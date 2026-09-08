@@ -83,36 +83,29 @@ open Finset Function
 
 variable {α β ι M N O G H : Type*}
 
-/--
-Definition of `Finsupp` / `Finsupp` 的定义
+/-- `Finsupp α M`, denoted `α →₀ M`, is the type of functions `f : α → M` such that
+  `f x = 0` for all but finitely many `x`. -/
+/-
+**Finsupp** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_9 → (M : Type u_10) → [Zero M] → Type (max u_10 u_9)
+参数：M : Type u_10；max u_10 u_9。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Finsupp
-  parameters: (α : Type*) (M : Type*) [Zero M]
-  axioms and operations (3):
-    - support : Finset α
-    - toFun : α -> M
-    - mem_support_toFun : forall a, a in support ↔ toFun a != 0
-
-中文:
-结构 有限支撑
-  参数: (α : 类型) (M : 类型) [零 M]
-  公理与运算 (3 个):
-    - support : 有限集 α
-    - toFun : α -> M
-    - mem_support_toFun : 对任意 a, a in support ↔ toFun a != 0
+--- 原说明 ---
+`Finsupp α M`, denoted `α →₀ M`, is the type of functions `f : α → M` such that
+  `f x = 0` for all but finitely many `x`.
 -/
 structure Finsupp (α : Type*) (M : Type*) [Zero M] where
   /-- The support of a finitely supported function (aka `Finsupp`). -/
   support : Finset α
   /-- The underlying function of a bundled finitely supported function (aka `Finsupp`). -/
-  toFun : α -> M
+  toFun : α → M
   /-- The witness that the support of a `Finsupp` is indeed the exact locus where its
   underlying function is nonzero. -/
-  mem_support_toFun : forall a, a in support ↔ toFun a != 0
+  mem_support_toFun : ∀ a, a ∈ support ↔ toFun a ≠ 0
 
 @[inherit_doc]
-infixr:25 " ->₀ " => Finsupp
+infixr:25 " →₀ " => Finsupp
 
 namespace Finsupp
 
@@ -123,644 +116,364 @@ section Basic
 
 variable [Zero M]
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (α ->₀ M) α M
-  body: ⟨toFun, by
-    rintro ⟨s, f, hf⟩ ⟨t, g, hg⟩ (rfl : f = g)
-    congr
-    ext a
-    exact (hf _).trans (hg _).symm⟩
-
-initialize_simps_projections Finsupp (toFun -> apply)
-
-@[ext, grind ext]
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (α ->₀ M) α M
-  定义体: ⟨toFun, by
-    rintro ⟨s, f, hf⟩ ⟨t, g, hg⟩ (rfl : f = g)
-    congr
-    ext a
-    exact (hf _).trans (hg _).symm⟩
-
-initialize_simps_projections Finsupp (toFun -> apply)
-
-@[ext, grind ext]
+/-
+**Finsupp.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instFunLike : FunLike (α ->₀ M) α M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instFunLike : FunLike (α ->₀ M) α M :=
+instance instFunLike : FunLike (α →₀ M) α M :=
   ⟨toFun, by
     rintro ⟨s, f, hf⟩ ⟨t, g, hg⟩ (rfl : f = g)
     congr
     ext a
     exact (hf _).trans (hg _).symm⟩
 
-initialize_simps_projections Finsupp (toFun -> apply)
+initialize_simps_projections Finsupp (toFun → apply)
 
 @[ext, grind ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : α ->₀ M} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: {f g : α ->₀ M} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**Finsupp.ext** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : α →₀ M} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext _ _ h
-
-/--
-Instance `instSubsingleton` / 实例 `instSubsingleton`
-
-English:
-instance instSubsingleton
-  signature: [IsEmpty α]
-  body: by ext x; exact isEmptyElim x
-
-中文:
-实例 instSubsingleton
-  签名: [是空 α]
-  定义体: by ext x; exact isEmptyElim x
-
-Depends on / 依赖: isEmptyElim
+/-
+**Finsupp.instSubsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instSubsingleton [IsEmpty α] : Subsingleton (α ->₀ M) where allEq f g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 -/
-instance instSubsingleton [IsEmpty α] : Subsingleton (α ->₀ M) where
+instance instSubsingleton [IsEmpty α] : Subsingleton (α →₀ M) where
   allEq f g := by ext x; exact isEmptyElim x
-
-/--
-Instance `instSubsingleton'` / 实例 `instSubsingleton'`
-
-English:
-instance instSubsingleton'
-  signature: [Subsingleton M]
-  body: by ext x; exact Subsingleton.elim ..
-
-中文:
-实例 instSubsingleton'
-  签名: [子单例 M]
-  定义体: by ext x; exact Subsingleton.elim ..
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**Finsupp.instSubsingleton'** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instSubsingleton' [Subsingleton M] : Subsingleton (α ->₀ M) where allEq f 
+g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-instance instSubsingleton' [Subsingleton M] : Subsingleton (α ->₀ M) where
+instance instSubsingleton' [Subsingleton M] : Subsingleton (α →₀ M) where
   allEq f g := by ext x; exact Subsingleton.elim ..
 
 variable (α) in
-/--
-theorem `nontrivial_of_nontrivial` / 定理 `nontrivial_of_nontrivial`
-
-English:
-theorem nontrivial_of_nontrivial
-  given: [h : Nontrivial (α ->₀ M)]
-  statement: Nontrivial M
-  proof: by
-  contrapose! h; infer_instance
-
-中文:
-定理 nontrivial_of_nontrivial
-  条件: [h : 非平凡 (α ->₀ M)]
-  结论: 非平凡 M
-  证明: by
-  contrapose! h; infer_instance
-
-Depends on / 依赖: contrapose, infer_instance
+/-
+**Finsupp.nontrivial_of_nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：nontrivial_of_nontrivial [h : Nontrivial (α ->₀ M)] : Nontrivial M
+参数：α ->₀ M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem nontrivial_of_nontrivial [h : Nontrivial (α ->₀ M)] : Nontrivial M := by
+theorem nontrivial_of_nontrivial [h : Nontrivial (α →₀ M)] : Nontrivial M := by
   contrapose! h; infer_instance
-
-/--
-lemma `ne_iff` / 引理 `ne_iff`
-
-English:
-lemma ne_iff
-  given: {f g : α ->₀ M}
-  statement: f != g ↔ exists a, f a != g a
-  proof: DFunLike.ne_iff
+/-
+**Finsupp.ne_iff** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：ne_iff {f g : α ->₀ M} : f != g ↔ exists a, f a != g a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ne_iff`：ne_iff {f g : F} : f != g ↔ exists a, f a != g a
+-/
+lemma ne_iff {f g : α →₀ M} : f ≠ g ↔ ∃ a, f a ≠ g a := DFunLike.ne_iff
 
 @[simp, norm_cast, grind =]
-
-中文:
-引理 ne_iff
-  条件: {f g : α ->₀ M}
-  结论: f != g ↔ 存在 a, f a != g a
-  证明: DFunLike.ne_iff
-
-@[simp, norm_cast, grind =]
-
-Depends on / 依赖: DFunLike, DFunLike.ne_iff, ne_iff
+/-
+**Finsupp.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：coe_mk (f : α -> M) (s : Finset α) (h : forall a, a in s ↔ f a != 0) : ⇑(⟨
+s, f, h⟩ : α ->₀ M) = f
+参数：f : α -> M；s : Finset α；h : forall a, a in s ↔ f a != 0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ne_iff {f g : α ->₀ M} : f != g ↔ exists a, f a != g a := DFunLike.ne_iff
-
-@[simp, norm_cast, grind =]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : α -> M) (s : Finset α) (h : forall a, a in s ↔ f a != 0)
-  statement: ⇑(⟨s, f, h⟩ : α ->₀ M) = f
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (f : α -> M) (s : 有限集 α) (h : 对任意 a, a in s ↔ f a != 0)
-  结论: ⇑(⟨s, f, h⟩ : α ->₀ M) = f
-  证明: rfl
--/
-theorem coe_mk (f : α -> M) (s : Finset α) (h : forall a, a in s ↔ f a != 0) : ⇑(⟨s, f, h⟩ : α ->₀ M) = f :=
+theorem coe_mk (f : α → M) (s : Finset α) (h : ∀ a, a ∈ s ↔ f a ≠ 0) : ⇑(⟨s, f, h⟩ : α →₀ M) = f :=
   rfl
-
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: : Zero (α ->₀ M)
-  body: ⟨⟨∅, 0, fun _ => ⟨fun h => (notMem_empty _ h).elim, fun H => (H rfl).elim⟩⟩⟩
-
-中文:
-实例 instZero
-  签名: : 零 (α ->₀ M)
-  定义体: ⟨⟨∅, 0, fun _ => ⟨fun h => (notMem_empty _ h).elim, fun H => (H rfl).elim⟩⟩⟩
-
-Depends on / 依赖: notMem_empty
+/-
+**Finsupp.instZero** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instZero : Zero (α ->₀ M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instZero : Zero (α ->₀ M) :=
-  ⟨⟨∅, 0, fun _ => ⟨fun h => (notMem_empty _ h).elim, fun H => (H rfl).elim⟩⟩⟩
-
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  statement: ⇑(0 : α ->₀ M) = 0
-  proof: rfl
+instance instZero : Zero (α →₀ M) :=
+  ⟨⟨∅, 0, fun _ => ⟨fun h ↦ (notMem_empty _ h).elim, fun H => (H rfl).elim⟩⟩⟩
+/-
+**Finsupp.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M], ⇑0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp, norm_cast] lemma coe_zero : ⇑(0 : α →₀ M) = 0 := rfl
 
 @[grind =]
-
-中文:
-引理 coe_zero
-  结论: ⇑(0 : α ->₀ M) = 0
-  证明: rfl
-
-@[grind =]
+/-
+**Finsupp.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：zero_apply {a : α} : (0 : α ->₀ M) a = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_zero : ⇑(0 : α ->₀ M) = 0 := rfl
-
-@[grind =]
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: {a : α}
-  statement: (0 : α ->₀ M) a = 0
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 zero_apply
-  条件: {a : α}
-  结论: (0 : α ->₀ M) a = 0
-  证明: rfl
-
-@[simp, grind =]
--/
-theorem zero_apply {a : α} : (0 : α ->₀ M) a = 0 :=
+theorem zero_apply {a : α} : (0 : α →₀ M) a = 0 :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `support_zero` / 定理 `support_zero`
-
-English:
-theorem support_zero
-  statement: (0 : α ->₀ M).support = ∅
-  proof: rfl
-
-中文:
-定理 support_zero
-  结论: (0 : α ->₀ M).support = ∅
-  证明: rfl
+/-
+**Finsupp.support_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_zero : (0 : α ->₀ M).support = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem support_zero : (0 : α ->₀ M).support = ∅ :=
+theorem support_zero : (0 : α →₀ M).support = ∅ :=
   rfl
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: : Inhabited (α ->₀ M)
-  body: ⟨0⟩
-
-中文:
-实例 instInhabited
-  签名: : 可居 (α ->₀ M)
-  定义体: ⟨0⟩
+/-
+**Finsupp.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instInhabited : Inhabited (α ->₀ M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instInhabited : Inhabited (α ->₀ M) :=
+instance instInhabited : Inhabited (α →₀ M) :=
   ⟨0⟩
-
-/--
-lemma `default_eq_zero` / 引理 `default_eq_zero`
-
-English:
-lemma default_eq_zero
-  statement: (default : α ->₀ M) = 0
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-引理 default_eq_zero
-  结论: (default : α ->₀ M) = 0
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Finsupp.default_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M], default = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma default_eq_zero : (default : α ->₀ M) = 0 := rfl
+@[simp] lemma default_eq_zero : (default : α →₀ M) = 0 := rfl
 
 @[simp, grind =]
-/--
-theorem `mem_support_iff` / 定理 `mem_support_iff`
-
-English:
-theorem mem_support_iff
-  given: {f : α ->₀ M}
-  statement: forall {a : α}, a in f.support ↔ f a != 0
-  proof: @(f.mem_support_toFun)
-
-@[simp, norm_cast]
-
-中文:
-定理 mem_support_iff
-  条件: {f : α ->₀ M}
-  结论: 对任意 {a : α}, a in f.support ↔ f a != 0
-  证明: @(f.mem_support_toFun)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: f.mem_support_toFun, mem_support_toFun
+/-
+**Finsupp.mem_support_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mem_support_iff {f : α ->₀ M} : forall {a : α}, a in f.support ↔ f a != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.mem_support_toFun`：∀ {α : Type u_9} {M : Type u_10} [inst : Zero
+ M] (self : α →₀ M) (a : α), a ∈ self.support ↔ self.toFun a ≠ 0
 -/
-theorem mem_support_iff {f : α ->₀ M} : forall {a : α}, a in f.support ↔ f a != 0 :=
+theorem mem_support_iff {f : α →₀ M} : ∀ {a : α}, a ∈ f.support ↔ f a ≠ 0 :=
   @(f.mem_support_toFun)
 
 @[simp, norm_cast]
-/--
-theorem `fun_support_eq` / 定理 `fun_support_eq`
-
-English:
-theorem fun_support_eq
-  given: (f : α ->₀ M)
-  statement: Function.support f = f.support
-  proof: Set.ext fun _x => mem_support_iff.symm
-
-中文:
-定理 fun_support_eq
-  条件: (f : α ->₀ M)
-  结论: 函数.support f = f.support
-  证明: Set.ext fun _x => mem_support_iff.symm
-
-Depends on / 依赖: Set.ext, mem_support_iff, mem_support_iff.symm
+/-
+**Finsupp.fun_support_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：fun_support_eq (f : α ->₀ M) : Function.support f = f.support
+参数：f : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
 -/
-theorem fun_support_eq (f : α ->₀ M) : Function.support f = f.support :=
+theorem fun_support_eq (f : α →₀ M) : Function.support f = f.support :=
   Set.ext fun _x => mem_support_iff.symm
-
-/--
-theorem `notMem_support_iff` / 定理 `notMem_support_iff`
-
-English:
-theorem notMem_support_iff
-  given: {f : α ->₀ M} {a}
-  statement: a ∉ f.support ↔ f a = 0
-  proof: not_iff_comm.1 mem_support_iff.symm
-
-@[simp, norm_cast]
-
-中文:
-定理 notMem_support_iff
-  条件: {f : α ->₀ M} {a}
-  结论: a ∉ f.support ↔ f a = 0
-  证明: not_iff_comm.1 mem_support_iff.symm
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Nat.Prime.one_lt, mem_support_iff, mem_support_iff.symm, not_iff_comm, one_lt
+/-
+**Finsupp.notMem_support_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：notMem_support_iff {f : α ->₀ M} {a} : a ∉ f.support ↔ f a = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_iff_comm`：not_iff_comm : (¬a ↔ b) ↔ (¬b ↔ a)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
 -/
-theorem notMem_support_iff {f : α ->₀ M} {a} : a ∉ f.support ↔ f a = 0 :=
+theorem notMem_support_iff {f : α →₀ M} {a} : a ∉ f.support ↔ f a = 0 :=
   not_iff_comm.1 mem_support_iff.symm
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_zero` / 定理 `coe_eq_zero`
-
-English:
-theorem coe_eq_zero
-  given: {f : α ->₀ M}
-  statement: (f : α -> M) = 0 ↔ f = 0
-  proof: by rw [← coe_zero, DFunLike.coe_fn_eq]
-
-中文:
-定理 coe_eq_zero
-  条件: {f : α ->₀ M}
-  结论: (f : α -> M) = 0 ↔ f = 0
-  证明: by rw [← coe_zero, DFunLike.coe_fn_eq]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_fn_eq, coe_fn_eq, coe_zero
+/-
+**Finsupp.coe_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：coe_eq_zero {f : α ->₀ M} : (f : α -> M) = 0 ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.coe_zero`：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M], ⇑0 = 
+0
+· 使用定理 `DFunLike.coe_fn_eq`：coe_fn_eq {f g : F} : (f : forall a : α, β a) = (g :
+ forall a : α, β a) ↔ f = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_eq_zero {f : α ->₀ M} : (f : α -> M) = 0 ↔ f = 0 := by rw [← coe_zero, DFunLike.coe_fn_eq]
-
-/--
-theorem `ext_iff'` / 定理 `ext_iff'`
-
-English:
-theorem ext_iff'
-  given: {f g : α ->₀ M}
-  statement: f = g ↔ f.support = g.support ∧ forall x in f.support, f x = g x
-  proof: ⟨fun h => h ▸ ⟨rfl, fun _ _ => rfl⟩, fun ⟨h₁, h₂⟩ =>
-    ext fun a => by
-      classical
-      exact if h : a in f.support then h₂ a h else by
-        have hf : f a = 0 := notMem_support_iff.1 h
-        have hg : g a = 0 := by rwa [h₁, notMem_support_iff] at h
-        rw [hf]; rw [hg]⟩
-
-@[simp]
-
-中文:
-定理 ext_iff'
-  条件: {f g : α ->₀ M}
-  结论: f = g ↔ f.support = g.support ∧ 对任意 x in f.support, f x = g x
-  证明: ⟨fun h => h ▸ ⟨rfl, fun _ _ => rfl⟩, fun ⟨h₁, h₂⟩ =>
-    ext fun a => by
-      classical
-      exact if h : a in f.support then h₂ a h else by
-        have hf : f a = 0 := notMem_support_iff.1 h
-        have hg : g a = 0 := by rwa [h₁, notMem_support_iff] at h
-        rw [hf]; rw [hg]⟩
-
-@[simp]
-
-Depends on / 依赖: classical, f.support, notMem_support_iff, support
+theorem coe_eq_zero {f : α →₀ M} : (f : α → M) = 0 ↔ f = 0 := by rw [← coe_zero, DFunLike.coe_fn_eq]
+/-
+**Finsupp.ext_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：ext_iff' {f g : α ->₀ M} : f = g ↔ f.support = g.support ∧ forall x in f.s
+upport, f x = g x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.notMem_support_iff`：notMem_support_iff {f : α ->₀ M} {a} : a ∉ f
+.support ↔ f a = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem ext_iff' {f g : α ->₀ M} : f = g ↔ f.support = g.support ∧ forall x in f.support, f x = g x :=
+theorem ext_iff' {f g : α →₀ M} : f = g ↔ f.support = g.support ∧ ∀ x ∈ f.support, f x = g x :=
   ⟨fun h => h ▸ ⟨rfl, fun _ _ => rfl⟩, fun ⟨h₁, h₂⟩ =>
     ext fun a => by
       classical
-      exact if h : a in f.support then h₂ a h else by
+      exact if h : a ∈ f.support then h₂ a h else by
         have hf : f a = 0 := notMem_support_iff.1 h
         have hg : g a = 0 := by rwa [h₁, notMem_support_iff] at h
-        rw [hf]; rw [hg]⟩
+        rw [hf, hg]⟩
 
 @[simp]
-/--
-theorem `support_eq_empty` / 定理 `support_eq_empty`
-
-English:
-theorem support_eq_empty
-  given: {f : α ->₀ M}
-  statement: f.support = ∅ ↔ f = 0
-  proof: mod_cast @Function.support_eq_empty_iff _ _ _ f
-
-@[simp]
-
-中文:
-定理 support_eq_empty
-  条件: {f : α ->₀ M}
-  结论: f.support = ∅ ↔ f = 0
-  证明: mod_cast @Function.support_eq_empty_iff _ _ _ f
-
-@[simp]
-
-Depends on / 依赖: Function, Function.support_eq_empty_iff, mod_cast, support_eq_empty_iff
+/-
+**Finsupp.support_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_eq_empty {f : α ->₀ M} : f.support = ∅ ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.fun_support_eq`：fun_support_eq (f : α ->₀ M) : Function.support 
+f = f.support
+· 使用定理 `Function.support_eq_empty_iff`：∀ {ι : Type u_1} {M : Type u_3} [inst : Z
+ero M] {f : ι → M}, Function.support f = ∅ ↔ f = 0
 -/
-theorem support_eq_empty {f : α ->₀ M} : f.support = ∅ ↔ f = 0 :=
+theorem support_eq_empty {f : α →₀ M} : f.support = ∅ ↔ f = 0 :=
   mod_cast @Function.support_eq_empty_iff _ _ _ f
 
 @[simp]
-/--
-theorem `support_nonempty_iff` / 定理 `support_nonempty_iff`
-
-English:
-theorem support_nonempty_iff
-  given: {f : α ->₀ M}
-  statement: f.support.Nonempty ↔ f != 0
-  proof: by
-  contrapose!; exact support_eq_empty
-
-中文:
-定理 support_nonempty_iff
-  条件: {f : α ->₀ M}
-  结论: f.support.非空 ↔ f != 0
-  证明: by
-  contrapose!; exact support_eq_empty
-
-Depends on / 依赖: contrapose, support_eq_empty
+/-
+**Finsupp.support_nonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_nonempty_iff {f : α ->₀ M} : f.support.Nonempty ↔ f != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₃`：contrapose_iff₃ {p q : Prop} 
+: (¬ p ↔ q) -> (p ↔ ¬ q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.support_eq_empty`：support_eq_empty {f : α ->₀ M} : f.support = ∅
+ ↔ f = 0
 -/
-theorem support_nonempty_iff {f : α ->₀ M} : f.support.Nonempty ↔ f != 0 := by
+theorem support_nonempty_iff {f : α →₀ M} : f.support.Nonempty ↔ f ≠ 0 := by
   contrapose!; exact support_eq_empty
-
-/--
-theorem `card_support_eq_zero` / 定理 `card_support_eq_zero`
-
-English:
-theorem card_support_eq_zero
-  given: {f : α ->₀ M}
-  statement: #f.support = 0 ↔ f = 0
-  proof: by simp
-
-中文:
-定理 card_support_eq_zero
-  条件: {f : α ->₀ M}
-  结论: #f.support = 0 ↔ f = 0
-  证明: by simp
+/-
+**Finsupp.card_support_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_support_eq_zero {f : α ->₀ M} : #f.support = 0 ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem card_support_eq_zero {f : α ->₀ M} : #f.support = 0 ↔ f = 0 := by simp
-
-/--
-Instance `instDecidableEq` / 实例 `instDecidableEq`
-
-English:
-instance instDecidableEq
-  signature: [DecidableEq α] [DecidableEq M]
-  body: fun f g =>
-  decidable_of_iff (f.support = g.support ∧ forall a in f.support, f a = g a) ext_iff'.symm
+theorem card_support_eq_zero {f : α →₀ M} : #f.support = 0 ↔ f = 0 := by simp
+/-
+**Finsupp.instDecidableEq** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instDecidableEq [DecidableEq α] [DecidableEq M] : DecidableEq (α ->₀ M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance instDecidableEq [DecidableEq α] [DecidableEq M] : DecidableEq (α →₀ M) := fun f g =>
+  decidable_of_iff (f.support = g.support ∧ ∀ a ∈ f.support, f a = g a) ext_iff'.symm
 
 @[fun_prop]
-
-中文:
-实例 instDecidableEq
-  签名: [DecidableEq α] [DecidableEq M]
-  定义体: fun f g =>
-  decidable_of_iff (f.support = g.support ∧ forall a in f.support, f a = g a) ext_iff'.symm
-
-@[fun_prop]
+/-
+**Finsupp.hasFiniteSupport** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：hasFiniteSupport (f : α ->₀ M) : HasFiniteSupport f
+参数：f : α ->₀ M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.HasFiniteSupport.eq_1`：∀ {α : Type u_1} {M : Type u_2} [inst : 
+Zero M] (f : α → M), Function.HasFiniteSupport f = (Function.support f).Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.fun_support_eq`：fun_support_eq (f : α ->₀ M) : Function.support 
+f = f.support
 -/
-instance instDecidableEq [DecidableEq α] [DecidableEq M] : DecidableEq (α ->₀ M) := fun f g =>
-  decidable_of_iff (f.support = g.support ∧ forall a in f.support, f a = g a) ext_iff'.symm
-
-@[fun_prop]
-/--
-theorem `hasFiniteSupport` / 定理 `hasFiniteSupport`
-
-English:
-theorem hasFiniteSupport
-  given: (f : α ->₀ M)
-  statement: HasFiniteSupport f
-  proof: by
+theorem hasFiniteSupport (f : α →₀ M) : HasFiniteSupport f := by
   rw [HasFiniteSupport]
   exact f.fun_support_eq.symm ▸ f.support.finite_toSet
 
 @[deprecated (since := "2026-03-03")] alias finite_support := hasFiniteSupport
-
-中文:
-定理 hasFiniteSupport
-  条件: (f : α ->₀ M)
-  结论: HasFiniteSupport f
-  证明: by
-  rw [HasFiniteSupport]
-  exact f.fun_support_eq.symm ▸ f.support.finite_toSet
-
-@[deprecated (since := "2026-03-03")] alias finite_support := hasFiniteSupport
-
-Depends on / 依赖: HasFiniteSupport, f.fun_support_eq.symm, f.support.finite_toSet, finite_toSet, fun_support_eq, support
+/-
+**Finsupp.support_subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_subset_iff {s : Set α} {f : α ->₀ M} : ↑f.support subseteq s ↔ for
+all a ∉ s, f a = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem hasFiniteSupport (f : α ->₀ M) : HasFiniteSupport f := by
-  rw [HasFiniteSupport]
-  exact f.fun_support_eq.symm ▸ f.support.finite_toSet
-
-@[deprecated (since := "2026-03-03")] alias finite_support := hasFiniteSupport
-
-/--
-theorem `support_subset_iff` / 定理 `support_subset_iff`
-
-English:
-theorem support_subset_iff
-  given: {s : Set α} {f : α ->₀ M}
-  proof: by
-  grind
-
-中文:
-定理 support_subset_iff
-  条件: {s : 集合 α} {f : α ->₀ M}
-  证明: by
-  grind
--/
-theorem support_subset_iff {s : Set α} {f : α ->₀ M} :
-    ↑f.support subseteq s ↔ forall a ∉ s, f a = 0 := by
+theorem support_subset_iff {s : Set α} {f : α →₀ M} :
+    ↑f.support ⊆ s ↔ ∀ a ∉ s, f a = 0 := by
   grind
 
 /-- Given `Finite α`, `equivFunOnFinite` is the `Equiv` between `α →₀ β` and `α → β`.
   (All functions on a finite type are finitely supported.) -/
 @[simps]
-/--
-Definition of `equivFunOnFinite` / `equivFunOnFinite` 的定义
+/-
+**Finsupp.equivFunOnFinite** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：equivFunOnFinite [Finite α] : (α ->₀ M) ≃ (α -> M) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivFunOnFinite
-  signature: [Finite α]
-  body: (⇑)
-  invFun f := mk (Function.support f).toFinite.toFinset f fun _a => Set.Finite.mem_toFinset _
-
-@[simp]
-
-中文:
-定义 equivFunOnFinite
-  签名: [有限 α]
-  定义体: (⇑)
-  invFun f := mk (Function.support f).toFinite.toFinset f fun _a => Set.Finite.mem_toFinset _
-
-@[simp]
-
-Depends on / 依赖: Nat.Prime.ne_one, PNat.coe_eq_one_iff, coe_eq_one_iff, contra, ne_one
+--- 原说明 ---
+Given `Finite α`, `equivFunOnFinite` is the `Equiv` between `α →₀ β` and `α → β`
+.
+  (All functions on a finite type are finitely supported.)
 -/
-def equivFunOnFinite [Finite α] : (α ->₀ M) ≃ (α -> M) where
+def equivFunOnFinite [Finite α] : (α →₀ M) ≃ (α → M) where
   toFun := (⇑)
   invFun f := mk (Function.support f).toFinite.toFinset f fun _a => Set.Finite.mem_toFinset _
 
 @[simp]
-/--
-theorem `equivFunOnFinite_symm_coe` / 定理 `equivFunOnFinite_symm_coe`
-
-English:
-theorem equivFunOnFinite_symm_coe
-  given: {α} [Finite α] (f : α ->₀ M)
-  statement: equivFunOnFinite.symm f = f
-  proof: equivFunOnFinite.symm_apply_apply f
-
-@[simp]
-
-中文:
-定理 equivFunOnFinite_symm_coe
-  条件: {α} [有限 α] (f : α ->₀ M)
-  结论: equivFunOnFinite.symm f = f
-  证明: equivFunOnFinite.symm_apply_apply f
-
-@[simp]
-
-Depends on / 依赖: equivFunOnFinite, equivFunOnFinite.symm_apply_apply, symm_apply_apply
+/-
+**Finsupp.equivFunOnFinite_symm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：equivFunOnFinite_symm_coe {α} [Finite α] (f : α ->₀ M) : equivFunOnFinite.
+symm f = f
+参数：f : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-theorem equivFunOnFinite_symm_coe {α} [Finite α] (f : α ->₀ M) : equivFunOnFinite.symm f = f :=
+theorem equivFunOnFinite_symm_coe {α} [Finite α] (f : α →₀ M) : equivFunOnFinite.symm f = f :=
   equivFunOnFinite.symm_apply_apply f
 
 @[simp]
-/--
-lemma `coe_equivFunOnFinite_symm` / 引理 `coe_equivFunOnFinite_symm`
-
-English:
-lemma coe_equivFunOnFinite_symm
-  given: {α} [Finite α] (f : α -> M)
-  statement: ⇑(equivFunOnFinite.symm f) = f
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 coe_equivFunOnFinite_symm
-  条件: {α} [有限 α] (f : α -> M)
-  结论: ⇑(equivFunOnFinite.symm f) = f
-  证明: rfl
-
-@[ext]
-
-Depends on / 依赖: Nat.Prime.not_dvd_one, dvd_iff, not_dvd_one, p.Prime
+/-
+**Finsupp.coe_equivFunOnFinite_symm** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：coe_equivFunOnFinite_symm {α} [Finite α] (f : α -> M) : ⇑(equivFunOnFinite
+.symm f) = f
+参数：f : α -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-lemma coe_equivFunOnFinite_symm {α} [Finite α] (f : α -> M) : ⇑(equivFunOnFinite.symm f) = f := rfl
+lemma coe_equivFunOnFinite_symm {α} [Finite α] (f : α → M) : ⇑(equivFunOnFinite.symm f) = f := rfl
 
 @[ext]
-/--
-theorem `unique_ext` / 定理 `unique_ext`
-
-English:
-theorem unique_ext
-  given: [Unique α] {f g : α ->₀ M} (h : f default = g default)
-  statement: f = g
-  proof: ext fun a => by rwa [Unique.eq_default a]
-
-中文:
-定理 unique_ext
-  条件: [唯一 α] {f g : α ->₀ M} (h : f default = g default)
-  结论: f = g
-  证明: ext fun a => by rwa [Unique.eq_default a]
-
-Depends on / 依赖: Unique, Unique.eq_default, eq_default
+/-
+**Finsupp.unique_ext** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：unique_ext [Unique α] {f g : α ->₀ M} (h : f default = g default) : f = g
+参数：h : f default = g default。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unique.eq_default`：eq_default (a : α) : a = default
 -/
-theorem unique_ext [Unique α] {f g : α ->₀ M} (h : f default = g default) : f = g :=
+theorem unique_ext [Unique α] {f g : α →₀ M} (h : f default = g default) : f = g :=
   ext fun a => by rwa [Unique.eq_default a]
 
 end Basic
@@ -772,178 +485,127 @@ section OnFinset
 
 variable [Zero M]
 
-/--
-Definition of `onFinsetSupport` / `onFinsetSupport` 的定义
+/-- The (not exposed) support of `Finsupp.onFinset`. -/
+/-
+**Finsupp.onFinsetSupport** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：{α : Type u_1} → {M : Type u_4} → [Zero M] → Finset α → (α → M) → Finset α
+参数：α → M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition onFinsetSupport
-  signature: (s : Finset α) (f : α -> M)
-  body: haveI := Classical.decEq M
-  {a in s | f a != 0}
-
-中文:
-定义 onFinsetSupport
-  签名: (s : 有限集 α) (f : α -> M)
-  定义体: haveI := Classical.decEq M
-  {a in s | f a != 0}
+--- 原说明 ---
+The (not exposed) support of `Finsupp.onFinset`.
 -/
-@[no_expose] def onFinsetSupport (s : Finset α) (f : α -> M) : Finset α :=
+@[no_expose] def onFinsetSupport (s : Finset α) (f : α → M) : Finset α :=
   haveI := Classical.decEq M
-  {a in s | f a != 0}
+  {a ∈ s | f a ≠ 0}
 
-/--
-Definition of `onFinset` / `onFinset` 的定义
+/-- `Finsupp.onFinset s f hf` is the finsupp function representing `f` restricted to the finset `s`.
+The function must be `0` outside of `s`. Use this when the set needs to be filtered anyways,
+otherwise a better set representation is often available. -/
+/-
+**Finsupp.onFinset** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：onFinset (s : Finset α) (f : α -> M) (hf : forall a, f a != 0 -> a in s) :
+ α ->₀ M where support
+参数：s : Finset α；f : α -> M；hf : forall a, f a != 0 -> a in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition onFinset
-  signature: (s : Finset α) (f : α -> M) (hf : forall a, f a != 0 -> a in s)
-  body: onFinsetSupport s f
-  toFun := f
-  mem_support_toFun := by simpa [onFinsetSupport]
-
-中文:
-定义 onFinset
-  签名: (s : 有限集 α) (f : α -> M) (hf : 对任意 a, f a != 0 -> a in s)
-  定义体: onFinsetSupport s f
-  toFun := f
-  mem_support_toFun := by simpa [onFinsetSupport]
-
-Depends on / 依赖: onFinsetSupport
+--- 原说明 ---
+`Finsupp.onFinset s f hf` is the finsupp function representing `f` restricted to
+ the finset `s`.
+The function must be `0` outside of `s`. Use this when the set needs to be filte
+red anyways,
+otherwise a better set representation is often available.
 -/
-def onFinset (s : Finset α) (f : α -> M) (hf : forall a, f a != 0 -> a in s) : α ->₀ M where
+def onFinset (s : Finset α) (f : α → M) (hf : ∀ a, f a ≠ 0 → a ∈ s) : α →₀ M where
   support := onFinsetSupport s f
   toFun := f
   mem_support_toFun := by simpa [onFinsetSupport]
-
-/--
-lemma `coe_onFinset` / 引理 `coe_onFinset`
-
-English:
-lemma coe_onFinset
-  given: (s : Finset α) (f : α -> M) (hf)
-  statement: onFinset s f hf = f
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-引理 coe_onFinset
-  条件: (s : 有限集 α) (f : α -> M) (hf)
-  结论: onFinset s f hf = f
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Finsupp.coe_onFinset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M] (s : Finset α) (f : α → M)
+ (hf : ∀ (a : α), f a ≠ 0 → a ∈ s),   ⇑(Finsupp.onFinset s f hf) = f
+参数：s : Finset α；f : α → M；hf : ∀ (a : α), f a ≠ 0 → a ∈ s；Finsupp.onFinset s f h
+f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_onFinset (s : Finset α) (f : α -> M) (hf) : onFinset s f hf = f := rfl
+@[simp, norm_cast] lemma coe_onFinset (s : Finset α) (f : α → M) (hf) : onFinset s f hf = f := rfl
 
 @[simp, grind =]
-/--
-theorem `onFinset_apply` / 定理 `onFinset_apply`
-
-English:
-theorem onFinset_apply
-  given: {s : Finset α} {f : α -> M} {hf a}
-  statement: (onFinset s f hf : α ->₀ M) a = f a
-  proof: rfl
-
-中文:
-定理 onFinset_apply
-  条件: {s : 有限集 α} {f : α -> M} {hf a}
-  结论: (onFinset s f hf : α ->₀ M) a = f a
-  证明: rfl
+/-
+**Finsupp.onFinset_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：onFinset_apply {s : Finset α} {f : α -> M} {hf a} : (onFinset s f hf : α -
+>₀ M) a = f a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem onFinset_apply {s : Finset α} {f : α -> M} {hf a} : (onFinset s f hf : α ->₀ M) a = f a :=
+theorem onFinset_apply {s : Finset α} {f : α → M} {hf a} : (onFinset s f hf : α →₀ M) a = f a :=
   rfl
-
-/--
-theorem `support_onFinset` / 定理 `support_onFinset`
-
-English:
-theorem support_onFinset
-  statement: [DecidableEq M] {s : Finset α} {f : α -> M}
-  proof: by
-  dsimp [onFinset]; rw [onFinsetSupport]; congr
-
-中文:
-定理 support_onFinset
-  结论: [DecidableEq M] {s : 有限集 α} {f : α -> M}
-  证明: by
-  dsimp [onFinset]; rw [onFinsetSupport]; congr
-
-Depends on / 依赖: onFinset, onFinsetSupport
+/-
+**Finsupp.support_onFinset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_onFinset [DecidableEq M] {s : Finset α} {f : α -> M} (hf : forall 
+a : α, f a != 0 -> a in s) : (Finsupp.onFinset s f hf).support = {a in s | f a !
+= 0}
+参数：hf : forall a : α, f a != 0 -> a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Data.Finsupp.Defs.0.Finsupp.onFinsetSupport.eq_1`：∀ {α 
+: Type u_1} {M : Type u_4} [inst : Zero M] (s : Finset α) (f : α → M),   Finsupp
+.onFinsetSupport s f = {a ∈ s | f a ≠ 0}
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Pi.instSubsingleton`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Subsing
+leton (β a)], Subsingleton ((a : α) → β a)
+· 使用定理 `instSubsingletonDecidable`：∀ (p : Prop), Subsingleton (Decidable p)
 -/
-theorem support_onFinset [DecidableEq M] {s : Finset α} {f : α -> M}
-    (hf : forall a : α, f a != 0 -> a in s) :
-    (Finsupp.onFinset s f hf).support = {a in s | f a != 0} := by
+theorem support_onFinset [DecidableEq M] {s : Finset α} {f : α → M}
+    (hf : ∀ a : α, f a ≠ 0 → a ∈ s) :
+    (Finsupp.onFinset s f hf).support = {a ∈ s | f a ≠ 0} := by
   dsimp [onFinset]; rw [onFinsetSupport]; congr
-
-/--
-lemma `onFinset_support` / 引理 `onFinset_support`
-
-English:
-lemma onFinset_support
-  given: (f : α ->₀ M)
-  statement: onFinset f.support f (by simp) = f
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-引理 onFinset_support
-  条件: (f : α ->₀ M)
-  结论: onFinset f.support f (by simp) = f
-  证明: by ext; simp
-
-@[simp]
+/-
+**Finsupp.onFinset_support** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M] (f : α →₀ M), Finsupp.onFi
+nset f.support ⇑f ⋯ = f
+参数：f : α →₀ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma onFinset_support (f : α ->₀ M) : onFinset f.support f (by simp) = f := by ext; simp
+@[simp] lemma onFinset_support (f : α →₀ M) : onFinset f.support f (by simp) = f := by ext; simp
 
 @[simp]
-/--
-theorem `support_onFinset_subset` / 定理 `support_onFinset_subset`
-
-English:
-theorem support_onFinset_subset
-  given: {s : Finset α} {f : α -> M} {hf}
-  proof: by
+/-
+**Finsupp.support_onFinset_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_onFinset_subset {s : Finset α} {f : α -> M} {hf} : (onFinset s f h
+f).support subseteq s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem support_onFinset_subset {s : Finset α} {f : α → M} {hf} :
+    (onFinset s f hf).support ⊆ s := by
   grind
 
 grind_pattern support_onFinset_subset => onFinset s f hf
-
-中文:
-定理 support_onFinset_subset
-  条件: {s : 有限集 α} {f : α -> M} {hf}
-  证明: by
-  grind
-
-grind_pattern support_onFinset_subset => onFinset s f hf
+/-
+**Finsupp.mem_support_onFinset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mem_support_onFinset {s : Finset α} {f : α -> M} (hf : forall a : α, f a !
+= 0 -> a in s) {a : α} : a in (Finsupp.onFinset s f hf).support ↔ f a != 0
+参数：hf : forall a : α, f a != 0 -> a in s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `Finsupp.onFinset_apply`：onFinset_apply {s : Finset α} {f : α -> M} {hf a
+} : (onFinset s f hf : α ->₀ M) a = f a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem support_onFinset_subset {s : Finset α} {f : α -> M} {hf} :
-    (onFinset s f hf).support subseteq s := by
-  grind
-
-grind_pattern support_onFinset_subset => onFinset s f hf
-
-/--
-theorem `mem_support_onFinset` / 定理 `mem_support_onFinset`
-
-English:
-theorem mem_support_onFinset
-  given: {s : Finset α} {f : α -> M} (hf : forall a : α, f a != 0 -> a in s) {a : α}
-  proof: by
-  rw [Finsupp.mem_support_iff]; rw [Finsupp.onFinset_apply]
-
-中文:
-定理 mem_support_onFinset
-  条件: {s : 有限集 α} {f : α -> M} (hf : 对任意 a : α, f a != 0 -> a in s) {a : α}
-  证明: by
-  rw [Finsupp.mem_support_iff]; rw [Finsupp.onFinset_apply]
-
-Depends on / 依赖: Finsupp, Finsupp.mem_support_iff, Finsupp.onFinset_apply, mem_support_iff, onFinset_apply
--/
-theorem mem_support_onFinset {s : Finset α} {f : α -> M} (hf : forall a : α, f a != 0 -> a in s) {a : α} :
-    a in (Finsupp.onFinset s f hf).support ↔ f a != 0 := by
-  rw [Finsupp.mem_support_iff]; rw [Finsupp.onFinset_apply]
+theorem mem_support_onFinset {s : Finset α} {f : α → M} (hf : ∀ a : α, f a ≠ 0 → a ∈ s) {a : α} :
+    a ∈ (Finsupp.onFinset s f hf).support ↔ f a ≠ 0 := by
+  rw [Finsupp.mem_support_iff, Finsupp.onFinset_apply]
 
 end OnFinset
 
@@ -951,84 +613,62 @@ section OfSupportFinite
 
 variable [Zero M]
 
-/--
-Definition of `ofSupportFinite` / `ofSupportFinite` 的定义
+/-- The natural `Finsupp` induced by the function `f` given that it has finite support. -/
+/-
+**Finsupp.ofSupportFinite** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：ofSupportFinite (f : α -> M) (hf : (Function.support f).Finite) : α ->₀ M 
+where support
+参数：f : α -> M；hf : (Function.support f).Finite。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSupportFinite
-  signature: (f : α -> M) (hf : (Function.support f).Finite)
-  body: hf.toFinset
-  toFun := f
-  mem_support_toFun _ := hf.mem_toFinset
-
-中文:
-定义 ofSupportFinite
-  签名: (f : α -> M) (hf : (函数.support f).有限)
-  定义体: hf.toFinset
-  toFun := f
-  mem_support_toFun _ := hf.mem_toFinset
-
-Depends on / 依赖: hf.toFinset, toFinset
+--- 原说明 ---
+The natural `Finsupp` induced by the function `f` given that it has finite suppo
+rt.
 -/
-noncomputable def ofSupportFinite (f : α -> M) (hf : (Function.support f).Finite) : α ->₀ M where
+noncomputable def ofSupportFinite (f : α → M) (hf : (Function.support f).Finite) : α →₀ M where
   support := hf.toFinset
   toFun := f
   mem_support_toFun _ := hf.mem_toFinset
-
-/--
-theorem `ofSupportFinite_coe` / 定理 `ofSupportFinite_coe`
-
-English:
-theorem ofSupportFinite_coe
-  given: {f : α -> M} {hf : (Function.support f).Finite}
-  proof: rfl
-
-中文:
-定理 ofSupportFinite_coe
-  条件: {f : α -> M} {hf : (函数.support f).有限}
-  证明: rfl
+/-
+**Finsupp.ofSupportFinite_coe** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：ofSupportFinite_coe {f : α -> M} {hf : (Function.support f).Finite} : (ofS
+upportFinite f hf : α -> M) = f
+参数：Function.support f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofSupportFinite_coe {f : α -> M} {hf : (Function.support f).Finite} :
-    (ofSupportFinite f hf : α -> M) = f :=
+theorem ofSupportFinite_coe {f : α → M} {hf : (Function.support f).Finite} :
+    (ofSupportFinite f hf : α → M) = f :=
   rfl
-
-/--
-theorem `ofSupportFinite_support` / 定理 `ofSupportFinite_support`
-
-English:
-theorem ofSupportFinite_support
-  given: {f : α -> M} (hf : f.support.Finite)
-  proof: by
-  ext; simp [ofSupportFinite_coe]
-
-中文:
-定理 ofSupportFinite_support
-  条件: {f : α -> M} (hf : f.support.有限)
-  证明: by
-  ext; simp [ofSupportFinite_coe]
-
-Depends on / 依赖: ofSupportFinite_coe
+/-
+**Finsupp.ofSupportFinite_support** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：ofSupportFinite_support {f : α -> M} (hf : f.support.Finite) : (ofSupportF
+inite f hf).support = hf.toFinset
+参数：hf : f.support.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ofSupportFinite_support {f : α -> M} (hf : f.support.Finite) :
+theorem ofSupportFinite_support {f : α → M} (hf : f.support.Finite) :
     (ofSupportFinite f hf).support = hf.toFinset := by
   ext; simp [ofSupportFinite_coe]
-
-/--
-Instance `instCanLift` / 实例 `instCanLift`
-
-English:
-instance instCanLift
-  signature: : CanLift (α -> M) (α ->₀ M) (⇑) fun f => (Function.support f).Finite where
-  body: ⟨ofSupportFinite f hf, rfl⟩
-
-中文:
-实例 instCanLift
-  签名: : CanLift (α -> M) (α ->₀ M) (⇑) fun f => (函数.support f).有限 where
-  定义体: ⟨ofSupportFinite f hf, rfl⟩
-
-Depends on / 依赖: ofSupportFinite
+/-
+**Finsupp.instCanLift** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instCanLift : CanLift (α -> M) (α ->₀ M) (⇑) fun f => (Function.support f)
+.Finite where prf f hf
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCanLift : CanLift (α -> M) (α ->₀ M) (⇑) fun f => (Function.support f).Finite where
+instance instCanLift : CanLift (α → M) (α →₀ M) (⇑) fun f => (Function.support f).Finite where
   prf f hf := ⟨ofSupportFinite f hf, rfl⟩
 
 end OfSupportFinite
@@ -1040,231 +680,195 @@ section MapRange
 
 variable [Zero M] [Zero N] [Zero O]
 
-/--
-Definition of `mapRange` / `mapRange` 的定义
+/-- The composition of `f : M → N` and `g : α →₀ M` is `mapRange f hf g : α →₀ N`,
+which is well-defined when `f 0 = 0`.
 
-English:
-definition mapRange
-  signature: (f : M -> N) (hf : f 0 = 0) (g : α ->₀ M)
-  body: onFinset g.support (f ∘ g) fun a => by
-    rw [mem_support_iff]; rw [not_imp_not]; exact fun H => (congr_arg f H).trans hf
+This preserves the structure on `f`, and exists in various bundled forms for when `f` is itself
+bundled (defined in `Mathlib/Data/Finsupp/Basic.lean`):
 
-@[simp, grind =]
-
-中文:
-定义 mapRange
-  签名: (f : M -> N) (hf : f 0 = 0) (g : α ->₀ M)
-  定义体: onFinset g.support (f ∘ g) fun a => by
-    rw [mem_support_iff]; rw [not_imp_not]; exact fun H => (congr_arg f H).trans hf
-
-@[simp, grind =]
-
-Depends on / 依赖: congr_arg, g.support, mem_support_iff, not_imp_not, onFinset, support
+* `Finsupp.mapRange.equiv`
+* `Finsupp.mapRange.zeroHom`
+* `Finsupp.mapRange.addMonoidHom`
+* `Finsupp.mapRange.addEquiv`
+* `Finsupp.mapRange.linearMap`
+* `Finsupp.mapRange.linearEquiv`
 -/
-def mapRange (f : M -> N) (hf : f 0 = 0) (g : α ->₀ M) : α ->₀ N :=
+/-
+**Finsupp.mapRange** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：mapRange (f : M -> N) (hf : f 0 = 0) (g : α ->₀ M) : α ->₀ N
+参数：f : M -> N；hf : f 0 = 0；g : α ->₀ M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The composition of `f : M → N` and `g : α →₀ M` is `mapRange f hf g : α →₀ N`,
+which is well-defined when `f 0 = 0`.
+
+This preserves the structure on `f`, and exists in various bundled forms for whe
+n `f` is itself
+bundled (defined in `Mathlib/Data/Finsupp/Basic.lean`):
+
+* `Finsupp.mapRange.equiv`
+* `Finsupp.mapRange.zeroHom`
+* `Finsupp.mapRange.addMonoidHom`
+* `Finsupp.mapRange.addEquiv`
+* `Finsupp.mapRange.linearMap`
+* `Finsupp.mapRange.linearEquiv`
+-/
+def mapRange (f : M → N) (hf : f 0 = 0) (g : α →₀ M) : α →₀ N :=
   onFinset g.support (f ∘ g) fun a => by
-    rw [mem_support_iff]; rw [not_imp_not]; exact fun H => (congr_arg f H).trans hf
+    rw [mem_support_iff, not_imp_not]; exact fun H => (congr_arg f H).trans hf
 
 @[simp, grind =]
-/--
-theorem `mapRange_apply` / 定理 `mapRange_apply`
-
-English:
-theorem mapRange_apply
-  given: {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M} {a : α}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mapRange_apply
-  条件: {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M} {a : α}
-  证明: rfl
-
-@[simp]
+/-
+**Finsupp.mapRange_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_apply {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M} {a : α} : mapRang
+e f hf g a = f (g a)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapRange_apply {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M} {a : α} :
+theorem mapRange_apply {f : M → N} {hf : f 0 = 0} {g : α →₀ M} {a : α} :
     mapRange f hf g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `mapRange_zero` / 定理 `mapRange_zero`
-
-English:
-theorem mapRange_zero
-  given: {f : M -> N} {hf : f 0 = 0}
-  statement: mapRange f hf (0 : α ->₀ M) = 0
-  proof: ext fun _ => by simp only [hf, zero_apply, mapRange_apply]
-
-@[simp]
-
-中文:
-定理 mapRange_zero
-  条件: {f : M -> N} {hf : f 0 = 0}
-  结论: mapRange f hf (0 : α ->₀ M) = 0
-  证明: ext fun _ => by simp only [hf, zero_apply, mapRange_apply]
-
-@[simp]
-
-Depends on / 依赖: mapRange_apply, zero_apply
+/-
+**Finsupp.mapRange_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_zero {f : M -> N} {hf : f 0 = 0} : mapRange f hf (0 : α ->₀ M) = 
+0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mapRange_zero {f : M -> N} {hf : f 0 = 0} : mapRange f hf (0 : α ->₀ M) = 0 :=
+theorem mapRange_zero {f : M → N} {hf : f 0 = 0} : mapRange f hf (0 : α →₀ M) = 0 :=
   ext fun _ => by simp only [hf, zero_apply, mapRange_apply]
 
 @[simp]
-/--
-theorem `mapRange_eq_zero` / 定理 `mapRange_eq_zero`
-
-English:
-theorem mapRange_eq_zero
-  given: {a : α ->₀ M} {f : M -> N} (hf : f.Injective) (h)
-  proof: by
-  simp [Finsupp.ext_iff, ← h, hf.eq_iff]
-
-@[simp]
-
-中文:
-定理 mapRange_eq_zero
-  条件: {a : α ->₀ M} {f : M -> N} (hf : f.单射) (h)
-  证明: by
-  simp [Finsupp.ext_iff, ← h, hf.eq_iff]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.ext_iff, eq_iff, ext_iff, hf.eq_iff
+/-
+**Finsupp.mapRange_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_eq_zero {a : α ->₀ M} {f : M -> N} (hf : f.Injective) (h) : mapRa
+nge f h a = 0 ↔ a = 0
+参数：hf : f.Injective；h。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mapRange_eq_zero {a : α ->₀ M} {f : M -> N} (hf : f.Injective) (h) :
+theorem mapRange_eq_zero {a : α →₀ M} {f : M → N} (hf : f.Injective) (h) :
     mapRange f h a = 0 ↔ a = 0 := by
   simp [Finsupp.ext_iff, ← h, hf.eq_iff]
 
 @[simp]
-/--
-theorem `mapRange_id` / 定理 `mapRange_id`
-
-English:
-theorem mapRange_id
-  given: (g : α ->₀ M)
-  statement: mapRange id rfl g = g
-  proof: ext fun _ => rfl
-
-中文:
-定理 mapRange_id
-  条件: (g : α ->₀ M)
-  结论: mapRange id rfl g = g
-  证明: ext fun _ => rfl
+/-
+**Finsupp.mapRange_id** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_id (g : α ->₀ M) : mapRange id rfl g = g
+参数：g : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 -/
-theorem mapRange_id (g : α ->₀ M) : mapRange id rfl g = g :=
+theorem mapRange_id (g : α →₀ M) : mapRange id rfl g = g :=
   ext fun _ => rfl
-
-/--
-theorem `mapRange_comp` / 定理 `mapRange_comp`
-
-English:
-theorem mapRange_comp
-  statement: (f : N -> O) (hf : f 0 = 0) (f₂ : M -> N) (hf₂ : f₂ 0 = 0) (h : (f ∘ f₂) 0 = 0)
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 mapRange_comp
-  结论: (f : N -> O) (hf : f 0 = 0) (f₂ : M -> N) (hf₂ : f₂ 0 = 0) (h : (f ∘ f₂) 0 = 0)
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**Finsupp.mapRange_comp** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_comp (f : N -> O) (hf : f 0 = 0) (f₂ : M -> N) (hf₂ : f₂ 0 = 0) (
+h : (f ∘ f₂) 0 = 0) (g : α ->₀ M) : mapRange (f ∘ f₂) h g = mapRange f hf (mapRa
+nge f₂ hf₂ g)
+参数：f : N -> O；hf : f 0 = 0；f₂ : M -> N；hf₂ : f₂ 0 = 0；h : (f ∘ f₂) 0 = 0；g : α -
+>₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 -/
-theorem mapRange_comp (f : N -> O) (hf : f 0 = 0) (f₂ : M -> N) (hf₂ : f₂ 0 = 0) (h : (f ∘ f₂) 0 = 0)
-    (g : α ->₀ M) : mapRange (f ∘ f₂) h g = mapRange f hf (mapRange f₂ hf₂ g) :=
+theorem mapRange_comp (f : N → O) (hf : f 0 = 0) (f₂ : M → N) (hf₂ : f₂ 0 = 0) (h : (f ∘ f₂) 0 = 0)
+    (g : α →₀ M) : mapRange (f ∘ f₂) h g = mapRange f hf (mapRange f₂ hf₂ g) :=
   ext fun _ => rfl
 
 @[simp]
-/--
-lemma `mapRange_mapRange` / 引理 `mapRange_mapRange`
-
-English:
-lemma mapRange_mapRange
-  given: (e₁ : N -> O) (e₂ : M -> N) (he₁ he₂) (f : α ->₀ M)
-  proof: ext fun _ => rfl
-
-中文:
-引理 mapRange_mapRange
-  条件: (e₁ : N -> O) (e₂ : M -> N) (he₁ he₂) (f : α ->₀ M)
-  证明: ext fun _ => rfl
+/-
+**Finsupp.mapRange_mapRange** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_mapRange (e₁ : N -> O) (e₂ : M -> N) (he₁ he₂) (f : α ->₀ M) : ma
+pRange e₁ he₁ (mapRange e₂ he₂ f) = mapRange (e₁ ∘ e₂) (by simp [*]) f
+参数：e₁ : N -> O；e₂ : M -> N；he₁ he₂；f : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 -/
-lemma mapRange_mapRange (e₁ : N -> O) (e₂ : M -> N) (he₁ he₂) (f : α ->₀ M) :
-    mapRange e₁ he₁ (mapRange e₂ he₂ f) = mapRange (e₁ ∘ e₂) (by simp [*]) f := ext fun _ => rfl
-
-/--
-theorem `support_mapRange` / 定理 `support_mapRange`
-
-English:
-theorem support_mapRange
-  given: {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M}
-  proof: support_onFinset_subset
-
-中文:
-定理 support_mapRange
-  条件: {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M}
-  证明: support_onFinset_subset
-
-Depends on / 依赖: support_onFinset_subset
+lemma mapRange_mapRange (e₁ : N → O) (e₂ : M → N) (he₁ he₂) (f : α →₀ M) :
+    mapRange e₁ he₁ (mapRange e₂ he₂ f) = mapRange (e₁ ∘ e₂) (by simp [*]) f := ext fun _ ↦ rfl
+/-
+**Finsupp.support_mapRange** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_mapRange {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M} : (mapRange f h
+f g).support subseteq g.support
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.support_onFinset_subset`：support_onFinset_subset {s : Finset α} 
+{f : α -> M} {hf} : (onFinset s f hf).support subseteq s
 -/
-theorem support_mapRange {f : M -> N} {hf : f 0 = 0} {g : α ->₀ M} :
-    (mapRange f hf g).support subseteq g.support :=
+theorem support_mapRange {f : M → N} {hf : f 0 = 0} {g : α →₀ M} :
+    (mapRange f hf g).support ⊆ g.support :=
   support_onFinset_subset
-
-/--
-theorem `support_mapRange_of_injective` / 定理 `support_mapRange_of_injective`
-
-English:
-theorem support_mapRange_of_injective
-  statement: {e : M -> N} (he0 : e 0 = 0) (f : ι ->₀ M)
-  proof: by grind
-
-中文:
-定理 support_mapRange_of_injective
-  结论: {e : M -> N} (he0 : e 0 = 0) (f : ι ->₀ M)
-  证明: by grind
+/-
+**Finsupp.support_mapRange_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_mapRange_of_injective {e : M -> N} (he0 : e 0 = 0) (f : ι ->₀ M) (
+he : Function.Injective e) : (Finsupp.mapRange e he0 f).support = f.support
+参数：he0 : e 0 = 0；f : ι ->₀ M；he : Function.Injective e。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem support_mapRange_of_injective {e : M -> N} (he0 : e 0 = 0) (f : ι ->₀ M)
+theorem support_mapRange_of_injective {e : M → N} (he0 : e 0 = 0) (f : ι →₀ M)
     (he : Function.Injective e) : (Finsupp.mapRange e he0 f).support = f.support := by grind
-
-/--
-lemma `range_mapRange` / 引理 `range_mapRange`
-
-English:
-lemma range_mapRange
-  given: (e : M -> N) (he₀ : e 0 = 0)
-  proof: by
-  ext g
-  simp only [Set.mem_range, Set.mem_ofPred]
-  constructor
-  · grind
-  · intro h
-    classical
-    choose f h using h
-    use onFinset g.support (fun x => if x in g.support then f x else 0) (by simp_all)
-    grind
-
-中文:
-引理 range_mapRange
-  条件: (e : M -> N) (he₀ : e 0 = 0)
-  证明: by
-  ext g
-  simp only [Set.mem_range, Set.mem_ofPred]
-  constructor
-  · grind
-  · intro h
-    classical
-    choose f h using h
-    use onFinset g.support (fun x => if x in g.support then f x else 0) (by simp_all)
-    grind
-
-Depends on / 依赖: Set.mem_ofPred, Set.mem_range, Set.range, classical, g.support, mem_ofPred, mem_range, onFinset, support
+/-
+**Finsupp.range_mapRange** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：range_mapRange (e : M -> N) (he₀ : e 0 = 0) : Set.range (Finsupp.mapRange 
+(α
+参数：e : M -> N；he₀ : e 0 = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `ite_not`：∀ {α : Sort u_1} (p : Prop) [inst : Decidable p] (x y : α), (if
+ ¬p then x else y) = if p then y else x
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-lemma range_mapRange (e : M -> N) (he₀ : e 0 = 0) :
-    Set.range (Finsupp.mapRange (α := α) e he₀) = {g | forall i, g i in Set.range e} := by
+lemma range_mapRange (e : M → N) (he₀ : e 0 = 0) :
+    Set.range (Finsupp.mapRange (α := α) e he₀) = {g | ∀ i, g i ∈ Set.range e} := by
   ext g
   simp only [Set.mem_range, Set.mem_ofPred]
   constructor
@@ -1272,74 +876,84 @@ lemma range_mapRange (e : M -> N) (he₀ : e 0 = 0) :
   · intro h
     classical
     choose f h using h
-    use onFinset g.support (fun x => if x in g.support then f x else 0) (by simp_all)
+    use onFinset g.support (fun x ↦ if x ∈ g.support then f x else 0) (by simp_all)
     grind
 
-/--
-lemma `mapRange_injective` / 引理 `mapRange_injective`
+/-- `Finsupp.mapRange` of an injective function is injective. -/
+/-
+**Finsupp.mapRange_injective** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_injective (e : M -> N) (he₀ : e 0 = 0) (he : Injective e) : Injec
+tive (Finsupp.mapRange (α
+参数：e : M -> N；he₀ : e 0 = 0；he : Injective e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.ext_iff`：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M] {f g : 
+α →₀ M}, f = g ↔ ∀ (a : α), f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
 
-English:
-lemma mapRange_injective
-  given: (e : M -> N) (he₀ : e 0 = 0) (he : Injective e)
-  proof: by
-  intro a b h
-  rw [Finsupp.ext_iff] at h ⊢
-  simpa only [mapRange_apply, he.eq_iff] using h
-
-中文:
-引理 mapRange_injective
-  条件: (e : M -> N) (he₀ : e 0 = 0) (he : 单射 e)
-  证明: by
-  intro a b h
-  rw [Finsupp.ext_iff] at h ⊢
-  simpa only [mapRange_apply, he.eq_iff] using h
-
-Depends on / 依赖: Finsupp, Finsupp.ext_iff, eq_iff, ext_iff, he.eq_iff, mapRange_apply
+--- 原说明 ---
+`Finsupp.mapRange` of an injective function is injective.
 -/
-lemma mapRange_injective (e : M -> N) (he₀ : e 0 = 0) (he : Injective e) :
+lemma mapRange_injective (e : M → N) (he₀ : e 0 = 0) (he : Injective e) :
     Injective (Finsupp.mapRange (α := α) e he₀) := by
   intro a b h
   rw [Finsupp.ext_iff] at h ⊢
   simpa only [mapRange_apply, he.eq_iff] using h
 
-/--
-lemma `mapRange_surjective` / 引理 `mapRange_surjective`
+/-- `Finsupp.mapRange` of a surjective function is surjective. -/
+/-
+**Finsupp.mapRange_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_surjective (e : M -> N) (he₀ : e 0 = 0) (he : Surjective e) : Sur
+jective (Finsupp.mapRange (α
+参数：e : M -> N；he₀ : e 0 = 0；he : Surjective e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.range_eq_univ`：range_eq_univ : range f = univ ↔ Surjective f
+· 使用引理 `Finsupp.range_mapRange`：range_mapRange (e : M -> N) (he₀ : e 0 = 0) : Se
+t.range (Finsupp.mapRange (α
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mapRange_surjective
-  given: (e : M -> N) (he₀ : e 0 = 0) (he : Surjective e)
-  proof: by
-  rw [← Set.range_eq_univ]; rw [range_mapRange]; rw [he.range_eq]
-  simp
-
-中文:
-引理 mapRange_surjective
-  条件: (e : M -> N) (he₀ : e 0 = 0) (he : 满射 e)
-  证明: by
-  rw [← Set.range_eq_univ]; rw [range_mapRange]; rw [he.range_eq]
-  simp
-
-Depends on / 依赖: Set.range_eq_univ, he.range_eq, range_eq, range_eq_univ, range_mapRange
+--- 原说明 ---
+`Finsupp.mapRange` of a surjective function is surjective.
 -/
-lemma mapRange_surjective (e : M -> N) (he₀ : e 0 = 0) (he : Surjective e) :
+lemma mapRange_surjective (e : M → N) (he₀ : e 0 = 0) (he : Surjective e) :
     Surjective (Finsupp.mapRange (α := α) e he₀) := by
-  rw [← Set.range_eq_univ]; rw [range_mapRange]; rw [he.range_eq]
+  rw [← Set.range_eq_univ, range_mapRange, he.range_eq]
   simp
-
-/--
-lemma `mapRange_bijective` / 引理 `mapRange_bijective`
-
-English:
-lemma mapRange_bijective
-  given: (e : M -> N) (he₀ : e 0 = 0) (he : Bijective e)
-  proof: ⟨mapRange_injective e he₀ he.1, mapRange_surjective e he₀ he.2⟩
-
-中文:
-引理 mapRange_bijective
-  条件: (e : M -> N) (he₀ : e 0 = 0) (he : 双射 e)
-  证明: ⟨mapRange_injective e he₀ he.1, mapRange_surjective e he₀ he.2⟩
+/-
+**Finsupp.mapRange_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：mapRange_bijective (e : M -> N) (he₀ : e 0 = 0) (he : Bijective e) : Bijec
+tive (Finsupp.mapRange (α
+参数：e : M -> N；he₀ : e 0 = 0；he : Bijective e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.mapRange_injective`：mapRange_injective (e : M -> N) (he₀ : e 0 =
+ 0) (he : Injective e) : Injective (Finsupp.mapRange (α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `Finsupp.mapRange_surjective`：mapRange_surjective (e : M -> N) (he₀ : e 0
+ = 0) (he : Surjective e) : Surjective (Finsupp.mapRange (α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma mapRange_bijective (e : M -> N) (he₀ : e 0 = 0) (he : Bijective e) :
+lemma mapRange_bijective (e : M → N) (he₀ : e 0 = 0) (he : Bijective e) :
     Bijective (Finsupp.mapRange (α := α) e he₀) :=
   ⟨mapRange_injective e he₀ he.1, mapRange_surjective e he₀ he.2⟩
 
@@ -1350,87 +964,90 @@ variable [Zero M] [Zero N] [Zero O]
 
 /-- `Finsupp.mapRange` as an equiv. -/
 @[simps (attr := grind =) apply]
-/--
-Definition of `mapRange.equiv` / `mapRange.equiv` 的定义
+/-
+**Finsupp.mapRange.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：{ι : Type u_3} →   {M : Type u_4} → {N : Type u_5} → [inst : Zero M] → [in
+st_1 : Zero N] → (e : M ≃ N) → e 0 = 0 → (ι →₀ M) ≃ (ι →₀ N)
+参数：e : M ≃ N；ι →₀ M；ι →₀ N。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mapRange.equiv
-  signature: (e : M ≃ N) (hf : e 0 = 0)
-  body: mapRange e hf
-invFun := mapRange e.symm by simp [← hf]
-  left_inv x := by ext; simp
-  right_inv x := by ext; simp
-
-中文:
-定义 mapRange.equiv
-  签名: (e : M ≃ N) (hf : e 0 = 0)
-  定义体: mapRange e hf
-invFun := mapRange e.symm by simp [← hf]
-  left_inv x := by ext; simp
-  right_inv x := by ext; simp
-
-Depends on / 依赖: mapRange
+--- 原说明 ---
+`Finsupp.mapRange` as an equiv.
 -/
-def mapRange.equiv (e : M ≃ N) (hf : e 0 = 0) : (ι ->₀ M) ≃ (ι ->₀ N) where
+def mapRange.equiv (e : M ≃ N) (hf : e 0 = 0) : (ι →₀ M) ≃ (ι →₀ N) where
   toFun := mapRange e hf
-invFun := mapRange e.symm by simp [← hf]
+  invFun := mapRange e.symm <| by simp [← hf]
   left_inv x := by ext; simp
   right_inv x := by ext; simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mapRange.equiv_refl` / 引理 `mapRange.equiv_refl`
-
-English:
-lemma mapRange.equiv_refl
-  statement: mapRange.equiv (.refl M) rfl = .refl (ι ->₀ M)
-  proof: by ext; simp
-
-中文:
-引理 mapRange.equiv_refl
-  结论: mapRange.equiv (.refl M) rfl = .refl (ι ->₀ M)
-  证明: by ext; simp
+/-
+**Finsupp.mapRange.equiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_3} {M : Type u_4} [inst : Zero M], Finsupp.mapRange.equiv (E
+quiv.refl M) ⋯ = Equiv.refl (ι →₀ M)
+参数：Equiv.refl M；ι →₀ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.mapRange.equiv_apply`：∀ {ι : Type u_3} {M : Type u_4} {N : Type 
+u_5} [inst : Zero M] [inst_1 : Zero N] (e : M ≃ N) (hf : e 0 = 0)   (g : ι →₀ M)
+, (Finsupp.mapRang…
+· 使用定理 `Finsupp.mapRange_id`：mapRange_id (g : α ->₀ M) : mapRange id rfl g = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma mapRange.equiv_refl : mapRange.equiv (.refl M) rfl = .refl (ι ->₀ M) := by ext; simp
-
-/--
-lemma `mapRange.equiv_trans` / 引理 `mapRange.equiv_trans`
-
-English:
-lemma mapRange.equiv_trans
-  given: (e : M ≃ N) (hf) (f₂ : N ≃ O) (hf₂)
-  proof: by ext; simp
-
-@[simp, grind =]
-
-中文:
-引理 mapRange.equiv_trans
-  条件: (e : M ≃ N) (hf) (f₂ : N ≃ O) (hf₂)
-  证明: by ext; simp
-
-@[simp, grind =]
-
-Depends on / 依赖: Equiv.trans_apply, e.trans, trans_apply
+@[simp] lemma mapRange.equiv_refl : mapRange.equiv (.refl M) rfl = .refl (ι →₀ M) := by ext; simp
+/-
+**Finsupp.mapRange.equiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_3} {M : Type u_4} {N : Type u_5} {O : Type u_6} [inst : Zero
+ M] [inst_1 : Zero N] [inst_2 : Zero O]   (e : M ≃ N) (hf : e 0 = 0) (f₂ : N ≃ O
+) (hf₂ : f₂ 0 = 0),   Finsupp.mapRange.equiv (e.trans f₂) ⋯ = (Finsupp.mapRange.
+equiv e hf).trans (Finsupp.mapRange.equiv f₂ hf₂)
+参数：e : M ≃ N；hf : e 0 = 0；f₂ : N ≃ O；hf₂ : f₂ 0 = 0；e.trans f₂；Finsupp.mapRange.
+equiv e hf；Finsupp.mapRange.equiv f₂ hf₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.mapRange.equiv_apply`：∀ {ι : Type u_3} {M : Type u_4} {N : Type 
+u_5} [inst : Zero M] [inst_1 : Zero N] (e : M ≃ N) (hf : e 0 = 0)   (g : ι →₀ M)
+, (Finsupp.mapRang…
+· 使用引理 `Finsupp.mapRange_mapRange`：mapRange_mapRange (e₁ : N -> O) (e₂ : M -> N)
+ (he₁ he₂) (f : α ->₀ M) : mapRange e₁ he₁ (mapRange e₂ he₂ f) = mapRange (e₁ ∘ 
+e₂) (by simp [*…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapRange.equiv_trans (e : M ≃ N) (hf) (f₂ : N ≃ O) (hf₂) :
     mapRange.equiv (ι := ι) (e.trans f₂) (by rw [Equiv.trans_apply, hf, hf₂]) =
       (mapRange.equiv e hf).trans (mapRange.equiv f₂ hf₂) := by ext; simp
 
 @[simp, grind =]
-/--
-lemma `mapRange.equiv_symm` / 引理 `mapRange.equiv_symm`
-
-English:
-lemma mapRange.equiv_symm
-  given: (e : M ≃ N) (hf)
-  proof: rfl
-
-中文:
-引理 mapRange.equiv_symm
-  条件: (e : M ≃ N) (hf)
-  证明: rfl
-
-Depends on / 依赖: e.symm, mapRange, mapRange.equiv
+/-
+**Finsupp.mapRange.equiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.mapRange`。
+形式化陈述：∀ {ι : Type u_3} {M : Type u_4} {N : Type u_5} [inst : Zero M] [inst_1 : Z
+ero N] (e : M ≃ N) (hf : e 0 = 0),   (Finsupp.mapRange.equiv e hf).symm = Finsup
+p.mapRange.equiv e.symm ⋯
+参数：e : M ≃ N；hf : e 0 = 0；Finsupp.mapRange.equiv e hf。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma mapRange.equiv_symm (e : M ≃ N) (hf) :
     (mapRange.equiv (ι := ι) e hf).symm = mapRange.equiv e.symm (by simp [← hf]) := rfl
@@ -1444,38 +1061,22 @@ section EmbDomain
 
 variable [Zero M] [Zero N]
 
-/--
-Definition of `embDomain` / `embDomain` 的定义
+/-- Given `f : α ↪ β` and `v : α →₀ M`, `Finsupp.embDomain f v : β →₀ M`
+is the finitely supported function whose value at `f a : β` is `v a`.
+For a `b : β` outside the range of `f`, it is zero. -/
+/-
+**Finsupp.embDomain** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：embDomain (f : α ↪ β) (v : α ->₀ M) : β ->₀ M where support
+参数：f : α ↪ β；v : α ->₀ M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embDomain
-  signature: (f : α ↪ β) (v : α ->₀ M)
-  body: v.support.map f
-  toFun b :=
-    haveI := Classical.decEq β
-    match v.support.1.find? (fun a => f a = b) (by intro x; grind) with
-    | some a => v a
-    | none => 0
-  mem_support_toFun a₂ := by grind
-
-@[simp]
-
-中文:
-定义 embDomain
-  签名: (f : α ↪ β) (v : α ->₀ M)
-  定义体: v.support.map f
-  toFun b :=
-    haveI := Classical.decEq β
-    match v.support.1.find? (fun a => f a = b) (by intro x; grind) with
-    | some a => v a
-    | none => 0
-  mem_support_toFun a₂ := by grind
-
-@[simp]
-
-Depends on / 依赖: support, v.support.map
+--- 原说明 ---
+Given `f : α ↪ β` and `v : α →₀ M`, `Finsupp.embDomain f v : β →₀ M`
+is the finitely supported function whose value at `f a : β` is `v a`.
+For a `b : β` outside the range of `f`, it is zero.
 -/
-def embDomain (f : α ↪ β) (v : α ->₀ M) : β ->₀ M where
+def embDomain (f : α ↪ β) (v : α →₀ M) : β →₀ M where
   support := v.support.map f
   toFun b :=
     haveI := Classical.decEq β
@@ -1485,242 +1086,162 @@ def embDomain (f : α ↪ β) (v : α ->₀ M) : β ->₀ M where
   mem_support_toFun a₂ := by grind
 
 @[simp]
-/--
-theorem `support_embDomain` / 定理 `support_embDomain`
-
-English:
-theorem support_embDomain
-  given: (f : α ↪ β) (v : α ->₀ M)
-  statement: (embDomain f v).support = v.support.map f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 support_embDomain
-  条件: (f : α ↪ β) (v : α ->₀ M)
-  结论: (embDomain f v).support = v.support.map f
-  证明: rfl
-
-@[simp]
+/-
+**Finsupp.support_embDomain** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_embDomain (f : α ↪ β) (v : α ->₀ M) : (embDomain f v).support = v.
+support.map f
+参数：f : α ↪ β；v : α ->₀ M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem support_embDomain (f : α ↪ β) (v : α ->₀ M) : (embDomain f v).support = v.support.map f :=
+theorem support_embDomain (f : α ↪ β) (v : α →₀ M) : (embDomain f v).support = v.support.map f :=
   rfl
 
 @[simp]
-/--
-theorem `embDomain_zero` / 定理 `embDomain_zero`
-
-English:
-theorem embDomain_zero
-  given: (f : α ↪ β)
-  statement: (embDomain f 0 : β ->₀ M) = 0
-  proof: rfl
-
-中文:
-定理 embDomain_zero
-  条件: (f : α ↪ β)
-  结论: (embDomain f 0 : β ->₀ M) = 0
-  证明: rfl
+/-
+**Finsupp.embDomain_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_zero (f : α ↪ β) : (embDomain f 0 : β ->₀ M) = 0
+参数：f : α ↪ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem embDomain_zero (f : α ↪ β) : (embDomain f 0 : β ->₀ M) = 0 :=
+theorem embDomain_zero (f : α ↪ β) : (embDomain f 0 : β →₀ M) = 0 :=
   rfl
 
 open scoped Classical in
 @[grind =]
-/--
-theorem `embDomain_apply` / 定理 `embDomain_apply`
-
-English:
-theorem embDomain_apply
-  given: (f : α ↪ β) (v : α ->₀ M) (b : β)
-  proof: by
+/-
+**Finsupp.embDomain_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_apply (f : α ↪ β) (v : α ->₀ M) (b : β) : embDomain f v b = if h
+ : exists a, f a = b then v h.choose else 0
+参数：f : α ↪ β；v : α ->₀ M；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+-/
+theorem embDomain_apply (f : α ↪ β) (v : α →₀ M) (b : β) :
+    embDomain f v b = if h : ∃ a, f a = b then v h.choose else 0 := by
   simp only [embDomain, coe_mk]
   -- TODO: investigate why `grind` needs `split_ifs` first; this should never happen.
   split_ifs <;> grind
 
 @[simp, grind =]
-
-中文:
-定理 embDomain_apply
-  条件: (f : α ↪ β) (v : α ->₀ M) (b : β)
-  证明: by
-  simp only [embDomain, coe_mk]
-  -- TODO: investigate why `grind` needs `split_ifs` first; this should never happen.
-  split_ifs <;> grind
-
-@[simp, grind =]
-
-Depends on / 依赖: coe_mk, embDomain
+/-
+**Finsupp.embDomain_apply_self** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_apply_self (f : α ↪ β) (v : α ->₀ M) (a : α) : embDomain f v (f 
+a) = v a
+参数：f : α ↪ β；v : α ->₀ M；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem embDomain_apply (f : α ↪ β) (v : α ->₀ M) (b : β) :
-    embDomain f v b = if h : exists a, f a = b then v h.choose else 0 := by
-  simp only [embDomain, coe_mk]
-  -- TODO: investigate why `grind` needs `split_ifs` first; this should never happen.
-  split_ifs <;> grind
-
-@[simp, grind =]
-/--
-theorem `embDomain_apply_self` / 定理 `embDomain_apply_self`
-
-English:
-theorem embDomain_apply_self
-  given: (f : α ↪ β) (v : α ->₀ M) (a : α)
-  statement: embDomain f v (f a) = v a
-  proof: by
+theorem embDomain_apply_self (f : α ↪ β) (v : α →₀ M) (a : α) : embDomain f v (f a) = v a := by
   simp_rw [embDomain, coe_mk]
   grind
 
 @[grind =>]
-
-中文:
-定理 embDomain_apply_self
-  条件: (f : α ↪ β) (v : α ->₀ M) (a : α)
-  结论: embDomain f v (f a) = v a
-  证明: by
-  simp_rw [embDomain, coe_mk]
-  grind
-
-@[grind =>]
-
-Depends on / 依赖: coe_mk, embDomain, simp_rw
+/-
+**Finsupp.embDomain_of_notMem_range** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_of_notMem_range (f : α ↪ β) (v : α ->₀ M) (a : β) (h : a ∉ Set.r
+ange f) : embDomain f v a = 0
+参数：f : α ↪ β；v : α ->₀ M；a : β；h : a ∉ Set.range f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem embDomain_apply_self (f : α ↪ β) (v : α ->₀ M) (a : α) : embDomain f v (f a) = v a := by
-  simp_rw [embDomain, coe_mk]
-  grind
-
-@[grind =>]
-/--
-theorem `embDomain_of_notMem_range` / 定理 `embDomain_of_notMem_range`
-
-English:
-theorem embDomain_of_notMem_range
-  given: (f : α ↪ β) (v : α ->₀ M) (a : β) (h : a ∉ Set.range f)
-  proof: by grind [embDomain]
-
-@[deprecated (since := "2026-07-15")] alias embDomain_notin_range := embDomain_of_notMem_range
-
-中文:
-定理 embDomain_of_notMem_range
-  条件: (f : α ↪ β) (v : α ->₀ M) (a : β) (h : a ∉ 集合.range f)
-  证明: by grind [embDomain]
-
-@[deprecated (since := "2026-07-15")] alias embDomain_notin_range := embDomain_of_notMem_range
-
-Depends on / 依赖: embDomain
--/
-theorem embDomain_of_notMem_range (f : α ↪ β) (v : α ->₀ M) (a : β) (h : a ∉ Set.range f) :
+theorem embDomain_of_notMem_range (f : α ↪ β) (v : α →₀ M) (a : β) (h : a ∉ Set.range f) :
     embDomain f v a = 0 := by grind [embDomain]
 
 @[deprecated (since := "2026-07-15")] alias embDomain_notin_range := embDomain_of_notMem_range
-
-/--
-theorem `embDomain_injective` / 定理 `embDomain_injective`
-
-English:
-theorem embDomain_injective
-  given: (f : α ↪ β)
-  statement: Function.Injective (embDomain f : (α ->₀ M) -> β ->₀ M)
-  proof: fun l₁ l₂ h => ext fun a => by simpa only [embDomain_apply_self] using DFunLike.ext_iff.1 h (f a)
-
-@[simp]
-
-中文:
-定理 embDomain_injective
-  条件: (f : α ↪ β)
-  结论: 函数.单射 (embDomain f : (α ->₀ M) -> β ->₀ M)
-  证明: fun l₁ l₂ h => ext fun a => by simpa only [embDomain_apply_self] using DFunLike.ext_iff.1 h (f a)
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, embDomain_apply_self, ext_iff
+/-
+**Finsupp.embDomain_injective** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_injective (f : α ↪ β) : Function.Injective (embDomain f : (α ->₀
+ M) -> β ->₀ M)
+参数：f : α ↪ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.embDomain_apply_self`：embDomain_apply_self (f : α ↪ β) (v : α ->
+₀ M) (a : α) : embDomain f v (f a) = v a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-theorem embDomain_injective (f : α ↪ β) : Function.Injective (embDomain f : (α ->₀ M) -> β ->₀ M) :=
+theorem embDomain_injective (f : α ↪ β) : Function.Injective (embDomain f : (α →₀ M) → β →₀ M) :=
   fun l₁ l₂ h => ext fun a => by simpa only [embDomain_apply_self] using DFunLike.ext_iff.1 h (f a)
 
 @[simp]
-/--
-theorem `embDomain_inj` / 定理 `embDomain_inj`
-
-English:
-theorem embDomain_inj
-  given: {f : α ↪ β} {l₁ l₂ : α ->₀ M}
-  statement: embDomain f l₁ = embDomain f l₂ ↔ l₁ = l₂
-  proof: (embDomain_injective f).eq_iff
-
-@[simp]
-
-中文:
-定理 embDomain_inj
-  条件: {f : α ↪ β} {l₁ l₂ : α ->₀ M}
-  结论: embDomain f l₁ = embDomain f l₂ ↔ l₁ = l₂
-  证明: (embDomain_injective f).eq_iff
-
-@[simp]
-
-Depends on / 依赖: embDomain_injective, eq_iff
+/-
+**Finsupp.embDomain_inj** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_inj {f : α ↪ β} {l₁ l₂ : α ->₀ M} : embDomain f l₁ = embDomain f
+ l₂ ↔ l₁ = l₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Finsupp.embDomain_injective`：embDomain_injective (f : α ↪ β) : Function.
+Injective (embDomain f : (α ->₀ M) -> β ->₀ M)
 -/
-theorem embDomain_inj {f : α ↪ β} {l₁ l₂ : α ->₀ M} : embDomain f l₁ = embDomain f l₂ ↔ l₁ = l₂ :=
+theorem embDomain_inj {f : α ↪ β} {l₁ l₂ : α →₀ M} : embDomain f l₁ = embDomain f l₂ ↔ l₁ = l₂ :=
   (embDomain_injective f).eq_iff
 
 @[simp]
-/--
-theorem `embDomain_eq_zero` / 定理 `embDomain_eq_zero`
-
-English:
-theorem embDomain_eq_zero
-  given: {f : α ↪ β} {l : α ->₀ M}
-  statement: embDomain f l = 0 ↔ l = 0
-  proof: (embDomain_injective f).eq_iff' embDomain_zero f
-
-中文:
-定理 embDomain_eq_zero
-  条件: {f : α ↪ β} {l : α ->₀ M}
-  结论: embDomain f l = 0 ↔ l = 0
-  证明: (embDomain_injective f).eq_iff' embDomain_zero f
-
-Depends on / 依赖: embDomain_injective, embDomain_zero, eq_iff
+/-
+**Finsupp.embDomain_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_eq_zero {f : α ↪ β} {l : α ->₀ M} : embDomain f l = 0 ↔ l = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Finsupp.embDomain_injective`：embDomain_injective (f : α ↪ β) : Function.
+Injective (embDomain f : (α ->₀ M) -> β ->₀ M)
+· 使用定理 `Finsupp.embDomain_zero`：embDomain_zero (f : α ↪ β) : (embDomain f 0 : β 
+->₀ M) = 0
 -/
-theorem embDomain_eq_zero {f : α ↪ β} {l : α ->₀ M} : embDomain f l = 0 ↔ l = 0 :=
-(embDomain_injective f).eq_iff' embDomain_zero f
-
-/--
-theorem `embDomain_mapRange` / 定理 `embDomain_mapRange`
-
-English:
-theorem embDomain_mapRange
-  given: (f : α ↪ β) (g : M -> N) (p : α ->₀ M) (hg : g 0 = 0)
-  proof: by grind
-
-@[simp]
-
-中文:
-定理 embDomain_mapRange
-  条件: (f : α ↪ β) (g : M -> N) (p : α ->₀ M) (hg : g 0 = 0)
-  证明: by grind
-
-@[simp]
+theorem embDomain_eq_zero {f : α ↪ β} {l : α →₀ M} : embDomain f l = 0 ↔ l = 0 :=
+  (embDomain_injective f).eq_iff' <| embDomain_zero f
+/-
+**Finsupp.embDomain_mapRange** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_mapRange (f : α ↪ β) (g : M -> N) (p : α ->₀ M) (hg : g 0 = 0) :
+ embDomain f (mapRange g hg p) = mapRange g hg (embDomain f p)
+参数：f : α ↪ β；g : M -> N；p : α ->₀ M；hg : g 0 = 0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem embDomain_mapRange (f : α ↪ β) (g : M -> N) (p : α ->₀ M) (hg : g 0 = 0) :
+theorem embDomain_mapRange (f : α ↪ β) (g : M → N) (p : α →₀ M) (hg : g 0 = 0) :
     embDomain f (mapRange g hg p) = mapRange g hg (embDomain f p) := by grind
 
 @[simp]
-/--
-lemma `embDomain_refl` / 引理 `embDomain_refl`
-
-English:
-lemma embDomain_refl
-  statement: embDomain (M := M) (Function.Embedding.refl α) = id
-  proof: by
-  ext; simp [embDomain_apply]
-
-中文:
-引理 embDomain_refl
-  结论: embDomain (M := M) (函数.嵌入.refl α) = id
-  证明: by
-  ext; simp [embDomain_apply]
-
-Depends on / 依赖: Embedding, Function, Function.Embedding.refl, embDomain_apply
+/-
+**Finsupp.embDomain_refl** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：embDomain_refl : embDomain (M
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.embDomain_apply`：embDomain_apply (f : α ↪ β) (v : α ->₀ M) (b : 
+β) : embDomain f v b = if h : exists a, f a = b then v h.choose else 0
+· 使用定理 `Function.Embedding.refl_apply`：∀ (α : Sort u_1) (a : α), (Function.Embed
+ding.refl α) a = a
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Exists.choose.congr_simp`：∀ {α : Sort u_1} {p p_1 : α → Prop} (e_p : p =
+ p_1) (P : ∃ a, p a), P.choose = ⋯.choose
+· 使用定理 `Classical.choose_eq`：∀ {α : Sort u_1} (a : α), ⋯.choose = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma embDomain_refl : embDomain (M := M) (Function.Embedding.refl α) = id := by
   ext; simp [embDomain_apply]
@@ -1734,82 +1255,69 @@ section ZipWith
 
 variable [Zero M] [Zero N] [Zero O]
 
-/--
-Definition of `zipWith` / `zipWith` 的定义
+/-- Given finitely supported functions `g₁ : α →₀ M` and `g₂ : α →₀ N` and function `f : M → N → O`,
+`Finsupp.zipWith f hf g₁ g₂` is the finitely supported function `α →₀ O` satisfying
+`zipWith f hf g₁ g₂ a = f (g₁ a) (g₂ a)`, which is well-defined when `f 0 0 = 0`. -/
+/-
+**Finsupp.zipWith** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：zipWith (f : M -> N -> O) (hf : f 0 0 = 0) (g₁ : α ->₀ M) (g₂ : α ->₀ N) :
+ α ->₀ O
+参数：f : M -> N -> O；hf : f 0 0 = 0；g₁ : α ->₀ M；g₂ : α ->₀ N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zipWith
-  signature: (f : M -> N -> O) (hf : f 0 0 = 0) (g₁ : α ->₀ M) (g₂ : α ->₀ N)
-  body: onFinset
-    (haveI := Classical.decEq α; g₁.support union g₂.support)
-    (fun a => f (g₁ a) (g₂ a))
-    fun a (H : f _ _ != 0) => by
-      classical
-      grind
-
-@[simp, grind =]
-
-中文:
-定义 zipWith
-  签名: (f : M -> N -> O) (hf : f 0 0 = 0) (g₁ : α ->₀ M) (g₂ : α ->₀ N)
-  定义体: onFinset
-    (haveI := Classical.decEq α; g₁.support union g₂.support)
-    (fun a => f (g₁ a) (g₂ a))
-    fun a (H : f _ _ != 0) => by
-      classical
-      grind
-
-@[simp, grind =]
-
-Depends on / 依赖: Classical, Classical.decEq, classical, onFinset, support
+--- 原说明 ---
+Given finitely supported functions `g₁ : α →₀ M` and `g₂ : α →₀ N` and function 
+`f : M → N → O`,
+`Finsupp.zipWith f hf g₁ g₂` is the finitely supported function `α →₀ O` satisfy
+ing
+`zipWith f hf g₁ g₂ a = f (g₁ a) (g₂ a)`, which is well-defined when `f 0 0 = 0`
+.
 -/
-def zipWith (f : M -> N -> O) (hf : f 0 0 = 0) (g₁ : α ->₀ M) (g₂ : α ->₀ N) : α ->₀ O :=
+def zipWith (f : M → N → O) (hf : f 0 0 = 0) (g₁ : α →₀ M) (g₂ : α →₀ N) : α →₀ O :=
   onFinset
-    (haveI := Classical.decEq α; g₁.support union g₂.support)
+    (haveI := Classical.decEq α; g₁.support ∪ g₂.support)
     (fun a => f (g₁ a) (g₂ a))
-    fun a (H : f _ _ != 0) => by
+    fun a (H : f _ _ ≠ 0) => by
       classical
       grind
 
 @[simp, grind =]
-/--
-theorem `zipWith_apply` / 定理 `zipWith_apply`
-
-English:
-theorem zipWith_apply
-  given: {f : M -> N -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M} {g₂ : α ->₀ N} {a : α}
-  proof: rfl
-
-中文:
-定理 zipWith_apply
-  条件: {f : M -> N -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M} {g₂ : α ->₀ N} {a : α}
-  证明: rfl
+/-
+**Finsupp.zipWith_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：zipWith_apply {f : M -> N -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M} {g₂ : α ->
+₀ N} {a : α} : zipWith f hf g₁ g₂ a = f (g₁ a) (g₂ a)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zipWith_apply {f : M -> N -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M} {g₂ : α ->₀ N} {a : α} :
+theorem zipWith_apply {f : M → N → O} {hf : f 0 0 = 0} {g₁ : α →₀ M} {g₂ : α →₀ N} {a : α} :
     zipWith f hf g₁ g₂ a = f (g₁ a) (g₂ a) :=
   rfl
-
-/--
-theorem `support_zipWith` / 定理 `support_zipWith`
-
-English:
-theorem support_zipWith
-  statement: [D : DecidableEq α] {f : M -> N -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M}
-  proof: by
-  convert! support_onFinset_subset
-
-中文:
-定理 support_zipWith
-  结论: [D : DecidableEq α] {f : M -> N -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M}
-  证明: by
-  convert! support_onFinset_subset
-
-Depends on / 依赖: convert, support_onFinset_subset
+/-
+**Finsupp.support_zipWith** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：support_zipWith [D : DecidableEq α] {f : M -> N -> O} {hf : f 0 0 = 0} {g₁
+ : α ->₀ M} {g₂ : α ->₀ N} : (zipWith f hf g₁ g₂).support subseteq g₁.support un
+ion g₂.support
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Lean.Meta.instFastSubsingletonForall`：∀ {α : Sort u} {β : α → Sort v} [i
+nst : ∀ (x : α), Meta.FastSubsingleton (β x)], Meta.FastSubsingleton ((x : α) → 
+β x)
+· 使用定理 `Lean.Meta.instFastSubsingletonDecidable`：∀ {p : Prop}, Meta.FastSubsingl
+eton (Decidable p)
+· 使用定理 `Finsupp.support_onFinset_subset`：support_onFinset_subset {s : Finset α} 
+{f : α -> M} {hf} : (onFinset s f hf).support subseteq s
 -/
-theorem support_zipWith [D : DecidableEq α] {f : M -> N -> O} {hf : f 0 0 = 0} {g₁ : α ->₀ M}
-    {g₂ : α ->₀ N} : (zipWith f hf g₁ g₂).support subseteq g₁.support union g₂.support := by
+theorem support_zipWith [D : DecidableEq α] {f : M → N → O} {hf : f 0 0 = 0} {g₁ : α →₀ M}
+    {g₂ : α →₀ N} : (zipWith f hf g₁ g₂).support ⊆ g₁.support ∪ g₂.support := by
   convert! support_onFinset_subset
 
 end ZipWith
 
 end Finsupp
+

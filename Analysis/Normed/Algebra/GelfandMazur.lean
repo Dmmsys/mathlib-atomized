@@ -122,97 +122,117 @@ open Polynomial
 namespace NormedAlgebra
 
 open Filter Topology Set in
-/--
-lemma `norm_eq_of_isMinOn_of_forall_le` / 引理 `norm_eq_of_isMinOn_of_forall_le`
+/-- The key step: show that the norm of a suitable function is constant if the norm takes
+a positive minimum and condition `H` below is satisfied. -/
+/-
+**NormedAlgebra.norm_eq_of_isMinOn_of_forall_le** 是 Mathlib 中的一个引理，位于命名空间 `Norme
+dAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma norm_eq_of_isMinOn_of_forall_le
-  statement: {X E : Type*} [TopologicalSpace X]
-  proof: by
-  suffices {y | ‖f y‖ = M} = univ by simpa only [← this, hx] using! mem_univ y
-refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ nonempty_of_mem hx
-  rw [isOpen_iff_eventually]
-  intro w hw
-  filter_upwards [mem_map.mp <| hf.tendsto w (Metric.ball_mem_nhds (f w) hM)] with u hu
-  simp only [mem_preimage, Metric.mem_ball, dist_eq_norm, ← div_lt_one₀ hM] at hu
-  refine le_antisymm ?_ (hx ▸ isMinOn_univ_iff.mp h u)
-  suffices Tendsto (fun n : Nat => M * (1 + (‖f u - f w‖ / M) ^ n)) atTop (𝓝 (M * (1 + 0))) by
-    refine ge_of_tendsto (by simpa) ?_
-    filter_upwards [Ioi_mem_atTop 0] with n hn
-    exact H u hw n hn
-.const_mul M .const_add 1 exact tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) hu
-
-中文:
-引理 norm_eq_of_isMinOn_of_对任意_le
-  结论: {X E : 类型} [拓扑空间 X]
-  证明: by
-  suffices {y | ‖f y‖ = M} = univ by simpa only [← this, hx] using! mem_univ y
-refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ nonempty_of_mem hx
-  rw [isOpen_iff_eventually]
-  intro w hw
-  filter_upwards [mem_map.mp <| hf.tendsto w (Metric.ball_mem_nhds (f w) hM)] with u hu
-  simp only [mem_preimage, Metric.mem_ball, dist_eq_norm, ← div_lt_one₀ hM] at hu
-  refine le_antisymm ?_ (hx ▸ isMinOn_univ_iff.mp h u)
-  suffices Tendsto (fun n : Nat => M * (1 + (‖f u - f w‖ / M) ^ n)) atTop (𝓝 (M * (1 + 0))) by
-    refine ge_of_tendsto (by simpa) ?_
-    filter_upwards [Ioi_mem_atTop 0] with n hn
-    exact H u hw n hn
-.const_mul M .const_add 1 exact tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) hu
+--- 原说明 ---
+The key step: show that the norm of a suitable function is constant if the norm 
+takes
+a positive minimum and condition `H` below is satisfied.
 -/
 private lemma norm_eq_of_isMinOn_of_forall_le {X E : Type*} [TopologicalSpace X]
-    [PreconnectedSpace X] [SeminormedAddCommGroup E] {f : X -> E} {M : Real} {x : X} (hM : 0 < M)
+    [PreconnectedSpace X] [SeminormedAddCommGroup E] {f : X → E} {M : ℝ} {x : X} (hM : 0 < M)
     (hx : ‖f x‖ = M) (h : IsMinOn (‖f ·‖) univ x) (hf : Continuous f)
-    (H : forall {y} z, ‖f y‖ = M -> forall n > 0, ‖f z‖ <= M * (1 + (‖f z - f y‖ / M) ^ n)) (y : X) :
+    (H : ∀ {y} z, ‖f y‖ = M → ∀ n > 0, ‖f z‖ ≤ M * (1 + (‖f z - f y‖ / M) ^ n)) (y : X) :
     ‖f y‖ = M := by
   suffices {y | ‖f y‖ = M} = univ by simpa only [← this, hx] using! mem_univ y
-refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ nonempty_of_mem hx
+  refine IsClopen.eq_univ ⟨isClosed_eq (by fun_prop) (by fun_prop), ?_⟩ <| nonempty_of_mem hx
   rw [isOpen_iff_eventually]
   intro w hw
   filter_upwards [mem_map.mp <| hf.tendsto w (Metric.ball_mem_nhds (f w) hM)] with u hu
   simp only [mem_preimage, Metric.mem_ball, dist_eq_norm, ← div_lt_one₀ hM] at hu
   refine le_antisymm ?_ (hx ▸ isMinOn_univ_iff.mp h u)
-  suffices Tendsto (fun n : Nat => M * (1 + (‖f u - f w‖ / M) ^ n)) atTop (𝓝 (M * (1 + 0))) by
+  suffices Tendsto (fun n : ℕ ↦ M * (1 + (‖f u - f w‖ / M) ^ n)) atTop (𝓝 (M * (1 + 0))) by
     refine ge_of_tendsto (by simpa) ?_
     filter_upwards [Ioi_mem_atTop 0] with n hn
     exact H u hw n hn
-.const_mul M .const_add 1 exact tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) hu
+  exact tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) hu |>.const_add 1 |>.const_mul M
 
 open Filter Bornology Set in
-/--
-lemma `exists_isMinOn_norm_sub_smul` / 引理 `exists_isMinOn_norm_sub_smul`
+/-- In a normed algebra `F` over a normed field `𝕜` that is a proper space, the function
+`z : 𝕜 ↦ ‖x - algebraMap 𝕜 F z‖` achieves a global minimum for every `x : F`. -/
+/-
+**NormedAlgebra.exists_isMinOn_norm_sub_smul** 是 Mathlib 中的一个引理，位于命名空间 `NormedAl
+gebra`。
+形式化陈述：exists_isMinOn_norm_sub_smul (𝕜 : Type*) {F : Type*} [NormedField 𝕜] [Prop
+erSpace 𝕜] [SeminormedRing F] [NormedAlgebra 𝕜 F] [NormOneClass F] (x : F) : exi
+sts z : 𝕜, IsMinOn (‖x - algebraMap 𝕜 F ·‖) univ z
+参数：𝕜 : Type*；x : F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `tendsto_norm_cobounded_atTop`：∀ {E : Type u_2} [inst : SeminormedAddGrou
+p E], Filter.Tendsto norm (Bornology.cobounded E) Filter.atTop
+· 使用定理 `tendsto_const_sub_cobounded`：tendsto_const_sub_cobounded (x : R) : Tends
+to (x - ·) (cobounded R) (cobounded R)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Continuous.exists_forall_le_of_isBounded`：exists_forall_le_of_isBounded 
+{f : β -> α} (hf : Continuous f) (x₀ : β) (h : Bornology.IsBounded {x : β | f x 
+<= f x₀}) : exists x, forall y…
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Continuous.norm`：∀ {α : Type u_1} {E : Type u_4} [inst : SeminormedAddGr
+oup E] [inst_1 : TopologicalSpace α] {f : α → E},   Continuous f → Continuous fu
+n x =…
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_algebraMap`：continuous_algebraMap [ContinuousSMul R A] : Cont
+inuous (algebraMap R A)
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Filter.Ioi_mem_atTop`：Ioi_mem_atTop [Preorder α] [NoTopOrder α] (x : α) 
+: Ioi x in (atTop : Filter α)
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
 
-English:
-lemma exists_isMinOn_norm_sub_smul
-  statement: (𝕜 : Type*) {F : Type*} [NormedField 𝕜] [ProperSpace 𝕜]
-  proof: by
-  have : Tendsto (‖x - algebraMap 𝕜 F ·‖) (cobounded 𝕜) atTop := by
-.comp .comp by simp tendsto_const_sub_cobounded x exact tendsto_norm_cobounded_atTop
-  simp only [isMinOn_univ_iff]
-  refine (show Continuous fun z : 𝕜 => ‖x - algebraMap 𝕜 F z‖ by fun_prop)
-.exists_forall_le_of_isBounded 0 ?_
-  simpa [isBounded_def, compl_ofPred, Ioi] using this (Ioi_mem_atTop ‖x - (0 : 𝕜) • 1‖)
-
-中文:
-引理 存在_isMinOn_norm_sub_smul
-  结论: (𝕜 : 类型) {F : 类型} [赋范域 𝕜] [真空间 𝕜]
-  证明: by
-  have : Tendsto (‖x - algebraMap 𝕜 F ·‖) (cobounded 𝕜) atTop := by
-.comp .comp by simp tendsto_const_sub_cobounded x exact tendsto_norm_cobounded_atTop
-  simp only [isMinOn_univ_iff]
-  refine (show Continuous fun z : 𝕜 => ‖x - algebraMap 𝕜 F z‖ by fun_prop)
-.exists_forall_le_of_isBounded 0 ?_
-  simpa [isBounded_def, compl_ofPred, Ioi] using this (Ioi_mem_atTop ‖x - (0 : 𝕜) • 1‖)
-
-Depends on / 依赖: Continuous, Ioi_mem_atTop, Tendsto, algebraMap, cobounded, compl_ofPred, exists_forall_le_of_isBounded, fun_prop, isBounded_def, isMinOn_univ_iff, tendsto_const_sub_cobounded, tendsto_norm_cobounded_atTop
+--- 原说明 ---
+In a normed algebra `F` over a normed field `𝕜` that is a proper space, the func
+tion
+`z : 𝕜 ↦ ‖x - algebraMap 𝕜 F z‖` achieves a global minimum for every `x : F`.
 -/
 lemma exists_isMinOn_norm_sub_smul (𝕜 : Type*) {F : Type*} [NormedField 𝕜] [ProperSpace 𝕜]
     [SeminormedRing F] [NormedAlgebra 𝕜 F] [NormOneClass F] (x : F) :
-    exists z : 𝕜, IsMinOn (‖x - algebraMap 𝕜 F ·‖) univ z := by
+    ∃ z : 𝕜, IsMinOn (‖x - algebraMap 𝕜 F ·‖) univ z := by
   have : Tendsto (‖x - algebraMap 𝕜 F ·‖) (cobounded 𝕜) atTop := by
-.comp .comp by simp tendsto_const_sub_cobounded x exact tendsto_norm_cobounded_atTop
+    exact tendsto_norm_cobounded_atTop |>.comp <| tendsto_const_sub_cobounded x |>.comp <| by simp
   simp only [isMinOn_univ_iff]
-  refine (show Continuous fun z : 𝕜 => ‖x - algebraMap 𝕜 F z‖ by fun_prop)
-.exists_forall_le_of_isBounded 0 ?_
+  refine (show Continuous fun z : 𝕜 ↦ ‖x - algebraMap 𝕜 F z‖ by fun_prop)
+    |>.exists_forall_le_of_isBounded 0 ?_
   simpa [isBounded_def, compl_ofPred, Ioi] using this (Ioi_mem_atTop ‖x - (0 : 𝕜) • 1‖)
 
 /-!
@@ -221,188 +241,174 @@ lemma exists_isMinOn_norm_sub_smul (𝕜 : Type*) {F : Type*} [NormedField 𝕜]
 
 namespace Complex
 
-variable {F : Type*} [NormedRing F] [NormOneClass F] [NormMulClass F] [NormedAlgebra Complex F]
+variable {F : Type*} [NormedRing F] [NormOneClass F] [NormMulClass F] [NormedAlgebra ℂ F]
 
-/--
-lemma `le_aeval_of_isMonicOfDegree` / 引理 `le_aeval_of_isMonicOfDegree`
+/-- If the norm of every monic linear polynomial over `ℂ`, evaluated at some `x : F`,
+is bounded below by `M`, then the norm of the value at `x - algebraMap ℂ F c` of a monic polynomial
+of degree `n` is bounded below by `M ^ n`. This follows by induction from the fact that
+every monic polynomial over `ℂ` factors as a product of monic linear polynomials. -/
+/-
+**NormedAlgebra.Complex.le_aeval_of_isMonicOfDegree** 是 Mathlib 中的一个引理，位于命名空间 `N
+ormedAlgebra.Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma le_aeval_of_isMonicOfDegree
-  statement: (x : F) {M : Real} (hM : 0 <= M)
-  proof: by
-  induction n generalizing p with
-  | zero => simp [isMonicOfDegree_zero_iff.mp hp]
-  | succ n ih =>
-    obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_one_mul_isMonicOfDegree
-    obtain ⟨r, rfl⟩ := isMonicOfDegree_one_iff.mp hf₁
-    have H' (y : F) : aeval y (X + C r) = y + algebraMap Complex F r := by simp
-    simpa only [pow_succ, mul_comm, H, aeval_mul, H', sub_add, ← map_sub, norm_mul]
-      using mul_le_mul (ih hf₂) (h (c - r)) hM (norm_nonneg _)
-
-中文:
-引理 le_aeval_of_isMonicOfDegree
-  结论: (x : F) {M : 实数} (hM : 0 <= M)
-  证明: by
-  induction n generalizing p with
-  | zero => simp [isMonicOfDegree_zero_iff.mp hp]
-  | succ n ih =>
-    obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_one_mul_isMonicOfDegree
-    obtain ⟨r, rfl⟩ := isMonicOfDegree_one_iff.mp hf₁
-    have H' (y : F) : aeval y (X + C r) = y + algebraMap Complex F r := by simp
-    simpa only [pow_succ, mul_comm, H, aeval_mul, H', sub_add, ← map_sub, norm_mul]
-      using mul_le_mul (ih hf₂) (h (c - r)) hM (norm_nonneg _)
+--- 原说明 ---
+If the norm of every monic linear polynomial over `ℂ`, evaluated at some `x : F`
+,
+is bounded below by `M`, then the norm of the value at `x - algebraMap ℂ F c` of
+ a monic polynomial
+of degree `n` is bounded below by `M ^ n`. This follows by induction from the fa
+ct that
+every monic polynomial over `ℂ` factors as a product of monic linear polynomials
+.
 -/
-private lemma le_aeval_of_isMonicOfDegree (x : F) {M : Real} (hM : 0 <= M)
-    (h : forall z' : Complex, M <= ‖x - algebraMap Complex F z'‖) {p : Complex[X]} {n : Nat} (hp : IsMonicOfDegree p n)
-    (c : Complex) :
-    M ^ n <= ‖aeval (x - algebraMap Complex F c) p‖ := by
+private lemma le_aeval_of_isMonicOfDegree (x : F) {M : ℝ} (hM : 0 ≤ M)
+    (h : ∀ z' : ℂ, M ≤ ‖x - algebraMap ℂ F z'‖) {p : ℂ[X]} {n : ℕ} (hp : IsMonicOfDegree p n)
+    (c : ℂ) :
+    M ^ n ≤ ‖aeval (x - algebraMap ℂ F c) p‖ := by
   induction n generalizing p with
   | zero => simp [isMonicOfDegree_zero_iff.mp hp]
   | succ n ih =>
     obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_one_mul_isMonicOfDegree
     obtain ⟨r, rfl⟩ := isMonicOfDegree_one_iff.mp hf₁
-    have H' (y : F) : aeval y (X + C r) = y + algebraMap Complex F r := by simp
+    have H' (y : F) : aeval y (X + C r) = y + algebraMap ℂ F r := by simp
     simpa only [pow_succ, mul_comm, H, aeval_mul, H', sub_add, ← map_sub, norm_mul]
       using mul_le_mul (ih hf₂) (h (c - r)) hM (norm_nonneg _)
 
 open Set in
-/--
-lemma `norm_sub_eq_norm_sub_of_isMinOn` / 引理 `norm_sub_eq_norm_sub_of_isMinOn`
+/-- We show that when `z ↦ ‖x - algebraMap ℂ F z‖` is never zero (and attains a minimum), then
+it is constant. This uses the auxiliary result `norm_eq_of_isMinOn_of_forall_le`. -/
+/-
+**NormedAlgebra.Complex.norm_sub_eq_norm_sub_of_isMinOn** 是 Mathlib 中的一个引理，位于命名空
+间 `NormedAlgebra.Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma norm_sub_eq_norm_sub_of_isMinOn
-  statement: {x : F} {z : Complex}
-  proof: by
-  set M := ‖x - algebraMap Complex F z‖ with hMdef
-  have hM₀ : 0 < M := by have := H z; positivity
-  refine norm_eq_of_isMinOn_of_forall_le (f := (x - algebraMap Complex F ·)) hM₀ hMdef.symm hz
-    (by fun_prop) (fun {y} w hy n hn => ?_) c
-  -- show
-  -- `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - algebraMap ℂ F w - (x - algebraMap ℂ F y)‖ / M) ^ n)`
-  rw [sub_sub_sub_cancel_left]; rw [← map_sub]; rw [norm_algebraMap]; rw [norm_sub_rev y w]; rw [norm_one]; rw [mul_one]; rw [show M * (1 + (‖w - y‖ / M) ^ n) = (M ^ n + ‖w - y‖ ^ n) / M ^ (n - 1) by
-      simp only [field]; rw [div_pow]; rw [← pow_succ']; rw [Nat.sub_add_cancel hn],
-    le_div_iff₀ (by positivity)]
-  obtain ⟨p, hp, hrel⟩ :=
-    (isMonicOfDegree_X_pow Complex n).of_dvd_sub (by grind)
-(isMonicOfDegree_X_sub_one (w - y)) (by compute_degree!) sub_dvd_pow_sub_pow X _ n
-  grw [le_aeval_of_isMonicOfDegree x hM₀.le (isMinOn_univ_iff.mp hz) hp y]
-  rw [eq_comm]; rw [← eq_sub_iff_add_eq]; rw [mul_comm] at hrel
-  apply_fun (‖aeval (x - algebraMap Complex F y) ·‖) at hrel
-  simp only [map_sub, map_mul, aeval_X, aeval_C, sub_sub_sub_cancel_right, norm_mul, map_pow]
-    at hrel
-  rw [hrel]
-exact (norm_sub_le ..).trans by simp [hy, ← map_sub]
-
-中文:
-引理 norm_sub_eq_norm_sub_of_isMinOn
-  结论: {x : F} {z : 复形}
-  证明: by
-  set M := ‖x - algebraMap Complex F z‖ with hMdef
-  have hM₀ : 0 < M := by have := H z; positivity
-  refine norm_eq_of_isMinOn_of_forall_le (f := (x - algebraMap Complex F ·)) hM₀ hMdef.symm hz
-    (by fun_prop) (fun {y} w hy n hn => ?_) c
-  -- show
-  -- `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - algebraMap ℂ F w - (x - algebraMap ℂ F y)‖ / M) ^ n)`
-  rw [sub_sub_sub_cancel_left]; rw [← map_sub]; rw [norm_algebraMap]; rw [norm_sub_rev y w]; rw [norm_one]; rw [mul_one]; rw [show M * (1 + (‖w - y‖ / M) ^ n) = (M ^ n + ‖w - y‖ ^ n) / M ^ (n - 1) by
-      simp only [field]; rw [div_pow]; rw [← pow_succ']; rw [Nat.sub_add_cancel hn],
-    le_div_iff₀ (by positivity)]
-  obtain ⟨p, hp, hrel⟩ :=
-    (isMonicOfDegree_X_pow Complex n).of_dvd_sub (by grind)
-(isMonicOfDegree_X_sub_one (w - y)) (by compute_degree!) sub_dvd_pow_sub_pow X _ n
-  grw [le_aeval_of_isMonicOfDegree x hM₀.le (isMinOn_univ_iff.mp hz) hp y]
-  rw [eq_comm]; rw [← eq_sub_iff_add_eq]; rw [mul_comm] at hrel
-  apply_fun (‖aeval (x - algebraMap Complex F y) ·‖) at hrel
-  simp only [map_sub, map_mul, aeval_X, aeval_C, sub_sub_sub_cancel_right, norm_mul, map_pow]
-    at hrel
-  rw [hrel]
-exact (norm_sub_le ..).trans by simp [hy, ← map_sub]
+--- 原说明 ---
+We show that when `z ↦ ‖x - algebraMap ℂ F z‖` is never zero (and attains a mini
+mum), then
+it is constant. This uses the auxiliary result `norm_eq_of_isMinOn_of_forall_le`
+.
 -/
-private lemma norm_sub_eq_norm_sub_of_isMinOn {x : F} {z : Complex}
-    (hz : IsMinOn (‖x - algebraMap Complex F ·‖) univ z) (H : forall z' : Complex, ‖x - algebraMap Complex F z'‖ != 0)
-    (c : Complex) :
-    ‖x - algebraMap Complex F c‖ = ‖x - algebraMap Complex F z‖ := by
-  set M := ‖x - algebraMap Complex F z‖ with hMdef
+private lemma norm_sub_eq_norm_sub_of_isMinOn {x : F} {z : ℂ}
+    (hz : IsMinOn (‖x - algebraMap ℂ F ·‖) univ z) (H : ∀ z' : ℂ, ‖x - algebraMap ℂ F z'‖ ≠ 0)
+    (c : ℂ) :
+    ‖x - algebraMap ℂ F c‖ = ‖x - algebraMap ℂ F z‖ := by
+  set M := ‖x - algebraMap ℂ F z‖ with hMdef
   have hM₀ : 0 < M := by have := H z; positivity
-  refine norm_eq_of_isMinOn_of_forall_le (f := (x - algebraMap Complex F ·)) hM₀ hMdef.symm hz
-    (by fun_prop) (fun {y} w hy n hn => ?_) c
+  refine norm_eq_of_isMinOn_of_forall_le (f := (x - algebraMap ℂ F ·)) hM₀ hMdef.symm hz
+    (by fun_prop) (fun {y} w hy n hn ↦ ?_) c
   -- show
-  -- `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - algebraMap ℂ F w - (x - algebraMap ℂ F y)‖ / M) ^ n)`
-  rw [sub_sub_sub_cancel_left]; rw [← map_sub]; rw [norm_algebraMap]; rw [norm_sub_rev y w]; rw [norm_one]; rw [mul_one]; rw [show M * (1 + (‖w - y‖ / M) ^ n) = (M ^ n + ‖w - y‖ ^ n) / M ^ (n - 1) by
-      simp only [field]; rw [div_pow]; rw [← pow_succ']; rw [Nat.sub_add_cancel hn],
+  --  `‖x - algebraMap ℂ F w‖ ≤ M * (1 + (‖x - algebraMap ℂ F w - (x - algebraMap ℂ F y)‖ / M) ^ n)`
+  rw [sub_sub_sub_cancel_left, ← map_sub, norm_algebraMap, norm_sub_rev y w, norm_one, mul_one,
+    show M * (1 + (‖w - y‖ / M) ^ n) = (M ^ n + ‖w - y‖ ^ n) / M ^ (n - 1) by
+      simp only [field, div_pow, ← pow_succ', Nat.sub_add_cancel hn],
     le_div_iff₀ (by positivity)]
   obtain ⟨p, hp, hrel⟩ :=
-    (isMonicOfDegree_X_pow Complex n).of_dvd_sub (by grind)
-(isMonicOfDegree_X_sub_one (w - y)) (by compute_degree!) sub_dvd_pow_sub_pow X _ n
+    (isMonicOfDegree_X_pow ℂ n).of_dvd_sub (by grind)
+      (isMonicOfDegree_X_sub_one (w - y)) (by compute_degree!) <| sub_dvd_pow_sub_pow X _ n
   grw [le_aeval_of_isMonicOfDegree x hM₀.le (isMinOn_univ_iff.mp hz) hp y]
-  rw [eq_comm]; rw [← eq_sub_iff_add_eq]; rw [mul_comm] at hrel
-  apply_fun (‖aeval (x - algebraMap Complex F y) ·‖) at hrel
+  rw [eq_comm, ← eq_sub_iff_add_eq, mul_comm] at hrel
+  apply_fun (‖aeval (x - algebraMap ℂ F y) ·‖) at hrel
   simp only [map_sub, map_mul, aeval_X, aeval_C, sub_sub_sub_cancel_right, norm_mul, map_pow]
     at hrel
   rw [hrel]
-exact (norm_sub_le ..).trans by simp [hy, ← map_sub]
+  exact (norm_sub_le ..).trans <| by simp [hy, ← map_sub]
 
-/--
-lemma `exists_norm_sub_smul_one_eq_zero` / 引理 `exists_norm_sub_smul_one_eq_zero`
+/-- If `F` is a normed `ℂ`-algebra and `x : F`, then there is a complex number `z` such that
+`‖x - algebraMap ℂ F z‖ = 0` (whence `x = algebraMap ℂ F z`). -/
+/-
+**NormedAlgebra.Complex.exists_norm_sub_smul_one_eq_zero** 是 Mathlib 中的一个引理，位于命名
+空间 `NormedAlgebra.Complex`。
+形式化陈述：exists_norm_sub_smul_one_eq_zero (x : F) : exists z : Complex, ‖x - algebr
+aMap Complex F z‖ = 0
+参数：x : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NormedAlgebra.exists_isMinOn_norm_sub_smul`：exists_isMinOn_norm_sub_smul
+ (𝕜 : Type*) {F : Type*} [NormedField 𝕜] [ProperSpace 𝕜] [SeminormedRing F] [Nor
+medAlgebra 𝕜 F] [NormOneClass F]…
+· 使用定理 `Complex.instProperSpace`：ProperSpace ℂ
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `_private.Mathlib.Analysis.Normed.Algebra.GelfandMazur.0.NormedAlgebra.Co
+mplex.norm_sub_eq_norm_sub_of_isMinOn`：∀ {F : Type u_1} [inst : NormedRing F] [N
+ormOneClass F] [NormMulClass F] [inst_3 : NormedAlgebra ℂ F] {x : F} {z : ℂ},   
+IsMinOn (fun x_1 =>…
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `norm_sub_norm_le`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a 
+b : E), ‖a‖ - ‖b‖ ≤ ‖a - b‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_sub_rev`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a b : E), 
+‖a - b‖ = ‖b - a‖
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 57 条，此处仅展示前 30 条）
 
-English:
-lemma exists_norm_sub_smul_one_eq_zero
-  given: (x : F)
-  proof: by
-  -- there is a minimizing `z : ℂ`; get it.
-  obtain ⟨z, hz⟩ := exists_isMinOn_norm_sub_smul Complex x
-  set M := ‖x - algebraMap Complex F z‖ with hM
-  rcases eq_or_lt_of_le (show 0 <= M from norm_nonneg _) with hM₀ | hM₀
-    -- minimum is zero: nothing to do
-  · exact ⟨z, hM₀.symm⟩
-  -- otherwise, use the result from above that `z ↦ ‖x - algebraMap ℂ F z‖` is constant
-  -- to derive a contradiction.
-  by_contra! H
-  have key := norm_sub_eq_norm_sub_of_isMinOn hz H (‖x‖ + M + 1)
-  rw [← hM]; rw [norm_sub_rev] at key
-  replace key := (norm_sub_norm_le ..).trans_eq key
-  rw [norm_algebraMap]; rw [norm_one]; rw [mul_one] at key
-  norm_cast at key
-  rw [Real.norm_eq_abs]; rw [abs_of_nonneg (by positivity)] at key
-  linarith only [key]
-
-中文:
-引理 存在_norm_sub_smul_one_eq_zero
-  条件: (x : F)
-  证明: by
-  -- there is a minimizing `z : ℂ`; get it.
-  obtain ⟨z, hz⟩ := exists_isMinOn_norm_sub_smul Complex x
-  set M := ‖x - algebraMap Complex F z‖ with hM
-  rcases eq_or_lt_of_le (show 0 <= M from norm_nonneg _) with hM₀ | hM₀
-    -- minimum is zero: nothing to do
-  · exact ⟨z, hM₀.symm⟩
-  -- otherwise, use the result from above that `z ↦ ‖x - algebraMap ℂ F z‖` is constant
-  -- to derive a contradiction.
-  by_contra! H
-  have key := norm_sub_eq_norm_sub_of_isMinOn hz H (‖x‖ + M + 1)
-  rw [← hM]; rw [norm_sub_rev] at key
-  replace key := (norm_sub_norm_le ..).trans_eq key
-  rw [norm_algebraMap]; rw [norm_one]; rw [mul_one] at key
-  norm_cast at key
-  rw [Real.norm_eq_abs]; rw [abs_of_nonneg (by positivity)] at key
-  linarith only [key]
+--- 原说明 ---
+If `F` is a normed `ℂ`-algebra and `x : F`, then there is a complex number `z` s
+uch that
+`‖x - algebraMap ℂ F z‖ = 0` (whence `x = algebraMap ℂ F z`).
 -/
 lemma exists_norm_sub_smul_one_eq_zero (x : F) :
-    exists z : Complex, ‖x - algebraMap Complex F z‖ = 0 := by
+    ∃ z : ℂ, ‖x - algebraMap ℂ F z‖ = 0 := by
   -- there is a minimizing `z : ℂ`; get it.
-  obtain ⟨z, hz⟩ := exists_isMinOn_norm_sub_smul Complex x
-  set M := ‖x - algebraMap Complex F z‖ with hM
-  rcases eq_or_lt_of_le (show 0 <= M from norm_nonneg _) with hM₀ | hM₀
+  obtain ⟨z, hz⟩ := exists_isMinOn_norm_sub_smul ℂ x
+  set M := ‖x - algebraMap ℂ F z‖ with hM
+  rcases eq_or_lt_of_le (show 0 ≤ M from norm_nonneg _) with hM₀ | hM₀
     -- minimum is zero: nothing to do
   · exact ⟨z, hM₀.symm⟩
   -- otherwise, use the result from above that `z ↦ ‖x - algebraMap ℂ F z‖` is constant
   -- to derive a contradiction.
   by_contra! H
   have key := norm_sub_eq_norm_sub_of_isMinOn hz H (‖x‖ + M + 1)
-  rw [← hM]; rw [norm_sub_rev] at key
+  rw [← hM, norm_sub_rev] at key
   replace key := (norm_sub_norm_le ..).trans_eq key
-  rw [norm_algebraMap]; rw [norm_one]; rw [mul_one] at key
+  rw [norm_algebraMap, norm_one, mul_one] at key
   norm_cast at key
-  rw [Real.norm_eq_abs]; rw [abs_of_nonneg (by positivity)] at key
+  rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)] at key
   linarith only [key]
 
 variable (F) [Nontrivial F]
@@ -413,52 +419,35 @@ open Algebra in
 If `F` is a nontrivial normed `ℂ`-algebra with multiplicative norm, then we obtain a
 `ℂ`-algebra equivalence with `ℂ`. -/
 noncomputable
-/--
-Definition of `algEquivOfNormMul` / `algEquivOfNormMul` 的定义
-
-English:
-definition algEquivOfNormMul
-  signature: : Complex ≃ₐ[Complex] F
-  body: .ofBijective (ofId Complex F) by
-    refine ⟨FaithfulSMul.algebraMap_injective Complex F, fun x => ?_⟩
-    obtain ⟨z, hz⟩ := exists_norm_sub_smul_one_eq_zero x
-    refine ⟨z, ?_⟩
-    rwa [norm_eq_zero, sub_eq_zero, eq_comm, ← ofId_apply] at hz
-
-中文:
-定义 algEquivOfNormMul
-  签名: : 复形 ≃ₐ[复形] F
-  定义体: .ofBijective (ofId Complex F) by
-    refine ⟨FaithfulSMul.algebraMap_injective Complex F, fun x => ?_⟩
-    obtain ⟨z, hz⟩ := exists_norm_sub_smul_one_eq_zero x
-    refine ⟨z, ?_⟩
-    rwa [norm_eq_zero, sub_eq_zero, eq_comm, ← ofId_apply] at hz
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, eq_comm, exists_norm_sub_smul_one_eq_zero, norm_eq_zero, ofBijective, ofId_apply, sub_eq_zero
+/-
+**NormedAlgebra.Complex.algEquivOfNormMul** 是 Mathlib 中的一个定义，位于命名空间 `NormedAlgeb
+ra.Complex`。
+形式化陈述：algEquivOfNormMul : Complex ≃ₐ[Complex] F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def algEquivOfNormMul : Complex ≃ₐ[Complex] F :=
-.ofBijective (ofId Complex F) by
-    refine ⟨FaithfulSMul.algebraMap_injective Complex F, fun x => ?_⟩
+def algEquivOfNormMul : ℂ ≃ₐ[ℂ] F :=
+  .ofBijective (ofId ℂ F) <| by
+    refine ⟨FaithfulSMul.algebraMap_injective ℂ F, fun x ↦ ?_⟩
     obtain ⟨z, hz⟩ := exists_norm_sub_smul_one_eq_zero x
     refine ⟨z, ?_⟩
     rwa [norm_eq_zero, sub_eq_zero, eq_comm, ← ofId_apply] at hz
 
-/--
-theorem `nonempty_algEquiv` / 定理 `nonempty_algEquiv`
+/-- A version of the **Gelfand-Mazur Theorem** for nontrivial normed `ℂ`-algebras `F`
+with multiplicative norm: any such `F` is isomorphic to `ℂ` as a `ℂ`-algebra. -/
+/-
+**NormedAlgebra.Complex.nonempty_algEquiv** 是 Mathlib 中的一个定理，位于命名空间 `NormedAlgeb
+ra.Complex`。
+形式化陈述：nonempty_algEquiv : Nonempty (Complex ≃ₐ[Complex] F)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem nonempty_algEquiv
-  statement: Nonempty (Complex ≃ₐ[Complex] F)
-  proof: ⟨algEquivOfNormMul F⟩
-
-中文:
-定理 nonempty_algEquiv
-  结论: 非空 (复形 ≃ₐ[复形] F)
-  证明: ⟨algEquivOfNormMul F⟩
-
-Depends on / 依赖: algEquivOfNormMul
+--- 原说明 ---
+A version of the **Gelfand-Mazur Theorem** for nontrivial normed `ℂ`-algebras `F
+`
+with multiplicative norm: any such `F` is isomorphic to `ℂ` as a `ℂ`-algebra.
 -/
-theorem nonempty_algEquiv : Nonempty (Complex ≃ₐ[Complex] F) := ⟨algEquivOfNormMul F⟩
+theorem nonempty_algEquiv : Nonempty (ℂ ≃ₐ[ℂ] F) := ⟨algEquivOfNormMul F⟩
 
 end Complex
 
@@ -469,190 +458,91 @@ end Complex
 
 namespace Real
 
-variable {F : Type*} [NormedRing F] [NormedAlgebra Real F]
+variable {F : Type*} [NormedRing F] [NormedAlgebra ℝ F]
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- A (private) abbreviation introduced for conciseness below.
+We will show that for every `x : F`, `φ x` takes the value zero. -/
+/-
+**NormedAlgebra.Real.** 是 Mathlib 中的一个缩写定义，位于命名空间 `NormedAlgebra.Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation noncomputable
-  signature: abbrev φ (x : F) (u : Real × Real)
-  body: x ^ 2 - u.1 • x + algebraMap Real F u.2
-
-中文:
-缩写 noncomputable
-  签名: abbrev φ (x : F) (u : 实数 × 实数)
-  定义体: x ^ 2 - u.1 • x + algebraMap Real F u.2
+--- 原说明 ---
+A (private) abbreviation introduced for conciseness below.
+We will show that for every `x : F`, `φ x` takes the value zero.
 -/
-private noncomputable abbrev φ (x : F) (u : Real × Real) : F := x ^ 2 - u.1 • x + algebraMap Real F u.2
-
-/--
-lemma `continuous_φ` / 引理 `continuous_φ`
-
-English:
-lemma continuous_φ
-  given: (x : F)
-  statement: Continuous (φ x)
-  proof: by fun_prop
-
-中文:
-引理 continuous_φ
-  条件: (x : F)
-  结论: 连续 (φ x)
-  证明: by fun_prop
+private noncomputable abbrev φ (x : F) (u : ℝ × ℝ) : F := x ^ 2 - u.1 • x + algebraMap ℝ F u.2
+/-
+**NormedAlgebra.Real.continuous_** 是 Mathlib 中的一个引理，位于命名空间 `NormedAlgebra.Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma continuous_φ (x : F) : Continuous (φ x) := by fun_prop
-
-/--
-lemma `aeval_eq_φ` / 引理 `aeval_eq_φ`
-
-English:
-lemma aeval_eq_φ
-  given: (x : F) (u : Real × Real)
-  statement: aeval x (X ^ 2 - C u.1 * X + C u.2) = φ x u
-  proof: by
-  simp [Algebra.smul_def]
-
-中文:
-引理 aeval_eq_φ
-  条件: (x : F) (u : 实数 × 实数)
-  结论: aeval x (X ^ 2 - C u.1 * X + C u.2) = φ x u
-  证明: by
-  simp [Algebra.smul_def]
+/-
+**NormedAlgebra.Real.aeval_eq_** 是 Mathlib 中的一个引理，位于命名空间 `NormedAlgebra.Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma aeval_eq_φ (x : F) (u : Real × Real) : aeval x (X ^ 2 - C u.1 * X + C u.2) = φ x u := by
+private lemma aeval_eq_φ (x : F) (u : ℝ × ℝ) : aeval x (X ^ 2 - C u.1 * X + C u.2) = φ x u := by
   simp [Algebra.smul_def]
 
 variable [NormOneClass F] [NormMulClass F]
 
-/--
-lemma `le_aeval_of_isMonicOfDegree` / 引理 `le_aeval_of_isMonicOfDegree`
+/-- If, for some `x : F`, `‖φ x ·‖` is bounded below by `M`, then the value at `x` of any monic
+polynomial over `ℝ` of degree `2 * n` has norm bounded below by `M ^ n`. This follows by
+induction from the fact that a real monic polynomial of even degree is a product of monic
+polynomials of degree `2`. -/
+/-
+**NormedAlgebra.Real.le_aeval_of_isMonicOfDegree** 是 Mathlib 中的一个引理，位于命名空间 `Norm
+edAlgebra.Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma le_aeval_of_isMonicOfDegree
-  statement: {x : F} {M : Real} (hM : 0 <= M)
-  proof: by
-  induction n generalizing p with
-  | zero => simp_all
-  | succ n ih =>
-    rw [mul_add]; rw [mul_one] at hp
-    obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_two_mul_isMonicOfDegree
-    obtain ⟨a, b, hab⟩ := isMonicOfDegree_two_iff'.mp hf₁
-    rw [H]; rw [aeval_mul]; rw [norm_mul]; rw [mul_comm]; rw [pow_succ]; rw [hab]; rw [aeval_eq_φ x (a]; rw [b)]
-    exact mul_le_mul (ih hf₂) (h (a, b)) hM (norm_nonneg _)
-
-中文:
-引理 le_aeval_of_isMonicOfDegree
-  结论: {x : F} {M : 实数} (hM : 0 <= M)
-  证明: by
-  induction n generalizing p with
-  | zero => simp_all
-  | succ n ih =>
-    rw [mul_add]; rw [mul_one] at hp
-    obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_two_mul_isMonicOfDegree
-    obtain ⟨a, b, hab⟩ := isMonicOfDegree_two_iff'.mp hf₁
-    rw [H]; rw [aeval_mul]; rw [norm_mul]; rw [mul_comm]; rw [pow_succ]; rw [hab]; rw [aeval_eq_φ x (a]; rw [b)]
-    exact mul_le_mul (ih hf₂) (h (a, b)) hM (norm_nonneg _)
+--- 原说明 ---
+If, for some `x : F`, `‖φ x ·‖` is bounded below by `M`, then the value at `x` o
+f any monic
+polynomial over `ℝ` of degree `2 * n` has norm bounded below by `M ^ n`. This fo
+llows by
+induction from the fact that a real monic polynomial of even degree is a product
+ of monic
+polynomials of degree `2`.
 -/
-private lemma le_aeval_of_isMonicOfDegree {x : F} {M : Real} (hM : 0 <= M)
-    (h : forall z : Real × Real, M <= ‖φ x z‖) {p : Real[X]} {n : Nat} (hp : IsMonicOfDegree p (2 * n)) :
-    M ^ n <= ‖aeval x p‖ := by
+private lemma le_aeval_of_isMonicOfDegree {x : F} {M : ℝ} (hM : 0 ≤ M)
+    (h : ∀ z : ℝ × ℝ, M ≤ ‖φ x z‖) {p : ℝ[X]} {n : ℕ} (hp : IsMonicOfDegree p (2 * n)) :
+    M ^ n ≤ ‖aeval x p‖ := by
   induction n generalizing p with
   | zero => simp_all
   | succ n ih =>
-    rw [mul_add]; rw [mul_one] at hp
+    rw [mul_add, mul_one] at hp
     obtain ⟨f₁, f₂, hf₁, hf₂, H⟩ := hp.eq_isMonicOfDegree_two_mul_isMonicOfDegree
     obtain ⟨a, b, hab⟩ := isMonicOfDegree_two_iff'.mp hf₁
-    rw [H]; rw [aeval_mul]; rw [norm_mul]; rw [mul_comm]; rw [pow_succ]; rw [hab]; rw [aeval_eq_φ x (a]; rw [b)]
+    rw [H, aeval_mul, norm_mul, mul_comm, pow_succ, hab, aeval_eq_φ x (a, b)]
     exact mul_le_mul (ih hf₂) (h (a, b)) hM (norm_nonneg _)
 
-/--
-lemma `norm_φ_eq_norm_φ_of_isMinOn` / 引理 `norm_φ_eq_norm_φ_of_isMinOn`
+/-- The key step in the proof: if `a` and `b` are real numbers minimizing `‖φ x (a, b)‖`,
+and the minimal value is strictly positive, then the function `(s, t) ↦ ‖φ x (s, t)‖`
+is constant. -/
+/-
+**NormedAlgebra.Real.norm_** 是 Mathlib 中的一个引理，位于命名空间 `NormedAlgebra.Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma norm_φ_eq_norm_φ_of_isMinOn
-  statement: {x : F} {z : Real × Real} (h : IsMinOn (‖φ x ·‖) Set.univ z)
-  proof: by
-  set M : Real := ‖φ x z‖ with hM
-  have hM₀ : 0 < M := by positivity
-  -- we use the key result `norm_eq_of_isMinOn_of_forall_le`
-  refine norm_eq_of_isMinOn_of_forall_le hM₀ hM.symm h (continuous_φ x) (fun {w} u hw n hn => ?_) w
-  -- show `‖φ x u‖ ≤ M * (1 + (‖φ x u - φ x w‖ / M) ^ n)`
-  have HH : M * (1 + (‖φ x u - φ x w‖ / M) ^ n) = (M ^ n + ‖φ x u - φ x w‖ ^ n) / M ^ (n - 1) := by
-    simp only [field, div_pow, ← pow_succ', Nat.sub_add_cancel hn]
-  rw [HH]; rw [le_div_iff₀ (by positivity)]; clear HH
-  -- show `‖φ x u‖ * M ^ (n - 1) ≤ M ^ n + ‖φ x u - φ x w‖ ^ n`
-  let q (y : Real × Real) : Real[X] := X ^ 2 - C y.1 * X + C y.2
-  have hq (y : Real × Real) : IsMonicOfDegree (q y) 2 := isMonicOfDegree_sub_add_two ..
-  have hsub : q w - q u = (C u.1 - C w.1) * X + C w.2 - C u.2 := by simp only [q]; ring
-  have hdvd : q u ∣ q w ^ n - (q w - q u) ^ n := by
-    nth_rewrite 1 [← sub_sub_self (q w) (q u)]
-    exact sub_dvd_pow_sub_pow ..
-  have H' : ((q w - q u) ^ n).natDegree < 2 * n := by rw [hsub]; compute_degree; grind
-  -- write `q w ^ n = p * q u + (q w - q u) ^ n` with a monic polynomial `p` of deg. `2 * (n - 1)`,
-  -- where `aeval x (q u) = φ x u` (*).
-  obtain ⟨p, hp, hrel⟩ := ((hq w).pow n).of_dvd_sub (by grind) (hq u) H' hdvd; clear H' hdvd hsub
-  rw [show 2 * n - 2 = 2 * (n - 1) by grind] at hp
-  -- use that `‖aeval p x‖ ≥ M ^ (n - 1)`.
-  grw [le_aeval_of_isMonicOfDegree hM₀.le (isMinOn_univ_iff.mp h) hp]
-  -- from (*) above, deduce
-  -- `‖φ x u‖ * ‖(aeval x) p‖ = ‖(aeval x) (q w ^ n) - (aeval x) ((q w - q u) ^ n)‖`
-  -- and use that.
-  rw [← sub_eq_iff_eq_add]; rw [eq_comm]; rw [mul_comm] at hrel
-  apply_fun (‖aeval x ·‖) at hrel
-  rw [map_mul]; rw [norm_mul]; rw [map_sub]; rw [aeval_eq_φ x u] at hrel
-  rw [hrel]; rw [norm_sub_rev (φ ..)]
-exact (norm_sub_le ..).trans by simp [q, aeval_eq_φ, hw]
-
-中文:
-引理 norm_φ_eq_norm_φ_of_isMinOn
-  结论: {x : F} {z : 实数 × 实数} (h : IsMinOn (‖φ x ·‖) 集合.univ z)
-  证明: by
-  set M : Real := ‖φ x z‖ with hM
-  have hM₀ : 0 < M := by positivity
-  -- we use the key result `norm_eq_of_isMinOn_of_forall_le`
-  refine norm_eq_of_isMinOn_of_forall_le hM₀ hM.symm h (continuous_φ x) (fun {w} u hw n hn => ?_) w
-  -- show `‖φ x u‖ ≤ M * (1 + (‖φ x u - φ x w‖ / M) ^ n)`
-  have HH : M * (1 + (‖φ x u - φ x w‖ / M) ^ n) = (M ^ n + ‖φ x u - φ x w‖ ^ n) / M ^ (n - 1) := by
-    simp only [field, div_pow, ← pow_succ', Nat.sub_add_cancel hn]
-  rw [HH]; rw [le_div_iff₀ (by positivity)]; clear HH
-  -- show `‖φ x u‖ * M ^ (n - 1) ≤ M ^ n + ‖φ x u - φ x w‖ ^ n`
-  let q (y : Real × Real) : Real[X] := X ^ 2 - C y.1 * X + C y.2
-  have hq (y : Real × Real) : IsMonicOfDegree (q y) 2 := isMonicOfDegree_sub_add_two ..
-  have hsub : q w - q u = (C u.1 - C w.1) * X + C w.2 - C u.2 := by simp only [q]; ring
-  have hdvd : q u ∣ q w ^ n - (q w - q u) ^ n := by
-    nth_rewrite 1 [← sub_sub_self (q w) (q u)]
-    exact sub_dvd_pow_sub_pow ..
-  have H' : ((q w - q u) ^ n).natDegree < 2 * n := by rw [hsub]; compute_degree; grind
-  -- write `q w ^ n = p * q u + (q w - q u) ^ n` with a monic polynomial `p` of deg. `2 * (n - 1)`,
-  -- where `aeval x (q u) = φ x u` (*).
-  obtain ⟨p, hp, hrel⟩ := ((hq w).pow n).of_dvd_sub (by grind) (hq u) H' hdvd; clear H' hdvd hsub
-  rw [show 2 * n - 2 = 2 * (n - 1) by grind] at hp
-  -- use that `‖aeval p x‖ ≥ M ^ (n - 1)`.
-  grw [le_aeval_of_isMonicOfDegree hM₀.le (isMinOn_univ_iff.mp h) hp]
-  -- from (*) above, deduce
-  -- `‖φ x u‖ * ‖(aeval x) p‖ = ‖(aeval x) (q w ^ n) - (aeval x) ((q w - q u) ^ n)‖`
-  -- and use that.
-  rw [← sub_eq_iff_eq_add]; rw [eq_comm]; rw [mul_comm] at hrel
-  apply_fun (‖aeval x ·‖) at hrel
-  rw [map_mul]; rw [norm_mul]; rw [map_sub]; rw [aeval_eq_φ x u] at hrel
-  rw [hrel]; rw [norm_sub_rev (φ ..)]
-exact (norm_sub_le ..).trans by simp [q, aeval_eq_φ, hw]
+--- 原说明 ---
+The key step in the proof: if `a` and `b` are real numbers minimizing `‖φ x (a, 
+b)‖`,
+and the minimal value is strictly positive, then the function `(s, t) ↦ ‖φ x (s,
+ t)‖`
+is constant.
 -/
-private lemma norm_φ_eq_norm_φ_of_isMinOn {x : F} {z : Real × Real} (h : IsMinOn (‖φ x ·‖) Set.univ z)
-    (H : ‖φ x z‖ != 0) (w : Real × Real) :
+private lemma norm_φ_eq_norm_φ_of_isMinOn {x : F} {z : ℝ × ℝ} (h : IsMinOn (‖φ x ·‖) Set.univ z)
+    (H : ‖φ x z‖ ≠ 0) (w : ℝ × ℝ) :
     ‖φ x w‖ = ‖φ x z‖ := by
-  set M : Real := ‖φ x z‖ with hM
+  set M : ℝ := ‖φ x z‖ with hM
   have hM₀ : 0 < M := by positivity
   -- we use the key result `norm_eq_of_isMinOn_of_forall_le`
-  refine norm_eq_of_isMinOn_of_forall_le hM₀ hM.symm h (continuous_φ x) (fun {w} u hw n hn => ?_) w
+  refine norm_eq_of_isMinOn_of_forall_le hM₀ hM.symm h (continuous_φ x) (fun {w} u hw n hn ↦ ?_) w
   -- show `‖φ x u‖ ≤ M * (1 + (‖φ x u - φ x w‖ / M) ^ n)`
   have HH : M * (1 + (‖φ x u - φ x w‖ / M) ^ n) = (M ^ n + ‖φ x u - φ x w‖ ^ n) / M ^ (n - 1) := by
     simp only [field, div_pow, ← pow_succ', Nat.sub_add_cancel hn]
-  rw [HH]; rw [le_div_iff₀ (by positivity)]; clear HH
+  rw [HH, le_div_iff₀ (by positivity)]; clear HH
   -- show `‖φ x u‖ * M ^ (n - 1) ≤ M ^ n + ‖φ x u - φ x w‖ ^ n`
-  let q (y : Real × Real) : Real[X] := X ^ 2 - C y.1 * X + C y.2
-  have hq (y : Real × Real) : IsMonicOfDegree (q y) 2 := isMonicOfDegree_sub_add_two ..
+  let q (y : ℝ × ℝ) : ℝ[X] := X ^ 2 - C y.1 * X + C y.2
+  have hq (y : ℝ × ℝ) : IsMonicOfDegree (q y) 2 := isMonicOfDegree_sub_add_two ..
   have hsub : q w - q u = (C u.1 - C w.1) * X + C w.2 - C u.2 := by simp only [q]; ring
   have hdvd : q u ∣ q w ^ n - (q w - q u) ^ n := by
     nth_rewrite 1 [← sub_sub_self (q w) (q u)]
@@ -667,97 +557,40 @@ private lemma norm_φ_eq_norm_φ_of_isMinOn {x : F} {z : Real × Real} (h : IsMi
   -- from (*) above, deduce
   -- `‖φ x u‖ * ‖(aeval x) p‖ = ‖(aeval x) (q w ^ n) - (aeval x) ((q w - q u) ^ n)‖`
   -- and use that.
-  rw [← sub_eq_iff_eq_add]; rw [eq_comm]; rw [mul_comm] at hrel
+  rw [← sub_eq_iff_eq_add, eq_comm, mul_comm] at hrel
   apply_fun (‖aeval x ·‖) at hrel
-  rw [map_mul]; rw [norm_mul]; rw [map_sub]; rw [aeval_eq_φ x u] at hrel
-  rw [hrel]; rw [norm_sub_rev (φ ..)]
-exact (norm_sub_le ..).trans by simp [q, aeval_eq_φ, hw]
+  rw [map_mul, norm_mul, map_sub, aeval_eq_φ x u] at hrel
+  rw [hrel, norm_sub_rev (φ ..)]
+  exact (norm_sub_le ..).trans <| by simp [q, aeval_eq_φ, hw]
 
 open Filter Topology Bornology in
 omit [NormMulClass F] in
-/--
-lemma `tendsto_φ_cobounded` / 引理 `tendsto_φ_cobounded`
+/-- Assuming that `‖x - algebraMap ℝ F ·‖` is bounded below by a positive constant, we show that
+`φ x w` grows unboundedly as `w : ℝ × ℝ` does. We will use this to obtain a contradiction
+when `φ x` does not attain the value zero. -/
+/-
+**NormedAlgebra.Real.tendsto_** 是 Mathlib 中的一个引理，位于命名空间 `NormedAlgebra.Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma tendsto_φ_cobounded
-  statement: {x : F} {c : Real} (hc₀ : 0 < c)
-  proof: by
-  simp_rw [φ, sub_add]
-.comp ?_ refine tendsto_const_sub_cobounded _
-  rw [← tendsto_norm_atTop_iff_cobounded]
-  -- split into statements involving each of the two components separately.
-  refine Tendsto.coprod_of_prod_top_right (α := Real) (fun s hs => ?_) ?_
-    -- the first component is bounded and the second one is unbounded
-  · rw [← isCobounded_def, ← isBounded_compl_iff] at hs
-    obtain ⟨M, hM_pos, hM⟩ : exists M > 0, forall y in sᶜ, ‖y‖ <= M := hs.exists_pos_norm_le
-    suffices Tendsto (‖algebraMap Real F ·.2‖ - M * ‖x‖) (𝓟 sᶜ ×ˢ cobounded Real) atTop by
-      refine tendsto_atTop_mono' _ ?_ this
-      filter_upwards [prod_mem_prod (mem_principal_self sᶜ) univ_mem] with w hw
-      rw [norm_sub_rev]
-      refine le_trans ?_ (norm_sub_norm_le ..)
-      specialize hM _ (Set.mem_prod.mp hw).1
-      simp only [norm_algebraMap', norm_smul]
-      gcongr
-    simp only [norm_algebraMap', sub_eq_add_neg]
-exact tendsto_atTop_add_const_right _ _ tendsto_norm_atTop_iff_cobounded.mpr tendsto_snd
-    -- the first component is unbounded and the second one is arbitrary
-  · suffices Tendsto (fun y : Real × Real => ‖y.1‖ * c) (cobounded Real ×ˢ ⊤) atTop by
-      refine tendsto_atTop_mono' _ ?_ this
-      filter_upwards [prod_mem_prod (isBounded_singleton (x := 0)) univ_mem] with y hy
-      calc ‖y.1‖ * c
-        _ <= ‖y.1‖ * ‖x - algebraMap Real F (y.1⁻¹ * y.2)‖ := by gcongr; exact hbd _
-        _ = ‖y.1 • x - algebraMap Real F y.2‖ := by
-          simp only [← norm_smul, smul_sub, smul_smul, Algebra.algebraMap_eq_smul_one]
-          simp_all
-    rw [tendsto_mul_const_atTop_of_pos hc₀]; rw [tendsto_norm_atTop_iff_cobounded]
-    exact tendsto_fst
-
-中文:
-引理 tendsto_φ_cobounded
-  结论: {x : F} {c : 实数} (hc₀ : 0 < c)
-  证明: by
-  simp_rw [φ, sub_add]
-.comp ?_ refine tendsto_const_sub_cobounded _
-  rw [← tendsto_norm_atTop_iff_cobounded]
-  -- split into statements involving each of the two components separately.
-  refine Tendsto.coprod_of_prod_top_right (α := Real) (fun s hs => ?_) ?_
-    -- the first component is bounded and the second one is unbounded
-  · rw [← isCobounded_def, ← isBounded_compl_iff] at hs
-    obtain ⟨M, hM_pos, hM⟩ : exists M > 0, forall y in sᶜ, ‖y‖ <= M := hs.exists_pos_norm_le
-    suffices Tendsto (‖algebraMap Real F ·.2‖ - M * ‖x‖) (𝓟 sᶜ ×ˢ cobounded Real) atTop by
-      refine tendsto_atTop_mono' _ ?_ this
-      filter_upwards [prod_mem_prod (mem_principal_self sᶜ) univ_mem] with w hw
-      rw [norm_sub_rev]
-      refine le_trans ?_ (norm_sub_norm_le ..)
-      specialize hM _ (Set.mem_prod.mp hw).1
-      simp only [norm_algebraMap', norm_smul]
-      gcongr
-    simp only [norm_algebraMap', sub_eq_add_neg]
-exact tendsto_atTop_add_const_right _ _ tendsto_norm_atTop_iff_cobounded.mpr tendsto_snd
-    -- the first component is unbounded and the second one is arbitrary
-  · suffices Tendsto (fun y : Real × Real => ‖y.1‖ * c) (cobounded Real ×ˢ ⊤) atTop by
-      refine tendsto_atTop_mono' _ ?_ this
-      filter_upwards [prod_mem_prod (isBounded_singleton (x := 0)) univ_mem] with y hy
-      calc ‖y.1‖ * c
-        _ <= ‖y.1‖ * ‖x - algebraMap Real F (y.1⁻¹ * y.2)‖ := by gcongr; exact hbd _
-        _ = ‖y.1 • x - algebraMap Real F y.2‖ := by
-          simp only [← norm_smul, smul_sub, smul_smul, Algebra.algebraMap_eq_smul_one]
-          simp_all
-    rw [tendsto_mul_const_atTop_of_pos hc₀]; rw [tendsto_norm_atTop_iff_cobounded]
-    exact tendsto_fst
+--- 原说明 ---
+Assuming that `‖x - algebraMap ℝ F ·‖` is bounded below by a positive constant, 
+we show that
+`φ x w` grows unboundedly as `w : ℝ × ℝ` does. We will use this to obtain a cont
+radiction
+when `φ x` does not attain the value zero.
 -/
-private lemma tendsto_φ_cobounded {x : F} {c : Real} (hc₀ : 0 < c)
-    (hbd : forall r : Real, c <= ‖x - algebraMap Real F r‖) :
-    Tendsto (φ x ·) (cobounded (Real × Real)) (cobounded F) := by
+private lemma tendsto_φ_cobounded {x : F} {c : ℝ} (hc₀ : 0 < c)
+    (hbd : ∀ r : ℝ, c ≤ ‖x - algebraMap ℝ F r‖) :
+    Tendsto (φ x ·) (cobounded (ℝ × ℝ)) (cobounded F) := by
   simp_rw [φ, sub_add]
-.comp ?_ refine tendsto_const_sub_cobounded _
+  refine tendsto_const_sub_cobounded _ |>.comp ?_
   rw [← tendsto_norm_atTop_iff_cobounded]
   -- split into statements involving each of the two components separately.
-  refine Tendsto.coprod_of_prod_top_right (α := Real) (fun s hs => ?_) ?_
+  refine Tendsto.coprod_of_prod_top_right (α := ℝ) (fun s hs ↦ ?_) ?_
     -- the first component is bounded and the second one is unbounded
   · rw [← isCobounded_def, ← isBounded_compl_iff] at hs
-    obtain ⟨M, hM_pos, hM⟩ : exists M > 0, forall y in sᶜ, ‖y‖ <= M := hs.exists_pos_norm_le
-    suffices Tendsto (‖algebraMap Real F ·.2‖ - M * ‖x‖) (𝓟 sᶜ ×ˢ cobounded Real) atTop by
+    obtain ⟨M, hM_pos, hM⟩ : ∃ M > 0, ∀ y ∈ sᶜ, ‖y‖ ≤ M := hs.exists_pos_norm_le
+    suffices Tendsto (‖algebraMap ℝ F ·.2‖ - M * ‖x‖) (𝓟 sᶜ ×ˢ cobounded ℝ) atTop by
       refine tendsto_atTop_mono' _ ?_ this
       filter_upwards [prod_mem_prod (mem_principal_self sᶜ) univ_mem] with w hw
       rw [norm_sub_rev]
@@ -766,65 +599,37 @@ private lemma tendsto_φ_cobounded {x : F} {c : Real} (hc₀ : 0 < c)
       simp only [norm_algebraMap', norm_smul]
       gcongr
     simp only [norm_algebraMap', sub_eq_add_neg]
-exact tendsto_atTop_add_const_right _ _ tendsto_norm_atTop_iff_cobounded.mpr tendsto_snd
+    exact tendsto_atTop_add_const_right _ _ <| tendsto_norm_atTop_iff_cobounded.mpr tendsto_snd
     -- the first component is unbounded and the second one is arbitrary
-  · suffices Tendsto (fun y : Real × Real => ‖y.1‖ * c) (cobounded Real ×ˢ ⊤) atTop by
+  · suffices Tendsto (fun y : ℝ × ℝ ↦ ‖y.1‖ * c) (cobounded ℝ ×ˢ ⊤) atTop by
       refine tendsto_atTop_mono' _ ?_ this
       filter_upwards [prod_mem_prod (isBounded_singleton (x := 0)) univ_mem] with y hy
       calc ‖y.1‖ * c
-        _ <= ‖y.1‖ * ‖x - algebraMap Real F (y.1⁻¹ * y.2)‖ := by gcongr; exact hbd _
-        _ = ‖y.1 • x - algebraMap Real F y.2‖ := by
+        _ ≤ ‖y.1‖ * ‖x - algebraMap ℝ F (y.1⁻¹ * y.2)‖ := by gcongr; exact hbd _
+        _ = ‖y.1 • x - algebraMap ℝ F y.2‖ := by
           simp only [← norm_smul, smul_sub, smul_smul, Algebra.algebraMap_eq_smul_one]
           simp_all
-    rw [tendsto_mul_const_atTop_of_pos hc₀]; rw [tendsto_norm_atTop_iff_cobounded]
+    rw [tendsto_mul_const_atTop_of_pos hc₀, tendsto_norm_atTop_iff_cobounded]
     exact tendsto_fst
 
 open Bornology Filter Set in
 omit [NormMulClass F] in
-/--
-lemma `exists_isMinOn_norm_φ` / 引理 `exists_isMinOn_norm_φ`
+/-- The norm of `‖φ x ·‖` attains a minimum on `ℝ × ℝ`. -/
+/-
+**NormedAlgebra.Real.exists_isMinOn_norm_** 是 Mathlib 中的一个引理，位于命名空间 `NormedAlgeb
+ra.Real`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma exists_isMinOn_norm_φ
-  given: (x : F)
-  statement: exists z : Real × Real, IsMinOn (‖φ x ·‖) univ z
-  proof: by
-  -- use that `‖x - algebraMap ℝ F ·‖` has a minimum.
-  obtain ⟨u, hu⟩ := exists_isMinOn_norm_sub_smul Real x
-  rcases eq_or_lt_of_le (norm_nonneg (x - algebraMap Real F u)) with hc₀ | hc₀
-    -- if this minimum is zero, use `(u, 0)`.
-  · rw [eq_comm, norm_eq_zero, sub_eq_zero] at hc₀
-    exact ⟨(u, 0), fun _ => by simp [φ, hc₀, sq, Algebra.smul_def]⟩
-  -- otherwise, use `tendsto_φ_cobounded`.
-  simp only [isMinOn_univ_iff] at hu ⊢
-  refine (continuous_φ x).norm.exists_forall_le_of_isBounded (0, 0) ?_
-  simpa [isBounded_def, compl_ofPred, Ioi]
-    using tendsto_norm_cobounded_atTop.comp (tendsto_φ_cobounded hc₀ hu) (Ioi_mem_atTop _)
-
-中文:
-引理 存在_isMinOn_norm_φ
-  条件: (x : F)
-  结论: 存在 z : 实数 × 实数, IsMinOn (‖φ x ·‖) univ z
-  证明: by
-  -- use that `‖x - algebraMap ℝ F ·‖` has a minimum.
-  obtain ⟨u, hu⟩ := exists_isMinOn_norm_sub_smul Real x
-  rcases eq_or_lt_of_le (norm_nonneg (x - algebraMap Real F u)) with hc₀ | hc₀
-    -- if this minimum is zero, use `(u, 0)`.
-  · rw [eq_comm, norm_eq_zero, sub_eq_zero] at hc₀
-    exact ⟨(u, 0), fun _ => by simp [φ, hc₀, sq, Algebra.smul_def]⟩
-  -- otherwise, use `tendsto_φ_cobounded`.
-  simp only [isMinOn_univ_iff] at hu ⊢
-  refine (continuous_φ x).norm.exists_forall_le_of_isBounded (0, 0) ?_
-  simpa [isBounded_def, compl_ofPred, Ioi]
-    using tendsto_norm_cobounded_atTop.comp (tendsto_φ_cobounded hc₀ hu) (Ioi_mem_atTop _)
+--- 原说明 ---
+The norm of `‖φ x ·‖` attains a minimum on `ℝ × ℝ`.
 -/
-private lemma exists_isMinOn_norm_φ (x : F) : exists z : Real × Real, IsMinOn (‖φ x ·‖) univ z := by
+private lemma exists_isMinOn_norm_φ (x : F) : ∃ z : ℝ × ℝ, IsMinOn (‖φ x ·‖) univ z := by
   -- use that `‖x - algebraMap ℝ F ·‖` has a minimum.
-  obtain ⟨u, hu⟩ := exists_isMinOn_norm_sub_smul Real x
-  rcases eq_or_lt_of_le (norm_nonneg (x - algebraMap Real F u)) with hc₀ | hc₀
+  obtain ⟨u, hu⟩ := exists_isMinOn_norm_sub_smul ℝ x
+  rcases eq_or_lt_of_le (norm_nonneg (x - algebraMap ℝ F u)) with hc₀ | hc₀
     -- if this minimum is zero, use `(u, 0)`.
   · rw [eq_comm, norm_eq_zero, sub_eq_zero] at hc₀
-    exact ⟨(u, 0), fun _ => by simp [φ, hc₀, sq, Algebra.smul_def]⟩
+    exact ⟨(u, 0), fun _ ↦ by simp [φ, hc₀, sq, Algebra.smul_def]⟩
   -- otherwise, use `tendsto_φ_cobounded`.
   simp only [isMinOn_univ_iff] at hu ⊢
   refine (continuous_φ x).norm.exists_forall_le_of_isBounded (0, 0) ?_
@@ -832,49 +637,82 @@ private lemma exists_isMinOn_norm_φ (x : F) : exists z : Real × Real, IsMinOn 
     using tendsto_norm_cobounded_atTop.comp (tendsto_φ_cobounded hc₀ hu) (Ioi_mem_atTop _)
 
 open Algebra in
-/--
-lemma `exists_isMonicOfDegree_two_and_aeval_eq_zero` / 引理 `exists_isMonicOfDegree_two_and_aeval_eq_zero`
+/-- If `F` is a normed `ℝ`-algebra with a multiplicative norm (and such that `‖1‖ = 1`),
+e.g., a normed division ring, then every `x : F` is the root of a monic quadratic polynomial
+with real coefficients. -/
+/-
+**NormedAlgebra.Real.exists_isMonicOfDegree_two_and_aeval_eq_zero** 是 Mathlib 中的
+一个引理，位于命名空间 `NormedAlgebra.Real`。
+形式化陈述：exists_isMonicOfDegree_two_and_aeval_eq_zero (x : F) : exists p : Real[X],
+ IsMonicOfDegree p 2 ∧ aeval x p = 0
+参数：x : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Analysis.Normed.Algebra.GelfandMazur.0.NormedAlgebra.Re
+al.exists_isMinOn_norm_φ`：∀ {F : Type u_1} [inst : NormedRing F] [inst_1 : Norme
+dAlgebra ℝ F] [NormOneClass F] (x : F),   ∃ z, IsMinOn (fun x_1 => ‖NormedAlgebr
+a.Real…
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `sq_le_sq₀`：sq_le_sq₀ (ha : 0 <= a) (hb : 0 <= b) : a ^ 2 <= b ^ 2 ↔ a <=
+ b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `Real.sqrt_nonneg`：∀ (x : ℝ), 0 ≤ √x
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Real.sq_sqrt`：sq_sqrt (h : 0 <= x) : √x ^ 2 = x
+· 使用定理 `norm_pow`：norm_pow (a : α) : forall n : Nat, ‖a ^ n‖ = ‖a‖ ^ n
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Commute.sub_sq`：∀ {R : Type u} [inst : Ring R] {a b : R}, Commute a b → 
+(a - b) ^ 2 = a ^ 2 - 2 * a * b + b ^ 2
+· 使用引理 `Algebra.commute_algebraMap_right`：commute_algebraMap_right (r : R) (x : 
+A) : Commute x (algebraMap R A r)
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+（共 50 条，此处仅展示前 30 条）
 
-English:
-lemma exists_isMonicOfDegree_two_and_aeval_eq_zero
-  given: (x : F)
-  proof: by
-  -- take the minimizer of `‖φ x ·‖` ...
-  obtain ⟨z, h⟩ := exists_isMinOn_norm_φ x
-  -- ... and show that the minimum is zero.
-  suffices φ x z = 0 from ⟨_, isMonicOfDegree_sub_add_two z.1 z.2, by rwa [aeval_eq_φ]⟩
-  by_contra! H
-  set M := ‖φ x z‖
-  -- use that `‖φ x ·‖` is constant *and* is unbounded to produce a contradiction.
-  have h' (r : Real) : √M <= ‖x - algebraMap Real F r‖ := by
-    rw [← sq_le_sq₀ M.sqrt_nonneg (norm_nonneg _)]; rw [Real.sq_sqrt (norm_nonneg _)]; rw [← norm_pow]; rw [Commute.sub_sq algebraMap_eq_smul_one (A := F) r ▸ commute_algebraMap_right r x]
-    convert! isMinOn_univ_iff.mp h (2 * r, r ^ 2) using 4 <;>
-      simp [two_mul, add_mul, ← commutes, smul_def, mul_add]
-have := tendsto_norm_atTop_iff_cobounded.mpr tendsto_φ_cobounded (by positivity) h'
-  simp only [norm_φ_eq_norm_φ_of_isMinOn h (norm_ne_zero_iff.mpr H)] at this
-  exact Filter.not_tendsto_const_atTop _ _ this
-
-中文:
-引理 存在_isMonicOfDegree_two_and_aeval_eq_zero
-  条件: (x : F)
-  证明: by
-  -- take the minimizer of `‖φ x ·‖` ...
-  obtain ⟨z, h⟩ := exists_isMinOn_norm_φ x
-  -- ... and show that the minimum is zero.
-  suffices φ x z = 0 from ⟨_, isMonicOfDegree_sub_add_two z.1 z.2, by rwa [aeval_eq_φ]⟩
-  by_contra! H
-  set M := ‖φ x z‖
-  -- use that `‖φ x ·‖` is constant *and* is unbounded to produce a contradiction.
-  have h' (r : Real) : √M <= ‖x - algebraMap Real F r‖ := by
-    rw [← sq_le_sq₀ M.sqrt_nonneg (norm_nonneg _)]; rw [Real.sq_sqrt (norm_nonneg _)]; rw [← norm_pow]; rw [Commute.sub_sq algebraMap_eq_smul_one (A := F) r ▸ commute_algebraMap_right r x]
-    convert! isMinOn_univ_iff.mp h (2 * r, r ^ 2) using 4 <;>
-      simp [two_mul, add_mul, ← commutes, smul_def, mul_add]
-have := tendsto_norm_atTop_iff_cobounded.mpr tendsto_φ_cobounded (by positivity) h'
-  simp only [norm_φ_eq_norm_φ_of_isMinOn h (norm_ne_zero_iff.mpr H)] at this
-  exact Filter.not_tendsto_const_atTop _ _ this
+--- 原说明 ---
+If `F` is a normed `ℝ`-algebra with a multiplicative norm (and such that `‖1‖ = 
+1`),
+e.g., a normed division ring, then every `x : F` is the root of a monic quadrati
+c polynomial
+with real coefficients.
 -/
 lemma exists_isMonicOfDegree_two_and_aeval_eq_zero (x : F) :
-    exists p : Real[X], IsMonicOfDegree p 2 ∧ aeval x p = 0 := by
+    ∃ p : ℝ[X], IsMonicOfDegree p 2 ∧ aeval x p = 0 := by
   -- take the minimizer of `‖φ x ·‖` ...
   obtain ⟨z, h⟩ := exists_isMinOn_norm_φ x
   -- ... and show that the minimum is zero.
@@ -882,43 +720,50 @@ lemma exists_isMonicOfDegree_two_and_aeval_eq_zero (x : F) :
   by_contra! H
   set M := ‖φ x z‖
   -- use that `‖φ x ·‖` is constant *and* is unbounded to produce a contradiction.
-  have h' (r : Real) : √M <= ‖x - algebraMap Real F r‖ := by
-    rw [← sq_le_sq₀ M.sqrt_nonneg (norm_nonneg _)]; rw [Real.sq_sqrt (norm_nonneg _)]; rw [← norm_pow]; rw [Commute.sub_sq algebraMap_eq_smul_one (A := F) r ▸ commute_algebraMap_right r x]
+  have h' (r : ℝ) : √M ≤ ‖x - algebraMap ℝ F r‖ := by
+    rw [← sq_le_sq₀ M.sqrt_nonneg (norm_nonneg _), Real.sq_sqrt (norm_nonneg _), ← norm_pow,
+      Commute.sub_sq <| algebraMap_eq_smul_one (A := F) r ▸ commute_algebraMap_right r x]
     convert! isMinOn_univ_iff.mp h (2 * r, r ^ 2) using 4 <;>
       simp [two_mul, add_mul, ← commutes, smul_def, mul_add]
-have := tendsto_norm_atTop_iff_cobounded.mpr tendsto_φ_cobounded (by positivity) h'
+  have := tendsto_norm_atTop_iff_cobounded.mpr <| tendsto_φ_cobounded (by positivity) h'
   simp only [norm_φ_eq_norm_φ_of_isMinOn h (norm_ne_zero_iff.mpr H)] at this
   exact Filter.not_tendsto_const_atTop _ _ this
 
-/--
-theorem `nonempty_algEquiv_or` / 定理 `nonempty_algEquiv_or`
+/-- A version of the **Gelfand-Mazur Theorem** over `ℝ`.
 
-English:
-theorem nonempty_algEquiv_or
-  given: (F : Type*) [NormedField F] [NormedAlgebra Real F]
-  proof: by
-  have : Algebra.IsAlgebraic Real F := by
-    refine ⟨fun x => ?_⟩
-    obtain ⟨f, hf, hfx⟩ := exists_isMonicOfDegree_two_and_aeval_eq_zero x
-    exact ⟨f, hf.ne_zero, hfx⟩
-  exact _root_.Real.nonempty_algEquiv_or F
+If a field `F` is a normed `ℝ`-algebra, then `F` is isomorphic as an `ℝ`-algebra
+either to `ℝ` or to `ℂ`. -/
+/-
+**NormedAlgebra.Real.nonempty_algEquiv_or** 是 Mathlib 中的一个定理，位于命名空间 `NormedAlgeb
+ra.Real`。
+形式化陈述：nonempty_algEquiv_or (F : Type*) [NormedField F] [NormedAlgebra Real F] : 
+Nonempty (F ≃ₐ[Real] Real) ∨ Nonempty (F ≃ₐ[Real] Complex)
+参数：F : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NormedAlgebra.Real.exists_isMonicOfDegree_two_and_aeval_eq_zero`：exists_
+isMonicOfDegree_two_and_aeval_eq_zero (x : F) : exists p : Real[X], IsMonicOfDeg
+ree p 2 ∧ aeval x p = 0
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Polynomial.IsMonicOfDegree.ne_zero`：∀ {R : Type u_1} [inst : Semiring R]
+ [Nontrivial R] {p : Polynomial R} {n : ℕ}, p.IsMonicOfDegree n → p ≠ 0
+· 使用定理 `Real.nonempty_algEquiv_or`：Real.nonempty_algEquiv_or (F : Type*) [Field 
+F] [Algebra Real F] [Algebra.IsAlgebraic Real F] : Nonempty (F ≃ₐ[Real] Real) ∨ 
+Nonempty (F ≃ₐ[…
 
-中文:
-定理 nonempty_algEquiv_or
-  条件: (F : 类型) [赋范域 F] [赋范代数 实数 F]
-  证明: by
-  have : Algebra.IsAlgebraic Real F := by
-    refine ⟨fun x => ?_⟩
-    obtain ⟨f, hf, hfx⟩ := exists_isMonicOfDegree_two_and_aeval_eq_zero x
-    exact ⟨f, hf.ne_zero, hfx⟩
-  exact _root_.Real.nonempty_algEquiv_or F
+--- 原说明 ---
+A version of the **Gelfand-Mazur Theorem** over `ℝ`.
 
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic, IsAlgebraic, _root_, _root_.Real.nonempty_algEquiv_or, exists_isMonicOfDegree_two_and_aeval_eq_zero, hf.ne_zero, ne_zero, nonempty_algEquiv_or
+If a field `F` is a normed `ℝ`-algebra, then `F` is isomorphic as an `ℝ`-algebra
+either to `ℝ` or to `ℂ`.
 -/
-theorem nonempty_algEquiv_or (F : Type*) [NormedField F] [NormedAlgebra Real F] :
-    Nonempty (F ≃ₐ[Real] Real) ∨ Nonempty (F ≃ₐ[Real] Complex) := by
-  have : Algebra.IsAlgebraic Real F := by
-    refine ⟨fun x => ?_⟩
+theorem nonempty_algEquiv_or (F : Type*) [NormedField F] [NormedAlgebra ℝ F] :
+    Nonempty (F ≃ₐ[ℝ] ℝ) ∨ Nonempty (F ≃ₐ[ℝ] ℂ) := by
+  have : Algebra.IsAlgebraic ℝ F := by
+    refine ⟨fun x ↦ ?_⟩
     obtain ⟨f, hf, hfx⟩ := exists_isMonicOfDegree_two_and_aeval_eq_zero x
     exact ⟨f, hf.ne_zero, hfx⟩
   exact _root_.Real.nonempty_algEquiv_or F
@@ -926,3 +771,4 @@ theorem nonempty_algEquiv_or (F : Type*) [NormedField F] [NormedAlgebra Real F] 
 end Real
 
 end NormedAlgebra
+

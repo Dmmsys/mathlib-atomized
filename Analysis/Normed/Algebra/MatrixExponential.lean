@@ -69,7 +69,7 @@ open scoped Matrix
 
 open NormedSpace -- For `exp`.
 
-variable {m n : Type*} {n' : m -> Type*} {α 𝔸 : Type*}
+variable {m n : Type*} {n' : m → Type*} {α 𝔸 : Type*}
 
 namespace Matrix
 
@@ -77,180 +77,226 @@ section Topological
 
 section Ring
 
-variable [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n] [forall i, Fintype (n' i)]
-  [forall i, DecidableEq (n' i)] [Ring 𝔸] [TopologicalSpace 𝔸] [IsTopologicalRing 𝔸]
+variable [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n] [∀ i, Fintype (n' i)]
+  [∀ i, DecidableEq (n' i)] [Ring 𝔸] [TopologicalSpace 𝔸] [IsTopologicalRing 𝔸]
   [T2Space 𝔸]
 
-/--
-theorem `exp_diagonal` / 定理 `exp_diagonal`
-
-English:
-theorem exp_diagonal
-  given: [Algebra Rat 𝔸] (v : m -> 𝔸)
-  statement: exp (diagonal v) = diagonal (exp v)
-  proof: by
-  simp_rw [exp_eq_tsum_rat, diagonal_pow, ← diagonal_smul, ← diagonal_tsum]
-
-中文:
-定理 exp_diagonal
-  条件: [代数 有理数 𝔸] (v : m -> 𝔸)
-  结论: exp (diagonal v) = diagonal (exp v)
-  证明: by
-  simp_rw [exp_eq_tsum_rat, diagonal_pow, ← diagonal_smul, ← diagonal_tsum]
-
-Depends on / 依赖: diagonal_pow, diagonal_smul, diagonal_tsum, exp_eq_tsum_rat, simp_rw
+/-
+**Matrix.exp_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_diagonal [Algebra Rat 𝔸] (v : m -> 𝔸) : exp (diagonal v) = diagonal (e
+xp v)
+参数：v : m -> 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `NormedSpace.exp_eq_tsum_rat`：exp_eq_tsum_rat [Algebra Rat 𝔸] : exp = fun
+ x : 𝔸 => ∑' n : Nat, (n !⁻¹ : Rat) • x ^ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.diagonal_pow`：diagonal_pow [Fintype n] [DecidableEq n] (v : n -> 
+α) (k : Nat) : diagonal v ^ k = diagonal (v ^ k)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem exp_diagonal [Algebra Rat 𝔸] (v : m -> 𝔸) : exp (diagonal v) = diagonal (exp v) := by
+theorem exp_diagonal [Algebra ℚ 𝔸] (v : m → 𝔸) : exp (diagonal v) = diagonal (exp v) := by
   simp_rw [exp_eq_tsum_rat, diagonal_pow, ← diagonal_smul, ← diagonal_tsum]
-
-/--
-theorem `exp_blockDiagonal` / 定理 `exp_blockDiagonal`
-
-English:
-theorem exp_blockDiagonal
-  given: [Algebra Rat 𝔸] (v : m -> Matrix n n 𝔸)
-  proof: by
-  simp_rw [exp_eq_tsum_rat, ← blockDiagonal_pow, ← blockDiagonal_smul, ← blockDiagonal_tsum]
-
-中文:
-定理 exp_blockDiagonal
-  条件: [代数 有理数 𝔸] (v : m -> 矩阵 n n 𝔸)
-  证明: by
-  simp_rw [exp_eq_tsum_rat, ← blockDiagonal_pow, ← blockDiagonal_smul, ← blockDiagonal_tsum]
-
-Depends on / 依赖: blockDiagonal_pow, blockDiagonal_smul, blockDiagonal_tsum, exp_eq_tsum_rat, simp_rw
+/-
+**Matrix.exp_blockDiagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_blockDiagonal [Algebra Rat 𝔸] (v : m -> Matrix n n 𝔸) : exp (blockDiag
+onal v) = blockDiagonal (exp v)
+参数：v : m -> Matrix n n 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `NormedSpace.exp_eq_tsum_rat`：exp_eq_tsum_rat [Algebra Rat 𝔸] : exp = fun
+ x : 𝔸 => ∑' n : Nat, (n !⁻¹ : Rat) • x ^ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem exp_blockDiagonal [Algebra Rat 𝔸] (v : m -> Matrix n n 𝔸) :
+theorem exp_blockDiagonal [Algebra ℚ 𝔸] (v : m → Matrix n n 𝔸) :
     exp (blockDiagonal v) = blockDiagonal (exp v) := by
   simp_rw [exp_eq_tsum_rat, ← blockDiagonal_pow, ← blockDiagonal_smul, ← blockDiagonal_tsum]
-
-/--
-theorem `exp_blockDiagonal'` / 定理 `exp_blockDiagonal'`
-
-English:
-theorem exp_blockDiagonal'
-  given: [Algebra Rat 𝔸] (v : forall i, Matrix (n' i) (n' i) 𝔸)
-  proof: by
-  simp_rw [exp_eq_tsum_rat, ← blockDiagonal'_pow, ← blockDiagonal'_smul, ← blockDiagonal'_tsum]
-
-中文:
-定理 exp_blockDiagonal'
-  条件: [代数 有理数 𝔸] (v : 对任意 i, 矩阵 (n' i) (n' i) 𝔸)
-  证明: by
-  simp_rw [exp_eq_tsum_rat, ← blockDiagonal'_pow, ← blockDiagonal'_smul, ← blockDiagonal'_tsum]
-
-Depends on / 依赖: _pow, _smul, _tsum, blockDiagonal, exp_eq_tsum_rat, simp_rw
+/-
+**Matrix.exp_blockDiagonal'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_blockDiagonal' [Algebra Rat 𝔸] (v : forall i, Matrix (n' i) (n' i) 𝔸) 
+: exp (blockDiagonal' v) = blockDiagonal' (exp v)
+参数：v : forall i, Matrix (n' i) (n' i) 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `NormedSpace.exp_eq_tsum_rat`：exp_eq_tsum_rat [Algebra Rat 𝔸] : exp = fun
+ x : 𝔸 => ∑' n : Nat, (n !⁻¹ : Rat) • x ^ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem exp_blockDiagonal' [Algebra Rat 𝔸] (v : forall i, Matrix (n' i) (n' i) 𝔸) :
+theorem exp_blockDiagonal' [Algebra ℚ 𝔸] (v : ∀ i, Matrix (n' i) (n' i) 𝔸) :
     exp (blockDiagonal' v) = blockDiagonal' (exp v) := by
   simp_rw [exp_eq_tsum_rat, ← blockDiagonal'_pow, ← blockDiagonal'_smul, ← blockDiagonal'_tsum]
-
-/--
-theorem `exp_conjTranspose` / 定理 `exp_conjTranspose`
-
-English:
-theorem exp_conjTranspose
-  given: [StarRing 𝔸] [ContinuousStar 𝔸] (A : Matrix m m 𝔸)
-  proof: (star_exp A).symm
-
-中文:
-定理 exp_conjTranspose
-  条件: [对合环 𝔸] [余ntinuousStar 𝔸] (A : 矩阵 m m 𝔸)
-  证明: (star_exp A).symm
-
-Depends on / 依赖: star_exp
+/-
+**Matrix.exp_conjTranspose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_conjTranspose [StarRing 𝔸] [ContinuousStar 𝔸] (A : Matrix m m 𝔸) : exp
+ Aᴴ = (exp A)ᴴ
+参数：A : Matrix m m 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `NormedSpace.star_exp`：star_exp [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 
+𝔸] (x : 𝔸) : star (exp x) = exp (star x)
+· 使用定理 `instT2SpaceMatrix`：∀ {m : Type u_4} {n : Type u_5} {R : Type u_8} [inst 
+: TopologicalSpace R] [T2Space R], T2Space (Matrix m n R)
+· 使用定理 `instContinuousStarMatrix`：∀ {m : Type u_4} {R : Type u_8} [inst : Topolo
+gicalSpace R] [inst_1 : Star R] [ContinuousStar R],   ContinuousStar (Matrix m m
+ R)
 -/
 theorem exp_conjTranspose [StarRing 𝔸] [ContinuousStar 𝔸] (A : Matrix m m 𝔸) :
     exp Aᴴ = (exp A)ᴴ :=
   (star_exp A).symm
-
-/--
-theorem `IsHermitian.exp` / 定理 `IsHermitian.exp`
-
-English:
-theorem IsHermitian.exp
-  given: [StarRing 𝔸] [ContinuousStar 𝔸] {A : Matrix m m 𝔸} (h : A.IsHermitian)
-  proof: (exp_conjTranspose _).symm.trans congr_arg _ h
-
-中文:
-定理 IsHermitian.exp
-  条件: [对合环 𝔸] [余ntinuousStar 𝔸] {A : 矩阵 m m 𝔸} (h : A.IsHermitian)
-  证明: (exp_conjTranspose _).symm.trans congr_arg _ h
-
-Depends on / 依赖: congr_arg, exp_conjTranspose, symm.trans
+/-
+**Matrix.IsHermitian.exp** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.IsHermitian`。
+形式化陈述：∀ {m : Type u_1} {𝔸 : Type u_5} [inst : Fintype m] [inst_1 : DecidableEq m
+] [inst_2 : Ring 𝔸]   [inst_3 : TopologicalSpace 𝔸] [inst_4 : IsTopologicalRing 
+𝔸] [T2Space 𝔸] [inst_6 : StarRing 𝔸] [ContinuousStar 𝔸]   {A : Matrix m m 𝔸}, A.
+IsHermitian → (NormedSpace.exp A).IsHermitian
+参数：NormedSpace.exp A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.exp_conjTranspose`：exp_conjTranspose [StarRing 𝔸] [ContinuousStar
+ 𝔸] (A : Matrix m m 𝔸) : exp Aᴴ = (exp A)ᴴ
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem IsHermitian.exp [StarRing 𝔸] [ContinuousStar 𝔸] {A : Matrix m m 𝔸} (h : A.IsHermitian) :
     (exp A).IsHermitian :=
-(exp_conjTranspose _).symm.trans congr_arg _ h
-
-/--
-theorem `BlockTriangular.exp` / 定理 `BlockTriangular.exp`
-
-English:
-theorem BlockTriangular.exp
-  statement: [LinearOrder α] [Algebra Rat 𝔸] {M : Matrix m m 𝔸} {b : m -> α}
-  proof: exp_mem (s := blockTriangularSubalgebra Rat _ b) isClosed_setOfPred_blockTriangular hM
-
-中文:
-定理 BlockTriangular.exp
-  结论: [线性序 α] [代数 有理数 𝔸] {M : 矩阵 m m 𝔸} {b : m -> α}
-  证明: exp_mem (s := blockTriangularSubalgebra Rat _ b) isClosed_setOfPred_blockTriangular hM
-
-Depends on / 依赖: blockTriangularSubalgebra, exp_mem, isClosed_setOfPred_blockTriangular
+  (exp_conjTranspose _).symm.trans <| congr_arg _ h
+/-
+**Matrix.BlockTriangular.exp** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.BlockTriangular`。
+形式化陈述：∀ {m : Type u_1} {α : Type u_4} {𝔸 : Type u_5} [inst : Fintype m] [inst_1 
+: DecidableEq m] [inst_2 : Ring 𝔸]   [inst_3 : TopologicalSpace 𝔸] [inst_4 : IsT
+opologicalRing 𝔸] [T2Space 𝔸] [inst_6 : LinearOrder α] [Algebra ℚ 𝔸]   {M : Matr
+ix m m 𝔸} {b : m → α}, M.BlockTriangular b → (NormedSpace.exp M).BlockTriangular
+ b
+参数：NormedSpace.exp M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_mem`：exp_mem {R S : Type*} [Monoid R] [SMul Rat R] [MulA
+ction R 𝔸] [Algebra Rat 𝔸] [IsScalarTower Rat R 𝔸] [SetLike S 𝔸] [SubsemiringCla
+ss S 𝔸] […
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `isClosed_setOfPred_blockTriangular`：isClosed_setOfPred_blockTriangular {
+α : Type*} {b : m -> α} [LinearOrder α] [Zero R] [T2Space R] : IsClosed {M : Mat
+rix m m R | M.BlockTrian…
 -/
-theorem BlockTriangular.exp [LinearOrder α] [Algebra Rat 𝔸] {M : Matrix m m 𝔸} {b : m -> α}
+theorem BlockTriangular.exp [LinearOrder α] [Algebra ℚ 𝔸] {M : Matrix m m 𝔸} {b : m → α}
     (hM : BlockTriangular M b) :
     (exp M).BlockTriangular b :=
-  exp_mem (s := blockTriangularSubalgebra Rat _ b) isClosed_setOfPred_blockTriangular hM
+  exp_mem (s := blockTriangularSubalgebra ℚ _ b) isClosed_setOfPred_blockTriangular hM
 
 end Ring
 
 section CommRing
 
 variable [Fintype m] [DecidableEq m] [CommRing 𝔸] [TopologicalSpace 𝔸]
-  [IsTopologicalRing 𝔸] [Algebra Rat 𝔸] [T2Space 𝔸]
+  [IsTopologicalRing 𝔸] [Algebra ℚ 𝔸] [T2Space 𝔸]
 
-/--
-theorem `exp_transpose` / 定理 `exp_transpose`
-
-English:
-theorem exp_transpose
-  given: (A : Matrix m m 𝔸)
-  statement: exp Aᵀ = (exp A)ᵀ
-  proof: by
-  simp_rw [exp_eq_tsum_rat, transpose_tsum, transpose_smul, transpose_pow]
-
-中文:
-定理 exp_transpose
-  条件: (A : 矩阵 m m 𝔸)
-  结论: exp Aᵀ = (exp A)ᵀ
-  证明: by
-  simp_rw [exp_eq_tsum_rat, transpose_tsum, transpose_smul, transpose_pow]
-
-Depends on / 依赖: exp_eq_tsum_rat, simp_rw, transpose_pow, transpose_smul, transpose_tsum
+/-
+**Matrix.exp_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_transpose (A : Matrix m m 𝔸) : exp Aᵀ = (exp A)ᵀ
+参数：A : Matrix m m 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `NormedSpace.exp_eq_tsum_rat`：exp_eq_tsum_rat [Algebra Rat 𝔸] : exp = fun
+ x : 𝔸 => ∑' n : Nat, (n !⁻¹ : Rat) • x ^ n
+· 使用定理 `Matrix.transpose_tsum`：Matrix.transpose_tsum [T2Space R] {f : X -> Matri
+x m n R} : (∑'[L] x, f x)ᵀ = ∑'[L] x, (f x)ᵀ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.transpose_pow`：transpose_pow [CommSemiring α] [Fintype m] [Decida
+bleEq m] (M : Matrix m m α) (k : Nat) : (M ^ k)ᵀ = Mᵀ ^ k
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem exp_transpose (A : Matrix m m 𝔸) : exp Aᵀ = (exp A)ᵀ := by
   simp_rw [exp_eq_tsum_rat, transpose_tsum, transpose_smul, transpose_pow]
-
-/--
-theorem `IsSymm.exp` / 定理 `IsSymm.exp`
-
-English:
-theorem IsSymm.exp
-  given: {A : Matrix m m 𝔸} (h : A.IsSymm)
-  statement: (exp A).IsSymm
-  proof: (exp_transpose _).symm.trans congr_arg _ h
-
-中文:
-定理 是Symm.exp
-  条件: {A : 矩阵 m m 𝔸} (h : A.是Symm)
-  结论: (exp A).是Symm
-  证明: (exp_transpose _).symm.trans congr_arg _ h
-
-Depends on / 依赖: congr_arg, exp_transpose, symm.trans
+/-
+**Matrix.IsSymm.exp** 是 Mathlib 中的一个定理，位于命名空间 `Matrix.IsSymm`。
+形式化陈述：∀ {m : Type u_1} {𝔸 : Type u_5} [inst : Fintype m] [inst_1 : DecidableEq m
+] [inst_2 : CommRing 𝔸]   [inst_3 : TopologicalSpace 𝔸] [inst_4 : IsTopologicalR
+ing 𝔸] [Algebra ℚ 𝔸] [T2Space 𝔸] {A : Matrix m m 𝔸},   A.IsSymm → (NormedSpace.e
+xp A).IsSymm
+参数：NormedSpace.exp A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.exp_transpose`：exp_transpose (A : Matrix m m 𝔸) : exp Aᵀ = (exp A
+)ᵀ
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem IsSymm.exp {A : Matrix m m 𝔸} (h : A.IsSymm) : (exp A).IsSymm :=
-(exp_transpose _).symm.trans congr_arg _ h
+  (exp_transpose _).symm.trans <| congr_arg _ h
 
 end CommRing
 
@@ -258,7 +304,7 @@ end Topological
 
 section Normed
 
-variable [Fintype m] [DecidableEq m] [NormedRing 𝔸] [NormedAlgebra Rat 𝔸] [CompleteSpace 𝔸]
+variable [Fintype m] [DecidableEq m] [NormedRing 𝔸] [NormedAlgebra ℚ 𝔸] [CompleteSpace 𝔸]
 
 set_option backward.isDefEq.respectTransparency false in
 nonrec theorem exp_add_of_commute (A B : Matrix m m 𝔸) (h : Commute A B) :
@@ -267,14 +313,14 @@ nonrec theorem exp_add_of_commute (A B : Matrix m m 𝔸) (h : Commute A B) :
 
 set_option backward.isDefEq.respectTransparency false in
 open scoped Function in -- required for scoped `on` notation
-nonrec theorem exp_sum_of_commute {ι} (s : Finset ι) (f : ι -> Matrix m m 𝔸)
+nonrec theorem exp_sum_of_commute {ι} (s : Finset ι) (f : ι → Matrix m m 𝔸)
     (h : (s : Set ι).Pairwise (Commute on f)) :
-    exp (∑ i in s, f i) =
+    exp (∑ i ∈ s, f i) =
       s.noncommProd (fun i => exp (f i)) fun _ hi _ hj _ => (h.of_refl hi hj).exp :=
   open scoped Norms.Operator in exp_sum_of_commute s f h
 
 set_option backward.isDefEq.respectTransparency false in
-nonrec theorem exp_nsmul (n : Nat) (A : Matrix m m 𝔸) : exp (n • A) = exp A ^ n :=
+nonrec theorem exp_nsmul (n : ℕ) (A : Matrix m m 𝔸) : exp (n • A) = exp A ^ n :=
   open scoped Norms.Operator in exp_nsmul n A
 
 set_option backward.isDefEq.respectTransparency false in
@@ -296,20 +342,16 @@ nonrec theorem exp_units_conj (U : (Matrix m m 𝔸)ˣ) (A : Matrix m m 𝔸) :
 -- and zulip discussion at
 -- https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/Coercion.20instance.20problems.20with.20matrix.20exponential/with/539770030
 attribute [-instance] Matrix.SpecialLinearGroup.hasCoeToGeneralLinearGroup in
-/--
-theorem `exp_units_conj'` / 定理 `exp_units_conj'`
-
-English:
-theorem exp_units_conj'
-  given: (U : (Matrix m m 𝔸)ˣ) (A : Matrix m m 𝔸)
-  proof: exp_units_conj U⁻¹ A
-
-中文:
-定理 exp_units_conj'
-  条件: (U : (矩阵 m m 𝔸)ˣ) (A : 矩阵 m m 𝔸)
-  证明: exp_units_conj U⁻¹ A
-
-Depends on / 依赖: exp_units_conj
+/-
+**Matrix.exp_units_conj'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_units_conj' (U : (Matrix m m 𝔸)ˣ) (A : Matrix m m 𝔸) : exp (U⁻¹ * A * 
+U) = U⁻¹ * exp A * U
+参数：U : (Matrix m m 𝔸)ˣ；A : Matrix m m 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.exp_units_conj`：∀ {m : Type u_1} {𝔸 : Type u_5} [inst : Fintype m
+] [inst_1 : DecidableEq m] [inst_2 : NormedRing 𝔸] [NormedAlgebra ℚ 𝔸]   [Comple
+teSpace 𝔸] …
 -/
 theorem exp_units_conj' (U : (Matrix m m 𝔸)ˣ) (A : Matrix m m 𝔸) :
     exp (U⁻¹ * A * U) = U⁻¹ * exp A * U :=
@@ -320,103 +362,128 @@ end Normed
 section NormedComm
 
 variable [Fintype m] [DecidableEq m]
-  [NormedCommRing 𝔸] [NormedAlgebra Rat 𝔸] [CompleteSpace 𝔸]
+  [NormedCommRing 𝔸] [NormedAlgebra ℚ 𝔸] [CompleteSpace 𝔸]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `exp_neg` / 定理 `exp_neg`
-
-English:
-theorem exp_neg
-  given: (A : Matrix m m 𝔸)
-  statement: exp (-A) = (exp A)⁻¹
-  proof: by
-  rw [nonsing_inv_eq_ringInverse]
-  open scoped Norms.Operator in exact (Ring.inverse_exp A).symm
-
-中文:
-定理 exp_neg
-  条件: (A : 矩阵 m m 𝔸)
-  结论: exp (-A) = (exp A)⁻¹
-  证明: by
-  rw [nonsing_inv_eq_ringInverse]
-  open scoped Norms.Operator in exact (Ring.inverse_exp A).symm
-
-Depends on / 依赖: Norms.Operator, Operator, Ring.inverse_exp, inverse_exp, nonsing_inv_eq_ringInverse, scoped
+/-
+**Matrix.exp_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_neg (A : Matrix m m 𝔸) : exp (-A) = (exp A)⁻¹
+参数：A : Matrix m m 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.nonsing_inv_eq_ringInverse`：nonsing_inv_eq_ringInverse : A⁻¹ = A⁻
+¹ʳ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ring.inverse_exp`：∀ {𝔸 : Type u_1} [inst : NormedRing 𝔸] [NormedAlgebra 
+ℚ 𝔸] [CompleteSpace 𝔸] (x : 𝔸),   Ring.inverse (NormedSpace.exp x) = NormedSpace
+.exp (…
+· 使用定理 `Matrix.instCompleteSpace`：∀ (m : Type u_1) (n : Type u_2) (𝕜 : Type u_3)
+ [inst : UniformSpace 𝕜] [CompleteSpace 𝕜], CompleteSpace (Matrix m n 𝕜)
 -/
 theorem exp_neg (A : Matrix m m 𝔸) : exp (-A) = (exp A)⁻¹ := by
   rw [nonsing_inv_eq_ringInverse]
   open scoped Norms.Operator in exact (Ring.inverse_exp A).symm
-
-/--
-theorem `exp_zsmul` / 定理 `exp_zsmul`
-
-English:
-theorem exp_zsmul
-  given: (z : Int) (A : Matrix m m 𝔸)
-  statement: exp (z • A) = exp A ^ z
-  proof: by
-  obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
-  · rw [zpow_natCast, natCast_zsmul, exp_nsmul]
-  · have : IsUnit (exp A).det := (Matrix.isUnit_iff_isUnit_det _).mp (isUnit_exp _)
-    rw [Matrix.zpow_neg this]; rw [zpow_natCast]; rw [neg_smul]; rw [exp_neg]; rw [natCast_zsmul]; rw [exp_nsmul]
-
-中文:
-定理 exp_zsmul
-  条件: (z : 整数) (A : 矩阵 m m 𝔸)
-  结论: exp (z • A) = exp A ^ z
-  证明: by
-  obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
-  · rw [zpow_natCast, natCast_zsmul, exp_nsmul]
-  · have : IsUnit (exp A).det := (Matrix.isUnit_iff_isUnit_det _).mp (isUnit_exp _)
-    rw [Matrix.zpow_neg this]; rw [zpow_natCast]; rw [neg_smul]; rw [exp_neg]; rw [natCast_zsmul]; rw [exp_nsmul]
-
-Depends on / 依赖: IsUnit, Matrix, Matrix.isUnit_iff_isUnit_det, Matrix.zpow_neg, eq_nat_or_neg, exp_neg, exp_nsmul, isUnit_exp, isUnit_iff_isUnit_det, natCast_zsmul, neg_smul, z.eq_nat_or_neg, zpow_natCast, zpow_neg
+/-
+**Matrix.exp_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_zsmul (z : Int) (A : Matrix m m 𝔸) : exp (z • A) = exp A ^ z
+参数：z : Int；A : Matrix m m 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Int.eq_nat_or_neg`：∀ (a : ℤ), ∃ n, a = ↑n ∨ a = -↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `Matrix.exp_nsmul`：∀ {m : Type u_1} {𝔸 : Type u_5} [inst : Fintype m] [in
+st_1 : DecidableEq m] [inst_2 : NormedRing 𝔸] [NormedAlgebra ℚ 𝔸]   [CompleteSpa
+ce 𝔸] …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Matrix.isUnit_iff_isUnit_det`：isUnit_iff_isUnit_det : IsUnit A ↔ IsUnit 
+A.det
+· 使用定理 `Matrix.isUnit_exp`：∀ {m : Type u_1} {𝔸 : Type u_5} [inst : Fintype m] [i
+nst_1 : DecidableEq m] [inst_2 : NormedRing 𝔸] [NormedAlgebra ℚ 𝔸]   [CompleteSp
+ace 𝔸] …
+· 使用定理 `Matrix.zpow_neg`：∀ {n' : Type u_1} [inst : DecidableEq n'] [inst_1 : Fin
+type n'] {R : Type u_2} [inst_2 : CommRing R]   {A : Matrix n' n' R}, IsUnit A.d
+et → …
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `Matrix.exp_neg`：exp_neg (A : Matrix m m 𝔸) : exp (-A) = (exp A)⁻¹
 -/
-theorem exp_zsmul (z : Int) (A : Matrix m m 𝔸) : exp (z • A) = exp A ^ z := by
+theorem exp_zsmul (z : ℤ) (A : Matrix m m 𝔸) : exp (z • A) = exp A ^ z := by
   obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
   · rw [zpow_natCast, natCast_zsmul, exp_nsmul]
   · have : IsUnit (exp A).det := (Matrix.isUnit_iff_isUnit_det _).mp (isUnit_exp _)
-    rw [Matrix.zpow_neg this]; rw [zpow_natCast]; rw [neg_smul]; rw [exp_neg]; rw [natCast_zsmul]; rw [exp_nsmul]
-
-/--
-theorem `exp_conj` / 定理 `exp_conj`
-
-English:
-theorem exp_conj
-  given: (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U)
-  proof: let ⟨u, hu⟩ := hy
-  hu ▸ by simpa only [Matrix.coe_units_inv] using exp_units_conj u A
-
-中文:
-定理 exp_conj
-  条件: (U : 矩阵 m m 𝔸) (A : 矩阵 m m 𝔸) (hy : 是单位 U)
-  证明: let ⟨u, hu⟩ := hy
-  hu ▸ by simpa only [Matrix.coe_units_inv] using exp_units_conj u A
-
-Depends on / 依赖: Matrix, Matrix.coe_units_inv, coe_units_inv, exp_units_conj
+    rw [Matrix.zpow_neg this, zpow_natCast, neg_smul, exp_neg, natCast_zsmul, exp_nsmul]
+/-
+**Matrix.exp_conj** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_conj (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U) : exp (U * 
+A * U⁻¹) = U * exp A * U⁻¹
+参数：U : Matrix m m 𝔸；A : Matrix m m 𝔸；hy : IsUnit U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp.congr_simp`：∀ {𝔸 : Type u_3} [inst : Ring 𝔸] [inst_1 : T
+opologicalSpace 𝔸] [inst_2 : IsTopologicalRing 𝔸] (x x_1 : 𝔸),   x = x_1 → Norme
+dSpace.exp x = N…
+· 使用定理 `Matrix.coe_units_inv`：coe_units_inv (A : (Matrix n n α)ˣ) : ↑A⁻¹ = (A⁻¹ 
+: Matrix n n α)
+· 使用定理 `Matrix.exp_units_conj`：∀ {m : Type u_1} {𝔸 : Type u_5} [inst : Fintype m
+] [inst_1 : DecidableEq m] [inst_2 : NormedRing 𝔸] [NormedAlgebra ℚ 𝔸]   [Comple
+teSpace 𝔸] …
 -/
 theorem exp_conj (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U) :
     exp (U * A * U⁻¹) = U * exp A * U⁻¹ :=
   let ⟨u, hu⟩ := hy
   hu ▸ by simpa only [Matrix.coe_units_inv] using exp_units_conj u A
-
-/--
-theorem `exp_conj'` / 定理 `exp_conj'`
-
-English:
-theorem exp_conj'
-  given: (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U)
-  proof: let ⟨u, hu⟩ := hy
-  hu ▸ by simpa only [Matrix.coe_units_inv] using exp_units_conj' u A
-
-中文:
-定理 exp_conj'
-  条件: (U : 矩阵 m m 𝔸) (A : 矩阵 m m 𝔸) (hy : 是单位 U)
-  证明: let ⟨u, hu⟩ := hy
-  hu ▸ by simpa only [Matrix.coe_units_inv] using exp_units_conj' u A
-
-Depends on / 依赖: Matrix, Matrix.coe_units_inv, coe_units_inv, exp_units_conj
+/-
+**Matrix.exp_conj'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：exp_conj' (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U) : exp (U⁻¹
+ * A * U) = U⁻¹ * exp A * U
+参数：U : Matrix m m 𝔸；A : Matrix m m 𝔸；hy : IsUnit U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.topologicalRing`：∀ {n : Type u_5} {R : Type u_8} [inst : Topologi
+calSpace R] [inst_1 : Fintype n] [inst_2 : NonUnitalNonAssocRing R]   [IsTopolog
+icalRing R],…
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp.congr_simp`：∀ {𝔸 : Type u_3} [inst : Ring 𝔸] [inst_1 : T
+opologicalSpace 𝔸] [inst_2 : IsTopologicalRing 𝔸] (x x_1 : 𝔸),   x = x_1 → Norme
+dSpace.exp x = N…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.coe_units_inv`：coe_units_inv (A : (Matrix n n α)ˣ) : ↑A⁻¹ = (A⁻¹ 
+: Matrix n n α)
+· 使用定理 `Matrix.exp_units_conj'`：exp_units_conj' (U : (Matrix m m 𝔸)ˣ) (A : Matri
+x m m 𝔸) : exp (U⁻¹ * A * U) = U⁻¹ * exp A * U
 -/
 theorem exp_conj' (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U) :
     exp (U⁻¹ * A * U) = U⁻¹ * exp A * U :=
@@ -426,3 +493,4 @@ theorem exp_conj' (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U) :
 end NormedComm
 
 end Matrix
+

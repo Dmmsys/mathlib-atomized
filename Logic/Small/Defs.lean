@@ -34,39 +34,26 @@ universe u w v v'
 -- but we need the attribute to prevent `w` from also being treated as output.
 -- See Note [universe output parameters and typeclass caching].
 @[univ_out_params v, mk_iff, pp_with_univ]
-/--
-Definition of `Small` / `Small` 的定义
-
-English:
-class Small
-  parameters: (α : Type v)
-  axioms and operations (1):
-    - equiv_small : exists S : Type w, Nonempty (α ≃ S)
-
-中文:
-类 Small
-  参数: (α : 类型v)
-  公理与运算 (1 个):
-    - equiv_small : 存在 S : 类型 w, 非空 (α ≃ S)
+/-
+**Small** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type v → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class Small (α : Type v) : Prop where
   /-- If a type is `Small.{w}`, then there exists an equivalence with some `S : Type w` -/
-  equiv_small : exists S : Type w, Nonempty (α ≃ S)
+  equiv_small : ∃ S : Type w, Nonempty (α ≃ S)
 
-/--
-theorem `Small.mk'` / 定理 `Small.mk'`
+/-- Constructor for `Small α` from an explicit witness type and equivalence.
+-/
+/-
+**Small.mk'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Small.mk' {α : Type v} {S : Type w} (e : α ≃ S) : Small.{w} α
+参数：e : α ≃ S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Small.mk'
-  given: {α : Type v} {S : Type w} (e : α ≃ S)
-  statement: Small.{w} α
-  proof: ⟨⟨S, ⟨e⟩⟩⟩
-
-中文:
-定理 Small.mk'
-  条件: {α : 类型v} {S : 类型 w} (e : α ≃ S)
-  结论: Small.{w} α
-  证明: ⟨⟨S, ⟨e⟩⟩⟩
+--- 原说明 ---
+Constructor for `Small α` from an explicit witness type and equivalence.
 -/
 theorem Small.mk' {α : Type v} {S : Type w} (e : α ≃ S) : Small.{w} α :=
   ⟨⟨S, ⟨e⟩⟩⟩
@@ -74,20 +61,17 @@ theorem Small.mk' {α : Type v} {S : Type w} (e : α ≃ S) : Small.{w} α :=
 /-- An arbitrarily chosen model in `Type w` for a `w`-small type.
 -/
 @[pp_with_univ, no_expose]
-/--
-Definition of `Shrink` / `Shrink` 的定义
+/-
+**Shrink** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Shrink (α : Type v) [Small.{w} α] : Type w
+参数：α : Type v。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Small.equiv_small`：∀ {α : Type v} [self : Small.{w, v} α], ∃ S, Nonempty
+ (α ≃ S)
 
-English:
-definition Shrink
-  signature: (α : Type v) [Small.{w} α]
-  body: Classical.choose (@Small.equiv_small α _)
-
-中文:
-定义 Shrink
-  签名: (α : 类型v) [Small.{w} α]
-  定义体: Classical.choose (@Small.equiv_small α _)
-
-Depends on / 依赖: Classical, Classical.choose, Small.equiv_small, equiv_small
+--- 原说明 ---
+An arbitrarily chosen model in `Type w` for a `w`-small type.
 -/
 def Shrink (α : Type v) [Small.{w} α] : Type w :=
   Classical.choose (@Small.equiv_small α _)
@@ -95,43 +79,30 @@ def Shrink (α : Type v) [Small.{w} α] : Type w :=
 /-- The noncomputable equivalence between a `w`-small type and a model.
 -/
 @[no_expose]
-/--
-Definition of `equivShrink` / `equivShrink` 的定义
+/-
+**equivShrink** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：equivShrink (α : Type v) [Small.{w} α] : α ≃ Shrink α
+参数：α : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivShrink
-  signature: (α : Type v) [Small.{w} α]
-  body: Nonempty.some (Classical.choose_spec (@Small.equiv_small α _))
-
-@[ext]
-
-中文:
-定义 equivShrink
-  签名: (α : 类型v) [Small.{w} α]
-  定义体: Nonempty.some (Classical.choose_spec (@Small.equiv_small α _))
-
-@[ext]
-
-Depends on / 依赖: Classical, Classical.choose_spec, Nonempty, Nonempty.some, Small.equiv_small, choose_spec, equiv_small
+--- 原说明 ---
+The noncomputable equivalence between a `w`-small type and a model.
 -/
 noncomputable def equivShrink (α : Type v) [Small.{w} α] : α ≃ Shrink α :=
   Nonempty.some (Classical.choose_spec (@Small.equiv_small α _))
 
 @[ext]
-/--
-theorem `Shrink.ext` / 定理 `Shrink.ext`
-
-English:
-theorem Shrink.ext
-  statement: {α : Type v} [Small.{w} α] {x y : Shrink α}
-  proof: by
-  simpa using w
-
-中文:
-定理 Shrink.ext
-  结论: {α : 类型v} [Small.{w} α] {x y : Shrink α}
-  证明: by
-  simpa using w
+/-
+**Shrink.ext** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Shrink.ext {α : Type v} [Small.{w} α] {x y : Shrink α} (w : (equivShrink _
+).symm x = (equivShrink _).symm y) : x = y
+参数：w : (equivShrink _).symm x = (equivShrink _).symm y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
 -/
 theorem Shrink.ext {α : Type v} [Small.{w} α] {x y : Shrink α}
     (w : (equivShrink _).symm x = (equivShrink _).symm y) : x = y := by
@@ -141,268 +112,206 @@ theorem Shrink.ext {α : Type v} [Small.{w} α] {x y : Shrink α}
 -- https://github.com/leanprover-community/aesop/issues/59
 -- is resolved.
 @[induction_eliminator]
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def Shrink.rec {α : Type*} [Small.{w} α] {F : Shrink α -> Sort v}
-  body: fun X => ((equivShrink _).apply_symm_apply X) ▸ (h _)
-
-@[simp]
-
-中文:
-定义 noncomputable
-  签名: def Shrink.rec {α : 类型} [Small.{w} α] {F : Shrink α -> 类型层 v}
-  定义体: fun X => ((equivShrink _).apply_symm_apply X) ▸ (h _)
-
-@[simp]
+/-
+**Shrink.rec** 是 Mathlib 中的一个定义，位于命名空间 `Shrink`。
+形式化陈述：{α : Type u_1} →   [inst : Small.{w, u_1} α] →     {F : Shrink.{w, u_1} α 
+→ Sort v} → ((X : α) → F ((equivShrink α) X)) → (X : Shrink.{w, u_1} α) → F X
+参数：(X : α) → F ((equivShrink α) X)；X : Shrink.{w, u_1} α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-protected noncomputable def Shrink.rec {α : Type*} [Small.{w} α] {F : Shrink α -> Sort v}
-    (h : forall X, F (equivShrink _ X)) : forall X, F X :=
+protected noncomputable def Shrink.rec {α : Type*} [Small.{w} α] {F : Shrink α → Sort v}
+    (h : ∀ X, F (equivShrink _ X)) : ∀ X, F X :=
   fun X => ((equivShrink _).apply_symm_apply X) ▸ (h _)
 
 @[simp]
-/--
-lemma `Shrink.rec_equivShrink` / 引理 `Shrink.rec_equivShrink`
-
-English:
-lemma Shrink.rec_equivShrink
-  statement: {α : Type*} [Small.{w} α] {F : Shrink α -> Sort v}
-  proof: by
-  simp only [Shrink.rec, eqRec_eq_cast, cast_eq_iff_heq]
-  rw [Equiv.symm_apply_apply]
-
-中文:
-引理 Shrink.rec_equivShrink
-  结论: {α : 类型} [Small.{w} α] {F : Shrink α -> 类型层 v}
-  证明: by
-  simp only [Shrink.rec, eqRec_eq_cast, cast_eq_iff_heq]
-  rw [Equiv.symm_apply_apply]
-
-Depends on / 依赖: Equiv.symm_apply_apply, Shrink, Shrink.rec, cast_eq_iff_heq, eqRec_eq_cast, symm_apply_apply
+/-
+**Shrink.rec_equivShrink** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Shrink.rec_equivShrink {α : Type*} [Small.{w} α] {F : Shrink α -> Sort v} 
+{f : (a : α) -> F (equivShrink α a)} (a : α) : Shrink.rec f (equivShrink _ a) = 
+f a
+参数：a : α；equivShrink α a；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eqRec_eq_cast`：∀ {α : Sort u_1} {a : α} {motive : (a' : α) → a = a' → So
+rt u_2} (x : motive a ⋯) {a' : α} (e : a = a'),   e ▸ x = cast ⋯ x
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-lemma Shrink.rec_equivShrink {α : Type*} [Small.{w} α] {F : Shrink α -> Sort v}
-    {f : (a : α) -> F (equivShrink α a)} (a : α) : Shrink.rec f (equivShrink _ a) = f a := by
+lemma Shrink.rec_equivShrink {α : Type*} [Small.{w} α] {F : Shrink α → Sort v}
+    {f : (a : α) → F (equivShrink α a)} (a : α) : Shrink.rec f (equivShrink _ a) = f a := by
   simp only [Shrink.rec, eqRec_eq_cast, cast_eq_iff_heq]
   rw [Equiv.symm_apply_apply]
-
-/--
-Instance `small_self` / 实例 `small_self`
-
-English:
-instance small_self
-  signature: (α : Type v)
-  body: Small.mk' Equiv.refl α
-
-中文:
-实例 small_self
-  签名: (α : 类型v)
-  定义体: Small.mk' Equiv.refl α
-
-Depends on / 依赖: Equiv.refl, Small.mk
+/-
+**small_self** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_self (α : Type v) : Small.{v} α
+参数：α : Type v。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Small.mk'`：Small.mk' {α : Type v} {S : Type w} (e : α ≃ S) : Small.{w} α
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 instance small_self (α : Type v) : Small.{v} α :=
-Small.mk' Equiv.refl α
-
-/--
-theorem `small_map` / 定理 `small_map`
-
-English:
-theorem small_map
-  given: {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃ β)
-  statement: Small.{w} α
-  proof: let ⟨_, ⟨f⟩⟩ := hβ.equiv_small
-  Small.mk' (e.trans f)
-
-中文:
-定理 small_map
-  条件: {α : 类型} {β : 类型} [hβ : Small.{w} β] (e : α ≃ β)
-  结论: Small.{w} α
-  证明: let ⟨_, ⟨f⟩⟩ := hβ.equiv_small
-  Small.mk' (e.trans f)
-
-Depends on / 依赖: Small.mk, e.trans, equiv_small
+  Small.mk' <| Equiv.refl α
+/-
+**small_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃ β) : Small.{
+w} α
+参数：e : α ≃ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Small.equiv_small`：∀ {α : Type v} [self : Small.{w, v} α], ∃ S, Nonempty
+ (α ≃ S)
+· 使用定理 `Small.mk'`：Small.mk' {α : Type v} {S : Type w} (e : α ≃ S) : Small.{w} α
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃ β) : Small.{w} α :=
   let ⟨_, ⟨f⟩⟩ := hβ.equiv_small
   Small.mk' (e.trans f)
-
-/--
-theorem `small_lift` / 定理 `small_lift`
-
-English:
-theorem small_lift
-  given: (α : Type u) [hα : Small.{v} α]
-  statement: Small.{max v w} α
-  proof: let ⟨⟨_, ⟨f⟩⟩⟩ := hα
-Small.mk' f.trans (Equiv.ulift.{w}).symm
-
-中文:
-定理 small_lift
-  条件: (α : 类型u) [hα : Small.{v} α]
-  结论: Small.{最大值 v w} α
-  证明: let ⟨⟨_, ⟨f⟩⟩⟩ := hα
-Small.mk' f.trans (Equiv.ulift.{w}).symm
-
-Depends on / 依赖: Equiv.ulift, Small.mk, f.trans
+/-
+**small_lift** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_lift (α : Type u) [hα : Small.{v} α] : Small.{max v w} α
+参数：α : Type u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Small.mk'`：Small.mk' {α : Type v} {S : Type w} (e : α ≃ S) : Small.{w} α
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem small_lift (α : Type u) [hα : Small.{v} α] : Small.{max v w} α :=
   let ⟨⟨_, ⟨f⟩⟩⟩ := hα
-Small.mk' f.trans (Equiv.ulift.{w}).symm
+  Small.mk' <| f.trans (Equiv.ulift.{w}).symm
 
-/--
-lemma `small_max` / 引理 `small_max`
+/-- Due to https://github.com/leanprover/lean4/issues/2297, this is useless as an instance.
 
-English:
-lemma small_max
-  given: (α : Type v)
-  statement: Small.{max w v} α
-  proof: small_lift.{v, w} α
+See however `Logic.UnivLE`, whose API is able to indirectly provide this instance. -/
+/-
+**small_max** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：small_max (α : Type v) : Small.{max w v} α
+参数：α : Type v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_lift`：small_lift (α : Type u) [hα : Small.{v} α] : Small.{max v w}
+ α
 
-中文:
-引理 small_max
-  条件: (α : 类型v)
-  结论: Small.{最大值 w v} α
-  证明: small_lift.{v, w} α
+--- 原说明 ---
+Due to https://github.com/leanprover/lean4/issues/2297, this is useless as an in
+stance.
 
-Depends on / 依赖: small_lift
+See however `Logic.UnivLE`, whose API is able to indirectly provide this instanc
+e.
 -/
 lemma small_max (α : Type v) : Small.{max w v} α :=
   small_lift.{v, w} α
-
-/--
-Instance `small_zero` / 实例 `small_zero`
-
-English:
-instance small_zero
-  signature: (α : Type)
-  body: small_max α
-
-中文:
-实例 small_zero
-  签名: (α : 类型)
-  定义体: small_max α
-
-Depends on / 依赖: small_max
+/-
+**small_zero** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_zero (α : Type) : Small.{w} α
+参数：α : Type。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `small_max`：small_max (α : Type v) : Small.{max w v} α
 -/
 instance small_zero (α : Type) : Small.{w} α := small_max α
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) small_succ (α : Type v) : Small.{v + 1} α :=
   small_lift.{v, v + 1} α
-
-/--
-Instance `small_ulift` / 实例 `small_ulift`
-
-English:
-instance small_ulift
-  signature: (α : Type u) [Small.{v} α]
-  body: small_map Equiv.ulift
-
-中文:
-实例 small_ulift
-  签名: (α : 类型u) [Small.{v} α]
-  定义体: small_map Equiv.ulift
-
-Depends on / 依赖: Equiv.ulift, small_map
+/-
+**small_ulift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_ulift (α : Type u) [Small.{v} α] : Small.{v} (ULift.{w} α)
+参数：α : Type u。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_map`：small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃
+ β) : Small.{w} α
 -/
 instance small_ulift (α : Type u) [Small.{v} α] : Small.{v} (ULift.{w} α) :=
   small_map Equiv.ulift
-
-/--
-Instance `small_plift` / 实例 `small_plift`
-
-English:
-instance small_plift
-  signature: (α : Type u) [Small.{v} α]
-  body: small_map Equiv.plift
-
-中文:
-实例 small_plift
-  签名: (α : 类型u) [Small.{v} α]
-  定义体: small_map Equiv.plift
-
-Depends on / 依赖: Equiv.plift, small_map
+/-
+**small_plift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_plift (α : Type u) [Small.{v} α] : Small.{v} (PLift α)
+参数：α : Type u。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_map`：small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃
+ β) : Small.{w} α
 -/
 instance small_plift (α : Type u) [Small.{v} α] : Small.{v} (PLift α) :=
   small_map Equiv.plift
-
-/--
-theorem `small_type` / 定理 `small_type`
-
-English:
-theorem small_type
-  statement: Small.{max (u + 1) v} (Type u)
-  proof: small_max.{max (u + 1) v} _
-
-中文:
-定理 small_type
-  结论: Small.{最大值 (u + 1) v} (类型u)
-  证明: small_max.{max (u + 1) v} _
-
-Depends on / 依赖: small_max
+/-
+**small_type** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_type : Small.{max (u + 1) v} (Type u)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `small_max`：small_max (α : Type v) : Small.{max w v} α
 -/
 theorem small_type : Small.{max (u + 1) v} (Type u) :=
   small_max.{max (u + 1) v} _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type u} [Small.{v} α] [Nontrivial α] : Nontrivial (Shrink.{v} α) :=
   (equivShrink α).symm.nontrivial
 
 section
 
-/--
-theorem `small_congr` / 定理 `small_congr`
-
-English:
-theorem small_congr
-  given: {α : Type*} {β : Type*} (e : α ≃ β)
-  statement: Small.{w} α ↔ Small.{w} β
-  proof: ⟨fun h => @small_map _ _ h e.symm, fun h => @small_map _ _ h e⟩
-
-中文:
-定理 small_congr
-  条件: {α : 类型} {β : 类型} (e : α ≃ β)
-  结论: Small.{w} α ↔ Small.{w} β
-  证明: ⟨fun h => @small_map _ _ h e.symm, fun h => @small_map _ _ h e⟩
-
-Depends on / 依赖: e.symm, small_map
+/-
+**small_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_congr {α : Type*} {β : Type*} (e : α ≃ β) : Small.{w} α ↔ Small.{w} 
+β
+参数：e : α ≃ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_map`：small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃
+ β) : Small.{w} α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem small_congr {α : Type*} {β : Type*} (e : α ≃ β) : Small.{w} α ↔ Small.{w} β :=
   ⟨fun h => @small_map _ _ h e.symm, fun h => @small_map _ _ h e⟩
-
-/--
-Instance `small_sigma` / 实例 `small_sigma`
-
-English:
-instance small_sigma
-  signature: {α} (β : α -> Type*) [Small.{w} α] [forall a, Small.{w} (β a)]
-  body: ⟨⟨Σ a' : Shrink α, Shrink (β ((equivShrink α).symm a')),
-      ⟨Equiv.sigmaCongr (equivShrink α) fun a => by simpa using equivShrink (β a)⟩⟩⟩
-
-中文:
-实例 small_sigma
-  签名: {α} (β : α -> 类型) [Small.{w} α] [对任意 a, Small.{w} (β a)]
-  定义体: ⟨⟨Σ a' : Shrink α, Shrink (β ((equivShrink α).symm a')),
-      ⟨Equiv.sigmaCongr (equivShrink α) fun a => by simpa using equivShrink (β a)⟩⟩⟩
-
-Depends on / 依赖: Equiv.sigmaCongr, Shrink, equivShrink, sigmaCongr
+/-
+**small_sigma** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_sigma {α} (β : α -> Type*) [Small.{w} α] [forall a, Small.{w} (β a)]
+ : Small.{w} (Σ a, β a)
+参数：β : α -> Type*；β a。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Shrink.congr_simp`：∀ (α α_1 : Type v) (e_α : α = α_1) [inst : Small.{w, 
+v} α], Shrink.{w, v} α = Shrink.{w, v} α_1
 -/
-instance small_sigma {α} (β : α -> Type*) [Small.{w} α] [forall a, Small.{w} (β a)] :
+instance small_sigma {α} (β : α → Type*) [Small.{w} α] [∀ a, Small.{w} (β a)] :
     Small.{w} (Σ a, β a) :=
   ⟨⟨Σ a' : Shrink α, Shrink (β ((equivShrink α).symm a')),
       ⟨Equiv.sigmaCongr (equivShrink α) fun a => by simpa using equivShrink (β a)⟩⟩⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `not_small_type` / 定理 `not_small_type`
-
-English:
-theorem not_small_type
-  statement: ¬Small.{u} (Type max u v)
-
-中文:
-定理 not_small_type
-  结论: ¬Small.{u} (类型 最大值 u v)
+/-
+**not_small_type** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：¬Small.{u, max (u + 1) (v + 1)} (Type (max u v))
+参数：u + 1；v + 1；Type (max u v)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.cantor_injective`：∀ {α : Type u_4} (f : Set α → α), ¬Function.I
+njective f
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem not_small_type : ¬Small.{u} (Type max u v)
   | ⟨⟨S, ⟨e⟩⟩⟩ =>
@@ -412,3 +321,4 @@ theorem not_small_type : ¬Small.{u} (Type max u v)
       simpa using h₂
 
 end
+

@@ -87,33 +87,32 @@ as `x` and once as `y`, and in both cases the term needs to remember that it's a
 to `h`.
 -/
 
-/--
-Definition of `congrHoleForLhsKey` / `congrHoleForLhsKey` 的定义
+/-- Key for congruence hole metadata.
+For a `Bool` recording whether this hole is for the LHS elaboration. -/
+/-
+**Mathlib.Tactic.TermCongr.congrHoleForLhsKey** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.TermCongr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrHoleForLhsKey
-  signature: : Name
-  body: decl_name%
-
-中文:
-定义 congrHoleForLhsKey
-  签名: : Name
-  定义体: decl_name%
+--- 原说明 ---
+Key for congruence hole metadata.
+For a `Bool` recording whether this hole is for the LHS elaboration.
 -/
 private def congrHoleForLhsKey : Name := decl_name%
 
-/--
-Definition of `congrHoleIndex` / `congrHoleIndex` 的定义
+/-- Key for congruence hole metadata.
+For a `Nat` recording how old this congruence hole is, to prevent reprocessing them
+if they leak into the local context. -/
+/-
+**Mathlib.Tactic.TermCongr.congrHoleIndex** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.TermCongr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrHoleIndex
-  signature: : Name
-  body: decl_name%
-
-中文:
-定义 congrHoleIndex
-  签名: : Name
-  定义体: decl_name%
+--- 原说明 ---
+Key for congruence hole metadata.
+For a `Nat` recording how old this congruence hole is, to prevent reprocessing t
+hem
+if they leak into the local context.
 -/
 private def congrHoleIndex : Name := decl_name%
 
@@ -128,99 +127,87 @@ to elaborate as an iff, eq, or heq.
 Later, the congruence generator handles any discrepancies.
 See `CongrResult` below. -/
 @[reducible, nolint unusedArguments, expose]
-/--
-Definition of `cHole` / `cHole` 的定义
+/-
+**Mathlib.Tactic.TermCongr.cHole** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TermC
+ongr`。
+形式化陈述：cHole {α : Sort u} (val : α) {p : Prop} (_pf : p) : α
+参数：val : α；_pf : p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cHole
-  signature: {α : Sort u} (val : α) {p : Prop} (_pf : p)
-  body: val
+--- 原说明 ---
+For holding onto the hole's value along with the value of either the LHS or RHS 
+of the hole.
+These occur wrapped in metadata so that they always appear as function applicati
+on
+with exactly four arguments.
 
-中文:
-定义 cHole
-  签名: {α : 类型层 u} (val : α) {p : 命题} (_pf : p)
-  定义体: val
+Note that there is no relation between `val` and the proof.
+We need to decouple these to support letting the proof's elaboration be deferred
+ until
+we know whether we want an iff, eq, or heq, while also allowing it to choose
+to elaborate as an iff, eq, or heq.
+Later, the congruence generator handles any discrepancies.
+See `CongrResult` below.
 -/
 def cHole {α : Sort u} (val : α) {p : Prop} (_pf : p) : α := val
 
-/--
-Definition of `unexpandCHole` / `unexpandCHole` 的定义
+/-- For error reporting purposes, make the hole pretty print as its value.
+We can still see that it is a hole in the info view on mouseover. -/
+/-
+**Mathlib.Tactic.TermCongr.unexpandCHole** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.TermCongr`。
+形式化陈述：PrettyPrinter.Unexpander
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unexpandCHole
-  signature: : Lean.PrettyPrinter.Unexpander
-
-中文:
-定义 unexpandCHole
-  签名: : Lean.PrettyPrinter.Unexpander
+--- 原说明 ---
+For error reporting purposes, make the hole pretty print as its value.
+We can still see that it is a hole in the info view on mouseover.
 -/
 @[app_unexpander cHole] def unexpandCHole : Lean.PrettyPrinter.Unexpander
   | `($_ $val $_) => pure val
   | _ => throw ()
 
-/--
-Definition of `mkCHole` / `mkCHole` 的定义
+/-- Create the congruence hole. Used by `elabCHole`.
 
-English:
-definition mkCHole
-  signature: (forLhs : Bool) (val pf : Expr)
-  body: do
-  -- Create a metavariable to bump the mvarCounter.
-discard mkFreshTypeMVar
-  let d : MData := KVMap.empty
-.insert congrHoleForLhsKey forLhs
-.insert congrHoleIndex (← getMCtx).mvarCounter
-return Expr.mdata d ← mkAppM ``cHole #[val, pf]
+Saves the current mvarCounter as a proxy for age. We use this to avoid
+reprocessing old congruence holes that happened to leak into the local context. -/
+/-
+**Mathlib.Tactic.TermCongr.mkCHole** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Ter
+mCongr`。
+形式化陈述：mkCHole (forLhs : Bool) (val pf : Expr) : MetaM Expr
+参数：forLhs : Bool；val pf : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkCHole
-  签名: (forLhs : 布尔值) (val pf : Expr)
-  定义体: do
-  -- Create a metavariable to bump the mvarCounter.
-discard mkFreshTypeMVar
-  let d : MData := KVMap.empty
-.insert congrHoleForLhsKey forLhs
-.insert congrHoleIndex (← getMCtx).mvarCounter
-return Expr.mdata d ← mkAppM ``cHole #[val, pf]
+--- 原说明 ---
+Create the congruence hole. Used by `elabCHole`.
+
+Saves the current mvarCounter as a proxy for age. We use this to avoid
+reprocessing old congruence holes that happened to leak into the local context.
 -/
 def mkCHole (forLhs : Bool) (val pf : Expr) : MetaM Expr := do
   -- Create a metavariable to bump the mvarCounter.
-discard mkFreshTypeMVar
+  discard <| mkFreshTypeMVar
   let d : MData := KVMap.empty
-.insert congrHoleForLhsKey forLhs
-.insert congrHoleIndex (← getMCtx).mvarCounter
-return Expr.mdata d ← mkAppM ``cHole #[val, pf]
+    |>.insert congrHoleForLhsKey forLhs
+    |>.insert congrHoleIndex (← getMCtx).mvarCounter
+  return Expr.mdata d <| ← mkAppM ``cHole #[val, pf]
 
-/--
-Definition of `cHole?` / `cHole?` 的定义
+/-- If the expression is a congruence hole, returns `(forLhs, sideVal, pf)`.
+If `mvarCounterSaved?` is not none, then only returns the hole if it is at least as recent. -/
+/-
+**Mathlib.Tactic.TermCongr.cHole** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.TermC
+ongr`。
+形式化陈述：cHole {α : Sort u} (val : α) {p : Prop} (_pf : p) : α
+参数：val : α；_pf : p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cHole?
-  signature: (e : Expr) (mvarCounterSaved? : Option Nat := none)
-  body: do
-  match e with
-  | .mdata d e' =>
-    let forLhs : Bool ← d.get? congrHoleForLhsKey
-    let mvarCounter : Nat ← d.get? congrHoleIndex
-    if let some mvarCounterSaved := mvarCounterSaved? then
-guard mvarCounterSaved <= mvarCounter
-    let #[_, val, _, pf] := e'.getAppArgs | failure
-    return (forLhs, val, pf)
-  | _ => none
-
-中文:
-定义 cHole?
-  签名: (e : Expr) (mvarCounterSaved? : 选项类型 自然数 := none)
-  定义体: do
-  match e with
-  | .mdata d e' =>
-    let forLhs : Bool ← d.get? congrHoleForLhsKey
-    let mvarCounter : Nat ← d.get? congrHoleIndex
-    if let some mvarCounterSaved := mvarCounterSaved? then
-guard mvarCounterSaved <= mvarCounter
-    let #[_, val, _, pf] := e'.getAppArgs | failure
-    return (forLhs, val, pf)
-  | _ => none
+--- 原说明 ---
+If the expression is a congruence hole, returns `(forLhs, sideVal, pf)`.
+If `mvarCounterSaved?` is not none, then only returns the hole if it is at least
+ as recent.
 -/
 def cHole? (e : Expr) (mvarCounterSaved? : Option Nat := none) : Option (Bool × Expr × Expr) := do
   match e with
@@ -228,89 +215,57 @@ def cHole? (e : Expr) (mvarCounterSaved? : Option Nat := none) : Option (Bool ×
     let forLhs : Bool ← d.get? congrHoleForLhsKey
     let mvarCounter : Nat ← d.get? congrHoleIndex
     if let some mvarCounterSaved := mvarCounterSaved? then
-guard mvarCounterSaved <= mvarCounter
+      guard <| mvarCounterSaved ≤ mvarCounter
     let #[_, val, _, pf] := e'.getAppArgs | failure
     return (forLhs, val, pf)
   | _ => none
 
-/--
-Definition of `hasCHole` / `hasCHole` 的定义
+/-- Returns any subexpression that is a recent congruence hole. -/
+/-
+**Mathlib.Tactic.TermCongr.hasCHole** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Te
+rmCongr`。
+形式化陈述：hasCHole (mvarCounterSaved : Nat) (e : Expr) : Option Expr
+参数：mvarCounterSaved : Nat；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasCHole
-  signature: (mvarCounterSaved : Nat) (e : Expr)
-  body: e.find? fun e' => (cHole? e' mvarCounterSaved).isSome
-
-中文:
-定义 hasCHole
-  签名: (mvarCounterSaved : 自然数) (e : Expr)
-  定义体: e.find? fun e' => (cHole? e' mvarCounterSaved).isSome
-
-Depends on / 依赖: e.find, isSome, mvarCounterSaved
+--- 原说明 ---
+Returns any subexpression that is a recent congruence hole.
 -/
 def hasCHole (mvarCounterSaved : Nat) (e : Expr) : Option Expr :=
   e.find? fun e' => (cHole? e' mvarCounterSaved).isSome
 
-/--
-Definition of `removeCHoles` / `removeCHoles` 的定义
+/-- Eliminate all congruence holes from an expression by replacing them with their values. -/
+/-
+**Mathlib.Tactic.TermCongr.removeCHoles** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.TermCongr`。
+形式化陈述：removeCHoles (e : Expr) : Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition removeCHoles
-  signature: (e : Expr)
-  body: e.replace fun e' => if let some (_, val, _) := cHole? e' then val else none
-
-中文:
-定义 removeCHoles
-  签名: (e : Expr)
-  定义体: e.replace fun e' => if let some (_, val, _) := cHole? e' then val else none
-
-Depends on / 依赖: e.replace, replace
+--- 原说明 ---
+Eliminate all congruence holes from an expression by replacing them with their v
+alues.
 -/
 def removeCHoles (e : Expr) : Expr :=
   e.replace fun e' => if let some (_, val, _) := cHole? e' then val else none
 
-/--
-Definition of `elabCHole` / `elabCHole` 的定义
+/-- Elaborates a congruence hole and returns either the left-hand side or the right-hand side,
+annotated with information necessary to generate a congruence lemma. -/
+/-
+**Mathlib.Tactic.TermCongr.elabCHole** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.T
+ermCongr`。
+形式化陈述：elabCHole (h : Syntax) (forLhs : Bool) (expectedType? : Option Expr) : Ter
+m.TermElabM Expr
+参数：h : Syntax；forLhs : Bool；expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabCHole
-  signature: (h : Syntax) (forLhs : Bool) (expectedType? : Option Expr)
-  body: do
-  let pf ← Term.elabTerm h none
-  let pfTy ← inferType pf
-  -- Ensure that `pfTy` is a proposition
-  unless ← isDefEq (← inferType pfTy) (.sort .zero) do
-    throwError "Hole has type{indentD pfTy}\nbut is expected to be a Prop"
-  if let some (_, lhs, _, rhs) := (← whnf pfTy).sides? then
-    let val := if forLhs then lhs else rhs
-    if let some expectedType := expectedType? then
-      -- Propagate type hint:
-discard isDefEq expectedType (← inferType val)
-    mkCHole forLhs val pf
-  else
-    -- Since `pf` doesn't yet have sides, we resort to the value and the proof being decoupled.
-    -- These will be unified during congruence generation.
-    mkCHole forLhs (← mkFreshExprMVar expectedType?) pf
-
-中文:
-定义 elabCHole
-  签名: (h : Syntax) (forLhs : 布尔值) (expectedType? : 选项类型 Expr)
-  定义体: do
-  let pf ← Term.elabTerm h none
-  let pfTy ← inferType pf
-  -- Ensure that `pfTy` is a proposition
-  unless ← isDefEq (← inferType pfTy) (.sort .zero) do
-    throwError "Hole has type{indentD pfTy}\nbut is expected to be a Prop"
-  if let some (_, lhs, _, rhs) := (← whnf pfTy).sides? then
-    let val := if forLhs then lhs else rhs
-    if let some expectedType := expectedType? then
-      -- Propagate type hint:
-discard isDefEq expectedType (← inferType val)
-    mkCHole forLhs val pf
-  else
-    -- Since `pf` doesn't yet have sides, we resort to the value and the proof being decoupled.
-    -- These will be unified during congruence generation.
-    mkCHole forLhs (← mkFreshExprMVar expectedType?) pf
+--- 原说明 ---
+Elaborates a congruence hole and returns either the left-hand side or the right-
+hand side,
+annotated with information necessary to generate a congruence lemma.
 -/
 def elabCHole (h : Syntax) (forLhs : Bool) (expectedType? : Option Expr) : Term.TermElabM Expr := do
   let pf ← Term.elabTerm h none
@@ -322,7 +277,7 @@ def elabCHole (h : Syntax) (forLhs : Bool) (expectedType? : Option Expr) : Term.
     let val := if forLhs then lhs else rhs
     if let some expectedType := expectedType? then
       -- Propagate type hint:
-discard isDefEq expectedType (← inferType val)
+      discard <| isDefEq expectedType (← inferType val)
     mkCHole forLhs val pf
   else
     -- Since `pf` doesn't yet have sides, we resort to the value and the proof being decoupled.
@@ -335,28 +290,12 @@ if the LHS or RHS is available after elaborating `h`. Uses the expected type as 
 syntax (name := cHoleExpand) "cHole% " (&"lhs" <|> &"rhs") term : term
 
 @[term_elab cHoleExpand, inherit_doc cHoleExpand]
-/--
-Definition of `elabCHoleExpand` / `elabCHoleExpand` 的定义
-
-English:
-definition elabCHoleExpand
-  signature: : Term.TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(cHole% lhs $h) => elabCHole h true expectedType?
-  | `(cHole% rhs $h) => elabCHole h false expectedType?
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabCHoleExpand
-  签名: : 项.TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(cHole% lhs $h) => elabCHole h true expectedType?
-  | `(cHole% rhs $h) => elabCHole h false expectedType?
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+/-
+**Mathlib.Tactic.TermCongr.elabCHoleExpand** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.TermCongr`。
+形式化陈述：elabCHoleExpand : Term.TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabCHoleExpand : Term.TermElab := fun stx expectedType? =>
   match stx with
@@ -364,40 +303,20 @@ def elabCHoleExpand : Term.TermElab := fun stx expectedType? =>
   | `(cHole% rhs $h) => elabCHole h false expectedType?
   | _ => throwUnsupportedSyntax
 
-/--
-Definition of `processAntiquot` / `processAntiquot` 的定义
+/-- Replace all `term` antiquotations in a term using the given `expand` function. -/
+/-
+**Mathlib.Tactic.TermCongr.processAntiquot** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.TermCongr`。
+形式化陈述：processAntiquot (t : Term) (expand : Term -> Term.TermElabM Term) : Term.T
+ermElabM Term
+参数：t : Term；expand : Term -> Term.TermElabM Term。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition processAntiquot
-  signature: (t : Term) (expand : Term -> Term.TermElabM Term)
-  body: do
-  let t' ← t.raw.replaceM fun s => do
-    if s.isAntiquots then
-      let ks := s.antiquotKinds
-      unless ks.any (fun (k, _) => k == `term) do
-        throwErrorAt s "Expecting term"
-      let h : Term := ⟨s.getCanonicalAntiquot.getAntiquotTerm⟩
-      expand h
-    else
-      pure none
-  return ⟨t'⟩
-
-中文:
-定义 processAntiquot
-  签名: (t : 项) (expand : 项 -> 项.TermElabM 项)
-  定义体: do
-  let t' ← t.raw.replaceM fun s => do
-    if s.isAntiquots then
-      let ks := s.antiquotKinds
-      unless ks.any (fun (k, _) => k == `term) do
-        throwErrorAt s "Expecting term"
-      let h : Term := ⟨s.getCanonicalAntiquot.getAntiquotTerm⟩
-      expand h
-    else
-      pure none
-  return ⟨t'⟩
+--- 原说明 ---
+Replace all `term` antiquotations in a term using the given `expand` function.
 -/
-def processAntiquot (t : Term) (expand : Term -> Term.TermElabM Term) : Term.TermElabM Term := do
+def processAntiquot (t : Term) (expand : Term → Term.TermElabM Term) : Term.TermElabM Term := do
   let t' ← t.raw.replaceM fun s => do
     if s.isAntiquots then
       let ks := s.antiquotKinds
@@ -409,24 +328,22 @@ def processAntiquot (t : Term) (expand : Term -> Term.TermElabM Term) : Term.Ter
       pure none
   return ⟨t'⟩
 
-/--
-Definition of `elaboratePattern` / `elaboratePattern` 的定义
+/-- Given the pattern `t` in `congr(t)`, elaborate it for the given side
+by replacing antiquotations with `cHole%` terms, and ensure the elaborated term
+is of the expected type. -/
+/-
+**Mathlib.Tactic.TermCongr.elaboratePattern** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.TermCongr`。
+形式化陈述：elaboratePattern (t : Term) (expectedType? : Option Expr) (forLhs : Bool) 
+: Term.TermElabM Expr
+参数：t : Term；expectedType? : Option Expr；forLhs : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elaboratePattern
-  signature: (t : Term) (expectedType? : Option Expr) (forLhs : Bool)
-  body: Term.withoutErrToSorry do
-    let t' ← processAntiquot t (fun h => if forLhs then `(cHole% lhs $h) else `(cHole% rhs $h))
-    Term.elabTermEnsuringType t' expectedType?
-
-中文:
-定义 elaboratePattern
-  签名: (t : 项) (expectedType? : 选项类型 Expr) (forLhs : 布尔值)
-  定义体: Term.withoutErrToSorry do
-    let t' ← processAntiquot t (fun h => if forLhs then `(cHole% lhs $h) else `(cHole% rhs $h))
-    Term.elabTermEnsuringType t' expectedType?
-
-Depends on / 依赖: Term.elabTermEnsuringType, Term.withoutErrToSorry, elabTermEnsuringType, expectedType, forLhs, processAntiquot, withoutErrToSorry
+--- 原说明 ---
+Given the pattern `t` in `congr(t)`, elaborate it for the given side
+by replacing antiquotations with `cHole%` terms, and ensure the elaborated term
+is of the expected type.
 -/
 def elaboratePattern (t : Term) (expectedType? : Option Expr) (forLhs : Bool) :
     Term.TermElabM Expr :=
@@ -436,32 +353,19 @@ def elaboratePattern (t : Term) (expectedType? : Option Expr) (forLhs : Bool) :
 
 /-! ### Congruence generation -/
 
-/--
-Definition of `mkEqForExpectedType` / `mkEqForExpectedType` 的定义
+/-- Ensures the expected type is an equality. Returns the equality.
+The returned expression satisfies `Lean.Expr.eq?`. -/
+/-
+**Mathlib.Tactic.TermCongr.mkEqForExpectedType** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.TermCongr`。
+形式化陈述：mkEqForExpectedType (expectedType? : Option Expr) : MetaM Expr
+参数：expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkEqForExpectedType
-  signature: (expectedType? : Option Expr)
-  body: do
-  let u ← mkFreshLevelMVar
-  let ty ← mkFreshExprMVar (mkSort u)
-  let eq := mkApp3 (mkConst ``Eq [u]) ty (← mkFreshExprMVar ty) (← mkFreshExprMVar ty)
-  if let some expectedType := expectedType? then
-    unless ← isDefEq expectedType eq do
-      throwError m!"Type{indentD expectedType}\nis expected to be an equality."
-  return eq
-
-中文:
-定义 mkEqForExpectedType
-  签名: (expectedType? : 选项类型 Expr)
-  定义体: do
-  let u ← mkFreshLevelMVar
-  let ty ← mkFreshExprMVar (mkSort u)
-  let eq := mkApp3 (mkConst ``Eq [u]) ty (← mkFreshExprMVar ty) (← mkFreshExprMVar ty)
-  if let some expectedType := expectedType? then
-    unless ← isDefEq expectedType eq do
-      throwError m!"Type{indentD expectedType}\nis expected to be an equality."
-  return eq
+--- 原说明 ---
+Ensures the expected type is an equality. Returns the equality.
+The returned expression satisfies `Lean.Expr.eq?`.
 -/
 def mkEqForExpectedType (expectedType? : Option Expr) : MetaM Expr := do
   let u ← mkFreshLevelMVar
@@ -472,34 +376,19 @@ def mkEqForExpectedType (expectedType? : Option Expr) : MetaM Expr := do
       throwError m!"Type{indentD expectedType}\nis expected to be an equality."
   return eq
 
-/--
-Definition of `mkHEqForExpectedType` / `mkHEqForExpectedType` 的定义
+/-- Ensures the expected type is a HEq. Returns the HEq.
+This expression satisfies `Lean.Expr.heq?`. -/
+/-
+**Mathlib.Tactic.TermCongr.mkHEqForExpectedType** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.TermCongr`。
+形式化陈述：mkHEqForExpectedType (expectedType? : Option Expr) : MetaM Expr
+参数：expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkHEqForExpectedType
-  signature: (expectedType? : Option Expr)
-  body: do
-  let u ← mkFreshLevelMVar
-  let tya ← mkFreshExprMVar (mkSort u)
-  let tyb ← mkFreshExprMVar (mkSort u)
-  let heq := mkApp4 (mkConst ``HEq [u]) tya (← mkFreshExprMVar tya) tyb (← mkFreshExprMVar tyb)
-  if let some expectedType := expectedType? then
-    unless ← isDefEq expectedType heq do
-      throwError m!"Type{indentD expectedType}\nis expected to be a `HEq`."
-  return heq
-
-中文:
-定义 mkHEqForExpectedType
-  签名: (expectedType? : 选项类型 Expr)
-  定义体: do
-  let u ← mkFreshLevelMVar
-  let tya ← mkFreshExprMVar (mkSort u)
-  let tyb ← mkFreshExprMVar (mkSort u)
-  let heq := mkApp4 (mkConst ``HEq [u]) tya (← mkFreshExprMVar tya) tyb (← mkFreshExprMVar tyb)
-  if let some expectedType := expectedType? then
-    unless ← isDefEq expectedType heq do
-      throwError m!"Type{indentD expectedType}\nis expected to be a `HEq`."
-  return heq
+--- 原说明 ---
+Ensures the expected type is a HEq. Returns the HEq.
+This expression satisfies `Lean.Expr.heq?`.
 -/
 def mkHEqForExpectedType (expectedType? : Option Expr) : MetaM Expr := do
   let u ← mkFreshLevelMVar
@@ -511,32 +400,19 @@ def mkHEqForExpectedType (expectedType? : Option Expr) : MetaM Expr := do
       throwError m!"Type{indentD expectedType}\nis expected to be a `HEq`."
   return heq
 
-/--
-Definition of `mkIffForExpectedType` / `mkIffForExpectedType` 的定义
+/-- Ensures the expected type is an iff. Returns the iff.
+This expression satisfies `Lean.Expr.iff?`. -/
+/-
+**Mathlib.Tactic.TermCongr.mkIffForExpectedType** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.TermCongr`。
+形式化陈述：mkIffForExpectedType (expectedType? : Option Expr) : MetaM Expr
+参数：expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIffForExpectedType
-  signature: (expectedType? : Option Expr)
-  body: do
-  let a ← mkFreshExprMVar (Expr.sort .zero)
-  let b ← mkFreshExprMVar (Expr.sort .zero)
-  let iff := mkApp2 (Expr.const `Iff []) a b
-  if let some expectedType := expectedType? then
-    unless ← isDefEq expectedType iff do
-      throwError m!"Type{indentD expectedType}\nis expected to be an `Iff`."
-  return iff
-
-中文:
-定义 mkIffForExpectedType
-  签名: (expectedType? : 选项类型 Expr)
-  定义体: do
-  let a ← mkFreshExprMVar (Expr.sort .zero)
-  let b ← mkFreshExprMVar (Expr.sort .zero)
-  let iff := mkApp2 (Expr.const `Iff []) a b
-  if let some expectedType := expectedType? then
-    unless ← isDefEq expectedType iff do
-      throwError m!"Type{indentD expectedType}\nis expected to be an `Iff`."
-  return iff
+--- 原说明 ---
+Ensures the expected type is an iff. Returns the iff.
+This expression satisfies `Lean.Expr.iff?`.
 -/
 def mkIffForExpectedType (expectedType? : Option Expr) : MetaM Expr := do
   let a ← mkFreshExprMVar (Expr.sort .zero)
@@ -547,65 +423,72 @@ def mkIffForExpectedType (expectedType? : Option Expr) : MetaM Expr := do
       throwError m!"Type{indentD expectedType}\nis expected to be an `Iff`."
   return iff
 
-/--
-Definition of `ensureIff` / `ensureIff` 的定义
+/-- Make sure that the expected type of `pf` is an iff by unification. -/
+/-
+**Mathlib.Tactic.TermCongr.ensureIff** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.T
+ermCongr`。
+形式化陈述：ensureIff (pf : Expr) : MetaM Expr
+参数：pf : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ensureIff
-  signature: (pf : Expr)
-  body: do
-discard mkIffForExpectedType (← inferType pf)
-  return pf
-
-中文:
-定义 ensureIff
-  签名: (pf : Expr)
-  定义体: do
-discard mkIffForExpectedType (← inferType pf)
-  return pf
+--- 原说明 ---
+Make sure that the expected type of `pf` is an iff by unification.
 -/
 def ensureIff (pf : Expr) : MetaM Expr := do
-discard mkIffForExpectedType (← inferType pf)
+  discard <| mkIffForExpectedType (← inferType pf)
   return pf
 
-/--
-Inductive type `CongrType` / 归纳类型 `CongrType`
+/-- A request for a type of congruence lemma from a `CongrResult`. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrType** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic
+.TermCongr`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive CongrType
-  constructors (1):
-    - eq: | heq
-
-中文:
-归纳类型 余ngrType
-  构造子 (1 个):
-    - eq: | heq
-
-Depends on / 依赖: SkyscraperPresheafFunctor, SkyscraperPresheafFunctor.map, _app, cat_disch, split_ifs
+--- 原说明 ---
+A request for a type of congruence lemma from a `CongrResult`.
 -/
 inductive CongrType
   | eq | heq
 
 /--
-Definition of `CongrResult` / `CongrResult` 的定义
+A congruence lemma between two expressions. The proof is generated dynamically, depending on
+whether the resulting lemma should be an `Eq` or a `HEq`.
+If generating a proof impossible, then the generator can throw an error.
+This can be due to either an `Eq` proof being impossible
+or due to the lhs/rhs not being defeq to the lhs/rhs of the generated proof,
+which can happen for user-supplied congruence holes.
 
-English:
-structure CongrResult
-  parameters: where
-  axioms and operations (3):
-    - lhs : Expr
-    - rhs : Expr
-    - (pf? : Option (CongrType -> MetaM Expr))
+This complexity is to support two features:
 
-中文:
-结构 余ngrResult
-  参数: where
-  公理与运算 (3 个):
-    - lhs : Expr
-    - rhs : Expr
-    - (pf? : 选项类型 (余ngrType -> MetaM Expr))
+1. The user is free to supply Iff, Eq, and HEq lemmas in congruence holes,
+   and we're able to transform them into whatever is appropriate for a
+   given congruence lemma.
+2. If the congruence hole is a metavariable, then we can specialize that
+   hole to an Iff, Eq, or HEq depending on what's necessary at that site. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tact
+ic.TermCongr`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: SkyscraperPresheafFunctor, SkyscraperPresheafFunctor.map, _app, cat_disch, split_ifs
+--- 原说明 ---
+A congruence lemma between two expressions. The proof is generated dynamically, 
+depending on
+whether the resulting lemma should be an `Eq` or a `HEq`.
+If generating a proof impossible, then the generator can throw an error.
+This can be due to either an `Eq` proof being impossible
+or due to the lhs/rhs not being defeq to the lhs/rhs of the generated proof,
+which can happen for user-supplied congruence holes.
+
+This complexity is to support two features:
+
+1. The user is free to supply Iff, Eq, and HEq lemmas in congruence holes,
+   and we're able to transform them into whatever is appropriate for a
+   given congruence lemma.
+2. If the congruence hole is a metavariable, then we can specialize that
+   hole to an Iff, Eq, or HEq depending on what's necessary at that site.
 -/
 structure CongrResult where
   /-- The left-hand side of the congruence result. -/
@@ -618,49 +501,35 @@ structure CongrResult where
   This function can assign metavariables when constructing the proof.
 
   If `pf? = none`, then `lhs` and `rhs` are defeq, and the proof is by reflexivity. -/
-  (pf? : Option (CongrType -> MetaM Expr))
+  (pf? : Option (CongrType → MetaM Expr))
 
-/--
-Definition of `CongrResult.isRfl` / `CongrResult.isRfl` 的定义
+/-- Returns whether the proof is by reflexivity.
+Such congruence proofs are trivial. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.isRfl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.TermCongr.CongrResult`。
+形式化陈述：Mathlib.Tactic.TermCongr.CongrResult → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrResult.isRfl
-  signature: (res : CongrResult)
-  body: res.pf?.isNone
-
-中文:
-定义 余ngrResult.isRfl
-  签名: (res : 余ngrResult)
-  定义体: res.pf?.isNone
-
-Depends on / 依赖: isNone, res.pf
+--- 原说明 ---
+Returns whether the proof is by reflexivity.
+Such congruence proofs are trivial.
 -/
 def CongrResult.isRfl (res : CongrResult) : Bool := res.pf?.isNone
 
-/--
-Definition of `CongrResult.eq` / `CongrResult.eq` 的定义
+/-- Returns the proof that `lhs = rhs`. Fails if the `CongrResult` is inapplicable.
+Throws an error if the `lhs` and `rhs` have non-defeq types.
+If `pf? = none`, this returns the `rfl` proof. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.eq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.TermCongr.CongrResult`。
+形式化陈述：Mathlib.Tactic.TermCongr.CongrResult → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrResult.eq
-  signature: (res : CongrResult)
-  body: do
-  unless ← isDefEq (← inferType res.lhs) (← inferType res.rhs) do
-    throwError "Expecting{indentD res.lhs}\nand{indentD res.rhs}\n\
-      to have definitionally equal types."
-  match res.pf? with
-  | some pf => pf .eq
-  | none => mkEqRefl res.lhs
-
-中文:
-定义 余ngrResult.eq
-  签名: (res : 余ngrResult)
-  定义体: do
-  unless ← isDefEq (← inferType res.lhs) (← inferType res.rhs) do
-    throwError "Expecting{indentD res.lhs}\nand{indentD res.rhs}\n\
-      to have definitionally equal types."
-  match res.pf? with
-  | some pf => pf .eq
-  | none => mkEqRefl res.lhs
+--- 原说明 ---
+Returns the proof that `lhs = rhs`. Fails if the `CongrResult` is inapplicable.
+Throws an error if the `lhs` and `rhs` have non-defeq types.
+If `pf? = none`, this returns the `rfl` proof.
 -/
 def CongrResult.eq (res : CongrResult) : MetaM Expr := do
   unless ← isDefEq (← inferType res.lhs) (← inferType res.rhs) do
@@ -670,88 +539,52 @@ def CongrResult.eq (res : CongrResult) : MetaM Expr := do
   | some pf => pf .eq
   | none => mkEqRefl res.lhs
 
-/--
-Definition of `CongrResult.heq` / `CongrResult.heq` 的定义
+/-- Returns the proof that `lhs ≍ rhs`. Fails if the `CongrResult` is inapplicable.
+If `pf? = none`, this returns the `rfl` proof. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.heq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.TermCongr.CongrResult`。
+形式化陈述：Mathlib.Tactic.TermCongr.CongrResult → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrResult.heq
-  signature: (res : CongrResult)
-  body: do
-  match res.pf? with
-  | some pf => pf .heq
-  | none => mkHEqRefl res.lhs
-
-中文:
-定义 余ngrResult.heq
-  签名: (res : 余ngrResult)
-  定义体: do
-  match res.pf? with
-  | some pf => pf .heq
-  | none => mkHEqRefl res.lhs
+--- 原说明 ---
+Returns the proof that `lhs ≍ rhs`. Fails if the `CongrResult` is inapplicable.
+If `pf? = none`, this returns the `rfl` proof.
 -/
 def CongrResult.heq (res : CongrResult) : MetaM Expr := do
   match res.pf? with
   | some pf => pf .heq
   | none => mkHEqRefl res.lhs
 
-/--
-Definition of `CongrResult.iff` / `CongrResult.iff` 的定义
+/-- Returns a proof of `lhs ↔ rhs`. Uses `CongrResult.eq`. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.iff** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.TermCongr.CongrResult`。
+形式化陈述：Mathlib.Tactic.TermCongr.CongrResult → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrResult.iff
-  signature: (res : CongrResult)
-  body: do
-  unless ← Meta.isProp res.lhs do
-    throwError "Expecting{indentD res.lhs}\nto be a proposition."
-  return mkApp3 (.const ``iff_of_eq []) res.lhs res.rhs (← res.eq)
-
-中文:
-定义 余ngrResult.iff
-  签名: (res : 余ngrResult)
-  定义体: do
-  unless ← Meta.isProp res.lhs do
-    throwError "Expecting{indentD res.lhs}\nto be a proposition."
-  return mkApp3 (.const ``iff_of_eq []) res.lhs res.rhs (← res.eq)
+--- 原说明 ---
+Returns a proof of `lhs ↔ rhs`. Uses `CongrResult.eq`.
 -/
 def CongrResult.iff (res : CongrResult) : MetaM Expr := do
   unless ← Meta.isProp res.lhs do
     throwError "Expecting{indentD res.lhs}\nto be a proposition."
   return mkApp3 (.const ``iff_of_eq []) res.lhs res.rhs (← res.eq)
 
-/--
-Definition of `CongrResult.trans` / `CongrResult.trans` 的定义
+/-- Combine two congruence proofs using transitivity.
+Does not check that `res1.rhs` is defeq to `res2.lhs`.
+If both `res1` and `res2` are trivial then the result is trivial. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.trans** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.TermCongr.CongrResult`。
+形式化陈述：Mathlib.Tactic.TermCongr.CongrResult → Mathlib.Tactic.TermCongr.CongrResul
+t → Mathlib.Tactic.TermCongr.CongrResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrResult.trans
-  signature: (res1 res2 : CongrResult)
-  body: res1.lhs
-  rhs := res2.rhs
-  pf? :=
-    if res1.isRfl then
-      res2.pf?
-    else if res2.isRfl then
-      res1.pf?
-    else
-      some fun
-        | .eq => do mkEqTrans (← res1.eq) (← res2.eq)
-        | .heq => do mkHEqTrans (← res1.heq) (← res2.heq)
-
-中文:
-定义 余ngrResult.trans
-  签名: (res1 res2 : 余ngrResult)
-  定义体: res1.lhs
-  rhs := res2.rhs
-  pf? :=
-    if res1.isRfl then
-      res2.pf?
-    else if res2.isRfl then
-      res1.pf?
-    else
-      some fun
-        | .eq => do mkEqTrans (← res1.eq) (← res2.eq)
-        | .heq => do mkHEqTrans (← res1.heq) (← res2.heq)
-
-Depends on / 依赖: res1.lhs
+--- 原说明 ---
+Combine two congruence proofs using transitivity.
+Does not check that `res1.rhs` is defeq to `res2.lhs`.
+If both `res1` and `res2` are trivial then the result is trivial.
 -/
 def CongrResult.trans (res1 res2 : CongrResult) : CongrResult where
   lhs := res1.lhs
@@ -766,34 +599,24 @@ def CongrResult.trans (res1 res2 : CongrResult) : CongrResult where
         | .eq => do mkEqTrans (← res1.eq) (← res2.eq)
         | .heq => do mkHEqTrans (← res1.heq) (← res2.heq)
 
-/--
-Definition of `CongrResult.mk'` / `CongrResult.mk'` 的定义
+/-- Make a `CongrResult` from an LHS, an RHS, and a proof of an Iff, Eq, or HEq.
+The proof is allowed to have a metavariable for its type.
+Validates the inputs and throws errors in the `pf?` function.
 
-English:
-definition CongrResult.mk'
-  signature: (lhs rhs : Expr) (pf : Expr)
-  body: lhs
-  rhs := rhs
-  pf? :=
-    if (isRefl? pf).isSome then
-      none
-    else
-      some fun
-      | .eq => do ensureSidesDefeq (← toEqPf)
-      | .heq => do ensureSidesDefeq (← toHEqPf)
+The `pf?` function is responsible for finally unifying the type of `pf` with `lhs` and `rhs`. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.mk'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.TermCongr.CongrResult`。
+形式化陈述：Expr → Expr → Expr → Mathlib.Tactic.TermCongr.CongrResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 余ngrResult.mk'
-  签名: (lhs rhs : Expr) (pf : Expr)
-  定义体: lhs
-  rhs := rhs
-  pf? :=
-    if (isRefl? pf).isSome then
-      none
-    else
-      some fun
-      | .eq => do ensureSidesDefeq (← toEqPf)
-      | .heq => do ensureSidesDefeq (← toHEqPf)
+--- 原说明 ---
+Make a `CongrResult` from an LHS, an RHS, and a proof of an Iff, Eq, or HEq.
+The proof is allowed to have a metavariable for its type.
+Validates the inputs and throws errors in the `pf?` function.
+
+The `pf?` function is responsible for finally unifying the type of `pf` with `lh
+s` and `rhs`.
 -/
 def CongrResult.mk' (lhs rhs : Expr) (pf : Expr) : CongrResult where
   lhs := lhs
@@ -822,7 +645,7 @@ where
     else if ← Meta.isProp lhs then
       mkPropExt (← ensureIff pf)
     else
-discard mkEqForExpectedType (← inferType pf)
+      discard <| mkEqForExpectedType (← inferType pf)
       return pf
   /-- Given a `pf` of an `Iff`, `Eq`, or `HEq`, return a proof of `HEq`.
   If `pf` is not obviously any of these, weakly try making it be an `Eq` or an `Iff`,
@@ -835,10 +658,10 @@ discard mkEqForExpectedType (← inferType pf)
       mkAppM ``heq_of_eq #[pf]
     else if let some .. := ty.heq? then
       return pf
-else if ← withNewMCtxDepth isDefEq (← inferType lhs) (← inferType rhs) then
+    else if ← withNewMCtxDepth <| isDefEq (← inferType lhs) (← inferType rhs) then
       mkAppM ``heq_of_eq #[← toEqPf]
     else
-discard mkHEqForExpectedType (← inferType pf)
+      discard <| mkHEqForExpectedType (← inferType pf)
       return pf
   /-- Get the sides of the type of `pf` and unify them with the respective `lhs` and `rhs`. -/
   ensureSidesDefeq (pf : Expr) : MetaM Expr := do
@@ -853,36 +676,19 @@ discard mkHEqForExpectedType (← inferType pf)
         but its right-hand side is not definitionally equal to the expected value{indentD rhs}"
     return pf
 
-/--
-Definition of `CongrResult.defeq` / `CongrResult.defeq` 的定义
+/-- Force the lhs and rhs to be defeq. For when `dsimp`-like congruence is necessary.
+Clears the proof. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.defeq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.TermCongr.CongrResult`。
+形式化陈述：Mathlib.Tactic.TermCongr.CongrResult → MetaM Mathlib.Tactic.TermCongr.Cong
+rResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrResult.defeq
-  signature: (res : CongrResult)
-  body: do
-  if res.isRfl then
-    return res
-  else
-    unless ← isDefEq res.lhs res.rhs do
-      throwError "Cannot generate congruence because we need{indentD res.lhs}\n\
-        to be definitionally equal to{indentD res.rhs}"
-    -- Propagate types into any proofs that we're dropping:
-discard res.eq
-    return {res with pf? := none}
-
-中文:
-定义 余ngrResult.defeq
-  签名: (res : 余ngrResult)
-  定义体: do
-  if res.isRfl then
-    return res
-  else
-    unless ← isDefEq res.lhs res.rhs do
-      throwError "Cannot generate congruence because we need{indentD res.lhs}\n\
-        to be definitionally equal to{indentD res.rhs}"
-    -- Propagate types into any proofs that we're dropping:
-discard res.eq
-    return {res with pf? := none}
+--- 原说明 ---
+Force the lhs and rhs to be defeq. For when `dsimp`-like congruence is necessary
+.
+Clears the proof.
 -/
 def CongrResult.defeq (res : CongrResult) : MetaM CongrResult := do
   if res.isRfl then
@@ -892,35 +698,35 @@ def CongrResult.defeq (res : CongrResult) : MetaM CongrResult := do
       throwError "Cannot generate congruence because we need{indentD res.lhs}\n\
         to be definitionally equal to{indentD res.rhs}"
     -- Propagate types into any proofs that we're dropping:
-discard res.eq
+    discard <| res.eq
     return {res with pf? := none}
 
-/--
-Definition of `CongrResult.mkDefault` / `CongrResult.mkDefault` 的定义
+/-- Tries to make a congruence between `lhs` and `rhs` automatically.
+1. If they are defeq, returns a trivial congruence.
+2. Tries using `Subsingleton.elim`.
+3. Tries `proof_irrel_heq` as another effort to avoid doing congruence on proofs.
+3. Otherwise throws an error.
 
-English:
-definition CongrResult.mkDefault
-  signature: (lhs rhs : Expr)
-  body: do
-  if ← isDefEq lhs rhs then
-    return {lhs, rhs, pf? := none}
-  else if let some pf ← (observing? <| mkAppM ``Subsingleton.elim #[lhs, rhs]) then
-    return CongrResult.mk' lhs rhs pf
-  else if let some pf ← (observing? <| mkAppM ``proof_irrel_heq #[lhs, rhs]) then
-    return CongrResult.mk' lhs rhs pf
-  throwError "Could not generate congruence between{indentD lhs}\nand{indentD rhs}"
+Note: `mkAppM` uses `withNewMCtxDepth`, which prevents typeclass inference
+from accidentally specializing `Sort _` to `Prop`, which could otherwise happen
+because there is a `Subsingleton Prop` instance. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.mkDefault** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.TermCongr.CongrResult`。
+形式化陈述：Expr → Expr → MetaM Mathlib.Tactic.TermCongr.CongrResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 余ngrResult.mkDefault
-  签名: (lhs rhs : Expr)
-  定义体: do
-  if ← isDefEq lhs rhs then
-    return {lhs, rhs, pf? := none}
-  else if let some pf ← (observing? <| mkAppM ``Subsingleton.elim #[lhs, rhs]) then
-    return CongrResult.mk' lhs rhs pf
-  else if let some pf ← (observing? <| mkAppM ``proof_irrel_heq #[lhs, rhs]) then
-    return CongrResult.mk' lhs rhs pf
-  throwError "Could not generate congruence between{indentD lhs}\nand{indentD rhs}"
+--- 原说明 ---
+Tries to make a congruence between `lhs` and `rhs` automatically.
+1. If they are defeq, returns a trivial congruence.
+2. Tries using `Subsingleton.elim`.
+3. Tries `proof_irrel_heq` as another effort to avoid doing congruence on proofs
+.
+3. Otherwise throws an error.
+
+Note: `mkAppM` uses `withNewMCtxDepth`, which prevents typeclass inference
+from accidentally specializing `Sort _` to `Prop`, which could otherwise happen
+because there is a `Subsingleton Prop` instance.
 -/
 def CongrResult.mkDefault (lhs rhs : Expr) : MetaM CongrResult := do
   if ← isDefEq lhs rhs then
@@ -931,28 +737,16 @@ def CongrResult.mkDefault (lhs rhs : Expr) : MetaM CongrResult := do
     return CongrResult.mk' lhs rhs pf
   throwError "Could not generate congruence between{indentD lhs}\nand{indentD rhs}"
 
-/--
-Definition of `CongrResult.mkDefault'` / `CongrResult.mkDefault'` 的定义
+/-- Does `CongrResult.mkDefault` but makes sure there are no lingering congruence holes. -/
+/-
+**Mathlib.Tactic.TermCongr.CongrResult.mkDefault'** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.TermCongr.CongrResult`。
+形式化陈述：ℕ → Expr → Expr → MetaM Mathlib.Tactic.TermCongr.CongrResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrResult.mkDefault'
-  signature: (mvarCounterSaved : Nat) (lhs rhs : Expr)
-  body: do
-  if let some h := hasCHole mvarCounterSaved lhs then
-    throwError "Left-hand side{indentD lhs}\nstill has a congruence hole{indentD h}"
-  if let some h := hasCHole mvarCounterSaved rhs then
-    throwError "Right-hand side{indentD rhs}\nstill has a congruence hole{indentD h}"
-  CongrResult.mkDefault lhs rhs
-
-中文:
-定义 余ngrResult.mkDefault'
-  签名: (mvarCounterSaved : 自然数) (lhs rhs : Expr)
-  定义体: do
-  if let some h := hasCHole mvarCounterSaved lhs then
-    throwError "Left-hand side{indentD lhs}\nstill has a congruence hole{indentD h}"
-  if let some h := hasCHole mvarCounterSaved rhs then
-    throwError "Right-hand side{indentD rhs}\nstill has a congruence hole{indentD h}"
-  CongrResult.mkDefault lhs rhs
+--- 原说明 ---
+Does `CongrResult.mkDefault` but makes sure there are no lingering congruence ho
+les.
 -/
 def CongrResult.mkDefault' (mvarCounterSaved : Nat) (lhs rhs : Expr) : MetaM CongrResult := do
   if let some h := hasCHole mvarCounterSaved lhs then
@@ -961,85 +755,38 @@ def CongrResult.mkDefault' (mvarCounterSaved : Nat) (lhs rhs : Expr) : MetaM Con
     throwError "Right-hand side{indentD rhs}\nstill has a congruence hole{indentD h}"
   CongrResult.mkDefault lhs rhs
 
-/--
-Definition of `throwCongrEx` / `throwCongrEx` 的定义
+/-- Throw an internal error. -/
+/-
+**Mathlib.Tactic.TermCongr.throwCongrEx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.TermCongr`。
+形式化陈述：throwCongrEx {α : Type} (lhs rhs : Expr) (msg : MessageData) : MetaM α
+参数：lhs rhs : Expr；msg : MessageData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition throwCongrEx
-  signature: {α : Type} (lhs rhs : Expr) (msg : MessageData)
-  body: do
-  throwError "congr(...) failed with left-hand side{indentD lhs}\n\
-    and right-hand side {indentD rhs}\n{msg}"
-
-中文:
-定义 throwCongrEx
-  签名: {α : 类型} (lhs rhs : Expr) (msg : MessageData)
-  定义体: do
-  throwError "congr(...) failed with left-hand side{indentD lhs}\n\
-    and right-hand side {indentD rhs}\n{msg}"
+--- 原说明 ---
+Throw an internal error.
 -/
 def throwCongrEx {α : Type} (lhs rhs : Expr) (msg : MessageData) : MetaM α := do
   throwError "congr(...) failed with left-hand side{indentD lhs}\n\
     and right-hand side {indentD rhs}\n{msg}"
 
-/--
-Definition of `mkCongrOfCHole?` / `mkCongrOfCHole?` 的定义
+/-- If `lhs` or `rhs` is a congruence hole, then process it.
+Only process ones that are at least as new as `mvarCounterSaved`
+since nothing prevents congruence holes from leaking into the local context. -/
+/-
+**Mathlib.Tactic.TermCongr.mkCongrOfCHole** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.TermCongr`。
+形式化陈述：mkCongrOfCHole? (mvarCounterSaved : Nat) (lhs rhs : Expr) : MetaM (Option 
+CongrResult)
+参数：mvarCounterSaved : Nat；lhs rhs : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCongrOfCHole?
-  signature: (mvarCounterSaved : Nat) (lhs rhs : Expr)
-  body: do
-  match cHole? lhs mvarCounterSaved, cHole? rhs mvarCounterSaved with
-  | some (isLhs1, val1, pf1), some (isLhs2, val2, pf2) =>
-    trace[Elab.congr] "mkCongrOfCHole, both holes"
-    unless isLhs1 == true do
-      throwCongrEx lhs rhs "A RHS congruence hole leaked into the LHS"
-    unless isLhs2 == false do
-      throwCongrEx lhs rhs "A LHS congruence hole leaked into the RHS"
-    -- Defeq checks to unify the lhs and rhs congruence holes.
-    unless ← isDefEq (← inferType pf1) (← inferType pf2) do
-      throwCongrEx lhs rhs "Elaborated types of congruence holes are not defeq."
-    if let some (_, lhsVal, _, rhsVal) := (← whnf <| ← inferType pf1).sides? then
-      unless ← isDefEq val1 lhsVal do
-        throwError "Left-hand side of congruence hole is{indentD lhsVal}\n\
-          but is expected to be{indentD val1}"
-      unless ← isDefEq val2 rhsVal do
-        throwError "Right-hand side of congruence hole is{indentD rhsVal}\n\
-          but is expected to be{indentD val2}"
-return some CongrResult.mk' val1 val2 pf1
-  | some .., none =>
-    throwCongrEx lhs rhs "Right-hand side lost its congruence hole annotation."
-  | none, some .. =>
-    throwCongrEx lhs rhs "Left-hand side lost its congruence hole annotation."
-  | none, none => return none
-
-中文:
-定义 mkCongrOfCHole?
-  签名: (mvarCounterSaved : 自然数) (lhs rhs : Expr)
-  定义体: do
-  match cHole? lhs mvarCounterSaved, cHole? rhs mvarCounterSaved with
-  | some (isLhs1, val1, pf1), some (isLhs2, val2, pf2) =>
-    trace[Elab.congr] "mkCongrOfCHole, both holes"
-    unless isLhs1 == true do
-      throwCongrEx lhs rhs "A RHS congruence hole leaked into the LHS"
-    unless isLhs2 == false do
-      throwCongrEx lhs rhs "A LHS congruence hole leaked into the RHS"
-    -- Defeq checks to unify the lhs and rhs congruence holes.
-    unless ← isDefEq (← inferType pf1) (← inferType pf2) do
-      throwCongrEx lhs rhs "Elaborated types of congruence holes are not defeq."
-    if let some (_, lhsVal, _, rhsVal) := (← whnf <| ← inferType pf1).sides? then
-      unless ← isDefEq val1 lhsVal do
-        throwError "Left-hand side of congruence hole is{indentD lhsVal}\n\
-          but is expected to be{indentD val1}"
-      unless ← isDefEq val2 rhsVal do
-        throwError "Right-hand side of congruence hole is{indentD rhsVal}\n\
-          but is expected to be{indentD val2}"
-return some CongrResult.mk' val1 val2 pf1
-  | some .., none =>
-    throwCongrEx lhs rhs "Right-hand side lost its congruence hole annotation."
-  | none, some .. =>
-    throwCongrEx lhs rhs "Left-hand side lost its congruence hole annotation."
-  | none, none => return none
+--- 原说明 ---
+If `lhs` or `rhs` is a congruence hole, then process it.
+Only process ones that are at least as new as `mvarCounterSaved`
+since nothing prevents congruence holes from leaking into the local context.
 -/
 def mkCongrOfCHole? (mvarCounterSaved : Nat) (lhs rhs : Expr) : MetaM (Option CongrResult) := do
   match cHole? lhs mvarCounterSaved, cHole? rhs mvarCounterSaved with
@@ -1059,7 +806,7 @@ def mkCongrOfCHole? (mvarCounterSaved : Nat) (lhs rhs : Expr) : MetaM (Option Co
       unless ← isDefEq val2 rhsVal do
         throwError "Right-hand side of congruence hole is{indentD rhsVal}\n\
           but is expected to be{indentD val2}"
-return some CongrResult.mk' val1 val2 pf1
+    return some <| CongrResult.mk' val1 val2 pf1
   | some .., none =>
     throwCongrEx lhs rhs "Right-hand side lost its congruence hole annotation."
   | none, some .. =>
@@ -1067,27 +814,17 @@ return some CongrResult.mk' val1 val2 pf1
   | none, none => return none
 
 /--
-Definition of `getJointAppFns` / `getJointAppFns` 的定义
+Given two applications of the same arity, gives `Expr.getAppFn` of both,
+but if these functions are equal, gives the longest common prefix.
+-/
+/-
+**Mathlib.Tactic.TermCongr.getJointAppFns** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.TermCongr`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getJointAppFns
-  signature: (e e' : Expr)
-  body: if e == e' then
-    (e, e)
-  else
-    match e, e' with
-    | .app f _, .app f' _ => getJointAppFns f f'
-    | _, _ => (e, e')
-
-中文:
-定义 getJointAppFns
-  签名: (e e' : Expr)
-  定义体: if e == e' then
-    (e, e)
-  else
-    match e, e' with
-    | .app f _, .app f' _ => getJointAppFns f f'
-    | _, _ => (e, e')
+--- 原说明 ---
+Given two applications of the same arity, gives `Expr.getAppFn` of both,
+but if these functions are equal, gives the longest common prefix.
 -/
 private def getJointAppFns (e e' : Expr) : Expr × Expr :=
   if e == e' then
@@ -1095,219 +832,32 @@ private def getJointAppFns (e e' : Expr) : Expr × Expr :=
   else
     match e, e' with
     | .app f _, .app f' _ => getJointAppFns f f'
-    | _, _ => (e, e')
+    | _,        _         => (e, e')
 
-/--
-Definition of `M` / `M` 的定义
+/-- Monad for `mkCongrOfAux`, for caching `CongrResult`s. -/
+/-
+**Mathlib.Tactic.TermCongr.M** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.TermCon
+gr`。
+形式化陈述：M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation M
-  body: MonadCacheT (Expr × Expr) CongrResult MetaM
-
-mutual
-
-中文:
-缩写 M
-  定义体: MonadCacheT (Expr × Expr) CongrResult MetaM
-
-mutual
-
-Depends on / 依赖: CongrResult, MonadCacheT
+--- 原说明 ---
+Monad for `mkCongrOfAux`, for caching `CongrResult`s.
 -/
 abbrev M := MonadCacheT (Expr × Expr) CongrResult MetaM
 
 mutual
 
-/--
-Definition of `mkCongrOfAux` / `mkCongrOfAux` 的定义
+/-- Implementation of `mkCongrOf`, with caching. -/
+/-
+**Mathlib.Tactic.TermCongr.mkCongrOfAux** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Ta
+ctic.TermCongr`。
+形式化陈述：ℕ → ℕ → Expr → Expr → Mathlib.Tactic.TermCongr.M Mathlib.Tactic.TermCongr.
+CongrResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCongrOfAux
-  signature: (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
-  body: do
-  trace[Elab.congr] "mkCongrOf: {depth}, {lhs}, {rhs}, {(← mkFreshExprMVar none).mvarId!}"
-  if depth > 1000 then
-    throwError "congr(...) internal error: out of gas"
-  -- Potentially metavariables get assigned as we process congruence holes,
-  -- so instantiate them to be safe. Placeholders and implicit arguments might
-  -- end up with congruence holes, so they indeed might need a nontrivial congruence.
-  let lhs ← instantiateMVars lhs
-  let rhs ← instantiateMVars rhs
-  checkCache (lhs, rhs) fun _ => do
-    if let some res ← mkCongrOfCHole? mvarCounterSaved lhs rhs then
-      trace[Elab.congr] "hole processing succeeded"
-      return res
-    if lhs == rhs then
-      -- There should not be any cHoles, but to be safe let's remove them.
-      return { lhs := removeCHoles lhs, rhs := removeCHoles rhs, pf? := none }
-    if (hasCHole mvarCounterSaved lhs).isNone && (hasCHole mvarCounterSaved rhs).isNone then
-      -- It's safe to fastforward if the lhs and rhs are defeq and have no congruence holes.
-      -- This is more conservative than necessary since congruence holes might only be inside
-      -- proofs, and it is OK to ignore these.
-      if ← isDefEq lhs rhs then
-        return { lhs, rhs, pf? := none }
-    if ← (isProof lhs <||> isProof rhs) then
-      -- We don't want to look inside proofs at all.
-      return ← CongrResult.mkDefault lhs rhs
-    match lhs, rhs with
-    | .app .., .app .. =>
-      mkCongrOfApp depth mvarCounterSaved lhs rhs
-    | .lam .., .lam .. =>
-      trace[Elab.congr] "lam"
-      let resDom ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs.bindingDomain! rhs.bindingDomain!
-      -- We do not yet support congruences in the binding domain for lambdas.
-discard resDom.defeq
-      withLocalDecl lhs.bindingName! lhs.bindingInfo! resDom.lhs fun x => do
-        let lhsb := lhs.bindingBody!.instantiate1 x
-        let rhsb := rhs.bindingBody!.instantiate1 x
-        let resBody ← mkCongrOfAux (depth + 1) mvarCounterSaved lhsb rhsb
-        let lhs ← mkLambdaFVars #[x] resBody.lhs
-        let rhs ← mkLambdaFVars #[x] resBody.rhs
-        if resBody.isRfl then
-          return {lhs, rhs, pf? := none}
-        else
-          let pf ← mkLambdaFVars #[x] (← resBody.eq)
-          return CongrResult.mk' lhs rhs (← mkAppM ``funext #[pf])
-    | .forallE .., .forallE .. =>
-      trace[Elab.congr] "forallE"
-      let resDom ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs.bindingDomain! rhs.bindingDomain!
-      if lhs.isArrow && rhs.isArrow then
-        let resBody ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs.bindingBody! rhs.bindingBody!
-        let lhs := Expr.forallE lhs.bindingName! resDom.lhs resBody.lhs lhs.bindingInfo!
-        let rhs := Expr.forallE rhs.bindingName! resDom.rhs resBody.rhs rhs.bindingInfo!
-        if resDom.isRfl && resBody.isRfl then
-          return {lhs, rhs, pf? := none}
-        else
-          return CongrResult.mk' lhs rhs (← mkImpCongr (← resDom.eq) (← resBody.eq))
-      else
-        -- We do not yet support congruences in the binding domain for dependent pi types.
-discard resDom.defeq
-        withLocalDecl lhs.bindingName! lhs.bindingInfo! resDom.lhs fun x => do
-          let lhsb := lhs.bindingBody!.instantiate1 x
-          let rhsb := rhs.bindingBody!.instantiate1 x
-          let resBody ← mkCongrOfAux (depth + 1) mvarCounterSaved lhsb rhsb
-          let lhs ← mkForallFVars #[x] resBody.lhs
-          let rhs ← mkForallFVars #[x] resBody.rhs
-          if resBody.isRfl then
-            return {lhs, rhs, pf? := none}
-          else
-            let pf ← mkLambdaFVars #[x] (← resBody.eq)
-            return CongrResult.mk' lhs rhs (← mkAppM ``pi_congr #[pf])
-    | .letE .., .letE .. =>
-      trace[Elab.congr] "letE"
-      -- Just zeta reduce for now. Could look at `Lean.Meta.Simp.simp.simpLet`
-      let lhs := lhs.letBody!.instantiate1 lhs.letValue!
-      let rhs := rhs.letBody!.instantiate1 rhs.letValue!
-      mkCongrOfAux (depth + 1) mvarCounterSaved lhs rhs
-    | .mdata _ lhs', .mdata _ rhs' =>
-      trace[Elab.congr] "mdata"
-      let res ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-      return {res with lhs := lhs.updateMData! res.lhs, rhs := rhs.updateMData! res.rhs}
-    | .proj n1 i1 e1, .proj n2 i2 e2 =>
-      trace[Elab.congr] "proj"
-      -- Only handles defeq at the moment.
-      unless n1 == n2 && i1 == i2 do
-        throwCongrEx lhs rhs "Incompatible primitive projections"
-      let res ← mkCongrOfAux (depth + 1) mvarCounterSaved e1 e2
-discard res.defeq
-      return {lhs := lhs.updateProj! res.lhs, rhs := rhs.updateProj! res.rhs, pf? := none}
-    | _, _ =>
-      trace[Elab.congr] "base case"
-      CongrResult.mkDefault' mvarCounterSaved lhs rhs
-
-中文:
-定义 mkCongrOfAux
-  签名: (depth : 自然数) (mvarCounterSaved : 自然数) (lhs rhs : Expr)
-  定义体: do
-  trace[Elab.congr] "mkCongrOf: {depth}, {lhs}, {rhs}, {(← mkFreshExprMVar none).mvarId!}"
-  if depth > 1000 then
-    throwError "congr(...) internal error: out of gas"
-  -- Potentially metavariables get assigned as we process congruence holes,
-  -- so instantiate them to be safe. Placeholders and implicit arguments might
-  -- end up with congruence holes, so they indeed might need a nontrivial congruence.
-  let lhs ← instantiateMVars lhs
-  let rhs ← instantiateMVars rhs
-  checkCache (lhs, rhs) fun _ => do
-    if let some res ← mkCongrOfCHole? mvarCounterSaved lhs rhs then
-      trace[Elab.congr] "hole processing succeeded"
-      return res
-    if lhs == rhs then
-      -- There should not be any cHoles, but to be safe let's remove them.
-      return { lhs := removeCHoles lhs, rhs := removeCHoles rhs, pf? := none }
-    if (hasCHole mvarCounterSaved lhs).isNone && (hasCHole mvarCounterSaved rhs).isNone then
-      -- It's safe to fastforward if the lhs and rhs are defeq and have no congruence holes.
-      -- This is more conservative than necessary since congruence holes might only be inside
-      -- proofs, and it is OK to ignore these.
-      if ← isDefEq lhs rhs then
-        return { lhs, rhs, pf? := none }
-    if ← (isProof lhs <||> isProof rhs) then
-      -- We don't want to look inside proofs at all.
-      return ← CongrResult.mkDefault lhs rhs
-    match lhs, rhs with
-    | .app .., .app .. =>
-      mkCongrOfApp depth mvarCounterSaved lhs rhs
-    | .lam .., .lam .. =>
-      trace[Elab.congr] "lam"
-      let resDom ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs.bindingDomain! rhs.bindingDomain!
-      -- We do not yet support congruences in the binding domain for lambdas.
-discard resDom.defeq
-      withLocalDecl lhs.bindingName! lhs.bindingInfo! resDom.lhs fun x => do
-        let lhsb := lhs.bindingBody!.instantiate1 x
-        let rhsb := rhs.bindingBody!.instantiate1 x
-        let resBody ← mkCongrOfAux (depth + 1) mvarCounterSaved lhsb rhsb
-        let lhs ← mkLambdaFVars #[x] resBody.lhs
-        let rhs ← mkLambdaFVars #[x] resBody.rhs
-        if resBody.isRfl then
-          return {lhs, rhs, pf? := none}
-        else
-          let pf ← mkLambdaFVars #[x] (← resBody.eq)
-          return CongrResult.mk' lhs rhs (← mkAppM ``funext #[pf])
-    | .forallE .., .forallE .. =>
-      trace[Elab.congr] "forallE"
-      let resDom ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs.bindingDomain! rhs.bindingDomain!
-      if lhs.isArrow && rhs.isArrow then
-        let resBody ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs.bindingBody! rhs.bindingBody!
-        let lhs := Expr.forallE lhs.bindingName! resDom.lhs resBody.lhs lhs.bindingInfo!
-        let rhs := Expr.forallE rhs.bindingName! resDom.rhs resBody.rhs rhs.bindingInfo!
-        if resDom.isRfl && resBody.isRfl then
-          return {lhs, rhs, pf? := none}
-        else
-          return CongrResult.mk' lhs rhs (← mkImpCongr (← resDom.eq) (← resBody.eq))
-      else
-        -- We do not yet support congruences in the binding domain for dependent pi types.
-discard resDom.defeq
-        withLocalDecl lhs.bindingName! lhs.bindingInfo! resDom.lhs fun x => do
-          let lhsb := lhs.bindingBody!.instantiate1 x
-          let rhsb := rhs.bindingBody!.instantiate1 x
-          let resBody ← mkCongrOfAux (depth + 1) mvarCounterSaved lhsb rhsb
-          let lhs ← mkForallFVars #[x] resBody.lhs
-          let rhs ← mkForallFVars #[x] resBody.rhs
-          if resBody.isRfl then
-            return {lhs, rhs, pf? := none}
-          else
-            let pf ← mkLambdaFVars #[x] (← resBody.eq)
-            return CongrResult.mk' lhs rhs (← mkAppM ``pi_congr #[pf])
-    | .letE .., .letE .. =>
-      trace[Elab.congr] "letE"
-      -- Just zeta reduce for now. Could look at `Lean.Meta.Simp.simp.simpLet`
-      let lhs := lhs.letBody!.instantiate1 lhs.letValue!
-      let rhs := rhs.letBody!.instantiate1 rhs.letValue!
-      mkCongrOfAux (depth + 1) mvarCounterSaved lhs rhs
-    | .mdata _ lhs', .mdata _ rhs' =>
-      trace[Elab.congr] "mdata"
-      let res ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-      return {res with lhs := lhs.updateMData! res.lhs, rhs := rhs.updateMData! res.rhs}
-    | .proj n1 i1 e1, .proj n2 i2 e2 =>
-      trace[Elab.congr] "proj"
-      -- Only handles defeq at the moment.
-      unless n1 == n2 && i1 == i2 do
-        throwCongrEx lhs rhs "Incompatible primitive projections"
-      let res ← mkCongrOfAux (depth + 1) mvarCounterSaved e1 e2
-discard res.defeq
-      return {lhs := lhs.updateProj! res.lhs, rhs := rhs.updateProj! res.rhs, pf? := none}
-    | _, _ =>
-      trace[Elab.congr] "base case"
-      CongrResult.mkDefault' mvarCounterSaved lhs rhs
+--- 原说明 ---
+Implementation of `mkCongrOf`, with caching.
 -/
 partial def mkCongrOfAux (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr) :
     M CongrResult := do
@@ -1342,7 +892,7 @@ partial def mkCongrOfAux (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
       trace[Elab.congr] "lam"
       let resDom ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs.bindingDomain! rhs.bindingDomain!
       -- We do not yet support congruences in the binding domain for lambdas.
-discard resDom.defeq
+      discard <| resDom.defeq
       withLocalDecl lhs.bindingName! lhs.bindingInfo! resDom.lhs fun x => do
         let lhsb := lhs.bindingBody!.instantiate1 x
         let rhsb := rhs.bindingBody!.instantiate1 x
@@ -1367,7 +917,7 @@ discard resDom.defeq
           return CongrResult.mk' lhs rhs (← mkImpCongr (← resDom.eq) (← resBody.eq))
       else
         -- We do not yet support congruences in the binding domain for dependent pi types.
-discard resDom.defeq
+        discard <| resDom.defeq
         withLocalDecl lhs.bindingName! lhs.bindingInfo! resDom.lhs fun x => do
           let lhsb := lhs.bindingBody!.instantiate1 x
           let rhsb := rhs.bindingBody!.instantiate1 x
@@ -1395,244 +945,34 @@ discard resDom.defeq
       unless n1 == n2 && i1 == i2 do
         throwCongrEx lhs rhs "Incompatible primitive projections"
       let res ← mkCongrOfAux (depth + 1) mvarCounterSaved e1 e2
-discard res.defeq
+      discard <| res.defeq
       return {lhs := lhs.updateProj! res.lhs, rhs := rhs.updateProj! res.rhs, pf? := none}
     | _, _ =>
       trace[Elab.congr] "base case"
       CongrResult.mkDefault' mvarCounterSaved lhs rhs
 
 /--
-Definition of `mkCongrOfApp` / `mkCongrOfApp` 的定义
+Generate congruence for applications `lhs` and `rhs`.
+Key detail: functions might be *overapplied* due to the values of their arguments.
+For example, `id id 2` is overapplied.
+To handle these, we need to segment the applications into their natural arities,
+since `mkHCongrWithArity'` does not know how to generate congruence lemmas for the overapplied case.
+-/
+/-
+**Mathlib.Tactic.TermCongr.mkCongrOfApp** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Ta
+ctic.TermCongr`。
+形式化陈述：ℕ → ℕ → Expr → Expr → Mathlib.Tactic.TermCongr.M Mathlib.Tactic.TermCongr.
+CongrResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCongrOfApp
-  signature: (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
-  body: do
-  -- Even if a function is being rewritten (e.g. with `f x = g`), both sides should have the same
-  -- number of arguments since there will be a cHole around both `f x` and `g`.
-  let arity := lhs.getAppNumArgs
-  trace[Elab.congr] "app, arity {arity}"
-  unless arity == rhs.getAppNumArgs do
-    trace[Elab.congr] "app desync (arity)"
-    return ← CongrResult.mkDefault' mvarCounterSaved lhs rhs
-  -- Optimization: congruences often have a shared prefix (e.g. some type parameters an instances)
-  -- so if there's a shared prefix we use it.
-  let mut (f, f') := getJointAppFns lhs rhs
-  let arity := arity - f.getAppNumArgs
-  trace[Elab.congr] "app, updated arity {arity}"
-  if f != f' then
-    unless ← isDefEq (← inferType f) (← inferType f') do
-      trace[Elab.congr] "app desync (function types)"
-      return ← CongrResult.mkDefault' mvarCounterSaved lhs rhs
-  -- First try using `congr`/`congrFun` to build a proof as far as possible.
-  -- We update `f`, `f'`, and `finfo` as we go.
-  let lhsArgs := lhs.getBoundedAppArgs arity
-  let rhsArgs := rhs.getBoundedAppArgs arity
-  let rec
-    /--
-    Argument processing loop
-    - `i` is index into `lhsArgs`/`rhsArgs`.
-    - `finfo` is the funinfo of `f` applied to the first `finfoIdx` arguments
-    - `f` and `f'` are the current head functions, after the first `i` arguments have been applied.
-    -/
-    go (i : Nat) (finfo : FunInfo) (finfoIdx : Nat) (f f' : Expr) (pf : Expr) :
-        M CongrResult := do
-      if i >= arity then
-        return CongrResult.mk' f f' pf
-      else
-        let mut finfo := finfo
-        let mut finfoIdx := finfoIdx
-        unless i - finfoIdx < finfo.getArity do
-          finfo ← getFunInfoNArgs f (arity - finfoIdx)
-          finfoIdx := i
-        let info := finfo.paramInfo[i - finfoIdx]!
-        let a := lhsArgs[i]!
-        let a' := rhsArgs[i]!
-        let ra ← mkCongrOfAux (depth + 1) mvarCounterSaved a a'
-        if ra.isRfl then
-          trace[Elab.congr] "app, arg {i} by rfl"
-          go (i + 1) finfo finfoIdx (.app f ra.lhs) (.app f' ra.rhs) (← mkCongrFun pf ra.lhs)
-        else if !info.hasFwdDeps then
-          trace[Elab.congr] "app, arg {i} by eq"
-          go (i + 1) finfo finfoIdx (.app f ra.lhs) (.app f' ra.rhs) (← mkCongr pf (← ra.eq))
-        else
-          -- Otherwise, we can make progress with an hcongr lemma.
-          if (isRefl? pf).isNone then
-            trace[Elab.congr] "app, hcongr needs transitivity"
-            -- If there's a nontrivial proof, then since `mkHCongrWithArity'` fixes the function,
-            -- we need to use transitivity to make the functions be the same.
-            let lhsArgs' := (lhsArgs.extract i).map removeCHoles
-            let lhs := mkAppN f lhsArgs'
-            let lhs' := mkAppN f' lhsArgs'
-            let mut pf' := pf
-            for arg in lhsArgs' do
-              pf' ← mkCongrFun pf' arg
-            let res1 := CongrResult.mk' lhs lhs' pf'
-            let res2 ← go i finfo finfoIdx f' f' (← mkEqRefl f')
-            return res1.trans res2
-          else
-            -- Get an accurate measure of the arity of `f`, following `getFunInfoNArgs`.
-            -- No need to update `finfo` itself.
-            let fArity ←
-              if finfoIdx == i then pure finfo.getArity
-              else withAtLeastTransparency .default do
-                forallBoundedTelescope (← inferType f) (some (arity - i)) fun xs _ => pure xs.size
-            trace[Elab.congr] "app, args {i}-{i+arity-1} by hcongr, {arity} arguments"
-            let thm ← mkHCongrWithArity' f fArity
-            let mut args := #[]
-            let mut lhsArgs' := #[]
-            let mut rhsArgs' := #[]
-            for lhs' in lhsArgs[i:], rhs' in rhsArgs[i:], kind in thm.argKinds do
-              match kind with
-              | .eq =>
-                let ares ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-.push (← ares.eq) .push ares.rhs .push ares.lhs args := args
-                lhsArgs' := lhsArgs'.push ares.lhs
-                rhsArgs' := rhsArgs'.push ares.rhs
-              | .heq =>
-                let ares ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-.push (← ares.heq) .push ares.rhs .push ares.lhs args := args
-                lhsArgs' := lhsArgs'.push ares.lhs
-                rhsArgs' := rhsArgs'.push ares.rhs
-              | .subsingletonInst =>
-                -- Warning: we're not processing any congruence holes here.
-                -- Users shouldn't be intentionally placing them in such arguments anyway.
-                -- We can't throw an error because these arguments might incidentally have
-                -- congruence holes by unification.
-                let lhs' := removeCHoles lhs'
-                let rhs' := removeCHoles rhs'
-.push rhs' .push lhs' args := args
-                lhsArgs' := lhsArgs'.push lhs'
-                rhsArgs' := rhsArgs'.push rhs'
-              | _ => panic! "unexpected hcongr argument kind"
-            let lhs' := mkAppN f lhsArgs'
-            let rhs' := mkAppN f' rhsArgs'
-            let res := CongrResult.mk' lhs' rhs' (mkAppN thm.proof args)
-            if i + fArity < arity then
-              -- There are more arguments after this. The only way this can work is if
-              -- `res` can prove an equality.
-              go (i + fArity) finfo finfoIdx lhs' rhs' (← res.eq)
-            else
-              -- Otherwise, we can return `res`, which might only be a HEq.
-              return res
-  let res ← mkCongrOfAux (depth + 1) mvarCounterSaved f f'
-  let pf ← res.eq
-  go 0 (← getFunInfoNArgs f arity) 0 res.lhs res.rhs pf
-
-中文:
-定义 mkCongrOfApp
-  签名: (depth : 自然数) (mvarCounterSaved : 自然数) (lhs rhs : Expr)
-  定义体: do
-  -- Even if a function is being rewritten (e.g. with `f x = g`), both sides should have the same
-  -- number of arguments since there will be a cHole around both `f x` and `g`.
-  let arity := lhs.getAppNumArgs
-  trace[Elab.congr] "app, arity {arity}"
-  unless arity == rhs.getAppNumArgs do
-    trace[Elab.congr] "app desync (arity)"
-    return ← CongrResult.mkDefault' mvarCounterSaved lhs rhs
-  -- Optimization: congruences often have a shared prefix (e.g. some type parameters an instances)
-  -- so if there's a shared prefix we use it.
-  let mut (f, f') := getJointAppFns lhs rhs
-  let arity := arity - f.getAppNumArgs
-  trace[Elab.congr] "app, updated arity {arity}"
-  if f != f' then
-    unless ← isDefEq (← inferType f) (← inferType f') do
-      trace[Elab.congr] "app desync (function types)"
-      return ← CongrResult.mkDefault' mvarCounterSaved lhs rhs
-  -- First try using `congr`/`congrFun` to build a proof as far as possible.
-  -- We update `f`, `f'`, and `finfo` as we go.
-  let lhsArgs := lhs.getBoundedAppArgs arity
-  let rhsArgs := rhs.getBoundedAppArgs arity
-  let rec
-    /--
-    Argument processing loop
-    - `i` is index into `lhsArgs`/`rhsArgs`.
-    - `finfo` is the funinfo of `f` applied to the first `finfoIdx` arguments
-    - `f` and `f'` are the current head functions, after the first `i` arguments have been applied.
-    -/
-    go (i : Nat) (finfo : FunInfo) (finfoIdx : Nat) (f f' : Expr) (pf : Expr) :
-        M CongrResult := do
-      if i >= arity then
-        return CongrResult.mk' f f' pf
-      else
-        let mut finfo := finfo
-        let mut finfoIdx := finfoIdx
-        unless i - finfoIdx < finfo.getArity do
-          finfo ← getFunInfoNArgs f (arity - finfoIdx)
-          finfoIdx := i
-        let info := finfo.paramInfo[i - finfoIdx]!
-        let a := lhsArgs[i]!
-        let a' := rhsArgs[i]!
-        let ra ← mkCongrOfAux (depth + 1) mvarCounterSaved a a'
-        if ra.isRfl then
-          trace[Elab.congr] "app, arg {i} by rfl"
-          go (i + 1) finfo finfoIdx (.app f ra.lhs) (.app f' ra.rhs) (← mkCongrFun pf ra.lhs)
-        else if !info.hasFwdDeps then
-          trace[Elab.congr] "app, arg {i} by eq"
-          go (i + 1) finfo finfoIdx (.app f ra.lhs) (.app f' ra.rhs) (← mkCongr pf (← ra.eq))
-        else
-          -- Otherwise, we can make progress with an hcongr lemma.
-          if (isRefl? pf).isNone then
-            trace[Elab.congr] "app, hcongr needs transitivity"
-            -- If there's a nontrivial proof, then since `mkHCongrWithArity'` fixes the function,
-            -- we need to use transitivity to make the functions be the same.
-            let lhsArgs' := (lhsArgs.extract i).map removeCHoles
-            let lhs := mkAppN f lhsArgs'
-            let lhs' := mkAppN f' lhsArgs'
-            let mut pf' := pf
-            for arg in lhsArgs' do
-              pf' ← mkCongrFun pf' arg
-            let res1 := CongrResult.mk' lhs lhs' pf'
-            let res2 ← go i finfo finfoIdx f' f' (← mkEqRefl f')
-            return res1.trans res2
-          else
-            -- Get an accurate measure of the arity of `f`, following `getFunInfoNArgs`.
-            -- No need to update `finfo` itself.
-            let fArity ←
-              if finfoIdx == i then pure finfo.getArity
-              else withAtLeastTransparency .default do
-                forallBoundedTelescope (← inferType f) (some (arity - i)) fun xs _ => pure xs.size
-            trace[Elab.congr] "app, args {i}-{i+arity-1} by hcongr, {arity} arguments"
-            let thm ← mkHCongrWithArity' f fArity
-            let mut args := #[]
-            let mut lhsArgs' := #[]
-            let mut rhsArgs' := #[]
-            for lhs' in lhsArgs[i:], rhs' in rhsArgs[i:], kind in thm.argKinds do
-              match kind with
-              | .eq =>
-                let ares ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-.push (← ares.eq) .push ares.rhs .push ares.lhs args := args
-                lhsArgs' := lhsArgs'.push ares.lhs
-                rhsArgs' := rhsArgs'.push ares.rhs
-              | .heq =>
-                let ares ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-.push (← ares.heq) .push ares.rhs .push ares.lhs args := args
-                lhsArgs' := lhsArgs'.push ares.lhs
-                rhsArgs' := rhsArgs'.push ares.rhs
-              | .subsingletonInst =>
-                -- Warning: we're not processing any congruence holes here.
-                -- Users shouldn't be intentionally placing them in such arguments anyway.
-                -- We can't throw an error because these arguments might incidentally have
-                -- congruence holes by unification.
-                let lhs' := removeCHoles lhs'
-                let rhs' := removeCHoles rhs'
-.push rhs' .push lhs' args := args
-                lhsArgs' := lhsArgs'.push lhs'
-                rhsArgs' := rhsArgs'.push rhs'
-              | _ => panic! "unexpected hcongr argument kind"
-            let lhs' := mkAppN f lhsArgs'
-            let rhs' := mkAppN f' rhsArgs'
-            let res := CongrResult.mk' lhs' rhs' (mkAppN thm.proof args)
-            if i + fArity < arity then
-              -- There are more arguments after this. The only way this can work is if
-              -- `res` can prove an equality.
-              go (i + fArity) finfo finfoIdx lhs' rhs' (← res.eq)
-            else
-              -- Otherwise, we can return `res`, which might only be a HEq.
-              return res
-  let res ← mkCongrOfAux (depth + 1) mvarCounterSaved f f'
-  let pf ← res.eq
-  go 0 (← getFunInfoNArgs f arity) 0 res.lhs res.rhs pf
+--- 原说明 ---
+Generate congruence for applications `lhs` and `rhs`.
+Key detail: functions might be *overapplied* due to the values of their argument
+s.
+For example, `id id 2` is overapplied.
+To handle these, we need to segment the applications into their natural arities,
+since `mkHCongrWithArity'` does not know how to generate congruence lemmas for t
+he overapplied case.
 -/
 partial def mkCongrOfApp (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr) :
     M CongrResult := do
@@ -1665,7 +1005,7 @@ partial def mkCongrOfApp (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
     -/
     go (i : Nat) (finfo : FunInfo) (finfoIdx : Nat) (f f' : Expr) (pf : Expr) :
         M CongrResult := do
-      if i >= arity then
+      if i ≥ arity then
         return CongrResult.mk' f f' pf
       else
         let mut finfo := finfo
@@ -1714,12 +1054,12 @@ partial def mkCongrOfApp (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
               match kind with
               | .eq =>
                 let ares ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-.push (← ares.eq) .push ares.rhs .push ares.lhs args := args
+                args := args |>.push ares.lhs |>.push ares.rhs |>.push (← ares.eq)
                 lhsArgs' := lhsArgs'.push ares.lhs
                 rhsArgs' := rhsArgs'.push ares.rhs
               | .heq =>
                 let ares ← mkCongrOfAux (depth + 1) mvarCounterSaved lhs' rhs'
-.push (← ares.heq) .push ares.rhs .push ares.lhs args := args
+                args := args |>.push ares.lhs |>.push ares.rhs |>.push (← ares.heq)
                 lhsArgs' := lhsArgs'.push ares.lhs
                 rhsArgs' := rhsArgs'.push ares.rhs
               | .subsingletonInst =>
@@ -1729,7 +1069,7 @@ partial def mkCongrOfApp (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
                 -- congruence holes by unification.
                 let lhs' := removeCHoles lhs'
                 let rhs' := removeCHoles rhs'
-.push rhs' .push lhs' args := args
+                args := args |>.push lhs' |>.push rhs'
                 lhsArgs' := lhsArgs'.push lhs'
                 rhsArgs' := rhsArgs'.push rhs'
               | _ => panic! "unexpected hcongr argument kind"
@@ -1750,105 +1090,42 @@ partial def mkCongrOfApp (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
 end
 
 /--
-Definition of `mkCongrOf` / `mkCongrOf` 的定义
+Walks along both `lhs` and `rhs` simultaneously to create a congruence lemma between them.
 
-English:
-definition mkCongrOf
-  signature: (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr)
-  body: .run mkCongrOfAux depth mvarCounterSaved lhs rhs
+Where they are desynchronized, we fall back to the base case (using `CongrResult.mkDefault'`)
+since it's likely due to unification with the expected type,
+from `_` placeholders or implicit arguments being filled in.
+-/
+/-
+**Mathlib.Tactic.TermCongr.mkCongrOf** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.T
+ermCongr`。
+形式化陈述：ℕ → ℕ → Expr → Expr → MetaM Mathlib.Tactic.TermCongr.CongrResult
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkCongrOf
-  签名: (depth : 自然数) (mvarCounterSaved : 自然数) (lhs rhs : Expr)
-  定义体: .run mkCongrOfAux depth mvarCounterSaved lhs rhs
+--- 原说明 ---
+Walks along both `lhs` and `rhs` simultaneously to create a congruence lemma bet
+ween them.
+
+Where they are desynchronized, we fall back to the base case (using `CongrResult
+.mkDefault'`)
+since it's likely due to unification with the expected type,
+from `_` placeholders or implicit arguments being filled in.
 -/
 partial def mkCongrOf (depth : Nat) (mvarCounterSaved : Nat) (lhs rhs : Expr) :
     MetaM CongrResult :=
-.run mkCongrOfAux depth mvarCounterSaved lhs rhs
+  mkCongrOfAux depth mvarCounterSaved lhs rhs |>.run
 
 /-! ### Elaborating congruence quotations -/
 
 @[term_elab termCongr, inherit_doc termCongr]
-/--
-Definition of `elabTermCongr` / `elabTermCongr` 的定义
+/-
+**Mathlib.Tactic.TermCongr.elabTermCongr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.TermCongr`。
+形式化陈述：Elab.Term.TermElab
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabTermCongr
-  signature: : Term.TermElab
-  body: fun stx expectedType? => do
-  match stx with
-  | `(congr($t)) =>
-    -- Save the current mvarCounter so that we know which cHoles are for this congr quotation.
-    let mvarCounterSaved := (← getMCtx).mvarCounter
-    -- Case 1: There is an expected type and it's obviously an Iff/Eq/HEq.
-    if let some expectedType := expectedType? then
-      if let some (expLhsTy, expLhs, expRhsTy, expRhs) := (← whnf expectedType).sides? then
-        let lhs ← elaboratePattern t expLhsTy true
-        let rhs ← elaboratePattern t expRhsTy false
-        -- Note: these defeq checks can leak congruence holes.
-        unless ← isDefEq expLhs lhs do
-          throwError "Left-hand side of elaborated pattern{indentD lhs}\n\
-            is not definitionally equal to left-hand side of expected type{indentD expectedType}"
-        unless ← isDefEq expRhs rhs do
-          throwError "Right-hand side of elaborated pattern{indentD rhs}\n\
-            is not definitionally equal to right-hand side of expected type{indentD expectedType}"
-        Term.synthesizeSyntheticMVars (postpone := .yes)
-        let res ← mkCongrOf 0 mvarCounterSaved lhs rhs
-        let expectedType' ← whnf expectedType
-        let pf ← if expectedType'.iff?.isSome then res.iff
-                  else if expectedType'.isEq then res.eq
-                  else if expectedType'.isHEq then res.heq
-                  else panic! "unreachable case, sides? guarantees Iff, Eq, and HEq"
-        return ← mkExpectedTypeHint pf expectedType
-    -- Case 2: No expected type or it's not obviously Iff/Eq/HEq. We generate an Eq.
-    let lhs ← elaboratePattern t none true
-    let rhs ← elaboratePattern t none false
-    Term.synthesizeSyntheticMVars (postpone := .yes)
-    let res ← mkCongrOf 0 mvarCounterSaved lhs rhs
-    let pf ← res.eq
-    let ty ← mkEq res.lhs res.rhs
-    mkExpectedTypeHint pf ty
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabTermCongr
-  签名: : 项.TermElab
-  定义体: fun stx expectedType? => do
-  match stx with
-  | `(congr($t)) =>
-    -- Save the current mvarCounter so that we know which cHoles are for this congr quotation.
-    let mvarCounterSaved := (← getMCtx).mvarCounter
-    -- Case 1: There is an expected type and it's obviously an Iff/Eq/HEq.
-    if let some expectedType := expectedType? then
-      if let some (expLhsTy, expLhs, expRhsTy, expRhs) := (← whnf expectedType).sides? then
-        let lhs ← elaboratePattern t expLhsTy true
-        let rhs ← elaboratePattern t expRhsTy false
-        -- Note: these defeq checks can leak congruence holes.
-        unless ← isDefEq expLhs lhs do
-          throwError "Left-hand side of elaborated pattern{indentD lhs}\n\
-            is not definitionally equal to left-hand side of expected type{indentD expectedType}"
-        unless ← isDefEq expRhs rhs do
-          throwError "Right-hand side of elaborated pattern{indentD rhs}\n\
-            is not definitionally equal to right-hand side of expected type{indentD expectedType}"
-        Term.synthesizeSyntheticMVars (postpone := .yes)
-        let res ← mkCongrOf 0 mvarCounterSaved lhs rhs
-        let expectedType' ← whnf expectedType
-        let pf ← if expectedType'.iff?.isSome then res.iff
-                  else if expectedType'.isEq then res.eq
-                  else if expectedType'.isHEq then res.heq
-                  else panic! "unreachable case, sides? guarantees Iff, Eq, and HEq"
-        return ← mkExpectedTypeHint pf expectedType
-    -- Case 2: No expected type or it's not obviously Iff/Eq/HEq. We generate an Eq.
-    let lhs ← elaboratePattern t none true
-    let rhs ← elaboratePattern t none false
-    Term.synthesizeSyntheticMVars (postpone := .yes)
-    let res ← mkCongrOf 0 mvarCounterSaved lhs rhs
-    let pf ← res.eq
-    let ty ← mkEq res.lhs res.rhs
-    mkExpectedTypeHint pf ty
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+--- 原说明 ---
+### Elaborating congruence quotations
 -/
 def elabTermCongr : Term.TermElab := fun stx expectedType? => do
   match stx with
@@ -1888,3 +1165,4 @@ def elabTermCongr : Term.TermElab := fun stx expectedType? => do
 end TermCongr
 
 end Mathlib.Tactic
+

@@ -28,188 +28,104 @@ section
 
 open Additive Multiplicative
 
-/--
-Instance `Additive.vadd` / 实例 `Additive.vadd`
-
-English:
-instance Additive.vadd
-  signature: [SMul α β]
-  body: (a.toMul • ·)
-
-中文:
-实例 加性.vadd
-  签名: [标量乘法 α β]
-  定义体: (a.toMul • ·)
-
-Depends on / 依赖: a.toMul
+/-
+**Additive.vadd** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.vadd [SMul α β] : VAdd (Additive α) β where vadd a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Additive.vadd [SMul α β] : VAdd (Additive α) β where vadd a := (a.toMul • ·)
-
-/--
-Instance `Multiplicative.smul` / 实例 `Multiplicative.smul`
-
-English:
-instance Multiplicative.smul
-  signature: [VAdd α β]
-  body: (a.toAdd +ᵥ ·)
-
-中文:
-实例 Multiplicative.smul
-  签名: [向量加法 α β]
-  定义体: (a.toAdd +ᵥ ·)
-
-Depends on / 依赖: a.toAdd
+/-
+**Multiplicative.smul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.smul [VAdd α β] : SMul (Multiplicative α) β where smul a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Multiplicative.smul [VAdd α β] : SMul (Multiplicative α) β where smul a := (a.toAdd +ᵥ ·)
-
-/--
-lemma `toMul_smul` / 引理 `toMul_smul`
-
-English:
-lemma toMul_smul
-  given: [SMul α β] (a : Additive α) (b : β)
-  statement: (a.toMul : α) • b = a +ᵥ b
-  proof: rfl
-
-中文:
-引理 toMul_smul
-  条件: [标量乘法 α β] (a : 加性 α) (b : β)
-  结论: (a.toMul : α) • b = a +ᵥ b
-  证明: rfl
+/-
+**toMul_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] (a : Additive α) (b : β)
+, Additive.toMul a • b = a +ᵥ b
+参数：a : Additive α；b : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toMul_smul [SMul α β] (a : Additive α) (b : β) : (a.toMul : α) • b = a +ᵥ b := rfl
-
-/--
-lemma `ofMul_vadd` / 引理 `ofMul_vadd`
-
-English:
-lemma ofMul_vadd
-  given: [SMul α β] (a : α) (b : β)
-  statement: ofMul a +ᵥ b = a • b
-  proof: rfl
-
-中文:
-引理 ofMul_vadd
-  条件: [标量乘法 α β] (a : α) (b : β)
-  结论: ofMul a +ᵥ b = a • b
-  证明: rfl
+/-
+**ofMul_vadd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] (a : α) (b : β), Additiv
+e.ofMul a +ᵥ b = a • b
+参数：a : α；b : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofMul_vadd [SMul α β] (a : α) (b : β) : ofMul a +ᵥ b = a • b := rfl
-
-/--
-lemma `toAdd_vadd` / 引理 `toAdd_vadd`
-
-English:
-lemma toAdd_vadd
-  given: [VAdd α β] (a : Multiplicative α) (b : β)
-  statement: (a.toAdd : α) +ᵥ b = a • b
-  proof: rfl
-
-中文:
-引理 toAdd_vadd
-  条件: [向量加法 α β] (a : Multiplicative α) (b : β)
-  结论: (a.toAdd : α) +ᵥ b = a • b
-  证明: rfl
+/-
+**toAdd_vadd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : VAdd α β] (a : Multiplicative α) (
+b : β), Multiplicative.toAdd a +ᵥ b = a • b
+参数：a : Multiplicative α；b : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toAdd_vadd [VAdd α β] (a : Multiplicative α) (b : β) : (a.toAdd : α) +ᵥ b = a • b :=
   rfl
-
-/--
-lemma `ofAdd_smul` / 引理 `ofAdd_smul`
-
-English:
-lemma ofAdd_smul
-  given: [VAdd α β] (a : α) (b : β)
-  statement: ofAdd a • b = a +ᵥ b
-  proof: rfl
-
-中文:
-引理 ofAdd_smul
-  条件: [向量加法 α β] (a : α) (b : β)
-  结论: ofAdd a • b = a +ᵥ b
-  证明: rfl
+/-
+**ofAdd_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : VAdd α β] (a : α) (b : β), Multipl
+icative.ofAdd a • b = a +ᵥ b
+参数：a : α；b : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofAdd_smul [VAdd α β] (a : α) (b : β) : ofAdd a • b = a +ᵥ b := rfl
-
-/--
-Instance `Additive.addAction` / 实例 `Additive.addAction`
-
-English:
-instance Additive.addAction
-  signature: [Monoid α] [MulAction α β]
-  body: MulAction.one_smul
-  add_vadd := mul_smul (α := α)
-
-中文:
-实例 加性.addAction
-  签名: [幺半群 α] [乘法作用 α β]
-  定义体: MulAction.one_smul
-  add_vadd := mul_smul (α := α)
-
-Depends on / 依赖: MulAction, MulAction.one_smul, one_smul
+/-
+**Additive.addAction** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.addAction [Monoid α] [MulAction α β] : AddAction (Additive α) β w
+here zero_vadd
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.one_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Monoid α} [
+self : MulAction α β] (b : β), 1 • b = b
 -/
 instance Additive.addAction [Monoid α] [MulAction α β] : AddAction (Additive α) β where
   zero_vadd := MulAction.one_smul
   add_vadd := mul_smul (α := α)
-
-/--
-Instance `Multiplicative.mulAction` / 实例 `Multiplicative.mulAction`
-
-English:
-instance Multiplicative.mulAction
-  signature: [AddMonoid α] [AddAction α β]
-  body: AddAction.zero_vadd
-  mul_smul := add_vadd (G := α)
-
-中文:
-实例 Multiplicative.mulAction
-  签名: [加法幺半群 α] [加法作用 α β]
-  定义体: AddAction.zero_vadd
-  mul_smul := add_vadd (G := α)
-
-Depends on / 依赖: AddAction, AddAction.zero_vadd, zero_vadd
+/-
+**Multiplicative.mulAction** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.mulAction [AddMonoid α] [AddAction α β] : MulAction (Multip
+licative α) β where one_smul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddAction.zero_vadd`：∀ {G : Type u_9} {P : Type u_10} {inst : AddMonoid 
+G} [self : AddAction G P] (p : P), 0 +ᵥ p = p
 -/
 instance Multiplicative.mulAction [AddMonoid α] [AddAction α β] :
     MulAction (Multiplicative α) β where
   one_smul := AddAction.zero_vadd
   mul_smul := add_vadd (G := α)
-
-/--
-Instance `Additive.vaddCommClass` / 实例 `Additive.vaddCommClass`
-
-English:
-instance Additive.vaddCommClass
-  signature: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
-  body: ⟨@smul_comm α β _ _ _ _⟩
-
-中文:
-实例 加性.vaddCommClass
-  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
-  定义体: ⟨@smul_comm α β _ _ _ _⟩
-
-Depends on / 依赖: smul_comm
+/-
+**Additive.vaddCommClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Additive.vaddCommClass [SMul α γ] [SMul β γ] [SMulCommClass α β γ] : VAddC
+ommClass (Additive α) (Additive β) γ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance Additive.vaddCommClass [SMul α γ] [SMul β γ] [SMulCommClass α β γ] :
     VAddCommClass (Additive α) (Additive β) γ :=
   ⟨@smul_comm α β _ _ _ _⟩
-
-/--
-Instance `Multiplicative.smulCommClass` / 实例 `Multiplicative.smulCommClass`
-
-English:
-instance Multiplicative.smulCommClass
-  signature: [VAdd α γ] [VAdd β γ] [VAddCommClass α β γ]
-  body: ⟨@vadd_comm α β _ _ _ _⟩
-
-中文:
-实例 Multiplicative.smulCommClass
-  签名: [向量加法 α γ] [向量加法 β γ] [VAddComm类 α β γ]
-  定义体: ⟨@vadd_comm α β _ _ _ _⟩
-
-Depends on / 依赖: vadd_comm
+/-
+**Multiplicative.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Multiplicative.smulCommClass [VAdd α γ] [VAdd β γ] [VAddCommClass α β γ] :
+ SMulCommClass (Multiplicative α) (Multiplicative β) γ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `VAddCommClass.vadd_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : VAdd M α} {inst_1 : VAdd N α} [self : VAddCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance Multiplicative.smulCommClass [VAdd α γ] [VAdd β γ] [VAddCommClass α β γ] :
     SMulCommClass (Multiplicative α) (Multiplicative β) γ :=
   ⟨@vadd_comm α β _ _ _ _⟩
 
 end
+

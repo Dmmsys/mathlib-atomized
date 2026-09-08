@@ -23,179 +23,140 @@ lift, tactic
 
 public meta section
 
-/--
-Definition of `CanLift` / `CanLift` 的定义
+/-- A class specifying that you can lift elements from `α` to `β` assuming `cond` is true.
+  Used by the tactic `lift`. -/
+/-
+**CanLift** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Sort u_1) → (β : Sort u_2) → outParam (β → α) → outParam (α → Prop) →
+ Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CanLift
-  parameters: (α β : Sort*) (coe : outParam <| β -> α) (cond : outParam <| α -> Prop)
-  axioms and operations (1):
-    - prf : forall x : α, cond x -> exists y : β, coe y = x
-
-中文:
-类 CanLift
-  参数: (α β : 类型层*) (coe : outParam <| β -> α) (cond : outParam <| α -> 命题)
-  公理与运算 (1 个):
-    - prf : 对任意 x : α, cond x -> 存在 y : β, coe y = x
+--- 原说明 ---
+A class specifying that you can lift elements from `α` to `β` assuming `cond` is
+ true.
+  Used by the tactic `lift`.
 -/
-class CanLift (α β : Sort*) (coe : outParam <| β -> α) (cond : outParam <| α -> Prop) : Prop where
+class CanLift (α β : Sort*) (coe : outParam <| β → α) (cond : outParam <| α → Prop) : Prop where
   /-- An element of `α` that satisfies `cond` belongs to the range of `coe`. -/
-  prf : forall x : α, cond x -> exists y : β, coe y = x
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanLift Int Nat (fun n : Nat => n) (0 <= ·)
-  body: ⟨fun n hn => ⟨n.natAbs, Int.natAbs_of_nonneg hn⟩⟩
-
-中文:
-实例 :
-  签名: CanLift 整数 自然数 (fun n : 自然数 => n) (0 <= ·)
-  定义体: ⟨fun n hn => ⟨n.natAbs, Int.natAbs_of_nonneg hn⟩⟩
-
-Depends on / 依赖: Int.natAbs_of_nonneg, n.natAbs, natAbs, natAbs_of_nonneg
+  prf : ∀ x : α, cond x → ∃ y : β, coe y = x
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CanLift Int Nat (fun n : Nat => n) (0 <= ·) :=
-  ⟨fun n hn => ⟨n.natAbs, Int.natAbs_of_nonneg hn⟩⟩
+instance : CanLift Int Nat (fun n : Nat ↦ n) (0 ≤ ·) :=
+  ⟨fun n hn ↦ ⟨n.natAbs, Int.natAbs_of_nonneg hn⟩⟩
 
-/--
-Instance `Pi.canLift` / 实例 `Pi.canLift`
+/-- Enable automatic handling of pi types in `CanLift`. -/
+/-
+**Pi.canLift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.canLift (ι : Sort*) (α β : ι -> Sort*) (coe : forall i, β i -> α i) (P 
+: forall i, α i -> Prop) [forall i, CanLift (α i) (β i) (coe i) (P i)] : CanLift
+ (forall i, α i) (forall i, β i) (fun f i => coe i (f i)) fun f => forall i, P i
+ (f i) where prf f hf
+参数：ι : Sort*；α β : ι -> Sort*；coe : forall i, β i -> α i；P : forall i, α i -> Pr
+op；α i；β i；coe i；P i。
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-instance Pi.canLift
-  signature: (ι : Sort*) (α β : ι -> Sort*) (coe : forall i, β i -> α i) (P : forall i, α i -> Prop)
-  body: ⟨fun i => Classical.choose (CanLift.prf (f i) (hf i)),
-    funext fun i => Classical.choose_spec (CanLift.prf (f i) (hf i))⟩
-
-中文:
-实例 依赖函数类型.canLift
-  签名: (ι : 类型层*) (α β : ι -> 类型层*) (coe : 对任意 i, β i -> α i) (P : 对任意 i, α i -> 命题)
-  定义体: ⟨fun i => Classical.choose (CanLift.prf (f i) (hf i)),
-    funext fun i => Classical.choose_spec (CanLift.prf (f i) (hf i))⟩
-
-Depends on / 依赖: CanLift, CanLift.prf, Classical, Classical.choose
+--- 原说明 ---
+Enable automatic handling of pi types in `CanLift`.
 -/
-instance Pi.canLift (ι : Sort*) (α β : ι -> Sort*) (coe : forall i, β i -> α i) (P : forall i, α i -> Prop)
-    [forall i, CanLift (α i) (β i) (coe i) (P i)] :
-    CanLift (forall i, α i) (forall i, β i) (fun f i => coe i (f i)) fun f => forall i, P i (f i) where
+instance Pi.canLift (ι : Sort*) (α β : ι → Sort*) (coe : ∀ i, β i → α i) (P : ∀ i, α i → Prop)
+    [∀ i, CanLift (α i) (β i) (coe i) (P i)] :
+    CanLift (∀ i, α i) (∀ i, β i) (fun f i ↦ coe i (f i)) fun f ↦ ∀ i, P i (f i) where
   prf f hf := ⟨fun i => Classical.choose (CanLift.prf (f i) (hf i)),
     funext fun i => Classical.choose_spec (CanLift.prf (f i) (hf i))⟩
 
-/--
-Instance `Prod.instCanLift` / 实例 `Prod.instCanLift`
+/-- Enable automatic handling of product types in `CanLift`. -/
+/-
+**Prod.instCanLift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.instCanLift {α β γ δ : Type*} {coeβα condβα coeδγ condδγ} [CanLift α 
+β coeβα condβα] [CanLift γ δ coeδγ condδγ] : CanLift (α × γ) (β × δ) (Prod.map c
+oeβα coeδγ) (fun x => condβα x.1 ∧ condδγ x.2) where prf
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance Prod.instCanLift
-  signature: {α β γ δ : Type*} {coeβα condβα coeδγ condδγ} [CanLift α β coeβα condβα]
-  body: by
-    rintro ⟨x, y⟩ ⟨hx, hy⟩
-    rcases CanLift.prf (β := β) x hx with ⟨x, rfl⟩
-    rcases CanLift.prf (β := δ) y hy with ⟨y, rfl⟩
-    exact ⟨(x, y), by simp⟩
-
-中文:
-实例 积类型.instCanLift
-  签名: {α β γ δ : 类型} {coeβα condβα coeδγ condδγ} [CanLift α β coeβα condβα]
-  定义体: by
-    rintro ⟨x, y⟩ ⟨hx, hy⟩
-    rcases CanLift.prf (β := β) x hx with ⟨x, rfl⟩
-    rcases CanLift.prf (β := δ) y hy with ⟨y, rfl⟩
-    exact ⟨(x, y), by simp⟩
-
-Depends on / 依赖: CanLift, CanLift.prf
+--- 原说明 ---
+Enable automatic handling of product types in `CanLift`.
 -/
 instance Prod.instCanLift {α β γ δ : Type*} {coeβα condβα coeδγ condδγ} [CanLift α β coeβα condβα]
     [CanLift γ δ coeδγ condδγ] :
-    CanLift (α × γ) (β × δ) (Prod.map coeβα coeδγ) (fun x => condβα x.1 ∧ condδγ x.2) where
+    CanLift (α × γ) (β × δ) (Prod.map coeβα coeδγ) (fun x ↦ condβα x.1 ∧ condδγ x.2) where
   prf := by
     rintro ⟨x, y⟩ ⟨hx, hy⟩
     rcases CanLift.prf (β := β) x hx with ⟨x, rfl⟩
     rcases CanLift.prf (β := δ) y hy with ⟨y, rfl⟩
     exact ⟨(x, y), by simp⟩
-
-/--
-theorem `Subtype.exists_pi_extension` / 定理 `Subtype.exists_pi_extension`
-
-English:
-theorem Subtype.exists_pi_extension
-  statement: {ι : Sort*} {α : ι -> Sort*} [ne : forall i, Nonempty (α i)]
-  proof: by
-  haveI : DecidablePred p := fun i => Classical.propDecidable (p i)
-  exact ⟨fun i => if hi : p i then f ⟨i, hi⟩ else Classical.choice (ne i),
-    funext fun i => dif_pos i.2⟩
-
-中文:
-定理 子类型.存在_pi_extension
-  结论: {ι : 类型层*} {α : ι -> 类型层*} [ne : 对任意 i, 非空 (α i)]
-  证明: by
-  haveI : DecidablePred p := fun i => Classical.propDecidable (p i)
-  exact ⟨fun i => if hi : p i then f ⟨i, hi⟩ else Classical.choice (ne i),
-    funext fun i => dif_pos i.2⟩
-
-Depends on / 依赖: Classical, Classical.choice, Classical.propDecidable, DecidablePred, choice, dif_pos, propDecidable
+/-
+**Subtype.exists_pi_extension** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subtype.exists_pi_extension {ι : Sort*} {α : ι -> Sort*} [ne : forall i, N
+onempty (α i)] {p : ι -> Prop} (f : forall i : Subtype p, α i) : exists g : fora
+ll i : ι, α i, (fun i : Subtype p => g i) = f
+参数：α i；f : forall i : Subtype p, α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem Subtype.exists_pi_extension {ι : Sort*} {α : ι -> Sort*} [ne : forall i, Nonempty (α i)]
-    {p : ι -> Prop} (f : forall i : Subtype p, α i) :
-    exists g : forall i : ι, α i, (fun i : Subtype p => g i) = f := by
-  haveI : DecidablePred p := fun i => Classical.propDecidable (p i)
+theorem Subtype.exists_pi_extension {ι : Sort*} {α : ι → Sort*} [ne : ∀ i, Nonempty (α i)]
+    {p : ι → Prop} (f : ∀ i : Subtype p, α i) :
+    ∃ g : ∀ i : ι, α i, (fun i : Subtype p => g i) = f := by
+  haveI : DecidablePred p := fun i ↦ Classical.propDecidable (p i)
   exact ⟨fun i => if hi : p i then f ⟨i, hi⟩ else Classical.choice (ne i),
-    funext fun i => dif_pos i.2⟩
-
-/--
-Instance `PiSubtype.canLift` / 实例 `PiSubtype.canLift`
-
-English:
-instance PiSubtype.canLift
-  signature: (ι : Sort*) (α : ι -> Sort*) [forall i, Nonempty (α i)] (p : ι -> Prop)
-  body: Subtype.exists_pi_extension f
-
-中文:
-实例 PiSubtype.canLift
-  签名: (ι : 类型层*) (α : ι -> 类型层*) [对任意 i, 非空 (α i)] (p : ι -> 命题)
-  定义体: Subtype.exists_pi_extension f
-
-Depends on / 依赖: Subtype, Subtype.exists_pi_extension, exists_pi_extension
+    funext fun i ↦ dif_pos i.2⟩
+/-
+**PiSubtype.canLift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PiSubtype.canLift (ι : Sort*) (α : ι -> Sort*) [forall i, Nonempty (α i)] 
+(p : ι -> Prop) : CanLift (forall i : Subtype p, α i) (forall i, α i) (fun f i =
+> f i) fun _ => True where prf f _
+参数：ι : Sort*；α : ι -> Sort*；α i；p : ι -> Prop。
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.exists_pi_extension`：Subtype.exists_pi_extension {ι : Sort*} {α 
+: ι -> Sort*} [ne : forall i, Nonempty (α i)] {p : ι -> Prop} (f : forall i : Su
+btype p, α i) : e…
 -/
-instance PiSubtype.canLift (ι : Sort*) (α : ι -> Sort*) [forall i, Nonempty (α i)] (p : ι -> Prop) :
-    CanLift (forall i : Subtype p, α i) (forall i, α i) (fun f i => f i) fun _ => True where
+instance PiSubtype.canLift (ι : Sort*) (α : ι → Sort*) [∀ i, Nonempty (α i)] (p : ι → Prop) :
+    CanLift (∀ i : Subtype p, α i) (∀ i, α i) (fun f i => f i) fun _ => True where
   prf f _ := Subtype.exists_pi_extension f
 
 -- TODO: test if we need this instance in Lean 4
-/--
-Instance `PiSubtype.canLift'` / 实例 `PiSubtype.canLift'`
-
-English:
-instance PiSubtype.canLift'
-  signature: (ι : Sort*) (α : Sort*) [Nonempty α] (p : ι -> Prop)
-  body: PiSubtype.canLift ι (fun _ => α) p
-
-中文:
-实例 PiSubtype.canLift'
-  签名: (ι : 类型层*) (α : 类型层*) [非空 α] (p : ι -> 命题)
-  定义体: PiSubtype.canLift ι (fun _ => α) p
-
-Depends on / 依赖: PiSubtype, PiSubtype.canLift, canLift
+/-
+**PiSubtype.canLift'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PiSubtype.canLift' (ι : Sort*) (α : Sort*) [Nonempty α] (p : ι -> Prop) : 
+CanLift (Subtype p -> α) (ι -> α) (fun f i => f i) fun _ => True
+参数：ι : Sort*；α : Sort*；p : ι -> Prop。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance PiSubtype.canLift' (ι : Sort*) (α : Sort*) [Nonempty α] (p : ι -> Prop) :
-    CanLift (Subtype p -> α) (ι -> α) (fun f i => f i) fun _ => True :=
+instance PiSubtype.canLift' (ι : Sort*) (α : Sort*) [Nonempty α] (p : ι → Prop) :
+    CanLift (Subtype p → α) (ι → α) (fun f i => f i) fun _ => True :=
   PiSubtype.canLift ι (fun _ => α) p
-
-/--
-Instance `Subtype.canLift` / 实例 `Subtype.canLift`
-
-English:
-instance Subtype.canLift
-  signature: {α : Sort*} (p : α -> Prop)
-  body: ⟨⟨a, ha⟩, rfl⟩
-
-中文:
-实例 子类型.canLift
-  签名: {α : 类型层*} (p : α -> 命题)
-  定义体: ⟨⟨a, ha⟩, rfl⟩
+/-
+**Subtype.canLift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Subtype.canLift {α : Sort*} (p : α -> Prop) : CanLift α { x // p x } Subty
+pe.val p where prf a ha
+参数：p : α -> Prop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Subtype.canLift {α : Sort*} (p : α -> Prop) :
+instance Subtype.canLift {α : Sort*} (p : α → Prop) :
     CanLift α { x // p x } Subtype.val p where prf a ha :=
   ⟨⟨a, ha⟩, rfl⟩
 
@@ -248,8 +209,8 @@ example (n : ℤ) (h : P n) : n = 3 := by
   · unfold P at h; linarith
   · exact h
 
-example (n : Int) (hn : n >= 0) (h : P n) : n = 3 := by
-  lift n to Nat using hn
+example (n : ℤ) (hn : n ≥ 0) (h : P n) : n = 3 := by
+  lift n to ℕ using hn
   /-
   One goal:
   n : ℕ
@@ -258,9 +219,9 @@ example (n : Int) (hn : n >= 0) (h : P n) : n = 3 := by
   -/
   exact h
 
-example (n : Int) (hn : n + 3 >= 0) (h : P (n + 3)) :
+example (n : ℤ) (hn : n + 3 ≥ 0) (h : P (n + 3)) :
     n + 3 = n * 2 + 3 := by
-  lift n + 3 to Nat using hn with k hk
+  lift n + 3 to ℕ using hn with k hk
   /-
   One goal:
   n : ℤ
@@ -275,28 +236,15 @@ example (n : Int) (hn : n + 3 >= 0) (h : P (n + 3)) :
 syntax (name := lift) "lift " term " to " term (" using " term)?
   (" with " ident (ppSpace colGt ident)? (ppSpace colGt ident)?)? : tactic
 
-/--
-Definition of `Lift.getInst` / `Lift.getInst` 的定义
+/-- Generate instance for the `lift` tactic. -/
+/-
+**Mathlib.Tactic.Lift.getInst** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lift`。
+形式化陈述：Expr → Expr → MetaM (Expr × Expr × Expr)
+参数：Expr × Expr × Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lift.getInst
-  signature: (old_tp new_tp : Expr)
-  body: do
-  let coe ← mkFreshExprMVar (some <| .forallE `a new_tp old_tp .default)
-  let p ← mkFreshExprMVar (some <| .forallE `a old_tp (.sort .zero) .default)
-  let inst_type ← mkAppM ``CanLift #[old_tp, new_tp, coe, p]
-  let inst ← synthInstance inst_type -- TODO: catch error
-  return (← instantiateMVars p, ← instantiateMVars coe, ← instantiateMVars inst)
-
-中文:
-定义 Lift.getInst
-  签名: (old_tp new_tp : Expr)
-  定义体: do
-  let coe ← mkFreshExprMVar (some <| .forallE `a new_tp old_tp .default)
-  let p ← mkFreshExprMVar (some <| .forallE `a old_tp (.sort .zero) .default)
-  let inst_type ← mkAppM ``CanLift #[old_tp, new_tp, coe, p]
-  let inst ← synthInstance inst_type -- TODO: catch error
-  return (← instantiateMVars p, ← instantiateMVars coe, ← instantiateMVars inst)
+--- 原说明 ---
+Generate instance for the `lift` tactic.
 -/
 def Lift.getInst (old_tp new_tp : Expr) : MetaM (Expr × Expr × Expr) := do
   let coe ← mkFreshExprMVar (some <| .forallE `a new_tp old_tp .default)
@@ -305,128 +253,16 @@ def Lift.getInst (old_tp new_tp : Expr) : MetaM (Expr × Expr × Expr) := do
   let inst ← synthInstance inst_type -- TODO: catch error
   return (← instantiateMVars p, ← instantiateMVars coe, ← instantiateMVars inst)
 
-/--
-Definition of `Lift.main` / `Lift.main` 的定义
+/-- Main function for the `lift` tactic. -/
+/-
+**Mathlib.Tactic.Lift.main** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lift`。
+形式化陈述：TSyntax `term →   TSyntax `term →     Option (TSyntax `term) → Option (TSy
+ntax `ident) → Option (TSyntax `ident) → Bool → Elab.Tactic.TacticM Unit
+参数：TSyntax `term；TSyntax `ident；TSyntax `ident。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lift.main
-  signature: (e t : TSyntax `term) (hUsing : Option (TSyntax `term))
-  body: withMainContext do
-  -- Are we using a new variable for the lifted var?
-  let isNewVar := !newVarName.isNone
-  -- Name of the new hypothesis containing the equality of the lifted variable with the old one
-  -- rfl if none is given
-  let newEqName := (newEqName.map Syntax.getId).getD `rfl
-  -- Was a new hypothesis given?
-  let isNewEq := newEqName != `rfl
-  let e ← elabTerm e none
-  let goal ← getMainGoal
-  if !(← inferType (← instantiateMVars (← goal.getType))).isProp then throwError
-    "lift tactic failed. Tactic is only applicable when the target is a proposition."
-  if newVarName == none ∧ !e.isFVar then throwError
-    "lift tactic failed. When lifting an expression, a new variable name must be given"
-  let (p, coe, inst) ← Lift.getInst (← inferType e) (← Term.elabType t)
-  let prf ← match hUsing with
-    | some h => elabTermEnsuringType h (p.betaRev #[e])
-    | none => mkFreshExprMVar (some (p.betaRev #[e]))
-  let newVarName ← match newVarName with
-                 | some v => pure v.getId
-                 | none => e.fvarId!.getUserName
-  let prfEx ← mkAppOptM ``CanLift.prf #[none, none, coe, p, inst, e, prf]
-  let prfEx ← instantiateMVars prfEx
-  let prfSyn ← prfEx.toSyntax
-  -- if we have a new variable, but no hypothesis name was provided, we temporarily use a dummy
-  -- hypothesis name
-let newEqName ← if isNewVar && !isNewEq then withMainContext getUnusedUserName `tmpVar
-               else pure newEqName
-  let newEqIdent := mkIdent newEqName
-  -- Run rcases on the proof of the lift condition
-  replaceMainGoal (← Lean.Elab.Tactic.RCases.rcases #[(none, prfSyn)]
-    (.tuple Syntax.missing <| [newVarName, newEqName].map (.one Syntax.missing)) goal)
-  -- if we use a new variable, then substitute it everywhere
-  if isNewVar then
-    for decl in ← getLCtx do
-      if decl.userName != newEqName then
-        let declIdent := mkIdent decl.userName
-        evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent] at $declIdent:ident))
-    evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent]))
-  -- Clear the temporary hypothesis used for the new variable name if applicable
-  if isNewVar && !isNewEq then
-    evalTactic (← `(tactic| clear $newEqIdent))
-  -- Clear the "using" hypothesis if it's a variable in the context
-  if prf.isFVar && !keepUsing then
-    let some hUsingStx := hUsing | throwError "lift tactic failed: unreachable code was reached"
-    evalTactic (← `(tactic| try clear $hUsingStx))
-if hUsing.isNone then withMainContext setGoals (prf.mvarId! :: (← getGoals))
-
-elab_rules : tactic
-| `(tactic| lift $e to $t $[using $h]? $[with $newVarName $[$newEqName]? $[$newPrfName]?]?) =>
-withMainContext
-    let keepUsing := match h, newPrfName.join with
-      | some h, some newPrfName => h.raw == newPrfName
-      | _, _ => false
-    Lift.main e t h newVarName newEqName.join keepUsing
-
-中文:
-定义 Lift.main
-  签名: (e t : TSyntax `term) (hUsing : 选项类型 (TSyntax `term))
-  定义体: withMainContext do
-  -- Are we using a new variable for the lifted var?
-  let isNewVar := !newVarName.isNone
-  -- Name of the new hypothesis containing the equality of the lifted variable with the old one
-  -- rfl if none is given
-  let newEqName := (newEqName.map Syntax.getId).getD `rfl
-  -- Was a new hypothesis given?
-  let isNewEq := newEqName != `rfl
-  let e ← elabTerm e none
-  let goal ← getMainGoal
-  if !(← inferType (← instantiateMVars (← goal.getType))).isProp then throwError
-    "lift tactic failed. Tactic is only applicable when the target is a proposition."
-  if newVarName == none ∧ !e.isFVar then throwError
-    "lift tactic failed. When lifting an expression, a new variable name must be given"
-  let (p, coe, inst) ← Lift.getInst (← inferType e) (← Term.elabType t)
-  let prf ← match hUsing with
-    | some h => elabTermEnsuringType h (p.betaRev #[e])
-    | none => mkFreshExprMVar (some (p.betaRev #[e]))
-  let newVarName ← match newVarName with
-                 | some v => pure v.getId
-                 | none => e.fvarId!.getUserName
-  let prfEx ← mkAppOptM ``CanLift.prf #[none, none, coe, p, inst, e, prf]
-  let prfEx ← instantiateMVars prfEx
-  let prfSyn ← prfEx.toSyntax
-  -- if we have a new variable, but no hypothesis name was provided, we temporarily use a dummy
-  -- hypothesis name
-let newEqName ← if isNewVar && !isNewEq then withMainContext getUnusedUserName `tmpVar
-               else pure newEqName
-  let newEqIdent := mkIdent newEqName
-  -- Run rcases on the proof of the lift condition
-  replaceMainGoal (← Lean.Elab.Tactic.RCases.rcases #[(none, prfSyn)]
-    (.tuple Syntax.missing <| [newVarName, newEqName].map (.one Syntax.missing)) goal)
-  -- if we use a new variable, then substitute it everywhere
-  if isNewVar then
-    for decl in ← getLCtx do
-      if decl.userName != newEqName then
-        let declIdent := mkIdent decl.userName
-        evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent] at $declIdent:ident))
-    evalTactic (← `(tactic| simp -failIfUnchanged only [← $newEqIdent]))
-  -- Clear the temporary hypothesis used for the new variable name if applicable
-  if isNewVar && !isNewEq then
-    evalTactic (← `(tactic| clear $newEqIdent))
-  -- Clear the "using" hypothesis if it's a variable in the context
-  if prf.isFVar && !keepUsing then
-    let some hUsingStx := hUsing | throwError "lift tactic failed: unreachable code was reached"
-    evalTactic (← `(tactic| try clear $hUsingStx))
-if hUsing.isNone then withMainContext setGoals (prf.mvarId! :: (← getGoals))
-
-elab_rules : tactic
-| `(tactic| lift $e to $t $[using $h]? $[with $newVarName $[$newEqName]? $[$newPrfName]?]?) =>
-withMainContext
-    let keepUsing := match h, newPrfName.join with
-      | some h, some newPrfName => h.raw == newPrfName
-      | _, _ => false
-    Lift.main e t h newVarName newEqName.join keepUsing
-
-Depends on / 依赖: withMainContext
+--- 原说明 ---
+Main function for the `lift` tactic.
 -/
 def Lift.main (e t : TSyntax `term) (hUsing : Option (TSyntax `term))
     (newVarName newEqName : Option (TSyntax `ident)) (keepUsing : Bool) : TacticM Unit :=
@@ -450,13 +286,13 @@ def Lift.main (e t : TSyntax `term) (hUsing : Option (TSyntax `term))
     | none => mkFreshExprMVar (some (p.betaRev #[e]))
   let newVarName ← match newVarName with
                  | some v => pure v.getId
-                 | none => e.fvarId!.getUserName
+                 | none   => e.fvarId!.getUserName
   let prfEx ← mkAppOptM ``CanLift.prf #[none, none, coe, p, inst, e, prf]
   let prfEx ← instantiateMVars prfEx
   let prfSyn ← prfEx.toSyntax
   -- if we have a new variable, but no hypothesis name was provided, we temporarily use a dummy
   -- hypothesis name
-let newEqName ← if isNewVar && !isNewEq then withMainContext getUnusedUserName `tmpVar
+  let newEqName ← if isNewVar && !isNewEq then withMainContext <| getUnusedUserName `tmpVar
                else pure newEqName
   let newEqIdent := mkIdent newEqName
   -- Run rcases on the proof of the lift condition
@@ -476,14 +312,15 @@ let newEqName ← if isNewVar && !isNewEq then withMainContext getUnusedUserName
   if prf.isFVar && !keepUsing then
     let some hUsingStx := hUsing | throwError "lift tactic failed: unreachable code was reached"
     evalTactic (← `(tactic| try clear $hUsingStx))
-if hUsing.isNone then withMainContext setGoals (prf.mvarId! :: (← getGoals))
+  if hUsing.isNone then withMainContext <| setGoals (prf.mvarId! :: (← getGoals))
 
 elab_rules : tactic
 | `(tactic| lift $e to $t $[using $h]? $[with $newVarName $[$newEqName]? $[$newPrfName]?]?) =>
-withMainContext
+  withMainContext <|
     let keepUsing := match h, newPrfName.join with
       | some h, some newPrfName => h.raw == newPrfName
       | _, _ => false
     Lift.main e t h newVarName newEqName.join keepUsing
 
 end Mathlib.Tactic
+

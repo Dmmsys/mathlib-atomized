@@ -41,80 +41,67 @@ public section
 
 variable {X : Type*}
 
-/--
-Definition of `IsUltrametricDist` / `IsUltrametricDist` 的定义
+/-- The `dist : X → X → ℝ` respects the ultrametric inequality
+of `dist(x, z) ≤ max (dist(x,y)) (dist(y,z))`. -/
+/-
+**IsUltrametricDist** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_2) → [Dist X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsUltrametricDist
-  parameters: (X : Type*) [Dist X]
-  axioms and operations (1):
-    - dist_triangle_max : forall x y z : X, dist x z <= max (dist x y) (dist y z)
-
-中文:
-类 是UltrametricDist
-  参数: (X : 类型) [Dist X]
-  公理与运算 (1 个):
-    - dist_triangle_max : 对任意 x y z : X, dist x z <= 最大值 (dist x y) (dist y z)
+--- 原说明 ---
+The `dist : X → X → ℝ` respects the ultrametric inequality
+of `dist(x, z) ≤ max (dist(x,y)) (dist(y,z))`.
 -/
 class IsUltrametricDist (X : Type*) [Dist X] : Prop where
-  dist_triangle_max : forall x y z : X, dist x z <= max (dist x y) (dist y z)
+  dist_triangle_max : ∀ x y z : X, dist x z ≤ max (dist x y) (dist y z)
 
 open Metric
 
-variable [PseudoMetricSpace X] [IsUltrametricDist X] (x y z : X) (r s : Real)
-
-/--
-lemma `dist_triangle_max` / 引理 `dist_triangle_max`
-
-English:
-lemma dist_triangle_max
-  statement: dist x z <= max (dist x y) (dist y z)
-  proof: IsUltrametricDist.dist_triangle_max x y z
-
-中文:
-引理 dist_triangle_max
-  结论: dist x z <= 最大值 (dist x y) (dist y z)
-  证明: IsUltrametricDist.dist_triangle_max x y z
-
-Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.dist_triangle_max, dist_triangle_max
+variable [PseudoMetricSpace X] [IsUltrametricDist X] (x y z : X) (r s : ℝ)
+/-
+**dist_triangle_max** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：dist_triangle_max : dist x z <= max (dist x y) (dist y z)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUltrametricDist.dist_triangle_max`：∀ {X : Type u_2} {inst : Dist X} [s
+elf : IsUltrametricDist X] (x y z : X), dist x z ≤ max (dist x y) (dist y z)
 -/
-lemma dist_triangle_max : dist x z <= max (dist x y) (dist y z) :=
+lemma dist_triangle_max : dist x z ≤ max (dist x y) (dist y z) :=
   IsUltrametricDist.dist_triangle_max x y z
 
 namespace IsUltrametricDist
 
-/--
-lemma `dist_eq_max_of_dist_ne_dist` / 引理 `dist_eq_max_of_dist_ne_dist`
+/-- All triangles are isosceles in an ultrametric space. -/
+/-
+**IsUltrametricDist.dist_eq_max_of_dist_ne_dist** 是 Mathlib 中的一个引理，位于命名空间 `IsUlt
+rametricDist`。
+形式化陈述：dist_eq_max_of_dist_ne_dist (h : dist x y != dist y z) : dist x z = max (d
+ist x y) (dist y z)
+参数：h : dist x y != dist y z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IsUltrametricDist.dist_triangle_max`：∀ {X : Type u_2} {inst : Dist X} [s
+elf : IsUltrametricDist X] (x y z : X), dist x z ≤ max (dist x y) (dist y z)
+· 使用定理 `Ne.lt_or_gt`：Ne.lt_or_gt (h : a != b) : a < b ∨ b < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_max_iff`：le_max_iff : a <= max b c ↔ a <= b ∨ a <= c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
 
-English:
-lemma dist_eq_max_of_dist_ne_dist
-  given: (h : dist x y != dist y z)
-  proof: by
-  apply le_antisymm (dist_triangle_max x y z)
-  rcases h.lt_or_gt with h | h
-  · rw [max_eq_right h.le]
-    apply (le_max_iff.mp <| dist_triangle_max y x z).resolve_left
-    simpa only [not_le, dist_comm x y] using h
-  · rw [max_eq_left h.le, dist_comm x y, dist_comm x z]
-    apply (le_max_iff.mp <| dist_triangle_max y z x).resolve_left
-    simpa only [not_le, dist_comm x y] using h
-
-中文:
-引理 dist_eq_max_of_dist_ne_dist
-  条件: (h : dist x y != dist y z)
-  证明: by
-  apply le_antisymm (dist_triangle_max x y z)
-  rcases h.lt_or_gt with h | h
-  · rw [max_eq_right h.le]
-    apply (le_max_iff.mp <| dist_triangle_max y x z).resolve_left
-    simpa only [not_le, dist_comm x y] using h
-  · rw [max_eq_left h.le, dist_comm x y, dist_comm x z]
-    apply (le_max_iff.mp <| dist_triangle_max y z x).resolve_left
-    simpa only [not_le, dist_comm x y] using h
-
-Depends on / 依赖: dist_comm, dist_triangle_max, h.le, h.lt_or_gt, le_antisymm, le_max_iff, le_max_iff.mp, lt_or_gt, max_eq_left, max_eq_right, not_le, resolve_left
+--- 原说明 ---
+All triangles are isosceles in an ultrametric space.
 -/
-lemma dist_eq_max_of_dist_ne_dist (h : dist x y != dist y z) :
+lemma dist_eq_max_of_dist_ne_dist (h : dist x y ≠ dist y z) :
     dist x z = max (dist x y) (dist y z) := by
   apply le_antisymm (dist_triangle_max x y z)
   rcases h.lt_or_gt with h | h
@@ -124,244 +111,223 @@ lemma dist_eq_max_of_dist_ne_dist (h : dist x y != dist y z) :
   · rw [max_eq_left h.le, dist_comm x y, dist_comm x z]
     apply (le_max_iff.mp <| dist_triangle_max y z x).resolve_left
     simpa only [not_le, dist_comm x y] using h
-
-/--
-Instance `subtype` / 实例 `subtype`
-
-English:
-instance subtype
-  signature: (p : X -> Prop)
-  body: ⟨fun _ _ _ => by simpa [Subtype.dist_eq] using dist_triangle_max _ _ _⟩
-
-中文:
-实例 subtype
-  签名: (p : X -> 命题)
-  定义体: ⟨fun _ _ _ => by simpa [Subtype.dist_eq] using dist_triangle_max _ _ _⟩
-
-Depends on / 依赖: Subtype, Subtype.dist_eq, dist_eq, dist_triangle_max
+/-
+**IsUltrametricDist.subtype** 是 Mathlib 中的一个实例，位于命名空间 `IsUltrametricDist`。
+形式化陈述：subtype (p : X -> Prop) : IsUltrametricDist (Subtype p)
+参数：p : X -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUltrametricDist.dist_triangle_max`：∀ {X : Type u_2} {inst : Dist X} [s
+elf : IsUltrametricDist X] (x y z : X), dist x z ≤ max (dist x y) (dist y z)
 -/
-instance subtype (p : X -> Prop) : IsUltrametricDist (Subtype p) :=
-  ⟨fun _ _ _ => by simpa [Subtype.dist_eq] using dist_triangle_max _ _ _⟩
-
-/--
-lemma `ball_eq_of_mem` / 引理 `ball_eq_of_mem`
-
-English:
-lemma ball_eq_of_mem
-  given: {x y : X} {r : Real} (h : y in ball x r)
-  statement: ball x r = ball y r
-  proof: by
-  ext a
-  simp_rw [mem_ball] at h ⊢
-  constructor <;> intro h' <;>
-  exact (dist_triangle_max _ _ _).trans_lt (max_lt h' (dist_comm x _ ▸ h))
-
-中文:
-引理 ball_eq_of_mem
-  条件: {x y : X} {r : 实数} (h : y in ball x r)
-  结论: ball x r = ball y r
-  证明: by
-  ext a
-  simp_rw [mem_ball] at h ⊢
-  constructor <;> intro h' <;>
-  exact (dist_triangle_max _ _ _).trans_lt (max_lt h' (dist_comm x _ ▸ h))
-
-Depends on / 依赖: dist_comm, dist_triangle_max, max_lt, mem_ball, simp_rw, trans_lt
+instance subtype (p : X → Prop) : IsUltrametricDist (Subtype p) :=
+  ⟨fun _ _ _ ↦ by simpa [Subtype.dist_eq] using dist_triangle_max _ _ _⟩
+/-
+**IsUltrametricDist.ball_eq_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametricDist`
+。
+形式化陈述：ball_eq_of_mem {x y : X} {r : Real} (h : y in ball x r) : ball x r = ball 
+y r
+参数：h : y in ball x r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `IsUltrametricDist.dist_triangle_max`：∀ {X : Type u_2} {inst : Dist X} [s
+elf : IsUltrametricDist X] (x y z : X), dist x z ≤ max (dist x y) (dist y z)
+· 使用定理 `max_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, b < a → c <
+ a → max b c < a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
 -/
-lemma ball_eq_of_mem {x y : X} {r : Real} (h : y in ball x r) : ball x r = ball y r := by
+lemma ball_eq_of_mem {x y : X} {r : ℝ} (h : y ∈ ball x r) : ball x r = ball y r := by
   ext a
   simp_rw [mem_ball] at h ⊢
   constructor <;> intro h' <;>
   exact (dist_triangle_max _ _ _).trans_lt (max_lt h' (dist_comm x _ ▸ h))
-
-/--
-lemma `ball_subset_trichotomy` / 引理 `ball_subset_trichotomy`
-
-English:
-lemma ball_subset_trichotomy
-  proof: by
-  wlog! hrs : r <= s generalizing x y r s
-  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
-    exact this y x s r hrs.le
-.symm.imp (fun h => ?_) (Or.inr ·) · refine Set.disjoint_or_nonempty_inter (ball x r) (ball y s)
-    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
-    have hx := ball_subset_ball hrs (x := x)
-    rwa [ball_eq_of_mem hyz |>.trans (ball_eq_of_mem <| hx hxz).symm]
-
-中文:
-引理 ball_subset_trichotomy
-  证明: by
-  wlog! hrs : r <= s generalizing x y r s
-  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
-    exact this y x s r hrs.le
-.symm.imp (fun h => ?_) (Or.inr ·) · refine Set.disjoint_or_nonempty_inter (ball x r) (ball y s)
-    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
-    have hx := ball_subset_ball hrs (x := x)
-    rwa [ball_eq_of_mem hyz |>.trans (ball_eq_of_mem <| hx hxz).symm]
-
-Depends on / 依赖: Or.inr, Set.disjoint_or_nonempty_inter, Set.mem_inter_iff, ball_eq_of_mem, ball_subset_ball, disjoint_comm, disjoint_or_nonempty_inter, generalizing, h.some_mem, hrs.le, mem_inter_iff, or_assoc, or_comm, some_mem, subseteq, symm.imp
+/-
+**IsUltrametricDist.ball_subset_trichotomy** 是 Mathlib 中的一个引理，位于命名空间 `IsUltramet
+ricDist`。
+形式化陈述：ball_subset_trichotomy : ball x r subseteq ball y s ∨ ball y s subseteq ba
+ll x r ∨ Disjoint (ball x r) (ball y s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_inter_iff`：mem_inter_iff (x : α) (a b : Set α) : x in a inter b 
+↔ x in a ∧ x in b
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Metric.ball_subset_ball`：ball_subset_ball (h : ε₁ <= ε₂) : ball x ε₁ sub
+seteq ball x ε₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `IsUltrametricDist.ball_eq_of_mem`：ball_eq_of_mem {x y : X} {r : Real} (h
+ : y in ball x r) : ball x r = ball y r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `Set.disjoint_or_nonempty_inter`：disjoint_or_nonempty_inter (s t : Set α)
+ : Disjoint s t ∨ (s inter t).Nonempty
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `or_assoc`：∀ {a b c : Prop}, (a ∨ b) ∨ c ↔ a ∨ b ∨ c
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 lemma ball_subset_trichotomy :
-    ball x r subseteq ball y s ∨ ball y s subseteq ball x r ∨ Disjoint (ball x r) (ball y s) := by
-  wlog! hrs : r <= s generalizing x y r s
-  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
+    ball x r ⊆ ball y s ∨ ball y s ⊆ ball x r ∨ Disjoint (ball x r) (ball y s) := by
+  wlog! hrs : r ≤ s generalizing x y r s
+  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) ⊆ _), or_assoc]
     exact this y x s r hrs.le
-.symm.imp (fun h => ?_) (Or.inr ·) · refine Set.disjoint_or_nonempty_inter (ball x r) (ball y s)
+  · refine Set.disjoint_or_nonempty_inter (ball x r) (ball y s) |>.symm.imp (fun h ↦ ?_) (Or.inr ·)
     obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
     have hx := ball_subset_ball hrs (x := x)
     rwa [ball_eq_of_mem hyz |>.trans (ball_eq_of_mem <| hx hxz).symm]
-
-/--
-lemma `ball_eq_or_disjoint` / 引理 `ball_eq_or_disjoint`
-
-English:
-lemma ball_eq_or_disjoint
-  proof: by
-.symm.imp (fun h => ?_) id refine Set.disjoint_or_nonempty_inter (ball x r) (ball y r)
-have h₁ := ball_eq_of_mem Set.inter_subset_left h.some_mem
-have h₂ := ball_eq_of_mem Set.inter_subset_right h.some_mem
-  exact h₁.trans h₂.symm
-
-中文:
-引理 ball_eq_or_disjoint
-  证明: by
-.symm.imp (fun h => ?_) id refine Set.disjoint_or_nonempty_inter (ball x r) (ball y r)
-have h₁ := ball_eq_of_mem Set.inter_subset_left h.some_mem
-have h₂ := ball_eq_of_mem Set.inter_subset_right h.some_mem
-  exact h₁.trans h₂.symm
-
-Depends on / 依赖: Set.disjoint_or_nonempty_inter, Set.inter_subset_left, Set.inter_subset_right, ball_eq_of_mem, disjoint_or_nonempty_inter, h.some_mem, inter_subset_left, inter_subset_right, some_mem, symm.imp
+/-
+**IsUltrametricDist.ball_eq_or_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametric
+Dist`。
+形式化陈述：ball_eq_or_disjoint : ball x r = ball y r ∨ Disjoint (ball x r) (ball y r)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用引理 `IsUltrametricDist.ball_eq_of_mem`：ball_eq_of_mem {x y : X} {r : Real} (h
+ : y in ball x r) : ball x r = ball y r
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `Set.disjoint_or_nonempty_inter`：disjoint_or_nonempty_inter (s t : Set α)
+ : Disjoint s t ∨ (s inter t).Nonempty
 -/
 lemma ball_eq_or_disjoint :
     ball x r = ball y r ∨ Disjoint (ball x r) (ball y r) := by
-.symm.imp (fun h => ?_) id refine Set.disjoint_or_nonempty_inter (ball x r) (ball y r)
-have h₁ := ball_eq_of_mem Set.inter_subset_left h.some_mem
-have h₂ := ball_eq_of_mem Set.inter_subset_right h.some_mem
+  refine Set.disjoint_or_nonempty_inter (ball x r) (ball y r) |>.symm.imp (fun h ↦ ?_) id
+  have h₁ := ball_eq_of_mem <| Set.inter_subset_left h.some_mem
+  have h₂ := ball_eq_of_mem <| Set.inter_subset_right h.some_mem
   exact h₁.trans h₂.symm
-
-/--
-lemma `closedBall_eq_of_mem` / 引理 `closedBall_eq_of_mem`
-
-English:
-lemma closedBall_eq_of_mem
-  given: {x y : X} {r : Real} (h : y in closedBall x r)
-  proof: by
-  ext
-  simp_rw [mem_closedBall] at h ⊢
-  constructor <;> intro h' <;>
-  exact (dist_triangle_max _ _ _).trans (max_le h' (dist_comm x _ ▸ h))
-
-中文:
-引理 closedBall_eq_of_mem
-  条件: {x y : X} {r : 实数} (h : y in closedBall x r)
-  证明: by
-  ext
-  simp_rw [mem_closedBall] at h ⊢
-  constructor <;> intro h' <;>
-  exact (dist_triangle_max _ _ _).trans (max_le h' (dist_comm x _ ▸ h))
-
-Depends on / 依赖: dist_comm, dist_triangle_max, max_le, mem_closedBall, simp_rw
+/-
+**IsUltrametricDist.closedBall_eq_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametri
+cDist`。
+形式化陈述：closedBall_eq_of_mem {x y : X} {r : Real} (h : y in closedBall x r) : clos
+edBall x r = closedBall y r
+参数：h : y in closedBall x r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `IsUltrametricDist.dist_triangle_max`：∀ {X : Type u_2} {inst : Dist X} [s
+elf : IsUltrametricDist X] (x y z : X), dist x z ≤ max (dist x y) (dist y z)
+· 使用定理 `max_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, a ≤ c → b ≤
+ c → max a b ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
 -/
-lemma closedBall_eq_of_mem {x y : X} {r : Real} (h : y in closedBall x r) :
+lemma closedBall_eq_of_mem {x y : X} {r : ℝ} (h : y ∈ closedBall x r) :
     closedBall x r = closedBall y r := by
   ext
   simp_rw [mem_closedBall] at h ⊢
   constructor <;> intro h' <;>
   exact (dist_triangle_max _ _ _).trans (max_le h' (dist_comm x _ ▸ h))
-
-/--
-lemma `closedBall_subset_trichotomy` / 引理 `closedBall_subset_trichotomy`
-
-English:
-lemma closedBall_subset_trichotomy
-  proof: by
-  wlog! hrs : r <= s generalizing x y r s
-  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
-    exact this y x s r hrs.le
-.symm.imp · refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y s)
-      (fun h => ?_) (Or.inr ·)
-    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
-    have hx := closedBall_subset_closedBall hrs (x := x)
-    rwa [closedBall_eq_of_mem hyz |>.trans (closedBall_eq_of_mem <| hx hxz).symm]
-
-中文:
-引理 closedBall_subset_trichotomy
-  证明: by
-  wlog! hrs : r <= s generalizing x y r s
-  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
-    exact this y x s r hrs.le
-.symm.imp · refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y s)
-      (fun h => ?_) (Or.inr ·)
-    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
-    have hx := closedBall_subset_closedBall hrs (x := x)
-    rwa [closedBall_eq_of_mem hyz |>.trans (closedBall_eq_of_mem <| hx hxz).symm]
-
-Depends on / 依赖: Or.inr, Set.disjoint_or_nonempty_inter, Set.mem_inter_iff, closedBall, closedBall_eq_of_mem, closedBall_subset_closedBall, disjoint_comm, disjoint_or_nonempty_inter, generalizing, h.some_mem, hrs.le, mem_inter_iff, or_assoc, or_comm, some_mem, subseteq, symm.imp
+/-
+**IsUltrametricDist.closedBall_subset_trichotomy** 是 Mathlib 中的一个引理，位于命名空间 `IsUl
+trametricDist`。
+形式化陈述：closedBall_subset_trichotomy : closedBall x r subseteq closedBall y s ∨ cl
+osedBall y s subseteq closedBall x r ∨ Disjoint (closedBall x r) (closedBall y s
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_inter_iff`：mem_inter_iff (x : α) (a b : Set α) : x in a inter b 
+↔ x in a ∧ x in b
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Metric.closedBall_subset_closedBall`：closedBall_subset_closedBall (h : ε
+₁ <= ε₂) : closedBall x ε₁ subseteq closedBall x ε₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `IsUltrametricDist.closedBall_eq_of_mem`：closedBall_eq_of_mem {x y : X} {
+r : Real} (h : y in closedBall x r) : closedBall x r = closedBall y r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `Set.disjoint_or_nonempty_inter`：disjoint_or_nonempty_inter (s t : Set α)
+ : Disjoint s t ∨ (s inter t).Nonempty
+· 使用定理 `disjoint_comm`：disjoint_comm : Disjoint a b ↔ Disjoint b a
+· 使用定理 `or_assoc`：∀ {a b c : Prop}, (a ∨ b) ∨ c ↔ a ∨ b ∨ c
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 lemma closedBall_subset_trichotomy :
-    closedBall x r subseteq closedBall y s ∨ closedBall y s subseteq closedBall x r ∨
+    closedBall x r ⊆ closedBall y s ∨ closedBall y s ⊆ closedBall x r ∨
     Disjoint (closedBall x r) (closedBall y s) := by
-  wlog! hrs : r <= s generalizing x y r s
-  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
+  wlog! hrs : r ≤ s generalizing x y r s
+  · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) ⊆ _), or_assoc]
     exact this y x s r hrs.le
-.symm.imp · refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y s)
-      (fun h => ?_) (Or.inr ·)
+  · refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y s) |>.symm.imp
+      (fun h ↦ ?_) (Or.inr ·)
     obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
     have hx := closedBall_subset_closedBall hrs (x := x)
     rwa [closedBall_eq_of_mem hyz |>.trans (closedBall_eq_of_mem <| hx hxz).symm]
-
-/--
-lemma `isClosed_ball` / 引理 `isClosed_ball`
-
-English:
-lemma isClosed_ball
-  given: (x : X) (r : Real)
-  statement: IsClosed (ball x r)
-  proof: by
-  cases le_or_gt r 0 with
-  | inl hr =>
-    simp [ball_eq_empty.mpr hr]
-  | inr h =>
-    rw [← isOpen_compl_iff]; rw [isOpen_iff]
-    push _ in _
-    intro y hy
-    cases ball_eq_or_disjoint x y r with
-    | inl hd =>
-      rw [hd] at hy
-      simp [h.not_ge] at hy
-    | inr hd =>
-      use r
-      simp [h, le_compl_iff_disjoint_left, hd]
-
-中文:
-引理 isClosed_ball
-  条件: (x : X) (r : 实数)
-  结论: 是闭集 (ball x r)
-  证明: by
-  cases le_or_gt r 0 with
-  | inl hr =>
-    simp [ball_eq_empty.mpr hr]
-  | inr h =>
-    rw [← isOpen_compl_iff]; rw [isOpen_iff]
-    push _ in _
-    intro y hy
-    cases ball_eq_or_disjoint x y r with
-    | inl hd =>
-      rw [hd] at hy
-      simp [h.not_ge] at hy
-    | inr hd =>
-      use r
-      simp [h, le_compl_iff_disjoint_left, hd]
-
-Depends on / 依赖: ball_eq_empty, ball_eq_empty.mpr, ball_eq_or_disjoint, h.not_ge, isOpen_compl_iff, isOpen_iff, le_compl_iff_disjoint_left, le_or_gt, not_ge
+/-
+**IsUltrametricDist.isClosed_ball** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametricDist`。
+形式化陈述：isClosed_ball (x : X) (r : Real) : IsClosed (ball x r)
+参数：x : X；r : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.ball_eq_empty`：ball_eq_empty : ball x ε = ∅ ↔ ε <= 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isOpen_compl_iff`：∀ {X : Type u} {s : Set X} [inst : TopologicalSpace X]
+, IsOpen sᶜ ↔ IsClosed s
+· 使用定理 `Metric.isOpen_iff`：isOpen_iff : IsOpen s ↔ forall x in s, exists ε > 0, 
+ball x ε subseteq s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `IsUltrametricDist.ball_eq_or_disjoint`：ball_eq_or_disjoint : ball x r = 
+ball y r ∨ Disjoint (ball x r) (ball y r)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_self`：dist_self (x : α) : dist x x = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma isClosed_ball (x : X) (r : Real) : IsClosed (ball x r) := by
+lemma isClosed_ball (x : X) (r : ℝ) : IsClosed (ball x r) := by
   cases le_or_gt r 0 with
   | inl hr =>
     simp [ball_eq_empty.mpr hr]
   | inr h =>
-    rw [← isOpen_compl_iff]; rw [isOpen_iff]
-    push _ in _
+    rw [← isOpen_compl_iff, isOpen_iff]
+    push _ ∈ _
     intro y hy
     cases ball_eq_or_disjoint x y r with
     | inl hd =>
@@ -370,117 +336,97 @@ lemma isClosed_ball (x : X) (r : Real) : IsClosed (ball x r) := by
     | inr hd =>
       use r
       simp [h, le_compl_iff_disjoint_left, hd]
-
-/--
-lemma `isClopen_ball` / 引理 `isClopen_ball`
-
-English:
-lemma isClopen_ball
-  statement: IsClopen (ball x r)
-  proof: ⟨isClosed_ball x r, isOpen_ball⟩
-
-中文:
-引理 isClopen_ball
-  结论: IsClopen (ball x r)
-  证明: ⟨isClosed_ball x r, isOpen_ball⟩
-
-Depends on / 依赖: isClosed_ball, isOpen_ball
+/-
+**IsUltrametricDist.isClopen_ball** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametricDist`。
+形式化陈述：isClopen_ball : IsClopen (ball x r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsUltrametricDist.isClosed_ball`：isClosed_ball (x : X) (r : Real) : IsCl
+osed (ball x r)
+· 使用定理 `Metric.isOpen_ball`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x : α} 
+{ε : ℝ}, IsOpen (Metric.ball x ε)
 -/
 lemma isClopen_ball : IsClopen (ball x r) := ⟨isClosed_ball x r, isOpen_ball⟩
-
-/--
-lemma `frontier_ball_eq_empty` / 引理 `frontier_ball_eq_empty`
-
-English:
-lemma frontier_ball_eq_empty
-  statement: frontier (ball x r) = ∅
-  proof: isClopen_iff_frontier_eq_empty.mp (isClopen_ball x r)
-
-中文:
-引理 frontier_ball_eq_empty
-  结论: frontier (ball x r) = ∅
-  证明: isClopen_iff_frontier_eq_empty.mp (isClopen_ball x r)
-
-Depends on / 依赖: isClopen_ball, isClopen_iff_frontier_eq_empty, isClopen_iff_frontier_eq_empty.mp
+/-
+**IsUltrametricDist.frontier_ball_eq_empty** 是 Mathlib 中的一个引理，位于命名空间 `IsUltramet
+ricDist`。
+形式化陈述：frontier_ball_eq_empty : frontier (ball x r) = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isClopen_iff_frontier_eq_empty`：isClopen_iff_frontier_eq_empty : IsClope
+n s ↔ frontier s = ∅
+· 使用引理 `IsUltrametricDist.isClopen_ball`：isClopen_ball : IsClopen (ball x r)
 -/
 lemma frontier_ball_eq_empty : frontier (ball x r) = ∅ :=
   isClopen_iff_frontier_eq_empty.mp (isClopen_ball x r)
-
-/--
-lemma `closedBall_eq_or_disjoint` / 引理 `closedBall_eq_or_disjoint`
-
-English:
-lemma closedBall_eq_or_disjoint
-  proof: by
-.symm.imp refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y r)
-    (fun h => ?_) id
-have h₁ := closedBall_eq_of_mem Set.inter_subset_left h.some_mem
-have h₂ := closedBall_eq_of_mem Set.inter_subset_right h.some_mem
-  exact h₁.trans h₂.symm
-
-中文:
-引理 closedBall_eq_or_disjoint
-  证明: by
-.symm.imp refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y r)
-    (fun h => ?_) id
-have h₁ := closedBall_eq_of_mem Set.inter_subset_left h.some_mem
-have h₂ := closedBall_eq_of_mem Set.inter_subset_right h.some_mem
-  exact h₁.trans h₂.symm
-
-Depends on / 依赖: Set.disjoint_or_nonempty_inter, Set.inter_subset_left, Set.inter_subset_right, closedBall, closedBall_eq_of_mem, disjoint_or_nonempty_inter, h.some_mem, inter_subset_left, inter_subset_right, some_mem, symm.imp
+/-
+**IsUltrametricDist.closedBall_eq_or_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `IsUltra
+metricDist`。
+形式化陈述：closedBall_eq_or_disjoint : closedBall x r = closedBall y r ∨ Disjoint (cl
+osedBall x r) (closedBall y r)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用引理 `IsUltrametricDist.closedBall_eq_of_mem`：closedBall_eq_of_mem {x y : X} {
+r : Real} (h : y in closedBall x r) : closedBall x r = closedBall y r
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `Set.disjoint_or_nonempty_inter`：disjoint_or_nonempty_inter (s t : Set α)
+ : Disjoint s t ∨ (s inter t).Nonempty
 -/
 lemma closedBall_eq_or_disjoint :
     closedBall x r = closedBall y r ∨ Disjoint (closedBall x r) (closedBall y r) := by
-.symm.imp refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y r)
-    (fun h => ?_) id
-have h₁ := closedBall_eq_of_mem Set.inter_subset_left h.some_mem
-have h₂ := closedBall_eq_of_mem Set.inter_subset_right h.some_mem
+  refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y r) |>.symm.imp
+    (fun h ↦ ?_) id
+  have h₁ := closedBall_eq_of_mem <| Set.inter_subset_left h.some_mem
+  have h₂ := closedBall_eq_of_mem <| Set.inter_subset_right h.some_mem
   exact h₁.trans h₂.symm
-
-/--
-lemma `isOpen_closedBall` / 引理 `isOpen_closedBall`
-
-English:
-lemma isOpen_closedBall
-  given: {r : Real} (hr : r != 0)
-  statement: IsOpen (closedBall x r)
-  proof: by
-  cases lt_or_gt_of_ne hr with
-  | inl h =>
-    simp [closedBall_eq_empty.mpr h]
-  | inr h =>
-    rw [isOpen_iff]
-    simp only [gt_iff_lt]
-    intro y hy
-    cases closedBall_eq_or_disjoint x y r with
-    | inl hd =>
-      use r
-      simp [h, hd, ball_subset_closedBall]
-    | inr hd =>
-      simp [closedBall_eq_of_mem hy, h.not_gt] at hd
-
-中文:
-引理 isOpen_closedBall
-  条件: {r : 实数} (hr : r != 0)
-  结论: 是开集 (closedBall x r)
-  证明: by
-  cases lt_or_gt_of_ne hr with
-  | inl h =>
-    simp [closedBall_eq_empty.mpr h]
-  | inr h =>
-    rw [isOpen_iff]
-    simp only [gt_iff_lt]
-    intro y hy
-    cases closedBall_eq_or_disjoint x y r with
-    | inl hd =>
-      use r
-      simp [h, hd, ball_subset_closedBall]
-    | inr hd =>
-      simp [closedBall_eq_of_mem hy, h.not_gt] at hd
-
-Depends on / 依赖: ball_subset_closedBall, closedBall_eq_empty, closedBall_eq_empty.mpr, closedBall_eq_of_mem, closedBall_eq_or_disjoint, gt_iff_lt, h.not_gt, isOpen_iff, lt_or_gt_of_ne, not_gt
+/-
+**IsUltrametricDist.isOpen_closedBall** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametricDi
+st`。
+形式化陈述：isOpen_closedBall {r : Real} (hr : r != 0) : IsOpen (closedBall x r)
+参数：hr : r != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_or_gt_of_ne`：lt_or_gt_of_ne (h : a != b) : a < b ∨ b < a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.closedBall_eq_empty`：closedBall_eq_empty : closedBall x ε = ∅ ↔ ε
+ < 0
+· 使用定理 `Metric.isOpen_iff`：isOpen_iff : IsOpen s ↔ forall x in s, exists ε > 0, 
+ball x ε subseteq s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `IsUltrametricDist.closedBall_eq_or_disjoint`：closedBall_eq_or_disjoint :
+ closedBall x r = closedBall y r ∨ Disjoint (closedBall x r) (closedBall y r)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用引理 `IsUltrametricDist.closedBall_eq_of_mem`：closedBall_eq_of_mem {x y : X} {
+r : Real} (h : y in closedBall x r) : closedBall x r = closedBall y r
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ < a
 -/
-lemma isOpen_closedBall {r : Real} (hr : r != 0) : IsOpen (closedBall x r) := by
+lemma isOpen_closedBall {r : ℝ} (hr : r ≠ 0) : IsOpen (closedBall x r) := by
   cases lt_or_gt_of_ne hr with
   | inl h =>
     simp [closedBall_eq_empty.mpr h]
@@ -494,90 +440,73 @@ lemma isOpen_closedBall {r : Real} (hr : r != 0) : IsOpen (closedBall x r) := by
       simp [h, hd, ball_subset_closedBall]
     | inr hd =>
       simp [closedBall_eq_of_mem hy, h.not_gt] at hd
-
-/--
-lemma `isClopen_closedBall` / 引理 `isClopen_closedBall`
-
-English:
-lemma isClopen_closedBall
-  given: {r : Real} (hr : r != 0)
-  statement: IsClopen (closedBall x r)
-  proof: ⟨Metric.isClosed_closedBall, isOpen_closedBall x hr⟩
-
-中文:
-引理 isClopen_closedBall
-  条件: {r : 实数} (hr : r != 0)
-  结论: IsClopen (closedBall x r)
-  证明: ⟨Metric.isClosed_closedBall, isOpen_closedBall x hr⟩
-
-Depends on / 依赖: Metric, Metric.isClosed_closedBall, isClosed_closedBall, isOpen_closedBall
+/-
+**IsUltrametricDist.isClopen_closedBall** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametric
+Dist`。
+形式化陈述：isClopen_closedBall {r : Real} (hr : r != 0) : IsClopen (closedBall x r)
+参数：hr : r != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Metric.isClosed_closedBall`：isClosed_closedBall : IsClosed (closedBall x
+ ε)
+· 使用引理 `IsUltrametricDist.isOpen_closedBall`：isOpen_closedBall {r : Real} (hr : 
+r != 0) : IsOpen (closedBall x r)
 -/
-lemma isClopen_closedBall {r : Real} (hr : r != 0) : IsClopen (closedBall x r) :=
+lemma isClopen_closedBall {r : ℝ} (hr : r ≠ 0) : IsClopen (closedBall x r) :=
   ⟨Metric.isClosed_closedBall, isOpen_closedBall x hr⟩
-
-/--
-lemma `frontier_closedBall_eq_empty` / 引理 `frontier_closedBall_eq_empty`
-
-English:
-lemma frontier_closedBall_eq_empty
-  given: {r : Real} (hr : r != 0)
-  statement: frontier (closedBall x r) = ∅
-  proof: isClopen_iff_frontier_eq_empty.mp (isClopen_closedBall x hr)
-
-中文:
-引理 frontier_closedBall_eq_empty
-  条件: {r : 实数} (hr : r != 0)
-  结论: frontier (closedBall x r) = ∅
-  证明: isClopen_iff_frontier_eq_empty.mp (isClopen_closedBall x hr)
-
-Depends on / 依赖: isClopen_closedBall, isClopen_iff_frontier_eq_empty, isClopen_iff_frontier_eq_empty.mp
+/-
+**IsUltrametricDist.frontier_closedBall_eq_empty** 是 Mathlib 中的一个引理，位于命名空间 `IsUl
+trametricDist`。
+形式化陈述：frontier_closedBall_eq_empty {r : Real} (hr : r != 0) : frontier (closedBa
+ll x r) = ∅
+参数：hr : r != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isClopen_iff_frontier_eq_empty`：isClopen_iff_frontier_eq_empty : IsClope
+n s ↔ frontier s = ∅
+· 使用引理 `IsUltrametricDist.isClopen_closedBall`：isClopen_closedBall {r : Real} (h
+r : r != 0) : IsClopen (closedBall x r)
 -/
-lemma frontier_closedBall_eq_empty {r : Real} (hr : r != 0) : frontier (closedBall x r) = ∅ :=
+lemma frontier_closedBall_eq_empty {r : ℝ} (hr : r ≠ 0) : frontier (closedBall x r) = ∅ :=
   isClopen_iff_frontier_eq_empty.mp (isClopen_closedBall x hr)
-
-/--
-lemma `isOpen_sphere` / 引理 `isOpen_sphere`
-
-English:
-lemma isOpen_sphere
-  given: {r : Real} (hr : r != 0)
-  statement: IsOpen (sphere x r)
-  proof: by
-  rw [← closedBall_sdiff_ball]; rw [sdiff_eq]
-  exact (isOpen_closedBall x hr).inter (isClosed_ball x r).isOpen_compl
-
-中文:
-引理 isOpen_sphere
-  条件: {r : 实数} (hr : r != 0)
-  结论: 是开集 (sphere x r)
-  证明: by
-  rw [← closedBall_sdiff_ball]; rw [sdiff_eq]
-  exact (isOpen_closedBall x hr).inter (isClosed_ball x r).isOpen_compl
-
-Depends on / 依赖: closedBall_sdiff_ball, isClosed_ball, isOpen_closedBall, isOpen_compl, sdiff_eq
+/-
+**IsUltrametricDist.isOpen_sphere** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametricDist`。
+形式化陈述：isOpen_sphere {r : Real} (hr : r != 0) : IsOpen (sphere x r)
+参数：hr : r != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Metric.closedBall_sdiff_ball`：closedBall_sdiff_ball : closedBall x ε \ b
+all x ε = sphere x ε
+· 使用定理 `sdiff_eq`：sdiff_eq : x \ y = x ⊓ yᶜ
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用引理 `IsUltrametricDist.isOpen_closedBall`：isOpen_closedBall {r : Real} (hr : 
+r != 0) : IsOpen (closedBall x r)
+· 使用定理 `IsClosed.isOpen_compl`：∀ {X : Type u} {inst : TopologicalSpace X} {s : S
+et X} [self : IsClosed s], IsOpen sᶜ
+· 使用引理 `IsUltrametricDist.isClosed_ball`：isClosed_ball (x : X) (r : Real) : IsCl
+osed (ball x r)
 -/
-lemma isOpen_sphere {r : Real} (hr : r != 0) : IsOpen (sphere x r) := by
-  rw [← closedBall_sdiff_ball]; rw [sdiff_eq]
+lemma isOpen_sphere {r : ℝ} (hr : r ≠ 0) : IsOpen (sphere x r) := by
+  rw [← closedBall_sdiff_ball, sdiff_eq]
   exact (isOpen_closedBall x hr).inter (isClosed_ball x r).isOpen_compl
-
-/--
-lemma `isClopen_sphere` / 引理 `isClopen_sphere`
-
-English:
-lemma isClopen_sphere
-  given: {r : Real} (hr : r != 0)
-  statement: IsClopen (sphere x r)
-  proof: ⟨Metric.isClosed_sphere, isOpen_sphere x hr⟩
-
-中文:
-引理 isClopen_sphere
-  条件: {r : 实数} (hr : r != 0)
-  结论: IsClopen (sphere x r)
-  证明: ⟨Metric.isClosed_sphere, isOpen_sphere x hr⟩
-
-Depends on / 依赖: Metric, Metric.isClosed_sphere, isClosed_sphere, isOpen_sphere
+/-
+**IsUltrametricDist.isClopen_sphere** 是 Mathlib 中的一个引理，位于命名空间 `IsUltrametricDist
+`。
+形式化陈述：isClopen_sphere {r : Real} (hr : r != 0) : IsClopen (sphere x r)
+参数：hr : r != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Metric.isClosed_sphere`：isClosed_sphere : IsClosed (sphere x ε)
+· 使用引理 `IsUltrametricDist.isOpen_sphere`：isOpen_sphere {r : Real} (hr : r != 0) 
+: IsOpen (sphere x r)
 -/
-lemma isClopen_sphere {r : Real} (hr : r != 0) : IsClopen (sphere x r) :=
+lemma isClopen_sphere {r : ℝ} (hr : r ≠ 0) : IsClopen (sphere x r) :=
   ⟨Metric.isClosed_sphere, isOpen_sphere x hr⟩
 
 end IsUltrametricDist
+

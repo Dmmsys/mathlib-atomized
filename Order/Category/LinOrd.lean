@@ -24,46 +24,24 @@ namespace LinOrd
 
 /-- The type of morphisms in `LinOrd R`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**LinOrd.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `LinOrd`。
+形式化陈述：LinOrd → LinOrd → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : LinOrd.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : X ->o Y
-
-中文:
-结构 态射
-  参数: (X Y : 线性序.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : X ->o Y
+--- 原说明 ---
+The type of morphisms in `LinOrd R`.
 -/
 structure Hom (X Y : LinOrd.{u}) where
   private mk ::
   /-- The underlying `OrderHom`. -/
-  hom' : X ->o Y
+  hom' : X →o Y
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category LinOrd.{u}
-  body: Hom X Y
-  id _ := ⟨OrderHom.id⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 线性序.{u}
-  定义体: Hom X Y
-  id _ := ⟨OrderHom.id⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**LinOrd.** 是 Mathlib 中的一个实例，位于命名空间 `LinOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category LinOrd.{u} where
   Hom X Y := Hom X Y
@@ -72,458 +50,304 @@ instance : Category LinOrd.{u} where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory LinOrd (· ->o ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 线性序 (· ->o ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**LinOrd.** 是 Mathlib 中的一个实例，位于命名空间 `LinOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory LinOrd (· ->o ·) where
+instance : ConcreteCategory LinOrd (· →o ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `LinOrd` back into a `OrderHom`. -/
+/-
+**LinOrd.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `LinOrd.Hom`。
+形式化陈述：{X Y : LinOrd} → X.Hom Y → ↑X →o ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : LinOrd.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := LinOrd) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 线性序.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := LinOrd) f
+--- 原说明 ---
+Turn a morphism in `LinOrd` back into a `OrderHom`.
 -/
 abbrev Hom.hom {X Y : LinOrd.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := LinOrd) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `OrderHom` as a morphism in `LinOrd`. -/
+/-
+**LinOrd.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `LinOrd`。
+形式化陈述：ofHom {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) : of X 
+⟶ of Y
+参数：f : X ->o Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y)
-  body: ConcreteCategory.ofHom (C := LinOrd) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [线性序 X] [线性序 Y] (f : X ->o Y)
-  定义体: ConcreteCategory.ofHom (C := LinOrd) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, LinOrd
+--- 原说明 ---
+Typecheck a `OrderHom` as a morphism in `LinOrd`.
 -/
-abbrev ofHom {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) : of X ⟶ of Y :=
+abbrev ofHom {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X →o Y) : of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := LinOrd) f
 
 variable {R} in
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**LinOrd.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `LinOrd.Hom.Simps`。
+形式化陈述：(X Y : LinOrd) → X.Hom Y → ↑X →o ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : LinOrd.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 线性序.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : LinOrd.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
-
-/--
-lemma `coe_id` / 引理 `coe_id`
-
-English:
-lemma coe_id
-  given: {X : LinOrd}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-中文:
-引理 coe_id
-  条件: {X : 线性序}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
+/-!
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
-lemma coe_id {X : LinOrd} : (𝟙 X : X -> X) = id := rfl
 
-/--
-lemma `coe_comp` / 引理 `coe_comp`
+/-
+**LinOrd.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：coe_id {X : LinOrd} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_comp
-  given: {X Y Z : LinOrd} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 线性序} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_comp {X Y Z : LinOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
+lemma coe_id {X : LinOrd} : (𝟙 X : X → X) = id := rfl
+/-
+**LinOrd.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：coe_comp {X Y Z : LinOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘
+ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma coe_comp {X Y Z : LinOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[simp]
-/--
-lemma `forget_map` / 引理 `forget_map`
-
-English:
-lemma forget_map
-  given: {X Y : LinOrd} (f : X ⟶ Y)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 forget_map
-  条件: {X Y : 线性序} (f : X ⟶ Y)
-  证明: rfl
-
-@[ext]
+/-
+**LinOrd.forget_map** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：forget_map {X Y : LinOrd} (f : X ⟶ Y) : (forget LinOrd).map f = (f : _ -> 
+_)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forget_map {X Y : LinOrd} (f : X ⟶ Y) :
-    (forget LinOrd).map f = (f : _ -> _) := rfl
+    (forget LinOrd).map f = (f : _ → _) := rfl
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : LinOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-中文:
-引理 ext
-  条件: {X Y : 线性序} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
+/-
+**LinOrd.ext** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：ext {X Y : LinOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma ext {X Y : LinOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : LinOrd} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 -- This is not `simp` to avoid rewriting in types of terms.
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [LinearOrder X]
-  statement: (LinOrd.of X : Type u) = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [线性序 X]
-  结论: (线性序.of X : 类型u) = X
-  证明: rfl
-
-@[simp]
+/-
+**LinOrd.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `LinOrd`。
+形式化陈述：coe_of (X : Type u) [LinearOrder X] : (LinOrd.of X : Type u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [LinearOrder X] : (LinOrd.of X : Type u) = X := rfl
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {X : LinOrd}
-  statement: (𝟙 X : X ⟶ X).hom = OrderHom.id
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {X : 线性序}
-  结论: (𝟙 X : X ⟶ X).hom = 序态射.id
-  证明: rfl
+/-
+**LinOrd.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：hom_id {X : LinOrd} : (𝟙 X : X ⟶ X).hom = OrderHom.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {X : LinOrd} : (𝟙 X : X ⟶ X).hom = OrderHom.id := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**LinOrd.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：id_apply (X : LinOrd) (x : X) : (𝟙 X : X ⟶ X) x = x
+参数：X : LinOrd；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `OrderHom.id_coe`：∀ {α : Type u_2} [inst : Preorder α], ⇑OrderHom.id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (X : LinOrd) (x : X)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (X : 线性序) (x : X)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (X : LinOrd) (x : X) :
     (𝟙 X : X ⟶ X) x = x := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {X Y Z : 线性序} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**LinOrd.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：hom_comp {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom = g.hom.co
+mp f.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**LinOrd.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：comp_apply {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = 
+g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `OrderHom.comp_coe`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst 
+: Preorder α] [inst_1 : Preorder β] [inst_2 : Preorder γ]   (g : β →o γ) (f : α 
+→o β), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {X Y Z : 线性序} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {X Y Z : LinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) :
     (f ≫ g) x = g (f x) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : LinOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {X Y : 线性序} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**LinOrd.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：hom_ext {X Y : LinOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinOrd.Hom.ext`：∀ {X Y : LinOrd} {x y : X.Hom Y}, x.hom' = y.hom' → x = 
+y
 -/
 lemma hom_ext {X Y : LinOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {X Y : 类型u} [线性序 X] [线性序 Y] (f : X ->o Y)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[simp]
+/-
+**LinOrd.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：hom_ofHom {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) : (
+ofHom f).hom = f
+参数：f : X ->o Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) : (ofHom f).hom = f :=
+lemma hom_ofHom {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X →o Y) : (ofHom f).hom = f :=
   rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {X Y : LinOrd} (f : X ⟶ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {X Y : 线性序} (f : X ⟶ Y)
-  证明: rfl
-
-@[simp]
+/-
+**LinOrd.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：ofHom_hom {X Y : LinOrd} (f : X ⟶ Y) : ofHom (Hom.hom f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {X Y : LinOrd} (f : X ⟶ Y) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {X : Type u} [LinearOrder X]
-  statement: ofHom OrderHom.id = 𝟙 (of X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {X : 类型u} [线性序 X]
-  结论: ofHom 序态射.id = 𝟙 (of X)
-  证明: rfl
-
-@[simp]
+/-
+**LinOrd.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：ofHom_id {X : Type u} [LinearOrder X] : ofHom OrderHom.id = 𝟙 (of X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {X : Type u} [LinearOrder X] : ofHom OrderHom.id = 𝟙 (of X) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {X Y Z : Type u} [LinearOrder X] [LinearOrder Y] [LinearOrder Z]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {X Y Z : 类型u} [线性序 X] [线性序 Y] [线性序 Z]
-  证明: rfl
+/-
+**LinOrd.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：ofHom_comp {X Y Z : Type u} [LinearOrder X] [LinearOrder Y] [LinearOrder Z
+] (f : X ->o Y) (g : Y ->o Z) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : X ->o Y；g : Y ->o Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {X Y Z : Type u} [LinearOrder X] [LinearOrder Y] [LinearOrder Z]
-    (f : X ->o Y) (g : Y ->o Z) :
+    (f : X →o Y) (g : Y →o Z) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) (x : X)
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} [线性序 X] [线性序 Y] (f : X ->o Y) (x : X)
-  证明: rfl
+/-
+**LinOrd.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：ofHom_apply {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) (
+x : X) : (ofHom f) x = f x
+参数：f : X ->o Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X ->o Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} [LinearOrder X] [LinearOrder Y] (f : X →o Y) (x : X) :
     (ofHom f) x = f x := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {X Y : LinOrd} (e : X ≅ Y) (x : X)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {X Y : 线性序} (e : X ≅ Y) (x : X)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
+/-
+**LinOrd.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：inv_hom_apply {X Y : LinOrd} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x
+参数：e : X ≅ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {X Y : LinOrd} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {X Y : LinOrd} (e : X ≅ Y) (s : Y)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {X Y : 线性序} (e : X ≅ Y) (s : Y)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**LinOrd.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `LinOrd`。
+形式化陈述：hom_inv_apply {X Y : LinOrd} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s
+参数：e : X ≅ Y；s : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {X Y : LinOrd} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited LinOrd
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 线性序
-  定义体: ⟨of PUnit⟩
+/-
+**LinOrd.** 是 Mathlib 中的一个实例，位于命名空间 `LinOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited LinOrd :=
   ⟨of PUnit⟩
-
-/--
-Instance `hasForgetToLat` / 实例 `hasForgetToLat`
-
-English:
-instance hasForgetToLat
-  signature: : HasForget₂ LinOrd Lat where
-  body: .of X
-  forget₂.map f := Lat.ofHom (OrderHomClass.toLatticeHom _ _ f.hom)
-
-中文:
-实例 hasForgetToLat
-  签名: : 有Forget₂ 线性序 格 where
-  定义体: .of X
-  forget₂.map f := Lat.ofHom (OrderHomClass.toLatticeHom _ _ f.hom)
+/-
+**LinOrd.hasForgetToLat** 是 Mathlib 中的一个实例，位于命名空间 `LinOrd`。
+形式化陈述：hasForgetToLat : HasForget₂ LinOrd Lat where forget₂.obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToLat : HasForget₂ LinOrd Lat where
   forget₂.obj X := .of X
@@ -531,20 +355,15 @@ instance hasForgetToLat : HasForget₂ LinOrd Lat where
 
 /-- Constructs an equivalence between linear orders from an order isomorphism between them. -/
 @[simps]
-/--
-Definition of `Iso.mk` / `Iso.mk` 的定义
+/-
+**LinOrd.Iso.mk** 是 Mathlib 中的一个定义，位于命名空间 `LinOrd.Iso`。
+形式化陈述：{α β : LinOrd} → ↑α ≃o ↑β → (α ≅ β)
+参数：α ≅ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iso.mk
-  signature: {α β : LinOrd.{u}} (e : α ≃o β)
-  body: ofHom e
-  inv := ofHom e.symm
-
-中文:
-定义 同构.mk
-  签名: {α β : 线性序.{u}} (e : α ≃o β)
-  定义体: ofHom e
-  inv := ofHom e.symm
+--- 原说明 ---
+Constructs an equivalence between linear orders from an order isomorphism betwee
+n them.
 -/
 def Iso.mk {α β : LinOrd.{u}} (e : α ≃o β) : α ≅ β where
   hom := ofHom e
@@ -552,22 +371,14 @@ def Iso.mk {α β : LinOrd.{u}} (e : α ≃o β) : α ≅ β where
 
 /-- `OrderDual` as a functor. -/
 @[simps map]
-/--
-Definition of `dual` / `dual` 的定义
+/-
+**LinOrd.dual** 是 Mathlib 中的一个定义，位于命名空间 `LinOrd`。
+形式化陈述：dual : LinOrd ⥤ LinOrd where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dual
-  signature: : LinOrd ⥤ LinOrd where
-  body: of Xᵒᵈ
-  map f := ofHom f.hom.dual
-
-中文:
-定义 dual
-  签名: : 线性序 ⥤ 线性序 where
-  定义体: of Xᵒᵈ
-  map f := ofHom f.hom.dual
-
-Depends on / 依赖: FGModuleCat, FiniteDimensional, FiniteDimensional.of_injective, Functor, Functor.map_injective, mapLinearMap, map_injective, of_injective
+--- 原说明 ---
+`OrderDual` as a functor.
 -/
 def dual : LinOrd ⥤ LinOrd where
   obj X := of Xᵒᵈ
@@ -575,43 +386,29 @@ def dual : LinOrd ⥤ LinOrd where
 
 /-- The equivalence between `LinOrd` and itself induced by `OrderDual` both ways. -/
 @[simps functor inverse]
-/--
-Definition of `dualEquiv` / `dualEquiv` 的定义
+/-
+**LinOrd.dualEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LinOrd`。
+形式化陈述：dualEquiv : LinOrd ≌ LinOrd where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualEquiv
-  signature: : LinOrd ≌ LinOrd where
-  body: dual
-  inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-
-中文:
-定义 dualEquiv
-  签名: : 线性序 ≌ 线性序 where
-  定义体: dual
-  inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
+--- 原说明 ---
+The equivalence between `LinOrd` and itself induced by `OrderDual` both ways.
 -/
 def dualEquiv : LinOrd ≌ LinOrd where
   functor := dual
   inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
+  unitIso := NatIso.ofComponents fun X => Iso.mk <| OrderIso.dualDual X
+  counitIso := NatIso.ofComponents fun X => Iso.mk <| OrderIso.dualDual X
 
 end LinOrd
 
-/--
-theorem `linOrd_dual_comp_forget_to_Lat` / 定理 `linOrd_dual_comp_forget_to_Lat`
-
-English:
-theorem linOrd_dual_comp_forget_to_Lat
-  proof: rfl
-
-中文:
-定理 linOrd_dual_comp_forget_to_Lat
-  证明: rfl
+/-
+**linOrd_dual_comp_forget_to_Lat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：linOrd_dual_comp_forget_to_Lat : LinOrd.dual ⋙ forget₂ LinOrd Lat = forget
+₂ LinOrd Lat ⋙ Lat.dual
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem linOrd_dual_comp_forget_to_Lat :
     LinOrd.dual ⋙ forget₂ LinOrd Lat = forget₂ LinOrd Lat ⋙ Lat.dual :=

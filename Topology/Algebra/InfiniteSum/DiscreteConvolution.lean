@@ -48,10 +48,10 @@ The `mul/add` distinction refers to the index monoid `M`: multiplicative sums ov
 
 ## Notation
 
-| Notation | Operation |
+| Notation     | Operation                                       |
 |--------------|-------------------------------------------------|
-| `f ⋆[L] g` | `∑' ab : mulFiber x, L (f ab.1.1) (g ab.1.2)` |
-| `f ⋆₊[L] g` | `∑' ab : addFiber x, L (f ab.1.1) (g ab.1.2)` |
+| `f ⋆[L] g`   | `∑' ab : mulFiber x, L (f ab.1.1) (g ab.1.2)`   |
+| `f ⋆₊[L] g`  | `∑' ab : addFiber x, L (f ab.1.1) (g ab.1.2)`   |
 
 Precedence design: `f:68` and `g:67` gives right associativity (`f ⋆ g ⋆ h` parses as
 `f ⋆ (g ⋆ h)`), matching function composition `∘` and `MeasureTheory.convolution`.
@@ -75,68 +75,58 @@ variable [Monoid M]
 
 /-- The fiber of multiplication at `x`: all pairs `(a, b)` with `a * b = x`. -/
 @[to_additive /-- The fiber of addition at `x`: all pairs `(a, b)` with `a + b = x`. -/]
-/--
-Definition of `mulFiber` / `mulFiber` 的定义
+/-
+**DiscreteConvolution.mulFiber** 是 Mathlib 中的一个定义，位于命名空间 `DiscreteConvolution`。
+形式化陈述：mulFiber (x : M) : Set (M × M)
+参数：x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulFiber
-  signature: (x : M)
-  body: Set.mulAntidiagonal Set.univ Set.univ x
-
-@[to_additive (attr := grind =)]
-
-中文:
-定义 mulFiber
-  签名: (x : M)
-  定义体: Set.mulAntidiagonal Set.univ Set.univ x
-
-@[to_additive (attr := grind =)]
-
-Depends on / 依赖: Set.mulAntidiagonal, Set.univ, mulAntidiagonal
+--- 原说明 ---
+The fiber of multiplication at `x`: all pairs `(a, b)` with `a * b = x`.
 -/
 def mulFiber (x : M) : Set (M × M) := Set.mulAntidiagonal Set.univ Set.univ x
 
 @[to_additive (attr := grind =)]
-/--
-lemma `mem_mulFiber` / 引理 `mem_mulFiber`
-
-English:
-lemma mem_mulFiber
-  given: {x : M} {ab : M × M}
-  statement: ab in mulFiber x ↔ ab.1 * ab.2 = x
-  proof: by simp [mulFiber]
-
-@[to_additive]
-
-中文:
-引理 mem_mulFiber
-  条件: {x : M} {ab : M × M}
-  结论: ab in mulFiber x ↔ ab.1 * ab.2 = x
-  证明: by simp [mulFiber]
-
-@[to_additive]
-
-Depends on / 依赖: mulFiber
+/-
+**DiscreteConvolution.mem_mulFiber** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteConvolutio
+n`。
+形式化陈述：mem_mulFiber {x : M} {ab : M × M} : ab in mulFiber x ↔ ab.1 * ab.2 = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_mulFiber {x : M} {ab : M × M} : ab in mulFiber x ↔ ab.1 * ab.2 = x := by simp [mulFiber]
+lemma mem_mulFiber {x : M} {ab : M × M} : ab ∈ mulFiber x ↔ ab.1 * ab.2 = x := by simp [mulFiber]
 
 @[to_additive]
-/--
-lemma `mulFiber_one_mem` / 引理 `mulFiber_one_mem`
-
-English:
-lemma mulFiber_one_mem
-  statement: (1, 1) in mulFiber (1 : M)
-  proof: by simp [mulFiber]
-
-中文:
-引理 mulFiber_one_mem
-  结论: (1, 1) in mulFiber (1 : M)
-  证明: by simp [mulFiber]
-
-Depends on / 依赖: mulFiber
+/-
+**DiscreteConvolution.mulFiber_one_mem** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteConvol
+ution`。
+形式化陈述：mulFiber_one_mem : (1, 1) in mulFiber (1 : M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma mulFiber_one_mem : (1, 1) in mulFiber (1 : M) := by simp [mulFiber]
+lemma mulFiber_one_mem : (1, 1) ∈ mulFiber (1 : M) := by simp [mulFiber]
 
 end Fiber
 
@@ -152,22 +142,15 @@ variable [TopologicalSpace F]
 `(f ⋆[L] g) x = ∑' (a, b) : mulFiber x, L (f a) (g b)`. -/
 @[to_additive (dont_translate := S E E' F) addConvolution
   /-- Additive convolution: `(f ⋆₊[L] g) x = ∑' ab : addFiber x, L (f ab.1) (g ab.2)`. -/]
-/--
-Definition of `convolution` / `convolution` 的定义
-
-English:
-definition convolution
-  signature: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E')
-  body: fun x => ∑' ab : mulFiber x, L (f ab.1.1) (g ab.1.2)
-
-中文:
-定义 convolution
-  签名: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E')
-  定义体: fun x => ∑' ab : mulFiber x, L (f ab.1.1) (g ab.1.2)
-
-Depends on / 依赖: mulFiber
+/-
+**DiscreteConvolution.convolution** 是 Mathlib 中的一个定义，位于命名空间 `DiscreteConvolution
+`。
+形式化陈述：convolution (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') : M -> F
+参数：L : E ->ₗ[S] E' ->ₗ[S] F；f : M -> E；g : M -> E'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def convolution (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') : M -> F :=
+def convolution (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E) (g : M → E') : M → F :=
   fun x => ∑' ab : mulFiber x, L (f ab.1.1) (g ab.1.2)
 
 /-- Notation for discrete convolution with explicit bilinear map:
@@ -187,123 +170,149 @@ variable [Module S E] [Module S E'] [Module S F]
 variable [TopologicalSpace F]
 
 @[to_additive (dont_translate := S E E' F) (attr := simp) zero_addConvolution]
-/--
-lemma `zero_convolution` / 引理 `zero_convolution`
-
-English:
-lemma zero_convolution
-  given: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E')
-  proof: by
+/-
+**DiscreteConvolution.zero_convolution** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteConvol
+ution`。
+形式化陈述：zero_convolution (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E') : (0 : M -> E) ⋆
+[L] f = 0
+参数：L : E ->ₗ[S] E' ->ₗ[S] F；f : M -> E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `tsum_zero`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : TopologicalSpace α] {L : SummationFilter β},   ∑'[L] (x : β), 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma zero_convolution (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E') :
+    (0 : M → E) ⋆[L] f = 0 := by
   ext; simp [convolution]
 
 @[to_additive (dont_translate := S E E' F) (attr := simp) addConvolution_zero]
-
-中文:
-引理 zero_convolution
-  条件: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E')
-  证明: by
-  ext; simp [convolution]
-
-@[to_additive (dont_translate := S E E' F) (attr := simp) addConvolution_zero]
-
-Depends on / 依赖: convolution
+/-
+**DiscreteConvolution.convolution_zero** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteConvol
+ution`。
+形式化陈述：convolution_zero (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) : f ⋆[L] (0 : M -
+> E') = 0
+参数：L : E ->ₗ[S] E' ->ₗ[S] F；f : M -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `tsum_zero`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : TopologicalSpace α] {L : SummationFilter β},   ∑'[L] (x : β), 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma zero_convolution (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E') :
-    (0 : M -> E) ⋆[L] f = 0 := by
-  ext; simp [convolution]
-
-@[to_additive (dont_translate := S E E' F) (attr := simp) addConvolution_zero]
-/--
-lemma `convolution_zero` / 引理 `convolution_zero`
-
-English:
-lemma convolution_zero
-  given: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E)
-  proof: by
+lemma convolution_zero (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E) :
+    f ⋆[L] (0 : M → E') = 0 := by
   ext; simp [convolution]
 
 @[to_additive (dont_translate := S E F) (attr := simp) addConvolution_indicator_zero_left]
-
-中文:
-引理 convolution_zero
-  条件: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E)
-  证明: by
-  ext; simp [convolution]
-
-@[to_additive (dont_translate := S E F) (attr := simp) addConvolution_indicator_zero_left]
-
-Depends on / 依赖: convolution
+/-
+**DiscreteConvolution.convolution_indicator_one_left** 是 Mathlib 中的一个引理，位于命名空间 `
+DiscreteConvolution`。
+形式化陈述：convolution_indicator_one_left (L : E ->ₗ[S] F ->ₗ[S] F) (e : E) (f : M ->
+ F) (hL : forall y, L e y = y) : Set.indicator {1} (fun _ => e) ⋆[L] f = f
+参数：L : E ->ₗ[S] F ->ₗ[S] F；e : E；f : M -> F；hL : forall y, L e y = y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.indicator_apply`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] (s 
+: Set α) (f : α → M) (a : α) [inst_1 : Decidable (a ∈ s)],   s.indicator f a = i
+f a ∈ s t…
+· 使用定理 `tsum_eq_single`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] {f : β → α}
+ (b …
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma convolution_zero (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) :
-    f ⋆[L] (0 : M -> E') = 0 := by
-  ext; simp [convolution]
-
-@[to_additive (dont_translate := S E F) (attr := simp) addConvolution_indicator_zero_left]
-/--
-lemma `convolution_indicator_one_left` / 引理 `convolution_indicator_one_left`
-
-English:
-lemma convolution_indicator_one_left
-  statement: (L : E ->ₗ[S] F ->ₗ[S] F) (e : E) (f : M -> F)
-  proof: by
-  classical
-  ext x; simp only [convolution, Set.indicator_apply]
-  rw [tsum_eq_single (⟨(1]; rw [x)]; rw [by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
-  simp [hL]
-
-@[to_additive (dont_translate := S E F) (attr := simp) addConvolution_indicator_zero_right]
-
-中文:
-引理 convolution_indicator_one_left
-  结论: (L : E ->ₗ[S] F ->ₗ[S] F) (e : E) (f : M -> F)
-  证明: by
-  classical
-  ext x; simp only [convolution, Set.indicator_apply]
-  rw [tsum_eq_single (⟨(1]; rw [x)]; rw [by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
-  simp [hL]
-
-@[to_additive (dont_translate := S E F) (attr := simp) addConvolution_indicator_zero_right]
-
-Depends on / 依赖: LinearMap, LinearMap.zero_apply, Set.indicator_apply, classical, convolution, indicator_apply, mulFiber, tsum_eq_single, zero_apply
--/
-lemma convolution_indicator_one_left (L : E ->ₗ[S] F ->ₗ[S] F) (e : E) (f : M -> F)
-    (hL : forall y, L e y = y) :
+lemma convolution_indicator_one_left (L : E →ₗ[S] F →ₗ[S] F) (e : E) (f : M → F)
+    (hL : ∀ y, L e y = y) :
     Set.indicator {1} (fun _ => e) ⋆[L] f = f := by
   classical
   ext x; simp only [convolution, Set.indicator_apply]
-  rw [tsum_eq_single (⟨(1]; rw [x)]; rw [by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
+  rw [tsum_eq_single (⟨(1, x), by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
   simp [hL]
 
 @[to_additive (dont_translate := S E F) (attr := simp) addConvolution_indicator_zero_right]
-/--
-lemma `convolution_indicator_one_right` / 引理 `convolution_indicator_one_right`
-
-English:
-lemma convolution_indicator_one_right
-  statement: (L : F ->ₗ[S] E ->ₗ[S] F) (f : M -> F) (e : E)
-  proof: by
-  classical
-  ext x; simp only [convolution, Set.indicator_apply]
-  rw [tsum_eq_single (⟨(x]; rw [1)]; rw [by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
-  simp [hL]
-
-中文:
-引理 convolution_indicator_one_right
-  结论: (L : F ->ₗ[S] E ->ₗ[S] F) (f : M -> F) (e : E)
-  证明: by
-  classical
-  ext x; simp only [convolution, Set.indicator_apply]
-  rw [tsum_eq_single (⟨(x]; rw [1)]; rw [by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
-  simp [hL]
-
-Depends on / 依赖: LinearMap, LinearMap.zero_apply, Set.indicator_apply, classical, convolution, indicator_apply, mulFiber, tsum_eq_single, zero_apply
+/-
+**DiscreteConvolution.convolution_indicator_one_right** 是 Mathlib 中的一个引理，位于命名空间 
+`DiscreteConvolution`。
+形式化陈述：convolution_indicator_one_right (L : F ->ₗ[S] E ->ₗ[S] F) (f : M -> F) (e 
+: E) (hL : forall y, L y e = y) : f ⋆[L] Set.indicator {1} (fun _ => e) = f
+参数：L : F ->ₗ[S] E ->ₗ[S] F；f : M -> F；e : E；hL : forall y, L y e = y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.indicator_apply`：∀ {α : Type u_1} {M : Type u_3} [inst : Zero M] (s 
+: Set α) (f : α → M) (a : α) [inst_1 : Decidable (a ∈ s)],   s.indicator f a = i
+f a ∈ s t…
+· 使用定理 `tsum_eq_single`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] {f : β → α}
+ (b …
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma convolution_indicator_one_right (L : F ->ₗ[S] E ->ₗ[S] F) (f : M -> F) (e : E)
-    (hL : forall y, L y e = y) :
+lemma convolution_indicator_one_right (L : F →ₗ[S] E →ₗ[S] F) (f : M → F) (e : E)
+    (hL : ∀ y, L y e = y) :
     f ⋆[L] Set.indicator {1} (fun _ => e) = f := by
   classical
   ext x; simp only [convolution, Set.indicator_apply]
-  rw [tsum_eq_single (⟨(x]; rw [1)]; rw [by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
+  rw [tsum_eq_single (⟨(x, 1), by grind⟩ : mulFiber x) (by grind [LinearMap.zero_apply])]
   simp [hL]
 
 end BasicProperties
@@ -318,141 +327,159 @@ variable [TopologicalSpace F]
 the fiber is summable. -/
 @[to_additive (dont_translate := S E E' F) AddConvolutionExistsAt
   /-- Additive convolution exists at `x` when the fiber sum is summable. -/]
-/--
-Definition of `ConvolutionExistsAt` / `ConvolutionExistsAt` 的定义
-
-English:
-definition ConvolutionExistsAt
-  signature: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') (x : M)
-  body: Summable fun ab : mulFiber x => L (f ab.1.1) (g ab.1.2)
-
-中文:
-定义 ConvolutionExistsAt
-  签名: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') (x : M)
-  定义体: Summable fun ab : mulFiber x => L (f ab.1.1) (g ab.1.2)
-
-Depends on / 依赖: Summable, mulFiber
+/-
+**DiscreteConvolution.ConvolutionExistsAt** 是 Mathlib 中的一个定义，位于命名空间 `DiscreteCon
+volution`。
+形式化陈述：ConvolutionExistsAt (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') 
+(x : M) : Prop
+参数：L : E ->ₗ[S] E' ->ₗ[S] F；f : M -> E；g : M -> E'；x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ConvolutionExistsAt (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') (x : M) : Prop :=
+def ConvolutionExistsAt (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E) (g : M → E') (x : M) : Prop :=
   Summable fun ab : mulFiber x => L (f ab.1.1) (g ab.1.2)
 
 /-- The convolution of `f` and `g` with bilinear map `L` exists when it exists at every point. -/
 @[to_additive (dont_translate := S E E' F) AddConvolutionExists
   /-- Additive convolution exists when it exists at every point. -/]
-/--
-Definition of `ConvolutionExists` / `ConvolutionExists` 的定义
-
-English:
-definition ConvolutionExists
-  signature: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E')
-  body: forall x, ConvolutionExistsAt L f g x
-
-中文:
-定义 ConvolutionExists
-  签名: (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E')
-  定义体: forall x, ConvolutionExistsAt L f g x
-
-Depends on / 依赖: ConvolutionExistsAt
+/-
+**DiscreteConvolution.ConvolutionExists** 是 Mathlib 中的一个定义，位于命名空间 `DiscreteConvo
+lution`。
+形式化陈述：ConvolutionExists (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') : 
+Prop
+参数：L : E ->ₗ[S] E' ->ₗ[S] F；f : M -> E；g : M -> E'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ConvolutionExists (L : E ->ₗ[S] E' ->ₗ[S] F) (f : M -> E) (g : M -> E') : Prop :=
-  forall x, ConvolutionExistsAt L f g x
+def ConvolutionExists (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E) (g : M → E') : Prop :=
+  ∀ x, ConvolutionExistsAt L f g x
 
 variable [T2Space F] [ContinuousAdd F]
 
 @[to_additive (dont_translate := S E E' F)]
-/--
-lemma `ConvolutionExistsAt.distrib_add` / 引理 `ConvolutionExistsAt.distrib_add`
-
-English:
-lemma ConvolutionExistsAt.distrib_add
-  statement: {f : M -> E} {g g' : M -> E'} {x : M}
-  proof: by
-  simpa [convolution] using hfg.tsum_add hfg'
-
-@[to_additive (dont_translate := S E E' F)]
-
-中文:
-引理 ConvolutionExistsAt.distrib_add
-  结论: {f : M -> E} {g g' : M -> E'} {x : M}
-  证明: by
-  simpa [convolution] using hfg.tsum_add hfg'
-
-@[to_additive (dont_translate := S E E' F)]
+/-
+**DiscreteConvolution.ConvolutionExistsAt.distrib_add** 是 Mathlib 中的一个定理，位于命名空间 
+`DiscreteConvolution.ConvolutionExistsAt`。
+形式化陈述：∀ {M : Type u_1} {S : Type u_2} {E : Type u_3} {E' : Type u_4} {F : Type u
+_6} [inst : Monoid M]   [inst_1 : CommSemiring S] [inst_2 : AddCommMonoid E] [in
+st_3 : AddCommMonoid E'] [inst_4 : AddCommMonoid F]   [inst_5 : _root_.Module S 
+E] [inst_6 : _root_.Module S E'] [inst_7 : _root_.Module S F] [inst_8 : Topologi
+calSpace F]   [T2Space F] [ContinuousAdd F] {f : M → E} {g g' : M → E'} {x : M} 
+(L : E →ₗ[S] E' →ₗ[S] F),   DiscreteConvolution.ConvolutionExistsAt L f g x →   
+  DiscreteConvolution.ConvolutionExistsAt L f g' x →       DiscreteConvolution.c
+onvolution L f (g + g') x =         DiscreteConvolution.convolution L f g x + Di
+screteConvolution.convolution L f g' x
+参数：L : E →ₗ[S] E' →ₗ[S] F；g + g'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Summable.tsum_add`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid
+ α] [inst_1 : TopologicalSpace α] {f g : β → α}   {L : SummationFilter β} [T2Spa
+ce α] […
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
 -/
-lemma ConvolutionExistsAt.distrib_add {f : M -> E} {g g' : M -> E'} {x : M}
-    (L : E ->ₗ[S] E' ->ₗ[S] F) (hfg : ConvolutionExistsAt L f g x)
+lemma ConvolutionExistsAt.distrib_add {f : M → E} {g g' : M → E'} {x : M}
+    (L : E →ₗ[S] E' →ₗ[S] F) (hfg : ConvolutionExistsAt L f g x)
     (hfg' : ConvolutionExistsAt L f g' x) :
     (f ⋆[L] (g + g')) x = (f ⋆[L] g) x + (f ⋆[L] g') x := by
   simpa [convolution] using hfg.tsum_add hfg'
 
 @[to_additive (dont_translate := S E E' F)]
-/--
-lemma `ConvolutionExists.distrib_add` / 引理 `ConvolutionExists.distrib_add`
-
-English:
-lemma ConvolutionExists.distrib_add
-  statement: {f : M -> E} {g g' : M -> E'} (L : E ->ₗ[S] E' ->ₗ[S] F)
-  proof: by
-  ext x; exact (hfg x).distrib_add L (hfg' x)
-
-@[to_additive (dont_translate := S E E' F)]
-
-中文:
-引理 ConvolutionExists.distrib_add
-  结论: {f : M -> E} {g g' : M -> E'} (L : E ->ₗ[S] E' ->ₗ[S] F)
-  证明: by
-  ext x; exact (hfg x).distrib_add L (hfg' x)
-
-@[to_additive (dont_translate := S E E' F)]
+/-
+**DiscreteConvolution.ConvolutionExists.distrib_add** 是 Mathlib 中的一个定理，位于命名空间 `D
+iscreteConvolution.ConvolutionExists`。
+形式化陈述：∀ {M : Type u_1} {S : Type u_2} {E : Type u_3} {E' : Type u_4} {F : Type u
+_6} [inst : Monoid M]   [inst_1 : CommSemiring S] [inst_2 : AddCommMonoid E] [in
+st_3 : AddCommMonoid E'] [inst_4 : AddCommMonoid F]   [inst_5 : _root_.Module S 
+E] [inst_6 : _root_.Module S E'] [inst_7 : _root_.Module S F] [inst_8 : Topologi
+calSpace F]   [T2Space F] [ContinuousAdd F] {f : M → E} {g g' : M → E'} (L : E →
+ₗ[S] E' →ₗ[S] F),   DiscreteConvolution.ConvolutionExists L f g →     DiscreteCo
+nvolution.ConvolutionExists L f g' →       DiscreteConvolution.convolution L f (
+g + g') =         DiscreteConvolution.convolution L f g + DiscreteConvolution.co
+nvolution L f g'
+参数：L : E →ₗ[S] E' →ₗ[S] F；g + g'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DiscreteConvolution.ConvolutionExistsAt.distrib_add`：∀ {M : Type u_1} {S
+ : Type u_2} {E : Type u_3} {E' : Type u_4} {F : Type u_6} [inst : Monoid M]   [
+inst_1 : CommSemiring S] [inst_2 : AddCom…
 -/
-lemma ConvolutionExists.distrib_add {f : M -> E} {g g' : M -> E'} (L : E ->ₗ[S] E' ->ₗ[S] F)
+lemma ConvolutionExists.distrib_add {f : M → E} {g g' : M → E'} (L : E →ₗ[S] E' →ₗ[S] F)
     (hfg : ConvolutionExists L f g) (hfg' : ConvolutionExists L f g') :
     f ⋆[L] (g + g') = f ⋆[L] g + f ⋆[L] g' := by
   ext x; exact (hfg x).distrib_add L (hfg' x)
 
 @[to_additive (dont_translate := S E E' F)]
-/--
-lemma `ConvolutionExistsAt.add_distrib` / 引理 `ConvolutionExistsAt.add_distrib`
-
-English:
-lemma ConvolutionExistsAt.add_distrib
-  statement: {f f' : M -> E} {g : M -> E'} {x : M}
-  proof: by
-  simpa [convolution] using hfg.tsum_add hfg'
-
-@[to_additive (dont_translate := S E E' F)]
-
-中文:
-引理 ConvolutionExistsAt.add_distrib
-  结论: {f f' : M -> E} {g : M -> E'} {x : M}
-  证明: by
-  simpa [convolution] using hfg.tsum_add hfg'
-
-@[to_additive (dont_translate := S E E' F)]
+/-
+**DiscreteConvolution.ConvolutionExistsAt.add_distrib** 是 Mathlib 中的一个定理，位于命名空间 
+`DiscreteConvolution.ConvolutionExistsAt`。
+形式化陈述：∀ {M : Type u_1} {S : Type u_2} {E : Type u_3} {E' : Type u_4} {F : Type u
+_6} [inst : Monoid M]   [inst_1 : CommSemiring S] [inst_2 : AddCommMonoid E] [in
+st_3 : AddCommMonoid E'] [inst_4 : AddCommMonoid F]   [inst_5 : _root_.Module S 
+E] [inst_6 : _root_.Module S E'] [inst_7 : _root_.Module S F] [inst_8 : Topologi
+calSpace F]   [T2Space F] [ContinuousAdd F] {f f' : M → E} {g : M → E'} {x : M} 
+(L : E →ₗ[S] E' →ₗ[S] F),   DiscreteConvolution.ConvolutionExistsAt L f g x →   
+  DiscreteConvolution.ConvolutionExistsAt L f' g x →       DiscreteConvolution.c
+onvolution L (f + f') g x =         DiscreteConvolution.convolution L f g x + Di
+screteConvolution.convolution L f' g x
+参数：L : E →ₗ[S] E' →ₗ[S] F；f + f'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Summable.tsum_add`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid
+ α] [inst_1 : TopologicalSpace α] {f g : β → α}   {L : SummationFilter β} [T2Spa
+ce α] […
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
 -/
-lemma ConvolutionExistsAt.add_distrib {f f' : M -> E} {g : M -> E'} {x : M}
-    (L : E ->ₗ[S] E' ->ₗ[S] F) (hfg : ConvolutionExistsAt L f g x)
+lemma ConvolutionExistsAt.add_distrib {f f' : M → E} {g : M → E'} {x : M}
+    (L : E →ₗ[S] E' →ₗ[S] F) (hfg : ConvolutionExistsAt L f g x)
     (hfg' : ConvolutionExistsAt L f' g x) :
     ((f + f') ⋆[L] g) x = (f ⋆[L] g) x + (f' ⋆[L] g) x := by
   simpa [convolution] using hfg.tsum_add hfg'
 
 @[to_additive (dont_translate := S E E' F)]
-/--
-lemma `ConvolutionExists.add_distrib` / 引理 `ConvolutionExists.add_distrib`
-
-English:
-lemma ConvolutionExists.add_distrib
-  statement: {f f' : M -> E} {g : M -> E'} (L : E ->ₗ[S] E' ->ₗ[S] F)
-  proof: by
-  ext x; exact (hfg x).add_distrib L (hfg' x)
-
-中文:
-引理 ConvolutionExists.add_distrib
-  结论: {f f' : M -> E} {g : M -> E'} (L : E ->ₗ[S] E' ->ₗ[S] F)
-  证明: by
-  ext x; exact (hfg x).add_distrib L (hfg' x)
+/-
+**DiscreteConvolution.ConvolutionExists.add_distrib** 是 Mathlib 中的一个定理，位于命名空间 `D
+iscreteConvolution.ConvolutionExists`。
+形式化陈述：∀ {M : Type u_1} {S : Type u_2} {E : Type u_3} {E' : Type u_4} {F : Type u
+_6} [inst : Monoid M]   [inst_1 : CommSemiring S] [inst_2 : AddCommMonoid E] [in
+st_3 : AddCommMonoid E'] [inst_4 : AddCommMonoid F]   [inst_5 : _root_.Module S 
+E] [inst_6 : _root_.Module S E'] [inst_7 : _root_.Module S F] [inst_8 : Topologi
+calSpace F]   [T2Space F] [ContinuousAdd F] {f f' : M → E} {g : M → E'} (L : E →
+ₗ[S] E' →ₗ[S] F),   DiscreteConvolution.ConvolutionExists L f g →     DiscreteCo
+nvolution.ConvolutionExists L f' g →       DiscreteConvolution.convolution L (f 
++ f') g =         DiscreteConvolution.convolution L f g + DiscreteConvolution.co
+nvolution L f' g
+参数：L : E →ₗ[S] E' →ₗ[S] F；f + f'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DiscreteConvolution.ConvolutionExistsAt.add_distrib`：∀ {M : Type u_1} {S
+ : Type u_2} {E : Type u_3} {E' : Type u_4} {F : Type u_6} [inst : Monoid M]   [
+inst_1 : CommSemiring S] [inst_2 : AddCom…
 -/
-lemma ConvolutionExists.add_distrib {f f' : M -> E} {g : M -> E'} (L : E ->ₗ[S] E' ->ₗ[S] F)
+lemma ConvolutionExists.add_distrib {f f' : M → E} {g : M → E'} (L : E →ₗ[S] E' →ₗ[S] F)
     (hfg : ConvolutionExists L f g) (hfg' : ConvolutionExists L f' g) :
     (f + f') ⋆[L] g = f ⋆[L] g + f' ⋆[L] g := by
   ext x; exact (hfg x).add_distrib L (hfg' x)
@@ -461,52 +488,74 @@ variable {F : Type*}
 variable [AddCommMonoid F] [Module S F] [TopologicalSpace F] [ContinuousConstSMul S F] [T2Space F]
 
 @[to_additive (dont_translate := S E E' F)]
-/--
-lemma `ConvolutionExistsAt.smul_convolution` / 引理 `ConvolutionExistsAt.smul_convolution`
-
-English:
-lemma ConvolutionExistsAt.smul_convolution
-  statement: {c : S} {f : M -> E} {g : M -> E'} {x : M}
-  proof: by
-  simpa [convolution] using hfg.tsum_const_smul c
-
-@[to_additive (dont_translate := S E E' F)]
-
-中文:
-引理 ConvolutionExistsAt.smul_convolution
-  结论: {c : S} {f : M -> E} {g : M -> E'} {x : M}
-  证明: by
-  simpa [convolution] using hfg.tsum_const_smul c
-
-@[to_additive (dont_translate := S E E' F)]
-
-Depends on / 依赖: convolution, hfg.tsum_const_smul, tsum_const_smul
+/-
+**DiscreteConvolution.ConvolutionExistsAt.smul_convolution** 是 Mathlib 中的一个定理，位于
+命名空间 `DiscreteConvolution.ConvolutionExistsAt`。
+形式化陈述：∀ {M : Type u_1} {S : Type u_2} {E : Type u_3} {E' : Type u_4} [inst : Mon
+oid M] [inst_1 : CommSemiring S]   [inst_2 : AddCommMonoid E] [inst_3 : AddCommM
+onoid E'] [inst_4 : _root_.Module S E] [inst_5 : _root_.Module S E']   {F : Type
+ u_10} [inst_6 : AddCommMonoid F] [inst_7 : _root_.Module S F] [inst_8 : Topolog
+icalSpace F]   [ContinuousConstSMul S F] [T2Space F] {c : S} {f : M → E} {g : M 
+→ E'} {x : M} (L : E →ₗ[S] E' →ₗ[S] F),   DiscreteConvolution.ConvolutionExistsA
+t L f g x →     DiscreteConvolution.convolution L (c • f) g x = c • DiscreteConv
+olution.convolution L f g x
+参数：L : E →ₗ[S] E' →ₗ[S] F；c • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Summable.tsum_const_smul`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3}
+ [inst : TopologicalSpace α] [inst_1 : AddCommMonoid α]   [inst_2 : DistribSMul 
+γ α] [Continuo…
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
 -/
-lemma ConvolutionExistsAt.smul_convolution {c : S} {f : M -> E} {g : M -> E'} {x : M}
-    (L : E ->ₗ[S] E' ->ₗ[S] F) (hfg : ConvolutionExistsAt L f g x) :
+lemma ConvolutionExistsAt.smul_convolution {c : S} {f : M → E} {g : M → E'} {x : M}
+    (L : E →ₗ[S] E' →ₗ[S] F) (hfg : ConvolutionExistsAt L f g x) :
     ((c • f) ⋆[L] g) x = c • ((f ⋆[L] g) x) := by
   simpa [convolution] using hfg.tsum_const_smul c
 
 @[to_additive (dont_translate := S E E' F)]
-/--
-lemma `ConvolutionExistsAt.convolution_smul` / 引理 `ConvolutionExistsAt.convolution_smul`
-
-English:
-lemma ConvolutionExistsAt.convolution_smul
-  statement: {c : S} {f : M -> E} {g : M -> E'} {x : M}
-  proof: by
-  simpa [convolution] using hfg.tsum_const_smul c
-
-中文:
-引理 ConvolutionExistsAt.convolution_smul
-  结论: {c : S} {f : M -> E} {g : M -> E'} {x : M}
-  证明: by
-  simpa [convolution] using hfg.tsum_const_smul c
-
-Depends on / 依赖: convolution, hfg.tsum_const_smul, tsum_const_smul
+/-
+**DiscreteConvolution.ConvolutionExistsAt.convolution_smul** 是 Mathlib 中的一个定理，位于
+命名空间 `DiscreteConvolution.ConvolutionExistsAt`。
+形式化陈述：∀ {M : Type u_1} {S : Type u_2} {E : Type u_3} {E' : Type u_4} [inst : Mon
+oid M] [inst_1 : CommSemiring S]   [inst_2 : AddCommMonoid E] [inst_3 : AddCommM
+onoid E'] [inst_4 : _root_.Module S E] [inst_5 : _root_.Module S E']   {F : Type
+ u_10} [inst_6 : AddCommMonoid F] [inst_7 : _root_.Module S F] [inst_8 : Topolog
+icalSpace F]   [ContinuousConstSMul S F] [T2Space F] {c : S} {f : M → E} {g : M 
+→ E'} {x : M} (L : E →ₗ[S] E' →ₗ[S] F),   DiscreteConvolution.ConvolutionExistsA
+t L f g x →     DiscreteConvolution.convolution L f (c • g) x = c • DiscreteConv
+olution.convolution L f g x
+参数：L : E →ₗ[S] E' →ₗ[S] F；c • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Summable.tsum_const_smul`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3}
+ [inst : TopologicalSpace α] [inst_1 : AddCommMonoid α]   [inst_2 : DistribSMul 
+γ α] [Continuo…
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
 -/
-lemma ConvolutionExistsAt.convolution_smul {c : S} {f : M -> E} {g : M -> E'} {x : M}
-    (L : E ->ₗ[S] E' ->ₗ[S] F) (hfg : ConvolutionExistsAt L f g x) :
+lemma ConvolutionExistsAt.convolution_smul {c : S} {f : M → E} {g : M → E'} {x : M}
+    (L : E →ₗ[S] E' →ₗ[S] F) (hfg : ConvolutionExistsAt L f g x) :
     (f ⋆[L] (c • g)) x = c • ((f ⋆[L] g) x) := by
   simpa [convolution] using hfg.tsum_const_smul c
 
@@ -519,28 +568,10 @@ section CommMonoid
 variable [CommMonoid M] [CommSemiring S] [AddCommMonoid E] [Module S E] [TopologicalSpace E]
 
 @[to_additive]
-/--
-Definition of `mulFiber_swapEquiv` / `mulFiber_swapEquiv` 的定义
-
-English:
-definition mulFiber_swapEquiv
-  signature: (x : M)
-  body: fun ⟨p, h⟩ => ⟨p.swap, by simp_all [mem_mulFiber, mul_comm]⟩
-  invFun := fun ⟨p, h⟩ => ⟨p.swap, by simp_all [mem_mulFiber, mul_comm]⟩
-  left_inv := fun ⟨⟨_, _⟩, _⟩ => rfl
-  right_inv := fun ⟨⟨_, _⟩, _⟩ => rfl
-
-@[to_additive (dont_translate := S E) addConvolution_comm]
-
-中文:
-定义 mulFiber_swapEquiv
-  签名: (x : M)
-  定义体: fun ⟨p, h⟩ => ⟨p.swap, by simp_all [mem_mulFiber, mul_comm]⟩
-  invFun := fun ⟨p, h⟩ => ⟨p.swap, by simp_all [mem_mulFiber, mul_comm]⟩
-  left_inv := fun ⟨⟨_, _⟩, _⟩ => rfl
-  right_inv := fun ⟨⟨_, _⟩, _⟩ => rfl
-
-@[to_additive (dont_translate := S E) addConvolution_comm]
+/-
+**DiscreteConvolution.mulFiber_swapEquiv** 是 Mathlib 中的一个定义，位于命名空间 `DiscreteConv
+olution`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def mulFiber_swapEquiv (x : M) : mulFiber x ≃ mulFiber x where
   toFun := fun ⟨p, h⟩ => ⟨p.swap, by simp_all [mem_mulFiber, mul_comm]⟩
@@ -549,28 +580,24 @@ private def mulFiber_swapEquiv (x : M) : mulFiber x ≃ mulFiber x where
   right_inv := fun ⟨⟨_, _⟩, _⟩ => rfl
 
 @[to_additive (dont_translate := S E) addConvolution_comm]
-/--
-theorem `convolution_comm` / 定理 `convolution_comm`
-
-English:
-theorem convolution_comm
-  given: (L : E ->ₗ[S] E ->ₗ[S] E) (f g : M -> E) (hL : forall x y, L x y = L y x)
-  proof: by
-  unfold convolution; ext x
-  rw [← (mulFiber_swapEquiv x).tsum_eq]
-  congr 1; funext ⟨⟨a, b⟩, _⟩; exact hL (f b) (g a)
-
-中文:
-定理 convolution_comm
-  条件: (L : E ->ₗ[S] E ->ₗ[S] E) (f g : M -> E) (hL : 对任意 x y, L x y = L y x)
-  证明: by
-  unfold convolution; ext x
-  rw [← (mulFiber_swapEquiv x).tsum_eq]
-  congr 1; funext ⟨⟨a, b⟩, _⟩; exact hL (f b) (g a)
-
-Depends on / 依赖: convolution, mulFiber_swapEquiv, tsum_eq
+/-
+**DiscreteConvolution.convolution_comm** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteConvol
+ution`。
+形式化陈述：convolution_comm (L : E ->ₗ[S] E ->ₗ[S] E) (f g : M -> E) (hL : forall x y
+, L x y = L y x) : f ⋆[L] g = g ⋆[L] f
+参数：L : E ->ₗ[S] E ->ₗ[S] E；f g : M -> E；hL : forall x y, L x y = L y x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.tsum_eq`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : Ad
+dCommMonoid α] [inst_1 : TopologicalSpace α] (e : γ ≃ β)   (f : β → α), ∑' (c : 
+γ),…
 -/
-theorem convolution_comm (L : E ->ₗ[S] E ->ₗ[S] E) (f g : M -> E) (hL : forall x y, L x y = L y x) :
+theorem convolution_comm (L : E →ₗ[S] E →ₗ[S] E) (f g : M → E) (hL : ∀ x y, L x y = L y x) :
     f ⋆[L] g = g ⋆[L] f := by
   unfold convolution; ext x
   rw [← (mulFiber_swapEquiv x).tsum_eq]
@@ -581,3 +608,4 @@ end CommMonoid
 end DiscreteConvolution
 
 end
+

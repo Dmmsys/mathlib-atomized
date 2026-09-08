@@ -37,410 +37,340 @@ variable {α : Type*} {G G' : SimpleGraph α}
 
 section eccent
 
-/--
-Definition of `eccent` / `eccent` 的定义
+/-- The eccentricity of a vertex is the greatest distance between it and any other vertex. -/
+/-
+**SimpleGraph.eccent** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent (G : SimpleGraph α) (u : α) : Nat∞
+参数：G : SimpleGraph α；u : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eccent
-  signature: (G : SimpleGraph α) (u : α)
-  body: ⨆ v, G.edist u v
-
-中文:
-定义 eccent
-  签名: (G : 简单图 α) (u : α)
-  定义体: ⨆ v, G.edist u v
-
-Depends on / 依赖: G.edist
+--- 原说明 ---
+The eccentricity of a vertex is the greatest distance between it and any other v
+ertex.
 -/
-noncomputable def eccent (G : SimpleGraph α) (u : α) : Nat∞ :=
+noncomputable def eccent (G : SimpleGraph α) (u : α) : ℕ∞ :=
   ⨆ v, G.edist u v
-
-/--
-lemma `eccent_def` / 引理 `eccent_def`
-
-English:
-lemma eccent_def
-  statement: G.eccent = fun u => ⨆ v, G.edist u v
-  proof: rfl
-
-中文:
-引理 eccent_def
-  结论: G.eccent = fun u => ⨆ v, G.edist u v
-  证明: rfl
+/-
+**SimpleGraph.eccent_def** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_def : G.eccent = fun u => ⨆ v, G.edist u v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma eccent_def : G.eccent = fun u => ⨆ v, G.edist u v := rfl
-
-/--
-lemma `edist_le_eccent` / 引理 `edist_le_eccent`
-
-English:
-lemma edist_le_eccent
-  given: {u v : α}
-  statement: G.edist u v <= G.eccent u
-  proof: le_iSup (G.edist u) v
-
-中文:
-引理 edist_le_eccent
-  条件: {u v : α}
-  结论: G.edist u v <= G.eccent u
-  证明: le_iSup (G.edist u) v
-
-Depends on / 依赖: G.edist, le_iSup
+lemma eccent_def : G.eccent = fun u ↦ ⨆ v, G.edist u v := rfl
+/-
+**SimpleGraph.edist_le_eccent** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：edist_le_eccent {u v : α} : G.edist u v <= G.eccent u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-lemma edist_le_eccent {u v : α} : G.edist u v <= G.eccent u :=
+lemma edist_le_eccent {u v : α} : G.edist u v ≤ G.eccent u :=
   le_iSup (G.edist u) v
-
-/--
-lemma `exists_edist_eq_eccent_of_finite` / 引理 `exists_edist_eq_eccent_of_finite`
-
-English:
-lemma exists_edist_eq_eccent_of_finite
-  given: [Finite α] (u : α)
-  proof: have : Nonempty α := Nonempty.intro u
-  exists_eq_ciSup_of_finite
-
-中文:
-引理 存在_edist_eq_eccent_of_finite
-  条件: [有限 α] (u : α)
-  证明: have : Nonempty α := Nonempty.intro u
-  exists_eq_ciSup_of_finite
-
-Depends on / 依赖: Nonempty, Nonempty.intro, exists_eq_ciSup_of_finite
+/-
+**SimpleGraph.exists_edist_eq_eccent_of_finite** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph`。
+形式化陈述：exists_edist_eq_eccent_of_finite [Finite α] (u : α) : exists v, G.edist u 
+v = G.eccent u
+参数：u : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_eq_ciSup_of_finite`：exists_eq_ciSup_of_finite [Nonempty ι] [Finit
+e ι] {f : ι -> α} : exists i, f i = ⨆ i, f i
 -/
 lemma exists_edist_eq_eccent_of_finite [Finite α] (u : α) :
-    exists v, G.edist u v = G.eccent u :=
+    ∃ v, G.edist u v = G.eccent u :=
   have : Nonempty α := Nonempty.intro u
   exists_eq_ciSup_of_finite
-
-/--
-lemma `eccent_eq_top_of_not_connected` / 引理 `eccent_eq_top_of_not_connected`
-
-English:
-lemma eccent_eq_top_of_not_connected
-  given: (h : ¬ G.Connected) (u : α)
-  proof: by
-  rw [connected_iff_exists_forall_reachable] at h
-  push Not at h
-  obtain ⟨v, h⟩ := h u
-  rw [eq_top_iff]; rw [← edist_eq_top_of_not_reachable h]
-  exact le_iSup (G.edist u) v
-
-中文:
-引理 eccent_eq_top_of_not_connected
-  条件: (h : ¬ G.连通) (u : α)
-  证明: by
-  rw [connected_iff_exists_forall_reachable] at h
-  push Not at h
-  obtain ⟨v, h⟩ := h u
-  rw [eq_top_iff]; rw [← edist_eq_top_of_not_reachable h]
-  exact le_iSup (G.edist u) v
-
-Depends on / 依赖: G.edist, connected_iff_exists_forall_reachable, edist_eq_top_of_not_reachable, eq_top_iff, le_iSup
+/-
+**SimpleGraph.eccent_eq_top_of_not_connected** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：eccent_eq_top_of_not_connected (h : ¬ G.Connected) (u : α) : G.eccent u = 
+⊤
+参数：h : ¬ G.Connected；u : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.connected_iff_exists_forall_reachable`：connected_iff_exists_
+forall_reachable : G.Connected ↔ exists v, forall w, G.Reachable v w
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.edist_eq_top_of_not_reachable`：edist_eq_top_of_not_reachable
+ (h : ¬G.Reachable u v) : G.edist u v = ⊤
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
 lemma eccent_eq_top_of_not_connected (h : ¬ G.Connected) (u : α) :
     G.eccent u = ⊤ := by
   rw [connected_iff_exists_forall_reachable] at h
   push Not at h
   obtain ⟨v, h⟩ := h u
-  rw [eq_top_iff]; rw [← edist_eq_top_of_not_reachable h]
+  rw [eq_top_iff, ← edist_eq_top_of_not_reachable h]
   exact le_iSup (G.edist u) v
-
-/--
-lemma `eccent_eq_zero_of_subsingleton` / 引理 `eccent_eq_zero_of_subsingleton`
-
-English:
-lemma eccent_eq_zero_of_subsingleton
-  given: [Subsingleton α] (u : α)
-  statement: G.eccent u = 0
-  proof: by
-  simpa [eccent, edist_eq_zero_iff] using subsingleton_iff.mp ‹_› u
-
-中文:
-引理 eccent_eq_zero_of_subsingleton
-  条件: [子单例 α] (u : α)
-  结论: G.eccent u = 0
-  证明: by
-  simpa [eccent, edist_eq_zero_iff] using subsingleton_iff.mp ‹_› u
-
-Depends on / 依赖: eccent, edist_eq_zero_iff, subsingleton_iff, subsingleton_iff.mp
+/-
+**SimpleGraph.eccent_eq_zero_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：eccent_eq_zero_of_subsingleton [Subsingleton α] (u : α) : G.eccent u = 0
+参数：u : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `subsingleton_iff`：subsingleton_iff : Subsingleton α ↔ forall x y : α, x 
+= y
 -/
 lemma eccent_eq_zero_of_subsingleton [Subsingleton α] (u : α) : G.eccent u = 0 := by
   simpa [eccent, edist_eq_zero_iff] using subsingleton_iff.mp ‹_› u
-
-/--
-lemma `eccent_ne_zero` / 引理 `eccent_ne_zero`
-
-English:
-lemma eccent_ne_zero
-  given: [Nontrivial α] (u : α)
-  statement: G.eccent u != 0
-  proof: by
-  obtain ⟨v, huv⟩ := exists_ne ‹_›
-  contrapose huv
-  simp only [eccent, ENat.iSup_eq_zero, edist_eq_zero_iff] at huv
-  exact (huv v).symm
-
-中文:
-引理 eccent_ne_zero
-  条件: [非平凡 α] (u : α)
-  结论: G.eccent u != 0
-  证明: by
-  obtain ⟨v, huv⟩ := exists_ne ‹_›
-  contrapose huv
-  simp only [eccent, ENat.iSup_eq_zero, edist_eq_zero_iff] at huv
-  exact (huv v).symm
-
-Depends on / 依赖: ENat.iSup_eq_zero, contrapose, eccent, edist_eq_zero_iff, exists_ne, iSup_eq_zero
+/-
+**SimpleGraph.eccent_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_ne_zero [Nontrivial α] (u : α) : G.eccent u != 0
+参数：u : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-lemma eccent_ne_zero [Nontrivial α] (u : α) : G.eccent u != 0 := by
+lemma eccent_ne_zero [Nontrivial α] (u : α) : G.eccent u ≠ 0 := by
   obtain ⟨v, huv⟩ := exists_ne ‹_›
   contrapose huv
   simp only [eccent, ENat.iSup_eq_zero, edist_eq_zero_iff] at huv
   exact (huv v).symm
-
-/--
-lemma `eccent_eq_zero_iff` / 引理 `eccent_eq_zero_iff`
-
-English:
-lemma eccent_eq_zero_iff
-  given: (u : α)
-  statement: G.eccent u = 0 ↔ Subsingleton α
-  proof: by
-  refine ⟨fun h => ?_, fun _ => eccent_eq_zero_of_subsingleton u⟩
-  contrapose! h
-  exact eccent_ne_zero u
-
-中文:
-引理 eccent_eq_zero_iff
-  条件: (u : α)
-  结论: G.eccent u = 0 ↔ 子单例 α
-  证明: by
-  refine ⟨fun h => ?_, fun _ => eccent_eq_zero_of_subsingleton u⟩
-  contrapose! h
-  exact eccent_ne_zero u
-
-Depends on / 依赖: contrapose, eccent_eq_zero_of_subsingleton, eccent_ne_zero
+/-
+**SimpleGraph.eccent_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_eq_zero_iff (u : α) : G.eccent u = 0 ↔ Subsingleton α
+参数：u : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `SimpleGraph.eccent_ne_zero`：eccent_ne_zero [Nontrivial α] (u : α) : G.ec
+cent u != 0
+· 使用引理 `SimpleGraph.eccent_eq_zero_of_subsingleton`：eccent_eq_zero_of_subsinglet
+on [Subsingleton α] (u : α) : G.eccent u = 0
 -/
 lemma eccent_eq_zero_iff (u : α) : G.eccent u = 0 ↔ Subsingleton α := by
-  refine ⟨fun h => ?_, fun _ => eccent_eq_zero_of_subsingleton u⟩
+  refine ⟨fun h ↦ ?_, fun _ ↦ eccent_eq_zero_of_subsingleton u⟩
   contrapose! h
   exact eccent_ne_zero u
-
-/--
-lemma `eccent_pos_iff` / 引理 `eccent_pos_iff`
-
-English:
-lemma eccent_pos_iff
-  given: (u : α)
-  statement: 0 < G.eccent u ↔ Nontrivial α
-  proof: by
-  rw [pos_iff_ne_zero]; rw [← not_subsingleton_iff_nontrivial]; rw [← eccent_eq_zero_iff]
-
-@[simp]
-
-中文:
-引理 eccent_pos_iff
-  条件: (u : α)
-  结论: 0 < G.eccent u ↔ 非平凡 α
-  证明: by
-  rw [pos_iff_ne_zero]; rw [← not_subsingleton_iff_nontrivial]; rw [← eccent_eq_zero_iff]
-
-@[simp]
-
-Depends on / 依赖: eccent_eq_zero_iff, not_subsingleton_iff_nontrivial, pos_iff_ne_zero
+/-
+**SimpleGraph.eccent_pos_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_pos_iff (u : α) : 0 < G.eccent u ↔ Nontrivial α
+参数：u : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `not_subsingleton_iff_nontrivial`：not_subsingleton_iff_nontrivial : ¬Subs
+ingleton α ↔ Nontrivial α
+· 使用引理 `SimpleGraph.eccent_eq_zero_iff`：eccent_eq_zero_iff (u : α) : G.eccent u 
+= 0 ↔ Subsingleton α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma eccent_pos_iff (u : α) : 0 < G.eccent u ↔ Nontrivial α := by
-  rw [pos_iff_ne_zero]; rw [← not_subsingleton_iff_nontrivial]; rw [← eccent_eq_zero_iff]
+  rw [pos_iff_ne_zero, ← not_subsingleton_iff_nontrivial, ← eccent_eq_zero_iff]
 
 @[simp]
-/--
-lemma `eccent_bot` / 引理 `eccent_bot`
-
-English:
-lemma eccent_bot
-  given: [Nontrivial α] (u : α)
-  statement: (⊥ : SimpleGraph α).eccent u = ⊤
-  proof: eccent_eq_top_of_not_connected not_connected_bot u
-
-@[simp]
-
-中文:
-引理 eccent_bot
-  条件: [非平凡 α] (u : α)
-  结论: (⊥ : 简单图 α).eccent u = ⊤
-  证明: eccent_eq_top_of_not_connected not_connected_bot u
-
-@[simp]
-
-Depends on / 依赖: eccent_eq_top_of_not_connected, not_connected_bot
+/-
+**SimpleGraph.eccent_bot** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_bot [Nontrivial α] (u : α) : (⊥ : SimpleGraph α).eccent u = ⊤
+参数：u : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.eccent_eq_top_of_not_connected`：eccent_eq_top_of_not_connect
+ed (h : ¬ G.Connected) (u : α) : G.eccent u = ⊤
+· 使用引理 `SimpleGraph.not_connected_bot`：not_connected_bot [Nontrivial V] : ¬(⊥ : 
+SimpleGraph V).Connected
 -/
 lemma eccent_bot [Nontrivial α] (u : α) : (⊥ : SimpleGraph α).eccent u = ⊤ :=
   eccent_eq_top_of_not_connected not_connected_bot u
 
 @[simp]
-/--
-lemma `eccent_top` / 引理 `eccent_top`
-
-English:
-lemma eccent_top
-  given: [Nontrivial α] (u : α)
-  statement: (⊤ : SimpleGraph α).eccent u = 1
-  proof: by
-apply le_antisymm ?_ Order.one_le_iff_pos.mpr pos_iff_ne_zero.mpr eccent_ne_zero u
-  rw [eccent]; rw [iSup_le_iff]
-  intro v
-  cases eq_or_ne u v <;> simp_all [edist_top_of_ne]
-
-中文:
-引理 eccent_top
-  条件: [非平凡 α] (u : α)
-  结论: (⊤ : 简单图 α).eccent u = 1
-  证明: by
-apply le_antisymm ?_ Order.one_le_iff_pos.mpr pos_iff_ne_zero.mpr eccent_ne_zero u
-  rw [eccent]; rw [iSup_le_iff]
-  intro v
-  cases eq_or_ne u v <;> simp_all [edist_top_of_ne]
-
-Depends on / 依赖: Order.one_le_iff_pos.mpr, eccent, eccent_ne_zero, edist_top_of_ne, eq_or_ne, iSup_le_iff, le_antisymm, one_le_iff_pos, pos_iff_ne_zero, pos_iff_ne_zero.mpr
+/-
+**SimpleGraph.eccent_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_top [Nontrivial α] (u : α) : (⊤ : SimpleGraph α).eccent u = 1
+参数：u : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.eccent.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α) (u : α), G
+.eccent u = ⨆ v, G.edist u v
+· 使用定理 `iSup_le_iff`：iSup_le_iff : iSup f <= a ↔ forall i, f i <= a
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.edist_self`：edist_self : edist G v v = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用引理 `SimpleGraph.edist_top_of_ne`：edist_top_of_ne (h : u != v) : (⊤ : SimpleG
+raph V).edist u v = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instNontrivialENat`：Nontrivial ℕ∞
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用引理 `SimpleGraph.eccent_ne_zero`：eccent_ne_zero [Nontrivial α] (u : α) : G.ec
+cent u != 0
 -/
 lemma eccent_top [Nontrivial α] (u : α) : (⊤ : SimpleGraph α).eccent u = 1 := by
-apply le_antisymm ?_ Order.one_le_iff_pos.mpr pos_iff_ne_zero.mpr eccent_ne_zero u
-  rw [eccent]; rw [iSup_le_iff]
+  apply le_antisymm ?_ <| Order.one_le_iff_pos.mpr <| pos_iff_ne_zero.mpr <| eccent_ne_zero u
+  rw [eccent, iSup_le_iff]
   intro v
   cases eq_or_ne u v <;> simp_all [edist_top_of_ne]
-
-/--
-lemma `eq_top_iff_forall_eccent_eq_one` / 引理 `eq_top_iff_forall_eccent_eq_one`
-
-English:
-lemma eq_top_iff_forall_eccent_eq_one
-  given: [Nontrivial α]
-  proof: by
-  refine ⟨fun h => h ▸ eccent_top, fun h => ?_⟩
-  ext u v
-  refine ⟨Adj.ne, fun huv => ?_⟩
-  rw [← edist_eq_one_iff_adj]
-  apply le_antisymm ((h u).symm ▸ edist_le_eccent)
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]; rw [edist_eq_zero_iff.ne]
-  exact huv.ne
-
-中文:
-引理 eq_top_iff_对任意_eccent_eq_one
-  条件: [非平凡 α]
-  证明: by
-  refine ⟨fun h => h ▸ eccent_top, fun h => ?_⟩
-  ext u v
-  refine ⟨Adj.ne, fun huv => ?_⟩
-  rw [← edist_eq_one_iff_adj]
-  apply le_antisymm ((h u).symm ▸ edist_le_eccent)
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]; rw [edist_eq_zero_iff.ne]
-  exact huv.ne
-
-Depends on / 依赖: Adj.ne, Order.one_le_iff_pos, eccent_top, edist_eq_one_iff_adj, edist_eq_zero_iff, edist_eq_zero_iff.ne, edist_le_eccent, huv.ne, le_antisymm, one_le_iff_pos, pos_iff_ne_zero
+/-
+**SimpleGraph.eq_top_iff_forall_eccent_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph`。
+形式化陈述：eq_top_iff_forall_eccent_eq_one [Nontrivial α] : G = ⊤ ↔ forall u, G.eccen
+t u = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.eccent_top`：eccent_top [Nontrivial α] (u : α) : (⊤ : SimpleG
+raph α).eccent u = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.ext`：∀ {V : Type u} {x y : SimpleGraph V}, x.Adj = y.Adj → x
+ = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {a b : V}, G.Adj 
+a b → a ≠ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.edist_eq_one_iff_adj`：edist_eq_one_iff_adj : G.edist u v = 1
+ ↔ G.Adj u v
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `SimpleGraph.edist_le_eccent`：edist_le_eccent {u v : α} : G.edist u v <= 
+G.eccent u
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instNontrivialENat`：Nontrivial ℕ∞
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `Iff.ne`：∀ {α : Sort u_1} {β : Sort u_2} {a b : α} {c d : β}, (a = b ↔ c 
+= d) → (a ≠ b ↔ c ≠ d)
+· 使用定理 `SimpleGraph.edist_eq_zero_iff`：edist_eq_zero_iff : G.edist u v = 0 ↔ u =
+ v
 -/
 lemma eq_top_iff_forall_eccent_eq_one [Nontrivial α] :
-    G = ⊤ ↔ forall u, G.eccent u = 1 := by
-  refine ⟨fun h => h ▸ eccent_top, fun h => ?_⟩
+    G = ⊤ ↔ ∀ u, G.eccent u = 1 := by
+  refine ⟨fun h ↦ h ▸ eccent_top, fun h ↦ ?_⟩
   ext u v
-  refine ⟨Adj.ne, fun huv => ?_⟩
+  refine ⟨Adj.ne, fun huv ↦ ?_⟩
   rw [← edist_eq_one_iff_adj]
   apply le_antisymm ((h u).symm ▸ edist_le_eccent)
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]; rw [edist_eq_zero_iff.ne]
+  rw [Order.one_le_iff_pos, pos_iff_ne_zero, edist_eq_zero_iff.ne]
   exact huv.ne
-
-/--
-lemma `eccent_le_iff` / 引理 `eccent_le_iff`
-
-English:
-lemma eccent_le_iff
-  given: (u : α) (k : Nat∞)
-  statement: G.eccent u <= k ↔ forall v, G.edist u v <= k
-  proof: iSup_le_iff
-
-中文:
-引理 eccent_le_iff
-  条件: (u : α) (k : 自然数∞)
-  结论: G.eccent u <= k ↔ 对任意 v, G.edist u v <= k
-  证明: iSup_le_iff
-
-Depends on / 依赖: iSup_le_iff
+/-
+**SimpleGraph.eccent_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_le_iff (u : α) (k : Nat∞) : G.eccent u <= k ↔ forall v, G.edist u v
+ <= k
+参数：u : α；k : Nat∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iSup_le_iff`：iSup_le_iff : iSup f <= a ↔ forall i, f i <= a
 -/
-lemma eccent_le_iff (u : α) (k : Nat∞) : G.eccent u <= k ↔ forall v, G.edist u v <= k :=
+lemma eccent_le_iff (u : α) (k : ℕ∞) : G.eccent u ≤ k ↔ ∀ v, G.edist u v ≤ k :=
   iSup_le_iff
-
-/--
-lemma `eccent_le_one_iff` / 引理 `eccent_le_one_iff`
-
-English:
-lemma eccent_le_one_iff
-  given: (u : α)
-  statement: G.eccent u <= 1 ↔ forall v, u != v -> G.Adj u v
-  proof: by
-  constructor
-  · intro h v huv
-    have hd : G.edist u v <= 1 := edist_le_eccent.trans h
-    have hd' : 1 <= G.edist u v := Order.one_le_iff_pos.mpr (G.edist_pos_of_ne huv)
-    exact edist_eq_one_iff_adj.mp (le_antisymm (hd') hd).symm
-  · intro hall
-    rw [eccent_le_iff]
-    intro v
-    rw [edist_le_one_iff_adj_or_eq]
-    exact or_iff_not_imp_right.mpr (hall v)
-
-中文:
-引理 eccent_le_one_iff
-  条件: (u : α)
-  结论: G.eccent u <= 1 ↔ 对任意 v, u != v -> G.伴随 u v
-  证明: by
-  constructor
-  · intro h v huv
-    have hd : G.edist u v <= 1 := edist_le_eccent.trans h
-    have hd' : 1 <= G.edist u v := Order.one_le_iff_pos.mpr (G.edist_pos_of_ne huv)
-    exact edist_eq_one_iff_adj.mp (le_antisymm (hd') hd).symm
-  · intro hall
-    rw [eccent_le_iff]
-    intro v
-    rw [edist_le_one_iff_adj_or_eq]
-    exact or_iff_not_imp_right.mpr (hall v)
-
-Depends on / 依赖: G.edist, G.edist_pos_of_ne, Order.one_le_iff_pos.mpr, eccent_le_iff, edist_eq_one_iff_adj, edist_eq_one_iff_adj.mp, edist_le_eccent, edist_le_eccent.trans, edist_le_one_iff_adj_or_eq, edist_pos_of_ne, le_antisymm, one_le_iff_pos, or_iff_not_imp_right, or_iff_not_imp_right.mpr
+/-
+**SimpleGraph.eccent_le_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_le_one_iff (u : α) : G.eccent u <= 1 ↔ forall v, u != v -> G.Adj u 
+v
+参数：u : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `SimpleGraph.edist_le_eccent`：edist_le_eccent {u v : α} : G.edist u v <= 
+G.eccent u
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instNontrivialENat`：Nontrivial ℕ∞
+· 使用定理 `SimpleGraph.edist_pos_of_ne`：edist_pos_of_ne (hne : u != v) : 0 < G.edis
+t u v
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.edist_eq_one_iff_adj`：edist_eq_one_iff_adj : G.edist u v = 1
+ ↔ G.Adj u v
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.eccent_le_iff`：eccent_le_iff (u : α) (k : Nat∞) : G.eccent u
+ <= k ↔ forall v, G.edist u v <= k
+· 使用引理 `SimpleGraph.edist_le_one_iff_adj_or_eq`：edist_le_one_iff_adj_or_eq : G.e
+dist u v <= 1 ↔ G.Adj u v ∨ u = v
+· 使用定理 `Classical.or_iff_not_imp_right`：∀ {a b : Prop}, a ∨ b ↔ ¬b → a
 -/
-lemma eccent_le_one_iff (u : α) : G.eccent u <= 1 ↔ forall v, u != v -> G.Adj u v := by
+lemma eccent_le_one_iff (u : α) : G.eccent u ≤ 1 ↔ ∀ v, u ≠ v → G.Adj u v := by
   constructor
   · intro h v huv
-    have hd : G.edist u v <= 1 := edist_le_eccent.trans h
-    have hd' : 1 <= G.edist u v := Order.one_le_iff_pos.mpr (G.edist_pos_of_ne huv)
+    have hd : G.edist u v ≤ 1 := edist_le_eccent.trans h
+    have hd' : 1 ≤ G.edist u v := Order.one_le_iff_pos.mpr (G.edist_pos_of_ne huv)
     exact edist_eq_one_iff_adj.mp (le_antisymm (hd') hd).symm
   · intro hall
     rw [eccent_le_iff]
     intro v
     rw [edist_le_one_iff_adj_or_eq]
     exact or_iff_not_imp_right.mpr (hall v)
-
-/--
-lemma `eccent_eq_one_iff` / 引理 `eccent_eq_one_iff`
-
-English:
-lemma eccent_eq_one_iff
-  given: [Nontrivial α] (u : α)
-  proof: by
-  have h : 1 <= G.eccent u := Order.one_le_iff_ne_zero.mpr (eccent_ne_zero u)
-  rw [← h.ge_iff_eq']
-  exact eccent_le_one_iff u
-
-中文:
-引理 eccent_eq_one_iff
-  条件: [非平凡 α] (u : α)
-  证明: by
-  have h : 1 <= G.eccent u := Order.one_le_iff_ne_zero.mpr (eccent_ne_zero u)
-  rw [← h.ge_iff_eq']
-  exact eccent_le_one_iff u
-
-Depends on / 依赖: G.eccent, Order.one_le_iff_ne_zero.mpr, eccent, eccent_le_one_iff, eccent_ne_zero, ge_iff_eq, h.ge_iff_eq, one_le_iff_ne_zero
+/-
+**SimpleGraph.eccent_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_eq_one_iff [Nontrivial α] (u : α) : G.eccent u = 1 ↔ forall v, u !=
+ v -> G.Adj u v
+参数：u : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.one_le_iff_ne_zero`：one_le_iff_ne_zero [AddMonoidWithOne α] [NeZer
+o (1 : α)] [SuccAddOrder α] [IsBotZeroClass α] : 1 <= x ↔ x != 0
+· 使用定理 `instNontrivialENat`：Nontrivial ℕ∞
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用引理 `SimpleGraph.eccent_ne_zero`：eccent_ne_zero [Nontrivial α] (u : α) : G.ec
+cent u != 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.ge_iff_eq'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (a ≤ b ↔ a = b)
+· 使用引理 `SimpleGraph.eccent_le_one_iff`：eccent_le_one_iff (u : α) : G.eccent u <=
+ 1 ↔ forall v, u != v -> G.Adj u v
 -/
 lemma eccent_eq_one_iff [Nontrivial α] (u : α) :
-    G.eccent u = 1 ↔ forall v, u != v -> G.Adj u v := by
-  have h : 1 <= G.eccent u := Order.one_le_iff_ne_zero.mpr (eccent_ne_zero u)
+    G.eccent u = 1 ↔ ∀ v, u ≠ v → G.Adj u v := by
+  have h : 1 ≤ G.eccent u := Order.one_le_iff_ne_zero.mpr (eccent_ne_zero u)
   rw [← h.ge_iff_eq']
   exact eccent_le_one_iff u
 
@@ -449,667 +379,520 @@ end eccent
 section ediam
 
 /--
-Definition of `ediam` / `ediam` 的定义
-
-English:
-definition ediam
-  signature: (G : SimpleGraph α)
-  body: ⨆ u, G.eccent u
-
-中文:
-定义 ediam
-  签名: (G : 简单图 α)
-  定义体: ⨆ u, G.eccent u
-
-Depends on / 依赖: G.eccent, eccent
+The extended diameter is the greatest distance between any two vertices, with the value `⊤` in
+case the distances are not bounded above, or the graph is not connected.
 -/
-noncomputable def ediam (G : SimpleGraph α) : Nat∞ :=
+/-
+**SimpleGraph.ediam** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam (G : SimpleGraph α) : Nat∞
+参数：G : SimpleGraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The extended diameter is the greatest distance between any two vertices, with th
+e value `⊤` in
+case the distances are not bounded above, or the graph is not connected.
+-/
+noncomputable def ediam (G : SimpleGraph α) : ℕ∞ :=
   ⨆ u, G.eccent u
-
-/--
-lemma `ediam_eq_iSup_iSup_edist` / 引理 `ediam_eq_iSup_iSup_edist`
-
-English:
-lemma ediam_eq_iSup_iSup_edist
-  statement: G.ediam = ⨆ u, ⨆ v, G.edist u v
-  proof: rfl
-
-中文:
-引理 ediam_eq_iSup_iSup_edist
-  结论: G.ediam = ⨆ u, ⨆ v, G.edist u v
-  证明: rfl
+/-
+**SimpleGraph.ediam_eq_iSup_iSup_edist** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_eq_iSup_iSup_edist : G.ediam = ⨆ u, ⨆ v, G.edist u v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ediam_eq_iSup_iSup_edist : G.ediam = ⨆ u, ⨆ v, G.edist u v :=
   rfl
-
-/--
-lemma `ediam_def` / 引理 `ediam_def`
-
-English:
-lemma ediam_def
-  statement: G.ediam = ⨆ p : α × α, G.edist p.1 p.2
-  proof: by
-  rw [ediam]; rw [eccent_def]; rw [iSup_prod]
-
-中文:
-引理 ediam_def
-  结论: G.ediam = ⨆ p : α × α, G.edist p.1 p.2
-  证明: by
-  rw [ediam]; rw [eccent_def]; rw [iSup_prod]
-
-Depends on / 依赖: eccent_def, iSup_prod
+/-
+**SimpleGraph.ediam_def** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_def : G.ediam = ⨆ p : α × α, G.edist p.1 p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.ediam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.ediam = 
+⨆ u, G.eccent u
+· 使用引理 `SimpleGraph.eccent_def`：eccent_def : G.eccent = fun u => ⨆ v, G.edist u 
+v
+· 使用定理 `iSup_prod`：iSup_prod {f : β × γ -> α} : ⨆ x, f x = ⨆ (i) (j), f (i, j)
 -/
 lemma ediam_def : G.ediam = ⨆ p : α × α, G.edist p.1 p.2 := by
-  rw [ediam]; rw [eccent_def]; rw [iSup_prod]
-
-/--
-lemma `eccent_le_ediam` / 引理 `eccent_le_ediam`
-
-English:
-lemma eccent_le_ediam
-  given: {u : α}
-  statement: G.eccent u <= G.ediam
-  proof: le_iSup G.eccent u
-
-中文:
-引理 eccent_le_ediam
-  条件: {u : α}
-  结论: G.eccent u <= G.ediam
-  证明: le_iSup G.eccent u
-
-Depends on / 依赖: G.eccent, eccent, le_iSup
+  rw [ediam, eccent_def, iSup_prod]
+/-
+**SimpleGraph.eccent_le_ediam** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：eccent_le_ediam {u : α} : G.eccent u <= G.ediam
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-lemma eccent_le_ediam {u : α} : G.eccent u <= G.ediam :=
+lemma eccent_le_ediam {u : α} : G.eccent u ≤ G.ediam :=
   le_iSup G.eccent u
-
-/--
-lemma `edist_le_ediam` / 引理 `edist_le_ediam`
-
-English:
-lemma edist_le_ediam
-  given: {u v : α}
-  statement: G.edist u v <= G.ediam
-  proof: le_iSup₂ (f := G.edist) u v
-
-中文:
-引理 edist_le_ediam
-  条件: {u v : α}
-  结论: G.edist u v <= G.ediam
-  证明: le_iSup₂ (f := G.edist) u v
-
-Depends on / 依赖: G.edist
+/-
+**SimpleGraph.edist_le_ediam** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：edist_le_ediam {u v : α} : G.edist u v <= G.ediam
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_iSup₂`：le_iSup₂ {f : forall i, κ i -> α} (i : ι) (j : κ i) : f i j <=
+ ⨆ (i) (j), f i j
 -/
-lemma edist_le_ediam {u v : α} : G.edist u v <= G.ediam :=
+lemma edist_le_ediam {u v : α} : G.edist u v ≤ G.ediam :=
   le_iSup₂ (f := G.edist) u v
-
-/--
-lemma `ediam_le_of_edist_le` / 引理 `ediam_le_of_edist_le`
-
-English:
-lemma ediam_le_of_edist_le
-  given: {k : Nat∞} (h : forall u v, G.edist u v <= k)
-  statement: G.ediam <= k
-  proof: iSup₂_le h
-
-中文:
-引理 ediam_le_of_edist_le
-  条件: {k : 自然数∞} (h : 对任意 u v, G.edist u v <= k)
-  结论: G.ediam <= k
-  证明: iSup₂_le h
+/-
+**SimpleGraph.ediam_le_of_edist_le** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_le_of_edist_le {k : Nat∞} (h : forall u v, G.edist u v <= k) : G.edi
+am <= k
+参数：h : forall u v, G.edist u v <= k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iSup₂_le`：iSup₂_le {f : forall i, κ i -> α} (h : forall i j, f i j <= a)
+ : ⨆ (i) (j), f i j <= a
 -/
-lemma ediam_le_of_edist_le {k : Nat∞} (h : forall u v, G.edist u v <= k) : G.ediam <= k :=
+lemma ediam_le_of_edist_le {k : ℕ∞} (h : ∀ u v, G.edist u v ≤ k) : G.ediam ≤ k :=
   iSup₂_le h
-
-/--
-lemma `ediam_le_iff` / 引理 `ediam_le_iff`
-
-English:
-lemma ediam_le_iff
-  given: {k : Nat∞}
-  statement: G.ediam <= k ↔ forall u v, G.edist u v <= k
-  proof: iSup₂_le_iff
-
-中文:
-引理 ediam_le_iff
-  条件: {k : 自然数∞}
-  结论: G.ediam <= k ↔ 对任意 u v, G.edist u v <= k
-  证明: iSup₂_le_iff
+/-
+**SimpleGraph.ediam_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_le_iff {k : Nat∞} : G.ediam <= k ↔ forall u v, G.edist u v <= k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iSup₂_le_iff`：iSup₂_le_iff {f : forall i, κ i -> α} : ⨆ (i) (j), f i j <
+= a ↔ forall i j, f i j <= a
 -/
-lemma ediam_le_iff {k : Nat∞} : G.ediam <= k ↔ forall u v, G.edist u v <= k :=
+lemma ediam_le_iff {k : ℕ∞} : G.ediam ≤ k ↔ ∀ u v, G.edist u v ≤ k :=
   iSup₂_le_iff
-
-/--
-lemma `ediam_eq_top` / 引理 `ediam_eq_top`
-
-English:
-lemma ediam_eq_top
-  statement: G.ediam = ⊤ ↔ forall b < ⊤, exists u v, b < G.edist u v
-  proof: by
-  simp only [ediam, eccent, iSup_eq_top, lt_iSup_iff]
-
-中文:
-引理 ediam_eq_top
-  结论: G.ediam = ⊤ ↔ 对任意 b < ⊤, 存在 u v, b < G.edist u v
-  证明: by
-  simp only [ediam, eccent, iSup_eq_top, lt_iSup_iff]
-
-Depends on / 依赖: eccent, iSup_eq_top, lt_iSup_iff
+/-
+**SimpleGraph.ediam_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_eq_top : G.ediam = ⊤ ↔ forall b < ⊤, exists u v, b < G.edist u v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma ediam_eq_top : G.ediam = ⊤ ↔ forall b < ⊤, exists u v, b < G.edist u v := by
+lemma ediam_eq_top : G.ediam = ⊤ ↔ ∀ b < ⊤, ∃ u v, b < G.edist u v := by
   simp only [ediam, eccent, iSup_eq_top, lt_iSup_iff]
-
-/--
-lemma `ediam_eq_zero_of_subsingleton` / 引理 `ediam_eq_zero_of_subsingleton`
-
-English:
-lemma ediam_eq_zero_of_subsingleton
-  given: [Subsingleton α]
-  statement: G.ediam = 0
-  proof: by
-  simp [ediam_def]
-
-中文:
-引理 ediam_eq_zero_of_subsingleton
-  条件: [子单例 α]
-  结论: G.ediam = 0
-  证明: by
-  simp [ediam_def]
-
-Depends on / 依赖: ediam_def
+/-
+**SimpleGraph.ediam_eq_zero_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：ediam_eq_zero_of_subsingleton [Subsingleton α] : G.ediam = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.ediam_def`：ediam_def : G.ediam = ⨆ p : α × α, G.edist p.1 p.
+2
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma ediam_eq_zero_of_subsingleton [Subsingleton α] : G.ediam = 0 := by
   simp [ediam_def]
-
-/--
-lemma `nontrivial_of_ediam_ne_zero` / 引理 `nontrivial_of_ediam_ne_zero`
-
-English:
-lemma nontrivial_of_ediam_ne_zero
-  given: (h : G.ediam != 0)
-  statement: Nontrivial α
-  proof: by
-  contrapose! h
-  exact ediam_eq_zero_of_subsingleton
-
-中文:
-引理 nontrivial_of_ediam_ne_zero
-  条件: (h : G.ediam != 0)
-  结论: 非平凡 α
-  证明: by
-  contrapose! h
-  exact ediam_eq_zero_of_subsingleton
-
-Depends on / 依赖: contrapose, ediam_eq_zero_of_subsingleton
+/-
+**SimpleGraph.nontrivial_of_ediam_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph
+`。
+形式化陈述：nontrivial_of_ediam_ne_zero (h : G.ediam != 0) : Nontrivial α
+参数：h : G.ediam != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `SimpleGraph.ediam_eq_zero_of_subsingleton`：ediam_eq_zero_of_subsingleton
+ [Subsingleton α] : G.ediam = 0
 -/
-lemma nontrivial_of_ediam_ne_zero (h : G.ediam != 0) : Nontrivial α := by
+lemma nontrivial_of_ediam_ne_zero (h : G.ediam ≠ 0) : Nontrivial α := by
   contrapose! h
   exact ediam_eq_zero_of_subsingleton
-
-/--
-lemma `ediam_ne_zero` / 引理 `ediam_ne_zero`
-
-English:
-lemma ediam_ne_zero
-  given: [Nontrivial α]
-  statement: G.ediam != 0
-  proof: by
-  obtain ⟨u, v, huv⟩ := exists_pair_ne ‹_›
-  contrapose huv
-  simp only [ediam, eccent, ENat.iSup_eq_zero, edist_eq_zero_iff] at huv
-  exact huv u v
-
-中文:
-引理 ediam_ne_zero
-  条件: [非平凡 α]
-  结论: G.ediam != 0
-  证明: by
-  obtain ⟨u, v, huv⟩ := exists_pair_ne ‹_›
-  contrapose huv
-  simp only [ediam, eccent, ENat.iSup_eq_zero, edist_eq_zero_iff] at huv
-  exact huv u v
-
-Depends on / 依赖: ENat.iSup_eq_zero, contrapose, eccent, edist_eq_zero_iff, exists_pair_ne, iSup_eq_zero
+/-
+**SimpleGraph.ediam_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_ne_zero [Nontrivial α] : G.ediam != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pair_ne`：exists_pair_ne (α : Type*) [Nontrivial α] : exists x y :
+ α, x != y
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-lemma ediam_ne_zero [Nontrivial α] : G.ediam != 0 := by
+lemma ediam_ne_zero [Nontrivial α] : G.ediam ≠ 0 := by
   obtain ⟨u, v, huv⟩ := exists_pair_ne ‹_›
   contrapose huv
   simp only [ediam, eccent, ENat.iSup_eq_zero, edist_eq_zero_iff] at huv
   exact huv u v
-
-/--
-lemma `subsingleton_of_ediam_eq_zero` / 引理 `subsingleton_of_ediam_eq_zero`
-
-English:
-lemma subsingleton_of_ediam_eq_zero
-  given: (h : G.ediam = 0)
-  statement: Subsingleton α
-  proof: by
-  contrapose! h
-  exact ediam_ne_zero
-
-中文:
-引理 subsingleton_of_ediam_eq_zero
-  条件: (h : G.ediam = 0)
-  结论: 子单例 α
-  证明: by
-  contrapose! h
-  exact ediam_ne_zero
-
-Depends on / 依赖: contrapose, ediam_ne_zero
+/-
+**SimpleGraph.subsingleton_of_ediam_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：subsingleton_of_ediam_eq_zero (h : G.ediam = 0) : Subsingleton α
+参数：h : G.ediam = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `SimpleGraph.ediam_ne_zero`：ediam_ne_zero [Nontrivial α] : G.ediam != 0
 -/
 lemma subsingleton_of_ediam_eq_zero (h : G.ediam = 0) : Subsingleton α := by
   contrapose! h
   exact ediam_ne_zero
-
-/--
-lemma `ediam_ne_zero_iff_nontrivial` / 引理 `ediam_ne_zero_iff_nontrivial`
-
-English:
-lemma ediam_ne_zero_iff_nontrivial
-  proof: ⟨nontrivial_of_ediam_ne_zero, fun _ => ediam_ne_zero⟩
-
-@[simp]
-
-中文:
-引理 ediam_ne_zero_iff_nontrivial
-  证明: ⟨nontrivial_of_ediam_ne_zero, fun _ => ediam_ne_zero⟩
-
-@[simp]
-
-Depends on / 依赖: ediam_ne_zero, nontrivial_of_ediam_ne_zero
+/-
+**SimpleGraph.ediam_ne_zero_iff_nontrivial** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：ediam_ne_zero_iff_nontrivial : G.ediam != 0 ↔ Nontrivial α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.nontrivial_of_ediam_ne_zero`：nontrivial_of_ediam_ne_zero (h 
+: G.ediam != 0) : Nontrivial α
+· 使用引理 `SimpleGraph.ediam_ne_zero`：ediam_ne_zero [Nontrivial α] : G.ediam != 0
 -/
 lemma ediam_ne_zero_iff_nontrivial :
-    G.ediam != 0 ↔ Nontrivial α :=
-  ⟨nontrivial_of_ediam_ne_zero, fun _ => ediam_ne_zero⟩
+    G.ediam ≠ 0 ↔ Nontrivial α :=
+  ⟨nontrivial_of_ediam_ne_zero, fun _ ↦ ediam_ne_zero⟩
 
 @[simp]
-/--
-lemma `ediam_eq_zero_iff_subsingleton` / 引理 `ediam_eq_zero_iff_subsingleton`
-
-English:
-lemma ediam_eq_zero_iff_subsingleton
-  proof: ⟨subsingleton_of_ediam_eq_zero, fun _ => ediam_eq_zero_of_subsingleton⟩
-
-中文:
-引理 ediam_eq_zero_iff_subsingleton
-  证明: ⟨subsingleton_of_ediam_eq_zero, fun _ => ediam_eq_zero_of_subsingleton⟩
-
-Depends on / 依赖: ediam_eq_zero_of_subsingleton, subsingleton_of_ediam_eq_zero
+/-
+**SimpleGraph.ediam_eq_zero_iff_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：ediam_eq_zero_iff_subsingleton : G.ediam = 0 ↔ Subsingleton α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.subsingleton_of_ediam_eq_zero`：subsingleton_of_ediam_eq_zero
+ (h : G.ediam = 0) : Subsingleton α
+· 使用引理 `SimpleGraph.ediam_eq_zero_of_subsingleton`：ediam_eq_zero_of_subsingleton
+ [Subsingleton α] : G.ediam = 0
 -/
 lemma ediam_eq_zero_iff_subsingleton :
     G.ediam = 0 ↔ Subsingleton α :=
-  ⟨subsingleton_of_ediam_eq_zero, fun _ => ediam_eq_zero_of_subsingleton⟩
-
-/--
-lemma `ediam_eq_top_of_not_connected` / 引理 `ediam_eq_top_of_not_connected`
-
-English:
-lemma ediam_eq_top_of_not_connected
-  given: [Nonempty α] (h : ¬ G.Connected)
-  statement: G.ediam = ⊤
-  proof: by
-  rw [connected_iff_exists_forall_reachable] at h
-  push Not at h
-  obtain ⟨_, hw⟩ := h Classical.ofNonempty
-  rw [eq_top_iff]; rw [← edist_eq_top_of_not_reachable hw]
-  exact edist_le_ediam
-
-中文:
-引理 ediam_eq_top_of_not_connected
-  条件: [非空 α] (h : ¬ G.连通)
-  结论: G.ediam = ⊤
-  证明: by
-  rw [connected_iff_exists_forall_reachable] at h
-  push Not at h
-  obtain ⟨_, hw⟩ := h Classical.ofNonempty
-  rw [eq_top_iff]; rw [← edist_eq_top_of_not_reachable hw]
-  exact edist_le_ediam
-
-Depends on / 依赖: Classical, Classical.ofNonempty, connected_iff_exists_forall_reachable, edist_eq_top_of_not_reachable, edist_le_ediam, eq_top_iff, ofNonempty
+  ⟨subsingleton_of_ediam_eq_zero, fun _ ↦ ediam_eq_zero_of_subsingleton⟩
+/-
+**SimpleGraph.ediam_eq_top_of_not_connected** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：ediam_eq_top_of_not_connected [Nonempty α] (h : ¬ G.Connected) : G.ediam =
+ ⊤
+参数：h : ¬ G.Connected。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.connected_iff_exists_forall_reachable`：connected_iff_exists_
+forall_reachable : G.Connected ↔ exists v, forall w, G.Reachable v w
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.edist_eq_top_of_not_reachable`：edist_eq_top_of_not_reachable
+ (h : ¬G.Reachable u v) : G.edist u v = ⊤
+· 使用引理 `SimpleGraph.edist_le_ediam`：edist_le_ediam {u v : α} : G.edist u v <= G.
+ediam
 -/
 lemma ediam_eq_top_of_not_connected [Nonempty α] (h : ¬ G.Connected) : G.ediam = ⊤ := by
   rw [connected_iff_exists_forall_reachable] at h
   push Not at h
   obtain ⟨_, hw⟩ := h Classical.ofNonempty
-  rw [eq_top_iff]; rw [← edist_eq_top_of_not_reachable hw]
+  rw [eq_top_iff, ← edist_eq_top_of_not_reachable hw]
   exact edist_le_ediam
-
-/--
-lemma `ediam_eq_top_of_not_preconnected` / 引理 `ediam_eq_top_of_not_preconnected`
-
-English:
-lemma ediam_eq_top_of_not_preconnected
-  given: (h : ¬ G.Preconnected)
-  statement: G.ediam = ⊤
-  proof: by
-  cases isEmpty_or_nonempty α
-  · exfalso
-exact h IsEmpty.forall_iff.mpr trivial
-  · apply ediam_eq_top_of_not_connected
-    rw [connected_iff]
-    tauto
-
-中文:
-引理 ediam_eq_top_of_not_preconnected
-  条件: (h : ¬ G.预连通)
-  结论: G.ediam = ⊤
-  证明: by
-  cases isEmpty_or_nonempty α
-  · exfalso
-exact h IsEmpty.forall_iff.mpr trivial
-  · apply ediam_eq_top_of_not_connected
-    rw [connected_iff]
-    tauto
-
-Depends on / 依赖: IsEmpty, IsEmpty.forall_iff.mpr, connected_iff, ediam_eq_top_of_not_connected, forall_iff, isEmpty_or_nonempty
+/-
+**SimpleGraph.ediam_eq_top_of_not_preconnected** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph`。
+形式化陈述：ediam_eq_top_of_not_preconnected (h : ¬ G.Preconnected) : G.ediam = ⊤
+参数：h : ¬ G.Preconnected。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsEmpty.forall_iff`：forall_iff {p : α -> Prop} : (forall a, p a) ↔ True
+· 使用定理 `trivial`：True
+· 使用引理 `SimpleGraph.ediam_eq_top_of_not_connected`：ediam_eq_top_of_not_connected
+ [Nonempty α] (h : ¬ G.Connected) : G.ediam = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.connected_iff`：∀ {V : Type u} (G : SimpleGraph V), G.Connect
+ed ↔ G.Preconnected ∧ Nonempty V
 -/
 lemma ediam_eq_top_of_not_preconnected (h : ¬ G.Preconnected) : G.ediam = ⊤ := by
   cases isEmpty_or_nonempty α
   · exfalso
-exact h IsEmpty.forall_iff.mpr trivial
+    exact h <| IsEmpty.forall_iff.mpr trivial
   · apply ediam_eq_top_of_not_connected
     rw [connected_iff]
     tauto
-
-/--
-lemma `preconnected_of_ediam_ne_top` / 引理 `preconnected_of_ediam_ne_top`
-
-English:
-lemma preconnected_of_ediam_ne_top
-  given: (h : G.ediam != ⊤)
-  statement: G.Preconnected
-  proof: Not.imp_symm G.ediam_eq_top_of_not_preconnected h
-
-中文:
-引理 preconnected_of_ediam_ne_top
-  条件: (h : G.ediam != ⊤)
-  结论: G.预连通
-  证明: Not.imp_symm G.ediam_eq_top_of_not_preconnected h
-
-Depends on / 依赖: G.ediam_eq_top_of_not_preconnected, Not.imp_symm, ediam_eq_top_of_not_preconnected, imp_symm
+/-
+**SimpleGraph.preconnected_of_ediam_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：preconnected_of_ediam_ne_top (h : G.ediam != ⊤) : G.Preconnected
+参数：h : G.ediam != ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Not.imp_symm`：Not.imp_symm : (¬a -> b) -> ¬b -> a
+· 使用引理 `SimpleGraph.ediam_eq_top_of_not_preconnected`：ediam_eq_top_of_not_precon
+nected (h : ¬ G.Preconnected) : G.ediam = ⊤
 -/
-lemma preconnected_of_ediam_ne_top (h : G.ediam != ⊤) : G.Preconnected :=
+lemma preconnected_of_ediam_ne_top (h : G.ediam ≠ ⊤) : G.Preconnected :=
   Not.imp_symm G.ediam_eq_top_of_not_preconnected h
-
-/--
-lemma `connected_of_ediam_ne_top` / 引理 `connected_of_ediam_ne_top`
-
-English:
-lemma connected_of_ediam_ne_top
-  given: [Nonempty α] (h : G.ediam != ⊤)
-  statement: G.Connected
-  proof: G.connected_iff.mpr ⟨preconnected_of_ediam_ne_top h, ‹_›⟩
-
-中文:
-引理 connected_of_ediam_ne_top
-  条件: [非空 α] (h : G.ediam != ⊤)
-  结论: G.连通
-  证明: G.connected_iff.mpr ⟨preconnected_of_ediam_ne_top h, ‹_›⟩
-
-Depends on / 依赖: G.connected_iff.mpr, connected_iff, preconnected_of_ediam_ne_top
+/-
+**SimpleGraph.connected_of_ediam_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：connected_of_ediam_ne_top [Nonempty α] (h : G.ediam != ⊤) : G.Connected
+参数：h : G.ediam != ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.connected_iff`：∀ {V : Type u} (G : SimpleGraph V), G.Connect
+ed ↔ G.Preconnected ∧ Nonempty V
+· 使用引理 `SimpleGraph.preconnected_of_ediam_ne_top`：preconnected_of_ediam_ne_top (
+h : G.ediam != ⊤) : G.Preconnected
 -/
-lemma connected_of_ediam_ne_top [Nonempty α] (h : G.ediam != ⊤) : G.Connected :=
+lemma connected_of_ediam_ne_top [Nonempty α] (h : G.ediam ≠ ⊤) : G.Connected :=
   G.connected_iff.mpr ⟨preconnected_of_ediam_ne_top h, ‹_›⟩
-
-/--
-lemma `exists_eccent_eq_ediam_of_ne_top` / 引理 `exists_eccent_eq_ediam_of_ne_top`
-
-English:
-lemma exists_eccent_eq_ediam_of_ne_top
-  given: [Nonempty α] (h : G.ediam != ⊤)
-  proof: ENat.exists_eq_iSup_of_lt_top h.lt_top
-
-中文:
-引理 存在_eccent_eq_ediam_of_ne_top
-  条件: [非空 α] (h : G.ediam != ⊤)
-  证明: ENat.exists_eq_iSup_of_lt_top h.lt_top
-
-Depends on / 依赖: ENat.exists_eq_iSup_of_lt_top, exists_eq_iSup_of_lt_top, h.lt_top, lt_top
+/-
+**SimpleGraph.exists_eccent_eq_ediam_of_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph`。
+形式化陈述：exists_eccent_eq_ediam_of_ne_top [Nonempty α] (h : G.ediam != ⊤) : exists 
+u, G.eccent u = G.ediam
+参数：h : G.ediam != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENat.exists_eq_iSup_of_lt_top`：exists_eq_iSup_of_lt_top [Nonempty ι] (h 
+: ⨆ i, f i < ⊤) : exists i, f i = ⨆ i, f i
+· 使用定理 `Ne.lt_top`：Ne.lt_top (h : a != ⊤) : a < ⊤
 -/
-lemma exists_eccent_eq_ediam_of_ne_top [Nonempty α] (h : G.ediam != ⊤) :
-    exists u, G.eccent u = G.ediam :=
+lemma exists_eccent_eq_ediam_of_ne_top [Nonempty α] (h : G.ediam ≠ ⊤) :
+    ∃ u, G.eccent u = G.ediam :=
   ENat.exists_eq_iSup_of_lt_top h.lt_top
 
 -- Note: Neither `Finite α` nor `G.ediam ≠ ⊤` implies the other.
-/--
-lemma `exists_eccent_eq_ediam_of_finite` / 引理 `exists_eccent_eq_ediam_of_finite`
-
-English:
-lemma exists_eccent_eq_ediam_of_finite
-  given: [Nonempty α] [Finite α]
-  proof: exists_eq_ciSup_of_finite
-
-中文:
-引理 存在_eccent_eq_ediam_of_finite
-  条件: [非空 α] [有限 α]
-  证明: exists_eq_ciSup_of_finite
-
-Depends on / 依赖: exists_eq_ciSup_of_finite
+/-
+**SimpleGraph.exists_eccent_eq_ediam_of_finite** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph`。
+形式化陈述：exists_eccent_eq_ediam_of_finite [Nonempty α] [Finite α] : exists u, G.ecc
+ent u = G.ediam
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_eq_ciSup_of_finite`：exists_eq_ciSup_of_finite [Nonempty ι] [Finit
+e ι] {f : ι -> α} : exists i, f i = ⨆ i, f i
 -/
 lemma exists_eccent_eq_ediam_of_finite [Nonempty α] [Finite α] :
-    exists u, G.eccent u = G.ediam :=
+    ∃ u, G.eccent u = G.ediam :=
   exists_eq_ciSup_of_finite
-
-/--
-lemma `exists_edist_eq_ediam_of_ne_top` / 引理 `exists_edist_eq_ediam_of_ne_top`
-
-English:
-lemma exists_edist_eq_ediam_of_ne_top
-  given: [Nonempty α] (h : G.ediam != ⊤)
-  proof: ENat.exists_eq_iSup₂_of_lt_top h.lt_top
-
-中文:
-引理 存在_edist_eq_ediam_of_ne_top
-  条件: [非空 α] (h : G.ediam != ⊤)
-  证明: ENat.exists_eq_iSup₂_of_lt_top h.lt_top
-
-Depends on / 依赖: ENat.exists_eq_iSup, h.lt_top, lt_top
+/-
+**SimpleGraph.exists_edist_eq_ediam_of_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph`。
+形式化陈述：exists_edist_eq_ediam_of_ne_top [Nonempty α] (h : G.ediam != ⊤) : exists u
+ v, G.edist u v = G.ediam
+参数：h : G.ediam != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENat.exists_eq_iSup₂_of_lt_top`：exists_eq_iSup₂_of_lt_top {ι₁ ι₂ : Type*
+} {f : ι₁ -> ι₂ -> Nat∞} [Nonempty ι₁] [Nonempty ι₂] (h : ⨆ i, ⨆ j, f i j < ⊤) :
+ exists i j, f i j =…
+· 使用定理 `Ne.lt_top`：Ne.lt_top (h : a != ⊤) : a < ⊤
 -/
-lemma exists_edist_eq_ediam_of_ne_top [Nonempty α] (h : G.ediam != ⊤) :
-    exists u v, G.edist u v = G.ediam :=
+lemma exists_edist_eq_ediam_of_ne_top [Nonempty α] (h : G.ediam ≠ ⊤) :
+    ∃ u v, G.edist u v = G.ediam :=
   ENat.exists_eq_iSup₂_of_lt_top h.lt_top
 
 -- Note: Neither `Finite α` nor `G.ediam ≠ ⊤` implies the other.
-/--
-lemma `exists_edist_eq_ediam_of_finite` / 引理 `exists_edist_eq_ediam_of_finite`
-
-English:
-lemma exists_edist_eq_ediam_of_finite
-  given: [Nonempty α] [Finite α]
-  proof: Prod.exists'.mp ediam_def ▸ exists_eq_ciSup_of_finite
-
-中文:
-引理 存在_edist_eq_ediam_of_finite
-  条件: [非空 α] [有限 α]
-  证明: Prod.exists'.mp ediam_def ▸ exists_eq_ciSup_of_finite
-
-Depends on / 依赖: Prod.exists, ediam_def, exists_eq_ciSup_of_finite
+/-
+**SimpleGraph.exists_edist_eq_ediam_of_finite** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph`。
+形式化陈述：exists_edist_eq_ediam_of_finite [Nonempty α] [Finite α] : exists u v, G.ed
+ist u v = G.ediam
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.exists'`：exists' {p : α -> β -> Prop} : (exists x : α × β, p x.1 x.
+2) ↔ exists a b, p a b
+· 使用定理 `exists_eq_ciSup_of_finite`：exists_eq_ciSup_of_finite [Nonempty ι] [Finit
+e ι] {f : ι -> α} : exists i, f i = ⨆ i, f i
+· 使用定理 `instNonemptyProd`：∀ {α : Type u_1} {β : Type u_2} [h1 : Nonempty α] [h2 
+: Nonempty β], Nonempty (α × β)
+· 使用定理 `Finite.instProd`：∀ {α : Type u_1} {β : Type u_2} [Finite α] [Finite β], 
+Finite (α × β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.ediam_def`：ediam_def : G.ediam = ⨆ p : α × α, G.edist p.1 p.
+2
 -/
 lemma exists_edist_eq_ediam_of_finite [Nonempty α] [Finite α] :
-    exists u v, G.edist u v = G.ediam :=
-Prod.exists'.mp ediam_def ▸ exists_eq_ciSup_of_finite
+    ∃ u v, G.edist u v = G.ediam :=
+  Prod.exists'.mp <| ediam_def ▸ exists_eq_ciSup_of_finite
 
-/--
-lemma `connected_iff_ediam_ne_top` / 引理 `connected_iff_ediam_ne_top`
+/-- In a finite graph with nontrivial vertex set, the graph is connected
+if and only if the extended diameter is not `⊤`.
+See `connected_of_ediam_ne_top` for one of the implications without
+the finiteness assumptions -/
+/-
+**SimpleGraph.connected_iff_ediam_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：connected_iff_ediam_ne_top [Nonempty α] [Finite α] : G.Connected ↔ G.ediam
+ != ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.exists_edist_eq_ediam_of_finite`：exists_edist_eq_ediam_of_fi
+nite [Nonempty α] [Finite α] : exists u v, G.edist u v = G.ediam
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `SimpleGraph.edist_ne_top_iff_reachable`：edist_ne_top_iff_reachable : G.e
+dist u v != ⊤ ↔ G.Reachable u v
+· 使用定理 `SimpleGraph.Connected.preconnected`：∀ {V : Type u} {G : SimpleGraph V}, 
+G.Connected → G.Preconnected
+· 使用引理 `SimpleGraph.connected_of_ediam_ne_top`：connected_of_ediam_ne_top [Nonemp
+ty α] (h : G.ediam != ⊤) : G.Connected
 
-English:
-lemma connected_iff_ediam_ne_top
-  given: [Nonempty α] [Finite α]
-  statement: G.Connected ↔ G.ediam != ⊤
-  proof: have ⟨u, v, huv⟩ := G.exists_edist_eq_ediam_of_finite
-  ⟨fun h => huv ▸ edist_ne_top_iff_reachable.mpr (h u v),
-   fun h => G.connected_of_ediam_ne_top h⟩
-
-@[gcongr]
-
-中文:
-引理 connected_iff_ediam_ne_top
-  条件: [非空 α] [有限 α]
-  结论: G.连通 ↔ G.ediam != ⊤
-  证明: have ⟨u, v, huv⟩ := G.exists_edist_eq_ediam_of_finite
-  ⟨fun h => huv ▸ edist_ne_top_iff_reachable.mpr (h u v),
-   fun h => G.connected_of_ediam_ne_top h⟩
-
-@[gcongr]
-
-Depends on / 依赖: G.connected_of_ediam_ne_top, G.exists_edist_eq_ediam_of_finite, connected_of_ediam_ne_top, edist_ne_top_iff_reachable, edist_ne_top_iff_reachable.mpr, exists_edist_eq_ediam_of_finite
+--- 原说明 ---
+In a finite graph with nontrivial vertex set, the graph is connected
+if and only if the extended diameter is not `⊤`.
+See `connected_of_ediam_ne_top` for one of the implications without
+the finiteness assumptions
 -/
-lemma connected_iff_ediam_ne_top [Nonempty α] [Finite α] : G.Connected ↔ G.ediam != ⊤ :=
+lemma connected_iff_ediam_ne_top [Nonempty α] [Finite α] : G.Connected ↔ G.ediam ≠ ⊤ :=
   have ⟨u, v, huv⟩ := G.exists_edist_eq_ediam_of_finite
-  ⟨fun h => huv ▸ edist_ne_top_iff_reachable.mpr (h u v),
-   fun h => G.connected_of_ediam_ne_top h⟩
+  ⟨fun h ↦ huv ▸ edist_ne_top_iff_reachable.mpr (h u v),
+   fun h ↦ G.connected_of_ediam_ne_top h⟩
 
 @[gcongr]
-/--
-lemma `ediam_anti` / 引理 `ediam_anti`
-
-English:
-lemma ediam_anti
-  given: (h : G <= G')
-  statement: G'.ediam <= G.ediam
-  proof: iSup₂_mono fun _ _ => edist_anti h
-
-@[simp]
-
-中文:
-引理 ediam_anti
-  条件: (h : G <= G')
-  结论: G'.ediam <= G.ediam
-  证明: iSup₂_mono fun _ _ => edist_anti h
-
-@[simp]
-
-Depends on / 依赖: edist_anti
+/-
+**SimpleGraph.ediam_anti** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_anti (h : G <= G') : G'.ediam <= G.ediam
+参数：h : G <= G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iSup₂_mono`：iSup₂_mono {f g : forall i, κ i -> α} (h : forall i j, f i j
+ <= g i j) : ⨆ (i) (j), f i j <= ⨆ (i) (j), g i j
+· 使用定理 `SimpleGraph.edist_anti`：edist_anti {G' : SimpleGraph V} (h : G <= G') : 
+G'.edist u v <= G.edist u v
 -/
-lemma ediam_anti (h : G <= G') : G'.ediam <= G.ediam :=
-  iSup₂_mono fun _ _ => edist_anti h
+lemma ediam_anti (h : G ≤ G') : G'.ediam ≤ G.ediam :=
+  iSup₂_mono fun _ _ ↦ edist_anti h
 
 @[simp]
-/--
-lemma `ediam_bot` / 引理 `ediam_bot`
-
-English:
-lemma ediam_bot
-  given: [Nontrivial α]
-  statement: (⊥ : SimpleGraph α).ediam = ⊤
-  proof: ediam_eq_top_of_not_connected not_connected_bot
-
-@[simp]
-
-中文:
-引理 ediam_bot
-  条件: [非平凡 α]
-  结论: (⊥ : 简单图 α).ediam = ⊤
-  证明: ediam_eq_top_of_not_connected not_connected_bot
-
-@[simp]
-
-Depends on / 依赖: ediam_eq_top_of_not_connected, not_connected_bot
+/-
+**SimpleGraph.ediam_bot** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_bot [Nontrivial α] : (⊥ : SimpleGraph α).ediam = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.ediam_eq_top_of_not_connected`：ediam_eq_top_of_not_connected
+ [Nonempty α] (h : ¬ G.Connected) : G.ediam = ⊤
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用引理 `SimpleGraph.not_connected_bot`：not_connected_bot [Nontrivial V] : ¬(⊥ : 
+SimpleGraph V).Connected
 -/
 lemma ediam_bot [Nontrivial α] : (⊥ : SimpleGraph α).ediam = ⊤ :=
   ediam_eq_top_of_not_connected not_connected_bot
 
 @[simp]
-/--
-lemma `ediam_top` / 引理 `ediam_top`
-
-English:
-lemma ediam_top
-  given: [Nontrivial α]
-  statement: (⊤ : SimpleGraph α).ediam = 1
-  proof: by
-  simp [ediam]
-
-@[simp]
-
-中文:
-引理 ediam_top
-  条件: [非平凡 α]
-  结论: (⊤ : 简单图 α).ediam = 1
-  证明: by
-  simp [ediam]
-
-@[simp]
+/-
+**SimpleGraph.ediam_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_top [Nontrivial α] : (⊤ : SimpleGraph α).ediam = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `SimpleGraph.eccent_top`：eccent_top [Nontrivial α] (u : α) : (⊤ : SimpleG
+raph α).eccent u = 1
+· 使用定理 `ciSup_const`：ciSup_const [hι : Nonempty ι] {a : α} : ⨆ _ : ι, a = a
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ediam_top [Nontrivial α] : (⊤ : SimpleGraph α).ediam = 1 := by
   simp [ediam]
 
 @[simp]
-/--
-lemma `ediam_eq_one` / 引理 `ediam_eq_one`
-
-English:
-lemma ediam_eq_one
-  given: [Nontrivial α]
-  statement: G.ediam = 1 ↔ G = ⊤
-  proof: by
-  refine ⟨fun h => ?_, fun h => h ▸ ediam_top⟩
-  rw [eq_top_iff_forall_eccent_eq_one]
-  intro u
-  apply le_antisymm (h ▸ eccent_le_ediam)
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]
-  exact eccent_ne_zero u
-
-中文:
-引理 ediam_eq_one
-  条件: [非平凡 α]
-  结论: G.ediam = 1 ↔ G = ⊤
-  证明: by
-  refine ⟨fun h => ?_, fun h => h ▸ ediam_top⟩
-  rw [eq_top_iff_forall_eccent_eq_one]
-  intro u
-  apply le_antisymm (h ▸ eccent_le_ediam)
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]
-  exact eccent_ne_zero u
-
-Depends on / 依赖: Order.one_le_iff_pos, eccent_le_ediam, eccent_ne_zero, ediam_top, eq_top_iff_forall_eccent_eq_one, le_antisymm, one_le_iff_pos, pos_iff_ne_zero
+/-
+**SimpleGraph.ediam_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_eq_one [Nontrivial α] : G.ediam = 1 ↔ G = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.eq_top_iff_forall_eccent_eq_one`：eq_top_iff_forall_eccent_eq
+_one [Nontrivial α] : G = ⊤ ↔ forall u, G.eccent u = 1
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `SimpleGraph.eccent_le_ediam`：eccent_le_ediam {u : α} : G.eccent u <= G.e
+diam
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instNontrivialENat`：Nontrivial ℕ∞
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用引理 `SimpleGraph.eccent_ne_zero`：eccent_ne_zero [Nontrivial α] (u : α) : G.ec
+cent u != 0
+· 使用引理 `SimpleGraph.ediam_top`：ediam_top [Nontrivial α] : (⊤ : SimpleGraph α).ed
+iam = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma ediam_eq_one [Nontrivial α] : G.ediam = 1 ↔ G = ⊤ := by
-  refine ⟨fun h => ?_, fun h => h ▸ ediam_top⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ h ▸ ediam_top⟩
   rw [eq_top_iff_forall_eccent_eq_one]
   intro u
   apply le_antisymm (h ▸ eccent_le_ediam)
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]
+  rw [Order.one_le_iff_pos, pos_iff_ne_zero]
   exact eccent_ne_zero u
-
-/--
-lemma `ediam_le_two_mul_eccent` / 引理 `ediam_le_two_mul_eccent`
-
-English:
-lemma ediam_le_two_mul_eccent
-  given: (u : α)
-  statement: G.ediam <= 2 * G.eccent u
-  proof: by
-  refine ediam_le_of_edist_le fun v w => ?_
-  calc
-    G.edist v w
-      <= G.edist v u + G.edist u w := G.edist_triangle
-    _ = G.edist u v + G.edist u w := by rw [edist_comm]
-    _ <= G.eccent u + G.eccent u := add_le_add edist_le_eccent edist_le_eccent
-    _ = 2 * G.eccent u := (two_mul _).symm
-
-中文:
-引理 ediam_le_two_mul_eccent
-  条件: (u : α)
-  结论: G.ediam <= 2 * G.eccent u
-  证明: by
-  refine ediam_le_of_edist_le fun v w => ?_
-  calc
-    G.edist v w
-      <= G.edist v u + G.edist u w := G.edist_triangle
-    _ = G.edist u v + G.edist u w := by rw [edist_comm]
-    _ <= G.eccent u + G.eccent u := add_le_add edist_le_eccent edist_le_eccent
-    _ = 2 * G.eccent u := (two_mul _).symm
-
-Depends on / 依赖: G.eccent, G.edist, G.edist_triangle, add_le_add, eccent, ediam_le_of_edist_le, edist_comm, edist_le_eccent, edist_triangle, two_mul
+/-
+**SimpleGraph.ediam_le_two_mul_eccent** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_le_two_mul_eccent (u : α) : G.ediam <= 2 * G.eccent u
+参数：u : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.ediam_le_of_edist_le`：ediam_le_of_edist_le {k : Nat∞} (h : f
+orall u v, G.edist u v <= k) : G.ediam <= k
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SimpleGraph.edist_triangle`：∀ {V : Type u_1} {G : SimpleGraph V} {u v w 
+: V}, G.edist u w ≤ G.edist u v + G.edist v w
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.edist_comm`：edist_comm : G.edist u v = G.edist v u
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `SimpleGraph.edist_le_eccent`：edist_le_eccent {u v : α} : G.edist u v <= 
+G.eccent u
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
 -/
-lemma ediam_le_two_mul_eccent (u : α) : G.ediam <= 2 * G.eccent u := by
-  refine ediam_le_of_edist_le fun v w => ?_
+lemma ediam_le_two_mul_eccent (u : α) : G.ediam ≤ 2 * G.eccent u := by
+  refine ediam_le_of_edist_le fun v w ↦ ?_
   calc
     G.edist v w
-      <= G.edist v u + G.edist u w := G.edist_triangle
+      ≤ G.edist v u + G.edist u w := G.edist_triangle
     _ = G.edist u v + G.edist u w := by rw [edist_comm]
-    _ <= G.eccent u + G.eccent u := add_le_add edist_le_eccent edist_le_eccent
+    _ ≤ G.eccent u + G.eccent u := add_le_add edist_le_eccent edist_le_eccent
     _ = 2 * G.eccent u := (two_mul _).symm
 
 end ediam
@@ -1117,644 +900,501 @@ end ediam
 section diam
 
 /--
-Definition of `diam` / `diam` 的定义
+The diameter is the greatest distance between any two vertices, with the value `0` in
+case the distances are not bounded above, or the graph is not connected.
+-/
+/-
+**SimpleGraph.diam** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：diam (G : SimpleGraph α)
+参数：G : SimpleGraph α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diam
-  signature: (G : SimpleGraph α)
-  body: G.ediam.toNat
-
-中文:
-定义 diam
-  签名: (G : 简单图 α)
-  定义体: G.ediam.toNat
-
-Depends on / 依赖: G.ediam.toNat
+--- 原说明 ---
+The diameter is the greatest distance between any two vertices, with the value `
+0` in
+case the distances are not bounded above, or the graph is not connected.
 -/
 noncomputable def diam (G : SimpleGraph α) :=
   G.ediam.toNat
-
-/--
-lemma `diam_def` / 引理 `diam_def`
-
-English:
-lemma diam_def
-  statement: G.diam = (⨆ p : α × α, G.edist p.1 p.2).toNat
-  proof: by
-  rw [diam]; rw [ediam_def]
-
-中文:
-引理 diam_def
-  结论: G.diam = (⨆ p : α × α, G.edist p.1 p.2).to自然数
-  证明: by
-  rw [diam]; rw [ediam_def]
-
-Depends on / 依赖: ediam_def
+/-
+**SimpleGraph.diam_def** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：diam_def : G.diam = (⨆ p : α × α, G.edist p.1 p.2).toNat
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用引理 `SimpleGraph.ediam_def`：ediam_def : G.ediam = ⨆ p : α × α, G.edist p.1 p.
+2
 -/
 lemma diam_def : G.diam = (⨆ p : α × α, G.edist p.1 p.2).toNat := by
-  rw [diam]; rw [ediam_def]
-
-/--
-lemma `dist_le_diam` / 引理 `dist_le_diam`
-
-English:
-lemma dist_le_diam
-  given: (h : G.ediam != ⊤) {u v : α}
-  statement: G.dist u v <= G.diam
-  proof: ENat.toNat_le_toNat edist_le_ediam h
-
-中文:
-引理 dist_le_diam
-  条件: (h : G.ediam != ⊤) {u v : α}
-  结论: G.dist u v <= G.diam
-  证明: ENat.toNat_le_toNat edist_le_ediam h
-
-Depends on / 依赖: ENat.toNat_le_toNat, edist_le_ediam, toNat_le_toNat
+  rw [diam, ediam_def]
+/-
+**SimpleGraph.dist_le_diam** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：dist_le_diam (h : G.ediam != ⊤) {u v : α} : G.dist u v <= G.diam
+参数：h : G.ediam != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENat.toNat_le_toNat`：toNat_le_toNat {m n : Nat∞} (h : m <= n) (hn : n !=
+ ⊤) : toNat m <= toNat n
+· 使用引理 `SimpleGraph.edist_le_ediam`：edist_le_ediam {u v : α} : G.edist u v <= G.
+ediam
 -/
-lemma dist_le_diam (h : G.ediam != ⊤) {u v : α} : G.dist u v <= G.diam :=
+lemma dist_le_diam (h : G.ediam ≠ ⊤) {u v : α} : G.dist u v ≤ G.diam :=
   ENat.toNat_le_toNat edist_le_ediam h
-
-/--
-lemma `nontrivial_of_diam_ne_zero` / 引理 `nontrivial_of_diam_ne_zero`
-
-English:
-lemma nontrivial_of_diam_ne_zero
-  given: (h : G.diam != 0)
-  statement: Nontrivial α
-  proof: by
-  contrapose! h
-  simp [diam, h]
-
-中文:
-引理 nontrivial_of_diam_ne_zero
-  条件: (h : G.diam != 0)
-  结论: 非平凡 α
-  证明: by
-  contrapose! h
-  simp [diam, h]
-
-Depends on / 依赖: contrapose
+/-
+**SimpleGraph.nontrivial_of_diam_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：nontrivial_of_diam_ne_zero (h : G.diam != 0) : Nontrivial α
+参数：h : G.diam != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
-lemma nontrivial_of_diam_ne_zero (h : G.diam != 0) : Nontrivial α := by
+lemma nontrivial_of_diam_ne_zero (h : G.diam ≠ 0) : Nontrivial α := by
   contrapose! h
   simp [diam, h]
-
-/--
-lemma `diam_eq_zero_of_not_connected` / 引理 `diam_eq_zero_of_not_connected`
-
-English:
-lemma diam_eq_zero_of_not_connected
-  given: (h : ¬ G.Connected)
-  statement: G.diam = 0
-  proof: by
-  cases isEmpty_or_nonempty α
-  · rw [diam, ediam, ciSup_of_empty, bot_eq_zero']; rfl
-  · rw [diam, ediam_eq_top_of_not_connected h, ENat.toNat_top]
-
-中文:
-引理 diam_eq_zero_of_not_connected
-  条件: (h : ¬ G.连通)
-  结论: G.diam = 0
-  证明: by
-  cases isEmpty_or_nonempty α
-  · rw [diam, ediam, ciSup_of_empty, bot_eq_zero']; rfl
-  · rw [diam, ediam_eq_top_of_not_connected h, ENat.toNat_top]
-
-Depends on / 依赖: ENat.toNat_top, bot_eq_zero, ciSup_of_empty, ediam_eq_top_of_not_connected, isEmpty_or_nonempty, toNat_top
+/-
+**SimpleGraph.diam_eq_zero_of_not_connected** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：diam_eq_zero_of_not_connected (h : ¬ G.Connected) : G.diam = 0
+参数：h : ¬ G.Connected。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用定理 `SimpleGraph.ediam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.ediam = 
+⨆ u, G.eccent u
+· 使用定理 `ciSup_of_empty`：ciSup_of_empty [IsEmpty ι] (f : ι -> α) : ⨆ i, f i = ⊥
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用引理 `SimpleGraph.ediam_eq_top_of_not_connected`：ediam_eq_top_of_not_connected
+ [Nonempty α] (h : ¬ G.Connected) : G.ediam = ⊤
+· 使用定理 `ENat.toNat_top`：toNat_top : toNat ⊤ = 0
 -/
 lemma diam_eq_zero_of_not_connected (h : ¬ G.Connected) : G.diam = 0 := by
   cases isEmpty_or_nonempty α
   · rw [diam, ediam, ciSup_of_empty, bot_eq_zero']; rfl
   · rw [diam, ediam_eq_top_of_not_connected h, ENat.toNat_top]
-
-/--
-lemma `diam_eq_zero_of_ediam_eq_top` / 引理 `diam_eq_zero_of_ediam_eq_top`
-
-English:
-lemma diam_eq_zero_of_ediam_eq_top
-  given: (h : G.ediam = ⊤)
-  statement: G.diam = 0
-  proof: by
-  rw [diam]; rw [h]; rw [ENat.toNat_top]
-
-中文:
-引理 diam_eq_zero_of_ediam_eq_top
-  条件: (h : G.ediam = ⊤)
-  结论: G.diam = 0
-  证明: by
-  rw [diam]; rw [h]; rw [ENat.toNat_top]
-
-Depends on / 依赖: ENat.toNat_top, toNat_top
+/-
+**SimpleGraph.diam_eq_zero_of_ediam_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：diam_eq_zero_of_ediam_eq_top (h : G.ediam = ⊤) : G.diam = 0
+参数：h : G.ediam = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用定理 `ENat.toNat_top`：toNat_top : toNat ⊤ = 0
 -/
 lemma diam_eq_zero_of_ediam_eq_top (h : G.ediam = ⊤) : G.diam = 0 := by
-  rw [diam]; rw [h]; rw [ENat.toNat_top]
-
-/--
-lemma `ediam_ne_top_of_diam_ne_zero` / 引理 `ediam_ne_top_of_diam_ne_zero`
-
-English:
-lemma ediam_ne_top_of_diam_ne_zero
-  given: (h : G.diam != 0)
-  statement: G.ediam != ⊤
-  proof: mt diam_eq_zero_of_ediam_eq_top h
-
-中文:
-引理 ediam_ne_top_of_diam_ne_zero
-  条件: (h : G.diam != 0)
-  结论: G.ediam != ⊤
-  证明: mt diam_eq_zero_of_ediam_eq_top h
-
-Depends on / 依赖: diam_eq_zero_of_ediam_eq_top
+  rw [diam, h, ENat.toNat_top]
+/-
+**SimpleGraph.ediam_ne_top_of_diam_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：ediam_ne_top_of_diam_ne_zero (h : G.diam != 0) : G.ediam != ⊤
+参数：h : G.diam != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用引理 `SimpleGraph.diam_eq_zero_of_ediam_eq_top`：diam_eq_zero_of_ediam_eq_top (
+h : G.ediam = ⊤) : G.diam = 0
 -/
-lemma ediam_ne_top_of_diam_ne_zero (h : G.diam != 0) : G.ediam != ⊤ :=
+lemma ediam_ne_top_of_diam_ne_zero (h : G.diam ≠ 0) : G.ediam ≠ ⊤ :=
   mt diam_eq_zero_of_ediam_eq_top h
-
-/--
-lemma `exists_dist_eq_diam` / 引理 `exists_dist_eq_diam`
-
-English:
-lemma exists_dist_eq_diam
-  given: [Nonempty α]
-  proof: by
-  by_cases h : G.diam = 0
-  · simp [h]
-· obtain ⟨u, v, huv⟩ := exists_edist_eq_ediam_of_ne_top ediam_ne_top_of_diam_ne_zero h
-    use u, v
-    rw [diam]; rw [dist]; rw [congrArg ENat.toNat huv]
-
-中文:
-引理 存在_dist_eq_diam
-  条件: [非空 α]
-  证明: by
-  by_cases h : G.diam = 0
-  · simp [h]
-· obtain ⟨u, v, huv⟩ := exists_edist_eq_ediam_of_ne_top ediam_ne_top_of_diam_ne_zero h
-    use u, v
-    rw [diam]; rw [dist]; rw [congrArg ENat.toNat huv]
-
-Depends on / 依赖: ENat.toNat, G.diam, ediam_ne_top_of_diam_ne_zero, exists_edist_eq_ediam_of_ne_top
+/-
+**SimpleGraph.exists_dist_eq_diam** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：exists_dist_eq_diam [Nonempty α] : exists u v, G.dist u v = G.diam
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `SimpleGraph.exists_edist_eq_ediam_of_ne_top`：exists_edist_eq_ediam_of_ne
+_top [Nonempty α] (h : G.ediam != ⊤) : exists u v, G.edist u v = G.ediam
+· 使用引理 `SimpleGraph.ediam_ne_top_of_diam_ne_zero`：ediam_ne_top_of_diam_ne_zero (
+h : G.diam != 0) : G.ediam != ⊤
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用定理 `SimpleGraph.dist.eq_1`：∀ {V : Type u_1} (G : SimpleGraph V) (u v : V), G
+.dist u v = (G.edist u v).toNat
 -/
 lemma exists_dist_eq_diam [Nonempty α] :
-    exists u v, G.dist u v = G.diam := by
+    ∃ u v, G.dist u v = G.diam := by
   by_cases h : G.diam = 0
   · simp [h]
-· obtain ⟨u, v, huv⟩ := exists_edist_eq_ediam_of_ne_top ediam_ne_top_of_diam_ne_zero h
+  · obtain ⟨u, v, huv⟩ := exists_edist_eq_ediam_of_ne_top <| ediam_ne_top_of_diam_ne_zero h
     use u, v
-    rw [diam]; rw [dist]; rw [congrArg ENat.toNat huv]
-
-/--
-lemma `diam_ne_zero_of_ediam_ne_top` / 引理 `diam_ne_zero_of_ediam_ne_top`
-
-English:
-lemma diam_ne_zero_of_ediam_ne_top
-  given: [Nontrivial α] (h : G.ediam != ⊤)
-  statement: G.diam != 0
-  proof: have ⟨_, _, hne⟩ := exists_pair_ne ‹_›
-pos_iff_ne_zero.mp
-lt_of_lt_of_le ((connected_of_ediam_ne_top h).pos_dist_of_ne hne) dist_le_diam h
-
-@[gcongr]
-
-中文:
-引理 diam_ne_zero_of_ediam_ne_top
-  条件: [非平凡 α] (h : G.ediam != ⊤)
-  结论: G.diam != 0
-  证明: have ⟨_, _, hne⟩ := exists_pair_ne ‹_›
-pos_iff_ne_zero.mp
-lt_of_lt_of_le ((connected_of_ediam_ne_top h).pos_dist_of_ne hne) dist_le_diam h
-
-@[gcongr]
-
-Depends on / 依赖: connected_of_ediam_ne_top, dist_le_diam, exists_pair_ne, lt_of_lt_of_le, pos_dist_of_ne, pos_iff_ne_zero, pos_iff_ne_zero.mp
+    rw [diam, dist, congrArg ENat.toNat huv]
+/-
+**SimpleGraph.diam_ne_zero_of_ediam_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：diam_ne_zero_of_ediam_ne_top [Nontrivial α] (h : G.ediam != ⊤) : G.diam !=
+ 0
+参数：h : G.ediam != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pair_ne`：exists_pair_ne (α : Type*) [Nontrivial α] : exists x y :
+ α, x != y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `SimpleGraph.Connected.pos_dist_of_ne`：∀ {V : Type u_1} {G : SimpleGraph 
+V} {u v : V}, G.Connected → u ≠ v → 0 < G.dist u v
+· 使用引理 `SimpleGraph.connected_of_ediam_ne_top`：connected_of_ediam_ne_top [Nonemp
+ty α] (h : G.ediam != ⊤) : G.Connected
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用引理 `SimpleGraph.dist_le_diam`：dist_le_diam (h : G.ediam != ⊤) {u v : α} : G.
+dist u v <= G.diam
 -/
-lemma diam_ne_zero_of_ediam_ne_top [Nontrivial α] (h : G.ediam != ⊤) : G.diam != 0 :=
+lemma diam_ne_zero_of_ediam_ne_top [Nontrivial α] (h : G.ediam ≠ ⊤) : G.diam ≠ 0 :=
   have ⟨_, _, hne⟩ := exists_pair_ne ‹_›
-pos_iff_ne_zero.mp
-lt_of_lt_of_le ((connected_of_ediam_ne_top h).pos_dist_of_ne hne) dist_le_diam h
+  pos_iff_ne_zero.mp <|
+    lt_of_lt_of_le ((connected_of_ediam_ne_top h).pos_dist_of_ne hne) <| dist_le_diam h
 
 @[gcongr]
-/--
-lemma `diam_anti_of_ediam_ne_top` / 引理 `diam_anti_of_ediam_ne_top`
-
-English:
-lemma diam_anti_of_ediam_ne_top
-  given: (h : G <= G') (hn : G.ediam != ⊤)
-  statement: G'.diam <= G.diam
-  proof: ENat.toNat_le_toNat (ediam_anti h) hn
-
-@[simp]
-
-中文:
-引理 diam_anti_of_ediam_ne_top
-  条件: (h : G <= G') (hn : G.ediam != ⊤)
-  结论: G'.diam <= G.diam
-  证明: ENat.toNat_le_toNat (ediam_anti h) hn
-
-@[simp]
-
-Depends on / 依赖: ENat.toNat_le_toNat, ediam_anti, toNat_le_toNat
+/-
+**SimpleGraph.diam_anti_of_ediam_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：diam_anti_of_ediam_ne_top (h : G <= G') (hn : G.ediam != ⊤) : G'.diam <= G
+.diam
+参数：h : G <= G'；hn : G.ediam != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENat.toNat_le_toNat`：toNat_le_toNat {m n : Nat∞} (h : m <= n) (hn : n !=
+ ⊤) : toNat m <= toNat n
+· 使用引理 `SimpleGraph.ediam_anti`：ediam_anti (h : G <= G') : G'.ediam <= G.ediam
 -/
-lemma diam_anti_of_ediam_ne_top (h : G <= G') (hn : G.ediam != ⊤) : G'.diam <= G.diam :=
+lemma diam_anti_of_ediam_ne_top (h : G ≤ G') (hn : G.ediam ≠ ⊤) : G'.diam ≤ G.diam :=
   ENat.toNat_le_toNat (ediam_anti h) hn
 
 @[simp]
-/--
-lemma `diam_bot` / 引理 `diam_bot`
-
-English:
-lemma diam_bot
-  statement: (⊥ : SimpleGraph α).diam = 0
-  proof: by
-  rw [diam]; rw [ENat.toNat_eq_zero]
-  cases subsingleton_or_nontrivial α
-  · exact Or.inl ediam_eq_zero_of_subsingleton
-  · exact Or.inr ediam_bot
-
-@[simp]
-
-中文:
-引理 diam_bot
-  结论: (⊥ : 简单图 α).diam = 0
-  证明: by
-  rw [diam]; rw [ENat.toNat_eq_zero]
-  cases subsingleton_or_nontrivial α
-  · exact Or.inl ediam_eq_zero_of_subsingleton
-  · exact Or.inr ediam_bot
-
-@[simp]
-
-Depends on / 依赖: ENat.toNat_eq_zero, Or.inl, Or.inr, ediam_bot, ediam_eq_zero_of_subsingleton, subsingleton_or_nontrivial, toNat_eq_zero
+/-
+**SimpleGraph.diam_bot** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：diam_bot : (⊥ : SimpleGraph α).diam = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用定理 `ENat.toNat_eq_zero`：∀ {n : ℕ∞}, n.toNat = 0 ↔ n = 0 ∨ n = ⊤
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用引理 `SimpleGraph.ediam_eq_zero_of_subsingleton`：ediam_eq_zero_of_subsingleton
+ [Subsingleton α] : G.ediam = 0
+· 使用引理 `SimpleGraph.ediam_bot`：ediam_bot [Nontrivial α] : (⊥ : SimpleGraph α).ed
+iam = ⊤
 -/
 lemma diam_bot : (⊥ : SimpleGraph α).diam = 0 := by
-  rw [diam]; rw [ENat.toNat_eq_zero]
+  rw [diam, ENat.toNat_eq_zero]
   cases subsingleton_or_nontrivial α
   · exact Or.inl ediam_eq_zero_of_subsingleton
   · exact Or.inr ediam_bot
 
 @[simp]
-/--
-lemma `diam_top` / 引理 `diam_top`
-
-English:
-lemma diam_top
-  given: [Nontrivial α]
-  statement: (⊤ : SimpleGraph α).diam = 1
-  proof: by
-  rw [diam]; rw [ediam_top]; rw [ENat.toNat_one]
-
-@[simp]
-
-中文:
-引理 diam_top
-  条件: [非平凡 α]
-  结论: (⊤ : 简单图 α).diam = 1
-  证明: by
-  rw [diam]; rw [ediam_top]; rw [ENat.toNat_one]
-
-@[simp]
-
-Depends on / 依赖: ENat.toNat_one, ediam_top, toNat_one
+/-
+**SimpleGraph.diam_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：diam_top [Nontrivial α] : (⊤ : SimpleGraph α).diam = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用引理 `SimpleGraph.ediam_top`：ediam_top [Nontrivial α] : (⊤ : SimpleGraph α).ed
+iam = 1
+· 使用定理 `ENat.toNat_one`：toNat_one : toNat 1 = 1
 -/
 lemma diam_top [Nontrivial α] : (⊤ : SimpleGraph α).diam = 1 := by
-  rw [diam]; rw [ediam_top]; rw [ENat.toNat_one]
+  rw [diam, ediam_top, ENat.toNat_one]
 
 @[simp]
-/--
-lemma `diam_eq_zero` / 引理 `diam_eq_zero`
-
-English:
-lemma diam_eq_zero
-  statement: G.diam = 0 ↔ G.ediam = ⊤ ∨ Subsingleton α
-  proof: by
-  rw [diam]; rw [ENat.toNat_eq_zero]; rw [or_comm]; rw [ediam_eq_zero_iff_subsingleton]
-
-@[simp]
-
-中文:
-引理 diam_eq_zero
-  结论: G.diam = 0 ↔ G.ediam = ⊤ ∨ 子单例 α
-  证明: by
-  rw [diam]; rw [ENat.toNat_eq_zero]; rw [or_comm]; rw [ediam_eq_zero_iff_subsingleton]
-
-@[simp]
-
-Depends on / 依赖: ENat.toNat_eq_zero, ediam_eq_zero_iff_subsingleton, or_comm, toNat_eq_zero
+/-
+**SimpleGraph.diam_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：diam_eq_zero : G.diam = 0 ↔ G.ediam = ⊤ ∨ Subsingleton α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用定理 `ENat.toNat_eq_zero`：∀ {n : ℕ∞}, n.toNat = 0 ↔ n = 0 ∨ n = ⊤
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用引理 `SimpleGraph.ediam_eq_zero_iff_subsingleton`：ediam_eq_zero_iff_subsinglet
+on : G.ediam = 0 ↔ Subsingleton α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma diam_eq_zero : G.diam = 0 ↔ G.ediam = ⊤ ∨ Subsingleton α := by
-  rw [diam]; rw [ENat.toNat_eq_zero]; rw [or_comm]; rw [ediam_eq_zero_iff_subsingleton]
+  rw [diam, ENat.toNat_eq_zero, or_comm, ediam_eq_zero_iff_subsingleton]
 
 @[simp]
-/--
-lemma `diam_eq_one` / 引理 `diam_eq_one`
-
-English:
-lemma diam_eq_one
-  given: [Nontrivial α]
-  statement: G.diam = 1 ↔ G = ⊤
-  proof: by
-  rw [diam]; rw [ENat.toNat_eq_iff one_ne_zero]; rw [Nat.cast_one]; rw [ediam_eq_one]
-
-中文:
-引理 diam_eq_one
-  条件: [非平凡 α]
-  结论: G.diam = 1 ↔ G = ⊤
-  证明: by
-  rw [diam]; rw [ENat.toNat_eq_iff one_ne_zero]; rw [Nat.cast_one]; rw [ediam_eq_one]
-
-Depends on / 依赖: ENat.toNat_eq_iff, Nat.cast_one, cast_one, ediam_eq_one, one_ne_zero, toNat_eq_iff
+/-
+**SimpleGraph.diam_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：diam_eq_one [Nontrivial α] : G.diam = 1 ↔ G = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.diam.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.diam = G.
+ediam.toNat
+· 使用定理 `ENat.toNat_eq_iff`：toNat_eq_iff {m : Nat∞} {n : Nat} (hn : n != 0) : toN
+at m = n ↔ m = n
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用引理 `SimpleGraph.ediam_eq_one`：ediam_eq_one [Nontrivial α] : G.ediam = 1 ↔ G 
+= ⊤
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma diam_eq_one [Nontrivial α] : G.diam = 1 ↔ G = ⊤ := by
-  rw [diam]; rw [ENat.toNat_eq_iff one_ne_zero]; rw [Nat.cast_one]; rw [ediam_eq_one]
-
-/--
-lemma `diam_eq_zero_iff_ediam_eq_top` / 引理 `diam_eq_zero_iff_ediam_eq_top`
-
-English:
-lemma diam_eq_zero_iff_ediam_eq_top
-  given: [Nontrivial α]
-  statement: G.diam = 0 ↔ G.ediam = ⊤
-  proof: by
-  rw [← not_iff_not]
-  exact ⟨ediam_ne_top_of_diam_ne_zero, diam_ne_zero_of_ediam_ne_top⟩
-
-中文:
-引理 diam_eq_zero_iff_ediam_eq_top
-  条件: [非平凡 α]
-  结论: G.diam = 0 ↔ G.ediam = ⊤
-  证明: by
-  rw [← not_iff_not]
-  exact ⟨ediam_ne_top_of_diam_ne_zero, diam_ne_zero_of_ediam_ne_top⟩
-
-Depends on / 依赖: diam_ne_zero_of_ediam_ne_top, ediam_ne_top_of_diam_ne_zero, not_iff_not
+  rw [diam, ENat.toNat_eq_iff one_ne_zero, Nat.cast_one, ediam_eq_one]
+/-
+**SimpleGraph.diam_eq_zero_iff_ediam_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：diam_eq_zero_iff_ediam_eq_top [Nontrivial α] : G.diam = 0 ↔ G.ediam = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用引理 `SimpleGraph.ediam_ne_top_of_diam_ne_zero`：ediam_ne_top_of_diam_ne_zero (
+h : G.diam != 0) : G.ediam != ⊤
+· 使用引理 `SimpleGraph.diam_ne_zero_of_ediam_ne_top`：diam_ne_zero_of_ediam_ne_top [
+Nontrivial α] (h : G.ediam != ⊤) : G.diam != 0
 -/
 lemma diam_eq_zero_iff_ediam_eq_top [Nontrivial α] : G.diam = 0 ↔ G.ediam = ⊤ := by
   rw [← not_iff_not]
   exact ⟨ediam_ne_top_of_diam_ne_zero, diam_ne_zero_of_ediam_ne_top⟩
 
-/--
-lemma `connected_iff_diam_ne_zero` / 引理 `connected_iff_diam_ne_zero`
+/-- A finite and nontrivial graph is connected if and only if its diameter is not zero.
+See also `connected_iff_ediam_ne_top` for the extended diameter version. -/
+/-
+**SimpleGraph.connected_iff_diam_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：connected_iff_diam_ne_zero [Finite α] [Nontrivial α] : G.Connected ↔ G.dia
+m != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.connected_iff_ediam_ne_top`：connected_iff_ediam_ne_top [None
+mpty α] [Finite α] : G.Connected ↔ G.ediam != ⊤
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用引理 `SimpleGraph.diam_eq_zero_iff_ediam_eq_top`：diam_eq_zero_iff_ediam_eq_top
+ [Nontrivial α] : G.diam = 0 ↔ G.ediam = ⊤
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma connected_iff_diam_ne_zero
-  given: [Finite α] [Nontrivial α]
-  statement: G.Connected ↔ G.diam != 0
-  proof: by
-  rw [connected_iff_ediam_ne_top]; rw [not_iff_not]; rw [diam_eq_zero_iff_ediam_eq_top]
-
-中文:
-引理 connected_iff_diam_ne_zero
-  条件: [有限 α] [非平凡 α]
-  结论: G.连通 ↔ G.diam != 0
-  证明: by
-  rw [connected_iff_ediam_ne_top]; rw [not_iff_not]; rw [diam_eq_zero_iff_ediam_eq_top]
-
-Depends on / 依赖: connected_iff_ediam_ne_top, diam_eq_zero_iff_ediam_eq_top, not_iff_not
+--- 原说明 ---
+A finite and nontrivial graph is connected if and only if its diameter is not ze
+ro.
+See also `connected_iff_ediam_ne_top` for the extended diameter version.
 -/
-lemma connected_iff_diam_ne_zero [Finite α] [Nontrivial α] : G.Connected ↔ G.diam != 0 := by
-  rw [connected_iff_ediam_ne_top]; rw [not_iff_not]; rw [diam_eq_zero_iff_ediam_eq_top]
+lemma connected_iff_diam_ne_zero [Finite α] [Nontrivial α] : G.Connected ↔ G.diam ≠ 0 := by
+  rw [connected_iff_ediam_ne_top, not_iff_not, diam_eq_zero_iff_ediam_eq_top]
 
 end diam
 
 section radius
 
-/--
-Definition of `radius` / `radius` 的定义
+/-- The radius of a simple graph is the minimum eccentricity of any vertex. -/
+/-
+**SimpleGraph.radius** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：radius (G : SimpleGraph α) : Nat∞
+参数：G : SimpleGraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition radius
-  signature: (G : SimpleGraph α)
-  body: ⨅ u, G.eccent u
-
-中文:
-定义 radius
-  签名: (G : 简单图 α)
-  定义体: ⨅ u, G.eccent u
-
-Depends on / 依赖: G.eccent, eccent
+--- 原说明 ---
+The radius of a simple graph is the minimum eccentricity of any vertex.
 -/
-noncomputable def radius (G : SimpleGraph α) : Nat∞ :=
+noncomputable def radius (G : SimpleGraph α) : ℕ∞ :=
   ⨅ u, G.eccent u
-
-/--
-lemma `radius_eq_iInf_iSup_edist` / 引理 `radius_eq_iInf_iSup_edist`
-
-English:
-lemma radius_eq_iInf_iSup_edist
-  statement: G.radius = ⨅ u, ⨆ v, G.edist u v
-  proof: rfl
-
-中文:
-引理 radius_eq_iInf_iSup_edist
-  结论: G.radius = ⨅ u, ⨆ v, G.edist u v
-  证明: rfl
+/-
+**SimpleGraph.radius_eq_iInf_iSup_edist** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_eq_iInf_iSup_edist : G.radius = ⨅ u, ⨆ v, G.edist u v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma radius_eq_iInf_iSup_edist : G.radius = ⨅ u, ⨆ v, G.edist u v :=
   rfl
-
-/--
-lemma `radius_le_eccent` / 引理 `radius_le_eccent`
-
-English:
-lemma radius_le_eccent
-  given: {u : α}
-  statement: G.radius <= G.eccent u
-  proof: iInf_le G.eccent u
-
-中文:
-引理 radius_le_eccent
-  条件: {u : α}
-  结论: G.radius <= G.eccent u
-  证明: iInf_le G.eccent u
-
-Depends on / 依赖: G.eccent, eccent, iInf_le
+/-
+**SimpleGraph.radius_le_eccent** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_le_eccent {u : α} : G.radius <= G.eccent u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iInf_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] (f :
+ ι → α) (i : ι), iInf f ≤ f i
 -/
-lemma radius_le_eccent {u : α} : G.radius <= G.eccent u :=
+lemma radius_le_eccent {u : α} : G.radius ≤ G.eccent u :=
   iInf_le G.eccent u
-
-/--
-lemma `exists_eccent_eq_radius` / 引理 `exists_eccent_eq_radius`
-
-English:
-lemma exists_eccent_eq_radius
-  given: [Nonempty α]
-  statement: exists u, G.eccent u = G.radius
-  proof: ENat.exists_eq_iInf G.eccent
-
-中文:
-引理 存在_eccent_eq_radius
-  条件: [非空 α]
-  结论: 存在 u, G.eccent u = G.radius
-  证明: ENat.exists_eq_iInf G.eccent
-
-Depends on / 依赖: ENat.exists_eq_iInf, G.eccent, eccent, exists_eq_iInf
+/-
+**SimpleGraph.exists_eccent_eq_radius** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：exists_eccent_eq_radius [Nonempty α] : exists u, G.eccent u = G.radius
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENat.exists_eq_iInf`：exists_eq_iInf [Nonempty ι] (f : ι -> Nat∞) : exist
+s a, f a = ⨅ x, f x
 -/
-lemma exists_eccent_eq_radius [Nonempty α] : exists u, G.eccent u = G.radius :=
+lemma exists_eccent_eq_radius [Nonempty α] : ∃ u, G.eccent u = G.radius :=
   ENat.exists_eq_iInf G.eccent
-
-/--
-lemma `exists_edist_eq_radius_of_finite` / 引理 `exists_edist_eq_radius_of_finite`
-
-English:
-lemma exists_edist_eq_radius_of_finite
-  given: [Nonempty α] [Finite α]
-  proof: by
-  obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
-  obtain ⟨v, hv⟩ := G.exists_edist_eq_eccent_of_finite w
-  use w, v
-  rw [hv]; rw [hw]
-
-中文:
-引理 存在_edist_eq_radius_of_finite
-  条件: [非空 α] [有限 α]
-  证明: by
-  obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
-  obtain ⟨v, hv⟩ := G.exists_edist_eq_eccent_of_finite w
-  use w, v
-  rw [hv]; rw [hw]
-
-Depends on / 依赖: G.exists_eccent_eq_radius, G.exists_edist_eq_eccent_of_finite, exists_eccent_eq_radius, exists_edist_eq_eccent_of_finite
+/-
+**SimpleGraph.exists_edist_eq_radius_of_finite** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph`。
+形式化陈述：exists_edist_eq_radius_of_finite [Nonempty α] [Finite α] : exists u v, G.e
+dist u v = G.radius
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.exists_eccent_eq_radius`：exists_eccent_eq_radius [Nonempty α
+] : exists u, G.eccent u = G.radius
+· 使用引理 `SimpleGraph.exists_edist_eq_eccent_of_finite`：exists_edist_eq_eccent_of_
+finite [Finite α] (u : α) : exists v, G.edist u v = G.eccent u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma exists_edist_eq_radius_of_finite [Nonempty α] [Finite α] :
-    exists u v, G.edist u v = G.radius := by
+    ∃ u v, G.edist u v = G.radius := by
   obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
   obtain ⟨v, hv⟩ := G.exists_edist_eq_eccent_of_finite w
   use w, v
-  rw [hv]; rw [hw]
-
-/--
-lemma `radius_eq_top_of_not_connected` / 引理 `radius_eq_top_of_not_connected`
-
-English:
-lemma radius_eq_top_of_not_connected
-  given: (h : ¬ G.Connected)
-  statement: G.radius = ⊤
-  proof: by
-  simp [radius, eccent_eq_top_of_not_connected h]
-
-中文:
-引理 radius_eq_top_of_not_connected
-  条件: (h : ¬ G.连通)
-  结论: G.radius = ⊤
-  证明: by
-  simp [radius, eccent_eq_top_of_not_connected h]
-
-Depends on / 依赖: eccent_eq_top_of_not_connected, radius
+  rw [hv, hw]
+/-
+**SimpleGraph.radius_eq_top_of_not_connected** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：radius_eq_top_of_not_connected (h : ¬ G.Connected) : G.radius = ⊤
+参数：h : ¬ G.Connected。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `SimpleGraph.eccent_eq_top_of_not_connected`：eccent_eq_top_of_not_connect
+ed (h : ¬ G.Connected) (u : α) : G.eccent u = ⊤
+· 使用定理 `iInf_top`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α], ⨅ 
+x, ⊤ = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma radius_eq_top_of_not_connected (h : ¬ G.Connected) : G.radius = ⊤ := by
   simp [radius, eccent_eq_top_of_not_connected h]
-
-/--
-lemma `radius_eq_top_of_isEmpty` / 引理 `radius_eq_top_of_isEmpty`
-
-English:
-lemma radius_eq_top_of_isEmpty
-  given: [IsEmpty α]
-  statement: G.radius = ⊤
-  proof: iInf_of_empty G.eccent
-
-中文:
-引理 radius_eq_top_of_isEmpty
-  条件: [是空 α]
-  结论: G.radius = ⊤
-  证明: iInf_of_empty G.eccent
-
-Depends on / 依赖: G.eccent, eccent, iInf_of_empty
+/-
+**SimpleGraph.radius_eq_top_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_eq_top_of_isEmpty [IsEmpty α] : G.radius = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iInf_of_empty`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] [IsEmpty ι] (f : ι → α), iInf f = ⊤
 -/
 lemma radius_eq_top_of_isEmpty [IsEmpty α] : G.radius = ⊤ :=
   iInf_of_empty G.eccent
-
-/--
-lemma `radius_ne_top_iff` / 引理 `radius_ne_top_iff`
-
-English:
-lemma radius_ne_top_iff
-  given: [Nonempty α] [Finite α]
-  statement: G.radius != ⊤ ↔ G.Connected
-  proof: by
-  refine ⟨Not.imp_symm radius_eq_top_of_not_connected, fun h => ?_⟩
-  obtain ⟨u, v, huv⟩ := G.exists_edist_eq_radius_of_finite
-  rw [← huv]; rw [edist_ne_top_iff_reachable]
-  exact h u v
-
-中文:
-引理 radius_ne_top_iff
-  条件: [非空 α] [有限 α]
-  结论: G.radius != ⊤ ↔ G.连通
-  证明: by
-  refine ⟨Not.imp_symm radius_eq_top_of_not_connected, fun h => ?_⟩
-  obtain ⟨u, v, huv⟩ := G.exists_edist_eq_radius_of_finite
-  rw [← huv]; rw [edist_ne_top_iff_reachable]
-  exact h u v
-
-Depends on / 依赖: G.exists_edist_eq_radius_of_finite, Not.imp_symm, edist_ne_top_iff_reachable, exists_edist_eq_radius_of_finite, imp_symm, radius_eq_top_of_not_connected
+/-
+**SimpleGraph.radius_ne_top_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_ne_top_iff [Nonempty α] [Finite α] : G.radius != ⊤ ↔ G.Connected
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Not.imp_symm`：Not.imp_symm : (¬a -> b) -> ¬b -> a
+· 使用引理 `SimpleGraph.radius_eq_top_of_not_connected`：radius_eq_top_of_not_connect
+ed (h : ¬ G.Connected) : G.radius = ⊤
+· 使用引理 `SimpleGraph.exists_edist_eq_radius_of_finite`：exists_edist_eq_radius_of_
+finite [Nonempty α] [Finite α] : exists u v, G.edist u v = G.radius
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.edist_ne_top_iff_reachable`：edist_ne_top_iff_reachable : G.e
+dist u v != ⊤ ↔ G.Reachable u v
+· 使用定理 `SimpleGraph.Connected.preconnected`：∀ {V : Type u} {G : SimpleGraph V}, 
+G.Connected → G.Preconnected
 -/
-lemma radius_ne_top_iff [Nonempty α] [Finite α] : G.radius != ⊤ ↔ G.Connected := by
-  refine ⟨Not.imp_symm radius_eq_top_of_not_connected, fun h => ?_⟩
+lemma radius_ne_top_iff [Nonempty α] [Finite α] : G.radius ≠ ⊤ ↔ G.Connected := by
+  refine ⟨Not.imp_symm radius_eq_top_of_not_connected, fun h ↦ ?_⟩
   obtain ⟨u, v, huv⟩ := G.exists_edist_eq_radius_of_finite
-  rw [← huv]; rw [edist_ne_top_iff_reachable]
+  rw [← huv, edist_ne_top_iff_reachable]
   exact h u v
-
-/--
-lemma `radius_ne_zero_of_nontrivial` / 引理 `radius_ne_zero_of_nontrivial`
-
-English:
-lemma radius_ne_zero_of_nontrivial
-  given: [Nontrivial α]
-  statement: G.radius != 0
-  proof: by
-  rw [← Order.one_le_iff_ne_zero]
-  apply le_iInf
-  simp [Order.one_le_iff_ne_zero, G.eccent_ne_zero]
-
-中文:
-引理 radius_ne_zero_of_nontrivial
-  条件: [非平凡 α]
-  结论: G.radius != 0
-  证明: by
-  rw [← Order.one_le_iff_ne_zero]
-  apply le_iInf
-  simp [Order.one_le_iff_ne_zero, G.eccent_ne_zero]
-
-Depends on / 依赖: G.eccent_ne_zero, Order.one_le_iff_ne_zero, eccent_ne_zero, le_iInf, one_le_iff_ne_zero
+/-
+**SimpleGraph.radius_ne_zero_of_nontrivial** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：radius_ne_zero_of_nontrivial [Nontrivial α] : G.radius != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.one_le_iff_ne_zero`：one_le_iff_ne_zero [AddMonoidWithOne α] [NeZer
+o (1 : α)] [SuccAddOrder α] [IsBotZeroClass α] : 1 <= x ↔ x != 0
+· 使用定理 `instNontrivialENat`：Nontrivial ℕ∞
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用引理 `SimpleGraph.eccent_ne_zero`：eccent_ne_zero [Nontrivial α] (u : α) : G.ec
+cent u != 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma radius_ne_zero_of_nontrivial [Nontrivial α] : G.radius != 0 := by
+lemma radius_ne_zero_of_nontrivial [Nontrivial α] : G.radius ≠ 0 := by
   rw [← Order.one_le_iff_ne_zero]
   apply le_iInf
   simp [Order.one_le_iff_ne_zero, G.eccent_ne_zero]
-
-/--
-lemma `radius_eq_zero_iff` / 引理 `radius_eq_zero_iff`
-
-English:
-lemma radius_eq_zero_iff
-  statement: G.radius = 0 ↔ Nonempty α ∧ Subsingleton α
-  proof: by
-  refine ⟨fun h => ⟨?_, ?_⟩, fun ⟨_, _⟩ => ?_⟩
-  · contrapose! h
-    simp [radius]
-  · contrapose! h
-    simp [radius_ne_zero_of_nontrivial]
-  · rw [radius, ENat.iInf_eq_zero]
-    use Classical.ofNonempty
-    simpa [eccent] using Subsingleton.elim _
-
-中文:
-引理 radius_eq_zero_iff
-  结论: G.radius = 0 ↔ 非空 α ∧ 子单例 α
-  证明: by
-  refine ⟨fun h => ⟨?_, ?_⟩, fun ⟨_, _⟩ => ?_⟩
-  · contrapose! h
-    simp [radius]
-  · contrapose! h
-    simp [radius_ne_zero_of_nontrivial]
-  · rw [radius, ENat.iInf_eq_zero]
-    use Classical.ofNonempty
-    simpa [eccent] using Subsingleton.elim _
-
-Depends on / 依赖: Classical, Classical.ofNonempty, ENat.iInf_eq_zero, Subsingleton, Subsingleton.elim, contrapose, eccent, iInf_eq_zero, ofNonempty, radius, radius_ne_zero_of_nontrivial
+/-
+**SimpleGraph.radius_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_eq_zero_iff : G.radius = 0 ↔ Nonempty α ∧ Subsingleton α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `SimpleGraph.radius.eq_1`：∀ {α : Type u_1} (G : SimpleGraph α), G.radius 
+= ⨅ u, G.eccent u
+· 使用定理 `ENat.iInf_eq_zero`：∀ {ι : Sort u_1} {f : ι → ℕ∞}, ⨅ i, f i = 0 ↔ ∃ i, f 
+i = 0
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 lemma radius_eq_zero_iff : G.radius = 0 ↔ Nonempty α ∧ Subsingleton α := by
-  refine ⟨fun h => ⟨?_, ?_⟩, fun ⟨_, _⟩ => ?_⟩
+  refine ⟨fun h ↦ ⟨?_, ?_⟩, fun ⟨_, _⟩ ↦ ?_⟩
   · contrapose! h
     simp [radius]
   · contrapose! h
@@ -1762,103 +1402,95 @@ lemma radius_eq_zero_iff : G.radius = 0 ↔ Nonempty α ∧ Subsingleton α := b
   · rw [radius, ENat.iInf_eq_zero]
     use Classical.ofNonempty
     simpa [eccent] using Subsingleton.elim _
-
-/--
-lemma `radius_le_ediam` / 引理 `radius_le_ediam`
-
-English:
-lemma radius_le_ediam
-  given: [Nonempty α]
-  statement: G.radius <= G.ediam
-  proof: iInf_le_iSup
-
-中文:
-引理 radius_le_ediam
-  条件: [非空 α]
-  结论: G.radius <= G.ediam
-  证明: iInf_le_iSup
-
-Depends on / 依赖: iInf_le_iSup
+/-
+**SimpleGraph.radius_le_ediam** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_le_ediam [Nonempty α] : G.radius <= G.ediam
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `iInf_le_iSup`：iInf_le_iSup [Nonempty ι] : ⨅ i, f i <= ⨆ i, f i
 -/
-lemma radius_le_ediam [Nonempty α] : G.radius <= G.ediam :=
+lemma radius_le_ediam [Nonempty α] : G.radius ≤ G.ediam :=
   iInf_le_iSup
-
-/--
-lemma `ediam_eq_top_iff_radius_eq_top` / 引理 `ediam_eq_top_iff_radius_eq_top`
-
-English:
-lemma ediam_eq_top_iff_radius_eq_top
-  given: [Nonempty α]
-  statement: G.ediam = ⊤ ↔ G.radius = ⊤
-  proof: by
-  refine ⟨?_, fun hr => eq_top_iff.mpr (hr ▸ radius_le_ediam)⟩
-  contrapose
-  intro hr
-  obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
-  have hdiam : G.ediam <= 2 * G.eccent w := ediam_le_two_mul_eccent w
-exact ne_top_of_lt lt_of_le_of_lt hdiam WithTop.mul_lt_top (ENat.natCast_lt_top 2)
-    lt_top_iff_ne_top.mpr (hw ▸ hr)
-
-中文:
-引理 ediam_eq_top_iff_radius_eq_top
-  条件: [非空 α]
-  结论: G.ediam = ⊤ ↔ G.radius = ⊤
-  证明: by
-  refine ⟨?_, fun hr => eq_top_iff.mpr (hr ▸ radius_le_ediam)⟩
-  contrapose
-  intro hr
-  obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
-  have hdiam : G.ediam <= 2 * G.eccent w := ediam_le_two_mul_eccent w
-exact ne_top_of_lt lt_of_le_of_lt hdiam WithTop.mul_lt_top (ENat.natCast_lt_top 2)
-    lt_top_iff_ne_top.mpr (hw ▸ hr)
-
-Depends on / 依赖: ENat.natCast_lt_top, G.eccent, G.ediam, G.exists_eccent_eq_radius, WithTop, WithTop.mul_lt_top, contrapose, eccent, ediam_le_two_mul_eccent, eq_top_iff, eq_top_iff.mpr, exists_eccent_eq_radius, lt_of_le_of_lt, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, mul_lt_top, natCast_lt_top, ne_top_of_lt, radius_le_ediam
+/-
+**SimpleGraph.ediam_eq_top_iff_radius_eq_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：ediam_eq_top_iff_radius_eq_top [Nonempty α] : G.ediam = ⊤ ↔ G.radius = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用引理 `SimpleGraph.exists_eccent_eq_radius`：exists_eccent_eq_radius [Nonempty α
+] : exists u, G.eccent u = G.radius
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `SimpleGraph.ediam_le_two_mul_eccent`：ediam_le_two_mul_eccent (u : α) : G
+.ediam <= 2 * G.eccent u
+· 使用定理 `ne_top_of_lt`：ne_top_of_lt (h : a < b) : a != ⊤
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `WithTop.mul_lt_top`：mul_lt_top [LT α] {a b : WithTop α} (ha : a < ⊤) (hb
+ : b < ⊤) : a * b < ⊤
+· 使用引理 `ENat.natCast_lt_top`：natCast_lt_top (n : Nat) : (n : Nat∞) < ⊤
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用引理 `SimpleGraph.radius_le_ediam`：radius_le_ediam [Nonempty α] : G.radius <= 
+G.ediam
 -/
 lemma ediam_eq_top_iff_radius_eq_top [Nonempty α] : G.ediam = ⊤ ↔ G.radius = ⊤ := by
-  refine ⟨?_, fun hr => eq_top_iff.mpr (hr ▸ radius_le_ediam)⟩
+  refine ⟨?_, fun hr ↦ eq_top_iff.mpr (hr ▸ radius_le_ediam)⟩
   contrapose
   intro hr
   obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
-  have hdiam : G.ediam <= 2 * G.eccent w := ediam_le_two_mul_eccent w
-exact ne_top_of_lt lt_of_le_of_lt hdiam WithTop.mul_lt_top (ENat.natCast_lt_top 2)
+  have hdiam : G.ediam ≤ 2 * G.eccent w := ediam_le_two_mul_eccent w
+  exact ne_top_of_lt <| lt_of_le_of_lt hdiam <| WithTop.mul_lt_top (ENat.natCast_lt_top 2) <|
     lt_top_iff_ne_top.mpr (hw ▸ hr)
-
-/--
-lemma `ediam_le_two_mul_radius` / 引理 `ediam_le_two_mul_radius`
-
-English:
-lemma ediam_le_two_mul_radius
-  statement: G.ediam <= 2 * G.radius
-  proof: by
-  cases isEmpty_or_nonempty α
-  · rw [radius_eq_top_of_isEmpty]
-    exact le_top
-  · by_cases hdiam : G.ediam = ⊤
-    · simp [hdiam, ediam_eq_top_iff_radius_eq_top.mp hdiam]
-    · obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
-      obtain ⟨_, _, h⟩ := G.exists_edist_eq_ediam_of_ne_top hdiam
-      apply le_trans (h ▸ G.edist_triangle (v := w))
-      rw [two_mul]
-      exact hw ▸ add_le_add (G.edist_comm ▸ G.edist_le_eccent) G.edist_le_eccent
-
-中文:
-引理 ediam_le_two_mul_radius
-  结论: G.ediam <= 2 * G.radius
-  证明: by
-  cases isEmpty_or_nonempty α
-  · rw [radius_eq_top_of_isEmpty]
-    exact le_top
-  · by_cases hdiam : G.ediam = ⊤
-    · simp [hdiam, ediam_eq_top_iff_radius_eq_top.mp hdiam]
-    · obtain ⟨w, hw⟩ := G.exists_eccent_eq_radius
-      obtain ⟨_, _, h⟩ := G.exists_edist_eq_ediam_of_ne_top hdiam
-      apply le_trans (h ▸ G.edist_triangle (v := w))
-      rw [two_mul]
-      exact hw ▸ add_le_add (G.edist_comm ▸ G.edist_le_eccent) G.edist_le_eccent
-
-Depends on / 依赖: G.ediam, G.edist_comm, G.edist_le_eccent, G.edist_triangle, G.exists_eccent_eq_radius, G.exists_edist_eq_ediam_of_ne_top, add_le_add, ediam_eq_top_iff_radius_eq_top, ediam_eq_top_iff_radius_eq_top.mp, edist_comm, edist_le_eccent, edist_triangle, exists_eccent_eq_radius, exists_edist_eq_ediam_of_ne_top, isEmpty_or_nonempty, le_top, le_trans, radius_eq_top_of_isEmpty, two_mul
+/-
+**SimpleGraph.ediam_le_two_mul_radius** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：ediam_le_two_mul_radius : G.ediam <= 2 * G.radius
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.radius_eq_top_of_isEmpty`：radius_eq_top_of_isEmpty [IsEmpty 
+α] : G.radius = ⊤
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `SimpleGraph.ediam_eq_top_iff_radius_eq_top`：ediam_eq_top_iff_radius_eq_t
+op [Nonempty α] : G.ediam = ⊤ ↔ G.radius = ⊤
+· 使用定理 `ENat.mul_top`：∀ {m : ℕ∞}, m ≠ 0 → m * ⊤ = ⊤
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用引理 `SimpleGraph.exists_eccent_eq_radius`：exists_eccent_eq_radius [Nonempty α
+] : exists u, G.eccent u = G.radius
+· 使用引理 `SimpleGraph.exists_edist_eq_ediam_of_ne_top`：exists_edist_eq_ediam_of_ne
+_top [Nonempty α] (h : G.ediam != ⊤) : exists u v, G.edist u v = G.ediam
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `SimpleGraph.edist_triangle`：∀ {V : Type u_1} {G : SimpleGraph V} {u v w 
+: V}, G.edist u w ≤ G.edist u v + G.edist v w
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `SimpleGraph.edist_le_eccent`：edist_le_eccent {u v : α} : G.edist u v <= 
+G.eccent u
+· 使用定理 `SimpleGraph.edist_comm`：edist_comm : G.edist u v = G.edist v u
 -/
-lemma ediam_le_two_mul_radius : G.ediam <= 2 * G.radius := by
+lemma ediam_le_two_mul_radius : G.ediam ≤ 2 * G.radius := by
   cases isEmpty_or_nonempty α
   · rw [radius_eq_top_of_isEmpty]
     exact le_top
@@ -1869,100 +1501,72 @@ lemma ediam_le_two_mul_radius : G.ediam <= 2 * G.radius := by
       apply le_trans (h ▸ G.edist_triangle (v := w))
       rw [two_mul]
       exact hw ▸ add_le_add (G.edist_comm ▸ G.edist_le_eccent) G.edist_le_eccent
-
-/--
-lemma `radius_eq_ediam_iff` / 引理 `radius_eq_ediam_iff`
-
-English:
-lemma radius_eq_ediam_iff
-  given: [Nonempty α]
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · use G.radius
-    intro u
-    exact le_antisymm (h ▸ eccent_le_ediam) radius_le_eccent
-  · obtain ⟨e, h⟩ := h
-    have ediam_eq : G.ediam = e :=
-      le_antisymm (iSup_le fun u => (h u).le) ((h Classical.ofNonempty) ▸ eccent_le_ediam)
-    rw [ediam_eq]
-    exact le_antisymm ((h Classical.ofNonempty) ▸ radius_le_eccent) (le_iInf fun u => (h u).ge)
-
-@[simp]
-
-中文:
-引理 radius_eq_ediam_iff
-  条件: [非空 α]
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · use G.radius
-    intro u
-    exact le_antisymm (h ▸ eccent_le_ediam) radius_le_eccent
-  · obtain ⟨e, h⟩ := h
-    have ediam_eq : G.ediam = e :=
-      le_antisymm (iSup_le fun u => (h u).le) ((h Classical.ofNonempty) ▸ eccent_le_ediam)
-    rw [ediam_eq]
-    exact le_antisymm ((h Classical.ofNonempty) ▸ radius_le_eccent) (le_iInf fun u => (h u).ge)
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.ofNonempty, G.ediam, G.radius, eccent_le_ediam, ediam_eq, iSup_le, le_antisymm, le_iInf, ofNonempty, radius, radius_le_eccent
+/-
+**SimpleGraph.radius_eq_ediam_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_eq_ediam_iff [Nonempty α] : G.radius = G.ediam ↔ exists e, forall u
+, G.eccent u = e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `SimpleGraph.eccent_le_ediam`：eccent_le_ediam {u : α} : G.eccent u <= G.e
+diam
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.radius_le_eccent`：radius_le_eccent {u : α} : G.radius <= G.e
+ccent u
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
 -/
 lemma radius_eq_ediam_iff [Nonempty α] :
-    G.radius = G.ediam ↔ exists e, forall u, G.eccent u = e := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+    G.radius = G.ediam ↔ ∃ e, ∀ u, G.eccent u = e := by
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · use G.radius
     intro u
     exact le_antisymm (h ▸ eccent_le_ediam) radius_le_eccent
   · obtain ⟨e, h⟩ := h
     have ediam_eq : G.ediam = e :=
-      le_antisymm (iSup_le fun u => (h u).le) ((h Classical.ofNonempty) ▸ eccent_le_ediam)
+      le_antisymm (iSup_le fun u ↦ (h u).le) ((h Classical.ofNonempty) ▸ eccent_le_ediam)
     rw [ediam_eq]
-    exact le_antisymm ((h Classical.ofNonempty) ▸ radius_le_eccent) (le_iInf fun u => (h u).ge)
+    exact le_antisymm ((h Classical.ofNonempty) ▸ radius_le_eccent) (le_iInf fun u ↦ (h u).ge)
 
 @[simp]
-/--
-lemma `radius_bot` / 引理 `radius_bot`
-
-English:
-lemma radius_bot
-  given: [Nontrivial α]
-  statement: (⊥ : SimpleGraph α).radius = ⊤
-  proof: radius_eq_top_of_not_connected not_connected_bot
-
-@[simp]
-
-中文:
-引理 radius_bot
-  条件: [非平凡 α]
-  结论: (⊥ : 简单图 α).radius = ⊤
-  证明: radius_eq_top_of_not_connected not_connected_bot
-
-@[simp]
-
-Depends on / 依赖: not_connected_bot, radius_eq_top_of_not_connected
+/-
+**SimpleGraph.radius_bot** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_bot [Nontrivial α] : (⊥ : SimpleGraph α).radius = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.radius_eq_top_of_not_connected`：radius_eq_top_of_not_connect
+ed (h : ¬ G.Connected) : G.radius = ⊤
+· 使用引理 `SimpleGraph.not_connected_bot`：not_connected_bot [Nontrivial V] : ¬(⊥ : 
+SimpleGraph V).Connected
 -/
 lemma radius_bot [Nontrivial α] : (⊥ : SimpleGraph α).radius = ⊤ :=
   radius_eq_top_of_not_connected not_connected_bot
 
 @[simp]
-/--
-lemma `radius_top` / 引理 `radius_top`
-
-English:
-lemma radius_top
-  given: [Nontrivial α]
-  statement: (⊤ : SimpleGraph α).radius = 1
-  proof: by
-  simp [radius]
-
-中文:
-引理 radius_top
-  条件: [非平凡 α]
-  结论: (⊤ : 简单图 α).radius = 1
-  证明: by
-  simp [radius]
-
-Depends on / 依赖: radius
+/-
+**SimpleGraph.radius_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：radius_top [Nontrivial α] : (⊤ : SimpleGraph α).radius = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `SimpleGraph.eccent_top`：eccent_top [Nontrivial α] (u : α) : (⊤ : SimpleG
+raph α).eccent u = 1
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma radius_top [Nontrivial α] : (⊤ : SimpleGraph α).radius = 1 := by
   simp [radius]
@@ -1971,198 +1575,150 @@ end radius
 
 section center
 
-/--
-Definition of `center` / `center` 的定义
+/-- The center of a simple graph is the set of vertices with eccentricity equal to the radius. -/
+/-
+**SimpleGraph.center** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：center (G : SimpleGraph α) : Set α
+参数：G : SimpleGraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition center
-  signature: (G : SimpleGraph α)
-  body: {u | G.eccent u = G.radius}
-
-中文:
-定义 center
-  签名: (G : 简单图 α)
-  定义体: {u | G.eccent u = G.radius}
-
-Depends on / 依赖: G.eccent, G.radius, eccent, radius
+--- 原说明 ---
+The center of a simple graph is the set of vertices with eccentricity equal to t
+he radius.
 -/
 def center (G : SimpleGraph α) : Set α :=
   {u | G.eccent u = G.radius}
-
-/--
-lemma `center_nonempty` / 引理 `center_nonempty`
-
-English:
-lemma center_nonempty
-  given: [Nonempty α]
-  statement: G.center.Nonempty
-  proof: exists_eccent_eq_radius
-
-中文:
-引理 center_nonempty
-  条件: [非空 α]
-  结论: G.center.非空
-  证明: exists_eccent_eq_radius
-
-Depends on / 依赖: exists_eccent_eq_radius
+/-
+**SimpleGraph.center_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：center_nonempty [Nonempty α] : G.center.Nonempty
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.exists_eccent_eq_radius`：exists_eccent_eq_radius [Nonempty α
+] : exists u, G.eccent u = G.radius
 -/
 lemma center_nonempty [Nonempty α] : G.center.Nonempty :=
   exists_eccent_eq_radius
-
-/--
-lemma `mem_center_iff` / 引理 `mem_center_iff`
-
-English:
-lemma mem_center_iff
-  given: (u : α)
-  statement: u in G.center ↔ G.eccent u = G.radius
-  proof: .rfl
-
-中文:
-引理 mem_center_iff
-  条件: (u : α)
-  结论: u in G.center ↔ G.eccent u = G.radius
-  证明: .rfl
+/-
+**SimpleGraph.mem_center_iff** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：mem_center_iff (u : α) : u in G.center ↔ G.eccent u = G.radius
+参数：u : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_center_iff (u : α) : u in G.center ↔ G.eccent u = G.radius := .rfl
-
-/--
-lemma `center_eq_univ_iff_radius_eq_ediam` / 引理 `center_eq_univ_iff_radius_eq_ediam`
-
-English:
-lemma center_eq_univ_iff_radius_eq_ediam
-  given: [Nonempty α]
-  proof: by
-  rw [radius_eq_ediam_iff]; rw [← Set.univ_subset_iff]
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · use G.radius
-    exact fun _ => h trivial
-  · obtain ⟨e, h⟩ := h
-    intro u hu
-    rw [mem_center_iff]; rw [h u]
-    exact le_antisymm (le_iInf fun u => (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_eccent)
-
-中文:
-引理 center_eq_univ_iff_radius_eq_ediam
-  条件: [非空 α]
-  证明: by
-  rw [radius_eq_ediam_iff]; rw [← Set.univ_subset_iff]
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · use G.radius
-    exact fun _ => h trivial
-  · obtain ⟨e, h⟩ := h
-    intro u hu
-    rw [mem_center_iff]; rw [h u]
-    exact le_antisymm (le_iInf fun u => (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_eccent)
-
-Depends on / 依赖: Classical, Classical.ofNonempty, G.radius, Set.univ_subset_iff, le_antisymm, le_iInf, mem_center_iff, ofNonempty, radius, radius_eq_ediam_iff, radius_le_eccent, univ_subset_iff
+lemma mem_center_iff (u : α) : u ∈ G.center ↔ G.eccent u = G.radius := .rfl
+/-
+**SimpleGraph.center_eq_univ_iff_radius_eq_ediam** 是 Mathlib 中的一个引理，位于命名空间 `Simp
+leGraph`。
+形式化陈述：center_eq_univ_iff_radius_eq_ediam [Nonempty α] : G.center = Set.univ ↔ G.
+radius = G.ediam
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.radius_eq_ediam_iff`：radius_eq_ediam_iff [Nonempty α] : G.ra
+dius = G.ediam ↔ exists e, forall u, G.eccent u = e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `trivial`：True
+· 使用引理 `SimpleGraph.mem_center_iff`：mem_center_iff (u : α) : u in G.center ↔ G.e
+ccent u = G.radius
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用引理 `SimpleGraph.radius_le_eccent`：radius_le_eccent {u : α} : G.radius <= G.e
+ccent u
 -/
 lemma center_eq_univ_iff_radius_eq_ediam [Nonempty α] :
     G.center = Set.univ ↔ G.radius = G.ediam := by
-  rw [radius_eq_ediam_iff]; rw [← Set.univ_subset_iff]
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  rw [radius_eq_ediam_iff, ← Set.univ_subset_iff]
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · use G.radius
-    exact fun _ => h trivial
+    exact fun _ ↦ h trivial
   · obtain ⟨e, h⟩ := h
     intro u hu
-    rw [mem_center_iff]; rw [h u]
-    exact le_antisymm (le_iInf fun u => (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_eccent)
-
-/--
-lemma `center_eq_univ_of_subsingleton` / 引理 `center_eq_univ_of_subsingleton`
-
-English:
-lemma center_eq_univ_of_subsingleton
-  given: [Subsingleton α]
-  statement: G.center = Set.univ
-  proof: by
-  rw [Set.eq_univ_iff_forall]
-  intro u
-  rw [mem_center_iff]; rw [eccent_eq_zero_of_subsingleton u]; rw [eq_comm]; rw [radius_eq_zero_iff]
-  tauto
-
-中文:
-引理 center_eq_univ_of_subsingleton
-  条件: [子单例 α]
-  结论: G.center = 集合.univ
-  证明: by
-  rw [Set.eq_univ_iff_forall]
-  intro u
-  rw [mem_center_iff]; rw [eccent_eq_zero_of_subsingleton u]; rw [eq_comm]; rw [radius_eq_zero_iff]
-  tauto
-
-Depends on / 依赖: Set.eq_univ_iff_forall, eccent_eq_zero_of_subsingleton, eq_comm, eq_univ_iff_forall, mem_center_iff, radius_eq_zero_iff
+    rw [mem_center_iff, h u]
+    exact le_antisymm (le_iInf fun u ↦ (h u).ge) ((h Classical.ofNonempty) ▸ radius_le_eccent)
+/-
+**SimpleGraph.center_eq_univ_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：center_eq_univ_of_subsingleton [Subsingleton α] : G.center = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用引理 `SimpleGraph.mem_center_iff`：mem_center_iff (u : α) : u in G.center ↔ G.e
+ccent u = G.radius
+· 使用引理 `SimpleGraph.eccent_eq_zero_of_subsingleton`：eccent_eq_zero_of_subsinglet
+on [Subsingleton α] (u : α) : G.eccent u = 0
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用引理 `SimpleGraph.radius_eq_zero_iff`：radius_eq_zero_iff : G.radius = 0 ↔ None
+mpty α ∧ Subsingleton α
 -/
 lemma center_eq_univ_of_subsingleton [Subsingleton α] : G.center = Set.univ := by
   rw [Set.eq_univ_iff_forall]
   intro u
-  rw [mem_center_iff]; rw [eccent_eq_zero_of_subsingleton u]; rw [eq_comm]; rw [radius_eq_zero_iff]
+  rw [mem_center_iff, eccent_eq_zero_of_subsingleton u, eq_comm, radius_eq_zero_iff]
   tauto
-
-/--
-lemma `center_bot` / 引理 `center_bot`
-
-English:
-lemma center_bot
-  statement: (⊥ : SimpleGraph α).center = Set.univ
-  proof: by
-  cases subsingleton_or_nontrivial α
-  · exact center_eq_univ_of_subsingleton
-  · rw [Set.eq_univ_iff_forall]
-    intro u
-    rw [mem_center_iff]; rw [eccent_bot]; rw [radius_bot]
-
-中文:
-引理 center_bot
-  结论: (⊥ : 简单图 α).center = 集合.univ
-  证明: by
-  cases subsingleton_or_nontrivial α
-  · exact center_eq_univ_of_subsingleton
-  · rw [Set.eq_univ_iff_forall]
-    intro u
-    rw [mem_center_iff]; rw [eccent_bot]; rw [radius_bot]
-
-Depends on / 依赖: Set.eq_univ_iff_forall, center_eq_univ_of_subsingleton, eccent_bot, eq_univ_iff_forall, mem_center_iff, radius_bot, subsingleton_or_nontrivial
+/-
+**SimpleGraph.center_bot** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：center_bot : (⊥ : SimpleGraph α).center = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用引理 `SimpleGraph.center_eq_univ_of_subsingleton`：center_eq_univ_of_subsinglet
+on [Subsingleton α] : G.center = Set.univ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用引理 `SimpleGraph.mem_center_iff`：mem_center_iff (u : α) : u in G.center ↔ G.e
+ccent u = G.radius
+· 使用引理 `SimpleGraph.eccent_bot`：eccent_bot [Nontrivial α] (u : α) : (⊥ : SimpleG
+raph α).eccent u = ⊤
+· 使用引理 `SimpleGraph.radius_bot`：radius_bot [Nontrivial α] : (⊥ : SimpleGraph α).
+radius = ⊤
 -/
 lemma center_bot : (⊥ : SimpleGraph α).center = Set.univ := by
   cases subsingleton_or_nontrivial α
   · exact center_eq_univ_of_subsingleton
   · rw [Set.eq_univ_iff_forall]
     intro u
-    rw [mem_center_iff]; rw [eccent_bot]; rw [radius_bot]
-
-/--
-lemma `center_top` / 引理 `center_top`
-
-English:
-lemma center_top
-  statement: (⊤ : SimpleGraph α).center = Set.univ
-  proof: by
-  cases subsingleton_or_nontrivial α
-  · exact center_eq_univ_of_subsingleton
-  · rw [Set.eq_univ_iff_forall]
-    intro u
-    rw [mem_center_iff]; rw [eccent_top]; rw [radius_top]
-
-中文:
-引理 center_top
-  结论: (⊤ : 简单图 α).center = 集合.univ
-  证明: by
-  cases subsingleton_or_nontrivial α
-  · exact center_eq_univ_of_subsingleton
-  · rw [Set.eq_univ_iff_forall]
-    intro u
-    rw [mem_center_iff]; rw [eccent_top]; rw [radius_top]
-
-Depends on / 依赖: Set.eq_univ_iff_forall, center_eq_univ_of_subsingleton, eccent_top, eq_univ_iff_forall, mem_center_iff, radius_top, subsingleton_or_nontrivial
+    rw [mem_center_iff, eccent_bot, radius_bot]
+/-
+**SimpleGraph.center_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：center_top : (⊤ : SimpleGraph α).center = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用引理 `SimpleGraph.center_eq_univ_of_subsingleton`：center_eq_univ_of_subsinglet
+on [Subsingleton α] : G.center = Set.univ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用引理 `SimpleGraph.mem_center_iff`：mem_center_iff (u : α) : u in G.center ↔ G.e
+ccent u = G.radius
+· 使用引理 `SimpleGraph.eccent_top`：eccent_top [Nontrivial α] (u : α) : (⊤ : SimpleG
+raph α).eccent u = 1
+· 使用引理 `SimpleGraph.radius_top`：radius_top [Nontrivial α] : (⊤ : SimpleGraph α).
+radius = 1
 -/
 lemma center_top : (⊤ : SimpleGraph α).center = Set.univ := by
   cases subsingleton_or_nontrivial α
   · exact center_eq_univ_of_subsingleton
   · rw [Set.eq_univ_iff_forall]
     intro u
-    rw [mem_center_iff]; rw [eccent_top]; rw [radius_top]
+    rw [mem_center_iff, eccent_top, radius_top]
 
 end center
 
 end SimpleGraph
+

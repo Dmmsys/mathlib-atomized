@@ -43,20 +43,11 @@ the largest subgroup of `G` contained in `M`.
 @[to_additive (attr := simps!)
 /-- The support of a submonoid `M` of a group `G` is `M ∩ -M`,
 the largest subgroup of `G` contained in `M`. -/]
-/--
-Definition of `mulSupport` / `mulSupport` 的定义
-
-English:
-definition mulSupport
-  signature: : Subgroup G where
-  body: M ⊓ M⁻¹
-  inv_mem' := by aesop
-
-中文:
-定义 mulSupport
-  签名: : 子群 G where
-  定义体: M ⊓ M⁻¹
-  inv_mem' := by aesop
+/-
+**Submonoid.mulSupport** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：mulSupport : Subgroup G where toSubmonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mulSupport : Subgroup G where
   toSubmonoid := M ⊓ M⁻¹
@@ -64,172 +55,91 @@ def mulSupport : Subgroup G where
 
 variable {M} in
 @[to_additive (attr := simp)]
-/--
-theorem `mem_mulSupport` / 定理 `mem_mulSupport`
-
-English:
-theorem mem_mulSupport
-  given: {x}
-  statement: x in M.mulSupport ↔ x in M ∧ x⁻¹ in M
-  proof: .rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mem_mulSupport
-  条件: {x}
-  结论: x in M.mulSupport ↔ x in M ∧ x⁻¹ in M
-  证明: .rfl
-
-@[to_additive (attr := simp)]
+/-
+**Submonoid.mem_mulSupport** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_mulSupport {x} : x in M.mulSupport ↔ x in M ∧ x⁻¹ in M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mulSupport {x} : x in M.mulSupport ↔ x in M ∧ x⁻¹ in M := .rfl
+theorem mem_mulSupport {x} : x ∈ M.mulSupport ↔ x ∈ M ∧ x⁻¹ ∈ M := .rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mulSupport_toSubmonoid` / 定理 `mulSupport_toSubmonoid`
-
-English:
-theorem mulSupport_toSubmonoid
-  statement: M.mulSupport.toSubmonoid = M ⊓ M⁻¹
-  proof: rfl
-
-中文:
-定理 mulSupport_toSubmonoid
-  结论: M.mulSupport.toSubmonoid = M ⊓ M⁻¹
-  证明: rfl
+/-
+**Submonoid.mulSupport_toSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mulSupport_toSubmonoid : M.mulSupport.toSubmonoid = M ⊓ M⁻¹
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mulSupport_toSubmonoid : M.mulSupport.toSubmonoid = M ⊓ M⁻¹ := rfl
 
 /-- The support of a submonoid is the largest subgroup it contains. -/
 @[to_additive /-- The support of a submonoid is the largest subgroup it contains. -/]
-/--
-theorem `_root_.Subgroup.gc_toSubmonoid_mulSupport` / 定理 `_root_.Subgroup.gc_toSubmonoid_mulSupport`
+/-
+**Submonoid._root_.Subgroup.gc_toSubmonoid_mulSupport** 是 Mathlib 中的一个定理，位于命名空间 
+`Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Subgroup.gc_toSubmonoid_mulSupport
-  proof: fun _ _ => ⟨fun _ _ => by aesop, fun h _ hx => (h hx).1⟩
-
-中文:
-定理 _root_.子群.gc_toSubmonoid_mulSupport
-  证明: fun _ _ => ⟨fun _ _ => by aesop, fun h _ hx => (h hx).1⟩
-
-Depends on / 依赖: Subgroup, Subgroup.toSubmonoid, mulSupport, toSubmonoid
+--- 原说明 ---
+The support of a submonoid is the largest subgroup it contains.
 -/
 theorem _root_.Subgroup.gc_toSubmonoid_mulSupport :
     GaloisConnection (α := Subgroup G) Subgroup.toSubmonoid mulSupport :=
-  fun _ _ => ⟨fun _ _ => by aesop, fun h _ hx => (h hx).1⟩
+  fun _ _ ↦ ⟨fun _ _ ↦ by aesop, fun h _ hx ↦ (h hx).1⟩
 
 variable {M}
 
 variable (M) in
 /-- A submonoid is pointed if it has zero support. -/
 @[to_additive /-- A submonoid is pointed if it has zero support. -/]
-/--
-Definition of `IsMulPointed` / `IsMulPointed` 的定义
+/-
+**Submonoid.IsMulPointed** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：IsMulPointed
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsMulPointed
-  body: forall x in M, x⁻¹ in M -> x = 1
-
-中文:
-定义 IsMulPointed
-  定义体: forall x in M, x⁻¹ in M -> x = 1
+--- 原说明 ---
+A submonoid is pointed if it has zero support.
 -/
-def IsMulPointed := forall x in M, x⁻¹ in M -> x = 1
+def IsMulPointed := ∀ x ∈ M, x⁻¹ ∈ M → x = 1
 
 namespace IsMulPointed
 
 @[to_additive (attr := aesop 90%)]
-/--
-theorem `mk` / 定理 `mk`
-
-English:
-theorem mk
-  given: (h : forall x in M, x⁻¹ in M -> x = 1)
-  statement: M.IsMulPointed
-  proof: h -- for Aesop
-
-@[to_additive (attr := aesop safe forward (immediate := [hM, hx₁]))]
-
-中文:
-定理 mk
-  条件: (h : 对任意 x in M, x⁻¹ in M -> x = 1)
-  结论: M.IsMulPointed
-  证明: h -- for Aesop
-
-@[to_additive (attr := aesop safe forward (immediate := [hM, hx₁]))]
+/-
+**Submonoid.IsMulPointed.mk** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid.IsMulPointed`。
+形式化陈述：mk (h : forall x in M, x⁻¹ in M -> x = 1) : M.IsMulPointed
+参数：h : forall x in M, x⁻¹ in M -> x = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk (h : forall x in M, x⁻¹ in M -> x = 1) : M.IsMulPointed := h -- for Aesop
+theorem mk (h : ∀ x ∈ M, x⁻¹ ∈ M → x = 1) : M.IsMulPointed := h -- for Aesop
 
 @[to_additive (attr := aesop safe forward (immediate := [hM, hx₁]))]
-/--
-theorem `eq_one_of_mem_of_inv_mem` / 定理 `eq_one_of_mem_of_inv_mem`
-
-English:
-theorem eq_one_of_mem_of_inv_mem
-  statement: (hM : M.IsMulPointed)
-  proof: hM _ hx₁ hx₂
-
-@[to_additive (attr := aesop safe forward (immediate := [hM, hx₂]))]
-alias eq_one_of_mem_of_inv_mem₂ := eq_one_of_mem_of_inv_mem -- for Aesop
-
-@[to_additive]
-
-中文:
-定理 eq_one_of_mem_of_inv_mem
-  结论: (hM : M.IsMulPointed)
-  证明: hM _ hx₁ hx₂
-
-@[to_additive (attr := aesop safe forward (immediate := [hM, hx₂]))]
-alias eq_one_of_mem_of_inv_mem₂ := eq_one_of_mem_of_inv_mem -- for Aesop
-
-@[to_additive]
+/-
+**Submonoid.IsMulPointed.eq_one_of_mem_of_inv_mem** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+monoid.IsMulPointed`。
+形式化陈述：eq_one_of_mem_of_inv_mem (hM : M.IsMulPointed) {x : G} (hx₁ : x in M) (hx₂
+ : x⁻¹ in M) : x = 1
+参数：hM : M.IsMulPointed；hx₁ : x in M；hx₂ : x⁻¹ in M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eq_one_of_mem_of_inv_mem (hM : M.IsMulPointed)
-    {x : G} (hx₁ : x in M) (hx₂ : x⁻¹ in M) : x = 1 := hM _ hx₁ hx₂
+    {x : G} (hx₁ : x ∈ M) (hx₂ : x⁻¹ ∈ M) : x = 1 := hM _ hx₁ hx₂
 
 @[to_additive (attr := aesop safe forward (immediate := [hM, hx₂]))]
 alias eq_one_of_mem_of_inv_mem₂ := eq_one_of_mem_of_inv_mem -- for Aesop
 
 @[to_additive]
-/--
-theorem `_root_.isMulPointed_iff_mulSupport_eq_bot` / 定理 `_root_.isMulPointed_iff_mulSupport_eq_bot`
-
-English:
-theorem _root_.isMulPointed_iff_mulSupport_eq_bot
-  statement: M.IsMulPointed ↔ M.mulSupport = ⊥ where
-  proof: by aesop
-  mpr h := fun x => by
-    apply_fun (x in ·) at h
-    aesop
-
-@[to_additive (attr := simp)]
-alias ⟨mulSupport_eq_bot, _⟩ := isMulPointed_iff_mulSupport_eq_bot
-
-@[to_additive]
-alias ⟨_, of_mulSupport_eq_bot⟩ := isMulPointed_iff_mulSupport_eq_bot
-
-中文:
-定理 _root_.isMulPointed_iff_mulSupport_eq_bot
-  结论: M.IsMulPointed ↔ M.mulSupport = ⊥ where
-  证明: by aesop
-  mpr h := fun x => by
-    apply_fun (x in ·) at h
-    aesop
-
-@[to_additive (attr := simp)]
-alias ⟨mulSupport_eq_bot, _⟩ := isMulPointed_iff_mulSupport_eq_bot
-
-@[to_additive]
-alias ⟨_, of_mulSupport_eq_bot⟩ := isMulPointed_iff_mulSupport_eq_bot
-
-Depends on / 依赖: apply_fun
+/-
+**Submonoid.IsMulPointed._root_.isMulPointed_iff_mulSupport_eq_bot** 是 Mathlib 中
+的一个定理，位于命名空间 `Submonoid.IsMulPointed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.isMulPointed_iff_mulSupport_eq_bot : M.IsMulPointed ↔ M.mulSupport = ⊥ where
   mp := by aesop
-  mpr h := fun x => by
-    apply_fun (x in ·) at h
+  mpr h := fun x ↦ by
+    apply_fun (x ∈ ·) at h
     aesop
 
 @[to_additive (attr := simp)]
@@ -244,104 +154,88 @@ variable (M) in
 /-- A submonoid `M` of a group `G` is spanning if `M` generates `G` as a subgroup. -/
 @[to_additive
 /-- A submonoid `M` of a group `G` is spanning if `M` generates `G` as a subgroup. -/]
-/--
-Definition of `IsMulSpanning` / `IsMulSpanning` 的定义
-
-English:
-definition IsMulSpanning
-  body: forall a : G, a in M ∨ a⁻¹ in M
-
-中文:
-定义 IsMulSpanning
-  定义体: forall a : G, a in M ∨ a⁻¹ in M
+/-
+**Submonoid.IsMulSpanning** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：IsMulSpanning
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def IsMulSpanning := forall a : G, a in M ∨ a⁻¹ in M
+def IsMulSpanning := ∀ a : G, a ∈ M ∨ a⁻¹ ∈ M
 
 namespace IsMulSpanning
 
 @[to_additive (attr := aesop 90%)]
-/--
-theorem `mk` / 定理 `mk`
-
-English:
-theorem mk
-  given: (h : forall a : G, a in M ∨ a⁻¹ in M)
-  statement: M.IsMulSpanning
-  proof: h -- for Aesop
+/-
+**Submonoid.IsMulSpanning.mk** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid.IsMulSpanning`
+。
+形式化陈述：mk (h : forall a : G, a in M ∨ a⁻¹ in M) : M.IsMulSpanning
+参数：h : forall a : G, a in M ∨ a⁻¹ in M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem mk (h : ∀ a : G, a ∈ M ∨ a⁻¹ ∈ M) : M.IsMulSpanning := h -- for Aesop
 
 @[to_additive (attr := aesop safe forward)]
-
-中文:
-定理 mk
-  条件: (h : 对任意 a : G, a in M ∨ a⁻¹ in M)
-  结论: M.IsMulSpanning
-  证明: h -- for Aesop
-
-@[to_additive (attr := aesop safe forward)]
+/-
+**Submonoid.IsMulSpanning.mem_or_inv_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid.Is
+MulSpanning`。
+形式化陈述：mem_or_inv_mem (hM : M.IsMulSpanning) (a : G) : a in M ∨ a⁻¹ in M
+参数：hM : M.IsMulSpanning；a : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk (h : forall a : G, a in M ∨ a⁻¹ in M) : M.IsMulSpanning := h -- for Aesop
-
-@[to_additive (attr := aesop safe forward)]
-/--
-theorem `mem_or_inv_mem` / 定理 `mem_or_inv_mem`
-
-English:
-theorem mem_or_inv_mem
-  given: (hM : M.IsMulSpanning) (a : G)
-  statement: a in M ∨ a⁻¹ in M
-  proof: by aesop
+theorem mem_or_inv_mem (hM : M.IsMulSpanning) (a : G) : a ∈ M ∨ a⁻¹ ∈ M := by aesop
 
 @[to_additive]
-
-中文:
-定理 mem_or_inv_mem
-  条件: (hM : M.IsMulSpanning) (a : G)
-  结论: a in M ∨ a⁻¹ in M
-  证明: by aesop
-
-@[to_additive]
+/-
+**Submonoid.IsMulSpanning.of_le** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid.IsMulSpanni
+ng`。
+形式化陈述：of_le {N : Submonoid G} (hM : M.IsMulSpanning) (h : M <= N) : N.IsMulSpann
+ing
+参数：hM : M.IsMulSpanning；h : M <= N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.IsMulSpanning.mk`：mk (h : forall a : G, a in M ∨ a⁻¹ in M) : M
+.IsMulSpanning
+· 使用定理 `Submonoid.IsMulSpanning.mem_or_inv_mem`：mem_or_inv_mem (hM : M.IsMulSpan
+ning) (a : G) : a in M ∨ a⁻¹ in M
 -/
-theorem mem_or_inv_mem (hM : M.IsMulSpanning) (a : G) : a in M ∨ a⁻¹ in M := by aesop
-
-@[to_additive]
-/--
-theorem `of_le` / 定理 `of_le`
-
-English:
-theorem of_le
-  given: {N : Submonoid G} (hM : M.IsMulSpanning) (h : M <= N)
-  proof: by aesop
-
-@[to_additive]
-
-中文:
-定理 of_le
-  条件: {N : 子幺半群 G} (hM : M.IsMulSpanning) (h : M <= N)
-  证明: by aesop
-
-@[to_additive]
--/
-theorem of_le {N : Submonoid G} (hM : M.IsMulSpanning) (h : M <= N) :
+theorem of_le {N : Submonoid G} (hM : M.IsMulSpanning) (h : M ≤ N) :
     N.IsMulSpanning := by aesop
 
 @[to_additive]
-/--
-theorem `maximal_isMulPointed` / 定理 `maximal_isMulPointed`
-
-English:
-theorem maximal_isMulPointed
-  given: (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning)
-  proof: ⟨hMp, fun N hN h => by rw [SetLike.le_def] at h ⊢; aesop⟩
-
-中文:
-定理 maximal_isMulPointed
-  条件: (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning)
-  证明: ⟨hMp, fun N hN h => by rw [SetLike.le_def] at h ⊢; aesop⟩
-
-Depends on / 依赖: SetLike, SetLike.le_def, le_def
+/-
+**Submonoid.IsMulSpanning.maximal_isMulPointed** 是 Mathlib 中的一个定理，位于命名空间 `Submon
+oid.IsMulSpanning`。
+形式化陈述：maximal_isMulPointed (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning) : Maxi
+mal IsMulPointed M
+参数：hMp : M.IsMulPointed；hMs : M.IsMulSpanning。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SetLike.le_def`：le_def {S T : A} : S <= T ↔ forall ⦃x : B⦄, x in S -> x 
+in T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `Submonoid.IsMulSpanning.mem_or_inv_mem`：mem_or_inv_mem (hM : M.IsMulSpan
+ning) (a : G) : a in M ∨ a⁻¹ in M
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Submonoid.IsMulPointed.eq_one_of_mem_of_inv_mem`：eq_one_of_mem_of_inv_me
+m (hM : M.IsMulPointed) {x : G} (hx₁ : x in M) (hx₂ : x⁻¹ in M) : x = 1
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 -/
 theorem maximal_isMulPointed (hMp : M.IsMulPointed) (hMs : M.IsMulSpanning) :
     Maximal IsMulPointed M :=
-  ⟨hMp, fun N hN h => by rw [SetLike.le_def] at h ⊢; aesop⟩
+  ⟨hMp, fun N hN h ↦ by rw [SetLike.le_def] at h ⊢; aesop⟩
 
 end Submonoid.IsMulSpanning
+

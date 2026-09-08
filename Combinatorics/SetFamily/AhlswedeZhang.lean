@@ -50,149 +50,63 @@ inequality since for an antichain `𝒜` and every `A ∈ 𝒜` we have
 @[expose] public section
 
 section
-variable (α : Type*) [Fintype α] [Nonempty α] {m n : Nat}
+variable (α : Type*) [Fintype α] [Nonempty α] {m n : ℕ}
 
 open Finset Fintype Nat
 
-/--
-lemma `binomial_sum_eq` / 引理 `binomial_sum_eq`
-
-English:
-lemma binomial_sum_eq
-  given: (h : n < m)
-  proof: by
-  set f : Nat -> Rat := fun i => n.choose i * (m.choose i : Rat)⁻¹ with hf
-  suffices forall i in range (n + 1), f i - f (i + 1) = n.choose i * (m - n) / ((m - i) * m.choose i) by
-    rw [← sum_congr rfl this]; rw [sum_range_sub']; rw [hf]
-    simp [choose_zero_right]
-  intro i h₁
-  rw [mem_range] at h₁
-  have h₁ := le_of_lt_succ h₁
-  have h₂ := h₁.trans_lt h
-  have h₃ := h₂.le
-  have hi₄ : (i + 1 : Rat) != 0 := i.cast_add_one_ne_zero
-  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq m i)
-  push_cast at this
-  dsimp [f, hf]
-  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
-  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq n i)
-  push_cast at this
-  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
-  have : (m - i : Rat) != 0 := sub_ne_zero_of_ne (cast_lt.mpr h₂).ne'
-  have : (m.choose i : Rat) != 0 := cast_ne_zero.2 (choose_pos h₂.le).ne'
-  simp [field, *]
-
-中文:
-引理 binomial_sum_eq
-  条件: (h : n < m)
-  证明: by
-  set f : Nat -> Rat := fun i => n.choose i * (m.choose i : Rat)⁻¹ with hf
-  suffices forall i in range (n + 1), f i - f (i + 1) = n.choose i * (m - n) / ((m - i) * m.choose i) by
-    rw [← sum_congr rfl this]; rw [sum_range_sub']; rw [hf]
-    simp [choose_zero_right]
-  intro i h₁
-  rw [mem_range] at h₁
-  have h₁ := le_of_lt_succ h₁
-  have h₂ := h₁.trans_lt h
-  have h₃ := h₂.le
-  have hi₄ : (i + 1 : Rat) != 0 := i.cast_add_one_ne_zero
-  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq m i)
-  push_cast at this
-  dsimp [f, hf]
-  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
-  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq n i)
-  push_cast at this
-  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
-  have : (m - i : Rat) != 0 := sub_ne_zero_of_ne (cast_lt.mpr h₂).ne'
-  have : (m.choose i : Rat) != 0 := cast_ne_zero.2 (choose_pos h₂.le).ne'
-  simp [field, *]
+/-
+**binomial_sum_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma binomial_sum_eq (h : n < m) :
-    ∑ i in range (n + 1), (n.choose i * (m - n) / ((m - i) * m.choose i) : Rat) = 1 := by
-  set f : Nat -> Rat := fun i => n.choose i * (m.choose i : Rat)⁻¹ with hf
-  suffices forall i in range (n + 1), f i - f (i + 1) = n.choose i * (m - n) / ((m - i) * m.choose i) by
-    rw [← sum_congr rfl this]; rw [sum_range_sub']; rw [hf]
+    ∑ i ∈ range (n + 1), (n.choose i * (m - n) / ((m - i) * m.choose i) : ℚ) = 1 := by
+  set f : ℕ → ℚ := fun i ↦ n.choose i * (m.choose i : ℚ)⁻¹ with hf
+  suffices ∀ i ∈ range (n + 1), f i - f (i + 1) = n.choose i * (m - n) / ((m - i) * m.choose i) by
+    rw [← sum_congr rfl this, sum_range_sub', hf]
     simp [choose_zero_right]
   intro i h₁
   rw [mem_range] at h₁
   have h₁ := le_of_lt_succ h₁
   have h₂ := h₁.trans_lt h
   have h₃ := h₂.le
-  have hi₄ : (i + 1 : Rat) != 0 := i.cast_add_one_ne_zero
-  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq m i)
+  have hi₄ : (i + 1 : ℚ) ≠ 0 := i.cast_add_one_ne_zero
+  have := congr_arg ((↑) : ℕ → ℚ) (choose_succ_right_eq m i)
   push_cast at this
   dsimp [f, hf]
   rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
-  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq n i)
+  have := congr_arg ((↑) : ℕ → ℚ) (choose_succ_right_eq n i)
   push_cast at this
   rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
-  have : (m - i : Rat) != 0 := sub_ne_zero_of_ne (cast_lt.mpr h₂).ne'
-  have : (m.choose i : Rat) != 0 := cast_ne_zero.2 (choose_pos h₂.le).ne'
+  have : (m - i : ℚ) ≠ 0 := sub_ne_zero_of_ne (cast_lt.mpr h₂).ne'
+  have : (m.choose i : ℚ) ≠ 0 := cast_ne_zero.2 (choose_pos h₂.le).ne'
   simp [field, *]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Fintype.sum_div_mul_card_choose_card` / 引理 `Fintype.sum_div_mul_card_choose_card`
-
-English:
-lemma Fintype.sum_div_mul_card_choose_card
-  proof: by
-  rw [← powerset_univ]; rw [powerset_card_disjiUnion]; rw [sum_disjiUnion]
-  have : forall {x : Nat}, forall s in powersetCard x (univ : Finset α),
-    (card α / ((card α - #s) * (card α).choose #s) : Rat) =
-      card α / ((card α - x) * (card α).choose x) := by
-    intro n s hs
-    rw [mem_powersetCard_univ.1 hs]
-  simp_rw [Finset.sum_congr rfl this, sum_const, card_powersetCard, card_univ, nsmul_eq_mul,
-    mul_div, mul_comm, ← mul_div]
-  rw [← mul_sum]; rw [← mul_inv_cancel₀ (cast_ne_zero.mpr card_ne_zero : (card α : Rat) != 0)]; rw [← mul_add]; rw [add_comm _ ((card α)⁻¹ : Rat)]; rw [← sum_insert (f := fun x : Nat => (x⁻¹ : Rat)) notMem_range_self]; rw [← range_add_one]
-  have (n) (hn : n in range (card α + 1)) :
-      ((card α).choose n / ((card α - n) * (card α).choose n) : Rat) = (card α - n : Rat)⁻¹ := by
-    rw [div_mul_cancel_right₀]
-    exact cast_ne_zero.2 (choose_pos <| mem_range_succ_iff.1 hn).ne'
-  simp only [Finset.sum_congr rfl this, mul_eq_mul_left_iff, cast_eq_zero]
-convert! Or.inl sum_range_reflect _ _ with a ha
-  rw [add_tsub_cancel_right]; rw [cast_sub (mem_range_succ_iff.mp ha)]
-
-中文:
-引理 有限类型.sum_div_mul_card_choose_card
-  证明: by
-  rw [← powerset_univ]; rw [powerset_card_disjiUnion]; rw [sum_disjiUnion]
-  have : forall {x : Nat}, forall s in powersetCard x (univ : Finset α),
-    (card α / ((card α - #s) * (card α).choose #s) : Rat) =
-      card α / ((card α - x) * (card α).choose x) := by
-    intro n s hs
-    rw [mem_powersetCard_univ.1 hs]
-  simp_rw [Finset.sum_congr rfl this, sum_const, card_powersetCard, card_univ, nsmul_eq_mul,
-    mul_div, mul_comm, ← mul_div]
-  rw [← mul_sum]; rw [← mul_inv_cancel₀ (cast_ne_zero.mpr card_ne_zero : (card α : Rat) != 0)]; rw [← mul_add]; rw [add_comm _ ((card α)⁻¹ : Rat)]; rw [← sum_insert (f := fun x : Nat => (x⁻¹ : Rat)) notMem_range_self]; rw [← range_add_one]
-  have (n) (hn : n in range (card α + 1)) :
-      ((card α).choose n / ((card α - n) * (card α).choose n) : Rat) = (card α - n : Rat)⁻¹ := by
-    rw [div_mul_cancel_right₀]
-    exact cast_ne_zero.2 (choose_pos <| mem_range_succ_iff.1 hn).ne'
-  simp only [Finset.sum_congr rfl this, mul_eq_mul_left_iff, cast_eq_zero]
-convert! Or.inl sum_range_reflect _ _ with a ha
-  rw [add_tsub_cancel_right]; rw [cast_sub (mem_range_succ_iff.mp ha)]
+/-
+**Fintype.sum_div_mul_card_choose_card** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma Fintype.sum_div_mul_card_choose_card :
-    ∑ s : Finset α, (card α / ((card α - #s) * (card α).choose #s) : Rat) =
-      card α * ∑ k in range (card α), (↑k)⁻¹ + 1 := by
-  rw [← powerset_univ]; rw [powerset_card_disjiUnion]; rw [sum_disjiUnion]
-  have : forall {x : Nat}, forall s in powersetCard x (univ : Finset α),
-    (card α / ((card α - #s) * (card α).choose #s) : Rat) =
+    ∑ s : Finset α, (card α / ((card α - #s) * (card α).choose #s) : ℚ) =
+      card α * ∑ k ∈ range (card α), (↑k)⁻¹ + 1 := by
+  rw [← powerset_univ, powerset_card_disjiUnion, sum_disjiUnion]
+  have : ∀ {x : ℕ}, ∀ s ∈ powersetCard x (univ : Finset α),
+    (card α / ((card α - #s) * (card α).choose #s) : ℚ) =
       card α / ((card α - x) * (card α).choose x) := by
     intro n s hs
     rw [mem_powersetCard_univ.1 hs]
   simp_rw [Finset.sum_congr rfl this, sum_const, card_powersetCard, card_univ, nsmul_eq_mul,
     mul_div, mul_comm, ← mul_div]
-  rw [← mul_sum]; rw [← mul_inv_cancel₀ (cast_ne_zero.mpr card_ne_zero : (card α : Rat) != 0)]; rw [← mul_add]; rw [add_comm _ ((card α)⁻¹ : Rat)]; rw [← sum_insert (f := fun x : Nat => (x⁻¹ : Rat)) notMem_range_self]; rw [← range_add_one]
-  have (n) (hn : n in range (card α + 1)) :
-      ((card α).choose n / ((card α - n) * (card α).choose n) : Rat) = (card α - n : Rat)⁻¹ := by
+  rw [← mul_sum, ← mul_inv_cancel₀ (cast_ne_zero.mpr card_ne_zero : (card α : ℚ) ≠ 0), ← mul_add,
+    add_comm _ ((card α)⁻¹ : ℚ), ← sum_insert (f := fun x : ℕ ↦ (x⁻¹ : ℚ)) notMem_range_self,
+    ← range_add_one]
+  have (n) (hn : n ∈ range (card α + 1)) :
+      ((card α).choose n / ((card α - n) * (card α).choose n) : ℚ) = (card α - n : ℚ)⁻¹ := by
     rw [div_mul_cancel_right₀]
     exact cast_ne_zero.2 (choose_pos <| mem_range_succ_iff.1 hn).ne'
   simp only [Finset.sum_congr rfl this, mul_eq_mul_left_iff, cast_eq_zero]
-convert! Or.inl sum_range_reflect _ _ with a ha
-  rw [add_tsub_cancel_right]; rw [cast_sub (mem_range_succ_iff.mp ha)]
+  convert! Or.inl <| sum_range_reflect _ _ with a ha
+  rw [add_tsub_cancel_right, cast_sub (mem_range_succ_iff.mp ha)]
 
 end
 
@@ -207,230 +121,289 @@ section SemilatticeSup
 variable [SemilatticeSup α] [SemilatticeSup β] [BoundedOrder β] {s t : Finset α} {a : α}
 
 set_option backward.privateInPublic true in
-/--
-lemma `sup_aux` / 引理 `sup_aux`
-
-English:
-lemma sup_aux
-  given: [DecidableLE α]
-  statement: a in lowerClosure s -> {b in s | a <= b}.Nonempty
-  proof: fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
-
-中文:
-引理 sup_aux
-  条件: [DecidableLE α]
-  结论: a in lowerClosure s -> {b in s | a <= b}.非空
-  证明: fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
+/-
+**Finset.sup_aux** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma sup_aux [DecidableLE α] : a in lowerClosure s -> {b in s | a <= b}.Nonempty :=
-  fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
-
-/--
-lemma `lower_aux` / 引理 `lower_aux`
-
-English:
-lemma lower_aux
-  given: [DecidableEq α]
-  proof: by
-  rw [coe_union]; rw [lowerClosure_union]; rw [LowerSet.mem_sup_iff]
-
-中文:
-引理 lower_aux
-  条件: [DecidableEq α]
-  证明: by
-  rw [coe_union]; rw [lowerClosure_union]; rw [LowerSet.mem_sup_iff]
+private lemma sup_aux [DecidableLE α] : a ∈ lowerClosure s → {b ∈ s | a ≤ b}.Nonempty :=
+  fun ⟨b, hb, hab⟩ ↦ ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
+/-
+**Finset.lower_aux** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma lower_aux [DecidableEq α] :
-    a in lowerClosure ↑(s union t) ↔ a in lowerClosure s ∨ a in lowerClosure t := by
-  rw [coe_union]; rw [lowerClosure_union]; rw [LowerSet.mem_sup_iff]
+    a ∈ lowerClosure ↑(s ∪ t) ↔ a ∈ lowerClosure s ∨ a ∈ lowerClosure t := by
+  rw [coe_union, lowerClosure_union, LowerSet.mem_sup_iff]
 
 variable [DecidableLE α] [OrderTop α]
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `truncatedSup` / `truncatedSup` 的定义
+/-- The supremum of the elements of `s` less than `a` if there are some, otherwise `⊤`. -/
+/-
+**Finset.truncatedSup** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：truncatedSup (s : Finset α) (a : α) : α
+参数：s : Finset α；a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
 
-English:
-definition truncatedSup
-  signature: (s : Finset α) (a : α)
-  body: if h : a in lowerClosure s then {b in s | a <= b}.sup' (sup_aux h) id else ⊤
-
-中文:
-定义 truncatedSup
-  签名: (s : 有限集 α) (a : α)
-  定义体: if h : a in lowerClosure s then {b in s | a <= b}.sup' (sup_aux h) id else ⊤
-
-Depends on / 依赖: lowerClosure, sup_aux
+--- 原说明 ---
+The supremum of the elements of `s` less than `a` if there are some, otherwise `
+⊤`.
 -/
 def truncatedSup (s : Finset α) (a : α) : α :=
-  if h : a in lowerClosure s then {b in s | a <= b}.sup' (sup_aux h) id else ⊤
+  if h : a ∈ lowerClosure s then {b ∈ s | a ≤ b}.sup' (sup_aux h) id else ⊤
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-lemma `truncatedSup_of_mem` / 引理 `truncatedSup_of_mem`
-
-English:
-lemma truncatedSup_of_mem
-  given: (h : a in lowerClosure s)
-  proof: dif_pos h
-
-中文:
-引理 truncatedSup_of_mem
-  条件: (h : a in lowerClosure s)
-  证明: dif_pos h
-
-Depends on / 依赖: dif_pos
+/-
+**Finset.truncatedSup_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_of_mem (h : a in lowerClosure s) : truncatedSup s a = {b in s
+ | a <= b}.sup' (sup_aux h) id
+参数：h : a in lowerClosure s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
 -/
-lemma truncatedSup_of_mem (h : a in lowerClosure s) :
-    truncatedSup s a = {b in s | a <= b}.sup' (sup_aux h) id := dif_pos h
-
-/--
-lemma `truncatedSup_of_notMem` / 引理 `truncatedSup_of_notMem`
-
-English:
-lemma truncatedSup_of_notMem
-  given: (h : a ∉ lowerClosure s)
-  statement: truncatedSup s a = ⊤
-  proof: dif_neg h
-
-中文:
-引理 truncatedSup_of_notMem
-  条件: (h : a ∉ lowerClosure s)
-  结论: truncatedSup s a = ⊤
-  证明: dif_neg h
-
-Depends on / 依赖: dif_neg
+lemma truncatedSup_of_mem (h : a ∈ lowerClosure s) :
+    truncatedSup s a = {b ∈ s | a ≤ b}.sup' (sup_aux h) id := dif_pos h
+/-
+**Finset.truncatedSup_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_of_notMem (h : a ∉ lowerClosure s) : truncatedSup s a = ⊤
+参数：h : a ∉ lowerClosure s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
 -/
 lemma truncatedSup_of_notMem (h : a ∉ lowerClosure s) : truncatedSup s a = ⊤ := dif_neg h
-
-/--
-lemma `truncatedSup_empty` / 引理 `truncatedSup_empty`
-
-English:
-lemma truncatedSup_empty
-  given: (a : α)
-  statement: truncatedSup ∅ a = ⊤
-  proof: truncatedSup_of_notMem (by simp)
-
-中文:
-引理 truncatedSup_empty
-  条件: (a : α)
-  结论: truncatedSup ∅ a = ⊤
-  证明: truncatedSup_of_notMem (by simp)
+/-
+**Finset.truncatedSup_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : DecidableLE α] [inst_
+2 : OrderTop α] (a : α), ∅.truncatedSup a = ⊤
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.truncatedSup_of_notMem`：truncatedSup_of_notMem (h : a ∉ lowerClos
+ure s) : truncatedSup s a = ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `lowerClosure_empty`：∀ {α : Type u_1} [inst : Preorder α], lowerClosure ∅
+ = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 @[simp] lemma truncatedSup_empty (a : α) : truncatedSup ∅ a = ⊤ := truncatedSup_of_notMem (by simp)
-
-/--
-lemma `truncatedSup_singleton` / 引理 `truncatedSup_singleton`
-
-English:
-lemma truncatedSup_singleton
-  given: (b a : α)
-  statement: truncatedSup {b} a = if a <= b then b else ⊤
-  proof: by
-  simp [truncatedSup]; split_ifs <;> simp [Finset.filter_true_of_mem, *]
-
-中文:
-引理 truncatedSup_singleton
-  条件: (b a : α)
-  结论: truncatedSup {b} a = if a <= b then b else ⊤
-  证明: by
-  simp [truncatedSup]; split_ifs <;> simp [Finset.filter_true_of_mem, *]
+/-
+**Finset.truncatedSup_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : DecidableLE α] [inst_
+2 : OrderTop α] (b a : α),   {b}.truncatedSup a = if a ≤ b then b else ⊤
+参数：b a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `lowerClosure_singleton`：∀ {α : Type u_1} [inst : Preorder α] (a : α), lo
+werClosure {a} = LowerSet.Iic a
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Finset.sup'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finset.filter_true_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Decid
+ablePred p] {s : Finset α}, (∀ x ∈ s, p x) → Finset.filter p s = s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-@[simp] lemma truncatedSup_singleton (b a : α) : truncatedSup {b} a = if a <= b then b else ⊤ := by
+@[simp] lemma truncatedSup_singleton (b a : α) : truncatedSup {b} a = if a ≤ b then b else ⊤ := by
   simp [truncatedSup]; split_ifs <;> simp [Finset.filter_true_of_mem, *]
-
-/--
-lemma `le_truncatedSup` / 引理 `le_truncatedSup`
-
-English:
-lemma le_truncatedSup
-  statement: a <= truncatedSup s a
-  proof: by
-  rw [truncatedSup]
-  split_ifs with h
-  · obtain ⟨ℬ, hb, h⟩ := h
-exact h.trans le_sup' id mem_filter.2 ⟨hb, h⟩
-  · exact le_top
-
-中文:
-引理 le_truncatedSup
-  结论: a <= truncatedSup s a
-  证明: by
-  rw [truncatedSup]
-  split_ifs with h
-  · obtain ⟨ℬ, hb, h⟩ := h
-exact h.trans le_sup' id mem_filter.2 ⟨hb, h⟩
-  · exact le_top
-
-Depends on / 依赖: h.trans, le_sup, le_top, mem_filter, split_ifs, truncatedSup
+/-
+**Finset.le_truncatedSup** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：le_truncatedSup : a <= truncatedSup s a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.truncatedSup.eq_1`：∀ {α : Type u_1} [inst : SemilatticeSup α] [in
+st_1 : DecidableLE α] [inst_2 : OrderTop α] (s : Finset α) (a : α),   s.truncate
+dSup a = if h …
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Finset.le_sup'`：le_sup' {b : β} (h : b in s) : f b <= s.sup' ⟨b, h⟩ f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
-lemma le_truncatedSup : a <= truncatedSup s a := by
+lemma le_truncatedSup : a ≤ truncatedSup s a := by
   rw [truncatedSup]
   split_ifs with h
   · obtain ⟨ℬ, hb, h⟩ := h
-exact h.trans le_sup' id mem_filter.2 ⟨hb, h⟩
+    exact h.trans <| le_sup' id <| mem_filter.2 ⟨hb, h⟩
   · exact le_top
-
-/--
-lemma `map_truncatedSup` / 引理 `map_truncatedSup`
-
-English:
-lemma map_truncatedSup
-  given: [DecidableLE β] (e : α ≃o β) (s : Finset α) (a : α)
-  proof: by
-  have : e a in lowerClosure (s.map e.toEquiv.toEmbedding : Set β) ↔ a in lowerClosure s := by simp
-  simp_rw [truncatedSup, apply_dite e, map_finset_sup', map_top, this]
-  congr with h
-  simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_le, id, sup'_map]
-
-中文:
-引理 map_truncatedSup
-  条件: [DecidableLE β] (e : α ≃o β) (s : 有限集 α) (a : α)
-  证明: by
-  have : e a in lowerClosure (s.map e.toEquiv.toEmbedding : Set β) ↔ a in lowerClosure s := by simp
-  simp_rw [truncatedSup, apply_dite e, map_finset_sup', map_top, this]
-  congr with h
-  simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_le, id, sup'_map]
-
-Depends on / 依赖: Equiv.coe_toEmbedding, Function, Function.comp_def, OrderIso, OrderIso.le_iff_le, RelIso, RelIso.coe_fn_toEquiv, _map, apply_dite, coe_fn_toEquiv, coe_toEmbedding, comp_def, e.toEquiv.toEmbedding, filter_map, le_iff_le, lowerClosure, map_finset_sup, map_top, s.map, simp_rw
+/-
+**Finset.map_truncatedSup** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：map_truncatedSup [DecidableLE β] (e : α ≃o β) (s : Finset α) (a : α) : e (
+truncatedSup s a) = truncatedSup (s.map e.toEquiv.toEmbedding) (e a)
+参数：e : α ≃o β；s : Finset α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `lowerClosure_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] 
+[inst_1 : Preorder β] {s : Set α} (f : α ≃o β),   lowerClosure (⇑f '' s) = (Lowe
+rSet.map…
+· 使用定理 `OrderIso.symm_apply_apply`：symm_apply_apply (e : α ≃o β) (x : α) : e.sym
+m (e x) = x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
+· 使用定理 `apply_dite`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) (P : Prop) [inst
+ : Decidable P] (x : P → α) (y : ¬P → α),   f (dite P x y) = if h : P then f (x 
+…
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `map_finset_sup'`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Typ
+e u_5} [inst : SemilatticeSup α] [inst_1 : SemilatticeSup β]   [inst_2 : FunLike
+ F α …
+· 使用定理 `OrderIsoClass.toSupHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : EquivLike F α β] [inst_1 : SemilatticeSup α]   [inst_2 : Semilattice
+Sup β] [OrderIsoC…
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `TopHomClass.map_top`：∀ {F : Type u_6} {α : outParam (Type u_7)} {β : out
+Param (Type u_8)} {inst : Top α} {inst_1 : Top β}   {inst_2 : FunLike F α β} [se
+lf : TopH…
+· 使用定理 `OrderIsoClass.toTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : EquivLike F α β] [inst_1 : LE α] [inst_2 : OrderTop α]   [inst_3 : P
+artialOrder β] [i…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `instSubsingletonDecidable`：∀ (p : Prop), Subsingleton (Decidable p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.map_nonempty`：map_nonempty : (s.map f).Nonempty ↔ s.Nonempty
+· 使用定理 `Finset.filter_map`：filter_map {p : β -> Prop} [DecidablePred p] : (s.map
+ f).filter p = (s.filter (p ∘ f)).map f
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.sup'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `Finset.sup'_map`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst : 
+SemilatticeSup α] {s : Finset γ} {f : γ ↪ β} (g : β → α)   (hs : (Finset.map f s
+).Non…
+（共 31 条，此处仅展示前 30 条）
 -/
 lemma map_truncatedSup [DecidableLE β] (e : α ≃o β) (s : Finset α) (a : α) :
     e (truncatedSup s a) = truncatedSup (s.map e.toEquiv.toEmbedding) (e a) := by
-  have : e a in lowerClosure (s.map e.toEquiv.toEmbedding : Set β) ↔ a in lowerClosure s := by simp
+  have : e a ∈ lowerClosure (s.map e.toEquiv.toEmbedding : Set β) ↔ a ∈ lowerClosure s := by simp
   simp_rw [truncatedSup, apply_dite e, map_finset_sup', map_top, this]
   congr with h
   simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
     OrderIso.le_iff_le, id, sup'_map]
-
-/--
-lemma `truncatedSup_of_isAntichain` / 引理 `truncatedSup_of_isAntichain`
-
-English:
-lemma truncatedSup_of_isAntichain
-  given: (hs : IsAntichain (· <= ·) (s : Set α)) (ha : a in s)
-  proof: by
-  refine le_antisymm ?_ le_truncatedSup
-  simp_rw [truncatedSup_of_mem (subset_lowerClosure ha), sup'_le_iff, mem_filter]
-  rintro b ⟨hb, hab⟩
-  exact (hs.eq ha hb hab).ge
-
-中文:
-引理 truncatedSup_of_isAntichain
-  条件: (hs : IsAntichain (· <= ·) (s : 集合 α)) (ha : a in s)
-  证明: by
-  refine le_antisymm ?_ le_truncatedSup
-  simp_rw [truncatedSup_of_mem (subset_lowerClosure ha), sup'_le_iff, mem_filter]
-  rintro b ⟨hb, hab⟩
-  exact (hs.eq ha hb hab).ge
-
-Depends on / 依赖: _le_iff, hs.eq, le_antisymm, le_truncatedSup, mem_filter, simp_rw, subset_lowerClosure, truncatedSup_of_mem
+/-
+**Finset.truncatedSup_of_isAntichain** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_of_isAntichain (hs : IsAntichain (· <= ·) (s : Set α)) (ha : 
+a in s) : truncatedSup s a = a
+参数：hs : IsAntichain (· <= ·) (s : Set α)；ha : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
+· 使用定理 `subset_lowerClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, s
+ ⊆ ↑(lowerClosure s)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.truncatedSup_of_mem`：truncatedSup_of_mem (h : a in lowerClosure s
+) : truncatedSup s a = {b in s | a <= b}.sup' (sup_aux h) id
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `IsAntichain.eq`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}, IsAntic
+hain r s → ∀ {a b : α}, a ∈ s → b ∈ s → r a b → a = b
+· 使用引理 `Finset.le_truncatedSup`：le_truncatedSup : a <= truncatedSup s a
 -/
-lemma truncatedSup_of_isAntichain (hs : IsAntichain (· <= ·) (s : Set α)) (ha : a in s) :
+lemma truncatedSup_of_isAntichain (hs : IsAntichain (· ≤ ·) (s : Set α)) (ha : a ∈ s) :
     truncatedSup s a = a := by
   refine le_antisymm ?_ le_truncatedSup
   simp_rw [truncatedSup_of_mem (subset_lowerClosure ha), sup'_le_iff, mem_filter]
@@ -438,93 +411,124 @@ lemma truncatedSup_of_isAntichain (hs : IsAntichain (· <= ·) (s : Set α)) (ha
   exact (hs.eq ha hb hab).ge
 
 variable [DecidableEq α]
-
-/--
-lemma `truncatedSup_union` / 引理 `truncatedSup_union`
-
-English:
-lemma truncatedSup_union
-  given: (hs : a in lowerClosure s) (ht : a in lowerClosure t)
-  proof: by
-  simpa only [truncatedSup_of_mem, hs, ht, lower_aux.2 (Or.inl hs), filter_union] using
-    sup'_union _ _ _
-
-中文:
-引理 truncatedSup_union
-  条件: (hs : a in lowerClosure s) (ht : a in lowerClosure t)
-  证明: by
-  simpa only [truncatedSup_of_mem, hs, ht, lower_aux.2 (Or.inl hs), filter_union] using
-    sup'_union _ _ _
-
-Depends on / 依赖: Or.inl, _union, filter_union, lower_aux, truncatedSup_of_mem
+/-
+**Finset.truncatedSup_union** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_union (hs : a in lowerClosure s) (ht : a in lowerClosure t) :
+ truncatedSup (s union t) a = truncatedSup s a ⊔ truncatedSup t a
+参数：hs : a in lowerClosure s；ht : a in lowerClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.lower_au
+x`：∀ {α : Type u_1} [inst : SemilatticeSup α] {s t : Finset α} {a : α} [inst_1 :
+ DecidableEq α],   a ∈ lowerClosure ↑(s ∪ t) ↔ a ∈ lowerClosure…
+· 使用定理 `Finset.filter_union`：filter_union (s₁ s₂ : Finset α) : (s₁ union s₂).fil
+ter p = s₁.filter p union s₂.filter p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.truncatedSup_of_mem`：truncatedSup_of_mem (h : a in lowerClosure s
+) : truncatedSup s a = {b in s | a <= b}.sup' (sup_aux h) id
+· 使用定理 `Finset.sup'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `Finset.sup'_union`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] [inst_1 : DecidableEq β] {s₁ s₂ : Finset β} (h₁ : s₁.Nonempty)   (h₂ : s₂.N
+onempty…
 -/
-lemma truncatedSup_union (hs : a in lowerClosure s) (ht : a in lowerClosure t) :
-    truncatedSup (s union t) a = truncatedSup s a ⊔ truncatedSup t a := by
+lemma truncatedSup_union (hs : a ∈ lowerClosure s) (ht : a ∈ lowerClosure t) :
+    truncatedSup (s ∪ t) a = truncatedSup s a ⊔ truncatedSup t a := by
   simpa only [truncatedSup_of_mem, hs, ht, lower_aux.2 (Or.inl hs), filter_union] using
     sup'_union _ _ _
-
-/--
-lemma `truncatedSup_union_left` / 引理 `truncatedSup_union_left`
-
-English:
-lemma truncatedSup_union_left
-  given: (hs : a in lowerClosure s) (ht : a ∉ lowerClosure t)
-  proof: by
+/-
+**Finset.truncatedSup_union_left** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_union_left (hs : a in lowerClosure s) (ht : a ∉ lowerClosure 
+t) : truncatedSup (s union t) a = truncatedSup s a
+参数：hs : a in lowerClosure s；ht : a ∉ lowerClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.lower_au
+x`：∀ {α : Type u_1} [inst : SemilatticeSup α] {s t : Finset α} {a : α} [inst_1 :
+ DecidableEq α],   a ∈ lowerClosure ↑(s ∪ t) ↔ a ∈ lowerClosure…
+· 使用定理 `Finset.filter_union`：filter_union (s₁ s₂ : Finset α) : (s₁ union s₂).fil
+ter p = s₁.filter p union s₂.filter p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.filter_false_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Deci
+dablePred p] {s : Finset α}, (∀ x ∈ s, ¬p x) → Finset.filter p s = ∅
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Finset.union_empty`：union_empty (s : Finset α) : s union ∅ = s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Finset.truncatedSup_of_mem`：truncatedSup_of_mem (h : a in lowerClosure s
+) : truncatedSup s a = {b in s | a <= b}.sup' (sup_aux h) id
+· 使用定理 `Finset.sup'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma truncatedSup_union_left (hs : a ∈ lowerClosure s) (ht : a ∉ lowerClosure t) :
+    truncatedSup (s ∪ t) a = truncatedSup s a := by
   simp only [mem_lowerClosure, mem_coe, not_exists, not_and] at ht
   simp only [truncatedSup_of_mem, hs, filter_union, filter_false_of_mem ht, union_empty,
     lower_aux.2 (Or.inl hs)]
-
-中文:
-引理 truncatedSup_union_left
-  条件: (hs : a in lowerClosure s) (ht : a ∉ lowerClosure t)
-  证明: by
-  simp only [mem_lowerClosure, mem_coe, not_exists, not_and] at ht
-  simp only [truncatedSup_of_mem, hs, filter_union, filter_false_of_mem ht, union_empty,
-    lower_aux.2 (Or.inl hs)]
-
-Depends on / 依赖: Or.inl, filter_false_of_mem, filter_union, lower_aux, mem_coe, mem_lowerClosure, not_and, not_exists, truncatedSup_of_mem, union_empty
+/-
+**Finset.truncatedSup_union_right** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_union_right (hs : a ∉ lowerClosure s) (ht : a in lowerClosure
+ t) : truncatedSup (s union t) a = truncatedSup t a
+参数：hs : a ∉ lowerClosure s；ht : a in lowerClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_comm`：union_comm (s₁ s₂ : Finset α) : s₁ union s₂ = s₂ unio
+n s₁
+· 使用引理 `Finset.truncatedSup_union_left`：truncatedSup_union_left (hs : a in lower
+Closure s) (ht : a ∉ lowerClosure t) : truncatedSup (s union t) a = truncatedSup
+ s a
 -/
-lemma truncatedSup_union_left (hs : a in lowerClosure s) (ht : a ∉ lowerClosure t) :
-    truncatedSup (s union t) a = truncatedSup s a := by
-  simp only [mem_lowerClosure, mem_coe, not_exists, not_and] at ht
-  simp only [truncatedSup_of_mem, hs, filter_union, filter_false_of_mem ht, union_empty,
-    lower_aux.2 (Or.inl hs)]
-
-/--
-lemma `truncatedSup_union_right` / 引理 `truncatedSup_union_right`
-
-English:
-lemma truncatedSup_union_right
-  given: (hs : a ∉ lowerClosure s) (ht : a in lowerClosure t)
-  proof: by rw [union_comm, truncatedSup_union_left ht hs]
-
-中文:
-引理 truncatedSup_union_right
-  条件: (hs : a ∉ lowerClosure s) (ht : a in lowerClosure t)
-  证明: by rw [union_comm, truncatedSup_union_left ht hs]
-
-Depends on / 依赖: truncatedSup_union_left, union_comm
--/
-lemma truncatedSup_union_right (hs : a ∉ lowerClosure s) (ht : a in lowerClosure t) :
-    truncatedSup (s union t) a = truncatedSup t a := by rw [union_comm, truncatedSup_union_left ht hs]
-
-/--
-lemma `truncatedSup_union_of_notMem` / 引理 `truncatedSup_union_of_notMem`
-
-English:
-lemma truncatedSup_union_of_notMem
-  given: (hs : a ∉ lowerClosure s) (ht : a ∉ lowerClosure t)
-  proof: truncatedSup_of_notMem fun h => (lower_aux.1 h).elim hs ht
-
-中文:
-引理 truncatedSup_union_of_notMem
-  条件: (hs : a ∉ lowerClosure s) (ht : a ∉ lowerClosure t)
-  证明: truncatedSup_of_notMem fun h => (lower_aux.1 h).elim hs ht
-
-Depends on / 依赖: lower_aux, truncatedSup_of_notMem
+lemma truncatedSup_union_right (hs : a ∉ lowerClosure s) (ht : a ∈ lowerClosure t) :
+    truncatedSup (s ∪ t) a = truncatedSup t a := by rw [union_comm, truncatedSup_union_left ht hs]
+/-
+**Finset.truncatedSup_union_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_union_of_notMem (hs : a ∉ lowerClosure s) (ht : a ∉ lowerClos
+ure t) : truncatedSup (s union t) a = ⊤
+参数：hs : a ∉ lowerClosure s；ht : a ∉ lowerClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.truncatedSup_of_notMem`：truncatedSup_of_notMem (h : a ∉ lowerClos
+ure s) : truncatedSup s a = ⊤
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.lower_au
+x`：∀ {α : Type u_1} [inst : SemilatticeSup α] {s t : Finset α} {a : α} [inst_1 :
+ DecidableEq α],   a ∈ lowerClosure ↑(s ∪ t) ↔ a ∈ lowerClosure…
 -/
 lemma truncatedSup_union_of_notMem (hs : a ∉ lowerClosure s) (ht : a ∉ lowerClosure t) :
-    truncatedSup (s union t) a = ⊤ := truncatedSup_of_notMem fun h => (lower_aux.1 h).elim hs ht
+    truncatedSup (s ∪ t) a = ⊤ := truncatedSup_of_notMem fun h ↦ (lower_aux.1 h).elim hs ht
 
 end SemilatticeSup
 
@@ -533,236 +537,287 @@ variable [SemilatticeInf α] [SemilatticeInf β]
   [BoundedOrder β] [DecidableLE β] {s t : Finset α} {a : α}
 
 set_option backward.privateInPublic true in
-/--
-lemma `inf_aux` / 引理 `inf_aux`
-
-English:
-lemma inf_aux
-  given: [DecidableLE α]
-  statement: a in upperClosure s -> {b in s | b <= a}.Nonempty
-  proof: fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
-
-中文:
-引理 inf_aux
-  条件: [DecidableLE α]
-  结论: a in upperClosure s -> {b in s | b <= a}.非空
-  证明: fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
+/-
+**Finset.inf_aux** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma inf_aux [DecidableLE α] : a in upperClosure s -> {b in s | b <= a}.Nonempty :=
-  fun ⟨b, hb, hab⟩ => ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
-
-/--
-lemma `upper_aux` / 引理 `upper_aux`
-
-English:
-lemma upper_aux
-  given: [DecidableEq α]
-  proof: by
-  rw [coe_union]; rw [upperClosure_union]; rw [UpperSet.mem_inf_iff]
-
-中文:
-引理 upper_aux
-  条件: [DecidableEq α]
-  证明: by
-  rw [coe_union]; rw [upperClosure_union]; rw [UpperSet.mem_inf_iff]
+private lemma inf_aux [DecidableLE α] : a ∈ upperClosure s → {b ∈ s | b ≤ a}.Nonempty :=
+  fun ⟨b, hb, hab⟩ ↦ ⟨b, mem_filter.2 ⟨hb, hab⟩⟩
+/-
+**Finset.upper_aux** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma upper_aux [DecidableEq α] :
-    a in upperClosure ↑(s union t) ↔ a in upperClosure s ∨ a in upperClosure t := by
-  rw [coe_union]; rw [upperClosure_union]; rw [UpperSet.mem_inf_iff]
+    a ∈ upperClosure ↑(s ∪ t) ↔ a ∈ upperClosure s ∨ a ∈ upperClosure t := by
+  rw [coe_union, upperClosure_union, UpperSet.mem_inf_iff]
 
 variable [DecidableLE α] [BoundedOrder α]
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `truncatedInf` / `truncatedInf` 的定义
+/-- The infimum of the elements of `s` less than `a` if there are some, otherwise `⊥`. -/
+/-
+**Finset.truncatedInf** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：truncatedInf (s : Finset α) (a : α) : α
+参数：s : Finset α；a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
 
-English:
-definition truncatedInf
-  signature: (s : Finset α) (a : α)
-  body: if h : a in upperClosure s then {b in s | b <= a}.inf' (inf_aux h) id else ⊥
-
-中文:
-定义 truncatedInf
-  签名: (s : 有限集 α) (a : α)
-  定义体: if h : a in upperClosure s then {b in s | b <= a}.inf' (inf_aux h) id else ⊥
-
-Depends on / 依赖: inf_aux, upperClosure
+--- 原说明 ---
+The infimum of the elements of `s` less than `a` if there are some, otherwise `⊥
+`.
 -/
 def truncatedInf (s : Finset α) (a : α) : α :=
-  if h : a in upperClosure s then {b in s | b <= a}.inf' (inf_aux h) id else ⊥
+  if h : a ∈ upperClosure s then {b ∈ s | b ≤ a}.inf' (inf_aux h) id else ⊥
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-lemma `truncatedInf_of_mem` / 引理 `truncatedInf_of_mem`
-
-English:
-lemma truncatedInf_of_mem
-  given: (h : a in upperClosure s)
-  proof: dif_pos h
-
-中文:
-引理 truncatedInf_of_mem
-  条件: (h : a in upperClosure s)
-  证明: dif_pos h
-
-Depends on / 依赖: dif_pos
+/-
+**Finset.truncatedInf_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_of_mem (h : a in upperClosure s) : truncatedInf s a = {b in s
+ | b <= a}.inf' (inf_aux h) id
+参数：h : a in upperClosure s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
 -/
-lemma truncatedInf_of_mem (h : a in upperClosure s) :
-    truncatedInf s a = {b in s | b <= a}.inf' (inf_aux h) id := dif_pos h
-
-/--
-lemma `truncatedInf_of_notMem` / 引理 `truncatedInf_of_notMem`
-
-English:
-lemma truncatedInf_of_notMem
-  given: (h : a ∉ upperClosure s)
-  statement: truncatedInf s a = ⊥
-  proof: dif_neg h
-
-中文:
-引理 truncatedInf_of_notMem
-  条件: (h : a ∉ upperClosure s)
-  结论: truncatedInf s a = ⊥
-  证明: dif_neg h
-
-Depends on / 依赖: add_le_add_left, dif_neg
+lemma truncatedInf_of_mem (h : a ∈ upperClosure s) :
+    truncatedInf s a = {b ∈ s | b ≤ a}.inf' (inf_aux h) id := dif_pos h
+/-
+**Finset.truncatedInf_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_of_notMem (h : a ∉ upperClosure s) : truncatedInf s a = ⊥
+参数：h : a ∉ upperClosure s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
 -/
 lemma truncatedInf_of_notMem (h : a ∉ upperClosure s) : truncatedInf s a = ⊥ := dif_neg h
-
-/--
-lemma `truncatedInf_le` / 引理 `truncatedInf_le`
-
-English:
-lemma truncatedInf_le
-  statement: truncatedInf s a <= a
-  proof: by
-  unfold truncatedInf
-  split_ifs with h
-  · obtain ⟨b, hb, hba⟩ := h
-exact hba.trans' inf'_le id mem_filter.2 ⟨hb, ‹_›⟩
-  · exact bot_le
-
-中文:
-引理 truncatedInf_le
-  结论: truncatedInf s a <= a
-  证明: by
-  unfold truncatedInf
-  split_ifs with h
-  · obtain ⟨b, hb, hba⟩ := h
-exact hba.trans' inf'_le id mem_filter.2 ⟨hb, ‹_›⟩
-  · exact bot_le
-
-Depends on / 依赖: bot_le, hba.trans, le_of_add_le_add_left, mem_filter, split_ifs, truncatedInf
+/-
+**Finset.truncatedInf_le** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_le : truncatedInf s a <= a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用定理 `Finset.inf'_le`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf α
+] {s : Finset β} (f : β → α) {b : β} (h : b ∈ s),   s.inf' ⋯ f ≤ f b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
-lemma truncatedInf_le : truncatedInf s a <= a := by
+lemma truncatedInf_le : truncatedInf s a ≤ a := by
   unfold truncatedInf
   split_ifs with h
   · obtain ⟨b, hb, hba⟩ := h
-exact hba.trans' inf'_le id mem_filter.2 ⟨hb, ‹_›⟩
+    exact hba.trans' <| inf'_le id <| mem_filter.2 ⟨hb, ‹_›⟩
   · exact bot_le
-
-/--
-lemma `truncatedInf_empty` / 引理 `truncatedInf_empty`
-
-English:
-lemma truncatedInf_empty
-  given: (a : α)
-  statement: truncatedInf ∅ a = ⊥
-  proof: truncatedInf_of_notMem (by simp)
-
-中文:
-引理 truncatedInf_empty
-  条件: (a : α)
-  结论: truncatedInf ∅ a = ⊥
-  证明: truncatedInf_of_notMem (by simp)
+/-
+**Finset.truncatedInf_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : DecidableLE α] [inst_
+2 : BoundedOrder α] (a : α),   ∅.truncatedInf a = ⊥
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.truncatedInf_of_notMem`：truncatedInf_of_notMem (h : a ∉ upperClos
+ure s) : truncatedInf s a = ⊥
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `upperClosure_empty`：upperClosure_empty : upperClosure (∅ : Set α) = ⊤
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 @[simp] lemma truncatedInf_empty (a : α) : truncatedInf ∅ a = ⊥ := truncatedInf_of_notMem (by simp)
-
-/--
-lemma `truncatedInf_singleton` / 引理 `truncatedInf_singleton`
-
-English:
-lemma truncatedInf_singleton
-  given: (b a : α)
-  statement: truncatedInf {b} a = if b <= a then b else ⊥
-  proof: by
-  simp only [truncatedInf, coe_singleton, upperClosure_singleton, UpperSet.mem_Ici_iff,
-    id_eq]
-  split_ifs <;> simp [Finset.filter_true_of_mem, *]
-
-中文:
-引理 truncatedInf_singleton
-  条件: (b a : α)
-  结论: truncatedInf {b} a = if b <= a then b else ⊥
-  证明: by
-  simp only [truncatedInf, coe_singleton, upperClosure_singleton, UpperSet.mem_Ici_iff,
-    id_eq]
-  split_ifs <;> simp [Finset.filter_true_of_mem, *]
+/-
+**Finset.truncatedInf_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : DecidableLE α] [inst_
+2 : BoundedOrder α] (b a : α),   {b}.truncatedInf a = if b ≤ a then b else ⊥
+参数：b a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `upperClosure_singleton`：upperClosure_singleton (a : α) : upperClosure ({
+a} : Set α) = UpperSet.Ici a
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Finset.inf'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeIn
+f α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finset.filter_true_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Decid
+ablePred p] {s : Finset α}, (∀ x ∈ s, p x) → Finset.filter p s = s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-@[simp] lemma truncatedInf_singleton (b a : α) : truncatedInf {b} a = if b <= a then b else ⊥ := by
+@[simp] lemma truncatedInf_singleton (b a : α) : truncatedInf {b} a = if b ≤ a then b else ⊥ := by
   simp only [truncatedInf, coe_singleton, upperClosure_singleton, UpperSet.mem_Ici_iff,
     id_eq]
   split_ifs <;> simp [Finset.filter_true_of_mem, *]
-
-/--
-lemma `map_truncatedInf` / 引理 `map_truncatedInf`
-
-English:
-lemma map_truncatedInf
-  given: (e : α ≃o β) (s : Finset α) (a : α)
-  proof: by
-  have : e a in upperClosure (s.map e.toEquiv.toEmbedding) ↔ a in upperClosure s := by simp
-  simp_rw [truncatedInf, apply_dite e, map_finset_inf', map_bot, this]
-  congr with h
-  simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_le, id, inf'_map]
-
-中文:
-引理 map_truncatedInf
-  条件: (e : α ≃o β) (s : 有限集 α) (a : α)
-  证明: by
-  have : e a in upperClosure (s.map e.toEquiv.toEmbedding) ↔ a in upperClosure s := by simp
-  simp_rw [truncatedInf, apply_dite e, map_finset_inf', map_bot, this]
-  congr with h
-  simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_le, id, inf'_map]
-
-Depends on / 依赖: Equiv.coe_toEmbedding, Function, Function.comp_def, OrderIso, OrderIso.le_iff_le, RelIso, RelIso.coe_fn_toEquiv, _map, apply_dite, coe_fn_toEquiv, coe_toEmbedding, comp_def, e.toEquiv.toEmbedding, filter_map, le_iff_le, map_bot, map_finset_inf, s.map, simp_rw, toEmbedding
+/-
+**Finset.map_truncatedInf** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：map_truncatedInf (e : α ≃o β) (s : Finset α) (a : α) : e (truncatedInf s a
+) = truncatedInf (s.map e.toEquiv.toEmbedding) (e a)
+参数：e : α ≃o β；s : Finset α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `upperClosure_image`：upperClosure_image (f : α ≃o β) : upperClosure (f ''
+ s) = UpperSet.map f (upperClosure s)
+· 使用定理 `OrderIso.symm_apply_apply`：symm_apply_apply (e : α ≃o β) (x : α) : e.sym
+m (e x) = x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
+· 使用定理 `apply_dite`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) (P : Prop) [inst
+ : Decidable P] (x : P → α) (y : ¬P → α),   f (dite P x y) = if h : P then f (x 
+…
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `map_finset_inf'`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Typ
+e u_5} [inst : SemilatticeInf α] [inst_1 : SemilatticeInf β]   [inst_2 : FunLike
+ F α …
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `OrderIsoClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Typ
+e u_3} [inst : EquivLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : OrderTop
+ α] [inst_3 : Semila…
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `BotHomClass.map_bot`：∀ {F : Type u_6} {α : outParam (Type u_7)} {β : out
+Param (Type u_8)} {inst : Bot α} {inst_1 : Bot β}   {inst_2 : FunLike F α β} [se
+lf : BotH…
+· 使用定理 `OrderIsoClass.toBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : EquivLike F α β] [inst_1 : LE α] [inst_2 : OrderBot α]   [inst_3 : P
+artialOrder β] [i…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `instSubsingletonDecidable`：∀ (p : Prop), Subsingleton (Decidable p)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.map_nonempty`：map_nonempty : (s.map f).Nonempty ↔ s.Nonempty
+· 使用定理 `Finset.filter_map`：filter_map {p : β -> Prop} [DecidablePred p] : (s.map
+ f).filter p = (s.filter (p ∘ f)).map f
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.inf'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeIn
+f α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+（共 32 条，此处仅展示前 30 条）
 -/
 lemma map_truncatedInf (e : α ≃o β) (s : Finset α) (a : α) :
     e (truncatedInf s a) = truncatedInf (s.map e.toEquiv.toEmbedding) (e a) := by
-  have : e a in upperClosure (s.map e.toEquiv.toEmbedding) ↔ a in upperClosure s := by simp
+  have : e a ∈ upperClosure (s.map e.toEquiv.toEmbedding) ↔ a ∈ upperClosure s := by simp
   simp_rw [truncatedInf, apply_dite e, map_finset_inf', map_bot, this]
   congr with h
   simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
     OrderIso.le_iff_le, id, inf'_map]
-
-/--
-lemma `truncatedInf_of_isAntichain` / 引理 `truncatedInf_of_isAntichain`
-
-English:
-lemma truncatedInf_of_isAntichain
-  given: (hs : IsAntichain (· <= ·) (s : Set α)) (ha : a in s)
-  proof: by
-  refine le_antisymm truncatedInf_le ?_
-  simp_rw [truncatedInf_of_mem (subset_upperClosure ha), le_inf'_iff, mem_filter]
-  rintro b ⟨hb, hba⟩
-  exact (hs.eq hb ha hba).ge
-
-中文:
-引理 truncatedInf_of_isAntichain
-  条件: (hs : IsAntichain (· <= ·) (s : 集合 α)) (ha : a in s)
-  证明: by
-  refine le_antisymm truncatedInf_le ?_
-  simp_rw [truncatedInf_of_mem (subset_upperClosure ha), le_inf'_iff, mem_filter]
-  rintro b ⟨hb, hba⟩
-  exact (hs.eq hb ha hba).ge
-
-Depends on / 依赖: _iff, hs.eq, le_antisymm, le_inf, mem_filter, simp_rw, subset_upperClosure, truncatedInf_le, truncatedInf_of_mem
+/-
+**Finset.truncatedInf_of_isAntichain** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_of_isAntichain (hs : IsAntichain (· <= ·) (s : Set α)) (ha : 
+a in s) : truncatedInf s a = a
+参数：hs : IsAntichain (· <= ·) (s : Set α)；ha : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `Finset.truncatedInf_le`：truncatedInf_le : truncatedInf s a <= a
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
+· 使用定理 `subset_upperClosure`：subset_upperClosure : s subseteq upperClosure s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.truncatedInf_of_mem`：truncatedInf_of_mem (h : a in upperClosure s
+) : truncatedInf s a = {b in s | b <= a}.inf' (inf_aux h) id
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `IsAntichain.eq`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}, IsAntic
+hain r s → ∀ {a b : α}, a ∈ s → b ∈ s → r a b → a = b
 -/
-lemma truncatedInf_of_isAntichain (hs : IsAntichain (· <= ·) (s : Set α)) (ha : a in s) :
+lemma truncatedInf_of_isAntichain (hs : IsAntichain (· ≤ ·) (s : Set α)) (ha : a ∈ s) :
     truncatedInf s a = a := by
   refine le_antisymm truncatedInf_le ?_
   simp_rw [truncatedInf_of_mem (subset_upperClosure ha), le_inf'_iff, mem_filter]
@@ -770,272 +825,308 @@ lemma truncatedInf_of_isAntichain (hs : IsAntichain (· <= ·) (s : Set α)) (ha
   exact (hs.eq hb ha hba).ge
 
 variable [DecidableEq α]
-
-/--
-lemma `truncatedInf_union` / 引理 `truncatedInf_union`
-
-English:
-lemma truncatedInf_union
-  given: (hs : a in upperClosure s) (ht : a in upperClosure t)
-  proof: by
-  simpa only [truncatedInf_of_mem, hs, ht, upper_aux.2 (Or.inl hs), filter_union] using
-    inf'_union _ _ _
-
-中文:
-引理 truncatedInf_union
-  条件: (hs : a in upperClosure s) (ht : a in upperClosure t)
-  证明: by
-  simpa only [truncatedInf_of_mem, hs, ht, upper_aux.2 (Or.inl hs), filter_union] using
-    inf'_union _ _ _
-
-Depends on / 依赖: Or.inl, _union, filter_union, truncatedInf_of_mem, upper_aux
+/-
+**Finset.truncatedInf_union** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_union (hs : a in upperClosure s) (ht : a in upperClosure t) :
+ truncatedInf (s union t) a = truncatedInf s a ⊓ truncatedInf t a
+参数：hs : a in upperClosure s；ht : a in upperClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.upper_au
+x`：∀ {α : Type u_1} [inst : SemilatticeInf α] {s t : Finset α} {a : α} [inst_1 :
+ DecidableEq α],   a ∈ upperClosure ↑(s ∪ t) ↔ a ∈ upperClosure…
+· 使用定理 `Finset.filter_union`：filter_union (s₁ s₂ : Finset α) : (s₁ union s₂).fil
+ter p = s₁.filter p union s₂.filter p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.truncatedInf_of_mem`：truncatedInf_of_mem (h : a in upperClosure s
+) : truncatedInf s a = {b in s | b <= a}.inf' (inf_aux h) id
+· 使用定理 `Finset.inf'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeIn
+f α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `Finset.inf'_union`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeIn
+f α] [inst_1 : DecidableEq β] {s₁ s₂ : Finset β} (h₁ : s₁.Nonempty)   (h₂ : s₂.N
+onempty…
 -/
-lemma truncatedInf_union (hs : a in upperClosure s) (ht : a in upperClosure t) :
-    truncatedInf (s union t) a = truncatedInf s a ⊓ truncatedInf t a := by
+lemma truncatedInf_union (hs : a ∈ upperClosure s) (ht : a ∈ upperClosure t) :
+    truncatedInf (s ∪ t) a = truncatedInf s a ⊓ truncatedInf t a := by
   simpa only [truncatedInf_of_mem, hs, ht, upper_aux.2 (Or.inl hs), filter_union] using
     inf'_union _ _ _
-
-/--
-lemma `truncatedInf_union_left` / 引理 `truncatedInf_union_left`
-
-English:
-lemma truncatedInf_union_left
-  given: (hs : a in upperClosure s) (ht : a ∉ upperClosure t)
-  proof: by
+/-
+**Finset.truncatedInf_union_left** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_union_left (hs : a in upperClosure s) (ht : a ∉ upperClosure 
+t) : truncatedInf (s union t) a = truncatedInf s a
+参数：hs : a in upperClosure s；ht : a ∉ upperClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.upper_au
+x`：∀ {α : Type u_1} [inst : SemilatticeInf α] {s t : Finset α} {a : α} [inst_1 :
+ DecidableEq α],   a ∈ upperClosure ↑(s ∪ t) ↔ a ∈ upperClosure…
+· 使用定理 `Finset.filter_union`：filter_union (s₁ s₂ : Finset α) : (s₁ union s₂).fil
+ter p = s₁.filter p union s₂.filter p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.filter_false_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Deci
+dablePred p] {s : Finset α}, (∀ x ∈ s, ¬p x) → Finset.filter p s = ∅
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Finset.union_empty`：union_empty (s : Finset α) : s union ∅ = s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Finset.truncatedInf_of_mem`：truncatedInf_of_mem (h : a in upperClosure s
+) : truncatedInf s a = {b in s | b <= a}.inf' (inf_aux h) id
+· 使用定理 `Finset.inf'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeIn
+f α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma truncatedInf_union_left (hs : a ∈ upperClosure s) (ht : a ∉ upperClosure t) :
+    truncatedInf (s ∪ t) a = truncatedInf s a := by
   simp only [mem_upperClosure, mem_coe, not_exists, not_and] at ht
   simp only [truncatedInf_of_mem, hs, filter_union, filter_false_of_mem ht, union_empty,
     upper_aux.2 (Or.inl hs)]
-
-中文:
-引理 truncatedInf_union_left
-  条件: (hs : a in upperClosure s) (ht : a ∉ upperClosure t)
-  证明: by
-  simp only [mem_upperClosure, mem_coe, not_exists, not_and] at ht
-  simp only [truncatedInf_of_mem, hs, filter_union, filter_false_of_mem ht, union_empty,
-    upper_aux.2 (Or.inl hs)]
-
-Depends on / 依赖: Or.inl, filter_false_of_mem, filter_union, mem_coe, mem_upperClosure, not_and, not_exists, truncatedInf_of_mem, union_empty, upper_aux
+/-
+**Finset.truncatedInf_union_right** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_union_right (hs : a ∉ upperClosure s) (ht : a in upperClosure
+ t) : truncatedInf (s union t) a = truncatedInf t a
+参数：hs : a ∉ upperClosure s；ht : a in upperClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.union_comm`：union_comm (s₁ s₂ : Finset α) : s₁ union s₂ = s₂ unio
+n s₁
+· 使用引理 `Finset.truncatedInf_union_left`：truncatedInf_union_left (hs : a in upper
+Closure s) (ht : a ∉ upperClosure t) : truncatedInf (s union t) a = truncatedInf
+ s a
 -/
-lemma truncatedInf_union_left (hs : a in upperClosure s) (ht : a ∉ upperClosure t) :
-    truncatedInf (s union t) a = truncatedInf s a := by
-  simp only [mem_upperClosure, mem_coe, not_exists, not_and] at ht
-  simp only [truncatedInf_of_mem, hs, filter_union, filter_false_of_mem ht, union_empty,
-    upper_aux.2 (Or.inl hs)]
-
-/--
-lemma `truncatedInf_union_right` / 引理 `truncatedInf_union_right`
-
-English:
-lemma truncatedInf_union_right
-  given: (hs : a ∉ upperClosure s) (ht : a in upperClosure t)
-  proof: by
-  rw [union_comm]; rw [truncatedInf_union_left ht hs]
-
-中文:
-引理 truncatedInf_union_right
-  条件: (hs : a ∉ upperClosure s) (ht : a in upperClosure t)
-  证明: by
-  rw [union_comm]; rw [truncatedInf_union_left ht hs]
-
-Depends on / 依赖: truncatedInf_union_left, union_comm
--/
-lemma truncatedInf_union_right (hs : a ∉ upperClosure s) (ht : a in upperClosure t) :
-    truncatedInf (s union t) a = truncatedInf t a := by
-  rw [union_comm]; rw [truncatedInf_union_left ht hs]
-
-/--
-lemma `truncatedInf_union_of_notMem` / 引理 `truncatedInf_union_of_notMem`
-
-English:
-lemma truncatedInf_union_of_notMem
-  given: (hs : a ∉ upperClosure s) (ht : a ∉ upperClosure t)
-  proof: truncatedInf_of_notMem by rw [coe_union, upperClosure_union]; exact fun h => h.elim hs ht
-
-中文:
-引理 truncatedInf_union_of_notMem
-  条件: (hs : a ∉ upperClosure s) (ht : a ∉ upperClosure t)
-  证明: truncatedInf_of_notMem by rw [coe_union, upperClosure_union]; exact fun h => h.elim hs ht
-
-Depends on / 依赖: coe_union, h.elim, truncatedInf_of_notMem, upperClosure_union
+lemma truncatedInf_union_right (hs : a ∉ upperClosure s) (ht : a ∈ upperClosure t) :
+    truncatedInf (s ∪ t) a = truncatedInf t a := by
+  rw [union_comm, truncatedInf_union_left ht hs]
+/-
+**Finset.truncatedInf_union_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_union_of_notMem (hs : a ∉ upperClosure s) (ht : a ∉ upperClos
+ure t) : truncatedInf (s union t) a = ⊥
+参数：hs : a ∉ upperClosure s；ht : a ∉ upperClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.truncatedInf_of_notMem`：truncatedInf_of_notMem (h : a ∉ upperClos
+ure s) : truncatedInf s a = ⊥
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
+· 使用定理 `upperClosure_union`：upperClosure_union (s t : Set α) : upperClosure (s u
+nion t) = upperClosure s ⊓ upperClosure t
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
 lemma truncatedInf_union_of_notMem (hs : a ∉ upperClosure s) (ht : a ∉ upperClosure t) :
-    truncatedInf (s union t) a = ⊥ :=
-truncatedInf_of_notMem by rw [coe_union, upperClosure_union]; exact fun h => h.elim hs ht
+    truncatedInf (s ∪ t) a = ⊥ :=
+  truncatedInf_of_notMem <| by rw [coe_union, upperClosure_union]; exact fun h ↦ h.elim hs ht
 
 end SemilatticeInf
 
 section DistribLattice
 variable [DistribLattice α] [DecidableEq α] {s t : Finset α} {a : α}
 
-/--
-lemma `infs_aux` / 引理 `infs_aux`
-
-English:
-lemma infs_aux
-  statement: a in lowerClosure ↑(s ⊼ t) ↔ a in lowerClosure s ∧ a in lowerClosure t
-  proof: by
-  rw [coe_infs]; rw [lowerClosure_infs]; rw [LowerSet.mem_inf_iff]
-
-中文:
-引理 infs_aux
-  结论: a in lowerClosure ↑(s ⊼ t) ↔ a in lowerClosure s ∧ a in lowerClosure t
-  证明: by
-  rw [coe_infs]; rw [lowerClosure_infs]; rw [LowerSet.mem_inf_iff]
+/-
+**Finset.infs_aux** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma infs_aux : a in lowerClosure ↑(s ⊼ t) ↔ a in lowerClosure s ∧ a in lowerClosure t := by
-  rw [coe_infs]; rw [lowerClosure_infs]; rw [LowerSet.mem_inf_iff]
-
-/--
-lemma `sups_aux` / 引理 `sups_aux`
-
-English:
-lemma sups_aux
-  statement: a in upperClosure ↑(s ⊻ t) ↔ a in upperClosure s ∧ a in upperClosure t
-  proof: by
-  rw [coe_sups]; rw [upperClosure_sups]; rw [UpperSet.mem_sup_iff]
-
-中文:
-引理 sups_aux
-  结论: a in upperClosure ↑(s ⊻ t) ↔ a in upperClosure s ∧ a in upperClosure t
-  证明: by
-  rw [coe_sups]; rw [upperClosure_sups]; rw [UpperSet.mem_sup_iff]
+private lemma infs_aux : a ∈ lowerClosure ↑(s ⊼ t) ↔ a ∈ lowerClosure s ∧ a ∈ lowerClosure t := by
+  rw [coe_infs, lowerClosure_infs, LowerSet.mem_inf_iff]
+/-
+**Finset.sups_aux** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma sups_aux : a in upperClosure ↑(s ⊻ t) ↔ a in upperClosure s ∧ a in upperClosure t := by
-  rw [coe_sups]; rw [upperClosure_sups]; rw [UpperSet.mem_sup_iff]
+private lemma sups_aux : a ∈ upperClosure ↑(s ⊻ t) ↔ a ∈ upperClosure s ∧ a ∈ upperClosure t := by
+  rw [coe_sups, upperClosure_sups, UpperSet.mem_sup_iff]
 
 variable [DecidableLE α] [BoundedOrder α]
-
-/--
-lemma `truncatedSup_infs` / 引理 `truncatedSup_infs`
-
-English:
-lemma truncatedSup_infs
-  given: (hs : a in lowerClosure s) (ht : a in lowerClosure t)
-  proof: by
-  simp only [truncatedSup_of_mem, hs, ht, infs_aux.2 ⟨hs, ht⟩, sup'_inf_sup', filter_infs_le]
-  simp_rw [← image_inf_product]
-  rw [sup'_image]
-  simp [Function.uncurry_def]
-
-中文:
-引理 truncatedSup_infs
-  条件: (hs : a in lowerClosure s) (ht : a in lowerClosure t)
-  证明: by
-  simp only [truncatedSup_of_mem, hs, ht, infs_aux.2 ⟨hs, ht⟩, sup'_inf_sup', filter_infs_le]
-  simp_rw [← image_inf_product]
-  rw [sup'_image]
-  simp [Function.uncurry_def]
-
-Depends on / 依赖: Function, Function.uncurry_def, _image, _inf_sup, filter_infs_le, image_inf_product, infs_aux, simp_rw, truncatedSup_of_mem, uncurry_def
+/-
+**Finset.truncatedSup_infs** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_infs (hs : a in lowerClosure s) (ht : a in lowerClosure t) : 
+truncatedSup (s ⊼ t) a = truncatedSup s a ⊓ truncatedSup t a
+参数：hs : a in lowerClosure s；ht : a in lowerClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sup_aux`
+：∀ {α : Type u_1} [inst : SemilatticeSup α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ lowerClosure ↑s → {b ∈ s | a ≤ b}.Nonempty
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.infs_aux
+`：∀ {α : Type u_1} [inst : DistribLattice α] [inst_1 : DecidableEq α] {s t : Fin
+set α} {a : α},   a ∈ lowerClosure ↑(s ⊼ t) ↔ a ∈ lowerClosure…
+· 使用引理 `Finset.filter_infs_le`：filter_infs_le [DecidableLE α] (s t : Finset α) (
+a : α) : {b in s ⊼ t | a <= b} = {b in s | a <= b} ⊼ {b in t | a <= b}
+· 使用定理 `Finset.Nonempty.product`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} 
+{t : Finset β}, s.Nonempty → t.Nonempty → (s ×ˢ t).Nonempty
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.truncatedSup_of_mem`：truncatedSup_of_mem (h : a in lowerClosure s
+) : truncatedSup s a = {b in s | a <= b}.sup' (sup_aux h) id
+· 使用定理 `Finset.sup'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `Finset.sup'_inf_sup'`：∀ {α : Type u_2} {ι : Type u_5} {κ : Type u_6} [in
+st : DistribLattice α] {s : Finset ι} {t : Finset κ} (hs : s.Nonempty)   (ht : t
+.Nonempty)…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decida
+bleEq β] {f : α → β} {s : Finset α},   (Finset.image f s).Nonempty → s.Nonempty
+· 使用定理 `Finset.sup'_image`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst 
+: SemilatticeSup α] [inst_1 : DecidableEq β] {s : Finset γ}   {f : γ → β} (hs : 
+(Finset…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma truncatedSup_infs (hs : a in lowerClosure s) (ht : a in lowerClosure t) :
+lemma truncatedSup_infs (hs : a ∈ lowerClosure s) (ht : a ∈ lowerClosure t) :
     truncatedSup (s ⊼ t) a = truncatedSup s a ⊓ truncatedSup t a := by
   simp only [truncatedSup_of_mem, hs, ht, infs_aux.2 ⟨hs, ht⟩, sup'_inf_sup', filter_infs_le]
   simp_rw [← image_inf_product]
   rw [sup'_image]
   simp [Function.uncurry_def]
-
-/--
-lemma `truncatedInf_sups` / 引理 `truncatedInf_sups`
-
-English:
-lemma truncatedInf_sups
-  given: (hs : a in upperClosure s) (ht : a in upperClosure t)
-  proof: by
-  simp only [truncatedInf_of_mem, hs, ht, sups_aux.2 ⟨hs, ht⟩, inf'_sup_inf', filter_sups_le]
-  simp_rw [← image_sup_product]
-  rw [inf'_image]
-  simp [Function.uncurry_def]
-
-中文:
-引理 truncatedInf_sups
-  条件: (hs : a in upperClosure s) (ht : a in upperClosure t)
-  证明: by
-  simp only [truncatedInf_of_mem, hs, ht, sups_aux.2 ⟨hs, ht⟩, inf'_sup_inf', filter_sups_le]
-  simp_rw [← image_sup_product]
-  rw [inf'_image]
-  simp [Function.uncurry_def]
-
-Depends on / 依赖: Function, Function.uncurry_def, _image, _sup_inf, filter_sups_le, image_sup_product, simp_rw, sups_aux, truncatedInf_of_mem, uncurry_def
+/-
+**Finset.truncatedInf_sups** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_sups (hs : a in upperClosure s) (ht : a in upperClosure t) : 
+truncatedInf (s ⊻ t) a = truncatedInf s a ⊔ truncatedInf t a
+参数：hs : a in upperClosure s；ht : a in upperClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.inf_aux`
+：∀ {α : Type u_1} [inst : SemilatticeInf α] {s : Finset α} {a : α} [inst_1 : Dec
+idableLE α],   a ∈ upperClosure ↑s → {b ∈ s | b ≤ a}.Nonempty
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Finset.sups_aux
+`：∀ {α : Type u_1} [inst : DistribLattice α] [inst_1 : DecidableEq α] {s t : Fin
+set α} {a : α},   a ∈ upperClosure ↑(s ⊻ t) ↔ a ∈ upperClosure…
+· 使用引理 `Finset.filter_sups_le`：filter_sups_le [DecidableLE α] (s t : Finset α) (
+a : α) : {b in s ⊻ t | b <= a} = {b in s | b <= a} ⊻ {b in t | b <= a}
+· 使用定理 `Finset.Nonempty.product`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} 
+{t : Finset β}, s.Nonempty → t.Nonempty → (s ×ˢ t).Nonempty
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.truncatedInf_of_mem`：truncatedInf_of_mem (h : a in upperClosure s
+) : truncatedInf s a = {b in s | b <= a}.inf' (inf_aux h) id
+· 使用定理 `Finset.inf'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeIn
+f α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `Finset.inf'_sup_inf'`：∀ {α : Type u_2} {ι : Type u_5} {κ : Type u_6} [in
+st : DistribLattice α] {s : Finset ι} {t : Finset κ} (hs : s.Nonempty)   (ht : t
+.Nonempty)…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.Nonempty.of_image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decida
+bleEq β] {f : α → β} {s : Finset α},   (Finset.image f s).Nonempty → s.Nonempty
+· 使用定理 `Finset.inf'_image`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst 
+: SemilatticeInf α] [inst_1 : DecidableEq β] {s : Finset γ}   {f : γ → β} (hs : 
+(Finset…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma truncatedInf_sups (hs : a in upperClosure s) (ht : a in upperClosure t) :
+lemma truncatedInf_sups (hs : a ∈ upperClosure s) (ht : a ∈ upperClosure t) :
     truncatedInf (s ⊻ t) a = truncatedInf s a ⊔ truncatedInf t a := by
   simp only [truncatedInf_of_mem, hs, ht, sups_aux.2 ⟨hs, ht⟩, inf'_sup_inf', filter_sups_le]
   simp_rw [← image_sup_product]
   rw [inf'_image]
   simp [Function.uncurry_def]
-
-/--
-lemma `truncatedSup_infs_of_notMem` / 引理 `truncatedSup_infs_of_notMem`
-
-English:
-lemma truncatedSup_infs_of_notMem
-  given: (ha : a ∉ lowerClosure s ⊓ lowerClosure t)
-  proof: truncatedSup_of_notMem by rwa [coe_infs, lowerClosure_infs]
-
-中文:
-引理 truncatedSup_infs_of_notMem
-  条件: (ha : a ∉ lowerClosure s ⊓ lowerClosure t)
-  证明: truncatedSup_of_notMem by rwa [coe_infs, lowerClosure_infs]
-
-Depends on / 依赖: coe_infs, lowerClosure_infs, truncatedSup_of_notMem
+/-
+**Finset.truncatedSup_infs_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedSup_infs_of_notMem (ha : a ∉ lowerClosure s ⊓ lowerClosure t) : t
+runcatedSup (s ⊼ t) a = ⊤
+参数：ha : a ∉ lowerClosure s ⊓ lowerClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.truncatedSup_of_notMem`：truncatedSup_of_notMem (h : a ∉ lowerClos
+ure s) : truncatedSup s a = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_infs`：coe_infs : (↑(s ⊼ t) : Set α) = ↑s ⊼ ↑t
+· 使用定理 `lowerClosure_infs`：lowerClosure_infs [SemilatticeInf α] (s t : Set α) : 
+lowerClosure (s ⊼ t) = lowerClosure s ⊓ lowerClosure t
 -/
 lemma truncatedSup_infs_of_notMem (ha : a ∉ lowerClosure s ⊓ lowerClosure t) :
     truncatedSup (s ⊼ t) a = ⊤ :=
-truncatedSup_of_notMem by rwa [coe_infs, lowerClosure_infs]
-
-/--
-lemma `truncatedInf_sups_of_notMem` / 引理 `truncatedInf_sups_of_notMem`
-
-English:
-lemma truncatedInf_sups_of_notMem
-  given: (ha : a ∉ upperClosure s ⊔ upperClosure t)
-  proof: truncatedInf_of_notMem by rwa [coe_sups, upperClosure_sups]
-
-中文:
-引理 truncatedInf_sups_of_notMem
-  条件: (ha : a ∉ upperClosure s ⊔ upperClosure t)
-  证明: truncatedInf_of_notMem by rwa [coe_sups, upperClosure_sups]
-
-Depends on / 依赖: coe_sups, truncatedInf_of_notMem, upperClosure_sups
+  truncatedSup_of_notMem <| by rwa [coe_infs, lowerClosure_infs]
+/-
+**Finset.truncatedInf_sups_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：truncatedInf_sups_of_notMem (ha : a ∉ upperClosure s ⊔ upperClosure t) : t
+runcatedInf (s ⊻ t) a = ⊥
+参数：ha : a ∉ upperClosure s ⊔ upperClosure t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.truncatedInf_of_notMem`：truncatedInf_of_notMem (h : a ∉ upperClos
+ure s) : truncatedInf s a = ⊥
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_sups`：coe_sups : (↑(s ⊻ t) : Set α) = ↑s ⊻ ↑t
+· 使用定理 `upperClosure_sups`：upperClosure_sups [SemilatticeSup α] (s t : Set α) : 
+upperClosure (s ⊻ t) = upperClosure s ⊔ upperClosure t
 -/
 lemma truncatedInf_sups_of_notMem (ha : a ∉ upperClosure s ⊔ upperClosure t) :
     truncatedInf (s ⊻ t) a = ⊥ :=
-truncatedInf_of_notMem by rwa [coe_sups, upperClosure_sups]
+  truncatedInf_of_notMem <| by rwa [coe_sups, upperClosure_sups]
 
 end DistribLattice
 
 section BooleanAlgebra
 variable [BooleanAlgebra α] [DecidableLE α]
 
-/--
-lemma `compl_truncatedSup` / 引理 `compl_truncatedSup`
-
-English:
-lemma compl_truncatedSup
-  given: (s : Finset α) (a : α)
-  proof: map_truncatedSup (OrderIso.compl α) _ _
-
-中文:
-引理 compl_truncatedSup
-  条件: (s : 有限集 α) (a : α)
-  证明: map_truncatedSup (OrderIso.compl α) _ _
+/-
+**Finset.compl_truncatedSup** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : BooleanAlgebra α] [inst_1 : DecidableLE α] (s : F
+inset α) (a : α),   (s.truncatedSup a)ᶜ = s.compls.truncatedInf aᶜ
+参数：s : Finset α；a : α；s.truncatedSup a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.map_truncatedSup`：map_truncatedSup [DecidableLE β] (e : α ≃o β) (
+s : Finset α) (a : α) : e (truncatedSup s a) = truncatedSup (s.map e.toEquiv.toE
+mbedding) (e …
 -/
 @[simp] lemma compl_truncatedSup (s : Finset α) (a : α) :
     (truncatedSup s a)ᶜ = truncatedInf sᶜˢ aᶜ := map_truncatedSup (OrderIso.compl α) _ _
-
-/--
-lemma `compl_truncatedInf` / 引理 `compl_truncatedInf`
-
-English:
-lemma compl_truncatedInf
-  given: (s : Finset α) (a : α)
-  proof: map_truncatedInf (OrderIso.compl α) _ _
-
-中文:
-引理 compl_truncatedInf
-  条件: (s : 有限集 α) (a : α)
-  证明: map_truncatedInf (OrderIso.compl α) _ _
+/-
+**Finset.compl_truncatedInf** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} [inst : BooleanAlgebra α] [inst_1 : DecidableLE α] (s : F
+inset α) (a : α),   (s.truncatedInf a)ᶜ = s.compls.truncatedSup aᶜ
+参数：s : Finset α；a : α；s.truncatedInf a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.map_truncatedInf`：map_truncatedInf (e : α ≃o β) (s : Finset α) (a
+ : α) : e (truncatedInf s a) = truncatedInf (s.map e.toEquiv.toEmbedding) (e a)
 -/
 @[simp] lemma compl_truncatedInf (s : Finset α) (a : α) :
     (truncatedInf s a)ᶜ = truncatedSup sᶜˢ aᶜ := map_truncatedInf (OrderIso.compl α) _ _
@@ -1044,103 +1135,104 @@ end BooleanAlgebra
 
 variable [DecidableEq α] [Fintype α]
 
-/--
-lemma `card_truncatedSup_union_add_card_truncatedSup_infs` / 引理 `card_truncatedSup_union_add_card_truncatedSup_infs`
-
-English:
-lemma card_truncatedSup_union_add_card_truncatedSup_infs
-  given: (𝒜 ℬ : Finset (Finset α)) (s : Finset α)
-  proof: by
-  by_cases h𝒜 : s in lowerClosure (𝒜 : Set <| Finset α) <;>
-    by_cases hℬ : s in lowerClosure (ℬ : Set <| Finset α)
-  · rw [truncatedSup_union h𝒜 hℬ, truncatedSup_infs h𝒜 hℬ]
-    exact card_union_add_card_inter _ _
-  · rw [truncatedSup_union_left h𝒜 hℬ, truncatedSup_of_notMem hℬ,
-      truncatedSup_infs_of_notMem fun h => hℬ h.2]
-  · rw [truncatedSup_union_right h𝒜 hℬ, truncatedSup_of_notMem h𝒜,
-      truncatedSup_infs_of_notMem fun h => h𝒜 h.1, add_comm]
-  · rw [truncatedSup_of_notMem h𝒜, truncatedSup_of_notMem hℬ,
-      truncatedSup_union_of_notMem h𝒜 hℬ, truncatedSup_infs_of_notMem fun h => h𝒜 h.1]
-
-中文:
-引理 card_truncatedSup_union_add_card_truncatedSup_infs
-  条件: (𝒜 ℬ : 有限集 (有限集 α)) (s : 有限集 α)
-  证明: by
-  by_cases h𝒜 : s in lowerClosure (𝒜 : Set <| Finset α) <;>
-    by_cases hℬ : s in lowerClosure (ℬ : Set <| Finset α)
-  · rw [truncatedSup_union h𝒜 hℬ, truncatedSup_infs h𝒜 hℬ]
-    exact card_union_add_card_inter _ _
-  · rw [truncatedSup_union_left h𝒜 hℬ, truncatedSup_of_notMem hℬ,
-      truncatedSup_infs_of_notMem fun h => hℬ h.2]
-  · rw [truncatedSup_union_right h𝒜 hℬ, truncatedSup_of_notMem h𝒜,
-      truncatedSup_infs_of_notMem fun h => h𝒜 h.1, add_comm]
-  · rw [truncatedSup_of_notMem h𝒜, truncatedSup_of_notMem hℬ,
-      truncatedSup_union_of_notMem h𝒜 hℬ, truncatedSup_infs_of_notMem fun h => h𝒜 h.1]
-
-Depends on / 依赖: Finset, add_comm, card_union_add_card_inter, lowerClosure, truncatedSup_infs, truncatedSup_infs_of_notMem, truncatedSup_of_notMem, truncatedSup_union, truncatedSup_union_left, truncatedSup_union_right
+/-
+**Finset.card_truncatedSup_union_add_card_truncatedSup_infs** 是 Mathlib 中的一个引理，位
+于命名空间 `Finset`。
+形式化陈述：card_truncatedSup_union_add_card_truncatedSup_infs (𝒜 ℬ : Finset (Finset α
+)) (s : Finset α) : #(truncatedSup (𝒜 union ℬ) s) + #(truncatedSup (𝒜 ⊼ ℬ) s) = 
+#(truncatedSup 𝒜 s) + #(truncatedSup ℬ s)
+参数：𝒜 ℬ : Finset (Finset α)；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.truncatedSup_union`：truncatedSup_union (hs : a in lowerClosure s)
+ (ht : a in lowerClosure t) : truncatedSup (s union t) a = truncatedSup s a ⊔ tr
+uncatedSup t a
+· 使用引理 `Finset.truncatedSup_infs`：truncatedSup_infs (hs : a in lowerClosure s) (
+ht : a in lowerClosure t) : truncatedSup (s ⊼ t) a = truncatedSup s a ⊓ truncate
+dSup t a
+· 使用定理 `Finset.card_union_add_card_inter`：card_union_add_card_inter (s t : Finse
+t α) : #(s union t) + #(s inter t) = #s + #t
+· 使用引理 `Finset.truncatedSup_union_left`：truncatedSup_union_left (hs : a in lower
+Closure s) (ht : a ∉ lowerClosure t) : truncatedSup (s union t) a = truncatedSup
+ s a
+· 使用引理 `Finset.truncatedSup_of_notMem`：truncatedSup_of_notMem (h : a ∉ lowerClos
+ure s) : truncatedSup s a = ⊤
+· 使用引理 `Finset.truncatedSup_infs_of_notMem`：truncatedSup_infs_of_notMem (ha : a 
+∉ lowerClosure s ⊓ lowerClosure t) : truncatedSup (s ⊼ t) a = ⊤
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Finset.truncatedSup_union_right`：truncatedSup_union_right (hs : a ∉ lowe
+rClosure s) (ht : a in lowerClosure t) : truncatedSup (s union t) a = truncatedS
+up t a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Finset.truncatedSup_union_of_notMem`：truncatedSup_union_of_notMem (hs : 
+a ∉ lowerClosure s) (ht : a ∉ lowerClosure t) : truncatedSup (s union t) a = ⊤
 -/
 lemma card_truncatedSup_union_add_card_truncatedSup_infs (𝒜 ℬ : Finset (Finset α)) (s : Finset α) :
-    #(truncatedSup (𝒜 union ℬ) s) + #(truncatedSup (𝒜 ⊼ ℬ) s) =
+    #(truncatedSup (𝒜 ∪ ℬ) s) + #(truncatedSup (𝒜 ⊼ ℬ) s) =
       #(truncatedSup 𝒜 s) + #(truncatedSup ℬ s) := by
-  by_cases h𝒜 : s in lowerClosure (𝒜 : Set <| Finset α) <;>
-    by_cases hℬ : s in lowerClosure (ℬ : Set <| Finset α)
+  by_cases h𝒜 : s ∈ lowerClosure (𝒜 : Set <| Finset α) <;>
+    by_cases hℬ : s ∈ lowerClosure (ℬ : Set <| Finset α)
   · rw [truncatedSup_union h𝒜 hℬ, truncatedSup_infs h𝒜 hℬ]
     exact card_union_add_card_inter _ _
   · rw [truncatedSup_union_left h𝒜 hℬ, truncatedSup_of_notMem hℬ,
-      truncatedSup_infs_of_notMem fun h => hℬ h.2]
+      truncatedSup_infs_of_notMem fun h ↦ hℬ h.2]
   · rw [truncatedSup_union_right h𝒜 hℬ, truncatedSup_of_notMem h𝒜,
-      truncatedSup_infs_of_notMem fun h => h𝒜 h.1, add_comm]
+      truncatedSup_infs_of_notMem fun h ↦ h𝒜 h.1, add_comm]
   · rw [truncatedSup_of_notMem h𝒜, truncatedSup_of_notMem hℬ,
-      truncatedSup_union_of_notMem h𝒜 hℬ, truncatedSup_infs_of_notMem fun h => h𝒜 h.1]
-
-/--
-lemma `card_truncatedInf_union_add_card_truncatedInf_sups` / 引理 `card_truncatedInf_union_add_card_truncatedInf_sups`
-
-English:
-lemma card_truncatedInf_union_add_card_truncatedInf_sups
-  given: (𝒜 ℬ : Finset (Finset α)) (s : Finset α)
-  proof: by
-  by_cases h𝒜 : s in upperClosure (𝒜 : Set <| Finset α) <;>
-    by_cases hℬ : s in upperClosure (ℬ : Set <| Finset α)
-  · rw [truncatedInf_union h𝒜 hℬ, truncatedInf_sups h𝒜 hℬ]
-    exact card_inter_add_card_union _ _
-  · rw [truncatedInf_union_left h𝒜 hℬ, truncatedInf_of_notMem hℬ,
-      truncatedInf_sups_of_notMem fun h => hℬ h.2]
-  · rw [truncatedInf_union_right h𝒜 hℬ, truncatedInf_of_notMem h𝒜,
-      truncatedInf_sups_of_notMem fun h => h𝒜 h.1, add_comm]
-  · rw [truncatedInf_of_notMem h𝒜, truncatedInf_of_notMem hℬ,
-      truncatedInf_union_of_notMem h𝒜 hℬ, truncatedInf_sups_of_notMem fun h => h𝒜 h.1]
-
-中文:
-引理 card_truncatedInf_union_add_card_truncatedInf_sups
-  条件: (𝒜 ℬ : 有限集 (有限集 α)) (s : 有限集 α)
-  证明: by
-  by_cases h𝒜 : s in upperClosure (𝒜 : Set <| Finset α) <;>
-    by_cases hℬ : s in upperClosure (ℬ : Set <| Finset α)
-  · rw [truncatedInf_union h𝒜 hℬ, truncatedInf_sups h𝒜 hℬ]
-    exact card_inter_add_card_union _ _
-  · rw [truncatedInf_union_left h𝒜 hℬ, truncatedInf_of_notMem hℬ,
-      truncatedInf_sups_of_notMem fun h => hℬ h.2]
-  · rw [truncatedInf_union_right h𝒜 hℬ, truncatedInf_of_notMem h𝒜,
-      truncatedInf_sups_of_notMem fun h => h𝒜 h.1, add_comm]
-  · rw [truncatedInf_of_notMem h𝒜, truncatedInf_of_notMem hℬ,
-      truncatedInf_union_of_notMem h𝒜 hℬ, truncatedInf_sups_of_notMem fun h => h𝒜 h.1]
-
-Depends on / 依赖: Finset, add_comm, card_inter_add_card_union, truncatedInf_of_notMem, truncatedInf_sups, truncatedInf_sups_of_notMem, truncatedInf_union, truncatedInf_union_left, truncatedInf_union_right, upperClosure
+      truncatedSup_union_of_notMem h𝒜 hℬ, truncatedSup_infs_of_notMem fun h ↦ h𝒜 h.1]
+/-
+**Finset.card_truncatedInf_union_add_card_truncatedInf_sups** 是 Mathlib 中的一个引理，位
+于命名空间 `Finset`。
+形式化陈述：card_truncatedInf_union_add_card_truncatedInf_sups (𝒜 ℬ : Finset (Finset α
+)) (s : Finset α) : #(truncatedInf (𝒜 union ℬ) s) + #(truncatedInf (𝒜 ⊻ ℬ) s) = 
+#(truncatedInf 𝒜 s) + #(truncatedInf ℬ s)
+参数：𝒜 ℬ : Finset (Finset α)；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.truncatedInf_union`：truncatedInf_union (hs : a in upperClosure s)
+ (ht : a in upperClosure t) : truncatedInf (s union t) a = truncatedInf s a ⊓ tr
+uncatedInf t a
+· 使用引理 `Finset.truncatedInf_sups`：truncatedInf_sups (hs : a in upperClosure s) (
+ht : a in upperClosure t) : truncatedInf (s ⊻ t) a = truncatedInf s a ⊔ truncate
+dInf t a
+· 使用定理 `Finset.card_inter_add_card_union`：card_inter_add_card_union (s t : Finse
+t α) : #(s inter t) + #(s union t) = #s + #t
+· 使用引理 `Finset.truncatedInf_union_left`：truncatedInf_union_left (hs : a in upper
+Closure s) (ht : a ∉ upperClosure t) : truncatedInf (s union t) a = truncatedInf
+ s a
+· 使用引理 `Finset.truncatedInf_of_notMem`：truncatedInf_of_notMem (h : a ∉ upperClos
+ure s) : truncatedInf s a = ⊥
+· 使用引理 `Finset.truncatedInf_sups_of_notMem`：truncatedInf_sups_of_notMem (ha : a 
+∉ upperClosure s ⊔ upperClosure t) : truncatedInf (s ⊻ t) a = ⊥
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Finset.truncatedInf_union_right`：truncatedInf_union_right (hs : a ∉ uppe
+rClosure s) (ht : a in upperClosure t) : truncatedInf (s union t) a = truncatedI
+nf t a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Finset.truncatedInf_union_of_notMem`：truncatedInf_union_of_notMem (hs : 
+a ∉ upperClosure s) (ht : a ∉ upperClosure t) : truncatedInf (s union t) a = ⊥
 -/
 lemma card_truncatedInf_union_add_card_truncatedInf_sups (𝒜 ℬ : Finset (Finset α)) (s : Finset α) :
-    #(truncatedInf (𝒜 union ℬ) s) + #(truncatedInf (𝒜 ⊻ ℬ) s) =
+    #(truncatedInf (𝒜 ∪ ℬ) s) + #(truncatedInf (𝒜 ⊻ ℬ) s) =
       #(truncatedInf 𝒜 s) + #(truncatedInf ℬ s) := by
-  by_cases h𝒜 : s in upperClosure (𝒜 : Set <| Finset α) <;>
-    by_cases hℬ : s in upperClosure (ℬ : Set <| Finset α)
+  by_cases h𝒜 : s ∈ upperClosure (𝒜 : Set <| Finset α) <;>
+    by_cases hℬ : s ∈ upperClosure (ℬ : Set <| Finset α)
   · rw [truncatedInf_union h𝒜 hℬ, truncatedInf_sups h𝒜 hℬ]
     exact card_inter_add_card_union _ _
   · rw [truncatedInf_union_left h𝒜 hℬ, truncatedInf_of_notMem hℬ,
-      truncatedInf_sups_of_notMem fun h => hℬ h.2]
+      truncatedInf_sups_of_notMem fun h ↦ hℬ h.2]
   · rw [truncatedInf_union_right h𝒜 hℬ, truncatedInf_of_notMem h𝒜,
-      truncatedInf_sups_of_notMem fun h => h𝒜 h.1, add_comm]
+      truncatedInf_sups_of_notMem fun h ↦ h𝒜 h.1, add_comm]
   · rw [truncatedInf_of_notMem h𝒜, truncatedInf_of_notMem hℬ,
-      truncatedInf_union_of_notMem h𝒜 hℬ, truncatedInf_sups_of_notMem fun h => h𝒜 h.1]
+      truncatedInf_union_of_notMem h𝒜 hℬ, truncatedInf_sups_of_notMem fun h ↦ h𝒜 h.1]
 
 end Finset
 
@@ -1150,285 +1242,376 @@ open Fintype Nat
 namespace AhlswedeZhang
 variable {α : Type*} [Fintype α] [DecidableEq α] {𝒜 : Finset (Finset α)} {s : Finset α}
 
-/--
-Definition of `infSum` / `infSum` 的定义
+/-- Weighted sum of the size of the truncated infima of a set family. Relevant to the
+Ahlswede-Zhang identity. -/
+/-
+**AhlswedeZhang.infSum** 是 Mathlib 中的一个定义，位于命名空间 `AhlswedeZhang`。
+形式化陈述：infSum (𝒜 : Finset (Finset α)) : Rat
+参数：𝒜 : Finset (Finset α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition infSum
-  signature: (𝒜 : Finset (Finset α))
-  body: ∑ s, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s)
-
-中文:
-定义 infSum
-  签名: (𝒜 : 有限集 (有限集 α))
-  定义体: ∑ s, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s)
-
-Depends on / 依赖: truncatedInf
+--- 原说明 ---
+Weighted sum of the size of the truncated infima of a set family. Relevant to th
+e
+Ahlswede-Zhang identity.
 -/
-def infSum (𝒜 : Finset (Finset α)) : Rat :=
+def infSum (𝒜 : Finset (Finset α)) : ℚ :=
   ∑ s, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s)
 
-/--
-Definition of `supSum` / `supSum` 的定义
+/-- Weighted sum of the size of the truncated suprema of a set family. Relevant to the
+Ahlswede-Zhang identity. -/
+/-
+**AhlswedeZhang.supSum** 是 Mathlib 中的一个定义，位于命名空间 `AhlswedeZhang`。
+形式化陈述：supSum (𝒜 : Finset (Finset α)) : Rat
+参数：𝒜 : Finset (Finset α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition supSum
-  signature: (𝒜 : Finset (Finset α))
-  body: ∑ s, #(truncatedSup 𝒜 s) / ((card α - #s) * (card α).choose #s)
-
-中文:
-定义 supSum
-  签名: (𝒜 : 有限集 (有限集 α))
-  定义体: ∑ s, #(truncatedSup 𝒜 s) / ((card α - #s) * (card α).choose #s)
-
-Depends on / 依赖: truncatedSup
+--- 原说明 ---
+Weighted sum of the size of the truncated suprema of a set family. Relevant to t
+he
+Ahlswede-Zhang identity.
 -/
-def supSum (𝒜 : Finset (Finset α)) : Rat :=
+def supSum (𝒜 : Finset (Finset α)) : ℚ :=
   ∑ s, #(truncatedSup 𝒜 s) / ((card α - #s) * (card α).choose #s)
-
-/--
-lemma `supSum_union_add_supSum_infs` / 引理 `supSum_union_add_supSum_infs`
-
-English:
-lemma supSum_union_add_supSum_infs
-  given: (𝒜 ℬ : Finset (Finset α))
-  proof: by
-  unfold supSum
-  rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
-  simp_rw [← add_div, ← Nat.cast_add, card_truncatedSup_union_add_card_truncatedSup_infs]
-  simp
-
-中文:
-引理 supSum_union_add_supSum_infs
-  条件: (𝒜 ℬ : 有限集 (有限集 α))
-  证明: by
-  unfold supSum
-  rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
-  simp_rw [← add_div, ← Nat.cast_add, card_truncatedSup_union_add_card_truncatedSup_infs]
-  simp
-
-Depends on / 依赖: Finset, Finset.sum_congr, Nat.cast_add, add_div, card_truncatedSup_union_add_card_truncatedSup_infs, cast_add, simp_rw, sum_add_distrib, sum_congr, supSum
+/-
+**AhlswedeZhang.supSum_union_add_supSum_infs** 是 Mathlib 中的一个引理，位于命名空间 `Ahlswede
+Zhang`。
+形式化陈述：supSum_union_add_supSum_infs (𝒜 ℬ : Finset (Finset α)) : supSum (𝒜 union ℬ
+) + supSum (𝒜 ⊼ ℬ) = supSum 𝒜 + supSum ℬ
+参数：𝒜 ℬ : Finset (Finset α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.card_truncatedSup_union_add_card_truncatedSup_infs`：card_truncate
+dSup_union_add_card_truncatedSup_infs (𝒜 ℬ : Finset (Finset α)) (s : Finset α) :
+ #(truncatedSup (𝒜 union ℬ) s) + #(truncatedSup…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma supSum_union_add_supSum_infs (𝒜 ℬ : Finset (Finset α)) :
-    supSum (𝒜 union ℬ) + supSum (𝒜 ⊼ ℬ) = supSum 𝒜 + supSum ℬ := by
+    supSum (𝒜 ∪ ℬ) + supSum (𝒜 ⊼ ℬ) = supSum 𝒜 + supSum ℬ := by
   unfold supSum
-  rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
+  rw [← sum_add_distrib, ← sum_add_distrib, Finset.sum_congr rfl fun s _ ↦ _]
   simp_rw [← add_div, ← Nat.cast_add, card_truncatedSup_union_add_card_truncatedSup_infs]
   simp
-
-/--
-lemma `infSum_union_add_infSum_sups` / 引理 `infSum_union_add_infSum_sups`
-
-English:
-lemma infSum_union_add_infSum_sups
-  given: (𝒜 ℬ : Finset (Finset α))
-  proof: by
-  unfold infSum
-  rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
-  simp_rw [← add_div, ← Nat.cast_add, card_truncatedInf_union_add_card_truncatedInf_sups]
-  simp
-
-中文:
-引理 infSum_union_add_infSum_sups
-  条件: (𝒜 ℬ : 有限集 (有限集 α))
-  证明: by
-  unfold infSum
-  rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
-  simp_rw [← add_div, ← Nat.cast_add, card_truncatedInf_union_add_card_truncatedInf_sups]
-  simp
-
-Depends on / 依赖: Finset, Finset.sum_congr, Nat.cast_add, add_div, card_truncatedInf_union_add_card_truncatedInf_sups, cast_add, infSum, simp_rw, sum_add_distrib, sum_congr
+/-
+**AhlswedeZhang.infSum_union_add_infSum_sups** 是 Mathlib 中的一个引理，位于命名空间 `Ahlswede
+Zhang`。
+形式化陈述：infSum_union_add_infSum_sups (𝒜 ℬ : Finset (Finset α)) : infSum (𝒜 union ℬ
+) + infSum (𝒜 ⊻ ℬ) = infSum 𝒜 + infSum ℬ
+参数：𝒜 ℬ : Finset (Finset α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.card_truncatedInf_union_add_card_truncatedInf_sups`：card_truncate
+dInf_union_add_card_truncatedInf_sups (𝒜 ℬ : Finset (Finset α)) (s : Finset α) :
+ #(truncatedInf (𝒜 union ℬ) s) + #(truncatedInf…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma infSum_union_add_infSum_sups (𝒜 ℬ : Finset (Finset α)) :
-    infSum (𝒜 union ℬ) + infSum (𝒜 ⊻ ℬ) = infSum 𝒜 + infSum ℬ := by
+    infSum (𝒜 ∪ ℬ) + infSum (𝒜 ⊻ ℬ) = infSum 𝒜 + infSum ℬ := by
   unfold infSum
-  rw [← sum_add_distrib]; rw [← sum_add_distrib]; rw [Finset.sum_congr rfl fun s _ => _]
+  rw [← sum_add_distrib, ← sum_add_distrib, Finset.sum_congr rfl fun s _ ↦ _]
   simp_rw [← add_div, ← Nat.cast_add, card_truncatedInf_union_add_card_truncatedInf_sups]
   simp
-
-/--
-lemma `IsAntichain.le_infSum` / 引理 `IsAntichain.le_infSum`
-
-English:
-lemma IsAntichain.le_infSum
-  given: (h𝒜 : IsAntichain (· subseteq ·) (𝒜 : Set (Finset α))) (h𝒜₀ : ∅ ∉ 𝒜)
-  proof: by
-  calc
-    _ = ∑ s in 𝒜, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s : Rat) := ?_
-    _ <= _ := sum_le_univ_sum_of_nonneg fun s => by positivity
-  refine sum_congr rfl fun s hs => ?_
-  rw [truncatedInf_of_isAntichain h𝒜 hs]; rw [div_mul_cancel_left₀]
-  have := (nonempty_iff_ne_empty.2 <| ne_of_mem_of_not_mem hs h𝒜₀).card_pos
-  positivity
-
-中文:
-引理 IsAntichain.le_infSum
-  条件: (h𝒜 : IsAntichain (· subseteq ·) (𝒜 : 集合 (有限集 α))) (h𝒜₀ : ∅ ∉ 𝒜)
-  证明: by
-  calc
-    _ = ∑ s in 𝒜, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s : Rat) := ?_
-    _ <= _ := sum_le_univ_sum_of_nonneg fun s => by positivity
-  refine sum_congr rfl fun s hs => ?_
-  rw [truncatedInf_of_isAntichain h𝒜 hs]; rw [div_mul_cancel_left₀]
-  have := (nonempty_iff_ne_empty.2 <| ne_of_mem_of_not_mem hs h𝒜₀).card_pos
-  positivity
-
-Depends on / 依赖: card_pos, ne_of_mem_of_not_mem, nonempty_iff_ne_empty, sum_congr, sum_le_univ_sum_of_nonneg, truncatedInf, truncatedInf_of_isAntichain
+/-
+**AhlswedeZhang.IsAntichain.le_infSum** 是 Mathlib 中的一个定理，位于命名空间 `AhlswedeZhang.I
+sAntichain`。
+形式化陈述：∀ {α : Type u_1} [inst : Fintype α] [inst_1 : DecidableEq α] {𝒜 : Finset (
+Finset α)},   IsAntichain (fun x1 x2 => x1 ⊆ x2) ↑𝒜 →     ∅ ∉ 𝒜 → ∑ s ∈ 𝒜, (↑((F
+intype.card α).choose s.card))⁻¹ ≤ AhlswedeZhang.infSum 𝒜
+参数：Finset α；fun x1 x2 => x1 ⊆ x2；↑((Fintype.card α).choose s.card)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.truncatedInf_of_isAntichain`：truncatedInf_of_isAntichain (hs : Is
+Antichain (· <= ·) (s : Set α)) (ha : a in s) : truncatedInf s a = a
+· 使用引理 `div_mul_cancel_left₀`：div_mul_cancel_left₀ (ha : a != 0) (b : G₀) : a / 
+(a * b) = b⁻¹
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Nat.cast_pos'`：cast_pos' {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Finset.sum_le_univ_sum_of_nonneg`：∀ {ι : Type u_1} {N : Type u_5} [inst 
+: AddCommMonoid N] [inst_1 : Preorder N] {f : ι → N} [AddLeftMono N]   [inst_3 :
+ Fintype ι] {s : Finse…
+· 使用引理 `div_nonneg`：div_nonneg (ha : 0 <= a) (hb : 0 <= b) : 0 <= a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
 -/
-lemma IsAntichain.le_infSum (h𝒜 : IsAntichain (· subseteq ·) (𝒜 : Set (Finset α))) (h𝒜₀ : ∅ ∉ 𝒜) :
-    ∑ s in 𝒜, ((card α).choose #s : Rat)⁻¹ <= infSum 𝒜 := by
+lemma IsAntichain.le_infSum (h𝒜 : IsAntichain (· ⊆ ·) (𝒜 : Set (Finset α))) (h𝒜₀ : ∅ ∉ 𝒜) :
+    ∑ s ∈ 𝒜, ((card α).choose #s : ℚ)⁻¹ ≤ infSum 𝒜 := by
   calc
-    _ = ∑ s in 𝒜, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s : Rat) := ?_
-    _ <= _ := sum_le_univ_sum_of_nonneg fun s => by positivity
-  refine sum_congr rfl fun s hs => ?_
-  rw [truncatedInf_of_isAntichain h𝒜 hs]; rw [div_mul_cancel_left₀]
+    _ = ∑ s ∈ 𝒜, #(truncatedInf 𝒜 s) / (#s * (card α).choose #s : ℚ) := ?_
+    _ ≤ _ := sum_le_univ_sum_of_nonneg fun s ↦ by positivity
+  refine sum_congr rfl fun s hs ↦ ?_
+  rw [truncatedInf_of_isAntichain h𝒜 hs, div_mul_cancel_left₀]
   have := (nonempty_iff_ne_empty.2 <| ne_of_mem_of_not_mem hs h𝒜₀).card_pos
   positivity
 
 variable [Nonempty α]
-
-/--
-lemma `supSum_singleton` / 引理 `supSum_singleton`
-
-English:
-lemma supSum_singleton
-  given: (hs : s != univ)
-  proof: by
-  have : forall t : Finset α,
-    (card α - #(truncatedSup {s} t) : Rat) / ((card α - #t) * (card α).choose #t) =
-    if t subseteq s then (card α - #s : Rat) / ((card α - #t) * (card α).choose #t) else 0 := by
-    rintro t
-    simp_rw [truncatedSup_singleton]
-    split_ifs <;> simp
-  simp_rw [← sub_eq_of_eq_add (Fintype.sum_div_mul_card_choose_card α), eq_sub_iff_add_eq,
-    ← eq_sub_iff_add_eq', supSum, ← sum_sub_distrib, ← sub_div]
-  rw [sum_congr rfl fun t _ => this t]; rw [sum_ite]; rw [sum_const_zero]; rw [add_zero]; rw [filter_subset_univ]; rw [sum_powerset]; rw [← binomial_sum_eq ((card_lt_iff_ne_univ _).2 hs)]; rw [eq_comm]
-  refine sum_congr rfl fun n _ => ?_
-  rw [mul_div_assoc]; rw [← nsmul_eq_mul]
-  exact sum_powersetCard n s fun m => (card α - #s : Rat) / ((card α - m) * (card α).choose m)
-
-中文:
-引理 supSum_singleton
-  条件: (hs : s != univ)
-  证明: by
-  have : forall t : Finset α,
-    (card α - #(truncatedSup {s} t) : Rat) / ((card α - #t) * (card α).choose #t) =
-    if t subseteq s then (card α - #s : Rat) / ((card α - #t) * (card α).choose #t) else 0 := by
-    rintro t
-    simp_rw [truncatedSup_singleton]
-    split_ifs <;> simp
-  simp_rw [← sub_eq_of_eq_add (Fintype.sum_div_mul_card_choose_card α), eq_sub_iff_add_eq,
-    ← eq_sub_iff_add_eq', supSum, ← sum_sub_distrib, ← sub_div]
-  rw [sum_congr rfl fun t _ => this t]; rw [sum_ite]; rw [sum_const_zero]; rw [add_zero]; rw [filter_subset_univ]; rw [sum_powerset]; rw [← binomial_sum_eq ((card_lt_iff_ne_univ _).2 hs)]; rw [eq_comm]
-  refine sum_congr rfl fun n _ => ?_
-  rw [mul_div_assoc]; rw [← nsmul_eq_mul]
-  exact sum_powersetCard n s fun m => (card α - #s : Rat) / ((card α - m) * (card α).choose m)
+/-
+**AhlswedeZhang.supSum_singleton** 是 Mathlib 中的一个定理，位于命名空间 `AhlswedeZhang`。
+形式化陈述：∀ {α : Type u_1} [inst : Fintype α] [inst_1 : DecidableEq α] {s : Finset α
+} [Nonempty α],   s ≠ Finset.univ → AhlswedeZhang.supSum {s} = ↑(Fintype.card α)
+ * ∑ k ∈ Finset.range (Fintype.card α), (↑k)⁻¹
+参数：Fintype.card α；Fintype.card α；↑k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.truncatedSup_singleton`：∀ {α : Type u_1} [inst : SemilatticeSup α
+] [inst_1 : DecidableLE α] [inst_2 : OrderTop α] (b a : α),   {b}.truncatedSup a
+ = if a ≤ b then b …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `zero_div`：zero_div (a : G₀) : 0 / a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_of_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a = 
+c + b → a - b = c
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Fintype.sum_div
+_mul_card_choose_card`：∀ (α : Type u_1) [inst : Fintype α] [Nonempty α],   ∑ s, 
+↑(Fintype.card α) / ((↑(Fintype.card α) - ↑s.card) * ↑((Fintype.card α).choose s
+.ca…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_ite`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M]
+ {s : Finset ι} {p : ι → Prop} [inst_1 : DecidablePred p]   (f g : ι → M), (∑ x 
+∈ s,…
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `Finset.filter_subset_univ`：filter_subset_univ [DecidableEq α] (s : Finse
+t α) : ({t | t subseteq s} : Finset _) = powerset s
+· 使用定理 `Finset.sum_powerset`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMono
+id β] (s : Finset α) (f : Finset α → β),   ∑ t ∈ s.powerset, f t = ∑ j ∈ Finset.
+range (s.…
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.binomial_sum_eq
+`：∀ {m n : ℕ}, n < m → ∑ i ∈ Finset.range (n + 1), ↑(n.choose i) * (↑m - ↑n) / (
+(↑m - ↑i) * ↑(m.choose i)) = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.card_lt_iff_ne_univ`：Finset.card_lt_iff_ne_univ [Fintype α] (s : 
+Finset α) : #s < Fintype.card α ↔ s != Finset.univ
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `mul_div_assoc`：mul_div_assoc (a b c : G) : a * b / c = a * (b / c)
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `Finset.sum_powersetCard`：∀ {α : Type u_1} {β : Type u_2} [inst : AddComm
+Monoid β] (n : ℕ) (s : Finset α) (f : ℕ → β),   ∑ t ∈ Finset.powersetCard n s, f
+ t.card = s.c…
 -/
-@[simp] lemma supSum_singleton (hs : s != univ) :
-    supSum ({s} : Finset (Finset α)) = card α * ∑ k in range (card α), (k : Rat)⁻¹ := by
-  have : forall t : Finset α,
-    (card α - #(truncatedSup {s} t) : Rat) / ((card α - #t) * (card α).choose #t) =
-    if t subseteq s then (card α - #s : Rat) / ((card α - #t) * (card α).choose #t) else 0 := by
+@[simp] lemma supSum_singleton (hs : s ≠ univ) :
+    supSum ({s} : Finset (Finset α)) = card α * ∑ k ∈ range (card α), (k : ℚ)⁻¹ := by
+  have : ∀ t : Finset α,
+    (card α - #(truncatedSup {s} t) : ℚ) / ((card α - #t) * (card α).choose #t) =
+    if t ⊆ s then (card α - #s : ℚ) / ((card α - #t) * (card α).choose #t) else 0 := by
     rintro t
     simp_rw [truncatedSup_singleton]
     split_ifs <;> simp
   simp_rw [← sub_eq_of_eq_add (Fintype.sum_div_mul_card_choose_card α), eq_sub_iff_add_eq,
     ← eq_sub_iff_add_eq', supSum, ← sum_sub_distrib, ← sub_div]
-  rw [sum_congr rfl fun t _ => this t]; rw [sum_ite]; rw [sum_const_zero]; rw [add_zero]; rw [filter_subset_univ]; rw [sum_powerset]; rw [← binomial_sum_eq ((card_lt_iff_ne_univ _).2 hs)]; rw [eq_comm]
-  refine sum_congr rfl fun n _ => ?_
-  rw [mul_div_assoc]; rw [← nsmul_eq_mul]
-  exact sum_powersetCard n s fun m => (card α - #s : Rat) / ((card α - m) * (card α).choose m)
+  rw [sum_congr rfl fun t _ ↦ this t, sum_ite, sum_const_zero, add_zero, filter_subset_univ,
+    sum_powerset, ← binomial_sum_eq ((card_lt_iff_ne_univ _).2 hs), eq_comm]
+  refine sum_congr rfl fun n _ ↦ ?_
+  rw [mul_div_assoc, ← nsmul_eq_mul]
+  exact sum_powersetCard n s fun m ↦ (card α - #s : ℚ) / ((card α - m) * (card α).choose m)
 
-/--
-lemma `infSum_compls_add_supSum` / 引理 `infSum_compls_add_supSum`
+/-- The **Ahlswede-Zhang Identity**. -/
+/-
+**AhlswedeZhang.infSum_compls_add_supSum** 是 Mathlib 中的一个引理，位于命名空间 `AhlswedeZhan
+g`。
+形式化陈述：infSum_compls_add_supSum (𝒜 : Finset (Finset α)) : infSum 𝒜ᶜˢ + supSum 𝒜 =
+ card α * ∑ k in range (card α), (k : Rat)⁻¹ + 1
+参数：𝒜 : Finset (Finset α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `compl_injective`：compl_injective : Function.Injective (compl : α -> α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_univ_of_surjective`：map_univ_of_surjective [Fintype β] {f : β
+ ↪ α} (hf : Surjective f) : univ.map f = univ
+· 使用定理 `compl_surjective`：compl_surjective : Function.Surjective (compl : α -> α
+)
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.card_compl`：Finset.card_compl [DecidableEq α] [Fintype α] (s : Fi
+nset α) : #sᶜ = Fintype.card α - #s
+· 使用定理 `Nat.cast_sub`：cast_sub {m n} (h : m <= n) : ((n - m : Nat) : R) = n - m
+· 使用定理 `Finset.card_le_univ`：Finset.card_le_univ [Fintype α] (s : Finset α) : #s
+ <= Fintype.card α
+· 使用定理 `Nat.choose_symm`：choose_symm {n k : Nat} (hk : k <= n) : choose n (n - k
+) = choose n k
+· 使用定理 `Finset.univ_map_embedding`：Finset.univ_map_embedding {α : Type*} [Fintyp
+e α] (e : α ↪ α) : univ.map e = univ
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `_private.Mathlib.Combinatorics.SetFamily.AhlswedeZhang.0.Fintype.sum_div
+_mul_card_choose_card`：∀ (α : Type u_1) [inst : Fintype α] [Nonempty α],   ∑ s, 
+↑(Fintype.card α) / ((↑(Fintype.card α) - ↑s.card) * ↑((Fintype.card α).choose s
+.ca…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma infSum_compls_add_supSum
-  given: (𝒜 : Finset (Finset α))
-  proof: by
-  unfold infSum supSum
-  rw [← @map_univ_of_surjective (Finset α) _ _ _ ⟨compl]; rw [compl_injective⟩ compl_surjective]; rw [sum_map]
-  simp only [Function.Embedding.coeFn_mk, univ_map_embedding, ← compl_truncatedSup,
-    ← sum_add_distrib, card_compl, cast_sub (card_le_univ _), choose_symm (card_le_univ _),
-    ← add_div, sub_add_cancel, Fintype.sum_div_mul_card_choose_card]
-
-中文:
-引理 infSum_compls_add_supSum
-  条件: (𝒜 : 有限集 (有限集 α))
-  证明: by
-  unfold infSum supSum
-  rw [← @map_univ_of_surjective (Finset α) _ _ _ ⟨compl]; rw [compl_injective⟩ compl_surjective]; rw [sum_map]
-  simp only [Function.Embedding.coeFn_mk, univ_map_embedding, ← compl_truncatedSup,
-    ← sum_add_distrib, card_compl, cast_sub (card_le_univ _), choose_symm (card_le_univ _),
-    ← add_div, sub_add_cancel, Fintype.sum_div_mul_card_choose_card]
-
-Depends on / 依赖: Embedding, Finset, Fintype, Fintype.sum_div_mul_card_choose_card, Function, Function.Embedding.coeFn_mk, add_div, card_compl, card_le_univ, cast_sub, choose_symm, coeFn_mk, compl_injective, compl_surjective, compl_truncatedSup, infSum, map_univ_of_surjective, sub_add_cancel, sum_add_distrib, sum_div_mul_card_choose_card
+--- 原说明 ---
+The **Ahlswede-Zhang Identity**.
 -/
 lemma infSum_compls_add_supSum (𝒜 : Finset (Finset α)) :
-    infSum 𝒜ᶜˢ + supSum 𝒜 = card α * ∑ k in range (card α), (k : Rat)⁻¹ + 1 := by
+    infSum 𝒜ᶜˢ + supSum 𝒜 = card α * ∑ k ∈ range (card α), (k : ℚ)⁻¹ + 1 := by
   unfold infSum supSum
-  rw [← @map_univ_of_surjective (Finset α) _ _ _ ⟨compl]; rw [compl_injective⟩ compl_surjective]; rw [sum_map]
+  rw [← @map_univ_of_surjective (Finset α) _ _ _ ⟨compl, compl_injective⟩ compl_surjective, sum_map]
   simp only [Function.Embedding.coeFn_mk, univ_map_embedding, ← compl_truncatedSup,
     ← sum_add_distrib, card_compl, cast_sub (card_le_univ _), choose_symm (card_le_univ _),
     ← add_div, sub_add_cancel, Fintype.sum_div_mul_card_choose_card]
-
-/--
-lemma `supSum_of_univ_notMem` / 引理 `supSum_of_univ_notMem`
-
-English:
-lemma supSum_of_univ_notMem
-  given: (h𝒜₁ : 𝒜.Nonempty) (h𝒜₂ : univ ∉ 𝒜)
-  proof: by
-  set m := 𝒜.card with hm
-  clear_value m
-  induction m using Nat.strongRecOn generalizing 𝒜 with | ind m ih => _
-  replace ih := fun 𝒜 h𝒜 h𝒜₁ h𝒜₂ => @ih _ h𝒜 𝒜 h𝒜₁ h𝒜₂ rfl
-  obtain ⟨a, rfl⟩ | h𝒜₃ := h𝒜₁.exists_eq_singleton_or_nontrivial
-  · refine supSum_singleton ?_
-    simpa [eq_comm] using h𝒜₂
-  cases m
-  · cases h𝒜₁.card_pos.ne hm
-  obtain ⟨s, 𝒜, hs, rfl, rfl⟩ := card_eq_succ.1 hm.symm
-  have h𝒜 : 𝒜.Nonempty := by by_contra! rfl; simp at h𝒜₃
-  rw [insert_eq]; rw [eq_sub_of_add_eq (supSum_union_add_supSum_infs _ _)]; rw [singleton_infs]; rw [supSum_singleton (ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂)]; rw [ih]; rw [ih]; rw [add_sub_cancel_right]
-  · exact card_image_le.trans_lt (lt_add_one _)
-  · exact h𝒜.image _
-  · simpa using fun _ => ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂
-  · exact lt_add_one _
-  · exact h𝒜
-  · exact fun h => h𝒜₂ (mem_insert_of_mem h)
-
-中文:
-引理 supSum_of_univ_notMem
-  条件: (h𝒜₁ : 𝒜.非空) (h𝒜₂ : univ ∉ 𝒜)
-  证明: by
-  set m := 𝒜.card with hm
-  clear_value m
-  induction m using Nat.strongRecOn generalizing 𝒜 with | ind m ih => _
-  replace ih := fun 𝒜 h𝒜 h𝒜₁ h𝒜₂ => @ih _ h𝒜 𝒜 h𝒜₁ h𝒜₂ rfl
-  obtain ⟨a, rfl⟩ | h𝒜₃ := h𝒜₁.exists_eq_singleton_or_nontrivial
-  · refine supSum_singleton ?_
-    simpa [eq_comm] using h𝒜₂
-  cases m
-  · cases h𝒜₁.card_pos.ne hm
-  obtain ⟨s, 𝒜, hs, rfl, rfl⟩ := card_eq_succ.1 hm.symm
-  have h𝒜 : 𝒜.Nonempty := by by_contra! rfl; simp at h𝒜₃
-  rw [insert_eq]; rw [eq_sub_of_add_eq (supSum_union_add_supSum_infs _ _)]; rw [singleton_infs]; rw [supSum_singleton (ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂)]; rw [ih]; rw [ih]; rw [add_sub_cancel_right]
-  · exact card_image_le.trans_lt (lt_add_one _)
-  · exact h𝒜.image _
-  · simpa using fun _ => ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂
-  · exact lt_add_one _
-  · exact h𝒜
-  · exact fun h => h𝒜₂ (mem_insert_of_mem h)
-
-Depends on / 依赖: Nat.strongRecOn, Nonempty, card_eq_succ, card_pos, card_pos.ne, clear_value, eq_comm, eq_sub_of_add_eq, exists_eq_singleton_or_nontrivial, generalizing, hm.symm, insert_eq, replace, strongRecOn, supSum_singleton, supSum_union_add_supSum_infs
+/-
+**AhlswedeZhang.supSum_of_univ_notMem** 是 Mathlib 中的一个引理，位于命名空间 `AhlswedeZhang`。
+形式化陈述：supSum_of_univ_notMem (h𝒜₁ : 𝒜.Nonempty) (h𝒜₂ : univ ∉ 𝒜) : supSum 𝒜 = car
+d α * ∑ k in range (card α), (k : Rat)⁻¹
+参数：h𝒜₁ : 𝒜.Nonempty；h𝒜₂ : univ ∉ 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.exists_eq_singleton_or_nontrivial`：∀ {α : Type u_1} {s :
+ Finset α}, s.Nonempty → (∃ a, s = {a}) ∨ s.Nontrivial
+· 使用定理 `AhlswedeZhang.supSum_singleton`：∀ {α : Type u_1} [inst : Fintype α] [ins
+t_1 : DecidableEq α] {s : Finset α} [Nonempty α],   s ≠ Finset.univ → AhlswedeZh
+ang.supSum {s} = ↑(F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.card_eq_succ`：card_eq_succ : #s = n + 1 ↔ exists a t, a ∉ t ∧ ins
+ert a t = s ∧ #t = n
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LawfulSingleton.insert_empty_eq`：∀ {α : Type u} {β : Type v} {inst : Emp
+tyCollection β} {inst_1 : Insert α β} {inst_2 : Singleton α β}   [self : LawfulS
+ingleton α β] (x : α)…
+· 使用定理 `Finset.instLawfulSingleton`：∀ {α : Type u_1} [inst : DecidableEq α], Law
+fulSingleton α (Finset α)
+· 使用定理 `Finset.insert_eq`：insert_eq (a : α) (s : Finset α) : insert a s = {a} un
+ion s
+· 使用定理 `eq_sub_of_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a + 
+c = b → a = b - c
+· 使用引理 `AhlswedeZhang.supSum_union_add_supSum_infs`：supSum_union_add_supSum_infs
+ (𝒜 ℬ : Finset (Finset α)) : supSum (𝒜 union ℬ) + supSum (𝒜 ⊼ ℬ) = supSum 𝒜 + su
+pSum ℬ
+· 使用定理 `Finset.singleton_infs`：∀ {α : Type u_2} [inst : DecidableEq α] [inst_1 :
+ SemilatticeInf α] {t : Finset α} {a : α},   {a} ⊼ t = Finset.image (fun x => a 
+⊓ x) t
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Finset.card_image_le`：card_image_le [DecidableEq β] : #(s.image f) <= #s
+· 使用定理 `Finset.Nonempty.image`：∀ {α : Type u_1} {β : Type u_2} [inst : Decidable
+Eq β] {s : Finset α},   s.Nonempty → ∀ (f : α → β), (Finset.image f s).Nonempty
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
 -/
 lemma supSum_of_univ_notMem (h𝒜₁ : 𝒜.Nonempty) (h𝒜₂ : univ ∉ 𝒜) :
-    supSum 𝒜 = card α * ∑ k in range (card α), (k : Rat)⁻¹ := by
+    supSum 𝒜 = card α * ∑ k ∈ range (card α), (k : ℚ)⁻¹ := by
   set m := 𝒜.card with hm
   clear_value m
   induction m using Nat.strongRecOn generalizing 𝒜 with | ind m ih => _
-  replace ih := fun 𝒜 h𝒜 h𝒜₁ h𝒜₂ => @ih _ h𝒜 𝒜 h𝒜₁ h𝒜₂ rfl
+  replace ih := fun 𝒜 h𝒜 h𝒜₁ h𝒜₂ ↦ @ih _ h𝒜 𝒜 h𝒜₁ h𝒜₂ rfl
   obtain ⟨a, rfl⟩ | h𝒜₃ := h𝒜₁.exists_eq_singleton_or_nontrivial
   · refine supSum_singleton ?_
     simpa [eq_comm] using h𝒜₂
@@ -1436,37 +1619,48 @@ lemma supSum_of_univ_notMem (h𝒜₁ : 𝒜.Nonempty) (h𝒜₂ : univ ∉ 𝒜
   · cases h𝒜₁.card_pos.ne hm
   obtain ⟨s, 𝒜, hs, rfl, rfl⟩ := card_eq_succ.1 hm.symm
   have h𝒜 : 𝒜.Nonempty := by by_contra! rfl; simp at h𝒜₃
-  rw [insert_eq]; rw [eq_sub_of_add_eq (supSum_union_add_supSum_infs _ _)]; rw [singleton_infs]; rw [supSum_singleton (ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂)]; rw [ih]; rw [ih]; rw [add_sub_cancel_right]
+  rw [insert_eq, eq_sub_of_add_eq (supSum_union_add_supSum_infs _ _), singleton_infs,
+    supSum_singleton (ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂), ih, ih, add_sub_cancel_right]
   · exact card_image_le.trans_lt (lt_add_one _)
   · exact h𝒜.image _
-  · simpa using fun _ => ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂
+  · simpa using fun _ ↦ ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂
   · exact lt_add_one _
   · exact h𝒜
-  · exact fun h => h𝒜₂ (mem_insert_of_mem h)
+  · exact fun h ↦ h𝒜₂ (mem_insert_of_mem h)
 
-/--
-lemma `infSum_eq_one` / 引理 `infSum_eq_one`
+/-- The **Ahlswede-Zhang Identity**. -/
+/-
+**AhlswedeZhang.infSum_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `AhlswedeZhang`。
+形式化陈述：infSum_eq_one (h𝒜₁ : 𝒜.Nonempty) (h𝒜₀ : ∅ ∉ 𝒜) : infSum 𝒜 = 1
+参数：h𝒜₁ : 𝒜.Nonempty；h𝒜₀ : ∅ ∉ 𝒜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.compls_compls`：∀ {α : Type u_2} [inst : BooleanAlgebra α] (s : Fi
+nset α), s.compls.compls = s
+· 使用定理 `eq_sub_of_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a + 
+c = b → a = b - c
+· 使用引理 `AhlswedeZhang.infSum_compls_add_supSum`：infSum_compls_add_supSum (𝒜 : Fi
+nset (Finset α)) : infSum 𝒜ᶜˢ + supSum 𝒜 = card α * ∑ k in range (card α), (k : 
+Rat)⁻¹ + 1
+· 使用引理 `AhlswedeZhang.supSum_of_univ_notMem`：supSum_of_univ_notMem (h𝒜₁ : 𝒜.None
+mpty) (h𝒜₂ : univ ∉ 𝒜) : supSum 𝒜 = card α * ∑ k in range (card α), (k : Rat)⁻¹
+· 使用定理 `Finset.Nonempty.compls`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {s : 
+Finset α}, s.Nonempty → s.compls.Nonempty
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.compl_univ`：compl_univ : (univ : Finset α)ᶜ = ∅
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
 
-English:
-lemma infSum_eq_one
-  given: (h𝒜₁ : 𝒜.Nonempty) (h𝒜₀ : ∅ ∉ 𝒜)
-  statement: infSum 𝒜 = 1
-  proof: by
-  rw [← compls_compls 𝒜]; rw [eq_sub_of_add_eq (infSum_compls_add_supSum _)]; rw [supSum_of_univ_notMem h𝒜₁.compls]; rw [add_sub_cancel_left]
-  simpa
-
-中文:
-引理 infSum_eq_one
-  条件: (h𝒜₁ : 𝒜.非空) (h𝒜₀ : ∅ ∉ 𝒜)
-  结论: infSum 𝒜 = 1
-  证明: by
-  rw [← compls_compls 𝒜]; rw [eq_sub_of_add_eq (infSum_compls_add_supSum _)]; rw [supSum_of_univ_notMem h𝒜₁.compls]; rw [add_sub_cancel_left]
-  simpa
-
-Depends on / 依赖: add_sub_cancel_left, compls, compls_compls, eq_sub_of_add_eq, infSum_compls_add_supSum, supSum_of_univ_notMem
+--- 原说明 ---
+The **Ahlswede-Zhang Identity**.
 -/
 lemma infSum_eq_one (h𝒜₁ : 𝒜.Nonempty) (h𝒜₀ : ∅ ∉ 𝒜) : infSum 𝒜 = 1 := by
-  rw [← compls_compls 𝒜]; rw [eq_sub_of_add_eq (infSum_compls_add_supSum _)]; rw [supSum_of_univ_notMem h𝒜₁.compls]; rw [add_sub_cancel_left]
+  rw [← compls_compls 𝒜, eq_sub_of_add_eq (infSum_compls_add_supSum _),
+    supSum_of_univ_notMem h𝒜₁.compls, add_sub_cancel_left]
   simpa
 
 end AhlswedeZhang
+

@@ -59,290 +59,127 @@ section IsGδ
 
 variable [TopologicalSpace X]
 
-/--
-Definition of `IsGδ` / `IsGδ` 的定义
+/-- A Gδ set is a countable intersection of open sets. -/
+/-
+**IsG** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsGδ
-  signature: (s : Set X)
-  body: exists T : Set (Set X), (forall t in T, IsOpen t) ∧ T.Countable ∧ s = ⋂₀ T
-
-中文:
-定义 IsGδ
-  签名: (s : 集合 X)
-  定义体: exists T : Set (Set X), (forall t in T, IsOpen t) ∧ T.Countable ∧ s = ⋂₀ T
-
-Depends on / 依赖: Countable, IsOpen, T.Countable
+--- 原说明 ---
+A Gδ set is a countable intersection of open sets.
 -/
 def IsGδ (s : Set X) : Prop :=
-  exists T : Set (Set X), (forall t in T, IsOpen t) ∧ T.Countable ∧ s = ⋂₀ T
+  ∃ T : Set (Set X), (∀ t ∈ T, IsOpen t) ∧ T.Countable ∧ s = ⋂₀ T
 
-/--
-theorem `IsOpen.isGδ` / 定理 `IsOpen.isGδ`
+/-- An open set is a Gδ set. -/
+/-
+**IsOpen.isG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsOpen.isGδ
-  given: {s : Set X} (h : IsOpen s)
-  statement: IsGδ s
-  proof: ⟨{s}, by simp [h], countable_singleton _, (Set.sInter_singleton _).symm⟩
-
-@[simp]
-
-中文:
-定理 是开集.isGδ
-  条件: {s : 集合 X} (h : 是开集 s)
-  结论: IsGδ s
-  证明: ⟨{s}, by simp [h], countable_singleton _, (Set.sInter_singleton _).symm⟩
-
-@[simp]
-
-Depends on / 依赖: Set.sInter_singleton, countable_singleton, sInter_singleton
+--- 原说明 ---
+An open set is a Gδ set.
 -/
 theorem IsOpen.isGδ {s : Set X} (h : IsOpen s) : IsGδ s :=
   ⟨{s}, by simp [h], countable_singleton _, (Set.sInter_singleton _).symm⟩
 
 @[simp]
-/--
-theorem `IsGδ.empty` / 定理 `IsGδ.empty`
-
-English:
-theorem IsGδ.empty
-  statement: IsGδ (∅ : Set X)
-  proof: isOpen_empty.isGδ
-
-
-@[simp]
-
-中文:
-定理 IsGδ.empty
-  结论: IsGδ (∅ : 集合 X)
-  证明: isOpen_empty.isGδ
-
-
-@[simp]
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem IsGδ.empty : IsGδ (∅ : Set X) :=
   isOpen_empty.isGδ
 
 
 @[simp]
-/--
-theorem `IsGδ.univ` / 定理 `IsGδ.univ`
-
-English:
-theorem IsGδ.univ
-  statement: IsGδ (univ : Set X)
-  proof: isOpen_univ.isGδ
-
-中文:
-定理 IsGδ.univ
-  结论: IsGδ (univ : 集合 X)
-  证明: isOpen_univ.isGδ
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem IsGδ.univ : IsGδ (univ : Set X) :=
   isOpen_univ.isGδ
-
-
-/--
-theorem `IsGδ.biInter_of_isOpen` / 定理 `IsGδ.biInter_of_isOpen`
-
-English:
-theorem IsGδ.biInter_of_isOpen
-  statement: {I : Set ι} (hI : I.Countable) {f : ι -> Set X}
-  proof: ⟨f '' I, by rwa [forall_mem_image], hI.image _, by rw [sInter_image]⟩
-
-中文:
-定理 IsGδ.bi整数er_of_isOpen
-  结论: {I : 集合 ι} (hI : I.可数) {f : ι -> 集合 X}
-  证明: ⟨f '' I, by rwa [forall_mem_image], hI.image _, by rw [sInter_image]⟩
-
-Depends on / 依赖: forall_mem_image, hI.image, sInter_image
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsGδ.biInter_of_isOpen {I : Set ι} (hI : I.Countable) {f : ι -> Set X}
-    (hf : forall i in I, IsOpen (f i)) : IsGδ (⋂ i in I, f i) :=
+theorem IsGδ.biInter_of_isOpen {I : Set ι} (hI : I.Countable) {f : ι → Set X}
+    (hf : ∀ i ∈ I, IsOpen (f i)) : IsGδ (⋂ i ∈ I, f i) :=
   ⟨f '' I, by rwa [forall_mem_image], hI.image _, by rw [sInter_image]⟩
-
-
-/--
-theorem `IsGδ.iInter_of_isOpen` / 定理 `IsGδ.iInter_of_isOpen`
-
-English:
-theorem IsGδ.iInter_of_isOpen
-  given: [Countable ι'] {f : ι' -> Set X} (hf : forall i, IsOpen (f i))
-  proof: ⟨range f, by rwa [forall_mem_range], countable_range _, by rw [sInter_range]⟩
-
-中文:
-定理 IsGδ.i整数er_of_isOpen
-  条件: [可数 ι'] {f : ι' -> 集合 X} (hf : 对任意 i, 是开集 (f i))
-  证明: ⟨range f, by rwa [forall_mem_range], countable_range _, by rw [sInter_range]⟩
-
-Depends on / 依赖: countable_range, forall_mem_range, sInter_range
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsGδ.iInter_of_isOpen [Countable ι'] {f : ι' -> Set X} (hf : forall i, IsOpen (f i)) :
+theorem IsGδ.iInter_of_isOpen [Countable ι'] {f : ι' → Set X} (hf : ∀ i, IsOpen (f i)) :
     IsGδ (⋂ i, f i) :=
   ⟨range f, by rwa [forall_mem_range], countable_range _, by rw [sInter_range]⟩
-
-
-/--
-lemma `isGδ_iff_eq_iInter_nat` / 引理 `isGδ_iff_eq_iInter_nat`
-
-English:
-lemma isGδ_iff_eq_iInter_nat
-  given: {s : Set X}
-  proof: by
-  refine ⟨?_, ?_⟩
-  · rintro ⟨T, hT, T_count, rfl⟩
-    rcases Set.eq_empty_or_nonempty T with rfl | hT
-    · exact ⟨fun _n => univ, fun _n => isOpen_univ, by simp⟩
-    · obtain ⟨f, hf⟩ : exists (f : Nat -> Set X), T = range f := Countable.exists_eq_range T_count hT
-      exact ⟨f, by simp_all, by simp [hf]⟩
-  · rintro ⟨f, hf, rfl⟩
-    exact .iInter_of_isOpen hf
-
-alias ⟨IsGδ.eq_iInter_nat, _⟩ := isGδ_iff_eq_iInter_nat
-
-中文:
-引理 isGδ_iff_eq_i整数er_nat
-  条件: {s : 集合 X}
-  证明: by
-  refine ⟨?_, ?_⟩
-  · rintro ⟨T, hT, T_count, rfl⟩
-    rcases Set.eq_empty_or_nonempty T with rfl | hT
-    · exact ⟨fun _n => univ, fun _n => isOpen_univ, by simp⟩
-    · obtain ⟨f, hf⟩ : exists (f : Nat -> Set X), T = range f := Countable.exists_eq_range T_count hT
-      exact ⟨f, by simp_all, by simp [hf]⟩
-  · rintro ⟨f, hf, rfl⟩
-    exact .iInter_of_isOpen hf
-
-alias ⟨IsGδ.eq_iInter_nat, _⟩ := isGδ_iff_eq_iInter_nat
-
-Depends on / 依赖: Countable, Countable.exists_eq_range, Set.eq_empty_or_nonempty, T_count, eq_empty_or_nonempty, exists_eq_range, iInter_of_isOpen, isOpen_univ
+/-
+**isG** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isGδ_iff_eq_iInter_nat {s : Set X} :
-    IsGδ s ↔ exists (f : Nat -> Set X), (forall n, IsOpen (f n)) ∧ s = ⋂ n, f n := by
+    IsGδ s ↔ ∃ (f : ℕ → Set X), (∀ n, IsOpen (f n)) ∧ s = ⋂ n, f n := by
   refine ⟨?_, ?_⟩
   · rintro ⟨T, hT, T_count, rfl⟩
     rcases Set.eq_empty_or_nonempty T with rfl | hT
-    · exact ⟨fun _n => univ, fun _n => isOpen_univ, by simp⟩
-    · obtain ⟨f, hf⟩ : exists (f : Nat -> Set X), T = range f := Countable.exists_eq_range T_count hT
+    · exact ⟨fun _n ↦ univ, fun _n ↦ isOpen_univ, by simp⟩
+    · obtain ⟨f, hf⟩ : ∃ (f : ℕ → Set X), T = range f := Countable.exists_eq_range T_count hT
       exact ⟨f, by simp_all, by simp [hf]⟩
   · rintro ⟨f, hf, rfl⟩
     exact .iInter_of_isOpen hf
 
 alias ⟨IsGδ.eq_iInter_nat, _⟩ := isGδ_iff_eq_iInter_nat
 
-/--
-theorem `IsGδ.iInter` / 定理 `IsGδ.iInter`
+/-- The intersection of an encodable family of Gδ sets is a Gδ set. -/
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsGδ.iInter
-  given: [Countable ι'] {s : ι' -> Set X} (hs : forall i, IsGδ (s i))
-  proof: by
-  choose T hTo hTc hTs using hs
-  obtain rfl : s = fun i => ⋂₀ T i := funext hTs
-  refine ⟨⋃ i, T i, ?_, countable_iUnion hTc, (sInter_iUnion _).symm⟩
-  simpa [@forall_comm ι'] using hTo
-
-中文:
-定理 IsGδ.i整数er
-  条件: [可数 ι'] {s : ι' -> 集合 X} (hs : 对任意 i, IsGδ (s i))
-  证明: by
-  choose T hTo hTc hTs using hs
-  obtain rfl : s = fun i => ⋂₀ T i := funext hTs
-  refine ⟨⋃ i, T i, ?_, countable_iUnion hTc, (sInter_iUnion _).symm⟩
-  simpa [@forall_comm ι'] using hTo
+--- 原说明 ---
+The intersection of an encodable family of Gδ sets is a Gδ set.
 -/
-protected theorem IsGδ.iInter [Countable ι'] {s : ι' -> Set X} (hs : forall i, IsGδ (s i)) :
+protected theorem IsGδ.iInter [Countable ι'] {s : ι' → Set X} (hs : ∀ i, IsGδ (s i)) :
     IsGδ (⋂ i, s i) := by
   choose T hTo hTc hTs using hs
   obtain rfl : s = fun i => ⋂₀ T i := funext hTs
   refine ⟨⋃ i, T i, ?_, countable_iUnion hTc, (sInter_iUnion _).symm⟩
   simpa [@forall_comm ι'] using hTo
-
-/--
-theorem `IsGδ.biInter` / 定理 `IsGδ.biInter`
-
-English:
-theorem IsGδ.biInter
-  statement: {s : Set ι} (hs : s.Countable) {t : forall i in s, Set X}
-  proof: by
-  rw [biInter_eq_iInter]
-  have := hs.to_subtype
-  exact .iInter fun x => ht x x.2
-
-中文:
-定理 IsGδ.bi整数er
-  结论: {s : 集合 ι} (hs : s.可数) {t : 对任意 i in s, 集合 X}
-  证明: by
-  rw [biInter_eq_iInter]
-  have := hs.to_subtype
-  exact .iInter fun x => ht x x.2
-
-Depends on / 依赖: biInter_eq_iInter, hs.to_subtype, iInter, to_subtype
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsGδ.biInter {s : Set ι} (hs : s.Countable) {t : forall i in s, Set X}
-    (ht : forall (i) (hi : i in s), IsGδ (t i hi)) : IsGδ (⋂ i in s, t i ‹_›) := by
+theorem IsGδ.biInter {s : Set ι} (hs : s.Countable) {t : ∀ i ∈ s, Set X}
+    (ht : ∀ (i) (hi : i ∈ s), IsGδ (t i hi)) : IsGδ (⋂ i ∈ s, t i ‹_›) := by
   rw [biInter_eq_iInter]
   have := hs.to_subtype
   exact .iInter fun x => ht x x.2
 
 
-/--
-theorem `IsGδ.sInter` / 定理 `IsGδ.sInter`
+/-- A countable intersection of Gδ sets is a Gδ set. -/
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsGδ.sInter
-  given: {S : Set (Set X)} (h : forall s in S, IsGδ s) (hS : S.Countable)
-  statement: IsGδ (⋂₀ S)
-  proof: by
-  simpa only [sInter_eq_biInter] using IsGδ.biInter hS h
-
-中文:
-定理 IsGδ.集合交集
-  条件: {S : 集合 (集合 X)} (h : 对任意 s in S, IsGδ s) (hS : S.可数)
-  结论: IsGδ (⋂₀ S)
-  证明: by
-  simpa only [sInter_eq_biInter] using IsGδ.biInter hS h
-
-Depends on / 依赖: biInter, sInter_eq_biInter
+--- 原说明 ---
+A countable intersection of Gδ sets is a Gδ set.
 -/
-theorem IsGδ.sInter {S : Set (Set X)} (h : forall s in S, IsGδ s) (hS : S.Countable) : IsGδ (⋂₀ S) := by
+theorem IsGδ.sInter {S : Set (Set X)} (h : ∀ s ∈ S, IsGδ s) (hS : S.Countable) : IsGδ (⋂₀ S) := by
   simpa only [sInter_eq_biInter] using IsGδ.biInter hS h
-
-
-/--
-theorem `IsGδ.inter` / 定理 `IsGδ.inter`
-
-English:
-theorem IsGδ.inter
-  given: {s t : Set X} (hs : IsGδ s) (ht : IsGδ t)
-  statement: IsGδ (s inter t)
-  proof: by
-  rw [inter_eq_iInter]
-  exact .iInter (Bool.forall_bool.2 ⟨ht, hs⟩)
-
-中文:
-定理 IsGδ.inter
-  条件: {s t : 集合 X} (hs : IsGδ s) (ht : IsGδ t)
-  结论: IsGδ (s inter t)
-  证明: by
-  rw [inter_eq_iInter]
-  exact .iInter (Bool.forall_bool.2 ⟨ht, hs⟩)
-
-Depends on / 依赖: Bool.forall_bool, forall_bool, iInter, inter_eq_iInter
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsGδ.inter {s t : Set X} (hs : IsGδ s) (ht : IsGδ t) : IsGδ (s inter t) := by
+theorem IsGδ.inter {s t : Set X} (hs : IsGδ s) (ht : IsGδ t) : IsGδ (s ∩ t) := by
   rw [inter_eq_iInter]
   exact .iInter (Bool.forall_bool.2 ⟨ht, hs⟩)
 
-/--
-theorem `IsGδ.union` / 定理 `IsGδ.union`
+/-- The union of two Gδ sets is a Gδ set. -/
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsGδ.union
-  given: {s t : Set X} (hs : IsGδ s) (ht : IsGδ t)
-  statement: IsGδ (s union t)
-  proof: by
+--- 原说明 ---
+The union of two Gδ sets is a Gδ set.
+-/
+theorem IsGδ.union {s t : Set X} (hs : IsGδ s) (ht : IsGδ t) : IsGδ (s ∪ t) := by
   rcases hs with ⟨S, Sopen, Scount, rfl⟩
   rcases ht with ⟨T, Topen, Tcount, rfl⟩
   rw [sInter_union_sInter]
@@ -350,132 +187,54 @@ theorem IsGδ.union
   rintro ⟨a, b⟩ ⟨ha, hb⟩
   exact (Sopen a ha).union (Topen b hb)
 
-中文:
-定理 IsGδ.union
-  条件: {s t : 集合 X} (hs : IsGδ s) (ht : IsGδ t)
-  结论: IsGδ (s union t)
-  证明: by
-  rcases hs with ⟨S, Sopen, Scount, rfl⟩
-  rcases ht with ⟨T, Topen, Tcount, rfl⟩
-  rw [sInter_union_sInter]
-  refine .biInter_of_isOpen (Scount.prod Tcount) ?_
-  rintro ⟨a, b⟩ ⟨ha, hb⟩
-  exact (Sopen a ha).union (Topen b hb)
+/-- The union of finitely many Gδ sets is a Gδ set, `Set.sUnion` version. -/
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Scount, Scount.prod, Tcount, biInter_of_isOpen, sInter_union_sInter
+--- 原说明 ---
+The union of finitely many Gδ sets is a Gδ set, `Set.sUnion` version.
 -/
-theorem IsGδ.union {s t : Set X} (hs : IsGδ s) (ht : IsGδ t) : IsGδ (s union t) := by
-  rcases hs with ⟨S, Sopen, Scount, rfl⟩
-  rcases ht with ⟨T, Topen, Tcount, rfl⟩
-  rw [sInter_union_sInter]
-  refine .biInter_of_isOpen (Scount.prod Tcount) ?_
-  rintro ⟨a, b⟩ ⟨ha, hb⟩
-  exact (Sopen a ha).union (Topen b hb)
-
-/--
-theorem `IsGδ.sUnion` / 定理 `IsGδ.sUnion`
-
-English:
-theorem IsGδ.sUnion
-  given: {S : Set (Set X)} (hS : S.Finite) (h : forall s in S, IsGδ s)
-  statement: IsGδ (⋃₀ S)
-  proof: by
+theorem IsGδ.sUnion {S : Set (Set X)} (hS : S.Finite) (h : ∀ s ∈ S, IsGδ s) : IsGδ (⋃₀ S) := by
   induction S, hS using Set.Finite.induction_on with
   | empty => simp
   | insert _ _ ih =>
     simp only [forall_mem_insert, sUnion_insert] at *
     exact h.1.union (ih h.2)
 
-中文:
-定理 IsGδ.集合并集
-  条件: {S : 集合 (集合 X)} (hS : S.有限) (h : 对任意 s in S, IsGδ s)
-  结论: IsGδ (⋃₀ S)
-  证明: by
-  induction S, hS using Set.Finite.induction_on with
-  | empty => simp
-  | insert _ _ ih =>
-    simp only [forall_mem_insert, sUnion_insert] at *
-    exact h.1.union (ih h.2)
+/-- The union of finitely many Gδ sets is a Gδ set, bounded indexed union version. -/
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Finite, Set.Finite.induction_on, forall_mem_insert, induction_on, insert, sUnion_insert
+--- 原说明 ---
+The union of finitely many Gδ sets is a Gδ set, bounded indexed union version.
 -/
-theorem IsGδ.sUnion {S : Set (Set X)} (hS : S.Finite) (h : forall s in S, IsGδ s) : IsGδ (⋃₀ S) := by
-  induction S, hS using Set.Finite.induction_on with
-  | empty => simp
-  | insert _ _ ih =>
-    simp only [forall_mem_insert, sUnion_insert] at *
-    exact h.1.union (ih h.2)
-
-/--
-theorem `IsGδ.biUnion` / 定理 `IsGδ.biUnion`
-
-English:
-theorem IsGδ.biUnion
-  given: {s : Set ι} (hs : s.Finite) {f : ι -> Set X} (h : forall i in s, IsGδ (f i))
-  proof: by
+theorem IsGδ.biUnion {s : Set ι} (hs : s.Finite) {f : ι → Set X} (h : ∀ i ∈ s, IsGδ (f i)) :
+    IsGδ (⋃ i ∈ s, f i) := by
   rw [← sUnion_image]
   exact .sUnion (hs.image _) (forall_mem_image.2 h)
 
-中文:
-定理 IsGδ.biUnion
-  条件: {s : 集合 ι} (hs : s.有限) {f : ι -> 集合 X} (h : 对任意 i in s, IsGδ (f i))
-  证明: by
-  rw [← sUnion_image]
-  exact .sUnion (hs.image _) (forall_mem_image.2 h)
+/-- The union of finitely many Gδ sets is a Gδ set, bounded indexed union version. -/
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: forall_mem_image, hs.image, sUnion, sUnion_image
+--- 原说明 ---
+The union of finitely many Gδ sets is a Gδ set, bounded indexed union version.
 -/
-theorem IsGδ.biUnion {s : Set ι} (hs : s.Finite) {f : ι -> Set X} (h : forall i in s, IsGδ (f i)) :
-    IsGδ (⋃ i in s, f i) := by
-  rw [← sUnion_image]
-  exact .sUnion (hs.image _) (forall_mem_image.2 h)
+theorem IsGδ.iUnion [Finite ι'] {f : ι' → Set X} (h : ∀ i, IsGδ (f i)) : IsGδ (⋃ i, f i) :=
+  .sUnion (finite_range _) <| forall_mem_range.2 h
 
-/--
-theorem `IsGδ.iUnion` / 定理 `IsGδ.iUnion`
+/-- The preimage of a Gδ set under a continuous map is Gδ. -/
+/-
+**IsG** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsGδ.iUnion
-  given: [Finite ι'] {f : ι' -> Set X} (h : forall i, IsGδ (f i))
-  statement: IsGδ (⋃ i, f i)
-  proof: .sUnion (finite_range _) forall_mem_range.2 h
-
-中文:
-定理 IsGδ.iUnion
-  条件: [有限 ι'] {f : ι' -> 集合 X} (h : 对任意 i, IsGδ (f i))
-  结论: IsGδ (⋃ i, f i)
-  证明: .sUnion (finite_range _) forall_mem_range.2 h
-
-Depends on / 依赖: finite_range, forall_mem_range, sUnion
+--- 原说明 ---
+The preimage of a Gδ set under a continuous map is Gδ.
 -/
-theorem IsGδ.iUnion [Finite ι'] {f : ι' -> Set X} (h : forall i, IsGδ (f i)) : IsGδ (⋃ i, f i) :=
-.sUnion (finite_range _) forall_mem_range.2 h
-
-/--
-theorem `IsGδ.preimage` / 定理 `IsGδ.preimage`
-
-English:
-theorem IsGδ.preimage
-  statement: [TopologicalSpace Y] {f : X -> Y} {s : Set Y} (hf : Continuous f)
-  proof: by
-  obtain ⟨U, hU1, hU2⟩ := hs.eq_iInter_nat
-  simp_all only [preimage_iInter]
-  exact IsGδ.iInter_of_isOpen (fun i => hf.isOpen_preimage (U i) (hU1 i))
-
-@[deprecated (since := "2026-05-19")] alias isGδ_induced := IsGδ.preimage
-
-中文:
-定理 IsGδ.原像
-  结论: [拓扑空间 Y] {f : X -> Y} {s : 集合 Y} (hf : 连续 f)
-  证明: by
-  obtain ⟨U, hU1, hU2⟩ := hs.eq_iInter_nat
-  simp_all only [preimage_iInter]
-  exact IsGδ.iInter_of_isOpen (fun i => hf.isOpen_preimage (U i) (hU1 i))
-
-@[deprecated (since := "2026-05-19")] alias isGδ_induced := IsGδ.preimage
-
-Depends on / 依赖: eq_iInter_nat, hf.isOpen_preimage, hs.eq_iInter_nat, iInter_of_isOpen, isOpen_preimage, preimage_iInter
--/
-theorem IsGδ.preimage [TopologicalSpace Y] {f : X -> Y} {s : Set Y} (hf : Continuous f)
+theorem IsGδ.preimage [TopologicalSpace Y] {f : X → Y} {s : Set Y} (hf : Continuous f)
     (hs : IsGδ s) : IsGδ (f ⁻¹' s) := by
   obtain ⟨U, hU1, hU2⟩ := hs.eq_iInter_nat
   simp_all only [preimage_iInter]
@@ -489,114 +248,97 @@ section residual
 
 variable [TopologicalSpace X]
 
-/--
-Definition of `residual` / `residual` 的定义
+/-- A set `s` is called *residual* if it includes a countable intersection of dense open sets. -/
+/-
+**residual** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：residual (X : Type*) [TopologicalSpace X] : Filter X
+参数：X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition residual
-  signature: (X : Type*) [TopologicalSpace X]
-  body: Filter.countableGenerate { t | IsOpen t ∧ Dense t }
-
-中文:
-定义 residual
-  签名: (X : 类型) [拓扑空间 X]
-  定义体: Filter.countableGenerate { t | IsOpen t ∧ Dense t }
-
-Depends on / 依赖: Filter, Filter.countableGenerate, IsOpen, countableGenerate
+--- 原说明 ---
+A set `s` is called *residual* if it includes a countable intersection of dense 
+open sets.
 -/
 def residual (X : Type*) [TopologicalSpace X] : Filter X :=
   Filter.countableGenerate { t | IsOpen t ∧ Dense t }
-
-/--
-Instance `countableInterFilter_residual` / 实例 `countableInterFilter_residual`
-
-English:
-instance countableInterFilter_residual
-  signature: : CountableInterFilter (residual X)
-  body: by
-  rw [residual]; infer_instance
-
-中文:
-实例 countable整数erFilter_residual
-  签名: : 余untable整数erFilter (residual X)
-  定义体: by
-  rw [residual]; infer_instance
-
-Depends on / 依赖: infer_instance, residual
+/-
+**countableInterFilter_residual** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：countableInterFilter_residual : CountableInterFilter (residual X)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `residual.eq_1`：∀ (X : Type u_5) [inst : TopologicalSpace X], residual X 
+= Filter.countableGenerate {t | IsOpen t ∧ Dense t}
+· 使用定理 `Filter.instCountableInterFilterCountableGenerate`：∀ {α : Type u_1} (g : 
+Set (Set α)), CountableInterFilter (Filter.countableGenerate g)
 -/
 instance countableInterFilter_residual : CountableInterFilter (residual X) := by
   rw [residual]; infer_instance
 
-/--
-theorem `residual_of_dense_open` / 定理 `residual_of_dense_open`
+/-- Dense open sets are residual. -/
+/-
+**residual_of_dense_open** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：residual_of_dense_open {s : Set X} (ho : IsOpen s) (hd : Dense s) : s in r
+esidual X
+参数：ho : IsOpen s；hd : Dense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem residual_of_dense_open
-  given: {s : Set X} (ho : IsOpen s) (hd : Dense s)
-  statement: s in residual X
-  proof: CountableGenerateSets.basic ⟨ho, hd⟩
-
-中文:
-定理 residual_of_dense_open
-  条件: {s : 集合 X} (ho : 是开集 s) (hd : 稠密 s)
-  结论: s in residual X
-  证明: CountableGenerateSets.basic ⟨ho, hd⟩
-
-Depends on / 依赖: CountableGenerateSets, CountableGenerateSets.basic
+--- 原说明 ---
+Dense open sets are residual.
 -/
-theorem residual_of_dense_open {s : Set X} (ho : IsOpen s) (hd : Dense s) : s in residual X :=
+theorem residual_of_dense_open {s : Set X} (ho : IsOpen s) (hd : Dense s) : s ∈ residual X :=
   CountableGenerateSets.basic ⟨ho, hd⟩
 
-/--
-theorem `residual_of_dense_Gδ` / 定理 `residual_of_dense_Gδ`
+/-- Dense Gδ sets are residual. -/
+/-
+**residual_of_dense_G** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem residual_of_dense_Gδ
-  given: {s : Set X} (ho : IsGδ s) (hd : Dense s)
-  statement: s in residual X
-  proof: by
-  rcases ho with ⟨T, To, Tct, rfl⟩
-  exact
-    (countable_sInter_mem Tct).mpr fun t tT =>
-      residual_of_dense_open (To t tT) (hd.mono (sInter_subset_of_mem tT))
-
-中文:
-定理 residual_of_dense_Gδ
-  条件: {s : 集合 X} (ho : IsGδ s) (hd : 稠密 s)
-  结论: s in residual X
-  证明: by
-  rcases ho with ⟨T, To, Tct, rfl⟩
-  exact
-    (countable_sInter_mem Tct).mpr fun t tT =>
-      residual_of_dense_open (To t tT) (hd.mono (sInter_subset_of_mem tT))
-
-Depends on / 依赖: countable_sInter_mem, hd.mono, residual_of_dense_open, sInter_subset_of_mem
+--- 原说明 ---
+Dense Gδ sets are residual.
 -/
-theorem residual_of_dense_Gδ {s : Set X} (ho : IsGδ s) (hd : Dense s) : s in residual X := by
+theorem residual_of_dense_Gδ {s : Set X} (ho : IsGδ s) (hd : Dense s) : s ∈ residual X := by
   rcases ho with ⟨T, To, Tct, rfl⟩
   exact
     (countable_sInter_mem Tct).mpr fun t tT =>
       residual_of_dense_open (To t tT) (hd.mono (sInter_subset_of_mem tT))
 
-/--
-theorem `mem_residual_iff` / 定理 `mem_residual_iff`
+/-- A set is residual iff it includes a countable intersection of dense open sets. -/
+/-
+**mem_residual_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_residual_iff {s : Set X} : s in residual X ↔ exists S : Set (Set X), (
+forall t in S, IsOpen t) ∧ (forall t in S, Dense t) ∧ S.Countable ∧ ⋂₀ S subsete
+q s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Filter.mem_countableGenerate_iff`：mem_countableGenerate_iff {s : Set α} 
+: s in countableGenerate g ↔ exists S : Set (Set α), S subseteq g ∧ S.Countable 
+∧ ⋂₀ S subseteq s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mem_residual_iff
-  given: {s : Set X}
-  proof: mem_countableGenerate_iff.trans by simp_rw [subset_def, mem_ofPred, forall_and, and_assoc]
-
-中文:
-定理 mem_residual_iff
-  条件: {s : 集合 X}
-  证明: mem_countableGenerate_iff.trans by simp_rw [subset_def, mem_ofPred, forall_and, and_assoc]
-
-Depends on / 依赖: and_assoc, forall_and, mem_countableGenerate_iff, mem_countableGenerate_iff.trans, mem_ofPred, simp_rw, subset_def
+--- 原说明 ---
+A set is residual iff it includes a countable intersection of dense open sets.
 -/
 theorem mem_residual_iff {s : Set X} :
-    s in residual X ↔
-      exists S : Set (Set X), (forall t in S, IsOpen t) ∧ (forall t in S, Dense t) ∧ S.Countable ∧ ⋂₀ S subseteq s :=
-mem_countableGenerate_iff.trans by simp_rw [subset_def, mem_ofPred, forall_and, and_assoc]
+    s ∈ residual X ↔
+      ∃ S : Set (Set X), (∀ t ∈ S, IsOpen t) ∧ (∀ t ∈ S, Dense t) ∧ S.Countable ∧ ⋂₀ S ⊆ s :=
+  mem_countableGenerate_iff.trans <| by simp_rw [subset_def, mem_ofPred, forall_and, and_assoc]
 
 end residual
 
@@ -604,562 +346,586 @@ section IsMeagre
 open Function TopologicalSpace Set
 variable [TopologicalSpace X]
 
-/--
-Definition of `IsNowhereDense` / `IsNowhereDense` 的定义
+/-- A set is called **nowhere dense** iff its closure has empty interior. -/
+/-
+**IsNowhereDense** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsNowhereDense (s : Set X)
+参数：s : Set X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsNowhereDense
-  signature: (s : Set X)
-  body: interior (closure s) = ∅
-
-中文:
-定义 IsNowhereDense
-  签名: (s : 集合 X)
-  定义体: interior (closure s) = ∅
-
-Depends on / 依赖: closure, interior
+--- 原说明 ---
+A set is called **nowhere dense** iff its closure has empty interior.
 -/
 def IsNowhereDense (s : Set X) := interior (closure s) = ∅
 
 /-- The empty set is nowhere dense. -/
 @[simp]
-/--
-lemma `isNowhereDense_empty` / 引理 `isNowhereDense_empty`
+/-
+**isNowhereDense_empty** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isNowhereDense_empty : IsNowhereDense (∅ : Set X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsNowhereDense.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (s : S
+et X), IsNowhereDense s = (interior (closure s) = ∅)
+· 使用定理 `closure_empty`：closure_empty : closure (∅ : Set X) = ∅
+· 使用定理 `interior_empty`：interior_empty : interior (∅ : Set X) = ∅
 
-English:
-lemma isNowhereDense_empty
-  statement: IsNowhereDense (∅ : Set X)
-  proof: by
-  rw [IsNowhereDense]; rw [closure_empty]; rw [interior_empty]
-
-中文:
-引理 isNowhereDense_empty
-  结论: IsNowhereDense (∅ : 集合 X)
-  证明: by
-  rw [IsNowhereDense]; rw [closure_empty]; rw [interior_empty]
-
-Depends on / 依赖: IsNowhereDense, closure_empty, interior_empty
+--- 原说明 ---
+The empty set is nowhere dense.
 -/
 lemma isNowhereDense_empty : IsNowhereDense (∅ : Set X) := by
-  rw [IsNowhereDense]; rw [closure_empty]; rw [interior_empty]
+  rw [IsNowhereDense, closure_empty, interior_empty]
 
 /-- A subset of a nowhere dense set is nowhere dense. -/
 @[gcongr]
-/--
-lemma `IsNowhereDense.mono` / 引理 `IsNowhereDense.mono`
+/-
+**IsNowhereDense.mono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsNowhereDense.mono {s t : Set X} (ht : t subseteq s) (hs : IsNowhereDense
+ s) : IsNowhereDense t
+参数：ht : t subseteq s；hs : IsNowhereDense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_of_subset_empty`：eq_empty_of_subset_empty {s : Set α} : s s
+ubseteq ∅ -> s = ∅
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `interior_mono`：interior_mono (h : s subseteq t) : interior s subseteq in
+terior t
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma IsNowhereDense.mono
-  given: {s t : Set X} (ht : t subseteq s) (hs : IsNowhereDense s)
-  statement: IsNowhereDense t
-  proof: Set.eq_empty_of_subset_empty by grw [ht]; rw [hs]
-
-中文:
-引理 IsNowhereDense.mono
-  条件: {s t : 集合 X} (ht : t subseteq s) (hs : IsNowhereDense s)
-  结论: IsNowhereDense t
-  证明: Set.eq_empty_of_subset_empty by grw [ht]; rw [hs]
-
-Depends on / 依赖: Set.eq_empty_of_subset_empty, eq_empty_of_subset_empty
+--- 原说明 ---
+A subset of a nowhere dense set is nowhere dense.
 -/
-lemma IsNowhereDense.mono {s t : Set X} (ht : t subseteq s) (hs : IsNowhereDense s) : IsNowhereDense t :=
-Set.eq_empty_of_subset_empty by grw [ht]; rw [hs]
+lemma IsNowhereDense.mono {s t : Set X} (ht : t ⊆ s) (hs : IsNowhereDense s) : IsNowhereDense t :=
+  Set.eq_empty_of_subset_empty <| by grw [ht]; rw [hs]
 
-/--
-lemma `IsClosed.isNowhereDense_iff` / 引理 `IsClosed.isNowhereDense_iff`
+/-- A closed set is nowhere dense iff its interior is empty. -/
+/-
+**IsClosed.isNowhereDense_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsClosed.isNowhereDense_iff {s : Set X} (hs : IsClosed s) : IsNowhereDense
+ s ↔ interior s = ∅
+参数：hs : IsClosed s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsNowhereDense.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (s : S
+et X), IsNowhereDense s = (interior (closure s) = ∅)
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma IsClosed.isNowhereDense_iff
-  given: {s : Set X} (hs : IsClosed s)
-  proof: by
-  rw [IsNowhereDense]; rw [IsClosed.closure_eq hs]
-
-中文:
-引理 是闭集.isNowhereDense_iff
-  条件: {s : 集合 X} (hs : 是闭集 s)
-  证明: by
-  rw [IsNowhereDense]; rw [IsClosed.closure_eq hs]
-
-Depends on / 依赖: IsClosed, IsClosed.closure_eq, IsNowhereDense, closure_eq
+--- 原说明 ---
+A closed set is nowhere dense iff its interior is empty.
 -/
 lemma IsClosed.isNowhereDense_iff {s : Set X} (hs : IsClosed s) :
     IsNowhereDense s ↔ interior s = ∅ := by
-  rw [IsNowhereDense]; rw [IsClosed.closure_eq hs]
+  rw [IsNowhereDense, IsClosed.closure_eq hs]
 
-/--
-lemma `IsNowhereDense.closure` / 引理 `IsNowhereDense.closure`
+/-- If a set `s` is nowhere dense, so is its closure. -/
+/-
+**IsNowhereDense.closure** 是 Mathlib 中的一个定理，位于命名空间 `IsNowhereDense`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {s : Set X}, IsNowhereDense s
+ → IsNowhereDense (closure s)
+参数：closure s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsNowhereDense.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (s : S
+et X), IsNowhereDense s = (interior (closure s) = ∅)
+· 使用定理 `closure_closure`：closure_closure : closure (closure s) = closure s
 
-English:
-lemma IsNowhereDense.closure
-  given: {s : Set X} (hs : IsNowhereDense s)
-  proof: by
-  rwa [IsNowhereDense, closure_closure]
-
-中文:
-引理 IsNowhereDense.closure
-  条件: {s : 集合 X} (hs : IsNowhereDense s)
-  证明: by
-  rwa [IsNowhereDense, closure_closure]
+--- 原说明 ---
+If a set `s` is nowhere dense, so is its closure.
 -/
 protected lemma IsNowhereDense.closure {s : Set X} (hs : IsNowhereDense s) :
     IsNowhereDense (closure s) := by
   rwa [IsNowhereDense, closure_closure]
 
-/--
-lemma `IsNowhereDense.subset_of_closed_isNowhereDense` / 引理 `IsNowhereDense.subset_of_closed_isNowhereDense`
+/-- A nowhere dense set `s` is contained in a closed nowhere dense set (namely, its closure). -/
+/-
+**IsNowhereDense.subset_of_closed_isNowhereDense** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsNowhereDense.subset_of_closed_isNowhereDense {s : Set X} (hs : IsNowhere
+Dense s) : exists t : Set X, s subseteq t ∧ IsNowhereDense t ∧ IsClosed t
+参数：hs : IsNowhereDense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `IsNowhereDense.closure`：∀ {X : Type u_1} [inst : TopologicalSpace X] {s 
+: Set X}, IsNowhereDense s → IsNowhereDense (closure s)
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
 
-English:
-lemma IsNowhereDense.subset_of_closed_isNowhereDense
-  given: {s : Set X} (hs : IsNowhereDense s)
-  proof: ⟨closure s, subset_closure, ⟨hs.closure, isClosed_closure⟩⟩
-
-中文:
-引理 IsNowhereDense.subset_of_closed_isNowhereDense
-  条件: {s : 集合 X} (hs : IsNowhereDense s)
-  证明: ⟨closure s, subset_closure, ⟨hs.closure, isClosed_closure⟩⟩
-
-Depends on / 依赖: closure, hs.closure, isClosed_closure, subset_closure
+--- 原说明 ---
+A nowhere dense set `s` is contained in a closed nowhere dense set (namely, its 
+closure).
 -/
 lemma IsNowhereDense.subset_of_closed_isNowhereDense {s : Set X} (hs : IsNowhereDense s) :
-    exists t : Set X, s subseteq t ∧ IsNowhereDense t ∧ IsClosed t :=
+    ∃ t : Set X, s ⊆ t ∧ IsNowhereDense t ∧ IsClosed t :=
   ⟨closure s, subset_closure, ⟨hs.closure, isClosed_closure⟩⟩
 
-/--
-lemma `isClosed_isNowhereDense_iff_compl` / 引理 `isClosed_isNowhereDense_iff_compl`
+/-- A set `s` is closed and nowhere dense iff its complement `sᶜ` is open and dense. -/
+/-
+**isClosed_isNowhereDense_iff_compl** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isClosed_isNowhereDense_iff_compl {s : Set X} : IsClosed s ∧ IsNowhereDens
+e s ↔ IsOpen sᶜ ∧ Dense sᶜ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_congr_right`：∀ {a b c : Prop}, (a → (b ↔ c)) → (a ∧ b ↔ a ∧ c)
+· 使用引理 `IsClosed.isNowhereDense_iff`：IsClosed.isNowhereDense_iff {s : Set X} (hs
+ : IsClosed s) : IsNowhereDense s ↔ interior s = ∅
+· 使用定理 `isOpen_compl_iff`：∀ {X : Type u} {s : Set X} [inst : TopologicalSpace X]
+, IsOpen sᶜ ↔ IsClosed s
+· 使用定理 `interior_eq_empty_iff_dense_compl`：interior_eq_empty_iff_dense_compl : i
+nterior s = ∅ ↔ Dense sᶜ
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma isClosed_isNowhereDense_iff_compl
-  given: {s : Set X}
-  proof: by
-  rw [and_congr_right IsClosed.isNowhereDense_iff]; rw [isOpen_compl_iff]; rw [interior_eq_empty_iff_dense_compl]
-
-中文:
-引理 isClosed_isNowhereDense_iff_compl
-  条件: {s : 集合 X}
-  证明: by
-  rw [and_congr_right IsClosed.isNowhereDense_iff]; rw [isOpen_compl_iff]; rw [interior_eq_empty_iff_dense_compl]
-
-Depends on / 依赖: IsClosed, IsClosed.isNowhereDense_iff, and_congr_right, interior_eq_empty_iff_dense_compl, isNowhereDense_iff, isOpen_compl_iff
+--- 原说明 ---
+A set `s` is closed and nowhere dense iff its complement `sᶜ` is open and dense.
 -/
 lemma isClosed_isNowhereDense_iff_compl {s : Set X} :
     IsClosed s ∧ IsNowhereDense s ↔ IsOpen sᶜ ∧ Dense sᶜ := by
-  rw [and_congr_right IsClosed.isNowhereDense_iff]; rw [isOpen_compl_iff]; rw [interior_eq_empty_iff_dense_compl]
+  rw [and_congr_right IsClosed.isNowhereDense_iff,
+    isOpen_compl_iff, interior_eq_empty_iff_dense_compl]
 
-/--
-lemma `isNowhereDense_iff_disjoint` / 引理 `isNowhereDense_iff_disjoint`
+/-- To check that `s` is nowhere dense, it suffices to check that no point of `s`
+is in the interior of `closure s`. -/
+/-
+**isNowhereDense_iff_disjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isNowhereDense_iff_disjoint {s : Set X} : IsNowhereDense s ↔ Disjoint s (i
+nterior (closure s))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.disjoint_empty`：∀ {α : Type u} (s : Set α), Disjoint s ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Disjoint.eq_bot_of_self`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_
+1 : OrderBot α] {a : α}, Disjoint a a → a = ⊥
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
+· 使用定理 `Disjoint.closure_left`：Disjoint.closure_left (hd : Disjoint s t) (ht : I
+sOpen t) : Disjoint (closure s) t
+· 使用定理 `isOpen_interior`：isOpen_interior : IsOpen (interior s)
 
-English:
-lemma isNowhereDense_iff_disjoint
-  given: {s : Set X}
-  proof: ⟨fun H => H ▸ disjoint_empty _, fun H =>
-.eq_bot_of_self⟩ .mono_left interior_subset H.closure_left isOpen_interior
-
-中文:
-引理 isNowhereDense_iff_disjoint
-  条件: {s : 集合 X}
-  证明: ⟨fun H => H ▸ disjoint_empty _, fun H =>
-.eq_bot_of_self⟩ .mono_left interior_subset H.closure_left isOpen_interior
-
-Depends on / 依赖: H.closure_left, closure_left, disjoint_empty, eq_bot_of_self, interior_subset, isOpen_interior, mono_left
+--- 原说明 ---
+To check that `s` is nowhere dense, it suffices to check that no point of `s`
+is in the interior of `closure s`.
 -/
 lemma isNowhereDense_iff_disjoint {s : Set X} :
     IsNowhereDense s ↔ Disjoint s (interior (closure s)) :=
-  ⟨fun H => H ▸ disjoint_empty _, fun H =>
-.eq_bot_of_self⟩ .mono_left interior_subset H.closure_left isOpen_interior
+  ⟨fun H ↦ H ▸ disjoint_empty _, fun H ↦
+    H.closure_left isOpen_interior |>.mono_left interior_subset |>.eq_bot_of_self⟩
 
-/--
-lemma `isNowhereDense_iff_forall_notMem_nhds` / 引理 `isNowhereDense_iff_forall_notMem_nhds`
+/-- To check that `s` is nowhere dense, it suffices to check that `closure s` is not a
+neighborhood of any point of `s`. -/
+/-
+**isNowhereDense_iff_forall_notMem_nhds** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isNowhereDense_iff_forall_notMem_nhds {s : Set X} : IsNowhereDense s ↔ for
+all x in s, closure s ∉ 𝓝 x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma isNowhereDense_iff_forall_notMem_nhds
-  given: {s : Set X}
-  proof: by
-  simp [isNowhereDense_iff_disjoint, disjoint_iff_inter_eq_empty, eq_empty_iff_forall_notMem,
-    mem_interior_iff_mem_nhds]
-
-中文:
-引理 isNowhereDense_iff_对任意_notMem_nhds
-  条件: {s : 集合 X}
-  证明: by
-  simp [isNowhereDense_iff_disjoint, disjoint_iff_inter_eq_empty, eq_empty_iff_forall_notMem,
-    mem_interior_iff_mem_nhds]
-
-Depends on / 依赖: disjoint_iff_inter_eq_empty, eq_empty_iff_forall_notMem, isNowhereDense_iff_disjoint, mem_interior_iff_mem_nhds
+--- 原说明 ---
+To check that `s` is nowhere dense, it suffices to check that `closure s` is not
+ a
+neighborhood of any point of `s`.
 -/
 lemma isNowhereDense_iff_forall_notMem_nhds {s : Set X} :
-    IsNowhereDense s ↔ forall x in s, closure s ∉ 𝓝 x := by
+    IsNowhereDense s ↔ ∀ x ∈ s, closure s ∉ 𝓝 x := by
   simp [isNowhereDense_iff_disjoint, disjoint_iff_inter_eq_empty, eq_empty_iff_forall_notMem,
     mem_interior_iff_mem_nhds]
 
-/--
-lemma `Topology.IsInducing.isNowhereDense_image` / 引理 `Topology.IsInducing.isNowhereDense_image`
+/-- The image of a nowhere dense set through an inducing map is nowhere dense. -/
+/-
+**Topology.IsInducing.isNowhereDense_image** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsInducing.isNowhereDense_image [TopologicalSpace Y] {f : X -> Y}
+ (hf : Topology.IsInducing f) {s : Set X} (h : IsNowhereDense s) : IsNowhereDens
+e (f '' s)
+参数：hf : Topology.IsInducing f；h : IsNowhereDense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `isNowhereDense_iff_forall_notMem_nhds`：isNowhereDense_iff_forall_notMem_
+nhds {s : Set X} : IsNowhereDense s ↔ forall x in s, closure s ∉ 𝓝 x
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `Topology.IsInducing.closure_eq_preimage_closure_image`：closure_eq_preima
+ge_closure_image (hf : IsInducing f) (s : Set X) : closure s = f ⁻¹' closure (f 
+'' s)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Topology.IsInducing.nhds_eq_comap`：nhds_eq_comap (hf : IsInducing f) : f
+orall x : X, 𝓝 x = comap f (𝓝 <| f x)
+· 使用定理 `Filter.preimage_mem_comap`：preimage_mem_comap (ht : t in g) : m ⁻¹' t in
+ comap m g
 
-English:
-lemma Topology.IsInducing.isNowhereDense_image
-  statement: [TopologicalSpace Y] {f : X -> Y}
-  proof: by
-  rw [isNowhereDense_iff_forall_notMem_nhds]; rw [forall_mem_image] at *
-  simp_rw [hf.nhds_eq_comap, hf.closure_eq_preimage_closure_image] at h
-  exact fun x x_mem hx => h x x_mem (preimage_mem_comap hx)
-
-中文:
-引理 拓扑.是Inducing.isNowhereDense_image
-  结论: [拓扑空间 Y] {f : X -> Y}
-  证明: by
-  rw [isNowhereDense_iff_forall_notMem_nhds]; rw [forall_mem_image] at *
-  simp_rw [hf.nhds_eq_comap, hf.closure_eq_preimage_closure_image] at h
-  exact fun x x_mem hx => h x x_mem (preimage_mem_comap hx)
-
-Depends on / 依赖: closure_eq_preimage_closure_image, forall_mem_image, hf.closure_eq_preimage_closure_image, hf.nhds_eq_comap, isNowhereDense_iff_forall_notMem_nhds, nhds_eq_comap, preimage_mem_comap, simp_rw, x_mem
+--- 原说明 ---
+The image of a nowhere dense set through an inducing map is nowhere dense.
 -/
-lemma Topology.IsInducing.isNowhereDense_image [TopologicalSpace Y] {f : X -> Y}
+lemma Topology.IsInducing.isNowhereDense_image [TopologicalSpace Y] {f : X → Y}
     (hf : Topology.IsInducing f) {s : Set X} (h : IsNowhereDense s) : IsNowhereDense (f '' s) := by
-  rw [isNowhereDense_iff_forall_notMem_nhds]; rw [forall_mem_image] at *
+  rw [isNowhereDense_iff_forall_notMem_nhds, forall_mem_image] at *
   simp_rw [hf.nhds_eq_comap, hf.closure_eq_preimage_closure_image] at h
-  exact fun x x_mem hx => h x x_mem (preimage_mem_comap hx)
+  exact fun x x_mem hx ↦ h x x_mem (preimage_mem_comap hx)
 
-/--
-lemma `IsNowhereDense.image_val` / 引理 `IsNowhereDense.image_val`
+/-- A set is nowhere dense if it is nowhere dense in some subspace. -/
+/-
+**IsNowhereDense.image_val** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsNowhereDense.image_val {Y : Set X} {s : Set Y} (hs : IsNowhereDense s) :
+ IsNowhereDense (s : Set X)
+参数：hs : IsNowhereDense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsInducing.isNowhereDense_image`：Topology.IsInducing.isNowhereD
+ense_image [TopologicalSpace Y] {f : X -> Y} (hf : Topology.IsInducing f) {s : S
+et X} (h : IsNowhereDense s) :…
+· 使用引理 `Topology.IsInducing.subtypeVal`：Topology.IsInducing.subtypeVal {t : Set 
+Y} : IsInducing ((↑) : t -> Y)
 
-English:
-lemma IsNowhereDense.image_val
-  statement: {Y : Set X} {s : Set Y}
-  proof: Topology.IsInducing.subtypeVal.isNowhereDense_image hs
-
-中文:
-引理 IsNowhereDense.image_val
-  结论: {Y : 集合 X} {s : 集合 Y}
-  证明: Topology.IsInducing.subtypeVal.isNowhereDense_image hs
-
-Depends on / 依赖: IsInducing, Topology, Topology.IsInducing.subtypeVal.isNowhereDense_image, isNowhereDense_image, subtypeVal
+--- 原说明 ---
+A set is nowhere dense if it is nowhere dense in some subspace.
 -/
 lemma IsNowhereDense.image_val {Y : Set X} {s : Set Y}
     (hs : IsNowhereDense s) : IsNowhereDense (s : Set X) :=
   Topology.IsInducing.subtypeVal.isNowhereDense_image hs
 
-/--
-Definition of `IsMeagre` / `IsMeagre` 的定义
+/-- A set is called **meagre** iff its complement is a residual (or comeagre) set. -/
+/-
+**IsMeagre** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsMeagre (s : Set X)
+参数：s : Set X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsMeagre
-  signature: (s : Set X)
-  body: sᶜ in residual X
-
-中文:
-定义 IsMeagre
-  签名: (s : 集合 X)
-  定义体: sᶜ in residual X
-
-Depends on / 依赖: residual
+--- 原说明 ---
+A set is called **meagre** iff its complement is a residual (or comeagre) set.
 -/
-def IsMeagre (s : Set X) := sᶜ in residual X
+def IsMeagre (s : Set X) := sᶜ ∈ residual X
 
-/--
-lemma `IsMeagre.empty` / 引理 `IsMeagre.empty`
+/-- The empty set is meagre. -/
+/-
+**IsMeagre.empty** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsMeagre.empty : IsMeagre (∅ : Set X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsMeagre.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (s : Set X),
+ IsMeagre s = (sᶜ ∈ residual X)
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 
-English:
-lemma IsMeagre.empty
-  statement: IsMeagre (∅ : Set X)
-  proof: by
-  rw [IsMeagre]; rw [compl_empty]
-  exact Filter.univ_mem
-
-中文:
-引理 IsMeagre.empty
-  结论: IsMeagre (∅ : 集合 X)
-  证明: by
-  rw [IsMeagre]; rw [compl_empty]
-  exact Filter.univ_mem
-
-Depends on / 依赖: Filter, Filter.univ_mem, IsMeagre, compl_empty, univ_mem
+--- 原说明 ---
+The empty set is meagre.
 -/
 lemma IsMeagre.empty : IsMeagre (∅ : Set X) := by
-  rw [IsMeagre]; rw [compl_empty]
+  rw [IsMeagre, compl_empty]
   exact Filter.univ_mem
 
 /-- Subsets of meagre sets are meagre. -/
 @[gcongr]
-/--
-lemma `IsMeagre.mono` / 引理 `IsMeagre.mono`
+/-
+**IsMeagre.mono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsMeagre.mono {s t : Set X} (hts : t subseteq s) (hs : IsMeagre s) : IsMea
+gre t
+参数：hts : t subseteq s；hs : IsMeagre s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.compl_subset_compl`：compl_subset_compl : sᶜ subseteq tᶜ ↔ t subseteq
+ s
 
-English:
-lemma IsMeagre.mono
-  given: {s t : Set X} (hts : t subseteq s) (hs : IsMeagre s)
-  statement: IsMeagre t
-  proof: Filter.mem_of_superset hs (compl_subset_compl.mpr hts)
-
-中文:
-引理 IsMeagre.mono
-  条件: {s t : 集合 X} (hts : t subseteq s) (hs : IsMeagre s)
-  结论: IsMeagre t
-  证明: Filter.mem_of_superset hs (compl_subset_compl.mpr hts)
-
-Depends on / 依赖: Filter, Filter.mem_of_superset, compl_subset_compl, compl_subset_compl.mpr, mem_of_superset
+--- 原说明 ---
+Subsets of meagre sets are meagre.
 -/
-lemma IsMeagre.mono {s t : Set X} (hts : t subseteq s) (hs : IsMeagre s) : IsMeagre t :=
+lemma IsMeagre.mono {s t : Set X} (hts : t ⊆ s) (hs : IsMeagre s) : IsMeagre t :=
   Filter.mem_of_superset hs (compl_subset_compl.mpr hts)
 
-/--
-lemma `IsMeagre.inter` / 引理 `IsMeagre.inter`
+/-- An intersection with a meagre set is meagre. -/
+/-
+**IsMeagre.inter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsMeagre.inter {s t : Set X} (hs : IsMeagre s) : IsMeagre (s inter t)
+参数：hs : IsMeagre s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsMeagre.mono`：IsMeagre.mono {s t : Set X} (hts : t subseteq s) (hs : Is
+Meagre s) : IsMeagre t
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 
-English:
-lemma IsMeagre.inter
-  given: {s t : Set X} (hs : IsMeagre s)
-  statement: IsMeagre (s inter t)
-  proof: hs.mono inter_subset_left
-
-中文:
-引理 IsMeagre.inter
-  条件: {s t : 集合 X} (hs : IsMeagre s)
-  结论: IsMeagre (s inter t)
-  证明: hs.mono inter_subset_left
-
-Depends on / 依赖: hs.mono, inter_subset_left
+--- 原说明 ---
+An intersection with a meagre set is meagre.
 -/
-lemma IsMeagre.inter {s t : Set X} (hs : IsMeagre s) : IsMeagre (s inter t) :=
+lemma IsMeagre.inter {s t : Set X} (hs : IsMeagre s) : IsMeagre (s ∩ t) :=
   hs.mono inter_subset_left
 
-/--
-lemma `IsMeagre.union` / 引理 `IsMeagre.union`
+/-- A union of two meagre sets is meagre. -/
+/-
+**IsMeagre.union** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsMeagre.union {s t : Set X} (hs : IsMeagre s) (ht : IsMeagre t) : IsMeagr
+e (s union t)
+参数：hs : IsMeagre s；ht : IsMeagre t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsMeagre.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (s : Set X),
+ IsMeagre s = (sᶜ ∈ residual X)
+· 使用定理 `Set.compl_union`：compl_union (s t : Set α) : (s union t)ᶜ = sᶜ inter tᶜ
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
 
-English:
-lemma IsMeagre.union
-  given: {s t : Set X} (hs : IsMeagre s) (ht : IsMeagre t)
-  statement: IsMeagre (s union t)
-  proof: by
-  rw [IsMeagre]; rw [compl_union]
-  exact inter_mem hs ht
-
-中文:
-引理 IsMeagre.union
-  条件: {s t : 集合 X} (hs : IsMeagre s) (ht : IsMeagre t)
-  结论: IsMeagre (s union t)
-  证明: by
-  rw [IsMeagre]; rw [compl_union]
-  exact inter_mem hs ht
-
-Depends on / 依赖: IsMeagre, compl_union, inter_mem
+--- 原说明 ---
+A union of two meagre sets is meagre.
 -/
-lemma IsMeagre.union {s t : Set X} (hs : IsMeagre s) (ht : IsMeagre t) : IsMeagre (s union t) := by
-  rw [IsMeagre]; rw [compl_union]
+lemma IsMeagre.union {s t : Set X} (hs : IsMeagre s) (ht : IsMeagre t) : IsMeagre (s ∪ t) := by
+  rw [IsMeagre, compl_union]
   exact inter_mem hs ht
 
-/--
-lemma `isMeagre_iUnion` / 引理 `isMeagre_iUnion`
+/-- A countable union of meagre sets is meagre. -/
+/-
+**isMeagre_iUnion** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isMeagre_iUnion [Countable ι'] {f : ι' -> Set X} (hs : forall i, IsMeagre 
+(f i)) : IsMeagre (⋃ i, f i)
+参数：hs : forall i, IsMeagre (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsMeagre.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (s : Set X),
+ IsMeagre s = (sᶜ ∈ residual X)
+· 使用定理 `Set.compl_iUnion`：compl_iUnion (s : ι -> Set β) : (⋃ i, s i)ᶜ = ⋂ i, (s 
+i)ᶜ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `countable_iInter_mem`：countable_iInter_mem [Countable ι] {s : ι -> Set α
+} : (⋂ i, s i) in l ↔ forall i, s i in l
 
-English:
-lemma isMeagre_iUnion
-  given: [Countable ι'] {f : ι' -> Set X} (hs : forall i, IsMeagre (f i))
-  proof: by
-  rw [IsMeagre]; rw [compl_iUnion]
-  exact countable_iInter_mem.mpr hs
-
-中文:
-引理 isMeagre_iUnion
-  条件: [可数 ι'] {f : ι' -> 集合 X} (hs : 对任意 i, IsMeagre (f i))
-  证明: by
-  rw [IsMeagre]; rw [compl_iUnion]
-  exact countable_iInter_mem.mpr hs
-
-Depends on / 依赖: IsMeagre, compl_iUnion, countable_iInter_mem, countable_iInter_mem.mpr
+--- 原说明 ---
+A countable union of meagre sets is meagre.
 -/
-lemma isMeagre_iUnion [Countable ι'] {f : ι' -> Set X} (hs : forall i, IsMeagre (f i)) :
+lemma isMeagre_iUnion [Countable ι'] {f : ι' → Set X} (hs : ∀ i, IsMeagre (f i)) :
     IsMeagre (⋃ i, f i) := by
-  rw [IsMeagre]; rw [compl_iUnion]
+  rw [IsMeagre, compl_iUnion]
   exact countable_iInter_mem.mpr hs
-
-/--
-lemma `isMeagre_biUnion` / 引理 `isMeagre_biUnion`
-
-English:
-lemma isMeagre_biUnion
-  statement: {I : Set ι} (c : I.Countable) {f : ι -> Set X}
-  proof: by
-  suffices IsMeagre (⋃ i : I, f i) by simpa
-  have : Countable I := c
-  apply isMeagre_iUnion
-  intro ⟨i, hi⟩
-  exact h i hi
-
-中文:
-引理 isMeagre_biUnion
-  结论: {I : 集合 ι} (c : I.可数) {f : ι -> 集合 X}
-  证明: by
-  suffices IsMeagre (⋃ i : I, f i) by simpa
-  have : Countable I := c
-  apply isMeagre_iUnion
-  intro ⟨i, hi⟩
-  exact h i hi
-
-Depends on / 依赖: Countable, IsMeagre, isMeagre_iUnion
+/-
+**isMeagre_biUnion** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isMeagre_biUnion {I : Set ι} (c : I.Countable) {f : ι -> Set X} (h : foral
+l i in I, IsMeagre (f i)) : IsMeagre (⋃ i in I, f i)
+参数：c : I.Countable；h : forall i in I, IsMeagre (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `isMeagre_iUnion`：isMeagre_iUnion [Countable ι'] {f : ι' -> Set X} (hs : 
+forall i, IsMeagre (f i)) : IsMeagre (⋃ i, f i)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.iUnion_coe_set`：iUnion_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋃ i, f i = ⋃ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
 -/
-lemma isMeagre_biUnion {I : Set ι} (c : I.Countable) {f : ι -> Set X}
-    (h : forall i in I, IsMeagre (f i)) : IsMeagre (⋃ i in I, f i) := by
+lemma isMeagre_biUnion {I : Set ι} (c : I.Countable) {f : ι → Set X}
+    (h : ∀ i ∈ I, IsMeagre (f i)) : IsMeagre (⋃ i ∈ I, f i) := by
   suffices IsMeagre (⋃ i : I, f i) by simpa
   have : Countable I := c
   apply isMeagre_iUnion
   intro ⟨i, hi⟩
   exact h i hi
 
-/--
-lemma `isMeagre_iff_countable_union_isNowhereDense` / 引理 `isMeagre_iff_countable_union_isNowhereDense`
+/-- A set is meagre iff it is contained in a countable union of nowhere dense sets. -/
+/-
+**isMeagre_iff_countable_union_isNowhereDense** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isMeagre_iff_countable_union_isNowhereDense {s : Set X} : IsMeagre s ↔ exi
+sts S : Set (Set X), (forall t in S, IsNowhereDense t) ∧ S.Countable ∧ s subsete
+q ⋃₀ S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsMeagre.eq_1`：∀ {X : Type u_1} [inst : TopologicalSpace X] (s : Set X),
+ IsMeagre s = (sᶜ ∈ residual X)
+· 使用定理 `mem_residual_iff`：mem_residual_iff {s : Set X} : s in residual X ↔ exist
+s S : Set (Set X), (forall t in S, IsOpen t) ∧ (forall t in S, Dense t) ∧ S.Coun
+table …
+· 使用定理 `Function.Surjective.exists`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Surjective f → ∀ {p : β → Prop}, (∃ y, p y) ↔ ∃ x, p (f x)
+· 使用定理 `Function.Surjective.image_surjective`：∀ {α : Type u_1} {β : Type u_2} {f
+ : α → β}, Function.Surjective f → Function.Surjective (Set.image f)
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用定理 `compl_bijective`：compl_bijective : Function.Bijective (compl : α -> α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Set.sInter_image`：sInter_image (f : α -> Set β) (s : Set α) : ⋂₀ (f '' s
+) = ⋂ a in s, f a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.compl_compl_image`：compl_compl_image [BooleanAlgebra α] (s : Set α) 
+: Compl.compl '' Compl.compl '' s = s
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `IsNowhereDense.closure`：∀ {X : Type u_1} [inst : TopologicalSpace X] {s 
+: Set X}, IsNowhereDense s → IsNowhereDense (closure s)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `Set.sUnion_mono_subsets`：sUnion_mono_subsets {s : Set (Set α)} {f : Set 
+α -> Set α} (hf : forall t : Set α, t subseteq f t) : ⋃₀ s subseteq ⋃₀ (f '' s)
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 
-English:
-lemma isMeagre_iff_countable_union_isNowhereDense
-  given: {s : Set X}
-  proof: by
-  rw [IsMeagre]; rw [mem_residual_iff]; rw [compl_bijective.surjective.image_surjective.exists]
-  simp_rw [← and_assoc, ← forall_and, forall_mem_image, ← isClosed_isNowhereDense_iff_compl,
-    sInter_image, ← compl_iUnion₂, compl_subset_compl, ← sUnion_eq_biUnion, and_assoc]
-  refine ⟨fun ⟨S, hS, hc, hsub⟩ => ⟨S, fun s hs => (hS hs).2, ?_, hsub⟩, ?_⟩
-  · rw [← compl_compl_image S]; exact hc.image _
-  · intro ⟨S, hS, hc, hsub⟩
-    use closure '' S
-    rw [forall_mem_image]
-    exact ⟨fun s hs => ⟨isClosed_closure, (hS s hs).closure⟩,
-      (hc.image _).image _, hsub.trans (sUnion_mono_subsets fun s => subset_closure)⟩
-
-中文:
-引理 isMeagre_iff_countable_union_isNowhereDense
-  条件: {s : 集合 X}
-  证明: by
-  rw [IsMeagre]; rw [mem_residual_iff]; rw [compl_bijective.surjective.image_surjective.exists]
-  simp_rw [← and_assoc, ← forall_and, forall_mem_image, ← isClosed_isNowhereDense_iff_compl,
-    sInter_image, ← compl_iUnion₂, compl_subset_compl, ← sUnion_eq_biUnion, and_assoc]
-  refine ⟨fun ⟨S, hS, hc, hsub⟩ => ⟨S, fun s hs => (hS hs).2, ?_, hsub⟩, ?_⟩
-  · rw [← compl_compl_image S]; exact hc.image _
-  · intro ⟨S, hS, hc, hsub⟩
-    use closure '' S
-    rw [forall_mem_image]
-    exact ⟨fun s hs => ⟨isClosed_closure, (hS s hs).closure⟩,
-      (hc.image _).image _, hsub.trans (sUnion_mono_subsets fun s => subset_closure)⟩
-
-Depends on / 依赖: IsMeagre, and_assoc, closure, compl_bijective, compl_bijective.surjective.image_surjective.exists, compl_compl_image, compl_subset_compl, forall_and, forall_mem_image, hc.image, image_surjective, isClosed_closure, isClosed_isNowhereDense_iff_compl, mem_residual_iff, sInter_image, sUnion_eq_biUnion, simp_rw, surjective
+--- 原说明 ---
+A set is meagre iff it is contained in a countable union of nowhere dense sets.
 -/
 lemma isMeagre_iff_countable_union_isNowhereDense {s : Set X} :
-    IsMeagre s ↔ exists S : Set (Set X), (forall t in S, IsNowhereDense t) ∧ S.Countable ∧ s subseteq ⋃₀ S := by
-  rw [IsMeagre]; rw [mem_residual_iff]; rw [compl_bijective.surjective.image_surjective.exists]
+    IsMeagre s ↔ ∃ S : Set (Set X), (∀ t ∈ S, IsNowhereDense t) ∧ S.Countable ∧ s ⊆ ⋃₀ S := by
+  rw [IsMeagre, mem_residual_iff, compl_bijective.surjective.image_surjective.exists]
   simp_rw [← and_assoc, ← forall_and, forall_mem_image, ← isClosed_isNowhereDense_iff_compl,
     sInter_image, ← compl_iUnion₂, compl_subset_compl, ← sUnion_eq_biUnion, and_assoc]
-  refine ⟨fun ⟨S, hS, hc, hsub⟩ => ⟨S, fun s hs => (hS hs).2, ?_, hsub⟩, ?_⟩
+  refine ⟨fun ⟨S, hS, hc, hsub⟩ ↦ ⟨S, fun s hs ↦ (hS hs).2, ?_, hsub⟩, ?_⟩
   · rw [← compl_compl_image S]; exact hc.image _
   · intro ⟨S, hS, hc, hsub⟩
     use closure '' S
     rw [forall_mem_image]
-    exact ⟨fun s hs => ⟨isClosed_closure, (hS s hs).closure⟩,
-      (hc.image _).image _, hsub.trans (sUnion_mono_subsets fun s => subset_closure)⟩
+    exact ⟨fun s hs ↦ ⟨isClosed_closure, (hS s hs).closure⟩,
+      (hc.image _).image _, hsub.trans (sUnion_mono_subsets fun s ↦ subset_closure)⟩
 
-/--
-lemma `nonempty_of_not_isMeagre` / 引理 `nonempty_of_not_isMeagre`
+/-- A set of second category (i.e. non-meagre) is nonempty. -/
+/-
+**nonempty_of_not_isMeagre** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nonempty_of_not_isMeagre {s : Set X} (hs : ¬IsMeagre s) : s.Nonempty
+参数：hs : ¬IsMeagre s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IsMeagre.empty`：IsMeagre.empty : IsMeagre (∅ : Set X)
 
-English:
-lemma nonempty_of_not_isMeagre
-  given: {s : Set X} (hs : ¬IsMeagre s)
-  statement: s.Nonempty
-  proof: by
-  contrapose! hs
-  simpa [hs] using IsMeagre.empty
-
-中文:
-引理 nonempty_of_not_isMeagre
-  条件: {s : 集合 X} (hs : ¬IsMeagre s)
-  结论: s.非空
-  证明: by
-  contrapose! hs
-  simpa [hs] using IsMeagre.empty
-
-Depends on / 依赖: IsMeagre, IsMeagre.empty, contrapose
+--- 原说明 ---
+A set of second category (i.e. non-meagre) is nonempty.
 -/
 lemma nonempty_of_not_isMeagre {s : Set X} (hs : ¬IsMeagre s) : s.Nonempty := by
   contrapose! hs
   simpa [hs] using IsMeagre.empty
 
-/--
-lemma `IsNowhereDense.isMeagre` / 引理 `IsNowhereDense.isMeagre`
+/-- A nowhere dense set is meagre. -/
+/-
+**IsNowhereDense.isMeagre** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsNowhereDense.isMeagre {s : Set X} (h : IsNowhereDense s) : IsMeagre s
+参数：h : IsNowhereDense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `isMeagre_iff_countable_union_isNowhereDense`：isMeagre_iff_countable_unio
+n_isNowhereDense {s : Set X} : IsMeagre s ↔ exists S : Set (Set X), (forall t in
+ S, IsNowhereDense t) ∧ S.Countab…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.sUnion_singleton`：sUnion_singleton (s : Set α) : ⋃₀ {s} = s
 
-English:
-lemma IsNowhereDense.isMeagre
-  given: {s : Set X} (h : IsNowhereDense s)
-  statement: IsMeagre s
-  proof: by
-  rw [isMeagre_iff_countable_union_isNowhereDense]
-  exact ⟨{s}, by simpa, by simp, by simp⟩
-
-中文:
-引理 IsNowhereDense.isMeagre
-  条件: {s : 集合 X} (h : IsNowhereDense s)
-  结论: IsMeagre s
-  证明: by
-  rw [isMeagre_iff_countable_union_isNowhereDense]
-  exact ⟨{s}, by simpa, by simp, by simp⟩
-
-Depends on / 依赖: isMeagre_iff_countable_union_isNowhereDense
+--- 原说明 ---
+A nowhere dense set is meagre.
 -/
 lemma IsNowhereDense.isMeagre {s : Set X} (h : IsNowhereDense s) : IsMeagre s := by
   rw [isMeagre_iff_countable_union_isNowhereDense]
   exact ⟨{s}, by simpa, by simp, by simp⟩
-
-/--
-lemma `exists_of_not_isMeagre_biUnion` / 引理 `exists_of_not_isMeagre_biUnion`
-
-English:
-lemma exists_of_not_isMeagre_biUnion
-  statement: {I : Set ι}
-  proof: by
-  contrapose! h
-  exact isMeagre_biUnion c h
-
-中文:
-引理 存在_of_not_isMeagre_biUnion
-  结论: {I : 集合 ι}
-  证明: by
-  contrapose! h
-  exact isMeagre_biUnion c h
-
-Depends on / 依赖: contrapose, isMeagre_biUnion
+/-
+**exists_of_not_isMeagre_biUnion** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：exists_of_not_isMeagre_biUnion {I : Set ι} (c : I.Countable) {A : ι -> Set
+ X} (h : ¬IsMeagre (⋃ i in I, A i)) : exists i in I, ¬IsMeagre (A i)
+参数：c : I.Countable；h : ¬IsMeagre (⋃ i in I, A i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用引理 `isMeagre_biUnion`：isMeagre_biUnion {I : Set ι} (c : I.Countable) {f : ι 
+-> Set X} (h : forall i in I, IsMeagre (f i)) : IsMeagre (⋃ i in I, f i)
 -/
 lemma exists_of_not_isMeagre_biUnion {I : Set ι}
-    (c : I.Countable) {A : ι -> Set X} (h : ¬IsMeagre (⋃ i in I, A i)) :
-    exists i in I, ¬IsMeagre (A i) := by
+    (c : I.Countable) {A : ι → Set X} (h : ¬IsMeagre (⋃ i ∈ I, A i)) :
+    ∃ i ∈ I, ¬IsMeagre (A i) := by
   contrapose! h
   exact isMeagre_biUnion c h
 
-/--
-lemma `Topology.IsInducing.isMeagre_image` / 引理 `Topology.IsInducing.isMeagre_image`
+/-- The image of a meagre set through an inducing map is meagre. -/
+/-
+**Topology.IsInducing.isMeagre_image** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsInducing.isMeagre_image [TopologicalSpace Y] {f : X -> Y} (hf :
+ Topology.IsInducing f) {s : Set X} (h : IsMeagre s) : IsMeagre (f '' s)
+参数：hf : Topology.IsInducing f；h : IsMeagre s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `isMeagre_iff_countable_union_isNowhereDense`：isMeagre_iff_countable_unio
+n_isNowhereDense {s : Set X} : IsMeagre s ↔ exists S : Set (Set X), (forall t in
+ S, IsNowhereDense t) ∧ S.Countab…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Topology.IsInducing.isNowhereDense_image`：Topology.IsInducing.isNowhereD
+ense_image [TopologicalSpace Y] {f : X -> Y} (hf : Topology.IsInducing f) {s : S
+et X} (h : IsNowhereDense s) :…
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Set.image_sUnion`：image_sUnion {f : α -> β} {s : Set (Set α)} : (f '' ⋃₀
+ s) = ⋃₀ (image f '' s)
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-lemma Topology.IsInducing.isMeagre_image
-  statement: [TopologicalSpace Y] {f : X -> Y}
-  proof: by
-  rw [isMeagre_iff_countable_union_isNowhereDense] at *
-  obtain ⟨T, isNowhereDense, countable, cover⟩ := h
-  refine ⟨(Set.image f) '' T, ?isNowhereDense, countable.image _, ?cover⟩
-  case isNowhereDense =>
-    intro u ⟨t, tT, tu⟩
-    rw [← tu]
-    apply hf.isNowhereDense_image (isNowhereDense t tT)
-  case cover =>
-    rw [← Set.image_sUnion]
-    grw [cover]
-
-中文:
-引理 拓扑.是Inducing.isMeagre_image
-  结论: [拓扑空间 Y] {f : X -> Y}
-  证明: by
-  rw [isMeagre_iff_countable_union_isNowhereDense] at *
-  obtain ⟨T, isNowhereDense, countable, cover⟩ := h
-  refine ⟨(Set.image f) '' T, ?isNowhereDense, countable.image _, ?cover⟩
-  case isNowhereDense =>
-    intro u ⟨t, tT, tu⟩
-    rw [← tu]
-    apply hf.isNowhereDense_image (isNowhereDense t tT)
-  case cover =>
-    rw [← Set.image_sUnion]
-    grw [cover]
-
-Depends on / 依赖: Set.image, Set.image_sUnion, countable, countable.image, hf.isNowhereDense_image, image_sUnion, isMeagre_iff_countable_union_isNowhereDense, isNowhereDense, isNowhereDense_image
+--- 原说明 ---
+The image of a meagre set through an inducing map is meagre.
 -/
-lemma Topology.IsInducing.isMeagre_image [TopologicalSpace Y] {f : X -> Y}
+lemma Topology.IsInducing.isMeagre_image [TopologicalSpace Y] {f : X → Y}
     (hf : Topology.IsInducing f) {s : Set X} (h : IsMeagre s) : IsMeagre (f '' s) := by
   rw [isMeagre_iff_countable_union_isNowhereDense] at *
   obtain ⟨T, isNowhereDense, countable, cover⟩ := h
@@ -1172,22 +938,25 @@ lemma Topology.IsInducing.isMeagre_image [TopologicalSpace Y] {f : X -> Y}
     rw [← Set.image_sUnion]
     grw [cover]
 
-/--
-lemma `IsMeagre.image_val` / 引理 `IsMeagre.image_val`
+/-- A set is meagre if it is meagre in some subspace. -/
+/-
+**IsMeagre.image_val** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsMeagre.image_val {s : Set X} {m : Set s} (h : IsMeagre (m : Set s)) : Is
+Meagre (m : Set X)
+参数：h : IsMeagre (m : Set s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsInducing.isMeagre_image`：Topology.IsInducing.isMeagre_image [
+TopologicalSpace Y] {f : X -> Y} (hf : Topology.IsInducing f) {s : Set X} (h : I
+sMeagre s) : IsMeagre (f…
+· 使用引理 `Topology.IsInducing.subtypeVal`：Topology.IsInducing.subtypeVal {t : Set 
+Y} : IsInducing ((↑) : t -> Y)
 
-English:
-lemma IsMeagre.image_val
-  given: {s : Set X} {m : Set s} (h : IsMeagre (m : Set s))
-  proof: Topology.IsInducing.subtypeVal.isMeagre_image h
-
-中文:
-引理 IsMeagre.image_val
-  条件: {s : 集合 X} {m : 集合 s} (h : IsMeagre (m : 集合 s))
-  证明: Topology.IsInducing.subtypeVal.isMeagre_image h
-
-Depends on / 依赖: IsInducing, Topology, Topology.IsInducing.subtypeVal.isMeagre_image, isMeagre_image, subtypeVal
+--- 原说明 ---
+A set is meagre if it is meagre in some subspace.
 -/
 lemma IsMeagre.image_val {s : Set X} {m : Set s} (h : IsMeagre (m : Set s)) :
     IsMeagre (m : Set X) := Topology.IsInducing.subtypeVal.isMeagre_image h
 
 end IsMeagre
+

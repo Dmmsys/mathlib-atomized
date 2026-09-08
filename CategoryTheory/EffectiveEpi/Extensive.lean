@@ -25,63 +25,49 @@ open Limits
 
 variable {C : Type*} [Category* C] [FinitaryPreExtensive C]
 
-/--
-theorem `effectiveEpi_desc_iff_effectiveEpiFamily` / 定理 `effectiveEpi_desc_iff_effectiveEpiFamily`
-
-English:
-theorem effectiveEpi_desc_iff_effectiveEpiFamily
-  statement: {α : Type} [Finite α]
-  proof: by
-  exact ⟨fun h => ⟨⟨@effectiveEpiFamilyStructOfEffectiveEpiDesc _ _ _ _ X π _ h _ _ (fun g =>
-    (FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X a) g inferInstance).epi_of_iso)⟩⟩,
-    fun _ => inferInstance⟩
-
-中文:
-定理 effectiveEpi_desc_iff_effectiveEpiFamily
-  结论: {α : 类型} [有限 α]
-  证明: by
-  exact ⟨fun h => ⟨⟨@effectiveEpiFamilyStructOfEffectiveEpiDesc _ _ _ _ X π _ h _ _ (fun g =>
-    (FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X a) g inferInstance).epi_of_iso)⟩⟩,
-    fun _ => inferInstance⟩
-
-Depends on / 依赖: FinitaryPreExtensive, FinitaryPreExtensive.isIso_sigmaDesc_fst, effectiveEpiFamilyStructOfEffectiveEpiDesc, epi_of_iso, isIso_sigmaDesc_fst
+/-
+**CategoryTheory.effectiveEpi_desc_iff_effectiveEpiFamily** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory`。
+形式化陈述：effectiveEpi_desc_iff_effectiveEpiFamily {α : Type} [Finite α] {B : C} (X 
+: α -> C) (π : (a : α) -> X a ⟶ B) : EffectiveEpi (Sigma.desc π) ↔ EffectiveEpiF
+amily X π
+参数：X : α -> C；π : (a : α) -> X a ⟶ B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.FinitaryPreExtensive.hasFiniteCoproducts`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.FinitaryPreExte
+nsive C],   CategoryTheory.Limits.HasFiniteCo…
+· 使用定理 `CategoryTheory.FinitaryPreExtensive.hasPullbacks_of_inclusions`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Finita
+ryPreExtensive C] {X Z : C}   {α : Type u_1} (f : X …
+· 使用定理 `CategoryTheory.Limits.instIsIsoDescι`：∀ {β : Type w} {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limit
+s.HasCoproduct f],   Categ…
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.FinitaryPreExtensive.isIso_sigmaDesc_fst`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.FinitaryPreEx
+tensive C] {α : Type}   [inst_2 : Finite α] {…
+· 使用定理 `CategoryTheory.instEffectiveEpiDescOfEffectiveEpiFamily`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] {B : C} {α : Type u_2} (X : α → 
+C)   (π : (a : α) → X a ⟶ B) [inst_1 : Catego…
 -/
 theorem effectiveEpi_desc_iff_effectiveEpiFamily {α : Type} [Finite α]
-    {B : C} (X : α -> C) (π : (a : α) -> X a ⟶ B) :
+    {B : C} (X : α → C) (π : (a : α) → X a ⟶ B) :
     EffectiveEpi (Sigma.desc π) ↔ EffectiveEpiFamily X π := by
-  exact ⟨fun h => ⟨⟨@effectiveEpiFamilyStructOfEffectiveEpiDesc _ _ _ _ X π _ h _ _ (fun g =>
-    (FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X a) g inferInstance).epi_of_iso)⟩⟩,
-    fun _ => inferInstance⟩
+  exact ⟨fun h ↦ ⟨⟨@effectiveEpiFamilyStructOfEffectiveEpiDesc _ _ _ _ X π _ h _ _ (fun g ↦
+    (FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a ↦ Sigma.ι X a) g inferInstance).epi_of_iso)⟩⟩,
+    fun _ ↦ inferInstance⟩
 
 variable {D : Type*} [Category* D] [FinitaryPreExtensive D]
 variable (F : C ⥤ D) [PreservesFiniteCoproducts F]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.ReflectsEffectiveEpis]
-  signature: : F.ReflectsFiniteEffectiveEpiFamilies where
-  body: by
-    simp only [← effectiveEpi_desc_iff_effectiveEpiFamily]
-    apply F.effectiveEpi_of_map
-    convert!
-      (inferInstance :
-        EffectiveEpi (inv (sigmaComparison F X) ≫ (Sigma.desc (fun a => F.map (π a)))))
-    simp
-
-中文:
-实例 [F.ReflectsEffectiveEpis]
-  签名: : F.ReflectsFiniteEffectiveEpiFamilies where
-  定义体: by
-    simp only [← effectiveEpi_desc_iff_effectiveEpiFamily]
-    apply F.effectiveEpi_of_map
-    convert!
-      (inferInstance :
-        EffectiveEpi (inv (sigmaComparison F X) ≫ (Sigma.desc (fun a => F.map (π a)))))
-    simp
-
-Depends on / 依赖: EffectiveEpi, F.effectiveEpi_of_map, F.map, Sigma.desc, convert, effectiveEpi_desc_iff_effectiveEpiFamily, effectiveEpi_of_map, sigmaComparison
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.ReflectsEffectiveEpis] : F.ReflectsFiniteEffectiveEpiFamilies where
   reflects {α _ B} X π h := by
@@ -89,29 +75,11 @@ instance [F.ReflectsEffectiveEpis] : F.ReflectsFiniteEffectiveEpiFamilies where
     apply F.effectiveEpi_of_map
     convert!
       (inferInstance :
-        EffectiveEpi (inv (sigmaComparison F X) ≫ (Sigma.desc (fun a => F.map (π a)))))
+        EffectiveEpi (inv (sigmaComparison F X) ≫ (Sigma.desc (fun a ↦ F.map (π a)))))
     simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.PreservesEffectiveEpis]
-  signature: : F.PreservesFiniteEffectiveEpiFamilies where
-  body: by
-    simp only [← effectiveEpi_desc_iff_effectiveEpiFamily]
-    convert! (inferInstance : EffectiveEpi ((sigmaComparison F X) ≫ (F.map (Sigma.desc π))))
-    simp
-
-中文:
-实例 [F.保持EffectiveEpis]
-  签名: : F.保持FiniteEffectiveEpiFamilies where
-  定义体: by
-    simp only [← effectiveEpi_desc_iff_effectiveEpiFamily]
-    convert! (inferInstance : EffectiveEpi ((sigmaComparison F X) ≫ (F.map (Sigma.desc π))))
-    simp
-
-Depends on / 依赖: EffectiveEpi, F.map, Sigma.desc, convert, effectiveEpi_desc_iff_effectiveEpiFamily, sigmaComparison
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.PreservesEffectiveEpis] : F.PreservesFiniteEffectiveEpiFamilies where
   preserves {α _ B} X π h := by
@@ -120,3 +88,4 @@ instance [F.PreservesEffectiveEpis] : F.PreservesFiniteEffectiveEpiFamilies wher
     simp
 
 end CategoryTheory
+

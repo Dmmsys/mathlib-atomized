@@ -27,32 +27,20 @@ set_option backward.defeqAttrib.useBackward true in
 /-- When `f : α <i β` and a functor `F : β ⥤ C`, this is the cocone
 for `f.monotone.functor ⋙ F : α ⥤ C` whose point is `F.obj f.top`. -/
 @[simps]
-/--
-Definition of `PrincipalSeg.cocone` / `PrincipalSeg.cocone` 的定义
+/-
+**PrincipalSeg.cocone** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PrincipalSeg.cocone {α β : Type*} [PartialOrder α] [PartialOrder β] (f : α
+ <i β) {C : Type*} [Category* C] (F : β ⥤ C) : Cocone (f.monotone.functor ⋙ F) w
+here pt
+参数：f : α <i β；F : β ⥤ C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PrincipalSeg.monotone`：monotone [PartialOrder α] (f : α <i β) : Monotone
+ f
 
-English:
-definition PrincipalSeg.cocone
-  signature: {α β : Type*} [PartialOrder α] [PartialOrder β]
-  body: F.obj f.top
-  ι :=
-    { app i := F.map (homOfLE (f.lt_top i).le)
-      naturality i j f := by
-        dsimp
-        rw [← F.map_comp]; rw [comp_id]
-        rfl }
-
-中文:
-定义 主段.cocone
-  签名: {α β : 类型} [偏序 α] [偏序 β]
-  定义体: F.obj f.top
-  ι :=
-    { app i := F.map (homOfLE (f.lt_top i).le)
-      naturality i j f := by
-        dsimp
-        rw [← F.map_comp]; rw [comp_id]
-        rfl }
-
-Depends on / 依赖: F.obj, f.top
+--- 原说明 ---
+When `f : α <i β` and a functor `F : β ⥤ C`, this is the cocone
+for `f.monotone.functor ⋙ F : α ⥤ C` whose point is `F.obj f.top`.
 -/
 def PrincipalSeg.cocone {α β : Type*} [PartialOrder α] [PartialOrder β]
     (f : α <i β) {C : Type*} [Category* C] (F : β ⥤ C) : Cocone (f.monotone.functor ⋙ F) where
@@ -61,5 +49,5 @@ def PrincipalSeg.cocone {α β : Type*} [PartialOrder α] [PartialOrder β]
     { app i := F.map (homOfLE (f.lt_top i).le)
       naturality i j f := by
         dsimp
-        rw [← F.map_comp]; rw [comp_id]
+        rw [← F.map_comp, comp_id]
         rfl }

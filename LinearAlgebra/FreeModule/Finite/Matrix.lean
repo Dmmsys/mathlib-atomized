@@ -37,142 +37,132 @@ section Ring
 variable [Ring R] [Ring S] [AddCommGroup M] [Module R M] [Module.Free R M] [Module.Finite R M]
 variable [AddCommGroup N] [Module R N] [Module S N] [SMulCommClass R S N]
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def linearMapEquivFun
-  body: (chooseBasis R M).repr.congrLeft N S ≪≫ₗ (Finsupp.lsum S).symm ≪≫ₗ
-    LinearEquiv.piCongrRight fun _ => LinearMap.ringLmapEquivSelf R S N
-
-中文:
-定义 noncomputable
-  签名: def linearMapEquivFun
-  定义体: (chooseBasis R M).repr.congrLeft N S ≪≫ₗ (Finsupp.lsum S).symm ≪≫ₗ
-    LinearEquiv.piCongrRight fun _ => LinearMap.ringLmapEquivSelf R S N
+/-
+**linearMapEquivFun** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private noncomputable def linearMapEquivFun : (M ->ₗ[R] N) ≃ₗ[S] ChooseBasisIndex R M -> N :=
+private noncomputable def linearMapEquivFun : (M →ₗ[R] N) ≃ₗ[S] ChooseBasisIndex R M → N :=
   (chooseBasis R M).repr.congrLeft N S ≪≫ₗ (Finsupp.lsum S).symm ≪≫ₗ
-    LinearEquiv.piCongrRight fun _ => LinearMap.ringLmapEquivSelf R S N
-
-/--
-Instance `Module.Free.linearMap` / 实例 `Module.Free.linearMap`
-
-English:
-instance Module.Free.linearMap
-  signature: [Module.Free S N]
-  body: Module.Free.of_equiv (linearMapEquivFun R S M N).symm
-
-中文:
-实例 模.自由.linearMap
-  签名: [模.自由 S N]
-  定义体: Module.Free.of_equiv (linearMapEquivFun R S M N).symm
-
-Depends on / 依赖: Module, Module.Free.of_equiv, linearMapEquivFun, of_equiv
+    LinearEquiv.piCongrRight fun _ ↦ LinearMap.ringLmapEquivSelf R S N
+/-
+**Module.Free.linearMap** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Free.linearMap [Module.Free S N] : Module.Free S (M ->ₗ[R] N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Free.of_equiv`：of_equiv {R R' M M' : Type*} [Semiring R] [AddComm
+Monoid M] [Module R M] [Semiring R'] [AddCommMonoid M'] [Module R' M'] {σ : R ->
++* R'} {σ'…
+· 使用定理 `Module.Free.function`：∀ (ι : Type u_1) (R : Type u_2) (M : Type u_3) [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [Fini
+te ι] [Mod…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
-instance Module.Free.linearMap [Module.Free S N] : Module.Free S (M ->ₗ[R] N) :=
+instance Module.Free.linearMap [Module.Free S N] : Module.Free S (M →ₗ[R] N) :=
   Module.Free.of_equiv (linearMapEquivFun R S M N).symm
-
-/--
-Instance `Module.Finite.linearMap` / 实例 `Module.Finite.linearMap`
-
-English:
-instance Module.Finite.linearMap
-  signature: [Module.Finite S N]
-  body: Module.Finite.equiv (linearMapEquivFun R S M N).symm
-
-中文:
-实例 模.有限.linearMap
-  签名: [模.有限 S N]
-  定义体: Module.Finite.equiv (linearMapEquivFun R S M N).symm
-
-Depends on / 依赖: Finite, Module, Module.Finite.equiv, linearMapEquivFun
+/-
+**Module.Finite.linearMap** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Finite.linearMap [Module.Finite S N] : Module.Finite S (M ->ₗ[R] N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
-instance Module.Finite.linearMap [Module.Finite S N] : Module.Finite S (M ->ₗ[R] N) :=
+instance Module.Finite.linearMap [Module.Finite S N] : Module.Finite S (M →ₗ[R] N) :=
   Module.Finite.equiv (linearMapEquivFun R S M N).symm
 
 variable [StrongRankCondition R] [StrongRankCondition S] [Module.Free S N]
 
 open Cardinal
-/--
-theorem `Module.rank_linearMap` / 定理 `Module.rank_linearMap`
-
-English:
-theorem Module.rank_linearMap
-  proof: by
-  rw [(linearMapEquivFun R S M N).rank_eq]; rw [rank_fun_eq_lift_mul]; rw [← finrank_eq_card_chooseBasisIndex]; rw [← finrank_eq_rank R]; rw [lift_natCast]
-
-中文:
-定理 模.rank_linearMap
-  证明: by
-  rw [(linearMapEquivFun R S M N).rank_eq]; rw [rank_fun_eq_lift_mul]; rw [← finrank_eq_card_chooseBasisIndex]; rw [← finrank_eq_rank R]; rw [lift_natCast]
-
-Depends on / 依赖: finrank_eq_card_chooseBasisIndex, finrank_eq_rank, lift_natCast, linearMapEquivFun, rank_eq, rank_fun_eq_lift_mul
+/-
+**Module.rank_linearMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Module.rank_linearMap : Module.rank S (M ->ₗ[R] N) = lift.{w} (Module.rank
+ R M) * lift.{v} (Module.rank S N)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.rank_eq`：LinearEquiv.rank_eq (f : M ≃ₗ[R] M₁) : Module.rank 
+R M = Module.rank R M₁
+· 使用定理 `rank_fun_eq_lift_mul`：rank_fun_eq_lift_mul : Module.rank R (η -> M) = (F
+intype.card η : Cardinal.{max u₁' v}) * Cardinal.lift.{u₁'} (Module.rank R M)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.finrank_eq_card_chooseBasisIndex`：∀ (R : Type u) (M : Type v) [in
+st : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [inst
+_3 : Module.Free R M] [Strong…
+· 使用定理 `Module.finrank_eq_rank`：finrank_eq_rank [Module.Finite R M] : ↑(finrank 
+R M) = Module.rank R M
+· 使用定理 `Cardinal.lift_natCast`：lift_natCast (n : Nat) : lift.{u} (n : Cardinal.{
+v}) = n
 -/
 theorem Module.rank_linearMap :
-    Module.rank S (M ->ₗ[R] N) = lift.{w} (Module.rank R M) * lift.{v} (Module.rank S N) := by
-  rw [(linearMapEquivFun R S M N).rank_eq]; rw [rank_fun_eq_lift_mul]; rw [← finrank_eq_card_chooseBasisIndex]; rw [← finrank_eq_rank R]; rw [lift_natCast]
+    Module.rank S (M →ₗ[R] N) = lift.{w} (Module.rank R M) * lift.{v} (Module.rank S N) := by
+  rw [(linearMapEquivFun R S M N).rank_eq, rank_fun_eq_lift_mul,
+    ← finrank_eq_card_chooseBasisIndex, ← finrank_eq_rank R, lift_natCast]
 
-/--
-theorem `Module.finrank_linearMap` / 定理 `Module.finrank_linearMap`
+/-- The `finrank` of `M →ₗ[R] N` as an `S`-module is `(finrank R M) * (finrank S N)`. -/
+/-
+**Module.finrank_linearMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Module.finrank_linearMap : finrank S (M ->ₗ[R] N) = finrank R M * finrank 
+S N
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.rank_linearMap`：Module.rank_linearMap : Module.rank S (M ->ₗ[R] N
+) = lift.{w} (Module.rank R M) * lift.{v} (Module.rank S N)
+· 使用定理 `Cardinal.toNat_mul`：toNat_mul (x y : Cardinal) : toNat (x * y) = toNat x
+ * toNat y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Cardinal.toNat_lift`：toNat_lift (c : Cardinal.{v}) : toNat (lift.{u, v} 
+c) = toNat c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem Module.finrank_linearMap
-  proof: by
-  simp_rw [finrank, rank_linearMap, toNat_mul, toNat_lift]
-
-中文:
-定理 模.finrank_linearMap
-  证明: by
-  simp_rw [finrank, rank_linearMap, toNat_mul, toNat_lift]
-
-Depends on / 依赖: finrank, rank_linearMap, simp_rw, toNat_lift, toNat_mul
+--- 原说明 ---
+The `finrank` of `M →ₗ[R] N` as an `S`-module is `(finrank R M) * (finrank S N)`
+.
 -/
 theorem Module.finrank_linearMap :
-    finrank S (M ->ₗ[R] N) = finrank R M * finrank S N := by
+    finrank S (M →ₗ[R] N) = finrank R M * finrank S N := by
   simp_rw [finrank, rank_linearMap, toNat_mul, toNat_lift]
 
 variable [Module R S] [SMulCommClass R S S]
-
-/--
-theorem `Module.rank_linearMap_self` / 定理 `Module.rank_linearMap_self`
-
-English:
-theorem Module.rank_linearMap_self
-  proof: by
-  rw [rank_linearMap]; rw [rank_self]; rw [lift_one]; rw [mul_one]
-
-中文:
-定理 模.rank_linearMap_self
-  证明: by
-  rw [rank_linearMap]; rw [rank_self]; rw [lift_one]; rw [mul_one]
-
-Depends on / 依赖: lift_one, mul_one, rank_linearMap, rank_self
+/-
+**Module.rank_linearMap_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Module.rank_linearMap_self : Module.rank S (M ->ₗ[R] S) = lift.{u'} (Modul
+e.rank R M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.rank_linearMap`：Module.rank_linearMap : Module.rank S (M ->ₗ[R] N
+) = lift.{w} (Module.rank R M) * lift.{v} (Module.rank S N)
+· 使用定理 `Module.rank_self`：rank_self : Module.rank R R = 1
+· 使用定理 `Cardinal.lift_one`：lift_one : lift 1 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem Module.rank_linearMap_self :
-    Module.rank S (M ->ₗ[R] S) = lift.{u'} (Module.rank R M) := by
-  rw [rank_linearMap]; rw [rank_self]; rw [lift_one]; rw [mul_one]
-
-/--
-theorem `Module.finrank_linearMap_self` / 定理 `Module.finrank_linearMap_self`
-
-English:
-theorem Module.finrank_linearMap_self
-  statement: finrank S (M ->ₗ[R] S) = finrank R M
-  proof: by
-  rw [finrank_linearMap]; rw [finrank_self]; rw [mul_one]
-
-中文:
-定理 模.finrank_linearMap_self
-  结论: finrank S (M ->ₗ[R] S) = finrank R M
-  证明: by
-  rw [finrank_linearMap]; rw [finrank_self]; rw [mul_one]
-
-Depends on / 依赖: finrank_linearMap, finrank_self, mul_one
+    Module.rank S (M →ₗ[R] S) = lift.{u'} (Module.rank R M) := by
+  rw [rank_linearMap, rank_self, lift_one, mul_one]
+/-
+**Module.finrank_linearMap_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Module.finrank_linearMap_self : finrank S (M ->ₗ[R] S) = finrank R M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.finrank_linearMap`：Module.finrank_linearMap : finrank S (M ->ₗ[R]
+ N) = finrank R M * finrank S N
+· 使用定理 `Module.finrank_self`：finrank_self : finrank R R = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem Module.finrank_linearMap_self : finrank S (M ->ₗ[R] S) = finrank R M := by
-  rw [finrank_linearMap]; rw [finrank_self]; rw [mul_one]
+theorem Module.finrank_linearMap_self : finrank S (M →ₗ[R] S) = finrank R M := by
+  rw [finrank_linearMap, finrank_self, mul_one]
 
 end Ring
 
@@ -181,82 +171,91 @@ section AlgHom
 variable (K M : Type*) (L : Type v) [CommRing K] [Ring M] [Algebra K M]
   [Module.Free K M] [Module.Finite K M] [CommRing L] [IsDomain L] [Algebra K L]
 
-/--
-Instance `Finite.algHom` / 实例 `Finite.algHom`
-
-English:
-instance Finite.algHom
-  signature: : Finite (M ->ₐ[K] L)
-  body: (linearIndependent_algHom_toLinearMap K M L).finite
-
-中文:
-实例 有限.algHom
-  签名: : 有限 (M ->ₐ[K] L)
-  定义体: (linearIndependent_algHom_toLinearMap K M L).finite
-
-Depends on / 依赖: finite, linearIndependent_algHom_toLinearMap
+/-
+**Finite.algHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Finite.algHom : Finite (M ->ₐ[K] L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIndependent.finite`：finite [Module.Finite R M] {ι : Type*} {f : ι 
+-> M} (h : LinearIndependent R f) : Finite ι
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用引理 `linearIndependent_algHom_toLinearMap`：linearIndependent_algHom_toLinearM
+ap (K M L) [CommSemiring K] [Semiring M] [Algebra K M] [CommRing L] [IsDomain L]
+ [Algebra K L] : LinearInd…
 -/
-instance Finite.algHom : Finite (M ->ₐ[K] L) :=
+instance Finite.algHom : Finite (M →ₐ[K] L) :=
   (linearIndependent_algHom_toLinearMap K M L).finite
 
 open Cardinal
-
-/--
-theorem `cardinalMk_algHom_le_rank` / 定理 `cardinalMk_algHom_le_rank`
-
-English:
-theorem cardinalMk_algHom_le_rank
-  statement: #(M ->ₐ[K] L) <= lift.{v} (Module.rank K M)
-  proof: by
-  convert! (linearIndependent_algHom_toLinearMap K M L).cardinal_lift_le_rank
-  · rw [lift_id]
-  · have := Module.nontrivial K L
-    rw [lift_id]; rw [Module.rank_linearMap_self]
-
-@[stacks 09HS]
-
-中文:
-定理 cardinalMk_algHom_le_rank
-  结论: #(M ->ₐ[K] L) <= lift.{v} (模.rank K M)
-  证明: by
-  convert! (linearIndependent_algHom_toLinearMap K M L).cardinal_lift_le_rank
-  · rw [lift_id]
-  · have := Module.nontrivial K L
-    rw [lift_id]; rw [Module.rank_linearMap_self]
-
-@[stacks 09HS]
-
-Depends on / 依赖: Module, Module.nontrivial, Module.rank_linearMap_self, cardinal_lift_le_rank, convert, lift_id, linearIndependent_algHom_toLinearMap, nontrivial, rank_linearMap_self
+/-
+**cardinalMk_algHom_le_rank** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：cardinalMk_algHom_le_rank : #(M ->ₐ[K] L) <= lift.{v} (Module.rank K M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Module.nontrivial`：∀ (R : Type u_5) (M : Type u_6) [inst : MonoidWithZer
+o R] [Nontrivial M] [inst_2 : Zero M] [MulActionWithZero R M],   Nontrivial R
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `Module.rank_linearMap_self`：Module.rank_linearMap_self : Module.rank S (
+M ->ₗ[R] S) = lift.{u'} (Module.rank R M)
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `LinearIndependent.cardinal_lift_le_rank`：cardinal_lift_le_rank {ι : Type
+ w} {v : ι -> M} (hv : LinearIndependent R v) : Cardinal.lift.{v} #ι <= Cardinal
+.lift.{w} (Module.rank R M)
+· 使用引理 `linearIndependent_algHom_toLinearMap`：linearIndependent_algHom_toLinearM
+ap (K M L) [CommSemiring K] [Semiring M] [Algebra K M] [CommRing L] [IsDomain L]
+ [Algebra K L] : LinearInd…
 -/
-theorem cardinalMk_algHom_le_rank : #(M ->ₐ[K] L) <= lift.{v} (Module.rank K M) := by
+theorem cardinalMk_algHom_le_rank : #(M →ₐ[K] L) ≤ lift.{v} (Module.rank K M) := by
   convert! (linearIndependent_algHom_toLinearMap K M L).cardinal_lift_le_rank
   · rw [lift_id]
   · have := Module.nontrivial K L
-    rw [lift_id]; rw [Module.rank_linearMap_self]
+    rw [lift_id, Module.rank_linearMap_self]
 
 @[stacks 09HS]
-/--
-theorem `card_algHom_le_finrank` / 定理 `card_algHom_le_finrank`
-
-English:
-theorem card_algHom_le_finrank
-  statement: Nat.card (M ->ₐ[K] L) <= finrank K M
-  proof: by
-  convert! toNat_le_toNat (cardinalMk_algHom_le_rank K M L) ?_
-  · rw [toNat_lift, finrank]
-  · rw [lift_lt_aleph0]; have := Module.nontrivial K L; apply Module.rank_lt_aleph0
-
-中文:
-定理 card_algHom_le_finrank
-  结论: 自然数.card (M ->ₐ[K] L) <= finrank K M
-  证明: by
-  convert! toNat_le_toNat (cardinalMk_algHom_le_rank K M L) ?_
-  · rw [toNat_lift, finrank]
-  · rw [lift_lt_aleph0]; have := Module.nontrivial K L; apply Module.rank_lt_aleph0
-
-Depends on / 依赖: Module, Module.nontrivial, Module.rank_lt_aleph0, cardinalMk_algHom_le_rank, convert, finrank, lift_lt_aleph0, nontrivial, rank_lt_aleph0, toNat_le_toNat, toNat_lift
+/-
+**card_algHom_le_finrank** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：card_algHom_le_finrank : Nat.card (M ->ₐ[K] L) <= finrank K M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.toNat_lift`：toNat_lift (c : Cardinal.{v}) : toNat (lift.{u, v} 
+c) = toNat c
+· 使用定理 `Module.finrank.eq_1`：∀ (R : Type u_1) (M : Type u_2) [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M],   Module.finrank R M =
+ Cardinal…
+· 使用定理 `Cardinal.toNat_le_toNat`：toNat_le_toNat (hcd : c <= d) (hd : d < ℵ₀) : t
+oNat c <= toNat d
+· 使用定理 `cardinalMk_algHom_le_rank`：cardinalMk_algHom_le_rank : #(M ->ₐ[K] L) <= 
+lift.{v} (Module.rank K M)
+· 使用定理 `Cardinal.lift_lt_aleph0`：lift_lt_aleph0 {c : Cardinal.{u}} : lift.{v} c 
+< ℵ₀ ↔ c < ℵ₀
+· 使用定理 `Module.nontrivial`：∀ (R : Type u_5) (M : Type u_6) [inst : MonoidWithZer
+o R] [Nontrivial M] [inst_2 : Zero M] [MulActionWithZero R M],   Nontrivial R
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `Module.rank_lt_aleph0`：rank_lt_aleph0 [Module.Finite R M] : Module.rank 
+R M < ℵ₀
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
 -/
-theorem card_algHom_le_finrank : Nat.card (M ->ₐ[K] L) <= finrank K M := by
+theorem card_algHom_le_finrank : Nat.card (M →ₐ[K] L) ≤ finrank K M := by
   convert! toNat_le_toNat (cardinalMk_algHom_le_rank K M L) ?_
   · rw [toNat_lift, finrank]
   · rw [lift_lt_aleph0]; have := Module.nontrivial K L; apply Module.rank_lt_aleph0
@@ -265,45 +264,31 @@ end AlgHom
 
 section Integer
 
-variable [AddCommGroup M] [Module.Finite Int M] [Module.Free Int M] [AddCommGroup N]
+variable [AddCommGroup M] [Module.Finite ℤ M] [Module.Free ℤ M] [AddCommGroup N]
 
-/--
-Instance `Module.Finite.addMonoidHom` / 实例 `Module.Finite.addMonoidHom`
-
-English:
-instance Module.Finite.addMonoidHom
-  signature: [Module.Finite Int N]
-  body: Module.Finite.equiv (addMonoidHomLequivInt Int).symm
-
-中文:
-实例 模.有限.addMonoidHom
-  签名: [模.有限 整数 N]
-  定义体: Module.Finite.equiv (addMonoidHomLequivInt Int).symm
-
-Depends on / 依赖: Finite, Module, Module.Finite.equiv, addMonoidHomLequivInt
+/-
+**Module.Finite.addMonoidHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Finite.addMonoidHom [Module.Finite Int N] : Module.Finite Int (M ->
++ N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
 -/
-instance Module.Finite.addMonoidHom [Module.Finite Int N] : Module.Finite Int (M ->+ N) :=
-  Module.Finite.equiv (addMonoidHomLequivInt Int).symm
-
-/--
-Instance `Module.Free.addMonoidHom` / 实例 `Module.Free.addMonoidHom`
-
-English:
-instance Module.Free.addMonoidHom
-  signature: [Module.Free Int N]
-  body: letI : Module.Free Int (M ->ₗ[Int] N) := Module.Free.linearMap _ _ _ _
-  Module.Free.of_equiv (addMonoidHomLequivInt Int).symm
-
-中文:
-实例 模.自由.addMonoidHom
-  签名: [模.自由 整数 N]
-  定义体: letI : Module.Free Int (M ->ₗ[Int] N) := Module.Free.linearMap _ _ _ _
-  Module.Free.of_equiv (addMonoidHomLequivInt Int).symm
-
-Depends on / 依赖: Module, Module.Free, Module.Free.linearMap, Module.Free.of_equiv, addMonoidHomLequivInt, linearMap, of_equiv
+instance Module.Finite.addMonoidHom [Module.Finite ℤ N] : Module.Finite ℤ (M →+ N) :=
+  Module.Finite.equiv (addMonoidHomLequivInt ℤ).symm
+/-
+**Module.Free.addMonoidHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Free.addMonoidHom [Module.Free Int N] : Module.Free Int (M ->+ N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Free.of_equiv`：of_equiv {R R' M M' : Type*} [Semiring R] [AddComm
+Monoid M] [Module R M] [Semiring R'] [AddCommMonoid M'] [Module R' M'] {σ : R ->
++* R'} {σ'…
 -/
-instance Module.Free.addMonoidHom [Module.Free Int N] : Module.Free Int (M ->+ N) :=
-  letI : Module.Free Int (M ->ₗ[Int] N) := Module.Free.linearMap _ _ _ _
-  Module.Free.of_equiv (addMonoidHomLequivInt Int).symm
+instance Module.Free.addMonoidHom [Module.Free ℤ N] : Module.Free ℤ (M →+ N) :=
+  letI : Module.Free ℤ (M →ₗ[ℤ] N) := Module.Free.linearMap _ _ _ _
+  Module.Free.of_equiv (addMonoidHomLequivInt ℤ).symm
 
 end Integer
+

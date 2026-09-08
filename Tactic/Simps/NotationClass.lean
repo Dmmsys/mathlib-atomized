@@ -41,28 +41,32 @@ open Lean Meta Elab Term
 
 namespace Simps
 
-/--
-Definition of `findArgType` / `findArgType` 的定义
-
-English:
-definition findArgType
-  signature: : Type
-  body: Name -> Name -> Array Expr -> MetaM (Array (Option Expr))
-
-中文:
-定义 findArgType
-  签名: : 类型
-  定义体: Name -> Name -> Array Expr -> MetaM (Array (Option Expr))
+/-- The type of methods to find arguments for automatic projections for `simps`.
+We partly define this as a separate definition so that the unused arguments linter doesn't complain.
 -/
-@[expose] def findArgType : Type := Name -> Name -> Array Expr -> MetaM (Array (Option Expr))
+/-
+**Simps.findArgType** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `defaultfindArgs` / `defaultfindArgs` 的定义
+--- 原说明 ---
+The type of methods to find arguments for automatic projections for `simps`.
+We partly define this as a separate definition so that the unused arguments lint
+er doesn't complain.
+-/
+@[expose] def findArgType : Type := Name → Name → Array Expr → MetaM (Array (Option Expr))
 
-English:
-definition defaultfindArgs
-  signature: : findArgType
-  body: fun _ className args => do
+/-- Find arguments for a notation class -/
+/-
+**Simps.defaultfindArgs** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：defaultfindArgs : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Find arguments for a notation class
+-/
+def defaultfindArgs : findArgType := fun _ className args ↦ do
   let some classExpr := (← getEnv).find? className | throwError "no such class {className}"
   let arity := classExpr.type.getNumHeadForalls
   if arity == args.size then
@@ -73,189 +77,112 @@ definition defaultfindArgs
     throwError "initialize_simps_projections cannot automatically find arguments for class \
       {className}"
 
-中文:
-定义 defaultfindArgs
-  签名: : findArgType
-  定义体: fun _ className args => do
-  let some classExpr := (← getEnv).find? className | throwError "no such class {className}"
-  let arity := classExpr.type.getNumHeadForalls
-  if arity == args.size then
-    return args.map some
-  else if h : args.size = 1 then
-    return .replicate arity args[0]
-  else
-    throwError "initialize_simps_projections cannot automatically find arguments for class \
-      {className}"
+/-- Find arguments by duplicating the first argument. Used for `pow`. -/
+/-
+**Simps.copyFirst** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：copyFirst : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: className
+--- 原说明 ---
+Find arguments by duplicating the first argument. Used for `pow`.
 -/
-def defaultfindArgs : findArgType := fun _ className args => do
-  let some classExpr := (← getEnv).find? className | throwError "no such class {className}"
-  let arity := classExpr.type.getNumHeadForalls
-  if arity == args.size then
-    return args.map some
-  else if h : args.size = 1 then
-    return .replicate arity args[0]
-  else
-    throwError "initialize_simps_projections cannot automatically find arguments for class \
-      {className}"
+def copyFirst : findArgType := fun _ _ args ↦ return (args.push <| args[0]?.getD default).map some
 
-/--
-Definition of `copyFirst` / `copyFirst` 的定义
+/-- Find arguments by duplicating the first argument. Used for `smul`. -/
+/-
+**Simps.copySecond** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：copySecond : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copyFirst
-  signature: : findArgType
-  body: fun _ _ args => return (args.push <| args[0]?.getD default).map some
-
-中文:
-定义 copyFirst
-  签名: : findArgType
-  定义体: fun _ _ args => return (args.push <| args[0]?.getD default).map some
-
-Depends on / 依赖: args.push, return
+--- 原说明 ---
+Find arguments by duplicating the first argument. Used for `smul`.
 -/
-def copyFirst : findArgType := fun _ _ args => return (args.push <| args[0]?.getD default).map some
+def copySecond : findArgType := fun _ _ args ↦ return (args.push <| args[1]?.getD default).map some
 
-/--
-Definition of `copySecond` / `copySecond` 的定义
+/-- Find arguments by prepending `ℕ` and duplicating the first argument. Used for `nsmul`. -/
+/-
+**Simps.nsmulArgs** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：nsmulArgs : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copySecond
-  signature: : findArgType
-  body: fun _ _ args => return (args.push <| args[1]?.getD default).map some
-
-中文:
-定义 copySecond
-  签名: : findArgType
-  定义体: fun _ _ args => return (args.push <| args[1]?.getD default).map some
-
-Depends on / 依赖: args.push, return
+--- 原说明 ---
+Find arguments by prepending `ℕ` and duplicating the first argument. Used for `n
+smul`.
 -/
-def copySecond : findArgType := fun _ _ args => return (args.push <| args[1]?.getD default).map some
+def nsmulArgs : findArgType := fun _ _ args ↦
+  return #[Expr.const `Nat [], args[0]?.getD default] ++ args |>.map some
 
-/--
-Definition of `nsmulArgs` / `nsmulArgs` 的定义
+/-- Find arguments by prepending `ℤ` and duplicating the first argument. Used for `zsmul`. -/
+/-
+**Simps.zsmulArgs** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：zsmulArgs : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nsmulArgs
-  signature: : findArgType
-  body: fun _ _ args =>
-.map some return #[Expr.const `Nat [], args[0]?.getD default] ++ args
-
-中文:
-定义 nsmulArgs
-  签名: : findArgType
-  定义体: fun _ _ args =>
-.map some return #[Expr.const `Nat [], args[0]?.getD default] ++ args
+--- 原说明 ---
+Find arguments by prepending `ℤ` and duplicating the first argument. Used for `z
+smul`.
 -/
-def nsmulArgs : findArgType := fun _ _ args =>
-.map some return #[Expr.const `Nat [], args[0]?.getD default] ++ args
+def zsmulArgs : findArgType := fun _ _ args ↦
+  return #[Expr.const `Int [], args[0]?.getD default] ++ args |>.map some
 
-/--
-Definition of `zsmulArgs` / `zsmulArgs` 的定义
+/-- Find arguments for the `Zero` class. -/
+/-
+**Simps.findZeroArgs** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：findZeroArgs : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zsmulArgs
-  signature: : findArgType
-  body: fun _ _ args =>
-.map some return #[Expr.const `Int [], args[0]?.getD default] ++ args
-
-中文:
-定义 zsmulArgs
-  签名: : findArgType
-  定义体: fun _ _ args =>
-.map some return #[Expr.const `Int [], args[0]?.getD default] ++ args
+--- 原说明 ---
+Find arguments for the `Zero` class.
 -/
-def zsmulArgs : findArgType := fun _ _ args =>
-.map some return #[Expr.const `Int [], args[0]?.getD default] ++ args
-
-/--
-Definition of `findZeroArgs` / `findZeroArgs` 的定义
-
-English:
-definition findZeroArgs
-  signature: : findArgType
-  body: fun _ _ args =>
+def findZeroArgs : findArgType := fun _ _ args ↦
   return #[some <| args[0]?.getD default, some <| mkRawNatLit 0]
 
-中文:
-定义 findZeroArgs
-  签名: : findArgType
-  定义体: fun _ _ args =>
-  return #[some <| args[0]?.getD default, some <| mkRawNatLit 0]
+/-- Find arguments for the `One` class. -/
+/-
+**Simps.findOneArgs** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：findOneArgs : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Find arguments for the `One` class.
 -/
-def findZeroArgs : findArgType := fun _ _ args =>
-  return #[some <| args[0]?.getD default, some <| mkRawNatLit 0]
-
-/--
-Definition of `findOneArgs` / `findOneArgs` 的定义
-
-English:
-definition findOneArgs
-  signature: : findArgType
-  body: fun _ _ args =>
+def findOneArgs : findArgType := fun _ _ args ↦
   return #[some <| args[0]?.getD default, some <| mkRawNatLit 1]
 
-中文:
-定义 findOneArgs
-  签名: : findArgType
-  定义体: fun _ _ args =>
-  return #[some <| args[0]?.getD default, some <| mkRawNatLit 1]
+/-- Find arguments of a coercion class (`DFunLike` or `SetLike`) -/
+/-
+**Simps.findCoercionArgs** 是 Mathlib 中的一个定义，位于命名空间 `Simps`。
+形式化陈述：findCoercionArgs : findArgType
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Find arguments of a coercion class (`DFunLike` or `SetLike`)
 -/
-def findOneArgs : findArgType := fun _ _ args =>
-  return #[some <| args[0]?.getD default, some <| mkRawNatLit 1]
-
-/--
-Definition of `findCoercionArgs` / `findCoercionArgs` 的定义
-
-English:
-definition findCoercionArgs
-  signature: : findArgType
-  body: fun str className args => do
+def findCoercionArgs : findArgType := fun str className args ↦ do
   let some classExpr := (← getEnv).find? className | throwError "no such class {className}"
   let arity := classExpr.type.getNumHeadForalls
   let eStr := mkAppN (← mkConstWithLevelParams str) args
   let classArgs := .replicate (arity - 1) none
   return #[some eStr] ++ classArgs
 
-中文:
-定义 findCoercionArgs
-  签名: : findArgType
-  定义体: fun str className args => do
-  let some classExpr := (← getEnv).find? className | throwError "no such class {className}"
-  let arity := classExpr.type.getNumHeadForalls
-  let eStr := mkAppN (← mkConstWithLevelParams str) args
-  let classArgs := .replicate (arity - 1) none
-  return #[some eStr] ++ classArgs
+/-- Data needed to generate automatic projections. This data is associated to a name of a projection
+in a structure that must be used to trigger the search. -/
+/-
+**Simps.AutomaticProjectionData** 是 Mathlib 中的一个归纳类型，位于命名空间 `Simps`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: className
--/
-def findCoercionArgs : findArgType := fun str className args => do
-  let some classExpr := (← getEnv).find? className | throwError "no such class {className}"
-  let arity := classExpr.type.getNumHeadForalls
-  let eStr := mkAppN (← mkConstWithLevelParams str) args
-  let classArgs := .replicate (arity - 1) none
-  return #[some eStr] ++ classArgs
-
-/--
-Definition of `AutomaticProjectionData` / `AutomaticProjectionData` 的定义
-
-English:
-structure AutomaticProjectionData
-  parameters: where
-  axioms and operations (3):
-    - className : Name
-    - isNotation : = true
-    - findArgs : Name  [default: `Simps.defaultfindArgs]
-
-中文:
-结构 AutomaticProjectionData
-  参数: where
-  公理与运算 (3 个):
-    - className : Name
-    - isNotation : = true
-    - findArgs : Name  [默认: `Simps.defaultfindArgs]
+--- 原说明 ---
+Data needed to generate automatic projections. This data is associated to a name
+ of a projection
+in a structure that must be used to trigger the search.
 -/
 structure AutomaticProjectionData where
   /-- `className` is the name of the class we are looking for. -/
@@ -287,10 +214,11 @@ initialize notationClassAttr : NameMapExtension AutomaticProjectionData ← do
         match (← getEnv).find? findArgs with
         | none => throwError "no such declaration {findArgs}"
         | some declInfo =>
-unless ← MetaM.run' isDefEq declInfo.type (mkConst ``findArgType) do
+          unless ← MetaM.run' <| isDefEq declInfo.type (mkConst ``findArgType) do
             throwError "declaration {findArgs} has wrong type"
         ext.add projName ⟨src, coercion.isNone, findArgs⟩
       | _ => throwUnsupportedSyntax }
   return ext
 
 end Simps
+

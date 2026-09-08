@@ -22,151 +22,97 @@ fixed point
 
 namespace Function
 
-variable {α : Type*} {x : α} {f g : α -> α}
+variable {α : Type*} {x : α} {f g : α → α}
 
-/--
-Definition of `fixedPoints` / `fixedPoints` 的定义
+/-- The set of fixed points of a map `f : α → α`. -/
+/-
+**Function.fixedPoints** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：fixedPoints (f : α -> α) : Set α
+参数：f : α -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fixedPoints
-  signature: (f : α -> α)
-  body: { x : α | IsFixedPt f x }
-
-中文:
-定义 fixedPoints
-  签名: (f : α -> α)
-  定义体: { x : α | IsFixedPt f x }
-
-Depends on / 依赖: IsFixedPt
+--- 原说明 ---
+The set of fixed points of a map `f : α → α`.
 -/
-def fixedPoints (f : α -> α) : Set α :=
+def fixedPoints (f : α → α) : Set α :=
   { x : α | IsFixedPt f x }
-
-/--
-Instance `fixedPoints.decidable` / 实例 `fixedPoints.decidable`
-
-English:
-instance fixedPoints.decidable
-  signature: [DecidableEq α] (f : α -> α) (x : α)
-  body: IsFixedPt.decidable
-
-@[simp]
-
-中文:
-实例 fixedPoints.decidable
-  签名: [DecidableEq α] (f : α -> α) (x : α)
-  定义体: IsFixedPt.decidable
-
-@[simp]
-
-Depends on / 依赖: IsFixedPt, IsFixedPt.decidable, decidable
+/-
+**Function.fixedPoints.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Function.fixedPoints
+`。
+形式化陈述：{α : Type u_1} → [DecidableEq α] → (f : α → α) → (x : α) → Decidable (x ∈ 
+Function.fixedPoints f)
+参数：f : α → α；x : α；x ∈ Function.fixedPoints f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fixedPoints.decidable [DecidableEq α] (f : α -> α) (x : α) :
-    Decidable (x in fixedPoints f) :=
+instance fixedPoints.decidable [DecidableEq α] (f : α → α) (x : α) :
+    Decidable (x ∈ fixedPoints f) :=
   IsFixedPt.decidable
 
 @[simp]
-/--
-theorem `mem_fixedPoints` / 定理 `mem_fixedPoints`
-
-English:
-theorem mem_fixedPoints
-  statement: x in fixedPoints f ↔ IsFixedPt f x
-  proof: .rfl
-
-中文:
-定理 mem_fixedPoints
-  结论: x in fixedPoints f ↔ IsFixedPt f x
-  证明: .rfl
+/-
+**Function.mem_fixedPoints** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：mem_fixedPoints : x in fixedPoints f ↔ IsFixedPt f x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_fixedPoints : x in fixedPoints f ↔ IsFixedPt f x :=
+theorem mem_fixedPoints : x ∈ fixedPoints f ↔ IsFixedPt f x :=
   .rfl
-
-/--
-theorem `mem_fixedPoints_iff` / 定理 `mem_fixedPoints_iff`
-
-English:
-theorem mem_fixedPoints_iff
-  given: {α : Type*} {f : α -> α} {x : α}
-  statement: x in fixedPoints f ↔ f x = x
-  proof: .rfl
-
-@[simp]
-
-中文:
-定理 mem_fixedPoints_iff
-  条件: {α : 类型} {f : α -> α} {x : α}
-  结论: x in fixedPoints f ↔ f x = x
-  证明: .rfl
-
-@[simp]
+/-
+**Function.mem_fixedPoints_iff** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：mem_fixedPoints_iff {α : Type*} {f : α -> α} {x : α} : x in fixedPoints f 
+↔ f x = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_fixedPoints_iff {α : Type*} {f : α -> α} {x : α} : x in fixedPoints f ↔ f x = x :=
+theorem mem_fixedPoints_iff {α : Type*} {f : α → α} {x : α} : x ∈ fixedPoints f ↔ f x = x :=
   .rfl
 
 @[simp]
-/--
-theorem `fixedPoints_id` / 定理 `fixedPoints_id`
-
-English:
-theorem fixedPoints_id
-  statement: fixedPoints (@id α) = Set.univ
-  proof: Set.ext fun _ => by simpa using isFixedPt_id _
-
-@[simp]
-
-中文:
-定理 fixedPoints_id
-  结论: fixedPoints (@id α) = 集合.univ
-  证明: Set.ext fun _ => by simpa using isFixedPt_id _
-
-@[simp]
-
-Depends on / 依赖: Set.ext, isFixedPt_id
+/-
+**Function.fixedPoints_id** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：fixedPoints_id : fixedPoints (@id α) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `Function.isFixedPt_id`：isFixedPt_id (x : α) : IsFixedPt id x
 -/
 theorem fixedPoints_id : fixedPoints (@id α) = Set.univ :=
   Set.ext fun _ => by simpa using isFixedPt_id _
 
 @[simp]
-/--
-theorem `inter_subset_fixedPoints_comp` / 定理 `inter_subset_fixedPoints_comp`
-
-English:
-theorem inter_subset_fixedPoints_comp
-  statement: fixedPoints f inter fixedPoints g subseteq fixedPoints (f ∘ g)
-  proof: by
-  rintro x ⟨hf, hg⟩
-  rw [mem_fixedPoints_iff] at *
-  rw [comp_apply]; rw [hg]; rw [hf]
-
-中文:
-定理 inter_subset_fixedPoints_comp
-  结论: fixedPoints f inter fixedPoints g subseteq fixedPoints (f ∘ g)
-  证明: by
-  rintro x ⟨hf, hg⟩
-  rw [mem_fixedPoints_iff] at *
-  rw [comp_apply]; rw [hg]; rw [hf]
-
-Depends on / 依赖: comp_apply, mem_fixedPoints_iff
+/-
+**Function.inter_subset_fixedPoints_comp** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：inter_subset_fixedPoints_comp : fixedPoints f inter fixedPoints g subseteq
+ fixedPoints (f ∘ g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.mem_fixedPoints_iff`：mem_fixedPoints_iff {α : Type*} {f : α -> 
+α} {x : α} : x in fixedPoints f ↔ f x = x
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
 -/
-theorem inter_subset_fixedPoints_comp : fixedPoints f inter fixedPoints g subseteq fixedPoints (f ∘ g) := by
+theorem inter_subset_fixedPoints_comp : fixedPoints f ∩ fixedPoints g ⊆ fixedPoints (f ∘ g) := by
   rintro x ⟨hf, hg⟩
   rw [mem_fixedPoints_iff] at *
-  rw [comp_apply]; rw [hg]; rw [hf]
-
-/--
-theorem `fixedPoints_subset_range` / 定理 `fixedPoints_subset_range`
-
-English:
-theorem fixedPoints_subset_range
-  statement: fixedPoints f subseteq Set.range f
-  proof: fun x hx => ⟨x, hx⟩
-
-中文:
-定理 fixedPoints_subset_range
-  结论: fixedPoints f subseteq 集合.range f
-  证明: fun x hx => ⟨x, hx⟩
+  rw [comp_apply, hg, hf]
+/-
+**Function.fixedPoints_subset_range** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：fixedPoints_subset_range : fixedPoints f subseteq Set.range f
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem fixedPoints_subset_range : fixedPoints f subseteq Set.range f := fun x hx => ⟨x, hx⟩
+theorem fixedPoints_subset_range : fixedPoints f ⊆ Set.range f := fun x hx => ⟨x, hx⟩
 
 end Function
+

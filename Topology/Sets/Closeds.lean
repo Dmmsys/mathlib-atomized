@@ -33,22 +33,14 @@ namespace TopologicalSpace
 /-! ### Closed sets -/
 
 
-/--
-Definition of `Closeds` / `Closeds` 的定义
+/-- The type of closed subsets of a topological space. -/
+/-
+**TopologicalSpace.Closeds** 是 Mathlib 中的一个归纳类型，位于命名空间 `TopologicalSpace`。
+形式化陈述：(α : Type u_4) → [TopologicalSpace α] → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Closeds
-  parameters: (α : Type*) [TopologicalSpace α]
-  axioms and operations (2):
-    - carrier : Set α
-    - isClosed' : IsClosed carrier
-
-中文:
-结构 Closeds
-  参数: (α : 类型) [拓扑空间 α]
-  公理与运算 (2 个):
-    - carrier : 集合 α
-    - isClosed' : 是闭集 carrier
+--- 原说明 ---
+The type of closed subsets of a topological space.
 -/
 structure Closeds (α : Type*) [TopologicalSpace α] where
   /-- the carrier set, i.e. the points in this set -/
@@ -57,350 +49,187 @@ structure Closeds (α : Type*) [TopologicalSpace α] where
 
 namespace Closeds
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (Closeds α) α
-  body: Closeds.carrier
-  coe_injective s t h := by cases s; cases t; congr
-
-中文:
-实例 :
-  签名: 集合状 (Closeds α) α
-  定义体: Closeds.carrier
-  coe_injective s t h := by cases s; cases t; congr
-
-Depends on / 依赖: Closeds, Closeds.carrier, carrier
+/-
+**TopologicalSpace.Closeds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Closeds`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (Closeds α) α where
   coe := Closeds.carrier
   coe_injective s t h := by cases s; cases t; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Closeds α)
-  body: fast_instance% .ofSetLike (Closeds α) α
-
-中文:
-实例 :
-  签名: 偏序 (Closeds α)
-  定义体: fast_instance% .ofSetLike (Closeds α) α
-
-Depends on / 依赖: Closeds, fast_instance, ofSetLike
+/-
+**TopologicalSpace.Closeds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Closeds`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Closeds α) := fast_instance% .ofSetLike (Closeds α) α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanLift (Set α) (Closeds α) (↑) IsClosed
-  body: ⟨⟨s, hs⟩, rfl⟩
-
-中文:
-实例 :
-  签名: CanLift (集合 α) (Closeds α) (↑) 是闭集
-  定义体: ⟨⟨s, hs⟩, rfl⟩
+/-
+**TopologicalSpace.Closeds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Closeds`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CanLift (Set α) (Closeds α) (↑) IsClosed where
   prf s hs := ⟨⟨s, hs⟩, rfl⟩
-
-/--
-theorem `isClosed` / 定理 `isClosed`
-
-English:
-theorem isClosed
-  given: (s : Closeds α)
-  statement: IsClosed (s : Set α)
-  proof: s.isClosed'
-
-中文:
-定理 isClosed
-  条件: (s : Closeds α)
-  结论: 是闭集 (s : 集合 α)
-  证明: s.isClosed'
-
-Depends on / 依赖: isClosed, s.isClosed
+/-
+**TopologicalSpace.Closeds.isClosed** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：isClosed (s : Closeds α) : IsClosed (s : Set α)
+参数：s : Closeds α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Closeds.isClosed'`：∀ {α : Type u_4} [inst : Topological
+Space α] (self : TopologicalSpace.Closeds α), IsClosed self.carrier
 -/
 theorem isClosed (s : Closeds α) : IsClosed (s : Set α) :=
   s.isClosed'
 
-/--
-Definition of `Simps.coe` / `Simps.coe` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**TopologicalSpace.Closeds.Simps.coe** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace
+.Closeds.Simps`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Closeds α 
+→ Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.coe
-  signature: (s : Closeds α)
-  body: s
-
-initialize_simps_projections Closeds (carrier -> coe, as_prefix coe)
-
-@[simp]
-
-中文:
-定义 Simps.coe
-  签名: (s : Closeds α)
-  定义体: s
-
-initialize_simps_projections Closeds (carrier -> coe, as_prefix coe)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection].
 -/
 def Simps.coe (s : Closeds α) : Set α := s
 
-initialize_simps_projections Closeds (carrier -> coe, as_prefix coe)
+initialize_simps_projections Closeds (carrier → coe, as_prefix coe)
 
 @[simp]
-/--
-lemma `carrier_eq_coe` / 引理 `carrier_eq_coe`
-
-English:
-lemma carrier_eq_coe
-  given: (s : Closeds α)
-  statement: s.carrier = (s : Set α)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 carrier_eq_coe
-  条件: (s : Closeds α)
-  结论: s.carrier = (s : 集合 α)
-  证明: rfl
-
-@[ext]
+/-
+**TopologicalSpace.Closeds.carrier_eq_coe** 是 Mathlib 中的一个引理，位于命名空间 `Topological
+Space.Closeds`。
+形式化陈述：carrier_eq_coe (s : Closeds α) : s.carrier = (s : Set α)
+参数：s : Closeds α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma carrier_eq_coe (s : Closeds α) : s.carrier = (s : Set α) := rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {s t : Closeds α} (h : (s : Set α) = t)
-  statement: s = t
-  proof: SetLike.ext' h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {s t : Closeds α} (h : (s : 集合 α) = t)
-  结论: s = t
-  证明: SetLike.ext' h
-
-@[simp]
+/-
+**TopologicalSpace.Closeds.ext** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Close
+ds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {s t : TopologicalSpace.Close
+ds α}, ↑s = ↑t → s = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
 -/
 protected theorem ext {s t : Closeds α} (h : (s : Set α) = t) : s = t :=
   SetLike.ext' h
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (s : Set α) (h)
-  statement: (mk s h : Set α) = s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (s : 集合 α) (h)
-  结论: (mk s h : 集合 α) = s
-  证明: rfl
-
-@[simp]
+/-
+**TopologicalSpace.Closeds.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Cl
+oseds`。
+形式化陈述：coe_mk (s : Set α) (h) : (mk s h : Set α) = s
+参数：s : Set α；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (s : Set α) (h) : (mk s h : Set α) = s :=
   rfl
 
 @[simp]
-/--
-lemma `mem_mk` / 引理 `mem_mk`
-
-English:
-lemma mem_mk
-  given: {s : Set α} {hs : IsClosed s} {x : α}
-  statement: x in (⟨s, hs⟩ : Closeds α) ↔ x in s
-  proof: .rfl
-
-中文:
-引理 mem_mk
-  条件: {s : 集合 α} {hs : 是闭集 s} {x : α}
-  结论: x in (⟨s, hs⟩ : Closeds α) ↔ x in s
-  证明: .rfl
+/-
+**TopologicalSpace.Closeds.mem_mk** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.Cl
+oseds`。
+形式化陈述：mem_mk {s : Set α} {hs : IsClosed s} {x : α} : x in (⟨s, hs⟩ : Closeds α) 
+↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_mk {s : Set α} {hs : IsClosed s} {x : α} : x in (⟨s, hs⟩ : Closeds α) ↔ x in s :=
+lemma mem_mk {s : Set α} {hs : IsClosed s} {x : α} : x ∈ (⟨s, hs⟩ : Closeds α) ↔ x ∈ s :=
   .rfl
 
 /-- The closure of a set, as an element of `TopologicalSpace.Closeds`. -/
 @[simps]
-/--
-Definition of `closure` / `closure` 的定义
+/-
+**TopologicalSpace.Closeds.closure** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.C
+loseds`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → Set α → TopologicalSpace.Cl
+oseds α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
 
-English:
-definition closure
-  signature: (s : Set α)
-  body: ⟨closure s, isClosed_closure⟩
-
-@[simp]
-
-中文:
-定义 closure
-  签名: (s : 集合 α)
-  定义体: ⟨closure s, isClosed_closure⟩
-
-@[simp]
+--- 原说明 ---
+The closure of a set, as an element of `TopologicalSpace.Closeds`.
 -/
 protected def closure (s : Set α) : Closeds α :=
   ⟨closure s, isClosed_closure⟩
 
 @[simp]
-/--
-theorem `mem_closure` / 定理 `mem_closure`
-
-English:
-theorem mem_closure
-  given: {s : Set α} {x : α}
-  statement: x in Closeds.closure s ↔ x in closure s
-  proof: .rfl
-
-中文:
-定理 mem_closure
-  条件: {s : 集合 α} {x : α}
-  结论: x in Closeds.closure s ↔ x in closure s
-  证明: .rfl
+/-
+**TopologicalSpace.Closeds.mem_closure** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpa
+ce.Closeds`。
+形式化陈述：mem_closure {s : Set α} {x : α} : x in Closeds.closure s ↔ x in closure s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_closure {s : Set α} {x : α} : x in Closeds.closure s ↔ x in closure s := .rfl
-
-/--
-theorem `gc` / 定理 `gc`
-
-English:
-theorem gc
-  statement: GaloisConnection Closeds.closure ((↑) : Closeds α -> Set α)
-  proof: fun _ U =>
+theorem mem_closure {s : Set α} {x : α} : x ∈ Closeds.closure s ↔ x ∈ closure s := .rfl
+/-
+**TopologicalSpace.Closeds.gc** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Closed
+s`。
+形式化陈述：gc : GaloisConnection Closeds.closure ((↑) : Closeds α -> Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
+· 使用定理 `TopologicalSpace.Closeds.isClosed`：isClosed (s : Closeds α) : IsClosed (
+s : Set α)
+-/
+theorem gc : GaloisConnection Closeds.closure ((↑) : Closeds α → Set α) := fun _ U =>
   ⟨subset_closure.trans, fun h => closure_minimal h U.isClosed⟩
 
 @[simp]
-
-中文:
-定理 gc
-  结论: GaloisConnection Closeds.closure ((↑) : Closeds α -> 集合 α)
-  证明: fun _ U =>
-  ⟨subset_closure.trans, fun h => closure_minimal h U.isClosed⟩
-
-@[simp]
+/-
+**TopologicalSpace.Closeds.closure_le** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpac
+e.Closeds`。
+形式化陈述：closure_le {s : Set α} {t : Closeds α} : .closure s <= t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.closure_subset_iff`：IsClosed.closure_subset_iff (h₁ : IsClosed 
+t) : closure s subseteq t ↔ s subseteq t
+· 使用定理 `TopologicalSpace.Closeds.isClosed`：isClosed (s : Closeds α) : IsClosed (
+s : Set α)
 -/
-theorem gc : GaloisConnection Closeds.closure ((↑) : Closeds α -> Set α) := fun _ U =>
-  ⟨subset_closure.trans, fun h => closure_minimal h U.isClosed⟩
-
-@[simp]
-/--
-lemma `closure_le` / 引理 `closure_le`
-
-English:
-lemma closure_le
-  given: {s : Set α} {t : Closeds α}
-  statement: .closure s <= t ↔ s subseteq t
-  proof: t.isClosed.closure_subset_iff
-
-中文:
-引理 closure_le
-  条件: {s : 集合 α} {t : Closeds α}
-  结论: .closure s <= t ↔ s subseteq t
-  证明: t.isClosed.closure_subset_iff
-
-Depends on / 依赖: closure_subset_iff, isClosed, t.isClosed.closure_subset_iff
--/
-lemma closure_le {s : Set α} {t : Closeds α} : .closure s <= t ↔ s subseteq t :=
+lemma closure_le {s : Set α} {t : Closeds α} : .closure s ≤ t ↔ s ⊆ t :=
   t.isClosed.closure_subset_iff
 
-/--
-Definition of `gi` / `gi` 的定义
+/-- The Galois insertion between sets and closeds. -/
+/-
+**TopologicalSpace.Closeds.gi** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Closed
+s`。
+形式化陈述：gi : GaloisInsertion (@Closeds.closure α _) (↑) where choice s hs
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Closeds.gc`：gc : GaloisConnection Closeds.closure ((↑) 
+: Closeds α -> Set α)
 
-English:
-definition gi
-  signature: : GaloisInsertion (@Closeds.closure α _) (↑) where
-  body: ⟨s, closure_eq_iff_isClosed.1 hs.antisymm subset_closure⟩
-  gc := gc
-  le_l_u _ := subset_closure
-choice_eq _s hs := SetLike.coe_injective subset_closure.antisymm hs
-
-中文:
-定义 gi
-  签名: : Galois嵌入 (@Closeds.closure α _) (↑) where
-  定义体: ⟨s, closure_eq_iff_isClosed.1 hs.antisymm subset_closure⟩
-  gc := gc
-  le_l_u _ := subset_closure
-choice_eq _s hs := SetLike.coe_injective subset_closure.antisymm hs
-
-Depends on / 依赖: antisymm, closure_eq_iff_isClosed, hs.antisymm, subset_closure
+--- 原说明 ---
+The Galois insertion between sets and closeds.
 -/
 def gi : GaloisInsertion (@Closeds.closure α _) (↑) where
-choice s hs := ⟨s, closure_eq_iff_isClosed.1 hs.antisymm subset_closure⟩
+  choice s hs := ⟨s, closure_eq_iff_isClosed.1 <| hs.antisymm subset_closure⟩
   gc := gc
   le_l_u _ := subset_closure
-choice_eq _s hs := SetLike.coe_injective subset_closure.antisymm hs
-
-/--
-Instance `instCompleteLattice` / 实例 `instCompleteLattice`
-
-English:
-instance instCompleteLattice
-  signature: : CompleteLattice (Closeds α)
-  body: fast_instance% CompleteLattice.copy
-    (GaloisInsertion.liftCompleteLattice gi)
-    -- le
-    _ rfl
-    -- top
-    ⟨univ, isClosed_univ⟩ rfl
-    -- bot
-    ⟨∅, isClosed_empty⟩ (SetLike.coe_injective closure_empty.symm)
-    -- sup
-    (fun s t => ⟨s union t, s.2.union t.2⟩)
-    (funext fun s => funext fun t => SetLike.coe_injective (s.2.union t.2).closure_eq.symm)
-    -- inf
-    (fun s t => ⟨s inter t, s.2.inter t.2⟩) rfl
-    -- sSup
-    _ rfl
-    -- sInf
-    (fun S => ⟨⋂ s in S, ↑s, isClosed_biInter fun s _ => s.2⟩)
-    (funext fun _ => SetLike.coe_injective sInf_image.symm)
-
-中文:
-实例 instCompleteLattice
-  签名: : 完备格 (Closeds α)
-  定义体: fast_instance% CompleteLattice.copy
-    (GaloisInsertion.liftCompleteLattice gi)
-    -- le
-    _ rfl
-    -- top
-    ⟨univ, isClosed_univ⟩ rfl
-    -- bot
-    ⟨∅, isClosed_empty⟩ (SetLike.coe_injective closure_empty.symm)
-    -- sup
-    (fun s t => ⟨s union t, s.2.union t.2⟩)
-    (funext fun s => funext fun t => SetLike.coe_injective (s.2.union t.2).closure_eq.symm)
-    -- inf
-    (fun s t => ⟨s inter t, s.2.inter t.2⟩) rfl
-    -- sSup
-    _ rfl
-    -- sInf
-    (fun S => ⟨⋂ s in S, ↑s, isClosed_biInter fun s _ => s.2⟩)
-    (funext fun _ => SetLike.coe_injective sInf_image.symm)
-
-Depends on / 依赖: CompleteLattice, CompleteLattice.copy, GaloisInsertion, GaloisInsertion.liftCompleteLattice, fast_instance, liftCompleteLattice
+  choice_eq _s hs := SetLike.coe_injective <| subset_closure.antisymm hs
+/-
+**TopologicalSpace.Closeds.instCompleteLattice** 是 Mathlib 中的一个实例，位于命名空间 `Topolo
+gicalSpace.Closeds`。
+形式化陈述：instCompleteLattice : CompleteLattice (Closeds α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_univ`：isClosed_univ : IsClosed (univ : Set X)
+· 使用定理 `isClosed_empty`：isClosed_empty : IsClosed (∅ : Set X)
 -/
 instance instCompleteLattice : CompleteLattice (Closeds α) :=
   fast_instance% CompleteLattice.copy
@@ -412,629 +241,429 @@ instance instCompleteLattice : CompleteLattice (Closeds α) :=
     -- bot
     ⟨∅, isClosed_empty⟩ (SetLike.coe_injective closure_empty.symm)
     -- sup
-    (fun s t => ⟨s union t, s.2.union t.2⟩)
+    (fun s t => ⟨s ∪ t, s.2.union t.2⟩)
     (funext fun s => funext fun t => SetLike.coe_injective (s.2.union t.2).closure_eq.symm)
     -- inf
-    (fun s t => ⟨s inter t, s.2.inter t.2⟩) rfl
+    (fun s t => ⟨s ∩ t, s.2.inter t.2⟩) rfl
     -- sSup
     _ rfl
     -- sInf
-    (fun S => ⟨⋂ s in S, ↑s, isClosed_biInter fun s _ => s.2⟩)
+    (fun S => ⟨⋂ s ∈ S, ↑s, isClosed_biInter fun s _ => s.2⟩)
     (funext fun _ => SetLike.coe_injective sInf_image.symm)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The type of closed sets is inhabited, with default element the empty set. -/
+/-
+**TopologicalSpace.Closeds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Closeds`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Inhabited (Closeds α)
-  body: ⟨⊥⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 可居 (Closeds α)
-  定义体: ⟨⊥⟩
-
-@[simp, norm_cast]
+--- 原说明 ---
+The type of closed sets is inhabited, with default element the empty set.
 -/
 instance : Inhabited (Closeds α) :=
   ⟨⊥⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_sup` / 定理 `coe_sup`
-
-English:
-theorem coe_sup
-  given: (s t : Closeds α)
-  statement: (↑(s ⊔ t) : Set α) = ↑s union ↑t
-  proof: by
-  rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_sup
-  条件: (s t : Closeds α)
-  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
-  证明: by
-  rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Closeds.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+loseds`。
+形式化陈述：coe_sup (s t : Closeds α) : (↑(s ⊔ t) : Set α) = ↑s union ↑t
+参数：s t : Closeds α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sup (s t : Closeds α) : (↑(s ⊔ t) : Set α) = ↑s union ↑t := by
+theorem coe_sup (s t : Closeds α) : (↑(s ⊔ t) : Set α) = ↑s ∪ ↑t := by
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  given: (s t : Closeds α)
-  statement: (↑(s ⊓ t) : Set α) = ↑s inter ↑t
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_inf
-  条件: (s t : Closeds α)
-  结论: (↑(s ⊓ t) : 集合 α) = ↑s inter ↑t
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Closeds.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+loseds`。
+形式化陈述：coe_inf (s t : Closeds α) : (↑(s ⊓ t) : Set α) = ↑s inter ↑t
+参数：s t : Closeds α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf (s t : Closeds α) : (↑(s ⊓ t) : Set α) = ↑s inter ↑t :=
+theorem coe_inf (s t : Closeds α) : (↑(s ⊓ t) : Set α) = ↑s ∩ ↑t :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: (↑(⊤ : Closeds α) : Set α) = univ
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_top
-  结论: (↑(⊤ : Closeds α) : 集合 α) = univ
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Closeds.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+loseds`。
+形式化陈述：coe_top : (↑(⊤ : Closeds α) : Set α) = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : (↑(⊤ : Closeds α) : Set α) = univ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_univ` / 定理 `coe_eq_univ`
-
-English:
-theorem coe_eq_univ
-  given: {s : Closeds α}
-  statement: (s : Set α) = univ ↔ s = ⊤
-  proof: SetLike.coe_injective.eq_iff' rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_eq_univ
-  条件: {s : Closeds α}
-  结论: (s : 集合 α) = univ ↔ s = ⊤
-  证明: SetLike.coe_injective.eq_iff' rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.eq_iff, coe_injective, eq_iff
+/-
+**TopologicalSpace.Closeds.coe_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpa
+ce.Closeds`。
+形式化陈述：coe_eq_univ {s : Closeds α} : (s : Set α) = univ ↔ s = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem coe_eq_univ {s : Closeds α} : (s : Set α) = univ ↔ s = ⊤ :=
   SetLike.coe_injective.eq_iff' rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_bot` / 定理 `coe_bot`
-
-English:
-theorem coe_bot
-  statement: (↑(⊥ : Closeds α) : Set α) = ∅
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_bot
-  结论: (↑(⊥ : Closeds α) : 集合 α) = ∅
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Closeds.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+loseds`。
+形式化陈述：coe_bot : (↑(⊥ : Closeds α) : Set α) = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bot : (↑(⊥ : Closeds α) : Set α) = ∅ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_empty` / 定理 `coe_eq_empty`
-
-English:
-theorem coe_eq_empty
-  given: {s : Closeds α}
-  statement: (s : Set α) = ∅ ↔ s = ⊥
-  proof: SetLike.coe_injective.eq_iff' rfl
-
-中文:
-定理 coe_eq_empty
-  条件: {s : Closeds α}
-  结论: (s : 集合 α) = ∅ ↔ s = ⊥
-  证明: SetLike.coe_injective.eq_iff' rfl
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.eq_iff, coe_injective, eq_iff
+/-
+**TopologicalSpace.Closeds.coe_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Closeds`。
+形式化陈述：coe_eq_empty {s : Closeds α} : (s : Set α) = ∅ ↔ s = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem coe_eq_empty {s : Closeds α} : (s : Set α) = ∅ ↔ s = ⊥ :=
   SetLike.coe_injective.eq_iff' rfl
-
-/--
-theorem `coe_nonempty` / 定理 `coe_nonempty`
-
-English:
-theorem coe_nonempty
-  given: {s : Closeds α}
-  statement: (s : Set α).Nonempty ↔ s != ⊥
-  proof: nonempty_iff_ne_empty.trans coe_eq_empty.not
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_nonempty
-  条件: {s : Closeds α}
-  结论: (s : 集合 α).非空 ↔ s != ⊥
-  证明: nonempty_iff_ne_empty.trans coe_eq_empty.not
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coe_eq_empty, coe_eq_empty.not, nonempty_iff_ne_empty, nonempty_iff_ne_empty.trans
+/-
+**TopologicalSpace.Closeds.coe_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Closeds`。
+形式化陈述：coe_nonempty {s : Closeds α} : (s : Set α).Nonempty ↔ s != ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `TopologicalSpace.Closeds.coe_eq_empty`：coe_eq_empty {s : Closeds α} : (s
+ : Set α) = ∅ ↔ s = ⊥
 -/
-theorem coe_nonempty {s : Closeds α} : (s : Set α).Nonempty ↔ s != ⊥ :=
+theorem coe_nonempty {s : Closeds α} : (s : Set α).Nonempty ↔ s ≠ ⊥ :=
   nonempty_iff_ne_empty.trans coe_eq_empty.not
 
 @[simp, norm_cast]
-/--
-theorem `coe_sInf` / 定理 `coe_sInf`
-
-English:
-theorem coe_sInf
-  given: {S : Set (Closeds α)}
-  statement: (↑(sInf S) : Set α) = ⋂ i in S, ↑i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sInf
-  条件: {S : 集合 (Closeds α)}
-  结论: (↑(sInf S) : 集合 α) = ⋂ i in S, ↑i
-  证明: rfl
-
-@[simp]
+/-
+**TopologicalSpace.Closeds.coe_sInf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：coe_sInf {S : Set (Closeds α)} : (↑(sInf S) : Set α) = ⋂ i in S, ↑i
+参数：Closeds α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sInf {S : Set (Closeds α)} : (↑(sInf S) : Set α) = ⋂ i in S, ↑i :=
+theorem coe_sInf {S : Set (Closeds α)} : (↑(sInf S) : Set α) = ⋂ i ∈ S, ↑i :=
   rfl
 
 @[simp]
-/--
-lemma `coe_sSup` / 引理 `coe_sSup`
-
-English:
-lemma coe_sSup
-  given: {S : Set (Closeds α)}
-  statement: ((sSup S : Closeds α) : Set α) =
-  proof: by rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_sSup
-  条件: {S : 集合 (Closeds α)}
-  结论: ((sSup S : Closeds α) : 集合 α) =
-  证明: by rfl
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Closeds.coe_sSup** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：coe_sSup {S : Set (Closeds α)} : ((sSup S : Closeds α) : Set α) = closure 
+(⋃₀ ((↑) '' S))
+参数：Closeds α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_sSup {S : Set (Closeds α)} : ((sSup S : Closeds α) : Set α) =
     closure (⋃₀ ((↑) '' S)) := by rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_finset_sup` / 定理 `coe_finset_sup`
-
-English:
-theorem coe_finset_sup
-  given: (f : ι -> Closeds α) (s : Finset ι)
-  proof: map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Closeds α) (Set α)) _ _
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_finset_sup
-  条件: (f : ι -> Closeds α) (s : 有限集 ι)
-  证明: map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Closeds α) (Set α)) _ _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Closeds, SupBotHom, coe_bot, coe_sup, map_finset_sup
+/-
+**TopologicalSpace.Closeds.coe_finset_sup** 是 Mathlib 中的一个定理，位于命名空间 `Topological
+Space.Closeds`。
+形式化陈述：coe_finset_sup (f : ι -> Closeds α) (s : Finset ι) : (↑(s.sup f) : Set α) 
+= s.sup ((↑) ∘ f)
+参数：f : ι -> Closeds α；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finset_sup`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeSup α] [inst_1 : OrderBot α]   [inst_2 : SemilatticeSup
+ β] …
+· 使用定理 `SupBotHom.instSupBotHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : Ma
+x α] [inst_1 : Bot α] [inst_2 : Max β] [inst_3 : Bot β],   SupBotHomClass (SupBo
+tHom α β) α β
+· 使用定理 `TopologicalSpace.Closeds.coe_sup`：coe_sup (s t : Closeds α) : (↑(s ⊔ t) 
+: Set α) = ↑s union ↑t
+· 使用定理 `TopologicalSpace.Closeds.coe_bot`：coe_bot : (↑(⊥ : Closeds α) : Set α) =
+ ∅
 -/
-theorem coe_finset_sup (f : ι -> Closeds α) (s : Finset ι) :
+theorem coe_finset_sup (f : ι → Closeds α) (s : Finset ι) :
     (↑(s.sup f) : Set α) = s.sup ((↑) ∘ f) :=
   map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Closeds α) (Set α)) _ _
 
 @[simp, norm_cast]
-/--
-theorem `coe_finset_inf` / 定理 `coe_finset_inf`
-
-English:
-theorem coe_finset_inf
-  given: (f : ι -> Closeds α) (s : Finset ι)
-  proof: map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Closeds α) (Set α)) _ _
-
-@[simp]
-
-中文:
-定理 coe_finset_inf
-  条件: (f : ι -> Closeds α) (s : 有限集 ι)
-  证明: map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Closeds α) (Set α)) _ _
-
-@[simp]
-
-Depends on / 依赖: Closeds, InfTopHom, coe_inf, coe_top, map_finset_inf
+/-
+**TopologicalSpace.Closeds.coe_finset_inf** 是 Mathlib 中的一个定理，位于命名空间 `Topological
+Space.Closeds`。
+形式化陈述：coe_finset_inf (f : ι -> Closeds α) (s : Finset ι) : (↑(s.inf f) : Set α) 
+= s.inf ((↑) ∘ f)
+参数：f : ι -> Closeds α；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finset_inf`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeInf α] [inst_1 : OrderTop α]   [inst_2 : SemilatticeInf
+ β] …
+· 使用定理 `InfTopHom.instInfTopHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : Mi
+n α] [inst_1 : Top α] [inst_2 : Min β] [inst_3 : Top β],   InfTopHomClass (InfTo
+pHom α β) α β
+· 使用定理 `TopologicalSpace.Closeds.coe_inf`：coe_inf (s t : Closeds α) : (↑(s ⊓ t) 
+: Set α) = ↑s inter ↑t
+· 使用定理 `TopologicalSpace.Closeds.coe_top`：coe_top : (↑(⊤ : Closeds α) : Set α) =
+ univ
 -/
-theorem coe_finset_inf (f : ι -> Closeds α) (s : Finset ι) :
+theorem coe_finset_inf (f : ι → Closeds α) (s : Finset ι) :
     (↑(s.inf f) : Set α) = s.inf ((↑) ∘ f) :=
   map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Closeds α) (Set α)) _ _
 
 @[simp]
-/--
-theorem `mem_sInf` / 定理 `mem_sInf`
-
-English:
-theorem mem_sInf
-  given: {S : Set (Closeds α)} {x : α}
-  statement: x in sInf S ↔ forall s in S, x in s
-  proof: mem_iInter₂
-
-@[simp]
-
-中文:
-定理 mem_sInf
-  条件: {S : 集合 (Closeds α)} {x : α}
-  结论: x in sInf S ↔ 对任意 s in S, x in s
-  证明: mem_iInter₂
-
-@[simp]
+/-
+**TopologicalSpace.Closeds.mem_sInf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：mem_sInf {S : Set (Closeds α)} {x : α} : x in sInf S ↔ forall s in S, x in
+ s
+参数：Closeds α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_iInter₂`：mem_iInter₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋂ (i) (j), s i j) ↔ forall i j, x in s i j
 -/
-theorem mem_sInf {S : Set (Closeds α)} {x : α} : x in sInf S ↔ forall s in S, x in s := mem_iInter₂
+theorem mem_sInf {S : Set (Closeds α)} {x : α} : x ∈ sInf S ↔ ∀ s ∈ S, x ∈ s := mem_iInter₂
 
 @[simp]
-/--
-theorem `mem_iInf` / 定理 `mem_iInf`
-
-English:
-theorem mem_iInf
-  given: {ι} {x : α} {s : ι -> Closeds α}
-  statement: x in iInf s ↔ forall i, x in s i
-  proof: by simp [iInf]
+/-
+**TopologicalSpace.Closeds.mem_iInf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：mem_iInf {ι} {x : α} {s : ι -> Closeds α} : x in iInf s ↔ forall i, x in s
+ i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem mem_iInf {ι} {x : α} {s : ι → Closeds α} : x ∈ iInf s ↔ ∀ i, x ∈ s i := by simp [iInf]
 
 @[simp, norm_cast]
-
-中文:
-定理 mem_iInf
-  条件: {ι} {x : α} {s : ι -> Closeds α}
-  结论: x in iInf s ↔ 对任意 i, x in s i
-  证明: by simp [iInf]
-
-@[simp, norm_cast]
+/-
+**TopologicalSpace.Closeds.coe_iInf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：coe_iInf {ι} (s : ι -> Closeds α) : ((⨅ i, s i : Closeds α) : Set α) = ⋂ i
+, s i
+参数：s : ι -> Closeds α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iInf {ι} {x : α} {s : ι -> Closeds α} : x in iInf s ↔ forall i, x in s i := by simp [iInf]
-
-@[simp, norm_cast]
-/--
-theorem `coe_iInf` / 定理 `coe_iInf`
-
-English:
-theorem coe_iInf
-  given: {ι} (s : ι -> Closeds α)
-  statement: ((⨅ i, s i : Closeds α) : Set α) = ⋂ i, s i
-  proof: by
+theorem coe_iInf {ι} (s : ι → Closeds α) : ((⨅ i, s i : Closeds α) : Set α) = ⋂ i, s i := by
   ext; simp
-
-中文:
-定理 coe_iInf
-  条件: {ι} (s : ι -> Closeds α)
-  结论: ((⨅ i, s i : Closeds α) : 集合 α) = ⋂ i, s i
-  证明: by
-  ext; simp
+/-
+**TopologicalSpace.Closeds.iInf_def** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：iInf_def {ι} (s : ι -> Closeds α) : ⨅ i, s i = ⟨⋂ i, s i, isClosed_iInter 
+fun i => (s i).2⟩
+参数：s : ι -> Closeds α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Closeds.ext`：∀ {α : Type u_2} [inst : TopologicalSpace 
+α] {s t : TopologicalSpace.Closeds α}, ↑s = ↑t → s = t
+· 使用定理 `isClosed_iInter`：isClosed_iInter {f : ι -> Set X} (h : forall i, IsClose
+d (f i)) : IsClosed (⋂ i, f i)
+· 使用定理 `TopologicalSpace.Closeds.isClosed'`：∀ {α : Type u_4} [inst : Topological
+Space α] (self : TopologicalSpace.Closeds α), IsClosed self.carrier
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopologicalSpace.Closeds.coe_iInf`：coe_iInf {ι} (s : ι -> Closeds α) : (
+(⨅ i, s i : Closeds α) : Set α) = ⋂ i, s i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coe_iInf {ι} (s : ι -> Closeds α) : ((⨅ i, s i : Closeds α) : Set α) = ⋂ i, s i := by
-  ext; simp
-
-/--
-theorem `iInf_def` / 定理 `iInf_def`
-
-English:
-theorem iInf_def
-  given: {ι} (s : ι -> Closeds α)
-  proof: by ext1; simp
-
-@[simp]
-
-中文:
-定理 iInf_def
-  条件: {ι} (s : ι -> Closeds α)
-  证明: by ext1; simp
-
-@[simp]
--/
-theorem iInf_def {ι} (s : ι -> Closeds α) :
+theorem iInf_def {ι} (s : ι → Closeds α) :
     ⨅ i, s i = ⟨⋂ i, s i, isClosed_iInter fun i => (s i).2⟩ := by ext1; simp
 
 @[simp]
-/--
-theorem `iInf_mk` / 定理 `iInf_mk`
-
-English:
-theorem iInf_mk
-  given: {ι} (s : ι -> Set α) (h : forall i, IsClosed (s i))
-  proof: iInf_def _
-
-中文:
-定理 iInf_mk
-  条件: {ι} (s : ι -> 集合 α) (h : 对任意 i, 是闭集 (s i))
-  证明: iInf_def _
-
-Depends on / 依赖: iInf_def
+/-
+**TopologicalSpace.Closeds.iInf_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+loseds`。
+形式化陈述：iInf_mk {ι} (s : ι -> Set α) (h : forall i, IsClosed (s i)) : (⨅ i, ⟨s i, 
+h i⟩ : Closeds α) = ⟨⋂ i, s i, isClosed_iInter h⟩
+参数：s : ι -> Set α；h : forall i, IsClosed (s i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Closeds.iInf_def`：iInf_def {ι} (s : ι -> Closeds α) : ⨅
+ i, s i = ⟨⋂ i, s i, isClosed_iInter fun i => (s i).2⟩
 -/
-theorem iInf_mk {ι} (s : ι -> Set α) (h : forall i, IsClosed (s i)) :
+theorem iInf_mk {ι} (s : ι → Set α) (h : ∀ i, IsClosed (s i)) :
     (⨅ i, ⟨s i, h i⟩ : Closeds α) = ⟨⋂ i, s i, isClosed_iInter h⟩ :=
   iInf_def _
-
-/--
-Instance `instCoframe` / 实例 `instCoframe`
-
-English:
-instance instCoframe
-  signature: : Coframe (Closeds α)
-  body: fast_instance% .ofMinimalAxioms {
-  iInf_sup_le_sup_sInf a s :=
-    (SetLike.coe_injective <| by simp only [coe_sup, coe_iInf, coe_sInf, Set.union_iInter₂]).le }
-
-@[simps]
-
-中文:
-实例 instCoframe
-  签名: : 余frame (Closeds α)
-  定义体: fast_instance% .ofMinimalAxioms {
-  iInf_sup_le_sup_sInf a s :=
-    (SetLike.coe_injective <| by simp only [coe_sup, coe_iInf, coe_sInf, Set.union_iInter₂]).le }
-
-@[simps]
-
-Depends on / 依赖: fast_instance, ofMinimalAxioms
+/-
+**TopologicalSpace.Closeds.instCoframe** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.Closeds`。
+形式化陈述：instCoframe : Coframe (Closeds α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCoframe : Coframe (Closeds α) := fast_instance% .ofMinimalAxioms {
   iInf_sup_le_sup_sInf a s :=
     (SetLike.coe_injective <| by simp only [coe_sup, coe_iInf, coe_sInf, Set.union_iInter₂]).le }
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T1Space
-  signature: α] : Singleton α (Closeds α) where
-  body: ⟨{x}, isClosed_singleton⟩
-
-@[simp]
-
-中文:
-实例 [T1空间
-  签名: α] : 单例 α (Closeds α) where
-  定义体: ⟨{x}, isClosed_singleton⟩
-
-@[simp]
-
-Depends on / 依赖: isClosed_singleton
+/-
+**TopologicalSpace.Closeds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Closeds`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T1Space α] : Singleton α (Closeds α) where
   singleton x := ⟨{x}, isClosed_singleton⟩
 
 @[simp]
-/--
-theorem `mk_singleton` / 定理 `mk_singleton`
-
-English:
-theorem mk_singleton
-  given: [T1Space α] {x : α}
-  proof: rfl
-
-中文:
-定理 mk_singleton
-  条件: [T1空间 α] {x : α}
-  证明: rfl
+/-
+**TopologicalSpace.Closeds.mk_singleton** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSp
+ace.Closeds`。
+形式化陈述：mk_singleton [T1Space α] {x : α} : (⟨{x}, isClosed_singleton⟩ : Closeds α)
+ = {x}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_singleton`：isClosed_singleton [T1Space X] {x : X} : IsClosed ({
+x} : Set X)
 -/
 theorem mk_singleton [T1Space α] {x : α} :
     (⟨{x}, isClosed_singleton⟩ : Closeds α) = {x} :=
   rfl
-
-/--
-lemma `mem_singleton` / 引理 `mem_singleton`
-
-English:
-lemma mem_singleton
-  given: [T1Space α] {a b : α}
-  statement: a in ({b} : Closeds α) ↔ a = b
-  proof: Iff.rfl
-
-中文:
-引理 mem_singleton
-  条件: [T1空间 α] {a b : α}
-  结论: a in ({b} : Closeds α) ↔ a = b
-  证明: Iff.rfl
+/-
+**TopologicalSpace.Closeds.mem_singleton** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalS
+pace.Closeds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] [inst_1 : T1Space α] {a b : α
+}, a ∈ {b} ↔ a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_singleton [T1Space α] {a b : α} : a in ({b} : Closeds α) ↔ a = b := Iff.rfl
-
-/--
-theorem `singleton_injective` / 定理 `singleton_injective`
-
-English:
-theorem singleton_injective
-  given: [T1Space α]
-  statement: Function.Injective ({·} : α -> Closeds α)
-  proof: .of_comp (f := SetLike.coe) Set.singleton_injective
-
-@[simp]
-
-中文:
-定理 singleton_injective
-  条件: [T1空间 α]
-  结论: 函数.单射 ({·} : α -> Closeds α)
-  证明: .of_comp (f := SetLike.coe) Set.singleton_injective
-
-@[simp]
-
-Depends on / 依赖: Set.singleton_injective, SetLike, SetLike.coe, of_comp, singleton_injective
+@[simp] lemma mem_singleton [T1Space α] {a b : α} : a ∈ ({b} : Closeds α) ↔ a = b := Iff.rfl
+/-
+**TopologicalSpace.Closeds.singleton_injective** 是 Mathlib 中的一个定理，位于命名空间 `Topolo
+gicalSpace.Closeds`。
+形式化陈述：singleton_injective [T1Space α] : Function.Injective ({·} : α -> Closeds α
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `Set.singleton_injective`：singleton_injective : Injective (singleton : α 
+-> Set α)
 -/
-theorem singleton_injective [T1Space α] : Function.Injective ({·} : α -> Closeds α) :=
+theorem singleton_injective [T1Space α] : Function.Injective ({·} : α → Closeds α) :=
   .of_comp (f := SetLike.coe) Set.singleton_injective
 
 @[simp]
-/--
-theorem `singleton_inj` / 定理 `singleton_inj`
-
-English:
-theorem singleton_inj
-  given: [T1Space α] {x y : α}
-  statement: ({x} : Closeds α) = {y} ↔ x = y
-  proof: singleton_injective.eq_iff
-
-中文:
-定理 singleton_inj
-  条件: [T1空间 α] {x y : α}
-  结论: ({x} : Closeds α) = {y} ↔ x = y
-  证明: singleton_injective.eq_iff
-
-Depends on / 依赖: eq_iff, singleton_injective, singleton_injective.eq_iff
+/-
+**TopologicalSpace.Closeds.singleton_inj** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalS
+pace.Closeds`。
+形式化陈述：singleton_inj [T1Space α] {x y : α} : ({x} : Closeds α) = {y} ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `TopologicalSpace.Closeds.singleton_injective`：singleton_injective [T1Spa
+ce α] : Function.Injective ({·} : α -> Closeds α)
 -/
 theorem singleton_inj [T1Space α] {x y : α} : ({x} : Closeds α) = {y} ↔ x = y :=
   singleton_injective.eq_iff
 
 /-- The preimage of a closed set under a continuous map. -/
 @[simps]
-/--
-Definition of `preimage` / `preimage` 的定义
+/-
+**TopologicalSpace.Closeds.preimage** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：preimage (s : Closeds β) {f : α -> β} (hf : Continuous f) : Closeds α
+参数：s : Closeds β；hf : Continuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preimage
-  signature: (s : Closeds β) {f : α -> β} (hf : Continuous f)
-  body: ⟨f ⁻¹' s, s.isClosed.preimage hf⟩
-
-中文:
-定义 原像
-  签名: (s : Closeds β) {f : α -> β} (hf : 连续 f)
-  定义体: ⟨f ⁻¹' s, s.isClosed.preimage hf⟩
-
-Depends on / 依赖: isClosed, preimage, s.isClosed.preimage
+--- 原说明 ---
+The preimage of a closed set under a continuous map.
 -/
-def preimage (s : Closeds β) {f : α -> β} (hf : Continuous f) : Closeds α :=
+def preimage (s : Closeds β) {f : α → β} (hf : Continuous f) : Closeds α :=
   ⟨f ⁻¹' s, s.isClosed.preimage hf⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SProd (Closeds α) (Closeds β) (Closeds (α × β))
-  body: ⟨s ×ˢ t, s.isClosed.prod t.isClosed⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: SProd (Closeds α) (Closeds β) (Closeds (α × β))
-  定义体: ⟨s ×ˢ t, s.isClosed.prod t.isClosed⟩
-
-@[simp]
-
-Depends on / 依赖: isClosed, s.isClosed.prod, t.isClosed
+/-
+**TopologicalSpace.Closeds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Closeds`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SProd (Closeds α) (Closeds β) (Closeds (α × β)) where
   sprod s t := ⟨s ×ˢ t, s.isClosed.prod t.isClosed⟩
 
 @[simp]
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (s : Closeds α) (t : Closeds β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prod
-  条件: (s : Closeds α) (t : Closeds β)
-  证明: rfl
-
-@[simp]
+/-
+**TopologicalSpace.Closeds.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：coe_prod (s : Closeds α) (t : Closeds β) : (s ×ˢ t : Closeds (α × β)) = (s
+ : Set α) ×ˢ (t : Set β)
+参数：s : Closeds α；t : Closeds β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prod (s : Closeds α) (t : Closeds β) :
     (s ×ˢ t : Closeds (α × β)) = (s : Set α) ×ˢ (t : Set β) :=
   rfl
 
 @[simp]
-/--
-theorem `mem_prod` / 定理 `mem_prod`
-
-English:
-theorem mem_prod
-  given: {s : Closeds α} {t : Closeds β} {x : α × β}
-  statement: x in s ×ˢ t ↔ x.1 in s ∧ x.2 in t
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_prod
-  条件: {s : Closeds α} {t : Closeds β} {x : α × β}
-  结论: x in s ×ˢ t ↔ x.1 in s ∧ x.2 in t
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**TopologicalSpace.Closeds.mem_prod** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Closeds`。
+形式化陈述：mem_prod {s : Closeds α} {t : Closeds β} {x : α × β} : x in s ×ˢ t ↔ x.1 i
+n s ∧ x.2 in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_prod {s : Closeds α} {t : Closeds β} {x : α × β} : x in s ×ˢ t ↔ x.1 in s ∧ x.2 in t :=
+theorem mem_prod {s : Closeds α} {t : Closeds β} {x : α × β} : x ∈ s ×ˢ t ↔ x.1 ∈ s ∧ x.2 ∈ t :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `singleton_prod_singleton` / 定理 `singleton_prod_singleton`
-
-English:
-theorem singleton_prod_singleton
-  given: [T1Space α] [T1Space β] (x : α) (y : β)
-  proof: Closeds.ext Set.singleton_prod_singleton
-
-中文:
-定理 singleton_prod_singleton
-  条件: [T1空间 α] [T1空间 β] (x : α) (y : β)
-  证明: Closeds.ext Set.singleton_prod_singleton
-
-Depends on / 依赖: Closeds, Closeds.ext, Set.singleton_prod_singleton, singleton_prod_singleton
+/-
+**TopologicalSpace.Closeds.singleton_prod_singleton** 是 Mathlib 中的一个定理，位于命名空间 `T
+opologicalSpace.Closeds`。
+形式化陈述：singleton_prod_singleton [T1Space α] [T1Space β] (x : α) (y : β) : ({x} ×ˢ
+ {y} : Closeds (α × β)) = {(x, y)}
+参数：x : α；y : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Closeds.ext`：∀ {α : Type u_2} [inst : TopologicalSpace 
+α] {s t : TopologicalSpace.Closeds α}, ↑s = ↑t → s = t
+· 使用定理 `instT1SpaceProd`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpac
+e X] [inst_1 : TopologicalSpace Y] [T1Space X] [T1Space Y],   T1Space (X × Y)
+· 使用定理 `Set.singleton_prod_singleton`：singleton_prod_singleton : ({a} : Set α) ×
+ˢ ({b} : Set β) = {(a, b)}
 -/
 theorem singleton_prod_singleton [T1Space α] [T1Space β] (x : α) (y : β) :
     ({x} ×ˢ {y} : Closeds (α × β)) = {(x, y)} :=
@@ -1044,52 +673,30 @@ end Closeds
 
 /-- The complement of a closed set as an open set. -/
 @[simps]
-/--
-Definition of `Closeds.compl` / `Closeds.compl` 的定义
+/-
+**TopologicalSpace.Closeds.compl** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Clo
+seds`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Closeds α 
+→ TopologicalSpace.Opens α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Closeds.compl
-  signature: (s : Closeds α)
-  body: ⟨sᶜ, s.2.isOpen_compl⟩
-
-中文:
-定义 Closeds.compl
-  签名: (s : Closeds α)
-  定义体: ⟨sᶜ, s.2.isOpen_compl⟩
-
-Depends on / 依赖: isOpen_compl
+--- 原说明 ---
+The complement of a closed set as an open set.
 -/
 def Closeds.compl (s : Closeds α) : Opens α :=
   ⟨sᶜ, s.2.isOpen_compl⟩
 
 /-- The complement of an open set as a closed set. -/
 @[simps]
-/--
-Definition of `Opens.compl` / `Opens.compl` 的定义
+/-
+**TopologicalSpace.Opens.compl** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.Opens
+`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Opens α → 
+TopologicalSpace.Closeds α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Opens.compl
-  signature: (s : Opens α)
-  body: ⟨sᶜ, s.2.isClosed_compl⟩
-
-nonrec theorem Closeds.compl_compl (s : Closeds α) : s.compl.compl = s :=
-  Closeds.ext (compl_compl (s : Set α))
-
-nonrec theorem Opens.compl_compl (s : Opens α) : s.compl.compl = s :=
-  Opens.ext (compl_compl (s : Set α))
-
-中文:
-定义 Opens.compl
-  签名: (s : Opens α)
-  定义体: ⟨sᶜ, s.2.isClosed_compl⟩
-
-nonrec theorem Closeds.compl_compl (s : Closeds α) : s.compl.compl = s :=
-  Closeds.ext (compl_compl (s : Set α))
-
-nonrec theorem Opens.compl_compl (s : Opens α) : s.compl.compl = s :=
-  Opens.ext (compl_compl (s : Set α))
-
-Depends on / 依赖: isClosed_compl
+--- 原说明 ---
+The complement of an open set as a closed set.
 -/
 def Opens.compl (s : Opens α) : Closeds α :=
   ⟨sᶜ, s.2.isClosed_compl⟩
@@ -1099,39 +706,35 @@ nonrec theorem Closeds.compl_compl (s : Closeds α) : s.compl.compl = s :=
 
 nonrec theorem Opens.compl_compl (s : Opens α) : s.compl.compl = s :=
   Opens.ext (compl_compl (s : Set α))
-
-/--
-theorem `Closeds.compl_bijective` / 定理 `Closeds.compl_bijective`
-
-English:
-theorem Closeds.compl_bijective
-  statement: Function.Bijective (@Closeds.compl α _)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨Opens.compl, Closeds.compl_compl, Opens.compl_compl⟩
-
-中文:
-定理 Closeds.compl_bijective
-  结论: 函数.双射 (@Closeds.compl α _)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨Opens.compl, Closeds.compl_compl, Opens.compl_compl⟩
-
-Depends on / 依赖: Closeds, Closeds.compl_compl, Function, Function.bijective_iff_has_inverse.mpr, Opens.compl, Opens.compl_compl, bijective_iff_has_inverse, compl_compl
+/-
+**TopologicalSpace.Closeds.compl_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Topologica
+lSpace.Closeds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α], Function.Bijective Topologic
+alSpace.Closeds.compl
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `TopologicalSpace.Closeds.compl_compl`：∀ {α : Type u_2} [inst : Topologic
+alSpace α] (s : TopologicalSpace.Closeds α), s.compl.compl = s
+· 使用定理 `TopologicalSpace.Opens.compl_compl`：∀ {α : Type u_2} [inst : Topological
+Space α] (s : TopologicalSpace.Opens α), s.compl.compl = s
 -/
 theorem Closeds.compl_bijective : Function.Bijective (@Closeds.compl α _) :=
   Function.bijective_iff_has_inverse.mpr ⟨Opens.compl, Closeds.compl_compl, Opens.compl_compl⟩
-
-/--
-theorem `Opens.compl_bijective` / 定理 `Opens.compl_bijective`
-
-English:
-theorem Opens.compl_bijective
-  statement: Function.Bijective (@Opens.compl α _)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨Closeds.compl, Opens.compl_compl, Closeds.compl_compl⟩
-
-中文:
-定理 Opens.compl_bijective
-  结论: 函数.双射 (@Opens.compl α _)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨Closeds.compl, Opens.compl_compl, Closeds.compl_compl⟩
-
-Depends on / 依赖: Closeds, Closeds.compl, Closeds.compl_compl, Function, Function.bijective_iff_has_inverse.mpr, Opens.compl_compl, bijective_iff_has_inverse, compl_compl
+/-
+**TopologicalSpace.Opens.compl_bijective** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalS
+pace.Opens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α], Function.Bijective Topologic
+alSpace.Opens.compl
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `TopologicalSpace.Opens.compl_compl`：∀ {α : Type u_2} [inst : Topological
+Space α] (s : TopologicalSpace.Opens α), s.compl.compl = s
+· 使用定理 `TopologicalSpace.Closeds.compl_compl`：∀ {α : Type u_2} [inst : Topologic
+alSpace α] (s : TopologicalSpace.Closeds α), s.compl.compl = s
 -/
 theorem Opens.compl_bijective : Function.Bijective (@Opens.compl α _) :=
   Function.bijective_iff_has_inverse.mpr ⟨Closeds.compl, Opens.compl_compl, Closeds.compl_compl⟩
@@ -1141,28 +744,16 @@ variable (α)
 /-- `TopologicalSpace.Closeds.compl` as an `OrderIso` to the order dual of
 `TopologicalSpace.Opens α`. -/
 @[simps]
-/--
-Definition of `Closeds.complOrderIso` / `Closeds.complOrderIso` 的定义
+/-
+**TopologicalSpace.Closeds.complOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalS
+pace.Closeds`。
+形式化陈述：(α : Type u_2) → [inst : TopologicalSpace α] → TopologicalSpace.Closeds α 
+≃o (TopologicalSpace.Opens α)ᵒᵈ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Closeds.complOrderIso
-  signature: : Closeds α ≃o (Opens α)ᵒᵈ where
-  body: OrderDual.toDual ∘ Closeds.compl
-  invFun := Opens.compl ∘ OrderDual.ofDual
-  left_inv s := by simp [Closeds.compl_compl]
-  right_inv s := by simp [Opens.compl_compl]
-  map_rel_iff' := (@OrderDual.toDual_le_toDual (Opens α)).trans compl_subset_compl
-
-中文:
-定义 Closeds.complOrderIso
-  签名: : Closeds α ≃o (Opens α)ᵒᵈ where
-  定义体: OrderDual.toDual ∘ Closeds.compl
-  invFun := Opens.compl ∘ OrderDual.ofDual
-  left_inv s := by simp [Closeds.compl_compl]
-  right_inv s := by simp [Opens.compl_compl]
-  map_rel_iff' := (@OrderDual.toDual_le_toDual (Opens α)).trans compl_subset_compl
-
-Depends on / 依赖: Closeds, Closeds.compl, OrderDual, OrderDual.toDual, toDual
+--- 原说明 ---
+`TopologicalSpace.Closeds.compl` as an `OrderIso` to the order dual of
+`TopologicalSpace.Opens α`.
 -/
 def Closeds.complOrderIso : Closeds α ≃o (Opens α)ᵒᵈ where
   toFun := OrderDual.toDual ∘ Closeds.compl
@@ -1174,28 +765,16 @@ def Closeds.complOrderIso : Closeds α ≃o (Opens α)ᵒᵈ where
 /-- `TopologicalSpace.Opens.compl` as an `OrderIso` to the order dual of
 `TopologicalSpace.Closeds α`. -/
 @[simps]
-/--
-Definition of `Opens.complOrderIso` / `Opens.complOrderIso` 的定义
+/-
+**TopologicalSpace.Opens.complOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpa
+ce.Opens`。
+形式化陈述：(α : Type u_2) → [inst : TopologicalSpace α] → TopologicalSpace.Opens α ≃o
+ (TopologicalSpace.Closeds α)ᵒᵈ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Opens.complOrderIso
-  signature: : Opens α ≃o (Closeds α)ᵒᵈ where
-  body: OrderDual.toDual ∘ Opens.compl
-  invFun := Closeds.compl ∘ OrderDual.ofDual
-  left_inv s := by simp [Opens.compl_compl]
-  right_inv s := by simp [Closeds.compl_compl]
-  map_rel_iff' := (@OrderDual.toDual_le_toDual (Closeds α)).trans compl_subset_compl
-
-中文:
-定义 Opens.complOrderIso
-  签名: : Opens α ≃o (Closeds α)ᵒᵈ where
-  定义体: OrderDual.toDual ∘ Opens.compl
-  invFun := Closeds.compl ∘ OrderDual.ofDual
-  left_inv s := by simp [Opens.compl_compl]
-  right_inv s := by simp [Closeds.compl_compl]
-  map_rel_iff' := (@OrderDual.toDual_le_toDual (Closeds α)).trans compl_subset_compl
-
-Depends on / 依赖: Opens.compl, OrderDual, OrderDual.toDual, toDual
+--- 原说明 ---
+`TopologicalSpace.Opens.compl` as an `OrderIso` to the order dual of
+`TopologicalSpace.Closeds α`.
 -/
 def Opens.complOrderIso : Opens α ≃o (Closeds α)ᵒᵈ where
   toFun := OrderDual.toDual ∘ Opens.compl
@@ -1205,101 +784,129 @@ def Opens.complOrderIso : Opens α ≃o (Closeds α)ᵒᵈ where
   map_rel_iff' := (@OrderDual.toDual_le_toDual (Closeds α)).trans compl_subset_compl
 
 variable {α}
-
-/--
-lemma `Closeds.coe_eq_singleton_of_isAtom` / 引理 `Closeds.coe_eq_singleton_of_isAtom`
-
-English:
-lemma Closeds.coe_eq_singleton_of_isAtom
-  given: [T0Space α] {s : Closeds α} (hs : IsAtom s)
-  proof: by
-  refine minimal_nonempty_closed_eq_singleton s.2 (coe_nonempty.2 hs.1) fun t hts ht ht' => ?_
-  lift t to Closeds α using ht'
-exact SetLike.coe_injective.eq_iff.2 (hs.le_iff_eq <| coe_nonempty.1 ht).1 hts
-
-中文:
-引理 Closeds.coe_eq_singleton_of_isAtom
-  条件: [T0空间 α] {s : Closeds α} (hs : IsAtom s)
-  证明: by
-  refine minimal_nonempty_closed_eq_singleton s.2 (coe_nonempty.2 hs.1) fun t hts ht ht' => ?_
-  lift t to Closeds α using ht'
-exact SetLike.coe_injective.eq_iff.2 (hs.le_iff_eq <| coe_nonempty.1 ht).1 hts
-
-Depends on / 依赖: Closeds, SetLike, SetLike.coe_injective.eq_iff, coe_injective, coe_nonempty, eq_iff, hs.le_iff_eq, le_iff_eq, minimal_nonempty_closed_eq_singleton
+/-
+**TopologicalSpace.Closeds.coe_eq_singleton_of_isAtom** 是 Mathlib 中的一个定理，位于命名空间 
+`TopologicalSpace.Closeds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] [T0Space α] {s : TopologicalS
+pace.Closeds α}, IsAtom s → ∃ a, ↑s = {a}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `minimal_nonempty_closed_eq_singleton`：minimal_nonempty_closed_eq_singlet
+on [T0Space X] {s : Set X} (hs : IsClosed s) (hne : s.Nonempty) (hmin : forall t
+, t subseteq s -> t.Nonemp…
+· 使用定理 `TopologicalSpace.Closeds.isClosed'`：∀ {α : Type u_4} [inst : Topological
+Space α] (self : TopologicalSpace.Closeds α), IsClosed self.carrier
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `TopologicalSpace.Closeds.coe_nonempty`：coe_nonempty {s : Closeds α} : (s
+ : Set α).Nonempty ↔ s != ⊥
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `TopologicalSpace.Closeds.instCanLiftSetCoeIsClosed`：∀ {α : Type u_2} [in
+st : TopologicalSpace α], CanLift (Set α) (TopologicalSpace.Closeds α) SetLike.c
+oe IsClosed
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `IsAtom.le_iff_eq`：IsAtom.le_iff_eq (ha : IsAtom a) (hb : b != ⊥) : b <= 
+a ↔ b = a
 -/
 lemma Closeds.coe_eq_singleton_of_isAtom [T0Space α] {s : Closeds α} (hs : IsAtom s) :
-    exists a, (s : Set α) = {a} := by
-  refine minimal_nonempty_closed_eq_singleton s.2 (coe_nonempty.2 hs.1) fun t hts ht ht' => ?_
+    ∃ a, (s : Set α) = {a} := by
+  refine minimal_nonempty_closed_eq_singleton s.2 (coe_nonempty.2 hs.1) fun t hts ht ht' ↦ ?_
   lift t to Closeds α using ht'
-exact SetLike.coe_injective.eq_iff.2 (hs.le_iff_eq <| coe_nonempty.1 ht).1 hts
-
-/--
-lemma `Closeds.isAtom_coe` / 引理 `Closeds.isAtom_coe`
-
-English:
-lemma Closeds.isAtom_coe
-  given: [T1Space α] {s : Closeds α}
-  proof: Closeds.gi.isAtom_iff' rfl
-    (fun t ht => by obtain ⟨x, rfl⟩ := Set.isAtom_iff.1 ht; exact closure_singleton) s
-
-中文:
-引理 Closeds.isAtom_coe
-  条件: [T1空间 α] {s : Closeds α}
-  证明: Closeds.gi.isAtom_iff' rfl
-    (fun t ht => by obtain ⟨x, rfl⟩ := Set.isAtom_iff.1 ht; exact closure_singleton) s
+  exact SetLike.coe_injective.eq_iff.2 <| (hs.le_iff_eq <| coe_nonempty.1 ht).1 hts
+/-
+**TopologicalSpace.Closeds.isAtom_coe** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpac
+e.Closeds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] [T1Space α] {s : TopologicalS
+pace.Closeds α}, IsAtom ↑s ↔ IsAtom s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisInsertion.isAtom_iff'`：isAtom_iff' [OrderBot α] [IsAtomic α] [Orde
+rBot β] {l : α -> β} {u : β -> α} (gi : GaloisInsertion l u) (hbot : u ⊥ = ⊥) (h
+_atom : forall a,…
+· 使用定理 `IsAtomistic.instIsAtomic`：∀ {α : Type u_2} [inst : PartialOrder α] [inst
+_1 : OrderBot α] [IsAtomistic α], IsAtomic α
+· 使用定理 `Set.instIsAtomistic`：∀ {α : Type u_2}, IsAtomistic (Set α)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.isAtom_iff`：isAtom_iff {s : Set α} : IsAtom s ↔ exists x, s = {x}
+· 使用定理 `closure_singleton`：closure_singleton [T1Space X] {x : X} : closure ({x} 
+: Set X) = {x}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp, norm_cast] lemma Closeds.isAtom_coe [T1Space α] {s : Closeds α} :
     IsAtom (s : Set α) ↔ IsAtom s :=
   Closeds.gi.isAtom_iff' rfl
-    (fun t ht => by obtain ⟨x, rfl⟩ := Set.isAtom_iff.1 ht; exact closure_singleton) s
+    (fun t ht ↦ by obtain ⟨x, rfl⟩ := Set.isAtom_iff.1 ht; exact closure_singleton) s
 
-/--
-theorem `Closeds.isAtom_iff` / 定理 `Closeds.isAtom_iff`
+/-- in a `T1Space`, atoms of `TopologicalSpace.Closeds α` are precisely the singletons. -/
+/-
+**TopologicalSpace.Closeds.isAtom_iff** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpac
+e.Closeds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] [inst_1 : T1Space α] {s : Top
+ologicalSpace.Closeds α},   IsAtom s ↔ ∃ x, s = {x}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem Closeds.isAtom_iff
-  given: [T1Space α] {s : Closeds α}
-  proof: by
-  simp [← Closeds.isAtom_coe, Set.isAtom_iff, SetLike.ext_iff, Set.ext_iff]
-
-中文:
-定理 Closeds.isAtom_iff
-  条件: [T1空间 α] {s : Closeds α}
-  证明: by
-  simp [← Closeds.isAtom_coe, Set.isAtom_iff, SetLike.ext_iff, Set.ext_iff]
-
-Depends on / 依赖: Closeds, Closeds.isAtom_coe, Set.ext_iff, Set.isAtom_iff, SetLike, SetLike.ext_iff, ext_iff, isAtom_coe, isAtom_iff
+--- 原说明 ---
+in a `T1Space`, atoms of `TopologicalSpace.Closeds α` are precisely the singleto
+ns.
 -/
 theorem Closeds.isAtom_iff [T1Space α] {s : Closeds α} :
-    IsAtom s ↔ exists x, s = {x} := by
+    IsAtom s ↔ ∃ x, s = {x} := by
   simp [← Closeds.isAtom_coe, Set.isAtom_iff, SetLike.ext_iff, Set.ext_iff]
 
-/--
-theorem `Opens.isCoatom_iff` / 定理 `Opens.isCoatom_iff`
+/-- in a `T1Space`, coatoms of `TopologicalSpace.Opens α` are precisely complements of singletons:
+`({x} : Closeds α).compl`. -/
+/-
+**TopologicalSpace.Opens.isCoatom_iff** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpac
+e.Opens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] [inst_1 : T1Space α] {s : Top
+ologicalSpace.Opens α},   IsCoatom s ↔ ∃ x, s = {x}.compl
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopologicalSpace.Opens.compl_compl`：∀ {α : Type u_2} [inst : Topological
+Space α] (s : TopologicalSpace.Opens α), s.compl.compl = s
+· 使用定理 `isAtom_dual_iff_isCoatom`：isAtom_dual_iff_isCoatom [OrderTop α] {a : α} 
+: IsAtom (OrderDual.toDual a) ↔ IsCoatom a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `OrderIso.isAtom_iff`：isAtom_iff [OrderBot α] [OrderBot β] (f : α ≃o β) (
+a : α) : IsAtom (f a) ↔ IsAtom a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `TopologicalSpace.Closeds.compl_bijective`：∀ {α : Type u_2} [inst : Topol
+ogicalSpace α], Function.Bijective TopologicalSpace.Closeds.compl
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem Opens.isCoatom_iff
-  given: [T1Space α] {s : Opens α}
-  proof: by
-  rw [← s.compl_compl]; rw [← isAtom_dual_iff_isCoatom]
-  change IsAtom (Closeds.complOrderIso α s.compl) ↔ _
-  simp only [(Closeds.complOrderIso α).isAtom_iff, Closeds.isAtom_iff,
-    Closeds.compl_bijective.injective.eq_iff]
-
-中文:
-定理 Opens.isCoatom_iff
-  条件: [T1空间 α] {s : Opens α}
-  证明: by
-  rw [← s.compl_compl]; rw [← isAtom_dual_iff_isCoatom]
-  change IsAtom (Closeds.complOrderIso α s.compl) ↔ _
-  simp only [(Closeds.complOrderIso α).isAtom_iff, Closeds.isAtom_iff,
-    Closeds.compl_bijective.injective.eq_iff]
-
-Depends on / 依赖: Closeds, Closeds.complOrderIso, Closeds.compl_bijective.injective.eq_iff, Closeds.isAtom_iff, IsAtom, complOrderIso, compl_bijective, compl_compl, eq_iff, injective, isAtom_dual_iff_isCoatom, isAtom_iff, s.compl, s.compl_compl
+--- 原说明 ---
+in a `T1Space`, coatoms of `TopologicalSpace.Opens α` are precisely complements 
+of singletons:
+`({x} : Closeds α).compl`.
 -/
 theorem Opens.isCoatom_iff [T1Space α] {s : Opens α} :
-    IsCoatom s ↔ exists x, s = ({x} : Closeds α).compl := by
-  rw [← s.compl_compl]; rw [← isAtom_dual_iff_isCoatom]
+    IsCoatom s ↔ ∃ x, s = ({x} : Closeds α).compl := by
+  rw [← s.compl_compl, ← isAtom_dual_iff_isCoatom]
   change IsAtom (Closeds.complOrderIso α s.compl) ↔ _
   simp only [(Closeds.complOrderIso α).isAtom_iff, Closeds.isAtom_iff,
     Closeds.compl_bijective.injective.eq_iff]
@@ -1307,22 +914,14 @@ theorem Opens.isCoatom_iff [T1Space α] {s : Opens α} :
 /-! ### Clopen sets -/
 
 
-/--
-Definition of `Clopens` / `Clopens` 的定义
+/-- The type of clopen sets of a topological space. -/
+/-
+**TopologicalSpace.Clopens** 是 Mathlib 中的一个归纳类型，位于命名空间 `TopologicalSpace`。
+形式化陈述：(α : Type u_4) → [TopologicalSpace α] → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Clopens
-  parameters: (α : Type*) [TopologicalSpace α]
-  axioms and operations (2):
-    - carrier : Set α
-    - isClopen' : IsClopen carrier
-
-中文:
-结构 Clopens
-  参数: (α : 类型) [拓扑空间 α]
-  公理与运算 (2 个):
-    - carrier : 集合 α
-    - isClopen' : IsClopen carrier
+--- 原说明 ---
+The type of clopen sets of a topological space.
 -/
 structure Clopens (α : Type*) [TopologicalSpace α] where
   /-- the carrier set, i.e. the points in this set -/
@@ -1331,571 +930,332 @@ structure Clopens (α : Type*) [TopologicalSpace α] where
 
 namespace Clopens
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (Clopens α) α
-  body: s.carrier
-  coe_injective s t h := by cases s; cases t; congr
-
-中文:
-实例 :
-  签名: 集合状 (Clopens α) α
-  定义体: s.carrier
-  coe_injective s t h := by cases s; cases t; congr
-
-Depends on / 依赖: carrier, s.carrier
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (Clopens α) α where
   coe s := s.carrier
   coe_injective s t h := by cases s; cases t; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Clopens α)
-  body: fast_instance% .ofSetLike (Clopens α) α
-
-中文:
-实例 :
-  签名: 偏序 (Clopens α)
-  定义体: fast_instance% .ofSetLike (Clopens α) α
-
-Depends on / 依赖: Clopens, fast_instance, ofSetLike
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Clopens α) := fast_instance% .ofSetLike (Clopens α) α
-
-/--
-theorem `isClopen` / 定理 `isClopen`
-
-English:
-theorem isClopen
-  given: (s : Clopens α)
-  statement: IsClopen (s : Set α)
-  proof: s.isClopen'
-
-中文:
-定理 isClopen
-  条件: (s : Clopens α)
-  结论: IsClopen (s : 集合 α)
-  证明: s.isClopen'
-
-Depends on / 依赖: isClopen, s.isClopen
+/-
+**TopologicalSpace.Clopens.isClopen** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Clopens`。
+形式化陈述：isClopen (s : Clopens α) : IsClopen (s : Set α)
+参数：s : Clopens α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.Clopens.isClopen'`：∀ {α : Type u_4} [inst : Topological
+Space α] (self : TopologicalSpace.Clopens α), IsClopen self.carrier
 -/
 theorem isClopen (s : Clopens α) : IsClopen (s : Set α) :=
   s.isClopen'
-
-/--
-lemma `isOpen` / 引理 `isOpen`
-
-English:
-lemma isOpen
-  given: (s : Clopens α)
-  statement: IsOpen (s : Set α)
-  proof: s.isClopen.isOpen
-
-中文:
-引理 isOpen
-  条件: (s : Clopens α)
-  结论: 是开集 (s : 集合 α)
-  证明: s.isClopen.isOpen
-
-Depends on / 依赖: isClopen, isOpen, s.isClopen.isOpen
+/-
+**TopologicalSpace.Clopens.isOpen** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.Cl
+opens`。
+形式化陈述：isOpen (s : Clopens α) : IsOpen (s : Set α)
+参数：s : Clopens α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClopen.isOpen`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X},
+ IsClopen s → IsOpen s
+· 使用定理 `TopologicalSpace.Clopens.isClopen`：isClopen (s : Clopens α) : IsClopen (
+s : Set α)
 -/
 lemma isOpen (s : Clopens α) : IsOpen (s : Set α) := s.isClopen.isOpen
-
-/--
-lemma `isClosed` / 引理 `isClosed`
-
-English:
-lemma isClosed
-  given: (s : Clopens α)
-  statement: IsClosed (s : Set α)
-  proof: s.isClopen.isClosed
-
-中文:
-引理 isClosed
-  条件: (s : Clopens α)
-  结论: 是闭集 (s : 集合 α)
-  证明: s.isClopen.isClosed
-
-Depends on / 依赖: isClopen, isClosed, s.isClopen.isClosed
+/-
+**TopologicalSpace.Clopens.isClosed** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSpace.
+Clopens`。
+形式化陈述：isClosed (s : Clopens α) : IsClosed (s : Set α)
+参数：s : Clopens α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClopen.isClosed`：∀ {X : Type u} [inst : TopologicalSpace X] {s : Set X
+}, IsClopen s → IsClosed s
+· 使用定理 `TopologicalSpace.Clopens.isClopen`：isClopen (s : Clopens α) : IsClopen (
+s : Set α)
 -/
 lemma isClosed (s : Clopens α) : IsClosed (s : Set α) := s.isClopen.isClosed
 
-/--
-Definition of `Simps.coe` / `Simps.coe` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**TopologicalSpace.Clopens.Simps.coe** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace
+.Clopens.Simps`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Clopens α 
+→ Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.coe
-  signature: (s : Clopens α)
-  body: s
-
-initialize_simps_projections Clopens (carrier -> coe, as_prefix coe)
-
-中文:
-定义 Simps.coe
-  签名: (s : Clopens α)
-  定义体: s
-
-initialize_simps_projections Clopens (carrier -> coe, as_prefix coe)
+--- 原说明 ---
+See Note [custom simps projection].
 -/
 def Simps.coe (s : Clopens α) : Set α := s
 
-initialize_simps_projections Clopens (carrier -> coe, as_prefix coe)
+initialize_simps_projections Clopens (carrier → coe, as_prefix coe)
 
-/--
-Definition of `toOpens` / `toOpens` 的定义
+/-- Reinterpret a clopen as an open. -/
+/-
+**TopologicalSpace.Clopens.toOpens** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.C
+lopens`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Clopens α 
+→ TopologicalSpace.Opens α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `TopologicalSpace.Clopens.isOpen`：isOpen (s : Clopens α) : IsOpen (s : Se
+t α)
 
-English:
-definition toOpens
-  signature: (s : Clopens α)
-  body: ⟨s, s.isOpen⟩
-
-中文:
-定义 toOpens
-  签名: (s : Clopens α)
-  定义体: ⟨s, s.isOpen⟩
+--- 原说明 ---
+Reinterpret a clopen as an open.
 -/
 @[simps] def toOpens (s : Clopens α) : Opens α := ⟨s, s.isOpen⟩
 
-/--
-Definition of `toCloseds` / `toCloseds` 的定义
+/-- Reinterpret a clopen as a closed. -/
+/-
+**TopologicalSpace.Clopens.toCloseds** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace
+.Clopens`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Clopens α 
+→ TopologicalSpace.Closeds α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `TopologicalSpace.Clopens.isClosed`：isClosed (s : Clopens α) : IsClosed (
+s : Set α)
 
-English:
-definition toCloseds
-  signature: (s : Clopens α)
-  body: ⟨s, s.isClosed⟩
-
-@[ext]
-
-中文:
-定义 toCloseds
-  签名: (s : Clopens α)
-  定义体: ⟨s, s.isClosed⟩
-
-@[ext]
+--- 原说明 ---
+Reinterpret a clopen as a closed.
 -/
 @[simps] def toCloseds (s : Clopens α) : Closeds α := ⟨s, s.isClosed⟩
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**TopologicalSpace.Clopens.ext** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Clope
+ns`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {s t : TopologicalSpace.Clope
+ns α}, ↑s = ↑t → s = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
 
-English:
-theorem ext
-  given: {s t : Clopens α} (h : (s : Set α) = t)
-  statement: s = t
-  proof: SetLike.ext' h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {s t : Clopens α} (h : (s : 集合 α) = t)
-  结论: s = t
-  证明: SetLike.ext' h
-
-@[simp]
+--- 原说明 ---
+Reinterpret a clopen as a closed.
 -/
 protected theorem ext {s t : Clopens α} (h : (s : Set α) = t) : s = t :=
   SetLike.ext' h
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (s : Set α) (h)
-  statement: (mk s h : Set α) = s
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (s : 集合 α) (h)
-  结论: (mk s h : 集合 α) = s
-  证明: rfl
+/-
+**TopologicalSpace.Clopens.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Cl
+opens`。
+形式化陈述：coe_mk (s : Set α) (h) : (mk s h : Set α) = s
+参数：s : Set α；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (s : Set α) (h) : (mk s h : Set α) = s :=
   rfl
-
-/--
-lemma `mem_mk` / 引理 `mem_mk`
-
-English:
-lemma mem_mk
-  given: {s : Set α} {x h}
-  statement: x in mk s h ↔ x in s
-  proof: .rfl
-
-中文:
-引理 mem_mk
-  条件: {s : 集合 α} {x h}
-  结论: x in mk s h ↔ x in s
-  证明: .rfl
+/-
+**TopologicalSpace.Clopens.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.Cl
+opens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {s : Set α} {x : α} {h : IsCl
+open s},   x ∈ { carrier := s, isClopen' := h } ↔ x ∈ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_mk {s : Set α} {x h} : x in mk s h ↔ x in s := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (Clopens α)
-  body: ⟨fun s t => ⟨s union t, s.isClopen.union t.isClopen⟩⟩
-
-中文:
-实例 :
-  签名: 最大值 (Clopens α)
-  定义体: ⟨fun s t => ⟨s union t, s.isClopen.union t.isClopen⟩⟩
-
-Depends on / 依赖: isClopen, s.isClopen.union, t.isClopen
+@[simp] lemma mem_mk {s : Set α} {x h} : x ∈ mk s h ↔ x ∈ s := .rfl
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Max (Clopens α) := ⟨fun s t => ⟨s union t, s.isClopen.union t.isClopen⟩⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (Clopens α)
-  body: ⟨fun s t => ⟨s inter t, s.isClopen.inter t.isClopen⟩⟩
-
-中文:
-实例 :
-  签名: 最小值 (Clopens α)
-  定义体: ⟨fun s t => ⟨s inter t, s.isClopen.inter t.isClopen⟩⟩
-
-Depends on / 依赖: isClopen, s.isClopen.inter, t.isClopen
+instance : Max (Clopens α) := ⟨fun s t => ⟨s ∪ t, s.isClopen.union t.isClopen⟩⟩
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Min (Clopens α) := ⟨fun s t => ⟨s inter t, s.isClopen.inter t.isClopen⟩⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (Clopens α)
-  body: ⟨⟨⊤, isClopen_univ⟩⟩
-
-中文:
-实例 :
-  签名: 顶元素 (Clopens α)
-  定义体: ⟨⟨⊤, isClopen_univ⟩⟩
-
-Depends on / 依赖: isClopen_univ
+instance : Min (Clopens α) := ⟨fun s t => ⟨s ∩ t, s.isClopen.inter t.isClopen⟩⟩
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (Clopens α) := ⟨⟨⊤, isClopen_univ⟩⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (Clopens α)
-  body: ⟨⟨⊥, isClopen_empty⟩⟩
-
-中文:
-实例 :
-  签名: 底元素 (Clopens α)
-  定义体: ⟨⟨⊥, isClopen_empty⟩⟩
-
-Depends on / 依赖: isClopen_empty
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (Clopens α) := ⟨⟨⊥, isClopen_empty⟩⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SDiff (Clopens α)
-  body: ⟨fun s t => ⟨s \ t, s.isClopen.diff t.isClopen⟩⟩
-
-中文:
-实例 :
-  签名: 对称差 (Clopens α)
-  定义体: ⟨fun s t => ⟨s \ t, s.isClopen.diff t.isClopen⟩⟩
-
-Depends on / 依赖: isClopen, s.isClopen.diff, t.isClopen
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SDiff (Clopens α) := ⟨fun s t => ⟨s \ t, s.isClopen.diff t.isClopen⟩⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HImp (Clopens α)
-  body: ⟨s ⇨ t, s.isClopen.himp t.isClopen⟩
-
-中文:
-实例 :
-  签名: HImp (Clopens α)
-  定义体: ⟨s ⇨ t, s.isClopen.himp t.isClopen⟩
-
-Depends on / 依赖: isClopen, s.isClopen.himp, t.isClopen
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HImp (Clopens α) where himp s t := ⟨s ⇨ t, s.isClopen.himp t.isClopen⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Compl (Clopens α)
-  body: ⟨fun s => ⟨sᶜ, s.isClopen.compl⟩⟩
-
-中文:
-实例 :
-  签名: 补集 (Clopens α)
-  定义体: ⟨fun s => ⟨sᶜ, s.isClopen.compl⟩⟩
-
-Depends on / 依赖: isClopen, s.isClopen.compl
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Compl (Clopens α) := ⟨fun s => ⟨sᶜ, s.isClopen.compl⟩⟩
-
-/--
-lemma `coe_sup` / 引理 `coe_sup`
-
-English:
-lemma coe_sup
-  given: (s t : Clopens α)
-  statement: ↑(s ⊔ t) = (s union t : Set α)
-  proof: rfl
-
-中文:
-引理 coe_sup
-  条件: (s t : Clopens α)
-  结论: ↑(s ⊔ t) = (s union t : 集合 α)
-  证明: rfl
+/-
+**TopologicalSpace.Clopens.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+lopens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (s t : TopologicalSpace.Clope
+ns α), ↑(s ⊔ t) = ↑s ∪ ↑t
+参数：s t : TopologicalSpace.Clopens α；s ⊔ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_sup (s t : Clopens α) : ↑(s ⊔ t) = (s union t : Set α) := rfl
-/--
-lemma `coe_inf` / 引理 `coe_inf`
-
-English:
-lemma coe_inf
-  given: (s t : Clopens α)
-  statement: ↑(s ⊓ t) = (s inter t : Set α)
-  proof: rfl
-
-中文:
-引理 coe_inf
-  条件: (s t : Clopens α)
-  结论: ↑(s ⊓ t) = (s inter t : 集合 α)
-  证明: rfl
+@[simp, norm_cast] lemma coe_sup (s t : Clopens α) : ↑(s ⊔ t) = (s ∪ t : Set α) := rfl
+/-
+**TopologicalSpace.Clopens.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+lopens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (s t : TopologicalSpace.Clope
+ns α), ↑(s ⊓ t) = ↑s ∩ ↑t
+参数：s t : TopologicalSpace.Clopens α；s ⊓ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_inf (s t : Clopens α) : ↑(s ⊓ t) = (s inter t : Set α) := rfl
-/--
-lemma `coe_top` / 引理 `coe_top`
-
-English:
-lemma coe_top
-  statement: (↑(⊤ : Clopens α) : Set α) = univ
-  proof: rfl
-
-中文:
-引理 coe_top
-  结论: (↑(⊤ : Clopens α) : 集合 α) = univ
-  证明: rfl
+@[simp, norm_cast] lemma coe_inf (s t : Clopens α) : ↑(s ⊓ t) = (s ∩ t : Set α) := rfl
+/-
+**TopologicalSpace.Clopens.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+lopens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α], ↑⊤ = Set.univ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_top : (↑(⊤ : Clopens α) : Set α) = univ := rfl
-/--
-lemma `coe_bot` / 引理 `coe_bot`
-
-English:
-lemma coe_bot
-  statement: (↑(⊥ : Clopens α) : Set α) = ∅
-  proof: rfl
-
-中文:
-引理 coe_bot
-  结论: (↑(⊥ : Clopens α) : 集合 α) = ∅
-  证明: rfl
+/-
+**TopologicalSpace.Clopens.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.C
+lopens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α], ↑⊥ = ∅
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_bot : (↑(⊥ : Clopens α) : Set α) = ∅ := rfl
-/--
-lemma `coe_sdiff` / 引理 `coe_sdiff`
-
-English:
-lemma coe_sdiff
-  given: (s t : Clopens α)
-  statement: ↑(s \ t) = (s \ t : Set α)
-  proof: rfl
-
-中文:
-引理 coe_sdiff
-  条件: (s t : Clopens α)
-  结论: ↑(s \ t) = (s \ t : 集合 α)
-  证明: rfl
+/-
+**TopologicalSpace.Clopens.coe_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace
+.Clopens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (s t : TopologicalSpace.Clope
+ns α), ↑(s \ t) = ↑s \ ↑t
+参数：s t : TopologicalSpace.Clopens α；s \ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_sdiff (s t : Clopens α) : ↑(s \ t) = (s \ t : Set α) := rfl
-/--
-lemma `coe_himp` / 引理 `coe_himp`
-
-English:
-lemma coe_himp
-  given: (s t : Clopens α)
-  statement: ↑(s ⇨ t) = (s ⇨ t : Set α)
-  proof: rfl
-
-中文:
-引理 coe_himp
-  条件: (s t : Clopens α)
-  结论: ↑(s ⇨ t) = (s ⇨ t : 集合 α)
-  证明: rfl
+/-
+**TopologicalSpace.Clopens.coe_himp** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Clopens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (s t : TopologicalSpace.Clope
+ns α), ↑(s ⇨ t) = ↑s ⇨ ↑t
+参数：s t : TopologicalSpace.Clopens α；s ⇨ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_himp (s t : Clopens α) : ↑(s ⇨ t) = (s ⇨ t : Set α) := rfl
-/--
-lemma `coe_compl` / 引理 `coe_compl`
-
-English:
-lemma coe_compl
-  given: (s : Clopens α)
-  statement: (↑sᶜ : Set α) = (↑s)ᶜ
-  proof: rfl
-
-中文:
-引理 coe_compl
-  条件: (s : Clopens α)
-  结论: (↑sᶜ : 集合 α) = (↑s)ᶜ
-  证明: rfl
+/-
+**TopologicalSpace.Clopens.coe_compl** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace
+.Clopens`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] (s : TopologicalSpace.Clopens
+ α), ↑sᶜ = (↑s)ᶜ
+参数：s : TopologicalSpace.Clopens α；↑s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_compl (s : Clopens α) : (↑sᶜ : Set α) = (↑s)ᶜ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BooleanAlgebra (Clopens α)
-  body: fast_instance%
-  SetLike.coe_injective.booleanAlgebra _ .rfl .rfl coe_sup coe_inf coe_top coe_bot coe_compl
-    coe_sdiff coe_himp
-
-中文:
-实例 :
-  签名: 布尔代数 (Clopens α)
-  定义体: fast_instance%
-  SetLike.coe_injective.booleanAlgebra _ .rfl .rfl coe_sup coe_inf coe_top coe_bot coe_compl
-    coe_sdiff coe_himp
-
-Depends on / 依赖: fast_instance
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BooleanAlgebra (Clopens α) := fast_instance%
   SetLike.coe_injective.booleanAlgebra _ .rfl .rfl coe_sup coe_inf coe_top coe_bot coe_compl
     coe_sdiff coe_himp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Clopens α)
-  body: ⟨⊥⟩
-
-中文:
-实例 :
-  签名: 可居 (Clopens α)
-  定义体: ⟨⊥⟩
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Clopens α) := ⟨⊥⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SProd (Clopens α) (Clopens β) (Clopens (α × β))
-  body: ⟨s ×ˢ t, s.2.prod t.2⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: SProd (Clopens α) (Clopens β) (Clopens (α × β))
-  定义体: ⟨s ×ˢ t, s.2.prod t.2⟩
-
-@[simp]
+/-
+**TopologicalSpace.Clopens.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Clopens`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SProd (Clopens α) (Clopens β) (Clopens (α × β)) where
   sprod s t := ⟨s ×ˢ t, s.2.prod t.2⟩
 
 @[simp]
-/--
-lemma `mem_prod` / 引理 `mem_prod`
-
-English:
-lemma mem_prod
-  given: {s : Clopens α} {t : Clopens β} {x : α × β}
-  proof: .rfl
-
-@[simp]
-
-中文:
-引理 mem_prod
-  条件: {s : Clopens α} {t : Clopens β} {x : α × β}
-  证明: .rfl
-
-@[simp]
+/-
+**TopologicalSpace.Clopens.mem_prod** 是 Mathlib 中的一个定理，位于命名空间 `TopologicalSpace.
+Clopens`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : TopologicalSpace α] [inst_1 : Topo
+logicalSpace β]   {s : TopologicalSpace.Clopens α} {t : TopologicalSpace.Clopens
+ β} {x : α × β}, x ∈ s ×ˢ t ↔ x.1 ∈ s ∧ x.2 ∈ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 protected lemma mem_prod {s : Clopens α} {t : Clopens β} {x : α × β} :
-    x in s ×ˢ t ↔ x.1 in s ∧ x.2 in t := .rfl
+    x ∈ s ×ˢ t ↔ x.1 ∈ s ∧ x.2 ∈ t := .rfl
 
 @[simp]
-/--
-lemma `coe_finset_sup` / 引理 `coe_finset_sup`
-
-English:
-lemma coe_finset_sup
-  given: (s : Finset ι) (U : ι -> Clopens α)
-  proof: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert _ _ _ IH => simp [IH]
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_finset_sup
-  条件: (s : 有限集 ι) (U : ι -> Clopens α)
-  证明: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert _ _ _ IH => simp [IH]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Finset, Finset.induction_on, classical, induction_on, insert
+/-
+**TopologicalSpace.Clopens.coe_finset_sup** 是 Mathlib 中的一个引理，位于命名空间 `Topological
+Space.Clopens`。
+形式化陈述：coe_finset_sup (s : Finset ι) (U : ι -> Clopens α) : (↑(s.sup U) : Set α) 
+= ⋃ i in s, U i
+参数：s : Finset ι；U : ι -> Clopens α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
+· 使用定理 `Set.iUnion_iUnion_eq_or_left`：iUnion_iUnion_eq_or_left {b : β} {p : β ->
+ Prop} {s : forall x : β, x = b ∨ p x -> Set α} : ⋃ (x) (h), s x h = s b (Or.inl
+ rfl) union ⋃ (x) …
 -/
-lemma coe_finset_sup (s : Finset ι) (U : ι -> Clopens α) :
-    (↑(s.sup U) : Set α) = ⋃ i in s, U i := by
+lemma coe_finset_sup (s : Finset ι) (U : ι → Clopens α) :
+    (↑(s.sup U) : Set α) = ⋃ i ∈ s, U i := by
   classical
   induction s using Finset.induction_on with
   | empty => simp
   | insert _ _ _ IH => simp [IH]
 
 @[simp, norm_cast]
-/--
-lemma `coe_disjoint` / 引理 `coe_disjoint`
-
-English:
-lemma coe_disjoint
-  given: {s t : Clopens α}
-  statement: Disjoint (s : Set α) t ↔ Disjoint s t
-  proof: by
-  simp [disjoint_iff, ← SetLike.coe_set_eq]
-
-中文:
-引理 coe_disjoint
-  条件: {s t : Clopens α}
-  结论: Disjoint (s : 集合 α) t ↔ Disjoint s t
-  证明: by
-  simp [disjoint_iff, ← SetLike.coe_set_eq]
-
-Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq, disjoint_iff
+/-
+**TopologicalSpace.Clopens.coe_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalSp
+ace.Clopens`。
+形式化陈述：coe_disjoint {s t : Clopens α} : Disjoint (s : Set α) t ↔ Disjoint s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma coe_disjoint {s t : Clopens α} : Disjoint (s : Set α) t ↔ Disjoint s t := by
   simp [disjoint_iff, ← SetLike.coe_set_eq]
@@ -1904,24 +1264,15 @@ end Clopens
 
 /-! ### Irreducible closed sets -/
 
-/--
-Definition of `IrreducibleCloseds` / `IrreducibleCloseds` 的定义
+/-- The type of irreducible closed subsets of a topological space. -/
+/-
+**TopologicalSpace.IrreducibleCloseds** 是 Mathlib 中的一个归纳类型，位于命名空间 `TopologicalSp
+ace`。
+形式化陈述：(α : Type u_4) → [TopologicalSpace α] → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IrreducibleCloseds
-  parameters: (α : Type*) [TopologicalSpace α]
-  axioms and operations (3):
-    - carrier : Set α
-    - isIrreducible' : IsIrreducible carrier
-    - isClosed' : IsClosed carrier
-
-中文:
-结构 IrreducibleCloseds
-  参数: (α : 类型) [拓扑空间 α]
-  公理与运算 (3 个):
-    - carrier : 集合 α
-    - isIrreducible' : 是不可约 carrier
-    - isClosed' : 是闭集 carrier
+--- 原说明 ---
+The type of irreducible closed subsets of a topological space.
 -/
 structure IrreducibleCloseds (α : Type*) [TopologicalSpace α] where
   /-- the carrier set, i.e. the points in this set -/
@@ -1931,269 +1282,154 @@ structure IrreducibleCloseds (α : Type*) [TopologicalSpace α] where
 
 namespace IrreducibleCloseds
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (IrreducibleCloseds α) α
-  body: IrreducibleCloseds.carrier
-  coe_injective s t h := by cases s; cases t; congr
-
-中文:
-实例 :
-  签名: 集合状 (IrreducibleCloseds α) α
-  定义体: IrreducibleCloseds.carrier
-  coe_injective s t h := by cases s; cases t; congr
-
-Depends on / 依赖: IrreducibleCloseds, IrreducibleCloseds.carrier, carrier
+/-
+**TopologicalSpace.IrreducibleCloseds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.IrreducibleCloseds`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (IrreducibleCloseds α) α where
   coe := IrreducibleCloseds.carrier
   coe_injective s t h := by cases s; cases t; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (IrreducibleCloseds α)
-  body: fast_instance% .ofSetLike (IrreducibleCloseds α) α
-
-中文:
-实例 :
-  签名: 偏序 (IrreducibleCloseds α)
-  定义体: fast_instance% .ofSetLike (IrreducibleCloseds α) α
-
-Depends on / 依赖: IrreducibleCloseds, fast_instance, ofSetLike
+/-
+**TopologicalSpace.IrreducibleCloseds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.IrreducibleCloseds`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (IrreducibleCloseds α) := fast_instance% .ofSetLike (IrreducibleCloseds α) α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CanLift (Set α) (IrreducibleCloseds α) (↑) (fun s => IsIrreducible s ∧ IsClosed s)
-  body: ⟨⟨s, hs.1, hs.2⟩, rfl⟩
-
-中文:
-实例 :
-  签名: CanLift (集合 α) (IrreducibleCloseds α) (↑) (fun s => 是不可约 s ∧ 是闭集 s)
-  定义体: ⟨⟨s, hs.1, hs.2⟩, rfl⟩
+/-
+**TopologicalSpace.IrreducibleCloseds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.IrreducibleCloseds`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CanLift (Set α) (IrreducibleCloseds α) (↑) (fun s => IsIrreducible s ∧ IsClosed s) where
+instance : CanLift (Set α) (IrreducibleCloseds α) (↑) (fun s ↦ IsIrreducible s ∧ IsClosed s) where
   prf s hs := ⟨⟨s, hs.1, hs.2⟩, rfl⟩
-
-/--
-theorem `isIrreducible` / 定理 `isIrreducible`
-
-English:
-theorem isIrreducible
-  given: (s : IrreducibleCloseds α)
-  statement: IsIrreducible (s : Set α)
-  proof: s.isIrreducible'
-
-中文:
-定理 isIrreducible
-  条件: (s : IrreducibleCloseds α)
-  结论: 是不可约 (s : 集合 α)
-  证明: s.isIrreducible'
-
-Depends on / 依赖: isIrreducible, s.isIrreducible
+/-
+**TopologicalSpace.IrreducibleCloseds.isIrreducible** 是 Mathlib 中的一个定理，位于命名空间 `T
+opologicalSpace.IrreducibleCloseds`。
+形式化陈述：isIrreducible (s : IrreducibleCloseds α) : IsIrreducible (s : Set α)
+参数：s : IrreducibleCloseds α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.IrreducibleCloseds.isIrreducible'`：∀ {α : Type u_4} [in
+st : TopologicalSpace α] (self : TopologicalSpace.IrreducibleCloseds α), IsIrred
+ucible self.carrier
 -/
 theorem isIrreducible (s : IrreducibleCloseds α) : IsIrreducible (s : Set α) := s.isIrreducible'
-
-/--
-theorem `isClosed` / 定理 `isClosed`
-
-English:
-theorem isClosed
-  given: (s : IrreducibleCloseds α)
-  statement: IsClosed (s : Set α)
-  proof: s.isClosed'
-
-中文:
-定理 isClosed
-  条件: (s : IrreducibleCloseds α)
-  结论: 是闭集 (s : 集合 α)
-  证明: s.isClosed'
-
-Depends on / 依赖: isClosed, s.isClosed
+/-
+**TopologicalSpace.IrreducibleCloseds.isClosed** 是 Mathlib 中的一个定理，位于命名空间 `Topolo
+gicalSpace.IrreducibleCloseds`。
+形式化陈述：isClosed (s : IrreducibleCloseds α) : IsClosed (s : Set α)
+参数：s : IrreducibleCloseds α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.IrreducibleCloseds.isClosed'`：∀ {α : Type u_4} [inst : 
+TopologicalSpace α] (self : TopologicalSpace.IrreducibleCloseds α), IsClosed sel
+f.carrier
 -/
 theorem isClosed (s : IrreducibleCloseds α) : IsClosed (s : Set α) := s.isClosed'
 
-/--
-Definition of `Simps.coe` / `Simps.coe` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**TopologicalSpace.IrreducibleCloseds.Simps.coe** 是 Mathlib 中的一个定义，位于命名空间 `Topol
+ogicalSpace.IrreducibleCloseds.Simps`。
+形式化陈述：{α : Type u_2} → [inst : TopologicalSpace α] → TopologicalSpace.Irreducibl
+eCloseds α → Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.coe
-  signature: (s : IrreducibleCloseds α)
-  body: s
-
-initialize_simps_projections IrreducibleCloseds (carrier -> coe, as_prefix coe)
-
-@[ext]
-
-中文:
-定义 Simps.coe
-  签名: (s : IrreducibleCloseds α)
-  定义体: s
-
-initialize_simps_projections IrreducibleCloseds (carrier -> coe, as_prefix coe)
-
-@[ext]
+--- 原说明 ---
+See Note [custom simps projection].
 -/
 def Simps.coe (s : IrreducibleCloseds α) : Set α := s
 
-initialize_simps_projections IrreducibleCloseds (carrier -> coe, as_prefix coe)
+initialize_simps_projections IrreducibleCloseds (carrier → coe, as_prefix coe)
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {s t : IrreducibleCloseds α} (h : (s : Set α) = t)
-  statement: s = t
-  proof: SetLike.ext' h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {s t : IrreducibleCloseds α} (h : (s : 集合 α) = t)
-  结论: s = t
-  证明: SetLike.ext' h
-
-@[simp]
+/-
+**TopologicalSpace.IrreducibleCloseds.ext** 是 Mathlib 中的一个定理，位于命名空间 `Topological
+Space.IrreducibleCloseds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] {s t : TopologicalSpace.Irred
+ucibleCloseds α}, ↑s = ↑t → s = t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
 -/
 protected theorem ext {s t : IrreducibleCloseds α} (h : (s : Set α) = t) : s = t :=
   SetLike.ext' h
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (s : Set α) (h : IsIrreducible s) (h' : IsClosed s)
-  statement: (mk s h h' : Set α) = s
-  proof: rfl
-
-@[simps]
-
-中文:
-定理 coe_mk
-  条件: (s : 集合 α) (h : 是不可约 s) (h' : 是闭集 s)
-  结论: (mk s h h' : 集合 α) = s
-  证明: rfl
-
-@[simps]
+/-
+**TopologicalSpace.IrreducibleCloseds.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Topologi
+calSpace.IrreducibleCloseds`。
+形式化陈述：coe_mk (s : Set α) (h : IsIrreducible s) (h' : IsClosed s) : (mk s h h' : 
+Set α) = s
+参数：s : Set α；h : IsIrreducible s；h' : IsClosed s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk (s : Set α) (h : IsIrreducible s) (h' : IsClosed s) : (mk s h h' : Set α) = s :=
   rfl
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [T1Space
-  signature: α] : Singleton α (IrreducibleCloseds α) where
-  body: ⟨{x}, isIrreducible_singleton, isClosed_singleton⟩
-
-@[simp]
-
-中文:
-实例 [T1空间
-  签名: α] : 单例 α (IrreducibleCloseds α) where
-  定义体: ⟨{x}, isIrreducible_singleton, isClosed_singleton⟩
-
-@[simp]
-
-Depends on / 依赖: isClosed_singleton, isIrreducible_singleton
+/-
+**TopologicalSpace.IrreducibleCloseds.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpa
+ce.IrreducibleCloseds`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [T1Space α] : Singleton α (IrreducibleCloseds α) where
   singleton x := ⟨{x}, isIrreducible_singleton, isClosed_singleton⟩
 
 @[simp]
-/--
-theorem `mk_singleton` / 定理 `mk_singleton`
-
-English:
-theorem mk_singleton
-  given: [T1Space α] {x : α}
-  proof: rfl
-
-中文:
-定理 mk_singleton
-  条件: [T1空间 α] {x : α}
-  证明: rfl
+/-
+**TopologicalSpace.IrreducibleCloseds.mk_singleton** 是 Mathlib 中的一个定理，位于命名空间 `To
+pologicalSpace.IrreducibleCloseds`。
+形式化陈述：mk_singleton [T1Space α] {x : α} : (⟨{x}, isIrreducible_singleton, isClose
+d_singleton⟩ : IrreducibleCloseds α) = {x}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isIrreducible_singleton`：isIrreducible_singleton {x} : IsIrreducible ({x
+} : Set X)
+· 使用定理 `isClosed_singleton`：isClosed_singleton [T1Space X] {x : X} : IsClosed ({
+x} : Set X)
 -/
 theorem mk_singleton [T1Space α] {x : α} :
     (⟨{x}, isIrreducible_singleton, isClosed_singleton⟩ : IrreducibleCloseds α) = {x} :=
   rfl
-
-/--
-lemma `mem_singleton` / 引理 `mem_singleton`
-
-English:
-lemma mem_singleton
-  given: [T1Space α] {a b : α}
-  statement: a in ({b} : IrreducibleCloseds α) ↔ a = b
-  proof: Iff.rfl
-
-中文:
-引理 mem_singleton
-  条件: [T1空间 α] {a b : α}
-  结论: a in ({b} : IrreducibleCloseds α) ↔ a = b
-  证明: Iff.rfl
+/-
+**TopologicalSpace.IrreducibleCloseds.mem_singleton** 是 Mathlib 中的一个定理，位于命名空间 `T
+opologicalSpace.IrreducibleCloseds`。
+形式化陈述：∀ {α : Type u_2} [inst : TopologicalSpace α] [inst_1 : T1Space α] {a b : α
+}, a ∈ {b} ↔ a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_singleton [T1Space α] {a b : α} : a in ({b} : IrreducibleCloseds α) ↔ a = b :=
+@[simp] lemma mem_singleton [T1Space α] {a b : α} : a ∈ ({b} : IrreducibleCloseds α) ↔ a = b :=
   Iff.rfl
-
-/--
-theorem `singleton_injective` / 定理 `singleton_injective`
-
-English:
-theorem singleton_injective
-  given: [T1Space α]
-  statement: Function.Injective ({·} : α -> IrreducibleCloseds α)
-  proof: .of_comp (f := SetLike.coe) Set.singleton_injective
-
-@[simp]
-
-中文:
-定理 singleton_injective
-  条件: [T1空间 α]
-  结论: 函数.单射 ({·} : α -> IrreducibleCloseds α)
-  证明: .of_comp (f := SetLike.coe) Set.singleton_injective
-
-@[simp]
-
-Depends on / 依赖: Set.singleton_injective, SetLike, SetLike.coe, of_comp, singleton_injective
+/-
+**TopologicalSpace.IrreducibleCloseds.singleton_injective** 是 Mathlib 中的一个定理，位于命
+名空间 `TopologicalSpace.IrreducibleCloseds`。
+形式化陈述：singleton_injective [T1Space α] : Function.Injective ({·} : α -> Irreducib
+leCloseds α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `Set.singleton_injective`：singleton_injective : Injective (singleton : α 
+-> Set α)
 -/
-theorem singleton_injective [T1Space α] : Function.Injective ({·} : α -> IrreducibleCloseds α) :=
+theorem singleton_injective [T1Space α] : Function.Injective ({·} : α → IrreducibleCloseds α) :=
   .of_comp (f := SetLike.coe) Set.singleton_injective
 
 @[simp]
-/--
-theorem `singleton_inj` / 定理 `singleton_inj`
-
-English:
-theorem singleton_inj
-  given: [T1Space α] {x y : α}
-  statement: ({x} : IrreducibleCloseds α) = {y} ↔ x = y
-  proof: singleton_injective.eq_iff
-
-中文:
-定理 singleton_inj
-  条件: [T1空间 α] {x y : α}
-  结论: ({x} : IrreducibleCloseds α) = {y} ↔ x = y
-  证明: singleton_injective.eq_iff
-
-Depends on / 依赖: eq_iff, singleton_injective, singleton_injective.eq_iff
+/-
+**TopologicalSpace.IrreducibleCloseds.singleton_inj** 是 Mathlib 中的一个定理，位于命名空间 `T
+opologicalSpace.IrreducibleCloseds`。
+形式化陈述：singleton_inj [T1Space α] {x y : α} : ({x} : IrreducibleCloseds α) = {y} ↔
+ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `TopologicalSpace.IrreducibleCloseds.singleton_injective`：singleton_injec
+tive [T1Space α] : Function.Injective ({·} : α -> IrreducibleCloseds α)
 -/
 theorem singleton_inj [T1Space α] {x y : α} : ({x} : IrreducibleCloseds α) = {y} ↔ x = y :=
   singleton_injective.eq_iff
@@ -2203,23 +1439,20 @@ set_option linter.style.whitespace false in -- manual alignment is not recognise
 The equivalence between `IrreducibleCloseds α` and `{x : Set α // IsIrreducible x ∧ IsClosed x }`.
 -/
 @[simps apply symm_apply]
-/--
-Definition of `equivSubtype` / `equivSubtype` 的定义
+/-
+**TopologicalSpace.IrreducibleCloseds.equivSubtype** 是 Mathlib 中的一个定义，位于命名空间 `To
+pologicalSpace.IrreducibleCloseds`。
+形式化陈述：equivSubtype : IrreducibleCloseds α ≃ { x : Set α // IsIrreducible x ∧ IsC
+losed x } where toFun a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivSubtype
-  signature: : IrreducibleCloseds α ≃ { x : Set α // IsIrreducible x ∧ IsClosed x } where
-  body: ⟨a.1, a.2, a.3⟩
-  invFun a := ⟨a.1, a.2.1, a.2.2⟩
-
-中文:
-定义 equivSubtype
-  签名: : IrreducibleCloseds α ≃ { x : 集合 α // 是不可约 x ∧ 是闭集 x } where
-  定义体: ⟨a.1, a.2, a.3⟩
-  invFun a := ⟨a.1, a.2.1, a.2.2⟩
+--- 原说明 ---
+The equivalence between `IrreducibleCloseds α` and `{x : Set α // IsIrreducible 
+x ∧ IsClosed x }`.
 -/
 def equivSubtype : IrreducibleCloseds α ≃ { x : Set α // IsIrreducible x ∧ IsClosed x } where
-  toFun a := ⟨a.1, a.2, a.3⟩
+  toFun a  := ⟨a.1, a.2, a.3⟩
   invFun a := ⟨a.1, a.2.1, a.2.2⟩
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
@@ -2227,178 +1460,172 @@ set_option linter.style.whitespace false in -- manual alignment is not recognise
 The equivalence between `IrreducibleCloseds α` and `{x : Set α // IsClosed x ∧ IsIrreducible x }`.
 -/
 @[simps apply symm_apply]
-/--
-Definition of `equivSubtype'` / `equivSubtype'` 的定义
+/-
+**TopologicalSpace.IrreducibleCloseds.equivSubtype'** 是 Mathlib 中的一个定义，位于命名空间 `T
+opologicalSpace.IrreducibleCloseds`。
+形式化陈述：equivSubtype' : IrreducibleCloseds α ≃ { x : Set α // IsClosed x ∧ IsIrred
+ucible x } where toFun a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivSubtype'
-  signature: : IrreducibleCloseds α ≃ { x : Set α // IsClosed x ∧ IsIrreducible x } where
-  body: ⟨a.1, a.3, a.2⟩
-  invFun a := ⟨a.1, a.2.2, a.2.1⟩
-
-中文:
-定义 equivSubtype'
-  签名: : IrreducibleCloseds α ≃ { x : 集合 α // 是闭集 x ∧ 是不可约 x } where
-  定义体: ⟨a.1, a.3, a.2⟩
-  invFun a := ⟨a.1, a.2.2, a.2.1⟩
+--- 原说明 ---
+The equivalence between `IrreducibleCloseds α` and `{x : Set α // IsClosed x ∧ I
+sIrreducible x }`.
 -/
 def equivSubtype' : IrreducibleCloseds α ≃ { x : Set α // IsClosed x ∧ IsIrreducible x } where
-  toFun a := ⟨a.1, a.3, a.2⟩
+  toFun a  := ⟨a.1, a.3, a.2⟩
   invFun a := ⟨a.1, a.2.2, a.2.1⟩
 
 variable (α) in
-/--
-Definition of `orderIsoSubtype` / `orderIsoSubtype` 的定义
+/-- The equivalence `IrreducibleCloseds α ≃ { x : Set α // IsIrreducible x ∧ IsClosed x }` is an
+order isomorphism. -/
+/-
+**TopologicalSpace.IrreducibleCloseds.orderIsoSubtype** 是 Mathlib 中的一个定义，位于命名空间 
+`TopologicalSpace.IrreducibleCloseds`。
+形式化陈述：orderIsoSubtype : IrreducibleCloseds α ≃o { x : Set α // IsIrreducible x ∧
+ IsClosed x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoSubtype
-  signature: : IrreducibleCloseds α ≃o { x : Set α // IsIrreducible x ∧ IsClosed x }
-  body: equivSubtype.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
-
-中文:
-定义 orderIsoSubtype
-  签名: : IrreducibleCloseds α ≃o { x : 集合 α // 是不可约 x ∧ 是闭集 x }
-  定义体: equivSubtype.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
-
-Depends on / 依赖: equivSubtype, equivSubtype.toOrderIso, toOrderIso
+--- 原说明 ---
+The equivalence `IrreducibleCloseds α ≃ { x : Set α // IsIrreducible x ∧ IsClose
+d x }` is an
+order isomorphism.
 -/
 def orderIsoSubtype : IrreducibleCloseds α ≃o { x : Set α // IsIrreducible x ∧ IsClosed x } :=
-  equivSubtype.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
+  equivSubtype.toOrderIso (fun _ _ h ↦ h) (fun _ _ h ↦ h)
 
 variable (α) in
-/--
-Definition of `orderIsoSubtype'` / `orderIsoSubtype'` 的定义
+/-- The equivalence `IrreducibleCloseds α ≃ { x : Set α // IsClosed x ∧ IsIrreducible x }` is an
+order isomorphism. -/
+/-
+**TopologicalSpace.IrreducibleCloseds.orderIsoSubtype'** 是 Mathlib 中的一个定义，位于命名空间
+ `TopologicalSpace.IrreducibleCloseds`。
+形式化陈述：orderIsoSubtype' : IrreducibleCloseds α ≃o { x : Set α // IsClosed x ∧ IsI
+rreducible x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoSubtype'
-  signature: : IrreducibleCloseds α ≃o { x : Set α // IsClosed x ∧ IsIrreducible x }
-  body: equivSubtype'.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
-
-中文:
-定义 orderIsoSubtype'
-  签名: : IrreducibleCloseds α ≃o { x : 集合 α // 是闭集 x ∧ 是不可约 x }
-  定义体: equivSubtype'.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
-
-Depends on / 依赖: equivSubtype, toOrderIso
+--- 原说明 ---
+The equivalence `IrreducibleCloseds α ≃ { x : Set α // IsClosed x ∧ IsIrreducibl
+e x }` is an
+order isomorphism.
 -/
 def orderIsoSubtype' : IrreducibleCloseds α ≃o { x : Set α // IsClosed x ∧ IsIrreducible x } :=
-  equivSubtype'.toOrderIso (fun _ _ h => h) (fun _ _ h => h)
+  equivSubtype'.toOrderIso (fun _ _ h ↦ h) (fun _ _ h ↦ h)
 
 /-! ### Partial order structure on irreducible closed sets and maps thereof.-/
 
-/--
-Definition of `map` / `map` 的定义
+/-- The map on irreducible closed sets induced by a continuous map `f`. -/
+/-
+**TopologicalSpace.IrreducibleCloseds.map** 是 Mathlib 中的一个定义，位于命名空间 `Topological
+Space.IrreducibleCloseds`。
+形式化陈述：map (f : β -> α) (hf : Continuous f) (c : IrreducibleCloseds β) : Irreduci
+bleCloseds α where carrier
+参数：f : β -> α；hf : Continuous f；c : IrreducibleCloseds β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : β -> α) (hf : Continuous f)
-  body: closure (f '' c)
-.closure isIrreducible' := c.isIrreducible.image f hf.continuousOn
-  isClosed' := isClosed_closure
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : β -> α) (hf : 连续 f)
-  定义体: closure (f '' c)
-.closure isIrreducible' := c.isIrreducible.image f hf.continuousOn
-  isClosed' := isClosed_closure
-
-@[simp]
-
-Depends on / 依赖: closure
+--- 原说明 ---
+The map on irreducible closed sets induced by a continuous map `f`.
 -/
-def map (f : β -> α) (hf : Continuous f)
+def map (f : β → α) (hf : Continuous f)
     (c : IrreducibleCloseds β) : IrreducibleCloseds α where
   carrier := closure (f '' c)
-.closure isIrreducible' := c.isIrreducible.image f hf.continuousOn
+  isIrreducible' := c.isIrreducible.image f hf.continuousOn |>.closure
   isClosed' := isClosed_closure
 
 @[simp]
-/--
-lemma `coe_map` / 引理 `coe_map`
-
-English:
-lemma coe_map
-  given: (f : β -> α) (hf : Continuous f) (s : IrreducibleCloseds β)
-  proof: rfl
-
-中文:
-引理 coe_map
-  条件: (f : β -> α) (hf : 连续 f) (s : IrreducibleCloseds β)
-  证明: rfl
+/-
+**TopologicalSpace.IrreducibleCloseds.coe_map** 是 Mathlib 中的一个引理，位于命名空间 `Topolog
+icalSpace.IrreducibleCloseds`。
+形式化陈述：coe_map (f : β -> α) (hf : Continuous f) (s : IrreducibleCloseds β) : (map
+ f hf s : Set α) = closure (f '' s)
+参数：f : β -> α；hf : Continuous f；s : IrreducibleCloseds β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_map (f : β -> α) (hf : Continuous f) (s : IrreducibleCloseds β) :
+lemma coe_map (f : β → α) (hf : Continuous f) (s : IrreducibleCloseds β) :
     (map f hf s : Set α) = closure (f '' s) :=
   rfl
-
-/--
-lemma `map_mono` / 引理 `map_mono`
-
-English:
-lemma map_mono
-  given: {f : β -> α} (hf : Continuous f)
-  statement: Monotone (map f hf)
-  proof: fun _ _ h_le => closure_mono Set.image_mono h_le
-
-中文:
-引理 map_mono
-  条件: {f : β -> α} (hf : 连续 f)
-  结论: 递增 (map f hf)
-  证明: fun _ _ h_le => closure_mono Set.image_mono h_le
-
-Depends on / 依赖: Set.image_mono, closure_mono, h_le, image_mono
+/-
+**TopologicalSpace.IrreducibleCloseds.map_mono** 是 Mathlib 中的一个引理，位于命名空间 `Topolo
+gicalSpace.IrreducibleCloseds`。
+形式化陈述：map_mono {f : β -> α} (hf : Continuous f) : Monotone (map f hf)
+参数：hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
-lemma map_mono {f : β -> α} (hf : Continuous f) : Monotone (map f hf) :=
-fun _ _ h_le => closure_mono Set.image_mono h_le
+lemma map_mono {f : β → α} (hf : Continuous f) : Monotone (map f hf) :=
+  fun _ _ h_le => closure_mono <| Set.image_mono h_le
 
-/--
-lemma `map_injective_of_isInducing` / 引理 `map_injective_of_isInducing`
+/-- The map `IrreducibleCloseds.map` is injective when `f` is inducing.
+This relies on the property of embeddings that a closed set in the domain is the preimage
+of the closure of its image. -/
+/-
+**TopologicalSpace.IrreducibleCloseds.map_injective_of_isInducing** 是 Mathlib 中的
+一个引理，位于命名空间 `TopologicalSpace.IrreducibleCloseds`。
+形式化陈述：map_injective_of_isInducing {f : β -> α} (hf : IsInducing f) : Function.In
+jective (map f hf.continuous)
+参数：hf : IsInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X →
+ Y} [inst : TopologicalSpace Y] [inst_1 : TopologicalSpace X],   Topology.IsIndu
+cing f → Continuous …
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `TopologicalSpace.IrreducibleCloseds.isClosed`：isClosed (s : IrreducibleC
+loseds α) : IsClosed (s : Set α)
+· 使用引理 `Topology.IsInducing.closure_eq_preimage_closure_image`：closure_eq_preima
+ge_closure_image (hf : IsInducing f) (s : Set X) : closure s = f ⁻¹' closure (f 
+'' s)
 
-English:
-lemma map_injective_of_isInducing
-  given: {f : β -> α} (hf : IsInducing f)
-  proof: by
-  intro A B h_images_eq
-  apply SetLike.coe_injective
-  replace h_images_eq : closure (f '' A) = closure (f '' B) := congr($h_images_eq)
-  rw [← A.isClosed.closure_eq]; rw [hf.closure_eq_preimage_closure_image]; rw [h_images_eq]; rw [← hf.closure_eq_preimage_closure_image]; rw [B.isClosed.closure_eq]
-
-中文:
-引理 map_injective_of_isInducing
-  条件: {f : β -> α} (hf : 是Inducing f)
-  证明: by
-  intro A B h_images_eq
-  apply SetLike.coe_injective
-  replace h_images_eq : closure (f '' A) = closure (f '' B) := congr($h_images_eq)
-  rw [← A.isClosed.closure_eq]; rw [hf.closure_eq_preimage_closure_image]; rw [h_images_eq]; rw [← hf.closure_eq_preimage_closure_image]; rw [B.isClosed.closure_eq]
-
-Depends on / 依赖: A.isClosed.closure_eq, B.isClosed.closure_eq, SetLike, SetLike.coe_injective, closure, closure_eq, closure_eq_preimage_closure_image, coe_injective, h_images_eq, hf.closure_eq_preimage_closure_image, isClosed, replace
+--- 原说明 ---
+The map `IrreducibleCloseds.map` is injective when `f` is inducing.
+This relies on the property of embeddings that a closed set in the domain is the
+ preimage
+of the closure of its image.
 -/
-lemma map_injective_of_isInducing {f : β -> α} (hf : IsInducing f) :
+lemma map_injective_of_isInducing {f : β → α} (hf : IsInducing f) :
     Function.Injective (map f hf.continuous) := by
   intro A B h_images_eq
   apply SetLike.coe_injective
   replace h_images_eq : closure (f '' A) = closure (f '' B) := congr($h_images_eq)
-  rw [← A.isClosed.closure_eq]; rw [hf.closure_eq_preimage_closure_image]; rw [h_images_eq]; rw [← hf.closure_eq_preimage_closure_image]; rw [B.isClosed.closure_eq]
+  rw [← A.isClosed.closure_eq, hf.closure_eq_preimage_closure_image, h_images_eq,
+    ← hf.closure_eq_preimage_closure_image, B.isClosed.closure_eq]
 
-/--
-lemma `map_strictMono_of_isInducing` / 引理 `map_strictMono_of_isInducing`
+/-- The map `IrreducibleCloseds.map` is strictly monotone when `f` is inducing. -/
+/-
+**TopologicalSpace.IrreducibleCloseds.map_strictMono_of_isInducing** 是 Mathlib 中
+的一个引理，位于命名空间 `TopologicalSpace.IrreducibleCloseds`。
+形式化陈述：map_strictMono_of_isInducing {f : β -> α} (hf : IsInducing f) : StrictMono
+ (map f hf.continuous)
+参数：hf : IsInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.strictMono_of_injective`：Monotone.strictMono_of_injective (h₁ :
+ Monotone f) (h₂ : Injective f) : StrictMono f
+· 使用定理 `Topology.IsInducing.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X →
+ Y} [inst : TopologicalSpace Y] [inst_1 : TopologicalSpace X],   Topology.IsIndu
+cing f → Continuous …
+· 使用引理 `TopologicalSpace.IrreducibleCloseds.map_mono`：map_mono {f : β -> α} (hf 
+: Continuous f) : Monotone (map f hf)
+· 使用引理 `TopologicalSpace.IrreducibleCloseds.map_injective_of_isInducing`：map_inj
+ective_of_isInducing {f : β -> α} (hf : IsInducing f) : Function.Injective (map 
+f hf.continuous)
 
-English:
-lemma map_strictMono_of_isInducing
-  given: {f : β -> α} (hf : IsInducing f)
-  proof: Monotone.strictMono_of_injective (map_mono hf.continuous) (map_injective_of_isInducing hf)
-
-中文:
-引理 map_strictMono_of_isInducing
-  条件: {f : β -> α} (hf : 是Inducing f)
-  证明: Monotone.strictMono_of_injective (map_mono hf.continuous) (map_injective_of_isInducing hf)
-
-Depends on / 依赖: Monotone, Monotone.strictMono_of_injective, continuous, hf.continuous, map_injective_of_isInducing, map_mono, strictMono_of_injective
+--- 原说明 ---
+The map `IrreducibleCloseds.map` is strictly monotone when `f` is inducing.
 -/
-lemma map_strictMono_of_isInducing {f : β -> α} (hf : IsInducing f) :
+lemma map_strictMono_of_isInducing {f : β → α} (hf : IsInducing f) :
     StrictMono (map f hf.continuous) :=
   Monotone.strictMono_of_injective (map_mono hf.continuous) (map_injective_of_isInducing hf)
 
@@ -2408,50 +1635,19 @@ Given `f : U → X` a continuous open embedding, the irreducible closeds of `U` 
 to the irreducible closeds of `X` nontrivially intersecting the range of `f`.
 -/
 noncomputable
-/--
-Definition of `orderIsoOfIsOpenEmbedding` / `orderIsoOfIsOpenEmbedding` 的定义
-
-English:
-definition orderIsoOfIsOpenEmbedding
-  signature: (f : β -> α) (h : IsOpenEmbedding f)
-  body: ⟨map f h.continuous T, nonempty_preimage_closure_image h.continuous T T.2.nonempty⟩
-  invFun V :=
-    { carrier := f ⁻¹' V
-      isIrreducible' := ⟨V.2, V.1.2.isPreirreducible.preimage h⟩
-      isClosed' := V.1.3.preimage h.continuous }
-  left_inv V := by
-    ext
-    simp [h.isOpenMap.preimage_closure_image h.injective h.continuous _ V.isClosed]
-  right_inv V := by
-    ext
-    simp [closure_image_preimage_of_isPreirreducible f h.isOpenMap V V.2 V.1.2.2 V.1.3]
-  map_rel_iff' {a b} := by
-    refine ⟨fun hle => ?_, fun hle => map_mono h.continuous hle⟩
-    simpa [← h.isEmbedding.closure_eq_preimage_closure_image, a.isClosed.closure_eq,
-      b.isClosed.closure_eq] using Set.preimage_mono (f := f) hle
-
-中文:
-定义 orderIsoOfIsOpenEmbedding
-  签名: (f : β -> α) (h : 是开嵌入 f)
-  定义体: ⟨map f h.continuous T, nonempty_preimage_closure_image h.continuous T T.2.nonempty⟩
-  invFun V :=
-    { carrier := f ⁻¹' V
-      isIrreducible' := ⟨V.2, V.1.2.isPreirreducible.preimage h⟩
-      isClosed' := V.1.3.preimage h.continuous }
-  left_inv V := by
-    ext
-    simp [h.isOpenMap.preimage_closure_image h.injective h.continuous _ V.isClosed]
-  right_inv V := by
-    ext
-    simp [closure_image_preimage_of_isPreirreducible f h.isOpenMap V V.2 V.1.2.2 V.1.3]
-  map_rel_iff' {a b} := by
-    refine ⟨fun hle => ?_, fun hle => map_mono h.continuous hle⟩
-    simpa [← h.isEmbedding.closure_eq_preimage_closure_image, a.isClosed.closure_eq,
-      b.isClosed.closure_eq] using Set.preimage_mono (f := f) hle
-
-Depends on / 依赖: continuous, h.continuous, nonempty, nonempty_preimage_closure_image
+/-
+**TopologicalSpace.IrreducibleCloseds.orderIsoOfIsOpenEmbedding** 是 Mathlib 中的一个
+定义，位于命名空间 `TopologicalSpace.IrreducibleCloseds`。
+形式化陈述：orderIsoOfIsOpenEmbedding (f : β -> α) (h : IsOpenEmbedding f) : Irreducib
+leCloseds β ≃o {V : IrreducibleCloseds α | (f ⁻¹' V).Nonempty} where toFun T
+参数：f : β -> α；h : IsOpenEmbedding f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f 
+: X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.I
+sOpenEmbedding f → Contin…
 -/
-def orderIsoOfIsOpenEmbedding (f : β -> α) (h : IsOpenEmbedding f) :
+def orderIsoOfIsOpenEmbedding (f : β → α) (h : IsOpenEmbedding f) :
     IrreducibleCloseds β ≃o {V : IrreducibleCloseds α | (f ⁻¹' V).Nonempty} where
   toFun T := ⟨map f h.continuous T, nonempty_preimage_closure_image h.continuous T T.2.nonempty⟩
   invFun V :=
@@ -2465,10 +1661,11 @@ def orderIsoOfIsOpenEmbedding (f : β -> α) (h : IsOpenEmbedding f) :
     ext
     simp [closure_image_preimage_of_isPreirreducible f h.isOpenMap V V.2 V.1.2.2 V.1.3]
   map_rel_iff' {a b} := by
-    refine ⟨fun hle => ?_, fun hle => map_mono h.continuous hle⟩
+    refine ⟨fun hle ↦ ?_, fun hle ↦ map_mono h.continuous hle⟩
     simpa [← h.isEmbedding.closure_eq_preimage_closure_image, a.isClosed.closure_eq,
       b.isClosed.closure_eq] using Set.preimage_mono (f := f) hle
 
 end IrreducibleCloseds
 
 end TopologicalSpace
+

@@ -31,18 +31,16 @@ variable {R} [CommRing R] (r : R) (M : Type*) {M' M''}
     [AddCommGroup M] [Module R M] [AddCommGroup M'] [Module R M']
     [AddCommGroup M''] [Module R M'']
 
-/--
-Definition of `QuotSMulTop` / `QuotSMulTop` 的定义
+/-- An abbreviation for `M⧸rM` that keeps us from having to write
+`(⊤ : Submodule R M)` over and over to satisfy the typechecker. -/
+/-
+**QuotSMulTop** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：QuotSMulTop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation QuotSMulTop
-  body: M ⧸ r • (⊤ : Submodule R M)
-
-中文:
-缩写 QuotSMulTop
-  定义体: M ⧸ r • (⊤ : Submodule R M)
-
-Depends on / 依赖: Submodule
+--- 原说明 ---
+An abbreviation for `M⧸rM` that keeps us from having to write
+`(⊤ : Submodule R M)` over and over to satisfy the typechecker.
 -/
 abbrev QuotSMulTop := M ⧸ r • (⊤ : Submodule R M)
 
@@ -50,308 +48,252 @@ namespace QuotSMulTop
 
 open Submodule Function TensorProduct
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- If `M'` is isomorphic to `M''` as `R`-modules, then `M'⧸rM'` is isomorphic to `M''⧸rM''`. -/
+/-
+**QuotSMulTop.congr** 是 Mathlib 中的一个定义，位于命名空间 `QuotSMulTop`。
+形式化陈述：{R : Type u_2} →   [inst : CommRing R] →     (r : R) →       {M' : Type u_
+3} →         {M'' : Type u_4} →           [inst_1 : AddCommGroup M'] →          
+   [inst_2 : _root_.Module R M'] →               [inst_3 : AddCommGroup M''] →  
+               [inst_4 : _root_.Module R M''] → (M' ≃ₗ[R] M'') → QuotSMulTop r M
+' ≃ₗ[R] QuotSMulTop r M''
+参数：r : R；M' ≃ₗ[R] M''。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congr
-  signature: (e : M' ≃ₗ[R] M'')
-  body: Submodule.Quotient.equiv (r • ⊤) (r • ⊤) e
-    (Submodule.map_pointwise_smul r _ e.toLinearMap).trans (by simp)
-
-中文:
-定义 congr
-  签名: (e : M' ≃ₗ[R] M'')
-  定义体: Submodule.Quotient.equiv (r • ⊤) (r • ⊤) e
-    (Submodule.map_pointwise_smul r _ e.toLinearMap).trans (by simp)
+--- 原说明 ---
+If `M'` is isomorphic to `M''` as `R`-modules, then `M'⧸rM'` is isomorphic to `M
+''⧸rM''`.
 -/
 protected def congr (e : M' ≃ₗ[R] M'') : QuotSMulTop r M' ≃ₗ[R] QuotSMulTop r M'' :=
-Submodule.Quotient.equiv (r • ⊤) (r • ⊤) e
+  Submodule.Quotient.equiv (r • ⊤) (r • ⊤) e <|
     (Submodule.map_pointwise_smul r _ e.toLinearMap).trans (by simp)
 
-/--
-Definition of `equivQuotTensor` / `equivQuotTensor` 的定义
+/-- Reducing a module modulo `r` is the same as left tensoring with `R/(r)`. -/
+/-
+**QuotSMulTop.equivQuotTensor** 是 Mathlib 中的一个定义，位于命名空间 `QuotSMulTop`。
+形式化陈述：equivQuotTensor : QuotSMulTop r M ≃ₗ[R] (R ⧸ Ideal.span {r}) otimes[R] M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivQuotTensor
-  signature: :
-  body: quotEquivOfEq _ _ (ideal_span_singleton_smul _ _).symm ≪≫ₗ
-    (quotTensorEquivQuotSMul M _).symm
-
-中文:
-定义 equivQuotTensor
-  签名: :
-  定义体: quotEquivOfEq _ _ (ideal_span_singleton_smul _ _).symm ≪≫ₗ
-    (quotTensorEquivQuotSMul M _).symm
-
-Depends on / 依赖: ideal_span_singleton_smul, quotEquivOfEq, quotTensorEquivQuotSMul
+--- 原说明 ---
+Reducing a module modulo `r` is the same as left tensoring with `R/(r)`.
 -/
 noncomputable def equivQuotTensor :
-    QuotSMulTop r M ≃ₗ[R] (R ⧸ Ideal.span {r}) otimes[R] M :=
+    QuotSMulTop r M ≃ₗ[R] (R ⧸ Ideal.span {r}) ⊗[R] M :=
   quotEquivOfEq _ _ (ideal_span_singleton_smul _ _).symm ≪≫ₗ
     (quotTensorEquivQuotSMul M _).symm
 
-/--
-Definition of `equivTensorQuot` / `equivTensorQuot` 的定义
+/-- Reducing a module modulo `r` is the same as right tensoring with `R/(r)`. -/
+/-
+**QuotSMulTop.equivTensorQuot** 是 Mathlib 中的一个定义，位于命名空间 `QuotSMulTop`。
+形式化陈述：equivTensorQuot : QuotSMulTop r M ≃ₗ[R] M otimes[R] (R ⧸ Ideal.span {r})
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivTensorQuot
-  signature: :
-  body: quotEquivOfEq _ _ (ideal_span_singleton_smul _ _).symm ≪≫ₗ
-    (tensorQuotEquivQuotSMul M _).symm
-
-中文:
-定义 equivTensorQuot
-  签名: :
-  定义体: quotEquivOfEq _ _ (ideal_span_singleton_smul _ _).symm ≪≫ₗ
-    (tensorQuotEquivQuotSMul M _).symm
-
-Depends on / 依赖: ideal_span_singleton_smul, quotEquivOfEq, tensorQuotEquivQuotSMul
+--- 原说明 ---
+Reducing a module modulo `r` is the same as right tensoring with `R/(r)`.
 -/
 noncomputable def equivTensorQuot :
-    QuotSMulTop r M ≃ₗ[R] M otimes[R] (R ⧸ Ideal.span {r}) :=
+    QuotSMulTop r M ≃ₗ[R] M ⊗[R] (R ⧸ Ideal.span {r}) :=
   quotEquivOfEq _ _ (ideal_span_singleton_smul _ _).symm ≪≫ₗ
     (tensorQuotEquivQuotSMul M _).symm
 
 variable {M}
 
-/--
-Definition of `map` / `map` 的定义
+/-- The action of the functor `QuotSMulTop r` on morphisms. -/
+/-
+**QuotSMulTop.map** 是 Mathlib 中的一个定义，位于命名空间 `QuotSMulTop`。
+形式化陈述：map : (M ->ₗ[R] M') ->ₗ[R] QuotSMulTop r M ->ₗ[R] QuotSMulTop r M'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : (M ->ₗ[R] M') ->ₗ[R] QuotSMulTop r M ->ₗ[R] QuotSMulTop r M'
-  body: Submodule.mapQLinear _ _ ∘ₗ LinearMap.id.codRestrict _ fun _ =>
-map_le_iff_le_comap.mp le_of_eq_of_le (map_pointwise_smul _ _ _)
-      smul_mono_right r le_top
-
-@[simp]
-
-中文:
-定义 map
-  签名: : (M ->ₗ[R] M') ->ₗ[R] QuotSMulTop r M ->ₗ[R] QuotSMulTop r M'
-  定义体: Submodule.mapQLinear _ _ ∘ₗ LinearMap.id.codRestrict _ fun _ =>
-map_le_iff_le_comap.mp le_of_eq_of_le (map_pointwise_smul _ _ _)
-      smul_mono_right r le_top
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id.codRestrict, Submodule, Submodule.mapQLinear, codRestrict, le_of_eq_of_le, le_top, mapQLinear, map_le_iff_le_comap, map_le_iff_le_comap.mp, map_pointwise_smul, smul_mono_right
+--- 原说明 ---
+The action of the functor `QuotSMulTop r` on morphisms.
 -/
-def map : (M ->ₗ[R] M') ->ₗ[R] QuotSMulTop r M ->ₗ[R] QuotSMulTop r M' :=
+def map : (M →ₗ[R] M') →ₗ[R] QuotSMulTop r M →ₗ[R] QuotSMulTop r M' :=
   Submodule.mapQLinear _ _ ∘ₗ LinearMap.id.codRestrict _ fun _ =>
-map_le_iff_le_comap.mp le_of_eq_of_le (map_pointwise_smul _ _ _)
+    map_le_iff_le_comap.mp <| le_of_eq_of_le (map_pointwise_smul _ _ _) <|
       smul_mono_right r le_top
 
 @[simp]
-/--
-lemma `map_apply_mk` / 引理 `map_apply_mk`
-
-English:
-lemma map_apply_mk
-  given: (f : M ->ₗ[R] M') (x : M)
-  proof: rfl
-
-中文:
-引理 map_apply_mk
-  条件: (f : M ->ₗ[R] M') (x : M)
-  证明: rfl
+/-
+**QuotSMulTop.map_apply_mk** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`。
+形式化陈述：map_apply_mk (f : M ->ₗ[R] M') (x : M) : map r f (Submodule.Quotient.mk x)
+ = (Submodule.Quotient.mk (f x) : QuotSMulTop r M')
+参数：f : M ->ₗ[R] M'；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_apply_mk (f : M ->ₗ[R] M') (x : M) :
+lemma map_apply_mk (f : M →ₗ[R] M') (x : M) :
     map r f (Submodule.Quotient.mk x) =
       (Submodule.Quotient.mk (f x) : QuotSMulTop r M') := rfl
 
 -- weirdly expensive to typecheck the type here?
-/--
-lemma `map_comp_mkQ` / 引理 `map_comp_mkQ`
-
-English:
-lemma map_comp_mkQ
-  given: (f : M ->ₗ[R] M')
-  proof: by
-  ext; rfl
-
-中文:
-引理 map_comp_mkQ
-  条件: (f : M ->ₗ[R] M')
-  证明: by
-  ext; rfl
+/-
+**QuotSMulTop.map_comp_mkQ** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`。
+形式化陈述：map_comp_mkQ (f : M ->ₗ[R] M') : map r f ∘ₗ mkQ (r • ⊤) = mkQ (r • ⊤) ∘ₗ f
+参数：f : M ->ₗ[R] M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
-lemma map_comp_mkQ (f : M ->ₗ[R] M') :
+lemma map_comp_mkQ (f : M →ₗ[R] M') :
     map r f ∘ₗ mkQ (r • ⊤) = mkQ (r • ⊤) ∘ₗ f := by
   ext; rfl
 
 variable (M)
 
 @[simp]
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  statement: map r (LinearMap.id : M ->ₗ[R] M) = .id
-  proof: DFunLike.ext _ _ (mkQ_surjective _).forall.mpr fun _ => rfl
-
-中文:
-引理 map_id
-  结论: map r (线性映射.id : M ->ₗ[R] M) = .id
-  证明: DFunLike.ext _ _ (mkQ_surjective _).forall.mpr fun _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.ext, forall.mpr, mkQ_surjective
+/-
+**QuotSMulTop.map_id** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`。
+形式化陈述：map_id : map r (LinearMap.id : M ->ₗ[R] M) = .id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Submodule.mkQ_surjective`：mkQ_surjective : Function.Surjective p.mkQ
 -/
-lemma map_id : map r (LinearMap.id : M ->ₗ[R] M) = .id :=
-DFunLike.ext _ _ (mkQ_surjective _).forall.mpr fun _ => rfl
+lemma map_id : map r (LinearMap.id : M →ₗ[R] M) = .id :=
+  DFunLike.ext _ _ <| (mkQ_surjective _).forall.mpr fun _ => rfl
 
 variable {M}
 
 @[simp]
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: (g : M' ->ₗ[R] M'') (f : M ->ₗ[R] M')
-  proof: DFunLike.ext _ _ (mkQ_surjective _).forall.mpr fun _ => rfl
-
-中文:
-引理 map_comp
-  条件: (g : M' ->ₗ[R] M'') (f : M ->ₗ[R] M')
-  证明: DFunLike.ext _ _ (mkQ_surjective _).forall.mpr fun _ => rfl
-
-Depends on / 依赖: CompHaus, CompHaus.epi_iff_surjective, CompHaus.of, CompHausLike, CompHausLike.ofHom, CompactT2, CompactT2.Projective.extremallyDisconnected, DFunLike, DFunLike.ext, Projective, Projective.factors, apply_fun, epi_iff_surjective, extremallyDisconnected, factors, forall.mpr, h.hom.hom, mkQ_surjective
+/-
+**QuotSMulTop.map_comp** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`。
+形式化陈述：map_comp (g : M' ->ₗ[R] M'') (f : M ->ₗ[R] M') : map r (g ∘ₗ f) = map r g 
+∘ₗ map r f
+参数：g : M' ->ₗ[R] M''；f : M ->ₗ[R] M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Submodule.mkQ_surjective`：mkQ_surjective : Function.Surjective p.mkQ
 -/
-lemma map_comp (g : M' ->ₗ[R] M'') (f : M ->ₗ[R] M') :
+lemma map_comp (g : M' →ₗ[R] M'') (f : M →ₗ[R] M') :
     map r (g ∘ₗ f) = map r g ∘ₗ map r f :=
-DFunLike.ext _ _ (mkQ_surjective _).forall.mpr fun _ => rfl
-
-/--
-lemma `equivQuotTensor_naturality_mk` / 引理 `equivQuotTensor_naturality_mk`
-
-English:
-lemma equivQuotTensor_naturality_mk
-  given: (f : M ->ₗ[R] M') (x : M)
-  proof: (LinearMap.lTensor_tmul (R ⧸ Ideal.span {r}) f 1 x).symm
-
-中文:
-引理 equivQuotTensor_naturality_mk
-  条件: (f : M ->ₗ[R] M') (x : M)
-  证明: (LinearMap.lTensor_tmul (R ⧸ Ideal.span {r}) f 1 x).symm
-
-Depends on / 依赖: Ideal.span, LinearMap, LinearMap.lTensor_tmul, lTensor_tmul
+  DFunLike.ext _ _ <| (mkQ_surjective _).forall.mpr fun _ => rfl
+/-
+**QuotSMulTop.equivQuotTensor_naturality_mk** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulT
+op`。
+形式化陈述：equivQuotTensor_naturality_mk (f : M ->ₗ[R] M') (x : M) : equivQuotTensor 
+r M' (map r f (Submodule.Quotient.mk x)) = f.lTensor (R ⧸ Ideal.span {r}) (equiv
+QuotTensor r M (Submodule.Quotient.mk x))
+参数：f : M ->ₗ[R] M'；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.lTensor_tmul`：lTensor_tmul (m : M) (n : N) : f.lTensor M (m ot
+imesₜ n) = m otimesₜ f n
 -/
-lemma equivQuotTensor_naturality_mk (f : M ->ₗ[R] M') (x : M) :
+lemma equivQuotTensor_naturality_mk (f : M →ₗ[R] M') (x : M) :
     equivQuotTensor r M' (map r f (Submodule.Quotient.mk x)) =
       f.lTensor (R ⧸ Ideal.span {r})
         (equivQuotTensor r M (Submodule.Quotient.mk x)) :=
   (LinearMap.lTensor_tmul (R ⧸ Ideal.span {r}) f 1 x).symm
-
-/--
-lemma `equivQuotTensor_naturality` / 引理 `equivQuotTensor_naturality`
-
-English:
-lemma equivQuotTensor_naturality
-  given: (f : M ->ₗ[R] M')
-  proof: quot_hom_ext _ _ _ (equivQuotTensor_naturality_mk r f)
-
-中文:
-引理 equivQuotTensor_naturality
-  条件: (f : M ->ₗ[R] M')
-  证明: quot_hom_ext _ _ _ (equivQuotTensor_naturality_mk r f)
-
-Depends on / 依赖: equivQuotTensor_naturality_mk, quot_hom_ext
+/-
+**QuotSMulTop.equivQuotTensor_naturality** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`
+。
+形式化陈述：equivQuotTensor_naturality (f : M ->ₗ[R] M') : equivQuotTensor r M' ∘ₗ map
+ r f = f.lTensor (R ⧸ Ideal.span {r}) ∘ₗ equivQuotTensor r M
+参数：f : M ->ₗ[R] M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.quot_hom_ext`：quot_hom_ext (f g : (M ⧸ p) ->ₗ[R] M₂) (h : fora
+ll x : M, f (Quotient.mk x) = g (Quotient.mk x)) : f = g
+· 使用引理 `QuotSMulTop.equivQuotTensor_naturality_mk`：equivQuotTensor_naturality_mk
+ (f : M ->ₗ[R] M') (x : M) : equivQuotTensor r M' (map r f (Submodule.Quotient.m
+k x)) = f.lTensor (R ⧸ Ideal.sp…
 -/
-lemma equivQuotTensor_naturality (f : M ->ₗ[R] M') :
+lemma equivQuotTensor_naturality (f : M →ₗ[R] M') :
     equivQuotTensor r M' ∘ₗ map r f =
       f.lTensor (R ⧸ Ideal.span {r}) ∘ₗ equivQuotTensor r M :=
   quot_hom_ext _ _ _ (equivQuotTensor_naturality_mk r f)
-
-/--
-lemma `equivTensorQuot_naturality_mk` / 引理 `equivTensorQuot_naturality_mk`
-
-English:
-lemma equivTensorQuot_naturality_mk
-  given: (f : M ->ₗ[R] M') (x : M)
-  proof: (LinearMap.rTensor_tmul (R ⧸ Ideal.span {r}) f 1 x).symm
-
-中文:
-引理 equivTensorQuot_naturality_mk
-  条件: (f : M ->ₗ[R] M') (x : M)
-  证明: (LinearMap.rTensor_tmul (R ⧸ Ideal.span {r}) f 1 x).symm
-
-Depends on / 依赖: Ideal.span, LinearMap, LinearMap.rTensor_tmul, rTensor_tmul
+/-
+**QuotSMulTop.equivTensorQuot_naturality_mk** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulT
+op`。
+形式化陈述：equivTensorQuot_naturality_mk (f : M ->ₗ[R] M') (x : M) : equivTensorQuot 
+r M' (map r f (Submodule.Quotient.mk x)) = f.rTensor (R ⧸ Ideal.span {r}) (equiv
+TensorQuot r M (Submodule.Quotient.mk x))
+参数：f : M ->ₗ[R] M'；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.rTensor_tmul`：rTensor_tmul (m : M) (n : N) : f.rTensor M (n ot
+imesₜ m) = f n otimesₜ m
 -/
-lemma equivTensorQuot_naturality_mk (f : M ->ₗ[R] M') (x : M) :
+lemma equivTensorQuot_naturality_mk (f : M →ₗ[R] M') (x : M) :
     equivTensorQuot r M' (map r f (Submodule.Quotient.mk x)) =
       f.rTensor (R ⧸ Ideal.span {r})
         (equivTensorQuot r M (Submodule.Quotient.mk x)) :=
   (LinearMap.rTensor_tmul (R ⧸ Ideal.span {r}) f 1 x).symm
-
-/--
-lemma `equivTensorQuot_naturality` / 引理 `equivTensorQuot_naturality`
-
-English:
-lemma equivTensorQuot_naturality
-  given: (f : M ->ₗ[R] M')
-  proof: quot_hom_ext _ _ _ (equivTensorQuot_naturality_mk r f)
-
-中文:
-引理 equivTensorQuot_naturality
-  条件: (f : M ->ₗ[R] M')
-  证明: quot_hom_ext _ _ _ (equivTensorQuot_naturality_mk r f)
-
-Depends on / 依赖: ExtremallyDisconnected, equivTensorQuot_naturality_mk, quot_hom_ext
+/-
+**QuotSMulTop.equivTensorQuot_naturality** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`
+。
+形式化陈述：equivTensorQuot_naturality (f : M ->ₗ[R] M') : equivTensorQuot r M' ∘ₗ map
+ r f = f.rTensor (R ⧸ Ideal.span {r}) ∘ₗ equivTensorQuot r M
+参数：f : M ->ₗ[R] M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.quot_hom_ext`：quot_hom_ext (f g : (M ⧸ p) ->ₗ[R] M₂) (h : fora
+ll x : M, f (Quotient.mk x) = g (Quotient.mk x)) : f = g
+· 使用引理 `QuotSMulTop.equivTensorQuot_naturality_mk`：equivTensorQuot_naturality_mk
+ (f : M ->ₗ[R] M') (x : M) : equivTensorQuot r M' (map r f (Submodule.Quotient.m
+k x)) = f.rTensor (R ⧸ Ideal.sp…
 -/
-lemma equivTensorQuot_naturality (f : M ->ₗ[R] M') :
+lemma equivTensorQuot_naturality (f : M →ₗ[R] M') :
     equivTensorQuot r M' ∘ₗ map r f =
       f.rTensor (R ⧸ Ideal.span {r}) ∘ₗ equivTensorQuot r M :=
   quot_hom_ext _ _ _ (equivTensorQuot_naturality_mk r f)
-
-/--
-lemma `map_surjective` / 引理 `map_surjective`
-
-English:
-lemma map_surjective
-  given: {f : M ->ₗ[R] M'} (hf : Surjective f)
-  statement: Surjective (map r f)
-  proof: have H₁ := (mkQ_surjective (r • ⊤ : Submodule R M')).comp hf
-@Surjective.of_comp _ _ _ _ (mkQ (r • ⊤ : Submodule R M)) by
-    rwa [← LinearMap.coe_comp, map_comp_mkQ, LinearMap.coe_comp]
-
-中文:
-引理 map_surjective
-  条件: {f : M ->ₗ[R] M'} (hf : 满射 f)
-  结论: 满射 (map r f)
-  证明: have H₁ := (mkQ_surjective (r • ⊤ : Submodule R M')).comp hf
-@Surjective.of_comp _ _ _ _ (mkQ (r • ⊤ : Submodule R M)) by
-    rwa [← LinearMap.coe_comp, map_comp_mkQ, LinearMap.coe_comp]
-
-Depends on / 依赖: LinearMap, LinearMap.coe_comp, Submodule, Surjective, Surjective.of_comp, coe_comp, map_comp_mkQ, mkQ_surjective, of_comp
+/-
+**QuotSMulTop.map_surjective** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`。
+形式化陈述：map_surjective {f : M ->ₗ[R] M'} (hf : Surjective f) : Surjective (map r f
+)
+参数：hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `Submodule.mkQ_surjective`：mkQ_surjective : Function.Surjective p.mkQ
+· 使用定理 `Function.Surjective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u
+_3} {f : α → β} {g : γ → α},   Function.Surjective (f ∘ g) → Function.Surjective
+ f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.coe_comp`：coe_comp : (f.comp g : M₁ -> M₃) = f ∘ g
+· 使用引理 `QuotSMulTop.map_comp_mkQ`：map_comp_mkQ (f : M ->ₗ[R] M') : map r f ∘ₗ mk
+Q (r • ⊤) = mkQ (r • ⊤) ∘ₗ f
 -/
-lemma map_surjective {f : M ->ₗ[R] M'} (hf : Surjective f) : Surjective (map r f) :=
+lemma map_surjective {f : M →ₗ[R] M'} (hf : Surjective f) : Surjective (map r f) :=
   have H₁ := (mkQ_surjective (r • ⊤ : Submodule R M')).comp hf
-@Surjective.of_comp _ _ _ _ (mkQ (r • ⊤ : Submodule R M)) by
+  @Surjective.of_comp _ _ _ _ (mkQ (r • ⊤ : Submodule R M)) <| by
     rwa [← LinearMap.coe_comp, map_comp_mkQ, LinearMap.coe_comp]
-
-/--
-lemma `map_exact` / 引理 `map_exact`
-
-English:
-lemma map_exact
-  statement: {f : M ->ₗ[R] M'} {g : M' ->ₗ[R] M''}
-  proof: (Exact.iff_of_ladder_linearEquiv (equivQuotTensor_naturality r f).symm
-                             (equivQuotTensor_naturality r g).symm).mp
-    (lTensor_exact (R ⧸ Ideal.span {r}) hfg hg)
-
-中文:
-引理 map_exact
-  结论: {f : M ->ₗ[R] M'} {g : M' ->ₗ[R] M''}
-  证明: (Exact.iff_of_ladder_linearEquiv (equivQuotTensor_naturality r f).symm
-                             (equivQuotTensor_naturality r g).symm).mp
-    (lTensor_exact (R ⧸ Ideal.span {r}) hfg hg)
-
-Depends on / 依赖: Exact.iff_of_ladder_linearEquiv, Ideal.span, X.prop, equivQuotTensor_naturality, iff_of_ladder_linearEquiv, lTensor_exact
+/-
+**QuotSMulTop.map_exact** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`。
+形式化陈述：map_exact {f : M ->ₗ[R] M'} {g : M' ->ₗ[R] M''} (hfg : Exact f g) (hg : Su
+rjective g) : Exact (map r f) (map r g)
+参数：hfg : Exact f g；hg : Surjective g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Function.Exact.iff_of_ladder_linearEquiv`：iff_of_ladder_linearEquiv (h₁₂
+ : g₁₂ ∘ₗ e₁ = e₂ ∘ₗ f₁₂) (h₂₃ : g₂₃ ∘ₗ e₂ = e₃ ∘ₗ f₂₃) : Exact g₁₂ g₂₃ ↔ Exact 
+f₁₂ f₂₃
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `QuotSMulTop.equivQuotTensor_naturality`：equivQuotTensor_naturality (f : 
+M ->ₗ[R] M') : equivQuotTensor r M' ∘ₗ map r f = f.lTensor (R ⧸ Ideal.span {r}) 
+∘ₗ equivQuotTensor r M
+· 使用定理 `lTensor_exact`：lTensor_exact : Exact (lTensor Q f) (lTensor Q g)
 -/
-lemma map_exact {f : M ->ₗ[R] M'} {g : M' ->ₗ[R] M''}
+lemma map_exact {f : M →ₗ[R] M'} {g : M' →ₗ[R] M''}
     (hfg : Exact f g) (hg : Surjective g) : Exact (map r f) (map r g) :=
   (Exact.iff_of_ladder_linearEquiv (equivQuotTensor_naturality r f).symm
                              (equivQuotTensor_naturality r g).symm).mp
@@ -359,107 +301,88 @@ lemma map_exact {f : M ->ₗ[R] M'} {g : M' ->ₗ[R] M''}
 
 variable (M M')
 
-/--
-Definition of `tensorQuotSMulTopEquivQuotSMulTop` / `tensorQuotSMulTopEquivQuotSMulTop` 的定义
+/-- Tensoring on the left and applying `QuotSMulTop · r` commute. -/
+/-
+**QuotSMulTop.tensorQuotSMulTopEquivQuotSMulTop** 是 Mathlib 中的一个定义，位于命名空间 `QuotS
+MulTop`。
+形式化陈述：tensorQuotSMulTopEquivQuotSMulTop : M otimes[R] QuotSMulTop r M' ≃ₗ[R] Quo
+tSMulTop r (M otimes[R] M')
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorQuotSMulTopEquivQuotSMulTop
-  signature: :
-  body: (equivTensorQuot r M').lTensor M ≪≫ₗ
-    (TensorProduct.assoc R M M' (R ⧸ Ideal.span {r})).symm ≪≫ₗ
-      (equivTensorQuot r (M otimes[R] M')).symm
-
-中文:
-定义 tensorQuotSMulTopEquivQuotSMulTop
-  签名: :
-  定义体: (equivTensorQuot r M').lTensor M ≪≫ₗ
-    (TensorProduct.assoc R M M' (R ⧸ Ideal.span {r})).symm ≪≫ₗ
-      (equivTensorQuot r (M otimes[R] M')).symm
-
-Depends on / 依赖: Ideal.span, TensorProduct, TensorProduct.assoc, equivTensorQuot, lTensor, otimes
+--- 原说明 ---
+Tensoring on the left and applying `QuotSMulTop · r` commute.
 -/
 noncomputable def tensorQuotSMulTopEquivQuotSMulTop :
-    M otimes[R] QuotSMulTop r M' ≃ₗ[R] QuotSMulTop r (M otimes[R] M') :=
+    M ⊗[R] QuotSMulTop r M' ≃ₗ[R] QuotSMulTop r (M ⊗[R] M') :=
   (equivTensorQuot r M').lTensor M ≪≫ₗ
     (TensorProduct.assoc R M M' (R ⧸ Ideal.span {r})).symm ≪≫ₗ
-      (equivTensorQuot r (M otimes[R] M')).symm
+      (equivTensorQuot r (M ⊗[R] M')).symm
 
-/--
-Definition of `quotSMulTopTensorEquivQuotSMulTop` / `quotSMulTopTensorEquivQuotSMulTop` 的定义
+/-- Tensoring on the right and applying `QuotSMulTop · r` commute. -/
+/-
+**QuotSMulTop.quotSMulTopTensorEquivQuotSMulTop** 是 Mathlib 中的一个定义，位于命名空间 `QuotS
+MulTop`。
+形式化陈述：quotSMulTopTensorEquivQuotSMulTop : QuotSMulTop r M' otimes[R] M ≃ₗ[R] Quo
+tSMulTop r (M' otimes[R] M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotSMulTopTensorEquivQuotSMulTop
-  signature: :
-  body: (equivQuotTensor r M').rTensor M ≪≫ₗ
-    TensorProduct.assoc R (R ⧸ Ideal.span {r}) M' M ≪≫ₗ
-      (equivQuotTensor r (M' otimes[R] M)).symm
-
-中文:
-定义 quotSMulTopTensorEquivQuotSMulTop
-  签名: :
-  定义体: (equivQuotTensor r M').rTensor M ≪≫ₗ
-    TensorProduct.assoc R (R ⧸ Ideal.span {r}) M' M ≪≫ₗ
-      (equivQuotTensor r (M' otimes[R] M)).symm
-
-Depends on / 依赖: Ideal.span, TensorProduct, TensorProduct.assoc, equivQuotTensor, otimes, rTensor
+--- 原说明 ---
+Tensoring on the right and applying `QuotSMulTop · r` commute.
 -/
 noncomputable def quotSMulTopTensorEquivQuotSMulTop :
-    QuotSMulTop r M' otimes[R] M ≃ₗ[R] QuotSMulTop r (M' otimes[R] M) :=
+    QuotSMulTop r M' ⊗[R] M ≃ₗ[R] QuotSMulTop r (M' ⊗[R] M) :=
   (equivQuotTensor r M').rTensor M ≪≫ₗ
     TensorProduct.assoc R (R ⧸ Ideal.span {r}) M' M ≪≫ₗ
-      (equivQuotTensor r (M' otimes[R] M)).symm
+      (equivQuotTensor r (M' ⊗[R] M)).symm
 
-/--
-Definition of `algebraMapTensorEquivTensorQuotSMulTop` / `algebraMapTensorEquivTensorQuotSMulTop` 的定义
+/-- Let `R` be a commutative ring, `M` be an `R`-module, `S` be an `R`-algebra, then
+  `S ⊗[R] (M/rM)` is isomorphic to `(S ⊗[R] M)⧸r(S ⊗[R] M)` as `S`-modules. -/
+/-
+**QuotSMulTop.algebraMapTensorEquivTensorQuotSMulTop** 是 Mathlib 中的一个定义，位于命名空间 `
+QuotSMulTop`。
+形式化陈述：algebraMapTensorEquivTensorQuotSMulTop (S : Type*) [CommRing S] [Algebra R
+ S] : QuotSMulTop ((algebraMap R S) r) (S otimes[R] M) ≃ₗ[S] S otimes[R] QuotSMu
+lTop r M
+参数：S : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraMapTensorEquivTensorQuotSMulTop
-  signature: (S : Type*) [CommRing S] [Algebra R S]
-  body: Submodule.quotEquivOfEq _ _ (by simp [Ideal.map_span, ideal_span_singleton_smul]) ≪≫ₗ
-    tensorQuotMapSMulEquivTensorQuot M S (Ideal.span {r}) ≪≫ₗ
-      (Submodule.quotEquivOfEq _ _ (ideal_span_singleton_smul r _)).baseChange R S _ _
-
-中文:
-定义 algebraMapTensorEquivTensorQuotSMulTop
-  签名: (S : 类型) [交换环 S] [代数 R S]
-  定义体: Submodule.quotEquivOfEq _ _ (by simp [Ideal.map_span, ideal_span_singleton_smul]) ≪≫ₗ
-    tensorQuotMapSMulEquivTensorQuot M S (Ideal.span {r}) ≪≫ₗ
-      (Submodule.quotEquivOfEq _ _ (ideal_span_singleton_smul r _)).baseChange R S _ _
-
-Depends on / 依赖: Ideal.map_span, Ideal.span, Submodule, Submodule.quotEquivOfEq, baseChange, ideal_span_singleton_smul, map_span, quotEquivOfEq, tensorQuotMapSMulEquivTensorQuot
+--- 原说明 ---
+Let `R` be a commutative ring, `M` be an `R`-module, `S` be an `R`-algebra, then
+  `S ⊗[R] (M/rM)` is isomorphic to `(S ⊗[R] M)⧸r(S ⊗[R] M)` as `S`-modules.
 -/
 noncomputable def algebraMapTensorEquivTensorQuotSMulTop (S : Type*) [CommRing S] [Algebra R S] :
-    QuotSMulTop ((algebraMap R S) r) (S otimes[R] M) ≃ₗ[S] S otimes[R] QuotSMulTop r M :=
+    QuotSMulTop ((algebraMap R S) r) (S ⊗[R] M) ≃ₗ[S] S ⊗[R] QuotSMulTop r M :=
   Submodule.quotEquivOfEq _ _ (by simp [Ideal.map_span, ideal_span_singleton_smul]) ≪≫ₗ
     tensorQuotMapSMulEquivTensorQuot M S (Ideal.span {r}) ≪≫ₗ
       (Submodule.quotEquivOfEq _ _ (ideal_span_singleton_smul r _)).baseChange R S _ _
-
-/--
-lemma `mem_annihilator` / 引理 `mem_annihilator`
-
-English:
-lemma mem_annihilator
-  given: (x : R)
-  statement: x in Module.annihilator R (QuotSMulTop x M)
-  proof: by
-  refine Module.mem_annihilator.mpr (fun m => ?_)
-  rcases Submodule.Quotient.mk_surjective _ m with ⟨m', hm'⟩
-  simpa [← hm', ← Submodule.Quotient.mk_smul] using Submodule.smul_mem_pointwise_smul m' x ⊤ trivial
-
-中文:
-引理 mem_annihilator
-  条件: (x : R)
-  结论: x in 模.annihilator R (QuotSMulTop x M)
-  证明: by
-  refine Module.mem_annihilator.mpr (fun m => ?_)
-  rcases Submodule.Quotient.mk_surjective _ m with ⟨m', hm'⟩
-  simpa [← hm', ← Submodule.Quotient.mk_smul] using Submodule.smul_mem_pointwise_smul m' x ⊤ trivial
-
-Depends on / 依赖: Module, Module.mem_annihilator.mpr, Quotient, Submodule, Submodule.Quotient.mk_smul, Submodule.Quotient.mk_surjective, Submodule.smul_mem_pointwise_smul, mem_annihilator, mk_smul, mk_surjective, smul_mem_pointwise_smul
+/-
+**QuotSMulTop.mem_annihilator** 是 Mathlib 中的一个引理，位于命名空间 `QuotSMulTop`。
+形式化陈述：mem_annihilator (x : R) : x in Module.annihilator R (QuotSMulTop x M)
+参数：x : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.mem_annihilator`：Module.mem_annihilator {r} : r in Module.annihil
+ator R M ↔ forall m : M, r • m = 0
+· 使用定理 `Submodule.Quotient.mk_surjective`：mk_surjective : Function.Surjective (@
+mk _ _ _ _ _ p)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.smul_mem_pointwise_smul`：smul_mem_pointwise_smul (m : M) (a : 
+α) (S : Submodule R M) : m in S -> a • m in a • S
+· 使用定理 `trivial`：True
 -/
-lemma mem_annihilator (x : R) : x in Module.annihilator R (QuotSMulTop x M) := by
-  refine Module.mem_annihilator.mpr (fun m => ?_)
+lemma mem_annihilator (x : R) : x ∈ Module.annihilator R (QuotSMulTop x M) := by
+  refine Module.mem_annihilator.mpr (fun m ↦ ?_)
   rcases Submodule.Quotient.mk_surjective _ m with ⟨m', hm'⟩
   simpa [← hm', ← Submodule.Quotient.mk_smul] using Submodule.smul_mem_pointwise_smul m' x ⊤ trivial
 
 end QuotSMulTop
+

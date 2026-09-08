@@ -31,53 +31,40 @@ variable [Lattice α] [Nonempty α]
 /-- Order-bornology on a nonempty lattice. The bounded sets are the sets that are bounded both above
 and below. -/
 @[instance_reducible]
-/--
-Definition of `orderBornology` / `orderBornology` 的定义
+/-
+**orderBornology** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：orderBornology : Bornology α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderBornology
-  signature: : Bornology α
-  body: .ofBounded
-  {s | BddBelow s ∧ BddAbove s}
-  (by simp)
-  (fun _ hs _ hst => ⟨hs.1.mono hst, hs.2.mono hst⟩)
-  (fun _ hs _ ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩)
-  (by simp)
-
-中文:
-定义 orderBornology
-  签名: : 有界结构 α
-  定义体: .ofBounded
-  {s | BddBelow s ∧ BddAbove s}
-  (by simp)
-  (fun _ hs _ hst => ⟨hs.1.mono hst, hs.2.mono hst⟩)
-  (fun _ hs _ ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩)
-  (by simp)
-
-Depends on / 依赖: ofBounded
+--- 原说明 ---
+Order-bornology on a nonempty lattice. The bounded sets are the sets that are bo
+unded both above
+and below.
 -/
 def orderBornology : Bornology α := .ofBounded
   {s | BddBelow s ∧ BddAbove s}
   (by simp)
-  (fun _ hs _ hst => ⟨hs.1.mono hst, hs.2.mono hst⟩)
-  (fun _ hs _ ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩)
+  (fun _ hs _ hst ↦ ⟨hs.1.mono hst, hs.2.mono hst⟩)
+  (fun _ hs _ ht ↦ ⟨hs.1.union ht.1, hs.2.union ht.2⟩)
   (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `orderBornology_isBounded` / 引理 `orderBornology_isBounded`
-
-English:
-lemma orderBornology_isBounded
-  statement: orderBornology.IsBounded s ↔ BddBelow s ∧ BddAbove s
-  proof: by
-  simp [IsBounded, IsCobounded, -isCobounded_compl_iff]
-
-中文:
-引理 orderBornology_isBounded
-  结论: orderBornology.IsBounded s ↔ BddBelow s ∧ BddAbove s
-  证明: by
-  simp [IsBounded, IsCobounded, -isCobounded_compl_iff]
+/-
+**orderBornology_isBounded** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} {s : Set α} [inst : Lattice α] [inst_1 : Nonempty α], Bor
+nology.IsBounded s ↔ BddBelow s ∧ BddAbove s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma orderBornology_isBounded : orderBornology.IsBounded s ↔ BddBelow s ∧ BddAbove s := by
   simp [IsBounded, IsCobounded, -isCobounded_compl_iff]
@@ -87,368 +74,318 @@ end Lattice
 variable [Bornology α]
 
 variable (α) [Preorder α] in
-/--
-Definition of `IsOrderBornology` / `IsOrderBornology` 的定义
+/-- Predicate for a preorder to be equipped with its order-bornology, namely for its bounded sets
+to be the ones that are bounded both above and below. -/
+/-
+**IsOrderBornology** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Bornology α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsOrderBornology
-  parameters: : Prop where
-  axioms and operations (1):
-    - isBounded_iff_bddBelow_bddAbove((s : Set α)) : IsBounded s ↔ BddBelow s ∧ BddAbove s
-
-中文:
-类 是OrderBornology
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isBounded_iff_bddBelow_bddAbove((s : 集合 α)) : IsBounded s ↔ BddBelow s ∧ BddAbove s
+--- 原说明 ---
+Predicate for a preorder to be equipped with its order-bornology, namely for its
+ bounded sets
+to be the ones that are bounded both above and below.
 -/
 class IsOrderBornology : Prop where
   protected isBounded_iff_bddBelow_bddAbove (s : Set α) : IsBounded s ↔ BddBelow s ∧ BddAbove s
-
-/--
-lemma `isOrderBornology_iff_eq_orderBornology` / 引理 `isOrderBornology_iff_eq_orderBornology`
-
-English:
-lemma isOrderBornology_iff_eq_orderBornology
-  given: [Lattice α] [Nonempty α]
-  proof: by
-  refine ⟨fun h => ?_, fun h => ⟨fun s => by rw [h, orderBornology_isBounded]⟩⟩
-  ext s
-  exact isBounded_compl_iff.symm.trans (h.1 _)
-
-中文:
-引理 isOrderBornology_iff_eq_orderBornology
-  条件: [格 α] [非空 α]
-  证明: by
-  refine ⟨fun h => ?_, fun h => ⟨fun s => by rw [h, orderBornology_isBounded]⟩⟩
-  ext s
-  exact isBounded_compl_iff.symm.trans (h.1 _)
-
-Depends on / 依赖: isBounded_compl_iff, isBounded_compl_iff.symm.trans, orderBornology_isBounded
+/-
+**isOrderBornology_iff_eq_orderBornology** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isOrderBornology_iff_eq_orderBornology [Lattice α] [Nonempty α] : IsOrderB
+ornology α ↔ ‹Bornology α› = orderBornology
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bornology.ext`：Bornology.ext (t t' : Bornology α) (h_cobounded : @Bornol
+ogy.cobounded α t = @Bornology.cobounded α t') : t = t'
+· 使用定理 `Filter.ext`：∀ {α : Type u_1} {f g : Filter α}, (∀ (s : Set α), s ∈ f ↔ s
+ ∈ g) → f = g
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Bornology.isBounded_compl_iff`：isBounded_compl_iff : IsBounded sᶜ ↔ IsCo
+bounded s
+· 使用定理 `IsOrderBornology.isBounded_iff_bddBelow_bddAbove`：∀ {α : Type u_1} {inst
+ : Bornology α} {inst_1 : Preorder α} [self : IsOrderBornology α] (s : Set α),  
+ Bornology.IsBounded s ↔ BddBelow s ∧ …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `orderBornology_isBounded`：∀ {α : Type u_1} {s : Set α} [inst : Lattice α
+] [inst_1 : Nonempty α], Bornology.IsBounded s ↔ BddBelow s ∧ BddAbove s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isOrderBornology_iff_eq_orderBornology [Lattice α] [Nonempty α] :
     IsOrderBornology α ↔ ‹Bornology α› = orderBornology := by
-  refine ⟨fun h => ?_, fun h => ⟨fun s => by rw [h, orderBornology_isBounded]⟩⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ⟨fun s ↦ by rw [h, orderBornology_isBounded]⟩⟩
   ext s
   exact isBounded_compl_iff.symm.trans (h.1 _)
 
 section Preorder
 variable [Preorder α] [IsOrderBornology α]
 
-/--
-lemma `isBounded_iff_bddBelow_bddAbove` / 引理 `isBounded_iff_bddBelow_bddAbove`
-
-English:
-lemma isBounded_iff_bddBelow_bddAbove
-  statement: IsBounded s ↔ BddBelow s ∧ BddAbove s
-  proof: IsOrderBornology.isBounded_iff_bddBelow_bddAbove _
-
-中文:
-引理 isBounded_iff_bddBelow_bddAbove
-  结论: IsBounded s ↔ BddBelow s ∧ BddAbove s
-  证明: IsOrderBornology.isBounded_iff_bddBelow_bddAbove _
-
-Depends on / 依赖: IsOrderBornology, IsOrderBornology.isBounded_iff_bddBelow_bddAbove, isBounded_iff_bddBelow_bddAbove
+/-
+**isBounded_iff_bddBelow_bddAbove** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isBounded_iff_bddBelow_bddAbove : IsBounded s ↔ BddBelow s ∧ BddAbove s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderBornology.isBounded_iff_bddBelow_bddAbove`：∀ {α : Type u_1} {inst
+ : Bornology α} {inst_1 : Preorder α} [self : IsOrderBornology α] (s : Set α),  
+ Bornology.IsBounded s ↔ BddBelow s ∧ …
 -/
 lemma isBounded_iff_bddBelow_bddAbove : IsBounded s ↔ BddBelow s ∧ BddAbove s :=
   IsOrderBornology.isBounded_iff_bddBelow_bddAbove _
-
-/--
-lemma `Bornology.IsBounded.bddBelow` / 引理 `Bornology.IsBounded.bddBelow`
-
-English:
-lemma Bornology.IsBounded.bddBelow
-  given: (hs : IsBounded s)
-  statement: BddBelow s
-  proof: (isBounded_iff_bddBelow_bddAbove.1 hs).1
-
-中文:
-引理 有界结构.IsBounded.bddBelow
-  条件: (hs : IsBounded s)
-  结论: BddBelow s
-  证明: (isBounded_iff_bddBelow_bddAbove.1 hs).1
+/-
+**Bornology.IsBounded.bddBelow** 是 Mathlib 中的一个定理，位于命名空间 `Bornology.IsBounded`。
+形式化陈述：∀ {α : Type u_1} {s : Set α} [inst : Bornology α] [inst_1 : Preorder α] [I
+sOrderBornology α],   Bornology.IsBounded s → BddBelow s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
 -/
 protected lemma Bornology.IsBounded.bddBelow (hs : IsBounded s) : BddBelow s :=
   (isBounded_iff_bddBelow_bddAbove.1 hs).1
-
-/--
-lemma `Bornology.IsBounded.bddAbove` / 引理 `Bornology.IsBounded.bddAbove`
-
-English:
-lemma Bornology.IsBounded.bddAbove
-  given: (hs : IsBounded s)
-  statement: BddAbove s
-  proof: (isBounded_iff_bddBelow_bddAbove.1 hs).2
-
-中文:
-引理 有界结构.IsBounded.bddAbove
-  条件: (hs : IsBounded s)
-  结论: BddAbove s
-  证明: (isBounded_iff_bddBelow_bddAbove.1 hs).2
+/-
+**Bornology.IsBounded.bddAbove** 是 Mathlib 中的一个定理，位于命名空间 `Bornology.IsBounded`。
+形式化陈述：∀ {α : Type u_1} {s : Set α} [inst : Bornology α] [inst_1 : Preorder α] [I
+sOrderBornology α],   Bornology.IsBounded s → BddAbove s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
 -/
 protected lemma Bornology.IsBounded.bddAbove (hs : IsBounded s) : BddAbove s :=
   (isBounded_iff_bddBelow_bddAbove.1 hs).2
-
-/--
-lemma `BddBelow.isBounded` / 引理 `BddBelow.isBounded`
-
-English:
-lemma BddBelow.isBounded
-  given: (hs₀ : BddBelow s) (hs₁ : BddAbove s)
-  statement: IsBounded s
-  proof: isBounded_iff_bddBelow_bddAbove.2 ⟨hs₀, hs₁⟩
-
-中文:
-引理 BddBelow.isBounded
-  条件: (hs₀ : BddBelow s) (hs₁ : BddAbove s)
-  结论: IsBounded s
-  证明: isBounded_iff_bddBelow_bddAbove.2 ⟨hs₀, hs₁⟩
+/-
+**BddBelow.isBounded** 是 Mathlib 中的一个定理，位于命名空间 `BddBelow`。
+形式化陈述：∀ {α : Type u_1} {s : Set α} [inst : Bornology α] [inst_1 : Preorder α] [I
+sOrderBornology α],   BddBelow s → BddAbove s → Bornology.IsBounded s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
 -/
 protected lemma BddBelow.isBounded (hs₀ : BddBelow s) (hs₁ : BddAbove s) : IsBounded s :=
   isBounded_iff_bddBelow_bddAbove.2 ⟨hs₀, hs₁⟩
-
-/--
-lemma `BddAbove.isBounded` / 引理 `BddAbove.isBounded`
-
-English:
-lemma BddAbove.isBounded
-  given: (hs₀ : BddAbove s) (hs₁ : BddBelow s)
-  statement: IsBounded s
-  proof: isBounded_iff_bddBelow_bddAbove.2 ⟨hs₁, hs₀⟩
-
-中文:
-引理 BddAbove.isBounded
-  条件: (hs₀ : BddAbove s) (hs₁ : BddBelow s)
-  结论: IsBounded s
-  证明: isBounded_iff_bddBelow_bddAbove.2 ⟨hs₁, hs₀⟩
+/-
+**BddAbove.isBounded** 是 Mathlib 中的一个定理，位于命名空间 `BddAbove`。
+形式化陈述：∀ {α : Type u_1} {s : Set α} [inst : Bornology α] [inst_1 : Preorder α] [I
+sOrderBornology α],   BddAbove s → BddBelow s → Bornology.IsBounded s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
 -/
 protected lemma BddAbove.isBounded (hs₀ : BddAbove s) (hs₁ : BddBelow s) : IsBounded s :=
   isBounded_iff_bddBelow_bddAbove.2 ⟨hs₁, hs₀⟩
-
-/--
-lemma `BddBelow.isBounded_inter` / 引理 `BddBelow.isBounded_inter`
-
-English:
-lemma BddBelow.isBounded_inter
-  given: (hs : BddBelow s) (ht : BddAbove t)
-  statement: IsBounded (s inter t)
-  proof: (hs.mono inter_subset_left).isBounded ht.mono inter_subset_right
-
-中文:
-引理 BddBelow.isBounded_inter
-  条件: (hs : BddBelow s) (ht : BddAbove t)
-  结论: IsBounded (s inter t)
-  证明: (hs.mono inter_subset_left).isBounded ht.mono inter_subset_right
-
-Depends on / 依赖: hs.mono, ht.mono, inter_subset_left, inter_subset_right, isBounded
+/-
+**BddBelow.isBounded_inter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddBelow.isBounded_inter (hs : BddBelow s) (ht : BddAbove t) : IsBounded (
+s inter t)
+参数：hs : BddBelow s；ht : BddAbove t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BddBelow.isBounded`：∀ {α : Type u_1} {s : Set α} [inst : Bornology α] [i
+nst_1 : Preorder α] [IsOrderBornology α],   BddBelow s → BddAbove s → Bornology.
+IsBounde…
+· 使用定理 `BddBelow.mono`：∀ {α : Type u_1} [inst : Preorder α] ⦃s t : Set α⦄, s ⊆ t
+ → BddBelow t → BddBelow s
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `BddAbove.mono`：BddAbove.mono ⦃s t : Set α⦄ (h : s subseteq t) : BddAbove
+ t -> BddAbove s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
-lemma BddBelow.isBounded_inter (hs : BddBelow s) (ht : BddAbove t) : IsBounded (s inter t) :=
-(hs.mono inter_subset_left).isBounded ht.mono inter_subset_right
-
-/--
-lemma `BddAbove.isBounded_inter` / 引理 `BddAbove.isBounded_inter`
-
-English:
-lemma BddAbove.isBounded_inter
-  given: (hs : BddAbove s) (ht : BddBelow t)
-  statement: IsBounded (s inter t)
-  proof: (hs.mono inter_subset_left).isBounded ht.mono inter_subset_right
-
-中文:
-引理 BddAbove.isBounded_inter
-  条件: (hs : BddAbove s) (ht : BddBelow t)
-  结论: IsBounded (s inter t)
-  证明: (hs.mono inter_subset_left).isBounded ht.mono inter_subset_right
-
-Depends on / 依赖: hs.mono, ht.mono, inter_subset_left, inter_subset_right, isBounded
+lemma BddBelow.isBounded_inter (hs : BddBelow s) (ht : BddAbove t) : IsBounded (s ∩ t) :=
+  (hs.mono inter_subset_left).isBounded <| ht.mono inter_subset_right
+/-
+**BddAbove.isBounded_inter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：BddAbove.isBounded_inter (hs : BddAbove s) (ht : BddBelow t) : IsBounded (
+s inter t)
+参数：hs : BddAbove s；ht : BddBelow t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BddAbove.isBounded`：∀ {α : Type u_1} {s : Set α} [inst : Bornology α] [i
+nst_1 : Preorder α] [IsOrderBornology α],   BddAbove s → BddBelow s → Bornology.
+IsBounde…
+· 使用定理 `BddAbove.mono`：BddAbove.mono ⦃s t : Set α⦄ (h : s subseteq t) : BddAbove
+ t -> BddAbove s
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `BddBelow.mono`：∀ {α : Type u_1} [inst : Preorder α] ⦃s t : Set α⦄, s ⊆ t
+ → BddBelow t → BddBelow s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
-lemma BddAbove.isBounded_inter (hs : BddAbove s) (ht : BddBelow t) : IsBounded (s inter t) :=
-(hs.mono inter_subset_left).isBounded ht.mono inter_subset_right
-
-/--
-Instance `OrderDual.instIsOrderBornology` / 实例 `OrderDual.instIsOrderBornology`
-
-English:
-instance OrderDual.instIsOrderBornology
-  signature: : IsOrderBornology αᵒᵈ where
-  body: by
-    rw [← isBounded_preimage_toDual]; rw [← bddBelow_preimage_toDual]; rw [← bddAbove_preimage_toDual]; rw [isBounded_iff_bddBelow_bddAbove]; rw [and_comm]
-
-中文:
-实例 OrderDual.instIsOrderBornology
-  签名: : 是OrderBornology αᵒᵈ where
-  定义体: by
-    rw [← isBounded_preimage_toDual]; rw [← bddBelow_preimage_toDual]; rw [← bddAbove_preimage_toDual]; rw [isBounded_iff_bddBelow_bddAbove]; rw [and_comm]
-
-Depends on / 依赖: and_comm, bddAbove_preimage_toDual, bddBelow_preimage_toDual, isBounded_iff_bddBelow_bddAbove, isBounded_preimage_toDual
+lemma BddAbove.isBounded_inter (hs : BddAbove s) (ht : BddBelow t) : IsBounded (s ∩ t) :=
+  (hs.mono inter_subset_left).isBounded <| ht.mono inter_subset_right
+/-
+**OrderDual.instIsOrderBornology** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：OrderDual.instIsOrderBornology : IsOrderBornology αᵒᵈ where isBounded_iff_
+bddBelow_bddAbove s
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderDual.isBounded_preimage_toDual`：∀ {α : Type u_2} [inst : Bornology 
+α] {s : Set αᵒᵈ},   Bornology.IsBounded (⇑OrderDual.toDual ⁻¹' s) ↔ Bornology.Is
+Bounded s
+· 使用定理 `bddBelow_preimage_toDual`：∀ {α : Type u_1} [inst : Preorder α] {s : Set 
+αᵒᵈ}, BddBelow (⇑OrderDual.toDual ⁻¹' s) ↔ BddAbove s
+· 使用引理 `bddAbove_preimage_toDual`：bddAbove_preimage_toDual {s : Set αᵒᵈ} : BddAb
+ove (toDual ⁻¹' s) ↔ BddBelow s
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 instance OrderDual.instIsOrderBornology : IsOrderBornology αᵒᵈ where
   isBounded_iff_bddBelow_bddAbove s := by
-    rw [← isBounded_preimage_toDual]; rw [← bddBelow_preimage_toDual]; rw [← bddAbove_preimage_toDual]; rw [isBounded_iff_bddBelow_bddAbove]; rw [and_comm]
-
-/--
-Instance `Prod.instIsOrderBornology` / 实例 `Prod.instIsOrderBornology`
-
-English:
-instance Prod.instIsOrderBornology
-  signature: {β : Type*} [Preorder β] [Bornology β] [IsOrderBornology β]
-  body: by
-    rw [← isBounded_image_fst_and_snd]; rw [bddBelow_prod]; rw [bddAbove_prod]; rw [and_and_and_comm]; rw [isBounded_iff_bddBelow_bddAbove]; rw [isBounded_iff_bddBelow_bddAbove]
-
-中文:
-实例 积类型.instIsOrderBornology
-  签名: {β : 类型} [预序 β] [有界结构 β] [是OrderBornology β]
-  定义体: by
-    rw [← isBounded_image_fst_and_snd]; rw [bddBelow_prod]; rw [bddAbove_prod]; rw [and_and_and_comm]; rw [isBounded_iff_bddBelow_bddAbove]; rw [isBounded_iff_bddBelow_bddAbove]
-
-Depends on / 依赖: and_and_and_comm, bddAbove_prod, bddBelow_prod, isBounded_iff_bddBelow_bddAbove, isBounded_image_fst_and_snd
+    rw [← isBounded_preimage_toDual, ← bddBelow_preimage_toDual, ← bddAbove_preimage_toDual,
+      isBounded_iff_bddBelow_bddAbove, and_comm]
+/-
+**Prod.instIsOrderBornology** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.instIsOrderBornology {β : Type*} [Preorder β] [Bornology β] [IsOrderB
+ornology β] : IsOrderBornology (α × β) where isBounded_iff_bddBelow_bddAbove s
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Bornology.isBounded_image_fst_and_snd`：isBounded_image_fst_and_snd {s : 
+Set (α × β)} : IsBounded (Prod.fst '' s) ∧ IsBounded (Prod.snd '' s) ↔ IsBounded
+ s
+· 使用定理 `bddBelow_prod`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [inst
+_1 : Preorder β] {s : Set (α × β)},   BddBelow s ↔ BddBelow (Prod.fst '' s) ∧ Bd
+dBe…
+· 使用引理 `bddAbove_prod`：bddAbove_prod {s : Set (α × β)} : BddAbove s ↔ BddAbove (
+Prod.fst '' s) ∧ BddAbove (Prod.snd '' s)
+· 使用定理 `and_and_and_comm`：∀ {a b c d : Prop}, (a ∧ b) ∧ c ∧ d ↔ (a ∧ c) ∧ b ∧ d
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 instance Prod.instIsOrderBornology {β : Type*} [Preorder β] [Bornology β] [IsOrderBornology β] :
     IsOrderBornology (α × β) where
   isBounded_iff_bddBelow_bddAbove s := by
-    rw [← isBounded_image_fst_and_snd]; rw [bddBelow_prod]; rw [bddAbove_prod]; rw [and_and_and_comm]; rw [isBounded_iff_bddBelow_bddAbove]; rw [isBounded_iff_bddBelow_bddAbove]
-
-/--
-Instance `Pi.instIsOrderBornology` / 实例 `Pi.instIsOrderBornology`
-
-English:
-instance Pi.instIsOrderBornology
-  signature: {ι : Type*} {α : ι -> Type*} [forall i, Preorder (α i)]
-  body: by
-    simp_rw [← forall_isBounded_image_eval_iff, bddBelow_pi, bddAbove_pi, ← forall_and,
-      isBounded_iff_bddBelow_bddAbove]
-
-中文:
-实例 依赖函数类型.instIsOrderBornology
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 预序 (α i)]
-  定义体: by
-    simp_rw [← forall_isBounded_image_eval_iff, bddBelow_pi, bddAbove_pi, ← forall_and,
-      isBounded_iff_bddBelow_bddAbove]
-
-Depends on / 依赖: bddAbove_pi, bddBelow_pi, forall_and, forall_isBounded_image_eval_iff, isBounded_iff_bddBelow_bddAbove, simp_rw
+    rw [← isBounded_image_fst_and_snd, bddBelow_prod, bddAbove_prod, and_and_and_comm,
+      isBounded_iff_bddBelow_bddAbove, isBounded_iff_bddBelow_bddAbove]
+/-
+**Pi.instIsOrderBornology** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.instIsOrderBornology {ι : Type*} {α : ι -> Type*} [forall i, Preorder (
+α i)] [forall i, Bornology (α i)] [forall i, IsOrderBornology (α i)] : IsOrderBo
+rnology (forall i, α i) where isBounded_iff_bddBelow_bddAbove s
+参数：α i；α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-instance Pi.instIsOrderBornology {ι : Type*} {α : ι -> Type*} [forall i, Preorder (α i)]
-    [forall i, Bornology (α i)] [forall i, IsOrderBornology (α i)] : IsOrderBornology (forall i, α i) where
+instance Pi.instIsOrderBornology {ι : Type*} {α : ι → Type*} [∀ i, Preorder (α i)]
+    [∀ i, Bornology (α i)] [∀ i, IsOrderBornology (α i)] : IsOrderBornology (∀ i, α i) where
   isBounded_iff_bddBelow_bddAbove s := by
     simp_rw [← forall_isBounded_image_eval_iff, bddBelow_pi, bddAbove_pi, ← forall_and,
       isBounded_iff_bddBelow_bddAbove]
 
 variable (α) in
-/--
-lemma `Nonempty.of_isOrderBornology` / 引理 `Nonempty.of_isOrderBornology`
-
-English:
-lemma Nonempty.of_isOrderBornology
-  statement: Nonempty α
-  proof: Bornology.isBounded_empty.bddBelow.nonempty
-
-中文:
-引理 非空.of_isOrderBornology
-  结论: 非空 α
-  证明: Bornology.isBounded_empty.bddBelow.nonempty
-
-Depends on / 依赖: Bornology, Bornology.isBounded_empty.bddBelow.nonempty, bddBelow, isBounded_empty, nonempty
+/-
+**Nonempty.of_isOrderBornology** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Nonempty.of_isOrderBornology : Nonempty α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.nonempty`：∀ {α : Sort u_1} {p : α → Prop}, (∃ x, p x) → Nonempty 
+α
+· 使用定理 `Bornology.IsBounded.bddBelow`：∀ {α : Type u_1} {s : Set α} [inst : Borno
+logy α] [inst_1 : Preorder α] [IsOrderBornology α],   Bornology.IsBounded s → Bd
+dBelow s
+· 使用定理 `Bornology.isBounded_empty`：isBounded_empty : IsBounded (∅ : Set α)
 -/
 lemma Nonempty.of_isOrderBornology : Nonempty α := Bornology.isBounded_empty.bddBelow.nonempty
-
-/--
-Instance `IsOrderBornology.neBot_cobounded_of_noBotOrder` / 实例 `IsOrderBornology.neBot_cobounded_of_noBotOrder`
-
-English:
-instance IsOrderBornology.neBot_cobounded_of_noBotOrder
-  signature: [NoBotOrder α]
-  body: by
-  simp [Filter.neBot_iff, cobounded_eq_bot_iff, ← isBounded_univ, isBounded_iff_bddBelow_bddAbove]
-
-中文:
-实例 是OrderBornology.neBot_cobounded_of_noBotOrder
-  签名: [无底序 α]
-  定义体: by
-  simp [Filter.neBot_iff, cobounded_eq_bot_iff, ← isBounded_univ, isBounded_iff_bddBelow_bddAbove]
-
-Depends on / 依赖: Filter, Filter.neBot_iff, cobounded_eq_bot_iff, isBounded_iff_bddBelow_bddAbove, isBounded_univ, neBot_iff
+/-
+**IsOrderBornology.neBot_cobounded_of_noBotOrder** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsOrderBornology.neBot_cobounded_of_noBotOrder [NoBotOrder α] : (cobounded
+ α).NeBot
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 instance IsOrderBornology.neBot_cobounded_of_noBotOrder [NoBotOrder α] : (cobounded α).NeBot := by
   simp [Filter.neBot_iff, cobounded_eq_bot_iff, ← isBounded_univ, isBounded_iff_bddBelow_bddAbove]
-
-/--
-Instance `IsOrderBornology.neBot_cobounded_of_noTopOrder` / 实例 `IsOrderBornology.neBot_cobounded_of_noTopOrder`
-
-English:
-instance IsOrderBornology.neBot_cobounded_of_noTopOrder
-  signature: [NoTopOrder α]
-  body: neBot_cobounded_of_noBotOrder (α := αᵒᵈ)
-
-中文:
-实例 是OrderBornology.neBot_cobounded_of_noTopOrder
-  签名: [无顶序 α]
-  定义体: neBot_cobounded_of_noBotOrder (α := αᵒᵈ)
-
-Depends on / 依赖: neBot_cobounded_of_noBotOrder
+/-
+**IsOrderBornology.neBot_cobounded_of_noTopOrder** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsOrderBornology.neBot_cobounded_of_noTopOrder [NoTopOrder α] : (cobounded
+ α).NeBot
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance IsOrderBornology.neBot_cobounded_of_noTopOrder [NoTopOrder α] : (cobounded α).NeBot :=
   neBot_cobounded_of_noBotOrder (α := αᵒᵈ)
-
-/--
-lemma `IsOrderBornology.atTop_le_cobounded` / 引理 `IsOrderBornology.atTop_le_cobounded`
-
-English:
-lemma IsOrderBornology.atTop_le_cobounded
-  given: [NoMaxOrder α]
-  statement: .atTop <= Bornology.cobounded α
-  proof: by
-  intro s hs
-  rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove] at hs
-  obtain ⟨b, hb⟩ := hs.2
-  obtain ⟨c, hbc⟩ := exists_gt b
-  refine Filter.mem_of_superset (Filter.mem_atTop c) fun x hx => ?_
-  by_contra hx'
-exact hbc.not_ge hx.trans hb mem_compl hx'
-
-中文:
-引理 是OrderBornology.atTop_le_cobounded
-  条件: [NoMax序 α]
-  结论: .atTop <= 有界结构.cobounded α
-  证明: by
-  intro s hs
-  rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove] at hs
-  obtain ⟨b, hb⟩ := hs.2
-  obtain ⟨c, hbc⟩ := exists_gt b
-  refine Filter.mem_of_superset (Filter.mem_atTop c) fun x hx => ?_
-  by_contra hx'
-exact hbc.not_ge hx.trans hb mem_compl hx'
-
-Depends on / 依赖: Filter, Filter.mem_atTop, Filter.mem_of_superset, compl_compl, exists_gt, hbc.not_ge, hx.trans, isBounded_def, isBounded_iff_bddBelow_bddAbove, mem_atTop, mem_compl, mem_of_superset, not_ge
+/-
+**IsOrderBornology.atTop_le_cobounded** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOrderBornology.atTop_le_cobounded [NoMaxOrder α] : .atTop <= Bornology.c
+obounded α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Bornology.isBounded_def`：isBounded_def {s : Set α} : IsBounded s ↔ sᶜ in
+ cobounded α
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Filter.mem_atTop`：mem_atTop [Preorder α] (a : α) : { b : α | a <= b } in
+ @atTop α _
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.mem_compl`：mem_compl {s : Set α} {x : α} (h : x ∉ s) : x in sᶜ
 -/
-lemma IsOrderBornology.atTop_le_cobounded [NoMaxOrder α] : .atTop <= Bornology.cobounded α := by
+lemma IsOrderBornology.atTop_le_cobounded [NoMaxOrder α] : .atTop ≤ Bornology.cobounded α := by
   intro s hs
-  rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove] at hs
+  rw [← compl_compl s, ← isBounded_def, isBounded_iff_bddBelow_bddAbove] at hs
   obtain ⟨b, hb⟩ := hs.2
   obtain ⟨c, hbc⟩ := exists_gt b
-  refine Filter.mem_of_superset (Filter.mem_atTop c) fun x hx => ?_
+  refine Filter.mem_of_superset (Filter.mem_atTop c) fun x hx ↦ ?_
   by_contra hx'
-exact hbc.not_ge hx.trans hb mem_compl hx'
+  exact hbc.not_ge <| hx.trans <| hb <| mem_compl hx'
 
 -- TODO (khw): Generate this in the future with `to_dual`
 -- See https://github.com/leanprover-community/mathlib4/pull/37738
-/--
-lemma `IsOrderBornology.atBot_le_cobounded` / 引理 `IsOrderBornology.atBot_le_cobounded`
-
-English:
-lemma IsOrderBornology.atBot_le_cobounded
-  given: [NoMinOrder α]
-  statement: .atBot <= Bornology.cobounded α
-  proof: atTop_le_cobounded (α := αᵒᵈ)
-
-中文:
-引理 是OrderBornology.atBot_le_cobounded
-  条件: [NoMin序 α]
-  结论: .atBot <= 有界结构.cobounded α
-  证明: atTop_le_cobounded (α := αᵒᵈ)
-
-Depends on / 依赖: atTop_le_cobounded
+/-
+**IsOrderBornology.atBot_le_cobounded** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOrderBornology.atBot_le_cobounded [NoMinOrder α] : .atBot <= Bornology.c
+obounded α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOrderBornology.atTop_le_cobounded`：IsOrderBornology.atTop_le_cobounded
+ [NoMaxOrder α] : .atTop <= Bornology.cobounded α
+· 使用定理 `OrderDual.noMaxOrder`：∀ {α : Type u_1} [inst : LT α] [NoMinOrder α], NoM
+axOrder αᵒᵈ
 -/
-lemma IsOrderBornology.atBot_le_cobounded [NoMinOrder α] : .atBot <= Bornology.cobounded α :=
+lemma IsOrderBornology.atBot_le_cobounded [NoMinOrder α] : .atBot ≤ Bornology.cobounded α :=
   atTop_le_cobounded (α := αᵒᵈ)
 
 end Preorder
@@ -457,121 +394,122 @@ section LinearOrder
 
 variable [LinearOrder α] [IsOrderBornology α]
 
-/--
-lemma `IsOrderBornology.cobounded_le_atBot_sup_atTop` / 引理 `IsOrderBornology.cobounded_le_atBot_sup_atTop`
-
-English:
-lemma IsOrderBornology.cobounded_le_atBot_sup_atTop
-  statement: cobounded α <= .atBot ⊔ .atTop
-  proof: by
-  have := Nonempty.of_isOrderBornology α
-  intro s
-  rw [Filter.mem_sup]; rw [Filter.atTop_basis.mem_iff]; rw [Filter.atBot_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
-  intro ⟨⟨b, _, hb⟩, ⟨a, _, ha⟩⟩
-  refine ⟨⟨b, fun x hx => ?_⟩, ⟨a, fun x hx => ?_⟩⟩ <;> by_contra! hx'
-  · exact hx (hb hx'.le)
-  · exact hx (ha hx'.le)
-
-@[simp]
-
-中文:
-引理 是OrderBornology.cobounded_le_atBot_sup_atTop
-  结论: cobounded α <= .atBot ⊔ .atTop
-  证明: by
-  have := Nonempty.of_isOrderBornology α
-  intro s
-  rw [Filter.mem_sup]; rw [Filter.atTop_basis.mem_iff]; rw [Filter.atBot_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
-  intro ⟨⟨b, _, hb⟩, ⟨a, _, ha⟩⟩
-  refine ⟨⟨b, fun x hx => ?_⟩, ⟨a, fun x hx => ?_⟩⟩ <;> by_contra! hx'
-  · exact hx (hb hx'.le)
-  · exact hx (ha hx'.le)
-
-@[simp]
-
-Depends on / 依赖: Filter, Filter.atBot_basis.mem_iff, Filter.atTop_basis.mem_iff, Filter.mem_sup, Nonempty, Nonempty.of_isOrderBornology, atBot_basis, atTop_basis, compl_compl, isBounded_def, isBounded_iff_bddBelow_bddAbove, mem_iff, mem_sup, of_isOrderBornology
+/-
+**IsOrderBornology.cobounded_le_atBot_sup_atTop** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOrderBornology.cobounded_le_atBot_sup_atTop : cobounded α <= .atBot ⊔ .a
+tTop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nonempty.of_isOrderBornology`：Nonempty.of_isOrderBornology : Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_sup`：mem_sup {f g : Filter α} {s : Set α} : s in f ⊔ g ↔ s in
+ f ∧ s in g
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `Filter.atTop_basis`：atTop_basis [Nonempty α] : (@atTop α _).HasBasis (fu
+n _ => True) Ici
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用引理 `Filter.atBot_basis`：atBot_basis {α : Type*} [Preorder α] [IsCodirectedOr
+der α] [Nonempty α] : (@atBot α _).HasBasis (fun _ => True) Iic
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Bornology.isBounded_def`：isBounded_def {s : Set α} : IsBounded s ↔ sᶜ in
+ cobounded α
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma IsOrderBornology.cobounded_le_atBot_sup_atTop : cobounded α <= .atBot ⊔ .atTop := by
+lemma IsOrderBornology.cobounded_le_atBot_sup_atTop : cobounded α ≤ .atBot ⊔ .atTop := by
   have := Nonempty.of_isOrderBornology α
   intro s
-  rw [Filter.mem_sup]; rw [Filter.atTop_basis.mem_iff]; rw [Filter.atBot_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
+  rw [Filter.mem_sup, Filter.atTop_basis.mem_iff, Filter.atBot_basis.mem_iff,
+    ← compl_compl s, ← isBounded_def, isBounded_iff_bddBelow_bddAbove, compl_compl s]
   intro ⟨⟨b, _, hb⟩, ⟨a, _, ha⟩⟩
-  refine ⟨⟨b, fun x hx => ?_⟩, ⟨a, fun x hx => ?_⟩⟩ <;> by_contra! hx'
+  refine ⟨⟨b, fun x hx ↦ ?_⟩, ⟨a, fun x hx ↦ ?_⟩⟩ <;> by_contra! hx'
   · exact hx (hb hx'.le)
   · exact hx (ha hx'.le)
 
 @[simp]
-/--
-lemma `IsOrderBornology.cobounded_eq` / 引理 `IsOrderBornology.cobounded_eq`
-
-English:
-lemma IsOrderBornology.cobounded_eq
-  given: [NoMaxOrder α] [NoMinOrder α]
-  proof: cobounded_le_atBot_sup_atTop.antisymm
-    sup_le IsOrderBornology.atBot_le_cobounded IsOrderBornology.atTop_le_cobounded
-
-中文:
-引理 是OrderBornology.cobounded_eq
-  条件: [NoMax序 α] [NoMin序 α]
-  证明: cobounded_le_atBot_sup_atTop.antisymm
-    sup_le IsOrderBornology.atBot_le_cobounded IsOrderBornology.atTop_le_cobounded
-
-Depends on / 依赖: IsOrderBornology, IsOrderBornology.atBot_le_cobounded, IsOrderBornology.atTop_le_cobounded, antisymm, atBot_le_cobounded, atTop_le_cobounded, cobounded_le_atBot_sup_atTop, cobounded_le_atBot_sup_atTop.antisymm, sup_le
+/-
+**IsOrderBornology.cobounded_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOrderBornology.cobounded_eq [NoMaxOrder α] [NoMinOrder α] : Bornology.co
+bounded α = .atBot ⊔ .atTop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用引理 `IsOrderBornology.cobounded_le_atBot_sup_atTop`：IsOrderBornology.cobounde
+d_le_atBot_sup_atTop : cobounded α <= .atBot ⊔ .atTop
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用引理 `IsOrderBornology.atBot_le_cobounded`：IsOrderBornology.atBot_le_cobounded
+ [NoMinOrder α] : .atBot <= Bornology.cobounded α
+· 使用引理 `IsOrderBornology.atTop_le_cobounded`：IsOrderBornology.atTop_le_cobounded
+ [NoMaxOrder α] : .atTop <= Bornology.cobounded α
 -/
 lemma IsOrderBornology.cobounded_eq [NoMaxOrder α] [NoMinOrder α] :
     Bornology.cobounded α = .atBot ⊔ .atTop :=
-cobounded_le_atBot_sup_atTop.antisymm
+  cobounded_le_atBot_sup_atTop.antisymm <|
     sup_le IsOrderBornology.atBot_le_cobounded IsOrderBornology.atTop_le_cobounded
-
-/--
-lemma `IsOrderBornology.cobounded_eq_atTop` / 引理 `IsOrderBornology.cobounded_eq_atTop`
-
-English:
-lemma IsOrderBornology.cobounded_eq_atTop
-  given: [NoMaxOrder α] [OrderBot α]
-  proof: by
-  refine atTop_le_cobounded.antisymm' fun s => ?_
-  rw [Filter.atTop_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
-  refine fun ⟨b, _, hb⟩ => ⟨⟨⊥, fun x hx => by simp⟩, ⟨b, fun x hx => ?_⟩⟩
-  by_contra! hx'
-  exact hx (hb hx'.le)
-
-中文:
-引理 是OrderBornology.cobounded_eq_atTop
-  条件: [NoMax序 α] [有底序 α]
-  证明: by
-  refine atTop_le_cobounded.antisymm' fun s => ?_
-  rw [Filter.atTop_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
-  refine fun ⟨b, _, hb⟩ => ⟨⟨⊥, fun x hx => by simp⟩, ⟨b, fun x hx => ?_⟩⟩
-  by_contra! hx'
-  exact hx (hb hx'.le)
-
-Depends on / 依赖: Filter, Filter.atTop_basis.mem_iff, antisymm, atTop_basis, atTop_le_cobounded, atTop_le_cobounded.antisymm, compl_compl, isBounded_def, isBounded_iff_bddBelow_bddAbove, mem_iff
+/-
+**IsOrderBornology.cobounded_eq_atTop** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOrderBornology.cobounded_eq_atTop [NoMaxOrder α] [OrderBot α] : Bornolog
+y.cobounded α = .atTop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用引理 `IsOrderBornology.atTop_le_cobounded`：IsOrderBornology.atTop_le_cobounded
+ [NoMaxOrder α] : .atTop <= Bornology.cobounded α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `Filter.atTop_basis`：atTop_basis [Nonempty α] : (@atTop α _).HasBasis (fu
+n _ => True) Ici
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Bornology.isBounded_def`：isBounded_def {s : Set α} : IsBounded s ↔ sᶜ in
+ cobounded α
+· 使用引理 `isBounded_iff_bddBelow_bddAbove`：isBounded_iff_bddBelow_bddAbove : IsBou
+nded s ↔ BddBelow s ∧ BddAbove s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 lemma IsOrderBornology.cobounded_eq_atTop [NoMaxOrder α] [OrderBot α] :
     Bornology.cobounded α = .atTop := by
-  refine atTop_le_cobounded.antisymm' fun s => ?_
-  rw [Filter.atTop_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
-  refine fun ⟨b, _, hb⟩ => ⟨⟨⊥, fun x hx => by simp⟩, ⟨b, fun x hx => ?_⟩⟩
+  refine atTop_le_cobounded.antisymm' fun s ↦ ?_
+  rw [Filter.atTop_basis.mem_iff,
+    ← compl_compl s, ← isBounded_def, isBounded_iff_bddBelow_bddAbove, compl_compl s]
+  refine fun ⟨b, _, hb⟩ ↦ ⟨⟨⊥, fun x hx ↦ by simp⟩, ⟨b, fun x hx ↦ ?_⟩⟩
   by_contra! hx'
   exact hx (hb hx'.le)
 
 -- TODO (khw): Generate this in the future with `to_dual`
 -- See https://github.com/leanprover-community/mathlib4/pull/37738
 @[to_dual existing]
-/--
-lemma `IsOrderBornology.cobounded_eq_atBot` / 引理 `IsOrderBornology.cobounded_eq_atBot`
-
-English:
-lemma IsOrderBornology.cobounded_eq_atBot
-  given: [NoMinOrder α] [OrderTop α]
-  proof: cobounded_eq_atTop (α := αᵒᵈ)
-
-中文:
-引理 是OrderBornology.cobounded_eq_atBot
-  条件: [NoMin序 α] [有顶序 α]
-  证明: cobounded_eq_atTop (α := αᵒᵈ)
-
-Depends on / 依赖: cobounded_eq_atTop
+/-
+**IsOrderBornology.cobounded_eq_atBot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOrderBornology.cobounded_eq_atBot [NoMinOrder α] [OrderTop α] : Bornolog
+y.cobounded α = .atBot
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOrderBornology.cobounded_eq_atTop`：IsOrderBornology.cobounded_eq_atTop
+ [NoMaxOrder α] [OrderBot α] : Bornology.cobounded α = .atTop
+· 使用定理 `OrderDual.noMaxOrder`：∀ {α : Type u_1} [inst : LT α] [NoMinOrder α], NoM
+axOrder αᵒᵈ
 -/
 lemma IsOrderBornology.cobounded_eq_atBot [NoMinOrder α] [OrderTop α] :
     Bornology.cobounded α = .atBot := cobounded_eq_atTop (α := αᵒᵈ)
@@ -581,20 +519,25 @@ end LinearOrder
 section ConditionallyCompleteLattice
 variable [ConditionallyCompleteLattice α] [IsOrderBornology α] {s : Set α}
 
-/--
-lemma `Bornology.IsBounded.subset_Icc_sInf_sSup` / 引理 `Bornology.IsBounded.subset_Icc_sInf_sSup`
-
-English:
-lemma Bornology.IsBounded.subset_Icc_sInf_sSup
-  given: (hs : IsBounded s)
-  proof: subset_Icc_csInf_csSup hs.bddBelow hs.bddAbove
-
-中文:
-引理 有界结构.IsBounded.subset_Icc_sInf_sSup
-  条件: (hs : IsBounded s)
-  证明: subset_Icc_csInf_csSup hs.bddBelow hs.bddAbove
+/-
+**Bornology.IsBounded.subset_Icc_sInf_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Bornology.
+IsBounded`。
+形式化陈述：∀ {α : Type u_1} [inst : Bornology α] [inst_1 : ConditionallyCompleteLatti
+ce α] [IsOrderBornology α] {s : Set α},   Bornology.IsBounded s → s ⊆ Set.Icc (s
+Inf s) (sSup s)
+参数：sInf s；sSup s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_Icc_csInf_csSup`：subset_Icc_csInf_csSup (hb : BddBelow s) (ha : B
+ddAbove s) : s subseteq Icc (sInf s) (sSup s)
+· 使用定理 `Bornology.IsBounded.bddBelow`：∀ {α : Type u_1} {s : Set α} [inst : Borno
+logy α] [inst_1 : Preorder α] [IsOrderBornology α],   Bornology.IsBounded s → Bd
+dBelow s
+· 使用定理 `Bornology.IsBounded.bddAbove`：∀ {α : Type u_1} {s : Set α} [inst : Borno
+logy α] [inst_1 : Preorder α] [IsOrderBornology α],   Bornology.IsBounded s → Bd
+dAbove s
 -/
 protected lemma Bornology.IsBounded.subset_Icc_sInf_sSup (hs : IsBounded s) :
-    s subseteq Icc (sInf s) (sSup s) := subset_Icc_csInf_csSup hs.bddBelow hs.bddAbove
+    s ⊆ Icc (sInf s) (sSup s) := subset_Icc_csInf_csSup hs.bddBelow hs.bddAbove
 
 end ConditionallyCompleteLattice
+

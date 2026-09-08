@@ -41,62 +41,48 @@ open Function
 
 variable {F α β γ δ : Type*}
 
-/--
-Definition of `SupBotHom` / `SupBotHom` 的定义
+/-- The type of finitary supremum-preserving homomorphisms from `α` to `β`. -/
+/-
+**SupBotHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_6) → (β : Type u_7) → [Max α] → [Max β] → [Bot α] → [Bot β] → 
+Type (max u_6 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SupBotHom
-  parameters: (α β : Type*) [Max α] [Max β] [Bot α] [Bot β]
-  extends: SupHom α β, BotHom α β
-  (no additional axioms)
-
-中文:
-结构 SupBot态射
-  参数: (α β : 类型) [最大值 α] [最大值 β] [底元素 α] [底元素 β]
-  继承: 并态射 α β, 底元素态射 α β
-  (无附加公理)
+--- 原说明 ---
+The type of finitary supremum-preserving homomorphisms from `α` to `β`.
 -/
 structure SupBotHom (α β : Type*) [Max α] [Max β] [Bot α] [Bot β]
   extends SupHom α β, BotHom α β where
 
 /-- The type of finitary infimum-preserving homomorphisms from `α` to `β`. -/
 @[to_dual]
-/--
-Definition of `InfTopHom` / `InfTopHom` 的定义
+/-
+**InfTopHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_6) → (β : Type u_7) → [Min α] → [Min β] → [Top α] → [Top β] → 
+Type (max u_6 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure InfTopHom
-  parameters: (α β : Type*) [Min α] [Min β] [Top α] [Top β]
-  extends: InfHom α β, TopHom α β
-  (no additional axioms)
-
-中文:
-结构 InfTop态射
-  参数: (α β : 类型) [最小值 α] [最小值 β] [顶元素 α] [顶元素 β]
-  继承: 交态射 α β, 顶元素态射 α β
-  (无附加公理)
+--- 原说明 ---
+The type of finitary infimum-preserving homomorphisms from `α` to `β`.
 -/
 structure InfTopHom (α β : Type*) [Min α] [Min β] [Top α] [Top β]
   extends InfHom α β, TopHom α β where
 
 attribute [nolint docBlame] SupBotHom.toBotHom InfTopHom.toTopHom
 
-/--
-Definition of `BoundedLatticeHom` / `BoundedLatticeHom` 的定义
+/-- The type of bounded lattice homomorphisms from `α` to `β`. -/
+/-
+**BoundedLatticeHom** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：BoundedLatticeHom (α β : Type*) [Lattice α] [Lattice β] [BoundedOrder α] [
+BoundedOrder β] extends LatticeHom α β, InfTopHom α β, SupBotHom α β where  attr
+ibute [nolint docBlame] BoundedLatticeHom.toInfTopHom BoundedLatticeHom.toSupBot
+Hom  attribute [to_dual self (reorder
+参数：α β : Type*。
+继承自：LatticeHom α β, InfTopHom α β, SupBotHom α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BoundedLatticeHom
-  parameters: (α β : Type*) [Lattice α] [Lattice β] [BoundedOrder α]
-  extends: LatticeHom α β, InfTopHom α β, SupBotHom α β
-  (no additional axioms)
-
-中文:
-结构 有界格态射
-  参数: (α β : 类型) [格 α] [格 β] [有界序 α]
-  继承: 格态射 α β, InfTop态射 α β, SupBot态射 α β
-  (无附加公理)
-
-Depends on / 依赖: BoundedLatticeHom, BoundedLatticeHom.mk, map_bot, map_top
+--- 原说明 ---
+The type of bounded lattice homomorphisms from `α` to `β`.
 -/
 structure BoundedLatticeHom (α β : Type*) [Lattice α] [Lattice β] [BoundedOrder α]
   [BoundedOrder β] extends LatticeHom α β, InfTopHom α β, SupBotHom α β where
@@ -108,22 +94,20 @@ attribute [to_dual existing] BoundedLatticeHom.toInfTopHom BoundedLatticeHom.map
 
 section
 
-/--
-Definition of `SupBotHomClass` / `SupBotHomClass` 的定义
+/-- `SupBotHomClass F α β` states that `F` is a type of finitary supremum-preserving morphisms.
 
-English:
-class SupBotHomClass
-  parameters: (F α β : Type*) [Max α] [Max β] [Bot α] [Bot β] [FunLike F α β]
-  extends: SupHomClass F α β
-  axioms and operations (1):
-    - map_bot((f : F)) : f ⊥ = ⊥
+You should extend this class when you extend `SupBotHom`. -/
+/-
+**SupBotHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_6) → (α : Type u_7) → (β : Type u_8) → [Max α] → [Max β] → [Bo
+t α] → [Bot β] → [FunLike F α β] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 SupBot态射类
-  参数: (F α β : 类型) [最大值 α] [最大值 β] [底元素 α] [底元素 β] [函数状 F α β]
-  继承: 并态射类 F α β
-  公理与运算 (1 个):
-    - map_bot((f : F)) : f ⊥ = ⊥
+--- 原说明 ---
+`SupBotHomClass F α β` states that `F` is a type of finitary supremum-preserving
+ morphisms.
+
+You should extend this class when you extend `SupBotHom`.
 -/
 class SupBotHomClass (F α β : Type*) [Max α] [Max β] [Bot α] [Bot β] [FunLike F α β] : Prop
   extends SupHomClass F α β where
@@ -134,48 +118,42 @@ class SupBotHomClass (F α β : Type*) [Max α] [Max β] [Bot α] [Bot β] [FunL
 
 You should extend this class when you extend `SupBotHom`. -/
 @[to_dual]
-/--
-Definition of `InfTopHomClass` / `InfTopHomClass` 的定义
+/-
+**InfTopHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_6) → (α : Type u_7) → (β : Type u_8) → [Min α] → [Min β] → [To
+p α] → [Top β] → [FunLike F α β] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class InfTopHomClass
-  parameters: (F α β : Type*) [Min α] [Min β] [Top α] [Top β] [FunLike F α β]
-  extends: InfHomClass F α β
-  axioms and operations (1):
-    - map_top((f : F)) : f ⊤ = ⊤
+--- 原说明 ---
+`InfTopHomClass F α β` states that `F` is a type of finitary infimum-preserving 
+morphisms.
 
-中文:
-类 InfTop态射类
-  参数: (F α β : 类型) [最小值 α] [最小值 β] [顶元素 α] [顶元素 β] [函数状 F α β]
-  继承: 交态射类 F α β
-  公理与运算 (1 个):
-    - map_top((f : F)) : f ⊤ = ⊤
+You should extend this class when you extend `SupBotHom`.
 -/
 class InfTopHomClass (F α β : Type*) [Min α] [Min β] [Top α] [Top β] [FunLike F α β] : Prop
   extends InfHomClass F α β where
   /-- An `InfTopHomClass` morphism preserves the top element. -/
   map_top (f : F) : f ⊤ = ⊤
 
-/--
-Definition of `BoundedLatticeHomClass` / `BoundedLatticeHomClass` 的定义
+/-- `BoundedLatticeHomClass F α β` states that `F` is a type of bounded lattice morphisms.
 
-English:
-class BoundedLatticeHomClass
-  parameters: (F α β : Type*) [Lattice α] [Lattice β] [BoundedOrder α]
-  extends: LatticeHomClass F α β
-  axioms and operations (2):
-    - map_top((f : F)) : f ⊤ = ⊤
-    - map_bot((f : F)) : f ⊥ = ⊥
+You should extend this class when you extend `BoundedLatticeHom`. -/
+/-
+**BoundedLatticeHomClass** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：BoundedLatticeHomClass (F α β : Type*) [Lattice α] [Lattice β] [BoundedOrd
+er α] [BoundedOrder β] [FunLike F α β] : Prop extends LatticeHomClass F α β wher
+e /-- A `BoundedLatticeHomClass` morphism preserves the top element. -/ map_top 
+(f : F) : f ⊤ = ⊤ /-- A `BoundedLatticeHomClass` morphism preserves the bottom e
+lement. -/ map_bot (f : F) : f ⊥ = ⊥  attribute [to_dual self (reorder
+参数：F α β : Type*。
+继承自：LatticeHomClass F α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有界格态射类
-  参数: (F α β : 类型) [格 α] [格 β] [有界序 α]
-  继承: 格态射类 F α β
-  公理与运算 (2 个):
-    - map_top((f : F)) : f ⊤ = ⊤
-    - map_bot((f : F)) : f ⊥ = ⊥
+--- 原说明 ---
+`BoundedLatticeHomClass F α β` states that `F` is a type of bounded lattice morp
+hisms.
 
-Depends on / 依赖: BoundedLatticeHomClass, BoundedLatticeHomClass.mk, map_bot, map_top
+You should extend this class when you extend `BoundedLatticeHom`.
 -/
 class BoundedLatticeHomClass (F α β : Type*) [Lattice α] [Lattice β] [BoundedOrder α]
     [BoundedOrder β] [FunLike F α β] : Prop
@@ -196,18 +174,30 @@ variable [FunLike F α β]
 
 -- See note [lower instance priority]
 @[to_dual]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) SupBotHomClass.toBotHomClass [Max α] [Max β] [Bot α]
     [Bot β] [SupBotHomClass F α β] : BotHomClass F α β :=
   { ‹SupBotHomClass F α β› with }
 
 -- See note [lower instance priority]
 @[to_dual]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) BoundedLatticeHomClass.toSupBotHomClass [Lattice α] [Lattice β]
     [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] :
     SupBotHomClass F α β :=
   { ‹BoundedLatticeHomClass F α β› with }
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) BoundedLatticeHomClass.toBoundedOrderHomClass [Lattice α]
     [Lattice β] [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] :
     BoundedOrderHomClass F α β :=
@@ -221,11 +211,19 @@ variable [EquivLike F α β]
 
 -- See note [lower instance priority]
 @[to_dual]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) OrderIsoClass.toSupBotHomClass [SemilatticeSup α] [OrderBot α]
     [SemilatticeSup β] [OrderBot β] [OrderIsoClass F α β] : SupBotHomClass F α β :=
   { OrderIsoClass.toSupHomClass, OrderIsoClass.toBotHomClass with }
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) OrderIsoClass.toBoundedLatticeHomClass [Lattice α] [Lattice β]
     [BoundedOrder α] [BoundedOrder β] [OrderIsoClass F α β] :
     BoundedLatticeHomClass F α β :=
@@ -238,39 +236,62 @@ section BoundedLattice
 variable [Lattice α] [Lattice β] [FunLike F α β]
 
 @[to_dual]
-/--
-theorem `Disjoint.map` / 定理 `Disjoint.map`
-
-English:
-theorem Disjoint.map
-  statement: [OrderBot α] [OrderBot β] [BotHomClass F α β] [InfHomClass F α β] {a b : α}
-  proof: by
-  rw [disjoint_iff]; rw [← map_inf]; rw [h.eq_bot]; rw [map_bot]
-
-中文:
-定理 Disjoint.map
-  结论: [有底序 α] [有底序 β] [底元素态射类 F α β] [交态射类 F α β] {a b : α}
-  证明: by
-  rw [disjoint_iff]; rw [← map_inf]; rw [h.eq_bot]; rw [map_bot]
-
-Depends on / 依赖: disjoint_iff, eq_bot, h.eq_bot, map_bot, map_inf
+/-
+**Disjoint.map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Disjoint.map [OrderBot α] [OrderBot β] [BotHomClass F α β] [InfHomClass F 
+α β] {a b : α} (f : F) (h : Disjoint a b) : Disjoint (f a) (f b)
+参数：f : F；h : Disjoint a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_iff`：disjoint_iff : Disjoint a b ↔ a ⊓ b = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `InfHomClass.map_inf`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Min α} {inst_1 : Min β} {inst_2 : FunLike F α β}   [self : InfHomClass F α β
+] (f : F)…
+· 使用定理 `Disjoint.eq_bot`：Disjoint.eq_bot : Disjoint a b -> a ⊓ b = ⊥
+· 使用定理 `BotHomClass.map_bot`：∀ {F : Type u_6} {α : outParam (Type u_7)} {β : out
+Param (Type u_8)} {inst : Bot α} {inst_1 : Bot β}   {inst_2 : FunLike F α β} [se
+lf : BotH…
 -/
 theorem Disjoint.map [OrderBot α] [OrderBot β] [BotHomClass F α β] [InfHomClass F α β] {a b : α}
     (f : F) (h : Disjoint a b) : Disjoint (f a) (f b) := by
-  rw [disjoint_iff]; rw [← map_inf]; rw [h.eq_bot]; rw [map_bot]
-
-/--
-theorem `IsCompl.map` / 定理 `IsCompl.map`
-
-English:
-theorem IsCompl.map
-  statement: [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] {a b : α}
-  proof: ⟨h.1.map _, h.2.map _⟩
-
-中文:
-定理 是补集.map
-  结论: [有界序 α] [有界序 β] [有界格态射类 F α β] {a b : α}
-  证明: ⟨h.1.map _, h.2.map _⟩
+  rw [disjoint_iff, ← map_inf, h.eq_bot, map_bot]
+/-
+**IsCompl.map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCompl.map [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α 
+β] {a b : α} (f : F) (h : IsCompl a b) : IsCompl (f a) (f b)
+参数：f : F；h : IsCompl a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.map`：Disjoint.map [OrderBot α] [OrderBot β] [BotHomClass F α β]
+ [InfHomClass F α β] {a b : α} (f : F) (h : Disjoint a b) : Disjoint (f a) (f b)
+· 使用定理 `SupBotHomClass.toBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type 
+u_3} [inst : FunLike F α β] [inst_1 : Max α] [inst_2 : Max β] [inst_3 : Bot α]  
+ [inst_4 : Bot β] …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `IsCompl.disjoint`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bou
+ndedOrder α] {x y : α}, IsCompl x y → Disjoint x y
+· 使用定理 `Codisjoint.map`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : L
+attice α] [inst_1 : Lattice β] [inst_2 : FunLike F α β]   [inst_3 : OrderTop α] 
+[ins…
+· 使用定理 `InfTopHomClass.toTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type 
+u_3} [inst : FunLike F α β] [inst_1 : Min α] [inst_2 : Min β] [inst_3 : Top α]  
+ [inst_4 : Top β] …
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `IsCompl.codisjoint`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : B
+oundedOrder α] {x y : α}, IsCompl x y → Codisjoint x y
 -/
 theorem IsCompl.map [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] {a b : α}
     (f : F) (h : IsCompl a b) : IsCompl (f a) (f b) :=
@@ -283,116 +304,95 @@ section BooleanAlgebra
 variable [BooleanAlgebra α] [BooleanAlgebra β] [FunLike F α β] [BoundedLatticeHomClass F α β]
 variable (f : F)
 
-/--
-theorem `map_compl'` / 定理 `map_compl'`
+/-- Special case of `map_compl` for Boolean algebras. -/
+/-
+**map_compl'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_compl' (a : α) : f aᶜ = (f a)ᶜ
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCompl.compl_eq`：IsCompl.compl_eq (h : IsCompl a b) : aᶜ = b
+· 使用定理 `IsCompl.map`：IsCompl.map [BoundedOrder α] [BoundedOrder β] [BoundedLatti
+ceHomClass F α β] {a b : α} (f : F) (h : IsCompl a b) : IsCompl (f a) (f b)
+· 使用定理 `isCompl_compl`：isCompl_compl : IsCompl x xᶜ
 
-English:
-theorem map_compl'
-  given: (a : α)
-  statement: f aᶜ = (f a)ᶜ
-  proof: (isCompl_compl.map _).compl_eq.symm
-
-中文:
-定理 map_compl'
-  条件: (a : α)
-  结论: f aᶜ = (f a)ᶜ
-  证明: (isCompl_compl.map _).compl_eq.symm
-
-Depends on / 依赖: compl_eq, compl_eq.symm, isCompl_compl, isCompl_compl.map
+--- 原说明 ---
+Special case of `map_compl` for Boolean algebras.
 -/
 theorem map_compl' (a : α) : f aᶜ = (f a)ᶜ :=
   (isCompl_compl.map _).compl_eq.symm
 
-/--
-theorem `map_sdiff'` / 定理 `map_sdiff'`
+/-- Special case of `map_sdiff` for Boolean algebras. -/
+/-
+**map_sdiff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_sdiff' (a b : α) : f (a \ b) = f a \ f b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sdiff_eq`：sdiff_eq : x \ y = x ⊓ yᶜ
+· 使用定理 `InfHomClass.map_inf`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Min α} {inst_1 : Min β} {inst_2 : FunLike F α β}   [self : InfHomClass F α β
+] (f : F)…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `map_compl'`：map_compl' (a : α) : f aᶜ = (f a)ᶜ
 
-English:
-theorem map_sdiff'
-  given: (a b : α)
-  statement: f (a \ b) = f a \ f b
-  proof: by
-  rw [sdiff_eq]; rw [sdiff_eq]; rw [map_inf]; rw [map_compl']
-
-中文:
-定理 map_sdiff'
-  条件: (a b : α)
-  结论: f (a \ b) = f a \ f b
-  证明: by
-  rw [sdiff_eq]; rw [sdiff_eq]; rw [map_inf]; rw [map_compl']
-
-Depends on / 依赖: map_compl, map_inf, sdiff_eq
+--- 原说明 ---
+Special case of `map_sdiff` for Boolean algebras.
 -/
 theorem map_sdiff' (a b : α) : f (a \ b) = f a \ f b := by
-  rw [sdiff_eq]; rw [sdiff_eq]; rw [map_inf]; rw [map_compl']
+  rw [sdiff_eq, sdiff_eq, map_inf, map_compl']
 
 open scoped symmDiff in
-/--
-theorem `map_symmDiff'` / 定理 `map_symmDiff'`
+/-- Special case of `map_symmDiff` for Boolean algebras. -/
+/-
+**map_symmDiff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_symmDiff' (a b : α) : f (a ∆ b) = f a ∆ f b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `symmDiff.eq_1`：∀ {α : Type u_2} [inst : Max α] [inst_1 : SDiff α] (a b :
+ α), symmDiff a b = a \ b ⊔ b \ a
+· 使用定理 `SupHomClass.map_sup`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Max α} {inst_1 : Max β} {inst_2 : FunLike F α β}   [self : SupHomClass F α β
+] (f : F)…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `map_sdiff'`：map_sdiff' (a b : α) : f (a \ b) = f a \ f b
 
-English:
-theorem map_symmDiff'
-  given: (a b : α)
-  statement: f (a ∆ b) = f a ∆ f b
-  proof: by
-  rw [symmDiff]; rw [symmDiff]; rw [map_sup]; rw [map_sdiff']; rw [map_sdiff']
-
-中文:
-定理 map_symmDiff'
-  条件: (a b : α)
-  结论: f (a ∆ b) = f a ∆ f b
-  证明: by
-  rw [symmDiff]; rw [symmDiff]; rw [map_sup]; rw [map_sdiff']; rw [map_sdiff']
-
-Depends on / 依赖: map_sdiff, map_sup, symmDiff
+--- 原说明 ---
+Special case of `map_symmDiff` for Boolean algebras.
 -/
 theorem map_symmDiff' (a b : α) : f (a ∆ b) = f a ∆ f b := by
-  rw [symmDiff]; rw [symmDiff]; rw [map_sup]; rw [map_sdiff']; rw [map_sdiff']
+  rw [symmDiff, symmDiff, map_sup, map_sdiff', map_sdiff']
 
 end BooleanAlgebra
 
 variable [FunLike F α β]
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Max
-  signature: α] [Max β] [Bot α] [Bot β] [SupBotHomClass F α β] : CoeTC F (SupBotHom α β)
-  body: ⟨fun f => ⟨f, map_bot f⟩⟩
-
-中文:
-实例 [最大值
-  签名: α] [最大值 β] [底元素 α] [底元素 β] [SupBot态射类 F α β] : CoeTC F (SupBot态射 α β)
-  定义体: ⟨fun f => ⟨f, map_bot f⟩⟩
-
-Depends on / 依赖: map_bot
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Max α] [Max β] [Bot α] [Bot β] [SupBotHomClass F α β] : CoeTC F (SupBotHom α β) :=
   ⟨fun f => ⟨f, map_bot f⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Lattice
-  signature: α] [Lattice β] [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] :
-  body: ⟨fun f =>
-    { (f : LatticeHom α β) with
-      toFun := f
-      map_top' := map_top f
-      map_bot' := map_bot f }⟩
-
-中文:
-实例 [格
-  签名: α] [格 β] [有界序 α] [有界序 β] [有界格态射类 F α β] :
-  定义体: ⟨fun f =>
-    { (f : LatticeHom α β) with
-      toFun := f
-      map_top' := map_top f
-      map_bot' := map_bot f }⟩
-
-Depends on / 依赖: LatticeHom, map_bot, map_top
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Lattice α] [Lattice β] [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] :
     CoeTC F (BoundedLatticeHom α β) :=
@@ -413,32 +413,9 @@ section Sup
 variable [Max β] [Bot β] [Max γ] [Bot γ] [Max δ] [Bot δ]
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (SupBotHom α β) α β
-  body: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-@[to_dual]
-
-中文:
-实例 :
-  签名: 函数状 (SupBot态射 α β) α β
-  定义体: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨_, _⟩, _⟩ := f
-    obtain ⟨⟨_, _⟩, _⟩ := g
-    congr
-
-@[to_dual]
-
-Depends on / 依赖: f.toFun
+/-
+**SupBotHom.** 是 Mathlib 中的一个实例，位于命名空间 `SupBotHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (SupBotHom α β) α β where
   coe f := f.toFun
@@ -448,121 +425,59 @@ instance : FunLike (SupBotHom α β) α β where
     congr
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupBotHomClass (SupBotHom α β) α β
-  body: f.map_sup'
-  map_bot f := f.map_bot'
-
-@[to_dual]
-
-中文:
-实例 :
-  签名: SupBot态射类 (SupBot态射 α β) α β
-  定义体: f.map_sup'
-  map_bot f := f.map_bot'
-
-@[to_dual]
-
-Depends on / 依赖: f.map_sup, map_sup
+/-
+**SupBotHom.** 是 Mathlib 中的一个实例，位于命名空间 `SupBotHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupBotHomClass (SupBotHom α β) α β where
   map_sup f := f.map_sup'
   map_bot f := f.map_bot'
 
 @[to_dual]
-/--
-lemma `toFun_eq_coe` / 引理 `toFun_eq_coe`
-
-English:
-lemma toFun_eq_coe
-  given: (f : SupBotHom α β)
-  statement: f.toFun = f
-  proof: rfl
-
-中文:
-引理 toFun_eq_coe
-  条件: (f : SupBot态射 α β)
-  结论: f.toFun = f
-  证明: rfl
+/-
+**SupBotHom.toFun_eq_coe** 是 Mathlib 中的一个引理，位于命名空间 `SupBotHom`。
+形式化陈述：toFun_eq_coe (f : SupBotHom α β) : f.toFun = f
+参数：f : SupBotHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toFun_eq_coe (f : SupBotHom α β) : f.toFun = f := rfl
-
-/--
-lemma `coe_toSupHom` / 引理 `coe_toSupHom`
-
-English:
-lemma coe_toSupHom
-  given: (f : SupBotHom α β)
-  statement: ⇑f.toSupHom = f
-  proof: rfl
-
-中文:
-引理 coe_toSupHom
-  条件: (f : SupBot态射 α β)
-  结论: ⇑f.toSupHom = f
-  证明: rfl
+/-
+**SupBotHom.coe_toSupHom** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Max α] [inst_1 : Bot α] [inst_2 : 
+Max β] [inst_3 : Bot β] (f : SupBotHom α β),   ⇑f.toSupHom = ⇑f
+参数：f : SupBotHom α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual (attr := simp)] lemma coe_toSupHom (f : SupBotHom α β) : ⇑f.toSupHom = f := rfl
-/--
-lemma `coe_toBotHom` / 引理 `coe_toBotHom`
-
-English:
-lemma coe_toBotHom
-  given: (f : SupBotHom α β)
-  statement: ⇑f.toBotHom = f
-  proof: rfl
-
-中文:
-引理 coe_toBotHom
-  条件: (f : SupBot态射 α β)
-  结论: ⇑f.toBotHom = f
-  证明: rfl
+/-
+**SupBotHom.coe_toBotHom** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Max α] [inst_1 : Bot α] [inst_2 : 
+Max β] [inst_3 : Bot β] (f : SupBotHom α β),   ⇑f.toBotHom = ⇑f
+参数：f : SupBotHom α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual (attr := simp)] lemma coe_toBotHom (f : SupBotHom α β) : ⇑f.toBotHom = f := rfl
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (f : SupHom α β) (hf)
-  statement: ⇑(mk f hf) = f
-  proof: rfl
-
-@[to_dual (attr := ext)]
-
-中文:
-引理 coe_mk
-  条件: (f : 并态射 α β) (hf)
-  结论: ⇑(mk f hf) = f
-  证明: rfl
-
-@[to_dual (attr := ext)]
+/-
+**SupBotHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Max α] [inst_1 : Bot α] [inst_2 : 
+Max β] [inst_3 : Bot β] (f : SupHom α β)   (hf : f.toFun ⊥ = ⊥), ⇑{ toSupHom := 
+f, map_bot' := hf } = ⇑f
+参数：f : SupHom α β；hf : f.toFun ⊥ = ⊥。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual (attr := simp)] lemma coe_mk (f : SupHom α β) (hf) : ⇑(mk f hf) = f := rfl
 
 @[to_dual (attr := ext)]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : SupBotHom α β} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : SupBot态射 α β} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**SupBotHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：ext {f g : SupBotHom α β} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : SupBotHom α β} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : SupBotHom α β} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
 
 /-- Copy of a `SupBotHom` with a new `toFun` equal to the old one. Useful to fix definitional
@@ -570,130 +485,73 @@ equalities. -/
 @[to_dual /--
 Copy of an `InfTopHom` with a new `toFun` equal to the old one. Useful to fix definitional
 equalities. -/]
-/--
-Definition of `copy` / `copy` 的定义
-
-English:
-definition copy
-  signature: (f : SupBotHom α β) (f' : α -> β) (h : f' = f)
-  body: { f.toBotHom.copy f' h with toSupHom := f.toSupHom.copy f' h }
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 copy
-  签名: (f : SupBot态射 α β) (f' : α -> β) (h : f' = f)
-  定义体: { f.toBotHom.copy f' h with toSupHom := f.toSupHom.copy f' h }
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `SupBotHom`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : Max α] →       [inst_1 : B
+ot α] →         [inst_2 : Max β] → [inst_3 : Bot β] → (f : SupBotHom α β) → (f' 
+: α → β) → f' = ⇑f → SupBotHom α β
+参数：f : SupBotHom α β；f' : α → β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BotHom.map_bot'`：∀ {α : Type u_6} {β : Type u_7} [inst : Bot α] [inst_1 
+: Bot β] (self : BotHom α β), self.toFun ⊥ = ⊥
 -/
-protected def copy (f : SupBotHom α β) (f' : α -> β) (h : f' = f) : SupBotHom α β :=
+protected def copy (f : SupBotHom α β) (f' : α → β) (h : f' = f) : SupBotHom α β :=
   { f.toBotHom.copy f' h with toSupHom := f.toSupHom.copy f' h }
 
 @[to_dual (attr := simp)]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : SupBotHom α β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-@[to_dual]
-
-中文:
-定理 coe_copy
-  条件: (f : SupBot态射 α β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
-
-@[to_dual]
+/-
+**SupBotHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：coe_copy (f : SupBotHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) =
+ f'
+参数：f : SupBotHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : SupBotHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : SupBotHom α β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
 
 @[to_dual]
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : SupBotHom α β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : SupBot态射 α β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**SupBotHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：copy_eq (f : SupBotHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f
+参数：f : SupBotHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : SupBotHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : SupBotHom α β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 variable (α)
 
 /-- `id` as a `SupBotHom`. -/
 @[to_dual (attr := simps!) /-- `id` as an `InfTopHom`. -/]
-/--
-Definition of `id` / `id` 的定义
+/-
+**SupBotHom.id** 是 Mathlib 中的一个定义，位于命名空间 `SupBotHom`。
+形式化陈述：(α : Type u_2) → [inst : Max α] → [inst_1 : Bot α] → SupBotHom α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : SupBotHom α α
-  body: ⟨SupHom.id α, rfl⟩
-
-@[to_dual]
-
-中文:
-定义 id
-  签名: : SupBot态射 α α
-  定义体: ⟨SupHom.id α, rfl⟩
-
-@[to_dual]
+--- 原说明 ---
+`id` as a `SupBotHom`.
 -/
 protected def id : SupBotHom α α :=
   ⟨SupHom.id α, rfl⟩
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (SupBotHom α α)
-  body: ⟨SupBotHom.id α⟩
-
-@[to_dual (attr := simp, norm_cast)]
-
-中文:
-实例 :
-  签名: 可居 (SupBot态射 α α)
-  定义体: ⟨SupBotHom.id α⟩
-
-@[to_dual (attr := simp, norm_cast)]
-
-Depends on / 依赖: SupBotHom, SupBotHom.id
+/-
+**SupBotHom.** 是 Mathlib 中的一个实例，位于命名空间 `SupBotHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (SupBotHom α α) :=
   ⟨SupBotHom.id α⟩
 
 @[to_dual (attr := simp, norm_cast)]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(SupBotHom.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(SupBot态射.id α) = id
-  证明: rfl
+/-
+**SupBotHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：coe_id : ⇑(SupBotHom.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(SupBotHom.id α) = id :=
   rfl
@@ -701,410 +559,226 @@ theorem coe_id : ⇑(SupBotHom.id α) = id :=
 variable {α}
 
 @[to_dual]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (a : α)
-  statement: SupBotHom.id α a = a
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (a : α)
-  结论: SupBot态射.id α a = a
-  证明: rfl
+/-
+**SupBotHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：id_apply (a : α) : SupBotHom.id α a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (a : α) : SupBotHom.id α a = a :=
   rfl
 
 /-- Composition of `SupBotHom`s as a `SupBotHom`. -/
 @[to_dual /-- Composition of `InfTopHom`s as an `InfTopHom`. -/]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**SupBotHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `SupBotHom`。
+形式化陈述：comp (f : SupBotHom β γ) (g : SupBotHom α β) : SupBotHom α γ
+参数：f : SupBotHom β γ；g : SupBotHom α β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BotHom.map_bot'`：∀ {α : Type u_6} {β : Type u_7} [inst : Bot α] [inst_1 
+: Bot β] (self : BotHom α β), self.toFun ⊥ = ⊥
 
-English:
-definition comp
-  signature: (f : SupBotHom β γ) (g : SupBotHom α β)
-  body: { f.toSupHom.comp g.toSupHom, f.toBotHom.comp g.toBotHom with }
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 comp
-  签名: (f : SupBot态射 β γ) (g : SupBot态射 α β)
-  定义体: { f.toSupHom.comp g.toSupHom, f.toBotHom.comp g.toBotHom with }
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: f.toBotHom.comp, f.toSupHom.comp, g.toBotHom, g.toSupHom, toBotHom, toSupHom
+--- 原说明 ---
+Composition of `SupBotHom`s as a `SupBotHom`.
 -/
 def comp (f : SupBotHom β γ) (g : SupBotHom α β) : SupBotHom α γ :=
   { f.toSupHom.comp g.toSupHom, f.toBotHom.comp g.toBotHom with }
 
 @[to_dual (attr := simp)]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : SupBotHom β γ) (g : SupBotHom α β)
-  statement: (f.comp g : α -> γ) = f ∘ g
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 coe_comp
-  条件: (f : SupBot态射 β γ) (g : SupBot态射 α β)
-  结论: (f.comp g : α -> γ) = f ∘ g
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：coe_comp (f : SupBotHom β γ) (g : SupBotHom α β) : (f.comp g : α -> γ) = f
+ ∘ g
+参数：f : SupBotHom β γ；g : SupBotHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (f : SupBotHom β γ) (g : SupBotHom α β) : (f.comp g : α -> γ) = f ∘ g :=
+theorem coe_comp (f : SupBotHom β γ) (g : SupBotHom α β) : (f.comp g : α → γ) = f ∘ g :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : SupBotHom β γ) (g : SupBotHom α β) (a : α)
-  statement: (f.comp g) a = f (g a)
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 comp_apply
-  条件: (f : SupBot态射 β γ) (g : SupBot态射 α β) (a : α)
-  结论: (f.comp g) a = f (g a)
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：comp_apply (f : SupBotHom β γ) (g : SupBotHom α β) (a : α) : (f.comp g) a 
+= f (g a)
+参数：f : SupBotHom β γ；g : SupBotHom α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : SupBotHom β γ) (g : SupBotHom α β) (a : α) : (f.comp g) a = f (g a) :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : SupBotHom γ δ) (g : SupBotHom β γ) (h : SupBotHom α β)
-  proof: rfl
-
-中文:
-定理 comp_assoc
-  条件: (f : SupBot态射 γ δ) (g : SupBot态射 β γ) (h : SupBot态射 α β)
-  证明: rfl
+/-
+**SupBotHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：comp_assoc (f : SupBotHom γ δ) (g : SupBotHom β γ) (h : SupBotHom α β) : (
+f.comp g).comp h = f.comp (g.comp h)
+参数：f : SupBotHom γ δ；g : SupBotHom β γ；h : SupBotHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : SupBotHom γ δ) (g : SupBotHom β γ) (h : SupBotHom α β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
-
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : SupBotHom α β)
-  statement: f.comp (SupBotHom.id α) = f
-  proof: rfl
-
-中文:
-定理 comp_id
-  条件: (f : SupBot态射 α β)
-  结论: f.comp (SupBot态射.id α) = f
-  证明: rfl
+/-
+**SupBotHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Max α] [inst_1 : Bot α] [inst_2 : 
+Max β] [inst_3 : Bot β] (f : SupBotHom α β),   f.comp (SupBotHom.id α) = f
+参数：f : SupBotHom α β；SupBotHom.id α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual (attr := simp)] theorem comp_id (f : SupBotHom α β) : f.comp (SupBotHom.id α) = f := rfl
-
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : SupBotHom α β)
-  statement: (SupBotHom.id β).comp f = f
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 id_comp
-  条件: (f : SupBot态射 α β)
-  结论: (SupBot态射.id β).comp f = f
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Max α] [inst_1 : Bot α] [inst_2 : 
+Max β] [inst_3 : Bot β] (f : SupBotHom α β),   (SupBotHom.id β).comp f = f
+参数：f : SupBotHom α β；SupBotHom.id β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual (attr := simp)] theorem id_comp (f : SupBotHom α β) : (SupBotHom.id β).comp f = f := rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  given: {g₁ g₂ : SupBotHom β γ} {f : SupBotHom α β} (hf : Surjective f)
-  proof: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 cancel_right
-  条件: {g₁ g₂ : SupBot态射 β γ} {f : SupBot态射 α β} (hf : 满射 f)
-  证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, hf.forall
+/-
+**SupBotHom.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：cancel_right {g₁ g₂ : SupBotHom β γ} {f : SupBotHom α β} (hf : Surjective 
+f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupBotHom.ext`：ext {f g : SupBotHom α β} (h : forall a, f a = g a) : f =
+ g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
 -/
 theorem cancel_right {g₁ g₂ : SupBotHom β γ} {f : SupBotHom α β} (hf : Surjective f) :
     g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
+  ⟨fun h => ext <| hf.forall.2 <| DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
 
 @[to_dual (attr := simp)]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: {g : SupBotHom β γ} {f₁ f₂ : SupBotHom α β} (hg : Injective g)
-  proof: ⟨fun h => SupBotHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: {g : SupBot态射 β γ} {f₁ f₂ : SupBot态射 α β} (hg : 单射 g)
-  证明: ⟨fun h => SupBotHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: SupBotHom, SupBotHom.ext, comp_apply, congr_arg
+/-
+**SupBotHom.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：cancel_left {g : SupBotHom β γ} {f₁ f₂ : SupBotHom α β} (hg : Injective g)
+ : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupBotHom.ext`：ext {f g : SupBotHom α β} (h : forall a, f a = g a) : f =
+ g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SupBotHom.comp_apply`：comp_apply (f : SupBotHom β γ) (g : SupBotHom α β)
+ (a : α) : (f.comp g) a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_left {g : SupBotHom β γ} {f₁ f₂ : SupBotHom α β} (hg : Injective g) :
     g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => SupBotHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+  ⟨fun h => SupBotHom.ext fun a => hg <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 end Sup
 
 variable [SemilatticeSup β] [OrderBot β]
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (SupBotHom α β)
-  body: ⟨fun f g => { f.toBotHom ⊔ g.toBotHom with toSupHom := f.toSupHom ⊔ g.toSupHom }⟩
-
-@[to_dual]
-
-中文:
-实例 :
-  签名: 最大值 (SupBot态射 α β)
-  定义体: ⟨fun f g => { f.toBotHom ⊔ g.toBotHom with toSupHom := f.toSupHom ⊔ g.toSupHom }⟩
-
-@[to_dual]
-
-Depends on / 依赖: f.toBotHom, f.toSupHom, g.toBotHom, g.toSupHom, toBotHom, toSupHom
+/-
+**SupBotHom.** 是 Mathlib 中的一个实例，位于命名空间 `SupBotHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (SupBotHom α β) :=
   ⟨fun f g => { f.toBotHom ⊔ g.toBotHom with toSupHom := f.toSupHom ⊔ g.toSupHom }⟩
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (SupBotHom α β)
-  body: PartialOrder.lift _ DFunLike.coe_injective
-
-@[to_dual]
-
-中文:
-实例 :
-  签名: 偏序 (SupBot态射 α β)
-  定义体: PartialOrder.lift _ DFunLike.coe_injective
-
-@[to_dual]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
+/-
+**SupBotHom.** 是 Mathlib 中的一个实例，位于命名空间 `SupBotHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (SupBotHom α β) :=
   PartialOrder.lift _ DFunLike.coe_injective
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeSup (SupBotHom α β)
-  body: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-
-@[to_dual]
-
-中文:
-实例 :
-  签名: SemilatticeSup (SupBot态射 α β)
-  定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-
-@[to_dual]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeSup, coe_injective, semilatticeSup
+/-
+**SupBotHom.** 是 Mathlib 中的一个实例，位于命名空间 `SupBotHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeSup (SupBotHom α β) :=
-  DFunLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
+  DFunLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ ↦ rfl
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderBot (SupBotHom α β)
-  body: ⟨⊥, rfl⟩
-  bot_le _ _ := bot_le
-
-@[to_dual (attr := simp)]
-
-中文:
-实例 :
-  签名: 有底序 (SupBot态射 α β)
-  定义体: ⟨⊥, rfl⟩
-  bot_le _ _ := bot_le
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.** 是 Mathlib 中的一个实例，位于命名空间 `SupBotHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderBot (SupBotHom α β) where
   bot := ⟨⊥, rfl⟩
   bot_le _ _ := bot_le
 
 @[to_dual (attr := simp)]
-/--
-theorem `coe_sup` / 定理 `coe_sup`
-
-English:
-theorem coe_sup
-  given: (f g : SupBotHom α β)
-  statement: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 coe_sup
-  条件: (f g : SupBot态射 α β)
-  结论: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：coe_sup (f g : SupBotHom α β) : ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
+参数：f g : SupBotHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sup (f g : SupBotHom α β) : ⇑(f ⊔ g) = ⇑f ⊔ ⇑g :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `coe_bot` / 定理 `coe_bot`
-
-English:
-theorem coe_bot
-  statement: ⇑(⊥ : SupBotHom α β) = ⊥
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 coe_bot
-  结论: ⇑(⊥ : SupBot态射 α β) = ⊥
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.coe_bot** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：coe_bot : ⇑(⊥ : SupBotHom α β) = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_bot : ⇑(⊥ : SupBotHom α β) = ⊥ :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `sup_apply` / 定理 `sup_apply`
-
-English:
-theorem sup_apply
-  given: (f g : SupBotHom α β) (a : α)
-  statement: (f ⊔ g) a = f a ⊔ g a
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 sup_apply
-  条件: (f g : SupBot态射 α β) (a : α)
-  结论: (f ⊔ g) a = f a ⊔ g a
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.sup_apply** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：sup_apply (f g : SupBotHom α β) (a : α) : (f ⊔ g) a = f a ⊔ g a
+参数：f g : SupBotHom α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sup_apply (f g : SupBotHom α β) (a : α) : (f ⊔ g) a = f a ⊔ g a :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `bot_apply` / 定理 `bot_apply`
-
-English:
-theorem bot_apply
-  given: (a : α)
-  statement: (⊥ : SupBotHom α β) a = ⊥
-  proof: rfl
-
-中文:
-定理 bot_apply
-  条件: (a : α)
-  结论: (⊥ : SupBot态射 α β) a = ⊥
-  证明: rfl
+/-
+**SupBotHom.bot_apply** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：bot_apply (a : α) : (⊥ : SupBotHom α β) a = ⊥
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_apply (a : α) : (⊥ : SupBotHom α β) a = ⊥ :=
   rfl
 
 /-- `Subtype.val` as a `SupBotHom`. -/
-@[to_dual (rename := Pbot -> Ptop, Psup -> Pinf) /-- `Subtype.val` as an `InfTopHom`. -/]
-/--
-Definition of `subtypeVal` / `subtypeVal` 的定义
+@[to_dual (rename := Pbot → Ptop, Psup → Pinf) /-- `Subtype.val` as an `InfTopHom`. -/]
+/-
+**SupBotHom.subtypeVal** 是 Mathlib 中的一个定义，位于命名空间 `SupBotHom`。
+形式化陈述：subtypeVal {P : β -> Prop} (Pbot : P ⊥) (Psup : forall ⦃x y : β⦄, P x -> P
+ y -> P (x ⊔ y)) : letI
+参数：Pbot : P ⊥；Psup : forall ⦃x y : β⦄, P x -> P y -> P (x ⊔ y)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtypeVal
-  signature: {P : β -> Prop}
-  body: Subtype.orderBot Pbot
-    letI := Subtype.semilatticeSup Psup
-    SupBotHom {x : β // P x} β :=
-  letI := Subtype.orderBot Pbot
-  letI := Subtype.semilatticeSup Psup
-  .mk (SupHom.subtypeVal Psup) (by simp [Subtype.coe_bot Pbot])
-
-@[to_dual (attr := simp) (rename := Pbot -> Ptop, Psup -> Pinf)]
-
-中文:
-定义 subtypeVal
-  签名: {P : β -> 命题}
-  定义体: Subtype.orderBot Pbot
-    letI := Subtype.semilatticeSup Psup
-    SupBotHom {x : β // P x} β :=
-  letI := Subtype.orderBot Pbot
-  letI := Subtype.semilatticeSup Psup
-  .mk (SupHom.subtypeVal Psup) (by simp [Subtype.coe_bot Pbot])
-
-@[to_dual (attr := simp) (rename := Pbot -> Ptop, Psup -> Pinf)]
-
-Depends on / 依赖: Subtype, Subtype.orderBot, orderBot
+--- 原说明 ---
+`Subtype.val` as a `SupBotHom`.
 -/
-def subtypeVal {P : β -> Prop}
-    (Pbot : P ⊥) (Psup : forall ⦃x y : β⦄, P x -> P y -> P (x ⊔ y)) :
+def subtypeVal {P : β → Prop}
+    (Pbot : P ⊥) (Psup : ∀ ⦃x y : β⦄, P x → P y → P (x ⊔ y)) :
     letI := Subtype.orderBot Pbot
     letI := Subtype.semilatticeSup Psup
     SupBotHom {x : β // P x} β :=
@@ -1112,44 +786,31 @@ def subtypeVal {P : β -> Prop}
   letI := Subtype.semilatticeSup Psup
   .mk (SupHom.subtypeVal Psup) (by simp [Subtype.coe_bot Pbot])
 
-@[to_dual (attr := simp) (rename := Pbot -> Ptop, Psup -> Pinf)]
-/--
-lemma `subtypeVal_apply` / 引理 `subtypeVal_apply`
-
-English:
-lemma subtypeVal_apply
-  statement: {P : β -> Prop}
-  proof: rfl
-
-@[to_dual (attr := simp) (rename := Pbot -> Ptop, Psup -> Pinf)]
-
-中文:
-引理 subtypeVal_apply
-  结论: {P : β -> 命题}
-  证明: rfl
-
-@[to_dual (attr := simp) (rename := Pbot -> Ptop, Psup -> Pinf)]
+@[to_dual (attr := simp) (rename := Pbot → Ptop, Psup → Pinf)]
+/-
+**SupBotHom.subtypeVal_apply** 是 Mathlib 中的一个引理，位于命名空间 `SupBotHom`。
+形式化陈述：subtypeVal_apply {P : β -> Prop} (Pbot : P ⊥) (Psup : forall ⦃x y : β⦄, P 
+x -> P y -> P (x ⊔ y)) (x : {x : β // P x}) : subtypeVal Pbot Psup x = x
+参数：Pbot : P ⊥；Psup : forall ⦃x y : β⦄, P x -> P y -> P (x ⊔ y)；x : {x : β // P x
+}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma subtypeVal_apply {P : β -> Prop}
-    (Pbot : P ⊥) (Psup : forall ⦃x y : β⦄, P x -> P y -> P (x ⊔ y)) (x : {x : β // P x}) :
+lemma subtypeVal_apply {P : β → Prop}
+    (Pbot : P ⊥) (Psup : ∀ ⦃x y : β⦄, P x → P y → P (x ⊔ y)) (x : {x : β // P x}) :
     subtypeVal Pbot Psup x = x := rfl
 
-@[to_dual (attr := simp) (rename := Pbot -> Ptop, Psup -> Pinf)]
-/--
-lemma `subtypeVal_coe` / 引理 `subtypeVal_coe`
-
-English:
-lemma subtypeVal_coe
-  statement: {P : β -> Prop}
-  proof: rfl
-
-中文:
-引理 subtypeVal_coe
-  结论: {P : β -> 命题}
-  证明: rfl
+@[to_dual (attr := simp) (rename := Pbot → Ptop, Psup → Pinf)]
+/-
+**SupBotHom.subtypeVal_coe** 是 Mathlib 中的一个引理，位于命名空间 `SupBotHom`。
+形式化陈述：subtypeVal_coe {P : β -> Prop} (Pbot : P ⊥) (Psup : forall ⦃x y : β⦄, P x 
+-> P y -> P (x ⊔ y)) : ⇑(subtypeVal Pbot Psup) = Subtype.val
+参数：Pbot : P ⊥；Psup : forall ⦃x y : β⦄, P x -> P y -> P (x ⊔ y)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma subtypeVal_coe {P : β -> Prop}
-    (Pbot : P ⊥) (Psup : forall ⦃x y : β⦄, P x -> P y -> P (x ⊔ y)) :
+lemma subtypeVal_coe {P : β → Prop}
+    (Pbot : P ⊥) (Psup : ∀ ⦃x y : β⦄, P x → P y → P (x ⊔ y)) :
     ⇑(subtypeVal Pbot Psup) = Subtype.val := rfl
 
 end SupBotHom
@@ -1161,294 +822,192 @@ namespace BoundedLatticeHom
 variable [Lattice α] [Lattice β] [Lattice γ] [Lattice δ] [BoundedOrder α] [BoundedOrder β]
   [BoundedOrder γ] [BoundedOrder δ]
 
-/--
-Definition of `toBoundedOrderHom` / `toBoundedOrderHom` 的定义
+/-- Reinterpret a `BoundedLatticeHom` as a `BoundedOrderHom`. -/
+/-
+**BoundedLatticeHom.toBoundedOrderHom** 是 Mathlib 中的一个定义，位于命名空间 `BoundedLatticeH
+om`。
+形式化陈述：toBoundedOrderHom (f : BoundedLatticeHom α β) : BoundedOrderHom α β
+参数：f : BoundedLatticeHom α β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedLatticeHom.map_top'`：∀ {α : Type u_6} {β : Type u_7} [inst : Latt
+ice α] [inst_1 : Lattice β] [inst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β
+] (self : Bounde…
+· 使用定理 `BoundedLatticeHom.map_bot'`：∀ {α : Type u_6} {β : Type u_7} [inst : Latt
+ice α] [inst_1 : Lattice β] [inst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β
+] (self : Bounde…
 
-English:
-definition toBoundedOrderHom
-  signature: (f : BoundedLatticeHom α β)
-  body: { f, (f.toLatticeHom : α ->o β) with }
-
-中文:
-定义 toBoundedOrderHom
-  签名: (f : 有界格态射 α β)
-  定义体: { f, (f.toLatticeHom : α ->o β) with }
-
-Depends on / 依赖: f.toLatticeHom, toLatticeHom
+--- 原说明 ---
+Reinterpret a `BoundedLatticeHom` as a `BoundedOrderHom`.
 -/
 def toBoundedOrderHom (f : BoundedLatticeHom α β) : BoundedOrderHom α β :=
-  { f, (f.toLatticeHom : α ->o β) with }
-
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (BoundedLatticeHom α β) α β where
-  body: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (有界格态射 α β) α β where
-  定义体: f.toFun
-  coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-Depends on / 依赖: f.toFun
+  { f, (f.toLatticeHom : α →o β) with }
+/-
+**BoundedLatticeHom.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：instFunLike : FunLike (BoundedLatticeHom α β) α β where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike (BoundedLatticeHom α β) α β where
   coe f := f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
-
-/--
-Instance `instBoundedLatticeHomClass` / 实例 `instBoundedLatticeHomClass`
-
-English:
-instance instBoundedLatticeHomClass
-  signature: : BoundedLatticeHomClass (BoundedLatticeHom α β) α β where
-  body: f.map_sup'
-  map_inf f := f.map_inf'
-  map_top f := f.map_top'
-  map_bot f := f.map_bot'
-
-中文:
-实例 instBoundedLatticeHomClass
-  签名: : 有界格态射类 (有界格态射 α β) α β where
-  定义体: f.map_sup'
-  map_inf f := f.map_inf'
-  map_top f := f.map_top'
-  map_bot f := f.map_bot'
-
-Depends on / 依赖: f.map_sup, map_sup
+/-
+**BoundedLatticeHom.instBoundedLatticeHomClass** 是 Mathlib 中的一个实例，位于命名空间 `Bounde
+dLatticeHom`。
+形式化陈述：instBoundedLatticeHomClass : BoundedLatticeHomClass (BoundedLatticeHom α β
+) α β where map_sup f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHom.map_sup'`：∀ {α : Type u_6} {β : Type u_7} [inst : Max α] [inst_1 
+: Max β] (self : SupHom α β) (a b : α),   self.toFun (a ⊔ b) = self.toFun a ⊔ se
+lf.to…
+· 使用定理 `LatticeHom.map_inf'`：∀ {α : Type u_6} {β : Type u_7} [inst : Lattice α] 
+[inst_1 : Lattice β] (self : LatticeHom α β) (a b : α),   self.toFun (a ⊓ b) = s
+elf.toFun…
+· 使用定理 `BoundedLatticeHom.map_top'`：∀ {α : Type u_6} {β : Type u_7} [inst : Latt
+ice α] [inst_1 : Lattice β] [inst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β
+] (self : Bounde…
+· 使用定理 `BoundedLatticeHom.map_bot'`：∀ {α : Type u_6} {β : Type u_7} [inst : Latt
+ice α] [inst_1 : Lattice β] [inst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β
+] (self : Bounde…
 -/
 instance instBoundedLatticeHomClass : BoundedLatticeHomClass (BoundedLatticeHom α β) α β where
   map_sup f := f.map_sup'
   map_inf f := f.map_inf'
   map_top f := f.map_top'
   map_bot f := f.map_bot'
-
-/--
-lemma `toFun_eq_coe` / 引理 `toFun_eq_coe`
-
-English:
-lemma toFun_eq_coe
-  given: (f : BoundedLatticeHom α β)
-  statement: f.toFun = f
-  proof: rfl
-
-中文:
-引理 toFun_eq_coe
-  条件: (f : 有界格态射 α β)
-  结论: f.toFun = f
-  证明: rfl
+/-
+**BoundedLatticeHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Lattice α] [inst_1 : Lattice β] [i
+nst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β] (f : BoundedLatticeHom α β),
+ f.toFun = ⇑f
+参数：f : BoundedLatticeHom α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toFun_eq_coe (f : BoundedLatticeHom α β) : f.toFun = f := rfl
-
-/--
-lemma `coe_toLatticeHom` / 引理 `coe_toLatticeHom`
-
-English:
-lemma coe_toLatticeHom
-  given: (f : BoundedLatticeHom α β)
-  statement: ⇑f.toLatticeHom = f
-  proof: rfl
-@[to_dual (attr := simp)]
-
-中文:
-引理 coe_toLatticeHom
-  条件: (f : 有界格态射 α β)
-  结论: ⇑f.toLatticeHom = f
-  证明: rfl
-@[to_dual (attr := simp)]
+/-
+**BoundedLatticeHom.coe_toLatticeHom** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHo
+m`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Lattice α] [inst_1 : Lattice β] [i
+nst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β] (f : BoundedLatticeHom α β),
+ ⇑f.toLatticeHom = ⇑f
+参数：f : BoundedLatticeHom α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toLatticeHom (f : BoundedLatticeHom α β) : ⇑f.toLatticeHom = f := rfl
 @[to_dual (attr := simp)]
-/--
-lemma `coe_toSupBotHom` / 引理 `coe_toSupBotHom`
-
-English:
-lemma coe_toSupBotHom
-  given: (f : BoundedLatticeHom α β)
-  statement: ⇑f.toSupBotHom = f
-  proof: rfl
-
-中文:
-引理 coe_toSupBotHom
-  条件: (f : 有界格态射 α β)
-  结论: ⇑f.toSupBotHom = f
-  证明: rfl
+/-
+**BoundedLatticeHom.coe_toSupBotHom** 是 Mathlib 中的一个引理，位于命名空间 `BoundedLatticeHom
+`。
+形式化陈述：coe_toSupBotHom (f : BoundedLatticeHom α β) : ⇑f.toSupBotHom = f
+参数：f : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_toSupBotHom (f : BoundedLatticeHom α β) : ⇑f.toSupBotHom = f := rfl
-/--
-lemma `coe_toBoundedOrderHom` / 引理 `coe_toBoundedOrderHom`
-
-English:
-lemma coe_toBoundedOrderHom
-  given: (f : BoundedLatticeHom α β)
-  statement: ⇑f.toBoundedOrderHom = f
-  proof: rfl
-
-中文:
-引理 coe_toBoundedOrderHom
-  条件: (f : 有界格态射 α β)
-  结论: ⇑f.toBoundedOrderHom = f
-  证明: rfl
+/-
+**BoundedLatticeHom.coe_toBoundedOrderHom** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatt
+iceHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Lattice α] [inst_1 : Lattice β] [i
+nst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β] (f : BoundedLatticeHom α β),
+ ⇑f.toBoundedOrderHom = ⇑f
+参数：f : BoundedLatticeHom α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toBoundedOrderHom (f : BoundedLatticeHom α β) : ⇑f.toBoundedOrderHom = f := rfl
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (f : LatticeHom α β) (hf hf')
-  statement: ⇑(mk f hf hf') = f
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 coe_mk
-  条件: (f : 格态射 α β) (hf hf')
-  结论: ⇑(mk f hf hf') = f
-  证明: rfl
-
-@[ext]
+/-
+**BoundedLatticeHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Lattice α] [inst_1 : Lattice β] [i
+nst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β] (f : LatticeHom α β) (hf : f
+.toFun ⊤ = ⊤) (hf' : f.toFun ⊥ = ⊥),   ⇑{ toLatticeHom := f, map_top' := hf, map
+_bot' := hf' } = ⇑f
+参数：f : LatticeHom α β；hf : f.toFun ⊤ = ⊤；hf' : f.toFun ⊥ = ⊥。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_mk (f : LatticeHom α β) (hf hf') : ⇑(mk f hf hf') = f := rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : BoundedLatticeHom α β} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : 有界格态射 α β} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**BoundedLatticeHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：ext {f g : BoundedLatticeHom α β} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : BoundedLatticeHom α β} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : BoundedLatticeHom α β} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `BoundedLatticeHom` with a new `toFun` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**BoundedLatticeHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : Lattice α] →       [inst_1
+ : Lattice β] →         [inst_2 : BoundedOrder α] →           [inst_3 : BoundedO
+rder β] → (f : BoundedLatticeHom α β) → (f' : α → β) → f' = ⇑f → BoundedLatticeH
+om α β
+参数：f : BoundedLatticeHom α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f)
-  body: { f.toLatticeHom.copy f' h, f.toBoundedOrderHom.copy f' h with }
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : 有界格态射 α β) (f' : α -> β) (h : f' = f)
-  定义体: { f.toLatticeHom.copy f' h, f.toBoundedOrderHom.copy f' h with }
-
-@[simp]
+--- 原说明 ---
+Copy of a `BoundedLatticeHom` with a new `toFun` equal to the old one. Useful to
+ fix
+definitional equalities.
 -/
-protected def copy (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f) : BoundedLatticeHom α β :=
+protected def copy (f : BoundedLatticeHom α β) (f' : α → β) (h : f' = f) : BoundedLatticeHom α β :=
   { f.toLatticeHom.copy f' h, f.toBoundedOrderHom.copy f' h with }
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : 有界格态射 α β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**BoundedLatticeHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：coe_copy (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy
+ f' h) = f'
+参数：f : BoundedLatticeHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : BoundedLatticeHom α β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : 有界格态射 α β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**BoundedLatticeHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：copy_eq (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f) : f.copy f'
+ h = f
+参数：f : BoundedLatticeHom α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : BoundedLatticeHom α β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- `id` as a `BoundedLatticeHom`. -/
+/-
+**BoundedLatticeHom.id** 是 Mathlib 中的一个定义，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：(α : Type u_2) → [inst : Lattice α] → [inst_1 : BoundedOrder α] → BoundedL
+atticeHom α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : BoundedLatticeHom α α
-  body: { LatticeHom.id α, BoundedOrderHom.id α with }
-
-中文:
-定义 id
-  签名: : 有界格态射 α α
-  定义体: { LatticeHom.id α, BoundedOrderHom.id α with }
+--- 原说明 ---
+`id` as a `BoundedLatticeHom`.
 -/
 protected def id : BoundedLatticeHom α α :=
   { LatticeHom.id α, BoundedOrderHom.id α with }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (BoundedLatticeHom α α)
-  body: ⟨BoundedLatticeHom.id α⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 可居 (有界格态射 α α)
-  定义体: ⟨BoundedLatticeHom.id α⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: BoundedLatticeHom, BoundedLatticeHom.id
+/-
+**BoundedLatticeHom.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedLatticeHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (BoundedLatticeHom α α) :=
   ⟨BoundedLatticeHom.id α⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(BoundedLatticeHom.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(有界格态射.id α) = id
-  证明: rfl
+/-
+**BoundedLatticeHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：coe_id : ⇑(BoundedLatticeHom.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(BoundedLatticeHom.id α) = id :=
   rfl
@@ -1456,85 +1015,52 @@ theorem coe_id : ⇑(BoundedLatticeHom.id α) = id :=
 variable {α}
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (a : α)
-  statement: BoundedLatticeHom.id α a = a
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (a : α)
-  结论: 有界格态射.id α a = a
-  证明: rfl
+/-
+**BoundedLatticeHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：id_apply (a : α) : BoundedLatticeHom.id α a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (a : α) : BoundedLatticeHom.id α a = a :=
   rfl
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of `BoundedLatticeHom`s as a `BoundedLatticeHom`. -/
+/-
+**BoundedLatticeHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：comp (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) : BoundedLatt
+iceHom α γ
+参数：f : BoundedLatticeHom β γ；g : BoundedLatticeHom α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
-  body: { f.toLatticeHom.comp g.toLatticeHom, f.toBoundedOrderHom.comp g.toBoundedOrderHom with }
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : 有界格态射 β γ) (g : 有界格态射 α β)
-  定义体: { f.toLatticeHom.comp g.toLatticeHom, f.toBoundedOrderHom.comp g.toBoundedOrderHom with }
-
-@[simp]
-
-Depends on / 依赖: f.toBoundedOrderHom.comp, f.toLatticeHom.comp, g.toBoundedOrderHom, g.toLatticeHom, toBoundedOrderHom, toLatticeHom
+--- 原说明 ---
+Composition of `BoundedLatticeHom`s as a `BoundedLatticeHom`.
 -/
 def comp (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) : BoundedLatticeHom α γ :=
   { f.toLatticeHom.comp g.toLatticeHom, f.toBoundedOrderHom.comp g.toBoundedOrderHom with }
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：coe_comp (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) : (f.comp
+ g : α -> γ) = f ∘ g
+参数：f : BoundedLatticeHom β γ；g : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) :
-    (f.comp g : α -> γ) = f ∘ g :=
+    (f.comp g : α → γ) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) (a : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β) (a : α)
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：comp_apply (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) (a : α)
+ : (f.comp g) a = f (g a)
+参数：f : BoundedLatticeHom β γ；g : BoundedLatticeHom α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) (a : α) :
     (f.comp g) a = f (g a) :=
@@ -1542,40 +1068,49 @@ theorem comp_apply (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) (
 
 @[simp]
 -- `simp`-normal form of `coe_comp_lattice_hom`
-/--
-theorem `coe_comp_lattice_hom'` / 定理 `coe_comp_lattice_hom'`
-
-English:
-theorem coe_comp_lattice_hom'
-  given: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
-  proof: rfl
-
-中文:
-定理 coe_comp_lattice_hom'
-  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
-  证明: rfl
+/-
+**BoundedLatticeHom.coe_comp_lattice_hom'** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatt
+iceHom`。
+形式化陈述：coe_comp_lattice_hom' (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α
+ β) : (⟨(f : SupHom β γ).comp g, map_inf (f.comp g)⟩ : LatticeHom α γ) = (f : La
+tticeHom β γ).comp g
+参数：f : BoundedLatticeHom β γ；g : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHomClass.map_sup`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Max α} {inst_1 : Max β} {inst_2 : FunLike F α β}   [self : SupHomClass F α β
+] (f : F)…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
+· 使用定理 `InfHomClass.map_inf`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Min α} {inst_1 : Min β} {inst_2 : FunLike F α β}   [self : InfHomClass F α β
+] (f : F)…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
 -/
 theorem coe_comp_lattice_hom' (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) :
     (⟨(f : SupHom β γ).comp g, map_inf (f.comp g)⟩ : LatticeHom α γ) =
       (f : LatticeHom β γ).comp g :=
   rfl
-
-/--
-theorem `coe_comp_lattice_hom` / 定理 `coe_comp_lattice_hom`
-
-English:
-theorem coe_comp_lattice_hom
-  given: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 coe_comp_lattice_hom
-  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**BoundedLatticeHom.coe_comp_lattice_hom** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatti
+ceHom`。
+形式化陈述：coe_comp_lattice_hom (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α 
+β) : (f.comp g : LatticeHom α γ) = (f : LatticeHom β γ).comp g
+参数：f : BoundedLatticeHom β γ；g : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedLatticeHomClass.toLatticeHomClass`：∀ {F : Type u_6} {α : Type u_7
+} {β : Type u_8} {inst : Lattice α} {inst_1 : Lattice β} {inst_2 : BoundedOrder 
+α}   {inst_3 : BoundedOrder β}…
 -/
 theorem coe_comp_lattice_hom (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) :
     (f.comp g : LatticeHom α γ) = (f : LatticeHom β γ).comp g :=
@@ -1583,185 +1118,145 @@ theorem coe_comp_lattice_hom (f : BoundedLatticeHom β γ) (g : BoundedLatticeHo
 
 @[to_dual (attr := simp)]
 -- `simp`-normal form of `coe_comp_sup_hom`
-/--
-theorem `coe_comp_sup_hom'` / 定理 `coe_comp_sup_hom'`
-
-English:
-theorem coe_comp_sup_hom'
-  given: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
-  proof: rfl
-
-@[to_dual]
-
-中文:
-定理 coe_comp_sup_hom'
-  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
-  证明: rfl
-
-@[to_dual]
+/-
+**BoundedLatticeHom.coe_comp_sup_hom'** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeH
+om`。
+形式化陈述：coe_comp_sup_hom' (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) 
+: ⟨f ∘ g, map_sup (f.comp g)⟩ = (f : SupHom β γ).comp g
+参数：f : BoundedLatticeHom β γ；g : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHomClass.map_sup`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Max α} {inst_1 : Max β} {inst_2 : FunLike F α β}   [self : SupHomClass F α β
+] (f : F)…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
 -/
 theorem coe_comp_sup_hom' (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) :
     ⟨f ∘ g, map_sup (f.comp g)⟩ = (f : SupHom β γ).comp g :=
   rfl
 
 @[to_dual]
-/--
-theorem `coe_comp_sup_hom` / 定理 `coe_comp_sup_hom`
-
-English:
-theorem coe_comp_sup_hom
-  given: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp_sup_hom
-  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.coe_comp_sup_hom** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHo
+m`。
+形式化陈述：coe_comp_sup_hom (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) :
+ (f.comp g : SupHom α γ) = (f : SupHom β γ).comp g
+参数：f : BoundedLatticeHom β γ；g : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHomClass.map_sup`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Max α} {inst_1 : Max β} {inst_2 : FunLike F α β}   [self : SupHomClass F α β
+] (f : F)…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `BoundedLatticeHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : FunLike F α β] [inst_1 : Lattice α] [inst_2 : Lattice β]
+   [inst_3 : BoundedOrder α] …
 -/
 theorem coe_comp_sup_hom (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) :
     (f.comp g : SupHom α γ) = (f : SupHom β γ).comp g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: (f : BoundedLatticeHom γ δ) (g : BoundedLatticeHom β γ)
-  proof: rfl
-
-中文:
-定理 comp_assoc
-  结论: (f : 有界格态射 γ δ) (g : 有界格态射 β γ)
-  证明: rfl
+/-
+**BoundedLatticeHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：comp_assoc (f : BoundedLatticeHom γ δ) (g : BoundedLatticeHom β γ) (h : Bo
+undedLatticeHom α β) : (f.comp g).comp h = f.comp (g.comp h)
+参数：f : BoundedLatticeHom γ δ；g : BoundedLatticeHom β γ；h : BoundedLatticeHom α β
+。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : BoundedLatticeHom γ δ) (g : BoundedLatticeHom β γ)
     (h : BoundedLatticeHom α β) : (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
-
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : BoundedLatticeHom α β)
-  statement: f.comp (BoundedLatticeHom.id α) = f
-  proof: rfl
-
-中文:
-定理 comp_id
-  条件: (f : 有界格态射 α β)
-  结论: f.comp (有界格态射.id α) = f
-  证明: rfl
+/-
+**BoundedLatticeHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Lattice α] [inst_1 : Lattice β] [i
+nst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β] (f : BoundedLatticeHom α β),
+ f.comp (BoundedLatticeHom.id α) = f
+参数：f : BoundedLatticeHom α β；BoundedLatticeHom.id α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem comp_id (f : BoundedLatticeHom α β) : f.comp (BoundedLatticeHom.id α) = f := rfl
-
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : BoundedLatticeHom α β)
-  statement: (BoundedLatticeHom.id β).comp f = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : 有界格态射 α β)
-  结论: (有界格态射.id β).comp f = f
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Lattice α] [inst_1 : Lattice β] [i
+nst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β] (f : BoundedLatticeHom α β),
+ (BoundedLatticeHom.id β).comp f = f
+参数：f : BoundedLatticeHom α β；BoundedLatticeHom.id β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem id_comp (f : BoundedLatticeHom α β) : (BoundedLatticeHom.id β).comp f = f := rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  statement: {g₁ g₂ : BoundedLatticeHom β γ} {f : BoundedLatticeHom α β}
-  proof: ⟨fun h => BoundedLatticeHom.ext hf.forall.2 DFunLike.ext_iff.1 h,
-    fun h => congr_arg₂ _ h rfl⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  结论: {g₁ g₂ : 有界格态射 β γ} {f : 有界格态射 α β}
-  证明: ⟨fun h => BoundedLatticeHom.ext hf.forall.2 DFunLike.ext_iff.1 h,
-    fun h => congr_arg₂ _ h rfl⟩
-
-@[simp]
-
-Depends on / 依赖: BoundedLatticeHom, BoundedLatticeHom.ext, DFunLike, DFunLike.ext_iff, ext_iff, hf.forall
+/-
+**BoundedLatticeHom.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：cancel_right {g₁ g₂ : BoundedLatticeHom β γ} {f : BoundedLatticeHom α β} (
+hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedLatticeHom.ext`：ext {f g : BoundedLatticeHom α β} (h : forall a, 
+f a = g a) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
 -/
 theorem cancel_right {g₁ g₂ : BoundedLatticeHom β γ} {f : BoundedLatticeHom α β}
     (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => BoundedLatticeHom.ext hf.forall.2 DFunLike.ext_iff.1 h,
+  ⟨fun h => BoundedLatticeHom.ext <| hf.forall.2 <| DFunLike.ext_iff.1 h,
     fun h => congr_arg₂ _ h rfl⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: {g : BoundedLatticeHom β γ} {f₁ f₂ : BoundedLatticeHom α β} (hg : Injective g)
-  proof: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: {g : 有界格态射 β γ} {f₁ f₂ : 有界格态射 α β} (hg : 单射 g)
-  证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: comp_apply, congr_arg
+/-
+**BoundedLatticeHom.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：cancel_left {g : BoundedLatticeHom β γ} {f₁ f₂ : BoundedLatticeHom α β} (h
+g : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedLatticeHom.ext`：ext {f g : BoundedLatticeHom α β} (h : forall a, 
+f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `BoundedLatticeHom.comp_apply`：comp_apply (f : BoundedLatticeHom β γ) (g 
+: BoundedLatticeHom α β) (a : α) : (f.comp g) a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_left {g : BoundedLatticeHom β γ} {f₁ f₂ : BoundedLatticeHom α β} (hg : Injective g) :
     g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+  ⟨fun h => ext fun a => hg <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 /-- `Subtype.val` as a `BoundedLatticeHom`. -/
 @[to_dual self (reorder := Pbot Ptop, Psup Pinf)]
-/--
-Definition of `subtypeVal` / `subtypeVal` 的定义
+/-
+**BoundedLatticeHom.subtypeVal** 是 Mathlib 中的一个定义，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：subtypeVal {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤) (Psup : forall ⦃x y⦄,
+ P x -> P y -> P (x ⊔ y)) (Pinf : forall ⦃x y⦄, P x -> P y -> P (x ⊓ y)) : letI
+参数：Pbot : P ⊥；Ptop : P ⊤；Psup : forall ⦃x y⦄, P x -> P y -> P (x ⊔ y)；Pinf : for
+all ⦃x y⦄, P x -> P y -> P (x ⊓ y)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtypeVal
-  signature: {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤)
-  body: Subtype.lattice Psup Pinf
-    letI := Subtype.boundedOrder Pbot Ptop
-    BoundedLatticeHom {x : β // P x} β :=
-  letI := Subtype.lattice Psup Pinf
-  letI := Subtype.boundedOrder Pbot Ptop
-  .mk (.subtypeVal Psup Pinf) (by simp [Subtype.coe_top Ptop]) (by simp [Subtype.coe_bot Pbot])
-
-@[simp]
-
-中文:
-定义 subtypeVal
-  签名: {P : β -> 命题} (Pbot : P ⊥) (Ptop : P ⊤)
-  定义体: Subtype.lattice Psup Pinf
-    letI := Subtype.boundedOrder Pbot Ptop
-    BoundedLatticeHom {x : β // P x} β :=
-  letI := Subtype.lattice Psup Pinf
-  letI := Subtype.boundedOrder Pbot Ptop
-  .mk (.subtypeVal Psup Pinf) (by simp [Subtype.coe_top Ptop]) (by simp [Subtype.coe_bot Pbot])
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.lattice, lattice
+--- 原说明 ---
+`Subtype.val` as a `BoundedLatticeHom`.
 -/
-def subtypeVal {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤)
-    (Psup : forall ⦃x y⦄, P x -> P y -> P (x ⊔ y)) (Pinf : forall ⦃x y⦄, P x -> P y -> P (x ⊓ y)) :
+def subtypeVal {P : β → Prop} (Pbot : P ⊥) (Ptop : P ⊤)
+    (Psup : ∀ ⦃x y⦄, P x → P y → P (x ⊔ y)) (Pinf : ∀ ⦃x y⦄, P x → P y → P (x ⊓ y)) :
     letI := Subtype.lattice Psup Pinf
     letI := Subtype.boundedOrder Pbot Ptop
     BoundedLatticeHom {x : β // P x} β :=
@@ -1770,44 +1265,36 @@ def subtypeVal {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤)
   .mk (.subtypeVal Psup Pinf) (by simp [Subtype.coe_top Ptop]) (by simp [Subtype.coe_bot Pbot])
 
 @[simp]
-/--
-lemma `subtypeVal_apply` / 引理 `subtypeVal_apply`
-
-English:
-lemma subtypeVal_apply
-  statement: {P : β -> Prop}
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 subtypeVal_apply
-  结论: {P : β -> 命题}
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.subtypeVal_apply** 是 Mathlib 中的一个引理，位于命名空间 `BoundedLatticeHo
+m`。
+形式化陈述：subtypeVal_apply {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤) (Psup : forall 
+⦃x y⦄, P x -> P y -> P (x ⊔ y)) (Pinf : forall ⦃x y⦄, P x -> P y -> P (x ⊓ y)) (
+x : {x : β // P x}) : subtypeVal Pbot Ptop Psup Pinf x = x
+参数：Pbot : P ⊥；Ptop : P ⊤；Psup : forall ⦃x y⦄, P x -> P y -> P (x ⊔ y)；Pinf : for
+all ⦃x y⦄, P x -> P y -> P (x ⊓ y)；x : {x : β // P x}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma subtypeVal_apply {P : β -> Prop}
-    (Pbot : P ⊥) (Ptop : P ⊤) (Psup : forall ⦃x y⦄, P x -> P y -> P (x ⊔ y))
-    (Pinf : forall ⦃x y⦄, P x -> P y -> P (x ⊓ y)) (x : {x : β // P x}) :
+lemma subtypeVal_apply {P : β → Prop}
+    (Pbot : P ⊥) (Ptop : P ⊤) (Psup : ∀ ⦃x y⦄, P x → P y → P (x ⊔ y))
+    (Pinf : ∀ ⦃x y⦄, P x → P y → P (x ⊓ y)) (x : {x : β // P x}) :
     subtypeVal Pbot Ptop Psup Pinf x = x := rfl
 
 @[simp]
-/--
-lemma `subtypeVal_coe` / 引理 `subtypeVal_coe`
-
-English:
-lemma subtypeVal_coe
-  statement: {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤)
-  proof: rfl
-
-中文:
-引理 subtypeVal_coe
-  结论: {P : β -> 命题} (Pbot : P ⊥) (Ptop : P ⊤)
-  证明: rfl
+/-
+**BoundedLatticeHom.subtypeVal_coe** 是 Mathlib 中的一个引理，位于命名空间 `BoundedLatticeHom`
+。
+形式化陈述：subtypeVal_coe {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤) (Psup : forall ⦃x
+ y⦄, P x -> P y -> P (x ⊔ y)) (Pinf : forall ⦃x y⦄, P x -> P y -> P (x ⊓ y)) : ⇑
+(subtypeVal Pbot Ptop Psup Pinf) = Subtype.val
+参数：Pbot : P ⊥；Ptop : P ⊤；Psup : forall ⦃x y⦄, P x -> P y -> P (x ⊔ y)；Pinf : for
+all ⦃x y⦄, P x -> P y -> P (x ⊓ y)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma subtypeVal_coe {P : β -> Prop} (Pbot : P ⊥) (Ptop : P ⊤)
-    (Psup : forall ⦃x y⦄, P x -> P y -> P (x ⊔ y)) (Pinf : forall ⦃x y⦄, P x -> P y -> P (x ⊓ y)) :
+lemma subtypeVal_coe {P : β → Prop} (Pbot : P ⊥) (Ptop : P ⊤)
+    (Psup : ∀ ⦃x y⦄, P x → P y → P (x ⊔ y)) (Pinf : ∀ ⦃x y⦄, P x → P y → P (x ⊓ y)) :
     ⇑(subtypeVal Pbot Ptop Psup Pinf) = Subtype.val := rfl
 
 end BoundedLatticeHom
@@ -1823,102 +1310,61 @@ lattices. -/
 @[to_dual /--
 Reinterpret a finitary infimum homomorphism as a finitary supremum homomorphism between the dual
 lattices. -/]
-/--
-Definition of `dual` / `dual` 的定义
-
-English:
-definition dual
-  signature: : SupBotHom α β ≃ InfTopHom αᵒᵈ βᵒᵈ where
-  body: ⟨SupHom.dual f.toSupHom, f.map_bot'⟩
-  invFun f := ⟨SupHom.dual.symm f.toInfHom, f.map_top'⟩
-
-中文:
-定义 dual
-  签名: : SupBot态射 α β ≃ InfTop态射 αᵒᵈ βᵒᵈ where
-  定义体: ⟨SupHom.dual f.toSupHom, f.map_bot'⟩
-  invFun f := ⟨SupHom.dual.symm f.toInfHom, f.map_top'⟩
-
-Depends on / 依赖: SupHom, SupHom.dual, f.map_bot, f.toSupHom, map_bot, toSupHom
+/-
+**SupBotHom.dual** 是 Mathlib 中的一个定义，位于命名空间 `SupBotHom`。
+形式化陈述：dual : SupBotHom α β ≃ InfTopHom αᵒᵈ βᵒᵈ where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SupBotHom.map_bot'`：∀ {α : Type u_6} {β : Type u_7} [inst : Max α] [inst
+_1 : Max β] [inst_2 : Bot α] [inst_3 : Bot β]   (self : SupBotHom α β), self.toF
+un ⊥ = ⊥
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def dual : SupBotHom α β ≃ InfTopHom αᵒᵈ βᵒᵈ where
   toFun f := ⟨SupHom.dual f.toSupHom, f.map_bot'⟩
   invFun f := ⟨SupHom.dual.symm f.toInfHom, f.map_top'⟩
-
-/--
-theorem `dual_id` / 定理 `dual_id`
-
-English:
-theorem dual_id
-  statement: SupBotHom.dual (SupBotHom.id α) = InfTopHom.id _
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 dual_id
-  结论: SupBot态射.dual (SupBot态射.id α) = InfTop态射.id _
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.dual_id** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：∀ {α : Type u_2} [inst : Max α] [inst_1 : Bot α], SupBotHom.dual (SupBotHo
+m.id α) = InfTopHom.id αᵒᵈ
+参数：SupBotHom.id α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual (attr := simp)] theorem dual_id : SupBotHom.dual (SupBotHom.id α) = InfTopHom.id _ := rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `dual_comp` / 定理 `dual_comp`
-
-English:
-theorem dual_comp
-  given: (g : SupBotHom β γ) (f : SupBotHom α β)
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 dual_comp
-  条件: (g : SupBot态射 β γ) (f : SupBot态射 α β)
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.dual_comp** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：dual_comp (g : SupBotHom β γ) (f : SupBotHom α β) : SupBotHom.dual (g.comp
+ f) = (SupBotHom.dual g).comp (SupBotHom.dual f)
+参数：g : SupBotHom β γ；f : SupBotHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dual_comp (g : SupBotHom β γ) (f : SupBotHom α β) :
     SupBotHom.dual (g.comp f) = (SupBotHom.dual g).comp (SupBotHom.dual f) :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `symm_dual_id` / 定理 `symm_dual_id`
-
-English:
-theorem symm_dual_id
-  statement: SupBotHom.dual.symm (InfTopHom.id _) = SupBotHom.id α
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 symm_dual_id
-  结论: SupBot态射.dual.symm (InfTop态射.id _) = SupBot态射.id α
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**SupBotHom.symm_dual_id** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：symm_dual_id : SupBotHom.dual.symm (InfTopHom.id _) = SupBotHom.id α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem symm_dual_id : SupBotHom.dual.symm (InfTopHom.id _) = SupBotHom.id α :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `symm_dual_comp` / 定理 `symm_dual_comp`
-
-English:
-theorem symm_dual_comp
-  given: (g : InfTopHom βᵒᵈ γᵒᵈ) (f : InfTopHom αᵒᵈ βᵒᵈ)
-  proof: rfl
-
-中文:
-定理 symm_dual_comp
-  条件: (g : InfTop态射 βᵒᵈ γᵒᵈ) (f : InfTop态射 αᵒᵈ βᵒᵈ)
-  证明: rfl
+/-
+**SupBotHom.symm_dual_comp** 是 Mathlib 中的一个定理，位于命名空间 `SupBotHom`。
+形式化陈述：symm_dual_comp (g : InfTopHom βᵒᵈ γᵒᵈ) (f : InfTopHom αᵒᵈ βᵒᵈ) : SupBotHom
+.dual.symm (g.comp f) = (SupBotHom.dual.symm g).comp (SupBotHom.dual.symm f)
+参数：g : InfTopHom βᵒᵈ γᵒᵈ；f : InfTopHom αᵒᵈ βᵒᵈ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem symm_dual_comp (g : InfTopHom βᵒᵈ γᵒᵈ) (f : InfTopHom αᵒᵈ βᵒᵈ) :
     SupBotHom.dual.symm (g.comp f) =
@@ -1934,67 +1380,49 @@ variable [Lattice α] [BoundedOrder α] [Lattice β] [BoundedOrder β] [Lattice 
 /-- Reinterpret a bounded lattice homomorphism as a bounded lattice homomorphism between the dual
 bounded lattices. -/
 @[simps!]
-/--
-Definition of `dual` / `dual` 的定义
+/-
+**BoundedLatticeHom.dual** 是 Mathlib 中的一个定义，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : Lattice α] →       [inst_1
+ : BoundedOrder α] →         [inst_2 : Lattice β] → [inst_3 : BoundedOrder β] → 
+BoundedLatticeHom α β ≃ BoundedLatticeHom αᵒᵈ βᵒᵈ
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BoundedLatticeHom.map_bot'`：∀ {α : Type u_6} {β : Type u_7} [inst : Latt
+ice α] [inst_1 : Lattice β] [inst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β
+] (self : Bounde…
+· 使用定理 `BoundedLatticeHom.map_top'`：∀ {α : Type u_6} {β : Type u_7} [inst : Latt
+ice α] [inst_1 : Lattice β] [inst_2 : BoundedOrder α]   [inst_3 : BoundedOrder β
+] (self : Bounde…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition dual
-  signature: : BoundedLatticeHom α β ≃ BoundedLatticeHom αᵒᵈ βᵒᵈ where
-  body: ⟨LatticeHom.dual f.toLatticeHom, f.map_bot', f.map_top'⟩
-  invFun f := ⟨LatticeHom.dual.symm f.toLatticeHom, f.map_bot', f.map_top'⟩
-
-@[simp]
-
-中文:
-定义 dual
-  签名: : 有界格态射 α β ≃ 有界格态射 αᵒᵈ βᵒᵈ where
-  定义体: ⟨LatticeHom.dual f.toLatticeHom, f.map_bot', f.map_top'⟩
-  invFun f := ⟨LatticeHom.dual.symm f.toLatticeHom, f.map_bot', f.map_top'⟩
-
-@[simp]
+--- 原说明 ---
+Reinterpret a bounded lattice homomorphism as a bounded lattice homomorphism bet
+ween the dual
+bounded lattices.
 -/
 protected def dual : BoundedLatticeHom α β ≃ BoundedLatticeHom αᵒᵈ βᵒᵈ where
   toFun f := ⟨LatticeHom.dual f.toLatticeHom, f.map_bot', f.map_top'⟩
   invFun f := ⟨LatticeHom.dual.symm f.toLatticeHom, f.map_bot', f.map_top'⟩
 
 @[simp]
-/--
-theorem `dual_id` / 定理 `dual_id`
-
-English:
-theorem dual_id
-  statement: BoundedLatticeHom.dual (BoundedLatticeHom.id α) = BoundedLatticeHom.id _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dual_id
-  结论: 有界格态射.dual (有界格态射.id α) = 有界格态射.id _
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.dual_id** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：dual_id : BoundedLatticeHom.dual (BoundedLatticeHom.id α) = BoundedLattice
+Hom.id _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dual_id : BoundedLatticeHom.dual (BoundedLatticeHom.id α) = BoundedLatticeHom.id _ :=
   rfl
 
 @[simp]
-/--
-theorem `dual_comp` / 定理 `dual_comp`
-
-English:
-theorem dual_comp
-  given: (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dual_comp
-  条件: (g : 有界格态射 β γ) (f : 有界格态射 α β)
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.dual_comp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：dual_comp (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β) : Bounde
+dLatticeHom.dual (g.comp f) = (BoundedLatticeHom.dual g).comp (BoundedLatticeHom
+.dual f)
+参数：g : BoundedLatticeHom β γ；f : BoundedLatticeHom α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dual_comp (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β) :
     BoundedLatticeHom.dual (g.comp f) =
@@ -2002,38 +1430,29 @@ theorem dual_comp (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β) :
   rfl
 
 @[simp]
-/--
-theorem `symm_dual_id` / 定理 `symm_dual_id`
-
-English:
-theorem symm_dual_id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_dual_id
-  证明: rfl
-
-@[simp]
+/-
+**BoundedLatticeHom.symm_dual_id** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`。
+形式化陈述：symm_dual_id : BoundedLatticeHom.dual.symm (BoundedLatticeHom.id _) = Boun
+dedLatticeHom.id α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem symm_dual_id :
     BoundedLatticeHom.dual.symm (BoundedLatticeHom.id _) = BoundedLatticeHom.id α :=
   rfl
 
 @[simp]
-/--
-theorem `symm_dual_comp` / 定理 `symm_dual_comp`
-
-English:
-theorem symm_dual_comp
-  given: (g : BoundedLatticeHom βᵒᵈ γᵒᵈ) (f : BoundedLatticeHom αᵒᵈ βᵒᵈ)
-  proof: rfl
-
-中文:
-定理 symm_dual_comp
-  条件: (g : 有界格态射 βᵒᵈ γᵒᵈ) (f : 有界格态射 αᵒᵈ βᵒᵈ)
-  证明: rfl
+/-
+**BoundedLatticeHom.symm_dual_comp** 是 Mathlib 中的一个定理，位于命名空间 `BoundedLatticeHom`
+。
+形式化陈述：symm_dual_comp (g : BoundedLatticeHom βᵒᵈ γᵒᵈ) (f : BoundedLatticeHom αᵒᵈ 
+βᵒᵈ) : BoundedLatticeHom.dual.symm (g.comp f) = (BoundedLatticeHom.dual.symm g).
+comp (BoundedLatticeHom.dual.symm f)
+参数：g : BoundedLatticeHom βᵒᵈ γᵒᵈ；f : BoundedLatticeHom αᵒᵈ βᵒᵈ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem symm_dual_comp (g : BoundedLatticeHom βᵒᵈ γᵒᵈ) (f : BoundedLatticeHom αᵒᵈ βᵒᵈ) :
     BoundedLatticeHom.dual.symm (g.comp f) =
@@ -2041,3 +1460,4 @@ theorem symm_dual_comp (g : BoundedLatticeHom βᵒᵈ γᵒᵈ) (f : BoundedLat
   rfl
 
 end BoundedLatticeHom
+

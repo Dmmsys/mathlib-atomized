@@ -52,272 +52,273 @@ open Finset
 
 namespace Nat
 
-variable (p : Nat -> Prop)
+variable (p : ℕ → Prop)
 
-/--
-Definition of `nth` / `nth` 的定义
+/-- Find the `n`-th natural number satisfying `p` (indexed from `0`, so `nth p 0` is the first
+natural number satisfying `p`), or `0` if there is no such number. See also
+`Subtype.orderIsoOfNat` for the order isomorphism with ℕ when `p` is infinitely often true. -/
+/-
+**Nat.nth** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：nth (p : Nat -> Prop) (n : Nat) : Nat
+参数：p : Nat -> Prop；n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
 
-English:
-definition nth
-  signature: (p : Nat -> Prop) (n : Nat)
-  body: by
-  classical exact
-    if h : Set.Finite (Set.ofPred p) then h.toFinset.sort.getD n 0
-    else @Nat.Subtype.orderIsoOfNat (Set.ofPred p) (Set.Infinite.to_subtype h) n
-
-中文:
-定义 nth
-  签名: (p : 自然数 -> 命题) (n : 自然数)
-  定义体: by
-  classical exact
-    if h : Set.Finite (Set.ofPred p) then h.toFinset.sort.getD n 0
-    else @Nat.Subtype.orderIsoOfNat (Set.ofPred p) (Set.Infinite.to_subtype h) n
-
-Depends on / 依赖: Finite, Infinite, Nat.Subtype.orderIsoOfNat, Set.Finite, Set.Infinite.to_subtype, Set.ofPred, Subtype, classical, h.toFinset.sort.getD, ofPred, orderIsoOfNat, toFinset, to_subtype
+--- 原说明 ---
+Find the `n`-th natural number satisfying `p` (indexed from `0`, so `nth p 0` is
+ the first
+natural number satisfying `p`), or `0` if there is no such number. See also
+`Subtype.orderIsoOfNat` for the order isomorphism with ℕ when `p` is infinitely 
+often true.
 -/
-noncomputable def nth (p : Nat -> Prop) (n : Nat) : Nat := by
+noncomputable def nth (p : ℕ → Prop) (n : ℕ) : ℕ := by
   classical exact
     if h : Set.Finite (Set.ofPred p) then h.toFinset.sort.getD n 0
     else @Nat.Subtype.orderIsoOfNat (Set.ofPred p) (Set.Infinite.to_subtype h) n
 
 variable {p}
 
-
-
-/--
-theorem `nth_of_card_le` / 定理 `nth_of_card_le`
-
-English:
-theorem nth_of_card_le
-  given: (hf : (Set.ofPred p).Finite) {n : Nat} (hn : #hf.toFinset <= n)
-  proof: by rw [nth, dif_pos hf, List.getD_eq_default]; rwa [Finset.length_sort]
-
-中文:
-定理 nth_of_card_le
-  条件: (hf : (集合.ofPred p).有限) {n : 自然数} (hn : #hf.toFinset <= n)
-  证明: by rw [nth, dif_pos hf, List.getD_eq_default]; rwa [Finset.length_sort]
-
-Depends on / 依赖: Finset, Finset.length_sort, List.getD_eq_default, dif_pos, getD_eq_default, length_sort
+/-!
+### Lemmas about `Nat.nth` on a finite set
 -/
-theorem nth_of_card_le (hf : (Set.ofPred p).Finite) {n : Nat} (hn : #hf.toFinset <= n) :
+
+
+/-
+**Nat.nth_of_card_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_of_card_le (hf : (Set.ofPred p).Finite) {n : Nat} (hn : #hf.toFinset <
+= n) : nth p n = 0
+参数：hf : (Set.ofPred p).Finite；hn : #hf.toFinset <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth.eq_1`：∀ (p : ℕ → Prop) (n : ℕ),   Nat.nth p n =     if h : (Set.
+ofPred p).Finite then (h.toFinset.sort fun a b => a ≤ b).getD n 0     else ↑((Na
+t.…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `List.getD_eq_default`：getD_eq_default {n : Nat} (hn : l.length <= n) : l
+.getD n d = d
+· 使用定理 `Finset.length_sort`：length_sort : (sort s r).length = s.card
+
+--- 原说明 ---
+### Lemmas about `Nat.nth` on a finite set
+-/
+theorem nth_of_card_le (hf : (Set.ofPred p).Finite) {n : ℕ} (hn : #hf.toFinset ≤ n) :
     nth p n = 0 := by rw [nth, dif_pos hf, List.getD_eq_default]; rwa [Finset.length_sort]
-
-/--
-theorem `nth_eq_getD_sort` / 定理 `nth_eq_getD_sort`
-
-English:
-theorem nth_eq_getD_sort
-  given: (h : (Set.ofPred p).Finite) (n : Nat)
-  proof: dif_pos h
-
-中文:
-定理 nth_eq_getD_sort
-  条件: (h : (集合.ofPred p).有限) (n : 自然数)
-  证明: dif_pos h
-
-Depends on / 依赖: dif_pos
+/-
+**Nat.nth_eq_getD_sort** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_eq_getD_sort (h : (Set.ofPred p).Finite) (n : Nat) : nth p n = h.toFin
+set.sort.getD n 0
+参数：h : (Set.ofPred p).Finite；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
 -/
-theorem nth_eq_getD_sort (h : (Set.ofPred p).Finite) (n : Nat) :
+theorem nth_eq_getD_sort (h : (Set.ofPred p).Finite) (n : ℕ) :
     nth p n = h.toFinset.sort.getD n 0 :=
   dif_pos h
-
-/--
-theorem `nth_eq_orderEmbOfFin` / 定理 `nth_eq_orderEmbOfFin`
-
-English:
-theorem nth_eq_orderEmbOfFin
-  given: (hf : (Set.ofPred p).Finite) {n : Nat} (hn : n < #hf.toFinset)
-  proof: by
-  rw [nth_eq_getD_sort hf]; rw [Finset.orderEmbOfFin_apply]; rw [List.getD_eq_getElem]; rw [Fin.getElem_fin]
-
-中文:
-定理 nth_eq_orderEmbOfFin
-  条件: (hf : (集合.ofPred p).有限) {n : 自然数} (hn : n < #hf.toFinset)
-  证明: by
-  rw [nth_eq_getD_sort hf]; rw [Finset.orderEmbOfFin_apply]; rw [List.getD_eq_getElem]; rw [Fin.getElem_fin]
-
-Depends on / 依赖: Fin.getElem_fin, Finset, Finset.orderEmbOfFin_apply, List.getD_eq_getElem, getD_eq_getElem, getElem_fin, nth_eq_getD_sort, orderEmbOfFin_apply
+/-
+**Nat.nth_eq_orderEmbOfFin** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_eq_orderEmbOfFin (hf : (Set.ofPred p).Finite) {n : Nat} (hn : n < #hf.
+toFinset) : nth p n = hf.toFinset.orderEmbOfFin rfl ⟨n, hn⟩
+参数：hf : (Set.ofPred p).Finite；hn : n < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_eq_getD_sort`：nth_eq_getD_sort (h : (Set.ofPred p).Finite) (n : 
+Nat) : nth p n = h.toFinset.sort.getD n 0
+· 使用定理 `Finset.orderEmbOfFin_apply`：orderEmbOfFin_apply (s : Finset α) {k : Nat}
+ (h : s.card = k) (i : Fin k) : s.orderEmbOfFin h i = s.sort[i]'(by rw [length_s
+ort, h]; exact i…
+· 使用定理 `List.getD_eq_getElem`：getD_eq_getElem {n : Nat} (hn : n < l.length) : l.
+getD n d = l[n]
+· 使用定理 `Fin.getElem_fin`：∀ {Cont : Type u_1} {Elem : Type u_2} {Dom : Cont → ℕ →
+ Prop} {n : ℕ} [inst : GetElem Cont ℕ Elem Dom] (a : Cont)   (i : Fin n) (h : Do
+m a ↑…
 -/
-theorem nth_eq_orderEmbOfFin (hf : (Set.ofPred p).Finite) {n : Nat} (hn : n < #hf.toFinset) :
+theorem nth_eq_orderEmbOfFin (hf : (Set.ofPred p).Finite) {n : ℕ} (hn : n < #hf.toFinset) :
     nth p n = hf.toFinset.orderEmbOfFin rfl ⟨n, hn⟩ := by
-  rw [nth_eq_getD_sort hf]; rw [Finset.orderEmbOfFin_apply]; rw [List.getD_eq_getElem]; rw [Fin.getElem_fin]
-
-/--
-theorem `nth_strictMonoOn` / 定理 `nth_strictMonoOn`
-
-English:
-theorem nth_strictMonoOn
-  given: (hf : (Set.ofPred p).Finite)
-  proof: by
-  rintro m (hm : m < _) n (hn : n < _) h
-  simp only [nth_eq_orderEmbOfFin, *]
-  exact OrderEmbedding.strictMono _ h
-
-中文:
-定理 nth_strictMonoOn
-  条件: (hf : (集合.ofPred p).有限)
-  证明: by
-  rintro m (hm : m < _) n (hn : n < _) h
-  simp only [nth_eq_orderEmbOfFin, *]
-  exact OrderEmbedding.strictMono _ h
-
-Depends on / 依赖: OrderEmbedding, OrderEmbedding.strictMono, nth_eq_orderEmbOfFin, strictMono
+  rw [nth_eq_getD_sort hf, Finset.orderEmbOfFin_apply, List.getD_eq_getElem, Fin.getElem_fin]
+/-
+**Nat.nth_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_strictMonoOn (hf : (Set.ofPred p).Finite) : StrictMonoOn (nth p) (Set.
+Iio #hf.toFinset)
+参数：hf : (Set.ofPred p).Finite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_eq_orderEmbOfFin`：nth_eq_orderEmbOfFin (hf : (Set.ofPred p).Fini
+te) {n : Nat} (hn : n < #hf.toFinset) : nth p n = hf.toFinset.orderEmbOfFin rfl 
+⟨n, hn⟩
+· 使用定理 `OrderEmbedding.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preor
+der α] [inst_1 : Preorder β] (f : α ↪o β), StrictMono ⇑f
 -/
 theorem nth_strictMonoOn (hf : (Set.ofPred p).Finite) :
     StrictMonoOn (nth p) (Set.Iio #hf.toFinset) := by
   rintro m (hm : m < _) n (hn : n < _) h
   simp only [nth_eq_orderEmbOfFin, *]
   exact OrderEmbedding.strictMono _ h
-
-/--
-theorem `nth_lt_nth_of_lt_card` / 定理 `nth_lt_nth_of_lt_card`
-
-English:
-theorem nth_lt_nth_of_lt_card
-  statement: (hf : (Set.ofPred p).Finite) {m n : Nat} (h : m < n)
-  proof: nth_strictMonoOn hf (h.trans hn) hn h
-
-中文:
-定理 nth_lt_nth_of_lt_card
-  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : m < n)
-  证明: nth_strictMonoOn hf (h.trans hn) hn h
-
-Depends on / 依赖: h.trans, nth_strictMonoOn
+/-
+**Nat.nth_lt_nth_of_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : m < n)
+ (hn : n < #hf.toFinset) : nth p m < nth p n
+参数：hf : (Set.ofPred p).Finite；h : m < n；hn : n < #hf.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_strictMonoOn`：nth_strictMonoOn (hf : (Set.ofPred p).Finite) : St
+rictMonoOn (nth p) (Set.Iio #hf.toFinset)
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
 -/
-theorem nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : m < n)
+theorem nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : ℕ} (h : m < n)
     (hn : n < #hf.toFinset) : nth p m < nth p n :=
   nth_strictMonoOn hf (h.trans hn) hn h
-
-/--
-theorem `nth_le_nth_of_lt_card` / 定理 `nth_le_nth_of_lt_card`
-
-English:
-theorem nth_le_nth_of_lt_card
-  statement: (hf : (Set.ofPred p).Finite) {m n : Nat} (h : m <= n)
-  proof: (nth_strictMonoOn hf).monotoneOn (h.trans_lt hn) hn h
-
-中文:
-定理 nth_le_nth_of_lt_card
-  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : m <= n)
-  证明: (nth_strictMonoOn hf).monotoneOn (h.trans_lt hn) hn h
-
-Depends on / 依赖: h.trans_lt, monotoneOn, nth_strictMonoOn, trans_lt
+/-
+**Nat.nth_le_nth_of_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_le_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : m <= n
+) (hn : n < #hf.toFinset) : nth p m <= nth p n
+参数：hf : (Set.ofPred p).Finite；h : m <= n；hn : n < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.monotoneOn`：∀ {α : Type u} {β : Type v} [inst : PartialOrde
+r α] [inst_1 : Preorder β] {f : α → β} {s : Set α},   StrictMonoOn f s → Monoton
+eOn f s
+· 使用定理 `Nat.nth_strictMonoOn`：nth_strictMonoOn (hf : (Set.ofPred p).Finite) : St
+rictMonoOn (nth p) (Set.Iio #hf.toFinset)
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
 -/
-theorem nth_le_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : m <= n)
-    (hn : n < #hf.toFinset) : nth p m <= nth p n :=
+theorem nth_le_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : ℕ} (h : m ≤ n)
+    (hn : n < #hf.toFinset) : nth p m ≤ nth p n :=
   (nth_strictMonoOn hf).monotoneOn (h.trans_lt hn) hn h
-
-/--
-theorem `lt_of_nth_lt_nth_of_lt_card` / 定理 `lt_of_nth_lt_nth_of_lt_card`
-
-English:
-theorem lt_of_nth_lt_nth_of_lt_card
-  statement: (hf : (Set.ofPred p).Finite) {m n : Nat} (h : nth p m < nth p n)
-  proof: not_le.1 fun hle => h.not_ge nth_le_nth_of_lt_card hf hle hm
-
-中文:
-定理 lt_of_nth_lt_nth_of_lt_card
-  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : nth p m < nth p n)
-  证明: not_le.1 fun hle => h.not_ge nth_le_nth_of_lt_card hf hle hm
-
-Depends on / 依赖: h.not_ge, not_ge, not_le, nth_le_nth_of_lt_card
+/-
+**Nat.lt_of_nth_lt_nth_of_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_of_nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : 
+nth p m < nth p n) (hm : m < #hf.toFinset) : m < n
+参数：hf : (Set.ofPred p).Finite；h : nth p m < nth p n；hm : m < #hf.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Nat.nth_le_nth_of_lt_card`：nth_le_nth_of_lt_card (hf : (Set.ofPred p).Fi
+nite) {m n : Nat} (h : m <= n) (hn : n < #hf.toFinset) : nth p m <= nth p n
 -/
-theorem lt_of_nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : nth p m < nth p n)
+theorem lt_of_nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : ℕ} (h : nth p m < nth p n)
     (hm : m < #hf.toFinset) : m < n :=
-not_le.1 fun hle => h.not_ge nth_le_nth_of_lt_card hf hle hm
-
-/--
-theorem `le_of_nth_le_nth_of_lt_card` / 定理 `le_of_nth_le_nth_of_lt_card`
-
-English:
-theorem le_of_nth_le_nth_of_lt_card
-  statement: (hf : (Set.ofPred p).Finite) {m n : Nat} (h : nth p m <= nth p n)
-  proof: not_lt.1 fun hlt => h.not_gt nth_lt_nth_of_lt_card hf hlt hm
-
-中文:
-定理 le_of_nth_le_nth_of_lt_card
-  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : nth p m <= nth p n)
-  证明: not_lt.1 fun hlt => h.not_gt nth_lt_nth_of_lt_card hf hlt hm
-
-Depends on / 依赖: h.not_gt, not_gt, not_lt, nth_lt_nth_of_lt_card
+  not_le.1 fun hle => h.not_ge <| nth_le_nth_of_lt_card hf hle hm
+/-
+**Nat.le_of_nth_le_nth_of_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_of_nth_le_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : 
+nth p m <= nth p n) (hm : m < #hf.toFinset) : m <= n
+参数：hf : (Set.ofPred p).Finite；h : nth p m <= nth p n；hm : m < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.nth_lt_nth_of_lt_card`：nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Fi
+nite) {m n : Nat} (h : m < n) (hn : n < #hf.toFinset) : nth p m < nth p n
 -/
-theorem le_of_nth_le_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : Nat} (h : nth p m <= nth p n)
-    (hm : m < #hf.toFinset) : m <= n :=
-not_lt.1 fun hlt => h.not_gt nth_lt_nth_of_lt_card hf hlt hm
-
-/--
-theorem `nth_injOn` / 定理 `nth_injOn`
-
-English:
-theorem nth_injOn
-  given: (hf : (Set.ofPred p).Finite)
-  statement: (Set.Iio #hf.toFinset).InjOn (nth p)
-  proof: (nth_strictMonoOn hf).injOn
-
-中文:
-定理 nth_injOn
-  条件: (hf : (集合.ofPred p).有限)
-  结论: (集合.左无界右开区间 #hf.toFinset).单射限制 (nth p)
-  证明: (nth_strictMonoOn hf).injOn
-
-Depends on / 依赖: nth_strictMonoOn
+theorem le_of_nth_le_nth_of_lt_card (hf : (Set.ofPred p).Finite) {m n : ℕ} (h : nth p m ≤ nth p n)
+    (hm : m < #hf.toFinset) : m ≤ n :=
+  not_lt.1 fun hlt => h.not_gt <| nth_lt_nth_of_lt_card hf hlt hm
+/-
+**Nat.nth_injOn** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_injOn (hf : (Set.ofPred p).Finite) : (Set.Iio #hf.toFinset).InjOn (nth
+ p)
+参数：hf : (Set.ofPred p).Finite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `StrictMonoOn.injOn`：StrictMonoOn.injOn (hf : StrictMonoOn f s) : s.InjOn
+ f
+· 使用定理 `Nat.nth_strictMonoOn`：nth_strictMonoOn (hf : (Set.ofPred p).Finite) : St
+rictMonoOn (nth p) (Set.Iio #hf.toFinset)
 -/
 theorem nth_injOn (hf : (Set.ofPred p).Finite) : (Set.Iio #hf.toFinset).InjOn (nth p) :=
   (nth_strictMonoOn hf).injOn
-
-/--
-theorem `range_nth_of_finite` / 定理 `range_nth_of_finite`
-
-English:
-theorem range_nth_of_finite
-  given: (hf : (Set.ofPred p).Finite)
-  proof: by
-  simpa only [← List.getD_eq_getElem?_getD, ← nth_eq_getD_sort hf, mem_sort,
-    Set.Finite.mem_toFinset] using! Set.range_list_getD (hf.toFinset.sort (· <= ·)) 0
-
-@[simp]
-
-中文:
-定理 range_nth_of_finite
-  条件: (hf : (集合.ofPred p).有限)
-  证明: by
-  simpa only [← List.getD_eq_getElem?_getD, ← nth_eq_getD_sort hf, mem_sort,
-    Set.Finite.mem_toFinset] using! Set.range_list_getD (hf.toFinset.sort (· <= ·)) 0
-
-@[simp]
-
-Depends on / 依赖: Finite, List.getD_eq_getElem, Set.Finite.mem_toFinset, Set.range_list_getD, _getD, getD_eq_getElem, hf.toFinset.sort, mem_sort, mem_toFinset, nth_eq_getD_sort, range_list_getD, toFinset
+/-
+**Nat.range_nth_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：range_nth_of_finite (hf : (Set.ofPred p).Finite) : Set.range (nth p) = ins
+ert 0 (Set.ofPred p)
+参数：hf : (Set.ofPred p).Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.nth_eq_getD_sort`：nth_eq_getD_sort (h : (Set.ofPred p).Finite) (n : 
+Nat) : nth p n = h.toFinset.sort.getD n 0
+· 使用定理 `Set.range_list_getD`：range_list_getD (d : α) : (range fun n : Nat => l[n
+]?.getD d) = insert d { x | x in l }
 -/
 theorem range_nth_of_finite (hf : (Set.ofPred p).Finite) :
     Set.range (nth p) = insert 0 (Set.ofPred p) := by
   simpa only [← List.getD_eq_getElem?_getD, ← nth_eq_getD_sort hf, mem_sort,
-    Set.Finite.mem_toFinset] using! Set.range_list_getD (hf.toFinset.sort (· <= ·)) 0
+    Set.Finite.mem_toFinset] using! Set.range_list_getD (hf.toFinset.sort (· ≤ ·)) 0
 
 @[simp]
-/--
-theorem `image_nth_Iio_card` / 定理 `image_nth_Iio_card`
-
-English:
-theorem image_nth_Iio_card
-  given: (hf : (Set.ofPred p).Finite)
-  proof: calc
-    nth p '' Set.Iio #hf.toFinset = Set.range (hf.toFinset.orderEmbOfFin rfl) := by
-      ext x
-      simp only [Set.mem_image, Set.mem_range, Fin.exists_iff, ← nth_eq_orderEmbOfFin hf,
-        Set.mem_Iio, exists_prop]
-    _ = Set.ofPred p := by rw [range_orderEmbOfFin, Set.Finite.coe_toFinset]
-
-中文:
-定理 image_nth_Iio_card
-  条件: (hf : (集合.ofPred p).有限)
-  证明: calc
-    nth p '' Set.Iio #hf.toFinset = Set.range (hf.toFinset.orderEmbOfFin rfl) := by
-      ext x
-      simp only [Set.mem_image, Set.mem_range, Fin.exists_iff, ← nth_eq_orderEmbOfFin hf,
-        Set.mem_Iio, exists_prop]
-    _ = Set.ofPred p := by rw [range_orderEmbOfFin, Set.Finite.coe_toFinset]
-
-Depends on / 依赖: Fin.exists_iff, Finite, Set.Finite.coe_toFinset, Set.Iio, Set.mem_Iio, Set.mem_image, Set.mem_range, Set.ofPred, Set.range, coe_toFinset, exists_iff, exists_prop, hf.toFinset, hf.toFinset.orderEmbOfFin, mem_Iio, mem_image, mem_range, nth_eq_orderEmbOfFin, ofPred, orderEmbOfFin
+/-
+**Nat.image_nth_Iio_card** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：image_nth_Iio_card (hf : (Set.ofPred p).Finite) : nth p '' Set.Iio #hf.toF
+inset = Set.ofPred p
+参数：hf : (Set.ofPred p).Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.nth_eq_orderEmbOfFin`：nth_eq_orderEmbOfFin (hf : (Set.ofPred p).Fini
+te) {n : Nat} (hn : n < #hf.toFinset) : nth p n = hf.toFinset.orderEmbOfFin rfl 
+⟨n, hn⟩
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Finset.range_orderEmbOfFin`：range_orderEmbOfFin (s : Finset α) {k : Nat}
+ (h : s.card = k) : Set.range (s.orderEmbOfFin h) = s
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
 -/
 theorem image_nth_Iio_card (hf : (Set.ofPred p).Finite) :
     nth p '' Set.Iio #hf.toFinset = Set.ofPred p :=
@@ -327,709 +328,691 @@ theorem image_nth_Iio_card (hf : (Set.ofPred p).Finite) :
       simp only [Set.mem_image, Set.mem_range, Fin.exists_iff, ← nth_eq_orderEmbOfFin hf,
         Set.mem_Iio, exists_prop]
     _ = Set.ofPred p := by rw [range_orderEmbOfFin, Set.Finite.coe_toFinset]
-
-/--
-theorem `nth_mem_of_lt_card` / 定理 `nth_mem_of_lt_card`
-
-English:
-theorem nth_mem_of_lt_card
-  given: {n : Nat} (hf : (Set.ofPred p).Finite) (hlt : n < #hf.toFinset)
-  proof: (image_nth_Iio_card hf).subset Set.mem_image_of_mem _ hlt
-
-中文:
-定理 nth_mem_of_lt_card
-  条件: {n : 自然数} (hf : (集合.ofPred p).有限) (hlt : n < #hf.toFinset)
-  证明: (image_nth_Iio_card hf).subset Set.mem_image_of_mem _ hlt
-
-Depends on / 依赖: Set.mem_image_of_mem, image_nth_Iio_card, mem_image_of_mem, subset
+/-
+**Nat.nth_mem_of_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_mem_of_lt_card {n : Nat} (hf : (Set.ofPred p).Finite) (hlt : n < #hf.t
+oFinset) : p (nth p n)
+参数：hf : (Set.ofPred p).Finite；hlt : n < #hf.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `Nat.image_nth_Iio_card`：image_nth_Iio_card (hf : (Set.ofPred p).Finite) 
+: nth p '' Set.Iio #hf.toFinset = Set.ofPred p
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
-theorem nth_mem_of_lt_card {n : Nat} (hf : (Set.ofPred p).Finite) (hlt : n < #hf.toFinset) :
+theorem nth_mem_of_lt_card {n : ℕ} (hf : (Set.ofPred p).Finite) (hlt : n < #hf.toFinset) :
     p (nth p n) :=
-(image_nth_Iio_card hf).subset Set.mem_image_of_mem _ hlt
-
-/--
-theorem `exists_lt_card_finite_nth_eq` / 定理 `exists_lt_card_finite_nth_eq`
-
-English:
-theorem exists_lt_card_finite_nth_eq
-  given: (hf : (Set.ofPred p).Finite) {x} (h : p x)
-  proof: by
-  rwa [← @Set.mem_ofPred_eq _ _ p, ← image_nth_Iio_card hf] at h
-
-中文:
-定理 存在_lt_card_finite_nth_eq
-  条件: (hf : (集合.ofPred p).有限) {x} (h : p x)
-  证明: by
-  rwa [← @Set.mem_ofPred_eq _ _ p, ← image_nth_Iio_card hf] at h
-
-Depends on / 依赖: Set.mem_ofPred_eq, image_nth_Iio_card, mem_ofPred_eq
+  (image_nth_Iio_card hf).subset <| Set.mem_image_of_mem _ hlt
+/-
+**Nat.exists_lt_card_finite_nth_eq** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：exists_lt_card_finite_nth_eq (hf : (Set.ofPred p).Finite) {x} (h : p x) : 
+exists n, n < #hf.toFinset ∧ nth p n = x
+参数：hf : (Set.ofPred p).Finite；h : p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.image_nth_Iio_card`：image_nth_Iio_card (hf : (Set.ofPred p).Finite) 
+: nth p '' Set.Iio #hf.toFinset = Set.ofPred p
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
 -/
 theorem exists_lt_card_finite_nth_eq (hf : (Set.ofPred p).Finite) {x} (h : p x) :
-    exists n, n < #hf.toFinset ∧ nth p n = x := by
+    ∃ n, n < #hf.toFinset ∧ nth p n = x := by
   rwa [← @Set.mem_ofPred_eq _ _ p, ← image_nth_Iio_card hf] at h
 
 /-!
 ### Lemmas about `Nat.nth` on an infinite set
 -/
 
-/--
-theorem `nth_apply_eq_orderIsoOfNat` / 定理 `nth_apply_eq_orderIsoOfNat`
+/-- When `s` is an infinite set, `nth` agrees with `Nat.Subtype.orderIsoOfNat`. -/
+/-
+**Nat.nth_apply_eq_orderIsoOfNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_apply_eq_orderIsoOfNat (hf : (Set.ofPred p).Infinite) (n : Nat) : nth 
+p n = @Nat.Subtype.orderIsoOfNat (Set.ofPred p) hf.to_subtype n
+参数：hf : (Set.ofPred p).Infinite；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Infinite → Infini
+te ↑s
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth.eq_1`：∀ (p : ℕ → Prop) (n : ℕ),   Nat.nth p n =     if h : (Set.
+ofPred p).Finite then (h.toFinset.sort fun a b => a ≤ b).getD n 0     else ↑((Na
+t.…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 
-English:
-theorem nth_apply_eq_orderIsoOfNat
-  given: (hf : (Set.ofPred p).Infinite) (n : Nat)
-  proof: by rw [nth, dif_neg hf]
-
-中文:
-定理 nth_apply_eq_orderIsoOf自然数
-  条件: (hf : (集合.ofPred p).无限) (n : 自然数)
-  证明: by rw [nth, dif_neg hf]
-
-Depends on / 依赖: dif_neg
+--- 原说明 ---
+When `s` is an infinite set, `nth` agrees with `Nat.Subtype.orderIsoOfNat`.
 -/
-theorem nth_apply_eq_orderIsoOfNat (hf : (Set.ofPred p).Infinite) (n : Nat) :
+theorem nth_apply_eq_orderIsoOfNat (hf : (Set.ofPred p).Infinite) (n : ℕ) :
     nth p n = @Nat.Subtype.orderIsoOfNat (Set.ofPred p) hf.to_subtype n := by rw [nth, dif_neg hf]
 
-/--
-theorem `nth_eq_orderIsoOfNat` / 定理 `nth_eq_orderIsoOfNat`
+/-- When `s` is an infinite set, `nth` agrees with `Nat.Subtype.orderIsoOfNat`. -/
+/-
+**Nat.nth_eq_orderIsoOfNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_eq_orderIsoOfNat (hf : (Set.ofPred p).Infinite) : nth p = (↑) ∘ @Nat.S
+ubtype.orderIsoOfNat (Set.ofPred p) hf.to_subtype
+参数：hf : (Set.ofPred p).Infinite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.Infinite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Infinite → Infini
+te ↑s
+· 使用定理 `Nat.nth_apply_eq_orderIsoOfNat`：nth_apply_eq_orderIsoOfNat (hf : (Set.of
+Pred p).Infinite) (n : Nat) : nth p n = @Nat.Subtype.orderIsoOfNat (Set.ofPred p
+) hf.to_subtype n
 
-English:
-theorem nth_eq_orderIsoOfNat
-  given: (hf : (Set.ofPred p).Infinite)
-  proof: funext nth_apply_eq_orderIsoOfNat hf
-
-中文:
-定理 nth_eq_orderIsoOf自然数
-  条件: (hf : (集合.ofPred p).无限)
-  证明: funext nth_apply_eq_orderIsoOfNat hf
-
-Depends on / 依赖: nth_apply_eq_orderIsoOfNat
+--- 原说明 ---
+When `s` is an infinite set, `nth` agrees with `Nat.Subtype.orderIsoOfNat`.
 -/
 theorem nth_eq_orderIsoOfNat (hf : (Set.ofPred p).Infinite) :
     nth p = (↑) ∘ @Nat.Subtype.orderIsoOfNat (Set.ofPred p) hf.to_subtype :=
-funext nth_apply_eq_orderIsoOfNat hf
-
-/--
-theorem `nth_strictMono` / 定理 `nth_strictMono`
-
-English:
-theorem nth_strictMono
-  given: (hf : (Set.ofPred p).Infinite)
-  statement: StrictMono (nth p)
-  proof: by
-  rw [nth_eq_orderIsoOfNat hf]
-  exact (Subtype.strictMono_coe _).comp (OrderIso.strictMono _)
-
-中文:
-定理 nth_strictMono
-  条件: (hf : (集合.ofPred p).无限)
-  结论: 严格递增 (nth p)
-  证明: by
-  rw [nth_eq_orderIsoOfNat hf]
-  exact (Subtype.strictMono_coe _).comp (OrderIso.strictMono _)
-
-Depends on / 依赖: OrderIso, OrderIso.strictMono, Subtype, Subtype.strictMono_coe, nth_eq_orderIsoOfNat, strictMono, strictMono_coe
+  funext <| nth_apply_eq_orderIsoOfNat hf
+/-
+**Nat.nth_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_strictMono (hf : (Set.ofPred p).Infinite) : StrictMono (nth p)
+参数：hf : (Set.ofPred p).Infinite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Infinite → Infini
+te ↑s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_eq_orderIsoOfNat`：nth_eq_orderIsoOfNat (hf : (Set.ofPred p).Infi
+nite) : nth p = (↑) ∘ @Nat.Subtype.orderIsoOfNat (Set.ofPred p) hf.to_subtype
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `Subtype.strictMono_coe`：Subtype.strictMono_coe [Preorder α] (p : α -> Pr
+op) : StrictMono ((↑) : Subtype p -> α)
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
 -/
 theorem nth_strictMono (hf : (Set.ofPred p).Infinite) : StrictMono (nth p) := by
   rw [nth_eq_orderIsoOfNat hf]
   exact (Subtype.strictMono_coe _).comp (OrderIso.strictMono _)
-
-/--
-theorem `nth_injective` / 定理 `nth_injective`
-
-English:
-theorem nth_injective
-  given: (hf : (Set.ofPred p).Infinite)
-  statement: Function.Injective (nth p)
-  proof: (nth_strictMono hf).injective
-
-中文:
-定理 nth_injective
-  条件: (hf : (集合.ofPred p).无限)
-  结论: 函数.单射 (nth p)
-  证明: (nth_strictMono hf).injective
-
-Depends on / 依赖: injective, nth_strictMono
+/-
+**Nat.nth_injective** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_injective (hf : (Set.ofPred p).Infinite) : Function.Injective (nth p)
+参数：hf : (Set.ofPred p).Infinite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.injective`：StrictMono.injective (hf : StrictMono f) : Injecti
+ve f
+· 使用定理 `Nat.nth_strictMono`：nth_strictMono (hf : (Set.ofPred p).Infinite) : Stri
+ctMono (nth p)
 -/
 theorem nth_injective (hf : (Set.ofPred p).Infinite) : Function.Injective (nth p) :=
   (nth_strictMono hf).injective
-
-/--
-theorem `nth_monotone` / 定理 `nth_monotone`
-
-English:
-theorem nth_monotone
-  given: (hf : (Set.ofPred p).Infinite)
-  statement: Monotone (nth p)
-  proof: (nth_strictMono hf).monotone
-
-中文:
-定理 nth_monotone
-  条件: (hf : (集合.ofPred p).无限)
-  结论: 递增 (nth p)
-  证明: (nth_strictMono hf).monotone
-
-Depends on / 依赖: monotone, nth_strictMono
+/-
+**Nat.nth_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_monotone (hf : (Set.ofPred p).Infinite) : Monotone (nth p)
+参数：hf : (Set.ofPred p).Infinite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `Nat.nth_strictMono`：nth_strictMono (hf : (Set.ofPred p).Infinite) : Stri
+ctMono (nth p)
 -/
 theorem nth_monotone (hf : (Set.ofPred p).Infinite) : Monotone (nth p) :=
   (nth_strictMono hf).monotone
-
-/--
-theorem `nth_lt_nth` / 定理 `nth_lt_nth`
-
-English:
-theorem nth_lt_nth
-  given: (hf : (Set.ofPred p).Infinite) {k n}
-  statement: nth p k < nth p n ↔ k < n
-  proof: (nth_strictMono hf).lt_iff_lt
-
-中文:
-定理 nth_lt_nth
-  条件: (hf : (集合.ofPred p).无限) {k n}
-  结论: nth p k < nth p n ↔ k < n
-  证明: (nth_strictMono hf).lt_iff_lt
-
-Depends on / 依赖: lt_iff_lt, nth_strictMono
+/-
+**Nat.nth_lt_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_lt_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p k < nth p n ↔ k < 
+n
+参数：hf : (Set.ofPred p).Infinite。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `Nat.nth_strictMono`：nth_strictMono (hf : (Set.ofPred p).Infinite) : Stri
+ctMono (nth p)
 -/
 theorem nth_lt_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p k < nth p n ↔ k < n :=
   (nth_strictMono hf).lt_iff_lt
-
-/--
-theorem `nth_le_nth` / 定理 `nth_le_nth`
-
-English:
-theorem nth_le_nth
-  given: (hf : (Set.ofPred p).Infinite) {k n}
-  statement: nth p k <= nth p n ↔ k <= n
-  proof: (nth_strictMono hf).le_iff_le
-
-中文:
-定理 nth_le_nth
-  条件: (hf : (集合.ofPred p).无限) {k n}
-  结论: nth p k <= nth p n ↔ k <= n
-  证明: (nth_strictMono hf).le_iff_le
-
-Depends on / 依赖: le_iff_le, nth_strictMono
+/-
+**Nat.nth_le_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_le_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p k <= nth p n ↔ k <
+= n
+参数：hf : (Set.ofPred p).Infinite。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `Nat.nth_strictMono`：nth_strictMono (hf : (Set.ofPred p).Infinite) : Stri
+ctMono (nth p)
 -/
-theorem nth_le_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p k <= nth p n ↔ k <= n :=
+theorem nth_le_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p k ≤ nth p n ↔ k ≤ n :=
   (nth_strictMono hf).le_iff_le
-
-/--
-theorem `range_nth_of_infinite` / 定理 `range_nth_of_infinite`
-
-English:
-theorem range_nth_of_infinite
-  given: (hf : (Set.ofPred p).Infinite)
-  proof: by
-  rw [nth_eq_orderIsoOfNat hf]
-  have := hf.to_subtype
-  classical exact Nat.Subtype.coe_comp_ofNat_range
-
-中文:
-定理 range_nth_of_infinite
-  条件: (hf : (集合.ofPred p).无限)
-  证明: by
-  rw [nth_eq_orderIsoOfNat hf]
-  have := hf.to_subtype
-  classical exact Nat.Subtype.coe_comp_ofNat_range
-
-Depends on / 依赖: Nat.Subtype.coe_comp_ofNat_range, Subtype, classical, coe_comp_ofNat_range, hf.to_subtype, nth_eq_orderIsoOfNat, to_subtype
+/-
+**Nat.range_nth_of_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：range_nth_of_infinite (hf : (Set.ofPred p).Infinite) : Set.range (nth p) =
+ Set.ofPred p
+参数：hf : (Set.ofPred p).Infinite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Infinite → Infini
+te ↑s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_eq_orderIsoOfNat`：nth_eq_orderIsoOfNat (hf : (Set.ofPred p).Infi
+nite) : nth p = (↑) ∘ @Nat.Subtype.orderIsoOfNat (Set.ofPred p) hf.to_subtype
+· 使用定理 `Nat.Subtype.coe_comp_ofNat_range`：coe_comp_ofNat_range : Set.range ((↑) 
+∘ ofNat s : Nat -> Nat) = s
 -/
 theorem range_nth_of_infinite (hf : (Set.ofPred p).Infinite) :
     Set.range (nth p) = Set.ofPred p := by
   rw [nth_eq_orderIsoOfNat hf]
   have := hf.to_subtype
   classical exact Nat.Subtype.coe_comp_ofNat_range
-
-/--
-theorem `nth_mem_of_infinite` / 定理 `nth_mem_of_infinite`
-
-English:
-theorem nth_mem_of_infinite
-  given: (hf : (Set.ofPred p).Infinite) (n : Nat)
-  statement: p (nth p n)
-  proof: Set.range_subset_iff.1 (range_nth_of_infinite hf).le n
-
-中文:
-定理 nth_mem_of_infinite
-  条件: (hf : (集合.ofPred p).无限) (n : 自然数)
-  结论: p (nth p n)
-  证明: Set.range_subset_iff.1 (range_nth_of_infinite hf).le n
-
-Depends on / 依赖: Set.range_subset_iff, range_nth_of_infinite, range_subset_iff
+/-
+**Nat.nth_mem_of_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_mem_of_infinite (hf : (Set.ofPred p).Infinite) (n : Nat) : p (nth p n)
+参数：hf : (Set.ofPred p).Infinite；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Nat.range_nth_of_infinite`：range_nth_of_infinite (hf : (Set.ofPred p).In
+finite) : Set.range (nth p) = Set.ofPred p
 -/
-theorem nth_mem_of_infinite (hf : (Set.ofPred p).Infinite) (n : Nat) : p (nth p n) :=
+theorem nth_mem_of_infinite (hf : (Set.ofPred p).Infinite) (n : ℕ) : p (nth p n) :=
   Set.range_subset_iff.1 (range_nth_of_infinite hf).le n
 
+/-!
+### Lemmas that work for finite and infinite sets
+-/
 
-/--
-theorem `exists_lt_card_nth_eq` / 定理 `exists_lt_card_nth_eq`
+/-
+**Nat.exists_lt_card_nth_eq** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：exists_lt_card_nth_eq {x} (h : p x) : exists n, (forall hf : (Set.ofPred p
+).Finite, n < #hf.toFinset) ∧ nth p n = x
+参数：h : p x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `Nat.exists_lt_card_finite_nth_eq`：exists_lt_card_finite_nth_eq (hf : (Se
+t.ofPred p).Finite) {x} (h : p x) : exists n, n < #hf.toFinset ∧ nth p n = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.range_nth_of_infinite`：range_nth_of_infinite (hf : (Set.ofPred p).In
+finite) : Set.range (nth p) = Set.ofPred p
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
 
-English:
-theorem exists_lt_card_nth_eq
-  given: {x} (h : p x)
-  proof: by
-  refine (Set.ofPred p).finite_or_infinite.elim (fun hf => ?_) fun hf => ?_
-  · rcases exists_lt_card_finite_nth_eq hf h with ⟨n, hn, hx⟩
-    exact ⟨n, fun _ => hn, hx⟩
-  · rw [← @Set.mem_ofPred_eq _ _ p, ← range_nth_of_infinite hf] at h
-    rcases h with ⟨n, hx⟩
-    exact ⟨n, fun hf' => absurd hf' hf, hx⟩
-
-中文:
-定理 存在_lt_card_nth_eq
-  条件: {x} (h : p x)
-  证明: by
-  refine (Set.ofPred p).finite_or_infinite.elim (fun hf => ?_) fun hf => ?_
-  · rcases exists_lt_card_finite_nth_eq hf h with ⟨n, hn, hx⟩
-    exact ⟨n, fun _ => hn, hx⟩
-  · rw [← @Set.mem_ofPred_eq _ _ p, ← range_nth_of_infinite hf] at h
-    rcases h with ⟨n, hx⟩
-    exact ⟨n, fun hf' => absurd hf' hf, hx⟩
-
-Depends on / 依赖: Set.mem_ofPred_eq, Set.ofPred, absurd, exists_lt_card_finite_nth_eq, finite_or_infinite, finite_or_infinite.elim, mem_ofPred_eq, ofPred, range_nth_of_infinite
+--- 原说明 ---
+### Lemmas that work for finite and infinite sets
 -/
 theorem exists_lt_card_nth_eq {x} (h : p x) :
-    exists n, (forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) ∧ nth p n = x := by
+    ∃ n, (∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) ∧ nth p n = x := by
   refine (Set.ofPred p).finite_or_infinite.elim (fun hf => ?_) fun hf => ?_
   · rcases exists_lt_card_finite_nth_eq hf h with ⟨n, hn, hx⟩
     exact ⟨n, fun _ => hn, hx⟩
   · rw [← @Set.mem_ofPred_eq _ _ p, ← range_nth_of_infinite hf] at h
     rcases h with ⟨n, hx⟩
     exact ⟨n, fun hf' => absurd hf' hf, hx⟩
-
-/--
-theorem `subset_range_nth` / 定理 `subset_range_nth`
-
-English:
-theorem subset_range_nth
-  statement: Set.ofPred p subseteq Set.range (nth p)
-  proof: fun x (hx : p x) =>
-  let ⟨n, _, hn⟩ := exists_lt_card_nth_eq hx
-  ⟨n, hn⟩
-
-中文:
-定理 subset_range_nth
-  结论: 集合.ofPred p subseteq 集合.range (nth p)
-  证明: fun x (hx : p x) =>
-  let ⟨n, _, hn⟩ := exists_lt_card_nth_eq hx
-  ⟨n, hn⟩
+/-
+**Nat.subset_range_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：subset_range_nth : Set.ofPred p subseteq Set.range (nth p)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_lt_card_nth_eq`：exists_lt_card_nth_eq {x} (h : p x) : exists 
+n, (forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) ∧ nth p n = x
 -/
-theorem subset_range_nth : Set.ofPred p subseteq Set.range (nth p) := fun x (hx : p x) =>
+theorem subset_range_nth : Set.ofPred p ⊆ Set.range (nth p) := fun x (hx : p x) =>
   let ⟨n, _, hn⟩ := exists_lt_card_nth_eq hx
   ⟨n, hn⟩
-
-/--
-theorem `range_nth_subset` / 定理 `range_nth_subset`
-
-English:
-theorem range_nth_subset
-  statement: Set.range (nth p) subseteq insert 0 (Set.ofPred p)
-  proof: (Set.ofPred p).finite_or_infinite.elim (fun h => (range_nth_of_finite h).subset) fun h =>
-    (range_nth_of_infinite h).trans_subset (Set.subset_insert _ _)
-
-中文:
-定理 range_nth_subset
-  结论: 集合.range (nth p) subseteq insert 0 (集合.ofPred p)
-  证明: (Set.ofPred p).finite_or_infinite.elim (fun h => (range_nth_of_finite h).subset) fun h =>
-    (range_nth_of_infinite h).trans_subset (Set.subset_insert _ _)
-
-Depends on / 依赖: Set.ofPred, Set.subset_insert, finite_or_infinite, finite_or_infinite.elim, ofPred, range_nth_of_finite, range_nth_of_infinite, subset, subset_insert, trans_subset
+/-
+**Nat.range_nth_subset** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：range_nth_subset : Set.range (nth p) subseteq insert 0 (Set.ofPred p)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `Nat.range_nth_of_finite`：range_nth_of_finite (hf : (Set.ofPred p).Finite
+) : Set.range (nth p) = insert 0 (Set.ofPred p)
+· 使用定理 `Eq.trans_subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] {a b c : α
+} [inst : LE α], a = b → b ⊆ c → a ⊆ c
+· 使用定理 `Nat.range_nth_of_infinite`：range_nth_of_infinite (hf : (Set.ofPred p).In
+finite) : Set.range (nth p) = Set.ofPred p
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
 -/
-theorem range_nth_subset : Set.range (nth p) subseteq insert 0 (Set.ofPred p) :=
+theorem range_nth_subset : Set.range (nth p) ⊆ insert 0 (Set.ofPred p) :=
   (Set.ofPred p).finite_or_infinite.elim (fun h => (range_nth_of_finite h).subset) fun h =>
     (range_nth_of_infinite h).trans_subset (Set.subset_insert _ _)
-
-/--
-theorem `nth_mem` / 定理 `nth_mem`
-
-English:
-theorem nth_mem
-  given: (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
-  statement: p (nth p n)
-  proof: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_mem_of_lt_card hf (h hf)) fun h =>
-    nth_mem_of_infinite h n
-
-中文:
-定理 nth_mem
-  条件: (n : 自然数) (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
-  结论: p (nth p n)
-  证明: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_mem_of_lt_card hf (h hf)) fun h =>
-    nth_mem_of_infinite h n
-
-Depends on / 依赖: Set.ofPred, finite_or_infinite, finite_or_infinite.elim, nth_mem_of_infinite, nth_mem_of_lt_card, ofPred
+/-
+**Nat.nth_mem** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset
+) : p (nth p n)
+参数：n : Nat；h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `Nat.nth_mem_of_lt_card`：nth_mem_of_lt_card {n : Nat} (hf : (Set.ofPred p
+).Finite) (hlt : n < #hf.toFinset) : p (nth p n)
+· 使用定理 `Nat.nth_mem_of_infinite`：nth_mem_of_infinite (hf : (Set.ofPred p).Infini
+te) (n : Nat) : p (nth p n)
 -/
-theorem nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) : p (nth p n) :=
+theorem nth_mem (n : ℕ) (h : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) : p (nth p n) :=
   (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_mem_of_lt_card hf (h hf)) fun h =>
     nth_mem_of_infinite h n
-
-/--
-theorem `nth_lt_nth'` / 定理 `nth_lt_nth'`
-
-English:
-theorem nth_lt_nth'
-  given: {m n : Nat} (hlt : m < n) (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
-  proof: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_lt_nth_of_lt_card hf hlt (h _)) fun hf =>
-    (nth_lt_nth hf).2 hlt
-
-中文:
-定理 nth_lt_nth'
-  条件: {m n : 自然数} (hlt : m < n) (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
-  证明: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_lt_nth_of_lt_card hf hlt (h _)) fun hf =>
-    (nth_lt_nth hf).2 hlt
-
-Depends on / 依赖: Set.ofPred, finite_or_infinite, finite_or_infinite.elim, nth_lt_nth, nth_lt_nth_of_lt_card, ofPred
+/-
+**Nat.nth_lt_nth'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_lt_nth' {m n : Nat} (hlt : m < n) (h : forall hf : (Set.ofPred p).Fini
+te, n < #hf.toFinset) : nth p m < nth p n
+参数：hlt : m < n；h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `Nat.nth_lt_nth_of_lt_card`：nth_lt_nth_of_lt_card (hf : (Set.ofPred p).Fi
+nite) {m n : Nat} (h : m < n) (hn : n < #hf.toFinset) : nth p m < nth p n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.nth_lt_nth`：nth_lt_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p 
+k < nth p n ↔ k < n
 -/
-theorem nth_lt_nth' {m n : Nat} (hlt : m < n) (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
+theorem nth_lt_nth' {m n : ℕ} (hlt : m < n) (h : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
     nth p m < nth p n :=
   (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_lt_nth_of_lt_card hf hlt (h _)) fun hf =>
     (nth_lt_nth hf).2 hlt
-
-/--
-theorem `nth_le_nth'` / 定理 `nth_le_nth'`
-
-English:
-theorem nth_le_nth'
-  given: {m n : Nat} (hle : m <= n) (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
-  proof: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_le_nth_of_lt_card hf hle (h _)) fun hf =>
-    (nth_le_nth hf).2 hle
-
-中文:
-定理 nth_le_nth'
-  条件: {m n : 自然数} (hle : m <= n) (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
-  证明: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_le_nth_of_lt_card hf hle (h _)) fun hf =>
-    (nth_le_nth hf).2 hle
-
-Depends on / 依赖: Set.ofPred, finite_or_infinite, finite_or_infinite.elim, nth_le_nth, nth_le_nth_of_lt_card, ofPred
+/-
+**Nat.nth_le_nth'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_le_nth' {m n : Nat} (hle : m <= n) (h : forall hf : (Set.ofPred p).Fin
+ite, n < #hf.toFinset) : nth p m <= nth p n
+参数：hle : m <= n；h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `Nat.nth_le_nth_of_lt_card`：nth_le_nth_of_lt_card (hf : (Set.ofPred p).Fi
+nite) {m n : Nat} (h : m <= n) (hn : n < #hf.toFinset) : nth p m <= nth p n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.nth_le_nth`：nth_le_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p 
+k <= nth p n ↔ k <= n
 -/
-theorem nth_le_nth' {m n : Nat} (hle : m <= n) (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
-    nth p m <= nth p n :=
+theorem nth_le_nth' {m n : ℕ} (hle : m ≤ n) (h : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
+    nth p m ≤ nth p n :=
   (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_le_nth_of_lt_card hf hle (h _)) fun hf =>
     (nth_le_nth hf).2 hle
-
-/--
-theorem `le_nth` / 定理 `le_nth`
-
-English:
-theorem le_nth
-  given: {n : Nat} (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
-  statement: n <= nth p n
-  proof: (Set.ofPred p).finite_or_infinite.elim
-    (fun hf => ((nth_strictMonoOn hf).mono <| Set.Iic_subset_Iio.2 (h _)).Iic_id_le _ le_rfl)
-    fun hf => (nth_strictMono hf).id_le _
-
-中文:
-定理 le_nth
-  条件: {n : 自然数} (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
-  结论: n <= nth p n
-  证明: (Set.ofPred p).finite_or_infinite.elim
-    (fun hf => ((nth_strictMonoOn hf).mono <| Set.Iic_subset_Iio.2 (h _)).Iic_id_le _ le_rfl)
-    fun hf => (nth_strictMono hf).id_le _
-
-Depends on / 依赖: Iic_id_le, Iic_subset_Iio, Set.Iic_subset_Iio, Set.ofPred, finite_or_infinite, finite_or_infinite.elim, id_le, le_rfl, nth_strictMono, nth_strictMonoOn, ofPred
+/-
+**Nat.le_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_nth {n : Nat} (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+ : n <= nth p n
+参数：h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `StrictMonoOn.Iic_id_le`：StrictMonoOn.Iic_id_le [SuccOrder α] [IsSuccArch
+imedean α] [OrderBot α] {n : α} {φ : α -> α} (hφ : StrictMonoOn φ (Set.Iic n)) :
+ forall m <=…
+· 使用定理 `Nat.instIsSuccArchimedean`：IsSuccArchimedean ℕ
+· 使用定理 `StrictMonoOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s s₂ : Set α} {f : α
+ → β} [inst : Preorder α] [inst_1 : Preorder β],   StrictMonoOn f s → s₂ ⊆ s → S
+trictMo…
+· 使用定理 `Nat.nth_strictMonoOn`：nth_strictMonoOn (hf : (Set.ofPred p).Finite) : St
+rictMonoOn (nth p) (Set.Iio #hf.toFinset)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Iic_subset_Iio`：Iic_subset_Iio : Iic a subseteq Iio b ↔ a < b
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `StrictMono.id_le`：StrictMono.id_le [WellFoundedLT β] {f : β -> β} (hf : 
+StrictMono f) : id <= f
+· 使用定理 `instWellFoundedLTNat`：WellFoundedLT ℕ
+· 使用定理 `Nat.nth_strictMono`：nth_strictMono (hf : (Set.ofPred p).Infinite) : Stri
+ctMono (nth p)
 -/
-theorem le_nth {n : Nat} (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) : n <= nth p n :=
+theorem le_nth {n : ℕ} (h : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) : n ≤ nth p n :=
   (Set.ofPred p).finite_or_infinite.elim
     (fun hf => ((nth_strictMonoOn hf).mono <| Set.Iic_subset_Iio.2 (h _)).Iic_id_le _ le_rfl)
     fun hf => (nth_strictMono hf).id_le _
-
-/--
-theorem `isLeast_nth` / 定理 `isLeast_nth`
-
-English:
-theorem isLeast_nth
-  given: {n} (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
-  proof: ⟨⟨nth_mem n h, fun _k hk => nth_lt_nth' hk h⟩, fun _x hx =>
-    let ⟨k, hk, hkx⟩ := exists_lt_card_nth_eq hx.1
-    (lt_or_ge k n).elim (fun hlt => absurd hkx (hx.2 _ hlt).ne) fun hle => hkx ▸ nth_le_nth' hle hk⟩
-
-中文:
-定理 isLeast_nth
-  条件: {n} (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
-  证明: ⟨⟨nth_mem n h, fun _k hk => nth_lt_nth' hk h⟩, fun _x hx =>
-    let ⟨k, hk, hkx⟩ := exists_lt_card_nth_eq hx.1
-    (lt_or_ge k n).elim (fun hlt => absurd hkx (hx.2 _ hlt).ne) fun hle => hkx ▸ nth_le_nth' hle hk⟩
-
-Depends on / 依赖: absurd, exists_lt_card_nth_eq, lt_or_ge, nth_le_nth, nth_lt_nth, nth_mem
+/-
+**Nat.isLeast_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：isLeast_nth {n} (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) 
+: IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n)
+参数：h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用定理 `Nat.nth_lt_nth'`：nth_lt_nth' {m n : Nat} (hlt : m < n) (h : forall hf : 
+(Set.ofPred p).Finite, n < #hf.toFinset) : nth p m < nth p n
+· 使用定理 `Nat.exists_lt_card_nth_eq`：exists_lt_card_nth_eq {x} (h : p x) : exists 
+n, (forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) ∧ nth p n = x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Nat.nth_le_nth'`：nth_le_nth' {m n : Nat} (hle : m <= n) (h : forall hf :
+ (Set.ofPred p).Finite, n < #hf.toFinset) : nth p m <= nth p n
 -/
-theorem isLeast_nth {n} (h : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
-    IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n) :=
+theorem isLeast_nth {n} (h : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
+    IsLeast {i | p i ∧ ∀ k < n, nth p k < i} (nth p n) :=
   ⟨⟨nth_mem n h, fun _k hk => nth_lt_nth' hk h⟩, fun _x hx =>
     let ⟨k, hk, hkx⟩ := exists_lt_card_nth_eq hx.1
     (lt_or_ge k n).elim (fun hlt => absurd hkx (hx.2 _ hlt).ne) fun hle => hkx ▸ nth_le_nth' hle hk⟩
-
-/--
-theorem `isLeast_nth_of_lt_card` / 定理 `isLeast_nth_of_lt_card`
-
-English:
-theorem isLeast_nth_of_lt_card
-  given: {n : Nat} (hf : (Set.ofPred p).Finite) (hn : n < #hf.toFinset)
-  proof: isLeast_nth fun _ => hn
-
-中文:
-定理 isLeast_nth_of_lt_card
-  条件: {n : 自然数} (hf : (集合.ofPred p).有限) (hn : n < #hf.toFinset)
-  证明: isLeast_nth fun _ => hn
-
-Depends on / 依赖: isLeast_nth
+/-
+**Nat.isLeast_nth_of_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：isLeast_nth_of_lt_card {n : Nat} (hf : (Set.ofPred p).Finite) (hn : n < #h
+f.toFinset) : IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n)
+参数：hf : (Set.ofPred p).Finite；hn : n < #hf.toFinset。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.isLeast_nth`：isLeast_nth {n} (h : forall hf : (Set.ofPred p).Finite,
+ n < #hf.toFinset) : IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n)
 -/
-theorem isLeast_nth_of_lt_card {n : Nat} (hf : (Set.ofPred p).Finite) (hn : n < #hf.toFinset) :
-    IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n) :=
+theorem isLeast_nth_of_lt_card {n : ℕ} (hf : (Set.ofPred p).Finite) (hn : n < #hf.toFinset) :
+    IsLeast {i | p i ∧ ∀ k < n, nth p k < i} (nth p n) :=
   isLeast_nth fun _ => hn
-
-/--
-theorem `isLeast_nth_of_infinite` / 定理 `isLeast_nth_of_infinite`
-
-English:
-theorem isLeast_nth_of_infinite
-  given: (hf : (Set.ofPred p).Infinite) (n : Nat)
-  proof: isLeast_nth fun h => absurd h hf
-
-中文:
-定理 isLeast_nth_of_infinite
-  条件: (hf : (集合.ofPred p).无限) (n : 自然数)
-  证明: isLeast_nth fun h => absurd h hf
-
-Depends on / 依赖: absurd, isLeast_nth
+/-
+**Nat.isLeast_nth_of_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：isLeast_nth_of_infinite (hf : (Set.ofPred p).Infinite) (n : Nat) : IsLeast
+ {i | p i ∧ forall k < n, nth p k < i} (nth p n)
+参数：hf : (Set.ofPred p).Infinite；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.isLeast_nth`：isLeast_nth {n} (h : forall hf : (Set.ofPred p).Finite,
+ n < #hf.toFinset) : IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n)
 -/
-theorem isLeast_nth_of_infinite (hf : (Set.ofPred p).Infinite) (n : Nat) :
-    IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n) :=
+theorem isLeast_nth_of_infinite (hf : (Set.ofPred p).Infinite) (n : ℕ) :
+    IsLeast {i | p i ∧ ∀ k < n, nth p k < i} (nth p n) :=
   isLeast_nth fun h => absurd h hf
 
-/--
-theorem `nth_eq_sInf` / 定理 `nth_eq_sInf`
+/-- An alternative recursive definition of `Nat.nth`: `Nat.nth s n` is the infimum of `x ∈ s` such
+that `Nat.nth s k < x` for all `k < n`, if this set is nonempty. We do not assume that the set is
+nonempty because we use the same "garbage value" `0` both for `sInf` on `ℕ` and for `Nat.nth s n`
+for `n ≥ #s`. -/
+/-
+**Nat.nth_eq_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_eq_sInf (p : Nat -> Prop) (n : Nat) : nth p n = sInf {x | p x ∧ forall
+ k < n, nth p k < x}
+参数：p : Nat -> Prop；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLeast.csInf_eq`：∀ {α : Type u_1} [inst : ConditionallyCompletePartialO
+rderInf α] {s : Set α} {a : α}, IsLeast s a → sInf s = a
+· 使用定理 `Nat.isLeast_nth`：isLeast_nth {n} (h : forall hf : (Set.ofPred p).Finite,
+ n < #hf.toFinset) : IsLeast {i | p i ∧ forall k < n, nth p k < i} (nth p n)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_of_card_le`：nth_of_card_le (hf : (Set.ofPred p).Finite) {n : Nat
+} (hn : #hf.toFinset <= n) : nth p n = 0
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem (h : forall x, 
+x ∉ s) : s = ∅
+· 使用定理 `Nat.exists_lt_card_nth_eq`：exists_lt_card_nth_eq {x} (h : p x) : exists 
+n, (forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) ∧ nth p n = x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.sInf_empty`：sInf_empty : sInf ∅ = 0
 
-English:
-theorem nth_eq_sInf
-  given: (p : Nat -> Prop) (n : Nat)
-  statement: nth p n = sInf {x | p x ∧ forall k < n, nth p k < x}
-  proof: by
-  by_cases! hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset
-  · exact (isLeast_nth hn).csInf_eq.symm
-  · rcases hn with ⟨hf, hn⟩
-    rw [nth_of_card_le _ hn]
-    refine ((congr_arg sInf <| Set.eq_empty_of_forall_notMem fun k hk => ?_).trans sInf_empty).symm
-    rcases exists_lt_card_nth_eq hk.1 with ⟨k, hlt, rfl⟩
-    exact (hk.2 _ ((hlt hf).trans_le hn)).false
-
-中文:
-定理 nth_eq_sInf
-  条件: (p : 自然数 -> 命题) (n : 自然数)
-  结论: nth p n = sInf {x | p x ∧ 对任意 k < n, nth p k < x}
-  证明: by
-  by_cases! hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset
-  · exact (isLeast_nth hn).csInf_eq.symm
-  · rcases hn with ⟨hf, hn⟩
-    rw [nth_of_card_le _ hn]
-    refine ((congr_arg sInf <| Set.eq_empty_of_forall_notMem fun k hk => ?_).trans sInf_empty).symm
-    rcases exists_lt_card_nth_eq hk.1 with ⟨k, hlt, rfl⟩
-    exact (hk.2 _ ((hlt hf).trans_le hn)).false
-
-Depends on / 依赖: Finite, Set.eq_empty_of_forall_notMem, Set.ofPred, congr_arg, csInf_eq, csInf_eq.symm, eq_empty_of_forall_notMem, exists_lt_card_nth_eq, hf.toFinset, isLeast_nth, nth_of_card_le, ofPred, sInf_empty, toFinset, trans_le
+--- 原说明 ---
+An alternative recursive definition of `Nat.nth`: `Nat.nth s n` is the infimum o
+f `x ∈ s` such
+that `Nat.nth s k < x` for all `k < n`, if this set is nonempty. We do not assum
+e that the set is
+nonempty because we use the same "garbage value" `0` both for `sInf` on `ℕ` and 
+for `Nat.nth s n`
+for `n ≥ #s`.
 -/
-theorem nth_eq_sInf (p : Nat -> Prop) (n : Nat) : nth p n = sInf {x | p x ∧ forall k < n, nth p k < x} := by
-  by_cases! hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset
+theorem nth_eq_sInf (p : ℕ → Prop) (n : ℕ) : nth p n = sInf {x | p x ∧ ∀ k < n, nth p k < x} := by
+  by_cases! hn : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset
   · exact (isLeast_nth hn).csInf_eq.symm
   · rcases hn with ⟨hf, hn⟩
     rw [nth_of_card_le _ hn]
     refine ((congr_arg sInf <| Set.eq_empty_of_forall_notMem fun k hk => ?_).trans sInf_empty).symm
     rcases exists_lt_card_nth_eq hk.1 with ⟨k, hlt, rfl⟩
     exact (hk.2 _ ((hlt hf).trans_le hn)).false
-
-/--
-theorem `nth_zero` / 定理 `nth_zero`
-
-English:
-theorem nth_zero
-  statement: nth p 0 = sInf (Set.ofPred p)
-  proof: by rw [nth_eq_sInf]; simp
-
-@[simp]
-
-中文:
-定理 nth_zero
-  结论: nth p 0 = sInf (集合.ofPred p)
-  证明: by rw [nth_eq_sInf]; simp
-
-@[simp]
-
-Depends on / 依赖: nth_eq_sInf
+/-
+**Nat.nth_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_zero : nth p 0 = sInf (Set.ofPred p)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_eq_sInf`：nth_eq_sInf (p : Nat -> Prop) (n : Nat) : nth p n = sIn
+f {x | p x ∧ forall k < n, nth p k < x}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nth_zero : nth p 0 = sInf (Set.ofPred p) := by rw [nth_eq_sInf]; simp
 
 @[simp]
-/--
-theorem `nth_zero_of_zero` / 定理 `nth_zero_of_zero`
-
-English:
-theorem nth_zero_of_zero
-  given: (h : p 0)
-  statement: nth p 0 = 0
-  proof: by simp [nth_zero, h]
-
-中文:
-定理 nth_zero_of_zero
-  条件: (h : p 0)
-  结论: nth p 0 = 0
-  证明: by simp [nth_zero, h]
-
-Depends on / 依赖: nth_zero
+/-
+**Nat.nth_zero_of_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_zero_of_zero (h : p 0) : nth p 0 = 0
+参数：h : p 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_zero`：nth_zero : nth p 0 = sInf (Set.ofPred p)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
 theorem nth_zero_of_zero (h : p 0) : nth p 0 = 0 := by simp [nth_zero, h]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `nth_zero_of_exists` / 定理 `nth_zero_of_exists`
-
-English:
-theorem nth_zero_of_exists
-  given: [DecidablePred p] (h : exists n, p n)
-  statement: nth p 0 = Nat.find h
-  proof: by
-  rw [nth_zero]; convert! Nat.sInf_def h
-
-中文:
-定理 nth_zero_of_存在
-  条件: [DecidablePred p] (h : 存在 n, p n)
-  结论: nth p 0 = 自然数.find h
-  证明: by
-  rw [nth_zero]; convert! Nat.sInf_def h
-
-Depends on / 依赖: Nat.sInf_def, convert, nth_zero, sInf_def
+/-
+**Nat.nth_zero_of_exists** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_zero_of_exists [DecidablePred p] (h : exists n, p n) : nth p 0 = Nat.f
+ind h
+参数：h : exists n, p n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_zero`：nth_zero : nth p 0 = sInf (Set.ofPred p)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Lean.Meta.instFastSubsingletonForall`：∀ {α : Sort u} {β : α → Sort v} [i
+nst : ∀ (x : α), Meta.FastSubsingleton (β x)], Meta.FastSubsingleton ((x : α) → 
+β x)
+· 使用定理 `Lean.Meta.instFastSubsingletonDecidable`：∀ {p : Prop}, Meta.FastSubsingl
+eton (Decidable p)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.sInf_def`：sInf_def {s : Set Nat} (h : s.Nonempty) : sInf s = @Nat.fi
+nd (fun n => n in s) _ h
 -/
-theorem nth_zero_of_exists [DecidablePred p] (h : exists n, p n) : nth p 0 = Nat.find h := by
+theorem nth_zero_of_exists [DecidablePred p] (h : ∃ n, p n) : nth p 0 = Nat.find h := by
   rw [nth_zero]; convert! Nat.sInf_def h
-
-/--
-theorem `nth_eq_zero` / 定理 `nth_eq_zero`
-
-English:
-theorem nth_eq_zero
-  given: {n}
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · simp only [or_iff_not_imp_right, not_exists, not_le]
-exact fun hn => ⟨h ▸ nth_mem _ hn, nonpos_iff_eq_zero.1 h ▸ le_nth hn⟩
-  · rintro (⟨h₀, rfl⟩ | ⟨hf, hle⟩)
-    exacts [nth_zero_of_zero h₀, nth_of_card_le hf hle]
-
-中文:
-定理 nth_eq_zero
-  条件: {n}
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · simp only [or_iff_not_imp_right, not_exists, not_le]
-exact fun hn => ⟨h ▸ nth_mem _ hn, nonpos_iff_eq_zero.1 h ▸ le_nth hn⟩
-  · rintro (⟨h₀, rfl⟩ | ⟨hf, hle⟩)
-    exacts [nth_zero_of_zero h₀, nth_of_card_le hf hle]
-
-Depends on / 依赖: exacts, le_nth, nonpos_iff_eq_zero, not_exists, not_le, nth_mem, nth_of_card_le, nth_zero_of_zero, or_iff_not_imp_right
+/-
+**Nat.nth_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_eq_zero {n} : nth p n = 0 ↔ p 0 ∧ n = 0 ∨ exists hf : (Set.ofPred p).F
+inite, #hf.toFinset <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Nat.le_nth`：le_nth {n : Nat} (h : forall hf : (Set.ofPred p).Finite, n <
+ #hf.toFinset) : n <= nth p n
+· 使用定理 `Nat.nth_zero_of_zero`：nth_zero_of_zero (h : p 0) : nth p 0 = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.nth_of_card_le`：nth_of_card_le (hf : (Set.ofPred p).Finite) {n : Nat
+} (hn : #hf.toFinset <= n) : nth p n = 0
 -/
 theorem nth_eq_zero {n} :
-    nth p n = 0 ↔ p 0 ∧ n = 0 ∨ exists hf : (Set.ofPred p).Finite, #hf.toFinset <= n := by
+    nth p n = 0 ↔ p 0 ∧ n = 0 ∨ ∃ hf : (Set.ofPred p).Finite, #hf.toFinset ≤ n := by
   refine ⟨fun h => ?_, ?_⟩
   · simp only [or_iff_not_imp_right, not_exists, not_le]
-exact fun hn => ⟨h ▸ nth_mem _ hn, nonpos_iff_eq_zero.1 h ▸ le_nth hn⟩
+    exact fun hn => ⟨h ▸ nth_mem _ hn, nonpos_iff_eq_zero.1 <| h ▸ le_nth hn⟩
   · rintro (⟨h₀, rfl⟩ | ⟨hf, hle⟩)
     exacts [nth_zero_of_zero h₀, nth_of_card_le hf hle]
-
-/--
-lemma `lt_card_toFinset_of_nth_ne_zero` / 引理 `lt_card_toFinset_of_nth_ne_zero`
-
-English:
-lemma lt_card_toFinset_of_nth_ne_zero
-  given: {n : Nat} (h : nth p n != 0) (hf : (Set.ofPred p).Finite)
-  proof: by
-  simp only [ne_eq, nth_eq_zero, not_or, not_exists, not_le] at h
-  exact h.2 hf
-
-中文:
-引理 lt_card_toFinset_of_nth_ne_zero
-  条件: {n : 自然数} (h : nth p n != 0) (hf : (集合.ofPred p).有限)
-  证明: by
-  simp only [ne_eq, nth_eq_zero, not_or, not_exists, not_le] at h
-  exact h.2 hf
-
-Depends on / 依赖: ne_eq, not_exists, not_le, not_or, nth_eq_zero
+/-
+**Nat.lt_card_toFinset_of_nth_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：lt_card_toFinset_of_nth_ne_zero {n : Nat} (h : nth p n != 0) (hf : (Set.of
+Pred p).Finite) : n < #hf.toFinset
+参数：h : nth p n != 0；hf : (Set.ofPred p).Finite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-lemma lt_card_toFinset_of_nth_ne_zero {n : Nat} (h : nth p n != 0) (hf : (Set.ofPred p).Finite) :
+lemma lt_card_toFinset_of_nth_ne_zero {n : ℕ} (h : nth p n ≠ 0) (hf : (Set.ofPred p).Finite) :
     n < #hf.toFinset := by
   simp only [ne_eq, nth_eq_zero, not_or, not_exists, not_le] at h
   exact h.2 hf
-
-/--
-lemma `nth_mem_of_ne_zero` / 引理 `nth_mem_of_ne_zero`
-
-English:
-lemma nth_mem_of_ne_zero
-  given: {n : Nat} (h : nth p n != 0)
-  statement: p (Nat.nth p n)
-  proof: nth_mem n (lt_card_toFinset_of_nth_ne_zero h)
-
-中文:
-引理 nth_mem_of_ne_zero
-  条件: {n : 自然数} (h : nth p n != 0)
-  结论: p (自然数.nth p n)
-  证明: nth_mem n (lt_card_toFinset_of_nth_ne_zero h)
-
-Depends on / 依赖: lt_card_toFinset_of_nth_ne_zero, nth_mem
+/-
+**Nat.nth_mem_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_mem_of_ne_zero {n : Nat} (h : nth p n != 0) : p (Nat.nth p n)
+参数：h : nth p n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用引理 `Nat.lt_card_toFinset_of_nth_ne_zero`：lt_card_toFinset_of_nth_ne_zero {n 
+: Nat} (h : nth p n != 0) (hf : (Set.ofPred p).Finite) : n < #hf.toFinset
 -/
-lemma nth_mem_of_ne_zero {n : Nat} (h : nth p n != 0) : p (Nat.nth p n) :=
+lemma nth_mem_of_ne_zero {n : ℕ} (h : nth p n ≠ 0) : p (Nat.nth p n) :=
   nth_mem n (lt_card_toFinset_of_nth_ne_zero h)
-
-/--
-theorem `nth_eq_zero_mono` / 定理 `nth_eq_zero_mono`
-
-English:
-theorem nth_eq_zero_mono
-  given: (h₀ : ¬p 0) {a b : Nat} (hab : a <= b) (ha : nth p a = 0)
-  statement: nth p b = 0
-  proof: by
-  simp only [nth_eq_zero, h₀, false_and, false_or] at ha ⊢
-  exact ha.imp fun hf hle => hle.trans hab
-
-中文:
-定理 nth_eq_zero_mono
-  条件: (h₀ : ¬p 0) {a b : 自然数} (hab : a <= b) (ha : nth p a = 0)
-  结论: nth p b = 0
-  证明: by
-  simp only [nth_eq_zero, h₀, false_and, false_or] at ha ⊢
-  exact ha.imp fun hf hle => hle.trans hab
-
-Depends on / 依赖: false_and, false_or, ha.imp, hle.trans, nth_eq_zero
+/-
+**Nat.nth_eq_zero_mono** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_eq_zero_mono (h₀ : ¬p 0) {a b : Nat} (hab : a <= b) (ha : nth p a = 0)
+ : nth p b = 0
+参数：h₀ : ¬p 0；hab : a <= b；ha : nth p a = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-theorem nth_eq_zero_mono (h₀ : ¬p 0) {a b : Nat} (hab : a <= b) (ha : nth p a = 0) : nth p b = 0 := by
+theorem nth_eq_zero_mono (h₀ : ¬p 0) {a b : ℕ} (hab : a ≤ b) (ha : nth p a = 0) : nth p b = 0 := by
   simp only [nth_eq_zero, h₀, false_and, false_or] at ha ⊢
   exact ha.imp fun hf hle => hle.trans hab
-
-/--
-lemma `nth_ne_zero_anti` / 引理 `nth_ne_zero_anti`
-
-English:
-lemma nth_ne_zero_anti
-  given: (h₀ : ¬p 0) {a b : Nat} (hab : a <= b) (hb : nth p b != 0)
-  statement: nth p a != 0
-  proof: mt (nth_eq_zero_mono h₀ hab) hb
-
-中文:
-引理 nth_ne_zero_anti
-  条件: (h₀ : ¬p 0) {a b : 自然数} (hab : a <= b) (hb : nth p b != 0)
-  结论: nth p a != 0
-  证明: mt (nth_eq_zero_mono h₀ hab) hb
-
-Depends on / 依赖: nth_eq_zero_mono
+/-
+**Nat.nth_ne_zero_anti** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_ne_zero_anti (h₀ : ¬p 0) {a b : Nat} (hab : a <= b) (hb : nth p b != 0
+) : nth p a != 0
+参数：h₀ : ¬p 0；hab : a <= b；hb : nth p b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Nat.nth_eq_zero_mono`：nth_eq_zero_mono (h₀ : ¬p 0) {a b : Nat} (hab : a 
+<= b) (ha : nth p a = 0) : nth p b = 0
 -/
-lemma nth_ne_zero_anti (h₀ : ¬p 0) {a b : Nat} (hab : a <= b) (hb : nth p b != 0) : nth p a != 0 :=
+lemma nth_ne_zero_anti (h₀ : ¬p 0) {a b : ℕ} (hab : a ≤ b) (hb : nth p b ≠ 0) : nth p a ≠ 0 :=
   mt (nth_eq_zero_mono h₀ hab) hb
-
-/--
-theorem `le_nth_of_lt_nth_succ` / 定理 `le_nth_of_lt_nth_succ`
-
-English:
-theorem le_nth_of_lt_nth_succ
-  given: {k a : Nat} (h : a < nth p (k + 1)) (ha : p a)
-  statement: a <= nth p k
-  proof: by
+/-
+**Nat.le_nth_of_lt_nth_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_nth_of_lt_nth_succ {k a : Nat} (h : a < nth p (k + 1)) (ha : p a) : a <
+= nth p k
+参数：h : a < nth p (k + 1)；ha : p a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.finite_or_infinite`：∀ {α : Type u} (s : Set α), s.Finite ∨ s.Infinit
+e
+· 使用定理 `Nat.exists_lt_card_finite_nth_eq`：exists_lt_card_finite_nth_eq (hf : (Se
+t.ofPred p).Finite) {x} (h : p x) : exists n, n < #hf.toFinset ∧ nth p n = x
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StrictMonoOn.le_iff_le`：StrictMonoOn.le_iff_le (hf : StrictMonoOn f s) {
+a b : α} (ha : a in s) (hb : b in s) : f a <= f b ↔ a <= b
+· 使用定理 `Nat.nth_strictMonoOn`：nth_strictMonoOn (hf : (Set.ofPred p).Finite) : St
+rictMonoOn (nth p) (Set.Iio #hf.toFinset)
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `Nat.lt_succ_iff`：∀ {m n : ℕ}, m < n.succ ↔ m ≤ n
+· 使用定理 `StrictMonoOn.lt_iff_lt`：StrictMonoOn.lt_iff_lt (hf : StrictMonoOn f s) {
+a b : α} (ha : a in s) (hb : b in s) : f a < f b ↔ a < b
+· 使用定理 `Nat.nth_of_card_le`：nth_of_card_le (hf : (Set.ofPred p).Finite) {n : Nat
+} (hn : #hf.toFinset <= n) : nth p n = 0
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Nat.subset_range_nth`：subset_range_nth : Set.ofPred p subseteq Set.range
+ (nth p)
+· 使用定理 `Nat.nth_le_nth`：nth_le_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p 
+k <= nth p n ↔ k <= n
+· 使用定理 `Nat.nth_lt_nth`：nth_lt_nth (hf : (Set.ofPred p).Infinite) {k n} : nth p 
+k < nth p n ↔ k < n
+-/
+theorem le_nth_of_lt_nth_succ {k a : ℕ} (h : a < nth p (k + 1)) (ha : p a) : a ≤ nth p k := by
   rcases (Set.ofPred p).finite_or_infinite with hf | hf
   · rcases exists_lt_card_finite_nth_eq hf ha with ⟨n, hn, rfl⟩
     rcases lt_or_ge (k + 1) #hf.toFinset with hk | hk
@@ -1039,47 +1022,32 @@ theorem le_nth_of_lt_nth_succ
       exact absurd h (zero_le _).not_gt
   · rcases subset_range_nth ha with ⟨n, rfl⟩
     rwa [nth_lt_nth hf, Nat.lt_succ_iff, ← nth_le_nth hf] at h
-
-中文:
-定理 le_nth_of_lt_nth_succ
-  条件: {k a : 自然数} (h : a < nth p (k + 1)) (ha : p a)
-  结论: a <= nth p k
-  证明: by
-  rcases (Set.ofPred p).finite_or_infinite with hf | hf
-  · rcases exists_lt_card_finite_nth_eq hf ha with ⟨n, hn, rfl⟩
-    rcases lt_or_ge (k + 1) #hf.toFinset with hk | hk
-    · rwa [(nth_strictMonoOn hf).lt_iff_lt hn hk, Nat.lt_succ_iff,
-        ← (nth_strictMonoOn hf).le_iff_le hn (k.lt_succ_self.trans hk)] at h
-    · rw [nth_of_card_le _ hk] at h
-      exact absurd h (zero_le _).not_gt
-  · rcases subset_range_nth ha with ⟨n, rfl⟩
-    rwa [nth_lt_nth hf, Nat.lt_succ_iff, ← nth_le_nth hf] at h
-
-Depends on / 依赖: Nat.lt_succ_iff, Set.ofPred, absurd, exists_lt_card_finite_nth_eq, finite_or_infinite, hf.toFinset, k.lt_succ_self.trans, le_iff_le, lt_iff_lt, lt_or_ge, lt_succ_iff, lt_succ_self, not_gt, nth_le_nth, nth_lt_nth, nth_of_card_le, nth_strictMonoOn, ofPred, subset_range_nth, toFinset
+/-
+**Nat.nth_mem_anti** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_mem_anti {a b : Nat} (hab : a <= b) (h : p (nth p b)) : p (nth p a)
+参数：hab : a <= b；h : p (nth p b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
-theorem le_nth_of_lt_nth_succ {k a : Nat} (h : a < nth p (k + 1)) (ha : p a) : a <= nth p k := by
-  rcases (Set.ofPred p).finite_or_infinite with hf | hf
-  · rcases exists_lt_card_finite_nth_eq hf ha with ⟨n, hn, rfl⟩
-    rcases lt_or_ge (k + 1) #hf.toFinset with hk | hk
-    · rwa [(nth_strictMonoOn hf).lt_iff_lt hn hk, Nat.lt_succ_iff,
-        ← (nth_strictMonoOn hf).le_iff_le hn (k.lt_succ_self.trans hk)] at h
-    · rw [nth_of_card_le _ hk] at h
-      exact absurd h (zero_le _).not_gt
-  · rcases subset_range_nth ha with ⟨n, rfl⟩
-    rwa [nth_lt_nth hf, Nat.lt_succ_iff, ← nth_le_nth hf] at h
-
-/--
-lemma `nth_mem_anti` / 引理 `nth_mem_anti`
-
-English:
-lemma nth_mem_anti
-  given: {a b : Nat} (hab : a <= b) (h : p (nth p b))
-  statement: p (nth p a)
-  proof: by
-  by_cases h' : forall hf : (Set.ofPred p).Finite, a < #hf.toFinset
+lemma nth_mem_anti {a b : ℕ} (hab : a ≤ b) (h : p (nth p b)) : p (nth p a) := by
+  by_cases h' : ∀ hf : (Set.ofPred p).Finite, a < #hf.toFinset
   · exact nth_mem a h'
   · simp only [not_forall, not_lt] at h'
-    have h'b : exists hf : (Set.ofPred p).Finite, #hf.toFinset <= b := by
+    have h'b : ∃ hf : (Set.ofPred p).Finite, #hf.toFinset ≤ b := by
       rcases h' with ⟨hf, ha⟩
       exact ⟨hf, ha.trans hab⟩
     have ha0 : nth p a = 0 := by simp [nth_eq_zero, h']
@@ -1087,92 +1055,111 @@ lemma nth_mem_anti
     rw [ha0]
     rwa [hb0] at h
 
-中文:
-引理 nth_mem_anti
-  条件: {a b : 自然数} (hab : a <= b) (h : p (nth p b))
-  结论: p (nth p a)
-  证明: by
-  by_cases h' : forall hf : (Set.ofPred p).Finite, a < #hf.toFinset
-  · exact nth_mem a h'
-  · simp only [not_forall, not_lt] at h'
-    have h'b : exists hf : (Set.ofPred p).Finite, #hf.toFinset <= b := by
-      rcases h' with ⟨hf, ha⟩
-      exact ⟨hf, ha.trans hab⟩
-    have ha0 : nth p a = 0 := by simp [nth_eq_zero, h']
-    have hb0 : nth p b = 0 := by simp [nth_eq_zero, h'b]
-    rw [ha0]
-    rwa [hb0] at h
+/-- `Nat.nth p` is the least strictly monotone function whose image is contained in
+`Set.ofPred p` -/
+/-
+**Nat.nth_le_of_strictMonoOn_of_mapsTo** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_le_of_strictMonoOn_of_mapsTo {p : Nat -> Prop} (f : Nat -> Nat) (hmaps
+ : Set.MapsTo f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFins
+et.card } (Set.ofPred p)) (hmono : StrictMonoOn f { n : Nat | forall hf : Set.Fi
+nite (Set.ofPred p), n < hf.toFinset.card }) {n : Nat} : nth p n <= f n
+参数：f : Nat -> Nat；hmaps : Set.MapsTo f { n : Nat | forall hf : Set.Finite (Set.o
+fPred p), n < hf.toFinset.card } (Set.ofPred p)；hmono : StrictMonoOn f { n : Nat
+ | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.strong_induction_on`：∀ {p : ℕ → Prop} (n : ℕ), (∀ (n : ℕ), (∀ m < n,
+ p m) → p n) → p n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_eq_sInf`：nth_eq_sInf (p : Nat -> Prop) (n : Nat) : nth p n = sIn
+f {x | p x ∧ forall k < n, nth p k < x}
+· 使用定理 `csInf_le`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s : 
+Set α} {a : α}, BddBelow s → a ∈ s → sInf s ≤ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `Nat.instAntisymmLe`：Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `Nat.nth.eq_1`：∀ (p : ℕ → Prop) (n : ℕ),   Nat.nth p n =     if h : (Set.
+ofPred p).Finite then (h.toFinset.sort fun a b => a ≤ b).getD n 0     else ↑((Na
+t.…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `List.getD_eq_default`：getD_eq_default {n : Nat} (hn : l.length <= n) : l
+.getD n d = d
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.length_sort`：length_sort : (sort s r).length = s.card
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 
-Depends on / 依赖: Finite, Set.ofPred, ha.trans, hf.toFinset, not_forall, not_lt, nth_eq_zero, nth_mem, ofPred, toFinset
+--- 原说明 ---
+`Nat.nth p` is the least strictly monotone function whose image is contained in
+`Set.ofPred p`
 -/
-lemma nth_mem_anti {a b : Nat} (hab : a <= b) (h : p (nth p b)) : p (nth p a) := by
-  by_cases h' : forall hf : (Set.ofPred p).Finite, a < #hf.toFinset
-  · exact nth_mem a h'
-  · simp only [not_forall, not_lt] at h'
-    have h'b : exists hf : (Set.ofPred p).Finite, #hf.toFinset <= b := by
-      rcases h' with ⟨hf, ha⟩
-      exact ⟨hf, ha.trans hab⟩
-    have ha0 : nth p a = 0 := by simp [nth_eq_zero, h']
-    have hb0 : nth p b = 0 := by simp [nth_eq_zero, h'b]
-    rw [ha0]
-    rwa [hb0] at h
-
-/--
-lemma `nth_le_of_strictMonoOn_of_mapsTo` / 引理 `nth_le_of_strictMonoOn_of_mapsTo`
-
-English:
-lemma nth_le_of_strictMonoOn_of_mapsTo
-  statement: {p : Nat -> Prop} (f : Nat -> Nat)
-  proof: by
-  by_cases! hn : (forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card)
-  · induction n using Nat.strong_induction_on with | _ n ih =>
-    rw [nth_eq_sInf]
-    refine csInf_le (by simp) ⟨hmaps hn, fun k hk => ?_⟩
-    have : f k < f n := by apply hmono <;> grind
-    grind
-  · rcases hn with ⟨hf, hn⟩
-    rw [nth]; rw [dif_pos hf]; rw [List.getD_eq_default _ _ (by simp [hn])]
-    exact Nat.zero_le _
-
-中文:
-引理 nth_le_of_strictMonoOn_of_mapsTo
-  结论: {p : 自然数 -> 命题} (f : 自然数 -> 自然数)
-  证明: by
-  by_cases! hn : (forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card)
-  · induction n using Nat.strong_induction_on with | _ n ih =>
-    rw [nth_eq_sInf]
-    refine csInf_le (by simp) ⟨hmaps hn, fun k hk => ?_⟩
-    have : f k < f n := by apply hmono <;> grind
-    grind
-  · rcases hn with ⟨hf, hn⟩
-    rw [nth]; rw [dif_pos hf]; rw [List.getD_eq_default _ _ (by simp [hn])]
-    exact Nat.zero_le _
-
-Depends on / 依赖: Finite, List.getD_eq_default, Nat.strong_induction_on, Nat.zero_le, Set.Finite, Set.ofPred, csInf_le, dif_pos, getD_eq_default, hf.toFinset.card, nth_eq_sInf, ofPred, strong_induction_on, toFinset, zero_le
--/
-lemma nth_le_of_strictMonoOn_of_mapsTo {p : Nat -> Prop} (f : Nat -> Nat)
-    (hmaps : Set.MapsTo f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
+lemma nth_le_of_strictMonoOn_of_mapsTo {p : ℕ → Prop} (f : ℕ → ℕ)
+    (hmaps : Set.MapsTo f { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
       (Set.ofPred p))
-    (hmono : StrictMonoOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card })
-      {n : Nat} :
-    nth p n <= f n := by
-  by_cases! hn : (forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card)
+    (hmono : StrictMonoOn f { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card })
+      {n : ℕ} :
+    nth p n ≤ f n := by
+  by_cases! hn : (∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card)
   · induction n using Nat.strong_induction_on with | _ n ih =>
     rw [nth_eq_sInf]
     refine csInf_le (by simp) ⟨hmaps hn, fun k hk => ?_⟩
     have : f k < f n := by apply hmono <;> grind
     grind
   · rcases hn with ⟨hf, hn⟩
-    rw [nth]; rw [dif_pos hf]; rw [List.getD_eq_default _ _ (by simp [hn])]
+    rw [nth, dif_pos hf, List.getD_eq_default _ _ (by simp [hn])]
     exact Nat.zero_le _
 
-/--
-lemma `le_nth_of_monotoneOn_of_surjOn` / 引理 `le_nth_of_monotoneOn_of_surjOn`
+/-- `Nat.nth p` is the greatest monotone function whose image contains `Set.ofPred p`. -/
+/-
+**Nat.le_nth_of_monotoneOn_of_surjOn** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：le_nth_of_monotoneOn_of_surjOn {p : Nat -> Prop} (f : Nat -> Nat) (hsurj :
+ Set.SurjOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset
+.card } (Set.ofPred p)) (hmono : MonotoneOn f { n : Nat | forall hf : Set.Finite
+ (Set.ofPred p), n < hf.toFinset.card }) {n : Nat} (hn : forall hf : Set.Finite 
+(Set.ofPred p), n < hf.toFinset.card) : f n <= nth p n
+参数：f : Nat -> Nat；hsurj : Set.SurjOn f { n : Nat | forall hf : Set.Finite (Set.o
+fPred p), n < hf.toFinset.card } (Set.ofPred p)；hmono : MonotoneOn f { n : Nat |
+ forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }；hn : forall hf : 
+Set.Finite (Set.ofPred p), n < hf.toFinset.card。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_zero`：nth_zero : nth p 0 = sInf (Set.ofPred p)
+· 使用定理 `le_csInf`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s : 
+Set α} {a : α}, s.Nonempty → (∀ b ∈ s, a ≤ b) → a ≤ sInf s
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Nat.nth_eq_sInf`：nth_eq_sInf (p : Nat -> Prop) (n : Nat) : nth p n = sIn
+f {x | p x ∧ forall k < n, nth p k < x}
+· 使用定理 `Nat.nth_lt_nth'`：nth_lt_nth' {m n : Nat} (hlt : m < n) (h : forall hf : 
+(Set.ofPred p).Finite, n < #hf.toFinset) : nth p m < nth p n
+· 使用定理 `Nat.succ_le_iff`：∀ {m n : ℕ}, m.succ ≤ n ↔ m < n
+· 使用定理 `MonotoneOn.reflect_lt`：MonotoneOn.reflect_lt (hf : MonotoneOn f s) {a b 
+: α} (ha : a in s) (hb : b in s) (h : f a < f b) : a < b
 
-English:
-lemma le_nth_of_monotoneOn_of_surjOn
-  statement: {p : Nat -> Prop} (f : Nat -> Nat)
-  proof: by
+--- 原说明 ---
+`Nat.nth p` is the greatest monotone function whose image contains `Set.ofPred p
+`.
+-/
+lemma le_nth_of_monotoneOn_of_surjOn {p : ℕ → Prop} (f : ℕ → ℕ)
+    (hsurj : Set.SurjOn f { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
+      (Set.ofPred p))
+    (hmono : MonotoneOn f { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card })
+      {n : ℕ}
+    (hn : ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card) : f n ≤ nth p n := by
   induction n with
   | zero =>
     rw [Nat.nth_zero]
@@ -1190,487 +1177,411 @@ lemma le_nth_of_monotoneOn_of_surjOn
     rw [Nat.succ_le_iff]
     apply hmono.reflect_lt <;> grind
 
-中文:
-引理 le_nth_of_monotoneOn_of_surjOn
-  结论: {p : 自然数 -> 命题} (f : 自然数 -> 自然数)
-  证明: by
-  induction n with
-  | zero =>
-    rw [Nat.nth_zero]
-    refine le_csInf ⟨_, nth_mem _ hn⟩ fun b hb => ?_
-    rcases hsurj hb with ⟨k, hk, rfl⟩
-    exact hmono hn hk (Nat.zero_le _)
-  | succ n ih =>
-    rw [nth_eq_sInf]
-    refine le_csInf ?_ ?_
-    · use nth p (n + 1), nth_mem _ hn
-      exact fun k hk => nth_lt_nth' hk hn
-    rintro b ⟨hb, h⟩
-    rcases hsurj hb with ⟨m, hm, rfl⟩
-    apply hmono hn hm
-    rw [Nat.succ_le_iff]
-    apply hmono.reflect_lt <;> grind
+/-- `Nat.nth p` is the unique strictly monotone function whose image is `Set.ofPred p`. -/
+/-
+**Nat.eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn** 是 Mathlib 中的一个引理，位于命名空间 `Nat`
+。
+形式化陈述：eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn {p : Nat -> Prop} (f : Nat -> N
+at) (hsurj : Set.SurjOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n <
+ hf.toFinset.card } (Set.ofPred p)) (hmaps : Set.MapsTo f { n : Nat | forall hf 
+: Set.Finite (Set.ofPred p), n < hf.toFinset.card } (Set.ofPred p)) (hmono : Str
+ictMonoOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.c
+ard }) : Set.EqOn f (nth p) { n : Nat | forall hf : Set.Finite (Set.ofPred p), n
+ < hf.toFinset.card }
+参数：f : Nat -> Nat；hsurj : Set.SurjOn f { n : Nat | forall hf : Set.Finite (Set.o
+fPred p), n < hf.toFinset.card } (Set.ofPred p)；hmaps : Set.MapsTo f { n : Nat |
+ forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card } (Set.ofPred p)；hm
+ono : StrictMonoOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.t
+oFinset.card }。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `Nat.le_nth_of_monotoneOn_of_surjOn`：le_nth_of_monotoneOn_of_surjOn {p : 
+Nat -> Prop} (f : Nat -> Nat) (hsurj : Set.SurjOn f { n : Nat | forall hf : Set.
+Finite (Set.ofPred p), n…
+· 使用定理 `StrictMonoOn.monotoneOn`：∀ {α : Type u} {β : Type v} [inst : PartialOrde
+r α] [inst_1 : Preorder β] {f : α → β} {s : Set α},   StrictMonoOn f s → Monoton
+eOn f s
+· 使用引理 `Nat.nth_le_of_strictMonoOn_of_mapsTo`：nth_le_of_strictMonoOn_of_mapsTo {
+p : Nat -> Prop} (f : Nat -> Nat) (hmaps : Set.MapsTo f { n : Nat | forall hf : 
+Set.Finite (Set.ofPred p),…
 
-Depends on / 依赖: Nat.nth_zero, Nat.succ_le_iff, Nat.zero_le, hmono.reflect_lt, le_csInf, nth_eq_sInf, nth_lt_nth, nth_mem, nth_zero, reflect_lt, succ_le_iff, zero_le
+--- 原说明 ---
+`Nat.nth p` is the unique strictly monotone function whose image is `Set.ofPred 
+p`.
 -/
-lemma le_nth_of_monotoneOn_of_surjOn {p : Nat -> Prop} (f : Nat -> Nat)
-    (hsurj : Set.SurjOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
+lemma eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn {p : ℕ → Prop} (f : ℕ → ℕ)
+    (hsurj : Set.SurjOn f { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
       (Set.ofPred p))
-    (hmono : MonotoneOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card })
-      {n : Nat}
-    (hn : forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card) : f n <= nth p n := by
-  induction n with
-  | zero =>
-    rw [Nat.nth_zero]
-    refine le_csInf ⟨_, nth_mem _ hn⟩ fun b hb => ?_
-    rcases hsurj hb with ⟨k, hk, rfl⟩
-    exact hmono hn hk (Nat.zero_le _)
-  | succ n ih =>
-    rw [nth_eq_sInf]
-    refine le_csInf ?_ ?_
-    · use nth p (n + 1), nth_mem _ hn
-      exact fun k hk => nth_lt_nth' hk hn
-    rintro b ⟨hb, h⟩
-    rcases hsurj hb with ⟨m, hm, rfl⟩
-    apply hmono hn hm
-    rw [Nat.succ_le_iff]
-    apply hmono.reflect_lt <;> grind
-
-/--
-lemma `eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn` / 引理 `eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn`
-
-English:
-lemma eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn
-  statement: {p : Nat -> Prop} (f : Nat -> Nat)
-  proof: fun _ hi => le_antisymm
-    (Nat.le_nth_of_monotoneOn_of_surjOn _ hsurj hmono.monotoneOn hi)
-    (Nat.nth_le_of_strictMonoOn_of_mapsTo _ hmaps hmono)
-
-中文:
-引理 eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn
-  结论: {p : 自然数 -> 命题} (f : 自然数 -> 自然数)
-  证明: fun _ hi => le_antisymm
-    (Nat.le_nth_of_monotoneOn_of_surjOn _ hsurj hmono.monotoneOn hi)
-    (Nat.nth_le_of_strictMonoOn_of_mapsTo _ hmaps hmono)
-
-Depends on / 依赖: Nat.le_nth_of_monotoneOn_of_surjOn, Nat.nth_le_of_strictMonoOn_of_mapsTo, hmono.monotoneOn, le_antisymm, le_nth_of_monotoneOn_of_surjOn, monotoneOn, nth_le_of_strictMonoOn_of_mapsTo
--/
-lemma eq_nth_of_strictMonoOn_of_mapsTo_of_surjOn {p : Nat -> Prop} (f : Nat -> Nat)
-    (hsurj : Set.SurjOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
+    (hmaps : Set.MapsTo f { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
       (Set.ofPred p))
-    (hmaps : Set.MapsTo f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }
-      (Set.ofPred p))
-    (hmono : StrictMonoOn f { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }) :
-    Set.EqOn f (nth p) { n : Nat | forall hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card } :=
+    (hmono : StrictMonoOn f { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card }) :
+    Set.EqOn f (nth p) { n : ℕ | ∀ hf : Set.Finite (Set.ofPred p), n < hf.toFinset.card } :=
   fun _ hi => le_antisymm
     (Nat.le_nth_of_monotoneOn_of_surjOn _ hsurj hmono.monotoneOn hi)
     (Nat.nth_le_of_strictMonoOn_of_mapsTo _ hmaps hmono)
-
-/--
-lemma `nth_comp_of_strictMono` / 引理 `nth_comp_of_strictMono`
-
-English:
-lemma nth_comp_of_strictMono
-  statement: {n : Nat} {f : Nat -> Nat} (hf : StrictMono f)
-  proof: by
-  have hs {p' : Nat -> Prop} (h0p' : forall k, p' k -> k in Set.range f) :
+/-
+**Nat.nth_comp_of_strictMono** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_comp_of_strictMono {n : Nat} {f : Nat -> Nat} (hf : StrictMono f) (h0 
+: forall k, p k -> k in Set.range f) (h : forall hfi : (Set.ofPred p).Finite, n 
+< hfi.toFinset.card) : f (nth (fun i => p (f i)) n) = nth p n
+参数：hf : StrictMono f；h0 : forall k, p k -> k in Set.range f；h : forall hfi : (Se
+t.ofPred p).Finite, n < hfi.toFinset.card。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.case_strong_induction_on`：∀ {p : ℕ → Prop} (a : ℕ), p 0 → (∀ (n : ℕ)
+, (∀ m ≤ n, p m) → p (n + 1)) → p a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_zero`：nth_zero : nth p 0 = sInf (Set.ofPred p)
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monotone.map_csInf`：Monotone.map_csInf {β : Type*} [ConditionallyComplet
+eLattice β] {f : α -> β} (hf : Monotone f) (hs : s.Nonempty) : f (sInf s) = sInf
+ (f '' s…
+· 使用定理 `instWellFoundedLTNat`：WellFoundedLT ℕ
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
+· 使用定理 `Nat.nth_eq_sInf`：nth_eq_sInf (p : Nat -> Prop) (n : Nat) : nth p n = sIn
+f {x | p x ∧ forall k < n, nth p k < x}
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Nat.nth_lt_nth'`：nth_lt_nth' {m n : Nat} (hlt : m < n) (h : forall hf : 
+(Set.ofPred p).Finite, n < #hf.toFinset) : nth p m < nth p n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.lt_add_one_iff`：∀ {m n : ℕ}, m < n + 1 ↔ m ≤ n
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+lemma nth_comp_of_strictMono {n : ℕ} {f : ℕ → ℕ} (hf : StrictMono f)
+    (h0 : ∀ k, p k → k ∈ Set.range f) (h : ∀ hfi : (Set.ofPred p).Finite, n < hfi.toFinset.card) :
+    f (nth (fun i ↦ p (f i)) n) = nth p n := by
+  have hs {p' : ℕ → Prop} (h0p' : ∀ k, p' k → k ∈ Set.range f) :
       f '' {i | p' (f i)} = Set.ofPred p' := by
     ext i
-    refine ⟨fun ⟨_, hi, h⟩ => h ▸ hi, fun he => ?_⟩
+    refine ⟨fun ⟨_, hi, h⟩ ↦ h ▸ hi, fun he ↦ ?_⟩
     rcases h0p' _ he with ⟨t, rfl⟩
     exact ⟨t, he, rfl⟩
   induction n using Nat.case_strong_induction_on
   case _ =>
     simp_rw [nth_zero]
     replace h := nth_mem _ h
-    rw [← hs h0]; rw [← hf.monotone.map_csInf]
+    rw [← hs h0, ← hf.monotone.map_csInf]
     rcases h0 _ h with ⟨t, ht⟩
     exact ⟨t, Set.mem_ofPred_eq ▸ ht ▸ h⟩
   case _ n ih =>
     repeat nth_rw 1 [nth_eq_sInf]
-    have h0' : forall k', (p k' ∧ forall k < n + 1, nth p k < k') -> k' in Set.range f := fun _ h => h0 _ h.1
-    rw [← hs h0']; rw [← hf.monotone.map_csInf]
+    have h0' : ∀ k', (p k' ∧ ∀ k < n + 1, nth p k < k') → k' ∈ Set.range f := fun _ h ↦ h0 _ h.1
+    rw [← hs h0', ← hf.monotone.map_csInf]
     · convert! rfl using 8 with k m' hm
       nth_rw 2 [← hf.lt_iff_lt]
       convert! Iff.rfl using 2
-      exact ih m' (Nat.lt_add_one_iff.mp hm) fun hfi => hm.trans (h hfi)
+      exact ih m' (Nat.lt_add_one_iff.mp hm) fun hfi ↦ hm.trans (h hfi)
     · rcases h0 _ (nth_mem _ h) with ⟨t, ht⟩
-      exact ⟨t, ht ▸ (nth_mem _ h), fun _ hk => ht ▸ nth_lt_nth' hk h⟩
-
-中文:
-引理 nth_comp_of_strictMono
-  结论: {n : 自然数} {f : 自然数 -> 自然数} (hf : 严格递增 f)
-  证明: by
-  have hs {p' : Nat -> Prop} (h0p' : forall k, p' k -> k in Set.range f) :
-      f '' {i | p' (f i)} = Set.ofPred p' := by
-    ext i
-    refine ⟨fun ⟨_, hi, h⟩ => h ▸ hi, fun he => ?_⟩
-    rcases h0p' _ he with ⟨t, rfl⟩
-    exact ⟨t, he, rfl⟩
-  induction n using Nat.case_strong_induction_on
-  case _ =>
-    simp_rw [nth_zero]
-    replace h := nth_mem _ h
-    rw [← hs h0]; rw [← hf.monotone.map_csInf]
-    rcases h0 _ h with ⟨t, ht⟩
-    exact ⟨t, Set.mem_ofPred_eq ▸ ht ▸ h⟩
-  case _ n ih =>
-    repeat nth_rw 1 [nth_eq_sInf]
-    have h0' : forall k', (p k' ∧ forall k < n + 1, nth p k < k') -> k' in Set.range f := fun _ h => h0 _ h.1
-    rw [← hs h0']; rw [← hf.monotone.map_csInf]
-    · convert! rfl using 8 with k m' hm
-      nth_rw 2 [← hf.lt_iff_lt]
-      convert! Iff.rfl using 2
-      exact ih m' (Nat.lt_add_one_iff.mp hm) fun hfi => hm.trans (h hfi)
-    · rcases h0 _ (nth_mem _ h) with ⟨t, ht⟩
-      exact ⟨t, ht ▸ (nth_mem _ h), fun _ hk => ht ▸ nth_lt_nth' hk h⟩
-
-Depends on / 依赖: Nat.case_strong_induction_on, Set.mem_ofPred_eq, Set.ofPred, Set.range, case_strong_induction_on, hf.monotone.map_csInf, map_csInf, mem_ofPred_eq, monotone, nth_eq_sInf, nth_mem, nth_rw, nth_zero, ofPred, repeat, replace, simp_rw
+      exact ⟨t, ht ▸ (nth_mem _ h), fun _ hk ↦ ht ▸ nth_lt_nth' hk h⟩
+/-
+**Nat.nth_add** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_add {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n != 0) : nth (fu
+n i => p (i + m)) n + m = nth p n
+参数：h0 : forall k < m, ¬p k；h : nth p n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.nth_comp_of_strictMono`：nth_comp_of_strictMono {n : Nat} {f : Nat ->
+ Nat} (hf : StrictMono f) (h0 : forall k, p k -> k in Set.range f) (h : forall h
+fi : (Set.ofPred…
+· 使用定理 `StrictMono.add_const`：∀ {α : Type u_1} {β : Type u_2} [inst : Add α] [in
+st_1 : Preorder α] [inst_2 : Preorder β] {f : β → α}   [AddRightStrictMono α], S
+trictMono …
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `strictMono_id`：strictMono_id [Preorder α] : StrictMono (id : α -> α)
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `le_iff_exists_add'`：∀ {α : Type u} [inst : AddCommMagma α] [inst_1 : Pre
+order α] [CanonicallyOrderedAdd α] {a b : α}, a ≤ b ↔ ∃ c, b = c + a
+· 使用引理 `Nat.lt_card_toFinset_of_nth_ne_zero`：lt_card_toFinset_of_nth_ne_zero {n 
+: Nat} (h : nth p n != 0) (hf : (Set.ofPred p).Finite) : n < #hf.toFinset
 -/
-lemma nth_comp_of_strictMono {n : Nat} {f : Nat -> Nat} (hf : StrictMono f)
-    (h0 : forall k, p k -> k in Set.range f) (h : forall hfi : (Set.ofPred p).Finite, n < hfi.toFinset.card) :
-    f (nth (fun i => p (f i)) n) = nth p n := by
-  have hs {p' : Nat -> Prop} (h0p' : forall k, p' k -> k in Set.range f) :
-      f '' {i | p' (f i)} = Set.ofPred p' := by
-    ext i
-    refine ⟨fun ⟨_, hi, h⟩ => h ▸ hi, fun he => ?_⟩
-    rcases h0p' _ he with ⟨t, rfl⟩
-    exact ⟨t, he, rfl⟩
-  induction n using Nat.case_strong_induction_on
-  case _ =>
-    simp_rw [nth_zero]
-    replace h := nth_mem _ h
-    rw [← hs h0]; rw [← hf.monotone.map_csInf]
-    rcases h0 _ h with ⟨t, ht⟩
-    exact ⟨t, Set.mem_ofPred_eq ▸ ht ▸ h⟩
-  case _ n ih =>
-    repeat nth_rw 1 [nth_eq_sInf]
-    have h0' : forall k', (p k' ∧ forall k < n + 1, nth p k < k') -> k' in Set.range f := fun _ h => h0 _ h.1
-    rw [← hs h0']; rw [← hf.monotone.map_csInf]
-    · convert! rfl using 8 with k m' hm
-      nth_rw 2 [← hf.lt_iff_lt]
-      convert! Iff.rfl using 2
-      exact ih m' (Nat.lt_add_one_iff.mp hm) fun hfi => hm.trans (h hfi)
-    · rcases h0 _ (nth_mem _ h) with ⟨t, ht⟩
-      exact ⟨t, ht ▸ (nth_mem _ h), fun _ hk => ht ▸ nth_lt_nth' hk h⟩
-
-/--
-lemma `nth_add` / 引理 `nth_add`
-
-English:
-lemma nth_add
-  given: {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n != 0)
-  proof: by
-  refine nth_comp_of_strictMono (strictMono_id.add_const m) (fun k hk => ?_)
-    (fun hf => lt_card_toFinset_of_nth_ne_zero h hf)
+lemma nth_add {m n : ℕ} (h0 : ∀ k < m, ¬p k) (h : nth p n ≠ 0) :
+    nth (fun i ↦ p (i + m)) n + m = nth p n := by
+  refine nth_comp_of_strictMono (strictMono_id.add_const m) (fun k hk ↦ ?_)
+    (fun hf ↦ lt_card_toFinset_of_nth_ne_zero h hf)
   by_contra hn
   simp_rw [id_eq, Set.mem_range, eq_comm] at hn
-  exact h0 _ (not_le.mp fun h => hn (le_iff_exists_add'.mp h)) hk
-
-中文:
-引理 nth_add
-  条件: {m n : 自然数} (h0 : 对任意 k < m, ¬p k) (h : nth p n != 0)
-  证明: by
-  refine nth_comp_of_strictMono (strictMono_id.add_const m) (fun k hk => ?_)
-    (fun hf => lt_card_toFinset_of_nth_ne_zero h hf)
-  by_contra hn
-  simp_rw [id_eq, Set.mem_range, eq_comm] at hn
-  exact h0 _ (not_le.mp fun h => hn (le_iff_exists_add'.mp h)) hk
-
-Depends on / 依赖: Set.mem_range, add_const, eq_comm, id_eq, le_iff_exists_add, lt_card_toFinset_of_nth_ne_zero, mem_range, not_le, not_le.mp, nth_comp_of_strictMono, simp_rw, strictMono_id, strictMono_id.add_const
+  exact h0 _ (not_le.mp fun h ↦ hn (le_iff_exists_add'.mp h)) hk
+/-
+**Nat.nth_add_eq_sub** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_add_eq_sub {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n != 0) : 
+nth (fun i => p (i + m)) n = nth p n - m
+参数：h0 : forall k < m, ¬p k；h : nth p n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Nat.nth_add`：nth_add {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n 
+!= 0) : nth (fun i => p (i + m)) n + m = nth p n
+· 使用定理 `Nat.add_sub_cancel`：∀ (n m : ℕ), n + m - m = n
 -/
-lemma nth_add {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n != 0) :
-    nth (fun i => p (i + m)) n + m = nth p n := by
-  refine nth_comp_of_strictMono (strictMono_id.add_const m) (fun k hk => ?_)
-    (fun hf => lt_card_toFinset_of_nth_ne_zero h hf)
-  by_contra hn
-  simp_rw [id_eq, Set.mem_range, eq_comm] at hn
-  exact h0 _ (not_le.mp fun h => hn (le_iff_exists_add'.mp h)) hk
-
-/--
-lemma `nth_add_eq_sub` / 引理 `nth_add_eq_sub`
-
-English:
-lemma nth_add_eq_sub
-  given: {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n != 0)
-  proof: by
-  rw [← nth_add h0 h]; rw [Nat.add_sub_cancel]
-
-中文:
-引理 nth_add_eq_sub
-  条件: {m n : 自然数} (h0 : 对任意 k < m, ¬p k) (h : nth p n != 0)
-  证明: by
-  rw [← nth_add h0 h]; rw [Nat.add_sub_cancel]
-
-Depends on / 依赖: Nat.add_sub_cancel, add_sub_cancel, nth_add
+lemma nth_add_eq_sub {m n : ℕ} (h0 : ∀ k < m, ¬p k) (h : nth p n ≠ 0) :
+    nth (fun i ↦ p (i + m)) n = nth p n - m := by
+  rw [← nth_add h0 h, Nat.add_sub_cancel]
+/-
+**Nat.nth_add_one** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_add_one {n : Nat} (h0 : ¬p 0) (h : nth p n != 0) : nth (fun i => p (i 
++ 1)) n + 1 = nth p n
+参数：h0 : ¬p 0；h : nth p n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.nth_add`：nth_add {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n 
+!= 0) : nth (fun i => p (i + m)) n + m = nth p n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.lt_one_iff`：∀ {n : ℕ}, n < 1 ↔ n = 0
 -/
-lemma nth_add_eq_sub {m n : Nat} (h0 : forall k < m, ¬p k) (h : nth p n != 0) :
-    nth (fun i => p (i + m)) n = nth p n - m := by
-  rw [← nth_add h0 h]; rw [Nat.add_sub_cancel]
-
-/--
-lemma `nth_add_one` / 引理 `nth_add_one`
-
-English:
-lemma nth_add_one
-  given: {n : Nat} (h0 : ¬p 0) (h : nth p n != 0)
-  proof: nth_add (fun _ hk => (lt_one_iff.1 hk ▸ h0)) h
-
-中文:
-引理 nth_add_one
-  条件: {n : 自然数} (h0 : ¬p 0) (h : nth p n != 0)
-  证明: nth_add (fun _ hk => (lt_one_iff.1 hk ▸ h0)) h
-
-Depends on / 依赖: lt_one_iff, nth_add
+lemma nth_add_one {n : ℕ} (h0 : ¬p 0) (h : nth p n ≠ 0) :
+    nth (fun i ↦ p (i + 1)) n + 1 = nth p n :=
+  nth_add (fun _ hk ↦ (lt_one_iff.1 hk ▸ h0)) h
+/-
+**Nat.nth_add_one_eq_sub** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nth_add_one_eq_sub {n : Nat} (h0 : ¬p 0) (h : nth p n != 0) : nth (fun i =
+> p (i + 1)) n = nth p n - 1
+参数：h0 : ¬p 0；h : nth p n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.nth_add_eq_sub`：nth_add_eq_sub {m n : Nat} (h0 : forall k < m, ¬p k)
+ (h : nth p n != 0) : nth (fun i => p (i + m)) n = nth p n - m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.lt_one_iff`：∀ {n : ℕ}, n < 1 ↔ n = 0
 -/
-lemma nth_add_one {n : Nat} (h0 : ¬p 0) (h : nth p n != 0) :
-    nth (fun i => p (i + 1)) n + 1 = nth p n :=
-  nth_add (fun _ hk => (lt_one_iff.1 hk ▸ h0)) h
-
-/--
-lemma `nth_add_one_eq_sub` / 引理 `nth_add_one_eq_sub`
-
-English:
-lemma nth_add_one_eq_sub
-  given: {n : Nat} (h0 : ¬p 0) (h : nth p n != 0)
-  proof: nth_add_eq_sub (fun _ hk => (lt_one_iff.1 hk ▸ h0)) h
-
-中文:
-引理 nth_add_one_eq_sub
-  条件: {n : 自然数} (h0 : ¬p 0) (h : nth p n != 0)
-  证明: nth_add_eq_sub (fun _ hk => (lt_one_iff.1 hk ▸ h0)) h
-
-Depends on / 依赖: lt_one_iff, nth_add_eq_sub
--/
-lemma nth_add_one_eq_sub {n : Nat} (h0 : ¬p 0) (h : nth p n != 0) :
-    nth (fun i => p (i + 1)) n = nth p n - 1 :=
-  nth_add_eq_sub (fun _ hk => (lt_one_iff.1 hk ▸ h0)) h
+lemma nth_add_one_eq_sub {n : ℕ} (h0 : ¬p 0) (h : nth p n ≠ 0) :
+    nth (fun i ↦ p (i + 1)) n = nth p n - 1 :=
+  nth_add_eq_sub (fun _ hk ↦ (lt_one_iff.1 hk ▸ h0)) h
 
 section Count
 
 variable (p) [DecidablePred p]
 
 @[simp]
-/--
-theorem `count_nth_zero` / 定理 `count_nth_zero`
-
-English:
-theorem count_nth_zero
-  statement: count p (nth p 0) = 0
-  proof: by
-  rw [count_eq_card_filter_range]; rw [card_eq_zero]; rw [filter_eq_empty_iff]; rw [nth_zero]
-  exact fun n h₁ h₂ => (mem_range.1 h₁).not_ge (Nat.sInf_le h₂)
-
-中文:
-定理 count_nth_zero
-  结论: count p (nth p 0) = 0
-  证明: by
-  rw [count_eq_card_filter_range]; rw [card_eq_zero]; rw [filter_eq_empty_iff]; rw [nth_zero]
-  exact fun n h₁ h₂ => (mem_range.1 h₁).not_ge (Nat.sInf_le h₂)
-
-Depends on / 依赖: Nat.sInf_le, card_eq_zero, count_eq_card_filter_range, filter_eq_empty_iff, mem_range, not_ge, nth_zero, sInf_le
+/-
+**Nat.count_nth_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：count_nth_zero : count p (nth p 0) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.count_eq_card_filter_range`：count_eq_card_filter_range (n : Nat) : c
+ount p n = #{x in range n | p x}
+· 使用定理 `Finset.card_eq_zero`：∀ {α : Type u_1} {s : Finset α}, s.card = 0 ↔ s = ∅
+· 使用定理 `Finset.filter_eq_empty_iff`：∀ {α : Type u_1} {p : α → Prop} [inst : Deci
+dablePred p] {s : Finset α}, Finset.filter p s = ∅ ↔ ∀ ⦃x : α⦄, x ∈ s → ¬p x
+· 使用定理 `Nat.nth_zero`：nth_zero : nth p 0 = sInf (Set.ofPred p)
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `Nat.sInf_le`：∀ {s : Set ℕ} {m : ℕ}, m ∈ s → sInf s ≤ m
 -/
 theorem count_nth_zero : count p (nth p 0) = 0 := by
-  rw [count_eq_card_filter_range]; rw [card_eq_zero]; rw [filter_eq_empty_iff]; rw [nth_zero]
+  rw [count_eq_card_filter_range, card_eq_zero, filter_eq_empty_iff, nth_zero]
   exact fun n h₁ h₂ => (mem_range.1 h₁).not_ge (Nat.sInf_le h₂)
-
-/--
-theorem `filter_range_nth_subset_insert` / 定理 `filter_range_nth_subset_insert`
-
-English:
-theorem filter_range_nth_subset_insert
-  given: (k : Nat)
-  proof: by
-  intro a ha
-  simp only [mem_insert, mem_filter, mem_range] at ha ⊢
-  exact (le_nth_of_lt_nth_succ ha.1 ha.2).eq_or_lt.imp_right fun h => ⟨h, ha.2⟩
-
-中文:
-定理 filter_range_nth_subset_insert
-  条件: (k : 自然数)
-  证明: by
-  intro a ha
-  simp only [mem_insert, mem_filter, mem_range] at ha ⊢
-  exact (le_nth_of_lt_nth_succ ha.1 ha.2).eq_or_lt.imp_right fun h => ⟨h, ha.2⟩
-
-Depends on / 依赖: eq_or_lt, eq_or_lt.imp_right, imp_right, le_nth_of_lt_nth_succ, mem_filter, mem_insert, mem_range
+/-
+**Nat.filter_range_nth_subset_insert** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：filter_range_nth_subset_insert (k : Nat) : {n in range (nth p (k + 1)) | p
+ n} subseteq insert (nth p k) {n in range (nth p k) | p n}
+参数：k : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `Nat.le_nth_of_lt_nth_succ`：le_nth_of_lt_nth_succ {k a : Nat} (h : a < nt
+h p (k + 1)) (ha : p a) : a <= nth p k
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem filter_range_nth_subset_insert (k : Nat) :
-    {n in range (nth p (k + 1)) | p n} subseteq insert (nth p k) {n in range (nth p k) | p n} := by
+theorem filter_range_nth_subset_insert (k : ℕ) :
+    {n ∈ range (nth p (k + 1)) | p n} ⊆ insert (nth p k) {n ∈ range (nth p k) | p n} := by
   intro a ha
   simp only [mem_insert, mem_filter, mem_range] at ha ⊢
   exact (le_nth_of_lt_nth_succ ha.1 ha.2).eq_or_lt.imp_right fun h => ⟨h, ha.2⟩
 
 variable {p}
-
-/--
-theorem `filter_range_nth_eq_insert` / 定理 `filter_range_nth_eq_insert`
-
-English:
-theorem filter_range_nth_eq_insert
-  statement: {k : Nat}
-  proof: by
-  refine (filter_range_nth_subset_insert p k).antisymm fun a ha => ?_
-  simp only [mem_insert, mem_filter, mem_range] at ha ⊢
-  have : nth p k < nth p (k + 1) := nth_lt_nth' k.lt_succ_self hlt
-  rcases ha with (rfl | ⟨hlt, hpa⟩)
-  · exact ⟨this, nth_mem _ fun hf => k.lt_succ_self.trans (hlt hf)⟩
-  · exact ⟨hlt.trans this, hpa⟩
-
-中文:
-定理 filter_range_nth_eq_insert
-  结论: {k : 自然数}
-  证明: by
-  refine (filter_range_nth_subset_insert p k).antisymm fun a ha => ?_
-  simp only [mem_insert, mem_filter, mem_range] at ha ⊢
-  have : nth p k < nth p (k + 1) := nth_lt_nth' k.lt_succ_self hlt
-  rcases ha with (rfl | ⟨hlt, hpa⟩)
-  · exact ⟨this, nth_mem _ fun hf => k.lt_succ_self.trans (hlt hf)⟩
-  · exact ⟨hlt.trans this, hpa⟩
-
-Depends on / 依赖: antisymm, filter_range_nth_subset_insert, hlt.trans, k.lt_succ_self, k.lt_succ_self.trans, lt_succ_self, mem_filter, mem_insert, mem_range, nth_lt_nth, nth_mem
+/-
+**Nat.filter_range_nth_eq_insert** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：filter_range_nth_eq_insert {k : Nat} (hlt : forall hf : (Set.ofPred p).Fin
+ite, k + 1 < #hf.toFinset) : {n in range (nth p (k + 1)) | p n} = insert (nth p 
+k) {n in range (nth p k) | p n}
+参数：hlt : forall hf : (Set.ofPred p).Finite, k + 1 < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Nat.filter_range_nth_subset_insert`：filter_range_nth_subset_insert (k : 
+Nat) : {n in range (nth p (k + 1)) | p n} subseteq insert (nth p k) {n in range 
+(nth p k) | p n}
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_lt_nth'`：nth_lt_nth' {m n : Nat} (hlt : m < n) (h : forall hf : 
+(Set.ofPred p).Finite, n < #hf.toFinset) : nth p m < nth p n
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem filter_range_nth_eq_insert {k : Nat}
-    (hlt : forall hf : (Set.ofPred p).Finite, k + 1 < #hf.toFinset) :
-    {n in range (nth p (k + 1)) | p n} = insert (nth p k) {n in range (nth p k) | p n} := by
+theorem filter_range_nth_eq_insert {k : ℕ}
+    (hlt : ∀ hf : (Set.ofPred p).Finite, k + 1 < #hf.toFinset) :
+    {n ∈ range (nth p (k + 1)) | p n} = insert (nth p k) {n ∈ range (nth p k) | p n} := by
   refine (filter_range_nth_subset_insert p k).antisymm fun a ha => ?_
   simp only [mem_insert, mem_filter, mem_range] at ha ⊢
   have : nth p k < nth p (k + 1) := nth_lt_nth' k.lt_succ_self hlt
   rcases ha with (rfl | ⟨hlt, hpa⟩)
   · exact ⟨this, nth_mem _ fun hf => k.lt_succ_self.trans (hlt hf)⟩
   · exact ⟨hlt.trans this, hpa⟩
-
-/--
-theorem `filter_range_nth_eq_insert_of_finite` / 定理 `filter_range_nth_eq_insert_of_finite`
-
-English:
-theorem filter_range_nth_eq_insert_of_finite
-  statement: (hf : (Set.ofPred p).Finite) {k : Nat}
-  proof: filter_range_nth_eq_insert fun _ => hlt
-
-中文:
-定理 filter_range_nth_eq_insert_of_finite
-  结论: (hf : (集合.ofPred p).有限) {k : 自然数}
-  证明: filter_range_nth_eq_insert fun _ => hlt
-
-Depends on / 依赖: filter_range_nth_eq_insert
+/-
+**Nat.filter_range_nth_eq_insert_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：filter_range_nth_eq_insert_of_finite (hf : (Set.ofPred p).Finite) {k : Nat
+} (hlt : k + 1 < #hf.toFinset) : {n in range (nth p (k + 1)) | p n} = insert (nt
+h p k) {n in range (nth p k) | p n}
+参数：hf : (Set.ofPred p).Finite；hlt : k + 1 < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.filter_range_nth_eq_insert`：filter_range_nth_eq_insert {k : Nat} (hl
+t : forall hf : (Set.ofPred p).Finite, k + 1 < #hf.toFinset) : {n in range (nth 
+p (k + 1)) | p n} = …
 -/
-theorem filter_range_nth_eq_insert_of_finite (hf : (Set.ofPred p).Finite) {k : Nat}
+theorem filter_range_nth_eq_insert_of_finite (hf : (Set.ofPred p).Finite) {k : ℕ}
     (hlt : k + 1 < #hf.toFinset) :
-    {n in range (nth p (k + 1)) | p n} = insert (nth p k) {n in range (nth p k) | p n} :=
+    {n ∈ range (nth p (k + 1)) | p n} = insert (nth p k) {n ∈ range (nth p k) | p n} :=
   filter_range_nth_eq_insert fun _ => hlt
-
-/--
-theorem `filter_range_nth_eq_insert_of_infinite` / 定理 `filter_range_nth_eq_insert_of_infinite`
-
-English:
-theorem filter_range_nth_eq_insert_of_infinite
-  given: (hp : (Set.ofPred p).Infinite) (k : Nat)
-  proof: filter_range_nth_eq_insert fun hf => absurd hf hp
-
-中文:
-定理 filter_range_nth_eq_insert_of_infinite
-  条件: (hp : (集合.ofPred p).无限) (k : 自然数)
-  证明: filter_range_nth_eq_insert fun hf => absurd hf hp
-
-Depends on / 依赖: absurd, filter_range_nth_eq_insert
+/-
+**Nat.filter_range_nth_eq_insert_of_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：filter_range_nth_eq_insert_of_infinite (hp : (Set.ofPred p).Infinite) (k :
+ Nat) : {n in range (nth p (k + 1)) | p n} = insert (nth p k) {n in range (nth p
+ k) | p n}
+参数：hp : (Set.ofPred p).Infinite；k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.filter_range_nth_eq_insert`：filter_range_nth_eq_insert {k : Nat} (hl
+t : forall hf : (Set.ofPred p).Finite, k + 1 < #hf.toFinset) : {n in range (nth 
+p (k + 1)) | p n} = …
 -/
-theorem filter_range_nth_eq_insert_of_infinite (hp : (Set.ofPred p).Infinite) (k : Nat) :
-    {n in range (nth p (k + 1)) | p n} = insert (nth p k) {n in range (nth p k) | p n} :=
+theorem filter_range_nth_eq_insert_of_infinite (hp : (Set.ofPred p).Infinite) (k : ℕ) :
+    {n ∈ range (nth p (k + 1)) | p n} = insert (nth p k) {n ∈ range (nth p k) | p n} :=
   filter_range_nth_eq_insert fun hf => absurd hf hp
-
-/--
-theorem `count_nth` / 定理 `count_nth`
-
-English:
-theorem count_nth
-  given: {n : Nat} (hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
-  proof: by
-  induction n with
-  | zero => exact count_nth_zero _
-  | succ k ihk =>
-    rw [count_eq_card_filter_range]; rw [filter_range_nth_eq_insert hn]; rw [card_insert_of_notMem]; rw [← count_eq_card_filter_range]; rw [ihk fun hf => lt_of_succ_lt (hn hf)]
-    simp
-
-中文:
-定理 count_nth
-  条件: {n : 自然数} (hn : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
-  证明: by
-  induction n with
-  | zero => exact count_nth_zero _
-  | succ k ihk =>
-    rw [count_eq_card_filter_range]; rw [filter_range_nth_eq_insert hn]; rw [card_insert_of_notMem]; rw [← count_eq_card_filter_range]; rw [ihk fun hf => lt_of_succ_lt (hn hf)]
-    simp
-
-Depends on / 依赖: card_insert_of_notMem, count_eq_card_filter_range, count_nth_zero, filter_range_nth_eq_insert, lt_of_succ_lt
+/-
+**Nat.count_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：count_nth {n : Nat} (hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFin
+set) : count p (nth p n) = n
+参数：hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.count_nth_zero`：count_nth_zero : count p (nth p 0) = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.count_eq_card_filter_range`：count_eq_card_filter_range (n : Nat) : c
+ount p n = #{x in range n | p x}
+· 使用定理 `Nat.filter_range_nth_eq_insert`：filter_range_nth_eq_insert {k : Nat} (hl
+t : forall hf : (Set.ofPred p).Finite, k + 1 < #hf.toFinset) : {n in range (nth 
+p (k + 1)) | p n} = …
+· 使用定理 `Finset.card_insert_of_notMem`：card_insert_of_notMem (h : a ∉ s) : #(inse
+rt a s) = #s + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.lt_of_succ_lt`：∀ {n m : ℕ}, n.succ < m → n < m
 -/
-theorem count_nth {n : Nat} (hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
+theorem count_nth {n : ℕ} (hn : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
     count p (nth p n) = n := by
   induction n with
   | zero => exact count_nth_zero _
   | succ k ihk =>
-    rw [count_eq_card_filter_range]; rw [filter_range_nth_eq_insert hn]; rw [card_insert_of_notMem]; rw [← count_eq_card_filter_range]; rw [ihk fun hf => lt_of_succ_lt (hn hf)]
+    rw [count_eq_card_filter_range, filter_range_nth_eq_insert hn, card_insert_of_notMem,
+      ← count_eq_card_filter_range, ihk fun hf => lt_of_succ_lt (hn hf)]
     simp
-
-/--
-theorem `count_nth_of_lt_card_finite` / 定理 `count_nth_of_lt_card_finite`
-
-English:
-theorem count_nth_of_lt_card_finite
-  given: {n : Nat} (hp : (Set.ofPred p).Finite) (hlt : n < #hp.toFinset)
-  proof: count_nth fun _ => hlt
-
-中文:
-定理 count_nth_of_lt_card_finite
-  条件: {n : 自然数} (hp : (集合.ofPred p).有限) (hlt : n < #hp.toFinset)
-  证明: count_nth fun _ => hlt
-
-Depends on / 依赖: count_nth
+/-
+**Nat.count_nth_of_lt_card_finite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：count_nth_of_lt_card_finite {n : Nat} (hp : (Set.ofPred p).Finite) (hlt : 
+n < #hp.toFinset) : count p (nth p n) = n
+参数：hp : (Set.ofPred p).Finite；hlt : n < #hp.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.count_nth`：count_nth {n : Nat} (hn : forall hf : (Set.ofPred p).Fini
+te, n < #hf.toFinset) : count p (nth p n) = n
 -/
-theorem count_nth_of_lt_card_finite {n : Nat} (hp : (Set.ofPred p).Finite) (hlt : n < #hp.toFinset) :
+theorem count_nth_of_lt_card_finite {n : ℕ} (hp : (Set.ofPred p).Finite) (hlt : n < #hp.toFinset) :
     count p (nth p n) = n :=
   count_nth fun _ => hlt
-
-/--
-theorem `count_nth_of_infinite` / 定理 `count_nth_of_infinite`
-
-English:
-theorem count_nth_of_infinite
-  given: (hp : (Set.ofPred p).Infinite) (n : Nat)
-  statement: count p (nth p n) = n
-  proof: count_nth fun hf => absurd hf hp
-
-中文:
-定理 count_nth_of_infinite
-  条件: (hp : (集合.ofPred p).无限) (n : 自然数)
-  结论: count p (nth p n) = n
-  证明: count_nth fun hf => absurd hf hp
-
-Depends on / 依赖: absurd, count_nth
+/-
+**Nat.count_nth_of_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：count_nth_of_infinite (hp : (Set.ofPred p).Infinite) (n : Nat) : count p (
+nth p n) = n
+参数：hp : (Set.ofPred p).Infinite；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.count_nth`：count_nth {n : Nat} (hn : forall hf : (Set.ofPred p).Fini
+te, n < #hf.toFinset) : count p (nth p n) = n
 -/
-theorem count_nth_of_infinite (hp : (Set.ofPred p).Infinite) (n : Nat) : count p (nth p n) = n :=
+theorem count_nth_of_infinite (hp : (Set.ofPred p).Infinite) (n : ℕ) : count p (nth p n) = n :=
   count_nth fun hf => absurd hf hp
-
-/--
-theorem `surjective_count_of_infinite_setOfPred` / 定理 `surjective_count_of_infinite_setOfPred`
-
-English:
-theorem surjective_count_of_infinite_setOfPred
-  given: (h : {n | p n}.Infinite)
-  proof: fun n => ⟨nth p n, count_nth_of_infinite h n⟩
-
-@[deprecated (since := "2026-07-09")]
-alias surjective_count_of_infinite_setOf := surjective_count_of_infinite_setOfPred
-
-中文:
-定理 surjective_count_of_infinite_setOfPred
-  条件: (h : {n | p n}.无限)
-  证明: fun n => ⟨nth p n, count_nth_of_infinite h n⟩
-
-@[deprecated (since := "2026-07-09")]
-alias surjective_count_of_infinite_setOf := surjective_count_of_infinite_setOfPred
-
-Depends on / 依赖: count_nth_of_infinite
+/-
+**Nat.surjective_count_of_infinite_setOfPred** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：surjective_count_of_infinite_setOfPred (h : {n | p n}.Infinite) : Function
+.Surjective (Nat.count p)
+参数：h : {n | p n}.Infinite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.count_nth_of_infinite`：count_nth_of_infinite (hp : (Set.ofPred p).In
+finite) (n : Nat) : count p (nth p n) = n
 -/
 theorem surjective_count_of_infinite_setOfPred (h : {n | p n}.Infinite) :
     Function.Surjective (Nat.count p) :=
@@ -1678,395 +1589,342 @@ theorem surjective_count_of_infinite_setOfPred (h : {n | p n}.Infinite) :
 
 @[deprecated (since := "2026-07-09")]
 alias surjective_count_of_infinite_setOf := surjective_count_of_infinite_setOfPred
-
-/--
-theorem `count_nth_succ` / 定理 `count_nth_succ`
-
-English:
-theorem count_nth_succ
-  given: {n : Nat} (hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset)
-  proof: by rw [count_succ, count_nth hn, if_pos (nth_mem _ hn)]
-
-中文:
-定理 count_nth_succ
-  条件: {n : 自然数} (hn : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
-  证明: by rw [count_succ, count_nth hn, if_pos (nth_mem _ hn)]
-
-Depends on / 依赖: count_nth, count_succ, if_pos, nth_mem
+/-
+**Nat.count_nth_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：count_nth_succ {n : Nat} (hn : forall hf : (Set.ofPred p).Finite, n < #hf.
+toFinset) : count p (nth p n + 1) = n + 1
+参数：hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.count_succ`：count_succ (n : Nat) : count p (n + 1) = count p n + if 
+p n then 1 else 0
+· 使用定理 `Nat.count_nth`：count_nth {n : Nat} (hn : forall hf : (Set.ofPred p).Fini
+te, n < #hf.toFinset) : count p (nth p n) = n
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
 -/
-theorem count_nth_succ {n : Nat} (hn : forall hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
+theorem count_nth_succ {n : ℕ} (hn : ∀ hf : (Set.ofPred p).Finite, n < #hf.toFinset) :
     count p (nth p n + 1) = n + 1 := by rw [count_succ, count_nth hn, if_pos (nth_mem _ hn)]
-
-/--
-lemma `count_nth_succ_of_infinite` / 引理 `count_nth_succ_of_infinite`
-
-English:
-lemma count_nth_succ_of_infinite
-  given: (hp : (Set.ofPred p).Infinite) (n : Nat)
-  proof: by
-  rw [count_succ]; rw [count_nth_of_infinite hp]; rw [if_pos (nth_mem_of_infinite hp _)]
-
-@[simp]
-
-中文:
-引理 count_nth_succ_of_infinite
-  条件: (hp : (集合.ofPred p).无限) (n : 自然数)
-  证明: by
-  rw [count_succ]; rw [count_nth_of_infinite hp]; rw [if_pos (nth_mem_of_infinite hp _)]
-
-@[simp]
-
-Depends on / 依赖: count_nth_of_infinite, count_succ, if_pos, nth_mem_of_infinite
+/-
+**Nat.count_nth_succ_of_infinite** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：count_nth_succ_of_infinite (hp : (Set.ofPred p).Infinite) (n : Nat) : coun
+t p (nth p n + 1) = n + 1
+参数：hp : (Set.ofPred p).Infinite；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.count_succ`：count_succ (n : Nat) : count p (n + 1) = count p n + if 
+p n then 1 else 0
+· 使用定理 `Nat.count_nth_of_infinite`：count_nth_of_infinite (hp : (Set.ofPred p).In
+finite) (n : Nat) : count p (nth p n) = n
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Nat.nth_mem_of_infinite`：nth_mem_of_infinite (hf : (Set.ofPred p).Infini
+te) (n : Nat) : p (nth p n)
 -/
-lemma count_nth_succ_of_infinite (hp : (Set.ofPred p).Infinite) (n : Nat) :
+lemma count_nth_succ_of_infinite (hp : (Set.ofPred p).Infinite) (n : ℕ) :
     count p (nth p n + 1) = n + 1 := by
-  rw [count_succ]; rw [count_nth_of_infinite hp]; rw [if_pos (nth_mem_of_infinite hp _)]
+  rw [count_succ, count_nth_of_infinite hp, if_pos (nth_mem_of_infinite hp _)]
 
 @[simp]
-/--
-theorem `nth_count` / 定理 `nth_count`
-
-English:
-theorem nth_count
-  given: {n : Nat} (hpn : p n)
-  statement: nth p (count p n) = n
-  proof: have : forall hf : (Set.ofPred p).Finite, count p n < #hf.toFinset := fun hf => count_lt_card hf hpn
-  count_injective (nth_mem _ this) hpn (count_nth this)
-
-中文:
-定理 nth_count
-  条件: {n : 自然数} (hpn : p n)
-  结论: nth p (count p n) = n
-  证明: have : forall hf : (Set.ofPred p).Finite, count p n < #hf.toFinset := fun hf => count_lt_card hf hpn
-  count_injective (nth_mem _ this) hpn (count_nth this)
-
-Depends on / 依赖: Finite, Set.ofPred, count_injective, count_lt_card, count_nth, hf.toFinset, nth_mem, ofPred, toFinset
+/-
+**Nat.nth_count** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+参数：hpn : p n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.count_lt_card`：count_lt_card {n : Nat} (hp : (Set.ofPred p).Finite) 
+(hpn : p n) : count p n < #hp.toFinset
+· 使用定理 `Nat.count_injective`：count_injective {m n : Nat} (hm : p m) (hn : p n) (
+heq : count p m = count p n) : m = n
+· 使用定理 `Nat.nth_mem`：nth_mem (n : Nat) (h : forall hf : (Set.ofPred p).Finite, n
+ < #hf.toFinset) : p (nth p n)
+· 使用定理 `Nat.count_nth`：count_nth {n : Nat} (hn : forall hf : (Set.ofPred p).Fini
+te, n < #hf.toFinset) : count p (nth p n) = n
 -/
-theorem nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n :=
-  have : forall hf : (Set.ofPred p).Finite, count p n < #hf.toFinset := fun hf => count_lt_card hf hpn
+theorem nth_count {n : ℕ} (hpn : p n) : nth p (count p n) = n :=
+  have : ∀ hf : (Set.ofPred p).Finite, count p n < #hf.toFinset := fun hf => count_lt_card hf hpn
   count_injective (nth_mem _ this) hpn (count_nth this)
-
-/--
-theorem `nth_lt_of_lt_count` / 定理 `nth_lt_of_lt_count`
-
-English:
-theorem nth_lt_of_lt_count
-  given: {n k : Nat} (h : k < count p n)
-  statement: nth p k < n
-  proof: by
+/-
+**Nat.nth_lt_of_lt_count** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_lt_of_lt_count {n k : Nat} (h : k < count p n) : nth p k < n
+参数：h : k < count p n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.reflect_lt`：Monotone.reflect_lt (hf : Monotone f) {a b : α} (h 
+: f a < f b) : a < b
+· 使用定理 `Nat.count_monotone`：count_monotone : Monotone (count p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.count_nth`：count_nth {n : Nat} (hn : forall hf : (Set.ofPred p).Fini
+te, n < #hf.toFinset) : count p (nth p n) = n
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.count_le_card`：count_le_card (hp : (Set.ofPred p).Finite) (n : Nat) 
+: count p n <= #hp.toFinset
+-/
+theorem nth_lt_of_lt_count {n k : ℕ} (h : k < count p n) : nth p k < n := by
   refine (count_monotone p).reflect_lt ?_
   rwa [count_nth]
   exact fun hf => h.trans_le (count_le_card hf n)
-
-中文:
-定理 nth_lt_of_lt_count
-  条件: {n k : 自然数} (h : k < count p n)
-  结论: nth p k < n
-  证明: by
-  refine (count_monotone p).reflect_lt ?_
-  rwa [count_nth]
-  exact fun hf => h.trans_le (count_le_card hf n)
-
-Depends on / 依赖: count_le_card, count_monotone, count_nth, h.trans_le, reflect_lt, trans_le
+/-
+**Nat.le_nth_of_count_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_nth_of_count_le {n k : Nat} (h : n <= nth p k) : count p n <= k
+参数：h : n <= nth p k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.nth_lt_of_lt_count`：nth_lt_of_lt_count {n k : Nat} (h : k < count p 
+n) : nth p k < n
 -/
-theorem nth_lt_of_lt_count {n k : Nat} (h : k < count p n) : nth p k < n := by
-  refine (count_monotone p).reflect_lt ?_
-  rwa [count_nth]
-  exact fun hf => h.trans_le (count_le_card hf n)
-
-/--
-theorem `le_nth_of_count_le` / 定理 `le_nth_of_count_le`
-
-English:
-theorem le_nth_of_count_le
-  given: {n k : Nat} (h : n <= nth p k)
-  statement: count p n <= k
-  proof: not_lt.1 fun hlt => h.not_gt nth_lt_of_lt_count hlt
-
-中文:
-定理 le_nth_of_count_le
-  条件: {n k : 自然数} (h : n <= nth p k)
-  结论: count p n <= k
-  证明: not_lt.1 fun hlt => h.not_gt nth_lt_of_lt_count hlt
-
-Depends on / 依赖: h.not_gt, not_gt, not_lt, nth_lt_of_lt_count
+theorem le_nth_of_count_le {n k : ℕ} (h : n ≤ nth p k) : count p n ≤ k :=
+  not_lt.1 fun hlt => h.not_gt <| nth_lt_of_lt_count hlt
+/-
+**Nat.count_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {p : ℕ → Prop} [inst : DecidablePred p], (∃ n, p n) → ∀ {n : ℕ}, Nat.cou
+nt p n = 0 ↔ n ≤ Nat.nth p 0
+参数：∃ n, p n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.nth_zero_of_exists`：nth_zero_of_exists [DecidablePred p] (h : exists
+ n, p n) : nth p 0 = Nat.find h
+· 使用定理 `Nat.le_find_iff`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (h : ∃ n, p n
+) (n : ℕ), n ≤ Nat.find h ↔ ∀ m < n, ¬p m
+· 使用定理 `Nat.count_iff_forall_not`：count_iff_forall_not {n : Nat} : count p n = 0
+ ↔ forall m < n, ¬p m
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_nth_of_count_le {n k : Nat} (h : n <= nth p k) : count p n <= k :=
-not_lt.1 fun hlt => h.not_gt nth_lt_of_lt_count hlt
-
-/--
-theorem `count_eq_zero` / 定理 `count_eq_zero`
-
-English:
-theorem count_eq_zero
-  given: (h : exists n, p n) {n : Nat}
-  statement: count p n = 0 ↔ n <= nth p 0
-  proof: by
-  rw [nth_zero_of_exists h]; rw [le_find_iff h]; rw [Nat.count_iff_forall_not]
-
-中文:
-定理 count_eq_zero
-  条件: (h : 存在 n, p n) {n : 自然数}
-  结论: count p n = 0 ↔ n <= nth p 0
-  证明: by
-  rw [nth_zero_of_exists h]; rw [le_find_iff h]; rw [Nat.count_iff_forall_not]
--/
-protected theorem count_eq_zero (h : exists n, p n) {n : Nat} : count p n = 0 ↔ n <= nth p 0 := by
-  rw [nth_zero_of_exists h]; rw [le_find_iff h]; rw [Nat.count_iff_forall_not]
+protected theorem count_eq_zero (h : ∃ n, p n) {n : ℕ} : count p n = 0 ↔ n ≤ nth p 0 := by
+  rw [nth_zero_of_exists h, le_find_iff h, Nat.count_iff_forall_not]
 
 variable (p) in
-/--
-theorem `nth_count_eq_sInf` / 定理 `nth_count_eq_sInf`
-
-English:
-theorem nth_count_eq_sInf
-  given: (n : Nat)
-  statement: nth p (count p n) = sInf {i : Nat | p i ∧ n <= i}
-  proof: by
-  refine (nth_eq_sInf _ _).trans (congr_arg sInf ?_)
-  refine Set.ext fun a => and_congr_right fun hpa => ?_
-  refine ⟨fun h => not_lt.1 fun ha => ?_, fun hn k hk => lt_of_lt_of_le (nth_lt_of_lt_count hk) hn⟩
-  have hn : nth p (count p a) < a := h _ (count_strict_mono hpa ha)
-  rwa [nth_count hpa, lt_self_iff_false] at hn
-
-中文:
-定理 nth_count_eq_sInf
-  条件: (n : 自然数)
-  结论: nth p (count p n) = sInf {i : 自然数 | p i ∧ n <= i}
-  证明: by
-  refine (nth_eq_sInf _ _).trans (congr_arg sInf ?_)
-  refine Set.ext fun a => and_congr_right fun hpa => ?_
-  refine ⟨fun h => not_lt.1 fun ha => ?_, fun hn k hk => lt_of_lt_of_le (nth_lt_of_lt_count hk) hn⟩
-  have hn : nth p (count p a) < a := h _ (count_strict_mono hpa ha)
-  rwa [nth_count hpa, lt_self_iff_false] at hn
-
-Depends on / 依赖: Set.ext, and_congr_right, congr_arg, count_strict_mono, lt_of_lt_of_le, lt_self_iff_false, not_lt, nth_count, nth_eq_sInf, nth_lt_of_lt_count
+/-
+**Nat.nth_count_eq_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_count_eq_sInf (n : Nat) : nth p (count p n) = sInf {i : Nat | p i ∧ n 
+<= i}
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.nth_eq_sInf`：nth_eq_sInf (p : Nat -> Prop) (n : Nat) : nth p n = sIn
+f {x | p x ∧ forall k < n, nth p k < x}
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `and_congr_right`：∀ {a b c : Prop}, (a → (b ↔ c)) → (a ∧ b ↔ a ∧ c)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Nat.count_strict_mono`：count_strict_mono {m n : Nat} (hm : p m) (hmn : m
+ < n) : count p m < count p n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `lt_self_iff_false`：lt_self_iff_false (x : α) : x < x ↔ False
+· 使用定理 `Nat.nth_count`：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `Nat.nth_lt_of_lt_count`：nth_lt_of_lt_count {n k : Nat} (h : k < count p 
+n) : nth p k < n
 -/
-theorem nth_count_eq_sInf (n : Nat) : nth p (count p n) = sInf {i : Nat | p i ∧ n <= i} := by
+theorem nth_count_eq_sInf (n : ℕ) : nth p (count p n) = sInf {i : ℕ | p i ∧ n ≤ i} := by
   refine (nth_eq_sInf _ _).trans (congr_arg sInf ?_)
   refine Set.ext fun a => and_congr_right fun hpa => ?_
   refine ⟨fun h => not_lt.1 fun ha => ?_, fun hn k hk => lt_of_lt_of_le (nth_lt_of_lt_count hk) hn⟩
   have hn : nth p (count p a) < a := h _ (count_strict_mono hpa ha)
   rwa [nth_count hpa, lt_self_iff_false] at hn
-
-/--
-theorem `le_nth_count'` / 定理 `le_nth_count'`
-
-English:
-theorem le_nth_count'
-  given: {n : Nat} (hpn : exists k, p k ∧ n <= k)
-  statement: n <= nth p (count p n)
-  proof: (le_csInf hpn fun _ => And.right).trans (nth_count_eq_sInf p n).ge
-
-中文:
-定理 le_nth_count'
-  条件: {n : 自然数} (hpn : 存在 k, p k ∧ n <= k)
-  结论: n <= nth p (count p n)
-  证明: (le_csInf hpn fun _ => And.right).trans (nth_count_eq_sInf p n).ge
-
-Depends on / 依赖: And.right, le_csInf, nth_count_eq_sInf
+/-
+**Nat.le_nth_count'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_nth_count' {n : Nat} (hpn : exists k, p k ∧ n <= k) : n <= nth p (count
+ p n)
+参数：hpn : exists k, p k ∧ n <= k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_csInf`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s : 
+Set α} {a : α}, s.Nonempty → (∀ b ∈ s, a ≤ b) → a ≤ sInf s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Nat.nth_count_eq_sInf`：nth_count_eq_sInf (n : Nat) : nth p (count p n) =
+ sInf {i : Nat | p i ∧ n <= i}
 -/
-theorem le_nth_count' {n : Nat} (hpn : exists k, p k ∧ n <= k) : n <= nth p (count p n) :=
+theorem le_nth_count' {n : ℕ} (hpn : ∃ k, p k ∧ n ≤ k) : n ≤ nth p (count p n) :=
   (le_csInf hpn fun _ => And.right).trans (nth_count_eq_sInf p n).ge
-
-/--
-theorem `le_nth_count` / 定理 `le_nth_count`
-
-English:
-theorem le_nth_count
-  given: (hp : (Set.ofPred p).Infinite) (n : Nat)
-  statement: n <= nth p (count p n)
-  proof: let ⟨m, hp, hn⟩ := hp.exists_gt n
-  le_nth_count' ⟨m, hp, hn.le⟩
-
-中文:
-定理 le_nth_count
-  条件: (hp : (集合.ofPred p).无限) (n : 自然数)
-  结论: n <= nth p (count p n)
-  证明: let ⟨m, hp, hn⟩ := hp.exists_gt n
-  le_nth_count' ⟨m, hp, hn.le⟩
-
-Depends on / 依赖: exists_gt, hn.le, hp.exists_gt, le_nth_count
+/-
+**Nat.le_nth_count** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_nth_count (hp : (Set.ofPred p).Infinite) (n : Nat) : n <= nth p (count 
+p n)
+参数：hp : (Set.ofPred p).Infinite；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.exists_gt`：∀ {α : Type u_2} [inst : LinearOrder α] [Locally
+FiniteOrderBot α] {s : Set α}, s.Infinite → ∀ (a : α), ∃ b ∈ s, a < b
+· 使用定理 `Nat.le_nth_count'`：le_nth_count' {n : Nat} (hpn : exists k, p k ∧ n <= k
+) : n <= nth p (count p n)
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-theorem le_nth_count (hp : (Set.ofPred p).Infinite) (n : Nat) : n <= nth p (count p n) :=
+theorem le_nth_count (hp : (Set.ofPred p).Infinite) (n : ℕ) : n ≤ nth p (count p n) :=
   let ⟨m, hp, hn⟩ := hp.exists_gt n
   le_nth_count' ⟨m, hp, hn.le⟩
 
-/--
-Definition of `giCountNth` / `giCountNth` 的定义
+/-- If a predicate `p : ℕ → Prop` is true for infinitely many numbers, then `Nat.count p` and
+`Nat.nth p` form a Galois insertion. -/
+/-
+**Nat.giCountNth** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：giCountNth (hp : (Set.ofPred p).Infinite) : GaloisInsertion (count p) (nth
+ p)
+参数：hp : (Set.ofPred p).Infinite。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_monotone`：nth_monotone (hf : (Set.ofPred p).Infinite) : Monotone
+ (nth p)
+· 使用定理 `Nat.count_monotone`：count_monotone : Monotone (count p)
+· 使用定理 `Nat.le_nth_count`：le_nth_count (hp : (Set.ofPred p).Infinite) (n : Nat) 
+: n <= nth p (count p n)
+· 使用定理 `Nat.count_nth_of_infinite`：count_nth_of_infinite (hp : (Set.ofPred p).In
+finite) (n : Nat) : count p (nth p n) = n
 
-English:
-definition giCountNth
-  signature: (hp : (Set.ofPred p).Infinite)
-  body: GaloisInsertion.monotoneIntro (nth_monotone hp) (count_monotone p) (le_nth_count hp)
-    (count_nth_of_infinite hp)
-
-中文:
-定义 giCountNth
-  签名: (hp : (集合.ofPred p).无限)
-  定义体: GaloisInsertion.monotoneIntro (nth_monotone hp) (count_monotone p) (le_nth_count hp)
-    (count_nth_of_infinite hp)
-
-Depends on / 依赖: GaloisInsertion, GaloisInsertion.monotoneIntro, count_monotone, count_nth_of_infinite, le_nth_count, monotoneIntro, nth_monotone
+--- 原说明 ---
+If a predicate `p : ℕ → Prop` is true for infinitely many numbers, then `Nat.cou
+nt p` and
+`Nat.nth p` form a Galois insertion.
 -/
 noncomputable def giCountNth (hp : (Set.ofPred p).Infinite) : GaloisInsertion (count p) (nth p) :=
   GaloisInsertion.monotoneIntro (nth_monotone hp) (count_monotone p) (le_nth_count hp)
     (count_nth_of_infinite hp)
-
-/--
-theorem `gc_count_nth` / 定理 `gc_count_nth`
-
-English:
-theorem gc_count_nth
-  given: (hp : (Set.ofPred p).Infinite)
-  statement: GaloisConnection (count p) (nth p)
-  proof: (giCountNth hp).gc
-
-中文:
-定理 gc_count_nth
-  条件: (hp : (集合.ofPred p).无限)
-  结论: GaloisConnection (count p) (nth p)
-  证明: (giCountNth hp).gc
-
-Depends on / 依赖: giCountNth
+/-
+**Nat.gc_count_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：gc_count_nth (hp : (Set.ofPred p).Infinite) : GaloisConnection (count p) (
+nth p)
+参数：hp : (Set.ofPred p).Infinite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
 theorem gc_count_nth (hp : (Set.ofPred p).Infinite) : GaloisConnection (count p) (nth p) :=
   (giCountNth hp).gc
-
-/--
-theorem `count_le_iff_le_nth` / 定理 `count_le_iff_le_nth`
-
-English:
-theorem count_le_iff_le_nth
-  given: (hp : (Set.ofPred p).Infinite) {a b : Nat}
-  proof: gc_count_nth hp _ _
-
-中文:
-定理 count_le_iff_le_nth
-  条件: (hp : (集合.ofPred p).无限) {a b : 自然数}
-  证明: gc_count_nth hp _ _
-
-Depends on / 依赖: gc_count_nth
+/-
+**Nat.count_le_iff_le_nth** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：count_le_iff_le_nth (hp : (Set.ofPred p).Infinite) {a b : Nat} : count p a
+ <= b ↔ a <= nth p b
+参数：hp : (Set.ofPred p).Infinite。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.gc_count_nth`：gc_count_nth (hp : (Set.ofPred p).Infinite) : GaloisCo
+nnection (count p) (nth p)
 -/
-theorem count_le_iff_le_nth (hp : (Set.ofPred p).Infinite) {a b : Nat} :
-    count p a <= b ↔ a <= nth p b :=
+theorem count_le_iff_le_nth (hp : (Set.ofPred p).Infinite) {a b : ℕ} :
+    count p a ≤ b ↔ a ≤ nth p b :=
   gc_count_nth hp _ _
-
-/--
-theorem `lt_nth_iff_count_lt` / 定理 `lt_nth_iff_count_lt`
-
-English:
-theorem lt_nth_iff_count_lt
-  given: (hp : (Set.ofPred p).Infinite) {a b : Nat}
-  proof: (gc_count_nth hp).lt_iff_lt
-
-中文:
-定理 lt_nth_iff_count_lt
-  条件: (hp : (集合.ofPred p).无限) {a b : 自然数}
-  证明: (gc_count_nth hp).lt_iff_lt
-
-Depends on / 依赖: gc_count_nth, lt_iff_lt
+/-
+**Nat.lt_nth_iff_count_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_nth_iff_count_lt (hp : (Set.ofPred p).Infinite) {a b : Nat} : a < count
+ p b ↔ nth p a < b
+参数：hp : (Set.ofPred p).Infinite。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.lt_iff_lt`：lt_iff_lt (gc : GaloisConnection l u) {a : α
+} {b : β} : b < l a ↔ u b < a
+· 使用定理 `Nat.gc_count_nth`：gc_count_nth (hp : (Set.ofPred p).Infinite) : GaloisCo
+nnection (count p) (nth p)
 -/
-theorem lt_nth_iff_count_lt (hp : (Set.ofPred p).Infinite) {a b : Nat} :
+theorem lt_nth_iff_count_lt (hp : (Set.ofPred p).Infinite) {a b : ℕ} :
     a < count p b ↔ nth p a < b :=
   (gc_count_nth hp).lt_iff_lt
 
 end Count
 
-/--
-theorem `nth_of_forall` / 定理 `nth_of_forall`
-
-English:
-theorem nth_of_forall
-  given: {n : Nat} (hp : forall n' <= n, p n')
-  statement: nth p n = n
-  proof: by
-  classical nth_rw 1 [← count_of_forall (hp · ·.le), nth_count (hp n le_rfl)]
-
-中文:
-定理 nth_of_对任意
-  条件: {n : 自然数} (hp : 对任意 n' <= n, p n')
-  结论: nth p n = n
-  证明: by
-  classical nth_rw 1 [← count_of_forall (hp · ·.le), nth_count (hp n le_rfl)]
-
-Depends on / 依赖: classical, count_of_forall, le_rfl, nth_count, nth_rw
+/-
+**Nat.nth_of_forall** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_of_forall {n : Nat} (hp : forall n' <= n, p n') : nth p n = n
+参数：hp : forall n' <= n, p n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.count_of_forall`：∀ {p : ℕ → Prop} [inst : DecidablePred p] {n : ℕ}, 
+(∀ n' < n, p n') → Nat.count p n = n
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.nth_count`：nth_count {n : Nat} (hpn : p n) : nth p (count p n) = n
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem nth_of_forall {n : Nat} (hp : forall n' <= n, p n') : nth p n = n := by
+theorem nth_of_forall {n : ℕ} (hp : ∀ n' ≤ n, p n') : nth p n = n := by
   classical nth_rw 1 [← count_of_forall (hp · ·.le), nth_count (hp n le_rfl)]
-
-/--
-theorem `nth_true` / 定理 `nth_true`
-
-English:
-theorem nth_true
-  given: (n : Nat)
-  statement: nth (fun _ => True) n = n
-  proof: nth_of_forall fun _ _ => trivial
-
-中文:
-定理 nth_true
-  条件: (n : 自然数)
-  结论: nth (fun _ => 真) n = n
-  证明: nth_of_forall fun _ _ => trivial
+/-
+**Nat.nth_true** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (n : ℕ), Nat.nth (fun x => True) n = n
+参数：n : ℕ；fun x => True。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_of_forall`：nth_of_forall {n : Nat} (hp : forall n' <= n, p n') :
+ nth p n = n
+· 使用定理 `trivial`：True
 -/
-@[simp] theorem nth_true (n : Nat) : nth (fun _ => True) n = n := nth_of_forall fun _ _ => trivial
-
-/--
-theorem `nth_of_forall_not` / 定理 `nth_of_forall_not`
-
-English:
-theorem nth_of_forall_not
-  given: {n : Nat} (hp : forall n' >= n, ¬p n')
-  statement: nth p n = 0
-  proof: by
-  have : Set.ofPred p subseteq Finset.range n := by
+@[simp] theorem nth_true (n : ℕ) : nth (fun _ ↦ True) n = n := nth_of_forall fun _ _ ↦ trivial
+/-
+**Nat.nth_of_forall_not** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：nth_of_forall_not {n : Nat} (hp : forall n' >= n, ¬p n') : nth p n = 0
+参数：hp : forall n' >= n, ¬p n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_range`：coe_range (n : Nat) : (range n : Set Nat) = Set.Iio n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `Nat.nth_of_card_le`：nth_of_card_le (hf : (Set.ofPred p).Finite) {n : Nat
+} (hn : #hf.toFinset <= n) : nth p n = 0
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Finite.toFinset_subset`：toFinset_subset {t : Finset α} : hs.toFinset
+ subseteq t ↔ s subseteq t
+· 使用定理 `Finset.card_range`：card_range (n : Nat) : #(range n) = n
+-/
+theorem nth_of_forall_not {n : ℕ} (hp : ∀ n' ≥ n, ¬p n') : nth p n = 0 := by
+  have : Set.ofPred p ⊆ Finset.range n := by
     intro n' hn'
     contrapose! hp
     exact ⟨n', by simpa using hp, Set.mem_ofPred.mp hn'⟩
   rw [nth_of_card_le ((finite_toSet _).subset this)]
   · refine (Finset.card_le_card ?_).trans_eq (Finset.card_range n)
     exact Set.Finite.toFinset_subset.mpr this
-
-中文:
-定理 nth_of_对任意_not
-  条件: {n : 自然数} (hp : 对任意 n' >= n, ¬p n')
-  结论: nth p n = 0
-  证明: by
-  have : Set.ofPred p subseteq Finset.range n := by
-    intro n' hn'
-    contrapose! hp
-    exact ⟨n', by simpa using hp, Set.mem_ofPred.mp hn'⟩
-  rw [nth_of_card_le ((finite_toSet _).subset this)]
-  · refine (Finset.card_le_card ?_).trans_eq (Finset.card_range n)
-    exact Set.Finite.toFinset_subset.mpr this
-
-Depends on / 依赖: Finite, Finset, Finset.card_le_card, Finset.card_range, Finset.range, Set.Finite.toFinset_subset.mpr, Set.mem_ofPred.mp, Set.ofPred, card_le_card, card_range, contrapose, finite_toSet, mem_ofPred, nth_of_card_le, ofPred, subset, subseteq, toFinset_subset, trans_eq
+/-
+**Nat.nth_false** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ (n : ℕ), Nat.nth (fun x => False) n = 0
+参数：n : ℕ；fun x => False。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.nth_of_forall_not`：nth_of_forall_not {n : Nat} (hp : forall n' >= n,
+ ¬p n') : nth p n = 0
 -/
-theorem nth_of_forall_not {n : Nat} (hp : forall n' >= n, ¬p n') : nth p n = 0 := by
-  have : Set.ofPred p subseteq Finset.range n := by
-    intro n' hn'
-    contrapose! hp
-    exact ⟨n', by simpa using hp, Set.mem_ofPred.mp hn'⟩
-  rw [nth_of_card_le ((finite_toSet _).subset this)]
-  · refine (Finset.card_le_card ?_).trans_eq (Finset.card_range n)
-    exact Set.Finite.toFinset_subset.mpr this
-
-/--
-theorem `nth_false` / 定理 `nth_false`
-
-English:
-theorem nth_false
-  given: (n : Nat)
-  statement: nth (fun _ => False) n = 0
-  proof: nth_of_forall_not fun _ _ => id
-
-中文:
-定理 nth_false
-  条件: (n : 自然数)
-  结论: nth (fun _ => 假) n = 0
-  证明: nth_of_forall_not fun _ _ => id
--/
-@[simp] theorem nth_false (n : Nat) : nth (fun _ => False) n = 0 := nth_of_forall_not fun _ _ => id
+@[simp] theorem nth_false (n : ℕ) : nth (fun _ ↦ False) n = 0 := nth_of_forall_not fun _ _ ↦ id
 
 end Nat
+

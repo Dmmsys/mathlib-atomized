@@ -18,24 +18,24 @@ namespace Mathlib.Tactic.ClickSuggestions
 
 open Lean Meta Mathlib.Tactic ProofWidgets Jsx
 
-/--
-Definition of `GrwPos` / `GrwPos` 的定义
+/-- `GRewritePos` contains the ìnformation about a given subexpression position needed for
+applying a  `grw` lemma. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.GrwPos** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tact
+ic.ClickSuggestions`。
+形式化陈述：GrwPos where /-- The name of the relation. -/ relName : Name /-- The expre
+ssion of the relation. -/ relation : Expr /-- `symm` is `none` if the given rela
+tions are symmetric. `symm` is `true` when you can only rewrite from right to le
+ft. -/ symm? : Option Bool  /-- Given the relation for grewriting at the given p
+osition, figure out all of the subrelations that could also be used. -/ private 
+def gcongrBackward (relName : Name) (relation : Expr) (symm : Bool) : MetaM (Arr
+ay GrwPos)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GrwPos
-  parameters: where
-  axioms and operations (3):
-    - relName : Name
-    - relation : Expr
-    - symm? : Option Bool
-
-中文:
-结构 GrwPos
-  参数: where
-  公理与运算 (3 个):
-    - relName : Name
-    - relation : Expr
-    - symm? : 选项类型 布尔值
+--- 原说明 ---
+`GRewritePos` contains the ìnformation about a given subexpression position need
+ed for
+applying a  `grw` lemma.
 -/
 structure GrwPos where
   /-- The name of the relation. -/
@@ -46,88 +46,16 @@ structure GrwPos where
   `symm` is `true` when you can only rewrite from right to left. -/
   symm? : Option Bool
 
-/--
-Definition of `gcongrBackward` / `gcongrBackward` 的定义
+/-- Given the relation for grewriting at the given position, figure out all of the
+subrelations that could also be used. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.gcongrBackward** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gcongrBackward
-  signature: (relName : Name) (relation : Expr) (symm : Bool)
-  body: do
-  let type ← inferType relation
-  let α ← mkFreshTypeMVar
-  unless ← isDefEq type (.forallE `_ α (.forallE `_ α (.sort 0) .default) .default) do
-    throwError "invalid relation {relation}"
-  let α ← instantiateMVars α
-  let u ← getDecLevel α
-  withLocalDeclD `a α fun a => do
-  withLocalDeclD `b α fun b => do
-  withNewMCtxDepth do
-  let mut result : Array GrwPos := #[]
-  -- Any relation `r` can be proved from `AntisymmRel r`, so we add this as a possible relation
-  if (← getEnv).contains `AntisymmRel then
-    let antiSymm := mkApp2 (.const `AntisymmRel [u]) α relation
-    result := result.push { relName := `AntisymmRel, relation := antiSymm, symm? := none }
-  -- If `relName` is symmetric, then include the reverse as a possible relation (`symm? := none`)
-  let symm? ← try
-    let dummyVar ← mkFreshExprMVar (mkApp2 relation a b)
-    if let mkApp2 relation' b' a' ← inferType (← dummyVar.applySymm) then
-      if relation' == relation && b == b' && a == a' then
-        pure none
-      else
-        pure symm
-    else
-      pure symm
-    catch _ => pure symm
-  result := result.push { relName, relation, symm? }
-  -- For `≤`, we add the relation `<`.
-  if relName == ``LE.le then
-    if (← getEnv).contains `le_of_lt then
-      let (mvars, _, le) ←
-        forallMetaTelescope (← inferType (← mkConstWithFreshMVarLevels `le_of_lt))
-      if ← isDefEq le.appFn!.appFn! relation then
-        let lt ← instantiateMVars (← inferType mvars.back!).appFn!.appFn!
-        result := result.push { relName := ``LT.lt, relation := lt, symm? := symm }
-  return result
-
-中文:
-定义 gcongrBackward
-  签名: (relName : Name) (relation : Expr) (symm : 布尔值)
-  定义体: do
-  let type ← inferType relation
-  let α ← mkFreshTypeMVar
-  unless ← isDefEq type (.forallE `_ α (.forallE `_ α (.sort 0) .default) .default) do
-    throwError "invalid relation {relation}"
-  let α ← instantiateMVars α
-  let u ← getDecLevel α
-  withLocalDeclD `a α fun a => do
-  withLocalDeclD `b α fun b => do
-  withNewMCtxDepth do
-  let mut result : Array GrwPos := #[]
-  -- Any relation `r` can be proved from `AntisymmRel r`, so we add this as a possible relation
-  if (← getEnv).contains `AntisymmRel then
-    let antiSymm := mkApp2 (.const `AntisymmRel [u]) α relation
-    result := result.push { relName := `AntisymmRel, relation := antiSymm, symm? := none }
-  -- If `relName` is symmetric, then include the reverse as a possible relation (`symm? := none`)
-  let symm? ← try
-    let dummyVar ← mkFreshExprMVar (mkApp2 relation a b)
-    if let mkApp2 relation' b' a' ← inferType (← dummyVar.applySymm) then
-      if relation' == relation && b == b' && a == a' then
-        pure none
-      else
-        pure symm
-    else
-      pure symm
-    catch _ => pure symm
-  result := result.push { relName, relation, symm? }
-  -- For `≤`, we add the relation `<`.
-  if relName == ``LE.le then
-    if (← getEnv).contains `le_of_lt then
-      let (mvars, _, le) ←
-        forallMetaTelescope (← inferType (← mkConstWithFreshMVarLevels `le_of_lt))
-      if ← isDefEq le.appFn!.appFn! relation then
-        let lt ← instantiateMVars (← inferType mvars.back!).appFn!.appFn!
-        result := result.push { relName := ``LT.lt, relation := lt, symm? := symm }
-  return result
+--- 原说明 ---
+Given the relation for grewriting at the given position, figure out all of the
+subrelations that could also be used.
 -/
 private def gcongrBackward (relName : Name) (relation : Expr) (symm : Bool) :
     MetaM (Array GrwPos) := do
@@ -137,8 +65,8 @@ private def gcongrBackward (relName : Name) (relation : Expr) (symm : Bool) :
     throwError "invalid relation {relation}"
   let α ← instantiateMVars α
   let u ← getDecLevel α
-  withLocalDeclD `a α fun a => do
-  withLocalDeclD `b α fun b => do
+  withLocalDeclD `a α fun a ↦ do
+  withLocalDeclD `b α fun b ↦ do
   withNewMCtxDepth do
   let mut result : Array GrwPos := #[]
   -- Any relation `r` can be proved from `AntisymmRel r`, so we add this as a possible relation
@@ -167,44 +95,27 @@ private def gcongrBackward (relName : Name) (relation : Expr) (symm : Bool) :
         result := result.push { relName := ``LT.lt, relation := lt, symm? := symm }
   return result
 
-/--
-Definition of `dummyDischarger` / `dummyDischarger` 的定义
+/-- This function is passed to `MVarId.gcongr` as the main discharger.
+It doesn't try to prove the goal, but instead observes what the goal is,
+to help determine which lemmas could work with `grw`.
 
-English:
-definition dummyDischarger
-  signature: (ref : IO.Ref (Array GrwPos)) (hyp? : Bool) (fvar : Expr)
-  body: do
-  let e ← instantiateMVars (← goal.getType)
-  let mkApp2 relation lhs rhs := e | throwError "`{e}` is not a relation"
-  let .const relName _ := relation.getAppFn | throwError "{e} is not a relation"
-  if relName matches ``Eq | ``Iff then throwError "{e} is not a generalized relation"
-  let symm ←
-    if lhs.cleanupAnnotations == fvar then
-      pure hyp?
-    else if rhs.cleanupAnnotations == fvar then
-      pure !hyp?
-    else
-      throwError "{e} doesn't have {fvar} on either side"
-  ref.set (← gcongrBackward relName relation symm)
-throw .error default "dummyError"
+If the selected grewrite position is valid, then `ref` is set, and a dummy error is thrown.
+Note that this function will be called at most once,
+so we don't lose information by throwing an error. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.dummyDischarger** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 dummyDischarger
-  签名: (ref : IO.Ref (数组 GrwPos)) (hyp? : 布尔值) (fvar : Expr)
-  定义体: do
-  let e ← instantiateMVars (← goal.getType)
-  let mkApp2 relation lhs rhs := e | throwError "`{e}` is not a relation"
-  let .const relName _ := relation.getAppFn | throwError "{e} is not a relation"
-  if relName matches ``Eq | ``Iff then throwError "{e} is not a generalized relation"
-  let symm ←
-    if lhs.cleanupAnnotations == fvar then
-      pure hyp?
-    else if rhs.cleanupAnnotations == fvar then
-      pure !hyp?
-    else
-      throwError "{e} doesn't have {fvar} on either side"
-  ref.set (← gcongrBackward relName relation symm)
-throw .error default "dummyError"
+--- 原说明 ---
+This function is passed to `MVarId.gcongr` as the main discharger.
+It doesn't try to prove the goal, but instead observes what the goal is,
+to help determine which lemmas could work with `grw`.
+
+If the selected grewrite position is valid, then `ref` is set, and a dummy error
+ is thrown.
+Note that this function will be called at most once,
+so we don't lose information by throwing an error.
 -/
 private def dummyDischarger (ref : IO.Ref (Array GrwPos)) (hyp? : Bool) (fvar : Expr)
     (goal : MVarId) : MetaM Bool := do
@@ -220,56 +131,21 @@ private def dummyDischarger (ref : IO.Ref (Array GrwPos)) (hyp? : Bool) (fvar : 
     else
       throwError "{e} doesn't have {fvar} on either side"
   ref.set (← gcongrBackward relName relation symm)
-throw .error default "dummyError"
+  throw <| .error default "dummyError"
 
-/--
-Definition of `getGrwPos?` / `getGrwPos?` 的定义
+/-- Determine possible ways in which a `grw` call could rewrite at the given subexpression. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.getGrwPos** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.ClickSuggestions`。
+形式化陈述：getGrwPos? (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : Bool) : M
+etaM (Array GrwPos)
+参数：rootExpr subExpr : Expr；pos : SubExpr.Pos；hyp? : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getGrwPos?
-  signature: (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : Bool)
-  body: do
-  withLocalDeclD `_a (← inferType subExpr) fun fvar => do
-  let root' ← replaceSubexpr (fun _ => pure (GCongr.mkHoleAnnotation fvar)) pos rootExpr
-  let imp := Expr.forallE `_a rootExpr root' .default
-  let dummyGoal ← mkFreshExprMVar imp
-  let ref ← IO.mkRef #[]
-  try
-.run (mainGoalDischarger := dummyDischarger ref hyp? fvar) _ ← dummyGoal.mvarId!.gcongr false
-    return #[]
-  catch ex =>
-    if (← ex.toMessageData.toString) != "dummyError" then
-      return #[]
-  let result ← ref.get
-  /- I doubt that this can come up in practice, but we check anyways that the relation
-  that was found doesn't contain any free variables that are now out of scope. -/
-  for { relation, .. } in result do
-    unless (collectFVars {} relation).fvarIds.all (← getLCtx).contains do
-      return #[]
-  return result
-
-中文:
-定义 getGrwPos?
-  签名: (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : 布尔值)
-  定义体: do
-  withLocalDeclD `_a (← inferType subExpr) fun fvar => do
-  let root' ← replaceSubexpr (fun _ => pure (GCongr.mkHoleAnnotation fvar)) pos rootExpr
-  let imp := Expr.forallE `_a rootExpr root' .default
-  let dummyGoal ← mkFreshExprMVar imp
-  let ref ← IO.mkRef #[]
-  try
-.run (mainGoalDischarger := dummyDischarger ref hyp? fvar) _ ← dummyGoal.mvarId!.gcongr false
-    return #[]
-  catch ex =>
-    if (← ex.toMessageData.toString) != "dummyError" then
-      return #[]
-  let result ← ref.get
-  /- I doubt that this can come up in practice, but we check anyways that the relation
-  that was found doesn't contain any free variables that are now out of scope. -/
-  for { relation, .. } in result do
-    unless (collectFVars {} relation).fvarIds.all (← getLCtx).contains do
-      return #[]
-  return result
+--- 原说明 ---
+Determine possible ways in which a `grw` call could rewrite at the given subexpr
+ession.
 -/
 def getGrwPos? (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : Bool) :
     MetaM (Array GrwPos) := do
@@ -279,7 +155,7 @@ def getGrwPos? (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : Bool) :
   let dummyGoal ← mkFreshExprMVar imp
   let ref ← IO.mkRef #[]
   try
-.run (mainGoalDischarger := dummyDischarger ref hyp? fvar) _ ← dummyGoal.mvarId!.gcongr false
+    _ ← dummyGoal.mvarId!.gcongr false |>.run (mainGoalDischarger := dummyDischarger ref hyp? fvar)
     return #[]
   catch ex =>
     if (← ex.toMessageData.toString) != "dummyError" then
@@ -293,24 +169,15 @@ def getGrwPos? (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : Bool) :
   return result
 
 
-/--
-Definition of `GrwLemma` / `GrwLemma` 的定义
+/-- The structure for rewrite lemmas stored in the `RefinedDiscrTree`. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.GrwLemma** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.
+Tactic.ClickSuggestions`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GrwLemma
-  parameters: where
-  axioms and operations (3):
-    - name : Premise
-    - symm : Bool
-    - relName : Name
-
-中文:
-结构 GrwLemma
-  参数: where
-  公理与运算 (3 个):
-    - name : Premise
-    - symm : 布尔值
-    - relName : Name
+--- 原说明 ---
+The structure for rewrite lemmas stored in the `RefinedDiscrTree`.
 -/
 structure GrwLemma where
   /-- The lemma -/
@@ -320,28 +187,15 @@ structure GrwLemma where
   /-- `relName` is the relation of the lemma. -/
   relName : Name
 
-/--
-Definition of `GrwInfo` / `GrwInfo` 的定义
+/-- The information needed for doing a grewrite. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.GrwInfo** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.T
+actic.ClickSuggestions`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GrwInfo
-  parameters: where
-  axioms and operations (5):
-    - rootExpr : Expr
-    - subExpr : Expr
-    - rflTarget? : Option Expr
-    - gpos : Array GrwPos
-    - rwKind : RwKind
-
-中文:
-结构 GrwInfo
-  参数: where
-  公理与运算 (5 个):
-    - rootExpr : Expr
-    - subExpr : Expr
-    - rflTarget? : 选项类型 Expr
-    - gpos : 数组 GrwPos
-    - rwKind : RwKind
+--- 原说明 ---
+The information needed for doing a grewrite.
 -/
 structure GrwInfo where
   /-- The outer expression in which the rewrite takes place. -/
@@ -355,28 +209,15 @@ structure GrwInfo where
   /-- Some information about the rewrite position. -/
   rwKind : RwKind
 
-/--
-Definition of `GrwKey` / `GrwKey` 的定义
+/-- The key that is used for sorting and deduplicating `grw` lemmas. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.GrwKey** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Ta
+ctic.ClickSuggestions`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GrwKey
-  parameters: where
-  axioms and operations (5):
-    - numGoals : Nat
-    - nameLength : Nat
-    - replacementSize : Nat
-    - name : String
-    - replacement : AbstractMVarsResult
-
-中文:
-结构 GrwKey
-  参数: where
-  公理与运算 (5 个):
-    - numGoals : 自然数
-    - nameLength : 自然数
-    - replacementSize : 自然数
-    - name : String
-    - replacement : AbstractMVarsResult
+--- 原说明 ---
+The key that is used for sorting and deduplicating `grw` lemmas.
 -/
 structure GrwKey where
   /-- The number of side goals created. -/
@@ -393,78 +234,45 @@ structure GrwKey where
   /-- The new subexpression. -/
   replacement : AbstractMVarsResult
 deriving Inhabited
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Ord GrwKey
-  body: (compare a.1 b.1).then
-(compare a.2 b.2).then
-(compare a.3 b.3).then
-    (compare a.4 b.4)
-
-中文:
-实例 :
-  签名: 序 GrwKey
-  定义体: (compare a.1 b.1).then
-(compare a.2 b.2).then
-(compare a.3 b.3).then
-    (compare a.4 b.4)
-
-Depends on / 依赖: compare
+/-
+**Mathlib.Tactic.ClickSuggestions.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Cli
+ckSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Ord GrwKey where
   compare a b :=
-(compare a.1 b.1).then
-(compare a.2 b.2).then
-(compare a.3 b.3).then
+    (compare a.1 b.1).then <|
+    (compare a.2 b.2).then <|
+    (compare a.3 b.3).then <|
     (compare a.4 b.4)
 
-/--
-Definition of `GrwKey.isDuplicate` / `GrwKey.isDuplicate` 的定义
+/-- Whether the two suggestions are duplicates of each other. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.GrwKey.isDuplicate** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.ClickSuggestions.GrwKey`。
+形式化陈述：Mathlib.Tactic.ClickSuggestions.GrwKey → Mathlib.Tactic.ClickSuggestions.G
+rwKey → MetaM Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GrwKey.isDuplicate
-  signature: (a b : GrwKey)
-  body: pure (a.replacement.mvars.size == b.replacement.mvars.size)
-    <&&> isExplicitEq a.replacement.expr b.replacement.expr
-
-中文:
-定义 GrwKey.isDuplicate
-  签名: (a b : GrwKey)
-  定义体: pure (a.replacement.mvars.size == b.replacement.mvars.size)
-    <&&> isExplicitEq a.replacement.expr b.replacement.expr
-
-Depends on / 依赖: a.replacement.expr, a.replacement.mvars.size, b.replacement.expr, b.replacement.mvars.size, isExplicitEq, replacement
+--- 原说明 ---
+Whether the two suggestions are duplicates of each other.
 -/
 def GrwKey.isDuplicate (a b : GrwKey) : MetaM Bool :=
   pure (a.replacement.mvars.size == b.replacement.mvars.size)
     <&&> isExplicitEq a.replacement.expr b.replacement.expr
 
-/--
-Definition of `tacticSyntax` / `tacticSyntax` 的定义
+/-- Return the rewrite tactic that performs the rewrite. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.tacticSyntax** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.ClickSuggestions`。
+形式化陈述：tacticSyntax (e eNew : Expr) (rwKind : RwKind) : ClickSuggestionsM (TSynta
+x `tactic)
+参数：e eNew : Expr；rwKind : RwKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tacticSyntax
-  signature: (lem : GrwLemma) (i : GrwInfo) (proof : Expr) (justLemmaName : Bool)
-  body: do
-  let proof ← if justLemmaName then
-      `(term| $(mkIdent <| ← lem.name.unresolveName))
-    else
-      withOptions (pp.mvars.set · false) (PrettyPrinter.delab proof)
-  mkRewrite i.rwKind lem.symm proof (← getHypIdent?) (grw := true)
-
-中文:
-定义 tacticSyntax
-  签名: (lem : GrwLemma) (i : GrwInfo) (proof : Expr) (justLemmaName : 布尔值)
-  定义体: do
-  let proof ← if justLemmaName then
-      `(term| $(mkIdent <| ← lem.name.unresolveName))
-    else
-      withOptions (pp.mvars.set · false) (PrettyPrinter.delab proof)
-  mkRewrite i.rwKind lem.symm proof (← getHypIdent?) (grw := true)
+--- 原说明 ---
+Return the rewrite tactic that performs the rewrite.
 -/
 private def tacticSyntax (lem : GrwLemma) (i : GrwInfo) (proof : Expr) (justLemmaName : Bool) :
     ClickSuggestionsM (TSyntax `tactic) := do
@@ -474,156 +282,29 @@ private def tacticSyntax (lem : GrwLemma) (i : GrwInfo) (proof : Expr) (justLemm
       withOptions (pp.mvars.set · false) (PrettyPrinter.delab proof)
   mkRewrite i.rwKind lem.symm proof (← getHypIdent?) (grw := true)
 
-/--
-Definition of `GrwLemma.try` / `GrwLemma.try` 的定义
+/-- Generate the suggestion for rewriting with `lem`. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.GrwLemma.try** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.ClickSuggestions.GrwLemma`。
+形式化陈述：Mathlib.Tactic.ClickSuggestions.GrwInfo →   Mathlib.Tactic.ClickSuggestion
+s.GrwLemma →     Mathlib.Tactic.ClickSuggestions.ClickSuggestionsM       (Mathli
+b.Tactic.ClickSuggestions.Result Mathlib.Tactic.ClickSuggestions.GrwKey)
+参数：Mathlib.Tactic.ClickSuggestions.Result Mathlib.Tactic.ClickSuggestions.GrwKey
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GrwLemma.try
-  signature: (i : GrwInfo) (lem : GrwLemma)
-  body: do
-  withNewMCtxDepth do
-  let mctx ← getMCtx
-  (·.getDM do throwError "no suitable `grw` relation was found") =<< i.gpos.findSomeM? fun pos => do
-  unless lem.relName == pos.relName && pos.symm?.all (· == lem.symm) do return none
-  let (proof, mvars, binderInfos, rel) ← lem.name.forallMetaTelescopeReducing
-  let mkApp2 rel lhs rhs := rel.cleanupAnnotations | return none
-  unless ← isDefEq rel pos.relation do setMCtx mctx; return none
-some < > do
-  let e := i.subExpr
-  let (lhs, rhs) := if lem.symm then (rhs, lhs) else (lhs, rhs)
-  let lhsOrig := lhs; let mctxOrig ← getMCtx
-  unless ← isDefEq e lhs do
-    throwError "{lhs} does not unify with {e}"
-  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
-  let lhs ← instantiateMVars lhs
-  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
-    throwError "{lhs} and {e} do not match according to the head-constant indexing"
-  synthAppInstances `click_suggestions default mvars binderInfos false false
-  let mut extraGoals := #[]
-  for mvar in mvars do
-    unless ← mvar.mvarId!.isAssigned do
-      extraGoals := extraGoals.push (← instantiateMVars (← inferType mvar))
-
-  let replacement ← instantiateMVars rhs
-  let makesNewMVars :=
-    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
-    extraGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
-  let proof ← instantiateMVars proof
-  let isRefl ← isExplicitEq e replacement
-  let justLemmaName ←
-    if i.rwKind matches .hasBVars then pure true
-    else withMCtx mctxOrig do kabstractFindsPositions i.rootExpr lhsOrig (← read).pos
-  let key := {
-    numGoals := extraGoals.size
-    nameLength := lem.name.length
-    replacementSize := (← ppExpr replacement).pretty.length
-    name := lem.name.toString
-    replacement := ← abstractMVars replacement
-  }
-  let tactic ← tacticSyntax lem i proof justLemmaName
-  let isClosing ← (do
-    if extraGoals.isEmpty then
-      if let some rflTarget := i.rflTarget? then
-return ← withoutModifyingMCtx isDefEq replacement rflTarget
-    return false)
-  if isClosing then
-    addSolvedSuggestion tactic
-  let mut htmls := #[← exprToHtml replacement]
-  for goal in extraGoals do
-    htmls := htmls.push
-      <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
-  let filtered ←
-    if !isRefl && !makesNewMVars then
-some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
-    else
-      pure none
-  htmls := htmls.push <div> {← lem.name.toHtml} </div>
-  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
-  let pattern ← do
-    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
-    let mkApp2 _ lhs rhs := (← instantiateMVars e).cleanupAnnotations
-      | throwError "Expected relation, not {indentExpr e}"
-exprToHtml if lem.symm then rhs else lhs
-  return { filtered, unfiltered, key, pattern }
-
-中文:
-定义 GrwLemma.try
-  签名: (i : GrwInfo) (lem : GrwLemma)
-  定义体: do
-  withNewMCtxDepth do
-  let mctx ← getMCtx
-  (·.getDM do throwError "no suitable `grw` relation was found") =<< i.gpos.findSomeM? fun pos => do
-  unless lem.relName == pos.relName && pos.symm?.all (· == lem.symm) do return none
-  let (proof, mvars, binderInfos, rel) ← lem.name.forallMetaTelescopeReducing
-  let mkApp2 rel lhs rhs := rel.cleanupAnnotations | return none
-  unless ← isDefEq rel pos.relation do setMCtx mctx; return none
-some < > do
-  let e := i.subExpr
-  let (lhs, rhs) := if lem.symm then (rhs, lhs) else (lhs, rhs)
-  let lhsOrig := lhs; let mctxOrig ← getMCtx
-  unless ← isDefEq e lhs do
-    throwError "{lhs} does not unify with {e}"
-  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
-  let lhs ← instantiateMVars lhs
-  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
-    throwError "{lhs} and {e} do not match according to the head-constant indexing"
-  synthAppInstances `click_suggestions default mvars binderInfos false false
-  let mut extraGoals := #[]
-  for mvar in mvars do
-    unless ← mvar.mvarId!.isAssigned do
-      extraGoals := extraGoals.push (← instantiateMVars (← inferType mvar))
-
-  let replacement ← instantiateMVars rhs
-  let makesNewMVars :=
-    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
-    extraGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
-  let proof ← instantiateMVars proof
-  let isRefl ← isExplicitEq e replacement
-  let justLemmaName ←
-    if i.rwKind matches .hasBVars then pure true
-    else withMCtx mctxOrig do kabstractFindsPositions i.rootExpr lhsOrig (← read).pos
-  let key := {
-    numGoals := extraGoals.size
-    nameLength := lem.name.length
-    replacementSize := (← ppExpr replacement).pretty.length
-    name := lem.name.toString
-    replacement := ← abstractMVars replacement
-  }
-  let tactic ← tacticSyntax lem i proof justLemmaName
-  let isClosing ← (do
-    if extraGoals.isEmpty then
-      if let some rflTarget := i.rflTarget? then
-return ← withoutModifyingMCtx isDefEq replacement rflTarget
-    return false)
-  if isClosing then
-    addSolvedSuggestion tactic
-  let mut htmls := #[← exprToHtml replacement]
-  for goal in extraGoals do
-    htmls := htmls.push
-      <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
-  let filtered ←
-    if !isRefl && !makesNewMVars then
-some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
-    else
-      pure none
-  htmls := htmls.push <div> {← lem.name.toHtml} </div>
-  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
-  let pattern ← do
-    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
-    let mkApp2 _ lhs rhs := (← instantiateMVars e).cleanupAnnotations
-      | throwError "Expected relation, not {indentExpr e}"
-exprToHtml if lem.symm then rhs else lhs
-  return { filtered, unfiltered, key, pattern }
+--- 原说明 ---
+Generate the suggestion for rewriting with `lem`.
 -/
 def GrwLemma.try (i : GrwInfo) (lem : GrwLemma) : ClickSuggestionsM (Result GrwKey) := do
   withNewMCtxDepth do
   let mctx ← getMCtx
-  (·.getDM do throwError "no suitable `grw` relation was found") =<< i.gpos.findSomeM? fun pos => do
+  (·.getDM do throwError "no suitable `grw` relation was found") =<< i.gpos.findSomeM? fun pos ↦ do
   unless lem.relName == pos.relName && pos.symm?.all (· == lem.symm) do return none
   let (proof, mvars, binderInfos, rel) ← lem.name.forallMetaTelescopeReducing
   let mkApp2 rel lhs rhs := rel.cleanupAnnotations | return none
   unless ← isDefEq rel pos.relation do setMCtx mctx; return none
-some < > do
+  some <$> do
   let e := i.subExpr
   let (lhs, rhs) := if lem.symm then (rhs, lhs) else (lhs, rhs)
   let lhsOrig := lhs; let mctxOrig ← getMCtx
@@ -642,7 +323,7 @@ some < > do
   let replacement ← instantiateMVars rhs
   let makesNewMVars :=
     (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
-    extraGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+    extraGoals.any fun goal ↦ (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
   let proof ← instantiateMVars proof
   let isRefl ← isExplicitEq e replacement
   let justLemmaName ←
@@ -659,7 +340,7 @@ some < > do
   let isClosing ← (do
     if extraGoals.isEmpty then
       if let some rflTarget := i.rflTarget? then
-return ← withoutModifyingMCtx isDefEq replacement rflTarget
+        return ← withoutModifyingMCtx <| isDefEq replacement rflTarget
     return false)
   if isClosing then
     addSolvedSuggestion tactic
@@ -669,7 +350,7 @@ return ← withoutModifyingMCtx isDefEq replacement rflTarget
       <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
   let filtered ←
     if !isRefl && !makesNewMVars then
-some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+      some <$> mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
     else
       pure none
   htmls := htmls.push <div> {← lem.name.toHtml} </div>
@@ -678,7 +359,8 @@ some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
     let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
     let mkApp2 _ lhs rhs := (← instantiateMVars e).cleanupAnnotations
       | throwError "Expected relation, not {indentExpr e}"
-exprToHtml if lem.symm then rhs else lhs
+    exprToHtml <| if lem.symm then rhs else lhs
   return { filtered, unfiltered, key, pattern }
 
 end Mathlib.Tactic.ClickSuggestions
+

@@ -24,48 +24,21 @@ variable (e : α ≃ β)
 
 -- See note [instance transfer via equivalence]
 variable (R) in
-/--
-Definition of `algebra` / `algebra` 的定义
+/-- Transfer `Algebra` across an `Equiv` -/
+/-
+**Equiv.algebra** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：(R : Type u_1) →   {α : Type u_2} →     {β : Type u_3} →       [inst : Com
+mSemiring R] →         (e : α ≃ β) →           [inst_1 : Semiring β] →          
+   have x := e.semiring;             [Algebra R β] → Algebra R α
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation algebra
-  signature: (e : α ≃ β) [Semiring β]
-  body: Equiv.semiring e
-    forall [Algebra R β], Algebra R α := fast_instance%
-  letI := Equiv.semiring e
-  letI := e.smul R
-  { algebraMap :=
-    { toFun r := e.invFun (algebraMap R β r)
-      __ := e.ringEquiv.symm.toRingHom.comp (algebraMap R β) }
-    commutes' r x :=
-      show e.symm ((e (e.symm (algebraMap R β r)) * e x)) =
-          e.symm (e x * e (e.symm (algebraMap R β r))) by
-        simp [Algebra.commutes]
-    smul_def' r x :=
-      show e.symm (r • e x) = e.symm (e (e.symm (algebraMap R β r)) * e x) by
-        simp [Algebra.smul_def] }
-
-中文:
-缩写 algebra
-  签名: (e : α ≃ β) [半环 β]
-  定义体: Equiv.semiring e
-    forall [Algebra R β], Algebra R α := fast_instance%
-  letI := Equiv.semiring e
-  letI := e.smul R
-  { algebraMap :=
-    { toFun r := e.invFun (algebraMap R β r)
-      __ := e.ringEquiv.symm.toRingHom.comp (algebraMap R β) }
-    commutes' r x :=
-      show e.symm ((e (e.symm (algebraMap R β r)) * e x)) =
-          e.symm (e x * e (e.symm (algebraMap R β r))) by
-        simp [Algebra.commutes]
-    smul_def' r x :=
-      show e.symm (r • e x) = e.symm (e (e.symm (algebraMap R β r)) * e x) by
-        simp [Algebra.smul_def] }
+--- 原说明 ---
+Transfer `Algebra` across an `Equiv`
 -/
 protected abbrev algebra (e : α ≃ β) [Semiring β] :
     let _ := Equiv.semiring e
-    forall [Algebra R β], Algebra R α := fast_instance%
+    ∀ [Algebra R β], Algebra R α := fast_instance%
   letI := Equiv.semiring e
   letI := e.smul R
   { algebraMap :=
@@ -78,25 +51,12 @@ protected abbrev algebra (e : α ≃ β) [Semiring β] :
     smul_def' r x :=
       show e.symm (r • e x) = e.symm (e (e.symm (algebraMap R β r)) * e x) by
         simp [Algebra.smul_def] }
-
-/--
-lemma `algebraMap_def` / 引理 `algebraMap_def`
-
-English:
-lemma algebraMap_def
-  given: (e : α ≃ β) [Semiring β] [Algebra R β] (r : R)
-  proof: Equiv.semiring e
-    letI := Equiv.algebra R e
-    algebraMap R α r = e.symm (algebraMap R β r) := rfl
-
-中文:
-引理 algebraMap_def
-  条件: (e : α ≃ β) [半环 β] [代数 R β] (r : R)
-  证明: Equiv.semiring e
-    letI := Equiv.algebra R e
-    algebraMap R α r = e.symm (algebraMap R β r) := rfl
-
-Depends on / 依赖: Equiv.semiring, semiring
+/-
+**Equiv.algebraMap_def** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：algebraMap_def (e : α ≃ β) [Semiring β] [Algebra R β] (r : R) : letI
+参数：e : α ≃ β；r : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma algebraMap_def (e : α ≃ β) [Semiring β] [Algebra R β] (r : R) :
     letI := Equiv.semiring e
@@ -104,42 +64,20 @@ lemma algebraMap_def (e : α ≃ β) [Semiring β] [Algebra R β] (r : R) :
     algebraMap R α r = e.symm (algebraMap R β r) := rfl
 
 variable (R) in
-/--
-Definition of `algEquiv` / `algEquiv` 的定义
+/-- An equivalence `e : α ≃ β` gives an algebra equivalence `α ≃ₐ[R] β`
+where the `R`-algebra structure on `α` is
+the one obtained by transporting an `R`-algebra structure on `β` back along `e`. -/
+/-
+**Equiv.algEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：algEquiv (e : α ≃ β) [Semiring β] [Algebra R β] : by let semiring
+参数：e : α ≃ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algEquiv
-  signature: (e : α ≃ β) [Semiring β] [Algebra R β]
-  body: Equiv.semiring e
-    let algebra := Equiv.algebra R e
-    exact α ≃ₐ[R] β := by
-  intros
-  exact
-    { Equiv.ringEquiv e with
-      commutes' := fun r => by
-        apply e.symm.injective
-        simp only [RingEquiv.toEquiv_eq_coe, toFun_as_coe, EquivLike.coe_coe, ringEquiv_apply,
-          symm_apply_apply, algebraMap_def] }
-
-@[simp]
-
-中文:
-定义 algEquiv
-  签名: (e : α ≃ β) [半环 β] [代数 R β]
-  定义体: Equiv.semiring e
-    let algebra := Equiv.algebra R e
-    exact α ≃ₐ[R] β := by
-  intros
-  exact
-    { Equiv.ringEquiv e with
-      commutes' := fun r => by
-        apply e.symm.injective
-        simp only [RingEquiv.toEquiv_eq_coe, toFun_as_coe, EquivLike.coe_coe, ringEquiv_apply,
-          symm_apply_apply, algebraMap_def] }
-
-@[simp]
-
-Depends on / 依赖: Equiv.semiring, semiring
+--- 原说明 ---
+An equivalence `e : α ≃ β` gives an algebra equivalence `α ≃ₐ[R] β`
+where the `R`-algebra structure on `α` is
+the one obtained by transporting an `R`-algebra structure on `β` back along `e`.
 -/
 def algEquiv (e : α ≃ β) [Semiring β] [Algebra R β] : by
     let semiring := Equiv.semiring e
@@ -154,44 +92,23 @@ def algEquiv (e : α ≃ β) [Semiring β] [Algebra R β] : by
           symm_apply_apply, algebraMap_def] }
 
 @[simp]
-/--
-theorem `algEquiv_apply` / 定理 `algEquiv_apply`
-
-English:
-theorem algEquiv_apply
-  given: (e : α ≃ β) [Semiring β] [Algebra R β] (a : α)
-  statement: (algEquiv R e) a = e a
-  proof: rfl
-
-中文:
-定理 algEquiv_apply
-  条件: (e : α ≃ β) [半环 β] [代数 R β] (a : α)
-  结论: (algEquiv R e) a = e a
-  证明: rfl
+/-
+**Equiv.algEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：algEquiv_apply (e : α ≃ β) [Semiring β] [Algebra R β] (a : α) : (algEquiv 
+R e) a = e a
+参数：e : α ≃ β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algEquiv_apply (e : α ≃ β) [Semiring β] [Algebra R β] (a : α) : (algEquiv R e) a = e a :=
   rfl
-
-/--
-theorem `algEquiv_symm_apply` / 定理 `algEquiv_symm_apply`
-
-English:
-theorem algEquiv_symm_apply
-  given: (e : α ≃ β) [Semiring β] [Algebra R β] (b : β)
-  statement: by
-  proof: Equiv.semiring e
-    letI := Equiv.algebra R e
-    exact (algEquiv R e).symm b = e.symm b := rfl
-
-中文:
-定理 algEquiv_symm_apply
-  条件: (e : α ≃ β) [半环 β] [代数 R β] (b : β)
-  结论: by
-  证明: Equiv.semiring e
-    letI := Equiv.algebra R e
-    exact (algEquiv R e).symm b = e.symm b := rfl
-
-Depends on / 依赖: Equiv.semiring, semiring
+/-
+**Equiv.algEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：algEquiv_symm_apply (e : α ≃ β) [Semiring β] [Algebra R β] (b : β) : by le
+tI
+参数：e : α ≃ β；b : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algEquiv_symm_apply (e : α ≃ β) [Semiring β] [Algebra R β] (b : β) : by
     letI := Equiv.semiring e
@@ -199,3 +116,4 @@ theorem algEquiv_symm_apply (e : α ≃ β) [Semiring β] [Algebra R β] (b : β
     exact (algEquiv R e).symm b = e.symm b := rfl
 
 end Equiv
+

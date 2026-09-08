@@ -19,227 +19,157 @@ same as the one on `X`.
 
 open scoped ENNReal
 
-variable (p : Real>=0∞) (X : Type*) [MeasurableSpace X]
+variable (p : ℝ≥0∞) (X : Type*) [MeasurableSpace X]
 
 namespace WithLp
 
-/--
-Instance `measurableSpace` / 实例 `measurableSpace`
-
-English:
-instance measurableSpace
-  signature: : MeasurableSpace (WithLp p X)
-  body: MeasurableSpace.comap ofLp inferInstance
-
-@[fun_prop]
-
-中文:
-实例 measurableSpace
-  签名: : 可测空间 (WithLp p X)
-  定义体: MeasurableSpace.comap ofLp inferInstance
-
-@[fun_prop]
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap
+/-
+**WithLp.measurableSpace** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：measurableSpace : MeasurableSpace (WithLp p X)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance measurableSpace : MeasurableSpace (WithLp p X) :=
   MeasurableSpace.comap ofLp inferInstance
 
 @[fun_prop]
-/--
-lemma `measurable_ofLp` / 引理 `measurable_ofLp`
-
-English:
-lemma measurable_ofLp
-  statement: Measurable (@ofLp p X)
-  proof: comap_measurable _
-
-@[fun_prop]
-
-中文:
-引理 measurable_ofLp
-  结论: 可测 (@ofLp p X)
-  证明: comap_measurable _
-
-@[fun_prop]
-
-Depends on / 依赖: comap_measurable
+/-
+**WithLp.measurable_ofLp** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：measurable_ofLp : Measurable (@ofLp p X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comap_measurable`：comap_measurable {m : MeasurableSpace β} (f : α -> β) 
+: Measurable[m.comap f] f
 -/
 lemma measurable_ofLp : Measurable (@ofLp p X) := comap_measurable _
 
 @[fun_prop]
-/--
-lemma `measurable_toLp` / 引理 `measurable_toLp`
-
-English:
-lemma measurable_toLp
-  statement: Measurable (@toLp p X)
-  proof: fun s hs => by
-  obtain ⟨t, ht, rfl⟩ := hs
-  simpa [Set.preimage_preimage]
-
-中文:
-引理 measurable_toLp
-  结论: 可测 (@toLp p X)
-  证明: fun s hs => by
-  obtain ⟨t, ht, rfl⟩ := hs
-  simpa [Set.preimage_preimage]
-
-Depends on / 依赖: Set.preimage_preimage, preimage_preimage
+/-
+**WithLp.measurable_toLp** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：measurable_toLp : Measurable (@toLp p X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_preimage`：preimage_preimage {g : β -> γ} {f : α -> β} {s : 
+Set γ} : f ⁻¹' g ⁻¹' s = (fun x => g (f x)) ⁻¹' s
 -/
-lemma measurable_toLp : Measurable (@toLp p X) := fun s hs => by
+lemma measurable_toLp : Measurable (@toLp p X) := fun s hs ↦ by
   obtain ⟨t, ht, rfl⟩ := hs
   simpa [Set.preimage_preimage]
 
 variable (Y : Type*) [MeasurableSpace Y] [TopologicalSpace X] [TopologicalSpace Y]
   [BorelSpace X] [BorelSpace Y] [SecondCountableTopologyEither X Y]
-
-/--
-Instance `borelSpace` / 实例 `borelSpace`
-
-English:
-instance borelSpace
-  signature: : BorelSpace (WithLp p (X × Y)) where
-  body: by
-    rw [instProdTopologicalSpace]; rw [borel_comap]; rw [measurableSpace]; rw [BorelSpace.measurable_eq (α := X × Y)]
-
-中文:
-实例 borelSpace
-  签名: : Borel空间 (WithLp p (X × Y)) where
-  定义体: by
-    rw [instProdTopologicalSpace]; rw [borel_comap]; rw [measurableSpace]; rw [BorelSpace.measurable_eq (α := X × Y)]
-
-Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq, borel_comap, instProdTopologicalSpace, measurableSpace, measurable_eq
+/-
+**WithLp.borelSpace** 是 Mathlib 中的一个实例，位于命名空间 `WithLp`。
+形式化陈述：borelSpace : BorelSpace (WithLp p (X × Y)) where measurable_eq
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithLp.instProdTopologicalSpace.eq_1`：∀ (p : ENNReal) (α : Type u_2) (β 
+: Type u_3) [inst : TopologicalSpace α] [inst_1 : TopologicalSpace β],   WithLp.
+instProdTopologicalSpace p…
+· 使用定理 `borel_comap`：borel_comap {f : α -> β} {t : TopologicalSpace β} : @borel 
+α (t.induced f) = (@borel β t).comap f
+· 使用定理 `WithLp.measurableSpace.eq_1`：∀ (p : ENNReal) (X : Type u_1) [inst : Meas
+urableSpace X],   WithLp.measurableSpace p X = MeasurableSpace.comap WithLp.ofLp
+ inferInstance
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
 -/
 instance borelSpace : BorelSpace (WithLp p (X × Y)) where
   measurable_eq := by
-    rw [instProdTopologicalSpace]; rw [borel_comap]; rw [measurableSpace]; rw [BorelSpace.measurable_eq (α := X × Y)]
+    rw [instProdTopologicalSpace, borel_comap, measurableSpace,
+      BorelSpace.measurable_eq (α := X × Y)]
 
 end WithLp
 
 namespace PiLp
 
-variable {ι : Type*} {X : ι -> Type*} [Countable ι] [forall i, MeasurableSpace (X i)]
-    [forall i, TopologicalSpace (X i)] [forall i, BorelSpace (X i)] [forall i, SecondCountableTopology (X i)]
+variable {ι : Type*} {X : ι → Type*} [Countable ι] [∀ i, MeasurableSpace (X i)]
+    [∀ i, TopologicalSpace (X i)] [∀ i, BorelSpace (X i)] [∀ i, SecondCountableTopology (X i)]
 
-/--
-Instance `borelSpace` / 实例 `borelSpace`
-
-English:
-instance borelSpace
-  signature: : BorelSpace (PiLp p X) where
-  body: by
-    rw [topologicalSpace]; rw [borel_comap]; rw [WithLp.measurableSpace]; rw [BorelSpace.measurable_eq (α := Π i]; rw [X i)]
-
-中文:
-实例 borelSpace
-  签名: : Borel空间 (PiLp p X) where
-  定义体: by
-    rw [topologicalSpace]; rw [borel_comap]; rw [WithLp.measurableSpace]; rw [BorelSpace.measurable_eq (α := Π i]; rw [X i)]
-
-Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq, WithLp, WithLp.measurableSpace, borel_comap, measurableSpace, measurable_eq, topologicalSpace
+/-
+**PiLp.borelSpace** 是 Mathlib 中的一个实例，位于命名空间 `PiLp`。
+形式化陈述：borelSpace : BorelSpace (PiLp p X) where measurable_eq
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PiLp.topologicalSpace.eq_1`：∀ (p : ENNReal) {ι : Type u_2} (β : ι → Type
+ u_4) [inst : (i : ι) → TopologicalSpace (β i)],   PiLp.topologicalSpace p β = T
+opologicalSpace.…
+· 使用定理 `borel_comap`：borel_comap {f : α -> β} {t : TopologicalSpace β} : @borel 
+α (t.induced f) = (@borel β t).comap f
+· 使用定理 `WithLp.measurableSpace.eq_1`：∀ (p : ENNReal) (X : Type u_1) [inst : Meas
+urableSpace X],   WithLp.measurableSpace p X = MeasurableSpace.comap WithLp.ofLp
+ inferInstance
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
 -/
 instance borelSpace : BorelSpace (PiLp p X) where
   measurable_eq := by
-    rw [topologicalSpace]; rw [borel_comap]; rw [WithLp.measurableSpace]; rw [BorelSpace.measurable_eq (α := Π i]; rw [X i)]
+    rw [topologicalSpace, borel_comap, WithLp.measurableSpace,
+      BorelSpace.measurable_eq (α := Π i, X i)]
 
 end PiLp
 
 namespace MeasurableEquiv
 
-/--
-Definition of `toLp` / `toLp` 的定义
+/-- The map from `X` to `WithLp p X` as a measurable equivalence. -/
+/-
+**MeasurableEquiv.toLp** 是 Mathlib 中的一个定义，位于命名空间 `MeasurableEquiv`。
+形式化陈述：(p : ENNReal) → (X : Type u_1) → [inst : MeasurableSpace X] → X ≃ᵐ WithLp 
+p X
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `WithLp.measurable_toLp`：measurable_toLp : Measurable (@toLp p X)
+· 使用引理 `WithLp.measurable_ofLp`：measurable_ofLp : Measurable (@ofLp p X)
 
-English:
-definition toLp
-  signature: : X ≃ᵐ (WithLp p X) where
-  body: (WithLp.equiv p X).symm
-  measurable_toFun := WithLp.measurable_toLp p X
-  measurable_invFun := WithLp.measurable_ofLp p X
-
-中文:
-定义 toLp
-  签名: : X ≃ᵐ (WithLp p X) where
-  定义体: (WithLp.equiv p X).symm
-  measurable_toFun := WithLp.measurable_toLp p X
-  measurable_invFun := WithLp.measurable_ofLp p X
+--- 原说明 ---
+The map from `X` to `WithLp p X` as a measurable equivalence.
 -/
 protected def toLp : X ≃ᵐ (WithLp p X) where
   toEquiv := (WithLp.equiv p X).symm
   measurable_toFun := WithLp.measurable_toLp p X
   measurable_invFun := WithLp.measurable_ofLp p X
-
-/--
-lemma `coe_toLp` / 引理 `coe_toLp`
-
-English:
-lemma coe_toLp
-  statement: ⇑(MeasurableEquiv.toLp p X) = WithLp.toLp p
-  proof: rfl
-
-中文:
-引理 coe_toLp
-  结论: ⇑(可测等价.toLp p X) = WithLp.toLp p
-  证明: rfl
+/-
+**MeasurableEquiv.coe_toLp** 是 Mathlib 中的一个引理，位于命名空间 `MeasurableEquiv`。
+形式化陈述：coe_toLp : ⇑(MeasurableEquiv.toLp p X) = WithLp.toLp p
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_toLp : ⇑(MeasurableEquiv.toLp p X) = WithLp.toLp p := rfl
-
-/--
-lemma `coe_toLp_symm` / 引理 `coe_toLp_symm`
-
-English:
-lemma coe_toLp_symm
-  statement: ⇑(MeasurableEquiv.toLp p X).symm = WithLp.ofLp
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_toLp_symm
-  结论: ⇑(可测等价.toLp p X).symm = WithLp.ofLp
-  证明: rfl
-
-@[simp]
+/-
+**MeasurableEquiv.coe_toLp_symm** 是 Mathlib 中的一个引理，位于命名空间 `MeasurableEquiv`。
+形式化陈述：coe_toLp_symm : ⇑(MeasurableEquiv.toLp p X).symm = WithLp.ofLp
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_toLp_symm : ⇑(MeasurableEquiv.toLp p X).symm = WithLp.ofLp := rfl
 
 @[simp]
-/--
-lemma `toLp_apply` / 引理 `toLp_apply`
-
-English:
-lemma toLp_apply
-  given: (x : X)
-  statement: MeasurableEquiv.toLp p X x = WithLp.toLp p x
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLp_apply
-  条件: (x : X)
-  结论: 可测等价.toLp p X x = WithLp.toLp p x
-  证明: rfl
-
-@[simp]
+/-
+**MeasurableEquiv.toLp_apply** 是 Mathlib 中的一个引理，位于命名空间 `MeasurableEquiv`。
+形式化陈述：toLp_apply (x : X) : MeasurableEquiv.toLp p X x = WithLp.toLp p x
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLp_apply (x : X) : MeasurableEquiv.toLp p X x = WithLp.toLp p x := rfl
 
 @[simp]
-/--
-lemma `toLp_symm_apply` / 引理 `toLp_symm_apply`
-
-English:
-lemma toLp_symm_apply
-  given: (x : WithLp p X)
-  proof: rfl
-
-中文:
-引理 toLp_symm_apply
-  条件: (x : WithLp p X)
-  证明: rfl
+/-
+**MeasurableEquiv.toLp_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `MeasurableEquiv`。
+形式化陈述：toLp_symm_apply (x : WithLp p X) : (MeasurableEquiv.toLp p X).symm x = Wit
+hLp.ofLp x
+参数：x : WithLp p X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLp_symm_apply (x : WithLp p X) :
     (MeasurableEquiv.toLp p X).symm x = WithLp.ofLp x := rfl
 
 end MeasurableEquiv
+

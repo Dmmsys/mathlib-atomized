@@ -81,227 +81,140 @@ We capture this concept by injective graph homomorphisms.
 
 section Copy
 
-/--
-Definition of `Copy` / `Copy` 的定义
+/-- The type of copies as a subtype of *injective* homomorphisms. -/
+/-
+**SimpleGraph.Copy** 是 Mathlib 中的一个归纳类型，位于命名空间 `SimpleGraph`。
+形式化陈述：{α : Type u_4} → {β : Type u_5} → SimpleGraph α → SimpleGraph β → Type (ma
+x u_4 u_5)
+参数：max u_4 u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Copy
-  parameters: (A : SimpleGraph α) (B : SimpleGraph β)
-  axioms and operations (2):
-    - toHom : A ->g B
-    - injective' : Injective toHom
-
-中文:
-结构 余py
-  参数: (A : 简单图 α) (B : 简单图 β)
-  公理与运算 (2 个):
-    - toHom : A ->g B
-    - injective' : 单射 toHom
+--- 原说明 ---
+The type of copies as a subtype of *injective* homomorphisms.
 -/
 structure Copy (A : SimpleGraph α) (B : SimpleGraph β) where
   /-- A copy gives rise to a homomorphism. -/
-  toHom : A ->g B
+  toHom : A →g B
   injective' : Injective toHom
 
-/--
-Definition of `Hom.toCopy` / `Hom.toCopy` 的定义
+/-- An injective homomorphism gives rise to a copy. -/
+/-
+**SimpleGraph.Hom.toCopy** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Hom`。
+形式化陈述：{α : Type u_4} →   {β : Type u_5} → {A : SimpleGraph α} → {B : SimpleGraph
+ β} → (f : A →g B) → Function.Injective ⇑f → A.Copy B
+参数：f : A →g B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.toCopy
-  signature: (f : A ->g B) (h : Injective f)
-  body: .mk f h
-
-中文:
-缩写 态射.toCopy
-  签名: (f : A ->g B) (h : 单射 f)
-  定义体: .mk f h
+--- 原说明 ---
+An injective homomorphism gives rise to a copy.
 -/
-abbrev Hom.toCopy (f : A ->g B) (h : Injective f) : Copy A B := .mk f h
+abbrev Hom.toCopy (f : A →g B) (h : Injective f) : Copy A B := .mk f h
 
-/--
-Definition of `Embedding.toCopy` / `Embedding.toCopy` 的定义
+/-- An embedding gives rise to a copy. -/
+/-
+**SimpleGraph.Embedding.toCopy** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Embedding`
+。
+形式化陈述：{α : Type u_4} → {β : Type u_5} → {A : SimpleGraph α} → {B : SimpleGraph β
+} → A ↪g B → A.Copy B
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Embedding.toCopy
-  signature: (f : A ↪g B)
-  body: f.toHom.toCopy f.injective
-
-中文:
-缩写 嵌入.toCopy
-  签名: (f : A ↪g B)
-  定义体: f.toHom.toCopy f.injective
-
-Depends on / 依赖: f.injective, f.toHom.toCopy, injective, toCopy
+--- 原说明 ---
+An embedding gives rise to a copy.
 -/
 abbrev Embedding.toCopy (f : A ↪g B) : Copy A B := f.toHom.toCopy f.injective
 
-/--
-Definition of `Iso.toCopy` / `Iso.toCopy` 的定义
+/-- An isomorphism gives rise to a copy. -/
+/-
+**SimpleGraph.Iso.toCopy** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：{α : Type u_4} → {β : Type u_5} → {A : SimpleGraph α} → {B : SimpleGraph β
+} → A ≃g B → A.Copy B
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Iso.toCopy
-  signature: (f : A ≃g B)
-  body: f.toEmbedding.toCopy
-
-中文:
-缩写 同构.toCopy
-  签名: (f : A ≃g B)
-  定义体: f.toEmbedding.toCopy
-
-Depends on / 依赖: f.toEmbedding.toCopy, toCopy, toEmbedding
+--- 原说明 ---
+An isomorphism gives rise to a copy.
 -/
 abbrev Iso.toCopy (f : A ≃g B) : Copy A B := f.toEmbedding.toCopy
 
 namespace Copy
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (Copy A B) α β
-  body: DFunLike.coe f.toHom
-  coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
-
-中文:
-实例 :
-  签名: 函数状 (余py A B) α β
-  定义体: DFunLike.coe f.toHom
-  coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
-
-Depends on / 依赖: DFunLike, DFunLike.coe, f.toHom
+/-
+**SimpleGraph.Copy.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Copy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (Copy A B) α β where
   coe f := DFunLike.coe f.toHom
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
-
-/--
-lemma `injective` / 引理 `injective`
-
-English:
-lemma injective
-  given: (f : Copy A B)
-  statement: Injective f.toHom
-  proof: f.injective'
-
-中文:
-引理 injective
-  条件: (f : 余py A B)
-  结论: 单射 f.toHom
-  证明: f.injective'
-
-Depends on / 依赖: f.injective, injective
+/-
+**SimpleGraph.Copy.injective** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：injective (f : Copy A B) : Injective f.toHom
+参数：f : Copy A B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Copy.injective'`：∀ {α : Type u_4} {β : Type u_5} {A : Simple
+Graph α} {B : SimpleGraph β} (self : A.Copy B),   Function.Injective ⇑self.toHom
 -/
 lemma injective (f : Copy A B) : Injective f.toHom := f.injective'
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {f g : Copy A B}
-  statement: (forall a, f a = g a) -> f = g
-  proof: DFunLike.ext _ _
-
-中文:
-引理 ext
-  条件: {f g : 余py A B}
-  结论: (对任意 a, f a = g a) -> f = g
-  证明: DFunLike.ext _ _
+/-
+**SimpleGraph.Copy.ext** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B : SimpleGraph β} {f
+ g : A.Copy B}, (∀ (a : α), f a = g a) → f = g
+参数：∀ (a : α), f a = g a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-@[ext] lemma ext {f g : Copy A B} : (forall a, f a = g a) -> f = g := DFunLike.ext _ _
-
-/--
-lemma `coe_toHom` / 引理 `coe_toHom`
-
-English:
-lemma coe_toHom
-  given: (f : Copy A B)
-  statement: ⇑f.toHom = f
-  proof: rfl
-
-中文:
-引理 coe_toHom
-  条件: (f : 余py A B)
-  结论: ⇑f.toHom = f
-  证明: rfl
+@[ext] lemma ext {f g : Copy A B} : (∀ a, f a = g a) → f = g := DFunLike.ext _ _
+/-
+**SimpleGraph.Copy.coe_toHom** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B : SimpleGraph β} (f
+ : A.Copy B), ⇑f.toHom = ⇑f
+参数：f : A.Copy B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_toHom (f : Copy A B) : ⇑f.toHom = f := rfl
-/--
-lemma `toHom_apply` / 引理 `toHom_apply`
-
-English:
-lemma toHom_apply
-  given: (f : Copy A B) (a : α)
-  statement: ⇑f.toHom a = f a
-  proof: rfl
-
-中文:
-引理 toHom_apply
-  条件: (f : 余py A B) (a : α)
-  结论: ⇑f.toHom a = f a
-  证明: rfl
+/-
+**SimpleGraph.Copy.toHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B : SimpleGraph β} (f
+ : A.Copy B) (a : α), f.toHom a = f a
+参数：f : A.Copy B；a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toHom_apply (f : Copy A B) (a : α) : ⇑f.toHom a = f a := rfl
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (f : A ->g B) (hf)
-  statement: ⇑(.mk f hf : Copy A B) = f
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (f : A ->g B) (hf)
-  结论: ⇑(.mk f hf : 余py A B) = f
-  证明: rfl
+/-
+**SimpleGraph.Copy.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B : SimpleGraph β} (f
+ : A →g B) (hf : Function.Injective ⇑f),   ⇑{ toHom := f, injective' := hf } = ⇑
+f
+参数：f : A →g B；hf : Function.Injective ⇑f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_mk (f : A ->g B) (hf) : ⇑(.mk f hf : Copy A B) = f := rfl
+@[simp] lemma coe_mk (f : A →g B) (hf) : ⇑(.mk f hf : Copy A B) = f := rfl
 
-/--
-Definition of `mapEdgeSet` / `mapEdgeSet` 的定义
+/-- A copy induces an embedding of edge sets. -/
+/-
+**SimpleGraph.Copy.mapEdgeSet** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：mapEdgeSet (f : Copy A B) : A.edgeSet ↪ B.edgeSet where toFun
+参数：f : Copy A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapEdgeSet
-  signature: (f : Copy A B)
-  body: f.toHom.mapEdgeSet
-  inj' := Hom.mapEdgeSet.injective f.toHom f.injective
-
-中文:
-定义 mapEdgeSet
-  签名: (f : 余py A B)
-  定义体: f.toHom.mapEdgeSet
-  inj' := Hom.mapEdgeSet.injective f.toHom f.injective
-
-Depends on / 依赖: f.toHom.mapEdgeSet, mapEdgeSet
+--- 原说明 ---
+A copy induces an embedding of edge sets.
 -/
 def mapEdgeSet (f : Copy A B) : A.edgeSet ↪ B.edgeSet where
   toFun := f.toHom.mapEdgeSet
   inj' := Hom.mapEdgeSet.injective f.toHom f.injective
 
-/--
-Definition of `mapNeighborSet` / `mapNeighborSet` 的定义
+/-- A copy induces an embedding of neighbor sets. -/
+/-
+**SimpleGraph.Copy.mapNeighborSet** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：mapNeighborSet (f : Copy A B) (a : α) : A.neighborSet a ↪ B.neighborSet (f
+ a) where toFun v
+参数：f : Copy A B；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapNeighborSet
-  signature: (f : Copy A B) (a : α)
-  body: ⟨f v, f.toHom.apply_mem_neighborSet v.prop⟩
-  inj' _ _ h := by
-    rw [Subtype.mk_eq_mk] at h ⊢
-    exact f.injective h
-
-中文:
-定义 mapNeighborSet
-  签名: (f : 余py A B) (a : α)
-  定义体: ⟨f v, f.toHom.apply_mem_neighborSet v.prop⟩
-  inj' _ _ h := by
-    rw [Subtype.mk_eq_mk] at h ⊢
-    exact f.injective h
-
-Depends on / 依赖: apply_mem_neighborSet, f.toHom.apply_mem_neighborSet, v.prop
+--- 原说明 ---
+A copy induces an embedding of neighbor sets.
 -/
 def mapNeighborSet (f : Copy A B) (a : α) :
     A.neighborSet a ↪ B.neighborSet (f a) where
@@ -310,77 +223,53 @@ def mapNeighborSet (f : Copy A B) (a : α) :
     rw [Subtype.mk_eq_mk] at h ⊢
     exact f.injective h
 
-/--
-Definition of `toEmbedding` / `toEmbedding` 的定义
+/-- A copy gives rise to an embedding of vertex types. -/
+/-
+**SimpleGraph.Copy.toEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：toEmbedding (f : Copy A B) : α ↪ β
+参数：f : Copy A B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.Copy.injective`：injective (f : Copy A B) : Injective f.toHom
 
-English:
-definition toEmbedding
-  signature: (f : Copy A B)
-  body: ⟨f, f.injective⟩
-
-中文:
-定义 toEmbedding
-  签名: (f : 余py A B)
-  定义体: ⟨f, f.injective⟩
-
-Depends on / 依赖: f.injective, injective
+--- 原说明 ---
+A copy gives rise to an embedding of vertex types.
 -/
 def toEmbedding (f : Copy A B) : α ↪ β := ⟨f, f.injective⟩
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity copy from a simple graph to itself. -/
+/-
+**SimpleGraph.Copy.id** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：{V : Type u_1} → (G : SimpleGraph V) → G.Copy G
+参数：G : SimpleGraph V。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 
-English:
-definition id
-  signature: (G : SimpleGraph V)
-  body: ⟨Hom.id, Function.injective_id⟩
-
-中文:
-定义 id
-  签名: (G : 简单图 V)
-  定义体: ⟨Hom.id, Function.injective_id⟩
+--- 原说明 ---
+The identity copy from a simple graph to itself.
 -/
 @[refl] def id (G : SimpleGraph V) : Copy G G := ⟨Hom.id, Function.injective_id⟩
+/-
+**SimpleGraph.Copy.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V}, ⇑(SimpleGraph.Copy.id G) = id
+参数：SimpleGraph.Copy.id G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `coe_id` / 引理 `coe_id`
-
-English:
-lemma coe_id
-  statement: ⇑(id G) = _root_.id
-  proof: rfl
-
-中文:
-引理 coe_id
-  结论: ⇑(id G) = _root_.id
-  证明: rfl
+--- 原说明 ---
+The identity copy from a simple graph to itself.
 -/
 @[simp, norm_cast] lemma coe_id : ⇑(id G) = _root_.id := rfl
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of copies is a copy. -/
+/-
+**SimpleGraph.Copy.comp** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：comp (g : Copy B C) (f : Copy A B) : Copy A C
+参数：g : Copy B C；f : Copy A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (g : Copy B C) (f : Copy A B)
-  body: by
-  use g.toHom.comp f.toHom
-  rw [Hom.coe_comp]
-  exact g.injective.comp f.injective
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (g : 余py B C) (f : 余py A B)
-  定义体: by
-  use g.toHom.comp f.toHom
-  rw [Hom.coe_comp]
-  exact g.injective.comp f.injective
-
-@[simp]
-
-Depends on / 依赖: Hom.coe_comp, coe_comp, f.injective, f.toHom, g.injective.comp, g.toHom.comp, injective
+--- 原说明 ---
+The composition of copies is a copy.
 -/
 def comp (g : Copy B C) (f : Copy A B) : Copy A C := by
   use g.toHom.comp f.toHom
@@ -388,172 +277,140 @@ def comp (g : Copy B C) (f : Copy A B) : Copy A C := by
   exact g.injective.comp f.injective
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (g : Copy B C) (f : Copy A B) (a : α)
-  statement: g.comp f a = g (f a)
-  proof: RelHom.comp_apply g.toHom f.toHom a
-
-中文:
-定理 comp_apply
-  条件: (g : 余py B C) (f : 余py A B) (a : α)
-  结论: g.comp f a = g (f a)
-  证明: RelHom.comp_apply g.toHom f.toHom a
-
-Depends on / 依赖: RelHom, RelHom.comp_apply, comp_apply, f.toHom, g.toHom
+/-
+**SimpleGraph.Copy.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：comp_apply (g : Copy B C) (f : Copy A B) (a : α) : g.comp f a = g (f a)
+参数：g : Copy B C；f : Copy A B；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RelHom.comp_apply`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {r : α
+ → α → Prop} {s : β → β → Prop} {t : γ → γ → Prop} (g : s →r t)   (f : r →r s) (
+x : α),…
 -/
 theorem comp_apply (g : Copy B C) (f : Copy A B) (a : α) : g.comp f a = g (f a) :=
   RelHom.comp_apply g.toHom f.toHom a
 
-/--
-Definition of `ofLE` / `ofLE` 的定义
+/-- The copy from a subgraph to the supergraph. -/
+/-
+**SimpleGraph.Copy.ofLE** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：ofLE (G₁ G₂ : SimpleGraph V) (h : G₁ <= G₂) : Copy G₁ G₂
+参数：G₁ G₂ : SimpleGraph V；h : G₁ <= G₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
 
-English:
-definition ofLE
-  signature: (G₁ G₂ : SimpleGraph V) (h : G₁ <= G₂)
-  body: ⟨Hom.ofLE h, Function.injective_id⟩
-
-@[simp, norm_cast]
-
-中文:
-定义 ofLE
-  签名: (G₁ G₂ : 简单图 V) (h : G₁ <= G₂)
-  定义体: ⟨Hom.ofLE h, Function.injective_id⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Function, Function.injective_id, Hom.ofLE, injective_id
+--- 原说明 ---
+The copy from a subgraph to the supergraph.
 -/
-def ofLE (G₁ G₂ : SimpleGraph V) (h : G₁ <= G₂) : Copy G₁ G₂ := ⟨Hom.ofLE h, Function.injective_id⟩
+def ofLE (G₁ G₂ : SimpleGraph V) (h : G₁ ≤ G₂) : Copy G₁ G₂ := ⟨Hom.ofLE h, Function.injective_id⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (g : Copy B C) (f : Copy A B)
-  statement: ⇑(g.comp f) = g ∘ f
-  proof: by ext; simp
-
-中文:
-定理 coe_comp
-  条件: (g : 余py B C) (f : 余py A B)
-  结论: ⇑(g.comp f) = g ∘ f
-  证明: by ext; simp
+/-
+**SimpleGraph.Copy.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：coe_comp (g : Copy B C) (f : Copy A B) : ⇑(g.comp f) = g ∘ f
+参数：g : Copy B C；f : Copy A B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Copy.comp_apply`：comp_apply (g : Copy B C) (f : Copy A B) (a
+ : α) : g.comp f a = g (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_comp (g : Copy B C) (f : Copy A B) : ⇑(g.comp f) = g ∘ f := by ext; simp
-
-/--
-lemma `coe_ofLE` / 引理 `coe_ofLE`
-
-English:
-lemma coe_ofLE
-  given: (h : G₁ <= G₂)
-  statement: ⇑(ofLE G₁ G₂ h) = _root_.id
-  proof: rfl
-
-中文:
-引理 coe_ofLE
-  条件: (h : G₁ <= G₂)
-  结论: ⇑(ofLE G₁ G₂ h) = _root_.id
-  证明: rfl
+/-
+**SimpleGraph.Copy.coe_ofLE** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {V : Type u_1} {G₁ G₂ : SimpleGraph V} (h : G₁ ≤ G₂), ⇑(SimpleGraph.Copy
+.ofLE G₁ G₂ h) = id
+参数：h : G₁ ≤ G₂；SimpleGraph.Copy.ofLE G₁ G₂ h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_ofLE (h : G₁ <= G₂) : ⇑(ofLE G₁ G₂ h) = _root_.id := rfl
-
-/--
-theorem `ofLE_refl` / 定理 `ofLE_refl`
-
-English:
-theorem ofLE_refl
-  statement: ofLE G G le_rfl = id G
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-定理 ofLE_refl
-  结论: ofLE G G le_rfl = id G
-  证明: by ext; simp
-
-@[simp]
+@[simp, norm_cast] lemma coe_ofLE (h : G₁ ≤ G₂) : ⇑(ofLE G₁ G₂ h) = _root_.id := rfl
+/-
+**SimpleGraph.Copy.ofLE_refl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V}, SimpleGraph.Copy.ofLE G G ⋯ = Simple
+Graph.Copy.id G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Copy.ext`：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α
+} {B : SimpleGraph β} {f g : A.Copy B}, (∀ (a : α), f a = g a) → f = g
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem ofLE_refl : ofLE G G le_rfl = id G := by ext; simp
 
 @[simp]
-/--
-theorem `ofLE_comp` / 定理 `ofLE_comp`
-
-English:
-theorem ofLE_comp
-  given: (h₁₂ : G₁ <= G₂) (h₂₃ : G₂ <= G₃)
-  proof: by ext; simp
-
-中文:
-定理 ofLE_comp
-  条件: (h₁₂ : G₁ <= G₂) (h₂₃ : G₂ <= G₃)
-  证明: by ext; simp
+/-
+**SimpleGraph.Copy.ofLE_comp** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：ofLE_comp (h₁₂ : G₁ <= G₂) (h₂₃ : G₂ <= G₃) : (ofLE _ _ h₂₃).comp (ofLE _ 
+_ h₁₂) = ofLE _ _ (h₁₂.trans h₂₃)
+参数：h₁₂ : G₁ <= G₂；h₂₃ : G₂ <= G₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Copy.ext`：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α
+} {B : SimpleGraph β} {f g : A.Copy B}, (∀ (a : α), f a = g a) → f = g
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Copy.comp_apply`：comp_apply (g : Copy B C) (f : Copy A B) (a
+ : α) : g.comp f a = g (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofLE_comp (h₁₂ : G₁ <= G₂) (h₂₃ : G₂ <= G₃) :
+theorem ofLE_comp (h₁₂ : G₁ ≤ G₂) (h₂₃ : G₂ ≤ G₃) :
     (ofLE _ _ h₂₃).comp (ofLE _ _ h₁₂) = ofLE _ _ (h₁₂.trans h₂₃) := by ext; simp
 
-/--
-Definition of `induce` / `induce` 的定义
+/-- The copy from an induced subgraph to the initial simple graph. -/
+/-
+**SimpleGraph.Copy.induce** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：induce (G : SimpleGraph V) (s : Set V) : Copy (G.induce s) G
+参数：G : SimpleGraph V；s : Set V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition induce
-  signature: (G : SimpleGraph V) (s : Set V)
-  body: (Embedding.induce s).toCopy
-
-中文:
-定义 induce
-  签名: (G : 简单图 V) (s : 集合 V)
-  定义体: (Embedding.induce s).toCopy
-
-Depends on / 依赖: Embedding, Embedding.induce, induce, toCopy
+--- 原说明 ---
+The copy from an induced subgraph to the initial simple graph.
 -/
 def induce (G : SimpleGraph V) (s : Set V) : Copy (G.induce s) G := (Embedding.induce s).toCopy
 
-/--
-Definition of `bot` / `bot` 的定义
+/-- The copy of `⊥` in any simple graph that can embed its vertices. -/
+/-
+**SimpleGraph.Copy.bot** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：{α : Type u_4} → {β : Type u_5} → {B : SimpleGraph β} → (α ↪ β) → ⊥.Copy B
+参数：α ↪ β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
 
-English:
-definition bot
-  signature: (f : α ↪ β)
-  body: ⟨⟨f, False.elim⟩, f.injective⟩
-
-中文:
-定义 bot
-  签名: (f : α ↪ β)
-  定义体: ⟨⟨f, False.elim⟩, f.injective⟩
+--- 原说明 ---
+The copy of `⊥` in any simple graph that can embed its vertices.
 -/
 protected def bot (f : α ↪ β) : Copy (⊥ : SimpleGraph α) B := ⟨⟨f, False.elim⟩, f.injective⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isoSubgraphMap` / `isoSubgraphMap` 的定义
+/-- The isomorphism from a subgraph of `A` to its map under a copy `f : Copy A B`. -/
+/-
+**SimpleGraph.Copy.isoSubgraphMap** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：isoSubgraphMap (f : Copy A B) (A' : A.Subgraph) : A'.coe ≃g (A'.map f.toHo
+m).coe
+参数：f : Copy A B；A' : A.Subgraph。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.Copy.injective`：injective (f : Copy A B) : Injective f.toHom
 
-English:
-definition isoSubgraphMap
-  signature: (f : Copy A B) (A' : A.Subgraph)
-  body: by
-  use Equiv.Set.image f.toHom _ f.injective
-  simp_rw [Subgraph.map_verts, Equiv.Set.image_apply, Subgraph.coe_adj, Subgraph.map_adj,
-    Relation.map_apply, f.injective.eq_iff, exists_eq_right_right, exists_eq_right, forall_true_iff]
-
-中文:
-定义 isoSubgraphMap
-  签名: (f : 余py A B) (A' : A.子图)
-  定义体: by
-  use Equiv.Set.image f.toHom _ f.injective
-  simp_rw [Subgraph.map_verts, Equiv.Set.image_apply, Subgraph.coe_adj, Subgraph.map_adj,
-    Relation.map_apply, f.injective.eq_iff, exists_eq_right_right, exists_eq_right, forall_true_iff]
-
-Depends on / 依赖: Equiv.Set.image, Equiv.Set.image_apply, Relation, Relation.map_apply, Subgraph, Subgraph.coe_adj, Subgraph.map_adj, Subgraph.map_verts, coe_adj, eq_iff, exists_eq_right, exists_eq_right_right, f.injective, f.injective.eq_iff, f.toHom, forall_true_iff, image_apply, injective, map_adj, map_apply
+--- 原说明 ---
+The isomorphism from a subgraph of `A` to its map under a copy `f : Copy A B`.
 -/
 noncomputable def isoSubgraphMap (f : Copy A B) (A' : A.Subgraph) :
     A'.coe ≃g (A'.map f.toHom).coe := by
@@ -561,65 +418,63 @@ noncomputable def isoSubgraphMap (f : Copy A B) (A' : A.Subgraph) :
   simp_rw [Subgraph.map_verts, Equiv.Set.image_apply, Subgraph.coe_adj, Subgraph.map_adj,
     Relation.map_apply, f.injective.eq_iff, exists_eq_right_right, exists_eq_right, forall_true_iff]
 
-/--
-Definition of `toSubgraph` / `toSubgraph` 的定义
+/-- The subgraph of `B` corresponding to a copy of `A` inside `B`. -/
+/-
+**SimpleGraph.Copy.toSubgraph** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：toSubgraph (f : Copy A B) : B.Subgraph
+参数：f : Copy A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toSubgraph
-  signature: (f : Copy A B)
-  body: .map f.toHom ⊤
-
-中文:
-缩写 toSubgraph
-  签名: (f : 余py A B)
-  定义体: .map f.toHom ⊤
-
-Depends on / 依赖: f.toHom
+--- 原说明 ---
+The subgraph of `B` corresponding to a copy of `A` inside `B`.
 -/
 abbrev toSubgraph (f : Copy A B) : B.Subgraph := .map f.toHom ⊤
 
-/--
-Definition of `isoToSubgraph` / `isoToSubgraph` 的定义
+/-- The isomorphism from `A` to its copy under `f : Copy A B`. -/
+/-
+**SimpleGraph.Copy.isoToSubgraph** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：isoToSubgraph (f : Copy A B) : A ≃g f.toSubgraph.coe
+参数：f : Copy A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoToSubgraph
-  signature: (f : Copy A B)
-  body: (f.isoSubgraphMap ⊤).comp Subgraph.topIso.symm
-
-中文:
-定义 isoToSubgraph
-  签名: (f : 余py A B)
-  定义体: (f.isoSubgraphMap ⊤).comp Subgraph.topIso.symm
-
-Depends on / 依赖: Subgraph, Subgraph.topIso.symm, f.isoSubgraphMap, isoSubgraphMap, topIso
+--- 原说明 ---
+The isomorphism from `A` to its copy under `f : Copy A B`.
 -/
 noncomputable def isoToSubgraph (f : Copy A B) : A ≃g f.toSubgraph.coe :=
   (f.isoSubgraphMap ⊤).comp Subgraph.topIso.symm
-
-/--
-lemma `range_toSubgraph` / 引理 `range_toSubgraph`
-
-English:
-lemma range_toSubgraph
-  proof: by
-  ext H'
-  constructor
-  · rintro ⟨f, hf, rfl⟩
-    simpa [toSubgraph] using ⟨f.isoToSubgraph⟩
-  · rintro ⟨e⟩
-    refine ⟨⟨H'.hom.comp e.toHom, Subgraph.hom_injective.comp e.injective⟩, ?_⟩
-    simp [toSubgraph, Subgraph.map_comp]
-
-中文:
-引理 range_toSubgraph
-  证明: by
-  ext H'
-  constructor
-  · rintro ⟨f, hf, rfl⟩
-    simpa [toSubgraph] using ⟨f.isoToSubgraph⟩
-  · rintro ⟨e⟩
-    refine ⟨⟨H'.hom.comp e.toHom, Subgraph.hom_injective.comp e.injective⟩, ?_⟩
-    simp [toSubgraph, Subgraph.map_comp]
+/-
+**SimpleGraph.Copy.range_toSubgraph** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`
+。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B : SimpleGraph β},  
+ Set.range SimpleGraph.Copy.toSubgraph = {B' | Nonempty (A ≃g B'.coe)}
+参数：A ≃g B'.coe。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `SimpleGraph.Subgraph.hom_injective`：hom_injective {x : Subgraph G} : Fun
+ction.Injective x.hom
+· 使用定理 `RelIso.injective`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {s 
+: β → β → Prop} (e : r ≃r s), Function.Injective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.Subgraph.map_comp`：map_comp {U : Type*} {G'' : SimpleGraph U
+} (H : G.Subgraph) (f : G ->g G') (g : G' ->g G'') : H.map (g.comp f) = (H.map f
+).map g
+· 使用定理 `SimpleGraph.Subgraph.map_iso_top`：∀ {V : Type u} {W : Type v} {G : Simpl
+eGraph V} {H : SimpleGraph W} (e : G ≃g H), SimpleGraph.Subgraph.map e.toHom ⊤ =
+ ⊤
+· 使用定理 `SimpleGraph.Subgraph.map_hom_top`：∀ {V : Type u} {G : SimpleGraph V} (G'
+ : G.Subgraph), SimpleGraph.Subgraph.map G'.hom ⊤ = G'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma range_toSubgraph :
     .range (toSubgraph (A := A)) = {B' : B.Subgraph | Nonempty (A ≃g B'.coe)} := by
@@ -630,107 +485,69 @@ lemma range_toSubgraph
   · rintro ⟨e⟩
     refine ⟨⟨H'.hom.comp e.toHom, Subgraph.hom_injective.comp e.injective⟩, ?_⟩
     simp [toSubgraph, Subgraph.map_comp]
-
-/--
-lemma `toSubgraph_surjOn` / 引理 `toSubgraph_surjOn`
-
-English:
-lemma toSubgraph_surjOn
-  proof: fun H' hH' => by simpa
-
-中文:
-引理 toSubgraph_surjOn
-  证明: fun H' hH' => by simpa
-
-Depends on / 依赖: B.Subgraph, Nonempty, Subgraph
+/-
+**SimpleGraph.Copy.toSubgraph_surjOn** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Copy
+`。
+形式化陈述：toSubgraph_surjOn : Set.SurjOn (toSubgraph (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `SimpleGraph.Copy.range_toSubgraph`：∀ {α : Type u_4} {β : Type u_5} {A : 
+SimpleGraph α} {B : SimpleGraph β},   Set.range SimpleGraph.Copy.toSubgraph = {B
+' | Nonempty (A ≃g B'.c…
 -/
 lemma toSubgraph_surjOn :
     Set.SurjOn (toSubgraph (A := A)) .univ {B' : B.Subgraph | Nonempty (A ≃g B'.coe)} :=
-  fun H' hH' => by simpa
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: (V -> W)] : Subsingleton (G.Copy H)
-  body: DFunLike.coe_injective.subsingleton
-
-中文:
-实例 [子单例
-  签名: (V -> W)] : 子单例 (G.余py H)
-  定义体: DFunLike.coe_injective.subsingleton
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.subsingleton, coe_injective, subsingleton
+  fun H' hH' ↦ by simpa
+/-
+**SimpleGraph.Copy.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Copy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Subsingleton (V -> W)] : Subsingleton (G.Copy H) := DFunLike.coe_injective.subsingleton
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: {f : G ->g H // Injective f}] : Fintype (G.Copy H)
-  body: .ofEquiv {f : G ->g H // Injective f} {
-    toFun f := ⟨f.1, f.2⟩
-    invFun f := ⟨f.1, f.2⟩
-  }
-
-中文:
-实例 [有限类型
-  签名: {f : G ->g H // 单射 f}] : 有限类型 (G.余py H)
-  定义体: .ofEquiv {f : G ->g H // Injective f} {
-    toFun f := ⟨f.1, f.2⟩
-    invFun f := ⟨f.1, f.2⟩
-  }
-
-Depends on / 依赖: Injective, invFun, ofEquiv
+instance [Subsingleton (V → W)] : Subsingleton (G.Copy H) := DFunLike.coe_injective.subsingleton
+/-
+**SimpleGraph.Copy.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph.Copy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Fintype {f : G ->g H // Injective f}] : Fintype (G.Copy H) :=
-  .ofEquiv {f : G ->g H // Injective f} {
+instance [Fintype {f : G →g H // Injective f}] : Fintype (G.Copy H) :=
+  .ofEquiv {f : G →g H // Injective f} {
     toFun f := ⟨f.1, f.2⟩
     invFun f := ⟨f.1, f.2⟩
   }
 
 /-- A copy of `⊤` gives rise to an embedding of `⊤`. -/
 @[simps!]
-/--
-Definition of `topEmbedding` / `topEmbedding` 的定义
+/-
+**SimpleGraph.Copy.topEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：topEmbedding (f : Copy (⊤ : SimpleGraph α) G) : (⊤ : SimpleGraph α) ↪g G
+参数：f : Copy (⊤ : SimpleGraph α) G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topEmbedding
-  signature: (f : Copy (⊤ : SimpleGraph α) G)
-  body: { f.toEmbedding with
-    map_rel_iff' := fun {v w} => ⟨fun h => by simpa using h.ne, f.toHom.map_adj⟩}
-
-中文:
-定义 topEmbedding
-  签名: (f : 余py (⊤ : 简单图 α) G)
-  定义体: { f.toEmbedding with
-    map_rel_iff' := fun {v w} => ⟨fun h => by simpa using h.ne, f.toHom.map_adj⟩}
-
-Depends on / 依赖: f.toEmbedding, f.toHom.map_adj, h.ne, map_adj, map_rel_iff, toEmbedding
+--- 原说明 ---
+A copy of `⊤` gives rise to an embedding of `⊤`.
 -/
 def topEmbedding (f : Copy (⊤ : SimpleGraph α) G) : (⊤ : SimpleGraph α) ↪g G :=
   { f.toEmbedding with
-    map_rel_iff' := fun {v w} => ⟨fun h => by simpa using h.ne, f.toHom.map_adj⟩}
+    map_rel_iff' := fun {v w} ↦ ⟨fun h ↦ by simpa using h.ne, f.toHom.map_adj⟩}
 
 end Copy
 
-/--
-Definition of `Subgraph.coeCopy` / `Subgraph.coeCopy` 的定义
+/-- A `Subgraph G` gives rise to a copy from the coercion to `G`. -/
+/-
+**SimpleGraph.Subgraph.coeCopy** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Subgraph`。
+形式化陈述：{V : Type u_1} → {G : SimpleGraph V} → (G' : G.Subgraph) → G'.coe.Copy G
+参数：G' : G.Subgraph。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Subgraph.hom_injective`：hom_injective {x : Subgraph G} : Fun
+ction.Injective x.hom
 
-English:
-definition Subgraph.coeCopy
-  signature: (G' : G.Subgraph)
-  body: G'.hom.toCopy hom_injective
-
-中文:
-定义 子图.coeCopy
-  签名: (G' : G.子图)
-  定义体: G'.hom.toCopy hom_injective
-
-Depends on / 依赖: hom.toCopy, hom_injective, toCopy
+--- 原说明 ---
+A `Subgraph G` gives rise to a copy from the coercion to `G`.
 -/
 def Subgraph.coeCopy (G' : G.Subgraph) : Copy G'.coe G := G'.hom.toCopy hom_injective
 
@@ -756,728 +573,549 @@ We denote "`G` is contained in `H`" by `G ⊑ H` (`\squb`).
 
 section IsContained
 
-/--
-Definition of `IsContained` / `IsContained` 的定义
+/-- The relation `IsContained A B`, `A ⊑ B` says that `B` contains a copy of `A`.
 
-English:
-abbreviation IsContained
-  signature: (A : SimpleGraph α) (B : SimpleGraph β)
-  body: Nonempty (Copy A B)
+This is equivalent to the existence of an isomorphism from `A` to a subgraph of `B`. -/
+/-
+**SimpleGraph.IsContained** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph`。
+形式化陈述：IsContained (A : SimpleGraph α) (B : SimpleGraph β)
+参数：A : SimpleGraph α；B : SimpleGraph β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[inherit_doc] scoped infixl:50 " ⊑ " => SimpleGraph.IsContained
+--- 原说明 ---
+The relation `IsContained A B`, `A ⊑ B` says that `B` contains a copy of `A`.
 
-中文:
-缩写 IsContained
-  签名: (A : 简单图 α) (B : 简单图 β)
-  定义体: Nonempty (Copy A B)
-
-@[inherit_doc] scoped infixl:50 " ⊑ " => SimpleGraph.IsContained
-
-Depends on / 依赖: Nonempty
+This is equivalent to the existence of an isomorphism from `A` to a subgraph of 
+`B`.
 -/
 abbrev IsContained (A : SimpleGraph α) (B : SimpleGraph β) := Nonempty (Copy A B)
 
 @[inherit_doc] scoped infixl:50 " ⊑ " => SimpleGraph.IsContained
 
-/--
-theorem `IsContained.refl` / 定理 `IsContained.refl`
+/-- A simple graph contains itself. -/
+/-
+**SimpleGraph.IsContained.refl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsContaine
+d`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V), G.IsContained G
+参数：G : SimpleGraph V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsContained.refl
-  given: (G : SimpleGraph V)
-  statement: G ⊑ G
-  proof: ⟨.id G⟩
-
-中文:
-定理 IsContained.refl
-  条件: (G : 简单图 V)
-  结论: G ⊑ G
-  证明: ⟨.id G⟩
+--- 原说明 ---
+A simple graph contains itself.
 -/
 @[refl] protected theorem IsContained.refl (G : SimpleGraph V) : G ⊑ G := ⟨.id G⟩
+/-
+**SimpleGraph.IsContained.rfl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsContained
+`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V}, G.IsContained G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.refl`：∀ {V : Type u_1} (G : SimpleGraph V), G.Is
+Contained G
 
-/--
-theorem `IsContained.rfl` / 定理 `IsContained.rfl`
-
-English:
-theorem IsContained.rfl
-  statement: G ⊑ G
-  proof: IsContained.refl G
-
-中文:
-定理 IsContained.rfl
-  结论: G ⊑ G
-  证明: IsContained.refl G
+--- 原说明 ---
+A simple graph contains itself.
 -/
 protected theorem IsContained.rfl : G ⊑ G := IsContained.refl G
 
-/--
-theorem `IsContained.of_le` / 定理 `IsContained.of_le`
+/-- A simple graph contains its subgraphs. -/
+/-
+**SimpleGraph.IsContained.of_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsContain
+ed`。
+形式化陈述：∀ {V : Type u_1} {G₁ G₂ : SimpleGraph V}, G₁ ≤ G₂ → G₁.IsContained G₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsContained.of_le
-  given: (h : G₁ <= G₂)
-  statement: G₁ ⊑ G₂
-  proof: ⟨.ofLE G₁ G₂ h⟩
-
-中文:
-定理 IsContained.of_le
-  条件: (h : G₁ <= G₂)
-  结论: G₁ ⊑ G₂
-  证明: ⟨.ofLE G₁ G₂ h⟩
+--- 原说明 ---
+A simple graph contains its subgraphs.
 -/
-theorem IsContained.of_le (h : G₁ <= G₂) : G₁ ⊑ G₂ := ⟨.ofLE G₁ G₂ h⟩
+theorem IsContained.of_le (h : G₁ ≤ G₂) : G₁ ⊑ G₂ := ⟨.ofLE G₁ G₂ h⟩
 
-/--
-theorem `IsContained.trans` / 定理 `IsContained.trans`
+/-- If `A` contains `B` and `B` contains `C`, then `A` contains `C`. -/
+/-
+**SimpleGraph.IsContained.trans** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsContain
+ed`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {γ : Type u_6} {A : SimpleGraph α} {B : Si
+mpleGraph β} {C : SimpleGraph γ},   A.IsContained B → B.IsContained C → A.IsCont
+ained C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsContained.trans
-  statement: A ⊑ B -> B ⊑ C -> A ⊑ C
-  proof: fun ⟨f⟩ ⟨g⟩ => ⟨g.comp f⟩
-
-中文:
-定理 IsContained.trans
-  结论: A ⊑ B -> B ⊑ C -> A ⊑ C
-  证明: fun ⟨f⟩ ⟨g⟩ => ⟨g.comp f⟩
-
-Depends on / 依赖: g.comp
+--- 原说明 ---
+If `A` contains `B` and `B` contains `C`, then `A` contains `C`.
 -/
-theorem IsContained.trans : A ⊑ B -> B ⊑ C -> A ⊑ C := fun ⟨f⟩ ⟨g⟩ => ⟨g.comp f⟩
+theorem IsContained.trans : A ⊑ B → B ⊑ C → A ⊑ C := fun ⟨f⟩ ⟨g⟩ ↦ ⟨g.comp f⟩
 
-/--
-theorem `IsContained.trans'` / 定理 `IsContained.trans'`
+/-- If `B` contains `C` and `A` contains `B`, then `A` contains `C`. -/
+/-
+**SimpleGraph.IsContained.trans'** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsContai
+ned`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {γ : Type u_6} {A : SimpleGraph α} {B : Si
+mpleGraph β} {C : SimpleGraph γ},   B.IsContained C → A.IsContained B → A.IsCont
+ained C
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.trans`：∀ {α : Type u_4} {β : Type u_5} {γ : Type
+ u_6} {A : SimpleGraph α} {B : SimpleGraph β} {C : SimpleGraph γ},   A.IsContain
+ed B → B.IsContaine…
 
-English:
-theorem IsContained.trans'
-  statement: B ⊑ C -> A ⊑ B -> A ⊑ C
-  proof: flip IsContained.trans
+--- 原说明 ---
+If `B` contains `C` and `A` contains `B`, then `A` contains `C`.
+-/
+theorem IsContained.trans' : B ⊑ C → A ⊑ B → A ⊑ C := flip IsContained.trans
 
 @[gcongr]
-
-中文:
-定理 IsContained.trans'
-  结论: B ⊑ C -> A ⊑ B -> A ⊑ C
-  证明: flip IsContained.trans
-
-@[gcongr]
-
-Depends on / 依赖: IsContained, IsContained.trans
+/-
+**SimpleGraph.IsContained.mono_right** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsCo
+ntained`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B B' : SimpleGraph β}
+, A.IsContained B → B ≤ B' → A.IsContained B'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.trans`：∀ {α : Type u_4} {β : Type u_5} {γ : Type
+ u_6} {A : SimpleGraph α} {B : SimpleGraph β} {C : SimpleGraph γ},   A.IsContain
+ed B → B.IsContaine…
+· 使用定理 `SimpleGraph.IsContained.of_le`：∀ {V : Type u_1} {G₁ G₂ : SimpleGraph V},
+ G₁ ≤ G₂ → G₁.IsContained G₂
 -/
-theorem IsContained.trans' : B ⊑ C -> A ⊑ B -> A ⊑ C := flip IsContained.trans
-
-@[gcongr]
-/--
-lemma `IsContained.mono_right` / 引理 `IsContained.mono_right`
-
-English:
-lemma IsContained.mono_right
-  given: {B' : SimpleGraph β} (h_isub : A ⊑ B) (h_sub : B <= B')
-  statement: A ⊑ B'
-  proof: h_isub.trans IsContained.of_le h_sub
+lemma IsContained.mono_right {B' : SimpleGraph β} (h_isub : A ⊑ B) (h_sub : B ≤ B') : A ⊑ B' :=
+  h_isub.trans <| IsContained.of_le h_sub
 
 alias IsContained.trans_le := IsContained.mono_right
 
 @[gcongr]
-
-中文:
-引理 IsContained.mono_right
-  条件: {B' : 简单图 β} (h_isub : A ⊑ B) (h_sub : B <= B')
-  结论: A ⊑ B'
-  证明: h_isub.trans IsContained.of_le h_sub
-
-alias IsContained.trans_le := IsContained.mono_right
-
-@[gcongr]
-
-Depends on / 依赖: IsContained, IsContained.of_le, h_isub, h_isub.trans, h_sub, of_le
+/-
+**SimpleGraph.IsContained.mono_left** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsCon
+tained`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B : SimpleGraph β} {A
+' : SimpleGraph α},   A ≤ A' → A'.IsContained B → A.IsContained B
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.trans`：∀ {α : Type u_4} {β : Type u_5} {γ : Type
+ u_6} {A : SimpleGraph α} {B : SimpleGraph β} {C : SimpleGraph γ},   A.IsContain
+ed B → B.IsContaine…
+· 使用定理 `SimpleGraph.IsContained.of_le`：∀ {V : Type u_1} {G₁ G₂ : SimpleGraph V},
+ G₁ ≤ G₂ → G₁.IsContained G₂
 -/
-lemma IsContained.mono_right {B' : SimpleGraph β} (h_isub : A ⊑ B) (h_sub : B <= B') : A ⊑ B' :=
-h_isub.trans IsContained.of_le h_sub
-
-alias IsContained.trans_le := IsContained.mono_right
-
-@[gcongr]
-/--
-lemma `IsContained.mono_left` / 引理 `IsContained.mono_left`
-
-English:
-lemma IsContained.mono_left
-  given: {A' : SimpleGraph α} (h_sub : A <= A') (h_isub : A' ⊑ B)
-  statement: A ⊑ B
-  proof: (IsContained.of_le h_sub).trans h_isub
-
-alias IsContained.trans_le' := IsContained.mono_left
-
-中文:
-引理 IsContained.mono_left
-  条件: {A' : 简单图 α} (h_sub : A <= A') (h_isub : A' ⊑ B)
-  结论: A ⊑ B
-  证明: (IsContained.of_le h_sub).trans h_isub
-
-alias IsContained.trans_le' := IsContained.mono_left
-
-Depends on / 依赖: IsContained, IsContained.of_le, h_isub, h_sub, of_le
--/
-lemma IsContained.mono_left {A' : SimpleGraph α} (h_sub : A <= A') (h_isub : A' ⊑ B) : A ⊑ B :=
+lemma IsContained.mono_left {A' : SimpleGraph α} (h_sub : A ≤ A') (h_isub : A' ⊑ B) : A ⊑ B :=
   (IsContained.of_le h_sub).trans h_isub
 
 alias IsContained.trans_le' := IsContained.mono_left
 
-/--
-theorem `isContained_congr` / 定理 `isContained_congr`
+/-- If `A ≃g H` and `B ≃g G` then `A` is contained in `B` if and only if `H` is contained
+in `G`. -/
+/-
+**SimpleGraph.isContained_congr** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：isContained_congr (e₁ : A ≃g H) (e₂ : B ≃g G) : A ⊑ B ↔ H ⊑ G
+参数：e₁ : A ≃g H；e₂ : B ≃g G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.trans'`：∀ {α : Type u_4} {β : Type u_5} {γ : Typ
+e u_6} {A : SimpleGraph α} {B : SimpleGraph β} {C : SimpleGraph γ},   B.IsContai
+ned C → A.IsContaine…
+· 使用定理 `SimpleGraph.IsContained.trans`：∀ {α : Type u_4} {β : Type u_5} {γ : Type
+ u_6} {A : SimpleGraph α} {B : SimpleGraph β} {C : SimpleGraph γ},   A.IsContain
+ed B → B.IsContaine…
 
-English:
-theorem isContained_congr
-  given: (e₁ : A ≃g H) (e₂ : B ≃g G)
-  statement: A ⊑ B ↔ H ⊑ G
-  proof: ⟨.trans' ⟨e₂.toCopy⟩ ∘ .trans ⟨e₁.symm.toCopy⟩, .trans' ⟨e₂.symm.toCopy⟩ ∘ .trans ⟨e₁.toCopy⟩⟩
-
-中文:
-定理 isContained_congr
-  条件: (e₁ : A ≃g H) (e₂ : B ≃g G)
-  结论: A ⊑ B ↔ H ⊑ G
-  证明: ⟨.trans' ⟨e₂.toCopy⟩ ∘ .trans ⟨e₁.symm.toCopy⟩, .trans' ⟨e₂.symm.toCopy⟩ ∘ .trans ⟨e₁.toCopy⟩⟩
-
-Depends on / 依赖: symm.toCopy, toCopy
+--- 原说明 ---
+If `A ≃g H` and `B ≃g G` then `A` is contained in `B` if and only if `H` is cont
+ained
+in `G`.
 -/
 theorem isContained_congr (e₁ : A ≃g H) (e₂ : B ≃g G) : A ⊑ B ↔ H ⊑ G :=
   ⟨.trans' ⟨e₂.toCopy⟩ ∘ .trans ⟨e₁.symm.toCopy⟩, .trans' ⟨e₂.symm.toCopy⟩ ∘ .trans ⟨e₁.toCopy⟩⟩
-
-/--
-lemma `isContained_congr_left` / 引理 `isContained_congr_left`
-
-English:
-lemma isContained_congr_left
-  given: (e₁ : A ≃g B)
-  statement: A ⊑ C ↔ B ⊑ C
-  proof: isContained_congr e₁ .refl
-
-alias ⟨_, IsContained.congr_left⟩ := isContained_congr_left
-
-中文:
-引理 isContained_congr_left
-  条件: (e₁ : A ≃g B)
-  结论: A ⊑ C ↔ B ⊑ C
-  证明: isContained_congr e₁ .refl
-
-alias ⟨_, IsContained.congr_left⟩ := isContained_congr_left
-
-Depends on / 依赖: isContained_congr
+/-
+**SimpleGraph.isContained_congr_left** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：isContained_congr_left (e₁ : A ≃g B) : A ⊑ C ↔ B ⊑ C
+参数：e₁ : A ≃g B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.isContained_congr`：isContained_congr (e₁ : A ≃g H) (e₂ : B ≃
+g G) : A ⊑ B ↔ H ⊑ G
 -/
 lemma isContained_congr_left (e₁ : A ≃g B) : A ⊑ C ↔ B ⊑ C := isContained_congr e₁ .refl
 
 alias ⟨_, IsContained.congr_left⟩ := isContained_congr_left
-
-/--
-lemma `isContained_congr_right` / 引理 `isContained_congr_right`
-
-English:
-lemma isContained_congr_right
-  given: (e₂ : B ≃g C)
-  statement: A ⊑ B ↔ A ⊑ C
-  proof: isContained_congr .refl e₂
-
-alias ⟨_, IsContained.congr_right⟩ := isContained_congr_right
-
-中文:
-引理 isContained_congr_right
-  条件: (e₂ : B ≃g C)
-  结论: A ⊑ B ↔ A ⊑ C
-  证明: isContained_congr .refl e₂
-
-alias ⟨_, IsContained.congr_right⟩ := isContained_congr_right
-
-Depends on / 依赖: isContained_congr
+/-
+**SimpleGraph.isContained_congr_right** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：isContained_congr_right (e₂ : B ≃g C) : A ⊑ B ↔ A ⊑ C
+参数：e₂ : B ≃g C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.isContained_congr`：isContained_congr (e₁ : A ≃g H) (e₂ : B ≃
+g G) : A ⊑ B ↔ H ⊑ G
 -/
 lemma isContained_congr_right (e₂ : B ≃g C) : A ⊑ B ↔ A ⊑ C := isContained_congr .refl e₂
 
 alias ⟨_, IsContained.congr_right⟩ := isContained_congr_right
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPreorder (SimpleGraph α) IsContained
-  body: .refl
-  trans _ _ _ := .trans
-
-中文:
-实例 :
-  签名: 是预序 (简单图 α) IsContained
-  定义体: .refl
-  trans _ _ _ := .trans
+/-
+**SimpleGraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsPreorder (SimpleGraph α) IsContained where
   refl := .refl
   trans _ _ _ := .trans
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: .trans
-
-中文:
-实例 :
-  定义体: .trans
-
-Depends on / 依赖: SimpleGraph
+/-
+**SimpleGraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance :
     Trans (α := SimpleGraph α) (β := SimpleGraph β) (γ := SimpleGraph γ)
       IsContained IsContained IsContained where
   trans := .trans
 
-/--
-lemma `IsContained.of_isEmpty` / 引理 `IsContained.of_isEmpty`
+/-- A simple graph having no vertices is contained in any simple graph. -/
+/-
+**SimpleGraph.IsContained.of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsCo
+ntained`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {A : SimpleGraph α} {B : SimpleGraph β} [I
+sEmpty α], A.IsContained B
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma IsContained.of_isEmpty
-  given: [IsEmpty α]
-  statement: A ⊑ B
-  proof: ⟨⟨isEmptyElim, fun {a} => isEmptyElim a⟩, isEmptyElim⟩
-
-中文:
-引理 IsContained.of_isEmpty
-  条件: [是空 α]
-  结论: A ⊑ B
-  证明: ⟨⟨isEmptyElim, fun {a} => isEmptyElim a⟩, isEmptyElim⟩
-
-Depends on / 依赖: isEmptyElim
+--- 原说明 ---
+A simple graph having no vertices is contained in any simple graph.
 -/
 lemma IsContained.of_isEmpty [IsEmpty α] : A ⊑ B :=
-  ⟨⟨isEmptyElim, fun {a} => isEmptyElim a⟩, isEmptyElim⟩
+  ⟨⟨isEmptyElim, fun {a} ↦ isEmptyElim a⟩, isEmptyElim⟩
 
-/--
-lemma `bot_isContained_iff_card_le` / 引理 `bot_isContained_iff_card_le`
+/-- `⊥` is contained in any simple graph having sufficiently many vertices. -/
+/-
+**SimpleGraph.bot_isContained_iff_card_le** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph
+`。
+形式化陈述：bot_isContained_iff_card_le [Fintype α] [Fintype β] : (⊥ : SimpleGraph α) 
+⊑ B ↔ Fintype.card α <= Fintype.card β
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_le_of_embedding`：card_le_of_embedding (f : α ↪ β) : card α 
+<= card β
+· 使用定理 `Function.Embedding.nonempty_of_card_le`：nonempty_of_card_le [Fintype α] 
+[Fintype β] (h : Fintype.card α <= Fintype.card β) : Nonempty (α ↪ β)
 
-English:
-lemma bot_isContained_iff_card_le
-  given: [Fintype α] [Fintype β]
-  proof: ⟨fun ⟨f⟩ => Fintype.card_le_of_embedding f.toEmbedding,
-    fun h => ⟨Copy.bot (Function.Embedding.nonempty_of_card_le h).some⟩⟩
-
-protected alias IsContained.bot := bot_isContained_iff_card_le
-
-中文:
-引理 bot_isContained_iff_card_le
-  条件: [有限类型 α] [有限类型 β]
-  证明: ⟨fun ⟨f⟩ => Fintype.card_le_of_embedding f.toEmbedding,
-    fun h => ⟨Copy.bot (Function.Embedding.nonempty_of_card_le h).some⟩⟩
-
-protected alias IsContained.bot := bot_isContained_iff_card_le
-
-Depends on / 依赖: Copy.bot, Embedding, Fintype, Fintype.card_le_of_embedding, Function, Function.Embedding.nonempty_of_card_le, card_le_of_embedding, f.toEmbedding, nonempty_of_card_le, toEmbedding
+--- 原说明 ---
+`⊥` is contained in any simple graph having sufficiently many vertices.
 -/
 lemma bot_isContained_iff_card_le [Fintype α] [Fintype β] :
-    (⊥ : SimpleGraph α) ⊑ B ↔ Fintype.card α <= Fintype.card β :=
-  ⟨fun ⟨f⟩ => Fintype.card_le_of_embedding f.toEmbedding,
-    fun h => ⟨Copy.bot (Function.Embedding.nonempty_of_card_le h).some⟩⟩
+    (⊥ : SimpleGraph α) ⊑ B ↔ Fintype.card α ≤ Fintype.card β :=
+  ⟨fun ⟨f⟩ ↦ Fintype.card_le_of_embedding f.toEmbedding,
+    fun h ↦ ⟨Copy.bot (Function.Embedding.nonempty_of_card_le h).some⟩⟩
 
 protected alias IsContained.bot := bot_isContained_iff_card_le
 
-/--
-lemma `Subgraph.coe_isContained` / 引理 `Subgraph.coe_isContained`
+/-- A simple graph `G` contains all `Subgraph G` coercions. -/
+/-
+**SimpleGraph.Subgraph.coe_isContained** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Su
+bgraph`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} (G' : G.Subgraph), G'.coe.IsContained
+ G
+参数：G' : G.Subgraph。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Subgraph.coe_isContained
-  given: (G' : G.Subgraph)
-  statement: G'.coe ⊑ G
-  proof: ⟨G'.coeCopy⟩
-
-中文:
-引理 子图.coe_isContained
-  条件: (G' : G.子图)
-  结论: G'.coe ⊑ G
-  证明: ⟨G'.coeCopy⟩
-
-Depends on / 依赖: coeCopy
+--- 原说明 ---
+A simple graph `G` contains all `Subgraph G` coercions.
 -/
 lemma Subgraph.coe_isContained (G' : G.Subgraph) : G'.coe ⊑ G := ⟨G'.coeCopy⟩
 
-/--
-theorem `isContained_iff_exists_iso_subgraph` / 定理 `isContained_iff_exists_iso_subgraph`
+/-- `B` contains `A` if and only if `B` has a subgraph `B'` and `B'` is isomorphic to `A`. -/
+/-
+**SimpleGraph.isContained_iff_exists_iso_subgraph** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph`。
+形式化陈述：isContained_iff_exists_iso_subgraph : A ⊑ B ↔ exists B' : B.Subgraph, None
+mpty (A ≃g B'.coe) where mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.trans'`：∀ {α : Type u_4} {β : Type u_5} {γ : Typ
+e u_6} {A : SimpleGraph α} {B : SimpleGraph β} {C : SimpleGraph γ},   B.IsContai
+ned C → A.IsContaine…
+· 使用定理 `SimpleGraph.Subgraph.coe_isContained`：∀ {V : Type u_1} {G : SimpleGraph 
+V} (G' : G.Subgraph), G'.coe.IsContained G
 
-English:
-theorem isContained_iff_exists_iso_subgraph
-  proof: fun ⟨f⟩ => ⟨.map f.toHom ⊤, ⟨f.isoToSubgraph⟩⟩
-  mpr := fun ⟨B', ⟨e⟩⟩ => B'.coe_isContained.trans' ⟨e.toCopy⟩
-
-alias ⟨IsContained.exists_iso_subgraph, IsContained.of_exists_iso_subgraph⟩ :=
-  isContained_iff_exists_iso_subgraph
-
-中文:
-定理 isContained_iff_存在_iso_subgraph
-  证明: fun ⟨f⟩ => ⟨.map f.toHom ⊤, ⟨f.isoToSubgraph⟩⟩
-  mpr := fun ⟨B', ⟨e⟩⟩ => B'.coe_isContained.trans' ⟨e.toCopy⟩
-
-alias ⟨IsContained.exists_iso_subgraph, IsContained.of_exists_iso_subgraph⟩ :=
-  isContained_iff_exists_iso_subgraph
-
-Depends on / 依赖: f.isoToSubgraph, f.toHom, isoToSubgraph
+--- 原说明 ---
+`B` contains `A` if and only if `B` has a subgraph `B'` and `B'` is isomorphic t
+o `A`.
 -/
 theorem isContained_iff_exists_iso_subgraph :
-    A ⊑ B ↔ exists B' : B.Subgraph, Nonempty (A ≃g B'.coe) where
-  mp := fun ⟨f⟩ => ⟨.map f.toHom ⊤, ⟨f.isoToSubgraph⟩⟩
-  mpr := fun ⟨B', ⟨e⟩⟩ => B'.coe_isContained.trans' ⟨e.toCopy⟩
+    A ⊑ B ↔ ∃ B' : B.Subgraph, Nonempty (A ≃g B'.coe) where
+  mp := fun ⟨f⟩ ↦ ⟨.map f.toHom ⊤, ⟨f.isoToSubgraph⟩⟩
+  mpr := fun ⟨B', ⟨e⟩⟩ ↦ B'.coe_isContained.trans' ⟨e.toCopy⟩
 
 alias ⟨IsContained.exists_iso_subgraph, IsContained.of_exists_iso_subgraph⟩ :=
   isContained_iff_exists_iso_subgraph
-
-/--
-theorem `Copy.degree_le` / 定理 `Copy.degree_le`
-
-English:
-theorem Copy.degree_le
-  statement: (f : Copy G H) (v : V) [Fintype <| G.neighborSet v]
-  proof: by
-  simpa [card_neighborSet_eq_degree] using
-    Fintype.card_le_of_injective _ (f.mapNeighborSet v).injective
-
-中文:
-定理 余py.degree_le
-  结论: (f : 余py G H) (v : V) [有限类型 <| G.neighborSet v]
-  证明: by
-  simpa [card_neighborSet_eq_degree] using
-    Fintype.card_le_of_injective _ (f.mapNeighborSet v).injective
-
-Depends on / 依赖: Fintype, Fintype.card_le_of_injective, card_le_of_injective, card_neighborSet_eq_degree, f.mapNeighborSet, injective, mapNeighborSet
+/-
+**SimpleGraph.Copy.degree_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (f
+ : G.Copy H) (v : V)   [inst : Fintype ↑(G.neighborSet v)] [inst_1 : Fintype ↑(H
+.neighborSet (f v))], G.degree v ≤ H.degree (f v)
+参数：f : G.Copy H；v : V；G.neighborSet v；H.neighborSet (f v)；f v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
+· 使用定理 `Fintype.card_le_of_injective`：card_le_of_injective (f : α -> β) (hf : Fu
+nction.Injective f) : card α <= card β
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
 -/
 theorem Copy.degree_le (f : Copy G H) (v : V) [Fintype <| G.neighborSet v]
-    [Fintype <| H.neighborSet (f v)] : G.degree v <= H.degree (f v) := by
+    [Fintype <| H.neighborSet (f v)] : G.degree v ≤ H.degree (f v) := by
   simpa [card_neighborSet_eq_degree] using
     Fintype.card_le_of_injective _ (f.mapNeighborSet v).injective
-
-/--
-theorem `Copy.maxDegree_mono` / 定理 `Copy.maxDegree_mono`
-
-English:
-theorem Copy.maxDegree_mono
-  statement: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-  proof: by
-  cases isEmpty_or_nonempty V
-  · simp
-  obtain ⟨v, h⟩ := exists_maximal_degree_vertex G
-  grind [degree_le_maxDegree H (f v), f.degree_le v]
-
-@[deprecated (since := "2026-05-20")] alias Copy.max_degree_le := Copy.maxDegree_mono
-
-中文:
-定理 余py.maxDegree_mono
-  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
-  证明: by
-  cases isEmpty_or_nonempty V
-  · simp
-  obtain ⟨v, h⟩ := exists_maximal_degree_vertex G
-  grind [degree_le_maxDegree H (f v), f.degree_le v]
-
-@[deprecated (since := "2026-05-20")] alias Copy.max_degree_le := Copy.maxDegree_mono
-
-Depends on / 依赖: degree_le, degree_le_maxDegree, exists_maximal_degree_vertex, f.degree_le, isEmpty_or_nonempty
+/-
+**SimpleGraph.Copy.maxDegree_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V] [inst_1 : Fintype W]   [inst_2 : DecidableRel G.Adj] [inst_3 : 
+DecidableRel H.Adj] (f : G.Copy H), G.maxDegree ≤ H.maxDegree
+参数：f : G.Copy H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.maxDegree_of_subsingleton`：maxDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.maxDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `SimpleGraph.exists_maximal_degree_vertex`：exists_maximal_degree_vertex [
+DecidableRel G.Adj] [Nonempty V] : exists v, G.maxDegree = G.degree v
 -/
 theorem Copy.maxDegree_mono [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-    (f : Copy G H) : G.maxDegree <= H.maxDegree := by
+    (f : Copy G H) : G.maxDegree ≤ H.maxDegree := by
   cases isEmpty_or_nonempty V
   · simp
   obtain ⟨v, h⟩ := exists_maximal_degree_vertex G
   grind [degree_le_maxDegree H (f v), f.degree_le v]
 
 @[deprecated (since := "2026-05-20")] alias Copy.max_degree_le := Copy.maxDegree_mono
-
-/--
-theorem `IsContained.maxDegree_mono` / 定理 `IsContained.maxDegree_mono`
-
-English:
-theorem IsContained.maxDegree_mono
-  statement: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-  proof: by
-  have ⟨f⟩ := h
-  exact f.maxDegree_mono
-
-@[deprecated (since := "2026-05-20")] alias IsContained.max_degree_le := IsContained.maxDegree_mono
-
-@[gcongr]
-
-中文:
-定理 IsContained.maxDegree_mono
-  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
-  证明: by
-  have ⟨f⟩ := h
-  exact f.maxDegree_mono
-
-@[deprecated (since := "2026-05-20")] alias IsContained.max_degree_le := IsContained.maxDegree_mono
-
-@[gcongr]
-
-Depends on / 依赖: f.maxDegree_mono, maxDegree_mono
+/-
+**SimpleGraph.IsContained.maxDegree_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+IsContained`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V] [inst_1 : Fintype W]   [inst_2 : DecidableRel G.Adj] [inst_3 : 
+DecidableRel H.Adj], G.IsContained H → G.maxDegree ≤ H.maxDegree
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Copy.maxDegree_mono`：∀ {V : Type u_1} {W : Type u_2} {G : Si
+mpleGraph V} {H : SimpleGraph W} [inst : Fintype V] [inst_1 : Fintype W]   [inst
+_2 : DecidableRel G.A…
 -/
 theorem IsContained.maxDegree_mono [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-    (h : G ⊑ H) : G.maxDegree <= H.maxDegree := by
+    (h : G ⊑ H) : G.maxDegree ≤ H.maxDegree := by
   have ⟨f⟩ := h
   exact f.maxDegree_mono
 
 @[deprecated (since := "2026-05-20")] alias IsContained.max_degree_le := IsContained.maxDegree_mono
 
 @[gcongr]
-/--
-lemma `maxDegree_mono` / 引理 `maxDegree_mono`
-
-English:
-lemma maxDegree_mono
-  statement: {H : SimpleGraph V} [Fintype V] [DecidableRel G.Adj] [DecidableRel H.Adj]
-  proof: .maxDegree_mono IsContained.of_le hle
-
-中文:
-引理 maxDegree_mono
-  结论: {H : 简单图 V} [有限类型 V] [DecidableRel G.伴随] [DecidableRel H.伴随]
-  证明: .maxDegree_mono IsContained.of_le hle
-
-Depends on / 依赖: IsContained, IsContained.of_le, maxDegree_mono, of_le
+/-
+**SimpleGraph.maxDegree_mono** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：maxDegree_mono {H : SimpleGraph V} [Fintype V] [DecidableRel G.Adj] [Decid
+ableRel H.Adj] (hle : G <= H) : G.maxDegree <= H.maxDegree
+参数：hle : G <= H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.maxDegree_mono`：∀ {V : Type u_1} {W : Type u_2} 
+{G : SimpleGraph V} {H : SimpleGraph W} [inst : Fintype V] [inst_1 : Fintype W] 
+  [inst_2 : DecidableRel G.A…
+· 使用定理 `SimpleGraph.IsContained.of_le`：∀ {V : Type u_1} {G₁ G₂ : SimpleGraph V},
+ G₁ ≤ G₂ → G₁.IsContained G₂
 -/
 lemma maxDegree_mono {H : SimpleGraph V} [Fintype V] [DecidableRel G.Adj] [DecidableRel H.Adj]
-    (hle : G <= H) : G.maxDegree <= H.maxDegree :=
-.maxDegree_mono IsContained.of_le hle
-
-/--
-theorem `Copy.minDegree_mono` / 定理 `Copy.minDegree_mono`
-
-English:
-theorem Copy.minDegree_mono
-  statement: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-  proof: by
-  cases isEmpty_or_nonempty W
-  · have := Function.isEmpty f
-    simp
-  refine H.le_minDegree_of_forall_le_degree _ fun w => ?_
-  obtain ⟨v, rfl⟩ := hf w
-  grw [← f.degree_le, ← minDegree_le_degree]
-
-@[deprecated (since := "2026-05-20")] alias Copy.minDegree_le := Copy.minDegree_mono
-
-中文:
-定理 余py.minDegree_mono
-  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
-  证明: by
-  cases isEmpty_or_nonempty W
-  · have := Function.isEmpty f
-    simp
-  refine H.le_minDegree_of_forall_le_degree _ fun w => ?_
-  obtain ⟨v, rfl⟩ := hf w
-  grw [← f.degree_le, ← minDegree_le_degree]
-
-@[deprecated (since := "2026-05-20")] alias Copy.minDegree_le := Copy.minDegree_mono
-
-Depends on / 依赖: Function, Function.isEmpty, H.le_minDegree_of_forall_le_degree, degree_le, f.degree_le, isEmpty, isEmpty_or_nonempty, le_minDegree_of_forall_le_degree, minDegree_le_degree
+    (hle : G ≤ H) : G.maxDegree ≤ H.maxDegree :=
+  IsContained.of_le hle |>.maxDegree_mono
+/-
+**SimpleGraph.Copy.minDegree_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V] [inst_1 : Fintype W]   [inst_2 : DecidableRel G.Adj] [inst_3 : 
+DecidableRel H.Adj] {f : G.Copy H},   Function.Surjective ⇑f → G.minDegree ≤ H.m
+inDegree
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `Function.isEmpty`：∀ {α : Sort u} {β : Sort v} [IsEmpty β] (f : α → β), I
+sEmpty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.minDegree_of_subsingleton`：minDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.minDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `SimpleGraph.le_minDegree_of_forall_le_degree`：le_minDegree_of_forall_le_
+degree [DecidableRel G.Adj] [Nonempty V] (k : Nat) (h : forall v, k <= G.degree 
+v) : k <= G.minDegree
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `SimpleGraph.Copy.degree_le`：∀ {V : Type u_1} {W : Type u_2} {G : SimpleG
+raph V} {H : SimpleGraph W} (f : G.Copy H) (v : V)   [inst : Fintype ↑(G.neighbo
+rSet v)] [inst_1…
+· 使用定理 `SimpleGraph.minDegree_le_degree`：minDegree_le_degree [DecidableRel G.Adj
+] (v : V) : G.minDegree <= G.degree v
 -/
 theorem Copy.minDegree_mono [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-    {f : Copy G H} (hf : Function.Surjective f) : G.minDegree <= H.minDegree := by
+    {f : Copy G H} (hf : Function.Surjective f) : G.minDegree ≤ H.minDegree := by
   cases isEmpty_or_nonempty W
   · have := Function.isEmpty f
     simp
-  refine H.le_minDegree_of_forall_le_degree _ fun w => ?_
+  refine H.le_minDegree_of_forall_le_degree _ fun w ↦ ?_
   obtain ⟨v, rfl⟩ := hf w
   grw [← f.degree_le, ← minDegree_le_degree]
 
 @[deprecated (since := "2026-05-20")] alias Copy.minDegree_le := Copy.minDegree_mono
-
-/--
-theorem `Hom.minDegree_mono` / 定理 `Hom.minDegree_mono`
-
-English:
-theorem Hom.minDegree_mono
-  statement: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-  proof: Copy.minDegree_mono (f := ⟨f, hf.injective⟩) hf.surjective
-
-@[deprecated (since := "2026-05-20")] alias Hom.minDegree_le := Hom.minDegree_mono
-
-中文:
-定理 态射.minDegree_mono
-  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
-  证明: Copy.minDegree_mono (f := ⟨f, hf.injective⟩) hf.surjective
-
-@[deprecated (since := "2026-05-20")] alias Hom.minDegree_le := Hom.minDegree_mono
-
-Depends on / 依赖: Copy.minDegree_mono, hf.injective, hf.surjective, injective, minDegree_mono, surjective
+/-
+**SimpleGraph.Hom.minDegree_mono** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Hom`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V] [inst_1 : Fintype W]   [inst_2 : DecidableRel G.Adj] [inst_3 : 
+DecidableRel H.Adj] {f : G →g H},   Function.Bijective ⇑f → G.minDegree ≤ H.minD
+egree
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Copy.minDegree_mono`：∀ {V : Type u_1} {W : Type u_2} {G : Si
+mpleGraph V} {H : SimpleGraph W} [inst : Fintype V] [inst_1 : Fintype W]   [inst
+_2 : DecidableRel G.A…
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
 -/
 theorem Hom.minDegree_mono [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
-    {f : G ->g H} (hf : Function.Bijective f) : G.minDegree <= H.minDegree :=
+    {f : G →g H} (hf : Function.Bijective f) : G.minDegree ≤ H.minDegree :=
   Copy.minDegree_mono (f := ⟨f, hf.injective⟩) hf.surjective
 
 @[deprecated (since := "2026-05-20")] alias Hom.minDegree_le := Hom.minDegree_mono
-
-/--
-theorem `maxDegree_induce_of_support_subset` / 定理 `maxDegree_induce_of_support_subset`
-
-English:
-theorem maxDegree_induce_of_support_subset
-  statement: [Fintype V] [DecidableRel G.Adj] {s : Set V}
-  proof: by
-apply le_antisymm Copy.maxDegree_mono .toCopy Embedding.induce s
-  refine G.maxDegree_le_of_forall_degree_le _ fun v => ?_
-  by_cases hv : G.IsIsolated v
-  · simp [hv]
-  grw [← degree_le_maxDegree _ ⟨v, h <| G.mem_support_iff_not_isIsolated.mpr hv⟩,
-degree_induce_of_neighborSet_subset .trans h] G.neighborSet_subset_support v
-
-中文:
-定理 maxDegree_induce_of_support_subset
-  结论: [有限类型 V] [DecidableRel G.伴随] {s : 集合 V}
-  证明: by
-apply le_antisymm Copy.maxDegree_mono .toCopy Embedding.induce s
-  refine G.maxDegree_le_of_forall_degree_le _ fun v => ?_
-  by_cases hv : G.IsIsolated v
-  · simp [hv]
-  grw [← degree_le_maxDegree _ ⟨v, h <| G.mem_support_iff_not_isIsolated.mpr hv⟩,
-degree_induce_of_neighborSet_subset .trans h] G.neighborSet_subset_support v
-
-Depends on / 依赖: Copy.maxDegree_mono, Embedding, Embedding.induce, G.IsIsolated, G.maxDegree_le_of_forall_degree_le, G.mem_support_iff_not_isIsolated.mpr, G.neighborSet_subset_support, IsIsolated, degree_induce_of_neighborSet_subset, degree_le_maxDegree, induce, le_antisymm, maxDegree_le_of_forall_degree_le, maxDegree_mono, mem_support_iff_not_isIsolated, neighborSet_subset_support, toCopy
+/-
+**SimpleGraph.maxDegree_induce_of_support_subset** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph`。
+形式化陈述：maxDegree_induce_of_support_subset [Fintype V] [DecidableRel G.Adj] {s : S
+et V} [DecidablePred (· in s)] (h : G.support subseteq s) : (G.induce s).maxDegr
+ee = G.maxDegree
+参数：· in s；h : G.support subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `SimpleGraph.Copy.maxDegree_mono`：∀ {V : Type u_1} {W : Type u_2} {G : Si
+mpleGraph V} {H : SimpleGraph W} [inst : Fintype V] [inst_1 : Fintype W]   [inst
+_2 : DecidableRel G.A…
+· 使用定理 `SimpleGraph.maxDegree_le_of_forall_degree_le`：maxDegree_le_of_forall_deg
+ree_le [DecidableRel G.Adj] (k : Nat) (h : forall v, G.degree v <= k) : G.maxDeg
+ree <= k
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.IsIsolated.degree_eq_zero`：∀ {V : Type u_1} (G : SimpleGraph
+ V) (v : V) [inst : Fintype ↑(G.neighborSet v)], G.IsIsolated v → G.degree v = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `SimpleGraph.mem_support_iff_not_isIsolated`：mem_support_iff_not_isIsolat
+ed : v in G.support ↔ ¬ G.IsIsolated v
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `SimpleGraph.degree_le_maxDegree`：degree_le_maxDegree [DecidableRel G.Adj
+] (v : V) : G.degree v <= G.maxDegree
+· 使用定理 `SimpleGraph.degree_induce_of_neighborSet_subset`：degree_induce_of_neighb
+orSet_subset {v : s} (h : G.neighborSet v subseteq s) : (G.induce s).degree v = 
+G.degree v
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `SimpleGraph.neighborSet_subset_support`：neighborSet_subset_support (v : 
+V) : G.neighborSet v subseteq G.support
 -/
 theorem maxDegree_induce_of_support_subset [Fintype V] [DecidableRel G.Adj] {s : Set V}
-    [DecidablePred (· in s)] (h : G.support subseteq s) : (G.induce s).maxDegree = G.maxDegree := by
-apply le_antisymm Copy.maxDegree_mono .toCopy Embedding.induce s
-  refine G.maxDegree_le_of_forall_degree_le _ fun v => ?_
+    [DecidablePred (· ∈ s)] (h : G.support ⊆ s) : (G.induce s).maxDegree = G.maxDegree := by
+  apply le_antisymm <| Copy.maxDegree_mono <| Embedding.induce s |>.toCopy
+  refine G.maxDegree_le_of_forall_degree_le _ fun v ↦ ?_
   by_cases hv : G.IsIsolated v
   · simp [hv]
   grw [← degree_le_maxDegree _ ⟨v, h <| G.mem_support_iff_not_isIsolated.mpr hv⟩,
-degree_induce_of_neighborSet_subset .trans h] G.neighborSet_subset_support v
+    degree_induce_of_neighborSet_subset <| G.neighborSet_subset_support v |>.trans h]
 
 end IsContained
 
 section Free
 
-/--
-Definition of `Free` / `Free` 的定义
+/-- `A.Free B` means that `B` does not contain a copy of `A`. -/
+/-
+**SimpleGraph.Free** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph`。
+形式化陈述：Free (A : SimpleGraph α) (B : SimpleGraph β)
+参数：A : SimpleGraph α；B : SimpleGraph β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Free
-  signature: (A : SimpleGraph α) (B : SimpleGraph β)
-  body: ¬A ⊑ B
-
-中文:
-缩写 自由
-  签名: (A : 简单图 α) (B : 简单图 β)
-  定义体: ¬A ⊑ B
+--- 原说明 ---
+`A.Free B` means that `B` does not contain a copy of `A`.
 -/
 abbrev Free (A : SimpleGraph α) (B : SimpleGraph β) := ¬A ⊑ B
-
-/--
-lemma `not_free` / 引理 `not_free`
-
-English:
-lemma not_free
-  statement: ¬A.Free B ↔ A ⊑ B
-  proof: not_not
-
-中文:
-引理 not_free
-  结论: ¬A.自由 B ↔ A ⊑ B
-  证明: not_not
-
-Depends on / 依赖: not_not
+/-
+**SimpleGraph.not_free** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：not_free : ¬A.Free B ↔ A ⊑ B
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
 -/
 lemma not_free : ¬A.Free B ↔ A ⊑ B := not_not
 
-/--
-theorem `free_congr` / 定理 `free_congr`
+/-- If `A ≃g H` and `B ≃g G` then `B` is `A`-free if and only if `G` is `H`-free. -/
+/-
+**SimpleGraph.free_congr** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：free_congr (e₁ : A ≃g H) (e₂ : B ≃g G) : A.Free B ↔ H.Free G
+参数：e₁ : A ≃g H；e₂ : B ≃g G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `SimpleGraph.isContained_congr`：isContained_congr (e₁ : A ≃g H) (e₂ : B ≃
+g G) : A ⊑ B ↔ H ⊑ G
 
-English:
-theorem free_congr
-  given: (e₁ : A ≃g H) (e₂ : B ≃g G)
-  statement: A.Free B ↔ H.Free G
-  proof: (isContained_congr e₁ e₂).not
-
-中文:
-定理 free_congr
-  条件: (e₁ : A ≃g H) (e₂ : B ≃g G)
-  结论: A.自由 B ↔ H.自由 G
-  证明: (isContained_congr e₁ e₂).not
-
-Depends on / 依赖: isContained_congr
+--- 原说明 ---
+If `A ≃g H` and `B ≃g G` then `B` is `A`-free if and only if `G` is `H`-free.
 -/
 theorem free_congr (e₁ : A ≃g H) (e₂ : B ≃g G) : A.Free B ↔ H.Free G :=
   (isContained_congr e₁ e₂).not
-
-/--
-lemma `free_congr_left` / 引理 `free_congr_left`
-
-English:
-lemma free_congr_left
-  given: (e₁ : A ≃g B)
-  statement: A.Free C ↔ B.Free C
-  proof: free_congr e₁ .refl
-
-alias ⟨_, Free.congr_left⟩ := free_congr_left
-
-中文:
-引理 free_congr_left
-  条件: (e₁ : A ≃g B)
-  结论: A.自由 C ↔ B.自由 C
-  证明: free_congr e₁ .refl
-
-alias ⟨_, Free.congr_left⟩ := free_congr_left
-
-Depends on / 依赖: free_congr
+/-
+**SimpleGraph.free_congr_left** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：free_congr_left (e₁ : A ≃g B) : A.Free C ↔ B.Free C
+参数：e₁ : A ≃g B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.free_congr`：free_congr (e₁ : A ≃g H) (e₂ : B ≃g G) : A.Free 
+B ↔ H.Free G
 -/
 lemma free_congr_left (e₁ : A ≃g B) : A.Free C ↔ B.Free C := free_congr e₁ .refl
 
 alias ⟨_, Free.congr_left⟩ := free_congr_left
-
-/--
-lemma `free_congr_right` / 引理 `free_congr_right`
-
-English:
-lemma free_congr_right
-  given: (e₂ : B ≃g C)
-  statement: A.Free B ↔ A.Free C
-  proof: free_congr .refl e₂
-
-alias ⟨_, Free.congr_right⟩ := free_congr_right
-
-中文:
-引理 free_congr_right
-  条件: (e₂ : B ≃g C)
-  结论: A.自由 B ↔ A.自由 C
-  证明: free_congr .refl e₂
-
-alias ⟨_, Free.congr_right⟩ := free_congr_right
-
-Depends on / 依赖: free_congr
+/-
+**SimpleGraph.free_congr_right** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：free_congr_right (e₂ : B ≃g C) : A.Free B ↔ A.Free C
+参数：e₂ : B ≃g C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.free_congr`：free_congr (e₁ : A ≃g H) (e₂ : B ≃g G) : A.Free 
+B ↔ H.Free G
 -/
 lemma free_congr_right (e₂ : B ≃g C) : A.Free B ↔ A.Free C := free_congr .refl e₂
 
 alias ⟨_, Free.congr_right⟩ := free_congr_right
-
-/--
-lemma `free_bot` / 引理 `free_bot`
-
-English:
-lemma free_bot
-  given: (h : A != ⊥)
-  statement: A.Free (⊥ : SimpleGraph β)
-  proof: by
-  rw [← edgeSet_nonempty] at h
-  intro ⟨f, hf⟩
-  absurd f.map_mem_edgeSet h.choose_spec
-  rw [edgeSet_bot]
-  exact Set.notMem_empty (h.choose.map f)
-
-中文:
-引理 free_bot
-  条件: (h : A != ⊥)
-  结论: A.自由 (⊥ : 简单图 β)
-  证明: by
-  rw [← edgeSet_nonempty] at h
-  intro ⟨f, hf⟩
-  absurd f.map_mem_edgeSet h.choose_spec
-  rw [edgeSet_bot]
-  exact Set.notMem_empty (h.choose.map f)
-
-Depends on / 依赖: Set.notMem_empty, absurd, choose_spec, edgeSet_bot, edgeSet_nonempty, f.map_mem_edgeSet, h.choose.map, h.choose_spec, map_mem_edgeSet, notMem_empty
+/-
+**SimpleGraph.free_bot** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：free_bot (h : A != ⊥) : A.Free (⊥ : SimpleGraph β)
+参数：h : A != ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.edgeSet_nonempty`：∀ {V : Type u} {G : SimpleGraph V}, G.edge
+Set.Nonempty ↔ G ≠ ⊥
+· 使用定理 `SimpleGraph.Hom.map_mem_edgeSet`：map_mem_edgeSet {e : Sym2 V} (h : e in 
+G.edgeSet) : e.map f in G'.edgeSet
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `SimpleGraph.edgeSet_bot`：edgeSet_bot : (⊥ : SimpleGraph V).edgeSet = ∅
+· 使用定理 `Set.notMem_empty`：notMem_empty (x : α) : x ∉ (∅ : Set α)
 -/
-lemma free_bot (h : A != ⊥) : A.Free (⊥ : SimpleGraph β) := by
+lemma free_bot (h : A ≠ ⊥) : A.Free (⊥ : SimpleGraph β) := by
   rw [← edgeSet_nonempty] at h
   intro ⟨f, hf⟩
   absurd f.map_mem_edgeSet h.choose_spec
@@ -1495,327 +1133,228 @@ to `H` having an induced subgraph isomorphic to `G`.
 We denote "`G` is inducingly contained in `H`" by `G ⊴ H` (`\trianglelefteq`).
 -/
 
-/--
-Definition of `IsIndContained` / `IsIndContained` 的定义
+/-- A simple graph `G` is inducingly contained in a simple graph `H` if there exists an induced
+subgraph of `H` isomorphic to `G`. This is denoted by `G ⊴ H`. -/
+/-
+**SimpleGraph.IsIndContained** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：IsIndContained (G : SimpleGraph V) (H : SimpleGraph W) : Prop
+参数：G : SimpleGraph V；H : SimpleGraph W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsIndContained
-  signature: (G : SimpleGraph V) (H : SimpleGraph W)
-  body: Nonempty (G ↪g H)
-
-@[inherit_doc] scoped infixl:50 " ⊴ " => SimpleGraph.IsIndContained
-
-中文:
-定义 IsIndContained
-  签名: (G : 简单图 V) (H : 简单图 W)
-  定义体: Nonempty (G ↪g H)
-
-@[inherit_doc] scoped infixl:50 " ⊴ " => SimpleGraph.IsIndContained
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+A simple graph `G` is inducingly contained in a simple graph `H` if there exists
+ an induced
+subgraph of `H` isomorphic to `G`. This is denoted by `G ⊴ H`.
 -/
 def IsIndContained (G : SimpleGraph V) (H : SimpleGraph W) : Prop := Nonempty (G ↪g H)
 
 @[inherit_doc] scoped infixl:50 " ⊴ " => SimpleGraph.IsIndContained
-
-/--
-lemma `Copy.isContained` / 引理 `Copy.isContained`
-
-English:
-lemma Copy.isContained
-  given: (f : Copy G H)
-  statement: G ⊑ H
-  proof: ⟨f⟩
-
-中文:
-引理 余py.isContained
-  条件: (f : 余py G H)
-  结论: G ⊑ H
-  证明: ⟨f⟩
+/-
+**SimpleGraph.Copy.isContained** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Copy`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (f
+ : G.Copy H), G.IsContained H
+参数：f : G.Copy H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma Copy.isContained (f : Copy G H) : G ⊑ H := ⟨f⟩
-
-/--
-lemma `Embedding.isIndContained` / 引理 `Embedding.isIndContained`
-
-English:
-lemma Embedding.isIndContained
-  given: (f : G ↪g H)
-  statement: G ⊴ H
-  proof: ⟨f⟩
-
-中文:
-引理 嵌入.isIndContained
-  条件: (f : G ↪g H)
-  结论: G ⊴ H
-  证明: ⟨f⟩
+/-
+**SimpleGraph.Embedding.isIndContained** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Em
+bedding`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (f
+ : G ↪g H), G.IsIndContained H
+参数：f : G ↪g H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma Embedding.isIndContained (f : G ↪g H) : G ⊴ H := ⟨f⟩
-
-/--
-lemma `Embedding.isContained` / 引理 `Embedding.isContained`
-
-English:
-lemma Embedding.isContained
-  given: (f : G ↪g H)
-  statement: G ⊑ H
-  proof: f.toCopy.isContained
-
-中文:
-引理 嵌入.isContained
-  条件: (f : G ↪g H)
-  结论: G ⊑ H
-  证明: f.toCopy.isContained
+/-
+**SimpleGraph.Embedding.isContained** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Embed
+ding`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (f
+ : G ↪g H), G.IsContained H
+参数：f : G ↪g H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Copy.isContained`：∀ {V : Type u_1} {W : Type u_2} {G : Simpl
+eGraph V} {H : SimpleGraph W} (f : G.Copy H), G.IsContained H
 -/
 protected lemma Embedding.isContained (f : G ↪g H) : G ⊑ H := f.toCopy.isContained
-
-/--
-lemma `IsIndContained.isContained` / 引理 `IsIndContained.isContained`
-
-English:
-lemma IsIndContained.isContained
-  statement: G ⊴ H -> G ⊑ H
-  proof: fun ⟨f⟩ => f.isContained
-
-中文:
-引理 IsIndContained.isContained
-  结论: G ⊴ H -> G ⊑ H
-  证明: fun ⟨f⟩ => f.isContained
+/-
+**SimpleGraph.IsIndContained.isContained** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.
+IsIndContained`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W}, G
+.IsIndContained H → G.IsContained H
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Embedding.isContained`：∀ {V : Type u_1} {W : Type u_2} {G : 
+SimpleGraph V} {H : SimpleGraph W} (f : G ↪g H), G.IsContained H
 -/
-protected lemma IsIndContained.isContained : G ⊴ H -> G ⊑ H := fun ⟨f⟩ => f.isContained
+protected lemma IsIndContained.isContained : G ⊴ H → G ⊑ H := fun ⟨f⟩ ↦ f.isContained
 
-/--
-lemma `Iso.isContained` / 引理 `Iso.isContained`
+/-- If `G` is isomorphic to `H`, then `G` is contained in `H`. -/
+/-
+**SimpleGraph.Iso.isContained** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (e
+ : G ≃g H), G.IsContained H
+参数：e : G ≃g H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Copy.isContained`：∀ {V : Type u_1} {W : Type u_2} {G : Simpl
+eGraph V} {H : SimpleGraph W} (f : G.Copy H), G.IsContained H
 
-English:
-lemma Iso.isContained
-  given: (e : G ≃g H)
-  statement: G ⊑ H
-  proof: e.toCopy.isContained
-
-中文:
-引理 同构.isContained
-  条件: (e : G ≃g H)
-  结论: G ⊑ H
-  证明: e.toCopy.isContained
+--- 原说明 ---
+If `G` is isomorphic to `H`, then `G` is contained in `H`.
 -/
 protected lemma Iso.isContained (e : G ≃g H) : G ⊑ H := e.toCopy.isContained
 
-/--
-lemma `Iso.isContained'` / 引理 `Iso.isContained'`
+/-- If `G` is isomorphic to `H`, then `H` is contained in `G`. -/
+/-
+**SimpleGraph.Iso.isContained'** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (e
+ : G ≃g H), H.IsContained G
+参数：e : G ≃g H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Iso.isContained`：∀ {V : Type u_1} {W : Type u_2} {G : Simple
+Graph V} {H : SimpleGraph W} (e : G ≃g H), G.IsContained H
 
-English:
-lemma Iso.isContained'
-  given: (e : G ≃g H)
-  statement: H ⊑ G
-  proof: e.symm.isContained
-
-中文:
-引理 同构.isContained'
-  条件: (e : G ≃g H)
-  结论: H ⊑ G
-  证明: e.symm.isContained
+--- 原说明 ---
+If `G` is isomorphic to `H`, then `H` is contained in `G`.
 -/
 protected lemma Iso.isContained' (e : G ≃g H) : H ⊑ G := e.symm.isContained
 
-/--
-lemma `Iso.isIndContained` / 引理 `Iso.isIndContained`
+/-- If `G` is isomorphic to `H`, then `G` is inducingly contained in `H`. -/
+/-
+**SimpleGraph.Iso.isIndContained** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (e
+ : G ≃g H), G.IsIndContained H
+参数：e : G ≃g H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Embedding.isIndContained`：∀ {V : Type u_1} {W : Type u_2} {G
+ : SimpleGraph V} {H : SimpleGraph W} (f : G ↪g H), G.IsIndContained H
 
-English:
-lemma Iso.isIndContained
-  given: (e : G ≃g H)
-  statement: G ⊴ H
-  proof: e.toEmbedding.isIndContained
-
-中文:
-引理 同构.isIndContained
-  条件: (e : G ≃g H)
-  结论: G ⊴ H
-  证明: e.toEmbedding.isIndContained
+--- 原说明 ---
+If `G` is isomorphic to `H`, then `G` is inducingly contained in `H`.
 -/
 protected lemma Iso.isIndContained (e : G ≃g H) : G ⊴ H := e.toEmbedding.isIndContained
 
-/--
-lemma `Iso.isIndContained'` / 引理 `Iso.isIndContained'`
+/-- If `G` is isomorphic to `H`, then `H` is inducingly contained in `G`. -/
+/-
+**SimpleGraph.Iso.isIndContained'** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} (e
+ : G ≃g H), H.IsIndContained G
+参数：e : G ≃g H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Iso.isIndContained`：∀ {V : Type u_1} {W : Type u_2} {G : Sim
+pleGraph V} {H : SimpleGraph W} (e : G ≃g H), G.IsIndContained H
 
-English:
-lemma Iso.isIndContained'
-  given: (e : G ≃g H)
-  statement: H ⊴ G
-  proof: e.symm.isIndContained
-
-中文:
-引理 同构.isIndContained'
-  条件: (e : G ≃g H)
-  结论: H ⊴ G
-  证明: e.symm.isIndContained
+--- 原说明 ---
+If `G` is isomorphic to `H`, then `H` is inducingly contained in `G`.
 -/
 protected lemma Iso.isIndContained' (e : G ≃g H) : H ⊴ G := e.symm.isIndContained
-
-/--
-lemma `Subgraph.IsInduced.isIndContained` / 引理 `Subgraph.IsInduced.isIndContained`
-
-English:
-lemma Subgraph.IsInduced.isIndContained
-  given: {G' : G.Subgraph} (hG' : G'.IsInduced)
-  proof: ⟨{ toFun := (↑)
-     inj' := Subtype.coe_injective
-     map_rel_iff' := hG'.adj.symm }⟩
-
-中文:
-引理 子图.是Induced.isIndContained
-  条件: {G' : G.子图} (hG' : G'.是Induced)
-  证明: ⟨{ toFun := (↑)
-     inj' := Subtype.coe_injective
-     map_rel_iff' := hG'.adj.symm }⟩
+/-
+**SimpleGraph.Subgraph.IsInduced.isIndContained** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph.Subgraph.IsInduced`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {G' : G.Subgraph}, G'.IsInduced → G'.
+coe.IsIndContained G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `SimpleGraph.Subgraph.IsInduced.adj`：∀ {V : Type u} {G : SimpleGraph V} {
+G' : G.Subgraph}, G'.IsInduced → ∀ {a b : ↑G'.verts}, G'.Adj ↑a ↑b ↔ G.Adj ↑a ↑b
 -/
 protected lemma Subgraph.IsInduced.isIndContained {G' : G.Subgraph} (hG' : G'.IsInduced) :
     G'.coe ⊴ G :=
   ⟨{ toFun := (↑)
      inj' := Subtype.coe_injective
      map_rel_iff' := hG'.adj.symm }⟩
-
-/--
-lemma `IsIndContained.refl` / 引理 `IsIndContained.refl`
-
-English:
-lemma IsIndContained.refl
-  given: (G : SimpleGraph V)
-  statement: G ⊴ G
-  proof: ⟨Embedding.refl⟩
-
-中文:
-引理 IsIndContained.refl
-  条件: (G : 简单图 V)
-  结论: G ⊴ G
-  证明: ⟨Embedding.refl⟩
+/-
+**SimpleGraph.IsIndContained.refl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsIndCo
+ntained`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V), G.IsIndContained G
+参数：G : SimpleGraph V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[refl] lemma IsIndContained.refl (G : SimpleGraph V) : G ⊴ G := ⟨Embedding.refl⟩
-/--
-lemma `IsIndContained.rfl` / 引理 `IsIndContained.rfl`
-
-English:
-lemma IsIndContained.rfl
-  statement: G ⊴ G
-  proof: .refl _
-
-中文:
-引理 IsIndContained.rfl
-  结论: G ⊴ G
-  证明: .refl _
+/-
+**SimpleGraph.IsIndContained.rfl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsIndCon
+tained`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V}, G.IsIndContained G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsIndContained.refl`：∀ {V : Type u_1} (G : SimpleGraph V), G
+.IsIndContained G
 -/
 lemma IsIndContained.rfl : G ⊴ G := .refl _
-/--
-lemma `IsIndContained.trans` / 引理 `IsIndContained.trans`
-
-English:
-lemma IsIndContained.trans
-  statement: G ⊴ H -> H ⊴ I -> G ⊴ I
-  proof: fun ⟨f⟩ ⟨g⟩ => ⟨g.comp f⟩
-
-中文:
-引理 IsIndContained.trans
-  结论: G ⊴ H -> H ⊴ I -> G ⊴ I
-  证明: fun ⟨f⟩ ⟨g⟩ => ⟨g.comp f⟩
+/-
+**SimpleGraph.IsIndContained.trans** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsIndC
+ontained`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {X : Type u_3} {G : SimpleGraph V} {H : Si
+mpleGraph W} {I : SimpleGraph X},   G.IsIndContained H → H.IsIndContained I → G.
+IsIndContained I
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[trans] lemma IsIndContained.trans : G ⊴ H -> H ⊴ I -> G ⊴ I := fun ⟨f⟩ ⟨g⟩ => ⟨g.comp f⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPreorder (SimpleGraph α) IsIndContained
-  body: .refl
-  trans _ _ _ := .trans
-
-中文:
-实例 :
-  签名: 是预序 (简单图 α) IsIndContained
-  定义体: .refl
-  trans _ _ _ := .trans
+@[trans] lemma IsIndContained.trans : G ⊴ H → H ⊴ I → G ⊴ I := fun ⟨f⟩ ⟨g⟩ ↦ ⟨g.comp f⟩
+/-
+**SimpleGraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsPreorder (SimpleGraph α) IsIndContained where
   refl := .refl
   trans _ _ _ := .trans
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: .trans
-
-中文:
-实例 :
-  定义体: .trans
-
-Depends on / 依赖: SimpleGraph
+/-
+**SimpleGraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance :
     Trans (α := SimpleGraph α) (β := SimpleGraph β) (γ := SimpleGraph γ)
       IsIndContained IsIndContained IsIndContained where
   trans := .trans
-
-/--
-lemma `IsIndContained.of_isEmpty` / 引理 `IsIndContained.of_isEmpty`
-
-English:
-lemma IsIndContained.of_isEmpty
-  given: [IsEmpty V]
-  statement: G ⊴ H
-  proof: ⟨{ toFun := isEmptyElim
-     inj' := isEmptyElim
-     map_rel_iff' := fun {a} => isEmptyElim a }⟩
-
-中文:
-引理 IsIndContained.of_isEmpty
-  条件: [是空 V]
-  结论: G ⊴ H
-  证明: ⟨{ toFun := isEmptyElim
-     inj' := isEmptyElim
-     map_rel_iff' := fun {a} => isEmptyElim a }⟩
-
-Depends on / 依赖: isEmptyElim, map_rel_iff
+/-
+**SimpleGraph.IsIndContained.of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.I
+sIndContained`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [I
+sEmpty V], G.IsIndContained H
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsIndContained.of_isEmpty [IsEmpty V] : G ⊴ H :=
   ⟨{ toFun := isEmptyElim
      inj' := isEmptyElim
-     map_rel_iff' := fun {a} => isEmptyElim a }⟩
-
-/--
-lemma `isIndContained_iff_exists_iso_subgraph` / 引理 `isIndContained_iff_exists_iso_subgraph`
-
-English:
-lemma isIndContained_iff_exists_iso_subgraph
-  proof: by
-  constructor
-  · rintro ⟨f⟩
-    refine ⟨f.toCopy.toSubgraph, f.toCopy.isoToSubgraph, ?_⟩
-    simp [Subgraph.IsInduced, Relation.map_apply_apply, f.injective]
-  · rintro ⟨H', e, hH'⟩
-    exact e.isIndContained.trans hH'.isIndContained
-
-alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_exists_iso_subgraph⟩ :=
-  isIndContained_iff_exists_iso_subgraph
-
-中文:
-引理 isIndContained_iff_存在_iso_subgraph
-  证明: by
-  constructor
-  · rintro ⟨f⟩
-    refine ⟨f.toCopy.toSubgraph, f.toCopy.isoToSubgraph, ?_⟩
-    simp [Subgraph.IsInduced, Relation.map_apply_apply, f.injective]
-  · rintro ⟨H', e, hH'⟩
-    exact e.isIndContained.trans hH'.isIndContained
-
-alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_exists_iso_subgraph⟩ :=
-  isIndContained_iff_exists_iso_subgraph
-
-Depends on / 依赖: IsInduced, Relation, Relation.map_apply_apply, Subgraph, Subgraph.IsInduced, e.isIndContained.trans, f.injective, f.toCopy.isoToSubgraph, f.toCopy.toSubgraph, injective, isIndContained, isoToSubgraph, map_apply_apply, toCopy, toSubgraph
+     map_rel_iff' := fun {a} ↦ isEmptyElim a }⟩
+/-
+**SimpleGraph.isIndContained_iff_exists_iso_subgraph** 是 Mathlib 中的一个引理，位于命名空间 `
+SimpleGraph`。
+形式化陈述：isIndContained_iff_exists_iso_subgraph : G ⊴ H ↔ exists (H' : H.Subgraph) 
+(_e : G ≃g H'.coe), H'.IsInduced
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Subgraph.map_verts`：∀ {V : Type u} {W : Type v} {G : SimpleG
+raph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Subg
+raph.map f H).verts …
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `SimpleGraph.Subgraph.map_adj`：∀ {V : Type u} {W : Type v} {G : SimpleGra
+ph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (a a_1 : W),   (Simple
+Graph.Subgraph.map…
+· 使用定理 `RelEmbedding.injective`：injective (f : r ↪r s) : Injective f
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `SimpleGraph.IsIndContained.trans`：∀ {V : Type u_1} {W : Type u_2} {X : T
+ype u_3} {G : SimpleGraph V} {H : SimpleGraph W} {I : SimpleGraph X},   G.IsIndC
+ontained H → H.IsIndCo…
+· 使用定理 `SimpleGraph.Iso.isIndContained`：∀ {V : Type u_1} {W : Type u_2} {G : Sim
+pleGraph V} {H : SimpleGraph W} (e : G ≃g H), G.IsIndContained H
+· 使用定理 `SimpleGraph.Subgraph.IsInduced.isIndContained`：∀ {V : Type u_1} {G : Sim
+pleGraph V} {G' : G.Subgraph}, G'.IsInduced → G'.coe.IsIndContained G
 -/
 lemma isIndContained_iff_exists_iso_subgraph :
-    G ⊴ H ↔ exists (H' : H.Subgraph) (_e : G ≃g H'.coe), H'.IsInduced := by
+    G ⊴ H ↔ ∃ (H' : H.Subgraph) (_e : G ≃g H'.coe), H'.IsInduced := by
   constructor
   · rintro ⟨f⟩
     refine ⟨f.toCopy.toSubgraph, f.toCopy.isoToSubgraph, ?_⟩
@@ -1825,155 +1364,106 @@ lemma isIndContained_iff_exists_iso_subgraph :
 
 alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_exists_iso_subgraph⟩ :=
   isIndContained_iff_exists_iso_subgraph
-
-/--
-theorem `isIndContained_iff_exists_iso_induce` / 定理 `isIndContained_iff_exists_iso_induce`
-
-English:
-theorem isIndContained_iff_exists_iso_induce
-  statement: G ⊴ H ↔ exists s, Nonempty (G ≃g H.induce s)
-  proof: ⟨fun ⟨f⟩ => ⟨Set.range f, ⟨f.isoInduceRange⟩⟩, fun ⟨s, ⟨f⟩⟩ => ⟨.comp (.induce s) f⟩⟩
-
-中文:
-定理 isIndContained_iff_存在_iso_induce
-  结论: G ⊴ H ↔ 存在 s, 非空 (G ≃g H.induce s)
-  证明: ⟨fun ⟨f⟩ => ⟨Set.range f, ⟨f.isoInduceRange⟩⟩, fun ⟨s, ⟨f⟩⟩ => ⟨.comp (.induce s) f⟩⟩
-
-Depends on / 依赖: Set.range, f.isoInduceRange, induce, isoInduceRange
+/-
+**SimpleGraph.isIndContained_iff_exists_iso_induce** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph`。
+形式化陈述：isIndContained_iff_exists_iso_induce : G ⊴ H ↔ exists s, Nonempty (G ≃g H.
+induce s)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isIndContained_iff_exists_iso_induce : G ⊴ H ↔ exists s, Nonempty (G ≃g H.induce s) :=
-  ⟨fun ⟨f⟩ => ⟨Set.range f, ⟨f.isoInduceRange⟩⟩, fun ⟨s, ⟨f⟩⟩ => ⟨.comp (.induce s) f⟩⟩
-
-/--
-lemma `top_isIndContained_iff_top_isContained` / 引理 `top_isIndContained_iff_top_isContained`
-
-English:
-lemma top_isIndContained_iff_top_isContained
-  proof: ⟨IsIndContained.isContained, fun ⟨f⟩ => ⟨f.topEmbedding⟩⟩
-
-中文:
-引理 top_isIndContained_iff_top_isContained
-  证明: ⟨IsIndContained.isContained, fun ⟨f⟩ => ⟨f.topEmbedding⟩⟩
+theorem isIndContained_iff_exists_iso_induce : G ⊴ H ↔ ∃ s, Nonempty (G ≃g H.induce s) :=
+  ⟨fun ⟨f⟩ ↦ ⟨Set.range f, ⟨f.isoInduceRange⟩⟩, fun ⟨s, ⟨f⟩⟩ ↦ ⟨.comp (.induce s) f⟩⟩
+/-
+**SimpleGraph.top_isIndContained_iff_top_isContained** 是 Mathlib 中的一个定理，位于命名空间 `
+SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {H : SimpleGraph W}, ⊤.IsIndContained H ↔ 
+⊤.IsContained H
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsIndContained.isContained`：∀ {V : Type u_1} {W : Type u_2} 
+{G : SimpleGraph V} {H : SimpleGraph W}, G.IsIndContained H → G.IsContained H
 -/
 @[simp] lemma top_isIndContained_iff_top_isContained :
     (⊤ : SimpleGraph V) ⊴ H ↔ (⊤ : SimpleGraph V) ⊑ H :=
-  ⟨IsIndContained.isContained, fun ⟨f⟩ => ⟨f.topEmbedding⟩⟩
-
-/--
-theorem `isContained_top_iff` / 定理 `isContained_top_iff`
-
-English:
-theorem isContained_top_iff
-  given: {G : SimpleGraph V}
-  statement: G ⊑ completeGraph W ↔ Nonempty (V ↪ W)
-  proof: ⟨(⟨·.some.toEmbedding⟩), (.trans (.of_le le_top) ⟨Embedding.completeGraph ·.some |>.toCopy⟩)⟩
-
-中文:
-定理 isContained_top_iff
-  条件: {G : 简单图 V}
-  结论: G ⊑ completeGraph W ↔ 非空 (V ↪ W)
-  证明: ⟨(⟨·.some.toEmbedding⟩), (.trans (.of_le le_top) ⟨Embedding.completeGraph ·.some |>.toCopy⟩)⟩
-
-Depends on / 依赖: Embedding, Embedding.completeGraph, completeGraph, le_top, of_le, some.toEmbedding, toCopy, toEmbedding
+  ⟨IsIndContained.isContained, fun ⟨f⟩ ↦ ⟨f.topEmbedding⟩⟩
+/-
+**SimpleGraph.isContained_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：isContained_top_iff {G : SimpleGraph V} : G ⊑ completeGraph W ↔ Nonempty (
+V ↪ W)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.IsContained.trans`：∀ {α : Type u_4} {β : Type u_5} {γ : Type
+ u_6} {A : SimpleGraph α} {B : SimpleGraph β} {C : SimpleGraph γ},   A.IsContain
+ed B → B.IsContaine…
+· 使用定理 `SimpleGraph.IsContained.of_le`：∀ {V : Type u_1} {G₁ G₂ : SimpleGraph V},
+ G₁ ≤ G₂ → G₁.IsContained G₂
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
 theorem isContained_top_iff {G : SimpleGraph V} : G ⊑ completeGraph W ↔ Nonempty (V ↪ W) :=
   ⟨(⟨·.some.toEmbedding⟩), (.trans (.of_le le_top) ⟨Embedding.completeGraph ·.some |>.toCopy⟩)⟩
-
-/--
-theorem `top_isIndContained_top_iff` / 定理 `top_isIndContained_top_iff`
-
-English:
-theorem top_isIndContained_top_iff
-  statement: completeGraph V ⊴ completeGraph W ↔ Nonempty (V ↪ W)
-  proof: ⟨(⟨·.some.toEmbedding⟩), (⟨.completeGraph ·.some⟩)⟩
-
-中文:
-定理 top_isIndContained_top_iff
-  结论: completeGraph V ⊴ completeGraph W ↔ 非空 (V ↪ W)
-  证明: ⟨(⟨·.some.toEmbedding⟩), (⟨.completeGraph ·.some⟩)⟩
-
-Depends on / 依赖: completeGraph, some.toEmbedding, toEmbedding
+/-
+**SimpleGraph.top_isIndContained_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：top_isIndContained_top_iff : completeGraph V ⊴ completeGraph W ↔ Nonempty 
+(V ↪ W)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem top_isIndContained_top_iff : completeGraph V ⊴ completeGraph W ↔ Nonempty (V ↪ W) :=
   ⟨(⟨·.some.toEmbedding⟩), (⟨.completeGraph ·.some⟩)⟩
-
-/--
-theorem `eq_top_of_isIndContained_top` / 定理 `eq_top_of_isIndContained_top`
-
-English:
-theorem eq_top_of_isIndContained_top
-  given: (h : G ⊴ completeGraph W)
-  statement: G = ⊤
-  proof: h.some.comap_eq ▸ comap_top h.some.injective
-
-中文:
-定理 eq_top_of_isIndContained_top
-  条件: (h : G ⊴ completeGraph W)
-  结论: G = ⊤
-  证明: h.some.comap_eq ▸ comap_top h.some.injective
-
-Depends on / 依赖: comap_eq, comap_top, h.some.comap_eq, h.some.injective, injective
+/-
+**SimpleGraph.eq_top_of_isIndContained_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：eq_top_of_isIndContained_top (h : G ⊴ completeGraph W) : G = ⊤
+参数：h : G ⊴ completeGraph W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.comap_top`：comap_top {f : V -> W} (hf : f.Injective) : (comp
+leteGraph W).comap f = completeGraph V
+· 使用定理 `RelEmbedding.injective`：injective (f : r ↪r s) : Injective f
+· 使用定理 `SimpleGraph.Embedding.comap_eq`：comap_eq (f : H ↪g G) : G.comap f = H
 -/
 theorem eq_top_of_isIndContained_top (h : G ⊴ completeGraph W) : G = ⊤ :=
   h.some.comap_eq ▸ comap_top h.some.injective
-
-/--
-lemma `compl_isIndContained_compl` / 引理 `compl_isIndContained_compl`
-
-English:
-lemma compl_isIndContained_compl
-  statement: Gᶜ ⊴ Hᶜ ↔ G ⊴ H
-  proof: Embedding.complEquiv.symm.nonempty_congr
-
-protected alias ⟨IsIndContained.of_compl, IsIndContained.compl⟩ := compl_isIndContained_compl
-
-中文:
-引理 compl_isIndContained_compl
-  结论: Gᶜ ⊴ Hᶜ ↔ G ⊴ H
-  证明: Embedding.complEquiv.symm.nonempty_congr
-
-protected alias ⟨IsIndContained.of_compl, IsIndContained.compl⟩ := compl_isIndContained_compl
+/-
+**SimpleGraph.compl_isIndContained_compl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W}, G
+ᶜ.IsIndContained Hᶜ ↔ G.IsIndContained H
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma compl_isIndContained_compl : Gᶜ ⊴ Hᶜ ↔ G ⊴ H :=
   Embedding.complEquiv.symm.nonempty_congr
 
 protected alias ⟨IsIndContained.of_compl, IsIndContained.compl⟩ := compl_isIndContained_compl
-
-/--
-theorem `isContained_iff_exists_le_comap` / 定理 `isContained_iff_exists_le_comap`
-
-English:
-theorem isContained_iff_exists_le_comap
-  statement: H ⊑ G ↔ exists (f : W ↪ V), H <= G.comap f
-  proof: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.toHom.le_comap⟩, fun ⟨f, h⟩ => ⟨⟨f, (h ·)⟩, f.injective⟩⟩
-
-中文:
-定理 isContained_iff_存在_le_comap
-  结论: H ⊑ G ↔ 存在 (f : W ↪ V), H <= G.comap f
-  证明: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.toHom.le_comap⟩, fun ⟨f, h⟩ => ⟨⟨f, (h ·)⟩, f.injective⟩⟩
-
-Depends on / 依赖: f.injective, f.toEmbedding, f.toHom.le_comap, injective, le_comap, toEmbedding
+/-
+**SimpleGraph.isContained_iff_exists_le_comap** 是 Mathlib 中的一个定理，位于命名空间 `SimpleG
+raph`。
+形式化陈述：isContained_iff_exists_le_comap : H ⊑ G ↔ exists (f : W ↪ V), H <= G.comap
+ f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Hom.le_comap`：le_comap (f : H ->g G) : H <= G.comap f
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
 -/
-theorem isContained_iff_exists_le_comap : H ⊑ G ↔ exists (f : W ↪ V), H <= G.comap f :=
-  ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.toHom.le_comap⟩, fun ⟨f, h⟩ => ⟨⟨f, (h ·)⟩, f.injective⟩⟩
-
-/--
-theorem `isIndContained_iff_exists_comap_eq` / 定理 `isIndContained_iff_exists_comap_eq`
-
-English:
-theorem isIndContained_iff_exists_comap_eq
-  statement: H ⊴ G ↔ exists (f : W ↪ V), G.comap f = H
-  proof: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.comap_eq⟩, fun ⟨f, h⟩ => ⟨f, h ▸ .rfl⟩⟩
-
-中文:
-定理 isIndContained_iff_存在_comap_eq
-  结论: H ⊴ G ↔ 存在 (f : W ↪ V), G.comap f = H
-  证明: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.comap_eq⟩, fun ⟨f, h⟩ => ⟨f, h ▸ .rfl⟩⟩
-
-Depends on / 依赖: comap_eq, f.comap_eq, f.toEmbedding, toEmbedding
+theorem isContained_iff_exists_le_comap : H ⊑ G ↔ ∃ (f : W ↪ V), H ≤ G.comap f :=
+  ⟨fun ⟨f⟩ ↦ ⟨f.toEmbedding, f.toHom.le_comap⟩, fun ⟨f, h⟩ ↦ ⟨⟨f, (h ·)⟩, f.injective⟩⟩
+/-
+**SimpleGraph.isIndContained_iff_exists_comap_eq** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph`。
+形式化陈述：isIndContained_iff_exists_comap_eq : H ⊴ G ↔ exists (f : W ↪ V), G.comap f
+ = H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Embedding.comap_eq`：comap_eq (f : H ↪g G) : G.comap f = H
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem isIndContained_iff_exists_comap_eq : H ⊴ G ↔ exists (f : W ↪ V), G.comap f = H :=
-  ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.comap_eq⟩, fun ⟨f, h⟩ => ⟨f, h ▸ .rfl⟩⟩
+theorem isIndContained_iff_exists_comap_eq : H ⊴ G ↔ ∃ (f : W ↪ V), G.comap f = H :=
+  ⟨fun ⟨f⟩ ↦ ⟨f.toEmbedding, f.comap_eq⟩, fun ⟨f, h⟩ ↦ ⟨f, h ▸ .rfl⟩⟩
 
 /-!
 ### Counting the copies
@@ -1987,80 +1477,72 @@ in `H`.
 section LabelledCopyCount
 variable [Fintype V] [Fintype W]
 
-/--
-Definition of `labelledCopyCount` / `labelledCopyCount` 的定义
+/-- `G.labelledCopyCount H` is the number of labelled copies of `H` in `G`, i.e. the number of graph
+embeddings from `H` to `G`. See `SimpleGraph.copyCount` for the number of unlabelled copies. -/
+/-
+**SimpleGraph.labelledCopyCount** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：labelledCopyCount (G : SimpleGraph V) (H : SimpleGraph W) : Nat
+参数：G : SimpleGraph V；H : SimpleGraph W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition labelledCopyCount
-  signature: (G : SimpleGraph V) (H : SimpleGraph W)
-  body: by
-  classical exact Fintype.card (Copy H G)
-
-中文:
-定义 labelledCopyCount
-  签名: (G : 简单图 V) (H : 简单图 W)
-  定义体: by
-  classical exact Fintype.card (Copy H G)
-
-Depends on / 依赖: Fintype, Fintype.card, classical
+--- 原说明 ---
+`G.labelledCopyCount H` is the number of labelled copies of `H` in `G`, i.e. the
+ number of graph
+embeddings from `H` to `G`. See `SimpleGraph.copyCount` for the number of unlabe
+lled copies.
 -/
-noncomputable def labelledCopyCount (G : SimpleGraph V) (H : SimpleGraph W) : Nat := by
+noncomputable def labelledCopyCount (G : SimpleGraph V) (H : SimpleGraph W) : ℕ := by
   classical exact Fintype.card (Copy H G)
-
-/--
-lemma `labelledCopyCount_of_isEmpty` / 引理 `labelledCopyCount_of_isEmpty`
-
-English:
-lemma labelledCopyCount_of_isEmpty
-  given: [IsEmpty W] (G : SimpleGraph V) (H : SimpleGraph W)
-  proof: by
-  convert! Fintype.card_unique
-  exact { default := ⟨default, isEmptyElim⟩, uniq := fun _ => Subsingleton.elim _ _ }
-
-中文:
-引理 labelledCopyCount_of_isEmpty
-  条件: [是空 W] (G : 简单图 V) (H : 简单图 W)
-  证明: by
-  convert! Fintype.card_unique
-  exact { default := ⟨default, isEmptyElim⟩, uniq := fun _ => Subsingleton.elim _ _ }
+/-
+**SimpleGraph.labelledCopyCount_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} [inst : Fintype V] [inst_1 : Fintype W] [I
+sEmpty W] (G : SimpleGraph V)   (H : SimpleGraph W), G.labelledCopyCount H = 1
+参数：G : SimpleGraph V；H : SimpleGraph W。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fintype.card_unique`：card_unique [Unique α] [h : Fintype α] : Fintype.ca
+rd α = 1
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `SimpleGraph.Copy.instSubsingletonOfForall`：∀ {V : Type u_1} {W : Type u_
+2} {G : SimpleGraph V} {H : SimpleGraph W} [Subsingleton (V → W)], Subsingleton 
+(G.Copy H)
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 @[simp] lemma labelledCopyCount_of_isEmpty [IsEmpty W] (G : SimpleGraph V) (H : SimpleGraph W) :
     G.labelledCopyCount H = 1 := by
   convert! Fintype.card_unique
-  exact { default := ⟨default, isEmptyElim⟩, uniq := fun _ => Subsingleton.elim _ _ }
-
-/--
-lemma `labelledCopyCount_eq_zero` / 引理 `labelledCopyCount_eq_zero`
-
-English:
-lemma labelledCopyCount_eq_zero
-  statement: G.labelledCopyCount H = 0 ↔ H.Free G
-  proof: by
-  simp [labelledCopyCount, Fintype.card_eq_zero_iff]
-
-中文:
-引理 labelledCopyCount_eq_zero
-  结论: G.labelledCopyCount H = 0 ↔ H.自由 G
-  证明: by
-  simp [labelledCopyCount, Fintype.card_eq_zero_iff]
+  exact { default := ⟨default, isEmptyElim⟩, uniq := fun _ ↦ Subsingleton.elim _ _ }
+/-
+**SimpleGraph.labelledCopyCount_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V] [inst_1 : Fintype W],   G.labelledCopyCount H = 0 ↔ H.Free G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma labelledCopyCount_eq_zero : G.labelledCopyCount H = 0 ↔ H.Free G := by
   simp [labelledCopyCount, Fintype.card_eq_zero_iff]
-
-/--
-lemma `labelledCopyCount_pos` / 引理 `labelledCopyCount_pos`
-
-English:
-lemma labelledCopyCount_pos
-  statement: 0 < G.labelledCopyCount H ↔ H ⊑ G
-  proof: by
-  simp [labelledCopyCount, IsContained, Fintype.card_pos_iff]
-
-中文:
-引理 labelledCopyCount_pos
-  结论: 0 < G.labelledCopyCount H ↔ H ⊑ G
-  证明: by
-  simp [labelledCopyCount, IsContained, Fintype.card_pos_iff]
+/-
+**SimpleGraph.labelledCopyCount_pos** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V] [inst_1 : Fintype W],   0 < G.labelledCopyCount H ↔ H.IsContain
+ed G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma labelledCopyCount_pos : 0 < G.labelledCopyCount H ↔ H ⊑ G := by
   simp [labelledCopyCount, IsContained, Fintype.card_pos_iff]
@@ -2070,163 +1552,177 @@ end LabelledCopyCount
 section CopyCount
 variable [Fintype V]
 
-/--
-Definition of `copyCount` / `copyCount` 的定义
+/-- `G.copyCount H` is the number of unlabelled copies of `H` in `G`, i.e. the number of subgraphs
+of `G` isomorphic to `H`. See `SimpleGraph.labelledCopyCount` for the number of labelled copies. -/
+/-
+**SimpleGraph.copyCount** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：copyCount (G : SimpleGraph V) (H : SimpleGraph W) : Nat
+参数：G : SimpleGraph V；H : SimpleGraph W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copyCount
-  signature: (G : SimpleGraph V) (H : SimpleGraph W)
-  body: by
-  classical exact #{G' : G.Subgraph | Nonempty (H ≃g G'.coe)}
-
-中文:
-定义 copyCount
-  签名: (G : 简单图 V) (H : 简单图 W)
-  定义体: by
-  classical exact #{G' : G.Subgraph | Nonempty (H ≃g G'.coe)}
-
-Depends on / 依赖: G.Subgraph, Nonempty, Subgraph, classical
+--- 原说明 ---
+`G.copyCount H` is the number of unlabelled copies of `H` in `G`, i.e. the numbe
+r of subgraphs
+of `G` isomorphic to `H`. See `SimpleGraph.labelledCopyCount` for the number of 
+labelled copies.
 -/
-noncomputable def copyCount (G : SimpleGraph V) (H : SimpleGraph W) : Nat := by
+noncomputable def copyCount (G : SimpleGraph V) (H : SimpleGraph W) : ℕ := by
   classical exact #{G' : G.Subgraph | Nonempty (H ≃g G'.coe)}
-
-/--
-lemma `copyCount_eq_card_image_copyToSubgraph` / 引理 `copyCount_eq_card_image_copyToSubgraph`
-
-English:
-lemma copyCount_eq_card_image_copyToSubgraph
-  statement: [Fintype {f : H ->g G // Injective f}]
-  proof: by
-  rw [copyCount]
-  congr
-  refine Finset.coe_injective ?_
-  simpa [-Copy.range_toSubgraph] using Copy.range_toSubgraph.symm
-
-中文:
-引理 copyCount_eq_card_image_copyToSubgraph
-  结论: [有限类型 {f : H ->g G // 单射 f}]
-  证明: by
-  rw [copyCount]
-  congr
-  refine Finset.coe_injective ?_
-  simpa [-Copy.range_toSubgraph] using Copy.range_toSubgraph.symm
-
-Depends on / 依赖: Copy.range_toSubgraph, Copy.range_toSubgraph.symm, Finset, Finset.coe_injective, coe_injective, copyCount, range_toSubgraph
+/-
+**SimpleGraph.copyCount_eq_card_image_copyToSubgraph** 是 Mathlib 中的一个引理，位于命名空间 `
+SimpleGraph`。
+形式化陈述：copyCount_eq_card_image_copyToSubgraph [Fintype {f : H ->g G // Injective 
+f}] [DecidableEq G.Subgraph] : copyCount G H = #((Finset.univ : Finset (H.Copy G
+)).image Copy.toSubgraph)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.copyCount.eq_1`：∀ {V : Type u_1} {W : Type u_2} [inst : Fint
+ype V] (G : SimpleGraph V) (H : SimpleGraph W),   G.copyCount H = {G' | Nonempty
+ (H ≃g G'.coe)}.…
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_filter`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α), ↑(Finset.filter p s) = {x | x ∈ s ∧ p x}
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Copy.range_toSubgraph`：∀ {α : Type u_4} {β : Type u_5} {A : 
+SimpleGraph α} {B : SimpleGraph β},   Set.range SimpleGraph.Copy.toSubgraph = {B
+' | Nonempty (A ≃g B'.c…
 -/
-lemma copyCount_eq_card_image_copyToSubgraph [Fintype {f : H ->g G // Injective f}]
+lemma copyCount_eq_card_image_copyToSubgraph [Fintype {f : H →g G // Injective f}]
     [DecidableEq G.Subgraph] :
     copyCount G H = #((Finset.univ : Finset (H.Copy G)).image Copy.toSubgraph) := by
   rw [copyCount]
   congr
   refine Finset.coe_injective ?_
   simpa [-Copy.range_toSubgraph] using Copy.range_toSubgraph.symm
-
-/--
-lemma `copyCount_eq_zero` / 引理 `copyCount_eq_zero`
-
-English:
-lemma copyCount_eq_zero
-  statement: G.copyCount H = 0 ↔ H.Free G
-  proof: by
-  simp [copyCount, Free, -nonempty_subtype, isContained_iff_exists_iso_subgraph,
-    filter_eq_empty_iff]
-
-中文:
-引理 copyCount_eq_zero
-  结论: G.copyCount H = 0 ↔ H.自由 G
-  证明: by
-  simp [copyCount, Free, -nonempty_subtype, isContained_iff_exists_iso_subgraph,
-    filter_eq_empty_iff]
+/-
+**SimpleGraph.copyCount_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V], G.copyCount H = 0 ↔ H.Free G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma copyCount_eq_zero : G.copyCount H = 0 ↔ H.Free G := by
   simp [copyCount, Free, -nonempty_subtype, isContained_iff_exists_iso_subgraph,
     filter_eq_empty_iff]
-
-/--
-lemma `copyCount_pos` / 引理 `copyCount_pos`
-
-English:
-lemma copyCount_pos
-  statement: 0 < G.copyCount H ↔ H ⊑ G
-  proof: by
-  simp [copyCount, -nonempty_subtype, isContained_iff_exists_iso_subgraph, card_pos,
-    filter_nonempty_iff]
-
-中文:
-引理 copyCount_pos
-  结论: 0 < G.copyCount H ↔ H ⊑ G
-  证明: by
-  simp [copyCount, -nonempty_subtype, isContained_iff_exists_iso_subgraph, card_pos,
-    filter_nonempty_iff]
+/-
+**SimpleGraph.copyCount_pos** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W} [i
+nst : Fintype V],   0 < G.copyCount H ↔ H.IsContained G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma copyCount_pos : 0 < G.copyCount H ↔ H ⊑ G := by
   simp [copyCount, -nonempty_subtype, isContained_iff_exists_iso_subgraph, card_pos,
     filter_nonempty_iff]
 
-/--
-lemma `copyCount_le_labelledCopyCount` / 引理 `copyCount_le_labelledCopyCount`
+/-- There's at least as many labelled copies of `H` in `G` than unlabelled ones. -/
+/-
+**SimpleGraph.copyCount_le_labelledCopyCount** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：copyCount_le_labelledCopyCount [Fintype W] : G.copyCount H <= G.labelledCo
+pyCount H
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.copyCount_eq_card_image_copyToSubgraph`：copyCount_eq_card_im
+age_copyToSubgraph [Fintype {f : H ->g G // Injective f}] [DecidableEq G.Subgrap
+h] : copyCount G H = #((Finset.univ : Fi…
+· 使用定理 `Finset.card_image_le`：card_image_le [DecidableEq β] : #(s.image f) <= #s
 
-English:
-lemma copyCount_le_labelledCopyCount
-  given: [Fintype W]
-  statement: G.copyCount H <= G.labelledCopyCount H
-  proof: by
-  classical rw [copyCount_eq_card_image_copyToSubgraph]; exact card_image_le
-
-中文:
-引理 copyCount_le_labelledCopyCount
-  条件: [有限类型 W]
-  结论: G.copyCount H <= G.labelledCopyCount H
-  证明: by
-  classical rw [copyCount_eq_card_image_copyToSubgraph]; exact card_image_le
-
-Depends on / 依赖: card_image_le, classical, copyCount_eq_card_image_copyToSubgraph
+--- 原说明 ---
+There's at least as many labelled copies of `H` in `G` than unlabelled ones.
 -/
-lemma copyCount_le_labelledCopyCount [Fintype W] : G.copyCount H <= G.labelledCopyCount H := by
+lemma copyCount_le_labelledCopyCount [Fintype W] : G.copyCount H ≤ G.labelledCopyCount H := by
   classical rw [copyCount_eq_card_image_copyToSubgraph]; exact card_image_le
-
-/--
-lemma `copyCount_bot` / 引理 `copyCount_bot`
-
-English:
-lemma copyCount_bot
-  given: (G : SimpleGraph V)
-  statement: copyCount G (⊥ : SimpleGraph V) = 1
-  proof: by
-  classical
-  rw [copyCount]
-  convert!
-    card_singleton (α := G.Subgraph)
-      { verts := .univ
-        Adj := ⊥
-        adj_sub := False.elim
-        edge_vert := False.elim }
-  simp only [eq_singleton_iff_unique_mem, mem_filter_univ, Nonempty.forall]
-  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by simp⟩⟩, fun H' e =>
-    Subgraph.ext ((set_fintype_card_eq_univ_iff _).1 <| Fintype.card_congr e.toEquiv.symm) ?_⟩
-  ext a b
-  simp only [Prop.bot_eq_false, Pi.bot_apply, iff_false]
-  exact fun hab => e.symm.map_rel_iff.2 hab.coe
-
-中文:
-引理 copyCount_bot
-  条件: (G : 简单图 V)
-  结论: copyCount G (⊥ : 简单图 V) = 1
-  证明: by
-  classical
-  rw [copyCount]
-  convert!
-    card_singleton (α := G.Subgraph)
-      { verts := .univ
-        Adj := ⊥
-        adj_sub := False.elim
-        edge_vert := False.elim }
-  simp only [eq_singleton_iff_unique_mem, mem_filter_univ, Nonempty.forall]
-  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by simp⟩⟩, fun H' e =>
-    Subgraph.ext ((set_fintype_card_eq_univ_iff _).1 <| Fintype.card_congr e.toEquiv.symm) ?_⟩
-  ext a b
-  simp only [Prop.bot_eq_false, Pi.bot_apply, iff_false]
-  exact fun hab => e.symm.map_rel_iff.2 hab.coe
+/-
+**SimpleGraph.copyCount_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} [inst : Fintype V] (G : SimpleGraph V), G.copyCount ⊥ = 1
+参数：G : SimpleGraph V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.copyCount.eq_1`：∀ {V : Type u_1} {W : Type u_2} [inst : Fint
+ype V] (G : SimpleGraph V) (H : SimpleGraph W),   G.copyCount H = {G' | Nonempty
+ (H ≃g G'.coe)}.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `trivial`：True
+· 使用定理 `Equiv.Set.univ_symm_apply`：∀ (α : Type u_3) (a : α), (Equiv.Set.univ α).
+symm a = ⟨a, trivial⟩
+· 使用定理 `SimpleGraph.Subgraph.coe_adj`：∀ {V : Type u} {G : SimpleGraph V} (G' : G
+.Subgraph) (v w : ↑G'.verts), G'.coe.Adj v w = G'.Adj ↑v ↑w
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `SimpleGraph.Subgraph.ext`：∀ {V : Type u} {G : SimpleGraph V} {x y : G.Su
+bgraph}, x.verts = y.verts → x.Adj = y.Adj → x = y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `set_fintype_card_eq_univ_iff`：set_fintype_card_eq_univ_iff [Fintype α] (
+s : Set α) [Fintype s] : Fintype.card s = Fintype.card α ↔ s = Set.univ
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.Subgraph.edge_vert`：∀ {V : Type u} {G : SimpleGraph V} (self
+ : G.Subgraph) {v w : V}, self.Adj v w → v ∈ self.verts
+· 使用定理 `SimpleGraph.Subgraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {G' : 
+G.Subgraph} {u v : V}, G'.Adj u v → G'.Adj v u
+· 使用定理 `RelIso.map_rel_iff`：map_rel_iff (f : r ≃r s) {a b} : s (f a) (f b) ↔ r a
+ b
+· 使用定理 `SimpleGraph.Subgraph.Adj.coe`：∀ {V : Type u} {G : SimpleGraph V} {H : G.
+Subgraph} {u v : V} (h : H.Adj u v), H.coe.Adj ⟨u, ⋯⟩ ⟨v, ⋯⟩
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
 -/
 @[simp] lemma copyCount_bot (G : SimpleGraph V) : copyCount G (⊥ : SimpleGraph V) = 1 := by
   classical
@@ -2238,36 +1734,43 @@ lemma copyCount_bot
         adj_sub := False.elim
         edge_vert := False.elim }
   simp only [eq_singleton_iff_unique_mem, mem_filter_univ, Nonempty.forall]
-  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by simp⟩⟩, fun H' e =>
+  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by simp⟩⟩, fun H' e ↦
     Subgraph.ext ((set_fintype_card_eq_univ_iff _).1 <| Fintype.card_congr e.toEquiv.symm) ?_⟩
   ext a b
   simp only [Prop.bot_eq_false, Pi.bot_apply, iff_false]
-  exact fun hab => e.symm.map_rel_iff.2 hab.coe
-
-/--
-lemma `copyCount_of_isEmpty` / 引理 `copyCount_of_isEmpty`
-
-English:
-lemma copyCount_of_isEmpty
-  given: [IsEmpty W] (G : SimpleGraph V) (H : SimpleGraph W)
-  proof: by
-  cases nonempty_fintype W
-exact (copyCount_le_labelledCopyCount.trans_eq <| labelledCopyCount_of_isEmpty ..).antisymm
-copyCount_pos.2 .of_isEmpty
-
-中文:
-引理 copyCount_of_isEmpty
-  条件: [是空 W] (G : 简单图 V) (H : 简单图 W)
-  证明: by
-  cases nonempty_fintype W
-exact (copyCount_le_labelledCopyCount.trans_eq <| labelledCopyCount_of_isEmpty ..).antisymm
-copyCount_pos.2 .of_isEmpty
+  exact fun hab ↦ e.symm.map_rel_iff.2 hab.coe
+/-
+**SimpleGraph.copyCount_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} [inst : Fintype V] [IsEmpty W] (G : Simple
+Graph V) (H : SimpleGraph W),   G.copyCount H = 1
+参数：G : SimpleGraph V；H : SimpleGraph W。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Finite.of_subsingleton`：Finite.of_subsingleton [Subsingleton α] (s : Set
+ α) : s.Finite
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `SimpleGraph.copyCount_le_labelledCopyCount`：copyCount_le_labelledCopyCou
+nt [Fintype W] : G.copyCount H <= G.labelledCopyCount H
+· 使用定理 `SimpleGraph.labelledCopyCount_of_isEmpty`：∀ {V : Type u_1} {W : Type u_2
+} [inst : Fintype V] [inst_1 : Fintype W] [IsEmpty W] (G : SimpleGraph V)   (H :
+ SimpleGraph W), G.labelledCop…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.copyCount_pos`：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGr
+aph V} {H : SimpleGraph W} [inst : Fintype V],   0 < G.copyCount H ↔ H.IsContain
+ed G
+· 使用定理 `SimpleGraph.IsContained.of_isEmpty`：∀ {α : Type u_4} {β : Type u_5} {A :
+ SimpleGraph α} {B : SimpleGraph β} [IsEmpty α], A.IsContained B
 -/
 @[simp] lemma copyCount_of_isEmpty [IsEmpty W] (G : SimpleGraph V) (H : SimpleGraph W) :
     G.copyCount H = 1 := by
   cases nonempty_fintype W
-exact (copyCount_le_labelledCopyCount.trans_eq <| labelledCopyCount_of_isEmpty ..).antisymm
-copyCount_pos.2 .of_isEmpty
+  exact (copyCount_le_labelledCopyCount.trans_eq <| labelledCopyCount_of_isEmpty ..).antisymm <|
+    copyCount_pos.2 <| .of_isEmpty
 
 end CopyCount
 
@@ -2289,30 +1792,34 @@ than `G`.
 -/
 
 set_option backward.privateInPublic true in
-/--
-lemma `aux` / 引理 `aux`
+/-
+**SimpleGraph.aux** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma aux
-  given: (hH : H != ⊥) {G' : G.Subgraph}
-  proof: by
-  obtain ⟨e, he⟩ := edgeSet_nonempty.2 hH
-  rw [← Subgraph.image_coe_edgeSet_coe]
-  exact fun ⟨f⟩ => Set.Nonempty.image _ ⟨_, f.map_mem_edgeSet_iff.2 he⟩
+--- 原说明 ---
+#### Induced copies
 
-中文:
-引理 aux
-  条件: (hH : H != ⊥) {G' : G.子图}
-  证明: by
-  obtain ⟨e, he⟩ := edgeSet_nonempty.2 hH
-  rw [← Subgraph.image_coe_edgeSet_coe]
-  exact fun ⟨f⟩ => Set.Nonempty.image _ ⟨_, f.map_mem_edgeSet_iff.2 he⟩
+TODO
+
+### Killing a subgraph
+
+An important aspect of graph containment is that we can remove not too many edge
+s from a graph `H`
+to get a graph `H'` that doesn't contain `G`.
+
+#### Killing not necessarily induced copies
+
+`SimpleGraph.killCopies G H` is a subgraph of `G` where an edge was removed from
+ each copy of `H` in
+`G`. By construction, it doesn't contain `H` and has at most the number of copie
+s of `H` edges less
+than `G`.
 -/
-private lemma aux (hH : H != ⊥) {G' : G.Subgraph} :
-    Nonempty (H ≃g G'.coe) -> G'.edgeSet.Nonempty := by
+private lemma aux (hH : H ≠ ⊥) {G' : G.Subgraph} :
+    Nonempty (H ≃g G'.coe) → G'.edgeSet.Nonempty := by
   obtain ⟨e, he⟩ := edgeSet_nonempty.2 hH
   rw [← Subgraph.image_coe_edgeSet_coe]
-  exact fun ⟨f⟩ => Set.Nonempty.image _ ⟨_, f.map_mem_edgeSet_iff.2 he⟩
+  exact fun ⟨f⟩ ↦ Set.Nonempty.image _ ⟨_, f.map_mem_edgeSet_iff.2 he⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
@@ -2324,122 +1831,125 @@ noncomputable irreducible_def killCopies (G : SimpleGraph V) (H : SimpleGraph W)
     SimpleGraph V := by
   classical exact
   if hH : H = ⊥ then G
-else G.deleteEdges ⋃ (G' : G.Subgraph) (hG' : Nonempty (H ≃g G'.coe)), {(aux hH hG').some}
+  else G.deleteEdges <| ⋃ (G' : G.Subgraph) (hG' : Nonempty (H ≃g G'.coe)), {(aux hH hG').some}
 
-/--
-lemma `killCopies_le_left` / 引理 `killCopies_le_left`
+/-- Removing an edge from `G` for each subgraph isomorphic to `H` results in a subgraph of `G`. -/
+/-
+**SimpleGraph.killCopies_le_left** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：killCopies_le_left : G.killCopies H <= G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Copy.0.SimpleGraph.aux`：∀ {V 
+: Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W},   H ≠ ⊥ → ∀ 
+{G' : G.Subgraph}, Nonempty (H ≃g G'.coe) → G'.edgeSet.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.killCopies_def`：∀ {V : Type u_7} {W : Type u_8} (G : SimpleG
+raph V) (H : SimpleGraph W),   G.killCopies H = if hH : H = ⊥ then G else G.dele
+teEdges (⋃ G', ⋃…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用引理 `SimpleGraph.deleteEdges_le`：deleteEdges_le (s : Set (Sym2 V)) : G.delete
+Edges s <= G
 
-English:
-lemma killCopies_le_left
-  statement: G.killCopies H <= G
-  proof: by
-  rw [killCopies]; split_ifs; exacts [le_rfl, deleteEdges_le _]
-
-中文:
-引理 killCopies_le_left
-  结论: G.killCopies H <= G
-  证明: by
-  rw [killCopies]; split_ifs; exacts [le_rfl, deleteEdges_le _]
-
-Depends on / 依赖: deleteEdges_le, exacts, killCopies, le_rfl, split_ifs
+--- 原说明 ---
+Removing an edge from `G` for each subgraph isomorphic to `H` results in a subgr
+aph of `G`.
 -/
-lemma killCopies_le_left : G.killCopies H <= G := by
+lemma killCopies_le_left : G.killCopies H ≤ G := by
   rw [killCopies]; split_ifs; exacts [le_rfl, deleteEdges_le _]
-
-/--
-lemma `killCopies_bot` / 引理 `killCopies_bot`
-
-English:
-lemma killCopies_bot
-  given: (G : SimpleGraph V)
-  statement: G.killCopies (⊥ : SimpleGraph W) = G
-  proof: by
-  rw [killCopies]; exact dif_pos rfl
-
-中文:
-引理 killCopies_bot
-  条件: (G : 简单图 V)
-  结论: G.killCopies (⊥ : 简单图 W) = G
-  证明: by
-  rw [killCopies]; exact dif_pos rfl
+/-
+**SimpleGraph.killCopies_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} (G : SimpleGraph V), G.killCopies ⊥ = G
+参数：G : SimpleGraph V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Copy.0.SimpleGraph.aux`：∀ {V 
+: Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W},   H ≠ ⊥ → ∀ 
+{G' : G.Subgraph}, Nonempty (H ≃g G'.coe) → G'.edgeSet.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.killCopies_def`：∀ {V : Type u_7} {W : Type u_8} (G : SimpleG
+raph V) (H : SimpleGraph W),   G.killCopies H = if hH : H = ⊥ then G else G.dele
+teEdges (⋃ G', ⋃…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
 @[simp] lemma killCopies_bot (G : SimpleGraph V) : G.killCopies (⊥ : SimpleGraph W) = G := by
   rw [killCopies]; exact dif_pos rfl
-
-/--
-lemma `killCopies_of_ne_bot` / 引理 `killCopies_of_ne_bot`
-
-English:
-lemma killCopies_of_ne_bot
-  given: (hH : H != ⊥) (G : SimpleGraph V)
-  proof: by
-  rw [killCopies]; exact dif_neg hH
-
-中文:
-引理 killCopies_of_ne_bot
-  条件: (hH : H != ⊥) (G : 简单图 V)
-  证明: by
-  rw [killCopies]; exact dif_neg hH
+/-
+**SimpleGraph.killCopies_of_ne_bot** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma killCopies_of_ne_bot (hH : H != ⊥) (G : SimpleGraph V) :
+private lemma killCopies_of_ne_bot (hH : H ≠ ⊥) (G : SimpleGraph V) :
     G.killCopies H =
       G.deleteEdges (⋃ (G' : G.Subgraph) (hG' : Nonempty (H ≃g G'.coe)), {(aux hH hG').some}) := by
   rw [killCopies]; exact dif_neg hH
 
-/--
-lemma `killCopies_eq_left` / 引理 `killCopies_eq_left`
+/-- `G.killCopies H` has no effect on `G` if and only if `G` already contained no copies of `H`. See
+`Free.killCopies_eq_left` for the reverse implication with no assumption on `H`. -/
+/-
+**SimpleGraph.killCopies_eq_left** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：killCopies_eq_left (hH : H != ⊥) : G.killCopies H = G ↔ H.Free G
+参数：hH : H != ⊥。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Copy.0.SimpleGraph.aux`：∀ {V 
+: Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W},   H ≠ ⊥ → ∀ 
+{G' : G.Subgraph}, Nonempty (H ≃g G'.coe) → G'.edgeSet.…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Copy.0.SimpleGraph.killCopies
+_of_ne_bot`：∀ {V : Type u_1} {W : Type u_2} {H : SimpleGraph W} (hH : H ≠ ⊥) (G 
+: SimpleGraph V),   G.killCopies H = G.deleteEdges (⋃ G', ⋃ (hG' : Nonem…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_subset`：edgeSet_subset (G' : Subgraph G) : 
+G'.edgeSet subseteq G.edgeSet
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 
-English:
-lemma killCopies_eq_left
-  given: (hH : H != ⊥)
-  statement: G.killCopies H = G ↔ H.Free G
-  proof: by
-  simp only [killCopies_of_ne_bot hH, Set.disjoint_left, isContained_iff_exists_iso_subgraph,
-    @forall_comm _ G.Subgraph, deleteEdges_eq_self, Set.mem_iUnion,
-    not_exists, not_nonempty_iff, Nonempty.forall, Free]
-  exact forall_congr' fun G' => ⟨fun h => ⟨fun f => h _
-    (Subgraph.edgeSet_subset _ <| (aux hH ⟨f⟩).choose_spec) f rfl⟩, fun h _ _ => h.elim⟩
-
-中文:
-引理 killCopies_eq_left
-  条件: (hH : H != ⊥)
-  结论: G.killCopies H = G ↔ H.自由 G
-  证明: by
-  simp only [killCopies_of_ne_bot hH, Set.disjoint_left, isContained_iff_exists_iso_subgraph,
-    @forall_comm _ G.Subgraph, deleteEdges_eq_self, Set.mem_iUnion,
-    not_exists, not_nonempty_iff, Nonempty.forall, Free]
-  exact forall_congr' fun G' => ⟨fun h => ⟨fun f => h _
-    (Subgraph.edgeSet_subset _ <| (aux hH ⟨f⟩).choose_spec) f rfl⟩, fun h _ _ => h.elim⟩
-
-Depends on / 依赖: G.Subgraph, Nonempty, Nonempty.forall, Set.disjoint_left, Set.mem_iUnion, Subgraph, Subgraph.edgeSet_subset, choose_spec, deleteEdges_eq_self, disjoint_left, edgeSet_subset, forall_comm, forall_congr, h.elim, isContained_iff_exists_iso_subgraph, killCopies_of_ne_bot, mem_iUnion, not_exists, not_nonempty_iff
+--- 原说明 ---
+`G.killCopies H` has no effect on `G` if and only if `G` already contained no co
+pies of `H`. See
+`Free.killCopies_eq_left` for the reverse implication with no assumption on `H`.
 -/
-lemma killCopies_eq_left (hH : H != ⊥) : G.killCopies H = G ↔ H.Free G := by
+lemma killCopies_eq_left (hH : H ≠ ⊥) : G.killCopies H = G ↔ H.Free G := by
   simp only [killCopies_of_ne_bot hH, Set.disjoint_left, isContained_iff_exists_iso_subgraph,
     @forall_comm _ G.Subgraph, deleteEdges_eq_self, Set.mem_iUnion,
     not_exists, not_nonempty_iff, Nonempty.forall, Free]
-  exact forall_congr' fun G' => ⟨fun h => ⟨fun f => h _
-    (Subgraph.edgeSet_subset _ <| (aux hH ⟨f⟩).choose_spec) f rfl⟩, fun h _ _ => h.elim⟩
-
-/--
-lemma `Free.killCopies_eq_left` / 引理 `Free.killCopies_eq_left`
-
-English:
-lemma Free.killCopies_eq_left
-  given: (hHG : H.Free G)
-  statement: G.killCopies H = G
-  proof: by
-  obtain rfl | hH := eq_or_ne H ⊥
-  · exact killCopies_bot _
-  · exact (killCopies_eq_left hH).2 hHG
-
-中文:
-引理 自由.killCopies_eq_left
-  条件: (hHG : H.自由 G)
-  结论: G.killCopies H = G
-  证明: by
-  obtain rfl | hH := eq_or_ne H ⊥
-  · exact killCopies_bot _
-  · exact (killCopies_eq_left hH).2 hHG
+  exact forall_congr' fun G' ↦ ⟨fun h ↦ ⟨fun f ↦ h _
+    (Subgraph.edgeSet_subset _ <| (aux hH ⟨f⟩).choose_spec) f rfl⟩, fun h _ _ ↦ h.elim⟩
+/-
+**SimpleGraph.Free.killCopies_eq_left** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Fre
+e`。
+形式化陈述：∀ {V : Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W}, H
+.Free G → G.killCopies H = G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `SimpleGraph.killCopies_bot`：∀ {V : Type u_1} {W : Type u_2} (G : SimpleG
+raph V), G.killCopies ⊥ = G
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `SimpleGraph.killCopies_eq_left`：killCopies_eq_left (hH : H != ⊥) : G.kil
+lCopies H = G ↔ H.Free G
 -/
 protected lemma Free.killCopies_eq_left (hHG : H.Free G) : G.killCopies H = G := by
   obtain rfl | hH := eq_or_ne H ⊥
@@ -2447,191 +1957,227 @@ protected lemma Free.killCopies_eq_left (hHG : H.Free G) : G.killCopies H = G :=
   · exact (killCopies_eq_left hH).2 hHG
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `free_killCopies` / 引理 `free_killCopies`
+/-- Removing an edge from `G` for each subgraph isomorphic to `H` results in a graph that doesn't
+contain `H`. -/
+/-
+**SimpleGraph.free_killCopies** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：free_killCopies (hH : H != ⊥) : H.Free (G.killCopies H)
+参数：hH : H != ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Copy.0.SimpleGraph.aux`：∀ {V 
+: Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W},   H ≠ ⊥ → ∀ 
+{G' : G.Subgraph}, Nonempty (H ≃g G'.coe) → G'.edgeSet.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Copy.0.SimpleGraph.killCopies
+_of_ne_bot`：∀ {V : Type u_1} {W : Type u_2} {H : SimpleGraph W} (hH : H ≠ ⊥) (G 
+: SimpleGraph V),   G.killCopies H = G.deleteEdges (⋃ G', ⋃ (hG' : Nonem…
+· 使用定理 `SimpleGraph.deleteEdges.eq_1`：∀ {V : Type u_1} (G : SimpleGraph V) (s : 
+Set (Sym2 V)), G.deleteEdges s = G \ SimpleGraph.fromEdgeSet s
+· 使用定理 `SimpleGraph.Free.eq_1`：∀ {α : Type u_4} {β : Type u_5} (A : SimpleGraph 
+α) (B : SimpleGraph β), A.Free B = ¬A.IsContained B
+· 使用定理 `SimpleGraph.isContained_iff_exists_iso_subgraph`：isContained_iff_exists_
+iso_subgraph : A ⊑ B ↔ exists B' : B.Subgraph, Nonempty (A ≃g B'.coe) where mp
+· 使用定理 `sdiff_le`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a b :
+ α}, a \ b ≤ a
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_map`：∀ {V : Type u} {W : Type v} {G : Simpl
+eGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph),   (SimpleGraph.Su
+bgraph.map f H).edgeSe…
+· 使用定理 `Set.Nonempty.image`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) {s : Set
+ α}, s.Nonempty → (f '' s).Nonempty
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.Iso.map_mem_edgeSet_iff`：map_mem_edgeSet_iff {e : Sym2 V} : 
+e.map f in G'.edgeSet ↔ e in G.edgeSet
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_subset`：edgeSet_subset (G' : Subgraph G) : 
+G'.edgeSet subseteq G.edgeSet
+· 使用定理 `SimpleGraph.Subgraph.edgeSet_coe`：∀ {V : Type u} {G : SimpleGraph V} {G'
+ : G.Subgraph}, G'.coe.edgeSet = Sym2.map Subtype.val ⁻¹' G'.edgeSet
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.edgeSet_sdiff`：edgeSet_sdiff : (G₁ \ G₂).edgeSet = G₁.edgeSe
+t \ G₂.edgeSet
+· 使用定理 `SimpleGraph.edgeSet_fromEdgeSet`：edgeSet_fromEdgeSet : (fromEdgeSet s).e
+dgeSet = s \ Sym2.diagSet
+· 使用定理 `SimpleGraph.edgeSet_sdiff_sdiff_isDiag`：edgeSet_sdiff_sdiff_isDiag (G : 
+SimpleGraph V) (s : Set (Sym2 V)) : G.edgeSet \ (s \ Sym2.diagSet) = G.edgeSet \
+ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Sym2.map_map`：map_map {g : β -> γ} {f : α -> β} (x : Sym2 α) : map g (ma
+p f x) = map (g ∘ f) x
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+（共 33 条，此处仅展示前 30 条）
 
-English:
-lemma free_killCopies
-  given: (hH : H != ⊥)
-  statement: H.Free (G.killCopies H)
-  proof: by
-  rw [killCopies_of_ne_bot hH]; rw [deleteEdges]; rw [Free]; rw [isContained_iff_exists_iso_subgraph]
-  rintro ⟨G', hHG'⟩
-  have hG' : (G'.map <| .ofLE (sdiff_le : G \ _ <= G)).edgeSet.Nonempty := by
-    rw [Subgraph.edgeSet_map]
-    exact (aux hH hHG').image _
-  set e := hG'.some with he
-  have : e in _ := hG'.some_mem
-  clear_value e
-  rw [← Subgraph.image_coe_edgeSet_coe] at this
-  subst he
-  obtain ⟨e, he₀, he₁⟩ := this
-  let e' : Sym2 G'.verts := Sym2.map (Copy.isoSubgraphMap (.ofLE _ _ _) _).symm e
-  have he' : e' in G'.coe.edgeSet := (Iso.map_mem_edgeSet_iff _).2 he₀
-  rw [Subgraph.edgeSet_coe] at he'
-  have := Subgraph.edgeSet_subset _ he'
-  simp only [edgeSet_sdiff, edgeSet_fromEdgeSet, edgeSet_sdiff_sdiff_isDiag, Set.mem_sdiff,
-    Set.mem_iUnion, not_exists] at this
-  refine this.2 (G'.map <| .ofLE sdiff_le) ⟨((Copy.ofLE _ _ _).isoSubgraphMap _).comp hHG'.some⟩ ?_
-  rw [Sym2.map_map]; rw [Set.mem_singleton_iff]; rw [← he₁]
-  congr 1 with x
-  exact congr_arg _ (Equiv.Set.image_symm_apply _ _ injective_id _ _)
-
-中文:
-引理 free_killCopies
-  条件: (hH : H != ⊥)
-  结论: H.自由 (G.killCopies H)
-  证明: by
-  rw [killCopies_of_ne_bot hH]; rw [deleteEdges]; rw [Free]; rw [isContained_iff_exists_iso_subgraph]
-  rintro ⟨G', hHG'⟩
-  have hG' : (G'.map <| .ofLE (sdiff_le : G \ _ <= G)).edgeSet.Nonempty := by
-    rw [Subgraph.edgeSet_map]
-    exact (aux hH hHG').image _
-  set e := hG'.some with he
-  have : e in _ := hG'.some_mem
-  clear_value e
-  rw [← Subgraph.image_coe_edgeSet_coe] at this
-  subst he
-  obtain ⟨e, he₀, he₁⟩ := this
-  let e' : Sym2 G'.verts := Sym2.map (Copy.isoSubgraphMap (.ofLE _ _ _) _).symm e
-  have he' : e' in G'.coe.edgeSet := (Iso.map_mem_edgeSet_iff _).2 he₀
-  rw [Subgraph.edgeSet_coe] at he'
-  have := Subgraph.edgeSet_subset _ he'
-  simp only [edgeSet_sdiff, edgeSet_fromEdgeSet, edgeSet_sdiff_sdiff_isDiag, Set.mem_sdiff,
-    Set.mem_iUnion, not_exists] at this
-  refine this.2 (G'.map <| .ofLE sdiff_le) ⟨((Copy.ofLE _ _ _).isoSubgraphMap _).comp hHG'.some⟩ ?_
-  rw [Sym2.map_map]; rw [Set.mem_singleton_iff]; rw [← he₁]
-  congr 1 with x
-  exact congr_arg _ (Equiv.Set.image_symm_apply _ _ injective_id _ _)
-
-Depends on / 依赖: Copy.isoSubgraphMap, Nonempty, Subgraph, Subgraph.edgeSet_map, Subgraph.image_coe_edgeSet_coe, Sym2.map, clear_value, deleteEdges, edgeSet, edgeSet.Nonempty, edgeSet_map, image_coe_edgeSet_coe, isContained_iff_exists_iso_subgraph, isoSubgraphMap, killCopies_of_ne_bot, sdiff_le, some_mem
+--- 原说明 ---
+Removing an edge from `G` for each subgraph isomorphic to `H` results in a graph
+ that doesn't
+contain `H`.
 -/
-lemma free_killCopies (hH : H != ⊥) : H.Free (G.killCopies H) := by
-  rw [killCopies_of_ne_bot hH]; rw [deleteEdges]; rw [Free]; rw [isContained_iff_exists_iso_subgraph]
+lemma free_killCopies (hH : H ≠ ⊥) : H.Free (G.killCopies H) := by
+  rw [killCopies_of_ne_bot hH, deleteEdges, Free, isContained_iff_exists_iso_subgraph]
   rintro ⟨G', hHG'⟩
-  have hG' : (G'.map <| .ofLE (sdiff_le : G \ _ <= G)).edgeSet.Nonempty := by
+  have hG' : (G'.map <| .ofLE (sdiff_le : G \ _ ≤ G)).edgeSet.Nonempty := by
     rw [Subgraph.edgeSet_map]
     exact (aux hH hHG').image _
   set e := hG'.some with he
-  have : e in _ := hG'.some_mem
+  have : e ∈ _ := hG'.some_mem
   clear_value e
   rw [← Subgraph.image_coe_edgeSet_coe] at this
   subst he
   obtain ⟨e, he₀, he₁⟩ := this
   let e' : Sym2 G'.verts := Sym2.map (Copy.isoSubgraphMap (.ofLE _ _ _) _).symm e
-  have he' : e' in G'.coe.edgeSet := (Iso.map_mem_edgeSet_iff _).2 he₀
+  have he' : e' ∈ G'.coe.edgeSet := (Iso.map_mem_edgeSet_iff _).2 he₀
   rw [Subgraph.edgeSet_coe] at he'
   have := Subgraph.edgeSet_subset _ he'
   simp only [edgeSet_sdiff, edgeSet_fromEdgeSet, edgeSet_sdiff_sdiff_isDiag, Set.mem_sdiff,
     Set.mem_iUnion, not_exists] at this
   refine this.2 (G'.map <| .ofLE sdiff_le) ⟨((Copy.ofLE _ _ _).isoSubgraphMap _).comp hHG'.some⟩ ?_
-  rw [Sym2.map_map]; rw [Set.mem_singleton_iff]; rw [← he₁]
+  rw [Sym2.map_map, Set.mem_singleton_iff, ← he₁]
   congr 1 with x
   exact congr_arg _ (Equiv.Set.image_symm_apply _ _ injective_id _ _)
 
 variable [Fintype G.edgeSet]
-
-/--
-Instance `killCopies.edgeSet.instFintype` / 实例 `killCopies.edgeSet.instFintype`
-
-English:
-instance killCopies.edgeSet.instFintype
-  signature: : Fintype (G.killCopies H).edgeSet
-  body: .ofInjective (Set.inclusion <| edgeSet_mono killCopies_le_left) Set.inclusion_injective _
-
-中文:
-实例 killCopies.edgeSet.instFintype
-  签名: : 有限类型 (G.killCopies H).edgeSet
-  定义体: .ofInjective (Set.inclusion <| edgeSet_mono killCopies_le_left) Set.inclusion_injective _
-
-Depends on / 依赖: Set.inclusion, Set.inclusion_injective, edgeSet_mono, inclusion, inclusion_injective, killCopies_le_left, ofInjective
+/-
+**SimpleGraph.killCopies.edgeSet.instFintype** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGr
+aph.killCopies.edgeSet`。
+形式化陈述：{V : Type u_1} →   {W : Type u_2} → {G : SimpleGraph V} → {H : SimpleGraph
+ W} → [Fintype ↑G.edgeSet] → Fintype ↑(G.killCopies H).edgeSet
+参数：G.killCopies H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance killCopies.edgeSet.instFintype : Fintype (G.killCopies H).edgeSet :=
-.ofInjective (Set.inclusion <| edgeSet_mono killCopies_le_left) Set.inclusion_injective _
+  .ofInjective (Set.inclusion <| edgeSet_mono killCopies_le_left) <| Set.inclusion_injective _
 
-/--
-lemma `le_card_edgeFinset_killCopies` / 引理 `le_card_edgeFinset_killCopies`
+/-- Removing an edge from `H` for each subgraph isomorphic to `G` means that the number of edges
+we've removed is at most the number of copies of `G` in `H`. -/
+/-
+**SimpleGraph.le_card_edgeFinset_killCopies** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：le_card_edgeFinset_killCopies [Fintype V] : #G.edgeFinset - G.copyCount H 
+<= #(G.killCopies H).edgeFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `SimpleGraph.killCopies_bot`：∀ {V : Type u_1} {W : Type u_2} (G : SimpleG
+raph V), G.killCopies ⊥ = G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Copy.0.SimpleGraph.aux`：∀ {V 
+: Type u_1} {W : Type u_2} {G : SimpleGraph V} {H : SimpleGraph W},   H ≠ ⊥ → ∀ 
+{G' : G.Subgraph}, Nonempty (H ≃g G'.coe) → G'.edgeSet.…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
+· 使用定理 `SimpleGraph.edgeFinset.eq_1`：∀ {V : Type u_1} (G : SimpleGraph V) [inst 
+: Fintype ↑G.edgeSet], G.edgeFinset = G.edgeSet.toFinset
+· 使用定理 `SimpleGraph.copyCount.eq_1`：∀ {V : Type u_1} {W : Type u_2} [inst : Fint
+ype V] (G : SimpleGraph V) (H : SimpleGraph W),   G.copyCount H = {G' | Nonempty
+ (H ≃g G'.coe)}.…
+· 使用定理 `Finset.card_subtype`：card_subtype (p : α -> Prop) [DecidablePred p] (s :
+ Finset α) : #(s.subtype p) = #(s.filter p)
+· 使用定理 `Finset.subtype_univ`：∀ {α : Type u_1} [inst : Fintype α] (p : α → Prop) 
+[inst_1 : DecidablePred p] [inst_2 : Fintype { a // p a }],   Finset.subtype p F
+inset.uni…
+· 使用定理 `Finset.card_univ`：Finset.card_univ [Fintype α] : #(univ : Finset α) = Fi
+ntype.card α
+· 使用定理 `Nat.sub_le_sub_left`：∀ {n m : ℕ}, n ≤ m → ∀ (k : ℕ), k - m ≤ k - n
+· 使用定理 `Finset.card_image_le`：card_image_le [DecidableEq β] : #(s.image f) <= #s
+· 使用定理 `Set.toFinset_range`：toFinset_range [DecidableEq α] [Fintype β] (f : β ->
+ α) [Fintype (Set.range f)] : (Set.range f).toFinset = Finset.univ.image f
+· 使用定理 `Finset.le_card_sdiff`：le_card_sdiff (s t : Finset α) : #t - #s <= #(t \ 
+s)
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Sym2.inductionOn`：∀ {α : Type u_1} {f : Sym2 α → Prop} (i : Sym2 α), (∀ 
+(x y : α), f s(x, y)) → f i
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+（共 37 条，此处仅展示前 30 条）
 
-English:
-lemma le_card_edgeFinset_killCopies
-  given: [Fintype V]
-  proof: by
-  classical
-  obtain rfl | hH := eq_or_ne H ⊥
-  · simp [← card_edgeSet]
-  let f (G' : {G' : G.Subgraph // Nonempty (H ≃g G'.coe)}) := (aux hH G'.2).some
-  calc
-    _ = #G.edgeFinset - card {G' : G.Subgraph // Nonempty (H ≃g G'.coe)} := ?_
-    _ <= #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub_left card_image_le _
-    _ = #G.edgeFinset - #(Set.range f).toFinset := by rw [Set.toFinset_range]
-    _ <= #(G.edgeFinset \ (Set.range f).toFinset) := le_card_sdiff ..
-    _ = #(G.killCopies H).edgeFinset := ?_
-  · simp only [edgeFinset, Set.toFinset_card]
-    rw [← Set.toFinset_card]; rw [← edgeFinset]; rw [copyCount]; rw [← card_subtype]; rw [subtype_univ]; rw [card_univ]
-  congr 1
-  ext e
-  induction e using Sym2.inductionOn with | hf v w
-  simp [mem_edgeSet, killCopies_of_ne_bot hH, f, eq_comm]
-
-中文:
-引理 le_card_edgeFinset_killCopies
-  条件: [有限类型 V]
-  证明: by
-  classical
-  obtain rfl | hH := eq_or_ne H ⊥
-  · simp [← card_edgeSet]
-  let f (G' : {G' : G.Subgraph // Nonempty (H ≃g G'.coe)}) := (aux hH G'.2).some
-  calc
-    _ = #G.edgeFinset - card {G' : G.Subgraph // Nonempty (H ≃g G'.coe)} := ?_
-    _ <= #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub_left card_image_le _
-    _ = #G.edgeFinset - #(Set.range f).toFinset := by rw [Set.toFinset_range]
-    _ <= #(G.edgeFinset \ (Set.range f).toFinset) := le_card_sdiff ..
-    _ = #(G.killCopies H).edgeFinset := ?_
-  · simp only [edgeFinset, Set.toFinset_card]
-    rw [← Set.toFinset_card]; rw [← edgeFinset]; rw [copyCount]; rw [← card_subtype]; rw [subtype_univ]; rw [card_univ]
-  congr 1
-  ext e
-  induction e using Sym2.inductionOn with | hf v w
-  simp [mem_edgeSet, killCopies_of_ne_bot hH, f, eq_comm]
-
-Depends on / 依赖: G.Subgraph, G.edgeFinset, G.killCopies, Nat.sub_le_sub_left, Nonempty, Set.range, Set.toFinset_range, Subgraph, card_edgeSet, card_image_le, classical, edgeFinset, eq_or_ne, killCopies, le_card_sdiff, sub_le_sub_left, toFinset, toFinset_range, univ.image
+--- 原说明 ---
+Removing an edge from `H` for each subgraph isomorphic to `G` means that the num
+ber of edges
+we've removed is at most the number of copies of `G` in `H`.
 -/
 lemma le_card_edgeFinset_killCopies [Fintype V] :
-    #G.edgeFinset - G.copyCount H <= #(G.killCopies H).edgeFinset := by
+    #G.edgeFinset - G.copyCount H ≤ #(G.killCopies H).edgeFinset := by
   classical
   obtain rfl | hH := eq_or_ne H ⊥
   · simp [← card_edgeSet]
   let f (G' : {G' : G.Subgraph // Nonempty (H ≃g G'.coe)}) := (aux hH G'.2).some
   calc
     _ = #G.edgeFinset - card {G' : G.Subgraph // Nonempty (H ≃g G'.coe)} := ?_
-    _ <= #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub_left card_image_le _
+    _ ≤ #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub_left card_image_le _
     _ = #G.edgeFinset - #(Set.range f).toFinset := by rw [Set.toFinset_range]
-    _ <= #(G.edgeFinset \ (Set.range f).toFinset) := le_card_sdiff ..
+    _ ≤ #(G.edgeFinset \ (Set.range f).toFinset) := le_card_sdiff ..
     _ = #(G.killCopies H).edgeFinset := ?_
   · simp only [edgeFinset, Set.toFinset_card]
-    rw [← Set.toFinset_card]; rw [← edgeFinset]; rw [copyCount]; rw [← card_subtype]; rw [subtype_univ]; rw [card_univ]
+    rw [← Set.toFinset_card, ← edgeFinset, copyCount, ← card_subtype, subtype_univ, card_univ]
   congr 1
   ext e
   induction e using Sym2.inductionOn with | hf v w
   simp [mem_edgeSet, killCopies_of_ne_bot hH, f, eq_comm]
 
-/--
-lemma `le_card_edgeFinset_killCopies_add_copyCount` / 引理 `le_card_edgeFinset_killCopies_add_copyCount`
+/-- Removing an edge from `H` for each subgraph isomorphic to `G` means that the number of edges
+we've removed is at most the number of copies of `G` in `H`. -/
+/-
+**SimpleGraph.le_card_edgeFinset_killCopies_add_copyCount** 是 Mathlib 中的一个引理，位于命
+名空间 `SimpleGraph`。
+形式化陈述：le_card_edgeFinset_killCopies_add_copyCount [Fintype V] : #G.edgeFinset <=
+ #(G.killCopies H).edgeFinset + G.copyCount H
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用引理 `SimpleGraph.le_card_edgeFinset_killCopies`：le_card_edgeFinset_killCopies
+ [Fintype V] : #G.edgeFinset - G.copyCount H <= #(G.killCopies H).edgeFinset
 
-English:
-lemma le_card_edgeFinset_killCopies_add_copyCount
-  given: [Fintype V]
-  proof: tsub_le_iff_right.1 le_card_edgeFinset_killCopies
-
-中文:
-引理 le_card_edgeFinset_killCopies_add_copyCount
-  条件: [有限类型 V]
-  证明: tsub_le_iff_right.1 le_card_edgeFinset_killCopies
-
-Depends on / 依赖: le_card_edgeFinset_killCopies, tsub_le_iff_right
+--- 原说明 ---
+Removing an edge from `H` for each subgraph isomorphic to `G` means that the num
+ber of edges
+we've removed is at most the number of copies of `G` in `H`.
 -/
 lemma le_card_edgeFinset_killCopies_add_copyCount [Fintype V] :
-    #G.edgeFinset <= #(G.killCopies H).edgeFinset + G.copyCount H :=
+    #G.edgeFinset ≤ #(G.killCopies H).edgeFinset + G.copyCount H :=
   tsub_le_iff_right.1 le_card_edgeFinset_killCopies
 
 /-!
@@ -2641,3 +2187,4 @@ TODO
 -/
 
 end SimpleGraph
+

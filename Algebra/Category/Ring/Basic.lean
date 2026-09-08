@@ -27,24 +27,15 @@ universe u v
 
 open CategoryTheory
 
-/--
-Definition of `SemiRingCat` / `SemiRingCat` 的定义
+/-- The category of semirings. -/
+/-
+**SemiRingCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SemiRingCat
-  parameters: where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [semiring : Semiring carrier]
-
-中文:
-结构 Semi环范畴
-  参数: where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [semiring : 半环 carrier]
+--- 原说明 ---
+The category of semirings.
 -/
 structure SemiRingCat where
   /-- The object in the category of semirings associated to a type equipped with the appropriate
@@ -71,104 +62,53 @@ initialize_simps_projections SemiRingCat (-semiring)
 
 namespace SemiRingCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort SemiRingCat (Type u)
-  body: ⟨SemiRingCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort Semi环范畴 (类型u)
-  定义体: ⟨SemiRingCat.carrier⟩
-
-Depends on / 依赖: SemiRingCat, SemiRingCat.carrier, carrier
+/-
+**SemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort SemiRingCat (Type u) :=
   ⟨SemiRingCat.carrier⟩
 
 attribute [coe] SemiRingCat.carrier
-
-/--
-lemma `coe_of` / 引理 `coe_of`
-
-English:
-lemma coe_of
-  given: (R : Type u) [Semiring R]
-  statement: (of R : Type u) = R
-  proof: rfl
-
-中文:
-引理 coe_of
-  条件: (R : 类型u) [半环 R]
-  结论: (of R : 类型u) = R
-  证明: rfl
+/-
+**SemiRingCat.coe_of** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：coe_of (R : Type u) [Semiring R] : (of R : Type u) = R
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_of (R : Type u) [Semiring R] : (of R : Type u) = R :=
   rfl
-
-/--
-lemma `of_carrier` / 引理 `of_carrier`
-
-English:
-lemma of_carrier
-  given: (R : SemiRingCat.{u})
-  statement: of R = R
-  proof: rfl
-
-中文:
-引理 of_carrier
-  条件: (R : Semi环范畴.{u})
-  结论: of R = R
-  证明: rfl
+/-
+**SemiRingCat.of_carrier** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：of_carrier (R : SemiRingCat.{u}) : of R = R
+参数：R : SemiRingCat.{u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_carrier (R : SemiRingCat.{u}) : of R = R := rfl
 
 variable {R} in
 /-- The type of morphisms in `SemiRingCat`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**SemiRingCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `SemiRingCat`。
+形式化陈述：SemiRingCat → SemiRingCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R S : SemiRingCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : R ->+* S
-
-中文:
-结构 态射
-  参数: (R S : Semi环范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : R ->+* S
+--- 原说明 ---
+The type of morphisms in `SemiRingCat`.
 -/
 structure Hom (R S : SemiRingCat.{u}) where
   private mk ::
   /-- The underlying ring hom. -/
-  hom' : R ->+* S
+  hom' : R →+* S
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category SemiRingCat
-  body: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 Semi环范畴
-  定义体: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**SemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category SemiRingCat where
   Hom R S := Hom R S
@@ -177,339 +117,227 @@ instance : Category SemiRingCat where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory.{u} SemiRingCat (fun R S => R ->+* S)
-  body: Hom.hom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 :
-  签名: 余ncrete范畴.{u} Semi环范畴 (fun R S => R ->+* S)
-  定义体: Hom.hom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: Hom.hom
+/-
+**SemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory.{u} SemiRingCat (fun R S => R ->+* S) where
+instance : ConcreteCategory.{u} SemiRingCat (fun R S => R →+* S) where
   hom := Hom.hom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `SemiRingCat` back into a `RingHom`. -/
+/-
+**SemiRingCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `SemiRingCat.Hom`。
+形式化陈述：{R S : SemiRingCat} → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {R S : SemiRingCat.{u}} (f : Hom R S)
-  body: ConcreteCategory.hom (C := SemiRingCat) f
-
-中文:
-缩写 态射.hom
-  签名: {R S : Semi环范畴.{u}} (f : 态射 R S)
-  定义体: ConcreteCategory.hom (C := SemiRingCat) f
+--- 原说明 ---
+Turn a morphism in `SemiRingCat` back into a `RingHom`.
 -/
 abbrev Hom.hom {R S : SemiRingCat.{u}} (f : Hom R S) :=
   ConcreteCategory.hom (C := SemiRingCat) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `RingHom` as a morphism in `SemiRingCat`. -/
+/-
+**SemiRingCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `SemiRingCat`。
+形式化陈述：ofHom {R S : Type u} [Semiring R] [Semiring S] (f : R ->+* S) : of R ⟶ of 
+S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {R S : Type u} [Semiring R] [Semiring S] (f : R ->+* S)
-  body: ConcreteCategory.ofHom (C := SemiRingCat) f
-
-中文:
-缩写 ofHom
-  签名: {R S : 类型u} [半环 R] [半环 S] (f : R ->+* S)
-  定义体: ConcreteCategory.ofHom (C := SemiRingCat) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, SemiRingCat
+--- 原说明 ---
+Typecheck a `RingHom` as a morphism in `SemiRingCat`.
 -/
-abbrev ofHom {R S : Type u} [Semiring R] [Semiring S] (f : R ->+* S) : of R ⟶ of S :=
+abbrev ofHom {R S : Type u} [Semiring R] [Semiring S] (f : R →+* S) : of R ⟶ of S :=
   ConcreteCategory.ofHom (C := SemiRingCat) f
 
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**SemiRingCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `SemiRingCat.Hom.Simps`。
+形式化陈述：(R S : SemiRingCat) → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (R S : SemiRingCat) (f : Hom R S)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (R S : Semi环范畴) (f : 态射 R S)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (R S : SemiRingCat) (f : Hom R S) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
+/-
+**SemiRingCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：hom_id {R : SemiRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma hom_id
-  given: {R : SemiRingCat}
-  statement: (𝟙 R : R ⟶ R).hom = RingHom.id R
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {R : Semi环范畴}
-  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
-  证明: rfl
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
 lemma hom_id {R : SemiRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**SemiRingCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：id_apply (R : SemiRingCat) (r : R) : (𝟙 R : R ⟶ R) r = r
+参数：R : SemiRingCat；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (R : SemiRingCat) (r : R)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (R : Semi环范畴) (r : R)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (R : SemiRingCat) (r : R) :
     (𝟙 R : R ⟶ R) r = r := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {R S T : Semi环范畴} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
+/-
+**SemiRingCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：hom_comp {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T) : (f ≫ g).hom = g.h
+om.comp f.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**SemiRingCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：comp_apply {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) : (f ≫ g)
+ r = g (f r)
+参数：f : R ⟶ S；g : S ⟶ T；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {R S T : Semi环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) :
     (f ≫ g) r = g (f r) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R S : SemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {R S : Semi环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**SemiRingCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：hom_ext {R S : SemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemiRingCat.Hom.ext`：∀ {R S : SemiRingCat} {x y : R.Hom S}, x.hom' = y.h
+om' → x = y
 -/
 lemma hom_ext {R S : SemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {R S : Type u} [Semiring R] [Semiring S] (f : R ->+* S)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {R S : 类型u} [半环 R] [半环 S] (f : R ->+* S)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[simp]
+/-
+**SemiRingCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：hom_ofHom {R S : Type u} [Semiring R] [Semiring S] (f : R ->+* S) : (ofHom
+ f).hom = f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {R S : Type u} [Semiring R] [Semiring S] (f : R ->+* S) : (ofHom f).hom = f := rfl
+lemma hom_ofHom {R S : Type u} [Semiring R] [Semiring S] (f : R →+* S) : (ofHom f).hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {R S : SemiRingCat} (f : R ⟶ S)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {R S : Semi环范畴} (f : R ⟶ S)
-  证明: rfl
-
-@[simp]
+/-
+**SemiRingCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：ofHom_hom {R S : SemiRingCat} (f : R ⟶ S) : ofHom (Hom.hom f) = f
+参数：f : R ⟶ S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {R S : SemiRingCat} (f : R ⟶ S) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {R : Type u} [Semiring R]
-  statement: ofHom (RingHom.id R) = 𝟙 (of R)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {R : 类型u} [半环 R]
-  结论: ofHom (环态射.id R) = 𝟙 (of R)
-  证明: rfl
-
-@[simp]
+/-
+**SemiRingCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：ofHom_id {R : Type u} [Semiring R] : ofHom (RingHom.id R) = 𝟙 (of R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {R : Type u} [Semiring R] : ofHom (RingHom.id R) = 𝟙 (of R) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {R S T : Type u} [Semiring R] [Semiring S] [Semiring T]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {R S T : 类型u} [半环 R] [半环 S] [半环 T]
-  证明: rfl
+/-
+**SemiRingCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：ofHom_comp {R S T : Type u} [Semiring R] [Semiring S] [Semiring T] (f : R 
+->+* S) (g : S ->+* T) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : R ->+* S；g : S ->+* T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {R S T : Type u} [Semiring R] [Semiring S] [Semiring T]
-    (f : R ->+* S) (g : S ->+* T) :
+    (f : R →+* S) (g : S →+* T) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  statement: {R S : Type u} [Semiring R] [Semiring S]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {R S : 类型u} [半环 R] [半环 S]
-  证明: rfl
+/-
+**SemiRingCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：ofHom_apply {R S : Type u} [Semiring R] [Semiring S] (f : R ->+* S) (r : R
+) : ofHom f r = f r
+参数：f : R ->+* S；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_apply {R S : Type u} [Semiring R] [Semiring S]
-    (f : R ->+* S) (r : R) : ofHom f r = f r := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {R S : SemiRingCat} (e : R ≅ S) (r : R)
-  statement: e.inv (e.hom r) = r
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {R S : Semi环范畴} (e : R ≅ S) (r : R)
-  结论: e.inv (e.hom r) = r
-  证明: by
-  simp
+    (f : R →+* S) (r : R) : ofHom f r = f r := rfl
+/-
+**SemiRingCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：inv_hom_apply {R S : SemiRingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r) = 
+r
+参数：e : R ≅ S；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {R S : SemiRingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r) = r := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {R S : SemiRingCat} (e : R ≅ S) (s : S)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {R S : Semi环范畴} (e : R ≅ S) (s : S)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**SemiRingCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+形式化陈述：hom_inv_apply {R S : SemiRingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s) = 
+s
+参数：e : R ≅ S；s : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {R S : SemiRingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited SemiRingCat
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 Semi环范畴
-  定义体: ⟨of PUnit⟩
+/-
+**SemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited SemiRingCat :=
   ⟨of PUnit⟩
@@ -522,157 +350,97 @@ unif_hint forget_obj_eq_coe (R R' : SemiRingCat) where
 @[deprecated (since := "2026-02-16")] alias forget_obj := CategoryTheory.forget_obj
 @[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
 
+/-
+**SemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : SemiRingCat} : Semiring ((forget SemiRingCat).obj R) :=
-inferInstanceAs Semiring R.carrier
-
-/--
-Instance `hasForgetToMonCat` / 实例 `hasForgetToMonCat`
-
-English:
-instance hasForgetToMonCat
-  signature: : HasForget₂ SemiRingCat MonCat where
-  body: { obj := fun R => MonCat.of R
-      map := fun f => MonCat.ofHom f.hom.toMonoidHom }
-
-中文:
-实例 hasForgetToMonCat
-  签名: : 有Forget₂ Semi环范畴 幺半群范畴 where
-  定义体: { obj := fun R => MonCat.of R
-      map := fun f => MonCat.ofHom f.hom.toMonoidHom }
-
-Depends on / 依赖: MonCat, MonCat.of, MonCat.ofHom, f.hom.toMonoidHom, toMonoidHom
+  inferInstanceAs <| Semiring R.carrier
+/-
+**SemiRingCat.hasForgetToMonCat** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+形式化陈述：hasForgetToMonCat : HasForget₂ SemiRingCat MonCat where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToMonCat : HasForget₂ SemiRingCat MonCat where
   forget₂ :=
-    { obj := fun R => MonCat.of R
-      map := fun f => MonCat.ofHom f.hom.toMonoidHom }
-
-/--
-Instance `hasForgetToAddCommMonCat` / 实例 `hasForgetToAddCommMonCat`
-
-English:
-instance hasForgetToAddCommMonCat
-  signature: : HasForget₂ SemiRingCat AddCommMonCat where
-  body: { obj := fun R => AddCommMonCat.of R
-      map := fun f => AddCommMonCat.ofHom f.hom.toAddMonoidHom }
-
-中文:
-实例 hasForgetToAddCommMonCat
-  签名: : 有Forget₂ Semi环范畴 加法交换幺半群范畴 where
-  定义体: { obj := fun R => AddCommMonCat.of R
-      map := fun f => AddCommMonCat.ofHom f.hom.toAddMonoidHom }
-
-Depends on / 依赖: AddCommMonCat, AddCommMonCat.of, AddCommMonCat.ofHom, f.hom.toAddMonoidHom, toAddMonoidHom
+    { obj := fun R ↦ MonCat.of R
+      map := fun f ↦ MonCat.ofHom f.hom.toMonoidHom }
+/-
+**SemiRingCat.hasForgetToAddCommMonCat** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+形式化陈述：hasForgetToAddCommMonCat : HasForget₂ SemiRingCat AddCommMonCat where forg
+et₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToAddCommMonCat : HasForget₂ SemiRingCat AddCommMonCat where
   forget₂ :=
-    { obj := fun R => AddCommMonCat.of R
-      map := fun f => AddCommMonCat.ofHom f.hom.toAddMonoidHom }
-
-/--
-lemma `forget₂_monCat_map` / 引理 `forget₂_monCat_map`
-
-English:
-lemma forget₂_monCat_map
-  given: {R S : SemiRingCat} (f : R ⟶ S) (x)
-  proof: rfl
-
-中文:
-引理 forget₂_monCat_map
-  条件: {R S : Semi环范畴} (f : R ⟶ S) (x)
-  证明: rfl
+    { obj := fun R ↦ AddCommMonCat.of R
+      map := fun f ↦ AddCommMonCat.ofHom f.hom.toAddMonoidHom }
+/-
+**SemiRingCat.forget** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma forget₂_monCat_map {R S : SemiRingCat} (f : R ⟶ S) (x) :
     (forget₂ SemiRingCat MonCat).map f x = f x := rfl
-
-/--
-lemma `forget₂_addCommMonCat_map` / 引理 `forget₂_addCommMonCat_map`
-
-English:
-lemma forget₂_addCommMonCat_map
-  given: {R S : SemiRingCat} (f : R ⟶ S) (x)
-  proof: rfl
-
-中文:
-引理 forget₂_addCommMonCat_map
-  条件: {R S : Semi环范畴} (f : R ⟶ S) (x)
-  证明: rfl
+/-
+**SemiRingCat.forget** 是 Mathlib 中的一个引理，位于命名空间 `SemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma forget₂_addCommMonCat_map {R S : SemiRingCat} (f : R ⟶ S) (x) :
     (forget₂ SemiRingCat AddCommMonCat).map f x = f x := rfl
 
 /-- Ring equivalences are isomorphisms in category of semirings -/
 @[simps]
-/--
-Definition of `_root_.RingEquiv.toSemiRingCatIso` / `_root_.RingEquiv.toSemiRingCatIso` 的定义
+/-
+**SemiRingCat._root_.RingEquiv.toSemiRingCatIso** 是 Mathlib 中的一个定义，位于命名空间 `SemiR
+ingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.RingEquiv.toSemiRingCatIso
-  signature: {R S : Type u} [Semiring R] [Semiring S] (e : R ≃+* S)
-  body: ofHom e
-  inv := ofHom e.symm
-
-中文:
-定义 _root_.环等价.toSemiRingCatIso
-  签名: {R S : 类型u} [半环 R] [半环 S] (e : R ≃+* S)
-  定义体: ofHom e
-  inv := ofHom e.symm
+--- 原说明 ---
+Ring equivalences are isomorphisms in category of semirings
 -/
 def _root_.RingEquiv.toSemiRingCatIso {R S : Type u} [Semiring R] [Semiring S] (e : R ≃+* S) :
     of R ≅ of S where
   hom := ofHom e
   inv := ofHom e.symm
-
-/--
-Instance `forgetReflectIsos` / 实例 `forgetReflectIsos`
-
-English:
-instance forgetReflectIsos
-  signature: : (forget SemiRingCat).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget SemiRingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toSemiRingCatIso.isIso_hom
-
-中文:
-实例 forgetReflectIsos
-  签名: : (forget Semi环范畴).反映同构 where
-  定义体: by
-    let i := asIso ((forget SemiRingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toSemiRingCatIso.isIso_hom
-
-Depends on / 依赖: SemiRingCat, e.toSemiRingCatIso.isIso_hom, f.hom, forget, i.toEquiv, isIso_hom, toEquiv, toSemiRingCatIso
+/-
+**SemiRingCat.forgetReflectIsos** 是 Mathlib 中的一个实例，位于命名空间 `SemiRingCat`。
+形式化陈述：forgetReflectIsos : (forget SemiRingCat).ReflectsIsomorphisms where reflec
+ts {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MonoidHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOne M] 
+[inst_1 : MulOne N] (self : M →* N) (x y : M),   (↑self).toFun (x * y) = (↑self)
+.toFun x…
+· 使用定理 `RingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonAssocSemiri
+ng α] [inst_1 : NonAssocSemiring β] (self : α →+* β) (x y : α),   (↑↑self).toFun
+ (x + …
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance forgetReflectIsos : (forget SemiRingCat).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
     let i := asIso ((forget SemiRingCat).map f)
-    let ff : X ->+* Y := f.hom
+    let ff : X →+* Y := f.hom
     let e : X ≃+* Y := { ff, i.toEquiv with }
     exact e.toSemiRingCatIso.isIso_hom
 
 end SemiRingCat
 
-/--
-Definition of `RingCat` / `RingCat` 的定义
+/-- The category of rings. -/
+/-
+**RingCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingCat
-  parameters: where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [ring : Ring carrier]
-
-中文:
-结构 环范畴
-  参数: where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [ring : 环 carrier]
+--- 原说明 ---
+The category of rings.
 -/
 structure RingCat where
   /-- The object in the category of rings associated to a type equipped with the appropriate
@@ -699,104 +467,53 @@ initialize_simps_projections RingCat (-ring)
 
 namespace RingCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort RingCat (Type u)
-  body: ⟨RingCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 环范畴 (类型u)
-  定义体: ⟨RingCat.carrier⟩
-
-Depends on / 依赖: RingCat, RingCat.carrier, carrier
+/-
+**RingCat.** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort RingCat (Type u) :=
   ⟨RingCat.carrier⟩
 
 attribute [coe] RingCat.carrier
-
-/--
-lemma `coe_of` / 引理 `coe_of`
-
-English:
-lemma coe_of
-  given: (R : Type u) [Ring R]
-  statement: (of R : Type u) = R
-  proof: rfl
-
-中文:
-引理 coe_of
-  条件: (R : 类型u) [环 R]
-  结论: (of R : 类型u) = R
-  证明: rfl
+/-
+**RingCat.coe_of** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：coe_of (R : Type u) [Ring R] : (of R : Type u) = R
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_of (R : Type u) [Ring R] : (of R : Type u) = R :=
   rfl
-
-/--
-lemma `of_carrier` / 引理 `of_carrier`
-
-English:
-lemma of_carrier
-  given: (R : RingCat.{u})
-  statement: of R = R
-  proof: rfl
-
-中文:
-引理 of_carrier
-  条件: (R : 环范畴.{u})
-  结论: of R = R
-  证明: rfl
+/-
+**RingCat.of_carrier** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：of_carrier (R : RingCat.{u}) : of R = R
+参数：R : RingCat.{u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_carrier (R : RingCat.{u}) : of R = R := rfl
 
 variable {R} in
 /-- The type of morphisms in `RingCat`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**RingCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `RingCat`。
+形式化陈述：RingCat → RingCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R S : RingCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : R ->+* S
-
-中文:
-结构 态射
-  参数: (R S : 环范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : R ->+* S
+--- 原说明 ---
+The type of morphisms in `RingCat`.
 -/
 structure Hom (R S : RingCat.{u}) where
   private mk ::
   /-- The underlying ring hom. -/
-  hom' : R ->+* S
+  hom' : R →+* S
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category RingCat
-  body: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 环范畴
-  定义体: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**RingCat.** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category RingCat where
   Hom R S := Hom R S
@@ -805,339 +522,224 @@ instance : Category RingCat where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory.{u} RingCat (fun R S => R ->+* S)
-  body: Hom.hom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 :
-  签名: 余ncrete范畴.{u} 环范畴 (fun R S => R ->+* S)
-  定义体: Hom.hom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: Hom.hom
+/-
+**RingCat.** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory.{u} RingCat (fun R S => R ->+* S) where
+instance : ConcreteCategory.{u} RingCat (fun R S => R →+* S) where
   hom := Hom.hom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `RingCat` back into a `RingHom`. -/
+/-
+**RingCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `RingCat.Hom`。
+形式化陈述：{R S : RingCat} → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {R S : RingCat.{u}} (f : Hom R S)
-  body: ConcreteCategory.hom (C := RingCat) f
-
-中文:
-缩写 态射.hom
-  签名: {R S : 环范畴.{u}} (f : 态射 R S)
-  定义体: ConcreteCategory.hom (C := RingCat) f
+--- 原说明 ---
+Turn a morphism in `RingCat` back into a `RingHom`.
 -/
 abbrev Hom.hom {R S : RingCat.{u}} (f : Hom R S) :=
   ConcreteCategory.hom (C := RingCat) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `RingHom` as a morphism in `RingCat`. -/
+/-
+**RingCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `RingCat`。
+形式化陈述：ofHom {R S : Type u} [Ring R] [Ring S] (f : R ->+* S) : of R ⟶ of S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {R S : Type u} [Ring R] [Ring S] (f : R ->+* S)
-  body: ConcreteCategory.ofHom (C := RingCat) f
-
-中文:
-缩写 ofHom
-  签名: {R S : 类型u} [环 R] [环 S] (f : R ->+* S)
-  定义体: ConcreteCategory.ofHom (C := RingCat) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, RingCat
+--- 原说明 ---
+Typecheck a `RingHom` as a morphism in `RingCat`.
 -/
-abbrev ofHom {R S : Type u} [Ring R] [Ring S] (f : R ->+* S) : of R ⟶ of S :=
+abbrev ofHom {R S : Type u} [Ring R] [Ring S] (f : R →+* S) : of R ⟶ of S :=
   ConcreteCategory.ofHom (C := RingCat) f
 
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**RingCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `RingCat.Hom.Simps`。
+形式化陈述：(R S : RingCat) → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (R S : RingCat) (f : Hom R S)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (R S : 环范畴) (f : 态射 R S)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (R S : RingCat) (f : Hom R S) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
+/-
+**RingCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：hom_id {R : RingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma hom_id
-  given: {R : RingCat}
-  statement: (𝟙 R : R ⟶ R).hom = RingHom.id R
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {R : 环范畴}
-  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
-  证明: rfl
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
 lemma hom_id {R : RingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**RingCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：id_apply (R : RingCat) (r : R) : (𝟙 R : R ⟶ R) r = r
+参数：R : RingCat；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (R : RingCat) (r : R)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (R : 环范畴) (r : R)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (R : RingCat) (r : R) :
     (𝟙 R : R ⟶ R) r = r := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {R S T : 环范畴} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
+/-
+**RingCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：hom_comp {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T) : (f ≫ g).hom = g.hom.c
+omp f.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**RingCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：comp_apply {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) : (f ≫ g) r =
+ g (f r)
+参数：f : R ⟶ S；g : S ⟶ T；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {R S T : 环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) :
     (f ≫ g) r = g (f r) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R S : RingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {R S : 环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**RingCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：hom_ext {R S : RingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingCat.Hom.ext`：∀ {R S : RingCat} {x y : R.Hom S}, x.hom' = y.hom' → x 
+= y
 -/
 lemma hom_ext {R S : RingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {R S : Type u} [Ring R] [Ring S] (f : R ->+* S)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {R S : 类型u} [环 R] [环 S] (f : R ->+* S)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[simp]
+/-
+**RingCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：hom_ofHom {R S : Type u} [Ring R] [Ring S] (f : R ->+* S) : (ofHom f).hom 
+= f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {R S : Type u} [Ring R] [Ring S] (f : R ->+* S) : (ofHom f).hom = f := rfl
+lemma hom_ofHom {R S : Type u} [Ring R] [Ring S] (f : R →+* S) : (ofHom f).hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {R S : RingCat} (f : R ⟶ S)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {R S : 环范畴} (f : R ⟶ S)
-  证明: rfl
-
-@[simp]
+/-
+**RingCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：ofHom_hom {R S : RingCat} (f : R ⟶ S) : ofHom (Hom.hom f) = f
+参数：f : R ⟶ S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {R S : RingCat} (f : R ⟶ S) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {R : Type u} [Ring R]
-  statement: ofHom (RingHom.id R) = 𝟙 (of R)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {R : 类型u} [环 R]
-  结论: ofHom (环态射.id R) = 𝟙 (of R)
-  证明: rfl
-
-@[simp]
+/-
+**RingCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：ofHom_id {R : Type u} [Ring R] : ofHom (RingHom.id R) = 𝟙 (of R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {R : Type u} [Ring R] : ofHom (RingHom.id R) = 𝟙 (of R) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {R S T : Type u} [Ring R] [Ring S] [Ring T]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {R S T : 类型u} [环 R] [环 S] [环 T]
-  证明: rfl
+/-
+**RingCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：ofHom_comp {R S T : Type u} [Ring R] [Ring S] [Ring T] (f : R ->+* S) (g :
+ S ->+* T) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : R ->+* S；g : S ->+* T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {R S T : Type u} [Ring R] [Ring S] [Ring T]
-    (f : R ->+* S) (g : S ->+* T) :
+    (f : R →+* S) (g : S →+* T) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  statement: {R S : Type u} [Ring R] [Ring S]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {R S : 类型u} [环 R] [环 S]
-  证明: rfl
+/-
+**RingCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：ofHom_apply {R S : Type u} [Ring R] [Ring S] (f : R ->+* S) (r : R) : ofHo
+m f r = f r
+参数：f : R ->+* S；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_apply {R S : Type u} [Ring R] [Ring S]
-    (f : R ->+* S) (r : R) : ofHom f r = f r := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {R S : RingCat} (e : R ≅ S) (r : R)
-  statement: e.inv (e.hom r) = r
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {R S : 环范畴} (e : R ≅ S) (r : R)
-  结论: e.inv (e.hom r) = r
-  证明: by
-  simp
+    (f : R →+* S) (r : R) : ofHom f r = f r := rfl
+/-
+**RingCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：inv_hom_apply {R S : RingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r) = r
+参数：e : R ≅ S；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {R S : RingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r) = r := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {R S : RingCat} (e : R ≅ S) (s : S)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {R S : 环范畴} (e : R ≅ S) (s : S)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**RingCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+形式化陈述：hom_inv_apply {R S : RingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s) = s
+参数：e : R ≅ S；s : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {R S : RingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited RingCat
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 环范畴
-  定义体: ⟨of PUnit⟩
+/-
+**RingCat.** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited RingCat :=
   ⟨of PUnit⟩
@@ -1154,178 +756,107 @@ unif_hint forget_obj_eq_coe (R R' : RingCat) where
 @[deprecated (since := "2026-02-16")] alias forget_obj := CategoryTheory.forget_obj
 @[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
 
+/-
+**RingCat.** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : RingCat} : Ring ((forget RingCat).obj R) :=
-inferInstanceAs Ring R.carrier
-
-/--
-Instance `hasForgetToSemiRingCat` / 实例 `hasForgetToSemiRingCat`
-
-English:
-instance hasForgetToSemiRingCat
-  signature: : HasForget₂ RingCat SemiRingCat where
-  body: { obj := fun R => SemiRingCat.of R
-      map := fun f => SemiRingCat.ofHom f.hom }
-
-中文:
-实例 hasForgetToSemiRingCat
-  签名: : 有Forget₂ 环范畴 Semi环范畴 where
-  定义体: { obj := fun R => SemiRingCat.of R
-      map := fun f => SemiRingCat.ofHom f.hom }
-
-Depends on / 依赖: SemiRingCat, SemiRingCat.of, SemiRingCat.ofHom, f.hom
+  inferInstanceAs <| Ring R.carrier
+/-
+**RingCat.hasForgetToSemiRingCat** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+形式化陈述：hasForgetToSemiRingCat : HasForget₂ RingCat SemiRingCat where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToSemiRingCat : HasForget₂ RingCat SemiRingCat where
   forget₂ :=
-    { obj := fun R => SemiRingCat.of R
-      map := fun f => SemiRingCat.ofHom f.hom }
-
-/--
-lemma `forget₂_map` / 引理 `forget₂_map`
-
-English:
-lemma forget₂_map
-  given: {R S : RingCat} (f : R ⟶ S) (x)
-  proof: rfl
-
-中文:
-引理 forget₂_map
-  条件: {R S : 环范畴} (f : R ⟶ S) (x)
-  证明: rfl
+    { obj := fun R ↦ SemiRingCat.of R
+      map := fun f ↦ SemiRingCat.ofHom f.hom }
+/-
+**RingCat.forget** 是 Mathlib 中的一个引理，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma forget₂_map {R S : RingCat} (f : R ⟶ S) (x) :
     (forget₂ RingCat SemiRingCat).map f x = f x := rfl
 
-/--
-Definition of `fullyFaithfulForget₂ToSemiRingCat` / `fullyFaithfulForget₂ToSemiRingCat` 的定义
+/-- The forgetful functor from `RingCat` to `SemiRingCat` is fully faithful. -/
+/-
+**RingCat.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget₂ToSemiRingCat
-  signature: :
-  body: ofHom f.hom
-
-中文:
-定义 fullyFaithfulForget₂ToSemiRingCat
-  签名: :
-  定义体: ofHom f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The forgetful functor from `RingCat` to `SemiRingCat` is fully faithful.
 -/
 def fullyFaithfulForget₂ToSemiRingCat :
     (forget₂ RingCat SemiRingCat).FullyFaithful where
   preimage f := ofHom f.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂ RingCat SemiRingCat).Full
-  body: fullyFaithfulForget₂ToSemiRingCat.full
-
-中文:
-实例 :
-  签名: (forget₂ 环范畴 Semi环范畴).满
-  定义体: fullyFaithfulForget₂ToSemiRingCat.full
-
-Depends on / 依赖: ToSemiRingCat.full
+/-
+**RingCat.** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂ RingCat SemiRingCat).Full :=
   fullyFaithfulForget₂ToSemiRingCat.full
-
-/--
-Instance `hasForgetToAddCommGrp` / 实例 `hasForgetToAddCommGrp`
-
-English:
-instance hasForgetToAddCommGrp
-  signature: : HasForget₂ RingCat AddCommGrpCat where
-  body: { obj := fun R => AddCommGrpCat.of R
-      map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
-
-中文:
-实例 hasForgetToAddCommGrp
-  签名: : 有Forget₂ 环范畴 加法交换群范畴 where
-  定义体: { obj := fun R => AddCommGrpCat.of R
-      map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.of, AddCommGrpCat.ofHom, f.hom.toAddMonoidHom, toAddMonoidHom
+/-
+**RingCat.hasForgetToAddCommGrp** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+形式化陈述：hasForgetToAddCommGrp : HasForget₂ RingCat AddCommGrpCat where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToAddCommGrp : HasForget₂ RingCat AddCommGrpCat where
   forget₂ :=
-    { obj := fun R => AddCommGrpCat.of R
-      map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
+    { obj := fun R ↦ AddCommGrpCat.of R
+      map := fun f ↦ AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
 
 /-- Ring equivalences are isomorphisms in category of rings -/
 @[simps]
-/--
-Definition of `_root_.RingEquiv.toRingCatIso` / `_root_.RingEquiv.toRingCatIso` 的定义
+/-
+**RingCat._root_.RingEquiv.toRingCatIso** 是 Mathlib 中的一个定义，位于命名空间 `RingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.RingEquiv.toRingCatIso
-  signature: {R S : Type u} [Ring R] [Ring S] (e : R ≃+* S)
-  body: ofHom e
-  inv := ofHom e.symm
-
-中文:
-定义 _root_.环等价.toRingCatIso
-  签名: {R S : 类型u} [环 R] [环 S] (e : R ≃+* S)
-  定义体: ofHom e
-  inv := ofHom e.symm
+--- 原说明 ---
+Ring equivalences are isomorphisms in category of rings
 -/
 def _root_.RingEquiv.toRingCatIso {R S : Type u} [Ring R] [Ring S] (e : R ≃+* S) :
     of R ≅ of S where
   hom := ofHom e
   inv := ofHom e.symm
-
-/--
-Instance `forgetReflectIsos` / 实例 `forgetReflectIsos`
-
-English:
-instance forgetReflectIsos
-  signature: : (forget RingCat).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget RingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toRingCatIso.isIso_hom
-
-中文:
-实例 forgetReflectIsos
-  签名: : (forget 环范畴).反映同构 where
-  定义体: by
-    let i := asIso ((forget RingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toRingCatIso.isIso_hom
-
-Depends on / 依赖: RingCat, Submodule, Submodule.inclusion_injective, e.toRingCatIso.isIso_hom, f.hom, forget, i.toEquiv, inclusion_injective, isIso_hom, mono_of_injective, toEquiv, toRingCatIso
+/-
+**RingCat.forgetReflectIsos** 是 Mathlib 中的一个实例，位于命名空间 `RingCat`。
+形式化陈述：forgetReflectIsos : (forget RingCat).ReflectsIsomorphisms where reflects {
+X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MonoidHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOne M] 
+[inst_1 : MulOne N] (self : M →* N) (x y : M),   (↑self).toFun (x * y) = (↑self)
+.toFun x…
+· 使用定理 `RingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonAssocSemiri
+ng α] [inst_1 : NonAssocSemiring β] (self : α →+* β) (x y : α),   (↑↑self).toFun
+ (x + …
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance forgetReflectIsos : (forget RingCat).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
     let i := asIso ((forget RingCat).map f)
-    let ff : X ->+* Y := f.hom
+    let ff : X →+* Y := f.hom
     let e : X ≃+* Y := { ff, i.toEquiv with }
     exact e.toRingCatIso.isIso_hom
 
 end RingCat
 
-/--
-Definition of `CommSemiRingCat` / `CommSemiRingCat` 的定义
+/-- The category of commutative semirings. -/
+/-
+**CommSemiRingCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommSemiRingCat
-  parameters: where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [commSemiring : CommSemiring carrier]
-
-中文:
-结构 交换Semi环范畴
-  参数: where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [commSemiring : 交换半环 carrier]
+--- 原说明 ---
+The category of commutative semirings.
 -/
 structure CommSemiRingCat where
   /-- The object in the category of commutative semirings associated to a type equipped with the
@@ -1352,104 +883,53 @@ initialize_simps_projections CommSemiRingCat (-commSemiring)
 
 namespace CommSemiRingCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (CommSemiRingCat) (Type u)
-  body: ⟨CommSemiRingCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort (交换Semi环范畴) (类型u)
-  定义体: ⟨CommSemiRingCat.carrier⟩
-
-Depends on / 依赖: CommSemiRingCat, CommSemiRingCat.carrier, carrier
+/-
+**CommSemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (CommSemiRingCat) (Type u) :=
   ⟨CommSemiRingCat.carrier⟩
 
 attribute [coe] CommSemiRingCat.carrier
-
-/--
-lemma `coe_of` / 引理 `coe_of`
-
-English:
-lemma coe_of
-  given: (R : Type u) [CommSemiring R]
-  statement: (of R : Type u) = R
-  proof: rfl
-
-中文:
-引理 coe_of
-  条件: (R : 类型u) [交换半环 R]
-  结论: (of R : 类型u) = R
-  证明: rfl
+/-
+**CommSemiRingCat.coe_of** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：coe_of (R : Type u) [CommSemiring R] : (of R : Type u) = R
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_of (R : Type u) [CommSemiring R] : (of R : Type u) = R :=
   rfl
-
-/--
-lemma `of_carrier` / 引理 `of_carrier`
-
-English:
-lemma of_carrier
-  given: (R : CommSemiRingCat.{u})
-  statement: of R = R
-  proof: rfl
-
-中文:
-引理 of_carrier
-  条件: (R : 交换Semi环范畴.{u})
-  结论: of R = R
-  证明: rfl
+/-
+**CommSemiRingCat.of_carrier** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：of_carrier (R : CommSemiRingCat.{u}) : of R = R
+参数：R : CommSemiRingCat.{u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_carrier (R : CommSemiRingCat.{u}) : of R = R := rfl
 
 variable {R} in
 /-- The type of morphisms in `CommSemiRingCat`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CommSemiRingCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CommSemiRingCat`。
+形式化陈述：CommSemiRingCat → CommSemiRingCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R S : CommSemiRingCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : R ->+* S
-
-中文:
-结构 态射
-  参数: (R S : 交换Semi环范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : R ->+* S
+--- 原说明 ---
+The type of morphisms in `CommSemiRingCat`.
 -/
 structure Hom (R S : CommSemiRingCat.{u}) where
   private mk ::
   /-- The underlying ring hom. -/
-  hom' : R ->+* S
+  hom' : R →+* S
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category CommSemiRingCat
-  body: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 交换Semi环范畴
-  定义体: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**CommSemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category CommSemiRingCat where
   Hom R S := Hom R S
@@ -1458,338 +938,229 @@ instance : Category CommSemiRingCat where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory.{u} CommSemiRingCat (fun R S => R ->+* S)
-  body: Hom.hom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 :
-  签名: 余ncrete范畴.{u} 交换Semi环范畴 (fun R S => R ->+* S)
-  定义体: Hom.hom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: Hom.hom
+/-
+**CommSemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory.{u} CommSemiRingCat (fun R S => R ->+* S) where
+instance : ConcreteCategory.{u} CommSemiRingCat (fun R S => R →+* S) where
   hom := Hom.hom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `CommSemiRingCat` back into a `RingHom`. -/
+/-
+**CommSemiRingCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `CommSemiRingCat.Hom`。
+形式化陈述：{R S : CommSemiRingCat} → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {R S : CommSemiRingCat.{u}} (f : Hom R S)
-  body: ConcreteCategory.hom (C := CommSemiRingCat) f
-
-中文:
-缩写 态射.hom
-  签名: {R S : 交换Semi环范畴.{u}} (f : 态射 R S)
-  定义体: ConcreteCategory.hom (C := CommSemiRingCat) f
+--- 原说明 ---
+Turn a morphism in `CommSemiRingCat` back into a `RingHom`.
 -/
 abbrev Hom.hom {R S : CommSemiRingCat.{u}} (f : Hom R S) :=
   ConcreteCategory.hom (C := CommSemiRingCat) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `RingHom` as a morphism in `CommSemiRingCat`. -/
+/-
+**CommSemiRingCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CommSemiRingCat`。
+形式化陈述：ofHom {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R ->+* S) : of
+ R ⟶ of S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R ->+* S)
-  body: ConcreteCategory.ofHom (C := CommSemiRingCat) f
-
-中文:
-缩写 ofHom
-  签名: {R S : 类型u} [交换半环 R] [交换半环 S] (f : R ->+* S)
-  定义体: ConcreteCategory.ofHom (C := CommSemiRingCat) f
-
-Depends on / 依赖: CommSemiRingCat, ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a `RingHom` as a morphism in `CommSemiRingCat`.
 -/
-abbrev ofHom {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R ->+* S) : of R ⟶ of S :=
+abbrev ofHom {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R →+* S) : of R ⟶ of S :=
   ConcreteCategory.ofHom (C := CommSemiRingCat) f
 
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**CommSemiRingCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `CommSemiRingCat.Hom.S
+imps`。
+形式化陈述：(R S : CommSemiRingCat) → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (R S : CommSemiRingCat) (f : Hom R S)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (R S : 交换Semi环范畴) (f : 态射 R S)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (R S : CommSemiRingCat) (f : Hom R S) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
+/-
+**CommSemiRingCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：hom_id {R : CommSemiRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma hom_id
-  given: {R : CommSemiRingCat}
-  statement: (𝟙 R : R ⟶ R).hom = RingHom.id R
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {R : 交换Semi环范畴}
-  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
-  证明: rfl
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
 lemma hom_id {R : CommSemiRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**CommSemiRingCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：id_apply (R : CommSemiRingCat) (r : R) : (𝟙 R : R ⟶ R) r = r
+参数：R : CommSemiRingCat；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (R : CommSemiRingCat) (r : R)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (R : 交换Semi环范畴) (r : R)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (R : CommSemiRingCat) (r : R) :
     (𝟙 R : R ⟶ R) r = r := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {R S T : 交换Semi环范畴} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
+/-
+**CommSemiRingCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：hom_comp {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T) : (f ≫ g).hom =
+ g.hom.comp f.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**CommSemiRingCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：comp_apply {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) : (f 
+≫ g) r = g (f r)
+参数：f : R ⟶ S；g : S ⟶ T；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {R S T : 交换Semi环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) :
     (f ≫ g) r = g (f r) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R S : CommSemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {R S : 交换Semi环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**CommSemiRingCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：hom_ext {R S : CommSemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CommSemiRingCat.Hom.ext`：∀ {R S : CommSemiRingCat} {x y : R.Hom S}, x.ho
+m' = y.hom' → x = y
 -/
 lemma hom_ext {R S : CommSemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R ->+* S)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {R S : 类型u} [交换半环 R] [交换半环 S] (f : R ->+* S)
-  证明: rfl
-
-@[simp]
+/-
+**CommSemiRingCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：hom_ofHom {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R ->+* S) 
+: (ofHom f).hom = f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R ->+* S) :
+lemma hom_ofHom {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R →+* S) :
     (ofHom f).hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {R S : CommSemiRingCat} (f : R ⟶ S)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {R S : 交换Semi环范畴} (f : R ⟶ S)
-  证明: rfl
-
-@[simp]
+/-
+**CommSemiRingCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：ofHom_hom {R S : CommSemiRingCat} (f : R ⟶ S) : ofHom (Hom.hom f) = f
+参数：f : R ⟶ S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {R S : CommSemiRingCat} (f : R ⟶ S) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {R : Type u} [CommSemiring R]
-  statement: ofHom (RingHom.id R) = 𝟙 (of R)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {R : 类型u} [交换半环 R]
-  结论: ofHom (环态射.id R) = 𝟙 (of R)
-  证明: rfl
-
-@[simp]
+/-
+**CommSemiRingCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：ofHom_id {R : Type u} [CommSemiring R] : ofHom (RingHom.id R) = 𝟙 (of R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {R : Type u} [CommSemiring R] : ofHom (RingHom.id R) = 𝟙 (of R) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {R S T : Type u} [CommSemiring R] [CommSemiring S] [CommSemiring T]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {R S T : 类型u} [交换半环 R] [交换半环 S] [交换半环 T]
-  证明: rfl
+/-
+**CommSemiRingCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：ofHom_comp {R S T : Type u} [CommSemiring R] [CommSemiring S] [CommSemirin
+g T] (f : R ->+* S) (g : S ->+* T) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : R ->+* S；g : S ->+* T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {R S T : Type u} [CommSemiring R] [CommSemiring S] [CommSemiring T]
-    (f : R ->+* S) (g : S ->+* T) :
+    (f : R →+* S) (g : S →+* T) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  statement: {R S : Type u} [CommSemiring R] [CommSemiring S]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {R S : 类型u} [交换半环 R] [交换半环 S]
-  证明: rfl
+/-
+**CommSemiRingCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：ofHom_apply {R S : Type u} [CommSemiring R] [CommSemiring S] (f : R ->+* S
+) (r : R) : ofHom f r = f r
+参数：f : R ->+* S；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_apply {R S : Type u} [CommSemiring R] [CommSemiring S]
-    (f : R ->+* S) (r : R) : ofHom f r = f r := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {R S : CommSemiRingCat} (e : R ≅ S) (r : R)
-  statement: e.inv (e.hom r) = r
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {R S : 交换Semi环范畴} (e : R ≅ S) (r : R)
-  结论: e.inv (e.hom r) = r
-  证明: by
-  simp
+    (f : R →+* S) (r : R) : ofHom f r = f r := rfl
+/-
+**CommSemiRingCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：inv_hom_apply {R S : CommSemiRingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r
+) = r
+参数：e : R ≅ S；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {R S : CommSemiRingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r) = r := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {R S : CommSemiRingCat} (e : R ≅ S) (s : S)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {R S : 交换Semi环范畴} (e : R ≅ S) (s : S)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**CommSemiRingCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommSemiRingCat`。
+形式化陈述：hom_inv_apply {R S : CommSemiRingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s
+) = s
+参数：e : R ≅ S；s : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {R S : CommSemiRingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited CommSemiRingCat
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 交换Semi环范畴
-  定义体: ⟨of PUnit⟩
+/-
+**CommSemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited CommSemiRingCat :=
   ⟨of PUnit⟩
@@ -1802,163 +1173,117 @@ unif_hint forget_obj_eq_coe (R R' : CommSemiRingCat) where
 @[deprecated (since := "2026-02-16")] alias forget_obj := CategoryTheory.forget_obj
 @[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
 
+/-
+**CommSemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : CommSemiRingCat} : CommSemiring ((forget CommSemiRingCat).obj R) :=
-inferInstanceAs CommSemiring R.carrier
+  inferInstanceAs <| CommSemiring R.carrier
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `hasForgetToSemiRingCat` / 实例 `hasForgetToSemiRingCat`
-
-English:
-instance hasForgetToSemiRingCat
-  signature: : HasForget₂ CommSemiRingCat SemiRingCat where
-  body: { obj := fun R => ⟨R⟩
-      map := fun f => ⟨f.hom⟩ }
-
-中文:
-实例 hasForgetToSemiRingCat
-  签名: : 有Forget₂ 交换Semi环范畴 Semi环范畴 where
-  定义体: { obj := fun R => ⟨R⟩
-      map := fun f => ⟨f.hom⟩ }
-
-Depends on / 依赖: f.hom
+/-
+**CommSemiRingCat.hasForgetToSemiRingCat** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRing
+Cat`。
+形式化陈述：hasForgetToSemiRingCat : HasForget₂ CommSemiRingCat SemiRingCat where forg
+et₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToSemiRingCat : HasForget₂ CommSemiRingCat SemiRingCat where
   forget₂ :=
-    { obj := fun R => ⟨R⟩
-      map := fun f => ⟨f.hom⟩ }
+    { obj := fun R ↦ ⟨R⟩
+      map := fun f ↦ ⟨f.hom⟩ }
 
-/--
-Definition of `fullyFaithfulForget₂ToSemiRingCat` / `fullyFaithfulForget₂ToSemiRingCat` 的定义
+/-- The forgetful functor from `CommSemiRingCat` to `SemiRingCat` is fully faithful. -/
+/-
+**CommSemiRingCat.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `CommSemiRingCat
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget₂ToSemiRingCat
-  signature: :
-  body: ofHom f.hom
-
-中文:
-定义 fullyFaithfulForget₂ToSemiRingCat
-  签名: :
-  定义体: ofHom f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The forgetful functor from `CommSemiRingCat` to `SemiRingCat` is fully faithful.
 -/
 def fullyFaithfulForget₂ToSemiRingCat :
     (forget₂ CommSemiRingCat SemiRingCat).FullyFaithful where
   preimage f := ofHom f.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂ CommSemiRingCat SemiRingCat).Full
-  body: fullyFaithfulForget₂ToSemiRingCat.full
-
-中文:
-实例 :
-  签名: (forget₂ 交换Semi环范畴 Semi环范畴).满
-  定义体: fullyFaithfulForget₂ToSemiRingCat.full
-
-Depends on / 依赖: ToSemiRingCat.full
+/-
+**CommSemiRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂ CommSemiRingCat SemiRingCat).Full :=
   fullyFaithfulForget₂ToSemiRingCat.full
 
-/--
-Instance `hasForgetToCommMonCat` / 实例 `hasForgetToCommMonCat`
+/-- The forgetful functor from commutative rings to (multiplicative) commutative monoids. -/
+/-
+**CommSemiRingCat.hasForgetToCommMonCat** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingC
+at`。
+形式化陈述：hasForgetToCommMonCat : HasForget₂ CommSemiRingCat CommMonCat where forget
+₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance hasForgetToCommMonCat
-  signature: : HasForget₂ CommSemiRingCat CommMonCat where
-  body: { obj := fun R => CommMonCat.of R
-      map := fun f => CommMonCat.ofHom f.hom.toMonoidHom }
-
-中文:
-实例 hasForgetToCommMonCat
-  签名: : 有Forget₂ 交换Semi环范畴 交换幺半群范畴 where
-  定义体: { obj := fun R => CommMonCat.of R
-      map := fun f => CommMonCat.ofHom f.hom.toMonoidHom }
-
-Depends on / 依赖: CommMonCat, CommMonCat.of, CommMonCat.ofHom, f.hom.toMonoidHom, toMonoidHom
+--- 原说明 ---
+The forgetful functor from commutative rings to (multiplicative) commutative mon
+oids.
 -/
 instance hasForgetToCommMonCat : HasForget₂ CommSemiRingCat CommMonCat where
   forget₂ :=
-    { obj := fun R => CommMonCat.of R
-      map := fun f => CommMonCat.ofHom f.hom.toMonoidHom }
+    { obj := fun R ↦ CommMonCat.of R
+      map := fun f ↦ CommMonCat.ofHom f.hom.toMonoidHom }
 
 /-- Ring equivalences are isomorphisms in category of commutative semirings -/
 @[simps]
-/--
-Definition of `_root_.RingEquiv.toCommSemiRingCatIso` / `_root_.RingEquiv.toCommSemiRingCatIso` 的定义
+/-
+**CommSemiRingCat._root_.RingEquiv.toCommSemiRingCatIso** 是 Mathlib 中的一个定义，位于命名空
+间 `CommSemiRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.RingEquiv.toCommSemiRingCatIso
-  body: ofHom e
-  inv := ofHom e.symm
-
-中文:
-定义 _root_.环等价.toCommSemiRingCatIso
-  定义体: ofHom e
-  inv := ofHom e.symm
+--- 原说明 ---
+Ring equivalences are isomorphisms in category of commutative semirings
 -/
 def _root_.RingEquiv.toCommSemiRingCatIso
     {R S : Type u} [CommSemiring R] [CommSemiring S] (e : R ≃+* S) :
     of R ≅ of S where
   hom := ofHom e
   inv := ofHom e.symm
-
-/--
-Instance `forgetReflectIsos` / 实例 `forgetReflectIsos`
-
-English:
-instance forgetReflectIsos
-  signature: : (forget CommSemiRingCat).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget CommSemiRingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toCommSemiRingCatIso.isIso_hom
-
-中文:
-实例 forgetReflectIsos
-  签名: : (forget 交换Semi环范畴).反映同构 where
-  定义体: by
-    let i := asIso ((forget CommSemiRingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toCommSemiRingCatIso.isIso_hom
-
-Depends on / 依赖: CommSemiRingCat, e.toCommSemiRingCatIso.isIso_hom, f.hom, forget, i.toEquiv, isIso_hom, toCommSemiRingCatIso, toEquiv
+/-
+**CommSemiRingCat.forgetReflectIsos** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiRingCat`。
+形式化陈述：forgetReflectIsos : (forget CommSemiRingCat).ReflectsIsomorphisms where re
+flects {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MonoidHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOne M] 
+[inst_1 : MulOne N] (self : M →* N) (x y : M),   (↑self).toFun (x * y) = (↑self)
+.toFun x…
+· 使用定理 `RingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonAssocSemiri
+ng α] [inst_1 : NonAssocSemiring β] (self : α →+* β) (x y : α),   (↑↑self).toFun
+ (x + …
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance forgetReflectIsos : (forget CommSemiRingCat).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
     let i := asIso ((forget CommSemiRingCat).map f)
-    let ff : X ->+* Y := f.hom
+    let ff : X →+* Y := f.hom
     let e : X ≃+* Y := { ff, i.toEquiv with }
     exact e.toCommSemiRingCatIso.isIso_hom
 
 end CommSemiRingCat
 
-/--
-Definition of `CommRingCat` / `CommRingCat` 的定义
+/-- The category of commutative rings. -/
+/-
+**CommRingCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommRingCat
-  parameters: where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type u
-    - [commRing : CommRing carrier]
-
-中文:
-结构 交换环范畴
-  参数: where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型u
-    - [commRing : 交换环 carrier]
+--- 原说明 ---
+The category of commutative rings.
 -/
 structure CommRingCat where
   /-- The object in the category of commutative rings associated to a type equipped with the
@@ -1985,104 +1310,53 @@ initialize_simps_projections CommRingCat (-commRing)
 
 namespace CommRingCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort CommRingCat (Type u)
-  body: ⟨CommRingCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 交换环范畴 (类型u)
-  定义体: ⟨CommRingCat.carrier⟩
-
-Depends on / 依赖: CommRingCat, CommRingCat.carrier, carrier
+/-
+**CommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort CommRingCat (Type u) :=
   ⟨CommRingCat.carrier⟩
 
 attribute [coe] CommRingCat.carrier
-
-/--
-lemma `coe_of` / 引理 `coe_of`
-
-English:
-lemma coe_of
-  given: (R : Type u) [CommRing R]
-  statement: (of R : Type u) = R
-  proof: rfl
-
-中文:
-引理 coe_of
-  条件: (R : 类型u) [交换环 R]
-  结论: (of R : 类型u) = R
-  证明: rfl
+/-
+**CommRingCat.coe_of** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：coe_of (R : Type u) [CommRing R] : (of R : Type u) = R
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_of (R : Type u) [CommRing R] : (of R : Type u) = R :=
   rfl
-
-/--
-lemma `of_carrier` / 引理 `of_carrier`
-
-English:
-lemma of_carrier
-  given: (R : CommRingCat.{u})
-  statement: of R = R
-  proof: rfl
-
-中文:
-引理 of_carrier
-  条件: (R : 交换环范畴.{u})
-  结论: of R = R
-  证明: rfl
+/-
+**CommRingCat.of_carrier** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：of_carrier (R : CommRingCat.{u}) : of R = R
+参数：R : CommRingCat.{u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_carrier (R : CommRingCat.{u}) : of R = R := rfl
 
 variable {R} in
 /-- The type of morphisms in `CommRingCat`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CommRingCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CommRingCat`。
+形式化陈述：CommRingCat → CommRingCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R S : CommRingCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : R ->+* S
-
-中文:
-结构 态射
-  参数: (R S : 交换环范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : R ->+* S
+--- 原说明 ---
+The type of morphisms in `CommRingCat`.
 -/
 structure Hom (R S : CommRingCat.{u}) where
   private mk ::
   /-- The underlying ring hom. -/
-  hom' : R ->+* S
+  hom' : R →+* S
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category CommRingCat
-  body: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 交换环范畴
-  定义体: Hom R S
-  id R := ⟨RingHom.id R⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**CommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category CommRingCat where
   Hom R S := Hom R S
@@ -2091,349 +1365,227 @@ instance : Category CommRingCat where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory.{u} CommRingCat (fun R S => R ->+* S)
-  body: Hom.hom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 :
-  签名: 余ncrete范畴.{u} 交换环范畴 (fun R S => R ->+* S)
-  定义体: Hom.hom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: Hom.hom
+/-
+**CommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory.{u} CommRingCat (fun R S => R ->+* S) where
+instance : ConcreteCategory.{u} CommRingCat (fun R S => R →+* S) where
   hom := Hom.hom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- The underlying ring hom. -/
+/-
+**CommRingCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Hom`。
+形式化陈述：{R S : CommRingCat} → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {R S : CommRingCat.{u}} (f : Hom R S)
-  body: ConcreteCategory.hom (C := CommRingCat) f
-
-中文:
-缩写 态射.hom
-  签名: {R S : 交换环范畴.{u}} (f : 态射 R S)
-  定义体: ConcreteCategory.hom (C := CommRingCat) f
+--- 原说明 ---
+The underlying ring hom.
 -/
 abbrev Hom.hom {R S : CommRingCat.{u}} (f : Hom R S) :=
   ConcreteCategory.hom (C := CommRingCat) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `RingHom` as a morphism in `CommRingCat`. -/
+/-
+**CommRingCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CommRingCat`。
+形式化陈述：ofHom {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S) : of R ⟶ of 
+S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S)
-  body: ConcreteCategory.ofHom (C := CommRingCat) f
-
-中文:
-缩写 ofHom
-  签名: {R S : 类型u} [交换环 R] [交换环 S] (f : R ->+* S)
-  定义体: ConcreteCategory.ofHom (C := CommRingCat) f
-
-Depends on / 依赖: CommRingCat, ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a `RingHom` as a morphism in `CommRingCat`.
 -/
-abbrev ofHom {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S) : of R ⟶ of S :=
+abbrev ofHom {R S : Type u} [CommRing R] [CommRing S] (f : R →+* S) : of R ⟶ of S :=
   ConcreteCategory.ofHom (C := CommRingCat) f
 
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**CommRingCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat.Hom.Simps`。
+形式化陈述：(R S : CommRingCat) → R.Hom S → ↑R →+* ↑S
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (R S : CommRingCat) (f : Hom R S)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (R S : 交换环范畴) (f : 态射 R S)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (R S : CommRingCat) (f : Hom R S) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
+/-
+**CommRingCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：hom_id {R : CommRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma hom_id
-  given: {R : CommRingCat}
-  statement: (𝟙 R : R ⟶ R).hom = RingHom.id R
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {R : 交换环范畴}
-  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
-  证明: rfl
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
 lemma hom_id {R : CommRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**CommRingCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：id_apply (R : CommRingCat) (r : R) : (𝟙 R : R ⟶ R) r = r
+参数：R : CommRingCat；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (R : CommRingCat) (r : R)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (R : 交换环范畴) (r : R)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (R : CommRingCat) (r : R) :
     (𝟙 R : R ⟶ R) r = r := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {R S T : 交换环范畴} (f : R ⟶ S) (g : S ⟶ T)
-  证明: rfl
-
-Depends on / 依赖: Finite
+/-
+**CommRingCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：hom_comp {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T) : (f ≫ g).hom = g.h
+om.comp f.hom
+参数：f : R ⟶ S；g : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**CommRingCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：comp_apply {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) : (f ≫ g)
+ r = g (f r)
+参数：f : R ⟶ S；g : S ⟶ T；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {R S T : 交换环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R) :
     (f ≫ g) r = g (f r) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R S : CommRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {R S : 交换环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**CommRingCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：hom_ext {R S : CommRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CommRingCat.Hom.ext`：∀ {R S : CommRingCat} {x y : R.Hom S}, x.hom' = y.h
+om' → x = y
 -/
 lemma hom_ext {R S : CommRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {R S : 类型u} [交换环 R] [交换环 S] (f : R ->+* S)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[simp]
+/-
+**CommRingCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：hom_ofHom {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S) : (ofHom
+ f).hom = f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S) : (ofHom f).hom = f := rfl
+lemma hom_ofHom {R S : Type u} [CommRing R] [CommRing S] (f : R →+* S) : (ofHom f).hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {R S : CommRingCat} (f : R ⟶ S)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {R S : 交换环范畴} (f : R ⟶ S)
-  证明: rfl
-
-@[simp]
+/-
+**CommRingCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：ofHom_hom {R S : CommRingCat} (f : R ⟶ S) : ofHom (Hom.hom f) = f
+参数：f : R ⟶ S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {R S : CommRingCat} (f : R ⟶ S) :
     ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {R : Type u} [CommRing R]
-  statement: ofHom (RingHom.id R) = 𝟙 (of R)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {R : 类型u} [交换环 R]
-  结论: ofHom (环态射.id R) = 𝟙 (of R)
-  证明: rfl
-
-@[simp]
+/-
+**CommRingCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：ofHom_id {R : Type u} [CommRing R] : ofHom (RingHom.id R) = 𝟙 (of R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {R : Type u} [CommRing R] : ofHom (RingHom.id R) = 𝟙 (of R) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {R S T : Type u} [CommRing R] [CommRing S] [CommRing T]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {R S T : 类型u} [交换环 R] [交换环 S] [交换环 T]
-  证明: rfl
+/-
+**CommRingCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：ofHom_comp {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] (f : R 
+->+* S) (g : S ->+* T) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : R ->+* S；g : S ->+* T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {R S T : Type u} [CommRing R] [CommRing S] [CommRing T]
-    (f : R ->+* S) (g : S ->+* T) :
+    (f : R →+* S) (g : S →+* T) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  statement: {R S : Type u} [CommRing R] [CommRing S]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {R S : 类型u} [交换环 R] [交换环 S]
-  证明: rfl
+/-
+**CommRingCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：ofHom_apply {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S) (r : R
+) : ofHom f r = f r
+参数：f : R ->+* S；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_apply {R S : Type u} [CommRing R] [CommRing S]
-    (f : R ->+* S) (r : R) : ofHom f r = f r := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {R S : CommRingCat} (e : R ≅ S) (r : R)
-  statement: e.inv (e.hom r) = r
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {R S : 交换环范畴} (e : R ≅ S) (r : R)
-  结论: e.inv (e.hom r) = r
-  证明: by
-  simp
+    (f : R →+* S) (r : R) : ofHom f r = f r := rfl
+/-
+**CommRingCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：inv_hom_apply {R S : CommRingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r) = 
+r
+参数：e : R ≅ S；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {R S : CommRingCat} (e : R ≅ S) (r : R) : e.inv (e.hom r) = r := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {R S : CommRingCat} (e : R ≅ S) (s : S)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {R S : 交换环范畴} (e : R ≅ S) (s : S)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**CommRingCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommRingCat`。
+形式化陈述：hom_inv_apply {R S : CommRingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s) = 
+s
+参数：e : R ≅ S；s : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {R S : CommRingCat} (e : R ≅ S) (s : S) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited CommRingCat
-  body: ⟨of PUnit⟩
-
-@[deprecated (since := "2026-02-16")] alias forget_obj := CategoryTheory.forget_obj
-@[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-中文:
-实例 :
-  签名: 可居 交换环范畴
-  定义体: ⟨of PUnit⟩
-
-@[deprecated (since := "2026-02-16")] alias forget_obj := CategoryTheory.forget_obj
-@[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-Depends on / 依赖: solve_by_elim
+/-
+**CommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited CommRingCat :=
   ⟨of PUnit⟩
@@ -2449,145 +1601,76 @@ unif_hint forget_obj_eq_coe (R R' : CommRingCat) where
   R ≟ R' ⊢
   (forget CommRingCat).obj R ≟ CommRingCat.carrier R'
 
+/-
+**CommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : CommRingCat} : CommRing ((forget CommRingCat).obj R) :=
-inferInstanceAs CommRing R.carrier
-
-/--
-Instance `hasForgetToRingCat` / 实例 `hasForgetToRingCat`
-
-English:
-instance hasForgetToRingCat
-  signature: : HasForget₂ CommRingCat RingCat where
-  body: { obj := fun R => RingCat.of R
-      map := fun f => RingCat.ofHom f.hom }
-
-中文:
-实例 hasForgetToRingCat
-  签名: : 有Forget₂ 交换环范畴 环范畴 where
-  定义体: { obj := fun R => RingCat.of R
-      map := fun f => RingCat.ofHom f.hom }
-
-Depends on / 依赖: RingCat, RingCat.of, RingCat.ofHom, f.hom
+  inferInstanceAs <| CommRing R.carrier
+/-
+**CommRingCat.hasForgetToRingCat** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+形式化陈述：hasForgetToRingCat : HasForget₂ CommRingCat RingCat where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToRingCat : HasForget₂ CommRingCat RingCat where
   forget₂ :=
-    { obj := fun R => RingCat.of R
-      map := fun f => RingCat.ofHom f.hom }
+    { obj := fun R ↦ RingCat.of R
+      map := fun f ↦ RingCat.ofHom f.hom }
 
-/--
-Definition of `fullyFaithfulForget₂ToRingCat` / `fullyFaithfulForget₂ToRingCat` 的定义
+/-- The forgetful functor from `CommRingCat` to `RingCat` is fully faithful. -/
+/-
+**CommRingCat.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget₂ToRingCat
-  signature: :
-  body: ofHom f.hom
-
-中文:
-定义 fullyFaithfulForget₂ToRingCat
-  签名: :
-  定义体: ofHom f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The forgetful functor from `CommRingCat` to `RingCat` is fully faithful.
 -/
 def fullyFaithfulForget₂ToRingCat :
     (forget₂ CommRingCat RingCat).FullyFaithful where
   preimage f := ofHom f.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂ CommRingCat RingCat).Full
-  body: fullyFaithfulForget₂ToRingCat.full
-
-中文:
-实例 :
-  签名: (forget₂ 交换环范畴 环范畴).满
-  定义体: fullyFaithfulForget₂ToRingCat.full
-
-Depends on / 依赖: ToRingCat.full
+/-
+**CommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂ CommRingCat RingCat).Full :=
   fullyFaithfulForget₂ToRingCat.full
-
-/--
-lemma `forgetToRingCat_map_hom` / 引理 `forgetToRingCat_map_hom`
-
-English:
-lemma forgetToRingCat_map_hom
-  given: {R S : CommRingCat} (f : R ⟶ S)
-  proof: rfl
-
-中文:
-引理 forgetToRingCat_map_hom
-  条件: {R S : 交换环范畴} (f : R ⟶ S)
-  证明: rfl
+/-
+**CommRingCat.forgetToRingCat_map_hom** 是 Mathlib 中的一个定理，位于命名空间 `CommRingCat`。
+形式化陈述：∀ {R S : CommRingCat} (f : R ⟶ S),   RingCat.Hom.hom ((CategoryTheory.forg
+et₂ CommRingCat RingCat).map f) = CommRingCat.Hom.hom f
+参数：f : R ⟶ S；(CategoryTheory.forget₂ CommRingCat RingCat).map f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma forgetToRingCat_map_hom {R S : CommRingCat} (f : R ⟶ S) :
     ((forget₂ CommRingCat RingCat).map f).hom = f.hom :=
   rfl
-
-/--
-lemma `forgetToRingCat_obj` / 引理 `forgetToRingCat_obj`
-
-English:
-lemma forgetToRingCat_obj
-  given: {R : CommRingCat}
-  proof: rfl
-
-中文:
-引理 forgetToRingCat_obj
-  条件: {R : 交换环范畴}
-  证明: rfl
+/-
+**CommRingCat.forgetToRingCat_obj** 是 Mathlib 中的一个定理，位于命名空间 `CommRingCat`。
+形式化陈述：∀ {R : CommRingCat}, ↑((CategoryTheory.forget₂ CommRingCat RingCat).obj R)
+ = ↑R
+参数：(CategoryTheory.forget₂ CommRingCat RingCat).obj R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma forgetToRingCat_obj {R : CommRingCat} :
     (((forget₂ CommRingCat RingCat).obj R) : Type u) = R :=
   rfl
-
-/--
-Instance `hasForgetToAddCommMonCat` / 实例 `hasForgetToAddCommMonCat`
-
-English:
-instance hasForgetToAddCommMonCat
-  signature: : HasForget₂ CommRingCat CommSemiRingCat where
-  body: { obj := fun R => CommSemiRingCat.of R
-      map := fun f => CommSemiRingCat.ofHom f.hom }
-
-@[simps (nameStem := "commMon")]
-
-中文:
-实例 hasForgetToAddCommMonCat
-  签名: : 有Forget₂ 交换环范畴 交换Semi环范畴 where
-  定义体: { obj := fun R => CommSemiRingCat.of R
-      map := fun f => CommSemiRingCat.ofHom f.hom }
-
-@[simps (nameStem := "commMon")]
-
-Depends on / 依赖: CommSemiRingCat, CommSemiRingCat.of, CommSemiRingCat.ofHom, f.hom
+/-
+**CommRingCat.hasForgetToAddCommMonCat** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+形式化陈述：hasForgetToAddCommMonCat : HasForget₂ CommRingCat CommSemiRingCat where fo
+rget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToAddCommMonCat : HasForget₂ CommRingCat CommSemiRingCat where
   forget₂ :=
-    { obj := fun R => CommSemiRingCat.of R
-      map := fun f => CommSemiRingCat.ofHom f.hom }
+    { obj := fun R ↦ CommSemiRingCat.of R
+      map := fun f ↦ CommSemiRingCat.ofHom f.hom }
 
 @[simps (nameStem := "commMon")]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasForget₂ CommRingCat CommMonCat
-  body: { obj M := .of M, map f := CommMonCat.ofHom f.hom }
-  forget_comp := rfl
-
-中文:
-实例 :
-  签名: 有Forget₂ 交换环范畴 交换幺半群范畴
-  定义体: { obj M := .of M, map f := CommMonCat.ofHom f.hom }
-  forget_comp := rfl
-
-Depends on / 依赖: CommMonCat, CommMonCat.ofHom, f.hom
+/-
+**CommRingCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasForget₂ CommRingCat CommMonCat where
   forget₂ := { obj M := .of M, map f := CommMonCat.ofHom f.hom }
@@ -2595,52 +1678,42 @@ instance : HasForget₂ CommRingCat CommMonCat where
 
 /-- Ring equivalences are isomorphisms in category of commutative rings -/
 @[simps]
-/--
-Definition of `_root_.RingEquiv.toCommRingCatIso` / `_root_.RingEquiv.toCommRingCatIso` 的定义
+/-
+**CommRingCat._root_.RingEquiv.toCommRingCatIso** 是 Mathlib 中的一个定义，位于命名空间 `CommR
+ingCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.RingEquiv.toCommRingCatIso
-  body: ofHom e
-  inv := ofHom e.symm
-
-中文:
-定义 _root_.环等价.toCommRingCatIso
-  定义体: ofHom e
-  inv := ofHom e.symm
+--- 原说明 ---
+Ring equivalences are isomorphisms in category of commutative rings
 -/
 def _root_.RingEquiv.toCommRingCatIso
     {R S : Type u} [CommRing R] [CommRing S] (e : R ≃+* S) :
     of R ≅ of S where
   hom := ofHom e
   inv := ofHom e.symm
-
-/--
-Instance `forgetReflectIsos` / 实例 `forgetReflectIsos`
-
-English:
-instance forgetReflectIsos
-  signature: : (forget CommRingCat).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget CommRingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toCommRingCatIso.isIso_hom
-
-中文:
-实例 forgetReflectIsos
-  签名: : (forget 交换环范畴).反映同构 where
-  定义体: by
-    let i := asIso ((forget CommRingCat).map f)
-    let ff : X ->+* Y := f.hom
-    let e : X ≃+* Y := { ff, i.toEquiv with }
-    exact e.toCommRingCatIso.isIso_hom
-
-Depends on / 依赖: CommRingCat, e.toCommRingCatIso.isIso_hom, f.hom, forget, i.toEquiv, isIso_hom, toCommRingCatIso, toEquiv
+/-
+**CommRingCat.forgetReflectIsos** 是 Mathlib 中的一个实例，位于命名空间 `CommRingCat`。
+形式化陈述：forgetReflectIsos : (forget CommRingCat).ReflectsIsomorphisms where reflec
+ts {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MonoidHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOne M] 
+[inst_1 : MulOne N] (self : M →* N) (x y : M),   (↑self).toFun (x * y) = (↑self)
+.toFun x…
+· 使用定理 `RingHom.map_add'`：∀ {α : Type u_5} {β : Type u_6} [inst : NonAssocSemiri
+ng α] [inst_1 : NonAssocSemiring β] (self : α →+* β) (x y : α),   (↑↑self).toFun
+ (x + …
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance forgetReflectIsos : (forget CommRingCat).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
     let i := asIso ((forget CommRingCat).map f)
-    let ff : X ->+* Y := f.hom
+    let ff : X →+* Y := f.hom
     let e : X ≃+* Y := { ff, i.toEquiv with }
     exact e.toCommRingCatIso.isIso_hom
 
@@ -2648,182 +1721,152 @@ end CommRingCat
 
 namespace CategoryTheory.Iso
 
-/--
-Definition of `semiRingCatIsoToRingEquiv` / `semiRingCatIsoToRingEquiv` 的定义
+/-- Build a `RingEquiv` from an isomorphism in the category `SemiRingCat`. -/
+/-
+**CategoryTheory.Iso.semiRingCatIsoToRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Iso`。
+形式化陈述：semiRingCatIsoToRingEquiv {R S : SemiRingCat.{u}} (e : R ≅ S) : R ≃+* S
+参数：e : R ≅ S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition semiRingCatIsoToRingEquiv
-  signature: {R S : SemiRingCat.{u}} (e : R ≅ S)
-  body: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 semiRingCatIsoToRingEquiv
-  签名: {R S : Semi环范畴.{u}} (e : R ≅ S)
-  定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
+--- 原说明 ---
+Build a `RingEquiv` from an isomorphism in the category `SemiRingCat`.
 -/
 def semiRingCatIsoToRingEquiv {R S : SemiRingCat.{u}} (e : R ≅ S) : R ≃+* S :=
   RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
 
-/--
-Definition of `ringCatIsoToRingEquiv` / `ringCatIsoToRingEquiv` 的定义
+/-- Build a `RingEquiv` from an isomorphism in the category `RingCat`. -/
+/-
+**CategoryTheory.Iso.ringCatIsoToRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Iso`。
+形式化陈述：ringCatIsoToRingEquiv {R S : RingCat.{u}} (e : R ≅ S) : R ≃+* S
+参数：e : R ≅ S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringCatIsoToRingEquiv
-  signature: {R S : RingCat.{u}} (e : R ≅ S)
-  body: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 ringCatIsoToRingEquiv
-  签名: {R S : 环范畴.{u}} (e : R ≅ S)
-  定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
+--- 原说明 ---
+Build a `RingEquiv` from an isomorphism in the category `RingCat`.
 -/
 def ringCatIsoToRingEquiv {R S : RingCat.{u}} (e : R ≅ S) : R ≃+* S :=
   RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
 
-/--
-Definition of `commSemiRingCatIsoToRingEquiv` / `commSemiRingCatIsoToRingEquiv` 的定义
+/-- Build a `RingEquiv` from an isomorphism in the category `CommSemiRingCat`. -/
+/-
+**CategoryTheory.Iso.commSemiRingCatIsoToRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Iso`。
+形式化陈述：commSemiRingCatIsoToRingEquiv {R S : CommSemiRingCat.{u}} (e : R ≅ S) : R 
+≃+* S
+参数：e : R ≅ S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commSemiRingCatIsoToRingEquiv
-  signature: {R S : CommSemiRingCat.{u}} (e : R ≅ S)
-  body: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 commSemiRingCatIsoToRingEquiv
-  签名: {R S : 交换Semi环范畴.{u}} (e : R ≅ S)
-  定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
+--- 原说明 ---
+Build a `RingEquiv` from an isomorphism in the category `CommSemiRingCat`.
 -/
 def commSemiRingCatIsoToRingEquiv {R S : CommSemiRingCat.{u}} (e : R ≅ S) : R ≃+* S :=
   RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
 
-/--
-Definition of `commRingCatIsoToRingEquiv` / `commRingCatIsoToRingEquiv` 的定义
+/-- Build a `RingEquiv` from an isomorphism in the category `CommRingCat`. -/
+/-
+**CategoryTheory.Iso.commRingCatIsoToRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Iso`。
+形式化陈述：commRingCatIsoToRingEquiv {R S : CommRingCat.{u}} (e : R ≅ S) : R ≃+* S
+参数：e : R ≅ S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commRingCatIsoToRingEquiv
-  signature: {R S : CommRingCat.{u}} (e : R ≅ S)
-  body: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 commRingCatIsoToRingEquiv
-  签名: {R S : 交换环范畴.{u}} (e : R ≅ S)
-  定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
+--- 原说明 ---
+Build a `RingEquiv` from an isomorphism in the category `CommRingCat`.
 -/
 def commRingCatIsoToRingEquiv {R S : CommRingCat.{u}} (e : R ≅ S) : R ≃+* S :=
   RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
-
-/--
-lemma `semiRingCatIsoToRingEquiv_toRingHom` / 引理 `semiRingCatIsoToRingEquiv_toRingHom`
-
-English:
-lemma semiRingCatIsoToRingEquiv_toRingHom
-  given: {R S : SemiRingCat.{u}} (e : R ≅ S)
-  proof: rfl
-
-中文:
-引理 semiRingCatIsoToRingEquiv_toRingHom
-  条件: {R S : Semi环范畴.{u}} (e : R ≅ S)
-  证明: rfl
-
-Depends on / 依赖: free.generatingSections_, infer_instance
+/-
+**CategoryTheory.Iso.semiRingCatIsoToRingEquiv_toRingHom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Iso`。
+形式化陈述：∀ {R S : SemiRingCat} (e : R ≅ S), ↑e.semiRingCatIsoToRingEquiv = SemiRing
+Cat.Hom.hom e.hom
+参数：e : R ≅ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 @[simp] lemma semiRingCatIsoToRingEquiv_toRingHom {R S : SemiRingCat.{u}} (e : R ≅ S) :
-    (e.semiRingCatIsoToRingEquiv : R ->+* S) = e.hom.hom := rfl
-
-/--
-lemma `ringCatIsoToRingEquiv_toRingHom` / 引理 `ringCatIsoToRingEquiv_toRingHom`
-
-English:
-lemma ringCatIsoToRingEquiv_toRingHom
-  given: {R S : RingCat.{u}} (e : R ≅ S)
-  proof: rfl
-
-中文:
-引理 ringCatIsoToRingEquiv_toRingHom
-  条件: {R S : 环范畴.{u}} (e : R ≅ S)
-  证明: rfl
-
-Depends on / 依赖: IsLocallyFreeData, localGeneratorsData, localGeneratorsData.IsLocallyFreeData
+    (e.semiRingCatIsoToRingEquiv : R →+* S) = e.hom.hom := rfl
+/-
+**CategoryTheory.Iso.ringCatIsoToRingEquiv_toRingHom** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Iso`。
+形式化陈述：∀ {R S : RingCat} (e : R ≅ S), ↑e.ringCatIsoToRingEquiv = RingCat.Hom.hom 
+e.hom
+参数：e : R ≅ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 @[simp] lemma ringCatIsoToRingEquiv_toRingHom {R S : RingCat.{u}} (e : R ≅ S) :
-    (e.ringCatIsoToRingEquiv : R ->+* S) = e.hom.hom := rfl
-
-/--
-lemma `commSemiRingCatIsoToRingEquiv_toRingHom` / 引理 `commSemiRingCatIsoToRingEquiv_toRingHom`
-
-English:
-lemma commSemiRingCatIsoToRingEquiv_toRingHom
-  given: {R S : CommSemiRingCat.{u}} (e : R ≅ S)
-  proof: rfl
-
-中文:
-引理 commSemiRingCatIsoToRingEquiv_toRingHom
-  条件: {R S : 交换Semi环范畴.{u}} (e : R ≅ S)
-  证明: rfl
-
-Depends on / 依赖: IsLocallyFree
+    (e.ringCatIsoToRingEquiv : R →+* S) = e.hom.hom := rfl
+/-
+**CategoryTheory.Iso.commSemiRingCatIsoToRingEquiv_toRingHom** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：∀ {R S : CommSemiRingCat} (e : R ≅ S), ↑e.commSemiRingCatIsoToRingEquiv = 
+CommSemiRingCat.Hom.hom e.hom
+参数：e : R ≅ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 @[simp] lemma commSemiRingCatIsoToRingEquiv_toRingHom {R S : CommSemiRingCat.{u}} (e : R ≅ S) :
-    (e.commSemiRingCatIsoToRingEquiv : R ->+* S) = e.hom.hom := rfl
-
-/--
-lemma `commRingCatIsoToRingEquiv_toRingHom` / 引理 `commRingCatIsoToRingEquiv_toRingHom`
-
-English:
-lemma commRingCatIsoToRingEquiv_toRingHom
-  given: {R S : CommRingCat.{u}} (e : R ≅ S)
-  proof: rfl
-
-中文:
-引理 commRingCatIsoToRingEquiv_toRingHom
-  条件: {R S : 交换环范畴.{u}} (e : R ≅ S)
-  证明: rfl
+    (e.commSemiRingCatIsoToRingEquiv : R →+* S) = e.hom.hom := rfl
+/-
+**CategoryTheory.Iso.commRingCatIsoToRingEquiv_toRingHom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Iso`。
+形式化陈述：∀ {R S : CommRingCat} (e : R ≅ S), ↑e.commRingCatIsoToRingEquiv = CommRing
+Cat.Hom.hom e.hom
+参数：e : R ≅ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 @[simp] lemma commRingCatIsoToRingEquiv_toRingHom {R S : CommRingCat.{u}} (e : R ≅ S) :
-    (e.commRingCatIsoToRingEquiv : R ->+* S) = e.hom.hom := rfl
+    (e.commRingCatIsoToRingEquiv : R →+* S) = e.hom.hom := rfl
 
 end CategoryTheory.Iso
 
-/--
-lemma `RingCat.forget_map_apply` / 引理 `RingCat.forget_map_apply`
-
-English:
-lemma RingCat.forget_map_apply
-  statement: {R S : RingCat} (f : R ⟶ S)
-  proof: rfl
-
-中文:
-引理 环范畴.forget_map_apply
-  结论: {R S : 环范畴} (f : R ⟶ S)
-  证明: rfl
+/-
+**RingCat.forget_map_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：RingCat.forget_map_apply {R S : RingCat} (f : R ⟶ S) (x : (CategoryTheory.
+forget RingCat).obj R) : (forget _).map f x = f x
+参数：f : R ⟶ S；x : (CategoryTheory.forget RingCat).obj R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma RingCat.forget_map_apply {R S : RingCat} (f : R ⟶ S)
     (x : (CategoryTheory.forget RingCat).obj R) :
     (forget _).map f x = f x :=
   rfl
-
-/--
-lemma `CommRingCat.forget_map_apply` / 引理 `CommRingCat.forget_map_apply`
-
-English:
-lemma CommRingCat.forget_map_apply
-  statement: {R S : CommRingCat} (f : R ⟶ S)
-  proof: rfl
-
-中文:
-引理 交换环范畴.forget_map_apply
-  结论: {R S : 交换环范畴} (f : R ⟶ S)
-  证明: rfl
-
-Depends on / 依赖: IsLocallyFree, IsQuasicoherent, M.IsLocallyFree, M.IsQuasicoherent, SheafOfModules
+/-
+**CommRingCat.forget_map_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：CommRingCat.forget_map_apply {R S : CommRingCat} (f : R ⟶ S) (x : (Categor
+yTheory.forget CommRingCat).obj R) : (forget _).map f x = f x
+参数：f : R ⟶ S；x : (CategoryTheory.forget CommRingCat).obj R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma CommRingCat.forget_map_apply {R S : CommRingCat} (f : R ⟶ S)
     (x : (CategoryTheory.forget CommRingCat).obj R) :

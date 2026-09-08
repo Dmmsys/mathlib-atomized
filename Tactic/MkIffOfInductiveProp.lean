@@ -32,43 +32,20 @@ namespace Mathlib.Tactic.MkIff
 
 open Lean Meta Elab
 
-/--
-Definition of `select` / `select` 的定义
+/-- `select m n` runs `right` `m` times; if `m < n`, then it also runs `left` once.
+Fails if `n < m`. -/
+/-
+**Mathlib.Tactic.MkIff.select** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIff`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition select
-  signature: (m n : Nat) (goal : MVarId)
-  body: match m,n with
-  | 0, 0 => pure goal
-  | 0, (_ + 1) => do
-    let [new_goal] ← goal.nthConstructor `left 0 (some 2)
-      | throwError "expected only one new goal"
-    pure new_goal
-  | (m + 1), (n + 1) => do
-    let [new_goal] ← goal.nthConstructor `right 1 (some 2)
-      | throwError "expected only one new goal"
-    select m n new_goal
-  | _, _ => failure
-
-中文:
-定义 select
-  签名: (m n : 自然数) (goal : MVarId)
-  定义体: match m,n with
-  | 0, 0 => pure goal
-  | 0, (_ + 1) => do
-    let [new_goal] ← goal.nthConstructor `left 0 (some 2)
-      | throwError "expected only one new goal"
-    pure new_goal
-  | (m + 1), (n + 1) => do
-    let [new_goal] ← goal.nthConstructor `right 1 (some 2)
-      | throwError "expected only one new goal"
-    select m n new_goal
-  | _, _ => failure
+--- 原说明 ---
+`select m n` runs `right` `m` times; if `m < n`, then it also runs `left` once.
+Fails if `n < m`.
 -/
 private def select (m n : Nat) (goal : MVarId) : MetaM MVarId :=
   match m,n with
-  | 0, 0 => pure goal
-  | 0, (_ + 1) => do
+  | 0, 0             => pure goal
+  | 0, (_ + 1)       => do
     let [new_goal] ← goal.nthConstructor `left 0 (some 2)
       | throwError "expected only one new goal"
     pure new_goal
@@ -76,99 +53,70 @@ private def select (m n : Nat) (goal : MVarId) : MetaM MVarId :=
     let [new_goal] ← goal.nthConstructor `right 1 (some 2)
       | throwError "expected only one new goal"
     select m n new_goal
-  | _, _ => failure
+  | _, _             => failure
 
-/--
-Definition of `compactRelation` / `compactRelation` 的定义
+/-- `compactRelation bs as_ps`: Produce a relation of the form:
+```lean
+R := fun as ↦ ∃ bs, ⋀_i a_i = p_i[bs]
+```
+This relation is user-visible, so we compact it by removing each `b_j` where a `p_i = b_j`, and
+hence `a_i = b_j`. We need to take care when there are `p_i` and `p_j` with `p_i = p_j = b_k`.
+-/
+/-
+**Mathlib.Tactic.MkIff.compactRelation** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tac
+tic.MkIff`。
+形式化陈述：List Expr → List (Expr × Expr) → List (Option Expr) × List (Expr × Expr) ×
+ (Expr → Expr)
+参数：Expr × Expr；Option Expr；Expr × Expr；Expr → Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compactRelation
-  signature: :
-  body: compactRelation bs as_ps
-      (b::bs, as_ps', subst)
-    | (ps₁, (a, _) :: ps₂) => -- found one that matches b. Remove it.
-      let i := fun e => e.replaceFVar b a
-      let (bs, as_ps', subst) :=
-        compactRelation (bs.map i) ((ps₁ ++ ps₂).map (fun ⟨a, p⟩ => (a, i p)))
-      (none :: bs, as_ps', i ∘ subst)
-
-中文:
-定义 compactRelation
-  签名: :
-  定义体: compactRelation bs as_ps
-      (b::bs, as_ps', subst)
-    | (ps₁, (a, _) :: ps₂) => -- found one that matches b. Remove it.
-      let i := fun e => e.replaceFVar b a
-      let (bs, as_ps', subst) :=
-        compactRelation (bs.map i) ((ps₁ ++ ps₂).map (fun ⟨a, p⟩ => (a, i p)))
-      (none :: bs, as_ps', i ∘ subst)
+--- 原说明 ---
+`compactRelation bs as_ps`: Produce a relation of the form:
+```lean
+R := fun as ↦ ∃ bs, ⋀_i a_i = p_i[bs]
+```
+This relation is user-visible, so we compact it by removing each `b_j` where a `
+p_i = b_j`, and
+hence `a_i = b_j`. We need to take care when there are `p_i` and `p_j` with `p_i
+ = p_j = b_k`.
 -/
 partial def compactRelation :
-    List Expr -> List (Expr × Expr) -> List (Option Expr) × List (Expr × Expr) × (Expr -> Expr)
-| [], as_ps => ([], as_ps, id)
+    List Expr → List (Expr × Expr) → List (Option Expr) × List (Expr × Expr) × (Expr → Expr)
+| [],    as_ps => ([], as_ps, id)
 | b::bs, as_ps =>
-  match as_ps.span (fun ⟨_, p⟩ => p != b) with
+  match as_ps.span (fun ⟨_, p⟩ ↦ p != b) with
     | (_, []) => -- found nothing in ps equal to b
       let (bs, as_ps', subst) := compactRelation bs as_ps
       (b::bs, as_ps', subst)
     | (ps₁, (a, _) :: ps₂) => -- found one that matches b. Remove it.
-      let i := fun e => e.replaceFVar b a
+      let i := fun e ↦ e.replaceFVar b a
       let (bs, as_ps', subst) :=
-        compactRelation (bs.map i) ((ps₁ ++ ps₂).map (fun ⟨a, p⟩ => (a, i p)))
+        compactRelation (bs.map i) ((ps₁ ++ ps₂).map (fun ⟨a, p⟩ ↦ (a, i p)))
       (none :: bs, as_ps', i ∘ subst)
-
-/--
-Definition of `updateLambdaBinderInfoD!` / `updateLambdaBinderInfoD!` 的定义
-
-English:
-definition updateLambdaBinderInfoD!
-  signature: (e : Expr)
-  body: match e with
-  | .lam n domain body _ => .lam n domain body .default
-  | _ => panic! "lambda expected"
-
-中文:
-定义 updateLambdaBinderInfoD!
-  签名: (e : Expr)
-  定义体: match e with
-  | .lam n domain body _ => .lam n domain body .default
-  | _ => panic! "lambda expected"
+/-
+**Mathlib.Tactic.MkIff.updateLambdaBinderInfoD** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.MkIff`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def updateLambdaBinderInfoD! (e : Expr) : Expr :=
   match e with
   | .lam n domain body _ => .lam n domain body .default
-  | _ => panic! "lambda expected"
+  | _           => panic! "lambda expected"
 
-/--
-Definition of `mkExistsList` / `mkExistsList` 的定义
+/-- Generates an expression of the form `∃ (args), inner`. `args` is assumed to be a list of fvars.
+When possible, `p ∧ q` is used instead of `∃ (_ : p), q`. -/
+/-
+**Mathlib.Tactic.MkIff.mkExistsList** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Mk
+Iff`。
+形式化陈述：mkExistsList (args : List Expr) (inner : Expr) : MetaM Expr
+参数：args : List Expr；inner : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkExistsList
-  signature: (args : List Expr) (inner : Expr)
-  body: args.foldrM
-    (fun arg i:Expr => do
-      let t ← inferType arg
-      let l := (← inferType t).sortLevel!
-      if arg.occurs i || l != Level.zero
-        then pure (mkApp2 (.const `Exists [l]) t
-          (updateLambdaBinderInfoD! <| ← mkLambdaFVars #[arg] i))
-else pure mkApp2 (mkConst `And) t i)
-    inner
-
-中文:
-定义 mkExistsList
-  签名: (args : 列表 Expr) (inner : Expr)
-  定义体: args.foldrM
-    (fun arg i:Expr => do
-      let t ← inferType arg
-      let l := (← inferType t).sortLevel!
-      if arg.occurs i || l != Level.zero
-        then pure (mkApp2 (.const `Exists [l]) t
-          (updateLambdaBinderInfoD! <| ← mkLambdaFVars #[arg] i))
-else pure mkApp2 (mkConst `And) t i)
-    inner
-
-Depends on / 依赖: Exists, Level.zero, arg.occurs, args.foldrM, foldrM, inferType, mkApp2, mkConst, mkLambdaFVars, occurs, sortLevel, updateLambdaBinderInfoD
+--- 原说明 ---
+Generates an expression of the form `∃ (args), inner`. `args` is assumed to be a
+ list of fvars.
+When possible, `p ∧ q` is used instead of `∃ (_ : p), q`.
 -/
 def mkExistsList (args : List Expr) (inner : Expr) : MetaM Expr :=
   args.foldrM
@@ -178,91 +126,78 @@ def mkExistsList (args : List Expr) (inner : Expr) : MetaM Expr :=
       if arg.occurs i || l != Level.zero
         then pure (mkApp2 (.const `Exists [l]) t
           (updateLambdaBinderInfoD! <| ← mkLambdaFVars #[arg] i))
-else pure mkApp2 (mkConst `And) t i)
+        else pure <| mkApp2 (mkConst `And) t i)
     inner
 
-/--
-Definition of `mkOpList` / `mkOpList` 的定义
+/-- `mkOpList op empty [x1, x2, ...]` is defined as `op x1 (op x2 ...)`.
+  Returns `empty` if the list is empty. -/
+/-
+**Mathlib.Tactic.MkIff.mkOpList** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIff`
+。
+形式化陈述：Expr → Expr → List Expr → Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOpList
-  signature: (op : Expr) (empty : Expr)
-
-中文:
-定义 mkOpList
-  签名: (op : Expr) (empty : Expr)
+--- 原说明 ---
+`mkOpList op empty [x1, x2, ...]` is defined as `op x1 (op x2 ...)`.
+  Returns `empty` if the list is empty.
 -/
-def mkOpList (op : Expr) (empty : Expr) : List Expr -> Expr
-  | [] => empty
-  | [e] => e
-| (e :: es) => mkApp2 op e mkOpList op empty es
+def mkOpList (op : Expr) (empty : Expr) : List Expr → Expr
+  | []        => empty
+  | [e]       => e
+  | (e :: es) => mkApp2 op e <| mkOpList op empty es
 
-/--
-Definition of `mkAndList` / `mkAndList` 的定义
+/-- `mkAndList [x1, x2, ...]` is defined as `x1 ∧ (x2 ∧ ...)`, or `True` if the list is empty. -/
+/-
+**Mathlib.Tactic.MkIff.mkAndList** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIff
+`。
+形式化陈述：mkAndList : List Expr -> Expr
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkAndList
-  signature: : List Expr -> Expr
-  body: mkOpList (mkConst `And) (mkConst `True)
-
-中文:
-定义 mkAndList
-  签名: : 列表 Expr -> Expr
-  定义体: mkOpList (mkConst `And) (mkConst `True)
-
-Depends on / 依赖: mkConst, mkOpList
+--- 原说明 ---
+`mkAndList [x1, x2, ...]` is defined as `x1 ∧ (x2 ∧ ...)`, or `True` if the list
+ is empty.
 -/
-def mkAndList : List Expr -> Expr := mkOpList (mkConst `And) (mkConst `True)
+def mkAndList : List Expr → Expr := mkOpList (mkConst `And) (mkConst `True)
 
-/--
-Definition of `mkOrList` / `mkOrList` 的定义
+/-- `mkOrList [x1, x2, ...]` is defined as `x1 ∨ (x2 ∨ ...)`, or `False` if the list is empty. -/
+/-
+**Mathlib.Tactic.MkIff.mkOrList** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIff`
+。
+形式化陈述：mkOrList : List Expr -> Expr
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOrList
-  signature: : List Expr -> Expr
-  body: mkOpList (mkConst `Or) (mkConst `False)
-
-中文:
-定义 mkOrList
-  签名: : 列表 Expr -> Expr
-  定义体: mkOpList (mkConst `Or) (mkConst `False)
-
-Depends on / 依赖: mkConst, mkOpList
+--- 原说明 ---
+`mkOrList [x1, x2, ...]` is defined as `x1 ∨ (x2 ∨ ...)`, or `False` if the list
+ is empty.
 -/
-def mkOrList : List Expr -> Expr := mkOpList (mkConst `Or) (mkConst `False)
+def mkOrList : List Expr → Expr := mkOpList (mkConst `Or) (mkConst `False)
 
-/--
-Definition of `List.init` / `List.init` 的定义
+/-- Drops the final element of a list. -/
+/-
+**Mathlib.Tactic.MkIff.List.init** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIff
+.List`。
+形式化陈述：{α : Type u_1} → List α → List α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition List.init
-  signature: {α : Type*}
-
-中文:
-定义 列表.init
-  签名: {α : 类型}
+--- 原说明 ---
+Drops the final element of a list.
 -/
-def List.init {α : Type*} : List α -> List α
-  | [] => []
-  | [_] => []
+def List.init {α : Type*} : List α → List α
+  | []     => []
+  | [_]    => []
   | a::l => a::init l
 
-/--
-Definition of `Shape` / `Shape` 的定义
+/-- Auxiliary data associated with a single constructor of an inductive declaration.
+-/
+/-
+**Mathlib.Tactic.MkIff.Shape** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.MkIff`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Shape
-  parameters: : Type where
-  axioms and operations (2):
-    - variablesKept : List Bool
-    - neqs : Option Nat
-
-中文:
-结构 形状
-  参数: : 类型 where
-  公理与运算 (2 个):
-    - variablesKept : 列表 布尔值
-    - neqs : 选项类型 自然数
+--- 原说明 ---
+Auxiliary data associated with a single constructor of an inductive declaration.
 -/
 structure Shape : Type where
   /-- For each forall-bound variable in the type of the constructor, minus
@@ -290,86 +225,31 @@ structure Shape : Type where
   -/
   neqs : Option Nat
 
-/--
-Definition of `constrToProp` / `constrToProp` 的定义
+/-- Converts an inductive constructor `c` into a `Shape` that will be used later in
+while proving the iff theorem, and a proposition representing the constructor.
+-/
+/-
+**Mathlib.Tactic.MkIff.constrToProp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Mk
+Iff`。
+形式化陈述：constrToProp (univs : List Level) (params : List Expr) (idxs : List Expr) 
+(c : Name) : MetaM (Shape × Expr)
+参数：univs : List Level；params : List Expr；idxs : List Expr；c : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constrToProp
-  signature: (univs : List Level) (params : List Expr) (idxs : List Expr) (c : Name)
-  body: do
-  let type := (← getConstInfo c).instantiateTypeLevelParams univs
-  let type' ← Meta.forallBoundedTelescope type (params.length) fun fvars ty => do
-pure ty.replaceFVars fvars params.toArray
-  Meta.forallTelescope type' fun fvars ty => do
-    let idxs_inst := ty.getAppArgs.toList.drop params.length
-    let (bs, eqs, subst) := compactRelation fvars.toList (idxs.zip idxs_inst)
-    let eqs ← eqs.mapM (fun ⟨idx, inst⟩ => do
-      let ty ← idx.fvarId!.getType
-      let instTy ← inferType inst
-      let u := (← inferType ty).sortLevel!
-      if ← isDefEq ty instTy
-      then pure (mkApp3 (.const `Eq [u]) ty idx inst)
-      else pure (mkApp4 (.const `HEq [u]) ty idx instTy inst))
-    let (n, r) ← match bs.filterMap id, eqs with
-    | [], [] => do
-      pure (some 0, (mkConst `True))
-    | bs', [] => do
-      let t : Expr ← bs'.getLast!.fvarId!.getType
-      let l := (← inferType t).sortLevel!
-      if l == Level.zero then do
-        let r ← mkExistsList (List.init bs') t
-        pure (none, subst r)
-      else do
-        let r ← mkExistsList bs' (mkConst `True)
-        pure (some 0, subst r)
-    | bs', _ => do
-      let r ← mkExistsList bs' (mkAndList eqs)
-      pure (some eqs.length, subst r)
-    pure (⟨bs.map Option.isSome, n⟩, r)
-
-中文:
-定义 constrToProp
-  签名: (univs : 列表 Level) (params : 列表 Expr) (idxs : 列表 Expr) (c : Name)
-  定义体: do
-  let type := (← getConstInfo c).instantiateTypeLevelParams univs
-  let type' ← Meta.forallBoundedTelescope type (params.length) fun fvars ty => do
-pure ty.replaceFVars fvars params.toArray
-  Meta.forallTelescope type' fun fvars ty => do
-    let idxs_inst := ty.getAppArgs.toList.drop params.length
-    let (bs, eqs, subst) := compactRelation fvars.toList (idxs.zip idxs_inst)
-    let eqs ← eqs.mapM (fun ⟨idx, inst⟩ => do
-      let ty ← idx.fvarId!.getType
-      let instTy ← inferType inst
-      let u := (← inferType ty).sortLevel!
-      if ← isDefEq ty instTy
-      then pure (mkApp3 (.const `Eq [u]) ty idx inst)
-      else pure (mkApp4 (.const `HEq [u]) ty idx instTy inst))
-    let (n, r) ← match bs.filterMap id, eqs with
-    | [], [] => do
-      pure (some 0, (mkConst `True))
-    | bs', [] => do
-      let t : Expr ← bs'.getLast!.fvarId!.getType
-      let l := (← inferType t).sortLevel!
-      if l == Level.zero then do
-        let r ← mkExistsList (List.init bs') t
-        pure (none, subst r)
-      else do
-        let r ← mkExistsList bs' (mkConst `True)
-        pure (some 0, subst r)
-    | bs', _ => do
-      let r ← mkExistsList bs' (mkAndList eqs)
-      pure (some eqs.length, subst r)
-    pure (⟨bs.map Option.isSome, n⟩, r)
+--- 原说明 ---
+Converts an inductive constructor `c` into a `Shape` that will be used later in
+while proving the iff theorem, and a proposition representing the constructor.
 -/
 def constrToProp (univs : List Level) (params : List Expr) (idxs : List Expr) (c : Name) :
     MetaM (Shape × Expr) := do
   let type := (← getConstInfo c).instantiateTypeLevelParams univs
-  let type' ← Meta.forallBoundedTelescope type (params.length) fun fvars ty => do
-pure ty.replaceFVars fvars params.toArray
-  Meta.forallTelescope type' fun fvars ty => do
+  let type' ← Meta.forallBoundedTelescope type (params.length) fun fvars ty ↦ do
+    pure <| ty.replaceFVars fvars params.toArray
+  Meta.forallTelescope type' fun fvars ty ↦ do
     let idxs_inst := ty.getAppArgs.toList.drop params.length
     let (bs, eqs, subst) := compactRelation fvars.toList (idxs.zip idxs_inst)
-    let eqs ← eqs.mapM (fun ⟨idx, inst⟩ => do
+    let eqs ← eqs.mapM (fun ⟨idx, inst⟩ ↦ do
       let ty ← idx.fvarId!.getType
       let instTy ← inferType inst
       let u := (← inferType ty).sortLevel!
@@ -393,115 +273,59 @@ pure ty.replaceFVars fvars params.toArray
       pure (some eqs.length, subst r)
     pure (⟨bs.map Option.isSome, n⟩, r)
 
-/--
-Definition of `splitThenConstructor` / `splitThenConstructor` 的定义
+/-- Splits the goal `n` times via `refine ⟨?_,?_⟩`, and then applies `constructor` to
+close the resulting subgoals.
+-/
+/-
+**Mathlib.Tactic.MkIff.splitThenConstructor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.MkIff`。
+形式化陈述：splitThenConstructor (mvar : MVarId) (n : Nat) : MetaM Unit
+参数：mvar : MVarId；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition splitThenConstructor
-  signature: (mvar : MVarId) (n : Nat)
-  body: match n with
-| 0 => do
-let (subgoals',_) ← Term.TermElabM.run Tactic.run mvar do
-    Tactic.evalTactic (← `(tactic| constructor))
-  let [] := subgoals' | throwError "expected no subgoals"
-  pure ()
-| n + 1 => do
-let (subgoals,_) ← Term.TermElabM.run Tactic.run mvar do
-    Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
-  let [sg1, sg2] := subgoals | throwError "expected two subgoals"
-let (subgoals',_) ← Term.TermElabM.run Tactic.run sg1 do
-    Tactic.evalTactic (← `(tactic| constructor))
-  let [] := subgoals' | throwError "expected no subgoals"
-  splitThenConstructor sg2 n
-
-中文:
-定义 splitThenConstructor
-  签名: (mvar : MVarId) (n : 自然数)
-  定义体: match n with
-| 0 => do
-let (subgoals',_) ← Term.TermElabM.run Tactic.run mvar do
-    Tactic.evalTactic (← `(tactic| constructor))
-  let [] := subgoals' | throwError "expected no subgoals"
-  pure ()
-| n + 1 => do
-let (subgoals,_) ← Term.TermElabM.run Tactic.run mvar do
-    Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
-  let [sg1, sg2] := subgoals | throwError "expected two subgoals"
-let (subgoals',_) ← Term.TermElabM.run Tactic.run sg1 do
-    Tactic.evalTactic (← `(tactic| constructor))
-  let [] := subgoals' | throwError "expected no subgoals"
-  splitThenConstructor sg2 n
-
-Depends on / 依赖: Tactic, Tactic.evalTactic, Tactic.run, Term.TermElabM.run, TermElabM, evalTactic, expected, subgoals, tactic, throwError
+--- 原说明 ---
+Splits the goal `n` times via `refine ⟨?_,?_⟩`, and then applies `constructor` t
+o
+close the resulting subgoals.
 -/
 def splitThenConstructor (mvar : MVarId) (n : Nat) : MetaM Unit :=
 match n with
-| 0 => do
-let (subgoals',_) ← Term.TermElabM.run Tactic.run mvar do
+| 0   => do
+  let (subgoals',_) ← Term.TermElabM.run <| Tactic.run mvar do
     Tactic.evalTactic (← `(tactic| constructor))
   let [] := subgoals' | throwError "expected no subgoals"
   pure ()
 | n + 1 => do
-let (subgoals,_) ← Term.TermElabM.run Tactic.run mvar do
+  let (subgoals,_) ← Term.TermElabM.run <| Tactic.run mvar do
     Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
   let [sg1, sg2] := subgoals | throwError "expected two subgoals"
-let (subgoals',_) ← Term.TermElabM.run Tactic.run sg1 do
+  let (subgoals',_) ← Term.TermElabM.run <| Tactic.run sg1 do
     Tactic.evalTactic (← `(tactic| constructor))
   let [] := subgoals' | throwError "expected no subgoals"
   splitThenConstructor sg2 n
 
-/--
-Definition of `toCases` / `toCases` 的定义
+/-- Proves the left to right direction of a generated iff theorem.
+`shape` is the output of a call to `constrToProp`.
+-/
+/-
+**Mathlib.Tactic.MkIff.toCases** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIff`。
+形式化陈述：toCases (mvar : MVarId) (shape : List Shape) : MetaM Unit
+参数：mvar : MVarId；shape : List Shape。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCases
-  signature: (mvar : MVarId) (shape : List Shape)
-  body: do
-  let ⟨h, mvar'⟩ ← mvar.intro1
-  let subgoals ← mvar'.cases h
-  let _ ← (shape.zip subgoals.toList).zipIdx.mapM fun ⟨⟨⟨shape, t⟩, subgoal⟩, p⟩ => do
-    let vars := subgoal.fields
-    let si := (shape.zip vars.toList).filterMap (fun ⟨c,v⟩ => if c then some v else none)
-    let mvar'' ← select p (subgoals.size - 1) subgoal.mvarId
-    match t with
-    | none => do
-      let v := vars[shape.length - 1]!
-      let mv ← mvar''.existsi (List.init si)
-      mv.assign v
-    | some n => do
-      let mv ← mvar''.existsi si
-      splitThenConstructor mv (n - 1)
-  pure ()
-
-中文:
-定义 toCases
-  签名: (mvar : MVarId) (shape : 列表 形状)
-  定义体: do
-  let ⟨h, mvar'⟩ ← mvar.intro1
-  let subgoals ← mvar'.cases h
-  let _ ← (shape.zip subgoals.toList).zipIdx.mapM fun ⟨⟨⟨shape, t⟩, subgoal⟩, p⟩ => do
-    let vars := subgoal.fields
-    let si := (shape.zip vars.toList).filterMap (fun ⟨c,v⟩ => if c then some v else none)
-    let mvar'' ← select p (subgoals.size - 1) subgoal.mvarId
-    match t with
-    | none => do
-      let v := vars[shape.length - 1]!
-      let mv ← mvar''.existsi (List.init si)
-      mv.assign v
-    | some n => do
-      let mv ← mvar''.existsi si
-      splitThenConstructor mv (n - 1)
-  pure ()
-
-Depends on / 依赖: List.init, assign, existsi, fields, filterMap, intro1, length, mv.assign, mvar.intro1, mvarId, select, shape.length, shape.zip, splitThenConstructor, subgoal, subgoal.fields, subgoal.mvarId, subgoals, subgoals.size, subgoals.toList
+--- 原说明 ---
+Proves the left to right direction of a generated iff theorem.
+`shape` is the output of a call to `constrToProp`.
 -/
 def toCases (mvar : MVarId) (shape : List Shape) : MetaM Unit :=
 do
   let ⟨h, mvar'⟩ ← mvar.intro1
   let subgoals ← mvar'.cases h
-  let _ ← (shape.zip subgoals.toList).zipIdx.mapM fun ⟨⟨⟨shape, t⟩, subgoal⟩, p⟩ => do
+  let _ ← (shape.zip subgoals.toList).zipIdx.mapM fun ⟨⟨⟨shape, t⟩, subgoal⟩, p⟩ ↦ do
     let vars := subgoal.fields
-    let si := (shape.zip vars.toList).filterMap (fun ⟨c,v⟩ => if c then some v else none)
+    let si := (shape.zip vars.toList).filterMap (fun ⟨c,v⟩ ↦ if c then some v else none)
     let mvar'' ← select p (subgoals.size - 1) subgoal.mvarId
     match t with
     | none => do
@@ -513,34 +337,21 @@ do
       splitThenConstructor mv (n - 1)
   pure ()
 
-/--
-Definition of `nCasesSum` / `nCasesSum` 的定义
+/-- Calls `cases` on `h` (assumed to be a binary sum) `n` times, and returns
+the resulting subgoals and their corresponding new hypotheses.
+-/
+/-
+**Mathlib.Tactic.MkIff.nCasesSum** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIff
+`。
+形式化陈述：nCasesSum (n : Nat) (mvar : MVarId) (h : FVarId) : MetaM (List (FVarId × M
+VarId))
+参数：n : Nat；mvar : MVarId；h : FVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nCasesSum
-  signature: (n : Nat) (mvar : MVarId) (h : FVarId)
-  body: match n with
-| 0 => pure [(h, mvar)]
-| n' + 1 => do
-  let #[sg1, sg2] ← mvar.cases h | throwError "expected two case subgoals"
-  let #[Expr.fvar fvar1] ← pure sg1.fields | throwError "expected fvar"
-  let #[Expr.fvar fvar2] ← pure sg2.fields | throwError "expected fvar"
-  let rest ← nCasesSum n' sg2.mvarId fvar2
-  pure ((fvar1, sg1.mvarId)::rest)
-
-中文:
-定义 nCasesSum
-  签名: (n : 自然数) (mvar : MVarId) (h : FVarId)
-  定义体: match n with
-| 0 => pure [(h, mvar)]
-| n' + 1 => do
-  let #[sg1, sg2] ← mvar.cases h | throwError "expected two case subgoals"
-  let #[Expr.fvar fvar1] ← pure sg1.fields | throwError "expected fvar"
-  let #[Expr.fvar fvar2] ← pure sg2.fields | throwError "expected fvar"
-  let rest ← nCasesSum n' sg2.mvarId fvar2
-  pure ((fvar1, sg1.mvarId)::rest)
-
-Depends on / 依赖: Expr.fvar, expected, fields, mvar.cases, mvarId, nCasesSum, sg1.fields, sg1.mvarId, sg2.fields, sg2.mvarId, subgoals, throwError
+--- 原说明 ---
+Calls `cases` on `h` (assumed to be a binary sum) `n` times, and returns
+the resulting subgoals and their corresponding new hypotheses.
 -/
 def nCasesSum (n : Nat) (mvar : MVarId) (h : FVarId) : MetaM (List (FVarId × MVarId)) :=
 match n with
@@ -552,32 +363,21 @@ match n with
   let rest ← nCasesSum n' sg2.mvarId fvar2
   pure ((fvar1, sg1.mvarId)::rest)
 
-/--
-Definition of `nCasesProd` / `nCasesProd` 的定义
+/-- Calls `cases` on `h` (assumed to be a binary product) `n` times, and returns
+the resulting subgoal and the new hypotheses.
+-/
+/-
+**Mathlib.Tactic.MkIff.nCasesProd** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkIf
+f`。
+形式化陈述：nCasesProd (n : Nat) (mvar : MVarId) (h : FVarId) : MetaM (MVarId × List F
+VarId)
+参数：n : Nat；mvar : MVarId；h : FVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nCasesProd
-  signature: (n : Nat) (mvar : MVarId) (h : FVarId)
-  body: match n with
-| 0 => pure (mvar, [h])
-| n' + 1 => do
-  let #[sg] ← mvar.cases h | throwError "expected one case subgoals"
-  let #[Expr.fvar fvar1, Expr.fvar fvar2] ← pure sg.fields | throwError "expected fvar"
-  let (mvar', rest) ← nCasesProd n' sg.mvarId fvar2
-  pure (mvar', fvar1::rest)
-
-中文:
-定义 nCasesProd
-  签名: (n : 自然数) (mvar : MVarId) (h : FVarId)
-  定义体: match n with
-| 0 => pure (mvar, [h])
-| n' + 1 => do
-  let #[sg] ← mvar.cases h | throwError "expected one case subgoals"
-  let #[Expr.fvar fvar1, Expr.fvar fvar2] ← pure sg.fields | throwError "expected fvar"
-  let (mvar', rest) ← nCasesProd n' sg.mvarId fvar2
-  pure (mvar', fvar1::rest)
-
-Depends on / 依赖: Expr.fvar, expected, fields, mvar.cases, mvarId, nCasesProd, sg.fields, sg.mvarId, subgoals, throwError
+--- 原说明 ---
+Calls `cases` on `h` (assumed to be a binary product) `n` times, and returns
+the resulting subgoal and the new hypotheses.
 -/
 def nCasesProd (n : Nat) (mvar : MVarId) (h : FVarId) : MetaM (MVarId × List FVarId) :=
 match n with
@@ -589,120 +389,65 @@ match n with
   pure (mvar', fvar1::rest)
 
 /--
-Definition of `listBoolMerge` / `listBoolMerge` 的定义
+Iterate over two lists, if the first element of the first list is `false`, insert `none` into the
+result and continue with the tail of first list. Otherwise, wrap the first element of the second
+list with `some` and continue with the tails of both lists. Return when either list is empty.
 
-English:
-definition listBoolMerge
-  signature: {α : Type*}
-
-中文:
-定义 list布尔Merge
-  签名: {α : 类型}
+Example:
+```
+listBoolMerge [false, true, false, true] [0, 1, 2, 3, 4] = [none, (some 0), none, (some 1)]
+```
 -/
-def listBoolMerge {α : Type*} : List Bool -> List α -> List (Option α)
+/-
+**Mathlib.Tactic.MkIff.listBoolMerge** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.M
+kIff`。
+形式化陈述：{α : Type u_1} → List Bool → List α → List (Option α)
+参数：Option α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Iterate over two lists, if the first element of the first list is `false`, inser
+t `none` into the
+result and continue with the tail of first list. Otherwise, wrap the first eleme
+nt of the second
+list with `some` and continue with the tails of both lists. Return when either l
+ist is empty.
+
+Example:
+```
+listBoolMerge [false, true, false, true] [0, 1, 2, 3, 4] = [none, (some 0), none
+, (some 1)]
+```
+-/
+def listBoolMerge {α : Type*} : List Bool → List α → List (Option α)
   | [], _ => []
   | false :: xs, ys => none :: listBoolMerge xs ys
   | true :: xs, y :: ys => some y :: listBoolMerge xs ys
   | true :: _, [] => []
 
-/--
-Definition of `toInductive` / `toInductive` 的定义
+/-- Proves the right to left direction of a generated iff theorem.
+-/
+/-
+**Mathlib.Tactic.MkIff.toInductive** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.MkI
+ff`。
+形式化陈述：toInductive (mvar : MVarId) (cs : List Name) (gs : List Expr) (s : List Sh
+ape) (h : FVarId) : MetaM Unit
+参数：mvar : MVarId；cs : List Name；gs : List Expr；s : List Shape；h : FVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toInductive
-  signature: (mvar : MVarId) (cs : List Name)
-  body: do
-  match s.length with
-  | 0 => do let _ ← mvar.cases h
-                  pure ()
-  | (n + 1) => do
-      let subgoals ← nCasesSum n mvar h
-      let _ ← (cs.zip (subgoals.zip s)).mapM fun ⟨constr_name, ⟨h, mv⟩, bs, e⟩ => do
-        let n := (bs.filter id).length
-        let (mvar', _fvars) ← match e with
-        | none => nCasesProd (n-1) mv h
-        | some 0 => do let ⟨mvar', fvars⟩ ← nCasesProd n mv h
-                          let mvar'' ← mvar'.tryClear fvars.getLast!
-                          pure ⟨mvar'', fvars⟩
-        | some (e + 1) => do
-           let (mv', fvars) ← nCasesProd n mv h
-           let lastfv := fvars.getLast!
-           let (mv2, fvars') ← nCasesProd e mv' lastfv
-
-           /- `fvars'.foldlM subst mv2` fails when we have dependent equalities (`HEq`).
-           `subst` will change the dependent hypotheses, so that the `uniq` local names
-           are wrong afterwards. Instead we revert them and pull them out one-by-one. -/
-           let (_, mv3) ← mv2.revert fvars'.toArray
-           let mv4 ← fvars'.foldlM (fun mv _ => do let ⟨fv, mv'⟩ ← mv.intro1; subst mv' fv) mv3
-           pure (mv4, fvars)
-        mvar'.withContext do
-          let fvarIds := (← getLCtx).getFVarIds.toList
-          let gs := fvarIds.take gs.length
-          let hs := (fvarIds.reverse.take n).reverse
-          let m := gs.map some ++ listBoolMerge bs hs
-          let args ← m.mapM fun a =>
-            match a with
-            | some v => pure (mkFVar v)
-            | none => mkFreshExprMVar none
-          let c ← mkConstWithFreshMVarLevels constr_name
-          let e := mkAppN c args.toArray
-          let t ← inferType e
-          let mt ← mvar'.getType
-          let _ ← isDefEq t mt -- infer values for those mvars we just made
-          mvar'.assign e
-
-中文:
-定义 toInductive
-  签名: (mvar : MVarId) (cs : 列表 Name)
-  定义体: do
-  match s.length with
-  | 0 => do let _ ← mvar.cases h
-                  pure ()
-  | (n + 1) => do
-      let subgoals ← nCasesSum n mvar h
-      let _ ← (cs.zip (subgoals.zip s)).mapM fun ⟨constr_name, ⟨h, mv⟩, bs, e⟩ => do
-        let n := (bs.filter id).length
-        let (mvar', _fvars) ← match e with
-        | none => nCasesProd (n-1) mv h
-        | some 0 => do let ⟨mvar', fvars⟩ ← nCasesProd n mv h
-                          let mvar'' ← mvar'.tryClear fvars.getLast!
-                          pure ⟨mvar'', fvars⟩
-        | some (e + 1) => do
-           let (mv', fvars) ← nCasesProd n mv h
-           let lastfv := fvars.getLast!
-           let (mv2, fvars') ← nCasesProd e mv' lastfv
-
-           /- `fvars'.foldlM subst mv2` fails when we have dependent equalities (`HEq`).
-           `subst` will change the dependent hypotheses, so that the `uniq` local names
-           are wrong afterwards. Instead we revert them and pull them out one-by-one. -/
-           let (_, mv3) ← mv2.revert fvars'.toArray
-           let mv4 ← fvars'.foldlM (fun mv _ => do let ⟨fv, mv'⟩ ← mv.intro1; subst mv' fv) mv3
-           pure (mv4, fvars)
-        mvar'.withContext do
-          let fvarIds := (← getLCtx).getFVarIds.toList
-          let gs := fvarIds.take gs.length
-          let hs := (fvarIds.reverse.take n).reverse
-          let m := gs.map some ++ listBoolMerge bs hs
-          let args ← m.mapM fun a =>
-            match a with
-            | some v => pure (mkFVar v)
-            | none => mkFreshExprMVar none
-          let c ← mkConstWithFreshMVarLevels constr_name
-          let e := mkAppN c args.toArray
-          let t ← inferType e
-          let mt ← mvar'.getType
-          let _ ← isDefEq t mt -- infer values for those mvars we just made
-          mvar'.assign e
+--- 原说明 ---
+Proves the right to left direction of a generated iff theorem.
 -/
 def toInductive (mvar : MVarId) (cs : List Name)
     (gs : List Expr) (s : List Shape) (h : FVarId) :
     MetaM Unit := do
   match s.length with
-  | 0 => do let _ ← mvar.cases h
+  | 0       => do let _ ← mvar.cases h
                   pure ()
   | (n + 1) => do
       let subgoals ← nCasesSum n mvar h
-      let _ ← (cs.zip (subgoals.zip s)).mapM fun ⟨constr_name, ⟨h, mv⟩, bs, e⟩ => do
+      let _ ← (cs.zip (subgoals.zip s)).mapM fun ⟨constr_name, ⟨h, mv⟩, bs, e⟩ ↦ do
         let n := (bs.filter id).length
         let (mvar', _fvars) ← match e with
         | none => nCasesProd (n-1) mv h
@@ -718,14 +463,14 @@ def toInductive (mvar : MVarId) (cs : List Name)
            `subst` will change the dependent hypotheses, so that the `uniq` local names
            are wrong afterwards. Instead we revert them and pull them out one-by-one. -/
            let (_, mv3) ← mv2.revert fvars'.toArray
-           let mv4 ← fvars'.foldlM (fun mv _ => do let ⟨fv, mv'⟩ ← mv.intro1; subst mv' fv) mv3
+           let mv4 ← fvars'.foldlM (fun mv _ ↦ do let ⟨fv, mv'⟩ ← mv.intro1; subst mv' fv) mv3
            pure (mv4, fvars)
         mvar'.withContext do
           let fvarIds := (← getLCtx).getFVarIds.toList
           let gs := fvarIds.take gs.length
           let hs := (fvarIds.reverse.take n).reverse
           let m := gs.map some ++ listBoolMerge bs hs
-          let args ← m.mapM fun a =>
+          let args ← m.mapM fun a ↦
             match a with
             | some v => pure (mkFVar v)
             | none => mkFreshExprMVar none
@@ -736,92 +481,19 @@ def toInductive (mvar : MVarId) (cs : List Name)
           let _ ← isDefEq t mt -- infer values for those mvars we just made
           mvar'.assign e
 
-/--
-Definition of `mkIffOfInductivePropImpl` / `mkIffOfInductivePropImpl` 的定义
+/-- Implementation for both `mk_iff` and `mk_iff_of_inductive_prop`.
+-/
+/-
+**Mathlib.Tactic.MkIff.mkIffOfInductivePropImpl** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.MkIff`。
+形式化陈述：mkIffOfInductivePropImpl (ind : Name) (rel : Name) (relStx : Syntax) : Met
+aM Unit
+参数：ind : Name；rel : Name；relStx : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIffOfInductivePropImpl
-  signature: (ind : Name) (rel : Name) (relStx : Syntax)
-  body: do
-  let .inductInfo inductVal ← getConstInfo ind |
-    throwError "mk_iff only applies to inductive declarations"
-  let constrs := inductVal.ctors
-  let params := inductVal.numParams
-  let type := inductVal.type
-
-  let univNames := inductVal.levelParams
-  let univs := univNames.map mkLevelParam
-  /- we use these names for our universe parameters, maybe we should construct a copy of them
-  using `uniq_name` -/
-
-  let (thmTy, shape) ← Meta.forallTelescope type fun fvars ty => do
-    if !ty.isProp then throwError "mk_iff only applies to prop-valued declarations"
-    let lhs := mkAppN (mkConst ind univs) fvars
-    let fvars' := fvars.toList
-    let shape_rhss ← constrs.mapM (constrToProp univs (fvars'.take params) (fvars'.drop params))
-    let (shape, rhss) := shape_rhss.unzip
-    pure (← mkForallFVars fvars (mkApp2 (mkConst `Iff) lhs (mkOrList rhss)), shape)
-
-  let mvar ← mkFreshExprMVar (some thmTy)
-  let mvarId := mvar.mvarId!
-  let (fvars, mvarId') ← mvarId.intros
-  let [mp, mpr] ← mvarId'.apply (mkConst `Iff.intro) | throwError "failed to split goal"
-
-  toCases mp shape
-
-  let ⟨mprFvar, mpr'⟩ ← mpr.intro1
-  toInductive mpr' constrs ((fvars.toList.take params).map .fvar) shape mprFvar
-
-addDecl .thmDecl {
-    name := rel
-    levelParams := univNames
-    type := thmTy
-    value := ← instantiateMVars mvar
-  }
-  addDeclarationRangesFromSyntax rel (← getRef) relStx
-.run' Term.addTermInfo' relStx (← mkConstWithLevelParams rel) (isBinder := true)
-
-中文:
-定义 mkIffOfInductivePropImpl
-  签名: (ind : Name) (rel : Name) (relStx : Syntax)
-  定义体: do
-  let .inductInfo inductVal ← getConstInfo ind |
-    throwError "mk_iff only applies to inductive declarations"
-  let constrs := inductVal.ctors
-  let params := inductVal.numParams
-  let type := inductVal.type
-
-  let univNames := inductVal.levelParams
-  let univs := univNames.map mkLevelParam
-  /- we use these names for our universe parameters, maybe we should construct a copy of them
-  using `uniq_name` -/
-
-  let (thmTy, shape) ← Meta.forallTelescope type fun fvars ty => do
-    if !ty.isProp then throwError "mk_iff only applies to prop-valued declarations"
-    let lhs := mkAppN (mkConst ind univs) fvars
-    let fvars' := fvars.toList
-    let shape_rhss ← constrs.mapM (constrToProp univs (fvars'.take params) (fvars'.drop params))
-    let (shape, rhss) := shape_rhss.unzip
-    pure (← mkForallFVars fvars (mkApp2 (mkConst `Iff) lhs (mkOrList rhss)), shape)
-
-  let mvar ← mkFreshExprMVar (some thmTy)
-  let mvarId := mvar.mvarId!
-  let (fvars, mvarId') ← mvarId.intros
-  let [mp, mpr] ← mvarId'.apply (mkConst `Iff.intro) | throwError "failed to split goal"
-
-  toCases mp shape
-
-  let ⟨mprFvar, mpr'⟩ ← mpr.intro1
-  toInductive mpr' constrs ((fvars.toList.take params).map .fvar) shape mprFvar
-
-addDecl .thmDecl {
-    name := rel
-    levelParams := univNames
-    type := thmTy
-    value := ← instantiateMVars mvar
-  }
-  addDeclarationRangesFromSyntax rel (← getRef) relStx
-.run' Term.addTermInfo' relStx (← mkConstWithLevelParams rel) (isBinder := true)
+--- 原说明 ---
+Implementation for both `mk_iff` and `mk_iff_of_inductive_prop`.
 -/
 def mkIffOfInductivePropImpl (ind : Name) (rel : Name) (relStx : Syntax) : MetaM Unit := do
   let .inductInfo inductVal ← getConstInfo ind |
@@ -835,7 +507,7 @@ def mkIffOfInductivePropImpl (ind : Name) (rel : Name) (relStx : Syntax) : MetaM
   /- we use these names for our universe parameters, maybe we should construct a copy of them
   using `uniq_name` -/
 
-  let (thmTy, shape) ← Meta.forallTelescope type fun fvars ty => do
+  let (thmTy, shape) ← Meta.forallTelescope type fun fvars ty ↦ do
     if !ty.isProp then throwError "mk_iff only applies to prop-valued declarations"
     let lhs := mkAppN (mkConst ind univs) fvars
     let fvars' := fvars.toList
@@ -853,14 +525,14 @@ def mkIffOfInductivePropImpl (ind : Name) (rel : Name) (relStx : Syntax) : MetaM
   let ⟨mprFvar, mpr'⟩ ← mpr.intro1
   toInductive mpr' constrs ((fvars.toList.take params).map .fvar) shape mprFvar
 
-addDecl .thmDecl {
+  addDecl <| .thmDecl {
     name := rel
     levelParams := univNames
     type := thmTy
     value := ← instantiateMVars mvar
   }
   addDeclarationRangesFromSyntax rel (← getRef) relStx
-.run' Term.addTermInfo' relStx (← mkConstWithLevelParams rel) (isBinder := true)
+  Term.addTermInfo' relStx (← mkConstWithLevelParams rel) (isBinder := true) |>.run'
 
 /--
 Applying the `mk_iff` attribute to an inductively-defined proposition `mk_iff` makes an `iff` rule
@@ -932,7 +604,7 @@ syntax (name := mkIffOfInductiveProp) "mk_iff_of_inductive_prop " ident ppSpace 
 
 elab_rules : command
 | `(command| mk_iff_of_inductive_prop $i:ident $r:ident) =>
-Command.liftCoreM MetaM.run' do
+    Command.liftCoreM <| MetaM.run' do
       mkIffOfInductivePropImpl i.getId r.getId r
 
 initialize Lean.registerBuiltinAttribute {
@@ -948,3 +620,4 @@ initialize Lean.registerBuiltinAttribute {
 }
 
 end Mathlib.Tactic.MkIff
+

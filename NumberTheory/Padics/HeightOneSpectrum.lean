@@ -22,15 +22,15 @@ respective rings of integers.
 
 Isomorphisms are provided in both directions, allowing traversal of the following diagram:
 ```
-HeightOneSpectrum R <-----------> Nat.Primes
-          | |
-          | |
-          v v
-v.adicCompletionIntegers ℚ <-------> ℤ_[p]
-          | |
-          | |
-          v v
-v.adicCompletion ℚ <---------------> ℚ_[p]
+HeightOneSpectrum R <----------->  Nat.Primes
+          |                               |
+          |                               |
+          v                               v
+v.adicCompletionIntegers ℚ  <------->   ℤ_[p]
+          |                               |
+          |                               |
+          v                               v
+v.adicCompletion ℚ  <--------------->   ℚ_[p]
 ```
 
 ## Main definitions
@@ -57,248 +57,282 @@ open IsDedekindDomain UniformSpace.Completion NumberField PadicInt
 
 local instance (p : Nat.Primes) : Fact p.1.Prime := ⟨p.2⟩
 
-variable (R : Type*) [CommRing R] [Algebra R Rat]
+variable (R : Type*) [CommRing R] [Algebra R ℚ]
 
-/--
-theorem `Rat.int_algebraMap_injective` / 定理 `Rat.int_algebraMap_injective`
-
-English:
-theorem Rat.int_algebraMap_injective
-  statement: Function.Injective (algebraMap Int R)
-  proof: .of_comp (IsScalarTower.algebraMap_eq Int R Rat ▸ RingHom.injective_int (algebraMap Int Rat))
-
-中文:
-定理 有理数.int_algebraMap_injective
-  结论: 函数.单射 (algebraMap 整数 R)
-  证明: .of_comp (IsScalarTower.algebraMap_eq Int R Rat ▸ RingHom.injective_int (algebraMap Int Rat))
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, RingHom, RingHom.injective_int, algebraMap, algebraMap_eq, injective_int, of_comp
+/-
+**Rat.int_algebraMap_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Rat.int_algebraMap_injective : Function.Injective (algebraMap Int R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `RingHom.injective_int`：RingHom.injective_int {α : Type*} [NonAssocRing α
+] (f : Int ->+* α) [CharZero α] : Function.Injective f
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
 -/
-theorem Rat.int_algebraMap_injective : Function.Injective (algebraMap Int R) :=
-  .of_comp (IsScalarTower.algebraMap_eq Int R Rat ▸ RingHom.injective_int (algebraMap Int Rat))
+theorem Rat.int_algebraMap_injective : Function.Injective (algebraMap ℤ R) :=
+  .of_comp (IsScalarTower.algebraMap_eq ℤ R ℚ ▸ RingHom.injective_int (algebraMap ℤ ℚ))
 
-variable [IsIntegralClosure R Int Rat]
-
-/--
-theorem `Rat.int_algebraMap_surjective` / 定理 `Rat.int_algebraMap_surjective`
-
-English:
-theorem Rat.int_algebraMap_surjective
-  given: [IsFractionRing R Rat]
-  proof: by
-  intro x
-obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.1
-    IsIntegral.algebraMap (B := Rat) (IsIntegralClosure.isIntegral Int Rat x)
-exact ⟨y, IsFractionRing.injective R Rat by simp only [← IsScalarTower.algebraMap_apply, hy]⟩
-
-中文:
-定理 有理数.int_algebraMap_surjective
-  条件: [IsFractionRing R 有理数]
-  证明: by
-  intro x
-obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.1
-    IsIntegral.algebraMap (B := Rat) (IsIntegralClosure.isIntegral Int Rat x)
-exact ⟨y, IsFractionRing.injective R Rat by simp only [← IsScalarTower.algebraMap_apply, hy]⟩
-
-Depends on / 依赖: IsFractionRing, IsFractionRing.injective, IsIntegral, IsIntegral.algebraMap, IsIntegralClosure, IsIntegralClosure.isIntegral, IsIntegrallyClosed, IsIntegrallyClosed.isIntegral_iff, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap, algebraMap_apply, injective, isIntegral, isIntegral_iff
+variable [IsIntegralClosure R ℤ ℚ]
+/-
+**Rat.int_algebraMap_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Rat.int_algebraMap_surjective [IsFractionRing R Rat] : Function.Surjective
+ (algebraMap Int R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsIntegrallyClosed.isIntegral_iff`：isIntegral_iff [IsIntegrallyClosed R]
+ {x : K} : IsIntegral R x ↔ exists y : R, algebraMap R K y = x
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `IsIntegral.algebraMap`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [i
+nst : CommRing R] [inst_1 : CommRing A] [inst_2 : Ring B]   [inst_3 : Algebra R 
+A] [inst_4 …
+· 使用定理 `IsIntegralClosure.isIntegral`：∀ (R : Type u_1) {A : Type u_2} (B : Type 
+u_3) [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : CommRing B]   [inst_3 :
+ Algebra R B] [ins…
+· 使用定理 `IsFractionRing.injective`：∀ (R : Type u_1) [inst : CommRing R] (K : Type
+ u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K],   Funct
+ion.Injective …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Rat.int_algebraMap_surjective [IsFractionRing R Rat] :
-    Function.Surjective (algebraMap Int R) := by
+theorem Rat.int_algebraMap_surjective [IsFractionRing R ℚ] :
+    Function.Surjective (algebraMap ℤ R) := by
   intro x
-obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.1
-    IsIntegral.algebraMap (B := Rat) (IsIntegralClosure.isIntegral Int Rat x)
-exact ⟨y, IsFractionRing.injective R Rat by simp only [← IsScalarTower.algebraMap_apply, hy]⟩
+  obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.1 <|
+    IsIntegral.algebraMap (B := ℚ) (IsIntegralClosure.isIntegral ℤ ℚ x)
+  exact ⟨y, IsFractionRing.injective R ℚ <| by simp only [← IsScalarTower.algebraMap_apply, hy]⟩
 
-/--
-Definition of `Rat.IsIntegralClosure.intEquiv` / `Rat.IsIntegralClosure.intEquiv` 的定义
+/-- If `R` has field of fractions `ℚ` and is the integral closure of `ℤ` in `ℚ` then it is
+isomorphic to `ℤ`. -/
+/-
+**Rat.IsIntegralClosure.intEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Rat.IsIntegralClosure.intEquiv : R ≃+* Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Rat.IsIntegralClosure.intEquiv
-  signature: : R ≃+* Int
-  body: (NumberField.RingOfIntegers.equiv R).symm.trans ringOfIntegersEquiv
-
-@[simp]
-
-中文:
-定义 有理数.是整闭包.intEquiv
-  签名: : R ≃+* 整数
-  定义体: (NumberField.RingOfIntegers.equiv R).symm.trans ringOfIntegersEquiv
-
-@[simp]
-
-Depends on / 依赖: NumberField, NumberField.RingOfIntegers.equiv, RingOfIntegers, ringOfIntegersEquiv, symm.trans
+--- 原说明 ---
+If `R` has field of fractions `ℚ` and is the integral closure of `ℤ` in `ℚ` then
+ it is
+isomorphic to `ℤ`.
 -/
-noncomputable def Rat.IsIntegralClosure.intEquiv : R ≃+* Int :=
+noncomputable def Rat.IsIntegralClosure.intEquiv : R ≃+* ℤ :=
   (NumberField.RingOfIntegers.equiv R).symm.trans ringOfIntegersEquiv
 
 @[simp]
-/--
-theorem `Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv` / 定理 `Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv`
-
-English:
-theorem Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv
-  given: (x : 𝓞 Rat)
-  proof: by
-  simp [intEquiv, RingOfIntegers.equiv, IsIntegralClosure.equiv, IsIntegralClosure.lift,
-    IsIntegralClosure.mk']
-
-中文:
-定理 有理数.是整闭包.intEquiv_apply_eq_ringOf整数egersEquiv
-  条件: (x : 𝓞 有理数)
-  证明: by
-  simp [intEquiv, RingOfIntegers.equiv, IsIntegralClosure.equiv, IsIntegralClosure.lift,
-    IsIntegralClosure.mk']
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.equiv, IsIntegralClosure.lift, IsIntegralClosure.mk, RingOfIntegers, RingOfIntegers.equiv, intEquiv
+/-
+**Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv** 是 Mathlib 中的一个定理
+，位于命名空间 ``。
+形式化陈述：Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv (x : 𝓞 Rat) : 
+intEquiv (𝓞 Rat) x = ringOfIntegersEquiv x
+参数：x : 𝓞 Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosureInt`：∀ {K : Type u_1} [i
+nst : Field K], IsIntegralClosure (NumberField.RingOfIntegers K) ℤ K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsIntegralClosure.isIntegral_algebra`：isIntegral_algebra [Algebra R A] [
+IsScalarTower R A B] : Algebra.IsIntegral R A
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsTorsionFree_2`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   Module.IsT
+orsionFree (NumberField.RingOfIntege…
+· 使用定理 `Classical.choose.congr_simp`：∀ {α : Sort u} {p p_1 : α → Prop} (e_p : p 
+= p_1) (h : ∃ x, p x), Classical.choose h = Classical.choose ⋯
+· 使用定理 `Classical.choose_eq`：∀ {α : Sort u_1} (a : α), ⋯.choose = a
+· 使用定理 `OneHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : One M] [
+inst_1 : One N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_one' 
+: toFun 1 …
+· 使用定理 `MonoidHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOn
+e M] [inst_1 : MulOne N] (toOneHom toOneHom_1 : OneHom M N)   (e_toOneHom : toOn
+eHom = toOneH…
+· 使用定理 `RingHom.mk.congr_simp`：∀ {α : Type u_5} {β : Type u_6} [inst : NonAssocS
+emiring α] [inst_1 : NonAssocSemiring β]   (toMonoidHom toMonoidHom_1 : α →* β) 
+(e_toMonoid…
+· 使用定理 `AlgHom.mk.congr_simp`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : C
+ommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R
+ A] [inst_…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `RingEquiv.map_mul'`：∀ {R : Type u_7} {S : Type u_8} [inst : Mul R] [inst
+_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (self : R ≃+* S)   (x y : R), self
+.toFun (…
+· 使用定理 `AlgEquiv.map_mul'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Comm
+Semiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A]
+ [inst_…
+· 使用定理 `AlgEquiv.map_add'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Comm
+Semiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A]
+ [inst_…
+· 使用定理 `RingEquiv.map_add'`：∀ {R : Type u_7} {S : Type u_8} [inst : Mul R] [inst
+_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (self : R ≃+* S)   (x y : R), self
+.toFun (…
+· 使用定理 `AlgEquiv.ofAlgHom.congr_simp`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type
+ uA₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [i
+nst_3 : Algebra R …
+· 使用定理 `AlgEquiv.ofAlgHom_apply`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂}
+ [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3
+ : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv (x : 𝓞 Rat) :
-    intEquiv (𝓞 Rat) x = ringOfIntegersEquiv x := by
+theorem Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv (x : 𝓞 ℚ) :
+    intEquiv (𝓞 ℚ) x = ringOfIntegersEquiv x := by
   simp [intEquiv, RingOfIntegers.equiv, IsIntegralClosure.equiv, IsIntegralClosure.lift,
     IsIntegralClosure.mk']
 
 namespace Rat.HeightOneSpectrum
 
-variable {R : Type*} [CommRing R] [Algebra R Rat] [IsIntegralClosure R Int Rat]
+variable {R : Type*} [CommRing R] [Algebra R ℚ] [IsIntegralClosure R ℤ ℚ]
 
-/--
-Definition of `natGenerator` / `natGenerator` 的定义
+/-- If `v : HeightOneSpectrum R` then `natGenerator v` is the generator in `ℕ` of the corresponding
+ideal in `ℤ`. -/
+/-
+**Rat.HeightOneSpectrum.natGenerator** 是 Mathlib 中的一个定义，位于命名空间 `Rat.HeightOneSpe
+ctrum`。
+形式化陈述：natGenerator (v : HeightOneSpectrum R) : Nat
+参数：v : HeightOneSpectrum R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natGenerator
-  signature: (v : HeightOneSpectrum R)
-  body: .natAbs Submodule.IsPrincipal.generator (v.asIdeal.map <| IsIntegralClosure.intEquiv R)
-
-中文:
-定义 natGenerator
-  签名: (v : 高一谱 R)
-  定义体: .natAbs Submodule.IsPrincipal.generator (v.asIdeal.map <| IsIntegralClosure.intEquiv R)
-
-Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.intEquiv, IsPrincipal, Submodule, Submodule.IsPrincipal.generator, asIdeal, generator, intEquiv, natAbs, v.asIdeal.map
+--- 原说明 ---
+If `v : HeightOneSpectrum R` then `natGenerator v` is the generator in `ℕ` of th
+e corresponding
+ideal in `ℤ`.
 -/
-noncomputable def natGenerator (v : HeightOneSpectrum R) : Nat :=
-.natAbs Submodule.IsPrincipal.generator (v.asIdeal.map <| IsIntegralClosure.intEquiv R)
-
-/--
-theorem `span_natGenerator` / 定理 `span_natGenerator`
-
-English:
-theorem span_natGenerator
-  given: (v : HeightOneSpectrum R)
-  proof: by
-  simp [natGenerator]
-
-中文:
-定理 span_natGenerator
-  条件: (v : 高一谱 R)
-  证明: by
-  simp [natGenerator]
-
-Depends on / 依赖: natGenerator
+noncomputable def natGenerator (v : HeightOneSpectrum R) : ℕ :=
+  Submodule.IsPrincipal.generator (v.asIdeal.map <| IsIntegralClosure.intEquiv R) |>.natAbs
+/-
+**Rat.HeightOneSpectrum.span_natGenerator** 是 Mathlib 中的一个定理，位于命名空间 `Rat.HeightO
+neSpectrum`。
+形式化陈述：span_natGenerator (v : HeightOneSpectrum R) : Ideal.span {(natGenerator v 
+: Int)} = v.asIdeal.map (IsIntegralClosure.intEquiv R)
+参数：v : HeightOneSpectrum R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_natAbs`：∀ {α : Type u_1} [inst : AddGroupWithOne α] (n : ℤ), ↑n
+.natAbs = ↑|n|
+· 使用引理 `Int.cast_abs`：cast_abs : (↑|a| : R) = |(a : R)|
+· 使用定理 `Ideal.span_singleton_abs`：span_singleton_abs [LinearOrder α] : span {|x|
+} = span {x}
+· 使用定理 `Ideal.span_singleton_generator`：∀ {R : Type u} [inst : Semiring R] (I : 
+Ideal R) [inst_1 : Submodule.IsPrincipal I],   Ideal.span {Submodule.IsPrincipal
+.generator I} = I
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem span_natGenerator (v : HeightOneSpectrum R) :
-    Ideal.span {(natGenerator v : Int)} = v.asIdeal.map (IsIntegralClosure.intEquiv R) := by
+    Ideal.span {(natGenerator v : ℤ)} = v.asIdeal.map (IsIntegralClosure.intEquiv R) := by
   simp [natGenerator]
-
-/--
-theorem `natGenerator_dvd_iff` / 定理 `natGenerator_dvd_iff`
-
-English:
-theorem natGenerator_dvd_iff
-  given: (v : HeightOneSpectrum R) {n : Nat}
-  proof: by
-  rw [← span_natGenerator]; rw [Ideal.mem_span_singleton]
-  exact Int.ofNat_dvd.symm
-
-中文:
-定理 natGenerator_dvd_iff
-  条件: (v : 高一谱 R) {n : 自然数}
-  证明: by
-  rw [← span_natGenerator]; rw [Ideal.mem_span_singleton]
-  exact Int.ofNat_dvd.symm
-
-Depends on / 依赖: Ideal.mem_span_singleton, Int.ofNat_dvd.symm, mem_span_singleton, ofNat_dvd, span_natGenerator
+/-
+**Rat.HeightOneSpectrum.natGenerator_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat.Heig
+htOneSpectrum`。
+形式化陈述：natGenerator_dvd_iff (v : HeightOneSpectrum R) {n : Nat} : natGenerator v 
+∣ n ↔ ↑n in v.asIdeal.map (IsIntegralClosure.intEquiv R)
+参数：v : HeightOneSpectrum R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.HeightOneSpectrum.span_natGenerator`：span_natGenerator (v : HeightOn
+eSpectrum R) : Ideal.span {(natGenerator v : Int)} = v.asIdeal.map (IsIntegralCl
+osure.intEquiv R)
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Int.ofNat_dvd`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
 -/
-theorem natGenerator_dvd_iff (v : HeightOneSpectrum R) {n : Nat} :
-    natGenerator v ∣ n ↔ ↑n in v.asIdeal.map (IsIntegralClosure.intEquiv R) := by
-  rw [← span_natGenerator]; rw [Ideal.mem_span_singleton]
+theorem natGenerator_dvd_iff (v : HeightOneSpectrum R) {n : ℕ} :
+    natGenerator v ∣ n ↔ ↑n ∈ v.asIdeal.map (IsIntegralClosure.intEquiv R) := by
+  rw [← span_natGenerator, Ideal.mem_span_singleton]
   exact Int.ofNat_dvd.symm
-
-/--
-theorem `prime_natGenerator` / 定理 `prime_natGenerator`
-
-English:
-theorem prime_natGenerator
-  given: (v : HeightOneSpectrum R)
-  statement: Nat.Prime (natGenerator v)
-  proof: Int.prime_iff_natAbs_prime.1 Submodule.IsPrincipal.prime_generator_of_isPrime _
-    ((Ideal.map_eq_bot_iff_of_injective (IsIntegralClosure.intEquiv R).injective).not.2 v.ne_bot)
-
-中文:
-定理 prime_natGenerator
-  条件: (v : 高一谱 R)
-  结论: 自然数.素 (natGenerator v)
-  证明: Int.prime_iff_natAbs_prime.1 Submodule.IsPrincipal.prime_generator_of_isPrime _
-    ((Ideal.map_eq_bot_iff_of_injective (IsIntegralClosure.intEquiv R).injective).not.2 v.ne_bot)
-
-Depends on / 依赖: Ideal.map_eq_bot_iff_of_injective, Int.prime_iff_natAbs_prime, IsIntegralClosure, IsIntegralClosure.intEquiv, IsPrincipal, Submodule, Submodule.IsPrincipal.prime_generator_of_isPrime, injective, intEquiv, map_eq_bot_iff_of_injective, ne_bot, prime_generator_of_isPrime, prime_iff_natAbs_prime, v.ne_bot
+/-
+**Rat.HeightOneSpectrum.prime_natGenerator** 是 Mathlib 中的一个定理，位于命名空间 `Rat.Height
+OneSpectrum`。
+形式化陈述：prime_natGenerator (v : HeightOneSpectrum R) : Nat.Prime (natGenerator v)
+参数：v : HeightOneSpectrum R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.prime_iff_natAbs_prime`：prime_iff_natAbs_prime {k : Int} : Prime k ↔
+ Nat.Prime k.natAbs
+· 使用定理 `Submodule.IsPrincipal.prime_generator_of_isPrime`：prime_generator_of_isP
+rime (S : Ideal R) [S.IsPrincipal] [is_prime : S.IsPrime] (ne_bot : S != ⊥) : Pr
+ime (generator S)
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.isPrime`：∀ {R : Type u_1} [inst : Com
+mRing R] (self : IsDedekindDomain.HeightOneSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Ideal.map_eq_bot_iff_of_injective`：map_eq_bot_iff_of_injective {I : Idea
+l R} {f : F} (hf : Function.Injective f) : I.map f = ⊥ ↔ I = ⊥
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.injective`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] (e : R ≃+* S),   Function.Injecti
+ve ⇑e
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.ne_bot`：∀ {R : Type u_1} [inst : Comm
+Ring R] (self : IsDedekindDomain.HeightOneSpectrum R), self.asIdeal ≠ ⊥
 -/
 theorem prime_natGenerator (v : HeightOneSpectrum R) : Nat.Prime (natGenerator v) :=
-Int.prime_iff_natAbs_prime.1 Submodule.IsPrincipal.prime_generator_of_isPrime _
+  Int.prime_iff_natAbs_prime.1 <| Submodule.IsPrincipal.prime_generator_of_isPrime _
     ((Ideal.map_eq_bot_iff_of_injective (IsIntegralClosure.intEquiv R).injective).not.2 v.ne_bot)
 
-variable [IsDedekindDomain R] [IsFractionRing R Rat]
+variable [IsDedekindDomain R] [IsFractionRing R ℚ]
 
-/--
-Definition of `primesEquiv` / `primesEquiv` 的定义
+/-- The equivalence between height-one prime ideals of `R` and primes in `ℕ`. -/
+/-
+**Rat.HeightOneSpectrum.primesEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rat.HeightOneSpec
+trum`。
+形式化陈述：primesEquiv : HeightOneSpectrum R ≃ Nat.Primes where toFun v
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.HeightOneSpectrum.prime_natGenerator`：prime_natGenerator (v : Height
+OneSpectrum R) : Nat.Prime (natGenerator v)
 
-English:
-definition primesEquiv
-  signature: : HeightOneSpectrum R ≃ Nat.Primes where
-  body: ⟨natGenerator v, prime_natGenerator v⟩
-  invFun p :=
-    have h : Prime ((Ideal.span {(p.1 : Int)}).map (IsIntegralClosure.intEquiv R).symm) :=
-      Ideal.map_prime_of_equiv _ (by simp [← Nat.prime_iff_prime_int, p.2]) (by simp [p.2.ne_zero])
-    .ofPrime h
-  left_inv v := by
-    simp only [Ideal.map_symm]
-    congr
-    rw [← v.asIdeal.comap_map_of_bijective _ (IsIntegralClosure.intEquiv R).bijective]; rw [← span_natGenerator]
-  right_inv p := by
-    simp only [Ideal.map_symm, natGenerator, HeightOneSpectrum.ofPrime_asIdeal]
-    congr
-    simp [Ideal.map_comap_of_surjective _ (IsIntegralClosure.intEquiv R).surjective,
-      Int.associated_iff_natAbs.1 (Submodule.IsPrincipal.associated_generator_span_self _)]
-
-中文:
-定义 primesEquiv
-  签名: : 高一谱 R ≃ 自然数.Primes where
-  定义体: ⟨natGenerator v, prime_natGenerator v⟩
-  invFun p :=
-    have h : Prime ((Ideal.span {(p.1 : Int)}).map (IsIntegralClosure.intEquiv R).symm) :=
-      Ideal.map_prime_of_equiv _ (by simp [← Nat.prime_iff_prime_int, p.2]) (by simp [p.2.ne_zero])
-    .ofPrime h
-  left_inv v := by
-    simp only [Ideal.map_symm]
-    congr
-    rw [← v.asIdeal.comap_map_of_bijective _ (IsIntegralClosure.intEquiv R).bijective]; rw [← span_natGenerator]
-  right_inv p := by
-    simp only [Ideal.map_symm, natGenerator, HeightOneSpectrum.ofPrime_asIdeal]
-    congr
-    simp [Ideal.map_comap_of_surjective _ (IsIntegralClosure.intEquiv R).surjective,
-      Int.associated_iff_natAbs.1 (Submodule.IsPrincipal.associated_generator_span_self _)]
-
-Depends on / 依赖: natGenerator, prime_natGenerator
+--- 原说明 ---
+The equivalence between height-one prime ideals of `R` and primes in `ℕ`.
 -/
 noncomputable def primesEquiv : HeightOneSpectrum R ≃ Nat.Primes where
   toFun v := ⟨natGenerator v, prime_natGenerator v⟩
   invFun p :=
-    have h : Prime ((Ideal.span {(p.1 : Int)}).map (IsIntegralClosure.intEquiv R).symm) :=
+    have h : Prime ((Ideal.span {(p.1 : ℤ)}).map (IsIntegralClosure.intEquiv R).symm) :=
       Ideal.map_prime_of_equiv _ (by simp [← Nat.prime_iff_prime_int, p.2]) (by simp [p.2.ne_zero])
     .ofPrime h
   left_inv v := by
     simp only [Ideal.map_symm]
     congr
-    rw [← v.asIdeal.comap_map_of_bijective _ (IsIntegralClosure.intEquiv R).bijective]; rw [← span_natGenerator]
+    rw [← v.asIdeal.comap_map_of_bijective _ (IsIntegralClosure.intEquiv R).bijective,
+      ← span_natGenerator]
   right_inv p := by
     simp only [Ideal.map_symm, natGenerator, HeightOneSpectrum.ofPrime_asIdeal]
     congr
@@ -306,207 +340,276 @@ noncomputable def primesEquiv : HeightOneSpectrum R ≃ Nat.Primes where
       Int.associated_iff_natAbs.1 (Submodule.IsPrincipal.associated_generator_span_self _)]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `valuation_equiv_padicValuation` / 定理 `valuation_equiv_padicValuation`
-
-English:
-theorem valuation_equiv_padicValuation
-  given: (v : HeightOneSpectrum R)
-  proof: by
-  simp [primesEquiv, Valuation.isEquiv_iff_val_le_one, valuation_le_one_iff_den,
-    padicValuation_le_one_iff, natGenerator_dvd_iff,
-    map_natCast (IsIntegralClosure.intEquiv R) _ ▸ Ideal.apply_mem_of_equiv_iff]
-
-中文:
-定理 valuation_equiv_padicValuation
-  条件: (v : 高一谱 R)
-  证明: by
-  simp [primesEquiv, Valuation.isEquiv_iff_val_le_one, valuation_le_one_iff_den,
-    padicValuation_le_one_iff, natGenerator_dvd_iff,
-    map_natCast (IsIntegralClosure.intEquiv R) _ ▸ Ideal.apply_mem_of_equiv_iff]
-
-Depends on / 依赖: Ideal.apply_mem_of_equiv_iff, IsIntegralClosure, IsIntegralClosure.intEquiv, Valuation, Valuation.isEquiv_iff_val_le_one, apply_mem_of_equiv_iff, intEquiv, isEquiv_iff_val_le_one, map_natCast, natGenerator_dvd_iff, padicValuation_le_one_iff, primesEquiv, valuation_le_one_iff_den
+/-
+**Rat.HeightOneSpectrum.valuation_equiv_padicValuation** 是 Mathlib 中的一个定理，位于命名空间
+ `Rat.HeightOneSpectrum`。
+形式化陈述：valuation_equiv_padicValuation (v : HeightOneSpectrum R) : (v.valuation Ra
+t).IsEquiv (padicValuation (primesEquiv v))
+参数：v : HeightOneSpectrum R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.HeightOneSpectrum.prime_natGenerator`：prime_natGenerator (v : Height
+OneSpectrum R) : Nat.Prime (natGenerator v)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `Ideal.map_symm`：map_symm {I : Ideal S} (f : R ≃+* S) : I.map f.symm = I.
+comap f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.ofPrime.congr_simp`：∀ {R : Type u_1} 
+[inst : CommRing R] [inst_1 : IsDedekindDomain R] {p p_1 : Ideal R} (e_p : p = p
+_1) (hp : Prime p),   IsDedekindDomain.Heig…
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
+· 使用定理 `Rat.padicValuation.congr_simp`：∀ (p p_1 : ℕ) (e_p : p = p_1) [inst : Fac
+t (Nat.Prime p)], Rat.padicValuation p = Rat.padicValuation p_1
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Ideal.apply_mem_of_equiv_iff`：apply_mem_of_equiv_iff {I : Ideal R} {f : 
+R ≃+* S} {x : R} : f x in I.map f ↔ x in I
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem valuation_equiv_padicValuation (v : HeightOneSpectrum R) :
-    (v.valuation Rat).IsEquiv (padicValuation (primesEquiv v)) := by
+    (v.valuation ℚ).IsEquiv (padicValuation (primesEquiv v)) := by
   simp [primesEquiv, Valuation.isEquiv_iff_val_le_one, valuation_le_one_iff_den,
     padicValuation_le_one_iff, natGenerator_dvd_iff,
     map_natCast (IsIntegralClosure.intEquiv R) _ ▸ Ideal.apply_mem_of_equiv_iff]
 
 open Valuation
 
-/--
-Definition of `withValEquiv` / `withValEquiv` 的定义
+/-- The uniform space isomorphism `ℚ ≃ᵤ ℚ`, where the LHS has the uniformity from
+`HeightOneSpectrum.valuation ℚ v` and the RHS has uniformity from
+`Rat.padicValuation (natGenerator v)`, for a height-one prime ideal
+`v : HeightOneSpectrum R`. -/
+/-
+**Rat.HeightOneSpectrum.withValEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rat.HeightOneSpe
+ctrum`。
+形式化陈述：withValEquiv (v : HeightOneSpectrum R) : WithVal (v.valuation Rat) ≃ᵤ With
+Val (padicValuation (primesEquiv v))
+参数：v : HeightOneSpectrum R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.HeightOneSpectrum.valuation_equiv_padicValuation`：valuation_equiv_pa
+dicValuation (v : HeightOneSpectrum R) : (v.valuation Rat).IsEquiv (padicValuati
+on (primesEquiv v))
 
-English:
-definition withValEquiv
-  signature: (v : HeightOneSpectrum R)
-  body: (valuation_equiv_padicValuation v).uniformEquiv
-
-中文:
-定义 withValEquiv
-  签名: (v : 高一谱 R)
-  定义体: (valuation_equiv_padicValuation v).uniformEquiv
-
-Depends on / 依赖: uniformEquiv, valuation_equiv_padicValuation
+--- 原说明 ---
+The uniform space isomorphism `ℚ ≃ᵤ ℚ`, where the LHS has the uniformity from
+`HeightOneSpectrum.valuation ℚ v` and the RHS has uniformity from
+`Rat.padicValuation (natGenerator v)`, for a height-one prime ideal
+`v : HeightOneSpectrum R`.
 -/
 noncomputable def withValEquiv (v : HeightOneSpectrum R) :
-    WithVal (v.valuation Rat) ≃ᵤ WithVal (padicValuation (primesEquiv v)) :=
+    WithVal (v.valuation ℚ) ≃ᵤ WithVal (padicValuation (primesEquiv v)) :=
   (valuation_equiv_padicValuation v).uniformEquiv
 
-/--
-Definition of `adicCompletion.padicEquiv` / `adicCompletion.padicEquiv` 的定义
+/-- The continuous `ℚ`-algebra isomorphism between `v.adicCompletion ℚ` and `ℚ_[primesEquiv v]`. -/
+/-
+**Rat.HeightOneSpectrum.adicCompletion.padicEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rat
+.HeightOneSpectrum.adicCompletion`。
+形式化陈述：{R : Type u_2} →   [inst : CommRing R] →     [inst_1 : Algebra R ℚ] →     
+  [inst_2 : IsIntegralClosure R ℤ ℚ] →         [inst_3 : IsDedekindDomain R] →  
+         [inst_4 : IsFractionRing R ℚ] →             (v : IsDedekindDomain.Heigh
+tOneSpectrum R) →               IsDedekindDomain.HeightOneSpectrum.adicCompletio
+n ℚ v ≃A[ℚ] ℚ_[↑(Rat.HeightOneSpectrum.primesEquiv v)]
+参数：v : IsDedekindDomain.HeightOneSpectrum R；Rat.HeightOneSpectrum.primesEquiv v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adicCompletion.padicEquiv
-  signature: (v : HeightOneSpectrum R)
-  body: (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).trans
-    (mapRingEquiv _ (withValEquiv v).continuous
-      (withValEquiv v).symm.continuous).trans Padic.withValRingEquiv
-  __ := ((IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).trans <|
-    (mapEquiv (withValEquiv v)).trans Padic.withValUniformEquiv).toHomeomorph
-  commutes' := by simp
-
-中文:
-定义 adicCompletion.padicEquiv
-  签名: (v : 高一谱 R)
-  定义体: (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).trans
-    (mapRingEquiv _ (withValEquiv v).continuous
-      (withValEquiv v).symm.continuous).trans Padic.withValRingEquiv
-  __ := ((IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).trans <|
-    (mapEquiv (withValEquiv v)).trans Padic.withValUniformEquiv).toHomeomorph
-  commutes' := by simp
-
-Depends on / 依赖: HeightOneSpectrum, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv, adicCompletion
+--- 原说明 ---
+The continuous `ℚ`-algebra isomorphism between `v.adicCompletion ℚ` and `ℚ_[prim
+esEquiv v]`.
 -/
 noncomputable def adicCompletion.padicEquiv (v : HeightOneSpectrum R) :
-    v.adicCompletion Rat ≃A[Rat] Rat_[primesEquiv v] where
-__ := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).trans
+    v.adicCompletion ℚ ≃A[ℚ] ℚ_[primesEquiv v] where
+  __ := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv ℚ v).trans <|
     (mapRingEquiv _ (withValEquiv v).continuous
       (withValEquiv v).symm.continuous).trans Padic.withValRingEquiv
-  __ := ((IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).trans <|
+  __ := ((IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv ℚ v).trans <|
     (mapEquiv (withValEquiv v)).trans Padic.withValUniformEquiv).toHomeomorph
   commutes' := by simp
 
-/--
-Definition of `adicCompletionIntegers.padicIntEquiv` / `adicCompletionIntegers.padicIntEquiv` 的定义
+/-- The continuous `ℤ`-algebra isomorphism between `v.adicCompletionIntegers ℚ` and
+`ℤ_[primesEquiv v]`. -/
+/-
+**Rat.HeightOneSpectrum.adicCompletionIntegers.padicIntEquiv** 是 Mathlib 中的一个定义，
+位于命名空间 `Rat.HeightOneSpectrum.adicCompletionIntegers`。
+形式化陈述：{R : Type u_2} →   [inst : CommRing R] →     [inst_1 : Algebra R ℚ] →     
+  [inst_2 : IsIntegralClosure R ℤ ℚ] →         [inst_3 : IsDedekindDomain R] →  
+         [inst_4 : IsFractionRing R ℚ] →             (v : IsDedekindDomain.Heigh
+tOneSpectrum R) →               ↥(IsDedekindDomain.HeightOneSpectrum.adicComplet
+ionIntegers ℚ v) ≃A[ℤ]                 ℤ_[↑(Rat.HeightOneSpectrum.primesEquiv v)
+]
+参数：v : IsDedekindDomain.HeightOneSpectrum R；IsDedekindDomain.HeightOneSpectrum.a
+dicCompletionIntegers ℚ v；Rat.HeightOneSpectrum.primesEquiv v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adicCompletionIntegers.padicIntEquiv
-  signature: (v : HeightOneSpectrum R)
-  body: let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).restrict
-          (v.adicCompletionIntegers Rat)
-          (Valued.v (R := (v.valuation Rat).Completion)).valuationSubring
-          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
-        let e := (mapRingEquiv _ (withValEquiv v).continuous
-          (withValEquiv v).symm.continuous).restrict _ _ fun _ => by
-            simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
-        (e0.trans e).trans withValIntegersRingEquiv
-  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).subtype
-          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
-        let e := (mapEquiv (withValEquiv v)).subtype fun _ => by
-          simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
-        ((e0.trans e).trans withValIntegersUniformEquiv).toHomeomorph
-  commutes' := by simp
-
-中文:
-定义 adicCompletion整数egers.padic整数Equiv
-  签名: (v : 高一谱 R)
-  定义体: let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).restrict
-          (v.adicCompletionIntegers Rat)
-          (Valued.v (R := (v.valuation Rat).Completion)).valuationSubring
-          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
-        let e := (mapRingEquiv _ (withValEquiv v).continuous
-          (withValEquiv v).symm.continuous).restrict _ _ fun _ => by
-            simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
-        (e0.trans e).trans withValIntegersRingEquiv
-  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).subtype
-          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
-        let e := (mapEquiv (withValEquiv v)).subtype fun _ => by
-          simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
-        ((e0.trans e).trans withValIntegersUniformEquiv).toHomeomorph
-  commutes' := by simp
-
-Depends on / 依赖: HeightOneSpectrum, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv, adicCompletion, restrict
+--- 原说明 ---
+The continuous `ℤ`-algebra isomorphism between `v.adicCompletionIntegers ℚ` and
+`ℤ_[primesEquiv v]`.
 -/
 noncomputable def adicCompletionIntegers.padicIntEquiv (v : HeightOneSpectrum R) :
-    v.adicCompletionIntegers Rat ≃A[Int] Int_[primesEquiv v] where
-  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).restrict
-          (v.adicCompletionIntegers Rat)
-          (Valued.v (R := (v.valuation Rat).Completion)).valuationSubring
-          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
+    v.adicCompletionIntegers ℚ ≃A[ℤ] ℤ_[primesEquiv v] where
+  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv ℚ v).restrict
+          (v.adicCompletionIntegers ℚ)
+          (Valued.v (R := (v.valuation ℚ).Completion)).valuationSubring
+          fun _ ↦ by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
         let e := (mapRingEquiv _ (withValEquiv v).continuous
-          (withValEquiv v).symm.continuous).restrict _ _ fun _ => by
+          (withValEquiv v).symm.continuous).restrict _ _ fun _ ↦ by
             simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
         (e0.trans e).trans withValIntegersRingEquiv
-  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).subtype
-          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
-        let e := (mapEquiv (withValEquiv v)).subtype fun _ => by
+  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv ℚ v).subtype
+          fun _ ↦ by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
+        let e := (mapEquiv (withValEquiv v)).subtype fun _ ↦ by
           simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
         ((e0.trans e).trans withValIntegersUniformEquiv).toHomeomorph
   commutes' := by simp
 
-/--
-theorem `adicCompletionIntegers.coe_padicIntEquiv_apply` / 定理 `adicCompletionIntegers.coe_padicIntEquiv_apply`
+/-- The diagram
+```
+v.adicCompletionIntegers ℚ  ----->  ℤ_[primesEquiv v]
+      |                               |
+      |                               |
+      v                               v
+v.adicCompletion ℚ  ------------->  ℚ_[primesEquiv v]
+```
+commutes. -/
+/-
+**Rat.HeightOneSpectrum.adicCompletionIntegers.coe_padicIntEquiv_apply** 是 Mathl
+ib 中的一个定理，位于命名空间 `Rat.HeightOneSpectrum.adicCompletionIntegers`。
+形式化陈述：∀ {R : Type u_2} [inst : CommRing R] [inst_1 : Algebra R ℚ] [inst_2 : IsIn
+tegralClosure R ℤ ℚ]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R 
+ℚ] (v : IsDedekindDomain.HeightOneSpectrum R)   (x : ↥(IsDedekindDomain.HeightOn
+eSpectrum.adicCompletionIntegers ℚ v)),   ↑((Rat.HeightOneSpectrum.adicCompletio
+nIntegers.padicIntEquiv v) x) =     (Rat.HeightOneSpectrum.adicCompletion.padicE
+quiv v) ↑x
+参数：v : IsDedekindDomain.HeightOneSpectrum R；x : ↥(IsDedekindDomain.HeightOneSpec
+trum.adicCompletionIntegers ℚ v)；(Rat.HeightOneSpectrum.adicCompletionIntegers.p
+adicIntEquiv v) x；Rat.HeightOneSpectrum.adicCompletion.padicEquiv v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `ValuationSubring.instSubringClass`：∀ {K : Type u} [inst : Field K], Subr
+ingClass (ValuationSubring K) K
 
-English:
-theorem adicCompletionIntegers.coe_padicIntEquiv_apply
-  statement: (v : HeightOneSpectrum R)
-  proof: rfl
-
-中文:
-定理 adicCompletion整数egers.coe_padic整数Equiv_apply
-  结论: (v : 高一谱 R)
-  证明: rfl
+--- 原说明 ---
+The diagram
+```
+v.adicCompletionIntegers ℚ  ----->  ℤ_[primesEquiv v]
+      |                               |
+      |                               |
+      v                               v
+v.adicCompletion ℚ  ------------->  ℚ_[primesEquiv v]
+```
+commutes.
 -/
 theorem adicCompletionIntegers.coe_padicIntEquiv_apply (v : HeightOneSpectrum R)
-    (x : v.adicCompletionIntegers Rat) : padicIntEquiv v x = adicCompletion.padicEquiv v x := rfl
+    (x : v.adicCompletionIntegers ℚ) : padicIntEquiv v x = adicCompletion.padicEquiv v x := rfl
 
-/--
-theorem `adicCompletionIntegers.coe_padicIntEquiv_symm_apply` / 定理 `adicCompletionIntegers.coe_padicIntEquiv_symm_apply`
+/-- The diagram
+```
+v.adicCompletionIntegers ℚ  <-----  ℤ_[primesEquiv v]
+      |                               |
+      |                               |
+      v                               v
+v.adicCompletion ℚ  <-------------  ℚ_[primesEquiv v]
+```
+commutes. -/
+/-
+**Rat.HeightOneSpectrum.adicCompletionIntegers.coe_padicIntEquiv_symm_apply** 是 
+Mathlib 中的一个定理，位于命名空间 `Rat.HeightOneSpectrum.adicCompletionIntegers`。
+形式化陈述：∀ {R : Type u_2} [inst : CommRing R] [inst_1 : Algebra R ℚ] [inst_2 : IsIn
+tegralClosure R ℤ ℚ]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R 
+ℚ] (v : IsDedekindDomain.HeightOneSpectrum R)   (x : ℤ_[↑(Rat.HeightOneSpectrum.
+primesEquiv v)]),   ↑((Rat.HeightOneSpectrum.adicCompletionIntegers.padicIntEqui
+v v).symm x) =     (Rat.HeightOneSpectrum.adicCompletion.padicEquiv v).symm ↑x
+参数：v : IsDedekindDomain.HeightOneSpectrum R；x : ℤ_[↑(Rat.HeightOneSpectrum.prime
+sEquiv v)]；(Rat.HeightOneSpectrum.adicCompletionIntegers.padicIntEquiv v).symm x
+；Rat.HeightOneSpectrum.adicCompletion.padicEquiv v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `ValuationSubring.instSubringClass`：∀ {K : Type u} [inst : Field K], Subr
+ingClass (ValuationSubring K) K
 
-English:
-theorem adicCompletionIntegers.coe_padicIntEquiv_symm_apply
-  statement: (v : HeightOneSpectrum R)
-  proof: rfl
-
-中文:
-定理 adicCompletion整数egers.coe_padic整数Equiv_symm_apply
-  结论: (v : 高一谱 R)
-  证明: rfl
+--- 原说明 ---
+The diagram
+```
+v.adicCompletionIntegers ℚ  <-----  ℤ_[primesEquiv v]
+      |                               |
+      |                               |
+      v                               v
+v.adicCompletion ℚ  <-------------  ℚ_[primesEquiv v]
+```
+commutes.
 -/
 theorem adicCompletionIntegers.coe_padicIntEquiv_symm_apply (v : HeightOneSpectrum R)
-    (x : Int_[primesEquiv v]) : (adicCompletionIntegers.padicIntEquiv v).symm x =
+    (x : ℤ_[primesEquiv v]) : (adicCompletionIntegers.padicIntEquiv v).symm x =
       (adicCompletion.padicEquiv v).symm x := rfl
-
-/--
-theorem `adicCompletion.padicEquiv_bijOn` / 定理 `adicCompletion.padicEquiv_bijOn`
-
-English:
-theorem adicCompletion.padicEquiv_bijOn
-  given: (v : HeightOneSpectrum R)
-  proof: by
-  refine ⟨fun x hx => ?_, (padicEquiv v).injective.injOn, fun y hy => ?_⟩
-  · rw [← adicCompletionIntegers.coe_padicIntEquiv_apply v ⟨x, hx⟩]
-    exact norm_le_one ((adicCompletionIntegers.padicIntEquiv v) ⟨x, hx⟩)
-  · obtain ⟨x, hx⟩ := (adicCompletionIntegers.padicIntEquiv v).surjective ⟨y, hy⟩
-    refine ⟨x, x.2, by rw [← adicCompletionIntegers.coe_padicIntEquiv_apply, hx]⟩
-
-中文:
-定理 adicCompletion.padicEquiv_bijOn
-  条件: (v : 高一谱 R)
-  证明: by
-  refine ⟨fun x hx => ?_, (padicEquiv v).injective.injOn, fun y hy => ?_⟩
-  · rw [← adicCompletionIntegers.coe_padicIntEquiv_apply v ⟨x, hx⟩]
-    exact norm_le_one ((adicCompletionIntegers.padicIntEquiv v) ⟨x, hx⟩)
-  · obtain ⟨x, hx⟩ := (adicCompletionIntegers.padicIntEquiv v).surjective ⟨y, hy⟩
-    refine ⟨x, x.2, by rw [← adicCompletionIntegers.coe_padicIntEquiv_apply, hx]⟩
-
-Depends on / 依赖: adicCompletionIntegers, adicCompletionIntegers.coe_padicIntEquiv_apply, adicCompletionIntegers.padicIntEquiv, coe_padicIntEquiv_apply, injective, injective.injOn, norm_le_one, padicEquiv, padicIntEquiv, surjective
+/-
+**Rat.HeightOneSpectrum.adicCompletion.padicEquiv_bijOn** 是 Mathlib 中的一个定理，位于命名空
+间 `Rat.HeightOneSpectrum.adicCompletion`。
+形式化陈述：∀ {R : Type u_2} [inst : CommRing R] [inst_1 : Algebra R ℚ] [inst_2 : IsIn
+tegralClosure R ℤ ℚ]   [inst_3 : IsDedekindDomain R] [inst_4 : IsFractionRing R 
+ℚ] (v : IsDedekindDomain.HeightOneSpectrum R),   Set.BijOn ⇑(Rat.HeightOneSpectr
+um.adicCompletion.padicEquiv v)     ↑(IsDedekindDomain.HeightOneSpectrum.adicCom
+pletionIntegers ℚ v)     ↑(PadicInt.subring ↑(Rat.HeightOneSpectrum.primesEquiv 
+v))
+参数：v : IsDedekindDomain.HeightOneSpectrum R；Rat.HeightOneSpectrum.adicCompletion
+.padicEquiv v；IsDedekindDomain.HeightOneSpectrum.adicCompletionIntegers ℚ v；Padi
+cInt.subring ↑(Rat.HeightOneSpectrum.primesEquiv v)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `ValuationSubring.instSubringClass`：∀ {K : Type u} [inst : Field K], Subr
+ingClass (ValuationSubring K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.HeightOneSpectrum.adicCompletionIntegers.coe_padicIntEquiv_apply`：∀ 
+{R : Type u_2} [inst : CommRing R] [inst_1 : Algebra R ℚ] [inst_2 : IsIntegralCl
+osure R ℤ ℚ]   [inst_3 : IsDedekindDomain R] [inst_4 : IsF…
+· 使用定理 `PadicInt.norm_le_one`：norm_le_one (z : Int_[p]) : ‖z‖ <= 1
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `AlgEquiv.injective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [ins
+t : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Al
+gebra R …
+· 使用定理 `ContinuousAlgEquiv.surjective`：surjective (e : A ≃A[R] B) : Function.Sur
+jective e
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem adicCompletion.padicEquiv_bijOn (v : HeightOneSpectrum R) :
-    Set.BijOn (padicEquiv v) (v.adicCompletionIntegers Rat) (subring (primesEquiv v)) := by
-  refine ⟨fun x hx => ?_, (padicEquiv v).injective.injOn, fun y hy => ?_⟩
+    Set.BijOn (padicEquiv v) (v.adicCompletionIntegers ℚ) (subring (primesEquiv v)) := by
+  refine ⟨fun x hx ↦ ?_, (padicEquiv v).injective.injOn, fun y hy ↦ ?_⟩
   · rw [← adicCompletionIntegers.coe_padicIntEquiv_apply v ⟨x, hx⟩]
     exact norm_le_one ((adicCompletionIntegers.padicIntEquiv v) ⟨x, hx⟩)
   · obtain ⟨x, hx⟩ := (adicCompletionIntegers.padicIntEquiv v).surjective ⟨y, hy⟩
@@ -518,30 +621,26 @@ open Rat.HeightOneSpectrum
 
 namespace Padic
 
-variable (R : Type*) [CommRing R] [IsDedekindDomain R] [Algebra R Rat] [IsFractionRing R Rat]
-  [IsIntegralClosure R Int Rat]
+variable (R : Type*) [CommRing R] [IsDedekindDomain R] [Algebra R ℚ] [IsFractionRing R ℚ]
+  [IsIntegralClosure R ℤ ℚ]
 
-/--
-Definition of `adicCompletionEquiv` / `adicCompletionEquiv` 的定义
+/-- The continuous `ℚ`-algebra isomorphism between `ℚ_[p]` and
+`(primesEquiv.symm p).adicCompletion ℚ`. -/
+/-
+**Padic.adicCompletionEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Padic`。
+形式化陈述：adicCompletionEquiv (p : Nat.Primes) : Rat_[p] ≃A[Rat] ((primesEquiv (R
+参数：p : Nat.Primes。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition adicCompletionEquiv
-  signature: (p : Nat.Primes)
-  body: by
-  apply (ContinuousAlgEquiv.cast (primesEquiv.apply_symm_apply p).symm).trans
-    (adicCompletion.padicEquiv (primesEquiv.symm p)).symm
-
-中文:
-定义 adicCompletionEquiv
-  签名: (p : 自然数.Primes)
-  定义体: by
-  apply (ContinuousAlgEquiv.cast (primesEquiv.apply_symm_apply p).symm).trans
-    (adicCompletion.padicEquiv (primesEquiv.symm p)).symm
-
-Depends on / 依赖: ContinuousAlgEquiv, ContinuousAlgEquiv.cast, adicCompletion, adicCompletion.padicEquiv, apply_symm_apply, padicEquiv, primesEquiv, primesEquiv.apply_symm_apply, primesEquiv.symm
+--- 原说明 ---
+The continuous `ℚ`-algebra isomorphism between `ℚ_[p]` and
+`(primesEquiv.symm p).adicCompletion ℚ`.
 -/
 noncomputable def adicCompletionEquiv (p : Nat.Primes) :
-    Rat_[p] ≃A[Rat] ((primesEquiv (R := R)).symm p).adicCompletion Rat := by
+    ℚ_[p] ≃A[ℚ] ((primesEquiv (R := R)).symm p).adicCompletion ℚ := by
   apply (ContinuousAlgEquiv.cast (primesEquiv.apply_symm_apply p).symm).trans
     (adicCompletion.padicEquiv (primesEquiv.symm p)).symm
 
@@ -551,64 +650,82 @@ namespace PadicInt
 
 open Padic
 
-variable (R : Type*) [CommRing R] [IsDedekindDomain R] [Algebra R Rat] [IsFractionRing R Rat]
-  [IsIntegralClosure R Int Rat]
+variable (R : Type*) [CommRing R] [IsDedekindDomain R] [Algebra R ℚ] [IsFractionRing R ℚ]
+  [IsIntegralClosure R ℤ ℚ]
 
-/--
-Definition of `adicCompletionIntegersEquiv` / `adicCompletionIntegersEquiv` 的定义
+/-- The continuous `ℤ`-algebra isomorphism between `ℤ_[p]` and
+`(primesEquiv.symm p).adicCompletionIntegers ℚ`. -/
+/-
+**PadicInt.adicCompletionIntegersEquiv** 是 Mathlib 中的一个定义，位于命名空间 `PadicInt`。
+形式化陈述：adicCompletionIntegersEquiv (p : Nat.Primes) : Int_[p] ≃A[Int] ((primesEqu
+iv (R
+参数：p : Nat.Primes。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition adicCompletionIntegersEquiv
-  signature: (p : Nat.Primes)
-  body: by
-  apply (ContinuousAlgEquiv.cast (primesEquiv.apply_symm_apply p).symm).trans
-    (adicCompletionIntegers.padicIntEquiv (primesEquiv.symm p)).symm
-
-中文:
-定义 adicCompletion整数egersEquiv
-  签名: (p : 自然数.Primes)
-  定义体: by
-  apply (ContinuousAlgEquiv.cast (primesEquiv.apply_symm_apply p).symm).trans
-    (adicCompletionIntegers.padicIntEquiv (primesEquiv.symm p)).symm
-
-Depends on / 依赖: ContinuousAlgEquiv, ContinuousAlgEquiv.cast, adicCompletionIntegers, adicCompletionIntegers.padicIntEquiv, apply_symm_apply, padicIntEquiv, primesEquiv, primesEquiv.apply_symm_apply, primesEquiv.symm
+--- 原说明 ---
+The continuous `ℤ`-algebra isomorphism between `ℤ_[p]` and
+`(primesEquiv.symm p).adicCompletionIntegers ℚ`.
 -/
 noncomputable def adicCompletionIntegersEquiv (p : Nat.Primes) :
-    Int_[p] ≃A[Int] ((primesEquiv (R := R)).symm p).adicCompletionIntegers Rat := by
+    ℤ_[p] ≃A[ℤ] ((primesEquiv (R := R)).symm p).adicCompletionIntegers ℚ := by
   apply (ContinuousAlgEquiv.cast (primesEquiv.apply_symm_apply p).symm).trans
     (adicCompletionIntegers.padicIntEquiv (primesEquiv.symm p)).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `coe_adicCompletionIntegersEquiv_apply` / 定理 `coe_adicCompletionIntegersEquiv_apply`
+/-- The diagram
+```
+ℤ_[p]  -------->  (primesEquiv.symm p).adicCompletionIntegers ℚ
+   |                          |
+   |                          |
+   v                          v
+ℚ_[p]  -------->  (primesEquiv.symm p).adicCompletion ℚ
+```
+commutes. -/
+/-
+**PadicInt.coe_adicCompletionIntegersEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Padi
+cInt`。
+形式化陈述：coe_adicCompletionIntegersEquiv_apply (p : Nat.Primes) (x : Int_[p]) : (ad
+icCompletionIntegersEquiv R p x) = adicCompletionEquiv R p x
+参数：p : Nat.Primes；x : Int_[p]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `ValuationSubring.instSubringClass`：∀ {K : Type u} [inst : Field K], Subr
+ingClass (ValuationSubring K) K
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Subtype.heq_iff_coe_heq`：heq_iff_coe_heq {α β : Sort _} {p : α -> Prop} 
+{q : β -> Prop} {a : {x // p x}} {b : {y // q y}} (h : α = β) (h' : p ≍ q) : a ≍
+ b ↔ (a : α) …
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `cast_heq`：∀ {α β : Sort u} (h : α = β) (a : α), cast h a ≍ a
 
-English:
-theorem coe_adicCompletionIntegersEquiv_apply
-  given: (p : Nat.Primes) (x : Int_[p])
-  proof: by
-  simp only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.trans_apply,
-    adicCompletionIntegers.coe_padicIntEquiv_symm_apply,
-    adicCompletionEquiv, ContinuousAlgEquiv.trans_apply, ContinuousAlgEquiv.cast_apply,
-    EmbeddingLike.apply_eq_iff_eq, Equiv.cast_apply, eq_cast_iff_heq]
-  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
-    (by rw [primesEquiv.apply_symm_apply])]
-  exact cast_heq _ _
-
-中文:
-定理 coe_adicCompletion整数egersEquiv_apply
-  条件: (p : 自然数.Primes) (x : 整数_[p])
-  证明: by
-  simp only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.trans_apply,
-    adicCompletionIntegers.coe_padicIntEquiv_symm_apply,
-    adicCompletionEquiv, ContinuousAlgEquiv.trans_apply, ContinuousAlgEquiv.cast_apply,
-    EmbeddingLike.apply_eq_iff_eq, Equiv.cast_apply, eq_cast_iff_heq]
-  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
-    (by rw [primesEquiv.apply_symm_apply])]
-  exact cast_heq _ _
-
-Depends on / 依赖: ContinuousAlgEquiv, ContinuousAlgEquiv.cast_apply, ContinuousAlgEquiv.trans_apply, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Equiv.cast_apply, Subtype, Subtype.heq_iff_coe_heq, adicCompletionEquiv, adicCompletionIntegers, adicCompletionIntegers.coe_padicIntEquiv_symm_apply, adicCompletionIntegersEquiv, apply_eq_iff_eq, apply_symm_apply, cast_apply, cast_heq, coe_padicIntEquiv_symm_apply, eq_cast_iff_heq, heq_iff_coe_heq, primesEquiv
+--- 原说明 ---
+The diagram
+```
+ℤ_[p]  -------->  (primesEquiv.symm p).adicCompletionIntegers ℚ
+   |                          |
+   |                          |
+   v                          v
+ℚ_[p]  -------->  (primesEquiv.symm p).adicCompletion ℚ
+```
+commutes.
 -/
-theorem coe_adicCompletionIntegersEquiv_apply (p : Nat.Primes) (x : Int_[p]) :
+theorem coe_adicCompletionIntegersEquiv_apply (p : Nat.Primes) (x : ℤ_[p]) :
     (adicCompletionIntegersEquiv R p x) = adicCompletionEquiv R p x := by
   simp only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.trans_apply,
     adicCompletionIntegers.coe_padicIntEquiv_symm_apply,
@@ -619,35 +736,70 @@ theorem coe_adicCompletionIntegersEquiv_apply (p : Nat.Primes) (x : Int_[p]) :
   exact cast_heq _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `coe_adicCompletionIntegersEquiv_symm_apply` / 定理 `coe_adicCompletionIntegersEquiv_symm_apply`
+/-- The diagram
+```
+ℤ_[p]  <--------  (primesEquiv.symm p).adicCompletionIntegers ℚ
+   |                          |
+   |                          |
+   v                          v
+ℚ_[p]  <--------  (primesEquiv.symm p).adicCompletion ℚ
+```
+commutes. -/
+/-
+**PadicInt.coe_adicCompletionIntegersEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 
+`PadicInt`。
+形式化陈述：coe_adicCompletionIntegersEquiv_symm_apply (p : Nat.Primes) (x : (primesEq
+uiv.symm p).adicCompletionIntegers Rat) : (adicCompletionIntegersEquiv R p).symm
+ x = (adicCompletionEquiv R p).symm x
+参数：p : Nat.Primes；x : (primesEquiv.symm p).adicCompletionIntegers Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `instFactPrimeValNat`：∀ (p : Nat.Primes), Fact (Nat.Prime ↑p)
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `ValuationSubring.instSubringClass`：∀ {K : Type u} [inst : Field K], Subr
+ingClass (ValuationSubring K) K
+· 使用定理 `Padic.instCharZero`：∀ (p : ℕ) [inst : Fact (Nat.Prime p)], CharZero ℚ_[p
+]
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ContinuousAlgEquiv.symm_trans_apply`：symm_trans_apply (e₁ : B ≃A[R] A) (
+e₂ : C ≃A[R] B) (a : A) : (e₂.trans e₁).symm a = e₂.symm (e₁.symm a)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ContinuousAlgEquiv.symm_symm`：symm_symm (e : A ≃A[R] B) : e.symm.symm = 
+e
+· 使用定理 `ContinuousAlgEquiv.cast_symm_apply`：cast_symm_apply {ι : Type*} {A : ι -
+> Type*} [(i : ι) -> Semiring (A i)] [(i : ι) -> Algebra R (A i)] [(i : ι) -> To
+pologicalSpace (A i)] {i…
+· 使用定理 `Equiv.cast_apply`：∀ {α β : Sort u_1} (h : α = β) (x : α), (Equiv.cast h)
+ x = cast h x
+· 使用引理 `Subtype.heq_iff_coe_heq`：heq_iff_coe_heq {α β : Sort _} {p : α -> Prop} 
+{q : β -> Prop} {a : {x // p x}} {b : {y // q y}} (h : α = β) (h' : p ≍ q) : a ≍
+ b ↔ (a : α) …
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `cast_heq`：∀ {α β : Sort u} (h : α = β) (a : α), cast h a ≍ a
 
-English:
-theorem coe_adicCompletionIntegersEquiv_symm_apply
-  statement: (p : Nat.Primes)
-  proof: by
-  simp -implicitDefEqProofs only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.symm_trans_apply,
-    ContinuousAlgEquiv.symm_symm, adicCompletionEquiv, Equiv.cast_apply, eq_cast_iff_heq,
-    ← adicCompletionIntegers.coe_padicIntEquiv_apply, ContinuousAlgEquiv.cast_symm_apply]
-  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
-    (by rw [primesEquiv.apply_symm_apply])]
-  exact cast_heq _ _
-
-中文:
-定理 coe_adicCompletion整数egersEquiv_symm_apply
-  结论: (p : 自然数.Primes)
-  证明: by
-  simp -implicitDefEqProofs only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.symm_trans_apply,
-    ContinuousAlgEquiv.symm_symm, adicCompletionEquiv, Equiv.cast_apply, eq_cast_iff_heq,
-    ← adicCompletionIntegers.coe_padicIntEquiv_apply, ContinuousAlgEquiv.cast_symm_apply]
-  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
-    (by rw [primesEquiv.apply_symm_apply])]
-  exact cast_heq _ _
-
-Depends on / 依赖: ContinuousAlgEquiv, ContinuousAlgEquiv.cast_symm_apply, ContinuousAlgEquiv.symm_symm, ContinuousAlgEquiv.symm_trans_apply, Equiv.cast_apply, Subtype, Subtype.heq_iff_coe_heq, adicCompletionEquiv, adicCompletionIntegers, adicCompletionIntegers.coe_padicIntEquiv_apply, adicCompletionIntegersEquiv, apply_symm_apply, cast_apply, cast_heq, cast_symm_apply, coe_padicIntEquiv_apply, eq_cast_iff_heq, heq_iff_coe_heq, implicitDefEqProofs, primesEquiv
+--- 原说明 ---
+The diagram
+```
+ℤ_[p]  <--------  (primesEquiv.symm p).adicCompletionIntegers ℚ
+   |                          |
+   |                          |
+   v                          v
+ℚ_[p]  <--------  (primesEquiv.symm p).adicCompletion ℚ
+```
+commutes.
 -/
 theorem coe_adicCompletionIntegersEquiv_symm_apply (p : Nat.Primes)
-    (x : (primesEquiv.symm p).adicCompletionIntegers Rat) :
+    (x : (primesEquiv.symm p).adicCompletionIntegers ℚ) :
     (adicCompletionIntegersEquiv R p).symm x = (adicCompletionEquiv R p).symm x := by
   simp -implicitDefEqProofs only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.symm_trans_apply,
     ContinuousAlgEquiv.symm_symm, adicCompletionEquiv, Equiv.cast_apply, eq_cast_iff_heq,
@@ -657,3 +809,4 @@ theorem coe_adicCompletionIntegersEquiv_symm_apply (p : Nat.Primes)
   exact cast_heq _ _
 
 end PadicInt
+

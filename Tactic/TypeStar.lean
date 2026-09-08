@@ -7,7 +7,7 @@ module
 
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public import Mathlib.Tactic.Linter.Header -- shake: keep
+public import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # Support for `Sort*` and `Type*`.
@@ -20,17 +20,21 @@ public meta section
 namespace Lean.Elab.Term
 
 /--
-Definition of `mkFreshLevelName` / `mkFreshLevelName` 的定义
+Given a `namePrefix` (`` `u`` by default), returns the first name out of `namePrefix_1`,
+`namePrefix_2`, ... which does not appear in `usedLevelNames`. Note `mkFreshLevelName` does not
+attempt to use `namePrefix` itself as a level name.
+-/
+/-
+**Lean.Elab.Term.mkFreshLevelName** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Term`。
+形式化陈述：List Name → optParam Name `u → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFreshLevelName
-  signature: (usedLevelNames : List Name) (namePrefix : Name := `u)
-  body: go 1
-
-中文:
-定义 mkFreshLevelName
-  签名: (usedLevelNames : 列表 Name) (namePrefix : Name := `u)
-  定义体: go 1
+--- 原说明 ---
+Given a `namePrefix` (`` `u`` by default), returns the first name out of `namePr
+efix_1`,
+`namePrefix_2`, ... which does not appear in `usedLevelNames`. Note `mkFreshLeve
+lName` does not
+attempt to use `namePrefix` itself as a level name.
 -/
 partial def mkFreshLevelName (usedLevelNames : List Name) (namePrefix : Name := `u) : Name :=
   go 1
@@ -41,39 +45,59 @@ where
     if usedLevelNames.contains u then go (n+1) else u
 
 /--
-Definition of `mkFreshLevelParam` / `mkFreshLevelParam` 的定义
+Creates a fresh `Level` parameter which does not appear in the current state's `levelNames`, and
+updates the state to include the new level parameter.
 
-English:
-definition mkFreshLevelParam
-  signature: (namePrefix : Name := `u)
-  body: do
-  let levelNames ← getLevelNames
-  let u := mkFreshLevelName levelNames namePrefix
-setLevelNames insert levelNames u
-  return mkLevelParam u
+By default, the new level parameter is of the form `u_i` and is included in the state as the most
+recent level parameter (at the front of the list).
 
-中文:
-定义 mkFreshLevelParam
-  签名: (namePrefix : Name := `u)
-  定义体: do
-  let levelNames ← getLevelNames
-  let u := mkFreshLevelName levelNames namePrefix
-setLevelNames insert levelNames u
-  return mkLevelParam u
+Supplying a `namePrefix` will cause the new level parameter to be of the form `namePrefix_i`, with
+`i` starting at `1`.
+
+The new level name can be inserted at a custom position in the list of level names by providing a
+function `insert : List Name → Name → List Name` which will be called as
+`insert currentLevelNames newLevelName`. It is expected that the result will contain the new level
+name and still contain all current level names.
+-/
+/-
+**Lean.Elab.Term.mkFreshLevelParam** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Term`。
+形式化陈述：mkFreshLevelParam (namePrefix : Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Creates a fresh `Level` parameter which does not appear in the current state's `
+levelNames`, and
+updates the state to include the new level parameter.
+
+By default, the new level parameter is of the form `u_i` and is included in the 
+state as the most
+recent level parameter (at the front of the list).
+
+Supplying a `namePrefix` will cause the new level parameter to be of the form `n
+amePrefix_i`, with
+`i` starting at `1`.
+
+The new level name can be inserted at a custom position in the list of level nam
+es by providing a
+function `insert : List Name → Name → List Name` which will be called as
+`insert currentLevelNames newLevelName`. It is expected that the result will con
+tain the new level
+name and still contain all current level names.
 -/
 def mkFreshLevelParam (namePrefix : Name := `u)
-    (insert : List Name -> Name -> List Name := (·.cons)) : TermElabM Level := do
+    (insert : List Name → Name → List Name := (·.cons)) : TermElabM Level := do
   let levelNames ← getLevelNames
   let u := mkFreshLevelName levelNames namePrefix
-setLevelNames insert levelNames u
+  setLevelNames <| insert levelNames u
   return mkLevelParam u
 
 /-- The syntax `variable (X Y ... Z : Sort*)` creates a new distinct implicit universe variable
 for each variable in the sequence. -/
-elab "Sort*" : term => return .sort ← mkFreshLevelParam
+elab "Sort*" : term => return .sort <| ← mkFreshLevelParam
 
 /-- The syntax `variable (X Y ... Z : Type*)` creates a new distinct implicit universe variable
 `> 0` for each variable in the sequence. -/
-elab "Type*" : term => return .sort .succ ← mkFreshLevelParam
+elab "Type*" : term => return .sort <| .succ <| ← mkFreshLevelParam
 
 end Lean.Elab.Term
+

@@ -43,83 +43,60 @@ namespace CategoryTheory
 variable {C : Type u} [Category.{v} C]
 
 /--
-Definition of `Projective` / `Projective` 的定义
+An object `P` is called *projective* if every morphism out of `P` factors through every epimorphism.
+-/
+/-
+**CategoryTheory.Projective** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} → [CategoryTheory.Category.{v, u} C] → C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Projective
-  parameters: (P : C)
-  axioms and operations (1):
-    - factors : forall {E X : C} (f : P ⟶ X) (e : E ⟶ X) [Epi e], exists f', f' ≫ e = f
-
-中文:
-类 投射
-  参数: (P : C)
-  公理与运算 (1 个):
-    - factors : 对任意 {E X : C} (f : P ⟶ X) (e : E ⟶ X) [满态射 e], 存在 f', f' ≫ e = f
+--- 原说明 ---
+An object `P` is called *projective* if every morphism out of `P` factors throug
+h every epimorphism.
 -/
 class Projective (P : C) : Prop where
-  factors : forall {E X : C} (f : P ⟶ X) (e : E ⟶ X) [Epi e], exists f', f' ≫ e = f
+  factors : ∀ {E X : C} (f : P ⟶ X) (e : E ⟶ X) [Epi e], ∃ f', f' ≫ e = f
 
 variable (C) in
-/--
-Definition of `isProjective` / `isProjective` 的定义
+/-- The `ObjectProperty C` corresponding to the notion of projective objects in `C`. -/
+/-
+**CategoryTheory.isProjective** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：isProjective : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation isProjective
-  signature: : ObjectProperty C
-  body: Projective
-
-中文:
-缩写 isProjective
-  签名: : ObjectProperty C
-  定义体: Projective
-
-Depends on / 依赖: Projective
+--- 原说明 ---
+The `ObjectProperty C` corresponding to the notion of projective objects in `C`.
 -/
 abbrev isProjective : ObjectProperty C := Projective
-
-/--
-lemma `Limits.IsZero.projective` / 引理 `Limits.IsZero.projective`
-
-English:
-lemma Limits.IsZero.projective
-  given: {X : C} (h : IsZero X)
-  statement: Projective X where
-  proof: ⟨h.to_ _, h.eq_of_src _ _⟩
-
-中文:
-引理 Limits.是零.projective
-  条件: {X : C} (h : 是零 X)
-  结论: 投射 X where
-  证明: ⟨h.to_ _, h.eq_of_src _ _⟩
-
-Depends on / 依赖: eq_of_src, h.eq_of_src, h.to_
+/-
+**CategoryTheory.Limits.IsZero.projective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.IsZero`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X : C},   Catego
+ryTheory.Limits.IsZero X → CategoryTheory.Projective X
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
 -/
 lemma Limits.IsZero.projective {X : C} (h : IsZero X) : Projective X where
   factors _ _ _ := ⟨h.to_ _, h.eq_of_src _ _⟩
 
 section
 
-/--
-Definition of `ProjectivePresentation` / `ProjectivePresentation` 的定义
+/-- A projective presentation of an object `X` consists of an epimorphism `f : P ⟶ X`
+from some projective object `P`.
+-/
+/-
+**CategoryTheory.ProjectivePresentation** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：{C : Type u} → [CategoryTheory.Category.{v, u} C] → C → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ProjectivePresentation
-  parameters: (X : C)
-  axioms and operations (4):
-    - p : C
-    - [projective : Projective p]
-    - f : p ⟶ X
-    - [epi : Epi f]
-
-中文:
-结构 投射呈现
-  参数: (X : C)
-  公理与运算 (4 个):
-    - p : C
-    - [projective : 投射 p]
-    - f : p ⟶ X
-    - [epi : 满态射 f]
+--- 原说明 ---
+A projective presentation of an object `X` consists of an epimorphism `f : P ⟶ X
+`
+from some projective object `P`.
 -/
 structure ProjectivePresentation (X : C) where
   /-- The projective object `p` of this presentation -/
@@ -133,23 +110,20 @@ attribute [instance] ProjectivePresentation.projective ProjectivePresentation.ep
 
 variable (C)
 
-/--
-Definition of `EnoughProjectives` / `EnoughProjectives` 的定义
+/-- A category "has enough projectives" if for every object `X` there is a projective object `P` and
+an epimorphism `P ↠ X`. -/
+/-
+**CategoryTheory.EnoughProjectives** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class EnoughProjectives
-  parameters: : Prop where
-  axioms and operations (1):
-    - presentation : forall X : C, Nonempty (ProjectivePresentation X)
-
-中文:
-类 有足够投射
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - presentation : 对任意 X : C, 非空 (投射呈现 X)
+--- 原说明 ---
+A category "has enough projectives" if for every object `X` there is a projectiv
+e object `P` and
+an epimorphism `P ↠ X`.
 -/
 class EnoughProjectives : Prop where
-  presentation : forall X : C, Nonempty (ProjectivePresentation X)
+  presentation : ∀ X : C, Nonempty (ProjectivePresentation X)
 
 attribute [instance low] EnoughProjectives.presentation
 
@@ -158,42 +132,41 @@ end
 namespace Projective
 
 /--
-Definition of `factorThru` / `factorThru` 的定义
+An arbitrarily chosen factorisation of a morphism out of a projective object through an epimorphism.
+-/
+/-
+**CategoryTheory.Projective.factorThru** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Projective`。
+形式化陈述：factorThru {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e] : P 
+⟶ E
+参数：f : P ⟶ X；e : E ⟶ X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.factors`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {P : C} [self : CategoryTheory.Projective P] {E X : C}   (f 
+: P ⟶ X) (e : E ⟶ X) [C…
 
-English:
-definition factorThru
-  signature: {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e]
-  body: (Projective.factors f e).choose
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 factorThru
-  签名: {P X E : C} [投射 P] (f : P ⟶ X) (e : E ⟶ X) [满态射 e]
-  定义体: (Projective.factors f e).choose
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Projective, Projective.factors, factors
+--- 原说明 ---
+An arbitrarily chosen factorisation of a morphism out of a projective object thr
+ough an epimorphism.
 -/
 def factorThru {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e] : P ⟶ E :=
   (Projective.factors f e).choose
 
 @[reassoc (attr := simp)]
-/--
-theorem `factorThru_comp` / 定理 `factorThru_comp`
-
-English:
-theorem factorThru_comp
-  given: {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e]
-  proof: (Projective.factors f e).choose_spec
-
-中文:
-定理 factorThru_comp
-  条件: {P X E : C} [投射 P] (f : P ⟶ X) (e : E ⟶ X) [满态射 e]
-  证明: (Projective.factors f e).choose_spec
-
-Depends on / 依赖: Projective, Projective.factors, choose_spec, factors
+/-
+**CategoryTheory.Projective.factorThru_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Projective`。
+形式化陈述：factorThru_comp {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e]
+ : factorThru f e ≫ e = f
+参数：f : P ⟶ X；e : E ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `CategoryTheory.Projective.factors`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {P : C} [self : CategoryTheory.Projective P] {E X : C}   (f 
+: P ⟶ X) (e : E ⟶ X) [C…
 -/
 theorem factorThru_comp {P X E : C} [Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e] :
     factorThru f e ≫ e = f :=
@@ -203,138 +176,140 @@ section
 
 open ZeroObject
 
-/--
-Instance `zero_projective` / 实例 `zero_projective`
-
-English:
-instance zero_projective
-  signature: [HasZeroObject C]
-  body: (isZero_zero C).projective
-
-中文:
-实例 zero_projective
-  签名: [有ZeroObject C]
-  定义体: (isZero_zero C).projective
-
-Depends on / 依赖: isZero_zero, projective
+/-
+**CategoryTheory.Projective.zero_projective** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Projective`。
+形式化陈述：zero_projective [HasZeroObject C] : Projective (0 : C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.projective`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {X : C},   CategoryTheory.Limits.IsZero X → CategoryTh
+eory.Projective X
+· 使用定理 `CategoryTheory.Limits.isZero_zero`：isZero_zero : IsZero (0 : C)
 -/
 instance zero_projective [HasZeroObject C] : Projective (0 : C) :=
   (isZero_zero C).projective
 
 end
 
-/--
-theorem `of_iso` / 定理 `of_iso`
-
-English:
-theorem of_iso
-  given: {P Q : C} (i : P ≅ Q) (_ : Projective P)
-  statement: Projective Q where
-  proof: let ⟨f', hf'⟩ := Projective.factors (i.hom ≫ f) e
-    ⟨i.inv ≫ f', by simp [hf']⟩
-
-中文:
-定理 of_iso
-  条件: {P Q : C} (i : P ≅ Q) (_ : 投射 P)
-  结论: 投射 Q where
-  证明: let ⟨f', hf'⟩ := Projective.factors (i.hom ≫ f) e
-    ⟨i.inv ≫ f', by simp [hf']⟩
-
-Depends on / 依赖: Projective, Projective.factors, factors, i.hom, i.inv
+/-
+**CategoryTheory.Projective.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Pro
+jective`。
+形式化陈述：of_iso {P Q : C} (i : P ≅ Q) (_ : Projective P) : Projective Q where facto
+rs f e _
+参数：i : P ≅ Q；_ : Projective P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.factors`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {P : C} [self : CategoryTheory.Projective P] {E X : C}   (f 
+: P ⟶ X) (e : E ⟶ X) [C…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem of_iso {P Q : C} (i : P ≅ Q) (_ : Projective P) : Projective Q where
   factors f e _ :=
     let ⟨f', hf'⟩ := Projective.factors (i.hom ≫ f) e
     ⟨i.inv ≫ f', by simp [hf']⟩
-
-/--
-theorem `iso_iff` / 定理 `iso_iff`
-
-English:
-theorem iso_iff
-  given: {P Q : C} (i : P ≅ Q)
-  statement: Projective P ↔ Projective Q
-  proof: ⟨of_iso i, of_iso i.symm⟩
-
-中文:
-定理 iso_iff
-  条件: {P Q : C} (i : P ≅ Q)
-  结论: 投射 P ↔ 投射 Q
-  证明: ⟨of_iso i, of_iso i.symm⟩
-
-Depends on / 依赖: i.symm, of_iso
+/-
+**CategoryTheory.Projective.iso_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Pr
+ojective`。
+形式化陈述：iso_iff {P Q : C} (i : P ≅ Q) : Projective P ↔ Projective Q
+参数：i : P ≅ Q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.of_iso`：of_iso {P Q : C} (i : P ≅ Q) (_ : Proj
+ective P) : Projective Q where factors f e _
 -/
 theorem iso_iff {P Q : C} (i : P ≅ Q) : Projective P ↔ Projective Q :=
   ⟨of_iso i, of_iso i.symm⟩
 
 /-- The axiom of choice says that every type is a projective object in `Type`. -/
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The axiom of choice says that every type is a projective object in `Type`.
+-/
 instance (X : Type u) : Projective X where
   factors f e _ :=
     have he : Function.Surjective e := surjective_of_epi e
     ⟨↾fun x => (he (f x)).choose, by ext x; exact (he (f x)).choose_spec⟩
-
-/--
-Instance `Type.enoughProjectives` / 实例 `Type.enoughProjectives`
-
-English:
-instance Type.enoughProjectives
-  signature: : EnoughProjectives (Type u) where
-  body: ⟨⟨X, 𝟙 X⟩⟩
-
-中文:
-实例 类型.enoughProjectives
-  签名: : 有足够投射 (类型u) where
-  定义体: ⟨⟨X, 𝟙 X⟩⟩
+/-
+**CategoryTheory.Projective.Type.enoughProjectives** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Projective.Type`。
+形式化陈述：CategoryTheory.EnoughProjectives (Type u)
+参数：Type u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.inst`：∀ (X : Type u), CategoryTheory.Projectiv
+e X
+· 使用定理 `CategoryTheory.instEpiId`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] (X : C),   CategoryTheory.Epi (CategoryTheory.CategoryStruct.id X)
 -/
 instance Type.enoughProjectives : EnoughProjectives (Type u) where
   presentation X := ⟨⟨X, 𝟙 X⟩⟩
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P Q : C} [HasBinaryCoproduct P Q] [Projective P] [Projective Q] : Projective (P ⨿ Q) where
   factors f e epi := ⟨coprod.desc (factorThru (coprod.inl ≫ f) e) (factorThru (coprod.inr ≫ f) e),
     by cat_disch⟩
 
 set_option backward.isDefEq.respectTransparency false in
-instance {β : Type v} (g : β -> C) [HasCoproduct g] [forall b, Projective (g b)] : Projective (∐ g) where
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {β : Type v} (g : β → C) [HasCoproduct g] [∀ b, Projective (g b)] : Projective (∐ g) where
   factors f e epi := ⟨Sigma.desc fun b => factorThru (Sigma.ι g b ≫ f) e, by cat_disch⟩
-
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P Q : C} [HasZeroMorphisms C] [HasBinaryBiproduct P Q] [Projective P] [Projective Q] :
     Projective (P ⊞ Q) where
   factors f e epi := ⟨biprod.desc (factorThru (biprod.inl ≫ f) e) (factorThru (biprod.inr ≫ f) e),
     by cat_disch⟩
-
-instance {β : Type v} (g : β -> C) [HasZeroMorphisms C] [HasBiproduct g] [forall b, Projective (g b)] :
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {β : Type v} (g : β → C) [HasZeroMorphisms C] [HasBiproduct g] [∀ b, Projective (g b)] :
     Projective (⨁ g) where
   factors f e epi := ⟨biproduct.desc fun b => factorThru (biproduct.ι g b ≫ f) e, by cat_disch⟩
-
-/--
-theorem `projective_iff_preservesEpimorphisms_coyoneda_obj` / 定理 `projective_iff_preservesEpimorphisms_coyoneda_obj`
-
-English:
-theorem projective_iff_preservesEpimorphisms_coyoneda_obj
-  given: (P : C)
-  proof: ⟨fun hP =>
-    ⟨fun f _ =>
-      (epi_iff_surjective _).2 fun g =>
-        have : Projective (unop (op P)) := hP
-        ⟨factorThru g f, factorThru_comp _ _⟩⟩,
-    fun _ =>
-    ⟨fun f e _ =>
-      (epi_iff_surjective _).1 (inferInstance : Epi ((coyoneda.obj (op P)).map e)) f⟩⟩
-
-中文:
-定理 projective_iff_preservesEpimorphisms_coyoneda_obj
-  条件: (P : C)
-  证明: ⟨fun hP =>
-    ⟨fun f _ =>
-      (epi_iff_surjective _).2 fun g =>
-        have : Projective (unop (op P)) := hP
-        ⟨factorThru g f, factorThru_comp _ _⟩⟩,
-    fun _ =>
-    ⟨fun f e _ =>
-      (epi_iff_surjective _).1 (inferInstance : Epi ((coyoneda.obj (op P)).map e)) f⟩⟩
-
-Depends on / 依赖: Projective, coyoneda, coyoneda.obj, epi_iff_surjective, factorThru, factorThru_comp
+/-
+**CategoryTheory.Projective.projective_iff_preservesEpimorphisms_coyoneda_obj** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Projective`。
+形式化陈述：projective_iff_preservesEpimorphisms_coyoneda_obj (P : C) : Projective P ↔
+ (coyoneda.obj (op P)).PreservesEpimorphisms
+参数：P : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
+· 使用定理 `CategoryTheory.Projective.factorThru_comp`：factorThru_comp {P X E : C} [
+Projective P] (f : P ⟶ X) (e : E ⟶ X) [Epi e] : factorThru f e ≫ e = f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem projective_iff_preservesEpimorphisms_coyoneda_obj (P : C) :
     Projective P ↔ (coyoneda.obj (op P)).PreservesEpimorphisms :=
@@ -351,74 +326,62 @@ section EnoughProjectives
 
 variable [EnoughProjectives C]
 
-/--
-Definition of `over` / `over` 的定义
+/-- `Projective.over X` provides an arbitrarily chosen projective object equipped with
+an epimorphism `Projective.π : Projective.over X ⟶ X`.
+-/
+/-
+**CategoryTheory.Projective.over** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Proje
+ctive`。
+形式化陈述：over (X : C) : C
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnoughProjectives.presentation`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.EnoughProjectives C] (X :
+ C),   Nonempty (CategoryTheory.Pro…
 
-English:
-definition over
-  signature: (X : C)
-  body: (EnoughProjectives.presentation X).some.p
-
-中文:
-定义 over
-  签名: (X : C)
-  定义体: (EnoughProjectives.presentation X).some.p
-
-Depends on / 依赖: EnoughProjectives, EnoughProjectives.presentation, presentation, some.p
+--- 原说明 ---
+`Projective.over X` provides an arbitrarily chosen projective object equipped wi
+th
+an epimorphism `Projective.π : Projective.over X ⟶ X`.
 -/
 def over (X : C) : C :=
   (EnoughProjectives.presentation X).some.p
-
-/--
-Instance `projective_over` / 实例 `projective_over`
-
-English:
-instance projective_over
-  signature: (X : C)
-  body: (EnoughProjectives.presentation X).some.projective
-
-中文:
-实例 projective_over
-  签名: (X : C)
-  定义体: (EnoughProjectives.presentation X).some.projective
-
-Depends on / 依赖: EnoughProjectives, EnoughProjectives.presentation, presentation, projective, some.projective
+/-
+**CategoryTheory.Projective.projective_over** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Projective`。
+形式化陈述：projective_over (X : C) : Projective (over X)
+参数：X : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ProjectivePresentation.projective`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {X : C} (self : CategoryTheory.ProjectivePres
+entation X),   CategoryTheory.Projecti…
+· 使用定理 `CategoryTheory.EnoughProjectives.presentation`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.EnoughProjectives C] (X :
+ C),   Nonempty (CategoryTheory.Pro…
 -/
 instance projective_over (X : C) : Projective (over X) :=
   (EnoughProjectives.presentation X).some.projective
 
-/--
-Definition of `π` / `π` 的定义
+/-- The epimorphism `projective.π : projective.over X ⟶ X`
+from the arbitrarily chosen projective object over `X`.
+-/
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π
-  signature: (X : C)
-  body: (EnoughProjectives.presentation X).some.f
-
-中文:
-定义 π
-  签名: (X : C)
-  定义体: (EnoughProjectives.presentation X).some.f
-
-Depends on / 依赖: EnoughProjectives, EnoughProjectives.presentation, presentation, some.f
+--- 原说明 ---
+The epimorphism `projective.π : projective.over X ⟶ X`
+from the arbitrarily chosen projective object over `X`.
 -/
 def π (X : C) : over X ⟶ X :=
   (EnoughProjectives.presentation X).some.f
-
-/--
-Instance `π_epi` / 实例 `π_epi`
-
-English:
-instance π_epi
-  signature: (X : C)
-  body: (EnoughProjectives.presentation X).some.epi
-
-中文:
-实例 π_epi
-  签名: (X : C)
-  定义体: (EnoughProjectives.presentation X).some.epi
-
-Depends on / 依赖: EnoughProjectives, EnoughProjectives.presentation, presentation, some.epi
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance π_epi (X : C) : Epi (π X) :=
   (EnoughProjectives.presentation X).some.epi
@@ -427,54 +390,47 @@ section
 
 variable [HasZeroMorphisms C] {X Y : C} (f : X ⟶ Y) [HasKernel f]
 
-/--
-Definition of `syzygies` / `syzygies` 的定义
+/-- When `C` has enough projectives, the object `Projective.syzygies f` is
+an arbitrarily chosen projective object over `kernel f`.
+-/
+/-
+**CategoryTheory.Projective.syzygies** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.P
+rojective`。
+形式化陈述：syzygies : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition syzygies
-  signature: : C
-  body: over (kernel f)
-
-中文:
-定义 syzygies
-  签名: : C
-  定义体: over (kernel f)
-
-Depends on / 依赖: kernel
+--- 原说明 ---
+When `C` has enough projectives, the object `Projective.syzygies f` is
+an arbitrarily chosen projective object over `kernel f`.
 -/
 def syzygies : C := over (kernel f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Projective (syzygies f)
-  body: inferInstanceAs (Projective (over _))
-
-中文:
-实例 :
-  签名: 投射 (syzygies f)
-  定义体: inferInstanceAs (Projective (over _))
-
-Depends on / 依赖: Projective
+/-
+**CategoryTheory.Projective.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Projectiv
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Projective (syzygies f) := inferInstanceAs (Projective (over _))
 
-/--
-Definition of `d` / `d` 的定义
+/-- When `C` has enough projectives,
+`Projective.d f : Projective.syzygies f ⟶ X` is the composition
+`π (kernel f) ≫ kernel.ι f`.
 
-English:
-abbreviation d
-  signature: : syzygies f ⟶ X
-  body: π (kernel f) ≫ kernel.ι f
+(When `C` is abelian, we have `exact (projective.d f) f`.)
+-/
+/-
+**CategoryTheory.Projective.d** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Projec
+tive`。
+形式化陈述：d : syzygies f ⟶ X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 d
-  签名: : syzygies f ⟶ X
-  定义体: π (kernel f) ≫ kernel.ι f
+--- 原说明 ---
+When `C` has enough projectives,
+`Projective.d f : Projective.syzygies f ⟶ X` is the composition
+`π (kernel f) ≫ kernel.ι f`.
 
-Depends on / 依赖: kernel
+(When `C` is abelian, we have `exact (projective.d f) f`.)
 -/
 abbrev d : syzygies f ⟶ X :=
   π (kernel f) ≫ kernel.ι f
@@ -490,59 +446,93 @@ namespace Adjunction
 variable {D : Type u'} [Category.{v'} D] {F : C ⥤ D} {G : D ⥤ C}
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `map_projective` / 定理 `map_projective`
-
-English:
-theorem map_projective
-  given: (adj : F ⊣ G) [G.PreservesEpimorphisms] (P : C) (hP : Projective P)
-  proof: by
-    rcases hP.factors (adj.unit.app P ≫ G.map f) (G.map g) with ⟨f', hf'⟩
-    use F.map f' ≫ adj.counit.app _
-    rw [Category.assoc]; rw [← Adjunction.counit_naturality]; rw [← Category.assoc]; rw [← F.map_comp]; rw [hf']
-    simp
-
-中文:
-定理 map_projective
-  条件: (adj : F ⊣ G) [G.保持Epimorphisms] (P : C) (hP : 投射 P)
-  证明: by
-    rcases hP.factors (adj.unit.app P ≫ G.map f) (G.map g) with ⟨f', hf'⟩
-    use F.map f' ≫ adj.counit.app _
-    rw [Category.assoc]; rw [← Adjunction.counit_naturality]; rw [← Category.assoc]; rw [← F.map_comp]; rw [hf']
-    simp
-
-Depends on / 依赖: Adjunction, Adjunction.counit_naturality, Category, Category.assoc, F.map, F.map_comp, G.map, adj.counit.app, adj.unit.app, counit, counit_naturality, factors, hP.factors, map_comp
+/-
+**CategoryTheory.Adjunction.map_projective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Adjunction`。
+形式化陈述：map_projective (adj : F ⊣ G) [G.PreservesEpimorphisms] (P : C) (hP : Proje
+ctive P) : Projective (F.obj P) where factors f g _
+参数：adj : F ⊣ G；P : C；hP : Projective P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.factors`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {P : C} [self : CategoryTheory.Projective P] {E X : C}   (f 
+: P ⟶ X) (e : E ⟶ X) [C…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Adjunction.counit_naturality`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_projective (adj : F ⊣ G) [G.PreservesEpimorphisms] (P : C) (hP : Projective P) :
     Projective (F.obj P) where
   factors f g _ := by
     rcases hP.factors (adj.unit.app P ≫ G.map f) (G.map g) with ⟨f', hf'⟩
     use F.map f' ≫ adj.counit.app _
-    rw [Category.assoc]; rw [← Adjunction.counit_naturality]; rw [← Category.assoc]; rw [← F.map_comp]; rw [hf']
+    rw [Category.assoc, ← Adjunction.counit_naturality, ← Category.assoc, ← F.map_comp, hf']
     simp
-
-/--
-theorem `projective_of_map_projective` / 定理 `projective_of_map_projective`
-
-English:
-theorem projective_of_map_projective
-  statement: (adj : F ⊣ G) [F.Full] [F.Faithful] (P : C)
-  proof: by
-    have := Adjunction.leftAdjoint_preservesColimits.{0, 0} adj
-    rcases (@hP).1 (F.map f) (F.map g) with ⟨f', hf'⟩
-    use adj.unit.app _ ≫ G.map f' ≫ (inv <| adj.unit.app _)
-    exact F.map_injective (by simpa)
-
-中文:
-定理 projective_of_map_projective
-  结论: (adj : F ⊣ G) [F.满] [F.忠实] (P : C)
-  证明: by
-    have := Adjunction.leftAdjoint_preservesColimits.{0, 0} adj
-    rcases (@hP).1 (F.map f) (F.map g) with ⟨f', hf'⟩
-    use adj.unit.app _ ≫ G.map f' ≫ (inv <| adj.unit.app _)
-    exact F.map_injective (by simpa)
-
-Depends on / 依赖: Adjunction, Adjunction.leftAdjoint_preservesColimits, F.map, F.map_injective, G.map, adj.unit.app, leftAdjoint_preservesColimits, map_injective
+/-
+**CategoryTheory.Adjunction.projective_of_map_projective** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Adjunction`。
+形式化陈述：projective_of_map_projective (adj : F ⊣ G) [F.Full] [F.Faithful] (P : C) (
+hP : Projective (F.obj P)) : Projective P where factors f g _
+参数：adj : F ⊣ G；P : C；hP : Projective (F.obj P)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.leftAdjoint_preservesColimits`：leftAdjoint_pre
+servesColimits : PreservesColimitsOfSize.{v, u} F where preservesColimitsOfShape
+· 使用定理 `CategoryTheory.Projective.factors`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {P : C} [self : CategoryTheory.Projective P] {E X : C}   (f 
+: P ⟶ X) (e : E ⟶ X) [C…
+· 使用定理 `CategoryTheory.preservesEpimorphisms_of_preservesColimitsOfShape`：∀ {C :
+ Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteColimits.preservesFiniteColimits`：∀
+ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1
+ : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize0.preservesFiniteColimits`：
+∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_
+1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppUnitOfFullOfFaithful`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.Adjunction.inv_map_unit`：inv_map_unit {X : C} [IsIso (h.u
+nit.app X)] : inv (L.map (h.unit.app X)) = h.counit.app (L.obj X)
+· 使用定理 `CategoryTheory.Adjunction.counit_naturality_assoc`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components_assoc`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   {F : CategoryTheor…
 -/
 theorem projective_of_map_projective (adj : F ⊣ G) [F.Full] [F.Faithful] (P : C)
     (hP : Projective (F.obj P)) : Projective P where
@@ -552,26 +542,21 @@ theorem projective_of_map_projective (adj : F ⊣ G) [F.Full] [F.Faithful] (P : 
     use adj.unit.app _ ≫ G.map f' ≫ (inv <| adj.unit.app _)
     exact F.map_injective (by simpa)
 
-/--
-Definition of `mapProjectivePresentation` / `mapProjectivePresentation` 的定义
+/-- Given an adjunction `F ⊣ G` such that `G` preserves epis, `F` maps a projective presentation of
+`X` to a projective presentation of `F(X)`. -/
+/-
+**CategoryTheory.Adjunction.mapProjectivePresentation** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Adjunction`。
+形式化陈述：mapProjectivePresentation (adj : F ⊣ G) [G.PreservesEpimorphisms] (X : C) 
+(Y : ProjectivePresentation X) : ProjectivePresentation (F.obj X) where p
+参数：adj : F ⊣ G；X : C；Y : ProjectivePresentation X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapProjectivePresentation
-  signature: (adj : F ⊣ G) [G.PreservesEpimorphisms] (X : C)
-  body: F.obj Y.p
-  projective := adj.map_projective _ Y.projective
-  f := F.map Y.f
-  epi := have := Adjunction.leftAdjoint_preservesColimits.{0, 0} adj; inferInstance
-
-中文:
-定义 mapProjectivePresentation
-  签名: (adj : F ⊣ G) [G.保持Epimorphisms] (X : C)
-  定义体: F.obj Y.p
-  projective := adj.map_projective _ Y.projective
-  f := F.map Y.f
-  epi := have := Adjunction.leftAdjoint_preservesColimits.{0, 0} adj; inferInstance
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+Given an adjunction `F ⊣ G` such that `G` preserves epis, `F` maps a projective 
+presentation of
+`X` to a projective presentation of `F(X)`.
 -/
 def mapProjectivePresentation (adj : F ⊣ G) [G.PreservesEpimorphisms] (X : C)
     (Y : ProjectivePresentation X) : ProjectivePresentation (F.obj X) where
@@ -586,24 +571,31 @@ namespace Functor
 
 variable {D : Type*} [Category* D] (F : C ⥤ D)
 
-/--
-theorem `projective_of_map_projective` / 定理 `projective_of_map_projective`
-
-English:
-theorem projective_of_map_projective
-  statement: [F.Full] [F.Faithful]
-  proof: by
-    obtain ⟨h, fac⟩ := hP.factors (F.map g) (F.map f)
-    exact ⟨F.preimage h, F.map_injective (by simp [fac])⟩
-
-中文:
-定理 projective_of_map_projective
-  结论: [F.满] [F.忠实]
-  证明: by
-    obtain ⟨h, fac⟩ := hP.factors (F.map g) (F.map f)
-    exact ⟨F.preimage h, F.map_injective (by simp [fac])⟩
-
-Depends on / 依赖: F.map, F.map_injective, F.preimage, factors, hP.factors, map_injective, preimage
+/-
+**CategoryTheory.Functor.projective_of_map_projective** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Functor`。
+形式化陈述：projective_of_map_projective [F.Full] [F.Faithful] [F.PreservesEpimorphism
+s] {P : C} (hP : Projective (F.obj P)) : Projective P where factors g f _
+参数：hP : Projective (F.obj P)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.factors`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {P : C} [self : CategoryTheory.Projective P] {E X : C}   (f 
+: P ⟶ X) (e : E ⟶ X) [C…
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem projective_of_map_projective [F.Full] [F.Faithful]
     [F.PreservesEpimorphisms] {P : C} (hP : Projective (F.obj P)) : Projective P where
@@ -617,46 +609,56 @@ namespace Equivalence
 
 variable {D : Type u'} [Category.{v'} D] (F : C ≌ D)
 
-/--
-theorem `map_projective_iff` / 定理 `map_projective_iff`
-
-English:
-theorem map_projective_iff
-  given: (P : C)
-  statement: Projective (F.functor.obj P) ↔ Projective P
-  proof: ⟨F.toAdjunction.projective_of_map_projective P, F.toAdjunction.map_projective P⟩
-
-中文:
-定理 map_projective_iff
-  条件: (P : C)
-  结论: 投射 (F.functor.obj P) ↔ 投射 P
-  证明: ⟨F.toAdjunction.projective_of_map_projective P, F.toAdjunction.map_projective P⟩
-
-Depends on / 依赖: F.toAdjunction.map_projective, F.toAdjunction.projective_of_map_projective, map_projective, projective_of_map_projective, toAdjunction
+/-
+**CategoryTheory.Equivalence.map_projective_iff** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Equivalence`。
+形式化陈述：map_projective_iff (P : C) : Projective (F.functor.obj P) ↔ Projective P
+参数：P : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.projective_of_map_projective`：projective_of_ma
+p_projective (adj : F ⊣ G) [F.Full] [F.Faithful] (P : C) (hP : Projective (F.obj
+ P)) : Projective P where factors f g _
+· 使用定理 `CategoryTheory.Adjunction.map_projective`：map_projective (adj : F ⊣ G) [
+G.PreservesEpimorphisms] (P : C) (hP : Projective P) : Projective (F.obj P) wher
+e factors f g _
+· 使用定理 `CategoryTheory.preservesEpimorphisms_of_preservesColimitsOfShape`：∀ {C :
+ Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteColimits.preservesFiniteColimits`：∀
+ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1
+ : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFiniteColimits`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
 -/
 theorem map_projective_iff (P : C) : Projective (F.functor.obj P) ↔ Projective P :=
   ⟨F.toAdjunction.projective_of_map_projective P, F.toAdjunction.map_projective P⟩
 
-/--
-Definition of `projectivePresentationOfMapProjectivePresentation` / `projectivePresentationOfMapProjectivePresentation` 的定义
+/-- Given an equivalence of categories `F`, a projective presentation of `F(X)` induces a
+projective presentation of `X.` -/
+/-
+**CategoryTheory.Equivalence.projectivePresentationOfMapProjectivePresentation**
+ 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equivalence`。
+形式化陈述：projectivePresentationOfMapProjectivePresentation (X : C) (Y : ProjectiveP
+resentation (F.functor.obj X)) : ProjectivePresentation X where p
+参数：X : C；Y : ProjectivePresentation (F.functor.obj X)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition projectivePresentationOfMapProjectivePresentation
-  signature: (X : C)
-  body: F.inverse.obj Y.p
-  projective := Adjunction.map_projective F.symm.toAdjunction Y.p Y.projective
-  f := F.inverse.map Y.f ≫ F.unitInv.app _
-  epi := epi_comp _ _
-
-中文:
-定义 projectivePresentationOfMapProjectivePresentation
-  签名: (X : C)
-  定义体: F.inverse.obj Y.p
-  projective := Adjunction.map_projective F.symm.toAdjunction Y.p Y.projective
-  f := F.inverse.map Y.f ≫ F.unitInv.app _
-  epi := epi_comp _ _
-
-Depends on / 依赖: F.inverse.obj, inverse
+--- 原说明 ---
+Given an equivalence of categories `F`, a projective presentation of `F(X)` indu
+ces a
+projective presentation of `X.`
 -/
 def projectivePresentationOfMapProjectivePresentation (X : C)
     (Y : ProjectivePresentation (F.functor.obj X)) : ProjectivePresentation X where
@@ -664,35 +666,17 @@ def projectivePresentationOfMapProjectivePresentation (X : C)
   projective := Adjunction.map_projective F.symm.toAdjunction Y.p Y.projective
   f := F.inverse.map Y.f ≫ F.unitInv.app _
   epi := epi_comp _ _
-
-/--
-theorem `enoughProjectives_iff` / 定理 `enoughProjectives_iff`
-
-English:
-theorem enoughProjectives_iff
-  given: (F : C ≌ D)
-  statement: EnoughProjectives C ↔ EnoughProjectives D
-  proof: by
-  constructor
-  all_goals intro H; constructor; intro X; constructor
-  · exact F.symm.projectivePresentationOfMapProjectivePresentation _
-      (Nonempty.some (H.presentation (F.inverse.obj X)))
-  · exact F.projectivePresentationOfMapProjectivePresentation X
-      (Nonempty.some (H.presentation (F.functor.obj X)))
-
-中文:
-定理 enoughProjectives_iff
-  条件: (F : C ≌ D)
-  结论: 有足够投射 C ↔ 有足够投射 D
-  证明: by
-  constructor
-  all_goals intro H; constructor; intro X; constructor
-  · exact F.symm.projectivePresentationOfMapProjectivePresentation _
-      (Nonempty.some (H.presentation (F.inverse.obj X)))
-  · exact F.projectivePresentationOfMapProjectivePresentation X
-      (Nonempty.some (H.presentation (F.functor.obj X)))
-
-Depends on / 依赖: F.functor.obj, F.inverse.obj, F.projectivePresentationOfMapProjectivePresentation, F.symm.projectivePresentationOfMapProjectivePresentation, H.presentation, Nonempty, Nonempty.some, all_goals, functor, inverse, presentation, projectivePresentationOfMapProjectivePresentation
+/-
+**CategoryTheory.Equivalence.enoughProjectives_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：enoughProjectives_iff (F : C ≌ D) : EnoughProjectives C ↔ EnoughProjective
+s D
+参数：F : C ≌ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnoughProjectives.presentation`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.EnoughProjectives C] (X :
+ C),   Nonempty (CategoryTheory.Pro…
 -/
 theorem enoughProjectives_iff (F : C ≌ D) : EnoughProjectives C ↔ EnoughProjectives D := by
   constructor
@@ -704,35 +688,36 @@ theorem enoughProjectives_iff (F : C ≌ D) : EnoughProjectives C ↔ EnoughProj
 
 end Equivalence
 
-/--
-lemma `Retract.projective` / 引理 `Retract.projective`
-
-English:
-lemma Retract.projective
-  given: {X Y : C} (h : Retract X Y) [p : Projective Y]
-  statement: Projective X
-  proof: by
-  refine Projective.mk (fun {A B} f e _ => ?_)
-  rcases p.factors (h.r ≫ f) e with ⟨g, hg⟩
-  use h.i ≫ g
-  simp [hg]
-
-中文:
-引理 收缩.projective
-  条件: {X Y : C} (h : 收缩 X Y) [p : 投射 Y]
-  结论: 投射 X
-  证明: by
-  refine Projective.mk (fun {A B} f e _ => ?_)
-  rcases p.factors (h.r ≫ f) e with ⟨g, hg⟩
-  use h.i ≫ g
-  simp [hg]
-
-Depends on / 依赖: Projective, Projective.mk, factors, p.factors
+/-
+**CategoryTheory.Retract.projective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Re
+tract`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (h : Ca
+tegoryTheory.Retract X Y)   [p : CategoryTheory.Projective Y], CategoryTheory.Pr
+ojective X
+参数：h : CategoryTheory.Retract X Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.factors`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {P : C} [self : CategoryTheory.Projective P] {E X : C}   (f 
+: P ⟶ X) (e : E ⟶ X) [C…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Retract.retract_assoc`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {X Y : C} (self : CategoryTheory.Retract X Y) {Z : C}   (
+h : X ⟶ Z), CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Retract.projective {X Y : C} (h : Retract X Y) [p : Projective Y] : Projective X := by
-  refine Projective.mk (fun {A B} f e _ => ?_)
+  refine Projective.mk (fun {A B} f e _ ↦ ?_)
   rcases p.factors (h.r ≫ f) e with ⟨g, hg⟩
   use h.i ≫ g
   simp [hg]
 
 end CategoryTheory
+

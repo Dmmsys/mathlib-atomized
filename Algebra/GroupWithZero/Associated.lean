@@ -24,21 +24,21 @@ assert_not_exists IsOrderedMonoid Multiset Ring
 
 variable {M : Type*}
 
-/--
-Definition of `Associated` / `Associated` 的定义
+/-- Two elements of a `Monoid` are `Associated` if one of them is another one
+multiplied by a unit on the right. -/
+/-
+**Associated** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Associated [Monoid M] (x y : M) : Prop
+参数：x y : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Associated
-  signature: [Monoid M] (x y : M)
-  body: exists u : Mˣ, x * u = y
-
-中文:
-定义 Associated
-  签名: [幺半群 M] (x y : M)
-  定义体: exists u : Mˣ, x * u = y
+--- 原说明 ---
+Two elements of a `Monoid` are `Associated` if one of them is another one
+multiplied by a unit on the right.
 -/
 def Associated [Monoid M] (x y : M) : Prop :=
-  exists u : Mˣ, x * u = y
+  ∃ u : Mˣ, x * u = y
 
 /-- Notation for two elements of a monoid being associated, i.e.
 if one of them is another one multiplied by a unit on the right. -/
@@ -47,203 +47,125 @@ local infixl:50 " ~ᵤ " => Associated
 namespace Associated
 
 @[refl]
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: [Monoid M] (x : M)
-  statement: x ~ᵤ x
-  proof: ⟨1, by simp⟩
-
-@[simp]
-
-中文:
-定理 refl
-  条件: [幺半群 M] (x : M)
-  结论: x ~ᵤ x
-  证明: ⟨1, by simp⟩
-
-@[simp]
-
-Depends on / 依赖: CochainComplex
+/-
+**Associated.refl** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] (x : M), Associated x x
+参数：x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem refl [Monoid M] (x : M) : x ~ᵤ x :=
   ⟨1, by simp⟩
 
 @[simp]
-/--
-theorem `rfl` / 定理 `rfl`
-
-English:
-theorem rfl
-  given: [Monoid M] {x : M}
-  statement: x ~ᵤ x
-  proof: .refl x
-
-中文:
-定理 rfl
-  条件: [幺半群 M] {x : M}
-  结论: x ~ᵤ x
-  证明: .refl x
+/-
+**Associated.rfl** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {x : M}, Associated x x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.refl`：∀ {M : Type u_1} [inst : Monoid M] (x : M), Associated 
+x x
 -/
 protected theorem rfl [Monoid M] {x : M} : x ~ᵤ x :=
   .refl x
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] : @Std.Refl M Associated
-  body: ⟨Associated.refl⟩
-
-@[symm]
-
-中文:
-实例 [幺半群
-  签名: M] : @Std.Refl M Associated
-  定义体: ⟨Associated.refl⟩
-
-@[symm]
-
-Depends on / 依赖: Associated, Associated.refl
+/-
+**Associated.** 是 Mathlib 中的一个实例，位于命名空间 `Associated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] : @Std.Refl M Associated :=
   ⟨Associated.refl⟩
 
 @[symm]
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: [Monoid M]
-  statement: forall {x y : M}, x ~ᵤ y -> y ~ᵤ x
-
-中文:
-定理 symm
-  条件: [幺半群 M]
-  结论: 对任意 {x y : M}, x ~ᵤ y -> y ~ᵤ x
+/-
+**Associated.symm** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associated x y → Associated 
+y x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-protected theorem symm [Monoid M] : forall {x y : M}, x ~ᵤ y -> y ~ᵤ x
+protected theorem symm [Monoid M] : ∀ {x y : M}, x ~ᵤ y → y ~ᵤ x
   | x, _, ⟨u, rfl⟩ => ⟨u⁻¹, by rw [mul_assoc, Units.mul_inv, mul_one]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] : Std.Symm (α
-  body: ⟨fun _ _ => Associated.symm⟩
-
-中文:
-实例 [幺半群
-  签名: M] : Std.Symm (α
-  定义体: ⟨fun _ _ => Associated.symm⟩
-
-Depends on / 依赖: Associated
+/-
+**Associated.** 是 Mathlib 中的一个实例，位于命名空间 `Associated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] : Std.Symm (α := M) Associated :=
   ⟨fun _ _ => Associated.symm⟩
-
-/--
-theorem `comm` / 定理 `comm`
-
-English:
-theorem comm
-  given: [Monoid M] {x y : M}
-  statement: x ~ᵤ y ↔ y ~ᵤ x
-  proof: ⟨Associated.symm, Associated.symm⟩
-
-@[trans]
-
-中文:
-定理 comm
-  条件: [幺半群 M] {x y : M}
-  结论: x ~ᵤ y ↔ y ~ᵤ x
-  证明: ⟨Associated.symm, Associated.symm⟩
-
-@[trans]
+/-
+**Associated.comm** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associated x y ↔ Associated 
+y x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 protected theorem comm [Monoid M] {x y : M} : x ~ᵤ y ↔ y ~ᵤ x :=
   ⟨Associated.symm, Associated.symm⟩
 
 @[trans]
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  given: [Monoid M]
-  statement: forall {x y z : M}, x ~ᵤ y -> y ~ᵤ z -> x ~ᵤ z
-
-中文:
-定理 trans
-  条件: [幺半群 M]
-  结论: 对任意 {x y z : M}, x ~ᵤ y -> y ~ᵤ z -> x ~ᵤ z
+/-
+**Associated.trans** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {x y z : M}, Associated x y → Associate
+d y z → Associated x z
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Units.val_mul`：val_mul : (↑(a * b) : α) = a * b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-protected theorem trans [Monoid M] : forall {x y z : M}, x ~ᵤ y -> y ~ᵤ z -> x ~ᵤ z
+protected theorem trans [Monoid M] : ∀ {x y z : M}, x ~ᵤ y → y ~ᵤ z → x ~ᵤ z
   | x, _, _, ⟨u, rfl⟩, ⟨v, rfl⟩ => ⟨u * v, by rw [Units.val_mul, mul_assoc]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] : IsTrans M Associated
-  body: ⟨fun _ _ _ => Associated.trans⟩
-
-中文:
-实例 [幺半群
-  签名: M] : 是Trans M Associated
-  定义体: ⟨fun _ _ _ => Associated.trans⟩
-
-Depends on / 依赖: Associated, Associated.trans
+/-
+**Associated.** 是 Mathlib 中的一个实例，位于命名空间 `Associated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] : IsTrans M Associated :=
   ⟨fun _ _ _ => Associated.trans⟩
 
 /-- The setoid of the relation `x ~ᵤ y` iff there is a unit `u` such that `x * u = y` -/
 @[instance_reducible]
-/--
-Definition of `setoid` / `setoid` 的定义
+/-
+**Associated.setoid** 是 Mathlib 中的一个定义，位于命名空间 `Associated`。
+形式化陈述：(M : Type u_2) → [Monoid M] → Setoid M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setoid
-  signature: (M : Type*) [Monoid M]
-  body: Associated
-  iseqv := ⟨Associated.refl, Associated.symm, Associated.trans⟩
-
-中文:
-定义 setoid
-  签名: (M : 类型) [幺半群 M]
-  定义体: Associated
-  iseqv := ⟨Associated.refl, Associated.symm, Associated.trans⟩
+--- 原说明 ---
+The setoid of the relation `x ~ᵤ y` iff there is a unit `u` such that `x * u = y
+`
 -/
 protected def setoid (M : Type*) [Monoid M] :
     Setoid M where
   r := Associated
   iseqv := ⟨Associated.refl, Associated.symm, Associated.trans⟩
-
-/--
-theorem `map` / 定理 `map`
-
-English:
-theorem map
-  statement: {M N : Type*} [Monoid M] [Monoid N] {F : Type*} [FunLike F M N] [MonoidHomClass F M N]
-  proof: by
-  obtain ⟨u, ha⟩ := ha
-  exact ⟨Units.map f u, by rw [← ha, map_mul, Units.coe_map, MonoidHom.coe_coe]⟩
-
-中文:
-定理 map
-  结论: {M N : 类型} [幺半群 M] [幺半群 N] {F : 类型} [函数状 F M N] [幺半群态射类 F M N]
-  证明: by
-  obtain ⟨u, ha⟩ := ha
-  exact ⟨Units.map f u, by rw [← ha, map_mul, Units.coe_map, MonoidHom.coe_coe]⟩
-
-Depends on / 依赖: MonoidHom, MonoidHom.coe_coe, Units.coe_map, Units.map, coe_coe, coe_map, map_mul
+/-
+**Associated.map** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：map {M N : Type*} [Monoid M] [Monoid N] {F : Type*} [FunLike F M N] [Monoi
+dHomClass F M N] (f : F) {x y : M} (ha : Associated x y) : Associated (f x) (f y
+)
+参数：f : F；ha : Associated x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Units.coe_map`：coe_map (f : M ->* N) (x : Mˣ) : ↑(map f x) = f x
+· 使用定理 `MonoidHom.coe_coe`：MonoidHom.coe_coe [MonoidHomClass F M N] (f : F) : ((
+f : M ->* N) : M -> N) = f
 -/
 theorem map {M N : Type*} [Monoid M] [Monoid N] {F : Type*} [FunLike F M N] [MonoidHomClass F M N]
     (f : F) {x y : M} (ha : Associated x y) : Associated (f x) (f y) := by
@@ -254,95 +176,58 @@ end Associated
 
 attribute [local instance] Associated.setoid
 
-/--
-theorem `Associated.of_eq` / 定理 `Associated.of_eq`
-
-English:
-theorem Associated.of_eq
-  given: [Monoid M] {a b : M} (h : a = b)
-  statement: a ~ᵤ b
-  proof: ⟨1, by rwa [Units.val_one, mul_one]⟩
-
-中文:
-定理 Associated.of_eq
-  条件: [幺半群 M] {a b : M} (h : a = b)
-  结论: a ~ᵤ b
-  证明: ⟨1, by rwa [Units.val_one, mul_one]⟩
-
-Depends on / 依赖: Units.val_one, mul_one, val_one
+/-
+**Associated.of_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.of_eq [Monoid M] {a b : M} (h : a = b) : a ~ᵤ b
+参数：h : a = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Units.val_one`：val_one : ((1 : αˣ) : α) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem Associated.of_eq [Monoid M] {a b : M} (h : a = b) : a ~ᵤ b :=
   ⟨1, by rwa [Units.val_one, mul_one]⟩
-
-/--
-theorem `Associated.of_subsingleton` / 定理 `Associated.of_subsingleton`
-
-English:
-theorem Associated.of_subsingleton
-  given: [Subsingleton M] [Monoid M] (a b : M)
-  proof: .of_eq (Subsingleton.elim ..)
-
-中文:
-定理 Associated.of_subsingleton
-  条件: [子单例 M] [幺半群 M] (a b : M)
-  证明: .of_eq (Subsingleton.elim ..)
+/-
+**Associated.of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [Subsingleton M] [inst : Monoid M] (a b : M), Associated 
+a b
+参数：a b : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.of_eq`：Associated.of_eq [Monoid M] {a b : M} (h : a = b) : a 
+~ᵤ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 @[nontriviality] theorem Associated.of_subsingleton [Subsingleton M] [Monoid M] (a b : M) :
     Associated a b := .of_eq (Subsingleton.elim ..)
-
-/--
-theorem `unit_associated_one` / 定理 `unit_associated_one`
-
-English:
-theorem unit_associated_one
-  given: [Monoid M] {u : Mˣ}
-  statement: (u : M) ~ᵤ 1
-  proof: ⟨u⁻¹, Units.mul_inv u⟩
-
-@[simp]
-
-中文:
-定理 unit_associated_one
-  条件: [幺半群 M] {u : Mˣ}
-  结论: (u : M) ~ᵤ 1
-  证明: ⟨u⁻¹, Units.mul_inv u⟩
-
-@[simp]
-
-Depends on / 依赖: Units.mul_inv, mul_inv
+/-
+**unit_associated_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：unit_associated_one [Monoid M] {u : Mˣ} : (u : M) ~ᵤ 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
 -/
 theorem unit_associated_one [Monoid M] {u : Mˣ} : (u : M) ~ᵤ 1 :=
   ⟨u⁻¹, Units.mul_inv u⟩
 
 @[simp]
-/--
-theorem `associated_one_iff_isUnit` / 定理 `associated_one_iff_isUnit`
-
-English:
-theorem associated_one_iff_isUnit
-  given: [Monoid M] {a : M}
-  statement: (a : M) ~ᵤ 1 ↔ IsUnit a
-  proof: Iff.intro
-    (fun h =>
-      let ⟨c, h⟩ := h.symm
-      h ▸ ⟨c, (one_mul _).symm⟩)
-    fun ⟨c, h⟩ => Associated.symm ⟨c, by simp [h]⟩
-
-@[simp]
-
-中文:
-定理 associated_one_iff_isUnit
-  条件: [幺半群 M] {a : M}
-  结论: (a : M) ~ᵤ 1 ↔ 是单位 a
-  证明: Iff.intro
-    (fun h =>
-      let ⟨c, h⟩ := h.symm
-      h ▸ ⟨c, (one_mul _).symm⟩)
-    fun ⟨c, h⟩ => Associated.symm ⟨c, by simp [h]⟩
-
-@[simp]
-
-Depends on / 依赖: Associated, Associated.symm, Iff.intro, h.symm, one_mul
+/-
+**associated_one_iff_isUnit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_one_iff_isUnit [Monoid M] {a : M} : (a : M) ~ᵤ 1 ↔ IsUnit a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associated_one_iff_isUnit [Monoid M] {a : M} : (a : M) ~ᵤ 1 ↔ IsUnit a :=
   Iff.intro
@@ -352,30 +237,21 @@ theorem associated_one_iff_isUnit [Monoid M] {a : M} : (a : M) ~ᵤ 1 ↔ IsUnit
     fun ⟨c, h⟩ => Associated.symm ⟨c, by simp [h]⟩
 
 @[simp]
-/--
-theorem `associated_zero_iff_eq_zero` / 定理 `associated_zero_iff_eq_zero`
-
-English:
-theorem associated_zero_iff_eq_zero
-  given: [MonoidWithZero M] (a : M)
-  statement: a ~ᵤ 0 ↔ a = 0
-  proof: Iff.intro
-    (fun h => by
-      let ⟨u, h⟩ := h.symm
-      simpa using h.symm)
-    fun h => h ▸ Associated.refl a
-
-中文:
-定理 associated_zero_iff_eq_zero
-  条件: [带零幺半群 M] (a : M)
-  结论: a ~ᵤ 0 ↔ a = 0
-  证明: Iff.intro
-    (fun h => by
-      let ⟨u, h⟩ := h.symm
-      simpa using h.symm)
-    fun h => h ▸ Associated.refl a
-
-Depends on / 依赖: Associated, Associated.refl, Iff.intro, h.symm
+/-
+**associated_zero_iff_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_zero_iff_eq_zero [MonoidWithZero M] (a : M) : a ~ᵤ 0 ↔ a = 0
+参数：a : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associated.refl`：∀ {M : Type u_1} [inst : Monoid M] (x : M), Associated 
+x x
 -/
 theorem associated_zero_iff_eq_zero [MonoidWithZero M] (a : M) : a ~ᵤ 0 ↔ a = 0 :=
   Iff.intro
@@ -383,510 +259,354 @@ theorem associated_zero_iff_eq_zero [MonoidWithZero M] (a : M) : a ~ᵤ 0 ↔ a 
       let ⟨u, h⟩ := h.symm
       simpa using h.symm)
     fun h => h ▸ Associated.refl a
-
-/--
-theorem `associated_one_of_mul_eq_one` / 定理 `associated_one_of_mul_eq_one`
-
-English:
-theorem associated_one_of_mul_eq_one
-  given: [CommMonoid M] {a : M} (b : M) (hab : a * b = 1)
-  statement: a ~ᵤ 1
-  proof: show (Units.mkOfMulEqOne a b hab : M) ~ᵤ 1 from unit_associated_one
-
-中文:
-定理 associated_one_of_mul_eq_one
-  条件: [交换幺半群 M] {a : M} (b : M) (hab : a * b = 1)
-  结论: a ~ᵤ 1
-  证明: show (Units.mkOfMulEqOne a b hab : M) ~ᵤ 1 from unit_associated_one
-
-Depends on / 依赖: Units.mkOfMulEqOne, mkOfMulEqOne, unit_associated_one
+/-
+**associated_one_of_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_one_of_mul_eq_one [CommMonoid M] {a : M} (b : M) (hab : a * b =
+ 1) : a ~ᵤ 1
+参数：b : M；hab : a * b = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `unit_associated_one`：unit_associated_one [Monoid M] {u : Mˣ} : (u : M) ~
+ᵤ 1
 -/
 theorem associated_one_of_mul_eq_one [CommMonoid M] {a : M} (b : M) (hab : a * b = 1) : a ~ᵤ 1 :=
   show (Units.mkOfMulEqOne a b hab : M) ~ᵤ 1 from unit_associated_one
-
-/--
-theorem `associated_one_of_associated_mul_one` / 定理 `associated_one_of_associated_mul_one`
-
-English:
-theorem associated_one_of_associated_mul_one
-  given: [CommMonoid M] {a b : M}
-  statement: a * b ~ᵤ 1 -> a ~ᵤ 1
-
-中文:
-定理 associated_one_of_associated_mul_one
-  条件: [交换幺半群 M] {a b : M}
-  结论: a * b ~ᵤ 1 -> a ~ᵤ 1
+/-
+**associated_one_of_associated_mul_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] {a b : M}, Associated (a * b) 1 → A
+ssociated a 1
+参数：a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `associated_one_of_mul_eq_one`：associated_one_of_mul_eq_one [CommMonoid M
+] {a : M} (b : M) (hab : a * b = 1) : a ~ᵤ 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem associated_one_of_associated_mul_one [CommMonoid M] {a b : M} : a * b ~ᵤ 1 -> a ~ᵤ 1
-| ⟨u, h⟩ => associated_one_of_mul_eq_one (b * u) by simpa [mul_assoc] using h
-
-/--
-theorem `associated_mul_unit_left` / 定理 `associated_mul_unit_left`
-
-English:
-theorem associated_mul_unit_left
-  given: {N : Type*} [Monoid N] (a u : N) (hu : IsUnit u)
-  proof: let ⟨u', hu⟩ := hu
-  ⟨u'⁻¹, hu ▸ Units.mul_inv_cancel_right _ _⟩
-
-中文:
-定理 associated_mul_unit_left
-  条件: {N : 类型} [幺半群 N] (a u : N) (hu : 是单位 u)
-  证明: let ⟨u', hu⟩ := hu
-  ⟨u'⁻¹, hu ▸ Units.mul_inv_cancel_right _ _⟩
-
-Depends on / 依赖: Units.mul_inv_cancel_right, mul_inv_cancel_right
+theorem associated_one_of_associated_mul_one [CommMonoid M] {a b : M} : a * b ~ᵤ 1 → a ~ᵤ 1
+  | ⟨u, h⟩ => associated_one_of_mul_eq_one (b * u) <| by simpa [mul_assoc] using h
+/-
+**associated_mul_unit_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_mul_unit_left {N : Type*} [Monoid N] (a u : N) (hu : IsUnit u) 
+: Associated (a * u) a
+参数：a u : N；hu : IsUnit u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.mul_inv_cancel_right`：mul_inv_cancel_right (a : α) (b : αˣ) : a * 
+b * ↑b⁻¹ = a
 -/
 theorem associated_mul_unit_left {N : Type*} [Monoid N] (a u : N) (hu : IsUnit u) :
     Associated (a * u) a :=
   let ⟨u', hu⟩ := hu
   ⟨u'⁻¹, hu ▸ Units.mul_inv_cancel_right _ _⟩
-
-/--
-theorem `associated_unit_mul_left` / 定理 `associated_unit_mul_left`
-
-English:
-theorem associated_unit_mul_left
-  given: {N : Type*} [CommMonoid N] (a u : N) (hu : IsUnit u)
-  proof: by
-  rw [mul_comm]
-  exact associated_mul_unit_left _ _ hu
-
-中文:
-定理 associated_unit_mul_left
-  条件: {N : 类型} [交换幺半群 N] (a u : N) (hu : 是单位 u)
-  证明: by
-  rw [mul_comm]
-  exact associated_mul_unit_left _ _ hu
-
-Depends on / 依赖: associated_mul_unit_left, mul_comm
+/-
+**associated_unit_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_unit_mul_left {N : Type*} [CommMonoid N] (a u : N) (hu : IsUnit
+ u) : Associated (u * a) a
+参数：a u : N；hu : IsUnit u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `associated_mul_unit_left`：associated_mul_unit_left {N : Type*} [Monoid N
+] (a u : N) (hu : IsUnit u) : Associated (a * u) a
 -/
 theorem associated_unit_mul_left {N : Type*} [CommMonoid N] (a u : N) (hu : IsUnit u) :
     Associated (u * a) a := by
   rw [mul_comm]
   exact associated_mul_unit_left _ _ hu
-
-/--
-theorem `associated_mul_unit_right` / 定理 `associated_mul_unit_right`
-
-English:
-theorem associated_mul_unit_right
-  given: {N : Type*} [Monoid N] (a u : N) (hu : IsUnit u)
-  proof: (associated_mul_unit_left a u hu).symm
-
-中文:
-定理 associated_mul_unit_right
-  条件: {N : 类型} [幺半群 N] (a u : N) (hu : 是单位 u)
-  证明: (associated_mul_unit_left a u hu).symm
-
-Depends on / 依赖: associated_mul_unit_left
+/-
+**associated_mul_unit_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_mul_unit_right {N : Type*} [Monoid N] (a u : N) (hu : IsUnit u)
+ : Associated a (a * u)
+参数：a u : N；hu : IsUnit u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `associated_mul_unit_left`：associated_mul_unit_left {N : Type*} [Monoid N
+] (a u : N) (hu : IsUnit u) : Associated (a * u) a
 -/
 theorem associated_mul_unit_right {N : Type*} [Monoid N] (a u : N) (hu : IsUnit u) :
     Associated a (a * u) :=
   (associated_mul_unit_left a u hu).symm
-
-/--
-theorem `associated_unit_mul_right` / 定理 `associated_unit_mul_right`
-
-English:
-theorem associated_unit_mul_right
-  given: {N : Type*} [CommMonoid N] (a u : N) (hu : IsUnit u)
-  proof: (associated_unit_mul_left a u hu).symm
-
-中文:
-定理 associated_unit_mul_right
-  条件: {N : 类型} [交换幺半群 N] (a u : N) (hu : 是单位 u)
-  证明: (associated_unit_mul_left a u hu).symm
-
-Depends on / 依赖: Finset, Finset.image, Finset.min, HomologicalComplex, HomologicalComplex.eval, IsStrictlyGE, IsZero, IsZero.iff_id_eq_zero, associated_unit_mul_left, eq_of_tgt, hom_ext, iff_id_eq_zero, isLimit, isLimitOfPreserves, isStrictlyGE_iff, isStrictlyGE_of_ge, isZero_of_isStrictlyGE, p.diag.obj, p.isLimit, p.prop_diag_obj
+/-
+**associated_unit_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_unit_mul_right {N : Type*} [CommMonoid N] (a u : N) (hu : IsUni
+t u) : Associated a (u * a)
+参数：a u : N；hu : IsUnit u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `associated_unit_mul_left`：associated_unit_mul_left {N : Type*} [CommMono
+id N] (a u : N) (hu : IsUnit u) : Associated (u * a) a
 -/
 theorem associated_unit_mul_right {N : Type*} [CommMonoid N] (a u : N) (hu : IsUnit u) :
     Associated a (u * a) :=
   (associated_unit_mul_left a u hu).symm
-
-/--
-theorem `associated_mul_isUnit_left_iff` / 定理 `associated_mul_isUnit_left_iff`
-
-English:
-theorem associated_mul_isUnit_left_iff
-  given: {N : Type*} [Monoid N] {a u b : N} (hu : IsUnit u)
-  proof: ⟨(associated_mul_unit_right _ _ hu).trans, (associated_mul_unit_left _ _ hu).trans⟩
-
-中文:
-定理 associated_mul_isUnit_left_iff
-  条件: {N : 类型} [幺半群 N] {a u b : N} (hu : 是单位 u)
-  证明: ⟨(associated_mul_unit_right _ _ hu).trans, (associated_mul_unit_left _ _ hu).trans⟩
-
-Depends on / 依赖: Finset, Finset.image, Finset.min, HomologicalComplex, HomologicalComplex.eval, IsStrictlyGE, IsZero, IsZero.iff_id_eq_zero, associated_mul_unit_left, associated_mul_unit_right, eq_of_s, hom_ext, iff_id_eq_zero, isColimit, isColimitOfPreserves, isStrictlyGE_iff, isStrictlyGE_of_ge, isZero_of_isStrictlyGE, p.diag.obj, p.isColimit
+/-
+**associated_mul_isUnit_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_mul_isUnit_left_iff {N : Type*} [Monoid N] {a u b : N} (hu : Is
+Unit u) : Associated (a * u) b ↔ Associated a b
+参数：hu : IsUnit u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.trans`：∀ {M : Type u_1} [inst : Monoid M] {x y z : M}, Associ
+ated x y → Associated y z → Associated x z
+· 使用定理 `associated_mul_unit_right`：associated_mul_unit_right {N : Type*} [Monoid
+ N] (a u : N) (hu : IsUnit u) : Associated a (a * u)
+· 使用定理 `associated_mul_unit_left`：associated_mul_unit_left {N : Type*} [Monoid N
+] (a u : N) (hu : IsUnit u) : Associated (a * u) a
 -/
 theorem associated_mul_isUnit_left_iff {N : Type*} [Monoid N] {a u b : N} (hu : IsUnit u) :
     Associated (a * u) b ↔ Associated a b :=
   ⟨(associated_mul_unit_right _ _ hu).trans, (associated_mul_unit_left _ _ hu).trans⟩
-
-/--
-theorem `associated_isUnit_mul_left_iff` / 定理 `associated_isUnit_mul_left_iff`
-
-English:
-theorem associated_isUnit_mul_left_iff
-  given: {N : Type*} [CommMonoid N] {u a b : N} (hu : IsUnit u)
-  proof: by
-  rw [mul_comm]
-  exact associated_mul_isUnit_left_iff hu
-
-中文:
-定理 associated_isUnit_mul_left_iff
-  条件: {N : 类型} [交换幺半群 N] {u a b : N} (hu : 是单位 u)
-  证明: by
-  rw [mul_comm]
-  exact associated_mul_isUnit_left_iff hu
-
-Depends on / 依赖: associated_mul_isUnit_left_iff, mul_comm
+/-
+**associated_isUnit_mul_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_isUnit_mul_left_iff {N : Type*} [CommMonoid N] {u a b : N} (hu 
+: IsUnit u) : Associated (u * a) b ↔ Associated a b
+参数：hu : IsUnit u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `associated_mul_isUnit_left_iff`：associated_mul_isUnit_left_iff {N : Type
+*} [Monoid N] {a u b : N} (hu : IsUnit u) : Associated (a * u) b ↔ Associated a 
+b
 -/
 theorem associated_isUnit_mul_left_iff {N : Type*} [CommMonoid N] {u a b : N} (hu : IsUnit u) :
     Associated (u * a) b ↔ Associated a b := by
   rw [mul_comm]
   exact associated_mul_isUnit_left_iff hu
-
-/--
-theorem `associated_mul_isUnit_right_iff` / 定理 `associated_mul_isUnit_right_iff`
-
-English:
-theorem associated_mul_isUnit_right_iff
-  given: {N : Type*} [Monoid N] {a b u : N} (hu : IsUnit u)
-  proof: Associated.comm.trans (associated_mul_isUnit_left_iff hu).trans Associated.comm
-
-中文:
-定理 associated_mul_isUnit_right_iff
-  条件: {N : 类型} [幺半群 N] {a b u : N} (hu : 是单位 u)
-  证明: Associated.comm.trans (associated_mul_isUnit_left_iff hu).trans Associated.comm
-
-Depends on / 依赖: Associated, Associated.comm, Associated.comm.trans, associated_mul_isUnit_left_iff
+/-
+**associated_mul_isUnit_right_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_mul_isUnit_right_iff {N : Type*} [Monoid N] {a b u : N} (hu : I
+sUnit u) : Associated a (b * u) ↔ Associated a b
+参数：hu : IsUnit u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Associated.comm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y ↔ Associated y x
+· 使用定理 `associated_mul_isUnit_left_iff`：associated_mul_isUnit_left_iff {N : Type
+*} [Monoid N] {a u b : N} (hu : IsUnit u) : Associated (a * u) b ↔ Associated a 
+b
 -/
 theorem associated_mul_isUnit_right_iff {N : Type*} [Monoid N] {a b u : N} (hu : IsUnit u) :
     Associated a (b * u) ↔ Associated a b :=
-Associated.comm.trans (associated_mul_isUnit_left_iff hu).trans Associated.comm
-
-/--
-theorem `associated_isUnit_mul_right_iff` / 定理 `associated_isUnit_mul_right_iff`
-
-English:
-theorem associated_isUnit_mul_right_iff
-  given: {N : Type*} [CommMonoid N] {a u b : N} (hu : IsUnit u)
-  proof: Associated.comm.trans (associated_isUnit_mul_left_iff hu).trans Associated.comm
-
-@[simp]
-
-中文:
-定理 associated_isUnit_mul_right_iff
-  条件: {N : 类型} [交换幺半群 N] {a u b : N} (hu : 是单位 u)
-  证明: Associated.comm.trans (associated_isUnit_mul_left_iff hu).trans Associated.comm
-
-@[simp]
-
-Depends on / 依赖: Associated, Associated.comm, Associated.comm.trans, associated_isUnit_mul_left_iff
+  Associated.comm.trans <| (associated_mul_isUnit_left_iff hu).trans Associated.comm
+/-
+**associated_isUnit_mul_right_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_isUnit_mul_right_iff {N : Type*} [CommMonoid N] {a u b : N} (hu
+ : IsUnit u) : Associated a (u * b) ↔ Associated a b
+参数：hu : IsUnit u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Associated.comm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y ↔ Associated y x
+· 使用定理 `associated_isUnit_mul_left_iff`：associated_isUnit_mul_left_iff {N : Type
+*} [CommMonoid N] {u a b : N} (hu : IsUnit u) : Associated (u * a) b ↔ Associate
+d a b
 -/
 theorem associated_isUnit_mul_right_iff {N : Type*} [CommMonoid N] {a u b : N} (hu : IsUnit u) :
     Associated a (u * b) ↔ Associated a b :=
-Associated.comm.trans (associated_isUnit_mul_left_iff hu).trans Associated.comm
+  Associated.comm.trans <| (associated_isUnit_mul_left_iff hu).trans Associated.comm
 
 @[simp]
-/--
-theorem `associated_mul_unit_left_iff` / 定理 `associated_mul_unit_left_iff`
-
-English:
-theorem associated_mul_unit_left_iff
-  given: {N : Type*} [Monoid N] {a b : N} {u : Units N}
-  proof: associated_mul_isUnit_left_iff u.isUnit
-
-@[simp]
-
-中文:
-定理 associated_mul_unit_left_iff
-  条件: {N : 类型} [幺半群 N] {a b : N} {u : 单位群 N}
-  证明: associated_mul_isUnit_left_iff u.isUnit
-
-@[simp]
-
-Depends on / 依赖: associated_mul_isUnit_left_iff, isUnit, u.isUnit
+/-
+**associated_mul_unit_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_mul_unit_left_iff {N : Type*} [Monoid N] {a b : N} {u : Units N
+} : Associated (a * u) b ↔ Associated a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `associated_mul_isUnit_left_iff`：associated_mul_isUnit_left_iff {N : Type
+*} [Monoid N] {a u b : N} (hu : IsUnit u) : Associated (a * u) b ↔ Associated a 
+b
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem associated_mul_unit_left_iff {N : Type*} [Monoid N] {a b : N} {u : Units N} :
     Associated (a * u) b ↔ Associated a b :=
   associated_mul_isUnit_left_iff u.isUnit
 
 @[simp]
-/--
-theorem `associated_unit_mul_left_iff` / 定理 `associated_unit_mul_left_iff`
-
-English:
-theorem associated_unit_mul_left_iff
-  given: {N : Type*} [CommMonoid N] {a b : N} {u : Units N}
-  proof: associated_isUnit_mul_left_iff u.isUnit
-
-@[simp]
-
-中文:
-定理 associated_unit_mul_left_iff
-  条件: {N : 类型} [交换幺半群 N] {a b : N} {u : 单位群 N}
-  证明: associated_isUnit_mul_left_iff u.isUnit
-
-@[simp]
-
-Depends on / 依赖: associated_isUnit_mul_left_iff, isUnit, u.isUnit
+/-
+**associated_unit_mul_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_unit_mul_left_iff {N : Type*} [CommMonoid N] {a b : N} {u : Uni
+ts N} : Associated (↑u * a) b ↔ Associated a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `associated_isUnit_mul_left_iff`：associated_isUnit_mul_left_iff {N : Type
+*} [CommMonoid N] {u a b : N} (hu : IsUnit u) : Associated (u * a) b ↔ Associate
+d a b
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem associated_unit_mul_left_iff {N : Type*} [CommMonoid N] {a b : N} {u : Units N} :
     Associated (↑u * a) b ↔ Associated a b :=
   associated_isUnit_mul_left_iff u.isUnit
 
 @[simp]
-/--
-theorem `associated_mul_unit_right_iff` / 定理 `associated_mul_unit_right_iff`
-
-English:
-theorem associated_mul_unit_right_iff
-  given: {N : Type*} [Monoid N] {a b : N} {u : Units N}
-  proof: associated_mul_isUnit_right_iff u.isUnit
-
-@[simp]
-
-中文:
-定理 associated_mul_unit_right_iff
-  条件: {N : 类型} [幺半群 N] {a b : N} {u : 单位群 N}
-  证明: associated_mul_isUnit_right_iff u.isUnit
-
-@[simp]
-
-Depends on / 依赖: associated_mul_isUnit_right_iff, isUnit, u.isUnit
+/-
+**associated_mul_unit_right_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_mul_unit_right_iff {N : Type*} [Monoid N] {a b : N} {u : Units 
+N} : Associated a (b * u) ↔ Associated a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `associated_mul_isUnit_right_iff`：associated_mul_isUnit_right_iff {N : Ty
+pe*} [Monoid N] {a b u : N} (hu : IsUnit u) : Associated a (b * u) ↔ Associated 
+a b
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem associated_mul_unit_right_iff {N : Type*} [Monoid N] {a b : N} {u : Units N} :
     Associated a (b * u) ↔ Associated a b :=
   associated_mul_isUnit_right_iff u.isUnit
 
 @[simp]
-/--
-theorem `associated_unit_mul_right_iff` / 定理 `associated_unit_mul_right_iff`
-
-English:
-theorem associated_unit_mul_right_iff
-  given: {N : Type*} [CommMonoid N] {a b : N} {u : Units N}
-  proof: associated_isUnit_mul_right_iff u.isUnit
-
-@[gcongr]
-
-中文:
-定理 associated_unit_mul_right_iff
-  条件: {N : 类型} [交换幺半群 N] {a b : N} {u : 单位群 N}
-  证明: associated_isUnit_mul_right_iff u.isUnit
-
-@[gcongr]
-
-Depends on / 依赖: associated_isUnit_mul_right_iff, isUnit, u.isUnit
+/-
+**associated_unit_mul_right_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_unit_mul_right_iff {N : Type*} [CommMonoid N] {a b : N} {u : Un
+its N} : Associated a (↑u * b) ↔ Associated a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `associated_isUnit_mul_right_iff`：associated_isUnit_mul_right_iff {N : Ty
+pe*} [CommMonoid N] {a u b : N} (hu : IsUnit u) : Associated a (u * b) ↔ Associa
+ted a b
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem associated_unit_mul_right_iff {N : Type*} [CommMonoid N] {a b : N} {u : Units N} :
     Associated a (↑u * b) ↔ Associated a b :=
   associated_isUnit_mul_right_iff u.isUnit
 
 @[gcongr]
-/--
-theorem `Associated.mul_left` / 定理 `Associated.mul_left`
-
-English:
-theorem Associated.mul_left
-  given: [Monoid M] (a : M) {b c : M} (h : b ~ᵤ c)
-  statement: a * b ~ᵤ a * c
-  proof: by
-  obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_assoc _ _ _⟩
-
-@[gcongr]
-
-中文:
-定理 Associated.mul_left
-  条件: [幺半群 M] (a : M) {b c : M} (h : b ~ᵤ c)
-  结论: a * b ~ᵤ a * c
-  证明: by
-  obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_assoc _ _ _⟩
-
-@[gcongr]
-
-Depends on / 依赖: mul_assoc
+/-
+**Associated.mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.mul_left [Monoid M] (a : M) {b c : M} (h : b ~ᵤ c) : a * b ~ᵤ a
+ * c
+参数：a : M；h : b ~ᵤ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem Associated.mul_left [Monoid M] (a : M) {b c : M} (h : b ~ᵤ c) : a * b ~ᵤ a * c := by
   obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_assoc _ _ _⟩
 
 @[gcongr]
-/--
-theorem `Associated.mul_right` / 定理 `Associated.mul_right`
-
-English:
-theorem Associated.mul_right
-  given: [CommMonoid M] {a b : M} (h : a ~ᵤ b) (c : M)
-  statement: a * c ~ᵤ b * c
-  proof: by
-  obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_right_comm _ _ _⟩
-
-@[gcongr]
-
-中文:
-定理 Associated.mul_right
-  条件: [交换幺半群 M] {a b : M} (h : a ~ᵤ b) (c : M)
-  结论: a * c ~ᵤ b * c
-  证明: by
-  obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_right_comm _ _ _⟩
-
-@[gcongr]
-
-Depends on / 依赖: mul_right_comm
+/-
+**Associated.mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.mul_right [CommMonoid M] {a b : M} (h : a ~ᵤ b) (c : M) : a * c
+ ~ᵤ b * c
+参数：h : a ~ᵤ b；c : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
 -/
 theorem Associated.mul_right [CommMonoid M] {a b : M} (h : a ~ᵤ b) (c : M) : a * c ~ᵤ b * c := by
   obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_right_comm _ _ _⟩
 
 @[gcongr]
-/--
-theorem `Associated.mul_mul` / 定理 `Associated.mul_mul`
-
-English:
-theorem Associated.mul_mul
-  statement: [CommMonoid M] {a₁ a₂ b₁ b₂ : M}
-  proof: (h₁.mul_right _).trans (h₂.mul_left _)
-
-@[gcongr]
-
-中文:
-定理 Associated.mul_mul
-  结论: [交换幺半群 M] {a₁ a₂ b₁ b₂ : M}
-  证明: (h₁.mul_right _).trans (h₂.mul_left _)
-
-@[gcongr]
-
-Depends on / 依赖: mul_left, mul_right
+/-
+**Associated.mul_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.mul_mul [CommMonoid M] {a₁ a₂ b₁ b₂ : M} (h₁ : a₁ ~ᵤ b₁) (h₂ : 
+a₂ ~ᵤ b₂) : a₁ * a₂ ~ᵤ b₁ * b₂
+参数：h₁ : a₁ ~ᵤ b₁；h₂ : a₂ ~ᵤ b₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.trans`：∀ {M : Type u_1} [inst : Monoid M] {x y z : M}, Associ
+ated x y → Associated y z → Associated x z
+· 使用定理 `Associated.mul_right`：Associated.mul_right [CommMonoid M] {a b : M} (h :
+ a ~ᵤ b) (c : M) : a * c ~ᵤ b * c
+· 使用定理 `Associated.mul_left`：Associated.mul_left [Monoid M] (a : M) {b c : M} (h
+ : b ~ᵤ c) : a * b ~ᵤ a * c
 -/
 theorem Associated.mul_mul [CommMonoid M] {a₁ a₂ b₁ b₂ : M}
     (h₁ : a₁ ~ᵤ b₁) (h₂ : a₂ ~ᵤ b₂) : a₁ * a₂ ~ᵤ b₁ * b₂ := (h₁.mul_right _).trans (h₂.mul_left _)
 
 @[gcongr]
-/--
-theorem `Associated.pow_pow` / 定理 `Associated.pow_pow`
-
-English:
-theorem Associated.pow_pow
-  given: [CommMonoid M] {a b : M} {n : Nat} (h : a ~ᵤ b)
-  statement: a ^ n ~ᵤ b ^ n
-  proof: by
-  induction n with
-  | zero => simp [Associated.refl]
-  | succ n ih => convert! h.mul_mul ih <;> rw [pow_succ']
-
-中文:
-定理 Associated.pow_pow
-  条件: [交换幺半群 M] {a b : M} {n : 自然数} (h : a ~ᵤ b)
-  结论: a ^ n ~ᵤ b ^ n
-  证明: by
-  induction n with
-  | zero => simp [Associated.refl]
-  | succ n ih => convert! h.mul_mul ih <;> rw [pow_succ']
-
-Depends on / 依赖: Associated, Associated.refl, convert, h.mul_mul, mul_mul, pow_succ
+/-
+**Associated.pow_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.pow_pow [CommMonoid M] {a b : M} {n : Nat} (h : a ~ᵤ b) : a ^ n
+ ~ᵤ b ^ n
+参数：h : a ~ᵤ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Associated.mul_mul`：Associated.mul_mul [CommMonoid M] {a₁ a₂ b₁ b₂ : M} 
+(h₁ : a₁ ~ᵤ b₁) (h₂ : a₂ ~ᵤ b₂) : a₁ * a₂ ~ᵤ b₁ * b₂
 -/
-theorem Associated.pow_pow [CommMonoid M] {a b : M} {n : Nat} (h : a ~ᵤ b) : a ^ n ~ᵤ b ^ n := by
+theorem Associated.pow_pow [CommMonoid M] {a b : M} {n : ℕ} (h : a ~ᵤ b) : a ^ n ~ᵤ b ^ n := by
   induction n with
   | zero => simp [Associated.refl]
   | succ n ih => convert! h.mul_mul ih <;> rw [pow_succ']
-
-/--
-theorem `Associated.dvd` / 定理 `Associated.dvd`
-
-English:
-theorem Associated.dvd
-  given: [Monoid M] {a b : M}
-  statement: a ~ᵤ b -> a ∣ b
-  proof: fun ⟨u, hu⟩ =>
-  ⟨u, hu.symm⟩
-
-中文:
-定理 Associated.dvd
-  条件: [幺半群 M] {a b : M}
-  结论: a ~ᵤ b -> a ∣ b
-  证明: fun ⟨u, hu⟩ =>
-  ⟨u, hu.symm⟩
+/-
+**Associated.dvd** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated a b → a ∣ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-protected theorem Associated.dvd [Monoid M] {a b : M} : a ~ᵤ b -> a ∣ b := fun ⟨u, hu⟩ =>
+protected theorem Associated.dvd [Monoid M] {a b : M} : a ~ᵤ b → a ∣ b := fun ⟨u, hu⟩ =>
   ⟨u, hu.symm⟩
-
-/--
-theorem `Associated.dvd'` / 定理 `Associated.dvd'`
-
-English:
-theorem Associated.dvd'
-  given: [Monoid M] {a b : M} (h : a ~ᵤ b)
-  statement: b ∣ a
-  proof: h.symm.dvd
-
-中文:
-定理 Associated.dvd'
-  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
-  结论: b ∣ a
-  证明: h.symm.dvd
+/-
+**Associated.dvd'** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated a b → b ∣ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 protected theorem Associated.dvd' [Monoid M] {a b : M} (h : a ~ᵤ b) : b ∣ a :=
   h.symm.dvd
-
-/--
-theorem `Associated.dvd_dvd` / 定理 `Associated.dvd_dvd`
-
-English:
-theorem Associated.dvd_dvd
-  given: [Monoid M] {a b : M} (h : a ~ᵤ b)
-  statement: a ∣ b ∧ b ∣ a
-  proof: ⟨h.dvd, h.symm.dvd⟩
-
-中文:
-定理 Associated.dvd_dvd
-  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
-  结论: a ∣ b ∧ b ∣ a
-  证明: ⟨h.dvd, h.symm.dvd⟩
+/-
+**Associated.dvd_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated a b → a ∣ b ∧ b ∣
+ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 protected theorem Associated.dvd_dvd [Monoid M] {a b : M} (h : a ~ᵤ b) : a ∣ b ∧ b ∣ a :=
   ⟨h.dvd, h.symm.dvd⟩
-
-/--
-theorem `associated_of_dvd_dvd` / 定理 `associated_of_dvd_dvd`
-
-English:
-theorem associated_of_dvd_dvd
-  statement: [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M}
-  proof: by
-  rcases hab with ⟨c, rfl⟩
-  rcases hba with ⟨d, a_eq⟩
-  by_cases ha0 : a = 0
-  · simp_all
-  have hac0 : a * c != 0 := by
-    intro con
-    rw [con]; rw [zero_mul] at a_eq
-    apply ha0 a_eq
-  have : a * (c * d) = a * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
-  have hcd : c * d = 1 := mul_left_cancel₀ ha0 this
-  have : a * c * (d * c) = a * c * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
-  have hdc : d * c = 1 := mul_left_cancel₀ hac0 this
-  exact ⟨⟨c, d, hcd, hdc⟩, rfl⟩
-
-中文:
-定理 associated_of_dvd_dvd
-  结论: [带零幺半群 M] [是左消去MulZero M] {a b : M}
-  证明: by
-  rcases hab with ⟨c, rfl⟩
-  rcases hba with ⟨d, a_eq⟩
-  by_cases ha0 : a = 0
-  · simp_all
-  have hac0 : a * c != 0 := by
-    intro con
-    rw [con]; rw [zero_mul] at a_eq
-    apply ha0 a_eq
-  have : a * (c * d) = a * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
-  have hcd : c * d = 1 := mul_left_cancel₀ ha0 this
-  have : a * c * (d * c) = a * c * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
-  have hdc : d * c = 1 := mul_left_cancel₀ hac0 this
-  exact ⟨⟨c, d, hcd, hdc⟩, rfl⟩
-
-Depends on / 依赖: a_eq, mul_assoc, mul_one, zero_mul
+/-
+**associated_of_dvd_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_of_dvd_dvd [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M}
+ (hab : a ∣ b) (hba : b ∣ a) : a ~ᵤ b
+参数：hab : a ∣ b；hba : b ∣ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
 -/
 theorem associated_of_dvd_dvd [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M}
     (hab : a ∣ b) (hba : b ∣ a) : a ~ᵤ b := by
@@ -894,168 +614,120 @@ theorem associated_of_dvd_dvd [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : 
   rcases hba with ⟨d, a_eq⟩
   by_cases ha0 : a = 0
   · simp_all
-  have hac0 : a * c != 0 := by
+  have hac0 : a * c ≠ 0 := by
     intro con
-    rw [con]; rw [zero_mul] at a_eq
+    rw [con, zero_mul] at a_eq
     apply ha0 a_eq
   have : a * (c * d) = a * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
   have hcd : c * d = 1 := mul_left_cancel₀ ha0 this
   have : a * c * (d * c) = a * c * 1 := by rw [← mul_assoc, ← a_eq, mul_one]
   have hdc : d * c = 1 := mul_left_cancel₀ hac0 this
   exact ⟨⟨c, d, hcd, hdc⟩, rfl⟩
-
-/--
-theorem `dvd_dvd_iff_associated` / 定理 `dvd_dvd_iff_associated`
-
-English:
-theorem dvd_dvd_iff_associated
-  given: [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M}
-  proof: ⟨fun ⟨h1, h2⟩ => associated_of_dvd_dvd h1 h2, Associated.dvd_dvd⟩
-
-中文:
-定理 dvd_dvd_iff_associated
-  条件: [带零幺半群 M] [是左消去MulZero M] {a b : M}
-  证明: ⟨fun ⟨h1, h2⟩ => associated_of_dvd_dvd h1 h2, Associated.dvd_dvd⟩
-
-Depends on / 依赖: Associated, Associated.dvd_dvd, associated_of_dvd_dvd, dvd_dvd
+/-
+**dvd_dvd_iff_associated** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_dvd_iff_associated [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M
+} : a ∣ b ∧ b ∣ a ↔ a ~ᵤ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `associated_of_dvd_dvd`：associated_of_dvd_dvd [MonoidWithZero M] [IsLeftC
+ancelMulZero M] {a b : M} (hab : a ∣ b) (hba : b ∣ a) : a ~ᵤ b
+· 使用定理 `Associated.dvd_dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associ
+ated a b → a ∣ b ∧ b ∣ a
 -/
 theorem dvd_dvd_iff_associated [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M} :
     a ∣ b ∧ b ∣ a ↔ a ~ᵤ b :=
   ⟨fun ⟨h1, h2⟩ => associated_of_dvd_dvd h1 h2, Associated.dvd_dvd⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonoidWithZero
-  signature: M] [IsLeftCancelMulZero M] [DecidableRel ((· ∣ ·) : M -> M -> Prop)] :
-  body: fun _ _ => decidable_of_iff _ dvd_dvd_iff_associated
-
-中文:
-实例 [带零幺半群
-  签名: M] [是左消去MulZero M] [DecidableRel ((· ∣ ·) : M -> M -> 命题)] :
-  定义体: fun _ _ => decidable_of_iff _ dvd_dvd_iff_associated
-
-Depends on / 依赖: decidable_of_iff, dvd_dvd_iff_associated
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [MonoidWithZero M] [IsLeftCancelMulZero M] [DecidableRel ((· ∣ ·) : M -> M -> Prop)] :
-    DecidableRel ((· ~ᵤ ·) : M -> M -> Prop) := fun _ _ => decidable_of_iff _ dvd_dvd_iff_associated
-
-/--
-theorem `Associated.dvd_iff_dvd_left` / 定理 `Associated.dvd_iff_dvd_left`
-
-English:
-theorem Associated.dvd_iff_dvd_left
-  given: [Monoid M] {a b c : M} (h : a ~ᵤ b)
-  statement: a ∣ c ↔ b ∣ c
-  proof: let ⟨_, hu⟩ := h
-  hu ▸ Units.mul_right_dvd.symm
-
-中文:
-定理 Associated.dvd_iff_dvd_left
-  条件: [幺半群 M] {a b c : M} (h : a ~ᵤ b)
-  结论: a ∣ c ↔ b ∣ c
-  证明: let ⟨_, hu⟩ := h
-  hu ▸ Units.mul_right_dvd.symm
-
-Depends on / 依赖: Units.mul_right_dvd.symm, mul_right_dvd
+instance [MonoidWithZero M] [IsLeftCancelMulZero M] [DecidableRel ((· ∣ ·) : M → M → Prop)] :
+    DecidableRel ((· ~ᵤ ·) : M → M → Prop) := fun _ _ => decidable_of_iff _ dvd_dvd_iff_associated
+/-
+**Associated.dvd_iff_dvd_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.dvd_iff_dvd_left [Monoid M] {a b c : M} (h : a ~ᵤ b) : a ∣ c ↔ 
+b ∣ c
+参数：h : a ~ᵤ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Units.mul_right_dvd`：mul_right_dvd : a * u ∣ b ↔ a ∣ b
 -/
 theorem Associated.dvd_iff_dvd_left [Monoid M] {a b c : M} (h : a ~ᵤ b) : a ∣ c ↔ b ∣ c :=
   let ⟨_, hu⟩ := h
   hu ▸ Units.mul_right_dvd.symm
-
-/--
-theorem `Associated.dvd_iff_dvd_right` / 定理 `Associated.dvd_iff_dvd_right`
-
-English:
-theorem Associated.dvd_iff_dvd_right
-  given: [Monoid M] {a b c : M} (h : b ~ᵤ c)
-  statement: a ∣ b ↔ a ∣ c
-  proof: let ⟨_, hu⟩ := h
-  hu ▸ Units.dvd_mul_right.symm
-
-中文:
-定理 Associated.dvd_iff_dvd_right
-  条件: [幺半群 M] {a b c : M} (h : b ~ᵤ c)
-  结论: a ∣ b ↔ a ∣ c
-  证明: let ⟨_, hu⟩ := h
-  hu ▸ Units.dvd_mul_right.symm
-
-Depends on / 依赖: Units.dvd_mul_right.symm, dvd_mul_right
+/-
+**Associated.dvd_iff_dvd_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.dvd_iff_dvd_right [Monoid M] {a b c : M} (h : b ~ᵤ c) : a ∣ b ↔
+ a ∣ c
+参数：h : b ~ᵤ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Units.dvd_mul_right`：dvd_mul_right : a ∣ b * u ↔ a ∣ b
 -/
 theorem Associated.dvd_iff_dvd_right [Monoid M] {a b c : M} (h : b ~ᵤ c) : a ∣ b ↔ a ∣ c :=
   let ⟨_, hu⟩ := h
   hu ▸ Units.dvd_mul_right.symm
-
-/--
-theorem `Associated.eq_zero_iff` / 定理 `Associated.eq_zero_iff`
-
-English:
-theorem Associated.eq_zero_iff
-  given: [MonoidWithZero M] {a b : M} (h : a ~ᵤ b)
-  statement: a = 0 ↔ b = 0
-  proof: by
-  obtain ⟨u, rfl⟩ := h
-  rw [← Units.eq_mul_inv_iff_mul_eq]; rw [zero_mul]
-
-中文:
-定理 Associated.eq_zero_iff
-  条件: [带零幺半群 M] {a b : M} (h : a ~ᵤ b)
-  结论: a = 0 ↔ b = 0
-  证明: by
-  obtain ⟨u, rfl⟩ := h
-  rw [← Units.eq_mul_inv_iff_mul_eq]; rw [zero_mul]
-
-Depends on / 依赖: Units.eq_mul_inv_iff_mul_eq, eq_mul_inv_iff_mul_eq, zero_mul
+/-
+**Associated.eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.eq_zero_iff [MonoidWithZero M] {a b : M} (h : a ~ᵤ b) : a = 0 ↔
+ b = 0
+参数：h : a ~ᵤ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Units.eq_mul_inv_iff_mul_eq`：eq_mul_inv_iff_mul_eq {a b : α} : a = b * ↑
+c⁻¹ ↔ a * c = b
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Associated.eq_zero_iff [MonoidWithZero M] {a b : M} (h : a ~ᵤ b) : a = 0 ↔ b = 0 := by
   obtain ⟨u, rfl⟩ := h
-  rw [← Units.eq_mul_inv_iff_mul_eq]; rw [zero_mul]
-
-/--
-theorem `Associated.ne_zero_iff` / 定理 `Associated.ne_zero_iff`
-
-English:
-theorem Associated.ne_zero_iff
-  given: [MonoidWithZero M] {a b : M} (h : a ~ᵤ b)
-  statement: a != 0 ↔ b != 0
-  proof: not_congr h.eq_zero_iff
-
-中文:
-定理 Associated.ne_zero_iff
-  条件: [带零幺半群 M] {a b : M} (h : a ~ᵤ b)
-  结论: a != 0 ↔ b != 0
-  证明: not_congr h.eq_zero_iff
-
-Depends on / 依赖: eq_zero_iff, h.eq_zero_iff, not_congr
+  rw [← Units.eq_mul_inv_iff_mul_eq, zero_mul]
+/-
+**Associated.ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.ne_zero_iff [MonoidWithZero M] {a b : M} (h : a ~ᵤ b) : a != 0 
+↔ b != 0
+参数：h : a ~ᵤ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Associated.eq_zero_iff`：Associated.eq_zero_iff [MonoidWithZero M] {a b :
+ M} (h : a ~ᵤ b) : a = 0 ↔ b = 0
 -/
-theorem Associated.ne_zero_iff [MonoidWithZero M] {a b : M} (h : a ~ᵤ b) : a != 0 ↔ b != 0 :=
+theorem Associated.ne_zero_iff [MonoidWithZero M] {a b : M} (h : a ~ᵤ b) : a ≠ 0 ↔ b ≠ 0 :=
   not_congr h.eq_zero_iff
-
-/--
-theorem `Associated.prime` / 定理 `Associated.prime`
-
-English:
-theorem Associated.prime
-  given: [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ q) (hp : Prime p)
-  proof: ⟨h.ne_zero_iff.1 hp.ne_zero,
-    let ⟨u, hu⟩ := h
-    ⟨fun ⟨v, hv⟩ => hp.not_isUnit ⟨v * u⁻¹, by simp [hv, hu.symm]⟩, by
-      rw [← hu]
-      simp only [Units.isUnit, IsUnit.mul_right_dvd]
-      intro a b
-      exact hp.dvd_or_dvd⟩⟩
-
-中文:
-定理 Associated.prime
-  条件: [带零交换幺半群 M] {p q : M} (h : p ~ᵤ q) (hp : 素 p)
-  证明: ⟨h.ne_zero_iff.1 hp.ne_zero,
-    let ⟨u, hu⟩ := h
-    ⟨fun ⟨v, hv⟩ => hp.not_isUnit ⟨v * u⁻¹, by simp [hv, hu.symm]⟩, by
-      rw [← hu]
-      simp only [Units.isUnit, IsUnit.mul_right_dvd]
-      intro a b
-      exact hp.dvd_or_dvd⟩⟩
+/-
+**Associated.prime** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoidWithZero M] {p q : M}, Associated p q →
+ Prime p → Prime q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Associated.ne_zero_iff`：Associated.ne_zero_iff [MonoidWithZero M] {a b :
+ M} (h : a ~ᵤ b) : a != 0 ↔ b != 0
+· 使用定理 `Prime.ne_zero`：ne_zero : p != 0
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Units.mul_inv_cancel_right`：mul_inv_cancel_right (a : α) (b : αˣ) : a * 
+b * ↑b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Prime.dvd_or_dvd`：dvd_or_dvd {a b : M} (h : p ∣ a * b) : p ∣ a ∨ p ∣ b
 -/
 protected theorem Associated.prime [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ q) (hp : Prime p) :
     Prime q :=
@@ -1066,43 +738,30 @@ protected theorem Associated.prime [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ 
       simp only [Units.isUnit, IsUnit.mul_right_dvd]
       intro a b
       exact hp.dvd_or_dvd⟩⟩
-
-/--
-theorem `prime_mul_iff` / 定理 `prime_mul_iff`
-
-English:
-theorem prime_mul_iff
-  given: [CommMonoidWithZero M] [IsCancelMulZero M] {x y : M}
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · rcases of_irreducible_mul h.irreducible with hx | hy
-    · exact Or.inr ⟨hx, (associated_unit_mul_left y x hx).prime h⟩
-    · exact Or.inl ⟨(associated_mul_unit_left x y hy).prime h, hy⟩
-  · rintro (⟨hx, hy⟩ | ⟨hx, hy⟩)
-    · exact (associated_mul_unit_left x y hy).symm.prime hx
-    · exact (associated_unit_mul_right y x hx).prime hy
-
-@[simp]
-
-中文:
-定理 prime_mul_iff
-  条件: [带零交换幺半群 M] [是乘零消去 M] {x y : M}
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · rcases of_irreducible_mul h.irreducible with hx | hy
-    · exact Or.inr ⟨hx, (associated_unit_mul_left y x hx).prime h⟩
-    · exact Or.inl ⟨(associated_mul_unit_left x y hy).prime h, hy⟩
-  · rintro (⟨hx, hy⟩ | ⟨hx, hy⟩)
-    · exact (associated_mul_unit_left x y hy).symm.prime hx
-    · exact (associated_unit_mul_right y x hx).prime hy
-
-@[simp]
-
-Depends on / 依赖: Or.inl, Or.inr, associated_mul_unit_left, associated_unit_mul_left, associated_unit_mul_right, h.irreducible, irreducible, of_irreducible_mul, symm.prime
+/-
+**prime_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：prime_mul_iff [CommMonoidWithZero M] [IsCancelMulZero M] {x y : M} : Prime
+ (x * y) ↔ (Prime x ∧ IsUnit y) ∨ (IsUnit x ∧ Prime y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_irreducible_mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Irredu
+cible (a * b) → IsUnit a ∨ IsUnit b
+· 使用定理 `Prime.irreducible`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCan
+celMulZero M] {p : M}, Prime p → Irreducible p
+· 使用定理 `Associated.prime`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] {p q : 
+M}, Associated p q → Prime p → Prime q
+· 使用定理 `associated_unit_mul_left`：associated_unit_mul_left {N : Type*} [CommMono
+id N] (a u : N) (hu : IsUnit u) : Associated (u * a) a
+· 使用定理 `associated_mul_unit_left`：associated_mul_unit_left {N : Type*} [Monoid N
+] (a u : N) (hu : IsUnit u) : Associated (a * u) a
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `associated_unit_mul_right`：associated_unit_mul_right {N : Type*} [CommMo
+noid N] (a u : N) (hu : IsUnit u) : Associated a (u * a)
 -/
 theorem prime_mul_iff [CommMonoidWithZero M] [IsCancelMulZero M] {x y : M} :
     Prime (x * y) ↔ (Prime x ∧ IsUnit y) ∨ (IsUnit x ∧ Prime y) := by
-  refine ⟨fun h => ?_, ?_⟩
+  refine ⟨fun h ↦ ?_, ?_⟩
   · rcases of_irreducible_mul h.irreducible with hx | hy
     · exact Or.inr ⟨hx, (associated_unit_mul_left y x hx).prime h⟩
     · exact Or.inl ⟨(associated_mul_unit_left x y hy).prime h, hy⟩
@@ -1111,65 +770,48 @@ theorem prime_mul_iff [CommMonoidWithZero M] [IsCancelMulZero M] {x y : M} :
     · exact (associated_unit_mul_right y x hx).prime hy
 
 @[simp]
-/--
-lemma `prime_pow_iff` / 引理 `prime_pow_iff`
-
-English:
-lemma prime_pow_iff
-  given: [CommMonoidWithZero M] [IsCancelMulZero M] {p : M} {n : Nat}
-  proof: by
-  refine ⟨fun hp => ?_, fun ⟨hp, hn⟩ => by simpa [hn]⟩
-  suffices n = 1 by simp_all
-  grind [not_prime_pow, Nat.zero_eq_one_mod_iff]
-
-中文:
-引理 prime_pow_iff
-  条件: [带零交换幺半群 M] [是乘零消去 M] {p : M} {n : 自然数}
-  证明: by
-  refine ⟨fun hp => ?_, fun ⟨hp, hn⟩ => by simpa [hn]⟩
-  suffices n = 1 by simp_all
-  grind [not_prime_pow, Nat.zero_eq_one_mod_iff]
-
-Depends on / 依赖: Nat.zero_eq_one_mod_iff, not_prime_pow, zero_eq_one_mod_iff
+/-
+**prime_pow_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：prime_pow_iff [CommMonoidWithZero M] [IsCancelMulZero M] {p : M} {n : Nat}
+ : Prime (p ^ n) ↔ Prime p ∧ n = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma prime_pow_iff [CommMonoidWithZero M] [IsCancelMulZero M] {p : M} {n : Nat} :
+lemma prime_pow_iff [CommMonoidWithZero M] [IsCancelMulZero M] {p : M} {n : ℕ} :
     Prime (p ^ n) ↔ Prime p ∧ n = 1 := by
-  refine ⟨fun hp => ?_, fun ⟨hp, hn⟩ => by simpa [hn]⟩
+  refine ⟨fun hp ↦ ?_, fun ⟨hp, hn⟩ ↦ by simpa [hn]⟩
   suffices n = 1 by simp_all
   grind [not_prime_pow, Nat.zero_eq_one_mod_iff]
-
-/--
-theorem `Irreducible.dvd_iff` / 定理 `Irreducible.dvd_iff`
-
-English:
-theorem Irreducible.dvd_iff
-  given: [Monoid M] {x y : M} (hx : Irreducible x)
-  proof: by
-  constructor
-  · rintro ⟨z, hz⟩
-    obtain (h | h) := hx.isUnit_or_isUnit hz
-    · exact Or.inl h
-    · rw [hz]
-      exact Or.inr (associated_mul_unit_left _ _ h)
-  · rintro (hy | h)
-    · exact hy.dvd
-    · exact h.symm.dvd
-
-中文:
-定理 不可约.dvd_iff
-  条件: [幺半群 M] {x y : M} (hx : 不可约 x)
-  证明: by
-  constructor
-  · rintro ⟨z, hz⟩
-    obtain (h | h) := hx.isUnit_or_isUnit hz
-    · exact Or.inl h
-    · rw [hz]
-      exact Or.inr (associated_mul_unit_left _ _ h)
-  · rintro (hy | h)
-    · exact hy.dvd
-    · exact h.symm.dvd
-
-Depends on / 依赖: Or.inl, Or.inr, associated_mul_unit_left, h.symm.dvd, hx.isUnit_or_isUnit, hy.dvd, isUnit_or_isUnit
+/-
+**Irreducible.dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.dvd_iff [Monoid M] {x y : M} (hx : Irreducible x) : y ∣ x ↔ Is
+Unit y ∨ Associated x y
+参数：hx : Irreducible x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.isUnit_or_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}
+, Irreducible p → ∀ ⦃a b : M⦄, p = a * b → IsUnit a ∨ IsUnit b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `associated_mul_unit_left`：associated_mul_unit_left {N : Type*} [Monoid N
+] (a u : N) (hu : IsUnit u) : Associated (a * u) a
+· 使用定理 `IsUnit.dvd`：dvd (hu : IsUnit u) : u ∣ a
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 theorem Irreducible.dvd_iff [Monoid M] {x y : M} (hx : Irreducible x) :
     y ∣ x ↔ IsUnit y ∨ Associated x y := by
@@ -1182,189 +824,168 @@ theorem Irreducible.dvd_iff [Monoid M] {x y : M} (hx : Irreducible x) :
   · rintro (hy | h)
     · exact hy.dvd
     · exact h.symm.dvd
-
-/--
-theorem `Irreducible.associated_of_dvd` / 定理 `Irreducible.associated_of_dvd`
-
-English:
-theorem Irreducible.associated_of_dvd
-  statement: [Monoid M] {p q : M} (p_irr : Irreducible p)
-  proof: ((q_irr.dvd_iff.mp dvd).resolve_left p_irr.not_isUnit).symm
-
-中文:
-定理 不可约.associated_of_dvd
-  结论: [幺半群 M] {p q : M} (p_irr : 不可约 p)
-  证明: ((q_irr.dvd_iff.mp dvd).resolve_left p_irr.not_isUnit).symm
-
-Depends on / 依赖: dvd_iff, not_isUnit, p_irr, p_irr.not_isUnit, q_irr, q_irr.dvd_iff.mp, resolve_left
+/-
+**Irreducible.associated_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.associated_of_dvd [Monoid M] {p q : M} (p_irr : Irreducible p)
+ (q_irr : Irreducible q) (dvd : p ∣ q) : Associated p q
+参数：p_irr : Irreducible p；q_irr : Irreducible q；dvd : p ∣ q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Irreducible.dvd_iff`：Irreducible.dvd_iff [Monoid M] {x y : M} (hx : Irre
+ducible x) : y ∣ x ↔ IsUnit y ∨ Associated x y
+· 使用定理 `Irreducible.not_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}, Irre
+ducible p → ¬IsUnit p
 -/
 theorem Irreducible.associated_of_dvd [Monoid M] {p q : M} (p_irr : Irreducible p)
     (q_irr : Irreducible q) (dvd : p ∣ q) : Associated p q :=
   ((q_irr.dvd_iff.mp dvd).resolve_left p_irr.not_isUnit).symm
-
-/--
-theorem `Irreducible.dvd_irreducible_iff_associated` / 定理 `Irreducible.dvd_irreducible_iff_associated`
-
-English:
-theorem Irreducible.dvd_irreducible_iff_associated
-  statement: [Monoid M] {p q : M}
-  proof: ⟨Irreducible.associated_of_dvd pp qp, Associated.dvd⟩
-
-中文:
-定理 不可约.dvd_irreducible_iff_associated
-  结论: [幺半群 M] {p q : M}
-  证明: ⟨Irreducible.associated_of_dvd pp qp, Associated.dvd⟩
-
-Depends on / 依赖: Associated, Associated.dvd, Irreducible, Irreducible.associated_of_dvd, associated_of_dvd
+/-
+**Irreducible.dvd_irreducible_iff_associated** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.dvd_irreducible_iff_associated [Monoid M] {p q : M} (pp : Irre
+ducible p) (qp : Irreducible q) : p ∣ q ↔ Associated p q
+参数：pp : Irreducible p；qp : Irreducible q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.associated_of_dvd`：Irreducible.associated_of_dvd [Monoid M] 
+{p q : M} (p_irr : Irreducible p) (q_irr : Irreducible q) (dvd : p ∣ q) : Associ
+ated p q
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
 -/
 theorem Irreducible.dvd_irreducible_iff_associated [Monoid M] {p q : M}
     (pp : Irreducible p) (qp : Irreducible q) : p ∣ q ↔ Associated p q :=
   ⟨Irreducible.associated_of_dvd pp qp, Associated.dvd⟩
-
-/--
-theorem `Prime.associated_of_dvd` / 定理 `Prime.associated_of_dvd`
-
-English:
-theorem Prime.associated_of_dvd
-  statement: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
-  proof: p_prime.irreducible.associated_of_dvd q_prime.irreducible dvd
-
-中文:
-定理 素.associated_of_dvd
-  结论: [带零交换幺半群 M] [是乘零消去 M] {p q : M}
-  证明: p_prime.irreducible.associated_of_dvd q_prime.irreducible dvd
-
-Depends on / 依赖: associated_of_dvd, irreducible, p_prime, p_prime.irreducible.associated_of_dvd, q_prime, q_prime.irreducible
+/-
+**Prime.associated_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Prime.associated_of_dvd [CommMonoidWithZero M] [IsCancelMulZero M] {p q : 
+M} (p_prime : Prime p) (q_prime : Prime q) (dvd : p ∣ q) : Associated p q
+参数：p_prime : Prime p；q_prime : Prime q；dvd : p ∣ q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.associated_of_dvd`：Irreducible.associated_of_dvd [Monoid M] 
+{p q : M} (p_irr : Irreducible p) (q_irr : Irreducible q) (dvd : p ∣ q) : Associ
+ated p q
+· 使用定理 `Prime.irreducible`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCan
+celMulZero M] {p : M}, Prime p → Irreducible p
 -/
 theorem Prime.associated_of_dvd [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
     (p_prime : Prime p) (q_prime : Prime q) (dvd : p ∣ q) : Associated p q :=
   p_prime.irreducible.associated_of_dvd q_prime.irreducible dvd
-
-/--
-theorem `Prime.dvd_prime_iff_associated` / 定理 `Prime.dvd_prime_iff_associated`
-
-English:
-theorem Prime.dvd_prime_iff_associated
-  statement: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
-  proof: pp.irreducible.dvd_irreducible_iff_associated qp.irreducible
-
-中文:
-定理 素.dvd_prime_iff_associated
-  结论: [带零交换幺半群 M] [是乘零消去 M] {p q : M}
-  证明: pp.irreducible.dvd_irreducible_iff_associated qp.irreducible
-
-Depends on / 依赖: dvd_irreducible_iff_associated, irreducible, pp.irreducible.dvd_irreducible_iff_associated, qp.irreducible
+/-
+**Prime.dvd_prime_iff_associated** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Prime.dvd_prime_iff_associated [CommMonoidWithZero M] [IsCancelMulZero M] 
+{p q : M} (pp : Prime p) (qp : Prime q) : p ∣ q ↔ Associated p q
+参数：pp : Prime p；qp : Prime q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.dvd_irreducible_iff_associated`：Irreducible.dvd_irreducible_
+iff_associated [Monoid M] {p q : M} (pp : Irreducible p) (qp : Irreducible q) : 
+p ∣ q ↔ Associated p q
+· 使用定理 `Prime.irreducible`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCan
+celMulZero M] {p : M}, Prime p → Irreducible p
 -/
 theorem Prime.dvd_prime_iff_associated [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
     (pp : Prime p) (qp : Prime q) : p ∣ q ↔ Associated p q :=
   pp.irreducible.dvd_irreducible_iff_associated qp.irreducible
-
-/--
-theorem `Associated.prime_iff` / 定理 `Associated.prime_iff`
-
-English:
-theorem Associated.prime_iff
-  given: [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ q)
-  statement: Prime p ↔ Prime q
-  proof: ⟨h.prime, h.symm.prime⟩
-
-中文:
-定理 Associated.prime_iff
-  条件: [带零交换幺半群 M] {p q : M} (h : p ~ᵤ q)
-  结论: 素 p ↔ 素 q
-  证明: ⟨h.prime, h.symm.prime⟩
-
-Depends on / 依赖: h.prime, h.symm.prime
+/-
+**Associated.prime_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.prime_iff [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ q) : Prime
+ p ↔ Prime q
+参数：h : p ~ᵤ q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.prime`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] {p q : 
+M}, Associated p q → Prime p → Prime q
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 theorem Associated.prime_iff [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ q) : Prime p ↔ Prime q :=
   ⟨h.prime, h.symm.prime⟩
-
-/--
-theorem `Associated.isUnit` / 定理 `Associated.isUnit`
-
-English:
-theorem Associated.isUnit
-  given: [Monoid M] {a b : M} (h : a ~ᵤ b)
-  statement: IsUnit a -> IsUnit b
-  proof: let ⟨u, hu⟩ := h
-  fun ⟨v, hv⟩ => ⟨v * u, by simp [hv, hu.symm]⟩
-
-中文:
-定理 Associated.isUnit
-  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
-  结论: 是单位 a -> 是单位 b
-  证明: let ⟨u, hu⟩ := h
-  fun ⟨v, hv⟩ => ⟨v * u, by simp [hv, hu.symm]⟩
+/-
+**Associated.isUnit** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated a b → IsUnit a → 
+IsUnit b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem Associated.isUnit [Monoid M] {a b : M} (h : a ~ᵤ b) : IsUnit a -> IsUnit b :=
+protected theorem Associated.isUnit [Monoid M] {a b : M} (h : a ~ᵤ b) : IsUnit a → IsUnit b :=
   let ⟨u, hu⟩ := h
   fun ⟨v, hv⟩ => ⟨v * u, by simp [hv, hu.symm]⟩
-
-/--
-theorem `Associated.isUnit_iff` / 定理 `Associated.isUnit_iff`
-
-English:
-theorem Associated.isUnit_iff
-  given: [Monoid M] {a b : M} (h : a ~ᵤ b)
-  statement: IsUnit a ↔ IsUnit b
-  proof: ⟨h.isUnit, h.symm.isUnit⟩
-
-中文:
-定理 Associated.isUnit_iff
-  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
-  结论: 是单位 a ↔ 是单位 b
-  证明: ⟨h.isUnit, h.symm.isUnit⟩
-
-Depends on / 依赖: h.isUnit, h.symm.isUnit, isUnit
+/-
+**Associated.isUnit_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.isUnit_iff [Monoid M] {a b : M} (h : a ~ᵤ b) : IsUnit a ↔ IsUni
+t b
+参数：h : a ~ᵤ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.isUnit`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associa
+ted a b → IsUnit a → IsUnit b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 theorem Associated.isUnit_iff [Monoid M] {a b : M} (h : a ~ᵤ b) : IsUnit a ↔ IsUnit b :=
   ⟨h.isUnit, h.symm.isUnit⟩
-
-/--
-theorem `Irreducible.isUnit_iff_not_associated_of_dvd` / 定理 `Irreducible.isUnit_iff_not_associated_of_dvd`
-
-English:
-theorem Irreducible.isUnit_iff_not_associated_of_dvd
-  statement: [Monoid M]
-  proof: ⟨fun hy hxy => hx.1 (hxy.symm.isUnit hy), (hx.dvd_iff.mp hy).resolve_right⟩
-
-中文:
-定理 不可约.isUnit_iff_not_associated_of_dvd
-  结论: [幺半群 M]
-  证明: ⟨fun hy hxy => hx.1 (hxy.symm.isUnit hy), (hx.dvd_iff.mp hy).resolve_right⟩
-
-Depends on / 依赖: dvd_iff, hx.dvd_iff.mp, hxy.symm.isUnit, isUnit, resolve_right
+/-
+**Irreducible.isUnit_iff_not_associated_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.isUnit_iff_not_associated_of_dvd [Monoid M] {x y : M} (hx : Ir
+reducible x) (hy : y ∣ x) : IsUnit y ↔ ¬ Associated x y
+参数：hx : Irreducible x；hy : y ∣ x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.not_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}, Irre
+ducible p → ¬IsUnit p
+· 使用定理 `Associated.isUnit`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associa
+ted a b → IsUnit a → IsUnit b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Irreducible.dvd_iff`：Irreducible.dvd_iff [Monoid M] {x y : M} (hx : Irre
+ducible x) : y ∣ x ↔ IsUnit y ∨ Associated x y
 -/
 theorem Irreducible.isUnit_iff_not_associated_of_dvd [Monoid M]
     {x y : M} (hx : Irreducible x) (hy : y ∣ x) : IsUnit y ↔ ¬ Associated x y :=
   ⟨fun hy hxy => hx.1 (hxy.symm.isUnit hy), (hx.dvd_iff.mp hy).resolve_right⟩
-
-/--
-theorem `Associated.irreducible` / 定理 `Associated.irreducible`
-
-English:
-theorem Associated.irreducible
-  given: [Monoid M] {p q : M} (h : p ~ᵤ q) (hp : Irreducible p)
-  proof: ⟨mt h.symm.isUnit hp.1,
-    let ⟨u, hu⟩ := h
-    fun a b hab =>
-    have hpab : p = a * (b * (u⁻¹ : Mˣ)) :=
-      calc
-        p = p * u * (u⁻¹ : Mˣ) := by simp
-        _ = _ := by rw [hu]; simp [hab, mul_assoc]
-    (hp.isUnit_or_isUnit hpab).elim Or.inl fun ⟨v, hv⟩ => Or.inr ⟨v * u, by simp [hv]⟩⟩
-
-中文:
-定理 Associated.irreducible
-  条件: [幺半群 M] {p q : M} (h : p ~ᵤ q) (hp : 不可约 p)
-  证明: ⟨mt h.symm.isUnit hp.1,
-    let ⟨u, hu⟩ := h
-    fun a b hab =>
-    have hpab : p = a * (b * (u⁻¹ : Mˣ)) :=
-      calc
-        p = p * u * (u⁻¹ : Mˣ) := by simp
-        _ = _ := by rw [hu]; simp [hab, mul_assoc]
-    (hp.isUnit_or_isUnit hpab).elim Or.inl fun ⟨v, hv⟩ => Or.inr ⟨v * u, by simp [hv]⟩⟩
+/-
+**Associated.irreducible** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {p q : M}, Associated p q → Irreducible
+ p → Irreducible q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Associated.isUnit`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associa
+ted a b → IsUnit a → IsUnit b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `Irreducible.not_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}, Irre
+ducible p → ¬IsUnit p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Units.mul_inv_cancel_right`：mul_inv_cancel_right (a : α) (b : αˣ) : a * 
+b * ↑b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Irreducible.isUnit_or_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}
+, Irreducible p → ∀ ⦃a b : M⦄, p = a * b → IsUnit a ∨ IsUnit b
+· 使用定理 `Units.inv_mul_cancel_right`：inv_mul_cancel_right (a : α) (b : αˣ) : a * 
+↑b⁻¹ * b = a
 -/
 protected theorem Associated.irreducible [Monoid M] {p q : M} (h : p ~ᵤ q) (hp : Irreducible p) :
     Irreducible q :=
@@ -1376,180 +997,162 @@ protected theorem Associated.irreducible [Monoid M] {p q : M} (h : p ~ᵤ q) (hp
         p = p * u * (u⁻¹ : Mˣ) := by simp
         _ = _ := by rw [hu]; simp [hab, mul_assoc]
     (hp.isUnit_or_isUnit hpab).elim Or.inl fun ⟨v, hv⟩ => Or.inr ⟨v * u, by simp [hv]⟩⟩
-
-/--
-theorem `Associated.irreducible_iff` / 定理 `Associated.irreducible_iff`
-
-English:
-theorem Associated.irreducible_iff
-  given: [Monoid M] {p q : M} (h : p ~ᵤ q)
-  proof: ⟨h.irreducible, h.symm.irreducible⟩
-
-中文:
-定理 Associated.irreducible_iff
-  条件: [幺半群 M] {p q : M} (h : p ~ᵤ q)
-  证明: ⟨h.irreducible, h.symm.irreducible⟩
+/-
+**Associated.irreducible_iff** 是 Mathlib 中的一个定理，位于命名空间 `Associated`。
+形式化陈述：∀ {M : Type u_1} [inst : Monoid M] {p q : M}, Associated p q → (Irreducibl
+e p ↔ Irreducible q)
+参数：Irreducible p ↔ Irreducible q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.irreducible`：∀ {M : Type u_1} [inst : Monoid M] {p q : M}, As
+sociated p q → Irreducible p → Irreducible q
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 protected theorem Associated.irreducible_iff [Monoid M] {p q : M} (h : p ~ᵤ q) :
     Irreducible p ↔ Irreducible q :=
   ⟨h.irreducible, h.symm.irreducible⟩
-
-/--
-theorem `Associated.of_mul_left` / 定理 `Associated.of_mul_left`
-
-English:
-theorem Associated.of_mul_left
-  statement: [CommMonoidWithZero M] [IsCancelMulZero M] {a b c d : M}
-  proof: let ⟨u, hu⟩ := h
-  let ⟨v, hv⟩ := Associated.symm h₁
-  ⟨u * (v : Mˣ),
-    mul_left_cancel₀ ha
-      (by
-        rw [← hv]; rw [mul_assoc c (v : M) d]; rw [mul_left_comm c]; rw [← hu]
-        simp [hv.symm, mul_comm, mul_left_comm])⟩
-
-中文:
-定理 Associated.of_mul_left
-  结论: [带零交换幺半群 M] [是乘零消去 M] {a b c d : M}
-  证明: let ⟨u, hu⟩ := h
-  let ⟨v, hv⟩ := Associated.symm h₁
-  ⟨u * (v : Mˣ),
-    mul_left_cancel₀ ha
-      (by
-        rw [← hv]; rw [mul_assoc c (v : M) d]; rw [mul_left_comm c]; rw [← hu]
-        simp [hv.symm, mul_comm, mul_left_comm])⟩
-
-Depends on / 依赖: Associated, Associated.symm, hv.symm, mul_assoc, mul_comm, mul_left_comm
+/-
+**Associated.of_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.of_mul_left [CommMonoidWithZero M] [IsCancelMulZero M] {a b c d
+ : M} (h : a * b ~ᵤ c * d) (h₁ : a ~ᵤ c) (ha : a != 0) : b ~ᵤ d
+参数：h : a * b ~ᵤ c * d；h₁ : a ~ᵤ c；ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Associated.of_mul_left [CommMonoidWithZero M] [IsCancelMulZero M] {a b c d : M}
-    (h : a * b ~ᵤ c * d) (h₁ : a ~ᵤ c) (ha : a != 0) : b ~ᵤ d :=
+    (h : a * b ~ᵤ c * d) (h₁ : a ~ᵤ c) (ha : a ≠ 0) : b ~ᵤ d :=
   let ⟨u, hu⟩ := h
   let ⟨v, hv⟩ := Associated.symm h₁
   ⟨u * (v : Mˣ),
     mul_left_cancel₀ ha
       (by
-        rw [← hv]; rw [mul_assoc c (v : M) d]; rw [mul_left_comm c]; rw [← hu]
+        rw [← hv, mul_assoc c (v : M) d, mul_left_comm c, ← hu]
         simp [hv.symm, mul_comm, mul_left_comm])⟩
-
-/--
-theorem `Associated.of_mul_right` / 定理 `Associated.of_mul_right`
-
-English:
-theorem Associated.of_mul_right
-  given: [CommMonoidWithZero M] [IsCancelMulZero M] {a b c d : M}
-  proof: by
-  rw [mul_comm a]; rw [mul_comm c]; exact Associated.of_mul_left
-
-中文:
-定理 Associated.of_mul_right
-  条件: [带零交换幺半群 M] [是乘零消去 M] {a b c d : M}
-  证明: by
-  rw [mul_comm a]; rw [mul_comm c]; exact Associated.of_mul_left
-
-Depends on / 依赖: Associated, Associated.of_mul_left, mul_comm, of_mul_left
+/-
+**Associated.of_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.of_mul_right [CommMonoidWithZero M] [IsCancelMulZero M] {a b c 
+d : M} : a * b ~ᵤ c * d -> b ~ᵤ d -> b != 0 -> a ~ᵤ c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Associated.of_mul_left`：Associated.of_mul_left [CommMonoidWithZero M] [I
+sCancelMulZero M] {a b c d : M} (h : a * b ~ᵤ c * d) (h₁ : a ~ᵤ c) (ha : a != 0)
+ : b ~ᵤ d
 -/
 theorem Associated.of_mul_right [CommMonoidWithZero M] [IsCancelMulZero M] {a b c d : M} :
-    a * b ~ᵤ c * d -> b ~ᵤ d -> b != 0 -> a ~ᵤ c := by
-  rw [mul_comm a]; rw [mul_comm c]; exact Associated.of_mul_left
-
-/--
-theorem `Associated.of_pow_associated_of_prime` / 定理 `Associated.of_pow_associated_of_prime`
-
-English:
-theorem Associated.of_pow_associated_of_prime
-  statement: [CommMonoidWithZero M] [IsCancelMulZero M]
-  proof: by
-  have : p₁ ∣ p₂ ^ k₂ := by
-    rw [← h.dvd_iff_dvd_right]
-    apply dvd_pow_self _ hk₁.ne'
-  rw [← hp₁.dvd_prime_iff_associated hp₂]
-  exact hp₁.dvd_of_dvd_pow this
-
-中文:
-定理 Associated.of_pow_associated_of_prime
-  结论: [带零交换幺半群 M] [是乘零消去 M]
-  证明: by
-  have : p₁ ∣ p₂ ^ k₂ := by
-    rw [← h.dvd_iff_dvd_right]
-    apply dvd_pow_self _ hk₁.ne'
-  rw [← hp₁.dvd_prime_iff_associated hp₂]
-  exact hp₁.dvd_of_dvd_pow this
-
-Depends on / 依赖: dvd_iff_dvd_right, dvd_of_dvd_pow, dvd_pow_self, dvd_prime_iff_associated, h.dvd_iff_dvd_right
+    a * b ~ᵤ c * d → b ~ᵤ d → b ≠ 0 → a ~ᵤ c := by
+  rw [mul_comm a, mul_comm c]; exact Associated.of_mul_left
+/-
+**Associated.of_pow_associated_of_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.of_pow_associated_of_prime [CommMonoidWithZero M] [IsCancelMulZ
+ero M] {p₁ p₂ : M} {k₁ k₂ : Nat} (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₁
+) (h : p₁ ^ k₁ ~ᵤ p₂ ^ k₂) : p₁ ~ᵤ p₂
+参数：hp₁ : Prime p₁；hp₂ : Prime p₂；hk₁ : 0 < k₁；h : p₁ ^ k₁ ~ᵤ p₂ ^ k₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associated.dvd_iff_dvd_right`：Associated.dvd_iff_dvd_right [Monoid M] {a
+ b c : M} (h : b ~ᵤ c) : a ∣ b ↔ a ∣ c
+· 使用引理 `dvd_pow_self`：dvd_pow_self (a : α) {n : Nat} (hn : n != 0) : a ∣ a ^ n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Prime.dvd_prime_iff_associated`：Prime.dvd_prime_iff_associated [CommMono
+idWithZero M] [IsCancelMulZero M] {p q : M} (pp : Prime p) (qp : Prime q) : p ∣ 
+q ↔ Associated p q
+· 使用定理 `Prime.dvd_of_dvd_pow`：dvd_of_dvd_pow {a : M} {n : Nat} (h : p ∣ a ^ n) :
+ p ∣ a
 -/
 theorem Associated.of_pow_associated_of_prime [CommMonoidWithZero M] [IsCancelMulZero M]
-    {p₁ p₂ : M} {k₁ k₂ : Nat}
+    {p₁ p₂ : M} {k₁ k₂ : ℕ}
     (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₁) (h : p₁ ^ k₁ ~ᵤ p₂ ^ k₂) : p₁ ~ᵤ p₂ := by
   have : p₁ ∣ p₂ ^ k₂ := by
     rw [← h.dvd_iff_dvd_right]
     apply dvd_pow_self _ hk₁.ne'
   rw [← hp₁.dvd_prime_iff_associated hp₂]
   exact hp₁.dvd_of_dvd_pow this
-
-/--
-theorem `Associated.of_pow_associated_of_prime'` / 定理 `Associated.of_pow_associated_of_prime'`
-
-English:
-theorem Associated.of_pow_associated_of_prime'
-  statement: [CommMonoidWithZero M] [IsCancelMulZero M]
-  proof: (h.symm.of_pow_associated_of_prime hp₂ hp₁ hk₂).symm
-
-中文:
-定理 Associated.of_pow_associated_of_prime'
-  结论: [带零交换幺半群 M] [是乘零消去 M]
-  证明: (h.symm.of_pow_associated_of_prime hp₂ hp₁ hk₂).symm
-
-Depends on / 依赖: h.symm.of_pow_associated_of_prime, of_pow_associated_of_prime
+/-
+**Associated.of_pow_associated_of_prime'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.of_pow_associated_of_prime' [CommMonoidWithZero M] [IsCancelMul
+Zero M] {p₁ p₂ : M} {k₁ k₂ : Nat} (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₂ : 0 < k
+₂) (h : p₁ ^ k₁ ~ᵤ p₂ ^ k₂) : p₁ ~ᵤ p₂
+参数：hp₁ : Prime p₁；hp₂ : Prime p₂；hk₂ : 0 < k₂；h : p₁ ^ k₁ ~ᵤ p₂ ^ k₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `Associated.of_pow_associated_of_prime`：Associated.of_pow_associated_of_p
+rime [CommMonoidWithZero M] [IsCancelMulZero M] {p₁ p₂ : M} {k₁ k₂ : Nat} (hp₁ :
+ Prime p₁) (hp₂ : Prime p₂)…
 -/
 theorem Associated.of_pow_associated_of_prime' [CommMonoidWithZero M] [IsCancelMulZero M]
-    {p₁ p₂ : M} {k₁ k₂ : Nat}
+    {p₁ p₂ : M} {k₁ k₂ : ℕ}
     (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₂ : 0 < k₂) (h : p₁ ^ k₁ ~ᵤ p₂ ^ k₂) : p₁ ~ᵤ p₂ :=
   (h.symm.of_pow_associated_of_prime hp₂ hp₁ hk₂).symm
 
-/--
-lemma `Irreducible.isRelPrime_iff_not_dvd` / 引理 `Irreducible.isRelPrime_iff_not_dvd`
+/-- See also `Irreducible.coprime_iff_not_dvd`. -/
+/-
+**Irreducible.isRelPrime_iff_not_dvd** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Irreducible.isRelPrime_iff_not_dvd [Monoid M] {p n : M} (hp : Irreducible 
+p) : IsRelPrime p n ↔ ¬ p ∣ n
+参数：hp : Irreducible p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.not_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}, Irre
+ducible p → ¬IsUnit p
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Irreducible.dvd_iff`：Irreducible.dvd_iff [Monoid M] {x y : M} (hx : Irre
+ducible x) : y ∣ x ↔ IsUnit y ∨ Associated x y
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
 
-English:
-lemma Irreducible.isRelPrime_iff_not_dvd
-  given: [Monoid M] {p n : M} (hp : Irreducible p)
-  proof: by
-  refine ⟨fun h contra => hp.not_isUnit (h dvd_rfl contra), fun hpn d hdp hdn => ?_⟩
-  contrapose hpn
-  suffices Associated p d from this.dvd.trans hdn
-  exact (hp.dvd_iff.mp hdp).resolve_left hpn
-
-中文:
-引理 不可约.isRelPrime_iff_not_dvd
-  条件: [幺半群 M] {p n : M} (hp : 不可约 p)
-  证明: by
-  refine ⟨fun h contra => hp.not_isUnit (h dvd_rfl contra), fun hpn d hdp hdn => ?_⟩
-  contrapose hpn
-  suffices Associated p d from this.dvd.trans hdn
-  exact (hp.dvd_iff.mp hdp).resolve_left hpn
-
-Depends on / 依赖: Associated, contra, contrapose, dvd_iff, dvd_rfl, hp.dvd_iff.mp, hp.not_isUnit, not_isUnit, resolve_left, this.dvd.trans
+--- 原说明 ---
+See also `Irreducible.coprime_iff_not_dvd`.
 -/
 lemma Irreducible.isRelPrime_iff_not_dvd [Monoid M] {p n : M} (hp : Irreducible p) :
     IsRelPrime p n ↔ ¬ p ∣ n := by
-  refine ⟨fun h contra => hp.not_isUnit (h dvd_rfl contra), fun hpn d hdp hdn => ?_⟩
+  refine ⟨fun h contra ↦ hp.not_isUnit (h dvd_rfl contra), fun hpn d hdp hdn ↦ ?_⟩
   contrapose hpn
   suffices Associated p d from this.dvd.trans hdn
   exact (hp.dvd_iff.mp hdp).resolve_left hpn
-
-/--
-lemma `Irreducible.dvd_or_isRelPrime` / 引理 `Irreducible.dvd_or_isRelPrime`
-
-English:
-lemma Irreducible.dvd_or_isRelPrime
-  given: [Monoid M] {p n : M} (hp : Irreducible p)
-  proof: Classical.or_iff_not_imp_left.mpr hp.isRelPrime_iff_not_dvd.2
-
-中文:
-引理 不可约.dvd_or_isRelPrime
-  条件: [幺半群 M] {p n : M} (hp : 不可约 p)
-  证明: Classical.or_iff_not_imp_left.mpr hp.isRelPrime_iff_not_dvd.2
-
-Depends on / 依赖: Classical, Classical.or_iff_not_imp_left.mpr, hp.isRelPrime_iff_not_dvd, isRelPrime_iff_not_dvd, or_iff_not_imp_left
+/-
+**Irreducible.dvd_or_isRelPrime** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Irreducible.dvd_or_isRelPrime [Monoid M] {p n : M} (hp : Irreducible p) : 
+p ∣ n ∨ IsRelPrime p n
+参数：hp : Irreducible p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用引理 `Irreducible.isRelPrime_iff_not_dvd`：Irreducible.isRelPrime_iff_not_dvd [
+Monoid M] {p n : M} (hp : Irreducible p) : IsRelPrime p n ↔ ¬ p ∣ n
 -/
 lemma Irreducible.dvd_or_isRelPrime [Monoid M] {p n : M} (hp : Irreducible p) :
     p ∣ n ∨ IsRelPrime p n := Classical.or_iff_not_imp_left.mpr hp.isRelPrime_iff_not_dvd.2
@@ -1558,121 +1161,102 @@ section UniqueUnits
 
 variable [Monoid M] [Subsingleton Mˣ]
 
-/--
-theorem `associated_iff_eq` / 定理 `associated_iff_eq`
-
-English:
-theorem associated_iff_eq
-  given: {x y : M}
-  statement: x ~ᵤ y ↔ x = y
-  proof: by
-  simp [Associated, Units.eq_one]
-
-中文:
-定理 associated_iff_eq
-  条件: {x y : M}
-  结论: x ~ᵤ y ↔ x = y
-  证明: by
-  simp [Associated, Units.eq_one]
-
-Depends on / 依赖: Associated, Units.eq_one, eq_one
+/-
+**associated_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_iff_eq {x y : M} : x ~ᵤ y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Units.eq_one`：∀ {M : Type u_1} [inst : Monoid M] [Subsingleton Mˣ] (u : 
+Mˣ), u = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem associated_iff_eq {x y : M} : x ~ᵤ y ↔ x = y := by
   simp [Associated, Units.eq_one]
-
-/--
-theorem `associated_eq_eq` / 定理 `associated_eq_eq`
-
-English:
-theorem associated_eq_eq
-  statement: (Associated : M -> M -> Prop) = Eq
-  proof: by
-  ext
-  rw [associated_iff_eq]
-
-中文:
-定理 associated_eq_eq
-  结论: (Associated : M -> M -> 命题) = 相等
-  证明: by
-  ext
-  rw [associated_iff_eq]
-
-Depends on / 依赖: associated_iff_eq
+/-
+**associated_eq_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：associated_eq_eq : (Associated : M -> M -> Prop) = Eq
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `associated_iff_eq`：associated_iff_eq {x y : M} : x ~ᵤ y ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem associated_eq_eq : (Associated : M -> M -> Prop) = Eq := by
+theorem associated_eq_eq : (Associated : M → M → Prop) = Eq := by
   ext
   rw [associated_iff_eq]
-
-/--
-theorem `prime_dvd_prime_iff_eq` / 定理 `prime_dvd_prime_iff_eq`
-
-English:
-theorem prime_dvd_prime_iff_eq
-  statement: {M : Type*} [CommMonoidWithZero M] [IsCancelMulZero M]
-  proof: by
-  rw [pp.dvd_prime_iff_associated qp]; rw [← associated_eq_eq]
-
-中文:
-定理 prime_dvd_prime_iff_eq
-  结论: {M : 类型} [带零交换幺半群 M] [是乘零消去 M]
-  证明: by
-  rw [pp.dvd_prime_iff_associated qp]; rw [← associated_eq_eq]
-
-Depends on / 依赖: associated_eq_eq, dvd_prime_iff_associated, pp.dvd_prime_iff_associated
+/-
+**prime_dvd_prime_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：prime_dvd_prime_iff_eq {M : Type*} [CommMonoidWithZero M] [IsCancelMulZero
+ M] [Subsingleton Mˣ] {p q : M} (pp : Prime p) (qp : Prime q) : p ∣ q ↔ p = q
+参数：pp : Prime p；qp : Prime q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prime.dvd_prime_iff_associated`：Prime.dvd_prime_iff_associated [CommMono
+idWithZero M] [IsCancelMulZero M] {p q : M} (pp : Prime p) (qp : Prime q) : p ∣ 
+q ↔ Associated p q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `associated_eq_eq`：associated_eq_eq : (Associated : M -> M -> Prop) = Eq
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem prime_dvd_prime_iff_eq {M : Type*} [CommMonoidWithZero M] [IsCancelMulZero M]
     [Subsingleton Mˣ] {p q : M} (pp : Prime p) (qp : Prime q) : p ∣ q ↔ p = q := by
-  rw [pp.dvd_prime_iff_associated qp]; rw [← associated_eq_eq]
+  rw [pp.dvd_prime_iff_associated qp, ← associated_eq_eq]
 
 end UniqueUnits
 
 section UniqueUnits₀
 
 variable {R : Type*} [CommMonoidWithZero R] [IsCancelMulZero R] [Subsingleton Rˣ]
-variable {p₁ p₂ : R} {k₁ k₂ : Nat}
+variable {p₁ p₂ : R} {k₁ k₂ : ℕ}
 
-/--
-theorem `eq_of_prime_pow_eq` / 定理 `eq_of_prime_pow_eq`
-
-English:
-theorem eq_of_prime_pow_eq
-  statement: (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₁)
-  proof: by
-  rw [← associated_iff_eq] at h ⊢
-  apply h.of_pow_associated_of_prime hp₁ hp₂ hk₁
-
-中文:
-定理 eq_of_prime_pow_eq
-  结论: (hp₁ : 素 p₁) (hp₂ : 素 p₂) (hk₁ : 0 < k₁)
-  证明: by
-  rw [← associated_iff_eq] at h ⊢
-  apply h.of_pow_associated_of_prime hp₁ hp₂ hk₁
-
-Depends on / 依赖: associated_iff_eq, h.of_pow_associated_of_prime, of_pow_associated_of_prime
+/-
+**eq_of_prime_pow_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_of_prime_pow_eq (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₁) (h : p
+₁ ^ k₁ = p₂ ^ k₂) : p₁ = p₂
+参数：hp₁ : Prime p₁；hp₂ : Prime p₂；hk₁ : 0 < k₁；h : p₁ ^ k₁ = p₂ ^ k₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `associated_iff_eq`：associated_iff_eq {x y : M} : x ~ᵤ y ↔ x = y
+· 使用定理 `Associated.of_pow_associated_of_prime`：Associated.of_pow_associated_of_p
+rime [CommMonoidWithZero M] [IsCancelMulZero M] {p₁ p₂ : M} {k₁ k₂ : Nat} (hp₁ :
+ Prime p₁) (hp₂ : Prime p₂)…
 -/
 theorem eq_of_prime_pow_eq (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₁)
     (h : p₁ ^ k₁ = p₂ ^ k₂) : p₁ = p₂ := by
   rw [← associated_iff_eq] at h ⊢
   apply h.of_pow_associated_of_prime hp₁ hp₂ hk₁
-
-/--
-theorem `eq_of_prime_pow_eq'` / 定理 `eq_of_prime_pow_eq'`
-
-English:
-theorem eq_of_prime_pow_eq'
-  statement: (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₂)
-  proof: by
-  rw [← associated_iff_eq] at h ⊢
-  apply h.of_pow_associated_of_prime' hp₁ hp₂ hk₁
-
-中文:
-定理 eq_of_prime_pow_eq'
-  结论: (hp₁ : 素 p₁) (hp₂ : 素 p₂) (hk₁ : 0 < k₂)
-  证明: by
-  rw [← associated_iff_eq] at h ⊢
-  apply h.of_pow_associated_of_prime' hp₁ hp₂ hk₁
-
-Depends on / 依赖: associated_iff_eq, h.of_pow_associated_of_prime, of_pow_associated_of_prime
+/-
+**eq_of_prime_pow_eq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_of_prime_pow_eq' (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₂) (h : 
+p₁ ^ k₁ = p₂ ^ k₂) : p₁ = p₂
+参数：hp₁ : Prime p₁；hp₂ : Prime p₂；hk₁ : 0 < k₂；h : p₁ ^ k₁ = p₂ ^ k₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `associated_iff_eq`：associated_iff_eq {x y : M} : x ~ᵤ y ↔ x = y
+· 使用定理 `Associated.of_pow_associated_of_prime'`：Associated.of_pow_associated_of_
+prime' [CommMonoidWithZero M] [IsCancelMulZero M] {p₁ p₂ : M} {k₁ k₂ : Nat} (hp₁
+ : Prime p₁) (hp₂ : Prime p₂…
 -/
 theorem eq_of_prime_pow_eq' (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₂)
     (h : p₁ ^ k₁ = p₂ ^ k₂) : p₁ = p₂ := by
@@ -1681,20 +1265,21 @@ theorem eq_of_prime_pow_eq' (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0
 
 end UniqueUnits₀
 
-/--
-Definition of `Associates` / `Associates` 的定义
+/-- The quotient of a monoid by the `Associated` relation. Two elements `x` and `y`
+  are associated iff there is a unit `u` such that `x * u = y`. There is a natural
+  monoid structure on `Associates M`. -/
+/-
+**Associates** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Associates (M : Type*) [Monoid M] : Type _
+参数：M : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Associates
-  signature: (M : Type*) [Monoid M]
-  body: Quotient (Associated.setoid M)
-
-中文:
-缩写 Associates
-  签名: (M : 类型) [幺半群 M]
-  定义体: Quotient (Associated.setoid M)
-
-Depends on / 依赖: Associated, Associated.setoid, Quotient, setoid
+--- 原说明 ---
+The quotient of a monoid by the `Associated` relation. Two elements `x` and `y`
+  are associated iff there is a unit `u` such that `x * u = y`. There is a natur
+al
+  monoid structure on `Associates M`.
 -/
 abbrev Associates (M : Type*) [Monoid M] : Type _ :=
   Quotient (Associated.setoid M)
@@ -1703,353 +1288,197 @@ namespace Associates
 
 open Associated
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The canonical quotient map from a monoid `M` into the `Associates` of `M` -/
+/-
+**Associates.mk** 是 Mathlib 中的一个定义，位于命名空间 `Associates`。
+形式化陈述：{M : Type u_2} → [inst : Monoid M] → M → Associates M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: {M : Type*} [Monoid M] (a : M)
-  body: ⟦a⟧
-
-中文:
-缩写 mk
-  签名: {M : 类型} [幺半群 M] (a : M)
-  定义体: ⟦a⟧
+--- 原说明 ---
+The canonical quotient map from a monoid `M` into the `Associates` of `M`
 -/
 protected abbrev mk {M : Type*} [Monoid M] (a : M) : Associates M :=
   ⟦a⟧
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] : Inhabited (Associates M)
-  body: ⟨⟦1⟧⟩
-
-中文:
-实例 [幺半群
-  签名: M] : 可居 (Associates M)
-  定义体: ⟨⟦1⟧⟩
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] : Inhabited (Associates M) :=
   ⟨⟦1⟧⟩
-
-/--
-theorem `mk_eq_mk_iff_associated` / 定理 `mk_eq_mk_iff_associated`
-
-English:
-theorem mk_eq_mk_iff_associated
-  given: [Monoid M] {a b : M}
-  statement: Associates.mk a = Associates.mk b ↔ a ~ᵤ b
-  proof: Iff.intro Quotient.exact Quot.sound
-
-中文:
-定理 mk_eq_mk_iff_associated
-  条件: [幺半群 M] {a b : M}
-  结论: Associates.mk a = Associates.mk b ↔ a ~ᵤ b
-  证明: Iff.intro Quotient.exact Quot.sound
-
-Depends on / 依赖: Iff.intro, Quot.sound, Quotient, Quotient.exact
+/-
+**Associates.mk_eq_mk_iff_associated** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_eq_mk_iff_associated [Monoid M] {a b : M} : Associates.mk a = Associate
+s.mk b ↔ a ~ᵤ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
 -/
 theorem mk_eq_mk_iff_associated [Monoid M] {a b : M} : Associates.mk a = Associates.mk b ↔ a ~ᵤ b :=
   Iff.intro Quotient.exact Quot.sound
-
-/--
-theorem `quotient_mk_eq_mk` / 定理 `quotient_mk_eq_mk`
-
-English:
-theorem quotient_mk_eq_mk
-  given: [Monoid M] (a : M)
-  statement: ⟦a⟧ = Associates.mk a
-  proof: rfl
-
-中文:
-定理 quotient_mk_eq_mk
-  条件: [幺半群 M] (a : M)
-  结论: ⟦a⟧ = Associates.mk a
-  证明: rfl
+/-
+**Associates.quotient_mk_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：quotient_mk_eq_mk [Monoid M] (a : M) : ⟦a⟧ = Associates.mk a
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotient_mk_eq_mk [Monoid M] (a : M) : ⟦a⟧ = Associates.mk a :=
   rfl
-
-/--
-theorem `quot_mk_eq_mk` / 定理 `quot_mk_eq_mk`
-
-English:
-theorem quot_mk_eq_mk
-  given: [Monoid M] (a : M)
-  statement: Quot.mk Setoid.r a = Associates.mk a
-  proof: rfl
-
-中文:
-定理 quot_mk_eq_mk
-  条件: [幺半群 M] (a : M)
-  结论: 商.mk 集合等价关系.r a = Associates.mk a
-  证明: rfl
+/-
+**Associates.quot_mk_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：quot_mk_eq_mk [Monoid M] (a : M) : Quot.mk Setoid.r a = Associates.mk a
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quot_mk_eq_mk [Monoid M] (a : M) : Quot.mk Setoid.r a = Associates.mk a :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `quot_out` / 定理 `quot_out`
-
-English:
-theorem quot_out
-  given: [Monoid M] (a : Associates M)
-  statement: Associates.mk (Quot.out a) = a
-  proof: by
-  rw [← quot_mk_eq_mk]; rw [Quot.out_eq]
-
-中文:
-定理 quot_out
-  条件: [幺半群 M] (a : Associates M)
-  结论: Associates.mk (商.out a) = a
-  证明: by
-  rw [← quot_mk_eq_mk]; rw [Quot.out_eq]
-
-Depends on / 依赖: Quot.out_eq, out_eq, quot_mk_eq_mk
+/-
+**Associates.quot_out** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：quot_out [Monoid M] (a : Associates M) : Associates.mk (Quot.out a) = a
+参数：a : Associates M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associates.quot_mk_eq_mk`：quot_mk_eq_mk [Monoid M] (a : M) : Quot.mk Set
+oid.r a = Associates.mk a
+· 使用定理 `Quot.out_eq`：Quot.out_eq {r : α -> α -> Prop} (q : Quot r) : Quot.mk r q
+.out = q
 -/
 theorem quot_out [Monoid M] (a : Associates M) : Associates.mk (Quot.out a) = a := by
-  rw [← quot_mk_eq_mk]; rw [Quot.out_eq]
-
-/--
-theorem `mk_quot_out` / 定理 `mk_quot_out`
-
-English:
-theorem mk_quot_out
-  given: [Monoid M] (a : M)
-  statement: Quot.out (Associates.mk a) ~ᵤ a
-  proof: by
-  rw [← Associates.mk_eq_mk_iff_associated]; rw [Associates.quot_out]
-
-中文:
-定理 mk_quot_out
-  条件: [幺半群 M] (a : M)
-  结论: 商.out (Associates.mk a) ~ᵤ a
-  证明: by
-  rw [← Associates.mk_eq_mk_iff_associated]; rw [Associates.quot_out]
-
-Depends on / 依赖: Associates, Associates.mk_eq_mk_iff_associated, Associates.quot_out, mk_eq_mk_iff_associated, quot_out
+  rw [← quot_mk_eq_mk, Quot.out_eq]
+/-
+**Associates.mk_quot_out** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_quot_out [Monoid M] (a : M) : Quot.out (Associates.mk a) ~ᵤ a
+参数：a : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associates.mk_eq_mk_iff_associated`：mk_eq_mk_iff_associated [Monoid M] {
+a b : M} : Associates.mk a = Associates.mk b ↔ a ~ᵤ b
+· 使用定理 `Associates.quot_out`：quot_out [Monoid M] (a : Associates M) : Associates
+.mk (Quot.out a) = a
 -/
 theorem mk_quot_out [Monoid M] (a : M) : Quot.out (Associates.mk a) ~ᵤ a := by
-  rw [← Associates.mk_eq_mk_iff_associated]; rw [Associates.quot_out]
-
-/--
-theorem `forall_associated` / 定理 `forall_associated`
-
-English:
-theorem forall_associated
-  given: [Monoid M] {p : Associates M -> Prop}
-  proof: Iff.intro (fun h _ => h _) fun h a => Quotient.inductionOn a h
-
-中文:
-定理 对任意_associated
-  条件: [幺半群 M] {p : Associates M -> 命题}
-  证明: Iff.intro (fun h _ => h _) fun h a => Quotient.inductionOn a h
-
-Depends on / 依赖: Iff.intro, Quotient, Quotient.inductionOn, inductionOn
+  rw [← Associates.mk_eq_mk_iff_associated, Associates.quot_out]
+/-
+**Associates.forall_associated** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：forall_associated [Monoid M] {p : Associates M -> Prop} : (forall a, p a) 
+↔ forall a, p (Associates.mk a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
 -/
-theorem forall_associated [Monoid M] {p : Associates M -> Prop} :
-    (forall a, p a) ↔ forall a, p (Associates.mk a) :=
+theorem forall_associated [Monoid M] {p : Associates M → Prop} :
+    (∀ a, p a) ↔ ∀ a, p (Associates.mk a) :=
   Iff.intro (fun h _ => h _) fun h a => Quotient.inductionOn a h
-
-/--
-theorem `mk_surjective` / 定理 `mk_surjective`
-
-English:
-theorem mk_surjective
-  given: [Monoid M]
-  statement: Function.Surjective (@Associates.mk M _)
-  proof: forall_associated.2 fun a => ⟨a, rfl⟩
-
-中文:
-定理 mk_surjective
-  条件: [幺半群 M]
-  结论: 函数.满射 (@Associates.mk M _)
-  证明: forall_associated.2 fun a => ⟨a, rfl⟩
-
-Depends on / 依赖: forall_associated
+/-
+**Associates.mk_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_surjective [Monoid M] : Function.Surjective (@Associates.mk M _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Associates.forall_associated`：forall_associated [Monoid M] {p : Associat
+es M -> Prop} : (forall a, p a) ↔ forall a, p (Associates.mk a)
 -/
 theorem mk_surjective [Monoid M] : Function.Surjective (@Associates.mk M _) :=
   forall_associated.2 fun a => ⟨a, rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] : One (Associates M)
-  body: ⟨⟦1⟧⟩
-
-@[simp]
-
-中文:
-实例 [幺半群
-  签名: M] : 幺 (Associates M)
-  定义体: ⟨⟦1⟧⟩
-
-@[simp]
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] : One (Associates M) :=
   ⟨⟦1⟧⟩
 
 @[simp]
-/--
-theorem `mk_one` / 定理 `mk_one`
-
-English:
-theorem mk_one
-  given: [Monoid M]
-  statement: Associates.mk (1 : M) = 1
-  proof: rfl
-
-中文:
-定理 mk_one
-  条件: [幺半群 M]
-  结论: Associates.mk (1 : M) = 1
-  证明: rfl
+/-
+**Associates.mk_one** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_one [Monoid M] : Associates.mk (1 : M) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_one [Monoid M] : Associates.mk (1 : M) = 1 :=
   rfl
-
-/--
-theorem `one_eq_mk_one` / 定理 `one_eq_mk_one`
-
-English:
-theorem one_eq_mk_one
-  given: [Monoid M]
-  statement: (1 : Associates M) = Associates.mk 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 one_eq_mk_one
-  条件: [幺半群 M]
-  结论: (1 : Associates M) = Associates.mk 1
-  证明: rfl
-
-@[simp]
+/-
+**Associates.one_eq_mk_one** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：one_eq_mk_one [Monoid M] : (1 : Associates M) = Associates.mk 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_eq_mk_one [Monoid M] : (1 : Associates M) = Associates.mk 1 :=
   rfl
 
 @[simp]
-/--
-theorem `mk_eq_one` / 定理 `mk_eq_one`
-
-English:
-theorem mk_eq_one
-  given: [Monoid M] {a : M}
-  statement: Associates.mk a = 1 ↔ IsUnit a
-  proof: by
-  rw [← mk_one]; rw [mk_eq_mk_iff_associated]; rw [associated_one_iff_isUnit]
-
-中文:
-定理 mk_eq_one
-  条件: [幺半群 M] {a : M}
-  结论: Associates.mk a = 1 ↔ 是单位 a
-  证明: by
-  rw [← mk_one]; rw [mk_eq_mk_iff_associated]; rw [associated_one_iff_isUnit]
-
-Depends on / 依赖: associated_one_iff_isUnit, mk_eq_mk_iff_associated, mk_one
+/-
+**Associates.mk_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_eq_one [Monoid M] {a : M} : Associates.mk a = 1 ↔ IsUnit a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associates.mk_one`：mk_one [Monoid M] : Associates.mk (1 : M) = 1
+· 使用定理 `Associates.mk_eq_mk_iff_associated`：mk_eq_mk_iff_associated [Monoid M] {
+a b : M} : Associates.mk a = Associates.mk b ↔ a ~ᵤ b
+· 使用定理 `associated_one_iff_isUnit`：associated_one_iff_isUnit [Monoid M] {a : M} 
+: (a : M) ~ᵤ 1 ↔ IsUnit a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mk_eq_one [Monoid M] {a : M} : Associates.mk a = 1 ↔ IsUnit a := by
-  rw [← mk_one]; rw [mk_eq_mk_iff_associated]; rw [associated_one_iff_isUnit]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] : Bot (Associates M)
-  body: ⟨1⟩
-
-中文:
-实例 [幺半群
-  签名: M] : 底元素 (Associates M)
-  定义体: ⟨1⟩
+  rw [← mk_one, mk_eq_mk_iff_associated, associated_one_iff_isUnit]
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] : Bot (Associates M) :=
   ⟨1⟩
-
-/--
-theorem `bot_eq_one` / 定理 `bot_eq_one`
-
-English:
-theorem bot_eq_one
-  given: [Monoid M]
-  statement: (⊥ : Associates M) = 1
-  proof: rfl
-
-中文:
-定理 bot_eq_one
-  条件: [幺半群 M]
-  结论: (⊥ : Associates M) = 1
-  证明: rfl
+/-
+**Associates.bot_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：bot_eq_one [Monoid M] : (⊥ : Associates M) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_eq_one [Monoid M] : (⊥ : Associates M) = 1 :=
   rfl
-
-/--
-theorem `exists_rep` / 定理 `exists_rep`
-
-English:
-theorem exists_rep
-  given: [Monoid M] (a : Associates M)
-  statement: exists a0 : M, Associates.mk a0 = a
-  proof: Quot.exists_rep a
-
-中文:
-定理 存在_rep
-  条件: [幺半群 M] (a : Associates M)
-  结论: 存在 a0 : M, Associates.mk a0 = a
-  证明: Quot.exists_rep a
-
-Depends on / 依赖: Quot.exists_rep, exists_rep
+/-
+**Associates.exists_rep** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：exists_rep [Monoid M] (a : Associates M) : exists a0 : M, Associates.mk a0
+ = a
+参数：a : Associates M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.exists_rep`：∀ {α : Sort u} {r : α → α → Prop} (q : Quot r), ∃ a, Qu
+ot.mk r a = q
 -/
-theorem exists_rep [Monoid M] (a : Associates M) : exists a0 : M, Associates.mk a0 = a :=
+theorem exists_rep [Monoid M] (a : Associates M) : ∃ a0 : M, Associates.mk a0 = a :=
   Quot.exists_rep a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [Subsingleton M] :
-  body: 1
-uniq := forall_associated.2 fun _ => mk_eq_one.2 isUnit_of_subsingleton _
-
-中文:
-实例 [幺半群
-  签名: M] [子单例 M] :
-  定义体: 1
-uniq := forall_associated.2 fun _ => mk_eq_one.2 isUnit_of_subsingleton _
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [Subsingleton M] :
     Unique (Associates M) where
   default := 1
-uniq := forall_associated.2 fun _ => mk_eq_one.2 isUnit_of_subsingleton _
-
-/--
-theorem `mk_injective` / 定理 `mk_injective`
-
-English:
-theorem mk_injective
-  given: [Monoid M] [Subsingleton Mˣ]
-  statement: Function.Injective (@Associates.mk M _)
-  proof: fun _ _ h => associated_iff_eq.mp (Associates.mk_eq_mk_iff_associated.mp h)
-
-中文:
-定理 mk_injective
-  条件: [幺半群 M] [子单例 Mˣ]
-  结论: 函数.单射 (@Associates.mk M _)
-  证明: fun _ _ h => associated_iff_eq.mp (Associates.mk_eq_mk_iff_associated.mp h)
-
-Depends on / 依赖: Associates, Associates.mk_eq_mk_iff_associated.mp, associated_iff_eq, associated_iff_eq.mp, mk_eq_mk_iff_associated
+  uniq := forall_associated.2 fun _ ↦ mk_eq_one.2 <| isUnit_of_subsingleton _
+/-
+**Associates.mk_injective** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_injective [Monoid M] [Subsingleton Mˣ] : Function.Injective (@Associate
+s.mk M _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `associated_iff_eq`：associated_iff_eq {x y : M} : x ~ᵤ y ↔ x = y
+· 使用定理 `Associates.mk_eq_mk_iff_associated`：mk_eq_mk_iff_associated [Monoid M] {
+a b : M} : Associates.mk a = Associates.mk b ↔ a ~ᵤ b
 -/
 theorem mk_injective [Monoid M] [Subsingleton Mˣ] : Function.Injective (@Associates.mk M _) :=
   fun _ _ h => associated_iff_eq.mp (Associates.mk_eq_mk_iff_associated.mp h)
@@ -2058,68 +1487,30 @@ section CommMonoid
 
 variable [CommMonoid M]
 
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (Associates M)
-  body: ⟨Quotient.map₂ (· * ·) fun _ _ h₁ _ _ h₂ => h₁.mul_mul h₂⟩
-
-中文:
-实例 instMul
-  签名: : 乘法 (Associates M)
-  定义体: ⟨Quotient.map₂ (· * ·) fun _ _ h₁ _ _ h₂ => h₁.mul_mul h₂⟩
-
-Depends on / 依赖: Quotient, Quotient.map, mul_mul
+/-
+**Associates.instMul** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instMul : Mul (Associates M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.mul_mul`：Associated.mul_mul [CommMonoid M] {a₁ a₂ b₁ b₂ : M} 
+(h₁ : a₁ ~ᵤ b₁) (h₂ : a₂ ~ᵤ b₂) : a₁ * a₂ ~ᵤ b₁ * b₂
 -/
 instance instMul : Mul (Associates M) :=
-  ⟨Quotient.map₂ (· * ·) fun _ _ h₁ _ _ h₂ => h₁.mul_mul h₂⟩
-
-/--
-theorem `mk_mul_mk` / 定理 `mk_mul_mk`
-
-English:
-theorem mk_mul_mk
-  given: {x y : M}
-  statement: Associates.mk x * Associates.mk y = Associates.mk (x * y)
-  proof: rfl
-
-中文:
-定理 mk_mul_mk
-  条件: {x y : M}
-  结论: Associates.mk x * Associates.mk y = Associates.mk (x * y)
-  证明: rfl
+  ⟨Quotient.map₂ (· * ·) fun _ _ h₁ _ _ h₂ ↦ h₁.mul_mul h₂⟩
+/-
+**Associates.mk_mul_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_mul_mk {x y : M} : Associates.mk x * Associates.mk y = Associates.mk (x
+ * y)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_mul_mk {x y : M} : Associates.mk x * Associates.mk y = Associates.mk (x * y) :=
   rfl
-
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: : CommMonoid (Associates M) where
-  body: Quotient.inductionOn a' fun a => show ⟦a * 1⟧ = ⟦a⟧ by simp
-  one_mul a' := Quotient.inductionOn a' fun a => show ⟦1 * a⟧ = ⟦a⟧ by simp
-  mul_assoc a' b' c' :=
-    Quotient.inductionOn₃ a' b' c' fun a b c =>
-      show ⟦a * b * c⟧ = ⟦a * (b * c)⟧ by rw [mul_assoc]
-  mul_comm a' b' :=
-    Quotient.inductionOn₂ a' b' fun a b => show ⟦a * b⟧ = ⟦b * a⟧ by rw [mul_comm]
-
-中文:
-实例 instCommMonoid
-  签名: : 交换幺半群 (Associates M) where
-  定义体: Quotient.inductionOn a' fun a => show ⟦a * 1⟧ = ⟦a⟧ by simp
-  one_mul a' := Quotient.inductionOn a' fun a => show ⟦1 * a⟧ = ⟦a⟧ by simp
-  mul_assoc a' b' c' :=
-    Quotient.inductionOn₃ a' b' c' fun a b c =>
-      show ⟦a * b * c⟧ = ⟦a * (b * c)⟧ by rw [mul_assoc]
-  mul_comm a' b' :=
-    Quotient.inductionOn₂ a' b' fun a b => show ⟦a * b⟧ = ⟦b * a⟧ by rw [mul_comm]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Associates.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instCommMonoid : CommMonoid (Associates M) where mul_one a'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoid : CommMonoid (Associates M) where
   mul_one a' := Quotient.inductionOn a' fun a => show ⟦a * 1⟧ = ⟦a⟧ by simp
@@ -2129,417 +1520,258 @@ instance instCommMonoid : CommMonoid (Associates M) where
       show ⟦a * b * c⟧ = ⟦a * (b * c)⟧ by rw [mul_assoc]
   mul_comm a' b' :=
     Quotient.inductionOn₂ a' b' fun a b => show ⟦a * b⟧ = ⟦b * a⟧ by rw [mul_comm]
-
-/--
-Instance `instPreorder` / 实例 `instPreorder`
-
-English:
-instance instPreorder
-  signature: : Preorder (Associates M) where
-  body: Dvd.dvd
-  le_refl := dvd_refl
-  le_trans _ _ _ := dvd_trans
-
-中文:
-实例 instPreorder
-  签名: : 预序 (Associates M) where
-  定义体: Dvd.dvd
-  le_refl := dvd_refl
-  le_trans _ _ _ := dvd_trans
-
-Depends on / 依赖: Dvd.dvd
+/-
+**Associates.instPreorder** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instPreorder : Preorder (Associates M) where le
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPreorder : Preorder (Associates M) where
   le := Dvd.dvd
   le_refl := dvd_refl
   le_trans _ _ _ := dvd_trans
 
-/--
-Definition of `mkMonoidHom` / `mkMonoidHom` 的定义
+/-- `Associates.mk` as a `MonoidHom`. -/
+/-
+**Associates.mkMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Associates`。
+形式化陈述：{M : Type u_1} → [inst : CommMonoid M] → M →* Associates M
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Associates.mk_mul_mk`：mk_mul_mk {x y : M} : Associates.mk x * Associates
+.mk y = Associates.mk (x * y)
 
-English:
-definition mkMonoidHom
-  signature: : M ->* Associates M where
-  body: Associates.mk
-  map_one' := mk_one
-  map_mul' _ _ := mk_mul_mk
-
-@[simp]
-
-中文:
-定义 mkMonoidHom
-  签名: : M ->* Associates M where
-  定义体: Associates.mk
-  map_one' := mk_one
-  map_mul' _ _ := mk_mul_mk
-
-@[simp]
+--- 原说明 ---
+`Associates.mk` as a `MonoidHom`.
 -/
-protected def mkMonoidHom : M ->* Associates M where
+protected def mkMonoidHom : M →* Associates M where
   toFun := Associates.mk
   map_one' := mk_one
   map_mul' _ _ := mk_mul_mk
 
 @[simp]
-/--
-theorem `mkMonoidHom_apply` / 定理 `mkMonoidHom_apply`
-
-English:
-theorem mkMonoidHom_apply
-  given: (a : M)
-  statement: Associates.mkMonoidHom a = Associates.mk a
-  proof: rfl
-
-中文:
-定理 mkMonoidHom_apply
-  条件: (a : M)
-  结论: Associates.mkMonoidHom a = Associates.mk a
-  证明: rfl
-
-Depends on / 依赖: add_assoc
+/-
+**Associates.mkMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mkMonoidHom_apply (a : M) : Associates.mkMonoidHom a = Associates.mk a
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mkMonoidHom_apply (a : M) : Associates.mkMonoidHom a = Associates.mk a :=
   rfl
-
-/--
-theorem `associated_map_mk` / 定理 `associated_map_mk`
-
-English:
-theorem associated_map_mk
-  statement: {f : Associates M ->* M} (hinv : Function.RightInverse f Associates.mk)
-  proof: Associates.mk_eq_mk_iff_associated.1 (hinv (Associates.mk a)).symm
-
-中文:
-定理 associated_map_mk
-  结论: {f : Associates M ->* M} (hinv : 函数.右逆 f Associates.mk)
-  证明: Associates.mk_eq_mk_iff_associated.1 (hinv (Associates.mk a)).symm
-
-Depends on / 依赖: Associates, Associates.mk, Associates.mk_eq_mk_iff_associated, mk_eq_mk_iff_associated
+/-
+**Associates.associated_map_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：associated_map_mk {f : Associates M ->* M} (hinv : Function.RightInverse f
+ Associates.mk) (a : M) : a ~ᵤ f (Associates.mk a)
+参数：hinv : Function.RightInverse f Associates.mk；a : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Associates.mk_eq_mk_iff_associated`：mk_eq_mk_iff_associated [Monoid M] {
+a b : M} : Associates.mk a = Associates.mk b ↔ a ~ᵤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem associated_map_mk {f : Associates M ->* M} (hinv : Function.RightInverse f Associates.mk)
+theorem associated_map_mk {f : Associates M →* M} (hinv : Function.RightInverse f Associates.mk)
     (a : M) : a ~ᵤ f (Associates.mk a) :=
   Associates.mk_eq_mk_iff_associated.1 (hinv (Associates.mk a)).symm
-
-/--
-theorem `mk_pow` / 定理 `mk_pow`
-
-English:
-theorem mk_pow
-  given: (a : M) (n : Nat)
-  statement: Associates.mk (a ^ n) = Associates.mk a ^ n
-  proof: by
-  induction n <;> simp [*, pow_succ, Associates.mk_mul_mk.symm]
-
-中文:
-定理 mk_pow
-  条件: (a : M) (n : 自然数)
-  结论: Associates.mk (a ^ n) = Associates.mk a ^ n
-  证明: by
-  induction n <;> simp [*, pow_succ, Associates.mk_mul_mk.symm]
-
-Depends on / 依赖: Associates, Associates.mk_mul_mk.symm, mk_mul_mk, pow_succ
+/-
+**Associates.mk_pow** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_pow (a : M) (n : Nat) : Associates.mk (a ^ n) = Associates.mk a ^ n
+参数：a : M；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associates.mk_mul_mk`：mk_mul_mk {x y : M} : Associates.mk x * Associates
+.mk y = Associates.mk (x * y)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem mk_pow (a : M) (n : Nat) : Associates.mk (a ^ n) = Associates.mk a ^ n := by
+theorem mk_pow (a : M) (n : ℕ) : Associates.mk (a ^ n) = Associates.mk a ^ n := by
   induction n <;> simp [*, pow_succ, Associates.mk_mul_mk.symm]
-
-/--
-theorem `dvd_eq_le` / 定理 `dvd_eq_le`
-
-English:
-theorem dvd_eq_le
-  statement: ((· ∣ ·) : Associates M -> Associates M -> Prop) = (· <= ·)
-  proof: rfl
-
-中文:
-定理 dvd_eq_le
-  结论: ((· ∣ ·) : Associates M -> Associates M -> 命题) = (· <= ·)
-  证明: rfl
+/-
+**Associates.dvd_eq_le** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：dvd_eq_le : ((· ∣ ·) : Associates M -> Associates M -> Prop) = (· <= ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dvd_eq_le : ((· ∣ ·) : Associates M -> Associates M -> Prop) = (· <= ·) :=
+theorem dvd_eq_le : ((· ∣ ·) : Associates M → Associates M → Prop) = (· ≤ ·) :=
   rfl
-
-/--
-Instance `uniqueUnits` / 实例 `uniqueUnits`
-
-English:
-instance uniqueUnits
-  signature: : Unique (Associates M)ˣ where
-  body: by
-    rintro ⟨a, b, hab, hba⟩
-    induction a, b using Quotient.inductionOn₂ with | _ a b
-exact Units.ext Quotient.sound associated_one_of_associated_mul_one Quotient.exact hab
-
-@[simp]
-
-中文:
-实例 uniqueUnits
-  签名: : 唯一 (Associates M)ˣ where
-  定义体: by
-    rintro ⟨a, b, hab, hba⟩
-    induction a, b using Quotient.inductionOn₂ with | _ a b
-exact Units.ext Quotient.sound associated_one_of_associated_mul_one Quotient.exact hab
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.exact, Quotient.inductionOn, Quotient.sound, Units.ext, associated_one_of_associated_mul_one
+/-
+**Associates.uniqueUnits** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：uniqueUnits : Unique (Associates M)ˣ where uniq
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance uniqueUnits : Unique (Associates M)ˣ where
   uniq := by
     rintro ⟨a, b, hab, hba⟩
     induction a, b using Quotient.inductionOn₂ with | _ a b
-exact Units.ext Quotient.sound associated_one_of_associated_mul_one Quotient.exact hab
+    exact Units.ext <| Quotient.sound <| associated_one_of_associated_mul_one <| Quotient.exact hab
 
 @[simp]
-/--
-theorem `coe_unit_eq_one` / 定理 `coe_unit_eq_one`
-
-English:
-theorem coe_unit_eq_one
-  given: (u : (Associates M)ˣ)
-  statement: (u : Associates M) = 1
-  proof: by
-  simp [eq_iff_true_of_subsingleton]
-
-中文:
-定理 coe_unit_eq_one
-  条件: (u : (Associates M)ˣ)
-  结论: (u : Associates M) = 1
-  证明: by
-  simp [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: eq_iff_true_of_subsingleton
+/-
+**Associates.coe_unit_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：coe_unit_eq_one (u : (Associates M)ˣ) : (u : Associates M) = 1
+参数：u : (Associates M)ˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem coe_unit_eq_one (u : (Associates M)ˣ) : (u : Associates M) = 1 := by
   simp [eq_iff_true_of_subsingleton]
-
-/--
-theorem `isUnit_iff_eq_one` / 定理 `isUnit_iff_eq_one`
-
-English:
-theorem isUnit_iff_eq_one
-  given: (a : Associates M)
-  statement: IsUnit a ↔ a = 1
-  proof: Iff.intro (fun ⟨_, h⟩ => h ▸ coe_unit_eq_one _) fun h => h.symm ▸ isUnit_one
-
-中文:
-定理 isUnit_iff_eq_one
-  条件: (a : Associates M)
-  结论: 是单位 a ↔ a = 1
-  证明: Iff.intro (fun ⟨_, h⟩ => h ▸ coe_unit_eq_one _) fun h => h.symm ▸ isUnit_one
-
-Depends on / 依赖: Iff.intro, coe_unit_eq_one, h.symm, isUnit_one
+/-
+**Associates.isUnit_iff_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：isUnit_iff_eq_one (a : Associates M) : IsUnit a ↔ a = 1
+参数：a : Associates M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associates.coe_unit_eq_one`：coe_unit_eq_one (u : (Associates M)ˣ) : (u :
+ Associates M) = 1
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isUnit_iff_eq_one (a : Associates M) : IsUnit a ↔ a = 1 :=
   Iff.intro (fun ⟨_, h⟩ => h ▸ coe_unit_eq_one _) fun h => h.symm ▸ isUnit_one
-
-/--
-theorem `isUnit_iff_eq_bot` / 定理 `isUnit_iff_eq_bot`
-
-English:
-theorem isUnit_iff_eq_bot
-  given: {a : Associates M}
-  statement: IsUnit a ↔ a = ⊥
-  proof: by
-  rw [Associates.isUnit_iff_eq_one]; rw [bot_eq_one]
-
-中文:
-定理 isUnit_iff_eq_bot
-  条件: {a : Associates M}
-  结论: 是单位 a ↔ a = ⊥
-  证明: by
-  rw [Associates.isUnit_iff_eq_one]; rw [bot_eq_one]
-
-Depends on / 依赖: Associates, Associates.isUnit_iff_eq_one, bot_eq_one, isUnit_iff_eq_one
+/-
+**Associates.isUnit_iff_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：isUnit_iff_eq_bot {a : Associates M} : IsUnit a ↔ a = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Associates.isUnit_iff_eq_one`：isUnit_iff_eq_one (a : Associates M) : IsU
+nit a ↔ a = 1
+· 使用定理 `Associates.bot_eq_one`：bot_eq_one [Monoid M] : (⊥ : Associates M) = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isUnit_iff_eq_bot {a : Associates M} : IsUnit a ↔ a = ⊥ := by
-  rw [Associates.isUnit_iff_eq_one]; rw [bot_eq_one]
-
-/--
-theorem `isUnit_mk` / 定理 `isUnit_mk`
-
-English:
-theorem isUnit_mk
-  given: {a : M}
-  statement: IsUnit (Associates.mk a) ↔ IsUnit a
-  proof: calc
-    IsUnit (Associates.mk a) ↔ a ~ᵤ 1 := by
-      rw [isUnit_iff_eq_one]; rw [one_eq_mk_one]; rw [mk_eq_mk_iff_associated]
-    _ ↔ IsUnit a := associated_one_iff_isUnit
-
-中文:
-定理 isUnit_mk
-  条件: {a : M}
-  结论: 是单位 (Associates.mk a) ↔ 是单位 a
-  证明: calc
-    IsUnit (Associates.mk a) ↔ a ~ᵤ 1 := by
-      rw [isUnit_iff_eq_one]; rw [one_eq_mk_one]; rw [mk_eq_mk_iff_associated]
-    _ ↔ IsUnit a := associated_one_iff_isUnit
-
-Depends on / 依赖: Associates, Associates.mk, IsUnit, associated_one_iff_isUnit, isUnit_iff_eq_one, mk_eq_mk_iff_associated, one_eq_mk_one
+  rw [Associates.isUnit_iff_eq_one, bot_eq_one]
+/-
+**Associates.isUnit_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：isUnit_mk {a : M} : IsUnit (Associates.mk a) ↔ IsUnit a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Associates.isUnit_iff_eq_one`：isUnit_iff_eq_one (a : Associates M) : IsU
+nit a ↔ a = 1
+· 使用定理 `Associates.one_eq_mk_one`：one_eq_mk_one [Monoid M] : (1 : Associates M) 
+= Associates.mk 1
+· 使用定理 `Associates.mk_eq_mk_iff_associated`：mk_eq_mk_iff_associated [Monoid M] {
+a b : M} : Associates.mk a = Associates.mk b ↔ a ~ᵤ b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `associated_one_iff_isUnit`：associated_one_iff_isUnit [Monoid M] {a : M} 
+: (a : M) ~ᵤ 1 ↔ IsUnit a
 -/
 theorem isUnit_mk {a : M} : IsUnit (Associates.mk a) ↔ IsUnit a :=
   calc
     IsUnit (Associates.mk a) ↔ a ~ᵤ 1 := by
-      rw [isUnit_iff_eq_one]; rw [one_eq_mk_one]; rw [mk_eq_mk_iff_associated]
+      rw [isUnit_iff_eq_one, one_eq_mk_one, mk_eq_mk_iff_associated]
     _ ↔ IsUnit a := associated_one_iff_isUnit
 
 section Order
 
-/--
-theorem `mul_mono` / 定理 `mul_mono`
-
-English:
-theorem mul_mono
-  given: {a b c d : Associates M} (h₁ : a <= b) (h₂ : c <= d)
-  statement: a * c <= b * d
-  proof: let ⟨x, hx⟩ := h₁
-  let ⟨y, hy⟩ := h₂
-  ⟨x * y, by simp [hx, hy, mul_comm, mul_left_comm]⟩
-
-中文:
-定理 mul_mono
-  条件: {a b c d : Associates M} (h₁ : a <= b) (h₂ : c <= d)
-  结论: a * c <= b * d
-  证明: let ⟨x, hx⟩ := h₁
-  let ⟨y, hy⟩ := h₂
-  ⟨x * y, by simp [hx, hy, mul_comm, mul_left_comm]⟩
-
-Depends on / 依赖: mul_comm, mul_left_comm
+/-
+**Associates.mul_mono** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mul_mono {a b c d : Associates M} (h₁ : a <= b) (h₂ : c <= d) : a * c <= b
+ * d
+参数：h₁ : a <= b；h₂ : c <= d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mul_mono {a b c d : Associates M} (h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d :=
+theorem mul_mono {a b c d : Associates M} (h₁ : a ≤ b) (h₂ : c ≤ d) : a * c ≤ b * d :=
   let ⟨x, hx⟩ := h₁
   let ⟨y, hy⟩ := h₂
   ⟨x * y, by simp [hx, hy, mul_comm, mul_left_comm]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsBotOneClass (Associates M)
-  body: Dvd.intro _ (one_mul a)
-
-中文:
-实例 :
-  签名: 是BotOne类 (Associates M)
-  定义体: Dvd.intro _ (one_mul a)
-
-Depends on / 依赖: Dvd.intro, one_mul
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsBotOneClass (Associates M) where
   isBot_one a := Dvd.intro _ (one_mul a)
-
-/--
-Instance `instOrderBot` / 实例 `instOrderBot`
-
-English:
-instance instOrderBot
-  signature: : OrderBot (Associates M) where
-  body: one_le
-
-@[deprecated _root_.one_le (since := "2026-05-07")]
-
-中文:
-实例 instOrderBot
-  签名: : 有底序 (Associates M) where
-  定义体: one_le
-
-@[deprecated _root_.one_le (since := "2026-05-07")]
-
-Depends on / 依赖: one_le
+/-
+**Associates.instOrderBot** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instOrderBot : OrderBot (Associates M) where bot_le _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOrderBot : OrderBot (Associates M) where
   bot_le _ := one_le
 
 @[deprecated _root_.one_le (since := "2026-05-07")]
-/--
-theorem `one_le` / 定理 `one_le`
-
-English:
-theorem one_le
-  given: {a : Associates M}
-  statement: 1 <= a
-  proof: one_le
-
-中文:
-定理 one_le
-  条件: {a : Associates M}
-  结论: 1 <= a
-  证明: one_le
+/-
+**Associates.one_le** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoid M] {a : Associates M}, 1 ≤ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `one_le`：one_le {a : α} : 1 <= a
+· 使用定理 `Associates.instIsBotOneClass`：∀ {M : Type u_1} [inst : CommMonoid M], Is
+BotOneClass (Associates M)
 -/
-protected theorem one_le {a : Associates M} : 1 <= a :=
+protected theorem one_le {a : Associates M} : 1 ≤ a :=
   one_le
-
-/--
-theorem `le_mul_right` / 定理 `le_mul_right`
-
-English:
-theorem le_mul_right
-  given: {a b : Associates M}
-  statement: a <= a * b
-  proof: ⟨b, rfl⟩
-
-中文:
-定理 le_mul_right
-  条件: {a b : Associates M}
-  结论: a <= a * b
-  证明: ⟨b, rfl⟩
+/-
+**Associates.le_mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：le_mul_right {a b : Associates M} : a <= a * b
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem le_mul_right {a b : Associates M} : a <= a * b :=
+theorem le_mul_right {a b : Associates M} : a ≤ a * b :=
   ⟨b, rfl⟩
-
-/--
-theorem `le_mul_left` / 定理 `le_mul_left`
-
-English:
-theorem le_mul_left
-  given: {a b : Associates M}
-  statement: a <= b * a
-  proof: by rw [mul_comm]; exact le_mul_right
-
-中文:
-定理 le_mul_left
-  条件: {a b : Associates M}
-  结论: a <= b * a
-  证明: by rw [mul_comm]; exact le_mul_right
-
-Depends on / 依赖: le_mul_right, mul_comm
+/-
+**Associates.le_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：le_mul_left {a b : Associates M} : a <= b * a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Associates.le_mul_right`：le_mul_right {a b : Associates M} : a <= a * b
 -/
-theorem le_mul_left {a b : Associates M} : a <= b * a := by rw [mul_comm]; exact le_mul_right
+theorem le_mul_left {a b : Associates M} : a ≤ b * a := by rw [mul_comm]; exact le_mul_right
 
 end Order
 
 @[simp]
-/--
-theorem `mk_dvd_mk` / 定理 `mk_dvd_mk`
-
-English:
-theorem mk_dvd_mk
-  given: {a b : M}
-  statement: Associates.mk a ∣ Associates.mk b ↔ a ∣ b
-  proof: by
-  simp only [dvd_def, mk_surjective.exists, mk_mul_mk, mk_eq_mk_iff_associated,
-    Associated.comm (x := b)]
-  constructor
-  · rintro ⟨x, u, rfl⟩
-    exact ⟨_, mul_assoc ..⟩
-  · rintro ⟨c, rfl⟩
-    use c
-
-中文:
-定理 mk_dvd_mk
-  条件: {a b : M}
-  结论: Associates.mk a ∣ Associates.mk b ↔ a ∣ b
-  证明: by
-  simp only [dvd_def, mk_surjective.exists, mk_mul_mk, mk_eq_mk_iff_associated,
-    Associated.comm (x := b)]
-  constructor
-  · rintro ⟨x, u, rfl⟩
-    exact ⟨_, mul_assoc ..⟩
-  · rintro ⟨c, rfl⟩
-    use c
-
-Depends on / 依赖: Associated, Associated.comm, dvd_def, mk_eq_mk_iff_associated, mk_mul_mk, mk_surjective, mk_surjective.exists, mul_assoc
+/-
+**Associates.mk_dvd_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_dvd_mk {a b : M} : Associates.mk a ∣ Associates.mk b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Function.Surjective.exists`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Surjective f → ∀ {p : β → Prop}, (∃ y, p y) ↔ ∃ x, p (f x)
+· 使用定理 `Associates.mk_surjective`：mk_surjective [Monoid M] : Function.Surjective
+ (@Associates.mk M _)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Associated.comm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y ↔ Associated y x
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Associated.refl`：∀ {M : Type u_1} [inst : Monoid M] (x : M), Associated 
+x x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mk_dvd_mk {a b : M} : Associates.mk a ∣ Associates.mk b ↔ a ∣ b := by
   simp only [dvd_def, mk_surjective.exists, mk_mul_mk, mk_eq_mk_iff_associated,
@@ -2549,101 +1781,70 @@ theorem mk_dvd_mk {a b : M} : Associates.mk a ∣ Associates.mk b ↔ a ∣ b :=
     exact ⟨_, mul_assoc ..⟩
   · rintro ⟨c, rfl⟩
     use c
-
-/--
-theorem `dvd_of_mk_le_mk` / 定理 `dvd_of_mk_le_mk`
-
-English:
-theorem dvd_of_mk_le_mk
-  given: {a b : M}
-  statement: Associates.mk a <= Associates.mk b -> a ∣ b
-  proof: mk_dvd_mk.mp
-
-中文:
-定理 dvd_of_mk_le_mk
-  条件: {a b : M}
-  结论: Associates.mk a <= Associates.mk b -> a ∣ b
-  证明: mk_dvd_mk.mp
-
-Depends on / 依赖: mk_dvd_mk, mk_dvd_mk.mp
+/-
+**Associates.dvd_of_mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：dvd_of_mk_le_mk {a b : M} : Associates.mk a <= Associates.mk b -> a ∣ b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Associates.mk_dvd_mk`：mk_dvd_mk {a b : M} : Associates.mk a ∣ Associates
+.mk b ↔ a ∣ b
 -/
-theorem dvd_of_mk_le_mk {a b : M} : Associates.mk a <= Associates.mk b -> a ∣ b :=
+theorem dvd_of_mk_le_mk {a b : M} : Associates.mk a ≤ Associates.mk b → a ∣ b :=
   mk_dvd_mk.mp
-
-/--
-theorem `mk_le_mk_of_dvd` / 定理 `mk_le_mk_of_dvd`
-
-English:
-theorem mk_le_mk_of_dvd
-  given: {a b : M}
-  statement: a ∣ b -> Associates.mk a <= Associates.mk b
-  proof: mk_dvd_mk.mpr
-
-中文:
-定理 mk_le_mk_of_dvd
-  条件: {a b : M}
-  结论: a ∣ b -> Associates.mk a <= Associates.mk b
-  证明: mk_dvd_mk.mpr
-
-Depends on / 依赖: mk_dvd_mk, mk_dvd_mk.mpr
+/-
+**Associates.mk_le_mk_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_le_mk_of_dvd {a b : M} : a ∣ b -> Associates.mk a <= Associates.mk b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Associates.mk_dvd_mk`：mk_dvd_mk {a b : M} : Associates.mk a ∣ Associates
+.mk b ↔ a ∣ b
 -/
-theorem mk_le_mk_of_dvd {a b : M} : a ∣ b -> Associates.mk a <= Associates.mk b :=
+theorem mk_le_mk_of_dvd {a b : M} : a ∣ b → Associates.mk a ≤ Associates.mk b :=
   mk_dvd_mk.mpr
-
-/--
-theorem `mk_le_mk_iff_dvd` / 定理 `mk_le_mk_iff_dvd`
-
-English:
-theorem mk_le_mk_iff_dvd
-  given: {a b : M}
-  statement: Associates.mk a <= Associates.mk b ↔ a ∣ b
-  proof: mk_dvd_mk
-
-@[simp]
-
-中文:
-定理 mk_le_mk_iff_dvd
-  条件: {a b : M}
-  结论: Associates.mk a <= Associates.mk b ↔ a ∣ b
-  证明: mk_dvd_mk
-
-@[simp]
-
-Depends on / 依赖: mk_dvd_mk
+/-
+**Associates.mk_le_mk_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_le_mk_iff_dvd {a b : M} : Associates.mk a <= Associates.mk b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associates.mk_dvd_mk`：mk_dvd_mk {a b : M} : Associates.mk a ∣ Associates
+.mk b ↔ a ∣ b
 -/
-theorem mk_le_mk_iff_dvd {a b : M} : Associates.mk a <= Associates.mk b ↔ a ∣ b := mk_dvd_mk
+theorem mk_le_mk_iff_dvd {a b : M} : Associates.mk a ≤ Associates.mk b ↔ a ∣ b := mk_dvd_mk
 
 @[simp]
-/--
-theorem `isPrimal_mk` / 定理 `isPrimal_mk`
-
-English:
-theorem isPrimal_mk
-  given: {a : M}
-  statement: IsPrimal (Associates.mk a) ↔ IsPrimal a
-  proof: by
-  simp_rw [IsPrimal, forall_associated, mk_surjective.exists, mk_mul_mk, mk_dvd_mk]
-  constructor <;> intro h b c dvd <;> obtain ⟨a₁, a₂, h₁, h₂, eq⟩ := @h b c dvd
-  · obtain ⟨u, rfl⟩ := mk_eq_mk_iff_associated.mp eq.symm
-    exact ⟨a₁, a₂ * u, h₁, Units.mul_right_dvd.mpr h₂, mul_assoc _ _ _⟩
-  · exact ⟨a₁, a₂, h₁, h₂, congr_arg _ eq⟩
-
-@[simp]
-
-中文:
-定理 isPrimal_mk
-  条件: {a : M}
-  结论: IsPrimal (Associates.mk a) ↔ IsPrimal a
-  证明: by
-  simp_rw [IsPrimal, forall_associated, mk_surjective.exists, mk_mul_mk, mk_dvd_mk]
-  constructor <;> intro h b c dvd <;> obtain ⟨a₁, a₂, h₁, h₂, eq⟩ := @h b c dvd
-  · obtain ⟨u, rfl⟩ := mk_eq_mk_iff_associated.mp eq.symm
-    exact ⟨a₁, a₂ * u, h₁, Units.mul_right_dvd.mpr h₂, mul_assoc _ _ _⟩
-  · exact ⟨a₁, a₂, h₁, h₂, congr_arg _ eq⟩
-
-@[simp]
-
-Depends on / 依赖: IsPrimal, Units.mul_right_dvd.mpr, congr_arg, eq.symm, forall_associated, mk_dvd_mk, mk_eq_mk_iff_associated, mk_eq_mk_iff_associated.mp, mk_mul_mk, mk_surjective, mk_surjective.exists, mul_assoc, mul_right_dvd, simp_rw
+/-
+**Associates.isPrimal_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：isPrimal_mk {a : M} : IsPrimal (Associates.mk a) ↔ IsPrimal a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.Surjective.exists`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Surjective f → ∀ {p : β → Prop}, (∃ y, p y) ↔ ∃ x, p (f x)
+· 使用定理 `Associates.mk_surjective`：mk_surjective [Monoid M] : Function.Surjective
+ (@Associates.mk M _)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Associates.mk_eq_mk_iff_associated`：mk_eq_mk_iff_associated [Monoid M] {
+a b : M} : Associates.mk a = Associates.mk b ↔ a ~ᵤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Units.mul_right_dvd`：mul_right_dvd : a * u ∣ b ↔ a ∣ b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem isPrimal_mk {a : M} : IsPrimal (Associates.mk a) ↔ IsPrimal a := by
   simp_rw [IsPrimal, forall_associated, mk_surjective.exists, mk_mul_mk, mk_dvd_mk]
@@ -2653,65 +1854,57 @@ theorem isPrimal_mk {a : M} : IsPrimal (Associates.mk a) ↔ IsPrimal a := by
   · exact ⟨a₁, a₂, h₁, h₂, congr_arg _ eq⟩
 
 @[simp]
-/--
-theorem `decompositionMonoid_iff` / 定理 `decompositionMonoid_iff`
-
-English:
-theorem decompositionMonoid_iff
-  statement: DecompositionMonoid (Associates M) ↔ DecompositionMonoid M
-  proof: by
-  simp_rw [_root_.decompositionMonoid_iff, forall_associated, isPrimal_mk]
-
-中文:
-定理 decompositionMonoid_iff
-  结论: 分解幺半群 (Associates M) ↔ 分解幺半群 M
-  证明: by
-  simp_rw [_root_.decompositionMonoid_iff, forall_associated, isPrimal_mk]
-
-Depends on / 依赖: _root_, _root_.decompositionMonoid_iff, decompositionMonoid_iff, forall_associated, isPrimal_mk, simp_rw
+/-
+**Associates.decompositionMonoid_iff** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：decompositionMonoid_iff : DecompositionMonoid (Associates M) ↔ Decompositi
+onMonoid M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem decompositionMonoid_iff : DecompositionMonoid (Associates M) ↔ DecompositionMonoid M := by
   simp_rw [_root_.decompositionMonoid_iff, forall_associated, isPrimal_mk]
-
-/--
-Instance `instDecompositionMonoid` / 实例 `instDecompositionMonoid`
-
-English:
-instance instDecompositionMonoid
-  signature: [DecompositionMonoid M]
-  body: decompositionMonoid_iff.mpr ‹_›
-
-@[simp]
-
-中文:
-实例 instDecompositionMonoid
-  签名: [分解幺半群 M]
-  定义体: decompositionMonoid_iff.mpr ‹_›
-
-@[simp]
-
-Depends on / 依赖: decompositionMonoid_iff, decompositionMonoid_iff.mpr
+/-
+**Associates.instDecompositionMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instDecompositionMonoid [DecompositionMonoid M] : DecompositionMonoid (Ass
+ociates M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Associates.decompositionMonoid_iff`：decompositionMonoid_iff : Decomposit
+ionMonoid (Associates M) ↔ DecompositionMonoid M
 -/
 instance instDecompositionMonoid [DecompositionMonoid M] : DecompositionMonoid (Associates M) :=
   decompositionMonoid_iff.mpr ‹_›
 
 @[simp]
-/--
-theorem `mk_isRelPrime_iff` / 定理 `mk_isRelPrime_iff`
-
-English:
-theorem mk_isRelPrime_iff
-  given: {a b : M}
-  proof: by
-  simp_rw [IsRelPrime, forall_associated, mk_dvd_mk, isUnit_mk]
-
-中文:
-定理 mk_isRelPrime_iff
-  条件: {a b : M}
-  证明: by
-  simp_rw [IsRelPrime, forall_associated, mk_dvd_mk, isUnit_mk]
-
-Depends on / 依赖: IsRelPrime, forall_associated, isUnit_mk, mk_dvd_mk, simp_rw
+/-
+**Associates.mk_isRelPrime_iff** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_isRelPrime_iff {a b : M} : IsRelPrime (Associates.mk a) (Associates.mk 
+b) ↔ IsRelPrime a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mk_isRelPrime_iff {a b : M} :
     IsRelPrime (Associates.mk a) (Associates.mk b) ↔ IsRelPrime a b := by
@@ -2719,52 +1912,22 @@ theorem mk_isRelPrime_iff {a b : M} :
 
 end CommMonoid
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: M] [Monoid M] : Zero (Associates M)
-  body: ⟨⟦0⟧⟩
-
-中文:
-实例 [零
-  签名: M] [幺半群 M] : 零 (Associates M)
-  定义体: ⟨⟦0⟧⟩
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero M] [Monoid M] : Zero (Associates M) :=
   ⟨⟦0⟧⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: M] [Monoid M] : Top (Associates M)
-  body: ⟨0⟩
-
-中文:
-实例 [零
-  签名: M] [幺半群 M] : 顶元素 (Associates M)
-  定义体: ⟨0⟩
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero M] [Monoid M] : Top (Associates M) :=
   ⟨0⟩
-
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  given: [Zero M] [Monoid M]
-  statement: Associates.mk (0 : M) = 0
-  proof: rfl
-
-中文:
-定理 mk_zero
-  条件: [零 M] [幺半群 M]
-  结论: Associates.mk (0 : M) = 0
-  证明: rfl
+/-
+**Associates.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：∀ {M : Type u_1} [inst : Zero M] [inst_1 : Monoid M], Associates.mk 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem mk_zero [Zero M] [Monoid M] : Associates.mk (0 : M) = 0 := rfl
 
@@ -2773,104 +1936,66 @@ section MonoidWithZero
 variable [MonoidWithZero M]
 
 @[simp]
-/--
-theorem `mk_eq_zero` / 定理 `mk_eq_zero`
-
-English:
-theorem mk_eq_zero
-  given: {a : M}
-  statement: Associates.mk a = 0 ↔ a = 0
-  proof: ⟨fun h => (associated_zero_iff_eq_zero a).1 Quotient.exact h, fun h => h.symm ▸ rfl⟩
-
-@[simp]
-
-中文:
-定理 mk_eq_zero
-  条件: {a : M}
-  结论: Associates.mk a = 0 ↔ a = 0
-  证明: ⟨fun h => (associated_zero_iff_eq_zero a).1 Quotient.exact h, fun h => h.symm ▸ rfl⟩
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.exact, associated_zero_iff_eq_zero, h.symm
+/-
+**Associates.mk_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_eq_zero {a : M} : Associates.mk a = 0 ↔ a = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `associated_zero_iff_eq_zero`：associated_zero_iff_eq_zero [MonoidWithZero
+ M] (a : M) : a ~ᵤ 0 ↔ a = 0
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mk_eq_zero {a : M} : Associates.mk a = 0 ↔ a = 0 :=
-⟨fun h => (associated_zero_iff_eq_zero a).1 Quotient.exact h, fun h => h.symm ▸ rfl⟩
+  ⟨fun h => (associated_zero_iff_eq_zero a).1 <| Quotient.exact h, fun h => h.symm ▸ rfl⟩
 
 @[simp]
-/--
-theorem `quot_out_zero` / 定理 `quot_out_zero`
-
-English:
-theorem quot_out_zero
-  statement: Quot.out (0 : Associates M) = 0
-  proof: by rw [← mk_eq_zero, quot_out]
-
-中文:
-定理 quot_out_zero
-  结论: 商.out (0 : Associates M) = 0
-  证明: by rw [← mk_eq_zero, quot_out]
-
-Depends on / 依赖: mk_eq_zero, quot_out
+/-
+**Associates.quot_out_zero** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：quot_out_zero : Quot.out (0 : Associates M) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associates.mk_eq_zero`：mk_eq_zero {a : M} : Associates.mk a = 0 ↔ a = 0
+· 使用定理 `Associates.quot_out`：quot_out [Monoid M] (a : Associates M) : Associates
+.mk (Quot.out a) = a
 -/
 theorem quot_out_zero : Quot.out (0 : Associates M) = 0 := by rw [← mk_eq_zero, quot_out]
-
-/--
-theorem `mk_ne_zero` / 定理 `mk_ne_zero`
-
-English:
-theorem mk_ne_zero
-  given: {a : M}
-  statement: Associates.mk a != 0 ↔ a != 0
-  proof: not_congr mk_eq_zero
-
-中文:
-定理 mk_ne_zero
-  条件: {a : M}
-  结论: Associates.mk a != 0 ↔ a != 0
-  证明: not_congr mk_eq_zero
-
-Depends on / 依赖: mk_eq_zero, not_congr
+/-
+**Associates.mk_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_ne_zero {a : M} : Associates.mk a != 0 ↔ a != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Associates.mk_eq_zero`：mk_eq_zero {a : M} : Associates.mk a = 0 ↔ a = 0
 -/
-theorem mk_ne_zero {a : M} : Associates.mk a != 0 ↔ a != 0 :=
+theorem mk_ne_zero {a : M} : Associates.mk a ≠ 0 ↔ a ≠ 0 :=
   not_congr mk_eq_zero
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: M] : Nontrivial (Associates M)
-  body: ⟨⟨1, 0, mk_ne_zero.2 one_ne_zero⟩⟩
-
-中文:
-实例 [非平凡
-  签名: M] : 非平凡 (Associates M)
-  定义体: ⟨⟨1, 0, mk_ne_zero.2 one_ne_zero⟩⟩
-
-Depends on / 依赖: mk_ne_zero, one_ne_zero
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial M] : Nontrivial (Associates M) :=
   ⟨⟨1, 0, mk_ne_zero.2 one_ne_zero⟩⟩
-
-/--
-theorem `exists_non_zero_rep` / 定理 `exists_non_zero_rep`
-
-English:
-theorem exists_non_zero_rep
-  given: {a : Associates M}
-  statement: a != 0 -> exists a0 : M, a0 != 0 ∧ Associates.mk a0 = a
-  proof: Quotient.inductionOn a fun b nz => ⟨b, mt (congr_arg Quotient.mk'') nz, rfl⟩
-
-中文:
-定理 存在_non_zero_rep
-  条件: {a : Associates M}
-  结论: a != 0 -> 存在 a0 : M, a0 != 0 ∧ Associates.mk a0 = a
-  证明: Quotient.inductionOn a fun b nz => ⟨b, mt (congr_arg Quotient.mk'') nz, rfl⟩
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.mk, congr_arg, inductionOn
+/-
+**Associates.exists_non_zero_rep** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：exists_non_zero_rep {a : Associates M} : a != 0 -> exists a0 : M, a0 != 0 
+∧ Associates.mk a0 = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem exists_non_zero_rep {a : Associates M} : a != 0 -> exists a0 : M, a0 != 0 ∧ Associates.mk a0 = a :=
+theorem exists_non_zero_rep {a : Associates M} : a ≠ 0 → ∃ a0 : M, a0 ≠ 0 ∧ Associates.mk a0 = a :=
   Quotient.inductionOn a fun b nz => ⟨b, mt (congr_arg Quotient.mk'') nz, rfl⟩
 
 end MonoidWithZero
@@ -2879,183 +2004,114 @@ section CommMonoidWithZero
 
 variable [CommMonoidWithZero M]
 
-/--
-Instance `instCommMonoidWithZero` / 实例 `instCommMonoidWithZero`
-
-English:
-instance instCommMonoidWithZero
-  signature: : CommMonoidWithZero (Associates M) where
-  body: forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, zero_mul]
-    mul_zero := forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, mul_zero]
-
-中文:
-实例 instCommMonoidWithZero
-  签名: : 带零交换幺半群 (Associates M) where
-  定义体: forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, zero_mul]
-    mul_zero := forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, mul_zero]
-
-Depends on / 依赖: forall_associated, mk_mul_mk, mk_zero, zero_mul
+/-
+**Associates.instCommMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instCommMonoidWithZero : CommMonoidWithZero (Associates M) where zero_mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoidWithZero : CommMonoidWithZero (Associates M) where
-    zero_mul := forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, zero_mul]
-    mul_zero := forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, mul_zero]
-
-/--
-Instance `instOrderTop` / 实例 `instOrderTop`
-
-English:
-instance instOrderTop
-  signature: : OrderTop (Associates M) where
-  body: 0
-  le_top := dvd_zero
-
-中文:
-实例 instOrderTop
-  签名: : 有顶序 (Associates M) where
-  定义体: 0
-  le_top := dvd_zero
+    zero_mul := forall_associated.2 fun a ↦ by rw [← mk_zero, mk_mul_mk, zero_mul]
+    mul_zero := forall_associated.2 fun a ↦ by rw [← mk_zero, mk_mul_mk, mul_zero]
+/-
+**Associates.instOrderTop** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instOrderTop : OrderTop (Associates M) where top
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOrderTop : OrderTop (Associates M) where
   top := 0
   le_top := dvd_zero
-
-/--
-theorem `le_zero` / 定理 `le_zero`
-
-English:
-theorem le_zero
-  given: (a : Associates M)
-  statement: a <= 0
-  proof: le_top
-
-中文:
-定理 le_zero
-  条件: (a : Associates M)
-  结论: a <= 0
-  证明: le_top
+/-
+**Associates.le_zero** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoidWithZero M] (a : Associates M), a ≤ 0
+参数：a : Associates M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
-@[simp] protected theorem le_zero (a : Associates M) : a <= 0 := le_top
-
-/--
-Instance `instBoundedOrder` / 实例 `instBoundedOrder`
-
-English:
-instance instBoundedOrder
-  signature: : BoundedOrder (Associates M) where
-
-中文:
-实例 instBoundedOrder
-  签名: : 有界序 (Associates M) where
+@[simp] protected theorem le_zero (a : Associates M) : a ≤ 0 := le_top
+/-
+**Associates.instBoundedOrder** 是 Mathlib 中的一个定义，位于命名空间 `Associates`。
+形式化陈述：{M : Type u_1} → [inst : CommMonoidWithZero M] → BoundedOrder (Associates 
+M)
+参数：Associates M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instBoundedOrder : BoundedOrder (Associates M) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableRel
-  signature: ((· ∣ ·) : M -> M -> Prop)] :
-  body: fun a b =>
-  Quotient.recOnSubsingleton₂ a b fun _ _ => decidable_of_iff' _ mk_dvd_mk
-
-中文:
-实例 [DecidableRel
-  签名: ((· ∣ ·) : M -> M -> 命题)] :
-  定义体: fun a b =>
-  Quotient.recOnSubsingleton₂ a b fun _ _ => decidable_of_iff' _ mk_dvd_mk
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DecidableRel ((· ∣ ·) : M -> M -> Prop)] :
-    DecidableRel ((· ∣ ·) : Associates M -> Associates M -> Prop) := fun a b =>
+instance [DecidableRel ((· ∣ ·) : M → M → Prop)] :
+    DecidableRel ((· ∣ ·) : Associates M → Associates M → Prop) := fun a b =>
   Quotient.recOnSubsingleton₂ a b fun _ _ => decidable_of_iff' _ mk_dvd_mk
-
-/--
-theorem `Prime.le_or_le` / 定理 `Prime.le_or_le`
-
-English:
-theorem Prime.le_or_le
-  given: {p : Associates M} (hp : Prime p) {a b : Associates M} (h : p <= a * b)
-  proof: hp.2.2 a b h
-
-@[simp]
-
-中文:
-定理 素.le_or_le
-  条件: {p : Associates M} (hp : 素 p) {a b : Associates M} (h : p <= a * b)
-  证明: hp.2.2 a b h
-
-@[simp]
+/-
+**Associates.Prime.le_or_le** 是 Mathlib 中的一个定理，位于命名空间 `Associates.Prime`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoidWithZero M] {p : Associates M},   Prime
+ p → ∀ {a b : Associates M}, p ≤ a * b → p ≤ a ∨ p ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Prime.le_or_le {p : Associates M} (hp : Prime p) {a b : Associates M} (h : p <= a * b) :
-    p <= a ∨ p <= b :=
+theorem Prime.le_or_le {p : Associates M} (hp : Prime p) {a b : Associates M} (h : p ≤ a * b) :
+    p ≤ a ∨ p ≤ b :=
   hp.2.2 a b h
 
 @[simp]
-/--
-theorem `prime_mk` / 定理 `prime_mk`
-
-English:
-theorem prime_mk
-  given: {p : M}
-  statement: Prime (Associates.mk p) ↔ Prime p
-  proof: by
-  rw [Prime]; rw [_root_.Prime]; rw [forall_associated]
-  simp only [forall_associated, mk_ne_zero, isUnit_mk, mk_mul_mk, mk_dvd_mk]
-
-@[simp]
-
-中文:
-定理 prime_mk
-  条件: {p : M}
-  结论: 素 (Associates.mk p) ↔ 素 p
-  证明: by
-  rw [Prime]; rw [_root_.Prime]; rw [forall_associated]
-  simp only [forall_associated, mk_ne_zero, isUnit_mk, mk_mul_mk, mk_dvd_mk]
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.Prime, forall_associated, isUnit_mk, mk_dvd_mk, mk_mul_mk, mk_ne_zero
+/-
+**Associates.prime_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：prime_mk {p : M} : Prime (Associates.mk p) ↔ Prime p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prime.eq_1`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] (p : M),   Pr
+ime p = (p ≠ 0 ∧ ¬IsUnit p ∧ ∀ (a b : M), p ∣ a * b → p ∣ a ∨ p ∣ b)
+· 使用定理 `Associates.forall_associated`：forall_associated [Monoid M] {p : Associat
+es M -> Prop} : (forall a, p a) ↔ forall a, p (Associates.mk a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem prime_mk {p : M} : Prime (Associates.mk p) ↔ Prime p := by
-  rw [Prime]; rw [_root_.Prime]; rw [forall_associated]
+  rw [Prime, _root_.Prime, forall_associated]
   simp only [forall_associated, mk_ne_zero, isUnit_mk, mk_mul_mk, mk_dvd_mk]
 
 @[simp]
-/--
-theorem `irreducible_mk` / 定理 `irreducible_mk`
-
-English:
-theorem irreducible_mk
-  given: {a : M}
-  statement: Irreducible (Associates.mk a) ↔ Irreducible a
-  proof: by
-  simp only [irreducible_iff, isUnit_mk, forall_associated, isUnit_mk, mk_mul_mk,
-    mk_eq_mk_iff_associated, Associated.comm (x := a)]
-  apply Iff.rfl.and
-  constructor
-  · rintro h x y rfl
-exact h _ _ .refl _
-  · rintro h x y ⟨u, rfl⟩
-    simpa using h (mul_assoc _ _ _)
-
-@[simp]
-
-中文:
-定理 irreducible_mk
-  条件: {a : M}
-  结论: 不可约 (Associates.mk a) ↔ 不可约 a
-  证明: by
-  simp only [irreducible_iff, isUnit_mk, forall_associated, isUnit_mk, mk_mul_mk,
-    mk_eq_mk_iff_associated, Associated.comm (x := a)]
-  apply Iff.rfl.and
-  constructor
-  · rintro h x y rfl
-exact h _ _ .refl _
-  · rintro h x y ⟨u, rfl⟩
-    simpa using h (mul_assoc _ _ _)
-
-@[simp]
-
-Depends on / 依赖: Associated, Associated.comm, Iff.rfl.and, forall_associated, irreducible_iff, isUnit_mk, mk_eq_mk_iff_associated, mk_mul_mk, mul_assoc
+/-
+**Associates.irreducible_mk** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：irreducible_mk {a : M} : Irreducible (Associates.mk a) ↔ Irreducible a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Associated.comm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y ↔ Associated y x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Associated.refl`：∀ {M : Type u_1} [inst : Monoid M] (x : M), Associated 
+x x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem irreducible_mk {a : M} : Irreducible (Associates.mk a) ↔ Irreducible a := by
   simp only [irreducible_iff, isUnit_mk, forall_associated, isUnit_mk, mk_mul_mk,
@@ -3063,43 +2119,41 @@ theorem irreducible_mk {a : M} : Irreducible (Associates.mk a) ↔ Irreducible a
   apply Iff.rfl.and
   constructor
   · rintro h x y rfl
-exact h _ _ .refl _
+    exact h _ _ <| .refl _
   · rintro h x y ⟨u, rfl⟩
     simpa using h (mul_assoc _ _ _)
 
 @[simp]
-/--
-theorem `mk_dvdNotUnit_mk_iff` / 定理 `mk_dvdNotUnit_mk_iff`
-
-English:
-theorem mk_dvdNotUnit_mk_iff
-  given: {a b : M}
-  proof: by
-  simp only [DvdNotUnit, mk_ne_zero, mk_surjective.exists, isUnit_mk, mk_mul_mk,
-    mk_eq_mk_iff_associated, Associated.comm (x := b)]
-  refine Iff.rfl.and ?_
-  constructor
-  · rintro ⟨x, hx, u, rfl⟩
-    refine ⟨x * u, ?_, mul_assoc ..⟩
-    simpa
-  · rintro ⟨x, ⟨hx, rfl⟩⟩
-    use x
-
-中文:
-定理 mk_dvdNotUnit_mk_iff
-  条件: {a b : M}
-  证明: by
-  simp only [DvdNotUnit, mk_ne_zero, mk_surjective.exists, isUnit_mk, mk_mul_mk,
-    mk_eq_mk_iff_associated, Associated.comm (x := b)]
-  refine Iff.rfl.and ?_
-  constructor
-  · rintro ⟨x, hx, u, rfl⟩
-    refine ⟨x * u, ?_, mul_assoc ..⟩
-    simpa
-  · rintro ⟨x, ⟨hx, rfl⟩⟩
-    use x
-
-Depends on / 依赖: Associated, Associated.comm, DvdNotUnit, Iff.rfl.and, isUnit_mk, mk_eq_mk_iff_associated, mk_mul_mk, mk_ne_zero, mk_surjective, mk_surjective.exists, mul_assoc
+/-
+**Associates.mk_dvdNotUnit_mk_iff** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：mk_dvdNotUnit_mk_iff {a b : M} : DvdNotUnit (Associates.mk a) (Associates.
+mk b) ↔ DvdNotUnit a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Function.Surjective.exists`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Surjective f → ∀ {p : β → Prop}, (∃ y, p y) ↔ ∃ x, p (f x)
+· 使用定理 `Associates.mk_surjective`：mk_surjective [Monoid M] : Function.Surjective
+ (@Associates.mk M _)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Associated.comm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y ↔ Associated y x
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Associated.refl`：∀ {M : Type u_1} [inst : Monoid M] (x : M), Associated 
+x x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mk_dvdNotUnit_mk_iff {a b : M} :
     DvdNotUnit (Associates.mk a) (Associates.mk b) ↔ DvdNotUnit a b := by
@@ -3112,41 +2166,27 @@ theorem mk_dvdNotUnit_mk_iff {a b : M} :
     simpa
   · rintro ⟨x, ⟨hx, rfl⟩⟩
     use x
-
-/--
-theorem `dvdNotUnit_of_lt` / 定理 `dvdNotUnit_of_lt`
-
-English:
-theorem dvdNotUnit_of_lt
-  given: {a b : Associates M} (hlt : a < b)
-  statement: DvdNotUnit a b
-  proof: by
-  constructor
-  · rintro rfl
-    apply not_lt_of_ge _ hlt
-    apply dvd_zero
-  rcases hlt with ⟨⟨x, rfl⟩, ndvd⟩
-  refine ⟨x, ?_, rfl⟩
-  contrapose ndvd
-  rcases ndvd with ⟨u, rfl⟩
-  simp
-
-中文:
-定理 dvdNotUnit_of_lt
-  条件: {a b : Associates M} (hlt : a < b)
-  结论: DvdNotUnit a b
-  证明: by
-  constructor
-  · rintro rfl
-    apply not_lt_of_ge _ hlt
-    apply dvd_zero
-  rcases hlt with ⟨⟨x, rfl⟩, ndvd⟩
-  refine ⟨x, ?_, rfl⟩
-  contrapose ndvd
-  rcases ndvd with ⟨u, rfl⟩
-  simp
-
-Depends on / 依赖: contrapose, dvd_zero, not_lt_of_ge
+/-
+**Associates.dvdNotUnit_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：dvdNotUnit_of_lt {a b : Associates M} (hlt : a < b) : DvdNotUnit a b
+参数：hlt : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `dvd_zero`：dvd_zero (a : α) : a ∣ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Associates.coe_unit_eq_one`：coe_unit_eq_one (u : (Associates M)ˣ) : (u :
+ Associates M) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem dvdNotUnit_of_lt {a b : Associates M} (hlt : a < b) : DvdNotUnit a b := by
   constructor
@@ -3158,24 +2198,24 @@ theorem dvdNotUnit_of_lt {a b : Associates M} (hlt : a < b) : DvdNotUnit a b := 
   contrapose ndvd
   rcases ndvd with ⟨u, rfl⟩
   simp
-
-/--
-theorem `irreducible_iff_prime_iff` / 定理 `irreducible_iff_prime_iff`
-
-English:
-theorem irreducible_iff_prime_iff
-  proof: by
-  simp_rw [forall_associated, irreducible_mk, prime_mk]
-
-中文:
-定理 irreducible_iff_prime_iff
-  证明: by
-  simp_rw [forall_associated, irreducible_mk, prime_mk]
-
-Depends on / 依赖: forall_associated, irreducible_mk, prime_mk, simp_rw
+/-
+**Associates.irreducible_iff_prime_iff** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：irreducible_iff_prime_iff : (forall a : M, Irreducible a ↔ Prime a) ↔ fora
+ll a : Associates M, Irreducible a ↔ Prime a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem irreducible_iff_prime_iff :
-    (forall a : M, Irreducible a ↔ Prime a) ↔ forall a : Associates M, Irreducible a ↔ Prime a := by
+    (∀ a : M, Irreducible a ↔ Prime a) ↔ ∀ a : Associates M, Irreducible a ↔ Prime a := by
   simp_rw [forall_associated, irreducible_mk, prime_mk]
 
 end CommMonoidWithZero
@@ -3184,51 +2224,37 @@ section CancelCommMonoidWithZero
 
 variable [CommMonoidWithZero M] [IsCancelMulZero M]
 
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: : PartialOrder (Associates M) where
-  body: mk_surjective.forall₂.2 fun _a _b hab hba => mk_eq_mk_iff_associated.2
-    associated_of_dvd_dvd (dvd_of_mk_le_mk hab) (dvd_of_mk_le_mk hba)
-
-中文:
-实例 instPartialOrder
-  签名: : 偏序 (Associates M) where
-  定义体: mk_surjective.forall₂.2 fun _a _b hab hba => mk_eq_mk_iff_associated.2
-    associated_of_dvd_dvd (dvd_of_mk_le_mk hab) (dvd_of_mk_le_mk hba)
-
-Depends on / 依赖: mk_eq_mk_iff_associated, mk_surjective, mk_surjective.forall
+/-
+**Associates.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instPartialOrder : PartialOrder (Associates M) where le_antisymm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPartialOrder : PartialOrder (Associates M) where
-le_antisymm := mk_surjective.forall₂.2 fun _a _b hab hba => mk_eq_mk_iff_associated.2
+  le_antisymm := mk_surjective.forall₂.2 fun _a _b hab hba => mk_eq_mk_iff_associated.2 <|
     associated_of_dvd_dvd (dvd_of_mk_le_mk hab) (dvd_of_mk_le_mk hba)
-
-/--
-Instance `instIsCancelMulZero` / 实例 `instIsCancelMulZero`
-
-English:
-instance instIsCancelMulZero
-  signature: : IsCancelMulZero (Associates M)
-  body: @IsLeftCancelMulZero.to_isCancelMulZero _ _ _
-  { mul_left_cancel_of_ne_zero := by
-      rintro ⟨a⟩ ha ⟨b⟩ ⟨c⟩ h
-      rcases Quotient.exact' h with ⟨u, hu⟩
-      have hu : a * (b * ↑u) = a * c := by rwa [← mul_assoc]
-      exact Quotient.sound' ⟨u, mul_left_cancel₀ (mk_ne_zero.1 ha) hu⟩ }
-
-中文:
-实例 instIsCancelMulZero
-  签名: : 是乘零消去 (Associates M)
-  定义体: @IsLeftCancelMulZero.to_isCancelMulZero _ _ _
-  { mul_left_cancel_of_ne_zero := by
-      rintro ⟨a⟩ ha ⟨b⟩ ⟨c⟩ h
-      rcases Quotient.exact' h with ⟨u, hu⟩
-      have hu : a * (b * ↑u) = a * c := by rwa [← mul_assoc]
-      exact Quotient.sound' ⟨u, mul_left_cancel₀ (mk_ne_zero.1 ha) hu⟩ }
-
-Depends on / 依赖: IsLeftCancelMulZero, IsLeftCancelMulZero.to_isCancelMulZero, Quotient, Quotient.exact, Quotient.sound, evalCompCoyonedaCorepresentable, mk_ne_zero, mul_assoc, mul_left_cancel_of_ne_zero, to_isCancelMulZero
+/-
+**Associates.instIsCancelMulZero** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+形式化陈述：instIsCancelMulZero : IsCancelMulZero (Associates M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLeftCancelMulZero.to_isCancelMulZero`：IsLeftCancelMulZero.to_isCancelM
+ulZero [IsLeftCancelMulZero M₀] : IsCancelMulZero M₀
+· 使用定理 `Quotient.exact'`：exact' {a b : α} : (Quotient.mk'' a : Quotient s₁) = Qu
+otient.mk'' b -> s₁ a b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Quotient.sound'`：sound' {a b : α} : s₁ a b -> @Quotient.mk'' α s₁ a = Qu
+otient.mk'' b
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Associates.mk_ne_zero`：mk_ne_zero {a : M} : Associates.mk a != 0 ↔ a != 
+0
 -/
 instance instIsCancelMulZero : IsCancelMulZero (Associates M) :=
   @IsLeftCancelMulZero.to_isCancelMulZero _ _ _
@@ -3237,126 +2263,90 @@ instance instIsCancelMulZero : IsCancelMulZero (Associates M) :=
       rcases Quotient.exact' h with ⟨u, hu⟩
       have hu : a * (b * ↑u) = a * c := by rwa [← mul_assoc]
       exact Quotient.sound' ⟨u, mul_left_cancel₀ (mk_ne_zero.1 ha) hu⟩ }
-
-/--
-theorem `_root_.associates_irreducible_iff_prime` / 定理 `_root_.associates_irreducible_iff_prime`
-
-English:
-theorem _root_.associates_irreducible_iff_prime
-  given: [DecompositionMonoid M] {p : Associates M}
-  proof: irreducible_iff_prime
-
-中文:
-定理 _root_.associates_irreducible_iff_prime
-  条件: [分解幺半群 M] {p : Associates M}
-  证明: irreducible_iff_prime
-
-Depends on / 依赖: irreducible_iff_prime
+/-
+**Associates._root_.associates_irreducible_iff_prime** 是 Mathlib 中的一个定理，位于命名空间 `
+Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.associates_irreducible_iff_prime [DecompositionMonoid M] {p : Associates M} :
     Irreducible p ↔ Prime p := irreducible_iff_prime
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NoZeroDivisors (Associates M)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 无零因子 (Associates M)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**Associates.** 是 Mathlib 中的一个实例，位于命名空间 `Associates`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NoZeroDivisors (Associates M) := by infer_instance
-
-/--
-theorem `le_of_mul_le_mul_left` / 定理 `le_of_mul_le_mul_left`
-
-English:
-theorem le_of_mul_le_mul_left
-  given: (a b c : Associates M) (ha : a != 0)
-  statement: a * b <= a * c -> b <= c
-
-中文:
-定理 le_of_mul_le_mul_left
-  条件: (a b c : Associates M) (ha : a != 0)
-  结论: a * b <= a * c -> b <= c
+/-
+**Associates.le_of_mul_le_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCancelMulZero M] (a b c 
+: Associates M), a ≠ 0 → a * b ≤ a * c → b ≤ c
+参数：a b c : Associates M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem le_of_mul_le_mul_left (a b c : Associates M) (ha : a != 0) : a * b <= a * c -> b <= c
-| ⟨d, hd⟩ => ⟨d, mul_left_cancel₀ ha by rwa [← mul_assoc]⟩
-
-/--
-theorem `one_or_eq_of_le_of_prime` / 定理 `one_or_eq_of_le_of_prime`
-
-English:
-theorem one_or_eq_of_le_of_prime
-  given: {p m : Associates M} (hp : Prime p) (hle : m <= p)
-  proof: by
-  rcases mk_surjective p with ⟨p, rfl⟩
-  rcases mk_surjective m with ⟨m, rfl⟩
-  simpa [mk_eq_mk_iff_associated, Associated.comm]
-    using (prime_mk.1 hp).irreducible.dvd_iff.mp (mk_le_mk_iff_dvd.1 hle)
-
-中文:
-定理 one_or_eq_of_le_of_prime
-  条件: {p m : Associates M} (hp : 素 p) (hle : m <= p)
-  证明: by
-  rcases mk_surjective p with ⟨p, rfl⟩
-  rcases mk_surjective m with ⟨m, rfl⟩
-  simpa [mk_eq_mk_iff_associated, Associated.comm]
-    using (prime_mk.1 hp).irreducible.dvd_iff.mp (mk_le_mk_iff_dvd.1 hle)
-
-Depends on / 依赖: Associated, Associated.comm, dvd_iff, irreducible, irreducible.dvd_iff.mp, mk_eq_mk_iff_associated, mk_le_mk_iff_dvd, mk_surjective, prime_mk
+theorem le_of_mul_le_mul_left (a b c : Associates M) (ha : a ≠ 0) : a * b ≤ a * c → b ≤ c
+  | ⟨d, hd⟩ => ⟨d, mul_left_cancel₀ ha <| by rwa [← mul_assoc]⟩
+/-
+**Associates.one_or_eq_of_le_of_prime** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：one_or_eq_of_le_of_prime {p m : Associates M} (hp : Prime p) (hle : m <= p
+) : m = 1 ∨ m = p
+参数：hp : Prime p；hle : m <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associates.mk_surjective`：mk_surjective [Monoid M] : Function.Surjective
+ (@Associates.mk M _)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Irreducible.dvd_iff`：Irreducible.dvd_iff [Monoid M] {x y : M} (hx : Irre
+ducible x) : y ∣ x ↔ IsUnit y ∨ Associated x y
+· 使用定理 `Prime.irreducible`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCan
+celMulZero M] {p : M}, Prime p → Irreducible p
+· 使用定理 `Associates.prime_mk`：prime_mk {p : M} : Prime (Associates.mk p) ↔ Prime 
+p
+· 使用定理 `Associates.mk_le_mk_iff_dvd`：mk_le_mk_iff_dvd {a b : M} : Associates.mk 
+a <= Associates.mk b ↔ a ∣ b
 -/
-theorem one_or_eq_of_le_of_prime {p m : Associates M} (hp : Prime p) (hle : m <= p) :
+theorem one_or_eq_of_le_of_prime {p m : Associates M} (hp : Prime p) (hle : m ≤ p) :
     m = 1 ∨ m = p := by
   rcases mk_surjective p with ⟨p, rfl⟩
   rcases mk_surjective m with ⟨m, rfl⟩
   simpa [mk_eq_mk_iff_associated, Associated.comm]
     using (prime_mk.1 hp).irreducible.dvd_iff.mp (mk_le_mk_iff_dvd.1 hle)
-
-/--
-theorem `dvdNotUnit_iff_lt` / 定理 `dvdNotUnit_iff_lt`
-
-English:
-theorem dvdNotUnit_iff_lt
-  given: {a b : Associates M}
-  statement: DvdNotUnit a b ↔ a < b
-  proof: dvd_and_not_dvd_iff.symm
-
-中文:
-定理 dvdNotUnit_iff_lt
-  条件: {a b : Associates M}
-  结论: DvdNotUnit a b ↔ a < b
-  证明: dvd_and_not_dvd_iff.symm
-
-Depends on / 依赖: dvd_and_not_dvd_iff, dvd_and_not_dvd_iff.symm
+/-
+**Associates.dvdNotUnit_iff_lt** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：dvdNotUnit_iff_lt {a b : Associates M} : DvdNotUnit a b ↔ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `dvd_and_not_dvd_iff`：dvd_and_not_dvd_iff [CommMonoidWithZero α] [IsCance
+lMulZero α] {x y : α} : x ∣ y ∧ ¬y ∣ x ↔ DvdNotUnit x y
 -/
 theorem dvdNotUnit_iff_lt {a b : Associates M} : DvdNotUnit a b ↔ a < b :=
   dvd_and_not_dvd_iff.symm
-
-/--
-theorem `le_one_iff` / 定理 `le_one_iff`
-
-English:
-theorem le_one_iff
-  given: {p : Associates M}
-  statement: p <= 1 ↔ p = 1
-  proof: by rw [← Associates.bot_eq_one, le_bot_iff]
-
-中文:
-定理 le_one_iff
-  条件: {p : Associates M}
-  结论: p <= 1 ↔ p = 1
-  证明: by rw [← Associates.bot_eq_one, le_bot_iff]
-
-Depends on / 依赖: Associates, Associates.bot_eq_one, bot_eq_one, le_bot_iff
+/-
+**Associates.le_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Associates`。
+形式化陈述：le_one_iff {p : Associates M} : p <= 1 ↔ p = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Associates.bot_eq_one`：bot_eq_one [Monoid M] : (⊥ : Associates M) = 1
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_one_iff {p : Associates M} : p <= 1 ↔ p = 1 := by rw [← Associates.bot_eq_one, le_bot_iff]
+theorem le_one_iff {p : Associates M} : p ≤ 1 ↔ p = 1 := by rw [← Associates.bot_eq_one, le_bot_iff]
 
 end CancelCommMonoidWithZero
 
@@ -3366,194 +2356,157 @@ section CommMonoidWithZero
 
 variable [CommMonoidWithZero M] {p q r : M}
 
-/--
-theorem `dvdNotUnit_of_dvdNotUnit_associated` / 定理 `dvdNotUnit_of_dvdNotUnit_associated`
-
-English:
-theorem dvdNotUnit_of_dvdNotUnit_associated
-  proof: by
-  obtain ⟨u, rfl⟩ := h'
-  obtain ⟨hp, x, hx⟩ := h
-  refine ⟨hp, x * u, mt isUnit_of_mul_isUnit_left hx.1, ?_⟩
-  rw [← mul_assoc]; rw [← hx.right]
-
-alias Associated.dvdNotUnit_right := dvdNotUnit_of_dvdNotUnit_associated
-
-中文:
-定理 dvdNotUnit_of_dvdNotUnit_associated
-  证明: by
-  obtain ⟨u, rfl⟩ := h'
-  obtain ⟨hp, x, hx⟩ := h
-  refine ⟨hp, x * u, mt isUnit_of_mul_isUnit_left hx.1, ?_⟩
-  rw [← mul_assoc]; rw [← hx.right]
-
-alias Associated.dvdNotUnit_right := dvdNotUnit_of_dvdNotUnit_associated
-
-Depends on / 依赖: hx.right, isUnit_of_mul_isUnit_left, mul_assoc
+/-
+**dvdNotUnit_of_dvdNotUnit_associated** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvdNotUnit_of_dvdNotUnit_associated (h : DvdNotUnit p q) (h' : Associated 
+q r) : DvdNotUnit p r
+参数：h : DvdNotUnit p q；h' : Associated q r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `isUnit_of_mul_isUnit_left`：isUnit_of_mul_isUnit_left [Monoid M] [IsDedek
+indFiniteMonoid M] {x y : M} (hu : IsUnit (x * y)) : IsUnit x
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem dvdNotUnit_of_dvdNotUnit_associated
     (h : DvdNotUnit p q) (h' : Associated q r) : DvdNotUnit p r := by
   obtain ⟨u, rfl⟩ := h'
   obtain ⟨hp, x, hx⟩ := h
   refine ⟨hp, x * u, mt isUnit_of_mul_isUnit_left hx.1, ?_⟩
-  rw [← mul_assoc]; rw [← hx.right]
+  rw [← mul_assoc, ← hx.right]
 
 alias Associated.dvdNotUnit_right := dvdNotUnit_of_dvdNotUnit_associated
-
-/--
-theorem `Associated.dvdNotUnit_left` / 定理 `Associated.dvdNotUnit_left`
-
-English:
-theorem Associated.dvdNotUnit_left
-  given: (h : DvdNotUnit p r) (h' : Associated p q)
-  proof: by
-  obtain ⟨u, rfl⟩ := h'.symm
-  obtain ⟨hp, x, hx⟩ := h
-  have hq : q != 0 := by simp_all
-  refine ⟨hq, x * u, mt isUnit_of_mul_isUnit_left hx.1, ?_⟩
-  rw [mul_comm x]; rw [← mul_assoc]; rw [← hx.2]
-
-中文:
-定理 Associated.dvdNotUnit_left
-  条件: (h : DvdNotUnit p r) (h' : Associated p q)
-  证明: by
-  obtain ⟨u, rfl⟩ := h'.symm
-  obtain ⟨hp, x, hx⟩ := h
-  have hq : q != 0 := by simp_all
-  refine ⟨hq, x * u, mt isUnit_of_mul_isUnit_left hx.1, ?_⟩
-  rw [mul_comm x]; rw [← mul_assoc]; rw [← hx.2]
-
-Depends on / 依赖: isUnit_of_mul_isUnit_left, mul_assoc, mul_comm
+/-
+**Associated.dvdNotUnit_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.dvdNotUnit_left (h : DvdNotUnit p r) (h' : Associated p q) : Dv
+dNotUnit q r
+参数：h : DvdNotUnit p r；h' : Associated p q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `isUnit_of_mul_isUnit_left`：isUnit_of_mul_isUnit_left [Monoid M] [IsDedek
+indFiniteMonoid M] {x y : M} (hu : IsUnit (x * y)) : IsUnit x
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem Associated.dvdNotUnit_left (h : DvdNotUnit p r) (h' : Associated p q) :
     DvdNotUnit q r := by
   obtain ⟨u, rfl⟩ := h'.symm
   obtain ⟨hp, x, hx⟩ := h
-  have hq : q != 0 := by simp_all
+  have hq : q ≠ 0 := by simp_all
   refine ⟨hq, x * u, mt isUnit_of_mul_isUnit_left hx.1, ?_⟩
-  rw [mul_comm x]; rw [← mul_assoc]; rw [← hx.2]
-
-/--
-theorem `Associated.dvdNotUnit_left_iff` / 定理 `Associated.dvdNotUnit_left_iff`
-
-English:
-theorem Associated.dvdNotUnit_left_iff
-  given: (h : Associated p q)
-  statement: DvdNotUnit p r ↔ DvdNotUnit q r where
-  proof: (h.dvdNotUnit_left ·)
-  mpr := (h.symm.dvdNotUnit_left ·)
-
-中文:
-定理 Associated.dvdNotUnit_left_iff
-  条件: (h : Associated p q)
-  结论: DvdNotUnit p r ↔ DvdNotUnit q r where
-  证明: (h.dvdNotUnit_left ·)
-  mpr := (h.symm.dvdNotUnit_left ·)
-
-Depends on / 依赖: dvdNotUnit_left, h.dvdNotUnit_left
+  rw [mul_comm x, ← mul_assoc, ← hx.2]
+/-
+**Associated.dvdNotUnit_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.dvdNotUnit_left_iff (h : Associated p q) : DvdNotUnit p r ↔ Dvd
+NotUnit q r where mp
+参数：h : Associated p q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.dvdNotUnit_left`：Associated.dvdNotUnit_left (h : DvdNotUnit p
+ r) (h' : Associated p q) : DvdNotUnit q r
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 theorem Associated.dvdNotUnit_left_iff (h : Associated p q) : DvdNotUnit p r ↔ DvdNotUnit q r where
   mp := (h.dvdNotUnit_left ·)
   mpr := (h.symm.dvdNotUnit_left ·)
-
-/--
-theorem `Associated.dvdNotUnit_right_iff` / 定理 `Associated.dvdNotUnit_right_iff`
-
-English:
-theorem Associated.dvdNotUnit_right_iff
-  given: (h : Associated q r)
-  statement: DvdNotUnit p q ↔ DvdNotUnit p r where
-  proof: (h.dvdNotUnit_right ·)
-  mpr := (h.symm.dvdNotUnit_right ·)
-
-中文:
-定理 Associated.dvdNotUnit_right_iff
-  条件: (h : Associated q r)
-  结论: DvdNotUnit p q ↔ DvdNotUnit p r where
-  证明: (h.dvdNotUnit_right ·)
-  mpr := (h.symm.dvdNotUnit_right ·)
-
-Depends on / 依赖: dvdNotUnit_right, h.dvdNotUnit_right
+/-
+**Associated.dvdNotUnit_right_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.dvdNotUnit_right_iff (h : Associated q r) : DvdNotUnit p q ↔ Dv
+dNotUnit p r where mp
+参数：h : Associated q r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.dvdNotUnit_right`：∀ {M : Type u_1} [inst : CommMonoidWithZero
+ M] {p q r : M}, DvdNotUnit p q → Associated q r → DvdNotUnit p r
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 theorem Associated.dvdNotUnit_right_iff (h : Associated q r) : DvdNotUnit p q ↔ DvdNotUnit p r where
   mp := (h.dvdNotUnit_right ·)
   mpr := (h.symm.dvdNotUnit_right ·)
-
-/--
-theorem `Associated.acc_dvdNotUnit_iff` / 定理 `Associated.acc_dvdNotUnit_iff`
-
-English:
-theorem Associated.acc_dvdNotUnit_iff
-  given: (h : Associated p q)
-  proof: .intro _ fun _r hr => acc.inv (h.dvdNotUnit_right_iff.mpr hr)
-  mpr acc := .intro _ fun _r hr => acc.inv (h.dvdNotUnit_right_iff.mp hr)
-
-中文:
-定理 Associated.acc_dvdNotUnit_iff
-  条件: (h : Associated p q)
-  证明: .intro _ fun _r hr => acc.inv (h.dvdNotUnit_right_iff.mpr hr)
-  mpr acc := .intro _ fun _r hr => acc.inv (h.dvdNotUnit_right_iff.mp hr)
-
-Depends on / 依赖: acc.inv, dvdNotUnit_right_iff, h.dvdNotUnit_right_iff.mpr
+/-
+**Associated.acc_dvdNotUnit_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Associated.acc_dvdNotUnit_iff (h : Associated p q) : Acc DvdNotUnit p ↔ Ac
+c DvdNotUnit q where mp acc
+参数：h : Associated p q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Acc.inv`：∀ {α : Sort u} {r : α → α → Prop} {x y : α}, Acc r x → r y x → 
+Acc r y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Associated.dvdNotUnit_right_iff`：Associated.dvdNotUnit_right_iff (h : As
+sociated q r) : DvdNotUnit p q ↔ DvdNotUnit p r where mp
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem Associated.acc_dvdNotUnit_iff (h : Associated p q) :
     Acc DvdNotUnit p ↔ Acc DvdNotUnit q where
-  mp acc := .intro _ fun _r hr => acc.inv (h.dvdNotUnit_right_iff.mpr hr)
-  mpr acc := .intro _ fun _r hr => acc.inv (h.dvdNotUnit_right_iff.mp hr)
+  mp acc := .intro _ fun _r hr ↦ acc.inv (h.dvdNotUnit_right_iff.mpr hr)
+  mpr acc := .intro _ fun _r hr ↦ acc.inv (h.dvdNotUnit_right_iff.mp hr)
 
 end CommMonoidWithZero
 
 section CancelCommMonoidWithZero
 
-/--
-theorem `isUnit_of_associated_mul` / 定理 `isUnit_of_associated_mul`
-
-English:
-theorem isUnit_of_associated_mul
-  statement: [CommMonoidWithZero M] [IsCancelMulZero M] {p b : M}
-  proof: by
-  obtain ⟨a, ha⟩ := h
-  refine .of_mul_eq_one a ((mul_right_inj' hp).mp ?_)
-  rwa [← mul_assoc, mul_one]
-
-中文:
-定理 isUnit_of_associated_mul
-  结论: [带零交换幺半群 M] [是乘零消去 M] {p b : M}
-  证明: by
-  obtain ⟨a, ha⟩ := h
-  refine .of_mul_eq_one a ((mul_right_inj' hp).mp ?_)
-  rwa [← mul_assoc, mul_one]
-
-Depends on / 依赖: mul_assoc, mul_one, mul_right_inj, of_mul_eq_one
+/-
+**isUnit_of_associated_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isUnit_of_associated_mul [CommMonoidWithZero M] [IsCancelMulZero M] {p b :
+ M} (h : Associated (p * b) p) (hp : p != 0) : IsUnit b
+参数：h : Associated (p * b) p；hp : p != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.of_mul_eq_one`：IsUnit.of_mul_eq_one [Monoid M] [IsDedekindFiniteM
+onoid M] {a : M} (b : M) (h : a * b = 1) : IsUnit a
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `mul_right_inj'`：mul_right_inj' (ha : a != 0) : a * b = a * c ↔ b = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem isUnit_of_associated_mul [CommMonoidWithZero M] [IsCancelMulZero M] {p b : M}
-    (h : Associated (p * b) p) (hp : p != 0) : IsUnit b := by
+    (h : Associated (p * b) p) (hp : p ≠ 0) : IsUnit b := by
   obtain ⟨a, ha⟩ := h
   refine .of_mul_eq_one a ((mul_right_inj' hp).mp ?_)
   rwa [← mul_assoc, mul_one]
-
-/--
-theorem `DvdNotUnit.not_associated` / 定理 `DvdNotUnit.not_associated`
-
-English:
-theorem DvdNotUnit.not_associated
-  statement: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
-  proof: by
-  rintro ⟨a, rfl⟩
-  obtain ⟨hp, x, hx, hx'⟩ := h
-  rcases (mul_right_inj' hp).mp hx' with rfl
-  exact hx a.isUnit
-
-中文:
-定理 DvdNotUnit.not_associated
-  结论: [带零交换幺半群 M] [是乘零消去 M] {p q : M}
-  证明: by
-  rintro ⟨a, rfl⟩
-  obtain ⟨hp, x, hx, hx'⟩ := h
-  rcases (mul_right_inj' hp).mp hx' with rfl
-  exact hx a.isUnit
-
-Depends on / 依赖: a.isUnit, isUnit, mul_right_inj
+/-
+**DvdNotUnit.not_associated** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DvdNotUnit.not_associated [CommMonoidWithZero M] [IsCancelMulZero M] {p q 
+: M} (h : DvdNotUnit p q) : ¬Associated p q
+参数：h : DvdNotUnit p q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `mul_right_inj'`：mul_right_inj' (ha : a != 0) : a * b = a * c ↔ b = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
 -/
 theorem DvdNotUnit.not_associated [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
     (h : DvdNotUnit p q) : ¬Associated p q := by
@@ -3561,50 +2514,55 @@ theorem DvdNotUnit.not_associated [CommMonoidWithZero M] [IsCancelMulZero M] {p 
   obtain ⟨hp, x, hx, hx'⟩ := h
   rcases (mul_right_inj' hp).mp hx' with rfl
   exact hx a.isUnit
-
-/--
-theorem `dvd_prime_pow` / 定理 `dvd_prime_pow`
-
-English:
-theorem dvd_prime_pow
-  given: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M} (hp : Prime p) (n : Nat)
-  proof: by
-  induction n generalizing q with
-  | zero =>
-    simp [← isUnit_iff_dvd_one, associated_one_iff_isUnit]
-  | succ n ih =>
-    refine ⟨fun h => ?_, fun ⟨i, hi, hq⟩ => hq.dvd.trans (pow_dvd_pow p hi)⟩
-    rw [pow_succ'] at h
-    rcases hp.left_dvd_or_dvd_right_of_dvd_mul h with (⟨q, rfl⟩ | hno)
-    · rw [mul_dvd_mul_iff_left hp.ne_zero, ih] at h
-      rcases h with ⟨i, hi, hq⟩
-      refine ⟨i + 1, Nat.succ_le_succ hi, (hq.mul_left p).trans ?_⟩
-      rw [pow_succ']
-    · obtain ⟨i, hi, hq⟩ := ih.mp hno
-      exact ⟨i, hi.trans n.le_succ, hq⟩
-
-中文:
-定理 dvd_prime_pow
-  条件: [带零交换幺半群 M] [是乘零消去 M] {p q : M} (hp : 素 p) (n : 自然数)
-  证明: by
-  induction n generalizing q with
-  | zero =>
-    simp [← isUnit_iff_dvd_one, associated_one_iff_isUnit]
-  | succ n ih =>
-    refine ⟨fun h => ?_, fun ⟨i, hi, hq⟩ => hq.dvd.trans (pow_dvd_pow p hi)⟩
-    rw [pow_succ'] at h
-    rcases hp.left_dvd_or_dvd_right_of_dvd_mul h with (⟨q, rfl⟩ | hno)
-    · rw [mul_dvd_mul_iff_left hp.ne_zero, ih] at h
-      rcases h with ⟨i, hi, hq⟩
-      refine ⟨i + 1, Nat.succ_le_succ hi, (hq.mul_left p).trans ?_⟩
-      rw [pow_succ']
-    · obtain ⟨i, hi, hq⟩ := ih.mp hno
-      exact ⟨i, hi.trans n.le_succ, hq⟩
-
-Depends on / 依赖: Nat.succ_le_succ, associated_one_iff_isUnit, generalizing, hi.trans, hp.left_dvd_or_dvd_right_of_dvd_mul, hp.ne_zero, hq.dvd.trans, hq.mul_left, ih.mp, isUnit_iff_dvd_one, le_succ, left_dvd_or_dvd_right_of_dvd_mul, mul_dvd_mul_iff_left, mul_left, n.le_succ, ne_zero, pow_dvd_pow, pow_succ, succ_le_succ
+/-
+**dvd_prime_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_prime_pow [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M} (hp : P
+rime p) (n : Nat) : q ∣ p ^ n ↔ exists i <= n, Associated q (p ^ i)
+参数：hp : Prime p；n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.le_zero_eq`：∀ (a : ℕ), (a ≤ 0) = (a = 0)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Prime.left_dvd_or_dvd_right_of_dvd_mul`：Prime.left_dvd_or_dvd_right_of_d
+vd_mul {p : M} (hp : Prime p) {a b : M} : a ∣ p * b -> p ∣ a ∨ a ∣ b
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `mul_dvd_mul_iff_left`：mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCan
+celMulZero α] {a b c : α} (ha : a != 0) : a * b ∣ a * c ↔ b ∣ c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `Prime.ne_zero`：ne_zero : p != 0
+· 使用定理 `Nat.succ_le_succ`：∀ {n m : ℕ}, n ≤ m → n.succ ≤ m.succ
+· 使用定理 `Associated.trans`：∀ {M : Type u_1} [inst : Monoid M] {x y z : M}, Associ
+ated x y → Associated y z → Associated x z
+· 使用定理 `Associated.mul_left`：Associated.mul_left [Monoid M] (a : M) {b c : M} (h
+ : b ~ᵤ c) : a * b ~ᵤ a * c
+· 使用定理 `Associated.refl`：∀ {M : Type u_1} [inst : Monoid M] (x : M), Associated 
+x x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
 -/
-theorem dvd_prime_pow [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M} (hp : Prime p) (n : Nat) :
-    q ∣ p ^ n ↔ exists i <= n, Associated q (p ^ i) := by
+theorem dvd_prime_pow [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M} (hp : Prime p) (n : ℕ) :
+    q ∣ p ^ n ↔ ∃ i ≤ n, Associated q (p ^ i) := by
   induction n generalizing q with
   | zero =>
     simp [← isUnit_iff_dvd_one, associated_one_iff_isUnit]
@@ -3620,3 +2578,4 @@ theorem dvd_prime_pow [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M} (hp :
       exact ⟨i, hi.trans n.le_succ, hq⟩
 
 end CancelCommMonoidWithZero
+

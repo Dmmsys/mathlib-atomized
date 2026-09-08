@@ -25,95 +25,74 @@ public section
 
 namespace Nat
 
-/--
-Instance `instOrderBot` / 实例 `instOrderBot`
-
-English:
-instance instOrderBot
-  signature: : OrderBot Nat where
-  body: 0
-  bot_le := zero_le
-
-中文:
-实例 instOrderBot
-  签名: : 有底序 自然数 where
-  定义体: 0
-  bot_le := zero_le
+/-
+**Nat.instOrderBot** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instOrderBot : OrderBot Nat where bot
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 -/
-instance instOrderBot : OrderBot Nat where
+instance instOrderBot : OrderBot ℕ where
   bot := 0
   bot_le := zero_le
-
-/--
-Instance `instNoMaxOrder` / 实例 `instNoMaxOrder`
-
-English:
-instance instNoMaxOrder
-  signature: : NoMaxOrder Nat where
-  body: ⟨n + 1, n.lt_succ_self⟩
-
-中文:
-实例 instNoMaxOrder
-  签名: : NoMax序 自然数 where
-  定义体: ⟨n + 1, n.lt_succ_self⟩
-
-Depends on / 依赖: lt_succ_self, n.lt_succ_self
+/-
+**Nat.instNoMaxOrder** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instNoMaxOrder : NoMaxOrder Nat where exists_gt n
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
 -/
-instance instNoMaxOrder : NoMaxOrder Nat where
+instance instNoMaxOrder : NoMaxOrder ℕ where
   exists_gt n := ⟨n + 1, n.lt_succ_self⟩
 
+/-! ### Miscellaneous lemmas -/
 
-/--
-lemma `bot_eq_zero` / 引理 `bot_eq_zero`
+/-
+**Nat.bot_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：⊥ = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma bot_eq_zero
-  statement: ⊥ = 0
-  proof: rfl
-
-中文:
-引理 bot_eq_zero
-  结论: ⊥ = 0
-  证明: rfl
+--- 原说明 ---
+### Miscellaneous lemmas
 -/
 @[simp high] protected lemma bot_eq_zero : ⊥ = 0 := rfl
 
-/--
-lemma `isLeast_find` / 引理 `isLeast_find`
+/-- `Nat.find` is the minimum natural number satisfying a predicate `p`. -/
+/-
+**Nat.isLeast_find** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：isLeast_find {p : Nat -> Prop} [DecidablePred p] (hp : exists n, p n) : Is
+Least {n | p n} (Nat.find hp)
+参数：hp : exists n, p n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.find_spec`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n),
+ p (Nat.find H)
+· 使用定理 `Nat.find_min'`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n) 
+{m : ℕ}, p m → Nat.find H ≤ m
 
-English:
-lemma isLeast_find
-  given: {p : Nat -> Prop} [DecidablePred p] (hp : exists n, p n)
-  proof: ⟨Nat.find_spec hp, fun _ => Nat.find_min' hp⟩
-
-中文:
-引理 isLeast_find
-  条件: {p : 自然数 -> 命题} [DecidablePred p] (hp : 存在 n, p n)
-  证明: ⟨Nat.find_spec hp, fun _ => Nat.find_min' hp⟩
-
-Depends on / 依赖: Nat.find_min, Nat.find_spec, find_min, find_spec
+--- 原说明 ---
+`Nat.find` is the minimum natural number satisfying a predicate `p`.
 -/
-lemma isLeast_find {p : Nat -> Prop} [DecidablePred p] (hp : exists n, p n) :
+lemma isLeast_find {p : ℕ → Prop} [DecidablePred p] (hp : ∃ n, p n) :
     IsLeast {n | p n} (Nat.find hp) :=
-  ⟨Nat.find_spec hp, fun _ => Nat.find_min' hp⟩
+  ⟨Nat.find_spec hp, fun _ ↦ Nat.find_min' hp⟩
 
 end Nat
 
-/--
-lemma `Set.Nonempty.isLeast_natFind` / 引理 `Set.Nonempty.isLeast_natFind`
+/-- `Nat.find` is the minimum element of a nonempty set of natural numbers. -/
+/-
+**Set.Nonempty.isLeast_natFind** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Set.Nonempty.isLeast_natFind {s : Set Nat} [DecidablePred (· in s)] (hs : 
+s.Nonempty) : IsLeast s (Nat.find hs)
+参数：· in s；hs : s.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.isLeast_find`：isLeast_find {p : Nat -> Prop} [DecidablePred p] (hp :
+ exists n, p n) : IsLeast {n | p n} (Nat.find hp)
 
-English:
-lemma Set.Nonempty.isLeast_natFind
-  given: {s : Set Nat} [DecidablePred (· in s)] (hs : s.Nonempty)
-  proof: Nat.isLeast_find hs
-
-中文:
-引理 集合.非空.isLeast_natFind
-  条件: {s : 集合 自然数} [DecidablePred (· in s)] (hs : s.非空)
-  证明: Nat.isLeast_find hs
-
-Depends on / 依赖: Nat.isLeast_find, isLeast_find
+--- 原说明 ---
+`Nat.find` is the minimum element of a nonempty set of natural numbers.
 -/
-lemma Set.Nonempty.isLeast_natFind {s : Set Nat} [DecidablePred (· in s)] (hs : s.Nonempty) :
+lemma Set.Nonempty.isLeast_natFind {s : Set ℕ} [DecidablePred (· ∈ s)] (hs : s.Nonempty) :
     IsLeast s (Nat.find hs) :=
   Nat.isLeast_find hs

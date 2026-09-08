@@ -55,64 +55,11 @@ has a doc string, a doc string for the additive version should be passed explici
 ```
 /-- Multiplication is commutative -/
 @[to_additive /-- Addition is commutative -/]
-/--
-theorem `mul_comm'` / 定理 `mul_comm'`
-
-English:
-theorem mul_comm'
-  given: {α} [CommSemigroup α] (x y : α)
-  statement: x * y = y * x
-  proof: CommSemigroup.mul_comm
-```
-
-The transport tries to do the right thing in most cases using several
-heuristics described below. However, in some cases it fails, and
-requires manual intervention.
-
-Use the `(reorder := ...)` syntax to reorder the arguments in the generated additive declaration.
-This is specified using cycle notation. For example `(reorder := α β, 5 6)` swaps the arguments
-`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` will move
-the fifth argument before the third argument. This is mostly useful to translate declarations using
-`Pow` to those using `SMul`.
-
-Use the `to_additive existing` syntax to use an existing additive declaration, instead of
-automatically generating it. This attempts to autogenerate the `(reorder := ...)` argument.
-
-Use the `(attr := ...)` syntax to apply attributes to both the multiplicative and the additive
-version:
-
-```
-
-中文:
-定理 mul_comm'
-  条件: {α} [交换半群 α] (x y : α)
-  结论: x * y = y * x
-  证明: CommSemigroup.mul_comm
-```
-
-The transport tries to do the right thing in most cases using several
-heuristics described below. However, in some cases it fails, and
-requires manual intervention.
-
-Use the `(reorder := ...)` syntax to reorder the arguments in the generated additive declaration.
-This is specified using cycle notation. For example `(reorder := α β, 5 6)` swaps the arguments
-`α` and `β` with each other and the fifth and the sixth argument and `(reorder := 3 4 5)` will move
-the fifth argument before the third argument. This is mostly useful to translate declarations using
-`Pow` to those using `SMul`.
-
-Use the `to_additive existing` syntax to use an existing additive declaration, instead of
-automatically generating it. This attempts to autogenerate the `(reorder := ...)` argument.
-
-Use the `(attr := ...)` syntax to apply attributes to both the multiplicative and the additive
-version:
-
-```
--/
 theorem mul_comm' {α} [CommSemigroup α] (x y : α) : x * y = y * x := CommSemigroup.mul_comm
 ```
 
 The transport tries to do the right thing in most cases using several
-heuristics described below. However, in some cases it fails, and
+heuristics described below.  However, in some cases it fails, and
 requires manual intervention.
 
 Use the `(reorder := ...)` syntax to reorder the arguments in the generated additive declaration.
@@ -128,31 +75,6 @@ Use the `(attr := ...)` syntax to apply attributes to both the multiplicative an
 version:
 
 ```
-/--
-lemma `mul_one'` / 引理 `mul_one'`
-
-English:
-lemma mul_one'
-  given: {G : Type*} [Group G] (x : G)
-  statement: x * 1 = x
-  proof: mul_one x
-```
-
-For `simps` this also ensures that some generated lemmas are added to the additive dictionary.
-`@[to_additive (attr := to_additive)]` is a special case, where the `to_additive`
-
-中文:
-引理 mul_one'
-  条件: {G : 类型} [群 G] (x : G)
-  结论: x * 1 = x
-  证明: mul_one x
-```
-
-For `simps` this also ensures that some generated lemmas are added to the additive dictionary.
-`@[to_additive (attr := to_additive)]` is a special case, where the `to_additive`
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.homMk, StructuredArrow, StructuredArrow.mk, V.homToIndex, V.index, homToIndex, single
--/
 @[to_additive (attr := simp)] lemma mul_one' {G : Type*} [Group G] (x : G) : x * 1 = x := mul_one x
 ```
 
@@ -162,251 +84,6 @@ attribute is added to the generated lemma only, to additivize it again.
 This is useful for lemmas about `Pow` to generate both lemmas about `SMul` and `VAdd`. Example:
 ```
 @[to_additive (attr := to_additive VAdd_lemma, simp) SMul_lemma]
-/--
-lemma `Pow_lemma` / 引理 `Pow_lemma`
-
-English:
-lemma Pow_lemma
-  statement: ...
-  proof: ```
-In the above example, the `simp` is added to all 3 lemmas. All other options to `to_additive`
-(like the generated name or `(reorder := ...)`) are not passed down,
-and can be given manually to each individual `to_additive` call.
-
-The `(rename := ...)` syntax can be used for specifying the argument names of the generated
-declaration, overriding the automatic translation of names. For example, `(rename := x -> a, y ↔ z)`
-will translate `lemma mul_foo (x y z : α) ...` to `lemma add_foo (a z y : α) ...`.
-
-## Implementation notes
-
-The transport process generally works by taking all the names of
-identifiers appearing in the name, type, and body of a declaration and
-creating a new declaration by mapping those names to additive versions
-using a simple string-based dictionary and also using all declarations
-that have previously been labeled with `to_additive`. The dictionary is `ToAdditive.nameDict`
-and can be found in the `Tactic.ToAdditive.GuessName` file. If you introduce a new name which
-should be translated by `to_additive` you should add the translation to this dictionary.
-
-In the `mul_comm'` example above, `to_additive` maps:
-* `mul_comm'` to `add_comm'`,
-* `CommSemigroup` to `AddCommSemigroup`,
-* `x * y` to `x + y` and `y * x` to `y + x`, and
-* `CommSemigroup.mul_comm'` to `AddCommSemigroup.add_comm'`.
-
-### Heuristics
-
-`to_additive` uses heuristics to determine whether a particular identifier has to be
-mapped to its additive version. The basic heuristic is
-
-* Only map an identifier to its additive version if its first argument doesn't
-  contain any unapplied identifiers.
-
-Examples:
-* `@Mul.mul Nat n m` (i.e. `(n * m : Nat)`) will not change to `+`, since its
-  first argument is `Nat`, an identifier not applied to any arguments.
-* `@Mul.mul (α × β) x y` will change to `+`. It's first argument contains only the identifier
-  `Prod`, but this is applied to arguments, `α` and `β`.
-* `@Mul.mul (α × Int) x y` will not change to `+`, since its first argument contains `Int`.
-
-The reasoning behind the heuristic is that the first argument is the type which is "additivized",
-and this usually doesn't make sense if this is on a fixed type.
-
-There are some exceptions to this heuristic:
-
-* Identifiers that have the `@[to_additive]` attribute are ignored.
-  For example, multiplication in `↥Semigroup` is replaced by addition in `↥AddSemigroup`.
-  You can turn this behavior off by *also* adding the `@[to_additive_dont_translate]` attribute.
-* If an identifier `d` has attribute `@[to_additive (relevant_arg := α)]` then the argument
-  `α` is checked for a fixed type, instead of checking the first argument.
-  `@[to_additive]` will automatically add the attribute `(relevant_arg := α)` to a
-  declaration when the first argument has no multiplicative type-class, but argument `α` does.
-* If an identifier has attribute `@[to_additive_ignore_args n1 n2 ...]` then all the arguments in
-  positions `n1`, `n2`, ... will not be checked for unapplied identifiers (start counting from 1).
-  For example, `ContMDiffMap` has attribute `@[to_additive_ignore_args 21]`, which means
-  that its 21st argument `(n : WithTop Nat)` can contain `Nat`
-  (usually in the form `Top.top Nat ...`) and still be additivized.
-  So `@Mul.mul (C^∞⟮I, N; I', G⟯) _ f g` will be additivized.
-
-### Troubleshooting
-
-If `@[to_additive]` fails because the additive declaration raises a type mismatch, there are
-various things you can try.
-The first thing to do is to figure out what `@[to_additive]` did wrong by looking at the type
-mismatch error.
-
-* Option 1: The most common case is that it didn't additivize a declaration that should be
-  additivized. This happened because the heuristic applied, and the first argument contains a
-  fixed type, like `Nat` or `Real`. However, the heuristic misfires on some other declarations.
-  Solutions:
-  * First figure out what the fixed type is in the first argument of the declaration that didn't
-    get additivized. Note that this fixed type can occur in implicit arguments. If manually finding
-    it is hard, you can run `set_option trace.translate_detail true` and search the output for the
-    fragment "contains the fixed type" to find what the fixed type is.
-  * If the fixed type has an additive counterpart (like `↥Semigroup`), give it the `@[to_additive]`
-    attribute.
-  * If the fixed type has nothing to do with algebraic operations (like `TopCat`), add the attribute
-    `@[to_additive_do_translate]` to the fixed type `Foo`.
-  * If the fixed type occurs inside the `k`-th argument of a declaration `d`, and the
-    `k`-th argument is not connected to the multiplicative structure on `d`, consider adding
-    attribute `[to_additive_ignore_args k]` to `d`.
-    Example: `ContMDiffMap` ignores the argument `(n : WithTop Nat)`
-  * If none of the arguments have a multiplicative structure, then the heuristic should not apply at
-    all. This can be achieved with the option `(relevant_arg := _)`.
-* Option 2: It additivized a declaration `d` that should remain multiplicative. Solution:
-  * Make sure the first argument of `d` is a type with a multiplicative structure. If not, can you
-    reorder the (implicit) arguments of `d` so that the first argument becomes a type with a
-    multiplicative structure (and not some indexing type)?
-    The reason is that `@[to_additive]` doesn't additivize declarations if their first argument
-    contains fixed types like `Nat` or `Real`. See section Heuristics.
-    If the first argument is not the argument with a multiplicative type-class, `@[to_additive]`
-    should have automatically added the attribute `(relevant_arg := ...)` to the declaration.
-    You can test this by running the following (where `d` is the full name of the declaration):
-    ```
-      open Lean in run_cmd logInfo m!"{ToAdditive.relevantArgAttr.find? (← getEnv) `d}"
-    ```
-    The expected output is `n` where the `n`-th (0-indexed) argument of `d` is a type (family)
-    with a multiplicative structure on it. `none` means `0`.
-    If you get a different output (or a failure), you could add the attribute
-    `@[to_additive (relevant_arg := n)]` manually, where `n` is an (1-indexed) argument with a
-    multiplicative structure.
-* Option 3: Arguments / universe levels are incorrectly ordered in the additive version.
-  This likely only happens when the multiplicative declaration involves `pow`/`^`. Solutions:
-  * Ensure that the order of arguments of all relevant declarations are the same for the
-    multiplicative and additive version. This might mean that arguments have an "unnatural" order
-    (e.g. `NPow.npow n x` corresponds to `x ^ n`, but it is convenient that `NPow.npow` has this
-    argument order, since it matches `NSMul.nsmul n x`.
-  * If this is not possible, add `(reorder := ...)` argument to `to_additive`.
-
-If neither of these solutions work, and `to_additive` is unable to automatically generate the
-additive version of a declaration, manually write and prove the additive version.
-Often the proof of a lemma/theorem can just be the multiplicative version of the lemma applied to
-`multiplicative G`.
-Afterwards, apply the attribute manually:
-
-```
-
-中文:
-引理 Pow_lemma
-  结论: ...
-  证明: ```
-In the above example, the `simp` is added to all 3 lemmas. All other options to `to_additive`
-(like the generated name or `(reorder := ...)`) are not passed down,
-and can be given manually to each individual `to_additive` call.
-
-The `(rename := ...)` syntax can be used for specifying the argument names of the generated
-declaration, overriding the automatic translation of names. For example, `(rename := x -> a, y ↔ z)`
-will translate `lemma mul_foo (x y z : α) ...` to `lemma add_foo (a z y : α) ...`.
-
-## Implementation notes
-
-The transport process generally works by taking all the names of
-identifiers appearing in the name, type, and body of a declaration and
-creating a new declaration by mapping those names to additive versions
-using a simple string-based dictionary and also using all declarations
-that have previously been labeled with `to_additive`. The dictionary is `ToAdditive.nameDict`
-and can be found in the `Tactic.ToAdditive.GuessName` file. If you introduce a new name which
-should be translated by `to_additive` you should add the translation to this dictionary.
-
-In the `mul_comm'` example above, `to_additive` maps:
-* `mul_comm'` to `add_comm'`,
-* `CommSemigroup` to `AddCommSemigroup`,
-* `x * y` to `x + y` and `y * x` to `y + x`, and
-* `CommSemigroup.mul_comm'` to `AddCommSemigroup.add_comm'`.
-
-### Heuristics
-
-`to_additive` uses heuristics to determine whether a particular identifier has to be
-mapped to its additive version. The basic heuristic is
-
-* Only map an identifier to its additive version if its first argument doesn't
-  contain any unapplied identifiers.
-
-Examples:
-* `@Mul.mul Nat n m` (i.e. `(n * m : Nat)`) will not change to `+`, since its
-  first argument is `Nat`, an identifier not applied to any arguments.
-* `@Mul.mul (α × β) x y` will change to `+`. It's first argument contains only the identifier
-  `Prod`, but this is applied to arguments, `α` and `β`.
-* `@Mul.mul (α × Int) x y` will not change to `+`, since its first argument contains `Int`.
-
-The reasoning behind the heuristic is that the first argument is the type which is "additivized",
-and this usually doesn't make sense if this is on a fixed type.
-
-There are some exceptions to this heuristic:
-
-* Identifiers that have the `@[to_additive]` attribute are ignored.
-  For example, multiplication in `↥Semigroup` is replaced by addition in `↥AddSemigroup`.
-  You can turn this behavior off by *also* adding the `@[to_additive_dont_translate]` attribute.
-* If an identifier `d` has attribute `@[to_additive (relevant_arg := α)]` then the argument
-  `α` is checked for a fixed type, instead of checking the first argument.
-  `@[to_additive]` will automatically add the attribute `(relevant_arg := α)` to a
-  declaration when the first argument has no multiplicative type-class, but argument `α` does.
-* If an identifier has attribute `@[to_additive_ignore_args n1 n2 ...]` then all the arguments in
-  positions `n1`, `n2`, ... will not be checked for unapplied identifiers (start counting from 1).
-  For example, `ContMDiffMap` has attribute `@[to_additive_ignore_args 21]`, which means
-  that its 21st argument `(n : WithTop Nat)` can contain `Nat`
-  (usually in the form `Top.top Nat ...`) and still be additivized.
-  So `@Mul.mul (C^∞⟮I, N; I', G⟯) _ f g` will be additivized.
-
-### Troubleshooting
-
-If `@[to_additive]` fails because the additive declaration raises a type mismatch, there are
-various things you can try.
-The first thing to do is to figure out what `@[to_additive]` did wrong by looking at the type
-mismatch error.
-
-* Option 1: The most common case is that it didn't additivize a declaration that should be
-  additivized. This happened because the heuristic applied, and the first argument contains a
-  fixed type, like `Nat` or `Real`. However, the heuristic misfires on some other declarations.
-  Solutions:
-  * First figure out what the fixed type is in the first argument of the declaration that didn't
-    get additivized. Note that this fixed type can occur in implicit arguments. If manually finding
-    it is hard, you can run `set_option trace.translate_detail true` and search the output for the
-    fragment "contains the fixed type" to find what the fixed type is.
-  * If the fixed type has an additive counterpart (like `↥Semigroup`), give it the `@[to_additive]`
-    attribute.
-  * If the fixed type has nothing to do with algebraic operations (like `TopCat`), add the attribute
-    `@[to_additive_do_translate]` to the fixed type `Foo`.
-  * If the fixed type occurs inside the `k`-th argument of a declaration `d`, and the
-    `k`-th argument is not connected to the multiplicative structure on `d`, consider adding
-    attribute `[to_additive_ignore_args k]` to `d`.
-    Example: `ContMDiffMap` ignores the argument `(n : WithTop Nat)`
-  * If none of the arguments have a multiplicative structure, then the heuristic should not apply at
-    all. This can be achieved with the option `(relevant_arg := _)`.
-* Option 2: It additivized a declaration `d` that should remain multiplicative. Solution:
-  * Make sure the first argument of `d` is a type with a multiplicative structure. If not, can you
-    reorder the (implicit) arguments of `d` so that the first argument becomes a type with a
-    multiplicative structure (and not some indexing type)?
-    The reason is that `@[to_additive]` doesn't additivize declarations if their first argument
-    contains fixed types like `Nat` or `Real`. See section Heuristics.
-    If the first argument is not the argument with a multiplicative type-class, `@[to_additive]`
-    should have automatically added the attribute `(relevant_arg := ...)` to the declaration.
-    You can test this by running the following (where `d` is the full name of the declaration):
-    ```
-      open Lean in run_cmd logInfo m!"{ToAdditive.relevantArgAttr.find? (← getEnv) `d}"
-    ```
-    The expected output is `n` where the `n`-th (0-indexed) argument of `d` is a type (family)
-    with a multiplicative structure on it. `none` means `0`.
-    If you get a different output (or a failure), you could add the attribute
-    `@[to_additive (relevant_arg := n)]` manually, where `n` is an (1-indexed) argument with a
-    multiplicative structure.
-* Option 3: Arguments / universe levels are incorrectly ordered in the additive version.
-  This likely only happens when the multiplicative declaration involves `pow`/`^`. Solutions:
-  * Ensure that the order of arguments of all relevant declarations are the same for the
-    multiplicative and additive version. This might mean that arguments have an "unnatural" order
-    (e.g. `NPow.npow n x` corresponds to `x ^ n`, but it is convenient that `NPow.npow` has this
-    argument order, since it matches `NSMul.nsmul n x`.
-  * If this is not possible, add `(reorder := ...)` argument to `to_additive`.
-
-If neither of these solutions work, and `to_additive` is unable to automatically generate the
-additive version of a declaration, manually write and prove the additive version.
-Often the proof of a lemma/theorem can just be the multiplicative version of the lemma applied to
-`multiplicative G`.
-Afterwards, apply the attribute manually:
-
-```
-
-Depends on / 依赖: example, generated, individual, lemmas, manually, options, passed, reorder, to_additive
--/
 lemma Pow_lemma ... :=
 ```
 In the above example, the `simp` is added to all 3 lemmas. All other options to `to_additive`
@@ -414,7 +91,7 @@ In the above example, the `simp` is added to all 3 lemmas. All other options to 
 and can be given manually to each individual `to_additive` call.
 
 The `(rename := ...)` syntax can be used for specifying the argument names of the generated
-declaration, overriding the automatic translation of names. For example, `(rename := x -> a, y ↔ z)`
+declaration, overriding the automatic translation of names. For example, `(rename := x → a, y ↔ z)`
 will translate `lemma mul_foo (x y z : α) ...` to `lemma add_foo (a z y : α) ...`.
 
 ## Implementation notes
@@ -463,8 +140,8 @@ There are some exceptions to this heuristic:
 * If an identifier has attribute `@[to_additive_ignore_args n1 n2 ...]` then all the arguments in
   positions `n1`, `n2`, ... will not be checked for unapplied identifiers (start counting from 1).
   For example, `ContMDiffMap` has attribute `@[to_additive_ignore_args 21]`, which means
-  that its 21st argument `(n : WithTop Nat)` can contain `Nat`
-  (usually in the form `Top.top Nat ...`) and still be additivized.
+  that its 21st argument `(n : WithTop ℕ)` can contain `ℕ`
+  (usually in the form `Top.top ℕ ...`) and still be additivized.
   So `@Mul.mul (C^∞⟮I, N; I', G⟯) _ f g` will be additivized.
 
 ### Troubleshooting
@@ -476,7 +153,7 @@ mismatch error.
 
 * Option 1: The most common case is that it didn't additivize a declaration that should be
   additivized. This happened because the heuristic applied, and the first argument contains a
-  fixed type, like `Nat` or `Real`. However, the heuristic misfires on some other declarations.
+  fixed type, like `ℕ` or `ℝ`. However, the heuristic misfires on some other declarations.
   Solutions:
   * First figure out what the fixed type is in the first argument of the declaration that didn't
     get additivized. Note that this fixed type can occur in implicit arguments. If manually finding
@@ -489,7 +166,7 @@ mismatch error.
   * If the fixed type occurs inside the `k`-th argument of a declaration `d`, and the
     `k`-th argument is not connected to the multiplicative structure on `d`, consider adding
     attribute `[to_additive_ignore_args k]` to `d`.
-    Example: `ContMDiffMap` ignores the argument `(n : WithTop Nat)`
+    Example: `ContMDiffMap` ignores the argument `(n : WithTop ℕ)`
   * If none of the arguments have a multiplicative structure, then the heuristic should not apply at
     all. This can be achieved with the option `(relevant_arg := _)`.
 * Option 2: It additivized a declaration `d` that should remain multiplicative. Solution:
@@ -497,7 +174,7 @@ mismatch error.
     reorder the (implicit) arguments of `d` so that the first argument becomes a type with a
     multiplicative structure (and not some indexing type)?
     The reason is that `@[to_additive]` doesn't additivize declarations if their first argument
-    contains fixed types like `Nat` or `Real`. See section Heuristics.
+    contains fixed types like `ℕ` or `ℝ`. See section Heuristics.
     If the first argument is not the argument with a multiplicative type-class, `@[to_additive]`
     should have automatically added the attribute `(relevant_arg := ...)` to the declaration.
     You can test this by running the following (where `d` is the full name of the declaration):
@@ -547,7 +224,7 @@ In this case `to_additive` adds all structure fields to its mapping.
 ### Name generation
 
 * If `@[to_additive]` is called without a `name` argument, then the
-  new name is autogenerated. First, it takes the longest prefix of
+  new name is autogenerated.  First, it takes the longest prefix of
   the source name that is already known to `to_additive`, and replaces
   this prefix with its additive counterpart. Second, it takes the last
   part of the name (i.e., after the last dot), and replaces common
@@ -583,9 +260,9 @@ initialize ignoreArgsAttr : NameMapExtension (List Nat) ←
     name := `to_additive_ignore_args
     descr :=
       "Auxiliary attribute for `to_additive` stating that certain arguments are not additivized."
-    add := fun _ stx => do
+    add := fun _ stx ↦ do
       let ids ← match stx with
-| `(attr| to_additive_ignore_args $[$ids:num]*) => pure ids.map (·.getNat - 1)
+        | `(attr| to_additive_ignore_args $[$ids:num]*) => pure <| ids.map (·.getNat - 1)
         | _ => throwUnsupportedSyntax
       return ids.toList }
 
@@ -608,116 +285,12 @@ initialize
 initialize translations : NameMapExtension TranslationInfo ← registerNameMapExtension _
 
 @[inherit_doc GuessName.GuessNameData.nameDict]
-/--
-Definition of `nameDict` / `nameDict` 的定义
-
-English:
-definition nameDict
-  signature: : Std.HashMap String (List String)
-  body: .ofList [
-  ("one", ["Zero"]),
-  ("mul", ["Add"]),
-  ("smul", ["VAdd"]),
-  ("inv", ["Neg"]),
-  ("div", ["Sub"]),
-  ("sdiv", ["VSub"]),
-  ("prod", ["Sum"]),
-  ("hmul", ["HAdd"]),
-  ("hsmul", ["HVAdd"]),
-  ("hdiv", ["HSub"]),
-  ("hpow", ["HSMul"]),
-  ("finprod", ["Finsum"]),
-  ("tprod", ["TSum"]),
-  ("pow", ["NSMul"]),
-  ("npow", ["NSMul"]),
-  ("zpow", ["ZSMul"]),
-  ("mabs", ["Abs"]),
-  ("monoid", ["Add", "Monoid"]),
-  ("submonoid", ["Add", "Submonoid"]),
-  ("group", ["Add", "Group"]),
-  ("subgroup", ["Add", "Subgroup"]),
-  ("semigroup", ["Add", "Semigroup"]),
-  ("torsor", ["Add", "Torsor"]),
-  ("magma", ["Add", "Magma"]),
-  ("haar", ["Add", "Haar"]),
-  ("prehaar", ["Add", "Prehaar"]),
-  ("unit", ["Add", "Unit"]),
-  ("units", ["Add", "Units"]),
-  ("cyclic", ["Add", "Cyclic"]),
-  ("semigrp", ["Add", "Semigrp"]),
-  ("grp", ["Add", "Grp"]),
-  ("commute", ["Add", "Commute"]),
-  ("semiconj", ["Add", "Semiconj"]),
-  ("conjugates", ["Add", "Conjugates"]),
-  ("conj", ["Add", "Conj"]),
-  ("commutator", ["Add", "Commutator"]),
-  ("rootable", ["Divisible"]),
-  ("zpowers", ["ZMultiples"]),
-  ("powers", ["Multiples"]),
-  ("multipliable", ["Summable"]),
-  ("gpfree", ["APFree"]),
-  ("quantale", ["Add", "Quantale"]),
-  ("square", ["Even"]),
-  ("mconv", ["Conv"]),
-  ("irreducible", ["Add", "Irreducible"]),
-  ("mlconvolution", ["LConvolution"])]
-
-@[inherit_doc GuessName.GuessNameData.abbreviationDict]
-
-中文:
-定义 nameDict
-  签名: : Std.HashMap String (列表 String)
-  定义体: .ofList [
-  ("one", ["Zero"]),
-  ("mul", ["Add"]),
-  ("smul", ["VAdd"]),
-  ("inv", ["Neg"]),
-  ("div", ["Sub"]),
-  ("sdiv", ["VSub"]),
-  ("prod", ["Sum"]),
-  ("hmul", ["HAdd"]),
-  ("hsmul", ["HVAdd"]),
-  ("hdiv", ["HSub"]),
-  ("hpow", ["HSMul"]),
-  ("finprod", ["Finsum"]),
-  ("tprod", ["TSum"]),
-  ("pow", ["NSMul"]),
-  ("npow", ["NSMul"]),
-  ("zpow", ["ZSMul"]),
-  ("mabs", ["Abs"]),
-  ("monoid", ["Add", "Monoid"]),
-  ("submonoid", ["Add", "Submonoid"]),
-  ("group", ["Add", "Group"]),
-  ("subgroup", ["Add", "Subgroup"]),
-  ("semigroup", ["Add", "Semigroup"]),
-  ("torsor", ["Add", "Torsor"]),
-  ("magma", ["Add", "Magma"]),
-  ("haar", ["Add", "Haar"]),
-  ("prehaar", ["Add", "Prehaar"]),
-  ("unit", ["Add", "Unit"]),
-  ("units", ["Add", "Units"]),
-  ("cyclic", ["Add", "Cyclic"]),
-  ("semigrp", ["Add", "Semigrp"]),
-  ("grp", ["Add", "Grp"]),
-  ("commute", ["Add", "Commute"]),
-  ("semiconj", ["Add", "Semiconj"]),
-  ("conjugates", ["Add", "Conjugates"]),
-  ("conj", ["Add", "Conj"]),
-  ("commutator", ["Add", "Commutator"]),
-  ("rootable", ["Divisible"]),
-  ("zpowers", ["ZMultiples"]),
-  ("powers", ["Multiples"]),
-  ("multipliable", ["Summable"]),
-  ("gpfree", ["APFree"]),
-  ("quantale", ["Add", "Quantale"]),
-  ("square", ["Even"]),
-  ("mconv", ["Conv"]),
-  ("irreducible", ["Add", "Irreducible"]),
-  ("mlconvolution", ["LConvolution"])]
-
-@[inherit_doc GuessName.GuessNameData.abbreviationDict]
-
-Depends on / 依赖: ofList
+/-
+**Mathlib.Tactic.ToAdditive.nameDict** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.T
+oAdditive`。
+形式化陈述：Std.HashMap String (List String)
+参数：List String。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def nameDict : Std.HashMap String (List String) := .ofList [
   ("one", ["Zero"]),
@@ -768,142 +341,11 @@ def nameDict : Std.HashMap String (List String) := .ofList [
   ("mlconvolution", ["LConvolution"])]
 
 @[inherit_doc GuessName.GuessNameData.abbreviationDict]
-/--
-Definition of `abbreviationDict` / `abbreviationDict` 的定义
-
-English:
-definition abbreviationDict
-  signature: : Std.HashMap String String
-  body: .ofList [
-  ("isCancelAdd", "IsCancelAdd"),
-  ("isLeftCancelAdd", "IsLeftCancelAdd"),
-  ("isRightCancelAdd", "IsRightCancelAdd"),
-  ("cancelAdd", "AddCancel"),
-  ("leftCancelAdd", "AddLeftCancel"),
-  ("rightCancelAdd", "AddRightCancel"),
-  ("cancelCommAdd", "AddCancelComm"),
-  ("commAdd", "AddComm"),
-  ("zero_le", "Nonneg"),
-  ("zeroLE", "Nonneg"),
-  ("zero_lt", "Pos"),
-  ("zeroLT", "Pos"),
-  ("lezero", "Nonpos"),
-  ("le_zero", "Nonpos"),
-  ("ltzero", "Neg"),
-  ("lt_zero", "Neg"),
-  ("addAntidiagonal", "Antidiagonal"),
-  ("addSingle", "Single"),
-  ("addSupport", "Support"),
-  ("addTSupport", "TSupport"),
-  ("addPointed", "Pointed"),
-  ("addSpanning", "Spanning"),
-  ("addIndicator", "Indicator"),
-  ("isEven", "Even"),
-  -- "Regular" is well-used in mathlib with various meanings (e.g. in
-  -- measure theory) and a direct translation
-  -- "regular" --> "addRegular" in `nameDict` above seems error-prone.
-  ("isRegular", "IsAddRegular"),
-  ("isLeftRegular", "IsAddLeftRegular"),
-  ("isRightRegular", "IsAddRightRegular"),
-  ("hasFundamentalDomain", "HasAddFundamentalDomain"),
-  ("quotientMeasure", "AddQuotientMeasure"),
-  ("negFun", "InvFun"),
-  ("uniqueProds", "UniqueSums"),
-  ("orderOf", "AddOrderOf"),
-  ("zeroLePart", "PosPart"),
-  ("leZeroPart", "NegPart"),
-  ("isScalarTower", "VAddAssocClass"),
-  ("isOfFinOrder", "IsOfFinAddOrder"),
-  ("isCentralScalar", "IsCentralVAdd"),
-  ("function_addSemiconj", "Function_semiconj"),
-  ("function_addCommute", "Function_commute"),
-  ("divisionAddMonoid", "SubtractionMonoid"),
-  ("subNegZeroAddMonoid", "SubNegZeroMonoid"),
-  ("modularCharacter", "AddModularCharacter"),
-  ("addShift", "Shift"),
-  ("addSubshift", "Subshift"),
-  ("isQuotientCoveringMap", "IsAddQuotientCoveringMap"),
-  ("addExact", "Exact"),
-  ("isMonHom", "IsAddMonHom"),
-  ("mapMon", "MapAddMon"),
-  ("monObj", "AddMonObj"),
-  ("isModHom", "IsAddModHom"),
-  ("mapMod", "MapAddMod"),
-  ("modObj", "AddModObj"),
-  ("yonedaMon", "YonedaAddMon"),
-  ("conGen", "AddConGen"),
-  ("unoneD", "unzeroD"),
-  ("unone", "unzero")]
-
-@[inherit_doc GuessName.GuessNameExt]
-
-中文:
-定义 abbreviationDict
-  签名: : Std.HashMap String String
-  定义体: .ofList [
-  ("isCancelAdd", "IsCancelAdd"),
-  ("isLeftCancelAdd", "IsLeftCancelAdd"),
-  ("isRightCancelAdd", "IsRightCancelAdd"),
-  ("cancelAdd", "AddCancel"),
-  ("leftCancelAdd", "AddLeftCancel"),
-  ("rightCancelAdd", "AddRightCancel"),
-  ("cancelCommAdd", "AddCancelComm"),
-  ("commAdd", "AddComm"),
-  ("zero_le", "Nonneg"),
-  ("zeroLE", "Nonneg"),
-  ("zero_lt", "Pos"),
-  ("zeroLT", "Pos"),
-  ("lezero", "Nonpos"),
-  ("le_zero", "Nonpos"),
-  ("ltzero", "Neg"),
-  ("lt_zero", "Neg"),
-  ("addAntidiagonal", "Antidiagonal"),
-  ("addSingle", "Single"),
-  ("addSupport", "Support"),
-  ("addTSupport", "TSupport"),
-  ("addPointed", "Pointed"),
-  ("addSpanning", "Spanning"),
-  ("addIndicator", "Indicator"),
-  ("isEven", "Even"),
-  -- "Regular" is well-used in mathlib with various meanings (e.g. in
-  -- measure theory) and a direct translation
-  -- "regular" --> "addRegular" in `nameDict` above seems error-prone.
-  ("isRegular", "IsAddRegular"),
-  ("isLeftRegular", "IsAddLeftRegular"),
-  ("isRightRegular", "IsAddRightRegular"),
-  ("hasFundamentalDomain", "HasAddFundamentalDomain"),
-  ("quotientMeasure", "AddQuotientMeasure"),
-  ("negFun", "InvFun"),
-  ("uniqueProds", "UniqueSums"),
-  ("orderOf", "AddOrderOf"),
-  ("zeroLePart", "PosPart"),
-  ("leZeroPart", "NegPart"),
-  ("isScalarTower", "VAddAssocClass"),
-  ("isOfFinOrder", "IsOfFinAddOrder"),
-  ("isCentralScalar", "IsCentralVAdd"),
-  ("function_addSemiconj", "Function_semiconj"),
-  ("function_addCommute", "Function_commute"),
-  ("divisionAddMonoid", "SubtractionMonoid"),
-  ("subNegZeroAddMonoid", "SubNegZeroMonoid"),
-  ("modularCharacter", "AddModularCharacter"),
-  ("addShift", "Shift"),
-  ("addSubshift", "Subshift"),
-  ("isQuotientCoveringMap", "IsAddQuotientCoveringMap"),
-  ("addExact", "Exact"),
-  ("isMonHom", "IsAddMonHom"),
-  ("mapMon", "MapAddMon"),
-  ("monObj", "AddMonObj"),
-  ("isModHom", "IsAddModHom"),
-  ("mapMod", "MapAddMod"),
-  ("modObj", "AddModObj"),
-  ("yonedaMon", "YonedaAddMon"),
-  ("conGen", "AddConGen"),
-  ("unoneD", "unzeroD"),
-  ("unone", "unzero")]
-
-@[inherit_doc GuessName.GuessNameExt]
-
-Depends on / 依赖: ofList
+/-
+**Mathlib.Tactic.ToAdditive.abbreviationDict** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.ToAdditive`。
+形式化陈述：Std.HashMap String String
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def abbreviationDict : Std.HashMap String String := .ofList [
   ("isCancelAdd", "IsCancelAdd"),
@@ -970,26 +412,15 @@ def abbreviationDict : Std.HashMap String String := .ofList [
 initialize guessNameExt : GuessName.GuessNameExt ←
   GuessName.registerGuessNameExt { nameDict, abbreviationDict }
 
-/--
-Definition of `data` / `data` 的定义
+/-- The bundle of environment extensions for `to_additive` -/
+/-
+**Mathlib.Tactic.ToAdditive.data** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ToAdd
+itive`。
+形式化陈述：Mathlib.Tactic.Translate.TranslateData
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition data
-  signature: : TranslateData where
-  body: `to_additive
-  changeNumeral := true
-  isDual := false
-  guessNameExt
-
-中文:
-定义 data
-  签名: : TranslateData where
-  定义体: `to_additive
-  changeNumeral := true
-  isDual := false
-  guessNameExt
-
-Depends on / 依赖: to_additive
+--- 原说明 ---
+The bundle of environment extensions for `to_additive`
 -/
 def data : TranslateData where
   ignoreArgsAttr; doTranslateAttr; translations
@@ -1001,7 +432,7 @@ def data : TranslateData where
 initialize registerBuiltinAttribute {
     name := `to_additive
     descr := "Transport multiplicative to additive"
-    add := fun src stx kind => discard do
+    add := fun src stx kind ↦ discard do
       profileitM Exception "to_additive" (← getOptions) do
         addTranslationAttr data src (← elabTranslationAttr src stx) kind
     -- we (presumably) need to run after compilation to properly add the `simp` attribute
@@ -1020,3 +451,4 @@ elab "to_additive_name_hint" src:ident tgt:ident : command => do
   guessNameExt.addTranslation src tgt
 
 end Mathlib.Tactic.ToAdditive
+

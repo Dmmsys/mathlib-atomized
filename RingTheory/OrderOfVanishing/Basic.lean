@@ -33,46 +33,31 @@ Order of vanishing function for elements of a ring.
 -/
 @[stacks 02MD]
 noncomputable
-/--
-Definition of `ord` / `ord` 的定义
-
-English:
-definition ord
-  signature: (x : R)
-  body: Module.length R (R ⧸ Ideal.span {x})
-
-@[simp]
-
-中文:
-定义 ord
-  签名: (x : R)
-  定义体: Module.length R (R ⧸ Ideal.span {x})
-
-@[simp]
-
-Depends on / 依赖: Ideal.span, Module, Module.length, length
+/-
+**Ring.ord** 是 Mathlib 中的一个定义，位于命名空间 `Ring`。
+形式化陈述：ord (x : R) : Nat∞
+参数：x : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ord (x : R) : Nat∞ := Module.length R (R ⧸ Ideal.span {x})
+def ord (x : R) : ℕ∞ := Module.length R (R ⧸ Ideal.span {x})
 
 @[simp]
-/--
-lemma `ord_one` / 引理 `ord_one`
-
-English:
-lemma ord_one
-  statement: ord R 1 = 0
-  proof: by
-  simp_all [ord,
-    Ideal.span_singleton_one, Submodule.Quotient.subsingleton_iff]
-
-中文:
-引理 ord_one
-  结论: ord R 1 = 0
-  证明: by
-  simp_all [ord,
-    Ideal.span_singleton_one, Submodule.Quotient.subsingleton_iff]
-
-Depends on / 依赖: Ideal.span_singleton_one, Quotient, Submodule, Submodule.Quotient.subsingleton_iff, span_singleton_one, subsingleton_iff
+/-
+**Ring.ord_one** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_one : ord R 1 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.length_eq_zero`：Module.length_eq_zero [Subsingleton M] : Module.l
+ength R M = 0
+· 使用定理 `Ideal.span_singleton_one`：span_singleton_one : span ({1} : Set α) = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ord_one : ord R 1 = 0 := by
   simp_all [ord,
@@ -83,144 +68,190 @@ end Ring
 variable [CommRing R] [Module R M]
 
 /--
-Definition of `Ideal.mulQuot` / `Ideal.mulQuot` 的定义
+The map `R ⧸ I →ₗ[R] R ⧸ (a • I)` defined by multiplication by `a`
+-/
+/-
+**Ideal.mulQuot** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ideal.mulQuot (a : R) (I : Ideal R) : R ⧸ I ->ₗ[R] R ⧸ (a • I)
+参数：a : R；I : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ideal.mulQuot
-  signature: (a : R) (I : Ideal R)
-  body: Submodule.mapQ _ _ (LinearMap.mul R R a) (Submodule.le_comap_map _ _)
-
-中文:
-定义 理想.mulQuot
-  签名: (a : R) (I : 理想 R)
-  定义体: Submodule.mapQ _ _ (LinearMap.mul R R a) (Submodule.le_comap_map _ _)
-
-Depends on / 依赖: LinearMap, LinearMap.mul, Submodule, Submodule.le_comap_map, Submodule.mapQ, le_comap_map
+--- 原说明 ---
+The map `R ⧸ I →ₗ[R] R ⧸ (a • I)` defined by multiplication by `a`
 -/
 def Ideal.mulQuot (a : R) (I : Ideal R) :
-    R ⧸ I ->ₗ[R] R ⧸ (a • I) :=
+    R ⧸ I →ₗ[R] R ⧸ (a • I) :=
   Submodule.mapQ _ _ (LinearMap.mul R R a) (Submodule.le_comap_map _ _)
 
 /--
-lemma `Ideal.mulQuot_injective` / 引理 `Ideal.mulQuot_injective`
-
-English:
-lemma Ideal.mulQuot_injective
-  given: {a : R} (I : Ideal R) (ha : a in nonZeroDivisors R)
-  proof: by
-  simp only [mulQuot, Submodule.mapQ, ← ker_eq_bot]
-  apply Submodule.ker_liftQ_eq_bot'
-  apply le_antisymm
-  · have : Submodule.map (mul R R a) I = a • I := rfl
-    rw [le_ker_iff_map]; rw [Submodule.map_comp]; rw [this]; rw [Submodule.mkQ_map_self]
-  · have m : I = Submodule.comap (mul R R a) (a • I) := by
-      ext b
-      exact (Submodule.mul_mem_smul_iff ha).symm
-    simp [← m, ker_comp]
-
-中文:
-引理 理想.mulQuot_injective
-  条件: {a : R} (I : 理想 R) (ha : a in nonZeroDivisors R)
-  证明: by
-  simp only [mulQuot, Submodule.mapQ, ← ker_eq_bot]
-  apply Submodule.ker_liftQ_eq_bot'
-  apply le_antisymm
-  · have : Submodule.map (mul R R a) I = a • I := rfl
-    rw [le_ker_iff_map]; rw [Submodule.map_comp]; rw [this]; rw [Submodule.mkQ_map_self]
-  · have m : I = Submodule.comap (mul R R a) (a • I) := by
-      ext b
-      exact (Submodule.mul_mem_smul_iff ha).symm
-    simp [← m, ker_comp]
-
-Depends on / 依赖: Submodule, Submodule.comap, Submodule.ker_liftQ_eq_bot, Submodule.map, Submodule.mapQ, Submodule.map_comp, Submodule.mkQ_map_self, Submodule.mul_mem_smul_iff, ker_comp, ker_eq_bot, ker_liftQ_eq_bot, le_antisymm, le_ker_iff_map, map_comp, mkQ_map_self, mulQuot, mul_mem_smul_iff
+The map `R ⧸ I →ₗ[R] R ⧸ (a • I)` defined by multiplication by `a` is injective if `a` is
+a nonzero divisor.
 -/
-lemma Ideal.mulQuot_injective {a : R} (I : Ideal R) (ha : a in nonZeroDivisors R) :
+/-
+**Ideal.mulQuot_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.mulQuot_injective {a : R} (I : Ideal R) (ha : a in nonZeroDivisors R
+) : Function.Injective (Ideal.mulQuot a I)
+参数：I : Ideal R；ha : a in nonZeroDivisors R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Submodule.ker_liftQ_eq_bot'`：ker_liftQ_eq_bot' (f : M ->ₛₗ[τ₁₂] M₂) (h :
+ p = ker f) : ker (p.liftQ f (le_of_eq h)) = ⊥
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.le_ker_iff_map`：le_ker_iff_map [RingHomSurjective τ₁₂] {f : M 
+->ₛₗ[τ₁₂] M₂} {p : Submodule R M} : p <= ker f ↔ map f p = ⊥
+· 使用定理 `Submodule.map_comp`：map_comp [RingHomSurjective σ₂₃] [RingHomSurjective 
+σ₁₃] (f : M ->ₛₗ[σ₁₂] M₂) (g : M₂ ->ₛₗ[σ₂₃] M₃) (p : Submodule R M) : map (g.com
+p f : M …
+· 使用定理 `Submodule.mkQ_map_self`：mkQ_map_self : map p.mkQ p = ⊥
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用引理 `Submodule.mul_mem_smul_iff`：mul_mem_smul_iff {S} [Ring S] [Algebra R S] 
+{x : S} {p : Submodule R S} {y : S} (hx : x in nonZeroDivisors S) : x * y in x •
+ p ↔ y in p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+
+--- 原说明 ---
+The map `R ⧸ I →ₗ[R] R ⧸ (a • I)` defined by multiplication by `a` is injective 
+if `a` is
+a nonzero divisor.
+-/
+lemma Ideal.mulQuot_injective {a : R} (I : Ideal R) (ha : a ∈ nonZeroDivisors R) :
     Function.Injective (Ideal.mulQuot a I) := by
   simp only [mulQuot, Submodule.mapQ, ← ker_eq_bot]
   apply Submodule.ker_liftQ_eq_bot'
   apply le_antisymm
   · have : Submodule.map (mul R R a) I = a • I := rfl
-    rw [le_ker_iff_map]; rw [Submodule.map_comp]; rw [this]; rw [Submodule.mkQ_map_self]
+    rw [le_ker_iff_map, Submodule.map_comp, this, Submodule.mkQ_map_self]
   · have m : I = Submodule.comap (mul R R a) (a • I) := by
       ext b
       exact (Submodule.mul_mem_smul_iff ha).symm
     simp [← m, ker_comp]
 
 /--
-Definition of `Ideal.quotOfMul` / `Ideal.quotOfMul` 的定义
+The quotient map `(R ⧸ a • I) →ₗ[R] (R ⧸ Ideal.span {a})`.
+-/
+/-
+**Ideal.quotOfMul** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Ideal.quotOfMul (a : R) (I : Ideal R) : (R ⧸ a • I) ->ₗ[R] (R ⧸ Ideal.span
+ {a})
+参数：a : R；I : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ideal.quotOfMul
-  signature: (a : R) (I : Ideal R)
-  body: Submodule.factor Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
-
-中文:
-定义 理想.quotOfMul
-  签名: (a : R) (I : 理想 R)
-  定义体: Submodule.factor Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
-
-Depends on / 依赖: Submodule, Submodule.factor, Submodule.singleton_set_smul, Submodule.smul_le_span, factor, singleton_set_smul, smul_le_span
+--- 原说明 ---
+The quotient map `(R ⧸ a • I) →ₗ[R] (R ⧸ Ideal.span {a})`.
 -/
 def Ideal.quotOfMul (a : R) (I : Ideal R) :
-    (R ⧸ a • I) ->ₗ[R] (R ⧸ Ideal.span {a}) :=
-Submodule.factor Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
+    (R ⧸ a • I) →ₗ[R] (R ⧸ Ideal.span {a}) :=
+  Submodule.factor <| Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
 
 /--
-lemma `Ideal.quotOfMul_surjective` / 引理 `Ideal.quotOfMul_surjective`
+The quotient map `(R ⧸ a • I) →ₗ[R] (R ⧸ Ideal.span {a})` is surjective.
+-/
+/-
+**Ideal.quotOfMul_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.quotOfMul_surjective {a : R} (I : Ideal R) : Function.Surjective (Id
+eal.quotOfMul a I)
+参数：I : Ideal R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用引理 `Submodule.factor_surjective`：factor_surjective (H : p <= p') : Function.
+Surjective (factor H)
+· 使用引理 `Submodule.smul_le_span`：smul_le_span (s : Set R) (I : Ideal R) : s • I <
+= Ideal.span s
+· 使用引理 `Submodule.singleton_set_smul`：singleton_set_smul [SMulCommClass S R M] (
+r : S) : ({r} : Set S) • N = r • N
 
-English:
-lemma Ideal.quotOfMul_surjective
-  given: {a : R} (I : Ideal R)
-  proof: by
-  simp only [Ideal.quotOfMul]
-exact Submodule.factor_surjective
-    Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
-
-中文:
-引理 理想.quotOfMul_surjective
-  条件: {a : R} (I : 理想 R)
-  证明: by
-  simp only [Ideal.quotOfMul]
-exact Submodule.factor_surjective
-    Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
-
-Depends on / 依赖: Ideal.quotOfMul, Submodule, Submodule.factor_surjective, Submodule.singleton_set_smul, Submodule.smul_le_span, factor_surjective, quotOfMul, singleton_set_smul, smul_le_span
+--- 原说明 ---
+The quotient map `(R ⧸ a • I) →ₗ[R] (R ⧸ Ideal.span {a})` is surjective.
 -/
 lemma Ideal.quotOfMul_surjective {a : R} (I : Ideal R) :
     Function.Surjective (Ideal.quotOfMul a I) := by
   simp only [Ideal.quotOfMul]
-exact Submodule.factor_surjective
+  exact Submodule.factor_surjective <|
     Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
 
 set_option backward.isDefEq.respectTransparency.types false in
 /--
-lemma `Ideal.exact_mulQuot_quotOfMul` / 引理 `Ideal.exact_mulQuot_quotOfMul`
+The sequence `R ⧸ I →ₗ[R] R ⧸ (a • I) →ₗ[R] R ⧸ (Ideal.span {a})` given by multiplication
+by `a` then quotienting by the ideal generated by `a` is exact.
+-/
+/-
+**Ideal.exact_mulQuot_quotOfMul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.exact_mulQuot_quotOfMul {a : R} (I : Ideal R) : Function.Exact (Idea
+l.mulQuot a I) (Ideal.quotOfMul a I)
+参数：I : Ideal R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.ker_liftQ`：ker_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : ker (p.liftQ f
+ h) = (ker f).map (mkQ p)
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `Ideal.Quotient.smul_top`：∀ {R : Type u_5} [inst : CommRing R] (a : R) (I
+ : Ideal R), a • ⊤ = R ∙ Submodule.Quotient.mk a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearMap.range.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u
+_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCo
+mmMonoid M] [ins…
+· 使用定理 `Submodule.mapQ.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [in
+st_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M) {R₂ : 
+Type u_3}…
+· 使用定理 `Submodule.range_liftQ`：range_liftQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ
+₁₂] M₂) (h) : range (p.liftQ f h) = range f
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用引理 `Ideal.range_mul`：range_mul (A : Type*) [CommSemiring A] [Module R A] [SM
+ulCommClass R A A] [IsScalarTower R A A] (a : A) : LinearMap.range (LinearMap.mu
+l R A…
+· 使用定理 `Submodule.restrictScalars.congr_simp`：∀ (S : Type u_1) {R : Type u_2} {M
+ : Type u_3} [inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : Semiring S
+]   [inst_3 : _root_.Modul…
+· 使用定理 `Submodule.restrictScalars_self`：restrictScalars_self (V : Submodule R M)
+ : V.restrictScalars R = V
+· 使用定理 `LinearMap.map_span`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_4} {M₂ 
+: Type u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Mo
+dule R M…
 
-English:
-lemma Ideal.exact_mulQuot_quotOfMul
-  given: {a : R} (I : Ideal R)
-  proof: by
-  simp only [exact_iff]
-  have : ker (Ideal.quotOfMul a I) = a • ⊤ := by
-    simp only [← submodule_span_eq, quotOfMul, Submodule.factor, Submodule.mapQ, comp_id,
-      Submodule.ker_liftQ, Submodule.ker_mkQ, Submodule.map_span, Submodule.mkQ_apply,
-      Quotient.mk_eq_mk, Set.image_singleton, Quotient.smul_top]
-  simp [this, Ideal.mulQuot, Submodule.mapQ.eq_1, Submodule.range_liftQ,
-    range_comp, Ideal.Quotient.smul_top, ← Ideal.submodule_span_eq, LinearMap.map_span]
-
-中文:
-引理 理想.exact_mulQuot_quotOfMul
-  条件: {a : R} (I : 理想 R)
-  证明: by
-  simp only [exact_iff]
-  have : ker (Ideal.quotOfMul a I) = a • ⊤ := by
-    simp only [← submodule_span_eq, quotOfMul, Submodule.factor, Submodule.mapQ, comp_id,
-      Submodule.ker_liftQ, Submodule.ker_mkQ, Submodule.map_span, Submodule.mkQ_apply,
-      Quotient.mk_eq_mk, Set.image_singleton, Quotient.smul_top]
-  simp [this, Ideal.mulQuot, Submodule.mapQ.eq_1, Submodule.range_liftQ,
-    range_comp, Ideal.Quotient.smul_top, ← Ideal.submodule_span_eq, LinearMap.map_span]
-
-Depends on / 依赖: Ideal.Quotient.smul_top, Ideal.mulQuot, Ideal.quotOfMul, Ideal.submodule_span_eq, LinearMap, LinearMap.map_span, Quotient, Quotient.mk_eq_mk, Quotient.smul_top, Set.image_singleton, Submodule, Submodule.factor, Submodule.ker_liftQ, Submodule.ker_mkQ, Submodule.mapQ, Submodule.mapQ.eq_1, Submodule.map_span, Submodule.mkQ_apply, Submodule.range_liftQ, comp_id
+--- 原说明 ---
+The sequence `R ⧸ I →ₗ[R] R ⧸ (a • I) →ₗ[R] R ⧸ (Ideal.span {a})` given by multi
+plication
+by `a` then quotienting by the ideal generated by `a` is exact.
 -/
 lemma Ideal.exact_mulQuot_quotOfMul {a : R} (I : Ideal R) :
     Function.Exact (Ideal.mulQuot a I) (Ideal.quotOfMul a I) := by
@@ -235,43 +266,48 @@ lemma Ideal.exact_mulQuot_quotOfMul {a : R} (I : Ideal R) :
 namespace Ring
 variable (R)
 /--
-theorem `ord_mul` / 定理 `ord_mul`
-
-English:
-theorem ord_mul
-  given: {a b : R} (hb : b in nonZeroDivisors R)
-  proof: by
-  have := Module.length_eq_add_of_exact (Ideal.mulQuot b (Ideal.span {a}))
-          (Ideal.quotOfMul b (Ideal.span {a})) (Ideal.mulQuot_injective (Ideal.span {a}) hb)
-          (Ideal.quotOfMul_surjective (Ideal.span {a}))
-          (Ideal.exact_mulQuot_quotOfMul (Ideal.span {a}))
-  simp only [Ring.ord, ← this]
-  have lem : (({b} : Set R) • Ideal.span {a}) = Ideal.span {b * a} := by
-    simp [← Ideal.submodule_span_eq, Submodule.set_smul_span]
-  have : (({b} : Set R) • Ideal.span {a}) = b • Ideal.span {a} := Submodule.singleton_set_smul
-    (Ideal.span {a}) b
-  rw [this] at lem
-  rw [lem]; rw [mul_comm]
-
-中文:
-定理 ord_mul
-  条件: {a b : R} (hb : b in nonZeroDivisors R)
-  证明: by
-  have := Module.length_eq_add_of_exact (Ideal.mulQuot b (Ideal.span {a}))
-          (Ideal.quotOfMul b (Ideal.span {a})) (Ideal.mulQuot_injective (Ideal.span {a}) hb)
-          (Ideal.quotOfMul_surjective (Ideal.span {a}))
-          (Ideal.exact_mulQuot_quotOfMul (Ideal.span {a}))
-  simp only [Ring.ord, ← this]
-  have lem : (({b} : Set R) • Ideal.span {a}) = Ideal.span {b * a} := by
-    simp [← Ideal.submodule_span_eq, Submodule.set_smul_span]
-  have : (({b} : Set R) • Ideal.span {a}) = b • Ideal.span {a} := Submodule.singleton_set_smul
-    (Ideal.span {a}) b
-  rw [this] at lem
-  rw [lem]; rw [mul_comm]
-
-Depends on / 依赖: Ideal.exact_mulQuot_quotOfMul, Ideal.mulQuot, Ideal.mulQuot_injective, Ideal.quotOfMul, Ideal.quotOfMul_surjective, Ideal.span, Ideal.submodule_span_eq, Module, Module.length_eq_add_of_exact, Ring.ord, Submodule, Submodule.set_smul_span, Submodule.singleton_set_, exact_mulQuot_quotOfMul, length_eq_add_of_exact, mulQuot, mulQuot_injective, quotOfMul, quotOfMul_surjective, set_smul_span
+The order of vanishing of `a * b` is the order of vanishing of `a` plus the order
+of vanishing of `b`.
 -/
-theorem ord_mul {a b : R} (hb : b in nonZeroDivisors R) :
+/-
+**Ring.ord_mul** 是 Mathlib 中的一个定理，位于命名空间 `Ring`。
+形式化陈述：ord_mul {a b : R} (hb : b in nonZeroDivisors R) : ord R (a * b) = ord R a 
++ ord R b
+参数：hb : b in nonZeroDivisors R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用引理 `Module.length_eq_add_of_exact`：Module.length_eq_add_of_exact : Module.le
+ngth R M = Module.length R N + Module.length R P
+· 使用引理 `Ideal.mulQuot_injective`：Ideal.mulQuot_injective {a : R} (I : Ideal R) (
+ha : a in nonZeroDivisors R) : Function.Injective (Ideal.mulQuot a I)
+· 使用引理 `Ideal.quotOfMul_surjective`：Ideal.quotOfMul_surjective {a : R} (I : Idea
+l R) : Function.Surjective (Ideal.quotOfMul a I)
+· 使用引理 `Ideal.exact_mulQuot_quotOfMul`：Ideal.exact_mulQuot_quotOfMul {a : R} (I 
+: Ideal R) : Function.Exact (Ideal.mulQuot a I) (Ideal.quotOfMul a I)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.set_smul_span`：set_smul_span (s : Set α) (t : Set M) : s • spa
+n R t = span R (s • t)
+· 使用引理 `Set.singleton_smul_singleton`：singleton_smul_singleton : ({a} : Set α) •
+ ({b} : Set β) = {a • b}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Submodule.singleton_set_smul`：singleton_set_smul [SMulCommClass S R M] (
+r : S) : ({r} : Set S) • N = r • N
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+
+--- 原说明 ---
+The order of vanishing of `a * b` is the order of vanishing of `a` plus the orde
+r
+of vanishing of `b`.
+-/
+theorem ord_mul {a b : R} (hb : b ∈ nonZeroDivisors R) :
     ord R (a * b) = ord R a + ord R b := by
   have := Module.length_eq_add_of_exact (Ideal.mulQuot b (Ideal.span {a}))
           (Ideal.quotOfMul b (Ideal.span {a})) (Ideal.mulQuot_injective (Ideal.span {a}) hb)
@@ -283,51 +319,62 @@ theorem ord_mul {a b : R} (hb : b in nonZeroDivisors R) :
   have : (({b} : Set R) • Ideal.span {a}) = b • Ideal.span {a} := Submodule.singleton_set_smul
     (Ideal.span {a}) b
   rw [this] at lem
-  rw [lem]; rw [mul_comm]
+  rw [lem, mul_comm]
 
 /--
-lemma `ord_mul'` / 引理 `ord_mul'`
-
-English:
-lemma ord_mul'
-  given: {a b : R} (ha : a in nonZeroDivisors R)
-  proof: by
-  rw [mul_comm]; rw [ord_mul R ha]; rw [add_comm]
-
-中文:
-引理 ord_mul'
-  条件: {a b : R} (ha : a in nonZeroDivisors R)
-  证明: by
-  rw [mul_comm]; rw [ord_mul R ha]; rw [add_comm]
-
-Depends on / 依赖: add_comm, mul_comm, ord_mul
+Variation of `ord_mul` where the user has to show the first input is a non
+zero divisor rather than the second.
 -/
-lemma ord_mul' {a b : R} (ha : a in nonZeroDivisors R) :
+/-
+**Ring.ord_mul'** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_mul' {a b : R} (ha : a in nonZeroDivisors R) : ord R (a * b) = ord R a
+ + ord R b
+参数：ha : a in nonZeroDivisors R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Ring.ord_mul`：ord_mul {a b : R} (hb : b in nonZeroDivisors R) : ord R (a
+ * b) = ord R a + ord R b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+
+--- 原说明 ---
+Variation of `ord_mul` where the user has to show the first input is a non
+zero divisor rather than the second.
+-/
+lemma ord_mul' {a b : R} (ha : a ∈ nonZeroDivisors R) :
     ord R (a * b) = ord R a + ord R b := by
-  rw [mul_comm]; rw [ord_mul R ha]; rw [add_comm]
+  rw [mul_comm, ord_mul R ha, add_comm]
 
 /--
-lemma `ord_zero` / 引理 `ord_zero`
+The order of zero is `Module.length R R`. Use this when it is necessary to unfold the definition
+of `ord` to avoid annoyances of working with `R ⧸ Ideal.span {0}` instead of `R`.
+-/
+/-
+**Ring.ord_zero** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_zero : ord R 0 = Module.length R R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.span_singleton_zero`：span_singleton_zero : span ({0} : Set α) = ⊥
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `Module.length_le_of_injective`：Module.length_le_of_injective : Module.le
+ngth R N <= Module.length R M
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用引理 `Module.length_le_of_surjective`：Module.length_le_of_surjective : Module.
+length R P <= Module.length R M
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
 
-English:
-lemma ord_zero
-  statement: ord R 0 = Module.length R R
-  proof: by
-  simp only [ord]
-  let m := (Submodule.quotEquivOfEqBot (Ideal.span {0} : Submodule R R) (span_singleton_zero))
-  exact le_antisymm (Module.length_le_of_injective m m.injective)
-      (Module.length_le_of_surjective m m.surjective)
-
-中文:
-引理 ord_zero
-  结论: ord R 0 = 模.length R R
-  证明: by
-  simp only [ord]
-  let m := (Submodule.quotEquivOfEqBot (Ideal.span {0} : Submodule R R) (span_singleton_zero))
-  exact le_antisymm (Module.length_le_of_injective m m.injective)
-      (Module.length_le_of_surjective m m.surjective)
-
-Depends on / 依赖: Ideal.span, Module, Module.length_le_of_injective, Module.length_le_of_surjective, Submodule, Submodule.quotEquivOfEqBot, injective, le_antisymm, length_le_of_injective, length_le_of_surjective, m.injective, m.surjective, quotEquivOfEqBot, span_singleton_zero, surjective
+--- 原说明 ---
+The order of zero is `Module.length R R`. Use this when it is necessary to unfol
+d the definition
+of `ord` to avoid annoyances of working with `R ⧸ Ideal.span {0}` instead of `R`
+.
 -/
 lemma ord_zero : ord R 0 = Module.length R R := by
   simp only [ord]
@@ -340,140 +387,108 @@ variable {R}
 For `x : R` a non zero divisor, `ord R (x ^ n) = n • ord R x`.
 -/
 @[simp]
-/--
-theorem `ord_pow` / 定理 `ord_pow`
+/-
+**Ring.ord_pow** 是 Mathlib 中的一个定理，位于命名空间 `Ring`。
+形式化陈述：ord_pow {x : R} (hx : x in nonZeroDivisors R) (n : Nat) : ord R (x ^ n) = 
+n • ord R x
+参数：hx : x in nonZeroDivisors R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用引理 `Ring.ord_one`：ord_one : ord R 1 = 0
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Ring.ord_mul`：ord_mul {a b : R} (hb : b in nonZeroDivisors R) : ord R (a
+ * b) = ord R a + ord R b
+· 使用定理 `succ_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M) (n : ℕ), (n + 
+1) • a = n • a + a
 
-English:
-theorem ord_pow
-  given: {x : R} (hx : x in nonZeroDivisors R) (n : Nat)
-  statement: ord R (x ^ n) = n • ord R x
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [pow_succ]; rw [ord_mul]; rw [ih]; rw [succ_nsmul]
-    exact hx
-
-@[simp]
-
-中文:
-定理 ord_pow
-  条件: {x : R} (hx : x in nonZeroDivisors R) (n : 自然数)
-  结论: ord R (x ^ n) = n • ord R x
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [pow_succ]; rw [ord_mul]; rw [ih]; rw [succ_nsmul]
-    exact hx
-
-@[simp]
-
-Depends on / 依赖: ord_mul, pow_succ, succ_nsmul
+--- 原说明 ---
+For `x : R` a non zero divisor, `ord R (x ^ n) = n • ord R x`.
 -/
-theorem ord_pow {x : R} (hx : x in nonZeroDivisors R) (n : Nat) : ord R (x ^ n) = n • ord R x := by
+theorem ord_pow {x : R} (hx : x ∈ nonZeroDivisors R) (n : ℕ) : ord R (x ^ n) = n • ord R x := by
   induction n with
   | zero => simp
   | succ n ih =>
-    rw [pow_succ]; rw [ord_mul]; rw [ih]; rw [succ_nsmul]
+    rw [pow_succ, ord_mul, ih, succ_nsmul]
     exact hx
 
 @[simp]
-/--
-lemma `ord_mul_of_isUnit_left` / 引理 `ord_mul_of_isUnit_left`
-
-English:
-lemma ord_mul_of_isUnit_left
-  given: {a : R} (h : IsUnit a) (x : R)
-  statement: ord R (a * x) = ord R x
-  proof: by
-  rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_left_unit h x]
-
-@[simp]
-
-中文:
-引理 ord_mul_of_isUnit_left
-  条件: {a : R} (h : 是单位 a) (x : R)
-  结论: ord R (a * x) = ord R x
-  证明: by
-  rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_left_unit h x]
-
-@[simp]
-
-Depends on / 依赖: Ideal.span_singleton_mul_left_unit, span_singleton_mul_left_unit
+/-
+**Ring.ord_mul_of_isUnit_left** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_mul_of_isUnit_left {a : R} (h : IsUnit a) (x : R) : ord R (a * x) = or
+d R x
+参数：h : IsUnit a；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ring.ord.eq_1`：∀ (R : Type u_1) [inst : Ring R] (x : R), Ring.ord R x = 
+Module.length R (R ⧸ Ideal.span {x})
+· 使用定理 `Ideal.span_singleton_mul_left_unit`：span_singleton_mul_left_unit {a : α}
+ (h2 : IsUnit a) (x : α) : span ({a * x} : Set α) = span {x}
 -/
 lemma ord_mul_of_isUnit_left {a : R} (h : IsUnit a) (x : R) : ord R (a * x) = ord R x := by
-  rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_left_unit h x]
+  rw [ord, ord, Ideal.span_singleton_mul_left_unit h x]
 
 @[simp]
-/--
-lemma `ord_mul_of_isUnit_right` / 引理 `ord_mul_of_isUnit_right`
-
-English:
-lemma ord_mul_of_isUnit_right
-  given: {a : R} (h : IsUnit a) (x : R)
-  statement: ord R (x * a) = ord R x
-  proof: by
-  rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_right_unit h x]
-
-中文:
-引理 ord_mul_of_isUnit_right
-  条件: {a : R} (h : 是单位 a) (x : R)
-  结论: ord R (x * a) = ord R x
-  证明: by
-  rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_right_unit h x]
-
-Depends on / 依赖: Ideal.span_singleton_mul_right_unit, span_singleton_mul_right_unit
+/-
+**Ring.ord_mul_of_isUnit_right** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_mul_of_isUnit_right {a : R} (h : IsUnit a) (x : R) : ord R (x * a) = o
+rd R x
+参数：h : IsUnit a；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ring.ord.eq_1`：∀ (R : Type u_1) [inst : Ring R] (x : R), Ring.ord R x = 
+Module.length R (R ⧸ Ideal.span {x})
+· 使用定理 `Ideal.span_singleton_mul_right_unit`：span_singleton_mul_right_unit {a : 
+α} (h2 : IsUnit a) (x : α) : span ({x * a} : Set α) = span {x}
 -/
 lemma ord_mul_of_isUnit_right {a : R} (h : IsUnit a) (x : R) : ord R (x * a) = ord R x := by
-  rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_right_unit h x]
-
-/--
-lemma `ord_eq_of_associated` / 引理 `ord_eq_of_associated`
-
-English:
-lemma ord_eq_of_associated
-  given: {x y : R} (h : Associated x y)
-  statement: ord R x = ord R y
-  proof: by
-  obtain ⟨a, rfl⟩ := h
-  simp
-
-@[simp]
-
-中文:
-引理 ord_eq_of_associated
-  条件: {x y : R} (h : Associated x y)
-  结论: ord R x = ord R y
-  证明: by
-  obtain ⟨a, rfl⟩ := h
-  simp
-
-@[simp]
+  rw [ord, ord, Ideal.span_singleton_mul_right_unit h x]
+/-
+**Ring.ord_eq_of_associated** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_eq_of_associated {x y : R} (h : Associated x y) : ord R x = ord R y
+参数：h : Associated x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Ring.ord_mul_of_isUnit_right`：ord_mul_of_isUnit_right {a : R} (h : IsUni
+t a) (x : R) : ord R (x * a) = ord R x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ord_eq_of_associated {x y : R} (h : Associated x y) : ord R x = ord R y := by
   obtain ⟨a, rfl⟩ := h
   simp
 
 @[simp]
-/--
-lemma `ord_neg` / 引理 `ord_neg`
-
-English:
-lemma ord_neg
-  given: (x : R)
-  statement: ord R (-x) = ord R x
-  proof: by
-    simp [ord_eq_of_associated (x := -x) (y := x) (by simp)]
-
-中文:
-引理 ord_neg
-  条件: (x : R)
-  结论: ord R (-x) = ord R x
-  证明: by
-    simp [ord_eq_of_associated (x := -x) (y := x) (by simp)]
-
-Depends on / 依赖: ord_eq_of_associated
+/-
+**Ring.ord_neg** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_neg (x : R) : ord R (-x) = ord R x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Ring.ord_eq_of_associated`：ord_eq_of_associated {x y : R} (h : Associate
+d x y) : ord R x = ord R y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ord_neg (x : R) : ord R (-x) = ord R x := by
     simp [ord_eq_of_associated (x := -x) (y := x) (by simp)]
@@ -483,135 +498,131 @@ In an `S` algebra `R`, the order of vanishing of `x : R` is equal to the order o
 of `a • x` for `a` a unit in `S`.
 -/
 @[simp]
-/--
-lemma `ord_smul_of_isUnit` / 引理 `ord_smul_of_isUnit`
+/-
+**Ring.ord_smul_of_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_smul_of_isUnit {S : Type*} [CommRing S] [Algebra S R] {a : S} (h : IsU
+nit a) (x : R) : ord R (a • x) = ord R x
+参数：h : IsUnit a；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用引理 `Ring.ord_mul_of_isUnit_left`：ord_mul_of_isUnit_left {a : R} (h : IsUnit 
+a) (x : R) : ord R (a * x) = ord R x
+· 使用定理 `RingHom.isUnit_map`：isUnit_map (f : α ->+* β) {a : α} : IsUnit a -> IsUn
+it (f a)
 
-English:
-lemma ord_smul_of_isUnit
-  statement: {S : Type*} [CommRing S] [Algebra S R]
-  proof: by
-  rw [Algebra.smul_def a x]
-  exact ord_mul_of_isUnit_left (RingHom.isUnit_map (algebraMap S R) h) x
-
-中文:
-引理 ord_smul_of_isUnit
-  结论: {S : 类型} [交换环 S] [代数 S R]
-  证明: by
-  rw [Algebra.smul_def a x]
-  exact ord_mul_of_isUnit_left (RingHom.isUnit_map (algebraMap S R) h) x
-
-Depends on / 依赖: Algebra, Algebra.smul_def, RingHom, RingHom.isUnit_map, algebraMap, isUnit_map, ord_mul_of_isUnit_left, smul_def
+--- 原说明 ---
+In an `S` algebra `R`, the order of vanishing of `x : R` is equal to the order o
+f vanishing
+of `a • x` for `a` a unit in `S`.
 -/
 lemma ord_smul_of_isUnit {S : Type*} [CommRing S] [Algebra S R]
     {a : S} (h : IsUnit a) (x : R) : ord R (a • x) = ord R x := by
   rw [Algebra.smul_def a x]
   exact ord_mul_of_isUnit_left (RingHom.isUnit_map (algebraMap S R) h) x
 
-/--
-lemma `ord_le_ord_mul` / 引理 `ord_le_ord_mul`
-
-English:
-lemma ord_le_ord_mul
-  given: (a : R) (x : R)
-  statement: ord R x <= ord R (a * x)
-  proof: by
-  simp only [ord]
-  suffices Ideal.span {a * x} <= Ideal.span {x} by
-    let g : (R ⧸ Ideal.span {a * x}) ->ₗ[R] (R ⧸ Ideal.span {x}) := Submodule.factor this
-    refine Module.length_le_of_surjective (Submodule.factor this) (Submodule.factor_surjective this)
-  rw [Ideal.span_singleton_le_span_singleton]
-  exact Dvd.intro_left (algebraMap R R a) rfl
-
-中文:
-引理 ord_le_ord_mul
-  条件: (a : R) (x : R)
-  结论: ord R x <= ord R (a * x)
-  证明: by
-  simp only [ord]
-  suffices Ideal.span {a * x} <= Ideal.span {x} by
-    let g : (R ⧸ Ideal.span {a * x}) ->ₗ[R] (R ⧸ Ideal.span {x}) := Submodule.factor this
-    refine Module.length_le_of_surjective (Submodule.factor this) (Submodule.factor_surjective this)
-  rw [Ideal.span_singleton_le_span_singleton]
-  exact Dvd.intro_left (algebraMap R R a) rfl
-
-Depends on / 依赖: Dvd.intro_left, Ideal.span, Ideal.span_singleton_le_span_singleton, Module, Module.length_le_of_surjective, Submodule, Submodule.factor, Submodule.factor_surjective, algebraMap, factor, factor_surjective, intro_left, length_le_of_surjective, span_singleton_le_span_singleton
+/-
+Note that the order here is the order on `ℕ∞` where `∞` is a top element, rather than the order on
+`ℤᵐ⁰` which also comes up when working with orders of vanishing.
 -/
-lemma ord_le_ord_mul (a : R) (x : R) : ord R x <= ord R (a * x) := by
+/-
+**Ring.ord_le_ord_mul** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_le_ord_mul (a : R) (x : R) : ord R x <= ord R (a * x)
+参数：a : R；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.span_singleton_le_span_singleton`：span_singleton_le_span_singleton
+ {x y : α} : span ({x} : Set α) <= span ({y} : Set α) ↔ y ∣ x
+· 使用定理 `Dvd.intro_left`：Dvd.intro_left (c : α) (h : c * a = b) : a ∣ b
+· 使用引理 `Module.length_le_of_surjective`：Module.length_le_of_surjective : Module.
+length R P <= Module.length R M
+· 使用引理 `Submodule.factor_surjective`：factor_surjective (H : p <= p') : Function.
+Surjective (factor H)
+
+--- 原说明 ---
+Note that the order here is the order on `ℕ∞` where `∞` is a top element, rather
+ than the order on
+`ℤᵐ⁰` which also comes up when working with orders of vanishing.
+-/
+lemma ord_le_ord_mul (a : R) (x : R) : ord R x ≤ ord R (a * x) := by
   simp only [ord]
-  suffices Ideal.span {a * x} <= Ideal.span {x} by
-    let g : (R ⧸ Ideal.span {a * x}) ->ₗ[R] (R ⧸ Ideal.span {x}) := Submodule.factor this
+  suffices Ideal.span {a * x} ≤ Ideal.span {x} by
+    let g : (R ⧸ Ideal.span {a * x}) →ₗ[R] (R ⧸ Ideal.span {x}) := Submodule.factor this
     refine Module.length_le_of_surjective (Submodule.factor this) (Submodule.factor_surjective this)
   rw [Ideal.span_singleton_le_span_singleton]
   exact Dvd.intro_left (algebraMap R R a) rfl
-
-/--
-lemma `ord_le_ord_of_dvd` / 引理 `ord_le_ord_of_dvd`
-
-English:
-lemma ord_le_ord_of_dvd
-  given: {a x : R} (h : a ∣ x)
-  statement: ord R a <= ord R x
-  proof: by
-  obtain ⟨b, rfl⟩ := h
-  rw [mul_comm]
-  exact ord_le_ord_mul b a
-
-中文:
-引理 ord_le_ord_of_dvd
-  条件: {a x : R} (h : a ∣ x)
-  结论: ord R a <= ord R x
-  证明: by
-  obtain ⟨b, rfl⟩ := h
-  rw [mul_comm]
-  exact ord_le_ord_mul b a
-
-Depends on / 依赖: mul_comm, ord_le_ord_mul
+/-
+**Ring.ord_le_ord_of_dvd** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_le_ord_of_dvd {a x : R} (h : a ∣ x) : ord R a <= ord R x
+参数：h : a ∣ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用引理 `Ring.ord_le_ord_mul`：ord_le_ord_mul (a : R) (x : R) : ord R x <= ord R (
+a * x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma ord_le_ord_of_dvd {a x : R} (h : a ∣ x) : ord R a <= ord R x := by
+lemma ord_le_ord_of_dvd {a x : R} (h : a ∣ x) : ord R a ≤ ord R x := by
   obtain ⟨b, rfl⟩ := h
   rw [mul_comm]
   exact ord_le_ord_mul b a
 
 /--
-lemma `ord_le_smul` / 引理 `ord_le_smul`
+In an `S` algebra `R`, the order of vanishing of `x : R` is less than or equal
+to the order of vanishing of `a • x` for any `a : S`. One should note that the order here
+is the order on `ℕ∞` where `∞` is a top element.
+-/
+/-
+**Ring.ord_le_smul** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_le_smul {S : Type*} [CommRing S] [Algebra S R] (a : S) (x : R) : ord R
+ x <= ord R (a • x)
+参数：a : S；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 
-English:
-lemma ord_le_smul
-  given: {S : Type*} [CommRing S] [Algebra S R] (a : S) (x : R)
-  proof: by simp [Algebra.smul_def, ord_le_ord_mul]
-
-中文:
-引理 ord_le_smul
-  条件: {S : 类型} [交换环 S] [代数 S R] (a : S) (x : R)
-  证明: by simp [Algebra.smul_def, ord_le_ord_mul]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, ord_le_ord_mul, smul_def
+--- 原说明 ---
+In an `S` algebra `R`, the order of vanishing of `x : R` is less than or equal
+to the order of vanishing of `a • x` for any `a : S`. One should note that the o
+rder here
+is the order on `ℕ∞` where `∞` is a top element.
 -/
 lemma ord_le_smul {S : Type*} [CommRing S] [Algebra S R] (a : S) (x : R) :
-    ord R x <= ord R (a • x) := by simp [Algebra.smul_def, ord_le_ord_mul]
+    ord R x ≤ ord R (a • x) := by simp [Algebra.smul_def, ord_le_ord_mul]
 
 /--
 The order of vanishing of a unit is `0`.
 -/
 @[simp]
-/--
-lemma `ord_of_isUnit` / 引理 `ord_of_isUnit`
+/-
+**Ring.ord_of_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_of_isUnit {x : R} (hx : IsUnit x) : ord R x = 0
+参数：hx : IsUnit x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `Ring.ord_one`：ord_one : ord R 1 = 0
+· 使用引理 `Ring.ord_smul_of_isUnit`：ord_smul_of_isUnit {S : Type*} [CommRing S] [Al
+gebra S R] {a : S} (h : IsUnit a) (x : R) : ord R (a • x) = ord R x
 
-English:
-lemma ord_of_isUnit
-  given: {x : R} (hx : IsUnit x)
-  statement: ord R x = 0
-  proof: by
-  simpa using ord_smul_of_isUnit hx (1 : R)
-
-中文:
-引理 ord_of_isUnit
-  条件: {x : R} (hx : 是单位 x)
-  结论: ord R x = 0
-  证明: by
-  simpa using ord_smul_of_isUnit hx (1 : R)
-
-Depends on / 依赖: ord_smul_of_isUnit
+--- 原说明 ---
+The order of vanishing of a unit is `0`.
 -/
 lemma ord_of_isUnit {x : R} (hx : IsUnit x) : ord R x = 0 := by
   simpa using ord_smul_of_isUnit hx (1 : R)
@@ -621,38 +632,40 @@ section IsPrincipalIdealRing
 variable [IsPrincipalIdealRing R]
 
 /--
-theorem `ord_of_irreducible` / 定理 `ord_of_irreducible`
+In a principal ideal ring, the order of vanishing of an irreducible element is `1`.
+-/
+/-
+**Ring.ord_of_irreducible** 是 Mathlib 中的一个定理，位于命名空间 `Ring`。
+形式化陈述：ord_of_irreducible {ϖ : R} (hϖ : Irreducible ϖ) : ord R ϖ = 1
+参数：hϖ : Irreducible ϖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ring.ord.eq_1`：∀ (R : Type u_1) [inst : Ring R] (x : R), Ring.ord R x = 
+Module.length R (R ⧸ Ideal.span {x})
+· 使用引理 `Module.length_eq_one_iff`：Module.length_eq_one_iff : Module.length R M =
+ 1 ↔ IsSimpleModule R M
+· 使用定理 `PrincipalIdealRing.isMaximal_of_irreducible`：isMaximal_of_irreducible [C
+ommSemiring R] [IsPrincipalIdealRing R] {p : R} (hp : Irreducible p) : Ideal.IsM
+aximal (span R ({p} : Set R))
+· 使用引理 `isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective`：isSimpleModu
+le_iff_isSimpleModule_of_algebraMap_surjective {R : Type*} [CommRing R] [Algebra
+ R S] [Module R M] [Module S M] [IsScalarTower R…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
 
-English:
-theorem ord_of_irreducible
-  given: {ϖ : R} (hϖ : Irreducible ϖ)
-  statement: ord R ϖ = 1
-  proof: by
-  rw [Ring.ord]; rw [Module.length_eq_one_iff]
-  have : (Ideal.span {ϖ}).IsMaximal :=
-    PrincipalIdealRing.isMaximal_of_irreducible hϖ
-  rw [isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective (S := R ⧸ Ideal.span {ϖ})
-    Ideal.Quotient.mk_surjective]
-  let := Ideal.Quotient.field (Ideal.span {ϖ})
-  exact instIsSimpleModule _
-
-中文:
-定理 ord_of_irreducible
-  条件: {ϖ : R} (hϖ : 不可约 ϖ)
-  结论: ord R ϖ = 1
-  证明: by
-  rw [Ring.ord]; rw [Module.length_eq_one_iff]
-  have : (Ideal.span {ϖ}).IsMaximal :=
-    PrincipalIdealRing.isMaximal_of_irreducible hϖ
-  rw [isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective (S := R ⧸ Ideal.span {ϖ})
-    Ideal.Quotient.mk_surjective]
-  let := Ideal.Quotient.field (Ideal.span {ϖ})
-  exact instIsSimpleModule _
-
-Depends on / 依赖: Ideal.Quotient.field, Ideal.Quotient.mk_surjective, Ideal.span, IsMaximal, Module, Module.length_eq_one_iff, PrincipalIdealRing, PrincipalIdealRing.isMaximal_of_irreducible, Quotient, Ring.ord, instIsSimpleModule, isMaximal_of_irreducible, isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective, length_eq_one_iff, mk_surjective
+--- 原说明 ---
+In a principal ideal ring, the order of vanishing of an irreducible element is `
+1`.
 -/
 theorem ord_of_irreducible {ϖ : R} (hϖ : Irreducible ϖ) : ord R ϖ = 1 := by
-  rw [Ring.ord]; rw [Module.length_eq_one_iff]
+  rw [Ring.ord, Module.length_eq_one_iff]
   have : (Ideal.span {ϖ}).IsMaximal :=
     PrincipalIdealRing.isMaximal_of_irreducible hϖ
   rw [isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective (S := R ⧸ Ideal.span {ϖ})
@@ -674,55 +687,14 @@ meaning in this case `0` will not be mapped to `⊤`.
 -/
 @[stacks 02MD]
 noncomputable
-/--
-Definition of `ordMonoidWithZeroHom` / `ordMonoidWithZeroHom` 的定义
-
-English:
-definition ordMonoidWithZeroHom
-  signature: [Nontrivial R]
-  body: if x in nonZeroDivisors R
-             then (ENat.recTopCoe 0 (WithZero.coe <| Multiplicative.ofAdd ·) (Ring.ord R x))
-             else 0
-  map_zero' := by simp [nonZeroDivisors, exists_ne]
-  map_one' := by simp [nonZeroDivisors]
-  map_mul' := by
-    intro x y
-    split_ifs with _ _ b
-    · rw [ord_mul _ b]
-      generalize ord R x = x'
-      generalize ord R y = y'
-      cases x' <;> cases y'
-      on_goal 4 =>
-        simp only [← ENat.natCast_add, ENat.recTopCoe_natCast, Nat.cast_add (R := Int),
-          ofAdd_add, WithZero.coe_mul]
-      all_goals simp
-    all_goals simp_all [mul_mem_nonZeroDivisors]
-
-中文:
-定义 ordMonoidWithZeroHom
-  签名: [非平凡 R]
-  定义体: if x in nonZeroDivisors R
-             then (ENat.recTopCoe 0 (WithZero.coe <| Multiplicative.ofAdd ·) (Ring.ord R x))
-             else 0
-  map_zero' := by simp [nonZeroDivisors, exists_ne]
-  map_one' := by simp [nonZeroDivisors]
-  map_mul' := by
-    intro x y
-    split_ifs with _ _ b
-    · rw [ord_mul _ b]
-      generalize ord R x = x'
-      generalize ord R y = y'
-      cases x' <;> cases y'
-      on_goal 4 =>
-        simp only [← ENat.natCast_add, ENat.recTopCoe_natCast, Nat.cast_add (R := Int),
-          ofAdd_add, WithZero.coe_mul]
-      all_goals simp
-    all_goals simp_all [mul_mem_nonZeroDivisors]
-
-Depends on / 依赖: nonZeroDivisors
+/-
+**Ring.ordMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间 `Ring`。
+形式化陈述：ordMonoidWithZeroHom [Nontrivial R] : R ->*₀ Intᵐ⁰ where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ordMonoidWithZeroHom [Nontrivial R] : R ->*₀ Intᵐ⁰ where
-  toFun x := if x in nonZeroDivisors R
+def ordMonoidWithZeroHom [Nontrivial R] : R →*₀ ℤᵐ⁰ where
+  toFun x := if x ∈ nonZeroDivisors R
              then (ENat.recTopCoe 0 (WithZero.coe <| Multiplicative.ofAdd ·) (Ring.ord R x))
              else 0
   map_zero' := by simp [nonZeroDivisors, exists_ne]
@@ -735,35 +707,30 @@ def ordMonoidWithZeroHom [Nontrivial R] : R ->*₀ Intᵐ⁰ where
       generalize ord R y = y'
       cases x' <;> cases y'
       on_goal 4 =>
-        simp only [← ENat.natCast_add, ENat.recTopCoe_natCast, Nat.cast_add (R := Int),
+        simp only [← ENat.natCast_add, ENat.recTopCoe_natCast, Nat.cast_add (R := ℤ),
           ofAdd_add, WithZero.coe_mul]
       all_goals simp
     all_goals simp_all [mul_mem_nonZeroDivisors]
-
-/--
-lemma `ordMonoidWithZeroHom_eq_zero_iff` / 引理 `ordMonoidWithZeroHom_eq_zero_iff`
-
-English:
-lemma ordMonoidWithZeroHom_eq_zero_iff
-  given: [Nontrivial R] (y : nonZeroDivisors R)
-  proof: by
-  simp only [ordMonoidWithZeroHom, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, SetLike.coe_mem,
-    ↓reduceIte]
-  generalize ord R y = k
-  cases k
-  all_goals simp
-
-中文:
-引理 ordMonoidWithZeroHom_eq_zero_iff
-  条件: [非平凡 R] (y : nonZeroDivisors R)
-  证明: by
-  simp only [ordMonoidWithZeroHom, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, SetLike.coe_mem,
-    ↓reduceIte]
-  generalize ord R y = k
-  cases k
-  all_goals simp
-
-Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.coe_mk, SetLike, SetLike.coe_mem, ZeroHom, ZeroHom.coe_mk, all_goals, coe_mem, coe_mk, generalize, ordMonoidWithZeroHom, reduceIte
+/-
+**Ring.ordMonoidWithZeroHom_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ordMonoidWithZeroHom_eq_zero_iff [Nontrivial R] (y : nonZeroDivisors R) : 
+ordMonoidWithZeroHom R y = 0 ↔ ord R y = ⊤
+参数：y : nonZeroDivisors R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma ordMonoidWithZeroHom_eq_zero_iff [Nontrivial R] (y : nonZeroDivisors R) :
     ordMonoidWithZeroHom R y = 0 ↔ ord R y = ⊤ := by
@@ -775,42 +742,50 @@ lemma ordMonoidWithZeroHom_eq_zero_iff [Nontrivial R] (y : nonZeroDivisors R) :
 
 variable {R} in
 /--
-theorem `ordMonoidWithZeroHom_eq_ord` / 定理 `ordMonoidWithZeroHom_eq_ord`
-
-English:
-theorem ordMonoidWithZeroHom_eq_ord
-  given: [Nontrivial R] {x : R} (h : x in nonZeroDivisors R)
-  proof: dif_pos h
-
-中文:
-定理 ordMonoidWithZeroHom_eq_ord
-  条件: [非平凡 R] {x : R} (h : x in nonZeroDivisors R)
-  证明: dif_pos h
-
-Depends on / 依赖: dif_pos
+If `x` is a non zero divisor, `ordMonoidWithZeroHom` is equal to the canonical embedding
+of `Ring.ord R x` into `WithZero (Multiplicative ℤ)`.
 -/
-theorem ordMonoidWithZeroHom_eq_ord [Nontrivial R] {x : R} (h : x in nonZeroDivisors R) :
+/-
+**Ring.ordMonoidWithZeroHom_eq_ord** 是 Mathlib 中的一个定理，位于命名空间 `Ring`。
+形式化陈述：ordMonoidWithZeroHom_eq_ord [Nontrivial R] {x : R} (h : x in nonZeroDiviso
+rs R) : ordMonoidWithZeroHom R x = (ENat.recTopCoe 0 (WithZero.coe <| Multiplica
+tive.ofAdd ·) (Ring.ord R x))
+参数：h : x in nonZeroDivisors R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+
+--- 原说明 ---
+If `x` is a non zero divisor, `ordMonoidWithZeroHom` is equal to the canonical e
+mbedding
+of `Ring.ord R x` into `WithZero (Multiplicative ℤ)`.
+-/
+theorem ordMonoidWithZeroHom_eq_ord [Nontrivial R] {x : R} (h : x ∈ nonZeroDivisors R) :
     ordMonoidWithZeroHom R x =
   (ENat.recTopCoe 0 (WithZero.coe <| Multiplicative.ofAdd ·) (Ring.ord R x)) := dif_pos h
-
-/--
-lemma `ordMonoidWithZeroHom_eq_coe` / 引理 `ordMonoidWithZeroHom_eq_coe`
-
-English:
-lemma ordMonoidWithZeroHom_eq_coe
-  proof: by
-  simp [ordMonoidWithZeroHom_eq_ord hx, hn]
-
-中文:
-引理 ordMonoidWithZeroHom_eq_coe
-  证明: by
-  simp [ordMonoidWithZeroHom_eq_ord hx, hn]
-
-Depends on / 依赖: ordMonoidWithZeroHom_eq_ord
+/-
+**Ring.ordMonoidWithZeroHom_eq_coe** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ordMonoidWithZeroHom_eq_coe [Nontrivial R] {x : R} (hx : x in nonZeroDivis
+ors R) {n : Nat} (hn : Ring.ord R x = n) : ordMonoidWithZeroHom R x = Multiplica
+tive.ofAdd (n : Int)
+参数：hx : x in nonZeroDivisors R；hn : Ring.ord R x = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ring.ordMonoidWithZeroHom_eq_ord`：ordMonoidWithZeroHom_eq_ord [Nontrivia
+l R] {x : R} (h : x in nonZeroDivisors R) : ordMonoidWithZeroHom R x = (ENat.rec
+TopCoe 0 (WithZero.coe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ordMonoidWithZeroHom_eq_coe
-    [Nontrivial R] {x : R} (hx : x in nonZeroDivisors R) {n : Nat} (hn : Ring.ord R x = n) :
-    ordMonoidWithZeroHom R x = Multiplicative.ofAdd (n : Int) := by
+    [Nontrivial R] {x : R} (hx : x ∈ nonZeroDivisors R) {n : ℕ} (hn : Ring.ord R x = n) :
+    ordMonoidWithZeroHom R x = Multiplicative.ofAdd (n : ℤ) := by
   simp [ordMonoidWithZeroHom_eq_ord hx, hn]
 
 variable {R} in
@@ -818,127 +793,93 @@ variable {R} in
 If `x` is not a non zero divisor, `ordMonoidWithZeroHom` is equal to `0`.
 -/
 @[simp]
-/--
-theorem `ordMonoidWithZeroHom_eq_zero` / 定理 `ordMonoidWithZeroHom_eq_zero`
+/-
+**Ring.ordMonoidWithZeroHom_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Ring`。
+形式化陈述：ordMonoidWithZeroHom_eq_zero [Nontrivial R] {x : R} (h : x ∉ nonZeroDiviso
+rs R) : ordMonoidWithZeroHom R x = 0
+参数：h : x ∉ nonZeroDivisors R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 
-English:
-theorem ordMonoidWithZeroHom_eq_zero
-  given: [Nontrivial R] {x : R} (h : x ∉ nonZeroDivisors R)
-  proof: dif_neg h
-
-中文:
-定理 ordMonoidWithZeroHom_eq_zero
-  条件: [非平凡 R] {x : R} (h : x ∉ nonZeroDivisors R)
-  证明: dif_neg h
-
-Depends on / 依赖: dif_neg
+--- 原说明 ---
+If `x` is not a non zero divisor, `ordMonoidWithZeroHom` is equal to `0`.
 -/
 theorem ordMonoidWithZeroHom_eq_zero [Nontrivial R] {x : R} (h : x ∉ nonZeroDivisors R) :
     ordMonoidWithZeroHom R x = 0 := dif_neg h
 
 /--
-theorem `_root_.isFiniteLength_quotient_span_singleton` / 定理 `_root_.isFiniteLength_quotient_span_singleton`
+The quotient of a Noetherian ring of krull dimension less than or equal to `1` by a principal ideal
+is of finite length.
+-/
+/-
+**Ring._root_.isFiniteLength_quotient_span_singleton** 是 Mathlib 中的一个定理，位于命名空间 `
+Ring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.isFiniteLength_quotient_span_singleton
-  statement: [IsNoetherianRing R]
-  proof: by
-  rw [isFiniteLength_iff_isNoetherian_isArtinian]
-  suffices IsArtinianRing (R ⧸ Ideal.span {x}) from
-    ⟨isNoetherian_quotient (Ideal.span {x}),
-      isArtinian_of_surjective_algebraMap (Ideal.Quotient.mk_surjective (I := .span {x}))⟩
-  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ENat.WithBot.add_le_add_one_right_iff]; rw [Nat.cast_zero]; rw [zero_add]
-  exact (ringKrullDim_quotient_succ_le_of_nonZeroDivisor hx).trans (Order.KrullDimLE.krullDim_le)
-
-中文:
-定理 _root_.isFiniteLength_quotient_span_singleton
-  结论: [是Noether环 R]
-  证明: by
-  rw [isFiniteLength_iff_isNoetherian_isArtinian]
-  suffices IsArtinianRing (R ⧸ Ideal.span {x}) from
-    ⟨isNoetherian_quotient (Ideal.span {x}),
-      isArtinian_of_surjective_algebraMap (Ideal.Quotient.mk_surjective (I := .span {x}))⟩
-  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ENat.WithBot.add_le_add_one_right_iff]; rw [Nat.cast_zero]; rw [zero_add]
-  exact (ringKrullDim_quotient_succ_le_of_nonZeroDivisor hx).trans (Order.KrullDimLE.krullDim_le)
-
-Depends on / 依赖: ENat.WithBot.add_le_add_one_right_iff, Ideal.Quotient.mk_surjective, Ideal.span, IsArtinianRing, KrullDimLE, Nat.cast_zero, Order.KrullDimLE.krullDim_le, Order.krullDimLE_iff, Quotient, Ring.KrullDimLE, WithBot, add_le_add_one_right_iff, cast_zero, isArtinianRing_iff_krullDimLE_zero, isArtinian_of_surjective_algebraMap, isFiniteLength_iff_isNoetherian_isArtinian, isNoetherian_quotient, krullDimLE_iff, krullDim_le, mk_surjective
+--- 原说明 ---
+The quotient of a Noetherian ring of krull dimension less than or equal to `1` b
+y a principal ideal
+is of finite length.
 -/
 theorem _root_.isFiniteLength_quotient_span_singleton [IsNoetherianRing R]
-    [Ring.KrullDimLE 1 R] {x : R} (hx : x in nonZeroDivisors R) :
+    [Ring.KrullDimLE 1 R] {x : R} (hx : x ∈ nonZeroDivisors R) :
     IsFiniteLength R (R ⧸ Ideal.span {x}) := by
   rw [isFiniteLength_iff_isNoetherian_isArtinian]
   suffices IsArtinianRing (R ⧸ Ideal.span {x}) from
     ⟨isNoetherian_quotient (Ideal.span {x}),
       isArtinian_of_surjective_algebraMap (Ideal.Quotient.mk_surjective (I := .span {x}))⟩
-  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ENat.WithBot.add_le_add_one_right_iff]; rw [Nat.cast_zero]; rw [zero_add]
+  rw [isArtinianRing_iff_krullDimLE_zero, Ring.KrullDimLE, Order.krullDimLE_iff,
+    ← ENat.WithBot.add_le_add_one_right_iff, Nat.cast_zero, zero_add]
   exact (ringKrullDim_quotient_succ_le_of_nonZeroDivisor hx).trans (Order.KrullDimLE.krullDim_le)
 
 variable [IsNoetherianRing R] [Ring.KrullDimLE 1 R]
 variable {K : Type*} [Field K] [Algebra R K] [IsFractionRing R K]
 
 variable {R} in
-/--
-lemma `ord_ne_top` / 引理 `ord_ne_top`
-
-English:
-lemma ord_ne_top
-  given: {a : R} (ha : a in nonZeroDivisors R)
-  statement: ord R a != ⊤
-  proof: by
-  simp [isFiniteLength_quotient_span_singleton R ha, Ring.ord, Module.length_ne_top_iff]
-
-中文:
-引理 ord_ne_top
-  条件: {a : R} (ha : a in nonZeroDivisors R)
-  结论: ord R a != ⊤
-  证明: by
-  simp [isFiniteLength_quotient_span_singleton R ha, Ring.ord, Module.length_ne_top_iff]
-
-Depends on / 依赖: Module, Module.length_ne_top_iff, Ring.ord, isFiniteLength_quotient_span_singleton, length_ne_top_iff
+/-
+**Ring.ord_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_ne_top {a : R} (ha : a in nonZeroDivisors R) : ord R a != ⊤
+参数：ha : a in nonZeroDivisors R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `isFiniteLength_quotient_span_singleton`：∀ (R : Type u_1) [inst : CommRin
+g R] [IsNoetherianRing R] [Ring.KrullDimLE 1 R] {x : R},   x ∈ nonZeroDivisors R
+ → IsFiniteLength R (R ⧸ Ide…
 -/
-lemma ord_ne_top {a : R} (ha : a in nonZeroDivisors R) : ord R a != ⊤ := by
+lemma ord_ne_top {a : R} (ha : a ∈ nonZeroDivisors R) : ord R a ≠ ⊤ := by
   simp [isFiniteLength_quotient_span_singleton R ha, Ring.ord, Module.length_ne_top_iff]
 
 variable {R} in
-/--
-lemma `ord_lt_top` / 引理 `ord_lt_top`
-
-English:
-lemma ord_lt_top
-  given: {a : R} (ha : a in nonZeroDivisors R)
-  statement: ord R a < ⊤
-  proof: (ord_ne_top ha).lt_top
-
-中文:
-引理 ord_lt_top
-  条件: {a : R} (ha : a in nonZeroDivisors R)
-  结论: ord R a < ⊤
-  证明: (ord_ne_top ha).lt_top
-
-Depends on / 依赖: lt_top, ord_ne_top
+/-
+**Ring.ord_lt_top** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ord_lt_top {a : R} (ha : a in nonZeroDivisors R) : ord R a < ⊤
+参数：ha : a in nonZeroDivisors R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ne.lt_top`：Ne.lt_top (h : a != ⊤) : a < ⊤
+· 使用引理 `Ring.ord_ne_top`：ord_ne_top {a : R} (ha : a in nonZeroDivisors R) : ord 
+R a != ⊤
 -/
-lemma ord_lt_top {a : R} (ha : a in nonZeroDivisors R) : ord R a < ⊤ := (ord_ne_top ha).lt_top
+lemma ord_lt_top {a : R} (ha : a ∈ nonZeroDivisors R) : ord R a < ⊤ := (ord_ne_top ha).lt_top
 
 variable [Nontrivial R]
-
-/--
-lemma `ordMonoidWithZeroHom_isUnit` / 引理 `ordMonoidWithZeroHom_isUnit`
-
-English:
-lemma ordMonoidWithZeroHom_isUnit
-  given: (y : nonZeroDivisors R)
-  statement: IsUnit (ordMonoidWithZeroHom R y)
-  proof: by
-  simp [ordMonoidWithZeroHom_eq_zero_iff, ord_ne_top]
-
-中文:
-引理 ordMonoidWithZeroHom_isUnit
-  条件: (y : nonZeroDivisors R)
-  结论: 是单位 (ordMonoidWithZeroHom R y)
-  证明: by
-  simp [ordMonoidWithZeroHom_eq_zero_iff, ord_ne_top]
-
-Depends on / 依赖: ordMonoidWithZeroHom_eq_zero_iff, ord_ne_top
+/-
+**Ring.ordMonoidWithZeroHom_isUnit** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ordMonoidWithZeroHom_isUnit (y : nonZeroDivisors R) : IsUnit (ordMonoidWit
+hZeroHom R y)
+参数：y : nonZeroDivisors R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma ordMonoidWithZeroHom_isUnit (y : nonZeroDivisors R) : IsUnit (ordMonoidWithZeroHom R y) := by
   simp [ordMonoidWithZeroHom_eq_zero_iff, ord_ne_top]
@@ -949,70 +890,89 @@ Order of vanishing function for elements of the fraction field defined as the ex
 -/
 @[stacks 02MD]
 noncomputable
-/--
-Definition of `ordFrac` / `ordFrac` 的定义
-
-English:
-definition ordFrac
-  signature: : K ->*₀ Intᵐ⁰
-  body: (toLocalizationMap (nonZeroDivisors R) K).lift₀ (ordMonoidWithZeroHom R)
-  ordMonoidWithZeroHom_isUnit R
-
-中文:
-定义 ordFrac
-  签名: : K ->*₀ 整数ᵐ⁰
-  定义体: (toLocalizationMap (nonZeroDivisors R) K).lift₀ (ordMonoidWithZeroHom R)
-  ordMonoidWithZeroHom_isUnit R
-
-Depends on / 依赖: nonZeroDivisors, ordMonoidWithZeroHom, ordMonoidWithZeroHom_isUnit, toLocalizationMap
+/-
+**Ring.ordFrac** 是 Mathlib 中的一个定义，位于命名空间 `Ring`。
+形式化陈述：ordFrac : K ->*₀ Intᵐ⁰
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Ring.ordMonoidWithZeroHom_isUnit`：ordMonoidWithZeroHom_isUnit (y : nonZe
+roDivisors R) : IsUnit (ordMonoidWithZeroHom R y)
 -/
-def ordFrac : K ->*₀ Intᵐ⁰ :=
-(toLocalizationMap (nonZeroDivisors R) K).lift₀ (ordMonoidWithZeroHom R)
+def ordFrac : K →*₀ ℤᵐ⁰ :=
+  (toLocalizationMap (nonZeroDivisors R) K).lift₀ (ordMonoidWithZeroHom R) <|
   ordMonoidWithZeroHom_isUnit R
-
-/--
-lemma `ordFrac_eq_ord` / 引理 `ordFrac_eq_ord`
-
-English:
-lemma ordFrac_eq_ord
-  given: {x : R} (hx : x != 0)
-  proof: by
-  have := (FaithfulSMul.algebraMap_injective R K).isDomain
-  refine (Submonoid.LocalizationMap.lift_eq ..).trans ?_
-  simp [ordMonoidWithZeroHom, mem_nonZeroDivisors_iff_ne_zero.mpr hx]
-
-中文:
-引理 ordFrac_eq_ord
-  条件: {x : R} (hx : x != 0)
-  证明: by
-  have := (FaithfulSMul.algebraMap_injective R K).isDomain
-  refine (Submonoid.LocalizationMap.lift_eq ..).trans ?_
-  simp [ordMonoidWithZeroHom, mem_nonZeroDivisors_iff_ne_zero.mpr hx]
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, LocalizationMap, Submonoid, Submonoid.LocalizationMap.lift_eq, algebraMap_injective, isDomain, lift_eq, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mpr, ordMonoidWithZeroHom
+/-
+**Ring.ordFrac_eq_ord** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ordFrac_eq_ord {x : R} (hx : x != 0) : ordFrac R (algebraMap R K x) = ordM
+onoidWithZeroHom R x
+参数：hx : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isDomain`：∀ {α : Type u_1} {β : Type u_2} [inst : Sem
+iring α] [IsDomain α] [inst_2 : Semiring β] {F : Type u_3}   [inst_3 : FunLike F
+ β α] [MonoidWith…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Ring.ordMonoidWithZeroHom_isUnit`：ordMonoidWithZeroHom_isUnit (y : nonZe
+roDivisors R) : IsUnit (ordMonoidWithZeroHom R y)
+· 使用定理 `Submonoid.LocalizationMap.lift_eq`：lift_eq (x : M) : f.lift hg (f x) = g
+ x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_nonZeroDivisors_iff_ne_zero`：∀ {M₀ : Type u_2} [inst : MonoidWithZer
+o M₀] {x : M₀} [NoZeroDivisors M₀] [Nontrivial M₀],   x ∈ nonZeroDivisors M₀ ↔ x
+ ≠ 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma ordFrac_eq_ord {x : R} (hx : x != 0) :
+lemma ordFrac_eq_ord {x : R} (hx : x ≠ 0) :
     ordFrac R (algebraMap R K x) = ordMonoidWithZeroHom R x := by
   have := (FaithfulSMul.algebraMap_injective R K).isDomain
   refine (Submonoid.LocalizationMap.lift_eq ..).trans ?_
   simp [ordMonoidWithZeroHom, mem_nonZeroDivisors_iff_ne_zero.mpr hx]
-
-/--
-lemma `ordFrac_eq_div` / 引理 `ordFrac_eq_div`
-
-English:
-lemma ordFrac_eq_div
-  given: (a : nonZeroDivisors R) (b : nonZeroDivisors R)
-  proof: by
-  simp [ordFrac_eq_ord]
-
-中文:
-引理 ordFrac_eq_div
-  条件: (a : nonZeroDivisors R) (b : nonZeroDivisors R)
-  证明: by
-  simp [ordFrac_eq_ord]
-
-Depends on / 依赖: ordFrac_eq_ord
+/-
+**Ring.ordFrac_eq_div** 是 Mathlib 中的一个引理，位于命名空间 `Ring`。
+形式化陈述：ordFrac_eq_div (a : nonZeroDivisors R) (b : nonZeroDivisors R) : ordFrac R
+ (IsLocalization.mk' K a.1 b) = ordMonoidWithZeroHom R a / ordMonoidWithZeroHom 
+R b
+参数：a : nonZeroDivisors R；b : nonZeroDivisors R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFractionRing.mk'_eq_div`：∀ {A : Type u_4} [inst : CommRing A] {K : Typ
+e u_5} [inst_1 : Field K] [inst_2 : Algebra A K]   [inst_3 : IsFractionRing A K]
+ {r : A} (s : ↥…
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Ring.ordFrac_eq_ord`：ordFrac_eq_ord {x : R} (hx : x != 0) : ordFrac R (a
+lgebraMap R K x) = ordMonoidWithZeroHom R x
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ordFrac_eq_div (a : nonZeroDivisors R) (b : nonZeroDivisors R) :
     ordFrac R (IsLocalization.mk' K a.1 b) =
@@ -1020,3 +980,4 @@ lemma ordFrac_eq_div (a : nonZeroDivisors R) (b : nonZeroDivisors R) :
   simp [ordFrac_eq_ord]
 
 end Ring
+

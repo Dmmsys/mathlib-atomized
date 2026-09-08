@@ -32,36 +32,22 @@ namespace SimpleGraph
 
 variable {V : Type u} (G : SimpleGraph V)
 
-/--
-theorem `Walk.setOfPred_length_eq_zero` / 定理 `Walk.setOfPred_length_eq_zero`
-
-English:
-theorem Walk.setOfPred_length_eq_zero
-  given: (u : V)
-  statement: {p : G.Walk u u | p.length = 0} = {.nil}
-  proof: by
-  simp [Walk.length_eq_zero_iff, ← Walk.eq_nil_iff_nil]
-
-@[deprecated (since := "2026-07-09")]
-alias Walk.setOf_length_eq_zero := Walk.setOfPred_length_eq_zero
-
-@[deprecated (since := "2026-05-12")]
-alias set_walk_self_length_zero_eq := Walk.setOfPred_length_eq_zero
-
-中文:
-定理 途径.setOfPred_length_eq_zero
-  条件: (u : V)
-  结论: {p : G.途径 u u | p.length = 0} = {.nil}
-  证明: by
-  simp [Walk.length_eq_zero_iff, ← Walk.eq_nil_iff_nil]
-
-@[deprecated (since := "2026-07-09")]
-alias Walk.setOf_length_eq_zero := Walk.setOfPred_length_eq_zero
-
-@[deprecated (since := "2026-05-12")]
-alias set_walk_self_length_zero_eq := Walk.setOfPred_length_eq_zero
-
-Depends on / 依赖: Walk.eq_nil_iff_nil, Walk.length_eq_zero_iff, eq_nil_iff_nil, length_eq_zero_iff
+/-
+**SimpleGraph.Walk.setOfPred_length_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Walk`。
+形式化陈述：∀ {V : Type u} (G : SimpleGraph V) (u : V), {p | p.length = 0} = {SimpleGr
+aph.Walk.nil}
+参数：G : SimpleGraph V；u : V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Walk.setOfPred_length_eq_zero (u : V) : {p : G.Walk u u | p.length = 0} = {.nil} := by
   simp [Walk.length_eq_zero_iff, ← Walk.eq_nil_iff_nil]
@@ -71,35 +57,19 @@ alias Walk.setOf_length_eq_zero := Walk.setOfPred_length_eq_zero
 
 @[deprecated (since := "2026-05-12")]
 alias set_walk_self_length_zero_eq := Walk.setOfPred_length_eq_zero
-
-/--
-theorem `Walk.setOfPred_length_eq_zero_of_ne` / 定理 `Walk.setOfPred_length_eq_zero_of_ne`
-
-English:
-theorem Walk.setOfPred_length_eq_zero_of_ne
-  given: {u v : V} (h : u != v)
-  proof: Set.eq_empty_of_forall_notMem (h <| ·.eq_of_length_eq_zero ·)
-
-@[deprecated (since := "2026-07-09")]
-alias Walk.setOf_length_eq_zero_of_ne := Walk.setOfPred_length_eq_zero_of_ne
-
-@[deprecated (since := "2026-05-12")]
-alias set_walk_length_zero_eq_of_ne := Walk.setOfPred_length_eq_zero_of_ne
-
-中文:
-定理 途径.setOfPred_length_eq_zero_of_ne
-  条件: {u v : V} (h : u != v)
-  证明: Set.eq_empty_of_forall_notMem (h <| ·.eq_of_length_eq_zero ·)
-
-@[deprecated (since := "2026-07-09")]
-alias Walk.setOf_length_eq_zero_of_ne := Walk.setOfPred_length_eq_zero_of_ne
-
-@[deprecated (since := "2026-05-12")]
-alias set_walk_length_zero_eq_of_ne := Walk.setOfPred_length_eq_zero_of_ne
-
-Depends on / 依赖: Set.eq_empty_of_forall_notMem, eq_empty_of_forall_notMem, eq_of_length_eq_zero
+/-
+**SimpleGraph.Walk.setOfPred_length_eq_zero_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph.Walk`。
+形式化陈述：∀ {V : Type u} (G : SimpleGraph V) {u v : V}, u ≠ v → {p | p.length = 0} =
+ ∅
+参数：G : SimpleGraph V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem (h : forall x, 
+x ∉ s) : s = ∅
+· 使用定理 `SimpleGraph.Walk.eq_of_length_eq_zero`：∀ {V : Type u} {G : SimpleGraph V
+} {u v : V} {p : G.Walk u v}, p.length = 0 → u = v
 -/
-theorem Walk.setOfPred_length_eq_zero_of_ne {u v : V} (h : u != v) :
+theorem Walk.setOfPred_length_eq_zero_of_ne {u v : V} (h : u ≠ v) :
     {p : G.Walk u v | p.length = 0} = ∅ :=
   Set.eq_empty_of_forall_notMem (h <| ·.eq_of_length_eq_zero ·)
 
@@ -108,43 +78,41 @@ alias Walk.setOf_length_eq_zero_of_ne := Walk.setOfPred_length_eq_zero_of_ne
 
 @[deprecated (since := "2026-05-12")]
 alias set_walk_length_zero_eq_of_ne := Walk.setOfPred_length_eq_zero_of_ne
-
-/--
-theorem `Walk.setOfPred_length_eq_add_one` / 定理 `Walk.setOfPred_length_eq_add_one`
-
-English:
-theorem Walk.setOfPred_length_eq_add_one
-  given: (u v : V) (n : Nat)
-  proof: by
-  ext p
-  cases p with
-  | nil => simp [eq_comm]
-  | cons huw pwv => grind [length_cons, Set.mem_iUnion]
-
-@[deprecated (since := "2026-07-09")]
-alias Walk.setOf_length_eq_add_one := Walk.setOfPred_length_eq_add_one
-
-@[deprecated (since := "2026-05-12")]
-alias set_walk_length_succ_eq := Walk.setOfPred_length_eq_add_one
-
-中文:
-定理 途径.setOfPred_length_eq_add_one
-  条件: (u v : V) (n : 自然数)
-  证明: by
-  ext p
-  cases p with
-  | nil => simp [eq_comm]
-  | cons huw pwv => grind [length_cons, Set.mem_iUnion]
-
-@[deprecated (since := "2026-07-09")]
-alias Walk.setOf_length_eq_add_one := Walk.setOfPred_length_eq_add_one
-
-@[deprecated (since := "2026-05-12")]
-alias set_walk_length_succ_eq := Walk.setOfPred_length_eq_add_one
-
-Depends on / 依赖: Set.mem_iUnion, eq_comm, length_cons, mem_iUnion
+/-
+**SimpleGraph.Walk.setOfPred_length_eq_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph.Walk`。
+形式化陈述：∀ {V : Type u} (G : SimpleGraph V) (u v : V) (n : ℕ),   {p | p.length = n 
++ 1} = ⋃ w, ⋃ (h : G.Adj u w), SimpleGraph.Walk.cons h '' {p' | p'.length = n}
+参数：G : SimpleGraph V；u v : V；n : ℕ；h : G.Adj u w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem Walk.setOfPred_length_eq_add_one (u v : V) (n : Nat) :
+theorem Walk.setOfPred_length_eq_add_one (u v : V) (n : ℕ) :
     {p : G.Walk u v | p.length = n + 1} =
       ⋃ (w : V) (h : G.Adj u w), Walk.cons h '' {p' : G.Walk w v | p'.length = n} := by
   ext p
@@ -161,26 +129,19 @@ alias set_walk_length_succ_eq := Walk.setOfPred_length_eq_add_one
 /-- Walks of length two from `u` to `v` correspond bijectively to common neighbours of `u` and `v`.
 Note that `u` and `v` may be the same. -/
 @[simps]
-/--
-Definition of `walkLengthTwoEquivCommonNeighbors` / `walkLengthTwoEquivCommonNeighbors` 的定义
+/-
+**SimpleGraph.walkLengthTwoEquivCommonNeighbors** 是 Mathlib 中的一个定义，位于命名空间 `Simpl
+eGraph`。
+形式化陈述：walkLengthTwoEquivCommonNeighbors (u v : V) : {p : G.Walk u v // p.length 
+= 2} ≃ G.commonNeighbors u v where toFun p
+参数：u v : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition walkLengthTwoEquivCommonNeighbors
-  signature: (u v : V)
-  body: ⟨p.val.snd, match p with
-    | ⟨.cons _ (.cons _ .nil), _⟩ => ⟨‹G.Adj u _›, ‹G.Adj _ v›.symm⟩⟩
-  invFun w := ⟨w.prop.1.toWalk.concat w.prop.2.symm, rfl⟩
-  left_inv | ⟨.cons _ (.cons _ .nil), hp⟩ => by rfl
-
-中文:
-定义 walkLengthTwoEquivCommonNeighbors
-  签名: (u v : V)
-  定义体: ⟨p.val.snd, match p with
-    | ⟨.cons _ (.cons _ .nil), _⟩ => ⟨‹G.Adj u _›, ‹G.Adj _ v›.symm⟩⟩
-  invFun w := ⟨w.prop.1.toWalk.concat w.prop.2.symm, rfl⟩
-  left_inv | ⟨.cons _ (.cons _ .nil), hp⟩ => by rfl
-
-Depends on / 依赖: p.val.snd
+--- 原说明 ---
+Walks of length two from `u` to `v` correspond bijectively to common neighbours 
+of `u` and `v`.
+Note that `u` and `v` may be the same.
 -/
 def walkLengthTwoEquivCommonNeighbors (u v : V) :
     {p : G.Walk u v // p.length = 2} ≃ G.commonNeighbors u v where
@@ -194,38 +155,30 @@ section LocallyFinite
 variable [DecidableEq V] [LocallyFinite G]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `finsetWalkLength` / `finsetWalkLength` 的定义
+/-- The `Finset` of length-`n` walks from `u` to `v`.
+This is used to give `{p : G.walk u v | p.length = n}` a `Fintype` instance, and it
+can also be useful as a recursive description of this set when `V` is finite.
 
-English:
-definition finsetWalkLength
-  signature: (n : Nat) (u v : V)
-  body: match n with
-  | 0 =>
-    if h : u = v then by
-      subst u
-      exact {Walk.nil}
-    else ∅
-  | n + 1 =>
-    Finset.univ.biUnion fun (w : G.neighborSet u) =>
-      (finsetWalkLength n w v).map ⟨fun p => Walk.cons w.property p, fun _ _ => by simp⟩
+See `SimpleGraph.coe_finsetWalkLength_eq` for the relationship between this `Finset` and
+the set of length-`n` walks. -/
+/-
+**SimpleGraph.finsetWalkLength** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：finsetWalkLength (n : Nat) (u v : V) : Finset (G.Walk u v)
+参数：n : Nat；u v : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 finsetWalkLength
-  签名: (n : 自然数) (u v : V)
-  定义体: match n with
-  | 0 =>
-    if h : u = v then by
-      subst u
-      exact {Walk.nil}
-    else ∅
-  | n + 1 =>
-    Finset.univ.biUnion fun (w : G.neighborSet u) =>
-      (finsetWalkLength n w v).map ⟨fun p => Walk.cons w.property p, fun _ _ => by simp⟩
+--- 原说明 ---
+The `Finset` of length-`n` walks from `u` to `v`.
+This is used to give `{p : G.walk u v | p.length = n}` a `Fintype` instance, and
+ it
+can also be useful as a recursive description of this set when `V` is finite.
 
-Depends on / 依赖: Finset, Finset.univ.biUnion, G.neighborSet, Walk.cons, Walk.nil, biUnion, finsetWalkLength, neighborSet, property, w.property
+See `SimpleGraph.coe_finsetWalkLength_eq` for the relationship between this `Fin
+set` and
+the set of length-`n` walks.
 -/
-def finsetWalkLength (n : Nat) (u v : V) : Finset (G.Walk u v) :=
+def finsetWalkLength (n : ℕ) (u v : V) : Finset (G.Walk u v) :=
   match n with
   | 0 =>
     if h : u = v then by
@@ -235,37 +188,42 @@ def finsetWalkLength (n : Nat) (u v : V) : Finset (G.Walk u v) :=
   | n + 1 =>
     Finset.univ.biUnion fun (w : G.neighborSet u) =>
       (finsetWalkLength n w v).map ⟨fun p => Walk.cons w.property p, fun _ _ => by simp⟩
-
-/--
-theorem `coe_finsetWalkLength_eq` / 定理 `coe_finsetWalkLength_eq`
-
-English:
-theorem coe_finsetWalkLength_eq
-  given: (n : Nat) (u v : V)
-  proof: by
-  induction n generalizing u v with
-  | zero => grind [finsetWalkLength, Walk.eq_nil_iff_nil]
-  | succ n ih =>
-    simp only [finsetWalkLength, Walk.setOfPred_length_eq_add_one, Finset.coe_biUnion,
-      Finset.mem_coe, Finset.mem_univ, Set.iUnion_true, Finset.coe_map, Set.iUnion_coe_set]
-    congr!
-    grind
-
-中文:
-定理 coe_finsetWalkLength_eq
-  条件: (n : 自然数) (u v : V)
-  证明: by
-  induction n generalizing u v with
-  | zero => grind [finsetWalkLength, Walk.eq_nil_iff_nil]
-  | succ n ih =>
-    simp only [finsetWalkLength, Walk.setOfPred_length_eq_add_one, Finset.coe_biUnion,
-      Finset.mem_coe, Finset.mem_univ, Set.iUnion_true, Finset.coe_map, Set.iUnion_coe_set]
-    congr!
-    grind
-
-Depends on / 依赖: Finset, Finset.coe_biUnion, Finset.coe_map, Finset.mem_coe, Finset.mem_univ, Set.iUnion_coe_set, Set.iUnion_true, Walk.eq_nil_iff_nil, Walk.setOfPred_length_eq_add_one, coe_biUnion, coe_map, eq_nil_iff_nil, finsetWalkLength, generalizing, iUnion_coe_set, iUnion_true, mem_coe, mem_univ, setOfPred_length_eq_add_one
+/-
+**SimpleGraph.coe_finsetWalkLength_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：coe_finsetWalkLength_eq (n : Nat) (u v : V) : (G.finsetWalkLength n u v : 
+Set (G.Walk u v)) = {p : G.Walk u v | p.length = n}
+参数：n : Nat；u v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Finset.coe_biUnion`：coe_biUnion : (s.biUnion t : Set β) = ⋃ x in (s : Se
+t α), t x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Set.iUnion_true`：iUnion_true {s : True -> Set α} : iUnion s = s trivial
+· 使用定理 `Set.iUnion_coe_set`：iUnion_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋃ i, f i = ⋃ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `SimpleGraph.Walk.setOfPred_length_eq_add_one`：∀ {V : Type u} (G : Simple
+Graph V) (u v : V) (n : ℕ),   {p | p.length = n + 1} = ⋃ w, ⋃ (h : G.Adj u w), S
+impleGraph.Walk.cons h '' {p' | p'…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
 -/
-theorem coe_finsetWalkLength_eq (n : Nat) (u v : V) :
+theorem coe_finsetWalkLength_eq (n : ℕ) (u v : V) :
     (G.finsetWalkLength n u v : Set (G.Walk u v)) = {p : G.Walk u v | p.length = n} := by
   induction n generalizing u v with
   | zero => grind [finsetWalkLength, Walk.eq_nil_iff_nil]
@@ -276,344 +234,265 @@ theorem coe_finsetWalkLength_eq (n : Nat) (u v : V) :
     grind
 
 variable {G} in
-/--
-theorem `mem_finsetWalkLength_iff` / 定理 `mem_finsetWalkLength_iff`
-
-English:
-theorem mem_finsetWalkLength_iff
-  given: {n : Nat} {u v : V} {p : G.Walk u v}
-  proof: Set.ext_iff.mp (G.coe_finsetWalkLength_eq n u v) p
-
-中文:
-定理 mem_finsetWalkLength_iff
-  条件: {n : 自然数} {u v : V} {p : G.途径 u v}
-  证明: Set.ext_iff.mp (G.coe_finsetWalkLength_eq n u v) p
-
-Depends on / 依赖: G.coe_finsetWalkLength_eq, Set.ext_iff.mp, coe_finsetWalkLength_eq, ext_iff
+/-
+**SimpleGraph.mem_finsetWalkLength_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：mem_finsetWalkLength_iff {n : Nat} {u v : V} {p : G.Walk u v} : p in G.fin
+setWalkLength n u v ↔ p.length = n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
+· 使用定理 `SimpleGraph.coe_finsetWalkLength_eq`：coe_finsetWalkLength_eq (n : Nat) (
+u v : V) : (G.finsetWalkLength n u v : Set (G.Walk u v)) = {p : G.Walk u v | p.l
+ength = n}
 -/
-theorem mem_finsetWalkLength_iff {n : Nat} {u v : V} {p : G.Walk u v} :
-    p in G.finsetWalkLength n u v ↔ p.length = n :=
+theorem mem_finsetWalkLength_iff {n : ℕ} {u v : V} {p : G.Walk u v} :
+    p ∈ G.finsetWalkLength n u v ↔ p.length = n :=
   Set.ext_iff.mp (G.coe_finsetWalkLength_eq n u v) p
 
-/--
-Definition of `finsetWalkLengthLT` / `finsetWalkLengthLT` 的定义
+/-- The `Finset` of walks from `u` to `v` with length less than `n`. See `finsetWalkLength` for
+context. In particular, we use this definition for `SimpleGraph.Path.instFintype`. -/
+/-
+**SimpleGraph.finsetWalkLengthLT** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：finsetWalkLengthLT (n : Nat) (u v : V) : Finset (G.Walk u v)
+参数：n : Nat；u v : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finsetWalkLengthLT
-  signature: (n : Nat) (u v : V)
-  body: (Finset.range n).disjiUnion
-    (fun l => G.finsetWalkLength l u v)
-    (fun l _ l' _ hne _ hsl hsl' p hp =>
-      have hl : p.length = l := mem_finsetWalkLength_iff.mp (hsl hp)
-      have hl' : p.length = l' := mem_finsetWalkLength_iff.mp (hsl' hp)
-False.elim hne hl.symm.trans hl')
-
-中文:
-定义 finsetWalkLengthLT
-  签名: (n : 自然数) (u v : V)
-  定义体: (Finset.range n).disjiUnion
-    (fun l => G.finsetWalkLength l u v)
-    (fun l _ l' _ hne _ hsl hsl' p hp =>
-      have hl : p.length = l := mem_finsetWalkLength_iff.mp (hsl hp)
-      have hl' : p.length = l' := mem_finsetWalkLength_iff.mp (hsl' hp)
-False.elim hne hl.symm.trans hl')
-
-Depends on / 依赖: False.elim, Finset, Finset.range, G.finsetWalkLength, disjiUnion, finsetWalkLength, hl.symm.trans, length, mem_finsetWalkLength_iff, mem_finsetWalkLength_iff.mp, p.length
+--- 原说明 ---
+The `Finset` of walks from `u` to `v` with length less than `n`. See `finsetWalk
+Length` for
+context. In particular, we use this definition for `SimpleGraph.Path.instFintype
+`.
 -/
-def finsetWalkLengthLT (n : Nat) (u v : V) : Finset (G.Walk u v) :=
+def finsetWalkLengthLT (n : ℕ) (u v : V) : Finset (G.Walk u v) :=
   (Finset.range n).disjiUnion
-    (fun l => G.finsetWalkLength l u v)
-    (fun l _ l' _ hne _ hsl hsl' p hp =>
+    (fun l ↦ G.finsetWalkLength l u v)
+    (fun l _ l' _ hne _ hsl hsl' p hp ↦
       have hl : p.length = l := mem_finsetWalkLength_iff.mp (hsl hp)
       have hl' : p.length = l' := mem_finsetWalkLength_iff.mp (hsl' hp)
-False.elim hne hl.symm.trans hl')
+      False.elim <| hne <| hl.symm.trans hl')
 
 set_option backward.isDefEq.respectTransparency.types false in
 open Finset in
-/--
-theorem `coe_finsetWalkLengthLT_eq` / 定理 `coe_finsetWalkLengthLT_eq`
-
-English:
-theorem coe_finsetWalkLengthLT_eq
-  given: (n : Nat) (u v : V)
-  proof: by
-  ext p
-  simp [finsetWalkLengthLT, mem_finsetWalkLength_iff]
-
-中文:
-定理 coe_finsetWalkLengthLT_eq
-  条件: (n : 自然数) (u v : V)
-  证明: by
-  ext p
-  simp [finsetWalkLengthLT, mem_finsetWalkLength_iff]
-
-Depends on / 依赖: finsetWalkLengthLT, mem_finsetWalkLength_iff
+/-
+**SimpleGraph.coe_finsetWalkLengthLT_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：coe_finsetWalkLengthLT_eq (n : Nat) (u v : V) : (G.finsetWalkLengthLT n u 
+v : Set (G.Walk u v)) = {p : G.Walk u v | p.length < n}
+参数：n : Nat；u v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.disjiUnion_eq_biUnion`：disjiUnion_eq_biUnion (s : Finset α) (f : 
+α -> Finset β) (hf) : s.disjiUnion f hf = s.biUnion f
+· 使用引理 `Finset.coe_biUnion`：coe_biUnion : (s.biUnion t : Set β) = ⋃ x in (s : Se
+t α), t x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.coe_range`：coe_range (n : Nat) : (range n : Set Nat) = Set.Iio n
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem coe_finsetWalkLengthLT_eq (n : Nat) (u v : V) :
+theorem coe_finsetWalkLengthLT_eq (n : ℕ) (u v : V) :
     (G.finsetWalkLengthLT n u v : Set (G.Walk u v)) = {p : G.Walk u v | p.length < n} := by
   ext p
   simp [finsetWalkLengthLT, mem_finsetWalkLength_iff]
 
 variable {G} in
-/--
-theorem `mem_finsetWalkLengthLT_iff` / 定理 `mem_finsetWalkLengthLT_iff`
-
-English:
-theorem mem_finsetWalkLengthLT_iff
-  given: {n : Nat} {u v : V} {p : G.Walk u v}
-  proof: Set.ext_iff.mp (G.coe_finsetWalkLengthLT_eq n u v) p
-
-中文:
-定理 mem_finsetWalkLengthLT_iff
-  条件: {n : 自然数} {u v : V} {p : G.途径 u v}
-  证明: Set.ext_iff.mp (G.coe_finsetWalkLengthLT_eq n u v) p
-
-Depends on / 依赖: G.coe_finsetWalkLengthLT_eq, Set.ext_iff.mp, coe_finsetWalkLengthLT_eq, ext_iff
+/-
+**SimpleGraph.mem_finsetWalkLengthLT_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：mem_finsetWalkLengthLT_iff {n : Nat} {u v : V} {p : G.Walk u v} : p in G.f
+insetWalkLengthLT n u v ↔ p.length < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
+· 使用定理 `SimpleGraph.coe_finsetWalkLengthLT_eq`：coe_finsetWalkLengthLT_eq (n : Na
+t) (u v : V) : (G.finsetWalkLengthLT n u v : Set (G.Walk u v)) = {p : G.Walk u v
+ | p.length < n}
 -/
-theorem mem_finsetWalkLengthLT_iff {n : Nat} {u v : V} {p : G.Walk u v} :
-    p in G.finsetWalkLengthLT n u v ↔ p.length < n :=
+theorem mem_finsetWalkLengthLT_iff {n : ℕ} {u v : V} {p : G.Walk u v} :
+    p ∈ G.finsetWalkLengthLT n u v ↔ p.length < n :=
   Set.ext_iff.mp (G.coe_finsetWalkLengthLT_eq n u v) p
-
-/--
-Instance `fintypeSetWalkLength` / 实例 `fintypeSetWalkLength`
-
-English:
-instance fintypeSetWalkLength
-  signature: (u v : V) (n : Nat)
-  body: Fintype.ofFinset (G.finsetWalkLength n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLength_eq]
-
-中文:
-实例 fintypeSetWalkLength
-  签名: (u v : V) (n : 自然数)
-  定义体: Fintype.ofFinset (G.finsetWalkLength n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLength_eq]
-
-Depends on / 依赖: Finset, Finset.mem_coe, Fintype, Fintype.ofFinset, G.finsetWalkLength, coe_finsetWalkLength_eq, finsetWalkLength, mem_coe, ofFinset
+/-
+**SimpleGraph.fintypeSetWalkLength** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+形式化陈述：fintypeSetWalkLength (u v : V) (n : Nat) : Fintype {p : G.Walk u v | p.len
+gth = n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSetWalkLength (u v : V) (n : Nat) : Fintype {p : G.Walk u v | p.length = n} :=
+instance fintypeSetWalkLength (u v : V) (n : ℕ) : Fintype {p : G.Walk u v | p.length = n} :=
   Fintype.ofFinset (G.finsetWalkLength n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLength_eq]
-
-/--
-Instance `fintypeSubtypeWalkLength` / 实例 `fintypeSubtypeWalkLength`
-
-English:
-instance fintypeSubtypeWalkLength
-  signature: (u v : V) (n : Nat)
-  body: inferInstanceAs Fintype {p : G.Walk u v | p.length = n}
-
-中文:
-实例 fintypeSubtypeWalkLength
-  签名: (u v : V) (n : 自然数)
-  定义体: inferInstanceAs Fintype {p : G.Walk u v | p.length = n}
-
-Depends on / 依赖: Fintype, G.Walk, length, p.length
+    rw [← Finset.mem_coe, coe_finsetWalkLength_eq]
+/-
+**SimpleGraph.fintypeSubtypeWalkLength** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+形式化陈述：fintypeSubtypeWalkLength (u v : V) (n : Nat) : Fintype {p : G.Walk u v // 
+p.length = n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSubtypeWalkLength (u v : V) (n : Nat) : Fintype {p : G.Walk u v // p.length = n} :=
-inferInstanceAs Fintype {p : G.Walk u v | p.length = n}
-
-/--
-theorem `set_walk_length_toFinset_eq` / 定理 `set_walk_length_toFinset_eq`
-
-English:
-theorem set_walk_length_toFinset_eq
-  given: (n : Nat) (u v : V)
-  proof: by
-  simp [← coe_finsetWalkLength_eq]
-
-中文:
-定理 set_walk_length_toFinset_eq
-  条件: (n : 自然数) (u v : V)
-  证明: by
-  simp [← coe_finsetWalkLength_eq]
-
-Depends on / 依赖: coe_finsetWalkLength_eq
+instance fintypeSubtypeWalkLength (u v : V) (n : ℕ) : Fintype {p : G.Walk u v // p.length = n} :=
+  inferInstanceAs <| Fintype {p : G.Walk u v | p.length = n}
+/-
+**SimpleGraph.set_walk_length_toFinset_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+`。
+形式化陈述：set_walk_length_toFinset_eq (n : Nat) (u v : V) : {p : G.Walk u v | p.leng
+th = n}.toFinset = G.finsetWalkLength n u v
+参数：n : Nat；u v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `Finset.toFinset_coe`：Finset.toFinset_coe (s : Finset α) [Fintype (s : Se
+t α)] : (s : Set α).toFinset = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem set_walk_length_toFinset_eq (n : Nat) (u v : V) :
+theorem set_walk_length_toFinset_eq (n : ℕ) (u v : V) :
     {p : G.Walk u v | p.length = n}.toFinset = G.finsetWalkLength n u v := by
   simp [← coe_finsetWalkLength_eq]
 
-/--
-theorem `card_set_walk_length_eq` / 定理 `card_set_walk_length_eq`
+/-- See `SimpleGraph.adjMatrix_pow_apply_eq_card_walk` for the cardinality in terms of the `n`th
+power of the adjacency matrix. -/
+/-
+**SimpleGraph.card_set_walk_length_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：card_set_walk_length_eq (u v : V) (n : Nat) : Fintype.card {p : G.Walk u v
+ | p.length = n} = #(G.finsetWalkLength n u v)
+参数：u v : V；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_ofFinset`：card_ofFinset {p : Set α} (s : Finset α) (H : for
+all x, x in s ↔ x in p) : @Fintype.card p (ofFinset s H) = #s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_coe`：mem_coe {a : α} {s : Finset α} : a in (s : Set α) ↔ a in
+ (s : Finset α)
+· 使用定理 `SimpleGraph.coe_finsetWalkLength_eq`：coe_finsetWalkLength_eq (n : Nat) (
+u v : V) : (G.finsetWalkLength n u v : Set (G.Walk u v)) = {p : G.Walk u v | p.l
+ength = n}
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem card_set_walk_length_eq
-  given: (u v : V) (n : Nat)
-  proof: Fintype.card_ofFinset (G.finsetWalkLength n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLength_eq]
-
-中文:
-定理 card_set_walk_length_eq
-  条件: (u v : V) (n : 自然数)
-  证明: Fintype.card_ofFinset (G.finsetWalkLength n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLength_eq]
-
-Depends on / 依赖: Finset, Finset.mem_coe, Fintype, Fintype.card_ofFinset, G.finsetWalkLength, card_ofFinset, coe_finsetWalkLength_eq, finsetWalkLength, mem_coe
+--- 原说明 ---
+See `SimpleGraph.adjMatrix_pow_apply_eq_card_walk` for the cardinality in terms 
+of the `n`th
+power of the adjacency matrix.
 -/
-theorem card_set_walk_length_eq (u v : V) (n : Nat) :
+theorem card_set_walk_length_eq (u v : V) (n : ℕ) :
     Fintype.card {p : G.Walk u v | p.length = n} = #(G.finsetWalkLength n u v) :=
   Fintype.card_ofFinset (G.finsetWalkLength n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLength_eq]
-
-/--
-Instance `fintypeSetWalkLengthLT` / 实例 `fintypeSetWalkLengthLT`
-
-English:
-instance fintypeSetWalkLengthLT
-  signature: (u v : V) (n : Nat)
-  body: Fintype.ofFinset (G.finsetWalkLengthLT n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLengthLT_eq]
-
-中文:
-实例 fintypeSetWalkLengthLT
-  签名: (u v : V) (n : 自然数)
-  定义体: Fintype.ofFinset (G.finsetWalkLengthLT n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLengthLT_eq]
-
-Depends on / 依赖: Finset, Finset.mem_coe, Fintype, Fintype.ofFinset, G.finsetWalkLengthLT, coe_finsetWalkLengthLT_eq, finsetWalkLengthLT, mem_coe, ofFinset
+    rw [← Finset.mem_coe, coe_finsetWalkLength_eq]
+/-
+**SimpleGraph.fintypeSetWalkLengthLT** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+形式化陈述：fintypeSetWalkLengthLT (u v : V) (n : Nat) : Fintype {p : G.Walk u v | p.l
+ength < n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSetWalkLengthLT (u v : V) (n : Nat) : Fintype {p : G.Walk u v | p.length < n} :=
-  Fintype.ofFinset (G.finsetWalkLengthLT n u v) fun p => by
-    rw [← Finset.mem_coe]; rw [coe_finsetWalkLengthLT_eq]
-
-/--
-Instance `fintypeSubtypeWalkLengthLT` / 实例 `fintypeSubtypeWalkLengthLT`
-
-English:
-instance fintypeSubtypeWalkLengthLT
-  signature: (u v : V) (n : Nat)
-  body: inferInstanceAs Fintype {p : G.Walk u v | p.length < n}
-
-中文:
-实例 fintypeSubtypeWalkLengthLT
-  签名: (u v : V) (n : 自然数)
-  定义体: inferInstanceAs Fintype {p : G.Walk u v | p.length < n}
-
-Depends on / 依赖: Fintype, G.Walk, length, p.length
+instance fintypeSetWalkLengthLT (u v : V) (n : ℕ) : Fintype {p : G.Walk u v | p.length < n} :=
+  Fintype.ofFinset (G.finsetWalkLengthLT n u v) fun p ↦ by
+    rw [← Finset.mem_coe, coe_finsetWalkLengthLT_eq]
+/-
+**SimpleGraph.fintypeSubtypeWalkLengthLT** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`
+。
+形式化陈述：fintypeSubtypeWalkLengthLT (u v : V) (n : Nat) : Fintype {p : G.Walk u v /
+/ p.length < n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSubtypeWalkLengthLT (u v : V) (n : Nat) : Fintype {p : G.Walk u v // p.length < n} :=
-inferInstanceAs Fintype {p : G.Walk u v | p.length < n}
-
-/--
-Instance `fintypeSetPathLength` / 实例 `fintypeSetPathLength`
-
-English:
-instance fintypeSetPathLength
-  signature: (u v : V) (n : Nat)
-  body: Fintype.ofFinset {w in G.finsetWalkLength n u v | w.IsPath} by
-    simp [mem_finsetWalkLength_iff, and_comm]
-
-中文:
-实例 fintypeSetPathLength
-  签名: (u v : V) (n : 自然数)
-  定义体: Fintype.ofFinset {w in G.finsetWalkLength n u v | w.IsPath} by
-    simp [mem_finsetWalkLength_iff, and_comm]
-
-Depends on / 依赖: Fintype, Fintype.ofFinset, G.finsetWalkLength, IsPath, and_comm, finsetWalkLength, mem_finsetWalkLength_iff, ofFinset, w.IsPath
+instance fintypeSubtypeWalkLengthLT (u v : V) (n : ℕ) : Fintype {p : G.Walk u v // p.length < n} :=
+  inferInstanceAs <| Fintype {p : G.Walk u v | p.length < n}
+/-
+**SimpleGraph.fintypeSetPathLength** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+形式化陈述：fintypeSetPathLength (u v : V) (n : Nat) : Fintype {p : G.Walk u v | p.IsP
+ath ∧ p.length = n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSetPathLength (u v : V) (n : Nat) :
+instance fintypeSetPathLength (u v : V) (n : ℕ) :
     Fintype {p : G.Walk u v | p.IsPath ∧ p.length = n} :=
-Fintype.ofFinset {w in G.finsetWalkLength n u v | w.IsPath} by
+  Fintype.ofFinset {w ∈ G.finsetWalkLength n u v | w.IsPath} <| by
     simp [mem_finsetWalkLength_iff, and_comm]
-
-/--
-Instance `fintypeSubtypePathLength` / 实例 `fintypeSubtypePathLength`
-
-English:
-instance fintypeSubtypePathLength
-  signature: (u v : V) (n : Nat)
-  body: inferInstanceAs Fintype {p : G.Walk u v | p.IsPath ∧ p.length = n}
-
-中文:
-实例 fintypeSubtypePathLength
-  签名: (u v : V) (n : 自然数)
-  定义体: inferInstanceAs Fintype {p : G.Walk u v | p.IsPath ∧ p.length = n}
-
-Depends on / 依赖: Fintype, G.Walk, IsPath, length, p.IsPath, p.length
+/-
+**SimpleGraph.fintypeSubtypePathLength** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+形式化陈述：fintypeSubtypePathLength (u v : V) (n : Nat) : Fintype {p : G.Walk u v // 
+p.IsPath ∧ p.length = n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSubtypePathLength (u v : V) (n : Nat) :
+instance fintypeSubtypePathLength (u v : V) (n : ℕ) :
     Fintype {p : G.Walk u v // p.IsPath ∧ p.length = n} :=
-inferInstanceAs Fintype {p : G.Walk u v | p.IsPath ∧ p.length = n}
-
-/--
-Instance `fintypeSetPathLengthLT` / 实例 `fintypeSetPathLengthLT`
-
-English:
-instance fintypeSetPathLengthLT
-  signature: (u v : V) (n : Nat)
-  body: Fintype.ofFinset {w in G.finsetWalkLengthLT n u v | w.IsPath} by
-    simp [mem_finsetWalkLengthLT_iff, and_comm]
-
-中文:
-实例 fintypeSetPathLengthLT
-  签名: (u v : V) (n : 自然数)
-  定义体: Fintype.ofFinset {w in G.finsetWalkLengthLT n u v | w.IsPath} by
-    simp [mem_finsetWalkLengthLT_iff, and_comm]
-
-Depends on / 依赖: Fintype, Fintype.ofFinset, G.finsetWalkLengthLT, IsPath, and_comm, finsetWalkLengthLT, mem_finsetWalkLengthLT_iff, ofFinset, w.IsPath
+  inferInstanceAs <| Fintype {p : G.Walk u v | p.IsPath ∧ p.length = n}
+/-
+**SimpleGraph.fintypeSetPathLengthLT** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+形式化陈述：fintypeSetPathLengthLT (u v : V) (n : Nat) : Fintype {p : G.Walk u v | p.I
+sPath ∧ p.length < n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSetPathLengthLT (u v : V) (n : Nat) :
+instance fintypeSetPathLengthLT (u v : V) (n : ℕ) :
     Fintype {p : G.Walk u v | p.IsPath ∧ p.length < n} :=
-Fintype.ofFinset {w in G.finsetWalkLengthLT n u v | w.IsPath} by
+  Fintype.ofFinset {w ∈ G.finsetWalkLengthLT n u v | w.IsPath} <| by
     simp [mem_finsetWalkLengthLT_iff, and_comm]
-
-/--
-Instance `fintypeSubtypePathLengthLT` / 实例 `fintypeSubtypePathLengthLT`
-
-English:
-instance fintypeSubtypePathLengthLT
-  signature: (u v : V) (n : Nat)
-  body: inferInstanceAs Fintype {p : G.Walk u v | p.IsPath ∧ p.length < n}
-
-中文:
-实例 fintypeSubtypePathLengthLT
-  签名: (u v : V) (n : 自然数)
-  定义体: inferInstanceAs Fintype {p : G.Walk u v | p.IsPath ∧ p.length < n}
-
-Depends on / 依赖: Fintype, G.Walk, IsPath, length, p.IsPath, p.length
+/-
+**SimpleGraph.fintypeSubtypePathLengthLT** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`
+。
+形式化陈述：fintypeSubtypePathLengthLT (u v : V) (n : Nat) : Fintype {p : G.Walk u v /
+/ p.IsPath ∧ p.length < n}
+参数：u v : V；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSubtypePathLengthLT (u v : V) (n : Nat) :
+instance fintypeSubtypePathLengthLT (u v : V) (n : ℕ) :
     Fintype {p : G.Walk u v // p.IsPath ∧ p.length < n} :=
-inferInstanceAs Fintype {p : G.Walk u v | p.IsPath ∧ p.length < n}
+  inferInstanceAs <| Fintype {p : G.Walk u v | p.IsPath ∧ p.length < n}
 
 end LocallyFinite
 
 section Fintype
 variable [DecidableEq V] [Fintype V] [DecidableRel G.Adj]
 
-/--
-Instance `Path.instFintype` / 实例 `Path.instFintype`
-
-English:
-instance Path.instFintype
-  signature: {u v : V}
-  body: (univ (α := { p : G.Walk u v | p.IsPath ∧ p.length < Fintype.card V })).map
-    ⟨fun p => { val := p.val, property := p.prop.left },
-fun _ _ h => SetCoe.ext Subtype.mk.injEq .. ▸ h⟩
-  complete p := mem_map.mpr ⟨
-    ⟨p.val, ⟨p.prop, p.prop.length_lt⟩⟩,
-    ⟨mem_univ _, rfl⟩⟩
-
-中文:
-实例 道路.instFintype
-  签名: {u v : V}
-  定义体: (univ (α := { p : G.Walk u v | p.IsPath ∧ p.length < Fintype.card V })).map
-    ⟨fun p => { val := p.val, property := p.prop.left },
-fun _ _ h => SetCoe.ext Subtype.mk.injEq .. ▸ h⟩
-  complete p := mem_map.mpr ⟨
-    ⟨p.val, ⟨p.prop, p.prop.length_lt⟩⟩,
-    ⟨mem_univ _, rfl⟩⟩
-
-Depends on / 依赖: Fintype, Fintype.card, G.Walk, IsPath, length, p.IsPath, p.length
+/-
+**SimpleGraph.Path.instFintype** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Path`。
+形式化陈述：{V : Type u} →   (G : SimpleGraph V) → [DecidableEq V] → [Fintype V] → [De
+cidableRel G.Adj] → {u v : V} → Fintype (G.Path u v)
+参数：G : SimpleGraph V；G.Path u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Path.instFintype {u v : V} : Fintype (G.Path u v) where
   elems := (univ (α := { p : G.Walk u v | p.IsPath ∧ p.length < Fintype.card V })).map
-    ⟨fun p => { val := p.val, property := p.prop.left },
-fun _ _ h => SetCoe.ext Subtype.mk.injEq .. ▸ h⟩
+    ⟨fun p ↦ { val := p.val, property := p.prop.left },
+     fun _ _ h ↦ SetCoe.ext <| Subtype.mk.injEq .. ▸ h⟩
   complete p := mem_map.mpr ⟨
     ⟨p.val, ⟨p.prop, p.prop.length_lt⟩⟩,
     ⟨mem_univ _, rfl⟩⟩
 
 end Fintype
 end SimpleGraph
+

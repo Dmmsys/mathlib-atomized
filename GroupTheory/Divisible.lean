@@ -81,29 +81,30 @@ section AddMonoid
 variable (A α : Type*) [AddMonoid A] [SMul α A] [Zero α]
 
 /--
-Definition of `DivisibleBy` / `DivisibleBy` 的定义
+An `AddMonoid A` is `α`-divisible iff `n • x = a` has a solution for all `n ≠ 0 ∈ α` and `a ∈ A`.
+Here we adopt a constructive approach where we ask an explicit `div : A → α → A` function such that
+* `div a 0 = 0` for all `a ∈ A`
+* `n • div a n = a` for all `n ≠ 0 ∈ α` and `a ∈ A`.
+-/
+/-
+**DivisibleBy** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u_1) → (α : Type u_2) → [AddMonoid A] → [SMul α A] → [Zero α] → 
+Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class DivisibleBy
-  parameters: where
-  axioms and operations (3):
-    - div : A -> α -> A
-    - div_zero : forall a, div a 0 = 0
-    - div_cancel : forall {n : α} (a : A), n != 0 -> n • div a n = a
-
-中文:
-类 DivisibleBy
-  参数: where
-  公理与运算 (3 个):
-    - div : A -> α -> A
-    - div_zero : 对任意 a, div a 0 = 0
-    - div_cancel : 对任意 {n : α} (a : A), n != 0 -> n • div a n = a
+--- 原说明 ---
+An `AddMonoid A` is `α`-divisible iff `n • x = a` has a solution for all `n ≠ 0 
+∈ α` and `a ∈ A`.
+Here we adopt a constructive approach where we ask an explicit `div : A → α → A`
+ function such that
+* `div a 0 = 0` for all `a ∈ A`
+* `n • div a n = a` for all `n ≠ 0 ∈ α` and `a ∈ A`.
 -/
 class DivisibleBy where
   /-- The division function -/
-  div : A -> α -> A
-  div_zero : forall a, div a 0 = 0
-  div_cancel : forall {n : α} (a : A), n != 0 -> n • div a n = a
+  div : A → α → A
+  div_zero : ∀ a, div a 0 = 0
+  div_cancel : ∀ {n : α} (a : A), n ≠ 0 → n • div a n = a
 
 end AddMonoid
 
@@ -117,60 +118,39 @@ Here we adopt a constructive approach where we ask an explicit `root : A → α 
 * `(root a n)ⁿ = a` for all `n ≠ 0 ∈ α` and `a ∈ A`.
 -/
 @[to_additive]
-/--
-Definition of `RootableBy` / `RootableBy` 的定义
+/-
+**RootableBy** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u_1) → (α : Type u_2) → [Monoid A] → [Pow A α] → [Zero α] → Type
+ (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RootableBy
-  parameters: where
-  axioms and operations (3):
-    - root : A -> α -> A
-    - root_zero : forall a, root a 0 = 1
-    - root_cancel : forall {n : α} (a : A), n != 0 -> root a n ^ n = a
-
-中文:
-类 RootableBy
-  参数: where
-  公理与运算 (3 个):
-    - root : A -> α -> A
-    - root_zero : 对任意 a, root a 0 = 1
-    - root_cancel : 对任意 {n : α} (a : A), n != 0 -> root a n ^ n = a
+--- 原说明 ---
+A `Monoid A` is `α`-rootable iff `xⁿ = a` has a solution for all `n ≠ 0 ∈ α` and
+ `a ∈ A`.
+Here we adopt a constructive approach where we ask an explicit `root : A → α → A
+` function such that
+* `root a 0 = 1` for all `a ∈ A`
+* `(root a n)ⁿ = a` for all `n ≠ 0 ∈ α` and `a ∈ A`.
 -/
 class RootableBy where
   /-- The root function -/
-  root : A -> α -> A
-  root_zero : forall a, root a 0 = 1
-  root_cancel : forall {n : α} (a : A), n != 0 -> root a n ^ n = a
+  root : A → α → A
+  root_zero : ∀ a, root a 0 = 1
+  root_cancel : ∀ {n : α} (a : A), n ≠ 0 → root a n ^ n = a
 
 @[to_additive DivisibleBy.surjective_smul]
-/--
-theorem `RootableBy.surjective_pow` / 定理 `RootableBy.surjective_pow`
-
-English:
-theorem RootableBy.surjective_pow
-  given: [RootableBy A α] {n : α} (hn : n != 0)
-  proof: fun x =>
-  ⟨RootableBy.root x n, RootableBy.root_cancel _ hn⟩
-
-@[deprecated (since := "2026-04-19")] alias pow_left_surj_of_rootableBy :=
-  RootableBy.surjective_pow
-
-@[deprecated (since := "2026-04-19")] alias smul_right_surj_of_divisibleBy :=
-  DivisibleBy.surjective_smul
-
-中文:
-定理 RootableBy.surjective_pow
-  条件: [RootableBy A α] {n : α} (hn : n != 0)
-  证明: fun x =>
-  ⟨RootableBy.root x n, RootableBy.root_cancel _ hn⟩
-
-@[deprecated (since := "2026-04-19")] alias pow_left_surj_of_rootableBy :=
-  RootableBy.surjective_pow
-
-@[deprecated (since := "2026-04-19")] alias smul_right_surj_of_divisibleBy :=
-  DivisibleBy.surjective_smul
+/-
+**RootableBy.surjective_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RootableBy.surjective_pow [RootableBy A α] {n : α} (hn : n != 0) : Functio
+n.Surjective fun a : A => a ^ n
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RootableBy.root_cancel`：∀ {A : Type u_1} {α : Type u_2} {inst : Monoid A
+} {inst_1 : Pow A α} {inst_2 : Zero α} [self : RootableBy A α] {n : α}   (a : A)
+, n ≠ 0 → Ro…
 -/
-theorem RootableBy.surjective_pow [RootableBy A α] {n : α} (hn : n != 0) :
+theorem RootableBy.surjective_pow [RootableBy A α] {n : α} (hn : n ≠ 0) :
     Function.Surjective fun a : A => a ^ n := fun x =>
   ⟨RootableBy.root x n, RootableBy.root_cancel _ hn⟩
 
@@ -187,31 +167,16 @@ implies the textbook approach.
 @[to_additive (attr := instance_reducible) divisibleByOfSMulRightSurj
   /-- An `AddMonoid A` is `α`-divisible iff `n • _` is a surjective function, i.e. the
   constructive version implies the textbook approach. -/]
-/--
-Definition of `rootableByOfPowLeftSurj` / `rootableByOfPowLeftSurj` 的定义
-
-English:
-definition rootableByOfPowLeftSurj
-  body: @dite _ (n = 0) (Classical.dec _) (fun _ => (1 : A)) fun hn => (H hn a).choose
-  root_zero _ := by exact dif_pos rfl
-  root_cancel a hn := by
-    dsimp only
-    rw [dif_neg hn]
-    exact (H hn a).choose_spec
-
-中文:
-定义 rootableByOfPowLeftSurj
-  定义体: @dite _ (n = 0) (Classical.dec _) (fun _ => (1 : A)) fun hn => (H hn a).choose
-  root_zero _ := by exact dif_pos rfl
-  root_cancel a hn := by
-    dsimp only
-    rw [dif_neg hn]
-    exact (H hn a).choose_spec
-
-Depends on / 依赖: Classical, Classical.dec
+/-
+**rootableByOfPowLeftSurj** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：rootableByOfPowLeftSurj (H : forall {n : α}, n != 0 -> Function.Surjective
+ (fun a => a ^ n : A -> A)) : RootableBy A α where root a n
+参数：H : forall {n : α}, n != 0 -> Function.Surjective (fun a => a ^ n : A -> A)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def rootableByOfPowLeftSurj
-    (H : forall {n : α}, n != 0 -> Function.Surjective (fun a => a ^ n : A -> A)) : RootableBy A α where
+    (H : ∀ {n : α}, n ≠ 0 → Function.Surjective (fun a => a ^ n : A → A)) : RootableBy A α where
   root a n := @dite _ (n = 0) (Classical.dec _) (fun _ => (1 : A)) fun hn => (H hn a).choose
   root_zero _ := by exact dif_pos rfl
   root_cancel a hn := by
@@ -221,30 +186,17 @@ noncomputable def rootableByOfPowLeftSurj
 
 section Pi
 
-variable {ι β : Type*} (B : ι -> Type*) [forall i : ι, Pow (B i) β]
-variable [Zero β] [forall i : ι, Monoid (B i)] [forall i, RootableBy (B i) β]
+variable {ι β : Type*} (B : ι → Type*) [∀ i : ι, Pow (B i) β]
+variable [Zero β] [∀ i : ι, Monoid (B i)] [∀ i, RootableBy (B i) β]
 
 @[to_additive]
-/--
-Instance `Pi.rootableBy` / 实例 `Pi.rootableBy`
-
-English:
-instance Pi.rootableBy
-  signature: : RootableBy (forall i, B i) β where
-  body: RootableBy.root (x i) n
-  root_zero _x := funext fun _i => RootableBy.root_zero _
-  root_cancel _x hn := funext fun _i => RootableBy.root_cancel _ hn
-
-中文:
-实例 依赖函数类型.rootableBy
-  签名: : RootableBy (对任意 i, B i) β where
-  定义体: RootableBy.root (x i) n
-  root_zero _x := funext fun _i => RootableBy.root_zero _
-  root_cancel _x hn := funext fun _i => RootableBy.root_cancel _ hn
-
-Depends on / 依赖: RootableBy, RootableBy.root
+/-
+**Pi.rootableBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.rootableBy : RootableBy (forall i, B i) β where root x n i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Pi.rootableBy : RootableBy (forall i, B i) β where
+instance Pi.rootableBy : RootableBy (∀ i, B i) β where
   root x n i := RootableBy.root (x i) n
   root_zero _x := funext fun _i => RootableBy.root_zero _
   root_cancel _x hn := funext fun _i => RootableBy.root_cancel _ hn
@@ -257,24 +209,11 @@ variable {β B B' : Type*} [Pow B β] [Pow B' β]
 variable [Zero β] [Monoid B] [Monoid B'] [RootableBy B β] [RootableBy B' β]
 
 @[to_additive]
-/--
-Instance `Prod.rootableBy` / 实例 `Prod.rootableBy`
-
-English:
-instance Prod.rootableBy
-  signature: : RootableBy (B × B') β where
-  body: (RootableBy.root p.1 n, RootableBy.root p.2 n)
-  root_zero _p := Prod.ext (RootableBy.root_zero _) (RootableBy.root_zero _)
-  root_cancel _p hn := Prod.ext (RootableBy.root_cancel _ hn) (RootableBy.root_cancel _ hn)
-
-中文:
-实例 积类型.rootableBy
-  签名: : RootableBy (B × B') β where
-  定义体: (RootableBy.root p.1 n, RootableBy.root p.2 n)
-  root_zero _p := Prod.ext (RootableBy.root_zero _) (RootableBy.root_zero _)
-  root_cancel _p hn := Prod.ext (RootableBy.root_cancel _ hn) (RootableBy.root_cancel _ hn)
-
-Depends on / 依赖: RootableBy, RootableBy.root
+/-
+**Prod.rootableBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.rootableBy : RootableBy (B × B') β where root p n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prod.rootableBy : RootableBy (B × B') β where
   root p n := (RootableBy.root p.1 n, RootableBy.root p.2 n)
@@ -286,29 +225,17 @@ end Prod
 section ULift
 
 @[to_additive]
-/--
-Instance `ULift.instRootableBy` / 实例 `ULift.instRootableBy`
-
-English:
-instance ULift.instRootableBy
-  signature: [RootableBy A α]
-  body: ULift.up RootableBy.root x.down a
-root_zero x := ULift.ext _ _ RootableBy.root_zero x.down
-root_cancel _ h := ULift.ext _ _ RootableBy.root_cancel _ h
-
-中文:
-实例 类型层提升.instRootableBy
-  签名: [RootableBy A α]
-  定义体: ULift.up RootableBy.root x.down a
-root_zero x := ULift.ext _ _ RootableBy.root_zero x.down
-root_cancel _ h := ULift.ext _ _ RootableBy.root_cancel _ h
-
-Depends on / 依赖: RootableBy, RootableBy.root, ULift.up, x.down
+/-
+**ULift.instRootableBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ULift.instRootableBy [RootableBy A α] : RootableBy (ULift A) α where root 
+x a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ULift.instRootableBy [RootableBy A α] : RootableBy (ULift A) α where
-root x a := ULift.up RootableBy.root x.down a
-root_zero x := ULift.ext _ _ RootableBy.root_zero x.down
-root_cancel _ h := ULift.ext _ _ RootableBy.root_cancel _ h
+  root x a := ULift.up <| RootableBy.root x.down a
+  root_zero x := ULift.ext _ _ <| RootableBy.root_zero x.down
+  root_cancel _ h := ULift.ext _ _ <| RootableBy.root_cancel _ h
 
 end ULift
 
@@ -318,55 +245,44 @@ namespace AddCommGroup
 
 variable (A : Type*) [AddCommGroup A]
 
-/--
-theorem `smul_top_eq_top_of_divisibleBy_int` / 定理 `smul_top_eq_top_of_divisibleBy_int`
-
-English:
-theorem smul_top_eq_top_of_divisibleBy_int
-  given: [DivisibleBy A Int] {n : Int} (hn : n != 0)
-  proof: AddSubgroup.map_top_of_surjective _ fun a => ⟨DivisibleBy.div a n, DivisibleBy.div_cancel _ hn⟩
-
-中文:
-定理 smul_top_eq_top_of_divisibleBy_int
-  条件: [DivisibleBy A 整数] {n : 整数} (hn : n != 0)
-  证明: AddSubgroup.map_top_of_surjective _ fun a => ⟨DivisibleBy.div a n, DivisibleBy.div_cancel _ hn⟩
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.map_top_of_surjective, DivisibleBy, DivisibleBy.div, DivisibleBy.div_cancel, div_cancel, map_top_of_surjective
+/-
+**AddCommGroup.smul_top_eq_top_of_divisibleBy_int** 是 Mathlib 中的一个定理，位于命名空间 `Add
+CommGroup`。
+形式化陈述：smul_top_eq_top_of_divisibleBy_int [DivisibleBy A Int] {n : Int} (hn : n !
+= 0) : n • (⊤ : AddSubgroup A) = ⊤
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.map_top_of_surjective`：∀ {G : Type u_1} [inst : AddGroup G] 
+{N : Type u_5} [inst_1 : AddGroup N] (f : G →+ N),   Function.Surjective ⇑f → Ad
+dSubgroup.map f ⊤ = ⊤
+· 使用定理 `DivisibleBy.div_cancel`：∀ {A : Type u_1} {α : Type u_2} {inst : AddMonoi
+d A} {inst_1 : SMul α A} {inst_2 : Zero α} [self : DivisibleBy A α]   {n : α} (a
+ : A), n ≠ 0…
 -/
-theorem smul_top_eq_top_of_divisibleBy_int [DivisibleBy A Int] {n : Int} (hn : n != 0) :
+theorem smul_top_eq_top_of_divisibleBy_int [DivisibleBy A ℤ] {n : ℤ} (hn : n ≠ 0) :
     n • (⊤ : AddSubgroup A) = ⊤ :=
   AddSubgroup.map_top_of_surjective _ fun a => ⟨DivisibleBy.div a n, DivisibleBy.div_cancel _ hn⟩
 
 /-- If for all `n ≠ 0 ∈ ℤ`, `n • A = A`, then `A` is divisible.
 -/
 @[instance_reducible]
-/--
-Definition of `divisibleByIntOfSMulTopEqTop` / `divisibleByIntOfSMulTopEqTop` 的定义
+/-
+**AddCommGroup.divisibleByIntOfSMulTopEqTop** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGr
+oup`。
+形式化陈述：divisibleByIntOfSMulTopEqTop (H : forall {n : Int} (_hn : n != 0), n • (⊤ 
+: AddSubgroup A) = ⊤) : DivisibleBy A Int where div a n
+参数：H : forall {n : Int} (_hn : n != 0), n • (⊤ : AddSubgroup A) = ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divisibleByIntOfSMulTopEqTop
-  body: if hn : n = 0 then 0 else (show a in n • (⊤ : AddSubgroup A) by rw [H hn]; trivial).choose
-  div_zero _ := dif_pos rfl
-  div_cancel a hn := by
-    simp_rw [dif_neg hn]
-    generalize_proofs h1
-    exact h1.choose_spec.2
-
-中文:
-定义 divisibleBy整数OfSMulTopEqTop
-  定义体: if hn : n = 0 then 0 else (show a in n • (⊤ : AddSubgroup A) by rw [H hn]; trivial).choose
-  div_zero _ := dif_pos rfl
-  div_cancel a hn := by
-    simp_rw [dif_neg hn]
-    generalize_proofs h1
-    exact h1.choose_spec.2
-
-Depends on / 依赖: AddSubgroup, choose_spec, dif_neg, dif_pos, div_cancel, div_zero, generalize_proofs, h1.choose_spec, simp_rw
+--- 原说明 ---
+If for all `n ≠ 0 ∈ ℤ`, `n • A = A`, then `A` is divisible.
 -/
 noncomputable def divisibleByIntOfSMulTopEqTop
-    (H : forall {n : Int} (_hn : n != 0), n • (⊤ : AddSubgroup A) = ⊤) : DivisibleBy A Int where
+    (H : ∀ {n : ℤ} (_hn : n ≠ 0), n • (⊤ : AddSubgroup A) = ⊤) : DivisibleBy A ℤ where
   div a n :=
-    if hn : n = 0 then 0 else (show a in n • (⊤ : AddSubgroup A) by rw [H hn]; trivial).choose
+    if hn : n = 0 then 0 else (show a ∈ n • (⊤ : AddSubgroup A) by rw [H hn]; trivial).choose
   div_zero _ := dif_pos rfl
   div_cancel a hn := by
     simp_rw [dif_neg hn]
@@ -375,12 +291,16 @@ noncomputable def divisibleByIntOfSMulTopEqTop
 
 end AddCommGroup
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) divisibleByIntOfCharZero {𝕜} [DivisionRing 𝕜] [CharZero 𝕜] :
-    DivisibleBy 𝕜 Int where
+    DivisibleBy 𝕜 ℤ where
   div q n := q / n
   div_zero q := by simp
   div_cancel {n} q hn := by
-    rw [zsmul_eq_mul]; rw [(Int.cast_commute n _).eq]; rw [div_mul_cancel₀ q (Int.cast_ne_zero.mpr hn)]
+    rw [zsmul_eq_mul, (Int.cast_commute n _).eq, div_mul_cancel₀ q (Int.cast_ne_zero.mpr hn)]
 
 namespace Group
 
@@ -391,41 +311,17 @@ open Int in
 -/
 @[to_additive (attr := instance_reducible)
   /-- An additive group is `ℤ`-divisible if it is `ℕ`-divisible. -/]
-/--
-Definition of `rootableByIntOfRootableByNat` / `rootableByIntOfRootableByNat` 的定义
-
-English:
-definition rootableByIntOfRootableByNat
-  signature: [RootableBy A Nat]
-  body: match z with
-    | (n : Nat) => RootableBy.root a n
-    | -[n+1] => (RootableBy.root a (n + 1))⁻¹
-  root_zero a := RootableBy.root_zero a
-  root_cancel {n} a hn := by
-    cases n
-    · rw [Int.ofNat_eq_natCast, Nat.cast_ne_zero] at hn
-      simp [RootableBy.root_cancel _ hn]
-    · simp [RootableBy.root_cancel _ (Nat.add_one_ne_zero _)]
-
-中文:
-定义 rootableBy整数OfRootableBy自然数
-  签名: [RootableBy A 自然数]
-  定义体: match z with
-    | (n : Nat) => RootableBy.root a n
-    | -[n+1] => (RootableBy.root a (n + 1))⁻¹
-  root_zero a := RootableBy.root_zero a
-  root_cancel {n} a hn := by
-    cases n
-    · rw [Int.ofNat_eq_natCast, Nat.cast_ne_zero] at hn
-      simp [RootableBy.root_cancel _ hn]
-    · simp [RootableBy.root_cancel _ (Nat.add_one_ne_zero _)]
-
-Depends on / 依赖: Int.ofNat_eq_natCast, Nat.add_one_ne_zero, Nat.cast_ne_zero, RootableBy, RootableBy.root, RootableBy.root_cancel, RootableBy.root_zero, add_one_ne_zero, cast_ne_zero, ofNat_eq_natCast, root_cancel, root_zero
+/-
+**Group.rootableByIntOfRootableByNat** 是 Mathlib 中的一个定义，位于命名空间 `Group`。
+形式化陈述：rootableByIntOfRootableByNat [RootableBy A Nat] : RootableBy A Int where r
+oot a z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def rootableByIntOfRootableByNat [RootableBy A Nat] : RootableBy A Int where
+def rootableByIntOfRootableByNat [RootableBy A ℕ] : RootableBy A ℤ where
   root a z :=
     match z with
-    | (n : Nat) => RootableBy.root a n
+    | (n : ℕ) => RootableBy.root a n
     | -[n+1] => (RootableBy.root a (n + 1))⁻¹
   root_zero a := RootableBy.root_zero a
   root_cancel {n} a hn := by
@@ -438,34 +334,18 @@ def rootableByIntOfRootableByNat [RootableBy A Nat] : RootableBy A Int where
 -/
 @[to_additive (attr := instance_reducible)
   /-- An additive group is `ℕ`-divisible if it `ℤ`-divisible. -/]
-/--
-Definition of `rootableByNatOfRootableByInt` / `rootableByNatOfRootableByInt` 的定义
-
-English:
-definition rootableByNatOfRootableByInt
-  signature: [RootableBy A Int]
-  body: RootableBy.root a (n : Int)
-  root_zero a := RootableBy.root_zero a
-  root_cancel {n} a hn := by
-    have := RootableBy.root_cancel a (show (n : Int) != 0 from mod_cast hn)
-    simpa
-
-中文:
-定义 rootableBy自然数OfRootableBy整数
-  签名: [RootableBy A 整数]
-  定义体: RootableBy.root a (n : Int)
-  root_zero a := RootableBy.root_zero a
-  root_cancel {n} a hn := by
-    have := RootableBy.root_cancel a (show (n : Int) != 0 from mod_cast hn)
-    simpa
-
-Depends on / 依赖: RootableBy, RootableBy.root
+/-
+**Group.rootableByNatOfRootableByInt** 是 Mathlib 中的一个定义，位于命名空间 `Group`。
+形式化陈述：rootableByNatOfRootableByInt [RootableBy A Int] : RootableBy A Nat where r
+oot a n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def rootableByNatOfRootableByInt [RootableBy A Int] : RootableBy A Nat where
-  root a n := RootableBy.root a (n : Int)
+def rootableByNatOfRootableByInt [RootableBy A ℤ] : RootableBy A ℕ where
+  root a n := RootableBy.root a (n : ℤ)
   root_zero a := RootableBy.root_zero a
   root_cancel {n} a hn := by
-    have := RootableBy.root_cancel a (show (n : Int) != 0 from mod_cast hn)
+    have := RootableBy.root_cancel a (show (n : ℤ) ≠ 0 from mod_cast hn)
     simpa
 
 end Group
@@ -474,7 +354,7 @@ section Hom
 
 variable {A B α : Type*}
 variable [Zero α] [Monoid A] [Monoid B] [Pow A α] [Pow B α] [RootableBy A α]
-variable (f : A -> B)
+variable (f : A → B)
 
 /--
 If `f : A → B` is a surjective homomorphism and `A` is `α`-rootable, then `B` is also `α`-rootable.
@@ -482,32 +362,20 @@ If `f : A → B` is a surjective homomorphism and `A` is `α`-rootable, then `B`
 @[to_additive (attr := instance_reducible)
       /-- If `f : A → B` is a surjective homomorphism and `A` is `α`-divisible, then `B` is also
       `α`-divisible. -/]
-/--
-Definition of `Function.Surjective.rootableBy` / `Function.Surjective.rootableBy` 的定义
-
-English:
-definition Function.Surjective.rootableBy
-  signature: (hf : Function.Surjective f)
-  body: rootableByOfPowLeftSurj _ _ fun {n} hn x =>
-    let ⟨y, hy⟩ := hf x
-⟨f RootableBy.root y n,
-      (by rw [← hpow (RootableBy.root y n) n, RootableBy.root_cancel _ hn, hy] : _ ^ n = x)⟩
-
-中文:
-定义 函数.满射.rootableBy
-  签名: (hf : 函数.满射 f)
-  定义体: rootableByOfPowLeftSurj _ _ fun {n} hn x =>
-    let ⟨y, hy⟩ := hf x
-⟨f RootableBy.root y n,
-      (by rw [← hpow (RootableBy.root y n) n, RootableBy.root_cancel _ hn, hy] : _ ^ n = x)⟩
-
-Depends on / 依赖: RootableBy, RootableBy.root, RootableBy.root_cancel, root_cancel, rootableByOfPowLeftSurj
+/-
+**Function.Surjective.rootableBy** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Function.Surjective.rootableBy (hf : Function.Surjective f) (hpow : forall
+ (a : A) (n : α), f (a ^ n) = f a ^ n) : RootableBy B α
+参数：hf : Function.Surjective f；hpow : forall (a : A) (n : α), f (a ^ n) = f a ^ n
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def Function.Surjective.rootableBy (hf : Function.Surjective f)
-    (hpow : forall (a : A) (n : α), f (a ^ n) = f a ^ n) : RootableBy B α :=
+    (hpow : ∀ (a : A) (n : α), f (a ^ n) = f a ^ n) : RootableBy B α :=
   rootableByOfPowLeftSurj _ _ fun {n} hn x =>
     let ⟨y, hy⟩ := hf x
-⟨f RootableBy.root y n,
+    ⟨f <| RootableBy.root y n,
       (by rw [← hpow (RootableBy.root y n) n, RootableBy.root_cancel _ hn, hy] : _ ^ n = x)⟩
 
 end Hom
@@ -518,22 +386,17 @@ variable (α : Type*) {A : Type*} [CommGroup A] (B : Subgroup A)
 
 /-- Any quotient group of a rootable group is rootable. -/
 @[to_additive /-- Any quotient group of a divisible group is divisible -/]
-/--
-Instance `QuotientGroup.rootableBy` / 实例 `QuotientGroup.rootableBy`
+/-
+**QuotientGroup.rootableBy** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：QuotientGroup.rootableBy [RootableBy A Nat] : RootableBy (A ⧸ B) Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance QuotientGroup.rootableBy
-  signature: [RootableBy A Nat]
-  body: QuotientGroup.mk_surjective.rootableBy _ fun _ _ => rfl
-
-中文:
-实例 商群.rootableBy
-  签名: [RootableBy A 自然数]
-  定义体: QuotientGroup.mk_surjective.rootableBy _ fun _ _ => rfl
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.mk_surjective.rootableBy, mk_surjective, rootableBy
+--- 原说明 ---
+Any quotient group of a rootable group is rootable.
 -/
-noncomputable instance QuotientGroup.rootableBy [RootableBy A Nat] : RootableBy (A ⧸ B) Nat :=
+noncomputable instance QuotientGroup.rootableBy [RootableBy A ℕ] : RootableBy (A ⧸ B) ℕ :=
   QuotientGroup.mk_surjective.rootableBy _ fun _ _ => rfl
 
 end Quotient
+

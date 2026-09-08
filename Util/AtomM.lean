@@ -27,189 +27,222 @@ public meta section
 namespace Mathlib.Tactic
 open Lean Meta
 
-/--
-Definition of `AtomM.Context` / `AtomM.Context` 的定义
+/-- The context (read-only state) of the `AtomM` monad. -/
+/-
+**Mathlib.Tactic.AtomM.Context** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.AtomM
+`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AtomM.Context
-  parameters: where
-  axioms and operations (2):
-    - red : TransparencyMode
-    - evalAtom : Expr -> MetaM Simp.Result  [default: fun e => pure { expr := e }]
-
-中文:
-结构 AtomM.余ntext
-  参数: where
-  公理与运算 (2 个):
-    - red : TransparencyMode
-    - evalAtom : Expr -> MetaM Simp.Result  [默认: fun e => pure { expr := e }]
+--- 原说明 ---
+The context (read-only state) of the `AtomM` monad.
 -/
 structure AtomM.Context where
   /-- The reducibility setting for definitional equality of atoms -/
   red : TransparencyMode
   /-- A simplification to apply to atomic expressions when they are encountered,
   before interning them in the atom list. -/
-  evalAtom : Expr -> MetaM Simp.Result := fun e => pure { expr := e }
+  evalAtom : Expr → MetaM Simp.Result := fun e ↦ pure { expr := e }
   deriving Inhabited
 
-/--
-Definition of `AtomM.State` / `AtomM.State` 的定义
+/-- The mutable state of the `AtomM` monad. -/
+/-
+**Mathlib.Tactic.AtomM.State** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.AtomM`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AtomM.State
-  parameters: where
-  axioms and operations (1):
-    - atoms : Array Expr  [default: #[]]
-
-中文:
-结构 AtomM.State
-  参数: where
-  公理与运算 (1 个):
-    - atoms : 数组 Expr  [默认: #[]]
+--- 原说明 ---
+The mutable state of the `AtomM` monad.
 -/
 structure AtomM.State where
   /-- The list of atoms-up-to-defeq encountered thus far, used for atom sorting. -/
   atoms : Array Expr := #[]
 
-/--
-Definition of `AtomM` / `AtomM` 的定义
+/-- The monad that `ring` works in. This is only used for collecting atoms. -/
+/-
+**Mathlib.Tactic.AtomM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：AtomM
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation AtomM
-  body: ReaderT AtomM.Context StateRefT AtomM.State MetaM
-
-中文:
-缩写 AtomM
-  定义体: ReaderT AtomM.Context StateRefT AtomM.State MetaM
-
-Depends on / 依赖: AtomM.Context, AtomM.State, Context, ReaderT, StateRefT
+--- 原说明 ---
+The monad that `ring` works in. This is only used for collecting atoms.
 -/
-abbrev AtomM := ReaderT AtomM.Context StateRefT AtomM.State MetaM
+abbrev AtomM := ReaderT AtomM.Context <| StateRefT AtomM.State MetaM
 
-/--
-Definition of `AtomM.run` / `AtomM.run` 的定义
+/-- Run a computation in the `AtomM` monad. -/
+/-
+**Mathlib.Tactic.AtomM.run** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.AtomM`。
+形式化陈述：{α : Type} →   Meta.TransparencyMode →     Mathlib.Tactic.AtomM α → (optPa
+ram (Expr → MetaM Meta.Simp.Result) fun e => pure { expr := e }) → MetaM α
+参数：optParam (Expr → MetaM Meta.Simp.Result) fun e => pure { expr := e }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AtomM.run
-  signature: {α : Type} (red : TransparencyMode) (m : AtomM α)
-  body: (m { red, evalAtom }).run' {}
-
-中文:
-定义 AtomM.run
-  签名: {α : 类型} (red : TransparencyMode) (m : AtomM α)
-  定义体: (m { red, evalAtom }).run' {}
+--- 原说明 ---
+Run a computation in the `AtomM` monad.
 -/
 def AtomM.run {α : Type} (red : TransparencyMode) (m : AtomM α)
-    (evalAtom : Expr -> MetaM Simp.Result := fun e => pure { expr := e }) :
+    (evalAtom : Expr → MetaM Simp.Result := fun e ↦ pure { expr := e }) :
     MetaM α :=
   (m { red, evalAtom }).run' {}
 
-/--
-Definition of `isDefEqSafe` / `isDefEqSafe` 的定义
+/-- A safe version of `isDefEq` that doesn't throw errors. We use it to avoid
+"unknown free variable `_fvar.102937`" errors when there may be out-of-scope free variables.
 
-English:
-definition isDefEqSafe
-  signature: (a b : Expr)
-  body: try isDefEq a b catch _ => pure false
+TODO: don't catch any other errors
+-/
+/-
+**Mathlib.Tactic.isDefEqSafe** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：isDefEqSafe (a b : Expr) : MetaM Bool
+参数：a b : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isDefEqSafe
-  签名: (a b : Expr)
-  定义体: try isDefEq a b catch _ => pure false
+--- 原说明 ---
+A safe version of `isDefEq` that doesn't throw errors. We use it to avoid
+"unknown free variable `_fvar.102937`" errors when there may be out-of-scope fre
+e variables.
 
-Depends on / 依赖: isDefEq
+TODO: don't catch any other errors
 -/
 def isDefEqSafe (a b : Expr) : MetaM Bool :=
   try isDefEq a b catch _ => pure false
 
-/--
-Definition of `AtomM.containsThenAdd` / `AtomM.containsThenAdd` 的定义
+/-- If an atomic expression has already been encountered, return `true`, the index and the stored
+form of the atom (which will be defeq at the specified transparency, but not necessarily
+syntactically equal). If the atomic expression has *not* already been encountered, store it in the
+list of atoms, and return the new index (and the stored form of the atom, which will be itself).
 
-English:
-definition AtomM.containsThenAdd
-  signature: (e : Expr)
-  body: do
-  let c ← get
-  for h : i in [:c.atoms.size] do
-if ← withTransparency (← read).red isDefEqSafe e c.atoms[i] then
-      return (true, i, c.atoms[i])
-  modifyGet fun c => ((false, c.atoms.size, e), { c with atoms := c.atoms.push e })
+In a normalizing tactic, the expression returned by `containsThenAdd` should be considered
+the normal form.
+-/
+/-
+**Mathlib.Tactic.AtomM.containsThenAdd** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.AtomM`。
+形式化陈述：Expr → Mathlib.Tactic.AtomM (Bool × ℕ × Expr)
+参数：Bool × ℕ × Expr。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-中文:
-定义 AtomM.containsThenAdd
-  签名: (e : Expr)
-  定义体: do
-  let c ← get
-  for h : i in [:c.atoms.size] do
-if ← withTransparency (← read).red isDefEqSafe e c.atoms[i] then
-      return (true, i, c.atoms[i])
-  modifyGet fun c => ((false, c.atoms.size, e), { c with atoms := c.atoms.push e })
+--- 原说明 ---
+If an atomic expression has already been encountered, return `true`, the index a
+nd the stored
+form of the atom (which will be defeq at the specified transparency, but not nec
+essarily
+syntactically equal). If the atomic expression has *not* already been encountere
+d, store it in the
+list of atoms, and return the new index (and the stored form of the atom, which 
+will be itself).
+
+In a normalizing tactic, the expression returned by `containsThenAdd` should be 
+considered
+the normal form.
 -/
 def AtomM.containsThenAdd (e : Expr) : AtomM (Bool × Nat × Expr) := do
   let c ← get
   for h : i in [:c.atoms.size] do
-if ← withTransparency (← read).red isDefEqSafe e c.atoms[i] then
+    if ← withTransparency (← read).red <| isDefEqSafe e c.atoms[i] then
       return (true, i, c.atoms[i])
-  modifyGet fun c => ((false, c.atoms.size, e), { c with atoms := c.atoms.push e })
+  modifyGet fun c ↦ ((false, c.atoms.size, e), { c with atoms := c.atoms.push e })
 
 open Qq in
-/--
-Definition of `AtomM.containsThenAddQ` / `AtomM.containsThenAddQ` 的定义
+/-- If an atomic expression has already been encountered, return `true`, the index and the stored
+form of the atom (which will be defeq at the specified transparency, but not necessarily
+syntactically equal). If the atomic expression has *not* already been encountered, store it in the
+list of atoms, and return the new index (and the stored form of the atom, which will be itself).
 
-English:
-definition AtomM.containsThenAddQ
-  signature: {u : Level} {α : Q(Type u)} (e : Q($α))
-  body: do
-  let (b, n, e') ← AtomM.containsThenAdd e
-  return (b, n, ⟨e', ⟨⟩⟩)
+In a normalizing tactic, the expression returned by `AtomM.containsThenAddQ` should be considered
+the normal form.
 
-中文:
-定义 AtomM.containsThenAddQ
-  签名: {u : Level} {α : Q(类型u)} (e : Q($α))
-  定义体: do
-  let (b, n, e') ← AtomM.containsThenAdd e
-  return (b, n, ⟨e', ⟨⟩⟩)
+This is a strongly-typed version of `AtomM.containsThenAdd` for code using `Qq`.
+-/
+/-
+**Mathlib.Tactic.AtomM.containsThenAddQ** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.AtomM`。
+形式化陈述：{u : Level} → {α : Q(Type u)} → (e : Q(«$α»)) → Mathlib.Tactic.AtomM (Bool
+ × ℕ × { e' // «$e» =Q «$e'» })
+参数：Type u；e : Q(«$α»)；Bool × ℕ × { e' // «$e» =Q «$e'» }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If an atomic expression has already been encountered, return `true`, the index a
+nd the stored
+form of the atom (which will be defeq at the specified transparency, but not nec
+essarily
+syntactically equal). If the atomic expression has *not* already been encountere
+d, store it in the
+list of atoms, and return the new index (and the stored form of the atom, which 
+will be itself).
+
+In a normalizing tactic, the expression returned by `AtomM.containsThenAddQ` sho
+uld be considered
+the normal form.
+
+This is a strongly-typed version of `AtomM.containsThenAdd` for code using `Qq`.
 -/
 def AtomM.containsThenAddQ {u : Level} {α : Q(Type u)} (e : Q($α)) :
     AtomM (Bool × Nat × {e' : Q($α) // $e =Q $e'}) := do
   let (b, n, e') ← AtomM.containsThenAdd e
   return (b, n, ⟨e', ⟨⟩⟩)
 
-/--
-Definition of `AtomM.addAtom` / `AtomM.addAtom` 的定义
+/-- If an atomic expression has already been encountered, get the index and the stored form of the
+atom (which will be defeq at the specified transparency, but not necessarily syntactically equal).
+If the atomic expression has *not* already been encountered, store it in the list of atoms, and
+return the new index (and the stored form of the atom, which will be itself).
 
-English:
-definition AtomM.addAtom
-  signature: (e : Expr)
-  body: Prod.snd < > AtomM.containsThenAdd e
+In a normalizing tactic, the expression returned by `addAtom` should be considered the normal form.
+-/
+/-
+**Mathlib.Tactic.AtomM.addAtom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.AtomM`。
+形式化陈述：Expr → Mathlib.Tactic.AtomM (ℕ × Expr)
+参数：ℕ × Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 AtomM.addAtom
-  签名: (e : Expr)
-  定义体: Prod.snd < > AtomM.containsThenAdd e
+--- 原说明 ---
+If an atomic expression has already been encountered, get the index and the stor
+ed form of the
+atom (which will be defeq at the specified transparency, but not necessarily syn
+tactically equal).
+If the atomic expression has *not* already been encountered, store it in the lis
+t of atoms, and
+return the new index (and the stored form of the atom, which will be itself).
 
-Depends on / 依赖: AtomM.containsThenAdd, Prod.snd, containsThenAdd
+In a normalizing tactic, the expression returned by `addAtom` should be consider
+ed the normal form.
 -/
 def AtomM.addAtom (e : Expr) : AtomM (Nat × Expr) :=
-Prod.snd < > AtomM.containsThenAdd e
+  Prod.snd <$> AtomM.containsThenAdd e
 
 open Qq in
-/--
-Definition of `AtomM.addAtomQ` / `AtomM.addAtomQ` 的定义
+/-- If an atomic expression has already been encountered, get the index and the stored form of the
+atom (which will be defeq at the specified transparency, but not necessarily syntactically equal).
+If the atomic expression has *not* already been encountered, store it in the list of atoms, and
+return the new index (and the stored form of the atom, which will be itself).
 
-English:
-definition AtomM.addAtomQ
-  signature: {u : Level} {α : Q(Type u)} (e : Q($α))
-  body: do
-  let (n, e') ← AtomM.addAtom e
-  return (n, ⟨e', ⟨⟩⟩)
+In a normalizing tactic, the expression returned by `addAtomQ` should be considered the normal form.
 
-中文:
-定义 AtomM.addAtomQ
-  签名: {u : Level} {α : Q(类型u)} (e : Q($α))
-  定义体: do
-  let (n, e') ← AtomM.addAtom e
-  return (n, ⟨e', ⟨⟩⟩)
+This is a strongly-typed version of `AtomM.addAtom` for code using `Qq`.
+-/
+/-
+**Mathlib.Tactic.AtomM.addAtomQ** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.AtomM`
+。
+形式化陈述：{u : Level} → {α : Q(Type u)} → (e : Q(«$α»)) → Mathlib.Tactic.AtomM (ℕ × 
+{ e' // «$e» =Q «$e'» })
+参数：Type u；e : Q(«$α»)；ℕ × { e' // «$e» =Q «$e'» }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If an atomic expression has already been encountered, get the index and the stor
+ed form of the
+atom (which will be defeq at the specified transparency, but not necessarily syn
+tactically equal).
+If the atomic expression has *not* already been encountered, store it in the lis
+t of atoms, and
+return the new index (and the stored form of the atom, which will be itself).
+
+In a normalizing tactic, the expression returned by `addAtomQ` should be conside
+red the normal form.
+
+This is a strongly-typed version of `AtomM.addAtom` for code using `Qq`.
 -/
 def AtomM.addAtomQ {u : Level} {α : Q(Type u)} (e : Q($α)) :
     AtomM (Nat × {e' : Q($α) // $e =Q $e'}) := do
@@ -217,3 +250,4 @@ def AtomM.addAtomQ {u : Level} {α : Q(Type u)} (e : Q($α)) :
   return (n, ⟨e', ⟨⟩⟩)
 
 end Mathlib.Tactic
+

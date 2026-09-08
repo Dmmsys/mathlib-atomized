@@ -38,49 +38,49 @@ variable {R : Type u} [CommSemiring R] {L : Type v} [CommSemiring L] [Algebra R 
 
 namespace IsLocalization
 
-/--
-theorem `lift_cardinalMk_le` / 定理 `lift_cardinalMk_le`
-
-English:
-theorem lift_cardinalMk_le
-  given: (S : Submonoid R) [IsLocalization S L]
-  proof: by
-  have := Localization.cardinalMk_le S
-  rwa [← lift_le.{v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
-
-中文:
-定理 lift_cardinalMk_le
-  条件: (S : 子幺半群 R) [是Localization S L]
-  证明: by
-  have := Localization.cardinalMk_le S
-  rwa [← lift_le.{v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
-
-Depends on / 依赖: Localization, Localization.algEquiv, Localization.cardinalMk_le, algEquiv, cardinalMk_le, lift_le, lift_mk_eq, toEquiv
+/-
+**IsLocalization.lift_cardinalMk_le** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：lift_cardinalMk_le (S : Submonoid R) [IsLocalization S L] : Cardinal.lift.
+{u} #L <= Cardinal.lift.{v} #R
+参数：S : Submonoid R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Localization.cardinalMk_le`：cardinalMk_le : #(Localization S) <= #M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_mk_eq'`：lift_mk_eq' {α : Type u} {β : Type v} : lift.{v} #
+α = lift.{u} #β ↔ Nonempty (α ≃ β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
 -/
 theorem lift_cardinalMk_le (S : Submonoid R) [IsLocalization S L] :
-    Cardinal.lift.{u} #L <= Cardinal.lift.{v} #R := by
+    Cardinal.lift.{u} #L ≤ Cardinal.lift.{v} #R := by
   have := Localization.cardinalMk_le S
   rwa [← lift_le.{v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
 
-/--
-theorem `cardinalMk_le` / 定理 `cardinalMk_le`
+/-- A localization always has cardinality less than or equal to the base ring. -/
+/-
+**IsLocalization.cardinalMk_le** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：cardinalMk_le {L : Type u} [CommSemiring L] [Algebra R L] (S : Submonoid R
+) [IsLocalization S L] : #L <= #R
+参数：S : Submonoid R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `IsLocalization.lift_cardinalMk_le`：lift_cardinalMk_le (S : Submonoid R) 
+[IsLocalization S L] : Cardinal.lift.{u} #L <= Cardinal.lift.{v} #R
 
-English:
-theorem cardinalMk_le
-  statement: {L : Type u} [CommSemiring L] [Algebra R L]
-  proof: by
-  simpa using lift_cardinalMk_le (L := L) S
-
-中文:
-定理 cardinalMk_le
-  结论: {L : 类型u} [交换半环 L] [代数 R L]
-  证明: by
-  simpa using lift_cardinalMk_le (L := L) S
-
-Depends on / 依赖: Finite, Finite.to_properlyDiscontinuousSMul, lift_cardinalMk_le, to_properlyDiscontinuousSMul
+--- 原说明 ---
+A localization always has cardinality less than or equal to the base ring.
 -/
 theorem cardinalMk_le {L : Type u} [CommSemiring L] [Algebra R L]
-    (S : Submonoid R) [IsLocalization S L] : #L <= #R := by
+    (S : Submonoid R) [IsLocalization S L] : #L ≤ #R := by
   simpa using lift_cardinalMk_le (L := L) S
 
 end IsLocalization
@@ -93,28 +93,20 @@ variable {R : Type u} [CommRing R] {L : Type v} [CommRing L] [Algebra R L]
 
 namespace Localization
 
-/--
-theorem `cardinalMk` / 定理 `cardinalMk`
-
-English:
-theorem cardinalMk
-  given: {S : Submonoid R} (hS : S <= R⁰)
-  statement: #(Localization S) = #R
-  proof: by
-  apply OreLocalization.cardinalMk
-  rwa [nonZeroDivisorsLeft_eq_nonZeroDivisors]
-
-中文:
-定理 cardinalMk
-  条件: {S : 子幺半群 R} (hS : S <= R⁰)
-  结论: #(Localization S) = #R
-  证明: by
-  apply OreLocalization.cardinalMk
-  rwa [nonZeroDivisorsLeft_eq_nonZeroDivisors]
-
-Depends on / 依赖: OreLocalization, OreLocalization.cardinalMk, cardinalMk, nonZeroDivisorsLeft_eq_nonZeroDivisors
+/-
+**Localization.cardinalMk** 是 Mathlib 中的一个定理，位于命名空间 `Localization`。
+形式化陈述：cardinalMk {S : Submonoid R} (hS : S <= R⁰) : #(Localization S) = #R
+参数：hS : S <= R⁰。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OreLocalization.cardinalMk`：cardinalMk (hS : S <= nonZeroDivisorsLeft R)
+ : #(OreLocalization S R) = #R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nonZeroDivisorsLeft_eq_nonZeroDivisors`：nonZeroDivisorsLeft_eq_nonZeroDi
+visors : nonZeroDivisorsLeft M₀ = nonZeroDivisors M₀
 -/
-theorem cardinalMk {S : Submonoid R} (hS : S <= R⁰) : #(Localization S) = #R := by
+theorem cardinalMk {S : Submonoid R} (hS : S ≤ R⁰) : #(Localization S) = #R := by
   apply OreLocalization.cardinalMk
   rwa [nonZeroDivisorsLeft_eq_nonZeroDivisors]
 
@@ -124,74 +116,65 @@ namespace IsLocalization
 
 variable (L)
 
-/--
-theorem `lift_cardinalMk` / 定理 `lift_cardinalMk`
-
-English:
-theorem lift_cardinalMk
-  given: (S : Submonoid R) [IsLocalization S L] (hS : S <= R⁰)
-  proof: by
-  have := Localization.cardinalMk hS
-  rwa [← lift_inj.{u, v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
-
-中文:
-定理 lift_cardinalMk
-  条件: (S : 子幺半群 R) [是Localization S L] (hS : S <= R⁰)
-  证明: by
-  have := Localization.cardinalMk hS
-  rwa [← lift_inj.{u, v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
-
-Depends on / 依赖: Localization, Localization.algEquiv, Localization.cardinalMk, algEquiv, cardinalMk, lift_inj, lift_mk_eq, toEquiv
+/-
+**IsLocalization.lift_cardinalMk** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：lift_cardinalMk (S : Submonoid R) [IsLocalization S L] (hS : S <= R⁰) : Ca
+rdinal.lift.{u} #L = Cardinal.lift.{v} #R
+参数：S : Submonoid R；hS : S <= R⁰。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Localization.cardinalMk`：cardinalMk {S : Submonoid R} (hS : S <= R⁰) : #
+(Localization S) = #R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_mk_eq'`：lift_mk_eq' {α : Type u} {β : Type v} : lift.{v} #
+α = lift.{u} #β ↔ Nonempty (α ≃ β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_inj`：lift_inj {a b : Cardinal.{u}} : lift.{v, u} a = lift.
+{v, u} b ↔ a = b
 -/
-theorem lift_cardinalMk (S : Submonoid R) [IsLocalization S L] (hS : S <= R⁰) :
+theorem lift_cardinalMk (S : Submonoid R) [IsLocalization S L] (hS : S ≤ R⁰) :
     Cardinal.lift.{u} #L = Cardinal.lift.{v} #R := by
   have := Localization.cardinalMk hS
   rwa [← lift_inj.{u, v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
 
-/--
-theorem `cardinalMk` / 定理 `cardinalMk`
+/-- If you do not localize at any zero-divisors, localization preserves cardinality. -/
+/-
+**IsLocalization.cardinalMk** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：cardinalMk (L : Type u) [CommRing L] [Algebra R L] (S : Submonoid R) [IsLo
+calization S L] (hS : S <= R⁰) : #L = #R
+参数：L : Type u；S : Submonoid R；hS : S <= R⁰。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `IsLocalization.lift_cardinalMk`：lift_cardinalMk (S : Submonoid R) [IsLoc
+alization S L] (hS : S <= R⁰) : Cardinal.lift.{u} #L = Cardinal.lift.{v} #R
 
-English:
-theorem cardinalMk
-  statement: (L : Type u) [CommRing L] [Algebra R L]
-  proof: by
-  simpa using lift_cardinalMk L S hS
-
-中文:
-定理 cardinalMk
-  结论: (L : 类型u) [交换环 L] [代数 R L]
-  证明: by
-  simpa using lift_cardinalMk L S hS
-
-Depends on / 依赖: T2Space, lift_cardinalMk, t2Space_of_properlyDiscontinuousSMul_of_t2Space
+--- 原说明 ---
+If you do not localize at any zero-divisors, localization preserves cardinality.
 -/
 theorem cardinalMk (L : Type u) [CommRing L] [Algebra R L]
-    (S : Submonoid R) [IsLocalization S L] (hS : S <= R⁰) : #L = #R := by
+    (S : Submonoid R) [IsLocalization S L] (hS : S ≤ R⁰) : #L = #R := by
   simpa using lift_cardinalMk L S hS
 
 end IsLocalization
 
 @[simp]
-/--
-theorem `Cardinal.mk_fractionRing` / 定理 `Cardinal.mk_fractionRing`
-
-English:
-theorem Cardinal.mk_fractionRing
-  given: (R : Type u) [CommRing R]
-  statement: #(FractionRing R) = #R
-  proof: IsLocalization.cardinalMk (FractionRing R) R⁰ le_rfl
-
-alias FractionRing.cardinalMk := Cardinal.mk_fractionRing
-
-中文:
-定理 基数.mk_fractionRing
-  条件: (R : 类型u) [交换环 R]
-  结论: #(FractionRing R) = #R
-  证明: IsLocalization.cardinalMk (FractionRing R) R⁰ le_rfl
-
-alias FractionRing.cardinalMk := Cardinal.mk_fractionRing
-
-Depends on / 依赖: FractionRing, IsLocalization, IsLocalization.cardinalMk, cardinalMk, le_rfl
+/-
+**Cardinal.mk_fractionRing** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Cardinal.mk_fractionRing (R : Type u) [CommRing R] : #(FractionRing R) = #
+R
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.cardinalMk`：cardinalMk (L : Type u) [CommRing L] [Algebra
+ R L] (S : Submonoid R) [IsLocalization S L] (hS : S <= R⁰) : #L = #R
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem Cardinal.mk_fractionRing (R : Type u) [CommRing R] : #(FractionRing R) = #R :=
   IsLocalization.cardinalMk (FractionRing R) R⁰ le_rfl
@@ -202,42 +185,28 @@ namespace IsFractionRing
 
 variable (R L)
 
-/--
-theorem `lift_cardinalMk` / 定理 `lift_cardinalMk`
-
-English:
-theorem lift_cardinalMk
-  given: [IsFractionRing R L]
-  statement: Cardinal.lift.{u} #L = Cardinal.lift.{v} #R
-  proof: IsLocalization.lift_cardinalMk L _ le_rfl
-
-中文:
-定理 lift_cardinalMk
-  条件: [IsFractionRing R L]
-  结论: 基数.lift.{u} #L = 基数.lift.{v} #R
-  证明: IsLocalization.lift_cardinalMk L _ le_rfl
-
-Depends on / 依赖: IsLocalization, IsLocalization.lift_cardinalMk, le_rfl, lift_cardinalMk
+/-
+**IsFractionRing.lift_cardinalMk** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：lift_cardinalMk [IsFractionRing R L] : Cardinal.lift.{u} #L = Cardinal.lif
+t.{v} #R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.lift_cardinalMk`：lift_cardinalMk (S : Submonoid R) [IsLoc
+alization S L] (hS : S <= R⁰) : Cardinal.lift.{u} #L = Cardinal.lift.{v} #R
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem lift_cardinalMk [IsFractionRing R L] : Cardinal.lift.{u} #L = Cardinal.lift.{v} #R :=
   IsLocalization.lift_cardinalMk L _ le_rfl
-
-/--
-theorem `cardinalMk` / 定理 `cardinalMk`
-
-English:
-theorem cardinalMk
-  given: (L : Type u) [CommRing L] [Algebra R L] [IsFractionRing R L]
-  statement: #L = #R
-  proof: IsLocalization.cardinalMk L _ le_rfl
-
-中文:
-定理 cardinalMk
-  条件: (L : 类型u) [交换环 L] [代数 R L] [IsFractionRing R L]
-  结论: #L = #R
-  证明: IsLocalization.cardinalMk L _ le_rfl
-
-Depends on / 依赖: IsLocalization, IsLocalization.cardinalMk, cardinalMk, le_rfl
+/-
+**IsFractionRing.cardinalMk** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRing`。
+形式化陈述：cardinalMk (L : Type u) [CommRing L] [Algebra R L] [IsFractionRing R L] : 
+#L = #R
+参数：L : Type u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.cardinalMk`：cardinalMk (L : Type u) [CommRing L] [Algebra
+ R L] (S : Submonoid R) [IsLocalization S L] (hS : S <= R⁰) : #L = #R
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem cardinalMk (L : Type u) [CommRing L] [Algebra R L] [IsFractionRing R L] : #L = #R :=
   IsLocalization.cardinalMk L _ le_rfl
@@ -245,3 +214,4 @@ theorem cardinalMk (L : Type u) [CommRing L] [Algebra R L] [IsFractionRing R L] 
 end IsFractionRing
 
 end CommRing
+

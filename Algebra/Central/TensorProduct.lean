@@ -37,37 +37,43 @@ open TensorProduct
 
 variable (K B C : Type*) [CommSemiring K] [Semiring B] [Semiring C] [Algebra K B] [Algebra K C]
 
-/--
-lemma `Algebra.TensorProduct.includeLeft_map_center_le` / 引理 `Algebra.TensorProduct.includeLeft_map_center_le`
-
-English:
-lemma Algebra.TensorProduct.includeLeft_map_center_le
-  proof: by
-  intro x hx
-  simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
-  obtain ⟨b, hb0, rfl⟩ := hx
-  intro bc
-  induction bc using TensorProduct.induction_on with
-  | zero => simp
-  | tmul b' c => simp [hb0]
-  | add _ _ _ _ => simp_all [add_mul, mul_add]
-
-中文:
-引理 代数.张量积.includeLeft_map_center_le
-  证明: by
-  intro x hx
-  simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
-  obtain ⟨b, hb0, rfl⟩ := hx
-  intro bc
-  induction bc using TensorProduct.induction_on with
-  | zero => simp
-  | tmul b' c => simp [hb0]
-  | add _ _ _ _ => simp_all [add_mul, mul_add]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, SemiRingCat, Subalgebra, Subalgebra.mem_center_iff, Subalgebra.mem_map, TensorProduct, TensorProduct.induction_on, add_mul, induction_on, mem_center_iff, mem_map, mul_add
+/-
+**Algebra.TensorProduct.includeLeft_map_center_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Algebra.TensorProduct.includeLeft_map_center_le : (Subalgebra.center K B).
+map includeLeft <= Subalgebra.center K (B otimes[K] C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 -/
 lemma Algebra.TensorProduct.includeLeft_map_center_le :
-    (Subalgebra.center K B).map includeLeft <= Subalgebra.center K (B otimes[K] C) := by
+    (Subalgebra.center K B).map includeLeft ≤ Subalgebra.center K (B ⊗[K] C) := by
   intro x hx
   simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
   obtain ⟨b, hb0, rfl⟩ := hx
@@ -76,36 +82,43 @@ lemma Algebra.TensorProduct.includeLeft_map_center_le :
   | zero => simp
   | tmul b' c => simp [hb0]
   | add _ _ _ _ => simp_all [add_mul, mul_add]
-
-/--
-lemma `Algebra.TensorProduct.includeRight_map_center_le` / 引理 `Algebra.TensorProduct.includeRight_map_center_le`
-
-English:
-lemma Algebra.TensorProduct.includeRight_map_center_le
-  proof: fun x hx => by
-  simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
-  obtain ⟨c, hc0, rfl⟩ := hx
-  intro bc
-  induction bc using TensorProduct.induction_on with
-  | zero => simp
-  | tmul b c' => simp [hc0]
-  | add _ _ _ _ => simp_all [add_mul, mul_add]
-
-中文:
-引理 代数.张量积.includeRight_map_center_le
-  证明: fun x hx => by
-  simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
-  obtain ⟨c, hc0, rfl⟩ := hx
-  intro bc
-  induction bc using TensorProduct.induction_on with
-  | zero => simp
-  | tmul b c' => simp [hc0]
-  | add _ _ _ _ => simp_all [add_mul, mul_add]
-
-Depends on / 依赖: Subalgebra, Subalgebra.mem_center_iff, Subalgebra.mem_map, TensorProduct, TensorProduct.induction_on, add_mul, induction_on, mem_center_iff, mem_map, mul_add
+/-
+**Algebra.TensorProduct.includeRight_map_center_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Algebra.TensorProduct.includeRight_map_center_le : (Subalgebra.center K C)
+.map includeRight <= Subalgebra.center K (B otimes[K] C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 -/
 lemma Algebra.TensorProduct.includeRight_map_center_le :
-    (Subalgebra.center K C).map includeRight <= Subalgebra.center K (B otimes[K] C) := fun x hx => by
+    (Subalgebra.center K C).map includeRight ≤ Subalgebra.center K (B ⊗[K] C) := fun x hx ↦ by
   simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
   obtain ⟨c, hc0, rfl⟩ := hx
   intro bc
@@ -117,87 +130,116 @@ lemma Algebra.TensorProduct.includeRight_map_center_le :
 namespace Algebra.IsCentral
 
 open Algebra.TensorProduct in
-/--
-lemma `left_of_tensor` / 引理 `left_of_tensor`
-
-English:
-lemma left_of_tensor
-  statement: (inj : Function.Injective (algebraMap K C)) [Module.Flat K B]
-  proof: (Subalgebra.map_le.mp ((includeLeft_map_center_le K B C).trans hbc.1)).trans
-    fun _ ⟨k, hk⟩ => ⟨k, includeLeft_injective (S := K) inj hk⟩
-
-中文:
-引理 left_of_tensor
-  结论: (inj : 函数.单射 (algebraMap K C)) [模.平坦 K B]
-  证明: (Subalgebra.map_le.mp ((includeLeft_map_center_le K B C).trans hbc.1)).trans
-    fun _ ⟨k, hk⟩ => ⟨k, includeLeft_injective (S := K) inj hk⟩
-
-Depends on / 依赖: Subalgebra, Subalgebra.map_le.mp, f.hom, includeLeft_map_center_le, map_le
+/-
+**Algebra.IsCentral.left_of_tensor** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.IsCentral`
+。
+形式化陈述：left_of_tensor (inj : Function.Injective (algebraMap K C)) [Module.Flat K 
+B] [hbc : Algebra.IsCentral K (B otimes[K] C)] : IsCentral K B where out
+参数：inj : Function.Injective (algebraMap K C)；B otimes[K] C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subalgebra.map_le`：map_le {S : Subalgebra R A} {f : A ->ₐ[R] B} {U : Sub
+algebra R B} : map f S <= U ↔ S <= comap f U
+· 使用引理 `Algebra.TensorProduct.includeLeft_map_center_le`：Algebra.TensorProduct.i
+ncludeLeft_map_center_le : (Subalgebra.center K B).map includeLeft <= Subalgebra
+.center K (B otimes[K] C)
+· 使用定理 `Algebra.IsCentral.out`：∀ {K : Type u} {inst : CommSemiring K} {D : Type 
+v} {inst_1 : Semiring D} {inst_2 : Algebra K D}   [self : Algebra.IsCentral K D]
+, Subalgebr…
+· 使用定理 `Algebra.TensorProduct.includeLeft_injective`：includeLeft_injective [Modu
+le.Flat R A] (hb : Function.Injective (algebraMap R B)) : Function.Injective (in
+cludeLeft : A ->ₐ[S] A otimes[R] …
 -/
 lemma left_of_tensor (inj : Function.Injective (algebraMap K C)) [Module.Flat K B]
-    [hbc : Algebra.IsCentral K (B otimes[K] C)] : IsCentral K B where
+    [hbc : Algebra.IsCentral K (B ⊗[K] C)] : IsCentral K B where
   out := (Subalgebra.map_le.mp ((includeLeft_map_center_le K B C).trans hbc.1)).trans
-    fun _ ⟨k, hk⟩ => ⟨k, includeLeft_injective (S := K) inj hk⟩
-
-/--
-lemma `right_of_tensor` / 引理 `right_of_tensor`
-
-English:
-lemma right_of_tensor
-  statement: (inj : Function.Injective (algebraMap K B)) [Module.Flat K C]
-  proof: have : IsCentral K (C otimes[K] B) := IsCentral.of_algEquiv K _ _ Algebra.TensorProduct.comm _ _ _
-  left_of_tensor K C B inj
-
-中文:
-引理 right_of_tensor
-  结论: (inj : 函数.单射 (algebraMap K B)) [模.平坦 K C]
-  证明: have : IsCentral K (C otimes[K] B) := IsCentral.of_algEquiv K _ _ Algebra.TensorProduct.comm _ _ _
-  left_of_tensor K C B inj
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.comm, IsCentral, IsCentral.of_algEquiv, TensorProduct, left_of_tensor, of_algEquiv, otimes
+    fun _ ⟨k, hk⟩ ↦ ⟨k, includeLeft_injective (S := K) inj hk⟩
+/-
+**Algebra.IsCentral.right_of_tensor** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.IsCentral
+`。
+形式化陈述：right_of_tensor (inj : Function.Injective (algebraMap K B)) [Module.Flat K
+ C] [Algebra.IsCentral K (B otimes[K] C)] : IsCentral K C
+参数：inj : Function.Injective (algebraMap K B)；B otimes[K] C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Algebra.IsCentral.of_algEquiv`：of_algEquiv (e : D ≃ₐ[K] D') : IsCentral 
+K D' where out x hx
+· 使用引理 `Algebra.IsCentral.left_of_tensor`：left_of_tensor (inj : Function.Injecti
+ve (algebraMap K C)) [Module.Flat K B] [hbc : Algebra.IsCentral K (B otimes[K] C
+)] : IsCentral K B whe…
 -/
 lemma right_of_tensor (inj : Function.Injective (algebraMap K B)) [Module.Flat K C]
-    [Algebra.IsCentral K (B otimes[K] C)] : IsCentral K C :=
-have : IsCentral K (C otimes[K] B) := IsCentral.of_algEquiv K _ _ Algebra.TensorProduct.comm _ _ _
+    [Algebra.IsCentral K (B ⊗[K] C)] : IsCentral K C :=
+  have : IsCentral K (C ⊗[K] B) := IsCentral.of_algEquiv K _ _ <| Algebra.TensorProduct.comm _ _ _
   left_of_tensor K C B inj
 
-/--
-lemma `left_of_tensor_of_field` / 引理 `left_of_tensor_of_field`
+/-- Let `B` and `C` be two algebras over a field `K`, if `B ⊗[K] C` is central and `C` is
+  non-trivial, then `B` is central. -/
+/-
+**Algebra.IsCentral.left_of_tensor_of_field** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.I
+sCentral`。
+形式化陈述：left_of_tensor_of_field (K B C : Type*) [Field K] [Ring B] [Ring C] [Nontr
+ivial C] [Algebra K B] [Algebra K C] [IsCentral K (B otimes[K] C)] : IsCentral K
+ B
+参数：K B C : Type*；B otimes[K] C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Algebra.IsCentral.left_of_tensor`：left_of_tensor (inj : Function.Injecti
+ve (algebraMap K C)) [Module.Flat K B] [hbc : Algebra.IsCentral K (B otimes[K] C
+)] : IsCentral K B whe…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Module.Free.instFaithfulSMulOfNontrivial`：∀ (R : Type u) (M : Type v) [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Mod
+ule.Free R M] [Nontrivial M], …
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
 
-English:
-lemma left_of_tensor_of_field
-  statement: (K B C : Type*) [Field K] [Ring B] [Ring C] [Nontrivial C]
-  proof: left_of_tensor K B C FaithfulSMul.algebraMap_injective K C
-
-中文:
-引理 left_of_tensor_of_field
-  结论: (K B C : 类型) [域 K] [环 B] [环 C] [非平凡 C]
-  证明: left_of_tensor K B C FaithfulSMul.algebraMap_injective K C
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, left_of_tensor
+--- 原说明 ---
+Let `B` and `C` be two algebras over a field `K`, if `B ⊗[K] C` is central and `
+C` is
+  non-trivial, then `B` is central.
 -/
 lemma left_of_tensor_of_field (K B C : Type*) [Field K] [Ring B] [Ring C] [Nontrivial C]
-    [Algebra K B] [Algebra K C] [IsCentral K (B otimes[K] C)] : IsCentral K B :=
-left_of_tensor K B C FaithfulSMul.algebraMap_injective K C
+    [Algebra K B] [Algebra K C] [IsCentral K (B ⊗[K] C)] : IsCentral K B :=
+  left_of_tensor K B C <| FaithfulSMul.algebraMap_injective K C
 
-/--
-lemma `right_of_tensor_of_field` / 引理 `right_of_tensor_of_field`
+/-- Let `B` and `C` be two algebras over a field `K`, if `B ⊗[K] C` is central and `B` is
+  non-trivial, then `C` is central. -/
+/-
+**Algebra.IsCentral.right_of_tensor_of_field** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.
+IsCentral`。
+形式化陈述：right_of_tensor_of_field (K B C : Type*) [Field K] [Ring B] [Ring C] [Nont
+rivial B] [Algebra K B] [Algebra K C] [IsCentral K (B otimes[K] C)] : IsCentral 
+K C
+参数：K B C : Type*；B otimes[K] C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Algebra.IsCentral.right_of_tensor`：right_of_tensor (inj : Function.Injec
+tive (algebraMap K B)) [Module.Flat K C] [Algebra.IsCentral K (B otimes[K] C)] :
+ IsCentral K C
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Module.Free.instFaithfulSMulOfNontrivial`：∀ (R : Type u) (M : Type v) [i
+nst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [Mod
+ule.Free R M] [Nontrivial M], …
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
 
-English:
-lemma right_of_tensor_of_field
-  statement: (K B C : Type*) [Field K] [Ring B] [Ring C] [Nontrivial B]
-  proof: right_of_tensor K B C FaithfulSMul.algebraMap_injective K B
-
-中文:
-引理 right_of_tensor_of_field
-  结论: (K B C : 类型) [域 K] [环 B] [环 C] [非平凡 B]
-  证明: right_of_tensor K B C FaithfulSMul.algebraMap_injective K B
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, right_of_tensor
+--- 原说明 ---
+Let `B` and `C` be two algebras over a field `K`, if `B ⊗[K] C` is central and `
+B` is
+  non-trivial, then `C` is central.
 -/
 lemma right_of_tensor_of_field (K B C : Type*) [Field K] [Ring B] [Ring C] [Nontrivial B]
-    [Algebra K B] [Algebra K C] [IsCentral K (B otimes[K] C)] : IsCentral K C :=
-right_of_tensor K B C FaithfulSMul.algebraMap_injective K B
+    [Algebra K B] [Algebra K C] [IsCentral K (B ⊗[K] C)] : IsCentral K C :=
+  right_of_tensor K B C <| FaithfulSMul.algebraMap_injective K B
 
 
 end Algebra.IsCentral
+

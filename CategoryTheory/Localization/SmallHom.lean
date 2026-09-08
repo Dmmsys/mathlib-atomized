@@ -47,20 +47,12 @@ is small. -/
 -- https://github.com/leanprover/lean4/pull/12423, the universe `w` would default to a
 -- universe output parameter. See Note [universe output parameters and typeclass caching].
 @[univ_out_params]
-/--
-Definition of `HasSmallLocalizedHom` / `HasSmallLocalizedHom` 的定义
-
-English:
-class HasSmallLocalizedHom
-  parameters: : Prop where
-  axioms and operations (1):
-    - small : Small.{w} (W.Q.obj X ⟶ W.Q.obj Y)
-
-中文:
-类 有SmallLocalized态射
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - small : Small.{w} (W.Q.obj X ⟶ W.Q.obj Y)
+/-
+**CategoryTheory.Localization.HasSmallLocalizedHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+CategoryTheory.Localization`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.MorphismProperty C → C → C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class HasSmallLocalizedHom : Prop where
   small : Small.{w} (W.Q.obj X ⟶ W.Q.obj Y)
@@ -68,33 +60,19 @@ class HasSmallLocalizedHom : Prop where
 attribute [instance] HasSmallLocalizedHom.small
 
 variable {X Y Z}
-
-/--
-lemma `hasSmallLocalizedHom_iff` / 引理 `hasSmallLocalizedHom_iff`
-
-English:
-lemma hasSmallLocalizedHom_iff
-  proof: by
-  constructor
-  · intro h
-    exact small_map (homEquiv W W.Q L).symm
-  · intro h
-    exact ⟨small_map (homEquiv W W.Q L)⟩
-
-include L in
-
-中文:
-引理 hasSmallLocalizedHom_iff
-  证明: by
-  constructor
-  · intro h
-    exact small_map (homEquiv W W.Q L).symm
-  · intro h
-    exact ⟨small_map (homEquiv W W.Q L)⟩
-
-include L in
-
-Depends on / 依赖: homEquiv, small_map
+/-
+**CategoryTheory.Localization.hasSmallLocalizedHom_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedHom_iff : HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.o
+bj X ⟶ L.obj Y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_map`：small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃
+ β) : Small.{w} α
+· 使用定理 `CategoryTheory.Localization.HasSmallLocalizedHom.small`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {W : CategoryTheory.MorphismProperty
+ C} {X Y : C}   [self : CategoryTheory.Local…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma hasSmallLocalizedHom_iff :
     HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.obj X ⟶ L.obj Y) := by
@@ -105,22 +83,16 @@ lemma hasSmallLocalizedHom_iff :
     exact ⟨small_map (homEquiv W W.Q L)⟩
 
 include L in
-/--
-lemma `hasSmallLocalizedHom_of_isLocalization` / 引理 `hasSmallLocalizedHom_of_isLocalization`
-
-English:
-lemma hasSmallLocalizedHom_of_isLocalization
-  proof: by
-  rw [hasSmallLocalizedHom_iff W L]
-  infer_instance
-
-中文:
-引理 hasSmallLocalizedHom_of_isLocalization
-  证明: by
-  rw [hasSmallLocalizedHom_iff W L]
-  infer_instance
-
-Depends on / 依赖: F.shiftIso_add, hasSmallLocalizedHom_iff, infer_instance, shiftIso_add
+/-
+**CategoryTheory.Localization.hasSmallLocalizedHom_of_isLocalization** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedHom_of_isLocalization : HasSmallLocalizedHom.{v₂} W X Y
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff`：hasSmallLocalizedH
+om_iff : HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.obj X ⟶ L.obj Y)
 -/
 lemma hasSmallLocalizedHom_of_isLocalization :
     HasSmallLocalizedHom.{v₂} W X Y := by
@@ -128,67 +100,57 @@ lemma hasSmallLocalizedHom_of_isLocalization :
   infer_instance
 
 variable (X Y) in
-/--
-lemma `small_of_hasSmallLocalizedHom` / 引理 `small_of_hasSmallLocalizedHom`
-
-English:
-lemma small_of_hasSmallLocalizedHom
-  given: [HasSmallLocalizedHom.{w} W X Y]
-  proof: by
-  rwa [← hasSmallLocalizedHom_iff W]
-
-中文:
-引理 small_of_hasSmallLocalizedHom
-  条件: [有SmallLocalized态射.{w} W X Y]
-  证明: by
-  rwa [← hasSmallLocalizedHom_iff W]
-
-Depends on / 依赖: F.shiftIso_add, hasSmallLocalizedHom_iff, shiftIso_add
+/-
+**CategoryTheory.Localization.small_of_hasSmallLocalizedHom** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Localization`。
+形式化陈述：small_of_hasSmallLocalizedHom [HasSmallLocalizedHom.{w} W X Y] : Small.{w}
+ (L.obj X ⟶ L.obj Y)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff`：hasSmallLocalizedH
+om_iff : HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.obj X ⟶ L.obj Y)
 -/
 lemma small_of_hasSmallLocalizedHom [HasSmallLocalizedHom.{w} W X Y] :
     Small.{w} (L.obj X ⟶ L.obj Y) := by
   rwa [← hasSmallLocalizedHom_iff W]
-
-/--
-lemma `hasSmallLocalizedHom_iff_of_isos` / 引理 `hasSmallLocalizedHom_iff_of_isos`
-
-English:
-lemma hasSmallLocalizedHom_iff_of_isos
-  given: {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y')
-  proof: by
-  simp only [hasSmallLocalizedHom_iff W W.Q]
-  exact small_congr (Iso.homCongr (W.Q.mapIso e) (W.Q.mapIso e'))
-
-中文:
-引理 hasSmallLocalizedHom_iff_of_isos
-  条件: {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y')
-  证明: by
-  simp only [hasSmallLocalizedHom_iff W W.Q]
-  exact small_congr (Iso.homCongr (W.Q.mapIso e) (W.Q.mapIso e'))
-
-Depends on / 依赖: Iso.homCongr, W.Q.mapIso, hasSmallLocalizedHom_iff, homCongr, mapIso, small_congr
+/-
+**CategoryTheory.Localization.hasSmallLocalizedHom_iff_of_isos** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedHom_iff_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y') : 
+HasSmallLocalizedHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X' Y'
+参数：e : X ≅ X'；e' : Y ≅ Y'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff`：hasSmallLocalizedH
+om_iff : HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.obj X ⟶ L.obj Y)
+· 使用定理 `small_congr`：small_congr {α : Type*} {β : Type*} (e : α ≃ β) : Small.{w}
+ α ↔ Small.{w} β
 -/
 lemma hasSmallLocalizedHom_iff_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y') :
     HasSmallLocalizedHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X' Y' := by
   simp only [hasSmallLocalizedHom_iff W W.Q]
   exact small_congr (Iso.homCongr (W.Q.mapIso e) (W.Q.mapIso e'))
-
-/--
-lemma `hasSmallLocalizedHom_of_isos` / 引理 `hasSmallLocalizedHom_of_isos`
-
-English:
-lemma hasSmallLocalizedHom_of_isos
-  statement: {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y')
-  proof: by
-  rwa [← hasSmallLocalizedHom_iff_of_isos _ e e']
-
-中文:
-引理 hasSmallLocalizedHom_of_isos
-  结论: {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y')
-  证明: by
-  rwa [← hasSmallLocalizedHom_iff_of_isos _ e e']
-
-Depends on / 依赖: hasSmallLocalizedHom_iff_of_isos
+/-
+**CategoryTheory.Localization.hasSmallLocalizedHom_of_isos** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedHom_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y') [HasSm
+allLocalizedHom.{w} W X Y] : HasSmallLocalizedHom.{w} W X' Y'
+参数：e : X ≅ X'；e' : Y ≅ Y'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff_of_isos`：hasSmallLo
+calizedHom_iff_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y') : HasSmallLocalize
+dHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X' Y'
 -/
 lemma hasSmallLocalizedHom_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y')
     [HasSmallLocalizedHom.{w} W X Y] :
@@ -196,48 +158,43 @@ lemma hasSmallLocalizedHom_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y')
   rwa [← hasSmallLocalizedHom_iff_of_isos _ e e']
 
 variable (X) in
-/--
-lemma `hasSmallLocalizedHom_iff_target` / 引理 `hasSmallLocalizedHom_iff_target`
-
-English:
-lemma hasSmallLocalizedHom_iff_target
-  given: {Y Y' : C} (f : Y ⟶ Y') (hf : W f)
-  proof: by
-  simp only [hasSmallLocalizedHom_iff W W.Q]
-  exact small_congr (Iso.homCongr (Iso.refl _) (Localization.isoOfHom W.Q W f hf))
-
-中文:
-引理 hasSmallLocalizedHom_iff_target
-  条件: {Y Y' : C} (f : Y ⟶ Y') (hf : W f)
-  证明: by
-  simp only [hasSmallLocalizedHom_iff W W.Q]
-  exact small_congr (Iso.homCongr (Iso.refl _) (Localization.isoOfHom W.Q W f hf))
-
-Depends on / 依赖: Iso.homCongr, Iso.refl, Localization, Localization.isoOfHom, hasSmallLocalizedHom_iff, homCongr, isoOfHom, small_congr
+/-
+**CategoryTheory.Localization.hasSmallLocalizedHom_iff_target** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedHom_iff_target {Y Y' : C} (f : Y ⟶ Y') (hf : W f) : HasSm
+allLocalizedHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X Y'
+参数：f : Y ⟶ Y'；hf : W f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff`：hasSmallLocalizedH
+om_iff : HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.obj X ⟶ L.obj Y)
+· 使用定理 `small_congr`：small_congr {α : Type*} {β : Type*} (e : α ≃ β) : Small.{w}
+ α ↔ Small.{w} β
 -/
 lemma hasSmallLocalizedHom_iff_target {Y Y' : C} (f : Y ⟶ Y') (hf : W f) :
     HasSmallLocalizedHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X Y' := by
   simp only [hasSmallLocalizedHom_iff W W.Q]
   exact small_congr (Iso.homCongr (Iso.refl _) (Localization.isoOfHom W.Q W f hf))
-
-/--
-lemma `hasSmallLocalizedHom_iff_source` / 引理 `hasSmallLocalizedHom_iff_source`
-
-English:
-lemma hasSmallLocalizedHom_iff_source
-  given: {X' : C} (f : X ⟶ X') (hf : W f) (Y : C)
-  proof: by
-  simp only [hasSmallLocalizedHom_iff W W.Q]
-  exact small_congr (Iso.homCongr (Localization.isoOfHom W.Q W f hf) (Iso.refl _))
-
-中文:
-引理 hasSmallLocalizedHom_iff_source
-  条件: {X' : C} (f : X ⟶ X') (hf : W f) (Y : C)
-  证明: by
-  simp only [hasSmallLocalizedHom_iff W W.Q]
-  exact small_congr (Iso.homCongr (Localization.isoOfHom W.Q W f hf) (Iso.refl _))
-
-Depends on / 依赖: Iso.homCongr, Iso.refl, Localization, Localization.isoOfHom, hasSmallLocalizedHom_iff, homCongr, isoOfHom, small_congr
+/-
+**CategoryTheory.Localization.hasSmallLocalizedHom_iff_source** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedHom_iff_source {X' : C} (f : X ⟶ X') (hf : W f) (Y : C) :
+ HasSmallLocalizedHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X' Y
+参数：f : X ⟶ X'；hf : W f；Y : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff`：hasSmallLocalizedH
+om_iff : HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.obj X ⟶ L.obj Y)
+· 使用定理 `small_congr`：small_congr {α : Type*} {β : Type*} (e : α ≃ β) : Small.{w}
+ α ↔ Small.{w} β
 -/
 lemma hasSmallLocalizedHom_iff_source {X' : C} (f : X ⟶ X') (hf : W f) (Y : C) :
     HasSmallLocalizedHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X' Y := by
@@ -246,42 +203,52 @@ lemma hasSmallLocalizedHom_iff_source {X' : C} (f : X ⟶ X') (hf : W f) (Y : C)
 
 end
 
-/--
-Definition of `SmallHom` / `SmallHom` 的定义
+/-- The type of morphisms from `X` to `Y` in the localized category
+with respect to `W : MorphismProperty C` that is shrunk to `Type w`
+when `HasSmallLocalizedHom.{w} W X Y` holds. -/
+/-
+**CategoryTheory.Localization.SmallHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Localization`。
+形式化陈述：SmallHom (X Y : C) [HasSmallLocalizedHom.{w} W X Y] : Type w
+参数：X Y : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.HasSmallLocalizedHom.small`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {W : CategoryTheory.MorphismProperty
+ C} {X Y : C}   [self : CategoryTheory.Local…
 
-English:
-definition SmallHom
-  signature: (X Y : C) [HasSmallLocalizedHom.{w} W X Y]
-  body: Shrink.{w} (W.Q.obj X ⟶ W.Q.obj Y)
-
-中文:
-定义 SmallHom
-  签名: (X Y : C) [有SmallLocalized态射.{w} W X Y]
-  定义体: Shrink.{w} (W.Q.obj X ⟶ W.Q.obj Y)
-
-Depends on / 依赖: Shrink, W.Q.obj
+--- 原说明 ---
+The type of morphisms from `X` to `Y` in the localized category
+with respect to `W : MorphismProperty C` that is shrunk to `Type w`
+when `HasSmallLocalizedHom.{w} W X Y` holds.
 -/
 def SmallHom (X Y : C) [HasSmallLocalizedHom.{w} W X Y] : Type w :=
   Shrink.{w} (W.Q.obj X ⟶ W.Q.obj Y)
 
 namespace SmallHom
 
-/--
-Definition of `equiv` / `equiv` 的定义
+/-- The canonical bijection `SmallHom.{w} W X Y ≃ (L.obj X ⟶ L.obj Y)`
+when `L` is a localization functor for `W : MorphismProperty C` and
+that `HasSmallLocalizedHom.{w} W X Y` holds. -/
+/-
+**CategoryTheory.Localization.SmallHom.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Localization.SmallHom`。
+形式化陈述：equiv (L : C ⥤ D) [L.IsLocalization W] {X Y : C} [HasSmallLocalizedHom.{w}
+ W X Y] : SmallHom.{w} W X Y ≃ (L.obj X ⟶ L.obj Y)
+参数：L : C ⥤ D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.Localization.HasSmallLocalizedHom.small`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {W : CategoryTheory.MorphismProperty
+ C} {X Y : C}   [self : CategoryTheory.Local…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition equiv
-  signature: (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
-  body: letI := small_of_hasSmallLocalizedHom.{w} W W.Q X Y
-  (equivShrink _).symm.trans (homEquiv W W.Q L)
-
-中文:
-定义 equiv
-  签名: (L : C ⥤ D) [L.是Localization W] {X Y : C}
-  定义体: letI := small_of_hasSmallLocalizedHom.{w} W W.Q X Y
-  (equivShrink _).symm.trans (homEquiv W W.Q L)
-
-Depends on / 依赖: equivShrink, homEquiv, small_of_hasSmallLocalizedHom, symm.trans
+--- 原说明 ---
+The canonical bijection `SmallHom.{w} W X Y ≃ (L.obj X ⟶ L.obj Y)`
+when `L` is a localization functor for `W : MorphismProperty C` and
+that `HasSmallLocalizedHom.{w} W X Y` holds.
 -/
 noncomputable def equiv (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
     [HasSmallLocalizedHom.{w} W X Y] :
@@ -290,26 +257,29 @@ noncomputable def equiv (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
   (equivShrink _).symm.trans (homEquiv W W.Q L)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `equiv_equiv_symm` / 引理 `equiv_equiv_symm`
-
-English:
-lemma equiv_equiv_symm
-  statement: (L : C ⥤ D) [L.IsLocalization W]
-  proof: by
-  dsimp [equiv]
-  rw [Equiv.symm_apply_apply]; rw [homEquiv_trans]
-  apply homEquiv_eq
-
-中文:
-引理 equiv_equiv_symm
-  结论: (L : C ⥤ D) [L.是Localization W]
-  证明: by
-  dsimp [equiv]
-  rw [Equiv.symm_apply_apply]; rw [homEquiv_trans]
-  apply homEquiv_eq
-
-Depends on / 依赖: Equiv.symm_apply_apply, homEquiv_eq, homEquiv_trans, symm_apply_apply
+/-
+**CategoryTheory.Localization.SmallHom.equiv_equiv_symm** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Localization.SmallHom`。
+形式化陈述：equiv_equiv_symm (L : C ⥤ D) [L.IsLocalization W] (L' : C ⥤ D') [L'.IsLoca
+lization W] (G : D ⥤ D') (e : L ⋙ G ≅ L') {X Y : C} [HasSmallLocalizedHom.{w} W 
+X Y] (f : L.obj X ⟶ L.obj Y) : equiv W L' ((equiv W L).symm f) = e.inv.app X ≫ G
+.map f ≫ e.hom.app Y
+参数：L : C ⥤ D；L' : C ⥤ D'；G : D ⥤ D'；e : L ⋙ G ≅ L'；f : L.obj X ⟶ L.obj Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.Localization.HasSmallLocalizedHom.small`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {W : CategoryTheory.MorphismProperty
+ C} {X Y : C}   [self : CategoryTheory.Local…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用引理 `CategoryTheory.Localization.homEquiv_trans`：homEquiv_trans (f : L₁.obj X
+ ⟶ L₁.obj Y) : homEquiv W L₂ L₃ (homEquiv W L₁ L₂ f) = homEquiv W L₁ L₃ f
+· 使用引理 `CategoryTheory.Localization.homEquiv_eq`：homEquiv_eq (G : D₁ ⥤ D₂) (e : 
+L₁ ⋙ G ≅ L₂) (f : L₁.obj X ⟶ L₁.obj Y) : homEquiv W L₁ L₂ f = e.inv.app X ≫ G.ma
+p f ≫ e.hom.app Y
 -/
 lemma equiv_equiv_symm (L : C ⥤ D) [L.IsLocalization W]
     (L' : C ⥤ D') [L'.IsLocalization W] (G : D ⥤ D')
@@ -318,23 +288,22 @@ lemma equiv_equiv_symm (L : C ⥤ D) [L.IsLocalization W]
     equiv W L' ((equiv W L).symm f) =
       e.inv.app X ≫ G.map f ≫ e.hom.app Y := by
   dsimp [equiv]
-  rw [Equiv.symm_apply_apply]; rw [homEquiv_trans]
+  rw [Equiv.symm_apply_apply, homEquiv_trans]
   apply homEquiv_eq
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The element in `SmallHom W X Y` induced by `f : X ⟶ Y`. -/
+/-
+**CategoryTheory.Localization.SmallHom.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Localization.SmallHom`。
+形式化陈述：mk {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : SmallHom.{w} W
+ X Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mk
-  signature: {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y)
-  body: (equiv.{w} W W.Q).symm (W.Q.map f)
-
-中文:
-定义 mk
-  签名: {X Y : C} [有SmallLocalized态射.{w} W X Y] (f : X ⟶ Y)
-  定义体: (equiv.{w} W W.Q).symm (W.Q.map f)
-
-Depends on / 依赖: W.Q.map
+--- 原说明 ---
+The element in `SmallHom W X Y` induced by `f : X ⟶ Y`.
 -/
 noncomputable def mk {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) :
     SmallHom.{w} W X Y :=
@@ -342,20 +311,33 @@ noncomputable def mk {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `equiv_mk` / 引理 `equiv_mk`
-
-English:
-lemma equiv_mk
-  statement: (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
-  proof: by
-  simp [equiv, mk]
-
-中文:
-引理 equiv_mk
-  结论: (L : C ⥤ D) [L.是Localization W] {X Y : C}
-  证明: by
-  simp [equiv, mk]
+/-
+**CategoryTheory.Localization.SmallHom.equiv_mk** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Localization.SmallHom`。
+形式化陈述：equiv_mk (L : C ⥤ D) [L.IsLocalization W] {X Y : C} [HasSmallLocalizedHom.
+{w} W X Y] (f : X ⟶ Y) : equiv.{w} W L (mk W f) = L.map f
+参数：L : C ⥤ D；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.Localization.HasSmallLocalizedHom.small`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {W : CategoryTheory.MorphismProperty
+ C} {X Y : C}   [self : CategoryTheory.Local…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.Localization.homEquiv_refl`：homEquiv_refl (f : L₁.obj X ⟶
+ L₁.obj Y) : homEquiv W L₁ L₁ f = f
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用引理 `CategoryTheory.Localization.homEquiv_map`：homEquiv_map (f : X ⟶ Y) : hom
+Equiv W L₁ L₂ (L₁.map f) = L₂.map f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_mk (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
     [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) :
@@ -364,20 +346,20 @@ lemma equiv_mk (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
 
 variable {W}
 
-/--
-Definition of `mkInv` / `mkInv` 的定义
+/-- The formal inverse in `SmallHom W X Y` of a morphism `f : Y ⟶ X` such that `W f`. -/
+/-
+**CategoryTheory.Localization.SmallHom.mkInv** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Localization.SmallHom`。
+形式化陈述：mkInv {X Y : C} (f : Y ⟶ X) (hf : W f) [HasSmallLocalizedHom.{w} W X Y] : 
+SmallHom.{w} W X Y
+参数：f : Y ⟶ X；hf : W f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition mkInv
-  signature: {X Y : C} (f : Y ⟶ X) (hf : W f) [HasSmallLocalizedHom.{w} W X Y]
-  body: (equiv.{w} W W.Q).symm (Localization.isoOfHom W.Q W f hf).inv
-
-中文:
-定义 mkInv
-  签名: {X Y : C} (f : Y ⟶ X) (hf : W f) [有SmallLocalized态射.{w} W X Y]
-  定义体: (equiv.{w} W W.Q).symm (Localization.isoOfHom W.Q W f hf).inv
-
-Depends on / 依赖: Localization, Localization.isoOfHom, isoOfHom
+--- 原说明 ---
+The formal inverse in `SmallHom W X Y` of a morphism `f : Y ⟶ X` such that `W f`
+.
 -/
 noncomputable def mkInv {X Y : C} (f : Y ⟶ X) (hf : W f) [HasSmallLocalizedHom.{w} W X Y] :
     SmallHom.{w} W X Y :=
@@ -385,24 +367,33 @@ noncomputable def mkInv {X Y : C} (f : Y ⟶ X) (hf : W f) [HasSmallLocalizedHom
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `equiv_mkInv` / 引理 `equiv_mkInv`
-
-English:
-lemma equiv_mkInv
-  statement: (L : C ⥤ D) [L.IsLocalization W] {X Y : C} (f : Y ⟶ X) (hf : W f)
-  proof: by
-  simp only [equiv, mkInv, Equiv.symm_trans_apply, Equiv.symm_symm, homEquiv_symm_apply,
-    Equiv.trans_apply, Equiv.symm_apply_apply, homEquiv_isoOfHom_inv]
-
-中文:
-引理 equiv_mkInv
-  结论: (L : C ⥤ D) [L.是Localization W] {X Y : C} (f : Y ⟶ X) (hf : W f)
-  证明: by
-  simp only [equiv, mkInv, Equiv.symm_trans_apply, Equiv.symm_symm, homEquiv_symm_apply,
-    Equiv.trans_apply, Equiv.symm_apply_apply, homEquiv_isoOfHom_inv]
-
-Depends on / 依赖: Equiv.symm_apply_apply, Equiv.symm_symm, Equiv.symm_trans_apply, Equiv.trans_apply, homEquiv_isoOfHom_inv, homEquiv_symm_apply, symm_apply_apply, symm_symm, symm_trans_apply, trans_apply
+/-
+**CategoryTheory.Localization.SmallHom.equiv_mkInv** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Localization.SmallHom`。
+形式化陈述：equiv_mkInv (L : C ⥤ D) [L.IsLocalization W] {X Y : C} (f : Y ⟶ X) (hf : W
+ f) [HasSmallLocalizedHom.{w} W X Y] : equiv.{w} W L (mkInv f hf) = (Localizatio
+n.isoOfHom L W f hf).inv
+参数：L : C ⥤ D；f : Y ⟶ X；hf : W f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.Localization.HasSmallLocalizedHom.small`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {W : CategoryTheory.MorphismProperty
+ C} {X Y : C}   [self : CategoryTheory.Local…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.Localization.homEquiv_isoOfHom_inv`：homEquiv_isoOfHom_inv
+ (f : Y ⟶ X) (hf : W f) : homEquiv W L₁ L₂ (isoOfHom L₁ W f hf).inv = (isoOfHom 
+L₂ W f hf).inv
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_mkInv (L : C ⥤ D) [L.IsLocalization W] {X Y : C} (f : Y ⟶ X) (hf : W f)
     [HasSmallLocalizedHom.{w} W X Y] :
@@ -410,18 +401,20 @@ lemma equiv_mkInv (L : C ⥤ D) [L.IsLocalization W] {X Y : C} (f : Y ⟶ X) (hf
   simp only [equiv, mkInv, Equiv.symm_trans_apply, Equiv.symm_symm, homEquiv_symm_apply,
     Equiv.trans_apply, Equiv.symm_apply_apply, homEquiv_isoOfHom_inv]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition on `SmallHom W`. -/
+/-
+**CategoryTheory.Localization.SmallHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Localization.SmallHom`。
+形式化陈述：comp {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w
+} W Y Z] [HasSmallLocalizedHom.{w} W X Z] (α : SmallHom.{w} W X Y) (β : SmallHom
+.{w} W Y Z) : SmallHom.{w} W X Z
+参数：α : SmallHom.{w} W X Y；β : SmallHom.{w} W Y Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition comp
-  signature: {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
-  body: (equiv W W.Q).symm (equiv W W.Q α ≫ equiv W W.Q β)
-
-中文:
-定义 comp
-  签名: {X Y Z : C} [有SmallLocalized态射.{w} W X Y]
-  定义体: (equiv W W.Q).symm (equiv W W.Q α ≫ equiv W W.Q β)
+--- 原说明 ---
+The composition on `SmallHom W`.
 -/
 noncomputable def comp {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
     [HasSmallLocalizedHom.{w} W Y Z] [HasSmallLocalizedHom.{w} W X Z]
@@ -430,34 +423,41 @@ noncomputable def comp {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
   (equiv W W.Q).symm (equiv W W.Q α ≫ equiv W W.Q β)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `equiv_comp` / 引理 `equiv_comp`
-
-English:
-lemma equiv_comp
-  statement: (L : C ⥤ D) [L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
-  proof: by
-  let := small_of_hasSmallLocalizedHom.{w} W W.Q X Y
-  let := small_of_hasSmallLocalizedHom.{w} W W.Q Y Z
-  obtain ⟨α, rfl⟩ := (equivShrink _).surjective α
-  obtain ⟨β, rfl⟩ := (equivShrink _).surjective β
-  dsimp [equiv, comp]
-  rw [Equiv.symm_apply_apply]
-  simp only [homEquiv_refl, homEquiv_comp]
-
-中文:
-引理 equiv_comp
-  结论: (L : C ⥤ D) [L.是Localization W] {X Y Z : C} [有SmallLocalized态射.{w} W X Y]
-  证明: by
-  let := small_of_hasSmallLocalizedHom.{w} W W.Q X Y
-  let := small_of_hasSmallLocalizedHom.{w} W W.Q Y Z
-  obtain ⟨α, rfl⟩ := (equivShrink _).surjective α
-  obtain ⟨β, rfl⟩ := (equivShrink _).surjective β
-  dsimp [equiv, comp]
-  rw [Equiv.symm_apply_apply]
-  simp only [homEquiv_refl, homEquiv_comp]
-
-Depends on / 依赖: Equiv.symm_apply_apply, equivShrink, homEquiv_comp, homEquiv_refl, small_of_hasSmallLocalizedHom, surjective, symm_apply_apply
+/-
+**CategoryTheory.Localization.SmallHom.equiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Localization.SmallHom`。
+形式化陈述：equiv_comp (L : C ⥤ D) [L.IsLocalization W] {X Y Z : C} [HasSmallLocalized
+Hom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Z] [HasSmallLocalizedHom.{w} W X Z]
+ (α : SmallHom.{w} W X Y) (β : SmallHom.{w} W Y Z) : equiv W L (α.comp β) = equi
+v W L α ≫ equiv W L β
+参数：L : C ⥤ D；α : SmallHom.{w} W X Y；β : SmallHom.{w} W Y Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.small_of_hasSmallLocalizedHom`：small_of_hasS
+mallLocalizedHom [HasSmallLocalizedHom.{w} W X Y] : Small.{w} (L.obj X ⟶ L.obj Y
+)
+· 使用定理 `CategoryTheory.Localization.HasSmallLocalizedHom.small`：∀ {C : Type u₁} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {W : CategoryTheory.MorphismProperty
+ C} {X Y : C}   [self : CategoryTheory.Local…
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Localization.homEquiv_refl`：homEquiv_refl (f : L₁.obj X ⟶
+ L₁.obj Y) : homEquiv W L₁ L₁ f = f
+· 使用引理 `CategoryTheory.Localization.homEquiv_comp`：homEquiv_comp (f : L₁.obj X ⟶
+ L₁.obj Y) (g : L₁.obj Y ⟶ L₁.obj Z) : homEquiv W L₁ L₂ (f ≫ g) = homEquiv W L₁ 
+L₂ f ≫ homEquiv W L₁ L₂ g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_comp (L : C ⥤ D) [L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
     [HasSmallLocalizedHom.{w} W Y Z] [HasSmallLocalizedHom.{w} W X Z]
@@ -475,24 +475,33 @@ section
 
 variable {X Y Z T : C}
 
-/--
-lemma `mk_comp_mk` / 引理 `mk_comp_mk`
-
-English:
-lemma mk_comp_mk
-  statement: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Z]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-中文:
-引理 mk_comp_mk
-  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W Y Z]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallHom.mk_comp_mk** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Localization.SmallHom`。
+形式化陈述：mk_comp_mk [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y 
+Z] [HasSmallLocalizedHom.{w} W X Z] (f : X ⟶ Y) (g : Y ⟶ Z) : (mk W f).comp (mk 
+W g) = mk W (f ≫ g)
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mk_comp_mk [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Z]
     [HasSmallLocalizedHom.{w} W X Z] (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -500,24 +509,35 @@ lemma mk_comp_mk [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y 
   (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
-/--
-lemma `comp_mk_id` / 引理 `comp_mk_id`
-
-English:
-lemma comp_mk_id
-  statement: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Y]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-中文:
-引理 comp_mk_id
-  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W Y Y]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallHom.comp_mk_id** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Localization.SmallHom`。
+形式化陈述：comp_mk_id [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y 
+Y] (α : SmallHom.{w} W X Y) : α.comp (mk W (𝟙 Y)) = α
+参数：α : SmallHom.{w} W X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_mk_id [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Y]
     (α : SmallHom.{w} W X Y) :
@@ -525,24 +545,35 @@ lemma comp_mk_id [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y 
   (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
-/--
-lemma `mk_id_comp` / 引理 `mk_id_comp`
-
-English:
-lemma mk_id_comp
-  statement: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X X]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-中文:
-引理 mk_id_comp
-  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W X X]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-Depends on / 依赖: equiv_comp, evaluation, injective
+/-
+**CategoryTheory.Localization.SmallHom.mk_id_comp** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Localization.SmallHom`。
+形式化陈述：mk_id_comp [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X 
+X] (α : SmallHom.{w} W X Y) : (mk W (𝟙 X)).comp α = α
+参数：α : SmallHom.{w} W X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mk_id_comp [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X X]
     (α : SmallHom.{w} W X Y) :
@@ -550,28 +581,34 @@ lemma mk_id_comp [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X 
   (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
-/--
-lemma `comp_assoc` / 引理 `comp_assoc`
-
-English:
-lemma comp_assoc
-  statement: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X Z]
-  proof: by
-  apply (equiv W W.Q).injective
-  simp only [equiv_comp, assoc]
-
-@[simp]
-
-中文:
-引理 comp_assoc
-  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W X Z]
-  证明: by
-  apply (equiv W W.Q).injective
-  simp only [equiv_comp, assoc]
-
-@[simp]
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallHom.comp_assoc** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Localization.SmallHom`。
+形式化陈述：comp_assoc [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X 
+Z] [HasSmallLocalizedHom.{w} W X T] [HasSmallLocalizedHom.{w} W Y Z] [HasSmallLo
+calizedHom.{w} W Y T] [HasSmallLocalizedHom.{w} W Z T] (α : SmallHom.{w} W X Y) 
+(β : SmallHom.{w} W Y Z) (γ : SmallHom.{w} W Z T) : (α.comp β).comp γ = α.comp (
+β.comp γ)
+参数：α : SmallHom.{w} W X Y；β : SmallHom.{w} W Y Z；γ : SmallHom.{w} W Z T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_assoc [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X Z]
     [HasSmallLocalizedHom.{w} W X T] [HasSmallLocalizedHom.{w} W Y Z]
@@ -582,24 +619,38 @@ lemma comp_assoc [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X 
   simp only [equiv_comp, assoc]
 
 @[simp]
-/--
-lemma `mk_comp_mkInv` / 引理 `mk_comp_mkInv`
-
-English:
-lemma mk_comp_mkInv
-  statement: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y X]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-中文:
-引理 mk_comp_mkInv
-  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W Y X]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-@[simp]
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallHom.mk_comp_mkInv** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Localization.SmallHom`。
+形式化陈述：mk_comp_mkInv [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W
+ Y X] [HasSmallLocalizedHom.{w} W Y Y] (f : Y ⟶ X) (hf : W f) : (mk W f).comp (m
+kInv f hf) = mk W (𝟙 Y)
+参数：f : Y ⟶ X；hf : W f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mkInv`：equiv_mkInv (L : C ⥤ D
+) [L.IsLocalization W] {X Y : C} (f : Y ⟶ X) (hf : W f) [HasSmallLocalizedHom.{w
+} W X Y] : equiv.{w} W L (mkInv f hf) …
+· 使用引理 `CategoryTheory.Localization.isoOfHom_hom_inv_id`：isoOfHom_hom_inv_id {X 
+Y : C} (f : X ⟶ Y) (hf : W f) : L.map f ≫ (isoOfHom L W f hf).inv = 𝟙 _
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mk_comp_mkInv [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y X]
     [HasSmallLocalizedHom.{w} W Y Y] (f : Y ⟶ X) (hf : W f) :
@@ -607,20 +658,38 @@ lemma mk_comp_mkInv [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W
   (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
-/--
-lemma `mkInv_comp_mk` / 引理 `mkInv_comp_mk`
-
-English:
-lemma mkInv_comp_mk
-  statement: [HasSmallLocalizedHom.{w} W X X] [HasSmallLocalizedHom.{w} W X Y]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-中文:
-引理 mkInv_comp_mk
-  结论: [有SmallLocalized态射.{w} W X X] [有SmallLocalized态射.{w} W X Y]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallHom.mkInv_comp_mk** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Localization.SmallHom`。
+形式化陈述：mkInv_comp_mk [HasSmallLocalizedHom.{w} W X X] [HasSmallLocalizedHom.{w} W
+ X Y] [HasSmallLocalizedHom.{w} W Y X] (f : Y ⟶ X) (hf : W f) : (mkInv f hf).com
+p (mk W f) = mk W (𝟙 X)
+参数：f : Y ⟶ X；hf : W f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mkInv`：equiv_mkInv (L : C ⥤ D
+) [L.IsLocalization W] {X Y : C} (f : Y ⟶ X) (hf : W f) [HasSmallLocalizedHom.{w
+} W X Y] : equiv.{w} W L (mkInv f hf) …
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用引理 `CategoryTheory.Localization.isoOfHom_inv_hom_id`：isoOfHom_inv_hom_id {X 
+Y : C} (f : X ⟶ Y) (hf : W f) : (isoOfHom L W f hf).inv ≫ L.map f = 𝟙 _
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mkInv_comp_mk [HasSmallLocalizedHom.{w} W X X] [HasSmallLocalizedHom.{w} W X Y]
     [HasSmallLocalizedHom.{w} W Y X] (f : Y ⟶ X) (hf : W f) :
@@ -631,46 +700,50 @@ end
 
 section ChangeOfUniverse
 
-/--
-Definition of `chgUniv` / `chgUniv` 的定义
+/-- Up to an equivalence, the type `SmallHom.{w} W X Y n` does not depend on the universe `w`. -/
+/-
+**CategoryTheory.Localization.SmallHom.chgUniv** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Localization.SmallHom`。
+形式化陈述：chgUniv {X Y : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{
+w''} W X Y] : SmallHom.{w} W X Y ≃ SmallHom.{w''} W X Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition chgUniv
-  signature: {X Y : C}
-  body: (equiv.{w} W W.Q).trans (equiv.{w''} W W.Q).symm
-
-中文:
-定义 chgUniv
-  签名: {X Y : C}
-  定义体: (equiv.{w} W W.Q).trans (equiv.{w''} W W.Q).symm
+--- 原说明 ---
+Up to an equivalence, the type `SmallHom.{w} W X Y n` does not depend on the uni
+verse `w`.
 -/
 noncomputable def chgUniv {X Y : C}
     [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w''} W X Y] :
     SmallHom.{w} W X Y ≃ SmallHom.{w''} W X Y :=
   (equiv.{w} W W.Q).trans (equiv.{w''} W W.Q).symm
-
-/--
-lemma `equiv_chgUniv` / 引理 `equiv_chgUniv`
-
-English:
-lemma equiv_chgUniv
-  statement: (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
-  proof: by
-  obtain ⟨f, rfl⟩ := (equiv W W.Q).symm.surjective e
-  dsimp [chgUniv]
-  simp only [Equiv.apply_symm_apply,
-    equiv_equiv_symm W _ _ _ (Localization.compUniqFunctor W.Q L W)]
-
-中文:
-引理 equiv_chgUniv
-  结论: (L : C ⥤ D) [L.是Localization W] {X Y : C}
-  证明: by
-  obtain ⟨f, rfl⟩ := (equiv W W.Q).symm.surjective e
-  dsimp [chgUniv]
-  simp only [Equiv.apply_symm_apply,
-    equiv_equiv_symm W _ _ _ (Localization.compUniqFunctor W.Q L W)]
-
-Depends on / 依赖: Equiv.apply_symm_apply, Localization, Localization.compUniqFunctor, apply_symm_apply, chgUniv, compUniqFunctor, equiv_equiv_symm, surjective, symm.surjective
+/-
+**CategoryTheory.Localization.SmallHom.equiv_chgUniv** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Localization.SmallHom`。
+形式化陈述：equiv_chgUniv (L : C ⥤ D) [L.IsLocalization W] {X Y : C} [HasSmallLocalize
+dHom.{w} W X Y] [HasSmallLocalizedHom.{w''} W X Y] (e : SmallHom.{w} W X Y) : eq
+uiv W L (chgUniv.{w''} e) = equiv W L e
+参数：L : C ⥤ D；e : SmallHom.{w} W X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_equiv_symm`：equiv_equiv_symm 
+(L : C ⥤ D) [L.IsLocalization W] (L' : C ⥤ D') [L'.IsLocalization W] (G : D ⥤ D'
+) (e : L ⋙ G ≅ L') {X Y : C} [HasSmallLocal…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_chgUniv (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
     [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w''} W X Y]
@@ -704,26 +777,19 @@ variable {X Y : C₁}
 variable [HasSmallLocalizedHom.{w} W₁ X Y]
   [HasSmallLocalizedHom.{w'} W₂ (Φ.functor.obj X) (Φ.functor.obj Y)]
 
-/--
-Definition of `smallHomMap` / `smallHomMap` 的定义
+/-- The action of a localizer morphism on `SmallHom`. -/
+/-
+**CategoryTheory.LocalizerMorphism.smallHomMap** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.LocalizerMorphism`。
+形式化陈述：smallHomMap (f : SmallHom.{w} W₁ X Y) : SmallHom.{w'} W₂ (Φ.functor.obj X)
+ (Φ.functor.obj Y)
+参数：f : SmallHom.{w} W₁ X Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition smallHomMap
-  signature: (f : SmallHom.{w} W₁ X Y)
-  body: (SmallHom.equiv W₂ W₂.Q).symm
-    (Iso.homCongr ((CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm.app _)
-      ((CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm.app _)
-      ((Φ.localizedFunctor W₁.Q W₂.Q).map ((SmallHom.equiv W₁ W₁.Q) f)))
-
-中文:
-定义 smallHomMap
-  签名: (f : SmallHom.{w} W₁ X Y)
-  定义体: (SmallHom.equiv W₂ W₂.Q).symm
-    (Iso.homCongr ((CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm.app _)
-      ((CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm.app _)
-      ((Φ.localizedFunctor W₁.Q W₂.Q).map ((SmallHom.equiv W₁ W₁.Q) f)))
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, Iso.homCongr, SmallHom, SmallHom.equiv, functor, homCongr, localizedFunctor, symm.app
+--- 原说明 ---
+The action of a localizer morphism on `SmallHom`.
 -/
 noncomputable def smallHomMap (f : SmallHom.{w} W₁ X Y) :
     SmallHom.{w'} W₂ (Φ.functor.obj X) (Φ.functor.obj Y) :=
@@ -733,76 +799,83 @@ noncomputable def smallHomMap (f : SmallHom.{w} W₁ X Y) :
       ((Φ.localizedFunctor W₁.Q W₂.Q).map ((SmallHom.equiv W₁ W₁.Q) f)))
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `equiv_smallHomMap` / 引理 `equiv_smallHomMap`
-
-English:
-lemma equiv_smallHomMap
-  statement: (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G)
-  proof: by
-  obtain ⟨g, rfl⟩ := (SmallHom.equiv W₁ W₁.Q).symm.surjective f
-  simp only [smallHomMap, Equiv.apply_symm_apply]
-  let G' := Φ.localizedFunctor W₁.Q W₂.Q
-  let β := CatCommSq.iso Φ.functor W₁.Q W₂.Q G'
-  let E₁ := (uniq W₁.Q L₁ W₁).functor
-  let α₁ : W₁.Q ⋙ E₁ ≅ L₁ := compUniqFunctor W₁.Q L₁ W₁
-  let E₂ := (uniq W₂.Q L₂ W₂).functor
-  let α₂ : W₂.Q ⋙ E₂ ≅ L₂ := compUniqFunctor W₂.Q L₂ W₂
-  rw [SmallHom.equiv_equiv_symm W₁ W₁.Q L₁ E₁ α₁]; rw [SmallHom.equiv_equiv_symm W₂ W₂.Q L₂ E₂ α₂]
-  change α₂.inv.app _ ≫ E₂.map (β.hom.app X ≫ G'.map g ≫ β.inv.app Y) ≫ _ = _
-  let γ : G' ⋙ E₂ ≅ E₁ ⋙ G := liftNatIso W₁.Q W₁ (W₁.Q ⋙ G' ⋙ E₂) (W₁.Q ⋙ E₁ ⋙ G) _ _
-    ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight β.symm E₂ ≪≫
-      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ α₂ ≪≫ e ≪≫
-      Functor.isoWhiskerRight α₁.symm G ≪≫ Functor.associator _ _ _)
-  have hγ : forall (X : C₁), γ.hom.app (W₁.Q.obj X) =
-      E₂.map (β.inv.app X) ≫ α₂.hom.app (Φ.functor.obj X) ≫
-        e.hom.app X ≫ G.map (α₁.inv.app X) := fun X => by
-    simp [γ, id_comp, comp_id]
-  simp only [Functor.map_comp, ← NatIso.naturality_1 γ, ← Functor.comp_map,
-    ← cancel_epi (e.inv.app X), ← cancel_epi (G.map (α₁.hom.app X)),
-    ← cancel_epi (γ.hom.app (W₁.Q.obj X)), assoc, Iso.inv_hom_id_app_assoc,
-    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.map_id, id_comp,
-    Iso.hom_inv_id_app_assoc]
-  simp only [hγ, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app,
-    Functor.map_id, id_comp, Iso.hom_inv_id_app_assoc,
-    Iso.hom_inv_id_app, Functor.comp_obj, comp_id]
-
-@[simp]
-
-中文:
-引理 equiv_smallHomMap
-  结论: (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G)
-  证明: by
-  obtain ⟨g, rfl⟩ := (SmallHom.equiv W₁ W₁.Q).symm.surjective f
-  simp only [smallHomMap, Equiv.apply_symm_apply]
-  let G' := Φ.localizedFunctor W₁.Q W₂.Q
-  let β := CatCommSq.iso Φ.functor W₁.Q W₂.Q G'
-  let E₁ := (uniq W₁.Q L₁ W₁).functor
-  let α₁ : W₁.Q ⋙ E₁ ≅ L₁ := compUniqFunctor W₁.Q L₁ W₁
-  let E₂ := (uniq W₂.Q L₂ W₂).functor
-  let α₂ : W₂.Q ⋙ E₂ ≅ L₂ := compUniqFunctor W₂.Q L₂ W₂
-  rw [SmallHom.equiv_equiv_symm W₁ W₁.Q L₁ E₁ α₁]; rw [SmallHom.equiv_equiv_symm W₂ W₂.Q L₂ E₂ α₂]
-  change α₂.inv.app _ ≫ E₂.map (β.hom.app X ≫ G'.map g ≫ β.inv.app Y) ≫ _ = _
-  let γ : G' ⋙ E₂ ≅ E₁ ⋙ G := liftNatIso W₁.Q W₁ (W₁.Q ⋙ G' ⋙ E₂) (W₁.Q ⋙ E₁ ⋙ G) _ _
-    ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight β.symm E₂ ≪≫
-      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ α₂ ≪≫ e ≪≫
-      Functor.isoWhiskerRight α₁.symm G ≪≫ Functor.associator _ _ _)
-  have hγ : forall (X : C₁), γ.hom.app (W₁.Q.obj X) =
-      E₂.map (β.inv.app X) ≫ α₂.hom.app (Φ.functor.obj X) ≫
-        e.hom.app X ≫ G.map (α₁.inv.app X) := fun X => by
-    simp [γ, id_comp, comp_id]
-  simp only [Functor.map_comp, ← NatIso.naturality_1 γ, ← Functor.comp_map,
-    ← cancel_epi (e.inv.app X), ← cancel_epi (G.map (α₁.hom.app X)),
-    ← cancel_epi (γ.hom.app (W₁.Q.obj X)), assoc, Iso.inv_hom_id_app_assoc,
-    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.map_id, id_comp,
-    Iso.hom_inv_id_app_assoc]
-  simp only [hγ, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app,
-    Functor.map_id, id_comp, Iso.hom_inv_id_app_assoc,
-    Iso.hom_inv_id_app, Functor.comp_obj, comp_id]
-
-@[simp]
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, Equiv.apply_symm_apply, SmallHom, SmallHom.equiv, SmallHom.equiv_equiv_symm, apply_symm_apply, compUniqFunctor, equiv_equiv_symm, functor, inv.app, localizedFunctor, smallHomMap, surjective, symm.surjective
+/-
+**CategoryTheory.LocalizerMorphism.equiv_smallHomMap** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.LocalizerMorphism`。
+形式化陈述：equiv_smallHomMap (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) (f : SmallHo
+m.{w} W₁ X Y) : (SmallHom.equiv W₂ L₂) (Φ.smallHomMap f) = e.hom.app X ≫ G.map (
+SmallHom.equiv W₁ L₁ f) ≫ e.inv.app Y
+参数：G : D₁ ⥤ D₂；e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G；f : SmallHom.{w} W₁ X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_equiv_symm`：equiv_equiv_symm 
+(L : C ⥤ D) [L.IsLocalization W] (L' : C ⥤ D') [L'.IsLocalization W] (G : D ⥤ D'
+) (e : L ⋙ G ≅ L') {X Y : C} [HasSmallLocal…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Localization.liftNatTrans_app`：liftNatTrans_app (F₁ F₂ : 
+C ⥤ E) (F₁' F₂' : D ⥤ E) [Lifting L W F₁ F₁'] [Lifting L W F₂ F₂'] (τ : F₁ ⟶ F₂)
+ (X : C) : (liftNatTrans L W F₁ F₂…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatIso.naturality_1`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsSplitEpi.epi`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [hf : CategoryTheory.IsSplitEpi f],   C
+ategoryTheory.Epi f
+· 使用定理 `CategoryTheory.IsSplitEpi.of_iso`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   Category
+Theory.IsSplitEpi f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.instIsSplitEpiMap`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {X Y : C} (f : X ⟶…
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
 -/
 lemma equiv_smallHomMap (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G)
     (f : SmallHom.{w} W₁ X Y) :
@@ -816,15 +889,16 @@ lemma equiv_smallHomMap (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ �
   let α₁ : W₁.Q ⋙ E₁ ≅ L₁ := compUniqFunctor W₁.Q L₁ W₁
   let E₂ := (uniq W₂.Q L₂ W₂).functor
   let α₂ : W₂.Q ⋙ E₂ ≅ L₂ := compUniqFunctor W₂.Q L₂ W₂
-  rw [SmallHom.equiv_equiv_symm W₁ W₁.Q L₁ E₁ α₁]; rw [SmallHom.equiv_equiv_symm W₂ W₂.Q L₂ E₂ α₂]
+  rw [SmallHom.equiv_equiv_symm W₁ W₁.Q L₁ E₁ α₁,
+    SmallHom.equiv_equiv_symm W₂ W₂.Q L₂ E₂ α₂]
   change α₂.inv.app _ ≫ E₂.map (β.hom.app X ≫ G'.map g ≫ β.inv.app Y) ≫ _ = _
   let γ : G' ⋙ E₂ ≅ E₁ ⋙ G := liftNatIso W₁.Q W₁ (W₁.Q ⋙ G' ⋙ E₂) (W₁.Q ⋙ E₁ ⋙ G) _ _
     ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight β.symm E₂ ≪≫
       Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ α₂ ≪≫ e ≪≫
       Functor.isoWhiskerRight α₁.symm G ≪≫ Functor.associator _ _ _)
-  have hγ : forall (X : C₁), γ.hom.app (W₁.Q.obj X) =
+  have hγ : ∀ (X : C₁), γ.hom.app (W₁.Q.obj X) =
       E₂.map (β.inv.app X) ≫ α₂.hom.app (Φ.functor.obj X) ≫
-        e.hom.app X ≫ G.map (α₁.inv.app X) := fun X => by
+        e.hom.app X ≫ G.map (α₁.inv.app X) := fun X ↦ by
     simp [γ, id_comp, comp_id]
   simp only [Functor.map_comp, ← NatIso.naturality_1 γ, ← Functor.comp_map,
     ← cancel_epi (e.inv.app X), ← cancel_epi (G.map (α₁.hom.app X)),
@@ -836,24 +910,37 @@ lemma equiv_smallHomMap (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ �
     Iso.hom_inv_id_app, Functor.comp_obj, comp_id]
 
 @[simp]
-/--
-lemma `smallHomMap_mk` / 引理 `smallHomMap_mk`
-
-English:
-lemma smallHomMap_mk
-  given: (f : X ⟶ Y)
-  proof: by
-  apply (SmallHom.equiv W₂ W₂.Q).injective
-  simp [Φ.equiv_smallHomMap W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) (CatCommSq.iso _ _ _ _)]
-
-中文:
-引理 smallHomMap_mk
-  条件: (f : X ⟶ Y)
-  证明: by
-  apply (SmallHom.equiv W₂ W₂.Q).injective
-  simp [Φ.equiv_smallHomMap W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) (CatCommSq.iso _ _ _ _)]
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, SmallHom, SmallHom.equiv, equiv_smallHomMap, injective, localizedFunctor
+/-
+**CategoryTheory.LocalizerMorphism.smallHomMap_mk** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.LocalizerMorphism`。
+形式化陈述：smallHomMap_mk (f : X ⟶ Y) : Φ.smallHomMap (SmallHom.mk _ f) = SmallHom.mk
+ _ (Φ.functor.map f)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallHomMap`：equiv_smallHomMap (G
+ : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) (f : SmallHom.{w} W₁ X Y) : (SmallHom.
+equiv W₂ L₂) (Φ.smallHomMap f) = e.hom.a…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用引理 `CategoryTheory.CatCommSq.iso_inv_naturality`：iso_inv_naturality [h : Cat
+CommSq T L R B] {x y : C₁} (f : x ⟶ y) : B.map (L.map f) ≫ (iso T L R B).inv.app
+ y = (iso T L R B).inv.app x ≫ R.…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smallHomMap_mk (f : X ⟶ Y) :
     Φ.smallHomMap (SmallHom.mk _ f) =
@@ -873,26 +960,40 @@ variable [HasSmallLocalizedHom.{w} W₁ X Y] [HasSmallLocalizedHom.{w} W₁ Y Z]
   [HasSmallLocalizedHom.{w'} W₂ (Φ.functor.obj Y) (Φ.functor.obj Z)]
   [HasSmallLocalizedHom.{w'} W₂ (Φ.functor.obj X) (Φ.functor.obj Z)]
 
-/--
-lemma `smallHomMap_comp` / 引理 `smallHomMap_comp`
-
-English:
-lemma smallHomMap_comp
-  given: (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z)
-  proof: by
-  apply (SmallHom.equiv W₂ W₂.Q).injective
-  simp [Φ.equiv_smallHomMap W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) (CatCommSq.iso _ _ _ _),
-    SmallHom.equiv_comp]
-
-中文:
-引理 smallHomMap_comp
-  条件: (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z)
-  证明: by
-  apply (SmallHom.equiv W₂ W₂.Q).injective
-  simp [Φ.equiv_smallHomMap W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q) (CatCommSq.iso _ _ _ _),
-    SmallHom.equiv_comp]
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, SmallHom, SmallHom.equiv, SmallHom.equiv_comp, equiv_comp, equiv_smallHomMap, injective, localizedFunctor
+/-
+**CategoryTheory.LocalizerMorphism.smallHomMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.LocalizerMorphism`。
+形式化陈述：smallHomMap_comp (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z) : Φ.s
+mallHomMap (f.comp g) = (Φ.smallHomMap f).comp (Φ.smallHomMap g)
+参数：f : SmallHom.{w} W₁ X Y；g : SmallHom.{w} W₁ Y Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallHomMap`：equiv_smallHomMap (G
+ : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) (f : SmallHom.{w} W₁ X Y) : (SmallHom.
+equiv W₂ L₂) (Φ.smallHomMap f) = e.hom.a…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smallHomMap_comp (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z) :
     Φ.smallHomMap (f.comp g) = (Φ.smallHomMap f).comp (Φ.smallHomMap g) := by
@@ -910,28 +1011,19 @@ variable {X Y : C₁} [HasSmallLocalizedHom.{w} W₁ X Y] {X' Y' : C₂}
   [HasSmallLocalizedHom.{w'} W₂ Y' Y']
   (eX : Φ.functor.obj X ≅ X') (eY : Φ.functor.obj Y ≅ Y')
 
-/--
-Definition of `smallHomMap'` / `smallHomMap'` 的定义
+/-- The action of a localizer morphism `Φ` on `SmallHom`. In this version, we allow
+the replacement of objects `Φ.functor.obj` by isomorphic objects. -/
+/-
+**CategoryTheory.LocalizerMorphism.smallHomMap'** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.LocalizerMorphism`。
+形式化陈述：smallHomMap' (f : SmallHom.{w} W₁ X Y) : SmallHom.{w'} W₂ X' Y'
+参数：f : SmallHom.{w} W₁ X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition smallHomMap'
-  signature: (f : SmallHom.{w} W₁ X Y)
-  body: have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm eY.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Y')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl X') eX.symm
-  (SmallHom.mk _ eX.inv).comp ((Φ.smallHomMap f).comp (SmallHom.mk _ eY.hom))
-
-中文:
-定义 smallHomMap'
-  签名: (f : SmallHom.{w} W₁ X Y)
-  定义体: have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm eY.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Y')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl X') eX.symm
-  (SmallHom.mk _ eX.inv).comp ((Φ.smallHomMap f).comp (SmallHom.mk _ eY.hom))
-
-Depends on / 依赖: Iso.refl, SmallHom, SmallHom.mk, eX.inv, eX.symm, eY.hom, eY.symm, hasSmallLocalizedHom_of_isos, smallHomMap
+--- 原说明 ---
+The action of a localizer morphism `Φ` on `SmallHom`. In this version, we allow
+the replacement of objects `Φ.functor.obj` by isomorphic objects.
 -/
 noncomputable def smallHomMap' (f : SmallHom.{w} W₁ X Y) :
     SmallHom.{w'} W₂ X' Y' :=
@@ -942,28 +1034,39 @@ noncomputable def smallHomMap' (f : SmallHom.{w} W₁ X Y) :
   (SmallHom.mk _ eX.inv).comp ((Φ.smallHomMap f).comp (SmallHom.mk _ eY.hom))
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `equiv_smallHomMap'` / 引理 `equiv_smallHomMap'`
-
-English:
-lemma equiv_smallHomMap'
-  statement: (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G)
-  proof: by
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
-  simp [smallHomMap', SmallHom.equiv_comp, Φ.equiv_smallHomMap L₁ L₂ G e]
-
-@[simp]
-
-中文:
-引理 equiv_smallHomMap'
-  结论: (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G)
-  证明: by
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
-  simp [smallHomMap', SmallHom.equiv_comp, Φ.equiv_smallHomMap L₁ L₂ G e]
-
-@[simp]
-
-Depends on / 依赖: Iso.refl, SmallHom, SmallHom.equiv_comp, eY.symm, equiv_comp, equiv_smallHomMap, hasSmallLocalizedHom_of_isos, smallHomMap
+/-
+**CategoryTheory.LocalizerMorphism.equiv_smallHomMap'** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.LocalizerMorphism`。
+形式化陈述：equiv_smallHomMap' (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) (f : SmallH
+om.{w} W₁ X Y) : SmallHom.equiv W₂ L₂ (Φ.smallHomMap' eX eY f) = L₂.map eX.inv ≫
+ e.hom.app X ≫ G.map (SmallHom.equiv W₁ L₁ f) ≫ e.inv.app Y ≫ L₂.map eY.hom
+参数：G : D₁ ⥤ D₂；e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G；f : SmallHom.{w} W₁ X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_of_isos`：hasSmallLocali
+zedHom_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y') [HasSmallLocalizedHom.{w} 
+W X Y] : HasSmallLocalizedHom.{w} W X' Y'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallHomMap`：equiv_smallHomMap (G
+ : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) (f : SmallHom.{w} W₁ X Y) : (SmallHom.
+equiv W₂ L₂) (Φ.smallHomMap f) = e.hom.a…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_smallHomMap' (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G)
     (f : SmallHom.{w} W₁ X Y) :
@@ -974,20 +1077,37 @@ lemma equiv_smallHomMap' (G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ �
   simp [smallHomMap', SmallHom.equiv_comp, Φ.equiv_smallHomMap L₁ L₂ G e]
 
 @[simp]
-/--
-lemma `smallHomMap'_mk` / 引理 `smallHomMap'_mk`
-
-English:
-lemma smallHomMap'_mk
-  given: (f : X ⟶ Y)
-  proof: by
-  simp [smallHomMap', SmallHom.mk_comp_mk]
-
-中文:
-引理 smallHomMap'_mk
-  条件: (f : X ⟶ Y)
-  证明: by
-  simp [smallHomMap', SmallHom.mk_comp_mk]
+/-
+**CategoryTheory.LocalizerMorphism.smallHomMap'_mk** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.LocalizerMorphism`。
+形式化陈述：∀ {C₁ : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C₁] {W₁ : Catego
+ryTheory.MorphismProperty C₁} {C₂ : Type u₂}   [inst_1 : CategoryTheory.Category
+.{v₂, u₂} C₂] {W₂ : CategoryTheory.MorphismProperty C₂}   (Φ : CategoryTheory.Lo
+calizerMorphism W₁ W₂) {X Y : C₁}   [inst_2 : CategoryTheory.Localization.HasSma
+llLocalizedHom W₁ X Y] {X' Y' : C₂}   [inst_3 : CategoryTheory.Localization.HasS
+mallLocalizedHom W₂ X' X']   [inst_4 : CategoryTheory.Localization.HasSmallLocal
+izedHom W₂ X' Y']   [inst_5 : CategoryTheory.Localization.HasSmallLocalizedHom W
+₂ Y' Y'] (eX : Φ.functor.obj X ≅ X')   (eY : Φ.functor.obj Y ≅ Y') (f : X ⟶ Y), 
+  Φ.smallHomMap' eX eY (CategoryTheory.Localization.SmallHom.mk W₁ f) =     Cate
+goryTheory.Localization.SmallHom.mk W₂       (CategoryTheory.CategoryStruct.comp
+ eX.inv (CategoryTheory.CategoryStruct.comp (Φ.functor.map f) eY.hom))
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；eX : Φ.functor.obj X ≅ X'；eY : Φ.f
+unctor.obj Y ≅ Y'；f : X ⟶ Y；CategoryTheory.Localization.SmallHom.mk W₁ f；Categor
+yTheory.CategoryStruct.comp eX.inv (CategoryTheory.CategoryStruct.comp (Φ.functo
+r.map f) eY.hom)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.LocalizerMorphism.smallHomMap_mk`：smallHomMap_mk (f : X ⟶
+ Y) : Φ.smallHomMap (SmallHom.mk _ f) = SmallHom.mk _ (Φ.functor.map f)
+· 使用引理 `CategoryTheory.Localization.SmallHom.mk_comp_mk`：mk_comp_mk [HasSmallLoc
+alizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Z] [HasSmallLocalizedHom.{w} 
+W X Z] (f : X ⟶ Y) (g : Y ⟶ Z) : (mk …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smallHomMap'_mk (f : X ⟶ Y) :
     Φ.smallHomMap' eX eY (SmallHom.mk _ f) =
@@ -1005,38 +1125,56 @@ variable {X Y Z : C₁} [HasSmallLocalizedHom.{w} W₁ X Y] [HasSmallLocalizedHo
   [HasSmallLocalizedHom.{w'} W₂ Y' Z'] [HasSmallLocalizedHom.{w'} W₂ X' Z']
   (eX : Φ.functor.obj X ≅ X') (eY : Φ.functor.obj Y ≅ Y') (eZ : Φ.functor.obj Z ≅ Z')
 
-/--
-lemma `smallHomMap'_comp` / 引理 `smallHomMap'_comp`
-
-English:
-lemma smallHomMap'_comp
-  given: (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z)
-  proof: by
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm eY.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Z')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eZ.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Z')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl Y') eY.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eY.symm
-  simp only [smallHomMap', smallHomMap_comp, SmallHom.comp_assoc]
-  congr 2
-  rw [← SmallHom.comp_assoc]; rw [SmallHom.mk_comp_mk]; rw [eY.hom_inv_id]; rw [SmallHom.mk_id_comp]
-
-中文:
-引理 smallHomMap'_comp
-  条件: (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z)
-  证明: by
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm eY.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Z')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eZ.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Z')
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl Y') eY.symm
-  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eY.symm
-  simp only [smallHomMap', smallHomMap_comp, SmallHom.comp_assoc]
-  congr 2
-  rw [← SmallHom.comp_assoc]; rw [SmallHom.mk_comp_mk]; rw [eY.hom_inv_id]; rw [SmallHom.mk_id_comp]
+/-
+**CategoryTheory.LocalizerMorphism.smallHomMap'_comp** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.LocalizerMorphism`。
+形式化陈述：∀ {C₁ : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C₁] {W₁ : Catego
+ryTheory.MorphismProperty C₁} {C₂ : Type u₂}   [inst_1 : CategoryTheory.Category
+.{v₂, u₂} C₂] {W₂ : CategoryTheory.MorphismProperty C₂}   (Φ : CategoryTheory.Lo
+calizerMorphism W₁ W₂) {X Y Z : C₁}   [inst_2 : CategoryTheory.Localization.HasS
+mallLocalizedHom W₁ X Y]   [inst_3 : CategoryTheory.Localization.HasSmallLocaliz
+edHom W₁ Y Z]   [inst_4 : CategoryTheory.Localization.HasSmallLocalizedHom W₁ X 
+Z] {X' Y' Z' : C₂}   [inst_5 : CategoryTheory.Localization.HasSmallLocalizedHom 
+W₂ X' X']   [inst_6 : CategoryTheory.Localization.HasSmallLocalizedHom W₂ Y' Y']
+   [inst_7 : CategoryTheory.Localization.HasSmallLocalizedHom W₂ Z' Z']   [inst_
+8 : CategoryTheory.Localization.HasSmallLocalizedHom W₂ X' Y']   [inst_9 : Categ
+oryTheory.Localization.HasSmallLocalizedHom W₂ Y' Z']   [inst_10 : CategoryTheor
+y.Localization.HasSmallLocalizedHom W₂ X' Z'] (eX : Φ.functor.obj X ≅ X')   (eY 
+: Φ.functor.obj Y ≅ Y') (eZ : Φ.functor.obj Z ≅ Z') (f : CategoryTheory.Localiza
+tion.SmallHom W₁ X Y)   (g : CategoryTheory.Localization.SmallHom W₁ Y Z),   Φ.s
+mallHomMap' eX eZ (f.comp g) = (Φ.smallHomMap' eX eY f).comp (Φ.smallHomMap' eY 
+eZ g)
+参数：Φ : CategoryTheory.LocalizerMorphism W₁ W₂；eX : Φ.functor.obj X ≅ X'；eY : Φ.f
+unctor.obj Y ≅ Y'；eZ : Φ.functor.obj Z ≅ Z'；f : CategoryTheory.Localization.Smal
+lHom W₁ X Y；g : CategoryTheory.Localization.SmallHom W₁ Y Z；f.comp g；Φ.smallHomM
+ap' eX eY f；Φ.smallHomMap' eY eZ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_of_isos`：hasSmallLocali
+zedHom_of_isos {X' Y' : C} (e : X ≅ X') (e' : Y ≅ Y') [HasSmallLocalizedHom.{w} 
+W X Y] : HasSmallLocalizedHom.{w} W X' Y'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.LocalizerMorphism.smallHomMap_comp`：smallHomMap_comp (f :
+ SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z) : Φ.smallHomMap (f.comp g) = (Φ.
+smallHomMap f).comp (Φ.smallHomMap g)
+· 使用引理 `CategoryTheory.Localization.SmallHom.comp_assoc`：comp_assoc [HasSmallLoc
+alizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X Z] [HasSmallLocalizedHom.{w} 
+W X T] [HasSmallLocalizedHom.{w} W Y …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Localization.SmallHom.mk_comp_mk`：mk_comp_mk [HasSmallLoc
+alizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Z] [HasSmallLocalizedHom.{w} 
+W X Z] (f : X ⟶ Y) (g : Y ⟶ Z) : (mk …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用引理 `CategoryTheory.Localization.SmallHom.mk_id_comp`：mk_id_comp [HasSmallLoc
+alizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X X] (α : SmallHom.{w} W X Y) :
+ (mk W (𝟙 X)).comp α = α
 -/
 lemma smallHomMap'_comp (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z) :
     Φ.smallHomMap' eX eZ (f.comp g) =
@@ -1050,10 +1188,11 @@ lemma smallHomMap'_comp (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z) 
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eY.symm
   simp only [smallHomMap', smallHomMap_comp, SmallHom.comp_assoc]
   congr 2
-  rw [← SmallHom.comp_assoc]; rw [SmallHom.mk_comp_mk]; rw [eY.hom_inv_id]; rw [SmallHom.mk_id_comp]
+  rw [← SmallHom.comp_assoc, SmallHom.mk_comp_mk, eY.hom_inv_id, SmallHom.mk_id_comp]
 
 end
 
 end LocalizerMorphism
 
 end CategoryTheory
+

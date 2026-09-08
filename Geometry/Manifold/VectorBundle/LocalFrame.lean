@@ -107,77 +107,96 @@ variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
 
 variable {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
   -- `F` model fiber
-  (n : Nat∞ω)
-  {V : M -> Type*} [TopologicalSpace (TotalSpace F V)]
-  [forall x, AddCommGroup (V x)] [forall x, Module 𝕜 (V x)]
-  [forall x : M, TopologicalSpace (V x)]
+  (n : ℕ∞ω)
+  {V : M → Type*} [TopologicalSpace (TotalSpace F V)]
+  [∀ x, AddCommGroup (V x)] [∀ x, Module 𝕜 (V x)]
+  [∀ x : M, TopologicalSpace (V x)]
   [FiberBundle F V]
 
 noncomputable section
 
 section IsLocalFrame
 
-variable {ι : Type*} {s s' : ι -> (x : M) -> V x} {u u' : Set M} {x : M} {n : Nat∞ω}
+variable {ι : Type*} {s s' : ι → (x : M) → V x} {u u' : Set M} {x : M} {n : ℕ∞ω}
 
 variable (I F n) in
 /--
-Definition of `IsLocalFrameOn` / `IsLocalFrameOn` 的定义
-
-English:
-structure IsLocalFrameOn
-  parameters: (s : ι -> (x : M) -> V x) (u : Set M)
-  axioms and operations (3):
-    - linearIndependent({x : M} (hx : x in u)) : LinearIndependent 𝕜 (s · x)
-    - generating({x : M} (hx : x in u)) : ⊤ <= Submodule.span 𝕜 (Set.range (s · x))
-    - contMDiffOn((i : ι)) : CMDiff[u] n (T% (s i))
-
-中文:
-结构 是LocalFrameOn
-  参数: (s : ι -> (x : M) -> V x) (u : 集合 M)
-  公理与运算 (3 个):
-    - linearIndependent({x : M} (hx : x in u)) : LinearIndependent 𝕜 (s · x)
-    - generating({x : M} (hx : x in u)) : ⊤ <= 子模.span 𝕜 (集合.range (s · x))
-    - contMDiffOn((i : ι)) : CMDiff[u] n (T% (s i))
+A family of sections `s i` of `V → M` is called a **C^k local frame** on a set `U ⊆ M` iff
+- the section values `s i x` form a basis for each `x ∈ U`,
+- each section `s i` is `C^k` on `U`.
 -/
-structure IsLocalFrameOn (s : ι -> (x : M) -> V x) (u : Set M) where
-  linearIndependent {x : M} (hx : x in u) : LinearIndependent 𝕜 (s · x)
-  generating {x : M} (hx : x in u) : ⊤ <= Submodule.span 𝕜 (Set.range (s · x))
+/-
+**IsLocalFrameOn** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{𝕜 : Type u_1} →   [inst : NontriviallyNormedField 𝕜] →     {E : Type u_2}
+ →       [inst_1 : NormedAddCommGroup E] →         [inst_2 : NormedSpace 𝕜 E] → 
+          {H : Type u_3} →             [inst_3 : TopologicalSpace H] →          
+     ModelWithCorners 𝕜 E H →                 {M : Type u_4} →                  
+ [inst_4 : TopologicalSpace M] →                     [ChartedSpace H M] →       
+                (F : Type u_5) →                         [inst_6 : NormedAddComm
+Group F] →                           [NormedSpace 𝕜 F] →                        
+     {V : M → Type u_6} →                               [inst_8 : TopologicalSpa
+ce (Bundle.TotalSpace F V)] →                                 [inst_9 : (x : M) 
+→ AddCommGroup (V x)] →                                   [(x : M) → _root_.Modu
+le 𝕜 (V x)] →                                     [inst : (x : M) → TopologicalS
+pace (V x)] →                                       [FiberBundle F V] →         
+                                {ι : Type u_7} → WithTop ℕ∞ → (ι → (x : M) → V x
+) → Set M → Prop
+参数：F : Type u_5；Bundle.TotalSpace F V；x : M；V x；x : M；V x；x : M；V x；ι → (x : M) 
+→ V x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A family of sections `s i` of `V → M` is called a **C^k local frame** on a set `
+U ⊆ M` iff
+- the section values `s i x` form a basis for each `x ∈ U`,
+- each section `s i` is `C^k` on `U`.
+-/
+structure IsLocalFrameOn (s : ι → (x : M) → V x) (u : Set M) where
+  linearIndependent {x : M} (hx : x ∈ u) : LinearIndependent 𝕜 (s · x)
+  generating {x : M} (hx : x ∈ u) : ⊤ ≤ Submodule.span 𝕜 (Set.range (s · x))
   contMDiffOn (i : ι) : CMDiff[u] n (T% (s i))
 
 namespace IsLocalFrameOn
 
-/--
-lemma `congr` / 引理 `congr`
+/-- If `s = s'` on `u` and `s i` is a local frame on `u`, then so is `s'`. -/
+/-
+**IsLocalFrameOn.congr** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：congr (hs : IsLocalFrameOn I F n s u) (hs' : forall i, forall x, x in u ->
+ s i x = s' i x) : IsLocalFrameOn I F n s' u where linearIndependent
+参数：hs : IsLocalFrameOn I F n s u；hs' : forall i, forall x, x in u -> s i x = s' 
+i x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalFrameOn.linearIndependent`：∀ {𝕜 : Type u_1} [inst : NontriviallyN
+ormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {H : Type u_…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsLocalFrameOn.generating`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ContMDiffOn.congr`：ContMDiffOn.congr (h : ContMDiffOn I I' n f s) (h₁ : 
+forall y in s, f₁ y = f y) : ContMDiffOn I I' n f₁ s
+· 使用定理 `IsLocalFrameOn.contMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-lemma congr
-  given: (hs : IsLocalFrameOn I F n s u) (hs' : forall i, forall x, x in u -> s i x = s' i x)
-  proof: by
-    intro x hx
-    have := hs.linearIndependent hx
-    simp_all
-  generating := by
-    intro x hx
-    have := hs.generating hx
-    simp_all
-  contMDiffOn i := (hs.contMDiffOn i).congr (by simp +contextual [hs'])
-
-中文:
-引理 congr
-  条件: (hs : 是LocalFrameOn I F n s u) (hs' : 对任意 i, 对任意 x, x in u -> s i x = s' i x)
-  证明: by
-    intro x hx
-    have := hs.linearIndependent hx
-    simp_all
-  generating := by
-    intro x hx
-    have := hs.generating hx
-    simp_all
-  contMDiffOn i := (hs.contMDiffOn i).congr (by simp +contextual [hs'])
-
-Depends on / 依赖: contMDiffOn, contextual, generating, hs.contMDiffOn, hs.generating, hs.linearIndependent, linearIndependent
+--- 原说明 ---
+If `s = s'` on `u` and `s i` is a local frame on `u`, then so is `s'`.
 -/
-lemma congr (hs : IsLocalFrameOn I F n s u) (hs' : forall i, forall x, x in u -> s i x = s' i x) :
+lemma congr (hs : IsLocalFrameOn I F n s u) (hs' : ∀ i, ∀ x, x ∈ u → s i x = s' i x) :
     IsLocalFrameOn I F n s' u where
   linearIndependent := by
     intro x hx
@@ -188,37 +207,26 @@ lemma congr (hs : IsLocalFrameOn I F n s u) (hs' : forall i, forall x, x in u ->
     have := hs.generating hx
     simp_all
   contMDiffOn i := (hs.contMDiffOn i).congr (by simp +contextual [hs'])
-
-/--
-lemma `mono` / 引理 `mono`
-
-English:
-lemma mono
-  given: (hs : IsLocalFrameOn I F n s u) (hu'u : u' subseteq u)
-  statement: IsLocalFrameOn I F n s u' where
-  proof: by
-    intro x hx
-    exact hs.linearIndependent (hu'u hx)
-  generating := by
-    intro x hx
-    exact hs.generating (hu'u hx)
-  contMDiffOn i := (hs.contMDiffOn i).mono hu'u
-
-中文:
-引理 mono
-  条件: (hs : 是LocalFrameOn I F n s u) (hu'u : u' subseteq u)
-  结论: 是LocalFrameOn I F n s u' where
-  证明: by
-    intro x hx
-    exact hs.linearIndependent (hu'u hx)
-  generating := by
-    intro x hx
-    exact hs.generating (hu'u hx)
-  contMDiffOn i := (hs.contMDiffOn i).mono hu'u
-
-Depends on / 依赖: contMDiffOn, generating, hs.contMDiffOn, hs.generating, hs.linearIndependent, linearIndependent
+/-
+**IsLocalFrameOn.mono** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：mono (hs : IsLocalFrameOn I F n s u) (hu'u : u' subseteq u) : IsLocalFrame
+On I F n s u' where linearIndependent
+参数：hs : IsLocalFrameOn I F n s u；hu'u : u' subseteq u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalFrameOn.linearIndependent`：∀ {𝕜 : Type u_1} [inst : NontriviallyN
+ormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {H : Type u_…
+· 使用定理 `IsLocalFrameOn.generating`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `ContMDiffOn.mono`：ContMDiffOn.mono (hf : ContMDiffOn I I' n f s) (hts : 
+t subseteq s) : ContMDiffOn I I' n f t
+· 使用定理 `IsLocalFrameOn.contMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
 -/
-lemma mono (hs : IsLocalFrameOn I F n s u) (hu'u : u' subseteq u) : IsLocalFrameOn I F n s u' where
+lemma mono (hs : IsLocalFrameOn I F n s u) (hu'u : u' ⊆ u) : IsLocalFrameOn I F n s u' where
   linearIndependent := by
     intro x hx
     exact hs.linearIndependent (hu'u hx)
@@ -226,100 +234,85 @@ lemma mono (hs : IsLocalFrameOn I F n s u) (hu'u : u' subseteq u) : IsLocalFrame
     intro x hx
     exact hs.generating (hu'u hx)
   contMDiffOn i := (hs.contMDiffOn i).mono hu'u
-
-/--
-lemma `contMDiffAt` / 引理 `contMDiffAt`
-
-English:
-lemma contMDiffAt
-  given: (hs : IsLocalFrameOn I F n s u) (hu : IsOpen u) (hx : x in u) (i : ι)
-  proof: (hs.contMDiffOn i).contMDiffAt hu.mem_nhds hx
-
-中文:
-引理 contMDiffAt
-  条件: (hs : 是LocalFrameOn I F n s u) (hu : 是开集 u) (hx : x in u) (i : ι)
-  证明: (hs.contMDiffOn i).contMDiffAt hu.mem_nhds hx
-
-Depends on / 依赖: contMDiffAt, contMDiffOn, hs.contMDiffOn, hu.mem_nhds, mem_nhds
+/-
+**IsLocalFrameOn.contMDiffAt** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：contMDiffAt (hs : IsLocalFrameOn I F n s u) (hu : IsOpen u) (hx : x in u) 
+(i : ι) : CMDiffAt n (T% (s i)) x
+参数：hs : IsLocalFrameOn I F n s u；hu : IsOpen u；hx : x in u；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContMDiffOn.contMDiffAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E]
+ {H : Type u_…
+· 使用定理 `IsLocalFrameOn.contMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 -/
-lemma contMDiffAt (hs : IsLocalFrameOn I F n s u) (hu : IsOpen u) (hx : x in u) (i : ι) :
+lemma contMDiffAt (hs : IsLocalFrameOn I F n s u) (hu : IsOpen u) (hx : x ∈ u) (i : ι) :
     CMDiffAt n (T% (s i)) x :=
-(hs.contMDiffOn i).contMDiffAt hu.mem_nhds hx
+  (hs.contMDiffOn i).contMDiffAt <| hu.mem_nhds hx
 
-/--
-Definition of `toBasisAt` / `toBasisAt` 的定义
+/-- Given a local frame `{s i}` on `U ∋ x`, returns the basis `{s i}` of `V x` -/
+/-
+**IsLocalFrameOn.toBasisAt** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：toBasisAt (hs : IsLocalFrameOn I F n s u) (hx : x in u) : Basis ι 𝕜 (V x)
+参数：hs : IsLocalFrameOn I F n s u；hx : x in u。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalFrameOn.linearIndependent`：∀ {𝕜 : Type u_1} [inst : NontriviallyN
+ormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {H : Type u_…
+· 使用定理 `IsLocalFrameOn.generating`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
 
-English:
-definition toBasisAt
-  signature: (hs : IsLocalFrameOn I F n s u) (hx : x in u)
-  body: Basis.mk (hs.linearIndependent hx) (hs.generating hx)
-
-@[simp]
-
-中文:
-定义 toBasisAt
-  签名: (hs : 是LocalFrameOn I F n s u) (hx : x in u)
-  定义体: Basis.mk (hs.linearIndependent hx) (hs.generating hx)
-
-@[simp]
-
-Depends on / 依赖: Basis.mk, generating, hs.generating, hs.linearIndependent, linearIndependent
+--- 原说明 ---
+Given a local frame `{s i}` on `U ∋ x`, returns the basis `{s i}` of `V x`
 -/
-def toBasisAt (hs : IsLocalFrameOn I F n s u) (hx : x in u) : Basis ι 𝕜 (V x) :=
+def toBasisAt (hs : IsLocalFrameOn I F n s u) (hx : x ∈ u) : Basis ι 𝕜 (V x) :=
   Basis.mk (hs.linearIndependent hx) (hs.generating hx)
 
 @[simp]
-/--
-lemma `toBasisAt_coe` / 引理 `toBasisAt_coe`
-
-English:
-lemma toBasisAt_coe
-  given: (hs : IsLocalFrameOn I F n s u) (hx : x in u) (i : ι)
-  proof: by
-  simpa only [toBasisAt] using Basis.mk_apply (hs.linearIndependent hx) (hs.generating hx) i
-
-中文:
-引理 toBasisAt_coe
-  条件: (hs : 是LocalFrameOn I F n s u) (hx : x in u) (i : ι)
-  证明: by
-  simpa only [toBasisAt] using Basis.mk_apply (hs.linearIndependent hx) (hs.generating hx) i
-
-Depends on / 依赖: Basis.mk_apply, generating, hs.generating, hs.linearIndependent, linearIndependent, mk_apply, toBasisAt
+/-
+**IsLocalFrameOn.toBasisAt_coe** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：toBasisAt_coe (hs : IsLocalFrameOn I F n s u) (hx : x in u) (i : ι) : toBa
+sisAt hs hx i = s i x
+参数：hs : IsLocalFrameOn I F n s u；hx : x in u；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.mk_apply`：mk_apply (i : ι) : Basis.mk hli hsp i = v i
+· 使用定理 `IsLocalFrameOn.linearIndependent`：∀ {𝕜 : Type u_1} [inst : NontriviallyN
+ormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {H : Type u_…
+· 使用定理 `IsLocalFrameOn.generating`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
 -/
-lemma toBasisAt_coe (hs : IsLocalFrameOn I F n s u) (hx : x in u) (i : ι) :
+lemma toBasisAt_coe (hs : IsLocalFrameOn I F n s u) (hx : x ∈ u) (i : ι) :
     toBasisAt hs hx i = s i x := by
   simpa only [toBasisAt] using Basis.mk_apply (hs.linearIndependent hx) (hs.generating hx) i
 
 /-- If `{sᵢ}` is a local frame on a vector bundle, `F` being finite-dimensional implies the
 indexing set being finite. -/
 @[instance_reducible]
-/--
-Definition of `fintypeOfFiniteDimensional` / `fintypeOfFiniteDimensional` 的定义
+/-
+**IsLocalFrameOn.fintypeOfFiniteDimensional** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalFr
+ameOn`。
+形式化陈述：fintypeOfFiniteDimensional [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F] (h
+s : IsLocalFrameOn I F n s u) (hx : x in u) : Fintype ι
+参数：hs : IsLocalFrameOn I F n s u；hx : x in u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fintypeOfFiniteDimensional
-  signature: [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F]
-  body: by
-  have : FiniteDimensional 𝕜 (V x) := by
-    let phi := (trivializationAt F V x).linearEquivAt 𝕜 x
-      (FiberBundle.mem_baseSet_trivializationAt' x)
-    exact Finite.equiv phi.symm
-  exact FiniteDimensional.fintypeBasisIndex (hs.toBasisAt hx)
-
-中文:
-定义 fintypeOfFiniteDimensional
-  签名: [向量丛 𝕜 F V] [有限维 𝕜 F]
-  定义体: by
-  have : FiniteDimensional 𝕜 (V x) := by
-    let phi := (trivializationAt F V x).linearEquivAt 𝕜 x
-      (FiberBundle.mem_baseSet_trivializationAt' x)
-    exact Finite.equiv phi.symm
-  exact FiniteDimensional.fintypeBasisIndex (hs.toBasisAt hx)
-
-Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, Finite, Finite.equiv, FiniteDimensional, FiniteDimensional.fintypeBasisIndex, fintypeBasisIndex, hs.toBasisAt, linearEquivAt, mem_baseSet_trivializationAt, phi.symm, toBasisAt, trivializationAt
+--- 原说明 ---
+If `{sᵢ}` is a local frame on a vector bundle, `F` being finite-dimensional impl
+ies the
+indexing set being finite.
 -/
 noncomputable def fintypeOfFiniteDimensional [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F]
-    (hs : IsLocalFrameOn I F n s u) (hx : x in u) : Fintype ι := by
+    (hs : IsLocalFrameOn I F n s u) (hx : x ∈ u) : Fintype ι := by
   have : FiniteDimensional 𝕜 (V x) := by
     let phi := (trivializationAt F V x).linearEquivAt 𝕜 x
       (FiberBundle.mem_baseSet_trivializationAt' x)
@@ -327,119 +320,132 @@ noncomputable def fintypeOfFiniteDimensional [VectorBundle 𝕜 F V] [FiniteDime
   exact FiniteDimensional.fintypeBasisIndex (hs.toBasisAt hx)
 
 open scoped Classical in
-/--
-Definition of `coeff` / `coeff` 的定义
+/-- Coefficients of a section `s` of `V` w.r.t. a local frame `{s i}` on `u`.
+Outside of `u`, this returns the junk value 0. -/
+/-
+**IsLocalFrameOn.coeff** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：coeff (hs : IsLocalFrameOn I F n s u) (i : ι) : Π x : M, (V x ->ₗ[𝕜] 𝕜)
+参数：hs : IsLocalFrameOn I F n s u；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeff
-  signature: (hs : IsLocalFrameOn I F n s u) (i : ι)
-  body: fun x =>
-  if hx : x in u then (hs.toBasisAt hx).coord i else 0
-
-中文:
-定义 coeff
-  签名: (hs : 是LocalFrameOn I F n s u) (i : ι)
-  定义体: fun x =>
-  if hx : x in u then (hs.toBasisAt hx).coord i else 0
+--- 原说明 ---
+Coefficients of a section `s` of `V` w.r.t. a local frame `{s i}` on `u`.
+Outside of `u`, this returns the junk value 0.
 -/
-def coeff (hs : IsLocalFrameOn I F n s u) (i : ι) : Π x : M, (V x ->ₗ[𝕜] 𝕜) := fun x =>
-  if hx : x in u then (hs.toBasisAt hx).coord i else 0
+def coeff (hs : IsLocalFrameOn I F n s u) (i : ι) : Π x : M, (V x →ₗ[𝕜] 𝕜) := fun x ↦
+  if hx : x ∈ u then (hs.toBasisAt hx).coord i else 0
 
 variable {x : M}
 
 @[simp]
-/--
-lemma `coeff_apply_of_notMem` / 引理 `coeff_apply_of_notMem`
-
-English:
-lemma coeff_apply_of_notMem
-  given: (hs : IsLocalFrameOn I F n s u) (hx : x ∉ u) (i : ι)
-  proof: by
-  simp [coeff, hx]
-
-@[simp]
-
-中文:
-引理 coeff_apply_of_notMem
-  条件: (hs : 是LocalFrameOn I F n s u) (hx : x ∉ u) (i : ι)
-  证明: by
-  simp [coeff, hx]
-
-@[simp]
+/-
+**IsLocalFrameOn.coeff_apply_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn
+`。
+形式化陈述：coeff_apply_of_notMem (hs : IsLocalFrameOn I F n s u) (hx : x ∉ u) (i : ι)
+ : hs.coeff i x = 0
+参数：hs : IsLocalFrameOn I F n s u；hx : x ∉ u；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coeff_apply_of_notMem (hs : IsLocalFrameOn I F n s u) (hx : x ∉ u) (i : ι) :
     hs.coeff i x = 0 := by
   simp [coeff, hx]
 
 @[simp]
-/--
-lemma `coeff_apply_of_mem` / 引理 `coeff_apply_of_mem`
-
-English:
-lemma coeff_apply_of_mem
-  given: (hs : IsLocalFrameOn I F n s u) (hx : x in u) (t : Π x : M, V x) (i : ι)
-  proof: by
-  simp [coeff, hx]
-
-中文:
-引理 coeff_apply_of_mem
-  条件: (hs : 是LocalFrameOn I F n s u) (hx : x in u) (t : Π x : M, V x) (i : ι)
-  证明: by
-  simp [coeff, hx]
+/-
+**IsLocalFrameOn.coeff_apply_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：coeff_apply_of_mem (hs : IsLocalFrameOn I F n s u) (hx : x in u) (t : Π x 
+: M, V x) (i : ι) : hs.coeff i x (t x) = (hs.toBasisAt hx).repr (t x) i
+参数：hs : IsLocalFrameOn I F n s u；hx : x in u；t : Π x : M, V x；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma coeff_apply_of_mem (hs : IsLocalFrameOn I F n s u) (hx : x in u) (t : Π x : M, V x) (i : ι) :
+lemma coeff_apply_of_mem (hs : IsLocalFrameOn I F n s u) (hx : x ∈ u) (t : Π x : M, V x) (i : ι) :
     hs.coeff i x (t x) = (hs.toBasisAt hx).repr (t x) i := by
   simp [coeff, hx]
-
-/--
-lemma `coeff_sum_eq` / 引理 `coeff_sum_eq`
-
-English:
-lemma coeff_sum_eq
-  given: [Fintype ι] (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hx : x in u)
-  proof: by
-  simpa [coeff, hx] using (Basis.sum_repr (hs.toBasisAt hx) (t x)).symm
-
-中文:
-引理 coeff_sum_eq
-  条件: [有限类型 ι] (hs : 是LocalFrameOn I F n s u) (t : Π x : M, V x) (hx : x in u)
-  证明: by
-  simpa [coeff, hx] using (Basis.sum_repr (hs.toBasisAt hx) (t x)).symm
-
-Depends on / 依赖: Basis.sum_repr, hs.toBasisAt, sum_repr, toBasisAt
+/-
+**IsLocalFrameOn.coeff_sum_eq** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：coeff_sum_eq [Fintype ι] (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x
+) (hx : x in u) : t x = ∑ i, hs.coeff i x (t x) • (s i x)
+参数：hs : IsLocalFrameOn I F n s u；t : Π x : M, V x；hx : x in u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用引理 `IsLocalFrameOn.toBasisAt_coe`：toBasisAt_coe (hs : IsLocalFrameOn I F n s
+ u) (hx : x in u) (i : ι) : toBasisAt hs hx i = s i x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.sum_repr`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_6} [i
+nst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [ins
+t_3 : Finty…
 -/
-lemma coeff_sum_eq [Fintype ι] (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hx : x in u) :
+lemma coeff_sum_eq [Fintype ι] (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hx : x ∈ u) :
     t x = ∑ i, hs.coeff i x (t x) • (s i x) := by
   simpa [coeff, hx] using (Basis.sum_repr (hs.toBasisAt hx) (t x)).symm
-
-/--
-lemma `eq_of_coeff_eq` / 引理 `eq_of_coeff_eq`
-
-English:
-lemma eq_of_coeff_eq
-  statement: [Finite ι] (hs : IsLocalFrameOn I F n s u) (hx : x in u)
-  proof: by
-  let : Fintype ι := Fintype.ofFinite ι
-  calc
-    t x = ∑ i, hs.coeff i x (t x) • (s i x) := hs.coeff_sum_eq t hx
-    _ = ∑ i, hs.coeff i x (t' x) • (s i x) := by simp [h]
-    _ = t' x := (hs.coeff_sum_eq t' hx).symm
-
-中文:
-引理 eq_of_coeff_eq
-  结论: [有限 ι] (hs : 是LocalFrameOn I F n s u) (hx : x in u)
-  证明: by
-  let : Fintype ι := Fintype.ofFinite ι
-  calc
-    t x = ∑ i, hs.coeff i x (t x) • (s i x) := hs.coeff_sum_eq t hx
-    _ = ∑ i, hs.coeff i x (t' x) • (s i x) := by simp [h]
-    _ = t' x := (hs.coeff_sum_eq t' hx).symm
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, coeff_sum_eq, hs.coeff, hs.coeff_sum_eq, ofFinite
+/-
+**IsLocalFrameOn.eq_of_coeff_eq** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：eq_of_coeff_eq [Finite ι] (hs : IsLocalFrameOn I F n s u) (hx : x in u) {t
+ t' : Π x : M, V x} (h : forall i, hs.coeff i x (t x) = hs.coeff i x (t' x)) : t
+ x = t' x
+参数：hs : IsLocalFrameOn I F n s u；hx : x in u；h : forall i, hs.coeff i x (t x) = 
+hs.coeff i x (t' x)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalFrameOn.coeff_sum_eq`：coeff_sum_eq [Fintype ι] (hs : IsLocalFrame
+On I F n s u) (t : Π x : M, V x) (hx : x in u) : t x = ∑ i, hs.coeff i x (t x) •
+ (s i x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma eq_of_coeff_eq [Finite ι] (hs : IsLocalFrameOn I F n s u) (hx : x in u)
+lemma eq_of_coeff_eq [Finite ι] (hs : IsLocalFrameOn I F n s u) (hx : x ∈ u)
     {t t' : Π x : M, V x}
-    (h : forall i, hs.coeff i x (t x) = hs.coeff i x (t' x)) :
+    (h : ∀ i, hs.coeff i x (t x) = hs.coeff i x (t' x)) :
     t x = t' x := by
   let : Fintype ι := Fintype.ofFinite ι
   calc
@@ -447,204 +453,283 @@ lemma eq_of_coeff_eq [Finite ι] (hs : IsLocalFrameOn I F n s u) (hx : x in u)
     _ = ∑ i, hs.coeff i x (t' x) • (s i x) := by simp [h]
     _ = t' x := (hs.coeff_sum_eq t' hx).symm
 
-/--
-lemma `eventually_eq_sum_coeff_smul` / 引理 `eventually_eq_sum_coeff_smul`
+/-- A local frame locally spans the space of sections for `V`: for each local frame `s i` on an open
+set `u` around `x`, we have `t = ∑ i, hs.coeff i x (t x) • (s i x)` near `x`. -/
+/-
+**IsLocalFrameOn.eventually_eq_sum_coeff_smul** 是 Mathlib 中的一个引理，位于命名空间 `IsLocal
+FrameOn`。
+形式化陈述：eventually_eq_sum_coeff_smul [Fintype ι] (hs : IsLocalFrameOn I F n s u) (
+t : Π x : M, V x) (hu'' : u in 𝓝 x) : forallᶠ x' in 𝓝 x, t x' = ∑ i, hs.coeff i 
+x' (t x') • (s i x')
+参数：hs : IsLocalFrameOn I F n s u；t : Π x : M, V x；hu'' : u in 𝓝 x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_of_mem`：eventually_of_mem {f : Filter α} {P : α -> Pro
+p} {U : Set α} (hU : U in f) (h : forall x in U, P x) : forallᶠ x in f, P x
+· 使用引理 `IsLocalFrameOn.coeff_sum_eq`：coeff_sum_eq [Fintype ι] (hs : IsLocalFrame
+On I F n s u) (t : Π x : M, V x) (hx : x in u) : t x = ∑ i, hs.coeff i x (t x) •
+ (s i x)
 
-English:
-lemma eventually_eq_sum_coeff_smul
-  statement: [Fintype ι]
-  proof: eventually_of_mem hu'' fun _ hx => hs.coeff_sum_eq _ hx
-
-中文:
-引理 eventually_eq_sum_coeff_smul
-  结论: [有限类型 ι]
-  证明: eventually_of_mem hu'' fun _ hx => hs.coeff_sum_eq _ hx
-
-Depends on / 依赖: coeff_sum_eq, eventually_of_mem, hs.coeff_sum_eq
+--- 原说明 ---
+A local frame locally spans the space of sections for `V`: for each local frame 
+`s i` on an open
+set `u` around `x`, we have `t = ∑ i, hs.coeff i x (t x) • (s i x)` near `x`.
 -/
 lemma eventually_eq_sum_coeff_smul [Fintype ι]
-    (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hu'' : u in 𝓝 x) :
-    forallᶠ x' in 𝓝 x, t x' = ∑ i, hs.coeff i x' (t x') • (s i x') :=
-  eventually_of_mem hu'' fun _ hx => hs.coeff_sum_eq _ hx
+    (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hu'' : u ∈ 𝓝 x) :
+    ∀ᶠ x' in 𝓝 x, t x' = ∑ i, hs.coeff i x' (t x') • (s i x') :=
+  eventually_of_mem hu'' fun _ hx ↦ hs.coeff_sum_eq _ hx
 
 variable {t t' : Π x : M, V x}
 
-/--
-lemma `coeff_congr` / 引理 `coeff_congr`
+/-- The coefficients of `t` in a local frame at `x` only depend on `t` at `x`. -/
+/-
+**IsLocalFrameOn.coeff_congr** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：coeff_congr (hs : IsLocalFrameOn I F n s u) (htt' : t x = t' x) (i : ι) : 
+hs.coeff i x (t x) = hs.coeff i x (t' x)
+参数：hs : IsLocalFrameOn I F n s u；htt' : t x = t' x；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 
-English:
-lemma coeff_congr
-  given: (hs : IsLocalFrameOn I F n s u) (htt' : t x = t' x) (i : ι)
-  proof: by
-  by_cases hxe : x in u <;> simp [coeff, hxe, htt']
-
-中文:
-引理 coeff_congr
-  条件: (hs : 是LocalFrameOn I F n s u) (htt' : t x = t' x) (i : ι)
-  证明: by
-  by_cases hxe : x in u <;> simp [coeff, hxe, htt']
+--- 原说明 ---
+The coefficients of `t` in a local frame at `x` only depend on `t` at `x`.
 -/
 lemma coeff_congr (hs : IsLocalFrameOn I F n s u) (htt' : t x = t' x) (i : ι) :
     hs.coeff i x (t x) = hs.coeff i x (t' x) := by
-  by_cases hxe : x in u <;> simp [coeff, hxe, htt']
+  by_cases hxe : x ∈ u <;> simp [coeff, hxe, htt']
 
-/--
-lemma `coeff_eq_of_eq` / 引理 `coeff_eq_of_eq`
+/-- If `s` and `s'` are local frames which are equal at `x`,
+a section `t` has equal frame coefficients in them. -/
+/-
+**IsLocalFrameOn.coeff_eq_of_eq** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：coeff_eq_of_eq (hs : IsLocalFrameOn I F n s u) (hs' : IsLocalFrameOn I F n
+ s' u) (hss' : forall i, s i x = s' i x) {t : Π x : M, V x} (i : ι) : hs.coeff i
+ x (t x) = hs'.coeff i x (t x)
+参数：hs : IsLocalFrameOn I F n s u；hs' : IsLocalFrameOn I F n s' u；hss' : forall i
+, s i x = s' i x；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `IsLocalFrameOn.linearIndependent`：∀ {𝕜 : Type u_1} [inst : NontriviallyN
+ormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {H : Type u_…
+· 使用定理 `IsLocalFrameOn.generating`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Module.Basis.mk.congr_simp`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_
+5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M]
+ {v v_1 : ι → M}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 
-English:
-lemma coeff_eq_of_eq
-  statement: (hs : IsLocalFrameOn I F n s u) (hs' : IsLocalFrameOn I F n s' u)
-  proof: by
-  by_cases hxe : x in u
-  · simp [coeff, hxe]
-    simp_all only [toBasisAt]
-  · simp [coeff, hxe]
-
-中文:
-引理 coeff_eq_of_eq
-  结论: (hs : 是LocalFrameOn I F n s u) (hs' : 是LocalFrameOn I F n s' u)
-  证明: by
-  by_cases hxe : x in u
-  · simp [coeff, hxe]
-    simp_all only [toBasisAt]
-  · simp [coeff, hxe]
-
-Depends on / 依赖: toBasisAt
+--- 原说明 ---
+If `s` and `s'` are local frames which are equal at `x`,
+a section `t` has equal frame coefficients in them.
 -/
 lemma coeff_eq_of_eq (hs : IsLocalFrameOn I F n s u) (hs' : IsLocalFrameOn I F n s' u)
-    (hss' : forall i, s i x = s' i x) {t : Π x : M, V x} (i : ι) :
+    (hss' : ∀ i, s i x = s' i x) {t : Π x : M, V x} (i : ι) :
     hs.coeff i x (t x) = hs'.coeff i x (t x) := by
-  by_cases hxe : x in u
+  by_cases hxe : x ∈ u
   · simp [coeff, hxe]
     simp_all only [toBasisAt]
   · simp [coeff, hxe]
 
-/--
-lemma `eq_iff_coeff` / 引理 `eq_iff_coeff`
+/-- Two sections `s` and `t` are equal at `x` if and only if their coefficients w.r.t. some local
+frame at `x` agree. -/
+/-
+**IsLocalFrameOn.eq_iff_coeff** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`。
+形式化陈述：eq_iff_coeff [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F] (hs : IsLocalFra
+meOn I F n s u) (hx : x in u) : t x = t' x ↔ forall i, hs.coeff i x (t x) = hs.c
+oeff i x (t' x)
+参数：hs : IsLocalFrameOn I F n s u；hx : x in u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalFrameOn.coeff_congr`：coeff_congr (hs : IsLocalFrameOn I F n s u) 
+(htt' : t x = t' x) (i : ι) : hs.coeff i x (t x) = hs.coeff i x (t' x)
+· 使用引理 `IsLocalFrameOn.eq_of_coeff_eq`：eq_of_coeff_eq [Finite ι] (hs : IsLocalFr
+ameOn I F n s u) (hx : x in u) {t t' : Π x : M, V x} (h : forall i, hs.coeff i x
+ (t x) = hs.coeff i…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-lemma eq_iff_coeff
-  statement: [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F]
-  proof: by
-  let := fintypeOfFiniteDimensional hs hx
-  exact ⟨fun h i => hs.coeff_congr h i, fun h => hs.eq_of_coeff_eq hx h⟩
-
-中文:
-引理 eq_iff_coeff
-  结论: [向量丛 𝕜 F V] [有限维 𝕜 F]
-  证明: by
-  let := fintypeOfFiniteDimensional hs hx
-  exact ⟨fun h i => hs.coeff_congr h i, fun h => hs.eq_of_coeff_eq hx h⟩
-
-Depends on / 依赖: coeff_congr, eq_of_coeff_eq, fintypeOfFiniteDimensional, hs.coeff_congr, hs.eq_of_coeff_eq
+--- 原说明 ---
+Two sections `s` and `t` are equal at `x` if and only if their coefficients w.r.
+t. some local
+frame at `x` agree.
 -/
 lemma eq_iff_coeff [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F]
-    (hs : IsLocalFrameOn I F n s u) (hx : x in u) :
-    t x = t' x ↔ forall i, hs.coeff i x (t x) = hs.coeff i x (t' x) := by
+    (hs : IsLocalFrameOn I F n s u) (hx : x ∈ u) :
+    t x = t' x ↔ ∀ i, hs.coeff i x (t x) = hs.coeff i x (t' x) := by
   let := fintypeOfFiniteDimensional hs hx
-  exact ⟨fun h i => hs.coeff_congr h i, fun h => hs.eq_of_coeff_eq hx h⟩
+  exact ⟨fun h i ↦ hs.coeff_congr h i, fun h ↦ hs.eq_of_coeff_eq hx h⟩
 
 variable (hs : IsLocalFrameOn I F n s u) [VectorBundle 𝕜 F V]
 
-/--
-lemma `contMDiffOn_of_coeff` / 引理 `contMDiffOn_of_coeff`
+/-- Given a local frame `s i ` on `u`, if a section `t` has `C^k` coefficients on `u` w.r.t. `s i`,
+then `t` is `C^n` on `u`. -/
+/-
+**IsLocalFrameOn.contMDiffOn_of_coeff** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`
+。
+形式化陈述：contMDiffOn_of_coeff [FiniteDimensional 𝕜 F] (h : forall i, CMDiff[u] n ((
+LinearMap.piApply (hs.coeff i)) t)) : CMDiff[u] n (T% t)
+参数：h : forall i, CMDiff[u] n ((LinearMap.piApply (hs.coeff i)) t)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ContMDiffOn.smul_section`：ContMDiffOn.smul_section (hf : CMDiff[u] n f) 
+(hs : CMDiff[u] n (T% s)) : CMDiff[u] n (T% (f • s))
+· 使用定理 `IsLocalFrameOn.contMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用引理 `ContMDiffOn.sum_section`：ContMDiffOn.sum_section {s : Finset ι} (hs : fo
+rall i in s, CMDiff[u] n (T% (t i ·))) : CMDiff[u] n (T% (fun x => (∑ i in s, (t
+ i x))))
+· 使用定理 `ContMDiffOn.congr`：ContMDiffOn.congr (h : ContMDiffOn I I' n f s) (h₁ : 
+forall y in s, f₁ y = f y) : ContMDiffOn I I' n f₁ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IsLocalFrameOn.coeff_sum_eq`：coeff_sum_eq [Fintype ι] (hs : IsLocalFrame
+On I F n s u) (t : Π x : M, V x) (hx : x in u) : t x = ∑ i, hs.coeff i x (t x) •
+ (s i x)
 
-English:
-lemma contMDiffOn_of_coeff
-  statement: [FiniteDimensional 𝕜 F]
-  proof: by
-  rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
-  have := fintypeOfFiniteDimensional hs hx
-  have this (i) : CMDiff[u] n (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
-    (h i).smul_section (hs.contMDiffOn i)
-  have almost : CMDiff[u] n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) :=
-    .sum_section fun i _ => this i
-  apply almost.congr
-  intro y hy
-  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
-
-中文:
-引理 contMDiffOn_of_coeff
-  结论: [有限维 𝕜 F]
-  证明: by
-  rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
-  have := fintypeOfFiniteDimensional hs hx
-  have this (i) : CMDiff[u] n (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
-    (h i).smul_section (hs.contMDiffOn i)
-  have almost : CMDiff[u] n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) :=
-    .sum_section fun i _ => this i
-  apply almost.congr
-  intro y hy
-  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
-
-Depends on / 依赖: CMDiff, LinearMap, LinearMap.piApply, TotalSpace, TotalSpace.mk, almost, almost.congr, coeff_sum_eq, contMDiffOn, eq_empty_or_nonempty, fintypeOfFiniteDimensional, hs.coeff, hs.coeff_sum_eq, hs.contMDiffOn, piApply, smul_section, sum_section, u.eq_empty_or_nonempty
+--- 原说明 ---
+Given a local frame `s i ` on `u`, if a section `t` has `C^k` coefficients on `u
+` w.r.t. `s i`,
+then `t` is `C^n` on `u`.
 -/
 lemma contMDiffOn_of_coeff [FiniteDimensional 𝕜 F]
-    (h : forall i, CMDiff[u] n ((LinearMap.piApply (hs.coeff i)) t)) :
+    (h : ∀ i, CMDiff[u] n ((LinearMap.piApply (hs.coeff i)) t)) :
     CMDiff[u] n (T% t) := by
   rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
   have := fintypeOfFiniteDimensional hs hx
   have this (i) : CMDiff[u] n (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
     (h i).smul_section (hs.contMDiffOn i)
-  have almost : CMDiff[u] n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) :=
-    .sum_section fun i _ => this i
+  have almost : CMDiff[u] n (T% (fun x ↦ ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) :=
+    .sum_section fun i _ ↦ this i
   apply almost.congr
   intro y hy
   simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
 
-/--
-lemma `contMDiffAt_of_coeff` / 引理 `contMDiffAt_of_coeff`
+/-- Given a local frame `s i` on a neighbourhood `u` of `x`,
+if a section `t` has `C^k` coefficients at `x` w.r.t. `s i`, then `t` is `C^n` at `x`. -/
+/-
+**IsLocalFrameOn.contMDiffAt_of_coeff** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFrameOn`
+。
+形式化陈述：contMDiffAt_of_coeff [FiniteDimensional 𝕜 F] (h : forall i, CMDiffAt n ((L
+inearMap.piApply (hs.coeff i)) t) x) (hu : u in 𝓝 x) : CMDiffAt n (T% t) x
+参数：h : forall i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x；hu : u in 𝓝 x
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+· 使用引理 `ContMDiffAt.sum_section`：ContMDiffAt.sum_section {s : Finset ι} (hs : fo
+rall i in s, CMDiffAt n (T% (t i ·)) x₀) : CMDiffAt n (T% (fun x => (∑ i in s, (
+t i x)))) x₀
+· 使用引理 `ContMDiffAt.smul_section`：ContMDiffAt.smul_section (hf : CMDiffAt n f x₀
+) (hs : CMDiffAt n (T% s) x₀) : CMDiffAt n (T% (f • s)) x₀
+· 使用定理 `ContMDiffOn.contMDiffAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E]
+ {H : Type u_…
+· 使用定理 `IsLocalFrameOn.contMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `ContMDiffAt.congr_of_eventuallyEq`：ContMDiffAt.congr_of_eventuallyEq (h 
+: ContMDiffAt I I' n f x) (h₁ : f₁ =ᶠ[𝓝 x] f) : ContMDiffAt I I' n f₁ x
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `IsLocalFrameOn.eventually_eq_sum_coeff_smul`：eventually_eq_sum_coeff_smu
+l [Fintype ι] (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hu'' : u in 𝓝 
+x) : forallᶠ x' in 𝓝 x, t x' = ∑ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-lemma contMDiffAt_of_coeff
-  statement: [FiniteDimensional 𝕜 F]
-  proof: by
-  have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
-  have almost : CMDiffAt n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) x :=
-    .sum_section (fun i _ => (h i).smul_section <| (hs.contMDiffOn i).contMDiffAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
-
-中文:
-引理 contMDiffAt_of_coeff
-  结论: [有限维 𝕜 F]
-  证明: by
-  have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
-  have almost : CMDiffAt n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) x :=
-    .sum_section (fun i _ => (h i).smul_section <| (hs.contMDiffOn i).contMDiffAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
-
-Depends on / 依赖: CMDiffAt, LinearMap, LinearMap.piApply, almost, almost.congr_of_eventuallyEq, congr_of_eventuallyEq, contMDiffAt, contMDiffOn, eventually_eq_sum_coeff_smul, fintypeOfFiniteDimensional, hs.coeff, hs.contMDiffOn, hs.eventually_eq_sum_coeff_smul, mem_of_mem_nhds, piApply, smul_section, sum_section
+--- 原说明 ---
+Given a local frame `s i` on a neighbourhood `u` of `x`,
+if a section `t` has `C^k` coefficients at `x` w.r.t. `s i`, then `t` is `C^n` a
+t `x`.
 -/
 lemma contMDiffAt_of_coeff [FiniteDimensional 𝕜 F]
-    (h : forall i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x) (hu : u in 𝓝 x) :
+    (h : ∀ i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x) (hu : u ∈ 𝓝 x) :
     CMDiffAt n (T% t) x := by
   have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
-  have almost : CMDiffAt n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) x :=
-    .sum_section (fun i _ => (h i).smul_section <| (hs.contMDiffOn i).contMDiffAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
+  have almost : CMDiffAt n (T% (fun x ↦ ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) x :=
+    .sum_section (fun i _ ↦ (h i).smul_section <| (hs.contMDiffOn i).contMDiffAt hu)
+  exact almost.congr_of_eventuallyEq <| (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
 
-/--
-lemma `contMDiffAt_of_coeff_aux` / 引理 `contMDiffAt_of_coeff_aux`
+/-- Given a local frame `s i` on an open set `u` containing `x`, if a section `t` has `C^k`
+coefficients at `x ∈ u` w.r.t. `s i`, then `t` is `C^n` at `x`. -/
+/-
+**IsLocalFrameOn.contMDiffAt_of_coeff_aux** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFram
+eOn`。
+形式化陈述：contMDiffAt_of_coeff_aux [FiniteDimensional 𝕜 F] (h : forall i, CMDiffAt n
+ ((LinearMap.piApply (hs.coeff i)) t) x) (hu : IsOpen u) (hx : x in u) : CMDiffA
+t n (T% t) x
+参数：h : forall i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x；hu : IsOpen u
+；hx : x in u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `IsLocalFrameOn.contMDiffAt_of_coeff`：contMDiffAt_of_coeff [FiniteDimensi
+onal 𝕜 F] (h : forall i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x) (hu 
+: u in 𝓝 x) : CMDiffAt n …
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-lemma contMDiffAt_of_coeff_aux
-  statement: [FiniteDimensional 𝕜 F]
-  proof: by
-  have := fintypeOfFiniteDimensional hs hx
-  exact hs.contMDiffAt_of_coeff h (hu.mem_nhds hx)
-
-中文:
-引理 contMDiffAt_of_coeff_aux
-  结论: [有限维 𝕜 F]
-  证明: by
-  have := fintypeOfFiniteDimensional hs hx
-  exact hs.contMDiffAt_of_coeff h (hu.mem_nhds hx)
-
-Depends on / 依赖: contMDiffAt_of_coeff, fintypeOfFiniteDimensional, hs.contMDiffAt_of_coeff, hu.mem_nhds, mem_nhds
+--- 原说明 ---
+Given a local frame `s i` on an open set `u` containing `x`, if a section `t` ha
+s `C^k`
+coefficients at `x ∈ u` w.r.t. `s i`, then `t` is `C^n` at `x`.
 -/
 lemma contMDiffAt_of_coeff_aux [FiniteDimensional 𝕜 F]
-    (h : forall i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x)
-    (hu : IsOpen u) (hx : x in u) : CMDiffAt n (T% t) x := by
+    (h : ∀ i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x)
+    (hu : IsOpen u) (hx : x ∈ u) : CMDiffAt n (T% t) x := by
   have := fintypeOfFiniteDimensional hs hx
   exact hs.contMDiffAt_of_coeff h (hu.mem_nhds hx)
 
@@ -652,104 +737,146 @@ section
 
 variable (hs : IsLocalFrameOn I F 1 s u)
 
-/--
-lemma `mdifferentiableOn_of_coeff` / 引理 `mdifferentiableOn_of_coeff`
+/-- Given a local frame `s i ` on `u`, if a section `t` has differentiable coefficients on `u`
+w.r.t. `s i`, then `t` is differentiable on `u`. -/
+/-
+**IsLocalFrameOn.mdifferentiableOn_of_coeff** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFr
+ameOn`。
+形式化陈述：mdifferentiableOn_of_coeff [FiniteDimensional 𝕜 F] (h : forall i, MDiff[u]
+ ((LinearMap.piApply (hs.coeff i)) t)) : MDiff[u] (T% t)
+参数：h : forall i, MDiff[u] ((LinearMap.piApply (hs.coeff i)) t)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MDifferentiableOn.smul_section`：MDifferentiableOn.smul_section (hf : MDi
+ff[u] f) (hs : MDiff[u] (T% s)) : MDiff[u] (T% (f • s))
+· 使用定理 `ContMDiffOn.mdifferentiableOn`：ContMDiffOn.mdifferentiableOn (hf : CMDif
+f[s] n f) (hn : n != 0) : MDiff[s] f
+· 使用定理 `IsLocalFrameOn.contMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用引理 `MDifferentiableOn.sum_section`：MDifferentiableOn.sum_section {ι : Type*}
+ {s : Finset ι} {t : ι -> (x : B) -> E x} (hs : forall i in s, MDiff[u] (T% (t i
+ ·))) : MDiff[u] (T…
+· 使用定理 `MDifferentiableOn.congr`：MDifferentiableOn.congr (h : MDiff[s] f) (h₁ : 
+forall y in s, f₁ y = f y) : MDiff[s] f₁
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IsLocalFrameOn.coeff_sum_eq`：coeff_sum_eq [Fintype ι] (hs : IsLocalFrame
+On I F n s u) (t : Π x : M, V x) (hx : x in u) : t x = ∑ i, hs.coeff i x (t x) •
+ (s i x)
 
-English:
-lemma mdifferentiableOn_of_coeff
-  statement: [FiniteDimensional 𝕜 F]
-  proof: by
-  rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
-  have := fintypeOfFiniteDimensional hs hx
-  have this (i) : MDiff[u] (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
-    (h i).smul_section ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero)
-  have almost : MDiff[u] (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) :=
-    .sum_section (fun i _ _ hx => this i _ hx)
-  apply almost.congr
-  intro y hy
-  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
-
-中文:
-引理 mdifferentiableOn_of_coeff
-  结论: [有限维 𝕜 F]
-  证明: by
-  rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
-  have := fintypeOfFiniteDimensional hs hx
-  have this (i) : MDiff[u] (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
-    (h i).smul_section ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero)
-  have almost : MDiff[u] (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) :=
-    .sum_section (fun i _ _ hx => this i _ hx)
-  apply almost.congr
-  intro y hy
-  simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
-
-Depends on / 依赖: LinearMap, LinearMap.piApply, TotalSpace, TotalSpace.mk, almost, almost.congr, coeff_sum_eq, contMDiffOn, eq_empty_or_nonempty, fintypeOfFiniteDimensional, hs.coeff, hs.coeff_sum_eq, hs.contMDiffOn, mdifferentiableOn, one_ne_zero, piApply, smul_section, sum_section, u.eq_empty_or_nonempty
+--- 原说明 ---
+Given a local frame `s i ` on `u`, if a section `t` has differentiable coefficie
+nts on `u`
+w.r.t. `s i`, then `t` is differentiable on `u`.
 -/
 lemma mdifferentiableOn_of_coeff [FiniteDimensional 𝕜 F]
-    (h : forall i, MDiff[u] ((LinearMap.piApply (hs.coeff i)) t)) :
+    (h : ∀ i, MDiff[u] ((LinearMap.piApply (hs.coeff i)) t)) :
     MDiff[u] (T% t) := by
   rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
   have := fintypeOfFiniteDimensional hs hx
   have this (i) : MDiff[u] (T% ((LinearMap.piApply (hs.coeff i)) t • s i)) :=
     (h i).smul_section ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero)
-  have almost : MDiff[u] (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) :=
-    .sum_section (fun i _ _ hx => this i _ hx)
+  have almost : MDiff[u] (T% (fun x ↦ ∑ i, hs.coeff i x (t x) • s i x)) :=
+    .sum_section (fun i _ _ hx ↦ this i _ hx)
   apply almost.congr
   intro y hy
   simpa using congrArg (TotalSpace.mk' F y) (hs.coeff_sum_eq t hy)
 
-/--
-lemma `mdifferentiableAt_of_coeff` / 引理 `mdifferentiableAt_of_coeff`
+/-- Given a local frame `s i` on a neighbourhood `u` of `x`, if a section `t` has differentiable
+coefficients at `x` w.r.t. `s i`, then `t` is differentiable at `x`. -/
+/-
+**IsLocalFrameOn.mdifferentiableAt_of_coeff** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalFr
+ameOn`。
+形式化陈述：mdifferentiableAt_of_coeff [FiniteDimensional 𝕜 F] (h : forall i, MDiffAt 
+((LinearMap.piApply (hs.coeff i)) t) x) (hu : u in 𝓝 x) : MDiffAt (T% t) x
+参数：h : forall i, MDiffAt ((LinearMap.piApply (hs.coeff i)) t) x；hu : u in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+· 使用引理 `MDifferentiableAt.sum_section`：MDifferentiableAt.sum_section {ι : Type*}
+ {s : Finset ι} {t : ι -> (x : B) -> E x} {x₀ : B} (hs : forall i in s, MDiffAt 
+(T% (t i ·)) x₀) : …
+· 使用引理 `MDifferentiableAt.smul_section`：MDifferentiableAt.smul_section (hf : MDi
+ffAt f x₀) (hs : MDiffAt (T% s) x₀) : MDiffAt (T% (f • s)) x₀
+· 使用定理 `MDifferentiableOn.mdifferentiableAt`：MDifferentiableOn.mdifferentiableAt
+ (h : MDiff[s] f) (hx : s in 𝓝 x) : MDiffAt f x
+· 使用定理 `ContMDiffOn.mdifferentiableOn`：ContMDiffOn.mdifferentiableOn (hf : CMDif
+f[s] n f) (hn : n != 0) : MDiff[s] f
+· 使用定理 `IsLocalFrameOn.contMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {H : Type u_…
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `MDifferentiableAt.congr_of_eventuallyEq`：MDifferentiableAt.congr_of_even
+tuallyEq (h : MDiffAt f x) (hL : f₁ =ᶠ[𝓝 x] f) : MDiffAt f₁ x
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `IsLocalFrameOn.eventually_eq_sum_coeff_smul`：eventually_eq_sum_coeff_smu
+l [Fintype ι] (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hu'' : u in 𝓝 
+x) : forallᶠ x' in 𝓝 x, t x' = ∑ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-lemma mdifferentiableAt_of_coeff
-  statement: [FiniteDimensional 𝕜 F]
-  proof: by
-  have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
-  have almost : MDiffAt (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) x :=
-    .sum_section (fun i _ => (h i).smul_section <|
-      ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero).mdifferentiableAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
-
-中文:
-引理 mdifferentiableAt_of_coeff
-  结论: [有限维 𝕜 F]
-  证明: by
-  have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
-  have almost : MDiffAt (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) x :=
-    .sum_section (fun i _ => (h i).smul_section <|
-      ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero).mdifferentiableAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
-
-Depends on / 依赖: MDiffAt, almost, almost.congr_of_eventuallyEq, congr_of_eventuallyEq, contMDiffOn, eventually_eq_sum_coeff_smul, fintypeOfFiniteDimensional, hs.coeff, hs.contMDiffOn, hs.eventually_eq_sum_coeff_smul, mdifferentiableAt, mdifferentiableOn, mem_of_mem_nhds, one_ne_zero, smul_section, sum_section
+--- 原说明 ---
+Given a local frame `s i` on a neighbourhood `u` of `x`, if a section `t` has di
+fferentiable
+coefficients at `x` w.r.t. `s i`, then `t` is differentiable at `x`.
 -/
 lemma mdifferentiableAt_of_coeff [FiniteDimensional 𝕜 F]
-    (h : forall i, MDiffAt ((LinearMap.piApply (hs.coeff i)) t) x) (hu : u in 𝓝 x) :
+    (h : ∀ i, MDiffAt ((LinearMap.piApply (hs.coeff i)) t) x) (hu : u ∈ 𝓝 x) :
     MDiffAt (T% t) x := by
   have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
-  have almost : MDiffAt (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) x :=
-    .sum_section (fun i _ => (h i).smul_section <|
+  have almost : MDiffAt (T% (fun x ↦ ∑ i, hs.coeff i x (t x) • s i x)) x :=
+    .sum_section (fun i _ ↦ (h i).smul_section <|
       ((hs.contMDiffOn i).mdifferentiableOn one_ne_zero).mdifferentiableAt hu)
-exact almost.congr_of_eventuallyEq (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
+  exact almost.congr_of_eventuallyEq <| (hs.eventually_eq_sum_coeff_smul t hu).mono (by simp)
 
-/--
-lemma `mdifferentiableAt_of_coeff_aux` / 引理 `mdifferentiableAt_of_coeff_aux`
+/-- Given a local frame `s i` on open set `u` containing `x`, if a section `t`
+has differentiable coefficients at `x ∈ u` w.r.t. `s i`, then `t` is differentiable at `x`. -/
+/-
+**IsLocalFrameOn.mdifferentiableAt_of_coeff_aux** 是 Mathlib 中的一个引理，位于命名空间 `IsLoc
+alFrameOn`。
+形式化陈述：mdifferentiableAt_of_coeff_aux [FiniteDimensional 𝕜 F] (h : forall i, MDif
+fAt ((LinearMap.piApply (hs.coeff i)) t) x) (hu : IsOpen u) (hx : x in u) : MDif
+fAt (T% t) x
+参数：h : forall i, MDiffAt ((LinearMap.piApply (hs.coeff i)) t) x；hu : IsOpen u；hx
+ : x in u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `IsLocalFrameOn.mdifferentiableAt_of_coeff`：mdifferentiableAt_of_coeff [F
+initeDimensional 𝕜 F] (h : forall i, MDiffAt ((LinearMap.piApply (hs.coeff i)) t
+) x) (hu : u in 𝓝 x) : MDiffAt …
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-lemma mdifferentiableAt_of_coeff_aux
-  statement: [FiniteDimensional 𝕜 F]
-  proof: hs.mdifferentiableAt_of_coeff h (hu.mem_nhds hx)
-
-中文:
-引理 mdifferentiableAt_of_coeff_aux
-  结论: [有限维 𝕜 F]
-  证明: hs.mdifferentiableAt_of_coeff h (hu.mem_nhds hx)
-
-Depends on / 依赖: hs.mdifferentiableAt_of_coeff, hu.mem_nhds, mdifferentiableAt_of_coeff, mem_nhds
+--- 原说明 ---
+Given a local frame `s i` on open set `u` containing `x`, if a section `t`
+has differentiable coefficients at `x ∈ u` w.r.t. `s i`, then `t` is differentia
+ble at `x`.
 -/
 lemma mdifferentiableAt_of_coeff_aux [FiniteDimensional 𝕜 F]
-    (h : forall i, MDiffAt ((LinearMap.piApply (hs.coeff i)) t) x)
-    (hu : IsOpen u) (hx : x in u) : MDiffAt (T% t) x :=
+    (h : ∀ i, MDiffAt ((LinearMap.piApply (hs.coeff i)) t) x)
+    (hu : IsOpen u) (hx : x ∈ u) : MDiffAt (T% t) x :=
   hs.mdifferentiableAt_of_coeff h (hu.mem_nhds hx)
 
 end
@@ -761,118 +888,131 @@ end IsLocalFrame
 namespace Bundle.Trivialization
 
 variable [VectorBundle 𝕜 F V] [ContMDiffVectorBundle n F V I] {ι : Type*} {x : M}
-  (e : Trivialization F (TotalSpace.proj : TotalSpace F V -> M)) [MemTrivializationAtlas e]
+  (e : Trivialization F (TotalSpace.proj : TotalSpace F V → M)) [MemTrivializationAtlas e]
   (b : Basis ι 𝕜 F)
 
-/--
-Definition of `basisAt` / `basisAt` 的定义
+/-- Given a compatible local trivialisation `e` of `V` and a basis `b` of the model fiber `F`,
+return the corresponding basis of `V x`. -/
+/-
+**Bundle.Trivialization.basisAt** 是 Mathlib 中的一个定义，位于命名空间 `Bundle.Trivialization
+`。
+形式化陈述：basisAt (hx : x in e.baseSet) : Basis ι 𝕜 (V x)
+参数：hx : x in e.baseSet。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basisAt
-  signature: (hx : x in e.baseSet)
-  body: b.map (e.linearEquivAt (R := 𝕜) x hx).symm
-
-中文:
-定义 basisAt
-  签名: (hx : x in e.baseSet)
-  定义体: b.map (e.linearEquivAt (R := 𝕜) x hx).symm
-
-Depends on / 依赖: b.map, e.linearEquivAt, linearEquivAt
+--- 原说明 ---
+Given a compatible local trivialisation `e` of `V` and a basis `b` of the model 
+fiber `F`,
+return the corresponding basis of `V x`.
 -/
-def basisAt (hx : x in e.baseSet) : Basis ι 𝕜 (V x) :=
+def basisAt (hx : x ∈ e.baseSet) : Basis ι 𝕜 (V x) :=
   b.map (e.linearEquivAt (R := 𝕜) x hx).symm
 
 open scoped Classical in
-/--
-Definition of `localFrame` / `localFrame` 的定义
+/-- The local frame on `V` induced by a compatible local trivialization `e` of `V` and a basis
+`b` of the model fiber `F`. Use `e.localFrame b i` to access the `i`-th section in that frame.
 
-English:
-definition localFrame
-  signature: : ι -> (x : M) -> V x
-  body: fun i x => if hx : x in e.baseSet then e.basisAt b hx i else 0
+If `x` is outside of `e.baseSet`, this returns the junk value 0. -/
+/-
+**Bundle.Trivialization.localFrame** 是 Mathlib 中的一个定义，位于命名空间 `Bundle.Trivializat
+ion`。
+形式化陈述：localFrame : ι -> (x : M) -> V x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+The local frame on `V` induced by a compatible local trivialization `e` of `V` a
+nd a basis
+`b` of the model fiber `F`. Use `e.localFrame b i` to access the `i`-th section 
+in that frame.
 
-中文:
-定义 localFrame
-  签名: : ι -> (x : M) -> V x
-  定义体: fun i x => if hx : x in e.baseSet then e.basisAt b hx i else 0
-
-@[simp]
-
-Depends on / 依赖: baseSet, basisAt, e.baseSet, e.basisAt
+If `x` is outside of `e.baseSet`, this returns the junk value 0.
 -/
-def localFrame : ι -> (x : M) -> V x :=
-  fun i x => if hx : x in e.baseSet then e.basisAt b hx i else 0
+def localFrame : ι → (x : M) → V x :=
+  fun i x ↦ if hx : x ∈ e.baseSet then e.basisAt b hx i else 0
 
 @[simp]
-/--
-lemma `localFrame_apply_of_mem_baseSet` / 引理 `localFrame_apply_of_mem_baseSet`
-
-English:
-lemma localFrame_apply_of_mem_baseSet
-  given: {i : ι} (hx : x in e.baseSet)
-  proof: by
-  simp [localFrame, hx]
-
-中文:
-引理 localFrame_apply_of_mem_baseSet
-  条件: {i : ι} (hx : x in e.baseSet)
-  证明: by
-  simp [localFrame, hx]
-
-Depends on / 依赖: localFrame
+/-
+**Bundle.Trivialization.localFrame_apply_of_mem_baseSet** 是 Mathlib 中的一个引理，位于命名空
+间 `Bundle.Trivialization`。
+形式化陈述：localFrame_apply_of_mem_baseSet {i : ι} (hx : x in e.baseSet) : e.localFra
+me b i x = e.basisAt b hx i
+参数：hx : x in e.baseSet。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma localFrame_apply_of_mem_baseSet {i : ι} (hx : x in e.baseSet) :
+lemma localFrame_apply_of_mem_baseSet {i : ι} (hx : x ∈ e.baseSet) :
     e.localFrame b i x = e.basisAt b hx i := by
   simp [localFrame, hx]
-
-/--
-lemma `localFrame_apply_of_notMem` / 引理 `localFrame_apply_of_notMem`
-
-English:
-lemma localFrame_apply_of_notMem
-  given: {i : ι} (hx : x ∉ e.baseSet)
-  statement: e.localFrame b i x = 0
-  proof: by
-  simp [localFrame, hx]
-
-中文:
-引理 localFrame_apply_of_notMem
-  条件: {i : ι} (hx : x ∉ e.baseSet)
-  结论: e.localFrame b i x = 0
-  证明: by
-  simp [localFrame, hx]
-
-Depends on / 依赖: localFrame
+/-
+**Bundle.Trivialization.localFrame_apply_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Bu
+ndle.Trivialization`。
+形式化陈述：localFrame_apply_of_notMem {i : ι} (hx : x ∉ e.baseSet) : e.localFrame b i
+ x = 0
+参数：hx : x ∉ e.baseSet。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma localFrame_apply_of_notMem {i : ι} (hx : x ∉ e.baseSet) : e.localFrame b i x = 0 := by
   simp [localFrame, hx]
 
-/--
-lemma `contMDiffOn_localFrame_baseSet` / 引理 `contMDiffOn_localFrame_baseSet`
+/-- Each local frame `{sᵢ} ∈ Γ(E)` of a `C^k` vector bundle, defined by a local trivialisation `e`,
+is `C^k` on `e.baseSet`. -/
+/-
+**Bundle.Trivialization.contMDiffOn_localFrame_baseSet** 是 Mathlib 中的一个引理，位于命名空间
+ `Bundle.Trivialization`。
+形式化陈述：contMDiffOn_localFrame_baseSet (i : ι) : CMDiff[e.baseSet] n (T% (e.localF
+rame b i))
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Bundle.Trivialization.contMDiffOn_section_baseSet_iff`：contMDiffOn_secti
+on_baseSet_iff {s : forall x, E x} (e : Trivialization F (Bundle.TotalSpace.proj
+ : Bundle.TotalSpace F E -> B)) [MemTrivial…
+· 使用定理 `ContMDiffOn.congr`：ContMDiffOn.congr (h : ContMDiffOn I I' n f s) (h₁ : 
+forall y in s, f₁ y = f y) : ContMDiffOn I I' n f₁ s
+· 使用定理 `contMDiffOn_const`：contMDiffOn_const : ContMDiffOn I I' n (fun _ : M => 
+c) s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用引理 `Bundle.Trivialization.localFrame_apply_of_mem_baseSet`：localFrame_apply_
+of_mem_baseSet {i : ι} (hx : x in e.baseSet) : e.localFrame b i x = e.basisAt b 
+hx i
+· 使用定理 `Bundle.Trivialization.apply_mk_symm`：∀ {B : Type u_1} {F : Type u_2} {E 
+: B → Type u_3} [inst : TopologicalSpace B] [inst_1 : TopologicalSpace F]   [ins
+t_2 : TopologicalSpace (B…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma contMDiffOn_localFrame_baseSet
-  given: (i : ι)
-  statement: CMDiff[e.baseSet] n (T% (e.localFrame b i))
-  proof: by
-  rw [e.contMDiffOn_section_baseSet_iff]
-  apply (contMDiffOn_const (c := b i)).congr
-  intro y hy
-  simp [hy, basisAt]
-
-中文:
-引理 contMDiffOn_localFrame_baseSet
-  条件: (i : ι)
-  结论: CMDiff[e.baseSet] n (T% (e.localFrame b i))
-  证明: by
-  rw [e.contMDiffOn_section_baseSet_iff]
-  apply (contMDiffOn_const (c := b i)).congr
-  intro y hy
-  simp [hy, basisAt]
-
-Depends on / 依赖: basisAt, contMDiffOn_const, contMDiffOn_section_baseSet_iff, e.contMDiffOn_section_baseSet_iff
+--- 原说明 ---
+Each local frame `{sᵢ} ∈ Γ(E)` of a `C^k` vector bundle, defined by a local triv
+ialisation `e`,
+is `C^k` on `e.baseSet`.
 -/
 lemma contMDiffOn_localFrame_baseSet (i : ι) : CMDiff[e.baseSet] n (T% (e.localFrame b i)) := by
   rw [e.contMDiffOn_section_baseSet_iff]
@@ -881,36 +1021,41 @@ lemma contMDiffOn_localFrame_baseSet (i : ι) : CMDiff[e.baseSet] n (T% (e.local
   simp [hy, basisAt]
 
 variable (I) in
-/--
-lemma `isLocalFrameOn_localFrame_baseSet` / 引理 `isLocalFrameOn_localFrame_baseSet`
+/-- `b.localFrame e i` is indeed a local frame on `e.baseSet` -/
+/-
+**Bundle.Trivialization.isLocalFrameOn_localFrame_baseSet** 是 Mathlib 中的一个引理，位于命
+名空间 `Bundle.Trivialization`。
+形式化陈述：isLocalFrameOn_localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) 
+e.baseSet where contMDiffOn i
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Bundle.Trivialization.localFrame_apply_of_mem_baseSet`：localFrame_apply_
+of_mem_baseSet {i : ι} (hx : x in e.baseSet) : e.localFrame b i x = e.basisAt b 
+hx i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
+· 使用引理 `Bundle.Trivialization.contMDiffOn_localFrame_baseSet`：contMDiffOn_localF
+rame_baseSet (i : ι) : CMDiff[e.baseSet] n (T% (e.localFrame b i))
 
-English:
-lemma isLocalFrameOn_localFrame_baseSet
-  statement: IsLocalFrameOn I F n (e.localFrame b) e.baseSet where
-  proof: e.contMDiffOn_localFrame_baseSet _ b i
-  linearIndependent := by
-    intro x hx
-    convert! (e.basisAt b hx).linearIndependent
-    simp [hx, basisAt]
-  generating := by
-    intro x hx
-    convert! (e.basisAt b hx).span_eq.ge
-    simp [hx, basisAt]
-
-中文:
-引理 isLocalFrameOn_localFrame_baseSet
-  结论: 是LocalFrameOn I F n (e.localFrame b) e.baseSet where
-  证明: e.contMDiffOn_localFrame_baseSet _ b i
-  linearIndependent := by
-    intro x hx
-    convert! (e.basisAt b hx).linearIndependent
-    simp [hx, basisAt]
-  generating := by
-    intro x hx
-    convert! (e.basisAt b hx).span_eq.ge
-    simp [hx, basisAt]
-
-Depends on / 依赖: contMDiffOn_localFrame_baseSet, e.contMDiffOn_localFrame_baseSet
+--- 原说明 ---
+`b.localFrame e i` is indeed a local frame on `e.baseSet`
 -/
 lemma isLocalFrameOn_localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) e.baseSet where
   contMDiffOn i := e.contMDiffOn_localFrame_baseSet _ b i
@@ -922,49 +1067,35 @@ lemma isLocalFrameOn_localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) 
     intro x hx
     convert! (e.basisAt b hx).span_eq.ge
     simp [hx, basisAt]
-
-/--
-lemma `_root_.contMDiffAt_localFrame_of_mem` / 引理 `_root_.contMDiffAt_localFrame_of_mem`
-
-English:
-lemma _root_.contMDiffAt_localFrame_of_mem
-  given: (i : ι) (hx : x in e.baseSet)
-  proof: (e.isLocalFrameOn_localFrame_baseSet I n b).contMDiffAt e.open_baseSet hx _
-
-中文:
-引理 _root_.contMDiffAt_localFrame_of_mem
-  条件: (i : ι) (hx : x in e.baseSet)
-  证明: (e.isLocalFrameOn_localFrame_baseSet I n b).contMDiffAt e.open_baseSet hx _
-
-Depends on / 依赖: contMDiffAt, e.isLocalFrameOn_localFrame_baseSet, e.open_baseSet, isLocalFrameOn_localFrame_baseSet, open_baseSet
+/-
+**Bundle.Trivialization._root_.contMDiffAt_localFrame_of_mem** 是 Mathlib 中的一个引理，
+位于命名空间 `Bundle.Trivialization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.contMDiffAt_localFrame_of_mem (i : ι) (hx : x in e.baseSet) :
+lemma _root_.contMDiffAt_localFrame_of_mem (i : ι) (hx : x ∈ e.baseSet) :
     CMDiffAt n (T% (e.localFrame b i)) x :=
   (e.isLocalFrameOn_localFrame_baseSet I n b).contMDiffAt e.open_baseSet hx _
 
 variable [ContMDiffVectorBundle 1 F V I]
 
 variable (I) in
-/--
-Definition of `localFrameCoeff` / `localFrameCoeff` 的定义
+/-- Coefficients of a section `s` of `V` w.r.t. the local frame `b.localFrame e i`.
 
-English:
-definition localFrameCoeff
-  signature: (i : ι)
-  body: (e.isLocalFrameOn_localFrame_baseSet I 1 b).coeff i
+If x is outside of `e.baseSet`, this returns the junk value 0. -/
+/-
+**Bundle.Trivialization.localFrameCoeff** 是 Mathlib 中的一个定义，位于命名空间 `Bundle.Trivia
+lization`。
+形式化陈述：localFrameCoeff (i : ι) : Π x : M, (V x ->ₗ[𝕜] 𝕜)
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[deprecated (since := "2026-07-26")] alias localFrame_coeff := localFrameCoeff
+--- 原说明 ---
+Coefficients of a section `s` of `V` w.r.t. the local frame `b.localFrame e i`.
 
-中文:
-定义 localFrameCoeff
-  签名: (i : ι)
-  定义体: (e.isLocalFrameOn_localFrame_baseSet I 1 b).coeff i
-
-@[deprecated (since := "2026-07-26")] alias localFrame_coeff := localFrameCoeff
-
-Depends on / 依赖: e.isLocalFrameOn_localFrame_baseSet, isLocalFrameOn_localFrame_baseSet
+If x is outside of `e.baseSet`, this returns the junk value 0.
 -/
-def localFrameCoeff (i : ι) : Π x : M, (V x ->ₗ[𝕜] 𝕜) :=
+def localFrameCoeff (i : ι) : Π x : M, (V x →ₗ[𝕜] 𝕜) :=
   (e.isLocalFrameOn_localFrame_baseSet I 1 b).coeff i
 
 @[deprecated (since := "2026-07-26")] alias localFrame_coeff := localFrameCoeff
@@ -974,30 +1105,19 @@ variable {x x' : M}
 
 variable (e b) in
 @[simp]
-/--
-lemma `localFrameCoeff_apply_of_notMem_baseSet` / 引理 `localFrameCoeff_apply_of_notMem_baseSet`
-
-English:
-lemma localFrameCoeff_apply_of_notMem_baseSet
-  given: (hx : x ∉ e.baseSet) (i : ι)
-  proof: by
-  simpa [localFrameCoeff] using
-    (e.isLocalFrameOn_localFrame_baseSet I 1 b).coeff_apply_of_notMem hx i
-
-@[deprecated (since := "2026-07-26")]
-alias localFrame_coeff_apply_of_notMem_baseSet := localFrameCoeff_apply_of_notMem_baseSet
-
-中文:
-引理 localFrameCoeff_apply_of_notMem_baseSet
-  条件: (hx : x ∉ e.baseSet) (i : ι)
-  证明: by
-  simpa [localFrameCoeff] using
-    (e.isLocalFrameOn_localFrame_baseSet I 1 b).coeff_apply_of_notMem hx i
-
-@[deprecated (since := "2026-07-26")]
-alias localFrame_coeff_apply_of_notMem_baseSet := localFrameCoeff_apply_of_notMem_baseSet
-
-Depends on / 依赖: coeff_apply_of_notMem, e.isLocalFrameOn_localFrame_baseSet, isLocalFrameOn_localFrame_baseSet, localFrameCoeff
+/-
+**Bundle.Trivialization.localFrameCoeff_apply_of_notMem_baseSet** 是 Mathlib 中的一个
+引理，位于命名空间 `Bundle.Trivialization`。
+形式化陈述：localFrameCoeff_apply_of_notMem_baseSet (hx : x ∉ e.baseSet) (i : ι) : e.l
+ocalFrameCoeff I b i x = 0
+参数：hx : x ∉ e.baseSet；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalFrameOn.coeff_apply_of_notMem`：coeff_apply_of_notMem (hs : IsLoca
+lFrameOn I F n s u) (hx : x ∉ u) (i : ι) : hs.coeff i x = 0
+· 使用引理 `Bundle.Trivialization.isLocalFrameOn_localFrame_baseSet`：isLocalFrameOn_
+localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) e.baseSet where contM
+DiffOn i
 -/
 lemma localFrameCoeff_apply_of_notMem_baseSet (hx : x ∉ e.baseSet) (i : ι) :
     e.localFrameCoeff I b i x = 0 := by
@@ -1009,38 +1129,51 @@ alias localFrame_coeff_apply_of_notMem_baseSet := localFrameCoeff_apply_of_notMe
 
 variable (e b) in
 @[simp]
-/--
-lemma `localFrameCoeff_apply_of_mem_baseSet` / 引理 `localFrameCoeff_apply_of_mem_baseSet`
-
-English:
-lemma localFrameCoeff_apply_of_mem_baseSet
-  given: (hx : x in e.baseSet) (s : Π x : M, V x) (i : ι)
-  proof: by
-  have he := e.isLocalFrameOn_localFrame_baseSet I 1 b
-  have hbasis : e.basisAt b hx = he.toBasisAt hx := by
-    ext j
-    simp [IsLocalFrameOn.toBasisAt, localFrame, basisAt, hx]
-  simp [localFrameCoeff, IsLocalFrameOn.coeff, hx, hbasis]
-
-@[deprecated (since := "2026-07-26")]
-alias localFrame_coeff_apply_of_mem_baseSet := localFrameCoeff_apply_of_mem_baseSet
-
-中文:
-引理 localFrameCoeff_apply_of_mem_baseSet
-  条件: (hx : x in e.baseSet) (s : Π x : M, V x) (i : ι)
-  证明: by
-  have he := e.isLocalFrameOn_localFrame_baseSet I 1 b
-  have hbasis : e.basisAt b hx = he.toBasisAt hx := by
-    ext j
-    simp [IsLocalFrameOn.toBasisAt, localFrame, basisAt, hx]
-  simp [localFrameCoeff, IsLocalFrameOn.coeff, hx, hbasis]
-
-@[deprecated (since := "2026-07-26")]
-alias localFrame_coeff_apply_of_mem_baseSet := localFrameCoeff_apply_of_mem_baseSet
-
-Depends on / 依赖: IsLocalFrameOn, IsLocalFrameOn.coeff, IsLocalFrameOn.toBasisAt, basisAt, e.basisAt, e.isLocalFrameOn_localFrame_baseSet, hbasis, he.toBasisAt, isLocalFrameOn_localFrame_baseSet, localFrame, localFrameCoeff, toBasisAt
+/-
+**Bundle.Trivialization.localFrameCoeff_apply_of_mem_baseSet** 是 Mathlib 中的一个引理，
+位于命名空间 `Bundle.Trivialization`。
+形式化陈述：localFrameCoeff_apply_of_mem_baseSet (hx : x in e.baseSet) (s : Π x : M, V
+ x) (i : ι) : (localFrameCoeff I e b i x) (s x) = (e.basisAt b hx).repr (s x) i
+参数：hx : x in e.baseSet；s : Π x : M, V x；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bundle.Trivialization.isLocalFrameOn_localFrame_baseSet`：isLocalFrameOn_
+localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) e.baseSet where contM
+DiffOn i
+· 使用定理 `Module.Basis.eq_of_apply_eq`：eq_of_apply_eq {b₁ b₂ : Basis ι R M} : (for
+all i, b₁ i = b₂ i) -> b₁ = b₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalFrameOn.linearIndependent`：∀ {𝕜 : Type u_1} [inst : NontriviallyN
+ormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {H : Type u_…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `IsLocalFrameOn.generating`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {H : Type u_…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Module.Basis.mk.congr_simp`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_
+5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M]
+ {v v_1 : ι → M}…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_mk`：coe_mk : ⇑(Basis.mk hli hsp) = v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
 -/
-lemma localFrameCoeff_apply_of_mem_baseSet (hx : x in e.baseSet) (s : Π x : M, V x) (i : ι) :
+lemma localFrameCoeff_apply_of_mem_baseSet (hx : x ∈ e.baseSet) (s : Π x : M, V x) (i : ι) :
     (localFrameCoeff I e b i x) (s x) = (e.basisAt b hx).repr (s x) i := by
   have he := e.isLocalFrameOn_localFrame_baseSet I 1 b
   have hbasis : e.basisAt b hx = he.toBasisAt hx := by
@@ -1052,29 +1185,22 @@ lemma localFrameCoeff_apply_of_mem_baseSet (hx : x in e.baseSet) (s : Π x : M, 
 alias localFrame_coeff_apply_of_mem_baseSet := localFrameCoeff_apply_of_mem_baseSet
 
 variable {s s' : Π x : M, V x}
-
-/--
-lemma `eq_sum_localFrameCoeff_smul` / 引理 `eq_sum_localFrameCoeff_smul`
-
-English:
-lemma eq_sum_localFrameCoeff_smul
-  given: [Fintype ι] (hx : x' in e.baseSet)
-  proof: (isLocalFrameOn_localFrame_baseSet I 1 e b).coeff_sum_eq s hx
-
-@[deprecated (since := "2026-07-26")]
-alias eq_sum_localFrame_coeff_smul := eq_sum_localFrameCoeff_smul
-
-中文:
-引理 eq_sum_localFrameCoeff_smul
-  条件: [有限类型 ι] (hx : x' in e.baseSet)
-  证明: (isLocalFrameOn_localFrame_baseSet I 1 e b).coeff_sum_eq s hx
-
-@[deprecated (since := "2026-07-26")]
-alias eq_sum_localFrame_coeff_smul := eq_sum_localFrameCoeff_smul
-
-Depends on / 依赖: coeff_sum_eq, isLocalFrameOn_localFrame_baseSet
+/-
+**Bundle.Trivialization.eq_sum_localFrameCoeff_smul** 是 Mathlib 中的一个引理，位于命名空间 `B
+undle.Trivialization`。
+形式化陈述：eq_sum_localFrameCoeff_smul [Fintype ι] (hx : x' in e.baseSet) : s x' = ∑ 
+i, e.localFrameCoeff I b i x' (s x') • e.localFrame b i x'
+参数：hx : x' in e.baseSet。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalFrameOn.coeff_sum_eq`：coeff_sum_eq [Fintype ι] (hs : IsLocalFrame
+On I F n s u) (t : Π x : M, V x) (hx : x in u) : t x = ∑ i, hs.coeff i x (t x) •
+ (s i x)
+· 使用引理 `Bundle.Trivialization.isLocalFrameOn_localFrame_baseSet`：isLocalFrameOn_
+localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) e.baseSet where contM
+DiffOn i
 -/
-lemma eq_sum_localFrameCoeff_smul [Fintype ι] (hx : x' in e.baseSet) :
+lemma eq_sum_localFrameCoeff_smul [Fintype ι] (hx : x' ∈ e.baseSet) :
     s x' = ∑ i, e.localFrameCoeff I b i x' (s x') • e.localFrame b i x' :=
   (isLocalFrameOn_localFrame_baseSet I 1 e b).coeff_sum_eq s hx
 
@@ -1082,46 +1208,57 @@ lemma eq_sum_localFrameCoeff_smul [Fintype ι] (hx : x' in e.baseSet) :
 alias eq_sum_localFrame_coeff_smul := eq_sum_localFrameCoeff_smul
 
 variable (e b) in
-/--
-lemma `eventually_eq_localFrame_sum_coeff_smul` / 引理 `eventually_eq_localFrame_sum_coeff_smul`
+/-- A local frame locally spans the space of sections for `V`: for each local trivialisation `e`
+of `V` around `x`, we have
+`s = ∑ i, (LinearMap.piApply (b.localFrameCoeff e i) s) • b.localFrame e i` near `x`. -/
+/-
+**Bundle.Trivialization.eventually_eq_localFrame_sum_coeff_smul** 是 Mathlib 中的一个
+引理，位于命名空间 `Bundle.Trivialization`。
+形式化陈述：eventually_eq_localFrame_sum_coeff_smul [Fintype ι] (hxe : x in e.baseSet)
+ : forallᶠ x' in 𝓝 x, s x' = ∑ i, e.localFrameCoeff I b i x' (s x') • e.localFra
+me b i x'
+参数：hxe : x in e.baseSet。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eventually_nhds_iff`：eventually_nhds_iff {p : X -> Prop} : (forallᶠ y in
+ 𝓝 x, p y) ↔ exists t : Set X, (forall y in t, p y) ∧ IsOpen t ∧ x in t
+· 使用引理 `Bundle.Trivialization.eq_sum_localFrameCoeff_smul`：eq_sum_localFrameCoef
+f_smul [Fintype ι] (hx : x' in e.baseSet) : s x' = ∑ i, e.localFrameCoeff I b i 
+x' (s x') • e.localFrame b i x'
+· 使用定理 `Bundle.Trivialization.open_baseSet`：∀ {B : Type u_1} {F : Type u_2} {Z :
+ Type u_4} [inst : TopologicalSpace B] [inst_1 : TopologicalSpace F]   [inst_2 :
+ TopologicalSpace Z] {pr…
 
-English:
-lemma eventually_eq_localFrame_sum_coeff_smul
-  given: [Fintype ι] (hxe : x in e.baseSet)
-  proof: eventually_nhds_iff.mpr ⟨e.baseSet, fun _ => e.eq_sum_localFrameCoeff_smul, e.open_baseSet, hxe⟩
-
-中文:
-引理 eventually_eq_localFrame_sum_coeff_smul
-  条件: [有限类型 ι] (hxe : x in e.baseSet)
-  证明: eventually_nhds_iff.mpr ⟨e.baseSet, fun _ => e.eq_sum_localFrameCoeff_smul, e.open_baseSet, hxe⟩
-
-Depends on / 依赖: baseSet, e.baseSet, e.eq_sum_localFrameCoeff_smul, e.open_baseSet, eq_sum_localFrameCoeff_smul, eventually_nhds_iff, eventually_nhds_iff.mpr, open_baseSet
+--- 原说明 ---
+A local frame locally spans the space of sections for `V`: for each local trivia
+lisation `e`
+of `V` around `x`, we have
+`s = ∑ i, (LinearMap.piApply (b.localFrameCoeff e i) s) • b.localFrame e i` near
+ `x`.
 -/
-lemma eventually_eq_localFrame_sum_coeff_smul [Fintype ι] (hxe : x in e.baseSet) :
-    forallᶠ x' in 𝓝 x, s x' = ∑ i, e.localFrameCoeff I b i x' (s x') • e.localFrame b i x' :=
-  eventually_nhds_iff.mpr ⟨e.baseSet, fun _ => e.eq_sum_localFrameCoeff_smul, e.open_baseSet, hxe⟩
+lemma eventually_eq_localFrame_sum_coeff_smul [Fintype ι] (hxe : x ∈ e.baseSet) :
+    ∀ᶠ x' in 𝓝 x, s x' = ∑ i, e.localFrameCoeff I b i x' (s x') • e.localFrame b i x' :=
+  eventually_nhds_iff.mpr ⟨e.baseSet, fun _ ↦ e.eq_sum_localFrameCoeff_smul, e.open_baseSet, hxe⟩
 
 variable (e b) in
-/--
-lemma `localFrameCoeff_congr` / 引理 `localFrameCoeff_congr`
+/-- The representation of `s` in a local frame at `x` only depends on `s` at `x`. -/
+/-
+**Bundle.Trivialization.localFrameCoeff_congr** 是 Mathlib 中的一个引理，位于命名空间 `Bundle.
+Trivialization`。
+形式化陈述：localFrameCoeff_congr {i : ι} (hss' : s x = s' x) : e.localFrameCoeff I b 
+i x (s x) = e.localFrameCoeff I b i x (s' x)
+参数：hss' : s x = s' x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalFrameOn.coeff_congr`：coeff_congr (hs : IsLocalFrameOn I F n s u) 
+(htt' : t x = t' x) (i : ι) : hs.coeff i x (t x) = hs.coeff i x (t' x)
+· 使用引理 `Bundle.Trivialization.isLocalFrameOn_localFrame_baseSet`：isLocalFrameOn_
+localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) e.baseSet where contM
+DiffOn i
 
-English:
-lemma localFrameCoeff_congr
-  given: {i : ι} (hss' : s x = s' x)
-  proof: by
-  simpa using! (isLocalFrameOn_localFrame_baseSet I 1 e b).coeff_congr hss' i
-
-@[deprecated (since := "2026-07-26")] alias localFrame_coeff_congr := localFrameCoeff_congr
-
-中文:
-引理 localFrameCoeff_congr
-  条件: {i : ι} (hss' : s x = s' x)
-  证明: by
-  simpa using! (isLocalFrameOn_localFrame_baseSet I 1 e b).coeff_congr hss' i
-
-@[deprecated (since := "2026-07-26")] alias localFrame_coeff_congr := localFrameCoeff_congr
-
-Depends on / 依赖: coeff_congr, isLocalFrameOn_localFrame_baseSet
+--- 原说明 ---
+The representation of `s` in a local frame at `x` only depends on `s` at `x`.
 -/
 lemma localFrameCoeff_congr {i : ι} (hss' : s x = s' x) :
     e.localFrameCoeff I b i x (s x) = e.localFrameCoeff I b i x (s' x) := by
@@ -1132,28 +1269,38 @@ lemma localFrameCoeff_congr {i : ι} (hss' : s x = s' x) :
 variable {n}
 
 variable (e) in
-/--
-lemma `localFrameCoeff_eq_coeff` / 引理 `localFrameCoeff_eq_coeff`
+/-- Suppose `e` is a compatible trivialisation around `x ∈ M`, and `s` a bundle section.
+Then the coefficient of `s` w.r.t. the local frame induced by `b` and `e`
+equals the coefficient of "`s x` read in the trivialisation `e`" for `b i`. -/
+/-
+**Bundle.Trivialization.localFrameCoeff_eq_coeff** 是 Mathlib 中的一个引理，位于命名空间 `Bund
+le.Trivialization`。
+形式化陈述：localFrameCoeff_eq_coeff (hxe : x in e.baseSet) {i : ι} : e.localFrameCoef
+f I b i x (s x) = b.repr (e ((T% s) x)).2 i
+参数：hxe : x in e.baseSet。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Bundle.Trivialization.localFrameCoeff_apply_of_mem_baseSet`：localFrameCo
+eff_apply_of_mem_baseSet (hx : x in e.baseSet) (s : Π x : M, V x) (i : ι) : (loc
+alFrameCoeff I e b i x) (s x) = (e.basisAt b hx)…
+· 使用定理 `Module.Basis.map_repr`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_6} {M
+' : Type u_7} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.
+Module R M]…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma localFrameCoeff_eq_coeff
-  given: (hxe : x in e.baseSet) {i : ι}
-  proof: by
-  simp [e.localFrameCoeff_apply_of_mem_baseSet b hxe, basisAt]
-
-@[deprecated (since := "2026-07-26")] alias localFrame_coeff_eq_coeff := localFrameCoeff_eq_coeff
-
-中文:
-引理 localFrameCoeff_eq_coeff
-  条件: (hxe : x in e.baseSet) {i : ι}
-  证明: by
-  simp [e.localFrameCoeff_apply_of_mem_baseSet b hxe, basisAt]
-
-@[deprecated (since := "2026-07-26")] alias localFrame_coeff_eq_coeff := localFrameCoeff_eq_coeff
-
-Depends on / 依赖: basisAt, e.localFrameCoeff_apply_of_mem_baseSet, localFrameCoeff_apply_of_mem_baseSet
+--- 原说明 ---
+Suppose `e` is a compatible trivialisation around `x ∈ M`, and `s` a bundle sect
+ion.
+Then the coefficient of `s` w.r.t. the local frame induced by `b` and `e`
+equals the coefficient of "`s x` read in the trivialisation `e`" for `b i`.
 -/
-lemma localFrameCoeff_eq_coeff (hxe : x in e.baseSet) {i : ι} :
+lemma localFrameCoeff_eq_coeff (hxe : x ∈ e.baseSet) {i : ι} :
     e.localFrameCoeff I b i x (s x) = b.repr (e ((T% s) x)).2 i := by
   simp [e.localFrameCoeff_apply_of_mem_baseSet b hxe, basisAt]
 
@@ -1169,77 +1316,98 @@ proven in `OrthonormalFrame.lean`).
 -/
 
 variable [VectorBundle 𝕜 F V] [ContMDiffVectorBundle 1 F V I]
-  {e : Trivialization F (TotalSpace.proj : TotalSpace F V -> M)} [MemTrivializationAtlas e]
-  {ι : Type*} (b : Basis ι 𝕜 F) {s : Π x : M, V x} {t : Set M} {k : Nat∞ω} {x x' : M}
+  {e : Trivialization F (TotalSpace.proj : TotalSpace F V → M)} [MemTrivializationAtlas e]
+  {ι : Type*} (b : Basis ι 𝕜 F) {s : Π x : M, V x} {t : Set M} {k : ℕ∞ω} {x x' : M}
   [FiniteDimensional 𝕜 F] [CompleteSpace 𝕜] [ContMDiffVectorBundle k F V I]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `contMDiffAt_localFrameCoeff` / 引理 `contMDiffAt_localFrameCoeff`
+/-- If `s` is `C^k` at `x`, so is its coefficient `b.localFrameCoeff e i` in the local frame
+near `x` induced by `e` and `b` -/
+/-
+**contMDiffAt_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：contMDiffAt_localFrameCoeff (hxe : x in e.baseSet) (hs : CMDiffAt k (T% s)
+ x) (i : ι) : CMDiffAt k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x
+参数：hxe : x in e.baseSet；hs : CMDiffAt k (T% s) x；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Bundle.Trivialization.contMDiffAt_section_iff`：contMDiffAt_section_iff {
+s : forall x, E x} {x₀ : B} (e : Trivialization F (Bundle.TotalSpace.proj : Bund
+le.TotalSpace F E -> B)) [MemTrivia…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `contMDiffAt_iff_contDiffAt`：contMDiffAt_iff_contDiffAt {f : E -> E'} {x 
+: E} : ContMDiffAt 𝓘(𝕜, E) 𝓘(𝕜, E') n f x ↔ ContDiffAt 𝕜 n f x
+· 使用定理 `ContDiffAt.clm_apply`：ContDiffAt.clm_apply {f : E -> F ->L[𝕜] G} {g : E 
+-> F} (hf : ContDiffAt 𝕜 n f x) (hg : ContDiffAt 𝕜 n g x) : ContDiffAt 𝕜 n (fun 
+x => (f x)…
+· 使用定理 `contDiffAt_const`：contDiffAt_const {c : F} : ContDiffAt 𝕜 n (fun _ : E =
+> c) x
+· 使用定理 `contDiffAt_id`：contDiffAt_id {x} : ContDiffAt 𝕜 n (id : E -> E) x
+· 使用定理 `ContMDiffAt.comp`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E
+ : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {H : T
+ype u_…
+· 使用定理 `ContMDiffAt.congr_of_eventuallyEq`：ContMDiffAt.congr_of_eventuallyEq (h 
+: ContMDiffAt I I' n f x) (h₁ : f₁ =ᶠ[𝓝 x] f) : ContMDiffAt I I' n f₁ x
+（共 35 条，此处仅展示前 30 条）
 
-English:
-lemma contMDiffAt_localFrameCoeff
-  given: (hxe : x in e.baseSet) (hs : CMDiffAt k (T% s) x) (i : ι)
-  proof: by
-  -- This boils down to computing the frame coefficients in a local trivialisation.
-  -- step 1: on e.baseSet, we know compute the coefficient very well
-  let aux := fun x => b.repr (e ((T% s) x)).2 i
-  -- Since `e.baseSet` is open, this is sufficient.
-  suffices CMDiffAt k aux x by
-    apply this.congr_of_eventuallyEq ?_
-    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
-    intro y hy
-    simp [aux, e.localFrameCoeff_eq_coeff hy]
-  simp only [aux]
-  -- step 2: `s` read in trivialization `e` is `C^k`
-  have h₁ : CMDiffAt k (fun x => (e ((T% s) x)).2) x := by
-    simpa using (e.contMDiffAt_section_iff hxe).1 hs
-  -- step 3: `b.repr` is a linear map, so the composition is smooth
-  let breprl : F ->ₗ[𝕜] 𝕜 :=
-    { toFun v := b.repr v i
-      map_add' m m' := by simp
-      map_smul' m x := by simp }
-  have : CMDiffAt k breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
-contMDiffAt_iff_contDiffAt.mpr by fun_prop
-  exact this.comp x h₁
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffAt_localFrame_coeff := contMDiffAt_localFrameCoeff
-
-中文:
-引理 contMDiffAt_localFrameCoeff
-  条件: (hxe : x in e.baseSet) (hs : CMDiffAt k (T% s) x) (i : ι)
-  证明: by
-  -- This boils down to computing the frame coefficients in a local trivialisation.
-  -- step 1: on e.baseSet, we know compute the coefficient very well
-  let aux := fun x => b.repr (e ((T% s) x)).2 i
-  -- Since `e.baseSet` is open, this is sufficient.
-  suffices CMDiffAt k aux x by
-    apply this.congr_of_eventuallyEq ?_
-    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
-    intro y hy
-    simp [aux, e.localFrameCoeff_eq_coeff hy]
-  simp only [aux]
-  -- step 2: `s` read in trivialization `e` is `C^k`
-  have h₁ : CMDiffAt k (fun x => (e ((T% s) x)).2) x := by
-    simpa using (e.contMDiffAt_section_iff hxe).1 hs
-  -- step 3: `b.repr` is a linear map, so the composition is smooth
-  let breprl : F ->ₗ[𝕜] 𝕜 :=
-    { toFun v := b.repr v i
-      map_add' m m' := by simp
-      map_smul' m x := by simp }
-  have : CMDiffAt k breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
-contMDiffAt_iff_contDiffAt.mpr by fun_prop
-  exact this.comp x h₁
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffAt_localFrame_coeff := contMDiffAt_localFrameCoeff
+--- 原说明 ---
+If `s` is `C^k` at `x`, so is its coefficient `b.localFrameCoeff e i` in the loc
+al frame
+near `x` induced by `e` and `b`
 -/
-lemma contMDiffAt_localFrameCoeff (hxe : x in e.baseSet) (hs : CMDiffAt k (T% s) x) (i : ι) :
+lemma contMDiffAt_localFrameCoeff (hxe : x ∈ e.baseSet) (hs : CMDiffAt k (T% s) x) (i : ι) :
     CMDiffAt k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x := by
   -- This boils down to computing the frame coefficients in a local trivialisation.
   -- step 1: on e.baseSet, we know compute the coefficient very well
-  let aux := fun x => b.repr (e ((T% s) x)).2 i
+  let aux := fun x ↦ b.repr (e ((T% s) x)).2 i
   -- Since `e.baseSet` is open, this is sufficient.
   suffices CMDiffAt k aux x by
     apply this.congr_of_eventuallyEq ?_
@@ -1248,72 +1416,79 @@ lemma contMDiffAt_localFrameCoeff (hxe : x in e.baseSet) (hs : CMDiffAt k (T% s)
     simp [aux, e.localFrameCoeff_eq_coeff hy]
   simp only [aux]
   -- step 2: `s` read in trivialization `e` is `C^k`
-  have h₁ : CMDiffAt k (fun x => (e ((T% s) x)).2) x := by
+  have h₁ : CMDiffAt k (fun x ↦ (e ((T% s) x)).2) x := by
     simpa using (e.contMDiffAt_section_iff hxe).1 hs
   -- step 3: `b.repr` is a linear map, so the composition is smooth
-  let breprl : F ->ₗ[𝕜] 𝕜 :=
+  let breprl : F →ₗ[𝕜] 𝕜 :=
     { toFun v := b.repr v i
       map_add' m m' := by simp
       map_smul' m x := by simp }
   have : CMDiffAt k breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
-contMDiffAt_iff_contDiffAt.mpr by fun_prop
+    contMDiffAt_iff_contDiffAt.mpr <| by fun_prop
   exact this.comp x h₁
 
 @[deprecated (since := "2026-07-26")]
 alias contMDiffAt_localFrame_coeff := contMDiffAt_localFrameCoeff
 
-/--
-lemma `contMDiffOn_localFrameCoeff` / 引理 `contMDiffOn_localFrameCoeff`
+/-- If `s` is `C^k` on `t ⊆ e.baseSet`, so is its coefficient `b.localFrameCoeff e i`
+in the local frame induced by `e` -/
+/-
+**contMDiffOn_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：contMDiffOn_localFrameCoeff (ht : IsOpen t) (ht' : t subseteq e.baseSet) (
+hs : CMDiff[t] k (T% s)) (i : ι) : CMDiff[t] k ((LinearMap.piApply (e.localFrame
+Coeff I b i)) s)
+参数：ht : IsOpen t；ht' : t subseteq e.baseSet；hs : CMDiff[t] k (T% s)；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContMDiffAt.contMDiffWithinAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNorm
+edField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpac
+e 𝕜 E] {H : Type u_…
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `contMDiffAt_localFrameCoeff`：contMDiffAt_localFrameCoeff (hxe : x in e.b
+aseSet) (hs : CMDiffAt k (T% s) x) (i : ι) : CMDiffAt k ((LinearMap.piApply (e.l
+ocalFrameCoeff I …
+· 使用定理 `ContMDiffOn.contMDiffAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E]
+ {H : Type u_…
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-lemma contMDiffOn_localFrameCoeff
-  statement: (ht : IsOpen t) (ht' : t subseteq e.baseSet)
-  proof: fun _ hx => (contMDiffAt_localFrameCoeff b (ht' hx)
-    (hs.contMDiffAt (ht.mem_nhds hx)) i).contMDiffWithinAt
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_localFrame_coeff := contMDiffOn_localFrameCoeff
-
-中文:
-引理 contMDiffOn_localFrameCoeff
-  结论: (ht : 是开集 t) (ht' : t subseteq e.baseSet)
-  证明: fun _ hx => (contMDiffAt_localFrameCoeff b (ht' hx)
-    (hs.contMDiffAt (ht.mem_nhds hx)) i).contMDiffWithinAt
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_localFrame_coeff := contMDiffOn_localFrameCoeff
-
-Depends on / 依赖: contMDiffAt, contMDiffAt_localFrameCoeff, contMDiffWithinAt, hs.contMDiffAt, ht.mem_nhds, mem_nhds
+--- 原说明 ---
+If `s` is `C^k` on `t ⊆ e.baseSet`, so is its coefficient `b.localFrameCoeff e i
+`
+in the local frame induced by `e`
 -/
-lemma contMDiffOn_localFrameCoeff (ht : IsOpen t) (ht' : t subseteq e.baseSet)
+lemma contMDiffOn_localFrameCoeff (ht : IsOpen t) (ht' : t ⊆ e.baseSet)
     (hs : CMDiff[t] k (T% s)) (i : ι) :
     CMDiff[t] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) :=
-  fun _ hx => (contMDiffAt_localFrameCoeff b (ht' hx)
+  fun _ hx ↦ (contMDiffAt_localFrameCoeff b (ht' hx)
     (hs.contMDiffAt (ht.mem_nhds hx)) i).contMDiffWithinAt
 
 @[deprecated (since := "2026-07-26")]
 alias contMDiffOn_localFrame_coeff := contMDiffOn_localFrameCoeff
 
-/--
-lemma `contMDiffOn_baseSet_localFrameCoeff` / 引理 `contMDiffOn_baseSet_localFrameCoeff`
+/-- If `s` is `C^k` on `e.baseSet`, so is its coefficient `b.localFrameCoeff e i`
+in the local frame induced by `e` -/
+/-
+**contMDiffOn_baseSet_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：contMDiffOn_baseSet_localFrameCoeff (hs : CMDiff[e.baseSet] k (T% s)) (i :
+ ι) : CMDiff[e.baseSet] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s)
+参数：hs : CMDiff[e.baseSet] k (T% s)；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `contMDiffOn_localFrameCoeff`：contMDiffOn_localFrameCoeff (ht : IsOpen t)
+ (ht' : t subseteq e.baseSet) (hs : CMDiff[t] k (T% s)) (i : ι) : CMDiff[t] k ((
+LinearMap.piApply…
+· 使用定理 `Bundle.Trivialization.open_baseSet`：∀ {B : Type u_1} {F : Type u_2} {Z :
+ Type u_4} [inst : TopologicalSpace B] [inst_1 : TopologicalSpace F]   [inst_2 :
+ TopologicalSpace Z] {pr…
+· 使用定理 `subset_refl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] (a : α), a ⊆ a
 
-English:
-lemma contMDiffOn_baseSet_localFrameCoeff
-  given: (hs : CMDiff[e.baseSet] k (T% s)) (i : ι)
-  proof: contMDiffOn_localFrameCoeff b e.open_baseSet (subset_refl _) hs _
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_baseSet_localFrame_coeff := contMDiffOn_baseSet_localFrameCoeff
-
-中文:
-引理 contMDiffOn_baseSet_localFrameCoeff
-  条件: (hs : CMDiff[e.baseSet] k (T% s)) (i : ι)
-  证明: contMDiffOn_localFrameCoeff b e.open_baseSet (subset_refl _) hs _
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_baseSet_localFrame_coeff := contMDiffOn_baseSet_localFrameCoeff
-
-Depends on / 依赖: contMDiffOn_localFrameCoeff, e.open_baseSet, open_baseSet, subset_refl
+--- 原说明 ---
+If `s` is `C^k` on `e.baseSet`, so is its coefficient `b.localFrameCoeff e i`
+in the local frame induced by `e`
 -/
 lemma contMDiffOn_baseSet_localFrameCoeff (hs : CMDiff[e.baseSet] k (T% s)) (i : ι) :
     CMDiff[e.baseSet] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) :=
@@ -1322,100 +1497,119 @@ lemma contMDiffOn_baseSet_localFrameCoeff (hs : CMDiff[e.baseSet] k (T% s)) (i :
 @[deprecated (since := "2026-07-26")]
 alias contMDiffOn_baseSet_localFrame_coeff := contMDiffOn_baseSet_localFrameCoeff
 
-/--
-lemma `contMDiffAt_iff_localFrameCoeff` / 引理 `contMDiffAt_iff_localFrameCoeff`
+/-- A section `s` of `V` is `C^k` at `x ∈ e.baseSet` iff each of its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame near `x` is -/
+/-
+**contMDiffAt_iff_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：contMDiffAt_iff_localFrameCoeff (hx : x' in e.baseSet) : CMDiffAt k (T% s)
+ x' ↔ forall i, CMDiffAt k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x'
+参数：hx : x' in e.baseSet。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `contMDiffAt_localFrameCoeff`：contMDiffAt_localFrameCoeff (hxe : x in e.b
+aseSet) (hs : CMDiffAt k (T% s) x) (i : ι) : CMDiffAt k ((LinearMap.piApply (e.l
+ocalFrameCoeff I …
+· 使用引理 `IsLocalFrameOn.contMDiffAt_of_coeff`：contMDiffAt_of_coeff [FiniteDimensi
+onal 𝕜 F] (h : forall i, CMDiffAt n ((LinearMap.piApply (hs.coeff i)) t) x) (hu 
+: u in 𝓝 x) : CMDiffAt n …
+· 使用引理 `Bundle.Trivialization.isLocalFrameOn_localFrame_baseSet`：isLocalFrameOn_
+localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) e.baseSet where contM
+DiffOn i
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `Bundle.Trivialization.open_baseSet`：∀ {B : Type u_1} {F : Type u_2} {Z :
+ Type u_4} [inst : TopologicalSpace B] [inst_1 : TopologicalSpace F]   [inst_2 :
+ TopologicalSpace Z] {pr…
 
-English:
-lemma contMDiffAt_iff_localFrameCoeff
-  given: (hx : x' in e.baseSet)
-  proof: ⟨fun h i => contMDiffAt_localFrameCoeff b hx h i,
-    fun hi => (e.isLocalFrameOn_localFrame_baseSet I k b).contMDiffAt_of_coeff hi
-    (e.open_baseSet.mem_nhds hx)⟩
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffAt_iff_localFrame_coeff := contMDiffAt_iff_localFrameCoeff
-
-中文:
-引理 contMDiffAt_iff_localFrameCoeff
-  条件: (hx : x' in e.baseSet)
-  证明: ⟨fun h i => contMDiffAt_localFrameCoeff b hx h i,
-    fun hi => (e.isLocalFrameOn_localFrame_baseSet I k b).contMDiffAt_of_coeff hi
-    (e.open_baseSet.mem_nhds hx)⟩
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffAt_iff_localFrame_coeff := contMDiffAt_iff_localFrameCoeff
-
-Depends on / 依赖: contMDiffAt_localFrameCoeff, contMDiffAt_of_coeff, e.isLocalFrameOn_localFrame_baseSet, e.open_baseSet.mem_nhds, isLocalFrameOn_localFrame_baseSet, mem_nhds, open_baseSet
+--- 原说明 ---
+A section `s` of `V` is `C^k` at `x ∈ e.baseSet` iff each of its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame ne
+ar `x` is
 -/
-lemma contMDiffAt_iff_localFrameCoeff (hx : x' in e.baseSet) :
-    CMDiffAt k (T% s) x' ↔ forall i, CMDiffAt k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x' :=
-  ⟨fun h i => contMDiffAt_localFrameCoeff b hx h i,
-    fun hi => (e.isLocalFrameOn_localFrame_baseSet I k b).contMDiffAt_of_coeff hi
+lemma contMDiffAt_iff_localFrameCoeff (hx : x' ∈ e.baseSet) :
+    CMDiffAt k (T% s) x' ↔ ∀ i, CMDiffAt k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x' :=
+  ⟨fun h i ↦ contMDiffAt_localFrameCoeff b hx h i,
+    fun hi ↦ (e.isLocalFrameOn_localFrame_baseSet I k b).contMDiffAt_of_coeff hi
     (e.open_baseSet.mem_nhds hx)⟩
 
 @[deprecated (since := "2026-07-26")]
 alias contMDiffAt_iff_localFrame_coeff := contMDiffAt_iff_localFrameCoeff
 
-/--
-lemma `contMDiffOn_iff_localFrameCoeff` / 引理 `contMDiffOn_iff_localFrameCoeff`
+/-- A section `s` of `V` is `C^k` on `t ⊆ e.baseSet` iff each of its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame near `x` is -/
+/-
+**contMDiffOn_iff_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：contMDiffOn_iff_localFrameCoeff (ht : IsOpen t) (ht' : t subseteq e.baseSe
+t) : CMDiff[t] k (T% s) ↔ forall i, CMDiff[t] k ((LinearMap.piApply (e.localFram
+eCoeff I b i)) s)
+参数：ht : IsOpen t；ht' : t subseteq e.baseSet。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `contMDiffOn_localFrameCoeff`：contMDiffOn_localFrameCoeff (ht : IsOpen t)
+ (ht' : t subseteq e.baseSet) (hs : CMDiff[t] k (T% s)) (i : ι) : CMDiff[t] k ((
+LinearMap.piApply…
+· 使用定理 `ContMDiffAt.contMDiffWithinAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNorm
+edField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpac
+e 𝕜 E] {H : Type u_…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `contMDiffAt_iff_localFrameCoeff`：contMDiffAt_iff_localFrameCoeff (hx : x
+' in e.baseSet) : CMDiffAt k (T% s) x' ↔ forall i, CMDiffAt k ((LinearMap.piAppl
+y (e.localFrameCoeff …
+· 使用定理 `ContMDiffWithinAt.contMDiffAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNorm
+edField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpac
+e 𝕜 E] {H : Type u_…
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-lemma contMDiffOn_iff_localFrameCoeff
-  given: (ht : IsOpen t) (ht' : t subseteq e.baseSet)
-  proof: by
-  refine ⟨fun h i => contMDiffOn_localFrameCoeff b ht ht' h _, fun h x hx => ?_⟩
-  exact (contMDiffAt_iff_localFrameCoeff b (ht' hx)).mpr
-.contMDiffWithinAt (fun i => (h i x hx).contMDiffAt (ht.mem_nhds hx))
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_iff_localFrame_coeff := contMDiffOn_iff_localFrameCoeff
-
-中文:
-引理 contMDiffOn_iff_localFrameCoeff
-  条件: (ht : 是开集 t) (ht' : t subseteq e.baseSet)
-  证明: by
-  refine ⟨fun h i => contMDiffOn_localFrameCoeff b ht ht' h _, fun h x hx => ?_⟩
-  exact (contMDiffAt_iff_localFrameCoeff b (ht' hx)).mpr
-.contMDiffWithinAt (fun i => (h i x hx).contMDiffAt (ht.mem_nhds hx))
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_iff_localFrame_coeff := contMDiffOn_iff_localFrameCoeff
-
-Depends on / 依赖: contMDiffAt, contMDiffAt_iff_localFrameCoeff, contMDiffOn_localFrameCoeff, contMDiffWithinAt, ht.mem_nhds, mem_nhds
+--- 原说明 ---
+A section `s` of `V` is `C^k` on `t ⊆ e.baseSet` iff each of its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame ne
+ar `x` is
 -/
-lemma contMDiffOn_iff_localFrameCoeff (ht : IsOpen t) (ht' : t subseteq e.baseSet) :
-    CMDiff[t] k (T% s) ↔ forall i, CMDiff[t] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) := by
-  refine ⟨fun h i => contMDiffOn_localFrameCoeff b ht ht' h _, fun h x hx => ?_⟩
+lemma contMDiffOn_iff_localFrameCoeff (ht : IsOpen t) (ht' : t ⊆ e.baseSet) :
+    CMDiff[t] k (T% s) ↔ ∀ i, CMDiff[t] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) := by
+  refine ⟨fun h i ↦ contMDiffOn_localFrameCoeff b ht ht' h _, fun h x hx ↦ ?_⟩
   exact (contMDiffAt_iff_localFrameCoeff b (ht' hx)).mpr
-.contMDiffWithinAt (fun i => (h i x hx).contMDiffAt (ht.mem_nhds hx))
+    (fun i ↦ (h i x hx).contMDiffAt (ht.mem_nhds hx)) |>.contMDiffWithinAt
 
 @[deprecated (since := "2026-07-26")]
 alias contMDiffOn_iff_localFrame_coeff := contMDiffOn_iff_localFrameCoeff
 
-/--
-lemma `contMDiffOn_baseSet_iff_localFrameCoeff` / 引理 `contMDiffOn_baseSet_iff_localFrameCoeff`
+/-- A section `s` of `V` is `C^k` on a trivialisation domain `e.baseSet` iff each of its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame near `x` is -/
+/-
+**contMDiffOn_baseSet_iff_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：contMDiffOn_baseSet_iff_localFrameCoeff : CMDiff[e.baseSet] k (T% s) ↔ for
+all i, CMDiff[e.baseSet] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `contMDiffOn_iff_localFrameCoeff`：contMDiffOn_iff_localFrameCoeff (ht : I
+sOpen t) (ht' : t subseteq e.baseSet) : CMDiff[t] k (T% s) ↔ forall i, CMDiff[t]
+ k ((LinearMap.piAppl…
+· 使用定理 `Bundle.Trivialization.open_baseSet`：∀ {B : Type u_1} {F : Type u_2} {Z :
+ Type u_4} [inst : TopologicalSpace B] [inst_1 : TopologicalSpace F]   [inst_2 :
+ TopologicalSpace Z] {pr…
+· 使用定理 `subset_refl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] (a : α), a ⊆ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma contMDiffOn_baseSet_iff_localFrameCoeff
-  proof: by
-  rw [contMDiffOn_iff_localFrameCoeff b e.open_baseSet (subset_refl _)]
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_baseSet_iff_localFrame_coeff := contMDiffOn_baseSet_iff_localFrameCoeff
-
-中文:
-引理 contMDiffOn_baseSet_iff_localFrameCoeff
-  证明: by
-  rw [contMDiffOn_iff_localFrameCoeff b e.open_baseSet (subset_refl _)]
-
-@[deprecated (since := "2026-07-26")]
-alias contMDiffOn_baseSet_iff_localFrame_coeff := contMDiffOn_baseSet_iff_localFrameCoeff
-
-Depends on / 依赖: contMDiffOn_iff_localFrameCoeff, e.open_baseSet, open_baseSet, subset_refl
+--- 原说明 ---
+A section `s` of `V` is `C^k` on a trivialisation domain `e.baseSet` iff each of
+ its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame ne
+ar `x` is
 -/
 lemma contMDiffOn_baseSet_iff_localFrameCoeff :
     CMDiff[e.baseSet] k (T% s) ↔
-      forall i, CMDiff[e.baseSet] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) := by
+      ∀ i, CMDiff[e.baseSet] k ((LinearMap.piApply (e.localFrameCoeff I b i)) s) := by
   rw [contMDiffOn_iff_localFrameCoeff b e.open_baseSet (subset_refl _)]
 
 @[deprecated (since := "2026-07-26")]
@@ -1425,71 +1619,94 @@ alias contMDiffOn_baseSet_iff_localFrame_coeff := contMDiffOn_baseSet_iff_localF
 section MDifferentiable
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mdifferentiableAt_localFrameCoeff` / 引理 `mdifferentiableAt_localFrameCoeff`
+/-- If `s` is differentiable at `x`, so is its coefficient `b.localFrameCoeff e i` in the local
+frame near `x` induced by `e` and `b` -/
+/-
+**mdifferentiableAt_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mdifferentiableAt_localFrameCoeff (hxe : x in e.baseSet) (hs : MDiffAt (T%
+ s) x) (i : ι) : MDiffAt ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x
+参数：hxe : x in e.baseSet；hs : MDiffAt (T% s) x；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Bundle.Trivialization.mdifferentiableAt_section_iff`：mdifferentiableAt_s
+ection_iff (e : Trivialization F (TotalSpace.proj : TotalSpace F E -> B)) [MemTr
+ivializationAtlas e] (s : Π b : B, E b) {…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `IsTopologicalSemiring.toIsModuleTopology`：∀ (R : Type u_1) [inst : Semir
+ing R] [τR : TopologicalSpace R] [IsTopologicalSemiring R], IsModuleTopology R R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mdifferentiableAt_iff_differentiableAt`：mdifferentiableAt_iff_differenti
+ableAt : MDiffAt f x ↔ DifferentiableAt 𝕜 f x
+· 使用定理 `ContinuousLinearMap.differentiableAt`：∀ {𝕜 : Type u_1} [inst : Nontrivia
+llyNormedField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Mo
+dule 𝕜 E] [inst_3 : Topolo…
+· 使用定理 `MDifferentiableAt.comp`：MDifferentiableAt.comp (hg : MDiffAt g (f x)) (h
+f : MDiffAt f x) : MDiffAt (g ∘ f) x
+· 使用定理 `MDifferentiableAt.congr_of_eventuallyEq`：MDifferentiableAt.congr_of_even
+tuallyEq (h : MDiffAt f x) (hL : f₁ =ᶠ[𝓝 x] f) : MDiffAt f₁ x
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Filter.eventuallyEq_of_mem`：eventuallyEq_of_mem {l : Filter α} {f g : α 
+-> β} {s : Set α} (hs : s in l) (h : EqOn f g s) : f =ᶠ[l] g
+（共 33 条，此处仅展示前 30 条）
 
-English:
-lemma mdifferentiableAt_localFrameCoeff
-  proof: by
-  -- This boils down to computing the frame coefficients in a local trivialisation.
-  -- step 1: on `e.baseSet`, we know the coefficient very well
-  let aux := fun x => b.repr (e ((T% s) x)).2 i
-  -- Since `e.baseSet` is open, this is sufficient.
-  suffices MDiffAt aux x by
-    apply this.congr_of_eventuallyEq
-    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
-    intro y hy
-    simp [aux, e.localFrameCoeff_eq_coeff hy]
-  simp only [aux]
-  -- step 2: `s` read in trivialization `e` is differentiable
-  have h₁ : MDiffAt (fun x => (e ((T% s) x)).2) x := by
-    simpa using (e.mdifferentiableAt_section_iff I s hxe).1 hs
-  -- step 3: `b.repr` is a linear map, so the composition is smooth
-  let breprl : F ->ₗ[𝕜] 𝕜 :=
-    { toFun v := b.repr v i
-      map_add' m m' := by simp
-      map_smul' m x := by simp }
-  have : MDifferentiableAt 𝓘(𝕜, F) 𝓘(𝕜) breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
-mdifferentiableAt_iff_differentiableAt.mpr by fun_prop
-  exact this.comp x h₁
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableAt_localFrame_coeff := mdifferentiableAt_localFrameCoeff
-
-中文:
-引理 mdifferentiableAt_localFrameCoeff
-  证明: by
-  -- This boils down to computing the frame coefficients in a local trivialisation.
-  -- step 1: on `e.baseSet`, we know the coefficient very well
-  let aux := fun x => b.repr (e ((T% s) x)).2 i
-  -- Since `e.baseSet` is open, this is sufficient.
-  suffices MDiffAt aux x by
-    apply this.congr_of_eventuallyEq
-    apply eventuallyEq_of_mem (s := e.baseSet) (by simp [e.open_baseSet.mem_nhds hxe])
-    intro y hy
-    simp [aux, e.localFrameCoeff_eq_coeff hy]
-  simp only [aux]
-  -- step 2: `s` read in trivialization `e` is differentiable
-  have h₁ : MDiffAt (fun x => (e ((T% s) x)).2) x := by
-    simpa using (e.mdifferentiableAt_section_iff I s hxe).1 hs
-  -- step 3: `b.repr` is a linear map, so the composition is smooth
-  let breprl : F ->ₗ[𝕜] 𝕜 :=
-    { toFun v := b.repr v i
-      map_add' m m' := by simp
-      map_smul' m x := by simp }
-  have : MDifferentiableAt 𝓘(𝕜, F) 𝓘(𝕜) breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
-mdifferentiableAt_iff_differentiableAt.mpr by fun_prop
-  exact this.comp x h₁
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableAt_localFrame_coeff := mdifferentiableAt_localFrameCoeff
+--- 原说明 ---
+If `s` is differentiable at `x`, so is its coefficient `b.localFrameCoeff e i` i
+n the local
+frame near `x` induced by `e` and `b`
 -/
 lemma mdifferentiableAt_localFrameCoeff
-    (hxe : x in e.baseSet) (hs : MDiffAt (T% s) x) (i : ι) :
+    (hxe : x ∈ e.baseSet) (hs : MDiffAt (T% s) x) (i : ι) :
     MDiffAt ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x := by
   -- This boils down to computing the frame coefficients in a local trivialisation.
   -- step 1: on `e.baseSet`, we know the coefficient very well
-  let aux := fun x => b.repr (e ((T% s) x)).2 i
+  let aux := fun x ↦ b.repr (e ((T% s) x)).2 i
   -- Since `e.baseSet` is open, this is sufficient.
   suffices MDiffAt aux x by
     apply this.congr_of_eventuallyEq
@@ -1498,71 +1715,77 @@ lemma mdifferentiableAt_localFrameCoeff
     simp [aux, e.localFrameCoeff_eq_coeff hy]
   simp only [aux]
   -- step 2: `s` read in trivialization `e` is differentiable
-  have h₁ : MDiffAt (fun x => (e ((T% s) x)).2) x := by
+  have h₁ : MDiffAt (fun x ↦ (e ((T% s) x)).2) x := by
     simpa using (e.mdifferentiableAt_section_iff I s hxe).1 hs
   -- step 3: `b.repr` is a linear map, so the composition is smooth
-  let breprl : F ->ₗ[𝕜] 𝕜 :=
+  let breprl : F →ₗ[𝕜] 𝕜 :=
     { toFun v := b.repr v i
       map_add' m m' := by simp
       map_smul' m x := by simp }
   have : MDifferentiableAt 𝓘(𝕜, F) 𝓘(𝕜) breprl.toContinuousLinearMap (e ((T% s) x)).2 :=
-mdifferentiableAt_iff_differentiableAt.mpr by fun_prop
+    mdifferentiableAt_iff_differentiableAt.mpr <| by fun_prop
   exact this.comp x h₁
 
 @[deprecated (since := "2026-07-26")]
 alias mdifferentiableAt_localFrame_coeff := mdifferentiableAt_localFrameCoeff
 
-/--
-lemma `mdifferentiableOn_localFrameCoeff` / 引理 `mdifferentiableOn_localFrameCoeff`
+/-- If `s` is differentiable on `t ⊆ e.baseSet`, so is its coefficient `b.localFrameCoeff e i`
+in the local frame induced by `e` -/
+/-
+**mdifferentiableOn_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mdifferentiableOn_localFrameCoeff (ht : IsOpen t) (ht' : t subseteq e.base
+Set) (hs : MDiff[t] (T% s)) (i : ι) : MDiff[t] ((LinearMap.piApply (e.localFrame
+Coeff I b i)) s)
+参数：ht : IsOpen t；ht' : t subseteq e.baseSet；hs : MDiff[t] (T% s)；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MDifferentiableAt.mdifferentiableWithinAt`：MDifferentiableAt.mdifferenti
+ableWithinAt (h : MDiffAt f x) : MDiffAt[s] f x
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `mdifferentiableAt_localFrameCoeff`：mdifferentiableAt_localFrameCoeff (hx
+e : x in e.baseSet) (hs : MDiffAt (T% s) x) (i : ι) : MDiffAt ((LinearMap.piAppl
+y (e.localFrameCoeff I …
+· 使用定理 `MDifferentiableOn.mdifferentiableAt`：MDifferentiableOn.mdifferentiableAt
+ (h : MDiff[s] f) (hx : s in 𝓝 x) : MDiffAt f x
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-lemma mdifferentiableOn_localFrameCoeff
-  statement: (ht : IsOpen t) (ht' : t subseteq e.baseSet)
-  proof: fun _ hx => (mdifferentiableAt_localFrameCoeff b (ht' hx)
-    (hs.mdifferentiableAt (ht.mem_nhds hx)) i).mdifferentiableWithinAt
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableOn_localFrame_coeff := mdifferentiableOn_localFrameCoeff
-
-中文:
-引理 mdifferentiableOn_localFrameCoeff
-  结论: (ht : 是开集 t) (ht' : t subseteq e.baseSet)
-  证明: fun _ hx => (mdifferentiableAt_localFrameCoeff b (ht' hx)
-    (hs.mdifferentiableAt (ht.mem_nhds hx)) i).mdifferentiableWithinAt
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableOn_localFrame_coeff := mdifferentiableOn_localFrameCoeff
-
-Depends on / 依赖: hs.mdifferentiableAt, ht.mem_nhds, mdifferentiableAt, mdifferentiableAt_localFrameCoeff, mdifferentiableWithinAt, mem_nhds
+--- 原说明 ---
+If `s` is differentiable on `t ⊆ e.baseSet`, so is its coefficient `b.localFrame
+Coeff e i`
+in the local frame induced by `e`
 -/
-lemma mdifferentiableOn_localFrameCoeff (ht : IsOpen t) (ht' : t subseteq e.baseSet)
+lemma mdifferentiableOn_localFrameCoeff (ht : IsOpen t) (ht' : t ⊆ e.baseSet)
     (hs : MDiff[t] (T% s)) (i : ι) : MDiff[t] ((LinearMap.piApply (e.localFrameCoeff I b i)) s) :=
-  fun _ hx => (mdifferentiableAt_localFrameCoeff b (ht' hx)
+  fun _ hx ↦ (mdifferentiableAt_localFrameCoeff b (ht' hx)
     (hs.mdifferentiableAt (ht.mem_nhds hx)) i).mdifferentiableWithinAt
 
 @[deprecated (since := "2026-07-26")]
 alias mdifferentiableOn_localFrame_coeff := mdifferentiableOn_localFrameCoeff
 
-/--
-lemma `mdifferentiableOn_baseSet_localFrameCoeff` / 引理 `mdifferentiableOn_baseSet_localFrameCoeff`
+/-- If `s` is differentiable on `e.baseSet`, so is its coefficient `b.localFrameCoeff e i` in the
+local frame induced by `e` -/
+/-
+**mdifferentiableOn_baseSet_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mdifferentiableOn_baseSet_localFrameCoeff (hs : MDiff[e.baseSet] (T% s)) (
+i : ι) : MDiff[e.baseSet] ((LinearMap.piApply (e.localFrameCoeff I b i)) s)
+参数：hs : MDiff[e.baseSet] (T% s)；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `mdifferentiableOn_localFrameCoeff`：mdifferentiableOn_localFrameCoeff (ht
+ : IsOpen t) (ht' : t subseteq e.baseSet) (hs : MDiff[t] (T% s)) (i : ι) : MDiff
+[t] ((LinearMap.piApply…
+· 使用定理 `Bundle.Trivialization.open_baseSet`：∀ {B : Type u_1} {F : Type u_2} {Z :
+ Type u_4} [inst : TopologicalSpace B] [inst_1 : TopologicalSpace F]   [inst_2 :
+ TopologicalSpace Z] {pr…
+· 使用定理 `subset_refl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] (a : α), a ⊆ a
 
-English:
-lemma mdifferentiableOn_baseSet_localFrameCoeff
-  given: (hs : MDiff[e.baseSet] (T% s)) (i : ι)
-  proof: mdifferentiableOn_localFrameCoeff b e.open_baseSet (subset_refl _) hs _
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableOn_baseSet_localFrame_coeff := mdifferentiableOn_baseSet_localFrameCoeff
-
-中文:
-引理 mdifferentiableOn_baseSet_localFrameCoeff
-  条件: (hs : MDiff[e.baseSet] (T% s)) (i : ι)
-  证明: mdifferentiableOn_localFrameCoeff b e.open_baseSet (subset_refl _) hs _
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableOn_baseSet_localFrame_coeff := mdifferentiableOn_baseSet_localFrameCoeff
-
-Depends on / 依赖: e.open_baseSet, mdifferentiableOn_localFrameCoeff, open_baseSet, subset_refl
+--- 原说明 ---
+If `s` is differentiable on `e.baseSet`, so is its coefficient `b.localFrameCoef
+f e i` in the
+local frame induced by `e`
 -/
 lemma mdifferentiableOn_baseSet_localFrameCoeff (hs : MDiff[e.baseSet] (T% s)) (i : ι) :
     MDiff[e.baseSet] ((LinearMap.piApply (e.localFrameCoeff I b i)) s) :=
@@ -1571,32 +1794,38 @@ lemma mdifferentiableOn_baseSet_localFrameCoeff (hs : MDiff[e.baseSet] (T% s)) (
 @[deprecated (since := "2026-07-26")]
 alias mdifferentiableOn_baseSet_localFrame_coeff := mdifferentiableOn_baseSet_localFrameCoeff
 
-/--
-lemma `mdifferentiableAt_iff_localFrameCoeff` / 引理 `mdifferentiableAt_iff_localFrameCoeff`
+/-- A section `s` of `V` is differentiable at `x ∈ e.baseSet` iff each of its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame near `x` is -/
+/-
+**mdifferentiableAt_iff_localFrameCoeff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mdifferentiableAt_iff_localFrameCoeff (hx : x' in e.baseSet) : MDiffAt (T%
+ s) x' ↔ forall i, MDiffAt ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x'
+参数：hx : x' in e.baseSet。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `mdifferentiableAt_localFrameCoeff`：mdifferentiableAt_localFrameCoeff (hx
+e : x in e.baseSet) (hs : MDiffAt (T% s) x) (i : ι) : MDiffAt ((LinearMap.piAppl
+y (e.localFrameCoeff I …
+· 使用引理 `IsLocalFrameOn.mdifferentiableAt_of_coeff_aux`：mdifferentiableAt_of_coef
+f_aux [FiniteDimensional 𝕜 F] (h : forall i, MDiffAt ((LinearMap.piApply (hs.coe
+ff i)) t) x) (hu : IsOpen u) (hx : …
+· 使用引理 `Bundle.Trivialization.isLocalFrameOn_localFrame_baseSet`：isLocalFrameOn_
+localFrame_baseSet : IsLocalFrameOn I F n (e.localFrame b) e.baseSet where contM
+DiffOn i
+· 使用定理 `Bundle.Trivialization.open_baseSet`：∀ {B : Type u_1} {F : Type u_2} {Z :
+ Type u_4} [inst : TopologicalSpace B] [inst_1 : TopologicalSpace F]   [inst_2 :
+ TopologicalSpace Z] {pr…
 
-English:
-lemma mdifferentiableAt_iff_localFrameCoeff
-  given: (hx : x' in e.baseSet)
-  proof: ⟨fun h i => mdifferentiableAt_localFrameCoeff b hx h i, fun hi =>
-    (e.isLocalFrameOn_localFrame_baseSet I 1 b).mdifferentiableAt_of_coeff_aux hi e.open_baseSet hx⟩
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableAt_iff_localFrame_coeff := mdifferentiableAt_iff_localFrameCoeff
-
-中文:
-引理 mdifferentiableAt_iff_localFrameCoeff
-  条件: (hx : x' in e.baseSet)
-  证明: ⟨fun h i => mdifferentiableAt_localFrameCoeff b hx h i, fun hi =>
-    (e.isLocalFrameOn_localFrame_baseSet I 1 b).mdifferentiableAt_of_coeff_aux hi e.open_baseSet hx⟩
-
-@[deprecated (since := "2026-07-26")]
-alias mdifferentiableAt_iff_localFrame_coeff := mdifferentiableAt_iff_localFrameCoeff
-
-Depends on / 依赖: e.isLocalFrameOn_localFrame_baseSet, e.open_baseSet, isLocalFrameOn_localFrame_baseSet, mdifferentiableAt_localFrameCoeff, mdifferentiableAt_of_coeff_aux, open_baseSet
+--- 原说明 ---
+A section `s` of `V` is differentiable at `x ∈ e.baseSet` iff each of its
+coefficients `(LinearMap.piApply (b.localFrameCoeff e i) s)` in a local frame ne
+ar `x` is
 -/
-lemma mdifferentiableAt_iff_localFrameCoeff (hx : x' in e.baseSet) :
-    MDiffAt (T% s) x' ↔ forall i, MDiffAt ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x' :=
-  ⟨fun h i => mdifferentiableAt_localFrameCoeff b hx h i, fun hi =>
+lemma mdifferentiableAt_iff_localFrameCoeff (hx : x' ∈ e.baseSet) :
+    MDiffAt (T% s) x' ↔ ∀ i, MDiffAt ((LinearMap.piApply (e.localFrameCoeff I b i)) s) x' :=
+  ⟨fun h i ↦ mdifferentiableAt_localFrameCoeff b hx h i, fun hi ↦
     (e.isLocalFrameOn_localFrame_baseSet I 1 b).mdifferentiableAt_of_coeff_aux hi e.open_baseSet hx⟩
 
 @[deprecated (since := "2026-07-26")]
@@ -1605,3 +1834,4 @@ alias mdifferentiableAt_iff_localFrame_coeff := mdifferentiableAt_iff_localFrame
 end MDifferentiable
 
 end
+

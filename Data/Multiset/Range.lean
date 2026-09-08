@@ -18,320 +18,203 @@ open List Nat
 namespace Multiset
 
 -- range
-/--
-Definition of `range` / `range` 的定义
+/-- `range n` is the multiset lifted from the list `range n`,
+  that is, the set `{0, 1, ..., n-1}`. -/
+/-
+**Multiset.range** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：range (n : Nat) : Multiset Nat
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition range
-  signature: (n : Nat)
-  body: List.range n
-
-中文:
-定义 range
-  签名: (n : 自然数)
-  定义体: List.range n
-
-Depends on / 依赖: List.range
+--- 原说明 ---
+`range n` is the multiset lifted from the list `range n`,
+  that is, the set `{0, 1, ..., n-1}`.
 -/
-def range (n : Nat) : Multiset Nat :=
+def range (n : ℕ) : Multiset ℕ :=
   List.range n
-
-/--
-theorem `coe_range` / 定理 `coe_range`
-
-English:
-theorem coe_range
-  given: (n : Nat)
-  statement: ↑(List.range n) = range n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_range
-  条件: (n : 自然数)
-  结论: ↑(列表.range n) = range n
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.coe_range** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_range (n : Nat) : ↑(List.range n) = range n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_range (n : Nat) : ↑(List.range n) = range n :=
+theorem coe_range (n : ℕ) : ↑(List.range n) = range n :=
   rfl
 
 @[simp]
-/--
-theorem `range_zero` / 定理 `range_zero`
-
-English:
-theorem range_zero
-  statement: range 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 range_zero
-  结论: range 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.range_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：range_zero : range 0 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem range_zero : range 0 = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `range_succ` / 定理 `range_succ`
-
-English:
-theorem range_succ
-  given: (n : Nat)
-  statement: range (succ n) = n ::ₘ range n
-  proof: by
-  rw [range]; rw [List.range_succ]; rw [← coe_add]; rw [Multiset.add_comm]; rw [range]; rw [coe_singleton]; rw [singleton_add]
-
-@[simp]
-
-中文:
-定理 range_succ
-  条件: (n : 自然数)
-  结论: range (succ n) = n ::ₘ range n
-  证明: by
-  rw [range]; rw [List.range_succ]; rw [← coe_add]; rw [Multiset.add_comm]; rw [range]; rw [coe_singleton]; rw [singleton_add]
-
-@[simp]
-
-Depends on / 依赖: List.range_succ, Multiset, Multiset.add_comm, add_comm, coe_add, coe_singleton, range_succ, singleton_add
+/-
+**Multiset.range_succ** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：range_succ (n : Nat) : range (succ n) = n ::ₘ range n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.range.eq_1`：∀ (n : ℕ), Multiset.range n = ↑(List.range n)
+· 使用定理 `List.range_succ`：∀ {n : ℕ}, List.range n.succ = List.range n ++ [n]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.coe_add`：coe_add (s t : List α) : (s + t : Multiset α) = (s ++ 
+t : List α)
+· 使用定理 `Multiset.add_comm`：∀ {α : Type u_1} (s t : Multiset α), s + t = t + s
+· 使用定理 `Multiset.coe_singleton`：coe_singleton (a : α) : ([a] : Multiset α) = {a}
+· 使用定理 `Multiset.singleton_add`：singleton_add (a : α) (s : Multiset α) : {a} + s
+ = a ::ₘ s
 -/
-theorem range_succ (n : Nat) : range (succ n) = n ::ₘ range n := by
-  rw [range]; rw [List.range_succ]; rw [← coe_add]; rw [Multiset.add_comm]; rw [range]; rw [coe_singleton]; rw [singleton_add]
+theorem range_succ (n : ℕ) : range (succ n) = n ::ₘ range n := by
+  rw [range, List.range_succ, ← coe_add, Multiset.add_comm, range, coe_singleton, singleton_add]
 
 @[simp]
-/--
-theorem `card_range` / 定理 `card_range`
-
-English:
-theorem card_range
-  given: (n : Nat)
-  statement: card (range n) = n
-  proof: length_range
-
-中文:
-定理 card_range
-  条件: (n : 自然数)
-  结论: card (range n) = n
-  证明: length_range
-
-Depends on / 依赖: length_range
+/-
+**Multiset.card_range** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_range (n : Nat) : card (range n) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.length_range`：∀ {n : ℕ}, (List.range n).length = n
 -/
-theorem card_range (n : Nat) : card (range n) = n :=
+theorem card_range (n : ℕ) : card (range n) = n :=
   length_range
-
-/--
-theorem `range_subset` / 定理 `range_subset`
-
-English:
-theorem range_subset
-  given: {m n : Nat}
-  statement: range m subseteq range n ↔ m <= n
-  proof: List.range_subset
-
-@[simp]
-
-中文:
-定理 range_subset
-  条件: {m n : 自然数}
-  结论: range m subseteq range n ↔ m <= n
-  证明: List.range_subset
-
-@[simp]
-
-Depends on / 依赖: List.range_subset, head_terminates_of_head_tail_terminates, range_subset
+/-
+**Multiset.range_subset** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：range_subset {m n : Nat} : range m subseteq range n ↔ m <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.range_subset`：∀ {m n : ℕ}, List.range m ⊆ List.range n ↔ m ≤ n
 -/
-theorem range_subset {m n : Nat} : range m subseteq range n ↔ m <= n :=
+theorem range_subset {m n : ℕ} : range m ⊆ range n ↔ m ≤ n :=
   List.range_subset
 
 @[simp]
-/--
-theorem `mem_range` / 定理 `mem_range`
-
-English:
-theorem mem_range
-  given: {m n : Nat}
-  statement: m in range n ↔ m < n
-  proof: List.mem_range
-
-中文:
-定理 mem_range
-  条件: {m n : 自然数}
-  结论: m in range n ↔ m < n
-  证明: List.mem_range
-
-Depends on / 依赖: List.mem_range, mem_range
+/-
+**Multiset.mem_range** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_range {m n : Nat} : m in range n ↔ m < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.mem_range`：∀ {m n : ℕ}, m ∈ List.range n ↔ m < n
 -/
-theorem mem_range {m n : Nat} : m in range n ↔ m < n :=
+theorem mem_range {m n : ℕ} : m ∈ range n ↔ m < n :=
   List.mem_range
-
-/--
-theorem `notMem_range_self` / 定理 `notMem_range_self`
-
-English:
-theorem notMem_range_self
-  given: {n : Nat}
-  statement: n ∉ range n
-  proof: List.not_mem_range_self
-
-中文:
-定理 notMem_range_self
-  条件: {n : 自然数}
-  结论: n ∉ range n
-  证明: List.not_mem_range_self
-
-Depends on / 依赖: List.not_mem_range_self, not_mem_range_self
+/-
+**Multiset.notMem_range_self** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：notMem_range_self {n : Nat} : n ∉ range n
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.not_mem_range_self`：∀ {n : ℕ}, n ∉ List.range n
 -/
-theorem notMem_range_self {n : Nat} : n ∉ range n :=
+theorem notMem_range_self {n : ℕ} : n ∉ range n :=
   List.not_mem_range_self
-
-/--
-theorem `self_mem_range_succ` / 定理 `self_mem_range_succ`
-
-English:
-theorem self_mem_range_succ
-  given: (n : Nat)
-  statement: n in range (n + 1)
-  proof: List.self_mem_range_succ
-
-中文:
-定理 self_mem_range_succ
-  条件: (n : 自然数)
-  结论: n in range (n + 1)
-  证明: List.self_mem_range_succ
-
-Depends on / 依赖: List.self_mem_range_succ, self_mem_range_succ
+/-
+**Multiset.self_mem_range_succ** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：self_mem_range_succ (n : Nat) : n in range (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.self_mem_range_succ`：∀ {n : ℕ}, n ∈ List.range (n + 1)
 -/
-theorem self_mem_range_succ (n : Nat) : n in range (n + 1) :=
+theorem self_mem_range_succ (n : ℕ) : n ∈ range (n + 1) :=
   List.self_mem_range_succ
-
-/--
-theorem `range_add` / 定理 `range_add`
-
-English:
-theorem range_add
-  given: (a b : Nat)
-  statement: range (a + b) = range a + (range b).map (a + ·)
-  proof: congr_arg ((↑) : List Nat -> Multiset Nat) List.range_add
-
-中文:
-定理 range_add
-  条件: (a b : 自然数)
-  结论: range (a + b) = range a + (range b).map (a + ·)
-  证明: congr_arg ((↑) : List Nat -> Multiset Nat) List.range_add
-
-Depends on / 依赖: List.range_add, Multiset, congr_arg, range_add
+/-
+**Multiset.range_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：range_add (a b : Nat) : range (a + b) = range a + (range b).map (a + ·)
+参数：a b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.range_add`：∀ {n m : ℕ}, List.range (n + m) = List.range n ++ List.m
+ap (fun x => n + x) (List.range m)
 -/
-theorem range_add (a b : Nat) : range (a + b) = range a + (range b).map (a + ·) :=
-  congr_arg ((↑) : List Nat -> Multiset Nat) List.range_add
-
-/--
-theorem `range_disjoint_map_add` / 定理 `range_disjoint_map_add`
-
-English:
-theorem range_disjoint_map_add
-  given: (a : Nat) (m : Multiset Nat)
-  proof: by
-  rw [disjoint_left]
-  intro x hxa hxb
-  rw [range]; rw [mem_coe]; rw [List.mem_range] at hxa
-  obtain ⟨c, _, rfl⟩ := mem_map.1 hxb
-  exact (Nat.le_add_right _ _).not_gt hxa
-
-中文:
-定理 range_disjoint_map_add
-  条件: (a : 自然数) (m : Multiset 自然数)
-  证明: by
-  rw [disjoint_left]
-  intro x hxa hxb
-  rw [range]; rw [mem_coe]; rw [List.mem_range] at hxa
-  obtain ⟨c, _, rfl⟩ := mem_map.1 hxb
-  exact (Nat.le_add_right _ _).not_gt hxa
-
-Depends on / 依赖: List.mem_range, Nat.le_add_right, disjoint_left, le_add_right, mem_coe, mem_map, mem_range, not_gt
+theorem range_add (a b : ℕ) : range (a + b) = range a + (range b).map (a + ·) :=
+  congr_arg ((↑) : List ℕ → Multiset ℕ) List.range_add
+/-
+**Multiset.range_disjoint_map_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：range_disjoint_map_add (a : Nat) (m : Multiset Nat) : Disjoint (range a) (
+m.map (a + ·))
+参数：a : Nat；m : Multiset Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.disjoint_left`：disjoint_left {s t : Multiset α} : Disjoint s t 
+↔ forall {a}, a in s -> a ∉ t
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用定理 `List.mem_range`：∀ {m n : ℕ}, m ∈ List.range n ↔ m < n
+· 使用定理 `Multiset.mem_coe`：mem_coe {a : α} {l : List α} : a in (l : Multiset α) ↔
+ a in l
+· 使用定理 `Multiset.range.eq_1`：∀ (n : ℕ), Multiset.range n = ↑(List.range n)
 -/
-theorem range_disjoint_map_add (a : Nat) (m : Multiset Nat) :
+theorem range_disjoint_map_add (a : ℕ) (m : Multiset ℕ) :
     Disjoint (range a) (m.map (a + ·)) := by
   rw [disjoint_left]
   intro x hxa hxb
-  rw [range]; rw [mem_coe]; rw [List.mem_range] at hxa
+  rw [range, mem_coe, List.mem_range] at hxa
   obtain ⟨c, _, rfl⟩ := mem_map.1 hxb
   exact (Nat.le_add_right _ _).not_gt hxa
-
-/--
-theorem `range_add_eq_union` / 定理 `range_add_eq_union`
-
-English:
-theorem range_add_eq_union
-  given: (a b : Nat)
-  statement: range (a + b) = range a union (range b).map (a + ·)
-  proof: by
-  rw [range_add]; rw [add_eq_union_iff_disjoint]
-  apply range_disjoint_map_add
-
-中文:
-定理 range_add_eq_union
-  条件: (a b : 自然数)
-  结论: range (a + b) = range a union (range b).map (a + ·)
-  证明: by
-  rw [range_add]; rw [add_eq_union_iff_disjoint]
-  apply range_disjoint_map_add
-
-Depends on / 依赖: add_eq_union_iff_disjoint, range_add, range_disjoint_map_add
+/-
+**Multiset.range_add_eq_union** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：range_add_eq_union (a b : Nat) : range (a + b) = range a union (range b).m
+ap (a + ·)
+参数：a b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.range_add`：range_add (a b : Nat) : range (a + b) = range a + (r
+ange b).map (a + ·)
+· 使用定理 `Multiset.add_eq_union_iff_disjoint`：add_eq_union_iff_disjoint [Decidable
+Eq α] {s t : Multiset α} : s + t = s union t ↔ Disjoint s t
+· 使用定理 `Multiset.range_disjoint_map_add`：range_disjoint_map_add (a : Nat) (m : M
+ultiset Nat) : Disjoint (range a) (m.map (a + ·))
 -/
-theorem range_add_eq_union (a b : Nat) : range (a + b) = range a union (range b).map (a + ·) := by
-  rw [range_add]; rw [add_eq_union_iff_disjoint]
+theorem range_add_eq_union (a b : ℕ) : range (a + b) = range a ∪ (range b).map (a + ·) := by
+  rw [range_add, add_eq_union_iff_disjoint]
   apply range_disjoint_map_add
 
 section Nodup
 
-/--
-theorem `nodup_range` / 定理 `nodup_range`
-
-English:
-theorem nodup_range
-  given: (n : Nat)
-  statement: Nodup (range n)
-  proof: List.nodup_range
-
-中文:
-定理 nodup_range
-  条件: (n : 自然数)
-  结论: Nodup (range n)
-  证明: List.nodup_range
-
-Depends on / 依赖: List.nodup_range, nodup_range
+/-
+**Multiset.nodup_range** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_range (n : Nat) : Nodup (range n)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.nodup_range`：∀ {n : ℕ}, (List.range n).Nodup
 -/
-theorem nodup_range (n : Nat) : Nodup (range n) :=
+theorem nodup_range (n : ℕ) : Nodup (range n) :=
   List.nodup_range
-
-/--
-theorem `range_le` / 定理 `range_le`
-
-English:
-theorem range_le
-  given: {m n : Nat}
-  statement: range m <= range n ↔ m <= n
-  proof: (le_iff_subset (nodup_range _)).trans range_subset
-
-中文:
-定理 range_le
-  条件: {m n : 自然数}
-  结论: range m <= range n ↔ m <= n
-  证明: (le_iff_subset (nodup_range _)).trans range_subset
-
-Depends on / 依赖: le_iff_subset, nodup_range, range_subset
+/-
+**Multiset.range_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：range_le {m n : Nat} : range m <= range n ↔ m <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Multiset.le_iff_subset`：le_iff_subset {s t : Multiset α} : Nodup s -> (s
+ <= t ↔ s subseteq t)
+· 使用定理 `Multiset.nodup_range`：nodup_range (n : Nat) : Nodup (range n)
+· 使用定理 `Multiset.range_subset`：range_subset {m n : Nat} : range m subseteq range
+ n ↔ m <= n
 -/
-theorem range_le {m n : Nat} : range m <= range n ↔ m <= n :=
+theorem range_le {m n : ℕ} : range m ≤ range n ↔ m ≤ n :=
   (le_iff_subset (nodup_range _)).trans range_subset
 
 end Nodup
 
 end Multiset
+

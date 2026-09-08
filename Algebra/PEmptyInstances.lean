@@ -20,22 +20,11 @@ public section
 universe u
 
 @[to_additive]
-/--
-Instance `SemigroupPEmpty` / 实例 `SemigroupPEmpty`
-
-English:
-instance SemigroupPEmpty
-  signature: : Semigroup PEmpty.{u + 1} where
-  body: by cases x
-  mul_assoc x y z := by cases x
-
-中文:
-实例 SemigroupPEmpty
-  签名: : 半群 命题空.{u + 1} where
-  定义体: by cases x
-  mul_assoc x y z := by cases x
-
-Depends on / 依赖: mul_assoc
+/-
+**SemigroupPEmpty** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：SemigroupPEmpty : Semigroup PEmpty.{u + 1} where mul x _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance SemigroupPEmpty : Semigroup PEmpty.{u + 1} where
   mul x _ := by cases x

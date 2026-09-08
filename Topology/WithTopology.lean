@@ -29,689 +29,381 @@ variable {X : Type*} (t : TopologicalSpace X)
 
 namespace WithTopology
 
-/--
-lemma `ofTopology_toTopology` / 引理 `ofTopology_toTopology`
-
-English:
-lemma ofTopology_toTopology
-  given: (x : X)
-  statement: ofTopology (toTopology t x) = x
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofTopology_toTopology
-  条件: (x : X)
-  结论: ofTopology (toTopology t x) = x
-  证明: rfl
-
-@[simp]
+/-
+**WithTopology.ofTopology_toTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：ofTopology_toTopology (x : X) : ofTopology (toTopology t x) = x
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofTopology_toTopology (x : X) : ofTopology (toTopology t x) = x := rfl
 
 @[simp]
-/--
-lemma `toTopology_ofTopology` / 引理 `toTopology_ofTopology`
-
-English:
-lemma toTopology_ofTopology
-  given: (x : WithTopology X t)
-  proof: rfl
-
-中文:
-引理 toTopology_ofTopology
-  条件: (x : With拓扑 X t)
-  证明: rfl
+/-
+**WithTopology.toTopology_ofTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：toTopology_ofTopology (x : WithTopology X t) : toTopology t (ofTopology x)
+ = x
+参数：x : WithTopology X t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toTopology_ofTopology (x : WithTopology X t) :
   toTopology t (ofTopology x) = x := rfl
-
-/--
-lemma `ofTopology_surjective` / 引理 `ofTopology_surjective`
-
-English:
-lemma ofTopology_surjective
-  statement: Function.Surjective (ofTopology (t := t))
-  proof: Function.RightInverse.surjective ofTopology_toTopology _
-
-中文:
-引理 ofTopology_surjective
-  结论: 函数.满射 (ofTopology (t := t))
-  证明: Function.RightInverse.surjective ofTopology_toTopology _
+/-
+**WithTopology.ofTopology_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：ofTopology_surjective : Function.Surjective (ofTopology (t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用引理 `WithTopology.ofTopology_toTopology`：ofTopology_toTopology (x : X) : ofTo
+pology (toTopology t x) = x
 -/
 lemma ofTopology_surjective : Function.Surjective (ofTopology (t := t)) :=
-Function.RightInverse.surjective ofTopology_toTopology _
-
-/--
-lemma `toTopology_surjective` / 引理 `toTopology_surjective`
-
-English:
-lemma toTopology_surjective
-  statement: Function.Surjective (toTopology t)
-  proof: Function.RightInverse.surjective toTopology_ofTopology _
-
-中文:
-引理 toTopology_surjective
-  结论: 函数.满射 (toTopology t)
-  证明: Function.RightInverse.surjective toTopology_ofTopology _
-
-Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toTopology_ofTopology
+  Function.RightInverse.surjective <| ofTopology_toTopology _
+/-
+**WithTopology.toTopology_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：toTopology_surjective : Function.Surjective (toTopology t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用引理 `WithTopology.toTopology_ofTopology`：toTopology_ofTopology (x : WithTopol
+ogy X t) : toTopology t (ofTopology x) = x
 -/
 lemma toTopology_surjective : Function.Surjective (toTopology t) :=
-Function.RightInverse.surjective toTopology_ofTopology _
-
-/--
-lemma `ofTopology_injective` / 引理 `ofTopology_injective`
-
-English:
-lemma ofTopology_injective
-  statement: Function.Injective (ofTopology (t := t))
-  proof: Function.LeftInverse.injective toTopology_ofTopology _
-
-中文:
-引理 ofTopology_injective
-  结论: 函数.单射 (ofTopology (t := t))
-  证明: Function.LeftInverse.injective toTopology_ofTopology _
+  Function.RightInverse.surjective <| toTopology_ofTopology _
+/-
+**WithTopology.ofTopology_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：ofTopology_injective : Function.Injective (ofTopology (t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用引理 `WithTopology.toTopology_ofTopology`：toTopology_ofTopology (x : WithTopol
+ogy X t) : toTopology t (ofTopology x) = x
 -/
 lemma ofTopology_injective : Function.Injective (ofTopology (t := t)) :=
-Function.LeftInverse.injective toTopology_ofTopology _
-
-/--
-lemma `toTopology_injective` / 引理 `toTopology_injective`
-
-English:
-lemma toTopology_injective
-  statement: Function.Injective (toTopology t)
-  proof: Function.LeftInverse.injective ofTopology_toTopology _
-
-中文:
-引理 toTopology_injective
-  结论: 函数.单射 (toTopology t)
-  证明: Function.LeftInverse.injective ofTopology_toTopology _
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofTopology_toTopology
+  Function.LeftInverse.injective <| toTopology_ofTopology _
+/-
+**WithTopology.toTopology_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：toTopology_injective : Function.Injective (toTopology t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用引理 `WithTopology.ofTopology_toTopology`：ofTopology_toTopology (x : X) : ofTo
+pology (toTopology t x) = x
 -/
 lemma toTopology_injective : Function.Injective (toTopology t) :=
-Function.LeftInverse.injective ofTopology_toTopology _
-
-/--
-lemma `ofTopology_bijective` / 引理 `ofTopology_bijective`
-
-English:
-lemma ofTopology_bijective
-  statement: Function.Bijective (ofTopology (t := t))
-  proof: ⟨ofTopology_injective t, ofTopology_surjective t⟩
-
-中文:
-引理 ofTopology_bijective
-  结论: 函数.双射 (ofTopology (t := t))
-  证明: ⟨ofTopology_injective t, ofTopology_surjective t⟩
+  Function.LeftInverse.injective <| ofTopology_toTopology _
+/-
+**WithTopology.ofTopology_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：ofTopology_bijective : Function.Bijective (ofTopology (t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithTopology.ofTopology_injective`：ofTopology_injective : Function.Injec
+tive (ofTopology (t
+· 使用引理 `WithTopology.ofTopology_surjective`：ofTopology_surjective : Function.Sur
+jective (ofTopology (t
 -/
 lemma ofTopology_bijective : Function.Bijective (ofTopology (t := t)) :=
   ⟨ofTopology_injective t, ofTopology_surjective t⟩
-
-/--
-lemma `toTopology_bijective` / 引理 `toTopology_bijective`
-
-English:
-lemma toTopology_bijective
-  statement: Function.Bijective (toTopology t)
-  proof: ⟨toTopology_injective t, toTopology_surjective t⟩
-
-中文:
-引理 toTopology_bijective
-  结论: 函数.双射 (toTopology t)
-  证明: ⟨toTopology_injective t, toTopology_surjective t⟩
-
-Depends on / 依赖: toTopology_injective, toTopology_surjective
+/-
+**WithTopology.toTopology_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：toTopology_bijective : Function.Bijective (toTopology t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithTopology.toTopology_injective`：toTopology_injective : Function.Injec
+tive (toTopology t)
+· 使用引理 `WithTopology.toTopology_surjective`：toTopology_surjective : Function.Sur
+jective (toTopology t)
 -/
 lemma toTopology_bijective : Function.Bijective (toTopology t) :=
   ⟨toTopology_injective t, toTopology_surjective t⟩
 
-/--
-lemma `toTopology_inj` / 引理 `toTopology_inj`
+/-- Injectivity lemma for the constructor `toTopology t`.
 
-English:
-lemma toTopology_inj
-  given: {x y : X}
-  statement: toTopology t x = toTopology t y ↔ x = y
-  proof: (toTopology_injective t).eq_iff
+It is not marked as `@[simp]`, because its autogenerated version
+is already in the default `simp` set. -/
+/-
+**WithTopology.toTopology_inj** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：toTopology_inj {x y : X} : toTopology t x = toTopology t y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithTopology.toTopology_injective`：toTopology_injective : Function.Injec
+tive (toTopology t)
 
-中文:
-引理 toTopology_inj
-  条件: {x y : X}
-  结论: toTopology t x = toTopology t y ↔ x = y
-  证明: (toTopology_injective t).eq_iff
+--- 原说明 ---
+Injectivity lemma for the constructor `toTopology t`.
 
-Depends on / 依赖: eq_iff, toTopology_injective
+It is not marked as `@[simp]`, because its autogenerated version
+is already in the default `simp` set.
 -/
 lemma toTopology_inj {x y : X} : toTopology t x = toTopology t y ↔ x = y :=
   (toTopology_injective t).eq_iff
-
-/--
-lemma `ofTopology_inj` / 引理 `ofTopology_inj`
-
-English:
-lemma ofTopology_inj
-  given: {x y : WithTopology X t}
-  statement: ofTopology x = ofTopology y ↔ x = y
-  proof: (ofTopology_injective t).eq_iff
-
-中文:
-引理 ofTopology_inj
-  条件: {x y : With拓扑 X t}
-  结论: ofTopology x = ofTopology y ↔ x = y
-  证明: (ofTopology_injective t).eq_iff
+/-
+**WithTopology.ofTopology_inj** 是 Mathlib 中的一个定理，位于命名空间 `WithTopology`。
+形式化陈述：∀ {X : Type u_1} (t : TopologicalSpace X) {x y : WithTopology X t}, x.ofTo
+pology = y.ofTopology ↔ x = y
+参数：t : TopologicalSpace X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithTopology.ofTopology_injective`：ofTopology_injective : Function.Injec
+tive (ofTopology (t
 -/
 @[simp] lemma ofTopology_inj {x y : WithTopology X t} : ofTopology x = ofTopology y ↔ x = y :=
   (ofTopology_injective t).eq_iff
 
 open Topology
-
-/--
-lemma `isOpen_iff` / 引理 `isOpen_iff`
-
-English:
-lemma isOpen_iff
-  given: {s : Set (WithTopology X t)}
-  proof: .rfl
-
-中文:
-引理 isOpen_iff
-  条件: {s : 集合 (With拓扑 X t)}
-  证明: .rfl
+/-
+**WithTopology.isOpen_iff** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：isOpen_iff {s : Set (WithTopology X t)} : IsOpen s ↔ IsOpen[t] (toTopology
+ t ⁻¹' s)
+参数：WithTopology X t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isOpen_iff {s : Set (WithTopology X t)} :
     IsOpen s ↔ IsOpen[t] (toTopology t ⁻¹' s) :=
   .rfl
-
-/--
-lemma `isClosed_iff` / 引理 `isClosed_iff`
-
-English:
-lemma isClosed_iff
-  given: {s : Set (WithTopology X t)}
-  proof: by
-  simp [← isOpen_compl_iff, isOpen_iff]
-
-中文:
-引理 isClosed_iff
-  条件: {s : 集合 (With拓扑 X t)}
-  证明: by
-  simp [← isOpen_compl_iff, isOpen_iff]
-
-Depends on / 依赖: isOpen_compl_iff, isOpen_iff
+/-
+**WithTopology.isClosed_iff** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：isClosed_iff {s : Set (WithTopology X t)} : IsClosed s ↔ IsClosed[t] (toTo
+pology t ⁻¹' s)
+参数：WithTopology X t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isClosed_iff {s : Set (WithTopology X t)} :
     IsClosed s ↔ IsClosed[t] (toTopology t ⁻¹' s) := by
   simp [← isOpen_compl_iff, isOpen_iff]
 
-/--
-lemma `continuous_toTopology` / 引理 `continuous_toTopology`
+/-- If `X` is equipped with topology `t`, the map `X → WithTopology X t` is continuous. -/
+/-
+**WithTopology.continuous_toTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：continuous_toTopology : Continuous[t, _] (toTopology t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma continuous_toTopology
-  statement: Continuous[t, _] (toTopology t)
-  proof: ⟨fun _ => (·)⟩
-
-中文:
-引理 continuous_toTopology
-  结论: 连续[t, _] (toTopology t)
-  证明: ⟨fun _ => (·)⟩
+--- 原说明 ---
+If `X` is equipped with topology `t`, the map `X → WithTopology X t` is continuo
+us.
 -/
 lemma continuous_toTopology : Continuous[t, _] (toTopology t) :=
-  ⟨fun _ => (·)⟩
+  ⟨fun _ ↦ (·)⟩
 
-/--
-lemma `continuous_ofTopology` / 引理 `continuous_ofTopology`
+/-- If `X` is equipped with topology `t`, the map `WithTopology X t → X` is continuous. -/
+/-
+**WithTopology.continuous_ofTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：continuous_ofTopology : Continuous[_, t] (ofTopology (t
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma continuous_ofTopology
-  statement: Continuous[_, t] (ofTopology (t := t))
-  proof: ⟨fun _ => (·)⟩
-
-中文:
-引理 continuous_ofTopology
-  结论: 连续[_, t] (ofTopology (t := t))
-  证明: ⟨fun _ => (·)⟩
+--- 原说明 ---
+If `X` is equipped with topology `t`, the map `WithTopology X t → X` is continuo
+us.
 -/
 lemma continuous_ofTopology : Continuous[_, t] (ofTopology (t := t)) :=
-  ⟨fun _ => (·)⟩
+  ⟨fun _ ↦ (·)⟩
 
 /-! ### Set-theoretic lemmas -/
 
 open Set
 
-/--
-lemma `image_ofTopology` / 引理 `image_ofTopology`
-
-English:
-lemma image_ofTopology
-  given: (s : Set (WithTopology X t))
-  statement: ofTopology '' s = toTopology t ⁻¹' s
-  proof: .symm.image_symm_eq_preimage _ WithTopology.equiv X t
-
-中文:
-引理 image_ofTopology
-  条件: (s : 集合 (With拓扑 X t))
-  结论: ofTopology '' s = toTopology t ⁻¹' s
-  证明: .symm.image_symm_eq_preimage _ WithTopology.equiv X t
-
-Depends on / 依赖: WithTopology, WithTopology.equiv, image_symm_eq_preimage, symm.image_symm_eq_preimage
+/-
+**WithTopology.image_ofTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：image_ofTopology (s : Set (WithTopology X t)) : ofTopology '' s = toTopolo
+gy t ⁻¹' s
+参数：s : Set (WithTopology X t)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.image_symm_eq_preimage`：image_symm_eq_preimage (e : α ≃ β) (s : Se
+t β) : e.symm '' s = e ⁻¹' s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma image_ofTopology (s : Set (WithTopology X t)) : ofTopology '' s = toTopology t ⁻¹' s :=
-.symm.image_symm_eq_preimage _ WithTopology.equiv X t
-
-/--
-lemma `preimage_toTopology` / 引理 `preimage_toTopology`
-
-English:
-lemma preimage_toTopology
-  given: (s : Set (WithTopology X t))
-  statement: toTopology t ⁻¹' s = ofTopology '' s
-  proof: (image_ofTopology t s).symm
-
-中文:
-引理 preimage_toTopology
-  条件: (s : 集合 (With拓扑 X t))
-  结论: toTopology t ⁻¹' s = ofTopology '' s
-  证明: (image_ofTopology t s).symm
-
-Depends on / 依赖: image_ofTopology
+  WithTopology.equiv X t |>.symm.image_symm_eq_preimage _
+/-
+**WithTopology.preimage_toTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：preimage_toTopology (s : Set (WithTopology X t)) : toTopology t ⁻¹' s = of
+Topology '' s
+参数：s : Set (WithTopology X t)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `WithTopology.image_ofTopology`：image_ofTopology (s : Set (WithTopology X
+ t)) : ofTopology '' s = toTopology t ⁻¹' s
 -/
 lemma preimage_toTopology (s : Set (WithTopology X t)) : toTopology t ⁻¹' s = ofTopology '' s :=
   (image_ofTopology t s).symm
-
-/--
-lemma `image_toTopology` / 引理 `image_toTopology`
-
-English:
-lemma image_toTopology
-  given: (s : Set X)
-  statement: toTopology t '' s = ofTopology ⁻¹' s
-  proof: .symm.image_eq_preimage_symm _ WithTopology.equiv X t
-
-中文:
-引理 image_toTopology
-  条件: (s : 集合 X)
-  结论: toTopology t '' s = ofTopology ⁻¹' s
-  证明: .symm.image_eq_preimage_symm _ WithTopology.equiv X t
-
-Depends on / 依赖: WithTopology, WithTopology.equiv, image_eq_preimage_symm, symm.image_eq_preimage_symm
+/-
+**WithTopology.image_toTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：image_toTopology (s : Set X) : toTopology t '' s = ofTopology ⁻¹' s
+参数：s : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma image_toTopology (s : Set X) : toTopology t '' s = ofTopology ⁻¹' s :=
-.symm.image_eq_preimage_symm _ WithTopology.equiv X t
-
-/--
-lemma `preimage_ofTopology` / 引理 `preimage_ofTopology`
-
-English:
-lemma preimage_ofTopology
-  given: (s : Set X)
-  statement: ofTopology ⁻¹' s = toTopology t '' s
-  proof: (image_toTopology t s).symm
-
-中文:
-引理 preimage_ofTopology
-  条件: (s : 集合 X)
-  结论: ofTopology ⁻¹' s = toTopology t '' s
-  证明: (image_toTopology t s).symm
-
-Depends on / 依赖: image_toTopology
+  WithTopology.equiv X t |>.symm.image_eq_preimage_symm _
+/-
+**WithTopology.preimage_ofTopology** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：preimage_ofTopology (s : Set X) : ofTopology ⁻¹' s = toTopology t '' s
+参数：s : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `WithTopology.image_toTopology`：image_toTopology (s : Set X) : toTopology
+ t '' s = ofTopology ⁻¹' s
 -/
 lemma preimage_ofTopology (s : Set X) : ofTopology ⁻¹' s = toTopology t '' s :=
   (image_toTopology t s).symm
 
+/-!
+### Instance transfers
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+In this section we transfer some instances from `X` to `WithTopology X t`.
+-/
 
-English:
-instance [Nonempty
-  signature: X] : Nonempty (WithTopology X t)
-  body: (WithTopology.equiv X t).nonempty
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 [非空
-  签名: X] : 非空 (With拓扑 X t)
-  定义体: (WithTopology.equiv X t).nonempty
+--- 原说明 ---
+### Instance transfers
 
-Depends on / 依赖: WithTopology, WithTopology.equiv, nonempty
+In this section we transfer some instances from `X` to `WithTopology X t`.
 -/
 instance [Nonempty X] : Nonempty (WithTopology X t) :=
   (WithTopology.equiv X t).nonempty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: X] : Inhabited (WithTopology X t)
-  body: ⟨toTopology t default⟩
-
-中文:
-实例 [可居
-  签名: X] : 可居 (With拓扑 X t)
-  定义体: ⟨toTopology t default⟩
-
-Depends on / 依赖: toTopology
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited X] : Inhabited (WithTopology X t) :=
   ⟨toTopology t default⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: X] : Subsingleton (WithTopology X t)
-  body: (WithTopology.equiv X t).subsingleton
-
-中文:
-实例 [子单例
-  签名: X] : 子单例 (With拓扑 X t)
-  定义体: (WithTopology.equiv X t).subsingleton
-
-Depends on / 依赖: WithTopology, WithTopology.equiv, subsingleton
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton X] : Subsingleton (WithTopology X t) :=
   (WithTopology.equiv X t).subsingleton
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: X] : Unique (WithTopology X t)
-  body: .mk' _
-
-中文:
-实例 [唯一
-  签名: X] : 唯一 (With拓扑 X t)
-  定义体: .mk' _
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique X] : Unique (WithTopology X t) := .mk' _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: X] : Finite (WithTopology X t)
-  body: .of_equiv _ (WithTopology.equiv X t).symm
-
-中文:
-实例 [有限
-  签名: X] : 有限 (With拓扑 X t)
-  定义体: .of_equiv _ (WithTopology.equiv X t).symm
-
-Depends on / 依赖: WithTopology, WithTopology.equiv, of_equiv
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite X] : Finite (WithTopology X t) := .of_equiv _ (WithTopology.equiv X t).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Infinite
-  signature: X] : Infinite (WithTopology X t)
-  body: .of_injective _ toTopology_injective _
-
-中文:
-实例 [无限
-  签名: X] : 无限 (With拓扑 X t)
-  定义体: .of_injective _ toTopology_injective _
-
-Depends on / 依赖: of_injective, toTopology_injective
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Infinite X] : Infinite (WithTopology X t) := .of_injective _ toTopology_injective _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: X] : Fintype (WithTopology X t)
-  body: .ofBijective (.toTopology t) (toTopology_bijective t)
-
-deriving instance DecidableEq for WithTopology
-
-中文:
-实例 [有限类型
-  签名: X] : 有限类型 (With拓扑 X t)
-  定义体: .ofBijective (.toTopology t) (toTopology_bijective t)
-
-deriving instance DecidableEq for WithTopology
-
-Depends on / 依赖: ofBijective, toTopology, toTopology_bijective
+instance [Infinite X] : Infinite (WithTopology X t) := .of_injective _ <| toTopology_injective _
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fintype X] : Fintype (WithTopology X t) :=
   .ofBijective (.toTopology t) (toTopology_bijective t)
 
 deriving instance DecidableEq for WithTopology
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LE
-  signature: X] : LE (WithTopology X t) where
-  body: ofTopology x <= ofTopology y
-
-中文:
-实例 [LE
-  签名: X] : LE (With拓扑 X t) where
-  定义体: ofTopology x <= ofTopology y
-
-Depends on / 依赖: ofTopology
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LE X] : LE (WithTopology X t) where
-  le x y := ofTopology x <= ofTopology y
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: X] : LT (WithTopology X t) where
-  body: ofTopology x < ofTopology y
-
-中文:
-实例 [LT
-  签名: X] : LT (With拓扑 X t) where
-  定义体: ofTopology x < ofTopology y
-
-Depends on / 依赖: ofTopology
+  le x y := ofTopology x ≤ ofTopology y
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LT X] : LT (WithTopology X t) where
   lt x y := ofTopology x < ofTopology y
 
 -- TODO: `inferInstance` works here, but it shouldn't
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LE
-  signature: X] [DecidableLE X] : DecidableLE (WithTopology X t)
-  body: fun x y =>
-  inferInstanceAs (Decidable (x.ofTopology <= y.ofTopology))
-
-中文:
-实例 [LE
-  签名: X] [DecidableLE X] : DecidableLE (With拓扑 X t)
-  定义体: fun x y =>
-  inferInstanceAs (Decidable (x.ofTopology <= y.ofTopology))
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [LE X] [DecidableLE X] : DecidableLE (WithTopology X t) := fun x y =>
-  inferInstanceAs (Decidable (x.ofTopology <= y.ofTopology))
+instance [LE X] [DecidableLE X] : DecidableLE (WithTopology X t) := fun x y ↦
+  inferInstanceAs (Decidable (x.ofTopology ≤ y.ofTopology))
 
 -- TODO: `inferInstance` works here, but it shouldn't
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LT
-  signature: X] [DecidableLT X] : DecidableLT (WithTopology X t)
-  body: fun x y =>
-  inferInstanceAs (Decidable (x.ofTopology < y.ofTopology))
-
-中文:
-实例 [LT
-  签名: X] [DecidableLT X] : DecidableLT (With拓扑 X t)
-  定义体: fun x y =>
-  inferInstanceAs (Decidable (x.ofTopology < y.ofTopology))
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [LT X] [DecidableLT X] : DecidableLT (WithTopology X t) := fun x y =>
+instance [LT X] [DecidableLT X] : DecidableLT (WithTopology X t) := fun x y ↦
   inferInstanceAs (Decidable (x.ofTopology < y.ofTopology))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: X] : Preorder (WithTopology X t)
-  body: .lift ofTopology
-
-中文:
-实例 [预序
-  签名: X] : 预序 (With拓扑 X t)
-  定义体: .lift ofTopology
-
-Depends on / 依赖: ofTopology
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preorder X] : Preorder (WithTopology X t) :=
   .lift ofTopology
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PartialOrder
-  signature: X] : PartialOrder (WithTopology X t)
-  body: .partialOrder _ .rfl .rfl ofTopology_injective t
-
-@[to_dual]
-
-中文:
-实例 [偏序
-  签名: X] : 偏序 (With拓扑 X t)
-  定义体: .partialOrder _ .rfl .rfl ofTopology_injective t
-
-@[to_dual]
-
-Depends on / 依赖: ofTopology_injective, partialOrder
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PartialOrder X] : PartialOrder (WithTopology X t) :=
-.partialOrder _ .rfl .rfl ofTopology_injective t
+  ofTopology_injective t |>.partialOrder _ .rfl .rfl
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Max
-  signature: X] : Max (WithTopology X t) where
-  body: toTopology t (max x.ofTopology y.ofTopology)
-
-@[to_dual]
-
-中文:
-实例 [最大值
-  签名: X] : 最大值 (With拓扑 X t) where
-  定义体: toTopology t (max x.ofTopology y.ofTopology)
-
-@[to_dual]
-
-Depends on / 依赖: ofTopology, toTopology, x.ofTopology, y.ofTopology
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Max X] : Max (WithTopology X t) where
   max x y := toTopology t (max x.ofTopology y.ofTopology)
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SemilatticeSup
-  signature: X] : SemilatticeSup (WithTopology X t)
-  body: .semilatticeSup _ .rfl .rfl fun _ _ => rfl ofTopology_injective t
-
-中文:
-实例 [SemilatticeSup
-  签名: X] : SemilatticeSup (With拓扑 X t)
-  定义体: .semilatticeSup _ .rfl .rfl fun _ _ => rfl ofTopology_injective t
-
-Depends on / 依赖: ofTopology_injective, semilatticeSup
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SemilatticeSup X] : SemilatticeSup (WithTopology X t) :=
-.semilatticeSup _ .rfl .rfl fun _ _ => rfl ofTopology_injective t
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Lattice
-  signature: X] : Lattice (WithTopology X t) where
-
-中文:
-实例 [格
-  签名: X] : 格 (With拓扑 X t) where
+  ofTopology_injective t |>.semilatticeSup _ .rfl .rfl fun _ _ ↦ rfl
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Lattice X] : Lattice (WithTopology X t) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribLattice
-  signature: X] : DistribLattice (WithTopology X t) where
-  body: le_sup_inf (α := X)
-
-中文:
-实例 [Distrib格
-  签名: X] : Distrib格 (With拓扑 X t) where
-  定义体: le_sup_inf (α := X)
-
-Depends on / 依赖: le_sup_inf
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DistribLattice X] : DistribLattice (WithTopology X t) where
   le_sup_inf _ _ _ := le_sup_inf (α := X)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ord
-  signature: X] : Ord (WithTopology X t) where
-  body: compare x.ofTopology y.ofTopology
-
-中文:
-实例 [序
-  签名: X] : 序 (With拓扑 X t) where
-  定义体: compare x.ofTopology y.ofTopology
-
-Depends on / 依赖: compare, ofTopology, x.ofTopology, y.ofTopology
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ord X] : Ord (WithTopology X t) where
   compare x y := compare x.ofTopology y.ofTopology
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LinearOrder
-  signature: X] : LinearOrder (WithTopology X t)
-  body: .linearOrder _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) ofTopology_injective t
-
-中文:
-实例 [线性序
-  签名: X] : 线性序 (With拓扑 X t)
-  定义体: .linearOrder _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) ofTopology_injective t
-
-Depends on / 依赖: linearOrder, ofTopology_injective
+/-
+**WithTopology.** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LinearOrder X] : LinearOrder (WithTopology X t) :=
-.linearOrder _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) ofTopology_injective t
+  ofTopology_injective t |>.linearOrder _ .rfl .rfl (fun _ _ ↦ rfl) (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
 
 end WithTopology
+

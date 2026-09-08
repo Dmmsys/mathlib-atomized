@@ -29,56 +29,56 @@ such that `f a / f b ∈ s`. -/
 /-- Given an additive commutative monoid `M`, a localization map `f` to its Grothendieck group `G`
 and a submonoid `s` of `G`, `s.subPairs f` is the submonoid of pairs `(a, b)`
 such that `f a - f b ∈ s`. -/]
-/--
-Definition of `divPairs` / `divPairs` 的定义
-
-English:
-definition divPairs
-  signature: : Submonoid (M × M)
-  body: s.comap divMonoidHom.comp .prodMap f f
-
-中文:
-定义 divPairs
-  签名: : 子幺半群 (M × M)
-  定义体: s.comap divMonoidHom.comp .prodMap f f
-
-Depends on / 依赖: divMonoidHom, divMonoidHom.comp, prodMap, s.comap
+/-
+**Submonoid.divPairs** 是 Mathlib 中的一个定义，位于命名空间 `Submonoid`。
+形式化陈述：divPairs : Submonoid (M × M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def divPairs : Submonoid (M × M) := s.comap divMonoidHom.comp .prodMap f f
-
-/--
-lemma `mem_divPairs` / 引理 `mem_divPairs`
-
-English:
-lemma mem_divPairs
-  statement: x in divPairs f s ↔ f x.1 / f x.2 in s
-  proof: .rfl
-
-中文:
-引理 mem_divPairs
-  结论: x in divPairs f s ↔ f x.1 / f x.2 in s
-  证明: .rfl
+def divPairs : Submonoid (M × M) := s.comap <| divMonoidHom.comp <| .prodMap f f
+/-
+**Submonoid.mem_divPairs** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : CommMonoid M] [inst_1 : CommGroup 
+G] {f : ⊤.LocalizationMap G} {s : Submonoid G}   {x : M × M}, x ∈ Submonoid.divP
+airs f s ↔ f x.1 / f x.2 ∈ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[to_additive (attr := simp)] lemma mem_divPairs : x in divPairs f s ↔ f x.1 / f x.2 in s := .rfl
+@[to_additive (attr := simp)] lemma mem_divPairs : x ∈ divPairs f s ↔ f x.1 / f x.2 ∈ s := .rfl
 
 --TODO(Yaël): make simp once `LocalizationMap.toMonoidHom` is simp nf
 variable (f g s) in
 @[to_additive]
-/--
-lemma `divPairs_comap` / 引理 `divPairs_comap`
-
-English:
-lemma divPairs_comap
-  proof: by
-  ext; simp
-
-中文:
-引理 divPairs_comap
-  证明: by
-  ext; simp
+/-
+**Submonoid.divPairs_comap** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：divPairs_comap : divPairs g (.comap (g.mulEquivOfLocalizations f).toMonoid
+Hom s) = divPairs f s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `Submonoid.LocalizationMap.map_units`：map_units (f : LocalizationMap S N)
+ (y : S) : IsUnit (f y)
+· 使用定理 `map_div`：map_div [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) : forall a b, f (a / b) = f a / f b
+· 使用定理 `Submonoid.LocalizationMap.lift_eq`：lift_eq (x : M) : f.lift hg (f x) = g
+ x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma divPairs_comap :
     divPairs g (.comap (g.mulEquivOfLocalizations f).toMonoidHom s) = divPairs f s := by
   ext; simp
 
 end Submonoid
+

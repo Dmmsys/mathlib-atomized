@@ -28,57 +28,44 @@ attribute [local simp] mul_assoc mul_comm mul_left_comm
 variable {M N : Type*}
 
 @[gcongr]
-/--
-theorem `map_dvd` / 定理 `map_dvd`
-
-English:
-theorem map_dvd
-  statement: [Semigroup M] [Semigroup N] {F : Type*} [FunLike F M N] [MulHomClass F M N]
-
-中文:
-定理 map_dvd
-  结论: [半群 M] [半群 N] {F : 类型} [函数状 F M N] [乘法态射类 F M N]
+/-
+**map_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {N : Type u_2} [inst : Semigroup M] [inst_1 : Semigroup N
+] {F : Type u_3} [inst_2 : FunLike F M N]   [MulHomClass F M N] (f : F) {a b : M
+}, a ∣ b → f a ∣ f b
+参数：f : F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem map_dvd [Semigroup M] [Semigroup N] {F : Type*} [FunLike F M N] [MulHomClass F M N]
-    (f : F) {a b} : a ∣ b -> f a ∣ f b
+    (f : F) {a b} : a ∣ b → f a ∣ f b
   | ⟨c, h⟩ => ⟨f c, h.symm ▸ map_mul f a c⟩
-
-/--
-theorem `MulHom.map_dvd` / 定理 `MulHom.map_dvd`
-
-English:
-theorem MulHom.map_dvd
-  given: [Semigroup M] [Semigroup N] (f : M ->ₙ* N) {a b}
-  statement: a ∣ b -> f a ∣ f b
-  proof: _root_.map_dvd f
-
-中文:
-定理 乘法半群态射.map_dvd
-  条件: [半群 M] [半群 N] (f : M ->ₙ* N) {a b}
-  结论: a ∣ b -> f a ∣ f b
-  证明: _root_.map_dvd f
-
-Depends on / 依赖: _root_, _root_.map_dvd, map_dvd
+/-
+**MulHom.map_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulHom.map_dvd [Semigroup M] [Semigroup N] (f : M ->ₙ* N) {a b} : a ∣ b ->
+ f a ∣ f b
+参数：f : M ->ₙ* N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_dvd`：∀ {M : Type u_1} {N : Type u_2} [inst : Semigroup M] [inst_1 : 
+Semigroup N] {F : Type u_3} [inst_2 : FunLike F M N]   [MulHomClass F M N] (f…
 -/
-theorem MulHom.map_dvd [Semigroup M] [Semigroup N] (f : M ->ₙ* N) {a b} : a ∣ b -> f a ∣ f b :=
+theorem MulHom.map_dvd [Semigroup M] [Semigroup N] (f : M →ₙ* N) {a b} : a ∣ b → f a ∣ f b :=
   _root_.map_dvd f
-
-/--
-theorem `MonoidHom.map_dvd` / 定理 `MonoidHom.map_dvd`
-
-English:
-theorem MonoidHom.map_dvd
-  given: [Monoid M] [Monoid N] (f : M ->* N) {a b}
-  statement: a ∣ b -> f a ∣ f b
-  proof: _root_.map_dvd f
-
-中文:
-定理 幺半群态射.map_dvd
-  条件: [幺半群 M] [幺半群 N] (f : M ->* N) {a b}
-  结论: a ∣ b -> f a ∣ f b
-  证明: _root_.map_dvd f
-
-Depends on / 依赖: _root_, _root_.map_dvd, map_dvd
+/-
+**MonoidHom.map_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonoidHom.map_dvd [Monoid M] [Monoid N] (f : M ->* N) {a b} : a ∣ b -> f a
+ ∣ f b
+参数：f : M ->* N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_dvd`：∀ {M : Type u_1} {N : Type u_2} [inst : Semigroup M] [inst_1 : 
+Semigroup N] {F : Type u_3} [inst_2 : FunLike F M N]   [MulHomClass F M N] (f…
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-theorem MonoidHom.map_dvd [Monoid M] [Monoid N] (f : M ->* N) {a b} : a ∣ b -> f a ∣ f b :=
+theorem MonoidHom.map_dvd [Monoid M] [Monoid N] (f : M →* N) {a b} : a ∣ b → f a ∣ f b :=
   _root_.map_dvd f

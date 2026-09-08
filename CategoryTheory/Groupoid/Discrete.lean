@@ -18,32 +18,16 @@ namespace CategoryTheory
 
 variable {C : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Groupoid (Discrete C)
-  body: { inv := fun h => ⟨⟨h.1.1.symm⟩⟩ }
-
-中文:
-实例 :
-  签名: 群胚 (离散 C)
-  定义体: { inv := fun h => ⟨⟨h.1.1.symm⟩⟩ }
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Groupoid (Discrete C) := { inv := fun h => ⟨⟨h.1.1.symm⟩⟩ }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Category*
-  signature: C] [IsDiscrete C] : IsGroupoid C where
-
-中文:
-实例 [范畴*
-  签名: C] [是离散 C] : 是群胚 C where
+instance : Groupoid (Discrete C) := { inv := fun h ↦ ⟨⟨h.1.1.symm⟩⟩ }
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Category* C] [IsDiscrete C] : IsGroupoid C where
 
 end CategoryTheory
+

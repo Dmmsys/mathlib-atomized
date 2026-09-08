@@ -40,28 +40,17 @@ variable [Monoid M] [Ring R] [MulSemiringAction M R]
 
 This is available as an instance in the `Pointwise` locale. -/
 @[instance_reducible]
-/--
-Definition of `pointwiseMulAction` / `pointwiseMulAction` 的定义
+/-
+**Subring.pointwiseMulAction** 是 Mathlib 中的一个定义，位于命名空间 `Subring`。
+形式化陈述：{M : Type u_1} →   {R : Type u_2} → [inst : Monoid M] → [inst_1 : Ring R] 
+→ [MulSemiringAction M R] → MulAction M (Subring R)
+参数：Subring R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointwiseMulAction
-  signature: : MulAction M (Subring R) where
-  body: S.map (MulSemiringAction.toRingHom _ _ a)
-  one_smul S := (congr_arg (fun f => S.map f) (RingHom.ext <| one_smul M)).trans S.map_id
-  mul_smul _ _ S :=
-    (congr_arg (fun f => S.map f) (RingHom.ext <| mul_smul _ _)).trans (S.map_map _ _).symm
+--- 原说明 ---
+The action on a subring corresponding to applying the action to every element.
 
-scoped[Pointwise] attribute [instance] Subring.pointwiseMulAction
-
-中文:
-定义 pointwiseMulAction
-  签名: : 乘法作用 M (子环 R) where
-  定义体: S.map (MulSemiringAction.toRingHom _ _ a)
-  one_smul S := (congr_arg (fun f => S.map f) (RingHom.ext <| one_smul M)).trans S.map_id
-  mul_smul _ _ S :=
-    (congr_arg (fun f => S.map f) (RingHom.ext <| mul_smul _ _)).trans (S.map_map _ _).symm
-
-scoped[Pointwise] attribute [instance] Subring.pointwiseMulAction
+This is available as an instance in the `Pointwise` locale.
 -/
 protected def pointwiseMulAction : MulAction M (Subring R) where
   smul a S := S.map (MulSemiringAction.toRingHom _ _ a)
@@ -72,231 +61,135 @@ protected def pointwiseMulAction : MulAction M (Subring R) where
 scoped[Pointwise] attribute [instance] Subring.pointwiseMulAction
 
 open scoped Pointwise
-
-/--
-theorem `pointwise_smul_def` / 定理 `pointwise_smul_def`
-
-English:
-theorem pointwise_smul_def
-  given: {a : M} (S : Subring R)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 pointwise_smul_def
-  条件: {a : M} (S : 子环 R)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Subring.pointwise_smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：pointwise_smul_def {a : M} (S : Subring R) : a • S = S.map (MulSemiringAct
+ion.toRingHom _ _ a)
+参数：S : Subring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pointwise_smul_def {a : M} (S : Subring R) :
     a • S = S.map (MulSemiringAction.toRingHom _ _ a) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_pointwise_smul` / 定理 `coe_pointwise_smul`
-
-English:
-theorem coe_pointwise_smul
-  given: (m : M) (S : Subring R)
-  statement: ↑(m • S) = m • (S : Set R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_pointwise_smul
-  条件: (m : M) (S : 子环 R)
-  结论: ↑(m • S) = m • (S : 集合 R)
-  证明: rfl
-
-@[simp]
+/-
+**Subring.coe_pointwise_smul** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：coe_pointwise_smul (m : M) (S : Subring R) : ↑(m • S) = m • (S : Set R)
+参数：m : M；S : Subring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_pointwise_smul (m : M) (S : Subring R) : ↑(m • S) = m • (S : Set R) :=
   rfl
 
 @[simp]
-/--
-theorem `pointwise_smul_toAddSubgroup` / 定理 `pointwise_smul_toAddSubgroup`
-
-English:
-theorem pointwise_smul_toAddSubgroup
-  given: (m : M) (S : Subring R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 pointwise_smul_toAddSubgroup
-  条件: (m : M) (S : 子环 R)
-  证明: rfl
-
-@[simp]
+/-
+**Subring.pointwise_smul_toAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：pointwise_smul_toAddSubgroup (m : M) (S : Subring R) : (m • S).toAddSubgro
+up = m • S.toAddSubgroup
+参数：m : M；S : Subring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pointwise_smul_toAddSubgroup (m : M) (S : Subring R) :
     (m • S).toAddSubgroup = m • S.toAddSubgroup :=
   rfl
 
 @[simp]
-/--
-theorem `pointwise_smul_toSubsemiring` / 定理 `pointwise_smul_toSubsemiring`
-
-English:
-theorem pointwise_smul_toSubsemiring
-  given: (m : M) (S : Subring R)
-  proof: rfl
-
-中文:
-定理 pointwise_smul_toSubsemiring
-  条件: (m : M) (S : 子环 R)
-  证明: rfl
+/-
+**Subring.pointwise_smul_toSubsemiring** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：pointwise_smul_toSubsemiring (m : M) (S : Subring R) : (m • S).toSubsemiri
+ng = m • S.toSubsemiring
+参数：m : M；S : Subring R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pointwise_smul_toSubsemiring (m : M) (S : Subring R) :
     (m • S).toSubsemiring = m • S.toSubsemiring :=
   rfl
-
-/--
-theorem `smul_mem_pointwise_smul` / 定理 `smul_mem_pointwise_smul`
-
-English:
-theorem smul_mem_pointwise_smul
-  given: (m : M) (r : R) (S : Subring R)
-  statement: r in S -> m • r in m • S
-  proof: (Set.smul_mem_smul_set : _ -> _ in m • (S : Set R))
-
-中文:
-定理 smul_mem_pointwise_smul
-  条件: (m : M) (r : R) (S : 子环 R)
-  结论: r in S -> m • r in m • S
-  证明: (Set.smul_mem_smul_set : _ -> _ in m • (S : Set R))
-
-Depends on / 依赖: Module, Set.smul_mem_smul_set, sectionsSubalgebra, sectionsSubalgebraSubmodule, smul_mem_smul_set
+/-
+**Subring.smul_mem_pointwise_smul** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：smul_mem_pointwise_smul (m : M) (r : R) (S : Subring R) : r in S -> m • r 
+in m • S
+参数：m : M；r : R；S : Subring R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_mem_smul_set`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β]
+ {s : Set β} {a : α} {b : β}, b ∈ s → a • b ∈ a • s
 -/
-theorem smul_mem_pointwise_smul (m : M) (r : R) (S : Subring R) : r in S -> m • r in m • S :=
-  (Set.smul_mem_smul_set : _ -> _ in m • (S : Set R))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CovariantClass M (Subring R) HSMul.hSMul LE.le
-  body: ⟨fun _ _ => image_mono⟩
-
-中文:
-实例 :
-  签名: 协变类 M (子环 R) 异质标量乘法.hSMul LE.le
-  定义体: ⟨fun _ _ => image_mono⟩
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_smul, Localizations, Subtype, Subtype.ext, algebraMap_smul, image_mono, of_algebraMap_smul
+theorem smul_mem_pointwise_smul (m : M) (r : R) (S : Subring R) : r ∈ S → m • r ∈ m • S :=
+  (Set.smul_mem_smul_set : _ → _ ∈ m • (S : Set R))
+/-
+**Subring.** 是 Mathlib 中的一个实例，位于命名空间 `Subring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CovariantClass M (Subring R) HSMul.hSMul LE.le :=
   ⟨fun _ _ => image_mono⟩
-
-/--
-theorem `mem_smul_pointwise_iff_exists` / 定理 `mem_smul_pointwise_iff_exists`
-
-English:
-theorem mem_smul_pointwise_iff_exists
-  given: (m : M) (r : R) (S : Subring R)
-  proof: (Set.mem_smul_set : r in m • (S : Set R) ↔ _)
-
-@[simp]
-
-中文:
-定理 mem_smul_pointwise_iff_存在
-  条件: (m : M) (r : R) (S : 子环 R)
-  证明: (Set.mem_smul_set : r in m • (S : Set R) ↔ _)
-
-@[simp]
-
-Depends on / 依赖: Set.mem_smul_set, mem_smul_set
+/-
+**Subring.mem_smul_pointwise_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：mem_smul_pointwise_iff_exists (m : M) (r : R) (S : Subring R) : r in m • S
+ ↔ exists s : R, s in S ∧ m • s = r
+参数：m : M；r : R；S : Subring R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_smul_set`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {t :
+ Set β} {a : α} {x : β}, x ∈ a • t ↔ ∃ y ∈ t, a • y = x
 -/
 theorem mem_smul_pointwise_iff_exists (m : M) (r : R) (S : Subring R) :
-    r in m • S ↔ exists s : R, s in S ∧ m • s = r :=
-  (Set.mem_smul_set : r in m • (S : Set R) ↔ _)
+    r ∈ m • S ↔ ∃ s : R, s ∈ S ∧ m • s = r :=
+  (Set.mem_smul_set : r ∈ m • (S : Set R) ↔ _)
 
 @[simp]
-/--
-theorem `smul_bot` / 定理 `smul_bot`
-
-English:
-theorem smul_bot
-  given: (a : M)
-  statement: a • (⊥ : Subring R) = ⊥
-  proof: map_bot _
-
-中文:
-定理 smul_bot
-  条件: (a : M)
-  结论: a • (⊥ : 子环 R) = ⊥
-  证明: map_bot _
-
-Depends on / 依赖: map_bot
+/-
+**Subring.smul_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：smul_bot (a : M) : a • (⊥ : Subring R) = ⊥
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subring.map_bot`：map_bot (f : R ->+* S) : (⊥ : Subring R).map f = ⊥
 -/
 theorem smul_bot (a : M) : a • (⊥ : Subring R) = ⊥ :=
   map_bot _
-
-/--
-theorem `smul_sup` / 定理 `smul_sup`
-
-English:
-theorem smul_sup
-  given: (a : M) (S T : Subring R)
-  statement: a • (S ⊔ T) = a • S ⊔ a • T
-  proof: map_sup _ _ _
-
-中文:
-定理 smul_sup
-  条件: (a : M) (S T : 子环 R)
-  结论: a • (S ⊔ T) = a • S ⊔ a • T
-  证明: map_sup _ _ _
-
-Depends on / 依赖: map_sup
+/-
+**Subring.smul_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：smul_sup (a : M) (S T : Subring R) : a • (S ⊔ T) = a • S ⊔ a • T
+参数：a : M；S T : Subring R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subring.map_sup`：map_sup (s t : Subring R) (f : R ->+* S) : (s ⊔ t).map 
+f = s.map f ⊔ t.map f
 -/
 theorem smul_sup (a : M) (S T : Subring R) : a • (S ⊔ T) = a • S ⊔ a • T :=
   map_sup _ _ _
-
-/--
-theorem `smul_closure` / 定理 `smul_closure`
-
-English:
-theorem smul_closure
-  given: (a : M) (s : Set R)
-  statement: a • closure s = closure (a • s)
-  proof: RingHom.map_closure _ _
-
-中文:
-定理 smul_closure
-  条件: (a : M) (s : 集合 R)
-  结论: a • closure s = closure (a • s)
-  证明: RingHom.map_closure _ _
-
-Depends on / 依赖: RingHom, RingHom.map_closure, map_closure
+/-
+**Subring.smul_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：smul_closure (a : M) (s : Set R) : a • closure s = closure (a • s)
+参数：a : M；s : Set R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_closure`：map_closure (f : R ->+* S) (s : Set R) : (closure s
+).map f = closure (f '' s)
 -/
 theorem smul_closure (a : M) (s : Set R) : a • closure s = closure (a • s) :=
   RingHom.map_closure _ _
-
-/--
-Instance `pointwise_central_scalar` / 实例 `pointwise_central_scalar`
-
-English:
-instance pointwise_central_scalar
-  signature: [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R]
-  body: ⟨fun _ S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
-
-中文:
-实例 pointwise_central_scalar
-  签名: [MulSemiring作用 Mᵐᵒᵖ R] [中心标量 M R]
-  定义体: ⟨fun _ S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
-
-Depends on / 依赖: RingHom, RingHom.ext, S.map, congr_arg, op_smul_eq_smul
+/-
+**Subring.pointwise_central_scalar** 是 Mathlib 中的一个实例，位于命名空间 `Subring`。
+形式化陈述：pointwise_central_scalar [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R] 
+: IsCentralScalar M (Subring R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance pointwise_central_scalar [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R] :
     IsCentralScalar M (Subring R) :=
-⟨fun _ S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
+  ⟨fun _ S => (congr_arg fun f => S.map f) <| RingHom.ext <| op_smul_eq_smul _⟩
 
 end Monoid
 
@@ -307,128 +200,76 @@ variable [Group M] [Ring R] [MulSemiringAction M R]
 open scoped Pointwise
 
 @[simp]
-/--
-theorem `smul_mem_pointwise_smul_iff` / 定理 `smul_mem_pointwise_smul_iff`
-
-English:
-theorem smul_mem_pointwise_smul_iff
-  given: {a : M} {S : Subring R} {x : R}
-  statement: a • x in a • S ↔ x in S
-  proof: smul_mem_smul_set_iff
-
-中文:
-定理 smul_mem_pointwise_smul_iff
-  条件: {a : M} {S : 子环 R} {x : R}
-  结论: a • x in a • S ↔ x in S
-  证明: smul_mem_smul_set_iff
-
-Depends on / 依赖: smul_mem_smul_set_iff
+/-
+**Subring.smul_mem_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：smul_mem_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : a • x in a •
+ S ↔ x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_mem_smul_set_iff`：smul_mem_smul_set_iff : a • x in a • s ↔ x in
+ s
 -/
-theorem smul_mem_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : a • x in a • S ↔ x in S :=
+theorem smul_mem_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : a • x ∈ a • S ↔ x ∈ S :=
   smul_mem_smul_set_iff
-
-/--
-theorem `mem_pointwise_smul_iff_inv_smul_mem` / 定理 `mem_pointwise_smul_iff_inv_smul_mem`
-
-English:
-theorem mem_pointwise_smul_iff_inv_smul_mem
-  given: {a : M} {S : Subring R} {x : R}
-  proof: mem_smul_set_iff_inv_smul_mem
-
-中文:
-定理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {a : M} {S : 子环 R} {x : R}
-  证明: mem_smul_set_iff_inv_smul_mem
-
-Depends on / 依赖: mem_smul_set_iff_inv_smul_mem
+/-
+**Subring.mem_pointwise_smul_iff_inv_smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subring
+`。
+形式化陈述：mem_pointwise_smul_iff_inv_smul_mem {a : M} {S : Subring R} {x : R} : x in
+ a • S ↔ a⁻¹ • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_smul_set_iff_inv_smul_mem`：mem_smul_set_iff_inv_smul_mem : x in 
+a • A ↔ a⁻¹ • x in A
 -/
 theorem mem_pointwise_smul_iff_inv_smul_mem {a : M} {S : Subring R} {x : R} :
-    x in a • S ↔ a⁻¹ • x in S :=
+    x ∈ a • S ↔ a⁻¹ • x ∈ S :=
   mem_smul_set_iff_inv_smul_mem
-
-/--
-theorem `mem_inv_pointwise_smul_iff` / 定理 `mem_inv_pointwise_smul_iff`
-
-English:
-theorem mem_inv_pointwise_smul_iff
-  given: {a : M} {S : Subring R} {x : R}
-  statement: x in a⁻¹ • S ↔ a • x in S
-  proof: mem_inv_smul_set_iff
-
-@[simp]
-
-中文:
-定理 mem_inv_pointwise_smul_iff
-  条件: {a : M} {S : 子环 R} {x : R}
-  结论: x in a⁻¹ • S ↔ a • x in S
-  证明: mem_inv_smul_set_iff
-
-@[simp]
-
-Depends on / 依赖: mem_inv_smul_set_iff
+/-
+**Subring.mem_inv_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：mem_inv_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : x in a⁻¹ • S 
+↔ a • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_inv_smul_set_iff`：mem_inv_smul_set_iff : x in a⁻¹ • A ↔ a • x in
+ A
 -/
-theorem mem_inv_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : x in a⁻¹ • S ↔ a • x in S :=
+theorem mem_inv_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : x ∈ a⁻¹ • S ↔ a • x ∈ S :=
   mem_inv_smul_set_iff
 
 @[simp]
-/--
-theorem `pointwise_smul_le_pointwise_smul_iff` / 定理 `pointwise_smul_le_pointwise_smul_iff`
-
-English:
-theorem pointwise_smul_le_pointwise_smul_iff
-  given: {a : M} {S T : Subring R}
-  statement: a • S <= a • T ↔ S <= T
-  proof: smul_set_subset_smul_set_iff
-
-中文:
-定理 pointwise_smul_le_pointwise_smul_iff
-  条件: {a : M} {S T : 子环 R}
-  结论: a • S <= a • T ↔ S <= T
-  证明: smul_set_subset_smul_set_iff
-
-Depends on / 依赖: smul_set_subset_smul_set_iff
+/-
+**Subring.pointwise_smul_le_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subrin
+g`。
+形式化陈述：pointwise_smul_le_pointwise_smul_iff {a : M} {S T : Subring R} : a • S <= 
+a • T ↔ S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_smul_set_iff`：smul_set_subset_smul_set_iff : a • A s
+ubseteq a • B ↔ A subseteq B
 -/
-theorem pointwise_smul_le_pointwise_smul_iff {a : M} {S T : Subring R} : a • S <= a • T ↔ S <= T :=
+theorem pointwise_smul_le_pointwise_smul_iff {a : M} {S T : Subring R} : a • S ≤ a • T ↔ S ≤ T :=
   smul_set_subset_smul_set_iff
-
-/--
-theorem `pointwise_smul_subset_iff` / 定理 `pointwise_smul_subset_iff`
-
-English:
-theorem pointwise_smul_subset_iff
-  given: {a : M} {S T : Subring R}
-  statement: a • S <= T ↔ S <= a⁻¹ • T
-  proof: smul_set_subset_iff_subset_inv_smul_set
-
-中文:
-定理 pointwise_smul_subset_iff
-  条件: {a : M} {S T : 子环 R}
-  结论: a • S <= T ↔ S <= a⁻¹ • T
-  证明: smul_set_subset_iff_subset_inv_smul_set
-
-Depends on / 依赖: smul_set_subset_iff_subset_inv_smul_set
+/-
+**Subring.pointwise_smul_subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：pointwise_smul_subset_iff {a : M} {S T : Subring R} : a • S <= T ↔ S <= a⁻
+¹ • T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_iff_subset_inv_smul_set`：smul_set_subset_iff_subset_
+inv_smul_set : a • A subseteq B ↔ A subseteq a⁻¹ • B
 -/
-theorem pointwise_smul_subset_iff {a : M} {S T : Subring R} : a • S <= T ↔ S <= a⁻¹ • T :=
+theorem pointwise_smul_subset_iff {a : M} {S T : Subring R} : a • S ≤ T ↔ S ≤ a⁻¹ • T :=
   smul_set_subset_iff_subset_inv_smul_set
-
-/--
-theorem `subset_pointwise_smul_iff` / 定理 `subset_pointwise_smul_iff`
-
-English:
-theorem subset_pointwise_smul_iff
-  given: {a : M} {S T : Subring R}
-  statement: S <= a • T ↔ a⁻¹ • S <= T
-  proof: subset_smul_set_iff
-
-中文:
-定理 subset_pointwise_smul_iff
-  条件: {a : M} {S T : 子环 R}
-  结论: S <= a • T ↔ a⁻¹ • S <= T
-  证明: subset_smul_set_iff
-
-Depends on / 依赖: subset_smul_set_iff
+/-
+**Subring.subset_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：subset_pointwise_smul_iff {a : M} {S T : Subring R} : S <= a • T ↔ a⁻¹ • S
+ <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subset_smul_set_iff`：subset_smul_set_iff : A subseteq a • B ↔ a⁻¹ • 
+A subseteq B
 -/
-theorem subset_pointwise_smul_iff {a : M} {S T : Subring R} : S <= a • T ↔ a⁻¹ • S <= T :=
+theorem subset_pointwise_smul_iff {a : M} {S T : Subring R} : S ≤ a • T ↔ a⁻¹ • S ≤ T :=
   subset_smul_set_iff
 
 /-! TODO: add `equivSMul` like we have for subgroup. -/
@@ -443,115 +284,72 @@ variable [GroupWithZero M] [Ring R] [MulSemiringAction M R]
 open scoped Pointwise
 
 @[simp]
-/--
-theorem `smul_mem_pointwise_smul_iff₀` / 定理 `smul_mem_pointwise_smul_iff₀`
-
-English:
-theorem smul_mem_pointwise_smul_iff₀
-  given: {a : M} (ha : a != 0) (S : Subring R) (x : R)
-  proof: smul_mem_smul_set_iff₀ ha (S : Set R) x
-
-中文:
-定理 smul_mem_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) (S : 子环 R) (x : R)
-  证明: smul_mem_smul_set_iff₀ ha (S : Set R) x
+/-
+**Subring.smul_mem_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：smul_mem_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : a • x in a •
+ S ↔ x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_mem_smul_set_iff`：smul_mem_smul_set_iff : a • x in a • s ↔ x in
+ s
 -/
-theorem smul_mem_pointwise_smul_iff₀ {a : M} (ha : a != 0) (S : Subring R) (x : R) :
-    a • x in a • S ↔ x in S :=
+theorem smul_mem_pointwise_smul_iff₀ {a : M} (ha : a ≠ 0) (S : Subring R) (x : R) :
+    a • x ∈ a • S ↔ x ∈ S :=
   smul_mem_smul_set_iff₀ ha (S : Set R) x
-
-/--
-theorem `mem_pointwise_smul_iff_inv_smul_mem₀` / 定理 `mem_pointwise_smul_iff_inv_smul_mem₀`
-
-English:
-theorem mem_pointwise_smul_iff_inv_smul_mem₀
-  given: {a : M} (ha : a != 0) (S : Subring R) (x : R)
-  proof: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set R) x
-
-中文:
-定理 mem_pointwise_smul_iff_inv_smul_mem₀
-  条件: {a : M} (ha : a != 0) (S : 子环 R) (x : R)
-  证明: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set R) x
+/-
+**Subring.mem_pointwise_smul_iff_inv_smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subring
+`。
+形式化陈述：mem_pointwise_smul_iff_inv_smul_mem {a : M} {S : Subring R} {x : R} : x in
+ a • S ↔ a⁻¹ • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_smul_set_iff_inv_smul_mem`：mem_smul_set_iff_inv_smul_mem : x in 
+a • A ↔ a⁻¹ • x in A
 -/
-theorem mem_pointwise_smul_iff_inv_smul_mem₀ {a : M} (ha : a != 0) (S : Subring R) (x : R) :
-    x in a • S ↔ a⁻¹ • x in S :=
+theorem mem_pointwise_smul_iff_inv_smul_mem₀ {a : M} (ha : a ≠ 0) (S : Subring R) (x : R) :
+    x ∈ a • S ↔ a⁻¹ • x ∈ S :=
   mem_smul_set_iff_inv_smul_mem₀ ha (S : Set R) x
-
-/--
-theorem `mem_inv_pointwise_smul_iff₀` / 定理 `mem_inv_pointwise_smul_iff₀`
-
-English:
-theorem mem_inv_pointwise_smul_iff₀
-  given: {a : M} (ha : a != 0) (S : Subring R) (x : R)
-  proof: mem_inv_smul_set_iff₀ ha (S : Set R) x
-
-@[simp]
-
-中文:
-定理 mem_inv_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) (S : 子环 R) (x : R)
-  证明: mem_inv_smul_set_iff₀ ha (S : Set R) x
-
-@[simp]
+/-
+**Subring.mem_inv_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+形式化陈述：mem_inv_pointwise_smul_iff {a : M} {S : Subring R} {x : R} : x in a⁻¹ • S 
+↔ a • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_inv_smul_set_iff`：mem_inv_smul_set_iff : x in a⁻¹ • A ↔ a • x in
+ A
 -/
-theorem mem_inv_pointwise_smul_iff₀ {a : M} (ha : a != 0) (S : Subring R) (x : R) :
-    x in a⁻¹ • S ↔ a • x in S :=
+theorem mem_inv_pointwise_smul_iff₀ {a : M} (ha : a ≠ 0) (S : Subring R) (x : R) :
+    x ∈ a⁻¹ • S ↔ a • x ∈ S :=
   mem_inv_smul_set_iff₀ ha (S : Set R) x
 
 @[simp]
-/--
-theorem `pointwise_smul_le_pointwise_smul_iff₀` / 定理 `pointwise_smul_le_pointwise_smul_iff₀`
-
-English:
-theorem pointwise_smul_le_pointwise_smul_iff₀
-  given: {a : M} (ha : a != 0) {S T : Subring R}
-  proof: smul_set_subset_smul_set_iff₀ ha
-
-中文:
-定理 pointwise_smul_le_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) {S T : 子环 R}
-  证明: smul_set_subset_smul_set_iff₀ ha
+/-
+**Subring.pointwise_smul_le_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subrin
+g`。
+形式化陈述：pointwise_smul_le_pointwise_smul_iff {a : M} {S T : Subring R} : a • S <= 
+a • T ↔ S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_smul_set_iff`：smul_set_subset_smul_set_iff : a • A s
+ubseteq a • B ↔ A subseteq B
 -/
-theorem pointwise_smul_le_pointwise_smul_iff₀ {a : M} (ha : a != 0) {S T : Subring R} :
-    a • S <= a • T ↔ S <= T :=
+theorem pointwise_smul_le_pointwise_smul_iff₀ {a : M} (ha : a ≠ 0) {S T : Subring R} :
+    a • S ≤ a • T ↔ S ≤ T :=
   smul_set_subset_smul_set_iff₀ ha
-
-/--
-theorem `pointwise_smul_le_iff₀` / 定理 `pointwise_smul_le_iff₀`
-
-English:
-theorem pointwise_smul_le_iff₀
-  given: {a : M} (ha : a != 0) {S T : Subring R}
-  statement: a • S <= T ↔ S <= a⁻¹ • T
-  proof: smul_set_subset_iff₀ ha
-
-中文:
-定理 pointwise_smul_le_iff₀
-  条件: {a : M} (ha : a != 0) {S T : 子环 R}
-  结论: a • S <= T ↔ S <= a⁻¹ • T
-  证明: smul_set_subset_iff₀ ha
+/-
+**Subring.pointwise_smul_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pointwise_smul_le_iff₀ {a : M} (ha : a != 0) {S T : Subring R} : a • S <= T ↔ S <= a⁻¹ • T :=
+theorem pointwise_smul_le_iff₀ {a : M} (ha : a ≠ 0) {S T : Subring R} : a • S ≤ T ↔ S ≤ a⁻¹ • T :=
   smul_set_subset_iff₀ ha
-
-/--
-theorem `le_pointwise_smul_iff₀` / 定理 `le_pointwise_smul_iff₀`
-
-English:
-theorem le_pointwise_smul_iff₀
-  given: {a : M} (ha : a != 0) {S T : Subring R}
-  statement: S <= a • T ↔ a⁻¹ • S <= T
-  proof: subset_smul_set_iff₀ ha
-
-中文:
-定理 le_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) {S T : 子环 R}
-  结论: S <= a • T ↔ a⁻¹ • S <= T
-  证明: subset_smul_set_iff₀ ha
+/-
+**Subring.le_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem le_pointwise_smul_iff₀ {a : M} (ha : a != 0) {S T : Subring R} : S <= a • T ↔ a⁻¹ • S <= T :=
+theorem le_pointwise_smul_iff₀ {a : M} (ha : a ≠ 0) {S T : Subring R} : S ≤ a • T ↔ a⁻¹ • S ≤ T :=
   subset_smul_set_iff₀ ha
 
 end GroupWithZero
 
 end Subring
+

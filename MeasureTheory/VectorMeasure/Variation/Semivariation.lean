@@ -45,400 +45,329 @@ open Set Filter
 
 namespace MeasureTheory.VectorMeasure
 
-variable {X E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] {mX : MeasurableSpace X}
+variable {X E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] {mX : MeasurableSpace X}
   {μ : VectorMeasure X E} {s t : Set X}
 
-/--
-Definition of `semivariation` / `semivariation` 的定义
+/-- The semivariation of a vector measure, defined as the supremum of the variations
+of the images of the vector measures under continuous linear forms of norm at most `1`. -/
+/-
+**MeasureTheory.VectorMeasure.semivariation** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTh
+eory.VectorMeasure`。
+形式化陈述：semivariation (μ : VectorMeasure X E) (s : Set X) : Real>=0∞
+参数：μ : VectorMeasure X E；s : Set X。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition semivariation
-  signature: (μ : VectorMeasure X E) (s : Set X)
-  body: ⨆ ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1}, (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s
-
-中文:
-定义 semivariation
-  签名: (μ : 向量测度 X E) (s : 集合 X)
-  定义体: ⨆ ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1}, (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s
-
-Depends on / 依赖: StrongDual, continuous, mapRange, variation
+--- 原说明 ---
+The semivariation of a vector measure, defined as the supremum of the variations
+of the images of the vector measures under continuous linear forms of norm at mo
+st `1`.
 -/
-noncomputable def semivariation (μ : VectorMeasure X E) (s : Set X) : Real>=0∞ :=
-  ⨆ ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1}, (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s
-
-/--
-lemma `semivariation_union_le` / 引理 `semivariation_union_le`
-
-English:
-lemma semivariation_union_le
-  proof: by
-  simp only [semivariation, iSup_le_iff]
-  intro ℓ hℓ
-  apply (measure_union_le _ _).trans
-  gcongr <;> apply le_biSup _ hℓ
-
-中文:
-引理 semivariation_union_le
-  证明: by
-  simp only [semivariation, iSup_le_iff]
-  intro ℓ hℓ
-  apply (measure_union_le _ _).trans
-  gcongr <;> apply le_biSup _ hℓ
-
-Depends on / 依赖: iSup_le_iff, le_biSup, measure_union_le, semivariation
+noncomputable def semivariation (μ : VectorMeasure X E) (s : Set X) : ℝ≥0∞ :=
+  ⨆ ℓ ∈ {ℓ : StrongDual ℝ E | ‖ℓ‖ₑ ≤ 1}, (μ.mapRange (ℓ : E →+ ℝ) ℓ.continuous).variation s
+/-
+**MeasureTheory.VectorMeasure.semivariation_union_le** 是 Mathlib 中的一个引理，位于命名空间 `
+MeasureTheory.VectorMeasure`。
+形式化陈述：semivariation_union_le : μ.semivariation (s union t) <= μ.semivariation s 
++ μ.semivariation t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.measure_union_le`：measure_union_le (s t : Set α) : μ (s un
+ion t) <= μ s + μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `le_biSup`：le_biSup {ι : Type*} {s : Set ι} (f : ι -> α) {i : ι} (hi : i 
+in s) : f i <= ⨆ i in s, f i
 -/
 lemma semivariation_union_le :
-    μ.semivariation (s union t) <= μ.semivariation s + μ.semivariation t := by
+    μ.semivariation (s ∪ t) ≤ μ.semivariation s + μ.semivariation t := by
   simp only [semivariation, iSup_le_iff]
   intro ℓ hℓ
   apply (measure_union_le _ _).trans
   gcongr <;> apply le_biSup _ hℓ
-
-/--
-lemma `semivariation_mono` / 引理 `semivariation_mono`
-
-English:
-lemma semivariation_mono
-  given: (hst : s subseteq t)
-  statement: μ.semivariation s <= μ.semivariation t
-  proof: by
-  simp only [semivariation, iSup_le_iff]
-  intro ℓ hℓ
-  apply (measure_mono hst).trans
-  apply le_biSup _ hℓ
-
-中文:
-引理 semivariation_mono
-  条件: (hst : s subseteq t)
-  结论: μ.semivariation s <= μ.semivariation t
-  证明: by
-  simp only [semivariation, iSup_le_iff]
-  intro ℓ hℓ
-  apply (measure_mono hst).trans
-  apply le_biSup _ hℓ
-
-Depends on / 依赖: iSup_le_iff, le_biSup, measure_mono, semivariation
+/-
+**MeasureTheory.VectorMeasure.semivariation_mono** 是 Mathlib 中的一个引理，位于命名空间 `Meas
+ureTheory.VectorMeasure`。
+形式化陈述：semivariation_mono (hst : s subseteq t) : μ.semivariation s <= μ.semivaria
+tion t
+参数：hst : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `le_biSup`：le_biSup {ι : Type*} {s : Set ι} (f : ι -> α) {i : ι} (hi : i 
+in s) : f i <= ⨆ i in s, f i
 -/
-lemma semivariation_mono (hst : s subseteq t) : μ.semivariation s <= μ.semivariation t := by
+lemma semivariation_mono (hst : s ⊆ t) : μ.semivariation s ≤ μ.semivariation t := by
   simp only [semivariation, iSup_le_iff]
   intro ℓ hℓ
   apply (measure_mono hst).trans
   apply le_biSup _ hℓ
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `semivariation_le_variation` / 引理 `semivariation_le_variation`
-
-English:
-lemma semivariation_le_variation
-  statement: μ.semivariation s <= μ.variation s
-  proof: by
-  simp only [semivariation, iSup_le_iff]
-  intro ℓ hℓ
-  suffices (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation <= μ.variation from this s
-  apply variation_le_of_forall_enorm_le (fun t ht => ?_)
-  simp only [mapRange_apply, AddMonoidHom.coe_coe]
-  apply le_trans ?_ (enorm_measure_le_variation _ _)
-  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
-
-中文:
-引理 semivariation_le_variation
-  结论: μ.semivariation s <= μ.variation s
-  证明: by
-  simp only [semivariation, iSup_le_iff]
-  intro ℓ hℓ
-  suffices (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation <= μ.variation from this s
-  apply variation_le_of_forall_enorm_le (fun t ht => ?_)
-  simp only [mapRange_apply, AddMonoidHom.coe_coe]
-  apply le_trans ?_ (enorm_measure_le_variation _ _)
-  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, ContinuousLinearMap, ContinuousLinearMap.le_opENorm, coe_coe, continuous, enorm_measure_le_variation, iSup_le_iff, le_opENorm, le_trans, mapRange, mapRange_apply, mul_le_of_le_one_left, semivariation, variation, variation_le_of_forall_enorm_le
+/-
+**MeasureTheory.VectorMeasure.semivariation_le_variation** 是 Mathlib 中的一个引理，位于命名
+空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：semivariation_le_variation : μ.semivariation s <= μ.variation s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
+· 使用引理 `MeasureTheory.VectorMeasure.variation_le_of_forall_enorm_le`：variation_l
+e_of_forall_enorm_le {m : Measure X} (h : forall E, MeasurableSet E -> ‖μ E‖ₑ <=
+ m E) : μ.variation <= m
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `ContinuousLinearMap.le_opENorm`：le_opENorm (f : E ->SL[σ₁₂] F) (x : E) :
+ ‖f x‖ₑ <= ‖f‖ₑ * ‖x‖ₑ
+· 使用定理 `mul_le_of_le_one_left`：mul_le_of_le_one_left [MulPosMono α] (hb : 0 <= b
+) (h : a <= 1) : a * b <= b
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `ENNReal.instIsOrderedRing`：IsOrderedRing ENNReal
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `MeasureTheory.VectorMeasure.enorm_measure_le_variation`：enorm_measure_le
+_variation (μ : VectorMeasure X V) (E : Set X) : ‖μ E‖ₑ <= variation μ E
 -/
-lemma semivariation_le_variation : μ.semivariation s <= μ.variation s := by
+lemma semivariation_le_variation : μ.semivariation s ≤ μ.variation s := by
   simp only [semivariation, iSup_le_iff]
   intro ℓ hℓ
-  suffices (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation <= μ.variation from this s
-  apply variation_le_of_forall_enorm_le (fun t ht => ?_)
+  suffices (μ.mapRange (ℓ : E →+ ℝ) ℓ.continuous).variation ≤ μ.variation from this s
+  apply variation_le_of_forall_enorm_le (fun t ht ↦ ?_)
   simp only [mapRange_apply, AddMonoidHom.coe_coe]
   apply le_trans ?_ (enorm_measure_le_variation _ _)
   exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `enorm_apply_le_semivariation` / 引理 `enorm_apply_le_semivariation`
-
-English:
-lemma enorm_apply_le_semivariation
-  statement: ‖μ s‖ₑ <= μ.semivariation s
-  proof: by
-  by_cases hs : MeasurableSet s; swap
-  · simp [not_measurable, hs]
-  obtain ⟨ℓ, ℓ_norm, hℓ⟩ : exists ℓ : StrongDual Real E, ‖ℓ‖ <= 1 ∧ ℓ (μ s) = ‖μ s‖ :=
-    exists_dual_vector'' _ _
-  have h'ℓ : ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1} := by
-    simp [enorm_eq_nnnorm, ← NNReal.coe_le_one, ℓ_norm]
-  calc ‖μ s‖ₑ
-  _ = ‖(μ.mapRange (ℓ : E ->+ Real) ℓ.continuous) s‖ₑ := by simp [← ofReal_norm, hℓ]
-  _ <= (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := enorm_measure_le_variation _ _
-  _ <= μ.semivariation s := by apply le_biSup _ h'ℓ
-
-中文:
-引理 enorm_apply_le_semivariation
-  结论: ‖μ s‖ₑ <= μ.semivariation s
-  证明: by
-  by_cases hs : MeasurableSet s; swap
-  · simp [not_measurable, hs]
-  obtain ⟨ℓ, ℓ_norm, hℓ⟩ : exists ℓ : StrongDual Real E, ‖ℓ‖ <= 1 ∧ ℓ (μ s) = ‖μ s‖ :=
-    exists_dual_vector'' _ _
-  have h'ℓ : ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1} := by
-    simp [enorm_eq_nnnorm, ← NNReal.coe_le_one, ℓ_norm]
-  calc ‖μ s‖ₑ
-  _ = ‖(μ.mapRange (ℓ : E ->+ Real) ℓ.continuous) s‖ₑ := by simp [← ofReal_norm, hℓ]
-  _ <= (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := enorm_measure_le_variation _ _
-  _ <= μ.semivariation s := by apply le_biSup _ h'ℓ
-
-Depends on / 依赖: MeasurableSet, NNReal, NNReal.coe_le_one, StrongDual, coe_le_one, continuous, enorm_eq_nnnorm, enorm_measure_le_variation, exists_dual_vector, mapRange, not_measurable, ofReal_norm, semivariation, variation
+/-
+**MeasureTheory.VectorMeasure.enorm_apply_le_semivariation** 是 Mathlib 中的一个引理，位于
+命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：enorm_apply_le_semivariation : ‖μ s‖ₑ <= μ.semivariation s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_dual_vector''`：exists_dual_vector'' (x : E) : exists g : StrongDu
+al 𝕜 E, ‖g‖ <= 1 ∧ g x = ‖x‖
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.VectorMeasure.enorm_measure_le_variation`：enorm_measure_le
+_variation (μ : VectorMeasure X V) (E : Set X) : ‖μ E‖ₑ <= variation μ E
+· 使用引理 `le_biSup`：le_biSup {ι : Type*} {s : Set ι} (f : ι -> α) {i : ι} (hi : i 
+in s) : f i <= ⨆ i in s, f i
+· 使用定理 `MeasureTheory.VectorMeasure.not_measurable`：not_measurable (v : VectorMe
+asure α M) {i : Set α} (hi : ¬MeasurableSet i) : v i = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `enorm_zero`：∀ {E : Type u_8} [inst : TopologicalSpace E] [inst_1 : ESemi
+normedAddMonoid E], ‖0‖ₑ = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
 -/
-lemma enorm_apply_le_semivariation : ‖μ s‖ₑ <= μ.semivariation s := by
+lemma enorm_apply_le_semivariation : ‖μ s‖ₑ ≤ μ.semivariation s := by
   by_cases hs : MeasurableSet s; swap
   · simp [not_measurable, hs]
-  obtain ⟨ℓ, ℓ_norm, hℓ⟩ : exists ℓ : StrongDual Real E, ‖ℓ‖ <= 1 ∧ ℓ (μ s) = ‖μ s‖ :=
+  obtain ⟨ℓ, ℓ_norm, hℓ⟩ : ∃ ℓ : StrongDual ℝ E, ‖ℓ‖ ≤ 1 ∧ ℓ (μ s) = ‖μ s‖ :=
     exists_dual_vector'' _ _
-  have h'ℓ : ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1} := by
+  have h'ℓ : ℓ ∈ {ℓ : StrongDual ℝ E | ‖ℓ‖ₑ ≤ 1} := by
     simp [enorm_eq_nnnorm, ← NNReal.coe_le_one, ℓ_norm]
   calc ‖μ s‖ₑ
-  _ = ‖(μ.mapRange (ℓ : E ->+ Real) ℓ.continuous) s‖ₑ := by simp [← ofReal_norm, hℓ]
-  _ <= (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := enorm_measure_le_variation _ _
-  _ <= μ.semivariation s := by apply le_biSup _ h'ℓ
-
-/--
-lemma `enorm_apply_le_semivariation_of_subset` / 引理 `enorm_apply_le_semivariation_of_subset`
-
-English:
-lemma enorm_apply_le_semivariation_of_subset
-  given: (hst : s subseteq t)
-  proof: enorm_apply_le_semivariation.trans (semivariation_mono hst)
-
-中文:
-引理 enorm_apply_le_semivariation_of_subset
-  条件: (hst : s subseteq t)
-  证明: enorm_apply_le_semivariation.trans (semivariation_mono hst)
-
-Depends on / 依赖: enorm_apply_le_semivariation, enorm_apply_le_semivariation.trans, semivariation_mono
+  _ = ‖(μ.mapRange (ℓ : E →+ ℝ) ℓ.continuous) s‖ₑ := by simp [← ofReal_norm, hℓ]
+  _ ≤ (μ.mapRange (ℓ : E →+ ℝ) ℓ.continuous).variation s := enorm_measure_le_variation _ _
+  _ ≤ μ.semivariation s := by apply le_biSup _ h'ℓ
+/-
+**MeasureTheory.VectorMeasure.enorm_apply_le_semivariation_of_subset** 是 Mathlib
+ 中的一个引理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：enorm_apply_le_semivariation_of_subset (hst : s subseteq t) : ‖μ s‖ₑ <= μ.
+semivariation t
+参数：hst : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `MeasureTheory.VectorMeasure.enorm_apply_le_semivariation`：enorm_apply_le
+_semivariation : ‖μ s‖ₑ <= μ.semivariation s
+· 使用引理 `MeasureTheory.VectorMeasure.semivariation_mono`：semivariation_mono (hst 
+: s subseteq t) : μ.semivariation s <= μ.semivariation t
 -/
-lemma enorm_apply_le_semivariation_of_subset (hst : s subseteq t) :
-    ‖μ s‖ₑ <= μ.semivariation t :=
+lemma enorm_apply_le_semivariation_of_subset (hst : s ⊆ t) :
+    ‖μ s‖ₑ ≤ μ.semivariation t :=
   enorm_apply_le_semivariation.trans (semivariation_mono hst)
-
-/--
-lemma `exists_subset_lt_enorm_apply_of_lt_semivariation` / 引理 `exists_subset_lt_enorm_apply_of_lt_semivariation`
-
-English:
-lemma exists_subset_lt_enorm_apply_of_lt_semivariation
-  statement: (hs : MeasurableSet s)
-  proof: by
-  obtain ⟨ℓ, hℓ, h'ℓ⟩ : exists ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1},
-    a < (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := lt_biSup_iff.1 ha
-  obtain ⟨t, ts, t_meas, ht⟩ :
-      exists t subseteq s, MeasurableSet t ∧ a < 2 * ‖μ.mapRange (ℓ : E ->+ Real) ℓ.continuous t‖ₑ :=
-    SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation _ hs h'ℓ
-  refine ⟨t, ts, t_meas, ht.trans_le ?_⟩
-  gcongr
-  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
-
-中文:
-引理 存在_subset_lt_enorm_apply_of_lt_semivariation
-  结论: (hs : 可测集 s)
-  证明: by
-  obtain ⟨ℓ, hℓ, h'ℓ⟩ : exists ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1},
-    a < (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := lt_biSup_iff.1 ha
-  obtain ⟨t, ts, t_meas, ht⟩ :
-      exists t subseteq s, MeasurableSet t ∧ a < 2 * ‖μ.mapRange (ℓ : E ->+ Real) ℓ.continuous t‖ₑ :=
-    SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation _ hs h'ℓ
-  refine ⟨t, ts, t_meas, ht.trans_le ?_⟩
-  gcongr
-  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.le_opENorm, MeasurableSet, SignedMeasure, SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation, StrongDual, continuous, exists_subset_lt_enorm_apply_of_lt_variation, ht.trans_le, le_opENorm, lt_biSup_iff, mapRange, mul_le_of_le_one_left, subseteq, t_meas, trans_le, variation
+/-
+**MeasureTheory.VectorMeasure.exists_subset_lt_enorm_apply_of_lt_semivariation**
+ 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：exists_subset_lt_enorm_apply_of_lt_semivariation (hs : MeasurableSet s) {a
+ : Real>=0∞} (ha : a < μ.semivariation s) : exists t subseteq s, MeasurableSet t
+ ∧ a < 2 * ‖μ t‖ₑ
+参数：hs : MeasurableSet s；ha : a < μ.semivariation s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `lt_biSup_iff`：lt_biSup_iff {s : Set β} {f : β -> α} : a < ⨆ i in s, f i 
+↔ exists i in s, a < f i
+· 使用定理 `MeasureTheory.SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation
+`：∀ {X : Type u_1} {mX : MeasurableSpace X} (μ : MeasureTheory.SignedMeasure X) 
+{s : Set X},   MeasurableSet s →     ∀ {a : ENNReal}, a < (Mea…
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `ENNReal.instIsOrderedMonoid`：IsOrderedMonoid ENNReal
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `ContinuousLinearMap.le_opENorm`：le_opENorm (f : E ->SL[σ₁₂] F) (x : E) :
+ ‖f x‖ₑ <= ‖f‖ₑ * ‖x‖ₑ
+· 使用定理 `mul_le_of_le_one_left`：mul_le_of_le_one_left [MulPosMono α] (hb : 0 <= b
+) (h : a <= 1) : a * b <= b
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `ENNReal.instIsOrderedRing`：IsOrderedRing ENNReal
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
 -/
 lemma exists_subset_lt_enorm_apply_of_lt_semivariation (hs : MeasurableSet s)
-    {a : Real>=0∞} (ha : a < μ.semivariation s) :
-    exists t subseteq s, MeasurableSet t ∧ a < 2 * ‖μ t‖ₑ := by
-  obtain ⟨ℓ, hℓ, h'ℓ⟩ : exists ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1},
-    a < (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := lt_biSup_iff.1 ha
+    {a : ℝ≥0∞} (ha : a < μ.semivariation s) :
+    ∃ t ⊆ s, MeasurableSet t ∧ a < 2 * ‖μ t‖ₑ := by
+  obtain ⟨ℓ, hℓ, h'ℓ⟩ : ∃ ℓ ∈ {ℓ : StrongDual ℝ E | ‖ℓ‖ₑ ≤ 1},
+    a < (μ.mapRange (ℓ : E →+ ℝ) ℓ.continuous).variation s := lt_biSup_iff.1 ha
   obtain ⟨t, ts, t_meas, ht⟩ :
-      exists t subseteq s, MeasurableSet t ∧ a < 2 * ‖μ.mapRange (ℓ : E ->+ Real) ℓ.continuous t‖ₑ :=
+      ∃ t ⊆ s, MeasurableSet t ∧ a < 2 * ‖μ.mapRange (ℓ : E →+ ℝ) ℓ.continuous t‖ₑ :=
     SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation _ hs h'ℓ
   refine ⟨t, ts, t_meas, ht.trans_le ?_⟩
   gcongr
   exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
-
-/--
-lemma `exists_one_le_enorm_apply_of_semivariation_eq_top` / 引理 `exists_one_le_enorm_apply_of_semivariation_eq_top`
-
-English:
-lemma exists_one_le_enorm_apply_of_semivariation_eq_top
-  proof: by
-  obtain ⟨t, ts, t_meas, ht⟩ : exists t subseteq s, MeasurableSet t ∧ 2 * ‖μ s‖ₑ + 2 < 2 * ‖μ t‖ₑ := by
-    apply exists_subset_lt_enorm_apply_of_lt_semivariation hs
-    rw [h's]
-    finiteness
-  have h't : 1 + ‖μ s‖ₑ <= ‖μ t‖ₑ := by
-    apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by simp)).1
-    rw [mul_add]; rw [add_comm]; rw [mul_one]
-    exact ht.le
-  have I : ∞ <= μ.semivariation t + μ.semivariation (s \ t) := by
-    rw [← h's]
-    apply le_trans (semivariation_mono (by simp)) semivariation_union_le
-  simp only [top_le_iff, ENNReal.add_eq_top] at I
-  rcases I with hI | hI
-  · refine ⟨t, t_meas, ts, hI, ?_⟩
-    have : 1 + ‖μ s‖ₑ <= ‖μ (s \ t)‖ₑ + ‖μ s‖ₑ := by
-      apply h't.trans
-      have : μ t = μ s - μ (s \ t) := by rw [← of_add_of_sdiff t_meas hs ts]; abel
-      rw [this]; rw [add_comm]
-      exact enorm_sub_le
-    rwa [ENNReal.add_le_add_iff_right (by simp)] at this
-  · refine ⟨s \ t, hs.diff t_meas, sdiff_subset, hI, ?_⟩
-    simp only [_root_.sdiff_sdiff_right_self, ts, inf_of_le_right]
-    exact le_trans (by simp) h't
-
-中文:
-引理 存在_one_le_enorm_apply_of_semivariation_eq_top
-  证明: by
-  obtain ⟨t, ts, t_meas, ht⟩ : exists t subseteq s, MeasurableSet t ∧ 2 * ‖μ s‖ₑ + 2 < 2 * ‖μ t‖ₑ := by
-    apply exists_subset_lt_enorm_apply_of_lt_semivariation hs
-    rw [h's]
-    finiteness
-  have h't : 1 + ‖μ s‖ₑ <= ‖μ t‖ₑ := by
-    apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by simp)).1
-    rw [mul_add]; rw [add_comm]; rw [mul_one]
-    exact ht.le
-  have I : ∞ <= μ.semivariation t + μ.semivariation (s \ t) := by
-    rw [← h's]
-    apply le_trans (semivariation_mono (by simp)) semivariation_union_le
-  simp only [top_le_iff, ENNReal.add_eq_top] at I
-  rcases I with hI | hI
-  · refine ⟨t, t_meas, ts, hI, ?_⟩
-    have : 1 + ‖μ s‖ₑ <= ‖μ (s \ t)‖ₑ + ‖μ s‖ₑ := by
-      apply h't.trans
-      have : μ t = μ s - μ (s \ t) := by rw [← of_add_of_sdiff t_meas hs ts]; abel
-      rw [this]; rw [add_comm]
-      exact enorm_sub_le
-    rwa [ENNReal.add_le_add_iff_right (by simp)] at this
-  · refine ⟨s \ t, hs.diff t_meas, sdiff_subset, hI, ?_⟩
-    simp only [_root_.sdiff_sdiff_right_self, ts, inf_of_le_right]
-    exact le_trans (by simp) h't
+/-
+**MeasureTheory.VectorMeasure.exists_one_le_enorm_apply_of_semivariation_eq_top*
+* 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory.VectorMeasure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma exists_one_le_enorm_apply_of_semivariation_eq_top
     (hs : MeasurableSet s) (h's : μ.semivariation s = ∞) :
-    exists t, MeasurableSet t ∧ t subseteq s ∧ μ.semivariation t = ∞ ∧ 1 <= ‖μ (s \ t)‖ₑ := by
-  obtain ⟨t, ts, t_meas, ht⟩ : exists t subseteq s, MeasurableSet t ∧ 2 * ‖μ s‖ₑ + 2 < 2 * ‖μ t‖ₑ := by
+    ∃ t, MeasurableSet t ∧ t ⊆ s ∧ μ.semivariation t = ∞ ∧ 1 ≤ ‖μ (s \ t)‖ₑ := by
+  obtain ⟨t, ts, t_meas, ht⟩ : ∃ t ⊆ s, MeasurableSet t ∧ 2 * ‖μ s‖ₑ + 2 < 2 * ‖μ t‖ₑ := by
     apply exists_subset_lt_enorm_apply_of_lt_semivariation hs
     rw [h's]
     finiteness
-  have h't : 1 + ‖μ s‖ₑ <= ‖μ t‖ₑ := by
+  have h't : 1 + ‖μ s‖ₑ ≤ ‖μ t‖ₑ := by
     apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by simp)).1
-    rw [mul_add]; rw [add_comm]; rw [mul_one]
+    rw [mul_add, add_comm, mul_one]
     exact ht.le
-  have I : ∞ <= μ.semivariation t + μ.semivariation (s \ t) := by
+  have I : ∞ ≤ μ.semivariation t + μ.semivariation (s \ t) := by
     rw [← h's]
     apply le_trans (semivariation_mono (by simp)) semivariation_union_le
   simp only [top_le_iff, ENNReal.add_eq_top] at I
   rcases I with hI | hI
   · refine ⟨t, t_meas, ts, hI, ?_⟩
-    have : 1 + ‖μ s‖ₑ <= ‖μ (s \ t)‖ₑ + ‖μ s‖ₑ := by
+    have : 1 + ‖μ s‖ₑ ≤ ‖μ (s \ t)‖ₑ + ‖μ s‖ₑ := by
       apply h't.trans
       have : μ t = μ s - μ (s \ t) := by rw [← of_add_of_sdiff t_meas hs ts]; abel
-      rw [this]; rw [add_comm]
+      rw [this, add_comm]
       exact enorm_sub_le
     rwa [ENNReal.add_le_add_iff_right (by simp)] at this
   · refine ⟨s \ t, hs.diff t_meas, sdiff_subset, hI, ?_⟩
     simp only [_root_.sdiff_sdiff_right_self, ts, inf_of_le_right]
     exact le_trans (by simp) h't
-
-/--
-lemma `semivariation_univ_lt_top` / 引理 `semivariation_univ_lt_top`
-
-English:
-lemma semivariation_univ_lt_top
-  statement: μ.semivariation univ < ∞
-  proof: by
-  apply Ne.lt_top (fun h => ?_)
-  have A (s : Set X) (hs : MeasurableSet s) (h's : μ.semivariation s = ∞) :
-      exists t, MeasurableSet t ∧ t subseteq s ∧ μ.semivariation t = ∞ ∧ 1 <= ‖μ (s \ t)‖ₑ :=
-    exists_one_le_enorm_apply_of_semivariation_eq_top hs h's
-  choose! t t_meas t_subs t_var ht using A
-  let s n := t^[n] univ
-  have hs n : MeasurableSet (s n) ∧ μ.semivariation (s n) = ∞ := by
-    induction n with
-    | zero => simp [s, h]
-    | succ n ih =>
-      simp only [Function.iterate_succ', Function.comp_apply, s]
-      exact ⟨t_meas _ ih.1 ih.2, t_var _ ih.1 ih.2⟩
-  let u n := s n \ s (n + 1)
-  have hu n : 1 <= ‖μ (u n)‖ₑ := by
-    simp only [Function.iterate_succ', Function.comp_apply, u, s]
-    exact ht _ (hs n).1 (hs n).2
-  have s_anti : Antitone s := by
-    apply antitone_nat_of_succ_le (fun n => ?_)
-    simp only [Function.iterate_succ', Function.comp_apply, s]
-    apply t_subs _ (hs n).1 (hs n).2
-  have u_disj : Pairwise (Disjoint on u) := by
-    apply (pairwise_disjoint_on _).2 (fun m n hmn => ?_)
-    have : Disjoint (u m) (s (m + 1)) := by simp [u, disjoint_sdiff_left]
-    apply this.mono_right
-    simp only [sdiff_le_iff, sup_eq_union, u]
-    exact Subset.trans (s_anti (by grind)) subset_union_right
-  have : HasSum (fun i => μ (u i)) (μ (⋃ i, u i)) :=
-    hasSum_of_disjoint_iUnion (fun n => (hs n).1.diff (hs (n + 1)).1) u_disj
-  have : Tendsto (fun x => ‖μ (u x)‖ₑ) atTop (𝓝 0) :=
-    tendsto_zero_iff_enorm_tendsto_zero.1 this.summable.tendsto_atTop_zero
-  obtain ⟨n, hn⟩ : exists n, ‖μ (u n)‖ₑ < 1 := ((tendsto_order.1 this).2 _ zero_lt_one).exists
-  order [hu n]
-
-中文:
-引理 semivariation_univ_lt_top
-  结论: μ.semivariation univ < ∞
-  证明: by
-  apply Ne.lt_top (fun h => ?_)
-  have A (s : Set X) (hs : MeasurableSet s) (h's : μ.semivariation s = ∞) :
-      exists t, MeasurableSet t ∧ t subseteq s ∧ μ.semivariation t = ∞ ∧ 1 <= ‖μ (s \ t)‖ₑ :=
-    exists_one_le_enorm_apply_of_semivariation_eq_top hs h's
-  choose! t t_meas t_subs t_var ht using A
-  let s n := t^[n] univ
-  have hs n : MeasurableSet (s n) ∧ μ.semivariation (s n) = ∞ := by
-    induction n with
-    | zero => simp [s, h]
-    | succ n ih =>
-      simp only [Function.iterate_succ', Function.comp_apply, s]
-      exact ⟨t_meas _ ih.1 ih.2, t_var _ ih.1 ih.2⟩
-  let u n := s n \ s (n + 1)
-  have hu n : 1 <= ‖μ (u n)‖ₑ := by
-    simp only [Function.iterate_succ', Function.comp_apply, u, s]
-    exact ht _ (hs n).1 (hs n).2
-  have s_anti : Antitone s := by
-    apply antitone_nat_of_succ_le (fun n => ?_)
-    simp only [Function.iterate_succ', Function.comp_apply, s]
-    apply t_subs _ (hs n).1 (hs n).2
-  have u_disj : Pairwise (Disjoint on u) := by
-    apply (pairwise_disjoint_on _).2 (fun m n hmn => ?_)
-    have : Disjoint (u m) (s (m + 1)) := by simp [u, disjoint_sdiff_left]
-    apply this.mono_right
-    simp only [sdiff_le_iff, sup_eq_union, u]
-    exact Subset.trans (s_anti (by grind)) subset_union_right
-  have : HasSum (fun i => μ (u i)) (μ (⋃ i, u i)) :=
-    hasSum_of_disjoint_iUnion (fun n => (hs n).1.diff (hs (n + 1)).1) u_disj
-  have : Tendsto (fun x => ‖μ (u x)‖ₑ) atTop (𝓝 0) :=
-    tendsto_zero_iff_enorm_tendsto_zero.1 this.summable.tendsto_atTop_zero
-  obtain ⟨n, hn⟩ : exists n, ‖μ (u n)‖ₑ < 1 := ((tendsto_order.1 this).2 _ zero_lt_one).exists
-  order [hu n]
+/-
+**MeasureTheory.VectorMeasure.semivariation_univ_lt_top** 是 Mathlib 中的一个引理，位于命名空
+间 `MeasureTheory.VectorMeasure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma semivariation_univ_lt_top : μ.semivariation univ < ∞ := by
-  apply Ne.lt_top (fun h => ?_)
+  apply Ne.lt_top (fun h ↦ ?_)
   have A (s : Set X) (hs : MeasurableSet s) (h's : μ.semivariation s = ∞) :
-      exists t, MeasurableSet t ∧ t subseteq s ∧ μ.semivariation t = ∞ ∧ 1 <= ‖μ (s \ t)‖ₑ :=
+      ∃ t, MeasurableSet t ∧ t ⊆ s ∧ μ.semivariation t = ∞ ∧ 1 ≤ ‖μ (s \ t)‖ₑ :=
     exists_one_le_enorm_apply_of_semivariation_eq_top hs h's
   choose! t t_meas t_subs t_var ht using A
   let s n := t^[n] univ
@@ -449,127 +378,107 @@ private lemma semivariation_univ_lt_top : μ.semivariation univ < ∞ := by
       simp only [Function.iterate_succ', Function.comp_apply, s]
       exact ⟨t_meas _ ih.1 ih.2, t_var _ ih.1 ih.2⟩
   let u n := s n \ s (n + 1)
-  have hu n : 1 <= ‖μ (u n)‖ₑ := by
+  have hu n : 1 ≤ ‖μ (u n)‖ₑ := by
     simp only [Function.iterate_succ', Function.comp_apply, u, s]
     exact ht _ (hs n).1 (hs n).2
   have s_anti : Antitone s := by
-    apply antitone_nat_of_succ_le (fun n => ?_)
+    apply antitone_nat_of_succ_le (fun n ↦ ?_)
     simp only [Function.iterate_succ', Function.comp_apply, s]
     apply t_subs _ (hs n).1 (hs n).2
   have u_disj : Pairwise (Disjoint on u) := by
-    apply (pairwise_disjoint_on _).2 (fun m n hmn => ?_)
+    apply (pairwise_disjoint_on _).2 (fun m n hmn ↦ ?_)
     have : Disjoint (u m) (s (m + 1)) := by simp [u, disjoint_sdiff_left]
     apply this.mono_right
     simp only [sdiff_le_iff, sup_eq_union, u]
     exact Subset.trans (s_anti (by grind)) subset_union_right
   have : HasSum (fun i => μ (u i)) (μ (⋃ i, u i)) :=
-    hasSum_of_disjoint_iUnion (fun n => (hs n).1.diff (hs (n + 1)).1) u_disj
-  have : Tendsto (fun x => ‖μ (u x)‖ₑ) atTop (𝓝 0) :=
+    hasSum_of_disjoint_iUnion (fun n ↦ (hs n).1.diff (hs (n + 1)).1) u_disj
+  have : Tendsto (fun x ↦ ‖μ (u x)‖ₑ) atTop (𝓝 0) :=
     tendsto_zero_iff_enorm_tendsto_zero.1 this.summable.tendsto_atTop_zero
-  obtain ⟨n, hn⟩ : exists n, ‖μ (u n)‖ₑ < 1 := ((tendsto_order.1 this).2 _ zero_lt_one).exists
+  obtain ⟨n, hn⟩ : ∃ n, ‖μ (u n)‖ₑ < 1 := ((tendsto_order.1 this).2 _ zero_lt_one).exists
   order [hu n]
 
 variable (μ) in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- A constant bounding the norm of `μ s` for any set `s`. -/
+/-
+**MeasureTheory.VectorMeasure.bound** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Vec
+torMeasure`。
+形式化陈述：{X : Type u_1} →   {E : Type u_2} →     [inst : NormedAddCommGroup E] →   
+    [NormedSpace ℝ E] → {mX : MeasurableSpace X} → MeasureTheory.VectorMeasure X
+ E → NNReal
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def bound
-  body: (μ.semivariation univ).toNNReal
-
-中文:
-定义 noncomputable
-  签名: def bound
-  定义体: (μ.semivariation univ).toNNReal
+--- 原说明 ---
+A constant bounding the norm of `μ s` for any set `s`.
 -/
-protected noncomputable def bound : Real>=0 := (μ.semivariation univ).toNNReal
-
-/--
-lemma `semivariation_apply_le_bound` / 引理 `semivariation_apply_le_bound`
-
-English:
-lemma semivariation_apply_le_bound
-  statement: μ.semivariation s <= μ.bound
-  proof: by
+protected noncomputable def bound : ℝ≥0 := (μ.semivariation univ).toNNReal
+/-
+**MeasureTheory.VectorMeasure.semivariation_apply_le_bound** 是 Mathlib 中的一个引理，位于
+命名空间 `MeasureTheory.VectorMeasure`。
+形式化陈述：semivariation_apply_le_bound : μ.semivariation s <= μ.bound
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `MeasureTheory.VectorMeasure.semivariation_mono`：semivariation_mono (hst 
+: s subseteq t) : μ.semivariation s <= μ.semivariation t
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.coe_toNNReal`：∀ {a : ENNReal}, a ≠ ⊤ → ↑a.toNNReal = a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `_private.Mathlib.MeasureTheory.VectorMeasure.Variation.Semivariation.0.M
+easureTheory.VectorMeasure.semivariation_univ_lt_top`：∀ {X : Type u_1} {E : Type
+ u_2} [inst : NormedAddCommGroup E] [inst_1 : NormedSpace ℝ E] {mX : MeasurableS
+pace X}   {μ : MeasureTheory.Vecto…
+-/
+lemma semivariation_apply_le_bound : μ.semivariation s ≤ μ.bound := by
   apply (semivariation_mono (subset_univ _)).trans_eq
   simp only [VectorMeasure.bound]
   rw [ENNReal.coe_toNNReal semivariation_univ_lt_top.ne]
-
-中文:
-引理 semivariation_apply_le_bound
-  结论: μ.semivariation s <= μ.bound
-  证明: by
-  apply (semivariation_mono (subset_univ _)).trans_eq
-  simp only [VectorMeasure.bound]
-  rw [ENNReal.coe_toNNReal semivariation_univ_lt_top.ne]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_toNNReal, VectorMeasure, VectorMeasure.bound, coe_toNNReal, semivariation_mono, semivariation_univ_lt_top, semivariation_univ_lt_top.ne, subset_univ, trans_eq
+/-
+**MeasureTheory.VectorMeasure.enorm_apply_le_bound** 是 Mathlib 中的一个引理，位于命名空间 `Me
+asureTheory.VectorMeasure`。
+形式化陈述：enorm_apply_le_bound : ‖μ s‖ₑ <= μ.bound
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `MeasureTheory.VectorMeasure.enorm_apply_le_semivariation`：enorm_apply_le
+_semivariation : ‖μ s‖ₑ <= μ.semivariation s
+· 使用引理 `MeasureTheory.VectorMeasure.semivariation_apply_le_bound`：semivariation_
+apply_le_bound : μ.semivariation s <= μ.bound
 -/
-lemma semivariation_apply_le_bound : μ.semivariation s <= μ.bound := by
-  apply (semivariation_mono (subset_univ _)).trans_eq
-  simp only [VectorMeasure.bound]
-  rw [ENNReal.coe_toNNReal semivariation_univ_lt_top.ne]
-
-/--
-lemma `enorm_apply_le_bound` / 引理 `enorm_apply_le_bound`
-
-English:
-lemma enorm_apply_le_bound
-  statement: ‖μ s‖ₑ <= μ.bound
-  proof: (enorm_apply_le_semivariation).trans semivariation_apply_le_bound
-
-中文:
-引理 enorm_apply_le_bound
-  结论: ‖μ s‖ₑ <= μ.bound
-  证明: (enorm_apply_le_semivariation).trans semivariation_apply_le_bound
-
-Depends on / 依赖: enorm_apply_le_semivariation, semivariation_apply_le_bound
--/
-lemma enorm_apply_le_bound : ‖μ s‖ₑ <= μ.bound :=
+lemma enorm_apply_le_bound : ‖μ s‖ₑ ≤ μ.bound :=
   (enorm_apply_le_semivariation).trans semivariation_apply_le_bound
-
-/--
-lemma `nnnorm_apply_le_bound` / 引理 `nnnorm_apply_le_bound`
-
-English:
-lemma nnnorm_apply_le_bound
-  statement: ‖μ s‖₊ <= μ.bound
-  proof: by
-  rw [← ENNReal.coe_le_coe]; rw [← enorm_eq_nnnorm]
-  exact enorm_apply_le_bound
-
-中文:
-引理 nnnorm_apply_le_bound
-  结论: ‖μ s‖₊ <= μ.bound
-  证明: by
-  rw [← ENNReal.coe_le_coe]; rw [← enorm_eq_nnnorm]
-  exact enorm_apply_le_bound
-
-Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, coe_le_coe, enorm_apply_le_bound, enorm_eq_nnnorm
+/-
+**MeasureTheory.VectorMeasure.nnnorm_apply_le_bound** 是 Mathlib 中的一个引理，位于命名空间 `M
+easureTheory.VectorMeasure`。
+形式化陈述：nnnorm_apply_le_bound : ‖μ s‖₊ <= μ.bound
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.coe_le_coe`：∀ {r q : NNReal}, ↑r ≤ ↑q ↔ r ≤ q
+· 使用引理 `enorm_eq_nnnorm`：enorm_eq_nnnorm (x : E) : ‖x‖ₑ = ‖x‖₊
+· 使用引理 `MeasureTheory.VectorMeasure.enorm_apply_le_bound`：enorm_apply_le_bound :
+ ‖μ s‖ₑ <= μ.bound
 -/
-lemma nnnorm_apply_le_bound : ‖μ s‖₊ <= μ.bound := by
-  rw [← ENNReal.coe_le_coe]; rw [← enorm_eq_nnnorm]
+lemma nnnorm_apply_le_bound : ‖μ s‖₊ ≤ μ.bound := by
+  rw [← ENNReal.coe_le_coe, ← enorm_eq_nnnorm]
   exact enorm_apply_le_bound
-
-/--
-lemma `norm_apply_le_bound` / 引理 `norm_apply_le_bound`
-
-English:
-lemma norm_apply_le_bound
-  statement: ‖μ s‖ <= μ.bound
-  proof: by
-  simpa [← coe_nnnorm] using nnnorm_apply_le_bound
-
-中文:
-引理 norm_apply_le_bound
-  结论: ‖μ s‖ <= μ.bound
-  证明: by
-  simpa [← coe_nnnorm] using nnnorm_apply_le_bound
-
-Depends on / 依赖: coe_nnnorm, nnnorm_apply_le_bound
+/-
+**MeasureTheory.VectorMeasure.norm_apply_le_bound** 是 Mathlib 中的一个引理，位于命名空间 `Mea
+sureTheory.VectorMeasure`。
+形式化陈述：norm_apply_le_bound : ‖μ s‖ <= μ.bound
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.VectorMeasure.nnnorm_apply_le_bound`：nnnorm_apply_le_bound
+ : ‖μ s‖₊ <= μ.bound
 -/
-lemma norm_apply_le_bound : ‖μ s‖ <= μ.bound := by
+lemma norm_apply_le_bound : ‖μ s‖ ≤ μ.bound := by
   simpa [← coe_nnnorm] using nnnorm_apply_le_bound
 
 end MeasureTheory.VectorMeasure
+

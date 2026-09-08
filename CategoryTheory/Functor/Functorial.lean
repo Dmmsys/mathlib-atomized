@@ -23,35 +23,28 @@ variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 
 -- Perhaps in the future we could redefine `Functor` in terms of this, but that isn't the
 -- immediate plan.
-/--
-Definition of `Functorial` / `Functorial` 的定义
+/-- An unbundled functor. -/
+/-
+**CategoryTheory.Functorial** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：Functorial (F : C -> D) : Type max v₁ v₂ u₁ u₂ where /-- If `F : C → D` (j
+ust a function) has `[Functorial F]`, we can write `map F f : F X ⟶ F Y` for the
+ action of `F` on a morphism `f : X ⟶ Y`. -/ map (F) : forall {X Y : C}, (X ⟶ Y)
+ -> (F X ⟶ F Y) /-- A functorial map preserves identities. -/ map_id : forall {X
+ : C}, map (𝟙 X) = 𝟙 (F X)
+参数：F : C -> D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Functorial
-  parameters: (F : C -> D)
-  axioms and operations (3):
-    - map((F)) : forall {X Y : C}, (X ⟶ Y) -> (F X ⟶ F Y)
-    - map_id : forall {X : C}, map (𝟙 X) = 𝟙 (F X)  [default: by cat_disch]
-    - map_comp : forall {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z}, map (f ≫ g) = map f ≫ map g  [default: by cat_disch]
-
-中文:
-类 函子性
-  参数: (F : C -> D)
-  公理与运算 (3 个):
-    - map((F)) : 对任意 {X Y : C}, (X ⟶ Y) -> (F X ⟶ F Y)
-    - map_id : 对任意 {X : C}, map (𝟙 X) = 𝟙 (F X)  [默认: by cat_disch]
-    - map_comp : 对任意 {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z}, map (f ≫ g) = map f ≫ map g  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, hasImages_of_hasStrongEpiMonoFactorisations
+--- 原说明 ---
+An unbundled functor.
 -/
-class Functorial (F : C -> D) : Type max v₁ v₂ u₁ u₂ where
+class Functorial (F : C → D) : Type max v₁ v₂ u₁ u₂ where
   /-- If `F : C → D` (just a function) has `[Functorial F]`,
   we can write `map F f : F X ⟶ F Y` for the action of `F` on a morphism `f : X ⟶ Y`. -/
-  map (F) : forall {X Y : C}, (X ⟶ Y) -> (F X ⟶ F Y)
+  map (F) : ∀ {X Y : C}, (X ⟶ Y) → (F X ⟶ F Y)
   /-- A functorial map preserves identities. -/
-  map_id : forall {X : C}, map (𝟙 X) = 𝟙 (F X) := by cat_disch
+  map_id : ∀ {X : C}, map (𝟙 X) = 𝟙 (F X) := by cat_disch
   /-- A functorial map preserves composition of morphisms. -/
-  map_comp : forall {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z}, map (f ≫ g) = map f ≫ map g := by
+  map_comp : ∀ {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z}, map (f ≫ g) = map f ≫ map g := by
     cat_disch
 
 attribute [simp, grind =] Functorial.map_id Functorial.map_comp
@@ -59,67 +52,55 @@ export Functorial (map)
 
 namespace Functor
 
-/--
-Definition of `of` / `of` 的定义
-
-English:
-definition of
-  signature: (F : C -> D) [I : Functorial.{v₁, v₂} F]
-  body: { I with obj := F
-           map := Functorial.map F }
-
-中文:
-定义 of
-  签名: (F : C -> D) [I : 函子性.{v₁, v₂} F]
-  定义体: { I with obj := F
-           map := Functorial.map F }
-
-Depends on / 依赖: Functorial, Functorial.map
+/-- Bundle a functorial function as a functor.
 -/
-def of (F : C -> D) [I : Functorial.{v₁, v₂} F] : C ⥤ D :=
+/-
+**CategoryTheory.Functor.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：of (F : C -> D) [I : Functorial.{v₁, v₂} F] : C ⥤ D
+参数：F : C -> D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functorial.map_id`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : C → D} [self …
+· 使用定理 `CategoryTheory.Functorial.map_comp`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : C → D} [self …
+
+--- 原说明 ---
+Bundle a functorial function as a functor.
+-/
+def of (F : C → D) [I : Functorial.{v₁, v₂} F] : C ⥤ D :=
   { I with obj := F
            map := Functorial.map F }
 
 end Functor
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) : Functorial.{v₁, v₂} F.obj :=
   { F with map := F.map }
 
 @[simp, grind =]
-/--
-theorem `map_functorial_obj` / 定理 `map_functorial_obj`
-
-English:
-theorem map_functorial_obj
-  given: (F : C ⥤ D) {X Y : C} (f : X ⟶ Y)
-  statement: map F.obj f = F.map f
-  proof: rfl
-
-中文:
-定理 map_functorial_obj
-  条件: (F : C ⥤ D) {X Y : C} (f : X ⟶ Y)
-  结论: map F.obj f = F.map f
-  证明: rfl
+/-
+**CategoryTheory.map_functorial_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：map_functorial_obj (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) : map F.obj f = F.map
+ f
+参数：F : C ⥤ D；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_functorial_obj (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) : map F.obj f = F.map f :=
   rfl
-
-/--
-Instance `functorial_id` / 实例 `functorial_id`
-
-English:
-instance functorial_id
-  signature: : Functorial.{v₁, v₁} (id : C -> C) where map f
-  body: f
-
-中文:
-实例 functorial_id
-  签名: : 函子性.{v₁, v₁} (id : C -> C) where map f
-  定义体: f
-
-Depends on / 依赖: hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
+/-
+**CategoryTheory.functorial_id** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：functorial_id : Functorial.{v₁, v₁} (id : C -> C) where map f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance functorial_id : Functorial.{v₁, v₁} (id : C -> C) where map f := f
+instance functorial_id : Functorial.{v₁, v₁} (id : C → C) where map f := f
 
 section
 
@@ -131,25 +112,28 @@ variable {E : Type u₃} [Category.{v₃} E]
 /-- `G ∘ F` is a functorial if both `F` and `G` are.
 -/
 @[instance_reducible]
-/--
-Definition of `functorial_comp` / `functorial_comp` 的定义
+/-
+**CategoryTheory.functorial_comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：functorial_comp (F : C -> D) [Functorial.{v₁, v₂} F] (G : D -> E) [Functor
+ial.{v₂, v₃} G] : Functorial.{v₁, v₃} (G ∘ F)
+参数：F : C -> D；G : D -> E。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 
-English:
-definition functorial_comp
-  signature: (F : C -> D) [Functorial.{v₁, v₂} F] (G : D -> E) [Functorial.{v₂, v₃} G]
-  body: { Functor.of F ⋙ Functor.of G with map := fun f => map G (map F f) }
-
-中文:
-定义 functorial_comp
-  签名: (F : C -> D) [函子性.{v₁, v₂} F] (G : D -> E) [函子性.{v₂, v₃} G]
-  定义体: { Functor.of F ⋙ Functor.of G with map := fun f => map G (map F f) }
-
-Depends on / 依赖: Functor, Functor.of, HasStrongEpiImages, hasImageMapsOfHasStrongEpiImages
+--- 原说明 ---
+`G ∘ F` is a functorial if both `F` and `G` are.
 -/
-def functorial_comp (F : C -> D) [Functorial.{v₁, v₂} F] (G : D -> E) [Functorial.{v₂, v₃} G] :
+def functorial_comp (F : C → D) [Functorial.{v₁, v₂} F] (G : D → E) [Functorial.{v₂, v₃} G] :
     Functorial.{v₁, v₃} (G ∘ F) :=
   { Functor.of F ⋙ Functor.of G with map := fun f => map G (map F f) }
 
 end
 
 end CategoryTheory
+

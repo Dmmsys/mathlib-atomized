@@ -5,7 +5,7 @@ Authors: Jireh Loreaux, Kim Morrison, Oliver Nash
 -/
 module
 
-public import Mathlib.Algebra.Group.Action.Defs -- shake: keep (metaprogram output dependency)
+public import Mathlib.Algebra.Group.Action.Defs  -- shake: keep (metaprogram output dependency)
 public import Mathlib.Tactic.Abel
 
 /-! # The `noncomm_ring` tactic
@@ -25,47 +25,37 @@ public meta section
 namespace Mathlib.Tactic.NoncommRing
 
 section nat_lit_mul
-variable {R : Type*} [NonAssocSemiring R] (r : R) (n : Nat)
+variable {R : Type*} [NonAssocSemiring R] (r : R) (n : ℕ)
 
-/--
-lemma `nat_lit_mul_eq_nsmul` / 引理 `nat_lit_mul_eq_nsmul`
-
-English:
-lemma nat_lit_mul_eq_nsmul
-  given: [n.AtLeastTwo]
-  statement: ofNat(n) * r = OfNat.ofNat n • r
-  proof: by
-  simp only [nsmul_eq_mul, Nat.cast_ofNat]
-
-中文:
-引理 nat_lit_mul_eq_nsmul
-  条件: [n.AtLeastTwo]
-  结论: of自然数(n) * r = Of自然数.of自然数 n • r
-  证明: by
-  simp only [nsmul_eq_mul, Nat.cast_ofNat]
-
-Depends on / 依赖: Nat.cast_ofNat, cast_ofNat, nsmul_eq_mul
+/-
+**Mathlib.Tactic.NoncommRing.nat_lit_mul_eq_nsmul** 是 Mathlib 中的一个引理，位于命名空间 `Mat
+hlib.Tactic.NoncommRing`。
+形式化陈述：nat_lit_mul_eq_nsmul [n.AtLeastTwo] : ofNat(n) * r = OfNat.ofNat n • r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma nat_lit_mul_eq_nsmul [n.AtLeastTwo] : ofNat(n) * r = OfNat.ofNat n • r := by
   simp only [nsmul_eq_mul, Nat.cast_ofNat]
-/--
-lemma `mul_nat_lit_eq_nsmul` / 引理 `mul_nat_lit_eq_nsmul`
-
-English:
-lemma mul_nat_lit_eq_nsmul
-  given: [n.AtLeastTwo]
-  statement: r * ofNat(n) = OfNat.ofNat n • r
-  proof: by
-  simp only [nsmul_eq_mul', Nat.cast_ofNat]
-
-中文:
-引理 mul_nat_lit_eq_nsmul
-  条件: [n.AtLeastTwo]
-  结论: r * of自然数(n) = Of自然数.of自然数 n • r
-  证明: by
-  simp only [nsmul_eq_mul', Nat.cast_ofNat]
-
-Depends on / 依赖: Nat.cast_ofNat, cast_ofNat, nsmul_eq_mul
+/-
+**Mathlib.Tactic.NoncommRing.mul_nat_lit_eq_nsmul** 是 Mathlib 中的一个引理，位于命名空间 `Mat
+hlib.Tactic.NoncommRing`。
+形式化陈述：mul_nat_lit_eq_nsmul [n.AtLeastTwo] : r * ofNat(n) = OfNat.ofNat n • r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul'`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (a : α) (n :
+ ℕ), n • a = a * ↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mul_nat_lit_eq_nsmul [n.AtLeastTwo] : r * ofNat(n) = OfNat.ofNat n • r := by
   simp only [nsmul_eq_mul', Nat.cast_ofNat]
@@ -123,7 +113,7 @@ macro_rules
           -- Pull out negations.
           neg_mul, mul_neg,
           -- user-specified simp lemmas
- rules',*] |
+          $rules',*] |
         fail "`noncomm_ring` simp lemmas don't apply; try `abel` instead") <;>
       first | abel1 | abel_nf)
     -- if a manual rewrite rule is provided, we repeat the tactic
@@ -138,3 +128,4 @@ We register `noncomm_ring` with the `hint` tactic.
 
 register_hint 1000 noncomm_ring
 register_try?_tactic (priority := 1000) noncomm_ring
+

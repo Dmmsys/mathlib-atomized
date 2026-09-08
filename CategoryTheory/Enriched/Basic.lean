@@ -50,41 +50,35 @@ open MonoidalCategory
 
 variable (V : Type v) [Category.{w} V] [MonoidalCategory V]
 
-/--
-Definition of `EnrichedCategory` / `EnrichedCategory` 的定义
+/-- A `V`-category is a category enriched in a monoidal category `V`.
 
-English:
-class EnrichedCategory
-  parameters: (C : Type u₁)
-  axioms and operations (6):
-    - Hom : C -> C -> V
-    - id((X : C)) : 𝟙_ V ⟶ Hom X X
-    - comp((X Y Z : C)) : Hom X Y otimes Hom Y Z ⟶ Hom X Z
-    - id_comp((X Y : C)) : (fun_ (Hom X Y)).inv ≫ id X ▷ _ ≫ comp X X Y = 𝟙 _  [default: by cat_disch]
-    - comp_id((X Y : C)) : (ρ_ (Hom X Y)).inv ≫ _ ◁ id Y ≫ comp X Y Y = 𝟙 _  [default: by cat_disch]
-    - assoc((W X Y Z : C)) : (α_ _ _ _).inv ≫ comp W X Y ▷ _ ≫ comp W Y Z = _ ◁ comp X Y Z ≫ comp W X Z  [default: by cat_disch]
+Note that we do not assume that `V` is a concrete category,
+so there may not be an "honest" underlying category at all!
+-/
+/-
+**CategoryTheory.EnrichedCategory** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：EnrichedCategory (C : Type u₁) where /-- `X ⟶[V] Y` is the `V` object of m
+orphisms from `X` to `Y`. -/ Hom : C -> C -> V /-- The identity morphism of this
+ category -/ id (X : C) : 𝟙_ V ⟶ Hom X X /-- Composition of two morphisms in thi
+s category -/ comp (X Y Z : C) : Hom X Y otimes Hom Y Z ⟶ Hom X Z id_comp (X Y :
+ C) : (fun_ (Hom X Y)).inv ≫ id X ▷ _ ≫ comp X X Y = 𝟙 _
+参数：C : Type u₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 Enriched范畴
-  参数: (C : 类型u₁)
-  公理与运算 (6 个):
-    - Hom : C -> C -> V
-    - id((X : C)) : 𝟙_ V ⟶ 态射 X X
-    - comp((X Y Z : C)) : 态射 X Y otimes 态射 Y Z ⟶ 态射 X Z
-    - id_comp((X Y : C)) : (fun_ (态射 X Y)).inv ≫ id X ▷ _ ≫ comp X X Y = 𝟙 _  [默认: by cat_disch]
-    - comp_id((X Y : C)) : (ρ_ (态射 X Y)).inv ≫ _ ◁ id Y ≫ comp X Y Y = 𝟙 _  [默认: by cat_disch]
-    - assoc((W X Y Z : C)) : (α_ _ _ _).inv ≫ comp W X Y ▷ _ ≫ comp W Y Z = _ ◁ comp X Y Z ≫ comp W X Z  [默认: by cat_disch]
+--- 原说明 ---
+A `V`-category is a category enriched in a monoidal category `V`.
 
-Depends on / 依赖: cat_disch, comp_id
+Note that we do not assume that `V` is a concrete category,
+so there may not be an "honest" underlying category at all!
 -/
 class EnrichedCategory (C : Type u₁) where
   /-- `X ⟶[V] Y` is the `V` object of morphisms from `X` to `Y`. -/
-  Hom : C -> C -> V
+  Hom : C → C → V
   /-- The identity morphism of this category -/
   id (X : C) : 𝟙_ V ⟶ Hom X X
   /-- Composition of two morphisms in this category -/
-  comp (X Y Z : C) : Hom X Y otimes Hom Y Z ⟶ Hom X Z
-  id_comp (X Y : C) : (fun_ (Hom X Y)).inv ≫ id X ▷ _ ≫ comp X X Y = 𝟙 _ := by cat_disch
+  comp (X Y Z : C) : Hom X Y ⊗ Hom Y Z ⟶ Hom X Z
+  id_comp (X Y : C) : (λ_ (Hom X Y)).inv ≫ id X ▷ _ ≫ comp X X Y = 𝟙 _ := by cat_disch
   comp_id (X Y : C) : (ρ_ (Hom X Y)).inv ≫ _ ◁ id Y ≫ comp X Y Y = 𝟙 _ := by cat_disch
   assoc (W X Y Z : C) : (α_ _ _ _).inv ≫ comp W X Y ▷ _ ≫ comp W Y Z =
     _ ◁ comp X Y Z ≫ comp W X Z := by cat_disch
@@ -93,113 +87,80 @@ class EnrichedCategory (C : Type u₁) where
 
 variable {C : Type u₁} [EnrichedCategory V C]
 
-/--
-Definition of `eId` / `eId` 的定义
+/-- The `𝟙_ V`-shaped generalized element giving the identity in a `V`-enriched category.
+-/
+/-
+**CategoryTheory.eId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：eId (X : C) : 𝟙_ V ⟶ X ⟶[V] X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eId
-  signature: (X : C)
-  body: EnrichedCategory.id X
-
-中文:
-定义 eId
-  签名: (X : C)
-  定义体: EnrichedCategory.id X
-
-Depends on / 依赖: EnrichedCategory, EnrichedCategory.id
+--- 原说明 ---
+The `𝟙_ V`-shaped generalized element giving the identity in a `V`-enriched cate
+gory.
 -/
 def eId (X : C) : 𝟙_ V ⟶ X ⟶[V] X :=
   EnrichedCategory.id X
 
-/--
-Definition of `eComp` / `eComp` 的定义
-
-English:
-definition eComp
-  signature: (X Y Z : C)
-  body: EnrichedCategory.comp X Y Z
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 eComp
-  签名: (X Y Z : C)
-  定义体: EnrichedCategory.comp X Y Z
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: EnrichedCategory, EnrichedCategory.comp
+/-- The composition `V`-morphism for a `V`-enriched category.
 -/
-def eComp (X Y Z : C) : ((X ⟶[V] Y) otimes Y ⟶[V] Z) ⟶ X ⟶[V] Z :=
+/-
+**CategoryTheory.eComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：eComp (X Y Z : C) : ((X ⟶[V] Y) otimes Y ⟶[V] Z) ⟶ X ⟶[V] Z
+参数：X Y Z : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The composition `V`-morphism for a `V`-enriched category.
+-/
+def eComp (X Y Z : C) : ((X ⟶[V] Y) ⊗ Y ⟶[V] Z) ⟶ X ⟶[V] Z :=
   EnrichedCategory.comp X Y Z
 
 @[reassoc (attr := simp)]
-/--
-theorem `e_id_comp` / 定理 `e_id_comp`
-
-English:
-theorem e_id_comp
-  given: (X Y : C)
-  proof: EnrichedCategory.id_comp X Y
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 e_id_comp
-  条件: (X Y : C)
-  证明: EnrichedCategory.id_comp X Y
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: EnrichedCategory, EnrichedCategory.id_comp, id_comp
+/-
+**CategoryTheory.e_id_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：e_id_comp (X Y : C) : (fun_ (X ⟶[V] Y)).inv ≫ eId V X ▷ _ ≫ eComp V X X Y 
+= 𝟙 (X ⟶[V] Y)
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnrichedCategory.id_comp`：∀ {V : Type v} {inst : Category
+Theory.Category.{w, v} V} {inst_1 : CategoryTheory.MonoidalCategory V} {C : Type
+ u₁}   [self : CategoryTheory…
 -/
 theorem e_id_comp (X Y : C) :
-    (fun_ (X ⟶[V] Y)).inv ≫ eId V X ▷ _ ≫ eComp V X X Y = 𝟙 (X ⟶[V] Y) :=
+    (λ_ (X ⟶[V] Y)).inv ≫ eId V X ▷ _ ≫ eComp V X X Y = 𝟙 (X ⟶[V] Y) :=
   EnrichedCategory.id_comp X Y
 
 @[reassoc (attr := simp)]
-/--
-theorem `e_comp_id` / 定理 `e_comp_id`
-
-English:
-theorem e_comp_id
-  given: (X Y : C)
-  proof: EnrichedCategory.comp_id X Y
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 e_comp_id
-  条件: (X Y : C)
-  证明: EnrichedCategory.comp_id X Y
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: EnrichedCategory, EnrichedCategory.comp_id, comp_id
+/-
+**CategoryTheory.e_comp_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：e_comp_id (X Y : C) : (ρ_ (X ⟶[V] Y)).inv ≫ _ ◁ eId V Y ≫ eComp V X Y Y = 
+𝟙 (X ⟶[V] Y)
+参数：X Y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnrichedCategory.comp_id`：∀ {V : Type v} {inst : Category
+Theory.Category.{w, v} V} {inst_1 : CategoryTheory.MonoidalCategory V} {C : Type
+ u₁}   [self : CategoryTheory…
 -/
 theorem e_comp_id (X Y : C) :
     (ρ_ (X ⟶[V] Y)).inv ≫ _ ◁ eId V Y ≫ eComp V X Y Y = 𝟙 (X ⟶[V] Y) :=
   EnrichedCategory.comp_id X Y
 
 @[reassoc (attr := simp)]
-/--
-theorem `e_assoc` / 定理 `e_assoc`
-
-English:
-theorem e_assoc
-  given: (W X Y Z : C)
-  proof: EnrichedCategory.assoc W X Y Z
-
-@[reassoc]
-
-中文:
-定理 e_assoc
-  条件: (W X Y Z : C)
-  证明: EnrichedCategory.assoc W X Y Z
-
-@[reassoc]
-
-Depends on / 依赖: EnrichedCategory, EnrichedCategory.assoc
+/-
+**CategoryTheory.e_assoc** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：e_assoc (W X Y Z : C) : (α_ _ _ _).inv ≫ eComp V W X Y ▷ _ ≫ eComp V W Y Z
+ = _ ◁ eComp V X Y Z ≫ eComp V W X Z
+参数：W X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.EnrichedCategory.assoc`：∀ {V : Type v} {inst : CategoryTh
+eory.Category.{w, v} V} {inst_1 : CategoryTheory.MonoidalCategory V} {C : Type u
+₁}   [self : CategoryTheory…
 -/
 theorem e_assoc (W X Y Z : C) :
     (α_ _ _ _).inv ≫ eComp V W X Y ▷ _ ≫ eComp V W Y Z =
@@ -207,27 +168,26 @@ theorem e_assoc (W X Y Z : C) :
   EnrichedCategory.assoc W X Y Z
 
 @[reassoc]
-/--
-theorem `e_assoc'` / 定理 `e_assoc'`
-
-English:
-theorem e_assoc'
-  given: (W X Y Z : C)
-  proof: by
-  rw [← e_assoc V W X Y Z]; rw [Iso.hom_inv_id_assoc]
-
-中文:
-定理 e_assoc'
-  条件: (W X Y Z : C)
-  证明: by
-  rw [← e_assoc V W X Y Z]; rw [Iso.hom_inv_id_assoc]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, e_assoc, hom_inv_id_assoc
+/-
+**CategoryTheory.e_assoc'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：e_assoc' (W X Y Z : C) : (α_ _ _ _).hom ≫ _ ◁ eComp V X Y Z ≫ eComp V W X 
+Z = eComp V W X Y ▷ _ ≫ eComp V W Y Z
+参数：W X Y Z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.e_assoc`：e_assoc (W X Y Z : C) : (α_ _ _ _).inv ≫ eComp V
+ W X Y ▷ _ ≫ eComp V W Y Z = _ ◁ eComp V X Y Z ≫ eComp V W X Z
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 theorem e_assoc' (W X Y Z : C) :
     (α_ _ _ _).hom ≫ _ ◁ eComp V X Y Z ≫ eComp V W X Z =
       eComp V W X Y ▷ _ ≫ eComp V W Y Z := by
-  rw [← e_assoc V W X Y Z]; rw [Iso.hom_inv_id_assoc]
+  rw [← e_assoc V W X Y Z, Iso.hom_inv_id_assoc]
 
 section
 
@@ -238,18 +198,18 @@ In a moment we will equip this with the `W`-enriched category structure
 obtained by applying the functor `F : LaxMonoidalFunctor V W` to each hom object.
 -/
 @[nolint unusedArguments]
-/--
-Definition of `TransportEnrichment` / `TransportEnrichment` 的定义
+/-
+**CategoryTheory.TransportEnrichment** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：TransportEnrichment (F : V ⥤ W) [F.LaxMonoidal] (C : Type u₁)
+参数：F : V ⥤ W；C : Type u₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TransportEnrichment
-  signature: (F : V ⥤ W) [F.LaxMonoidal] (C : Type u₁)
-  body: C
-
-中文:
-定义 TransportEnrichment
-  签名: (F : V ⥤ W) [F.松弛幺半群] (C : 类型u₁)
-  定义体: C
+--- 原说明 ---
+A type synonym for `C`, which should come equipped with a `V`-enriched category 
+structure.
+In a moment we will equip this with the `W`-enriched category structure
+obtained by applying the functor `F : LaxMonoidalFunctor V W` to each hom object
+.
 -/
 def TransportEnrichment (F : V ⥤ W) [F.LaxMonoidal] (C : Type u₁) :=
   C
@@ -259,54 +219,9 @@ variable (F : V ⥤ W) [F.LaxMonoidal]
 open Functor.LaxMonoidal
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EnrichedCategory W (TransportEnrichment F C)
-  body: fun X Y : C => F.obj (X ⟶[V] Y)
-  id := fun X : C => ε F ≫ F.map (eId V X)
-  comp := fun X Y Z : C => μ F _ _ ≫ F.map (eComp V X Y Z)
-  id_comp X Y := by
-    simp only [comp_whiskerRight, Category.assoc, Functor.LaxMonoidal.μ_natural_left_assoc,
-      Functor.LaxMonoidal.left_unitality_inv_assoc]
-    simp_rw [← F.map_comp]
-    convert! F.map_id _
-    simp
-  comp_id X Y := by
-    simp only [MonoidalCategory.whiskerLeft_comp, Category.assoc,
-      Functor.LaxMonoidal.μ_natural_right_assoc,
-      Functor.LaxMonoidal.right_unitality_inv_assoc]
-    simp_rw [← F.map_comp]
-    convert! F.map_id _
-    simp
-  assoc P Q R S := by
-    rw [comp_whiskerRight]; rw [Category.assoc]; rw [μ_natural_left_assoc]; rw [← associativity_inv_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [e_assoc]; rw [F.map_comp]; rw [MonoidalCategory.whiskerLeft_comp]; rw [Category.assoc]; rw [Functor.LaxMonoidal.μ_natural_right_assoc]
-
-中文:
-实例 :
-  签名: Enriched范畴 W (TransportEnrichment F C)
-  定义体: fun X Y : C => F.obj (X ⟶[V] Y)
-  id := fun X : C => ε F ≫ F.map (eId V X)
-  comp := fun X Y Z : C => μ F _ _ ≫ F.map (eComp V X Y Z)
-  id_comp X Y := by
-    simp only [comp_whiskerRight, Category.assoc, Functor.LaxMonoidal.μ_natural_left_assoc,
-      Functor.LaxMonoidal.left_unitality_inv_assoc]
-    simp_rw [← F.map_comp]
-    convert! F.map_id _
-    simp
-  comp_id X Y := by
-    simp only [MonoidalCategory.whiskerLeft_comp, Category.assoc,
-      Functor.LaxMonoidal.μ_natural_right_assoc,
-      Functor.LaxMonoidal.right_unitality_inv_assoc]
-    simp_rw [← F.map_comp]
-    convert! F.map_id _
-    simp
-  assoc P Q R S := by
-    rw [comp_whiskerRight]; rw [Category.assoc]; rw [μ_natural_left_assoc]; rw [← associativity_inv_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [e_assoc]; rw [F.map_comp]; rw [MonoidalCategory.whiskerLeft_comp]; rw [Category.assoc]; rw [Functor.LaxMonoidal.μ_natural_right_assoc]
-
-Depends on / 依赖: F.obj
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EnrichedCategory W (TransportEnrichment F C) where
   Hom := fun X Y : C => F.obj (X ⟶[V] Y)
@@ -326,39 +241,46 @@ instance : EnrichedCategory W (TransportEnrichment F C) where
     convert! F.map_id _
     simp
   assoc P Q R S := by
-    rw [comp_whiskerRight]; rw [Category.assoc]; rw [μ_natural_left_assoc]; rw [← associativity_inv_assoc]; rw [← F.map_comp]; rw [← F.map_comp]; rw [e_assoc]; rw [F.map_comp]; rw [MonoidalCategory.whiskerLeft_comp]; rw [Category.assoc]; rw [Functor.LaxMonoidal.μ_natural_right_assoc]
+    rw [comp_whiskerRight, Category.assoc, μ_natural_left_assoc,
+      ← associativity_inv_assoc, ← F.map_comp, ← F.map_comp, e_assoc,
+      F.map_comp, MonoidalCategory.whiskerLeft_comp, Category.assoc,
+      Functor.LaxMonoidal.μ_natural_right_assoc]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `TransportEnrichment.eId_eq` / 引理 `TransportEnrichment.eId_eq`
-
-English:
-lemma TransportEnrichment.eId_eq
-  given: (X : TransportEnrichment F C)
-  proof: rfl
-
-中文:
-引理 TransportEnrichment.eId_eq
-  条件: (X : TransportEnrichment F C)
-  证明: rfl
+/-
+**CategoryTheory.TransportEnrichment.eId_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.TransportEnrichment`。
+形式化陈述：∀ {V : Type v} [inst : CategoryTheory.Category.{w, v} V] [inst_1 : Categor
+yTheory.MonoidalCategory V] {C : Type u₁}   [inst_2 : CategoryTheory.EnrichedCat
+egory V C] {W : Type v'} [inst_3 : CategoryTheory.Category.{w', v'} W]   [inst_4
+ : CategoryTheory.MonoidalCategory W] (F : CategoryTheory.Functor V W) [inst_5 :
+ F.LaxMonoidal]   (X : CategoryTheory.TransportEnrichment F C),   CategoryTheory
+.eId W X =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Functor.LaxMon
+oidal.ε F) (F.map (CategoryTheory.eId V X))
+参数：F : CategoryTheory.Functor V W；X : CategoryTheory.TransportEnrichment F C；Cat
+egoryTheory.Functor.LaxMonoidal.ε F；F.map (CategoryTheory.eId V X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma TransportEnrichment.eId_eq (X : TransportEnrichment F C) :
     eId W X = ε F ≫ F.map (eId (C := C) V X) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `TransportEnrichment.eComp_eq` / 引理 `TransportEnrichment.eComp_eq`
-
-English:
-lemma TransportEnrichment.eComp_eq
-  given: (X Y Z : TransportEnrichment F C)
-  proof: rfl
-
-中文:
-引理 TransportEnrichment.eComp_eq
-  条件: (X Y Z : TransportEnrichment F C)
-  证明: rfl
+/-
+**CategoryTheory.TransportEnrichment.eComp_eq** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.TransportEnrichment`。
+形式化陈述：∀ {V : Type v} [inst : CategoryTheory.Category.{w, v} V] [inst_1 : Categor
+yTheory.MonoidalCategory V] {C : Type u₁}   [inst_2 : CategoryTheory.EnrichedCat
+egory V C] {W : Type v'} [inst_3 : CategoryTheory.Category.{w', v'} W]   [inst_4
+ : CategoryTheory.MonoidalCategory W] (F : CategoryTheory.Functor V W) [inst_5 :
+ F.LaxMonoidal]   (X Y Z : CategoryTheory.TransportEnrichment F C),   CategoryTh
+eory.eComp W X Y Z =     CategoryTheory.CategoryStruct.comp (CategoryTheory.Func
+tor.LaxMonoidal.μ F (X ⟶[V] Y) (Y ⟶[V] Z))       (F.map (CategoryTheory.eComp V 
+X Y Z))
+参数：F : CategoryTheory.Functor V W；X Y Z : CategoryTheory.TransportEnrichment F C
+；CategoryTheory.Functor.LaxMonoidal.μ F (X ⟶[V] Y) (Y ⟶[V] Z)；F.map (CategoryThe
+ory.eComp V X Y Z)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma TransportEnrichment.eComp_eq (X Y Z : TransportEnrichment F C) :
     eComp W X Y Z = μ F _ _ ≫ F.map (eComp V _ _ _) :=
@@ -369,28 +291,17 @@ end
 /-- Construct an honest category from a `Type v`-enriched category.
 -/
 @[instance_reducible]
-/--
-Definition of `categoryOfEnrichedCategoryType` / `categoryOfEnrichedCategoryType` 的定义
+/-
+**CategoryTheory.categoryOfEnrichedCategoryType** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：categoryOfEnrichedCategoryType (C : Type u₁) [𝒞 : EnrichedCategory (Type v
+) C] : Category.{v} C where Hom X Y
+参数：C : Type u₁；Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition categoryOfEnrichedCategoryType
-  signature: (C : Type u₁) [𝒞 : EnrichedCategory (Type v) C]
-  body: 𝒞.Hom X Y
-  id X := eId (Type v) X PUnit.unit
-  comp f g := eComp (Type v) _ _ _ ⟨f, g⟩
-  id_comp f := ConcreteCategory.congr_hom (e_id_comp (Type v) _ _) f
-  comp_id f := ConcreteCategory.congr_hom (e_comp_id (Type v) _ _) f
-  assoc f g h := ConcreteCategory.congr_hom (e_assoc (Type v) _ _ _ _) ⟨f, g, h⟩
-
-中文:
-定义 categoryOfEnrichedCategoryType
-  签名: (C : 类型u₁) [𝒞 : Enriched范畴 (类型v) C]
-  定义体: 𝒞.Hom X Y
-  id X := eId (Type v) X PUnit.unit
-  comp f g := eComp (Type v) _ _ _ ⟨f, g⟩
-  id_comp f := ConcreteCategory.congr_hom (e_id_comp (Type v) _ _) f
-  comp_id f := ConcreteCategory.congr_hom (e_comp_id (Type v) _ _) f
-  assoc f g h := ConcreteCategory.congr_hom (e_assoc (Type v) _ _ _ _) ⟨f, g, h⟩
+--- 原说明 ---
+Construct an honest category from a `Type v`-enriched category.
 -/
 def categoryOfEnrichedCategoryType (C : Type u₁) [𝒞 : EnrichedCategory (Type v) C] :
     Category.{v} C where
@@ -405,48 +316,39 @@ attribute [local simp] types_tensorObj_def in
 /-- Construct a `Type v`-enriched category from an honest category.
 -/
 @[instance_reducible]
-/--
-Definition of `enrichedCategoryTypeOfCategory` / `enrichedCategoryTypeOfCategory` 的定义
+/-
+**CategoryTheory.enrichedCategoryTypeOfCategory** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：enrichedCategoryTypeOfCategory (C : Type u₁) [𝒞 : Category.{v} C] : Enrich
+edCategory (Type v) C where Hom X Y
+参数：C : Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedCategoryTypeOfCategory
-  signature: (C : Type u₁) [𝒞 : Category.{v} C]
-  body: 𝒞.Hom X Y
-  id X := ↾fun _ => 𝟙 _
-  comp _ _ _ := ↾fun p => p.1 ≫ p.2
-
-中文:
-定义 enrichedCategoryTypeOfCategory
-  签名: (C : 类型u₁) [𝒞 : 范畴.{v} C]
-  定义体: 𝒞.Hom X Y
-  id X := ↾fun _ => 𝟙 _
-  comp _ _ _ := ↾fun p => p.1 ≫ p.2
+--- 原说明 ---
+Construct a `Type v`-enriched category from an honest category.
 -/
 def enrichedCategoryTypeOfCategory (C : Type u₁) [𝒞 : Category.{v} C] :
     EnrichedCategory (Type v) C where
   Hom X Y := 𝒞.Hom X Y
-  id X := ↾fun _ => 𝟙 _
-  comp _ _ _ := ↾fun p => p.1 ≫ p.2
+  id X := ↾fun _ ↦ 𝟙 _
+  comp _ _ _ := ↾fun p ↦ p.1 ≫ p.2
 
 /-- We verify that an enriched category in `Type u` is just the same thing as an honest category.
 -/
 @[implicit_reducible]
-/--
-Definition of `enrichedCategoryTypeEquivCategory` / `enrichedCategoryTypeEquivCategory` 的定义
+/-
+**CategoryTheory.enrichedCategoryTypeEquivCategory** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：enrichedCategoryTypeEquivCategory (C : Type u₁) : EnrichedCategory (Type v
+) C ≃ Category.{v} C where toFun _
+参数：C : Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedCategoryTypeEquivCategory
-  signature: (C : Type u₁)
-  body: categoryOfEnrichedCategoryType C
-  invFun _ := enrichedCategoryTypeOfCategory C
-
-中文:
-定义 enrichedCategoryTypeEquivCategory
-  签名: (C : 类型u₁)
-  定义体: categoryOfEnrichedCategoryType C
-  invFun _ := enrichedCategoryTypeOfCategory C
-
-Depends on / 依赖: categoryOfEnrichedCategoryType
+--- 原说明 ---
+We verify that an enriched category in `Type u` is just the same thing as an hon
+est category.
 -/
 def enrichedCategoryTypeEquivCategory (C : Type u₁) :
     EnrichedCategory (Type v) C ≃ Category.{v} C where
@@ -475,18 +377,33 @@ For `V = Algebra R`, the usual forgetful functor is coyoneda of `R[X]`, not of `
 (Perhaps we should have a typeclass for this situation: `ConcreteMonoidal`?)
 -/
 @[nolint unusedArguments]
-/--
-Definition of `ForgetEnrichment` / `ForgetEnrichment` 的定义
+/-
+**CategoryTheory.ForgetEnrichment** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ForgetEnrichment (W : Type v) [Category.{w} W] [MonoidalCategory W] (C : T
+ype u₁) [EnrichedCategory W C]
+参数：W : Type v；C : Type u₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ForgetEnrichment
-  signature: (W : Type v) [Category.{w} W] [MonoidalCategory W] (C : Type u₁)
-  body: C
+--- 原说明 ---
+A type synonym for `C`, which should come equipped with a `V`-enriched category 
+structure.
+In a moment we will equip this with the (honest) category structure
+so that `X ⟶ Y` is `(𝟙_ W) ⟶ (X ⟶[W] Y)`.
 
-中文:
-定义 ForgetEnrichment
-  签名: (W : 类型v) [范畴.{w} W] [幺半群范畴 W] (C : 类型u₁)
-  定义体: C
+We obtain this category by
+transporting the enrichment in `V` along the lax monoidal functor `coyonedaTenso
+rUnit`,
+then using the equivalence of `Type`-enriched categories with honest categories.
+
+This is sometimes called the "underlying" category of an enriched category,
+although some care is needed as the functor `coyonedaTensorUnit`,
+which always exists, does not necessarily coincide with
+"the forgetful functor" from `V` to `Type`, if such exists.
+When `V` is any of `Type`, `Top`, `AddCommGroup`, or `Module R`,
+`coyonedaTensorUnit` is just the usual forgetful functor, however.
+For `V = Algebra R`, the usual forgetful functor is coyoneda of `R[X]`, not of `
+R`.
+(Perhaps we should have a typeclass for this situation: `ConcreteMonoidal`?)
 -/
 def ForgetEnrichment (W : Type v) [Category.{w} W] [MonoidalCategory W] (C : Type u₁)
     [EnrichedCategory W C] :=
@@ -496,106 +413,75 @@ variable (W)
 
 /-- Typecheck an object of `C` as an object of `ForgetEnrichment W C`. -/
 @[implicit_reducible]
-/--
-Definition of `ForgetEnrichment.of` / `ForgetEnrichment.of` 的定义
+/-
+**CategoryTheory.ForgetEnrichment.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+orgetEnrichment`。
+形式化陈述：{C : Type u₁} →   (W : Type v) →     [inst : CategoryTheory.Category.{w, v
+} W] →       [inst_1 : CategoryTheory.MonoidalCategory W] →         [inst_2 : Ca
+tegoryTheory.EnrichedCategory W C] → C → CategoryTheory.ForgetEnrichment W C
+参数：W : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ForgetEnrichment.of
-  signature: (X : C)
-  body: X
-
-中文:
-定义 ForgetEnrichment.of
-  签名: (X : C)
-  定义体: X
+--- 原说明 ---
+Typecheck an object of `C` as an object of `ForgetEnrichment W C`.
 -/
 def ForgetEnrichment.of (X : C) : ForgetEnrichment W C :=
   X
 
 /-- Typecheck an object of `ForgetEnrichment W C` as an object of `C`. -/
 @[implicit_reducible]
-/--
-Definition of `ForgetEnrichment.to` / `ForgetEnrichment.to` 的定义
+/-
+**CategoryTheory.ForgetEnrichment.to** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+orgetEnrichment`。
+形式化陈述：{C : Type u₁} →   (W : Type v) →     [inst : CategoryTheory.Category.{w, v
+} W] →       [inst_1 : CategoryTheory.MonoidalCategory W] →         [inst_2 : Ca
+tegoryTheory.EnrichedCategory W C] → CategoryTheory.ForgetEnrichment W C → C
+参数：W : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ForgetEnrichment.to
-  signature: (X : ForgetEnrichment W C)
-  body: X
-
-@[simp]
-
-中文:
-定义 ForgetEnrichment.to
-  签名: (X : ForgetEnrichment W C)
-  定义体: X
-
-@[simp]
-
-Depends on / 依赖: HasSplitCoequalizer, preservesSplitCoequalizers
+--- 原说明 ---
+Typecheck an object of `ForgetEnrichment W C` as an object of `C`.
 -/
 def ForgetEnrichment.to (X : ForgetEnrichment W C) : C :=
   X
 
 @[simp]
-/--
-theorem `ForgetEnrichment.to_of` / 定理 `ForgetEnrichment.to_of`
-
-English:
-theorem ForgetEnrichment.to_of
-  given: (X : C)
-  statement: ForgetEnrichment.to W (ForgetEnrichment.of W X) = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ForgetEnrichment.to_of
-  条件: (X : C)
-  结论: ForgetEnrichment.to W (ForgetEnrichment.of W X) = X
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: HasSplitEqualizer, preservesSplitEqualizers
+/-
+**CategoryTheory.ForgetEnrichment.to_of** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] (X : C),   CategoryTheory.ForgetEnrichment.to W (CategoryTheory.Forge
+tEnrichment.of W X) = X
+参数：W : Type v；X : C；CategoryTheory.ForgetEnrichment.of W X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ForgetEnrichment.to_of (X : C) : ForgetEnrichment.to W (ForgetEnrichment.of W X) = X :=
   rfl
 
 @[simp]
-/--
-theorem `ForgetEnrichment.of_to` / 定理 `ForgetEnrichment.of_to`
-
-English:
-theorem ForgetEnrichment.of_to
-  given: (X : ForgetEnrichment W C)
-  proof: rfl
-
-中文:
-定理 ForgetEnrichment.of_to
-  条件: (X : ForgetEnrichment W C)
-  证明: rfl
+/-
+**CategoryTheory.ForgetEnrichment.of_to** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] (X : CategoryTheory.ForgetEnrichment W C),   CategoryTheory.ForgetEnr
+ichment.of W (CategoryTheory.ForgetEnrichment.to W X) = X
+参数：W : Type v；X : CategoryTheory.ForgetEnrichment W C；CategoryTheory.ForgetEnric
+hment.to W X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ForgetEnrichment.of_to (X : ForgetEnrichment W C) :
     ForgetEnrichment.of W (ForgetEnrichment.to W X) = X :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `categoryForgetEnrichment` / 实例 `categoryForgetEnrichment`
-
-English:
-instance categoryForgetEnrichment
-  signature: : Category (ForgetEnrichment W C)
-  body: enrichedCategoryTypeEquivCategory C (inferInstanceAs (EnrichedCategory (Type w)
-      (TransportEnrichment (coyoneda.obj (op (𝟙_ W))) C)))
-
-中文:
-实例 categoryForgetEnrichment
-  签名: : 范畴 (ForgetEnrichment W C)
-  定义体: enrichedCategoryTypeEquivCategory C (inferInstanceAs (EnrichedCategory (Type w)
-      (TransportEnrichment (coyoneda.obj (op (𝟙_ W))) C)))
-
-Depends on / 依赖: EnrichedCategory, TransportEnrichment, coyoneda, coyoneda.obj, enrichedCategoryTypeEquivCategory
+/-
+**CategoryTheory.categoryForgetEnrichment** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：categoryForgetEnrichment : Category (ForgetEnrichment W C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance categoryForgetEnrichment : Category (ForgetEnrichment W C) :=
   enrichedCategoryTypeEquivCategory C (inferInstanceAs (EnrichedCategory (Type w)
@@ -603,83 +489,89 @@ instance categoryForgetEnrichment : Category (ForgetEnrichment W C) :=
 
 /-- We verify that the morphism types in `ForgetEnrichment W C` are `(𝟙_ W) ⟶ (X ⟶[W] Y)`.
 -/
+/-
+**CategoryTheory.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We verify that the morphism types in `ForgetEnrichment W C` are `(𝟙_ W) ⟶ (X ⟶[W
+] Y)`.
+-/
 example (X Y : ForgetEnrichment W C) :
     (X ⟶ Y) = (𝟙_ W ⟶ ForgetEnrichment.to W X ⟶[W] ForgetEnrichment.to W Y) :=
   rfl
 
-/--
-Definition of `ForgetEnrichment.homOf` / `ForgetEnrichment.homOf` 的定义
+/-- Typecheck a `(𝟙_ W)`-shaped `W`-morphism as a morphism in `ForgetEnrichment W C`. -/
+/-
+**CategoryTheory.ForgetEnrichment.homOf** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ForgetEnrichment`。
+形式化陈述：{C : Type u₁} →   (W : Type v) →     [inst : CategoryTheory.Category.{w, v
+} W] →       [inst_1 : CategoryTheory.MonoidalCategory W] →         [inst_2 : Ca
+tegoryTheory.EnrichedCategory W C] →           {X Y : C} →             (Category
+Theory.MonoidalCategoryStruct.tensorUnit W ⟶ X ⟶[W] Y) →               (Category
+Theory.ForgetEnrichment.of W X ⟶ CategoryTheory.ForgetEnrichment.of W Y)
+参数：W : Type v；CategoryTheory.MonoidalCategoryStruct.tensorUnit W ⟶ X ⟶[W] Y；Cate
+goryTheory.ForgetEnrichment.of W X ⟶ CategoryTheory.ForgetEnrichment.of W Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ForgetEnrichment.homOf
-  signature: {X Y : C} (f : 𝟙_ W ⟶ X ⟶[W] Y)
-  body: f
-
-中文:
-定义 ForgetEnrichment.homOf
-  签名: {X Y : C} (f : 𝟙_ W ⟶ X ⟶[W] Y)
-  定义体: f
+--- 原说明 ---
+Typecheck a `(𝟙_ W)`-shaped `W`-morphism as a morphism in `ForgetEnrichment W C`
+.
 -/
 def ForgetEnrichment.homOf {X Y : C} (f : 𝟙_ W ⟶ X ⟶[W] Y) :
     ForgetEnrichment.of W X ⟶ ForgetEnrichment.of W Y :=
   f
 
-/--
-Definition of `ForgetEnrichment.homTo` / `ForgetEnrichment.homTo` 的定义
+/-- Typecheck a morphism in `ForgetEnrichment W C` as a `(𝟙_ W)`-shaped `W`-morphism. -/
+/-
+**CategoryTheory.ForgetEnrichment.homTo** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.ForgetEnrichment`。
+形式化陈述：{C : Type u₁} →   (W : Type v) →     [inst : CategoryTheory.Category.{w, v
+} W] →       [inst_1 : CategoryTheory.MonoidalCategory W] →         [inst_2 : Ca
+tegoryTheory.EnrichedCategory W C] →           {X Y : CategoryTheory.ForgetEnric
+hment W C} →             (X ⟶ Y) →               (CategoryTheory.MonoidalCategor
+yStruct.tensorUnit W ⟶                 CategoryTheory.ForgetEnrichment.to W X ⟶[
+W] CategoryTheory.ForgetEnrichment.to W Y)
+参数：W : Type v；X ⟶ Y；CategoryTheory.MonoidalCategoryStruct.tensorUnit W ⟶        
+         CategoryTheory.ForgetEnrichment.to W X ⟶[W] CategoryTheory.ForgetEnrich
+ment.to W Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ForgetEnrichment.homTo
-  signature: {X Y : ForgetEnrichment W C} (f : X ⟶ Y)
-  body: f
-
-@[simp]
-
-中文:
-定义 ForgetEnrichment.homTo
-  签名: {X Y : ForgetEnrichment W C} (f : X ⟶ Y)
-  定义体: f
-
-@[simp]
+--- 原说明 ---
+Typecheck a morphism in `ForgetEnrichment W C` as a `(𝟙_ W)`-shaped `W`-morphism
+.
 -/
 def ForgetEnrichment.homTo {X Y : ForgetEnrichment W C} (f : X ⟶ Y) :
     𝟙_ W ⟶ ForgetEnrichment.to W X ⟶[W] ForgetEnrichment.to W Y :=
   f
 
 @[simp]
-/--
-theorem `ForgetEnrichment.homTo_homOf` / 定理 `ForgetEnrichment.homTo_homOf`
-
-English:
-theorem ForgetEnrichment.homTo_homOf
-  given: {X Y : C} (f : 𝟙_ W ⟶ X ⟶[W] Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ForgetEnrichment.homTo_homOf
-  条件: {X Y : C} (f : 𝟙_ W ⟶ X ⟶[W] Y)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ForgetEnrichment.homTo_homOf** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] {X Y : C}   (f : CategoryTheory.MonoidalCategoryStruct.tensorUnit W ⟶
+ X ⟶[W] Y),   CategoryTheory.ForgetEnrichment.homTo W (CategoryTheory.ForgetEnri
+chment.homOf W f) = f
+参数：W : Type v；f : CategoryTheory.MonoidalCategoryStruct.tensorUnit W ⟶ X ⟶[W] Y；
+CategoryTheory.ForgetEnrichment.homOf W f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ForgetEnrichment.homTo_homOf {X Y : C} (f : 𝟙_ W ⟶ X ⟶[W] Y) :
     ForgetEnrichment.homTo W (ForgetEnrichment.homOf W f) = f :=
   rfl
 
 @[simp]
-/--
-theorem `ForgetEnrichment.homOf_homTo` / 定理 `ForgetEnrichment.homOf_homTo`
-
-English:
-theorem ForgetEnrichment.homOf_homTo
-  given: {X Y : ForgetEnrichment W C} (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-定理 ForgetEnrichment.homOf_homTo
-  条件: {X Y : ForgetEnrichment W C} (f : X ⟶ Y)
-  证明: rfl
+/-
+**CategoryTheory.ForgetEnrichment.homOf_homTo** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] {X Y : CategoryTheory.ForgetEnrichment W C} (f : X ⟶ Y),   CategoryTh
+eory.ForgetEnrichment.homOf W (CategoryTheory.ForgetEnrichment.homTo W f) = f
+参数：W : Type v；f : X ⟶ Y；CategoryTheory.ForgetEnrichment.homTo W f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ForgetEnrichment.homOf_homTo {X Y : ForgetEnrichment W C} (f : X ⟶ Y) :
     ForgetEnrichment.homOf W (ForgetEnrichment.homTo W f) = f :=
@@ -688,20 +580,23 @@ theorem ForgetEnrichment.homOf_homTo {X Y : ForgetEnrichment W C} (f : X ⟶ Y) 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The identity in the "underlying" category of an enriched category. -/
 @[simp]
-/--
-theorem `ForgetEnrichment.homTo_id` / 定理 `ForgetEnrichment.homTo_id`
+/-
+**CategoryTheory.ForgetEnrichment.homTo_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] (X : CategoryTheory.ForgetEnrichment W C),   CategoryTheory.ForgetEnr
+ichment.homTo W (CategoryTheory.CategoryStruct.id X) =     CategoryTheory.eId W 
+(CategoryTheory.ForgetEnrichment.to W X)
+参数：W : Type v；X : CategoryTheory.ForgetEnrichment W C；CategoryTheory.CategoryStr
+uct.id X；CategoryTheory.ForgetEnrichment.to W X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 
-English:
-theorem ForgetEnrichment.homTo_id
-  given: (X : ForgetEnrichment W C)
-  proof: Category.id_comp _
-
-中文:
-定理 ForgetEnrichment.homTo_id
-  条件: (X : ForgetEnrichment W C)
-  证明: Category.id_comp _
-
-Depends on / 依赖: Category, Category.id_comp, id_comp
+--- 原说明 ---
+The identity in the "underlying" category of an enriched category.
 -/
 theorem ForgetEnrichment.homTo_id (X : ForgetEnrichment W C) :
     ForgetEnrichment.homTo W (𝟙 X) = eId W (ForgetEnrichment.to W X : C) :=
@@ -709,20 +604,21 @@ theorem ForgetEnrichment.homTo_id (X : ForgetEnrichment W C) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `ForgetEnrichment.homOf_eId` / 定理 `ForgetEnrichment.homOf_eId`
-
-English:
-theorem ForgetEnrichment.homOf_eId
-  given: (X : C)
-  proof: (homTo_id W (ForgetEnrichment.of W X)).symm
-
-中文:
-定理 ForgetEnrichment.homOf_eId
-  条件: (X : C)
-  证明: (homTo_id W (ForgetEnrichment.of W X)).symm
-
-Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.of, homTo_id
+/-
+**CategoryTheory.ForgetEnrichment.homOf_eId** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] (X : C),   CategoryTheory.ForgetEnrichment.homOf W (CategoryTheory.eI
+d W X) =     CategoryTheory.CategoryStruct.id (CategoryTheory.ForgetEnrichment.o
+f W X)
+参数：W : Type v；X : C；CategoryTheory.eId W X；CategoryTheory.ForgetEnrichment.of W 
+X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ForgetEnrichment.homTo_id`：∀ {C : Type u₁} (W : Type v) [
+inst : CategoryTheory.Category.{w, v} W] [inst_1 : CategoryTheory.MonoidalCatego
+ry W]   [inst_2 : CategoryTheo…
 -/
 theorem ForgetEnrichment.homOf_eId (X : C) :
     ForgetEnrichment.homOf W (eId W X) = 𝟙 (of W X : C) :=
@@ -731,84 +627,102 @@ theorem ForgetEnrichment.homOf_eId (X : C) :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Composition in the "underlying" category of an enriched category. -/
 @[simp]
-/--
-theorem `ForgetEnrichment.homTo_comp` / 定理 `ForgetEnrichment.homTo_comp`
+/-
+**CategoryTheory.ForgetEnrichment.homTo_comp** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] {X Y Z : CategoryTheory.ForgetEnrichment W C} (f : X ⟶ Y) (g : Y ⟶ Z)
+,   CategoryTheory.ForgetEnrichment.homTo W (CategoryTheory.CategoryStruct.comp 
+f g) =     CategoryTheory.CategoryStruct.comp       (CategoryTheory.CategoryStru
+ct.comp         (CategoryTheory.MonoidalCategoryStruct.leftUnitor (CategoryTheor
+y.MonoidalCategoryStruct.tensorUnit W)).inv         (CategoryTheory.MonoidalCate
+goryStruct.tensorHom (CategoryTheory.ForgetEnrichment.homTo W f)           (Cate
+goryTheory.ForgetEnrichment.homTo W g)))       (CategoryTheory.eComp W (Category
+Theory.ForgetEnrichment.to W X) (CategoryTheory.ForgetEnrichment.to W Y)        
+ (CategoryTheory.ForgetEnrichment.to W Z))
+参数：W : Type v；f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；Categor
+yTheory.CategoryStruct.comp         (CategoryTheory.MonoidalCategoryStruct.leftU
+nitor (CategoryTheory.MonoidalCategoryStruct.tensorUnit W)).inv         (Categor
+yTheory.MonoidalCategoryStruct.tensorHom (CategoryTheory.ForgetEnrichment.homTo 
+W f)           (CategoryTheory.ForgetEnrichment.homTo W g))；CategoryTheory.eComp
+ W (CategoryTheory.ForgetEnrichment.to W X) (CategoryTheory.ForgetEnrichment.to 
+W Y)         (CategoryTheory.ForgetEnrichment.to W Z)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ForgetEnrichment.homTo_comp
-  given: {X Y Z : ForgetEnrichment W C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-定理 ForgetEnrichment.homTo_comp
-  条件: {X Y Z : ForgetEnrichment W C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+--- 原说明 ---
+Composition in the "underlying" category of an enriched category.
 -/
 theorem ForgetEnrichment.homTo_comp {X Y Z : ForgetEnrichment W C} (f : X ⟶ Y) (g : Y ⟶ Z) :
-    homTo W (f ≫ g) = ((fun_ (𝟙_ W)).inv ≫ (homTo W f otimesₘ homTo W g)) ≫ eComp W _ _ _ :=
+    homTo W (f ≫ g) = ((λ_ (𝟙_ W)).inv ≫ (homTo W f ⊗ₘ homTo W g)) ≫ eComp W _ _ _ :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `ForgetEnrichment.homOf_comp` / 定理 `ForgetEnrichment.homOf_comp`
-
-English:
-theorem ForgetEnrichment.homOf_comp
-  given: {X Y Z : C} (f : 𝟙_ W ⟶ (X ⟶[W] Y)) (g : 𝟙_ W ⟶ (Y ⟶[W] Z))
-  proof: by
-  rw [← Category.assoc]
-  rfl
-
-中文:
-定理 ForgetEnrichment.homOf_comp
-  条件: {X Y Z : C} (f : 𝟙_ W ⟶ (X ⟶[W] Y)) (g : 𝟙_ W ⟶ (Y ⟶[W] Z))
-  证明: by
-  rw [← Category.assoc]
-  rfl
-
-Depends on / 依赖: Category, Category.assoc
+/-
+**CategoryTheory.ForgetEnrichment.homOf_comp** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.ForgetEnrichment`。
+形式化陈述：∀ {C : Type u₁} (W : Type v) [inst : CategoryTheory.Category.{w, v} W] [in
+st_1 : CategoryTheory.MonoidalCategory W]   [inst_2 : CategoryTheory.EnrichedCat
+egory W C] {X Y Z : C}   (f : CategoryTheory.MonoidalCategoryStruct.tensorUnit W
+ ⟶ X ⟶[W] Y)   (g : CategoryTheory.MonoidalCategoryStruct.tensorUnit W ⟶ Y ⟶[W] 
+Z),   CategoryTheory.ForgetEnrichment.homOf W       (CategoryTheory.CategoryStru
+ct.comp         (CategoryTheory.MonoidalCategoryStruct.leftUnitor (CategoryTheor
+y.MonoidalCategoryStruct.tensorUnit W)).inv         (CategoryTheory.CategoryStru
+ct.comp (CategoryTheory.MonoidalCategoryStruct.tensorHom f g)           (Categor
+yTheory.eComp W X Y Z))) =     CategoryTheory.CategoryStruct.comp (CategoryTheor
+y.ForgetEnrichment.homOf W f)       (CategoryTheory.ForgetEnrichment.homOf W g)
+参数：W : Type v；f : CategoryTheory.MonoidalCategoryStruct.tensorUnit W ⟶ X ⟶[W] Y；
+g : CategoryTheory.MonoidalCategoryStruct.tensorUnit W ⟶ Y ⟶[W] Z；CategoryTheory
+.CategoryStruct.comp         (CategoryTheory.MonoidalCategoryStruct.leftUnitor (
+CategoryTheory.MonoidalCategoryStruct.tensorUnit W)).inv         (CategoryTheory
+.CategoryStruct.comp (CategoryTheory.MonoidalCategoryStruct.tensorHom f g)      
+     (CategoryTheory.eComp W X Y Z))；CategoryTheory.ForgetEnrichment.homOf W f；C
+ategoryTheory.ForgetEnrichment.homOf W g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 -/
 theorem ForgetEnrichment.homOf_comp {X Y Z : C} (f : 𝟙_ W ⟶ (X ⟶[W] Y)) (g : 𝟙_ W ⟶ (Y ⟶[W] Z)) :
-    homOf W ((fun_ _).inv ≫ (f otimesₘ g) ≫ eComp W ..) = homOf W f ≫ homOf W g := by
+    homOf W ((λ_ _).inv ≫ (f ⊗ₘ g) ≫ eComp W ..) = homOf W f ≫ homOf W g := by
   rw [← Category.assoc]
   rfl
 
 end
 
-/--
-Definition of `EnrichedFunctor` / `EnrichedFunctor` 的定义
+/-- A `V`-functor `F` between `V`-enriched categories
+has a `V`-morphism from `X ⟶[V] Y` to `F.obj X ⟶[V] F.obj Y`,
+satisfying the usual axioms.
+-/
+/-
+**CategoryTheory.EnrichedFunctor** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：EnrichedFunctor (C : Type u₁) [EnrichedCategory V C] (D : Type u₂) [Enrich
+edCategory V D] where /-- The application of this functor to an object -/ obj : 
+C -> D /-- The `V`-morphism from `X ⟶[V] Y` to `F.obj X ⟶[V] F.obj Y`, for all `
+X Y : C` -/ map : forall X Y : C, (X ⟶[V] Y) ⟶ obj X ⟶[V] obj Y map_id : forall 
+X : C, eId V X ≫ map X X = eId V (obj X)
+参数：C : Type u₁；D : Type u₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure EnrichedFunctor
-  parameters: (C : Type u₁) [EnrichedCategory V C] (D : Type u₂)
-  axioms and operations (4):
-    - obj : C -> D
-    - map : forall X Y : C, (X ⟶[V] Y) ⟶ obj X ⟶[V] obj Y
-    - map_id : forall X : C, eId V X ≫ map X X = eId V (obj X)  [default: by cat_disch]
-    - map_comp : forall X Y Z : C, eComp V X Y Z ≫ map X Z = (map X Y otimesₘ map Y Z) ≫ eComp V (obj X) (obj Y) (obj Z)  [default: by cat_disch]
-
-中文:
-结构 Enriched函子
-  参数: (C : 类型u₁) [Enriched范畴 V C] (D : 类型u₂)
-  公理与运算 (4 个):
-    - obj : C -> D
-    - map : 对任意 X Y : C, (X ⟶[V] Y) ⟶ obj X ⟶[V] obj Y
-    - map_id : 对任意 X : C, eId V X ≫ map X X = eId V (obj X)  [默认: by cat_disch]
-    - map_comp : 对任意 X Y Z : C, eComp V X Y Z ≫ map X Z = (map X Y otimesₘ map Y Z) ≫ eComp V (obj X) (obj Y) (obj Z)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, map_comp
+--- 原说明 ---
+A `V`-functor `F` between `V`-enriched categories
+has a `V`-morphism from `X ⟶[V] Y` to `F.obj X ⟶[V] F.obj Y`,
+satisfying the usual axioms.
 -/
 structure EnrichedFunctor (C : Type u₁) [EnrichedCategory V C] (D : Type u₂)
     [EnrichedCategory V D] where
   /-- The application of this functor to an object -/
-  obj : C -> D
+  obj : C → D
   /-- The `V`-morphism from `X ⟶[V] Y` to `F.obj X ⟶[V] F.obj Y`, for all `X Y : C` -/
-  map : forall X Y : C, (X ⟶[V] Y) ⟶ obj X ⟶[V] obj Y
-  map_id : forall X : C, eId V X ≫ map X X = eId V (obj X) := by cat_disch
+  map : ∀ X Y : C, (X ⟶[V] Y) ⟶ obj X ⟶[V] obj Y
+  map_id : ∀ X : C, eId V X ≫ map X X = eId V (obj X) := by cat_disch
   map_comp :
-    forall X Y Z : C,
-      eComp V X Y Z ≫ map X Z = (map X Y otimesₘ map Y Z) ≫ eComp V (obj X) (obj Y) (obj Z) := by
+    ∀ X Y Z : C,
+      eComp V X Y Z ≫ map X Z = (map X Y ⊗ₘ map Y Z) ≫ eComp V (obj X) (obj Y) (obj Z) := by
     cat_disch
 
 attribute [reassoc (attr := simp)] EnrichedFunctor.map_id
@@ -819,101 +733,76 @@ namespace EnrichedFunctor
 
 /-- The identity enriched functor. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.EnrichedFunctor.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.En
+richedFunctor`。
+形式化陈述：id (C : Type u₁) [EnrichedCategory V C] : EnrichedFunctor V C C where obj 
+X
+参数：C : Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (C : Type u₁) [EnrichedCategory V C]
-  body: X
-  map _ _ := 𝟙 _
-
-中文:
-定义 id
-  签名: (C : 类型u₁) [Enriched范畴 V C]
-  定义体: X
-  map _ _ := 𝟙 _
+--- 原说明 ---
+The identity enriched functor.
 -/
 def id (C : Type u₁) [EnrichedCategory V C] : EnrichedFunctor V C C where
   obj X := X
   map _ _ := 𝟙 _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (EnrichedFunctor V C C)
-  body: ⟨EnrichedFunctor.id V C⟩
-
-中文:
-实例 :
-  签名: 可居 (Enriched函子 V C C)
-  定义体: ⟨EnrichedFunctor.id V C⟩
-
-Depends on / 依赖: EnrichedFunctor, EnrichedFunctor.id
+/-
+**CategoryTheory.EnrichedFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Enri
+chedFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (EnrichedFunctor V C C) :=
   ⟨EnrichedFunctor.id V C⟩
 
 /-- Composition of enriched functors. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.EnrichedFunctor.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+EnrichedFunctor`。
+形式化陈述：comp {C : Type u₁} {D : Type u₂} {E : Type u₃} [EnrichedCategory V C] [Enr
+ichedCategory V D] [EnrichedCategory V E] (F : EnrichedFunctor V C D) (G : Enric
+hedFunctor V D E) : EnrichedFunctor V C E where obj X
+参数：F : EnrichedFunctor V C D；G : EnrichedFunctor V D E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {C : Type u₁} {D : Type u₂} {E : Type u₃} [EnrichedCategory V C]
-  body: G.obj (F.obj X)
-  map _ _ := F.map _ _ ≫ G.map _ _
-
-中文:
-定义 comp
-  签名: {C : 类型u₁} {D : 类型u₂} {E : 类型u₃} [Enriched范畴 V C]
-  定义体: G.obj (F.obj X)
-  map _ _ := F.map _ _ ≫ G.map _ _
-
-Depends on / 依赖: F.obj, G.obj
+--- 原说明 ---
+Composition of enriched functors.
 -/
 def comp {C : Type u₁} {D : Type u₂} {E : Type u₃} [EnrichedCategory V C]
     [EnrichedCategory V D] [EnrichedCategory V E] (F : EnrichedFunctor V C D)
     (G : EnrichedFunctor V D E) : EnrichedFunctor V C E where
   obj X := G.obj (F.obj X)
   map _ _ := F.map _ _ ≫ G.map _ _
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  statement: {C : Type u₁} {D : Type u₂} [EnrichedCategory V C]
-  proof: by
-  match F, G with
-  | mk F_obj F_map _ _, mk G_obj G_map _ _ =>
-    obtain rfl : F_obj = G_obj := funext fun X => h_obj X
-    congr
-    ext X Y
-    simpa using h_map X Y
-
-中文:
-引理 ext
-  结论: {C : 类型u₁} {D : 类型u₂} [Enriched范畴 V C]
-  证明: by
-  match F, G with
-  | mk F_obj F_map _ _, mk G_obj G_map _ _ =>
-    obtain rfl : F_obj = G_obj := funext fun X => h_obj X
-    congr
-    ext X Y
-    simpa using h_map X Y
-
-Depends on / 依赖: F_map, F_obj, G_map, G_obj, h_map, h_obj
+/-
+**CategoryTheory.EnrichedFunctor.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.E
+nrichedFunctor`。
+形式化陈述：ext {C : Type u₁} {D : Type u₂} [EnrichedCategory V C] [EnrichedCategory V
+ D] {F G : EnrichedFunctor V C D} (h_obj : forall X, F.obj X = G.obj X) (h_map :
+ forall (X Y : C), F.map X Y ≫ eqToHom (by rw [h_obj, h_obj]) = G.map X Y) : F =
+ G
+参数：h_obj : forall X, F.obj X = G.obj X；h_map : forall (X Y : C), F.map X Y ≫ eqT
+oHom (by rw [h_obj, h_obj]) = G.map X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma ext {C : Type u₁} {D : Type u₂} [EnrichedCategory V C]
-    [EnrichedCategory V D] {F G : EnrichedFunctor V C D} (h_obj : forall X, F.obj X = G.obj X)
-    (h_map : forall (X Y : C), F.map X Y ≫ eqToHom (by rw [h_obj, h_obj]) = G.map X Y) : F = G := by
+    [EnrichedCategory V D] {F G : EnrichedFunctor V C D} (h_obj : ∀ X, F.obj X = G.obj X)
+    (h_map : ∀ (X Y : C), F.map X Y ≫ eqToHom (by rw [h_obj, h_obj]) = G.map X Y) : F = G := by
   match F, G with
   | mk F_obj F_map _ _, mk G_obj G_map _ _ =>
-    obtain rfl : F_obj = G_obj := funext fun X => h_obj X
+    obtain rfl : F_obj = G_obj := funext fun X ↦ h_obj X
     congr
     ext X Y
     simpa using h_map X Y
@@ -930,38 +819,18 @@ set_option backward.isDefEq.respectTransparency false in
 by mapping the `(𝟙_ W)`-shaped morphisms.
 -/
 @[simps, implicit_reducible]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.EnrichedFunctor.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.EnrichedFunctor`。
+形式化陈述：forget (F : EnrichedFunctor W C D) : ForgetEnrichment W C ⥤ ForgetEnrichme
+nt W D where obj X
+参数：F : EnrichedFunctor W C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: (F : EnrichedFunctor W C D)
-  body: ForgetEnrichment.of W (F.obj (ForgetEnrichment.to W X))
-  map f :=
-    ForgetEnrichment.homOf W
-      (ForgetEnrichment.homTo W f ≫ F.map (ForgetEnrichment.to W _) (ForgetEnrichment.to W _))
-  map_comp f g := by
-    apply_fun ForgetEnrichment.homTo W
-    · simp only [Iso.cancel_iso_inv_left, Category.assoc, ← tensorHom_comp_tensorHom,
-        ForgetEnrichment.homTo_homOf, EnrichedFunctor.map_comp, ForgetEnrichment.homTo_comp]
-      rfl
-    · intro f g w; apply_fun ForgetEnrichment.homOf W at w; simpa using w
-
-中文:
-定义 forget
-  签名: (F : Enriched函子 W C D)
-  定义体: ForgetEnrichment.of W (F.obj (ForgetEnrichment.to W X))
-  map f :=
-    ForgetEnrichment.homOf W
-      (ForgetEnrichment.homTo W f ≫ F.map (ForgetEnrichment.to W _) (ForgetEnrichment.to W _))
-  map_comp f g := by
-    apply_fun ForgetEnrichment.homTo W
-    · simp only [Iso.cancel_iso_inv_left, Category.assoc, ← tensorHom_comp_tensorHom,
-        ForgetEnrichment.homTo_homOf, EnrichedFunctor.map_comp, ForgetEnrichment.homTo_comp]
-      rfl
-    · intro f g w; apply_fun ForgetEnrichment.homOf W at w; simpa using w
-
-Depends on / 依赖: F.obj, ForgetEnrichment, ForgetEnrichment.of, ForgetEnrichment.to
+--- 原说明 ---
+An enriched functor induces an honest functor of the underlying categories,
+by mapping the `(𝟙_ W)`-shaped morphisms.
 -/
 def forget (F : EnrichedFunctor W C D) :
     ForgetEnrichment W C ⥤ ForgetEnrichment W D where
@@ -979,20 +848,18 @@ def forget (F : EnrichedFunctor W C D) :
 set_option backward.defeqAttrib.useBackward true in
 /-- `EnrichedFunctor.forget` distributes over composition of enriched functors up to isomorphism. -/
 @[simps!]
-/--
-Definition of `forgetComp` / `forgetComp` 的定义
+/-
+**CategoryTheory.EnrichedFunctor.forgetComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.EnrichedFunctor`。
+形式化陈述：forgetComp (F : EnrichedFunctor W C D) (G : EnrichedFunctor W D E) : (F.co
+mp W G).forget ≅ F.forget ⋙ G.forget
+参数：F : EnrichedFunctor W C D；G : EnrichedFunctor W D E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetComp
-  signature: (F : EnrichedFunctor W C D) (G : EnrichedFunctor W D E)
-  body: NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp [comp, forget])
-
-中文:
-定义 forgetComp
-  签名: (F : Enriched函子 W C D) (G : Enriched函子 W D E)
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp [comp, forget])
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, forget, ofComponents
+--- 原说明 ---
+`EnrichedFunctor.forget` distributes over composition of enriched functors up to
+ isomorphism.
 -/
 def forgetComp (F : EnrichedFunctor W C D) (G : EnrichedFunctor W D E) :
     (F.comp W G).forget ≅ F.forget ⋙ G.forget :=
@@ -1003,20 +870,17 @@ variable (W) (C) in
 /-- `EnrichedFunctor.forget` maps the identity enriched functor to a functor isomorphic to
 `Functor.id`. -/
 @[simps!]
-/--
-Definition of `forgetId` / `forgetId` 的定义
+/-
+**CategoryTheory.EnrichedFunctor.forgetId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.EnrichedFunctor`。
+形式化陈述：forgetId : (EnrichedFunctor.id W C).forget ≅ Functor.id _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetId
-  signature: : (EnrichedFunctor.id W C).forget ≅ Functor.id _
-  body: NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp [forget])
-
-中文:
-定义 forgetId
-  签名: : (Enriched函子.id W C).forget ≅ 函子.id _
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp [forget])
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, forget, ofComponents
+--- 原说明 ---
+`EnrichedFunctor.forget` maps the identity enriched functor to a functor isomorp
+hic to
+`Functor.id`.
 -/
 def forgetId : (EnrichedFunctor.id W C).forget ≅ Functor.id _ :=
   NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp [forget])
@@ -1079,48 +943,49 @@ coming from the ambient braiding on `V`.)
 This is the type of morphisms in `V` from `A` to the `V`-object of natural transformations.
 -/
 @[ext]
-/--
-Definition of `GradedNatTrans` / `GradedNatTrans` 的定义
+/-
+**CategoryTheory.GradedNatTrans** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{V : Type v} →   [inst : CategoryTheory.Category.{w, v} V] →     [inst_1 :
+ CategoryTheory.MonoidalCategory V] →       {C : Type u₁} →         [inst_2 : Ca
+tegoryTheory.EnrichedCategory V C] →           {D : Type u₂} →             [inst
+_3 : CategoryTheory.EnrichedCategory V D] →               CategoryTheory.Center 
+V →                 CategoryTheory.EnrichedFunctor V C D → CategoryTheory.Enrich
+edFunctor V C D → Type (max u₁ w)
+参数：max u₁ w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GradedNatTrans
-  parameters: (A : Center V) (F G : EnrichedFunctor V C D)
-  axioms and operations (2):
-    - app : forall X : C, A.1 ⟶ F.obj X ⟶[V] G.obj X
-    - naturality : forall X Y : C, (A.2.β (X ⟶[V] Y)).hom ≫ (F.map X Y otimesₘ app Y) ≫ eComp V _ _ _ = (app X otimesₘ G.map X Y) ≫ eComp V _ _ _
-
-中文:
-结构 分次自然变换
-  参数: (A : 中心 V) (F G : Enriched函子 V C D)
-  公理与运算 (2 个):
-    - app : 对任意 X : C, A.1 ⟶ F.obj X ⟶[V] G.obj X
-    - naturality : 对任意 X Y : C, (A.2.β (X ⟶[V] Y)).hom ≫ (F.map X Y otimesₘ app Y) ≫ eComp V _ _ _ = (app X otimesₘ G.map X Y) ≫ eComp V _ _ _
+--- 原说明 ---
+The type of `A`-graded natural transformations between `V`-functors `F` and `G`.
+This is the type of morphisms in `V` from `A` to the `V`-object of natural trans
+formations.
 -/
 structure GradedNatTrans (A : Center V) (F G : EnrichedFunctor V C D) where
   /-- The `A`-graded transformation from `F` to `G` -/
-  app : forall X : C, A.1 ⟶ F.obj X ⟶[V] G.obj X
+  app : ∀ X : C, A.1 ⟶ F.obj X ⟶[V] G.obj X
   /-- `app` is a natural transformation. -/
   naturality :
-    forall X Y : C,
-      (A.2.β (X ⟶[V] Y)).hom ≫ (F.map X Y otimesₘ app Y) ≫ eComp V _ _ _ =
-        (app X otimesₘ G.map X Y) ≫ eComp V _ _ _
+    ∀ X Y : C,
+      (A.2.β (X ⟶[V] Y)).hom ≫ (F.map X Y ⊗ₘ app Y) ≫ eComp V _ _ _ =
+        (app X ⊗ₘ G.map X Y) ≫ eComp V _ _ _
 
 attribute [reassoc] GradedNatTrans.naturality
 
-/--
-Definition of `EnrichedNatTrans` / `EnrichedNatTrans` 的定义
+/-- A natural transformation between two enriched functors is a `𝟙_ V`-graded natural
+transformation. -/
+/-
+**CategoryTheory.EnrichedNatTrans** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{V : Type v} →   [inst : CategoryTheory.Category.{w, v} V] →     [inst_1 :
+ CategoryTheory.MonoidalCategory V] →       {C : Type u₁} →         [inst_2 : Ca
+tegoryTheory.EnrichedCategory V C] →           {D : Type u₂} →             [inst
+_3 : CategoryTheory.EnrichedCategory V D] →               CategoryTheory.Enriche
+dFunctor V C D → CategoryTheory.EnrichedFunctor V C D → Type (max u₁ w)
+参数：max u₁ w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure EnrichedNatTrans
-  parameters: (F G : EnrichedFunctor V C D)
-  axioms and operations (1):
-    - out : F.forget ⟶ G.forget
-
-中文:
-结构 Enriched自然数Trans
-  参数: (F G : Enriched函子 V C D)
-  公理与运算 (1 个):
-    - out : F.forget ⟶ G.forget
+--- 原说明 ---
+A natural transformation between two enriched functors is a `𝟙_ V`-graded natura
+l
+transformation.
 -/
 structure EnrichedNatTrans (F G : EnrichedFunctor V C D) where
   /-- The underlying natural transformation of an enriched transformation. -/
@@ -1131,28 +996,18 @@ namespace EnrichedFunctor
 /-- Enriched functors form a category with the morphisms between functors `F` and `G` being
 enriched natural transformations, i.e. natural transformations `F.forget ⟶ G.forget`. -/
 @[simps]
-/--
-Instance `category` / 实例 `category`
+/-
+**CategoryTheory.EnrichedFunctor.category** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.EnrichedFunctor`。
+形式化陈述：category : Category (EnrichedFunctor V C D) where Hom F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance category
-  signature: : Category (EnrichedFunctor V C D) where
-  body: EnrichedNatTrans F G
-  id F := ⟨𝟙 _⟩
-  comp F G := ⟨F.out ≫ G.out⟩
-
-@[ext]
-
-中文:
-实例 category
-  签名: : 范畴 (Enriched函子 V C D) where
-  定义体: EnrichedNatTrans F G
-  id F := ⟨𝟙 _⟩
-  comp F G := ⟨F.out ≫ G.out⟩
-
-@[ext]
-
-Depends on / 依赖: EnrichedNatTrans
+--- 原说明 ---
+Enriched functors form a category with the morphisms between functors `F` and `G
+` being
+enriched natural transformations, i.e. natural transformations `F.forget ⟶ G.for
+get`.
 -/
 instance category : Category (EnrichedFunctor V C D) where
   Hom F G := EnrichedNatTrans F G
@@ -1160,31 +1015,21 @@ instance category : Category (EnrichedFunctor V C D) where
   comp F G := ⟨F.out ≫ G.out⟩
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {F G : EnrichedFunctor V C D} {α β : F ⟶ G}
-  proof: by
-  rcases α with ⟨α⟩
-  rcases β with ⟨β⟩
-  congr
-  ext
-  apply h
-
-中文:
-引理 hom_ext
-  结论: {F G : Enriched函子 V C D} {α β : F ⟶ G}
-  证明: by
-  rcases α with ⟨α⟩
-  rcases β with ⟨β⟩
-  congr
-  ext
-  apply h
+/-
+**CategoryTheory.EnrichedFunctor.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.EnrichedFunctor`。
+形式化陈述：hom_ext {F G : EnrichedFunctor V C D} {α β : F ⟶ G} (h : forall X : C, α.o
+ut.app X = β.out.app X) : α = β
+参数：h : forall X : C, α.out.app X = β.out.app X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma hom_ext {F G : EnrichedFunctor V C D} {α β : F ⟶ G}
-    (h : forall X : C, α.out.app X = β.out.app X) : α = β := by
+    (h : ∀ X : C, α.out.app X = β.out.app X) : α = β := by
   rcases α with ⟨α⟩
   rcases β with ⟨β⟩
   congr
@@ -1194,22 +1039,19 @@ lemma hom_ext {F G : EnrichedFunctor V C D} {α β : F ⟶ G}
 /-- To construct an isomorphism between enriched functors `F` and `G`, it suffices to construct
 a natural isomorphism between `F.forget` and `G.forget`. -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.EnrichedFunctor.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.EnrichedFunctor`。
+形式化陈述：isoMk {F G : EnrichedFunctor V C D} (h : F.forget ≅ G.forget) : F ≅ G wher
+e hom
+参数：h : F.forget ≅ G.forget。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {F G : EnrichedFunctor V C D} (h : F.forget ≅ G.forget)
-  body: ⟨h.hom⟩
-  inv := ⟨h.inv⟩
-
-中文:
-定义 isoMk
-  签名: {F G : Enriched函子 V C D} (h : F.forget ≅ G.forget)
-  定义体: ⟨h.hom⟩
-  inv := ⟨h.inv⟩
-
-Depends on / 依赖: h.hom
+--- 原说明 ---
+To construct an isomorphism between enriched functors `F` and `G`, it suffices t
+o construct
+a natural isomorphism between `F.forget` and `G.forget`.
 -/
 def isoMk {F G : EnrichedFunctor V C D} (h : F.forget ≅ G.forget) : F ≅ G where
   hom := ⟨h.hom⟩
@@ -1227,41 +1069,29 @@ set_option backward.defeqAttrib.useBackward true in
 the `V`-object of natural transformations from `F` to `G`.
 -/
 @[simps]
-/--
-Definition of `enrichedNatTransYoneda` / `enrichedNatTransYoneda` 的定义
+/-
+**CategoryTheory.enrichedNatTransYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：enrichedNatTransYoneda (F G : EnrichedFunctor V C D) : Vᵒᵖ ⥤ Type (max u₁ 
+w) where obj A
+参数：F G : EnrichedFunctor V C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedNatTransYoneda
-  signature: (F G : EnrichedFunctor V C D)
-  body: GradedNatTrans ((Center.ofBraided V).obj (unop A)) F G
-  map f := ↾fun σ =>
-    { app X := f.unop ≫ σ.app X
-      naturality X Y := by
-        have p := σ.naturality X Y
-        dsimp at p ⊢
-        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [← braiding_naturality_assoc]; rw [id_tensor_comp_tensor_id_assoc]; rw [p]; rw [tensorHom_comp_tensorHom_assoc]; rw [Category.id_comp] }
-
-中文:
-定义 enriched自然数TransYoneda
-  签名: (F G : Enriched函子 V C D)
-  定义体: GradedNatTrans ((Center.ofBraided V).obj (unop A)) F G
-  map f := ↾fun σ =>
-    { app X := f.unop ≫ σ.app X
-      naturality X Y := by
-        have p := σ.naturality X Y
-        dsimp at p ⊢
-        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [← braiding_naturality_assoc]; rw [id_tensor_comp_tensor_id_assoc]; rw [p]; rw [tensorHom_comp_tensorHom_assoc]; rw [Category.id_comp] }
-
-Depends on / 依赖: Center, Center.ofBraided, GradedNatTrans, ofBraided
+--- 原说明 ---
+A presheaf isomorphic to the Yoneda embedding of
+the `V`-object of natural transformations from `F` to `G`.
 -/
 def enrichedNatTransYoneda (F G : EnrichedFunctor V C D) : Vᵒᵖ ⥤ Type (max u₁ w) where
   obj A := GradedNatTrans ((Center.ofBraided V).obj (unop A)) F G
-  map f := ↾fun σ =>
+  map f := ↾fun σ ↦
     { app X := f.unop ≫ σ.app X
       naturality X Y := by
         have p := σ.naturality X Y
         dsimp at p ⊢
-        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [← braiding_naturality_assoc]; rw [id_tensor_comp_tensor_id_assoc]; rw [p]; rw [tensorHom_comp_tensorHom_assoc]; rw [Category.id_comp] }
+        rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _, id_tensor_comp, Category.assoc,
+          Category.assoc, ← braiding_naturality_assoc, id_tensor_comp_tensor_id_assoc, p,
+          tensorHom_comp_tensorHom_assoc, Category.id_comp] }
 
 -- TODO assuming `[HasLimits C]` construct the actual object of natural transformations
 -- and show that the functor category is `V`-enriched.
@@ -1275,36 +1105,19 @@ attribute [local instance] categoryOfEnrichedCategoryType
 is just the same thing as an honest functor.
 -/
 @[simps]
-/--
-Definition of `enrichedFunctorTypeEquivFunctor` / `enrichedFunctorTypeEquivFunctor` 的定义
+/-
+**CategoryTheory.enrichedFunctorTypeEquivFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：enrichedFunctorTypeEquivFunctor {C : Type u₁} [𝒞 : EnrichedCategory (Type 
+v) C] {D : Type u₂} [𝒟 : EnrichedCategory (Type v) D] : EnrichedFunctor (Type v)
+ C D ≃ C ⥤ D where toFun F
+参数：Type v；Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedFunctorTypeEquivFunctor
-  signature: {C : Type u₁} [𝒞 : EnrichedCategory (Type v) C]
-  body: { obj := fun X => F.obj X
-      map := fun f => F.map _ _ f
-      map_id := fun X => ConcreteCategory.congr_hom (F.map_id X) PUnit.unit
-      map_comp := fun f g => ConcreteCategory.congr_hom (F.map_comp _ _ _) ⟨f, g⟩ }
-  invFun F :=
-    { obj := fun X => F.obj X
-      map := fun _ _ => ↾fun f => F.map f
-      map_id := fun X => by ext ⟨⟩; exact F.map_id X
-      map_comp := fun X Y Z => by ext ⟨f, g⟩; exact F.map_comp f g }
-
-中文:
-定义 enrichedFunctorTypeEquivFunctor
-  签名: {C : 类型u₁} [𝒞 : Enriched范畴 (类型v) C]
-  定义体: { obj := fun X => F.obj X
-      map := fun f => F.map _ _ f
-      map_id := fun X => ConcreteCategory.congr_hom (F.map_id X) PUnit.unit
-      map_comp := fun f g => ConcreteCategory.congr_hom (F.map_comp _ _ _) ⟨f, g⟩ }
-  invFun F :=
-    { obj := fun X => F.obj X
-      map := fun _ _ => ↾fun f => F.map f
-      map_id := fun X => by ext ⟨⟩; exact F.map_id X
-      map_comp := fun X Y Z => by ext ⟨f, g⟩; exact F.map_comp f g }
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.map, F.map_comp, F.map_id, F.obj, PUnit.unit, congr_hom, invFun, map_comp, map_id
+--- 原说明 ---
+We verify that an enriched functor between `Type v` enriched categories
+is just the same thing as an honest functor.
 -/
 def enrichedFunctorTypeEquivFunctor {C : Type u₁} [𝒞 : EnrichedCategory (Type v) C]
     {D : Type u₂} [𝒟 : EnrichedCategory (Type v) D] :
@@ -1321,36 +1134,25 @@ def enrichedFunctorTypeEquivFunctor {C : Type u₁} [𝒞 : EnrichedCategory (Ty
       map_comp := fun X Y Z => by ext ⟨f, g⟩; exact F.map_comp f g }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `enrichedNatTransYonedaTypeIsoYonedaNatTrans` / `enrichedNatTransYonedaTypeIsoYonedaNatTrans` 的定义
+/-- We verify that the presheaf representing natural transformations
+between `Type v`-enriched functors is actually represented by
+the usual type of natural transformations!
+-/
+/-
+**CategoryTheory.enrichedNatTransYonedaTypeIsoYonedaNatTrans** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory`。
+形式化陈述：enrichedNatTransYonedaTypeIsoYonedaNatTrans {C : Type v} [EnrichedCategory
+ (Type v) C] {D : Type v} [EnrichedCategory (Type v) D] (F G : EnrichedFunctor (
+Type v) C D) : enrichedNatTransYoneda F G ≅ yoneda.obj (enrichedFunctorTypeEquiv
+Functor F ⟶ enrichedFunctorTypeEquivFunctor G)
+参数：Type v；Type v；F G : EnrichedFunctor (Type v) C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enrichedNatTransYonedaTypeIsoYonedaNatTrans
-  signature: {C : Type v} [EnrichedCategory (Type v) C]
-  body: NatIso.ofComponents
-    (fun α =>
-      { hom := ↾fun σ => ↾fun x =>
-          { app X := σ.app X x
-            naturality X Y f := ConcreteCategory.congr_hom (σ.naturality X Y) ⟨x, f⟩ }
-        inv := ↾fun σ =>
-          { app X := ↾fun x => (σ.hom x).app X
-            naturality X Y := by ext ⟨x, f⟩; exact (σ.hom x).naturality f } })
-    (by cat_disch)
-
-中文:
-定义 enriched自然数TransYonedaTypeIsoYoneda自然数Trans
-  签名: {C : 类型v} [Enriched范畴 (类型v) C]
-  定义体: NatIso.ofComponents
-    (fun α =>
-      { hom := ↾fun σ => ↾fun x =>
-          { app X := σ.app X x
-            naturality X Y f := ConcreteCategory.congr_hom (σ.naturality X Y) ⟨x, f⟩ }
-        inv := ↾fun σ =>
-          { app X := ↾fun x => (σ.hom x).app X
-            naturality X Y := by ext ⟨x, f⟩; exact (σ.hom x).naturality f } })
-    (by cat_disch)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, NatIso, NatIso.ofComponents, cat_disch, congr_hom, naturality, ofComponents
+--- 原说明 ---
+We verify that the presheaf representing natural transformations
+between `Type v`-enriched functors is actually represented by
+the usual type of natural transformations!
 -/
 def enrichedNatTransYonedaTypeIsoYonedaNatTrans {C : Type v} [EnrichedCategory (Type v) C]
     {D : Type v} [EnrichedCategory (Type v) D] (F G : EnrichedFunctor (Type v) C D) :
@@ -1359,10 +1161,10 @@ def enrichedNatTransYonedaTypeIsoYonedaNatTrans {C : Type v} [EnrichedCategory (
         enrichedFunctorTypeEquivFunctor G) :=
   NatIso.ofComponents
     (fun α =>
-      { hom := ↾fun σ => ↾fun x =>
+      { hom := ↾fun σ ↦ ↾fun x =>
           { app X := σ.app X x
             naturality X Y f := ConcreteCategory.congr_hom (σ.naturality X Y) ⟨x, f⟩ }
-        inv := ↾fun σ =>
+        inv := ↾fun σ ↦
           { app X := ↾fun x => (σ.hom x).app X
             naturality X Y := by ext ⟨x, f⟩; exact (σ.hom x).naturality f } })
     (by cat_disch)
@@ -1370,3 +1172,4 @@ def enrichedNatTransYonedaTypeIsoYonedaNatTrans {C : Type v} [EnrichedCategory (
 end
 
 end CategoryTheory
+

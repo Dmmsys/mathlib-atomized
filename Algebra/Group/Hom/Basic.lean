@@ -35,24 +35,16 @@ variable [CommMonoid α]
 monoids. -/
 @[to_additive (attr := simps) /-- Multiplication by a natural `n` on a commutative additive monoid,
 considered as a morphism of additive monoids. -/]
-/--
-Definition of `powMonoidHom` / `powMonoidHom` 的定义
-
-English:
-definition powMonoidHom
-  signature: (n : Nat)
-  body: (· ^ n)
-  map_one' := one_pow _
-  map_mul' a b := mul_pow a b n
-
-中文:
-定义 powMonoidHom
-  签名: (n : 自然数)
-  定义体: (· ^ n)
-  map_one' := one_pow _
-  map_mul' a b := mul_pow a b n
+/-
+**powMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：powMonoidHom (n : Nat) : α ->* α where toFun
+参数：n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
 -/
-def powMonoidHom (n : Nat) : α ->* α where
+def powMonoidHom (n : ℕ) : α →* α where
   toFun := (· ^ n)
   map_one' := one_pow _
   map_mul' a b := mul_pow a b n
@@ -67,24 +59,16 @@ variable [DivisionCommMonoid α]
 homomorphism. -/
 @[to_additive (attr := simps) /-- Multiplication by an integer `n` on a commutative additive group,
 considered as an additive group homomorphism. -/]
-/--
-Definition of `zpowGroupHom` / `zpowGroupHom` 的定义
-
-English:
-definition zpowGroupHom
-  signature: (n : Int)
-  body: (· ^ n)
-  map_one' := one_zpow n
-  map_mul' a b := mul_zpow a b n
-
-中文:
-定义 zpowGroupHom
-  签名: (n : 整数)
-  定义体: (· ^ n)
-  map_one' := one_zpow n
-  map_mul' a b := mul_zpow a b n
+/-
+**zpowGroupHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：zpowGroupHom (n : Int) : α ->* α where toFun
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_zpow`：∀ {α : Type u_1} [inst : DivisionCommMonoid α] (a b : α) (n : 
+ℤ), (a * b) ^ n = a ^ n * b ^ n
 -/
-def zpowGroupHom (n : Int) : α ->* α where
+def zpowGroupHom (n : ℤ) : α →* α where
   toFun := (· ^ n)
   map_one' := one_zpow n
   map_mul' a b := mul_zpow a b n
@@ -92,93 +76,55 @@ def zpowGroupHom (n : Int) : α ->* α where
 /-- Inversion on a commutative group, considered as a monoid homomorphism. -/
 @[to_additive /-- Negation on a commutative additive group, considered as an additive monoid
 homomorphism. -/]
-/--
-Definition of `invMonoidHom` / `invMonoidHom` 的定义
-
-English:
-definition invMonoidHom
-  signature: : α ->* α where
-  body: Inv.inv
-  map_one' := inv_one
-  map_mul' := mul_inv
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 invMonoidHom
-  签名: : α ->* α where
-  定义体: Inv.inv
-  map_one' := inv_one
-  map_mul' := mul_inv
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Inv.inv
+/-
+**invMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：invMonoidHom : α ->* α where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_inv`：mul_inv : (a * b)⁻¹ = a⁻¹ * b⁻¹
 -/
-def invMonoidHom : α ->* α where
+def invMonoidHom : α →* α where
   toFun := Inv.inv
   map_one' := inv_one
   map_mul' := mul_inv
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_invMonoidHom` / 定理 `coe_invMonoidHom`
-
-English:
-theorem coe_invMonoidHom
-  statement: (invMonoidHom : α -> α) = Inv.inv
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_invMonoidHom
-  结论: (invMonoidHom : α -> α) = 取逆.inv
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**coe_invMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_invMonoidHom : (invMonoidHom : α -> α) = Inv.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_invMonoidHom : (invMonoidHom : α -> α) = Inv.inv := rfl
+theorem coe_invMonoidHom : (invMonoidHom : α → α) = Inv.inv := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `invMonoidHom_apply` / 定理 `invMonoidHom_apply`
-
-English:
-theorem invMonoidHom_apply
-  given: (a : α)
-  statement: invMonoidHom a = a⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 invMonoidHom_apply
-  条件: (a : α)
-  结论: invMonoidHom a = a⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**invMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：invMonoidHom_apply (a : α) : invMonoidHom a = a⁻¹
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem invMonoidHom_apply (a : α) : invMonoidHom a = a⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `invMonoidHom_comp_invMonoidHom` / 定理 `invMonoidHom_comp_invMonoidHom`
-
-English:
-theorem invMonoidHom_comp_invMonoidHom
-  statement: (invMonoidHom (α := α)).comp invMonoidHom = .id _
-  proof: by
-  ext; simp
-
-中文:
-定理 invMonoidHom_comp_invMonoidHom
-  结论: (invMonoidHom (α := α)).comp invMonoidHom = .id _
-  证明: by
-  ext; simp
-
-Depends on / 依赖: invMonoidHom
+/-
+**invMonoidHom_comp_invMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：invMonoidHom_comp_invMonoidHom : (invMonoidHom (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `MonoidHom.id_apply`：∀ (M : Type u_10) [inst : MulOne M] (x : M), (Monoid
+Hom.id M) x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem invMonoidHom_comp_invMonoidHom : (invMonoidHom (α := α)).comp invMonoidHom = .id _ := by
   ext; simp
@@ -191,26 +137,9 @@ namespace OneHom
 `f * g` is the one-preserving morphism sending `x` to `f x * g x`. -/
 @[to_additive /-- Given two zero-preserving morphisms `f`, `g`,
 `f + g` is the zero-preserving morphism sending `x` to `f x + g x`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: M] [MulOneClass N] : Mul (OneHom M N) where
-  body: { toFun m := f m * g m
-      map_one' := by simp }
-
-@[to_additive (attr := norm_cast)]
-
-中文:
-实例 [幺
-  签名: M] [MulOne类 N] : 乘法 (幺态射 M N) where
-  定义体: { toFun m := f m * g m
-      map_one' := by simp }
-
-@[to_additive (attr := norm_cast)]
-
-Depends on / 依赖: map_one
+/-
+**OneHom.** 是 Mathlib 中的一个实例，位于命名空间 `OneHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [One M] [MulOneClass N] : Mul (OneHom M N) where
   mul f g :=
@@ -218,61 +147,36 @@ instance [One M] [MulOneClass N] : Mul (OneHom M N) where
       map_one' := by simp }
 
 @[to_additive (attr := norm_cast)]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: {M N} [One M] [MulOneClass N] (f g : OneHom M N)
-  statement: ⇑(f * g) = ⇑f * ⇑g
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_mul
-  条件: {M N} [幺 M] [MulOne类 N] (f g : 幺态射 M N)
-  结论: ⇑(f * g) = ⇑f * ⇑g
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OneHom.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：coe_mul {M N} [One M] [MulOneClass N] (f g : OneHom M N) : ⇑(f * g) = ⇑f *
+ ⇑g
+参数：f g : OneHom M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul {M N} [One M] [MulOneClass N] (f g : OneHom M N) : ⇑(f * g) = ⇑f * ⇑g := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: {M N} [One M] [MulOneClass N] (f g : OneHom M N) (x : M)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mul_apply
-  条件: {M N} [幺 M] [MulOne类 N] (f g : 幺态射 M N) (x : M)
-  证明: rfl
-
-@[to_additive]
+/-
+**OneHom.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：mul_apply {M N} [One M] [MulOneClass N] (f g : OneHom M N) (x : M) : (f * 
+g) x = f x * g x
+参数：f g : OneHom M N；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_apply {M N} [One M] [MulOneClass N] (f g : OneHom M N) (x : M) :
     (f * g) x = f x * g x := rfl
 
 @[to_additive]
-/--
-theorem `mul_comp` / 定理 `mul_comp`
-
-English:
-theorem mul_comp
-  given: [One M] [One N] [MulOneClass P] (g₁ g₂ : OneHom N P) (f : OneHom M N)
-  proof: rfl
-
-中文:
-定理 mul_comp
-  条件: [幺 M] [幺 N] [MulOne类 P] (g₁ g₂ : 幺态射 N P) (f : 幺态射 M N)
-  证明: rfl
+/-
+**OneHom.mul_comp** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：mul_comp [One M] [One N] [MulOneClass P] (g₁ g₂ : OneHom N P) (f : OneHom 
+M N) : (g₁ * g₂).comp f = g₁.comp f * g₂.comp f
+参数：g₁ g₂ : OneHom N P；f : OneHom M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_comp [One M] [One N] [MulOneClass P] (g₁ g₂ : OneHom N P) (f : OneHom M N) :
     (g₁ * g₂).comp f = g₁.comp f * g₂.comp f := rfl
@@ -281,26 +185,9 @@ theorem mul_comp [One M] [One N] [MulOneClass P] (g₁ g₂ : OneHom N P) (f : O
 `f⁻¹` is the one-preserving morphism sending `x` to `(f x)⁻¹`. -/
 @[to_additive /-- Given a zero-preserving morphism `f`,
 `-f` is the zero-preserving morphism sending `x` to `-f x`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: M] [InvOneClass N] : Inv (OneHom M N) where
-  body: { toFun m := (f m)⁻¹
-      map_one' := by simp }
-
-@[to_additive (attr := norm_cast)]
-
-中文:
-实例 [幺
-  签名: M] [InvOne类 N] : 取逆 (幺态射 M N) where
-  定义体: { toFun m := (f m)⁻¹
-      map_one' := by simp }
-
-@[to_additive (attr := norm_cast)]
-
-Depends on / 依赖: map_one
+/-
+**OneHom.** 是 Mathlib 中的一个实例，位于命名空间 `OneHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [One M] [InvOneClass N] : Inv (OneHom M N) where
   inv f :=
@@ -308,61 +195,35 @@ instance [One M] [InvOneClass N] : Inv (OneHom M N) where
       map_one' := by simp }
 
 @[to_additive (attr := norm_cast)]
-/--
-theorem `coe_inv` / 定理 `coe_inv`
-
-English:
-theorem coe_inv
-  given: {M N} [One M] [InvOneClass N] (f : OneHom M N)
-  statement: ⇑(f⁻¹) = (⇑f)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_inv
-  条件: {M N} [幺 M] [InvOne类 N] (f : 幺态射 M N)
-  结论: ⇑(f⁻¹) = (⇑f)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OneHom.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：coe_inv {M N} [One M] [InvOneClass N] (f : OneHom M N) : ⇑(f⁻¹) = (⇑f)⁻¹
+参数：f : OneHom M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_inv {M N} [One M] [InvOneClass N] (f : OneHom M N) : ⇑(f⁻¹) = (⇑f)⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_apply` / 定理 `inv_apply`
-
-English:
-theorem inv_apply
-  given: {M N} [One M] [InvOneClass N] (f : OneHom M N) (x : M)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 inv_apply
-  条件: {M N} [幺 M] [InvOne类 N] (f : 幺态射 M N) (x : M)
-  证明: rfl
-
-@[to_additive]
+/-
+**OneHom.inv_apply** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：inv_apply {M N} [One M] [InvOneClass N] (f : OneHom M N) (x : M) : f⁻¹ x =
+ (f x)⁻¹
+参数：f : OneHom M N；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_apply {M N} [One M] [InvOneClass N] (f : OneHom M N) (x : M) :
     f⁻¹ x = (f x)⁻¹ := rfl
 
 @[to_additive]
-/--
-theorem `inv_comp` / 定理 `inv_comp`
-
-English:
-theorem inv_comp
-  given: [One M] [One N] [InvOneClass P] (g : OneHom N P) (f : OneHom M N)
-  proof: rfl
-
-中文:
-定理 inv_comp
-  条件: [幺 M] [幺 N] [InvOne类 P] (g : 幺态射 N P) (f : 幺态射 M N)
-  证明: rfl
+/-
+**OneHom.inv_comp** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：inv_comp [One M] [One N] [InvOneClass P] (g : OneHom N P) (f : OneHom M N)
+ : (g⁻¹).comp f = (g.comp f)⁻¹
+参数：g : OneHom N P；f : OneHom M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_comp [One M] [One N] [InvOneClass P] (g : OneHom N P) (f : OneHom M N) :
     (g⁻¹).comp f = (g.comp f)⁻¹ := rfl
@@ -371,26 +232,9 @@ theorem inv_comp [One M] [One N] [InvOneClass P] (g : OneHom N P) (f : OneHom M 
 `f / g` is the one-preserving morphism sending `x` to `f x / g x`. -/
 @[to_additive /-- Given two zero-preserving morphisms `f`, `g`,
 `f - g` is the additive morphism sending `x` to `f x - g x`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: M] [DivisionMonoid N] : Div (OneHom M N) where
-  body: { toFun m := f m / g m
-      map_one' := by simp }
-
-@[to_additive (attr := norm_cast)]
-
-中文:
-实例 [幺
-  签名: M] [Division幺半群 N] : 除法 (幺态射 M N) where
-  定义体: { toFun m := f m / g m
-      map_one' := by simp }
-
-@[to_additive (attr := norm_cast)]
-
-Depends on / 依赖: map_one
+/-
+**OneHom.** 是 Mathlib 中的一个实例，位于命名空间 `OneHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [One M] [DivisionMonoid N] : Div (OneHom M N) where
   div f g :=
@@ -398,61 +242,36 @@ instance [One M] [DivisionMonoid N] : Div (OneHom M N) where
       map_one' := by simp }
 
 @[to_additive (attr := norm_cast)]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  given: {M N} [One M] [DivisionMonoid N] (f g : OneHom M N)
-  statement: ⇑(f / g) = ⇑f / ⇑g
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_div
-  条件: {M N} [幺 M] [Division幺半群 N] (f g : 幺态射 M N)
-  结论: ⇑(f / g) = ⇑f / ⇑g
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**OneHom.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：coe_div {M N} [One M] [DivisionMonoid N] (f g : OneHom M N) : ⇑(f / g) = ⇑
+f / ⇑g
+参数：f g : OneHom M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_div {M N} [One M] [DivisionMonoid N] (f g : OneHom M N) : ⇑(f / g) = ⇑f / ⇑g := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `div_apply` / 定理 `div_apply`
-
-English:
-theorem div_apply
-  given: {M N} [One M] [DivisionMonoid N] (f g : OneHom M N) (x : M)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 div_apply
-  条件: {M N} [幺 M] [Division幺半群 N] (f g : 幺态射 M N) (x : M)
-  证明: rfl
-
-@[to_additive]
+/-
+**OneHom.div_apply** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：div_apply {M N} [One M] [DivisionMonoid N] (f g : OneHom M N) (x : M) : (f
+ / g) x = f x / g x
+参数：f g : OneHom M N；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem div_apply {M N} [One M] [DivisionMonoid N] (f g : OneHom M N) (x : M) :
     (f / g) x = f x / g x := rfl
 
 @[to_additive]
-/--
-theorem `div_comp` / 定理 `div_comp`
-
-English:
-theorem div_comp
-  given: [One M] [One N] [DivisionMonoid P] (g₁ g₂ : OneHom N P) (f : OneHom M N)
-  proof: rfl
-
-中文:
-定理 div_comp
-  条件: [幺 M] [幺 N] [Division幺半群 P] (g₁ g₂ : 幺态射 N P) (f : 幺态射 M N)
-  证明: rfl
+/-
+**OneHom.div_comp** 是 Mathlib 中的一个定理，位于命名空间 `OneHom`。
+形式化陈述：div_comp [One M] [One N] [DivisionMonoid P] (g₁ g₂ : OneHom N P) (f : OneH
+om M N) : (g₁ / g₂).comp f = g₁.comp f / g₂.comp f
+参数：g₁ g₂ : OneHom N P；f : OneHom M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem div_comp [One M] [One N] [DivisionMonoid P] (g₁ g₂ : OneHom N P) (f : OneHom M N) :
     (g₁ / g₂).comp f = g₁.comp f / g₂.comp f := rfl
@@ -465,101 +284,62 @@ namespace MulHom
 sending `x` to `f x * g x`. -/
 @[to_additive /-- Given two additive morphisms `f`, `g` to an additive commutative semigroup,
 `f + g` is the additive morphism sending `x` to `f x + g x`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: M] [CommSemigroup N] : Mul (M ->ₙ* N)
-  body: ⟨fun f g =>
-    { toFun := fun m => f m * g m,
-      map_mul' := fun x y => by
-        show f (x * y) * g (x * y) = f x * g x * (f y * g y)
-        rw [f.map_mul]; rw [g.map_mul]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_right_comm (f x)] }⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [乘法
-  签名: M] [交换半群 N] : 乘法 (M ->ₙ* N)
-  定义体: ⟨fun f g =>
-    { toFun := fun m => f m * g m,
-      map_mul' := fun x y => by
-        show f (x * y) * g (x * y) = f x * g x * (f y * g y)
-        rw [f.map_mul]; rw [g.map_mul]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_right_comm (f x)] }⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.map_mul, g.map_mul, map_mul, mul_assoc, mul_right_comm
+/-
+**MulHom.** 是 Mathlib 中的一个实例，位于命名空间 `MulHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Mul M] [CommSemigroup N] : Mul (M ->ₙ* N) :=
+instance [Mul M] [CommSemigroup N] : Mul (M →ₙ* N) :=
   ⟨fun f g =>
     { toFun := fun m => f m * g m,
       map_mul' := fun x y => by
         show f (x * y) * g (x * y) = f x * g x * (f y * g y)
-        rw [f.map_mul]; rw [g.map_mul]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_right_comm (f x)] }⟩
+        rw [f.map_mul, g.map_mul, ← mul_assoc, ← mul_assoc, mul_right_comm (f x)] }⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: {M N} [Mul M] [CommSemigroup N] (f g : M ->ₙ* N) (x : M)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mul_apply
-  条件: {M N} [乘法 M] [交换半群 N] (f g : M ->ₙ* N) (x : M)
-  证明: rfl
-
-@[to_additive]
+/-
+**MulHom.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulHom`。
+形式化陈述：mul_apply {M N} [Mul M] [CommSemigroup N] (f g : M ->ₙ* N) (x : M) : (f * 
+g) x = f x * g x
+参数：f g : M ->ₙ* N；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_apply {M N} [Mul M] [CommSemigroup N] (f g : M ->ₙ* N) (x : M) :
+theorem mul_apply {M N} [Mul M] [CommSemigroup N] (f g : M →ₙ* N) (x : M) :
     (f * g) x = f x * g x := rfl
 
 @[to_additive]
-/--
-theorem `mul_comp` / 定理 `mul_comp`
-
-English:
-theorem mul_comp
-  given: [Mul M] [Mul N] [CommSemigroup P] (g₁ g₂ : N ->ₙ* P) (f : M ->ₙ* N)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mul_comp
-  条件: [乘法 M] [乘法 N] [交换半群 P] (g₁ g₂ : N ->ₙ* P) (f : M ->ₙ* N)
-  证明: rfl
-
-@[to_additive]
+/-
+**MulHom.mul_comp** 是 Mathlib 中的一个定理，位于命名空间 `MulHom`。
+形式化陈述：mul_comp [Mul M] [Mul N] [CommSemigroup P] (g₁ g₂ : N ->ₙ* P) (f : M ->ₙ* 
+N) : (g₁ * g₂).comp f = g₁.comp f * g₂.comp f
+参数：g₁ g₂ : N ->ₙ* P；f : M ->ₙ* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_comp [Mul M] [Mul N] [CommSemigroup P] (g₁ g₂ : N ->ₙ* P) (f : M ->ₙ* N) :
+theorem mul_comp [Mul M] [Mul N] [CommSemigroup P] (g₁ g₂ : N →ₙ* P) (f : M →ₙ* N) :
     (g₁ * g₂).comp f = g₁.comp f * g₂.comp f := rfl
 
 @[to_additive]
-/--
-theorem `comp_mul` / 定理 `comp_mul`
-
-English:
-theorem comp_mul
-  given: [Mul M] [CommSemigroup N] [CommSemigroup P] (g : N ->ₙ* P) (f₁ f₂ : M ->ₙ* N)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 comp_mul
-  条件: [乘法 M] [交换半群 N] [交换半群 P] (g : N ->ₙ* P) (f₁ f₂ : M ->ₙ* N)
-  证明: by
-  ext
-  simp
+/-
+**MulHom.comp_mul** 是 Mathlib 中的一个定理，位于命名空间 `MulHom`。
+形式化陈述：comp_mul [Mul M] [CommSemigroup N] [CommSemigroup P] (g : N ->ₙ* P) (f₁ f₂
+ : M ->ₙ* N) : g.comp (f₁ * f₂) = g.comp f₁ * g.comp f₂
+参数：g : N ->ₙ* P；f₁ f₂ : M ->ₙ* N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulHom.ext`：MulHom.ext [Mul M] [Mul N] ⦃f g : M ->ₙ* N⦄ (h : forall x, f
+ x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_mul [Mul M] [CommSemigroup N] [CommSemigroup P] (g : N ->ₙ* P) (f₁ f₂ : M ->ₙ* N) :
+theorem comp_mul [Mul M] [CommSemigroup N] [CommSemigroup P] (g : N →ₙ* P) (f₁ f₂ : M →ₙ* N) :
     g.comp (f₁ * f₂) = g.comp f₁ * g.comp f₂ := by
   ext
   simp
@@ -576,28 +356,16 @@ For the iff statement on the triviality of the kernel, see `injective_iff_map_eq
   /-- A homomorphism from an additive group to an additive monoid is injective iff
   its kernel is trivial. For the iff statement on the triviality of the kernel,
   see `injective_iff_map_eq_zero'`. -/]
-/--
-theorem `_root_.injective_iff_map_eq_one` / 定理 `_root_.injective_iff_map_eq_one`
-
-English:
-theorem _root_.injective_iff_map_eq_one
-  statement: {G H} [Group G] [MulOneClass H]
-  proof: ⟨fun h _ => (map_eq_one_iff f h).mp, fun h x y hxy =>
-mul_inv_eq_one.1 h _ by rw [map_mul, hxy, ← map_mul, mul_inv_cancel, map_one]⟩
-
-中文:
-定理 _root_.injective_iff_map_eq_one
-  结论: {G H} [群 G] [MulOne类 H]
-  证明: ⟨fun h _ => (map_eq_one_iff f h).mp, fun h x y hxy =>
-mul_inv_eq_one.1 h _ by rw [map_mul, hxy, ← map_mul, mul_inv_cancel, map_one]⟩
-
-Depends on / 依赖: map_eq_one_iff, map_mul, map_one, mul_inv_cancel, mul_inv_eq_one
+/-
+**MonoidHom._root_.injective_iff_map_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.injective_iff_map_eq_one {G H} [Group G] [MulOneClass H]
     [FunLike F G H] [MonoidHomClass F G H]
-    (f : F) : Function.Injective f ↔ forall a, f a = 1 -> a = 1 :=
+    (f : F) : Function.Injective f ↔ ∀ a, f a = 1 → a = 1 :=
   ⟨fun h _ => (map_eq_one_iff f h).mp, fun h x y hxy =>
-mul_inv_eq_one.1 h _ by rw [map_mul, hxy, ← map_mul, mul_inv_cancel, map_one]⟩
+    mul_inv_eq_one.1 <| h _ <| by rw [map_mul, hxy, ← map_mul, mul_inv_cancel, map_one]⟩
 
 /-- A homomorphism from a group to a monoid is injective iff its kernel is trivial,
 stated as an iff on the triviality of the kernel.
@@ -606,27 +374,15 @@ For the implication, see `injective_iff_map_eq_one`. -/
   /-- A homomorphism from an additive group to an additive monoid is injective iff its
   kernel is trivial, stated as an iff on the triviality of the kernel. For the implication, see
   `injective_iff_map_eq_zero`. -/]
-/--
-theorem `_root_.injective_iff_map_eq_one'` / 定理 `_root_.injective_iff_map_eq_one'`
-
-English:
-theorem _root_.injective_iff_map_eq_one'
-  statement: {G H} [Group G] [MulOneClass H]
-  proof: (injective_iff_map_eq_one f).trans
-    forall_congr' fun _ => ⟨fun h => ⟨h, fun H => H.symm ▸ map_one f⟩, Iff.mp⟩
-
-中文:
-定理 _root_.injective_iff_map_eq_one'
-  结论: {G H} [群 G] [MulOne类 H]
-  证明: (injective_iff_map_eq_one f).trans
-    forall_congr' fun _ => ⟨fun h => ⟨h, fun H => H.symm ▸ map_one f⟩, Iff.mp⟩
-
-Depends on / 依赖: H.symm, Iff.mp, forall_congr, injective_iff_map_eq_one, map_one
+/-
+**MonoidHom._root_.injective_iff_map_eq_one'** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHo
+m`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.injective_iff_map_eq_one' {G H} [Group G] [MulOneClass H]
     [FunLike F G H] [MonoidHomClass F G H]
-    (f : F) : Function.Injective f ↔ forall a, f a = 1 ↔ a = 1 :=
-(injective_iff_map_eq_one f).trans
+    (f : F) : Function.Injective f ↔ ∀ a, f a = 1 ↔ a = 1 :=
+  (injective_iff_map_eq_one f).trans <|
     forall_congr' fun _ => ⟨fun h => ⟨h, fun H => H.symm ▸ map_one f⟩, Iff.mp⟩
 
 /-- Makes a group homomorphism from a proof that the map preserves right division
@@ -636,39 +392,16 @@ theorem _root_.injective_iff_map_eq_one' {G H} [Group G] [MulOneClass H]
   /-- Makes an additive group homomorphism from a proof that the map preserves
   the operation `fun a b => a + -b`. See also `AddMonoidHom.ofMapSub` for a version using
   `fun a b => a - b`. -/]
-/--
-Definition of `ofMapMulInv` / `ofMapMulInv` 的定义
-
-English:
-definition ofMapMulInv
-  signature: {H : Type*} [Group H] (f : G -> H)
-  body: (mk' f) fun x y =>
-    calc
-      f (x * y) = f x * (f <| 1 * 1⁻¹ * y⁻¹)⁻¹ := by
-        { simp only [one_mul, inv_one, ← map_div, inv_inv] }
-      _ = f x * f y := by
-        { simp only [map_div]
-          simp only [mul_inv_cancel, one_mul, inv_inv] }
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 ofMapMulInv
-  签名: {H : 类型} [群 H] (f : G -> H)
-  定义体: (mk' f) fun x y =>
-    calc
-      f (x * y) = f x * (f <| 1 * 1⁻¹ * y⁻¹)⁻¹ := by
-        { simp only [one_mul, inv_one, ← map_div, inv_inv] }
-      _ = f x * f y := by
-        { simp only [map_div]
-          simp only [mul_inv_cancel, one_mul, inv_inv] }
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: inv_inv, inv_one, map_div, mul_inv_cancel, one_mul
+/-
+**MonoidHom.ofMapMulInv** 是 Mathlib 中的一个定义，位于命名空间 `MonoidHom`。
+形式化陈述：ofMapMulInv {H : Type*} [Group H] (f : G -> H) (map_div : forall a b : G, 
+f (a * b⁻¹) = f a * (f b)⁻¹) : G ->* H
+参数：f : G -> H；map_div : forall a b : G, f (a * b⁻¹) = f a * (f b)⁻¹。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ofMapMulInv {H : Type*} [Group H] (f : G -> H)
-    (map_div : forall a b : G, f (a * b⁻¹) = f a * (f b)⁻¹) : G ->* H :=
+def ofMapMulInv {H : Type*} [Group H] (f : G → H)
+    (map_div : ∀ a b : G, f (a * b⁻¹) = f a * (f b)⁻¹) : G →* H :=
   (mk' f) fun x y =>
     calc
       f (x * y) = f x * (f <| 1 * 1⁻¹ * y⁻¹)⁻¹ := by
@@ -678,62 +411,44 @@ def ofMapMulInv {H : Type*} [Group H] (f : G -> H)
           simp only [mul_inv_cancel, one_mul, inv_inv] }
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_of_map_mul_inv` / 定理 `coe_of_map_mul_inv`
-
-English:
-theorem coe_of_map_mul_inv
-  statement: {H : Type*} [Group H] (f : G -> H)
-  proof: rfl
-
-中文:
-定理 coe_of_map_mul_inv
-  结论: {H : 类型} [群 H] (f : G -> H)
-  证明: rfl
+/-
+**MonoidHom.coe_of_map_mul_inv** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：coe_of_map_mul_inv {H : Type*} [Group H] (f : G -> H) (map_div : forall a 
+b : G, f (a * b⁻¹) = f a * (f b)⁻¹) : ↑(ofMapMulInv f map_div) = f
+参数：f : G -> H；map_div : forall a b : G, f (a * b⁻¹) = f a * (f b)⁻¹。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_of_map_mul_inv {H : Type*} [Group H] (f : G -> H)
-    (map_div : forall a b : G, f (a * b⁻¹) = f a * (f b)⁻¹) : ↑(ofMapMulInv f map_div) = f :=
+theorem coe_of_map_mul_inv {H : Type*} [Group H] (f : G → H)
+    (map_div : ∀ a b : G, f (a * b⁻¹) = f a * (f b)⁻¹) : ↑(ofMapMulInv f map_div) = f :=
   rfl
 
 /-- Define a morphism of additive groups given a map which respects ratios. -/
 @[to_additive /-- Define a morphism of additive groups given a map which respects difference. -/]
-/--
-Definition of `ofMapDiv` / `ofMapDiv` 的定义
+/-
+**MonoidHom.ofMapDiv** 是 Mathlib 中的一个定义，位于命名空间 `MonoidHom`。
+形式化陈述：ofMapDiv {H : Type*} [Group H] (f : G -> H) (hf : forall x y, f (x / y) = 
+f x / f y) : G ->* H
+参数：f : G -> H；hf : forall x y, f (x / y) = f x / f y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMapDiv
-  signature: {H : Type*} [Group H] (f : G -> H) (hf : forall x y, f (x / y) = f x / f y)
-  body: ofMapMulInv f (by simpa only [div_eq_mul_inv] using hf)
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 ofMapDiv
-  签名: {H : 类型} [群 H] (f : G -> H) (hf : 对任意 x y, f (x / y) = f x / f y)
-  定义体: ofMapMulInv f (by simpa only [div_eq_mul_inv] using hf)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: div_eq_mul_inv, ofMapMulInv
+--- 原说明 ---
+Define a morphism of additive groups given a map which respects ratios.
 -/
-def ofMapDiv {H : Type*} [Group H] (f : G -> H) (hf : forall x y, f (x / y) = f x / f y) : G ->* H :=
+def ofMapDiv {H : Type*} [Group H] (f : G → H) (hf : ∀ x y, f (x / y) = f x / f y) : G →* H :=
   ofMapMulInv f (by simpa only [div_eq_mul_inv] using hf)
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_of_map_div` / 定理 `coe_of_map_div`
-
-English:
-theorem coe_of_map_div
-  given: {H : Type*} [Group H] (f : G -> H) (hf : forall x y, f (x / y) = f x / f y)
-  proof: rfl
-
-中文:
-定理 coe_of_map_div
-  条件: {H : 类型} [群 H] (f : G -> H) (hf : 对任意 x y, f (x / y) = f x / f y)
-  证明: rfl
+/-
+**MonoidHom.coe_of_map_div** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：coe_of_map_div {H : Type*} [Group H] (f : G -> H) (hf : forall x y, f (x /
+ y) = f x / f y) : ↑(ofMapDiv f hf) = f
+参数：f : G -> H；hf : forall x y, f (x / y) = f x / f y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_of_map_div {H : Type*} [Group H] (f : G -> H) (hf : forall x y, f (x / y) = f x / f y) :
+theorem coe_of_map_div {H : Type*} [Group H] (f : G → H) (hf : ∀ x y, f (x / y) = f x / f y) :
     ↑(ofMapDiv f hf) = f := rfl
 
 end Group
@@ -744,101 +459,73 @@ variable [MulOneClass M] [CommMonoid N]
 /-- Given two monoid morphisms `f`, `g` to a commutative monoid, `f * g` is the monoid morphism
 sending `x` to `f x * g x`. -/
 @[to_additive]
-/--
-Instance `mul` / 实例 `mul`
+/-
+**MonoidHom.mul** 是 Mathlib 中的一个实例，位于命名空间 `MonoidHom`。
+形式化陈述：mul : Mul (M ->* N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mul
-  signature: : Mul (M ->* N)
-  body: ⟨fun f g =>
-    { toFun := fun m => f m * g m,
-      map_one' := by simp,
-      map_mul' := fun x y => by
-        rw [f.map_mul]; rw [g.map_mul]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_right_comm (f x)] }⟩
-
-中文:
-实例 mul
-  签名: : 乘法 (M ->* N)
-  定义体: ⟨fun f g =>
-    { toFun := fun m => f m * g m,
-      map_one' := by simp,
-      map_mul' := fun x y => by
-        rw [f.map_mul]; rw [g.map_mul]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_right_comm (f x)] }⟩
-
-Depends on / 依赖: f.map_mul, g.map_mul, map_mul, map_one, mul_assoc, mul_right_comm
+--- 原说明 ---
+Given two monoid morphisms `f`, `g` to a commutative monoid, `f * g` is the mono
+id morphism
+sending `x` to `f x * g x`.
 -/
-instance mul : Mul (M ->* N) :=
+instance mul : Mul (M →* N) :=
   ⟨fun f g =>
     { toFun := fun m => f m * g m,
       map_one' := by simp,
       map_mul' := fun x y => by
-        rw [f.map_mul]; rw [g.map_mul]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_right_comm (f x)] }⟩
+        rw [f.map_mul, g.map_mul, ← mul_assoc, ← mul_assoc, mul_right_comm (f x)] }⟩
 
 /-- Given two additive monoid morphisms `f`, `g` to an additive commutative monoid,
 `f + g` is the additive monoid morphism sending `x` to `f x + g x`. -/
 add_decl_doc AddMonoidHom.add
 
-/--
-lemma `mul_apply` / 引理 `mul_apply`
-
-English:
-lemma mul_apply
-  given: (f g : M ->* N) (x : M)
-  statement: (f * g) x = f x * g x
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 mul_apply
-  条件: (f g : M ->* N) (x : M)
-  结论: (f * g) x = f x * g x
-  证明: rfl
-
-@[to_additive]
+/-
+**MonoidHom.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：∀ {M : Type u_2} {N : Type u_3} [inst : MulOneClass M] [inst_1 : CommMonoi
+d N] (f g : M →* N) (x : M),   (f * g) x = f x * g x
+参数：f g : M →* N；x : M；f * g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma mul_apply (f g : M ->* N) (x : M) : (f * g) x = f x * g x := rfl
+@[to_additive (attr := simp)] lemma mul_apply (f g : M →* N) (x : M) : (f * g) x = f x * g x := rfl
 
 @[to_additive]
-/--
-lemma `mul_comp` / 引理 `mul_comp`
-
-English:
-lemma mul_comp
-  given: [MulOneClass P] (g₁ g₂ : M ->* N) (f : P ->* M)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 mul_comp
-  条件: [MulOne类 P] (g₁ g₂ : M ->* N) (f : P ->* M)
-  证明: rfl
-
-@[to_additive]
+/-
+**MonoidHom.mul_comp** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：mul_comp [MulOneClass P] (g₁ g₂ : M ->* N) (f : P ->* M) : (g₁ * g₂).comp 
+f = g₁.comp f * g₂.comp f
+参数：g₁ g₂ : M ->* N；f : P ->* M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mul_comp [MulOneClass P] (g₁ g₂ : M ->* N) (f : P ->* M) :
+lemma mul_comp [MulOneClass P] (g₁ g₂ : M →* N) (f : P →* M) :
     (g₁ * g₂).comp f = g₁.comp f * g₂.comp f := rfl
 
 @[to_additive]
-/--
-lemma `comp_mul` / 引理 `comp_mul`
-
-English:
-lemma comp_mul
-  given: [CommMonoid P] (g : N ->* P) (f₁ f₂ : M ->* N)
-  proof: by
-  ext
-  simp
-
-中文:
-引理 comp_mul
-  条件: [交换幺半群 P] (g : N ->* P) (f₁ f₂ : M ->* N)
-  证明: by
-  ext
-  simp
+/-
+**MonoidHom.comp_mul** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：comp_mul [CommMonoid P] (g : N ->* P) (f₁ f₂ : M ->* N) : g.comp (f₁ * f₂)
+ = g.comp f₁ * g.comp f₂
+参数：g : N ->* P；f₁ f₂ : M ->* N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma comp_mul [CommMonoid P] (g : N ->* P) (f₁ f₂ : M ->* N) :
+lemma comp_mul [CommMonoid P] (g : N →* P) (f₁ f₂ : M →* N) :
     g.comp (f₁ * f₂) = g.comp f₁ * g.comp f₂ := by
   ext
   simp
@@ -852,88 +539,51 @@ variable [MulOneClass M] [MulOneClass N] [CommGroup G] [CommGroup H]
 `x` to `(f x)⁻¹`. -/
 @[to_additive /-- If `f` is an additive monoid homomorphism to an additive commutative group,
 then `-f` is the homomorphism sending `x` to `-(f x)`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inv (M ->* G)
-  body: mk' (fun g => (f g)⁻¹) fun a b => by simp_rw [← mul_inv, f.map_mul]
-
-中文:
-实例 :
-  签名: 取逆 (M ->* G)
-  定义体: mk' (fun g => (f g)⁻¹) fun a b => by simp_rw [← mul_inv, f.map_mul]
-
-Depends on / 依赖: f.map_mul, map_mul, mul_inv, simp_rw
+/-
+**MonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inv (M ->* G) where
-  inv f := mk' (fun g => (f g)⁻¹) fun a b => by simp_rw [← mul_inv, f.map_mul]
-
-/--
-lemma `inv_apply` / 引理 `inv_apply`
-
-English:
-lemma inv_apply
-  given: (f : M ->* G) (x : M)
-  statement: f⁻¹ x = (f x)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 inv_apply
-  条件: (f : M ->* G) (x : M)
-  结论: f⁻¹ x = (f x)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+instance : Inv (M →* G) where
+  inv f := mk' (fun g ↦ (f g)⁻¹) fun a b ↦ by simp_rw [← mul_inv, f.map_mul]
+/-
+**MonoidHom.inv_apply** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：∀ {M : Type u_2} {G : Type u_5} [inst : MulOneClass M] [inst_1 : CommGroup
+ G] (f : M →* G) (x : M), f⁻¹ x = (f x)⁻¹
+参数：f : M →* G；x : M；f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma inv_apply (f : M ->* G) (x : M) : f⁻¹ x = (f x)⁻¹ := rfl
+@[to_additive (attr := simp)] lemma inv_apply (f : M →* G) (x : M) : f⁻¹ x = (f x)⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_comp` / 定理 `inv_comp`
-
-English:
-theorem inv_comp
-  given: (φ : N ->* G) (ψ : M ->* N)
-  statement: φ⁻¹.comp ψ = (φ.comp ψ)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 inv_comp
-  条件: (φ : N ->* G) (ψ : M ->* N)
-  结论: φ⁻¹.comp ψ = (φ.comp ψ)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonoidHom.inv_comp** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：inv_comp (φ : N ->* G) (ψ : M ->* N) : φ⁻¹.comp ψ = (φ.comp ψ)⁻¹
+参数：φ : N ->* G；ψ : M ->* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inv_comp (φ : N ->* G) (ψ : M ->* N) : φ⁻¹.comp ψ = (φ.comp ψ)⁻¹ := rfl
+theorem inv_comp (φ : N →* G) (ψ : M →* N) : φ⁻¹.comp ψ = (φ.comp ψ)⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `comp_inv` / 定理 `comp_inv`
-
-English:
-theorem comp_inv
-  given: (φ : G ->* H) (ψ : M ->* G)
-  statement: φ.comp ψ⁻¹ = (φ.comp ψ)⁻¹
-  proof: by
-  ext
-  simp
-
-中文:
-定理 comp_inv
-  条件: (φ : G ->* H) (ψ : M ->* G)
-  结论: φ.comp ψ⁻¹ = (φ.comp ψ)⁻¹
-  证明: by
-  ext
-  simp
+/-
+**MonoidHom.comp_inv** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：comp_inv (φ : G ->* H) (ψ : M ->* G) : φ.comp ψ⁻¹ = (φ.comp ψ)⁻¹
+参数：φ : G ->* H；ψ : M ->* G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_inv (φ : G ->* H) (ψ : M ->* G) : φ.comp ψ⁻¹ = (φ.comp ψ)⁻¹ := by
+theorem comp_inv (φ : G →* H) (ψ : M →* G) : φ.comp ψ⁻¹ = (φ.comp ψ)⁻¹ := by
   ext
   simp
 
@@ -941,91 +591,54 @@ theorem comp_inv (φ : G ->* H) (ψ : M ->* G) : φ.comp ψ⁻¹ = (φ.comp ψ)�
 sending `x` to `(f x) / (g x)`. -/
 @[to_additive /-- If `f` and `g` are monoid homomorphisms to an additive commutative group,
 then `f - g` is the homomorphism sending `x` to `(f x) - (g x)`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Div (M ->* G)
-  body: mk' (fun x => f x / g x) fun a b => by
+/-
+**MonoidHom.** 是 Mathlib 中的一个实例，位于命名空间 `MonoidHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : Div (M →* G) where
+  div f g := mk' (fun x ↦ f x / g x) fun a b ↦ by
     simp [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm]
-
-中文:
-实例 :
-  签名: 除法 (M ->* G)
-  定义体: mk' (fun x => f x / g x) fun a b => by
-    simp [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm]
-
-Depends on / 依赖: div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm
+/-
+**MonoidHom.div_apply** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：∀ {M : Type u_2} {G : Type u_5} [inst : MulOneClass M] [inst_1 : CommGroup
+ G] (f g : M →* G) (x : M),   (f / g) x = f x / g x
+参数：f g : M →* G；x : M；f / g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Div (M ->* G) where
-  div f g := mk' (fun x => f x / g x) fun a b => by
-    simp [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm]
-
-/--
-lemma `div_apply` / 引理 `div_apply`
-
-English:
-lemma div_apply
-  given: (f g : M ->* G) (x : M)
-  statement: (f / g) x = f x / g x
-  proof: rfl
+@[to_additive (attr := simp)] lemma div_apply (f g : M →* G) (x : M) : (f / g) x = f x / g x := rfl
 
 @[to_additive (attr := simp)]
-
-中文:
-引理 div_apply
-  条件: (f g : M ->* G) (x : M)
-  结论: (f / g) x = f x / g x
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonoidHom.div_comp** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：div_comp (f g : N ->* G) (h : M ->* N) : (f / g).comp h = f.comp h / g.com
+p h
+参数：f g : N ->* G；h : M ->* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma div_apply (f g : M ->* G) (x : M) : (f / g) x = f x / g x := rfl
+lemma div_comp (f g : N →* G) (h : M →* N) : (f / g).comp h = f.comp h / g.comp h := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `div_comp` / 引理 `div_comp`
-
-English:
-lemma div_comp
-  given: (f g : N ->* G) (h : M ->* N)
-  statement: (f / g).comp h = f.comp h / g.comp h
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 div_comp
-  条件: (f g : N ->* G) (h : M ->* N)
-  结论: (f / g).comp h = f.comp h / g.comp h
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonoidHom.comp_div** 是 Mathlib 中的一个引理，位于命名空间 `MonoidHom`。
+形式化陈述：comp_div (f : G ->* H) (g h : M ->* G) : f.comp (g / h) = f.comp g / f.com
+p h
+参数：f : G ->* H；g h : M ->* G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_div`：map_div [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) : forall a b, f (a / b) = f a / f b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma div_comp (f g : N ->* G) (h : M ->* N) : (f / g).comp h = f.comp h / g.comp h := rfl
-
-@[to_additive (attr := simp)]
-/--
-lemma `comp_div` / 引理 `comp_div`
-
-English:
-lemma comp_div
-  given: (f : G ->* H) (g h : M ->* G)
-  statement: f.comp (g / h) = f.comp g / f.comp h
-  proof: by
-  ext
-  simp
-
-中文:
-引理 comp_div
-  条件: (f : G ->* H) (g h : M ->* G)
-  结论: f.comp (g / h) = f.comp g / f.comp h
-  证明: by
-  ext
-  simp
--/
-lemma comp_div (f : G ->* H) (g h : M ->* G) : f.comp (g / h) = f.comp g / f.comp h := by
+lemma comp_div (f : G →* H) (g h : M →* G) : f.comp (g / h) = f.comp g / f.comp h := by
   ext
   simp
 
@@ -1033,44 +646,37 @@ end InvDiv
 
 /-- If `H` is commutative and `G →* H` is injective, then `G` is commutative. -/
 @[instance_reducible]
-/--
-Definition of `commGroupOfInjective` / `commGroupOfInjective` 的定义
+/-
+**MonoidHom.commGroupOfInjective** 是 Mathlib 中的一个定义，位于命名空间 `MonoidHom`。
+形式化陈述：commGroupOfInjective [Group G] [CommGroup H] (f : G ->* H) (hf : Function.
+Injective f) : CommGroup G
+参数：f : G ->* H；hf : Function.Injective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commGroupOfInjective
-  signature: [Group G] [CommGroup H] (f : G ->* H) (hf : Function.Injective f)
-  body: ⟨by simp_rw [← hf.eq_iff, map_mul, mul_comm, implies_true]⟩
-
-中文:
-定义 commGroupOfInjective
-  签名: [群 G] [交换群 H] (f : G ->* H) (hf : 函数.单射 f)
-  定义体: ⟨by simp_rw [← hf.eq_iff, map_mul, mul_comm, implies_true]⟩
-
-Depends on / 依赖: eq_iff, hf.eq_iff, implies_true, map_mul, mul_comm, simp_rw
+--- 原说明 ---
+If `H` is commutative and `G →* H` is injective, then `G` is commutative.
 -/
-def commGroupOfInjective [Group G] [CommGroup H] (f : G ->* H) (hf : Function.Injective f) :
+def commGroupOfInjective [Group G] [CommGroup H] (f : G →* H) (hf : Function.Injective f) :
     CommGroup G :=
   ⟨by simp_rw [← hf.eq_iff, map_mul, mul_comm, implies_true]⟩
 
 /-- If `G` is commutative and `G →* H` is surjective, then `H` is commutative. -/
 @[instance_reducible]
-/--
-Definition of `commGroupOfSurjective` / `commGroupOfSurjective` 的定义
+/-
+**MonoidHom.commGroupOfSurjective** 是 Mathlib 中的一个定义，位于命名空间 `MonoidHom`。
+形式化陈述：commGroupOfSurjective [CommGroup G] [Group H] (f : G ->* H) (hf : Function
+.Surjective f) : CommGroup H
+参数：f : G ->* H；hf : Function.Surjective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commGroupOfSurjective
-  signature: [CommGroup G] [Group H] (f : G ->* H) (hf : Function.Surjective f)
-  body: ⟨by simp_rw [hf.forall₂, ← map_mul, mul_comm, implies_true]⟩
-
-中文:
-定义 commGroupOfSurjective
-  签名: [交换群 G] [群 H] (f : G ->* H) (hf : 函数.满射 f)
-  定义体: ⟨by simp_rw [hf.forall₂, ← map_mul, mul_comm, implies_true]⟩
-
-Depends on / 依赖: hf.forall, implies_true, map_mul, mul_comm, simp_rw
+--- 原说明 ---
+If `G` is commutative and `G →* H` is surjective, then `H` is commutative.
 -/
-def commGroupOfSurjective [CommGroup G] [Group H] (f : G ->* H) (hf : Function.Surjective f) :
+def commGroupOfSurjective [CommGroup G] [Group H] (f : G →* H) (hf : Function.Surjective f) :
     CommGroup H :=
   ⟨by simp_rw [hf.forall₂, ← map_mul, mul_comm, implies_true]⟩
 
 end MonoidHom
+

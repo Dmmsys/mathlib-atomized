@@ -71,53 +71,92 @@ evaluator for this basis, which we take up in the next section.
 
 namespace ToPartrec
 
-/--
-Inductive type `Code` / 归纳类型 `Code`
+/-- The type of codes for primitive recursive functions. Unlike `Nat.Partrec.Code`, this uses a set
+of operations on `List ℕ`. See `Code.eval` for a description of the behavior of the primitives. -/
+/-
+**Turing.ToPartrec.Code** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Code
-  constructors (7):
-    - zero': 
-    - succ: 
-    - tail: 
-    - cons: Code -> Code -> Code
-    - comp: Code -> Code -> Code
-    - case: Code -> Code -> Code
-    - fix: Code -> Code
-
-中文:
-归纳类型 余de
-  构造子 (7 个):
-    - zero': 
-    - succ: 
-    - tail: 
-    - cons: 余de -> 余de -> 余de
-    - comp: 余de -> 余de -> 余de
-    - case: 余de -> 余de -> 余de
-    - fix: 余de -> 余de
+--- 原说明 ---
+The type of codes for primitive recursive functions. Unlike `Nat.Partrec.Code`, 
+this uses a set
+of operations on `List ℕ`. See `Code.eval` for a description of the behavior of 
+the primitives.
 -/
 inductive Code
   | zero'
   | succ
   | tail
-  | cons : Code -> Code -> Code
-  | comp : Code -> Code -> Code
-  | case : Code -> Code -> Code
-  | fix : Code -> Code
+  | cons : Code → Code → Code
+  | comp : Code → Code → Code
+  | case : Code → Code → Code
+  | fix : Code → Code
   deriving DecidableEq, Inhabited
 
-/--
-Definition of `Code.eval` / `Code.eval` 的定义
+/-- The semantics of the `Code` primitives, as partial functions `List ℕ →. List ℕ`.
+By convention, functions that return a single result return a singleton `[n]`,
+or in some cases `n :: v` where `v` will be ignored by a subsequent function.
 
-English:
-definition Code.eval
-  signature: : Code -> List Nat ->. List Nat
-
-中文:
-定义 余de.eval
-  签名: : 余de -> 列表 自然数 ->. 列表 自然数
+* `zero'` appends a `0` to the input. That is, `zero' v = 0 :: v`.
+* `succ` returns the successor of the head of the input, defaulting to zero if there is no head:
+  * `succ [] = [1]`
+  * `succ (n :: v) = [n + 1]`
+* `tail` returns the tail of the input
+  * `tail [] = []`
+  * `tail (n :: v) = v`
+* `cons f fs` calls `f` and `fs` on the input and conses the results:
+  * `cons f fs v = (f v).head :: fs v`
+* `comp f g` calls `f` on the output of `g`:
+  * `comp f g v = f (g v)`
+* `case f g` cases on the head of the input, calling `f` or `g` depending on whether it is zero or
+  a successor (similar to `Nat.casesOn`).
+  * `case f g [] = f []`
+  * `case f g (0 :: v) = f v`
+  * `case f g (n+1 :: v) = g (n :: v)`
+* `fix f` calls `f` repeatedly, using the head of the result of `f` to decide whether to call `f`
+  again or finish:
+  * `fix f v = []` if `f v = []`
+  * `fix f v = w` if `f v = 0 :: w`
+  * `fix f v = fix f w` if `f v = n+1 :: w` (the exact value of `n` is discarded)
 -/
-def Code.eval : Code -> List Nat ->. List Nat
+/-
+**Turing.ToPartrec.Code.eval** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：Turing.ToPartrec.Code → List ℕ →. List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The semantics of the `Code` primitives, as partial functions `List ℕ →. List ℕ`.
+By convention, functions that return a single result return a singleton `[n]`,
+or in some cases `n :: v` where `v` will be ignored by a subsequent function.
+
+* `zero'` appends a `0` to the input. That is, `zero' v = 0 :: v`.
+* `succ` returns the successor of the head of the input, defaulting to zero if t
+here is no head:
+  * `succ [] = [1]`
+  * `succ (n :: v) = [n + 1]`
+* `tail` returns the tail of the input
+  * `tail [] = []`
+  * `tail (n :: v) = v`
+* `cons f fs` calls `f` and `fs` on the input and conses the results:
+  * `cons f fs v = (f v).head :: fs v`
+* `comp f g` calls `f` on the output of `g`:
+  * `comp f g v = f (g v)`
+* `case f g` cases on the head of the input, calling `f` or `g` depending on whe
+ther it is zero or
+  a successor (similar to `Nat.casesOn`).
+  * `case f g [] = f []`
+  * `case f g (0 :: v) = f v`
+  * `case f g (n+1 :: v) = g (n :: v)`
+* `fix f` calls `f` repeatedly, using the head of the result of `f` to decide wh
+ether to call `f`
+  again or finish:
+  * `fix f v = []` if `f v = []`
+  * `fix f v = w` if `f v = 0 :: w`
+  * `fix f v = fix f w` if `f v = n+1 :: w` (the exact value of `n` is discarded
+)
+-/
+def Code.eval : Code → List ℕ →. List ℕ
   | Code.zero' => fun v => pure (0 :: v)
   | Code.succ => fun v => pure [v.headI.succ]
   | Code.tail => fun v => pure v.tail
@@ -134,71 +173,55 @@ namespace Code
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `zero'_eval` / 定理 `zero'_eval`
-
-English:
-theorem zero'_eval
-  statement: zero'.eval = fun v => pure (0 :: v)
-  proof: by simp [eval]
-
-中文:
-定理 zero'_eval
-  结论: zero'.eval = fun v => pure (0 :: v)
-  证明: by simp [eval]
+/-
+**Turing.ToPartrec.Code.zero'_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.C
+ode`。
+形式化陈述：Turing.ToPartrec.Code.zero'.eval = fun v => pure (0 :: v)
+参数：0 :: v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem zero'_eval : zero'.eval = fun v => pure (0 :: v) := by simp [eval]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `succ_eval` / 定理 `succ_eval`
-
-English:
-theorem succ_eval
-  statement: succ.eval = fun v => pure [v.headI.succ]
-  proof: by simp [eval]
-
-中文:
-定理 succ_eval
-  结论: succ.eval = fun v => pure [v.headI.succ]
-  证明: by simp [eval]
+/-
+**Turing.ToPartrec.Code.succ_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：succ_eval : succ.eval = fun v => pure [v.headI.succ]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem succ_eval : succ.eval = fun v => pure [v.headI.succ] := by simp [eval]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `tail_eval` / 定理 `tail_eval`
-
-English:
-theorem tail_eval
-  statement: tail.eval = fun v => pure v.tail
-  proof: by simp [eval]
-
-中文:
-定理 tail_eval
-  结论: tail.eval = fun v => pure v.tail
-  证明: by simp [eval]
+/-
+**Turing.ToPartrec.Code.tail_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：tail_eval : tail.eval = fun v => pure v.tail
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tail_eval : tail.eval = fun v => pure v.tail := by simp [eval]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `cons_eval` / 定理 `cons_eval`
-
-English:
-theorem cons_eval
-  given: (f fs)
-  statement: (cons f fs).eval = fun v => do {
-  proof: by simp [eval]
-
-中文:
-定理 cons_eval
-  条件: (f fs)
-  结论: (cons f fs).eval = fun v => do {
-  证明: by simp [eval]
+/-
+**Turing.ToPartrec.Code.cons_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：cons_eval (f fs) : (cons f fs).eval = fun v => do { let n ← Code.eval f v 
+let ns ← Code.eval fs v pure (n.headI :: ns) }
+参数：f fs。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem cons_eval (f fs) : (cons f fs).eval = fun v => do {
     let n ← Code.eval f v
@@ -207,382 +230,452 @@ theorem cons_eval (f fs) : (cons f fs).eval = fun v => do {
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `comp_eval` / 定理 `comp_eval`
-
-English:
-theorem comp_eval
-  given: (f g)
-  statement: (comp f g).eval = fun v => g.eval v >>= f.eval
-  proof: by simp [eval]
-
-中文:
-定理 comp_eval
-  条件: (f g)
-  结论: (comp f g).eval = fun v => g.eval v >>= f.eval
-  证明: by simp [eval]
+/-
+**Turing.ToPartrec.Code.comp_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：comp_eval (f g) : (comp f g).eval = fun v => g.eval v >>= f.eval
+参数：f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_eval (f g) : (comp f g).eval = fun v => g.eval v >>= f.eval := by simp [eval]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `case_eval` / 定理 `case_eval`
-
-English:
-theorem case_eval
-  given: (f g)
-  proof: by
-  simp [eval]
-
-@[simp]
-
-中文:
-定理 case_eval
-  条件: (f g)
-  证明: by
-  simp [eval]
-
-@[simp]
+/-
+**Turing.ToPartrec.Code.case_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：case_eval (f g) : (case f g).eval = fun v => v.headI.rec (f.eval v.tail) f
+un y _ => g.eval (y::v.tail)
+参数：f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem case_eval (f g) :
     (case f g).eval = fun v => v.headI.rec (f.eval v.tail) fun y _ => g.eval (y::v.tail) := by
   simp [eval]
 
 @[simp]
-/--
-theorem `fix_eval` / 定理 `fix_eval`
-
-English:
-theorem fix_eval
-  given: (f)
-  statement: (fix f).eval =
-  proof: by
-  simp [eval]
-
-中文:
-定理 fix_eval
-  条件: (f)
-  结论: (fix f).eval =
-  证明: by
-  simp [eval]
+/-
+**Turing.ToPartrec.Code.fix_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Cod
+e`。
+形式化陈述：fix_eval (f) : (fix f).eval = PFun.fix fun v => (f.eval v).map fun v => if
+ v.headI = 0 then Sum.inl v.tail else Sum.inr v.tail
+参数：f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem fix_eval (f) : (fix f).eval =
     PFun.fix fun v => (f.eval v).map fun v =>
       if v.headI = 0 then Sum.inl v.tail else Sum.inr v.tail := by
   simp [eval]
 
-/--
-Definition of `nil` / `nil` 的定义
+/-- `nil` is the constant nil function: `nil v = []`. -/
+/-
+**Turing.ToPartrec.Code.nil** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：nil : Code
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nil
-  signature: : Code
-  body: tail.comp succ
-
-@[simp]
-
-中文:
-定义 nil
-  签名: : 余de
-  定义体: tail.comp succ
-
-@[simp]
-
-Depends on / 依赖: tail.comp
+--- 原说明 ---
+`nil` is the constant nil function: `nil v = []`.
 -/
 def nil : Code :=
   tail.comp succ
 
 @[simp]
-/--
-theorem `nil_eval` / 定理 `nil_eval`
-
-English:
-theorem nil_eval
-  given: (v)
-  statement: nil.eval v = pure []
-  proof: by simp [nil]
-
-中文:
-定理 nil_eval
-  条件: (v)
-  结论: nil.eval v = pure []
-  证明: by simp [nil]
+/-
+**Turing.ToPartrec.Code.nil_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Cod
+e`。
+形式化陈述：nil_eval (v) : nil.eval v = pure []
+参数：v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Code.comp_eval`：comp_eval (f g) : (comp f g).eval = fun
+ v => g.eval v >>= f.eval
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Turing.ToPartrec.Code.succ_eval`：succ_eval : succ.eval = fun v => pure [
+v.headI.succ]
+· 使用定理 `Turing.ToPartrec.Code.tail_eval`：tail_eval : tail.eval = fun v => pure v
+.tail
+· 使用定理 `Part.bind_some`：bind_some (a : α) (f : α -> Part β) : (some a).bind f = 
+f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nil_eval (v) : nil.eval v = pure [] := by simp [nil]
 
-/--
-Definition of `id` / `id` 的定义
+/-- `id` is the identity function: `id v = v`. -/
+/-
+**Turing.ToPartrec.Code.id** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：id : Code
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
 
-English:
-definition id
-  signature: : Code
-  body: tail.comp zero'
-
-@[simp]
-
-中文:
-定义 id
-  签名: : 余de
-  定义体: tail.comp zero'
-
-@[simp]
-
-Depends on / 依赖: tail.comp
+--- 原说明 ---
+`id` is the identity function: `id v = v`.
 -/
 def id : Code :=
   tail.comp zero'
 
 @[simp]
-/--
-theorem `id_eval` / 定理 `id_eval`
-
-English:
-theorem id_eval
-  given: (v)
-  statement: id.eval v = pure v
-  proof: by simp [id]
-
-中文:
-定理 id_eval
-  条件: (v)
-  结论: id.eval v = pure v
-  证明: by simp [id]
+/-
+**Turing.ToPartrec.Code.id_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Code
+`。
+形式化陈述：id_eval (v) : id.eval v = pure v
+参数：v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Code.comp_eval`：comp_eval (f g) : (comp f g).eval = fun
+ v => g.eval v >>= f.eval
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Turing.ToPartrec.Code.zero'_eval`：Turing.ToPartrec.Code.zero'.eval = fun
+ v => pure (0 :: v)
+· 使用定理 `Turing.ToPartrec.Code.tail_eval`：tail_eval : tail.eval = fun v => pure v
+.tail
+· 使用定理 `Part.bind_some`：bind_some (a : α) (f : α -> Part β) : (some a).bind f = 
+f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem id_eval (v) : id.eval v = pure v := by simp [id]
 
-/--
-Definition of `head` / `head` 的定义
+/-- `head` gets the head of the input list: `head [] = [0]`, `head (n :: v) = [n]`. -/
+/-
+**Turing.ToPartrec.Code.head** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：head : Code
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition head
-  signature: : Code
-  body: cons id nil
-
-@[simp]
-
-中文:
-定义 head
-  签名: : 余de
-  定义体: cons id nil
-
-@[simp]
+--- 原说明 ---
+`head` gets the head of the input list: `head [] = [0]`, `head (n :: v) = [n]`.
 -/
 def head : Code :=
   cons id nil
 
 @[simp]
-/--
-theorem `head_eval` / 定理 `head_eval`
-
-English:
-theorem head_eval
-  given: (v)
-  statement: head.eval v = pure [v.headI]
-  proof: by simp [head]
-
-中文:
-定理 head_eval
-  条件: (v)
-  结论: head.eval v = pure [v.headI]
-  证明: by simp [head]
+/-
+**Turing.ToPartrec.Code.head_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：head_eval (v) : head.eval v = pure [v.headI]
+参数：v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Code.cons_eval`：cons_eval (f fs) : (cons f fs).eval = f
+un v => do { let n ← Code.eval f v let ns ← Code.eval fs v pure (n.headI :: ns) 
+}
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Turing.ToPartrec.Code.id_eval`：id_eval (v) : id.eval v = pure v
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.ToPartrec.Code.nil_eval`：nil_eval (v) : nil.eval v = pure []
+· 使用定理 `Part.bind_some`：bind_some (a : α) (f : α -> Part β) : (some a).bind f = 
+f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem head_eval (v) : head.eval v = pure [v.headI] := by simp [head]
 
-/--
-Definition of `zero` / `zero` 的定义
+/-- `zero` is the constant zero function: `zero v = [0]`. -/
+/-
+**Turing.ToPartrec.Code.zero** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：zero : Code
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
 
-English:
-definition zero
-  signature: : Code
-  body: cons zero' nil
-
-@[simp]
-
-中文:
-定义 zero
-  签名: : 余de
-  定义体: cons zero' nil
-
-@[simp]
+--- 原说明 ---
+`zero` is the constant zero function: `zero v = [0]`.
 -/
 def zero : Code :=
   cons zero' nil
 
 @[simp]
-/--
-theorem `zero_eval` / 定理 `zero_eval`
-
-English:
-theorem zero_eval
-  given: (v)
-  statement: zero.eval v = pure [0]
-  proof: by simp [zero]
-
-中文:
-定理 zero_eval
-  条件: (v)
-  结论: zero.eval v = pure [0]
-  证明: by simp [zero]
+/-
+**Turing.ToPartrec.Code.zero_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：zero_eval (v) : zero.eval v = pure [0]
+参数：v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Code.cons_eval`：cons_eval (f fs) : (cons f fs).eval = f
+un v => do { let n ← Code.eval f v let ns ← Code.eval fs v pure (n.headI :: ns) 
+}
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Turing.ToPartrec.Code.zero'_eval`：Turing.ToPartrec.Code.zero'.eval = fun
+ v => pure (0 :: v)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.ToPartrec.Code.nil_eval`：nil_eval (v) : nil.eval v = pure []
+· 使用定理 `Part.bind_some`：bind_some (a : α) (f : α -> Part β) : (some a).bind f = 
+f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem zero_eval (v) : zero.eval v = pure [0] := by simp [zero]
 
-/--
-Definition of `pred` / `pred` 的定义
+/-- `pred` returns the predecessor of the head of the input:
+`pred [] = [0]`, `pred (0 :: v) = [0]`, `pred (n+1 :: v) = [n]`. -/
+/-
+**Turing.ToPartrec.Code.pred** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：pred : Code
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pred
-  signature: : Code
-  body: case zero head
-
-@[simp]
-
-中文:
-定义 pred
-  签名: : 余de
-  定义体: case zero head
-
-@[simp]
+--- 原说明 ---
+`pred` returns the predecessor of the head of the input:
+`pred [] = [0]`, `pred (0 :: v) = [0]`, `pred (n+1 :: v) = [n]`.
 -/
 def pred : Code :=
   case zero head
 
 @[simp]
-/--
-theorem `pred_eval` / 定理 `pred_eval`
-
-English:
-theorem pred_eval
-  given: (v)
-  statement: pred.eval v = pure [v.headI.pred]
-  proof: by
-  simp [pred]; cases v.headI <;> simp
-
-中文:
-定理 pred_eval
-  条件: (v)
-  结论: pred.eval v = pure [v.headI.pred]
-  证明: by
-  simp [pred]; cases v.headI <;> simp
-
-Depends on / 依赖: v.headI
+/-
+**Turing.ToPartrec.Code.pred_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+de`。
+形式化陈述：pred_eval (v) : pred.eval v = pure [v.headI.pred]
+参数：v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Code.case_eval`：case_eval (f g) : (case f g).eval = fun
+ v => v.headI.rec (f.eval v.tail) fun y _ => g.eval (y::v.tail)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Turing.ToPartrec.Code.zero_eval`：zero_eval (v) : zero.eval v = pure [0]
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.ToPartrec.Code.head_eval`：head_eval (v) : head.eval v = pure [v.h
+eadI]
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem pred_eval (v) : pred.eval v = pure [v.headI.pred] := by
   simp [pred]; cases v.headI <;> simp
 
-/--
-Definition of `rfind` / `rfind` 的定义
+/-- `rfind f` performs the function of the `rfind` primitive of partial recursive functions.
+`rfind f v` returns the smallest `n` such that `(f (n :: v)).head = 0`.
 
-English:
-definition rfind
-  signature: (f : Code)
-  body: comp pred comp (fix <| cons f <| cons succ tail) zero'
+It is implemented as:
 
-中文:
-定义 rfind
-  签名: (f : 余de)
-  定义体: comp pred comp (fix <| cons f <| cons succ tail) zero'
+    rfind f v = pred (fix (fun (n::v) => f (n::v) :: n+1 :: v) (0 :: v))
+
+The idea is that the initial state is `0 :: v`, and the `fix` keeps `n :: v` as its internal state;
+it calls `f (n :: v)` as the exit test and `n+1 :: v` as the next state. At the end we get
+`n+1 :: v` where `n` is the desired output, and `pred (n+1 :: v) = [n]` returns the result.
+-/
+/-
+**Turing.ToPartrec.Code.rfind** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：rfind (f : Code) : Code
+参数：f : Code。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+
+--- 原说明 ---
+`rfind f` performs the function of the `rfind` primitive of partial recursive fu
+nctions.
+`rfind f v` returns the smallest `n` such that `(f (n :: v)).head = 0`.
+
+It is implemented as:
+
+    rfind f v = pred (fix (fun (n::v) => f (n::v) :: n+1 :: v) (0 :: v))
+
+The idea is that the initial state is `0 :: v`, and the `fix` keeps `n :: v` as 
+its internal state;
+it calls `f (n :: v)` as the exit test and `n+1 :: v` as the next state. At the 
+end we get
+`n+1 :: v` where `n` is the desired output, and `pred (n+1 :: v) = [n]` returns 
+the result.
 -/
 def rfind (f : Code) : Code :=
-comp pred comp (fix <| cons f <| cons succ tail) zero'
+  comp pred <| comp (fix <| cons f <| cons succ tail) zero'
 
-/--
-Definition of `prec` / `prec` 的定义
+/-- `prec f g` implements the `prec` (primitive recursion) operation of partial recursive
+functions. `prec f g` evaluates as:
 
-English:
-definition prec
-  signature: (f g : Code)
-  body: let G :=
-cons tail
-cons succ
-cons (comp pred tail)
-cons (comp g <| cons id <| comp tail tail) comp tail comp tail tail
-let F := case id comp (comp (comp tail tail) (fix G)) zero'
-  cons (comp F (cons head <| cons (comp f tail) tail)) nil
+* `prec f g [] = [f []]`
+* `prec f g (0 :: v) = [f v]`
+* `prec f g (n+1 :: v) = [g (n :: prec f g (n :: v) :: v)]`
 
-中文:
-定义 prec
-  签名: (f g : 余de)
-  定义体: let G :=
-cons tail
-cons succ
-cons (comp pred tail)
-cons (comp g <| cons id <| comp tail tail) comp tail comp tail tail
-let F := case id comp (comp (comp tail tail) (fix G)) zero'
-  cons (comp F (cons head <| cons (comp f tail) tail)) nil
+It is implemented as:
+
+    G (a :: b :: IH :: v) = (b :: a+1 :: b-1 :: g (a :: IH :: v) :: v)
+    F (0 :: f_v :: v) = (f_v :: v)
+    F (n+1 :: f_v :: v) = (fix G (0 :: n :: f_v :: v)).tail.tail
+    prec f g (a :: v) = [(F (a :: f v :: v)).head]
+
+Because `fix` always evaluates its body at least once, we must special case the `0` case to avoid
+calling `g` more times than necessary (which could be bad if `g` diverges). If the input is
+`0 :: v`, then `F (0 :: f v :: v) = (f v :: v)` so we return `[f v]`. If the input is `n+1 :: v`,
+we evaluate the function from the bottom up, with initial state `0 :: n :: f v :: v`. The first
+number counts up, providing arguments for the applications to `g`, while the second number counts
+down, providing the exit condition (this is the initial `b` in the return value of `G`, which is
+stripped by `fix`). After the `fix` is complete, the final state is `n :: 0 :: res :: v` where
+`res` is the desired result, and the rest reduces this to `[res]`. -/
+/-
+**Turing.ToPartrec.Code.prec** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：prec (f g : Code) : Code
+参数：f g : Code。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+
+--- 原说明 ---
+`prec f g` implements the `prec` (primitive recursion) operation of partial recu
+rsive
+functions. `prec f g` evaluates as:
+
+* `prec f g [] = [f []]`
+* `prec f g (0 :: v) = [f v]`
+* `prec f g (n+1 :: v) = [g (n :: prec f g (n :: v) :: v)]`
+
+It is implemented as:
+
+    G (a :: b :: IH :: v) = (b :: a+1 :: b-1 :: g (a :: IH :: v) :: v)
+    F (0 :: f_v :: v) = (f_v :: v)
+    F (n+1 :: f_v :: v) = (fix G (0 :: n :: f_v :: v)).tail.tail
+    prec f g (a :: v) = [(F (a :: f v :: v)).head]
+
+Because `fix` always evaluates its body at least once, we must special case the 
+`0` case to avoid
+calling `g` more times than necessary (which could be bad if `g` diverges). If t
+he input is
+`0 :: v`, then `F (0 :: f v :: v) = (f v :: v)` so we return `[f v]`. If the inp
+ut is `n+1 :: v`,
+we evaluate the function from the bottom up, with initial state `0 :: n :: f v :
+: v`. The first
+number counts up, providing arguments for the applications to `g`, while the sec
+ond number counts
+down, providing the exit condition (this is the initial `b` in the return value 
+of `G`, which is
+stripped by `fix`). After the `fix` is complete, the final state is `n :: 0 :: r
+es :: v` where
+`res` is the desired result, and the rest reduces this to `[res]`.
 -/
 def prec (f g : Code) : Code :=
   let G :=
-cons tail
-cons succ
-cons (comp pred tail)
-cons (comp g <| cons id <| comp tail tail) comp tail comp tail tail
-let F := case id comp (comp (comp tail tail) (fix G)) zero'
+    cons tail <|
+      cons succ <|
+        cons (comp pred tail) <|
+          cons (comp g <| cons id <| comp tail tail) <| comp tail <| comp tail tail
+  let F := case id <| comp (comp (comp tail tail) (fix G)) zero'
   cons (comp F (cons head <| cons (comp f tail) tail)) nil
 
 attribute [-simp] Part.bind_eq_bind Part.map_eq_map Part.pure_eq_some
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `exists_code.comp` / 定理 `exists_code.comp`
-
-English:
-theorem exists_code.comp
-  statement: {m n} {f : List.Vector Nat n ->. Nat} {g : Fin n -> List.Vector Nat m ->. Nat}
-  proof: by
-  rsuffices ⟨cg, hg⟩ :
-    exists c : Code, forall v : List.Vector Nat m,
-c.eval v.1 = Subtype.val < > List.Vector.mOfFn fun i => g i v
-  · obtain ⟨cf, hf⟩ := hf
-    exact
-      ⟨cf.comp cg, fun v => by
-        simp [hg, hf, map_bind]
-        rfl⟩
-  clear hf f
-  induction n with
-  | zero => exact ⟨nil, fun v => by simp [Vector.mOfFn]; rfl⟩
-  | succ n IH =>
-    obtain ⟨cg, hg₁⟩ := hg 0
-    obtain ⟨cl, hl⟩ := IH fun i => hg i.succ
-    exact
-      ⟨cons cg cl, fun v => by
-        simp [Vector.mOfFn, hg₁, hl]
-        rfl⟩
-
-中文:
-定理 存在_code.comp
-  结论: {m n} {f : 列表.Vector 自然数 n ->. 自然数} {g : 有限集 n -> 列表.Vector 自然数 m ->. 自然数}
-  证明: by
-  rsuffices ⟨cg, hg⟩ :
-    exists c : Code, forall v : List.Vector Nat m,
-c.eval v.1 = Subtype.val < > List.Vector.mOfFn fun i => g i v
-  · obtain ⟨cf, hf⟩ := hf
-    exact
-      ⟨cf.comp cg, fun v => by
-        simp [hg, hf, map_bind]
-        rfl⟩
-  clear hf f
-  induction n with
-  | zero => exact ⟨nil, fun v => by simp [Vector.mOfFn]; rfl⟩
-  | succ n IH =>
-    obtain ⟨cg, hg₁⟩ := hg 0
-    obtain ⟨cl, hl⟩ := IH fun i => hg i.succ
-    exact
-      ⟨cons cg cl, fun v => by
-        simp [Vector.mOfFn, hg₁, hl]
-        rfl⟩
-
-Depends on / 依赖: List.Vector, List.Vector.mOfFn, Subtype, Subtype.val, Vector, Vector.mOfFn, c.eval, cf.comp, i.succ, map_bind, rsuffices
+/-
+**Turing.ToPartrec.Code.exists_code.comp** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPar
+trec.Code.exists_code`。
+形式化陈述：∀ {m n : ℕ} {f : List.Vector ℕ n →. ℕ} {g : Fin n → List.Vector ℕ m →. ℕ},
+   (∃ c, ∀ (v : List.Vector ℕ n), c.eval ↑v = pure <$> f v) →     (∀ (i : Fin n)
+, ∃ c, ∀ (v : List.Vector ℕ m), c.eval ↑v = pure <$> g i v) →       ∃ c, ∀ (v : 
+List.Vector ℕ m), c.eval ↑v = pure <$> ((List.Vector.mOfFn fun i => g i v) >>= f
+)
+参数：∃ c, ∀ (v : List.Vector ℕ n), c.eval ↑v = pure <$> f v；∀ (i : Fin n), ∃ c, ∀ 
+(v : List.Vector ℕ m), c.eval ↑v = pure <$> g i v；v : List.Vector ℕ m；(List.Vect
+or.mOfFn fun i => g i v) >>= f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ToPartrec.Code.nil_eval`：nil_eval (v) : nil.eval v = pure []
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Code.cons_eval`：cons_eval (f fs) : (cons f fs).eval = f
+un v => do { let n ← Code.eval f v let ns ← Code.eval fs v pure (n.headI :: ns) 
+}
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `bind_map_left`：∀ {m : Type u_1 → Type u_2} {α β γ : Type u_1} [inst : Mo
+nad m] [LawfulMonad m] (f : α → β) (x : m α) (g : β → m γ),   (do       let b ← 
+f <…
+· 使用定理 `Part.instLawfulMonad`：LawfulMonad Part
+· 使用定理 `map_bind`：∀ {m : Type u_1 → Type u_2} {β γ α : Type u_1} [inst : Monad m
+] [LawfulMonad m] (f : β → γ) (x : m α) (g : α → m β),   f <$> (x >>= g) = do …
+· 使用定理 `Turing.ToPartrec.Code.comp_eval`：comp_eval (f g) : (comp f g).eval = fun
+ v => g.eval v >>= f.eval
 -/
-theorem exists_code.comp {m n} {f : List.Vector Nat n ->. Nat} {g : Fin n -> List.Vector Nat m ->. Nat}
-    (hf : exists c : Code, forall v : List.Vector Nat n, c.eval v.1 = pure <$> f v)
-    (hg : forall i, exists c : Code, forall v : List.Vector Nat m, c.eval v.1 = pure <$> g i v) :
-    exists c : Code, forall v : List.Vector Nat m,
-c.eval v.1 = pure < > ((List.Vector.mOfFn fun i => g i v) >>= f) := by
+theorem exists_code.comp {m n} {f : List.Vector ℕ n →. ℕ} {g : Fin n → List.Vector ℕ m →. ℕ}
+    (hf : ∃ c : Code, ∀ v : List.Vector ℕ n, c.eval v.1 = pure <$> f v)
+    (hg : ∀ i, ∃ c : Code, ∀ v : List.Vector ℕ m, c.eval v.1 = pure <$> g i v) :
+    ∃ c : Code, ∀ v : List.Vector ℕ m,
+      c.eval v.1 = pure <$> ((List.Vector.mOfFn fun i => g i v) >>= f) := by
   rsuffices ⟨cg, hg⟩ :
-    exists c : Code, forall v : List.Vector Nat m,
-c.eval v.1 = Subtype.val < > List.Vector.mOfFn fun i => g i v
+    ∃ c : Code, ∀ v : List.Vector ℕ m,
+      c.eval v.1 = Subtype.val <$> List.Vector.mOfFn fun i => g i v
   · obtain ⟨cf, hf⟩ := hf
     exact
       ⟨cf.comp cg, fun v => by
@@ -600,237 +693,76 @@ c.eval v.1 = Subtype.val < > List.Vector.mOfFn fun i => g i v
         rfl⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `exists_code` / 定理 `exists_code`
-
-English:
-theorem exists_code
-  given: {n} {f : List.Vector Nat n ->. Nat} (hf : Nat.Partrec' f)
-  proof: by
-  induction hf with
-  | prim hf =>
-    induction hf with
-    | zero => exact ⟨zero', fun ⟨[], _⟩ => rfl⟩
-    | succ => exact ⟨succ, fun ⟨[v], _⟩ => rfl⟩
-    | get i =>
-      refine Fin.succRec (fun n => ?_) (fun n i IH => ?_) i
-      · exact ⟨head, fun ⟨List.cons a as, _⟩ => by simp; rfl⟩
-      · obtain ⟨c, h⟩ := IH
-        exact ⟨c.comp tail, fun v => by simpa [← Vector.get_tail, Bind.bind] using h v.tail⟩
-    | comp g hf hg IHf IHg =>
-      simpa [Part.bind_eq_bind] using exists_code.comp IHf IHg
-    | @prec n f g _ _ IHf IHg =>
-      obtain ⟨cf, hf⟩ := IHf
-      obtain ⟨cg, hg⟩ := IHg
-      simp only [Part.map_eq_map, Part.map_some, PFun.coe_val] at hf hg
-      refine ⟨prec cf cg, fun v => ?_⟩
-      rw [← v.cons_head_tail]
-      specialize hf v.tail
-      replace hg := fun a b => hg (a ::ᵥ b ::ᵥ v.tail)
-      simp only [Vector.cons_val, Vector.tail_val] at hf hg
-      simp only [Part.map_eq_map, Part.map_some, Vector.cons_val, PFun.coe_val, Vector.tail_val]
-      simp only [← Part.pure_eq_some] at hf hg ⊢
-      induction v.head with
-      | zero => simp [prec, hf, Bind.bind]
-      | succ n _ =>
-      suffices forall a b, a + b = n ->
-        (n.succ :: 0 ::
-          g (n ::ᵥ Nat.rec (f v.tail) (fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)) n ::ᵥ v.tail) ::
-              v.val.tail : List Nat) in
-          PFun.fix
-            (fun v : List Nat => Part.bind (cg.eval (v.headI :: v.tail.tail))
-              (fun x => Part.some (if v.tail.headI = 0
-                then Sum.inl
-                  (v.headI.succ :: v.tail.headI.pred :: x.headI :: v.tail.tail.tail : List Nat)
-                else Sum.inr
-                  (v.headI.succ :: v.tail.headI.pred :: x.headI :: v.tail.tail.tail))))
-            (a :: b :: Nat.rec (f v.tail) (fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)) a :: v.val.tail) by
-        have := Part.eq_some_iff.mpr (this _ _ (zero_add _))
-        simp [prec, Part.bind_assoc, Bind.bind]
-        simp_all
-      intro a b e
-      induction b generalizing a with
-      | zero =>
-        refine PFun.mem_fix_iff.2 (Or.inl <| Part.eq_some_iff.1 ?_)
-        simp only [hg, ← e, Part.bind_some, List.tail_cons, pure]
-        rfl
-      | succ b IH =>
-        refine PFun.mem_fix_iff.2 (Or.inr ⟨_, ?_, IH (a + 1) (by rwa [add_right_comm])⟩)
-        simp only [hg, Part.bind_some, List.tail_cons, pure]
-        exact Part.mem_some_iff.2 rfl
-  | comp g _ _ IHf IHg => exact exists_code.comp IHf IHg
-  | @rfind n f _ IHf =>
-    obtain ⟨cf, hf⟩ := IHf; refine ⟨rfind cf, fun v => ?_⟩
-    replace hf := fun a => hf (a ::ᵥ v)
-    simp only [Part.map_eq_map, Part.map_some, Vector.cons_val, PFun.coe_val,
-      show forall x, pure x = [x] from fun _ => rfl] at hf ⊢
-    refine Part.ext fun x => ?_
-    simp only [rfind, Part.bind_eq_bind, Part.pure_eq_some, Part.bind_some,
-      cons_eval, comp_eval, fix_eval, tail_eval, succ_eval, zero'_eval,
-      List.headI_cons, pred_eval, Part.map_some, false_eq_decide_iff,
-      Part.mem_bind_iff, Part.mem_map_iff, Nat.mem_rfind,
-      List.tail_cons, true_eq_decide_iff, Part.mem_some_iff, Part.map_bind]
-    constructor
-    · rintro ⟨v', h1, rfl⟩
-      suffices forall v₁ : List Nat, v' in PFun.fix
-        (fun v => (cf.eval v).bind fun y => Part.some <|
-          if y.headI = 0 then Sum.inl (v.headI.succ :: v.tail)
-            else Sum.inr (v.headI.succ :: v.tail)) v₁ ->
-        forall n, (v₁ = n :: v.val) -> (forall m < n, ¬f (m ::ᵥ v) = 0) ->
-          exists a : Nat,
-            (f (a ::ᵥ v) = 0 ∧ forall {m : Nat}, m < a -> ¬f (m ::ᵥ v) = 0) ∧ [a] = [v'.headI.pred]
-        this _ h1 0 rfl (by rintro _ ⟨⟩)
-      clear h1
-      intro v₀ h1
-      refine PFun.fixInduction h1 fun v₁ h2 IH => ?_
-      clear h1
-      rintro n rfl hm
-      have := PFun.mem_fix_iff.1 h2
-      simp only [hf, Part.bind_some] at this
-      split_ifs at this with h
-      · simp only [List.headI_cons, exists_false, or_false, Part.mem_some_iff,
-          List.tail_cons, false_and, Sum.inl.injEq, reduceCtorEq] at this
-        subst this
-        exact ⟨_, ⟨h, @hm⟩, rfl⟩
-      · refine IH (n.succ::v.val) (by simp_all) _ rfl fun m h' => ?_
-        obtain h | rfl := Nat.lt_succ_iff_lt_or_eq.1 h'
-        exacts [hm _ h, h]
-    · rintro ⟨n, ⟨hn, hm⟩, rfl⟩
-      refine ⟨n.succ::v.1, ?_, rfl⟩
-      have : (n.succ::v.1 : List Nat) in
-        PFun.fix (fun v =>
-          (cf.eval v).bind fun y =>
-Part.some
-              if y.headI = 0 then Sum.inl (v.headI.succ :: v.tail)
-                else Sum.inr (v.headI.succ :: v.tail))
-            (n::v.val) :=
-        PFun.mem_fix_iff.2 (Or.inl (by simp [hf, hn]))
-      generalize (n.succ :: v.1 : List Nat) = w at this ⊢
-      clear hn
-      induction n with
-      | zero => exact this
-      | succ n IH =>
-        refine IH (fun {m} h' => hm (Nat.lt_succ_of_lt h'))
-          (PFun.mem_fix_iff.2 (Or.inr ⟨_, ?_, this⟩))
-        simp only [hf, hm n.lt_succ_self, Part.bind_some, List.headI, if_false,
-          Part.mem_some_iff, List.tail_cons]
-
-中文:
-定理 存在_code
-  条件: {n} {f : 列表.Vector 自然数 n ->. 自然数} (hf : 自然数.Partrec' f)
-  证明: by
-  induction hf with
-  | prim hf =>
-    induction hf with
-    | zero => exact ⟨zero', fun ⟨[], _⟩ => rfl⟩
-    | succ => exact ⟨succ, fun ⟨[v], _⟩ => rfl⟩
-    | get i =>
-      refine Fin.succRec (fun n => ?_) (fun n i IH => ?_) i
-      · exact ⟨head, fun ⟨List.cons a as, _⟩ => by simp; rfl⟩
-      · obtain ⟨c, h⟩ := IH
-        exact ⟨c.comp tail, fun v => by simpa [← Vector.get_tail, Bind.bind] using h v.tail⟩
-    | comp g hf hg IHf IHg =>
-      simpa [Part.bind_eq_bind] using exists_code.comp IHf IHg
-    | @prec n f g _ _ IHf IHg =>
-      obtain ⟨cf, hf⟩ := IHf
-      obtain ⟨cg, hg⟩ := IHg
-      simp only [Part.map_eq_map, Part.map_some, PFun.coe_val] at hf hg
-      refine ⟨prec cf cg, fun v => ?_⟩
-      rw [← v.cons_head_tail]
-      specialize hf v.tail
-      replace hg := fun a b => hg (a ::ᵥ b ::ᵥ v.tail)
-      simp only [Vector.cons_val, Vector.tail_val] at hf hg
-      simp only [Part.map_eq_map, Part.map_some, Vector.cons_val, PFun.coe_val, Vector.tail_val]
-      simp only [← Part.pure_eq_some] at hf hg ⊢
-      induction v.head with
-      | zero => simp [prec, hf, Bind.bind]
-      | succ n _ =>
-      suffices forall a b, a + b = n ->
-        (n.succ :: 0 ::
-          g (n ::ᵥ Nat.rec (f v.tail) (fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)) n ::ᵥ v.tail) ::
-              v.val.tail : List Nat) in
-          PFun.fix
-            (fun v : List Nat => Part.bind (cg.eval (v.headI :: v.tail.tail))
-              (fun x => Part.some (if v.tail.headI = 0
-                then Sum.inl
-                  (v.headI.succ :: v.tail.headI.pred :: x.headI :: v.tail.tail.tail : List Nat)
-                else Sum.inr
-                  (v.headI.succ :: v.tail.headI.pred :: x.headI :: v.tail.tail.tail))))
-            (a :: b :: Nat.rec (f v.tail) (fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)) a :: v.val.tail) by
-        have := Part.eq_some_iff.mpr (this _ _ (zero_add _))
-        simp [prec, Part.bind_assoc, Bind.bind]
-        simp_all
-      intro a b e
-      induction b generalizing a with
-      | zero =>
-        refine PFun.mem_fix_iff.2 (Or.inl <| Part.eq_some_iff.1 ?_)
-        simp only [hg, ← e, Part.bind_some, List.tail_cons, pure]
-        rfl
-      | succ b IH =>
-        refine PFun.mem_fix_iff.2 (Or.inr ⟨_, ?_, IH (a + 1) (by rwa [add_right_comm])⟩)
-        simp only [hg, Part.bind_some, List.tail_cons, pure]
-        exact Part.mem_some_iff.2 rfl
-  | comp g _ _ IHf IHg => exact exists_code.comp IHf IHg
-  | @rfind n f _ IHf =>
-    obtain ⟨cf, hf⟩ := IHf; refine ⟨rfind cf, fun v => ?_⟩
-    replace hf := fun a => hf (a ::ᵥ v)
-    simp only [Part.map_eq_map, Part.map_some, Vector.cons_val, PFun.coe_val,
-      show forall x, pure x = [x] from fun _ => rfl] at hf ⊢
-    refine Part.ext fun x => ?_
-    simp only [rfind, Part.bind_eq_bind, Part.pure_eq_some, Part.bind_some,
-      cons_eval, comp_eval, fix_eval, tail_eval, succ_eval, zero'_eval,
-      List.headI_cons, pred_eval, Part.map_some, false_eq_decide_iff,
-      Part.mem_bind_iff, Part.mem_map_iff, Nat.mem_rfind,
-      List.tail_cons, true_eq_decide_iff, Part.mem_some_iff, Part.map_bind]
-    constructor
-    · rintro ⟨v', h1, rfl⟩
-      suffices forall v₁ : List Nat, v' in PFun.fix
-        (fun v => (cf.eval v).bind fun y => Part.some <|
-          if y.headI = 0 then Sum.inl (v.headI.succ :: v.tail)
-            else Sum.inr (v.headI.succ :: v.tail)) v₁ ->
-        forall n, (v₁ = n :: v.val) -> (forall m < n, ¬f (m ::ᵥ v) = 0) ->
-          exists a : Nat,
-            (f (a ::ᵥ v) = 0 ∧ forall {m : Nat}, m < a -> ¬f (m ::ᵥ v) = 0) ∧ [a] = [v'.headI.pred]
-        this _ h1 0 rfl (by rintro _ ⟨⟩)
-      clear h1
-      intro v₀ h1
-      refine PFun.fixInduction h1 fun v₁ h2 IH => ?_
-      clear h1
-      rintro n rfl hm
-      have := PFun.mem_fix_iff.1 h2
-      simp only [hf, Part.bind_some] at this
-      split_ifs at this with h
-      · simp only [List.headI_cons, exists_false, or_false, Part.mem_some_iff,
-          List.tail_cons, false_and, Sum.inl.injEq, reduceCtorEq] at this
-        subst this
-        exact ⟨_, ⟨h, @hm⟩, rfl⟩
-      · refine IH (n.succ::v.val) (by simp_all) _ rfl fun m h' => ?_
-        obtain h | rfl := Nat.lt_succ_iff_lt_or_eq.1 h'
-        exacts [hm _ h, h]
-    · rintro ⟨n, ⟨hn, hm⟩, rfl⟩
-      refine ⟨n.succ::v.1, ?_, rfl⟩
-      have : (n.succ::v.1 : List Nat) in
-        PFun.fix (fun v =>
-          (cf.eval v).bind fun y =>
-Part.some
-              if y.headI = 0 then Sum.inl (v.headI.succ :: v.tail)
-                else Sum.inr (v.headI.succ :: v.tail))
-            (n::v.val) :=
-        PFun.mem_fix_iff.2 (Or.inl (by simp [hf, hn]))
-      generalize (n.succ :: v.1 : List Nat) = w at this ⊢
-      clear hn
-      induction n with
-      | zero => exact this
-      | succ n IH =>
-        refine IH (fun {m} h' => hm (Nat.lt_succ_of_lt h'))
-          (PFun.mem_fix_iff.2 (Or.inr ⟨_, ?_, this⟩))
-        simp only [hf, hm n.lt_succ_self, Part.bind_some, List.headI, if_false,
-          Part.mem_some_iff, List.tail_cons]
-
-Depends on / 依赖: Bind.bind, Fin.succRec, List.cons, Part.bind_eq_bind, Vector, Vector.get_tail, bind_eq_bind, c.comp, exists_code, exists_code.comp, get_tail, succRec, v.tail
+/-
+**Turing.ToPartrec.Code.exists_code** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.
+Code`。
+形式化陈述：exists_code {n} {f : List.Vector Nat n ->. Nat} (hf : Nat.Partrec' f) : ex
+ists c : Code, forall v : List.Vector Nat n, c.eval v.1 = pure < > f v
+参数：hf : Nat.Partrec' f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ToPartrec.Code.head_eval`：head_eval (v) : head.eval v = pure [v.h
+eadI]
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `List.Vector.get_zero`：∀ {α : Type u_1} {n : ℕ} (v : List.Vector α n.succ
+), v.get 0 = v.head
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Code.comp_eval`：comp_eval (f g) : (comp f g).eval = fun
+ v => g.eval v >>= f.eval
+· 使用定理 `Turing.ToPartrec.Code.tail_eval`：tail_eval : tail.eval = fun v => pure v
+.tail
+· 使用定理 `Part.bind_some`：bind_some (a : α) (f : α -> Part β) : (some a).bind f = 
+f a
+· 使用定理 `List.Vector.tail_val`：∀ {α : Type u_1} {n : ℕ} (v : List.Vector α n.succ
+), ↑v.tail = (↑v).tail
+· 使用定理 `List.Vector.get_tail_succ`：∀ {α : Type u_1} {n : ℕ} (v : List.Vector α n
+.succ) (i : Fin n), v.tail.get i = v.get i.succ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Vector.mOfFn_part_some`：Vector.mOfFn_part_some {α n} : forall f : Fin n 
+-> α, (List.Vector.mOfFn fun i => Part.some (f i)) = Part.some (List.Vector.ofFn
+ f)
+· 使用定理 `Turing.ToPartrec.Code.exists_code.comp`：∀ {m n : ℕ} {f : List.Vector ℕ n
+ →. ℕ} {g : Fin n → List.Vector ℕ m →. ℕ},   (∃ c, ∀ (v : List.Vector ℕ n), c.ev
+al ↑v = pure <$> f v) →     …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Vector.cons_head_tail`：∀ {α : Type u_1} {n : ℕ} (v : List.Vector α 
+n.succ), v.head ::ᵥ v.tail = v
+· 使用定理 `Part.map_some`：map_some (f : α -> β) (a : α) : map f (some a) = some (f 
+a)
+· 使用定理 `List.Vector.cons_val`：∀ {α : Type u_1} {n : ℕ} (a : α) (v : List.Vector 
+α n), ↑(a ::ᵥ v) = a :: ↑v
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.ToPartrec.Code.cons_eval`：cons_eval (f fs) : (cons f fs).eval = f
+un v => do { let n ← Code.eval f v let ns ← Code.eval fs v pure (n.headI :: ns) 
+}
+· 使用定理 `Turing.ToPartrec.Code.case_eval`：case_eval (f g) : (case f g).eval = fun
+ v => v.headI.rec (f.eval v.tail) fun y _ => g.eval (y::v.tail)
+· 使用定理 `Turing.ToPartrec.Code.id_eval`：id_eval (v) : id.eval v = pure v
+· 使用定理 `Turing.ToPartrec.Code.zero'_eval`：Turing.ToPartrec.Code.zero'.eval = fun
+ v => pure (0 :: v)
+· 使用定理 `Turing.ToPartrec.Code.fix_eval`：fix_eval (f) : (fix f).eval = PFun.fix f
+un v => (f.eval v).map fun v => if v.headI = 0 then Sum.inl v.tail else Sum.inr 
+v.tail
+· 使用定理 `Turing.ToPartrec.Code.succ_eval`：succ_eval : succ.eval = fun v => pure [
+v.headI.succ]
+（共 63 条，此处仅展示前 30 条）
 -/
-theorem exists_code {n} {f : List.Vector Nat n ->. Nat} (hf : Nat.Partrec' f) :
-exists c : Code, forall v : List.Vector Nat n, c.eval v.1 = pure < > f v := by
+theorem exists_code {n} {f : List.Vector ℕ n →. ℕ} (hf : Nat.Partrec' f) :
+    ∃ c : Code, ∀ v : List.Vector ℕ n, c.eval v.1 = pure <$> f v := by
   induction hf with
   | prim hf =>
     induction hf with
@@ -857,15 +789,15 @@ exists c : Code, forall v : List.Vector Nat n, c.eval v.1 = pure < > f v := by
       induction v.head with
       | zero => simp [prec, hf, Bind.bind]
       | succ n _ =>
-      suffices forall a b, a + b = n ->
+      suffices ∀ a b, a + b = n →
         (n.succ :: 0 ::
           g (n ::ᵥ Nat.rec (f v.tail) (fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)) n ::ᵥ v.tail) ::
-              v.val.tail : List Nat) in
+              v.val.tail : List ℕ) ∈
           PFun.fix
-            (fun v : List Nat => Part.bind (cg.eval (v.headI :: v.tail.tail))
+            (fun v : List ℕ => Part.bind (cg.eval (v.headI :: v.tail.tail))
               (fun x => Part.some (if v.tail.headI = 0
                 then Sum.inl
-                  (v.headI.succ :: v.tail.headI.pred :: x.headI :: v.tail.tail.tail : List Nat)
+                  (v.headI.succ :: v.tail.headI.pred :: x.headI :: v.tail.tail.tail : List ℕ)
                 else Sum.inr
                   (v.headI.succ :: v.tail.headI.pred :: x.headI :: v.tail.tail.tail))))
             (a :: b :: Nat.rec (f v.tail) (fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)) a :: v.val.tail) by
@@ -887,7 +819,7 @@ exists c : Code, forall v : List.Vector Nat n, c.eval v.1 = pure < > f v := by
     obtain ⟨cf, hf⟩ := IHf; refine ⟨rfind cf, fun v => ?_⟩
     replace hf := fun a => hf (a ::ᵥ v)
     simp only [Part.map_eq_map, Part.map_some, Vector.cons_val, PFun.coe_val,
-      show forall x, pure x = [x] from fun _ => rfl] at hf ⊢
+      show ∀ x, pure x = [x] from fun _ => rfl] at hf ⊢
     refine Part.ext fun x => ?_
     simp only [rfind, Part.bind_eq_bind, Part.pure_eq_some, Part.bind_some,
       cons_eval, comp_eval, fix_eval, tail_eval, succ_eval, zero'_eval,
@@ -896,14 +828,14 @@ exists c : Code, forall v : List.Vector Nat n, c.eval v.1 = pure < > f v := by
       List.tail_cons, true_eq_decide_iff, Part.mem_some_iff, Part.map_bind]
     constructor
     · rintro ⟨v', h1, rfl⟩
-      suffices forall v₁ : List Nat, v' in PFun.fix
+      suffices ∀ v₁ : List ℕ, v' ∈ PFun.fix
         (fun v => (cf.eval v).bind fun y => Part.some <|
           if y.headI = 0 then Sum.inl (v.headI.succ :: v.tail)
-            else Sum.inr (v.headI.succ :: v.tail)) v₁ ->
-        forall n, (v₁ = n :: v.val) -> (forall m < n, ¬f (m ::ᵥ v) = 0) ->
-          exists a : Nat,
-            (f (a ::ᵥ v) = 0 ∧ forall {m : Nat}, m < a -> ¬f (m ::ᵥ v) = 0) ∧ [a] = [v'.headI.pred]
-        this _ h1 0 rfl (by rintro _ ⟨⟩)
+            else Sum.inr (v.headI.succ :: v.tail)) v₁ →
+        ∀ n, (v₁ = n :: v.val) → (∀ m < n, ¬f (m ::ᵥ v) = 0) →
+          ∃ a : ℕ,
+            (f (a ::ᵥ v) = 0 ∧ ∀ {m : ℕ}, m < a → ¬f (m ::ᵥ v) = 0) ∧ [a] = [v'.headI.pred]
+        by exact this _ h1 0 rfl (by rintro _ ⟨⟩)
       clear h1
       intro v₀ h1
       refine PFun.fixInduction h1 fun v₁ h2 IH => ?_
@@ -921,15 +853,15 @@ exists c : Code, forall v : List.Vector Nat n, c.eval v.1 = pure < > f v := by
         exacts [hm _ h, h]
     · rintro ⟨n, ⟨hn, hm⟩, rfl⟩
       refine ⟨n.succ::v.1, ?_, rfl⟩
-      have : (n.succ::v.1 : List Nat) in
+      have : (n.succ::v.1 : List ℕ) ∈
         PFun.fix (fun v =>
           (cf.eval v).bind fun y =>
-Part.some
+            Part.some <|
               if y.headI = 0 then Sum.inl (v.headI.succ :: v.tail)
                 else Sum.inr (v.headI.succ :: v.tail))
             (n::v.val) :=
         PFun.mem_fix_iff.2 (Or.inl (by simp [hf, hn]))
-      generalize (n.succ :: v.1 : List Nat) = w at this ⊢
+      generalize (n.succ :: v.1 : List ℕ) = w at this ⊢
       clear hn
       induction n with
       | zero => exact this
@@ -978,47 +910,33 @@ to `v'` in finitely many steps if and only if `Code.eval c v = some v'`.
 -/
 
 
-/--
-Inductive type `Cont` / 归纳类型 `Cont`
+/-- The type of continuations, built up during evaluation of a `Code` expression. -/
+/-
+**Turing.ToPartrec.Cont** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Cont
-  constructors (5):
-    - halt: 
-    - cons₁: Code -> List Nat -> Cont -> Cont
-    - cons₂: List Nat -> Cont -> Cont
-    - comp: Code -> Cont -> Cont
-    - fix: Code -> Cont -> Cont
-
-中文:
-归纳类型 余nt
-  构造子 (5 个):
-    - halt: 
-    - cons₁: 余de -> 列表 自然数 -> 余nt -> 余nt
-    - cons₂: 列表 自然数 -> 余nt -> 余nt
-    - comp: 余de -> 余nt -> 余nt
-    - fix: 余de -> 余nt -> 余nt
+--- 原说明 ---
+The type of continuations, built up during evaluation of a `Code` expression.
 -/
 inductive Cont
   | halt
-  | cons₁ : Code -> List Nat -> Cont -> Cont
-  | cons₂ : List Nat -> Cont -> Cont
-  | comp : Code -> Cont -> Cont
-  | fix : Code -> Cont -> Cont
+  | cons₁ : Code → List ℕ → Cont → Cont
+  | cons₂ : List ℕ → Cont → Cont
+  | comp : Code → Cont → Cont
+  | fix : Code → Cont → Cont
   deriving Inhabited
 
-/--
-Definition of `Cont.eval` / `Cont.eval` 的定义
+/-- The semantics of a continuation. -/
+/-
+**Turing.ToPartrec.Cont.eval** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Cont`。
+形式化陈述：Turing.ToPartrec.Cont → List ℕ →. List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cont.eval
-  signature: : Cont -> List Nat ->. List Nat
-
-中文:
-定义 余nt.eval
-  签名: : 余nt -> 列表 自然数 ->. 列表 自然数
+--- 原说明 ---
+The semantics of a continuation.
 -/
-def Cont.eval : Cont -> List Nat ->. List Nat
+def Cont.eval : Cont → List ℕ →. List ℕ
   | Cont.halt => pure
   | Cont.cons₁ fs as k => fun v => do
     let ns ← Code.eval fs as
@@ -1027,38 +945,89 @@ def Cont.eval : Cont -> List Nat ->. List Nat
   | Cont.comp f k => fun v => Code.eval f v >>= Cont.eval k
   | Cont.fix f k => fun v => if v.headI = 0 then k.eval v.tail else f.fix.eval v.tail >>= k.eval
 
-/--
-Inductive type `Cfg` / 归纳类型 `Cfg`
+/-- The set of configurations of the machine:
 
-English:
-inductive Cfg
-  constructors (2):
-    - halt: List Nat -> Cfg
-    - ret: Cont -> List Nat -> Cfg
+* `halt v`: The machine is about to stop and `v : List ℕ` is the result.
+* `ret k v`: The machine is about to pass `v : List ℕ` to continuation `k : Cont`.
 
-中文:
-归纳类型 Cfg
-  构造子 (2 个):
-    - halt: 列表 自然数 -> Cfg
-    - ret: 余nt -> 列表 自然数 -> Cfg
+We don't have a state corresponding to normal evaluation because these are evaluated immediately
+to a `ret` "in zero steps" using the `stepNormal` function. -/
+/-
+**Turing.ToPartrec.Cfg** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：Cfg | halt : List Nat -> Cfg | ret : Cont -> List Nat -> Cfg deriving Inha
+bited  /-- Evaluating `c : Code` in a continuation `k : Cont` and input `v : Lis
+t ℕ`. This goes by recursion on `c`, building an augmented continuation and a va
+lue to pass to it.  * `zero' v = 0 :: v` evaluates immediately, so we return it 
+to the parent continuation * `succ v = [v.headI.succ]` evaluates immediately, so
+ we return it to the parent continuation * `tail v = v.tail` evaluates immediate
+ly, so we return it to the
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The set of configurations of the machine:
+
+* `halt v`: The machine is about to stop and `v : List ℕ` is the result.
+* `ret k v`: The machine is about to pass `v : List ℕ` to continuation `k : Cont
+`.
+
+We don't have a state corresponding to normal evaluation because these are evalu
+ated immediately
+to a `ret` "in zero steps" using the `stepNormal` function. -/
 -/
 inductive Cfg
-  | halt : List Nat -> Cfg
-  | ret : Cont -> List Nat -> Cfg
+  | halt : List ℕ → Cfg
+  | ret : Cont → List ℕ → Cfg
   deriving Inhabited
 
-/--
-Definition of `stepNormal` / `stepNormal` 的定义
+/-- Evaluating `c : Code` in a continuation `k : Cont` and input `v : List ℕ`. This goes by
+recursion on `c`, building an augmented continuation and a value to pass to it.
 
-English:
-definition stepNormal
-  signature: : Code -> Cont -> List Nat -> Cfg
-
-中文:
-定义 stepNormal
-  签名: : 余de -> 余nt -> 列表 自然数 -> Cfg
+* `zero' v = 0 :: v` evaluates immediately, so we return it to the parent continuation
+* `succ v = [v.headI.succ]` evaluates immediately, so we return it to the parent continuation
+* `tail v = v.tail` evaluates immediately, so we return it to the parent continuation
+* `cons f fs v = (f v).headI :: fs v` requires two sub-evaluations, so we evaluate
+  `f v` in the continuation `k (_.headI :: fs v)` (called `Cont.cons₁ fs v k`)
+* `comp f g v = f (g v)` requires two sub-evaluations, so we evaluate
+  `g v` in the continuation `k (f _)` (called `Cont.comp f k`)
+* `case f g v = v.head.casesOn (f v.tail) (fun n => g (n :: v.tail))` has the information needed
+  to evaluate the case statement, so we do that and transition to either
+  `f v` or `g (n :: v.tail)`.
+* `fix f v = let v' := f v; if v'.headI = 0 then k v'.tail else fix f v'.tail`
+  needs to first evaluate `f v`, so we do that and leave the rest for the continuation (called
+  `Cont.fix f k`)
 -/
-def stepNormal : Code -> Cont -> List Nat -> Cfg
+/-
+**Turing.ToPartrec.stepNormal** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：Turing.ToPartrec.Code → Turing.ToPartrec.Cont → List ℕ → Turing.ToPartrec.
+Cfg
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Evaluating `c : Code` in a continuation `k : Cont` and input `v : List ℕ`. This 
+goes by
+recursion on `c`, building an augmented continuation and a value to pass to it.
+
+* `zero' v = 0 :: v` evaluates immediately, so we return it to the parent contin
+uation
+* `succ v = [v.headI.succ]` evaluates immediately, so we return it to the parent
+ continuation
+* `tail v = v.tail` evaluates immediately, so we return it to the parent continu
+ation
+* `cons f fs v = (f v).headI :: fs v` requires two sub-evaluations, so we evalua
+te
+  `f v` in the continuation `k (_.headI :: fs v)` (called `Cont.cons₁ fs v k`)
+* `comp f g v = f (g v)` requires two sub-evaluations, so we evaluate
+  `g v` in the continuation `k (f _)` (called `Cont.comp f k`)
+* `case f g v = v.head.casesOn (f v.tail) (fun n => g (n :: v.tail))` has the in
+formation needed
+  to evaluate the case statement, so we do that and transition to either
+  `f v` or `g (n :: v.tail)`.
+* `fix f v = let v' := f v; if v'.headI = 0 then k v'.tail else fix f v'.tail`
+  needs to first evaluate `f v`, so we do that and leave the rest for the contin
+uation (called
+  `Cont.fix f k`)
+-/
+def stepNormal : Code → Cont → List ℕ → Cfg
   | Code.zero' => fun k v => Cfg.ret k (0::v)
   | Code.succ => fun k v => Cfg.ret k [v.headI.succ]
   | Code.tail => fun k v => Cfg.ret k v.tail
@@ -1068,53 +1037,109 @@ def stepNormal : Code -> Cont -> List Nat -> Cfg
     v.headI.rec (stepNormal f k v.tail) fun y _ => stepNormal g k (y::v.tail)
   | Code.fix f => fun k v => stepNormal f (Cont.fix f k) v
 
-/--
-Definition of `stepRet` / `stepRet` 的定义
+/-- Evaluating a continuation `k : Cont` on input `v : List ℕ`. This is the second part of
+evaluation, when we receive results from continuations built by `stepNormal`.
 
-English:
-definition stepRet
-  signature: : Cont -> List Nat -> Cfg
-
-中文:
-定义 stepRet
-  签名: : 余nt -> 列表 自然数 -> Cfg
+* `Cont.halt v = v`, so we are done and transition to the `Cfg.halt v` state
+* `Cont.cons₁ fs as k v = k (v.headI :: fs as)`, so we evaluate `fs as` now with the continuation
+  `k (v.headI :: _)` (called `cons₂ v k`).
+* `Cont.cons₂ ns k v = k (ns.headI :: v)`, where we now have everything we need to evaluate
+  `ns.headI :: v`, so we return it to `k`.
+* `Cont.comp f k v = k (f v)`, so we call `f v` with `k` as the continuation.
+* `Cont.fix f k v = k (if v.headI = 0 then k v.tail else fix f v.tail)`, where `v` is a value,
+  so we evaluate the if statement and either call `k` with `v.tail`, or call `fix f v` with `k` as
+  the continuation (which immediately calls `f` with `Cont.fix f k` as the continuation).
 -/
-def stepRet : Cont -> List Nat -> Cfg
+/-
+**Turing.ToPartrec.stepRet** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：Turing.ToPartrec.Cont → List ℕ → Turing.ToPartrec.Cfg
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Evaluating a continuation `k : Cont` on input `v : List ℕ`. This is the second p
+art of
+evaluation, when we receive results from continuations built by `stepNormal`.
+
+* `Cont.halt v = v`, so we are done and transition to the `Cfg.halt v` state
+* `Cont.cons₁ fs as k v = k (v.headI :: fs as)`, so we evaluate `fs as` now with
+ the continuation
+  `k (v.headI :: _)` (called `cons₂ v k`).
+* `Cont.cons₂ ns k v = k (ns.headI :: v)`, where we now have everything we need 
+to evaluate
+  `ns.headI :: v`, so we return it to `k`.
+* `Cont.comp f k v = k (f v)`, so we call `f v` with `k` as the continuation.
+* `Cont.fix f k v = k (if v.headI = 0 then k v.tail else fix f v.tail)`, where `
+v` is a value,
+  so we evaluate the if statement and either call `k` with `v.tail`, or call `fi
+x f v` with `k` as
+  the continuation (which immediately calls `f` with `Cont.fix f k` as the conti
+nuation).
+-/
+def stepRet : Cont → List ℕ → Cfg
   | Cont.halt, v => Cfg.halt v
   | Cont.cons₁ fs as k, v => stepNormal fs (Cont.cons₂ v k) as
   | Cont.cons₂ ns k, v => stepRet k (ns.headI :: v)
   | Cont.comp f k, v => stepNormal f k v
   | Cont.fix f k, v => if v.headI = 0 then stepRet k v.tail else stepNormal f (Cont.fix f k) v.tail
 
-/--
-Definition of `step` / `step` 的定义
+/-- If we are not done (in `Cfg.halt` state), then we must be still stuck on a continuation, so
+this main loop calls `stepRet` with the new continuation. The overall `step` function transitions
+from one `Cfg` to another, only halting at the `Cfg.halt` state. -/
+/-
+**Turing.ToPartrec.step** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：Turing.ToPartrec.Cfg → Option Turing.ToPartrec.Cfg
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition step
-  signature: : Cfg -> Option Cfg
-
-中文:
-定义 step
-  签名: : Cfg -> 选项类型 Cfg
+--- 原说明 ---
+If we are not done (in `Cfg.halt` state), then we must be still stuck on a conti
+nuation, so
+this main loop calls `stepRet` with the new continuation. The overall `step` fun
+ction transitions
+from one `Cfg` to another, only halting at the `Cfg.halt` state.
 -/
-def step : Cfg -> Option Cfg
+def step : Cfg → Option Cfg
   | Cfg.halt _ => none
   | Cfg.ret k v => some (stepRet k v)
 
-/--
-Definition of `Cont.then` / `Cont.then` 的定义
+/-- In order to extract a compositional semantics from the sequential execution behavior of
+configurations, we observe that continuations have a monoid structure, with `Cont.halt` as the unit
+and `Cont.then` as the multiplication. `Cont.then k₁ k₂` runs `k₁` until it halts, and then takes
+the result of `k₁` and passes it to `k₂`.
 
-English:
-definition Cont.then
-  signature: : Cont -> Cont -> Cont
-
-中文:
-定义 余nt.then
-  签名: : 余nt -> 余nt -> 余nt
-
-Depends on / 依赖: Preorder, WellFoundedLT, to_wellFoundedLT
+We will not prove it is associative (although it is), but we are instead interested in the
+associativity law `k₂ (eval c k₁) = eval c (k₁.then k₂)`. This holds at both the sequential and
+compositional levels, and allows us to express running a machine without the ambient continuation
+and relate it to the original machine's evaluation steps. In the literature this is usually
+where one uses Turing machines embedded inside other Turing machines, but this approach allows us
+to avoid changing the ambient type `Cfg` in the middle of the recursion.
 -/
-def Cont.then : Cont -> Cont -> Cont
+/-
+**Turing.ToPartrec.Cont.then** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Cont`。
+形式化陈述：Turing.ToPartrec.Cont → Turing.ToPartrec.Cont → Turing.ToPartrec.Cont
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+In order to extract a compositional semantics from the sequential execution beha
+vior of
+configurations, we observe that continuations have a monoid structure, with `Con
+t.halt` as the unit
+and `Cont.then` as the multiplication. `Cont.then k₁ k₂` runs `k₁` until it halt
+s, and then takes
+the result of `k₁` and passes it to `k₂`.
+
+We will not prove it is associative (although it is), but we are instead interes
+ted in the
+associativity law `k₂ (eval c k₁) = eval c (k₁.then k₂)`. This holds at both the
+ sequential and
+compositional levels, and allows us to express running a machine without the amb
+ient continuation
+and relate it to the original machine's evaluation steps. In the literature this
+ is usually
+where one uses Turing machines embedded inside other Turing machines, but this a
+pproach allows us
+to avoid changing the ambient type `Cfg` in the middle of the recursion.
+-/
+def Cont.then : Cont → Cont → Cont
   | Cont.halt => fun k' => k'
   | Cont.cons₁ fs as k => fun k' => Cont.cons₁ fs as (k.then k')
   | Cont.cons₂ ns k => fun k' => Cont.cons₂ ns (k.then k')
@@ -1122,38 +1147,50 @@ def Cont.then : Cont -> Cont -> Cont
   | Cont.fix f k => fun k' => Cont.fix f (k.then k')
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Cont.then_eval` / 定理 `Cont.then_eval`
-
-English:
-theorem Cont.then_eval
-  given: {k k' : Cont} {v}
-  statement: (k.then k').eval v = k.eval v >>= k'.eval
-  proof: by
-  induction k generalizing v with
-  | halt => simp only [Cont.eval, Cont.then, pure_bind]
-  | cons₁ => simp only [Cont.eval, Cont.then, bind_assoc, *]
-  | cons₂ => simp only [Cont.eval, Cont.then, *]
-  | comp _ _ k_ih => simp only [Cont.eval, Cont.then, bind_assoc, ← k_ih]
-  | fix _ _ k_ih =>
-    simp only [Cont.eval, Cont.then, *]
-    split_ifs <;> [rfl; simp only [← k_ih, bind_assoc]]
-
-中文:
-定理 余nt.then_eval
-  条件: {k k' : 余nt} {v}
-  结论: (k.then k').eval v = k.eval v >>= k'.eval
-  证明: by
-  induction k generalizing v with
-  | halt => simp only [Cont.eval, Cont.then, pure_bind]
-  | cons₁ => simp only [Cont.eval, Cont.then, bind_assoc, *]
-  | cons₂ => simp only [Cont.eval, Cont.then, *]
-  | comp _ _ k_ih => simp only [Cont.eval, Cont.then, bind_assoc, ← k_ih]
-  | fix _ _ k_ih =>
-    simp only [Cont.eval, Cont.then, *]
-    split_ifs <;> [rfl; simp only [← k_ih, bind_assoc]]
-
-Depends on / 依赖: Cont.eval, Cont.then, bind_assoc, generalizing, k_ih, pure_bind, split_ifs
+/-
+**Turing.ToPartrec.Cont.then_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Co
+nt`。
+形式化陈述：∀ {k k' : Turing.ToPartrec.Cont} {v : List ℕ}, (k.then k').eval v = k.eval
+ v >>= k'.eval
+参数：k.then k'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
+· 使用定理 `Part.instLawfulMonad`：LawfulMonad Part
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_2`：∀ (fs : Turing.ToPartrec.Code) (as : Li
+st ℕ) (k : Turing.ToPartrec.Cont),   (Turing.ToPartrec.Cont.cons₁ fs as k).eval 
+= fun v => do     let…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_3`：∀ (ns : List ℕ) (k : Turing.ToPartrec.C
+ont), (Turing.ToPartrec.Cont.cons₂ ns k).eval = fun v => k.eval (ns.headI :: v)
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_4`：∀ (f : Turing.ToPartrec.Code) (k : Turi
+ng.ToPartrec.Cont),   (Turing.ToPartrec.Cont.comp f k).eval = fun v => f.eval v 
+>>= k.eval
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_5`：∀ (f : Turing.ToPartrec.Code) (k : Turi
+ng.ToPartrec.Cont),   (Turing.ToPartrec.Cont.fix f k).eval = fun v => if v.headI
+ = 0 then k.eval v.ta…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
 theorem Cont.then_eval {k k' : Cont} {v} : (k.then k').eval v = k.eval v >>= k'.eval := by
   induction k generalizing v with
@@ -1165,47 +1202,64 @@ theorem Cont.then_eval {k k' : Cont} {v} : (k.then k').eval v = k.eval v >>= k'.
     simp only [Cont.eval, Cont.then, *]
     split_ifs <;> [rfl; simp only [← k_ih, bind_assoc]]
 
-/--
-Definition of `Cfg.then` / `Cfg.then` 的定义
+/-- The `then k` function is a "configuration homomorphism". Its operation on states is to append
+`k` to the continuation of a `Cfg.ret` state, and to run `k` on `v` if we are in the `Cfg.halt v`
+state. -/
+/-
+**Turing.ToPartrec.Cfg.then** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Cfg`。
+形式化陈述：Turing.ToPartrec.Cfg → Turing.ToPartrec.Cont → Turing.ToPartrec.Cfg
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cfg.then
-  signature: : Cfg -> Cont -> Cfg
-
-中文:
-定义 Cfg.then
-  签名: : Cfg -> 余nt -> Cfg
+--- 原说明 ---
+The `then k` function is a "configuration homomorphism". Its operation on states
+ is to append
+`k` to the continuation of a `Cfg.ret` state, and to run `k` on `v` if we are in
+ the `Cfg.halt v`
+state.
 -/
-def Cfg.then : Cfg -> Cont -> Cfg
+def Cfg.then : Cfg → Cont → Cfg
   | Cfg.halt v => fun k' => stepRet k' v
   | Cfg.ret k v => fun k' => Cfg.ret (k.then k') v
 
-/--
-theorem `stepNormal_then` / 定理 `stepNormal_then`
+/-- The `stepNormal` function respects the `then k'` homomorphism. Note that this is an exact
+equality, not a simulation; the original and embedded machines move in lock-step until the
+embedded machine reaches the halt state. -/
+/-
+**Turing.ToPartrec.stepNormal_then** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：stepNormal_then (c) (k k' : Cont) (v) : stepNormal c (k.then k') v = (step
+Normal c k v).then k'
+参数：c；k k' : Cont；v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.ToPartrec.Cont.then.eq_2`：∀ (fs : Turing.ToPartrec.Code) (as : Li
+st ℕ) (k : Turing.ToPartrec.Cont),   (Turing.ToPartrec.Cont.cons₁ fs as k).then 
+= fun k' => Turing.To…
+· 使用定理 `Turing.ToPartrec.Cont.then.eq_4`：∀ (f : Turing.ToPartrec.Code) (k : Turi
+ng.ToPartrec.Cont),   (Turing.ToPartrec.Cont.comp f k).then = fun k' => Turing.T
+oPartrec.Cont.comp f …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.ToPartrec.Cont.then.eq_5`：∀ (f : Turing.ToPartrec.Code) (k : Turi
+ng.ToPartrec.Cont),   (Turing.ToPartrec.Cont.fix f k).then = fun k' => Turing.To
+Partrec.Cont.fix f (k…
 
-English:
-theorem stepNormal_then
-  given: (c) (k k' : Cont) (v)
-  proof: by
-  induction c generalizing k v with simp only [stepNormal, *]
-  | cons c c' ih _ => rw [← ih, Cont.then]
-  | comp c c' _ ih' => rw [← ih', Cont.then]
-  | case => cases v.headI <;> simp only [Nat.rec_zero]
-  | fix c ih => rw [← ih, Cont.then]
-  | _ => simp only [Cfg.then]
-
-中文:
-定理 stepNormal_then
-  条件: (c) (k k' : 余nt) (v)
-  证明: by
-  induction c generalizing k v with simp only [stepNormal, *]
-  | cons c c' ih _ => rw [← ih, Cont.then]
-  | comp c c' _ ih' => rw [← ih', Cont.then]
-  | case => cases v.headI <;> simp only [Nat.rec_zero]
-  | fix c ih => rw [← ih, Cont.then]
-  | _ => simp only [Cfg.then]
-
-Depends on / 依赖: Cfg.then, Cont.then, Nat.rec_zero, generalizing, rec_zero, stepNormal, v.headI
+--- 原说明 ---
+The `stepNormal` function respects the `then k'` homomorphism. Note that this is
+ an exact
+equality, not a simulation; the original and embedded machines move in lock-step
+ until the
+embedded machine reaches the halt state.
 -/
 theorem stepNormal_then (c) (k k' : Cont) (v) :
     stepNormal c (k.then k') v = (stepNormal c k v).then k' := by
@@ -1216,46 +1270,52 @@ theorem stepNormal_then (c) (k k' : Cont) (v) :
   | fix c ih => rw [← ih, Cont.then]
   | _ => simp only [Cfg.then]
 
-/--
-theorem `stepRet_then` / 定理 `stepRet_then`
+/-- The `stepRet` function respects the `then k'` homomorphism. Note that this is an exact
+equality, not a simulation; the original and embedded machines move in lock-step until the
+embedded machine reaches the halt state. -/
+/-
+**Turing.ToPartrec.stepRet_then** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：stepRet_then {k k' : Cont} {v} : stepRet (k.then k') v = (stepRet k v).the
+n k'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ToPartrec.stepRet.eq_2`：∀ (x : List ℕ) (fs : Turing.ToPartrec.Cod
+e) (as : List ℕ) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing
+.ToPartrec.Cont.con…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.ToPartrec.stepNormal_then`：stepNormal_then (c) (k k' : Cont) (v) 
+: stepNormal c (k.then k') v = (stepNormal c k v).then k'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.ToPartrec.stepRet.eq_3`：∀ (x ns : List ℕ) (k : Turing.ToPartrec.C
+ont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont.cons₂ ns k) x = Turing.T
+oPartrec.stepRet k …
+· 使用定理 `Turing.ToPartrec.stepRet.eq_4`：∀ (x : List ℕ) (f : Turing.ToPartrec.Code
+) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont
+.comp f k) x = Turi…
+· 使用定理 `Turing.ToPartrec.stepRet.eq_5`：∀ (x : List ℕ) (f : Turing.ToPartrec.Code
+) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont
+.fix f k) x =     i…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 
-English:
-theorem stepRet_then
-  given: {k k' : Cont} {v}
-  statement: stepRet (k.then k') v = (stepRet k v).then k'
-  proof: by
-  induction k generalizing v with simp only [Cont.then, stepRet, *]
-  | cons₁ =>
-    rw [← stepNormal_then]
-    rfl
-  | comp =>
-    rw [← stepNormal_then]
-  | fix _ _ k_ih =>
-    split_ifs
-    · rw [← k_ih]
-    · rw [← stepNormal_then]
-      rfl
-  | _ => simp only [Cfg.then]
-
-中文:
-定理 stepRet_then
-  条件: {k k' : 余nt} {v}
-  结论: stepRet (k.then k') v = (stepRet k v).then k'
-  证明: by
-  induction k generalizing v with simp only [Cont.then, stepRet, *]
-  | cons₁ =>
-    rw [← stepNormal_then]
-    rfl
-  | comp =>
-    rw [← stepNormal_then]
-  | fix _ _ k_ih =>
-    split_ifs
-    · rw [← k_ih]
-    · rw [← stepNormal_then]
-      rfl
-  | _ => simp only [Cfg.then]
-
-Depends on / 依赖: Cfg.then, Cont.then, generalizing, k_ih, split_ifs, stepNormal_then, stepRet
+--- 原说明 ---
+The `stepRet` function respects the `then k'` homomorphism. Note that this is an
+ exact
+equality, not a simulation; the original and embedded machines move in lock-step
+ until the
+embedded machine reaches the halt state.
 -/
 theorem stepRet_then {k k' : Cont} {v} : stepRet (k.then k') v = (stepRet k v).then k' := by
   induction k generalizing v with simp only [Cont.then, stepRet, *]
@@ -1273,87 +1333,77 @@ theorem stepRet_then {k k' : Cont} {v} : stepRet (k.then k') v = (stepRet k v).t
 
 open StateTransition
 
-/--
-Definition of `Code.Ok` / `Code.Ok` 的定义
+/-- This is a temporary definition, because we will prove in `code_is_ok` that it always holds.
+It asserts that `c` is semantically correct; that is, for any `k` and `v`,
+`eval (stepNormal c k v) = eval (Cfg.ret k (Code.eval c v))`, as an equality of partial values
+(so one diverges iff the other does).
 
-English:
-definition Code.Ok
-  signature: (c : Code)
-  body: forall k v, StateTransition.eval step (stepNormal c k v) =
-    Code.eval c v >>= fun v => StateTransition.eval step (Cfg.ret k v)
+In particular, we can let `k = Cont.halt`, and then this asserts that `stepNormal c Cont.halt v`
+evaluates to `Cfg.halt (Code.eval c v)`. -/
+/-
+**Turing.ToPartrec.Code.Ok** 是 Mathlib 中的一个定义，位于命名空间 `Turing.ToPartrec.Code`。
+形式化陈述：Turing.ToPartrec.Code → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 余de.Ok
-  签名: (c : 余de)
-  定义体: forall k v, StateTransition.eval step (stepNormal c k v) =
-    Code.eval c v >>= fun v => StateTransition.eval step (Cfg.ret k v)
+--- 原说明 ---
+This is a temporary definition, because we will prove in `code_is_ok` that it al
+ways holds.
+It asserts that `c` is semantically correct; that is, for any `k` and `v`,
+`eval (stepNormal c k v) = eval (Cfg.ret k (Code.eval c v))`, as an equality of 
+partial values
+(so one diverges iff the other does).
 
-Depends on / 依赖: Cfg.ret, Code.eval, StateTransition, StateTransition.eval, stepNormal
+In particular, we can let `k = Cont.halt`, and then this asserts that `stepNorma
+l c Cont.halt v`
+evaluates to `Cfg.halt (Code.eval c v)`.
 -/
 def Code.Ok (c : Code) :=
-  forall k v, StateTransition.eval step (stepNormal c k v) =
+  ∀ k v, StateTransition.eval step (stepNormal c k v) =
     Code.eval c v >>= fun v => StateTransition.eval step (Cfg.ret k v)
-
-/--
-theorem `Code.Ok.zero` / 定理 `Code.Ok.zero`
-
-English:
-theorem Code.Ok.zero
-  given: {c} (h : Code.Ok c) {v}
-  proof: by
-  rw [h]; rw [← bind_pure_comp]; congr; funext v
-  exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.single rfl, rfl⟩)
-
-中文:
-定理 余de.Ok.zero
-  条件: {c} (h : 余de.Ok c) {v}
-  证明: by
-  rw [h]; rw [← bind_pure_comp]; congr; funext v
-  exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.single rfl, rfl⟩)
-
-Depends on / 依赖: Part.eq_some_iff, ReflTransGen, ReflTransGen.single, bind_pure_comp, eq_some_iff, mem_eval, single
+/-
+**Turing.ToPartrec.Code.Ok.zero** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec.Code
+.Ok`。
+形式化陈述：∀ {c : Turing.ToPartrec.Code},   c.Ok →     ∀ {v : List ℕ},       StateTra
+nsition.eval Turing.ToPartrec.step (Turing.ToPartrec.stepNormal c Turing.ToPartr
+ec.Cont.halt v) =         Turing.ToPartrec.Cfg.halt <$> c.eval v
+参数：Turing.ToPartrec.stepNormal c Turing.ToPartrec.Cont.halt v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LawfulMonad.bind_pure_comp`：∀ {m : Type u → Type v} {inst : Monad m} [se
+lf : LawfulMonad m] {α β : Type u} (f : α → β) (x : m α),   (do       let a ← x 
+      pure (f a)…
+· 使用定理 `Part.instLawfulMonad`：LawfulMonad Part
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Part.eq_some_iff`：eq_some_iff {a : α} {o : Part α} : o = some a ↔ a in o
+· 使用定理 `StateTransition.mem_eval`：mem_eval {σ} {f : σ -> Option σ} {a b} : b in 
+eval f a ↔ Reaches f a b ∧ f b = none
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
 -/
 theorem Code.Ok.zero {c} (h : Code.Ok c) {v} :
-StateTransition.eval step (stepNormal c Cont.halt v) = Cfg.halt < > Code.eval c v := by
-  rw [h]; rw [← bind_pure_comp]; congr; funext v
+    StateTransition.eval step (stepNormal c Cont.halt v) = Cfg.halt <$> Code.eval c v := by
+  rw [h, ← bind_pure_comp]; congr; funext v
   exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.single rfl, rfl⟩)
-
-/--
-theorem `stepNormal.is_ret` / 定理 `stepNormal.is_ret`
-
-English:
-theorem stepNormal.is_ret
-  given: (c k v)
-  statement: exists k' v', stepNormal c k v = Cfg.ret k' v'
-  proof: by
-  induction c generalizing k v with
-  | cons _f fs IHf _IHfs => apply IHf
-  | comp f _g _IHf IHg => apply IHg
-  | case f g IHf IHg =>
-    rw [stepNormal]
-    simp only
-    cases v.headI <;> [apply IHf; apply IHg]
-  | fix f IHf => apply IHf
-  | _ => exact ⟨_, _, rfl⟩
-
-中文:
-定理 stepNormal.is_ret
-  条件: (c k v)
-  结论: 存在 k' v', stepNormal c k v = Cfg.ret k' v'
-  证明: by
-  induction c generalizing k v with
-  | cons _f fs IHf _IHfs => apply IHf
-  | comp f _g _IHf IHg => apply IHg
-  | case f g IHf IHg =>
-    rw [stepNormal]
-    simp only
-    cases v.headI <;> [apply IHf; apply IHg]
-  | fix f IHf => apply IHf
-  | _ => exact ⟨_, _, rfl⟩
-
-Depends on / 依赖: _IHf, _IHfs, generalizing, stepNormal, v.headI
+/-
+**Turing.ToPartrec.stepNormal.is_ret** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec
+.stepNormal`。
+形式化陈述：∀ (c : Turing.ToPartrec.Code) (k : Turing.ToPartrec.Cont) (v : List ℕ),   
+∃ k' v', Turing.ToPartrec.stepNormal c k v = Turing.ToPartrec.Cfg.ret k' v'
+参数：c : Turing.ToPartrec.Code；k : Turing.ToPartrec.Cont；v : List ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_6`：∀ (f g : Turing.ToPartrec.Code),   Tur
+ing.ToPartrec.stepNormal (f.case g) = fun k v =>     Nat.rec (Turing.ToPartrec.s
+tepNormal f k v.tail) …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem stepNormal.is_ret (c k v) : exists k' v', stepNormal c k v = Cfg.ret k' v' := by
+theorem stepNormal.is_ret (c k v) : ∃ k' v', stepNormal c k v = Cfg.ret k' v' := by
   induction c generalizing k v with
   | cons _f fs IHf _IHfs => apply IHf
   | comp f _g _IHf IHg => apply IHg
@@ -1363,157 +1413,69 @@ theorem stepNormal.is_ret (c k v) : exists k' v', stepNormal c k v = Cfg.ret k' 
     cases v.headI <;> [apply IHf; apply IHg]
   | fix f IHf => apply IHf
   | _ => exact ⟨_, _, rfl⟩
-
-/--
-theorem `cont_eval_fix` / 定理 `cont_eval_fix`
-
-English:
-theorem cont_eval_fix
-  given: {f k v} (fok : Code.Ok f)
-  proof: by
-  refine Part.ext fun x => ?_
-  simp only [Part.bind_eq_bind, Part.mem_bind_iff]
-  constructor
-  · suffices forall c, x in eval step c -> forall v c', c = Cfg.then c' (Cont.fix f k) ->
-      Reaches step (stepNormal f Cont.halt v) c' ->
-        exists v₁ in f.eval v, exists v₂ in if List.headI v₁ = 0 then pure v₁.tail else f.fix.eval v₁.tail,
-          x in eval step (Cfg.ret k v₂) by
-      intro h
-      obtain ⟨v₁, hv₁, v₂, hv₂, h₃⟩ :=
-        this _ h _ _ (stepNormal_then _ Cont.halt _ _) ReflTransGen.refl
-      refine ⟨v₂, PFun.mem_fix_iff.2 ?_, h₃⟩
-      simp only [Part.eq_some_iff.2 hv₁, Part.map_some]
-      split_ifs at hv₂ ⊢
-      · rw [Part.mem_some_iff.1 hv₂]
-        exact Or.inl (Part.mem_some _)
-      · exact Or.inr ⟨_, Part.mem_some _, hv₂⟩
-    refine fun c he => evalInduction he fun y h IH => ?_
-    rintro v (⟨v'⟩ | ⟨k', v'⟩) rfl hr <;> rw [Cfg.then] at h IH <;> simp only at h IH
-    · have := mem_eval.2 ⟨hr, rfl⟩
-      rw [fok]; rw [Part.bind_eq_bind]; rw [Part.mem_bind_iff] at this
-      obtain ⟨v'', h₁, h₂⟩ := this
-      rw [reaches_eval] at h₂
-      swap
-      · exact ReflTransGen.single rfl
-      cases Part.mem_unique h₂ (mem_eval.2 ⟨ReflTransGen.refl, rfl⟩)
-      refine ⟨v', h₁, ?_⟩
-      rw [stepRet] at h
-      revert h
-      by_cases he : v'.headI = 0 <;> simp only [if_pos, if_false, he] <;> intro h
-      · refine ⟨_, Part.mem_some _, ?_⟩
-        rw [reaches_eval]
-        · exact h
-        exact ReflTransGen.single rfl
-      · obtain ⟨k₀, v₀, e₀⟩ := stepNormal.is_ret f Cont.halt v'.tail
-        have e₁ := stepNormal_then f Cont.halt (Cont.fix f k) v'.tail
-        rw [e₀]; rw [Cont.then]; rw [Cfg.then] at e₁
-        simp only at e₁
-        obtain ⟨v₁, hv₁, v₂, hv₂, h₃⟩ :=
-          IH (stepRet (k₀.then (Cont.fix f k)) v₀) (by rw [stepRet, if_neg he, e₁]; rfl)
-            v'.tail _ stepRet_then (by apply ReflTransGen.single; rw [e₀]; rfl)
-        refine ⟨_, PFun.mem_fix_iff.2 ?_, h₃⟩
-        simp only [Part.eq_some_iff.2 hv₁, Part.map_some, Part.mem_some_iff]
-        split_ifs at hv₂ ⊢ <;> [exact Or.inl (congr_arg Sum.inl (Part.mem_some_iff.1 hv₂));
-          exact Or.inr ⟨_, rfl, hv₂⟩]
-    · exact IH _ rfl _ _ stepRet_then (ReflTransGen.tail hr rfl)
-  · rintro ⟨v', he, hr⟩
-    rw [reaches_eval] at hr
-    swap
-    · exact ReflTransGen.single rfl
-    refine PFun.fixInduction he fun v (he : v' in f.fix.eval v) IH => ?_
-    rw [fok]; rw [Part.bind_eq_bind]; rw [Part.mem_bind_iff]
-    obtain he | ⟨v'', he₁', _⟩ := PFun.mem_fix_iff.1 he
-    · obtain ⟨v', he₁, he₂⟩ := (Part.mem_map_iff _).1 he
-      split_ifs at he₂ with h; cases he₂
-      refine ⟨_, he₁, ?_⟩
-      rw [reaches_eval]
-      swap
-      · exact ReflTransGen.single rfl
-      rwa [stepRet, if_pos h]
-    · obtain ⟨v₁, he₁, he₂⟩ := (Part.mem_map_iff _).1 he₁'
-      split_ifs at he₂ with h; cases he₂
-      clear he₁'
-      refine ⟨_, he₁, ?_⟩
-      rw [reaches_eval]
-      swap
-      · exact ReflTransGen.single rfl
-      rw [stepRet]; rw [if_neg h]
-      exact IH v₁.tail ((Part.mem_map_iff _).2 ⟨_, he₁, if_neg h⟩)
-
-中文:
-定理 cont_eval_fix
-  条件: {f k v} (fok : 余de.Ok f)
-  证明: by
-  refine Part.ext fun x => ?_
-  simp only [Part.bind_eq_bind, Part.mem_bind_iff]
-  constructor
-  · suffices forall c, x in eval step c -> forall v c', c = Cfg.then c' (Cont.fix f k) ->
-      Reaches step (stepNormal f Cont.halt v) c' ->
-        exists v₁ in f.eval v, exists v₂ in if List.headI v₁ = 0 then pure v₁.tail else f.fix.eval v₁.tail,
-          x in eval step (Cfg.ret k v₂) by
-      intro h
-      obtain ⟨v₁, hv₁, v₂, hv₂, h₃⟩ :=
-        this _ h _ _ (stepNormal_then _ Cont.halt _ _) ReflTransGen.refl
-      refine ⟨v₂, PFun.mem_fix_iff.2 ?_, h₃⟩
-      simp only [Part.eq_some_iff.2 hv₁, Part.map_some]
-      split_ifs at hv₂ ⊢
-      · rw [Part.mem_some_iff.1 hv₂]
-        exact Or.inl (Part.mem_some _)
-      · exact Or.inr ⟨_, Part.mem_some _, hv₂⟩
-    refine fun c he => evalInduction he fun y h IH => ?_
-    rintro v (⟨v'⟩ | ⟨k', v'⟩) rfl hr <;> rw [Cfg.then] at h IH <;> simp only at h IH
-    · have := mem_eval.2 ⟨hr, rfl⟩
-      rw [fok]; rw [Part.bind_eq_bind]; rw [Part.mem_bind_iff] at this
-      obtain ⟨v'', h₁, h₂⟩ := this
-      rw [reaches_eval] at h₂
-      swap
-      · exact ReflTransGen.single rfl
-      cases Part.mem_unique h₂ (mem_eval.2 ⟨ReflTransGen.refl, rfl⟩)
-      refine ⟨v', h₁, ?_⟩
-      rw [stepRet] at h
-      revert h
-      by_cases he : v'.headI = 0 <;> simp only [if_pos, if_false, he] <;> intro h
-      · refine ⟨_, Part.mem_some _, ?_⟩
-        rw [reaches_eval]
-        · exact h
-        exact ReflTransGen.single rfl
-      · obtain ⟨k₀, v₀, e₀⟩ := stepNormal.is_ret f Cont.halt v'.tail
-        have e₁ := stepNormal_then f Cont.halt (Cont.fix f k) v'.tail
-        rw [e₀]; rw [Cont.then]; rw [Cfg.then] at e₁
-        simp only at e₁
-        obtain ⟨v₁, hv₁, v₂, hv₂, h₃⟩ :=
-          IH (stepRet (k₀.then (Cont.fix f k)) v₀) (by rw [stepRet, if_neg he, e₁]; rfl)
-            v'.tail _ stepRet_then (by apply ReflTransGen.single; rw [e₀]; rfl)
-        refine ⟨_, PFun.mem_fix_iff.2 ?_, h₃⟩
-        simp only [Part.eq_some_iff.2 hv₁, Part.map_some, Part.mem_some_iff]
-        split_ifs at hv₂ ⊢ <;> [exact Or.inl (congr_arg Sum.inl (Part.mem_some_iff.1 hv₂));
-          exact Or.inr ⟨_, rfl, hv₂⟩]
-    · exact IH _ rfl _ _ stepRet_then (ReflTransGen.tail hr rfl)
-  · rintro ⟨v', he, hr⟩
-    rw [reaches_eval] at hr
-    swap
-    · exact ReflTransGen.single rfl
-    refine PFun.fixInduction he fun v (he : v' in f.fix.eval v) IH => ?_
-    rw [fok]; rw [Part.bind_eq_bind]; rw [Part.mem_bind_iff]
-    obtain he | ⟨v'', he₁', _⟩ := PFun.mem_fix_iff.1 he
-    · obtain ⟨v', he₁, he₂⟩ := (Part.mem_map_iff _).1 he
-      split_ifs at he₂ with h; cases he₂
-      refine ⟨_, he₁, ?_⟩
-      rw [reaches_eval]
-      swap
-      · exact ReflTransGen.single rfl
-      rwa [stepRet, if_pos h]
-    · obtain ⟨v₁, he₁, he₂⟩ := (Part.mem_map_iff _).1 he₁'
-      split_ifs at he₂ with h; cases he₂
-      clear he₁'
-      refine ⟨_, he₁, ?_⟩
-      rw [reaches_eval]
-      swap
-      · exact ReflTransGen.single rfl
-      rw [stepRet]; rw [if_neg h]
-      exact IH v₁.tail ((Part.mem_map_iff _).2 ⟨_, he₁, if_neg h⟩)
-
-Depends on / 依赖: Cfg.ret, Cfg.then, Cont.fix, Cont.halt, List.headI, PFun.mem_fix_iff, Part.bind_eq_bind, Part.ext, Part.mem_bind_iff, Reaches, ReflTransGen, ReflTransGen.refl, bind_eq_bind, f.eval, f.fix.eval, mem_bind_iff, mem_fix_iff, stepNormal, stepNormal_then
+/-
+**Turing.ToPartrec.cont_eval_fix** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：cont_eval_fix {f k v} (fok : Code.Ok f) : eval step (stepNormal f (Cont.fi
+x f k) v) = f.fix.eval v >>= fun v => eval step (Cfg.ret k v)
+参数：fok : Code.Ok f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Part.ext`：ext {o p : Part α} (H : forall a, a in o ↔ a in p) : o = p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `StateTransition.mem_eval`：mem_eval {σ} {f : σ -> Option σ} {a b} : b in 
+eval f a ↔ Reaches f a b ∧ f b = none
+· 使用定理 `Part.mem_bind_iff`：mem_bind_iff {f : Part α} {g : α -> Part β} {b} : b i
+n f.bind g ↔ exists a in f, b in g a
+· 使用定理 `Part.bind_eq_bind`：bind_eq_bind {α β} (f : Part α) (g : α -> Part β) : f
+ >>= g = f.bind g
+· 使用定理 `Part.mem_unique`：∀ {α : Type u_1} {a b : α} {o : Part α}, a ∈ o → b ∈ o 
+→ a = b
+· 使用定理 `StateTransition.reaches_eval`：reaches_eval {σ} {f : σ -> Option σ} {a b}
+ (ab : Reaches f a b) : eval f a = eval f b
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Part.mem_some`：mem_some (a : α) : a in some a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `Turing.ToPartrec.stepNormal.is_ret`：∀ (c : Turing.ToPartrec.Code) (k : T
+uring.ToPartrec.Cont) (v : List ℕ),   ∃ k' v', Turing.ToPartrec.stepNormal c k v
+ = Turing.ToPartrec.Cfg.…
+· 使用定理 `Turing.ToPartrec.stepNormal_then`：stepNormal_then (c) (k k' : Cont) (v) 
+: stepNormal c (k.then k') v = (stepNormal c k v).then k'
+· 使用定理 `Turing.ToPartrec.Cfg.then.eq_1`：∀ (a : List ℕ), (Turing.ToPartrec.Cfg.ha
+lt a).then = fun k' => Turing.ToPartrec.stepRet k' a
+· 使用定理 `Turing.ToPartrec.stepRet.eq_5`：∀ (x : List ℕ) (f : Turing.ToPartrec.Code
+) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont
+.fix f k) x =     i…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Turing.ToPartrec.Cfg.then.eq_2`：∀ (k : Turing.ToPartrec.Cont) (v : List 
+ℕ),   (Turing.ToPartrec.Cfg.ret k v).then = fun k' => Turing.ToPartrec.Cfg.ret (
+k.then k') v
+· 使用定理 `Turing.ToPartrec.Cont.then.eq_1`：Turing.ToPartrec.Cont.halt.then = fun k
+' => k'
+· 使用定理 `Turing.ToPartrec.stepRet_then`：stepRet_then {k k' : Cont} {v} : stepRet 
+(k.then k') v = (stepRet k v).then k'
+· 使用定理 `PFun.mem_fix_iff`：mem_fix_iff {f : α ->. β oplus α} {a : α} {b : β} : b 
+in f.fix a ↔ Sum.inl b in f a ∨ exists a', Sum.inr a' in f a ∧ b in f.fix a'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+（共 40 条，此处仅展示前 30 条）
 -/
 theorem cont_eval_fix {f k v} (fok : Code.Ok f) :
     eval step (stepNormal f (Cont.fix f k) v) =
@@ -1521,10 +1483,10 @@ theorem cont_eval_fix {f k v} (fok : Code.Ok f) :
   refine Part.ext fun x => ?_
   simp only [Part.bind_eq_bind, Part.mem_bind_iff]
   constructor
-  · suffices forall c, x in eval step c -> forall v c', c = Cfg.then c' (Cont.fix f k) ->
-      Reaches step (stepNormal f Cont.halt v) c' ->
-        exists v₁ in f.eval v, exists v₂ in if List.headI v₁ = 0 then pure v₁.tail else f.fix.eval v₁.tail,
-          x in eval step (Cfg.ret k v₂) by
+  · suffices ∀ c, x ∈ eval step c → ∀ v c', c = Cfg.then c' (Cont.fix f k) →
+      Reaches step (stepNormal f Cont.halt v) c' →
+        ∃ v₁ ∈ f.eval v, ∃ v₂ ∈ if List.headI v₁ = 0 then pure v₁.tail else f.fix.eval v₁.tail,
+          x ∈ eval step (Cfg.ret k v₂) by
       intro h
       obtain ⟨v₁, hv₁, v₂, hv₂, h₃⟩ :=
         this _ h _ _ (stepNormal_then _ Cont.halt _ _) ReflTransGen.refl
@@ -1537,7 +1499,7 @@ theorem cont_eval_fix {f k v} (fok : Code.Ok f) :
     refine fun c he => evalInduction he fun y h IH => ?_
     rintro v (⟨v'⟩ | ⟨k', v'⟩) rfl hr <;> rw [Cfg.then] at h IH <;> simp only at h IH
     · have := mem_eval.2 ⟨hr, rfl⟩
-      rw [fok]; rw [Part.bind_eq_bind]; rw [Part.mem_bind_iff] at this
+      rw [fok, Part.bind_eq_bind, Part.mem_bind_iff] at this
       obtain ⟨v'', h₁, h₂⟩ := this
       rw [reaches_eval] at h₂
       swap
@@ -1553,7 +1515,7 @@ theorem cont_eval_fix {f k v} (fok : Code.Ok f) :
         exact ReflTransGen.single rfl
       · obtain ⟨k₀, v₀, e₀⟩ := stepNormal.is_ret f Cont.halt v'.tail
         have e₁ := stepNormal_then f Cont.halt (Cont.fix f k) v'.tail
-        rw [e₀]; rw [Cont.then]; rw [Cfg.then] at e₁
+        rw [e₀, Cont.then, Cfg.then] at e₁
         simp only at e₁
         obtain ⟨v₁, hv₁, v₂, hv₂, h₃⟩ :=
           IH (stepRet (k₀.then (Cont.fix f k)) v₀) (by rw [stepRet, if_neg he, e₁]; rfl)
@@ -1567,8 +1529,8 @@ theorem cont_eval_fix {f k v} (fok : Code.Ok f) :
     rw [reaches_eval] at hr
     swap
     · exact ReflTransGen.single rfl
-    refine PFun.fixInduction he fun v (he : v' in f.fix.eval v) IH => ?_
-    rw [fok]; rw [Part.bind_eq_bind]; rw [Part.mem_bind_iff]
+    refine PFun.fixInduction he fun v (he : v' ∈ f.fix.eval v) IH => ?_
+    rw [fok, Part.bind_eq_bind, Part.mem_bind_iff]
     obtain he | ⟨v'', he₁', _⟩ := PFun.mem_fix_iff.1 he
     · obtain ⟨v', he₁, he₂⟩ := (Part.mem_map_iff _).1 he
       split_ifs at he₂ with h; cases he₂
@@ -1584,193 +1546,189 @@ theorem cont_eval_fix {f k v} (fok : Code.Ok f) :
       rw [reaches_eval]
       swap
       · exact ReflTransGen.single rfl
-      rw [stepRet]; rw [if_neg h]
+      rw [stepRet, if_neg h]
       exact IH v₁.tail ((Part.mem_map_iff _).2 ⟨_, he₁, if_neg h⟩)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `code_is_ok` / 定理 `code_is_ok`
-
-English:
-theorem code_is_ok
-  given: (c)
-  statement: Code.Ok c
-  proof: by
-  induction c with (intro k v; rw [stepNormal])
-  | cons f fs IHf IHfs =>
-    rw [Code.eval]; rw [IHf]
-    simp only [bind_assoc, pure_bind]; congr; funext v
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IHfs]; congr; funext v'
-    refine Eq.trans (b := eval step (stepRet (Cont.cons₂ v k) v')) ?_ (Eq.symm ?_) <;>
-      exact reaches_eval (ReflTransGen.single rfl)
-  | comp f g IHf IHg =>
-    rw [Code.eval]; rw [IHg]
-    simp only [bind_assoc]; congr; funext v
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IHf]
-  | case f g IHf IHg =>
-    simp only [Code.eval]
-    cases v.headI <;> simp only [Nat.rec_zero, Part.bind_eq_bind] <;> [apply IHf; apply IHg]
-  | fix f IHf => rw [cont_eval_fix IHf]
-  | _ => simp only [Code.eval, pure_bind]
-
-中文:
-定理 code_is_ok
-  条件: (c)
-  结论: 余de.Ok c
-  证明: by
-  induction c with (intro k v; rw [stepNormal])
-  | cons f fs IHf IHfs =>
-    rw [Code.eval]; rw [IHf]
-    simp only [bind_assoc, pure_bind]; congr; funext v
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IHfs]; congr; funext v'
-    refine Eq.trans (b := eval step (stepRet (Cont.cons₂ v k) v')) ?_ (Eq.symm ?_) <;>
-      exact reaches_eval (ReflTransGen.single rfl)
-  | comp f g IHf IHg =>
-    rw [Code.eval]; rw [IHg]
-    simp only [bind_assoc]; congr; funext v
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IHf]
-  | case f g IHf IHg =>
-    simp only [Code.eval]
-    cases v.headI <;> simp only [Nat.rec_zero, Part.bind_eq_bind] <;> [apply IHf; apply IHg]
-  | fix f IHf => rw [cont_eval_fix IHf]
-  | _ => simp only [Code.eval, pure_bind]
-
-Depends on / 依赖: Code.eval, Cont.cons, Eq.symm, Eq.trans, ReflTr, ReflTransGen, ReflTransGen.single, bind_assoc, pure_bind, reaches_eval, single, stepNormal, stepRet
+/-
+**Turing.ToPartrec.code_is_ok** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：code_is_ok (c) : Code.Ok c
+参数：c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.zero'`：zero'_eval : zero'.eval = fun v => pure (0 
+:: v)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_1`：Turing.ToPartrec.stepNormal Turing.ToP
+artrec.Code.zero' = fun k v => Turing.ToPartrec.Cfg.ret k (0 :: v)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
+· 使用定理 `Part.instLawfulMonad`：LawfulMonad Part
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_2`：Turing.ToPartrec.stepNormal Turing.ToP
+artrec.Code.succ = fun k v => Turing.ToPartrec.Cfg.ret k [v.headI.succ]
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_3`：Turing.ToPartrec.stepNormal Turing.ToP
+artrec.Code.tail = fun k v => Turing.ToPartrec.Cfg.ret k v.tail
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_4`：∀ (f fs : Turing.ToPartrec.Code),   Tu
+ring.ToPartrec.stepNormal (f.cons fs) = fun k v =>     Turing.ToPartrec.stepNorm
+al f (Turing.ToPartrec…
+· 使用定理 `Turing.ToPartrec.Code.eval.eq_4`：∀ (f fs : Turing.ToPartrec.Code),   (f.
+cons fs).eval = fun v => do     let n ← f.eval v     let ns ← fs.eval v     pure
+ (n.headI :: ns)
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `StateTransition.reaches_eval`：reaches_eval {σ} {f : σ -> Option σ} {a b}
+ (ab : Reaches f a b) : eval f a = eval f b
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
+· 使用定理 `Turing.ToPartrec.stepRet.eq_2`：∀ (x : List ℕ) (fs : Turing.ToPartrec.Cod
+e) (as : List ℕ) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing
+.ToPartrec.Cont.con…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_5`：∀ (f g : Turing.ToPartrec.Code),   Tur
+ing.ToPartrec.stepNormal (f.comp g) = fun k v => Turing.ToPartrec.stepNormal g (
+Turing.ToPartrec.Cont.…
+· 使用定理 `Turing.ToPartrec.Code.eval.eq_5`：∀ (f g : Turing.ToPartrec.Code), (f.com
+p g).eval = fun v => g.eval v >>= f.eval
+· 使用定理 `Turing.ToPartrec.stepRet.eq_4`：∀ (x : List ℕ) (f : Turing.ToPartrec.Code
+) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont
+.comp f k) x = Turi…
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_6`：∀ (f g : Turing.ToPartrec.Code),   Tur
+ing.ToPartrec.stepNormal (f.case g) = fun k v =>     Nat.rec (Turing.ToPartrec.s
+tepNormal f k v.tail) …
+· 使用定理 `Turing.ToPartrec.stepNormal.eq_7`：∀ (f : Turing.ToPartrec.Code),   Turin
+g.ToPartrec.stepNormal f.fix = fun k v => Turing.ToPartrec.stepNormal f (Turing.
+ToPartrec.Cont.fix f k…
+· 使用定理 `Turing.ToPartrec.cont_eval_fix`：cont_eval_fix {f k v} (fok : Code.Ok f) 
+: eval step (stepNormal f (Cont.fix f k) v) = f.fix.eval v >>= fun v => eval ste
+p (Cfg.ret k v)
 -/
 theorem code_is_ok (c) : Code.Ok c := by
   induction c with (intro k v; rw [stepNormal])
   | cons f fs IHf IHfs =>
-    rw [Code.eval]; rw [IHf]
+    rw [Code.eval, IHf]
     simp only [bind_assoc, pure_bind]; congr; funext v
     rw [reaches_eval]; swap
     · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IHfs]; congr; funext v'
+    rw [stepRet, IHfs]; congr; funext v'
     refine Eq.trans (b := eval step (stepRet (Cont.cons₂ v k) v')) ?_ (Eq.symm ?_) <;>
       exact reaches_eval (ReflTransGen.single rfl)
   | comp f g IHf IHg =>
-    rw [Code.eval]; rw [IHg]
+    rw [Code.eval, IHg]
     simp only [bind_assoc]; congr; funext v
     rw [reaches_eval]; swap
     · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IHf]
+    rw [stepRet, IHf]
   | case f g IHf IHg =>
     simp only [Code.eval]
     cases v.headI <;> simp only [Nat.rec_zero, Part.bind_eq_bind] <;> [apply IHf; apply IHg]
   | fix f IHf => rw [cont_eval_fix IHf]
   | _ => simp only [Code.eval, pure_bind]
-
-/--
-theorem `stepNormal_eval` / 定理 `stepNormal_eval`
-
-English:
-theorem stepNormal_eval
-  given: (c v)
-  statement: eval step (stepNormal c Cont.halt v) = Cfg.halt < > c.eval v
-  proof: (code_is_ok c).zero
-
-中文:
-定理 stepNormal_eval
-  条件: (c v)
-  结论: eval step (stepNormal c 余nt.halt v) = Cfg.halt < > c.eval v
-  证明: (code_is_ok c).zero
-
-Depends on / 依赖: code_is_ok
+/-
+**Turing.ToPartrec.stepNormal_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：stepNormal_eval (c v) : eval step (stepNormal c Cont.halt v) = Cfg.halt < 
+> c.eval v
+参数：c v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ToPartrec.Code.Ok.zero`：∀ {c : Turing.ToPartrec.Code},   c.Ok →  
+   ∀ {v : List ℕ},       StateTransition.eval Turing.ToPartrec.step (Turing.ToPa
+rtrec.stepNormal c …
+· 使用定理 `Turing.ToPartrec.code_is_ok`：code_is_ok (c) : Code.Ok c
 -/
-theorem stepNormal_eval (c v) : eval step (stepNormal c Cont.halt v) = Cfg.halt < > c.eval v :=
+theorem stepNormal_eval (c v) : eval step (stepNormal c Cont.halt v) = Cfg.halt <$> c.eval v :=
   (code_is_ok c).zero
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `stepRet_eval` / 定理 `stepRet_eval`
-
-English:
-theorem stepRet_eval
-  given: {k v}
-  statement: eval step (stepRet k v) = Cfg.halt < > k.eval v
-  proof: by
-  induction k generalizing v with
-  | halt =>
-    simp only [Cont.eval, map_pure]
-    exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.refl, rfl⟩)
-  | cons₁ fs as k IH =>
-    rw [Cont.eval]; rw [stepRet]; rw [code_is_ok]
-    simp only [← bind_pure_comp, bind_assoc]; congr; funext v'
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IH]; rw [bind_pure_comp]
-  | cons₂ ns k IH => rw [Cont.eval, stepRet]; exact IH
-  | comp f k IH =>
-    rw [Cont.eval]; rw [stepRet]; rw [code_is_ok]
-    simp only [← bind_pure_comp, bind_assoc]; congr; funext v'
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [IH]; rw [bind_pure_comp]
-  | fix f k IH =>
-    rw [Cont.eval]; rw [stepRet]; simp only
-    split_ifs; · exact IH
-    simp only [← bind_pure_comp, bind_assoc, cont_eval_fix (code_is_ok _)]
-    congr; funext; rw [bind_pure_comp, ← IH]
-    exact reaches_eval (ReflTransGen.single rfl)
-
-中文:
-定理 stepRet_eval
-  条件: {k v}
-  结论: eval step (stepRet k v) = Cfg.halt < > k.eval v
-  证明: by
-  induction k generalizing v with
-  | halt =>
-    simp only [Cont.eval, map_pure]
-    exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.refl, rfl⟩)
-  | cons₁ fs as k IH =>
-    rw [Cont.eval]; rw [stepRet]; rw [code_is_ok]
-    simp only [← bind_pure_comp, bind_assoc]; congr; funext v'
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IH]; rw [bind_pure_comp]
-  | cons₂ ns k IH => rw [Cont.eval, stepRet]; exact IH
-  | comp f k IH =>
-    rw [Cont.eval]; rw [stepRet]; rw [code_is_ok]
-    simp only [← bind_pure_comp, bind_assoc]; congr; funext v'
-    rw [reaches_eval]; swap
-    · exact ReflTransGen.single rfl
-    rw [IH]; rw [bind_pure_comp]
-  | fix f k IH =>
-    rw [Cont.eval]; rw [stepRet]; simp only
-    split_ifs; · exact IH
-    simp only [← bind_pure_comp, bind_assoc, cont_eval_fix (code_is_ok _)]
-    congr; funext; rw [bind_pure_comp, ← IH]
-    exact reaches_eval (ReflTransGen.single rfl)
-
-Depends on / 依赖: Cont.eval, Part.eq_some_iff, ReflTransGen, ReflTransGen.refl, ReflTransGen.single, bind_, bind_assoc, bind_pure_comp, code_is_ok, eq_some_iff, generalizing, map_pure, mem_eval, reaches_eval, single, stepRet
+/-
+**Turing.ToPartrec.stepRet_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.ToPartrec`。
+形式化陈述：stepRet_eval {k v} : eval step (stepRet k v) = Cfg.halt < > k.eval v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulApplicative.map_pure`：∀ {f : Type u → Type v} {inst : Applicative 
+f} [self : LawfulApplicative f] {α β : Type u} (g : α → β) (x : α),   g <$> pure
+ x = pure (g x)
+· 使用定理 `LawfulMonad.toLawfulApplicative`：∀ {m : Type u → Type v} {inst : Monad m
+} [self : LawfulMonad m], LawfulApplicative m
+· 使用定理 `Part.instLawfulMonad`：LawfulMonad Part
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Part.eq_some_iff`：eq_some_iff {a : α} {o : Part α} : o = some a ↔ a in o
+· 使用定理 `StateTransition.mem_eval`：mem_eval {σ} {f : σ -> Option σ} {a b} : b in 
+eval f a ↔ Reaches f a b ∧ f b = none
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_2`：∀ (fs : Turing.ToPartrec.Code) (as : Li
+st ℕ) (k : Turing.ToPartrec.Cont),   (Turing.ToPartrec.Cont.cons₁ fs as k).eval 
+= fun v => do     let…
+· 使用定理 `Turing.ToPartrec.stepRet.eq_2`：∀ (x : List ℕ) (fs : Turing.ToPartrec.Cod
+e) (as : List ℕ) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing
+.ToPartrec.Cont.con…
+· 使用定理 `Turing.ToPartrec.code_is_ok`：code_is_ok (c) : Code.Ok c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `StateTransition.reaches_eval`：reaches_eval {σ} {f : σ -> Option σ} {a b}
+ (ab : Reaches f a b) : eval f a = eval f b
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
+· 使用定理 `Turing.ToPartrec.stepRet.eq_3`：∀ (x ns : List ℕ) (k : Turing.ToPartrec.C
+ont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont.cons₂ ns k) x = Turing.T
+oPartrec.stepRet k …
+· 使用定理 `LawfulMonad.bind_pure_comp`：∀ {m : Type u → Type v} {inst : Monad m} [se
+lf : LawfulMonad m] {α β : Type u} (f : α → β) (x : m α),   (do       let a ← x 
+      pure (f a)…
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_3`：∀ (ns : List ℕ) (k : Turing.ToPartrec.C
+ont), (Turing.ToPartrec.Cont.cons₂ ns k).eval = fun v => k.eval (ns.headI :: v)
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_4`：∀ (f : Turing.ToPartrec.Code) (k : Turi
+ng.ToPartrec.Cont),   (Turing.ToPartrec.Cont.comp f k).eval = fun v => f.eval v 
+>>= k.eval
+· 使用定理 `Turing.ToPartrec.stepRet.eq_4`：∀ (x : List ℕ) (f : Turing.ToPartrec.Code
+) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont
+.comp f k) x = Turi…
+· 使用定理 `Turing.ToPartrec.Cont.eval.eq_5`：∀ (f : Turing.ToPartrec.Code) (k : Turi
+ng.ToPartrec.Cont),   (Turing.ToPartrec.Cont.fix f k).eval = fun v => if v.headI
+ = 0 then k.eval v.ta…
+· 使用定理 `Turing.ToPartrec.stepRet.eq_5`：∀ (x : List ℕ) (f : Turing.ToPartrec.Code
+) (k : Turing.ToPartrec.Cont),   Turing.ToPartrec.stepRet (Turing.ToPartrec.Cont
+.fix f k) x =     i…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Turing.ToPartrec.cont_eval_fix`：cont_eval_fix {f k v} (fok : Code.Ok f) 
+: eval step (stepNormal f (Cont.fix f k) v) = f.fix.eval v >>= fun v => eval ste
+p (Cfg.ret k v)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem stepRet_eval {k v} : eval step (stepRet k v) = Cfg.halt < > k.eval v := by
+theorem stepRet_eval {k v} : eval step (stepRet k v) = Cfg.halt <$> k.eval v := by
   induction k generalizing v with
   | halt =>
     simp only [Cont.eval, map_pure]
     exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.refl, rfl⟩)
   | cons₁ fs as k IH =>
-    rw [Cont.eval]; rw [stepRet]; rw [code_is_ok]
+    rw [Cont.eval, stepRet, code_is_ok]
     simp only [← bind_pure_comp, bind_assoc]; congr; funext v'
     rw [reaches_eval]; swap
     · exact ReflTransGen.single rfl
-    rw [stepRet]; rw [IH]; rw [bind_pure_comp]
+    rw [stepRet, IH, bind_pure_comp]
   | cons₂ ns k IH => rw [Cont.eval, stepRet]; exact IH
   | comp f k IH =>
-    rw [Cont.eval]; rw [stepRet]; rw [code_is_ok]
+    rw [Cont.eval, stepRet, code_is_ok]
     simp only [← bind_pure_comp, bind_assoc]; congr; funext v'
     rw [reaches_eval]; swap
     · exact ReflTransGen.single rfl
-    rw [IH]; rw [bind_pure_comp]
+    rw [IH, bind_pure_comp]
   | fix f k IH =>
-    rw [Cont.eval]; rw [stepRet]; simp only
+    rw [Cont.eval, stepRet]; simp only
     split_ifs; · exact IH
     simp only [← bind_pure_comp, bind_assoc, cont_eval_fix (code_is_ok _)]
     congr; funext; rw [bind_pure_comp, ← IH]
@@ -1779,3 +1737,4 @@ theorem stepRet_eval {k v} : eval step (stepRet k v) = Cfg.halt < > k.eval v := 
 end ToPartrec
 
 end Turing
+

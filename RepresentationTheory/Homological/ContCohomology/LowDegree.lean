@@ -28,196 +28,109 @@ attribute [local reducible] CategoryTheory.Functor.mapHomologicalComplex
 
 variable (X : TopRep k G)
 
-/--
-lemma `cocycles₀IsoAux` / 引理 `cocycles₀IsoAux`
-
-English:
-lemma cocycles₀IsoAux
-  statement: (σ : (homogeneousCochains X).X 0)
-  proof: by
-  simp only [Nat.reduceAdd, LinearMap.mem_ker, ContinuousLinearMap.coe_coe,
-    Subtype.ext_iff, homogeneousCochains.d_apply _] at hσ
-  simp only [mem_invariants]
-  intro g
-  rw [d_succ]; rw [hom_sub]; rw [hom_ofHom]; rw [ContIntertwiningMap.sub_apply]; rw [d_zero]; rw [ZeroMemClass.coe_zero]; rw [sub_eq_zero] at hσ
-  replace hσ := DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hσ 1) g⁻¹
-  simp only [Nat.reduceAdd, coind₁ι_toFun, ContinuousMap.const_apply, ConcreteCategory.hom_ofHom,
-    coind₁Map_toFun, ContinuousMap.comp_apply, ContinuousMap.coe_mk] at hσ
-  simpa [hσ] using DFunLike.ext_iff.1 (σ.2 g) 1
-
-中文:
-引理 cocycles₀IsoAux
-  结论: (σ : (homogeneousCochains X).X 0)
-  证明: by
-  simp only [Nat.reduceAdd, LinearMap.mem_ker, ContinuousLinearMap.coe_coe,
-    Subtype.ext_iff, homogeneousCochains.d_apply _] at hσ
-  simp only [mem_invariants]
-  intro g
-  rw [d_succ]; rw [hom_sub]; rw [hom_ofHom]; rw [ContIntertwiningMap.sub_apply]; rw [d_zero]; rw [ZeroMemClass.coe_zero]; rw [sub_eq_zero] at hσ
-  replace hσ := DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hσ 1) g⁻¹
-  simp only [Nat.reduceAdd, coind₁ι_toFun, ContinuousMap.const_apply, ConcreteCategory.hom_ofHom,
-    coind₁Map_toFun, ContinuousMap.comp_apply, ContinuousMap.coe_mk] at hσ
-  simpa [hσ] using DFunLike.ext_iff.1 (σ.2 g) 1
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, ContIntertwiningMap, ContIntertwiningMap.sub_apply, ContinuousLinearMap, ContinuousLinearMap.coe_coe, ContinuousMap, ContinuousMap.c, ContinuousMap.const_apply, DFunLike, DFunLike.ext_iff, LinearMap, LinearMap.mem_ker, Nat.reduceAdd, Subtype, Subtype.ext_iff, ZeroMemClass, ZeroMemClass.coe_zero, coe_coe, coe_zero
+/-
+**ContinuousCohomology.cocycles** 是 Mathlib 中的一个缩写定义，位于命名空间 `ContinuousCohomolog
+y`。
+形式化陈述：cocycles (A : TopRep k G) (n : Nat) : TopModuleCat k
+参数：A : TopRep k G；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cocycles₀IsoAux (σ : (homogeneousCochains X).X 0)
-    (hσ : σ in ((homogeneousCochains X).d 0 1).hom.ker) : σ.1 1 in X.ρ.invariants := by
+    (hσ : σ ∈ ((homogeneousCochains X).d 0 1).hom.ker) : σ.1 1 ∈ X.ρ.invariants := by
   simp only [Nat.reduceAdd, LinearMap.mem_ker, ContinuousLinearMap.coe_coe,
     Subtype.ext_iff, homogeneousCochains.d_apply _] at hσ
   simp only [mem_invariants]
   intro g
-  rw [d_succ]; rw [hom_sub]; rw [hom_ofHom]; rw [ContIntertwiningMap.sub_apply]; rw [d_zero]; rw [ZeroMemClass.coe_zero]; rw [sub_eq_zero] at hσ
+  rw [d_succ, hom_sub, hom_ofHom, ContIntertwiningMap.sub_apply, d_zero,
+    ZeroMemClass.coe_zero, sub_eq_zero] at hσ
   replace hσ := DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hσ 1) g⁻¹
   simp only [Nat.reduceAdd, coind₁ι_toFun, ContinuousMap.const_apply, ConcreteCategory.hom_ofHom,
     coind₁Map_toFun, ContinuousMap.comp_apply, ContinuousMap.coe_mk] at hσ
   simpa [hσ] using DFunLike.ext_iff.1 (σ.2 g) 1
-
-/--
-lemma `mem_const_resol₀` / 引理 `mem_const_resol₀`
-
-English:
-lemma mem_const_resol₀
-  given: (x : X) (hx : x in X.ρ.invariants)
-  proof: .1 fun _ => ContinuousMap.ext fun _ => hx _ ContRepresentation.mem_invariants _
-
-中文:
-引理 mem_const_resol₀
-  条件: (x : X) (hx : x in X.ρ.invariants)
-  证明: .1 fun _ => ContinuousMap.ext fun _ => hx _ ContRepresentation.mem_invariants _
-
-Depends on / 依赖: ContRepresentation, ContRepresentation.mem_invariants, ContinuousMap, ContinuousMap.ext, mem_invariants
+/-
+**ContinuousCohomology.mem_const_resol** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousCoho
+mology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mem_const_resol₀ (x : X) (hx : x in X.ρ.invariants) :
-    ContinuousMap.const G x in ((resolution' X).X 0).ρ.invariants :=
-.1 fun _ => ContinuousMap.ext fun _ => hx _ ContRepresentation.mem_invariants _
-
-/--
-lemma `cocycles₀IsoAux'` / 引理 `cocycles₀IsoAux'`
-
-English:
-lemma cocycles₀IsoAux'
-  given: (x : X) (h : ContinuousMap.const G x in ((resolution' X).X 0).ρ.invariants)
-  proof: by
-  rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply]
-  simp [d_succ, hom_sub, ContIntertwiningMap.sub_apply, d_zero]
-
-中文:
-引理 cocycles₀IsoAux'
-  条件: (x : X) (h : 连续映射.const G x in ((resolution' X).X 0).ρ.invariants)
-  证明: by
-  rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply]
-  simp [d_succ, hom_sub, ContIntertwiningMap.sub_apply, d_zero]
-
-Depends on / 依赖: ContIntertwiningMap, ContIntertwiningMap.sub_apply, ContinuousLinearMap, ContinuousLinearMap.coe_coe, LinearMap, LinearMap.mem_ker, Subtype, Subtype.ext_iff, coe_coe, d_apply, d_succ, d_zero, ext_iff, hom_sub, homogeneousCochains, homogeneousCochains.d_apply, mem_ker, sub_apply
+lemma mem_const_resol₀ (x : X) (hx : x ∈ X.ρ.invariants) :
+    ContinuousMap.const G x ∈ ((resolution' X).X 0).ρ.invariants :=
+  ContRepresentation.mem_invariants _|>.1 fun _ ↦ ContinuousMap.ext fun _ ↦ hx _
+/-
+**ContinuousCohomology.cocycles** 是 Mathlib 中的一个缩写定义，位于命名空间 `ContinuousCohomolog
+y`。
+形式化陈述：cocycles (A : TopRep k G) (n : Nat) : TopModuleCat k
+参数：A : TopRep k G；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma cocycles₀IsoAux' (x : X) (h : ContinuousMap.const G x in ((resolution' X).X 0).ρ.invariants) :
-    ⟨ContinuousMap.const G x, h⟩ in ((homogeneousCochains X).d 0 1).hom.ker := by
-  rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply]
+lemma cocycles₀IsoAux' (x : X) (h : ContinuousMap.const G x ∈ ((resolution' X).X 0).ρ.invariants) :
+    ⟨ContinuousMap.const G x, h⟩ ∈ ((homogeneousCochains X).d 0 1).hom.ker := by
+  rw [LinearMap.mem_ker, Subtype.ext_iff, ContinuousLinearMap.coe_coe,
+    homogeneousCochains.d_apply]
   simp [d_succ, hom_sub, ContIntertwiningMap.sub_apply, d_zero]
 
-/--
-Definition of `cocycles₀Iso` / `cocycles₀Iso` 的定义
+/-- The isomorphism between the zeroth cocycles and the kernel of the zeroth differential. -/
+/-
+**ContinuousCohomology.cocycles** 是 Mathlib 中的一个缩写定义，位于命名空间 `ContinuousCohomolog
+y`。
+形式化陈述：cocycles (A : TopRep k G) (n : Nat) : TopModuleCat k
+参数：A : TopRep k G；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation cocycles₀Iso
-  signature: : cocycles X 0 ≅
-  body: Limits.KernelFork.mapIsoOfIsLimit ((homogeneousCochains X).cyclesIsKernel 0 1 (by simp))
-    (TopModuleCat.isLimitKer _) (Iso.refl _)
-
-中文:
-缩写 cocycles₀Iso
-  签名: : cocycles X 0 ≅
-  定义体: Limits.KernelFork.mapIsoOfIsLimit ((homogeneousCochains X).cyclesIsKernel 0 1 (by simp))
-    (TopModuleCat.isLimitKer _) (Iso.refl _)
-
-Depends on / 依赖: Iso.refl, KernelFork, Limits, Limits.KernelFork.mapIsoOfIsLimit, TopModuleCat, TopModuleCat.isLimitKer, cyclesIsKernel, homogeneousCochains, isLimitKer, mapIsoOfIsLimit
+--- 原说明 ---
+The isomorphism between the zeroth cocycles and the kernel of the zeroth differe
+ntial.
 -/
 noncomputable abbrev cocycles₀Iso : cocycles X 0 ≅
     TopModuleCat.of k ((homogeneousCochains X).d 0 1).hom.ker :=
   Limits.KernelFork.mapIsoOfIsLimit ((homogeneousCochains X).cyclesIsKernel 0 1 (by simp))
     (TopModuleCat.isLimitKer _) (Iso.refl _)
 
-/--
-Definition of `d₀kerIso` / `d₀kerIso` 的定义
+/-- The isomorphism between the kernel of the zeroth differential and
+the invariants of a representation. -/
+/-
+**ContinuousCohomology.d** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition d₀kerIso
-  signature: : ((homogeneousCochains X).d 0 1).hom.ker ≃L[k] X.ρ.invariants where
-  body: fun ⟨σ, hσ⟩ => ⟨σ.val 1, cocycles₀IsoAux X σ hσ⟩
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  invFun := fun ⟨x, hx⟩ => ⟨⟨ContinuousMap.const G x, mem_const_resol₀ X x hx⟩,
-    cocycles₀IsoAux' X x (mem_const_resol₀ X x hx)⟩
-  left_inv := fun ⟨⟨(x : C(G, X)), hx'⟩, hx⟩ => by
-    ext g
-    rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply] at hx
-    simp only [Nat.reduceAdd, d_succ, d_zero, ConcreteCategory.hom_ofHom, hom_sub,
-      ContIntertwiningMap.sub_apply, coind₁ι_toFun, coind₁Map_toFun, ZeroMemClass.coe_zero,
-      sub_eq_zero, ContinuousMap.const_apply] at hx ⊢
-    simpa using DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hx g) 1
-  right_inv _ := rfl
-continuous_toFun := continuous_induced_rng.2 (continuous_eval_const 1).comp
-    (continuous_subtype_val.comp continuous_subtype_val)
-continuous_invFun := continuous_induced_rng.2 continuous_induced_rng.2
-    ContinuousMap.continuous_const'.comp continuous_subtype_val
-
-中文:
-定义 d₀kerIso
-  签名: : ((homogeneousCochains X).d 0 1).hom.ker ≃L[k] X.ρ.invariants where
-  定义体: fun ⟨σ, hσ⟩ => ⟨σ.val 1, cocycles₀IsoAux X σ hσ⟩
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  invFun := fun ⟨x, hx⟩ => ⟨⟨ContinuousMap.const G x, mem_const_resol₀ X x hx⟩,
-    cocycles₀IsoAux' X x (mem_const_resol₀ X x hx)⟩
-  left_inv := fun ⟨⟨(x : C(G, X)), hx'⟩, hx⟩ => by
-    ext g
-    rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply] at hx
-    simp only [Nat.reduceAdd, d_succ, d_zero, ConcreteCategory.hom_ofHom, hom_sub,
-      ContIntertwiningMap.sub_apply, coind₁ι_toFun, coind₁Map_toFun, ZeroMemClass.coe_zero,
-      sub_eq_zero, ContinuousMap.const_apply] at hx ⊢
-    simpa using DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hx g) 1
-  right_inv _ := rfl
-continuous_toFun := continuous_induced_rng.2 (continuous_eval_const 1).comp
-    (continuous_subtype_val.comp continuous_subtype_val)
-continuous_invFun := continuous_induced_rng.2 continuous_induced_rng.2
-    ContinuousMap.continuous_const'.comp continuous_subtype_val
+--- 原说明 ---
+The isomorphism between the kernel of the zeroth differential and
+the invariants of a representation.
 -/
 def d₀kerIso : ((homogeneousCochains X).d 0 1).hom.ker ≃L[k] X.ρ.invariants where
-  toFun := fun ⟨σ, hσ⟩ => ⟨σ.val 1, cocycles₀IsoAux X σ hσ⟩
+  toFun := fun ⟨σ, hσ⟩ ↦ ⟨σ.val 1, cocycles₀IsoAux X σ hσ⟩
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
-  invFun := fun ⟨x, hx⟩ => ⟨⟨ContinuousMap.const G x, mem_const_resol₀ X x hx⟩,
+  invFun := fun ⟨x, hx⟩ ↦ ⟨⟨ContinuousMap.const G x, mem_const_resol₀ X x hx⟩,
     cocycles₀IsoAux' X x (mem_const_resol₀ X x hx)⟩
-  left_inv := fun ⟨⟨(x : C(G, X)), hx'⟩, hx⟩ => by
+  left_inv := fun ⟨⟨(x : C(G, X)), hx'⟩, hx⟩ ↦ by
     ext g
-    rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply] at hx
+    rw [LinearMap.mem_ker, Subtype.ext_iff, ContinuousLinearMap.coe_coe,
+      homogeneousCochains.d_apply] at hx
     simp only [Nat.reduceAdd, d_succ, d_zero, ConcreteCategory.hom_ofHom, hom_sub,
       ContIntertwiningMap.sub_apply, coind₁ι_toFun, coind₁Map_toFun, ZeroMemClass.coe_zero,
       sub_eq_zero, ContinuousMap.const_apply] at hx ⊢
     simpa using DFunLike.ext_iff.1 (DFunLike.ext_iff.1 hx g) 1
   right_inv _ := rfl
-continuous_toFun := continuous_induced_rng.2 (continuous_eval_const 1).comp
+  continuous_toFun := continuous_induced_rng.2 <| (continuous_eval_const 1).comp <|
     (continuous_subtype_val.comp continuous_subtype_val)
-continuous_invFun := continuous_induced_rng.2 continuous_induced_rng.2
+  continuous_invFun := continuous_induced_rng.2 <| continuous_induced_rng.2 <|
     ContinuousMap.continuous_const'.comp continuous_subtype_val
 
-/--
-Definition of `zeroIso` / `zeroIso` 的定义
+/-- The isomorphism between the zeroth continuous cohomology group and
+the invariants of a representation. -/
+/-
+**ContinuousCohomology.zeroIso** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousCohomology`。
+形式化陈述：zeroIso (A : TopRep k G) : continuousCohomology 0 A ≅ TopModuleCat.of k A.
+ρ.invariants
+参数：A : TopRep k G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroIso
-  signature: (A : TopRep k G)
-  body: (homogeneousCochains A).isoHomologyπ₀.symm ≪≫ cocycles₀Iso A ≪≫
-    TopModuleCat.ofIso (d₀kerIso A)
-
-中文:
-定义 zeroIso
-  签名: (A : TopRep k G)
-  定义体: (homogeneousCochains A).isoHomologyπ₀.symm ≪≫ cocycles₀Iso A ≪≫
-    TopModuleCat.ofIso (d₀kerIso A)
-
-Depends on / 依赖: TopModuleCat, TopModuleCat.ofIso, homogeneousCochains
+--- 原说明 ---
+The isomorphism between the zeroth continuous cohomology group and
+the invariants of a representation.
 -/
 noncomputable def zeroIso (A : TopRep k G) :
     continuousCohomology 0 A ≅ TopModuleCat.of k A.ρ.invariants :=
@@ -225,3 +138,4 @@ noncomputable def zeroIso (A : TopRep k G) :
     TopModuleCat.ofIso (d₀kerIso A)
 
 end ContinuousCohomology
+

@@ -27,19 +27,20 @@ open SSet
 
 namespace CategoryTheory.Nerve
 
-/--
-Instance `quasicategory` / 实例 `quasicategory`
+/-- By virtue of satisfying the `StrictSegal` condition, the nerve of a
+category is a `Quasicategory`. -/
+/-
+**CategoryTheory.Nerve.quasicategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.N
+erve`。
+形式化陈述：quasicategory {C : Type u} [Category.{v} C] : Quasicategory (nerve C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance quasicategory
-  signature: {C : Type u} [Category.{v} C]
-  body: inferInstance
-
-中文:
-实例 quasicategory
-  签名: {C : 类型u} [范畴.{v} C]
-  定义体: inferInstance
+--- 原说明 ---
+By virtue of satisfying the `StrictSegal` condition, the nerve of a
+category is a `Quasicategory`.
 -/
 instance quasicategory {C : Type u} [Category.{v} C] : Quasicategory (nerve C) := inferInstance
 
 end CategoryTheory.Nerve
+

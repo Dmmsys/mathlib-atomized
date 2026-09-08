@@ -33,22 +33,15 @@ universe u v
 variable {α : Type u} {β : Type*} {γ : Type*} {δ : Type*}
 
 -- not all spaces are homeomorphic to each other
-/--
-Definition of `UniformEquiv` / `UniformEquiv` 的定义
+/-- Uniform isomorphism between `α` and `β` -/
+/-
+**UniformEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_4) → (β : Type u_5) → [UniformSpace α] → [UniformSpace β] → Ty
+pe (max u_4 u_5)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure UniformEquiv
-  parameters: (α : Type*) (β : Type*) [UniformSpace α] [UniformSpace β]
-  axioms and operations (2):
-    - uniformContinuous_toFun : UniformContinuous toFun
-    - uniformContinuous_invFun : UniformContinuous invFun
-
-中文:
-结构 一致等价
-  参数: (α : 类型) (β : 类型) [一致空间 α] [一致空间 β]
-  公理与运算 (2 个):
-    - uniformContinuous_toFun : 一致连续 toFun
-    - uniformContinuous_invFun : 一致连续 invFun
+--- 原说明 ---
+Uniform isomorphism between `α` and `β`
 -/
 structure UniformEquiv (α : Type*) (β : Type*) [UniformSpace α] [UniformSpace β] extends
   α ≃ β where
@@ -64,248 +57,160 @@ namespace UniformEquiv
 
 variable [UniformSpace α] [UniformSpace β] [UniformSpace γ] [UniformSpace δ]
 
-/--
-theorem `toEquiv_injective` / 定理 `toEquiv_injective`
-
-English:
-theorem toEquiv_injective
-  statement: Function.Injective (toEquiv : α ≃ᵤ β -> α ≃ β)
-
-中文:
-定理 toEquiv_injective
-  结论: 函数.单射 (toEquiv : α ≃ᵤ β -> α ≃ β)
+/-
+**UniformEquiv.toEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β], Function.Injective UniformEquiv.toEquiv
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformEquiv.mk.injEq`：∀ {α : Type u_4} {β : Type u_5} [inst : UniformSp
+ace α] [inst_1 : UniformSpace β] (toEquiv : α ≃ β)   (uniformContinuous_toFun : 
+UniformCont…
 -/
-theorem toEquiv_injective : Function.Injective (toEquiv : α ≃ᵤ β -> α ≃ β)
+theorem toEquiv_injective : Function.Injective (toEquiv : α ≃ᵤ β → α ≃ β)
   | ⟨e, h₁, h₂⟩, ⟨e', h₁', h₂'⟩, h => by simpa only [mk.injEq]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (α ≃ᵤ β) α β
-  body: h.toEquiv
-  inv h := h.toEquiv.symm
-  left_inv h := h.left_inv
-  right_inv h := h.right_inv
-coe_injective' _ _ H _ := toEquiv_injective DFunLike.ext' H
-
-@[simp]
-
-中文:
-实例 :
-  签名: 等价状 (α ≃ᵤ β) α β
-  定义体: h.toEquiv
-  inv h := h.toEquiv.symm
-  left_inv h := h.left_inv
-  right_inv h := h.right_inv
-coe_injective' _ _ H _ := toEquiv_injective DFunLike.ext' H
-
-@[simp]
-
-Depends on / 依赖: h.toEquiv, toEquiv
+/-
+**UniformEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `UniformEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (α ≃ᵤ β) α β where
   coe h := h.toEquiv
   inv h := h.toEquiv.symm
   left_inv h := h.left_inv
   right_inv h := h.right_inv
-coe_injective' _ _ H _ := toEquiv_injective DFunLike.ext' H
+  coe_injective' _ _ H _ := toEquiv_injective <| DFunLike.ext' H
 
 @[simp]
-/--
-theorem `uniformEquiv_mk_coe` / 定理 `uniformEquiv_mk_coe`
-
-English:
-theorem uniformEquiv_mk_coe
-  given: (a : Equiv α β) (b c)
-  statement: (UniformEquiv.mk a b c : α -> β) = a
-  proof: rfl
-
-中文:
-定理 uniformEquiv_mk_coe
-  条件: (a : 等价 α β) (b c)
-  结论: (一致等价.mk a b c : α -> β) = a
-  证明: rfl
+/-
+**UniformEquiv.uniformEquiv_mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：uniformEquiv_mk_coe (a : Equiv α β) (b c) : (UniformEquiv.mk a b c : α -> 
+β) = a
+参数：a : Equiv α β；b c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem uniformEquiv_mk_coe (a : Equiv α β) (b c) : (UniformEquiv.mk a b c : α -> β) = a :=
+theorem uniformEquiv_mk_coe (a : Equiv α β) (b c) : (UniformEquiv.mk a b c : α → β) = a :=
   rfl
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- Inverse of a uniform isomorphism. -/
+/-
+**UniformEquiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：{α : Type u} → {β : Type u_1} → [inst : UniformSpace α] → [inst_1 : Unifor
+mSpace β] → α ≃ᵤ β → β ≃ᵤ α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `UniformEquiv.uniformContinuous_invFun`：∀ {α : Type u_4} {β : Type u_5} [
+inst : UniformSpace α] [inst_1 : UniformSpace β] (self : α ≃ᵤ β),   UniformConti
+nuous self.invFun
+· 使用定理 `UniformEquiv.uniformContinuous_toFun`：∀ {α : Type u_4} {β : Type u_5} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] (self : α ≃ᵤ β),   UniformContin
+uous self.toFun
 
-English:
-definition symm
-  signature: (h : α ≃ᵤ β)
-  body: h.uniformContinuous_invFun
-  uniformContinuous_invFun := h.uniformContinuous_toFun
-  toEquiv := h.toEquiv.symm
-
-中文:
-定义 symm
-  签名: (h : α ≃ᵤ β)
-  定义体: h.uniformContinuous_invFun
-  uniformContinuous_invFun := h.uniformContinuous_toFun
-  toEquiv := h.toEquiv.symm
+--- 原说明 ---
+Inverse of a uniform isomorphism.
 -/
 protected def symm (h : α ≃ᵤ β) : β ≃ᵤ α where
   uniformContinuous_toFun := h.uniformContinuous_invFun
   uniformContinuous_invFun := h.uniformContinuous_toFun
   toEquiv := h.toEquiv.symm
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection]. We need to specify this projection explicitly in this case,
+  because it is a composition of multiple projections. -/
+/-
+**UniformEquiv.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv.Simps`。
+形式化陈述：{α : Type u} → {β : Type u_1} → [inst : UniformSpace α] → [inst_1 : Unifor
+mSpace β] → α ≃ᵤ β → α → β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (h : α ≃ᵤ β)
-  body: h
-
-中文:
-定义 Simps.apply
-  签名: (h : α ≃ᵤ β)
-  定义体: h
+--- 原说明 ---
+See Note [custom simps projection]. We need to specify this projection explicitl
+y in this case,
+  because it is a composition of multiple projections.
 -/
-def Simps.apply (h : α ≃ᵤ β) : α -> β :=
+def Simps.apply (h : α ≃ᵤ β) : α → β :=
   h
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**UniformEquiv.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv.Simps`。
+形式化陈述：{α : Type u} → {β : Type u_1} → [inst : UniformSpace α] → [inst_1 : Unifor
+mSpace β] → α ≃ᵤ β → β → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.symm_apply
-  signature: (h : α ≃ᵤ β)
-  body: h.symm
-
-initialize_simps_projections UniformEquiv (toFun -> apply, invFun -> symm_apply)
-
-@[simp]
-
-中文:
-定义 Simps.symm_apply
-  签名: (h : α ≃ᵤ β)
-  定义体: h.symm
-
-initialize_simps_projections UniformEquiv (toFun -> apply, invFun -> symm_apply)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.symm_apply (h : α ≃ᵤ β) : β -> α :=
+def Simps.symm_apply (h : α ≃ᵤ β) : β → α :=
   h.symm
 
-initialize_simps_projections UniformEquiv (toFun -> apply, invFun -> symm_apply)
+initialize_simps_projections UniformEquiv (toFun → apply, invFun → symm_apply)
 
 @[simp]
-/--
-theorem `coe_toEquiv` / 定理 `coe_toEquiv`
-
-English:
-theorem coe_toEquiv
-  given: (h : α ≃ᵤ β)
-  statement: ⇑h.toEquiv = h
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toEquiv
-  条件: (h : α ≃ᵤ β)
-  结论: ⇑h.toEquiv = h
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.coe_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：coe_toEquiv (h : α ≃ᵤ β) : ⇑h.toEquiv = h
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toEquiv (h : α ≃ᵤ β) : ⇑h.toEquiv = h :=
   rfl
 
 @[simp]
-/--
-theorem `coe_symm_toEquiv` / 定理 `coe_symm_toEquiv`
-
-English:
-theorem coe_symm_toEquiv
-  given: (h : α ≃ᵤ β)
-  statement: ⇑h.toEquiv.symm = h.symm
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_symm_toEquiv
-  条件: (h : α ≃ᵤ β)
-  结论: ⇑h.toEquiv.symm = h.symm
-  证明: rfl
-
-@[ext]
+/-
+**UniformEquiv.coe_symm_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：coe_symm_toEquiv (h : α ≃ᵤ β) : ⇑h.toEquiv.symm = h.symm
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem coe_symm_toEquiv (h : α ≃ᵤ β) : ⇑h.toEquiv.symm = h.symm :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {h h' : α ≃ᵤ β} (H : forall x, h x = h' x)
-  statement: h = h'
-  proof: toEquiv_injective Equiv.ext H
-
-中文:
-定理 ext
-  条件: {h h' : α ≃ᵤ β} (H : 对任意 x, h x = h' x)
-  结论: h = h'
-  证明: toEquiv_injective Equiv.ext H
-
-Depends on / 依赖: Equiv.ext, toEquiv_injective
+/-
+**UniformEquiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：ext {h h' : α ≃ᵤ β} (H : forall x, h x = h' x) : h = h'
+参数：H : forall x, h x = h' x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformEquiv.toEquiv_injective`：∀ {α : Type u} {β : Type u_1} [inst : Un
+iformSpace α] [inst_1 : UniformSpace β], Function.Injective UniformEquiv.toEquiv
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
 -/
-theorem ext {h h' : α ≃ᵤ β} (H : forall x, h x = h' x) : h = h' :=
-toEquiv_injective Equiv.ext H
+theorem ext {h h' : α ≃ᵤ β} (H : ∀ x, h x = h' x) : h = h' :=
+  toEquiv_injective <| Equiv.ext H
 
 /-- Identity map as a uniform isomorphism. -/
 @[simps! -fullyApplied apply]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**UniformEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：(α : Type u_4) → [inst : UniformSpace α] → α ≃ᵤ α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `uniformContinuous_id`：uniformContinuous_id : UniformContinuous (@id α)
 
-English:
-definition refl
-  signature: (α : Type*) [UniformSpace α]
-  body: uniformContinuous_id
-  uniformContinuous_invFun := uniformContinuous_id
-  toEquiv := Equiv.refl α
-
-中文:
-定义 refl
-  签名: (α : 类型) [一致空间 α]
-  定义体: uniformContinuous_id
-  uniformContinuous_invFun := uniformContinuous_id
-  toEquiv := Equiv.refl α
+--- 原说明 ---
+Identity map as a uniform isomorphism.
 -/
 protected def refl (α : Type*) [UniformSpace α] : α ≃ᵤ α where
   uniformContinuous_toFun := uniformContinuous_id
   uniformContinuous_invFun := uniformContinuous_id
   toEquiv := Equiv.refl α
 
-/--
-Definition of `trans` / `trans` 的定义
+/-- Composition of two uniform isomorphisms. -/
+/-
+**UniformEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：{α : Type u} →   {β : Type u_1} →     {γ : Type u_2} →       [inst : Unifo
+rmSpace α] → [inst_1 : UniformSpace β] → [inst_2 : UniformSpace γ] → α ≃ᵤ β → β 
+≃ᵤ γ → α ≃ᵤ γ
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition trans
-  signature: (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ)
-  body: h₂.uniformContinuous_toFun.comp h₁.uniformContinuous_toFun
-  uniformContinuous_invFun := h₁.uniformContinuous_invFun.comp h₂.uniformContinuous_invFun
-  toEquiv := Equiv.trans h₁.toEquiv h₂.toEquiv
-
-@[simp]
-
-中文:
-定义 trans
-  签名: (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ)
-  定义体: h₂.uniformContinuous_toFun.comp h₁.uniformContinuous_toFun
-  uniformContinuous_invFun := h₁.uniformContinuous_invFun.comp h₂.uniformContinuous_invFun
-  toEquiv := Equiv.trans h₁.toEquiv h₂.toEquiv
-
-@[simp]
+--- 原说明 ---
+Composition of two uniform isomorphisms.
 -/
 protected def trans (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ) : α ≃ᵤ γ where
   uniformContinuous_toFun := h₂.uniformContinuous_toFun.comp h₁.uniformContinuous_toFun
@@ -313,344 +218,208 @@ protected def trans (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ) : α ≃ᵤ γ w
   toEquiv := Equiv.trans h₁.toEquiv h₂.toEquiv
 
 @[simp]
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ) (a : α)
-  statement: h₁.trans h₂ a = h₂ (h₁ a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trans_apply
-  条件: (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ) (a : α)
-  结论: h₁.trans h₂ a = h₂ (h₁ a)
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：trans_apply (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ) (a : α) : h₁.trans h₂ a = h₂ (h₁ a
+)
+参数：h₁ : α ≃ᵤ β；h₂ : β ≃ᵤ γ；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_apply (h₁ : α ≃ᵤ β) (h₂ : β ≃ᵤ γ) (a : α) : h₁.trans h₂ a = h₂ (h₁ a) :=
   rfl
 
 @[simp]
-/--
-theorem `uniformEquiv_mk_coe_symm` / 定理 `uniformEquiv_mk_coe_symm`
-
-English:
-theorem uniformEquiv_mk_coe_symm
-  given: (a : Equiv α β) (b c)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 uniformEquiv_mk_coe_symm
-  条件: (a : 等价 α β) (b c)
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.uniformEquiv_mk_coe_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`
+。
+形式化陈述：uniformEquiv_mk_coe_symm (a : Equiv α β) (b c) : ((UniformEquiv.mk a b c).
+symm : β -> α) = a.symm
+参数：a : Equiv α β；b c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uniformEquiv_mk_coe_symm (a : Equiv α β) (b c) :
-    ((UniformEquiv.mk a b c).symm : β -> α) = a.symm :=
+    ((UniformEquiv.mk a b c).symm : β → α) = a.symm :=
   rfl
 
 @[simp]
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  statement: (UniformEquiv.refl α).symm = UniformEquiv.refl α
-  proof: rfl
-
-中文:
-定理 refl_symm
-  结论: (一致等价.refl α).symm = 一致等价.refl α
-  证明: rfl
+/-
+**UniformEquiv.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：refl_symm : (UniformEquiv.refl α).symm = UniformEquiv.refl α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_symm : (UniformEquiv.refl α).symm = UniformEquiv.refl α :=
   rfl
-
-/--
-theorem `uniformContinuous` / 定理 `uniformContinuous`
-
-English:
-theorem uniformContinuous
-  given: (h : α ≃ᵤ β)
-  statement: UniformContinuous h
-  proof: h.uniformContinuous_toFun
-
-@[continuity]
-
-中文:
-定理 uniformContinuous
-  条件: (h : α ≃ᵤ β)
-  结论: 一致连续 h
-  证明: h.uniformContinuous_toFun
-
-@[continuity]
+/-
+**UniformEquiv.uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β] (h : α ≃ᵤ β), UniformContinuous ⇑h
+参数：h : α ≃ᵤ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformEquiv.uniformContinuous_toFun`：∀ {α : Type u_4} {β : Type u_5} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] (self : α ≃ᵤ β),   UniformContin
+uous self.toFun
 -/
 protected theorem uniformContinuous (h : α ≃ᵤ β) : UniformContinuous h :=
   h.uniformContinuous_toFun
 
 @[continuity]
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  given: (h : α ≃ᵤ β)
-  statement: Continuous h
-  proof: h.uniformContinuous.continuous
-
-中文:
-定理 continuous
-  条件: (h : α ≃ᵤ β)
-  结论: 连续 h
-  证明: h.uniformContinuous.continuous
+/-
+**UniformEquiv.continuous** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β] (h : α ≃ᵤ β), Continuous ⇑h
+参数：h : α ≃ᵤ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `UniformEquiv.uniformContinuous`：∀ {α : Type u} {β : Type u_1} [inst : Un
+iformSpace α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), UniformContinuous ⇑h
 -/
 protected theorem continuous (h : α ≃ᵤ β) : Continuous h :=
   h.uniformContinuous.continuous
-
-/--
-theorem `uniformContinuous_symm` / 定理 `uniformContinuous_symm`
-
-English:
-theorem uniformContinuous_symm
-  given: (h : α ≃ᵤ β)
-  statement: UniformContinuous h.symm
-  proof: h.uniformContinuous_invFun
-
-中文:
-定理 uniformContinuous_symm
-  条件: (h : α ≃ᵤ β)
-  结论: 一致连续 h.symm
-  证明: h.uniformContinuous_invFun
+/-
+**UniformEquiv.uniformContinuous_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β] (h : α ≃ᵤ β), UniformContinuous ⇑h.symm
+参数：h : α ≃ᵤ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformEquiv.uniformContinuous_invFun`：∀ {α : Type u_4} {β : Type u_5} [
+inst : UniformSpace α] [inst_1 : UniformSpace β] (self : α ≃ᵤ β),   UniformConti
+nuous self.invFun
 -/
 protected theorem uniformContinuous_symm (h : α ≃ᵤ β) : UniformContinuous h.symm :=
   h.uniformContinuous_invFun
 
 -- otherwise `by continuity` can't prove continuity of `h.to_equiv.symm`
 @[continuity]
-/--
-theorem `continuous_symm` / 定理 `continuous_symm`
-
-English:
-theorem continuous_symm
-  given: (h : α ≃ᵤ β)
-  statement: Continuous h.symm
-  proof: h.uniformContinuous_symm.continuous
-
-中文:
-定理 continuous_symm
-  条件: (h : α ≃ᵤ β)
-  结论: 连续 h.symm
-  证明: h.uniformContinuous_symm.continuous
+/-
+**UniformEquiv.continuous_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β] (h : α ≃ᵤ β), Continuous ⇑h.symm
+参数：h : α ≃ᵤ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuous.continuous`：UniformContinuous.continuous (hf : Uniform
+Continuous f) : Continuous f
+· 使用定理 `UniformEquiv.uniformContinuous_symm`：∀ {α : Type u} {β : Type u_1} [inst
+ : UniformSpace α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), UniformContinuous ⇑h.
+symm
 -/
 protected theorem continuous_symm (h : α ≃ᵤ β) : Continuous h.symm :=
   h.uniformContinuous_symm.continuous
 
-/--
-Definition of `toHomeomorph` / `toHomeomorph` 的定义
+/-- A uniform isomorphism as a homeomorphism. -/
+/-
+**UniformEquiv.toHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：{α : Type u} → {β : Type u_1} → [inst : UniformSpace α] → [inst_1 : Unifor
+mSpace β] → α ≃ᵤ β → α ≃ₜ β
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformEquiv.continuous`：∀ {α : Type u} {β : Type u_1} [inst : UniformSp
+ace α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), Continuous ⇑h
+· 使用定理 `UniformEquiv.continuous_symm`：∀ {α : Type u} {β : Type u_1} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), Continuous ⇑h.symm
 
-English:
-definition toHomeomorph
-  signature: (e : α ≃ᵤ β)
-  body: { e.toEquiv with
-    continuous_toFun := e.continuous
-    continuous_invFun := e.continuous_symm }
-
-中文:
-定义 toHomeomorph
-  签名: (e : α ≃ᵤ β)
-  定义体: { e.toEquiv with
-    continuous_toFun := e.continuous
-    continuous_invFun := e.continuous_symm }
+--- 原说明 ---
+A uniform isomorphism as a homeomorphism.
 -/
 protected def toHomeomorph (e : α ≃ᵤ β) : α ≃ₜ β :=
   { e.toEquiv with
     continuous_toFun := e.continuous
     continuous_invFun := e.continuous_symm }
-
-/--
-lemma `toHomeomorph_apply` / 引理 `toHomeomorph_apply`
-
-English:
-lemma toHomeomorph_apply
-  given: (e : α ≃ᵤ β)
-  statement: (e.toHomeomorph : α -> β) = e
-  proof: rfl
-
-中文:
-引理 toHomeomorph_apply
-  条件: (e : α ≃ᵤ β)
-  结论: (e.toHomeomorph : α -> β) = e
-  证明: rfl
+/-
+**UniformEquiv.toHomeomorph_apply** 是 Mathlib 中的一个引理，位于命名空间 `UniformEquiv`。
+形式化陈述：toHomeomorph_apply (e : α ≃ᵤ β) : (e.toHomeomorph : α -> β) = e
+参数：e : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toHomeomorph_apply (e : α ≃ᵤ β) : (e.toHomeomorph : α -> β) = e := rfl
-
-/--
-lemma `toHomeomorph_symm_apply` / 引理 `toHomeomorph_symm_apply`
-
-English:
-lemma toHomeomorph_symm_apply
-  given: (e : α ≃ᵤ β)
-  statement: (e.toHomeomorph.symm : β -> α) = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toHomeomorph_symm_apply
-  条件: (e : α ≃ᵤ β)
-  结论: (e.toHomeomorph.symm : β -> α) = e.symm
-  证明: rfl
-
-@[simp]
+lemma toHomeomorph_apply (e : α ≃ᵤ β) : (e.toHomeomorph : α → β) = e := rfl
+/-
+**UniformEquiv.toHomeomorph_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `UniformEquiv`。
+形式化陈述：toHomeomorph_symm_apply (e : α ≃ᵤ β) : (e.toHomeomorph.symm : β -> α) = e.
+symm
+参数：e : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toHomeomorph_symm_apply (e : α ≃ᵤ β) : (e.toHomeomorph.symm : β -> α) = e.symm := rfl
+lemma toHomeomorph_symm_apply (e : α ≃ᵤ β) : (e.toHomeomorph.symm : β → α) = e.symm := rfl
 
 @[simp]
-/--
-theorem `apply_symm_apply` / 定理 `apply_symm_apply`
-
-English:
-theorem apply_symm_apply
-  given: (h : α ≃ᵤ β) (x : β)
-  statement: h (h.symm x) = x
-  proof: h.toEquiv.apply_symm_apply x
-
-@[simp]
-
-中文:
-定理 apply_symm_apply
-  条件: (h : α ≃ᵤ β) (x : β)
-  结论: h (h.symm x) = x
-  证明: h.toEquiv.apply_symm_apply x
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, h.toEquiv.apply_symm_apply, toEquiv
+/-
+**UniformEquiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：apply_symm_apply (h : α ≃ᵤ β) (x : β) : h (h.symm x) = x
+参数：h : α ≃ᵤ β；x : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 theorem apply_symm_apply (h : α ≃ᵤ β) (x : β) : h (h.symm x) = x :=
   h.toEquiv.apply_symm_apply x
 
 @[simp]
-/--
-theorem `symm_apply_apply` / 定理 `symm_apply_apply`
-
-English:
-theorem symm_apply_apply
-  given: (h : α ≃ᵤ β) (x : α)
-  statement: h.symm (h x) = x
-  proof: h.toEquiv.symm_apply_apply x
-
-中文:
-定理 symm_apply_apply
-  条件: (h : α ≃ᵤ β) (x : α)
-  结论: h.symm (h x) = x
-  证明: h.toEquiv.symm_apply_apply x
-
-Depends on / 依赖: h.toEquiv.symm_apply_apply, symm_apply_apply, toEquiv
+/-
+**UniformEquiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：symm_apply_apply (h : α ≃ᵤ β) (x : α) : h.symm (h x) = x
+参数：h : α ≃ᵤ β；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 theorem symm_apply_apply (h : α ≃ᵤ β) (x : α) : h.symm (h x) = x :=
   h.toEquiv.symm_apply_apply x
-
-/--
-theorem `bijective` / 定理 `bijective`
-
-English:
-theorem bijective
-  given: (h : α ≃ᵤ β)
-  statement: Function.Bijective h
-  proof: h.toEquiv.bijective
-
-中文:
-定理 bijective
-  条件: (h : α ≃ᵤ β)
-  结论: 函数.双射 h
-  证明: h.toEquiv.bijective
+/-
+**UniformEquiv.bijective** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β] (h : α ≃ᵤ β), Function.Bijective ⇑h
+参数：h : α ≃ᵤ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 protected theorem bijective (h : α ≃ᵤ β) : Function.Bijective h :=
   h.toEquiv.bijective
-
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  given: (h : α ≃ᵤ β)
-  statement: Function.Injective h
-  proof: h.toEquiv.injective
-
-中文:
-定理 injective
-  条件: (h : α ≃ᵤ β)
-  结论: 函数.单射 h
-  证明: h.toEquiv.injective
+/-
+**UniformEquiv.injective** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β] (h : α ≃ᵤ β), Function.Injective ⇑h
+参数：h : α ≃ᵤ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 protected theorem injective (h : α ≃ᵤ β) : Function.Injective h :=
   h.toEquiv.injective
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  given: (h : α ≃ᵤ β)
-  statement: Function.Surjective h
-  proof: h.toEquiv.surjective
-
-中文:
-定理 surjective
-  条件: (h : α ≃ᵤ β)
-  结论: 函数.满射 h
-  证明: h.toEquiv.surjective
+/-
+**UniformEquiv.surjective** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：∀ {α : Type u} {β : Type u_1} [inst : UniformSpace α] [inst_1 : UniformSpa
+ce β] (h : α ≃ᵤ β), Function.Surjective ⇑h
+参数：h : α ≃ᵤ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 protected theorem surjective (h : α ≃ᵤ β) : Function.Surjective h :=
   h.toEquiv.surjective
 
-/--
-Definition of `changeInv` / `changeInv` 的定义
+/-- Change the uniform equiv `f` to make the inverse function definitionally equal to `g`. -/
+/-
+**UniformEquiv.changeInv** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：changeInv (f : α ≃ᵤ β) (g : β -> α) (hg : Function.RightInverse g f) : α ≃
+ᵤ β
+参数：f : α ≃ᵤ β；g : β -> α；hg : Function.RightInverse g f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformEquiv.uniformContinuous`：∀ {α : Type u} {β : Type u_1} [inst : Un
+iformSpace α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), UniformContinuous ⇑h
 
-English:
-definition changeInv
-  signature: (f : α ≃ᵤ β) (g : β -> α) (hg : Function.RightInverse g f)
-  body: have : g = f.symm :=
-    funext fun x => calc
-      g x = f.symm (f (g x)) := (f.left_inv (g x)).symm
-      _ = f.symm x := by rw [hg x]
-  { toFun := f
-    invFun := g
-    left_inv := by convert! f.left_inv
-    right_inv := by convert! f.right_inv using 1
-    uniformContinuous_toFun := f.uniformContinuous
-    uniformContinuous_invFun := by convert! f.symm.uniformContinuous }
-
-@[simp]
-
-中文:
-定义 changeInv
-  签名: (f : α ≃ᵤ β) (g : β -> α) (hg : 函数.右逆 g f)
-  定义体: have : g = f.symm :=
-    funext fun x => calc
-      g x = f.symm (f (g x)) := (f.left_inv (g x)).symm
-      _ = f.symm x := by rw [hg x]
-  { toFun := f
-    invFun := g
-    left_inv := by convert! f.left_inv
-    right_inv := by convert! f.right_inv using 1
-    uniformContinuous_toFun := f.uniformContinuous
-    uniformContinuous_invFun := by convert! f.symm.uniformContinuous }
-
-@[simp]
-
-Depends on / 依赖: convert, f.left_inv, f.right_inv, f.symm, f.symm.uniformContinuous, f.uniformContinuous, invFun, left_inv, right_inv, uniformContinuous, uniformContinuous_invFun, uniformContinuous_toFun
+--- 原说明 ---
+Change the uniform equiv `f` to make the inverse function definitionally equal t
+o `g`.
 -/
-def changeInv (f : α ≃ᵤ β) (g : β -> α) (hg : Function.RightInverse g f) : α ≃ᵤ β :=
+def changeInv (f : α ≃ᵤ β) (g : β → α) (hg : Function.RightInverse g f) : α ≃ᵤ β :=
   have : g = f.symm :=
     funext fun x => calc
       g x = f.symm (f (g x)) := (f.left_inv (g x)).symm
@@ -663,323 +432,217 @@ def changeInv (f : α ≃ᵤ β) (g : β -> α) (hg : Function.RightInverse g f)
     uniformContinuous_invFun := by convert! f.symm.uniformContinuous }
 
 @[simp]
-/--
-theorem `symm_comp_self` / 定理 `symm_comp_self`
-
-English:
-theorem symm_comp_self
-  given: (h : α ≃ᵤ β)
-  statement: (h.symm : β -> α) ∘ h = id
-  proof: funext h.symm_apply_apply
-
-@[simp]
-
-中文:
-定理 symm_comp_self
-  条件: (h : α ≃ᵤ β)
-  结论: (h.symm : β -> α) ∘ h = id
-  证明: funext h.symm_apply_apply
-
-@[simp]
-
-Depends on / 依赖: h.symm_apply_apply, symm_apply_apply
+/-
+**UniformEquiv.symm_comp_self** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：symm_comp_self (h : α ≃ᵤ β) : (h.symm : β -> α) ∘ h = id
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `UniformEquiv.symm_apply_apply`：symm_apply_apply (h : α ≃ᵤ β) (x : α) : h
+.symm (h x) = x
 -/
-theorem symm_comp_self (h : α ≃ᵤ β) : (h.symm : β -> α) ∘ h = id :=
+theorem symm_comp_self (h : α ≃ᵤ β) : (h.symm : β → α) ∘ h = id :=
   funext h.symm_apply_apply
 
 @[simp]
-/--
-theorem `self_comp_symm` / 定理 `self_comp_symm`
-
-English:
-theorem self_comp_symm
-  given: (h : α ≃ᵤ β)
-  statement: (h : α -> β) ∘ h.symm = id
-  proof: funext h.apply_symm_apply
-
-中文:
-定理 self_comp_symm
-  条件: (h : α ≃ᵤ β)
-  结论: (h : α -> β) ∘ h.symm = id
-  证明: funext h.apply_symm_apply
-
-Depends on / 依赖: apply_symm_apply, h.apply_symm_apply
+/-
+**UniformEquiv.self_comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：self_comp_symm (h : α ≃ᵤ β) : (h : α -> β) ∘ h.symm = id
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `UniformEquiv.apply_symm_apply`：apply_symm_apply (h : α ≃ᵤ β) (x : β) : h
+ (h.symm x) = x
 -/
-theorem self_comp_symm (h : α ≃ᵤ β) : (h : α -> β) ∘ h.symm = id :=
+theorem self_comp_symm (h : α ≃ᵤ β) : (h : α → β) ∘ h.symm = id :=
   funext h.apply_symm_apply
-
-/--
-theorem `range_coe` / 定理 `range_coe`
-
-English:
-theorem range_coe
-  given: (h : α ≃ᵤ β)
-  statement: range h = univ
-  proof: by simp
-
-中文:
-定理 range_coe
-  条件: (h : α ≃ᵤ β)
-  结论: range h = univ
-  证明: by simp
+/-
+**UniformEquiv.range_coe** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：range_coe (h : α ≃ᵤ β) : range h = univ
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.range_eq_univ`：range_eq_univ {α : Type*} {β : Type*} {E : Type
+*} [EquivLike E α β] (e : E) : range e = univ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem range_coe (h : α ≃ᵤ β) : range h = univ := by simp
-
-/--
-theorem `image_symm` / 定理 `image_symm`
-
-English:
-theorem image_symm
-  given: (h : α ≃ᵤ β)
-  statement: image h.symm = preimage h
-  proof: funext h.symm.toEquiv.image_eq_preimage_symm
-
-中文:
-定理 image_symm
-  条件: (h : α ≃ᵤ β)
-  结论: 像 h.symm = 原像 h
-  证明: funext h.symm.toEquiv.image_eq_preimage_symm
-
-Depends on / 依赖: h.symm.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
+/-
+**UniformEquiv.image_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：image_symm (h : α ≃ᵤ β) : image h.symm = preimage h
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 theorem image_symm (h : α ≃ᵤ β) : image h.symm = preimage h :=
   funext h.symm.toEquiv.image_eq_preimage_symm
-
-/--
-theorem `preimage_symm` / 定理 `preimage_symm`
-
-English:
-theorem preimage_symm
-  given: (h : α ≃ᵤ β)
-  statement: preimage h.symm = image h
-  proof: (funext h.toEquiv.image_eq_preimage_symm).symm
-
-@[simp]
-
-中文:
-定理 preimage_symm
-  条件: (h : α ≃ᵤ β)
-  结论: 原像 h.symm = 像 h
-  证明: (funext h.toEquiv.image_eq_preimage_symm).symm
-
-@[simp]
-
-Depends on / 依赖: h.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
+/-
+**UniformEquiv.preimage_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：preimage_symm (h : α ≃ᵤ β) : preimage h.symm = image h
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 theorem preimage_symm (h : α ≃ᵤ β) : preimage h.symm = image h :=
   (funext h.toEquiv.image_eq_preimage_symm).symm
 
 @[simp]
-/--
-theorem `image_preimage` / 定理 `image_preimage`
-
-English:
-theorem image_preimage
-  given: (h : α ≃ᵤ β) (s : Set β)
-  statement: h '' h ⁻¹' s = s
-  proof: h.toEquiv.image_preimage s
-
-@[simp]
-
-中文:
-定理 image_preimage
-  条件: (h : α ≃ᵤ β) (s : 集合 β)
-  结论: h '' h ⁻¹' s = s
-  证明: h.toEquiv.image_preimage s
-
-@[simp]
-
-Depends on / 依赖: h.toEquiv.image_preimage, image_preimage, toEquiv
+/-
+**UniformEquiv.image_preimage** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：image_preimage (h : α ≃ᵤ β) (s : Set β) : h '' h ⁻¹' s = s
+参数：h : α ≃ᵤ β；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.image_preimage`：image_preimage {α β} (e : α ≃ β) (s : Set β) : e '
+' e ⁻¹' s = s
 -/
 theorem image_preimage (h : α ≃ᵤ β) (s : Set β) : h '' h ⁻¹' s = s :=
   h.toEquiv.image_preimage s
 
 @[simp]
-/--
-theorem `preimage_image` / 定理 `preimage_image`
-
-English:
-theorem preimage_image
-  given: (h : α ≃ᵤ β) (s : Set α)
-  statement: h ⁻¹' h '' s = s
-  proof: h.toEquiv.preimage_image s
-
-中文:
-定理 preimage_image
-  条件: (h : α ≃ᵤ β) (s : 集合 α)
-  结论: h ⁻¹' h '' s = s
-  证明: h.toEquiv.preimage_image s
-
-Depends on / 依赖: h.toEquiv.preimage_image, preimage_image, toEquiv
+/-
+**UniformEquiv.preimage_image** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：preimage_image (h : α ≃ᵤ β) (s : Set α) : h ⁻¹' h '' s = s
+参数：h : α ≃ᵤ β；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.preimage_image`：preimage_image {α β} (e : α ≃ β) (s : Set α) : e ⁻
+¹' e '' s = s
 -/
 theorem preimage_image (h : α ≃ᵤ β) (s : Set α) : h ⁻¹' h '' s = s :=
   h.toEquiv.preimage_image s
-
-/--
-theorem `isUniformInducing` / 定理 `isUniformInducing`
-
-English:
-theorem isUniformInducing
-  given: (h : α ≃ᵤ β)
-  statement: IsUniformInducing h
-  proof: IsUniformInducing.of_comp h.uniformContinuous h.symm.uniformContinuous by
-    simp only [symm_comp_self, IsUniformInducing.id]
-
-中文:
-定理 isUniformInducing
-  条件: (h : α ≃ᵤ β)
-  结论: 是UniformInducing h
-  证明: IsUniformInducing.of_comp h.uniformContinuous h.symm.uniformContinuous by
-    simp only [symm_comp_self, IsUniformInducing.id]
-
-Depends on / 依赖: IsUniformInducing, IsUniformInducing.id, IsUniformInducing.of_comp, h.symm.uniformContinuous, h.uniformContinuous, of_comp, symm_comp_self, uniformContinuous
+/-
+**UniformEquiv.isUniformInducing** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：isUniformInducing (h : α ≃ᵤ β) : IsUniformInducing h
+参数：h : α ≃ᵤ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.of_comp`：IsUniformInducing.of_comp {f : α -> β} {g : β
+ -> γ} (hf : UniformContinuous f) (hg : UniformContinuous g) (hgf : IsUniformInd
+ucing (g ∘ f)) …
+· 使用定理 `UniformEquiv.uniformContinuous`：∀ {α : Type u} {β : Type u_1} [inst : Un
+iformSpace α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), UniformContinuous ⇑h
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformEquiv.symm_comp_self`：symm_comp_self (h : α ≃ᵤ β) : (h.symm : β -
+> α) ∘ h = id
 -/
 theorem isUniformInducing (h : α ≃ᵤ β) : IsUniformInducing h :=
-IsUniformInducing.of_comp h.uniformContinuous h.symm.uniformContinuous by
+  IsUniformInducing.of_comp h.uniformContinuous h.symm.uniformContinuous <| by
     simp only [symm_comp_self, IsUniformInducing.id]
-
-/--
-theorem `comap_eq` / 定理 `comap_eq`
-
-English:
-theorem comap_eq
-  given: (h : α ≃ᵤ β)
-  statement: UniformSpace.comap h ‹_› = ‹_›
-  proof: h.isUniformInducing.comap_uniformSpace
-
-中文:
-定理 comap_eq
-  条件: (h : α ≃ᵤ β)
-  结论: 一致空间.comap h ‹_› = ‹_›
-  证明: h.isUniformInducing.comap_uniformSpace
-
-Depends on / 依赖: comap_uniformSpace, h.isUniformInducing.comap_uniformSpace, isUniformInducing
+/-
+**UniformEquiv.comap_eq** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：comap_eq (h : α ≃ᵤ β) : UniformSpace.comap h ‹_› = ‹_›
+参数：h : α ≃ᵤ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformInducing.comap_uniformSpace`：∀ {α : Type u} {β : Type v} [inst 
+: UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformInducing f →
+ UniformSpace.comap f inst…
+· 使用定理 `UniformEquiv.isUniformInducing`：isUniformInducing (h : α ≃ᵤ β) : IsUnifo
+rmInducing h
 -/
 theorem comap_eq (h : α ≃ᵤ β) : UniformSpace.comap h ‹_› = ‹_› :=
   h.isUniformInducing.comap_uniformSpace
-
-/--
-lemma `isUniformEmbedding` / 引理 `isUniformEmbedding`
-
-English:
-lemma isUniformEmbedding
-  given: (h : α ≃ᵤ β)
-  statement: IsUniformEmbedding h
-  proof: ⟨h.isUniformInducing, h.injective⟩
-
-中文:
-引理 isUniformEmbedding
-  条件: (h : α ≃ᵤ β)
-  结论: 是一致嵌入 h
-  证明: ⟨h.isUniformInducing, h.injective⟩
-
-Depends on / 依赖: h.injective, h.isUniformInducing, injective, isUniformInducing
+/-
+**UniformEquiv.isUniformEmbedding** 是 Mathlib 中的一个引理，位于命名空间 `UniformEquiv`。
+形式化陈述：isUniformEmbedding (h : α ≃ᵤ β) : IsUniformEmbedding h
+参数：h : α ≃ᵤ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformEquiv.isUniformInducing`：isUniformInducing (h : α ≃ᵤ β) : IsUnifo
+rmInducing h
+· 使用定理 `UniformEquiv.injective`：∀ {α : Type u} {β : Type u_1} [inst : UniformSpa
+ce α] [inst_1 : UniformSpace β] (h : α ≃ᵤ β), Function.Injective ⇑h
 -/
 lemma isUniformEmbedding (h : α ≃ᵤ β) : IsUniformEmbedding h := ⟨h.isUniformInducing, h.injective⟩
-
-/--
-theorem `completeSpace_iff` / 定理 `completeSpace_iff`
-
-English:
-theorem completeSpace_iff
-  given: (h : α ≃ᵤ β)
-  statement: CompleteSpace α ↔ CompleteSpace β
-  proof: completeSpace_congr h.isUniformEmbedding
-
-中文:
-定理 completeSpace_iff
-  条件: (h : α ≃ᵤ β)
-  结论: 完备空间 α ↔ 完备空间 β
-  证明: completeSpace_congr h.isUniformEmbedding
-
-Depends on / 依赖: completeSpace_congr, h.isUniformEmbedding, isUniformEmbedding
+/-
+**UniformEquiv.completeSpace_iff** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：completeSpace_iff (h : α ≃ᵤ β) : CompleteSpace α ↔ CompleteSpace β
+参数：h : α ≃ᵤ β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `completeSpace_congr`：completeSpace_congr {e : α ≃ β} (he : IsUniformEmbe
+dding e) : CompleteSpace α ↔ CompleteSpace β
+· 使用引理 `UniformEquiv.isUniformEmbedding`：isUniformEmbedding (h : α ≃ᵤ β) : IsUni
+formEmbedding h
 -/
 theorem completeSpace_iff (h : α ≃ᵤ β) : CompleteSpace α ↔ CompleteSpace β :=
   completeSpace_congr h.isUniformEmbedding
 
-/--
-Definition of `ofIsUniformEmbedding` / `ofIsUniformEmbedding` 的定义
+/-- Uniform equiv given a uniform embedding. -/
+/-
+**UniformEquiv.ofIsUniformEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：ofIsUniformEmbedding (f : α -> β) (hf : IsUniformEmbedding f) : α ≃ᵤ Set.r
+ange f where uniformContinuous_toFun
+参数：f : α -> β；hf : IsUniformEmbedding f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.injective`：∀ {α : Type ua} {β : Type ub} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Func
+tion.Injective f
 
-English:
-definition ofIsUniformEmbedding
-  signature: (f : α -> β) (hf : IsUniformEmbedding f)
-  body: hf.isUniformInducing.uniformContinuous.subtype_mk _
-  uniformContinuous_invFun := by
-    rw [hf.isUniformInducing.uniformContinuous_iff]; rw [Equiv.invFun_as_coe]; rw [Equiv.self_comp_ofInjective_symm]
-    exact uniformContinuous_subtype_val
-  toEquiv := Equiv.ofInjective f hf.injective
-
-中文:
-定义 ofIsUniformEmbedding
-  签名: (f : α -> β) (hf : 是一致嵌入 f)
-  定义体: hf.isUniformInducing.uniformContinuous.subtype_mk _
-  uniformContinuous_invFun := by
-    rw [hf.isUniformInducing.uniformContinuous_iff]; rw [Equiv.invFun_as_coe]; rw [Equiv.self_comp_ofInjective_symm]
-    exact uniformContinuous_subtype_val
-  toEquiv := Equiv.ofInjective f hf.injective
-
-Depends on / 依赖: hf.isUniformInducing.uniformContinuous.subtype_mk, isUniformInducing, subtype_mk, uniformContinuous
+--- 原说明 ---
+Uniform equiv given a uniform embedding.
 -/
-noncomputable def ofIsUniformEmbedding (f : α -> β) (hf : IsUniformEmbedding f) :
+noncomputable def ofIsUniformEmbedding (f : α → β) (hf : IsUniformEmbedding f) :
     α ≃ᵤ Set.range f where
   uniformContinuous_toFun := hf.isUniformInducing.uniformContinuous.subtype_mk _
   uniformContinuous_invFun := by
-    rw [hf.isUniformInducing.uniformContinuous_iff]; rw [Equiv.invFun_as_coe]; rw [Equiv.self_comp_ofInjective_symm]
+    rw [hf.isUniformInducing.uniformContinuous_iff, Equiv.invFun_as_coe,
+      Equiv.self_comp_ofInjective_symm]
     exact uniformContinuous_subtype_val
   toEquiv := Equiv.ofInjective f hf.injective
 
-/--
-Definition of `setCongr` / `setCongr` 的定义
+/-- If two sets are equal, then they are uniformly equivalent. -/
+/-
+**UniformEquiv.setCongr** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：setCongr {s t : Set α} (h : s = t) : s ≃ᵤ t where uniformContinuous_toFun
+参数：h : s = t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setCongr
-  signature: {s t : Set α} (h : s = t)
-  body: uniformContinuous_subtype_val.subtype_mk _
-  uniformContinuous_invFun := uniformContinuous_subtype_val.subtype_mk _
-  toEquiv := Equiv.setCongr h
-
-中文:
-定义 setCongr
-  签名: {s t : 集合 α} (h : s = t)
-  定义体: uniformContinuous_subtype_val.subtype_mk _
-  uniformContinuous_invFun := uniformContinuous_subtype_val.subtype_mk _
-  toEquiv := Equiv.setCongr h
-
-Depends on / 依赖: subtype_mk, uniformContinuous_subtype_val, uniformContinuous_subtype_val.subtype_mk
+--- 原说明 ---
+If two sets are equal, then they are uniformly equivalent.
 -/
 def setCongr {s t : Set α} (h : s = t) : s ≃ᵤ t where
   uniformContinuous_toFun := uniformContinuous_subtype_val.subtype_mk _
   uniformContinuous_invFun := uniformContinuous_subtype_val.subtype_mk _
   toEquiv := Equiv.setCongr h
 
-/--
-Definition of `prodCongr` / `prodCongr` 的定义
+/-- Product of two uniform isomorphisms. -/
+/-
+**UniformEquiv.prodCongr** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：prodCongr (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) : α × γ ≃ᵤ β × δ where uniformContin
+uous_toFun
+参数：h₁ : α ≃ᵤ β；h₂ : γ ≃ᵤ δ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodCongr
-  signature: (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ)
-  body: (h₁.uniformContinuous.comp uniformContinuous_fst).prodMk
-      (h₂.uniformContinuous.comp uniformContinuous_snd)
-  uniformContinuous_invFun :=
-    (h₁.symm.uniformContinuous.comp uniformContinuous_fst).prodMk
-      (h₂.symm.uniformContinuous.comp uniformContinuous_snd)
-  toEquiv := h₁.toEquiv.prodCongr h₂.toEquiv
-
-@[simp]
-
-中文:
-定义 prodCongr
-  签名: (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ)
-  定义体: (h₁.uniformContinuous.comp uniformContinuous_fst).prodMk
-      (h₂.uniformContinuous.comp uniformContinuous_snd)
-  uniformContinuous_invFun :=
-    (h₁.symm.uniformContinuous.comp uniformContinuous_fst).prodMk
-      (h₂.symm.uniformContinuous.comp uniformContinuous_snd)
-  toEquiv := h₁.toEquiv.prodCongr h₂.toEquiv
-
-@[simp]
-
-Depends on / 依赖: prodCongr, prodMk, symm.uniformContinuous.comp, toEquiv, toEquiv.prodCongr, uniformContinuous, uniformContinuous.comp, uniformContinuous_fst, uniformContinuous_invFun, uniformContinuous_snd
+--- 原说明 ---
+Product of two uniform isomorphisms.
 -/
 def prodCongr (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) : α × γ ≃ᵤ β × δ where
   uniformContinuous_toFun :=
@@ -991,42 +654,26 @@ def prodCongr (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) : α × γ ≃ᵤ β �
   toEquiv := h₁.toEquiv.prodCongr h₂.toEquiv
 
 @[simp]
-/--
-theorem `prodCongr_symm` / 定理 `prodCongr_symm`
-
-English:
-theorem prodCongr_symm
-  given: (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodCongr_symm
-  条件: (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ)
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.prodCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：prodCongr_symm (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) : (h₁.prodCongr h₂).symm = h₁.s
+ymm.prodCongr h₂.symm
+参数：h₁ : α ≃ᵤ β；h₂ : γ ≃ᵤ δ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodCongr_symm (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) :
     (h₁.prodCongr h₂).symm = h₁.symm.prodCongr h₂.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_prodCongr` / 定理 `coe_prodCongr`
-
-English:
-theorem coe_prodCongr
-  given: (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ)
-  statement: ⇑(h₁.prodCongr h₂) = Prod.map h₁ h₂
-  proof: rfl
-
-中文:
-定理 coe_prodCongr
-  条件: (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ)
-  结论: ⇑(h₁.prodCongr h₂) = 积类型.map h₁ h₂
-  证明: rfl
+/-
+**UniformEquiv.coe_prodCongr** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：coe_prodCongr (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) : ⇑(h₁.prodCongr h₂) = Prod.map 
+h₁ h₂
+参数：h₁ : α ≃ᵤ β；h₂ : γ ≃ᵤ δ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodCongr (h₁ : α ≃ᵤ β) (h₂ : γ ≃ᵤ δ) : ⇑(h₁.prodCongr h₂) = Prod.map h₁ h₂ :=
   rfl
@@ -1035,28 +682,15 @@ section
 
 variable (α β γ)
 
-/--
-Definition of `prodComm` / `prodComm` 的定义
+/-- `α × β` is uniformly isomorphic to `β × α`. -/
+/-
+**UniformEquiv.prodComm** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：prodComm : α × β ≃ᵤ β × α where uniformContinuous_toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodComm
-  signature: : α × β ≃ᵤ β × α where
-  body: uniformContinuous_snd.prodMk uniformContinuous_fst
-  uniformContinuous_invFun := uniformContinuous_snd.prodMk uniformContinuous_fst
-  toEquiv := Equiv.prodComm α β
-
-@[simp]
-
-中文:
-定义 prodComm
-  签名: : α × β ≃ᵤ β × α where
-  定义体: uniformContinuous_snd.prodMk uniformContinuous_fst
-  uniformContinuous_invFun := uniformContinuous_snd.prodMk uniformContinuous_fst
-  toEquiv := Equiv.prodComm α β
-
-@[simp]
-
-Depends on / 依赖: prodMk, uniformContinuous_fst, uniformContinuous_snd, uniformContinuous_snd.prodMk
+--- 原说明 ---
+`α × β` is uniformly isomorphic to `β × α`.
 -/
 def prodComm : α × β ≃ᵤ β × α where
   uniformContinuous_toFun := uniformContinuous_snd.prodMk uniformContinuous_fst
@@ -1064,67 +698,34 @@ def prodComm : α × β ≃ᵤ β × α where
   toEquiv := Equiv.prodComm α β
 
 @[simp]
-/--
-theorem `prodComm_symm` / 定理 `prodComm_symm`
-
-English:
-theorem prodComm_symm
-  statement: (prodComm α β).symm = prodComm β α
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodComm_symm
-  结论: (prodComm α β).symm = prodComm β α
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.prodComm_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：prodComm_symm : (prodComm α β).symm = prodComm β α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodComm_symm : (prodComm α β).symm = prodComm β α :=
   rfl
 
 @[simp]
-/--
-theorem `coe_prodComm` / 定理 `coe_prodComm`
-
-English:
-theorem coe_prodComm
-  statement: ⇑(prodComm α β) = Prod.swap
-  proof: rfl
-
-中文:
-定理 coe_prodComm
-  结论: ⇑(prodComm α β) = 积类型.swap
-  证明: rfl
+/-
+**UniformEquiv.coe_prodComm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：coe_prodComm : ⇑(prodComm α β) = Prod.swap
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodComm : ⇑(prodComm α β) = Prod.swap :=
   rfl
 
-/--
-Definition of `prodAssoc` / `prodAssoc` 的定义
+/-- `(α × β) × γ` is uniformly isomorphic to `α × (β × γ)`. -/
+/-
+**UniformEquiv.prodAssoc** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：prodAssoc : (α × β) × γ ≃ᵤ α × β × γ where uniformContinuous_toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodAssoc
-  signature: : (α × β) × γ ≃ᵤ α × β × γ where
-  body: (uniformContinuous_fst.comp uniformContinuous_fst).prodMk
-      ((uniformContinuous_snd.comp uniformContinuous_fst).prodMk uniformContinuous_snd)
-  uniformContinuous_invFun :=
-    (uniformContinuous_fst.prodMk (uniformContinuous_fst.comp
-      uniformContinuous_snd)).prodMk (uniformContinuous_snd.comp uniformContinuous_snd)
-  toEquiv := Equiv.prodAssoc α β γ
-
-中文:
-定义 prodAssoc
-  签名: : (α × β) × γ ≃ᵤ α × β × γ where
-  定义体: (uniformContinuous_fst.comp uniformContinuous_fst).prodMk
-      ((uniformContinuous_snd.comp uniformContinuous_fst).prodMk uniformContinuous_snd)
-  uniformContinuous_invFun :=
-    (uniformContinuous_fst.prodMk (uniformContinuous_fst.comp
-      uniformContinuous_snd)).prodMk (uniformContinuous_snd.comp uniformContinuous_snd)
-  toEquiv := Equiv.prodAssoc α β γ
-
-Depends on / 依赖: Equiv.prodAssoc, prodAssoc, prodMk, toEquiv, uniformContinuous_fst, uniformContinuous_fst.comp, uniformContinuous_fst.prodMk, uniformContinuous_invFun, uniformContinuous_snd, uniformContinuous_snd.comp
+--- 原说明 ---
+`(α × β) × γ` is uniformly isomorphic to `α × (β × γ)`.
 -/
 def prodAssoc : (α × β) × γ ≃ᵤ α × β × γ where
   uniformContinuous_toFun :=
@@ -1137,28 +738,16 @@ def prodAssoc : (α × β) × γ ≃ᵤ α × β × γ where
 
 /-- `α × {*}` is uniformly isomorphic to `α`. -/
 @[simps! -fullyApplied apply]
-/--
-Definition of `prodPUnit` / `prodPUnit` 的定义
+/-
+**UniformEquiv.prodPUnit** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：prodPUnit : α × PUnit ≃ᵤ α where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_fst`：uniformContinuous_fst [UniformSpace α] [UniformSp
+ace β] : UniformContinuous fun p : α × β => p.1
 
-English:
-definition prodPUnit
-  signature: : α × PUnit ≃ᵤ α where
-  body: Equiv.prodPUnit α
-  uniformContinuous_toFun := uniformContinuous_fst
-  uniformContinuous_invFun := uniformContinuous_id.prodMk uniformContinuous_const
-
-@[deprecated (since := "2026-02-08")] alias prodPunit := prodPUnit
-
-中文:
-定义 prodPUnit
-  签名: : α × 命题单元 ≃ᵤ α where
-  定义体: Equiv.prodPUnit α
-  uniformContinuous_toFun := uniformContinuous_fst
-  uniformContinuous_invFun := uniformContinuous_id.prodMk uniformContinuous_const
-
-@[deprecated (since := "2026-02-08")] alias prodPunit := prodPUnit
-
-Depends on / 依赖: Equiv.prodPUnit, prodPUnit
+--- 原说明 ---
+`α × {*}` is uniformly isomorphic to `α`.
 -/
 def prodPUnit : α × PUnit ≃ᵤ α where
   toEquiv := Equiv.prodPUnit α
@@ -1167,41 +756,25 @@ def prodPUnit : α × PUnit ≃ᵤ α where
 
 @[deprecated (since := "2026-02-08")] alias prodPunit := prodPUnit
 
-/--
-Definition of `punitProd` / `punitProd` 的定义
+/-- `{*} × α` is uniformly isomorphic to `α`. -/
+/-
+**UniformEquiv.punitProd** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：punitProd : PUnit × α ≃ᵤ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition punitProd
-  signature: : PUnit × α ≃ᵤ α
-  body: (prodComm _ _).trans (prodPUnit _)
-
-@[simp]
-
-中文:
-定义 punitProd
-  签名: : 命题单元 × α ≃ᵤ α
-  定义体: (prodComm _ _).trans (prodPUnit _)
-
-@[simp]
-
-Depends on / 依赖: prodComm, prodPUnit
+--- 原说明 ---
+`{*} × α` is uniformly isomorphic to `α`.
 -/
 def punitProd : PUnit × α ≃ᵤ α :=
   (prodComm _ _).trans (prodPUnit _)
 
 @[simp]
-/--
-theorem `coe_punitProd` / 定理 `coe_punitProd`
-
-English:
-theorem coe_punitProd
-  statement: ⇑(punitProd α) = Prod.snd
-  proof: rfl
-
-中文:
-定理 coe_punitProd
-  结论: ⇑(punitProd α) = 积类型.snd
-  证明: rfl
+/-
+**UniformEquiv.coe_punitProd** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：coe_punitProd : ⇑(punitProd α) = Prod.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_punitProd : ⇑(punitProd α) = Prod.snd :=
   rfl
@@ -1209,226 +782,153 @@ theorem coe_punitProd : ⇑(punitProd α) = Prod.snd :=
 /-- `Equiv.piCongrLeft` as a uniform isomorphism: this is the natural isomorphism
 `Π i, β (e i) ≃ᵤ Π j, β j` obtained from a bijection `ι ≃ ι'`. -/
 @[simps toEquiv, simps! -isSimp apply]
-/--
-Definition of `piCongrLeft` / `piCongrLeft` 的定义
+/-
+**UniformEquiv.piCongrLeft** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongrLeft {ι ι' : Type*} {β : ι' -> Type*} [forall j, UniformSpace (β j)
+] (e : ι ≃ ι') : (forall i, β (e i)) ≃ᵤ forall j, β j where uniformContinuous_to
+Fun
+参数：β j；e : ι ≃ ι'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piCongrLeft
-  signature: {ι ι' : Type*} {β : ι' -> Type*} [forall j, UniformSpace (β j)]
-  body: uniformContinuous_pi.mpr e.forall_congr_right.mp fun i => by
-    simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using
-      Pi.uniformContinuous_proj _ i
-  uniformContinuous_invFun := Pi.uniformContinuous_precomp' _ e
-  toEquiv := Equiv.piCongrLeft _ e
-
-@[simp]
-
-中文:
-定义 piCongrLeft
-  签名: {ι ι' : 类型} {β : ι' -> 类型} [对任意 j, 一致空间 (β j)]
-  定义体: uniformContinuous_pi.mpr e.forall_congr_right.mp fun i => by
-    simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using
-      Pi.uniformContinuous_proj _ i
-  uniformContinuous_invFun := Pi.uniformContinuous_precomp' _ e
-  toEquiv := Equiv.piCongrLeft _ e
-
-@[simp]
-
-Depends on / 依赖: Equiv.piCongrLeft, Equiv.piCongrLeft_apply_apply, Equiv.toFun_as_coe, Pi.uniformContinuous_precomp, Pi.uniformContinuous_proj, e.forall_congr_right.mp, forall_congr_right, piCongrLeft, piCongrLeft_apply_apply, toEquiv, toFun_as_coe, uniformContinuous_invFun, uniformContinuous_pi, uniformContinuous_pi.mpr, uniformContinuous_precomp, uniformContinuous_proj
+--- 原说明 ---
+`Equiv.piCongrLeft` as a uniform isomorphism: this is the natural isomorphism
+`Π i, β (e i) ≃ᵤ Π j, β j` obtained from a bijection `ι ≃ ι'`.
 -/
-def piCongrLeft {ι ι' : Type*} {β : ι' -> Type*} [forall j, UniformSpace (β j)]
-    (e : ι ≃ ι') : (forall i, β (e i)) ≃ᵤ forall j, β j where
-uniformContinuous_toFun := uniformContinuous_pi.mpr e.forall_congr_right.mp fun i => by
+def piCongrLeft {ι ι' : Type*} {β : ι' → Type*} [∀ j, UniformSpace (β j)]
+    (e : ι ≃ ι') : (∀ i, β (e i)) ≃ᵤ ∀ j, β j where
+  uniformContinuous_toFun := uniformContinuous_pi.mpr <| e.forall_congr_right.mp fun i ↦ by
     simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using
       Pi.uniformContinuous_proj _ i
   uniformContinuous_invFun := Pi.uniformContinuous_precomp' _ e
   toEquiv := Equiv.piCongrLeft _ e
 
 @[simp]
-/--
-lemma `piCongrLeft_refl` / 引理 `piCongrLeft_refl`
-
-English:
-lemma piCongrLeft_refl
-  given: {ι : Type*} {X : ι -> Type*} [forall i, UniformSpace (X i)]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 piCongrLeft_refl
-  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, 一致空间 (X i)]
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.piCongrLeft_refl** 是 Mathlib 中的一个引理，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongrLeft_refl {ι : Type*} {X : ι -> Type*} [forall i, UniformSpace (X i
+)] : piCongrLeft (.refl ι) = .refl (forall i, X i)
+参数：X i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-lemma piCongrLeft_refl {ι : Type*} {X : ι -> Type*} [forall i, UniformSpace (X i)] :
-    piCongrLeft (.refl ι) = .refl (forall i, X i) :=
+lemma piCongrLeft_refl {ι : Type*} {X : ι → Type*} [∀ i, UniformSpace (X i)] :
+    piCongrLeft (.refl ι) = .refl (∀ i, X i) :=
   rfl
 
 @[simp]
-/--
-lemma `piCongrLeft_symm_apply` / 引理 `piCongrLeft_symm_apply`
-
-English:
-lemma piCongrLeft_symm_apply
-  statement: {ι ι' : Type*} {X : ι' -> Type*} [forall j, UniformSpace (X j)]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 piCongrLeft_symm_apply
-  结论: {ι ι' : 类型} {X : ι' -> 类型} [对任意 j, 一致空间 (X j)]
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.piCongrLeft_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongrLeft_symm_apply {ι ι' : Type*} {X : ι' -> Type*} [forall j, Uniform
+Space (X j)] (e : ι ≃ ι') : ⇑(piCongrLeft (β
+参数：X j；e : ι ≃ ι'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma piCongrLeft_symm_apply {ι ι' : Type*} {X : ι' -> Type*} [forall j, UniformSpace (X j)]
+lemma piCongrLeft_symm_apply {ι ι' : Type*} {X : ι' → Type*} [∀ j, UniformSpace (X j)]
     (e : ι ≃ ι') : ⇑(piCongrLeft (β := X) e).symm = (· <| e ·) :=
   rfl
 
 @[simp]
-/--
-lemma `piCongrLeft_apply_apply` / 引理 `piCongrLeft_apply_apply`
-
-English:
-lemma piCongrLeft_apply_apply
-  statement: {ι ι' : Type*} {X : ι' -> Type*} [forall j, UniformSpace (X j)]
-  proof: Equiv.piCongrLeft_apply_apply ..
-
-中文:
-引理 piCongrLeft_apply_apply
-  结论: {ι ι' : 类型} {X : ι' -> 类型} [对任意 j, 一致空间 (X j)]
-  证明: Equiv.piCongrLeft_apply_apply ..
-
-Depends on / 依赖: Equiv.piCongrLeft_apply_apply, piCongrLeft_apply_apply
+/-
+**UniformEquiv.piCongrLeft_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongrLeft_apply_apply {ι ι' : Type*} {X : ι' -> Type*} [forall j, Unifor
+mSpace (X j)] (e : ι ≃ ι') (x : forall i, X (e i)) i : piCongrLeft e x (e i) = x
+ i
+参数：X j；e : ι ≃ ι'；x : forall i, X (e i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.piCongrLeft_apply_apply`：piCongrLeft_apply_apply (f : forall a, P 
+(e a)) (a : α) : (piCongrLeft P e) f (e a) = f a
 -/
-lemma piCongrLeft_apply_apply {ι ι' : Type*} {X : ι' -> Type*} [forall j, UniformSpace (X j)]
-    (e : ι ≃ ι') (x : forall i, X (e i)) i : piCongrLeft e x (e i) = x i :=
+lemma piCongrLeft_apply_apply {ι ι' : Type*} {X : ι' → Type*} [∀ j, UniformSpace (X j)]
+    (e : ι ≃ ι') (x : ∀ i, X (e i)) i : piCongrLeft e x (e i) = x i :=
   Equiv.piCongrLeft_apply_apply ..
 
 /-- `Equiv.piCongrRight` as a uniform isomorphism: this is the natural isomorphism
 `Π i, β₁ i ≃ᵤ Π j, β₂ i` obtained from uniform isomorphisms `β₁ i ≃ᵤ β₂ i` for each `i`. -/
 @[simps! apply toEquiv]
-/--
-Definition of `piCongrRight` / `piCongrRight` 的定义
+/-
+**UniformEquiv.piCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongrRight {ι : Type*} {β₁ β₂ : ι -> Type*} [forall i, UniformSpace (β₁ 
+i)] [forall i, UniformSpace (β₂ i)] (F : forall i, β₁ i ≃ᵤ β₂ i) : (forall i, β₁
+ i) ≃ᵤ forall i, β₂ i where uniformContinuous_toFun
+参数：β₁ i；β₂ i；F : forall i, β₁ i ≃ᵤ β₂ i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piCongrRight
-  signature: {ι : Type*} {β₁ β₂ : ι -> Type*} [forall i, UniformSpace (β₁ i)]
-  body: Pi.uniformContinuous_postcomp' _ fun i => (F i).uniformContinuous
-  uniformContinuous_invFun := Pi.uniformContinuous_postcomp' _ fun i => (F i).symm.uniformContinuous
-  toEquiv := Equiv.piCongrRight fun i => (F i).toEquiv
-
-@[simp]
-
-中文:
-定义 piCongrRight
-  签名: {ι : 类型} {β₁ β₂ : ι -> 类型} [对任意 i, 一致空间 (β₁ i)]
-  定义体: Pi.uniformContinuous_postcomp' _ fun i => (F i).uniformContinuous
-  uniformContinuous_invFun := Pi.uniformContinuous_postcomp' _ fun i => (F i).symm.uniformContinuous
-  toEquiv := Equiv.piCongrRight fun i => (F i).toEquiv
-
-@[simp]
-
-Depends on / 依赖: Pi.uniformContinuous_postcomp, uniformContinuous, uniformContinuous_postcomp
+--- 原说明 ---
+`Equiv.piCongrRight` as a uniform isomorphism: this is the natural isomorphism
+`Π i, β₁ i ≃ᵤ Π j, β₂ i` obtained from uniform isomorphisms `β₁ i ≃ᵤ β₂ i` for e
+ach `i`.
 -/
-def piCongrRight {ι : Type*} {β₁ β₂ : ι -> Type*} [forall i, UniformSpace (β₁ i)]
-    [forall i, UniformSpace (β₂ i)] (F : forall i, β₁ i ≃ᵤ β₂ i) : (forall i, β₁ i) ≃ᵤ forall i, β₂ i where
-  uniformContinuous_toFun := Pi.uniformContinuous_postcomp' _ fun i => (F i).uniformContinuous
-  uniformContinuous_invFun := Pi.uniformContinuous_postcomp' _ fun i => (F i).symm.uniformContinuous
+def piCongrRight {ι : Type*} {β₁ β₂ : ι → Type*} [∀ i, UniformSpace (β₁ i)]
+    [∀ i, UniformSpace (β₂ i)] (F : ∀ i, β₁ i ≃ᵤ β₂ i) : (∀ i, β₁ i) ≃ᵤ ∀ i, β₂ i where
+  uniformContinuous_toFun := Pi.uniformContinuous_postcomp' _ fun i ↦ (F i).uniformContinuous
+  uniformContinuous_invFun := Pi.uniformContinuous_postcomp' _ fun i ↦ (F i).symm.uniformContinuous
   toEquiv := Equiv.piCongrRight fun i => (F i).toEquiv
 
 @[simp]
-/--
-theorem `piCongrRight_symm` / 定理 `piCongrRight_symm`
-
-English:
-theorem piCongrRight_symm
-  statement: {ι : Type*} {β₁ β₂ : ι -> Type*} [forall i, UniformSpace (β₁ i)]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 piCongrRight_symm
-  结论: {ι : 类型} {β₁ β₂ : ι -> 类型} [对任意 i, 一致空间 (β₁ i)]
-  证明: rfl
-
-@[simp]
+/-
+**UniformEquiv.piCongrRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongrRight_symm {ι : Type*} {β₁ β₂ : ι -> Type*} [forall i, UniformSpace
+ (β₁ i)] [forall i, UniformSpace (β₂ i)] (F : forall i, β₁ i ≃ᵤ β₂ i) : (piCongr
+Right F).symm = piCongrRight fun i => (F i).symm
+参数：β₁ i；β₂ i；F : forall i, β₁ i ≃ᵤ β₂ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_symm {ι : Type*} {β₁ β₂ : ι -> Type*} [forall i, UniformSpace (β₁ i)]
-    [forall i, UniformSpace (β₂ i)] (F : forall i, β₁ i ≃ᵤ β₂ i) :
+theorem piCongrRight_symm {ι : Type*} {β₁ β₂ : ι → Type*} [∀ i, UniformSpace (β₁ i)]
+    [∀ i, UniformSpace (β₂ i)] (F : ∀ i, β₁ i ≃ᵤ β₂ i) :
     (piCongrRight F).symm = piCongrRight fun i => (F i).symm :=
   rfl
 
 @[simp]
-/--
-theorem `piCongrRight_refl` / 定理 `piCongrRight_refl`
-
-English:
-theorem piCongrRight_refl
-  given: {ι : Type*} {X : ι -> Type*} [forall i, UniformSpace (X i)]
-  proof: rfl
-
-中文:
-定理 piCongrRight_refl
-  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, 一致空间 (X i)]
-  证明: rfl
+/-
+**UniformEquiv.piCongrRight_refl** 是 Mathlib 中的一个定理，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongrRight_refl {ι : Type*} {X : ι -> Type*} [forall i, UniformSpace (X 
+i)] : piCongrRight (fun i => .refl (X i)) = .refl (forall i, X i)
+参数：X i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_refl {ι : Type*} {X : ι -> Type*} [forall i, UniformSpace (X i)] :
-    piCongrRight (fun i => .refl (X i)) = .refl (forall i, X i) :=
+theorem piCongrRight_refl {ι : Type*} {X : ι → Type*} [∀ i, UniformSpace (X i)] :
+    piCongrRight (fun i ↦ .refl (X i)) = .refl (∀ i, X i) :=
   rfl
 
 /-- `Equiv.piCongr` as a uniform isomorphism: this is the natural isomorphism
 `Π i₁, β₁ i ≃ᵤ Π i₂, β₂ i₂` obtained from a bijection `ι₁ ≃ ι₂` and isomorphisms
 `β₁ i₁ ≃ᵤ β₂ (e i₁)` for each `i₁ : ι₁`. -/
 @[simps! apply toEquiv]
-/--
-Definition of `piCongr` / `piCongr` 的定义
+/-
+**UniformEquiv.piCongr** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：piCongr {ι₁ ι₂ : Type*} {β₁ : ι₁ -> Type*} {β₂ : ι₂ -> Type*} [forall i₁, 
+UniformSpace (β₁ i₁)] [forall i₂, UniformSpace (β₂ i₂)] (e : ι₁ ≃ ι₂) (F : foral
+l i₁, β₁ i₁ ≃ᵤ β₂ (e i₁)) : (forall i₁, β₁ i₁) ≃ᵤ forall i₂, β₂ i₂
+参数：β₁ i₁；β₂ i₂；e : ι₁ ≃ ι₂；F : forall i₁, β₁ i₁ ≃ᵤ β₂ (e i₁)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piCongr
-  signature: {ι₁ ι₂ : Type*} {β₁ : ι₁ -> Type*} {β₂ : ι₂ -> Type*}
-  body: (UniformEquiv.piCongrRight F).trans (UniformEquiv.piCongrLeft e)
-
-中文:
-定义 piCongr
-  签名: {ι₁ ι₂ : 类型} {β₁ : ι₁ -> 类型} {β₂ : ι₂ -> 类型}
-  定义体: (UniformEquiv.piCongrRight F).trans (UniformEquiv.piCongrLeft e)
-
-Depends on / 依赖: UniformEquiv, UniformEquiv.piCongrLeft, UniformEquiv.piCongrRight, piCongrLeft, piCongrRight
+--- 原说明 ---
+`Equiv.piCongr` as a uniform isomorphism: this is the natural isomorphism
+`Π i₁, β₁ i ≃ᵤ Π i₂, β₂ i₂` obtained from a bijection `ι₁ ≃ ι₂` and isomorphisms
+`β₁ i₁ ≃ᵤ β₂ (e i₁)` for each `i₁ : ι₁`.
 -/
-def piCongr {ι₁ ι₂ : Type*} {β₁ : ι₁ -> Type*} {β₂ : ι₂ -> Type*}
-    [forall i₁, UniformSpace (β₁ i₁)] [forall i₂, UniformSpace (β₂ i₂)]
-    (e : ι₁ ≃ ι₂) (F : forall i₁, β₁ i₁ ≃ᵤ β₂ (e i₁)) : (forall i₁, β₁ i₁) ≃ᵤ forall i₂, β₂ i₂ :=
+def piCongr {ι₁ ι₂ : Type*} {β₁ : ι₁ → Type*} {β₂ : ι₂ → Type*}
+    [∀ i₁, UniformSpace (β₁ i₁)] [∀ i₂, UniformSpace (β₂ i₂)]
+    (e : ι₁ ≃ ι₂) (F : ∀ i₁, β₁ i₁ ≃ᵤ β₂ (e i₁)) : (∀ i₁, β₁ i₁) ≃ᵤ ∀ i₂, β₂ i₂ :=
   (UniformEquiv.piCongrRight F).trans (UniformEquiv.piCongrLeft e)
 
-/--
-Definition of `ulift` / `ulift` 的定义
+/-- Uniform equivalence between `ULift α` and `α`. -/
+/-
+**UniformEquiv.ulift** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：ulift : ULift.{v, u} α ≃ᵤ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ulift
-  signature: : ULift.{v, u} α ≃ᵤ α
-  body: { Equiv.ulift with
-    uniformContinuous_toFun := uniformContinuous_comap
-    uniformContinuous_invFun := by
-      have hf : IsUniformInducing (@Equiv.ulift.{v, u} α).toFun := ⟨rfl⟩
-      simp_rw [hf.uniformContinuous_iff]
-      exact uniformContinuous_id }
-
-中文:
-定义 ulift
-  签名: : 类型层提升.{v, u} α ≃ᵤ α
-  定义体: { Equiv.ulift with
-    uniformContinuous_toFun := uniformContinuous_comap
-    uniformContinuous_invFun := by
-      have hf : IsUniformInducing (@Equiv.ulift.{v, u} α).toFun := ⟨rfl⟩
-      simp_rw [hf.uniformContinuous_iff]
-      exact uniformContinuous_id }
-
-Depends on / 依赖: Equiv.ulift, IsUniformInducing, hf.uniformContinuous_iff, simp_rw, uniformContinuous_comap, uniformContinuous_id, uniformContinuous_iff, uniformContinuous_invFun, uniformContinuous_toFun
+--- 原说明 ---
+Uniform equivalence between `ULift α` and `α`.
 -/
 def ulift : ULift.{v, u} α ≃ᵤ α :=
   { Equiv.ulift with
@@ -1442,99 +942,69 @@ end
 
 /-- If `ι` has a unique element, then `ι → α` is uniformly isomorphic to `α`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `funUnique` / `funUnique` 的定义
+/-
+**UniformEquiv.funUnique** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：funUnique (ι α : Type*) [Unique ι] [UniformSpace α] : (ι -> α) ≃ᵤ α where 
+toEquiv
+参数：ι α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funUnique
-  signature: (ι α : Type*) [Unique ι] [UniformSpace α]
-  body: Equiv.funUnique ι α
-  uniformContinuous_toFun := Pi.uniformContinuous_proj _ _
-  uniformContinuous_invFun := uniformContinuous_pi.mpr fun _ => uniformContinuous_id
-
-中文:
-定义 funUnique
-  签名: (ι α : 类型) [唯一 ι] [一致空间 α]
-  定义体: Equiv.funUnique ι α
-  uniformContinuous_toFun := Pi.uniformContinuous_proj _ _
-  uniformContinuous_invFun := uniformContinuous_pi.mpr fun _ => uniformContinuous_id
-
-Depends on / 依赖: Equiv.funUnique, funUnique
+--- 原说明 ---
+If `ι` has a unique element, then `ι → α` is uniformly isomorphic to `α`.
 -/
-def funUnique (ι α : Type*) [Unique ι] [UniformSpace α] : (ι -> α) ≃ᵤ α where
+def funUnique (ι α : Type*) [Unique ι] [UniformSpace α] : (ι → α) ≃ᵤ α where
   toEquiv := Equiv.funUnique ι α
   uniformContinuous_toFun := Pi.uniformContinuous_proj _ _
   uniformContinuous_invFun := uniformContinuous_pi.mpr fun _ => uniformContinuous_id
 
 /-- Uniform isomorphism between dependent functions `Π i : Fin 2, α i` and `α 0 × α 1`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `piFinTwo` / `piFinTwo` 的定义
+/-
+**UniformEquiv.piFinTwo** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：piFinTwo (α : Fin 2 -> Type u) [forall i, UniformSpace (α i)] : (forall i,
+ α i) ≃ᵤ α 0 × α 1 where toEquiv
+参数：α : Fin 2 -> Type u；α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piFinTwo
-  signature: (α : Fin 2 -> Type u) [forall i, UniformSpace (α i)]
-  body: piFinTwoEquiv α
-  uniformContinuous_toFun := (Pi.uniformContinuous_proj _ 0).prodMk (Pi.uniformContinuous_proj _ 1)
-  uniformContinuous_invFun :=
-uniformContinuous_pi.mpr Fin.forall_fin_two.2 ⟨uniformContinuous_fst, uniformContinuous_snd⟩
-
-中文:
-定义 piFinTwo
-  签名: (α : 有限集 2 -> 类型u) [对任意 i, 一致空间 (α i)]
-  定义体: piFinTwoEquiv α
-  uniformContinuous_toFun := (Pi.uniformContinuous_proj _ 0).prodMk (Pi.uniformContinuous_proj _ 1)
-  uniformContinuous_invFun :=
-uniformContinuous_pi.mpr Fin.forall_fin_two.2 ⟨uniformContinuous_fst, uniformContinuous_snd⟩
-
-Depends on / 依赖: piFinTwoEquiv
+--- 原说明 ---
+Uniform isomorphism between dependent functions `Π i : Fin 2, α i` and `α 0 × α 
+1`.
 -/
-def piFinTwo (α : Fin 2 -> Type u) [forall i, UniformSpace (α i)] : (forall i, α i) ≃ᵤ α 0 × α 1 where
+def piFinTwo (α : Fin 2 → Type u) [∀ i, UniformSpace (α i)] : (∀ i, α i) ≃ᵤ α 0 × α 1 where
   toEquiv := piFinTwoEquiv α
   uniformContinuous_toFun := (Pi.uniformContinuous_proj _ 0).prodMk (Pi.uniformContinuous_proj _ 1)
   uniformContinuous_invFun :=
-uniformContinuous_pi.mpr Fin.forall_fin_two.2 ⟨uniformContinuous_fst, uniformContinuous_snd⟩
+    uniformContinuous_pi.mpr <| Fin.forall_fin_two.2 ⟨uniformContinuous_fst, uniformContinuous_snd⟩
 
 /-- Uniform isomorphism between `α² = Fin 2 → α` and `α × α`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `finTwoArrow` / `finTwoArrow` 的定义
+/-
+**UniformEquiv.finTwoArrow** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：finTwoArrow (α : Type*) [UniformSpace α] : (Fin 2 -> α) ≃ᵤ α × α
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finTwoArrow
-  signature: (α : Type*) [UniformSpace α]
-  body: { piFinTwo fun _ => α with toEquiv := finTwoArrowEquiv α }
-
-中文:
-定义 finTwoArrow
-  签名: (α : 类型) [一致空间 α]
-  定义体: { piFinTwo fun _ => α with toEquiv := finTwoArrowEquiv α }
-
-Depends on / 依赖: finTwoArrowEquiv, piFinTwo, toEquiv
+--- 原说明 ---
+Uniform isomorphism between `α² = Fin 2 → α` and `α × α`.
 -/
-def finTwoArrow (α : Type*) [UniformSpace α] : (Fin 2 -> α) ≃ᵤ α × α :=
+def finTwoArrow (α : Type*) [UniformSpace α] : (Fin 2 → α) ≃ᵤ α × α :=
   { piFinTwo fun _ => α with toEquiv := finTwoArrowEquiv α }
 
-/--
-Definition of `image` / `image` 的定义
+/-- A subset of a uniform space is uniformly isomorphic to its image under a uniform isomorphism.
+-/
+/-
+**UniformEquiv.image** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：image (e : α ≃ᵤ β) (s : Set α) : s ≃ᵤ e '' s where uniformContinuous_toFun
+参数：e : α ≃ᵤ β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: (e : α ≃ᵤ β) (s : Set α)
-  body: (e.uniformContinuous.comp uniformContinuous_subtype_val).subtype_mk _
-  uniformContinuous_invFun :=
-    (e.symm.uniformContinuous.comp uniformContinuous_subtype_val).subtype_mk _
-  toEquiv := e.toEquiv.image s
-
-中文:
-定义 像
-  签名: (e : α ≃ᵤ β) (s : 集合 α)
-  定义体: (e.uniformContinuous.comp uniformContinuous_subtype_val).subtype_mk _
-  uniformContinuous_invFun :=
-    (e.symm.uniformContinuous.comp uniformContinuous_subtype_val).subtype_mk _
-  toEquiv := e.toEquiv.image s
-
-Depends on / 依赖: e.uniformContinuous.comp, subtype_mk, uniformContinuous, uniformContinuous_subtype_val
+--- 原说明 ---
+A subset of a uniform space is uniformly isomorphic to its image under a uniform
+ isomorphism.
 -/
 def image (e : α ≃ᵤ β) (s : Set α) : s ≃ᵤ e '' s where
   uniformContinuous_toFun := (e.uniformContinuous.comp uniformContinuous_subtype_val).subtype_mk _
@@ -1545,30 +1015,20 @@ def image (e : α ≃ᵤ β) (s : Set α) : s ≃ᵤ e '' s where
 /-- A uniform isomorphism `e : α ≃ᵤ β` lifts to subtypes `{ a : α // p a } ≃ᵤ { b : β // q b }`
 provided `p = q ∘ e`. -/
 @[simps!]
-/--
-Definition of `subtype` / `subtype` 的定义
+/-
+**UniformEquiv.subtype** 是 Mathlib 中的一个定义，位于命名空间 `UniformEquiv`。
+形式化陈述：subtype {p : α -> Prop} {q : β -> Prop} (e : α ≃ᵤ β) (h : forall a, p a ↔ 
+q (e a)) : { a : α // p a } ≃ᵤ { b : β // q b } where uniformContinuous_toFun
+参数：e : α ≃ᵤ β；h : forall a, p a ↔ q (e a)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtype
-  signature: {p : α -> Prop} {q : β -> Prop} (e : α ≃ᵤ β) (h : forall a, p a ↔ q (e a))
-  body: by
-    simpa [Equiv.coe_subtypeEquiv_eq_map] using e.uniformContinuous.subtype_map _
-  uniformContinuous_invFun := by
-    simpa [Equiv.coe_subtypeEquiv_eq_map] using e.symm.uniformContinuous.subtype_map _
-  __ := e.subtypeEquiv h
-
-中文:
-定义 subtype
-  签名: {p : α -> 命题} {q : β -> 命题} (e : α ≃ᵤ β) (h : 对任意 a, p a ↔ q (e a))
-  定义体: by
-    simpa [Equiv.coe_subtypeEquiv_eq_map] using e.uniformContinuous.subtype_map _
-  uniformContinuous_invFun := by
-    simpa [Equiv.coe_subtypeEquiv_eq_map] using e.symm.uniformContinuous.subtype_map _
-  __ := e.subtypeEquiv h
-
-Depends on / 依赖: Equiv.coe_subtypeEquiv_eq_map, coe_subtypeEquiv_eq_map, e.subtypeEquiv, e.symm.uniformContinuous.subtype_map, e.uniformContinuous.subtype_map, subtypeEquiv, subtype_map, uniformContinuous, uniformContinuous_invFun
+--- 原说明 ---
+A uniform isomorphism `e : α ≃ᵤ β` lifts to subtypes `{ a : α // p a } ≃ᵤ { b : 
+β // q b }`
+provided `p = q ∘ e`.
 -/
-def subtype {p : α -> Prop} {q : β -> Prop} (e : α ≃ᵤ β) (h : forall a, p a ↔ q (e a)) :
+def subtype {p : α → Prop} {q : β → Prop} (e : α ≃ᵤ β) (h : ∀ a, p a ↔ q (e a)) :
     { a : α // p a } ≃ᵤ { b : β // q b } where
   uniformContinuous_toFun := by
     simpa [Equiv.coe_subtypeEquiv_eq_map] using e.uniformContinuous.subtype_map _
@@ -1578,27 +1038,20 @@ def subtype {p : α -> Prop} {q : β -> Prop} (e : α ≃ᵤ β) (h : forall a, 
 
 end UniformEquiv
 
-/--
-Definition of `Equiv.toUniformEquivOfIsUniformInducing` / `Equiv.toUniformEquivOfIsUniformInducing` 的定义
+/-- A uniform inducing equiv between uniform spaces is a uniform isomorphism. -/
+/-
+**Equiv.toUniformEquivOfIsUniformInducing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.toUniformEquivOfIsUniformInducing [UniformSpace α] [UniformSpace β] 
+(f : α ≃ β) (hf : IsUniformInducing f) : α ≃ᵤ β
+参数：f : α ≃ β；hf : IsUniformInducing f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equiv.toUniformEquivOfIsUniformInducing
-  signature: [UniformSpace α] [UniformSpace β] (f : α ≃ β)
-  body: { f with
-    uniformContinuous_toFun := hf.uniformContinuous
-uniformContinuous_invFun := hf.uniformContinuous_iff.2 by simpa using uniformContinuous_id }
-
-中文:
-定义 等价.toUniformEquivOfIsUniformInducing
-  签名: [一致空间 α] [一致空间 β] (f : α ≃ β)
-  定义体: { f with
-    uniformContinuous_toFun := hf.uniformContinuous
-uniformContinuous_invFun := hf.uniformContinuous_iff.2 by simpa using uniformContinuous_id }
-
-Depends on / 依赖: hf.uniformContinuous, hf.uniformContinuous_iff, uniformContinuous, uniformContinuous_id, uniformContinuous_iff, uniformContinuous_invFun, uniformContinuous_toFun
+--- 原说明 ---
+A uniform inducing equiv between uniform spaces is a uniform isomorphism.
 -/
 def Equiv.toUniformEquivOfIsUniformInducing [UniformSpace α] [UniformSpace β] (f : α ≃ β)
     (hf : IsUniformInducing f) : α ≃ᵤ β :=
   { f with
     uniformContinuous_toFun := hf.uniformContinuous
-uniformContinuous_invFun := hf.uniformContinuous_iff.2 by simpa using uniformContinuous_id }
+    uniformContinuous_invFun := hf.uniformContinuous_iff.2 <| by simpa using uniformContinuous_id }

@@ -35,13 +35,13 @@ all `j` shall give the expected lifting `c.pt ⟶ X` for the outer square.
 ```
          f
 F.obj ⊥ --> X
-   | Λ |
-   | f'╱ |
-   v ╱ |
-F.obj j | p
-   | |
-   | |
-   v g v
+   |      Λ |
+   |   f'╱  |
+   v    ╱   |
+F.obj j     | p
+   |        |
+   |        |
+   v    g   v
   c.pt ---> Y
 ```
 This is constructed by transfinite induction on `j`:
@@ -80,37 +80,45 @@ commutes, see `SqStruct.w`.)
 ```
          f
 F.obj ⊥ --> X
-   | Λ |
-   | f'╱ |
-   v ╱ |
-F.obj j | p
-   | |
-   | |
-   v g v
+   |      Λ |
+   |   f'╱  |
+   v    ╱   |
+F.obj j     | p
+   |        |
+   |        |
+   v    g   v
   c.pt ---> Y
 ```
 -/
 @[ext]
-/--
-Definition of `SqStruct` / `SqStruct` 的定义
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct** 是 Mathlib 
+中的一个结构，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteComposition`。
+形式化陈述：SqStruct (j : J) where /-- a morphism `F.obj j ⟶ X` -/ f' : F.obj j ⟶ X w₁
+ : F.map (homOfLE bot_le) ≫ f' = f
+参数：j : J。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SqStruct
-  parameters: (j : J)
-  axioms and operations (3):
-    - f' : F.obj j ⟶ X
-    - w₁ : F.map (homOfLE bot_le) ≫ f' = f  [default: by cat_disch]
-    - w₂ : f' ≫ p = c.ι.app j ≫ g  [default: by cat_disch]
+--- 原说明 ---
+Given a cocone `c` for a functor `F : J ⥤ C` from a well-ordered type,
+and maps `p : X ⟶ Y`, `f : F.obj ⊥ ⟶ X`, `g : c.pt ⟶ Y`, this structure
+contains the data of a map `F.obj j ⟶ X` such that `F.map (homOfLE bot_le) ≫ f' 
+= f`
+and `f' ≫ p = c.ι.app j ≫ g`. (This implies that the outer square below
+commutes, see `SqStruct.w`.)
 
-中文:
-结构 SqStruct
-  参数: (j : J)
-  公理与运算 (3 个):
-    - f' : F.obj j ⟶ X
-    - w₁ : F.map (homOfLE bot_le) ≫ f' = f  [默认: by cat_disch]
-    - w₂ : f' ≫ p = c.ι.app j ≫ g  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+```
+         f
+F.obj ⊥ --> X
+   |      Λ |
+   |   f'╱  |
+   v    ╱   |
+F.obj j     | p
+   |        |
+   |        |
+   v    g   v
+  c.pt ---> Y
+```
 -/
 structure SqStruct (j : J) where
   /-- a morphism `F.obj j ⟶ X` -/
@@ -127,39 +135,89 @@ variable {c p f g} {j : J} (sq' : SqStruct c p f g j)
 set_option backward.isDefEq.respectTransparency false in
 include sq' in
 @[reassoc]
-/--
-lemma `w` / 引理 `w`
-
-English:
-lemma w
-  statement: f ≫ p = c.ι.app ⊥ ≫ g
-  proof: by
-  rw [← sq'.w₁]; rw [assoc]; rw [sq'.w₂]; rw [Cocone.w_assoc]
-
-中文:
-引理 w
-  结论: f ≫ p = c.ι.app ⊥ ≫ g
-  证明: by
-  rw [← sq'.w₁]; rw [assoc]; rw [sq'.w₂]; rw [Cocone.w_assoc]
-
-Depends on / 依赖: Cocone, Cocone.w_assoc, w_assoc
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.w** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStru
+ct`。
+形式化陈述：w : f ≫ p = c.ι.app ⊥ ≫ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.w₁`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type w} [inst_1 : Li
+nearOrder J] [inst_2 : OrderBot J]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.w₂`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type w} [inst_1 : Li
+nearOrder J] [inst_2 : OrderBot J]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.Cocone.w_assoc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
 -/
 lemma w : f ≫ p = c.ι.app ⊥ ≫ g := by
-  rw [← sq'.w₁]; rw [assoc]; rw [sq'.w₂]; rw [Cocone.w_assoc]
+  rw [← sq'.w₁, assoc, sq'.w₂, Cocone.w_assoc]
 
 set_option backward.defeqAttrib.useBackward true in
 /--
-lemma `sq` / 引理 `sq`
+Given `sq' : SqStruct c p f g j`, this is the commutative square
+```
+               sq'.f'
+F.obj j --------------------> X
+   |                          |
+   |                          |p
+   v                      g   v
+F.obj (succ j) ---> c.pt ---> Y
+```
 
-English:
-lemma sq
-  given: [SuccOrder J]
-  proof: by simp
+(Using the lifting property for this square is the key ingredient
+in the proof that the left lifting property with respect to `p`
+is stable under transfinite composition.) -/
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.sq** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStr
+uct`。
+形式化陈述：sq [SuccOrder J] : CommSq sq'.f' (F.map (homOfLE (Order.le_succ j))) p (c.
+ι.app _ ≫ g) where w
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.w₂`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type w} [inst_1 : Li
+nearOrder J] [inst_2 : OrderBot J]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-引理 sq
-  条件: [Succ序 J]
-  证明: by simp
+--- 原说明 ---
+Given `sq' : SqStruct c p f g j`, this is the commutative square
+```
+               sq'.f'
+F.obj j --------------------> X
+   |                          |
+   |                          |p
+   v                      g   v
+F.obj (succ j) ---> c.pt ---> Y
+```
+
+(Using the lifting property for this square is the key ingredient
+in the proof that the left lifting property with respect to `p`
+is stable under transfinite composition.)
 -/
 lemma sq [SuccOrder J] :
     CommSq sq'.f' (F.map (homOfLE (Order.le_succ j))) p (c.ι.app _ ≫ g) where
@@ -168,26 +226,17 @@ lemma sq [SuccOrder J] :
 set_option backward.defeqAttrib.useBackward true in
 /-- Auxiliary definition for `sqFunctor`. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.map** 是 Math
+lib 中的一个定义，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqSt
+ruct`。
+形式化陈述：map {j' : J} (α : j' ⟶ j) : SqStruct c p f g j' where f'
+参数：α : j' ⟶ j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {j' : J} (α : j' ⟶ j)
-  body: F.map α ≫ sq'.f'
-  w₁ := by
-    rw [← F.map_comp_assoc]
-    exact sq'.w₁
-
-中文:
-定义 map
-  签名: {j' : J} (α : j' ⟶ j)
-  定义体: F.map α ≫ sq'.f'
-  w₁ := by
-    rw [← F.map_comp_assoc]
-    exact sq'.w₁
-
-Depends on / 依赖: F.map
+--- 原说明 ---
+Auxiliary definition for `sqFunctor`.
 -/
 def map {j' : J} (α : j' ⟶ j) : SqStruct c p f g j' where
   f' := F.map α ≫ sq'.f'
@@ -199,91 +248,67 @@ end SqStruct
 
 /-- The projective system `j ↦ SqStruct c p f g j.unop`. -/
 @[simps]
-/--
-Definition of `sqFunctor` / `sqFunctor` 的定义
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.sqFunctor** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteComposition`。
+形式化陈述：sqFunctor : Jᵒᵖ ⥤ Type _ where obj j
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sqFunctor
-  signature: : Jᵒᵖ ⥤ Type _ where
-  body: SqStruct c p f g j.unop
-  map α := ↾fun sq' => sq'.map α.unop
-
-中文:
-定义 sqFunctor
-  签名: : Jᵒᵖ ⥤ 类型 _ where
-  定义体: SqStruct c p f g j.unop
-  map α := ↾fun sq' => sq'.map α.unop
-
-Depends on / 依赖: SqStruct, j.unop
+--- 原说明 ---
+The projective system `j ↦ SqStruct c p f g j.unop`.
 -/
 def sqFunctor : Jᵒᵖ ⥤ Type _ where
   obj j := SqStruct c p f g j.unop
-  map α := ↾fun sq' => sq'.map α.unop
+  map α := ↾fun sq' ↦ sq'.map α.unop
 
 variable [F.IsWellOrderContinuous]
 
 namespace wellOrderInductionData
 
 variable {p c f g} {j : J} (hj : Order.IsSuccLimit j)
-  (s : ((OrderHom.Subtype.val (· in Set.Iio j)).monotone.functor.op ⋙ sqFunctor c p f g).sections)
+  (s : ((OrderHom.Subtype.val (· ∈ Set.Iio j)).monotone.functor.op ⋙ sqFunctor c p f g).sections)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `liftHom` / `liftHom` 的定义
+/-- Auxiliary definition for `transfiniteComposition.wellOrderInductionData`. -/
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.wellOrderInductionDat
+a.liftHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.HasLiftingProperty.transfini
+teComposition.wellOrderInductionData`。
+形式化陈述：liftHom : F.obj j ⟶ X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftHom
-  signature: : F.obj j ⟶ X
-  body: (F.isColimitOfIsWellOrderContinuous j hj).desc
-    (Cocone.mk _
-      { app := fun i => (s.1 ⟨i⟩).f'
-        naturality i i' g := by
-          have := congr_arg SqStruct.f' (s.2 g.op)
-          dsimp at this ⊢
-          rw [this]; rw [comp_id] })
-
-@[reassoc]
-
-中文:
-定义 liftHom
-  签名: : F.obj j ⟶ X
-  定义体: (F.isColimitOfIsWellOrderContinuous j hj).desc
-    (Cocone.mk _
-      { app := fun i => (s.1 ⟨i⟩).f'
-        naturality i i' g := by
-          have := congr_arg SqStruct.f' (s.2 g.op)
-          dsimp at this ⊢
-          rw [this]; rw [comp_id] })
-
-@[reassoc]
-
-Depends on / 依赖: Cocone, Cocone.mk, F.isColimitOfIsWellOrderContinuous, SqStruct, SqStruct.f, comp_id, congr_arg, g.op, isColimitOfIsWellOrderContinuous, naturality
+--- 原说明 ---
+Auxiliary definition for `transfiniteComposition.wellOrderInductionData`.
 -/
 noncomputable def liftHom : F.obj j ⟶ X :=
   (F.isColimitOfIsWellOrderContinuous j hj).desc
     (Cocone.mk _
-      { app := fun i => (s.1 ⟨i⟩).f'
+      { app := fun i ↦ (s.1 ⟨i⟩).f'
         naturality i i' g := by
           have := congr_arg SqStruct.f' (s.2 g.op)
           dsimp at this ⊢
-          rw [this]; rw [comp_id] })
+          rw [this, comp_id] })
 
 @[reassoc]
-/--
-lemma `liftHom_fac` / 引理 `liftHom_fac`
-
-English:
-lemma liftHom_fac
-  given: (i : J) (hi : i < j)
-  proof: (F.isColimitOfIsWellOrderContinuous j hj).fac _ ⟨i, hi⟩
-
-中文:
-引理 liftHom_fac
-  条件: (i : J) (hi : i < j)
-  证明: (F.isColimitOfIsWellOrderContinuous j hj).fac _ ⟨i, hi⟩
-
-Depends on / 依赖: F.isColimitOfIsWellOrderContinuous, isColimitOfIsWellOrderContinuous
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.wellOrderInductionDat
+a.liftHom_fac** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.HasLiftingProperty.trans
+finiteComposition.wellOrderInductionData`。
+形式化陈述：liftHom_fac (i : J) (hi : i < j) : F.map (homOfLE hi.le) ≫ liftHom hj s = 
+(s.1 ⟨⟨i, hi⟩⟩).f'
+参数：i : J；hi : i < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} C]   {F : CategoryTheor…
+· 使用定理 `PrincipalSeg.monotone`：monotone [PartialOrder α] (f : α <i β) : Monotone
+ f
 -/
 lemma liftHom_fac (i : J) (hi : i < j) :
     F.map (homOfLE hi.le) ≫ liftHom hj s = (s.1 ⟨⟨i, hi⟩⟩).f' :=
@@ -293,40 +318,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Auxiliary definition for `transfiniteComposition.wellOrderInductionData`. -/
 @[simps]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.wellOrderInductionDat
+a.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteC
+omposition.wellOrderInductionData`。
+形式化陈述：lift : (sqFunctor c p f g).obj (Opposite.op j) where f'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : (sqFunctor c p f g).obj (Opposite.op j) where
-  body: liftHom hj s
-  w₁ := by
-    have h : ⊥ < j := Ne.bot_lt' (by
-      rintro rfl
-      exact Order.not_isSuccLimit_bot hj)
-    rw [liftHom_fac hj s ⊥ h]
-    simpa using (s.1 ⟨⊥, h⟩).w₁
-  w₂ := (F.isColimitOfIsWellOrderContinuous j hj).hom_ext (fun ⟨i, hij⟩ => by
-    have := (s.1 ⟨i, hij⟩).w₂
-    dsimp at this ⊢
-    rw [liftHom_fac_assoc _ _ _ hij]; rw [this]; rw [Cocone.w_assoc])
-
-中文:
-定义 lift
-  签名: : (sqFunctor c p f g).obj (对偶.op j) where
-  定义体: liftHom hj s
-  w₁ := by
-    have h : ⊥ < j := Ne.bot_lt' (by
-      rintro rfl
-      exact Order.not_isSuccLimit_bot hj)
-    rw [liftHom_fac hj s ⊥ h]
-    simpa using (s.1 ⟨⊥, h⟩).w₁
-  w₂ := (F.isColimitOfIsWellOrderContinuous j hj).hom_ext (fun ⟨i, hij⟩ => by
-    have := (s.1 ⟨i, hij⟩).w₂
-    dsimp at this ⊢
-    rw [liftHom_fac_assoc _ _ _ hij]; rw [this]; rw [Cocone.w_assoc])
-
-Depends on / 依赖: liftHom
+--- 原说明 ---
+Auxiliary definition for `transfiniteComposition.wellOrderInductionData`.
 -/
 noncomputable def lift : (sqFunctor c p f g).obj (Opposite.op j) where
   f' := liftHom hj s
@@ -336,30 +337,30 @@ noncomputable def lift : (sqFunctor c p f g).obj (Opposite.op j) where
       exact Order.not_isSuccLimit_bot hj)
     rw [liftHom_fac hj s ⊥ h]
     simpa using (s.1 ⟨⊥, h⟩).w₁
-  w₂ := (F.isColimitOfIsWellOrderContinuous j hj).hom_ext (fun ⟨i, hij⟩ => by
+  w₂ := (F.isColimitOfIsWellOrderContinuous j hj).hom_ext (fun ⟨i, hij⟩ ↦ by
     have := (s.1 ⟨i, hij⟩).w₂
     dsimp at this ⊢
-    rw [liftHom_fac_assoc _ _ _ hij]; rw [this]; rw [Cocone.w_assoc])
+    rw [liftHom_fac_assoc _ _ _ hij, this, Cocone.w_assoc])
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `map_lift` / 引理 `map_lift`
-
-English:
-lemma map_lift
-  given: {i : J} (hij : i < j)
-  proof: by
-  ext
-  apply liftHom_fac
-
-中文:
-引理 map_lift
-  条件: {i : J} (hij : i < j)
-  证明: by
-  ext
-  apply liftHom_fac
-
-Depends on / 依赖: liftHom_fac
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.wellOrderInductionDat
+a.map_lift** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.HasLiftingProperty.transfin
+iteComposition.wellOrderInductionData`。
+形式化陈述：map_lift {i : J} (hij : i < j) : (lift hj s).map (homOfLE hij.le) = s.1 ⟨⟨
+i, hij⟩⟩
+参数：hij : i < j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
+· 使用定理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.ext`：∀
+ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {J : Type w} {inst_1 : L
+inearOrder J} {inst_2 : OrderBot J}   {F : CategoryTheory.F…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.wellOrderInduct
+ionData.liftHom_fac`：liftHom_fac (i : J) (hi : i < j) : F.map (homOfLE hi.le) ≫ 
+liftHom hj s = (s.1 ⟨⟨i, hi⟩⟩).f'
 -/
 lemma map_lift {i : J} (hij : i < j) :
     (lift hj s).map (homOfLE hij.le) = s.1 ⟨⟨i, hij⟩⟩ := by
@@ -372,50 +373,28 @@ variable {p} [SuccOrder J] [WellFoundedLT J]
 
 section
 
-variable (hF : forall (j : J) (_ : ¬IsMax j),
+variable (hF : ∀ (j : J) (_ : ¬IsMax j),
   HasLiftingPropertyFixedBot (F.map (homOfLE (Order.le_succ j))) p (c.ι.app _ ≫ g))
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 open wellOrderInductionData in
-/--
-Definition of `wellOrderInductionData` / `wellOrderInductionData` 的定义
+/-- The projective system `sqFunctor c p f g` has a `WellOrderInductionData` structure. -/
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.wellOrderInductionDat
+a** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteCompos
+ition`。
+形式化陈述：wellOrderInductionData : (sqFunctor c p f g).WellOrderInductionData where 
+succ j hj sq'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.wellOrderInduct
+ionData.map_lift`：map_lift {i : J} (hij : i < j) : (lift hj s).map (homOfLE hij.
+le) = s.1 ⟨⟨i, hij⟩⟩
 
-English:
-definition wellOrderInductionData
-  signature: :
-  body: have := hF j hj sq'.f'
-    have := hF j hj
-    { f' := sq'.sq.lift
-      w₁ := by
-        dsimp
-        simp only [← sq'.w₁]
-        conv_rhs => rw [← sq'.sq.fac_left, ← F.map_comp_assoc]
-        rfl }
-  map_succ j hj sq' := by cat_disch
-  lift j hj s := lift hj s
-  map_lift j hj s i hij := map_lift hj s hij
-
-include hF hc
-
-中文:
-定义 wellOrderInductionData
-  签名: :
-  定义体: have := hF j hj sq'.f'
-    have := hF j hj
-    { f' := sq'.sq.lift
-      w₁ := by
-        dsimp
-        simp only [← sq'.w₁]
-        conv_rhs => rw [← sq'.sq.fac_left, ← F.map_comp_assoc]
-        rfl }
-  map_succ j hj sq' := by cat_disch
-  lift j hj s := lift hj s
-  map_lift j hj s i hij := map_lift hj s hij
-
-include hF hc
-
-Depends on / 依赖: F.map_comp_assoc, cat_disch, conv_rhs, fac_left, map_comp_assoc, map_lift, map_succ, sq.fac_left, sq.lift
+--- 原说明 ---
+The projective system `sqFunctor c p f g` has a `WellOrderInductionData` structu
+re.
 -/
 noncomputable def wellOrderInductionData :
     (sqFunctor c p f g).WellOrderInductionData where
@@ -438,44 +417,57 @@ variable {c f g} (sq : CommSq f (c.ι.app ⊥) p g)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `hasLift` / 引理 `hasLift`
-
-English:
-lemma hasLift
-  statement: sq.HasLift
-  proof: by
-  obtain ⟨s, hs⟩ := (wellOrderInductionData c f g hF).surjective { w₂ := sq.w, .. }
-  replace hs := congr_arg SqStruct.f' hs
-  dsimp at hs
-  let t : Cocone F := Cocone.mk X
-    { app j := (s.1 ⟨j⟩).f'
-      naturality j j' g := by simpa using congr_arg SqStruct.f' (s.2 g.op) }
-  let l := hc.desc t
-  have hl (j : J) : c.ι.app j ≫ l = (s.1 ⟨j⟩).f' := hc.fac t j
-  exact ⟨⟨{
-    l := l
-    fac_left := by rw [hl, hs]
-    fac_right := hc.hom_ext (fun j => by rw [reassoc_of% (hl j), SqStruct.w₂])}⟩⟩
-
-中文:
-引理 hasLift
-  结论: sq.有Lift
-  证明: by
-  obtain ⟨s, hs⟩ := (wellOrderInductionData c f g hF).surjective { w₂ := sq.w, .. }
-  replace hs := congr_arg SqStruct.f' hs
-  dsimp at hs
-  let t : Cocone F := Cocone.mk X
-    { app j := (s.1 ⟨j⟩).f'
-      naturality j j' g := by simpa using congr_arg SqStruct.f' (s.2 g.op) }
-  let l := hc.desc t
-  have hl (j : J) : c.ι.app j ≫ l = (s.1 ⟨j⟩).f' := hc.fac t j
-  exact ⟨⟨{
-    l := l
-    fac_left := by rw [hl, hs]
-    fac_right := hc.hom_ext (fun j => by rw [reassoc_of% (hl j), SqStruct.w₂])}⟩⟩
-
-Depends on / 依赖: Cocone, Cocone.mk, SqStruct, SqStruct.f, SqStruct.w, congr_arg, fac_left, fac_right, g.op, hc.desc, hc.fac, hc.hom_ext, hom_ext, naturality, reassoc_of, replace, sq.w, surjective, wellOrderInductionData
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.hasLift** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteComposition`。
+形式化陈述：hasLift : sq.HasLift
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用引理 `CategoryTheory.Functor.WellOrderInductionData.surjective`：surjective : F
+unction.Surjective ((fun s => s (op ⊥)) ∘ Subtype.val : F.sections -> F.obj (op 
+⊥))
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.SqStruct.w₂`：∀ 
+{C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type w} [inst_1 : Li
+nearOrder J] [inst_2 : OrderBot J]   {F : CategoryTheory.F…
 -/
 lemma hasLift : sq.HasLift := by
   obtain ⟨s, hs⟩ := (wellOrderInductionData c f g hF).surjective { w₂ := sq.w, .. }
@@ -489,49 +481,30 @@ lemma hasLift : sq.HasLift := by
   exact ⟨⟨{
     l := l
     fac_left := by rw [hl, hs]
-    fac_right := hc.hom_ext (fun j => by rw [reassoc_of% (hl j), SqStruct.w₂])}⟩⟩
-
-/--
-lemma `hasLiftingPropertyFixedBot_ι_app_bot` / 引理 `hasLiftingPropertyFixedBot_ι_app_bot`
-
-English:
-lemma hasLiftingPropertyFixedBot_ι_app_bot
-  statement: HasLiftingPropertyFixedBot (c.ι.app ⊥) p g
-  proof: fun _ sq => hasLift hc hF sq
-
-中文:
-引理 hasLiftingPropertyFixedBot_ι_app_bot
-  结论: HasLiftingPropertyFixedBot (c.ι.app ⊥) p g
-  证明: fun _ sq => hasLift hc hF sq
-
-Depends on / 依赖: hasLift
+    fac_right := hc.hom_ext (fun j ↦ by rw [reassoc_of% (hl j), SqStruct.w₂])}⟩⟩
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.hasLiftingPropertyFix
+edBot_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteC
+omposition`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasLiftingPropertyFixedBot_ι_app_bot : HasLiftingPropertyFixedBot (c.ι.app ⊥) p g :=
-  fun _ sq => hasLift hc hF sq
+  fun _ sq ↦ hasLift hc hF sq
 
 end
 
-variable {c} (hF : forall (j : J) (_ : ¬IsMax j),
+variable {c} (hF : ∀ (j : J) (_ : ¬IsMax j),
   HasLiftingProperty (F.map (homOfLE (Order.le_succ j))) p)
 
 include hc hF
-/--
-lemma `hasLiftingProperty_ι_app_bot` / 引理 `hasLiftingProperty_ι_app_bot`
-
-English:
-lemma hasLiftingProperty_ι_app_bot
-  statement: HasLiftingProperty (c.ι.app ⊥) p where
-  proof: hasLift hc (fun j hj _ _ => by have := hF j hj; infer_instance) sq
-
-中文:
-引理 hasLiftingProperty_ι_app_bot
-  结论: 有LiftingProperty (c.ι.app ⊥) p where
-  证明: hasLift hc (fun j hj _ _ => by have := hF j hj; infer_instance) sq
-
-Depends on / 依赖: hasLift, infer_instance
+/-
+**CategoryTheory.HasLiftingProperty.transfiniteComposition.hasLiftingProperty_**
+ 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.HasLiftingProperty.transfiniteCompositi
+on`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasLiftingProperty_ι_app_bot : HasLiftingProperty (c.ι.app ⊥) p where
-  sq_hasLift sq := hasLift hc (fun j hj _ _ => by have := hF j hj; infer_instance) sq
+  sq_hasLift sq := hasLift hc (fun j hj _ _ ↦ by have := hF j hj; infer_instance) sq
 
 end transfiniteComposition
 
@@ -543,193 +516,201 @@ variable (W : MorphismProperty C)
   (J : Type w) [LinearOrder J] [SuccOrder J] [OrderBot J] [WellFoundedLT J]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isStableUnderTransfiniteCompositionOfShape_llp` / 实例 `isStableUnderTransfiniteCompositionOfShape_llp`
-
-English:
-instance isStableUnderTransfiniteCompositionOfShape_llp
-  signature: :
-  body: by
-  rw [isStableUnderTransfiniteCompositionOfShape_iff]
-  rintro X Y f ⟨h⟩
-  have : W.llp (h.incl.app ⊥) := fun _ _ p hp =>
-    HasLiftingProperty.transfiniteComposition.hasLiftingProperty_ι_app_bot
-      (hc := h.isColimit) (fun j hj => h.map_mem j hj _ hp)
-  exact (MorphismProperty.arrow_mk_iso_iff _
-    (Arrow.isoMk h.isoBot.symm (Iso.refl _))).2 this
-
-中文:
-实例 isStableUnderTransfiniteCompositionOfShape_llp
-  签名: :
-  定义体: by
-  rw [isStableUnderTransfiniteCompositionOfShape_iff]
-  rintro X Y f ⟨h⟩
-  have : W.llp (h.incl.app ⊥) := fun _ _ p hp =>
-    HasLiftingProperty.transfiniteComposition.hasLiftingProperty_ι_app_bot
-      (hc := h.isColimit) (fun j hj => h.map_mem j hj _ hp)
-  exact (MorphismProperty.arrow_mk_iso_iff _
-    (Arrow.isoMk h.isoBot.symm (Iso.refl _))).2 this
-
-Depends on / 依赖: Arrow.isoMk, HasLiftingProperty, HasLiftingProperty.transfiniteComposition.hasLiftingProperty_, Iso.refl, MorphismProperty, MorphismProperty.arrow_mk_iso_iff, W.llp, arrow_mk_iso_iff, h.incl.app, h.isColimit, h.isoBot.symm, h.map_mem, isColimit, isStableUnderTransfiniteCompositionOfShape_iff, isoBot, map_mem, transfiniteComposition
+/-
+**CategoryTheory.MorphismProperty.isStableUnderTransfiniteCompositionOfShape_llp
+** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：isStableUnderTransfiniteCompositionOfShape_llp : W.llp.IsStableUnderTransf
+initeCompositionOfShape J
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MorphismProperty.isStableUnderTransfiniteCompositionOfSha
+pe_iff`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (W : CategoryTh
+eory.MorphismProperty C) (J : Type w)   [inst_1 : LinearOrder J] [in…
+· 使用引理 `CategoryTheory.HasLiftingProperty.transfiniteComposition.hasLiftingPrope
+rty_ι_app_bot`：hasLiftingProperty_ι_app_bot : HasLiftingProperty (c.ι.app ⊥) p w
+here sq_hasLift sq
+· 使用定理 `CategoryTheory.TransfiniteCompositionOfShape.isWellOrderContinuous`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type w} [inst_1 : Line
+arOrder J] [inst_2 : OrderBot J]   {X Y : C} {f : X ⟶ Y}…
+· 使用定理 `CategoryTheory.MorphismProperty.TransfiniteCompositionOfShape.map_mem`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {W : CategoryTheory.Morp
+hismProperty C} {J : Type w}   [inst_1 : LinearOrder J] [in…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `CategoryTheory.MorphismProperty.instRespectsIsoOfIsStableUnderRetracts`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.Mor
+phismProperty C}   [P.IsStableUnderRetracts], P.RespectsIso
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.TransfiniteCompositionOfShape.fac`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {J : Type w} [inst_1 : LinearOrder J] [inst_2
+ : OrderBot J]   {X Y : C} {f : X ⟶ Y}…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance isStableUnderTransfiniteCompositionOfShape_llp :
     W.llp.IsStableUnderTransfiniteCompositionOfShape J := by
   rw [isStableUnderTransfiniteCompositionOfShape_iff]
   rintro X Y f ⟨h⟩
-  have : W.llp (h.incl.app ⊥) := fun _ _ p hp =>
+  have : W.llp (h.incl.app ⊥) := fun _ _ p hp ↦
     HasLiftingProperty.transfiniteComposition.hasLiftingProperty_ι_app_bot
-      (hc := h.isColimit) (fun j hj => h.map_mem j hj _ hp)
+      (hc := h.isColimit) (fun j hj ↦ h.map_mem j hj _ hp)
   exact (MorphismProperty.arrow_mk_iso_iff _
     (Arrow.isoMk h.isoBot.symm (Iso.refl _))).2 this
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsStableUnderTransfiniteComposition.{w} W.llp
-
-中文:
-实例 :
-  签名: MorphismProperty.是StableUnderTransfiniteComposition.{w} W.llp
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsStableUnderTransfiniteComposition.{w} W.llp where
-
-/--
-lemma `transfiniteCompositionsOfShape_le_llp_rlp` / 引理 `transfiniteCompositionsOfShape_le_llp_rlp`
-
-English:
-lemma transfiniteCompositionsOfShape_le_llp_rlp
-  proof: by
-  have := W.rlp.isStableUnderTransfiniteCompositionOfShape_llp J
-  rw [isStableUnderTransfiniteCompositionOfShape_iff] at this
-  exact le_trans (transfiniteCompositionsOfShape_monotone J W.le_llp_rlp) this
-
-中文:
-引理 transfiniteCompositionsOfShape_le_llp_rlp
-  证明: by
-  have := W.rlp.isStableUnderTransfiniteCompositionOfShape_llp J
-  rw [isStableUnderTransfiniteCompositionOfShape_iff] at this
-  exact le_trans (transfiniteCompositionsOfShape_monotone J W.le_llp_rlp) this
-
-Depends on / 依赖: W.le_llp_rlp, W.rlp.isStableUnderTransfiniteCompositionOfShape_llp, isStableUnderTransfiniteCompositionOfShape_iff, isStableUnderTransfiniteCompositionOfShape_llp, le_llp_rlp, le_trans, transfiniteCompositionsOfShape_monotone
+/-
+**CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_le_llp_rlp** 是 
+Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：transfiniteCompositionsOfShape_le_llp_rlp : W.transfiniteCompositionsOfSha
+pe J <= W.rlp.llp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_monotone`
+：transfiniteCompositionsOfShape_monotone : Monotone (transfiniteCompositionsOfSh
+ape (C
+· 使用引理 `CategoryTheory.MorphismProperty.le_llp_rlp`：le_llp_rlp : T <= T.rlp.llp
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MorphismProperty.isStableUnderTransfiniteCompositionOfSha
+pe_iff`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (W : CategoryTh
+eory.MorphismProperty C) (J : Type w)   [inst_1 : LinearOrder J] [in…
 -/
 lemma transfiniteCompositionsOfShape_le_llp_rlp :
-    W.transfiniteCompositionsOfShape J <= W.rlp.llp := by
+    W.transfiniteCompositionsOfShape J ≤ W.rlp.llp := by
   have := W.rlp.isStableUnderTransfiniteCompositionOfShape_llp J
   rw [isStableUnderTransfiniteCompositionOfShape_iff] at this
   exact le_trans (transfiniteCompositionsOfShape_monotone J W.le_llp_rlp) this
-
-/--
-lemma `transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp` / 引理 `transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp`
-
-English:
-lemma transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
-  proof: by
-  simpa using transfiniteCompositionsOfShape_le_llp_rlp (coproducts.{t} W).pushouts J
-
-中文:
-引理 transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
-  证明: by
-  simpa using transfiniteCompositionsOfShape_le_llp_rlp (coproducts.{t} W).pushouts J
-
-Depends on / 依赖: coproducts, pushouts, transfiniteCompositionsOfShape_le_llp_rlp
+/-
+**CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_pushouts_coprod
+ucts_le_llp_rlp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp : (coproduct
+s.{t} W).pushouts.transfiniteCompositionsOfShape J <= W.rlp.llp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.MorphismProperty.rlp_pushouts`：rlp_pushouts : T.pushouts.
+rlp = T.rlp
+· 使用引理 `CategoryTheory.MorphismProperty.rlp_coproducts`：rlp_coproducts : (coprod
+ucts.{w} T).rlp = T.rlp
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_le_llp_rl
+p`：transfiniteCompositionsOfShape_le_llp_rlp : W.transfiniteCompositionsOfShape 
+J <= W.rlp.llp
 -/
 lemma transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp :
-    (coproducts.{t} W).pushouts.transfiniteCompositionsOfShape J <= W.rlp.llp := by
+    (coproducts.{t} W).pushouts.transfiniteCompositionsOfShape J ≤ W.rlp.llp := by
   simpa using transfiniteCompositionsOfShape_le_llp_rlp (coproducts.{t} W).pushouts J
-
-/--
-lemma `retracts_transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp` / 引理 `retracts_transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp`
-
-English:
-lemma retracts_transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
-  proof: by
-  rw [le_llp_iff_le_rlp]; rw [rlp_retracts]; rw [← le_llp_iff_le_rlp]
-  apply transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
-
-中文:
-引理 retracts_transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
-  证明: by
-  rw [le_llp_iff_le_rlp]; rw [rlp_retracts]; rw [← le_llp_iff_le_rlp]
-  apply transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
-
-Depends on / 依赖: le_llp_iff_le_rlp, rlp_retracts, transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
+/-
+**CategoryTheory.MorphismProperty.retracts_transfiniteCompositionsOfShape_pushou
+ts_coproducts_le_llp_rlp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismPrope
+rty`。
+形式化陈述：retracts_transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp : (
+(coproducts.{t} W).pushouts.transfiniteCompositionsOfShape J).retracts <= W.rlp.
+llp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.le_llp_iff_le_rlp`：le_llp_iff_le_rlp (T'
+ : MorphismProperty C) : T <= T'.llp ↔ T' <= T.rlp
+· 使用引理 `CategoryTheory.MorphismProperty.rlp_retracts`：rlp_retracts : T.retracts.
+rlp = T.rlp
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_pushouts_
+coproducts_le_llp_rlp`：transfiniteCompositionsOfShape_pushouts_coproducts_le_llp
+_rlp : (coproducts.{t} W).pushouts.transfiniteCompositionsOfShape J <= W.rlp.llp
 -/
 lemma retracts_transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp :
-    ((coproducts.{t} W).pushouts.transfiniteCompositionsOfShape J).retracts <= W.rlp.llp := by
-  rw [le_llp_iff_le_rlp]; rw [rlp_retracts]; rw [← le_llp_iff_le_rlp]
+    ((coproducts.{t} W).pushouts.transfiniteCompositionsOfShape J).retracts ≤ W.rlp.llp := by
+  rw [le_llp_iff_le_rlp, rlp_retracts, ← le_llp_iff_le_rlp]
   apply transfiniteCompositionsOfShape_pushouts_coproducts_le_llp_rlp
-
-/--
-lemma `transfiniteCompositions_le_llp_rlp` / 引理 `transfiniteCompositions_le_llp_rlp`
-
-English:
-lemma transfiniteCompositions_le_llp_rlp
-  proof: by
-  intro _ _ f hf
-  rw [transfiniteCompositions_iff] at hf
-  obtain ⟨_, _, _, _, _, hf⟩ := hf
-  exact W.transfiniteCompositionsOfShape_le_llp_rlp _ _ hf
-
-中文:
-引理 transfiniteCompositions_le_llp_rlp
-  证明: by
-  intro _ _ f hf
-  rw [transfiniteCompositions_iff] at hf
-  obtain ⟨_, _, _, _, _, hf⟩ := hf
-  exact W.transfiniteCompositionsOfShape_le_llp_rlp _ _ hf
-
-Depends on / 依赖: W.transfiniteCompositionsOfShape_le_llp_rlp, transfiniteCompositionsOfShape_le_llp_rlp, transfiniteCompositions_iff
+/-
+**CategoryTheory.MorphismProperty.transfiniteCompositions_le_llp_rlp** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：transfiniteCompositions_le_llp_rlp : transfiniteCompositions.{w} W <= W.rl
+p.llp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositions_iff`：transfinite
+Compositions_iff {X Y : C} (f : X ⟶ Y) : transfiniteCompositions.{w} W f ↔ exist
+s (J : Type w) (_ : LinearOrder J) (_ : SuccOrder…
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_le_llp_rl
+p`：transfiniteCompositionsOfShape_le_llp_rlp : W.transfiniteCompositionsOfShape 
+J <= W.rlp.llp
 -/
 lemma transfiniteCompositions_le_llp_rlp :
-    transfiniteCompositions.{w} W <= W.rlp.llp := by
+    transfiniteCompositions.{w} W ≤ W.rlp.llp := by
   intro _ _ f hf
   rw [transfiniteCompositions_iff] at hf
   obtain ⟨_, _, _, _, _, hf⟩ := hf
   exact W.transfiniteCompositionsOfShape_le_llp_rlp _ _ hf
-
-/--
-lemma `transfiniteCompositions_pushouts_coproducts_le_llp_rlp` / 引理 `transfiniteCompositions_pushouts_coproducts_le_llp_rlp`
-
-English:
-lemma transfiniteCompositions_pushouts_coproducts_le_llp_rlp
-  proof: by
-  simpa using transfiniteCompositions_le_llp_rlp.{w} (coproducts.{w} W).pushouts
-
-中文:
-引理 transfiniteCompositions_pushouts_coproducts_le_llp_rlp
-  证明: by
-  simpa using transfiniteCompositions_le_llp_rlp.{w} (coproducts.{w} W).pushouts
-
-Depends on / 依赖: coproducts, pushouts, transfiniteCompositions_le_llp_rlp
+/-
+**CategoryTheory.MorphismProperty.transfiniteCompositions_pushouts_coproducts_le
+_llp_rlp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：transfiniteCompositions_pushouts_coproducts_le_llp_rlp : (transfiniteCompo
+sitions.{w} (coproducts.{w} W).pushouts) <= W.rlp.llp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.MorphismProperty.instIsStableUnderTransfiniteCompositionL
+lp`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (W : CategoryTheory
+.MorphismProperty C),   W.llp.IsStableUnderTransfiniteCompositio…
+· 使用定理 `CategoryTheory.MorphismProperty.instIsStableUnderCoproductsLlp`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] (T : CategoryTheory.MorphismPro
+perty C),   CategoryTheory.MorphismProperty.IsStable…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.rlp_pushouts`：rlp_pushouts : T.pushouts.
+rlp = T.rlp
+· 使用引理 `CategoryTheory.MorphismProperty.rlp_coproducts`：rlp_coproducts : (coprod
+ucts.{w} T).rlp = T.rlp
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositions_le_llp_rlp`：tran
+sfiniteCompositions_le_llp_rlp : transfiniteCompositions.{w} W <= W.rlp.llp
 -/
 lemma transfiniteCompositions_pushouts_coproducts_le_llp_rlp :
-    (transfiniteCompositions.{w} (coproducts.{w} W).pushouts) <= W.rlp.llp := by
+    (transfiniteCompositions.{w} (coproducts.{w} W).pushouts) ≤ W.rlp.llp := by
   simpa using transfiniteCompositions_le_llp_rlp.{w} (coproducts.{w} W).pushouts
-
-/--
-lemma `retracts_transfiniteComposition_pushouts_coproducts_le_llp_rlp` / 引理 `retracts_transfiniteComposition_pushouts_coproducts_le_llp_rlp`
-
-English:
-lemma retracts_transfiniteComposition_pushouts_coproducts_le_llp_rlp
-  proof: by
-  rw [le_llp_iff_le_rlp]; rw [rlp_retracts]; rw [← le_llp_iff_le_rlp]
-  apply transfiniteCompositions_pushouts_coproducts_le_llp_rlp
-
-中文:
-引理 retracts_transfiniteComposition_pushouts_coproducts_le_llp_rlp
-  证明: by
-  rw [le_llp_iff_le_rlp]; rw [rlp_retracts]; rw [← le_llp_iff_le_rlp]
-  apply transfiniteCompositions_pushouts_coproducts_le_llp_rlp
-
-Depends on / 依赖: le_llp_iff_le_rlp, rlp_retracts, transfiniteCompositions_pushouts_coproducts_le_llp_rlp
+/-
+**CategoryTheory.MorphismProperty.retracts_transfiniteComposition_pushouts_copro
+ducts_le_llp_rlp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：retracts_transfiniteComposition_pushouts_coproducts_le_llp_rlp : (transfin
+iteCompositions.{w} (coproducts.{w} W).pushouts).retracts <= W.rlp.llp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MorphismProperty.le_llp_iff_le_rlp`：le_llp_iff_le_rlp (T'
+ : MorphismProperty C) : T <= T'.llp ↔ T' <= T.rlp
+· 使用引理 `CategoryTheory.MorphismProperty.rlp_retracts`：rlp_retracts : T.retracts.
+rlp = T.rlp
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositions_pushouts_coprodu
+cts_le_llp_rlp`：transfiniteCompositions_pushouts_coproducts_le_llp_rlp : (transf
+initeCompositions.{w} (coproducts.{w} W).pushouts) <= W.rlp.llp
 -/
 lemma retracts_transfiniteComposition_pushouts_coproducts_le_llp_rlp :
-    (transfiniteCompositions.{w} (coproducts.{w} W).pushouts).retracts <= W.rlp.llp := by
-  rw [le_llp_iff_le_rlp]; rw [rlp_retracts]; rw [← le_llp_iff_le_rlp]
+    (transfiniteCompositions.{w} (coproducts.{w} W).pushouts).retracts ≤ W.rlp.llp := by
+  rw [le_llp_iff_le_rlp, rlp_retracts, ← le_llp_iff_le_rlp]
   apply transfiniteCompositions_pushouts_coproducts_le_llp_rlp
 
 end MorphismProperty
 
 end CategoryTheory
+

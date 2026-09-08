@@ -19,120 +19,111 @@ variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
 
 namespace Quot
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- A homeomorphism `e : X ≃ₜ Y` generates a homeomorphism between quotient spaces,
+if `rX x₁ x₂ ↔ rY (e x₁) (e x₂)`. -/
+/-
+**Homeomorph.Quot.congr** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph.Quot`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} →     [inst : TopologicalSpace X] →     
+  [inst_1 : TopologicalSpace Y] →         {rX : X → X → Prop} →           {rY : 
+Y → Y → Prop} → (e : X ≃ₜ Y) → (∀ (x₁ x₂ : X), rX x₁ x₂ ↔ rY (e x₁) (e x₂)) → Qu
+ot rX ≃ₜ Quot rY
+参数：e : X ≃ₜ Y；∀ (x₁ x₂ : X), rX x₁ x₂ ↔ rY (e x₁) (e x₂)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congr
-  signature: {rX : X -> X -> Prop} {rY : Y -> Y -> Prop} (e : X ≃ₜ Y)
-  body: _root_.Quot.congr e eq
-  continuous_toFun := continuous_quot_map (fun x y => by simp [eq]) e.continuous
-  continuous_invFun := continuous_quot_map (fun x y => by simp [eq]) e.symm.continuous
-
-中文:
-定义 congr
-  签名: {rX : X -> X -> 命题} {rY : Y -> Y -> 命题} (e : X ≃ₜ Y)
-  定义体: _root_.Quot.congr e eq
-  continuous_toFun := continuous_quot_map (fun x y => by simp [eq]) e.continuous
-  continuous_invFun := continuous_quot_map (fun x y => by simp [eq]) e.symm.continuous
+--- 原说明 ---
+A homeomorphism `e : X ≃ₜ Y` generates a homeomorphism between quotient spaces,
+if `rX x₁ x₂ ↔ rY (e x₁) (e x₂)`.
 -/
-protected def congr {rX : X -> X -> Prop} {rY : Y -> Y -> Prop} (e : X ≃ₜ Y)
-    (eq : forall x₁ x₂, rX x₁ x₂ ↔ rY (e x₁) (e x₂)) : Quot rX ≃ₜ Quot rY where
+protected def congr {rX : X → X → Prop} {rY : Y → Y → Prop} (e : X ≃ₜ Y)
+    (eq : ∀ x₁ x₂, rX x₁ x₂ ↔ rY (e x₁) (e x₂)) : Quot rX ≃ₜ Quot rY where
   toEquiv := _root_.Quot.congr e eq
-  continuous_toFun := continuous_quot_map (fun x y => by simp [eq]) e.continuous
-  continuous_invFun := continuous_quot_map (fun x y => by simp [eq]) e.symm.continuous
+  continuous_toFun := continuous_quot_map (fun x y ↦ by simp [eq]) e.continuous
+  continuous_invFun := continuous_quot_map (fun x y ↦ by simp [eq]) e.symm.continuous
 
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-- Quotient spaces for equal relations are homeomorphic. -/
+/-
+**Homeomorph.Quot.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph.Quot`。
+形式化陈述：{X : Type u_1} →   [inst : TopologicalSpace X] → {r r' : X → X → Prop} → (
+∀ (x₁ x₂ : X), r x₁ x₂ ↔ r' x₁ x₂) → Quot r ≃ₜ Quot r'
+参数：∀ (x₁ x₂ : X), r x₁ x₂ ↔ r' x₁ x₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRight
-  signature: {r r' : X -> X -> Prop} (eq : forall x₁ x₂, r x₁ x₂ ↔ r' x₁ x₂)
-  body: Quot.congr (Homeomorph.refl X) eq
-
-中文:
-定义 congrRight
-  签名: {r r' : X -> X -> 命题} (eq : 对任意 x₁ x₂, r x₁ x₂ ↔ r' x₁ x₂)
-  定义体: Quot.congr (Homeomorph.refl X) eq
+--- 原说明 ---
+Quotient spaces for equal relations are homeomorphic.
 -/
-protected def congrRight {r r' : X -> X -> Prop} (eq : forall x₁ x₂, r x₁ x₂ ↔ r' x₁ x₂) :
+protected def congrRight {r r' : X → X → Prop} (eq : ∀ x₁ x₂, r x₁ x₂ ↔ r' x₁ x₂) :
     Quot r ≃ₜ Quot r' := Quot.congr (Homeomorph.refl X) eq
 
-/--
-Definition of `congrLeft` / `congrLeft` 的定义
+/-- A homeomorphism `e : X ≃ₜ Y` generates an equivalence between the quotient space of `X`
+by a relation `rX` and the quotient space of `Y` by the image of this relation under `e`. -/
+/-
+**Homeomorph.Quot.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph.Quot`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} →     [inst : TopologicalSpace X] →     
+  [inst_1 : TopologicalSpace Y] →         {r : X → X → Prop} → (e : X ≃ₜ Y) → Qu
+ot r ≃ₜ Quot fun y₁ y₂ => r (e.symm y₁) (e.symm y₂)
+参数：e : X ≃ₜ Y；e.symm y₁；e.symm y₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrLeft
-  signature: {r : X -> X -> Prop} (e : X ≃ₜ Y)
-  body: Quot.congr e fun _ _ => by simp only [e.symm_apply_apply]
-
-中文:
-定义 congrLeft
-  签名: {r : X -> X -> 命题} (e : X ≃ₜ Y)
-  定义体: Quot.congr e fun _ _ => by simp only [e.symm_apply_apply]
+--- 原说明 ---
+A homeomorphism `e : X ≃ₜ Y` generates an equivalence between the quotient space
+ of `X`
+by a relation `rX` and the quotient space of `Y` by the image of this relation u
+nder `e`.
 -/
-protected def congrLeft {r : X -> X -> Prop} (e : X ≃ₜ Y) :
-    Quot r ≃ₜ Quot fun y₁ y₂ => r (e.symm y₁) (e.symm y₂) :=
-  Quot.congr e fun _ _ => by simp only [e.symm_apply_apply]
+protected def congrLeft {r : X → X → Prop} (e : X ≃ₜ Y) :
+    Quot r ≃ₜ Quot fun y₁ y₂ ↦ r (e.symm y₁) (e.symm y₂) :=
+  Quot.congr e fun _ _ ↦ by simp only [e.symm_apply_apply]
 
 end Quot
 
 namespace Quotient
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- A homeomorphism `e : X ≃ₜ Y` generates a homeomorphism between quotient spaces,
+if `rX x₁ x₂ ↔ rY (e x₁) (e x₂)`. -/
+/-
+**Homeomorph.Quotient.congr** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph.Quotient`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} →     [inst : TopologicalSpace X] →     
+  [inst_1 : TopologicalSpace Y] →         {rX : Setoid X} →           {rY : Seto
+id Y} → (e : X ≃ₜ Y) → (∀ (x₁ x₂ : X), rX x₁ x₂ ↔ rY (e x₁) (e x₂)) → Quotient r
+X ≃ₜ Quotient rY
+参数：e : X ≃ₜ Y；∀ (x₁ x₂ : X), rX x₁ x₂ ↔ rY (e x₁) (e x₂)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congr
-  signature: {rX : Setoid X} {rY : Setoid Y} (e : X ≃ₜ Y)
-  body: Quot.congr e eq
-
-中文:
-定义 congr
-  签名: {rX : 集合等价关系 X} {rY : 集合等价关系 Y} (e : X ≃ₜ Y)
-  定义体: Quot.congr e eq
+--- 原说明 ---
+A homeomorphism `e : X ≃ₜ Y` generates a homeomorphism between quotient spaces,
+if `rX x₁ x₂ ↔ rY (e x₁) (e x₂)`.
 -/
 protected def congr {rX : Setoid X} {rY : Setoid Y} (e : X ≃ₜ Y)
-    (eq : forall x₁ x₂, rX x₁ x₂ ↔ rY (e x₁) (e x₂)) :
+    (eq : ∀ x₁ x₂, rX x₁ x₂ ↔ rY (e x₁) (e x₂)) :
     Quotient rX ≃ₜ Quotient rY := Quot.congr e eq
 
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-- Quotient spaces for equal relations are homeomorphic. -/
+/-
+**Homeomorph.Quotient.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph.Quotient`
+。
+形式化陈述：{X : Type u_1} →   [inst : TopologicalSpace X] → {r r' : Setoid X} → (∀ (x
+₁ x₂ : X), r x₁ x₂ ↔ r' x₁ x₂) → Quotient r ≃ₜ Quotient r'
+参数：∀ (x₁ x₂ : X), r x₁ x₂ ↔ r' x₁ x₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRight
-  signature: {r r' : Setoid X}
-  body: Quot.congrRight eq
-
-中文:
-定义 congrRight
-  签名: {r r' : 集合等价关系 X}
-  定义体: Quot.congrRight eq
+--- 原说明 ---
+Quotient spaces for equal relations are homeomorphic.
 -/
 protected def congrRight {r r' : Setoid X}
-    (eq : forall x₁ x₂, r x₁ x₂ ↔ r' x₁ x₂) : Quotient r ≃ₜ Quotient r' :=
+    (eq : ∀ x₁ x₂, r x₁ x₂ ↔ r' x₁ x₂) : Quotient r ≃ₜ Quotient r' :=
   Quot.congrRight eq
 
 end Quotient
 
-/--
-Definition of `quotientBot` / `quotientBot` 的定义
+/-- The quotient by the trivial relation is homeomorphic to the original space. -/
+/-
+**Homeomorph.quotientBot** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：quotientBot : Quotient (⊥ : Setoid X) ≃ₜ X where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotientBot
-  signature: :
-  body: Setoid.quotientBotEquiv
-  continuous_toFun := continuous_quot_lift _ continuous_id
-  continuous_invFun := continuous_quot_mk
-
-中文:
-定义 quotientBot
-  签名: :
-  定义体: Setoid.quotientBotEquiv
-  continuous_toFun := continuous_quot_lift _ continuous_id
-  continuous_invFun := continuous_quot_mk
-
-Depends on / 依赖: Setoid, Setoid.quotientBotEquiv, quotientBotEquiv
+--- 原说明 ---
+The quotient by the trivial relation is homeomorphic to the original space.
 -/
 def quotientBot :
     Quotient (⊥ : Setoid X) ≃ₜ X where
@@ -141,3 +132,4 @@ def quotientBot :
   continuous_invFun := continuous_quot_mk
 
 end Homeomorph
+

@@ -50,160 +50,236 @@ open Unitization NNReal CStarAlgebra
 
 variable [PartialOrder A] [StarOrderedRing A]
 
-/--
-lemma `CFC.monotoneOn_one_sub_one_add_inv` / 引理 `CFC.monotoneOn_one_sub_one_add_inv`
-
-English:
-lemma CFC.monotoneOn_one_sub_one_add_inv
-  proof: by
-  intro a ha b hb hab
-  simp only [Set.mem_Ici] at ha hb
-  rw [← inr_le_iff ..]; rw [nnreal_cfcₙ_eq_cfc_inr a _]; rw [nnreal_cfcₙ_eq_cfc_inr b _]
-  rw [← inr_le_iff a b (.of_nonneg ha) (.of_nonneg hb)] at hab
-  rw [← inr_nonneg_iff] at ha hb
-  have h_cfc_one_sub (c : A⁺¹) (hc : 0 <= c := by cfc_tac) :
-      cfc (fun x : Real>=0 => 1 - (1 + x)⁻¹) c = 1 - cfc (·⁻¹ : Real>=0 -> Real>=0) (1 + c) := by
-    rw [cfc_tsub _ _ _ (fun x _ => by simp) (hg := by fun_prop (disch := intro _ _; positivity))]; rw [cfc_const_one Real>=0 c]; rw [cfc_comp' (·⁻¹) (1 + ·) c ?_]; rw [cfc_add ..]; rw [cfc_const_one Real>=0 c]; rw [cfc_id' Real>=0 c]
-    exact continuousOn_id.inv₀ (Set.forall_mem_image.mpr fun x _ => by dsimp only [id]; positivity)
-  rw [h_cfc_one_sub (a : A⁺¹)]; rw [h_cfc_one_sub (b : A⁺¹)]
-  gcongr
-  rw [← CFC.rpow_neg_one_eq_cfc_inv]; rw [← CFC.rpow_neg_one_eq_cfc_inv]
-  exact rpow_neg_one_le_rpow_neg_one (by gcongr)
-
-中文:
-引理 CFC.monotoneOn_one_sub_one_add_inv
-  证明: by
-  intro a ha b hb hab
-  simp only [Set.mem_Ici] at ha hb
-  rw [← inr_le_iff ..]; rw [nnreal_cfcₙ_eq_cfc_inr a _]; rw [nnreal_cfcₙ_eq_cfc_inr b _]
-  rw [← inr_le_iff a b (.of_nonneg ha) (.of_nonneg hb)] at hab
-  rw [← inr_nonneg_iff] at ha hb
-  have h_cfc_one_sub (c : A⁺¹) (hc : 0 <= c := by cfc_tac) :
-      cfc (fun x : Real>=0 => 1 - (1 + x)⁻¹) c = 1 - cfc (·⁻¹ : Real>=0 -> Real>=0) (1 + c) := by
-    rw [cfc_tsub _ _ _ (fun x _ => by simp) (hg := by fun_prop (disch := intro _ _; positivity))]; rw [cfc_const_one Real>=0 c]; rw [cfc_comp' (·⁻¹) (1 + ·) c ?_]; rw [cfc_add ..]; rw [cfc_const_one Real>=0 c]; rw [cfc_id' Real>=0 c]
-    exact continuousOn_id.inv₀ (Set.forall_mem_image.mpr fun x _ => by dsimp only [id]; positivity)
-  rw [h_cfc_one_sub (a : A⁺¹)]; rw [h_cfc_one_sub (b : A⁺¹)]
-  gcongr
-  rw [← CFC.rpow_neg_one_eq_cfc_inv]; rw [← CFC.rpow_neg_one_eq_cfc_inv]
-  exact rpow_neg_one_le_rpow_neg_one (by gcongr)
-
-Depends on / 依赖: Set.mem_Ici, cfc_const_one, cfc_tac, cfc_tsub, fun_prop, h_cfc_one_sub, inr_le_iff, inr_nonneg_iff, mem_Ici, of_nonneg
+/-
+**CFC.monotoneOn_one_sub_one_add_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：CFC.monotoneOn_one_sub_one_add_inv : MonotoneOn (cfcₙ (fun x : Real>=0 => 
+1 - (1 + x)⁻¹)) (Set.Ici (0 : A))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instNontrivial`：Nontrivial NNReal
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `NNReal.instIsScalarTowerOfReal`：∀ {M : Type u_1} {N : Type u_2} [inst : 
+MulAction ℝ M] [inst_1 : MulAction ℝ N] [inst_2 : SMul M N]   [IsScalarTower ℝ M
+ N], IsScalarTower N…
+· 使用定理 `NonUnitalCStarAlgebra.toIsScalarTower`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], IsScalarTower ℂ A A
+· 使用定理 `SMulCommClass.complexToReal`：∀ {M : Type u_1} {E : Type u_2} [inst : Add
+CommGroup E] [inst_1 : _root_.Module ℂ E] [inst_2 : SMul M E]   [SMulCommClass ℂ
+ M E], SMulCommCl…
+· 使用定理 `NonUnitalCStarAlgebra.toSMulCommClass`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], SMulCommClass ℂ A A
+· 使用定理 `NonUnitalIsometricContinuousFunctionalCalculus.toNonUnitalContinuousFunc
+tionalCalculus`：∀ {R : Type u_1} {A : Type u_2} {p : outParam (A → Prop)} {inst 
+: CommSemiring R} {inst_1 : Nontrivial R}   {inst_2 : StarRing R} {inst_3 : …
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Complex.instContinuousStar`：ContinuousStar ℂ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Unitization.inr_le_iff`：inr_le_iff (a b : A) (ha : IsSelfAdjoint a
+· 使用引理 `IsSelfAdjoint.of_nonneg`：IsSelfAdjoint.of_nonneg {x : R} (hx : 0 <= x) :
+ IsSelfAdjoint x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `NonUnitalCStarAlgebra.toStarModule`：∀ {A : Type u_1} [self : NonUnitalCS
+tarAlgebra A], StarModule ℂ A
+· 使用定理 `IsometricContinuousFunctionalCalculus.toContinuousFunctionalCalculus`：∀ 
+{R : Type u_1} {A : Type u_2} {p : outParam (A → Prop)} {inst : CommSemiring R} 
+{inst_1 : StarRing R}   {inst_2 : MetricSpace R} {inst_3 :…
+· 使用定理 `NonUnitalCStarAlgebra.toCStarRing`：∀ {A : Type u_1} [self : NonUnitalCSt
+arAlgebra A], CStarRing A
+· 使用引理 `Unitization.nnreal_cfcₙ_eq_cfc_inr`：nnreal_cfcₙ_eq_cfc_inr (a : A) (f : 
+Real>=0 -> Real>=0) (hf₀ : f 0 = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `NNReal.instOrderedSub`：OrderedSub NNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 83 条，此处仅展示前 30 条）
 -/
 lemma CFC.monotoneOn_one_sub_one_add_inv :
-    MonotoneOn (cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹)) (Set.Ici (0 : A)) := by
+    MonotoneOn (cfcₙ (fun x : ℝ≥0 ↦ 1 - (1 + x)⁻¹)) (Set.Ici (0 : A)) := by
   intro a ha b hb hab
   simp only [Set.mem_Ici] at ha hb
-  rw [← inr_le_iff ..]; rw [nnreal_cfcₙ_eq_cfc_inr a _]; rw [nnreal_cfcₙ_eq_cfc_inr b _]
+  rw [← inr_le_iff .., nnreal_cfcₙ_eq_cfc_inr a _, nnreal_cfcₙ_eq_cfc_inr b _]
   rw [← inr_le_iff a b (.of_nonneg ha) (.of_nonneg hb)] at hab
   rw [← inr_nonneg_iff] at ha hb
-  have h_cfc_one_sub (c : A⁺¹) (hc : 0 <= c := by cfc_tac) :
-      cfc (fun x : Real>=0 => 1 - (1 + x)⁻¹) c = 1 - cfc (·⁻¹ : Real>=0 -> Real>=0) (1 + c) := by
-    rw [cfc_tsub _ _ _ (fun x _ => by simp) (hg := by fun_prop (disch := intro _ _; positivity))]; rw [cfc_const_one Real>=0 c]; rw [cfc_comp' (·⁻¹) (1 + ·) c ?_]; rw [cfc_add ..]; rw [cfc_const_one Real>=0 c]; rw [cfc_id' Real>=0 c]
-    exact continuousOn_id.inv₀ (Set.forall_mem_image.mpr fun x _ => by dsimp only [id]; positivity)
-  rw [h_cfc_one_sub (a : A⁺¹)]; rw [h_cfc_one_sub (b : A⁺¹)]
+  have h_cfc_one_sub (c : A⁺¹) (hc : 0 ≤ c := by cfc_tac) :
+      cfc (fun x : ℝ≥0 ↦ 1 - (1 + x)⁻¹) c = 1 - cfc (·⁻¹ : ℝ≥0 → ℝ≥0) (1 + c) := by
+    rw [cfc_tsub _ _ _ (fun x _ ↦ by simp) (hg := by fun_prop (disch := intro _ _; positivity)),
+      cfc_const_one ℝ≥0 c, cfc_comp' (·⁻¹) (1 + ·) c ?_, cfc_add .., cfc_const_one ℝ≥0 c,
+      cfc_id' ℝ≥0 c]
+    exact continuousOn_id.inv₀ (Set.forall_mem_image.mpr fun x _ ↦ by dsimp only [id]; positivity)
+  rw [h_cfc_one_sub (a : A⁺¹), h_cfc_one_sub (b : A⁺¹)]
   gcongr
-  rw [← CFC.rpow_neg_one_eq_cfc_inv]; rw [← CFC.rpow_neg_one_eq_cfc_inv]
+  rw [← CFC.rpow_neg_one_eq_cfc_inv, ← CFC.rpow_neg_one_eq_cfc_inv]
   exact rpow_neg_one_le_rpow_neg_one (by gcongr)
-
-/--
-lemma `CFC.monotoneOn_one_sub_one_add_inv_real` / 引理 `CFC.monotoneOn_one_sub_one_add_inv_real`
-
-English:
-lemma CFC.monotoneOn_one_sub_one_add_inv_real
-  proof: by
-  intro a (ha : 0 <= a) b (hb : 0 <= b) hab
-  calc _ = cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) a := by
-          rw [cfcₙ_nnreal_eq_real _ _ ha]
-          refine cfcₙ_congr ?_
-          intro x hx
-          have hx' : 0 <= x := by grind
-          simp [hx']
-    _ <= cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) b :=
-          CFC.monotoneOn_one_sub_one_add_inv ha hb hab
-    _ = cfcₙ (fun x : Real => 1 - (1 + x)⁻¹) b := by
-          rw [cfcₙ_nnreal_eq_real _ _ hb]
-          refine cfcₙ_congr ?_
-          intro x hx
-          have hx' : 0 <= x := by grind
-          simp [hx']
-
-中文:
-引理 CFC.monotoneOn_one_sub_one_add_inv_real
-  证明: by
-  intro a (ha : 0 <= a) b (hb : 0 <= b) hab
-  calc _ = cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) a := by
-          rw [cfcₙ_nnreal_eq_real _ _ ha]
-          refine cfcₙ_congr ?_
-          intro x hx
-          have hx' : 0 <= x := by grind
-          simp [hx']
-    _ <= cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) b :=
-          CFC.monotoneOn_one_sub_one_add_inv ha hb hab
-    _ = cfcₙ (fun x : Real => 1 - (1 + x)⁻¹) b := by
-          rw [cfcₙ_nnreal_eq_real _ _ hb]
-          refine cfcₙ_congr ?_
-          intro x hx
-          have hx' : 0 <= x := by grind
-          simp [hx']
-
-Depends on / 依赖: CFC.monotoneOn_one_sub_one_add_inv, monotoneOn_one_sub_one_add_inv
+/-
+**CFC.monotoneOn_one_sub_one_add_inv_real** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：CFC.monotoneOn_one_sub_one_add_inv_real : MonotoneOn (cfcₙ (fun x : Real =
+> 1 - (1 + x)⁻¹)) (Set.Ici (0 : A))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousStarReal`：ContinuousStar ℝ
+· 使用定理 `NonUnitalCStarAlgebra.toIsScalarTower`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], IsScalarTower ℂ A A
+· 使用定理 `SMulCommClass.complexToReal`：∀ {M : Type u_1} {E : Type u_2} [inst : Add
+CommGroup E] [inst_1 : _root_.Module ℂ E] [inst_2 : SMul M E]   [SMulCommClass ℂ
+ M E], SMulCommCl…
+· 使用定理 `NonUnitalCStarAlgebra.toSMulCommClass`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], SMulCommClass ℂ A A
+· 使用定理 `NonUnitalIsometricContinuousFunctionalCalculus.toNonUnitalContinuousFunc
+tionalCalculus`：∀ {R : Type u_1} {A : Type u_2} {p : outParam (A → Prop)} {inst 
+: CommSemiring R} {inst_1 : Nontrivial R}   {inst_2 : StarRing R} {inst_3 : …
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Complex.instContinuousStar`：ContinuousStar ℂ
+· 使用定理 `NNReal.instNontrivial`：Nontrivial NNReal
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `NNReal.instIsScalarTowerOfReal`：∀ {M : Type u_1} {N : Type u_2} [inst : 
+MulAction ℝ M] [inst_1 : MulAction ℝ N] [inst_2 : SMul M N]   [IsScalarTower ℝ M
+ N], IsScalarTower N…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `cfcₙ_nnreal_eq_real`：cfcₙ_nnreal_eq_real (f : Real>=0 -> Real>=0) (a : A
+) (ha : 0 <= a
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用引理 `cfcₙ_congr`：cfcₙ_congr {f g : R -> R} {a : A} (hfg : (σₙ R a).EqOn f g) 
+: cfcₙ f a = cfcₙ g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `NNReal.coe_sub`：∀ {r₁ r₂ : NNReal}, r₂ ≤ r₁ → ↑(r₁ - r₂) = ↑r₁ - ↑r₂
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+（共 39 条，此处仅展示前 30 条）
 -/
 lemma CFC.monotoneOn_one_sub_one_add_inv_real :
-    MonotoneOn (cfcₙ (fun x : Real => 1 - (1 + x)⁻¹)) (Set.Ici (0 : A)) := by
-  intro a (ha : 0 <= a) b (hb : 0 <= b) hab
-  calc _ = cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) a := by
+    MonotoneOn (cfcₙ (fun x : ℝ => 1 - (1 + x)⁻¹)) (Set.Ici (0 : A)) := by
+  intro a (ha : 0 ≤ a) b (hb : 0 ≤ b) hab
+  calc _ = cfcₙ (fun x : ℝ≥0 => 1 - (1 + x)⁻¹) a := by
           rw [cfcₙ_nnreal_eq_real _ _ ha]
           refine cfcₙ_congr ?_
           intro x hx
-          have hx' : 0 <= x := by grind
+          have hx' : 0 ≤ x := by grind
           simp [hx']
-    _ <= cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) b :=
+    _ ≤ cfcₙ (fun x : ℝ≥0 => 1 - (1 + x)⁻¹) b :=
           CFC.monotoneOn_one_sub_one_add_inv ha hb hab
-    _ = cfcₙ (fun x : Real => 1 - (1 + x)⁻¹) b := by
+    _ = cfcₙ (fun x : ℝ => 1 - (1 + x)⁻¹) b := by
           rw [cfcₙ_nnreal_eq_real _ _ hb]
           refine cfcₙ_congr ?_
           intro x hx
-          have hx' : 0 <= x := by grind
+          have hx' : 0 ≤ x := by grind
           simp [hx']
-
-/--
-lemma `Set.InvOn.one_sub_one_add_inv` / 引理 `Set.InvOn.one_sub_one_add_inv`
-
-English:
-lemma Set.InvOn.one_sub_one_add_inv
-  statement: Set.InvOn (fun x => 1 - (1 + x)⁻¹) (fun x => x * (1 - x)⁻¹)
-  proof: by
-  have : (fun x : Real>=0 => x * (1 + x)⁻¹) = fun x => 1 - (1 + x)⁻¹ := by
-    ext x : 1
-    simp [field, mul_tsub]
-  rw [← this]
-  constructor <;> intro x (hx : x < 1)
-  · have : 0 < 1 - x := tsub_pos_of_lt hx
-    simp [field, tsub_add_cancel_of_le hx.le]
-  · simp [mul_assoc, ← mul_inv, mul_tsub]
-    field_simp
-    simp
-
-中文:
-引理 集合.InvOn.one_sub_one_add_inv
-  结论: 集合.InvOn (fun x => 1 - (1 + x)⁻¹) (fun x => x * (1 - x)⁻¹)
-  证明: by
-  have : (fun x : Real>=0 => x * (1 + x)⁻¹) = fun x => 1 - (1 + x)⁻¹ := by
-    ext x : 1
-    simp [field, mul_tsub]
-  rw [← this]
-  constructor <;> intro x (hx : x < 1)
-  · have : 0 < 1 - x := tsub_pos_of_lt hx
-    simp [field, tsub_add_cancel_of_le hx.le]
-  · simp [mul_assoc, ← mul_inv, mul_tsub]
-    field_simp
-    simp
-
-Depends on / 依赖: hx.le, mul_assoc, mul_inv, mul_tsub, tsub_add_cancel_of_le, tsub_pos_of_lt
+/-
+**Set.InvOn.one_sub_one_add_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Set.InvOn.one_sub_one_add_inv : Set.InvOn (fun x => 1 - (1 + x)⁻¹) (fun x 
+=> x * (1 - x)⁻¹) {x : Real>=0 | x < 1} {x : Real>=0 | x < 1}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval`：mul_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al * l₂.eval = l.eval) : x₁ *…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.inv_eq_eval`：inv_eq_eval [CommGroupWithZero 
+M] {l : NF M} {x : M} (h : x = l.eval) : x⁻¹ = (l⁻¹).eval
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_add`：subst_add {M : Type*} [Semiring M] {
+x₁ x₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ + X₂ =
+ Y) (hy : a * Y = y) : x…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.one_eq_eval`：one_eq_eval [GroupWithZero M] :
+ (1:M) = NF.eval (M
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval₃`：mul_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval * l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval`：eval_cons_mul_eval [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : ((n, e) ::ᵣ L).eval * l.eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval_cons_neg`：eval_cons_mul_e
+val_cons_neg [CommGroupWithZero M] (n : Int) {e : M} (he : e != 0) {L l l' : NF 
+M} (h : L.eval * l.eval = l'.eval) : ((n, e) …
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `add_pos_of_pos_of_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst
+_1 : Preorder α] [AddLeftMono α] {a b : α}, 0 < a → 0 ≤ b → 0 < a + b
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+（共 64 条，此处仅展示前 30 条）
 -/
-lemma Set.InvOn.one_sub_one_add_inv : Set.InvOn (fun x => 1 - (1 + x)⁻¹) (fun x => x * (1 - x)⁻¹)
-    {x : Real>=0 | x < 1} {x : Real>=0 | x < 1} := by
-  have : (fun x : Real>=0 => x * (1 + x)⁻¹) = fun x => 1 - (1 + x)⁻¹ := by
+lemma Set.InvOn.one_sub_one_add_inv : Set.InvOn (fun x ↦ 1 - (1 + x)⁻¹) (fun x ↦ x * (1 - x)⁻¹)
+    {x : ℝ≥0 | x < 1} {x : ℝ≥0 | x < 1} := by
+  have : (fun x : ℝ≥0 ↦ x * (1 + x)⁻¹) = fun x ↦ 1 - (1 + x)⁻¹ := by
     ext x : 1
     simp [field, mul_tsub]
   rw [← this]
@@ -213,100 +289,85 @@ lemma Set.InvOn.one_sub_one_add_inv : Set.InvOn (fun x => 1 - (1 + x)⁻¹) (fun
   · simp [mul_assoc, ← mul_inv, mul_tsub]
     field_simp
     simp
-
-/--
-lemma `norm_cfcₙ_one_sub_one_add_inv_lt_one` / 引理 `norm_cfcₙ_one_sub_one_add_inv_lt_one`
-
-English:
-lemma norm_cfcₙ_one_sub_one_add_inv_lt_one
-  given: (a : A)
-  proof: nnnorm_cfcₙ_nnreal_lt fun x _ => tsub_lt_self zero_lt_one (by positivity)
-
-中文:
-引理 norm_cfcₙ_one_sub_one_add_inv_lt_one
-  条件: (a : A)
-  证明: nnnorm_cfcₙ_nnreal_lt fun x _ => tsub_lt_self zero_lt_one (by positivity)
-
-Depends on / 依赖: tsub_lt_self, zero_lt_one
+/-
+**norm_cfc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma norm_cfcₙ_one_sub_one_add_inv_lt_one (a : A) :
-    ‖cfcₙ (fun x : Real>=0 => 1 - (1 + x)⁻¹) a‖ < 1 :=
-  nnnorm_cfcₙ_nnreal_lt fun x _ => tsub_lt_self zero_lt_one (by positivity)
-
-/--
-lemma `CStarAlgebra.directedOn_nonneg_ball` / 引理 `CStarAlgebra.directedOn_nonneg_ball`
-
-English:
-lemma CStarAlgebra.directedOn_nonneg_ball
-  proof: by
-  let f : Real>=0 -> Real>=0 := fun x => 1 - (1 + x)⁻¹
-  let g : Real>=0 -> Real>=0 := fun x => x * (1 - x)⁻¹
-  suffices forall a b : A, 0 <= a -> 0 <= b -> ‖a‖ < 1 -> ‖b‖ < 1 ->
-      a <= cfcₙ f (cfcₙ g a + cfcₙ g b) by
-    rintro a ⟨(ha₁ : 0 <= a), ha₂⟩ b ⟨(hb₁ : 0 <= b), hb₂⟩
-    simp only [Metric.mem_ball, dist_zero_right] at ha₂ hb₂
-    refine ⟨cfcₙ f (cfcₙ g a + cfcₙ g b), ⟨by simp, ?_⟩, ?_, ?_⟩
-    · simpa only [Metric.mem_ball, dist_zero_right] using norm_cfcₙ_one_sub_one_add_inv_lt_one _
-    · exact this a b ha₁ hb₁ ha₂ hb₂
-    · exact add_comm (cfcₙ g a) (cfcₙ g b) ▸ this b a hb₁ ha₁ hb₂ ha₂
-  rintro a b ha₁ - ha₂ -
-  calc
-    a = cfcₙ (f ∘ g) a := by
-      conv_lhs => rw [← cfcₙ_id Real>=0 a]
-      refine cfcₙ_congr (Set.InvOn.one_sub_one_add_inv.1.eqOn.symm.mono fun x hx => ?_)
-      exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
-    _ = cfcₙ f (cfcₙ g a) := by
-      rw [cfcₙ_comp f g a ?_ (by simp [f]; rw [tsub_self]) ?_ (by simp [g]) ha₁]
-      · fun_prop (disch := intro _ _; positivity)
-      · have (x) (hx : x in σₙ Real>=0 a) : 1 - x != 0 := by
-.ne' refine tsub_pos_of_lt ?_
-          exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
-        fun_prop
-    _ <= cfcₙ f (cfcₙ g a + cfcₙ g b) := by
-      have hab' : cfcₙ g a <= cfcₙ g a + cfcₙ g b := le_add_of_nonneg_right cfcₙ_nonneg_of_predicate
-      exact CFC.monotoneOn_one_sub_one_add_inv cfcₙ_nonneg_of_predicate
-        (cfcₙ_nonneg_of_predicate.trans hab') hab'
-
-中文:
-引理 CStar代数.directedOn_nonneg_ball
-  证明: by
-  let f : Real>=0 -> Real>=0 := fun x => 1 - (1 + x)⁻¹
-  let g : Real>=0 -> Real>=0 := fun x => x * (1 - x)⁻¹
-  suffices forall a b : A, 0 <= a -> 0 <= b -> ‖a‖ < 1 -> ‖b‖ < 1 ->
-      a <= cfcₙ f (cfcₙ g a + cfcₙ g b) by
-    rintro a ⟨(ha₁ : 0 <= a), ha₂⟩ b ⟨(hb₁ : 0 <= b), hb₂⟩
-    simp only [Metric.mem_ball, dist_zero_right] at ha₂ hb₂
-    refine ⟨cfcₙ f (cfcₙ g a + cfcₙ g b), ⟨by simp, ?_⟩, ?_, ?_⟩
-    · simpa only [Metric.mem_ball, dist_zero_right] using norm_cfcₙ_one_sub_one_add_inv_lt_one _
-    · exact this a b ha₁ hb₁ ha₂ hb₂
-    · exact add_comm (cfcₙ g a) (cfcₙ g b) ▸ this b a hb₁ ha₁ hb₂ ha₂
-  rintro a b ha₁ - ha₂ -
-  calc
-    a = cfcₙ (f ∘ g) a := by
-      conv_lhs => rw [← cfcₙ_id Real>=0 a]
-      refine cfcₙ_congr (Set.InvOn.one_sub_one_add_inv.1.eqOn.symm.mono fun x hx => ?_)
-      exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
-    _ = cfcₙ f (cfcₙ g a) := by
-      rw [cfcₙ_comp f g a ?_ (by simp [f]; rw [tsub_self]) ?_ (by simp [g]) ha₁]
-      · fun_prop (disch := intro _ _; positivity)
-      · have (x) (hx : x in σₙ Real>=0 a) : 1 - x != 0 := by
-.ne' refine tsub_pos_of_lt ?_
-          exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
-        fun_prop
-    _ <= cfcₙ f (cfcₙ g a + cfcₙ g b) := by
-      have hab' : cfcₙ g a <= cfcₙ g a + cfcₙ g b := le_add_of_nonneg_right cfcₙ_nonneg_of_predicate
-      exact CFC.monotoneOn_one_sub_one_add_inv cfcₙ_nonneg_of_predicate
-        (cfcₙ_nonneg_of_predicate.trans hab') hab'
-
-Depends on / 依赖: Metric, Metric.mem_ball, dist_zero_right, mem_ball
+    ‖cfcₙ (fun x : ℝ≥0 ↦ 1 - (1 + x)⁻¹) a‖ < 1 :=
+  nnnorm_cfcₙ_nnreal_lt fun x _ ↦ tsub_lt_self zero_lt_one (by positivity)
+/-
+**CStarAlgebra.directedOn_nonneg_ball** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：CStarAlgebra.directedOn_nonneg_ball : DirectedOn (· <= ·) ({x : A | 0 <= x
+} inter Metric.ball 0 1)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.instNontrivial`：Nontrivial NNReal
+· 使用定理 `NNReal.instIsTopologicalSemiring`：IsTopologicalSemiring NNReal
+· 使用定理 `NNReal.instContinuousStar`：ContinuousStar NNReal
+· 使用定理 `NNReal.instIsScalarTowerOfReal`：∀ {M : Type u_1} {N : Type u_2} [inst : 
+MulAction ℝ M] [inst_1 : MulAction ℝ N] [inst_2 : SMul M N]   [IsScalarTower ℝ M
+ N], IsScalarTower N…
+· 使用定理 `NonUnitalCStarAlgebra.toIsScalarTower`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], IsScalarTower ℂ A A
+· 使用定理 `SMulCommClass.complexToReal`：∀ {M : Type u_1} {E : Type u_2} [inst : Add
+CommGroup E] [inst_1 : _root_.Module ℂ E] [inst_2 : SMul M E]   [SMulCommClass ℂ
+ M E], SMulCommCl…
+· 使用定理 `NonUnitalCStarAlgebra.toSMulCommClass`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], SMulCommClass ℂ A A
+· 使用定理 `NonUnitalIsometricContinuousFunctionalCalculus.toNonUnitalContinuousFunc
+tionalCalculus`：∀ {R : Type u_1} {A : Type u_2} {p : outParam (A → Prop)} {inst 
+: CommSemiring R} {inst_1 : Nontrivial R}   {inst_2 : StarRing R} {inst_3 : …
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Complex.instContinuousStar`：ContinuousStar ℂ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `cfcₙ_id`：cfcₙ_id : cfcₙ (id : R -> R) a = a
+· 使用引理 `cfcₙ_congr`：cfcₙ_congr {f g : R -> R} {a : A} (hfg : (σₙ R a).EqOn f g) 
+: cfcₙ f a = cfcₙ g a
+· 使用定理 `Set.EqOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {f₁ f₂ : 
+α → β}, s₁ ⊆ s₂ → Set.EqOn f₁ f₂ s₂ → Set.EqOn f₁ f₂ s₁
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用引理 `CStarAlgebra.le_nnnorm_of_mem_quasispectrum`：CStarAlgebra.le_nnnorm_of_m
+em_quasispectrum {A : Type*} [NonUnitalCStarAlgebra A] {a : A} {x : Real>=0} (hx
+ : x in quasispectrum Real>=0 a) …
+· 使用定理 `Set.EqOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → 
+β}, Set.EqOn f₁ f₂ s → Set.EqOn f₂ f₁ s
+· 使用定理 `Set.LeftInvOn.eqOn`：eqOn (h : LeftInvOn f' f s) : EqOn (f' ∘ f) id s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `Set.InvOn.one_sub_one_add_inv`：Set.InvOn.one_sub_one_add_inv : Set.InvOn
+ (fun x => 1 - (1 + x)⁻¹) (fun x => x * (1 - x)⁻¹) {x : Real>=0 | x < 1} {x : Re
+al>=0 | x < 1}
+· 使用引理 `cfcₙ_comp`：cfcₙ_comp (g f : R -> R) (a : A) (hg : ContinuousOn g (f '' σ
+ₙ R a)
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+（共 72 条，此处仅展示前 30 条）
 -/
 lemma CStarAlgebra.directedOn_nonneg_ball :
-    DirectedOn (· <= ·) ({x : A | 0 <= x} inter Metric.ball 0 1) := by
-  let f : Real>=0 -> Real>=0 := fun x => 1 - (1 + x)⁻¹
-  let g : Real>=0 -> Real>=0 := fun x => x * (1 - x)⁻¹
-  suffices forall a b : A, 0 <= a -> 0 <= b -> ‖a‖ < 1 -> ‖b‖ < 1 ->
-      a <= cfcₙ f (cfcₙ g a + cfcₙ g b) by
-    rintro a ⟨(ha₁ : 0 <= a), ha₂⟩ b ⟨(hb₁ : 0 <= b), hb₂⟩
+    DirectedOn (· ≤ ·) ({x : A | 0 ≤ x} ∩ Metric.ball 0 1) := by
+  let f : ℝ≥0 → ℝ≥0 := fun x => 1 - (1 + x)⁻¹
+  let g : ℝ≥0 → ℝ≥0 := fun x => x * (1 - x)⁻¹
+  suffices ∀ a b : A, 0 ≤ a → 0 ≤ b → ‖a‖ < 1 → ‖b‖ < 1 →
+      a ≤ cfcₙ f (cfcₙ g a + cfcₙ g b) by
+    rintro a ⟨(ha₁ : 0 ≤ a), ha₂⟩ b ⟨(hb₁ : 0 ≤ b), hb₂⟩
     simp only [Metric.mem_ball, dist_zero_right] at ha₂ hb₂
     refine ⟨cfcₙ f (cfcₙ g a + cfcₙ g b), ⟨by simp, ?_⟩, ?_, ?_⟩
     · simpa only [Metric.mem_ball, dist_zero_right] using norm_cfcₙ_one_sub_one_add_inv_lt_one _
@@ -315,18 +376,18 @@ lemma CStarAlgebra.directedOn_nonneg_ball :
   rintro a b ha₁ - ha₂ -
   calc
     a = cfcₙ (f ∘ g) a := by
-      conv_lhs => rw [← cfcₙ_id Real>=0 a]
-      refine cfcₙ_congr (Set.InvOn.one_sub_one_add_inv.1.eqOn.symm.mono fun x hx => ?_)
+      conv_lhs => rw [← cfcₙ_id ℝ≥0 a]
+      refine cfcₙ_congr (Set.InvOn.one_sub_one_add_inv.1.eqOn.symm.mono fun x hx ↦ ?_)
       exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
     _ = cfcₙ f (cfcₙ g a) := by
-      rw [cfcₙ_comp f g a ?_ (by simp [f]; rw [tsub_self]) ?_ (by simp [g]) ha₁]
+      rw [cfcₙ_comp f g a ?_ (by simp [f, tsub_self]) ?_ (by simp [g]) ha₁]
       · fun_prop (disch := intro _ _; positivity)
-      · have (x) (hx : x in σₙ Real>=0 a) : 1 - x != 0 := by
-.ne' refine tsub_pos_of_lt ?_
+      · have (x) (hx : x ∈ σₙ ℝ≥0 a) : 1 - x ≠ 0 := by
+          refine tsub_pos_of_lt ?_ |>.ne'
           exact lt_of_le_of_lt (le_nnnorm_of_mem_quasispectrum hx) ha₂
         fun_prop
-    _ <= cfcₙ f (cfcₙ g a + cfcₙ g b) := by
-      have hab' : cfcₙ g a <= cfcₙ g a + cfcₙ g b := le_add_of_nonneg_right cfcₙ_nonneg_of_predicate
+    _ ≤ cfcₙ f (cfcₙ g a + cfcₙ g b) := by
+      have hab' : cfcₙ g a ≤ cfcₙ g a + cfcₙ g b := le_add_of_nonneg_right cfcₙ_nonneg_of_predicate
       exact CFC.monotoneOn_one_sub_one_add_inv cfcₙ_nonneg_of_predicate
         (cfcₙ_nonneg_of_predicate.trans hab') hab'
 
@@ -334,133 +395,139 @@ section ApproximateUnit
 
 open Metric Filter Topology
 
-/--
-Definition of `Filter.IsIncreasingApproximateUnit` / `Filter.IsIncreasingApproximateUnit` 的定义
+/-- An *increasing approximate unit* in a C⋆-algebra is an approximate unit contained in the
+closed unit ball of nonnegative elements. -/
+/-
+**Filter.IsIncreasingApproximateUnit** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：{A : Type u_1} → [NonUnitalCStarAlgebra A] → [PartialOrder A] → Filter A →
+ Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Filter.IsIncreasingApproximateUnit
-  parameters: (l : Filter A)
-  extends: l.IsApproximateUnit
-  axioms and operations (2):
-    - eventually_nonneg : forallᶠ x in l, 0 <= x
-    - eventually_norm : forallᶠ x in l, ‖x‖ <= 1
-
-中文:
-结构 滤子.是IncreasingApproximateUnit
-  参数: (l : 滤子 A)
-  继承: l.是ApproximateUnit
-  公理与运算 (2 个):
-    - eventually_nonneg : 对任意ᶠ x in l, 0 <= x
-    - eventually_norm : 对任意ᶠ x in l, ‖x‖ <= 1
+--- 原说明 ---
+An *increasing approximate unit* in a C⋆-algebra is an approximate unit containe
+d in the
+closed unit ball of nonnegative elements.
 -/
 structure Filter.IsIncreasingApproximateUnit (l : Filter A) : Prop extends l.IsApproximateUnit where
-  eventually_nonneg : forallᶠ x in l, 0 <= x
-  eventually_norm : forallᶠ x in l, ‖x‖ <= 1
+  eventually_nonneg : ∀ᶠ x in l, 0 ≤ x
+  eventually_norm : ∀ᶠ x in l, ‖x‖ ≤ 1
 
 namespace Filter.IsIncreasingApproximateUnit
 
 omit [StarOrderedRing A] in
-/--
-lemma `eventually_nnnorm` / 引理 `eventually_nnnorm`
-
-English:
-lemma eventually_nnnorm
-  given: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
-  proof: hl.eventually_norm
-
-中文:
-引理 eventually_nnnorm
-  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
-  证明: hl.eventually_norm
-
-Depends on / 依赖: eventually_norm, hl.eventually_norm
+/-
+**Filter.IsIncreasingApproximateUnit.eventually_nnnorm** 是 Mathlib 中的一个引理，位于命名空间
+ `Filter.IsIncreasingApproximateUnit`。
+形式化陈述：eventually_nnnorm {l : Filter A} (hl : l.IsIncreasingApproximateUnit) : fo
+rallᶠ x in l, ‖x‖₊ <= 1
+参数：hl : l.IsIncreasingApproximateUnit。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsIncreasingApproximateUnit.eventually_norm`：∀ {A : Type u_1} [in
+st : NonUnitalCStarAlgebra A] [inst_1 : PartialOrder A] {l : Filter A},   l.IsIn
+creasingApproximateUnit → ∀ᶠ (x : A) in …
 -/
 lemma eventually_nnnorm {l : Filter A} (hl : l.IsIncreasingApproximateUnit) :
-    forallᶠ x in l, ‖x‖₊ <= 1 :=
+    ∀ᶠ x in l, ‖x‖₊ ≤ 1 :=
   hl.eventually_norm
-
-/--
-lemma `eventually_isSelfAdjoint` / 引理 `eventually_isSelfAdjoint`
-
-English:
-lemma eventually_isSelfAdjoint
-  given: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
-  proof: hl.eventually_nonneg.mp .of_forall fun _ => IsSelfAdjoint.of_nonneg
-
-中文:
-引理 eventually_isSelfAdjoint
-  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
-  证明: hl.eventually_nonneg.mp .of_forall fun _ => IsSelfAdjoint.of_nonneg
-
-Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.of_nonneg, eventually_nonneg, hl.eventually_nonneg.mp, of_forall, of_nonneg
+/-
+**Filter.IsIncreasingApproximateUnit.eventually_isSelfAdjoint** 是 Mathlib 中的一个引理
+，位于命名空间 `Filter.IsIncreasingApproximateUnit`。
+形式化陈述：eventually_isSelfAdjoint {l : Filter A} (hl : l.IsIncreasingApproximateUni
+t) : forallᶠ x in l, IsSelfAdjoint x
+参数：hl : l.IsIncreasingApproximateUnit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.IsIncreasingApproximateUnit.eventually_nonneg`：∀ {A : Type u_1} [
+inst : NonUnitalCStarAlgebra A] [inst_1 : PartialOrder A] {l : Filter A},   l.Is
+IncreasingApproximateUnit → ∀ᶠ (x : A) in …
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用引理 `IsSelfAdjoint.of_nonneg`：IsSelfAdjoint.of_nonneg {x : R} (hx : 0 <= x) :
+ IsSelfAdjoint x
 -/
 lemma eventually_isSelfAdjoint {l : Filter A} (hl : l.IsIncreasingApproximateUnit) :
-    forallᶠ x in l, IsSelfAdjoint x :=
-hl.eventually_nonneg.mp .of_forall fun _ => IsSelfAdjoint.of_nonneg
-
-/--
-lemma `eventually_star_eq` / 引理 `eventually_star_eq`
-
-English:
-lemma eventually_star_eq
-  given: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
-  proof: hl.eventually_isSelfAdjoint.mp .of_forall fun _ => IsSelfAdjoint.star_eq
-
-omit [StarOrderedRing A] in
-
-中文:
-引理 eventually_star_eq
-  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
-  证明: hl.eventually_isSelfAdjoint.mp .of_forall fun _ => IsSelfAdjoint.star_eq
-
-omit [StarOrderedRing A] in
-
-Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.star_eq, eventually_isSelfAdjoint, hl.eventually_isSelfAdjoint.mp, of_forall, star_eq
+    ∀ᶠ x in l, IsSelfAdjoint x :=
+  hl.eventually_nonneg.mp <| .of_forall fun _ ↦ IsSelfAdjoint.of_nonneg
+/-
+**Filter.IsIncreasingApproximateUnit.eventually_star_eq** 是 Mathlib 中的一个引理，位于命名空
+间 `Filter.IsIncreasingApproximateUnit`。
+形式化陈述：eventually_star_eq {l : Filter A} (hl : l.IsIncreasingApproximateUnit) : f
+orallᶠ x in l, star x = x
+参数：hl : l.IsIncreasingApproximateUnit。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `Filter.IsIncreasingApproximateUnit.eventually_isSelfAdjoint`：eventually_
+isSelfAdjoint {l : Filter A} (hl : l.IsIncreasingApproximateUnit) : forallᶠ x in
+ l, IsSelfAdjoint x
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `IsSelfAdjoint.star_eq`：star_eq [Star R] {x : R} (hx : IsSelfAdjoint x) :
+ star x = x
 -/
 lemma eventually_star_eq {l : Filter A} (hl : l.IsIncreasingApproximateUnit) :
-    forallᶠ x in l, star x = x :=
-hl.eventually_isSelfAdjoint.mp .of_forall fun _ => IsSelfAdjoint.star_eq
+    ∀ᶠ x in l, star x = x :=
+  hl.eventually_isSelfAdjoint.mp <| .of_forall fun _ ↦ IsSelfAdjoint.star_eq
 
 omit [StarOrderedRing A] in
-/--
-lemma `closedBall_mem` / 引理 `closedBall_mem`
-
-English:
-lemma closedBall_mem
-  given: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
-  proof: by
-  simpa [Metric.closedBall] using! hl.eventually_norm
-
-中文:
-引理 closedBall_mem
-  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
-  证明: by
-  simpa [Metric.closedBall] using! hl.eventually_norm
-
-Depends on / 依赖: Metric, Metric.closedBall, closedBall, eventually_norm, hl.eventually_norm
+/-
+**Filter.IsIncreasingApproximateUnit.closedBall_mem** 是 Mathlib 中的一个引理，位于命名空间 `F
+ilter.IsIncreasingApproximateUnit`。
+形式化陈述：closedBall_mem {l : Filter A} (hl : l.IsIncreasingApproximateUnit) : Metri
+c.closedBall 0 1 in l
+参数：hl : l.IsIncreasingApproximateUnit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `Filter.IsIncreasingApproximateUnit.eventually_norm`：∀ {A : Type u_1} [in
+st : NonUnitalCStarAlgebra A] [inst_1 : PartialOrder A] {l : Filter A},   l.IsIn
+creasingApproximateUnit → ∀ᶠ (x : A) in …
 -/
 lemma closedBall_mem {l : Filter A} (hl : l.IsIncreasingApproximateUnit) :
-    Metric.closedBall 0 1 in l := by
+    Metric.closedBall 0 1 ∈ l := by
   simpa [Metric.closedBall] using! hl.eventually_norm
-
-/--
-lemma `pure_one` / 引理 `pure_one`
-
-English:
-lemma pure_one
-  given: (A : Type*) [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
-  proof: .pure_one A
-  eventually_nonneg := by simp
-  eventually_norm := by nontriviality A; simp
-
-中文:
-引理 pure_one
-  条件: (A : 类型) [CStar代数 A] [偏序 A] [StarOrdered环 A]
-  证明: .pure_one A
-  eventually_nonneg := by simp
-  eventually_norm := by nontriviality A; simp
-
-Depends on / 依赖: pure_one
+/-
+**Filter.IsIncreasingApproximateUnit.pure_one** 是 Mathlib 中的一个引理，位于命名空间 `Filter.
+IsIncreasingApproximateUnit`。
+形式化陈述：pure_one (A : Type*) [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
+ : (pure 1 : Filter A).IsIncreasingApproximateUnit where toIsApproximateUnit
+参数：A : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Filter.IsApproximateUnit.pure_one`：pure_one : IsApproximateUnit (pure (1
+ : α)) where tendsto_mul_left m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instZeroLEOneClass`：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : Parti
+alOrder R] [inst_2 : StarRing R] [StarOrderedRing R],   ZeroLEOneClass R
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `norm_of_subsingleton`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] [Su
+bsingleton E] (a : E), ‖a‖ = 0
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `CStarRing.instNormOneClassOfNontrivial`：∀ {E : Type u_2} [inst : NormedR
+ing E] [inst_1 : StarRing E] [CStarRing E] [Nontrivial E], NormOneClass E
+· 使用定理 `CStarAlgebra.toCStarRing`：∀ {A : Type u_1} [self : CStarAlgebra A], CSta
+rRing A
 -/
 lemma pure_one (A : Type*) [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A] :
     (pure 1 : Filter A).IsIncreasingApproximateUnit where
@@ -473,76 +540,134 @@ end Filter.IsIncreasingApproximateUnit
 namespace CStarAlgebra
 
 open Submodule in
-/--
-lemma `tendsto_mul_right_of_forall_nonneg_tendsto` / 引理 `tendsto_mul_right_of_forall_nonneg_tendsto`
+/-- To show that `l` is a one-sided approximate unit for `A`, it suffices to verify it only for
+`m : A` with `0 ≤ m` and `‖m‖ < 1`. -/
+/-
+**CStarAlgebra.tendsto_mul_right_of_forall_nonneg_tendsto** 是 Mathlib 中的一个引理，位于命
+名空间 `CStarAlgebra`。
+形式化陈述：tendsto_mul_right_of_forall_nonneg_tendsto {l : Filter A} (h : forall m, 0
+ <= m -> ‖m‖ < 1 -> Tendsto (· * m) l (𝓝 m)) (m : A) : Tendsto (· * m) l (𝓝 m)
+参数：h : forall m, 0 <= m -> ‖m‖ < 1 -> Tendsto (· * m) l (𝓝 m)；m : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CStarAlgebra.span_nonneg_inter_unitBall`：span_nonneg_inter_unitBall : sp
+an Complex ({x : A | 0 <= x} inter Metric.ball 0 1) = ⊤
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Submodule.mem_span_set'`：Submodule.mem_span_set' {m : M} {s : Set M} : m
+ in Submodule.span R s ↔ exists (n : Nat) (f : Fin n -> R) (g : Fin n -> s), ∑ i
+, f i • (g i …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `tendsto_finsetSum`：∀ {ι : Type u_1} {α : Type u_2} {M : Type u_3} [inst 
+: TopologicalSpace M] [inst_1 : AddCommMonoid M] [ContinuousAdd M]   {f : ι → α 
+→ M} {x…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用定理 `NonUnitalCStarAlgebra.toSMulCommClass`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], SMulCommClass ℂ A A
+· 使用定理 `Filter.Tendsto.smul`：Filter.Tendsto.smul {f : α -> M} {g : α -> X} {l : 
+Filter α} {c : M} {a : X} (hf : Tendsto f l (𝓝 c)) (hg : Tendsto g l (𝓝 a)) : Te
+ndsto (fu…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-lemma tendsto_mul_right_of_forall_nonneg_tendsto
-  statement: {l : Filter A}
-  proof: by
-  have : m in span Complex ({x | 0 <= x} inter ball 0 1) := by simp [span_nonneg_inter_unitBall]
-  obtain ⟨n, c, x, rfl⟩ := mem_span_set'.mp this
-  simp_rw [Finset.mul_sum]
-  refine tendsto_finsetSum _ fun i _ => ?_
-  simp_rw [mul_smul_comm]
-exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simpa using (x i).2.2
-
-omit [PartialOrder A] in
-
-中文:
-引理 tendsto_mul_right_of_对任意_nonneg_tendsto
-  结论: {l : 滤子 A}
-  证明: by
-  have : m in span Complex ({x | 0 <= x} inter ball 0 1) := by simp [span_nonneg_inter_unitBall]
-  obtain ⟨n, c, x, rfl⟩ := mem_span_set'.mp this
-  simp_rw [Finset.mul_sum]
-  refine tendsto_finsetSum _ fun i _ => ?_
-  simp_rw [mul_smul_comm]
-exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simpa using (x i).2.2
-
-omit [PartialOrder A] in
-
-Depends on / 依赖: Finset, Finset.mul_sum, mem_span_set, mul_smul_comm, mul_sum, simp_rw, span_nonneg_inter_unitBall, tendsto_const_nhds, tendsto_const_nhds.smul, tendsto_finsetSum
+--- 原说明 ---
+To show that `l` is a one-sided approximate unit for `A`, it suffices to verify 
+it only for
+`m : A` with `0 ≤ m` and `‖m‖ < 1`.
 -/
 lemma tendsto_mul_right_of_forall_nonneg_tendsto {l : Filter A}
-    (h : forall m, 0 <= m -> ‖m‖ < 1 -> Tendsto (· * m) l (𝓝 m)) (m : A) :
+    (h : ∀ m, 0 ≤ m → ‖m‖ < 1 → Tendsto (· * m) l (𝓝 m)) (m : A) :
     Tendsto (· * m) l (𝓝 m) := by
-  have : m in span Complex ({x | 0 <= x} inter ball 0 1) := by simp [span_nonneg_inter_unitBall]
+  have : m ∈ span ℂ ({x | 0 ≤ x} ∩ ball 0 1) := by simp [span_nonneg_inter_unitBall]
   obtain ⟨n, c, x, rfl⟩ := mem_span_set'.mp this
   simp_rw [Finset.mul_sum]
-  refine tendsto_finsetSum _ fun i _ => ?_
+  refine tendsto_finsetSum _ fun i _ ↦ ?_
   simp_rw [mul_smul_comm]
-exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simpa using (x i).2.2
+  exact tendsto_const_nhds.smul <| h (x i) (x i).2.1 <| by simpa using (x i).2.2
 
 omit [PartialOrder A] in
-/--
-lemma `tendsto_mul_left_iff_tendsto_mul_right` / 引理 `tendsto_mul_left_iff_tendsto_mul_right`
+/-- Multiplication on the left by `m` tends to `𝓝 m` if and only if multiplication on the right
+does, provided the elements are eventually selfadjoint along the filter `l`. -/
+/-
+**CStarAlgebra.tendsto_mul_left_iff_tendsto_mul_right** 是 Mathlib 中的一个引理，位于命名空间 
+`CStarAlgebra`。
+形式化陈述：tendsto_mul_left_iff_tendsto_mul_right {l : Filter A} (hl : forallᶠ x in l
+, IsSelfAdjoint x) : (forall m, Tendsto (m * ·) l (𝓝 m)) ↔ (forall m, Tendsto (·
+ * m) l (𝓝 m))
+参数：hl : forallᶠ x in l, IsSelfAdjoint x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
+· 使用定理 `ContinuousStar.continuous_star`：∀ {R : Type u_1} {inst : TopologicalSpac
+e R} {inst_1 : Star R} [self : ContinuousStar R], Continuous star
+· 使用定理 `NormedStarGroup.to_continuousStar`：∀ {E : Type u_2} [inst : SeminormedAd
+dCommGroup E] [inst_1 : StarAddMonoid E] [NormedStarGroup E], ContinuousStar E
+· 使用定理 `CStarRing.to_normedStarGroup`：∀ {E : Type u_2} [inst : NonUnitalNormedRi
+ng E] [inst_1 : StarRing E] [CStarRing E], NormedStarGroup E
+· 使用定理 `NonUnitalCStarAlgebra.toCStarRing`：∀ {A : Type u_1} [self : NonUnitalCSt
+arAlgebra A], CStarRing A
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsSelfAdjoint.star_eq`：star_eq [Star R] {x : R} (hx : IsSelfAdjoint x) :
+ star x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma tendsto_mul_left_iff_tendsto_mul_right
-  given: {l : Filter A} (hl : forallᶠ x in l, IsSelfAdjoint x)
-  proof: by
-  refine ⟨fun h m => ?_, fun h m => ?_⟩
-  all_goals
-    apply (star_star m ▸ (continuous_star.tendsto _ |>.comp <| h (star m))).congr'
-    filter_upwards [hl] with x hx
-    simp [hx.star_eq]
-
-中文:
-引理 tendsto_mul_left_iff_tendsto_mul_right
-  条件: {l : 滤子 A} (hl : 对任意ᶠ x in l, IsSelfAdjoint x)
-  证明: by
-  refine ⟨fun h m => ?_, fun h m => ?_⟩
-  all_goals
-    apply (star_star m ▸ (continuous_star.tendsto _ |>.comp <| h (star m))).congr'
-    filter_upwards [hl] with x hx
-    simp [hx.star_eq]
-
-Depends on / 依赖: all_goals, continuous_star, continuous_star.tendsto, filter_upwards, hx.star_eq, star_eq, star_star, tendsto
+--- 原说明 ---
+Multiplication on the left by `m` tends to `𝓝 m` if and only if multiplication o
+n the right
+does, provided the elements are eventually selfadjoint along the filter `l`.
 -/
-lemma tendsto_mul_left_iff_tendsto_mul_right {l : Filter A} (hl : forallᶠ x in l, IsSelfAdjoint x) :
-    (forall m, Tendsto (m * ·) l (𝓝 m)) ↔ (forall m, Tendsto (· * m) l (𝓝 m)) := by
-  refine ⟨fun h m => ?_, fun h m => ?_⟩
+lemma tendsto_mul_left_iff_tendsto_mul_right {l : Filter A} (hl : ∀ᶠ x in l, IsSelfAdjoint x) :
+    (∀ m, Tendsto (m * ·) l (𝓝 m)) ↔ (∀ m, Tendsto (· * m) l (𝓝 m)) := by
+  refine ⟨fun h m ↦ ?_, fun h m ↦ ?_⟩
   all_goals
     apply (star_star m ▸ (continuous_star.tendsto _ |>.comp <| h (star m))).congr'
     filter_upwards [hl] with x hx
@@ -550,366 +675,394 @@ lemma tendsto_mul_left_iff_tendsto_mul_right {l : Filter A} (hl : forallᶠ x in
 
 variable (A)
 
-/--
-lemma `isBasis_nonneg_sections` / 引理 `isBasis_nonneg_sections`
+/-- The sections of positive strict contractions form a filter basis. -/
+/-
+**CStarAlgebra.isBasis_nonneg_sections** 是 Mathlib 中的一个引理，位于命名空间 `CStarAlgebra`。
+形式化陈述：isBasis_nonneg_sections : IsBasis (fun x : A => 0 <= x ∧ ‖x‖ < 1) ({x | · 
+<= x}) where nonempty
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `CStarAlgebra.directedOn_nonneg_ball`：CStarAlgebra.directedOn_nonneg_ball
+ : DirectedOn (· <= ·) ({x : A | 0 <= x} inter Metric.ball 0 1)
 
-English:
-lemma isBasis_nonneg_sections
-  proof: ⟨0, by simp⟩
-  inter {x y} hx hy := by
-    peel directedOn_nonneg_ball x (by simpa) y (by simpa) with z hz
-    exact ⟨by simpa using hz.1, fun a ha => ⟨hz.2.1.trans ha, hz.2.2.trans ha⟩⟩
-
-中文:
-引理 isBasis_nonneg_sections
-  证明: ⟨0, by simp⟩
-  inter {x y} hx hy := by
-    peel directedOn_nonneg_ball x (by simpa) y (by simpa) with z hz
-    exact ⟨by simpa using hz.1, fun a ha => ⟨hz.2.1.trans ha, hz.2.2.trans ha⟩⟩
+--- 原说明 ---
+The sections of positive strict contractions form a filter basis.
 -/
 lemma isBasis_nonneg_sections :
-    IsBasis (fun x : A => 0 <= x ∧ ‖x‖ < 1) ({x | · <= x}) where
+    IsBasis (fun x : A ↦ 0 ≤ x ∧ ‖x‖ < 1) ({x | · ≤ x}) where
   nonempty := ⟨0, by simp⟩
   inter {x y} hx hy := by
     peel directedOn_nonneg_ball x (by simpa) y (by simpa) with z hz
-    exact ⟨by simpa using hz.1, fun a ha => ⟨hz.2.1.trans ha, hz.2.2.trans ha⟩⟩
+    exact ⟨by simpa using hz.1, fun a ha ↦ ⟨hz.2.1.trans ha, hz.2.2.trans ha⟩⟩
 
-/--
-Definition of `approximateUnit` / `approximateUnit` 的定义
+/-- The canonical approximate unit in a C⋆-algebra generated by the basis of sets
+`{x | a ≤ x} ∩ closedBall 0 1` for `0 ≤ a`. See also `CStarAlgebra.hasBasis_approximateUnit`. -/
+/-
+**CStarAlgebra.approximateUnit** 是 Mathlib 中的一个定义，位于命名空间 `CStarAlgebra`。
+形式化陈述：approximateUnit : Filter A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CStarAlgebra.isBasis_nonneg_sections`：isBasis_nonneg_sections : IsBasis 
+(fun x : A => 0 <= x ∧ ‖x‖ < 1) ({x | · <= x}) where nonempty
 
-English:
-definition approximateUnit
-  signature: : Filter A
-  body: (isBasis_nonneg_sections A).filter ⊓ 𝓟 (closedBall 0 1)
-
-中文:
-定义 approximateUnit
-  签名: : 滤子 A
-  定义体: (isBasis_nonneg_sections A).filter ⊓ 𝓟 (closedBall 0 1)
-
-Depends on / 依赖: closedBall, filter, isBasis_nonneg_sections
+--- 原说明 ---
+The canonical approximate unit in a C⋆-algebra generated by the basis of sets
+`{x | a ≤ x} ∩ closedBall 0 1` for `0 ≤ a`. See also `CStarAlgebra.hasBasis_appr
+oximateUnit`.
 -/
 def approximateUnit : Filter A :=
   (isBasis_nonneg_sections A).filter ⊓ 𝓟 (closedBall 0 1)
 
-/--
-lemma `hasBasis_approximateUnit` / 引理 `hasBasis_approximateUnit`
+/-- The canonical approximate unit in a C⋆-algebra has a basis of sets
+`{x | a ≤ x} ∩ closedBall 0 1` for `0 ≤ a`. -/
+/-
+**CStarAlgebra.hasBasis_approximateUnit** 是 Mathlib 中的一个引理，位于命名空间 `CStarAlgebra`
+。
+形式化陈述：hasBasis_approximateUnit : (approximateUnit A).HasBasis (fun x : A => 0 <=
+ x ∧ ‖x‖ < 1) ({x | · <= x} inter closedBall 0 1)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.inf_principal`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filt
+er α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ (s' : Set α), (l ⊓ Fi
+lter.principal s').…
+· 使用引理 `CStarAlgebra.isBasis_nonneg_sections`：isBasis_nonneg_sections : IsBasis 
+(fun x : A => 0 <= x ∧ ‖x‖ < 1) ({x | · <= x}) where nonempty
+· 使用定理 `Filter.IsBasis.hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {p : ι → Prop} 
+{s : ι → Set α} (h : Filter.IsBasis p s), h.filter.HasBasis p s
 
-English:
-lemma hasBasis_approximateUnit
-  proof: .hasBasis.inf_principal (closedBall 0 1) isBasis_nonneg_sections A
-
-中文:
-引理 hasBasis_approximateUnit
-  证明: .hasBasis.inf_principal (closedBall 0 1) isBasis_nonneg_sections A
-
-Depends on / 依赖: closedBall, hasBasis, hasBasis.inf_principal, inf_principal, isBasis_nonneg_sections
+--- 原说明 ---
+The canonical approximate unit in a C⋆-algebra has a basis of sets
+`{x | a ≤ x} ∩ closedBall 0 1` for `0 ≤ a`.
 -/
 lemma hasBasis_approximateUnit :
-    (approximateUnit A).HasBasis (fun x : A => 0 <= x ∧ ‖x‖ < 1) ({x | · <= x} inter closedBall 0 1) :=
-.hasBasis.inf_principal (closedBall 0 1) isBasis_nonneg_sections A
+    (approximateUnit A).HasBasis (fun x : A ↦ 0 ≤ x ∧ ‖x‖ < 1) ({x | · ≤ x} ∩ closedBall 0 1) :=
+  isBasis_nonneg_sections A |>.hasBasis.inf_principal (closedBall 0 1)
 
-/--
-lemma `nnnorm_sub_mul_self_le` / 引理 `nnnorm_sub_mul_self_le`
+/-- This is a common reasoning sequence in C⋆-algebra theory. If `0 ≤ x ≤ y ≤ 1`, then the norm of
+`z - y * z` is controlled by the norm of `star z * (1 - x) * z`, which is advantageous because the
+latter is nonnegative. This is a key step in establishing the existence of an increasing approximate
+unit in general C⋆-algebras. -/
+/-
+**CStarAlgebra.nnnorm_sub_mul_self_le** 是 Mathlib 中的一个引理，位于命名空间 `CStarAlgebra`。
+形式化陈述：nnnorm_sub_mul_self_le {A : Type*} [CStarAlgebra A] [PartialOrder A] [Star
+OrderedRing A] {x y : A} (z : A) (hx₀ : 0 <= x) (hy : y in Set.Icc x 1) {c : Rea
+l>=0} (h : ‖star z * (1 - x) * z‖₊ <= c ^ 2) : ‖z - y * z‖₊ <= c
+参数：z : A；hx₀ : 0 <= x；hy : y in Set.Icc x 1；h : ‖star z * (1 - x) * z‖₊ <= c ^ 2
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `NNReal.sqrt_sq`：∀ (x : NNReal), NNReal.sqrt (x ^ 2) = x
+· 使用引理 `NNReal.le_sqrt_iff_sq_le`：le_sqrt_iff_sq_le : x <= sqrt y ↔ x ^ 2 <= y
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `CStarRing.nnnorm_star_mul_self`：nnnorm_star_mul_self {x : E} : ‖x⋆ * x‖₊
+ = ‖x‖₊ * ‖x‖₊
+· 使用定理 `CStarAlgebra.toCStarRing`：∀ {A : Type u_1} [self : CStarAlgebra A], CSta
+rRing A
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `star_sub`：star_sub [AddGroup R] [StarAddMonoid R] (r s : R) : star (r - 
+s) = star r - star s
+· 使用定理 `star_one`：star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.sub_mem_Icc_zero_iff_right`：sub_mem_Icc_zero_iff_right : b - a in Ic
+c 0 b ↔ a in Icc 0 b
+· 使用定理 `StarOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} [inst : NonUnital
+Semiring R] [inst_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R],
+   IsOrderedAddMonoid R
+· 使用引理 `LE.le.star_eq`：LE.le.star_eq {x : R} (hx : 0 <= x) : star x = x
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `CStarAlgebra.nnnorm_le_nnnorm_of_nonneg_of_le`：nnnorm_le_nnnorm_of_nonne
+g_of_le {a : A} {b : A} (ha : 0 <= a
+· 使用定理 `star_left_conjugate_nonneg`：star_left_conjugate_nonneg {a : R} (ha : 0 <
+= a) (c : R) : 0 <= star c * a * c
+· 使用引理 `CStarAlgebra.pow_nonneg`：pow_nonneg {a : A} (ha : 0 <= a
+· 使用定理 `star_left_conjugate_le_conjugate`：star_left_conjugate_le_conjugate {a b 
+: R} (hab : a <= b) (c : R) : star c * a * c <= star c * b * c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用引理 `CStarAlgebra.pow_antitone`：pow_antitone {a : A} (ha₀ : 0 <= a
+（共 36 条，此处仅展示前 30 条）
 
-English:
-lemma nnnorm_sub_mul_self_le
-  statement: {A : Type*} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
-  proof: by
-  nth_rw 1 [← one_mul z]
-  rw [← sqrt_sq c]; rw [le_sqrt_iff_sq_le]; rw [← sub_mul]; rw [sq]; rw [← CStarRing.nnnorm_star_mul_self]
-  simp only [star_mul, star_sub, star_one]
-  have hy₀ : y in Set.Icc 0 1 := ⟨hx₀.trans hy.1, hy.2⟩
-  have hy' : 1 - y in Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_right.mpr hy₀
-  rw [hy₀.1.star_eq]; rw [← mul_assoc]; rw [mul_assoc (star _)]; rw [← sq]
-  refine nnnorm_le_nnnorm_of_nonneg_of_le (star_left_conjugate_nonneg (pow_nonneg hy'.1 2) _) ?_
-.trans h
-  refine star_left_conjugate_le_conjugate ?_ _
-  trans (1 - y)
-  · simpa using pow_antitone hy'.1 hy'.2 one_le_two
-  · gcongr
-    exact hy.1
-
-中文:
-引理 nnnorm_sub_mul_self_le
-  结论: {A : 类型} [CStar代数 A] [偏序 A] [StarOrdered环 A]
-  证明: by
-  nth_rw 1 [← one_mul z]
-  rw [← sqrt_sq c]; rw [le_sqrt_iff_sq_le]; rw [← sub_mul]; rw [sq]; rw [← CStarRing.nnnorm_star_mul_self]
-  simp only [star_mul, star_sub, star_one]
-  have hy₀ : y in Set.Icc 0 1 := ⟨hx₀.trans hy.1, hy.2⟩
-  have hy' : 1 - y in Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_right.mpr hy₀
-  rw [hy₀.1.star_eq]; rw [← mul_assoc]; rw [mul_assoc (star _)]; rw [← sq]
-  refine nnnorm_le_nnnorm_of_nonneg_of_le (star_left_conjugate_nonneg (pow_nonneg hy'.1 2) _) ?_
-.trans h
-  refine star_left_conjugate_le_conjugate ?_ _
-  trans (1 - y)
-  · simpa using pow_antitone hy'.1 hy'.2 one_le_two
-  · gcongr
-    exact hy.1
-
-Depends on / 依赖: CStarRing, CStarRing.nnnorm_star_mul_self, Set.Icc, Set.sub_mem_Icc_zero_iff_right.mpr, le_sqrt_iff_sq_le, mul_assoc, nnnorm_le_nnnorm_of_nonneg_of_le, nnnorm_star_mul_self, nth_rw, one_mul, pow_nonneg, sqrt_sq, star_eq, star_left_conjug, star_left_conjugate_nonneg, star_mul, star_one, star_sub, sub_mem_Icc_zero_iff_right, sub_mul
+--- 原说明 ---
+This is a common reasoning sequence in C⋆-algebra theory. If `0 ≤ x ≤ y ≤ 1`, th
+en the norm of
+`z - y * z` is controlled by the norm of `star z * (1 - x) * z`, which is advant
+ageous because the
+latter is nonnegative. This is a key step in establishing the existence of an in
+creasing approximate
+unit in general C⋆-algebras.
 -/
 lemma nnnorm_sub_mul_self_le {A : Type*} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
-    {x y : A} (z : A) (hx₀ : 0 <= x) (hy : y in Set.Icc x 1) {c : Real>=0}
-    (h : ‖star z * (1 - x) * z‖₊ <= c ^ 2) :
-    ‖z - y * z‖₊ <= c := by
+    {x y : A} (z : A) (hx₀ : 0 ≤ x) (hy : y ∈ Set.Icc x 1) {c : ℝ≥0}
+    (h : ‖star z * (1 - x) * z‖₊ ≤ c ^ 2) :
+    ‖z - y * z‖₊ ≤ c := by
   nth_rw 1 [← one_mul z]
-  rw [← sqrt_sq c]; rw [le_sqrt_iff_sq_le]; rw [← sub_mul]; rw [sq]; rw [← CStarRing.nnnorm_star_mul_self]
+  rw [← sqrt_sq c, le_sqrt_iff_sq_le, ← sub_mul, sq, ← CStarRing.nnnorm_star_mul_self]
   simp only [star_mul, star_sub, star_one]
-  have hy₀ : y in Set.Icc 0 1 := ⟨hx₀.trans hy.1, hy.2⟩
-  have hy' : 1 - y in Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_right.mpr hy₀
-  rw [hy₀.1.star_eq]; rw [← mul_assoc]; rw [mul_assoc (star _)]; rw [← sq]
+  have hy₀ : y ∈ Set.Icc 0 1 := ⟨hx₀.trans hy.1, hy.2⟩
+  have hy' : 1 - y ∈ Set.Icc 0 1 := Set.sub_mem_Icc_zero_iff_right.mpr hy₀
+  rw [hy₀.1.star_eq, ← mul_assoc, mul_assoc (star _), ← sq]
   refine nnnorm_le_nnnorm_of_nonneg_of_le (star_left_conjugate_nonneg (pow_nonneg hy'.1 2) _) ?_
-.trans h
+    |>.trans h
   refine star_left_conjugate_le_conjugate ?_ _
   trans (1 - y)
   · simpa using pow_antitone hy'.1 hy'.2 one_le_two
   · gcongr
     exact hy.1
 
-/--
-lemma `norm_sub_mul_self_le` / 引理 `norm_sub_mul_self_le`
+/-- A variant of `nnnorm_sub_mul_self_le` which uses `‖·‖` instead of `‖·‖₊`. -/
+/-
+**CStarAlgebra.norm_sub_mul_self_le** 是 Mathlib 中的一个引理，位于命名空间 `CStarAlgebra`。
+形式化陈述：norm_sub_mul_self_le {A : Type*} [CStarAlgebra A] [PartialOrder A] [StarOr
+deredRing A] {x y : A} (z : A) (hx₀ : 0 <= x) (hy : y in Set.Icc x 1) {c : Real}
+ (hc : 0 <= c) (h : ‖star z * (1 - x) * z‖ <= c ^ 2) : ‖z - y * z‖ <= c
+参数：z : A；hx₀ : 0 <= x；hy : y in Set.Icc x 1；hc : 0 <= c；h : ‖star z * (1 - x) * 
+z‖ <= c ^ 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CStarAlgebra.nnnorm_sub_mul_self_le`：nnnorm_sub_mul_self_le {A : Type*} 
+[CStarAlgebra A] [PartialOrder A] [StarOrderedRing A] {x y : A} (z : A) (hx₀ : 0
+ <= x) (hy : y in Set.Icc…
 
-English:
-lemma norm_sub_mul_self_le
-  statement: {A : Type*} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
-  proof: nnnorm_sub_mul_self_le z hx₀ hy h (c := ⟨c, hc⟩)
-
-中文:
-引理 norm_sub_mul_self_le
-  结论: {A : 类型} [CStar代数 A] [偏序 A] [StarOrdered环 A]
-  证明: nnnorm_sub_mul_self_le z hx₀ hy h (c := ⟨c, hc⟩)
-
-Depends on / 依赖: nnnorm_sub_mul_self_le
+--- 原说明 ---
+A variant of `nnnorm_sub_mul_self_le` which uses `‖·‖` instead of `‖·‖₊`.
 -/
 lemma norm_sub_mul_self_le {A : Type*} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
-    {x y : A} (z : A) (hx₀ : 0 <= x) (hy : y in Set.Icc x 1)
-    {c : Real} (hc : 0 <= c) (h : ‖star z * (1 - x) * z‖ <= c ^ 2) :
-    ‖z - y * z‖ <= c :=
+    {x y : A} (z : A) (hx₀ : 0 ≤ x) (hy : y ∈ Set.Icc x 1)
+    {c : ℝ} (hc : 0 ≤ c) (h : ‖star z * (1 - x) * z‖ ≤ c ^ 2) :
+    ‖z - y * z‖ ≤ c :=
   nnnorm_sub_mul_self_le z hx₀ hy h (c := ⟨c, hc⟩)
 
 variable {A} in
-/--
-lemma `norm_sub_mul_self_le_of_inr` / 引理 `norm_sub_mul_self_le_of_inr`
+/-- A variant of `norm_sub_mul_self_le` for non-unital algebras that passes to the unitization. -/
+/-
+**CStarAlgebra.norm_sub_mul_self_le_of_inr** 是 Mathlib 中的一个引理，位于命名空间 `CStarAlgeb
+ra`。
+形式化陈述：norm_sub_mul_self_le_of_inr {x y : A} (z : A) (hx₀ : 0 <= x) (hxy : x <= y
+) (hy₁ : ‖y‖ <= 1) {c : Real} (hc : 0 <= c) (h : ‖star (z : A⁺¹) * (1 - x) * z‖ 
+<= c ^ 2) : ‖z - y * z‖ <= c
+参数：z : A；hx₀ : 0 <= x；hxy : x <= y；hy₁ : ‖y‖ <= 1；hc : 0 <= c；h : ‖star (z : A⁺¹
+) * (1 - x) * z‖ <= c ^ 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalCStarAlgebra.toIsScalarTower`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], IsScalarTower ℂ A A
+· 使用定理 `NonUnitalCStarAlgebra.toSMulCommClass`：∀ {A : Type u_1} [self : NonUnita
+lCStarAlgebra A], SMulCommClass ℂ A A
+· 使用定理 `NonUnitalCStarAlgebra.toCStarRing`：∀ {A : Type u_1} [self : NonUnitalCSt
+arAlgebra A], CStarRing A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Unitization.norm_inr`：norm_inr (a : A) : ‖(a : Unitization 𝕜 A)‖ = ‖a‖
+· 使用定理 `Unitization.inr_sub`：inr_sub [AddGroup R] [AddGroup A] (m₁ m₂ : A) : (↑(
+m₁ - m₂) : Unitization R A) = m₁ - m₂
+· 使用定理 `Unitization.inr_mul`：inr_mul [MulZeroClass R] [AddZeroClass A] [Mul A] [
+SMulWithZero R A] (a₁ a₂ : A) : (↑(a₁ * a₂) : Unitization R A) = a₁ * a₂
+· 使用引理 `CStarAlgebra.norm_sub_mul_self_le`：norm_sub_mul_self_le {A : Type*} [CSt
+arAlgebra A] [PartialOrder A] [StarOrderedRing A] {x y : A} (z : A) (hx₀ : 0 <= 
+x) (hy : y in Set.Icc x…
+· 使用引理 `Unitization.inr_nonneg_iff`：inr_nonneg_iff {a : A} : 0 <= (a : A⁺¹) ↔ 0 
+<= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+cc a b ↔ a ≤ x ∧ x ≤ b
+· 使用引理 `Unitization.inr_le_iff`：inr_le_iff (a b : A) (ha : IsSelfAdjoint a
+· 使用定理 `LE.le.isSelfAdjoint`：∀ {R : Type u_1} [inst : NonUnitalSemiring R] [inst
+_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R]   {x : R}, 0 ≤ x 
+→ IsSelfA…
+· 使用引理 `CStarAlgebra.norm_le_one_iff_of_nonneg`：norm_le_one_iff_of_nonneg (a : A
+) (ha : 0 <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 
-English:
-lemma norm_sub_mul_self_le_of_inr
-  statement: {x y : A} (z : A) (hx₀ : 0 <= x) (hxy : x <= y) (hy₁ : ‖y‖ <= 1)
-  proof: by
-  rw [← norm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
-  refine norm_sub_mul_self_le _ ?_ ?_ hc h
-  · rwa [inr_nonneg_iff]
-  · have hy := hx₀.trans hxy
-    rw [Set.mem_Icc]; rw [inr_le_iff _ _ hx₀.isSelfAdjoint hy.isSelfAdjoint]; rw [← norm_le_one_iff_of_nonneg _]; rw [norm_inr]
-    exact ⟨hxy, hy₁⟩
-
-中文:
-引理 norm_sub_mul_self_le_of_inr
-  结论: {x y : A} (z : A) (hx₀ : 0 <= x) (hxy : x <= y) (hy₁ : ‖y‖ <= 1)
-  证明: by
-  rw [← norm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
-  refine norm_sub_mul_self_le _ ?_ ?_ hc h
-  · rwa [inr_nonneg_iff]
-  · have hy := hx₀.trans hxy
-    rw [Set.mem_Icc]; rw [inr_le_iff _ _ hx₀.isSelfAdjoint hy.isSelfAdjoint]; rw [← norm_le_one_iff_of_nonneg _]; rw [norm_inr]
-    exact ⟨hxy, hy₁⟩
-
-Depends on / 依赖: Set.mem_Icc, hy.isSelfAdjoint, inr_le_iff, inr_mul, inr_nonneg_iff, inr_sub, isSelfAdjoint, mem_Icc, norm_inr, norm_le_one_iff_of_nonneg, norm_sub_mul_self_le
+--- 原说明 ---
+A variant of `norm_sub_mul_self_le` for non-unital algebras that passes to the u
+nitization.
 -/
-lemma norm_sub_mul_self_le_of_inr {x y : A} (z : A) (hx₀ : 0 <= x) (hxy : x <= y) (hy₁ : ‖y‖ <= 1)
-    {c : Real} (hc : 0 <= c) (h : ‖star (z : A⁺¹) * (1 - x) * z‖ <= c ^ 2) :
-    ‖z - y * z‖ <= c := by
-  rw [← norm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
+lemma norm_sub_mul_self_le_of_inr {x y : A} (z : A) (hx₀ : 0 ≤ x) (hxy : x ≤ y) (hy₁ : ‖y‖ ≤ 1)
+    {c : ℝ} (hc : 0 ≤ c) (h : ‖star (z : A⁺¹) * (1 - x) * z‖ ≤ c ^ 2) :
+    ‖z - y * z‖ ≤ c := by
+  rw [← norm_inr (𝕜 := ℂ), inr_sub, inr_mul]
   refine norm_sub_mul_self_le _ ?_ ?_ hc h
   · rwa [inr_nonneg_iff]
   · have hy := hx₀.trans hxy
-    rw [Set.mem_Icc]; rw [inr_le_iff _ _ hx₀.isSelfAdjoint hy.isSelfAdjoint]; rw [← norm_le_one_iff_of_nonneg _]; rw [norm_inr]
+    rw [Set.mem_Icc, inr_le_iff _ _ hx₀.isSelfAdjoint hy.isSelfAdjoint,
+      ← norm_le_one_iff_of_nonneg _, norm_inr]
     exact ⟨hxy, hy₁⟩
 
 variable {A} in
-/--
-lemma `tendsto_mul_right_approximateUnit` / 引理 `tendsto_mul_right_approximateUnit`
+/-- This shows `CStarAlgebra.approximateUnit` is a one-sided approximate unit, but this is marked
+`private` because it is only used to prove `CStarAlgebra.increasingApproximateUnit`. -/
+/-
+**CStarAlgebra.tendsto_mul_right_approximateUnit** 是 Mathlib 中的一个引理，位于命名空间 `CSta
+rAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma tendsto_mul_right_approximateUnit
-  given: (m : A)
-  proof: by
-  refine tendsto_mul_right_of_forall_nonneg_tendsto (fun m hm₁ hm₂ => ?_) m
-  rw [(hasBasis_approximateUnit A).tendsto_iff nhds_basis_closedBall]
-  intro ε hε
-  lift ε to Real>=0 using hε.le
-  rw [coe_pos] at hε
-  refine ⟨cfcₙ (fun y : Real>=0 => 1 - (1 + y)⁻¹) (ε⁻¹ ^ 2 • m),
-    ⟨cfcₙ_nonneg_of_predicate, norm_cfcₙ_one_sub_one_add_inv_lt_one (ε⁻¹ ^ 2 • m)⟩, ?_⟩
-  rintro x ⟨(hx₁ : _ <= x), hx₂⟩
-  simp only [mem_closedBall, dist_eq_norm', zero_sub, norm_neg] at hx₂ ⊢
-  rw [← coe_nnnorm]; rw [coe_le_coe]
-  have hx₀ : 0 <= x := cfcₙ_nonneg_of_predicate.trans hx₁
-  rw [← inr_le_iff _ _ (.of_nonneg cfcₙ_nonneg_of_predicate) (.of_nonneg hx₀)]; rw [nnreal_cfcₙ_eq_cfc_inr _ _ (by simp [tsub_self]), inr_smul] at hx₁
-  rw [← norm_inr (𝕜 := Complex)] at hm₂ hx₂
-  rw [← inr_nonneg_iff] at hx₀ hm₁
-  rw [← nnnorm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
-  generalize (x : A⁺¹) = x, (m : A⁺¹) = m at *
-  set g : Real>=0 -> Real>=0 := fun y => 1 - (1 + y)⁻¹
-  have hg : Continuous g := by
-    rw [← continuousOn_univ]
-    fun_prop (disch := intro _ _; positivity)
-  have hg' : ContinuousOn (fun y => (1 + ε⁻¹ ^ 2 • y)⁻¹) (spectrum Real>=0 m) :=
-    ContinuousOn.inv₀ (by fun_prop) fun _ _ => by positivity
-  have hx : x in Set.Icc 0 1 := mem_Icc_iff_norm_le_one.mpr ⟨hx₀, hx₂⟩
-  have hx' : x in Set.Icc _ 1 := ⟨hx₁, hx.2⟩
-  refine nnnorm_sub_mul_self_le m cfc_nonneg_of_predicate hx' ?_
-  suffices star m * (1 - cfc g (ε⁻¹ ^ 2 • m)) * m =
-      cfc (fun y : Real>=0 => y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y) m by
-    rw [this]
-    refine nnnorm_cfc_nnreal_le fun y hy => ?_
-    calc
-      y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y = y * ε ^ 2 * (y / (ε ^ 2 + y)) := by simp [field]
-      _ <= ε ^ 2 * 1 := by
-        gcongr
-        · apply mul_le_of_le_one_left'
-          have hm' := hm₂.le
-          rw [norm_le_one_iff_of_nonneg m hm₁]; rw [← cfc_id' Real>=0 m]; rw [← cfc_one (R := Real>=0) m]; rw [cfc_nnreal_le_iff _ _ _ (QuasispectrumRestricts.nnreal_of_nonneg hm₁)] at hm'
-          exact hm' y hy
-.mpr le_add_self · exact div_le_one (by positivity)
-      _ = ε ^ 2 := mul_one _
-  rw [cfc_mul _ _ m (continuousOn_id' _ |>.fun_mul hg') (continuousOn_id' _)]; rw [cfc_mul _ _ m (continuousOn_id' _) hg']; rw [cfc_id' ..]; rw [hm₁.star_eq]
-  congr
-  rw [← cfc_one (R := Real>=0) m]; rw [← cfc_comp_smul _ _ _ hg.continuousOn hm₁]; rw [← cfc_tsub _ _ m (by simp [g]) hm₁ (by fun_prop) (Continuous.continuousOn <| by fun_prop)]
-  refine cfc_congr (fun y _ => ?_)
-  simp [g, tsub_tsub_cancel_of_le]
-
-中文:
-引理 tendsto_mul_right_approximateUnit
-  条件: (m : A)
-  证明: by
-  refine tendsto_mul_right_of_forall_nonneg_tendsto (fun m hm₁ hm₂ => ?_) m
-  rw [(hasBasis_approximateUnit A).tendsto_iff nhds_basis_closedBall]
-  intro ε hε
-  lift ε to Real>=0 using hε.le
-  rw [coe_pos] at hε
-  refine ⟨cfcₙ (fun y : Real>=0 => 1 - (1 + y)⁻¹) (ε⁻¹ ^ 2 • m),
-    ⟨cfcₙ_nonneg_of_predicate, norm_cfcₙ_one_sub_one_add_inv_lt_one (ε⁻¹ ^ 2 • m)⟩, ?_⟩
-  rintro x ⟨(hx₁ : _ <= x), hx₂⟩
-  simp only [mem_closedBall, dist_eq_norm', zero_sub, norm_neg] at hx₂ ⊢
-  rw [← coe_nnnorm]; rw [coe_le_coe]
-  have hx₀ : 0 <= x := cfcₙ_nonneg_of_predicate.trans hx₁
-  rw [← inr_le_iff _ _ (.of_nonneg cfcₙ_nonneg_of_predicate) (.of_nonneg hx₀)]; rw [nnreal_cfcₙ_eq_cfc_inr _ _ (by simp [tsub_self]), inr_smul] at hx₁
-  rw [← norm_inr (𝕜 := Complex)] at hm₂ hx₂
-  rw [← inr_nonneg_iff] at hx₀ hm₁
-  rw [← nnnorm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
-  generalize (x : A⁺¹) = x, (m : A⁺¹) = m at *
-  set g : Real>=0 -> Real>=0 := fun y => 1 - (1 + y)⁻¹
-  have hg : Continuous g := by
-    rw [← continuousOn_univ]
-    fun_prop (disch := intro _ _; positivity)
-  have hg' : ContinuousOn (fun y => (1 + ε⁻¹ ^ 2 • y)⁻¹) (spectrum Real>=0 m) :=
-    ContinuousOn.inv₀ (by fun_prop) fun _ _ => by positivity
-  have hx : x in Set.Icc 0 1 := mem_Icc_iff_norm_le_one.mpr ⟨hx₀, hx₂⟩
-  have hx' : x in Set.Icc _ 1 := ⟨hx₁, hx.2⟩
-  refine nnnorm_sub_mul_self_le m cfc_nonneg_of_predicate hx' ?_
-  suffices star m * (1 - cfc g (ε⁻¹ ^ 2 • m)) * m =
-      cfc (fun y : Real>=0 => y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y) m by
-    rw [this]
-    refine nnnorm_cfc_nnreal_le fun y hy => ?_
-    calc
-      y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y = y * ε ^ 2 * (y / (ε ^ 2 + y)) := by simp [field]
-      _ <= ε ^ 2 * 1 := by
-        gcongr
-        · apply mul_le_of_le_one_left'
-          have hm' := hm₂.le
-          rw [norm_le_one_iff_of_nonneg m hm₁]; rw [← cfc_id' Real>=0 m]; rw [← cfc_one (R := Real>=0) m]; rw [cfc_nnreal_le_iff _ _ _ (QuasispectrumRestricts.nnreal_of_nonneg hm₁)] at hm'
-          exact hm' y hy
-.mpr le_add_self · exact div_le_one (by positivity)
-      _ = ε ^ 2 := mul_one _
-  rw [cfc_mul _ _ m (continuousOn_id' _ |>.fun_mul hg') (continuousOn_id' _)]; rw [cfc_mul _ _ m (continuousOn_id' _) hg']; rw [cfc_id' ..]; rw [hm₁.star_eq]
-  congr
-  rw [← cfc_one (R := Real>=0) m]; rw [← cfc_comp_smul _ _ _ hg.continuousOn hm₁]; rw [← cfc_tsub _ _ m (by simp [g]) hm₁ (by fun_prop) (Continuous.continuousOn <| by fun_prop)]
-  refine cfc_congr (fun y _ => ?_)
-  simp [g, tsub_tsub_cancel_of_le]
+--- 原说明 ---
+This shows `CStarAlgebra.approximateUnit` is a one-sided approximate unit, but t
+his is marked
+`private` because it is only used to prove `CStarAlgebra.increasingApproximateUn
+it`.
 -/
 private lemma tendsto_mul_right_approximateUnit (m : A) :
     Tendsto (· * m) (approximateUnit A) (𝓝 m) := by
-  refine tendsto_mul_right_of_forall_nonneg_tendsto (fun m hm₁ hm₂ => ?_) m
+  refine tendsto_mul_right_of_forall_nonneg_tendsto (fun m hm₁ hm₂ ↦ ?_) m
   rw [(hasBasis_approximateUnit A).tendsto_iff nhds_basis_closedBall]
   intro ε hε
-  lift ε to Real>=0 using hε.le
+  lift ε to ℝ≥0 using hε.le
   rw [coe_pos] at hε
-  refine ⟨cfcₙ (fun y : Real>=0 => 1 - (1 + y)⁻¹) (ε⁻¹ ^ 2 • m),
+  refine ⟨cfcₙ (fun y : ℝ≥0 ↦ 1 - (1 + y)⁻¹) (ε⁻¹ ^ 2 • m),
     ⟨cfcₙ_nonneg_of_predicate, norm_cfcₙ_one_sub_one_add_inv_lt_one (ε⁻¹ ^ 2 • m)⟩, ?_⟩
-  rintro x ⟨(hx₁ : _ <= x), hx₂⟩
+  rintro x ⟨(hx₁ : _ ≤ x), hx₂⟩
   simp only [mem_closedBall, dist_eq_norm', zero_sub, norm_neg] at hx₂ ⊢
-  rw [← coe_nnnorm]; rw [coe_le_coe]
-  have hx₀ : 0 <= x := cfcₙ_nonneg_of_predicate.trans hx₁
-  rw [← inr_le_iff _ _ (.of_nonneg cfcₙ_nonneg_of_predicate) (.of_nonneg hx₀)]; rw [nnreal_cfcₙ_eq_cfc_inr _ _ (by simp [tsub_self]), inr_smul] at hx₁
-  rw [← norm_inr (𝕜 := Complex)] at hm₂ hx₂
+  rw [← coe_nnnorm, coe_le_coe]
+  have hx₀ : 0 ≤ x := cfcₙ_nonneg_of_predicate.trans hx₁
+  rw [← inr_le_iff _ _ (.of_nonneg cfcₙ_nonneg_of_predicate) (.of_nonneg hx₀),
+    nnreal_cfcₙ_eq_cfc_inr _ _ (by simp [tsub_self]), inr_smul] at hx₁
+  rw [← norm_inr (𝕜 := ℂ)] at hm₂ hx₂
   rw [← inr_nonneg_iff] at hx₀ hm₁
-  rw [← nnnorm_inr (𝕜 := Complex)]; rw [inr_sub]; rw [inr_mul]
+  rw [← nnnorm_inr (𝕜 := ℂ), inr_sub, inr_mul]
   generalize (x : A⁺¹) = x, (m : A⁺¹) = m at *
-  set g : Real>=0 -> Real>=0 := fun y => 1 - (1 + y)⁻¹
+  set g : ℝ≥0 → ℝ≥0 := fun y ↦ 1 - (1 + y)⁻¹
   have hg : Continuous g := by
     rw [← continuousOn_univ]
     fun_prop (disch := intro _ _; positivity)
-  have hg' : ContinuousOn (fun y => (1 + ε⁻¹ ^ 2 • y)⁻¹) (spectrum Real>=0 m) :=
-    ContinuousOn.inv₀ (by fun_prop) fun _ _ => by positivity
-  have hx : x in Set.Icc 0 1 := mem_Icc_iff_norm_le_one.mpr ⟨hx₀, hx₂⟩
-  have hx' : x in Set.Icc _ 1 := ⟨hx₁, hx.2⟩
+  have hg' : ContinuousOn (fun y ↦ (1 + ε⁻¹ ^ 2 • y)⁻¹) (spectrum ℝ≥0 m) :=
+    ContinuousOn.inv₀ (by fun_prop) fun _ _ ↦ by positivity
+  have hx : x ∈ Set.Icc 0 1 := mem_Icc_iff_norm_le_one.mpr ⟨hx₀, hx₂⟩
+  have hx' : x ∈ Set.Icc _ 1 := ⟨hx₁, hx.2⟩
   refine nnnorm_sub_mul_self_le m cfc_nonneg_of_predicate hx' ?_
   suffices star m * (1 - cfc g (ε⁻¹ ^ 2 • m)) * m =
-      cfc (fun y : Real>=0 => y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y) m by
+      cfc (fun y : ℝ≥0 ↦ y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y) m by
     rw [this]
-    refine nnnorm_cfc_nnreal_le fun y hy => ?_
+    refine nnnorm_cfc_nnreal_le fun y hy ↦ ?_
     calc
       y * (1 + ε⁻¹ ^ 2 • y)⁻¹ * y = y * ε ^ 2 * (y / (ε ^ 2 + y)) := by simp [field]
-      _ <= ε ^ 2 * 1 := by
+      _ ≤ ε ^ 2 * 1 := by
         gcongr
         · apply mul_le_of_le_one_left'
           have hm' := hm₂.le
-          rw [norm_le_one_iff_of_nonneg m hm₁]; rw [← cfc_id' Real>=0 m]; rw [← cfc_one (R := Real>=0) m]; rw [cfc_nnreal_le_iff _ _ _ (QuasispectrumRestricts.nnreal_of_nonneg hm₁)] at hm'
+          rw [norm_le_one_iff_of_nonneg m hm₁, ← cfc_id' ℝ≥0 m, ← cfc_one (R := ℝ≥0) m,
+            cfc_nnreal_le_iff _ _ _ (QuasispectrumRestricts.nnreal_of_nonneg hm₁)] at hm'
           exact hm' y hy
-.mpr le_add_self · exact div_le_one (by positivity)
+        · exact div_le_one (by positivity) |>.mpr le_add_self
       _ = ε ^ 2 := mul_one _
-  rw [cfc_mul _ _ m (continuousOn_id' _ |>.fun_mul hg') (continuousOn_id' _)]; rw [cfc_mul _ _ m (continuousOn_id' _) hg']; rw [cfc_id' ..]; rw [hm₁.star_eq]
+  rw [cfc_mul _ _ m (continuousOn_id' _ |>.fun_mul hg') (continuousOn_id' _),
+    cfc_mul _ _ m (continuousOn_id' _) hg', cfc_id' .., hm₁.star_eq]
   congr
-  rw [← cfc_one (R := Real>=0) m]; rw [← cfc_comp_smul _ _ _ hg.continuousOn hm₁]; rw [← cfc_tsub _ _ m (by simp [g]) hm₁ (by fun_prop) (Continuous.continuousOn <| by fun_prop)]
-  refine cfc_congr (fun y _ => ?_)
+  rw [← cfc_one (R := ℝ≥0) m, ← cfc_comp_smul _ _ _ hg.continuousOn hm₁,
+    ← cfc_tsub _ _ m (by simp [g]) hm₁ (by fun_prop) (Continuous.continuousOn <| by fun_prop)]
+  refine cfc_congr (fun y _ ↦ ?_)
   simp [g, tsub_tsub_cancel_of_le]
 
-/--
-lemma `increasingApproximateUnit` / 引理 `increasingApproximateUnit`
+/-- The filter `CStarAlgebra.approximateUnit` generated by the sections
+`{x | a ≤ x} ∩ closedBall 0 1` for `0 ≤ a` forms an increasing approximate unit. -/
+/-
+**CStarAlgebra.increasingApproximateUnit** 是 Mathlib 中的一个引理，位于命名空间 `CStarAlgebra
+`。
+形式化陈述：increasingApproximateUnit : IsIncreasingApproximateUnit (approximateUnit A
+) where tendsto_mul_left
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CStarAlgebra.tendsto_mul_left_iff_tendsto_mul_right`：tendsto_mul_left_if
+f_tendsto_mul_right {l : Filter A} (hl : forallᶠ x in l, IsSelfAdjoint x) : (for
+all m, Tendsto (m * ·) l (𝓝 m)) ↔ (forall…
+· 使用定理 `Filter.HasBasis.eventually_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Fil
+ter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {q : α → Prop}, (∀ᶠ 
+(x : α) in l, q x) ↔…
+· 使用引理 `CStarAlgebra.hasBasis_approximateUnit`：hasBasis_approximateUnit : (appro
+ximateUnit A).HasBasis (fun x : A => 0 <= x ∧ ‖x‖ < 1) ({x | · <= x} inter close
+dBall 0 1)
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `LE.le.isSelfAdjoint`：∀ {R : Type u_1} [inst : NonUnitalSemiring R] [inst
+_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R]   {x : R}, 0 ≤ x 
+→ IsSelfA…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.HasBasis.ex_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} {
+p : ι → Prop} {s : ι → Set α}, l.HasBasis p s → ∃ i, p i
+· 使用定理 `_private.Mathlib.Analysis.CStarAlgebra.ApproximateUnit.0.CStarAlgebra.te
+ndsto_mul_right_approximateUnit`：∀ {A : Type u_1} [inst : NonUnitalCStarAlgebra 
+A] [inst_1 : PartialOrder A] [inst_2 : StarOrderedRing A] (m : A),   Filter.Tend
+sto (fun x =>…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.neBot_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α
+} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → (l.NeBot ↔ ∀ {i : ι}, p i →
+ (s i).Nonempty…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Filter.Eventually.filter_mono`：∀ {α : Type u} {f₁ f₂ : Filter α}, f₁ ≤ f
+₂ → ∀ {p : α → Prop}, (∀ᶠ (x : α) in f₂, p x) → ∀ᶠ (x : α) in f₁, p x
+· 使用引理 `CStarAlgebra.isBasis_nonneg_sections`：isBasis_nonneg_sections : IsBasis 
+(fun x : A => 0 <= x ∧ ‖x‖ < 1) ({x | · <= x}) where nonempty
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `Filter.IsBasis.hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {p : ι → Prop} 
+{s : ι → Set α} (h : Filter.IsBasis p s), h.filter.HasBasis p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+（共 31 条，此处仅展示前 30 条）
 
-English:
-lemma increasingApproximateUnit
-  proof: by
-    rw [tendsto_mul_left_iff_tendsto_mul_right]
-    · exact tendsto_mul_right_approximateUnit
-    · rw [(hasBasis_approximateUnit A).eventually_iff]
-      peel (hasBasis_approximateUnit A).ex_mem with x hx
-      exact ⟨hx, fun y hy => (hx.1.trans hy.1).isSelfAdjoint⟩
-  tendsto_mul_right := tendsto_mul_right_approximateUnit
-eventually_nonneg := .filter_mono inf_le_left
-    (isBasis_nonneg_sections A).hasBasis.eventually_iff.mpr ⟨0, by simp⟩
-eventually_norm := .filter_mono inf_le_right by simp
-.neBot_iff.mpr neBot := hasBasis_approximateUnit A
-    fun hx => ⟨_, ⟨le_rfl, by simpa using hx.2.le⟩⟩
-
-中文:
-引理 increasingApproximateUnit
-  证明: by
-    rw [tendsto_mul_left_iff_tendsto_mul_right]
-    · exact tendsto_mul_right_approximateUnit
-    · rw [(hasBasis_approximateUnit A).eventually_iff]
-      peel (hasBasis_approximateUnit A).ex_mem with x hx
-      exact ⟨hx, fun y hy => (hx.1.trans hy.1).isSelfAdjoint⟩
-  tendsto_mul_right := tendsto_mul_right_approximateUnit
-eventually_nonneg := .filter_mono inf_le_left
-    (isBasis_nonneg_sections A).hasBasis.eventually_iff.mpr ⟨0, by simp⟩
-eventually_norm := .filter_mono inf_le_right by simp
-.neBot_iff.mpr neBot := hasBasis_approximateUnit A
-    fun hx => ⟨_, ⟨le_rfl, by simpa using hx.2.le⟩⟩
-
-Depends on / 依赖: eventually_iff, eventually_nonneg, eventually_norm, ex_mem, filter_mono, hasBas, hasBasis, hasBasis.eventually_iff.mpr, hasBasis_approximateUnit, inf_le_left, inf_le_right, isBasis_nonneg_sections, isSelfAdjoint, neBot_iff, neBot_iff.mpr, tendsto_mul_left_iff_tendsto_mul_right, tendsto_mul_right, tendsto_mul_right_approximateUnit
+--- 原说明 ---
+The filter `CStarAlgebra.approximateUnit` generated by the sections
+`{x | a ≤ x} ∩ closedBall 0 1` for `0 ≤ a` forms an increasing approximate unit.
 -/
 lemma increasingApproximateUnit :
     IsIncreasingApproximateUnit (approximateUnit A) where
@@ -918,31 +1071,20 @@ lemma increasingApproximateUnit :
     · exact tendsto_mul_right_approximateUnit
     · rw [(hasBasis_approximateUnit A).eventually_iff]
       peel (hasBasis_approximateUnit A).ex_mem with x hx
-      exact ⟨hx, fun y hy => (hx.1.trans hy.1).isSelfAdjoint⟩
+      exact ⟨hx, fun y hy ↦ (hx.1.trans hy.1).isSelfAdjoint⟩
   tendsto_mul_right := tendsto_mul_right_approximateUnit
-eventually_nonneg := .filter_mono inf_le_left
+  eventually_nonneg := .filter_mono inf_le_left <|
     (isBasis_nonneg_sections A).hasBasis.eventually_iff.mpr ⟨0, by simp⟩
-eventually_norm := .filter_mono inf_le_right by simp
-.neBot_iff.mpr neBot := hasBasis_approximateUnit A
-    fun hx => ⟨_, ⟨le_rfl, by simpa using hx.2.le⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (approximateUnit A).NeBot
-  body: (increasingApproximateUnit A).neBot
-
-中文:
-实例 :
-  签名: (approximateUnit A).NeBot
-  定义体: (increasingApproximateUnit A).neBot
-
-Depends on / 依赖: increasingApproximateUnit
+  eventually_norm := .filter_mono inf_le_right <| by simp
+  neBot := hasBasis_approximateUnit A |>.neBot_iff.mpr
+    fun hx ↦ ⟨_, ⟨le_rfl, by simpa using hx.2.le⟩⟩
+/-
+**CStarAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `CStarAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (approximateUnit A).NeBot := (increasingApproximateUnit A).neBot
 
 end CStarAlgebra
 
 end ApproximateUnit
+

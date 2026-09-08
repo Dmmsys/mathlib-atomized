@@ -34,26 +34,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The obvious functor `ShortComplex (J ⥤ C) ⥤ J ⥤ ShortComplex C`. -/
 @[simps]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CategoryTheory.ShortComplex.FunctorEquivalence.functor** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.ShortComplex.FunctorEquivalence`。
+形式化陈述：functor : ShortComplex (J ⥤ C) ⥤ J ⥤ ShortComplex C where obj S
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_evaluation_obj`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   [inst_2 : Category…
 
-English:
-definition functor
-  signature: : ShortComplex (J ⥤ C) ⥤ J ⥤ ShortComplex C where
-  body: { obj := fun j => S.map ((evaluation J C).obj j)
-      map := fun f => S.mapNatTrans ((evaluation J C).map f) }
-  map φ :=
-    { app := fun j => ((evaluation J C).obj j).mapShortComplex.map φ }
-
-中文:
-定义 functor
-  签名: : 短复形 (J ⥤ C) ⥤ J ⥤ 短复形 C where
-  定义体: { obj := fun j => S.map ((evaluation J C).obj j)
-      map := fun f => S.mapNatTrans ((evaluation J C).map f) }
-  map φ :=
-    { app := fun j => ((evaluation J C).obj j).mapShortComplex.map φ }
-
-Depends on / 依赖: S.map, S.mapNatTrans, evaluation, inv_hom_id, mapNatTrans, mapShortComplex, mapShortComplex.map
+--- 原说明 ---
+The obvious functor `ShortComplex (J ⥤ C) ⥤ J ⥤ ShortComplex C`.
 -/
 def functor : ShortComplex (J ⥤ C) ⥤ J ⥤ ShortComplex C where
   obj S :=
@@ -66,28 +58,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The obvious functor `(J ⥤ ShortComplex C) ⥤ ShortComplex (J ⥤ C)`. -/
 @[simps]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**CategoryTheory.ShortComplex.FunctorEquivalence.inverse** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.ShortComplex.FunctorEquivalence`。
+形式化陈述：inverse : (J ⥤ ShortComplex C) ⥤ ShortComplex (J ⥤ C) where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: : (J ⥤ ShortComplex C) ⥤ ShortComplex (J ⥤ C) where
-  body: { f := whiskerLeft F π₁Toπ₂
-      g := whiskerLeft F π₂Toπ₃
-      zero := by cat_disch }
-  map φ := Hom.mk (whiskerRight φ π₁) (whiskerRight φ π₂) (whiskerRight φ π₃)
-    (by cat_disch) (by cat_disch)
-
-中文:
-定义 inverse
-  签名: : (J ⥤ 短复形 C) ⥤ 短复形 (J ⥤ C) where
-  定义体: { f := whiskerLeft F π₁Toπ₂
-      g := whiskerLeft F π₂Toπ₃
-      zero := by cat_disch }
-  map φ := Hom.mk (whiskerRight φ π₁) (whiskerRight φ π₂) (whiskerRight φ π₃)
-    (by cat_disch) (by cat_disch)
-
-Depends on / 依赖: Hom.mk, cat_disch, whiskerLeft, whiskerRight
+--- 原说明 ---
+The obvious functor `(J ⥤ ShortComplex C) ⥤ ShortComplex (J ⥤ C)`.
 -/
 def inverse : (J ⥤ ShortComplex C) ⥤ ShortComplex (J ⥤ C) where
   obj F :=
@@ -102,28 +81,16 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The unit isomorphism of the equivalence
 `ShortComplex.functorEquivalence : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C`. -/
 @[simps!]
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-
+**CategoryTheory.ShortComplex.FunctorEquivalence.unitIso** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.ShortComplex.FunctorEquivalence`。
+形式化陈述：unitIso : 𝟭 _ ≅ functor J C ⋙ inverse J C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIso
-  signature: : 𝟭 _ ≅ functor J C ⋙ inverse J C
-  body: NatIso.ofComponents (fun _ => isoMk
-    (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (by cat_disch) (by cat_disch)) (by cat_disch)
-
-中文:
-定义 unitIso
-  签名: : 𝟭 _ ≅ functor J C ⋙ inverse J C
-  定义体: NatIso.ofComponents (fun _ => isoMk
-    (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (by cat_disch) (by cat_disch)) (by cat_disch)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+The unit isomorphism of the equivalence
+`ShortComplex.functorEquivalence : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C`.
 -/
 def unitIso : 𝟭 _ ≅ functor J C ⋙ inverse J C :=
   NatIso.ofComponents (fun _ => isoMk
@@ -137,24 +104,16 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The counit isomorphism of the equivalence
 `ShortComplex.functorEquivalence : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C`. -/
 @[simps!]
-/--
-Definition of `counitIso` / `counitIso` 的定义
+/-
+**CategoryTheory.ShortComplex.FunctorEquivalence.counitIso** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.ShortComplex.FunctorEquivalence`。
+形式化陈述：counitIso : inverse J C ⋙ functor J C ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIso
-  signature: : inverse J C ⋙ functor J C ≅ 𝟭 _
-  body: NatIso.ofComponents (fun _ => NatIso.ofComponents
-    (fun _ => isoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
-      (by simp) (by simp)) (by cat_disch)) (by cat_disch)
-
-中文:
-定义 counitIso
-  签名: : inverse J C ⋙ functor J C ≅ 𝟭 _
-  定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents
-    (fun _ => isoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
-      (by simp) (by simp)) (by cat_disch)) (by cat_disch)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+The counit isomorphism of the equivalence
+`ShortComplex.functorEquivalence : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C`.
 -/
 def counitIso : inverse J C ⋙ functor J C ≅ 𝟭 _ :=
   NatIso.ofComponents (fun _ => NatIso.ofComponents
@@ -167,26 +126,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The obvious equivalence `ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C`. -/
 @[simps]
-/--
-Definition of `functorEquivalence` / `functorEquivalence` 的定义
+/-
+**CategoryTheory.ShortComplex.functorEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.ShortComplex`。
+形式化陈述：functorEquivalence : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C where funct
+or
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorEquivalence
-  signature: : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C where
-  body: FunctorEquivalence.functor J C
-  inverse := FunctorEquivalence.inverse J C
-  unitIso := FunctorEquivalence.unitIso J C
-  counitIso := FunctorEquivalence.counitIso J C
-
-中文:
-定义 functorEquivalence
-  签名: : 短复形 (J ⥤ C) ≌ J ⥤ 短复形 C where
-  定义体: FunctorEquivalence.functor J C
-  inverse := FunctorEquivalence.inverse J C
-  unitIso := FunctorEquivalence.unitIso J C
-  counitIso := FunctorEquivalence.counitIso J C
-
-Depends on / 依赖: FunctorEquivalence, FunctorEquivalence.functor, functor, inv_hom_id
+--- 原说明 ---
+The obvious equivalence `ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C`.
 -/
 def functorEquivalence : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C where
   functor := FunctorEquivalence.functor J C
@@ -197,3 +146,4 @@ def functorEquivalence : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C where
 end ShortComplex
 
 end CategoryTheory
+

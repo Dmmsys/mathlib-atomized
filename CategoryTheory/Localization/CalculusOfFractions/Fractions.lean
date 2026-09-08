@@ -41,28 +41,19 @@ variable {C D : Type*} [Category* C] [Category* D] (L : C ⥤ D) (W : MorphismPr
 
 namespace MorphismProperty
 
-/--
-Definition of `LeftFraction₂` / `LeftFraction₂` 的定义
+/-- This structure contains the data of two left fractions for
+`W : MorphismProperty C` that have the same "denominator". -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cate
+goryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] → Categor
+yTheory.MorphismProperty C → C → C → Type (max u_1 v_1)
+参数：max u_1 v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LeftFraction₂
-  parameters: (X Y : C)
-  axioms and operations (5):
-    - {Y' : C}
-    - f : X ⟶ Y'
-    - f' : X ⟶ Y'
-    - s : Y ⟶ Y'
-    - hs : W s
-
-中文:
-结构 LeftFraction₂
-  参数: (X Y : C)
-  公理与运算 (5 个):
-    - {Y' : C}
-    - f : X ⟶ Y'
-    - f' : X ⟶ Y'
-    - s : Y ⟶ Y'
-    - hs : W s
+--- 原说明 ---
+This structure contains the data of two left fractions for
+`W : MorphismProperty C` that have the same "denominator".
 -/
 structure LeftFraction₂ (X Y : C) where
   /-- the auxiliary object of left fractions -/
@@ -75,34 +66,27 @@ structure LeftFraction₂ (X Y : C) where
   s : Y ⟶ Y'
   /-- the condition that the denominator belongs to the given morphism property -/
   hs : W s
-
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : C} (z : W.LeftFraction₂ X Y) : IsIso (L.map z.s) :=
   Localization.inverts L W _ z.hs
 
-/--
-Definition of `LeftFraction₃` / `LeftFraction₃` 的定义
+/-- This structure contains the data of three left fractions for
+`W : MorphismProperty C` that have the same "denominator". -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cate
+goryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] → Categor
+yTheory.MorphismProperty C → C → C → Type (max u_1 v_1)
+参数：max u_1 v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LeftFraction₃
-  parameters: (X Y : C)
-  axioms and operations (6):
-    - {Y' : C}
-    - f : X ⟶ Y'
-    - f' : X ⟶ Y'
-    - f'' : X ⟶ Y'
-    - s : Y ⟶ Y'
-    - hs : W s
-
-中文:
-结构 LeftFraction₃
-  参数: (X Y : C)
-  公理与运算 (6 个):
-    - {Y' : C}
-    - f : X ⟶ Y'
-    - f' : X ⟶ Y'
-    - f'' : X ⟶ Y'
-    - s : Y ⟶ Y'
-    - hs : W s
+--- 原说明 ---
+This structure contains the data of three left fractions for
+`W : MorphismProperty C` that have the same "denominator".
 -/
 structure LeftFraction₃ (X Y : C) where
   /-- the auxiliary object of left fractions -/
@@ -117,32 +101,27 @@ structure LeftFraction₃ (X Y : C) where
   s : Y ⟶ Y'
   /-- the condition that the denominator belongs to the given morphism property -/
   hs : W s
-
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : C} (z : W.LeftFraction₃ X Y) : IsIso (L.map z.s) :=
   Localization.inverts L W _ z.hs
 
-/--
-Definition of `RightFraction₂` / `RightFraction₂` 的定义
+/-- This structure contains the data of two right fractions for
+`W : MorphismProperty C` that have the same "denominator". -/
+/-
+**CategoryTheory.MorphismProperty.RightFraction** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cat
+egoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] → Categor
+yTheory.MorphismProperty C → C → C → Type (max u_1 v_1)
+参数：max u_1 v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RightFraction₂
-  parameters: (X Y : C)
-  axioms and operations (5):
-    - {X' : C}
-    - s : X' ⟶ X
-    - hs : W s
-    - f : X' ⟶ Y
-    - f' : X' ⟶ Y
-
-中文:
-结构 RightFraction₂
-  参数: (X Y : C)
-  公理与运算 (5 个):
-    - {X' : C}
-    - s : X' ⟶ X
-    - hs : W s
-    - f : X' ⟶ Y
-    - f' : X' ⟶ Y
+--- 原说明 ---
+This structure contains the data of two right fractions for
+`W : MorphismProperty C` that have the same "denominator".
 -/
 structure RightFraction₂ (X Y : C) where
   /-- the auxiliary object of right fractions -/
@@ -155,53 +134,53 @@ structure RightFraction₂ (X Y : C) where
   f : X' ⟶ Y
   /-- the numerator of the second right fraction -/
   f' : X' ⟶ Y
-
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : C} (z : W.RightFraction₂ X Y) : IsIso (L.map z.s) :=
   Localization.inverts L W _ z.hs
 
 variable {W}
 
-/--
-Definition of `LeftFraction₂Rel` / `LeftFraction₂Rel` 的定义
+/-- The equivalence relation on tuples of left fractions with the same denominator
+for a morphism property `W`. The fact it is an equivalence relation is not
+formalized, but it would follow easily from `LeftFraction₂.map_eq_iff`. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cate
+goryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] → Categor
+yTheory.MorphismProperty C → C → C → Type (max u_1 v_1)
+参数：max u_1 v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftFraction₂Rel
-  signature: {X Y : C} (z₁ z₂ : W.LeftFraction₂ X Y)
-  body: exists (Z : C) (t₁ : z₁.Y' ⟶ Z) (t₂ : z₂.Y' ⟶ Z) (_ : z₁.s ≫ t₁ = z₂.s ≫ t₂)
-    (_ : z₁.f ≫ t₁ = z₂.f ≫ t₂) (_ : z₁.f' ≫ t₁ = z₂.f' ≫ t₂), W (z₁.s ≫ t₁)
-
-中文:
-定义 LeftFraction₂Rel
-  签名: {X Y : C} (z₁ z₂ : W.LeftFraction₂ X Y)
-  定义体: exists (Z : C) (t₁ : z₁.Y' ⟶ Z) (t₂ : z₂.Y' ⟶ Z) (_ : z₁.s ≫ t₁ = z₂.s ≫ t₂)
-    (_ : z₁.f ≫ t₁ = z₂.f ≫ t₂) (_ : z₁.f' ≫ t₁ = z₂.f' ≫ t₂), W (z₁.s ≫ t₁)
+--- 原说明 ---
+The equivalence relation on tuples of left fractions with the same denominator
+for a morphism property `W`. The fact it is an equivalence relation is not
+formalized, but it would follow easily from `LeftFraction₂.map_eq_iff`.
 -/
 def LeftFraction₂Rel {X Y : C} (z₁ z₂ : W.LeftFraction₂ X Y) : Prop :=
-  exists (Z : C) (t₁ : z₁.Y' ⟶ Z) (t₂ : z₂.Y' ⟶ Z) (_ : z₁.s ≫ t₁ = z₂.s ≫ t₂)
+  ∃ (Z : C) (t₁ : z₁.Y' ⟶ Z) (t₂ : z₂.Y' ⟶ Z) (_ : z₁.s ≫ t₁ = z₂.s ≫ t₂)
     (_ : z₁.f ≫ t₁ = z₂.f ≫ t₂) (_ : z₁.f' ≫ t₁ = z₂.f' ≫ t₂), W (z₁.s ≫ t₁)
 
 namespace LeftFraction₂
 
 variable {X Y : C} (φ : W.LeftFraction₂ X Y)
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- The first left fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₂.fst** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.MorphismProperty.LeftFraction₂`。
+形式化陈述：fst : W.LeftFraction X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₂.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₂ X…
 
-English:
-abbreviation fst
-  signature: : W.LeftFraction X Y where
-  body: φ.Y'
-  f := φ.f
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 fst
-  签名: : W.LeftFraction X Y where
-  定义体: φ.Y'
-  f := φ.f
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The first left fraction.
 -/
 abbrev fst : W.LeftFraction X Y where
   Y' := φ.Y'
@@ -209,24 +188,19 @@ abbrev fst : W.LeftFraction X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- The second left fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₂.snd** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.MorphismProperty.LeftFraction₂`。
+形式化陈述：snd : W.LeftFraction X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₂.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₂ X…
 
-English:
-abbreviation snd
-  signature: : W.LeftFraction X Y where
-  body: φ.Y'
-  f := φ.f'
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 snd
-  签名: : W.LeftFraction X Y where
-  定义体: φ.Y'
-  f := φ.f'
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The second left fraction.
 -/
 abbrev snd : W.LeftFraction X Y where
   Y' := φ.Y'
@@ -234,26 +208,19 @@ abbrev snd : W.LeftFraction X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- The exchange of the two fractions. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₂.symm** 是 Mathlib 中的一个缩写定义，位于命名空间
+ `CategoryTheory.MorphismProperty.LeftFraction₂`。
+形式化陈述：symm : W.LeftFraction₂ X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₂.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₂ X…
 
-English:
-abbreviation symm
-  signature: : W.LeftFraction₂ X Y where
-  body: φ.Y'
-  f := φ.f'
-  f' := φ.f
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 symm
-  签名: : W.LeftFraction₂ X Y where
-  定义体: φ.Y'
-  f := φ.f'
-  f' := φ.f
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The exchange of the two fractions.
 -/
 abbrev symm : W.LeftFraction₂ X Y where
   Y' := φ.Y'
@@ -268,24 +235,19 @@ namespace LeftFraction₃
 
 variable {X Y : C} (φ : W.LeftFraction₃ X Y)
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- The first left fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₃.fst** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.MorphismProperty.LeftFraction₃`。
+形式化陈述：fst : W.LeftFraction X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₃.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₃ X…
 
-English:
-abbreviation fst
-  signature: : W.LeftFraction X Y where
-  body: φ.Y'
-  f := φ.f
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 fst
-  签名: : W.LeftFraction X Y where
-  定义体: φ.Y'
-  f := φ.f
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The first left fraction.
 -/
 abbrev fst : W.LeftFraction X Y where
   Y' := φ.Y'
@@ -293,24 +255,19 @@ abbrev fst : W.LeftFraction X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- The second left fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₃.snd** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.MorphismProperty.LeftFraction₃`。
+形式化陈述：snd : W.LeftFraction X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₃.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₃ X…
 
-English:
-abbreviation snd
-  signature: : W.LeftFraction X Y where
-  body: φ.Y'
-  f := φ.f'
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 snd
-  签名: : W.LeftFraction X Y where
-  定义体: φ.Y'
-  f := φ.f'
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The second left fraction.
 -/
 abbrev snd : W.LeftFraction X Y where
   Y' := φ.Y'
@@ -318,24 +275,19 @@ abbrev snd : W.LeftFraction X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `thd` / `thd` 的定义
+/-- The third left fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₃.thd** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.MorphismProperty.LeftFraction₃`。
+形式化陈述：thd : W.LeftFraction X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₃.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₃ X…
 
-English:
-abbreviation thd
-  signature: : W.LeftFraction X Y where
-  body: φ.Y'
-  f := φ.f''
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 thd
-  签名: : W.LeftFraction X Y where
-  定义体: φ.Y'
-  f := φ.f''
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The third left fraction.
 -/
 abbrev thd : W.LeftFraction X Y where
   Y' := φ.Y'
@@ -343,26 +295,19 @@ abbrev thd : W.LeftFraction X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `forgetFst` / `forgetFst` 的定义
+/-- Forgets the first fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₃.forgetFst** 是 Mathlib 中的一个缩写定义，位
+于命名空间 `CategoryTheory.MorphismProperty.LeftFraction₃`。
+形式化陈述：forgetFst : W.LeftFraction₂ X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₃.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₃ X…
 
-English:
-abbreviation forgetFst
-  signature: : W.LeftFraction₂ X Y where
-  body: φ.Y'
-  f := φ.f'
-  f' := φ.f''
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 forgetFst
-  签名: : W.LeftFraction₂ X Y where
-  定义体: φ.Y'
-  f := φ.f'
-  f' := φ.f''
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+Forgets the first fraction.
 -/
 abbrev forgetFst : W.LeftFraction₂ X Y where
   Y' := φ.Y'
@@ -371,26 +316,19 @@ abbrev forgetFst : W.LeftFraction₂ X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `forgetSnd` / `forgetSnd` 的定义
+/-- Forgets the second fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₃.forgetSnd** 是 Mathlib 中的一个缩写定义，位
+于命名空间 `CategoryTheory.MorphismProperty.LeftFraction₃`。
+形式化陈述：forgetSnd : W.LeftFraction₂ X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₃.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₃ X…
 
-English:
-abbreviation forgetSnd
-  signature: : W.LeftFraction₂ X Y where
-  body: φ.Y'
-  f := φ.f
-  f' := φ.f''
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 forgetSnd
-  签名: : W.LeftFraction₂ X Y where
-  定义体: φ.Y'
-  f := φ.f
-  f' := φ.f''
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+Forgets the second fraction.
 -/
 abbrev forgetSnd : W.LeftFraction₂ X Y where
   Y' := φ.Y'
@@ -399,26 +337,19 @@ abbrev forgetSnd : W.LeftFraction₂ X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `forgetThd` / `forgetThd` 的定义
+/-- Forgets the third fraction. -/
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₃.forgetThd** 是 Mathlib 中的一个缩写定义，位
+于命名空间 `CategoryTheory.MorphismProperty.LeftFraction₃`。
+形式化陈述：forgetThd : W.LeftFraction₂ X Y where Y'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₃.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₃ X…
 
-English:
-abbreviation forgetThd
-  signature: : W.LeftFraction₂ X Y where
-  body: φ.Y'
-  f := φ.f
-  f' := φ.f'
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 forgetThd
-  签名: : W.LeftFraction₂ X Y where
-  定义体: φ.Y'
-  f := φ.f
-  f' := φ.f'
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+Forgets the third fraction.
 -/
 abbrev forgetThd : W.LeftFraction₂ X Y where
   Y' := φ.Y'
@@ -433,47 +364,24 @@ namespace LeftFraction₂Rel
 
 variable {X Y : C} {z₁ z₂ : W.LeftFraction₂ X Y}
 
-/--
-lemma `fst` / 引理 `fst`
-
-English:
-lemma fst
-  given: (h : LeftFraction₂Rel z₁ z₂)
-  statement: LeftFractionRel z₁.fst z₂.fst
-  proof: by
-  obtain ⟨Z, t₁, t₂, hst, hft, _, ht⟩ := h
-  exact ⟨Z, t₁, t₂, hst, hft, ht⟩
-
-中文:
-引理 fst
-  条件: (h : LeftFraction₂Rel z₁ z₂)
-  结论: LeftFractionRel z₁.fst z₂.fst
-  证明: by
-  obtain ⟨Z, t₁, t₂, hst, hft, _, ht⟩ := h
-  exact ⟨Z, t₁, t₂, hst, hft, ht⟩
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₂Rel.fst** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.MorphismProperty.LeftFraction₂Rel`。
+形式化陈述：fst (h : LeftFraction₂Rel z₁ z₂) : LeftFractionRel z₁.fst z₂.fst
+参数：h : LeftFraction₂Rel z₁ z₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fst (h : LeftFraction₂Rel z₁ z₂) : LeftFractionRel z₁.fst z₂.fst := by
   obtain ⟨Z, t₁, t₂, hst, hft, _, ht⟩ := h
   exact ⟨Z, t₁, t₂, hst, hft, ht⟩
-
-/--
-lemma `snd` / 引理 `snd`
-
-English:
-lemma snd
-  given: (h : LeftFraction₂Rel z₁ z₂)
-  statement: LeftFractionRel z₁.snd z₂.snd
-  proof: by
-  obtain ⟨Z, t₁, t₂, hst, _, hft', ht⟩ := h
-  exact ⟨Z, t₁, t₂, hst, hft', ht⟩
-
-中文:
-引理 snd
-  条件: (h : LeftFraction₂Rel z₁ z₂)
-  结论: LeftFractionRel z₁.snd z₂.snd
-  证明: by
-  obtain ⟨Z, t₁, t₂, hst, _, hft', ht⟩ := h
-  exact ⟨Z, t₁, t₂, hst, hft', ht⟩
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₂Rel.snd** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.MorphismProperty.LeftFraction₂Rel`。
+形式化陈述：snd (h : LeftFraction₂Rel z₁ z₂) : LeftFractionRel z₁.snd z₂.snd
+参数：h : LeftFraction₂Rel z₁ z₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma snd (h : LeftFraction₂Rel z₁ z₂) : LeftFractionRel z₁.snd z₂.snd := by
   obtain ⟨Z, t₁, t₂, hst, _, hft', ht⟩ := h
@@ -486,62 +394,60 @@ namespace LeftFraction₂
 variable (W)
 variable [W.HasLeftCalculusOfFractions]
 
-/--
-lemma `map_eq_iff` / 引理 `map_eq_iff`
-
-English:
-lemma map_eq_iff
-  given: {X Y : C} (φ ψ : W.LeftFraction₂ X Y)
-  proof: by
-  simp only [LeftFraction.map_eq_iff L W]
-  constructor
-  · intro ⟨h, h'⟩
-    obtain ⟨Z, t₁, t₂, hst, hft, ht⟩ := h
-    obtain ⟨Z', t₁', t₂', hst', hft', ht'⟩ := h'
-    dsimp at t₁ t₂ t₁' t₂' hst hft hst' hft' ht ht'
-    have ⟨α, hα⟩ := (RightFraction.mk _ ht (φ.s ≫ t₁')).exists_leftFraction
-    simp only [Category.assoc] at hα
-    obtain ⟨Z'', u, hu, fac⟩ := HasLeftCalculusOfFractions.ext _ _ _ φ.hs hα
-    have hα' : ψ.s ≫ t₂ ≫ α.f ≫ u = ψ.s ≫ t₂' ≫ α.s ≫ u := by
-      rw [← reassoc_of% hst]; rw [← reassoc_of% hα]; rw [← reassoc_of% hst']
-    obtain ⟨Z''', u', hu', fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ ψ.hs hα'
-    simp only [Category.assoc] at fac fac'
-    refine ⟨Z''', t₁' ≫ α.s ≫ u ≫ u', t₂' ≫ α.s ≫ u ≫ u', ?_, ?_, ?_, ?_⟩
-    · rw [reassoc_of% hst']
-    · rw [reassoc_of% fac, reassoc_of% hft, fac']
-    · rw [reassoc_of% hft']
-    · rw [← Category.assoc]
-      exact W.comp_mem _ _ ht' (W.comp_mem _ _ α.hs (W.comp_mem _ _ hu hu'))
-  · intro h
-    exact ⟨h.fst, h.snd⟩
-
-中文:
-引理 map_eq_iff
-  条件: {X Y : C} (φ ψ : W.LeftFraction₂ X Y)
-  证明: by
-  simp only [LeftFraction.map_eq_iff L W]
-  constructor
-  · intro ⟨h, h'⟩
-    obtain ⟨Z, t₁, t₂, hst, hft, ht⟩ := h
-    obtain ⟨Z', t₁', t₂', hst', hft', ht'⟩ := h'
-    dsimp at t₁ t₂ t₁' t₂' hst hft hst' hft' ht ht'
-    have ⟨α, hα⟩ := (RightFraction.mk _ ht (φ.s ≫ t₁')).exists_leftFraction
-    simp only [Category.assoc] at hα
-    obtain ⟨Z'', u, hu, fac⟩ := HasLeftCalculusOfFractions.ext _ _ _ φ.hs hα
-    have hα' : ψ.s ≫ t₂ ≫ α.f ≫ u = ψ.s ≫ t₂' ≫ α.s ≫ u := by
-      rw [← reassoc_of% hst]; rw [← reassoc_of% hα]; rw [← reassoc_of% hst']
-    obtain ⟨Z''', u', hu', fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ ψ.hs hα'
-    simp only [Category.assoc] at fac fac'
-    refine ⟨Z''', t₁' ≫ α.s ≫ u ≫ u', t₂' ≫ α.s ≫ u ≫ u', ?_, ?_, ?_, ?_⟩
-    · rw [reassoc_of% hst']
-    · rw [reassoc_of% fac, reassoc_of% hft, fac']
-    · rw [reassoc_of% hft']
-    · rw [← Category.assoc]
-      exact W.comp_mem _ _ ht' (W.comp_mem _ _ α.hs (W.comp_mem _ _ hu hu'))
-  · intro h
-    exact ⟨h.fst, h.snd⟩
-
-Depends on / 依赖: Category, Category.assoc, HasLeftCalculusOfFractions, HasLeftCalculusOfFractions.ext, LeftFraction, LeftFraction.map_eq_iff, RightFraction, RightFraction.mk, exists_leftFraction, map_eq_iff, reassoc_o, reassoc_of
+/-
+**CategoryTheory.MorphismProperty.LeftFraction₂.map_eq_iff** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.MorphismProperty.LeftFraction₂`。
+形式化陈述：map_eq_iff {X Y : C} (φ ψ : W.LeftFraction₂ X Y) : (φ.fst.map L (Localizat
+ion.inverts _ _) = ψ.fst.map L (Localization.inverts _ _) ∧ φ.snd.map L (Localiz
+ation.inverts _ _) = ψ.snd.map L (Localization.inverts _ _)) ↔ LeftFraction₂Rel 
+φ ψ
+参数：φ ψ : W.LeftFraction₂ X Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction.map_eq_iff`：∀ {C : Type u_1
+} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Categ
+oryTheory.Category.{v_2, u_2} D] (L : Categor…
+· 使用定理 `CategoryTheory.MorphismProperty.RightFraction.exists_leftFraction`：∀ {C 
+: Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.Mo
+rphismProperty C}   [W.HasLeftCalculusOfFractions] {X Y…
+· 使用定理 `CategoryTheory.MorphismProperty.HasLeftCalculusOfFractions.ext`：∀ {C : T
+ype u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {W : CategoryTheory.Morph
+ismProperty C}   [self : W.HasLeftCalculusOfFraction…
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction₂.hs`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C}
+ {X Y : C}   (self : W.LeftFraction₂ X…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.MorphismProperty.comp_mem`：comp_mem (W : MorphismProperty
+ C) [W.IsStableUnderComposition] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W f) 
+(hg : W g) : W (f ≫ g)
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用定理 `CategoryTheory.MorphismProperty.HasLeftCalculusOfFractions.toIsMultiplic
+ative`：∀ {C : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {W : Categ
+oryTheory.MorphismProperty C}   [self : W.HasLeftCalculusOfFraction…
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction.hs`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C} 
+{X Y : C}   (self : W.LeftFraction X …
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction₂Rel.fst`：fst (h : LeftFract
+ion₂Rel z₁ z₂) : LeftFractionRel z₁.fst z₂.fst
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction₂Rel.snd`：snd (h : LeftFract
+ion₂Rel z₁ z₂) : LeftFractionRel z₁.snd z₂.snd
 -/
 lemma map_eq_iff {X Y : C} (φ ψ : W.LeftFraction₂ X Y) :
     (φ.fst.map L (Localization.inverts _ _) = ψ.fst.map L (Localization.inverts _ _) ∧
@@ -557,7 +463,7 @@ lemma map_eq_iff {X Y : C} (φ ψ : W.LeftFraction₂ X Y) :
     simp only [Category.assoc] at hα
     obtain ⟨Z'', u, hu, fac⟩ := HasLeftCalculusOfFractions.ext _ _ _ φ.hs hα
     have hα' : ψ.s ≫ t₂ ≫ α.f ≫ u = ψ.s ≫ t₂' ≫ α.s ≫ u := by
-      rw [← reassoc_of% hst]; rw [← reassoc_of% hα]; rw [← reassoc_of% hst']
+      rw [← reassoc_of% hst, ← reassoc_of% hα, ← reassoc_of% hst']
     obtain ⟨Z''', u', hu', fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ ψ.hs hα'
     simp only [Category.assoc] at fac fac'
     refine ⟨Z''', t₁' ≫ α.s ≫ u ≫ u', t₂' ≫ α.s ≫ u ≫ u', ?_, ?_, ?_, ?_⟩
@@ -576,24 +482,19 @@ namespace RightFraction₂
 variable {X Y : C}
 variable (φ : W.RightFraction₂ X Y)
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- The first right fraction. -/
+/-
+**CategoryTheory.MorphismProperty.RightFraction₂.fst** 是 Mathlib 中的一个缩写定义，位于命名空间
+ `CategoryTheory.MorphismProperty.RightFraction₂`。
+形式化陈述：fst : W.RightFraction X Y where X'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.RightFraction₂.hs`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C
+} {X Y : C}   (self : W.RightFraction₂ …
 
-English:
-abbreviation fst
-  signature: : W.RightFraction X Y where
-  body: φ.X'
-  f := φ.f
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 fst
-  签名: : W.RightFraction X Y where
-  定义体: φ.X'
-  f := φ.f
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The first right fraction.
 -/
 abbrev fst : W.RightFraction X Y where
   X' := φ.X'
@@ -601,66 +502,32 @@ abbrev fst : W.RightFraction X Y where
   s := φ.s
   hs := φ.hs
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- The second right fraction. -/
+/-
+**CategoryTheory.MorphismProperty.RightFraction₂.snd** 是 Mathlib 中的一个缩写定义，位于命名空间
+ `CategoryTheory.MorphismProperty.RightFraction₂`。
+形式化陈述：snd : W.RightFraction X Y where X'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.RightFraction₂.hs`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] {W : CategoryTheory.MorphismProperty C
+} {X Y : C}   (self : W.RightFraction₂ …
 
-English:
-abbreviation snd
-  signature: : W.RightFraction X Y where
-  body: φ.X'
-  f := φ.f'
-  s := φ.s
-  hs := φ.hs
-
-中文:
-缩写 snd
-  签名: : W.RightFraction X Y where
-  定义体: φ.X'
-  f := φ.f'
-  s := φ.s
-  hs := φ.hs
+--- 原说明 ---
+The second right fraction.
 -/
 abbrev snd : W.RightFraction X Y where
   X' := φ.X'
   f := φ.f'
   s := φ.s
   hs := φ.hs
-
-/--
-lemma `exists_leftFraction₂` / 引理 `exists_leftFraction₂`
-
-English:
-lemma exists_leftFraction₂
-  given: [W.HasLeftCalculusOfFractions]
-  proof: by
-  obtain ⟨ψ₁, hψ₁⟩ := φ.fst.exists_leftFraction
-  obtain ⟨ψ₂, hψ₂⟩ := φ.snd.exists_leftFraction
-  obtain ⟨α, hα⟩ := (RightFraction.mk _ ψ₁.hs ψ₂.s).exists_leftFraction
-  dsimp at hψ₁ hψ₂ hα
-  refine ⟨LeftFraction₂.mk (ψ₁.f ≫ α.f) (ψ₂.f ≫ α.s) (ψ₂.s ≫ α.s)
-      (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_⟩
-  · dsimp
-    rw [hα]; rw [reassoc_of% hψ₁]
-  · rw [reassoc_of% hψ₂]
-
-中文:
-引理 存在_leftFraction₂
-  条件: [W.有LeftCalculusOfFractions]
-  证明: by
-  obtain ⟨ψ₁, hψ₁⟩ := φ.fst.exists_leftFraction
-  obtain ⟨ψ₂, hψ₂⟩ := φ.snd.exists_leftFraction
-  obtain ⟨α, hα⟩ := (RightFraction.mk _ ψ₁.hs ψ₂.s).exists_leftFraction
-  dsimp at hψ₁ hψ₂ hα
-  refine ⟨LeftFraction₂.mk (ψ₁.f ≫ α.f) (ψ₂.f ≫ α.s) (ψ₂.s ≫ α.s)
-      (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_⟩
-  · dsimp
-    rw [hα]; rw [reassoc_of% hψ₁]
-  · rw [reassoc_of% hψ₂]
-
-Depends on / 依赖: RightFraction, RightFraction.mk, W.comp_mem, comp_mem, exists_leftFraction, fst.exists_leftFraction, reassoc_of, snd.exists_leftFraction
+/-
+**CategoryTheory.MorphismProperty.RightFraction₂.exists_leftFraction** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.MorphismProperty.RightFraction₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exists_leftFraction₂ [W.HasLeftCalculusOfFractions] :
-    exists (ψ : W.LeftFraction₂ X Y), φ.f ≫ ψ.s = φ.s ≫ ψ.f ∧
+    ∃ (ψ : W.LeftFraction₂ X Y), φ.f ≫ ψ.s = φ.s ≫ ψ.f ∧
       φ.f' ≫ ψ.s = φ.s ≫ ψ.f' := by
   obtain ⟨ψ₁, hψ₁⟩ := φ.fst.exists_leftFraction
   obtain ⟨ψ₂, hψ₂⟩ := φ.snd.exists_leftFraction
@@ -669,7 +536,7 @@ lemma exists_leftFraction₂ [W.HasLeftCalculusOfFractions] :
   refine ⟨LeftFraction₂.mk (ψ₁.f ≫ α.f) (ψ₂.f ≫ α.s) (ψ₂.s ≫ α.s)
       (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_⟩
   · dsimp
-    rw [hα]; rw [reassoc_of% hψ₁]
+    rw [hα, reassoc_of% hψ₁]
   · rw [reassoc_of% hψ₂]
 
 end RightFraction₂
@@ -682,61 +549,55 @@ variable [W.HasLeftCalculusOfFractions]
 
 open MorphismProperty
 
-/--
-lemma `exists_leftFraction₂` / 引理 `exists_leftFraction₂`
-
-English:
-lemma exists_leftFraction₂
-  given: {X Y : C} (f f' : L.obj X ⟶ L.obj Y)
-  proof: by
-  have ⟨φ, hφ⟩ := exists_leftFraction L W f
-  have ⟨φ', hφ'⟩ := exists_leftFraction L W f'
-  obtain ⟨α, hα⟩ := (RightFraction.mk _ φ.hs φ'.s).exists_leftFraction
-  let ψ : W.LeftFraction₂ X Y :=
-    { Y' := α.Y'
-      f := φ.f ≫ α.f
-      f' := φ'.f ≫ α.s
-      s := φ'.s ≫ α.s
-      hs := W.comp_mem _ _ φ'.hs α.hs }
-  have : IsIso (L.map (φ'.s ≫ α.s)) := by
-    rw [L.map_comp]
-    infer_instance
-  refine ⟨ψ, ?_, ?_⟩
-  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), LeftFraction.map_comp_map_s,
-      hα, L.map_comp, hφ, LeftFraction.map_comp_map_s_assoc,
-      L.map_comp]
-  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), hφ']
-    nth_rw 1 [L.map_comp]
-    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
-
-中文:
-引理 存在_leftFraction₂
-  条件: {X Y : C} (f f' : L.obj X ⟶ L.obj Y)
-  证明: by
-  have ⟨φ, hφ⟩ := exists_leftFraction L W f
-  have ⟨φ', hφ'⟩ := exists_leftFraction L W f'
-  obtain ⟨α, hα⟩ := (RightFraction.mk _ φ.hs φ'.s).exists_leftFraction
-  let ψ : W.LeftFraction₂ X Y :=
-    { Y' := α.Y'
-      f := φ.f ≫ α.f
-      f' := φ'.f ≫ α.s
-      s := φ'.s ≫ α.s
-      hs := W.comp_mem _ _ φ'.hs α.hs }
-  have : IsIso (L.map (φ'.s ≫ α.s)) := by
-    rw [L.map_comp]
-    infer_instance
-  refine ⟨ψ, ?_, ?_⟩
-  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), LeftFraction.map_comp_map_s,
-      hα, L.map_comp, hφ, LeftFraction.map_comp_map_s_assoc,
-      L.map_comp]
-  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), hφ']
-    nth_rw 1 [L.map_comp]
-    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
-
-Depends on / 依赖: L.map, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s, LeftFraction.map_comp_map_s_assoc, RightFraction, RightFraction.mk, W.LeftFraction, W.comp_mem, cancel_mono, comp_mem, exists_leftFraction, infer_instance, map_comp, map_comp_map_s, map_comp_map_s_assoc
+/-
+**CategoryTheory.Localization.exists_leftFraction** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Localization`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (L : CategoryTheory.Functo
+r C D)   (W : CategoryTheory.MorphismProperty C) [inst_2 : L.IsLocalization W] [
+W.HasLeftCalculusOfFractions] {X Y : C}   (f : L.obj X ⟶ L.obj Y), ∃ φ, f = φ.ma
+p L ⋯
+参数：L : CategoryTheory.Functor C D；W : CategoryTheory.MorphismProperty C；f : L.ob
+j X ⟶ L.obj Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.instIsLocaliza
+tionQ`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (W : Categ
+oryTheory.MorphismProperty C)   [inst_1 : W.HasLeftCalculusOfFracti…
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Functor.map_surjective`：map_surjective (F : C ⥤ D) [Full 
+F] : Function.Surjective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.Hom.mk_surject
+ive`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {W : Categor
+yTheory.MorphismProperty C} {X Y : C}   (f : CategoryTheory.Morph…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.homMk_eq_hom_m
+k`：homMk_eq_hom_mk {X Y : C} (f : W.LeftFraction X Y) : homMk f = Hom.mk f
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.homMk_eq`：homM
+k_eq {X Y : C} (f : LeftFraction W X Y) : homMk f = f.map (Q W) (Localization.in
+verts _ W)
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction.map_compatibility`：map_comp
+atibility {W} {X Y : C} (φ : W.LeftFraction X Y) {E : Type*} [Category* E] (L₁ :
+ C ⥤ D) (L₂ : C ⥤ E) [L₁.IsLocalization W] [L₂.IsLoc…
 -/
 lemma exists_leftFraction₂ {X Y : C} (f f' : L.obj X ⟶ L.obj Y) :
-    exists (φ : W.LeftFraction₂ X Y), f = φ.fst.map L (inverts L W) ∧
+    ∃ (φ : W.LeftFraction₂ X Y), f = φ.fst.map L (inverts L W) ∧
       f' = φ.snd.map L (inverts L W) := by
   have ⟨φ, hφ⟩ := exists_leftFraction L W f
   have ⟨φ', hφ'⟩ := exists_leftFraction L W f'
@@ -756,69 +617,57 @@ lemma exists_leftFraction₂ {X Y : C} (f f' : L.obj X ⟶ L.obj Y) :
       L.map_comp]
   · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), hφ']
     nth_rw 1 [L.map_comp]
-    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
-
-/--
-lemma `exists_leftFraction₃` / 引理 `exists_leftFraction₃`
-
-English:
-lemma exists_leftFraction₃
-  given: {X Y : C} (f f' f'' : L.obj X ⟶ L.obj Y)
-  proof: by
-  obtain ⟨α, hα, hα'⟩ := exists_leftFraction₂ L W f f'
-  have ⟨β, hβ⟩ := exists_leftFraction L W f''
-  obtain ⟨γ, hγ⟩ := (RightFraction.mk _ α.hs β.s).exists_leftFraction
-  dsimp at hγ
-  let ψ : W.LeftFraction₃ X Y :=
-    { Y' := γ.Y'
-      f := α.f ≫ γ.f
-      f' := α.f' ≫ γ.f
-      f'' := β.f ≫ γ.s
-      s := β.s ≫ γ.s
-      hs := W.comp_mem _ _ β.hs γ.hs }
-  have : IsIso (L.map (β.s ≫ γ.s)) := by
-    rw [L.map_comp]
-    infer_instance
-  refine ⟨ψ, ?_, ?_, ?_⟩
-  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα, hγ,
-      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
-  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα', hγ,
-      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
-  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), hβ]
-    nth_rw 1 [L.map_comp]
-    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
-
-中文:
-引理 存在_leftFraction₃
-  条件: {X Y : C} (f f' f'' : L.obj X ⟶ L.obj Y)
-  证明: by
-  obtain ⟨α, hα, hα'⟩ := exists_leftFraction₂ L W f f'
-  have ⟨β, hβ⟩ := exists_leftFraction L W f''
-  obtain ⟨γ, hγ⟩ := (RightFraction.mk _ α.hs β.s).exists_leftFraction
-  dsimp at hγ
-  let ψ : W.LeftFraction₃ X Y :=
-    { Y' := γ.Y'
-      f := α.f ≫ γ.f
-      f' := α.f' ≫ γ.f
-      f'' := β.f ≫ γ.s
-      s := β.s ≫ γ.s
-      hs := W.comp_mem _ _ β.hs γ.hs }
-  have : IsIso (L.map (β.s ≫ γ.s)) := by
-    rw [L.map_comp]
-    infer_instance
-  refine ⟨ψ, ?_, ?_, ?_⟩
-  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα, hγ,
-      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
-  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα', hγ,
-      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
-  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), hβ]
-    nth_rw 1 [L.map_comp]
-    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
-
-Depends on / 依赖: L.map, L.map_co, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s, RightFraction, RightFraction.mk, W.LeftFraction, W.comp_mem, cancel_mono, comp_mem, exists_leftFraction, infer_instance, map_co, map_comp, map_comp_map_s
+    rw [LeftFraction.map_comp_map_s_assoc, LeftFraction.map_comp_map_s,
+      L.map_comp]
+/-
+**CategoryTheory.Localization.exists_leftFraction** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Localization`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (L : CategoryTheory.Functo
+r C D)   (W : CategoryTheory.MorphismProperty C) [inst_2 : L.IsLocalization W] [
+W.HasLeftCalculusOfFractions] {X Y : C}   (f : L.obj X ⟶ L.obj Y), ∃ φ, f = φ.ma
+p L ⋯
+参数：L : CategoryTheory.Functor C D；W : CategoryTheory.MorphismProperty C；f : L.ob
+j X ⟶ L.obj Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.instIsLocaliza
+tionQ`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (W : Categ
+oryTheory.MorphismProperty C)   [inst_1 : W.HasLeftCalculusOfFracti…
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Functor.map_surjective`：map_surjective (F : C ⥤ D) [Full 
+F] : Function.Surjective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.Hom.mk_surject
+ive`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {W : Categor
+yTheory.MorphismProperty C} {X Y : C}   (f : CategoryTheory.Morph…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.homMk_eq_hom_m
+k`：homMk_eq_hom_mk {X Y : C} (f : W.LeftFraction X Y) : homMk f = Hom.mk f
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction.Localization.homMk_eq`：homM
+k_eq {X Y : C} (f : LeftFraction W X Y) : homMk f = f.map (Q W) (Localization.in
+verts _ W)
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction.map_compatibility`：map_comp
+atibility {W} {X Y : C} (φ : W.LeftFraction X Y) {E : Type*} [Category* E] (L₁ :
+ C ⥤ D) (L₂ : C ⥤ E) [L₁.IsLocalization W] [L₂.IsLoc…
 -/
 lemma exists_leftFraction₃ {X Y : C} (f f' f'' : L.obj X ⟶ L.obj Y) :
-    exists (φ : W.LeftFraction₃ X Y), f = φ.fst.map L (inverts L W) ∧
+    ∃ (φ : W.LeftFraction₃ X Y), f = φ.fst.map L (inverts L W) ∧
       f' = φ.snd.map L (inverts L W) ∧
       f'' = φ.thd.map L (inverts L W) := by
   obtain ⟨α, hα, hα'⟩ := exists_leftFraction₂ L W f f'
@@ -842,48 +691,71 @@ lemma exists_leftFraction₃ {X Y : C} (f f' f'' : L.obj X ⟶ L.obj Y) :
       L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
   · rw [← cancel_mono (L.map (β.s ≫ γ.s)), hβ]
     nth_rw 1 [L.map_comp]
-    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
+    rw [LeftFraction.map_comp_map_s_assoc, LeftFraction.map_comp_map_s, L.map_comp]
 
 end Localization
 
-/--
-lemma `Functor.faithful_of_comp_of_hasLeftCalculusOfFractions` / 引理 `Functor.faithful_of_comp_of_hasLeftCalculusOfFractions`
-
-English:
-lemma Functor.faithful_of_comp_of_hasLeftCalculusOfFractions
-  proof: by
-  have := Localization.essSurj L W
-  refine F.faithful_of_comp_essSurj L (fun X₁ X₂ f g hfg => ?_)
-  obtain ⟨φ, rfl, rfl⟩ := Localization.exists_leftFraction₂ L W f g
-  rw [← cancel_mono (L.map φ.s)]; rw [φ.fst.map_comp_map_s L]; rw [φ.snd.map_comp_map_s L]
-  apply h
-  simpa only [← F.map_comp, φ.fst.map_comp_map_s, φ.snd.map_comp_map_s] using
-    hfg =≫ F.map (L.map φ.s)
-
-中文:
-引理 函子.faithful_of_comp_of_hasLeftCalculusOfFractions
-  证明: by
-  have := Localization.essSurj L W
-  refine F.faithful_of_comp_essSurj L (fun X₁ X₂ f g hfg => ?_)
-  obtain ⟨φ, rfl, rfl⟩ := Localization.exists_leftFraction₂ L W f g
-  rw [← cancel_mono (L.map φ.s)]; rw [φ.fst.map_comp_map_s L]; rw [φ.snd.map_comp_map_s L]
-  apply h
-  simpa only [← F.map_comp, φ.fst.map_comp_map_s, φ.snd.map_comp_map_s] using
-    hfg =≫ F.map (L.map φ.s)
-
-Depends on / 依赖: F.faithful_of_comp_essSurj, F.map, F.map_comp, L.map, Localization, Localization.essSurj, Localization.exists_leftFraction, cancel_mono, essSurj, faithful_of_comp_essSurj, fst.map_comp_map_s, map_comp, map_comp_map_s, snd.map_comp_map_s
+/-
+**CategoryTheory.Functor.faithful_of_comp_of_hasLeftCalculusOfFractions** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (L : CategoryTheory.Functo
+r C D)   (W : CategoryTheory.MorphismProperty C) [L.IsLocalization W] {E : Type 
+u_3}   [inst_3 : CategoryTheory.Category.{v_3, u_3} E] (F : CategoryTheory.Funct
+or D E) [W.HasLeftCalculusOfFractions],   (∀ ⦃X₁ X₂ : C⦄ (f g : X₁ ⟶ X₂), F.map 
+(L.map f) = F.map (L.map g) → L.map f = L.map g) → F.Faithful
+参数：L : CategoryTheory.Functor C D；W : CategoryTheory.MorphismProperty C；F : Cate
+goryTheory.Functor D E；∀ ⦃X₁ X₂ : C⦄ (f g : X₁ ⟶ X₂), F.map (L.map f) = F.map (L
+.map g) → L.map f = L.map g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.essSurj`：essSurj (W) [L.IsLocalization W] : 
+L.EssSurj
+· 使用引理 `CategoryTheory.Functor.faithful_of_comp_essSurj`：faithful_of_comp_essSur
+j (F : D ⥤ E) (L : C ⥤ D) [EssSurj L] (h : forall ⦃X₁ X₂ : C⦄ (f g : L.obj X₁ ⟶ 
+L.obj X₂), F.map f = F.map g -> f = g…
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用引理 `CategoryTheory.Localization.exists_leftFraction₂`：exists_leftFraction₂ {
+X Y : C} (f f' : L.obj X ⟶ L.obj Y) : exists (φ : W.LeftFraction₂ X Y), f = φ.fs
+t.map L (inverts L W) ∧ f' = φ.snd.map…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsSplitMono.mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [hf : CategoryTheory.IsSplitMono f], 
+  CategoryTheory.Mono…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.MorphismProperty.instIsIsoMapS`：∀ {C : Type u_1} {D : Typ
+e u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.
+Category.{v_2, u_2} D] (L : Categor…
+· 使用引理 `CategoryTheory.MorphismProperty.LeftFraction.map_comp_map_s`：map_comp_ma
+p_s (φ : W.LeftFraction X Y) (L : C ⥤ D) (hL : W.IsInvertedBy L) : φ.map L hL ≫ 
+L.map φ.s = L.map φ.f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
 -/
 lemma Functor.faithful_of_comp_of_hasLeftCalculusOfFractions
     {E : Type*} [Category* E] (F : D ⥤ E)
     [W.HasLeftCalculusOfFractions]
-    (h : forall ⦃X₁ X₂ : C⦄ (f g : X₁ ⟶ X₂), F.map (L.map f) = F.map (L.map g) -> L.map f = L.map g) :
+    (h : ∀ ⦃X₁ X₂ : C⦄ (f g : X₁ ⟶ X₂), F.map (L.map f) = F.map (L.map g) → L.map f = L.map g) :
     F.Faithful := by
   have := Localization.essSurj L W
-  refine F.faithful_of_comp_essSurj L (fun X₁ X₂ f g hfg => ?_)
+  refine F.faithful_of_comp_essSurj L (fun X₁ X₂ f g hfg ↦ ?_)
   obtain ⟨φ, rfl, rfl⟩ := Localization.exists_leftFraction₂ L W f g
-  rw [← cancel_mono (L.map φ.s)]; rw [φ.fst.map_comp_map_s L]; rw [φ.snd.map_comp_map_s L]
+  rw [← cancel_mono (L.map φ.s), φ.fst.map_comp_map_s L, φ.snd.map_comp_map_s L]
   apply h
   simpa only [← F.map_comp, φ.fst.map_comp_map_s, φ.snd.map_comp_map_s] using
     hfg =≫ F.map (L.map φ.s)
 
 end CategoryTheory
+

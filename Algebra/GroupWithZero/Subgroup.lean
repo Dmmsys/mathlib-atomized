@@ -26,112 +26,67 @@ section GroupWithZero
 variable [GroupWithZero G₀] [Group G] [MulDistribMulAction G₀ G] {S T : Subgroup G} {a : G₀}
 
 @[simp]
-/--
-lemma `smul_mem_pointwise_smul_iff₀` / 引理 `smul_mem_pointwise_smul_iff₀`
-
-English:
-lemma smul_mem_pointwise_smul_iff₀
-  given: (ha : a != 0) (S : Subgroup G) (x : G)
-  proof: smul_mem_smul_set_iff₀ ha (S : Set G) x
-
-中文:
-引理 smul_mem_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : 子群 G) (x : G)
-  证明: smul_mem_smul_set_iff₀ ha (S : Set G) x
+/-
+**Subgroup.smul_mem_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：smul_mem_pointwise_smul_iff {a : α} {S : Subgroup G} {x : G} : a • x in a 
+• S ↔ x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_mem_smul_set_iff`：smul_mem_smul_set_iff : a • x in a • s ↔ x in
+ s
 -/
-lemma smul_mem_pointwise_smul_iff₀ (ha : a != 0) (S : Subgroup G) (x : G) :
-    a • x in a • S ↔ x in S :=
+lemma smul_mem_pointwise_smul_iff₀ (ha : a ≠ 0) (S : Subgroup G) (x : G) :
+    a • x ∈ a • S ↔ x ∈ S :=
   smul_mem_smul_set_iff₀ ha (S : Set G) x
-
-/--
-lemma `mem_pointwise_smul_iff_inv_smul_mem₀` / 引理 `mem_pointwise_smul_iff_inv_smul_mem₀`
-
-English:
-lemma mem_pointwise_smul_iff_inv_smul_mem₀
-  given: (ha : a != 0) (S : Subgroup G) (x : G)
-  proof: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set G) x
-
-中文:
-引理 mem_pointwise_smul_iff_inv_smul_mem₀
-  条件: (ha : a != 0) (S : 子群 G) (x : G)
-  证明: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set G) x
+/-
+**Subgroup.mem_pointwise_smul_iff_inv_smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subgro
+up`。
+形式化陈述：mem_pointwise_smul_iff_inv_smul_mem {a : α} {S : Subgroup G} {x : G} : x i
+n a • S ↔ a⁻¹ • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_smul_set_iff_inv_smul_mem`：mem_smul_set_iff_inv_smul_mem : x in 
+a • A ↔ a⁻¹ • x in A
 -/
-lemma mem_pointwise_smul_iff_inv_smul_mem₀ (ha : a != 0) (S : Subgroup G) (x : G) :
-    x in a • S ↔ a⁻¹ • x in S :=
+lemma mem_pointwise_smul_iff_inv_smul_mem₀ (ha : a ≠ 0) (S : Subgroup G) (x : G) :
+    x ∈ a • S ↔ a⁻¹ • x ∈ S :=
   mem_smul_set_iff_inv_smul_mem₀ ha (S : Set G) x
-
-/--
-lemma `mem_inv_pointwise_smul_iff₀` / 引理 `mem_inv_pointwise_smul_iff₀`
-
-English:
-lemma mem_inv_pointwise_smul_iff₀
-  given: (ha : a != 0) (S : Subgroup G) (x : G)
-  proof: mem_inv_smul_set_iff₀ ha (S : Set G) x
-
-@[simp]
-
-中文:
-引理 mem_inv_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : 子群 G) (x : G)
-  证明: mem_inv_smul_set_iff₀ ha (S : Set G) x
-
-@[simp]
+/-
+**Subgroup.mem_inv_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：mem_inv_pointwise_smul_iff {a : α} {S : Subgroup G} {x : G} : x in a⁻¹ • S
+ ↔ a • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_inv_smul_set_iff`：mem_inv_smul_set_iff : x in a⁻¹ • A ↔ a • x in
+ A
 -/
-lemma mem_inv_pointwise_smul_iff₀ (ha : a != 0) (S : Subgroup G) (x : G) :
-    x in a⁻¹ • S ↔ a • x in S :=
+lemma mem_inv_pointwise_smul_iff₀ (ha : a ≠ 0) (S : Subgroup G) (x : G) :
+    x ∈ a⁻¹ • S ↔ a • x ∈ S :=
   mem_inv_smul_set_iff₀ ha (S : Set G) x
 
 @[simp]
-/--
-lemma `pointwise_smul_le_pointwise_smul_iff₀` / 引理 `pointwise_smul_le_pointwise_smul_iff₀`
-
-English:
-lemma pointwise_smul_le_pointwise_smul_iff₀
-  given: (ha : a != 0)
-  statement: a • S <= a • T ↔ S <= T
-  proof: smul_set_subset_smul_set_iff₀ ha
-
-中文:
-引理 pointwise_smul_le_pointwise_smul_iff₀
-  条件: (ha : a != 0)
-  结论: a • S <= a • T ↔ S <= T
-  证明: smul_set_subset_smul_set_iff₀ ha
+/-
+**Subgroup.pointwise_smul_le_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subgr
+oup`。
+形式化陈述：pointwise_smul_le_pointwise_smul_iff {a : α} {S T : Subgroup G} : a • S <=
+ a • T ↔ S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_smul_set_iff`：smul_set_subset_smul_set_iff : a • A s
+ubseteq a • B ↔ A subseteq B
 -/
-lemma pointwise_smul_le_pointwise_smul_iff₀ (ha : a != 0) : a • S <= a • T ↔ S <= T :=
+lemma pointwise_smul_le_pointwise_smul_iff₀ (ha : a ≠ 0) : a • S ≤ a • T ↔ S ≤ T :=
   smul_set_subset_smul_set_iff₀ ha
-
-/--
-lemma `pointwise_smul_le_iff₀` / 引理 `pointwise_smul_le_iff₀`
-
-English:
-lemma pointwise_smul_le_iff₀
-  given: (ha : a != 0)
-  statement: a • S <= T ↔ S <= a⁻¹ • T
-  proof: smul_set_subset_iff₀ ha
-
-中文:
-引理 pointwise_smul_le_iff₀
-  条件: (ha : a != 0)
-  结论: a • S <= T ↔ S <= a⁻¹ • T
-  证明: smul_set_subset_iff₀ ha
+/-
+**Subgroup.pointwise_smul_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma pointwise_smul_le_iff₀ (ha : a != 0) : a • S <= T ↔ S <= a⁻¹ • T := smul_set_subset_iff₀ ha
-/--
-lemma `le_pointwise_smul_iff₀` / 引理 `le_pointwise_smul_iff₀`
-
-English:
-lemma le_pointwise_smul_iff₀
-  given: (ha : a != 0)
-  statement: S <= a • T ↔ a⁻¹ • S <= T
-  proof: subset_smul_set_iff₀ ha
-
-中文:
-引理 le_pointwise_smul_iff₀
-  条件: (ha : a != 0)
-  结论: S <= a • T ↔ a⁻¹ • S <= T
-  证明: subset_smul_set_iff₀ ha
+lemma pointwise_smul_le_iff₀ (ha : a ≠ 0) : a • S ≤ T ↔ S ≤ a⁻¹ • T := smul_set_subset_iff₀ ha
+/-
+**Subgroup.le_pointwise_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le_pointwise_smul_iff₀ (ha : a != 0) : S <= a • T ↔ a⁻¹ • S <= T := subset_smul_set_iff₀ ha
+lemma le_pointwise_smul_iff₀ (ha : a ≠ 0) : S ≤ a • T ↔ a⁻¹ • S ≤ T := subset_smul_set_iff₀ ha
 
 end GroupWithZero
 end Subgroup
@@ -144,30 +99,18 @@ variable [Monoid M] [AddGroup A] [DistribMulAction M A] {a : M}
 
 This is available as an instance in the `Pointwise` locale. -/
 @[instance_reducible]
-/--
-Definition of `pointwiseMulAction` / `pointwiseMulAction` 的定义
+/-
+**AddSubgroup.pointwiseMulAction** 是 Mathlib 中的一个定义，位于命名空间 `AddSubgroup`。
+形式化陈述：{M : Type u_3} →   {A : Type u_4} → [inst : Monoid M] → [inst_1 : AddGroup
+ A] → [DistribMulAction M A] → MulAction M (AddSubgroup A)
+参数：AddSubgroup A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointwiseMulAction
-  signature: : MulAction M (AddSubgroup A) where
-  body: S.map (DistribMulAction.toAddMonoidEnd _ A a)
-  one_smul S :=
-    (congr_arg (fun f : AddMonoid.End A => S.map f) (map_one _)).trans S.map_id
-  mul_smul _ _ S :=
-    (congr_arg (fun f : AddMonoid.End A => S.map f) (map_mul _ _ _)).trans (S.map_map _ _).symm
+--- 原说明 ---
+The action on an additive subgroup corresponding to applying the action to every
+ element.
 
-scoped[Pointwise] attribute [instance] AddSubgroup.pointwiseMulAction
-
-中文:
-定义 pointwiseMulAction
-  签名: : 乘法作用 M (加法子群 A) where
-  定义体: S.map (DistribMulAction.toAddMonoidEnd _ A a)
-  one_smul S :=
-    (congr_arg (fun f : AddMonoid.End A => S.map f) (map_one _)).trans S.map_id
-  mul_smul _ _ S :=
-    (congr_arg (fun f : AddMonoid.End A => S.map f) (map_mul _ _ _)).trans (S.map_map _ _).symm
-
-scoped[Pointwise] attribute [instance] AddSubgroup.pointwiseMulAction
+This is available as an instance in the `Pointwise` locale.
 -/
 protected def pointwiseMulAction : MulAction M (AddSubgroup A) where
   smul a S := S.map (DistribMulAction.toAddMonoidEnd _ A a)
@@ -177,126 +120,86 @@ protected def pointwiseMulAction : MulAction M (AddSubgroup A) where
     (congr_arg (fun f : AddMonoid.End A => S.map f) (map_mul _ _ _)).trans (S.map_map _ _).symm
 
 scoped[Pointwise] attribute [instance] AddSubgroup.pointwiseMulAction
-
-/--
-lemma `pointwise_smul_def` / 引理 `pointwise_smul_def`
-
-English:
-lemma pointwise_smul_def
-  given: (S : AddSubgroup A)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 pointwise_smul_def
-  条件: (S : 加法子群 A)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**AddSubgroup.pointwise_smul_def** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`。
+形式化陈述：pointwise_smul_def (S : AddSubgroup A) : a • S = S.map (DistribMulAction.t
+oAddMonoidEnd _ _ a)
+参数：S : AddSubgroup A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pointwise_smul_def (S : AddSubgroup A) :
     a • S = S.map (DistribMulAction.toAddMonoidEnd _ _ a) :=
   rfl
 
 @[simp, norm_cast]
-/--
-lemma `coe_pointwise_smul` / 引理 `coe_pointwise_smul`
-
-English:
-lemma coe_pointwise_smul
-  given: (a : M) (S : AddSubgroup A)
-  statement: ↑(a • S) = a • (S : Set A)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_pointwise_smul
-  条件: (a : M) (S : 加法子群 A)
-  结论: ↑(a • S) = a • (S : 集合 A)
-  证明: rfl
-
-@[simp]
+/-
+**AddSubgroup.coe_pointwise_smul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`。
+形式化陈述：coe_pointwise_smul (a : M) (S : AddSubgroup A) : ↑(a • S) = a • (S : Set A
+)
+参数：a : M；S : AddSubgroup A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_pointwise_smul (a : M) (S : AddSubgroup A) : ↑(a • S) = a • (S : Set A) :=
   rfl
 
 @[simp]
-/--
-lemma `pointwise_smul_toAddSubmonoid` / 引理 `pointwise_smul_toAddSubmonoid`
-
-English:
-lemma pointwise_smul_toAddSubmonoid
-  given: (a : M) (S : AddSubgroup A)
-  proof: rfl
-
-中文:
-引理 pointwise_smul_toAddSubmonoid
-  条件: (a : M) (S : 加法子群 A)
-  证明: rfl
+/-
+**AddSubgroup.pointwise_smul_toAddSubmonoid** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgro
+up`。
+形式化陈述：pointwise_smul_toAddSubmonoid (a : M) (S : AddSubgroup A) : (a • S).toAddS
+ubmonoid = a • S.toAddSubmonoid
+参数：a : M；S : AddSubgroup A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pointwise_smul_toAddSubmonoid (a : M) (S : AddSubgroup A) :
     (a • S).toAddSubmonoid = a • S.toAddSubmonoid :=
   rfl
-
-/--
-lemma `smul_mem_pointwise_smul` / 引理 `smul_mem_pointwise_smul`
-
-English:
-lemma smul_mem_pointwise_smul
-  given: (m : A) (a : M) (S : AddSubgroup A)
-  statement: m in S -> a • m in a • S
-  proof: (Set.smul_mem_smul_set : _ -> _ in a • (S : Set A))
-
-中文:
-引理 smul_mem_pointwise_smul
-  条件: (m : A) (a : M) (S : 加法子群 A)
-  结论: m in S -> a • m in a • S
-  证明: (Set.smul_mem_smul_set : _ -> _ in a • (S : Set A))
-
-Depends on / 依赖: Set.smul_mem_smul_set, smul_mem_smul_set
+/-
+**AddSubgroup.smul_mem_pointwise_smul** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`。
+形式化陈述：smul_mem_pointwise_smul (m : A) (a : M) (S : AddSubgroup A) : m in S -> a 
+• m in a • S
+参数：m : A；a : M；S : AddSubgroup A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_mem_smul_set`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β]
+ {s : Set β} {a : α} {b : β}, b ∈ s → a • b ∈ a • s
 -/
-lemma smul_mem_pointwise_smul (m : A) (a : M) (S : AddSubgroup A) : m in S -> a • m in a • S :=
-  (Set.smul_mem_smul_set : _ -> _ in a • (S : Set A))
-
-/--
-lemma `mem_smul_pointwise_iff_exists` / 引理 `mem_smul_pointwise_iff_exists`
-
-English:
-lemma mem_smul_pointwise_iff_exists
-  given: (m : A) (a : M) (S : AddSubgroup A)
-  proof: (Set.mem_smul_set : m in a • (S : Set A) ↔ _)
-
-中文:
-引理 mem_smul_pointwise_iff_存在
-  条件: (m : A) (a : M) (S : 加法子群 A)
-  证明: (Set.mem_smul_set : m in a • (S : Set A) ↔ _)
-
-Depends on / 依赖: Set.mem_smul_set, mem_smul_set
+lemma smul_mem_pointwise_smul (m : A) (a : M) (S : AddSubgroup A) : m ∈ S → a • m ∈ a • S :=
+  (Set.smul_mem_smul_set : _ → _ ∈ a • (S : Set A))
+/-
+**AddSubgroup.mem_smul_pointwise_iff_exists** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgro
+up`。
+形式化陈述：mem_smul_pointwise_iff_exists (m : A) (a : M) (S : AddSubgroup A) : m in a
+ • S ↔ exists s : A, s in S ∧ a • s = m
+参数：m : A；a : M；S : AddSubgroup A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_smul_set`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {t :
+ Set β} {a : α} {x : β}, x ∈ a • t ↔ ∃ y ∈ t, a • y = x
 -/
 lemma mem_smul_pointwise_iff_exists (m : A) (a : M) (S : AddSubgroup A) :
-    m in a • S ↔ exists s : A, s in S ∧ a • s = m :=
-  (Set.mem_smul_set : m in a • (S : Set A) ↔ _)
-
-/--
-Instance `pointwise_isCentralScalar` / 实例 `pointwise_isCentralScalar`
-
-English:
-instance pointwise_isCentralScalar
-  signature: [DistribMulAction Mᵐᵒᵖ A] [IsCentralScalar M A]
-  body: ⟨fun _ S => (congr_arg fun f => S.map f) AddMonoidHom.ext op_smul_eq_smul _⟩
-
-中文:
-实例 pointwise_isCentralScalar
-  签名: [分配乘法作用 Mᵐᵒᵖ A] [中心标量 M A]
-  定义体: ⟨fun _ S => (congr_arg fun f => S.map f) AddMonoidHom.ext op_smul_eq_smul _⟩
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, S.map, congr_arg, op_smul_eq_smul
+    m ∈ a • S ↔ ∃ s : A, s ∈ S ∧ a • s = m :=
+  (Set.mem_smul_set : m ∈ a • (S : Set A) ↔ _)
+/-
+**AddSubgroup.pointwise_isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `AddSubgroup`。
+形式化陈述：pointwise_isCentralScalar [DistribMulAction Mᵐᵒᵖ A] [IsCentralScalar M A] 
+: IsCentralScalar M (AddSubgroup A)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance pointwise_isCentralScalar [DistribMulAction Mᵐᵒᵖ A] [IsCentralScalar M A] :
     IsCentralScalar M (AddSubgroup A) :=
-⟨fun _ S => (congr_arg fun f => S.map f) AddMonoidHom.ext op_smul_eq_smul _⟩
+  ⟨fun _ S => (congr_arg fun f => S.map f) <| AddMonoidHom.ext <| op_smul_eq_smul _⟩
 
 -- TODO: Check that these lemmas are useful and uncomment.
 -- @[simp]
@@ -306,7 +209,7 @@ instance pointwise_isCentralScalar [DistribMulAction Mᵐᵒᵖ A] [IsCentralSca
 
 -- @[simp]
 -- lemma smul_closure (m : M) (s : Set A) : m • closure s = closure (m • s) :=
--- AddMonoidHom.map_closure ..
+--   AddMonoidHom.map_closure ..
 
 scoped[Pointwise] attribute [instance] AddSubgroup.pointwise_isCentralScalar
 
@@ -315,110 +218,68 @@ end Monoid
 section Group
 variable [Group G] [AddGroup A] [DistribMulAction G A] {S T : AddSubgroup A} {a : G} {x : A}
 
-/--
-lemma `smul_mem_pointwise_smul_iff` / 引理 `smul_mem_pointwise_smul_iff`
-
-English:
-lemma smul_mem_pointwise_smul_iff
-  statement: a • x in a • S ↔ x in S
-  proof: smul_mem_smul_set_iff
-
-中文:
-引理 smul_mem_pointwise_smul_iff
-  结论: a • x in a • S ↔ x in S
-  证明: smul_mem_smul_set_iff
+/-
+**AddSubgroup.smul_mem_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup
+`。
+形式化陈述：∀ {G : Type u_2} {A : Type u_4} [inst : Group G] [inst_1 : AddGroup A] [in
+st_2 : DistribMulAction G A]   {S : AddSubgroup A} {a : G} {x : A}, a • x ∈ a • 
+S ↔ x ∈ S
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_mem_smul_set_iff`：smul_mem_smul_set_iff : a • x in a • s ↔ x in
+ s
 -/
-@[simp] lemma smul_mem_pointwise_smul_iff : a • x in a • S ↔ x in S := smul_mem_smul_set_iff
-
-/--
-lemma `mem_pointwise_smul_iff_inv_smul_mem` / 引理 `mem_pointwise_smul_iff_inv_smul_mem`
-
-English:
-lemma mem_pointwise_smul_iff_inv_smul_mem
-  statement: x in a • S ↔ a⁻¹ • x in S
-  proof: mem_smul_set_iff_inv_smul_mem
-
-中文:
-引理 mem_pointwise_smul_iff_inv_smul_mem
-  结论: x in a • S ↔ a⁻¹ • x in S
-  证明: mem_smul_set_iff_inv_smul_mem
-
-Depends on / 依赖: mem_smul_set_iff_inv_smul_mem
+@[simp] lemma smul_mem_pointwise_smul_iff : a • x ∈ a • S ↔ x ∈ S := smul_mem_smul_set_iff
+/-
+**AddSubgroup.mem_pointwise_smul_iff_inv_smul_mem** 是 Mathlib 中的一个引理，位于命名空间 `Add
+Subgroup`。
+形式化陈述：mem_pointwise_smul_iff_inv_smul_mem : x in a • S ↔ a⁻¹ • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_smul_set_iff_inv_smul_mem`：mem_smul_set_iff_inv_smul_mem : x in 
+a • A ↔ a⁻¹ • x in A
 -/
-lemma mem_pointwise_smul_iff_inv_smul_mem : x in a • S ↔ a⁻¹ • x in S :=
+lemma mem_pointwise_smul_iff_inv_smul_mem : x ∈ a • S ↔ a⁻¹ • x ∈ S :=
   mem_smul_set_iff_inv_smul_mem
-
-/--
-lemma `mem_inv_pointwise_smul_iff` / 引理 `mem_inv_pointwise_smul_iff`
-
-English:
-lemma mem_inv_pointwise_smul_iff
-  statement: x in a⁻¹ • S ↔ a • x in S
-  proof: mem_inv_smul_set_iff
+/-
+**AddSubgroup.mem_inv_pointwise_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`
+。
+形式化陈述：mem_inv_pointwise_smul_iff : x in a⁻¹ • S ↔ a • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_inv_smul_set_iff`：mem_inv_smul_set_iff : x in a⁻¹ • A ↔ a • x in
+ A
+-/
+lemma mem_inv_pointwise_smul_iff : x ∈ a⁻¹ • S ↔ a • x ∈ S := mem_inv_smul_set_iff
 
 @[simp]
-
-中文:
-引理 mem_inv_pointwise_smul_iff
-  结论: x in a⁻¹ • S ↔ a • x in S
-  证明: mem_inv_smul_set_iff
-
-@[simp]
-
-Depends on / 依赖: mem_inv_smul_set_iff
+/-
+**AddSubgroup.pointwise_smul_le_pointwise_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `Ad
+dSubgroup`。
+形式化陈述：pointwise_smul_le_pointwise_smul_iff : a • S <= a • T ↔ S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_smul_set_iff`：smul_set_subset_smul_set_iff : a • A s
+ubseteq a • B ↔ A subseteq B
 -/
-lemma mem_inv_pointwise_smul_iff : x in a⁻¹ • S ↔ a • x in S := mem_inv_smul_set_iff
-
-@[simp]
-/--
-lemma `pointwise_smul_le_pointwise_smul_iff` / 引理 `pointwise_smul_le_pointwise_smul_iff`
-
-English:
-lemma pointwise_smul_le_pointwise_smul_iff
-  statement: a • S <= a • T ↔ S <= T
-  proof: smul_set_subset_smul_set_iff
-
-中文:
-引理 pointwise_smul_le_pointwise_smul_iff
-  结论: a • S <= a • T ↔ S <= T
-  证明: smul_set_subset_smul_set_iff
-
-Depends on / 依赖: smul_set_subset_smul_set_iff
+lemma pointwise_smul_le_pointwise_smul_iff : a • S ≤ a • T ↔ S ≤ T := smul_set_subset_smul_set_iff
+/-
+**AddSubgroup.pointwise_smul_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`。
+形式化陈述：pointwise_smul_le_iff : a • S <= T ↔ S <= a⁻¹ • T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_iff_subset_inv_smul_set`：smul_set_subset_iff_subset_
+inv_smul_set : a • A subseteq B ↔ A subseteq a⁻¹ • B
 -/
-lemma pointwise_smul_le_pointwise_smul_iff : a • S <= a • T ↔ S <= T := smul_set_subset_smul_set_iff
-
-/--
-lemma `pointwise_smul_le_iff` / 引理 `pointwise_smul_le_iff`
-
-English:
-lemma pointwise_smul_le_iff
-  statement: a • S <= T ↔ S <= a⁻¹ • T
-  proof: smul_set_subset_iff_subset_inv_smul_set
-
-中文:
-引理 pointwise_smul_le_iff
-  结论: a • S <= T ↔ S <= a⁻¹ • T
-  证明: smul_set_subset_iff_subset_inv_smul_set
-
-Depends on / 依赖: smul_set_subset_iff_subset_inv_smul_set
+lemma pointwise_smul_le_iff : a • S ≤ T ↔ S ≤ a⁻¹ • T := smul_set_subset_iff_subset_inv_smul_set
+/-
+**AddSubgroup.le_pointwise_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`。
+形式化陈述：le_pointwise_smul_iff : S <= a • T ↔ a⁻¹ • S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subset_smul_set_iff`：subset_smul_set_iff : A subseteq a • B ↔ a⁻¹ • 
+A subseteq B
 -/
-lemma pointwise_smul_le_iff : a • S <= T ↔ S <= a⁻¹ • T := smul_set_subset_iff_subset_inv_smul_set
-/--
-lemma `le_pointwise_smul_iff` / 引理 `le_pointwise_smul_iff`
-
-English:
-lemma le_pointwise_smul_iff
-  statement: S <= a • T ↔ a⁻¹ • S <= T
-  proof: subset_smul_set_iff
-
-中文:
-引理 le_pointwise_smul_iff
-  结论: S <= a • T ↔ a⁻¹ • S <= T
-  证明: subset_smul_set_iff
-
-Depends on / 依赖: subset_smul_set_iff
--/
-lemma le_pointwise_smul_iff : S <= a • T ↔ a⁻¹ • S <= T := subset_smul_set_iff
+lemma le_pointwise_smul_iff : S ≤ a • T ↔ a⁻¹ • S ≤ T := subset_smul_set_iff
 
 end Group
 
@@ -426,112 +287,75 @@ section GroupWithZero
 variable [GroupWithZero G₀] [AddGroup A] [DistribMulAction G₀ A] {S T : AddSubgroup A} {a : G₀}
 
 @[simp]
-/--
-lemma `smul_mem_pointwise_smul_iff₀` / 引理 `smul_mem_pointwise_smul_iff₀`
-
-English:
-lemma smul_mem_pointwise_smul_iff₀
-  given: (ha : a != 0) (S : AddSubgroup A) (x : A)
-  proof: smul_mem_smul_set_iff₀ ha (S : Set A) x
-
-中文:
-引理 smul_mem_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : 加法子群 A) (x : A)
-  证明: smul_mem_smul_set_iff₀ ha (S : Set A) x
+/-
+**AddSubgroup.smul_mem_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup
+`。
+形式化陈述：∀ {G : Type u_2} {A : Type u_4} [inst : Group G] [inst_1 : AddGroup A] [in
+st_2 : DistribMulAction G A]   {S : AddSubgroup A} {a : G} {x : A}, a • x ∈ a • 
+S ↔ x ∈ S
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_mem_smul_set_iff`：smul_mem_smul_set_iff : a • x in a • s ↔ x in
+ s
 -/
-lemma smul_mem_pointwise_smul_iff₀ (ha : a != 0) (S : AddSubgroup A) (x : A) :
-    a • x in a • S ↔ x in S :=
+lemma smul_mem_pointwise_smul_iff₀ (ha : a ≠ 0) (S : AddSubgroup A) (x : A) :
+    a • x ∈ a • S ↔ x ∈ S :=
   smul_mem_smul_set_iff₀ ha (S : Set A) x
-
-/--
-lemma `mem_pointwise_smul_iff_inv_smul_mem₀` / 引理 `mem_pointwise_smul_iff_inv_smul_mem₀`
-
-English:
-lemma mem_pointwise_smul_iff_inv_smul_mem₀
-  given: (ha : a != 0) (S : AddSubgroup A) (x : A)
-  proof: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set A) x
-
-中文:
-引理 mem_pointwise_smul_iff_inv_smul_mem₀
-  条件: (ha : a != 0) (S : 加法子群 A) (x : A)
-  证明: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set A) x
+/-
+**AddSubgroup.mem_pointwise_smul_iff_inv_smul_mem** 是 Mathlib 中的一个引理，位于命名空间 `Add
+Subgroup`。
+形式化陈述：mem_pointwise_smul_iff_inv_smul_mem : x in a • S ↔ a⁻¹ • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_smul_set_iff_inv_smul_mem`：mem_smul_set_iff_inv_smul_mem : x in 
+a • A ↔ a⁻¹ • x in A
 -/
-lemma mem_pointwise_smul_iff_inv_smul_mem₀ (ha : a != 0) (S : AddSubgroup A) (x : A) :
-    x in a • S ↔ a⁻¹ • x in S :=
+lemma mem_pointwise_smul_iff_inv_smul_mem₀ (ha : a ≠ 0) (S : AddSubgroup A) (x : A) :
+    x ∈ a • S ↔ a⁻¹ • x ∈ S :=
   mem_smul_set_iff_inv_smul_mem₀ ha (S : Set A) x
-
-/--
-lemma `mem_inv_pointwise_smul_iff₀` / 引理 `mem_inv_pointwise_smul_iff₀`
-
-English:
-lemma mem_inv_pointwise_smul_iff₀
-  given: (ha : a != 0) (S : AddSubgroup A) (x : A)
-  proof: mem_inv_smul_set_iff₀ ha (S : Set A) x
-
-@[simp]
-
-中文:
-引理 mem_inv_pointwise_smul_iff₀
-  条件: (ha : a != 0) (S : 加法子群 A) (x : A)
-  证明: mem_inv_smul_set_iff₀ ha (S : Set A) x
-
-@[simp]
+/-
+**AddSubgroup.mem_inv_pointwise_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`
+。
+形式化陈述：mem_inv_pointwise_smul_iff : x in a⁻¹ • S ↔ a • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_inv_smul_set_iff`：mem_inv_smul_set_iff : x in a⁻¹ • A ↔ a • x in
+ A
 -/
-lemma mem_inv_pointwise_smul_iff₀ (ha : a != 0) (S : AddSubgroup A) (x : A) :
-    x in a⁻¹ • S ↔ a • x in S :=
+lemma mem_inv_pointwise_smul_iff₀ (ha : a ≠ 0) (S : AddSubgroup A) (x : A) :
+    x ∈ a⁻¹ • S ↔ a • x ∈ S :=
   mem_inv_smul_set_iff₀ ha (S : Set A) x
 
 @[simp]
-/--
-lemma `pointwise_smul_le_pointwise_smul_iff₀` / 引理 `pointwise_smul_le_pointwise_smul_iff₀`
-
-English:
-lemma pointwise_smul_le_pointwise_smul_iff₀
-  given: (ha : a != 0)
-  statement: a • S <= a • T ↔ S <= T
-  proof: smul_set_subset_smul_set_iff₀ ha
-
-中文:
-引理 pointwise_smul_le_pointwise_smul_iff₀
-  条件: (ha : a != 0)
-  结论: a • S <= a • T ↔ S <= T
-  证明: smul_set_subset_smul_set_iff₀ ha
+/-
+**AddSubgroup.pointwise_smul_le_pointwise_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `Ad
+dSubgroup`。
+形式化陈述：pointwise_smul_le_pointwise_smul_iff : a • S <= a • T ↔ S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_smul_set_iff`：smul_set_subset_smul_set_iff : a • A s
+ubseteq a • B ↔ A subseteq B
 -/
-lemma pointwise_smul_le_pointwise_smul_iff₀ (ha : a != 0) : a • S <= a • T ↔ S <= T :=
+lemma pointwise_smul_le_pointwise_smul_iff₀ (ha : a ≠ 0) : a • S ≤ a • T ↔ S ≤ T :=
   smul_set_subset_smul_set_iff₀ ha
-
-/--
-lemma `pointwise_smul_le_iff₀` / 引理 `pointwise_smul_le_iff₀`
-
-English:
-lemma pointwise_smul_le_iff₀
-  given: (ha : a != 0)
-  statement: a • S <= T ↔ S <= a⁻¹ • T
-  proof: smul_set_subset_iff₀ ha
-
-中文:
-引理 pointwise_smul_le_iff₀
-  条件: (ha : a != 0)
-  结论: a • S <= T ↔ S <= a⁻¹ • T
-  证明: smul_set_subset_iff₀ ha
+/-
+**AddSubgroup.pointwise_smul_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`。
+形式化陈述：pointwise_smul_le_iff : a • S <= T ↔ S <= a⁻¹ • T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.smul_set_subset_iff_subset_inv_smul_set`：smul_set_subset_iff_subset_
+inv_smul_set : a • A subseteq B ↔ A subseteq a⁻¹ • B
 -/
-lemma pointwise_smul_le_iff₀ (ha : a != 0) : a • S <= T ↔ S <= a⁻¹ • T := smul_set_subset_iff₀ ha
-/--
-lemma `le_pointwise_smul_iff₀` / 引理 `le_pointwise_smul_iff₀`
-
-English:
-lemma le_pointwise_smul_iff₀
-  given: (ha : a != 0)
-  statement: S <= a • T ↔ a⁻¹ • S <= T
-  proof: subset_smul_set_iff₀ ha
-
-中文:
-引理 le_pointwise_smul_iff₀
-  条件: (ha : a != 0)
-  结论: S <= a • T ↔ a⁻¹ • S <= T
-  证明: subset_smul_set_iff₀ ha
+lemma pointwise_smul_le_iff₀ (ha : a ≠ 0) : a • S ≤ T ↔ S ≤ a⁻¹ • T := smul_set_subset_iff₀ ha
+/-
+**AddSubgroup.le_pointwise_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 `AddSubgroup`。
+形式化陈述：le_pointwise_smul_iff : S <= a • T ↔ a⁻¹ • S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subset_smul_set_iff`：subset_smul_set_iff : A subseteq a • B ↔ a⁻¹ • 
+A subseteq B
 -/
-lemma le_pointwise_smul_iff₀ (ha : a != 0) : S <= a • T ↔ a⁻¹ • S <= T := subset_smul_set_iff₀ ha
+lemma le_pointwise_smul_iff₀ (ha : a ≠ 0) : S ≤ a • T ↔ a⁻¹ • S ≤ T := subset_smul_set_iff₀ ha
 
 end GroupWithZero
 end AddSubgroup
+

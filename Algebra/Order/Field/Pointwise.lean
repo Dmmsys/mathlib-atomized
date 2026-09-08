@@ -28,133 +28,135 @@ namespace LinearOrderedField
 variable {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K] {a b r : K} (hr : 0 < r)
 include hr
 
-/--
-theorem `smul_Ioo` / 定理 `smul_Ioo`
-
-English:
-theorem smul_Ioo
-  statement: r • Ioo a b = Ioo (r * a) (r * b)
-  proof: (OrderIso.mulLeft₀ r hr).image_Ioo a b
-
-中文:
-定理 smul_Ioo
-  结论: r • 开区间 a b = 开区间 (r * a) (r * b)
-  证明: (OrderIso.mulLeft₀ r hr).image_Ioo a b
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioo
+/-
+**LinearOrderedField.smul_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Ioo : r • Ioo a b = Ioo (r * a) (r * b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Ioo`：image_Ioo (e : α ≃o β) (a b : α) : e '' Ioo a b = Io
+o (e a) (e b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Ioo : r • Ioo a b = Ioo (r * a) (r * b) := (OrderIso.mulLeft₀ r hr).image_Ioo a b
-/--
-theorem `smul_Icc` / 定理 `smul_Icc`
-
-English:
-theorem smul_Icc
-  statement: r • Icc a b = Icc (r * a) (r * b)
-  proof: (OrderIso.mulLeft₀ r hr).image_Icc a b
-
-中文:
-定理 smul_Icc
-  结论: r • 闭区间 a b = 闭区间 (r * a) (r * b)
-  证明: (OrderIso.mulLeft₀ r hr).image_Icc a b
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Icc
+/-
+**LinearOrderedField.smul_Icc** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Icc : r • Icc a b = Icc (r * a) (r * b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Icc`：image_Icc (e : α ≃o β) (a b : α) : e '' Icc a b = Ic
+c (e a) (e b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Icc : r • Icc a b = Icc (r * a) (r * b) := (OrderIso.mulLeft₀ r hr).image_Icc a b
-/--
-theorem `smul_Ico` / 定理 `smul_Ico`
-
-English:
-theorem smul_Ico
-  statement: r • Ico a b = Ico (r * a) (r * b)
-  proof: (OrderIso.mulLeft₀ r hr).image_Ico a b
-
-中文:
-定理 smul_Ico
-  结论: r • 左闭右开区间 a b = 左闭右开区间 (r * a) (r * b)
-  证明: (OrderIso.mulLeft₀ r hr).image_Ico a b
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ico
+/-
+**LinearOrderedField.smul_Ico** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Ico : r • Ico a b = Ico (r * a) (r * b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Ico`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] 
+[inst_1 : Preorder β] (e : α ≃o β) (b a : α),   ⇑e '' Set.Ico b a = Set.Ico (e b
+) (e a)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Ico : r • Ico a b = Ico (r * a) (r * b) := (OrderIso.mulLeft₀ r hr).image_Ico a b
-/--
-theorem `smul_Ioc` / 定理 `smul_Ioc`
-
-English:
-theorem smul_Ioc
-  statement: r • Ioc a b = Ioc (r * a) (r * b)
-  proof: (OrderIso.mulLeft₀ r hr).image_Ioc a b
-
-中文:
-定理 smul_Ioc
-  结论: r • 左开右闭区间 a b = 左开右闭区间 (r * a) (r * b)
-  证明: (OrderIso.mulLeft₀ r hr).image_Ioc a b
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioc
+/-
+**LinearOrderedField.smul_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Ioc : r • Ioc a b = Ioc (r * a) (r * b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Ioc`：image_Ioc (e : α ≃o β) (a b : α) : e '' Ioc a b = Io
+c (e a) (e b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Ioc : r • Ioc a b = Ioc (r * a) (r * b) := (OrderIso.mulLeft₀ r hr).image_Ioc a b
-/--
-theorem `smul_Ioi` / 定理 `smul_Ioi`
-
-English:
-theorem smul_Ioi
-  statement: r • Ioi a = Ioi (r * a)
-  proof: (OrderIso.mulLeft₀ r hr).image_Ioi a
-
-中文:
-定理 smul_Ioi
-  结论: r • 左开右无界区间 a = 左开右无界区间 (r * a)
-  证明: (OrderIso.mulLeft₀ r hr).image_Ioi a
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ioi
+/-
+**LinearOrderedField.smul_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Ioi : r • Ioi a = Ioi (r * a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Ioi`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] 
+[inst_1 : Preorder β] (e : α ≃o β) (a : α),   ⇑e '' Set.Ioi a = Set.Ioi (e a)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Ioi : r • Ioi a = Ioi (r * a) := (OrderIso.mulLeft₀ r hr).image_Ioi a
-/--
-theorem `smul_Iio` / 定理 `smul_Iio`
-
-English:
-theorem smul_Iio
-  statement: r • Iio a = Iio (r * a)
-  proof: (OrderIso.mulLeft₀ r hr).image_Iio a
-
-中文:
-定理 smul_Iio
-  结论: r • 左无界右开区间 a = 左无界右开区间 (r * a)
-  证明: (OrderIso.mulLeft₀ r hr).image_Iio a
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Iio
+/-
+**LinearOrderedField.smul_Iio** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Iio : r • Iio a = Iio (r * a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Iio`：image_Iio (e : α ≃o β) (a : α) : e '' Iio a = Iio (e
+ a)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Iio : r • Iio a = Iio (r * a) := (OrderIso.mulLeft₀ r hr).image_Iio a
-/--
-theorem `smul_Ici` / 定理 `smul_Ici`
-
-English:
-theorem smul_Ici
-  statement: r • Ici a = Ici (r * a)
-  proof: (OrderIso.mulLeft₀ r hr).image_Ici a
-
-中文:
-定理 smul_Ici
-  结论: r • 左闭右无界区间 a = 左闭右无界区间 (r * a)
-  证明: (OrderIso.mulLeft₀ r hr).image_Ici a
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Ici
+/-
+**LinearOrderedField.smul_Ici** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Ici : r • Ici a = Ici (r * a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Ici`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] 
+[inst_1 : Preorder β] (e : α ≃o β) (a : α),   ⇑e '' Set.Ici a = Set.Ici (e a)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Ici : r • Ici a = Ici (r * a) := (OrderIso.mulLeft₀ r hr).image_Ici a
-/--
-theorem `smul_Iic` / 定理 `smul_Iic`
-
-English:
-theorem smul_Iic
-  statement: r • Iic a = Iic (r * a)
-  proof: (OrderIso.mulLeft₀ r hr).image_Iic a
-
-中文:
-定理 smul_Iic
-  结论: r • 左无界右闭区间 a = 左无界右闭区间 (r * a)
-  证明: (OrderIso.mulLeft₀ r hr).image_Iic a
-
-Depends on / 依赖: OrderIso, OrderIso.mulLeft, image_Iic
+/-
+**LinearOrderedField.smul_Iic** 是 Mathlib 中的一个定理，位于命名空间 `LinearOrderedField`。
+形式化陈述：smul_Iic : r • Iic a = Iic (r * a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.image_Iic`：image_Iic (e : α ≃o β) (a : α) : e '' Iic a = Iic (e
+ a)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 theorem smul_Iic : r • Iic a = Iic (r * a) := (OrderIso.mulLeft₀ r hr).image_Iic a
 
 end LinearOrderedField
+

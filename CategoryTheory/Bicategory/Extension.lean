@@ -39,20 +39,35 @@ universe w v u
 
 variable {B : Type u} [Bicategory.{w, v} B] {a b c : B}
 
-/--
-Definition of `LeftExtension` / `LeftExtension` 的定义
+/-- Triangle diagrams for (left) extensions.
+```
+  b
+  △ \
+  |   \ extension  △
+f |     \          | unit
+  |       ◿
+  a - - - ▷ c
+      g
+```
+-/
+/-
+**CategoryTheory.Bicategory.LeftExtension** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Bicategory`。
+形式化陈述：LeftExtension (f : a ⟶ b) (g : a ⟶ c)
+参数：f : a ⟶ b；g : a ⟶ c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LeftExtension
-  signature: (f : a ⟶ b) (g : a ⟶ c)
-  body: StructuredArrow g (precomp _ f)
-
-中文:
-缩写 LeftExtension
-  签名: (f : a ⟶ b) (g : a ⟶ c)
-  定义体: StructuredArrow g (precomp _ f)
-
-Depends on / 依赖: StructuredArrow, precomp
+--- 原说明 ---
+Triangle diagrams for (left) extensions.
+```
+  b
+  △ \
+  |   \ extension  △
+f |     \          | unit
+  |       ◿
+  a - - - ▷ c
+      g
+```
 -/
 abbrev LeftExtension (f : a ⟶ b) (g : a ⟶ c) := StructuredArrow g (precomp _ f)
 
@@ -60,215 +75,176 @@ namespace LeftExtension
 
 variable {f : a ⟶ b} {g : a ⟶ c}
 
-/--
-Definition of `extension` / `extension` 的定义
+/-- The extension of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.extension** 是 Mathlib 中的一个缩写定义，位于命名空间 
+`CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：extension (t : LeftExtension f g) : b ⟶ c
+参数：t : LeftExtension f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation extension
-  signature: (t : LeftExtension f g)
-  body: t.right
-
-中文:
-缩写 extension
-  签名: (t : LeftExtension f g)
-  定义体: t.right
-
-Depends on / 依赖: t.right
+--- 原说明 ---
+The extension of `g` along `f`.
 -/
 abbrev extension (t : LeftExtension f g) : b ⟶ c := t.right
 
-/--
-Definition of `unit` / `unit` 的定义
+/-- The 2-morphism filling the triangle diagram. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.unit** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.Bicategory.LeftExtension`。
+形式化陈述：unit (t : LeftExtension f g) : g ⟶ f ≫ t.extension
+参数：t : LeftExtension f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation unit
-  signature: (t : LeftExtension f g)
-  body: t.hom
-
-中文:
-缩写 unit
-  签名: (t : LeftExtension f g)
-  定义体: t.hom
-
-Depends on / 依赖: t.hom
+--- 原说明 ---
+The 2-morphism filling the triangle diagram.
 -/
 abbrev unit (t : LeftExtension f g) : g ⟶ f ≫ t.extension := t.hom
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Construct a left extension from a 1-morphism and a 2-morphism. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.Bicategory.LeftExtension`。
+形式化陈述：mk (h : b ⟶ c) (unit : g ⟶ f ≫ h) : LeftExtension f g
+参数：h : b ⟶ c；unit : g ⟶ f ≫ h。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: (h : b ⟶ c) (unit : g ⟶ f ≫ h)
-  body: StructuredArrow.mk unit
-
-中文:
-缩写 mk
-  签名: (h : b ⟶ c) (unit : g ⟶ f ≫ h)
-  定义体: StructuredArrow.mk unit
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.mk
+--- 原说明 ---
+Construct a left extension from a 1-morphism and a 2-morphism.
 -/
 abbrev mk (h : b ⟶ c) (unit : g ⟶ f ≫ h) : LeftExtension f g :=
   StructuredArrow.mk unit
 
 variable {s t : LeftExtension f g}
 
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- To construct a morphism between left extensions, we need a 2-morphism between the extensions,
+and to check that it is compatible with the units. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.homMk** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cat
+egoryTheory.Bicategory.LeftExtension`。
+形式化陈述：homMk (η : s.extension ⟶ t.extension) (w : s.unit ≫ f ◁ η = t.unit
+参数：η : s.extension ⟶ t.extension。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation homMk
-  signature: (η : s.extension ⟶ t.extension) (w : s.unit ≫ f ◁ η = t.unit := by cat_disch)
-  body: StructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-中文:
-缩写 homMk
-  签名: (η : s.extension ⟶ t.extension) (w : s.unit ≫ f ◁ η = t.unit := by cat_disch)
-  定义体: StructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.homMk, cat_disch
+--- 原说明 ---
+To construct a morphism between left extensions, we need a 2-morphism between th
+e extensions,
+and to check that it is compatible with the units.
 -/
 abbrev homMk (η : s.extension ⟶ t.extension) (w : s.unit ≫ f ◁ η = t.unit := by cat_disch) :
     s ⟶ t :=
   StructuredArrow.homMk η w
 
 @[reassoc (attr := simp)]
-/--
-theorem `w` / 定理 `w`
-
-English:
-theorem w
-  given: (η : s ⟶ t)
-  statement: s.unit ≫ f ◁ η.right = t.unit
-  proof: StructuredArrow.w η
-
-中文:
-定理 w
-  条件: (η : s ⟶ t)
-  结论: s.unit ≫ f ◁ η.right = t.unit
-  证明: StructuredArrow.w η
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.w
+/-
+**CategoryTheory.Bicategory.LeftExtension.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Bicategory.LeftExtension`。
+形式化陈述：w (η : s ⟶ t) : s.unit ≫ f ◁ η.right = t.unit
+参数：η : s ⟶ t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StructuredArrow.w`：w : X.hom ≫ T.map f.right = Y.hom
 -/
 theorem w (η : s ⟶ t) : s.unit ≫ f ◁ η.right = t.unit :=
   StructuredArrow.w η
 
-/--
-Definition of `alongId` / `alongId` 的定义
+/-- The left extension along the identity. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.alongId** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Bicategory.LeftExtension`。
+形式化陈述：alongId (g : a ⟶ c) : LeftExtension (𝟙 a) g
+参数：g : a ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition alongId
-  signature: (g : a ⟶ c)
-  body: .mk _ (fun_ g).inv
-
-中文:
-定义 alongId
-  签名: (g : a ⟶ c)
-  定义体: .mk _ (fun_ g).inv
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+The left extension along the identity.
 -/
-def alongId (g : a ⟶ c) : LeftExtension (𝟙 a) g := .mk _ (fun_ g).inv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (LeftExtension (𝟙 a) g)
-  body: ⟨alongId g⟩
-
-中文:
-实例 :
-  签名: 可居 (LeftExtension (𝟙 a) g)
-  定义体: ⟨alongId g⟩
-
-Depends on / 依赖: alongId
+def alongId (g : a ⟶ c) : LeftExtension (𝟙 a) g := .mk _ (λ_ g).inv
+/-
+**CategoryTheory.Bicategory.LeftExtension.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Bicategory.LeftExtension`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (LeftExtension (𝟙 a) g) := ⟨alongId g⟩
 
 /-- Construct a left extension of `g : a ⟶ c` from a left extension of `g ≫ 𝟙 c`. -/
 @[simps!]
-/--
-Definition of `ofCompId` / `ofCompId` 的定义
+/-
+**CategoryTheory.Bicategory.LeftExtension.ofCompId** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Bicategory.LeftExtension`。
+形式化陈述：ofCompId (t : LeftExtension f (g ≫ 𝟙 c)) : LeftExtension f g
+参数：t : LeftExtension f (g ≫ 𝟙 c)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCompId
-  signature: (t : LeftExtension f (g ≫ 𝟙 c))
-  body: mk (extension t) ((ρ_ g).inv ≫ unit t)
-
-中文:
-定义 ofCompId
-  签名: (t : LeftExtension f (g ≫ 𝟙 c))
-  定义体: mk (extension t) ((ρ_ g).inv ≫ unit t)
-
-Depends on / 依赖: extension
+--- 原说明 ---
+Construct a left extension of `g : a ⟶ c` from a left extension of `g ≫ 𝟙 c`.
 -/
 def ofCompId (t : LeftExtension f (g ≫ 𝟙 c)) : LeftExtension f g :=
   mk (extension t) ((ρ_ g).inv ≫ unit t)
 
-/--
-Definition of `whisker` / `whisker` 的定义
+/-- Whisker a 1-morphism to an extension.
+```
+  b
+  △ \
+  |   \ extension  △
+f |     \          | unit
+  |       ◿
+  a - - - ▷ c - - - ▷ x
+      g         h
+```
+-/
+/-
+**CategoryTheory.Bicategory.LeftExtension.whisker** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whisker (t : LeftExtension f g) {x : B} (h : c ⟶ x) : LeftExtension f (g ≫
+ h)
+参数：t : LeftExtension f g；h : c ⟶ x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whisker
-  signature: (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  body: .mk _ t.unit ▷ h ≫ (α_ _ _ _).hom
-
-@[simp]
-
-中文:
-定义 whisker
-  签名: (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  定义体: .mk _ t.unit ▷ h ≫ (α_ _ _ _).hom
-
-@[simp]
-
-Depends on / 依赖: t.unit
+--- 原说明 ---
+Whisker a 1-morphism to an extension.
+```
+  b
+  △ \
+  |   \ extension  △
+f |     \          | unit
+  |       ◿
+  a - - - ▷ c - - - ▷ x
+      g         h
+```
 -/
 def whisker (t : LeftExtension f g) {x : B} (h : c ⟶ x) : LeftExtension f (g ≫ h) :=
-.mk _ t.unit ▷ h ≫ (α_ _ _ _).hom
+  .mk _ <| t.unit ▷ h ≫ (α_ _ _ _).hom
 
 @[simp]
-/--
-theorem `whisker_extension` / 定理 `whisker_extension`
-
-English:
-theorem whisker_extension
-  given: (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whisker_extension
-  条件: (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Bicategory.LeftExtension.whisker_extension** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whisker_extension (t : LeftExtension f g) {x : B} (h : c ⟶ x) : (t.whisker
+ h).extension = t.extension ≫ h
+参数：t : LeftExtension f g；h : c ⟶ x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whisker_extension (t : LeftExtension f g) {x : B} (h : c ⟶ x) :
     (t.whisker h).extension = t.extension ≫ h :=
   rfl
 
 @[simp]
-/--
-theorem `whisker_unit` / 定理 `whisker_unit`
-
-English:
-theorem whisker_unit
-  given: (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  proof: rfl
-
-中文:
-定理 whisker_unit
-  条件: (t : LeftExtension f g) {x : B} (h : c ⟶ x)
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.LeftExtension.whisker_unit** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whisker_unit (t : LeftExtension f g) {x : B} (h : c ⟶ x) : (t.whisker h).u
+nit = t.unit ▷ h ≫ (α_ f t.extension h).hom
+参数：t : LeftExtension f g；h : c ⟶ x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whisker_unit (t : LeftExtension f g) {x : B} (h : c ⟶ x) :
     (t.whisker h).unit = t.unit ▷ h ≫ (α_ f t.extension h).hom :=
@@ -276,45 +252,38 @@ theorem whisker_unit (t : LeftExtension f g) {x : B} (h : c ⟶ x) :
 
 /-- Whiskering a 1-morphism is a functor. -/
 @[simps]
-/--
-Definition of `whiskering` / `whiskering` 的定义
+/-
+**CategoryTheory.Bicategory.LeftExtension.whiskering** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whiskering {x : B} (h : c ⟶ x) : LeftExtension f g ⥤ LeftExtension f (g ≫ 
+h) where obj t
+参数：h : c ⟶ x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskering
-  signature: {x : B} (h : c ⟶ x)
-  body: t.whisker h
-map η := LeftExtension.homMk (η.right ▷ h) by
-    simp [-LeftExtension.w, ← LeftExtension.w η]
-
-中文:
-定义 whiskering
-  签名: {x : B} (h : c ⟶ x)
-  定义体: t.whisker h
-map η := LeftExtension.homMk (η.right ▷ h) by
-    simp [-LeftExtension.w, ← LeftExtension.w η]
-
-Depends on / 依赖: t.whisker, whisker
+--- 原说明 ---
+Whiskering a 1-morphism is a functor.
 -/
 def whiskering {x : B} (h : c ⟶ x) : LeftExtension f g ⥤ LeftExtension f (g ≫ h) where
   obj t := t.whisker h
-map η := LeftExtension.homMk (η.right ▷ h) by
+  map η := LeftExtension.homMk (η.right ▷ h) <| by
     simp [-LeftExtension.w, ← LeftExtension.w η]
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Define a morphism between left extensions by cancelling the whiskered identities. -/
 @[simps! right]
-/--
-Definition of `whiskerIdCancel` / `whiskerIdCancel` 的定义
+/-
+**CategoryTheory.Bicategory.LeftExtension.whiskerIdCancel** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whiskerIdCancel (s : LeftExtension f (g ≫ 𝟙 c)) {t : LeftExtension f g} (τ
+ : s ⟶ t.whisker (𝟙 c)) : s.ofCompId ⟶ t
+参数：s : LeftExtension f (g ≫ 𝟙 c)；τ : s ⟶ t.whisker (𝟙 c)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerIdCancel
-  body: LeftExtension.homMk (τ.right ≫ (ρ_ _).hom)
-
-中文:
-定义 whiskerIdCancel
-  定义体: LeftExtension.homMk (τ.right ≫ (ρ_ _).hom)
-
-Depends on / 依赖: LeftExtension, LeftExtension.homMk
+--- 原说明 ---
+Define a morphism between left extensions by cancelling the whiskered identities
+.
 -/
 def whiskerIdCancel
     (s : LeftExtension f (g ≫ 𝟙 c)) {t : LeftExtension f g} (τ : s ⟶ t.whisker (𝟙 c)) :
@@ -324,34 +293,20 @@ def whiskerIdCancel
 set_option backward.isDefEq.respectTransparency false in
 /-- Construct a morphism between whiskered extensions. -/
 @[simps! right]
-/--
-Definition of `whiskerHom` / `whiskerHom` 的定义
+/-
+**CategoryTheory.Bicategory.LeftExtension.whiskerHom** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whiskerHom (i : s ⟶ t) {x : B} (h : c ⟶ x) : s.whisker h ⟶ t.whisker h
+参数：i : s ⟶ t；h : c ⟶ x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerHom
-  signature: (i : s ⟶ t) {x : B} (h : c ⟶ x)
-  body: StructuredArrow.homMk (i.right ▷ h) by
-    rw [← cancel_mono (α_ _ _ _).inv]
-    calc
-      _ = (unit s ≫ f ◁ i.right) ▷ h := by simp [-LeftExtension.w]
-      _ = unit t ▷ h := congrArg (· ▷ h) (LeftExtension.w i)
-      _ = _ := by simp
-
-中文:
-定义 whiskerHom
-  签名: (i : s ⟶ t) {x : B} (h : c ⟶ x)
-  定义体: StructuredArrow.homMk (i.right ▷ h) by
-    rw [← cancel_mono (α_ _ _ _).inv]
-    calc
-      _ = (unit s ≫ f ◁ i.right) ▷ h := by simp [-LeftExtension.w]
-      _ = unit t ▷ h := congrArg (· ▷ h) (LeftExtension.w i)
-      _ = _ := by simp
-
-Depends on / 依赖: LeftExtension, LeftExtension.w, StructuredArrow, StructuredArrow.homMk, cancel_mono, i.right
+--- 原说明 ---
+Construct a morphism between whiskered extensions.
 -/
 def whiskerHom (i : s ⟶ t) {x : B} (h : c ⟶ x) :
     s.whisker h ⟶ t.whisker h :=
-StructuredArrow.homMk (i.right ▷ h) by
+  StructuredArrow.homMk (i.right ▷ h) <| by
     rw [← cancel_mono (α_ _ _ _).inv]
     calc
       _ = (unit s ≫ f ◁ i.right) ▷ h := by simp [-LeftExtension.w]
@@ -359,36 +314,17 @@ StructuredArrow.homMk (i.right ▷ h) by
       _ = _ := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `whiskerIso` / `whiskerIso` 的定义
+/-- Construct an isomorphism between whiskered extensions. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.whiskerIso** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whiskerIso (i : s ≅ t) {x : B} (h : c ⟶ x) : s.whisker h ≅ t.whisker h
+参数：i : s ≅ t；h : c ⟶ x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerIso
-  signature: (i : s ≅ t) {x : B} (h : c ⟶ x)
-  body: Iso.mk (whiskerHom i.hom h) (whiskerHom i.inv h)
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = (i.hom ≫ i.inv).right ▷ h := by simp [-Iso.hom_inv_id]
-        _ = 𝟙 _ := by simp [Iso.hom_inv_id])
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = (i.inv ≫ i.hom).right ▷ h := by simp [-Iso.inv_hom_id]
-        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
-
-中文:
-定义 whiskerIso
-  签名: (i : s ≅ t) {x : B} (h : c ⟶ x)
-  定义体: Iso.mk (whiskerHom i.hom h) (whiskerHom i.inv h)
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = (i.hom ≫ i.inv).right ▷ h := by simp [-Iso.hom_inv_id]
-        _ = 𝟙 _ := by simp [Iso.hom_inv_id])
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = (i.inv ≫ i.hom).right ▷ h := by simp [-Iso.inv_hom_id]
-        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
-
-Depends on / 依赖: Iso.hom_inv_id, Iso.inv_hom_id, Iso.mk, StructuredArrow, StructuredArrow.hom_ext, hom_ext, hom_inv_id, i.hom, i.inv, inv_hom_id, whiskerHom
+--- 原说明 ---
+Construct an isomorphism between whiskered extensions.
 -/
 def whiskerIso (i : s ≅ t) {x : B} (h : c ⟶ x) :
     s.whisker h ≅ t.whisker h :=
@@ -405,40 +341,52 @@ def whiskerIso (i : s ≅ t) {x : B} (h : c ⟶ x) :
 set_option backward.defeqAttrib.useBackward true in
 /-- The isomorphism between left extensions induced by a right unitor. -/
 @[simps! hom_right inv_right]
-/--
-Definition of `whiskerOfCompIdIsoSelf` / `whiskerOfCompIdIsoSelf` 的定义
+/-
+**CategoryTheory.Bicategory.LeftExtension.whiskerOfCompIdIsoSelf** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：whiskerOfCompIdIsoSelf (t : LeftExtension f g) : (t.whisker (𝟙 c)).ofCompI
+d ≅ t
+参数：t : LeftExtension f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerOfCompIdIsoSelf
-  signature: (t : LeftExtension f g)
-  body: StructuredArrow.isoMk (ρ_ (t.extension))
-
-中文:
-定义 whiskerOfCompIdIsoSelf
-  签名: (t : LeftExtension f g)
-  定义体: StructuredArrow.isoMk (ρ_ (t.extension))
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.isoMk, extension, t.extension
+--- 原说明 ---
+The isomorphism between left extensions induced by a right unitor.
 -/
 def whiskerOfCompIdIsoSelf (t : LeftExtension f g) : (t.whisker (𝟙 c)).ofCompId ≅ t :=
   StructuredArrow.isoMk (ρ_ (t.extension))
 
 end LeftExtension
 
-/--
-Definition of `LeftLift` / `LeftLift` 的定义
+/-- Triangle diagrams for (left) lifts.
+```
+            b
+          ◹ |
+   lift /   |      △
+      /     | f    | unit
+    /       ▽
+  c - - - ▷ a
+       g
+```
+-/
+/-
+**CategoryTheory.Bicategory.LeftLift** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.Bicategory`。
+形式化陈述：LeftLift (f : b ⟶ a) (g : c ⟶ a)
+参数：f : b ⟶ a；g : c ⟶ a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LeftLift
-  signature: (f : b ⟶ a) (g : c ⟶ a)
-  body: StructuredArrow g (postcomp _ f)
-
-中文:
-缩写 LeftLift
-  签名: (f : b ⟶ a) (g : c ⟶ a)
-  定义体: StructuredArrow g (postcomp _ f)
-
-Depends on / 依赖: StructuredArrow, postcomp
+--- 原说明 ---
+Triangle diagrams for (left) lifts.
+```
+            b
+          ◹ |
+   lift /   |      △
+      /     | f    | unit
+    /       ▽
+  c - - - ▷ a
+       g
+```
 -/
 abbrev LeftLift (f : b ⟶ a) (g : c ⟶ a) := StructuredArrow g (postcomp _ f)
 
@@ -446,213 +394,175 @@ namespace LeftLift
 
 variable {f : b ⟶ a} {g : c ⟶ a}
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- The lift of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.lift** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Bicategory.LeftLift`。
+形式化陈述：lift (t : LeftLift f g) : c ⟶ b
+参数：t : LeftLift f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lift
-  signature: (t : LeftLift f g)
-  body: t.right
-
-中文:
-缩写 lift
-  签名: (t : LeftLift f g)
-  定义体: t.right
-
-Depends on / 依赖: t.right
+--- 原说明 ---
+The lift of `g` along `f`.
 -/
 abbrev lift (t : LeftLift f g) : c ⟶ b := t.right
 
-/--
-Definition of `unit` / `unit` 的定义
+/-- The 2-morphism filling the triangle diagram. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.unit** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Bicategory.LeftLift`。
+形式化陈述：unit (t : LeftLift f g) : g ⟶ t.lift ≫ f
+参数：t : LeftLift f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation unit
-  signature: (t : LeftLift f g)
-  body: t.hom
-
-中文:
-缩写 unit
-  签名: (t : LeftLift f g)
-  定义体: t.hom
-
-Depends on / 依赖: t.hom
+--- 原说明 ---
+The 2-morphism filling the triangle diagram.
 -/
 abbrev unit (t : LeftLift f g) : g ⟶ t.lift ≫ f := t.hom
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Construct a left lift from a 1-morphism and a 2-morphism. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.Bicategory.LeftLift`。
+形式化陈述：mk (h : c ⟶ b) (unit : g ⟶ h ≫ f) : LeftLift f g
+参数：h : c ⟶ b；unit : g ⟶ h ≫ f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: (h : c ⟶ b) (unit : g ⟶ h ≫ f)
-  body: StructuredArrow.mk unit
-
-中文:
-缩写 mk
-  签名: (h : c ⟶ b) (unit : g ⟶ h ≫ f)
-  定义体: StructuredArrow.mk unit
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.mk
+--- 原说明 ---
+Construct a left lift from a 1-morphism and a 2-morphism.
 -/
 abbrev mk (h : c ⟶ b) (unit : g ⟶ h ≫ f) : LeftLift f g :=
   StructuredArrow.mk unit
 
 variable {s t : LeftLift f g}
 
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- To construct a morphism between left lifts, we need a 2-morphism between the lifts,
+and to check that it is compatible with the units. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.homMk** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.Bicategory.LeftLift`。
+形式化陈述：homMk (η : s.lift ⟶ t.lift) (w : s.unit ≫ η ▷ f = t.unit
+参数：η : s.lift ⟶ t.lift。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation homMk
-  signature: (η : s.lift ⟶ t.lift) (w : s.unit ≫ η ▷ f = t.unit := by cat_disch)
-  body: StructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-中文:
-缩写 homMk
-  签名: (η : s.lift ⟶ t.lift) (w : s.unit ≫ η ▷ f = t.unit := by cat_disch)
-  定义体: StructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.homMk, cat_disch
+--- 原说明 ---
+To construct a morphism between left lifts, we need a 2-morphism between the lif
+ts,
+and to check that it is compatible with the units.
 -/
 abbrev homMk (η : s.lift ⟶ t.lift) (w : s.unit ≫ η ▷ f = t.unit := by cat_disch) :
     s ⟶ t :=
   StructuredArrow.homMk η w
 
 @[reassoc (attr := simp)]
-/--
-theorem `w` / 定理 `w`
-
-English:
-theorem w
-  given: (h : s ⟶ t)
-  statement: s.unit ≫ h.right ▷ f = t.unit
-  proof: StructuredArrow.w h
-
-中文:
-定理 w
-  条件: (h : s ⟶ t)
-  结论: s.unit ≫ h.right ▷ f = t.unit
-  证明: StructuredArrow.w h
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.w
+/-
+**CategoryTheory.Bicategory.LeftLift.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Bicategory.LeftLift`。
+形式化陈述：w (h : s ⟶ t) : s.unit ≫ h.right ▷ f = t.unit
+参数：h : s ⟶ t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StructuredArrow.w`：w : X.hom ≫ T.map f.right = Y.hom
 -/
 theorem w (h : s ⟶ t) : s.unit ≫ h.right ▷ f = t.unit :=
   StructuredArrow.w h
 
-/--
-Definition of `alongId` / `alongId` 的定义
+/-- The left lift along the identity. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.alongId** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Bicategory.LeftLift`。
+形式化陈述：alongId (g : c ⟶ a) : LeftLift (𝟙 a) g
+参数：g : c ⟶ a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition alongId
-  signature: (g : c ⟶ a)
-  body: .mk _ (ρ_ g).inv
-
-中文:
-定义 alongId
-  签名: (g : c ⟶ a)
-  定义体: .mk _ (ρ_ g).inv
+--- 原说明 ---
+The left lift along the identity.
 -/
 def alongId (g : c ⟶ a) : LeftLift (𝟙 a) g := .mk _ (ρ_ g).inv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (LeftLift (𝟙 a) g)
-  body: ⟨alongId g⟩
-
-中文:
-实例 :
-  签名: 可居 (LeftLift (𝟙 a) g)
-  定义体: ⟨alongId g⟩
-
-Depends on / 依赖: alongId
+/-
+**CategoryTheory.Bicategory.LeftLift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Bicategory.LeftLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (LeftLift (𝟙 a) g) := ⟨alongId g⟩
 
 /-- Construct a left lift along `g : c ⟶ a` from a left lift along `𝟙 c ≫ g`. -/
 @[simps!]
-/--
-Definition of `ofIdComp` / `ofIdComp` 的定义
+/-
+**CategoryTheory.Bicategory.LeftLift.ofIdComp** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Bicategory.LeftLift`。
+形式化陈述：ofIdComp (t : LeftLift f (𝟙 c ≫ g)) : LeftLift f g
+参数：t : LeftLift f (𝟙 c ≫ g)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIdComp
-  signature: (t : LeftLift f (𝟙 c ≫ g))
-  body: mk (lift t) ((fun_ _).inv ≫ unit t)
-
-中文:
-定义 ofIdComp
-  签名: (t : LeftLift f (𝟙 c ≫ g))
-  定义体: mk (lift t) ((fun_ _).inv ≫ unit t)
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+Construct a left lift along `g : c ⟶ a` from a left lift along `𝟙 c ≫ g`.
 -/
 def ofIdComp (t : LeftLift f (𝟙 c ≫ g)) : LeftLift f g :=
-  mk (lift t) ((fun_ _).inv ≫ unit t)
+  mk (lift t) ((λ_ _).inv ≫ unit t)
 
-/--
-Definition of `whisker` / `whisker` 的定义
+/-- Whisker a 1-morphism to a lift.
+```
+                    b
+                  ◹ |
+           lift /   |      △
+              /     | f    | unit
+            /       ▽
+x - - - ▷ c - - - ▷ a
+     h         g
+```
+-/
+/-
+**CategoryTheory.Bicategory.LeftLift.whisker** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Bicategory.LeftLift`。
+形式化陈述：whisker (t : LeftLift f g) {x : B} (h : x ⟶ c) : LeftLift f (h ≫ g)
+参数：t : LeftLift f g；h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whisker
-  signature: (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  body: .mk _ h ◁ t.unit ≫ (α_ _ _ _).inv
-
-@[simp]
-
-中文:
-定义 whisker
-  签名: (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  定义体: .mk _ h ◁ t.unit ≫ (α_ _ _ _).inv
-
-@[simp]
-
-Depends on / 依赖: t.unit
+--- 原说明 ---
+Whisker a 1-morphism to a lift.
+```
+                    b
+                  ◹ |
+           lift /   |      △
+              /     | f    | unit
+            /       ▽
+x - - - ▷ c - - - ▷ a
+     h         g
+```
 -/
 def whisker (t : LeftLift f g) {x : B} (h : x ⟶ c) : LeftLift f (h ≫ g) :=
-.mk _ h ◁ t.unit ≫ (α_ _ _ _).inv
+  .mk _ <| h ◁ t.unit ≫ (α_ _ _ _).inv
 
 @[simp]
-/--
-theorem `whisker_lift` / 定理 `whisker_lift`
-
-English:
-theorem whisker_lift
-  given: (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whisker_lift
-  条件: (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Bicategory.LeftLift.whisker_lift** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Bicategory.LeftLift`。
+形式化陈述：whisker_lift (t : LeftLift f g) {x : B} (h : x ⟶ c) : (t.whisker h).lift =
+ h ≫ t.lift
+参数：t : LeftLift f g；h : x ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whisker_lift (t : LeftLift f g) {x : B} (h : x ⟶ c) :
     (t.whisker h).lift = h ≫ t.lift :=
   rfl
 
 @[simp]
-/--
-theorem `whisker_unit` / 定理 `whisker_unit`
-
-English:
-theorem whisker_unit
-  given: (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  proof: rfl
-
-中文:
-定理 whisker_unit
-  条件: (t : LeftLift f g) {x : B} (h : x ⟶ c)
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.LeftLift.whisker_unit** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Bicategory.LeftLift`。
+形式化陈述：whisker_unit (t : LeftLift f g) {x : B} (h : x ⟶ c) : (t.whisker h).unit =
+ h ◁ t.unit ≫ (α_ h t.lift f).inv
+参数：t : LeftLift f g；h : x ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whisker_unit (t : LeftLift f g) {x : B} (h : x ⟶ c) :
     (t.whisker h).unit = h ◁ t.unit ≫ (α_ h t.lift f).inv :=
@@ -660,32 +570,21 @@ theorem whisker_unit (t : LeftLift f g) {x : B} (h : x ⟶ c) :
 
 /-- Whiskering a 1-morphism is a functor. -/
 @[simps]
-/--
-Definition of `whiskering` / `whiskering` 的定义
+/-
+**CategoryTheory.Bicategory.LeftLift.whiskering** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Bicategory.LeftLift`。
+形式化陈述：whiskering {x : B} (h : x ⟶ c) : LeftLift f g ⥤ LeftLift f (h ≫ g) where o
+bj t
+参数：h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskering
-  signature: {x : B} (h : x ⟶ c)
-  body: t.whisker h
-map η := LeftLift.homMk (h ◁ η.right) by
-    dsimp only [whisker_lift, whisker_unit]
-    rw [← LeftLift.w η]
-    simp [-LeftLift.w]
-
-中文:
-定义 whiskering
-  签名: {x : B} (h : x ⟶ c)
-  定义体: t.whisker h
-map η := LeftLift.homMk (h ◁ η.right) by
-    dsimp only [whisker_lift, whisker_unit]
-    rw [← LeftLift.w η]
-    simp [-LeftLift.w]
-
-Depends on / 依赖: t.whisker, whisker
+--- 原说明 ---
+Whiskering a 1-morphism is a functor.
 -/
 def whiskering {x : B} (h : x ⟶ c) : LeftLift f g ⥤ LeftLift f (h ≫ g) where
   obj t := t.whisker h
-map η := LeftLift.homMk (h ◁ η.right) by
+  map η := LeftLift.homMk (h ◁ η.right) <| by
     dsimp only [whisker_lift, whisker_unit]
     rw [← LeftLift.w η]
     simp [-LeftLift.w]
@@ -693,55 +592,40 @@ map η := LeftLift.homMk (h ◁ η.right) by
 set_option backward.isDefEq.respectTransparency false in
 /-- Define a morphism between left lifts by cancelling the whiskered identities. -/
 @[simps! right]
-/--
-Definition of `whiskerIdCancel` / `whiskerIdCancel` 的定义
+/-
+**CategoryTheory.Bicategory.LeftLift.whiskerIdCancel** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Bicategory.LeftLift`。
+形式化陈述：whiskerIdCancel (s : LeftLift f (𝟙 c ≫ g)) {t : LeftLift f g} (τ : s ⟶ t.w
+hisker (𝟙 c)) : s.ofIdComp ⟶ t
+参数：s : LeftLift f (𝟙 c ≫ g)；τ : s ⟶ t.whisker (𝟙 c)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerIdCancel
-  body: LeftLift.homMk (τ.right ≫ (fun_ _).hom)
-
-中文:
-定义 whiskerIdCancel
-  定义体: LeftLift.homMk (τ.right ≫ (fun_ _).hom)
-
-Depends on / 依赖: LeftLift, LeftLift.homMk, fun_
+--- 原说明 ---
+Define a morphism between left lifts by cancelling the whiskered identities.
 -/
 def whiskerIdCancel
     (s : LeftLift f (𝟙 c ≫ g)) {t : LeftLift f g} (τ : s ⟶ t.whisker (𝟙 c)) :
     s.ofIdComp ⟶ t :=
-  LeftLift.homMk (τ.right ≫ (fun_ _).hom)
+  LeftLift.homMk (τ.right ≫ (λ_ _).hom)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Construct a morphism between whiskered lifts. -/
 @[simps! right]
-/--
-Definition of `whiskerHom` / `whiskerHom` 的定义
+/-
+**CategoryTheory.Bicategory.LeftLift.whiskerHom** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Bicategory.LeftLift`。
+形式化陈述：whiskerHom (i : s ⟶ t) {x : B} (h : x ⟶ c) : s.whisker h ⟶ t.whisker h
+参数：i : s ⟶ t；h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerHom
-  signature: (i : s ⟶ t) {x : B} (h : x ⟶ c)
-  body: StructuredArrow.homMk (h ◁ i.right) by
-    rw [← cancel_mono (α_ h _ _).hom]
-    calc
-      _ = h ◁ (unit s ≫ i.right ▷ f) := by simp [-LeftLift.w]
-      _ = h ◁ unit t := congrArg (h ◁ ·) (LeftLift.w i)
-      _ = _ := by simp
-
-中文:
-定义 whiskerHom
-  签名: (i : s ⟶ t) {x : B} (h : x ⟶ c)
-  定义体: StructuredArrow.homMk (h ◁ i.right) by
-    rw [← cancel_mono (α_ h _ _).hom]
-    calc
-      _ = h ◁ (unit s ≫ i.right ▷ f) := by simp [-LeftLift.w]
-      _ = h ◁ unit t := congrArg (h ◁ ·) (LeftLift.w i)
-      _ = _ := by simp
-
-Depends on / 依赖: LeftLift, LeftLift.w, StructuredArrow, StructuredArrow.homMk, cancel_mono, i.right
+--- 原说明 ---
+Construct a morphism between whiskered lifts.
 -/
 def whiskerHom (i : s ⟶ t) {x : B} (h : x ⟶ c) :
     s.whisker h ⟶ t.whisker h :=
-StructuredArrow.homMk (h ◁ i.right) by
+  StructuredArrow.homMk (h ◁ i.right) <| by
     rw [← cancel_mono (α_ h _ _).hom]
     calc
       _ = h ◁ (unit s ≫ i.right ▷ f) := by simp [-LeftLift.w]
@@ -749,36 +633,17 @@ StructuredArrow.homMk (h ◁ i.right) by
       _ = _ := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `whiskerIso` / `whiskerIso` 的定义
+/-- Construct an isomorphism between whiskered lifts. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.whiskerIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Bicategory.LeftLift`。
+形式化陈述：whiskerIso (i : s ≅ t) {x : B} (h : x ⟶ c) : s.whisker h ≅ t.whisker h
+参数：i : s ≅ t；h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerIso
-  signature: (i : s ≅ t) {x : B} (h : x ⟶ c)
-  body: Iso.mk (whiskerHom i.hom h) (whiskerHom i.inv h)
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.hom ≫ i.inv).right := by simp [-Iso.hom_inv_id]
-        _ = 𝟙 _ := by simp [Iso.hom_inv_id])
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.inv ≫ i.hom).right := by simp [-Iso.inv_hom_id]
-        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
-
-中文:
-定义 whiskerIso
-  签名: (i : s ≅ t) {x : B} (h : x ⟶ c)
-  定义体: Iso.mk (whiskerHom i.hom h) (whiskerHom i.inv h)
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.hom ≫ i.inv).right := by simp [-Iso.hom_inv_id]
-        _ = 𝟙 _ := by simp [Iso.hom_inv_id])
-    (StructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.inv ≫ i.hom).right := by simp [-Iso.inv_hom_id]
-        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
-
-Depends on / 依赖: Iso.hom_inv_id, Iso.inv_hom_id, Iso.mk, StructuredArrow, StructuredArrow.hom_ext, hom_ext, hom_inv_id, i.hom, i.inv, inv_hom_id, whiskerHom
+--- 原说明 ---
+Construct an isomorphism between whiskered lifts.
 -/
 def whiskerIso (i : s ≅ t) {x : B} (h : x ⟶ c) :
     s.whisker h ≅ t.whisker h :=
@@ -795,40 +660,51 @@ def whiskerIso (i : s ≅ t) {x : B} (h : x ⟶ c) :
 set_option backward.defeqAttrib.useBackward true in
 /-- The isomorphism between left lifts induced by a left unitor. -/
 @[simps! hom_right inv_right]
-/--
-Definition of `whiskerOfIdCompIsoSelf` / `whiskerOfIdCompIsoSelf` 的定义
+/-
+**CategoryTheory.Bicategory.LeftLift.whiskerOfIdCompIsoSelf** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Bicategory.LeftLift`。
+形式化陈述：whiskerOfIdCompIsoSelf (t : LeftLift f g) : (t.whisker (𝟙 c)).ofIdComp ≅ t
+参数：t : LeftLift f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerOfIdCompIsoSelf
-  signature: (t : LeftLift f g)
-  body: StructuredArrow.isoMk (fun_ (lift t))
-
-中文:
-定义 whiskerOfIdCompIsoSelf
-  签名: (t : LeftLift f g)
-  定义体: StructuredArrow.isoMk (fun_ (lift t))
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.isoMk, fun_
+--- 原说明 ---
+The isomorphism between left lifts induced by a left unitor.
 -/
 def whiskerOfIdCompIsoSelf (t : LeftLift f g) : (t.whisker (𝟙 c)).ofIdComp ≅ t :=
-  StructuredArrow.isoMk (fun_ (lift t))
+  StructuredArrow.isoMk (λ_ (lift t))
 
 end LeftLift
 
-/--
-Definition of `RightExtension` / `RightExtension` 的定义
+/-- Triangle diagrams for (right) extensions.
+```
+  b
+  △ \
+  |   \ extension  | counit
+f |     \          ▽
+  |       ◿
+  a - - - ▷ c
+      g
+```
+-/
+/-
+**CategoryTheory.Bicategory.RightExtension** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：RightExtension (f : a ⟶ b) (g : a ⟶ c)
+参数：f : a ⟶ b；g : a ⟶ c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RightExtension
-  signature: (f : a ⟶ b) (g : a ⟶ c)
-  body: CostructuredArrow (precomp _ f) g
-
-中文:
-缩写 RightExtension
-  签名: (f : a ⟶ b) (g : a ⟶ c)
-  定义体: CostructuredArrow (precomp _ f) g
-
-Depends on / 依赖: CostructuredArrow, precomp
+--- 原说明 ---
+Triangle diagrams for (right) extensions.
+```
+  b
+  △ \
+  |   \ extension  | counit
+f |     \          ▽
+  |       ◿
+  a - - - ▷ c
+      g
+```
 -/
 abbrev RightExtension (f : a ⟶ b) (g : a ⟶ c) := CostructuredArrow (precomp _ f) g
 
@@ -836,151 +712,135 @@ namespace RightExtension
 
 variable {f : a ⟶ b} {g : a ⟶ c}
 
-/--
-Definition of `extension` / `extension` 的定义
+/-- The extension of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.RightExtension.extension** 是 Mathlib 中的一个缩写定义，位于命名空间
+ `CategoryTheory.Bicategory.RightExtension`。
+形式化陈述：extension (t : RightExtension f g) : b ⟶ c
+参数：t : RightExtension f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation extension
-  signature: (t : RightExtension f g)
-  body: t.left
-
-中文:
-缩写 extension
-  签名: (t : RightExtension f g)
-  定义体: t.left
-
-Depends on / 依赖: t.left
+--- 原说明 ---
+The extension of `g` along `f`.
 -/
 abbrev extension (t : RightExtension f g) : b ⟶ c := t.left
 
-/--
-Definition of `counit` / `counit` 的定义
+/-- The 2-morphism filling the triangle diagram. -/
+/-
+**CategoryTheory.Bicategory.RightExtension.counit** 是 Mathlib 中的一个缩写定义，位于命名空间 `C
+ategoryTheory.Bicategory.RightExtension`。
+形式化陈述：counit (t : RightExtension f g) : f ≫ t.extension ⟶ g
+参数：t : RightExtension f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation counit
-  signature: (t : RightExtension f g)
-  body: t.hom
-
-中文:
-缩写 counit
-  签名: (t : RightExtension f g)
-  定义体: t.hom
-
-Depends on / 依赖: t.hom
+--- 原说明 ---
+The 2-morphism filling the triangle diagram.
 -/
 abbrev counit (t : RightExtension f g) : f ≫ t.extension ⟶ g := t.hom
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Construct a right extension from a 1-morphism and a 2-morphism. -/
+/-
+**CategoryTheory.Bicategory.RightExtension.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categ
+oryTheory.Bicategory.RightExtension`。
+形式化陈述：mk (h : b ⟶ c) (counit : f ≫ h ⟶ g) : RightExtension f g
+参数：h : b ⟶ c；counit : f ≫ h ⟶ g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: (h : b ⟶ c) (counit : f ≫ h ⟶ g)
-  body: CostructuredArrow.mk counit
-
-中文:
-缩写 mk
-  签名: (h : b ⟶ c) (counit : f ≫ h ⟶ g)
-  定义体: CostructuredArrow.mk counit
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, counit
+--- 原说明 ---
+Construct a right extension from a 1-morphism and a 2-morphism.
 -/
 abbrev mk (h : b ⟶ c) (counit : f ≫ h ⟶ g) : RightExtension f g :=
   CostructuredArrow.mk counit
 
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- To construct a morphism between right extensions, we need a 2-morphism between the extensions,
+and to check that it is compatible with the counits. -/
+/-
+**CategoryTheory.Bicategory.RightExtension.homMk** 是 Mathlib 中的一个缩写定义，位于命名空间 `Ca
+tegoryTheory.Bicategory.RightExtension`。
+形式化陈述：homMk {s t : RightExtension f g} (η : s.extension ⟶ t.extension) (w : f ◁ 
+η ≫ t.counit = s.counit
+参数：η : s.extension ⟶ t.extension。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation homMk
-  signature: {s t : RightExtension f g} (η : s.extension ⟶ t.extension)
-  body: CostructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-中文:
-缩写 homMk
-  签名: {s t : RightExtension f g} (η : s.extension ⟶ t.extension)
-  定义体: CostructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, cat_disch
+--- 原说明 ---
+To construct a morphism between right extensions, we need a 2-morphism between t
+he extensions,
+and to check that it is compatible with the counits.
 -/
 abbrev homMk {s t : RightExtension f g} (η : s.extension ⟶ t.extension)
     (w : f ◁ η ≫ t.counit = s.counit := by cat_disch) : s ⟶ t :=
   CostructuredArrow.homMk η w
 
 @[reassoc (attr := simp)]
-/--
-theorem `w` / 定理 `w`
-
-English:
-theorem w
-  given: {s t : RightExtension f g} (η : s ⟶ t)
-  proof: CostructuredArrow.w η
-
-中文:
-定理 w
-  条件: {s t : RightExtension f g} (η : s ⟶ t)
-  证明: CostructuredArrow.w η
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.w
+/-
+**CategoryTheory.Bicategory.RightExtension.w** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Bicategory.RightExtension`。
+形式化陈述：w {s t : RightExtension f g} (η : s ⟶ t) : f ◁ η.left ≫ t.counit = s.couni
+t
+参数：η : s ⟶ t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.w`：w (f : X ⟶ Y) : S.map f.left ≫ Y.hom
+ = X.hom
 -/
 theorem w {s t : RightExtension f g} (η : s ⟶ t) :
     f ◁ η.left ≫ t.counit = s.counit :=
   CostructuredArrow.w η
 
-/--
-Definition of `alongId` / `alongId` 的定义
+/-- The right extension along the identity. -/
+/-
+**CategoryTheory.Bicategory.RightExtension.alongId** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Bicategory.RightExtension`。
+形式化陈述：alongId (g : a ⟶ c) : RightExtension (𝟙 a) g
+参数：g : a ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition alongId
-  signature: (g : a ⟶ c)
-  body: .mk _ (fun_ g).hom
-
-中文:
-定义 alongId
-  签名: (g : a ⟶ c)
-  定义体: .mk _ (fun_ g).hom
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+The right extension along the identity.
 -/
-def alongId (g : a ⟶ c) : RightExtension (𝟙 a) g := .mk _ (fun_ g).hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (RightExtension (𝟙 a) g)
-  body: ⟨alongId g⟩
-
-中文:
-实例 :
-  签名: 可居 (RightExtension (𝟙 a) g)
-  定义体: ⟨alongId g⟩
-
-Depends on / 依赖: alongId
+def alongId (g : a ⟶ c) : RightExtension (𝟙 a) g := .mk _ (λ_ g).hom
+/-
+**CategoryTheory.Bicategory.RightExtension.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Bicategory.RightExtension`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (RightExtension (𝟙 a) g) := ⟨alongId g⟩
 
 end RightExtension
 
-/--
-Definition of `RightLift` / `RightLift` 的定义
+/-- Triangle diagrams for (right) lifts.
+```
+            b
+          ◹ |
+   lift /   |      | counit
+      /     | f    ▽
+    /       ▽
+  c - - - ▷ a
+       g
+```
+-/
+/-
+**CategoryTheory.Bicategory.RightLift** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.Bicategory`。
+形式化陈述：RightLift (f : b ⟶ a) (g : c ⟶ a)
+参数：f : b ⟶ a；g : c ⟶ a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RightLift
-  signature: (f : b ⟶ a) (g : c ⟶ a)
-  body: CostructuredArrow (postcomp _ f) g
-
-中文:
-缩写 RightLift
-  签名: (f : b ⟶ a) (g : c ⟶ a)
-  定义体: CostructuredArrow (postcomp _ f) g
-
-Depends on / 依赖: CostructuredArrow, postcomp
+--- 原说明 ---
+Triangle diagrams for (right) lifts.
+```
+            b
+          ◹ |
+   lift /   |      | counit
+      /     | f    ▽
+    /       ▽
+  c - - - ▷ a
+       g
+```
 -/
 abbrev RightLift (f : b ⟶ a) (g : c ⟶ a) := CostructuredArrow (postcomp _ f) g
 
@@ -988,213 +848,176 @@ namespace RightLift
 
 variable {f : b ⟶ a} {g : c ⟶ a}
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- The lift of `g` along `f`. -/
+/-
+**CategoryTheory.Bicategory.RightLift.lift** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.Bicategory.RightLift`。
+形式化陈述：lift (t : RightLift f g) : c ⟶ b
+参数：t : RightLift f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lift
-  signature: (t : RightLift f g)
-  body: t.left
-
-中文:
-缩写 lift
-  签名: (t : RightLift f g)
-  定义体: t.left
-
-Depends on / 依赖: t.left
+--- 原说明 ---
+The lift of `g` along `f`.
 -/
 abbrev lift (t : RightLift f g) : c ⟶ b := t.left
 
-/--
-Definition of `counit` / `counit` 的定义
+/-- The 2-morphism filling the triangle diagram. -/
+/-
+**CategoryTheory.Bicategory.RightLift.counit** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.Bicategory.RightLift`。
+形式化陈述：counit (t : RightLift f g) : t.lift ≫ f ⟶ g
+参数：t : RightLift f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation counit
-  signature: (t : RightLift f g)
-  body: t.hom
-
-中文:
-缩写 counit
-  签名: (t : RightLift f g)
-  定义体: t.hom
-
-Depends on / 依赖: t.hom
+--- 原说明 ---
+The 2-morphism filling the triangle diagram.
 -/
 abbrev counit (t : RightLift f g) : t.lift ≫ f ⟶ g := t.hom
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Construct a right lift from a 1-morphism and a 2-morphism. -/
+/-
+**CategoryTheory.Bicategory.RightLift.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory.Bicategory.RightLift`。
+形式化陈述：mk (h : c ⟶ b) (counit : h ≫ f ⟶ g) : RightLift f g
+参数：h : c ⟶ b；counit : h ≫ f ⟶ g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: (h : c ⟶ b) (counit : h ≫ f ⟶ g)
-  body: CostructuredArrow.mk counit
-
-中文:
-缩写 mk
-  签名: (h : c ⟶ b) (counit : h ≫ f ⟶ g)
-  定义体: CostructuredArrow.mk counit
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, counit
+--- 原说明 ---
+Construct a right lift from a 1-morphism and a 2-morphism.
 -/
 abbrev mk (h : c ⟶ b) (counit : h ≫ f ⟶ g) : RightLift f g :=
   CostructuredArrow.mk counit
 
 variable {s t : RightLift f g}
 
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- To construct a morphism between right lifts, we need a 2-morphism between the lifts,
+and to check that it is compatible with the counits. -/
+/-
+**CategoryTheory.Bicategory.RightLift.homMk** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Bicategory.RightLift`。
+形式化陈述：homMk (η : s.lift ⟶ t.lift) (w : η ▷ f ≫ t.counit = s.counit
+参数：η : s.lift ⟶ t.lift。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation homMk
-  signature: (η : s.lift ⟶ t.lift) (w : η ▷ f ≫ t.counit = s.counit := by cat_disch)
-  body: CostructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-中文:
-缩写 homMk
-  签名: (η : s.lift ⟶ t.lift) (w : η ▷ f ≫ t.counit = s.counit := by cat_disch)
-  定义体: CostructuredArrow.homMk η w
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, cat_disch
+--- 原说明 ---
+To construct a morphism between right lifts, we need a 2-morphism between the li
+fts,
+and to check that it is compatible with the counits.
 -/
 abbrev homMk (η : s.lift ⟶ t.lift) (w : η ▷ f ≫ t.counit = s.counit := by cat_disch) :
     s ⟶ t :=
   CostructuredArrow.homMk η w
 
 @[reassoc (attr := simp)]
-/--
-theorem `w` / 定理 `w`
-
-English:
-theorem w
-  given: (h : s ⟶ t)
-  statement: h.left ▷ f ≫ t.counit = s.counit
-  proof: CostructuredArrow.w h
-
-中文:
-定理 w
-  条件: (h : s ⟶ t)
-  结论: h.left ▷ f ≫ t.counit = s.counit
-  证明: CostructuredArrow.w h
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.w
+/-
+**CategoryTheory.Bicategory.RightLift.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Bicategory.RightLift`。
+形式化陈述：w (h : s ⟶ t) : h.left ▷ f ≫ t.counit = s.counit
+参数：h : s ⟶ t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.w`：w (f : X ⟶ Y) : S.map f.left ≫ Y.hom
+ = X.hom
 -/
 theorem w (h : s ⟶ t) : h.left ▷ f ≫ t.counit = s.counit :=
   CostructuredArrow.w h
 
-/--
-Definition of `alongId` / `alongId` 的定义
+/-- The right lift along the identity. -/
+/-
+**CategoryTheory.Bicategory.RightLift.alongId** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Bicategory.RightLift`。
+形式化陈述：alongId (g : c ⟶ a) : RightLift (𝟙 a) g
+参数：g : c ⟶ a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition alongId
-  signature: (g : c ⟶ a)
-  body: .mk _ (ρ_ g).hom
-
-中文:
-定义 alongId
-  签名: (g : c ⟶ a)
-  定义体: .mk _ (ρ_ g).hom
+--- 原说明 ---
+The right lift along the identity.
 -/
 def alongId (g : c ⟶ a) : RightLift (𝟙 a) g := .mk _ (ρ_ g).hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (RightLift (𝟙 a) g)
-  body: ⟨alongId g⟩
-
-中文:
-实例 :
-  签名: 可居 (RightLift (𝟙 a) g)
-  定义体: ⟨alongId g⟩
-
-Depends on / 依赖: alongId
+/-
+**CategoryTheory.Bicategory.RightLift.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.Bicategory.RightLift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (RightLift (𝟙 a) g) := ⟨alongId g⟩
 
 /-- Construct a right lift along `g : c ⟶ a` from a right lift along `𝟙 c ≫ g`. -/
 @[simps!]
-/--
-Definition of `ofIdComp` / `ofIdComp` 的定义
+/-
+**CategoryTheory.Bicategory.RightLift.ofIdComp** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Bicategory.RightLift`。
+形式化陈述：ofIdComp (t : RightLift f (𝟙 c ≫ g)) : RightLift f g
+参数：t : RightLift f (𝟙 c ≫ g)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIdComp
-  signature: (t : RightLift f (𝟙 c ≫ g))
-  body: mk (lift t) (counit t ≫ (fun_ _).hom)
-
-中文:
-定义 ofIdComp
-  签名: (t : RightLift f (𝟙 c ≫ g))
-  定义体: mk (lift t) (counit t ≫ (fun_ _).hom)
-
-Depends on / 依赖: counit, fun_, sq_hasLift_of_hasLiftingProperty
+--- 原说明 ---
+Construct a right lift along `g : c ⟶ a` from a right lift along `𝟙 c ≫ g`.
 -/
 def ofIdComp (t : RightLift f (𝟙 c ≫ g)) : RightLift f g :=
-  mk (lift t) (counit t ≫ (fun_ _).hom)
+  mk (lift t) (counit t ≫ (λ_ _).hom)
 
-/--
-Definition of `whisker` / `whisker` 的定义
+/-- Whisker a 1-morphism to a lift.
+```
+                    b
+                  ◹ |
+           lift /   |      | counit
+              /     | f    ▽
+            /       ▽
+x - - - ▷ c - - - ▷ a
+     h         g
+```
+-/
+/-
+**CategoryTheory.Bicategory.RightLift.whisker** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Bicategory.RightLift`。
+形式化陈述：whisker (t : RightLift f g) {x : B} (h : x ⟶ c) : RightLift f (h ≫ g)
+参数：t : RightLift f g；h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whisker
-  signature: (t : RightLift f g) {x : B} (h : x ⟶ c)
-  body: .mk _ (α_ _ _ _).hom ≫ h ◁ t.counit
-
-@[simp]
-
-中文:
-定义 whisker
-  签名: (t : RightLift f g) {x : B} (h : x ⟶ c)
-  定义体: .mk _ (α_ _ _ _).hom ≫ h ◁ t.counit
-
-@[simp]
-
-Depends on / 依赖: counit, t.counit
+--- 原说明 ---
+Whisker a 1-morphism to a lift.
+```
+                    b
+                  ◹ |
+           lift /   |      | counit
+              /     | f    ▽
+            /       ▽
+x - - - ▷ c - - - ▷ a
+     h         g
+```
 -/
 def whisker (t : RightLift f g) {x : B} (h : x ⟶ c) : RightLift f (h ≫ g) :=
-.mk _ (α_ _ _ _).hom ≫ h ◁ t.counit
+  .mk _ <| (α_ _ _ _).hom ≫ h ◁ t.counit
 
 @[simp]
-/--
-theorem `whisker_lift` / 定理 `whisker_lift`
-
-English:
-theorem whisker_lift
-  given: (t : RightLift f g) {x : B} (h : x ⟶ c)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whisker_lift
-  条件: (t : RightLift f g) {x : B} (h : x ⟶ c)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Bicategory.RightLift.whisker_lift** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Bicategory.RightLift`。
+形式化陈述：whisker_lift (t : RightLift f g) {x : B} (h : x ⟶ c) : (t.whisker h).lift 
+= h ≫ t.lift
+参数：t : RightLift f g；h : x ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whisker_lift (t : RightLift f g) {x : B} (h : x ⟶ c) :
     (t.whisker h).lift = h ≫ t.lift :=
   rfl
 
 @[simp]
-/--
-theorem `whisker_counit` / 定理 `whisker_counit`
-
-English:
-theorem whisker_counit
-  given: (t : RightLift f g) {x : B} (h : x ⟶ c)
-  proof: rfl
-
-中文:
-定理 whisker_counit
-  条件: (t : RightLift f g) {x : B} (h : x ⟶ c)
-  证明: rfl
+/-
+**CategoryTheory.Bicategory.RightLift.whisker_counit** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Bicategory.RightLift`。
+形式化陈述：whisker_counit (t : RightLift f g) {x : B} (h : x ⟶ c) : (t.whisker h).cou
+nit = (α_ h t.lift f).hom ≫ h ◁ t.counit
+参数：t : RightLift f g；h : x ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whisker_counit (t : RightLift f g) {x : B} (h : x ⟶ c) :
     (t.whisker h).counit = (α_ h t.lift f).hom ≫ h ◁ t.counit :=
@@ -1202,32 +1025,21 @@ theorem whisker_counit (t : RightLift f g) {x : B} (h : x ⟶ c) :
 
 /-- Whiskering a 1-morphism is a functor. -/
 @[simps]
-/--
-Definition of `whiskering` / `whiskering` 的定义
+/-
+**CategoryTheory.Bicategory.RightLift.whiskering** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Bicategory.RightLift`。
+形式化陈述：whiskering {x : B} (h : x ⟶ c) : RightLift f g ⥤ RightLift f (h ≫ g) where
+ obj t
+参数：h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskering
-  signature: {x : B} (h : x ⟶ c)
-  body: t.whisker h
-map η := RightLift.homMk (h ◁ η.left) by
-    dsimp only [whisker_lift, whisker_counit]
-    rw [← RightLift.w η]
-    simp [-RightLift.w]
-
-中文:
-定义 whiskering
-  签名: {x : B} (h : x ⟶ c)
-  定义体: t.whisker h
-map η := RightLift.homMk (h ◁ η.left) by
-    dsimp only [whisker_lift, whisker_counit]
-    rw [← RightLift.w η]
-    simp [-RightLift.w]
-
-Depends on / 依赖: t.whisker, whisker
+--- 原说明 ---
+Whiskering a 1-morphism is a functor.
 -/
 def whiskering {x : B} (h : x ⟶ c) : RightLift f g ⥤ RightLift f (h ≫ g) where
   obj t := t.whisker h
-map η := RightLift.homMk (h ◁ η.left) by
+  map η := RightLift.homMk (h ◁ η.left) <| by
     dsimp only [whisker_lift, whisker_counit]
     rw [← RightLift.w η]
     simp [-RightLift.w]
@@ -1235,91 +1047,57 @@ map η := RightLift.homMk (h ◁ η.left) by
 set_option backward.isDefEq.respectTransparency false in
 /-- Define a morphism between right lifts by cancelling the whiskered identities. -/
 @[simps! left]
-/--
-Definition of `whiskerIdCancel` / `whiskerIdCancel` 的定义
+/-
+**CategoryTheory.Bicategory.RightLift.whiskerIdCancel** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Bicategory.RightLift`。
+形式化陈述：whiskerIdCancel (t : RightLift f (𝟙 c ≫ g)) {s : RightLift f g} (τ : s.whi
+sker (𝟙 c) ⟶ t) : s ⟶ t.ofIdComp
+参数：t : RightLift f (𝟙 c ≫ g)；τ : s.whisker (𝟙 c) ⟶ t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerIdCancel
-  body: RightLift.homMk ((fun_ _).inv ≫ τ.left)
-
-中文:
-定义 whiskerIdCancel
-  定义体: RightLift.homMk ((fun_ _).inv ≫ τ.left)
-
-Depends on / 依赖: HasLiftingProperty, RightLift, RightLift.homMk, fun_, of_left_iso
+--- 原说明 ---
+Define a morphism between right lifts by cancelling the whiskered identities.
 -/
 def whiskerIdCancel
     (t : RightLift f (𝟙 c ≫ g)) {s : RightLift f g} (τ : s.whisker (𝟙 c) ⟶ t) :
     s ⟶ t.ofIdComp :=
-  RightLift.homMk ((fun_ _).inv ≫ τ.left)
+  RightLift.homMk ((λ_ _).inv ≫ τ.left)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Construct a morphism between whiskered lifts. -/
 @[simps! left]
-/--
-Definition of `whiskerHom` / `whiskerHom` 的定义
+/-
+**CategoryTheory.Bicategory.RightLift.whiskerHom** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Bicategory.RightLift`。
+形式化陈述：whiskerHom (i : s ⟶ t) {x : B} (h : x ⟶ c) : s.whisker h ⟶ t.whisker h
+参数：i : s ⟶ t；h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerHom
-  signature: (i : s ⟶ t) {x : B} (h : x ⟶ c)
-  body: CostructuredArrow.homMk (h ◁ i.left) by
-    rw [← cancel_epi (α_ h _ _).inv]
-    calc
-      _ = h ◁ (i.left ▷ f ≫ t.counit) := by simp [-RightLift.w]
-      _ = h ◁ s.counit := congrArg (h ◁ ·) (RightLift.w i)
-      _ = _ := by simp
-
-中文:
-定义 whiskerHom
-  签名: (i : s ⟶ t) {x : B} (h : x ⟶ c)
-  定义体: CostructuredArrow.homMk (h ◁ i.left) by
-    rw [← cancel_epi (α_ h _ _).inv]
-    calc
-      _ = h ◁ (i.left ▷ f ≫ t.counit) := by simp [-RightLift.w]
-      _ = h ◁ s.counit := congrArg (h ◁ ·) (RightLift.w i)
-      _ = _ := by simp
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, RightLift, RightLift.w, cancel_epi, counit, i.left, s.counit, t.counit
+--- 原说明 ---
+Construct a morphism between whiskered lifts.
 -/
 def whiskerHom (i : s ⟶ t) {x : B} (h : x ⟶ c) :
     s.whisker h ⟶ t.whisker h :=
-CostructuredArrow.homMk (h ◁ i.left) by
+  CostructuredArrow.homMk (h ◁ i.left) <| by
     rw [← cancel_epi (α_ h _ _).inv]
     calc
       _ = h ◁ (i.left ▷ f ≫ t.counit) := by simp [-RightLift.w]
       _ = h ◁ s.counit := congrArg (h ◁ ·) (RightLift.w i)
       _ = _ := by simp
 
-/--
-Definition of `whiskerIso` / `whiskerIso` 的定义
+/-- Construct an isomorphism between whiskered lifts. -/
+/-
+**CategoryTheory.Bicategory.RightLift.whiskerIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Bicategory.RightLift`。
+形式化陈述：whiskerIso (i : s ≅ t) {x : B} (h : x ⟶ c) : s.whisker h ≅ t.whisker h
+参数：i : s ≅ t；h : x ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerIso
-  signature: (i : s ≅ t) {x : B} (h : x ⟶ c)
-  body: Iso.mk (whiskerHom i.hom h) (whiskerHom i.inv h)
-    (CostructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.hom ≫ i.inv).left := by simp [-Iso.hom_inv_id]
-        _ = 𝟙 _ := by simp [Iso.hom_inv_id])
-    (CostructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.inv ≫ i.hom).left := by simp [-Iso.inv_hom_id]
-        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
-
-中文:
-定义 whiskerIso
-  签名: (i : s ≅ t) {x : B} (h : x ⟶ c)
-  定义体: Iso.mk (whiskerHom i.hom h) (whiskerHom i.inv h)
-    (CostructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.hom ≫ i.inv).left := by simp [-Iso.hom_inv_id]
-        _ = 𝟙 _ := by simp [Iso.hom_inv_id])
-    (CostructuredArrow.hom_ext _ _ <|
-      calc
-        _ = h ◁ (i.inv ≫ i.hom).left := by simp [-Iso.inv_hom_id]
-        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.hom_ext, Iso.hom_inv_id, Iso.inv_hom_id, Iso.mk, hom_ext, hom_inv_id, i.hom, i.inv, inv_hom_id, whiskerHom
+--- 原说明 ---
+Construct an isomorphism between whiskered lifts.
 -/
 def whiskerIso (i : s ≅ t) {x : B} (h : x ⟶ c) :
     s.whisker h ≅ t.whisker h :=
@@ -1337,26 +1115,24 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The isomorphism between right lifts induced by a left unitor. -/
 @[simps! hom_left inv_left]
-/--
-Definition of `whiskerOfIdCompIsoSelf` / `whiskerOfIdCompIsoSelf` 的定义
+/-
+**CategoryTheory.Bicategory.RightLift.whiskerOfIdCompIsoSelf** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Bicategory.RightLift`。
+形式化陈述：whiskerOfIdCompIsoSelf (t : RightLift f g) : (t.whisker (𝟙 c)).ofIdComp ≅ 
+t
+参数：t : RightLift f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerOfIdCompIsoSelf
-  signature: (t : RightLift f g)
-  body: CostructuredArrow.isoMk (fun_ (lift t))
-
-中文:
-定义 whiskerOfIdCompIsoSelf
-  签名: (t : RightLift f g)
-  定义体: CostructuredArrow.isoMk (fun_ (lift t))
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.isoMk, fun_
+--- 原说明 ---
+The isomorphism between right lifts induced by a left unitor.
 -/
 def whiskerOfIdCompIsoSelf (t : RightLift f g) : (t.whisker (𝟙 c)).ofIdComp ≅ t :=
-  CostructuredArrow.isoMk (fun_ (lift t))
+  CostructuredArrow.isoMk (λ_ (lift t))
 
 end RightLift
 
 end Bicategory
 
 end CategoryTheory
+

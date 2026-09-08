@@ -24,122 +24,91 @@ In this file we define the product of subalgebras as a subalgebra of the product
 open Algebra
 
 namespace Subalgebra
-variable {ι R : Type*} {S : ι -> Type*} [CommSemiring R] [forall i, Semiring (S i)] [forall i, Algebra R (S i)]
-  {s : Set ι} {t t₁ t₂ : forall i, Subalgebra R (S i)} {x : forall i, S i}
+variable {ι R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)]
+  {s : Set ι} {t t₁ t₂ : ∀ i, Subalgebra R (S i)} {x : ∀ i, S i}
 
 /-- The product of subalgebras as a subalgebra. -/
 @[simps coe toSubsemiring]
-/--
-Definition of `pi` / `pi` 的定义
+/-
+**Subalgebra.pi** 是 Mathlib 中的一个定义，位于命名空间 `Subalgebra`。
+形式化陈述：pi (s : Set ι) (t : forall i, Subalgebra R (S i)) : Subalgebra R (Π i, S i
+) where __
+参数：s : Set ι；t : forall i, Subalgebra R (S i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: (s : Set ι) (t : forall i, Subalgebra R (S i))
-  body: Submodule.pi s fun i => (t i).toSubmodule
-  mul_mem' hx hy i hi := (t i).mul_mem (hx i hi) (hy i hi)
-  algebraMap_mem' _ i _ := (t i).algebraMap_mem _
-
-中文:
-定义 pi
-  签名: (s : 集合 ι) (t : 对任意 i, 子代数 R (S i))
-  定义体: Submodule.pi s fun i => (t i).toSubmodule
-  mul_mem' hx hy i hi := (t i).mul_mem (hx i hi) (hy i hi)
-  algebraMap_mem' _ i _ := (t i).algebraMap_mem _
-
-Depends on / 依赖: Submodule, Submodule.pi, toSubmodule
+--- 原说明 ---
+The product of subalgebras as a subalgebra.
 -/
-def pi (s : Set ι) (t : forall i, Subalgebra R (S i)) : Subalgebra R (Π i, S i) where
-  __ := Submodule.pi s fun i => (t i).toSubmodule
+def pi (s : Set ι) (t : ∀ i, Subalgebra R (S i)) : Subalgebra R (Π i, S i) where
+  __ := Submodule.pi s fun i ↦ (t i).toSubmodule
   mul_mem' hx hy i hi := (t i).mul_mem (hx i hi) (hy i hi)
   algebraMap_mem' _ i _ := (t i).algebraMap_mem _
-
-/--
-lemma `mem_pi` / 引理 `mem_pi`
-
-English:
-lemma mem_pi
-  statement: x in pi s t ↔ forall i in s, x i in t i
-  proof: .rfl
-
-中文:
-引理 mem_pi
-  结论: x in pi s t ↔ 对任意 i in s, x i in t i
-  证明: .rfl
+/-
+**Subalgebra.mem_pi** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {S : ι → Type u_3} [inst : CommSemiring R]
+ [inst_1 : (i : ι) → Semiring (S i)]   [inst_2 : (i : ι) → Algebra R (S i)] {s :
+ Set ι} {t : (i : ι) → Subalgebra R (S i)} {x : (i : ι) → S i},   x ∈ Subalgebra
+.pi s t ↔ ∀ i ∈ s, x i ∈ t i
+参数：i : ι；S i；i : ι；S i；i : ι；S i；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_pi : x in pi s t ↔ forall i in s, x i in t i := .rfl
+@[simp] lemma mem_pi : x ∈ pi s t ↔ ∀ i ∈ s, x i ∈ t i := .rfl
 
 open Subalgebra in
-/--
-lemma `pi_toSubmodule` / 引理 `pi_toSubmodule`
-
-English:
-lemma pi_toSubmodule
-  statement: toSubmodule (pi s t) = .pi s fun i => (t i).toSubmodule
-  proof: rfl
+/-
+**Subalgebra.pi_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {S : ι → Type u_3} [inst : CommSemiring R]
+ [inst_1 : (i : ι) → Semiring (S i)]   [inst_2 : (i : ι) → Algebra R (S i)] {s :
+ Set ι} {t : (i : ι) → Subalgebra R (S i)},   Subalgebra.toSubmodule (Subalgebra
+.pi s t) = Submodule.pi s fun i => Subalgebra.toSubmodule (t i)
+参数：i : ι；S i；i : ι；S i；i : ι；S i；Subalgebra.pi s t；t i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp] lemma pi_toSubmodule : toSubmodule (pi s t) = .pi s fun i ↦ (t i).toSubmodule := rfl
 
 @[simp]
-
-中文:
-引理 pi_toSubmodule
-  结论: toSubmodule (pi s t) = .pi s fun i => (t i).toSubmodule
-  证明: rfl
-
-@[simp]
+/-
+**Subalgebra.pi_top** 是 Mathlib 中的一个引理，位于命名空间 `Subalgebra`。
+形式化陈述：pi_top (s : Set ι) : pi s (fun i => (⊤ : Subalgebra R (S i))) = ⊤
+参数：s : Set ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.pi_univ`：pi_univ (s : Set ι) : (pi s fun i => (univ : Set (α i))) = 
+univ
 -/
-@[simp] lemma pi_toSubmodule : toSubmodule (pi s t) = .pi s fun i => (t i).toSubmodule := rfl
-
-@[simp]
-/--
-lemma `pi_top` / 引理 `pi_top`
-
-English:
-lemma pi_top
-  given: (s : Set ι)
-  statement: pi s (fun i => (⊤ : Subalgebra R (S i))) = ⊤
-  proof: SetLike.coe_injective Set.pi_univ _
-
-中文:
-引理 pi_top
-  条件: (s : 集合 ι)
-  结论: pi s (fun i => (⊤ : 子代数 R (S i))) = ⊤
-  证明: SetLike.coe_injective Set.pi_univ _
-
-Depends on / 依赖: Set.pi_univ, SetLike, SetLike.coe_injective, coe_injective, pi_univ
+lemma pi_top (s : Set ι) : pi s (fun i ↦ (⊤ : Subalgebra R (S i))) = ⊤ :=
+  SetLike.coe_injective <| Set.pi_univ _
+/-
+**Subalgebra.pi_mono** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {S : ι → Type u_3} [inst : CommSemiring R]
+ [inst_1 : (i : ι) → Semiring (S i)]   [inst_2 : (i : ι) → Algebra R (S i)] {s :
+ Set ι} {t₁ t₂ : (i : ι) → Subalgebra R (S i)},   (∀ i ∈ s, t₁ i ≤ t₂ i) → Subal
+gebra.pi s t₁ ≤ Subalgebra.pi s t₂
+参数：i : ι；S i；i : ι；S i；i : ι；S i；∀ i ∈ s, t₁ i ≤ t₂ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.pi_mono`：pi_mono (h : forall i in s, t₁ i subseteq t₂ i) : pi s t₁ s
+ubseteq pi s t₂
 -/
-lemma pi_top (s : Set ι) : pi s (fun i => (⊤ : Subalgebra R (S i))) = ⊤ :=
-SetLike.coe_injective Set.pi_univ _
-
-/--
-lemma `pi_mono` / 引理 `pi_mono`
-
-English:
-lemma pi_mono
-  given: (h : forall i in s, t₁ i <= t₂ i)
-  statement: pi s t₁ <= pi s t₂
-  proof: Set.pi_mono h
-
-中文:
-引理 pi_mono
-  条件: (h : 对任意 i in s, t₁ i <= t₂ i)
-  结论: pi s t₁ <= pi s t₂
-  证明: Set.pi_mono h
+@[gcongr] lemma pi_mono (h : ∀ i ∈ s, t₁ i ≤ t₂ i) : pi s t₁ ≤ pi s t₂ := Set.pi_mono h
+/-
+**Subalgebra.center_pi** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {S : ι → Type u_3} [inst : CommSemiring R]
+ [inst_1 : (i : ι) → Semiring (S i)]   [inst_2 : (i : ι) → Algebra R (S i)],   S
+ubalgebra.center R ((i : ι) → S i) = Subalgebra.pi Set.univ fun i => Subalgebra.
+center R (S i)
+参数：i : ι；S i；i : ι；S i；(i : ι) → S i；S i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.center_pi`：∀ {ι : Type u_2} {A : ι → Type u_3} [inst : (i : ι) → Mul
+ (A i)],   Set.center ((i : ι) → A i) = Set.univ.pi fun i => Set.center (A i)
 -/
-@[gcongr] lemma pi_mono (h : forall i in s, t₁ i <= t₂ i) : pi s t₁ <= pi s t₂ := Set.pi_mono h
-
-/--
-theorem `center_pi` / 定理 `center_pi`
-
-English:
-theorem center_pi
-  statement: center R (Π i, S i) = pi .univ fun i => center R (S i)
-  proof: SetLike.coe_injective Set.center_pi
-
-中文:
-定理 center_pi
-  结论: center R (Π i, S i) = pi .univ fun i => center R (S i)
-  证明: SetLike.coe_injective Set.center_pi
--/
-protected theorem center_pi : center R (Π i, S i) = pi .univ fun i => center R (S i) :=
+protected theorem center_pi : center R (Π i, S i) = pi .univ fun i ↦ center R (S i) :=
   SetLike.coe_injective Set.center_pi
 
 end Subalgebra
+

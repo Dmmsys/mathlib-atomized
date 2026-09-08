@@ -47,28 +47,22 @@ section Module
 
 variable (S : Type*)
 
-/--
-Definition of `restrictScalarsEquiv` / `restrictScalarsEquiv` 的定义
+/-- The quotient of `P` as an `S`-submodule is the same as the quotient of `P` as an `R`-submodule,
+where `P : Submodule R M`.
+-/
+/-
+**Submodule.Quotient.restrictScalarsEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.Q
+uotient`。
+形式化陈述：restrictScalarsEquiv [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M
+] (P : Submodule R M) : (M ⧸ P.restrictScalars S) ≃ₗ[S] M ⧸ P
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictScalarsEquiv
-  signature: [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
-  body: { Quotient.congrRight fun _ _ => Iff.rfl with
-    map_add' := fun x y => Quotient.inductionOn₂' x y fun _x' _y' => rfl
-    map_smul' := fun _c x => Submodule.Quotient.induction_on _ x fun _x' => rfl }
-
-@[simp]
-
-中文:
-定义 restrictScalarsEquiv
-  签名: [环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
-  定义体: { Quotient.congrRight fun _ _ => Iff.rfl with
-    map_add' := fun x y => Quotient.inductionOn₂' x y fun _x' _y' => rfl
-    map_smul' := fun _c x => Submodule.Quotient.induction_on _ x fun _x' => rfl }
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl, Quotient, Quotient.congrRight, Quotient.inductionOn, Submodule, Submodule.Quotient.induction_on, congrRight, induction_on, map_add, map_smul
+--- 原说明 ---
+The quotient of `P` as an `S`-submodule is the same as the quotient of `P` as an
+ `R`-submodule,
+where `P : Submodule R M`.
 -/
 def restrictScalarsEquiv [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
     (P : Submodule R M) : (M ⧸ P.restrictScalars S) ≃ₗ[S] M ⧸ P :=
@@ -77,22 +71,14 @@ def restrictScalarsEquiv [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
     map_smul' := fun _c x => Submodule.Quotient.induction_on _ x fun _x' => rfl }
 
 @[simp]
-/--
-theorem `restrictScalarsEquiv_mk` / 定理 `restrictScalarsEquiv_mk`
-
-English:
-theorem restrictScalarsEquiv_mk
-  statement: [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 restrictScalarsEquiv_mk
-  结论: [环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.Quotient.restrictScalarsEquiv_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e.Quotient`。
+形式化陈述：restrictScalarsEquiv_mk [Ring S] [SMul S R] [Module S M] [IsScalarTower S 
+R M] (P : Submodule R M) (x : M) : restrictScalarsEquiv S P (mk x) = mk x
+参数：P : Submodule R M；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem restrictScalarsEquiv_mk [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
     (P : Submodule R M) (x : M) :
@@ -100,18 +86,15 @@ theorem restrictScalarsEquiv_mk [Ring S] [SMul S R] [Module S M] [IsScalarTower 
   rfl
 
 @[simp]
-/--
-theorem `restrictScalarsEquiv_symm_mk` / 定理 `restrictScalarsEquiv_symm_mk`
-
-English:
-theorem restrictScalarsEquiv_symm_mk
-  statement: [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
-  proof: rfl
-
-中文:
-定理 restrictScalarsEquiv_symm_mk
-  结论: [环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
-  证明: rfl
+/-
+**Submodule.Quotient.restrictScalarsEquiv_symm_mk** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+module.Quotient`。
+形式化陈述：restrictScalarsEquiv_symm_mk [Ring S] [SMul S R] [Module S M] [IsScalarTow
+er S R M] (P : Submodule R M) (x : M) : (restrictScalarsEquiv S P).symm (mk x) =
+ mk x
+参数：P : Submodule R M；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem restrictScalarsEquiv_symm_mk [Ring S] [SMul S R] [Module S M] [IsScalarTower S R M]
     (P : Submodule R M) (x : M) :
@@ -122,152 +105,119 @@ end Module
 
 variable {p}
 
-/--
-lemma `nontrivial_iff` / 引理 `nontrivial_iff`
-
-English:
-lemma nontrivial_iff
-  statement: Nontrivial (M ⧸ p) ↔ p != ⊤
-  proof: QuotientAddGroup.nontrivial_iff.trans (by simp)
-
-中文:
-引理 nontrivial_iff
-  结论: 非平凡 (M ⧸ p) ↔ p != ⊤
-  证明: QuotientAddGroup.nontrivial_iff.trans (by simp)
+/-
+**Submodule.Quotient.nontrivial_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotien
+t`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {p : Submodule R M}, Nontrivial (M ⧸ p) ↔ p ≠ ⊤
+参数：M ⧸ p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `QuotientAddGroup.nontrivial_iff`：∀ {G : Type u_1} [inst : AddGroup G] {N
+ : AddSubgroup G}, Nontrivial (G ⧸ N) ↔ N ≠ ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] protected lemma nontrivial_iff : Nontrivial (M ⧸ p) ↔ p != ⊤ :=
+@[simp] protected lemma nontrivial_iff : Nontrivial (M ⧸ p) ↔ p ≠ ⊤ :=
   QuotientAddGroup.nontrivial_iff.trans (by simp)
-
-/--
-lemma `subsingleton_iff` / 引理 `subsingleton_iff`
-
-English:
-lemma subsingleton_iff
-  statement: Subsingleton (M ⧸ p) ↔ p = ⊤
-  proof: QuotientAddGroup.subsingleton_iff.trans (by simp)
-
-中文:
-引理 subsingleton_iff
-  结论: 子单例 (M ⧸ p) ↔ p = ⊤
-  证明: QuotientAddGroup.subsingleton_iff.trans (by simp)
+/-
+**Submodule.Quotient.subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quoti
+ent`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {p : Submodule R M}, Subsingleton (M ⧸ p) ↔ p = ⊤
+参数：M ⧸ p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `QuotientAddGroup.subsingleton_iff`：∀ {G : Type u_1} [inst : AddGroup G] 
+{N : AddSubgroup G}, Subsingleton (G ⧸ N) ↔ N = ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] protected lemma subsingleton_iff : Subsingleton (M ⧸ p) ↔ p = ⊤ :=
   QuotientAddGroup.subsingleton_iff.trans (by simp)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: M] : Subsingleton (M ⧸ p)
-  body: by simpa using Subsingleton.elim ..
-
-中文:
-实例 [子单例
-  签名: M] : 子单例 (M ⧸ p)
-  定义体: by simpa using Subsingleton.elim ..
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**Submodule.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton M] : Subsingleton (M ⧸ p) := by simpa using Subsingleton.elim ..
 
 end Quotient
 
-/--
-Instance `QuotientBot.infinite` / 实例 `QuotientBot.infinite`
-
-English:
-instance QuotientBot.infinite
-  signature: [Infinite M]
-  body: Infinite.of_injective Submodule.Quotient.mk fun _x _y h =>
-sub_eq_zero.mp (Submodule.Quotient.eq ⊥).mp h
-
-中文:
-实例 QuotientBot.infinite
-  签名: [无限 M]
-  定义体: Infinite.of_injective Submodule.Quotient.mk fun _x _y h =>
-sub_eq_zero.mp (Submodule.Quotient.eq ⊥).mp h
-
-Depends on / 依赖: Infinite, Infinite.of_injective, Quotient, Submodule, Submodule.Quotient.eq, Submodule.Quotient.mk, of_injective, sub_eq_zero, sub_eq_zero.mp
+/-
+**Submodule.QuotientBot.infinite** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.QuotientBo
+t`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] [Infinite M],   Infinite (M ⧸ ⊥)
+参数：M ⧸ ⊥。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Infinite.of_injective`：of_injective {α β} [Infinite β] (f : β -> α) (hf 
+: Injective f) : Infinite α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Submodule.Quotient.eq`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [
+inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M) {x y
+ : M}, Subm…
 -/
 instance QuotientBot.infinite [Infinite M] : Infinite (M ⧸ (⊥ : Submodule R M)) :=
   Infinite.of_injective Submodule.Quotient.mk fun _x _y h =>
-sub_eq_zero.mp (Submodule.Quotient.eq ⊥).mp h
-
-/--
-Instance `QuotientTop.unique` / 实例 `QuotientTop.unique`
-
-English:
-instance QuotientTop.unique
-  signature: : Unique (M ⧸ (⊤ : Submodule R M)) where
-  body: 0
-  uniq x := Submodule.Quotient.induction_on _ x fun _x =>
-    (Submodule.Quotient.eq ⊤).mpr Submodule.mem_top
-
-中文:
-实例 QuotientTop.unique
-  签名: : 唯一 (M ⧸ (⊤ : 子模 R M)) where
-  定义体: 0
-  uniq x := Submodule.Quotient.induction_on _ x fun _x =>
-    (Submodule.Quotient.eq ⊤).mpr Submodule.mem_top
+    sub_eq_zero.mp <| (Submodule.Quotient.eq ⊥).mp h
+/-
+**Submodule.QuotientTop.unique** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.QuotientTop`
+。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} → [inst : Ring R] → [inst_1 : AddCommGro
+up M] → [inst_2 : _root_.Module R M] → Unique (M ⧸ ⊤)
+参数：M ⧸ ⊤。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance QuotientTop.unique : Unique (M ⧸ (⊤ : Submodule R M)) where
   default := 0
   uniq x := Submodule.Quotient.induction_on _ x fun _x =>
     (Submodule.Quotient.eq ⊤).mpr Submodule.mem_top
-
-/--
-Instance `QuotientTop.fintype` / 实例 `QuotientTop.fintype`
-
-English:
-instance QuotientTop.fintype
-  signature: : Fintype (M ⧸ (⊤ : Submodule R M))
-  body: Fintype.ofSubsingleton 0
-
-中文:
-实例 QuotientTop.fintype
-  签名: : 有限类型 (M ⧸ (⊤ : 子模 R M))
-  定义体: Fintype.ofSubsingleton 0
-
-Depends on / 依赖: Fintype, Fintype.ofSubsingleton, ofSubsingleton
+/-
+**Submodule.QuotientTop.fintype** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.QuotientTop
+`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} → [inst : Ring R] → [inst_1 : AddCommGro
+up M] → [inst_2 : _root_.Module R M] → Fintype (M ⧸ ⊤)
+参数：M ⧸ ⊤。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance QuotientTop.fintype : Fintype (M ⧸ (⊤ : Submodule R M)) :=
   Fintype.ofSubsingleton 0
 
 variable {p} in
-/--
-theorem `unique_quotient_iff_eq_top` / 定理 `unique_quotient_iff_eq_top`
-
-English:
-theorem unique_quotient_iff_eq_top
-  statement: Nonempty (Unique (M ⧸ p)) ↔ p = ⊤
-  proof: ⟨fun ⟨h⟩ => Quotient.subsingleton_iff.mp (@Unique.instSubsingleton _ h),
-    by rintro rfl; exact ⟨QuotientTop.unique⟩⟩
-
-中文:
-定理 unique_quotient_iff_eq_top
-  结论: 非空 (唯一 (M ⧸ p)) ↔ p = ⊤
-  证明: ⟨fun ⟨h⟩ => Quotient.subsingleton_iff.mp (@Unique.instSubsingleton _ h),
-    by rintro rfl; exact ⟨QuotientTop.unique⟩⟩
-
-Depends on / 依赖: Quotient, Quotient.subsingleton_iff.mp, QuotientTop, QuotientTop.unique, Unique, Unique.instSubsingleton, instSubsingleton, subsingleton_iff, unique
+/-
+**Submodule.unique_quotient_iff_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：unique_quotient_iff_eq_top : Nonempty (Unique (M ⧸ p)) ↔ p = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.Quotient.subsingleton_iff`：∀ {R : Type u_1} {M : Type u_2} [in
+st : Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {p : Submo
+dule R M}, Subsingleton (…
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem unique_quotient_iff_eq_top : Nonempty (Unique (M ⧸ p)) ↔ p = ⊤ :=
   ⟨fun ⟨h⟩ => Quotient.subsingleton_iff.mp (@Unique.instSubsingleton _ h),
     by rintro rfl; exact ⟨QuotientTop.unique⟩⟩
-
-/--
-Instance `Quotient.fintype` / 实例 `Quotient.fintype`
-
-English:
-instance Quotient.fintype
-  signature: [Fintype M] (S : Submodule R M)
-  body: @_root_.Quotient.fintype _ _ _ fun _ _ => Classical.dec _
-
-中文:
-实例 商.fintype
-  签名: [有限类型 M] (S : 子模 R M)
-  定义体: @_root_.Quotient.fintype _ _ _ fun _ _ => Classical.dec _
+/-
+**Submodule.Quotient.fintype** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.Quotient`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     [inst : Ring R] →       [inst_1 : 
+AddCommGroup M] → [inst_2 : _root_.Module R M] → [Fintype M] → (S : Submodule R 
+M) → Fintype (M ⧸ S)
+参数：S : Submodule R M；M ⧸ S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance Quotient.fintype [Fintype M] (S : Submodule R M) : Fintype (M ⧸ S) :=
   @_root_.Quotient.fintype _ _ _ fun _ _ => Classical.dec _
@@ -276,1050 +226,912 @@ section
 
 variable {M₂ : Type*} [AddCommGroup M₂] [Module R M₂]
 
-/--
-theorem `strictMono_comap_prod_map` / 定理 `strictMono_comap_prod_map`
-
-English:
-theorem strictMono_comap_prod_map
-  proof: fun m₁ m₂ => QuotientAddGroup.strictMono_comap_prod_map
-    p.toAddSubgroup (a := m₁.toAddSubgroup) (b := m₂.toAddSubgroup)
-
-中文:
-定理 strictMono_comap_prod_map
-  证明: fun m₁ m₂ => QuotientAddGroup.strictMono_comap_prod_map
-    p.toAddSubgroup (a := m₁.toAddSubgroup) (b := m₂.toAddSubgroup)
-
-Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.strictMono_comap_prod_map, p.toAddSubgroup, strictMono_comap_prod_map, toAddSubgroup
+/-
+**Submodule.strictMono_comap_prod_map** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：strictMono_comap_prod_map : StrictMono fun m : Submodule R M => (m.comap p
+.subtype, m.map p.mkQ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientAddGroup.strictMono_comap_prod_map`：∀ {G : Type u} [inst : AddGr
+oup G] (N : AddSubgroup G) [nN : N.Normal],   StrictMono fun H => (AddSubgroup.c
+omap N.subtype H, AddSubgroup.ma…
+· 使用定理 `AddSubgroup.normal_of_isAddCommutative`：∀ {G : Type u_1} [inst : AddGrou
+p G] [IsAddCommutative G] (H : AddSubgroup G), H.Normal
+· 使用定理 `AddCommMagma.to_isCommutative`：∀ {G : Type u_1} [inst : AddCommMagma G],
+ IsAddCommutative G
 -/
 theorem strictMono_comap_prod_map :
-    StrictMono fun m : Submodule R M => (m.comap p.subtype, m.map p.mkQ) :=
-  fun m₁ m₂ => QuotientAddGroup.strictMono_comap_prod_map
+    StrictMono fun m : Submodule R M ↦ (m.comap p.subtype, m.map p.mkQ) :=
+  fun m₁ m₂ ↦ QuotientAddGroup.strictMono_comap_prod_map
     p.toAddSubgroup (a := m₁.toAddSubgroup) (b := m₂.toAddSubgroup)
 
 end
 
-variable {R₂ M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R ->+* R₂}
+variable {R₂ M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R →+* R₂}
 
-/--
-Definition of `liftQ` / `liftQ` 的定义
+/-- The map from the quotient of `M` by a submodule `p` to `M₂` induced by a linear map `f : M → M₂`
+vanishing on `p`, as a linear map. -/
+/-
+**Submodule.liftQ** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= ker f) : M ⧸ p ->ₛₗ[τ₁₂] M₂
+参数：f : M ->ₛₗ[τ₁₂] M₂；h : p <= ker f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftQ
-  signature: (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= ker f)
-  body: { QuotientAddGroup.lift p.toAddSubgroup f.toAddMonoidHom h with
-    map_smul' := by rintro a ⟨x⟩; exact f.map_smulₛₗ a x }
-
-@[simp]
-
-中文:
-定义 liftQ
-  签名: (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= ker f)
-  定义体: { QuotientAddGroup.lift p.toAddSubgroup f.toAddMonoidHom h with
-    map_smul' := by rintro a ⟨x⟩; exact f.map_smulₛₗ a x }
-
-@[simp]
-
-Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.lift, f.map_smul, f.toAddMonoidHom, map_smul, p.toAddSubgroup, toAddMonoidHom, toAddSubgroup
+--- 原说明 ---
+The map from the quotient of `M` by a submodule `p` to `M₂` induced by a linear 
+map `f : M → M₂`
+vanishing on `p`, as a linear map.
 -/
-def liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= ker f) : M ⧸ p ->ₛₗ[τ₁₂] M₂ :=
+def liftQ (f : M →ₛₗ[τ₁₂] M₂) (h : p ≤ ker f) : M ⧸ p →ₛₗ[τ₁₂] M₂ :=
   { QuotientAddGroup.lift p.toAddSubgroup f.toAddMonoidHom h with
     map_smul' := by rintro a ⟨x⟩; exact f.map_smulₛₗ a x }
 
 @[simp]
-/--
-theorem `liftQ_apply` / 定理 `liftQ_apply`
-
-English:
-theorem liftQ_apply
-  given: (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M)
-  statement: p.liftQ f h (Quotient.mk x) = f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 liftQ_apply
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M)
-  结论: p.liftQ f h (商.mk x) = f x
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.liftQ_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：liftQ_apply (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M) : p.liftQ f h (Quotient.mk x)
+ = f x
+参数：f : M ->ₛₗ[τ₁₂] M₂；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem liftQ_apply (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M) : p.liftQ f h (Quotient.mk x) = f x :=
+theorem liftQ_apply (f : M →ₛₗ[τ₁₂] M₂) {h} (x : M) : p.liftQ f h (Quotient.mk x) = f x :=
   rfl
 
 @[simp]
-/--
-theorem `liftQ_mkQ` / 定理 `liftQ_mkQ`
-
-English:
-theorem liftQ_mkQ
-  given: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  statement: (p.liftQ f h).comp p.mkQ = f
-  proof: by ext; rfl
-
-中文:
-定理 liftQ_mkQ
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  结论: (p.liftQ f h).comp p.mkQ = f
-  证明: by ext; rfl
+/-
+**Submodule.liftQ_mkQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：liftQ_mkQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : (p.liftQ f h).comp p.mkQ = f
+参数：f : M ->ₛₗ[τ₁₂] M₂；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
-theorem liftQ_mkQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : (p.liftQ f h).comp p.mkQ = f := by ext; rfl
-
-/--
-theorem `pi_liftQ_eq_liftQ_pi` / 定理 `pi_liftQ_eq_liftQ_pi`
-
-English:
-theorem pi_liftQ_eq_liftQ_pi
-  statement: {ι : Type*} {N : ι -> Type*}
-  proof: by
-  ext x i
-  simp
-
-中文:
-定理 pi_liftQ_eq_liftQ_pi
-  结论: {ι : 类型} {N : ι -> 类型}
-  证明: by
-  ext x i
-  simp
+theorem liftQ_mkQ (f : M →ₛₗ[τ₁₂] M₂) (h) : (p.liftQ f h).comp p.mkQ = f := by ext; rfl
+/-
+**Submodule.pi_liftQ_eq_liftQ_pi** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：pi_liftQ_eq_liftQ_pi {ι : Type*} {N : ι -> Type*} [forall i, AddCommGroup 
+(N i)] [forall i, Module R (N i)] (f : (i : ι) -> M ->ₗ[R] (N i)) {p : Submodule
+ R M} (h : forall i, p <= ker (f i)) : LinearMap.pi (fun i => p.liftQ (f i) (h i
+)) = p.liftQ (LinearMap.pi f) (LinearMap.ker_pi f ▸ le_iInf h)
+参数：N i；N i；f : (i : ι) -> M ->ₗ[R] (N i)；h : forall i, p <= ker (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.linearMap_qext`：linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h :
+ f.comp p.mkQ = g.comp p.mkQ) : f = g
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.ker_pi`：ker_pi (f : (i : ι) -> M₂ ->ₗ[R] φ i) : ker (pi f) = ⨅
+ i : ι, ker (f i)
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.liftQ_mkQ`：liftQ_mkQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : (p.liftQ f h).
+comp p.mkQ = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem pi_liftQ_eq_liftQ_pi {ι : Type*} {N : ι -> Type*}
-    [forall i, AddCommGroup (N i)] [forall i, Module R (N i)]
-    (f : (i : ι) -> M ->ₗ[R] (N i)) {p : Submodule R M} (h : forall i, p <= ker (f i)) :
-    LinearMap.pi (fun i => p.liftQ (f i) (h i)) =
+theorem pi_liftQ_eq_liftQ_pi {ι : Type*} {N : ι → Type*}
+    [∀ i, AddCommGroup (N i)] [∀ i, Module R (N i)]
+    (f : (i : ι) → M →ₗ[R] (N i)) {p : Submodule R M} (h : ∀ i, p ≤ ker (f i)) :
+    LinearMap.pi (fun i ↦ p.liftQ (f i) (h i)) =
       p.liftQ (LinearMap.pi f) (LinearMap.ker_pi f ▸ le_iInf h) := by
   ext x i
   simp
 
-/--
-Definition of `liftQSpanSingleton` / `liftQSpanSingleton` 的定义
+/-- Special case of `submodule.liftQ` when `p` is the span of `x`. In this case, the condition on
+`f` simply becomes vanishing at `x`. -/
+/-
+**Submodule.liftQSpanSingleton** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：liftQSpanSingleton (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0) : (M ⧸ R ∙ x
+) ->ₛₗ[τ₁₂] M₂
+参数：x : M；f : M ->ₛₗ[τ₁₂] M₂；h : f x = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftQSpanSingleton
-  signature: (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0)
-  body: (R ∙ x).liftQ f by rw [span_singleton_le_iff_mem, LinearMap.mem_ker, h]
-
-@[simp]
-
-中文:
-定义 liftQSpanSingleton
-  签名: (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0)
-  定义体: (R ∙ x).liftQ f by rw [span_singleton_le_iff_mem, LinearMap.mem_ker, h]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.mem_ker, mem_ker, span_singleton_le_iff_mem
+--- 原说明 ---
+Special case of `submodule.liftQ` when `p` is the span of `x`. In this case, the
+ condition on
+`f` simply becomes vanishing at `x`.
 -/
-def liftQSpanSingleton (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0) : (M ⧸ R ∙ x) ->ₛₗ[τ₁₂] M₂ :=
-(R ∙ x).liftQ f by rw [span_singleton_le_iff_mem, LinearMap.mem_ker, h]
+def liftQSpanSingleton (x : M) (f : M →ₛₗ[τ₁₂] M₂) (h : f x = 0) : (M ⧸ R ∙ x) →ₛₗ[τ₁₂] M₂ :=
+  (R ∙ x).liftQ f <| by rw [span_singleton_le_iff_mem, LinearMap.mem_ker, h]
 
 @[simp]
-/--
-theorem `liftQSpanSingleton_apply` / 定理 `liftQSpanSingleton_apply`
-
-English:
-theorem liftQSpanSingleton_apply
-  given: (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0) (y : M)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 liftQSpanSingleton_apply
-  条件: (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0) (y : M)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.liftQSpanSingleton_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：liftQSpanSingleton_apply (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0) (y : M
+) : liftQSpanSingleton x f h (Quotient.mk y) = f y
+参数：x : M；f : M ->ₛₗ[τ₁₂] M₂；h : f x = 0；y : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem liftQSpanSingleton_apply (x : M) (f : M ->ₛₗ[τ₁₂] M₂) (h : f x = 0) (y : M) :
+theorem liftQSpanSingleton_apply (x : M) (f : M →ₛₗ[τ₁₂] M₂) (h : f x = 0) (y : M) :
     liftQSpanSingleton x f h (Quotient.mk y) = f y :=
   rfl
 
 @[simp]
-/--
-theorem `range_mkQ` / 定理 `range_mkQ`
-
-English:
-theorem range_mkQ
-  statement: range p.mkQ = ⊤
-  proof: eq_top_iff'.2 by rintro ⟨x⟩; exact ⟨x, rfl⟩
-
-@[simp]
-
-中文:
-定理 range_mkQ
-  结论: range p.mkQ = ⊤
-  证明: eq_top_iff'.2 by rintro ⟨x⟩; exact ⟨x, rfl⟩
-
-@[simp]
-
-Depends on / 依赖: eq_top_iff
+/-
+**Submodule.range_mkQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：range_mkQ : range p.mkQ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.eq_top_iff'`：eq_top_iff' {p : Submodule R M} : p = ⊤ ↔ forall 
+x, x in p
 -/
 theorem range_mkQ : range p.mkQ = ⊤ :=
-eq_top_iff'.2 by rintro ⟨x⟩; exact ⟨x, rfl⟩
+  eq_top_iff'.2 <| by rintro ⟨x⟩; exact ⟨x, rfl⟩
 
 @[simp]
-/--
-theorem `ker_mkQ` / 定理 `ker_mkQ`
-
-English:
-theorem ker_mkQ
-  statement: ker p.mkQ = p
-  proof: by ext; simp
-
-中文:
-定理 ker_mkQ
-  结论: ker p.mkQ = p
-  证明: by ext; simp
+/-
+**Submodule.ker_mkQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：ker_mkQ : ker p.mkQ = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem ker_mkQ : ker p.mkQ = p := by ext; simp
-
-/--
-theorem `le_comap_mkQ` / 定理 `le_comap_mkQ`
-
-English:
-theorem le_comap_mkQ
-  given: (p' : Submodule R (M ⧸ p))
-  statement: p <= comap p.mkQ p'
-  proof: by
-  simpa using (comap_mono bot_le : ker p.mkQ <= comap p.mkQ p')
-
-@[simp]
-
-中文:
-定理 le_comap_mkQ
-  条件: (p' : 子模 R (M ⧸ p))
-  结论: p <= comap p.mkQ p'
-  证明: by
-  simpa using (comap_mono bot_le : ker p.mkQ <= comap p.mkQ p')
-
-@[simp]
-
-Depends on / 依赖: bot_le, comap_mono, p.mkQ
+/-
+**Submodule.le_comap_mkQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：le_comap_mkQ (p' : Submodule R (M ⧸ p)) : p <= comap p.mkQ p'
+参数：p' : Submodule R (M ⧸ p)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `Submodule.comap_mono`：comap_mono {f : M ->ₛₗ[σ₁₂] M₂} {q q' : Submodule 
+R₂ M₂} : q <= q' -> comap f q <= comap f q'
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
-theorem le_comap_mkQ (p' : Submodule R (M ⧸ p)) : p <= comap p.mkQ p' := by
-  simpa using (comap_mono bot_le : ker p.mkQ <= comap p.mkQ p')
+theorem le_comap_mkQ (p' : Submodule R (M ⧸ p)) : p ≤ comap p.mkQ p' := by
+  simpa using (comap_mono bot_le : ker p.mkQ ≤ comap p.mkQ p')
 
 @[simp]
-/--
-theorem `mkQ_map_self` / 定理 `mkQ_map_self`
-
-English:
-theorem mkQ_map_self
-  statement: map p.mkQ p = ⊥
-  proof: by
-  rw [eq_bot_iff]; rw [map_le_iff_le_comap]; rw [comap_bot]; rw [ker_mkQ]
-
-@[simp]
-
-中文:
-定理 mkQ_map_self
-  结论: map p.mkQ p = ⊥
-  证明: by
-  rw [eq_bot_iff]; rw [map_le_iff_le_comap]; rw [comap_bot]; rw [ker_mkQ]
-
-@[simp]
-
-Depends on / 依赖: comap_bot, eq_bot_iff, ker_mkQ, map_le_iff_le_comap
+/-
+**Submodule.mkQ_map_self** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mkQ_map_self : map p.mkQ p = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Submodule.map_le_iff_le_comap`：map_le_iff_le_comap {f : M ->ₛₗ[σ₁₂] M₂} 
+{p : Submodule R M} {q : Submodule R₂ M₂} : map f p <= q ↔ p <= comap f q
+· 使用定理 `Submodule.comap_bot`：comap_bot (f : M ->ₛₗ[τ₁₂] M₂) : comap f ⊥ = ker f
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 theorem mkQ_map_self : map p.mkQ p = ⊥ := by
-  rw [eq_bot_iff]; rw [map_le_iff_le_comap]; rw [comap_bot]; rw [ker_mkQ]
+  rw [eq_bot_iff, map_le_iff_le_comap, comap_bot, ker_mkQ]
 
 @[simp]
-/--
-theorem `comap_map_mkQ` / 定理 `comap_map_mkQ`
-
-English:
-theorem comap_map_mkQ
-  statement: comap p.mkQ (map p.mkQ p') = p ⊔ p'
-  proof: by simp [comap_map_eq, sup_comm]
-
-@[simp]
-
-中文:
-定理 comap_map_mkQ
-  结论: comap p.mkQ (map p.mkQ p') = p ⊔ p'
-  证明: by simp [comap_map_eq, sup_comm]
-
-@[simp]
-
-Depends on / 依赖: comap_map_eq, sup_comm
+/-
+**Submodule.comap_map_mkQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：comap_map_mkQ : comap p.mkQ (map p.mkQ p') = p ⊔ p'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.comap_map_eq`：comap_map_eq (f : M ->ₛₗ[τ₁₂] M₂) (p : Submodule
+ R M) : comap f (map f p) = p ⊔ LinearMap.ker f
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comap_map_mkQ : comap p.mkQ (map p.mkQ p') = p ⊔ p' := by simp [comap_map_eq, sup_comm]
 
 @[simp]
-/--
-theorem `map_mkQ_eq_top` / 定理 `map_mkQ_eq_top`
-
-English:
-theorem map_mkQ_eq_top
-  statement: map p.mkQ p' = ⊤ ↔ p ⊔ p' = ⊤
-  proof: by
-  simp only [LinearMap.map_eq_top_iff p.range_mkQ, sup_comm, ker_mkQ]
-
-中文:
-定理 map_mkQ_eq_top
-  结论: map p.mkQ p' = ⊤ ↔ p ⊔ p' = ⊤
-  证明: by
-  simp only [LinearMap.map_eq_top_iff p.range_mkQ, sup_comm, ker_mkQ]
-
-Depends on / 依赖: LinearMap, LinearMap.map_eq_top_iff, ker_mkQ, map_eq_top_iff, p.range_mkQ, range_mkQ, sup_comm
+/-
+**Submodule.map_mkQ_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：map_mkQ_eq_top : map p.mkQ p' = ⊤ ↔ p ⊔ p' = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.map_eq_top_iff`：map_eq_top_iff {f : M ->ₛₗ[τ₁₂] M₂} (hf : rang
+e f = ⊤) {p : Submodule R M} : p.map f = ⊤ ↔ p ⊔ LinearMap.ker f = ⊤
+· 使用定理 `Submodule.range_mkQ`：range_mkQ : range p.mkQ = ⊤
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem map_mkQ_eq_top : map p.mkQ p' = ⊤ ↔ p ⊔ p' = ⊤ := by
   simp only [LinearMap.map_eq_top_iff p.range_mkQ, sup_comm, ker_mkQ]
 
 variable (q : Submodule R₂ M₂)
 
-/--
-Definition of `mapQ` / `mapQ` 的定义
+/-- The map from the quotient of `M` by submodule `p` to the quotient of `M₂` by submodule `q` along
+`f : M → M₂` is linear. -/
+/-
+**Submodule.mapQ** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：mapQ (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f q) : M ⧸ p ->ₛₗ[τ₁₂] M₂ ⧸ q
+参数：f : M ->ₛₗ[τ₁₂] M₂；h : p <= comap f q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapQ
-  signature: (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f q)
-  body: p.liftQ (q.mkQ.comp f) by simpa [ker_comp] using h
-
-@[simp]
-
-中文:
-定义 mapQ
-  签名: (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f q)
-  定义体: p.liftQ (q.mkQ.comp f) by simpa [ker_comp] using h
-
-@[simp]
-
-Depends on / 依赖: ker_comp, p.liftQ, q.mkQ.comp
+--- 原说明 ---
+The map from the quotient of `M` by submodule `p` to the quotient of `M₂` by sub
+module `q` along
+`f : M → M₂` is linear.
 -/
-def mapQ (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f q) : M ⧸ p ->ₛₗ[τ₁₂] M₂ ⧸ q :=
-p.liftQ (q.mkQ.comp f) by simpa [ker_comp] using h
+def mapQ (f : M →ₛₗ[τ₁₂] M₂) (h : p ≤ comap f q) : M ⧸ p →ₛₗ[τ₁₂] M₂ ⧸ q :=
+  p.liftQ (q.mkQ.comp f) <| by simpa [ker_comp] using h
 
 @[simp]
-/--
-theorem `mapQ_apply` / 定理 `mapQ_apply`
-
-English:
-theorem mapQ_apply
-  given: (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M)
-  proof: rfl
-
-中文:
-定理 mapQ_apply
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M)
-  证明: rfl
+/-
+**Submodule.mapQ_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mapQ_apply (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M) : mapQ p q f h (Quotient.mk x)
+ = Quotient.mk (f x)
+参数：f : M ->ₛₗ[τ₁₂] M₂；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mapQ_apply (f : M ->ₛₗ[τ₁₂] M₂) {h} (x : M) :
+theorem mapQ_apply (f : M →ₛₗ[τ₁₂] M₂) {h} (x : M) :
     mapQ p q f h (Quotient.mk x) = Quotient.mk (f x) :=
   rfl
-
-/--
-theorem `mapQ_mkQ` / 定理 `mapQ_mkQ`
-
-English:
-theorem mapQ_mkQ
-  given: (f : M ->ₛₗ[τ₁₂] M₂) {h}
-  statement: (mapQ p q f h).comp p.mkQ = q.mkQ.comp f
-  proof: by
-  ext x; rfl
-
-@[simp]
-
-中文:
-定理 mapQ_mkQ
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) {h}
-  结论: (mapQ p q f h).comp p.mkQ = q.mkQ.comp f
-  证明: by
-  ext x; rfl
-
-@[simp]
+/-
+**Submodule.mapQ_mkQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mapQ_mkQ (f : M ->ₛₗ[τ₁₂] M₂) {h} : (mapQ p q f h).comp p.mkQ = q.mkQ.comp
+ f
+参数：f : M ->ₛₗ[τ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
-theorem mapQ_mkQ (f : M ->ₛₗ[τ₁₂] M₂) {h} : (mapQ p q f h).comp p.mkQ = q.mkQ.comp f := by
+theorem mapQ_mkQ (f : M →ₛₗ[τ₁₂] M₂) {h} : (mapQ p q f h).comp p.mkQ = q.mkQ.comp f := by
   ext x; rfl
 
 @[simp]
-/--
-theorem `mapQ_zero` / 定理 `mapQ_zero`
-
-English:
-theorem mapQ_zero
-  given: (h : p <= q.comap (0 : M ->ₛₗ[τ₁₂] M₂) := (by simp))
-  proof: by
-  ext
-  simp
-
-中文:
-定理 mapQ_zero
-  条件: (h : p <= q.comap (0 : M ->ₛₗ[τ₁₂] M₂) := (by simp))
-  证明: by
-  ext
-  simp
+/-
+**Submodule.mapQ_zero** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mapQ_zero (h : p <= q.comap (0 : M ->ₛₗ[τ₁₂] M₂)
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.linearMap_qext`：linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h :
+ f.comp p.mkQ = g.comp p.mkQ) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mapQ_zero (h : p <= q.comap (0 : M ->ₛₗ[τ₁₂] M₂) := (by simp)) :
-    p.mapQ q (0 : M ->ₛₗ[τ₁₂] M₂) h = 0 := by
+theorem mapQ_zero (h : p ≤ q.comap (0 : M →ₛₗ[τ₁₂] M₂) := (by simp)) :
+    p.mapQ q (0 : M →ₛₗ[τ₁₂] M₂) h = 0 := by
   ext
   simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mapQ_comp` / 定理 `mapQ_comp`
+/-- Given submodules `p ⊆ M`, `p₂ ⊆ M₂`, `p₃ ⊆ M₃` and maps `f : M → M₂`, `g : M₂ → M₃` inducing
+`mapQ f : M ⧸ p → M₂ ⧸ p₂` and `mapQ g : M₂ ⧸ p₂ → M₃ ⧸ p₃` then
+`mapQ (g ∘ f) = (mapQ g) ∘ (mapQ f)`. -/
+/-
+**Submodule.mapQ_comp** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mapQ_comp {R₃ M₃ : Type*} [Ring R₃] [AddCommGroup M₃] [Module R₃ M₃] (p₂ :
+ Submodule R₂ M₂) (p₃ : Submodule R₃ M₃) {τ₂₃ : R₂ ->+* R₃} {τ₁₃ : R ->+* R₃} [R
+ingHomCompTriple τ₁₂ τ₂₃ τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) (hf : p
+ <= p₂.comap f) (hg : p₂ <= p₃.comap g) (h
+参数：p₂ : Submodule R₂ M₂；p₃ : Submodule R₃ M₃；f : M ->ₛₗ[τ₁₂] M₂；g : M₂ ->ₛₗ[τ₂₃]
+ M₃；hf : p <= p₂.comap f；hg : p₂ <= p₃.comap g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.linearMap_qext`：linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h :
+ f.comp p.mkQ = g.comp p.mkQ) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem mapQ_comp
-  statement: {R₃ M₃ : Type*} [Ring R₃] [AddCommGroup M₃] [Module R₃ M₃] (p₂ : Submodule R₂ M₂)
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 mapQ_comp
-  结论: {R₃ M₃ : 类型} [环 R₃] [加法交换群 M₃] [模 R₃ M₃] (p₂ : 子模 R₂ M₂)
-  证明: by
-  ext
-  simp
-
-@[simp]
-
-Depends on / 依赖: comap_mono, hf.trans
+--- 原说明 ---
+Given submodules `p ⊆ M`, `p₂ ⊆ M₂`, `p₃ ⊆ M₃` and maps `f : M → M₂`, `g : M₂ → 
+M₃` inducing
+`mapQ f : M ⧸ p → M₂ ⧸ p₂` and `mapQ g : M₂ ⧸ p₂ → M₃ ⧸ p₃` then
+`mapQ (g ∘ f) = (mapQ g) ∘ (mapQ f)`.
 -/
 theorem mapQ_comp {R₃ M₃ : Type*} [Ring R₃] [AddCommGroup M₃] [Module R₃ M₃] (p₂ : Submodule R₂ M₂)
-    (p₃ : Submodule R₃ M₃) {τ₂₃ : R₂ ->+* R₃} {τ₁₃ : R ->+* R₃} [RingHomCompTriple τ₁₂ τ₂₃ τ₁₃]
-    (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) (hf : p <= p₂.comap f) (hg : p₂ <= p₃.comap g)
+    (p₃ : Submodule R₃ M₃) {τ₂₃ : R₂ →+* R₃} {τ₁₃ : R →+* R₃} [RingHomCompTriple τ₁₂ τ₂₃ τ₁₃]
+    (f : M →ₛₗ[τ₁₂] M₂) (g : M₂ →ₛₗ[τ₂₃] M₃) (hf : p ≤ p₂.comap f) (hg : p₂ ≤ p₃.comap g)
     (h := hf.trans (comap_mono hg)) :
     p.mapQ p₃ (g.comp f) h = (p₂.mapQ p₃ g hg).comp (p.mapQ p₂ f hf) := by
   ext
   simp
 
 @[simp]
-/--
-theorem `mapQ_id` / 定理 `mapQ_id`
-
-English:
-theorem mapQ_id
-  given: (h : p <= p.comap LinearMap.id := (by rw [comap_id]))
-  proof: by
-  ext
-  simp
-
-中文:
-定理 mapQ_id
-  条件: (h : p <= p.comap 线性映射.id := (by rw [comap_id]))
-  证明: by
-  ext
-  simp
-
-Depends on / 依赖: comap_id
+/-
+**Submodule.mapQ_id** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mapQ_id (h : p <= p.comap LinearMap.id
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.linearMap_qext`：linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h :
+ f.comp p.mkQ = g.comp p.mkQ) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mapQ_id (h : p <= p.comap LinearMap.id := (by rw [comap_id])) :
+theorem mapQ_id (h : p ≤ p.comap LinearMap.id := (by rw [comap_id])) :
     p.mapQ p LinearMap.id h = LinearMap.id := by
   ext
   simp
-
-/--
-theorem `mapQ_pow` / 定理 `mapQ_pow`
-
-English:
-theorem mapQ_pow
-  statement: {f : M ->ₗ[R] M} (h : p <= p.comap f) (k : Nat)
-  proof: by
-  induction k with
-  | zero => simp [Module.End.one_eq_id]
-  | succ k ih =>
-    simp only [Module.End.iterate_succ]
-    rw [mapQ_comp]; rw [ih]
-    exact p.le_comap_pow_of_le_comap h k
-
-中文:
-定理 mapQ_pow
-  结论: {f : M ->ₗ[R] M} (h : p <= p.comap f) (k : 自然数)
-  证明: by
-  induction k with
-  | zero => simp [Module.End.one_eq_id]
-  | succ k ih =>
-    simp only [Module.End.iterate_succ]
-    rw [mapQ_comp]; rw [ih]
-    exact p.le_comap_pow_of_le_comap h k
-
-Depends on / 依赖: le_comap_pow_of_le_comap, p.le_comap_pow_of_le_comap
+/-
+**Submodule.mapQ_pow** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mapQ_pow {f : M ->ₗ[R] M} (h : p <= p.comap f) (k : Nat) (h' : p <= p.coma
+p (f ^ k)
+参数：h : p <= p.comap f；k : Nat。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Submodule.mapQ.congr_simp`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring 
+R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M) 
+{R₂ : Type u_3}…
+· 使用定理 `Submodule.mapQ_id`：mapQ_id (h : p <= p.comap LinearMap.id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Module.End.iterate_succ`：iterate_succ (n : Nat) : f' ^ (n + 1) = .comp (
+f' ^ n) f'
+· 使用定理 `Submodule.le_comap_pow_of_le_comap`：le_comap_pow_of_le_comap (p : Submod
+ule R M) {f : M ->ₗ[R] M} (h : p <= p.comap f) (k : Nat) : p <= p.comap (f ^ k)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Submodule.comap_mono`：comap_mono {f : M ->ₛₗ[σ₁₂] M₂} {q q' : Submodule 
+R₂ M₂} : q <= q' -> comap f q <= comap f q'
+· 使用定理 `Submodule.mapQ_comp`：mapQ_comp {R₃ M₃ : Type*} [Ring R₃] [AddCommGroup M
+₃] [Module R₃ M₃] (p₂ : Submodule R₂ M₂) (p₃ : Submodule R₃ M₃) {τ₂₃ : R₂ ->+* R
+₃} {τ₁₃ :…
 -/
-theorem mapQ_pow {f : M ->ₗ[R] M} (h : p <= p.comap f) (k : Nat)
-    (h' : p <= p.comap (f ^ k) := p.le_comap_pow_of_le_comap h k) :
+theorem mapQ_pow {f : M →ₗ[R] M} (h : p ≤ p.comap f) (k : ℕ)
+    (h' : p ≤ p.comap (f ^ k) := p.le_comap_pow_of_le_comap h k) :
     p.mapQ p (f ^ k) h' = p.mapQ p f h ^ k := by
   induction k with
   | zero => simp [Module.End.one_eq_id]
   | succ k ih =>
     simp only [Module.End.iterate_succ]
-    rw [mapQ_comp]; rw [ih]
+    rw [mapQ_comp, ih]
     exact p.le_comap_pow_of_le_comap h k
-
-/--
-theorem `comap_liftQ` / 定理 `comap_liftQ`
-
-English:
-theorem comap_liftQ
-  given: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  statement: q.comap (p.liftQ f h) = (q.comap f).map (mkQ p)
-  proof: le_antisymm (by rintro ⟨x⟩ hx; exact ⟨_, hx, rfl⟩)
-    (by rw [map_le_iff_le_comap, ← comap_comp, liftQ_mkQ])
-
-中文:
-定理 comap_liftQ
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  结论: q.comap (p.liftQ f h) = (q.comap f).map (mkQ p)
-  证明: le_antisymm (by rintro ⟨x⟩ hx; exact ⟨_, hx, rfl⟩)
-    (by rw [map_le_iff_le_comap, ← comap_comp, liftQ_mkQ])
-
-Depends on / 依赖: comap_comp, le_antisymm, liftQ_mkQ, map_le_iff_le_comap
+/-
+**Submodule.comap_liftQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：comap_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : q.comap (p.liftQ f h) = (q.comap f)
+.map (mkQ p)
+参数：f : M ->ₛₗ[τ₁₂] M₂；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_le_iff_le_comap`：map_le_iff_le_comap {f : M ->ₛₗ[σ₁₂] M₂} 
+{p : Submodule R M} {q : Submodule R₂ M₂} : map f p <= q ↔ p <= comap f q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.comap_comp`：comap_comp (f : M ->ₛₗ[σ₁₂] M₂) (g : M₂ ->ₛₗ[σ₂₃] 
+M₃) (p : Submodule R₃ M₃) : comap (g.comp f : M ->ₛₗ[σ₁₃] M₃) p = comap f (comap
+ g p)
+· 使用定理 `Submodule.liftQ_mkQ`：liftQ_mkQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : (p.liftQ f h).
+comp p.mkQ = f
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem comap_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : q.comap (p.liftQ f h) = (q.comap f).map (mkQ p) :=
+theorem comap_liftQ (f : M →ₛₗ[τ₁₂] M₂) (h) : q.comap (p.liftQ f h) = (q.comap f).map (mkQ p) :=
   le_antisymm (by rintro ⟨x⟩ hx; exact ⟨_, hx, rfl⟩)
     (by rw [map_le_iff_le_comap, ← comap_comp, liftQ_mkQ])
-
-/--
-theorem `map_liftQ` / 定理 `map_liftQ`
-
-English:
-theorem map_liftQ
-  given: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) (q : Submodule R (M ⧸ p))
-  proof: le_antisymm (by rintro _ ⟨⟨x⟩, hxq, rfl⟩; exact ⟨x, hxq, rfl⟩)
-    (by rintro _ ⟨x, hxq, rfl⟩; exact ⟨Quotient.mk x, hxq, rfl⟩)
-
-中文:
-定理 map_liftQ
-  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) (q : 子模 R (M ⧸ p))
-  证明: le_antisymm (by rintro _ ⟨⟨x⟩, hxq, rfl⟩; exact ⟨x, hxq, rfl⟩)
-    (by rintro _ ⟨x, hxq, rfl⟩; exact ⟨Quotient.mk x, hxq, rfl⟩)
-
-Depends on / 依赖: Quotient, Quotient.mk, le_antisymm
+/-
+**Submodule.map_liftQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：map_liftQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) (q : Submodule 
+R (M ⧸ p)) : q.map (p.liftQ f h) = (q.comap p.mkQ).map f
+参数：f : M ->ₛₗ[τ₁₂] M₂；h；q : Submodule R (M ⧸ p)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
 -/
-theorem map_liftQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) (q : Submodule R (M ⧸ p)) :
+theorem map_liftQ [RingHomSurjective τ₁₂] (f : M →ₛₗ[τ₁₂] M₂) (h) (q : Submodule R (M ⧸ p)) :
     q.map (p.liftQ f h) = (q.comap p.mkQ).map f :=
   le_antisymm (by rintro _ ⟨⟨x⟩, hxq, rfl⟩; exact ⟨x, hxq, rfl⟩)
     (by rintro _ ⟨x, hxq, rfl⟩; exact ⟨Quotient.mk x, hxq, rfl⟩)
-
-/--
-theorem `ker_liftQ` / 定理 `ker_liftQ`
-
-English:
-theorem ker_liftQ
-  given: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  statement: ker (p.liftQ f h) = (ker f).map (mkQ p)
-  proof: comap_liftQ _ _ _ _
-
-中文:
-定理 ker_liftQ
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  结论: ker (p.liftQ f h) = (ker f).map (mkQ p)
-  证明: comap_liftQ _ _ _ _
-
-Depends on / 依赖: comap_liftQ
+/-
+**Submodule.ker_liftQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：ker_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : ker (p.liftQ f h) = (ker f).map (mkQ 
+p)
+参数：f : M ->ₛₗ[τ₁₂] M₂；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.comap_liftQ`：comap_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : q.comap (p
+.liftQ f h) = (q.comap f).map (mkQ p)
 -/
-theorem ker_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : ker (p.liftQ f h) = (ker f).map (mkQ p) :=
+theorem ker_liftQ (f : M →ₛₗ[τ₁₂] M₂) (h) : ker (p.liftQ f h) = (ker f).map (mkQ p) :=
   comap_liftQ _ _ _ _
-
-/--
-lemma `ker_mapQ` / 引理 `ker_mapQ`
-
-English:
-lemma ker_mapQ
-  given: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  statement: ker (p.mapQ q f h) = (comap f q).map p.mkQ
-  proof: by
-  simp [Submodule.mapQ, Submodule.ker_liftQ, LinearMap.ker_comp]
-
-中文:
-引理 ker_mapQ
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  结论: ker (p.mapQ q f h) = (comap f q).map p.mkQ
-  证明: by
-  simp [Submodule.mapQ, Submodule.ker_liftQ, LinearMap.ker_comp]
-
-Depends on / 依赖: LinearMap, LinearMap.ker_comp, Submodule, Submodule.ker_liftQ, Submodule.mapQ, ker_comp, ker_liftQ
+/-
+**Submodule.ker_mapQ** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：ker_mapQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : ker (p.mapQ q f h) = (comap f q).map p
+.mkQ
+参数：f : M ->ₛₗ[τ₁₂] M₂；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.ker_liftQ`：ker_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : ker (p.liftQ f
+ h) = (ker f).map (mkQ p)
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma ker_mapQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : ker (p.mapQ q f h) = (comap f q).map p.mkQ := by
+lemma ker_mapQ (f : M →ₛₗ[τ₁₂] M₂) (h) : ker (p.mapQ q f h) = (comap f q).map p.mkQ := by
   simp [Submodule.mapQ, Submodule.ker_liftQ, LinearMap.ker_comp]
-
-/--
-theorem `range_liftQ` / 定理 `range_liftQ`
-
-English:
-theorem range_liftQ
-  given: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  proof: by simpa only [range_eq_map] using! map_liftQ _ _ _ _
-
-中文:
-定理 range_liftQ
-  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h)
-  证明: by simpa only [range_eq_map] using! map_liftQ _ _ _ _
-
-Depends on / 依赖: map_liftQ, range_eq_map
+/-
+**Submodule.range_liftQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：range_liftQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) : range (p.li
+ftQ f h) = range f
+参数：f : M ->ₛₗ[τ₁₂] M₂；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.range_eq_map`：range_eq_map [RingHomSurjective τ₁₂] (f : M ->ₛₗ
+[τ₁₂] M₂) : range f = map f ⊤
+· 使用定理 `Submodule.map_liftQ`：map_liftQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] 
+M₂) (h) (q : Submodule R (M ⧸ p)) : q.map (p.liftQ f h) = (q.comap p.mkQ).map f
 -/
-theorem range_liftQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h) :
+theorem range_liftQ [RingHomSurjective τ₁₂] (f : M →ₛₗ[τ₁₂] M₂) (h) :
     range (p.liftQ f h) = range f := by simpa only [range_eq_map] using! map_liftQ _ _ _ _
-
-/--
-theorem `ker_liftQ_eq_bot` / 定理 `ker_liftQ_eq_bot`
-
-English:
-theorem ker_liftQ_eq_bot
-  given: (f : M ->ₛₗ[τ₁₂] M₂) (h) (h' : ker f <= p)
-  statement: ker (p.liftQ f h) = ⊥
-  proof: by
-  rw [ker_liftQ]; rw [le_antisymm h h']; rw [mkQ_map_self]
-
-中文:
-定理 ker_liftQ_eq_bot
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) (h) (h' : ker f <= p)
-  结论: ker (p.liftQ f h) = ⊥
-  证明: by
-  rw [ker_liftQ]; rw [le_antisymm h h']; rw [mkQ_map_self]
-
-Depends on / 依赖: ker_liftQ, le_antisymm, mkQ_map_self
+/-
+**Submodule.ker_liftQ_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：ker_liftQ_eq_bot (f : M ->ₛₗ[τ₁₂] M₂) (h) (h' : ker f <= p) : ker (p.liftQ
+ f h) = ⊥
+参数：f : M ->ₛₗ[τ₁₂] M₂；h；h' : ker f <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.ker_liftQ`：ker_liftQ (f : M ->ₛₗ[τ₁₂] M₂) (h) : ker (p.liftQ f
+ h) = (ker f).map (mkQ p)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Submodule.mkQ_map_self`：mkQ_map_self : map p.mkQ p = ⊥
 -/
-theorem ker_liftQ_eq_bot (f : M ->ₛₗ[τ₁₂] M₂) (h) (h' : ker f <= p) : ker (p.liftQ f h) = ⊥ := by
-  rw [ker_liftQ]; rw [le_antisymm h h']; rw [mkQ_map_self]
-
-/--
-theorem `ker_liftQ_eq_bot'` / 定理 `ker_liftQ_eq_bot'`
-
-English:
-theorem ker_liftQ_eq_bot'
-  given: (f : M ->ₛₗ[τ₁₂] M₂) (h : p = ker f)
-  proof: ker_liftQ_eq_bot p f h.le h.ge
-
-中文:
-定理 ker_liftQ_eq_bot'
-  条件: (f : M ->ₛₗ[τ₁₂] M₂) (h : p = ker f)
-  证明: ker_liftQ_eq_bot p f h.le h.ge
-
-Depends on / 依赖: h.ge, h.le, ker_liftQ_eq_bot
+theorem ker_liftQ_eq_bot (f : M →ₛₗ[τ₁₂] M₂) (h) (h' : ker f ≤ p) : ker (p.liftQ f h) = ⊥ := by
+  rw [ker_liftQ, le_antisymm h h', mkQ_map_self]
+/-
+**Submodule.ker_liftQ_eq_bot'** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：ker_liftQ_eq_bot' (f : M ->ₛₗ[τ₁₂] M₂) (h : p = ker f) : ker (p.liftQ f (l
+e_of_eq h)) = ⊥
+参数：f : M ->ₛₗ[τ₁₂] M₂；h : p = ker f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ker_liftQ_eq_bot`：ker_liftQ_eq_bot (f : M ->ₛₗ[τ₁₂] M₂) (h) (h
+' : ker f <= p) : ker (p.liftQ f h) = ⊥
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
 -/
-theorem ker_liftQ_eq_bot' (f : M ->ₛₗ[τ₁₂] M₂) (h : p = ker f) :
+theorem ker_liftQ_eq_bot' (f : M →ₛₗ[τ₁₂] M₂) (h : p = ker f) :
     ker (p.liftQ f (le_of_eq h)) = ⊥ :=
   ker_liftQ_eq_bot p f h.le h.ge
-
-/--
-theorem `range_mapQ` / 定理 `range_mapQ`
-
-English:
-theorem range_mapQ
-  given: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f q)
-  proof: by
-  rw [mapQ]; rw [range_liftQ]; rw [range_comp]
-
-中文:
-定理 range_mapQ
-  条件: [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f q)
-  证明: by
-  rw [mapQ]; rw [range_liftQ]; rw [range_comp]
-
-Depends on / 依赖: range_comp, range_liftQ
+/-
+**Submodule.range_mapQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：range_mapQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f 
+q) : (p.mapQ q f h).range = f.range.map q.mkQ
+参数：f : M ->ₛₗ[τ₁₂] M₂；h : p <= comap f q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mapQ.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [in
+st_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M) {R₂ : 
+Type u_3}…
+· 使用定理 `Submodule.range_liftQ`：range_liftQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ
+₁₂] M₂) (h) : range (p.liftQ f h) = range f
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
 -/
-theorem range_mapQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) (h : p <= comap f q) :
+theorem range_mapQ [RingHomSurjective τ₁₂] (f : M →ₛₗ[τ₁₂] M₂) (h : p ≤ comap f q) :
     (p.mapQ q f h).range = f.range.map q.mkQ := by
-  rw [mapQ]; rw [range_liftQ]; rw [range_comp]
+  rw [mapQ, range_liftQ, range_comp]
 
 section
 
 variable {p p' p''}
 
-/--
-Definition of `factor` / `factor` 的定义
+/-- The linear map from the quotient by a smaller submodule to the quotient by a larger submodule.
 
-English:
-abbreviation factor
-  signature: (H : p <= p')
-  body: mapQ _ _ LinearMap.id H
+This is the `Submodule.Quotient` version of `Quot.Factor`
 
-@[simp]
+When the two submodules are of the form `I ^ m • ⊤` and `I ^ n • ⊤` and `n ≤ m`,
+please refer to the dedicated version `Submodule.factorPow`. -/
+/-
+**Submodule.factor** 是 Mathlib 中的一个缩写定义，位于命名空间 `Submodule`。
+形式化陈述：factor (H : p <= p') : M ⧸ p ->ₗ[R] M ⧸ p'
+参数：H : p <= p'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 factor
-  签名: (H : p <= p')
-  定义体: mapQ _ _ LinearMap.id H
+--- 原说明 ---
+The linear map from the quotient by a smaller submodule to the quotient by a lar
+ger submodule.
 
-@[simp]
+This is the `Submodule.Quotient` version of `Quot.Factor`
 
-Depends on / 依赖: LinearMap, LinearMap.id
+When the two submodules are of the form `I ^ m • ⊤` and `I ^ n • ⊤` and `n ≤ m`,
+please refer to the dedicated version `Submodule.factorPow`.
 -/
-abbrev factor (H : p <= p') : M ⧸ p ->ₗ[R] M ⧸ p' :=
+abbrev factor (H : p ≤ p') : M ⧸ p →ₗ[R] M ⧸ p' :=
   mapQ _ _ LinearMap.id H
 
 @[simp]
-/--
-theorem `factor_mk` / 定理 `factor_mk`
-
-English:
-theorem factor_mk
-  given: (H : p <= p') (x : M)
-  statement: factor H (mkQ p x) = mkQ p' x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 factor_mk
-  条件: (H : p <= p') (x : M)
-  结论: factor H (mkQ p x) = mkQ p' x
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.factor_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：factor_mk (H : p <= p') (x : M) : factor H (mkQ p x) = mkQ p' x
+参数：H : p <= p'；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem factor_mk (H : p <= p') (x : M) : factor H (mkQ p x) = mkQ p' x :=
+theorem factor_mk (H : p ≤ p') (x : M) : factor H (mkQ p x) = mkQ p' x :=
   rfl
 
 @[simp]
-/--
-theorem `factor_comp_mk` / 定理 `factor_comp_mk`
-
-English:
-theorem factor_comp_mk
-  given: (H : p <= p')
-  statement: (factor H).comp (mkQ p) = mkQ p'
-  proof: by
-  ext x
-  rw [LinearMap.comp_apply]; rw [factor_mk]
-
-中文:
-定理 factor_comp_mk
-  条件: (H : p <= p')
-  结论: (factor H).comp (mkQ p) = mkQ p'
-  证明: by
-  ext x
-  rw [LinearMap.comp_apply]; rw [factor_mk]
-
-Depends on / 依赖: LinearMap, LinearMap.comp_apply, comp_apply, factor_mk
+/-
+**Submodule.factor_comp_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：factor_comp_mk (H : p <= p') : (factor H).comp (mkQ p) = mkQ p'
+参数：H : p <= p'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `Submodule.factor_mk`：factor_mk (H : p <= p') (x : M) : factor H (mkQ p x
+) = mkQ p' x
 -/
-theorem factor_comp_mk (H : p <= p') : (factor H).comp (mkQ p) = mkQ p' := by
+theorem factor_comp_mk (H : p ≤ p') : (factor H).comp (mkQ p) = mkQ p' := by
   ext x
-  rw [LinearMap.comp_apply]; rw [factor_mk]
+  rw [LinearMap.comp_apply, factor_mk]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `factor_comp` / 定理 `factor_comp`
-
-English:
-theorem factor_comp
-  given: (H1 : p <= p') (H2 : p' <= p'')
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 factor_comp
-  条件: (H1 : p <= p') (H2 : p' <= p'')
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Submodule.factor_comp** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：factor_comp (H1 : p <= p') (H2 : p' <= p'') : (factor H2).comp (factor H1)
+ = factor (H1.trans H2)
+参数：H1 : p <= p'；H2 : p' <= p''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.linearMap_qext`：linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h :
+ f.comp p.mkQ = g.comp p.mkQ) : f = g
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.factor_comp_mk`：factor_comp_mk (H : p <= p') : (factor H).comp
+ (mkQ p) = mkQ p'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem factor_comp (H1 : p <= p') (H2 : p' <= p'') :
+theorem factor_comp (H1 : p ≤ p') (H2 : p' ≤ p'') :
     (factor H2).comp (factor H1) = factor (H1.trans H2) := by
   ext
   simp
 
 @[simp]
-/--
-theorem `factor_comp_apply` / 定理 `factor_comp_apply`
-
-English:
-theorem factor_comp_apply
-  given: (H1 : p <= p') (H2 : p' <= p'') (x : M ⧸ p)
-  proof: by
-  rw [← comp_apply]
-  simp
-
-中文:
-定理 factor_comp_apply
-  条件: (H1 : p <= p') (H2 : p' <= p'') (x : M ⧸ p)
-  证明: by
-  rw [← comp_apply]
-  simp
-
-Depends on / 依赖: comp_apply
+/-
+**Submodule.factor_comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：factor_comp_apply (H1 : p <= p') (H2 : p' <= p'') (x : M ⧸ p) : factor H2 
+(factor H1 x) = factor (H1.trans H2) x
+参数：H1 : p <= p'；H2 : p' <= p''；x : M ⧸ p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.factor_comp`：factor_comp (H1 : p <= p') (H2 : p' <= p'') : (fa
+ctor H2).comp (factor H1) = factor (H1.trans H2)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem factor_comp_apply (H1 : p <= p') (H2 : p' <= p'') (x : M ⧸ p) :
+theorem factor_comp_apply (H1 : p ≤ p') (H2 : p' ≤ p'') (x : M ⧸ p) :
     factor H2 (factor H1 x) = factor (H1.trans H2) x := by
   rw [← comp_apply]
   simp
-
-/--
-lemma `factor_surjective` / 引理 `factor_surjective`
-
-English:
-lemma factor_surjective
-  given: (H : p <= p')
-  statement: Function.Surjective (factor H)
-  proof: by
-  intro x
-  use Quotient.mk x.out
-  exact Quotient.out_eq x
-
-中文:
-引理 factor_surjective
-  条件: (H : p <= p')
-  结论: 函数.满射 (factor H)
-  证明: by
-  intro x
-  use Quotient.mk x.out
-  exact Quotient.out_eq x
-
-Depends on / 依赖: Quotient, Quotient.mk, Quotient.out_eq, out_eq, x.out
+/-
+**Submodule.factor_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：factor_surjective (H : p <= p') : Function.Surjective (factor H)
+参数：H : p <= p'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
-lemma factor_surjective (H : p <= p') : Function.Surjective (factor H) := by
+lemma factor_surjective (H : p ≤ p') : Function.Surjective (factor H) := by
   intro x
   use Quotient.mk x.out
   exact Quotient.out_eq x
 
 end
 
-/--
-Definition of `comapMkQRelIso` / `comapMkQRelIso` 的定义
+/-- The correspondence theorem for modules: there is an order isomorphism between submodules of the
+quotient of `M` by `p`, and submodules of `M` larger than `p`. -/
+/-
+**Submodule.comapMkQRelIso** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：comapMkQRelIso : Submodule R (M ⧸ p) ≃o Set.Ici p where toFun p'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.le_comap_mkQ`：le_comap_mkQ (p' : Submodule R (M ⧸ p)) : p <= c
+omap p.mkQ p'
 
-English:
-definition comapMkQRelIso
-  signature: : Submodule R (M ⧸ p) ≃o Set.Ici p where
-  body: ⟨comap p.mkQ p', le_comap_mkQ p _⟩
-  invFun q := map p.mkQ q
-left_inv p' := map_comap_eq_self by simp
-right_inv := fun ⟨q, hq⟩ => Subtype.ext by simpa [comap_map_mkQ p]
-map_rel_iff' := comap_le_comap_iff range_mkQ _
-
-中文:
-定义 comapMkQRelIso
-  签名: : 子模 R (M ⧸ p) ≃o 集合.左闭右无界区间 p where
-  定义体: ⟨comap p.mkQ p', le_comap_mkQ p _⟩
-  invFun q := map p.mkQ q
-left_inv p' := map_comap_eq_self by simp
-right_inv := fun ⟨q, hq⟩ => Subtype.ext by simpa [comap_map_mkQ p]
-map_rel_iff' := comap_le_comap_iff range_mkQ _
-
-Depends on / 依赖: le_comap_mkQ, p.mkQ
+--- 原说明 ---
+The correspondence theorem for modules: there is an order isomorphism between su
+bmodules of the
+quotient of `M` by `p`, and submodules of `M` larger than `p`.
 -/
 def comapMkQRelIso : Submodule R (M ⧸ p) ≃o Set.Ici p where
   toFun p' := ⟨comap p.mkQ p', le_comap_mkQ p _⟩
   invFun q := map p.mkQ q
-left_inv p' := map_comap_eq_self by simp
-right_inv := fun ⟨q, hq⟩ => Subtype.ext by simpa [comap_map_mkQ p]
-map_rel_iff' := comap_le_comap_iff range_mkQ _
+  left_inv p' := map_comap_eq_self <| by simp
+  right_inv := fun ⟨q, hq⟩ => Subtype.ext <| by simpa [comap_map_mkQ p]
+  map_rel_iff' := comap_le_comap_iff <| range_mkQ _
 
-/--
-Definition of `comapMkQOrderEmbedding` / `comapMkQOrderEmbedding` 的定义
+/-- The ordering on submodules of the quotient of `M` by `p` embeds into the ordering on submodules
+of `M`. -/
+/-
+**Submodule.comapMkQOrderEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：comapMkQOrderEmbedding : Submodule R (M ⧸ p) ↪o Submodule R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comapMkQOrderEmbedding
-  signature: : Submodule R (M ⧸ p) ↪o Submodule R M
-  body: (RelIso.toRelEmbedding <| comapMkQRelIso p).trans (Subtype.relEmbedding (· <= ·) _)
-
-@[simp]
-
-中文:
-定义 comapMkQOrderEmbedding
-  签名: : 子模 R (M ⧸ p) ↪o 子模 R M
-  定义体: (RelIso.toRelEmbedding <| comapMkQRelIso p).trans (Subtype.relEmbedding (· <= ·) _)
-
-@[simp]
-
-Depends on / 依赖: RelIso, RelIso.toRelEmbedding, Subtype, Subtype.relEmbedding, comapMkQRelIso, relEmbedding, toRelEmbedding
+--- 原说明 ---
+The ordering on submodules of the quotient of `M` by `p` embeds into the orderin
+g on submodules
+of `M`.
 -/
 def comapMkQOrderEmbedding : Submodule R (M ⧸ p) ↪o Submodule R M :=
-  (RelIso.toRelEmbedding <| comapMkQRelIso p).trans (Subtype.relEmbedding (· <= ·) _)
+  (RelIso.toRelEmbedding <| comapMkQRelIso p).trans (Subtype.relEmbedding (· ≤ ·) _)
 
 @[simp]
-/--
-theorem `comapMkQOrderEmbedding_eq` / 定理 `comapMkQOrderEmbedding_eq`
-
-English:
-theorem comapMkQOrderEmbedding_eq
-  given: (p' : Submodule R (M ⧸ p))
-  proof: rfl
-
-中文:
-定理 comapMkQOrderEmbedding_eq
-  条件: (p' : 子模 R (M ⧸ p))
-  证明: rfl
+/-
+**Submodule.comapMkQOrderEmbedding_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：comapMkQOrderEmbedding_eq (p' : Submodule R (M ⧸ p)) : comapMkQOrderEmbedd
+ing p p' = comap p.mkQ p'
+参数：p' : Submodule R (M ⧸ p)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comapMkQOrderEmbedding_eq (p' : Submodule R (M ⧸ p)) :
     comapMkQOrderEmbedding p p' = comap p.mkQ p' :=
   rfl
-
-/--
-theorem `span_preimage_eq` / 定理 `span_preimage_eq`
-
-English:
-theorem span_preimage_eq
-  statement: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {s : Set M₂} (h₀ : s.Nonempty)
-  proof: by
-  suffices (span R₂ s).comap f <= span R (f ⁻¹' s) by exact le_antisymm (span_preimage_le f s) this
-  have hk : ker f <= span R (f ⁻¹' s) := by
-    let y := Classical.choose h₀
-    have hy : y in s := Classical.choose_spec h₀
-    rw [ker_le_iff]
-    use y, h₁ hy
-    rw [← Set.singleton_subset_iff] at hy
-    exact Set.Subset.trans subset_span (span_mono (Set.preimage_mono hy))
-  rw [← left_eq_sup] at hk
-  rw [coe_range f] at h₁
-  rw [hk]; rw [← LinearMap.map_le_map_iff]; rw [map_span]; rw [map_comap_eq]; rw [Set.image_preimage_eq_of_subset h₁]
-  exact inf_le_right
-
-中文:
-定理 span_preimage_eq
-  结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {s : 集合 M₂} (h₀ : s.非空)
-  证明: by
-  suffices (span R₂ s).comap f <= span R (f ⁻¹' s) by exact le_antisymm (span_preimage_le f s) this
-  have hk : ker f <= span R (f ⁻¹' s) := by
-    let y := Classical.choose h₀
-    have hy : y in s := Classical.choose_spec h₀
-    rw [ker_le_iff]
-    use y, h₁ hy
-    rw [← Set.singleton_subset_iff] at hy
-    exact Set.Subset.trans subset_span (span_mono (Set.preimage_mono hy))
-  rw [← left_eq_sup] at hk
-  rw [coe_range f] at h₁
-  rw [hk]; rw [← LinearMap.map_le_map_iff]; rw [map_span]; rw [map_comap_eq]; rw [Set.image_preimage_eq_of_subset h₁]
-  exact inf_le_right
-
-Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, LinearMap, LinearMap.map_le_map_iff, Set.Subset.trans, Set.image_preimage, Set.preimage_mono, Set.singleton_subset_iff, Subset, choose_spec, coe_range, image_preimage, ker_le_iff, le_antisymm, left_eq_sup, map_comap_eq, map_le_map_iff, map_span, preimage_mono
+/-
+**Submodule.span_preimage_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：span_preimage_eq [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {s : Set M₂}
+ (h₀ : s.Nonempty) (h₁ : s subseteq range f) : span R (f ⁻¹' s) = (span R₂ s).co
+map f
+参数：h₀ : s.Nonempty；h₁ : s subseteq range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.ker_le_iff`：ker_le_iff [RingHomSurjective τ₁₂] {p : Submodule 
+R M} : ker f <= p ↔ exists y in range f, f ⁻¹' {y} subseteq p
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Submodule.span_mono`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {s t : Set M}, s ⊆ t 
+→ Submodu…
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `left_eq_sup`：left_eq_sup : a = a ⊔ b ↔ b <= a
+· 使用定理 `LinearMap.map_le_map_iff`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_4
+} {M₂ : Type u_5} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Group M] [inst…
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Submodule.map_comap_eq`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_5} 
+{M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMo
+noid M] [ins…
+· 使用定理 `Set.image_preimage_eq_of_subset`：image_preimage_eq_of_subset {f : α -> β
+} {s : Set β} (hs : s subseteq range f) : f '' f ⁻¹' s = s
+· 使用定理 `LinearMap.coe_range`：coe_range [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] 
+M₂) : (range f : Set M₂) = Set.range f
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Submodule.span_preimage_le`：span_preimage_le (f : M ->ₛₗ[σ₁₂] M₂) (s : S
+et M₂) : span R (f ⁻¹' s) <= (span R₂ s).comap f
 -/
-theorem span_preimage_eq [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {s : Set M₂} (h₀ : s.Nonempty)
-    (h₁ : s subseteq range f) : span R (f ⁻¹' s) = (span R₂ s).comap f := by
-  suffices (span R₂ s).comap f <= span R (f ⁻¹' s) by exact le_antisymm (span_preimage_le f s) this
-  have hk : ker f <= span R (f ⁻¹' s) := by
+theorem span_preimage_eq [RingHomSurjective τ₁₂] {f : M →ₛₗ[τ₁₂] M₂} {s : Set M₂} (h₀ : s.Nonempty)
+    (h₁ : s ⊆ range f) : span R (f ⁻¹' s) = (span R₂ s).comap f := by
+  suffices (span R₂ s).comap f ≤ span R (f ⁻¹' s) by exact le_antisymm (span_preimage_le f s) this
+  have hk : ker f ≤ span R (f ⁻¹' s) := by
     let y := Classical.choose h₀
-    have hy : y in s := Classical.choose_spec h₀
+    have hy : y ∈ s := Classical.choose_spec h₀
     rw [ker_le_iff]
     use y, h₁ hy
     rw [← Set.singleton_subset_iff] at hy
     exact Set.Subset.trans subset_span (span_mono (Set.preimage_mono hy))
   rw [← left_eq_sup] at hk
   rw [coe_range f] at h₁
-  rw [hk]; rw [← LinearMap.map_le_map_iff]; rw [map_span]; rw [map_comap_eq]; rw [Set.image_preimage_eq_of_subset h₁]
+  rw [hk, ← LinearMap.map_le_map_iff, map_span, map_comap_eq, Set.image_preimage_eq_of_subset h₁]
   exact inf_le_right
 
-variable {R₂ : Type*} [Ring R₂] {σ₁₂ : R ->+* R₂} {σ₂₁ : R₂ ->+* R}
+variable {R₂ : Type*} [Ring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R}
   [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂]
 variable {M N : Type*} [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R₂ N]
   (P : Submodule R M) (Q : Submodule R₂ N)
 
-/--
-Definition of `Quotient.equiv` / `Quotient.equiv` 的定义
+/-- If `P` is a submodule of `M` and `Q` a submodule of `N`,
+and `f : M ≃ₛₗ[σ] N` maps `P` to `Q`, then `M ⧸ P` is equivalent to `N ⧸ Q`. -/
+/-
+**Submodule.Quotient.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.Quotient`。
+形式化陈述：{R : Type u_1} →   [inst : Ring R] →     {R₂ : Type u_5} →       [inst_1 :
+ Ring R₂] →         {σ₁₂ : R →+* R₂} →           {σ₂₁ : R₂ →+* R} →             
+[inst_2 : RingHomInvPair σ₁₂ σ₂₁] →               [inst_3 : RingHomInvPair σ₂₁ σ
+₁₂] →                 {M : Type u_6} →                   {N : Type u_7} →       
+              [inst_4 : AddCommGroup M] →                       [inst_5 : _root_
+.Module R M] →                         [inst_6 : AddCommGroup N] →              
+             [inst_7 : _root_.Module R₂ N] →                             (P : Su
+bmodule R M) →                               (Q : Submodule R₂ N) →             
+                    (f : M ≃ₛₗ[σ₁₂] N) → Submodule.map (↑f) P = Q → (M ⧸ P) ≃ₛₗ[
+σ₁₂] N ⧸ Q
+参数：P : Submodule R M；Q : Submodule R₂ N；f : M ≃ₛₗ[σ₁₂] N；↑f；M ⧸ P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient.equiv
-  signature: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q)
-  body: P.mapQ Q (f : M ->ₛₗ[σ₁₂] N) (map_le_iff_le_comap.mp hf.le)
-  invFun := Q.mapQ P (f.symm : N ->ₛₗ[σ₂₁] M) (hf.symm.trans (map_equiv_eq_comap_symm f _)).le
-  left_inv x := Quotient.induction_on _ x (by simp)
-  right_inv x := Quotient.induction_on _ x (by simp)
-
-@[simp]
-
-中文:
-定义 商.equiv
-  签名: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q)
-  定义体: P.mapQ Q (f : M ->ₛₗ[σ₁₂] N) (map_le_iff_le_comap.mp hf.le)
-  invFun := Q.mapQ P (f.symm : N ->ₛₗ[σ₂₁] M) (hf.symm.trans (map_equiv_eq_comap_symm f _)).le
-  left_inv x := Quotient.induction_on _ x (by simp)
-  right_inv x := Quotient.induction_on _ x (by simp)
-
-@[simp]
-
-Depends on / 依赖: P.mapQ, hf.le, map_le_iff_le_comap, map_le_iff_le_comap.mp
+--- 原说明 ---
+If `P` is a submodule of `M` and `Q` a submodule of `N`,
+and `f : M ≃ₛₗ[σ] N` maps `P` to `Q`, then `M ⧸ P` is equivalent to `N ⧸ Q`.
 -/
-def Quotient.equiv (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q) :
+def Quotient.equiv (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M →ₛₗ[σ₁₂] N) = Q) :
     (M ⧸ P) ≃ₛₗ[σ₁₂] N ⧸ Q where
-  __ := P.mapQ Q (f : M ->ₛₗ[σ₁₂] N) (map_le_iff_le_comap.mp hf.le)
-  invFun := Q.mapQ P (f.symm : N ->ₛₗ[σ₂₁] M) (hf.symm.trans (map_equiv_eq_comap_symm f _)).le
+  __ := P.mapQ Q (f : M →ₛₗ[σ₁₂] N) (map_le_iff_le_comap.mp hf.le)
+  invFun := Q.mapQ P (f.symm : N →ₛₗ[σ₂₁] M) (hf.symm.trans (map_equiv_eq_comap_symm f _)).le
   left_inv x := Quotient.induction_on _ x (by simp)
   right_inv x := Quotient.induction_on _ x (by simp)
 
 @[simp]
-/--
-lemma `Quotient.equiv_apply` / 引理 `Quotient.equiv_apply`
-
-English:
-lemma Quotient.equiv_apply
-  given: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q) (a : M ⧸ P)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 商.equiv_apply
-  条件: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q) (a : M ⧸ P)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.Quotient.equiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {R₂ : Type u_5} [inst_1 : Ring R₂] {σ₁₂ :
+ R →+* R₂} {σ₂₁ : R₂ →+* R}   [inst_2 : RingHomInvPair σ₁₂ σ₂₁] [inst_3 : RingHo
+mInvPair σ₂₁ σ₁₂] {M : Type u_6} {N : Type u_7}   [inst_4 : AddCommGroup M] [ins
+t_5 : _root_.Module R M] [inst_6 : AddCommGroup N] [inst_7 : _root_.Module R₂ N]
+   (P : Submodule R M) (Q : Submodule R₂ N) (f : M ≃ₛₗ[σ₁₂] N) (hf : Submodule.m
+ap (↑f) P = Q) (a : M ⧸ P),   (Submodule.Quotient.equiv P Q f hf) a = (P.mapQ Q 
+↑f ⋯) a
+参数：P : Submodule R M；Q : Submodule R₂ N；f : M ≃ₛₗ[σ₁₂] N；hf : Submodule.map (↑f)
+ P = Q；a : M ⧸ P；Submodule.Quotient.equiv P Q f hf；P.mapQ Q ↑f ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
 -/
-lemma Quotient.equiv_apply (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q) (a : M ⧸ P) :
-    equiv P Q f hf a = P.mapQ Q (f : M ->ₛₗ[σ₁₂] N) (map_le_iff_le_comap.mp hf.le) a :=
+lemma Quotient.equiv_apply (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M →ₛₗ[σ₁₂] N) = Q) (a : M ⧸ P) :
+    equiv P Q f hf a = P.mapQ Q (f : M →ₛₗ[σ₁₂] N) (map_le_iff_le_comap.mp hf.le) a :=
   rfl
 
 @[simp]
-/--
-lemma `Quotient.equiv_symm` / 引理 `Quotient.equiv_symm`
-
-English:
-lemma Quotient.equiv_symm
-  given: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 商.equiv_symm
-  条件: (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.Quotient.equiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {R₂ : Type u_5} [inst_1 : Ring R₂] {σ₁₂ :
+ R →+* R₂} {σ₂₁ : R₂ →+* R}   [inst_2 : RingHomInvPair σ₁₂ σ₂₁] [inst_3 : RingHo
+mInvPair σ₂₁ σ₁₂] {M : Type u_6} {N : Type u_7}   [inst_4 : AddCommGroup M] [ins
+t_5 : _root_.Module R M] [inst_6 : AddCommGroup N] [inst_7 : _root_.Module R₂ N]
+   (P : Submodule R M) (Q : Submodule R₂ N) (f : M ≃ₛₗ[σ₁₂] N) (hf : Submodule.m
+ap (↑f) P = Q),   (Submodule.Quotient.equiv P Q f hf).symm = Submodule.Quotient.
+equiv Q P f.symm ⋯
+参数：P : Submodule R M；Q : Submodule R₂ N；f : M ≃ₛₗ[σ₁₂] N；hf : Submodule.map (↑f)
+ P = Q；Submodule.Quotient.equiv P Q f hf。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
 -/
-lemma Quotient.equiv_symm (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M ->ₛₗ[σ₁₂] N) = Q) :
+lemma Quotient.equiv_symm (f : M ≃ₛₗ[σ₁₂] N) (hf : P.map (f : M →ₛₗ[σ₁₂] N) = Q) :
     (Quotient.equiv P Q f hf).symm = Quotient.equiv Q P f.symm ((map_symm_eq_iff f).mpr hf) :=
   rfl
 
 @[simp]
-/--
-theorem `Quotient.equiv_trans` / 定理 `Quotient.equiv_trans`
-
-English:
-theorem Quotient.equiv_trans
-  statement: {R₃ : Type*} {O : Type*} [Ring R₃] [AddCommGroup O] [Module R₃ O]
-  proof: by
-  ext
-  -- `simp` can deal with `hef` depending on `e` and `f`
-  simp only [Quotient.equiv_apply, LinearEquiv.trans_apply, LinearEquiv.coe_trans]
-  -- `rw` can deal with `mapQ_comp` needing extra hypotheses coming from the RHS
-  rw [mapQ_comp]; rw [LinearMap.comp_apply]
-
-中文:
-定理 商.equiv_trans
-  结论: {R₃ : 类型} {O : 类型} [环 R₃] [加法交换群 O] [模 R₃ O]
-  证明: by
-  ext
-  -- `simp` can deal with `hef` depending on `e` and `f`
-  simp only [Quotient.equiv_apply, LinearEquiv.trans_apply, LinearEquiv.coe_trans]
-  -- `rw` can deal with `mapQ_comp` needing extra hypotheses coming from the RHS
-  rw [mapQ_comp]; rw [LinearMap.comp_apply]
+/-
+**Submodule.Quotient.equiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {R₂ : Type u_5} [inst_1 : Ring R₂] {σ₁₂ :
+ R →+* R₂} {σ₂₁ : R₂ →+* R}   [inst_2 : RingHomInvPair σ₁₂ σ₂₁] [inst_3 : RingHo
+mInvPair σ₂₁ σ₁₂] {M : Type u_6} {N : Type u_7}   [inst_4 : AddCommGroup M] [ins
+t_5 : _root_.Module R M] [inst_6 : AddCommGroup N] [inst_7 : _root_.Module R₂ N]
+   (P : Submodule R M) (Q : Submodule R₂ N) {R₃ : Type u_8} {O : Type u_9} [inst
+_8 : Ring R₃] [inst_9 : AddCommGroup O]   [inst_10 : _root_.Module R₃ O] {σ₂₃ : 
+R₂ →+* R₃} {σ₃₂ : R₃ →+* R₂} {σ₁₃ : R →+* R₃} {σ₃₁ : R₃ →+* R}   [inst_11 : Ring
+HomInvPair σ₂₃ σ₃₂] [inst_12 : RingHomInvPair σ₃₂ σ₂₃] [inst_13 : RingHomInvPair
+ σ₁₃ σ₃₁]   [inst_14 : RingHomInvPair σ₃₁ σ₁₃] [inst_15 : RingHomCompTriple σ₁₂ 
+σ₂₃ σ₁₃] [inst_16 : RingHomCompTriple σ₃₂ σ₂₁ σ₃₁]   (S : Submodule R₃ O) (e : M
+ ≃ₛₗ[σ₁₂] N) (f : N ≃ₛₗ[σ₂₃] O) (he : Submodule.map (↑e) P = Q)   (hf : Submodul
+e.map (↑f) Q = S) (hef : Submodule.map (↑(e.trans f)) P = S),   Submodule.Quotie
+nt.equiv P S (e.trans f) hef =     (Submodule.Quotient.equiv P Q e he).trans (Su
+bmodule.Quotient.equiv Q S f hf)
+参数：P : Submodule R M；Q : Submodule R₂ N；S : Submodule R₃ O；e : M ≃ₛₗ[σ₁₂] N；f : 
+N ≃ₛₗ[σ₂₃] O；he : Submodule.map (↑e) P = Q；hf : Submodule.map (↑f) Q = S；hef : S
+ubmodule.map (↑(e.trans f)) P = S；e.trans f；Submodule.Quotient.equiv P Q e he；Su
+bmodule.Quotient.equiv Q S f hf。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.map_le_iff_le_comap`：map_le_iff_le_comap {f : M ->ₛₗ[σ₁₂] M₂} 
+{p : Submodule R M} {q : Submodule R₂ M₂} : map f p <= q ↔ p <= comap f q
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Submodule.comap_mono`：comap_mono {f : M ->ₛₗ[σ₁₂] M₂} {q q' : Submodule 
+R₂ M₂} : q <= q' -> comap f q <= comap f q'
+· 使用定理 `Submodule.mapQ_comp`：mapQ_comp {R₃ M₃ : Type*} [Ring R₃] [AddCommGroup M
+₃] [Module R₃ M₃] (p₂ : Submodule R₂ M₂) (p₃ : Submodule R₃ M₃) {τ₂₃ : R₂ ->+* R
+₃} {τ₁₃ :…
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
 -/
 theorem Quotient.equiv_trans {R₃ : Type*} {O : Type*} [Ring R₃] [AddCommGroup O] [Module R₃ O]
-    {σ₂₃ : R₂ ->+* R₃} {σ₃₂ : R₃ ->+* R₂} {σ₁₃ : R ->+* R₃} {σ₃₁ : R₃ ->+* R}
+    {σ₂₃ : R₂ →+* R₃} {σ₃₂ : R₃ →+* R₂} {σ₁₃ : R →+* R₃} {σ₃₁ : R₃ →+* R}
     [RingHomInvPair σ₂₃ σ₃₂] [RingHomInvPair σ₃₂ σ₂₃]
     [RingHomInvPair σ₁₃ σ₃₁] [RingHomInvPair σ₃₁ σ₁₃]
     [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [RingHomCompTriple σ₃₂ σ₂₁ σ₃₁]
     (S : Submodule R₃ O) (e : M ≃ₛₗ[σ₁₂] N) (f : N ≃ₛₗ[σ₂₃] O)
-    (he : P.map (e : M ->ₛₗ[σ₁₂] N) = Q) (hf : Q.map (f : N ->ₛₗ[σ₂₃] O) = S)
-    (hef : P.map ((e.trans f : M ≃ₛₗ[σ₁₃] O) : M ->ₛₗ[σ₁₃] O) = S) :
+    (he : P.map (e : M →ₛₗ[σ₁₂] N) = Q) (hf : Q.map (f : N →ₛₗ[σ₂₃] O) = S)
+    (hef : P.map ((e.trans f : M ≃ₛₗ[σ₁₃] O) : M →ₛₗ[σ₁₃] O) = S) :
     Quotient.equiv P S (e.trans f) hef =
       (Quotient.equiv P Q e he).trans (Quotient.equiv Q S f hf) := by
   ext
   -- `simp` can deal with `hef` depending on `e` and `f`
   simp only [Quotient.equiv_apply, LinearEquiv.trans_apply, LinearEquiv.coe_trans]
   -- `rw` can deal with `mapQ_comp` needing extra hypotheses coming from the RHS
-  rw [mapQ_comp]; rw [LinearMap.comp_apply]
+  rw [mapQ_comp, LinearMap.comp_apply]
 
 end Submodule
 
@@ -1333,75 +1145,67 @@ variable {R M R₂ M₂ R₃ M₃ : Type*}
 variable [Ring R] [Ring R₂] [Ring R₃]
 variable [AddCommMonoid M] [AddCommGroup M₂] [AddCommMonoid M₃]
 variable [Module R M] [Module R₂ M₂] [Module R₃ M₃]
-variable {τ₁₂ : R ->+* R₂} {τ₂₃ : R₂ ->+* R₃} {τ₁₃ : R ->+* R₃}
+variable {τ₁₂ : R →+* R₂} {τ₂₃ : R₂ →+* R₃} {τ₁₃ : R →+* R₃}
 variable [RingHomCompTriple τ₁₂ τ₂₃ τ₁₃] [RingHomSurjective τ₁₂]
 
-/--
-theorem `range_mkQ_comp` / 定理 `range_mkQ_comp`
-
-English:
-theorem range_mkQ_comp
-  given: (f : M ->ₛₗ[τ₁₂] M₂)
-  statement: (range f).mkQ.comp f = 0
-  proof: LinearMap.ext fun x => by simp
-
-中文:
-定理 range_mkQ_comp
-  条件: (f : M ->ₛₗ[τ₁₂] M₂)
-  结论: (range f).mkQ.comp f = 0
-  证明: LinearMap.ext fun x => by simp
-
-Depends on / 依赖: LinearMap, LinearMap.ext
+/-
+**LinearMap.range_mkQ_comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：range_mkQ_comp (f : M ->ₛₗ[τ₁₂] M₂) : (range f).mkQ.comp f = 0
+参数：f : M ->ₛₗ[τ₁₂] M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem range_mkQ_comp (f : M ->ₛₗ[τ₁₂] M₂) : (range f).mkQ.comp f = 0 :=
+theorem range_mkQ_comp (f : M →ₛₗ[τ₁₂] M₂) : (range f).mkQ.comp f = 0 :=
   LinearMap.ext fun x => by simp
-
-/--
-theorem `ker_le_range_iff` / 定理 `ker_le_range_iff`
-
-English:
-theorem ker_le_range_iff
-  given: {f : M ->ₛₗ[τ₁₂] M₂} {g : M₂ ->ₛₗ[τ₂₃] M₃}
-  proof: by
-  rw [← range_le_ker_iff]; rw [Submodule.ker_mkQ]; rw [Submodule.range_subtype]
-
-中文:
-定理 ker_le_range_iff
-  条件: {f : M ->ₛₗ[τ₁₂] M₂} {g : M₂ ->ₛₗ[τ₂₃] M₃}
-  证明: by
-  rw [← range_le_ker_iff]; rw [Submodule.ker_mkQ]; rw [Submodule.range_subtype]
-
-Depends on / 依赖: Submodule, Submodule.ker_mkQ, Submodule.range_subtype, ker_mkQ, range_le_ker_iff, range_subtype
+/-
+**LinearMap.ker_le_range_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ker_le_range_iff {f : M ->ₛₗ[τ₁₂] M₂} {g : M₂ ->ₛₗ[τ₂₃] M₃} : ker g <= ran
+ge f ↔ (range f).mkQ.comp (ker g).subtype = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_le_ker_iff`：range_le_ker_iff {f : M ->ₛₗ[τ₁₂] M₂} {g : M
+₂ ->ₛₗ[τ₂₃] M₃} : range f <= ker g ↔ (g.comp f : M ->ₛₗ[τ₁₃] M₃) = 0
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ker_le_range_iff {f : M ->ₛₗ[τ₁₂] M₂} {g : M₂ ->ₛₗ[τ₂₃] M₃} :
-    ker g <= range f ↔ (range f).mkQ.comp (ker g).subtype = 0 := by
-  rw [← range_le_ker_iff]; rw [Submodule.ker_mkQ]; rw [Submodule.range_subtype]
+theorem ker_le_range_iff {f : M →ₛₗ[τ₁₂] M₂} {g : M₂ →ₛₗ[τ₂₃] M₃} :
+    ker g ≤ range f ↔ (range f).mkQ.comp (ker g).subtype = 0 := by
+  rw [← range_le_ker_iff, Submodule.ker_mkQ, Submodule.range_subtype]
 
-/--
-theorem `range_eq_top_of_cancel` / 定理 `range_eq_top_of_cancel`
+/-- An epimorphism is surjective. -/
+/-
+**LinearMap.range_eq_top_of_cancel** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：range_eq_top_of_cancel {f : M ->ₛₗ[τ₁₂] M₂} (h : forall u v : M₂ ->ₗ[R₂] M
+₂ ⧸ (range f), u.comp f = v.comp f -> u = v) : range f = ⊤
+参数：h : forall u v : M₂ ->ₗ[R₂] M₂ ⧸ (range f), u.comp f = v.comp f -> u = v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.zero_comp`：zero_comp (f : M ->ₛₗ[σ₁₂] M₂) : ((0 : M₂ ->ₛₗ[σ₂₃]
+ M₃).comp f : M ->ₛₗ[σ₁₃] M₃) = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearMap.range_mkQ_comp`：range_mkQ_comp (f : M ->ₛₗ[τ₁₂] M₂) : (range f
+).mkQ.comp f = 0
+· 使用定理 `LinearMap.ker_zero`：ker_zero : ker (0 : M ->ₛₗ[τ₁₂] M₂) = ⊤
 
-English:
-theorem range_eq_top_of_cancel
-  statement: {f : M ->ₛₗ[τ₁₂] M₂}
-  proof: by
-  have h₁ : (0 : M₂ ->ₗ[R₂] M₂ ⧸ (range f)).comp f = 0 := zero_comp _
-  rw [← Submodule.ker_mkQ (range f)]; rw [← h 0 (range f).mkQ (Eq.trans h₁ (range_mkQ_comp _).symm)]
-  exact ker_zero
-
-中文:
-定理 range_eq_top_of_cancel
-  结论: {f : M ->ₛₗ[τ₁₂] M₂}
-  证明: by
-  have h₁ : (0 : M₂ ->ₗ[R₂] M₂ ⧸ (range f)).comp f = 0 := zero_comp _
-  rw [← Submodule.ker_mkQ (range f)]; rw [← h 0 (range f).mkQ (Eq.trans h₁ (range_mkQ_comp _).symm)]
-  exact ker_zero
-
-Depends on / 依赖: Eq.trans, Submodule, Submodule.ker_mkQ, ker_mkQ, ker_zero, range_mkQ_comp, zero_comp
+--- 原说明 ---
+An epimorphism is surjective.
 -/
-theorem range_eq_top_of_cancel {f : M ->ₛₗ[τ₁₂] M₂}
-    (h : forall u v : M₂ ->ₗ[R₂] M₂ ⧸ (range f), u.comp f = v.comp f -> u = v) : range f = ⊤ := by
-  have h₁ : (0 : M₂ ->ₗ[R₂] M₂ ⧸ (range f)).comp f = 0 := zero_comp _
-  rw [← Submodule.ker_mkQ (range f)]; rw [← h 0 (range f).mkQ (Eq.trans h₁ (range_mkQ_comp _).symm)]
+theorem range_eq_top_of_cancel {f : M →ₛₗ[τ₁₂] M₂}
+    (h : ∀ u v : M₂ →ₗ[R₂] M₂ ⧸ (range f), u.comp f = v.comp f → u = v) : range f = ⊤ := by
+  have h₁ : (0 : M₂ →ₗ[R₂] M₂ ⧸ (range f)).comp f = 0 := zero_comp _
+  rw [← Submodule.ker_mkQ (range f), ← h 0 (range f).mkQ (Eq.trans h₁ (range_mkQ_comp _).symm)]
   exact ker_zero
 
 end Ring
@@ -1415,113 +1219,73 @@ namespace Submodule
 variable {R M : Type*} {r : R} {x y : M} [Ring R] [AddCommGroup M] [Module R M]
 variable (p p' : Submodule R M)
 
-/--
-Definition of `quotEquivOfEqBot` / `quotEquivOfEqBot` 的定义
+/-- If `p = ⊥`, then `M / p ≃ₗ[R] M`. -/
+/-
+**Submodule.quotEquivOfEqBot** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：quotEquivOfEqBot (hp : p = ⊥) : (M ⧸ p) ≃ₗ[R] M
+参数：hp : p = ⊥。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotEquivOfEqBot
-  signature: (hp : p = ⊥)
-  body: LinearEquiv.ofLinearMap (p.liftQ id <| hp.symm ▸ bot_le) p.mkQ (liftQ_mkQ _ _ _)
-    p.quot_hom_ext _ LinearMap.id fun _ => rfl
-
-@[simp]
-
-中文:
-定义 quotEquivOfEqBot
-  签名: (hp : p = ⊥)
-  定义体: LinearEquiv.ofLinearMap (p.liftQ id <| hp.symm ▸ bot_le) p.mkQ (liftQ_mkQ _ _ _)
-    p.quot_hom_ext _ LinearMap.id fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.id, bot_le, hp.symm, liftQ_mkQ, ofLinearMap, p.liftQ, p.mkQ, p.quot_hom_ext, quot_hom_ext
+--- 原说明 ---
+If `p = ⊥`, then `M / p ≃ₗ[R] M`.
 -/
 def quotEquivOfEqBot (hp : p = ⊥) : (M ⧸ p) ≃ₗ[R] M :=
-LinearEquiv.ofLinearMap (p.liftQ id <| hp.symm ▸ bot_le) p.mkQ (liftQ_mkQ _ _ _)
+  LinearEquiv.ofLinearMap (p.liftQ id <| hp.symm ▸ bot_le) p.mkQ (liftQ_mkQ _ _ _) <|
     p.quot_hom_ext _ LinearMap.id fun _ => rfl
 
 @[simp]
-/--
-theorem `quotEquivOfEqBot_apply_mk` / 定理 `quotEquivOfEqBot_apply_mk`
-
-English:
-theorem quotEquivOfEqBot_apply_mk
-  given: (hp : p = ⊥) (x : M)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 quotEquivOfEqBot_apply_mk
-  条件: (hp : p = ⊥) (x : M)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.quotEquivOfEqBot_apply_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：quotEquivOfEqBot_apply_mk (hp : p = ⊥) (x : M) : p.quotEquivOfEqBot hp (Qu
+otient.mk x) = x
+参数：hp : p = ⊥；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotEquivOfEqBot_apply_mk (hp : p = ⊥) (x : M) :
     p.quotEquivOfEqBot hp (Quotient.mk x) = x :=
   rfl
 
 @[simp]
-/--
-theorem `quotEquivOfEqBot_symm_apply` / 定理 `quotEquivOfEqBot_symm_apply`
-
-English:
-theorem quotEquivOfEqBot_symm_apply
-  given: (hp : p = ⊥) (x : M)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 quotEquivOfEqBot_symm_apply
-  条件: (hp : p = ⊥) (x : M)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.quotEquivOfEqBot_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：quotEquivOfEqBot_symm_apply (hp : p = ⊥) (x : M) : (p.quotEquivOfEqBot hp)
+.symm x = (Quotient.mk x)
+参数：hp : p = ⊥；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotEquivOfEqBot_symm_apply (hp : p = ⊥) (x : M) :
     (p.quotEquivOfEqBot hp).symm x = (Quotient.mk x) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_quotEquivOfEqBot_symm` / 定理 `coe_quotEquivOfEqBot_symm`
-
-English:
-theorem coe_quotEquivOfEqBot_symm
-  given: (hp : p = ⊥)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_quotEquivOfEqBot_symm
-  条件: (hp : p = ⊥)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.coe_quotEquivOfEqBot_symm** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_quotEquivOfEqBot_symm (hp : p = ⊥) : ((p.quotEquivOfEqBot hp).symm : M
+ ->ₗ[R] M ⧸ p) = p.mkQ
+参数：hp : p = ⊥。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_quotEquivOfEqBot_symm (hp : p = ⊥) :
-    ((p.quotEquivOfEqBot hp).symm : M ->ₗ[R] M ⧸ p) = p.mkQ :=
+    ((p.quotEquivOfEqBot hp).symm : M →ₗ[R] M ⧸ p) = p.mkQ :=
   rfl
 
 @[simp]
-/--
-theorem `Quotient.equiv_refl` / 定理 `Quotient.equiv_refl`
-
-English:
-theorem Quotient.equiv_refl
-  statement: (P : Submodule R M) (Q : Submodule R M)
-  proof: rfl
-
-中文:
-定理 商.equiv_refl
-  结论: (P : 子模 R M) (Q : 子模 R M)
-  证明: rfl
+/-
+**Submodule.Quotient.equiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   (P Q : Submodule R M) (hf : Submodule.map (↑(Line
+arEquiv.refl R M)) P = Q),   Submodule.Quotient.equiv P Q (LinearEquiv.refl R M)
+ hf = P.quotEquivOfEq Q ⋯
+参数：P Q : Submodule R M；hf : Submodule.map (↑(LinearEquiv.refl R M)) P = Q；Linear
+Equiv.refl R M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Quotient.equiv_refl (P : Submodule R M) (Q : Submodule R M)
-    (hf : P.map (LinearEquiv.refl R M : M ->ₗ[R] M) = Q) :
+    (hf : P.map (LinearEquiv.refl R M : M →ₗ[R] M) = Q) :
     Quotient.equiv P Q (LinearEquiv.refl R M) hf = quotEquivOfEq _ _ (by simpa using hf) :=
   rfl
 
@@ -1536,34 +1300,20 @@ variable {R M M₂ : Type*} {r : R} {x y : M} [CommRing R] [AddCommGroup M] [Mod
 
 namespace Submodule
 
-/--
-Definition of `mapQLinear` / `mapQLinear` 的定义
+/-- Given modules `M`, `M₂` over a commutative ring, together with submodules `p ⊆ M`, `q ⊆ M₂`,
+the natural map $\{f ∈ Hom(M, M₂) | f(p) ⊆ q \} \to Hom(M/p, M₂/q)$ is linear. -/
+/-
+**Submodule.mapQLinear** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：mapQLinear : compatibleMaps p q ->ₗ[R] M ⧸ p ->ₗ[R] M₂ ⧸ q where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapQLinear
-  signature: : compatibleMaps p q ->ₗ[R] M ⧸ p ->ₗ[R] M₂ ⧸ q where
-  body: mapQ _ _ f.val f.property
-  map_add' x y := by
-    ext
-    rfl
-  map_smul' c f := by
-    ext
-    rfl
-
-中文:
-定义 mapQLinear
-  签名: : compatibleMaps p q ->ₗ[R] M ⧸ p ->ₗ[R] M₂ ⧸ q where
-  定义体: mapQ _ _ f.val f.property
-  map_add' x y := by
-    ext
-    rfl
-  map_smul' c f := by
-    ext
-    rfl
-
-Depends on / 依赖: f.property, f.val, property
+--- 原说明 ---
+Given modules `M`, `M₂` over a commutative ring, together with submodules `p ⊆ M
+`, `q ⊆ M₂`,
+the natural map $\{f ∈ Hom(M, M₂) | f(p) ⊆ q \} \to Hom(M/p, M₂/q)$ is linear.
 -/
-def mapQLinear : compatibleMaps p q ->ₗ[R] M ⧸ p ->ₗ[R] M₂ ⧸ q where
+def mapQLinear : compatibleMaps p q →ₗ[R] M ⧸ p →ₗ[R] M₂ ⧸ q where
   toFun f := mapQ _ _ f.val f.property
   map_add' x y := by
     ext
@@ -1575,3 +1325,4 @@ def mapQLinear : compatibleMaps p q ->ₗ[R] M ⧸ p ->ₗ[R] M₂ ⧸ q where
 end Submodule
 
 end CommRing
+

@@ -61,83 +61,56 @@ assert_not_exists IsOrderedRing
 open scoped Relator
 namespace Filter
 
-variable {α β γ δ : Type*} {l : Filter α} {f g h : α -> β}
+variable {α β γ δ : Type*} {l : Filter α} {f g h : α → β}
 
-/--
-theorem `const_eventuallyEq'` / 定理 `const_eventuallyEq'`
-
-English:
-theorem const_eventuallyEq'
-  given: [NeBot l] {a b : β}
-  statement: (forallᶠ _ in l, a = b) ↔ a = b
-  proof: eventually_const
-
-中文:
-定理 const_eventuallyEq'
-  条件: [NeBot l] {a b : β}
-  结论: (对任意ᶠ _ in l, a = b) ↔ a = b
-  证明: eventually_const
-
-Depends on / 依赖: eventually_const
+/-
+**Filter.const_eventuallyEq'** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：const_eventuallyEq' [NeBot l] {a b : β} : (forallᶠ _ in l, a = b) ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_const`：eventually_const {f : Filter α} [t : NeBot f] {
+p : Prop} : (forallᶠ _ in f, p) ↔ p
 -/
-theorem const_eventuallyEq' [NeBot l] {a b : β} : (forallᶠ _ in l, a = b) ↔ a = b :=
+theorem const_eventuallyEq' [NeBot l] {a b : β} : (∀ᶠ _ in l, a = b) ↔ a = b :=
   eventually_const
-
-/--
-theorem `const_eventuallyEq` / 定理 `const_eventuallyEq`
-
-English:
-theorem const_eventuallyEq
-  given: [NeBot l] {a b : β}
-  statement: ((fun _ => a) =ᶠ[l] fun _ => b) ↔ a = b
-  proof: @const_eventuallyEq' _ _ _ _ a b
-
-中文:
-定理 const_eventuallyEq
-  条件: [NeBot l] {a b : β}
-  结论: ((fun _ => a) =ᶠ[l] fun _ => b) ↔ a = b
-  证明: @const_eventuallyEq' _ _ _ _ a b
+/-
+**Filter.const_eventuallyEq** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {l : Filter α} [l.NeBot] {a b : β}, ((fun 
+x => a) =ᶠ[l] fun x => b) ↔ a = b
+参数：(fun x => a) =ᶠ[l] fun x => b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.const_eventuallyEq'`：const_eventuallyEq' [NeBot l] {a b : β} : (f
+orallᶠ _ in l, a = b) ↔ a = b
 -/
 @[simp] theorem const_eventuallyEq [NeBot l] {a b : β} : ((fun _ => a) =ᶠ[l] fun _ => b) ↔ a = b :=
   @const_eventuallyEq' _ _ _ _ a b
 
 /-- Setoid used to define the space of germs. -/
 @[instance_reducible]
-/--
-Definition of `germSetoid` / `germSetoid` 的定义
+/-
+**Filter.germSetoid** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：germSetoid (l : Filter α) (β : Type*) : Setoid (α -> β) where r
+参数：l : Filter α；β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition germSetoid
-  signature: (l : Filter α) (β : Type*)
-  body: EventuallyEq l
-  iseqv := ⟨EventuallyEq.refl _, EventuallyEq.symm, EventuallyEq.trans⟩
-
-中文:
-定义 germSetoid
-  签名: (l : 滤子 α) (β : 类型)
-  定义体: EventuallyEq l
-  iseqv := ⟨EventuallyEq.refl _, EventuallyEq.symm, EventuallyEq.trans⟩
-
-Depends on / 依赖: EventuallyEq
+--- 原说明 ---
+Setoid used to define the space of germs.
 -/
-def germSetoid (l : Filter α) (β : Type*) : Setoid (α -> β) where
+def germSetoid (l : Filter α) (β : Type*) : Setoid (α → β) where
   r := EventuallyEq l
   iseqv := ⟨EventuallyEq.refl _, EventuallyEq.symm, EventuallyEq.trans⟩
 
-/--
-Definition of `Germ` / `Germ` 的定义
+/-- The space of germs of functions `α → β` at a filter `l`. -/
+/-
+**Filter.Germ** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：Germ (l : Filter α) (β : Type*) : Type _
+参数：l : Filter α；β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Germ
-  signature: (l : Filter α) (β : Type*)
-  body: Quotient (germSetoid l β)
-
-中文:
-定义 Germ
-  签名: (l : 滤子 α) (β : 类型)
-  定义体: Quotient (germSetoid l β)
-
-Depends on / 依赖: Quotient, germSetoid
+--- 原说明 ---
+The space of germs of functions `α → β` at a filter `l`.
 -/
 def Germ (l : Filter α) (β : Type*) : Type _ :=
   Quotient (germSetoid l β)
@@ -145,87 +118,65 @@ def Germ (l : Filter α) (β : Type*) : Type _ :=
 /-- Setoid used to define the filter product. This is a dependent version of
   `Filter.germSetoid`. -/
 @[instance_reducible]
-/--
-Definition of `productSetoid` / `productSetoid` 的定义
+/-
+**Filter.productSetoid** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：productSetoid (l : Filter α) (ε : α -> Type*) : Setoid ((a : _) -> ε a) wh
+ere r f g
+参数：l : Filter α；ε : α -> Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productSetoid
-  signature: (l : Filter α) (ε : α -> Type*)
-  body: forallᶠ a in l, f a = g a
-  iseqv :=
-    ⟨fun _ => Eventually.of_forall fun _ => rfl, fun h => h.mono fun _ => Eq.symm,
-      fun h1 h2 => h1.congr (h2.mono fun _ hx => hx ▸ Iff.rfl)⟩
-
-中文:
-定义 productSetoid
-  签名: (l : 滤子 α) (ε : α -> 类型)
-  定义体: forallᶠ a in l, f a = g a
-  iseqv :=
-    ⟨fun _ => Eventually.of_forall fun _ => rfl, fun h => h.mono fun _ => Eq.symm,
-      fun h1 h2 => h1.congr (h2.mono fun _ hx => hx ▸ Iff.rfl)⟩
+--- 原说明 ---
+Setoid used to define the filter product. This is a dependent version of
+  `Filter.germSetoid`.
 -/
-def productSetoid (l : Filter α) (ε : α -> Type*) : Setoid ((a : _) -> ε a) where
-  r f g := forallᶠ a in l, f a = g a
+def productSetoid (l : Filter α) (ε : α → Type*) : Setoid ((a : _) → ε a) where
+  r f g := ∀ᶠ a in l, f a = g a
   iseqv :=
     ⟨fun _ => Eventually.of_forall fun _ => rfl, fun h => h.mono fun _ => Eq.symm,
       fun h1 h2 => h1.congr (h2.mono fun _ hx => hx ▸ Iff.rfl)⟩
 
-/--
-Definition of `Product` / `Product` 的定义
+/-- The filter product `(a : α) → ε a` at a filter `l`. This is a dependent version of
+  `Filter.Germ`. -/
+/-
+**Filter.Product** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：Product (l : Filter α) (ε : α -> Type*) : Type _
+参数：l : Filter α；ε : α -> Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Product
-  signature: (l : Filter α) (ε : α -> Type*)
-  body: Quotient (productSetoid l ε)
-
-中文:
-定义 积
-  签名: (l : 滤子 α) (ε : α -> 类型)
-  定义体: Quotient (productSetoid l ε)
-
-Depends on / 依赖: Quotient, productSetoid
+--- 原说明 ---
+The filter product `(a : α) → ε a` at a filter `l`. This is a dependent version 
+of
+  `Filter.Germ`.
 -/
-def Product (l : Filter α) (ε : α -> Type*) : Type _ :=
+def Product (l : Filter α) (ε : α → Type*) : Type _ :=
   Quotient (productSetoid l ε)
 
 namespace Product
 
-variable {ε : α -> Type*}
+variable {ε : α → Type*}
 
-/--
-Instance `coeTC` / 实例 `coeTC`
-
-English:
-instance coeTC
-  signature: : CoeTC ((a : _) -> ε a) (l.Product ε)
-  body: ⟨@Quotient.mk' _ (productSetoid _ ε)⟩
-
-中文:
-实例 coeTC
-  签名: : CoeTC ((a : _) -> ε a) (l.积 ε)
-  定义体: ⟨@Quotient.mk' _ (productSetoid _ ε)⟩
-
-Depends on / 依赖: Quotient, Quotient.mk, productSetoid
+/-
+**Filter.Product.coeTC** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Product`。
+形式化陈述：coeTC : CoeTC ((a : _) -> ε a) (l.Product ε)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 -/
-instance coeTC : CoeTC ((a : _) -> ε a) (l.Product ε) :=
+instance coeTC : CoeTC ((a : _) → ε a) (l.Product ε) :=
   ⟨@Quotient.mk' _ (productSetoid _ ε)⟩
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: [(a : _) -> Inhabited (ε a)]
-  body: ⟨(↑fun a => (default : ε a) : l.Product ε)⟩
-
-中文:
-实例 instInhabited
-  签名: [(a : _) -> 可居 (ε a)]
-  定义体: ⟨(↑fun a => (default : ε a) : l.Product ε)⟩
-
-Depends on / 依赖: Product, l.Product
+/-
+**Filter.Product.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Product`。
+形式化陈述：instInhabited [(a : _) -> Inhabited (ε a)] : Inhabited (l.Product ε)
+参数：a : _；ε a。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 -/
-instance instInhabited [(a : _) -> Inhabited (ε a)] : Inhabited (l.Product ε) :=
+instance instInhabited [(a : _) → Inhabited (ε a)] : Inhabited (l.Product ε) :=
   ⟨(↑fun a => (default : ε a) : l.Product ε)⟩
 
 end Product
@@ -234,1038 +185,667 @@ namespace Germ
 
 /-- The germ corresponding to a global function. -/
 @[coe]
-/--
-Definition of `ofFun` / `ofFun` 的定义
+/-
+**Filter.Germ.ofFun** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：ofFun : (α -> β) -> Germ l β
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 
-English:
-definition ofFun
-  signature: : (α -> β) -> Germ l β
-  body: @Quotient.mk' _ (germSetoid _ _)
-
-中文:
-定义 ofFun
-  签名: : (α -> β) -> Germ l β
-  定义体: @Quotient.mk' _ (germSetoid _ _)
-
-Depends on / 依赖: Quotient, Quotient.mk, germSetoid
+--- 原说明 ---
+The germ corresponding to a global function.
 -/
-def ofFun : (α -> β) -> Germ l β := @Quotient.mk' _ (germSetoid _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeTC (α -> β) (Germ l β)
-  body: ⟨ofFun⟩
-
-中文:
-实例 :
-  签名: CoeTC (α -> β) (Germ l β)
-  定义体: ⟨ofFun⟩
+def ofFun : (α → β) → Germ l β := @Quotient.mk' _ (germSetoid _ _)
+/-
+**Filter.Germ.** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeTC (α -> β) (Germ l β) :=
+instance : CoeTC (α → β) (Germ l β) :=
   ⟨ofFun⟩
 
 /-- Germ of the constant function `fun x : α ↦ c` at a filter `l`. -/
 @[coe]
-/--
-Definition of `const` / `const` 的定义
+/-
+**Filter.Germ.const** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：const {l : Filter α} (b : β) : (Germ l β)
+参数：b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: {l : Filter α} (b : β)
-  body: ofFun fun _ => b
-
-中文:
-定义 const
-  签名: {l : 滤子 α} (b : β)
-  定义体: ofFun fun _ => b
+--- 原说明 ---
+Germ of the constant function `fun x : α ↦ c` at a filter `l`.
 -/
 def const {l : Filter α} (b : β) : (Germ l β) := ofFun fun _ => b
-
-/--
-Instance `coeTail` / 实例 `coeTail`
-
-English:
-instance coeTail
-  signature: : CoeTail β (Germ l β)
-  body: ⟨const⟩
-
-中文:
-实例 coeTail
-  签名: : CoeTail β (Germ l β)
-  定义体: ⟨const⟩
+/-
+**Filter.Germ.coeTail** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：coeTail : CoeTail β (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance coeTail : CoeTail β (Germ l β) :=
   ⟨const⟩
 
-/--
-Definition of `IsConstant` / `IsConstant` 的定义
+/-- A germ `P` of functions `α → β` is constant w.r.t. `l`. -/
+/-
+**Filter.Germ.IsConstant** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：IsConstant {l : Filter α} (P : Germ l β) : Prop
+参数：P : Germ l β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsConstant
-  signature: {l : Filter α} (P : Germ l β)
-  body: P.liftOn (fun f => exists b : β, f =ᶠ[l] (fun _ => b)) by
-    suffices forall f g : α -> β, forall b : β, f =ᶠ[l] g -> (f =ᶠ[l] fun _ => b) -> (g =ᶠ[l] fun _ => b) from
-      fun f g h => propext ⟨fun ⟨b, hb⟩ => ⟨b, this f g b h hb⟩, fun ⟨b, hb⟩ => ⟨b, h.trans hb⟩⟩
-    exact fun f g b hfg hf => (hfg.symm).trans hf
-
-中文:
-定义 是常数
-  签名: {l : 滤子 α} (P : Germ l β)
-  定义体: P.liftOn (fun f => exists b : β, f =ᶠ[l] (fun _ => b)) by
-    suffices forall f g : α -> β, forall b : β, f =ᶠ[l] g -> (f =ᶠ[l] fun _ => b) -> (g =ᶠ[l] fun _ => b) from
-      fun f g h => propext ⟨fun ⟨b, hb⟩ => ⟨b, this f g b h hb⟩, fun ⟨b, hb⟩ => ⟨b, h.trans hb⟩⟩
-    exact fun f g b hfg hf => (hfg.symm).trans hf
-
-Depends on / 依赖: Algebra, Algebra.adjoin_image, Finset, Finset.coe_image, P.liftOn, adjoin_image, classical, coe_image, h.trans, hfg.symm, liftOn, propext, s.image
+--- 原说明 ---
+A germ `P` of functions `α → β` is constant w.r.t. `l`.
 -/
 def IsConstant {l : Filter α} (P : Germ l β) : Prop :=
-P.liftOn (fun f => exists b : β, f =ᶠ[l] (fun _ => b)) by
-    suffices forall f g : α -> β, forall b : β, f =ᶠ[l] g -> (f =ᶠ[l] fun _ => b) -> (g =ᶠ[l] fun _ => b) from
-      fun f g h => propext ⟨fun ⟨b, hb⟩ => ⟨b, this f g b h hb⟩, fun ⟨b, hb⟩ => ⟨b, h.trans hb⟩⟩
-    exact fun f g b hfg hf => (hfg.symm).trans hf
-
-/--
-theorem `isConstant_coe` / 定理 `isConstant_coe`
-
-English:
-theorem isConstant_coe
-  given: {l : Filter α} {b} (h : forall x', f x' = b)
-  statement: (↑f : Germ l β).IsConstant
-  proof: ⟨b, Eventually.of_forall h⟩
-
-@[simp]
-
-中文:
-定理 isConstant_coe
-  条件: {l : 滤子 α} {b} (h : 对任意 x', f x' = b)
-  结论: (↑f : Germ l β).是常数
-  证明: ⟨b, Eventually.of_forall h⟩
-
-@[simp]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, of_forall
+  P.liftOn (fun f ↦ ∃ b : β, f =ᶠ[l] (fun _ ↦ b)) <| by
+    suffices ∀ f g : α → β, ∀ b : β, f =ᶠ[l] g → (f =ᶠ[l] fun _ ↦ b) → (g =ᶠ[l] fun _ ↦ b) from
+      fun f g h ↦ propext ⟨fun ⟨b, hb⟩ ↦ ⟨b, this f g b h hb⟩, fun ⟨b, hb⟩ ↦ ⟨b, h.trans hb⟩⟩
+    exact fun f g b hfg hf ↦ (hfg.symm).trans hf
+/-
+**Filter.Germ.isConstant_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：isConstant_coe {l : Filter α} {b} (h : forall x', f x' = b) : (↑f : Germ l
+ β).IsConstant
+参数：h : forall x', f x' = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-theorem isConstant_coe {l : Filter α} {b} (h : forall x', f x' = b) : (↑f : Germ l β).IsConstant :=
+theorem isConstant_coe {l : Filter α} {b} (h : ∀ x', f x' = b) : (↑f : Germ l β).IsConstant :=
   ⟨b, Eventually.of_forall h⟩
 
 @[simp]
-/--
-theorem `isConstant_coe_const` / 定理 `isConstant_coe_const`
-
-English:
-theorem isConstant_coe_const
-  given: {l : Filter α} {b : β}
-  statement: (fun _ : α => b : Germ l β).IsConstant
-  proof: by
-  use b
-
-中文:
-定理 isConstant_coe_const
-  条件: {l : 滤子 α} {b : β}
-  结论: (fun _ : α => b : Germ l β).是常数
-  证明: by
-  use b
+/-
+**Filter.Germ.isConstant_coe_const** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：isConstant_coe_const {l : Filter α} {b : β} : (fun _ : α => b : Germ l β).
+IsConstant
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
 -/
-theorem isConstant_coe_const {l : Filter α} {b : β} : (fun _ : α => b : Germ l β).IsConstant := by
+theorem isConstant_coe_const {l : Filter α} {b : β} : (fun _ : α ↦ b : Germ l β).IsConstant := by
   use b
 
-/--
-lemma `isConstant_comp` / 引理 `isConstant_comp`
+/-- If `f : α → β` is constant w.r.t. `l` and `g : β → γ`, then `g ∘ f : α → γ` also is. -/
+/-
+**Filter.Germ.isConstant_comp** 是 Mathlib 中的一个引理，位于命名空间 `Filter.Germ`。
+形式化陈述：isConstant_comp {l : Filter α} {f : α -> β} {g : β -> γ} (h : (f : Germ l 
+β).IsConstant) : ((g ∘ f) : Germ l γ).IsConstant
+参数：h : (f : Germ l β).IsConstant。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.fun_comp`：∀ {α : Type u} {β : Type v} {γ : Type w} {
+f g : α → β} {l : Filter α}, f =ᶠ[l] g → ∀ (h : β → γ), h ∘ f =ᶠ[l] h ∘ g
 
-English:
-lemma isConstant_comp
-  statement: {l : Filter α} {f : α -> β} {g : β -> γ}
-  proof: by
-  obtain ⟨b, hb⟩ := h
-  exact ⟨g b, hb.fun_comp g⟩
-
-@[simp]
-
-中文:
-引理 isConstant_comp
-  结论: {l : 滤子 α} {f : α -> β} {g : β -> γ}
-  证明: by
-  obtain ⟨b, hb⟩ := h
-  exact ⟨g b, hb.fun_comp g⟩
-
-@[simp]
-
-Depends on / 依赖: fun_comp, hb.fun_comp
+--- 原说明 ---
+If `f : α → β` is constant w.r.t. `l` and `g : β → γ`, then `g ∘ f : α → γ` also
+ is.
 -/
-lemma isConstant_comp {l : Filter α} {f : α -> β} {g : β -> γ}
+lemma isConstant_comp {l : Filter α} {f : α → β} {g : β → γ}
     (h : (f : Germ l β).IsConstant) : ((g ∘ f) : Germ l γ).IsConstant := by
   obtain ⟨b, hb⟩ := h
   exact ⟨g b, hb.fun_comp g⟩
 
 @[simp]
-/--
-theorem `quot_mk_eq_coe` / 定理 `quot_mk_eq_coe`
-
-English:
-theorem quot_mk_eq_coe
-  given: (l : Filter α) (f : α -> β)
-  statement: Quot.mk _ f = (f : Germ l β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 quot_mk_eq_coe
-  条件: (l : 滤子 α) (f : α -> β)
-  结论: 商.mk _ f = (f : Germ l β)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.adjoin_union, Finite, Set.Finite.union, Subalgebra, Subalgebra.fg_def, adjoin_union, fg_def, fg_def.mpr
+/-
+**Filter.Germ.quot_mk_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：quot_mk_eq_coe (l : Filter α) (f : α -> β) : Quot.mk _ f = (f : Germ l β)
+参数：l : Filter α；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem quot_mk_eq_coe (l : Filter α) (f : α -> β) : Quot.mk _ f = (f : Germ l β) :=
+theorem quot_mk_eq_coe (l : Filter α) (f : α → β) : Quot.mk _ f = (f : Germ l β) :=
   rfl
 
 @[simp]
-/--
-theorem `mk'_eq_coe` / 定理 `mk'_eq_coe`
-
-English:
-theorem mk'_eq_coe
-  given: (l : Filter α) (f : α -> β)
-  proof: rfl
-
-@[elab_as_elim]
-
-中文:
-定理 mk'_eq_coe
-  条件: (l : 滤子 α) (f : α -> β)
-  证明: rfl
-
-@[elab_as_elim]
+/-
+**Filter.Germ.mk'_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (l : Filter α) (f : α → β), Quotient.mk' f
+ = ↑f
+参数：l : Filter α；f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 -/
-theorem mk'_eq_coe (l : Filter α) (f : α -> β) :
+theorem mk'_eq_coe (l : Filter α) (f : α → β) :
     @Quotient.mk' _ (germSetoid _ _) f = (f : Germ l β) :=
   rfl
 
 @[elab_as_elim]
-/--
-theorem `inductionOn` / 定理 `inductionOn`
-
-English:
-theorem inductionOn
-  given: (f : Germ l β) {p : Germ l β -> Prop} (h : forall f : α -> β, p f)
-  statement: p f
-  proof: Quotient.inductionOn' f h
-
-@[elab_as_elim]
-
-中文:
-定理 inductionOn
-  条件: (f : Germ l β) {p : Germ l β -> 命题} (h : 对任意 f : α -> β, p f)
-  结论: p f
-  证明: Quotient.inductionOn' f h
-
-@[elab_as_elim]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Filter.Germ.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：inductionOn (f : Germ l β) {p : Germ l β -> Prop} (h : forall f : α -> β, 
+p f) : p f
+参数：f : Germ l β；h : forall f : α -> β, p f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
 -/
-theorem inductionOn (f : Germ l β) {p : Germ l β -> Prop} (h : forall f : α -> β, p f) : p f :=
+theorem inductionOn (f : Germ l β) {p : Germ l β → Prop} (h : ∀ f : α → β, p f) : p f :=
   Quotient.inductionOn' f h
 
 @[elab_as_elim]
-/--
-theorem `inductionOn₂` / 定理 `inductionOn₂`
-
-English:
-theorem inductionOn₂
-  statement: (f : Germ l β) (g : Germ l γ) {p : Germ l β -> Germ l γ -> Prop}
-  proof: Quotient.inductionOn₂' f g h
-
-@[elab_as_elim]
-
-中文:
-定理 inductionOn₂
-  结论: (f : Germ l β) (g : Germ l γ) {p : Germ l β -> Germ l γ -> 命题}
-  证明: Quotient.inductionOn₂' f g h
-
-@[elab_as_elim]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn
+/-
+**Filter.Germ.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：inductionOn (f : Germ l β) {p : Germ l β -> Prop} (h : forall f : α -> β, 
+p f) : p f
+参数：f : Germ l β；h : forall f : α -> β, p f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
 -/
-theorem inductionOn₂ (f : Germ l β) (g : Germ l γ) {p : Germ l β -> Germ l γ -> Prop}
-    (h : forall (f : α -> β) (g : α -> γ), p f g) : p f g :=
+theorem inductionOn₂ (f : Germ l β) (g : Germ l γ) {p : Germ l β → Germ l γ → Prop}
+    (h : ∀ (f : α → β) (g : α → γ), p f g) : p f g :=
   Quotient.inductionOn₂' f g h
 
 @[elab_as_elim]
-/--
-theorem `inductionOn₃` / 定理 `inductionOn₃`
-
-English:
-theorem inductionOn₃
-  statement: (f : Germ l β) (g : Germ l γ) (h : Germ l δ)
-  proof: Quotient.inductionOn₃' f g h H
-
-中文:
-定理 inductionOn₃
-  结论: (f : Germ l β) (g : Germ l γ) (h : Germ l δ)
-  证明: Quotient.inductionOn₃' f g h H
-
-Depends on / 依赖: Quotient, Quotient.inductionOn
+/-
+**Filter.Germ.inductionOn** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：inductionOn (f : Germ l β) {p : Germ l β -> Prop} (h : forall f : α -> β, 
+p f) : p f
+参数：f : Germ l β；h : forall f : α -> β, p f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
 -/
 theorem inductionOn₃ (f : Germ l β) (g : Germ l γ) (h : Germ l δ)
-    {p : Germ l β -> Germ l γ -> Germ l δ -> Prop}
-    (H : forall (f : α -> β) (g : α -> γ) (h : α -> δ), p f g h) : p f g h :=
+    {p : Germ l β → Germ l γ → Germ l δ → Prop}
+    (H : ∀ (f : α → β) (g : α → γ) (h : α → δ), p f g h) : p f g h :=
   Quotient.inductionOn₃' f g h H
 
-/--
-Definition of `map'` / `map'` 的定义
+/-- Given a map `F : (α → β) → (γ → δ)` that sends functions eventually equal at `l` to functions
+eventually equal at `lc`, returns a map from `Germ l β` to `Germ lc δ`. -/
+/-
+**Filter.Germ.map'** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：map' {lc : Filter γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.E
+ventuallyEq) F F) : Germ l β -> Germ lc δ
+参数：F : (α -> β) -> γ -> δ；hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
 
-English:
-definition map'
-  signature: {lc : Filter γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
-  body: Quotient.map' F hF
-
-中文:
-定义 map'
-  签名: {lc : 滤子 γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
-  定义体: Quotient.map' F hF
-
-Depends on / 依赖: Quotient, Quotient.map
+--- 原说明 ---
+Given a map `F : (α → β) → (γ → δ)` that sends functions eventually equal at `l`
+ to functions
+eventually equal at `lc`, returns a map from `Germ l β` to `Germ lc δ`.
 -/
-def map' {lc : Filter γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F) :
-    Germ l β -> Germ lc δ :=
+def map' {lc : Filter γ} (F : (α → β) → γ → δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F) :
+    Germ l β → Germ lc δ :=
   Quotient.map' F hF
 
-/--
-Definition of `liftOn` / `liftOn` 的定义
+/-- Given a germ `f : Germ l β` and a function `F : (α → β) → γ` sending eventually equal functions
+to the same value, returns the value `F` takes on functions having germ `f` at `l`. -/
+/-
+**Filter.Germ.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：liftOn {γ : Sort*} (f : Germ l β) (F : (α -> β) -> γ) (hF : (l.EventuallyE
+q ⇒ (· = ·)) F F) : γ
+参数：f : Germ l β；F : (α -> β) -> γ；hF : (l.EventuallyEq ⇒ (· = ·)) F F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftOn
-  signature: {γ : Sort*} (f : Germ l β) (F : (α -> β) -> γ) (hF : (l.EventuallyEq ⇒ (· = ·)) F F)
-  body: Quotient.liftOn' f F hF
-
-@[simp]
-
-中文:
-定义 liftOn
-  签名: {γ : 类型层*} (f : Germ l β) (F : (α -> β) -> γ) (hF : (l.EventuallyEq ⇒ (· = ·)) F F)
-  定义体: Quotient.liftOn' f F hF
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.liftOn, liftOn
+--- 原说明 ---
+Given a germ `f : Germ l β` and a function `F : (α → β) → γ` sending eventually 
+equal functions
+to the same value, returns the value `F` takes on functions having germ `f` at `
+l`.
 -/
-def liftOn {γ : Sort*} (f : Germ l β) (F : (α -> β) -> γ) (hF : (l.EventuallyEq ⇒ (· = ·)) F F) :
+def liftOn {γ : Sort*} (f : Germ l β) (F : (α → β) → γ) (hF : (l.EventuallyEq ⇒ (· = ·)) F F) :
     γ :=
   Quotient.liftOn' f F hF
 
 @[simp]
-/--
-theorem `map'_coe` / 定理 `map'_coe`
-
-English:
-theorem map'_coe
-  statement: {lc : Filter γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 map'_coe
-  结论: {lc : 滤子 γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Filter.Germ.map'_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} {l : Filter 
+α} {lc : Filter γ} (F : (α → β) → γ → δ)   (hF : Relator.LiftFun l.EventuallyEq 
+lc.EventuallyEq F F) (f : α → β), Filter.Germ.map' F hF ↑f = ↑(F f)
+参数：F : (α → β) → γ → δ；hF : Relator.LiftFun l.EventuallyEq lc.EventuallyEq F F；f
+ : α → β；F f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map'_coe {lc : Filter γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
-    (f : α -> β) : map' F hF f = F f :=
+theorem map'_coe {lc : Filter γ} (F : (α → β) → γ → δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
+    (f : α → β) : map' F hF f = F f :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq` / 定理 `coe_eq`
-
-English:
-theorem coe_eq
-  statement: (f : Germ l β) = g ↔ f =ᶠ[l] g
-  proof: Quotient.eq''
-
-alias ⟨_, _root_.Filter.EventuallyEq.germ_eq⟩ := coe_eq
-
-中文:
-定理 coe_eq
-  结论: (f : Germ l β) = g ↔ f =ᶠ[l] g
-  证明: Quotient.eq''
-
-alias ⟨_, _root_.Filter.EventuallyEq.germ_eq⟩ := coe_eq
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**Filter.Germ.coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq''`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk''
+ a = Quotient.mk'' b ↔ s₁ a b
 -/
 theorem coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g :=
   Quotient.eq''
 
 alias ⟨_, _root_.Filter.EventuallyEq.germ_eq⟩ := coe_eq
 
-/--
-Definition of `map` / `map` 的定义
+/-- Lift a function `β → γ` to a function `Germ l β → Germ l γ`. -/
+/-
+**Filter.Germ.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：map (op : β -> γ) : Germ l β -> Germ l γ
+参数：op : β -> γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (op : β -> γ)
-  body: map' (op ∘ ·) fun _ _ H => H.mono fun _ H => congr_arg op H
-
-@[simp]
-
-中文:
-定义 map
-  签名: (op : β -> γ)
-  定义体: map' (op ∘ ·) fun _ _ H => H.mono fun _ H => congr_arg op H
-
-@[simp]
-
-Depends on / 依赖: H.mono, congr_arg
+--- 原说明 ---
+Lift a function `β → γ` to a function `Germ l β → Germ l γ`.
 -/
-def map (op : β -> γ) : Germ l β -> Germ l γ :=
+def map (op : β → γ) : Germ l β → Germ l γ :=
   map' (op ∘ ·) fun _ _ H => H.mono fun _ H => congr_arg op H
 
 @[simp]
-/--
-theorem `map_coe` / 定理 `map_coe`
-
-English:
-theorem map_coe
-  given: (op : β -> γ) (f : α -> β)
-  statement: map op (f : Germ l β) = op ∘ f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_coe
-  条件: (op : β -> γ) (f : α -> β)
-  结论: map op (f : Germ l β) = op ∘ f
-  证明: rfl
-
-@[simp]
+/-
+**Filter.Germ.map_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：map_coe (op : β -> γ) (f : α -> β) : map op (f : Germ l β) = op ∘ f
+参数：op : β -> γ；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_coe (op : β -> γ) (f : α -> β) : map op (f : Germ l β) = op ∘ f :=
+theorem map_coe (op : β → γ) (f : α → β) : map op (f : Germ l β) = op ∘ f :=
   rfl
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: map id = (id : Germ l β -> Germ l β)
-  proof: by
-  ext ⟨f⟩
-  rfl
-
-中文:
-定理 map_id
-  结论: map id = (id : Germ l β -> Germ l β)
-  证明: by
-  ext ⟨f⟩
-  rfl
+/-
+**Filter.Germ.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：map_id : map id = (id : Germ l β -> Germ l β)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem map_id : map id = (id : Germ l β -> Germ l β) := by
+theorem map_id : map id = (id : Germ l β → Germ l β) := by
   ext ⟨f⟩
   rfl
-
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  given: (op₁ : γ -> δ) (op₂ : β -> γ) (f : Germ l β)
-  proof: inductionOn f fun _ => rfl
-
-中文:
-定理 map_map
-  条件: (op₁ : γ -> δ) (op₂ : β -> γ) (f : Germ l β)
-  证明: inductionOn f fun _ => rfl
-
-Depends on / 依赖: inductionOn
+/-
+**Filter.Germ.map_map** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：map_map (op₁ : γ -> δ) (op₂ : β -> γ) (f : Germ l β) : map op₁ (map op₂ f)
+ = map (op₁ ∘ op₂) f
+参数：op₁ : γ -> δ；op₂ : β -> γ；f : Germ l β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.inductionOn`：inductionOn (f : Germ l β) {p : Germ l β -> Pro
+p} (h : forall f : α -> β, p f) : p f
 -/
-theorem map_map (op₁ : γ -> δ) (op₂ : β -> γ) (f : Germ l β) :
+theorem map_map (op₁ : γ → δ) (op₂ : β → γ) (f : Germ l β) :
     map op₁ (map op₂ f) = map (op₁ ∘ op₂) f :=
   inductionOn f fun _ => rfl
 
-/--
-Definition of `map₂` / `map₂` 的定义
+/-- Lift a binary function `β → γ → δ` to a function `Germ l β → Germ l γ → Germ l δ`. -/
+/-
+**Filter.Germ.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：map (op : β -> γ) : Germ l β -> Germ l γ
+参数：op : β -> γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: (op : β -> γ -> δ)
-  body: Quotient.map₂ (fun f g x => op (f x) (g x)) fun f f' Hf g g' Hg =>
-Hg.mp Hf.mono fun x Hf Hg => by simp only [Hf, Hg]
-
-@[simp]
-
-中文:
-定义 map₂
-  签名: (op : β -> γ -> δ)
-  定义体: Quotient.map₂ (fun f g x => op (f x) (g x)) fun f f' Hf g g' Hg =>
-Hg.mp Hf.mono fun x Hf Hg => by simp only [Hf, Hg]
-
-@[simp]
-
-Depends on / 依赖: Hf.mono, Hg.mp, Quotient, Quotient.map
+--- 原说明 ---
+Lift a binary function `β → γ → δ` to a function `Germ l β → Germ l γ → Germ l δ
+`.
 -/
-def map₂ (op : β -> γ -> δ) : Germ l β -> Germ l γ -> Germ l δ :=
+def map₂ (op : β → γ → δ) : Germ l β → Germ l γ → Germ l δ :=
   Quotient.map₂ (fun f g x => op (f x) (g x)) fun f f' Hf g g' Hg =>
-Hg.mp Hf.mono fun x Hf Hg => by simp only [Hf, Hg]
+    Hg.mp <| Hf.mono fun x Hf Hg => by simp only [Hf, Hg]
 
 @[simp]
-/--
-theorem `map₂_coe` / 定理 `map₂_coe`
-
-English:
-theorem map₂_coe
-  given: (op : β -> γ -> δ) (f : α -> β) (g : α -> γ)
-  proof: rfl
-
-中文:
-定理 map₂_coe
-  条件: (op : β -> γ -> δ) (f : α -> β) (g : α -> γ)
-  证明: rfl
+/-
+**Filter.Germ.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：map (op : β -> γ) : Germ l β -> Germ l γ
+参数：op : β -> γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map₂_coe (op : β -> γ -> δ) (f : α -> β) (g : α -> γ) :
+theorem map₂_coe (op : β → γ → δ) (f : α → β) (g : α → γ) :
     map₂ op (f : Germ l β) g = fun x => op (f x) (g x) :=
   rfl
 
-/--
-Definition of `Tendsto` / `Tendsto` 的定义
+/-- A germ at `l` of maps from `α` to `β` tends to `lb : Filter β` if it is represented by a map
+which tends to `lb` along `l`. -/
+/-
+**Filter.Germ.Tendsto** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → {l : Filter α} → l.Germ β → Filter β → P
+rop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Tendsto
-  signature: (f : Germ l β) (lb : Filter β)
-  body: liftOn f (fun f => Tendsto f l lb) fun _f _g H => propext (tendsto_congr' H)
-
-@[simp, norm_cast]
-
-中文:
-定义 收敛
-  签名: (f : Germ l β) (lb : 滤子 β)
-  定义体: liftOn f (fun f => Tendsto f l lb) fun _f _g H => propext (tendsto_congr' H)
-
-@[simp, norm_cast]
+--- 原说明 ---
+A germ at `l` of maps from `α` to `β` tends to `lb : Filter β` if it is represen
+ted by a map
+which tends to `lb` along `l`.
 -/
 protected def Tendsto (f : Germ l β) (lb : Filter β) : Prop :=
   liftOn f (fun f => Tendsto f l lb) fun _f _g H => propext (tendsto_congr' H)
 
 @[simp, norm_cast]
-/--
-theorem `coe_tendsto` / 定理 `coe_tendsto`
-
-English:
-theorem coe_tendsto
-  given: {f : α -> β} {lb : Filter β}
-  statement: (f : Germ l β).Tendsto lb ↔ Tendsto f l lb
-  proof: Iff.rfl
-
-alias ⟨_, _root_.Filter.Tendsto.germ_tendsto⟩ := coe_tendsto
-
-中文:
-定理 coe_tendsto
-  条件: {f : α -> β} {lb : 滤子 β}
-  结论: (f : Germ l β).收敛 lb ↔ 收敛 f l lb
-  证明: Iff.rfl
-
-alias ⟨_, _root_.Filter.Tendsto.germ_tendsto⟩ := coe_tendsto
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.Germ.coe_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_tendsto {f : α -> β} {lb : Filter β} : (f : Germ l β).Tendsto lb ↔ Ten
+dsto f l lb
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_tendsto {f : α -> β} {lb : Filter β} : (f : Germ l β).Tendsto lb ↔ Tendsto f l lb :=
+theorem coe_tendsto {f : α → β} {lb : Filter β} : (f : Germ l β).Tendsto lb ↔ Tendsto f l lb :=
   Iff.rfl
 
 alias ⟨_, _root_.Filter.Tendsto.germ_tendsto⟩ := coe_tendsto
 
-/--
-Definition of `compTendsto'` / `compTendsto'` 的定义
+/-- Given two germs `f : Germ l β`, and `g : Germ lc α`, where `l : Filter α`, if `g` tends to `l`,
+then the composition `f ∘ g` is well-defined as a germ at `lc`. -/
+/-
+**Filter.Germ.compTendsto'** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：compTendsto' (f : Germ l β) {lc : Filter γ} (g : Germ lc α) (hg : g.Tendst
+o l) : Germ lc β
+参数：f : Germ l β；g : Germ lc α；hg : g.Tendsto l。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compTendsto'
-  signature: (f : Germ l β) {lc : Filter γ} (g : Germ lc α) (hg : g.Tendsto l)
-  body: liftOn f (fun f => g.map f) fun _f₁ _f₂ hF =>
-    inductionOn g (fun _g hg => coe_eq.2 <| hg.eventually hF) hg
-
-@[simp]
-
-中文:
-定义 compTendsto'
-  签名: (f : Germ l β) {lc : 滤子 γ} (g : Germ lc α) (hg : g.收敛 l)
-  定义体: liftOn f (fun f => g.map f) fun _f₁ _f₂ hF =>
-    inductionOn g (fun _g hg => coe_eq.2 <| hg.eventually hF) hg
-
-@[simp]
-
-Depends on / 依赖: coe_eq, eventually, g.map, hg.eventually, inductionOn, liftOn
+--- 原说明 ---
+Given two germs `f : Germ l β`, and `g : Germ lc α`, where `l : Filter α`, if `g
+` tends to `l`,
+then the composition `f ∘ g` is well-defined as a germ at `lc`.
 -/
 def compTendsto' (f : Germ l β) {lc : Filter γ} (g : Germ lc α) (hg : g.Tendsto l) : Germ lc β :=
   liftOn f (fun f => g.map f) fun _f₁ _f₂ hF =>
     inductionOn g (fun _g hg => coe_eq.2 <| hg.eventually hF) hg
 
 @[simp]
-/--
-theorem `coe_compTendsto'` / 定理 `coe_compTendsto'`
-
-English:
-theorem coe_compTendsto'
-  given: (f : α -> β) {lc : Filter γ} {g : Germ lc α} (hg : g.Tendsto l)
-  proof: rfl
-
-中文:
-定理 coe_compTendsto'
-  条件: (f : α -> β) {lc : 滤子 γ} {g : Germ lc α} (hg : g.收敛 l)
-  证明: rfl
+/-
+**Filter.Germ.coe_compTendsto'** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_compTendsto' (f : α -> β) {lc : Filter γ} {g : Germ lc α} (hg : g.Tend
+sto l) : (f : Germ l β).compTendsto' g hg = g.map f
+参数：f : α -> β；hg : g.Tendsto l。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_compTendsto' (f : α -> β) {lc : Filter γ} {g : Germ lc α} (hg : g.Tendsto l) :
+theorem coe_compTendsto' (f : α → β) {lc : Filter γ} {g : Germ lc α} (hg : g.Tendsto l) :
     (f : Germ l β).compTendsto' g hg = g.map f :=
   rfl
 
-/--
-Definition of `compTendsto` / `compTendsto` 的定义
+/-- Given a germ `f : Germ l β` and a function `g : γ → α`, where `l : Filter α`, if `g` tends
+to `l` along `lc : Filter γ`, then the composition `f ∘ g` is well-defined as a germ at `lc`. -/
+/-
+**Filter.Germ.compTendsto** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：compTendsto (f : Germ l β) {lc : Filter γ} (g : γ -> α) (hg : Tendsto g lc
+ l) : Germ lc β
+参数：f : Germ l β；g : γ -> α；hg : Tendsto g lc l。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.germ_tendsto`：∀ {α : Type u_1} {β : Type u_2} {l : Filter
+ α} {f : α → β} {lb : Filter β}, Filter.Tendsto f l lb → (↑f).Tendsto lb
 
-English:
-definition compTendsto
-  signature: (f : Germ l β) {lc : Filter γ} (g : γ -> α) (hg : Tendsto g lc l)
-  body: f.compTendsto' _ hg.germ_tendsto
-
-@[simp]
-
-中文:
-定义 compTendsto
-  签名: (f : Germ l β) {lc : 滤子 γ} (g : γ -> α) (hg : 收敛 g lc l)
-  定义体: f.compTendsto' _ hg.germ_tendsto
-
-@[simp]
-
-Depends on / 依赖: compTendsto, f.compTendsto, germ_tendsto, hg.germ_tendsto
+--- 原说明 ---
+Given a germ `f : Germ l β` and a function `g : γ → α`, where `l : Filter α`, if
+ `g` tends
+to `l` along `lc : Filter γ`, then the composition `f ∘ g` is well-defined as a 
+germ at `lc`.
 -/
-def compTendsto (f : Germ l β) {lc : Filter γ} (g : γ -> α) (hg : Tendsto g lc l) : Germ lc β :=
+def compTendsto (f : Germ l β) {lc : Filter γ} (g : γ → α) (hg : Tendsto g lc l) : Germ lc β :=
   f.compTendsto' _ hg.germ_tendsto
 
 @[simp]
-/--
-theorem `coe_compTendsto` / 定理 `coe_compTendsto`
-
-English:
-theorem coe_compTendsto
-  given: (f : α -> β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_compTendsto
-  条件: (f : α -> β) {lc : 滤子 γ} {g : γ -> α} (hg : 收敛 g lc l)
-  证明: rfl
-
-@[simp]
+/-
+**Filter.Germ.coe_compTendsto** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_compTendsto (f : α -> β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g 
+lc l) : (f : Germ l β).compTendsto g hg = f ∘ g
+参数：f : α -> β；hg : Tendsto g lc l。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_compTendsto (f : α -> β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l) :
+theorem coe_compTendsto (f : α → β) {lc : Filter γ} {g : γ → α} (hg : Tendsto g lc l) :
     (f : Germ l β).compTendsto g hg = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `compTendsto'_coe` / 定理 `compTendsto'_coe`
-
-English:
-theorem compTendsto'_coe
-  given: (f : Germ l β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l)
-  proof: rfl
-
-中文:
-定理 compTendsto'_coe
-  条件: (f : Germ l β) {lc : 滤子 γ} {g : γ -> α} (hg : 收敛 g lc l)
-  证明: rfl
-
-Depends on / 依赖: Set.mem_singleton, mem_singleton, subset_adjoin
+/-
+**Filter.Germ.compTendsto'_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {l : Filter α} (f : l.Germ 
+β) {lc : Filter γ} {g : γ → α}   (hg : Filter.Tendsto g lc l), f.compTendsto' ↑g
+ ⋯ = f.compTendsto g hg
+参数：f : l.Germ β；hg : Filter.Tendsto g lc l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.germ_tendsto`：∀ {α : Type u_1} {β : Type u_2} {l : Filter
+ α} {f : α → β} {lb : Filter β}, Filter.Tendsto f l lb → (↑f).Tendsto lb
 -/
-theorem compTendsto'_coe (f : Germ l β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l) :
+theorem compTendsto'_coe (f : Germ l β) {lc : Filter γ} {g : γ → α} (hg : Tendsto g lc l) :
     f.compTendsto' _ hg.germ_tendsto = f.compTendsto g hg :=
   rfl
-
-/--
-theorem `_root_.Filter.Tendsto.congr_germ` / 定理 `_root_.Filter.Tendsto.congr_germ`
-
-English:
-theorem _root_.Filter.Tendsto.congr_germ
-  statement: {f g : β -> γ} {l : Filter α} {l' : Filter β}
-  proof: EventuallyEq.germ_eq (h.comp_tendsto hφ)
-
-中文:
-定理 _root_.滤子.收敛.congr_germ
-  结论: {f g : β -> γ} {l : 滤子 α} {l' : 滤子 β}
-  证明: EventuallyEq.germ_eq (h.comp_tendsto hφ)
-
-Depends on / 依赖: EventuallyEq, EventuallyEq.germ_eq, comp_tendsto, germ_eq, h.comp_tendsto
+/-
+**Filter.Germ._root_.Filter.Tendsto.congr_germ** 是 Mathlib 中的一个定理，位于命名空间 `Filter
+.Germ`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Filter.Tendsto.congr_germ {f g : β -> γ} {l : Filter α} {l' : Filter β}
-    (h : f =ᶠ[l'] g) {φ : α -> β} (hφ : Tendsto φ l l') : (f ∘ φ : Germ l γ) = g ∘ φ :=
+theorem _root_.Filter.Tendsto.congr_germ {f g : β → γ} {l : Filter α} {l' : Filter β}
+    (h : f =ᶠ[l'] g) {φ : α → β} (hφ : Tendsto φ l l') : (f ∘ φ : Germ l γ) = g ∘ φ :=
   EventuallyEq.germ_eq (h.comp_tendsto hφ)
 
 set_option linter.dupNamespace false in
 @[deprecated (since := "2026-05-24")] alias Filter.Tendsto.congr_germ := Filter.Tendsto.congr_germ
-
-/--
-lemma `isConstant_comp_tendsto` / 引理 `isConstant_comp_tendsto`
-
-English:
-lemma isConstant_comp_tendsto
-  statement: {lc : Filter γ} {g : γ -> α}
-  proof: by
-  rcases hf with ⟨b, hb⟩
-  exact ⟨b, hb.comp_tendsto hg⟩
-
-中文:
-引理 isConstant_comp_tendsto
-  结论: {lc : 滤子 γ} {g : γ -> α}
-  证明: by
-  rcases hf with ⟨b, hb⟩
-  exact ⟨b, hb.comp_tendsto hg⟩
-
-Depends on / 依赖: comp_tendsto, hb.comp_tendsto
+/-
+**Filter.Germ.isConstant_comp_tendsto** 是 Mathlib 中的一个引理，位于命名空间 `Filter.Germ`。
+形式化陈述：isConstant_comp_tendsto {lc : Filter γ} {g : γ -> α} (hf : (f : Germ l β).
+IsConstant) (hg : Tendsto g lc l) : IsConstant (f ∘ g : Germ lc β)
+参数：hf : (f : Germ l β).IsConstant；hg : Tendsto g lc l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.comp_tendsto`：Filter.EventuallyEq.comp_tendsto {l : 
+Filter α} {f : α -> β} {f' : α -> β} (H : f =ᶠ[l] f') {g : γ -> α} {lc : Filter 
+γ} (hg : Tendsto g lc …
 -/
-lemma isConstant_comp_tendsto {lc : Filter γ} {g : γ -> α}
+lemma isConstant_comp_tendsto {lc : Filter γ} {g : γ → α}
     (hf : (f : Germ l β).IsConstant) (hg : Tendsto g lc l) : IsConstant (f ∘ g : Germ lc β) := by
   rcases hf with ⟨b, hb⟩
   exact ⟨b, hb.comp_tendsto hg⟩
 
-/--
-lemma `isConstant_compTendsto` / 引理 `isConstant_compTendsto`
+/-- If a germ `f : Germ l β` is constant, where `l : Filter α`,
+and a function `g : γ → α` tends to `l` along `lc : Filter γ`,
+the germ of the composition `f ∘ g` is also constant. -/
+/-
+**Filter.Germ.isConstant_compTendsto** 是 Mathlib 中的一个引理，位于命名空间 `Filter.Germ`。
+形式化陈述：isConstant_compTendsto {f : Germ l β} {lc : Filter γ} {g : γ -> α} (hf : f
+.IsConstant) (hg : Tendsto g lc l) : (f.compTendsto g hg).IsConstant
+参数：hf : f.IsConstant；hg : Tendsto g lc l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用引理 `Filter.Germ.isConstant_comp_tendsto`：isConstant_comp_tendsto {lc : Filte
+r γ} {g : γ -> α} (hf : (f : Germ l β).IsConstant) (hg : Tendsto g lc l) : IsCon
+stant (f ∘ g : Germ lc β)
 
-English:
-lemma isConstant_compTendsto
-  statement: {f : Germ l β} {lc : Filter γ} {g : γ -> α}
-  proof: by
-  induction f using Quotient.inductionOn with | _ f => ?_
-  exact isConstant_comp_tendsto hf hg
-
-@[simp, norm_cast]
-
-中文:
-引理 isConstant_compTendsto
-  结论: {f : Germ l β} {lc : 滤子 γ} {g : γ -> α}
-  证明: by
-  induction f using Quotient.inductionOn with | _ f => ?_
-  exact isConstant_comp_tendsto hf hg
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, isConstant_comp_tendsto
+--- 原说明 ---
+If a germ `f : Germ l β` is constant, where `l : Filter α`,
+and a function `g : γ → α` tends to `l` along `lc : Filter γ`,
+the germ of the composition `f ∘ g` is also constant.
 -/
-lemma isConstant_compTendsto {f : Germ l β} {lc : Filter γ} {g : γ -> α}
+lemma isConstant_compTendsto {f : Germ l β} {lc : Filter γ} {g : γ → α}
     (hf : f.IsConstant) (hg : Tendsto g lc l) : (f.compTendsto g hg).IsConstant := by
   induction f using Quotient.inductionOn with | _ f => ?_
   exact isConstant_comp_tendsto hf hg
 
 @[simp, norm_cast]
-/--
-theorem `const_inj` / 定理 `const_inj`
-
-English:
-theorem const_inj
-  given: [NeBot l] {a b : β}
-  statement: (↑a : Germ l β) = ↑b ↔ a = b
-  proof: coe_eq.trans const_eventuallyEq
-
-@[simp]
-
-中文:
-定理 const_inj
-  条件: [NeBot l] {a b : β}
-  结论: (↑a : Germ l β) = ↑b ↔ a = b
-  证明: coe_eq.trans const_eventuallyEq
-
-@[simp]
-
-Depends on / 依赖: coe_eq, coe_eq.trans, const_eventuallyEq
+/-
+**Filter.Germ.const_inj** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_inj [NeBot l] {a b : β} : (↑a : Germ l β) = ↑b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Filter.Germ.coe_eq`：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
+· 使用定理 `Filter.const_eventuallyEq`：∀ {α : Type u_1} {β : Type u_2} {l : Filter α
+} [l.NeBot] {a b : β}, ((fun x => a) =ᶠ[l] fun x => b) ↔ a = b
 -/
 theorem const_inj [NeBot l] {a b : β} : (↑a : Germ l β) = ↑b ↔ a = b :=
   coe_eq.trans const_eventuallyEq
 
 @[simp]
-/--
-theorem `map_const` / 定理 `map_const`
-
-English:
-theorem map_const
-  given: (l : Filter α) (a : β) (f : β -> γ)
-  statement: (↑a : Germ l β).map f = ↑(f a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_const
-  条件: (l : 滤子 α) (a : β) (f : β -> γ)
-  结论: (↑a : Germ l β).map f = ↑(f a)
-  证明: rfl
-
-@[simp]
+/-
+**Filter.Germ.map_const** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：map_const (l : Filter α) (a : β) (f : β -> γ) : (↑a : Germ l β).map f = ↑(
+f a)
+参数：l : Filter α；a : β；f : β -> γ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_const (l : Filter α) (a : β) (f : β -> γ) : (↑a : Germ l β).map f = ↑(f a) :=
+theorem map_const (l : Filter α) (a : β) (f : β → γ) : (↑a : Germ l β).map f = ↑(f a) :=
   rfl
 
 @[simp]
-/--
-theorem `map₂_const` / 定理 `map₂_const`
-
-English:
-theorem map₂_const
-  given: (l : Filter α) (b : β) (c : γ) (f : β -> γ -> δ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map₂_const
-  条件: (l : 滤子 α) (b : β) (c : γ) (f : β -> γ -> δ)
-  证明: rfl
-
-@[simp]
+/-
+**Filter.Germ.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：map (op : β -> γ) : Germ l β -> Germ l γ
+参数：op : β -> γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map₂_const (l : Filter α) (b : β) (c : γ) (f : β -> γ -> δ) :
+theorem map₂_const (l : Filter α) (b : β) (c : γ) (f : β → γ → δ) :
     map₂ f (↑b : Germ l β) ↑c = ↑(f b c) :=
   rfl
 
 @[simp]
-/--
-theorem `const_compTendsto` / 定理 `const_compTendsto`
-
-English:
-theorem const_compTendsto
-  given: {l : Filter α} (b : β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 const_compTendsto
-  条件: {l : 滤子 α} (b : β) {lc : 滤子 γ} {g : γ -> α} (hg : 收敛 g lc l)
-  证明: rfl
-
-@[simp]
+/-
+**Filter.Germ.const_compTendsto** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_compTendsto {l : Filter α} (b : β) {lc : Filter γ} {g : γ -> α} (hg 
+: Tendsto g lc l) : (↑b : Germ l β).compTendsto g hg = ↑b
+参数：b : β；hg : Tendsto g lc l。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem const_compTendsto {l : Filter α} (b : β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l) :
+theorem const_compTendsto {l : Filter α} (b : β) {lc : Filter γ} {g : γ → α} (hg : Tendsto g lc l) :
     (↑b : Germ l β).compTendsto g hg = ↑b :=
   rfl
 
 @[simp]
-/--
-theorem `const_compTendsto'` / 定理 `const_compTendsto'`
-
-English:
-theorem const_compTendsto'
-  statement: {l : Filter α} (b : β) {lc : Filter γ} {g : Germ lc α}
-  proof: inductionOn g (fun _ _ => rfl) hg
-
-中文:
-定理 const_compTendsto'
-  结论: {l : 滤子 α} (b : β) {lc : 滤子 γ} {g : Germ lc α}
-  证明: inductionOn g (fun _ _ => rfl) hg
-
-Depends on / 依赖: Algebra, Algebra.ofId, RingHom, RingHom.codRestrict, Subalgebra, Subalgebra.val, adjoin_singleton_eq_range_aeval, adjoin_singleton_induction, aeval_algebraMap_apply, codRestrict, inductionOn, restrictScalars
+/-
+**Filter.Germ.const_compTendsto'** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_compTendsto' {l : Filter α} (b : β) {lc : Filter γ} {g : Germ lc α} 
+(hg : g.Tendsto l) : (↑b : Germ l β).compTendsto' g hg = ↑b
+参数：b : β；hg : g.Tendsto l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.inductionOn`：inductionOn (f : Germ l β) {p : Germ l β -> Pro
+p} (h : forall f : α -> β, p f) : p f
 -/
 theorem const_compTendsto' {l : Filter α} (b : β) {lc : Filter γ} {g : Germ lc α}
     (hg : g.Tendsto l) : (↑b : Germ l β).compTendsto' g hg = ↑b :=
   inductionOn g (fun _ _ => rfl) hg
 
-/--
-Definition of `LiftPred` / `LiftPred` 的定义
+/-- Lift a predicate on `β` to `Germ l β`. -/
+/-
+**Filter.Germ.LiftPred** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：LiftPred (p : β -> Prop) (f : Germ l β) : Prop
+参数：p : β -> Prop；f : Germ l β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LiftPred
-  signature: (p : β -> Prop) (f : Germ l β)
-  body: liftOn f (fun f => forallᶠ x in l, p (f x)) fun _f _g H =>
-propext eventually_congr H.mono fun _x hx => hx ▸ Iff.rfl
-
-@[simp]
-
-中文:
-定义 LiftPred
-  签名: (p : β -> 命题) (f : Germ l β)
-  定义体: liftOn f (fun f => forallᶠ x in l, p (f x)) fun _f _g H =>
-propext eventually_congr H.mono fun _x hx => hx ▸ Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: H.mono, Iff.rfl, eventually_congr, liftOn, propext
+--- 原说明 ---
+Lift a predicate on `β` to `Germ l β`.
 -/
-def LiftPred (p : β -> Prop) (f : Germ l β) : Prop :=
-  liftOn f (fun f => forallᶠ x in l, p (f x)) fun _f _g H =>
-propext eventually_congr H.mono fun _x hx => hx ▸ Iff.rfl
+def LiftPred (p : β → Prop) (f : Germ l β) : Prop :=
+  liftOn f (fun f => ∀ᶠ x in l, p (f x)) fun _f _g H =>
+    propext <| eventually_congr <| H.mono fun _x hx => hx ▸ Iff.rfl
 
 @[simp]
-/--
-theorem `liftPred_coe` / 定理 `liftPred_coe`
-
-English:
-theorem liftPred_coe
-  given: {p : β -> Prop} {f : α -> β}
-  statement: LiftPred p (f : Germ l β) ↔ forallᶠ x in l, p (f x)
-  proof: Iff.rfl
-
-中文:
-定理 liftPred_coe
-  条件: {p : β -> 命题} {f : α -> β}
-  结论: LiftPred p (f : Germ l β) ↔ 对任意ᶠ x in l, p (f x)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.Germ.liftPred_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：liftPred_coe {p : β -> Prop} {f : α -> β} : LiftPred p (f : Germ l β) ↔ fo
+rallᶠ x in l, p (f x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem liftPred_coe {p : β -> Prop} {f : α -> β} : LiftPred p (f : Germ l β) ↔ forallᶠ x in l, p (f x) :=
+theorem liftPred_coe {p : β → Prop} {f : α → β} : LiftPred p (f : Germ l β) ↔ ∀ᶠ x in l, p (f x) :=
   Iff.rfl
-
-/--
-theorem `liftPred_const` / 定理 `liftPred_const`
-
-English:
-theorem liftPred_const
-  given: {p : β -> Prop} {x : β} (hx : p x)
-  statement: LiftPred p (↑x : Germ l β)
-  proof: Eventually.of_forall fun _y => hx
-
-@[simp]
-
-中文:
-定理 liftPred_const
-  条件: {p : β -> 命题} {x : β} (hx : p x)
-  结论: LiftPred p (↑x : Germ l β)
-  证明: Eventually.of_forall fun _y => hx
-
-@[simp]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, of_forall
+/-
+**Filter.Germ.liftPred_const** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：liftPred_const {p : β -> Prop} {x : β} (hx : p x) : LiftPred p (↑x : Germ 
+l β)
+参数：hx : p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-theorem liftPred_const {p : β -> Prop} {x : β} (hx : p x) : LiftPred p (↑x : Germ l β) :=
+theorem liftPred_const {p : β → Prop} {x : β} (hx : p x) : LiftPred p (↑x : Germ l β) :=
   Eventually.of_forall fun _y => hx
 
 @[simp]
-/--
-theorem `liftPred_const_iff` / 定理 `liftPred_const_iff`
-
-English:
-theorem liftPred_const_iff
-  given: [NeBot l] {p : β -> Prop} {x : β}
-  statement: LiftPred p (↑x : Germ l β) ↔ p x
-  proof: @eventually_const _ _ _ (p x)
-
-中文:
-定理 liftPred_const_iff
-  条件: [NeBot l] {p : β -> 命题} {x : β}
-  结论: LiftPred p (↑x : Germ l β) ↔ p x
-  证明: @eventually_const _ _ _ (p x)
-
-Depends on / 依赖: eventually_const
+/-
+**Filter.Germ.liftPred_const_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：liftPred_const_iff [NeBot l] {p : β -> Prop} {x : β} : LiftPred p (↑x : Ge
+rm l β) ↔ p x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_const`：eventually_const {f : Filter α} [t : NeBot f] {
+p : Prop} : (forallᶠ _ in f, p) ↔ p
 -/
-theorem liftPred_const_iff [NeBot l] {p : β -> Prop} {x : β} : LiftPred p (↑x : Germ l β) ↔ p x :=
+theorem liftPred_const_iff [NeBot l] {p : β → Prop} {x : β} : LiftPred p (↑x : Germ l β) ↔ p x :=
   @eventually_const _ _ _ (p x)
 
-/--
-Definition of `LiftRel` / `LiftRel` 的定义
+/-- Lift a relation `r : β → γ → Prop` to `Germ l β → Germ l γ → Prop`. -/
+/-
+**Filter.Germ.LiftRel** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：LiftRel (r : β -> γ -> Prop) (f : Germ l β) (g : Germ l γ) : Prop
+参数：r : β -> γ -> Prop；f : Germ l β；g : Germ l γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LiftRel
-  signature: (r : β -> γ -> Prop) (f : Germ l β) (g : Germ l γ)
-  body: Quotient.liftOn₂' f g (fun f g => forallᶠ x in l, r (f x) (g x)) fun _f _g _f' _g' Hf Hg =>
-propext eventually_congr Hg.mp Hf.mono fun _x hf hg => hf ▸ hg ▸ Iff.rfl
-
-@[simp]
-
-中文:
-定义 LiftRel
-  签名: (r : β -> γ -> 命题) (f : Germ l β) (g : Germ l γ)
-  定义体: Quotient.liftOn₂' f g (fun f g => forallᶠ x in l, r (f x) (g x)) fun _f _g _f' _g' Hf Hg =>
-propext eventually_congr Hg.mp Hf.mono fun _x hf hg => hf ▸ hg ▸ Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Hf.mono, Hg.mp, Iff.rfl, Quotient, Quotient.liftOn, eventually_congr, propext
+--- 原说明 ---
+Lift a relation `r : β → γ → Prop` to `Germ l β → Germ l γ → Prop`.
 -/
-def LiftRel (r : β -> γ -> Prop) (f : Germ l β) (g : Germ l γ) : Prop :=
-  Quotient.liftOn₂' f g (fun f g => forallᶠ x in l, r (f x) (g x)) fun _f _g _f' _g' Hf Hg =>
-propext eventually_congr Hg.mp Hf.mono fun _x hf hg => hf ▸ hg ▸ Iff.rfl
+def LiftRel (r : β → γ → Prop) (f : Germ l β) (g : Germ l γ) : Prop :=
+  Quotient.liftOn₂' f g (fun f g => ∀ᶠ x in l, r (f x) (g x)) fun _f _g _f' _g' Hf Hg =>
+    propext <| eventually_congr <| Hg.mp <| Hf.mono fun _x hf hg => hf ▸ hg ▸ Iff.rfl
 
 @[simp]
-/--
-theorem `liftRel_coe` / 定理 `liftRel_coe`
-
-English:
-theorem liftRel_coe
-  given: {r : β -> γ -> Prop} {f : α -> β} {g : α -> γ}
-  proof: Iff.rfl
-
-中文:
-定理 liftRel_coe
-  条件: {r : β -> γ -> 命题} {f : α -> β} {g : α -> γ}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.Germ.liftRel_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：liftRel_coe {r : β -> γ -> Prop} {f : α -> β} {g : α -> γ} : LiftRel r (f 
+: Germ l β) g ↔ forallᶠ x in l, r (f x) (g x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem liftRel_coe {r : β -> γ -> Prop} {f : α -> β} {g : α -> γ} :
-    LiftRel r (f : Germ l β) g ↔ forallᶠ x in l, r (f x) (g x) :=
+theorem liftRel_coe {r : β → γ → Prop} {f : α → β} {g : α → γ} :
+    LiftRel r (f : Germ l β) g ↔ ∀ᶠ x in l, r (f x) (g x) :=
   Iff.rfl
-
-/--
-theorem `liftRel_const` / 定理 `liftRel_const`
-
-English:
-theorem liftRel_const
-  given: {r : β -> γ -> Prop} {x : β} {y : γ} (h : r x y)
-  proof: Eventually.of_forall fun _ => h
-
-@[simp]
-
-中文:
-定理 liftRel_const
-  条件: {r : β -> γ -> 命题} {x : β} {y : γ} (h : r x y)
-  证明: Eventually.of_forall fun _ => h
-
-@[simp]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, of_forall
+/-
+**Filter.Germ.liftRel_const** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：liftRel_const {r : β -> γ -> Prop} {x : β} {y : γ} (h : r x y) : LiftRel r
+ (↑x : Germ l β) ↑y
+参数：h : r x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-theorem liftRel_const {r : β -> γ -> Prop} {x : β} {y : γ} (h : r x y) :
+theorem liftRel_const {r : β → γ → Prop} {x : β} {y : γ} (h : r x y) :
     LiftRel r (↑x : Germ l β) ↑y :=
   Eventually.of_forall fun _ => h
 
 @[simp]
-/--
-theorem `liftRel_const_iff` / 定理 `liftRel_const_iff`
-
-English:
-theorem liftRel_const_iff
-  given: [NeBot l] {r : β -> γ -> Prop} {x : β} {y : γ}
-  proof: @eventually_const _ _ _ (r x y)
-
-中文:
-定理 liftRel_const_iff
-  条件: [NeBot l] {r : β -> γ -> 命题} {x : β} {y : γ}
-  证明: @eventually_const _ _ _ (r x y)
-
-Depends on / 依赖: eventually_const
+/-
+**Filter.Germ.liftRel_const_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：liftRel_const_iff [NeBot l] {r : β -> γ -> Prop} {x : β} {y : γ} : LiftRel
+ r (↑x : Germ l β) ↑y ↔ r x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_const`：eventually_const {f : Filter α} [t : NeBot f] {
+p : Prop} : (forallᶠ _ in f, p) ↔ p
 -/
-theorem liftRel_const_iff [NeBot l] {r : β -> γ -> Prop} {x : β} {y : γ} :
+theorem liftRel_const_iff [NeBot l] {r : β → γ → Prop} {x : β} {y : γ} :
     LiftRel r (↑x : Germ l β) ↑y ↔ r x y :=
   @eventually_const _ _ _ (r x y)
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: [Inhabited β]
-  body: ⟨↑(default : β)⟩
-
-中文:
-实例 instInhabited
-  签名: [可居 β]
-  定义体: ⟨↑(default : β)⟩
+/-
+**Filter.Germ.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instInhabited [Inhabited β] : Inhabited (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited [Inhabited β] : Inhabited (Germ l β) := ⟨↑(default : β)⟩
 
@@ -1273,156 +853,81 @@ section Monoid
 
 variable {M : Type*} {G : Type*}
 
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: [Mul M]
-  body: ⟨map₂ (· * ·)⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instMul
-  签名: [乘法 M]
-  定义体: ⟨map₂ (· * ·)⟩
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.instMul** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：{α : Type u_1} → {l : Filter α} → {M : Type u_5} → [Mul M] → Mul (l.Germ M
+)
+参数：l.Germ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance instMul [Mul M] : Mul (Germ l M) := ⟨map₂ (· * ·)⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: [Mul M] (f g : α -> M)
-  statement: ↑(f * g) = (f * g : Germ l M)
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: [乘法 M] (f g : α -> M)
-  结论: ↑(f * g) = (f * g : Germ l M)
-  证明: rfl
+/-
+**Filter.Germ.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_mul [Mul M] (f g : α -> M) : ↑(f * g) = (f * g : Germ l M)
+参数：f g : α -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mul [Mul M] (f g : α -> M) : ↑(f * g) = (f * g : Germ l M) :=
+theorem coe_mul [Mul M] (f g : α → M) : ↑(f * g) = (f * g : Germ l M) :=
   rfl
-
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: [One M]
-  body: ⟨↑(1 : M)⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instOne
-  签名: [幺 M]
-  定义体: ⟨↑(1 : M)⟩
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.instOne** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：{α : Type u_1} → {l : Filter α} → {M : Type u_5} → [One M] → One (l.Germ M
+)
+参数：l.Germ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance instOne [One M] : One (Germ l M) := ⟨↑(1 : M)⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  given: [One M]
-  statement: ↑(1 : α -> M) = (1 : Germ l M)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_one
-  条件: [幺 M]
-  结论: ↑(1 : α -> M) = (1 : Germ l M)
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.Germ.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_one [One M] : ↑(1 : α -> M) = (1 : Germ l M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one [One M] : ↑(1 : α -> M) = (1 : Germ l M) :=
+theorem coe_one [One M] : ↑(1 : α → M) = (1 : Germ l M) :=
   rfl
 
 @[to_additive]
-/--
-Instance `instSemigroup` / 实例 `instSemigroup`
-
-English:
-instance instSemigroup
-  signature: [Semigroup M]
-  body: { mul_assoc := fun a b c => Quotient.inductionOn₃' a b c
-fun _ _ _ => congrArg ofFun mul_assoc .. }
-
-@[to_additive]
-
-中文:
-实例 instSemigroup
-  签名: [半群 M]
-  定义体: { mul_assoc := fun a b c => Quotient.inductionOn₃' a b c
-fun _ _ _ => congrArg ofFun mul_assoc .. }
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, aeval_mem_adjoin_singleton, mul_assoc, p.aeval
+/-
+**Filter.Germ.instSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instSemigroup [Semigroup M] : Semigroup (Germ l M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroup [Semigroup M] : Semigroup (Germ l M) :=
   { mul_assoc := fun a b c => Quotient.inductionOn₃' a b c
-fun _ _ _ => congrArg ofFun mul_assoc .. }
+      fun _ _ _ => congrArg ofFun <| mul_assoc .. }
 
 @[to_additive]
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: [CommSemigroup M]
-  body: { mul_comm := Quotient.ind₂' fun _ _ => congrArg ofFun <| mul_comm .. }
-
-@[to_additive]
-
-中文:
-实例 instCommSemigroup
-  签名: [交换半群 M]
-  定义体: { mul_comm := Quotient.ind₂' fun _ _ => congrArg ofFun <| mul_comm .. }
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.ind, mul_comm
+/-
+**Filter.Germ.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instCommSemigroup [CommSemigroup M] : CommSemigroup (Germ l M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemigroup [CommSemigroup M] : CommSemigroup (Germ l M) :=
   { mul_comm := Quotient.ind₂' fun _ _ => congrArg ofFun <| mul_comm .. }
 
 @[to_additive]
-/--
-Instance `instIsLeftCancelMul` / 实例 `instIsLeftCancelMul`
-
-English:
-instance instIsLeftCancelMul
-  signature: [Mul M] [IsLeftCancelMul M]
-  body: inductionOn₃ f₁ f₂ f₃ fun _f₁ _f₂ _f₃ H =>
-      coe_eq.2 ((coe_eq.1 H).mono fun _x => mul_left_cancel)
-
-@[to_additive]
-
-中文:
-实例 instIsLeftCancelMul
-  签名: [乘法 M] [左乘消去 M]
-  定义体: inductionOn₃ f₁ f₂ f₃ fun _f₁ _f₂ _f₃ H =>
-      coe_eq.2 ((coe_eq.1 H).mono fun _x => mul_left_cancel)
-
-@[to_additive]
-
-Depends on / 依赖: coe_eq, mul_left_cancel
+/-
+**Filter.Germ.instIsLeftCancelMul** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instIsLeftCancelMul [Mul M] [IsLeftCancelMul M] : IsLeftCancelMul (Germ l 
+M) where mul_left_cancel f₁ f₂ f₃
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.inductionOn₃`：inductionOn₃ (f : Germ l β) (g : Germ l γ) (h 
+: Germ l δ) {p : Germ l β -> Germ l γ -> Germ l δ -> Prop} (H : forall (f : α ->
+ β) (g : α -> …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.Germ.coe_eq`：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_left_cancel`：mul_left_cancel : a * b = a * c -> b = c
 -/
 instance instIsLeftCancelMul [Mul M] [IsLeftCancelMul M] : IsLeftCancelMul (Germ l M) where
   mul_left_cancel f₁ f₂ f₃ :=
@@ -1430,250 +935,136 @@ instance instIsLeftCancelMul [Mul M] [IsLeftCancelMul M] : IsLeftCancelMul (Germ
       coe_eq.2 ((coe_eq.1 H).mono fun _x => mul_left_cancel)
 
 @[to_additive]
-/--
-Instance `instIsRightCancelMul` / 实例 `instIsRightCancelMul`
-
-English:
-instance instIsRightCancelMul
-  signature: [Mul M] [IsRightCancelMul M]
-  body: inductionOn₃ f₁ f₂ f₃ fun _f₁ _f₂ _f₃ H =>
-coe_eq.2 (coe_eq.1 H).mono fun _x => mul_right_cancel
-
-@[to_additive]
-
-中文:
-实例 instIsRightCancelMul
-  签名: [乘法 M] [右乘消去 M]
-  定义体: inductionOn₃ f₁ f₂ f₃ fun _f₁ _f₂ _f₃ H =>
-coe_eq.2 (coe_eq.1 H).mono fun _x => mul_right_cancel
-
-@[to_additive]
-
-Depends on / 依赖: coe_eq, mul_right_cancel
+/-
+**Filter.Germ.instIsRightCancelMul** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instIsRightCancelMul [Mul M] [IsRightCancelMul M] : IsRightCancelMul (Germ
+ l M) where mul_right_cancel f₁ f₂ f₃
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.inductionOn₃`：inductionOn₃ (f : Germ l β) (g : Germ l γ) (h 
+: Germ l δ) {p : Germ l β -> Germ l γ -> Germ l δ -> Prop} (H : forall (f : α ->
+ β) (g : α -> …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.Germ.coe_eq`：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_right_cancel`：mul_right_cancel : a * b = c * b -> a = c
 -/
 instance instIsRightCancelMul [Mul M] [IsRightCancelMul M] : IsRightCancelMul (Germ l M) where
   mul_right_cancel f₁ f₂ f₃ :=
     inductionOn₃ f₁ f₂ f₃ fun _f₁ _f₂ _f₃ H =>
-coe_eq.2 (coe_eq.1 H).mono fun _x => mul_right_cancel
+      coe_eq.2 <| (coe_eq.1 H).mono fun _x => mul_right_cancel
 
 @[to_additive]
-/--
-Instance `instIsCancelMul` / 实例 `instIsCancelMul`
-
-English:
-instance instIsCancelMul
-  signature: [Mul M] [IsCancelMul M]
-
-中文:
-实例 instIsCancelMul
-  签名: [乘法 M] [是消去乘法 M]
+/-
+**Filter.Germ.instIsCancelMul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：∀ {α : Type u_1} {l : Filter α} {M : Type u_5} [inst : Mul M] [IsCancelMul
+ M], IsCancelMul (l.Germ M)
+参数：l.Germ M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCancelMul.toIsLeftCancelMul`：∀ {G : Type u} {inst : Mul G} [self : IsC
+ancelMul G], IsLeftCancelMul G
+· 使用定理 `IsCancelMul.toIsRightCancelMul`：∀ {G : Type u} {inst : Mul G} [self : Is
+CancelMul G], IsRightCancelMul G
 -/
 instance instIsCancelMul [Mul M] [IsCancelMul M] : IsCancelMul (Germ l M) where
 
 @[to_additive]
-/--
-Instance `instLeftCancelSemigroup` / 实例 `instLeftCancelSemigroup`
-
-English:
-instance instLeftCancelSemigroup
-  signature: [LeftCancelSemigroup M]
-  body: mul_left_cancel
-
-@[to_additive]
-
-中文:
-实例 instLeftCancelSemigroup
-  签名: [左消去半群 M]
-  定义体: mul_left_cancel
-
-@[to_additive]
-
-Depends on / 依赖: mul_left_cancel
+/-
+**Filter.Germ.instLeftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instLeftCancelSemigroup [LeftCancelSemigroup M] : LeftCancelSemigroup (Ger
+m l M) where mul_left_cancel _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instLeftCancelSemigroup [LeftCancelSemigroup M] : LeftCancelSemigroup (Germ l M) where
   mul_left_cancel _ _ _ := mul_left_cancel
 
 @[to_additive]
-/--
-Instance `instRightCancelSemigroup` / 实例 `instRightCancelSemigroup`
-
-English:
-instance instRightCancelSemigroup
-  signature: [RightCancelSemigroup M]
-  body: mul_right_cancel
-
-@[to_additive]
-
-中文:
-实例 instRightCancelSemigroup
-  签名: [右消去半群 M]
-  定义体: mul_right_cancel
-
-@[to_additive]
-
-Depends on / 依赖: mul_right_cancel
+/-
+**Filter.Germ.instRightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instRightCancelSemigroup [RightCancelSemigroup M] : RightCancelSemigroup (
+Germ l M) where mul_right_cancel _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRightCancelSemigroup [RightCancelSemigroup M] : RightCancelSemigroup (Germ l M) where
   mul_right_cancel _ _ _ := mul_right_cancel
 
 @[to_additive]
-/--
-Instance `instMulOneClass` / 实例 `instMulOneClass`
-
-English:
-instance instMulOneClass
-  signature: [MulOneClass M]
-  body: { one_mul := Quotient.ind' fun _ => congrArg ofFun <| one_mul _
-mul_one := Quotient.ind' fun _ => congrArg ofFun mul_one _ }
-
-@[to_additive (attr := to_additive) instSMul]
-
-中文:
-实例 instMulOneClass
-  签名: [MulOne类 M]
-  定义体: { one_mul := Quotient.ind' fun _ => congrArg ofFun <| one_mul _
-mul_one := Quotient.ind' fun _ => congrArg ofFun mul_one _ }
-
-@[to_additive (attr := to_additive) instSMul]
-
-Depends on / 依赖: Quotient, Quotient.ind, mul_one, one_mul
+/-
+**Filter.Germ.instMulOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instMulOneClass [MulOneClass M] : MulOneClass (Germ l M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulOneClass [MulOneClass M] : MulOneClass (Germ l M) :=
   { one_mul := Quotient.ind' fun _ => congrArg ofFun <| one_mul _
-mul_one := Quotient.ind' fun _ => congrArg ofFun mul_one _ }
+    mul_one := Quotient.ind' fun _ => congrArg ofFun <| mul_one _ }
 
 @[to_additive (attr := to_additive) instSMul]
-/--
-Instance `instPow` / 实例 `instPow`
-
-English:
-instance instPow
-  signature: [Pow G M]
-  body: map (· ^ n) f
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instPow
-  签名: [幂 G M]
-  定义体: map (· ^ n) f
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.instPow** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instPow [Pow G M] : Pow (Germ l G) M where pow f n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPow [Pow G M] : Pow (Germ l G) M where pow f n := map (· ^ n) f
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: [SMul M G] (n : M) (f : α -> G)
-  statement: ↑(n • f) = n • (f : Germ l G)
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_smul
-  条件: [标量乘法 M G] (n : M) (f : α -> G)
-  结论: ↑(n • f) = n • (f : Germ l G)
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_smul [SMul M G] (n : M) (f : α -> G) : ↑(n • f) = n • (f : Germ l G)
+参数：n : M；f : α -> G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smul [SMul M G] (n : M) (f : α -> G) : ↑(n • f) = n • (f : Germ l G) :=
+theorem coe_smul [SMul M G] (n : M) (f : α → G) : ↑(n • f) = n • (f : Germ l G) :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `const_smul` / 定理 `const_smul`
-
-English:
-theorem const_smul
-  given: [SMul M G] (n : M) (a : G)
-  statement: (↑(n • a) : Germ l G) = n • (↑a : Germ l G)
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 const_smul
-  条件: [标量乘法 M G] (n : M) (a : G)
-  结论: (↑(n • a) : Germ l G) = n • (↑a : Germ l G)
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.const_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_smul [SMul M G] (n : M) (a : G) : (↑(n • a) : Germ l G) = n • (↑a : 
+Germ l G)
+参数：n : M；a : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_smul [SMul M G] (n : M) (a : G) : (↑(n • a) : Germ l G) = n • (↑a : Germ l G) :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: [Pow G M] (f : α -> G) (n : M)
-  statement: ↑(f ^ n) = (f : Germ l G) ^ n
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_pow
-  条件: [幂 G M] (f : α -> G) (n : M)
-  结论: ↑(f ^ n) = (f : Germ l G) ^ n
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_pow [Pow G M] (f : α -> G) (n : M) : ↑(f ^ n) = (f : Germ l G) ^ n
+参数：f : α -> G；n : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pow [Pow G M] (f : α -> G) (n : M) : ↑(f ^ n) = (f : Germ l G) ^ n :=
+theorem coe_pow [Pow G M] (f : α → G) (n : M) : ↑(f ^ n) = (f : Germ l G) ^ n :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `const_pow` / 定理 `const_pow`
-
-English:
-theorem const_pow
-  given: [Pow G M] (a : G) (n : M)
-  statement: (↑(a ^ n) : Germ l G) = (↑a : Germ l G) ^ n
-  proof: rfl
-
-中文:
-定理 const_pow
-  条件: [幂 G M] (a : G) (n : M)
-  结论: (↑(a ^ n) : Germ l G) = (↑a : Germ l G) ^ n
-  证明: rfl
+/-
+**Filter.Germ.const_pow** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_pow [Pow G M] (a : G) (n : M) : (↑(a ^ n) : Germ l G) = (↑a : Germ l
+ G) ^ n
+参数：a : G；n : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_pow [Pow G M] (a : G) (n : M) : (↑(a ^ n) : Germ l G) = (↑a : Germ l G) ^ n :=
   rfl
 
 -- TODO: https://github.com/leanprover-community/mathlib4/pull/7432
 @[to_additive]
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: [Monoid M]
-  body: { Function.Surjective.monoid ofFun Quot.mk_surjective rfl
-      (fun _ _ => by rfl) fun _ _ => by rfl with
-    toSemigroup := instSemigroup
-    toOne := instOne
-    npow := fun n a => a ^ n }
-
-中文:
-实例 instMonoid
-  签名: [幺半群 M]
-  定义体: { Function.Surjective.monoid ofFun Quot.mk_surjective rfl
-      (fun _ _ => by rfl) fun _ _ => by rfl with
-    toSemigroup := instSemigroup
-    toOne := instOne
-    npow := fun n a => a ^ n }
-
-Depends on / 依赖: Algebra, Algebra.transcendental_of_subsingleton, Function, Function.Surjective.monoid, Quot.mk_surjective, Subsingleton, Surjective, instOne, instSemigroup, mk_surjective, monoid, toSemigroup, transcendental_of_subsingleton
+/-
+**Filter.Germ.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instMonoid [Monoid M] : Monoid (Germ l M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoid [Monoid M] : Monoid (Germ l M) :=
   { Function.Surjective.monoid ofFun Quot.mk_surjective rfl
@@ -1684,582 +1075,279 @@ instance instMonoid [Monoid M] : Monoid (Germ l M) :=
 
 /-- Coercion from functions to germs as a monoid homomorphism. -/
 @[to_additive /-- Coercion from functions to germs as an additive monoid homomorphism. -/]
-/--
-Definition of `coeMulHom` / `coeMulHom` 的定义
+/-
+**Filter.Germ.coeMulHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：coeMulHom [Monoid M] (l : Filter α) : (α -> M) ->* Germ l M where toFun
+参数：l : Filter α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeMulHom
-  signature: [Monoid M] (l : Filter α)
-  body: ofFun; map_one' := rfl; map_mul' _ _ := rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 coeMulHom
-  签名: [幺半群 M] (l : 滤子 α)
-  定义体: ofFun; map_one' := rfl; map_mul' _ _ := rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_mul, map_one
+--- 原说明 ---
+Coercion from functions to germs as a monoid homomorphism.
 -/
-def coeMulHom [Monoid M] (l : Filter α) : (α -> M) ->* Germ l M where
+def coeMulHom [Monoid M] (l : Filter α) : (α → M) →* Germ l M where
   toFun := ofFun; map_one' := rfl; map_mul' _ _ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_coeMulHom` / 定理 `coe_coeMulHom`
-
-English:
-theorem coe_coeMulHom
-  given: [Monoid M]
-  statement: (coeMulHom l : (α -> M) -> Germ l M) = ofFun
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_coeMulHom
-  条件: [幺半群 M]
-  结论: (coeMulHom l : (α -> M) -> Germ l M) = ofFun
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.Germ.coe_coeMulHom** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_coeMulHom [Monoid M] : (coeMulHom l : (α -> M) -> Germ l M) = ofFun
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coeMulHom [Monoid M] : (coeMulHom l : (α -> M) -> Germ l M) = ofFun :=
+theorem coe_coeMulHom [Monoid M] : (coeMulHom l : (α → M) → Germ l M) = ofFun :=
   rfl
 
 @[to_additive]
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: [CommMonoid M]
-  body: { mul_comm := mul_comm }
-
-中文:
-实例 instCommMonoid
-  签名: [交换幺半群 M]
-  定义体: { mul_comm := mul_comm }
-
-Depends on / 依赖: mul_comm
+/-
+**Filter.Germ.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instCommMonoid [CommMonoid M] : CommMonoid (Germ l M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoid [CommMonoid M] : CommMonoid (Germ l M) :=
   { mul_comm := mul_comm }
-
-/--
-Instance `instNatCast` / 实例 `instNatCast`
-
-English:
-instance instNatCast
-  signature: [NatCast M]
-  body: (n : α -> M)
+/-
+**Filter.Germ.instNatCast** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNatCast [NatCast M] : NatCast (Germ l M) where natCast n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance instNatCast [NatCast M] : NatCast (Germ l M) where natCast n := (n : α → M)
 
 @[simp]
-
-中文:
-实例 inst自然数Cast
-  签名: [自然数嵌入 M]
-  定义体: (n : α -> M)
-
-@[simp]
+/-
+**Filter.Germ.natCast_def** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：natCast_def [NatCast M] (n : Nat) : ((fun _ => n : α -> M) : Germ l M) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNatCast [NatCast M] : NatCast (Germ l M) where natCast n := (n : α -> M)
-
-@[simp]
-/--
-theorem `natCast_def` / 定理 `natCast_def`
-
-English:
-theorem natCast_def
-  given: [NatCast M] (n : Nat)
-  statement: ((fun _ => n : α -> M) : Germ l M) = n
-  proof: rfl
+theorem natCast_def [NatCast M] (n : ℕ) : ((fun _ ↦ n : α → M) : Germ l M) = n := rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 natCast_def
-  条件: [自然数嵌入 M] (n : 自然数)
-  结论: ((fun _ => n : α -> M) : Germ l M) = n
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Filter.Germ.const_nat** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_nat [NatCast M] (n : Nat) : ((n : M) : Germ l M) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem natCast_def [NatCast M] (n : Nat) : ((fun _ => n : α -> M) : Germ l M) = n := rfl
+theorem const_nat [NatCast M] (n : ℕ) : ((n : M) : Germ l M) = n := rfl
 
 @[simp, norm_cast]
-/--
-theorem `const_nat` / 定理 `const_nat`
-
-English:
-theorem const_nat
-  given: [NatCast M] (n : Nat)
-  statement: ((n : M) : Germ l M) = n
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 const_nat
-  条件: [自然数嵌入 M] (n : 自然数)
-  结论: ((n : M) : Germ l M) = n
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Filter.Germ.coe_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_ofNat [NatCast M] (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : α -> M) : Ge
+rm l M) = OfNat.ofNat n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem const_nat [NatCast M] (n : Nat) : ((n : M) : Germ l M) = n := rfl
-
-@[simp, norm_cast]
-/--
-theorem `coe_ofNat` / 定理 `coe_ofNat`
-
-English:
-theorem coe_ofNat
-  given: [NatCast M] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_of自然数
-  条件: [自然数嵌入 M] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
-
-@[simp, norm_cast]
--/
-theorem coe_ofNat [NatCast M] (n : Nat) [n.AtLeastTwo] :
-    ((ofNat(n) : α -> M) : Germ l M) = OfNat.ofNat n :=
+theorem coe_ofNat [NatCast M] (n : ℕ) [n.AtLeastTwo] :
+    ((ofNat(n) : α → M) : Germ l M) = OfNat.ofNat n :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `const_ofNat` / 定理 `const_ofNat`
-
-English:
-theorem const_ofNat
-  given: [NatCast M] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-中文:
-定理 const_of自然数
-  条件: [自然数嵌入 M] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
+/-
+**Filter.Germ.const_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_ofNat [NatCast M] (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : M) : Germ 
+l M) = OfNat.ofNat n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem const_ofNat [NatCast M] (n : Nat) [n.AtLeastTwo] :
+theorem const_ofNat [NatCast M] (n : ℕ) [n.AtLeastTwo] :
     ((ofNat(n) : M) : Germ l M) = OfNat.ofNat n :=
   rfl
-
-/--
-Instance `instIntCast` / 实例 `instIntCast`
-
-English:
-instance instIntCast
-  signature: [IntCast M]
-  body: (n : α -> M)
-
-@[simp]
-
-中文:
-实例 inst整数Cast
-  签名: [整数嵌入 M]
-  定义体: (n : α -> M)
-
-@[simp]
+/-
+**Filter.Germ.instIntCast** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instIntCast [IntCast M] : IntCast (Germ l M) where intCast n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instIntCast [IntCast M] : IntCast (Germ l M) where intCast n := (n : α -> M)
+instance instIntCast [IntCast M] : IntCast (Germ l M) where intCast n := (n : α → M)
 
 @[simp]
-/--
-theorem `intCast_def` / 定理 `intCast_def`
-
-English:
-theorem intCast_def
-  given: [IntCast M] (n : Int)
-  statement: ((fun _ => n : α -> M) : Germ l M) = n
-  proof: rfl
-
-中文:
-定理 intCast_def
-  条件: [整数嵌入 M] (n : 整数)
-  结论: ((fun _ => n : α -> M) : Germ l M) = n
-  证明: rfl
+/-
+**Filter.Germ.intCast_def** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：intCast_def [IntCast M] (n : Int) : ((fun _ => n : α -> M) : Germ l M) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem intCast_def [IntCast M] (n : Int) : ((fun _ => n : α -> M) : Germ l M) = n := rfl
-
-/--
-Instance `instAddMonoidWithOne` / 实例 `instAddMonoidWithOne`
-
-English:
-instance instAddMonoidWithOne
-  signature: [AddMonoidWithOne M]
-  body: congrArg ofFun by simp; rfl
-natCast_succ _ := congrArg ofFun by simp; rfl
-
-中文:
-实例 instAddMonoidWithOne
-  签名: [加法带幺幺半群 M]
-  定义体: congrArg ofFun by simp; rfl
-natCast_succ _ := congrArg ofFun by simp; rfl
+theorem intCast_def [IntCast M] (n : ℤ) : ((fun _ ↦ n : α → M) : Germ l M) = n := rfl
+/-
+**Filter.Germ.instAddMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instAddMonoidWithOne [AddMonoidWithOne M] : AddMonoidWithOne (Germ l M) wh
+ere natCast_zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddMonoidWithOne [AddMonoidWithOne M] : AddMonoidWithOne (Germ l M) where
-natCast_zero := congrArg ofFun by simp; rfl
-natCast_succ _ := congrArg ofFun by simp; rfl
-
-/--
-Instance `instAddCommMonoidWithOne` / 实例 `instAddCommMonoidWithOne`
-
-English:
-instance instAddCommMonoidWithOne
-  signature: [AddCommMonoidWithOne M]
-  body: { add_comm := add_comm }
-
-中文:
-实例 instAddCommMonoidWithOne
-  签名: [加法交换带幺幺半群 M]
-  定义体: { add_comm := add_comm }
-
-Depends on / 依赖: add_comm
+  natCast_zero := congrArg ofFun <| by simp; rfl
+  natCast_succ _ := congrArg ofFun <| by simp; rfl
+/-
+**Filter.Germ.instAddCommMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instAddCommMonoidWithOne [AddCommMonoidWithOne M] : AddCommMonoidWithOne (
+Germ l M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommMonoidWithOne [AddCommMonoidWithOne M] : AddCommMonoidWithOne (Germ l M) :=
   { add_comm := add_comm }
-
-/--
-Instance `instInv` / 实例 `instInv`
-
-English:
-instance instInv
-  signature: [Inv G]
-  body: ⟨map Inv.inv⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instInv
-  签名: [取逆 G]
-  定义体: ⟨map Inv.inv⟩
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.instInv** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：{α : Type u_1} → {l : Filter α} → {G : Type u_6} → [Inv G] → Inv (l.Germ G
+)
+参数：l.Germ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance instInv [Inv G] : Inv (Germ l G) := ⟨map Inv.inv⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_inv` / 定理 `coe_inv`
-
-English:
-theorem coe_inv
-  given: [Inv G] (f : α -> G)
-  statement: ↑f⁻¹ = (f⁻¹ : Germ l G)
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_inv
-  条件: [取逆 G] (f : α -> G)
-  结论: ↑f⁻¹ = (f⁻¹ : Germ l G)
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_inv [Inv G] (f : α -> G) : ↑f⁻¹ = (f⁻¹ : Germ l G)
+参数：f : α -> G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inv [Inv G] (f : α -> G) : ↑f⁻¹ = (f⁻¹ : Germ l G) :=
+theorem coe_inv [Inv G] (f : α → G) : ↑f⁻¹ = (f⁻¹ : Germ l G) :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `const_inv` / 定理 `const_inv`
-
-English:
-theorem const_inv
-  given: [Inv G] (a : G)
-  statement: (↑(a⁻¹) : Germ l G) = (↑a)⁻¹
-  proof: rfl
-
-中文:
-定理 const_inv
-  条件: [取逆 G] (a : G)
-  结论: (↑(a⁻¹) : Germ l G) = (↑a)⁻¹
-  证明: rfl
+/-
+**Filter.Germ.const_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_inv [Inv G] (a : G) : (↑(a⁻¹) : Germ l G) = (↑a)⁻¹
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_inv [Inv G] (a : G) : (↑(a⁻¹) : Germ l G) = (↑a)⁻¹ :=
   rfl
-
-/--
-Instance `instDiv` / 实例 `instDiv`
-
-English:
-instance instDiv
-  signature: [Div M]
-  body: ⟨map₂ (· / ·)⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instDiv
-  签名: [除法 M]
-  定义体: ⟨map₂ (· / ·)⟩
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.instDiv** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：{α : Type u_1} → {l : Filter α} → {M : Type u_5} → [Div M] → Div (l.Germ M
+)
+参数：l.Germ M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance instDiv [Div M] : Div (Germ l M) := ⟨map₂ (· / ·)⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  given: [Div M] (f g : α -> M)
-  statement: ↑(f / g) = (f / g : Germ l M)
-  proof: rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 coe_div
-  条件: [除法 M] (f g : α -> M)
-  结论: ↑(f / g) = (f / g : Germ l M)
-  证明: rfl
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_div [Div M] (f g : α -> M) : ↑(f / g) = (f / g : Germ l M)
+参数：f g : α -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_div [Div M] (f g : α -> M) : ↑(f / g) = (f / g : Germ l M) :=
+theorem coe_div [Div M] (f g : α → M) : ↑(f / g) = (f / g : Germ l M) :=
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `const_div` / 定理 `const_div`
-
-English:
-theorem const_div
-  given: [Div M] (a b : M)
-  statement: (↑(a / b) : Germ l M) = ↑a / ↑b
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 const_div
-  条件: [除法 M] (a b : M)
-  结论: (↑(a / b) : Germ l M) = ↑a / ↑b
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.Germ.const_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_div [Div M] (a b : M) : (↑(a / b) : Germ l M) = ↑a / ↑b
+参数：a b : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_div [Div M] (a b : M) : (↑(a / b) : Germ l M) = ↑a / ↑b :=
   rfl
 
 @[to_additive]
-/--
-Instance `instInvolutiveInv` / 实例 `instInvolutiveInv`
-
-English:
-instance instInvolutiveInv
-  signature: [InvolutiveInv G]
-  body: { inv_inv := Quotient.ind' fun _ => congrArg ofFun <| inv_inv _ }
-
-中文:
-实例 instInvolutiveInv
-  签名: [InvolutiveInv G]
-  定义体: { inv_inv := Quotient.ind' fun _ => congrArg ofFun <| inv_inv _ }
-
-Depends on / 依赖: Quotient, Quotient.ind, inv_inv
+/-
+**Filter.Germ.instInvolutiveInv** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instInvolutiveInv [InvolutiveInv G] : InvolutiveInv (Germ l G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInvolutiveInv [InvolutiveInv G] : InvolutiveInv (Germ l G) :=
   { inv_inv := Quotient.ind' fun _ => congrArg ofFun <| inv_inv _ }
-
-/--
-Instance `instHasDistribNeg` / 实例 `instHasDistribNeg`
-
-English:
-instance instHasDistribNeg
-  signature: [Mul G] [HasDistribNeg G]
-  body: { neg_mul := Quotient.ind₂' fun _ _ => congrArg ofFun <| neg_mul ..
-mul_neg := Quotient.ind₂' fun _ _ => congrArg ofFun mul_neg .. }
-
-@[to_additive]
-
-中文:
-实例 instHasDistribNeg
-  签名: [乘法 G] [有DistribNeg G]
-  定义体: { neg_mul := Quotient.ind₂' fun _ _ => congrArg ofFun <| neg_mul ..
-mul_neg := Quotient.ind₂' fun _ _ => congrArg ofFun mul_neg .. }
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.ind, mul_neg, neg_mul
+/-
+**Filter.Germ.instHasDistribNeg** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instHasDistribNeg [Mul G] [HasDistribNeg G] : HasDistribNeg (Germ l G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instHasDistribNeg [Mul G] [HasDistribNeg G] : HasDistribNeg (Germ l G) :=
   { neg_mul := Quotient.ind₂' fun _ _ => congrArg ofFun <| neg_mul ..
-mul_neg := Quotient.ind₂' fun _ _ => congrArg ofFun mul_neg .. }
+    mul_neg := Quotient.ind₂' fun _ _ => congrArg ofFun <| mul_neg .. }
 
 @[to_additive]
-/--
-Instance `instInvOneClass` / 实例 `instInvOneClass`
-
-English:
-instance instInvOneClass
-  signature: [InvOneClass G]
-  body: ⟨congr_arg ofFun inv_one⟩
-
-@[to_additive subNegMonoid]
-
-中文:
-实例 instInvOneClass
-  签名: [InvOne类 G]
-  定义体: ⟨congr_arg ofFun inv_one⟩
-
-@[to_additive subNegMonoid]
-
-Depends on / 依赖: congr_arg, inv_one
+/-
+**Filter.Germ.instInvOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instInvOneClass [InvOneClass G] : InvOneClass (Germ l G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInvOneClass [InvOneClass G] : InvOneClass (Germ l G) :=
   ⟨congr_arg ofFun inv_one⟩
 
 @[to_additive subNegMonoid]
-/--
-Instance `instDivInvMonoid` / 实例 `instDivInvMonoid`
-
-English:
-instance instDivInvMonoid
-  signature: [DivInvMonoid G]
-  body: f ^ z
-zpow_zero' := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_zero' _
-zpow_succ' _ := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_succ' ..
-zpow_neg' _ := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_neg' ..
-div_eq_mul_inv := Quotient.ind₂' fun _ _ => congrArg ofFun div_eq_mul_inv ..
-
-@[to_additive]
-
-中文:
-实例 instDivInvMonoid
-  签名: [除逆幺半群 G]
-  定义体: f ^ z
-zpow_zero' := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_zero' _
-zpow_succ' _ := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_succ' ..
-zpow_neg' _ := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_neg' ..
-div_eq_mul_inv := Quotient.ind₂' fun _ _ => congrArg ofFun div_eq_mul_inv ..
-
-@[to_additive]
+/-
+**Filter.Germ.instDivInvMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instDivInvMonoid [DivInvMonoid G] : DivInvMonoid (Germ l G) where zpow z f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivInvMonoid [DivInvMonoid G] : DivInvMonoid (Germ l G) where
   zpow z f := f ^ z
-zpow_zero' := Quotient.ind' fun _ => congrArg ofFun
+  zpow_zero' := Quotient.ind' fun _ => congrArg ofFun <|
     funext fun _ => DivInvMonoid.zpow_zero' _
-zpow_succ' _ := Quotient.ind' fun _ => congrArg ofFun
+  zpow_succ' _ := Quotient.ind' fun _ => congrArg ofFun <|
     funext fun _ => DivInvMonoid.zpow_succ' ..
-zpow_neg' _ := Quotient.ind' fun _ => congrArg ofFun
+  zpow_neg' _ := Quotient.ind' fun _ => congrArg ofFun <|
     funext fun _ => DivInvMonoid.zpow_neg' ..
-div_eq_mul_inv := Quotient.ind₂' fun _ _ => congrArg ofFun div_eq_mul_inv ..
+  div_eq_mul_inv := Quotient.ind₂' fun _ _ ↦ congrArg ofFun <| div_eq_mul_inv ..
 
 @[to_additive]
-/--
-Instance `instDivisionMonoid` / 实例 `instDivisionMonoid`
-
-English:
-instance instDivisionMonoid
-  signature: [DivisionMonoid G]
-  body: inv_inv
-mul_inv_rev x y := inductionOn₂ x y fun _ _ => congr_arg ofFun mul_inv_rev _ _
-inv_eq_of_mul x y := inductionOn₂ x y fun _ _ h => coe_eq.2 (coe_eq.1 h).mono fun _ =>
-    DivisionMonoid.inv_eq_of_mul _ _
-
-@[to_additive]
-
-中文:
-实例 instDivisionMonoid
-  签名: [Division幺半群 G]
-  定义体: inv_inv
-mul_inv_rev x y := inductionOn₂ x y fun _ _ => congr_arg ofFun mul_inv_rev _ _
-inv_eq_of_mul x y := inductionOn₂ x y fun _ _ h => coe_eq.2 (coe_eq.1 h).mono fun _ =>
-    DivisionMonoid.inv_eq_of_mul _ _
-
-@[to_additive]
-
-Depends on / 依赖: inv_inv
+/-
+**Filter.Germ.instDivisionMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instDivisionMonoid [DivisionMonoid G] : DivisionMonoid (Germ l G) where in
+v_inv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivisionMonoid [DivisionMonoid G] : DivisionMonoid (Germ l G) where
   inv_inv := inv_inv
-mul_inv_rev x y := inductionOn₂ x y fun _ _ => congr_arg ofFun mul_inv_rev _ _
-inv_eq_of_mul x y := inductionOn₂ x y fun _ _ h => coe_eq.2 (coe_eq.1 h).mono fun _ =>
+  mul_inv_rev x y := inductionOn₂ x y fun _ _ ↦ congr_arg ofFun <| mul_inv_rev _ _
+  inv_eq_of_mul x y := inductionOn₂ x y fun _ _ h ↦ coe_eq.2 <| (coe_eq.1 h).mono fun _ ↦
     DivisionMonoid.inv_eq_of_mul _ _
 
 @[to_additive]
-/--
-Instance `instGroup` / 实例 `instGroup`
-
-English:
-instance instGroup
-  signature: [Group G]
-  body: { inv_mul_cancel := Quotient.ind' fun _ => congrArg ofFun <| inv_mul_cancel _ }
-
-@[to_additive]
-
-中文:
-实例 instGroup
-  签名: [群 G]
-  定义体: { inv_mul_cancel := Quotient.ind' fun _ => congrArg ofFun <| inv_mul_cancel _ }
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.ind, inv_mul_cancel
+/-
+**Filter.Germ.instGroup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instGroup [Group G] : Group (Germ l G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instGroup [Group G] : Group (Germ l G) :=
   { inv_mul_cancel := Quotient.ind' fun _ => congrArg ofFun <| inv_mul_cancel _ }
 
 @[to_additive]
-/--
-Instance `instCommGroup` / 实例 `instCommGroup`
-
-English:
-instance instCommGroup
-  signature: [CommGroup G]
-  body: { mul_comm := mul_comm }
-
-中文:
-实例 instCommGroup
-  签名: [交换群 G]
-  定义体: { mul_comm := mul_comm }
-
-Depends on / 依赖: mul_comm
+/-
+**Filter.Germ.instCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instCommGroup [CommGroup G] : CommGroup (Germ l G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommGroup [CommGroup G] : CommGroup (Germ l G) :=
   { mul_comm := mul_comm }
-
-/--
-Instance `instAddGroupWithOne` / 实例 `instAddGroupWithOne`
-
-English:
-instance instAddGroupWithOne
-  signature: [AddGroupWithOne G]
-  body: instAddMonoidWithOne
-  __ := instAddGroup
-intCast_ofNat _ := congrArg ofFun by simp
-intCast_negSucc _ := congrArg ofFun by simp [Function.comp_def]; rfl
-
-中文:
-实例 instAddGroupWithOne
-  签名: [加法带幺群 G]
-  定义体: instAddMonoidWithOne
-  __ := instAddGroup
-intCast_ofNat _ := congrArg ofFun by simp
-intCast_negSucc _ := congrArg ofFun by simp [Function.comp_def]; rfl
-
-Depends on / 依赖: instAddMonoidWithOne
+/-
+**Filter.Germ.instAddGroupWithOne** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instAddGroupWithOne [AddGroupWithOne G] : AddGroupWithOne (Germ l G) where
+ __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddGroupWithOne [AddGroupWithOne G] : AddGroupWithOne (Germ l G) where
   __ := instAddMonoidWithOne
   __ := instAddGroup
-intCast_ofNat _ := congrArg ofFun by simp
-intCast_negSucc _ := congrArg ofFun by simp [Function.comp_def]; rfl
+  intCast_ofNat _ := congrArg ofFun <| by simp
+  intCast_negSucc _ := congrArg ofFun <| by simp [Function.comp_def]; rfl
 
 end Monoid
 
@@ -2267,405 +1355,199 @@ section Ring
 
 variable {R : Type*}
 
-/--
-Instance `instNontrivial` / 实例 `instNontrivial`
-
-English:
-instance instNontrivial
-  signature: [Nontrivial R] [NeBot l]
-  body: let ⟨x, y, h⟩ := exists_pair_ne R
-  ⟨⟨↑x, ↑y, mt const_inj.1 h⟩⟩
-
-中文:
-实例 instNontrivial
-  签名: [非平凡 R] [NeBot l]
-  定义体: let ⟨x, y, h⟩ := exists_pair_ne R
-  ⟨⟨↑x, ↑y, mt const_inj.1 h⟩⟩
-
-Depends on / 依赖: const_inj, exists_pair_ne
+/-
+**Filter.Germ.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNontrivial [Nontrivial R] [NeBot l] : Nontrivial (Germ l R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pair_ne`：exists_pair_ne (α : Type*) [Nontrivial α] : exists x y :
+ α, x != y
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.Germ.const_inj`：const_inj [NeBot l] {a b : β} : (↑a : Germ l β) =
+ ↑b ↔ a = b
 -/
 instance instNontrivial [Nontrivial R] [NeBot l] : Nontrivial (Germ l R) :=
   let ⟨x, y, h⟩ := exists_pair_ne R
   ⟨⟨↑x, ↑y, mt const_inj.1 h⟩⟩
-
-/--
-Instance `instMulZeroClass` / 实例 `instMulZeroClass`
-
-English:
-instance instMulZeroClass
-  signature: [MulZeroClass R]
-  body: { zero_mul := Quotient.ind' fun _ => congrArg ofFun <| zero_mul _
-mul_zero := Quotient.ind' fun _ => congrArg ofFun mul_zero _ }
-
-中文:
-实例 instMulZeroClass
-  签名: [乘零类 R]
-  定义体: { zero_mul := Quotient.ind' fun _ => congrArg ofFun <| zero_mul _
-mul_zero := Quotient.ind' fun _ => congrArg ofFun mul_zero _ }
-
-Depends on / 依赖: Quotient, Quotient.ind, mul_zero, zero_mul
+/-
+**Filter.Germ.instMulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instMulZeroClass [MulZeroClass R] : MulZeroClass (Germ l R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulZeroClass [MulZeroClass R] : MulZeroClass (Germ l R) :=
   { zero_mul := Quotient.ind' fun _ => congrArg ofFun <| zero_mul _
-mul_zero := Quotient.ind' fun _ => congrArg ofFun mul_zero _ }
-
-/--
-Instance `instMulZeroOneClass` / 实例 `instMulZeroOneClass`
-
-English:
-instance instMulZeroOneClass
-  signature: [MulZeroOneClass R]
-  body: instMulZeroClass
-  __ := instMulOneClass
-
-中文:
-实例 instMulZeroOneClass
-  签名: [乘零幺类 R]
-  定义体: instMulZeroClass
-  __ := instMulOneClass
-
-Depends on / 依赖: instMulZeroClass
+    mul_zero := Quotient.ind' fun _ => congrArg ofFun <| mul_zero _ }
+/-
+**Filter.Germ.instMulZeroOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instMulZeroOneClass [MulZeroOneClass R] : MulZeroOneClass (Germ l R) where
+ __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulZeroOneClass [MulZeroOneClass R] : MulZeroOneClass (Germ l R) where
   __ := instMulZeroClass
   __ := instMulOneClass
-
-/--
-Instance `instMonoidWithZero` / 实例 `instMonoidWithZero`
-
-English:
-instance instMonoidWithZero
-  signature: [MonoidWithZero R]
-  body: instMonoid
-  __ := instMulZeroClass
-
-中文:
-实例 instMonoidWithZero
-  签名: [带零幺半群 R]
-  定义体: instMonoid
-  __ := instMulZeroClass
-
-Depends on / 依赖: instMonoid
+/-
+**Filter.Germ.instMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instMonoidWithZero [MonoidWithZero R] : MonoidWithZero (Germ l R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoidWithZero [MonoidWithZero R] : MonoidWithZero (Germ l R) where
   __ := instMonoid
   __ := instMulZeroClass
-
-/--
-Instance `instDistrib` / 实例 `instDistrib`
-
-English:
-instance instDistrib
-  signature: [Distrib R]
-  body: Quotient.inductionOn₃' a b c fun _ _ _ => congrArg ofFun left_distrib ..
-right_distrib a b c := Quotient.inductionOn₃' a b c fun _ _ _ => congrArg ofFun right_distrib ..
-
-中文:
-实例 instDistrib
-  签名: [Distrib R]
-  定义体: Quotient.inductionOn₃' a b c fun _ _ _ => congrArg ofFun left_distrib ..
-right_distrib a b c := Quotient.inductionOn₃' a b c fun _ _ _ => congrArg ofFun right_distrib ..
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, left_distrib
+/-
+**Filter.Germ.instDistrib** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instDistrib [Distrib R] : Distrib (Germ l R) where left_distrib a b c
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistrib [Distrib R] : Distrib (Germ l R) where
-left_distrib a b c := Quotient.inductionOn₃' a b c fun _ _ _ => congrArg ofFun left_distrib ..
-right_distrib a b c := Quotient.inductionOn₃' a b c fun _ _ _ => congrArg ofFun right_distrib ..
-
-/--
-Instance `instNonUnitalNonAssocSemiring` / 实例 `instNonUnitalNonAssocSemiring`
-
-English:
-instance instNonUnitalNonAssocSemiring
-  signature: [NonUnitalNonAssocSemiring R]
-  body: instAddCommMonoid
-  __ := instDistrib
-  __ := instMulZeroClass
-
-中文:
-实例 instNonUnitalNonAssocSemiring
-  签名: [非幺非结合半环 R]
-  定义体: instAddCommMonoid
-  __ := instDistrib
-  __ := instMulZeroClass
-
-Depends on / 依赖: instAddCommMonoid
+  left_distrib a b c := Quotient.inductionOn₃' a b c fun _ _ _ ↦ congrArg ofFun <| left_distrib ..
+  right_distrib a b c := Quotient.inductionOn₃' a b c fun _ _ _ ↦ congrArg ofFun <| right_distrib ..
+/-
+**Filter.Germ.instNonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Ge
+rm`。
+形式化陈述：instNonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] : NonUnitalNon
+AssocSemiring (Germ l R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] :
     NonUnitalNonAssocSemiring (Germ l R) where
   __ := instAddCommMonoid
   __ := instDistrib
   __ := instMulZeroClass
-
-/--
-Instance `instNonUnitalSemiring` / 实例 `instNonUnitalSemiring`
-
-English:
-instance instNonUnitalSemiring
-  signature: [NonUnitalSemiring R]
-  body: { mul_assoc := mul_assoc }
-
-中文:
-实例 instNonUnitalSemiring
-  签名: [非幺半环 R]
-  定义体: { mul_assoc := mul_assoc }
-
-Depends on / 依赖: mul_assoc
+/-
+**Filter.Germ.instNonUnitalSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNonUnitalSemiring [NonUnitalSemiring R] : NonUnitalSemiring (Germ l R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalSemiring [NonUnitalSemiring R] : NonUnitalSemiring (Germ l R) :=
   { mul_assoc := mul_assoc }
-
-/--
-Instance `instNonAssocSemiring` / 实例 `instNonAssocSemiring`
-
-English:
-instance instNonAssocSemiring
-  signature: [NonAssocSemiring R]
-  body: instNonUnitalNonAssocSemiring
-  __ := instMulZeroOneClass
-  __ := instAddMonoidWithOne
-
-中文:
-实例 instNonAssocSemiring
-  签名: [非结合半环 R]
-  定义体: instNonUnitalNonAssocSemiring
-  __ := instMulZeroOneClass
-  __ := instAddMonoidWithOne
-
-Depends on / 依赖: instNonUnitalNonAssocSemiring
+/-
+**Filter.Germ.instNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNonAssocSemiring [NonAssocSemiring R] : NonAssocSemiring (Germ l R) wh
+ere __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocSemiring [NonAssocSemiring R] : NonAssocSemiring (Germ l R) where
   __ := instNonUnitalNonAssocSemiring
   __ := instMulZeroOneClass
   __ := instAddMonoidWithOne
-
-/--
-Instance `instNonUnitalNonAssocRing` / 实例 `instNonUnitalNonAssocRing`
-
-English:
-instance instNonUnitalNonAssocRing
-  signature: [NonUnitalNonAssocRing R]
-  body: instAddCommGroup
-  __ := instNonUnitalNonAssocSemiring
-
-中文:
-实例 instNonUnitalNonAssocRing
-  签名: [非幺非结合环 R]
-  定义体: instAddCommGroup
-  __ := instNonUnitalNonAssocSemiring
-
-Depends on / 依赖: instAddCommGroup
+/-
+**Filter.Germ.instNonUnitalNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNonUnitalNonAssocRing [NonUnitalNonAssocRing R] : NonUnitalNonAssocRin
+g (Germ l R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalNonAssocRing [NonUnitalNonAssocRing R] :
     NonUnitalNonAssocRing (Germ l R) where
   __ := instAddCommGroup
   __ := instNonUnitalNonAssocSemiring
-
-/--
-Instance `instNonUnitalRing` / 实例 `instNonUnitalRing`
-
-English:
-instance instNonUnitalRing
-  signature: [NonUnitalRing R]
-  body: { mul_assoc := mul_assoc }
-
-中文:
-实例 instNonUnitalRing
-  签名: [非幺环 R]
-  定义体: { mul_assoc := mul_assoc }
-
-Depends on / 依赖: mul_assoc
+/-
+**Filter.Germ.instNonUnitalRing** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNonUnitalRing [NonUnitalRing R] : NonUnitalRing (Germ l R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalRing [NonUnitalRing R] : NonUnitalRing (Germ l R) :=
   { mul_assoc := mul_assoc }
-
-/--
-Instance `instNonAssocRing` / 实例 `instNonAssocRing`
-
-English:
-instance instNonAssocRing
-  signature: [NonAssocRing R]
-  body: instNonUnitalNonAssocRing
-  __ := instNonAssocSemiring
-  __ := instAddGroupWithOne
-
-中文:
-实例 instNonAssocRing
-  签名: [非结合环 R]
-  定义体: instNonUnitalNonAssocRing
-  __ := instNonAssocSemiring
-  __ := instAddGroupWithOne
-
-Depends on / 依赖: instNonUnitalNonAssocRing
+/-
+**Filter.Germ.instNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNonAssocRing [NonAssocRing R] : NonAssocRing (Germ l R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocRing [NonAssocRing R] : NonAssocRing (Germ l R) where
   __ := instNonUnitalNonAssocRing
   __ := instNonAssocSemiring
   __ := instAddGroupWithOne
-
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: [Semiring R]
-  body: instNonUnitalSemiring
-  __ := instNonAssocSemiring
-  __ := instMonoidWithZero
-
-中文:
-实例 instSemiring
-  签名: [半环 R]
-  定义体: instNonUnitalSemiring
-  __ := instNonAssocSemiring
-  __ := instMonoidWithZero
-
-Depends on / 依赖: instNonUnitalSemiring
+/-
+**Filter.Germ.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instSemiring [Semiring R] : Semiring (Germ l R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemiring [Semiring R] : Semiring (Germ l R) where
   __ := instNonUnitalSemiring
   __ := instNonAssocSemiring
   __ := instMonoidWithZero
-
-/--
-Instance `instRing` / 实例 `instRing`
-
-English:
-instance instRing
-  signature: [Ring R]
-  body: instSemiring
-  __ := instAddCommGroup
-  __ := instNonAssocRing
-
-中文:
-实例 instRing
-  签名: [环 R]
-  定义体: instSemiring
-  __ := instAddCommGroup
-  __ := instNonAssocRing
-
-Depends on / 依赖: instSemiring
+/-
+**Filter.Germ.instRing** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instRing [Ring R] : Ring (Germ l R) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRing [Ring R] : Ring (Germ l R) where
   __ := instSemiring
   __ := instAddCommGroup
   __ := instNonAssocRing
-
-/--
-Instance `instNonUnitalCommSemiring` / 实例 `instNonUnitalCommSemiring`
-
-English:
-instance instNonUnitalCommSemiring
-  signature: [NonUnitalCommSemiring R]
-  body: { mul_comm := mul_comm }
-
-中文:
-实例 instNonUnitalCommSemiring
-  签名: [非幺交换半环 R]
-  定义体: { mul_comm := mul_comm }
-
-Depends on / 依赖: mul_comm
+/-
+**Filter.Germ.instNonUnitalCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNonUnitalCommSemiring [NonUnitalCommSemiring R] : NonUnitalCommSemirin
+g (Germ l R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalCommSemiring [NonUnitalCommSemiring R] :
     NonUnitalCommSemiring (Germ l R) :=
   { mul_comm := mul_comm }
-
-/--
-Instance `instCommSemiring` / 实例 `instCommSemiring`
-
-English:
-instance instCommSemiring
-  signature: [CommSemiring R]
-  body: { mul_comm := mul_comm }
-
-中文:
-实例 instCommSemiring
-  签名: [交换半环 R]
-  定义体: { mul_comm := mul_comm }
-
-Depends on / 依赖: mul_comm
+/-
+**Filter.Germ.instCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instCommSemiring [CommSemiring R] : CommSemiring (Germ l R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemiring [CommSemiring R] : CommSemiring (Germ l R) :=
   { mul_comm := mul_comm }
-
-/--
-Instance `instNonUnitalCommRing` / 实例 `instNonUnitalCommRing`
-
-English:
-instance instNonUnitalCommRing
-  signature: [NonUnitalCommRing R]
-  body: instNonUnitalRing
-  __ := instCommSemigroup
-
-中文:
-实例 instNonUnitalCommRing
-  签名: [非幺交换环 R]
-  定义体: instNonUnitalRing
-  __ := instCommSemigroup
-
-Depends on / 依赖: instNonUnitalRing
+/-
+**Filter.Germ.instNonUnitalCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instNonUnitalCommRing [NonUnitalCommRing R] : NonUnitalCommRing (Germ l R)
+ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalCommRing [NonUnitalCommRing R] : NonUnitalCommRing (Germ l R) where
   __ := instNonUnitalRing
   __ := instCommSemigroup
-
-/--
-Instance `instCommRing` / 实例 `instCommRing`
-
-English:
-instance instCommRing
-  signature: [CommRing R]
-  body: { mul_comm := mul_comm }
-
-中文:
-实例 instCommRing
-  签名: [交换环 R]
-  定义体: { mul_comm := mul_comm }
-
-Depends on / 依赖: mul_comm
+/-
+**Filter.Germ.instCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instCommRing [CommRing R] : CommRing (Germ l R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommRing [CommRing R] : CommRing (Germ l R) :=
   { mul_comm := mul_comm }
 
-/--
-Definition of `coeRingHom` / `coeRingHom` 的定义
+/-- Coercion `(α → R) → Germ l R` as a `RingHom`. -/
+/-
+**Filter.Germ.coeRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：coeRingHom [Semiring R] (l : Filter α) : (α -> R) ->+* Germ l R
+参数：l : Filter α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeRingHom
-  signature: [Semiring R] (l : Filter α)
-  body: { (coeMulHom l : _ ->* Germ l R), (coeAddHom l : _ ->+ Germ l R) with toFun := ofFun }
-
-@[simp]
-
-中文:
-定义 coeRingHom
-  签名: [半环 R] (l : 滤子 α)
-  定义体: { (coeMulHom l : _ ->* Germ l R), (coeAddHom l : _ ->+ Germ l R) with toFun := ofFun }
-
-@[simp]
-
-Depends on / 依赖: coeAddHom, coeMulHom
+--- 原说明 ---
+Coercion `(α → R) → Germ l R` as a `RingHom`.
 -/
-def coeRingHom [Semiring R] (l : Filter α) : (α -> R) ->+* Germ l R :=
-  { (coeMulHom l : _ ->* Germ l R), (coeAddHom l : _ ->+ Germ l R) with toFun := ofFun }
+def coeRingHom [Semiring R] (l : Filter α) : (α → R) →+* Germ l R :=
+  { (coeMulHom l : _ →* Germ l R), (coeAddHom l : _ →+ Germ l R) with toFun := ofFun }
 
 @[simp]
-/--
-theorem `coe_coeRingHom` / 定理 `coe_coeRingHom`
-
-English:
-theorem coe_coeRingHom
-  given: [Semiring R]
-  statement: (coeRingHom l : (α -> R) -> Germ l R) = ofFun
-  proof: rfl
-
-中文:
-定理 coe_coeRingHom
-  条件: [半环 R]
-  结论: (coeRingHom l : (α -> R) -> Germ l R) = ofFun
-  证明: rfl
+/-
+**Filter.Germ.coe_coeRingHom** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_coeRingHom [Semiring R] : (coeRingHom l : (α -> R) -> Germ l R) = ofFu
+n
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coeRingHom [Semiring R] : (coeRingHom l : (α -> R) -> Germ l R) = ofFun :=
+theorem coe_coeRingHom [Semiring R] : (coeRingHom l : (α → R) → Germ l R) = ofFun :=
   rfl
 
 end Ring
@@ -2675,80 +1557,34 @@ section Module
 variable {M N R : Type*}
 
 @[to_additive]
-/--
-Instance `instSMul'` / 实例 `instSMul'`
-
-English:
-instance instSMul'
-  signature: [SMul M β]
-  body: ⟨map₂ (· • ·)⟩
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 instSMul'
-  签名: [标量乘法 M β]
-  定义体: ⟨map₂ (· • ·)⟩
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Filter.Germ.instSMul'** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instSMul' [SMul M β] : SMul (Germ l M) (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul' [SMul M β] : SMul (Germ l M) (Germ l β) :=
   ⟨map₂ (· • ·)⟩
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_smul'` / 定理 `coe_smul'`
-
-English:
-theorem coe_smul'
-  given: [SMul M β] (c : α -> M) (f : α -> β)
-  statement: ↑(c • f) = (c : Germ l M) • (f : Germ l β)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_smul'
-  条件: [标量乘法 M β] (c : α -> M) (f : α -> β)
-  结论: ↑(c • f) = (c : Germ l M) • (f : Germ l β)
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.Germ.coe_smul'** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_smul' [SMul M β] (c : α -> M) (f : α -> β) : ↑(c • f) = (c : Germ l M)
+ • (f : Germ l β)
+参数：c : α -> M；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smul' [SMul M β] (c : α -> M) (f : α -> β) : ↑(c • f) = (c : Germ l M) • (f : Germ l β) :=
+theorem coe_smul' [SMul M β] (c : α → M) (f : α → β) : ↑(c • f) = (c : Germ l M) • (f : Germ l β) :=
   rfl
 
 @[to_additive]
-/--
-Instance `instMulAction` / 实例 `instMulAction`
-
-English:
-instance instMulAction
-  signature: [Monoid M] [MulAction M β]
-  body: inductionOn f fun f => by
-      norm_cast
-      simp [one_smul]
-  mul_smul c₁ c₂ f :=
-    inductionOn f fun f => by
-      norm_cast
-      simp [mul_smul]
-
-@[to_additive]
-
-中文:
-实例 instMulAction
-  签名: [幺半群 M] [乘法作用 M β]
-  定义体: inductionOn f fun f => by
-      norm_cast
-      simp [one_smul]
-  mul_smul c₁ c₂ f :=
-    inductionOn f fun f => by
-      norm_cast
-      simp [mul_smul]
-
-@[to_additive]
-
-Depends on / 依赖: inductionOn, mul_smul, one_smul
+/-
+**Filter.Germ.instMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instMulAction [Monoid M] [MulAction M β] : MulAction M (Germ l β) where on
+e_smul f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulAction [Monoid M] [MulAction M β] : MulAction M (Germ l β) where
   one_smul f :=
@@ -2761,28 +1597,12 @@ instance instMulAction [Monoid M] [MulAction M β] : MulAction M (Germ l β) whe
       simp [mul_smul]
 
 @[to_additive]
-/--
-Instance `instMulAction'` / 实例 `instMulAction'`
-
-English:
-instance instMulAction'
-  signature: [Monoid M] [MulAction M β]
-  body: inductionOn f fun f => by simp only [← coe_one, ← coe_smul', one_smul]
-  mul_smul c₁ c₂ f :=
-    inductionOn₃ c₁ c₂ f fun c₁ c₂ f => by
-      norm_cast
-      simp [mul_smul]
-
-中文:
-实例 instMulAction'
-  签名: [幺半群 M] [乘法作用 M β]
-  定义体: inductionOn f fun f => by simp only [← coe_one, ← coe_smul', one_smul]
-  mul_smul c₁ c₂ f :=
-    inductionOn₃ c₁ c₂ f fun c₁ c₂ f => by
-      norm_cast
-      simp [mul_smul]
-
-Depends on / 依赖: coe_one, coe_smul, inductionOn, one_smul
+/-
+**Filter.Germ.instMulAction'** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instMulAction' [Monoid M] [MulAction M β] : MulAction (Germ l M) (Germ l β
+) where one_smul f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulAction' [Monoid M] [MulAction M β] : MulAction (Germ l M) (Germ l β) where
   one_smul f := inductionOn f fun f => by simp only [← coe_one, ← coe_smul', one_smul]
@@ -2790,27 +1610,12 @@ instance instMulAction' [Monoid M] [MulAction M β] : MulAction (Germ l M) (Germ
     inductionOn₃ c₁ c₂ f fun c₁ c₂ f => by
       norm_cast
       simp [mul_smul]
-
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [Monoid M] [AddMonoid N] [DistribMulAction M N]
-  body: inductionOn₂ f g fun f g => by
-      norm_cast
-      simp [smul_add]
-  smul_zero c := by simp only [← coe_zero, ← coe_smul, smul_zero]
-
-中文:
-实例 instDistribMulAction
-  签名: [幺半群 M] [加法幺半群 N] [分配乘法作用 M N]
-  定义体: inductionOn₂ f g fun f g => by
-      norm_cast
-      simp [smul_add]
-  smul_zero c := by simp only [← coe_zero, ← coe_smul, smul_zero]
-
-Depends on / 依赖: coe_smul, coe_zero, smul_add, smul_zero
+/-
+**Filter.Germ.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instDistribMulAction [Monoid M] [AddMonoid N] [DistribMulAction M N] : Dis
+tribMulAction M (Germ l N) where smul_add c f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction [Monoid M] [AddMonoid N] [DistribMulAction M N] :
     DistribMulAction M (Germ l N) where
@@ -2819,27 +1624,12 @@ instance instDistribMulAction [Monoid M] [AddMonoid N] [DistribMulAction M N] :
       norm_cast
       simp [smul_add]
   smul_zero c := by simp only [← coe_zero, ← coe_smul, smul_zero]
-
-/--
-Instance `instDistribMulAction'` / 实例 `instDistribMulAction'`
-
-English:
-instance instDistribMulAction'
-  signature: [Monoid M] [AddMonoid N] [DistribMulAction M N]
-  body: inductionOn₃ c f g fun c f g => by
-      norm_cast
-      simp [smul_add]
-  smul_zero c := inductionOn c fun c => by simp only [← coe_zero, ← coe_smul', smul_zero]
-
-中文:
-实例 instDistribMulAction'
-  签名: [幺半群 M] [加法幺半群 N] [分配乘法作用 M N]
-  定义体: inductionOn₃ c f g fun c f g => by
-      norm_cast
-      simp [smul_add]
-  smul_zero c := inductionOn c fun c => by simp only [← coe_zero, ← coe_smul', smul_zero]
-
-Depends on / 依赖: coe_smul, coe_zero, inductionOn, smul_add, smul_zero
+/-
+**Filter.Germ.instDistribMulAction'** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instDistribMulAction' [Monoid M] [AddMonoid N] [DistribMulAction M N] : Di
+stribMulAction (Germ l M) (Germ l N) where smul_add c f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction' [Monoid M] [AddMonoid N] [DistribMulAction M N] :
     DistribMulAction (Germ l M) (Germ l N) where
@@ -2848,33 +1638,12 @@ instance instDistribMulAction' [Monoid M] [AddMonoid N] [DistribMulAction M N] :
       norm_cast
       simp [smul_add]
   smul_zero c := inductionOn c fun c => by simp only [← coe_zero, ← coe_smul', smul_zero]
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [Semiring R] [AddCommMonoid M] [Module R M]
-  body: inductionOn f fun f => by
-      norm_cast
-      simp [add_smul]
-  zero_smul f :=
-    inductionOn f fun f => by
-      norm_cast
-      simp [zero_smul]
-
-中文:
-实例 instModule
-  签名: [半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: inductionOn f fun f => by
-      norm_cast
-      simp [add_smul]
-  zero_smul f :=
-    inductionOn f fun f => by
-      norm_cast
-      simp [zero_smul]
-
-Depends on / 依赖: add_smul, inductionOn, zero_smul
+/-
+**Filter.Germ.instModule** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instModule [Semiring R] [AddCommMonoid M] [Module R M] : Module R (Germ l 
+M) where add_smul c₁ c₂ f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule [Semiring R] [AddCommMonoid M] [Module R M] : Module R (Germ l M) where
   add_smul c₁ c₂ f :=
@@ -2885,27 +1654,12 @@ instance instModule [Semiring R] [AddCommMonoid M] [Module R M] : Module R (Germ
     inductionOn f fun f => by
       norm_cast
       simp [zero_smul]
-
-/--
-Instance `instModule'` / 实例 `instModule'`
-
-English:
-instance instModule'
-  signature: [Semiring R] [AddCommMonoid M] [Module R M]
-  body: inductionOn₃ c₁ c₂ f fun c₁ c₂ f => by
-      norm_cast
-      simp [add_smul]
-  zero_smul f := inductionOn f fun f => by simp only [← coe_zero, ← coe_smul', zero_smul]
-
-中文:
-实例 instModule'
-  签名: [半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: inductionOn₃ c₁ c₂ f fun c₁ c₂ f => by
-      norm_cast
-      simp [add_smul]
-  zero_smul f := inductionOn f fun f => by simp only [← coe_zero, ← coe_smul', zero_smul]
-
-Depends on / 依赖: add_smul, coe_smul, coe_zero, inductionOn, zero_smul
+/-
+**Filter.Germ.instModule'** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instModule' [Semiring R] [AddCommMonoid M] [Module R M] : Module (Germ l R
+) (Germ l M) where add_smul c₁ c₂ f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule' [Semiring R] [AddCommMonoid M] [Module R M] :
     Module (Germ l R) (Germ l M) where
@@ -2917,504 +1671,255 @@ instance instModule' [Semiring R] [AddCommMonoid M] [Module R M] :
 
 end Module
 
-/--
-Instance `instLE` / 实例 `instLE`
-
-English:
-instance instLE
-  signature: [LE β]
-  body: ⟨LiftRel (· <= ·)⟩
-
-中文:
-实例 instLE
-  签名: [LE β]
-  定义体: ⟨LiftRel (· <= ·)⟩
-
-Depends on / 依赖: LiftRel
+/-
+**Filter.Germ.instLE** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instLE [LE β] : LE (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instLE [LE β] : LE (Germ l β) := ⟨LiftRel (· <= ·)⟩
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: [LE β]
-  statement: ((· <= ·) : Germ l β -> Germ l β -> Prop) = LiftRel (· <= ·)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 le_def
-  条件: [LE β]
-  结论: ((· <= ·) : Germ l β -> Germ l β -> 命题) = LiftRel (· <= ·)
-  证明: rfl
-
-@[simp]
+instance instLE [LE β] : LE (Germ l β) := ⟨LiftRel (· ≤ ·)⟩
+/-
+**Filter.Germ.le_def** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：le_def [LE β] : ((· <= ·) : Germ l β -> Germ l β -> Prop) = LiftRel (· <= 
+·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem le_def [LE β] : ((· <= ·) : Germ l β -> Germ l β -> Prop) = LiftRel (· <= ·) :=
+theorem le_def [LE β] : ((· ≤ ·) : Germ l β → Germ l β → Prop) = LiftRel (· ≤ ·) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_le` / 定理 `coe_le`
-
-English:
-theorem coe_le
-  given: [LE β]
-  statement: (f : Germ l β) <= g ↔ f <=ᶠ[l] g
-  proof: Iff.rfl
-
-中文:
-定理 coe_le
-  条件: [LE β]
-  结论: (f : Germ l β) <= g ↔ f <=ᶠ[l] g
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.Germ.coe_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_le [LE β] : (f : Germ l β) <= g ↔ f <=ᶠ[l] g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_le [LE β] : (f : Germ l β) <= g ↔ f <=ᶠ[l] g :=
+theorem coe_le [LE β] : (f : Germ l β) ≤ g ↔ f ≤ᶠ[l] g :=
   Iff.rfl
-
-/--
-theorem `coe_nonneg` / 定理 `coe_nonneg`
-
-English:
-theorem coe_nonneg
-  given: [LE β] [Zero β] {f : α -> β}
-  statement: 0 <= (f : Germ l β) ↔ forallᶠ x in l, 0 <= f x
-  proof: Iff.rfl
-
-中文:
-定理 coe_nonneg
-  条件: [LE β] [零 β] {f : α -> β}
-  结论: 0 <= (f : Germ l β) ↔ 对任意ᶠ x in l, 0 <= f x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.Germ.coe_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：coe_nonneg [LE β] [Zero β] {f : α -> β} : 0 <= (f : Germ l β) ↔ forallᶠ x 
+in l, 0 <= f x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_nonneg [LE β] [Zero β] {f : α -> β} : 0 <= (f : Germ l β) ↔ forallᶠ x in l, 0 <= f x :=
+theorem coe_nonneg [LE β] [Zero β] {f : α → β} : 0 ≤ (f : Germ l β) ↔ ∀ᶠ x in l, 0 ≤ f x :=
   Iff.rfl
-
-/--
-theorem `const_le` / 定理 `const_le`
-
-English:
-theorem const_le
-  given: [LE β] {x y : β}
-  statement: x <= y -> (↑x : Germ l β) <= ↑y
-  proof: liftRel_const
-
-@[simp, norm_cast]
-
-中文:
-定理 const_le
-  条件: [LE β] {x y : β}
-  结论: x <= y -> (↑x : Germ l β) <= ↑y
-  证明: liftRel_const
-
-@[simp, norm_cast]
-
-Depends on / 依赖: liftRel_const
+/-
+**Filter.Germ.const_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_le [LE β] {x y : β} : x <= y -> (↑x : Germ l β) <= ↑y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.liftRel_const`：liftRel_const {r : β -> γ -> Prop} {x : β} {y
+ : γ} (h : r x y) : LiftRel r (↑x : Germ l β) ↑y
 -/
-theorem const_le [LE β] {x y : β} : x <= y -> (↑x : Germ l β) <= ↑y :=
+theorem const_le [LE β] {x y : β} : x ≤ y → (↑x : Germ l β) ≤ ↑y :=
   liftRel_const
 
 @[simp, norm_cast]
-/--
-theorem `const_le_iff` / 定理 `const_le_iff`
-
-English:
-theorem const_le_iff
-  given: [LE β] [NeBot l] {x y : β}
-  statement: (↑x : Germ l β) <= ↑y ↔ x <= y
-  proof: liftRel_const_iff
-
-中文:
-定理 const_le_iff
-  条件: [LE β] [NeBot l] {x y : β}
-  结论: (↑x : Germ l β) <= ↑y ↔ x <= y
-  证明: liftRel_const_iff
-
-Depends on / 依赖: liftRel_const_iff
+/-
+**Filter.Germ.const_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_le_iff [LE β] [NeBot l] {x y : β} : (↑x : Germ l β) <= ↑y ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.liftRel_const_iff`：liftRel_const_iff [NeBot l] {r : β -> γ -
+> Prop} {x : β} {y : γ} : LiftRel r (↑x : Germ l β) ↑y ↔ r x y
 -/
-theorem const_le_iff [LE β] [NeBot l] {x y : β} : (↑x : Germ l β) <= ↑y ↔ x <= y :=
+theorem const_le_iff [LE β] [NeBot l] {x y : β} : (↑x : Germ l β) ≤ ↑y ↔ x ≤ y :=
   liftRel_const_iff
-
-/--
-Instance `instPreorder` / 实例 `instPreorder`
-
-English:
-instance instPreorder
-  signature: [Preorder β]
-  body: inductionOn f EventuallyLE.refl l
-  le_trans f₁ f₂ f₃ := inductionOn₃ f₁ f₂ f₃ fun _ _ _ => EventuallyLE.trans
-
-中文:
-实例 instPreorder
-  签名: [预序 β]
-  定义体: inductionOn f EventuallyLE.refl l
-  le_trans f₁ f₂ f₃ := inductionOn₃ f₁ f₂ f₃ fun _ _ _ => EventuallyLE.trans
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.refl, inductionOn
+/-
+**Filter.Germ.instPreorder** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instPreorder [Preorder β] : Preorder (Germ l β) where le_refl f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPreorder [Preorder β] : Preorder (Germ l β) where
-le_refl f := inductionOn f EventuallyLE.refl l
+  le_refl f := inductionOn f <| EventuallyLE.refl l
   le_trans f₁ f₂ f₃ := inductionOn₃ f₁ f₂ f₃ fun _ _ _ => EventuallyLE.trans
-
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: [PartialOrder β]
-  body: inductionOn₂ f g fun _ _ h₁ h₂ => (EventuallyLE.antisymm h₁ h₂).germ_eq
-
-中文:
-实例 instPartialOrder
-  签名: [偏序 β]
-  定义体: inductionOn₂ f g fun _ _ h₁ h₂ => (EventuallyLE.antisymm h₁ h₂).germ_eq
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.antisymm, antisymm, germ_eq
+/-
+**Filter.Germ.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instPartialOrder [PartialOrder β] : PartialOrder (Germ l β) where le_antis
+ymm f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPartialOrder [PartialOrder β] : PartialOrder (Germ l β) where
-  le_antisymm f g := inductionOn₂ f g fun _ _ h₁ h₂ => (EventuallyLE.antisymm h₁ h₂).germ_eq
-
-/--
-Instance `instBot` / 实例 `instBot`
-
-English:
-instance instBot
-  signature: [Bot β]
-  body: ⟨↑(⊥ : β)⟩
-
-中文:
-实例 instBot
-  签名: [底元素 β]
-  定义体: ⟨↑(⊥ : β)⟩
+  le_antisymm f g := inductionOn₂ f g fun _ _ h₁ h₂ ↦ (EventuallyLE.antisymm h₁ h₂).germ_eq
+/-
+**Filter.Germ.instBot** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instBot [Bot β] : Bot (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instBot [Bot β] : Bot (Germ l β) := ⟨↑(⊥ : β)⟩
-/--
-Instance `instTop` / 实例 `instTop`
-
-English:
-instance instTop
-  signature: [Top β]
-  body: ⟨↑(⊤ : β)⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instTop
-  签名: [顶元素 β]
-  定义体: ⟨↑(⊤ : β)⟩
-
-@[simp, norm_cast]
+/-
+**Filter.Germ.instTop** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instTop [Top β] : Top (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instTop [Top β] : Top (Germ l β) := ⟨↑(⊤ : β)⟩
 
 @[simp, norm_cast]
-/--
-theorem `const_bot` / 定理 `const_bot`
-
-English:
-theorem const_bot
-  given: [Bot β]
-  statement: (↑(⊥ : β) : Germ l β) = ⊥
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 const_bot
-  条件: [底元素 β]
-  结论: (↑(⊥ : β) : Germ l β) = ⊥
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Filter.Germ.const_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_bot [Bot β] : (↑(⊥ : β) : Germ l β) = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_bot [Bot β] : (↑(⊥ : β) : Germ l β) = ⊥ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `const_top` / 定理 `const_top`
-
-English:
-theorem const_top
-  given: [Top β]
-  statement: (↑(⊤ : β) : Germ l β) = ⊤
-  proof: rfl
-
-中文:
-定理 const_top
-  条件: [顶元素 β]
-  结论: (↑(⊤ : β) : Germ l β) = ⊤
-  证明: rfl
+/-
+**Filter.Germ.const_top** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_top [Top β] : (↑(⊤ : β) : Germ l β) = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_top [Top β] : (↑(⊤ : β) : Germ l β) = ⊤ :=
   rfl
-
-/--
-Instance `instOrderBot` / 实例 `instOrderBot`
-
-English:
-instance instOrderBot
-  signature: [LE β] [OrderBot β]
-  body: inductionOn f fun _ => Eventually.of_forall fun _ => bot_le
-
-中文:
-实例 instOrderBot
-  签名: [LE β] [有底序 β]
-  定义体: inductionOn f fun _ => Eventually.of_forall fun _ => bot_le
-
-Depends on / 依赖: Eventually, Eventually.of_forall, bot_le, inductionOn, of_forall
+/-
+**Filter.Germ.instOrderBot** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instOrderBot [LE β] [OrderBot β] : OrderBot (Germ l β) where bot_le f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOrderBot [LE β] [OrderBot β] : OrderBot (Germ l β) where
   bot_le f := inductionOn f fun _ => Eventually.of_forall fun _ => bot_le
-
-/--
-Instance `instOrderTop` / 实例 `instOrderTop`
-
-English:
-instance instOrderTop
-  signature: [LE β] [OrderTop β]
-  body: inductionOn f fun _ => Eventually.of_forall fun _ => le_top
-
-中文:
-实例 instOrderTop
-  签名: [LE β] [有顶序 β]
-  定义体: inductionOn f fun _ => Eventually.of_forall fun _ => le_top
-
-Depends on / 依赖: Eventually, Eventually.of_forall, inductionOn, le_top, of_forall
+/-
+**Filter.Germ.instOrderTop** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instOrderTop [LE β] [OrderTop β] : OrderTop (Germ l β) where le_top f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOrderTop [LE β] [OrderTop β] : OrderTop (Germ l β) where
   le_top f := inductionOn f fun _ => Eventually.of_forall fun _ => le_top
-
-/--
-Instance `instBoundedOrder` / 实例 `instBoundedOrder`
-
-English:
-instance instBoundedOrder
-  signature: [LE β] [BoundedOrder β]
-  body: instOrderBot
-  __ := instOrderTop
-
-中文:
-实例 instBoundedOrder
-  签名: [LE β] [有界序 β]
-  定义体: instOrderBot
-  __ := instOrderTop
-
-Depends on / 依赖: instOrderBot
+/-
+**Filter.Germ.instBoundedOrder** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instBoundedOrder [LE β] [BoundedOrder β] : BoundedOrder (Germ l β) where _
+_
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instBoundedOrder [LE β] [BoundedOrder β] : BoundedOrder (Germ l β) where
   __ := instOrderBot
   __ := instOrderTop
-
-/--
-Instance `instSup` / 实例 `instSup`
-
-English:
-instance instSup
-  signature: [Max β]
-  body: ⟨map₂ (· ⊔ ·)⟩
-
-中文:
-实例 instSup
-  签名: [最大值 β]
-  定义体: ⟨map₂ (· ⊔ ·)⟩
+/-
+**Filter.Germ.instSup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instSup [Max β] : Max (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSup [Max β] : Max (Germ l β) := ⟨map₂ (· ⊔ ·)⟩
-/--
-Instance `instInf` / 实例 `instInf`
-
-English:
-instance instInf
-  signature: [Min β]
-  body: ⟨map₂ (· ⊓ ·)⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 instInf
-  签名: [最小值 β]
-  定义体: ⟨map₂ (· ⊓ ·)⟩
-
-@[simp, norm_cast]
+/-
+**Filter.Germ.instInf** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instInf [Min β] : Min (Germ l β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInf [Min β] : Min (Germ l β) := ⟨map₂ (· ⊓ ·)⟩
 
 @[simp, norm_cast]
-/--
-theorem `const_sup` / 定理 `const_sup`
-
-English:
-theorem const_sup
-  given: [Max β] (a b : β)
-  statement: ↑(a ⊔ b) = (↑a ⊔ ↑b : Germ l β)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 const_sup
-  条件: [最大值 β] (a b : β)
-  结论: ↑(a ⊔ b) = (↑a ⊔ ↑b : Germ l β)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Filter.Germ.const_sup** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_sup [Max β] (a b : β) : ↑(a ⊔ b) = (↑a ⊔ ↑b : Germ l β)
+参数：a b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_sup [Max β] (a b : β) : ↑(a ⊔ b) = (↑a ⊔ ↑b : Germ l β) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `const_inf` / 定理 `const_inf`
-
-English:
-theorem const_inf
-  given: [Min β] (a b : β)
-  statement: ↑(a ⊓ b) = (↑a ⊓ ↑b : Germ l β)
-  proof: rfl
-
-中文:
-定理 const_inf
-  条件: [最小值 β] (a b : β)
-  结论: ↑(a ⊓ b) = (↑a ⊓ ↑b : Germ l β)
-  证明: rfl
+/-
+**Filter.Germ.const_inf** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：const_inf [Min β] (a b : β) : ↑(a ⊓ b) = (↑a ⊓ ↑b : Germ l β)
+参数：a b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_inf [Min β] (a b : β) : ↑(a ⊓ b) = (↑a ⊓ ↑b : Germ l β) :=
   rfl
-
-/--
-Instance `instSemilatticeSup` / 实例 `instSemilatticeSup`
-
-English:
-instance instSemilatticeSup
-  signature: [SemilatticeSup β]
-  body: max
-  le_sup_left f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => le_sup_left
-  le_sup_right f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => le_sup_right
-sup_le f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ => h₂.mp h₁.mono fun _x => sup_le
-
-中文:
-实例 instSemilatticeSup
-  签名: [SemilatticeSup β]
-  定义体: max
-  le_sup_left f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => le_sup_left
-  le_sup_right f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => le_sup_right
-sup_le f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ => h₂.mp h₁.mono fun _x => sup_le
+/-
+**Filter.Germ.instSemilatticeSup** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instSemilatticeSup [SemilatticeSup β] : SemilatticeSup (Germ l β) where su
+p
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemilatticeSup [SemilatticeSup β] : SemilatticeSup (Germ l β) where
   sup := max
-  le_sup_left f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => le_sup_left
-  le_sup_right f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => le_sup_right
-sup_le f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ => h₂.mp h₁.mono fun _x => sup_le
-
-/--
-Instance `instSemilatticeInf` / 实例 `instSemilatticeInf`
-
-English:
-instance instSemilatticeInf
-  signature: [SemilatticeInf β]
-  body: min
-  inf_le_left f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => inf_le_left
-  inf_le_right f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => inf_le_right
-le_inf f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ => h₂.mp h₁.mono fun _x => le_inf
-
-中文:
-实例 instSemilatticeInf
-  签名: [SemilatticeInf β]
-  定义体: min
-  inf_le_left f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => inf_le_left
-  inf_le_right f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => inf_le_right
-le_inf f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ => h₂.mp h₁.mono fun _x => le_inf
+  le_sup_left f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x ↦ le_sup_left
+  le_sup_right f g := inductionOn₂ f g fun _f _g ↦ Eventually.of_forall fun _x ↦ le_sup_right
+  sup_le f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ ↦ h₂.mp <| h₁.mono fun _x ↦ sup_le
+/-
+**Filter.Germ.instSemilatticeInf** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instSemilatticeInf [SemilatticeInf β] : SemilatticeInf (Germ l β) where in
+f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemilatticeInf [SemilatticeInf β] : SemilatticeInf (Germ l β) where
   inf := min
-  inf_le_left f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => inf_le_left
-  inf_le_right f g := inductionOn₂ f g fun _f _g => Eventually.of_forall fun _x => inf_le_right
-le_inf f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ => h₂.mp h₁.mono fun _x => le_inf
-
-/--
-Instance `instLattice` / 实例 `instLattice`
-
-English:
-instance instLattice
-  signature: [Lattice β]
-  body: instSemilatticeSup
-  __ := instSemilatticeInf
-
-中文:
-实例 instLattice
-  签名: [格 β]
-  定义体: instSemilatticeSup
-  __ := instSemilatticeInf
-
-Depends on / 依赖: instSemilatticeSup
+  inf_le_left f g := inductionOn₂ f g fun _f _g ↦ Eventually.of_forall fun _x ↦ inf_le_left
+  inf_le_right f g := inductionOn₂ f g fun _f _g ↦ Eventually.of_forall fun _x ↦ inf_le_right
+  le_inf f₁ f₂ g := inductionOn₃ f₁ f₂ g fun _f₁ _f₂ _g h₁ h₂ ↦ h₂.mp <| h₁.mono fun _x ↦ le_inf
+/-
+**Filter.Germ.instLattice** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instLattice [Lattice β] : Lattice (Germ l β) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instLattice [Lattice β] : Lattice (Germ l β) where
   __ := instSemilatticeSup
   __ := instSemilatticeInf
-
-/--
-Instance `instDistribLattice` / 实例 `instDistribLattice`
-
-English:
-instance instDistribLattice
-  signature: [DistribLattice β]
-  body: inductionOn₃ f g h fun _f _g _h => Eventually.of_forall fun _ => le_sup_inf
-
-@[to_additive]
-
-中文:
-实例 instDistribLattice
-  签名: [Distrib格 β]
-  定义体: inductionOn₃ f g h fun _f _g _h => Eventually.of_forall fun _ => le_sup_inf
-
-@[to_additive]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, le_sup_inf, of_forall
+/-
+**Filter.Germ.instDistribLattice** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instDistribLattice [DistribLattice β] : DistribLattice (Germ l β) where le
+_sup_inf f g h
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribLattice [DistribLattice β] : DistribLattice (Germ l β) where
-  le_sup_inf f g h := inductionOn₃ f g h fun _f _g _h => Eventually.of_forall fun _ => le_sup_inf
+  le_sup_inf f g h := inductionOn₃ f g h fun _f _g _h ↦ Eventually.of_forall fun _ ↦ le_sup_inf
 
 @[to_additive]
-/--
-Instance `instExistsMulOfLE` / 实例 `instExistsMulOfLE`
-
-English:
-instance instExistsMulOfLE
-  signature: [Mul β] [LE β] [ExistsMulOfLE β]
-  body: inductionOn₂ x y fun f g (h : f <=ᶠ[l] g) => by
-    classical
-    choose c hc using fun x (hx : f x <= g x) => exists_mul_of_le hx
-    refine ⟨ofFun fun x => if hx : f x <= g x then c x hx else f x, coe_eq.2 ?_⟩
-    filter_upwards [h] with x hx
-    rw [dif_pos hx]; rw [hc]
-
-中文:
-实例 instExistsMulOfLE
-  签名: [乘法 β] [LE β] [ExistsMulOfLE β]
-  定义体: inductionOn₂ x y fun f g (h : f <=ᶠ[l] g) => by
-    classical
-    choose c hc using fun x (hx : f x <= g x) => exists_mul_of_le hx
-    refine ⟨ofFun fun x => if hx : f x <= g x then c x hx else f x, coe_eq.2 ?_⟩
-    filter_upwards [h] with x hx
-    rw [dif_pos hx]; rw [hc]
-
-Depends on / 依赖: classical, coe_eq, dif_pos, exists_mul_of_le, filter_upwards
+/-
+**Filter.Germ.instExistsMulOfLE** 是 Mathlib 中的一个实例，位于命名空间 `Filter.Germ`。
+形式化陈述：instExistsMulOfLE [Mul β] [LE β] [ExistsMulOfLE β] : ExistsMulOfLE (Germ l
+ β) where exists_mul_of_le {x y}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.inductionOn₂`：inductionOn₂ (f : Germ l β) (g : Germ l γ) {p 
+: Germ l β -> Germ l γ -> Prop} (h : forall (f : α -> β) (g : α -> γ), p f g) : 
+p f g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.Germ.coe_eq`：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `ExistsMulOfLE.exists_mul_of_le`：∀ {α : Type u} {inst : Mul α} {inst_1 : 
+LE α} [self : ExistsMulOfLE α] {a b : α}, a ≤ b → ∃ c, b = a * c
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 instance instExistsMulOfLE [Mul β] [LE β] [ExistsMulOfLE β] : ExistsMulOfLE (Germ l β) where
-  exists_mul_of_le {x y} := inductionOn₂ x y fun f g (h : f <=ᶠ[l] g) => by
+  exists_mul_of_le {x y} := inductionOn₂ x y fun f g (h : f ≤ᶠ[l] g) ↦ by
     classical
-    choose c hc using fun x (hx : f x <= g x) => exists_mul_of_le hx
-    refine ⟨ofFun fun x => if hx : f x <= g x then c x hx else f x, coe_eq.2 ?_⟩
+    choose c hc using fun x (hx : f x ≤ g x) ↦ exists_mul_of_le hx
+    refine ⟨ofFun fun x ↦ if hx : f x ≤ g x then c x hx else f x, coe_eq.2 ?_⟩
     filter_upwards [h] with x hx
-    rw [dif_pos hx]; rw [hc]
+    rw [dif_pos hx, hc]
 
 end Germ
 
 end Filter
+

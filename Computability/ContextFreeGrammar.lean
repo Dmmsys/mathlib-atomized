@@ -31,22 +31,14 @@ open Function
 
 /-- Rule that rewrites a single nonterminal to any string (a list of symbols). -/
 @[ext]
-/--
-Definition of `ContextFreeRule` / `ContextFreeRule` 的定义
+/-
+**ContextFreeRule** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_2 → Type (max u_1 u_2)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ContextFreeRule
-  parameters: (T N : Type*)
-  axioms and operations (2):
-    - input : N
-    - output : List (Symbol T N)
-
-中文:
-结构 余ntextFreeRule
-  参数: (T N : 类型)
-  公理与运算 (2 个):
-    - input : N
-    - output : 列表 (Symbol T N)
+--- 原说明 ---
+Rule that rewrites a single nonterminal to any string (a list of symbols).
 -/
 structure ContextFreeRule (T N : Type*) where
   /-- Input nonterminal a.k.a. left-hand side. -/
@@ -58,24 +50,16 @@ deriving DecidableEq, Repr
 -- See https://github.com/leanprover/lean4/issues/10295
 attribute [nolint unusedArguments] instReprContextFreeRule.repr
 
-/--
-Definition of `ContextFreeGrammar` / `ContextFreeGrammar` 的定义
+/-- Context-free grammar that generates words over the alphabet `T` (a type of terminals). -/
+/-
+**ContextFreeGrammar** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type (max 1 u_1)
+参数：max 1 u_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ContextFreeGrammar
-  parameters: (T : Type*)
-  axioms and operations (3):
-    - NT : Type
-    - initial : NT
-    - rules : Finset (ContextFreeRule T NT)
-
-中文:
-结构 余ntextFreeGrammar
-  参数: (T : 类型)
-  公理与运算 (3 个):
-    - NT : 类型
-    - initial : NT
-    - rules : 有限集 (余ntextFreeRule T NT)
+--- 原说明 ---
+Context-free grammar that generates words over the alphabet `T` (a type of termi
+nals).
 -/
 structure ContextFreeGrammar (T : Type*) where
   /-- Type of nonterminals. -/
@@ -90,62 +74,50 @@ variable {T : Type*}
 namespace ContextFreeRule
 variable {N : Type*} {r : ContextFreeRule T N} {u v : List (Symbol T N)}
 
-/--
-Inductive type `Rewrites` / 归纳类型 `Rewrites`
+/-- Inductive definition of a single application of a given context-free rule `r` to a string `u`;
+`r.Rewrites u v` means that the `r` sends `u` to `v` (there may be multiple such strings `v`). -/
+/-
+**ContextFreeRule.Rewrites** 是 Mathlib 中的一个归纳类型，位于命名空间 `ContextFreeRule`。
+形式化陈述：{T : Type u_1} → {N : Type u_2} → ContextFreeRule T N → List (Symbol T N) 
+→ List (Symbol T N) → Prop
+参数：Symbol T N；Symbol T N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Rewrites
-  parameters: (r : ContextFreeRule T N)
-  constructors (2):
-    - head: (s : List (Symbol T N)) : r.Rewrites (Symbol.nonterminal r.input :: s) (r.output ++ s)
-    - cons: (x : Symbol T N) {s₁ s₂ : List (Symbol T N)} (hrs : Rewrites r s₁ s₂) : r.Rewrites (x :: s₁) (x :: s₂)
-
-中文:
-归纳类型 Rewrites
-  参数: (r : 余ntextFreeRule T N)
-  构造子 (2 个):
-    - head: (s : 列表 (Symbol T N)) : r.Rewrites (Symbol.nonterminal r.input :: s) (r.output ++ s)
-    - cons: (x : Symbol T N) {s₁ s₂ : 列表 (Symbol T N)} (hrs : Rewrites r s₁ s₂) : r.Rewrites (x :: s₁) (x :: s₂)
+--- 原说明 ---
+Inductive definition of a single application of a given context-free rule `r` to
+ a string `u`;
+`r.Rewrites u v` means that the `r` sends `u` to `v` (there may be multiple such
+ strings `v`).
 -/
-inductive Rewrites (r : ContextFreeRule T N) : List (Symbol T N) -> List (Symbol T N) -> Prop
+inductive Rewrites (r : ContextFreeRule T N) : List (Symbol T N) → List (Symbol T N) → Prop
   /-- The replacement is at the start of the remaining string. -/
   | head (s : List (Symbol T N)) :
       r.Rewrites (Symbol.nonterminal r.input :: s) (r.output ++ s)
   /-- There is a replacement later in the string. -/
   | cons (x : Symbol T N) {s₁ s₂ : List (Symbol T N)} (hrs : Rewrites r s₁ s₂) :
       r.Rewrites (x :: s₁) (x :: s₂)
-
-/--
-lemma `Rewrites.exists_parts` / 引理 `Rewrites.exists_parts`
-
-English:
-lemma Rewrites.exists_parts
-  given: (hr : r.Rewrites u v)
-  proof: by
-  induction hr with
-  | head s =>
-    use [], s
-    simp
-  | cons x _ ih =>
-    rcases ih with ⟨p', q', rfl, rfl⟩
-    use x :: p', q'
-    simp
-
-中文:
-引理 Rewrites.存在_parts
-  条件: (hr : r.Rewrites u v)
-  证明: by
-  induction hr with
-  | head s =>
-    use [], s
-    simp
-  | cons x _ ih =>
-    rcases ih with ⟨p', q', rfl, rfl⟩
-    use x :: p', q'
-    simp
+/-
+**ContextFreeRule.Rewrites.exists_parts** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRu
+le.Rewrites`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} {r : ContextFreeRule T N} {u v : List (Sym
+bol T N)},   r.Rewrites u v → ∃ p q, u = p ++ [Symbol.nonterminal r.input] ++ q 
+∧ v = p ++ r.output ++ q
+参数：Symbol T N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma Rewrites.exists_parts (hr : r.Rewrites u v) :
-    exists p q : List (Symbol T N),
+    ∃ p q : List (Symbol T N),
       u = p ++ [Symbol.nonterminal r.input] ++ q ∧ v = p ++ r.output ++ q := by
   induction hr with
   | head s =>
@@ -155,45 +127,26 @@ lemma Rewrites.exists_parts (hr : r.Rewrites u v) :
     rcases ih with ⟨p', q', rfl, rfl⟩
     use x :: p', q'
     simp
-
-/--
-lemma `Rewrites.input_output` / 引理 `Rewrites.input_output`
-
-English:
-lemma Rewrites.input_output
-  statement: r.Rewrites [.nonterminal r.input] r.output
-  proof: by
-  simpa using head []
-
-中文:
-引理 Rewrites.input_output
-  结论: r.Rewrites [.nonterminal r.input] r.output
-  证明: by
-  simpa using head []
+/-
+**ContextFreeRule.Rewrites.input_output** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRu
+le.Rewrites`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} {r : ContextFreeRule T N}, r.Rewrites [Sym
+bol.nonterminal r.input] r.output
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.append_nil`：∀ {α : Type u} (as : List α), as ++ [] = as
 -/
 lemma Rewrites.input_output : r.Rewrites [.nonterminal r.input] r.output := by
   simpa using head []
-
-/--
-lemma `rewrites_of_exists_parts` / 引理 `rewrites_of_exists_parts`
-
-English:
-lemma rewrites_of_exists_parts
-  given: (r : ContextFreeRule T N) (p q : List (Symbol T N))
-  proof: by
-  induction p with
-  | nil => exact Rewrites.head q
-  | cons d l ih => exact Rewrites.cons d ih
-
-中文:
-引理 rewrites_of_存在_parts
-  条件: (r : 余ntextFreeRule T N) (p q : 列表 (Symbol T N))
-  证明: by
-  induction p with
-  | nil => exact Rewrites.head q
-  | cons d l ih => exact Rewrites.cons d ih
-
-Depends on / 依赖: Rewrites, Rewrites.cons, Rewrites.head
+/-
+**ContextFreeRule.rewrites_of_exists_parts** 是 Mathlib 中的一个引理，位于命名空间 `ContextFre
+eRule`。
+形式化陈述：rewrites_of_exists_parts (r : ContextFreeRule T N) (p q : List (Symbol T N
+)) : r.Rewrites (p ++ [Symbol.nonterminal r.input] ++ q) (p ++ r.output ++ q)
+参数：r : ContextFreeRule T N；p q : List (Symbol T N)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rewrites_of_exists_parts (r : ContextFreeRule T N) (p q : List (Symbol T N)) :
     r.Rewrites (p ++ [Symbol.nonterminal r.input] ++ q) (p ++ r.output ++ q) := by
@@ -201,66 +154,94 @@ lemma rewrites_of_exists_parts (r : ContextFreeRule T N) (p q : List (Symbol T N
   | nil => exact Rewrites.head q
   | cons d l ih => exact Rewrites.cons d ih
 
-/--
-theorem `rewrites_iff` / 定理 `rewrites_iff`
+/-- Rule `r` rewrites string `u` is to string `v` iff they share both a prefix `p` and postfix `q`
+such that the remaining middle part of `u` is the input of `r` and the remaining middle part
+of `u` is the output of `r`. -/
+/-
+**ContextFreeRule.rewrites_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRule`。
+形式化陈述：rewrites_iff : r.Rewrites u v ↔ exists p q : List (Symbol T N), u = p ++ [
+Symbol.nonterminal r.input] ++ q ∧ v = p ++ r.output ++ q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeRule.Rewrites.exists_parts`：∀ {T : Type u_1} {N : Type u_2} {
+r : ContextFreeRule T N} {u v : List (Symbol T N)},   r.Rewrites u v → ∃ p q, u 
+= p ++ [Symbol.nonterminal …
+· 使用引理 `ContextFreeRule.rewrites_of_exists_parts`：rewrites_of_exists_parts (r : 
+ContextFreeRule T N) (p q : List (Symbol T N)) : r.Rewrites (p ++ [Symbol.nonter
+minal r.input] ++ q) (p ++ r.o…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem rewrites_iff
-  proof: ⟨Rewrites.exists_parts, by rintro ⟨p, q, rfl, rfl⟩; apply rewrites_of_exists_parts⟩
-
-中文:
-定理 rewrites_iff
-  证明: ⟨Rewrites.exists_parts, by rintro ⟨p, q, rfl, rfl⟩; apply rewrites_of_exists_parts⟩
-
-Depends on / 依赖: Rewrites, Rewrites.exists_parts, exists_parts, rewrites_of_exists_parts
+--- 原说明 ---
+Rule `r` rewrites string `u` is to string `v` iff they share both a prefix `p` a
+nd postfix `q`
+such that the remaining middle part of `u` is the input of `r` and the remaining
+ middle part
+of `u` is the output of `r`.
 -/
 theorem rewrites_iff :
-    r.Rewrites u v ↔ exists p q : List (Symbol T N),
+    r.Rewrites u v ↔ ∃ p q : List (Symbol T N),
       u = p ++ [Symbol.nonterminal r.input] ++ q ∧ v = p ++ r.output ++ q :=
   ⟨Rewrites.exists_parts, by rintro ⟨p, q, rfl, rfl⟩; apply rewrites_of_exists_parts⟩
-
-/--
-lemma `Rewrites.nonterminal_input_mem` / 引理 `Rewrites.nonterminal_input_mem`
-
-English:
-lemma Rewrites.nonterminal_input_mem
-  statement: r.Rewrites u v -> .nonterminal r.input in u
-  proof: by
-  simp +contextual [rewrites_iff, List.append_assoc]
-
-中文:
-引理 Rewrites.nonterminal_input_mem
-  结论: r.Rewrites u v -> .nonterminal r.input in u
-  证明: by
-  simp +contextual [rewrites_iff, List.append_assoc]
-
-Depends on / 依赖: List.append_assoc, append_assoc, contextual, rewrites_iff
+/-
+**ContextFreeRule.Rewrites.nonterminal_input_mem** 是 Mathlib 中的一个定理，位于命名空间 `Cont
+extFreeRule.Rewrites`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} {r : ContextFreeRule T N} {u v : List (Sym
+bol T N)},   r.Rewrites u v → Symbol.nonterminal r.input ∈ u
+参数：Symbol T N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma Rewrites.nonterminal_input_mem : r.Rewrites u v -> .nonterminal r.input in u := by
+lemma Rewrites.nonterminal_input_mem : r.Rewrites u v → .nonterminal r.input ∈ u := by
   simp +contextual [rewrites_iff, List.append_assoc]
 
-/--
-lemma `Rewrites.append_left` / 引理 `Rewrites.append_left`
+/-- Add extra prefix to context-free rewriting. -/
+/-
+**ContextFreeRule.Rewrites.append_left** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRul
+e.Rewrites`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} {r : ContextFreeRule T N} {u v : List (Sym
+bol T N)},   r.Rewrites u v → ∀ (p : List (Symbol T N)), r.Rewrites (p ++ u) (p 
+++ v)
+参数：Symbol T N；p : List (Symbol T N)；p ++ u；p ++ v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContextFreeRule.rewrites_iff`：rewrites_iff : r.Rewrites u v ↔ exists p q
+ : List (Symbol T N), u = p ++ [Symbol.nonterminal r.input] ++ q ∧ v = p ++ r.ou
+tput ++ q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-lemma Rewrites.append_left
-  given: (hvw : r.Rewrites u v) (p : List (Symbol T N))
-  proof: by
-  rw [rewrites_iff] at *
-  rcases hvw with ⟨x, y, hxy⟩
-  use p ++ x, y
-  simp_all
-
-中文:
-引理 Rewrites.append_left
-  条件: (hvw : r.Rewrites u v) (p : 列表 (Symbol T N))
-  证明: by
-  rw [rewrites_iff] at *
-  rcases hvw with ⟨x, y, hxy⟩
-  use p ++ x, y
-  simp_all
-
-Depends on / 依赖: rewrites_iff
+--- 原说明 ---
+Add extra prefix to context-free rewriting.
 -/
 lemma Rewrites.append_left (hvw : r.Rewrites u v) (p : List (Symbol T N)) :
     r.Rewrites (p ++ u) (p ++ v) := by
@@ -269,28 +250,33 @@ lemma Rewrites.append_left (hvw : r.Rewrites u v) (p : List (Symbol T N)) :
   use p ++ x, y
   simp_all
 
-/--
-lemma `Rewrites.append_right` / 引理 `Rewrites.append_right`
+/-- Add extra postfix to context-free rewriting. -/
+/-
+**ContextFreeRule.Rewrites.append_right** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRu
+le.Rewrites`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} {r : ContextFreeRule T N} {u v : List (Sym
+bol T N)},   r.Rewrites u v → ∀ (p : List (Symbol T N)), r.Rewrites (u ++ p) (v 
+++ p)
+参数：Symbol T N；p : List (Symbol T N)；u ++ p；v ++ p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContextFreeRule.rewrites_iff`：rewrites_iff : r.Rewrites u v ↔ exists p q
+ : List (Symbol T N), u = p ++ [Symbol.nonterminal r.input] ++ q ∧ v = p ++ r.ou
+tput ++ q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-lemma Rewrites.append_right
-  given: (hvw : r.Rewrites u v) (p : List (Symbol T N))
-  proof: by
-  rw [rewrites_iff] at *
-  rcases hvw with ⟨x, y, hxy⟩
-  use x, y ++ p
-  simp_all
-
-中文:
-引理 Rewrites.append_right
-  条件: (hvw : r.Rewrites u v) (p : 列表 (Symbol T N))
-  证明: by
-  rw [rewrites_iff] at *
-  rcases hvw with ⟨x, y, hxy⟩
-  use x, y ++ p
-  simp_all
-
-Depends on / 依赖: rewrites_iff
+--- 原说明 ---
+Add extra postfix to context-free rewriting.
 -/
 lemma Rewrites.append_right (hvw : r.Rewrites u v) (p : List (Symbol T N)) :
     r.Rewrites (u ++ p) (v ++ p) := by
@@ -303,75 +289,74 @@ end ContextFreeRule
 
 namespace ContextFreeGrammar
 
-/--
-Definition of `Produces` / `Produces` 的定义
+/-- Given a context-free grammar `g` and strings `u` and `v`
+`g.Produces u v` means that one step of a context-free transformation by a rule from `g` sends
+`u` to `v`. -/
+/-
+**ContextFreeGrammar.Produces** 是 Mathlib 中的一个定义，位于命名空间 `ContextFreeGrammar`。
+形式化陈述：Produces (g : ContextFreeGrammar T) (u v : List (Symbol T g.NT)) : Prop
+参数：g : ContextFreeGrammar T；u v : List (Symbol T g.NT)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Produces
-  signature: (g : ContextFreeGrammar T) (u v : List (Symbol T g.NT))
-  body: exists r in g.rules, r.Rewrites u v
-
-中文:
-定义 Produces
-  签名: (g : 余ntextFreeGrammar T) (u v : 列表 (Symbol T g.NT))
-  定义体: exists r in g.rules, r.Rewrites u v
-
-Depends on / 依赖: Rewrites, g.rules, r.Rewrites
+--- 原说明 ---
+Given a context-free grammar `g` and strings `u` and `v`
+`g.Produces u v` means that one step of a context-free transformation by a rule 
+from `g` sends
+`u` to `v`.
 -/
 def Produces (g : ContextFreeGrammar T) (u v : List (Symbol T g.NT)) : Prop :=
-  exists r in g.rules, r.Rewrites u v
+  ∃ r ∈ g.rules, r.Rewrites u v
 
-/--
-Definition of `Derives` / `Derives` 的定义
+/-- Given a context-free grammar `g` and strings `u` and `v`
+`g.Derives u v` means that `g` can transform `u` to `v` in some number of rewriting steps. -/
+/-
+**ContextFreeGrammar.Derives** 是 Mathlib 中的一个缩写定义，位于命名空间 `ContextFreeGrammar`。
+形式化陈述：Derives (g : ContextFreeGrammar T) : List (Symbol T g.NT) -> List (Symbol 
+T g.NT) -> Prop
+参数：g : ContextFreeGrammar T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Derives
-  signature: (g : ContextFreeGrammar T)
-  body: Relation.ReflTransGen g.Produces
-
-中文:
-缩写 Derives
-  签名: (g : 余ntextFreeGrammar T)
-  定义体: Relation.ReflTransGen g.Produces
-
-Depends on / 依赖: Produces, ReflTransGen, Relation, Relation.ReflTransGen, g.Produces
+--- 原说明 ---
+Given a context-free grammar `g` and strings `u` and `v`
+`g.Derives u v` means that `g` can transform `u` to `v` in some number of rewrit
+ing steps.
 -/
 abbrev Derives (g : ContextFreeGrammar T) :
-    List (Symbol T g.NT) -> List (Symbol T g.NT) -> Prop :=
+    List (Symbol T g.NT) → List (Symbol T g.NT) → Prop :=
   Relation.ReflTransGen g.Produces
 
-/--
-Definition of `Generates` / `Generates` 的定义
+/-- Given a context-free grammar `g` and a string `s`
+`g.Generates s` means that `g` can transform its initial nonterminal to `s` in some number of
+rewriting steps. -/
+/-
+**ContextFreeGrammar.Generates** 是 Mathlib 中的一个定义，位于命名空间 `ContextFreeGrammar`。
+形式化陈述：Generates (g : ContextFreeGrammar T) (s : List (Symbol T g.NT)) : Prop
+参数：g : ContextFreeGrammar T；s : List (Symbol T g.NT)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Generates
-  signature: (g : ContextFreeGrammar T) (s : List (Symbol T g.NT))
-  body: g.Derives [Symbol.nonterminal g.initial] s
-
-中文:
-定义 Generates
-  签名: (g : 余ntextFreeGrammar T) (s : 列表 (Symbol T g.NT))
-  定义体: g.Derives [Symbol.nonterminal g.initial] s
-
-Depends on / 依赖: Derives, Symbol, Symbol.nonterminal, g.Derives, g.initial, initial, nonterminal
+--- 原说明 ---
+Given a context-free grammar `g` and a string `s`
+`g.Generates s` means that `g` can transform its initial nonterminal to `s` in s
+ome number of
+rewriting steps.
 -/
 def Generates (g : ContextFreeGrammar T) (s : List (Symbol T g.NT)) : Prop :=
   g.Derives [Symbol.nonterminal g.initial] s
 
-/--
-Definition of `language` / `language` 的定义
+/-- The language (set of words) that can be generated by a given context-free grammar `g`. -/
+/-
+**ContextFreeGrammar.language** 是 Mathlib 中的一个定义，位于命名空间 `ContextFreeGrammar`。
+形式化陈述：language (g : ContextFreeGrammar T) : Language T
+参数：g : ContextFreeGrammar T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition language
-  signature: (g : ContextFreeGrammar T)
-  body: { w : List T | g.Generates (w.map Symbol.terminal) }
-
-中文:
-定义 language
-  签名: (g : 余ntextFreeGrammar T)
-  定义体: { w : List T | g.Generates (w.map Symbol.terminal) }
-
-Depends on / 依赖: Generates, Symbol, Symbol.terminal, g.Generates, terminal, w.map
+--- 原说明 ---
+The language (set of words) that can be generated by a given context-free gramma
+r `g`.
 -/
 def language (g : ContextFreeGrammar T) : Language T :=
   { w : List T | g.Generates (w.map Symbol.terminal) }
@@ -380,718 +365,649 @@ def language (g : ContextFreeGrammar T) : Language T :=
 `g` can derive the word `w` (wrapped as a string) from the initial nonterminal of `g` in some
 number of steps. -/
 @[simp]
-/--
-lemma `mem_language_iff` / 引理 `mem_language_iff`
+/-
+**ContextFreeGrammar.mem_language_iff** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGram
+mar`。
+形式化陈述：mem_language_iff (g : ContextFreeGrammar T) (w : List T) : w in g.language
+ ↔ g.Derives [Symbol.nonterminal g.initial] (w.map Symbol.terminal)
+参数：g : ContextFreeGrammar T；w : List T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma mem_language_iff
-  given: (g : ContextFreeGrammar T) (w : List T)
-  proof: by
-  rfl
-
-中文:
-引理 mem_language_iff
-  条件: (g : 余ntextFreeGrammar T) (w : 列表 T)
-  证明: by
-  rfl
+--- 原说明 ---
+A given word `w` belongs to the language generated by a given context-free gramm
+ar `g` iff
+`g` can derive the word `w` (wrapped as a string) from the initial nonterminal o
+f `g` in some
+number of steps.
 -/
 lemma mem_language_iff (g : ContextFreeGrammar T) (w : List T) :
-    w in g.language ↔ g.Derives [Symbol.nonterminal g.initial] (w.map Symbol.terminal) := by
+    w ∈ g.language ↔ g.Derives [Symbol.nonterminal g.initial] (w.map Symbol.terminal) := by
   rfl
 
 variable {g : ContextFreeGrammar T}
 
 @[refl]
-/--
-lemma `Derives.refl` / 引理 `Derives.refl`
-
-English:
-lemma Derives.refl
-  given: (w : List (Symbol T g.NT))
-  statement: g.Derives w w
-  proof: Relation.ReflTransGen.refl
-
-中文:
-引理 Derives.refl
-  条件: (w : 列表 (Symbol T g.NT))
-  结论: g.Derives w w
-  证明: Relation.ReflTransGen.refl
-
-Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.refl
+/-
+**ContextFreeGrammar.Derives.refl** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGrammar.
+Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} (w : List (Symbol T g.NT)), g.
+Derives w w
+参数：w : List (Symbol T g.NT)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Derives.refl (w : List (Symbol T g.NT)) : g.Derives w w :=
   Relation.ReflTransGen.refl
-
-/--
-lemma `Produces.single` / 引理 `Produces.single`
-
-English:
-lemma Produces.single
-  given: {v w : List (Symbol T g.NT)} (hvw : g.Produces v w)
-  statement: g.Derives v w
-  proof: Relation.ReflTransGen.single hvw
-
-@[trans]
-
-中文:
-引理 Produces.single
-  条件: {v w : 列表 (Symbol T g.NT)} (hvw : g.Produces v w)
-  结论: g.Derives v w
-  证明: Relation.ReflTransGen.single hvw
-
-@[trans]
-
-Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.single, single
+/-
+**ContextFreeGrammar.Produces.single** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGramm
+ar.Produces`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {v w : List (Symbol T g.NT)}, 
+g.Produces v w → g.Derives v w
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.ReflTransGen.single`：single (hab : r a b) : ReflTransGen r a b
 -/
 lemma Produces.single {v w : List (Symbol T g.NT)} (hvw : g.Produces v w) : g.Derives v w :=
   Relation.ReflTransGen.single hvw
 
 @[trans]
-/--
-lemma `Derives.trans` / 引理 `Derives.trans`
-
-English:
-lemma Derives.trans
-  given: {u v w : List (Symbol T g.NT)} (huv : g.Derives u v) (hvw : g.Derives v w)
-  proof: Relation.ReflTransGen.trans huv hvw
-
-中文:
-引理 Derives.trans
-  条件: {u v w : 列表 (Symbol T g.NT)} (huv : g.Derives u v) (hvw : g.Derives v w)
-  证明: Relation.ReflTransGen.trans huv hvw
-
-Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.trans
+/-
+**ContextFreeGrammar.Derives.trans** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGrammar
+.Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u v w : List (Symbol T g.NT)}
+,   g.Derives u v → g.Derives v w → g.Derives u w
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.ReflTransGen.trans`：trans (hab : ReflTransGen r a b) (hbc : Ref
+lTransGen r b c) : ReflTransGen r a c
 -/
 lemma Derives.trans {u v w : List (Symbol T g.NT)} (huv : g.Derives u v) (hvw : g.Derives v w) :
     g.Derives u w :=
   Relation.ReflTransGen.trans huv hvw
-
-/--
-lemma `Derives.trans_produces` / 引理 `Derives.trans_produces`
-
-English:
-lemma Derives.trans_produces
-  statement: {u v w : List (Symbol T g.NT)}
-  proof: huv.trans hvw.single
-
-中文:
-引理 Derives.trans_produces
-  结论: {u v w : 列表 (Symbol T g.NT)}
-  证明: huv.trans hvw.single
-
-Depends on / 依赖: huv.trans, hvw.single, single
+/-
+**ContextFreeGrammar.Derives.trans_produces** 是 Mathlib 中的一个定理，位于命名空间 `ContextFr
+eeGrammar.Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u v w : List (Symbol T g.NT)}
+,   g.Derives u v → g.Produces v w → g.Derives u w
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeGrammar.Derives.trans`：∀ {T : Type u_1} {g : ContextFreeGramm
+ar T} {u v w : List (Symbol T g.NT)},   g.Derives u v → g.Derives v w → g.Derive
+s u w
+· 使用定理 `ContextFreeGrammar.Produces.single`：∀ {T : Type u_1} {g : ContextFreeGra
+mmar T} {v w : List (Symbol T g.NT)}, g.Produces v w → g.Derives v w
 -/
 lemma Derives.trans_produces {u v w : List (Symbol T g.NT)}
     (huv : g.Derives u v) (hvw : g.Produces v w) :
     g.Derives u w :=
   huv.trans hvw.single
-
-/--
-lemma `Produces.trans_derives` / 引理 `Produces.trans_derives`
-
-English:
-lemma Produces.trans_derives
-  statement: {u v w : List (Symbol T g.NT)}
-  proof: huv.single.trans hvw
-
-中文:
-引理 Produces.trans_derives
-  结论: {u v w : 列表 (Symbol T g.NT)}
-  证明: huv.single.trans hvw
-
-Depends on / 依赖: huv.single.trans, single
+/-
+**ContextFreeGrammar.Produces.trans_derives** 是 Mathlib 中的一个定理，位于命名空间 `ContextFr
+eeGrammar.Produces`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u v w : List (Symbol T g.NT)}
+,   g.Produces u v → g.Derives v w → g.Derives u w
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeGrammar.Derives.trans`：∀ {T : Type u_1} {g : ContextFreeGramm
+ar T} {u v w : List (Symbol T g.NT)},   g.Derives u v → g.Derives v w → g.Derive
+s u w
+· 使用定理 `ContextFreeGrammar.Produces.single`：∀ {T : Type u_1} {g : ContextFreeGra
+mmar T} {v w : List (Symbol T g.NT)}, g.Produces v w → g.Derives v w
 -/
 lemma Produces.trans_derives {u v w : List (Symbol T g.NT)}
     (huv : g.Produces u v) (hvw : g.Derives v w) :
     g.Derives u w :=
   huv.single.trans hvw
-
-/--
-lemma `Derives.eq_or_head` / 引理 `Derives.eq_or_head`
-
-English:
-lemma Derives.eq_or_head
-  given: {u w : List (Symbol T g.NT)} (huw : g.Derives u w)
-  proof: Relation.ReflTransGen.cases_head huw
-
-中文:
-引理 Derives.eq_or_head
-  条件: {u w : 列表 (Symbol T g.NT)} (huw : g.Derives u w)
-  证明: Relation.ReflTransGen.cases_head huw
-
-Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.cases_head, cases_head
+/-
+**ContextFreeGrammar.Derives.eq_or_head** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGr
+ammar.Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u w : List (Symbol T g.NT)}, 
+  g.Derives u w → u = w ∨ ∃ v, g.Produces u v ∧ g.Derives v w
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.ReflTransGen.cases_head`：cases_head (h : ReflTransGen r a b) : 
+a = b ∨ exists c, r a c ∧ ReflTransGen r c b
 -/
 lemma Derives.eq_or_head {u w : List (Symbol T g.NT)} (huw : g.Derives u w) :
-    u = w ∨ exists v : List (Symbol T g.NT), g.Produces u v ∧ g.Derives v w :=
+    u = w ∨ ∃ v : List (Symbol T g.NT), g.Produces u v ∧ g.Derives v w :=
   Relation.ReflTransGen.cases_head huw
-
-/--
-lemma `derives_iff_eq_or_head` / 引理 `derives_iff_eq_or_head`
-
-English:
-lemma derives_iff_eq_or_head
-  given: {u w : List (Symbol T g.NT)}
-  proof: Relation.ReflTransGen.cases_head_iff
-
-中文:
-引理 derives_iff_eq_or_head
-  条件: {u w : 列表 (Symbol T g.NT)}
-  证明: Relation.ReflTransGen.cases_head_iff
-
-Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.cases_head_iff, cases_head_iff
+/-
+**ContextFreeGrammar.derives_iff_eq_or_head** 是 Mathlib 中的一个引理，位于命名空间 `ContextFr
+eeGrammar`。
+形式化陈述：derives_iff_eq_or_head {u w : List (Symbol T g.NT)} : g.Derives u w ↔ u = 
+w ∨ exists v : List (Symbol T g.NT), g.Produces u v ∧ g.Derives v w
+参数：Symbol T g.NT。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.ReflTransGen.cases_head_iff`：cases_head_iff : ReflTransGen r a 
+b ↔ a = b ∨ exists c, r a c ∧ ReflTransGen r c b
 -/
 lemma derives_iff_eq_or_head {u w : List (Symbol T g.NT)} :
-    g.Derives u w ↔ u = w ∨ exists v : List (Symbol T g.NT), g.Produces u v ∧ g.Derives v w :=
+    g.Derives u w ↔ u = w ∨ ∃ v : List (Symbol T g.NT), g.Produces u v ∧ g.Derives v w :=
   Relation.ReflTransGen.cases_head_iff
-
-/--
-lemma `Derives.eq_or_tail` / 引理 `Derives.eq_or_tail`
-
-English:
-lemma Derives.eq_or_tail
-  given: {u w : List (Symbol T g.NT)} (huw : g.Derives u w)
-  proof: Relation.ReflTransGen.cases_tail huw
-
-中文:
-引理 Derives.eq_or_tail
-  条件: {u w : 列表 (Symbol T g.NT)} (huw : g.Derives u w)
-  证明: Relation.ReflTransGen.cases_tail huw
-
-Depends on / 依赖: ReflTransGen, Relation, Relation.ReflTransGen.cases_tail, cases_tail
+/-
+**ContextFreeGrammar.Derives.eq_or_tail** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGr
+ammar.Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u w : List (Symbol T g.NT)}, 
+  g.Derives u w → w = u ∨ ∃ v, g.Derives u v ∧ g.Produces v w
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.ReflTransGen.cases_tail`：cases_tail : ReflTransGen r a b -> b =
+ a ∨ exists c, ReflTransGen r a c ∧ r c b
 -/
 lemma Derives.eq_or_tail {u w : List (Symbol T g.NT)} (huw : g.Derives u w) :
-    w = u ∨ exists v : List (Symbol T g.NT), g.Derives u v ∧ g.Produces v w :=
+    w = u ∨ ∃ v : List (Symbol T g.NT), g.Derives u v ∧ g.Produces v w :=
   Relation.ReflTransGen.cases_tail huw
-
-/--
-lemma `derives_iff_eq_or_tail` / 引理 `derives_iff_eq_or_tail`
-
-English:
-lemma derives_iff_eq_or_tail
-  given: {u w : List (Symbol T g.NT)}
-  proof: Relation.ReflTransGen.cases_tail_iff g.Produces u w
-
-中文:
-引理 derives_iff_eq_or_tail
-  条件: {u w : 列表 (Symbol T g.NT)}
-  证明: Relation.ReflTransGen.cases_tail_iff g.Produces u w
-
-Depends on / 依赖: Produces, ReflTransGen, Relation, Relation.ReflTransGen.cases_tail_iff, cases_tail_iff, g.Produces
+/-
+**ContextFreeGrammar.derives_iff_eq_or_tail** 是 Mathlib 中的一个引理，位于命名空间 `ContextFr
+eeGrammar`。
+形式化陈述：derives_iff_eq_or_tail {u w : List (Symbol T g.NT)} : g.Derives u w ↔ w = 
+u ∨ exists v : List (Symbol T g.NT), g.Derives u v ∧ g.Produces v w
+参数：Symbol T g.NT。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Relation.ReflTransGen.cases_tail_iff`：∀ {α : Type u_1} (r : α → α → Prop
+) (a a_1 : α),   Relation.ReflTransGen r a a_1 ↔ a_1 = a ∨ ∃ b, Relation.ReflTra
+nsGen r a b ∧ r b a_1
 -/
 lemma derives_iff_eq_or_tail {u w : List (Symbol T g.NT)} :
-    g.Derives u w ↔ w = u ∨ exists v : List (Symbol T g.NT), g.Derives u v ∧ g.Produces v w :=
+    g.Derives u w ↔ w = u ∨ ∃ v : List (Symbol T g.NT), g.Derives u v ∧ g.Produces v w :=
   Relation.ReflTransGen.cases_tail_iff g.Produces u w
 
-/--
-lemma `Produces.append_left` / 引理 `Produces.append_left`
+/-- Add extra prefix to context-free producing. -/
+/-
+**ContextFreeGrammar.Produces.append_left** 是 Mathlib 中的一个定理，位于命名空间 `ContextFree
+Grammar.Produces`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {v w : List (Symbol T g.NT)}, 
+  g.Produces v w → ∀ (p : List (Symbol T g.NT)), g.Produces (p ++ v) (p ++ w)
+参数：Symbol T g.NT；p : List (Symbol T g.NT)；p ++ v；p ++ w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeRule.Rewrites.append_left`：∀ {T : Type u_1} {N : Type u_2} {r
+ : ContextFreeRule T N} {u v : List (Symbol T N)},   r.Rewrites u v → ∀ (p : Lis
+t (Symbol T N)), r.Rewrite…
 
-English:
-lemma Produces.append_left
-  statement: {v w : List (Symbol T g.NT)}
-  proof: match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_left p⟩
-
-中文:
-引理 Produces.append_left
-  结论: {v w : 列表 (Symbol T g.NT)}
-  证明: match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_left p⟩
-
-Depends on / 依赖: append_left, hrvw.append_left
+--- 原说明 ---
+Add extra prefix to context-free producing.
 -/
 lemma Produces.append_left {v w : List (Symbol T g.NT)}
     (hvw : g.Produces v w) (p : List (Symbol T g.NT)) :
     g.Produces (p ++ v) (p ++ w) :=
   match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_left p⟩
 
-/--
-lemma `Produces.append_right` / 引理 `Produces.append_right`
+/-- Add extra postfix to context-free producing. -/
+/-
+**ContextFreeGrammar.Produces.append_right** 是 Mathlib 中的一个定理，位于命名空间 `ContextFre
+eGrammar.Produces`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {v w : List (Symbol T g.NT)}, 
+  g.Produces v w → ∀ (p : List (Symbol T g.NT)), g.Produces (v ++ p) (w ++ p)
+参数：Symbol T g.NT；p : List (Symbol T g.NT)；v ++ p；w ++ p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeRule.Rewrites.append_right`：∀ {T : Type u_1} {N : Type u_2} {
+r : ContextFreeRule T N} {u v : List (Symbol T N)},   r.Rewrites u v → ∀ (p : Li
+st (Symbol T N)), r.Rewrite…
 
-English:
-lemma Produces.append_right
-  statement: {v w : List (Symbol T g.NT)}
-  proof: match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_right p⟩
-
-中文:
-引理 Produces.append_right
-  结论: {v w : 列表 (Symbol T g.NT)}
-  证明: match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_right p⟩
-
-Depends on / 依赖: append_right, hrvw.append_right
+--- 原说明 ---
+Add extra postfix to context-free producing.
 -/
 lemma Produces.append_right {v w : List (Symbol T g.NT)}
     (hvw : g.Produces v w) (p : List (Symbol T g.NT)) :
     g.Produces (v ++ p) (w ++ p) :=
   match hvw with | ⟨r, hrmem, hrvw⟩ => ⟨r, hrmem, hrvw.append_right p⟩
 
-/--
-lemma `Derives.append_left` / 引理 `Derives.append_left`
+/-- Add extra prefix to context-free deriving. -/
+/-
+**ContextFreeGrammar.Derives.append_left** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeG
+rammar.Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {v w : List (Symbol T g.NT)}, 
+  g.Derives v w → ∀ (p : List (Symbol T g.NT)), g.Derives (p ++ v) (p ++ w)
+参数：Symbol T g.NT；p : List (Symbol T g.NT)；p ++ v；p ++ w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeGrammar.Derives.trans_produces`：∀ {T : Type u_1} {g : Context
+FreeGrammar T} {u v w : List (Symbol T g.NT)},   g.Derives u v → g.Produces v w 
+→ g.Derives u w
+· 使用定理 `ContextFreeGrammar.Produces.append_left`：∀ {T : Type u_1} {g : ContextFr
+eeGrammar T} {v w : List (Symbol T g.NT)},   g.Produces v w → ∀ (p : List (Symbo
+l T g.NT)), g.Produces (p ++ …
 
-English:
-lemma Derives.append_left
-  statement: {v w : List (Symbol T g.NT)}
-  proof: by
-  induction hvw with
-  | refl => rfl
-| tail _ last ih => exact ih.trans_produces last.append_left p
-
-中文:
-引理 Derives.append_left
-  结论: {v w : 列表 (Symbol T g.NT)}
-  证明: by
-  induction hvw with
-  | refl => rfl
-| tail _ last ih => exact ih.trans_produces last.append_left p
-
-Depends on / 依赖: append_left, ih.trans_produces, last.append_left, trans_produces
+--- 原说明 ---
+Add extra prefix to context-free deriving.
 -/
 lemma Derives.append_left {v w : List (Symbol T g.NT)}
     (hvw : g.Derives v w) (p : List (Symbol T g.NT)) :
     g.Derives (p ++ v) (p ++ w) := by
   induction hvw with
   | refl => rfl
-| tail _ last ih => exact ih.trans_produces last.append_left p
+  | tail _ last ih => exact ih.trans_produces <| last.append_left p
 
-/--
-lemma `Derives.append_right` / 引理 `Derives.append_right`
+/-- Add extra postfix to context-free deriving. -/
+/-
+**ContextFreeGrammar.Derives.append_right** 是 Mathlib 中的一个定理，位于命名空间 `ContextFree
+Grammar.Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {v w : List (Symbol T g.NT)}, 
+  g.Derives v w → ∀ (p : List (Symbol T g.NT)), g.Derives (v ++ p) (w ++ p)
+参数：Symbol T g.NT；p : List (Symbol T g.NT)；v ++ p；w ++ p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeGrammar.Derives.trans_produces`：∀ {T : Type u_1} {g : Context
+FreeGrammar T} {u v w : List (Symbol T g.NT)},   g.Derives u v → g.Produces v w 
+→ g.Derives u w
+· 使用定理 `ContextFreeGrammar.Produces.append_right`：∀ {T : Type u_1} {g : ContextF
+reeGrammar T} {v w : List (Symbol T g.NT)},   g.Produces v w → ∀ (p : List (Symb
+ol T g.NT)), g.Produces (v ++ …
 
-English:
-lemma Derives.append_right
-  statement: {v w : List (Symbol T g.NT)}
-  proof: by
-  induction hvw with
-  | refl => rfl
-| tail _ last ih => exact ih.trans_produces last.append_right p
-
-中文:
-引理 Derives.append_right
-  结论: {v w : 列表 (Symbol T g.NT)}
-  证明: by
-  induction hvw with
-  | refl => rfl
-| tail _ last ih => exact ih.trans_produces last.append_right p
-
-Depends on / 依赖: WithBot, WithBot.unbot, append_right, ih.trans_produces, last.append_right, s.sup, trans_produces
+--- 原说明 ---
+Add extra postfix to context-free deriving.
 -/
 lemma Derives.append_right {v w : List (Symbol T g.NT)}
     (hvw : g.Derives v w) (p : List (Symbol T g.NT)) :
     g.Derives (v ++ p) (w ++ p) := by
   induction hvw with
   | refl => rfl
-| tail _ last ih => exact ih.trans_produces last.append_right p
-
-/--
-lemma `Produces.exists_nonterminal_input_mem` / 引理 `Produces.exists_nonterminal_input_mem`
-
-English:
-lemma Produces.exists_nonterminal_input_mem
-  given: {u v : List (Symbol T g.NT)} (hguv : g.Produces u v)
-  proof: by
-  obtain ⟨w, l, r⟩ := hguv
-  exact ⟨w, l, r.nonterminal_input_mem⟩
-
-中文:
-引理 Produces.存在_nonterminal_input_mem
-  条件: {u v : 列表 (Symbol T g.NT)} (hguv : g.Produces u v)
-  证明: by
-  obtain ⟨w, l, r⟩ := hguv
-  exact ⟨w, l, r.nonterminal_input_mem⟩
-
-Depends on / 依赖: nonterminal_input_mem, r.nonterminal_input_mem
+  | tail _ last ih => exact ih.trans_produces <| last.append_right p
+/-
+**ContextFreeGrammar.Produces.exists_nonterminal_input_mem** 是 Mathlib 中的一个定理，位于
+命名空间 `ContextFreeGrammar.Produces`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u v : List (Symbol T g.NT)}, 
+  g.Produces u v → ∃ r ∈ g.rules, Symbol.nonterminal r.input ∈ u
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeRule.Rewrites.nonterminal_input_mem`：∀ {T : Type u_1} {N : Ty
+pe u_2} {r : ContextFreeRule T N} {u v : List (Symbol T N)},   r.Rewrites u v → 
+Symbol.nonterminal r.input ∈ u
 -/
 lemma Produces.exists_nonterminal_input_mem {u v : List (Symbol T g.NT)} (hguv : g.Produces u v) :
-    exists r in g.rules, .nonterminal r.input in u := by
+    ∃ r ∈ g.rules, .nonterminal r.input ∈ u := by
   obtain ⟨w, l, r⟩ := hguv
   exact ⟨w, l, r.nonterminal_input_mem⟩
-
-/--
-lemma `derives_nonterminal` / 引理 `derives_nonterminal`
-
-English:
-lemma derives_nonterminal
-  statement: {t : g.NT} (hgt : forall r in g.rules, r.input != t)
-  proof: by
-  rw [derives_iff_eq_or_head]
-  push Not
-  refine ⟨hs.symm, fun _ hx => ?_⟩
-  have hxr := hx.exists_nonterminal_input_mem
-  simp_rw [List.mem_singleton, Symbol.nonterminal.injEq] at hxr
-  tauto
-
-中文:
-引理 derives_nonterminal
-  结论: {t : g.NT} (hgt : 对任意 r in g.rules, r.input != t)
-  证明: by
-  rw [derives_iff_eq_or_head]
-  push Not
-  refine ⟨hs.symm, fun _ hx => ?_⟩
-  have hxr := hx.exists_nonterminal_input_mem
-  simp_rw [List.mem_singleton, Symbol.nonterminal.injEq] at hxr
-  tauto
-
-Depends on / 依赖: List.mem_singleton, Symbol, Symbol.nonterminal.injEq, WithBot, WithBot.coe_eq_coe, WithBot.coe_sup, coe_eq_coe, coe_sup, derives_iff_eq_or_head, exists_nonterminal_input_mem, hs.symm, hx.exists_nonterminal_input_mem, mem_singleton, nonterminal, simp_rw
+/-
+**ContextFreeGrammar.derives_nonterminal** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeG
+rammar`。
+形式化陈述：derives_nonterminal {t : g.NT} (hgt : forall r in g.rules, r.input != t) (
+s : List (Symbol T g.NT)) (hs : s != [.nonterminal t]) : ¬g.Derives [.nontermina
+l t] s
+参数：hgt : forall r in g.rules, r.input != t；s : List (Symbol T g.NT)；hs : s != [.
+nonterminal t]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContextFreeGrammar.derives_iff_eq_or_head`：derives_iff_eq_or_head {u w :
+ List (Symbol T g.NT)} : g.Derives u w ↔ u = w ∨ exists v : List (Symbol T g.NT)
+, g.Produces u v ∧ g.Derives v …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `ContextFreeGrammar.Produces.exists_nonterminal_input_mem`：∀ {T : Type u_
+1} {g : ContextFreeGrammar T} {u v : List (Symbol T g.NT)},   g.Produces u v → ∃
+ r ∈ g.rules, Symbol.nonterminal r.input ∈ u
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Symbol.nonterminal.injEq`：∀ {T : Type u_4} {N : Type u_5} (n n_1 : N), (
+Symbol.nonterminal n = Symbol.nonterminal n_1) = (n = n_1)
 -/
-lemma derives_nonterminal {t : g.NT} (hgt : forall r in g.rules, r.input != t)
-    (s : List (Symbol T g.NT)) (hs : s != [.nonterminal t]) :
+lemma derives_nonterminal {t : g.NT} (hgt : ∀ r ∈ g.rules, r.input ≠ t)
+    (s : List (Symbol T g.NT)) (hs : s ≠ [.nonterminal t]) :
     ¬g.Derives [.nonterminal t] s := by
   rw [derives_iff_eq_or_head]
   push Not
-  refine ⟨hs.symm, fun _ hx => ?_⟩
+  refine ⟨hs.symm, fun _ hx ↦ ?_⟩
   have hxr := hx.exists_nonterminal_input_mem
   simp_rw [List.mem_singleton, Symbol.nonterminal.injEq] at hxr
   tauto
-
-/--
-lemma `language_eq_zero_of_forall_input_ne_initial` / 引理 `language_eq_zero_of_forall_input_ne_initial`
-
-English:
-lemma language_eq_zero_of_forall_input_ne_initial
-  given: (hg : forall r in g.rules, r.input != g.initial)
-  proof: by ext; simp +contextual [derives_nonterminal, hg]
-
-中文:
-引理 language_eq_zero_of_对任意_input_ne_initial
-  条件: (hg : 对任意 r in g.rules, r.input != g.initial)
-  证明: by ext; simp +contextual [derives_nonterminal, hg]
-
-Depends on / 依赖: WithBot, WithBot.coe_eq_coe, WithBot.coe_sup, coe_eq_coe, coe_sup, contextual, derives_nonterminal
+/-
+**ContextFreeGrammar.language_eq_zero_of_forall_input_ne_initial** 是 Mathlib 中的一
+个引理，位于命名空间 `ContextFreeGrammar`。
+形式化陈述：language_eq_zero_of_forall_input_ne_initial (hg : forall r in g.rules, r.i
+nput != g.initial) : g.language = 0
+参数：hg : forall r in g.rules, r.input != g.initial。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma language_eq_zero_of_forall_input_ne_initial (hg : forall r in g.rules, r.input != g.initial) :
+lemma language_eq_zero_of_forall_input_ne_initial (hg : ∀ r ∈ g.rules, r.input ≠ g.initial) :
     g.language = 0 := by ext; simp +contextual [derives_nonterminal, hg]
 
 end ContextFreeGrammar
 
-/--
-Definition of `Language.IsContextFree` / `Language.IsContextFree` 的定义
+/-- Context-free languages are defined by context-free grammars. -/
+/-
+**Language.IsContextFree** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Language.IsContextFree (L : Language T) : Prop
+参数：L : Language T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Language.IsContextFree
-  signature: (L : Language T)
-  body: exists g : ContextFreeGrammar T, g.language = L
-
-中文:
-定义 Language.IsContextFree
-  签名: (L : Language T)
-  定义体: exists g : ContextFreeGrammar T, g.language = L
-
-Depends on / 依赖: ContextFreeGrammar, g.language, language
+--- 原说明 ---
+Context-free languages are defined by context-free grammars.
 -/
 def Language.IsContextFree (L : Language T) : Prop :=
-  exists g : ContextFreeGrammar T, g.language = L
+  ∃ g : ContextFreeGrammar T, g.language = L
 
 section closure_reversal
 
 namespace ContextFreeRule
 variable {N : Type*} {r : ContextFreeRule T N} {u v : List (Symbol T N)}
 
-/--
-Definition of `reverse` / `reverse` 的定义
+/-- Rules for a grammar for a reversed language. -/
+/-
+**ContextFreeRule.reverse** 是 Mathlib 中的一个定义，位于命名空间 `ContextFreeRule`。
+形式化陈述：reverse (r : ContextFreeRule T N) : ContextFreeRule T N
+参数：r : ContextFreeRule T N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: (r : ContextFreeRule T N)
-  body: ⟨r.input, r.output.reverse⟩
-
-中文:
-定义 reverse
-  签名: (r : 余ntextFreeRule T N)
-  定义体: ⟨r.input, r.output.reverse⟩
-
-Depends on / 依赖: Finset, Finset.sup_le_iff, WithBot, WithBot.coe_le_coe, coe_le_coe, coe_sup, output, r.input, r.output.reverse, reverse, simp_rw, sup_le_iff
+--- 原说明 ---
+Rules for a grammar for a reversed language.
 -/
 def reverse (r : ContextFreeRule T N) : ContextFreeRule T N := ⟨r.input, r.output.reverse⟩
-
-/--
-lemma `reverse_reverse` / 引理 `reverse_reverse`
-
-English:
-lemma reverse_reverse
-  given: (r : ContextFreeRule T N)
-  statement: r.reverse.reverse = r
-  proof: by simp [reverse]
-
-中文:
-引理 reverse_reverse
-  条件: (r : 余ntextFreeRule T N)
-  结论: r.reverse.reverse = r
-  证明: by simp [reverse]
+/-
+**ContextFreeRule.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRule`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} (r : ContextFreeRule T N), r.reverse.rever
+se = r
+参数：r : ContextFreeRule T N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma reverse_reverse (r : ContextFreeRule T N) : r.reverse.reverse = r := by simp [reverse]
-
-/--
-lemma `reverse_comp_reverse` / 引理 `reverse_comp_reverse`
-
-English:
-lemma reverse_comp_reverse
-  proof: by ext : 1; simp
-
-中文:
-引理 reverse_comp_reverse
-  证明: by ext : 1; simp
+/-
+**ContextFreeRule.reverse_comp_reverse** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRul
+e`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2}, ContextFreeRule.reverse ∘ ContextFreeRule
+.reverse = id
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContextFreeRule.reverse_reverse`：∀ {T : Type u_1} {N : Type u_2} (r : Co
+ntextFreeRule T N), r.reverse.reverse = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma reverse_comp_reverse :
-    reverse ∘ reverse = (id : ContextFreeRule T N -> ContextFreeRule T N) := by ext : 1; simp
-
-/--
-lemma `reverse_involutive` / 引理 `reverse_involutive`
-
-English:
-lemma reverse_involutive
-  statement: Involutive (reverse : ContextFreeRule T N -> ContextFreeRule T N)
-  proof: reverse_reverse
-
-中文:
-引理 reverse_involutive
-  结论: 对合 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
-  证明: reverse_reverse
-
-Depends on / 依赖: h.trans, le_sup, reverse_reverse
+    reverse ∘ reverse = (id : ContextFreeRule T N → ContextFreeRule T N) := by ext : 1; simp
+/-
+**ContextFreeRule.reverse_involutive** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeRule`
+。
+形式化陈述：reverse_involutive : Involutive (reverse : ContextFreeRule T N -> ContextF
+reeRule T N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeRule.reverse_reverse`：∀ {T : Type u_1} {N : Type u_2} (r : Co
+ntextFreeRule T N), r.reverse.reverse = r
 -/
-lemma reverse_involutive : Involutive (reverse : ContextFreeRule T N -> ContextFreeRule T N) :=
+lemma reverse_involutive : Involutive (reverse : ContextFreeRule T N → ContextFreeRule T N) :=
   reverse_reverse
-
-/--
-lemma `reverse_bijective` / 引理 `reverse_bijective`
-
-English:
-lemma reverse_bijective
-  statement: Bijective (reverse : ContextFreeRule T N -> ContextFreeRule T N)
-  proof: reverse_involutive.bijective
-
-中文:
-引理 reverse_bijective
-  结论: 双射 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
-  证明: reverse_involutive.bijective
-
-Depends on / 依赖: H.choose_spec, _of_le, bijective, choose_spec, le_antisymm, le_sup, reverse_involutive, reverse_involutive.bijective
+/-
+**ContextFreeRule.reverse_bijective** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeRule`。
+形式化陈述：reverse_bijective : Bijective (reverse : ContextFreeRule T N -> ContextFre
+eRule T N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.bijective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Bijective f
+· 使用引理 `ContextFreeRule.reverse_involutive`：reverse_involutive : Involutive (rev
+erse : ContextFreeRule T N -> ContextFreeRule T N)
 -/
-lemma reverse_bijective : Bijective (reverse : ContextFreeRule T N -> ContextFreeRule T N) :=
+lemma reverse_bijective : Bijective (reverse : ContextFreeRule T N → ContextFreeRule T N) :=
   reverse_involutive.bijective
-
-/--
-lemma `reverse_injective` / 引理 `reverse_injective`
-
-English:
-lemma reverse_injective
-  statement: Injective (reverse : ContextFreeRule T N -> ContextFreeRule T N)
-  proof: reverse_bijective.injective
-
-中文:
-引理 reverse_injective
-  结论: 单射 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
-  证明: reverse_bijective.injective
-
-Depends on / 依赖: _eq_of_forall, injective, reverse_bijective, reverse_bijective.injective
+/-
+**ContextFreeRule.reverse_injective** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeRule`。
+形式化陈述：reverse_injective : Injective (reverse : ContextFreeRule T N -> ContextFre
+eRule T N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用引理 `ContextFreeRule.reverse_bijective`：reverse_bijective : Bijective (revers
+e : ContextFreeRule T N -> ContextFreeRule T N)
 -/
-lemma reverse_injective : Injective (reverse : ContextFreeRule T N -> ContextFreeRule T N) :=
+lemma reverse_injective : Injective (reverse : ContextFreeRule T N → ContextFreeRule T N) :=
   reverse_bijective.injective
-
-/--
-lemma `reverse_surjective` / 引理 `reverse_surjective`
-
-English:
-lemma reverse_surjective
-  statement: Surjective (reverse : ContextFreeRule T N -> ContextFreeRule T N)
-  proof: reverse_bijective.surjective
-
-中文:
-引理 reverse_surjective
-  结论: 满射 (reverse : 余ntextFreeRule T N -> 余ntextFreeRule T N)
-  证明: reverse_bijective.surjective
-
-Depends on / 依赖: eq_of_forall_ge_iff, forall_and, or_imp, reverse_bijective, reverse_bijective.surjective, surjective
+/-
+**ContextFreeRule.reverse_surjective** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeRule`
+。
+形式化陈述：reverse_surjective : Surjective (reverse : ContextFreeRule T N -> ContextF
+reeRule T N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用引理 `ContextFreeRule.reverse_bijective`：reverse_bijective : Bijective (revers
+e : ContextFreeRule T N -> ContextFreeRule T N)
 -/
-lemma reverse_surjective : Surjective (reverse : ContextFreeRule T N -> ContextFreeRule T N) :=
+lemma reverse_surjective : Surjective (reverse : ContextFreeRule T N → ContextFreeRule T N) :=
   reverse_bijective.surjective
-
-/--
-lemma `Rewrites.reverse` / 引理 `Rewrites.reverse`
-
-English:
-lemma Rewrites.reverse
-  statement: forall {u v}, r.Rewrites u v -> r.reverse.Rewrites u.reverse v.reverse
-
-中文:
-引理 Rewrites.reverse
-  结论: 对任意 {u v}, r.Rewrites u v -> r.reverse.Rewrites u.reverse v.reverse
-
-Depends on / 依赖: WithBot, WithBot.recBotCoe, bot_sup_eq, coe_sup, recBotCoe, s.sup, sup_bot_eq, sup_induction
+/-
+**ContextFreeRule.Rewrites.reverse** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRule.Re
+writes`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} {r : ContextFreeRule T N} {u v : List (Sym
+bol T N)},   r.Rewrites u v → r.reverse.Rewrites u.reverse v.reverse
+参数：Symbol T N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeRule.Rewrites.brecOn`：∀ {T : Type u_1} {N : Type u_2} {r : Co
+ntextFreeRule T N}   {motive : (a a_1 : List (Symbol T N)) → r.Rewrites a a_1 → 
+Prop} {a a_1 : List (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `ContextFreeRule.Rewrites.append_left`：∀ {T : Type u_1} {N : Type u_2} {r
+ : ContextFreeRule T N} {u v : List (Symbol T N)},   r.Rewrites u v → ∀ (p : Lis
+t (Symbol T N)), r.Rewrite…
+· 使用定理 `ContextFreeRule.Rewrites.input_output`：∀ {T : Type u_1} {N : Type u_2} {
+r : ContextFreeRule T N}, r.Rewrites [Symbol.nonterminal r.input] r.output
+· 使用定理 `ContextFreeRule.Rewrites.append_right`：∀ {T : Type u_1} {N : Type u_2} {
+r : ContextFreeRule T N} {u v : List (Symbol T N)},   r.Rewrites u v → ∀ (p : Li
+st (Symbol T N)), r.Rewrite…
 -/
-protected lemma Rewrites.reverse : forall {u v}, r.Rewrites u v -> r.reverse.Rewrites u.reverse v.reverse
+protected lemma Rewrites.reverse : ∀ {u v}, r.Rewrites u v → r.reverse.Rewrites u.reverse v.reverse
   | _, _, head s => by simpa using .append_left .input_output _
   | _, _, @cons _ _ _ x u v h => by simpa using h.reverse.append_right _
-
-/--
-lemma `rewrites_reverse` / 引理 `rewrites_reverse`
-
-English:
-lemma rewrites_reverse
-  statement: r.reverse.Rewrites u.reverse v.reverse ↔ r.Rewrites u v
-  proof: ⟨fun h => by simpa using h.reverse, .reverse⟩
-
-中文:
-引理 rewrites_reverse
-  结论: r.reverse.Rewrites u.reverse v.reverse ↔ r.Rewrites u v
-  证明: ⟨fun h => by simpa using h.reverse, .reverse⟩
-
-Depends on / 依赖: _induction, h.reverse, reverse
+/-
+**ContextFreeRule.rewrites_reverse** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeRule`。
+形式化陈述：rewrites_reverse : r.reverse.Rewrites u.reverse v.reverse ↔ r.Rewrites u v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContextFreeRule.reverse_reverse`：∀ {T : Type u_1} {N : Type u_2} (r : Co
+ntextFreeRule T N), r.reverse.reverse = r
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `ContextFreeRule.Rewrites.reverse`：∀ {T : Type u_1} {N : Type u_2} {r : C
+ontextFreeRule T N} {u v : List (Symbol T N)},   r.Rewrites u v → r.reverse.Rewr
+ites u.reverse v.rever…
 -/
 lemma rewrites_reverse : r.reverse.Rewrites u.reverse v.reverse ↔ r.Rewrites u v :=
-  ⟨fun h => by simpa using h.reverse, .reverse⟩
-
-/--
-lemma `rewrites_reverse_comm` / 引理 `rewrites_reverse_comm`
-
-English:
-lemma rewrites_reverse_comm
-  statement: r.reverse.Rewrites u v ↔ r.Rewrites u.reverse v.reverse
-  proof: by
-  rw [← rewrites_reverse]; rw [reverse_reverse]
-
-中文:
-引理 rewrites_reverse_comm
-  结论: r.reverse.Rewrites u v ↔ r.Rewrites u.reverse v.reverse
-  证明: by
-  rw [← rewrites_reverse]; rw [reverse_reverse]
-
-Depends on / 依赖: _le_iff, contextual, eq_of_forall_ge_iff
+  ⟨fun h ↦ by simpa using h.reverse, .reverse⟩
+/-
+**ContextFreeRule.rewrites_reverse_comm** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeRu
+le`。
+形式化陈述：∀ {T : Type u_1} {N : Type u_2} {r : ContextFreeRule T N} {u v : List (Sym
+bol T N)},   r.reverse.Rewrites u v ↔ r.Rewrites u.reverse v.reverse
+参数：Symbol T N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ContextFreeRule.rewrites_reverse`：rewrites_reverse : r.reverse.Rewrites 
+u.reverse v.reverse ↔ r.Rewrites u v
+· 使用定理 `ContextFreeRule.reverse_reverse`：∀ {T : Type u_1} {N : Type u_2} (r : Co
+ntextFreeRule T N), r.reverse.reverse = r
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma rewrites_reverse_comm : r.reverse.Rewrites u v ↔ r.Rewrites u.reverse v.reverse := by
-  rw [← rewrites_reverse]; rw [reverse_reverse]
+  rw [← rewrites_reverse, reverse_reverse]
 
 end ContextFreeRule
 
 namespace ContextFreeGrammar
 variable {g : ContextFreeGrammar T} {u v : List (Symbol T g.NT)} {w : List T}
 
-/--
-Definition of `reverse` / `reverse` 的定义
+/-- Grammar for a reversed language. -/
+/-
+**ContextFreeGrammar.reverse** 是 Mathlib 中的一个定义，位于命名空间 `ContextFreeGrammar`。
+形式化陈述：{T : Type u_1} → ContextFreeGrammar T → ContextFreeGrammar T
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: (g : ContextFreeGrammar T)
-  body: ⟨g.NT, g.initial, g.rules.map (⟨ContextFreeRule.reverse, ContextFreeRule.reverse_injective⟩)⟩
-
-中文:
-定义 reverse
-  签名: (g : 余ntextFreeGrammar T)
-  定义体: ⟨g.NT, g.initial, g.rules.map (⟨ContextFreeRule.reverse, ContextFreeRule.reverse_injective⟩)⟩
+--- 原说明 ---
+Grammar for a reversed language.
 -/
 @[simps] def reverse (g : ContextFreeGrammar T) : ContextFreeGrammar T :=
   ⟨g.NT, g.initial, g.rules.map (⟨ContextFreeRule.reverse, ContextFreeRule.reverse_injective⟩)⟩
-
-/--
-lemma `reverse_reverse` / 引理 `reverse_reverse`
-
-English:
-lemma reverse_reverse
-  given: (g : ContextFreeGrammar T)
-  statement: g.reverse.reverse = g
-  proof: by
-  simp [reverse, Finset.map_map]
-
-中文:
-引理 reverse_reverse
-  条件: (g : 余ntextFreeGrammar T)
-  结论: g.reverse.reverse = g
-  证明: by
-  simp [reverse, Finset.map_map]
+/-
+**ContextFreeGrammar.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGramm
+ar`。
+形式化陈述：∀ {T : Type u_1} (g : ContextFreeGrammar T), g.reverse.reverse = g
+参数：g : ContextFreeGrammar T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.map_map`：map_map (f : α ↪ β) (g : β ↪ γ) (s : Finset α) : (s.map 
+f).map g = s.map (f.trans g)
+· 使用定理 `Function.Embedding.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun
+ toFun_1 : α → β) (e_toFun : toFun = toFun_1) (inj' : Function.Injective toFun),
+   { toFun := toFun, i…
+· 使用定理 `ContextFreeRule.reverse_comp_reverse`：∀ {T : Type u_1} {N : Type u_2}, C
+ontextFreeRule.reverse ∘ ContextFreeRule.reverse = id
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Finset.map_refl`：map_refl : s.map (Embedding.refl _) = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma reverse_reverse (g : ContextFreeGrammar T) : g.reverse.reverse = g := by
   simp [reverse, Finset.map_map]
-
-/--
-lemma `reverse_involutive` / 引理 `reverse_involutive`
-
-English:
-lemma reverse_involutive
-  statement: Involutive (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
-  proof: reverse_reverse
-
-中文:
-引理 reverse_involutive
-  结论: 对合 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
-  证明: reverse_reverse
-
-Depends on / 依赖: WithBot, WithBot.coe_eq_coe, coe_eq_coe, coe_sup, reverse_reverse, sup_image
+/-
+**ContextFreeGrammar.reverse_involutive** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGr
+ammar`。
+形式化陈述：reverse_involutive : Involutive (reverse : ContextFreeGrammar T -> Context
+FreeGrammar T)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeGrammar.reverse_reverse`：∀ {T : Type u_1} (g : ContextFreeGra
+mmar T), g.reverse.reverse = g
 -/
-lemma reverse_involutive : Involutive (reverse : ContextFreeGrammar T -> ContextFreeGrammar T) :=
+lemma reverse_involutive : Involutive (reverse : ContextFreeGrammar T → ContextFreeGrammar T) :=
   reverse_reverse
-
-/--
-lemma `reverse_bijective` / 引理 `reverse_bijective`
-
-English:
-lemma reverse_bijective
-  statement: Bijective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
-  proof: reverse_involutive.bijective
-
-中文:
-引理 reverse_bijective
-  结论: 双射 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
-  证明: reverse_involutive.bijective
-
-Depends on / 依赖: _image, bijective, reverse_involutive, reverse_involutive.bijective
+/-
+**ContextFreeGrammar.reverse_bijective** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGra
+mmar`。
+形式化陈述：reverse_bijective : Bijective (reverse : ContextFreeGrammar T -> ContextFr
+eeGrammar T)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.bijective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Bijective f
+· 使用引理 `ContextFreeGrammar.reverse_involutive`：reverse_involutive : Involutive (
+reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
 -/
-lemma reverse_bijective : Bijective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T) :=
+lemma reverse_bijective : Bijective (reverse : ContextFreeGrammar T → ContextFreeGrammar T) :=
   reverse_involutive.bijective
-
-/--
-lemma `reverse_injective` / 引理 `reverse_injective`
-
-English:
-lemma reverse_injective
-  statement: Injective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
-  proof: reverse_bijective.injective
-
-中文:
-引理 reverse_injective
-  结论: 单射 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
-  证明: reverse_bijective.injective
-
-Depends on / 依赖: WithBot, WithBot.coe_eq_coe, coe_eq_coe, coe_sup, injective, reverse_bijective, reverse_bijective.injective, sup_map
+/-
+**ContextFreeGrammar.reverse_injective** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGra
+mmar`。
+形式化陈述：reverse_injective : Injective (reverse : ContextFreeGrammar T -> ContextFr
+eeGrammar T)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用引理 `ContextFreeGrammar.reverse_bijective`：reverse_bijective : Bijective (rev
+erse : ContextFreeGrammar T -> ContextFreeGrammar T)
 -/
-lemma reverse_injective : Injective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T) :=
+lemma reverse_injective : Injective (reverse : ContextFreeGrammar T → ContextFreeGrammar T) :=
   reverse_bijective.injective
-
-/--
-lemma `reverse_surjective` / 引理 `reverse_surjective`
-
-English:
-lemma reverse_surjective
-  statement: Surjective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T)
-  proof: reverse_bijective.surjective
-
-中文:
-引理 reverse_surjective
-  结论: 满射 (reverse : 余ntextFreeGrammar T -> 余ntextFreeGrammar T)
-  证明: reverse_bijective.surjective
-
-Depends on / 依赖: _map, reverse_bijective, reverse_bijective.surjective, surjective
+/-
+**ContextFreeGrammar.reverse_surjective** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGr
+ammar`。
+形式化陈述：reverse_surjective : Surjective (reverse : ContextFreeGrammar T -> Context
+FreeGrammar T)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用引理 `ContextFreeGrammar.reverse_bijective`：reverse_bijective : Bijective (rev
+erse : ContextFreeGrammar T -> ContextFreeGrammar T)
 -/
-lemma reverse_surjective : Surjective (reverse : ContextFreeGrammar T -> ContextFreeGrammar T) :=
+lemma reverse_surjective : Surjective (reverse : ContextFreeGrammar T → ContextFreeGrammar T) :=
   reverse_bijective.surjective
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `produces_reverse` / 引理 `produces_reverse`
-
-English:
-lemma produces_reverse
-  statement: g.reverse.Produces u.reverse v.reverse ↔ g.Produces u v
-  proof: (Equiv.ofBijective _ ContextFreeRule.reverse_bijective).exists_congr
-    (by simp [ContextFreeRule.reverse_involutive.eq_iff])
-
-alias ⟨_, Produces.reverse⟩ := produces_reverse
-
-中文:
-引理 produces_reverse
-  结论: g.reverse.Produces u.reverse v.reverse ↔ g.Produces u v
-  证明: (Equiv.ofBijective _ ContextFreeRule.reverse_bijective).exists_congr
-    (by simp [ContextFreeRule.reverse_involutive.eq_iff])
-
-alias ⟨_, Produces.reverse⟩ := produces_reverse
-
-Depends on / 依赖: ContextFreeRule, ContextFreeRule.reverse_bijective, ContextFreeRule.reverse_involutive.eq_iff, Equiv.ofBijective, Finset, Finset.sup, eq_iff, exists_congr, le_sup, ofBijective, reverse_bijective, reverse_involutive
+/-
+**ContextFreeGrammar.produces_reverse** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGram
+mar`。
+形式化陈述：produces_reverse : g.reverse.Produces u.reverse v.reverse ↔ g.Produces u v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.exists_congr`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → 
+Prop} (e : α ≃ β),   (∀ (a : α), p a ↔ q (e a)) → ((∃ a, p a) ↔ ∃ b, q b)
+· 使用引理 `ContextFreeRule.reverse_bijective`：reverse_bijective : Bijective (revers
+e : ContextFreeRule T N -> ContextFreeRule T N)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.Involutive.eq_iff`：∀ {α : Sort u} {f : α → α}, Function.Involut
+ive f → ∀ {x y : α}, f x = y ↔ x = f y
+· 使用引理 `ContextFreeRule.reverse_involutive`：reverse_involutive : Involutive (rev
+erse : ContextFreeRule T N -> ContextFreeRule T N)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma produces_reverse : g.reverse.Produces u.reverse v.reverse ↔ g.Produces u v :=
   (Equiv.ofBijective _ ContextFreeRule.reverse_bijective).exists_congr
@@ -1101,49 +1017,54 @@ alias ⟨_, Produces.reverse⟩ := produces_reverse
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `produces_reverse_comm` / 引理 `produces_reverse_comm`
-
-English:
-lemma produces_reverse_comm
-  statement: g.reverse.Produces u v ↔ g.Produces u.reverse v.reverse
-  proof: (Equiv.ofBijective _ ContextFreeRule.reverse_bijective).exists_congr
-    (by simp [ContextFreeRule.reverse_involutive.eq_iff])
-
-中文:
-引理 produces_reverse_comm
-  结论: g.reverse.Produces u v ↔ g.Produces u.reverse v.reverse
-  证明: (Equiv.ofBijective _ ContextFreeRule.reverse_bijective).exists_congr
-    (by simp [ContextFreeRule.reverse_involutive.eq_iff])
-
-Depends on / 依赖: le_sup
+/-
+**ContextFreeGrammar.produces_reverse_comm** 是 Mathlib 中的一个定理，位于命名空间 `ContextFre
+eGrammar`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u v : List (Symbol T g.NT)}, 
+  g.reverse.Produces u v ↔ g.Produces u.reverse v.reverse
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.exists_congr`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} {q : β → 
+Prop} (e : α ≃ β),   (∀ (a : α), p a ↔ q (e a)) → ((∃ a, p a) ↔ ∃ b, q b)
+· 使用引理 `ContextFreeRule.reverse_bijective`：reverse_bijective : Bijective (revers
+e : ContextFreeRule T N -> ContextFreeRule T N)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.Involutive.eq_iff`：∀ {α : Sort u} {f : α → α}, Function.Involut
+ive f → ∀ {x y : α}, f x = y ↔ x = f y
+· 使用引理 `ContextFreeRule.reverse_involutive`：reverse_involutive : Involutive (rev
+erse : ContextFreeRule T N -> ContextFreeRule T N)
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[simp] lemma produces_reverse_comm : g.reverse.Produces u v ↔ g.Produces u.reverse v.reverse :=
   (Equiv.ofBijective _ ContextFreeRule.reverse_bijective).exists_congr
     (by simp [ContextFreeRule.reverse_involutive.eq_iff])
-
-/--
-lemma `Derives.reverse` / 引理 `Derives.reverse`
-
-English:
-lemma Derives.reverse
-  given: (hg : g.Derives u v)
-  statement: g.reverse.Derives u.reverse v.reverse
-  proof: by
-  induction hg with
-  | refl => rfl
-  | tail _ orig ih => exact ih.trans_produces orig.reverse
-
-中文:
-引理 Derives.reverse
-  条件: (hg : g.Derives u v)
-  结论: g.reverse.Derives u.reverse v.reverse
-  证明: by
-  induction hg with
-  | refl => rfl
-  | tail _ orig ih => exact ih.trans_produces orig.reverse
-
-Depends on / 依赖: Finset, Finset.sup_le, le_antisymm, le_sup, sup_le
+/-
+**ContextFreeGrammar.Derives.reverse** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGramm
+ar.Derives`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u v : List (Symbol T g.NT)}, 
+  g.Derives u v → g.reverse.Derives u.reverse v.reverse
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContextFreeGrammar.Derives.trans_produces`：∀ {T : Type u_1} {g : Context
+FreeGrammar T} {u v w : List (Symbol T g.NT)},   g.Derives u v → g.Produces v w 
+→ g.Derives u w
+· 使用定理 `ContextFreeGrammar.Produces.reverse`：∀ {T : Type u_1} {g : ContextFreeGr
+ammar T} {u v : List (Symbol T g.NT)},   g.Produces u v → g.reverse.Produces u.r
+everse v.reverse
 -/
 protected lemma Derives.reverse (hg : g.Derives u v) : g.reverse.Derives u.reverse v.reverse := by
   induction hg with
@@ -1152,170 +1073,179 @@ protected lemma Derives.reverse (hg : g.Derives u v) : g.reverse.Derives u.rever
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `derives_reverse` / 引理 `derives_reverse`
-
-English:
-lemma derives_reverse
-  statement: g.reverse.Derives u.reverse v.reverse ↔ g.Derives u v
-  proof: ⟨fun h => by convert! h.reverse <;> simp, .reverse⟩
-
-中文:
-引理 derives_reverse
-  结论: g.reverse.Derives u.reverse v.reverse ↔ g.Derives u v
-  证明: ⟨fun h => by convert! h.reverse <;> simp, .reverse⟩
-
-Depends on / 依赖: _eq_sup, convert, h.reverse, reverse
+/-
+**ContextFreeGrammar.derives_reverse** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGramm
+ar`。
+形式化陈述：derives_reverse : g.reverse.Derives u.reverse v.reverse ↔ g.Derives u v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContextFreeGrammar.reverse_reverse`：∀ {T : Type u_1} (g : ContextFreeGra
+mmar T), g.reverse.reverse = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `ContextFreeGrammar.Derives.reverse`：∀ {T : Type u_1} {g : ContextFreeGra
+mmar T} {u v : List (Symbol T g.NT)},   g.Derives u v → g.reverse.Derives u.reve
+rse v.reverse
 -/
 lemma derives_reverse : g.reverse.Derives u.reverse v.reverse ↔ g.Derives u v :=
-  ⟨fun h => by convert! h.reverse <;> simp, .reverse⟩
-
-/--
-lemma `derives_reverse_comm` / 引理 `derives_reverse_comm`
-
-English:
-lemma derives_reverse_comm
-  statement: g.reverse.Derives u v ↔ g.Derives u.reverse v.reverse
-  proof: by
-  rw [iff_comm]; rw [← derives_reverse]; rw [List.reverse_reverse]; rw [List.reverse_reverse]
-
-中文:
-引理 derives_reverse_comm
-  结论: g.reverse.Derives u v ↔ g.Derives u.reverse v.reverse
-  证明: by
-  rw [iff_comm]; rw [← derives_reverse]; rw [List.reverse_reverse]; rw [List.reverse_reverse]
+  ⟨fun h ↦ by convert! h.reverse <;> simp, .reverse⟩
+/-
+**ContextFreeGrammar.derives_reverse_comm** 是 Mathlib 中的一个定理，位于命名空间 `ContextFree
+Grammar`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u v : List (Symbol T g.NT)}, 
+  g.reverse.Derives u v ↔ g.Derives u.reverse v.reverse
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_comm`：∀ {a b : Prop}, (a ↔ b) ↔ (b ↔ a)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ContextFreeGrammar.derives_reverse`：derives_reverse : g.reverse.Derives 
+u.reverse v.reverse ↔ g.Derives u v
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma derives_reverse_comm : g.reverse.Derives u v ↔ g.Derives u.reverse v.reverse := by
-  rw [iff_comm]; rw [← derives_reverse]; rw [List.reverse_reverse]; rw [List.reverse_reverse]
+  rw [iff_comm, ← derives_reverse, List.reverse_reverse, List.reverse_reverse]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `generates_reverse` / 引理 `generates_reverse`
-
-English:
-lemma generates_reverse
-  statement: g.reverse.Generates u.reverse ↔ g.Generates u
-  proof: by simp [Generates]
-
-alias ⟨_, Generates.reverse⟩ := generates_reverse
-
-中文:
-引理 generates_reverse
-  结论: g.reverse.Generates u.reverse ↔ g.Generates u
-  证明: by simp [Generates]
-
-alias ⟨_, Generates.reverse⟩ := generates_reverse
-
-Depends on / 依赖: Generates
+/-
+**ContextFreeGrammar.generates_reverse** 是 Mathlib 中的一个引理，位于命名空间 `ContextFreeGra
+mmar`。
+形式化陈述：generates_reverse : g.reverse.Generates u.reverse ↔ g.Generates u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma generates_reverse : g.reverse.Generates u.reverse ↔ g.Generates u := by simp [Generates]
 
 alias ⟨_, Generates.reverse⟩ := generates_reverse
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `generates_reverse_comm` / 引理 `generates_reverse_comm`
-
-English:
-lemma generates_reverse_comm
-  statement: g.reverse.Generates u ↔ g.Generates u.reverse
-  proof: by
-  simp [Generates]
-
-中文:
-引理 generates_reverse_comm
-  结论: g.reverse.Generates u ↔ g.Generates u.reverse
-  证明: by
-  simp [Generates]
+/-
+**ContextFreeGrammar.generates_reverse_comm** 是 Mathlib 中的一个定理，位于命名空间 `ContextFr
+eeGrammar`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T} {u : List (Symbol T g.NT)}, g.
+reverse.Generates u ↔ g.Generates u.reverse
+参数：Symbol T g.NT。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma generates_reverse_comm : g.reverse.Generates u ↔ g.Generates u.reverse := by
   simp [Generates]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `language_reverse` / 引理 `language_reverse`
-
-English:
-lemma language_reverse
-  statement: g.reverse.language = g.language.reverse
-  proof: by ext; simp
-
-中文:
-引理 language_reverse
-  结论: g.reverse.language = g.language.reverse
-  证明: by ext; simp
-
-Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Nonempty, _cons, cons_induction, inf_sup_left, simp_rw, singleton
+/-
+**ContextFreeGrammar.language_reverse** 是 Mathlib 中的一个定理，位于命名空间 `ContextFreeGram
+mar`。
+形式化陈述：∀ {T : Type u_1} {g : ContextFreeGrammar T}, g.reverse.language = g.langua
+ge.reverse
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.map_reverse`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l : List 
+α}, List.map f l.reverse = (List.map f l).reverse
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma language_reverse : g.reverse.language = g.language.reverse := by ext; simp
 
 end ContextFreeGrammar
 
-/--
-theorem `Language.IsContextFree.reverse` / 定理 `Language.IsContextFree.reverse`
+/-- The class of context-free languages is closed under reversal. -/
+/-
+**Language.IsContextFree.reverse** 是 Mathlib 中的一个定理，位于命名空间 `Language.IsContextFr
+ee`。
+形式化陈述：∀ {T : Type u_1} {L : Language T}, L.IsContextFree → L.reverse.IsContextFr
+ee
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContextFreeGrammar.language_reverse`：∀ {T : Type u_1} {g : ContextFreeGr
+ammar T}, g.reverse.language = g.language.reverse
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem Language.IsContextFree.reverse
-  given: {L : Language T} (h : L.IsContextFree)
-  proof: by
-  rcases h with ⟨g, rfl⟩
-  exact ⟨g.reverse, by simp⟩
-
-中文:
-定理 Language.IsContextFree.reverse
-  条件: {L : Language T} (h : L.IsContextFree)
-  证明: by
-  rcases h with ⟨g, rfl⟩
-  exact ⟨g.reverse, by simp⟩
-
-Depends on / 依赖: _inf_distrib_left, inf_comm, simp_rw
+--- 原说明 ---
+The class of context-free languages is closed under reversal.
 -/
 protected theorem Language.IsContextFree.reverse {L : Language T} (h : L.IsContextFree) :
     L.reverse.IsContextFree := by
   rcases h with ⟨g, rfl⟩
   exact ⟨g.reverse, by simp⟩
-
-/--
-theorem `Language.IsContextFree.of_reverse` / 定理 `Language.IsContextFree.of_reverse`
-
-English:
-theorem Language.IsContextFree.of_reverse
-  given: {L : Language T} (h : L.reverse.IsContextFree)
-  proof: by
-  simpa using h.reverse
-
-@[simp]
-
-中文:
-定理 Language.IsContextFree.of_reverse
-  条件: {L : Language T} (h : L.reverse.IsContextFree)
-  证明: by
-  simpa using h.reverse
-
-@[simp]
+/-
+**Language.IsContextFree.of_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Language.IsContex
+tFree`。
+形式化陈述：∀ {T : Type u_1} {L : Language T}, L.reverse.IsContextFree → L.IsContextFr
+ee
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Language.reverse_reverse`：reverse_reverse (l : Language α) : l.reverse.r
+everse = l
+· 使用定理 `Language.IsContextFree.reverse`：∀ {T : Type u_1} {L : Language T}, L.IsC
+ontextFree → L.reverse.IsContextFree
 -/
 protected theorem Language.IsContextFree.of_reverse {L : Language T} (h : L.reverse.IsContextFree) :
     L.IsContextFree := by
   simpa using h.reverse
 
 @[simp]
-/--
-theorem `Language.isContextFree_reverse` / 定理 `Language.isContextFree_reverse`
-
-English:
-theorem Language.isContextFree_reverse
-  given: {L : Language T}
-  proof: ⟨.of_reverse, .reverse⟩
-
-中文:
-定理 Language.isContextFree_reverse
-  条件: {L : Language T}
-  证明: ⟨.of_reverse, .reverse⟩
-
-Depends on / 依赖: Finset, Finset.le_sup_iff, WithBot, WithBot.bot_lt_coe, WithBot.coe_le_coe, and_congr_right, bot_lt_coe, coe_le_coe, coe_sup, exists_congr, le_sup_iff, of_reverse, reverse
+/-
+**Language.isContextFree_reverse** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Language.isContextFree_reverse {L : Language T} : L.reverse.IsContextFree 
+↔ L.IsContextFree
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.IsContextFree.of_reverse`：∀ {T : Type u_1} {L : Language T}, L.
+reverse.IsContextFree → L.IsContextFree
+· 使用定理 `Language.IsContextFree.reverse`：∀ {T : Type u_1} {L : Language T}, L.IsC
+ontextFree → L.reverse.IsContextFree
 -/
 theorem Language.isContextFree_reverse {L : Language T} :
     L.reverse.IsContextFree ↔ L.IsContextFree :=
   ⟨.of_reverse, .reverse⟩
 
 end closure_reversal
+

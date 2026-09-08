@@ -27,54 +27,39 @@ universe v w w'
 
 variable {A : Type v} {B : Type w} {C : Type w'}
 
-/--
-Definition of `SubStarSemigroup` / `SubStarSemigroup` 的定义
+/-- A sub star semigroup is a subset of a magma which is closed under the `star`. -/
+/-
+**SubStarSemigroup** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type v) → [Mul M] → [Star M] → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SubStarSemigroup
-  parameters: (M : Type v) [Mul M] [Star M]
-  extends: Subsemigroup M
-  axioms and operations (1):
-    - star_mem' : forall {a : M} (_ha : a in carrier), star a in carrier
-
-中文:
-结构 SubStar半群
-  参数: (M : 类型v) [乘法 M] [对合 M]
-  继承: 子半群 M
-  公理与运算 (1 个):
-    - star_mem' : 对任意 {a : M} (_ha : a in carrier), star a in carrier
-
-Depends on / 依赖: Equation, eval_map, map_polynomial, map_zero
+--- 原说明 ---
+A sub star semigroup is a subset of a magma which is closed under the `star`.
 -/
 structure SubStarSemigroup (M : Type v) [Mul M] [Star M] : Type v
     extends Subsemigroup M where
   /-- The `carrier` of a `StarSubset` is closed under the `star` operation. -/
-  star_mem' : forall {a : M} (_ha : a in carrier), star a in carrier
+  star_mem' : ∀ {a : M} (_ha : a ∈ carrier), star a ∈ carrier
 
 /-- Reinterpret a `SubStarSemigroup` as a `Subsemigroup`. -/
 add_decl_doc SubStarSemigroup.toSubsemigroup
 
-/--
-Definition of `NonUnitalStarSubsemiring` / `NonUnitalStarSubsemiring` 的定义
+/-- A non-unital star subsemiring is a non-unital subsemiring which also is closed under the
+`star` operation. -/
+/-
+**NonUnitalStarSubsemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type v) → [NonUnitalNonAssocSemiring R] → [Star R] → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NonUnitalStarSubsemiring
-  parameters: (R : Type v) [NonUnitalNonAssocSemiring R] [Star R]
-  extends: NonUnitalSubsemiring R
-  axioms and operations (1):
-    - star_mem' : forall {a : R} (_ha : a in carrier), star a in carrier
-
-中文:
-结构 非幺对合子半环
-  参数: (R : 类型v) [非幺非结合半环 R] [对合 R]
-  继承: NonUnital子半环 R
-  公理与运算 (1 个):
-    - star_mem' : 对任意 {a : R} (_ha : a in carrier), star a in carrier
+--- 原说明 ---
+A non-unital star subsemiring is a non-unital subsemiring which also is closed u
+nder the
+`star` operation.
 -/
 structure NonUnitalStarSubsemiring (R : Type v) [NonUnitalNonAssocSemiring R] [Star R] : Type v
     extends NonUnitalSubsemiring R where
   /-- The `carrier` of a `NonUnitalStarSubsemiring` is closed under the `star` operation. -/
-  star_mem' : forall {a : R} (_ha : a in carrier), star a in carrier
+  star_mem' : ∀ {a : R} (_ha : a ∈ carrier), star a ∈ carrier
 
 /-- Reinterpret a `NonUnitalStarSubsemiring` as a `NonUnitalSubsemiring`. -/
 add_decl_doc NonUnitalStarSubsemiring.toNonUnitalSubsemiring
@@ -83,59 +68,40 @@ section NonUnitalStarSubsemiring
 
 namespace NonUnitalStarSubsemiring
 
-/--
-Instance `instSetLike` / 实例 `instSetLike`
-
-English:
-instance instSetLike
-  signature: {R : Type v} [NonUnitalNonAssocSemiring R] [Star R]
-  body: s.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
-
-initialize_simps_projections NonUnitalStarSubsemiring (carrier -> coe, as_prefix coe)
-
-中文:
-实例 instSetLike
-  签名: {R : 类型v} [非幺非结合半环 R] [对合 R]
-  定义体: s.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
-
-initialize_simps_projections NonUnitalStarSubsemiring (carrier -> coe, as_prefix coe)
-
-Depends on / 依赖: carrier, s.carrier
+/-
+**NonUnitalStarSubsemiring.instSetLike** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarS
+ubsemiring`。
+形式化陈述：instSetLike {R : Type v} [NonUnitalNonAssocSemiring R] [Star R] : SetLike 
+(NonUnitalStarSubsemiring R) R where coe {s}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSetLike {R : Type v} [NonUnitalNonAssocSemiring R] [Star R] :
     SetLike (NonUnitalStarSubsemiring R) R where
   coe {s} := s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
 
-initialize_simps_projections NonUnitalStarSubsemiring (carrier -> coe, as_prefix coe)
+initialize_simps_projections NonUnitalStarSubsemiring (carrier → coe, as_prefix coe)
 
 variable {R : Type v} [NonUnitalNonAssocSemiring R] [StarRing R]
 
 /-- The actual `NonUnitalStarSubsemiring` obtained from an element of a type satisfying
 `NonUnitalSubsemiringClass` and `StarMemClass`. -/
 @[simps]
-/--
-Definition of `ofClass` / `ofClass` 的定义
+/-
+**NonUnitalStarSubsemiring.ofClass** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalStarSubse
+miring`。
+形式化陈述：ofClass {S R : Type*} [NonUnitalNonAssocSemiring R] [StarRing R] [SetLike 
+S R] [NonUnitalSubsemiringClass S R] [StarMemClass S R] (s : S) : NonUnitalStarS
+ubsemiring R where carrier
+参数：s : S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofClass
-  signature: {S R : Type*} [NonUnitalNonAssocSemiring R] [StarRing R] [SetLike S R]
-  body: s
-  add_mem' := add_mem
-  zero_mem' := zero_mem _
-  mul_mem' := mul_mem
-  star_mem' := star_mem
-
-中文:
-定义 ofClass
-  签名: {S R : 类型} [非幺非结合半环 R] [对合环 R] [集合状 S R]
-  定义体: s
-  add_mem' := add_mem
-  zero_mem' := zero_mem _
-  mul_mem' := mul_mem
-  star_mem' := star_mem
+--- 原说明 ---
+The actual `NonUnitalStarSubsemiring` obtained from an element of a type satisfy
+ing
+`NonUnitalSubsemiringClass` and `StarMemClass`.
 -/
 def ofClass {S R : Type*} [NonUnitalNonAssocSemiring R] [StarRing R] [SetLike S R]
     [NonUnitalSubsemiringClass S R] [StarMemClass S R] (s : S) : NonUnitalStarSubsemiring R where
@@ -144,10 +110,14 @@ def ofClass {S R : Type*} [NonUnitalNonAssocSemiring R] [StarRing R] [SetLike S 
   zero_mem' := zero_mem _
   mul_mem' := mul_mem
   star_mem' := star_mem
-
+/-
+**NonUnitalStarSubsemiring.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarSubsemiring`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : CanLift (Set R) (NonUnitalStarSubsemiring R) (↑)
-    (fun s => 0 in s ∧ (forall {x y}, x in s -> y in s -> x + y in s) ∧ (forall {x y}, x in s -> y in s -> x * y in s) ∧
-      forall {x}, x in s -> star x in s)
+    (fun s ↦ 0 ∈ s ∧ (∀ {x y}, x ∈ s → y ∈ s → x + y ∈ s) ∧ (∀ {x y}, x ∈ s → y ∈ s → x * y ∈ s) ∧
+      ∀ {x}, x ∈ s → star x ∈ s)
     where
   prf s h :=
     ⟨ { carrier := s
@@ -156,139 +126,98 @@ instance (priority := 100) : CanLift (Set R) (NonUnitalStarSubsemiring R) (↑)
         mul_mem' := h.2.2.1
         star_mem' := h.2.2.2 },
       rfl ⟩
-
-/--
-Instance `instNonUnitalSubsemiringClass` / 实例 `instNonUnitalSubsemiringClass`
-
-English:
-instance instNonUnitalSubsemiringClass
-  signature: :
-  body: s.add_mem'
-  mul_mem {s} := s.mul_mem'
-  zero_mem {s} := s.zero_mem'
-
-中文:
-实例 instNonUnitalSubsemiringClass
-  签名: :
-  定义体: s.add_mem'
-  mul_mem {s} := s.mul_mem'
-  zero_mem {s} := s.zero_mem'
-
-Depends on / 依赖: add_mem, s.add_mem
+/-
+**NonUnitalStarSubsemiring.instNonUnitalSubsemiringClass** 是 Mathlib 中的一个实例，位于命名
+空间 `NonUnitalStarSubsemiring`。
+形式化陈述：instNonUnitalSubsemiringClass : NonUnitalSubsemiringClass (NonUnitalStarSu
+bsemiring R) R where add_mem {s}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubsemigroup.add_mem'`：∀ {M : Type u_3} [inst : Add M] (self : AddSub
+semigroup M) {a b : M},   a ∈ self.carrier → b ∈ self.carrier → a + b ∈ self.car
+rier
+· 使用定理 `AddSubmonoid.zero_mem'`：∀ {M : Type u_3} [inst : AddZeroClass M] (self :
+ AddSubmonoid M), 0 ∈ self.carrier
+· 使用定理 `NonUnitalSubsemiring.mul_mem'`：∀ {R : Type u} [inst : NonUnitalNonAssocS
+emiring R] (self : NonUnitalSubsemiring R) {a b : R},   a ∈ self.carrier → b ∈ s
+elf.carrier → a * b…
 -/
 instance instNonUnitalSubsemiringClass :
     NonUnitalSubsemiringClass (NonUnitalStarSubsemiring R) R where
   add_mem {s} := s.add_mem'
   mul_mem {s} := s.mul_mem'
   zero_mem {s} := s.zero_mem'
-
-/--
-Instance `instStarMemClass` / 实例 `instStarMemClass`
-
-English:
-instance instStarMemClass
-  signature: : StarMemClass (NonUnitalStarSubsemiring R) R where
-  body: s.star_mem'
-
-中文:
-实例 instStarMemClass
-  签名: : StarMem类 (非幺对合子半环 R) R where
-  定义体: s.star_mem'
-
-Depends on / 依赖: s.star_mem, star_mem
+/-
+**NonUnitalStarSubsemiring.instStarMemClass** 是 Mathlib 中的一个实例，位于命名空间 `NonUnital
+StarSubsemiring`。
+形式化陈述：instStarMemClass : StarMemClass (NonUnitalStarSubsemiring R) R where star_
+mem {s}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalStarSubsemiring.star_mem'`：∀ {R : Type v} [inst : NonUnitalNonA
+ssocSemiring R] [inst_1 : Star R] (self : NonUnitalStarSubsemiring R) {a : R},  
+ a ∈ self.carrier → star…
 -/
 instance instStarMemClass : StarMemClass (NonUnitalStarSubsemiring R) R where
   star_mem {s} := s.star_mem'
-
-/--
-theorem `mem_carrier` / 定理 `mem_carrier`
-
-English:
-theorem mem_carrier
-  given: {s : NonUnitalStarSubsemiring R} {x : R}
-  statement: x in s.carrier ↔ x in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_carrier
-  条件: {s : 非幺对合子半环 R} {x : R}
-  结论: x in s.carrier ↔ x in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**NonUnitalStarSubsemiring.mem_carrier** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarS
+ubsemiring`。
+形式化陈述：mem_carrier {s : NonUnitalStarSubsemiring R} {x : R} : x in s.carrier ↔ x 
+in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_carrier {s : NonUnitalStarSubsemiring R} {x : R} : x in s.carrier ↔ x in s :=
+theorem mem_carrier {s : NonUnitalStarSubsemiring R} {x : R} : x ∈ s.carrier ↔ x ∈ s :=
   Iff.rfl
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a non-unital star subsemiring with a new `carrier` equal to the old one.
+Useful to fix definitional equalities. -/
+/-
+**NonUnitalStarSubsemiring.copy** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalStarSubsemir
+ing`。
+形式化陈述：{R : Type v} →   [inst : NonUnitalNonAssocSemiring R] →     [inst_1 : Star
+Ring R] → (S : NonUnitalStarSubsemiring R) → (s : Set R) → s = ↑S → NonUnitalSta
+rSubsemiring R
+参数：S : NonUnitalStarSubsemiring R；s : Set R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S)
-  body: { S.toNonUnitalSubsemiring.copy s hs with
-    star_mem' := fun {x} (hx : x in s) => by
-      change star x in s
-      rw [hs] at hx ⊢
-      exact S.star_mem' hx }
-
-@[simp, norm_cast]
-
-中文:
-定义 copy
-  签名: (S : 非幺对合子半环 R) (s : 集合 R) (hs : s = ↑S)
-  定义体: { S.toNonUnitalSubsemiring.copy s hs with
-    star_mem' := fun {x} (hx : x in s) => by
-      change star x in s
-      rw [hs] at hx ⊢
-      exact S.star_mem' hx }
-
-@[simp, norm_cast]
+--- 原说明 ---
+Copy of a non-unital star subsemiring with a new `carrier` equal to the old one.
+Useful to fix definitional equalities.
 -/
 protected def copy (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S) :
     NonUnitalStarSubsemiring R :=
   { S.toNonUnitalSubsemiring.copy s hs with
-    star_mem' := fun {x} (hx : x in s) => by
-      change star x in s
+    star_mem' := fun {x} (hx : x ∈ s) => by
+      change star x ∈ s
       rw [hs] at hx ⊢
       exact S.star_mem' hx }
 
 @[simp, norm_cast]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S)
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (S : 非幺对合子半环 R) (s : 集合 R) (hs : s = ↑S)
-  证明: rfl
-
-Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Equation, Equation.map, convert, f.toRingHom, map_baseChange, toRingHom, toRingHom_eq_coe
+/-
+**NonUnitalStarSubsemiring.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarSubs
+emiring`。
+形式化陈述：coe_copy (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S) : (S.c
+opy s hs : Set R) = s
+参数：S : NonUnitalStarSubsemiring R；s : Set R；hs : s = ↑S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_copy (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S) :
     (S.copy s hs : Set R) = s :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S)
-  statement: S.copy s hs = S
-  proof: SetLike.coe_injective hs
-
-中文:
-定理 copy_eq
-  条件: (S : 非幺对合子半环 R) (s : 集合 R) (hs : s = ↑S)
-  结论: S.copy s hs = S
-  证明: SetLike.coe_injective hs
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**NonUnitalStarSubsemiring.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarSubse
+miring`。
+形式化陈述：copy_eq (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S) : S.cop
+y s hs = S
+参数：S : NonUnitalStarSubsemiring R；s : Set R；hs : s = ↑S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem copy_eq (S : NonUnitalStarSubsemiring R) (s : Set R) (hs : s = ↑S) : S.copy s hs = S :=
   SetLike.coe_injective hs
@@ -297,22 +226,23 @@ section Center
 
 variable (R)
 
-/--
-Definition of `center` / `center` 的定义
+/-- The center of a non-unital non-associative semiring `R` is the set of elements that
+commute and associate with everything in `R`, here realized as a non-unital star
+subsemiring. -/
+/-
+**NonUnitalStarSubsemiring.center** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalStarSubsem
+iring`。
+形式化陈述：center (R) [NonUnitalNonAssocSemiring R] [StarRing R] : NonUnitalStarSubse
+miring R where toNonUnitalSubsemiring
+参数：R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition center
-  signature: (R) [NonUnitalNonAssocSemiring R] [StarRing R]
-  body: NonUnitalSubsemiring.center R
-  star_mem' := Set.star_mem_center
-
-中文:
-定义 center
-  签名: (R) [非幺非结合半环 R] [对合环 R]
-  定义体: NonUnitalSubsemiring.center R
-  star_mem' := Set.star_mem_center
-
-Depends on / 依赖: NonUnitalSubsemiring, NonUnitalSubsemiring.center, center
+--- 原说明 ---
+The center of a non-unital non-associative semiring `R` is the set of elements t
+hat
+commute and associate with everything in `R`, here realized as a non-unital star
+subsemiring.
 -/
 def center (R) [NonUnitalNonAssocSemiring R] [StarRing R] : NonUnitalStarSubsemiring R where
   toNonUnitalSubsemiring := NonUnitalSubsemiring.center R
@@ -323,3 +253,4 @@ end Center
 end NonUnitalStarSubsemiring
 
 end NonUnitalStarSubsemiring
+

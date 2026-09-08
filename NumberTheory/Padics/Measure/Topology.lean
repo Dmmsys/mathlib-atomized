@@ -31,43 +31,51 @@ variable [NormedAddCommGroup E] [CommRing R] [Module R E] [TopologicalSpace R]
   [IsTopologicalRing R] [ContinuousSMul R E]
 
 /--
-Definition of `WeakTopology` / `WeakTopology` 的定义
+The weak topology on `AbstractMeasure G R E` (the weakest topology such that `μ ↦ μ f` is
+continuous for all `f`).
+-/
+/-
+**AbstractMeasure.WeakTopology** 是 Mathlib 中的一个定义，位于命名空间 `AbstractMeasure`。
+形式化陈述：{X : Type u_1} →   {R : Type u_2} →     {E : Type u_3} →       [inst : Top
+ologicalSpace X] →         [inst_1 : NormedAddCommGroup E] →           [inst_2 :
+ CommRing R] →             [inst_3 : _root_.Module R E] →               [inst_4 
+: TopologicalSpace R] → [inst_5 : IsTopologicalRing R] → TopologicalSpace (Abstr
+actMeasure X R E)
+参数：AbstractMeasure X R E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WeakTopology
-  signature: : TopologicalSpace (AbstractMeasure X R E)
-  body: .induced (fun μ f => μ f) inferInstance
-
-中文:
-定义 WeakTopology
-  签名: : 拓扑空间 (AbstractMeasure X R E)
-  定义体: .induced (fun μ f => μ f) inferInstance
+--- 原说明 ---
+The weak topology on `AbstractMeasure G R E` (the weakest topology such that `μ 
+↦ μ f` is
+continuous for all `f`).
 -/
 @[reducible] def WeakTopology : TopologicalSpace (AbstractMeasure X R E) :=
-  .induced (fun μ f => μ f) inferInstance
+  .induced (fun μ f ↦ μ f) inferInstance
 
 end Weak
 
 variable [CompactSpace X] [NontriviallyNormedField R] [NormedAddCommGroup E] [NormedSpace R E]
 
-/--
-Definition of `StrongTopology` / `StrongTopology` 的定义
+/-- The strong topology on `AbstractMeasure G R E` (the topology induced by the norm). -/
+/-
+**AbstractMeasure.StrongTopology** 是 Mathlib 中的一个定义，位于命名空间 `AbstractMeasure`。
+形式化陈述：{X : Type u_1} →   {R : Type u_2} →     {E : Type u_3} →       [inst : Top
+ologicalSpace X] →         [inst_1 : NontriviallyNormedField R] →           [ins
+t_2 : NormedAddCommGroup E] → [inst_3 : NormedSpace R E] → TopologicalSpace (Abs
+tractMeasure X R E)
+参数：AbstractMeasure X R E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StrongTopology
-  signature: : TopologicalSpace (AbstractMeasure X R E)
-  body: inferInstanceAs (TopologicalSpace (C(X, R) ->L[R] E))
-
-中文:
-定义 StrongTopology
-  签名: : 拓扑空间 (AbstractMeasure X R E)
-  定义体: inferInstanceAs (TopologicalSpace (C(X, R) ->L[R] E))
+--- 原说明 ---
+The strong topology on `AbstractMeasure G R E` (the topology induced by the norm
+).
 -/
 @[reducible] def StrongTopology : TopologicalSpace (AbstractMeasure X R E) :=
-  inferInstanceAs (TopologicalSpace (C(X, R) ->L[R] E))
+  inferInstanceAs (TopologicalSpace (C(X, R) →L[R] E))
 
 end Topology
 
 end AbstractMeasure
 
 end
+

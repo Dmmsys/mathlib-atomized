@@ -56,57 +56,17 @@ namespace Sheaf
 /-- Construct the finest (largest) Grothendieck topology for which the given presheaf is a sheaf. -/
 @[stacks 00Z9 "This is a special case of the Stacks entry, but following a different
 proof (see the Stacks comments)."]
-/--
-Definition of `finestTopologySingle` / `finestTopologySingle` 的定义
-
-English:
-definition finestTopologySingle
-  signature: (P : Cᵒᵖ ⥤ Type w)
-  body: {S | forall (Y) (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f : Presieve Y)}
-  top_mem' X Y f := by
-    rw [Sieve.pullback_top]
-    exact Presieve.isSheafFor_top P
-  pullback_stable' X Y S f hS Z g := by
-    rw [← pullback_comp]
-    apply hS
-  transitive' X S hS R hR Z g := by
-    -- This is the hard part of the construction, showing that the given set of sieves satisfies
-    -- the transitivity axiom.
-    refine Presieve.isSheafFor_trans P (pullback g S) _ (hS Z g) ?_ ?_
-    · intro Y f _
-      rw [← pullback_comp]
-      apply (hS _ _).isSeparatedFor
-    · intro Y f hf
-      have := hR hf _ (𝟙 _)
-      rw [pullback_id]; rw [pullback_comp] at this
-      apply this
-
-中文:
-定义 finestTopologySingle
-  签名: (P : Cᵒᵖ ⥤ 类型 w)
-  定义体: {S | forall (Y) (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f : Presieve Y)}
-  top_mem' X Y f := by
-    rw [Sieve.pullback_top]
-    exact Presieve.isSheafFor_top P
-  pullback_stable' X Y S f hS Z g := by
-    rw [← pullback_comp]
-    apply hS
-  transitive' X S hS R hR Z g := by
-    -- This is the hard part of the construction, showing that the given set of sieves satisfies
-    -- the transitivity axiom.
-    refine Presieve.isSheafFor_trans P (pullback g S) _ (hS Z g) ?_ ?_
-    · intro Y f _
-      rw [← pullback_comp]
-      apply (hS _ _).isSeparatedFor
-    · intro Y f hf
-      have := hR hf _ (𝟙 _)
-      rw [pullback_id]; rw [pullback_comp] at this
-      apply this
-
-Depends on / 依赖: IsSheafFor, Presieve, Presieve.IsSheafFor, S.pullback, pullback
+/-
+**CategoryTheory.Sheaf.finestTopologySingle** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Sheaf`。
+形式化陈述：finestTopologySingle (P : Cᵒᵖ ⥤ Type w) : GrothendieckTopology C where sie
+ves X
+参数：P : Cᵒᵖ ⥤ Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def finestTopologySingle (P : Cᵒᵖ ⥤ Type w) : GrothendieckTopology C where
-  sieves X := {S | forall (Y) (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f : Presieve Y)}
+  sieves X := {S | ∀ (Y) (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f : Presieve Y)}
   top_mem' X Y f := by
     rw [Sieve.pullback_top]
     exact Presieve.isSheafFor_top P
@@ -122,166 +82,173 @@ def finestTopologySingle (P : Cᵒᵖ ⥤ Type w) : GrothendieckTopology C where
       apply (hS _ _).isSeparatedFor
     · intro Y f hf
       have := hR hf _ (𝟙 _)
-      rw [pullback_id]; rw [pullback_comp] at this
+      rw [pullback_id, pullback_comp] at this
       apply this
 
 /-- Construct the finest (largest) Grothendieck topology for which all the given presheaves are
 sheaves. -/
 @[stacks 00Z9 "Equal to that Stacks construction"]
-/--
-Definition of `finestTopology` / `finestTopology` 的定义
+/-
+**CategoryTheory.Sheaf.finestTopology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Sheaf`。
+形式化陈述：finestTopology (Ps : Set (Cᵒᵖ ⥤ Type w)) : GrothendieckTopology C
+参数：Ps : Set (Cᵒᵖ ⥤ Type w)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finestTopology
-  signature: (Ps : Set (Cᵒᵖ ⥤ Type w))
-  body: sInf (finestTopologySingle '' Ps)
-
-中文:
-定义 finestTopology
-  签名: (Ps : 集合 (Cᵒᵖ ⥤ 类型 w))
-  定义体: sInf (finestTopologySingle '' Ps)
-
-Depends on / 依赖: finestTopologySingle
+--- 原说明 ---
+Construct the finest (largest) Grothendieck topology for which all the given pre
+sheaves are
+sheaves.
 -/
 def finestTopology (Ps : Set (Cᵒᵖ ⥤ Type w)) : GrothendieckTopology C :=
   sInf (finestTopologySingle '' Ps)
 
-/--
-theorem `sheaf_for_finestTopology` / 定理 `sheaf_for_finestTopology`
+/-- Check that if `P ∈ Ps`, then `P` is indeed a sheaf for the finest topology on `Ps`. -/
+/-
+**CategoryTheory.Sheaf.sheaf_for_finestTopology** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Sheaf`。
+形式化陈述：sheaf_for_finestTopology (Ps : Set (Cᵒᵖ ⥤ Type w)) (h : P in Ps) : Presiev
+e.IsSheaf (finestTopology Ps) P
+参数：Ps : Set (Cᵒᵖ ⥤ Type w)；h : P in Ps。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Sieve.pullback_id`：pullback_id : S.pullback (𝟙 _) = S
 
-English:
-theorem sheaf_for_finestTopology
-  given: (Ps : Set (Cᵒᵖ ⥤ Type w)) (h : P in Ps)
-  proof: fun X S hS => by
-  simpa using hS _ ⟨⟨_, _, ⟨_, h, rfl⟩, rfl⟩, rfl⟩ _ (𝟙 _)
-
-中文:
-定理 sheaf_for_finestTopology
-  条件: (Ps : 集合 (Cᵒᵖ ⥤ 类型 w)) (h : P in Ps)
-  证明: fun X S hS => by
-  simpa using hS _ ⟨⟨_, _, ⟨_, h, rfl⟩, rfl⟩, rfl⟩ _ (𝟙 _)
+--- 原说明 ---
+Check that if `P ∈ Ps`, then `P` is indeed a sheaf for the finest topology on `P
+s`.
 -/
-theorem sheaf_for_finestTopology (Ps : Set (Cᵒᵖ ⥤ Type w)) (h : P in Ps) :
+theorem sheaf_for_finestTopology (Ps : Set (Cᵒᵖ ⥤ Type w)) (h : P ∈ Ps) :
     Presieve.IsSheaf (finestTopology Ps) P := fun X S hS => by
   simpa using hS _ ⟨⟨_, _, ⟨_, h, rfl⟩, rfl⟩, rfl⟩ _ (𝟙 _)
-
-/--
-lemma `mem_finestTopology_of_forall_isSheafFor` / 引理 `mem_finestTopology_of_forall_isSheafFor`
-
-English:
-lemma mem_finestTopology_of_forall_isSheafFor
-  statement: {Ps : Set (Cᵒᵖ ⥤ Type w)} {X : C} {S : Sieve X}
-  proof: by
-  rintro _ ⟨⟨_, _, ⟨P, hP, rfl⟩, rfl⟩, rfl⟩ Y f
-  exact H P hP _
-
-中文:
-引理 mem_finestTopology_of_对任意_isSheafFor
-  结论: {Ps : 集合 (Cᵒᵖ ⥤ 类型 w)} {X : C} {S : 筛 X}
-  证明: by
-  rintro _ ⟨⟨_, _, ⟨P, hP, rfl⟩, rfl⟩, rfl⟩ Y f
-  exact H P hP _
+/-
+**CategoryTheory.Sheaf.mem_finestTopology_of_forall_isSheafFor** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Sheaf`。
+形式化陈述：mem_finestTopology_of_forall_isSheafFor {Ps : Set (Cᵒᵖ ⥤ Type w)} {X : C} 
+{S : Sieve X} (H : forall P in Ps, forall ⦃Y : C⦄ (f : Y ⟶ X), Presieve.IsSheafF
+or P (S.pullback f).arrows) : S in finestTopology Ps X
+参数：Cᵒᵖ ⥤ Type w；H : forall P in Ps, forall ⦃Y : C⦄ (f : Y ⟶ X), Presieve.IsSheaf
+For P (S.pullback f).arrows。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mem_finestTopology_of_forall_isSheafFor {Ps : Set (Cᵒᵖ ⥤ Type w)} {X : C} {S : Sieve X}
-    (H : forall P in Ps, forall ⦃Y : C⦄ (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f).arrows) :
-    S in finestTopology Ps X := by
+    (H : ∀ P ∈ Ps, ∀ ⦃Y : C⦄ (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f).arrows) :
+    S ∈ finestTopology Ps X := by
   rintro _ ⟨⟨_, _, ⟨P, hP, rfl⟩, rfl⟩, rfl⟩ Y f
   exact H P hP _
 
 /--
-theorem `le_finestTopology` / 定理 `le_finestTopology`
+Check that if each `P ∈ Ps` is a sheaf for `J`, then `J` is a subtopology of `finestTopology Ps`.
+-/
+/-
+**CategoryTheory.Sheaf.le_finestTopology** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Sheaf`。
+形式化陈述：le_finestTopology (Ps : Set (Cᵒᵖ ⥤ Type w)) (J : GrothendieckTopology C) (
+hJ : forall P in Ps, Presieve.IsSheaf J P) : J <= finestTopology Ps
+参数：Ps : Set (Cᵒᵖ ⥤ Type w)；J : GrothendieckTopology C；hJ : forall P in Ps, Presi
+eve.IsSheaf J P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Sheaf.mem_finestTopology_of_forall_isSheafFor`：mem_finest
+Topology_of_forall_isSheafFor {Ps : Set (Cᵒᵖ ⥤ Type w)} {X : C} {S : Sieve X} (H
+ : forall P in Ps, forall ⦃Y : C⦄ (f : Y ⟶ X), Pre…
+· 使用定理 `CategoryTheory.GrothendieckTopology.pullback_stable`：pullback_stable (f 
+: Y ⟶ X) (hS : S in J X) : S.pullback f in J Y
 
-English:
-theorem le_finestTopology
-  statement: (Ps : Set (Cᵒᵖ ⥤ Type w)) (J : GrothendieckTopology C)
-  proof: by
-  intro X S hS
-  exact mem_finestTopology_of_forall_isSheafFor
-    fun P hP Y f => hJ P hP _ (J.pullback_stable _ hS)
-
-中文:
-定理 le_finestTopology
-  结论: (Ps : 集合 (Cᵒᵖ ⥤ 类型 w)) (J : Grothendieck拓扑 C)
-  证明: by
-  intro X S hS
-  exact mem_finestTopology_of_forall_isSheafFor
-    fun P hP Y f => hJ P hP _ (J.pullback_stable _ hS)
-
-Depends on / 依赖: J.pullback_stable, mem_finestTopology_of_forall_isSheafFor, pullback_stable
+--- 原说明 ---
+Check that if each `P ∈ Ps` is a sheaf for `J`, then `J` is a subtopology of `fi
+nestTopology Ps`.
 -/
 theorem le_finestTopology (Ps : Set (Cᵒᵖ ⥤ Type w)) (J : GrothendieckTopology C)
-    (hJ : forall P in Ps, Presieve.IsSheaf J P) : J <= finestTopology Ps := by
+    (hJ : ∀ P ∈ Ps, Presieve.IsSheaf J P) : J ≤ finestTopology Ps := by
   intro X S hS
   exact mem_finestTopology_of_forall_isSheafFor
-    fun P hP Y f => hJ P hP _ (J.pullback_stable _ hS)
+    fun P hP Y f ↦ hJ P hP _ (J.pullback_stable _ hS)
 
 /-- The `canonicalTopology` on a category is the finest (largest) topology for which every
 representable presheaf is a sheaf. -/
 @[stacks 00ZA]
-/--
-Definition of `canonicalTopology` / `canonicalTopology` 的定义
+/-
+**CategoryTheory.Sheaf.canonicalTopology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Sheaf`。
+形式化陈述：canonicalTopology (C : Type u) [Category.{v} C] : GrothendieckTopology C
+参数：C : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition canonicalTopology
-  signature: (C : Type u) [Category.{v} C]
-  body: finestTopology (Set.range yoneda.obj)
-
-中文:
-定义 canonicalTopology
-  签名: (C : 类型u) [范畴.{v} C]
-  定义体: finestTopology (Set.range yoneda.obj)
-
-Depends on / 依赖: Set.range, finestTopology, yoneda, yoneda.obj
+--- 原说明 ---
+The `canonicalTopology` on a category is the finest (largest) topology for which
+ every
+representable presheaf is a sheaf.
 -/
 def canonicalTopology (C : Type u) [Category.{v} C] : GrothendieckTopology C :=
   finestTopology (Set.range yoneda.obj)
 
-/--
-theorem `isSheaf_yoneda_obj` / 定理 `isSheaf_yoneda_obj`
+/-- `yoneda.obj X` is a sheaf for the canonical topology. -/
+/-
+**CategoryTheory.Sheaf.isSheaf_yoneda_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Sheaf`。
+形式化陈述：isSheaf_yoneda_obj (X : C) : Presieve.IsSheaf (canonicalTopology C) (yoned
+a.obj X)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sheaf.sheaf_for_finestTopology`：sheaf_for_finestTopology 
+(Ps : Set (Cᵒᵖ ⥤ Type w)) (h : P in Ps) : Presieve.IsSheaf (finestTopology Ps) P
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 
-English:
-theorem isSheaf_yoneda_obj
-  given: (X : C)
-  statement: Presieve.IsSheaf (canonicalTopology C) (yoneda.obj X)
-  proof: fun _ _ hS => sheaf_for_finestTopology _ (Set.mem_range_self _) _ hS
-
-中文:
-定理 isSheaf_yoneda_obj
-  条件: (X : C)
-  结论: Presieve.是层 (canonicalTopology C) (yoneda.obj X)
-  证明: fun _ _ hS => sheaf_for_finestTopology _ (Set.mem_range_self _) _ hS
-
-Depends on / 依赖: Set.mem_range_self, mem_range_self, sheaf_for_finestTopology
+--- 原说明 ---
+`yoneda.obj X` is a sheaf for the canonical topology.
 -/
 theorem isSheaf_yoneda_obj (X : C) : Presieve.IsSheaf (canonicalTopology C) (yoneda.obj X) :=
   fun _ _ hS => sheaf_for_finestTopology _ (Set.mem_range_self _) _ hS
 
-/--
-theorem `isSheaf_of_isRepresentable` / 定理 `isSheaf_of_isRepresentable`
+/-- A representable functor is a sheaf for the canonical topology. -/
+/-
+**CategoryTheory.Sheaf.isSheaf_of_isRepresentable** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Sheaf`。
+形式化陈述：isSheaf_of_isRepresentable (P : Cᵒᵖ ⥤ Type w) [P.IsRepresentable] : Presie
+ve.IsSheaf (canonicalTopology C) P
+参数：P : Cᵒᵖ ⥤ Type w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Presieve.isSheaf_comp_uliftFunctor_iff`：isSheaf_comp_ulif
+tFunctor_iff : IsSheaf J (P ⋙ uliftFunctor.{w'}) ↔ IsSheaf J P
+· 使用定理 `CategoryTheory.Presieve.isSheaf_iso`：isSheaf_iso {P' : Cᵒᵖ ⥤ Type w} (i 
+: P ≅ P') (h : IsSheaf J P) : IsSheaf J P'
+· 使用定理 `CategoryTheory.Functor.instIsRepresentableCompOppositeUliftFunctor`：∀ {C
+ : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (F : CategoryTheory.Func
+tor Cᵒᵖ (Type v))   [F.IsRepresentable], (F.comp Categor…
+· 使用定理 `CategoryTheory.isSheaf_iff_isSheaf_of_type`：isSheaf_iff_isSheaf_of_type 
+(P : Cᵒᵖ ⥤ Type w) : Presheaf.IsSheaf J P ↔ Presieve.IsSheaf J P
+· 使用定理 `CategoryTheory.GrothendieckTopology.HasSheafCompose.isSheaf`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {A : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} A}   {B : Type u₃} {ins…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfSize.preservesLimitsOfShape`：∀ {C
+ : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : 
+CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.Types.instPreservesLimitsOfSizeUliftFunctor`：Categ
+oryTheory.Limits.PreservesLimitsOfSize.{w', w, u, max u v, u + 1, max (u + 1) (v
+ + 1)}   CategoryTheory.uliftFunctor.{v, u}
+· 使用定理 `CategoryTheory.Sheaf.isSheaf_yoneda_obj`：isSheaf_yoneda_obj (X : C) : Pr
+esieve.IsSheaf (canonicalTopology C) (yoneda.obj X)
 
-English:
-theorem isSheaf_of_isRepresentable
-  given: (P : Cᵒᵖ ⥤ Type w) [P.IsRepresentable]
-  proof: by
-  rw [← Presieve.isSheaf_comp_uliftFunctor_iff]
-  refine Presieve.isSheaf_iso (canonicalTopology C) (P ⋙ uliftFunctor.{v}).uliftYonedaReprXIso ?_
-  rw [← isSheaf_iff_isSheaf_of_type]
-  refine GrothendieckTopology.HasSheafCompose.isSheaf _ ?_
-  rw [isSheaf_iff_isSheaf_of_type]
-  exact isSheaf_yoneda_obj _
-
-中文:
-定理 isSheaf_of_isRepresentable
-  条件: (P : Cᵒᵖ ⥤ 类型 w) [P.是Representable]
-  证明: by
-  rw [← Presieve.isSheaf_comp_uliftFunctor_iff]
-  refine Presieve.isSheaf_iso (canonicalTopology C) (P ⋙ uliftFunctor.{v}).uliftYonedaReprXIso ?_
-  rw [← isSheaf_iff_isSheaf_of_type]
-  refine GrothendieckTopology.HasSheafCompose.isSheaf _ ?_
-  rw [isSheaf_iff_isSheaf_of_type]
-  exact isSheaf_yoneda_obj _
-
-Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.HasSheafCompose.isSheaf, HasSheafCompose, Presieve, Presieve.isSheaf_comp_uliftFunctor_iff, Presieve.isSheaf_iso, canonicalTopology, isSheaf, isSheaf_comp_uliftFunctor_iff, isSheaf_iff_isSheaf_of_type, isSheaf_iso, isSheaf_yoneda_obj, uliftFunctor, uliftYonedaReprXIso
+--- 原说明 ---
+A representable functor is a sheaf for the canonical topology.
 -/
 theorem isSheaf_of_isRepresentable (P : Cᵒᵖ ⥤ Type w) [P.IsRepresentable] :
     Presieve.IsSheaf (canonicalTopology C) P := by
@@ -298,123 +265,117 @@ namespace GrothendieckTopology
 
 open Sheaf
 
-/--
-Definition of `Subcanonical` / `Subcanonical` 的定义
+/-- A subcanonical topology is a topology which is smaller than the canonical topology.
+Equivalently, a topology is subcanonical iff every representable is a sheaf.
+-/
+/-
+**CategoryTheory.GrothendieckTopology.Subcanonical** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+CategoryTheory.GrothendieckTopology`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+GrothendieckTopology C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Subcanonical
-  parameters: (J : GrothendieckTopology C)
-  axioms and operations (1):
-    - le_canonical : J <= canonicalTopology C
-
-中文:
-类 子典范
-  参数: (J : Grothendieck拓扑 C)
-  公理与运算 (1 个):
-    - le_canonical : J <= canonicalTopology C
+--- 原说明 ---
+A subcanonical topology is a topology which is smaller than the canonical topolo
+gy.
+Equivalently, a topology is subcanonical iff every representable is a sheaf.
 -/
 class Subcanonical (J : GrothendieckTopology C) : Prop where
-  le_canonical : J <= canonicalTopology C
-
-/--
-lemma `le_canonical` / 引理 `le_canonical`
-
-English:
-lemma le_canonical
-  given: (J : GrothendieckTopology C) [Subcanonical J]
-  statement: J <= canonicalTopology C
-  proof: Subcanonical.le_canonical
-
-中文:
-引理 le_canonical
-  条件: (J : Grothendieck拓扑 C) [子典范 J]
-  结论: J <= canonicalTopology C
-  证明: Subcanonical.le_canonical
-
-Depends on / 依赖: Subcanonical, Subcanonical.le_canonical, le_canonical
+  le_canonical : J ≤ canonicalTopology C
+/-
+**CategoryTheory.GrothendieckTopology.le_canonical** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.GrothendieckTopology`。
+形式化陈述：le_canonical (J : GrothendieckTopology C) [Subcanonical J] : J <= canonica
+lTopology C
+参数：J : GrothendieckTopology C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.Subcanonical.le_canonical`：∀ {C : Ty
+pe u} {inst : CategoryTheory.Category.{v, u} C} {J : CategoryTheory.Grothendieck
+Topology C}   [self : J.Subcanonical], J ≤ Category…
 -/
-lemma le_canonical (J : GrothendieckTopology C) [Subcanonical J] : J <= canonicalTopology C :=
+lemma le_canonical (J : GrothendieckTopology C) [Subcanonical J] : J ≤ canonicalTopology C :=
   Subcanonical.le_canonical
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (canonicalTopology C).Subcanonical
-  body: le_rfl
-
-中文:
-实例 :
-  签名: (canonicalTopology C).子典范
-  定义体: le_rfl
-
-Depends on / 依赖: le_rfl
+/-
+**CategoryTheory.GrothendieckTopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.GrothendieckTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (canonicalTopology C).Subcanonical where
   le_canonical := le_rfl
 
 namespace Subcanonical
 
-/--
-theorem `of_isSheaf_yoneda_obj` / 定理 `of_isSheaf_yoneda_obj`
+/-- If every functor `yoneda.obj X` is a `J`-sheaf, then `J` is subcanonical. -/
+/-
+**CategoryTheory.GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.GrothendieckTopology.Subcanonical`。
+形式化陈述：of_isSheaf_yoneda_obj (J : GrothendieckTopology C) (h : forall X, Presieve
+.IsSheaf J (yoneda.obj X)) : Subcanonical J where le_canonical
+参数：J : GrothendieckTopology C；h : forall X, Presieve.IsSheaf J (yoneda.obj X)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sheaf.le_finestTopology`：le_finestTopology (Ps : Set (Cᵒᵖ
+ ⥤ Type w)) (J : GrothendieckTopology C) (hJ : forall P in Ps, Presieve.IsSheaf 
+J P) : J <= finestTopology P…
 
-English:
-theorem of_isSheaf_yoneda_obj
-  statement: (J : GrothendieckTopology C)
-  proof: le_finestTopology _ _ (by rintro P ⟨X, rfl⟩; apply h)
-
-中文:
-定理 of_isSheaf_yoneda_obj
-  结论: (J : Grothendieck拓扑 C)
-  证明: le_finestTopology _ _ (by rintro P ⟨X, rfl⟩; apply h)
-
-Depends on / 依赖: le_finestTopology
+--- 原说明 ---
+If every functor `yoneda.obj X` is a `J`-sheaf, then `J` is subcanonical.
 -/
 theorem of_isSheaf_yoneda_obj (J : GrothendieckTopology C)
-    (h : forall X, Presieve.IsSheaf J (yoneda.obj X)) : Subcanonical J where
+    (h : ∀ X, Presieve.IsSheaf J (yoneda.obj X)) : Subcanonical J where
   le_canonical := le_finestTopology _ _ (by rintro P ⟨X, rfl⟩; apply h)
 
-/--
-theorem `isSheaf_of_isRepresentable` / 定理 `isSheaf_of_isRepresentable`
+/-- If `J` is subcanonical, then any representable is a `J`-sheaf. -/
+/-
+**CategoryTheory.GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.GrothendieckTopology.Subcanonical`。
+形式化陈述：isSheaf_of_isRepresentable {J : GrothendieckTopology C} [Subcanonical J] (
+P : Cᵒᵖ ⥤ Type w) [P.IsRepresentable] : Presieve.IsSheaf J P
+参数：P : Cᵒᵖ ⥤ Type w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.isSheaf_of_le`：isSheaf_of_le (P : Cᵒᵖ ⥤ Type w) 
+{J₁ J₂ : GrothendieckTopology C} : J₁ <= J₂ -> IsSheaf J₂ P -> IsSheaf J₁ P
+· 使用引理 `CategoryTheory.GrothendieckTopology.le_canonical`：le_canonical (J : Grot
+hendieckTopology C) [Subcanonical J] : J <= canonicalTopology C
+· 使用定理 `CategoryTheory.Sheaf.isSheaf_of_isRepresentable`：isSheaf_of_isRepresenta
+ble (P : Cᵒᵖ ⥤ Type w) [P.IsRepresentable] : Presieve.IsSheaf (canonicalTopology
+ C) P
 
-English:
-theorem isSheaf_of_isRepresentable
-  statement: {J : GrothendieckTopology C} [Subcanonical J]
-  proof: Presieve.isSheaf_of_le _ J.le_canonical (Sheaf.isSheaf_of_isRepresentable P)
-
-中文:
-定理 isSheaf_of_isRepresentable
-  结论: {J : Grothendieck拓扑 C} [子典范 J]
-  证明: Presieve.isSheaf_of_le _ J.le_canonical (Sheaf.isSheaf_of_isRepresentable P)
-
-Depends on / 依赖: J.le_canonical, Presieve, Presieve.isSheaf_of_le, Sheaf.isSheaf_of_isRepresentable, isSheaf_of_isRepresentable, isSheaf_of_le, le_canonical
+--- 原说明 ---
+If `J` is subcanonical, then any representable is a `J`-sheaf.
 -/
 theorem isSheaf_of_isRepresentable {J : GrothendieckTopology C} [Subcanonical J]
     (P : Cᵒᵖ ⥤ Type w) [P.IsRepresentable] : Presieve.IsSheaf J P :=
   Presieve.isSheaf_of_le _ J.le_canonical (Sheaf.isSheaf_of_isRepresentable P)
-
-/--
-lemma `of_le` / 引理 `of_le`
-
-English:
-lemma of_le
-  given: {J K : GrothendieckTopology C} (h : J <= K) [K.Subcanonical]
-  statement: J.Subcanonical
-  proof: of_isSheaf_yoneda_obj _ fun _ _ _ _ => (isSheaf_of_isRepresentable (J := K) _).isSheafFor _
-    (h _ (by simpa))
-
-中文:
-引理 of_le
-  条件: {J K : Grothendieck拓扑 C} (h : J <= K) [K.子典范]
-  结论: J.子典范
-  证明: of_isSheaf_yoneda_obj _ fun _ _ _ _ => (isSheaf_of_isRepresentable (J := K) _).isSheafFor _
-    (h _ (by simpa))
-
-Depends on / 依赖: isSheafFor, isSheaf_of_isRepresentable, of_isSheaf_yoneda_obj
+/-
+**CategoryTheory.GrothendieckTopology.Subcanonical.of_le** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.GrothendieckTopology.Subcanonical`。
+形式化陈述：of_le {J K : GrothendieckTopology C} (h : J <= K) [K.Subcanonical] : J.Sub
+canonical
+参数：h : J <= K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj`：
+of_isSheaf_yoneda_obj (J : GrothendieckTopology C) (h : forall X, Presieve.IsShe
+af J (yoneda.obj X)) : Subcanonical J where le_canonical
+· 使用定理 `CategoryTheory.Presieve.IsSheaf.isSheafFor`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {X : C} {J : CategoryTheory.GrothendieckTopology C}
+   {P : CategoryTheory.Functor C…
+· 使用定理 `CategoryTheory.GrothendieckTopology.Subcanonical.isSheaf_of_isRepresenta
+ble`：isSheaf_of_isRepresentable {J : GrothendieckTopology C} [Subcanonical J] (P
+ : Cᵒᵖ ⥤ Type w) [P.IsRepresentable] : Presieve.IsSheaf J P
+· 使用定理 `CategoryTheory.Functor.instIsRepresentableObjOppositeTypeYoneda`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C}, (CategoryTheory.yo
+neda.obj X).IsRepresentable
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Sieve.generate_sieve`：generate_sieve (S : Sieve X) : gene
+rate S = S
 -/
-lemma of_le {J K : GrothendieckTopology C} (h : J <= K) [K.Subcanonical] : J.Subcanonical :=
-  of_isSheaf_yoneda_obj _ fun _ _ _ _ => (isSheaf_of_isRepresentable (J := K) _).isSheafFor _
+lemma of_le {J K : GrothendieckTopology C} (h : J ≤ K) [K.Subcanonical] : J.Subcanonical :=
+  of_isSheaf_yoneda_obj _ fun _ _ _ _ ↦ (isSheaf_of_isRepresentable (J := K) _).isSheafFor _
     (h _ (by simpa))
 
 end Subcanonical
@@ -426,51 +387,35 @@ If `J` is subcanonical, we obtain a "Yoneda" functor from the defining site
 into the sheaf category.
 -/
 @[simps! obj_obj map_hom, implicit_reducible]
-/--
-Definition of `yoneda` / `yoneda` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.yoneda** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.GrothendieckTopology`。
+形式化陈述：yoneda [J.Subcanonical] : C ⥤ Sheaf J (Type v)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yoneda
-  signature: [J.Subcanonical]
-  body: ObjectProperty.lift _ CategoryTheory.yoneda fun X => by
-    rw [isSheaf_iff_isSheaf_of_type]
-    apply Subcanonical.isSheaf_of_isRepresentable
-
-中文:
-定义 yoneda
-  签名: [J.子典范]
-  定义体: ObjectProperty.lift _ CategoryTheory.yoneda fun X => by
-    rw [isSheaf_iff_isSheaf_of_type]
-    apply Subcanonical.isSheaf_of_isRepresentable
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.yoneda, ObjectProperty, ObjectProperty.lift, Subcanonical, Subcanonical.isSheaf_of_isRepresentable, isSheaf_iff_isSheaf_of_type, isSheaf_of_isRepresentable, yoneda
+--- 原说明 ---
+If `J` is subcanonical, we obtain a "Yoneda" functor from the defining site
+into the sheaf category.
 -/
 def yoneda [J.Subcanonical] : C ⥤ Sheaf J (Type v) :=
-ObjectProperty.lift _ CategoryTheory.yoneda fun X => by
+  ObjectProperty.lift _ CategoryTheory.yoneda <| fun X ↦ by
     rw [isSheaf_iff_isSheaf_of_type]
     apply Subcanonical.isSheaf_of_isRepresentable
 
 /-- Variant of the Yoneda embedding which allows a raise in the universe level
 for the category of types. -/
 @[pp_with_univ, simps! +dsimpLhs]
-/--
-Definition of `uliftYoneda` / `uliftYoneda` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.uliftYoneda** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.GrothendieckTopology`。
+形式化陈述：uliftYoneda [J.Subcanonical] : C ⥤ Sheaf J (Type (max v w))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYoneda
-  signature: [J.Subcanonical]
-  body: J.yoneda ⋙ sheafCompose J uliftFunctor.{w}
-
-#adaptation_note
-
-中文:
-定义 uliftYoneda
-  签名: [J.子典范]
-  定义体: J.yoneda ⋙ sheafCompose J uliftFunctor.{w}
-
-#adaptation_note
-
-Depends on / 依赖: J.yoneda, sheafCompose, uliftFunctor, yoneda
+--- 原说明 ---
+Variant of the Yoneda embedding which allows a raise in the universe level
+for the category of types.
 -/
 def uliftYoneda [J.Subcanonical] : C ⥤ Sheaf J (Type (max v w)) :=
   J.yoneda ⋙ sheafCompose J uliftFunctor.{w}
@@ -481,49 +426,42 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- If `C` is a category with `[Category.{max w v} C]`, this is the isomorphism
 `uliftYoneda.{w} (C := C) ≅ yoneda`. -/
 @[simps!]
-/--
-Definition of `uliftYonedaIsoYoneda` / `uliftYonedaIsoYoneda` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.uliftYonedaIsoYoneda** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：uliftYonedaIsoYoneda {C : Type u} [Category.{max w v} C] (J : Grothendieck
+Topology C) [J.Subcanonical] : GrothendieckTopology.uliftYoneda.{w} J ≅ J.yoneda
+参数：J : GrothendieckTopology C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYonedaIsoYoneda
-  signature: {C : Type u} [Category.{max w v} C] (J : GrothendieckTopology C)
-  body: dsimp% NatIso.ofComponents (fun _ => (fullyFaithfulSheafToPresheaf J _).preimageIso
-    (NatIso.ofComponents (fun _ => Equiv.ulift.toIso)))
-
-中文:
-定义 uliftYonedaIsoYoneda
-  签名: {C : 类型u} [范畴.{最大值 w v} C] (J : Grothendieck拓扑 C)
-  定义体: dsimp% NatIso.ofComponents (fun _ => (fullyFaithfulSheafToPresheaf J _).preimageIso
-    (NatIso.ofComponents (fun _ => Equiv.ulift.toIso)))
-
-Depends on / 依赖: Equiv.ulift.toIso, NatIso, NatIso.ofComponents, fullyFaithfulSheafToPresheaf, ofComponents, preimageIso
+--- 原说明 ---
+If `C` is a category with `[Category.{max w v} C]`, this is the isomorphism
+`uliftYoneda.{w} (C := C) ≅ yoneda`.
 -/
 def uliftYonedaIsoYoneda {C : Type u} [Category.{max w v} C] (J : GrothendieckTopology C)
     [J.Subcanonical] :
     GrothendieckTopology.uliftYoneda.{w} J ≅ J.yoneda :=
   dsimp% NatIso.ofComponents (fun _ => (fullyFaithfulSheafToPresheaf J _).preimageIso
-    (NatIso.ofComponents (fun _ => Equiv.ulift.toIso)))
+    (NatIso.ofComponents (fun _ ↦ Equiv.ulift.toIso)))
 
 variable [Subcanonical J]
 
 /--
-Definition of `yonedaCompSheafToPresheaf` / `yonedaCompSheafToPresheaf` 的定义
+The yoneda embedding into the presheaf category factors through the one
+to the sheaf category.
+-/
+/-
+**CategoryTheory.GrothendieckTopology.yonedaCompSheafToPresheaf** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：yonedaCompSheafToPresheaf : J.yoneda ⋙ sheafToPresheaf J (Type v) ≅ Catego
+ryTheory.yoneda
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaCompSheafToPresheaf
-  signature: :
-  body: Iso.refl _
-
-#adaptation_note
-
-中文:
-定义 yonedaCompSheafToPresheaf
-  签名: :
-  定义体: Iso.refl _
-
-#adaptation_note
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The yoneda embedding into the presheaf category factors through the one
+to the sheaf category.
 -/
 def yonedaCompSheafToPresheaf :
     J.yoneda ⋙ sheafToPresheaf J (Type v) ≅ CategoryTheory.yoneda :=
@@ -534,128 +472,73 @@ def yonedaCompSheafToPresheaf :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A variant of `yonedaCompSheafToPresheaf` with a raise in the universe level. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `uliftYonedaCompSheafToPresheaf` / `uliftYonedaCompSheafToPresheaf` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.uliftYonedaCompSheafToPresheaf** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：uliftYonedaCompSheafToPresheaf : GrothendieckTopology.uliftYoneda.{w} J ⋙ 
+sheafToPresheaf J (Type (max v w)) ≅ CategoryTheory.uliftYoneda.{w}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYonedaCompSheafToPresheaf
-  signature: :
-  body: Iso.refl _
-
-中文:
-定义 uliftYonedaCompSheafToPresheaf
-  签名: :
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+A variant of `yonedaCompSheafToPresheaf` with a raise in the universe level.
 -/
 def uliftYonedaCompSheafToPresheaf :
     GrothendieckTopology.uliftYoneda.{w} J ⋙ sheafToPresheaf J (Type (max v w)) ≅
       CategoryTheory.uliftYoneda.{w} :=
   Iso.refl _
 
-/--
-Definition of `yonedaFullyFaithful` / `yonedaFullyFaithful` 的定义
+/-- The yoneda functor into the sheaf category is fully faithful -/
+/-
+**CategoryTheory.GrothendieckTopology.yonedaFullyFaithful** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：yonedaFullyFaithful : (J.yoneda).FullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaFullyFaithful
-  signature: : (J.yoneda).FullyFaithful
-  body: Functor.FullyFaithful.ofCompFaithful (G := sheafToPresheaf J (Type v)) Yoneda.fullyFaithful
-
-中文:
-定义 yonedaFullyFaithful
-  签名: : (J.yoneda).满忠实
-  定义体: Functor.FullyFaithful.ofCompFaithful (G := sheafToPresheaf J (Type v)) Yoneda.fullyFaithful
-
-Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofCompFaithful, Yoneda, Yoneda.fullyFaithful, fullyFaithful, ofCompFaithful, sheafToPresheaf
+--- 原说明 ---
+The yoneda functor into the sheaf category is fully faithful
 -/
 def yonedaFullyFaithful : (J.yoneda).FullyFaithful :=
   Functor.FullyFaithful.ofCompFaithful (G := sheafToPresheaf J (Type v)) Yoneda.fullyFaithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (J.yoneda).Full
-  body: (J.yonedaFullyFaithful).full
-
-中文:
-实例 :
-  签名: (J.yoneda).满
-  定义体: (J.yonedaFullyFaithful).full
-
-Depends on / 依赖: J.yonedaFullyFaithful, yonedaFullyFaithful
+/-
+**CategoryTheory.GrothendieckTopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.GrothendieckTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (J.yoneda).Full := (J.yonedaFullyFaithful).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (J.yoneda).Faithful
-  body: (J.yonedaFullyFaithful).faithful
-
-中文:
-实例 :
-  签名: (J.yoneda).忠实
-  定义体: (J.yonedaFullyFaithful).faithful
-
-Depends on / 依赖: J.yonedaFullyFaithful, faithful, yonedaFullyFaithful
+/-
+**CategoryTheory.GrothendieckTopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.GrothendieckTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (J.yoneda).Faithful := (J.yonedaFullyFaithful).faithful
 
-/--
-Definition of `fullyFaithfulUliftYoneda` / `fullyFaithfulUliftYoneda` 的定义
+/-- A variant of `yonedaFullyFaithful` with a raise in the universe level. -/
+/-
+**CategoryTheory.GrothendieckTopology.fullyFaithfulUliftYoneda** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：fullyFaithfulUliftYoneda : (GrothendieckTopology.uliftYoneda.{w} J).FullyF
+aithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulUliftYoneda
-  signature: : (GrothendieckTopology.uliftYoneda.{w} J).FullyFaithful
-  body: J.yonedaFullyFaithful.comp (fullyFaithfulSheafCompose J fullyFaithfulULiftFunctor)
-
-中文:
-定义 fullyFaithfulUliftYoneda
-  签名: : (Grothendieck拓扑.uliftYoneda.{w} J).满忠实
-  定义体: J.yonedaFullyFaithful.comp (fullyFaithfulSheafCompose J fullyFaithfulULiftFunctor)
-
-Depends on / 依赖: J.yonedaFullyFaithful.comp, fullyFaithfulSheafCompose, fullyFaithfulULiftFunctor, yonedaFullyFaithful
+--- 原说明 ---
+A variant of `yonedaFullyFaithful` with a raise in the universe level.
 -/
 def fullyFaithfulUliftYoneda : (GrothendieckTopology.uliftYoneda.{w} J).FullyFaithful :=
   J.yonedaFullyFaithful.comp (fullyFaithfulSheafCompose J fullyFaithfulULiftFunctor)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (GrothendieckTopology.uliftYoneda.{w} J).Full
-  body: (J.fullyFaithfulUliftYoneda).full
-
-中文:
-实例 :
-  签名: (Grothendieck拓扑.uliftYoneda.{w} J).满
-  定义体: (J.fullyFaithfulUliftYoneda).full
-
-Depends on / 依赖: J.fullyFaithfulUliftYoneda, fullyFaithfulUliftYoneda
+/-
+**CategoryTheory.GrothendieckTopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.GrothendieckTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (GrothendieckTopology.uliftYoneda.{w} J).Full :=
   (J.fullyFaithfulUliftYoneda).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (GrothendieckTopology.uliftYoneda.{w} J).Faithful
-  body: (J.fullyFaithfulUliftYoneda).faithful
-
-中文:
-实例 :
-  签名: (Grothendieck拓扑.uliftYoneda.{w} J).忠实
-  定义体: (J.fullyFaithfulUliftYoneda).faithful
-
-Depends on / 依赖: J.fullyFaithfulUliftYoneda, faithful, fullyFaithfulUliftYoneda
+/-
+**CategoryTheory.GrothendieckTopology.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.GrothendieckTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (GrothendieckTopology.uliftYoneda.{w} J).Faithful :=
   (J.fullyFaithfulUliftYoneda).faithful
@@ -663,3 +546,4 @@ instance : (GrothendieckTopology.uliftYoneda.{w} J).Faithful :=
 end GrothendieckTopology
 
 end CategoryTheory
+

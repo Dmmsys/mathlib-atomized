@@ -20,114 +20,84 @@ universe u
 namespace Mathlib.Tactic.Nontriviality
 open Lean Elab Meta Tactic Qq
 
-/--
-theorem `subsingleton_or_nontrivial_elim` / 定理 `subsingleton_or_nontrivial_elim`
-
-English:
-theorem subsingleton_or_nontrivial_elim
-  statement: {p : Prop} {α : Type u}
-  proof: (subsingleton_or_nontrivial α).elim @h₁ @h₂
-
-中文:
-定理 subsingleton_or_nontrivial_elim
-  结论: {p : 命题} {α : 类型u}
-  证明: (subsingleton_or_nontrivial α).elim @h₁ @h₂
-
-Depends on / 依赖: subsingleton_or_nontrivial
+/-
+**Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim** 是 Mathlib 中的一个定
+理，位于命名空间 `Mathlib.Tactic.Nontriviality`。
+形式化陈述：subsingleton_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton
+ α -> p) (h₂ : Nontrivial α -> p) : p
+参数：h₁ : Subsingleton α -> p；h₂ : Nontrivial α -> p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
 -/
 theorem subsingleton_or_nontrivial_elim {p : Prop} {α : Type u}
-    (h₁ : Subsingleton α -> p) (h₂ : Nontrivial α -> p) : p :=
+    (h₁ : Subsingleton α → p) (h₂ : Nontrivial α → p) : p :=
   (subsingleton_or_nontrivial α).elim @h₁ @h₂
 
 /--
-Definition of `nontrivialityByElim` / `nontrivialityByElim` 的定义
+Tries to generate a `Nontrivial α` instance by performing case analysis on
+`subsingleton_or_nontrivial α`,
+attempting to discharge the subsingleton branch using lemmas with `@[nontriviality]` attribute,
+including `Subsingleton.le` and `eq_iff_true_of_subsingleton`.
+-/
+/-
+**Mathlib.Tactic.Nontriviality.nontrivialityByElim** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Nontriviality`。
+形式化陈述：nontrivialityByElim {u : Level} (α : Q(Type u)) (g : MVarId) (simpArgs : A
+rray Syntax) : MetaM MVarId
+参数：α : Q(Type u)；g : MVarId；simpArgs : Array Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nontrivialityByElim
-  signature: {u : Level} (α : Q(Type u)) (g : MVarId) (simpArgs : Array Syntax)
-  body: do
-  let p : Q(Prop) ← g.getType
-  guard (← instantiateMVars (← inferType p)).isProp
-  g.withContext do
-    let g₁ ← mkFreshExprMVarQ q(Subsingleton $α -> $p)
-    let (_, g₁') ← g₁.mvarId!.intro1
-    g₁'.withContext try
-      -- FIXME: restore after https://github.com/leanprover/lean4/issues/2054 is fixed
-      -- g₁'.inferInstance <|> do
-(do g₁'.assign (← synthInstance (← g₁'.getType))) > do
-        let simpArgs := simpArgs.push (Unhygienic.run `(Parser.Tactic.simpLemma| nontriviality))
-        let stx := open TSyntax.Compat in Unhygienic.run `(tactic| simp [$simpArgs,*])
-        let ([], _) ← runTactic g₁' stx | failure
-    catch _ => throwError
-      "Could not prove goal assuming `{q(Subsingleton $α)}`\n{MessageData.ofGoal g₁'}"
-    let g₂ : Q(Nontrivial $α -> $p) ← mkFreshExprMVarQ q(Nontrivial $α -> $p)
-    g.assign q(subsingleton_or_nontrivial_elim $g₁ $g₂)
-    pure g₂.mvarId!
-
-中文:
-定义 nontrivialityByElim
-  签名: {u : Level} (α : Q(类型u)) (g : MVarId) (simpArgs : 数组 Syntax)
-  定义体: do
-  let p : Q(Prop) ← g.getType
-  guard (← instantiateMVars (← inferType p)).isProp
-  g.withContext do
-    let g₁ ← mkFreshExprMVarQ q(Subsingleton $α -> $p)
-    let (_, g₁') ← g₁.mvarId!.intro1
-    g₁'.withContext try
-      -- FIXME: restore after https://github.com/leanprover/lean4/issues/2054 is fixed
-      -- g₁'.inferInstance <|> do
-(do g₁'.assign (← synthInstance (← g₁'.getType))) > do
-        let simpArgs := simpArgs.push (Unhygienic.run `(Parser.Tactic.simpLemma| nontriviality))
-        let stx := open TSyntax.Compat in Unhygienic.run `(tactic| simp [$simpArgs,*])
-        let ([], _) ← runTactic g₁' stx | failure
-    catch _ => throwError
-      "Could not prove goal assuming `{q(Subsingleton $α)}`\n{MessageData.ofGoal g₁'}"
-    let g₂ : Q(Nontrivial $α -> $p) ← mkFreshExprMVarQ q(Nontrivial $α -> $p)
-    g.assign q(subsingleton_or_nontrivial_elim $g₁ $g₂)
-    pure g₂.mvarId!
+--- 原说明 ---
+Tries to generate a `Nontrivial α` instance by performing case analysis on
+`subsingleton_or_nontrivial α`,
+attempting to discharge the subsingleton branch using lemmas with `@[nontriviali
+ty]` attribute,
+including `Subsingleton.le` and `eq_iff_true_of_subsingleton`.
 -/
 def nontrivialityByElim {u : Level} (α : Q(Type u)) (g : MVarId) (simpArgs : Array Syntax) :
     MetaM MVarId := do
   let p : Q(Prop) ← g.getType
   guard (← instantiateMVars (← inferType p)).isProp
   g.withContext do
-    let g₁ ← mkFreshExprMVarQ q(Subsingleton $α -> $p)
+    let g₁ ← mkFreshExprMVarQ q(Subsingleton $α → $p)
     let (_, g₁') ← g₁.mvarId!.intro1
     g₁'.withContext try
       -- FIXME: restore after https://github.com/leanprover/lean4/issues/2054 is fixed
       -- g₁'.inferInstance <|> do
-(do g₁'.assign (← synthInstance (← g₁'.getType))) > do
+      (do g₁'.assign (← synthInstance (← g₁'.getType))) <|> do
         let simpArgs := simpArgs.push (Unhygienic.run `(Parser.Tactic.simpLemma| nontriviality))
         let stx := open TSyntax.Compat in Unhygienic.run `(tactic| simp [$simpArgs,*])
         let ([], _) ← runTactic g₁' stx | failure
     catch _ => throwError
       "Could not prove goal assuming `{q(Subsingleton $α)}`\n{MessageData.ofGoal g₁'}"
-    let g₂ : Q(Nontrivial $α -> $p) ← mkFreshExprMVarQ q(Nontrivial $α -> $p)
+    let g₂ : Q(Nontrivial $α → $p) ← mkFreshExprMVarQ q(Nontrivial $α → $p)
     g.assign q(subsingleton_or_nontrivial_elim $g₁ $g₂)
     pure g₂.mvarId!
 
 open Lean.Elab.Tactic.SolveByElim in
 /--
-Definition of `nontrivialityByAssumption` / `nontrivialityByAssumption` 的定义
+Tries to generate a `Nontrivial α` instance using `nontrivial_of_ne` or `nontrivial_of_lt`
+and local hypotheses.
+-/
+/-
+**Mathlib.Tactic.Nontriviality.nontrivialityByAssumption** 是 Mathlib 中的一个定义，位于命名
+空间 `Mathlib.Tactic.Nontriviality`。
+形式化陈述：nontrivialityByAssumption (g : MVarId) : MetaM Unit
+参数：g : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nontrivialityByAssumption
-  signature: (g : MVarId)
-  body: do
-g.inferInstance > do
-    _ ← processSyntax {maxDepth := 6}
-      false false [← `(nontrivial_of_ne), ← `(nontrivial_of_lt)] [] #[] [g]
-
-中文:
-定义 nontrivialityByAssumption
-  签名: (g : MVarId)
-  定义体: do
-g.inferInstance > do
-    _ ← processSyntax {maxDepth := 6}
-      false false [← `(nontrivial_of_ne), ← `(nontrivial_of_lt)] [] #[] [g]
+--- 原说明 ---
+Tries to generate a `Nontrivial α` instance using `nontrivial_of_ne` or `nontriv
+ial_of_lt`
+and local hypotheses.
 -/
 def nontrivialityByAssumption (g : MVarId) : MetaM Unit := do
-g.inferInstance > do
+  g.inferInstance <|> do
     _ ← processSyntax {maxDepth := 6}
       false false [← `(nontrivial_of_ne), ← `(nontrivial_of_lt)] [] #[] [g]
 
@@ -175,60 +145,15 @@ example {α : Type} (a b : α) (h : a = b) : myeq a b := by
 syntax (name := nontriviality) "nontriviality" (ppSpace colGt term)?
   (" using " Parser.Tactic.simpArg,+)? : tactic
 
-/--
-Definition of `elabNontriviality` / `elabNontriviality` 的定义
+/-- Elaborator for the `nontriviality` tactic. -/
+/-
+**Mathlib.Tactic.Nontriviality.elabNontriviality** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.Nontriviality`。
+形式化陈述：Elab.Tactic.Tactic
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabNontriviality
-  signature: : Tactic
-  body: fun stx => do
-    let g ← getMainGoal
-    let α ← match stx[1].getOptional? with
-    | some e => Term.elabType e
-    | none => (do
-      let mut tgt ← withReducible g.getType'
-      if let some tgt' := tgt.not? then tgt ← withReducible (whnf tgt')
-      if let some (α, _) := tgt.eq? then return α
-      if let some (α, _) := tgt.app4? ``LE.le then return α
-      if let some (α, _) := tgt.app4? ``LT.lt then return α
-      throwError "The goal is not an (in)equality, so you'll need to specify the desired \
-        `Nontrivial α` instance by invoking `nontriviality α`.")
-    let .sort u ← whnf (← inferType α) | unreachable!
-    let some v := u.dec | throwError "not a type{indentExpr α}"
-    let α : Q(Type v) := α
-    let tac := do
-      let ty := q(Nontrivial $α)
-      let m ← mkFreshExprMVar (some ty)
-      nontrivialityByAssumption m.mvarId!
-      g.assert `inst ty m
-let g ← liftM tac > nontrivialityByElim α g stx[2][1].getSepArgs
-    replaceMainGoal [(← g.intro1).2]
-
-中文:
-定义 elabNontriviality
-  签名: : Tactic
-  定义体: fun stx => do
-    let g ← getMainGoal
-    let α ← match stx[1].getOptional? with
-    | some e => Term.elabType e
-    | none => (do
-      let mut tgt ← withReducible g.getType'
-      if let some tgt' := tgt.not? then tgt ← withReducible (whnf tgt')
-      if let some (α, _) := tgt.eq? then return α
-      if let some (α, _) := tgt.app4? ``LE.le then return α
-      if let some (α, _) := tgt.app4? ``LT.lt then return α
-      throwError "The goal is not an (in)equality, so you'll need to specify the desired \
-        `Nontrivial α` instance by invoking `nontriviality α`.")
-    let .sort u ← whnf (← inferType α) | unreachable!
-    let some v := u.dec | throwError "not a type{indentExpr α}"
-    let α : Q(Type v) := α
-    let tac := do
-      let ty := q(Nontrivial $α)
-      let m ← mkFreshExprMVar (some ty)
-      nontrivialityByAssumption m.mvarId!
-      g.assert `inst ty m
-let g ← liftM tac > nontrivialityByElim α g stx[2][1].getSepArgs
-    replaceMainGoal [(← g.intro1).2]
+--- 原说明 ---
+Elaborator for the `nontriviality` tactic.
 -/
 @[tactic nontriviality] def elabNontriviality : Tactic := fun stx => do
     let g ← getMainGoal
@@ -250,9 +175,10 @@ let g ← liftM tac > nontrivialityByElim α g stx[2][1].getSepArgs
       let m ← mkFreshExprMVar (some ty)
       nontrivialityByAssumption m.mvarId!
       g.assert `inst ty m
-let g ← liftM tac > nontrivialityByElim α g stx[2][1].getSepArgs
+    let g ← liftM <| tac <|> nontrivialityByElim α g stx[2][1].getSepArgs
     replaceMainGoal [(← g.intro1).2]
 
 end Nontriviality
 
 end Mathlib.Tactic
+

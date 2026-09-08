@@ -39,56 +39,30 @@ namespace Mathlib.Meta.SetNotationForOrder
 
 open Mathlib.Tactic Lean Meta Elab Term PrettyPrinter.Delaborator SubExpr
 
-/--
-Definition of `mkUsesSetNotationForOrderInstance` / `mkUsesSetNotationForOrderInstance` 的定义
+/-- Add an instance of `UsesSetNotationForOrder` for `declName`. -/
+/-
+**Mathlib.Meta.SetNotationForOrder.mkUsesSetNotationForOrderInstance** 是 Mathlib
+ 中的一个定义，位于命名空间 `Mathlib.Meta.SetNotationForOrder`。
+形式化陈述：mkUsesSetNotationForOrderInstance (declName : Name) (kind : AttributeKind)
+ : CoreM Unit
+参数：declName : Name；kind : AttributeKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkUsesSetNotationForOrderInstance
-  signature: (declName : Name) (kind : AttributeKind)
-  body: MetaM.run' do
-  let cinfo ← getConstInfo declName
-  forallTelescope cinfo.type fun xs _ => do
-  let instName := .str declName "instUsesSetNotationForOrder"
-  let app := mkAppN (.const declName (cinfo.levelParams.map .param)) xs
-addDecl Declaration.defnDecl {
-    name := instName
-    levelParams := cinfo.levelParams
-type := ← mkForallFVars xs ← mkAppM ``UsesSetNotationForOrder #[app]
-value := ← mkLambdaFVars xs ← mkAppOptM ``UsesSetNotationForOrder.mk #[app]
-    hints := .regular 0
-    safety := .safe }
-  registerInstance instName kind (eval_prio default)
-
-中文:
-定义 mkUsesSetNotationForOrderInstance
-  签名: (declName : Name) (kind : AttributeKind)
-  定义体: MetaM.run' do
-  let cinfo ← getConstInfo declName
-  forallTelescope cinfo.type fun xs _ => do
-  let instName := .str declName "instUsesSetNotationForOrder"
-  let app := mkAppN (.const declName (cinfo.levelParams.map .param)) xs
-addDecl Declaration.defnDecl {
-    name := instName
-    levelParams := cinfo.levelParams
-type := ← mkForallFVars xs ← mkAppM ``UsesSetNotationForOrder #[app]
-value := ← mkLambdaFVars xs ← mkAppOptM ``UsesSetNotationForOrder.mk #[app]
-    hints := .regular 0
-    safety := .safe }
-  registerInstance instName kind (eval_prio default)
-
-Depends on / 依赖: Declaration, Declaration.defnDecl, MetaM.run, UsesSetNotationForOrder, UsesSetNotationForOrder.mk, addDecl, cinfo.levelParams, cinfo.levelParams.map, cinfo.type, declName, defnDecl, forallTelescope, getConstInfo, instName, instUsesSetNotationForOrder, levelParams, mkAppM, mkAppN, mkAppOptM, mkForallFVars
+--- 原说明 ---
+Add an instance of `UsesSetNotationForOrder` for `declName`.
 -/
 def mkUsesSetNotationForOrderInstance (declName : Name) (kind : AttributeKind) : CoreM Unit :=
   MetaM.run' do
   let cinfo ← getConstInfo declName
-  forallTelescope cinfo.type fun xs _ => do
+  forallTelescope cinfo.type fun xs _ ↦ do
   let instName := .str declName "instUsesSetNotationForOrder"
   let app := mkAppN (.const declName (cinfo.levelParams.map .param)) xs
-addDecl Declaration.defnDecl {
+  addDecl <| Declaration.defnDecl {
     name := instName
     levelParams := cinfo.levelParams
-type := ← mkForallFVars xs ← mkAppM ``UsesSetNotationForOrder #[app]
-value := ← mkLambdaFVars xs ← mkAppOptM ``UsesSetNotationForOrder.mk #[app]
+    type := ← mkForallFVars xs <| ← mkAppM ``UsesSetNotationForOrder #[app]
+    value := ← mkLambdaFVars xs <| ← mkAppOptM ``UsesSetNotationForOrder.mk #[app]
     hints := .regular 0
     safety := .safe }
   registerInstance instName kind (eval_prio default)
@@ -102,20 +76,17 @@ initialize
     descr := "use set notation for order operations on this type"
     add declName _stx kind := mkUsesSetNotationForOrderInstance declName kind }
 
-/--
-Definition of `useSetNotationFor` / `useSetNotationFor` 的定义
+/-- Whether to use set notation for the given type or not. -/
+/-
+**Mathlib.Meta.SetNotationForOrder.useSetNotationFor** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Meta.SetNotationForOrder`。
+形式化陈述：useSetNotationFor (type : Expr) : MetaM Bool
+参数：type : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition useSetNotationFor
-  signature: (type : Expr)
-  body: do
-  return (← trySynthInstance (← mkAppM ``UsesSetNotationForOrder #[type])) matches .some _
-
-中文:
-定义 useSetNotationFor
-  签名: (type : Expr)
-  定义体: do
-  return (← trySynthInstance (← mkAppM ``UsesSetNotationForOrder #[type])) matches .some _
+--- 原说明 ---
+Whether to use set notation for the given type or not.
 -/
 def useSetNotationFor (type : Expr) : MetaM Bool := do
   return (← trySynthInstance (← mkAppM ``UsesSetNotationForOrder #[type])) matches .some _
@@ -124,19 +95,19 @@ def useSetNotationFor (type : Expr) : MetaM Bool := do
 
 /-- Delaborate `x ≤ y` into `x ⊆ y` if the type is tagged with `@[use_set_notation_for_order]`. -/
 @[app_delab LE.le]
-public def delabLe : Delab := whenNotPPOption getPPExplicit whenPPOption getPPNotation do
+public def delabLe : Delab := whenNotPPOption getPPExplicit <| whenPPOption getPPNotation do
   let_expr LE.le α _ _ _ := ← getExpr | failure
-guard ← useSetNotationFor α
+  guard <| ← useSetNotationFor α
   let x ← withNaryArg 2 delab
   let y ← withNaryArg 3 delab
-  let stx ← `($x subseteq $y)
+  let stx ← `($x ⊆ $y)
   annotateGoToDef stx decl_name%
 
 /-- Delaborate `x < y` into `x ⊂ y` if the type is tagged with `@[use_set_notation_for_order]`. -/
 @[app_delab LT.lt]
-public def delabLt : Delab := whenNotPPOption getPPExplicit whenPPOption getPPNotation do
+public def delabLt : Delab := whenNotPPOption getPPExplicit <| whenPPOption getPPNotation do
   let_expr LT.lt α _ _ _ := ← getExpr | failure
-guard ← useSetNotationFor α
+  guard <| ← useSetNotationFor α
   let x ← withNaryArg 2 delab
   let y ← withNaryArg 3 delab
   let stx ← `($x ⊂ $y)
@@ -144,9 +115,9 @@ guard ← useSetNotationFor α
 
 /-- Delaborate `x ≥ y` into `x ⊇ y` if the type is tagged with `@[use_set_notation_for_order]`. -/
 @[app_delab GE.ge]
-public def delabGe : Delab := whenNotPPOption getPPExplicit whenPPOption getPPNotation do
+public def delabGe : Delab := whenNotPPOption getPPExplicit <| whenPPOption getPPNotation do
   let_expr GE.ge α _ _ _ := ← getExpr | failure
-guard ← useSetNotationFor α
+  guard <| ← useSetNotationFor α
   let x ← withNaryArg 2 delab
   let y ← withNaryArg 3 delab
   let stx ← `($x ⊇ $y)
@@ -154,9 +125,9 @@ guard ← useSetNotationFor α
 
 /-- Delaborate `x > y` into `x ⊃ y` if the type is tagged with `@[use_set_notation_for_order]`. -/
 @[app_delab GT.gt]
-public def delabGt : Delab := whenNotPPOption getPPExplicit whenPPOption getPPNotation do
+public def delabGt : Delab := whenNotPPOption getPPExplicit <| whenPPOption getPPNotation do
   let_expr GT.gt α _ _ _ := ← getExpr | failure
-guard ← useSetNotationFor α
+  guard <| ← useSetNotationFor α
   let x ← withNaryArg 2 delab
   let y ← withNaryArg 3 delab
   let stx ← `($x ⊃ $y)
@@ -170,60 +141,35 @@ register_option linter.setNotationForOrder : Bool := {
   descr := "Linter for ambiguous use of subset notation notation" }
 
 /-- This relation is an implementation detail of the `⊆` elaborator. -/
-public opaque SubsetElabAux.{u} {α : Type u} : α -> α -> Prop
+public opaque SubsetElabAux.{u} {α : Type u} : α → α → Prop
 
-/--
-Definition of `elabSubsetLike` / `elabSubsetLike` 的定义
+/-- Elaborate a notation like `a ⊆ b` by elaborating `a` and `b`, and then deciding
+based on their type whether to return `a ⊆ b` or `a ≤ b`.
+Use `a ≤ b` whenever `useSetNotationFor` returns true for the type.
+If the type is not known, elaboration of this term is postponed.
 
-English:
-definition elabSubsetLike
-  signature: (x y : Term) (le leCls sub subCls : Name) (expectedType? : Option Expr)
-  body: do
-  let rel ← `(SubsetElabAux $x $y)
-  let e ← elabApp rel expectedType?
-  let_expr f@SubsetElabAux α x y := e | throwError "unexpected result {e} when elaborating {rel}"
-  -- If the type cannot be determined yet, we postpone elaboration until it is known.
-  -- This behaviour is inspired by `resolveLValLoop` from the file `Lean.Elab.App`.
-  if ← isMVarApp α then
-    tryPostpone
-    synthesizeSyntheticMVarsUsingDefault
-    if ← isMVarApp α then
-      Linter.logLintIf linter.setNotationForOrder (← getRef)
-        m!"Ambiguous use of subset notation: the type is a metavariable.\n\
-        Consider adding a type annotation, e.g. `(_ : Set _) subseteq _`.\n\
-        The term will elaborate to a different constant depending on \
-        whether the type is tagged with `@[use_set_notation_for_order]`."
-  let (rel, cls) := if ← useSetNotationFor α then (le, leCls) else (sub, subCls)
-let inst ← mkInstMVar .app (.const cls f.constLevels!) α
-  let rel := mkApp2 (.const rel f.constLevels!) α inst
-  -- Add the relation (e.g. `LE.le : Set Nat → Set Nat → Prop`) as a hover on the whole term
-  addTermInfo' (← getRef) rel (isDisplayableTerm := true)
-  return mkApp2 rel x y
+We assume that `le` and `sub` are names for declarations of exactly the form
+`decl.{u} {α : Type u} [Cls.{u} α] (a b : α) : Prop`, and that likewise `leCls` and `subCls` are
+names for declarations of exactly the form  `Cls.{u} (α : Type u) : Type u`. -/
+/-
+**Mathlib.Meta.SetNotationForOrder.elabSubsetLike** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Meta.SetNotationForOrder`。
+形式化陈述：elabSubsetLike (x y : Term) (le leCls sub subCls : Name) (expectedType? : 
+Option Expr) : TermElabM Expr
+参数：x y : Term；le leCls sub subCls : Name；expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 elabSubsetLike
-  签名: (x y : 项) (le leCls sub subCls : Name) (expectedType? : 选项类型 Expr)
-  定义体: do
-  let rel ← `(SubsetElabAux $x $y)
-  let e ← elabApp rel expectedType?
-  let_expr f@SubsetElabAux α x y := e | throwError "unexpected result {e} when elaborating {rel}"
-  -- If the type cannot be determined yet, we postpone elaboration until it is known.
-  -- This behaviour is inspired by `resolveLValLoop` from the file `Lean.Elab.App`.
-  if ← isMVarApp α then
-    tryPostpone
-    synthesizeSyntheticMVarsUsingDefault
-    if ← isMVarApp α then
-      Linter.logLintIf linter.setNotationForOrder (← getRef)
-        m!"Ambiguous use of subset notation: the type is a metavariable.\n\
-        Consider adding a type annotation, e.g. `(_ : Set _) subseteq _`.\n\
-        The term will elaborate to a different constant depending on \
-        whether the type is tagged with `@[use_set_notation_for_order]`."
-  let (rel, cls) := if ← useSetNotationFor α then (le, leCls) else (sub, subCls)
-let inst ← mkInstMVar .app (.const cls f.constLevels!) α
-  let rel := mkApp2 (.const rel f.constLevels!) α inst
-  -- Add the relation (e.g. `LE.le : Set Nat → Set Nat → Prop`) as a hover on the whole term
-  addTermInfo' (← getRef) rel (isDisplayableTerm := true)
-  return mkApp2 rel x y
+--- 原说明 ---
+Elaborate a notation like `a ⊆ b` by elaborating `a` and `b`, and then deciding
+based on their type whether to return `a ⊆ b` or `a ≤ b`.
+Use `a ≤ b` whenever `useSetNotationFor` returns true for the type.
+If the type is not known, elaboration of this term is postponed.
+
+We assume that `le` and `sub` are names for declarations of exactly the form
+`decl.{u} {α : Type u} [Cls.{u} α] (a b : α) : Prop`, and that likewise `leCls` 
+and `subCls` are
+names for declarations of exactly the form  `Cls.{u} (α : Type u) : Type u`.
 -/
 def elabSubsetLike (x y : Term) (le leCls sub subCls : Name) (expectedType? : Option Expr) :
     TermElabM Expr := do
@@ -238,11 +184,11 @@ def elabSubsetLike (x y : Term) (le leCls sub subCls : Name) (expectedType? : Op
     if ← isMVarApp α then
       Linter.logLintIf linter.setNotationForOrder (← getRef)
         m!"Ambiguous use of subset notation: the type is a metavariable.\n\
-        Consider adding a type annotation, e.g. `(_ : Set _) subseteq _`.\n\
+        Consider adding a type annotation, e.g. `(_ : Set _) ⊆ _`.\n\
         The term will elaborate to a different constant depending on \
         whether the type is tagged with `@[use_set_notation_for_order]`."
   let (rel, cls) := if ← useSetNotationFor α then (le, leCls) else (sub, subCls)
-let inst ← mkInstMVar .app (.const cls f.constLevels!) α
+  let inst ← mkInstMVar <| .app (.const cls f.constLevels!) α
   let rel := mkApp2 (.const rel f.constLevels!) α inst
   -- Add the relation (e.g. `LE.le : Set Nat → Set Nat → Prop`) as a hover on the whole term
   addTermInfo' (← getRef) rel (isDisplayableTerm := true)
@@ -252,7 +198,7 @@ let inst ← mkInstMVar .app (.const cls f.constLevels!) α
 For types tagged with `@[use_set_notation_for_order]`,
 the relation `LE.le` is used instead of `Subset`.
 The hover info shows which one is used. -/
-syntax:50 (name := subsetStx') (priority := high) term:51 " subseteq " term:51 : term
+syntax:50 (name := subsetStx') (priority := high) term:51 " ⊆ " term:51 : term
 
 /-- Strict subset relation: `a ⊂ b`.
 For types tagged with `@[use_set_notation_for_order]`,
@@ -272,7 +218,7 @@ the relation `GT.gt` is used instead of `SSuperset`.
 The hover info shows which one is used. -/
 syntax:50 (name := ssupsetStx') (priority := high) term:51 " ⊃ " term:51 : term
 
-recommended_spelling "subset" for "subseteq" in [subsetStx']
+recommended_spelling "subset" for "⊆" in [subsetStx']
 recommended_spelling "ssubset" for "⊂" in [ssubsetStx']
 recommended_spelling "superset" for "⊇" in [supsetStx']
 recommended_spelling "ssuperset" for "⊃" in [ssupsetStx']
@@ -280,7 +226,7 @@ recommended_spelling "ssuperset" for "⊃" in [ssupsetStx']
 /-- Elaborator for `x ⊆ y` notation. -/
 @[term_elab subsetStx']
 public def elabSubsetStx' : TermElab
-  | `($x subseteq $y), expectedType? =>
+  | `($x ⊆ $y), expectedType? =>
     elabSubsetLike x y ``LE.le ``LE ``Subset ``HasSubset expectedType?
   | _, _ => throwUnsupportedSyntax
 
@@ -307,7 +253,7 @@ public def elabSSupsetStx' : TermElab
 
 /-- Declare `∀ x ⊆ y, ...` as syntax for `∀ x, x ⊆ y → ...` and `∃ x ⊆ y, ...` as syntax for
 `∃ x, x ⊆ y ∧ ...` -/
-binder_predicate (priority := high) x " subseteq " y:term => `($x subseteq $y)
+binder_predicate (priority := high) x " ⊆ " y:term => `($x ⊆ $y)
 
 /-- Declare `∀ x ⊂ y, ...` as syntax for `∀ x, x ⊂ y → ...` and `∃ x ⊂ y, ...` as syntax for
 `∃ x, x ⊂ y ∧ ...` -/
@@ -332,7 +278,7 @@ public def subsetDotNotationLinter : Batteries.Tactic.Lint.Linter where
   test declName := do
     if Linter.isDeprecated (← getEnv) declName then return none
     let n := declName.getNumParts
-    if n <= 2 then return none
+    if n ≤ 2 then return none
     let (nameStart, rest) := declName.splitAt (n - 2)
     let otherStart ← match nameStart with
       | ``Subset => pure ``LE.le
@@ -349,42 +295,15 @@ public def subsetDotNotationLinter : Batteries.Tactic.Lint.Linter where
 /-! ## Lemma translation -/
 
 @[inherit_doc GuessName.GuessNameData.nameDict]
-/--
-Definition of `nameDict` / `nameDict` 的定义
+/-
+**Mathlib.Meta.SetNotationForOrder.nameDict** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.M
+eta.SetNotationForOrder`。
+形式化陈述：nameDict : Std.HashMap String (List String)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nameDict
-  signature: : Std.HashMap String (List String)
-  body: .ofList [
-  ("le", ["Subset"]),
-  ("ge", ["Superset"]),
-  ("lt", ["SSubset"]),
-  ("gt", ["SSuperset"]),
-  ("inf", ["Inter"]),
-  ("sup", ["Union"]),
-  ("sInf", ["SInter"]),
-  ("sSup", ["SUnion"]),
-  ("iInf", ["IInter"]),
-  ("iSup", ["IUnion"]),
-]
-
-中文:
-定义 nameDict
-  签名: : Std.HashMap String (列表 String)
-  定义体: .ofList [
-  ("le", ["Subset"]),
-  ("ge", ["Superset"]),
-  ("lt", ["SSubset"]),
-  ("gt", ["SSuperset"]),
-  ("inf", ["Inter"]),
-  ("sup", ["Union"]),
-  ("sInf", ["SInter"]),
-  ("sSup", ["SUnion"]),
-  ("iInf", ["IInter"]),
-  ("iSup", ["IUnion"]),
-]
-
-Depends on / 依赖: ofList
+--- 原说明 ---
+## Lemma translation
 -/
 def nameDict : Std.HashMap String (List String) := .ofList [
   ("le", ["Subset"]),
@@ -417,23 +336,24 @@ initialize
       unless kind == .global do
         throwAttrMustBeGlobal `to_set_notation kind
       let .str srcRoot srcStr := src | throwError "invalid name `{src}`"
-let tgt := srcRoot.str GuessName.guessName { nameDict, abbreviationDict := {} } srcStr
-MetaM.run' addRelatedDecl src tgt stx ⟨mkNullNode⟩
+      let tgt := srcRoot.str <| GuessName.guessName { nameDict, abbreviationDict := {} } srcStr
+      MetaM.run' <| addRelatedDecl src tgt stx ⟨mkNullNode⟩
         (docstringPrefix? := s!"Set notation form of `{src}`") (hoverInfo := true)
         fun value levels => do
-        forallTelescope (← inferType value) fun xs _ => do
+        forallTelescope (← inferType value) fun xs _ ↦ do
           let mut value := mkAppN value xs
           for x in xs.reverse do
             if let .sort (.succ u) ← inferType x then
               -- If `x` is a type,
               -- create a constant lambda expression for the proof that now assumes `cls`.
               let cls := .app (.const ``UsesSetNotationForOrder [u]) x
-let ident ← withFreshMacroScope MonadQuotation.addMacroScope `inst
+              let ident ← withFreshMacroScope <| MonadQuotation.addMacroScope `inst
               value := .lam ident cls value .instImplicit
             value ← mkLambdaFVars #[x] value
           return (value, levels)
-liftCommandElabM Elab.Command.elabCommand (← `(command|
-attribute [nolint unusedArguments] (mkCIdent tgt)))
+      liftCommandElabM <| Elab.Command.elabCommand (← `(command|
+        attribute [nolint unusedArguments] $(mkCIdent tgt)))
   }
 
 end Mathlib.Meta.SetNotationForOrder
+

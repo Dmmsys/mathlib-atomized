@@ -39,26 +39,29 @@ namespace HomotopicalAlgebra
 variable {C : Type*} [Category* C] [ModelCategory C]
   {X Y : C} (f : X ⟶ Y)
 
-/--
-Definition of `CofibrantBrownFactorization` / `CofibrantBrownFactorization` 的定义
+/-- Given a morphism `f : X ⟶ Y` in a model category,
+this structure contains the data of a factorization `i ≫ p = f`
+with `i` a cofibration, `p` a trivial fibration which
+has a section `s` that is a cofibration.
+That this structure is nonempty when `X`
+and `Y` are cofibrant is Ken Brown's factorization lemma. -/
+/-
+**HomotopicalAlgebra.CofibrantBrownFactorization** 是 Mathlib 中的一个结构，位于命名空间 `Homo
+topicalAlgebra`。
+形式化陈述：CofibrantBrownFactorization extends MapFactorizationData (cofibrations C) 
+(trivialFibrations C) f where /-- a cofibration that is a section of `p` -/ s : 
+Y ⟶ Z s_p : s ≫ p = 𝟙 Y
+参数：cofibrations C；trivialFibrations C。
+继承自：MapFactorizationData (cofibrations C) (trivialFibrations C) f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CofibrantBrownFactorization
-  parameters: extends
-  axioms and operations (3):
-    - s : Y ⟶ Z
-    - s_p : s ≫ p = 𝟙 Y  [default: by cat_disch]
-    - cofibration_s : Cofibration s  [default: by infer_instance]
-
-中文:
-结构 余fibrantBrownFactorization
-  参数: extends
-  公理与运算 (3 个):
-    - s : Y ⟶ Z
-    - s_p : s ≫ p = 𝟙 Y  [默认: by cat_disch]
-    - cofibration_s : 余纤维化 s  [默认: by infer_instance]
-
-Depends on / 依赖: Cofibration, cat_disch, cofibration_s, infer_instance
+--- 原说明 ---
+Given a morphism `f : X ⟶ Y` in a model category,
+this structure contains the data of a factorization `i ≫ p = f`
+with `i` a cofibration, `p` a trivial fibration which
+has a section `s` that is a cofibration.
+That this structure is nonempty when `X`
+and `Y` are cofibrant is Ken Brown's factorization lemma.
 -/
 structure CofibrantBrownFactorization extends
     MapFactorizationData (cofibrations C) (trivialFibrations C) f where
@@ -74,38 +77,17 @@ attribute [instance] cofibration_s
 
 variable (h : CofibrantBrownFactorization f)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [WeakEquivalence
-  signature: f] : WeakEquivalence h.i
-  body: weakEquivalence_of_postcomp_of_fac h.fac
-
-中文:
-实例 [弱等价
-  签名: f] : 弱等价 h.i
-  定义体: weakEquivalence_of_postcomp_of_fac h.fac
-
-Depends on / 依赖: h.fac, weakEquivalence_of_postcomp_of_fac
+/-
+**HomotopicalAlgebra.CofibrantBrownFactorization.** 是 Mathlib 中的一个实例，位于命名空间 `Hom
+otopicalAlgebra.CofibrantBrownFactorization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [WeakEquivalence f] : WeakEquivalence h.i :=
   weakEquivalence_of_postcomp_of_fac h.fac
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WeakEquivalence h.s
-  body: weakEquivalence_of_postcomp_of_fac h.s_p
-
-中文:
-实例 :
-  签名: 弱等价 h.s
-  定义体: weakEquivalence_of_postcomp_of_fac h.s_p
-
-Depends on / 依赖: h.s_p, weakEquivalence_of_postcomp_of_fac
+/-
+**HomotopicalAlgebra.CofibrantBrownFactorization.** 是 Mathlib 中的一个实例，位于命名空间 `Hom
+otopicalAlgebra.CofibrantBrownFactorization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WeakEquivalence h.s :=
   weakEquivalence_of_postcomp_of_fac h.s_p
@@ -115,28 +97,21 @@ set_option backward.isDefEq.respectTransparency false in
 a factorization of `coprod.desc f (𝟙 Y) : X ⨿ Y ⟶ Y`
 as a cofibration followed by a trivial fibration. -/
 @[simps]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**HomotopicalAlgebra.CofibrantBrownFactorization.mk'** 是 Mathlib 中的一个定义，位于命名空间 `
+HomotopicalAlgebra.CofibrantBrownFactorization`。
+形式化陈述：mk' [IsCofibrant X] [IsCofibrant Y] (h : MapFactorizationData (cofibration
+s C) (trivialFibrations C) (coprod.desc f (𝟙 Y))) : CofibrantBrownFactorization 
+f where Z
+参数：h : MapFactorizationData (cofibrations C) (trivialFibrations C) (coprod.desc 
+f (𝟙 Y))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: [IsCofibrant X] [IsCofibrant Y]
-  body: h.Z
-  i := coprod.inl ≫ h.i
-  p := h.p
-  s := coprod.inr ≫ h.i
-  hi := by rw [← cofibration_iff]; infer_instance
-  hp := by rw [mem_trivialFibrations_iff]; constructor <;> infer_instance
-
-中文:
-定义 mk'
-  签名: [IsCofibrant X] [IsCofibrant Y]
-  定义体: h.Z
-  i := coprod.inl ≫ h.i
-  p := h.p
-  s := coprod.inr ≫ h.i
-  hi := by rw [← cofibration_iff]; infer_instance
-  hp := by rw [mem_trivialFibrations_iff]; constructor <;> infer_instance
+--- 原说明 ---
+The term in `CofibrantBrownFactorization f` that is deduced from
+a factorization of `coprod.desc f (𝟙 Y) : X ⨿ Y ⟶ Y`
+as a cofibration followed by a trivial fibration.
 -/
 noncomputable def mk' [IsCofibrant X] [IsCofibrant Y]
     (h : MapFactorizationData (cofibrations C) (trivialFibrations C) (coprod.desc f (𝟙 Y))) :
@@ -149,21 +124,10 @@ noncomputable def mk' [IsCofibrant X] [IsCofibrant Y]
   hp := by rw [mem_trivialFibrations_iff]; constructor <;> infer_instance
 
 variable (h : MapFactorizationData (cofibrations C) (trivialFibrations C) (coprod.desc f (𝟙 Y)))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofibrant
-  signature: X] [IsCofibrant Y] :
-  body: ⟨.mk' f (MorphismProperty.factorizationData _ _ _)⟩
-
-中文:
-实例 [IsCofibrant
-  签名: X] [IsCofibrant Y] :
-  定义体: ⟨.mk' f (MorphismProperty.factorizationData _ _ _)⟩
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.factorizationData, factorizationData
+/-
+**HomotopicalAlgebra.CofibrantBrownFactorization.** 是 Mathlib 中的一个实例，位于命名空间 `Hom
+otopicalAlgebra.CofibrantBrownFactorization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofibrant X] [IsCofibrant Y] :
     Nonempty (CofibrantBrownFactorization f) :=
@@ -171,26 +135,29 @@ instance [IsCofibrant X] [IsCofibrant Y] :
 
 end CofibrantBrownFactorization
 
-/--
-Definition of `FibrantBrownFactorization` / `FibrantBrownFactorization` 的定义
+/-- Given a morphism `f : X ⟶ Y` in a model category,
+this structure contains the data of a factorization `i ≫ p = f`
+with `p` a fibration, `i` a trivial cofibration which
+has a retraction `r` that is a fibration.
+That this structure is nonempty when `X`
+and `Y` are fibrant is Ken Brown's factorization lemma. -/
+/-
+**HomotopicalAlgebra.FibrantBrownFactorization** 是 Mathlib 中的一个结构，位于命名空间 `Homoto
+picalAlgebra`。
+形式化陈述：FibrantBrownFactorization extends MapFactorizationData (trivialCofibration
+s C) (fibrations C) f where /-- a fibration that is a retraction of `i` -/ r : Z
+ ⟶ X i_r : i ≫ r = 𝟙 X
+参数：trivialCofibrations C；fibrations C。
+继承自：MapFactorizationData (trivialCofibrations C) (fibrations C) f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FibrantBrownFactorization
-  parameters: extends
-  axioms and operations (3):
-    - r : Z ⟶ X
-    - i_r : i ≫ r = 𝟙 X  [default: by cat_disch]
-    - fibration_r : Fibration r  [default: by infer_instance]
-
-中文:
-结构 FibrantBrownFactorization
-  参数: extends
-  公理与运算 (3 个):
-    - r : Z ⟶ X
-    - i_r : i ≫ r = 𝟙 X  [默认: by cat_disch]
-    - fibration_r : 纤维化 r  [默认: by infer_instance]
-
-Depends on / 依赖: Fibration, cat_disch, fibration_r, infer_instance
+--- 原说明 ---
+Given a morphism `f : X ⟶ Y` in a model category,
+this structure contains the data of a factorization `i ≫ p = f`
+with `p` a fibration, `i` a trivial cofibration which
+has a retraction `r` that is a fibration.
+That this structure is nonempty when `X`
+and `Y` are fibrant is Ken Brown's factorization lemma.
 -/
 structure FibrantBrownFactorization extends
     MapFactorizationData (trivialCofibrations C) (fibrations C) f where
@@ -206,38 +173,17 @@ attribute [instance] fibration_r
 
 variable (h : FibrantBrownFactorization f)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [WeakEquivalence
-  signature: f] : WeakEquivalence h.p
-  body: weakEquivalence_of_precomp_of_fac h.fac
-
-中文:
-实例 [弱等价
-  签名: f] : 弱等价 h.p
-  定义体: weakEquivalence_of_precomp_of_fac h.fac
-
-Depends on / 依赖: h.fac, weakEquivalence_of_precomp_of_fac
+/-
+**HomotopicalAlgebra.FibrantBrownFactorization.** 是 Mathlib 中的一个实例，位于命名空间 `Homot
+opicalAlgebra.FibrantBrownFactorization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [WeakEquivalence f] : WeakEquivalence h.p :=
   weakEquivalence_of_precomp_of_fac h.fac
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WeakEquivalence h.r
-  body: weakEquivalence_of_precomp_of_fac h.i_r
-
-中文:
-实例 :
-  签名: 弱等价 h.r
-  定义体: weakEquivalence_of_precomp_of_fac h.i_r
-
-Depends on / 依赖: h.i_r, weakEquivalence_of_precomp_of_fac
+/-
+**HomotopicalAlgebra.FibrantBrownFactorization.** 是 Mathlib 中的一个实例，位于命名空间 `Homot
+opicalAlgebra.FibrantBrownFactorization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WeakEquivalence h.r :=
   weakEquivalence_of_precomp_of_fac h.i_r
@@ -247,28 +193,21 @@ set_option backward.isDefEq.respectTransparency false in
 a factorization of `prod.lift f (𝟙 X) : X ⟶ Y ⨯ X`
 as a cofibration followed by a trivial fibration. -/
 @[simps]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**HomotopicalAlgebra.FibrantBrownFactorization.mk'** 是 Mathlib 中的一个定义，位于命名空间 `Ho
+motopicalAlgebra.FibrantBrownFactorization`。
+形式化陈述：mk' [IsFibrant X] [IsFibrant Y] (h : MapFactorizationData (trivialCofibrat
+ions C) (fibrations C) (prod.lift f (𝟙 X))) : FibrantBrownFactorization f where 
+Z
+参数：h : MapFactorizationData (trivialCofibrations C) (fibrations C) (prod.lift f 
+(𝟙 X))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: [IsFibrant X] [IsFibrant Y]
-  body: h.Z
-  i := h.i
-  p := h.p ≫ prod.fst
-  r := h.p ≫ prod.snd
-  hi := by rw [mem_trivialCofibrations_iff]; constructor <;> infer_instance
-  hp := by rw [← fibration_iff]; infer_instance
-
-中文:
-定义 mk'
-  签名: [IsFibrant X] [IsFibrant Y]
-  定义体: h.Z
-  i := h.i
-  p := h.p ≫ prod.fst
-  r := h.p ≫ prod.snd
-  hi := by rw [mem_trivialCofibrations_iff]; constructor <;> infer_instance
-  hp := by rw [← fibration_iff]; infer_instance
+--- 原说明 ---
+The term in `CofibrantBrownFactorization f` that is deduced from
+a factorization of `prod.lift f (𝟙 X) : X ⟶ Y ⨯ X`
+as a cofibration followed by a trivial fibration.
 -/
 noncomputable def mk' [IsFibrant X] [IsFibrant Y]
     (h : MapFactorizationData (trivialCofibrations C) (fibrations C) (prod.lift f (𝟙 X))) :
@@ -279,21 +218,10 @@ noncomputable def mk' [IsFibrant X] [IsFibrant Y]
   r := h.p ≫ prod.snd
   hi := by rw [mem_trivialCofibrations_iff]; constructor <;> infer_instance
   hp := by rw [← fibration_iff]; infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFibrant
-  signature: X] [IsFibrant Y] :
-  body: ⟨.mk' f (MorphismProperty.factorizationData _ _ _)⟩
-
-中文:
-实例 [IsFibrant
-  签名: X] [IsFibrant Y] :
-  定义体: ⟨.mk' f (MorphismProperty.factorizationData _ _ _)⟩
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.factorizationData, factorizationData
+/-
+**HomotopicalAlgebra.FibrantBrownFactorization.** 是 Mathlib 中的一个实例，位于命名空间 `Homot
+opicalAlgebra.FibrantBrownFactorization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFibrant X] [IsFibrant Y] :
     Nonempty (FibrantBrownFactorization f) :=
@@ -302,3 +230,4 @@ instance [IsFibrant X] [IsFibrant Y] :
 end FibrantBrownFactorization
 
 end HomotopicalAlgebra
+

@@ -113,39 +113,24 @@ variable (Γ : Type*)
 -- type of "labels" or TM states
 variable (Λ : Type*)
 
-/--
-Inductive type `Stmt` / 归纳类型 `Stmt`
+/-- A Turing machine "statement" is just a command to either move
+  left or right, or write a symbol on the tape. -/
+/-
+**Turing.TM0.Stmt** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.TM0`。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Stmt
-  constructors (2):
-    - move: Dir -> Stmt
-    - write: Γ -> Stmt
-
-中文:
-归纳类型 Stmt
-  构造子 (2 个):
-    - move: Dir -> Stmt
-    - write: Γ -> Stmt
+--- 原说明 ---
+A Turing machine "statement" is just a command to either move
+  left or right, or write a symbol on the tape.
 -/
 inductive Stmt
-  | move : Dir -> Stmt
-  | write : Γ -> Stmt
-
-/--
-Instance `Stmt.inhabited` / 实例 `Stmt.inhabited`
-
-English:
-instance Stmt.inhabited
-  signature: [Inhabited Γ]
-  body: ⟨Stmt.write default⟩
-
-中文:
-实例 Stmt.inhabited
-  签名: [可居 Γ]
-  定义体: ⟨Stmt.write default⟩
-
-Depends on / 依赖: Stmt.write
+  | move : Dir → Stmt
+  | write : Γ → Stmt
+/-
+**Turing.TM0.Stmt.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0.Stmt`。
+形式化陈述：(Γ : Type u_1) → [Inhabited Γ] → Inhabited (Turing.TM0.Stmt Γ)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Stmt.inhabited [Inhabited Γ] : Inhabited (Stmt Γ) :=
   ⟨Stmt.write default⟩
@@ -160,41 +145,43 @@ instance Stmt.inhabited [Inhabited Γ] : Inhabited (Stmt Γ) :=
   for `Γ` is the "blank" tape value, and the default value of `Λ` is
   the initial state. -/
 @[nolint unusedArguments] -- this is a deliberate addition, see comment
-/--
-Definition of `Machine` / `Machine` 的定义
+/-
+**Turing.TM0.Machine** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0`。
+形式化陈述：Machine [Inhabited Λ]
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Machine
-  signature: [Inhabited Λ]
-  body: Λ -> Γ -> Option (Λ × (Stmt Γ))
-deriving Inhabited
+--- 原说明 ---
+A Post-Turing machine with symbol type `Γ` and label type `Λ`
+  is a function which, given the current state `q : Λ` and
+  the tape head `a : Γ`, either halts (returns `none`) or returns
+  a new state `q' : Λ` and a `Stmt` describing what to do,
+  either a move left or right, or a write command.
 
-中文:
-定义 Machine
-  签名: [可居 Λ]
-  定义体: Λ -> Γ -> Option (Λ × (Stmt Γ))
-deriving Inhabited
+  Both `Λ` and `Γ` are required to be inhabited; the default value
+  for `Γ` is the "blank" tape value, and the default value of `Λ` is
+  the initial state.
 -/
 def Machine [Inhabited Λ] :=
-  Λ -> Γ -> Option (Λ × (Stmt Γ))
+  Λ → Γ → Option (Λ × (Stmt Γ))
 deriving Inhabited
 
-/--
-Definition of `Cfg` / `Cfg` 的定义
+/-- The configuration state of a Turing machine during operation
+  consists of a label (machine state), and a tape.
+  The tape is represented in the form `(a, L, R)`, meaning the tape looks like `L.rev ++ [a] ++ R`
+  with the machine currently reading the `a`. The lists are
+  automatically extended with blanks as the machine moves around. -/
+/-
+**Turing.TM0.Cfg** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.TM0`。
+形式化陈述：(Γ : Type u_1) → Type u_2 → [Inhabited Γ] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Cfg
-  parameters: [Inhabited Γ]
-  axioms and operations (2):
-    - q : Λ
-    - Tape : Tape Γ
-
-中文:
-结构 Cfg
-  参数: [可居 Γ]
-  公理与运算 (2 个):
-    - q : Λ
-    - Tape : Tape Γ
+--- 原说明 ---
+The configuration state of a Turing machine during operation
+  consists of a label (machine state), and a tape.
+  The tape is represented in the form `(a, L, R)`, meaning the tape looks like `
+L.rev ++ [a] ++ R`
+  with the machine currently reading the `a`. The lists are
+  automatically extended with blanks as the machine moves around.
 -/
 structure Cfg [Inhabited Γ] where
   /-- The current machine state. -/
@@ -208,160 +195,126 @@ variable [Inhabited Λ]
 section
 variable [Inhabited Γ]
 
-/--
-Instance `Cfg.inhabited` / 实例 `Cfg.inhabited`
-
-English:
-instance Cfg.inhabited
-  signature: : Inhabited (Cfg Γ Λ)
-  body: ⟨⟨default, default⟩⟩
-
-中文:
-实例 Cfg.inhabited
-  签名: : 可居 (Cfg Γ Λ)
-  定义体: ⟨⟨default, default⟩⟩
+/-
+**Turing.TM0.Cfg.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0.Cfg`。
+形式化陈述：{Γ : Type u_1} → {Λ : Type u_2} → [Inhabited Λ] → [inst : Inhabited Γ] → I
+nhabited (Turing.TM0.Cfg Γ Λ)
+参数：Turing.TM0.Cfg Γ Λ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Cfg.inhabited : Inhabited (Cfg Γ Λ) := ⟨⟨default, default⟩⟩
 
-/--
-Definition of `step` / `step` 的定义
+/-- Execution semantics of the Turing machine. -/
+/-
+**Turing.TM0.step** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0`。
+形式化陈述：step (M : Machine Γ Λ) : Cfg Γ Λ -> Option (Cfg Γ Λ)
+参数：M : Machine Γ Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition step
-  signature: (M : Machine Γ Λ)
-  body: fun ⟨q, T⟩ => (M q T.1).map fun ⟨q', a⟩ => ⟨q', match a with
-    | Stmt.move d => T.move d
-    | Stmt.write a => T.write a⟩
-
-中文:
-定义 step
-  签名: (M : Machine Γ Λ)
-  定义体: fun ⟨q, T⟩ => (M q T.1).map fun ⟨q', a⟩ => ⟨q', match a with
-    | Stmt.move d => T.move d
-    | Stmt.write a => T.write a⟩
-
-Depends on / 依赖: Stmt.move, Stmt.write, T.move, T.write
+--- 原说明 ---
+Execution semantics of the Turing machine.
 -/
-def step (M : Machine Γ Λ) : Cfg Γ Λ -> Option (Cfg Γ Λ) :=
-  fun ⟨q, T⟩ => (M q T.1).map fun ⟨q', a⟩ => ⟨q', match a with
+def step (M : Machine Γ Λ) : Cfg Γ Λ → Option (Cfg Γ Λ) :=
+  fun ⟨q, T⟩ ↦ (M q T.1).map fun ⟨q', a⟩ ↦ ⟨q', match a with
     | Stmt.move d => T.move d
     | Stmt.write a => T.write a⟩
 
-/--
-Definition of `Reaches` / `Reaches` 的定义
+/-- The statement `Reaches M s₁ s₂` means that `s₂` is obtained
+  starting from `s₁` after a finite number of steps. -/
+/-
+**Turing.TM0.Reaches** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0`。
+形式化陈述：Reaches (M : Machine Γ Λ) : Cfg Γ Λ -> Cfg Γ Λ -> Prop
+参数：M : Machine Γ Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Reaches
-  signature: (M : Machine Γ Λ)
-  body: ReflTransGen fun a b => b in step M a
-
-中文:
-定义 Reaches
-  签名: (M : Machine Γ Λ)
-  定义体: ReflTransGen fun a b => b in step M a
-
-Depends on / 依赖: ReflTransGen
+--- 原说明 ---
+The statement `Reaches M s₁ s₂` means that `s₂` is obtained
+  starting from `s₁` after a finite number of steps.
 -/
-def Reaches (M : Machine Γ Λ) : Cfg Γ Λ -> Cfg Γ Λ -> Prop := ReflTransGen fun a b => b in step M a
+def Reaches (M : Machine Γ Λ) : Cfg Γ Λ → Cfg Γ Λ → Prop := ReflTransGen fun a b ↦ b ∈ step M a
 
-/--
-Definition of `init` / `init` 的定义
+/-- The initial configuration. -/
+/-
+**Turing.TM0.init** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0`。
+形式化陈述：init (l : List Γ) : Cfg Γ Λ
+参数：l : List Γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition init
-  signature: (l : List Γ)
-  body: ⟨default, Tape.mk₁ l⟩
-
-中文:
-定义 init
-  签名: (l : 列表 Γ)
-  定义体: ⟨default, Tape.mk₁ l⟩
-
-Depends on / 依赖: Tape.mk
+--- 原说明 ---
+The initial configuration.
 -/
 def init (l : List Γ) : Cfg Γ Λ := ⟨default, Tape.mk₁ l⟩
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- Evaluate a Turing machine on initial input to a final state,
+  if it terminates. -/
+/-
+**Turing.TM0.eval** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0`。
+形式化陈述：eval (M : Machine Γ Λ) (l : List Γ) : Part (ListBlank Γ)
+参数：M : Machine Γ Λ；l : List Γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (M : Machine Γ Λ) (l : List Γ)
-  body: (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
-
-中文:
-定义 eval
-  签名: (M : Machine Γ Λ) (l : 列表 Γ)
-  定义体: (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
-
-Depends on / 依赖: StateTransition, StateTransition.eval, c.Tape.right
+--- 原说明 ---
+Evaluate a Turing machine on initial input to a final state,
+  if it terminates.
 -/
 def eval (M : Machine Γ Λ) (l : List Γ) : Part (ListBlank Γ) :=
-  (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
+  (StateTransition.eval (step M) (init l)).map fun c ↦ c.Tape.right₀
 
-/--
-Definition of `Supports` / `Supports` 的定义
+/-- The raw definition of a Turing machine does not require that
+  `Γ` and `Λ` are finite, and in practice we will be interested
+  in the infinite `Λ` case. We recover instead a notion of
+  "effectively finite" Turing machines, which only make use of a
+  finite subset of their states. We say that a set `S ⊆ Λ`
+  supports a Turing machine `M` if `S` is closed under the
+  transition function and contains the initial state. -/
+/-
+**Turing.TM0.Supports** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0`。
+形式化陈述：Supports (M : Machine Γ Λ) (S : Set Λ)
+参数：M : Machine Γ Λ；S : Set Λ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Supports
-  signature: (M : Machine Γ Λ) (S : Set Λ)
-  body: default in S ∧ forall {q a q' s}, (q', s) in M q a -> q in S -> q' in S
-
-中文:
-定义 Supports
-  签名: (M : Machine Γ Λ) (S : 集合 Λ)
-  定义体: default in S ∧ forall {q a q' s}, (q', s) in M q a -> q in S -> q' in S
+--- 原说明 ---
+The raw definition of a Turing machine does not require that
+  `Γ` and `Λ` are finite, and in practice we will be interested
+  in the infinite `Λ` case. We recover instead a notion of
+  "effectively finite" Turing machines, which only make use of a
+  finite subset of their states. We say that a set `S ⊆ Λ`
+  supports a Turing machine `M` if `S` is closed under the
+  transition function and contains the initial state.
 -/
 def Supports (M : Machine Γ Λ) (S : Set Λ) :=
-  default in S ∧ forall {q a q' s}, (q', s) in M q a -> q in S -> q' in S
-
-/--
-theorem `step_supports` / 定理 `step_supports`
-
-English:
-theorem step_supports
-  given: (M : Machine Γ Λ) {S : Set Λ} (ss : Supports M S)
-  proof: by
-  intro ⟨q, T⟩ c' h₁ h₂
-  rcases Option.map_eq_some_iff.1 h₁ with ⟨⟨q', a⟩, h, rfl⟩
-  exact ss.2 h h₂
-
-中文:
-定理 step_supports
-  条件: (M : Machine Γ Λ) {S : 集合 Λ} (ss : Supports M S)
-  证明: by
-  intro ⟨q, T⟩ c' h₁ h₂
-  rcases Option.map_eq_some_iff.1 h₁ with ⟨⟨q', a⟩, h, rfl⟩
-  exact ss.2 h h₂
-
-Depends on / 依赖: Option.map_eq_some_iff, map_eq_some_iff
+  default ∈ S ∧ ∀ {q a q' s}, (q', s) ∈ M q a → q ∈ S → q' ∈ S
+/-
+**Turing.TM0.step_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM0`。
+形式化陈述：step_supports (M : Machine Γ Λ) {S : Set Λ} (ss : Supports M S) : forall {
+c c' : Cfg Γ Λ}, c' in step M c -> c.q in S -> c'.q in S
+参数：M : Machine Γ Λ；ss : Supports M S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Option.map_eq_some_iff`：∀ {α : Type u_1} {b : α} {α_1 : Type u_2} {x : O
+ption α_1} {f : α_1 → α},   Option.map f x = some b ↔ ∃ a, x = some a ∧ f a = b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem step_supports (M : Machine Γ Λ) {S : Set Λ} (ss : Supports M S) :
-    forall {c c' : Cfg Γ Λ}, c' in step M c -> c.q in S -> c'.q in S := by
+    ∀ {c c' : Cfg Γ Λ}, c' ∈ step M c → c.q ∈ S → c'.q ∈ S := by
   intro ⟨q, T⟩ c' h₁ h₂
   rcases Option.map_eq_some_iff.1 h₁ with ⟨⟨q', a⟩, h, rfl⟩
   exact ss.2 h h₂
 
 end
 
-/--
-theorem `univ_supports` / 定理 `univ_supports`
-
-English:
-theorem univ_supports
-  given: (M : Machine Γ Λ)
-  statement: Supports M Set.univ
-  proof: by
-  constructor <;> intros <;> apply Set.mem_univ
-
-中文:
-定理 univ_supports
-  条件: (M : Machine Γ Λ)
-  结论: Supports M 集合.univ
-  证明: by
-  constructor <;> intros <;> apply Set.mem_univ
-
-Depends on / 依赖: Set.mem_univ, intros, mem_univ
+/-
+**Turing.TM0.univ_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM0`。
+形式化陈述：univ_supports (M : Machine Γ Λ) : Supports M Set.univ
+参数：M : Machine Γ Λ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem univ_supports (M : Machine Γ Λ) : Supports M Set.univ := by
   constructor <;> intros <;> apply Set.mem_univ
@@ -375,66 +328,101 @@ variable {Γ' : Type*} [Inhabited Γ']
 variable {Λ : Type*} [Inhabited Λ]
 variable {Λ' : Type*} [Inhabited Λ']
 
-/--
-Definition of `Stmt.map` / `Stmt.map` 的定义
+/-- Map a TM statement across a function. This does nothing to move statements and maps the write
+values. -/
+/-
+**Turing.TM0.Stmt.map** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0.Stmt`。
+形式化陈述：{Γ : Type u_1} →   [inst : Inhabited Γ] →     {Γ' : Type u_2} → [inst_1 : 
+Inhabited Γ'] → Turing.PointedMap Γ Γ' → Turing.TM0.Stmt Γ → Turing.TM0.Stmt Γ'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Stmt.map
-  signature: (f : PointedMap Γ Γ')
-
-中文:
-定义 Stmt.map
-  签名: (f : PointedMap Γ Γ')
+--- 原说明 ---
+Map a TM statement across a function. This does nothing to move statements and m
+aps the write
+values.
 -/
-def Stmt.map (f : PointedMap Γ Γ') : Stmt Γ -> Stmt Γ'
+def Stmt.map (f : PointedMap Γ Γ') : Stmt Γ → Stmt Γ'
   | Stmt.move d => Stmt.move d
   | Stmt.write a => Stmt.write (f a)
 
-/--
-Definition of `Cfg.map` / `Cfg.map` 的定义
+/-- Map a configuration across a function, given `f : Γ → Γ'` a map of the alphabets and
+`g : Λ → Λ'` a map of the machine states. -/
+/-
+**Turing.TM0.Cfg.map** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0.Cfg`。
+形式化陈述：{Γ : Type u_1} →   [inst : Inhabited Γ] →     {Γ' : Type u_2} →       [ins
+t_1 : Inhabited Γ'] →         {Λ : Type u_3} → {Λ' : Type u_4} → Turing.PointedM
+ap Γ Γ' → (Λ → Λ') → Turing.TM0.Cfg Γ Λ → Turing.TM0.Cfg Γ' Λ'
+参数：Λ → Λ'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cfg.map
-  signature: (f : PointedMap Γ Γ') (g : Λ -> Λ')
-
-中文:
-定义 Cfg.map
-  签名: (f : PointedMap Γ Γ') (g : Λ -> Λ')
+--- 原说明 ---
+Map a configuration across a function, given `f : Γ → Γ'` a map of the alphabets
+ and
+`g : Λ → Λ'` a map of the machine states.
 -/
-def Cfg.map (f : PointedMap Γ Γ') (g : Λ -> Λ') : Cfg Γ Λ -> Cfg Γ' Λ'
+def Cfg.map (f : PointedMap Γ Γ') (g : Λ → Λ') : Cfg Γ Λ → Cfg Γ' Λ'
   | ⟨q, T⟩ => ⟨g q, T.map f⟩
 
-variable (M : Machine Γ Λ) (f₁ : PointedMap Γ Γ') (f₂ : PointedMap Γ' Γ) (g₁ : Λ -> Λ') (g₂ : Λ' -> Λ)
+variable (M : Machine Γ Λ) (f₁ : PointedMap Γ Γ') (f₂ : PointedMap Γ' Γ) (g₁ : Λ → Λ') (g₂ : Λ' → Λ)
 
-/--
-Definition of `Machine.map` / `Machine.map` 的定义
+/-- Because the state transition function uses the alphabet and machine states in both the input
+and output, to map a machine from one alphabet and machine state space to another we need functions
+in both directions, essentially an `Equiv` without the laws. -/
+/-
+**Turing.TM0.Machine.map** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0.Machine`。
+形式化陈述：{Γ : Type u_1} →   [inst : Inhabited Γ] →     {Γ' : Type u_2} →       [ins
+t_1 : Inhabited Γ'] →         {Λ : Type u_3} →           [inst_2 : Inhabited Λ] 
+→             {Λ' : Type u_4} →               [inst_3 : Inhabited Λ'] →         
+        Turing.TM0.Machine Γ Λ →                   Turing.PointedMap Γ Γ' → Turi
+ng.PointedMap Γ' Γ → (Λ → Λ') → (Λ' → Λ) → Turing.TM0.Machine Γ' Λ'
+参数：Λ → Λ'；Λ' → Λ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Machine.map
-  signature: : Machine Γ' Λ'
-
-中文:
-定义 Machine.map
-  签名: : Machine Γ' Λ'
+--- 原说明 ---
+Because the state transition function uses the alphabet and machine states in bo
+th the input
+and output, to map a machine from one alphabet and machine state space to anothe
+r we need functions
+in both directions, essentially an `Equiv` without the laws.
 -/
 def Machine.map : Machine Γ' Λ'
   | q, l => (M (g₂ q) (f₂ l)).map (Prod.map g₁ (Stmt.map f₁))
-
-/--
-theorem `Machine.map_step` / 定理 `Machine.map_step`
-
-English:
-theorem Machine.map_step
-  statement: {S : Set Λ} (f₂₁ : Function.RightInverse f₁ f₂)
-
-中文:
-定理 Machine.map_step
-  结论: {S : 集合 Λ} (f₂₁ : 函数.右逆 f₁ f₂)
+/-
+**Turing.TM0.Machine.map_step** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM0.Machine`。
+形式化陈述：∀ {Γ : Type u_1} [inst : Inhabited Γ] {Γ' : Type u_2} [inst_1 : Inhabited 
+Γ'] {Λ : Type u_3} [inst_2 : Inhabited Λ]   {Λ' : Type u_4} [inst_3 : Inhabited 
+Λ'] (M : Turing.TM0.Machine Γ Λ) (f₁ : Turing.PointedMap Γ Γ')   (f₂ : Turing.Po
+intedMap Γ' Γ) (g₁ : Λ → Λ') (g₂ : Λ' → Λ) {S : Set Λ},   Function.RightInverse 
+f₁.f f₂.f →     (∀ q ∈ S, g₂ (g₁ q) = q) →       ∀ (c : Turing.TM0.Cfg Γ Λ),    
+     c.q ∈ S →           Option.map (Turing.TM0.Cfg.map f₁ g₁) (Turing.TM0.step 
+M c) =             Turing.TM0.step (M.map f₁ f₂ g₁ g₂) (Turing.TM0.Cfg.map f₁ g₁
+ c)
+参数：M : Turing.TM0.Machine Γ Λ；f₁ : Turing.PointedMap Γ Γ'；f₂ : Turing.PointedMap
+ Γ' Γ；g₁ : Λ → Λ'；g₂ : Λ' → Λ；∀ q ∈ S, g₂ (g₁ q) = q；c : Turing.TM0.Cfg Γ Λ；Turi
+ng.TM0.Cfg.map f₁ g₁；Turing.TM0.step M c；M.map f₁ f₂ g₁ g₂；Turing.TM0.Cfg.map f₁
+ g₁ c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.Tape.map_fst`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : Inhabited 
+Γ] [inst_1 : Inhabited Γ'] (f : Turing.PointedMap Γ Γ')   (T : Turing.Tape Γ), (
+Turing.Ta…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.Tape.map_move`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : Inhabited
+ Γ] [inst_1 : Inhabited Γ'] (f : Turing.PointedMap Γ Γ')   (T : Turing.Tape Γ) (
+d : Turing…
+· 使用定理 `Turing.Tape.map_write`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : Inhabite
+d Γ] [inst_1 : Inhabited Γ'] (f : Turing.PointedMap Γ Γ') (b : Γ)   (T : Turing.
+Tape Γ), Tu…
 -/
 theorem Machine.map_step {S : Set Λ} (f₂₁ : Function.RightInverse f₁ f₂)
-    (g₂₁ : forall q in S, g₂ (g₁ q) = q) :
-    forall c : Cfg Γ Λ,
-      c.q in S -> (step M c).map (Cfg.map f₁ g₁) = step (M.map f₁ f₂ g₁ g₂) (Cfg.map f₁ g₁ c)
+    (g₂₁ : ∀ q ∈ S, g₂ (g₁ q) = q) :
+    ∀ c : Cfg Γ Λ,
+      c.q ∈ S → (step M c).map (Cfg.map f₁ g₁) = step (M.map f₁ f₂ g₁ g₂) (Cfg.map f₁ g₁ c)
   | ⟨q, T⟩, h => by
     unfold step Machine.map Cfg.map
     simp only [Turing.Tape.map_fst, g₂₁ q h, f₂₁ _]
@@ -443,65 +431,60 @@ theorem Machine.map_step {S : Set Λ} (f₂₁ : Function.RightInverse f₁ f₂
       rfl
     · simp only [Option.map_some, Tape.map_write]
       rfl
-
-/--
-theorem `map_init` / 定理 `map_init`
-
-English:
-theorem map_init
-  given: (g₁ : PointedMap Λ Λ') (l : List Γ)
-  statement: (init l).map f₁ g₁ = init (l.map f₁)
-  proof: congr (congr_arg Cfg.mk g₁.map_pt) (Tape.map_mk₁ _ _)
-
-中文:
-定理 map_init
-  条件: (g₁ : PointedMap Λ Λ') (l : 列表 Γ)
-  结论: (init l).map f₁ g₁ = init (l.map f₁)
-  证明: congr (congr_arg Cfg.mk g₁.map_pt) (Tape.map_mk₁ _ _)
-
-Depends on / 依赖: Cfg.mk, Tape.map_mk, congr_arg, map_pt
+/-
+**Turing.TM0.map_init** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM0`。
+形式化陈述：map_init (g₁ : PointedMap Λ Λ') (l : List Γ) : (init l).map f₁ g₁ = init (
+l.map f₁)
+参数：g₁ : PointedMap Λ Λ'；l : List Γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Turing.PointedMap.map_pt`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : Inhab
+ited Γ] [inst_1 : Inhabited Γ'] (f : Turing.PointedMap Γ Γ'),   f.f default = de
+fault
+· 使用定理 `Turing.Tape.map_mk₁`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : Inhabited 
+Γ] [inst_1 : Inhabited Γ'] (f : Turing.PointedMap Γ Γ') (l : List Γ),   Turing.T
+ape.map f…
 -/
 theorem map_init (g₁ : PointedMap Λ Λ') (l : List Γ) : (init l).map f₁ g₁ = init (l.map f₁) :=
   congr (congr_arg Cfg.mk g₁.map_pt) (Tape.map_mk₁ _ _)
-
-/--
-theorem `Machine.map_respects` / 定理 `Machine.map_respects`
-
-English:
-theorem Machine.map_respects
-  statement: (g₁ : PointedMap Λ Λ') (g₂ : Λ' -> Λ) {S} (ss : Supports M S)
-  proof: by
-  intro c _ ⟨cs, rfl⟩
-  cases e : step M c
-  · rw [← M.map_step f₁ f₂ g₁ g₂ f₂₁ g₂₁ _ cs, e]
-    rfl
-  · refine ⟨_, ⟨step_supports M ss e cs, rfl⟩, TransGen.single ?_⟩
-    rw [← M.map_step f₁ f₂ g₁ g₂ f₂₁ g₂₁ _ cs]; rw [e]
-    rfl
-
-中文:
-定理 Machine.map_respects
-  结论: (g₁ : PointedMap Λ Λ') (g₂ : Λ' -> Λ) {S} (ss : Supports M S)
-  证明: by
-  intro c _ ⟨cs, rfl⟩
-  cases e : step M c
-  · rw [← M.map_step f₁ f₂ g₁ g₂ f₂₁ g₂₁ _ cs, e]
-    rfl
-  · refine ⟨_, ⟨step_supports M ss e cs, rfl⟩, TransGen.single ?_⟩
-    rw [← M.map_step f₁ f₂ g₁ g₂ f₂₁ g₂₁ _ cs]; rw [e]
-    rfl
-
-Depends on / 依赖: M.map_step, TransGen, TransGen.single, map_step, single, step_supports
+/-
+**Turing.TM0.Machine.map_respects** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM0.Machine`
+。
+形式化陈述：∀ {Γ : Type u_1} [inst : Inhabited Γ] {Γ' : Type u_2} [inst_1 : Inhabited 
+Γ'] {Λ : Type u_3} [inst_2 : Inhabited Λ]   {Λ' : Type u_4} [inst_3 : Inhabited 
+Λ'] (M : Turing.TM0.Machine Γ Λ) (f₁ : Turing.PointedMap Γ Γ')   (f₂ : Turing.Po
+intedMap Γ' Γ) (g₁ : Turing.PointedMap Λ Λ') (g₂ : Λ' → Λ) {S : Set Λ},   Turing
+.TM0.Supports M S →     Function.RightInverse f₁.f f₂.f →       (∀ q ∈ S, g₂ (g₁
+.f q) = q) →         StateTransition.Respects (Turing.TM0.step M) (Turing.TM0.st
+ep (M.map f₁ f₂ g₁.f g₂)) fun a b =>           a.q ∈ S ∧ Turing.TM0.Cfg.map f₁ g
+₁.f a = b
+参数：M : Turing.TM0.Machine Γ Λ；f₁ : Turing.PointedMap Γ Γ'；f₂ : Turing.PointedMap
+ Γ' Γ；g₁ : Turing.PointedMap Λ Λ'；g₂ : Λ' → Λ；∀ q ∈ S, g₂ (g₁.f q) = q；Turing.TM
+0.step M；Turing.TM0.step (M.map f₁ f₂ g₁.f g₂)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.TM0.Machine.map_step`：∀ {Γ : Type u_1} [inst : Inhabited Γ] {Γ' :
+ Type u_2} [inst_1 : Inhabited Γ'] {Λ : Type u_3} [inst_2 : Inhabited Λ]   {Λ' :
+ Type u_4} [inst_…
+· 使用定理 `Turing.TM0.step_supports`：step_supports (M : Machine Γ Λ) {S : Set Λ} (s
+s : Supports M S) : forall {c c' : Cfg Γ Λ}, c' in step M c -> c.q in S -> c'.q 
+in S
 -/
-theorem Machine.map_respects (g₁ : PointedMap Λ Λ') (g₂ : Λ' -> Λ) {S} (ss : Supports M S)
-    (f₂₁ : Function.RightInverse f₁ f₂) (g₂₁ : forall q in S, g₂ (g₁ q) = q) :
-    Respects (step M) (step (M.map f₁ f₂ g₁ g₂)) fun a b => a.q in S ∧ Cfg.map f₁ g₁ a = b := by
+theorem Machine.map_respects (g₁ : PointedMap Λ Λ') (g₂ : Λ' → Λ) {S} (ss : Supports M S)
+    (f₂₁ : Function.RightInverse f₁ f₂) (g₂₁ : ∀ q ∈ S, g₂ (g₁ q) = q) :
+    Respects (step M) (step (M.map f₁ f₂ g₁ g₂)) fun a b ↦ a.q ∈ S ∧ Cfg.map f₁ g₁ a = b := by
   intro c _ ⟨cs, rfl⟩
   cases e : step M c
   · rw [← M.map_step f₁ f₂ g₁ g₂ f₂₁ g₂₁ _ cs, e]
     rfl
   · refine ⟨_, ⟨step_supports M ss e cs, rfl⟩, TransGen.single ?_⟩
-    rw [← M.map_step f₁ f₂ g₁ g₂ f₂₁ g₂₁ _ cs]; rw [e]
+    rw [← M.map_step f₁ f₂ g₁ g₂ f₂₁ g₂₁ _ cs, e]
     rfl
 
 end
@@ -552,72 +535,67 @@ variable (Λ : Type*)
 variable (σ : Type*)
 
 -- Type of variable settings
-/--
-Inductive type `Stmt` / 归纳类型 `Stmt`
+/-- The TM1 model is a simplification and extension of TM0
+  (Post-Turing model) in the direction of Wang B-machines. The machine's
+  internal state is extended with a (finite) store `σ` of variables
+  that may be accessed and updated at any time.
+  A machine is given by a `Λ` indexed set of procedures or functions.
+  Each function has a body which is a `Stmt`, which can either be a
+  `move` or `write` command, a `branch` (if statement based on the
+  current tape value), a `load` (set the variable value),
+  a `goto` (call another function), or `halt`. Note that here
+  most statements do not have labels; `goto` commands can only
+  go to a new function. All commands have access to the variable value
+  and current tape value. -/
+/-
+**Turing.TM1.Stmt** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.TM1`。
+形式化陈述：Type u_1 → Type u_2 → Type u_3 → Type (max (max u_1 u_2) u_3)
+参数：max (max u_1 u_2) u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Stmt
-  constructors (6):
-    - move: Dir -> Stmt -> Stmt
-    - write: (Γ -> σ -> Γ) -> Stmt -> Stmt
-    - load: (Γ -> σ -> σ) -> Stmt -> Stmt
-    - branch: (Γ -> σ -> Bool) -> Stmt -> Stmt -> Stmt
-    - goto: (Γ -> σ -> Λ) -> Stmt
-    - halt: Stmt
-
-中文:
-归纳类型 Stmt
-  构造子 (6 个):
-    - move: Dir -> Stmt -> Stmt
-    - write: (Γ -> σ -> Γ) -> Stmt -> Stmt
-    - load: (Γ -> σ -> σ) -> Stmt -> Stmt
-    - branch: (Γ -> σ -> 布尔值) -> Stmt -> Stmt -> Stmt
-    - goto: (Γ -> σ -> Λ) -> Stmt
-    - halt: Stmt
+--- 原说明 ---
+The TM1 model is a simplification and extension of TM0
+  (Post-Turing model) in the direction of Wang B-machines. The machine's
+  internal state is extended with a (finite) store `σ` of variables
+  that may be accessed and updated at any time.
+  A machine is given by a `Λ` indexed set of procedures or functions.
+  Each function has a body which is a `Stmt`, which can either be a
+  `move` or `write` command, a `branch` (if statement based on the
+  current tape value), a `load` (set the variable value),
+  a `goto` (call another function), or `halt`. Note that here
+  most statements do not have labels; `goto` commands can only
+  go to a new function. All commands have access to the variable value
+  and current tape value.
 -/
 inductive Stmt
-  | move : Dir -> Stmt -> Stmt
-  | write : (Γ -> σ -> Γ) -> Stmt -> Stmt
-  | load : (Γ -> σ -> σ) -> Stmt -> Stmt
-  | branch : (Γ -> σ -> Bool) -> Stmt -> Stmt -> Stmt
-  | goto : (Γ -> σ -> Λ) -> Stmt
+  | move : Dir → Stmt → Stmt
+  | write : (Γ → σ → Γ) → Stmt → Stmt
+  | load : (Γ → σ → σ) → Stmt → Stmt
+  | branch : (Γ → σ → Bool) → Stmt → Stmt → Stmt
+  | goto : (Γ → σ → Λ) → Stmt
   | halt : Stmt
 
 open Stmt
-
-/--
-Instance `Stmt.inhabited` / 实例 `Stmt.inhabited`
-
-English:
-instance Stmt.inhabited
-  signature: : Inhabited (Stmt Γ Λ σ)
-  body: ⟨halt⟩
-
-中文:
-实例 Stmt.inhabited
-  签名: : 可居 (Stmt Γ Λ σ)
-  定义体: ⟨halt⟩
+/-
+**Turing.TM1.Stmt.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1.Stmt`。
+形式化陈述：(Γ : Type u_1) → (Λ : Type u_2) → (σ : Type u_3) → Inhabited (Turing.TM1.S
+tmt Γ Λ σ)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Stmt.inhabited : Inhabited (Stmt Γ Λ σ) := ⟨halt⟩
 
-/--
-Definition of `Cfg` / `Cfg` 的定义
+/-- The configuration of a TM1 machine is given by the currently
+  evaluating statement, the variable store value, and the tape. -/
+/-
+**Turing.TM1.Cfg** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.TM1`。
+形式化陈述：(Γ : Type u_1) → Type u_2 → Type u_3 → [Inhabited Γ] → Type (max (max u_1 
+u_2) u_3)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Cfg
-  parameters: [Inhabited Γ]
-  axioms and operations (3):
-    - l : Option Λ
-    - var : σ
-    - Tape : Tape Γ
-
-中文:
-结构 Cfg
-  参数: [可居 Γ]
-  公理与运算 (3 个):
-    - l : 选项类型 Λ
-    - var : σ
-    - Tape : Tape Γ
+--- 原说明 ---
+The configuration of a TM1 machine is given by the currently
+  evaluating statement, the variable store value, and the tape.
 -/
 structure Cfg [Inhabited Γ] where
   /-- The statement (if any) which is currently evaluated -/
@@ -626,37 +604,28 @@ structure Cfg [Inhabited Γ] where
   var : σ
   /-- The current state of the tape -/
   Tape : Tape Γ
-
-/--
-Instance `Cfg.inhabited` / 实例 `Cfg.inhabited`
-
-English:
-instance Cfg.inhabited
-  signature: [Inhabited Γ] [Inhabited σ]
-  body: ⟨⟨default, default, default⟩⟩
-
-中文:
-实例 Cfg.inhabited
-  签名: [可居 Γ] [可居 σ]
-  定义体: ⟨⟨default, default, default⟩⟩
+/-
+**Turing.TM1.Cfg.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1.Cfg`。
+形式化陈述：(Γ : Type u_1) →   (Λ : Type u_2) → (σ : Type u_3) → [inst : Inhabited Γ] 
+→ [Inhabited σ] → Inhabited (Turing.TM1.Cfg Γ Λ σ)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Cfg.inhabited [Inhabited Γ] [Inhabited σ] : Inhabited (Cfg Γ Λ σ) :=
   ⟨⟨default, default, default⟩⟩
 
 variable {Γ Λ σ}
 
-/--
-Definition of `stepAux` / `stepAux` 的定义
+/-- The semantics of TM1 evaluation. -/
+/-
+**Turing.TM1.stepAux** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} → [inst : Inhabited
+ Γ] → Turing.TM1.Stmt Γ Λ σ → σ → Turing.Tape Γ → Turing.TM1.Cfg Γ Λ σ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stepAux
-  signature: [Inhabited Γ]
-
-中文:
-定义 stepAux
-  签名: [可居 Γ]
+--- 原说明 ---
+The semantics of TM1 evaluation.
 -/
-def stepAux [Inhabited Γ] : Stmt Γ Λ σ -> σ -> Tape Γ -> Cfg Γ Λ σ
+def stepAux [Inhabited Γ] : Stmt Γ Λ σ → σ → Tape Γ → Cfg Γ Λ σ
   | move d q, v, T => stepAux q v (T.move d)
   | write a q, v, T => stepAux q v (T.write (a T.1 v))
   | load s q, v, T => stepAux q (s T.1 v) T
@@ -664,89 +633,77 @@ def stepAux [Inhabited Γ] : Stmt Γ Λ σ -> σ -> Tape Γ -> Cfg Γ Λ σ
   | goto l, v, T => ⟨some (l T.1 v), v, T⟩
   | halt, v, T => ⟨none, v, T⟩
 
-/--
-Definition of `step` / `step` 的定义
+/-- The state transition function. -/
+/-
+**Turing.TM1.step** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       [inst : Inh
+abited Γ] → (Λ → Turing.TM1.Stmt Γ Λ σ) → Turing.TM1.Cfg Γ Λ σ → Option (Turing.
+TM1.Cfg Γ Λ σ)
+参数：Λ → Turing.TM1.Stmt Γ Λ σ；Turing.TM1.Cfg Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition step
-  signature: [Inhabited Γ] (M : Λ -> Stmt Γ Λ σ)
-
-中文:
-定义 step
-  签名: [可居 Γ] (M : Λ -> Stmt Γ Λ σ)
+--- 原说明 ---
+The state transition function.
 -/
-def step [Inhabited Γ] (M : Λ -> Stmt Γ Λ σ) : Cfg Γ Λ σ -> Option (Cfg Γ Λ σ)
+def step [Inhabited Γ] (M : Λ → Stmt Γ Λ σ) : Cfg Γ Λ σ → Option (Cfg Γ Λ σ)
   | ⟨none, _, _⟩ => none
   | ⟨some l, v, T⟩ => some (stepAux (M l) v T)
 
-/--
-Definition of `SupportsStmt` / `SupportsStmt` 的定义
+/-- A set `S` of labels supports the statement `q` if all the `goto`
+  statements in `q` refer only to other functions in `S`. -/
+/-
+**Turing.TM1.SupportsStmt** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：{Γ : Type u_1} → {Λ : Type u_2} → {σ : Type u_3} → Finset Λ → Turing.TM1.S
+tmt Γ Λ σ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SupportsStmt
-  signature: (S : Finset Λ)
-
-中文:
-定义 SupportsStmt
-  签名: (S : 有限集 Λ)
+--- 原说明 ---
+A set `S` of labels supports the statement `q` if all the `goto`
+  statements in `q` refer only to other functions in `S`.
 -/
-def SupportsStmt (S : Finset Λ) : Stmt Γ Λ σ -> Prop
+def SupportsStmt (S : Finset Λ) : Stmt Γ Λ σ → Prop
   | move _ q => SupportsStmt S q
   | write _ q => SupportsStmt S q
   | load _ q => SupportsStmt S q
   | branch _ q₁ q₂ => SupportsStmt S q₁ ∧ SupportsStmt S q₂
-  | goto l => forall a v, l a v in S
+  | goto l => ∀ a v, l a v ∈ S
   | halt => True
 
 open scoped Classical in
-/--
-Definition of `stmts₁` / `stmts₁` 的定义
+/-- The subterm closure of a statement. -/
+/-
+**Turing.TM1.stmts** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：stmts (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ) : Finset (Option (Stmt Γ Λ σ))
+参数：M : Λ -> Stmt Γ Λ σ；S : Finset Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stmts₁
-  signature: : Stmt Γ Λ σ -> Finset (Stmt Γ Λ σ)
-
-中文:
-定义 stmts₁
-  签名: : Stmt Γ Λ σ -> 有限集 (Stmt Γ Λ σ)
+--- 原说明 ---
+The subterm closure of a statement.
 -/
-noncomputable def stmts₁ : Stmt Γ Λ σ -> Finset (Stmt Γ Λ σ)
+noncomputable def stmts₁ : Stmt Γ Λ σ → Finset (Stmt Γ Λ σ)
   | Q@(move _ q) => insert Q (stmts₁ q)
   | Q@(write _ q) => insert Q (stmts₁ q)
   | Q@(load _ q) => insert Q (stmts₁ q)
-  | Q@(branch _ q₁ q₂) => insert Q (stmts₁ q₁ union stmts₁ q₂)
+  | Q@(branch _ q₁ q₂) => insert Q (stmts₁ q₁ ∪ stmts₁ q₂)
   | Q => {Q}
-
-/--
-theorem `stmts₁_self` / 定理 `stmts₁_self`
-
-English:
-theorem stmts₁_self
-  given: {q : Stmt Γ Λ σ}
-  statement: q in stmts₁ q
-  proof: by
-  cases q <;> simp only [stmts₁, Finset.mem_insert_self, Finset.mem_singleton_self]
-
-中文:
-定理 stmts₁_self
-  条件: {q : Stmt Γ Λ σ}
-  结论: q in stmts₁ q
-  证明: by
-  cases q <;> simp only [stmts₁, Finset.mem_insert_self, Finset.mem_singleton_self]
-
-Depends on / 依赖: Finset, Finset.mem_insert_self, Finset.mem_singleton_self, mem_insert_self, mem_singleton_self
+/-
+**Turing.TM1.stmts** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：stmts (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ) : Finset (Option (Stmt Γ Λ σ))
+参数：M : Λ -> Stmt Γ Λ σ；S : Finset Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stmts₁_self {q : Stmt Γ Λ σ} : q in stmts₁ q := by
+theorem stmts₁_self {q : Stmt Γ Λ σ} : q ∈ stmts₁ q := by
   cases q <;> simp only [stmts₁, Finset.mem_insert_self, Finset.mem_singleton_self]
-
-/--
-theorem `stmts₁_trans` / 定理 `stmts₁_trans`
-
-English:
-theorem stmts₁_trans
-  given: {q₁ q₂ : Stmt Γ Λ σ}
-  statement: q₁ in stmts₁ q₂ -> stmts₁ q₁ subseteq stmts₁ q₂
-  proof: by
+/-
+**Turing.TM1.stmts** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：stmts (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ) : Finset (Option (Stmt Γ Λ σ))
+参数：M : Λ -> Stmt Γ Λ σ；S : Finset Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem stmts₁_trans {q₁ q₂ : Stmt Γ Λ σ} : q₁ ∈ stmts₁ q₂ → stmts₁ q₁ ⊆ stmts₁ q₂ := by
   classical
   intro h₁₂ q₀ h₀₁
   induction q₂ with (
@@ -764,81 +721,14 @@ theorem stmts₁_trans
     rcases h₁₂ with rfl | h₁₂
     · exact h₀₁
     · grind
-
-中文:
-定理 stmts₁_trans
-  条件: {q₁ q₂ : Stmt Γ Λ σ}
-  结论: q₁ in stmts₁ q₂ -> stmts₁ q₁ subseteq stmts₁ q₂
-  证明: by
-  classical
-  intro h₁₂ q₀ h₀₁
-  induction q₂ with (
-    simp only [stmts₁] at h₁₂ ⊢
-    simp only [Finset.mem_insert, Finset.mem_union, Finset.mem_singleton] at h₁₂)
-  | branch p q₁ q₂ IH₁ IH₂ =>
-    rcases h₁₂ with (rfl | h₁₂ | h₁₂)
-    · unfold stmts₁ at h₀₁
-      exact h₀₁
-    · grind
-    · grind
-  | goto l => subst h₁₂; exact h₀₁
-  | halt => subst h₁₂; exact h₀₁
-  | _ _ q IH =>
-    rcases h₁₂ with rfl | h₁₂
-    · exact h₀₁
-    · grind
-
-Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, Finset.mem_union, branch, classical, mem_insert, mem_singleton, mem_union
+/-
+**Turing.TM1.stmts** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：stmts (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ) : Finset (Option (Stmt Γ Λ σ))
+参数：M : Λ -> Stmt Γ Λ σ；S : Finset Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stmts₁_trans {q₁ q₂ : Stmt Γ Λ σ} : q₁ in stmts₁ q₂ -> stmts₁ q₁ subseteq stmts₁ q₂ := by
-  classical
-  intro h₁₂ q₀ h₀₁
-  induction q₂ with (
-    simp only [stmts₁] at h₁₂ ⊢
-    simp only [Finset.mem_insert, Finset.mem_union, Finset.mem_singleton] at h₁₂)
-  | branch p q₁ q₂ IH₁ IH₂ =>
-    rcases h₁₂ with (rfl | h₁₂ | h₁₂)
-    · unfold stmts₁ at h₀₁
-      exact h₀₁
-    · grind
-    · grind
-  | goto l => subst h₁₂; exact h₀₁
-  | halt => subst h₁₂; exact h₀₁
-  | _ _ q IH =>
-    rcases h₁₂ with rfl | h₁₂
-    · exact h₀₁
-    · grind
-
-/--
-theorem `stmts₁_supportsStmt_mono` / 定理 `stmts₁_supportsStmt_mono`
-
-English:
-theorem stmts₁_supportsStmt_mono
-  statement: {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂)
-  proof: by
-  induction q₂ with
-    simp only [stmts₁, SupportsStmt, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton]
-      at h hs
-  | branch p q₁ q₂ IH₁ IH₂ => rcases h with (rfl | h | h); exacts [hs, IH₁ h hs.1, IH₂ h hs.2]
-  | goto l => subst h; exact hs
-  | halt => subst h; trivial
-  | _ _ q IH => rcases h with (rfl | h) <;> [exact hs; exact IH h hs]
-
-中文:
-定理 stmts₁_supportsStmt_mono
-  结论: {S : 有限集 Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂)
-  证明: by
-  induction q₂ with
-    simp only [stmts₁, SupportsStmt, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton]
-      at h hs
-  | branch p q₁ q₂ IH₁ IH₂ => rcases h with (rfl | h | h); exacts [hs, IH₁ h hs.1, IH₂ h hs.2]
-  | goto l => subst h; exact hs
-  | halt => subst h; trivial
-  | _ _ q IH => rcases h with (rfl | h) <;> [exact hs; exact IH h hs]
-
-Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, Finset.mem_union, SupportsStmt, branch, exacts, mem_insert, mem_singleton, mem_union
--/
-theorem stmts₁_supportsStmt_mono {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂)
+theorem stmts₁_supportsStmt_mono {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ ∈ stmts₁ q₂)
     (hs : SupportsStmt S q₂) : SupportsStmt S q₁ := by
   induction q₂ with
     simp only [stmts₁, SupportsStmt, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton]
@@ -849,135 +739,117 @@ theorem stmts₁_supportsStmt_mono {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (
   | _ _ q IH => rcases h with (rfl | h) <;> [exact hs; exact IH h hs]
 
 open scoped Classical in
-/--
-Definition of `stmts` / `stmts` 的定义
+/-- The set of all statements in a Turing machine, plus one extra value `none` representing the
+halt state. This is used in the TM1 to TM0 reduction. -/
+/-
+**Turing.TM1.stmts** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：stmts (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ) : Finset (Option (Stmt Γ Λ σ))
+参数：M : Λ -> Stmt Γ Λ σ；S : Finset Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stmts
-  signature: (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ)
-  body: Finset.insertNone (S.biUnion fun q => stmts₁ (M q))
-
-中文:
-定义 stmts
-  签名: (M : Λ -> Stmt Γ Λ σ) (S : 有限集 Λ)
-  定义体: Finset.insertNone (S.biUnion fun q => stmts₁ (M q))
-
-Depends on / 依赖: Finset, Finset.insertNone, S.biUnion, biUnion, insertNone
+--- 原说明 ---
+The set of all statements in a Turing machine, plus one extra value `none` repre
+senting the
+halt state. This is used in the TM1 to TM0 reduction.
 -/
-noncomputable def stmts (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ) : Finset (Option (Stmt Γ Λ σ)) :=
-  Finset.insertNone (S.biUnion fun q => stmts₁ (M q))
-
-/--
-theorem `stmts_trans` / 定理 `stmts_trans`
-
-English:
-theorem stmts_trans
-  given: {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂)
-  proof: by
-  simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
-    forall_eq', exists_imp, and_imp]
-  exact fun l ls h₂ => ⟨_, ls, stmts₁_trans h₂ h₁⟩
-
-中文:
-定理 stmts_trans
-  条件: {M : Λ -> Stmt Γ Λ σ} {S : 有限集 Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂)
-  证明: by
-  simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
-    forall_eq', exists_imp, and_imp]
-  exact fun l ls h₂ => ⟨_, ls, stmts₁_trans h₂ h₁⟩
-
-Depends on / 依赖: Finset, Finset.mem_biUnion, Finset.mem_insertNone, Option.mem_def, Option.some.injEq, and_imp, exists_imp, forall_eq, mem_biUnion, mem_def, mem_insertNone
+noncomputable def stmts (M : Λ → Stmt Γ Λ σ) (S : Finset Λ) : Finset (Option (Stmt Γ Λ σ)) :=
+  Finset.insertNone (S.biUnion fun q ↦ stmts₁ (M q))
+/-
+**Turing.TM1.stmts_trans** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1`。
+形式化陈述：stmts_trans {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ 
+: q₁ in stmts₁ q₂) : some q₂ in stmts M S -> some q₁ in stmts M S
+参数：h₁ : q₁ in stmts₁ q₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `Turing.TM1.stmts₁_trans`：stmts₁_trans {q₁ q₂ : Stmt Γ Λ σ} : q₁ in stmts
+₁ q₂ -> stmts₁ q₁ subseteq stmts₁ q₂
 -/
-theorem stmts_trans {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂) :
-    some q₂ in stmts M S -> some q₁ in stmts M S := by
+theorem stmts_trans {M : Λ → Stmt Γ Λ σ} {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ ∈ stmts₁ q₂) :
+    some q₂ ∈ stmts M S → some q₁ ∈ stmts M S := by
   simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
     forall_eq', exists_imp, and_imp]
-  exact fun l ls h₂ => ⟨_, ls, stmts₁_trans h₂ h₁⟩
+  exact fun l ls h₂ ↦ ⟨_, ls, stmts₁_trans h₂ h₁⟩
 
 variable [Inhabited Λ]
 
-/--
-Definition of `Supports` / `Supports` 的定义
+/-- A set `S` of labels supports machine `M` if all the `goto`
+  statements in the functions in `S` refer only to other functions
+  in `S`. -/
+/-
+**Turing.TM1.Supports** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：Supports (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ)
+参数：M : Λ -> Stmt Γ Λ σ；S : Finset Λ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Supports
-  signature: (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ)
-  body: default in S ∧ forall q in S, SupportsStmt S (M q)
-
-中文:
-定义 Supports
-  签名: (M : Λ -> Stmt Γ Λ σ) (S : 有限集 Λ)
-  定义体: default in S ∧ forall q in S, SupportsStmt S (M q)
-
-Depends on / 依赖: SupportsStmt
+--- 原说明 ---
+A set `S` of labels supports machine `M` if all the `goto`
+  statements in the functions in `S` refer only to other functions
+  in `S`.
 -/
-def Supports (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ) :=
-  default in S ∧ forall q in S, SupportsStmt S (M q)
-
-/--
-theorem `stmts_supportsStmt` / 定理 `stmts_supportsStmt`
-
-English:
-theorem stmts_supportsStmt
-  statement: {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q : Stmt Γ Λ σ}
-  proof: by
-  simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
-    forall_eq', exists_imp, and_imp]
-  exact fun l ls h => stmts₁_supportsStmt_mono h (ss.2 _ ls)
-
-中文:
-定理 stmts_supportsStmt
-  结论: {M : Λ -> Stmt Γ Λ σ} {S : 有限集 Λ} {q : Stmt Γ Λ σ}
-  证明: by
-  simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
-    forall_eq', exists_imp, and_imp]
-  exact fun l ls h => stmts₁_supportsStmt_mono h (ss.2 _ ls)
-
-Depends on / 依赖: Finset, Finset.mem_biUnion, Finset.mem_insertNone, Option.mem_def, Option.some.injEq, and_imp, exists_imp, forall_eq, mem_biUnion, mem_def, mem_insertNone
+def Supports (M : Λ → Stmt Γ Λ σ) (S : Finset Λ) :=
+  default ∈ S ∧ ∀ q ∈ S, SupportsStmt S (M q)
+/-
+**Turing.TM1.stmts_supportsStmt** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1`。
+形式化陈述：stmts_supportsStmt {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q : Stmt Γ Λ σ} (
+ss : Supports M S) : some q in stmts M S -> SupportsStmt S q
+参数：ss : Supports M S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `Turing.TM1.stmts₁_supportsStmt_mono`：stmts₁_supportsStmt_mono {S : Finse
+t Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂) (hs : SupportsStmt S q₂) : Suppo
+rtsStmt S q₁
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem stmts_supportsStmt {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q : Stmt Γ Λ σ}
-    (ss : Supports M S) : some q in stmts M S -> SupportsStmt S q := by
+theorem stmts_supportsStmt {M : Λ → Stmt Γ Λ σ} {S : Finset Λ} {q : Stmt Γ Λ σ}
+    (ss : Supports M S) : some q ∈ stmts M S → SupportsStmt S q := by
   simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
     forall_eq', exists_imp, and_imp]
-  exact fun l ls h => stmts₁_supportsStmt_mono h (ss.2 _ ls)
+  exact fun l ls h ↦ stmts₁_supportsStmt_mono h (ss.2 _ ls)
 
 variable [Inhabited Γ]
-
-/--
-theorem `step_supports` / 定理 `step_supports`
-
-English:
-theorem step_supports
-  given: (M : Λ -> Stmt Γ Λ σ) {S : Finset Λ} (ss : Supports M S)
-  proof: ss.2 _ (Finset.some_mem_insertNone.1 h₂)
-    simp only [step, Option.mem_def, Option.some.injEq] at h₁; subst c'
-    revert h₂; induction M l₁ generalizing v T with intro hs
-    | branch p q₁' q₂' IH₁ IH₂ =>
-      unfold stepAux; cases p T.1 v
-      · exact IH₂ _ _ hs.2
-      · exact IH₁ _ _ hs.1
-    | goto => exact Finset.some_mem_insertNone.2 (hs _ _)
-    | halt => apply Multiset.mem_cons_self
-    | _ _ q IH => exact IH _ _ hs
-
-中文:
-定理 step_supports
-  条件: (M : Λ -> Stmt Γ Λ σ) {S : 有限集 Λ} (ss : Supports M S)
-  证明: ss.2 _ (Finset.some_mem_insertNone.1 h₂)
-    simp only [step, Option.mem_def, Option.some.injEq] at h₁; subst c'
-    revert h₂; induction M l₁ generalizing v T with intro hs
-    | branch p q₁' q₂' IH₁ IH₂ =>
-      unfold stepAux; cases p T.1 v
-      · exact IH₂ _ _ hs.2
-      · exact IH₁ _ _ hs.1
-    | goto => exact Finset.some_mem_insertNone.2 (hs _ _)
-    | halt => apply Multiset.mem_cons_self
-    | _ _ q IH => exact IH _ _ hs
-
-Depends on / 依赖: Finset, Finset.some_mem_insertNone, some_mem_insertNone
+/-
+**Turing.TM1.step_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1`。
+形式化陈述：step_supports (M : Λ -> Stmt Γ Λ σ) {S : Finset Λ} (ss : Supports M S) : f
+orall {c c' : Cfg Γ Λ σ}, c' in step M c -> c.l in Finset.insertNone S -> c'.l i
+n Finset.insertNone S | ⟨some l₁, v, T⟩, c', h₁, h₂ => by replace h₂
+参数：M : Λ -> Stmt Γ Λ σ；ss : Supports M S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.some_mem_insertNone`：some_mem_insertNone {s : Finset α} {a : α} :
+ some a in insertNone s ↔ a in s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.TM1.stepAux.eq_def`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3
+} [inst : Inhabited Γ] (x : Turing.TM1.Stmt Γ Λ σ) (x_1 : σ)   (x_2 : Turing.Tap
+e Γ),   Turing.…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.mem_cons_self`：mem_cons_self (a : α) (s : Multiset α) : a in a 
+::ₘ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
 -/
-theorem step_supports (M : Λ -> Stmt Γ Λ σ) {S : Finset Λ} (ss : Supports M S) :
-    forall {c c' : Cfg Γ Λ σ}, c' in step M c -> c.l in Finset.insertNone S -> c'.l in Finset.insertNone S
+theorem step_supports (M : Λ → Stmt Γ Λ σ) {S : Finset Λ} (ss : Supports M S) :
+    ∀ {c c' : Cfg Γ Λ σ}, c' ∈ step M c → c.l ∈ Finset.insertNone S → c'.l ∈ Finset.insertNone S
   | ⟨some l₁, v, T⟩, c', h₁, h₂ => by
     replace h₂ := ss.2 _ (Finset.some_mem_insertNone.1 h₂)
     simp only [step, Option.mem_def, Option.some.injEq] at h₁; subst c'
@@ -992,41 +864,39 @@ theorem step_supports (M : Λ -> Stmt Γ Λ σ) {S : Finset Λ} (ss : Supports M
 
 variable [Inhabited σ]
 
-/--
-Definition of `init` / `init` 的定义
+/-- The initial state, given a finite input that is placed on the tape starting at the TM head and
+going to the right. -/
+/-
+**Turing.TM1.init** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：init (l : List Γ) : Cfg Γ Λ σ
+参数：l : List Γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition init
-  signature: (l : List Γ)
-  body: ⟨some default, default, Tape.mk₁ l⟩
-
-中文:
-定义 init
-  签名: (l : 列表 Γ)
-  定义体: ⟨some default, default, Tape.mk₁ l⟩
-
-Depends on / 依赖: Tape.mk
+--- 原说明 ---
+The initial state, given a finite input that is placed on the tape starting at t
+he TM head and
+going to the right.
 -/
 def init (l : List Γ) : Cfg Γ Λ σ :=
   ⟨some default, default, Tape.mk₁ l⟩
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- Evaluate a TM to completion, resulting in an output list on the tape (with an indeterminate
+number of blanks on the end). -/
+/-
+**Turing.TM1.eval** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1`。
+形式化陈述：eval (M : Λ -> Stmt Γ Λ σ) (l : List Γ) : Part (ListBlank Γ)
+参数：M : Λ -> Stmt Γ Λ σ；l : List Γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (M : Λ -> Stmt Γ Λ σ) (l : List Γ)
-  body: (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
-
-中文:
-定义 eval
-  签名: (M : Λ -> Stmt Γ Λ σ) (l : 列表 Γ)
-  定义体: (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
-
-Depends on / 依赖: StateTransition, StateTransition.eval, c.Tape.right
+--- 原说明 ---
+Evaluate a TM to completion, resulting in an output list on the tape (with an in
+determinate
+number of blanks on the end).
 -/
-def eval (M : Λ -> Stmt Γ Λ σ) (l : List Γ) : Part (ListBlank Γ) :=
-  (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
+def eval (M : Λ → Stmt Γ Λ σ) (l : List Γ) : Part (ListBlank Γ) :=
+  (StateTransition.eval (step M) (init l)).map fun c ↦ c.Tape.right₀
 
 end
 
@@ -1057,7 +927,7 @@ variable {Γ : Type*}
 variable {Λ : Type*} [Inhabited Λ]
 variable {σ : Type*} [Inhabited σ]
 
-variable (M : Λ -> TM1.Stmt Γ Λ σ)
+variable (M : Λ → TM1.Stmt Γ Λ σ)
 
 set_option linter.unusedVariables false in
 /-- The base machine state space is a pair of an `Option Stmt₁` representing the current program
@@ -1066,54 +936,55 @@ not the tape). Because there are an infinite number of programs, this state spac
 for a finitely supported TM1 machine and a finite type `σ`, only finitely many of these states are
 reachable. -/
 @[nolint unusedArguments] -- We need the M assumption
-/--
-Definition of `Λ'` / `Λ'` 的定义
+/-
+**Turing.TM1to0.** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to0`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Λ'
-  signature: (M : Λ -> TM1.Stmt Γ Λ σ)
-  body: Option (TM1.Stmt Γ Λ σ) × σ
-
-中文:
-定义 Λ'
-  签名: (M : Λ -> TM1.Stmt Γ Λ σ)
-  定义体: Option (TM1.Stmt Γ Λ σ) × σ
-
-Depends on / 依赖: TM1.Stmt
+--- 原说明 ---
+The base machine state space is a pair of an `Option Stmt₁` representing the cur
+rent program
+to be executed, or `none` for the halt state, and a `σ` which is the local state
+ (stored in the TM,
+not the tape). Because there are an infinite number of programs, this state spac
+e is infinite, but
+for a finitely supported TM1 machine and a finite type `σ`, only finitely many o
+f these states are
+reachable.
 -/
-def Λ' (M : Λ -> TM1.Stmt Γ Λ σ) :=
+def Λ' (M : Λ → TM1.Stmt Γ Λ σ) :=
   Option (TM1.Stmt Γ Λ σ) × σ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Λ' M)
-  body: ⟨(some (M default), default)⟩
-
-中文:
-实例 :
-  签名: 可居 (Λ' M)
-  定义体: ⟨(some (M default), default)⟩
+/-
+**Turing.TM1to0.** 是 Mathlib 中的一个实例，位于命名空间 `Turing.TM1to0`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Λ' M) :=
   ⟨(some (M default), default)⟩
 
 open TM0.Stmt
 
-/--
-Definition of `trAux` / `trAux` 的定义
+/-- The core TM1 → TM0 translation function. Here `s` is the current value on the tape, and the
+`Stmt₁` is the TM1 statement to translate, with local state `v : σ`. We evaluate all regular
+instructions recursively until we reach either a `move` or `write` command, or a `goto`; in the
+latter case we emit a dummy `write s` step and transition to the new target location. -/
+/-
+**Turing.TM1to0.trAux** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to0`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       (M : Λ → Tu
+ring.TM1.Stmt Γ Λ σ) → Γ → Turing.TM1.Stmt Γ Λ σ → σ → Turing.TM1to0.Λ' M × Turi
+ng.TM0.Stmt Γ
+参数：M : Λ → Turing.TM1.Stmt Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trAux
-  signature: (s : Γ)
-
-中文:
-定义 trAux
-  签名: (s : Γ)
+--- 原说明 ---
+The core TM1 → TM0 translation function. Here `s` is the current value on the ta
+pe, and the
+`Stmt₁` is the TM1 statement to translate, with local state `v : σ`. We evaluate
+ all regular
+instructions recursively until we reach either a `move` or `write` command, or a
+ `goto`; in the
+latter case we emit a dummy `write s` step and transition to the new target loca
+tion.
 -/
-def trAux (s : Γ) : TM1.Stmt Γ Λ σ -> σ -> Λ' M × TM0.Stmt Γ
+def trAux (s : Γ) : TM1.Stmt Γ Λ σ → σ → Λ' M × TM0.Stmt Γ
   | TM1.Stmt.move d q, v => ((some q, v), move d)
   | TM1.Stmt.write a q, v => ((some q, v), write (a s v))
   | TM1.Stmt.load a q, v => trAux s q (a s v)
@@ -1121,78 +992,69 @@ def trAux (s : Γ) : TM1.Stmt Γ Λ σ -> σ -> Λ' M × TM0.Stmt Γ
   | TM1.Stmt.goto l, v => ((some (M (l s v)), v), write s)
   | TM1.Stmt.halt, v => ((none, v), write s)
 
-/--
-Definition of `tr` / `tr` 的定义
+/-- The translated TM0 machine (given the TM1 machine input). -/
+/-
+**Turing.TM1to0.tr** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to0`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     [inst : Inhabited Λ] →       {σ : 
+Type u_3} →         [inst_1 : Inhabited σ] → (M : Λ → Turing.TM1.Stmt Γ Λ σ) → T
+uring.TM0.Machine Γ (Turing.TM1to0.Λ' M)
+参数：M : Λ → Turing.TM1.Stmt Γ Λ σ；Turing.TM1to0.Λ' M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tr
-  signature: : TM0.Machine Γ (Λ' M)
-
-中文:
-定义 tr
-  签名: : TM0.Machine Γ (Λ' M)
+--- 原说明 ---
+The translated TM0 machine (given the TM1 machine input).
 -/
 def tr : TM0.Machine Γ (Λ' M)
   | (none, _), _ => none
   | (some q, v), s => some (trAux M s q v)
 
-/--
-Definition of `trCfg` / `trCfg` 的定义
+/-- Translate configurations from TM1 to TM0. -/
+/-
+**Turing.TM1to0.trCfg** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to0`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       (M : Λ → Tu
+ring.TM1.Stmt Γ Λ σ) →         [inst : Inhabited Γ] → Turing.TM1.Cfg Γ Λ σ → Tur
+ing.TM0.Cfg Γ (Turing.TM1to0.Λ' M)
+参数：M : Λ → Turing.TM1.Stmt Γ Λ σ；Turing.TM1to0.Λ' M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trCfg
-  signature: [Inhabited Γ]
-
-中文:
-定义 trCfg
-  签名: [可居 Γ]
+--- 原说明 ---
+Translate configurations from TM1 to TM0.
 -/
-def trCfg [Inhabited Γ] : TM1.Cfg Γ Λ σ -> TM0.Cfg Γ (Λ' M)
+def trCfg [Inhabited Γ] : TM1.Cfg Γ Λ σ → TM0.Cfg Γ (Λ' M)
   | ⟨l, v, T⟩ => ⟨(l.map M, v), T⟩
-
-/--
-theorem `tr_respects` / 定理 `tr_respects`
-
-English:
-theorem tr_respects
-  given: [Inhabited Γ]
-  proof: fun_respects.2 fun ⟨l₁, v, T⟩ => by
-    rcases l₁ with - | l₁; · exact rfl
-    simp only [trCfg, TM1.step, FRespects, Option.map]
-    induction M l₁ generalizing v T with
-    | move _ _ IH => exact TransGen.head rfl (IH _ _)
-    | write _ _ IH => exact TransGen.head rfl (IH _ _)
-    | load _ _ IH => exact (reaches₁_eq (by rfl)).2 (IH _ _)
-    | branch p _ _ IH₁ IH₂ =>
-      unfold TM1.stepAux; cases e : p T.1 v
-      · exact (reaches₁_eq (by simp only [TM0.step, tr, trAux, e]; rfl)).2 (IH₂ _ _)
-      · exact (reaches₁_eq (by simp only [TM0.step, tr, trAux, e]; rfl)).2 (IH₁ _ _)
-    | _ =>
-      exact TransGen.single (congr_arg some (congr (congr_arg TM0.Cfg.mk rfl) (Tape.write_self T)))
-
-中文:
-定理 tr_respects
-  条件: [可居 Γ]
-  证明: fun_respects.2 fun ⟨l₁, v, T⟩ => by
-    rcases l₁ with - | l₁; · exact rfl
-    simp only [trCfg, TM1.step, FRespects, Option.map]
-    induction M l₁ generalizing v T with
-    | move _ _ IH => exact TransGen.head rfl (IH _ _)
-    | write _ _ IH => exact TransGen.head rfl (IH _ _)
-    | load _ _ IH => exact (reaches₁_eq (by rfl)).2 (IH _ _)
-    | branch p _ _ IH₁ IH₂ =>
-      unfold TM1.stepAux; cases e : p T.1 v
-      · exact (reaches₁_eq (by simp only [TM0.step, tr, trAux, e]; rfl)).2 (IH₂ _ _)
-      · exact (reaches₁_eq (by simp only [TM0.step, tr, trAux, e]; rfl)).2 (IH₁ _ _)
-    | _ =>
-      exact TransGen.single (congr_arg some (congr (congr_arg TM0.Cfg.mk rfl) (Tape.write_self T)))
-
-Depends on / 依赖: FRespects, Option.map, TM0.step, TM1.step, TM1.stepAux, TransGen, TransGen.head, branch, fun_respects, generalizing, stepAux
+/-
+**Turing.TM1to0.tr_respects** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to0`。
+形式化陈述：tr_respects [Inhabited Γ] : Respects (TM1.step M) (TM0.step (tr M)) fun (c
+₁ : TM1.Cfg Γ Λ σ) (c₂ : TM0.Cfg Γ (Λ' M)) => trCfg M c₁ = c₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `StateTransition.fun_respects`：fun_respects {σ₁ σ₂ f₁ f₂} {tr : σ₁ -> σ₂}
+ : (Respects f₁ f₂ fun a b => tr a = b) ↔ forall ⦃a₁⦄, FRespects f₂ tr (tr a₁) (
+f₁ a₁)
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `StateTransition.reaches₁_eq`：reaches₁_eq {σ} {f : σ -> Option σ} {a b c}
+ (h : f a = f b) : Reaches₁ f a c ↔ Reaches₁ f b c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.TM1.stepAux.eq_def`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3
+} [inst : Inhabited Γ] (x : Turing.TM1.Stmt Γ Λ σ) (x_1 : σ)   (x_2 : Turing.Tap
+e Γ),   Turing.…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Turing.Tape.write_self`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (T : Turin
+g.Tape Γ), Turing.Tape.write T.head T = T
 -/
 theorem tr_respects [Inhabited Γ] :
     Respects (TM1.step M) (TM0.step (tr M))
-      fun (c₁ : TM1.Cfg Γ Λ σ) (c₂ : TM0.Cfg Γ (Λ' M)) => trCfg M c₁ = c₂ :=
-  fun_respects.2 fun ⟨l₁, v, T⟩ => by
+      fun (c₁ : TM1.Cfg Γ Λ σ) (c₂ : TM0.Cfg Γ (Λ' M)) ↦ trCfg M c₁ = c₂ :=
+  fun_respects.2 fun ⟨l₁, v, T⟩ ↦ by
     rcases l₁ with - | l₁; · exact rfl
     simp only [trCfg, TM1.step, FRespects, Option.map]
     induction M l₁ generalizing v T with
@@ -1205,52 +1067,52 @@ theorem tr_respects [Inhabited Γ] :
       · exact (reaches₁_eq (by simp only [TM0.step, tr, trAux, e]; rfl)).2 (IH₁ _ _)
     | _ =>
       exact TransGen.single (congr_arg some (congr (congr_arg TM0.Cfg.mk rfl) (Tape.write_self T)))
-
-/--
-theorem `tr_eval` / 定理 `tr_eval`
-
-English:
-theorem tr_eval
-  given: [Inhabited Γ] (l : List Γ)
-  statement: TM0.eval (tr M) l = TM1.eval M l
-  proof: (congr_arg _ (tr_eval' _ _ _ (tr_respects M) ⟨some _, _, _⟩)).trans
-    (by
-      rw [Part.map_eq_map]; rw [Part.map_map]; rw [TM1.eval]
-      congr with ⟨⟩)
-
-中文:
-定理 tr_eval
-  条件: [可居 Γ] (l : 列表 Γ)
-  结论: TM0.eval (tr M) l = TM1.eval M l
-  证明: (congr_arg _ (tr_eval' _ _ _ (tr_respects M) ⟨some _, _, _⟩)).trans
-    (by
-      rw [Part.map_eq_map]; rw [Part.map_map]; rw [TM1.eval]
-      congr with ⟨⟩)
-
-Depends on / 依赖: Part.map_eq_map, Part.map_map, TM1.eval, congr_arg, map_eq_map, map_map, tr_eval, tr_respects
+/-
+**Turing.TM1to0.tr_eval** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to0`。
+形式化陈述：tr_eval [Inhabited Γ] (l : List Γ) : TM0.eval (tr M) l = TM1.eval M l
+参数：l : List Γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `StateTransition.tr_eval'`：tr_eval' {σ₁ σ₂} (f₁ : σ₁ -> Option σ₁) (f₂ : 
+σ₂ -> Option σ₂) (tr : σ₁ -> σ₂) (H : Respects f₁ f₂ fun a b => tr a = b) (a₁) :
+ eval f₂ (tr a…
+· 使用定理 `Turing.TM1to0.tr_respects`：tr_respects [Inhabited Γ] : Respects (TM1.ste
+p M) (TM0.step (tr M)) fun (c₁ : TM1.Cfg Γ Λ σ) (c₂ : TM0.Cfg Γ (Λ' M)) => trCfg
+ M c₁ = c₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Part.map_eq_map`：map_eq_map {α β} (f : α -> β) (o : Part α) : f < > o = 
+map f o
+· 使用定理 `Part.map_map`：map_map (g : β -> γ) (f : α -> β) (o : Part α) : map g (ma
+p f o) = map (g ∘ f) o
+· 使用定理 `Turing.TM1.eval.eq_1`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3} [in
+st : Inhabited Λ] [inst_1 : Inhabited Γ] [inst_2 : Inhabited σ]   (M : Λ → Turin
+g.TM1.Stmt…
 -/
 theorem tr_eval [Inhabited Γ] (l : List Γ) : TM0.eval (tr M) l = TM1.eval M l :=
   (congr_arg _ (tr_eval' _ _ _ (tr_respects M) ⟨some _, _, _⟩)).trans
     (by
-      rw [Part.map_eq_map]; rw [Part.map_map]; rw [TM1.eval]
+      rw [Part.map_eq_map, Part.map_map, TM1.eval]
       congr with ⟨⟩)
 
 variable [Fintype σ]
 
-/--
-Definition of `trStmts` / `trStmts` 的定义
+/-- Given a finite set of accessible `Λ` machine states, there is a finite set of accessible
+machine states in the target (even though the type `Λ'` is infinite). -/
+/-
+**Turing.TM1to0.trStmts** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to0`。
+形式化陈述：trStmts (S : Finset Λ) : Finset (Λ' M)
+参数：S : Finset Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trStmts
-  signature: (S : Finset Λ)
-  body: (TM1.stmts M S) ×ˢ Finset.univ
-
-中文:
-定义 trStmts
-  签名: (S : 有限集 Λ)
-  定义体: (TM1.stmts M S) ×ˢ Finset.univ
-
-Depends on / 依赖: Finset, Finset.univ, TM1.stmts
+--- 原说明 ---
+Given a finite set of accessible `Λ` machine states, there is a finite set of ac
+cessible
+machine states in the target (even though the type `Λ'` is infinite).
 -/
 noncomputable def trStmts (S : Finset Λ) : Finset (Λ' M) :=
   (TM1.stmts M S) ×ˢ Finset.univ
@@ -1258,104 +1120,59 @@ noncomputable def trStmts (S : Finset Λ) : Finset (Λ' M) :=
 attribute [local simp] TM1.stmts₁_self
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `tr_supports` / 定理 `tr_supports`
-
-English:
-theorem tr_supports
-  given: {S : Finset Λ} (ss : TM1.Supports M S)
-  proof: by
-  classical
-  constructor
-  · apply Finset.mem_product.2
-    constructor
-    · simp only [default, TM1.stmts, Finset.mem_insertNone, Option.mem_def, Option.some_inj,
-        forall_eq', Finset.mem_biUnion]
-      exact ⟨_, ss.1, TM1.stmts₁_self⟩
-    · apply Finset.mem_univ
-  · intro q a q' s h₁ h₂
-    rcases q with ⟨_ | q, v⟩; · cases h₁
-    obtain ⟨q', v'⟩ := q'
-    simp only [trStmts, Finset.mem_coe] at h₂ ⊢
-    rw [Finset.mem_product] at h₂ ⊢
-    simp only [Finset.mem_univ, and_true] at h₂ ⊢
-    cases q'; · exact Multiset.mem_cons_self _ _
-    simp only [tr, Option.mem_def] at h₁
-    have := TM1.stmts_supportsStmt ss h₂
-    revert this; induction q generalizing v with intro hs
-    | move d q =>
-      cases h₁; refine TM1.stmts_trans ?_ h₂
-      unfold TM1.stmts₁
-      exact Finset.mem_insert_of_mem TM1.stmts₁_self
-    | write b q =>
-      cases h₁; refine TM1.stmts_trans ?_ h₂
-      unfold TM1.stmts₁
-      exact Finset.mem_insert_of_mem TM1.stmts₁_self
-    | load b q IH =>
-      refine IH _ (TM1.stmts_trans ?_ h₂) h₁ hs
-      unfold TM1.stmts₁
-      exact Finset.mem_insert_of_mem TM1.stmts₁_self
-    | branch p q₁ q₂ IH₁ IH₂ =>
-      cases h : p a v <;> rw [trAux, h] at h₁
-      · refine IH₂ _ (TM1.stmts_trans ?_ h₂) h₁ hs.2
-        unfold TM1.stmts₁
-        exact Finset.mem_insert_of_mem (Finset.mem_union_right _ TM1.stmts₁_self)
-      · refine IH₁ _ (TM1.stmts_trans ?_ h₂) h₁ hs.1
-        unfold TM1.stmts₁
-        exact Finset.mem_insert_of_mem (Finset.mem_union_left _ TM1.stmts₁_self)
-    | goto l =>
-      cases h₁
-      exact Finset.some_mem_insertNone.2 (Finset.mem_biUnion.2 ⟨_, hs _ _, TM1.stmts₁_self⟩)
-    | halt => cases h₁
-
-中文:
-定理 tr_supports
-  条件: {S : 有限集 Λ} (ss : TM1.Supports M S)
-  证明: by
-  classical
-  constructor
-  · apply Finset.mem_product.2
-    constructor
-    · simp only [default, TM1.stmts, Finset.mem_insertNone, Option.mem_def, Option.some_inj,
-        forall_eq', Finset.mem_biUnion]
-      exact ⟨_, ss.1, TM1.stmts₁_self⟩
-    · apply Finset.mem_univ
-  · intro q a q' s h₁ h₂
-    rcases q with ⟨_ | q, v⟩; · cases h₁
-    obtain ⟨q', v'⟩ := q'
-    simp only [trStmts, Finset.mem_coe] at h₂ ⊢
-    rw [Finset.mem_product] at h₂ ⊢
-    simp only [Finset.mem_univ, and_true] at h₂ ⊢
-    cases q'; · exact Multiset.mem_cons_self _ _
-    simp only [tr, Option.mem_def] at h₁
-    have := TM1.stmts_supportsStmt ss h₂
-    revert this; induction q generalizing v with intro hs
-    | move d q =>
-      cases h₁; refine TM1.stmts_trans ?_ h₂
-      unfold TM1.stmts₁
-      exact Finset.mem_insert_of_mem TM1.stmts₁_self
-    | write b q =>
-      cases h₁; refine TM1.stmts_trans ?_ h₂
-      unfold TM1.stmts₁
-      exact Finset.mem_insert_of_mem TM1.stmts₁_self
-    | load b q IH =>
-      refine IH _ (TM1.stmts_trans ?_ h₂) h₁ hs
-      unfold TM1.stmts₁
-      exact Finset.mem_insert_of_mem TM1.stmts₁_self
-    | branch p q₁ q₂ IH₁ IH₂ =>
-      cases h : p a v <;> rw [trAux, h] at h₁
-      · refine IH₂ _ (TM1.stmts_trans ?_ h₂) h₁ hs.2
-        unfold TM1.stmts₁
-        exact Finset.mem_insert_of_mem (Finset.mem_union_right _ TM1.stmts₁_self)
-      · refine IH₁ _ (TM1.stmts_trans ?_ h₂) h₁ hs.1
-        unfold TM1.stmts₁
-        exact Finset.mem_insert_of_mem (Finset.mem_union_left _ TM1.stmts₁_self)
-    | goto l =>
-      cases h₁
-      exact Finset.some_mem_insertNone.2 (Finset.mem_biUnion.2 ⟨_, hs _ _, TM1.stmts₁_self⟩)
-    | halt => cases h₁
-
-Depends on / 依赖: Finset, Finset.mem_biUnion, Finset.mem_coe, Finset.mem_insertNone, Finset.mem_product, Finset.mem_univ, Multiset, Multiset.mem_cons_self, Option.mem_def, Option.some_inj, TM1.stmts, and_true, classical, forall_eq, mem_biUnion, mem_coe, mem_cons_self, mem_def, mem_insertNone, mem_product
+/-
+**Turing.TM1to0.tr_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to0`。
+形式化陈述：tr_supports {S : Finset Λ} (ss : TM1.Supports M S) : TM0.Supports (tr M) ↑
+(trStmts M S)
+参数：ss : TM1.Supports M S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_product`：mem_product {p : α × β} : p in s ×ˢ t ↔ p.1 in s ∧ p
+.2 in t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Turing.TM1.stmts₁_self`：stmts₁_self {q : Stmt Γ Λ σ} : q in stmts₁ q
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Multiset.mem_cons_self`：mem_cons_self (a : α) (s : Multiset α) : a in a 
+::ₘ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.TM1.stmts_supportsStmt`：stmts_supportsStmt {M : Λ -> Stmt Γ Λ σ} 
+{S : Finset Λ} {q : Stmt Γ Λ σ} (ss : Supports M S) : some q in stmts M S -> Sup
+portsStmt S q
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Turing.TM1.stmts_trans`：stmts_trans {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ}
+ {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂) : some q₂ in stmts M S -> some q₁ i
+n stmts M S
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.TM1.stmts₁.eq_def`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3}
+ (x : Turing.TM1.Stmt Γ Λ σ),   Turing.TM1.stmts₁ x =     match x with     | Q@h
+:(Turing.TM1.S…
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `Finset.mem_union_right`：mem_union_right (s : Finset α) (h : a in t) : a 
+in s union t
+· 使用定理 `Turing.TM1to0.trAux.eq_4`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3}
+ (M : Λ → Turing.TM1.Stmt Γ Λ σ) (s : Γ) (x : σ) (p : Γ → σ → Bool)   (q₁ q₂ : T
+uring.TM1.Stmt…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Finset.mem_union_left`：mem_union_left (t : Finset α) (h : a in s) : a in
+ s union t
+· 使用定理 `Finset.some_mem_insertNone`：some_mem_insertNone {s : Finset α} {a : α} :
+ some a in insertNone s ↔ a in s
+· 使用定理 `Finset.mem_biUnion`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : 
+α → Finset β} [inst : DecidableEq β] {b : β},   b ∈ s.biUnion t ↔ ∃ a ∈ s, b ∈ t
+ a
 -/
 theorem tr_supports {S : Finset Λ} (ss : TM1.Supports M S) :
     TM0.Supports (tr M) ↑(trStmts M S) := by
@@ -1433,45 +1250,39 @@ namespace TM1to1
 open TM1
 variable {Γ : Type*}
 
-/--
-theorem `exists_enc_dec` / 定理 `exists_enc_dec`
-
-English:
-theorem exists_enc_dec
-  given: [Inhabited Γ] [Finite Γ]
-  proof: by
-  rcases Finite.exists_equiv_fin Γ with ⟨n, ⟨e⟩⟩
-  let : DecidableEq Γ := e.decidableEq
-  let G : Fin n ↪ Fin n -> Bool :=
-    ⟨fun a b => a = b, fun a b h =>
-Bool.of_decide_true (congr_fun h b).trans Bool.decide_true rfl⟩
-  let H := (e.toEmbedding.trans G).trans (Equiv.vectorEquivFin _ _).symm.toEmbedding
-  let enc := H.setValue default (List.Vector.replicate n false)
-  exact ⟨_, enc, Function.invFun enc, H.setValue_eq _ _, Function.leftInverse_invFun enc.2⟩
-
-中文:
-定理 存在_enc_dec
-  条件: [可居 Γ] [有限 Γ]
-  证明: by
-  rcases Finite.exists_equiv_fin Γ with ⟨n, ⟨e⟩⟩
-  let : DecidableEq Γ := e.decidableEq
-  let G : Fin n ↪ Fin n -> Bool :=
-    ⟨fun a b => a = b, fun a b h =>
-Bool.of_decide_true (congr_fun h b).trans Bool.decide_true rfl⟩
-  let H := (e.toEmbedding.trans G).trans (Equiv.vectorEquivFin _ _).symm.toEmbedding
-  let enc := H.setValue default (List.Vector.replicate n false)
-  exact ⟨_, enc, Function.invFun enc, H.setValue_eq _ _, Function.leftInverse_invFun enc.2⟩
-
-Depends on / 依赖: Bool.decide_true, Bool.of_decide_true, DecidableEq, Equiv.vectorEquivFin, Finite, Finite.exists_equiv_fin, Function, Function.invFun, Function.leftInverse_invFun, H.setValue, H.setValue_eq, List.Vector.replicate, Vector, congr_fun, decidableEq, decide_true, e.decidableEq, e.toEmbedding.trans, exists_equiv_fin, invFun
+/-
+**Turing.TM1to1.exists_enc_dec** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：exists_enc_dec [Inhabited Γ] [Finite Γ] : exists (n : Nat) (enc : Γ -> Lis
+t.Vector Bool n) (dec : List.Vector Bool n -> Γ), enc default = List.Vector.repl
+icate n false ∧ forall a, dec (enc a) = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.exists_equiv_fin`：Finite.exists_equiv_fin (α : Sort*) [h : Finite
+ α] : exists n : Nat, Nonempty (α ≃ Fin n)
+· 使用定理 `Bool.of_decide_true`：of_decide_true {p : Prop} [Decidable p] : decide p 
+-> p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `Bool.decide_true`：decide_true {p : Prop} [Decidable p] : p -> decide p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Function.Embedding.setValue_eq`：setValue_eq {α β} (f : α ↪ β) (a : α) (b
+ : β) [forall a', Decidable (a' = a)] [forall a', Decidable (f a' = b)] : setVal
+ue f a b a = b
+· 使用定理 `Function.leftInverse_invFun`：leftInverse_invFun (hf : Injective f) : Lef
+tInverse (invFun f) f
+· 使用定理 `Function.Embedding.inj'`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ↪ β),
+ Function.Injective self.toFun
 -/
 theorem exists_enc_dec [Inhabited Γ] [Finite Γ] :
-    exists (n : Nat) (enc : Γ -> List.Vector Bool n) (dec : List.Vector Bool n -> Γ),
-      enc default = List.Vector.replicate n false ∧ forall a, dec (enc a) = a := by
+    ∃ (n : ℕ) (enc : Γ → List.Vector Bool n) (dec : List.Vector Bool n → Γ),
+      enc default = List.Vector.replicate n false ∧ ∀ a, dec (enc a) = a := by
   rcases Finite.exists_equiv_fin Γ with ⟨n, ⟨e⟩⟩
   let : DecidableEq Γ := e.decidableEq
-  let G : Fin n ↪ Fin n -> Bool :=
-    ⟨fun a b => a = b, fun a b h =>
-Bool.of_decide_true (congr_fun h b).trans Bool.decide_true rfl⟩
+  let G : Fin n ↪ Fin n → Bool :=
+    ⟨fun a b ↦ a = b, fun a b h ↦
+      Bool.of_decide_true <| (congr_fun h b).trans <| Bool.decide_true rfl⟩
   let H := (e.toEmbedding.trans G).trans (Equiv.vectorEquivFin _ _).symm.toEmbedding
   let enc := H.setValue default (List.Vector.replicate n false)
   exact ⟨_, enc, Function.invFun enc, H.setValue_eq _ _, Function.leftInverse_invFun enc.2⟩
@@ -1479,268 +1290,211 @@ Bool.of_decide_true (congr_fun h b).trans Bool.decide_true rfl⟩
 variable (Γ)
 variable (Λ σ : Type*)
 
-/--
-Inductive type `Λ'` / 归纳类型 `Λ'`
+/-- The configuration state of the TM. -/
+/-
+**Turing.TM1to1.** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.TM1to1`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Λ'
-  constructors (2):
-    - normal: Λ -> Λ'
-    - write: Γ -> Stmt Γ Λ σ -> Λ'
-
-中文:
-归纳类型 Λ'
-  构造子 (2 个):
-    - normal: Λ -> Λ'
-    - write: Γ -> Stmt Γ Λ σ -> Λ'
-
-Depends on / 依赖: Finite, Finite.of_fintype, Fintype, of_fintype
+--- 原说明 ---
+The configuration state of the TM.
 -/
 inductive Λ'
-  | normal : Λ -> Λ'
-  | write : Γ -> Stmt Γ Λ σ -> Λ'
+  | normal : Λ → Λ'
+  | write : Γ → Stmt Γ Λ σ → Λ'
 
 variable {Γ Λ σ}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: Λ] : Inhabited (Λ' Γ Λ σ)
-  body: ⟨Λ'.normal default⟩
-
-中文:
-实例 [可居
-  签名: Λ] : 可居 (Λ' Γ Λ σ)
-  定义体: ⟨Λ'.normal default⟩
-
-Depends on / 依赖: normal
+/-
+**Turing.TM1to1.** 是 Mathlib 中的一个实例，位于命名空间 `Turing.TM1to1`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited Λ] : Inhabited (Λ' Γ Λ σ) :=
   ⟨Λ'.normal default⟩
 
-/--
-Definition of `readAux` / `readAux` 的定义
+/-- Read a vector of length `n` from the tape. -/
+/-
+**Turing.TM1to1.readAux** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       (n : ℕ) →  
+       (List.Vector Bool n → Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ) → 
+          Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ
+参数：n : ℕ；List.Vector Bool n → Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ；Tu
+ring.TM1to1.Λ' Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition readAux
-  signature: : forall n, (List.Vector Bool n -> Stmt Bool (Λ' Γ Λ σ) σ) -> Stmt Bool (Λ' Γ Λ σ) σ
-
-中文:
-定义 readAux
-  签名: : 对任意 n, (列表.Vector 布尔值 n -> Stmt 布尔值 (Λ' Γ Λ σ) σ) -> Stmt 布尔值 (Λ' Γ Λ σ) σ
+--- 原说明 ---
+Read a vector of length `n` from the tape.
 -/
-def readAux : forall n, (List.Vector Bool n -> Stmt Bool (Λ' Γ Λ σ) σ) -> Stmt Bool (Λ' Γ Λ σ) σ
+def readAux : ∀ n, (List.Vector Bool n → Stmt Bool (Λ' Γ Λ σ) σ) → Stmt Bool (Λ' Γ Λ σ) σ
   | 0, f => f Vector.nil
   | i + 1, f =>
-    Stmt.branch (fun a _ => a) (Stmt.move Dir.right <| readAux i fun v => f (true ::ᵥ v))
-      (Stmt.move Dir.right <| readAux i fun v => f (false ::ᵥ v))
+    Stmt.branch (fun a _ ↦ a) (Stmt.move Dir.right <| readAux i fun v ↦ f (true ::ᵥ v))
+      (Stmt.move Dir.right <| readAux i fun v ↦ f (false ::ᵥ v))
 
-variable (n : Nat) (enc : Γ -> List.Vector Bool n) (dec : List.Vector Bool n -> Γ)
+variable (n : ℕ) (enc : Γ → List.Vector Bool n) (dec : List.Vector Bool n → Γ)
 
-/--
-Definition of `move` / `move` 的定义
+/-- A move left or right corresponds to `n` moves across the super-cell. -/
+/-
+**Turing.TM1to1.move** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：move (d : Dir) (q : Stmt Bool (Λ' Γ Λ σ) σ) : Stmt Bool (Λ' Γ Λ σ) σ
+参数：d : Dir；q : Stmt Bool (Λ' Γ Λ σ) σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition move
-  signature: (d : Dir) (q : Stmt Bool (Λ' Γ Λ σ) σ)
-  body: (Stmt.move d)^[n] q
-
-中文:
-定义 move
-  签名: (d : Dir) (q : Stmt 布尔值 (Λ' Γ Λ σ) σ)
-  定义体: (Stmt.move d)^[n] q
-
-Depends on / 依赖: Stmt.move
+--- 原说明 ---
+A move left or right corresponds to `n` moves across the super-cell.
 -/
 def move (d : Dir) (q : Stmt Bool (Λ' Γ Λ σ) σ) : Stmt Bool (Λ' Γ Λ σ) σ :=
   (Stmt.move d)^[n] q
 
 variable {n}
 
-/--
-Definition of `read` / `read` 的定义
+/-- To read a symbol from the tape, we use `readAux` to traverse the symbol,
+then return to the original position with `n` moves to the left. -/
+/-
+**Turing.TM1to1.read** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：read (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ) : Stmt Bool (Λ' Γ Λ σ) σ
+参数：f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition read
-  signature: (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ)
-  body: readAux n fun v => move n Dir.left f (dec v)
-
-中文:
-定义 read
-  签名: (f : Γ -> Stmt 布尔值 (Λ' Γ Λ σ) σ)
-  定义体: readAux n fun v => move n Dir.left f (dec v)
-
-Depends on / 依赖: Dir.left, Finite, Finite.of_subsingleton, Subsingleton, of_subsingleton, readAux
+--- 原说明 ---
+To read a symbol from the tape, we use `readAux` to traverse the symbol,
+then return to the original position with `n` moves to the left.
 -/
-def read (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ) : Stmt Bool (Λ' Γ Λ σ) σ :=
-readAux n fun v => move n Dir.left f (dec v)
+def read (f : Γ → Stmt Bool (Λ' Γ Λ σ) σ) : Stmt Bool (Λ' Γ Λ σ) σ :=
+  readAux n fun v ↦ move n Dir.left <| f (dec v)
 
-/--
-Definition of `write` / `write` 的定义
+/-- Write a list of `Bool`s on the tape. -/
+/-
+**Turing.TM1to1.write** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       List Bool →
+ Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ → Turing.TM1.Stmt Bool (Turing.
+TM1to1.Λ' Γ Λ σ) σ
+参数：Turing.TM1to1.Λ' Γ Λ σ；Turing.TM1to1.Λ' Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition write
-  signature: : List Bool -> Stmt Bool (Λ' Γ Λ σ) σ -> Stmt Bool (Λ' Γ Λ σ) σ
-
-中文:
-定义 write
-  签名: : 列表 布尔值 -> Stmt 布尔值 (Λ' Γ Λ σ) σ -> Stmt 布尔值 (Λ' Γ Λ σ) σ
+--- 原说明 ---
+Write a list of `Bool`s on the tape.
 -/
-def write : List Bool -> Stmt Bool (Λ' Γ Λ σ) σ -> Stmt Bool (Λ' Γ Λ σ) σ
+def write : List Bool → Stmt Bool (Λ' Γ Λ σ) σ → Stmt Bool (Λ' Γ Λ σ) σ
   | [], q => q
-| a :: l, q => (Stmt.write fun _ _ => a) Stmt.move Dir.right write l q
+  | a :: l, q => (Stmt.write fun _ _ ↦ a) <| Stmt.move Dir.right <| write l q
 
-/--
-Definition of `trNormal` / `trNormal` 的定义
+/-- Translate a normal instruction. For the `write` command, we use a `goto` indirection so that
+we can access the current value of the tape. -/
+/-
+**Turing.TM1to1.trNormal** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       {n : ℕ} → (
+List.Vector Bool n → Γ) → Turing.TM1.Stmt Γ Λ σ → Turing.TM1.Stmt Bool (Turing.T
+M1to1.Λ' Γ Λ σ) σ
+参数：List.Vector Bool n → Γ；Turing.TM1to1.Λ' Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trNormal
-  signature: : Stmt Γ Λ σ -> Stmt Bool (Λ' Γ Λ σ) σ
-
-中文:
-定义 trNormal
-  签名: : Stmt Γ Λ σ -> Stmt 布尔值 (Λ' Γ Λ σ) σ
+--- 原说明 ---
+Translate a normal instruction. For the `write` command, we use a `goto` indirec
+tion so that
+we can access the current value of the tape.
 -/
-def trNormal : Stmt Γ Λ σ -> Stmt Bool (Λ' Γ Λ σ) σ
-| Stmt.move d q => move n d trNormal q
-  | Stmt.write f q => read dec fun a => Stmt.goto fun _ s => Λ'.write (f a s) q
-| Stmt.load f q => read dec fun a => (Stmt.load fun _ s => f a s) trNormal q
+def trNormal : Stmt Γ Λ σ → Stmt Bool (Λ' Γ Λ σ) σ
+  | Stmt.move d q => move n d <| trNormal q
+  | Stmt.write f q => read dec fun a ↦ Stmt.goto fun _ s ↦ Λ'.write (f a s) q
+  | Stmt.load f q => read dec fun a ↦ (Stmt.load fun _ s ↦ f a s) <| trNormal q
   | Stmt.branch p q₁ q₂ =>
-    read dec fun a => Stmt.branch (fun _ s => p a s) (trNormal q₁) (trNormal q₂)
-  | Stmt.goto l => read dec fun a => Stmt.goto fun _ s => Λ'.normal (l a s)
+    read dec fun a ↦ Stmt.branch (fun _ s ↦ p a s) (trNormal q₁) (trNormal q₂)
+  | Stmt.goto l => read dec fun a ↦ Stmt.goto fun _ s ↦ Λ'.normal (l a s)
   | Stmt.halt => Stmt.halt
-
-/--
-theorem `stepAux_move` / 定理 `stepAux_move`
-
-English:
-theorem stepAux_move
-  given: (d : Dir) (q : Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (T : Tape Bool)
-  proof: by
-  suffices forall i, stepAux ((Stmt.move d)^[i] q) v T = stepAux q v ((Tape.move d)^[i] T) from this n
-  intro i
-  induction i generalizing T with
-  | zero => rfl
-  | succ i IH =>
-    rw [iterate_succ']; rw [iterate_succ]
-    simp only [stepAux, Function.comp_apply]
-    rw [IH]
-
-中文:
-定理 stepAux_move
-  条件: (d : Dir) (q : Stmt 布尔值 (Λ' Γ Λ σ) σ) (v : σ) (T : Tape 布尔值)
-  证明: by
-  suffices forall i, stepAux ((Stmt.move d)^[i] q) v T = stepAux q v ((Tape.move d)^[i] T) from this n
-  intro i
-  induction i generalizing T with
-  | zero => rfl
-  | succ i IH =>
-    rw [iterate_succ']; rw [iterate_succ]
-    simp only [stepAux, Function.comp_apply]
-    rw [IH]
-
-Depends on / 依赖: Function, Function.comp_apply, Stmt.move, Tape.move, comp_apply, generalizing, iterate_succ, stepAux
+/-
+**Turing.TM1to1.stepAux_move** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：stepAux_move (d : Dir) (q : Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (T : Tape Bool
+) : stepAux (move n d q) v T = stepAux q v ((Tape.move d)^[n] T)
+参数：d : Dir；q : Stmt Bool (Λ' Γ Λ σ) σ；v : σ；T : Tape Bool。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.iterate_succ'`：iterate_succ' (n : Nat) : f^[n.succ] = f ∘ f^[n]
+· 使用定理 `Function.iterate_succ`：iterate_succ (n : Nat) : f^[n.succ] = f^[n] ∘ f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.TM1.stepAux.eq_1`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3} 
+[inst : Inhabited Γ] (x : σ) (x_1 : Turing.Tape Γ) (d : Turing.Dir)   (q : Turin
+g.TM1.Stmt Γ …
 -/
 theorem stepAux_move (d : Dir) (q : Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (T : Tape Bool) :
     stepAux (move n d q) v T = stepAux q v ((Tape.move d)^[n] T) := by
-  suffices forall i, stepAux ((Stmt.move d)^[i] q) v T = stepAux q v ((Tape.move d)^[i] T) from this n
+  suffices ∀ i, stepAux ((Stmt.move d)^[i] q) v T = stepAux q v ((Tape.move d)^[i] T) from this n
   intro i
   induction i generalizing T with
   | zero => rfl
   | succ i IH =>
-    rw [iterate_succ']; rw [iterate_succ]
+    rw [iterate_succ', iterate_succ]
     simp only [stepAux, Function.comp_apply]
     rw [IH]
-
-/--
-theorem `supportsStmt_move` / 定理 `supportsStmt_move`
-
-English:
-theorem supportsStmt_move
-  given: {S : Finset (Λ' Γ Λ σ)} {d : Dir} {q : Stmt Bool (Λ' Γ Λ σ) σ}
-  proof: by
-  suffices forall {i}, SupportsStmt S ((Stmt.move d)^[i] q) = _ from this
-  intro i; induction i generalizing q <;> simp only [*, iterate]; rfl
-
-中文:
-定理 supportsStmt_move
-  条件: {S : 有限集 (Λ' Γ Λ σ)} {d : Dir} {q : Stmt 布尔值 (Λ' Γ Λ σ) σ}
-  证明: by
-  suffices forall {i}, SupportsStmt S ((Stmt.move d)^[i] q) = _ from this
-  intro i; induction i generalizing q <;> simp only [*, iterate]; rfl
-
-Depends on / 依赖: Stmt.move, SupportsStmt, generalizing, iterate
+/-
+**Turing.TM1to1.supportsStmt_move** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：supportsStmt_move {S : Finset (Λ' Γ Λ σ)} {d : Dir} {q : Stmt Bool (Λ' Γ Λ
+ σ) σ} : SupportsStmt S (move n d q) = SupportsStmt S q
+参数：Λ' Γ Λ σ；Λ' Γ Λ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem supportsStmt_move {S : Finset (Λ' Γ Λ σ)} {d : Dir} {q : Stmt Bool (Λ' Γ Λ σ) σ} :
     SupportsStmt S (move n d q) = SupportsStmt S q := by
-  suffices forall {i}, SupportsStmt S ((Stmt.move d)^[i] q) = _ from this
+  suffices ∀ {i}, SupportsStmt S ((Stmt.move d)^[i] q) = _ from this
   intro i; induction i generalizing q <;> simp only [*, iterate]; rfl
-
-/--
-theorem `supportsStmt_write` / 定理 `supportsStmt_write`
-
-English:
-theorem supportsStmt_write
-  given: {S : Finset (Λ' Γ Λ σ)} {l : List Bool} {q : Stmt Bool (Λ' Γ Λ σ) σ}
-  proof: by
-  induction l <;> simp only [write, SupportsStmt, *]
-
-中文:
-定理 supportsStmt_write
-  条件: {S : 有限集 (Λ' Γ Λ σ)} {l : 列表 布尔值} {q : Stmt 布尔值 (Λ' Γ Λ σ) σ}
-  证明: by
-  induction l <;> simp only [write, SupportsStmt, *]
-
-Depends on / 依赖: SupportsStmt
+/-
+**Turing.TM1to1.supportsStmt_write** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：supportsStmt_write {S : Finset (Λ' Γ Λ σ)} {l : List Bool} {q : Stmt Bool 
+(Λ' Γ Λ σ) σ} : SupportsStmt S (write l q) = SupportsStmt S q
+参数：Λ' Γ Λ σ；Λ' Γ Λ σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.TM1.SupportsStmt.eq_2`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type 
+u_3} (S : Finset Λ) (a : Γ → σ → Γ) (q : Turing.TM1.Stmt Γ Λ σ),   Turing.TM1.Su
+pportsStmt S (Turi…
 -/
 theorem supportsStmt_write {S : Finset (Λ' Γ Λ σ)} {l : List Bool} {q : Stmt Bool (Λ' Γ Λ σ) σ} :
     SupportsStmt S (write l q) = SupportsStmt S q := by
   induction l <;> simp only [write, SupportsStmt, *]
-
-/--
-theorem `supportsStmt_read` / 定理 `supportsStmt_read`
-
-English:
-theorem supportsStmt_read
-  given: {S : Finset (Λ' Γ Λ σ)}
-  proof: suffices
-    forall (i) (f : List.Vector Bool i -> Stmt Bool (Λ' Γ Λ σ) σ),
-      (forall v, SupportsStmt S (f v)) -> SupportsStmt S (readAux i f)
-    from fun hf => this n _ (by intro; simp only [supportsStmt_move, hf])
-  fun i f hf => by
-  induction i with
-  | zero => exact hf _
-  | succ i IH => constructor <;> apply IH <;> intro <;> apply hf
-
-中文:
-定理 supportsStmt_read
-  条件: {S : 有限集 (Λ' Γ Λ σ)}
-  证明: suffices
-    forall (i) (f : List.Vector Bool i -> Stmt Bool (Λ' Γ Λ σ) σ),
-      (forall v, SupportsStmt S (f v)) -> SupportsStmt S (readAux i f)
-    from fun hf => this n _ (by intro; simp only [supportsStmt_move, hf])
-  fun i f hf => by
-  induction i with
-  | zero => exact hf _
-  | succ i IH => constructor <;> apply IH <;> intro <;> apply hf
-
-Depends on / 依赖: List.Vector, SupportsStmt, Vector, readAux, supportsStmt_move
+/-
+**Turing.TM1to1.supportsStmt_read** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：supportsStmt_read {S : Finset (Λ' Γ Λ σ)} : forall {f : Γ -> Stmt Bool (Λ'
+ Γ Λ σ) σ}, (forall a, SupportsStmt S (f a)) -> SupportsStmt S (read dec f)
+参数：Λ' Γ Λ σ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.TM1to1.supportsStmt_move`：supportsStmt_move {S : Finset (Λ' Γ Λ σ
+)} {d : Dir} {q : Stmt Bool (Λ' Γ Λ σ) σ} : SupportsStmt S (move n d q) = Suppor
+tsStmt S q
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem supportsStmt_read {S : Finset (Λ' Γ Λ σ)} :
-    forall {f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ}, (forall a, SupportsStmt S (f a)) ->
+    ∀ {f : Γ → Stmt Bool (Λ' Γ Λ σ) σ}, (∀ a, SupportsStmt S (f a)) →
       SupportsStmt S (read dec f) :=
   suffices
-    forall (i) (f : List.Vector Bool i -> Stmt Bool (Λ' Γ Λ σ) σ),
-      (forall v, SupportsStmt S (f v)) -> SupportsStmt S (readAux i f)
-    from fun hf => this n _ (by intro; simp only [supportsStmt_move, hf])
-  fun i f hf => by
+    ∀ (i) (f : List.Vector Bool i → Stmt Bool (Λ' Γ Λ σ) σ),
+      (∀ v, SupportsStmt S (f v)) → SupportsStmt S (readAux i f)
+    from fun hf ↦ this n _ (by intro; simp only [supportsStmt_move, hf])
+  fun i f hf ↦ by
   induction i with
   | zero => exact hf _
   | succ i IH => constructor <;> apply IH <;> intro <;> apply hf
 
-variable (M : Λ -> TM1.Stmt Γ Λ σ)
+variable (M : Λ → TM1.Stmt Γ Λ σ)
 
 section
 variable [Inhabited Γ] (enc0 : enc default = List.Vector.replicate n false)
@@ -1748,157 +1502,145 @@ variable [Inhabited Γ] (enc0 : enc default = List.Vector.replicate n false)
 section
 variable {enc}
 
-/--
-Definition of `trTape'` / `trTape'` 的定义
+/-- The low level tape corresponding to the given tape over alphabet `Γ`. -/
+/-
+**Turing.TM1to1.trTape'** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：trTape' (L R : ListBlank Γ) : Tape Bool
+参数：L R : ListBlank Γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trTape'
-  signature: (L R : ListBlank Γ)
-  body: by
-  refine
-      Tape.mk' (L.flatMap (fun x => (enc x).toList.reverse) ⟨n, ?_⟩)
-        (R.flatMap (fun x => (enc x).toList) ⟨n, ?_⟩) <;>
-    simp only [enc0, List.Vector.replicate, List.reverse_replicate, Bool.default_bool,
-      List.Vector.toList_mk]
-
-中文:
-定义 trTape'
-  签名: (L R : ListBlank Γ)
-  定义体: by
-  refine
-      Tape.mk' (L.flatMap (fun x => (enc x).toList.reverse) ⟨n, ?_⟩)
-        (R.flatMap (fun x => (enc x).toList) ⟨n, ?_⟩) <;>
-    simp only [enc0, List.Vector.replicate, List.reverse_replicate, Bool.default_bool,
-      List.Vector.toList_mk]
-
-Depends on / 依赖: Bool.default_bool, L.flatMap, List.Vector.replicate, List.Vector.toList_mk, List.reverse_replicate, R.flatMap, Tape.mk, Vector, default_bool, flatMap, replicate, reverse, reverse_replicate, toList, toList.reverse, toList_mk
+--- 原说明 ---
+The low level tape corresponding to the given tape over alphabet `Γ`.
 -/
 def trTape' (L R : ListBlank Γ) : Tape Bool := by
   refine
-      Tape.mk' (L.flatMap (fun x => (enc x).toList.reverse) ⟨n, ?_⟩)
-        (R.flatMap (fun x => (enc x).toList) ⟨n, ?_⟩) <;>
+      Tape.mk' (L.flatMap (fun x ↦ (enc x).toList.reverse) ⟨n, ?_⟩)
+        (R.flatMap (fun x ↦ (enc x).toList) ⟨n, ?_⟩) <;>
     simp only [enc0, List.Vector.replicate, List.reverse_replicate, Bool.default_bool,
       List.Vector.toList_mk]
 
-/--
-Definition of `trTape` / `trTape` 的定义
+/-- The low level tape corresponding to the given tape over alphabet `Γ`. -/
+/-
+**Turing.TM1to1.trTape** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：trTape (T : Tape Γ) : Tape Bool
+参数：T : Tape Γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trTape
-  signature: (T : Tape Γ)
-  body: trTape' enc0 T.left T.right₀
-
-中文:
-定义 trTape
-  签名: (T : Tape Γ)
-  定义体: trTape' enc0 T.left T.right₀
-
-Depends on / 依赖: T.left, T.right, trTape
+--- 原说明 ---
+The low level tape corresponding to the given tape over alphabet `Γ`.
 -/
 def trTape (T : Tape Γ) : Tape Bool :=
   trTape' enc0 T.left T.right₀
-
-/--
-theorem `trTape_mk'` / 定理 `trTape_mk'`
-
-English:
-theorem trTape_mk'
-  given: (L R : ListBlank Γ)
-  statement: trTape enc0 (Tape.mk' L R) = trTape' enc0 L R
-  proof: by
-  simp only [trTape, Tape.mk'_left, Tape.mk'_right₀]
-
-中文:
-定理 trTape_mk'
-  条件: (L R : ListBlank Γ)
-  结论: trTape enc0 (Tape.mk' L R) = trTape' enc0 L R
-  证明: by
-  simp only [trTape, Tape.mk'_left, Tape.mk'_right₀]
-
-Depends on / 依赖: Tape.mk, _left, trTape
+/-
+**Turing.TM1to1.trTape_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：trTape_mk' (L R : ListBlank Γ) : trTape enc0 (Tape.mk' L R) = trTape' enc0
+ L R
+参数：L R : ListBlank Γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.TM1to1.trTape'.congr_simp`：∀ {Γ : Type u_1} {n : ℕ} {enc enc_1 : 
+Γ → List.Vector Bool n} (e_enc : enc = enc_1) [inst : Inhabited Γ]   (enc0 : enc
+ default = List.Vector…
+· 使用定理 `Turing.Tape.mk'_right₀`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (L R : Tur
+ing.ListBlank Γ), (Turing.Tape.mk' L R).right₀ = R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trTape_mk' (L R : ListBlank Γ) : trTape enc0 (Tape.mk' L R) = trTape' enc0 L R := by
   simp only [trTape, Tape.mk'_left, Tape.mk'_right₀]
 
 end
 
-/--
-Definition of `tr` / `tr` 的定义
+/-- The top level program. -/
+/-
+**Turing.TM1to1.tr** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       {n : ℕ} →  
+       (Γ → List.Vector Bool n) →           (List.Vector Bool n → Γ) →          
+   (Λ → Turing.TM1.Stmt Γ Λ σ) → Turing.TM1to1.Λ' Γ Λ σ → Turing.TM1.Stmt Bool (
+Turing.TM1to1.Λ' Γ Λ σ) σ
+参数：Γ → List.Vector Bool n；List.Vector Bool n → Γ；Λ → Turing.TM1.Stmt Γ Λ σ；Turin
+g.TM1to1.Λ' Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tr
-  signature: : Λ' Γ Λ σ -> Stmt Bool (Λ' Γ Λ σ) σ
-
-中文:
-定义 tr
-  签名: : Λ' Γ Λ σ -> Stmt 布尔值 (Λ' Γ Λ σ) σ
+--- 原说明 ---
+The top level program.
 -/
-def tr : Λ' Γ Λ σ -> Stmt Bool (Λ' Γ Λ σ) σ
+def tr : Λ' Γ Λ σ → Stmt Bool (Λ' Γ Λ σ) σ
   | Λ'.normal l => trNormal dec (M l)
-| Λ'.write a q => write (enc a).toList move n Dir.left trNormal dec q
+  | Λ'.write a q => write (enc a).toList <| move n Dir.left <| trNormal dec q
 
-/--
-Definition of `trCfg` / `trCfg` 的定义
+/-- The machine configuration translation. -/
+/-
+**Turing.TM1to1.trCfg** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     {σ : Type u_3} →       {n : ℕ} →  
+       (enc : Γ → List.Vector Bool n) →           [inst : Inhabited Γ] →        
+     enc default = List.Vector.replicate n false →               Turing.TM1.Cfg 
+Γ Λ σ → Turing.TM1.Cfg Bool (Turing.TM1to1.Λ' Γ Λ σ) σ
+参数：enc : Γ → List.Vector Bool n；Turing.TM1to1.Λ' Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trCfg
-  signature: : Cfg Γ Λ σ -> Cfg Bool (Λ' Γ Λ σ) σ
-
-中文:
-定义 trCfg
-  签名: : Cfg Γ Λ σ -> Cfg 布尔值 (Λ' Γ Λ σ) σ
+--- 原说明 ---
+The machine configuration translation.
 -/
-def trCfg : Cfg Γ Λ σ -> Cfg Bool (Λ' Γ Λ σ) σ
+def trCfg : Cfg Γ Λ σ → Cfg Bool (Λ' Γ Λ σ) σ
   | ⟨l, v, T⟩ => ⟨l.map Λ'.normal, v, trTape enc0 T⟩
 
 variable {enc}
-
-/--
-theorem `trTape'_move_left` / 定理 `trTape'_move_left`
-
-English:
-theorem trTape'_move_left
-  given: (L R : ListBlank Γ)
-  proof: by
-  obtain ⟨a, L, rfl⟩ := L.exists_cons
-  simp only [trTape', ListBlank.cons_flatMap, ListBlank.head_cons, ListBlank.tail_cons]
-  suffices forall {L' R' l₁ l₂} (_ : List.Vector.toList (enc a) = List.reverseAux l₁ l₂),
-      (Tape.move Dir.left)^[l₁.length]
-      (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂ R')) =
-      Tape.mk' L' (ListBlank.append (List.Vector.toList (enc a)) R') by
-    simpa only [List.length_reverse, Vector.toList_length] using! this (List.reverse_reverse _).symm
-  intro _ _ l₁ l₂ e
-  induction l₁ generalizing l₂ with
-  | nil => cases e; rfl
-  | cons b l₁ IH =>
-    simp only [List.length, iterate_succ_apply]
-    convert! IH e
-    simp only [ListBlank.tail_cons, ListBlank.append, Tape.move_left_mk', ListBlank.head_cons]
-
-中文:
-定理 trTape'_move_left
-  条件: (L R : ListBlank Γ)
-  证明: by
-  obtain ⟨a, L, rfl⟩ := L.exists_cons
-  simp only [trTape', ListBlank.cons_flatMap, ListBlank.head_cons, ListBlank.tail_cons]
-  suffices forall {L' R' l₁ l₂} (_ : List.Vector.toList (enc a) = List.reverseAux l₁ l₂),
-      (Tape.move Dir.left)^[l₁.length]
-      (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂ R')) =
-      Tape.mk' L' (ListBlank.append (List.Vector.toList (enc a)) R') by
-    simpa only [List.length_reverse, Vector.toList_length] using! this (List.reverse_reverse _).symm
-  intro _ _ l₁ l₂ e
-  induction l₁ generalizing l₂ with
-  | nil => cases e; rfl
-  | cons b l₁ IH =>
-    simp only [List.length, iterate_succ_apply]
-    convert! IH e
-    simp only [ListBlank.tail_cons, ListBlank.append, Tape.move_left_mk', ListBlank.head_cons]
+/-
+**Turing.TM1to1.trTape'_move_left** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：∀ {Γ : Type u_1} {n : ℕ} {enc : Γ → List.Vector Bool n} [inst : Inhabited 
+Γ]   (enc0 : enc default = List.Vector.replicate n false) (L R : Turing.ListBlan
+k Γ),   (Turing.Tape.move Turing.Dir.left)^[n] (Turing.TM1to1.trTape' enc0 L R) 
+=     Turing.TM1to1.trTape' enc0 L.tail (Turing.ListBlank.cons L.head R)
+参数：enc0 : enc default = List.Vector.replicate n false；L R : Turing.ListBlank Γ；T
+uring.Tape.move Turing.Dir.left；Turing.TM1to1.trTape' enc0 L R；Turing.ListBlank.
+cons L.head R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ListBlank.exists_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (l :
+ Turing.ListBlank Γ), ∃ a l', l = Turing.ListBlank.cons a l'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.ListBlank.cons_flatMap`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : 
+Inhabited Γ] [inst_1 : Inhabited Γ'] (a : Γ) (l : Turing.ListBlank Γ)   (f : Γ →
+ List Γ') (hf : ∃ n…
+· 使用定理 `Turing.ListBlank.flatMap.congr_simp`：∀ {Γ : Type u_1} {Γ' : Type u_2} [i
+nst : Inhabited Γ] [inst_1 : Inhabited Γ'] (l l_1 : Turing.ListBlank Γ),   l = l
+_1 →     ∀ (f f_1 : Γ → L…
+· 使用定理 `Turing.ListBlank.tail_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).tail = l
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.ListBlank.head_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).head = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.Tape.move_left_mk'`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (L R : 
+Turing.ListBlank Γ),   Turing.Tape.move Turing.Dir.left (Turing.Tape.mk' L R) = 
+Turing.Tape.mk'…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
+· 使用定理 `List.Vector.toList_length`：toList_length (v : Vector α n) : (toList v).l
+ength = n
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
 -/
 theorem trTape'_move_left (L R : ListBlank Γ) :
     (Tape.move Dir.left)^[n] (trTape' enc0 L R) = trTape' enc0 L.tail (R.cons L.head) := by
   obtain ⟨a, L, rfl⟩ := L.exists_cons
   simp only [trTape', ListBlank.cons_flatMap, ListBlank.head_cons, ListBlank.tail_cons]
-  suffices forall {L' R' l₁ l₂} (_ : List.Vector.toList (enc a) = List.reverseAux l₁ l₂),
+  suffices ∀ {L' R' l₁ l₂} (_ : List.Vector.toList (enc a) = List.reverseAux l₁ l₂),
       (Tape.move Dir.left)^[l₁.length]
       (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂ R')) =
       Tape.mk' L' (ListBlank.append (List.Vector.toList (enc a)) R') by
@@ -1910,39 +1652,47 @@ theorem trTape'_move_left (L R : ListBlank Γ) :
     simp only [List.length, iterate_succ_apply]
     convert! IH e
     simp only [ListBlank.tail_cons, ListBlank.append, Tape.move_left_mk', ListBlank.head_cons]
-
-/--
-theorem `trTape'_move_right` / 定理 `trTape'_move_right`
-
-English:
-theorem trTape'_move_right
-  given: (L R : ListBlank Γ)
-  proof: by
-  suffices forall i L, (Tape.move Dir.right)^[i] ((Tape.move Dir.left)^[i] L) = L by
-    refine (Eq.symm ?_).trans (this n _)
-    simp only [trTape'_move_left, ListBlank.cons_head_tail, ListBlank.head_cons,
-      ListBlank.tail_cons]
-  intro i _
-  induction i with
-  | zero => rfl
-  | succ i IH => rw [iterate_succ_apply, iterate_succ_apply', Tape.move_left_right, IH]
-
-中文:
-定理 trTape'_move_right
-  条件: (L R : ListBlank Γ)
-  证明: by
-  suffices forall i L, (Tape.move Dir.right)^[i] ((Tape.move Dir.left)^[i] L) = L by
-    refine (Eq.symm ?_).trans (this n _)
-    simp only [trTape'_move_left, ListBlank.cons_head_tail, ListBlank.head_cons,
-      ListBlank.tail_cons]
-  intro i _
-  induction i with
-  | zero => rfl
-  | succ i IH => rw [iterate_succ_apply, iterate_succ_apply', Tape.move_left_right, IH]
+/-
+**Turing.TM1to1.trTape'_move_right** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：∀ {Γ : Type u_1} {n : ℕ} {enc : Γ → List.Vector Bool n} [inst : Inhabited 
+Γ]   (enc0 : enc default = List.Vector.replicate n false) (L R : Turing.ListBlan
+k Γ),   (Turing.Tape.move Turing.Dir.right)^[n] (Turing.TM1to1.trTape' enc0 L R)
+ =     Turing.TM1to1.trTape' enc0 (Turing.ListBlank.cons R.head L) R.tail
+参数：enc0 : enc default = List.Vector.replicate n false；L R : Turing.ListBlank Γ；T
+uring.Tape.move Turing.Dir.right；Turing.TM1to1.trTape' enc0 L R；Turing.ListBlank
+.cons R.head L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.iterate_succ_apply`：iterate_succ_apply (n : Nat) (x : α) : f^[n
+.succ] x = f^[n] (f x)
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用定理 `Turing.Tape.move_left_right`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (T : 
+Turing.Tape Γ),   Turing.Tape.move Turing.Dir.right (Turing.Tape.move Turing.Dir
+.left T) = T
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.TM1to1.trTape'_move_left`：∀ {Γ : Type u_1} {n : ℕ} {enc : Γ → Lis
+t.Vector Bool n} [inst : Inhabited Γ]   (enc0 : enc default = List.Vector.replic
+ate n false) (L R : T…
+· 使用定理 `Turing.TM1to1.trTape'.congr_simp`：∀ {Γ : Type u_1} {n : ℕ} {enc enc_1 : 
+Γ → List.Vector Bool n} (e_enc : enc = enc_1) [inst : Inhabited Γ]   (enc0 : enc
+ default = List.Vector…
+· 使用定理 `Turing.ListBlank.tail_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).tail = l
+· 使用定理 `Turing.ListBlank.head_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).head = a
+· 使用定理 `Turing.ListBlank.cons_head_tail`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (
+l : Turing.ListBlank Γ), Turing.ListBlank.cons l.head l.tail = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trTape'_move_right (L R : ListBlank Γ) :
     (Tape.move Dir.right)^[n] (trTape' enc0 L R) = trTape' enc0 (L.cons R.head) R.tail := by
-  suffices forall i L, (Tape.move Dir.right)^[i] ((Tape.move Dir.left)^[i] L) = L by
+  suffices ∀ i L, (Tape.move Dir.right)^[i] ((Tape.move Dir.left)^[i] L) = L by
     refine (Eq.symm ?_).trans (this n _)
     simp only [trTape'_move_left, ListBlank.cons_head_tail, ListBlank.head_cons,
       ListBlank.tail_cons]
@@ -1950,55 +1700,56 @@ theorem trTape'_move_right (L R : ListBlank Γ) :
   induction i with
   | zero => rfl
   | succ i IH => rw [iterate_succ_apply, iterate_succ_apply', Tape.move_left_right, IH]
-
-/--
-theorem `stepAux_write` / 定理 `stepAux_write`
-
-English:
-theorem stepAux_write
-  given: (q : Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (a b : Γ) (L R : ListBlank Γ)
-  proof: by
-  simp only [trTape', ListBlank.cons_flatMap]
-  suffices forall {L' R'} (l₁ l₂ l₂' : List Bool) (_ : l₂'.length = l₂.length),
-      stepAux (write l₂ q) v (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂' R')) =
-      stepAux q v (Tape.mk' (L'.append (List.reverseAux l₂ l₁)) R') by
-    exact this [] _ _ ((enc b).2.trans (enc a).2.symm)
-  clear a b L R
-  intro L' R' l₁ l₂ l₂' e
-  induction l₂ generalizing l₁ l₂' with
-  | nil => cases List.length_eq_zero_iff.1 e; rfl
-  | cons a l₂ IH =>
-    rcases l₂' with - | ⟨b, l₂'⟩ <;>
-      simp only [List.length_nil, List.length_cons, Nat.succ_inj, reduceCtorEq] at e
-    rw [List.reverseAux]; rw [← IH (a :: l₁) l₂' e]
-    simp [stepAux, ListBlank.append, write]
-
-中文:
-定理 stepAux_write
-  条件: (q : Stmt 布尔值 (Λ' Γ Λ σ) σ) (v : σ) (a b : Γ) (L R : ListBlank Γ)
-  证明: by
-  simp only [trTape', ListBlank.cons_flatMap]
-  suffices forall {L' R'} (l₁ l₂ l₂' : List Bool) (_ : l₂'.length = l₂.length),
-      stepAux (write l₂ q) v (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂' R')) =
-      stepAux q v (Tape.mk' (L'.append (List.reverseAux l₂ l₁)) R') by
-    exact this [] _ _ ((enc b).2.trans (enc a).2.symm)
-  clear a b L R
-  intro L' R' l₁ l₂ l₂' e
-  induction l₂ generalizing l₁ l₂' with
-  | nil => cases List.length_eq_zero_iff.1 e; rfl
-  | cons a l₂ IH =>
-    rcases l₂' with - | ⟨b, l₂'⟩ <;>
-      simp only [List.length_nil, List.length_cons, Nat.succ_inj, reduceCtorEq] at e
-    rw [List.reverseAux]; rw [← IH (a :: l₁) l₂' e]
-    simp [stepAux, ListBlank.append, write]
-
-Depends on / 依赖: List.length_eq_zero_iff, List.reverseAux, ListBlank, ListBlank.append, ListBlank.cons_flatMap, Tape.mk, append, cons_flatMap, generalizing, length, length_eq_zero_iff, reverseAux, stepAux, trTape
+/-
+**Turing.TM1to1.stepAux_write** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：stepAux_write (q : Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (a b : Γ) (L R : ListBl
+ank Γ) : stepAux (write (enc a).toList q) v (trTape' enc0 L (ListBlank.cons b R)
+) = stepAux q v (trTape' enc0 (ListBlank.cons a L) R)
+参数：q : Stmt Bool (Λ' Γ Λ σ) σ；v : σ；a b : Γ；L R : ListBlank Γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ListBlank.cons_flatMap`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : 
+Inhabited Γ] [inst_1 : Inhabited Γ'] (a : Γ) (l : Turing.ListBlank Γ)   (f : Γ →
+ List Γ') (hf : ∃ n…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.length_eq_zero_iff`：∀ {α : Type u_1} {l : List α}, l.length = 0 ↔ l
+ = []
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `List.reverseAux.eq_2`：∀ {α : Type u} (x : List α) (a : α) (l : List α), 
+(a :: l).reverseAux x = l.reverseAux (a :: x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.TM1.stepAux.eq_2`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3} 
+[inst : Inhabited Γ] (x : σ) (x_1 : Turing.Tape Γ) (a : Γ → σ → Γ)   (q : Turing
+.TM1.Stmt Γ Λ…
+· 使用定理 `Turing.Tape.write_mk'`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (b : Γ) (L 
+R : Turing.ListBlank Γ),   Turing.Tape.write b (Turing.Tape.mk' L R) = Turing.Ta
+pe.mk' L (T…
+· 使用定理 `Turing.ListBlank.tail_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).tail = l
+· 使用定理 `Turing.Tape.move_right_mk'`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (L R :
+ Turing.ListBlank Γ),   Turing.Tape.move Turing.Dir.right (Turing.Tape.mk' L R) 
+= Turing.Tape.mk…
+· 使用定理 `Turing.ListBlank.head_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).head = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem stepAux_write (q : Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (a b : Γ) (L R : ListBlank Γ) :
     stepAux (write (enc a).toList q) v (trTape' enc0 L (ListBlank.cons b R)) =
       stepAux q v (trTape' enc0 (ListBlank.cons a L) R) := by
   simp only [trTape', ListBlank.cons_flatMap]
-  suffices forall {L' R'} (l₁ l₂ l₂' : List Bool) (_ : l₂'.length = l₂.length),
+  suffices ∀ {L' R'} (l₁ l₂ l₂' : List Bool) (_ : l₂'.length = l₂.length),
       stepAux (write l₂ q) v (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂' R')) =
       stepAux q v (Tape.mk' (L'.append (List.reverseAux l₂ l₁)) R') by
     exact this [] _ _ ((enc b).2.trans (enc a).2.symm)
@@ -2009,84 +1760,75 @@ theorem stepAux_write (q : Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (a b : Γ) (L R
   | cons a l₂ IH =>
     rcases l₂' with - | ⟨b, l₂'⟩ <;>
       simp only [List.length_nil, List.length_cons, Nat.succ_inj, reduceCtorEq] at e
-    rw [List.reverseAux]; rw [← IH (a :: l₁) l₂' e]
+    rw [List.reverseAux, ← IH (a :: l₁) l₂' e]
     simp [stepAux, ListBlank.append, write]
 
-variable (encdec : forall a, dec (enc a) = a)
+variable (encdec : ∀ a, dec (enc a) = a)
 include encdec
-
-/--
-theorem `stepAux_read` / 定理 `stepAux_read`
-
-English:
-theorem stepAux_read
-  given: (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (L R : ListBlank Γ)
-  proof: by
-  suffices forall f, stepAux (readAux n f) v (trTape' enc0 L R) =
-      stepAux (f (enc R.head)) v (trTape' enc0 (L.cons R.head) R.tail) by
-    rw [read]; rw [this]; rw [stepAux_move]; rw [encdec]; rw [trTape'_move_left enc0]
-    simp only [ListBlank.head_cons, ListBlank.cons_head_tail, ListBlank.tail_cons]
-  obtain ⟨a, R, rfl⟩ := R.exists_cons
-  simp only [ListBlank.head_cons, ListBlank.tail_cons, trTape', ListBlank.cons_flatMap]
-  suffices forall i f L' R' l₁ l₂ h,
-      stepAux (readAux i f) v (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂ R')) =
-      stepAux (f ⟨l₂, h⟩) v (Tape.mk' (ListBlank.append (l₂.reverseAux l₁) L') R') by
-    intro f
-    exact this n f (L.flatMap (fun x => (enc x).1.reverse) _)
-      (R.flatMap (fun x => (enc x).1) _) [] _ (enc a).2
-  clear f L a R
-  rintro _ f L' R' l₁ l₂ rfl
-  induction l₂ generalizing l₁ with
-  | nil => rfl
-  | cons a l₂ IH =>
-    trans stepAux (readAux l₂.length fun v => f (a ::ᵥ v)) v
-        (Tape.mk' ((L'.append l₁).cons a) (R'.append l₂))
-    · dsimp [readAux, stepAux]
-      simp only [ListBlank.head_cons, Tape.move_right_mk', ListBlank.tail_cons]
-      cases a <;> rfl
-    · rw [← ListBlank.append, IH]
-      rfl
-
-中文:
-定理 stepAux_read
-  条件: (f : Γ -> Stmt 布尔值 (Λ' Γ Λ σ) σ) (v : σ) (L R : ListBlank Γ)
-  证明: by
-  suffices forall f, stepAux (readAux n f) v (trTape' enc0 L R) =
-      stepAux (f (enc R.head)) v (trTape' enc0 (L.cons R.head) R.tail) by
-    rw [read]; rw [this]; rw [stepAux_move]; rw [encdec]; rw [trTape'_move_left enc0]
-    simp only [ListBlank.head_cons, ListBlank.cons_head_tail, ListBlank.tail_cons]
-  obtain ⟨a, R, rfl⟩ := R.exists_cons
-  simp only [ListBlank.head_cons, ListBlank.tail_cons, trTape', ListBlank.cons_flatMap]
-  suffices forall i f L' R' l₁ l₂ h,
-      stepAux (readAux i f) v (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂ R')) =
-      stepAux (f ⟨l₂, h⟩) v (Tape.mk' (ListBlank.append (l₂.reverseAux l₁) L') R') by
-    intro f
-    exact this n f (L.flatMap (fun x => (enc x).1.reverse) _)
-      (R.flatMap (fun x => (enc x).1) _) [] _ (enc a).2
-  clear f L a R
-  rintro _ f L' R' l₁ l₂ rfl
-  induction l₂ generalizing l₁ with
-  | nil => rfl
-  | cons a l₂ IH =>
-    trans stepAux (readAux l₂.length fun v => f (a ::ᵥ v)) v
-        (Tape.mk' ((L'.append l₁).cons a) (R'.append l₂))
-    · dsimp [readAux, stepAux]
-      simp only [ListBlank.head_cons, Tape.move_right_mk', ListBlank.tail_cons]
-      cases a <;> rfl
-    · rw [← ListBlank.append, IH]
-      rfl
-
-Depends on / 依赖: L.cons, ListBlank, ListBlank.ap, ListBlank.cons_flatMap, ListBlank.cons_head_tail, ListBlank.head_cons, ListBlank.tail_cons, R.exists_cons, R.head, R.tail, Tape.mk, _move_left, cons_flatMap, cons_head_tail, encdec, exists_cons, head_cons, readAux, stepAux, stepAux_move
+/-
+**Turing.TM1to1.stepAux_read** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：stepAux_read (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (L R : ListBlank Γ)
+ : stepAux (read dec f) v (trTape' enc0 L R) = stepAux (f R.head) v (trTape' enc
+0 L R)
+参数：f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ；v : σ；L R : ListBlank Γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Turing.ListBlank.exists_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (l :
+ Turing.ListBlank Γ), ∃ a l', l = Turing.ListBlank.cons a l'
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Turing.ListBlank.cons_flatMap`：∀ {Γ : Type u_1} {Γ' : Type u_2} [inst : 
+Inhabited Γ] [inst_1 : Inhabited Γ'] (a : Γ) (l : Turing.ListBlank Γ)   (f : Γ →
+ List Γ') (hf : ∃ n…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.ListBlank.head_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).head = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.ListBlank.flatMap.congr_simp`：∀ {Γ : Type u_1} {Γ' : Type u_2} [i
+nst : Inhabited Γ] [inst_1 : Inhabited Γ'] (l l_1 : Turing.ListBlank Γ),   l = l
+_1 →     ∀ (f f_1 : Γ → L…
+· 使用定理 `Turing.ListBlank.tail_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).tail = l
+· 使用定理 `Turing.Tape.move_right_mk'`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (L R :
+ Turing.ListBlank Γ),   Turing.Tape.move Turing.Dir.right (Turing.Tape.mk' L R) 
+= Turing.Tape.mk…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Turing.ListBlank.append.eq_2`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (x :
+ Turing.ListBlank Γ) (a : Γ) (l : List Γ),   Turing.ListBlank.append (a :: l) x 
+= Turing.ListBlank…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Turing.TM1to1.read.eq_1`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3} 
+{n : ℕ} (dec : List.Vector Bool n → Γ)   (f : Γ → Turing.TM1.Stmt Bool (Turing.T
+M1to1.Λ' Γ Λ …
+· 使用定理 `Turing.TM1to1.stepAux_move`：stepAux_move (d : Dir) (q : Stmt Bool (Λ' Γ 
+Λ σ) σ) (v : σ) (T : Tape Bool) : stepAux (move n d q) v T = stepAux q v ((Tape.
+move d)^[n] T)
+· 使用定理 `Turing.TM1to1.trTape'_move_left`：∀ {Γ : Type u_1} {n : ℕ} {enc : Γ → Lis
+t.Vector Bool n} [inst : Inhabited Γ]   (enc0 : enc default = List.Vector.replic
+ate n false) (L R : T…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Turing.TM1to1.trTape'.congr_simp`：∀ {Γ : Type u_1} {n : ℕ} {enc enc_1 : 
+Γ → List.Vector Bool n} (e_enc : enc = enc_1) [inst : Inhabited Γ]   (enc0 : enc
+ default = List.Vector…
+· 使用定理 `Turing.ListBlank.cons_head_tail`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (
+l : Turing.ListBlank Γ), Turing.ListBlank.cons l.head l.tail = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem stepAux_read (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (L R : ListBlank Γ) :
+theorem stepAux_read (f : Γ → Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (L R : ListBlank Γ) :
     stepAux (read dec f) v (trTape' enc0 L R) = stepAux (f R.head) v (trTape' enc0 L R) := by
-  suffices forall f, stepAux (readAux n f) v (trTape' enc0 L R) =
+  suffices ∀ f, stepAux (readAux n f) v (trTape' enc0 L R) =
       stepAux (f (enc R.head)) v (trTape' enc0 (L.cons R.head) R.tail) by
-    rw [read]; rw [this]; rw [stepAux_move]; rw [encdec]; rw [trTape'_move_left enc0]
+    rw [read, this, stepAux_move, encdec, trTape'_move_left enc0]
     simp only [ListBlank.head_cons, ListBlank.cons_head_tail, ListBlank.tail_cons]
   obtain ⟨a, R, rfl⟩ := R.exists_cons
   simp only [ListBlank.head_cons, ListBlank.tail_cons, trTape', ListBlank.cons_flatMap]
-  suffices forall i f L' R' l₁ l₂ h,
+  suffices ∀ i f L' R' l₁ l₂ h,
       stepAux (readAux i f) v (Tape.mk' (ListBlank.append l₁ L') (ListBlank.append l₂ R')) =
       stepAux (f ⟨l₂, h⟩) v (Tape.mk' (ListBlank.append (l₂.reverseAux l₁) L') R') by
     intro f
@@ -2097,7 +1839,7 @@ theorem stepAux_read (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (L R : Lis
   induction l₂ generalizing l₁ with
   | nil => rfl
   | cons a l₂ IH =>
-    trans stepAux (readAux l₂.length fun v => f (a ::ᵥ v)) v
+    trans stepAux (readAux l₂.length fun v ↦ f (a ::ᵥ v)) v
         (Tape.mk' ((L'.append l₁).cons a) (R'.append l₂))
     · dsimp [readAux, stepAux]
       simp only [ListBlank.head_cons, Tape.move_right_mk', ListBlank.tail_cons]
@@ -2106,98 +1848,83 @@ theorem stepAux_read (f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ) (v : σ) (L R : Lis
       rfl
 
 variable {enc0} in
-/--
-theorem `tr_respects` / 定理 `tr_respects`
-
-English:
-theorem tr_respects
-  proof: fun_respects.2 fun ⟨l₁, v, T⟩ => by
-    obtain ⟨L, R, rfl⟩ := T.exists_mk'
-    rcases l₁ with - | l₁
-    · exact rfl
-    suffices forall q R, Reaches (step (tr enc dec M)) (stepAux (trNormal dec q) v (trTape' enc0 L R))
-        (trCfg enc enc0 (stepAux q v (Tape.mk' L R))) by
-      refine TransGen.head' rfl ?_
-      rw [trTape_mk']
-      exact this _ R
-    clear R l₁
-    intro q R
-    induction q generalizing v L R with
-    | move d q IH =>
-      cases d <;>
-          simp only [trNormal, stepAux_move, stepAux,
-            Tape.move_left_mk',
-            trTape'_move_left enc0, trTape'_move_right enc0] <;>
-        apply IH
-    | write f q IH =>
-      simp only [trNormal, stepAux_read dec enc0 encdec, stepAux]
-      refine ReflTransGen.head rfl ?_
-      obtain ⟨a, R, rfl⟩ := R.exists_cons
-      rw [tr]; rw [Tape.mk'_head]; rw [stepAux_write]; rw [ListBlank.head_cons]; rw [stepAux_move]; rw [trTape'_move_left enc0]
-      simpa using! IH ..
-    | load a q IH =>
-      simp only [trNormal, stepAux_read dec enc0 encdec]
-      apply IH
-    | branch p q₁ q₂ IH₁ IH₂ =>
-      simp only [trNormal, stepAux_read dec enc0 encdec, stepAux, Tape.mk'_head]
-      grind
-    | goto l =>
-      simp only [trNormal, stepAux_read dec enc0 encdec, stepAux, trCfg, trTape_mk']
-      apply ReflTransGen.refl
-    | halt =>
-      simp only [trNormal, stepAux, trCfg,
-        trTape_mk']
-      apply ReflTransGen.refl
-
-中文:
-定理 tr_respects
-  证明: fun_respects.2 fun ⟨l₁, v, T⟩ => by
-    obtain ⟨L, R, rfl⟩ := T.exists_mk'
-    rcases l₁ with - | l₁
-    · exact rfl
-    suffices forall q R, Reaches (step (tr enc dec M)) (stepAux (trNormal dec q) v (trTape' enc0 L R))
-        (trCfg enc enc0 (stepAux q v (Tape.mk' L R))) by
-      refine TransGen.head' rfl ?_
-      rw [trTape_mk']
-      exact this _ R
-    clear R l₁
-    intro q R
-    induction q generalizing v L R with
-    | move d q IH =>
-      cases d <;>
-          simp only [trNormal, stepAux_move, stepAux,
-            Tape.move_left_mk',
-            trTape'_move_left enc0, trTape'_move_right enc0] <;>
-        apply IH
-    | write f q IH =>
-      simp only [trNormal, stepAux_read dec enc0 encdec, stepAux]
-      refine ReflTransGen.head rfl ?_
-      obtain ⟨a, R, rfl⟩ := R.exists_cons
-      rw [tr]; rw [Tape.mk'_head]; rw [stepAux_write]; rw [ListBlank.head_cons]; rw [stepAux_move]; rw [trTape'_move_left enc0]
-      simpa using! IH ..
-    | load a q IH =>
-      simp only [trNormal, stepAux_read dec enc0 encdec]
-      apply IH
-    | branch p q₁ q₂ IH₁ IH₂ =>
-      simp only [trNormal, stepAux_read dec enc0 encdec, stepAux, Tape.mk'_head]
-      grind
-    | goto l =>
-      simp only [trNormal, stepAux_read dec enc0 encdec, stepAux, trCfg, trTape_mk']
-      apply ReflTransGen.refl
-    | halt =>
-      simp only [trNormal, stepAux, trCfg,
-        trTape_mk']
-      apply ReflTransGen.refl
-
-Depends on / 依赖: Reaches, T.exists_mk, Tape.mk, Tape.move_left_mk, TransGen, TransGen.head, _move_, _move_left, exists_mk, fun_respects, generalizing, move_left_mk, stepAux, stepAux_move, trNormal, trTape, trTape_mk
+/-
+**Turing.TM1to1.tr_respects** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：tr_respects : Respects (step M) (step (tr enc dec M)) fun c₁ c₂ => trCfg e
+nc enc0 c₁ = c₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `StateTransition.fun_respects`：fun_respects {σ₁ σ₂ f₁ f₂} {tr : σ₁ -> σ₂}
+ : (Respects f₁ f₂ fun a b => tr a = b) ↔ forall ⦃a₁⦄, FRespects f₂ tr (tr a₁) (
+f₁ a₁)
+· 使用定理 `Turing.Tape.exists_mk'`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (T : Turin
+g.Tape Γ), ∃ L R, T = Turing.Tape.mk' L R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.TM1to1.stepAux_move`：stepAux_move (d : Dir) (q : Stmt Bool (Λ' Γ 
+Λ σ) σ) (v : σ) (T : Tape Bool) : stepAux (move n d q) v T = stepAux q v ((Tape.
+move d)^[n] T)
+· 使用定理 `Turing.TM1to1.trTape'_move_left`：∀ {Γ : Type u_1} {n : ℕ} {enc : Γ → Lis
+t.Vector Bool n} [inst : Inhabited Γ]   (enc0 : enc default = List.Vector.replic
+ate n false) (L R : T…
+· 使用定理 `Turing.TM1to1.trCfg.congr_simp`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Typ
+e u_3} {n : ℕ} (enc enc_1 : Γ → List.Vector Bool n) (e_enc : enc = enc_1)   [ins
+t : Inhabited Γ] (en…
+· 使用定理 `Turing.Tape.move_left_mk'`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (L R : 
+Turing.ListBlank Γ),   Turing.Tape.move Turing.Dir.left (Turing.Tape.mk' L R) = 
+Turing.Tape.mk'…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.TM1to1.trTape'_move_right`：∀ {Γ : Type u_1} {n : ℕ} {enc : Γ → Li
+st.Vector Bool n} [inst : Inhabited Γ]   (enc0 : enc default = List.Vector.repli
+cate n false) (L R : T…
+· 使用定理 `Turing.TM1to1.stepAux_read`：stepAux_read (f : Γ -> Stmt Bool (Λ' Γ Λ σ) 
+σ) (v : σ) (L R : ListBlank Γ) : stepAux (read dec f) v (trTape' enc0 L R) = ste
+pAux (f R.head) …
+· 使用定理 `Relation.ReflTransGen.head`：head (hab : r a b) (hbc : ReflTransGen r b c
+) : ReflTransGen r a c
+· 使用定理 `Turing.ListBlank.exists_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (l :
+ Turing.ListBlank Γ), ∃ a l', l = Turing.ListBlank.cons a l'
+· 使用定理 `Turing.TM1to1.tr.eq_2`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3} {n
+ : ℕ} (enc : Γ → List.Vector Bool n) (dec : List.Vector Bool n → Γ)   (M : Λ → T
+uring.TM1.S…
+· 使用定理 `Turing.Tape.mk'_head`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (L R : Turin
+g.ListBlank Γ), (Turing.Tape.mk' L R).head = R.head
+· 使用定理 `Turing.TM1to1.stepAux_write`：stepAux_write (q : Stmt Bool (Λ' Γ Λ σ) σ) 
+(v : σ) (a b : Γ) (L R : ListBlank Γ) : stepAux (write (enc a).toList q) v (trTa
+pe' enc0 L (ListB…
+· 使用定理 `Turing.ListBlank.head_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).head = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Turing.TM1to1.trTape'.congr_simp`：∀ {Γ : Type u_1} {n : ℕ} {enc enc_1 : 
+Γ → List.Vector Bool n} (e_enc : enc = enc_1) [inst : Inhabited Γ]   (enc0 : enc
+ default = List.Vector…
+· 使用定理 `Turing.ListBlank.tail_cons`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (a : Γ
+) (l : Turing.ListBlank Γ), (Turing.ListBlank.cons a l).tail = l
+· 使用定理 `Turing.Tape.write_mk'`：∀ {Γ : Type u_1} [inst : Inhabited Γ] (b : Γ) (L 
+R : Turing.ListBlank Γ),   Turing.Tape.write b (Turing.Tape.mk' L R) = Turing.Ta
+pe.mk' L (T…
+· 使用定理 `Turing.TM1to1.trTape_mk'`：trTape_mk' (L R : ListBlank Γ) : trTape enc0 (
+Tape.mk' L R) = trTape' enc0 L R
+· 使用定理 `Turing.TM1.stepAux.eq_6`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u_3} 
+[inst : Inhabited Γ] (x : σ) (x_1 : Turing.Tape Γ),   Turing.TM1.stepAux Turing.
+TM1.Stmt.halt…
+· 使用定理 `Relation.TransGen.head'`：head' (hab : r a b) (hbc : ReflTransGen r b c) 
+: TransGen r a c
 -/
 theorem tr_respects :
-    Respects (step M) (step (tr enc dec M)) fun c₁ c₂ => trCfg enc enc0 c₁ = c₂ :=
-  fun_respects.2 fun ⟨l₁, v, T⟩ => by
+    Respects (step M) (step (tr enc dec M)) fun c₁ c₂ ↦ trCfg enc enc0 c₁ = c₂ :=
+  fun_respects.2 fun ⟨l₁, v, T⟩ ↦ by
     obtain ⟨L, R, rfl⟩ := T.exists_mk'
     rcases l₁ with - | l₁
     · exact rfl
-    suffices forall q R, Reaches (step (tr enc dec M)) (stepAux (trNormal dec q) v (trTape' enc0 L R))
+    suffices ∀ q R, Reaches (step (tr enc dec M)) (stepAux (trNormal dec q) v (trTape' enc0 L R))
         (trCfg enc enc0 (stepAux q v (Tape.mk' L R))) by
       refine TransGen.head' rfl ?_
       rw [trTape_mk']
@@ -2215,7 +1942,8 @@ theorem tr_respects :
       simp only [trNormal, stepAux_read dec enc0 encdec, stepAux]
       refine ReflTransGen.head rfl ?_
       obtain ⟨a, R, rfl⟩ := R.exists_cons
-      rw [tr]; rw [Tape.mk'_head]; rw [stepAux_write]; rw [ListBlank.head_cons]; rw [stepAux_move]; rw [trTape'_move_left enc0]
+      rw [tr, Tape.mk'_head, stepAux_write, ListBlank.head_cons, stepAux_move,
+        trTape'_move_left enc0]
       simpa using! IH ..
     | load a q IH =>
       simp only [trNormal, stepAux_read dec enc0 encdec]
@@ -2237,149 +1965,103 @@ end
 variable [Fintype Γ]
 
 open scoped Classical in
-/--
-Definition of `writes` / `writes` 的定义
+/-- The set of accessible `Λ'.write` machine states. -/
+/-
+**Turing.TM1to1.writes** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：{Γ : Type u_1} → {Λ : Type u_2} → {σ : Type u_3} → [Fintype Γ] → Turing.TM
+1.Stmt Γ Λ σ → Finset (Turing.TM1to1.Λ' Γ Λ σ)
+参数：Turing.TM1to1.Λ' Γ Λ σ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition writes
-  signature: : Stmt Γ Λ σ -> Finset (Λ' Γ Λ σ)
-
-中文:
-定义 writes
-  签名: : Stmt Γ Λ σ -> 有限集 (Λ' Γ Λ σ)
+--- 原说明 ---
+The set of accessible `Λ'.write` machine states.
 -/
-noncomputable def writes : Stmt Γ Λ σ -> Finset (Λ' Γ Λ σ)
+noncomputable def writes : Stmt Γ Λ σ → Finset (Λ' Γ Λ σ)
   | Stmt.move _ q => writes q
-  | Stmt.write _ q => (Finset.univ.image fun a => Λ'.write a q) union writes q
+  | Stmt.write _ q => (Finset.univ.image fun a ↦ Λ'.write a q) ∪ writes q
   | Stmt.load _ q => writes q
-  | Stmt.branch _ q₁ q₂ => writes q₁ union writes q₂
+  | Stmt.branch _ q₁ q₂ => writes q₁ ∪ writes q₂
   | Stmt.goto _ => ∅
   | Stmt.halt => ∅
 
 open scoped Classical in
-/--
-Definition of `trSupp` / `trSupp` 的定义
+/-- The set of accessible machine states, assuming that the input machine is supported on `S`,
+are the normal states embedded from `S`, plus all write states accessible from these states. -/
+/-
+**Turing.TM1to1.trSupp** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM1to1`。
+形式化陈述：trSupp (S : Finset Λ) : Finset (Λ' Γ Λ σ)
+参数：S : Finset Λ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trSupp
-  signature: (S : Finset Λ)
-  body: S.biUnion fun l => insert (Λ'.normal l) (writes (M l))
-
-中文:
-定义 trSupp
-  签名: (S : 有限集 Λ)
-  定义体: S.biUnion fun l => insert (Λ'.normal l) (writes (M l))
-
-Depends on / 依赖: S.biUnion, biUnion, insert, normal, writes
+--- 原说明 ---
+The set of accessible machine states, assuming that the input machine is support
+ed on `S`,
+are the normal states embedded from `S`, plus all write states accessible from t
+hese states.
 -/
 noncomputable def trSupp (S : Finset Λ) : Finset (Λ' Γ Λ σ) :=
-  S.biUnion fun l => insert (Λ'.normal l) (writes (M l))
+  S.biUnion fun l ↦ insert (Λ'.normal l) (writes (M l))
 
 open scoped Classical in
-/--
-theorem `tr_supports` / 定理 `tr_supports`
-
-English:
-theorem tr_supports
-  given: [Inhabited Λ] {S : Finset Λ} (ss : Supports M S)
-  proof: ⟨Finset.mem_biUnion.2 ⟨_, ss.1, Finset.mem_insert_self _ _⟩, fun q h => by
-    suffices forall q, SupportsStmt S q -> (forall q' in writes q, q' in trSupp M S) ->
-        SupportsStmt (trSupp M S) (trNormal dec q) ∧
-        forall q' in writes q, SupportsStmt (trSupp M S) (tr enc dec M q') by
-      rcases Finset.mem_biUnion.1 h with ⟨l, hl, h⟩
-      have :=
-        this _ (ss.2 _ hl) fun q' hq => Finset.mem_biUnion.2 ⟨_, hl, Finset.mem_insert_of_mem hq⟩
-      rcases Finset.mem_insert.1 h with (rfl | h)
-      exacts [this.1, this.2 _ h]
-    intro q hs hw
-    induction q with
-    | move d q IH =>
-      unfold writes at hw ⊢
-      replace IH := IH hs hw; refine ⟨?_, IH.2⟩
-      cases d <;> simp only [trNormal, supportsStmt_move, IH]
-    | write f q IH =>
-      unfold writes at hw ⊢
-      simp only [Finset.mem_image, Finset.mem_union, Finset.mem_univ, true_and]
-        at hw ⊢
-      replace IH := IH hs fun q hq => hw q (Or.inr hq)
-      refine ⟨supportsStmt_read _ fun a _ s => hw _ (Or.inl ⟨_, rfl⟩), fun q' hq => ?_⟩
-      rcases hq with (⟨a, q₂, rfl⟩ | hq)
-      · simp only [tr, supportsStmt_write, supportsStmt_move, IH.1]
-      · exact IH.2 _ hq
-    | load a q IH =>
-      unfold writes at hw ⊢
-      replace IH := IH hs hw
-      exact ⟨supportsStmt_read _ fun _ => IH.1, IH.2⟩
-    | branch p q₁ q₂ IH₁ IH₂ =>
-      unfold writes at hw ⊢
-      simp only [Finset.mem_union] at hw ⊢
-      replace IH₁ := IH₁ hs.1 fun q hq => hw q (Or.inl hq)
-      replace IH₂ := IH₂ hs.2 fun q hq => hw q (Or.inr hq)
-      exact ⟨supportsStmt_read _ fun _ => ⟨IH₁.1, IH₂.1⟩, fun q => Or.rec (IH₁.2 _) (IH₂.2 _)⟩
-    | goto l =>
-      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
-      refine supportsStmt_read _ fun a _ s => ?_
-      exact Finset.mem_biUnion.2 ⟨_, hs _ _, Finset.mem_insert_self _ _⟩
-    | halt =>
-      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
-      simp only [SupportsStmt, trNormal]⟩
-
-中文:
-定理 tr_supports
-  条件: [可居 Λ] {S : 有限集 Λ} (ss : Supports M S)
-  证明: ⟨Finset.mem_biUnion.2 ⟨_, ss.1, Finset.mem_insert_self _ _⟩, fun q h => by
-    suffices forall q, SupportsStmt S q -> (forall q' in writes q, q' in trSupp M S) ->
-        SupportsStmt (trSupp M S) (trNormal dec q) ∧
-        forall q' in writes q, SupportsStmt (trSupp M S) (tr enc dec M q') by
-      rcases Finset.mem_biUnion.1 h with ⟨l, hl, h⟩
-      have :=
-        this _ (ss.2 _ hl) fun q' hq => Finset.mem_biUnion.2 ⟨_, hl, Finset.mem_insert_of_mem hq⟩
-      rcases Finset.mem_insert.1 h with (rfl | h)
-      exacts [this.1, this.2 _ h]
-    intro q hs hw
-    induction q with
-    | move d q IH =>
-      unfold writes at hw ⊢
-      replace IH := IH hs hw; refine ⟨?_, IH.2⟩
-      cases d <;> simp only [trNormal, supportsStmt_move, IH]
-    | write f q IH =>
-      unfold writes at hw ⊢
-      simp only [Finset.mem_image, Finset.mem_union, Finset.mem_univ, true_and]
-        at hw ⊢
-      replace IH := IH hs fun q hq => hw q (Or.inr hq)
-      refine ⟨supportsStmt_read _ fun a _ s => hw _ (Or.inl ⟨_, rfl⟩), fun q' hq => ?_⟩
-      rcases hq with (⟨a, q₂, rfl⟩ | hq)
-      · simp only [tr, supportsStmt_write, supportsStmt_move, IH.1]
-      · exact IH.2 _ hq
-    | load a q IH =>
-      unfold writes at hw ⊢
-      replace IH := IH hs hw
-      exact ⟨supportsStmt_read _ fun _ => IH.1, IH.2⟩
-    | branch p q₁ q₂ IH₁ IH₂ =>
-      unfold writes at hw ⊢
-      simp only [Finset.mem_union] at hw ⊢
-      replace IH₁ := IH₁ hs.1 fun q hq => hw q (Or.inl hq)
-      replace IH₂ := IH₂ hs.2 fun q hq => hw q (Or.inr hq)
-      exact ⟨supportsStmt_read _ fun _ => ⟨IH₁.1, IH₂.1⟩, fun q => Or.rec (IH₁.2 _) (IH₂.2 _)⟩
-    | goto l =>
-      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
-      refine supportsStmt_read _ fun a _ s => ?_
-      exact Finset.mem_biUnion.2 ⟨_, hs _ _, Finset.mem_insert_self _ _⟩
-    | halt =>
-      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
-      simp only [SupportsStmt, trNormal]⟩
-
-Depends on / 依赖: Finset, Finset.mem_biUnion, Finset.mem_insert, Finset.mem_insert_of_mem, Finset.mem_insert_self, SupportsStmt, exacts, mem_biUnion, mem_insert, mem_insert_of_mem, mem_insert_self, trNormal, trSupp, writes
+/-
+**Turing.TM1to1.tr_supports** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM1to1`。
+形式化陈述：tr_supports [Inhabited Λ] {S : Finset Λ} (ss : Supports M S) : Supports (t
+r enc dec M) (trSupp M S)
+参数：ss : Supports M S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_biUnion`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : 
+α → Finset β} [inst : DecidableEq β] {b : β},   b ∈ s.biUnion t ↔ ∃ a ∈ s, b ∈ t
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Turing.TM1to1.writes.eq_def`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type u
+_3} [inst : Fintype Γ] (x : Turing.TM1.Stmt Γ Λ σ),   Turing.TM1to1.writes x =  
+   match x with  …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Turing.TM1to1.supportsStmt_move`：supportsStmt_move {S : Finset (Λ' Γ Λ σ
+)} {d : Dir} {q : Stmt Bool (Λ' Γ Λ σ) σ} : SupportsStmt S (move n d q) = Suppor
+tsStmt S q
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Turing.TM1to1.supportsStmt_read`：supportsStmt_read {S : Finset (Λ' Γ Λ σ
+)} : forall {f : Γ -> Stmt Bool (Λ' Γ Λ σ) σ}, (forall a, SupportsStmt S (f a)) 
+-> SupportsStmt S (re…
+· 使用定理 `Turing.TM1to1.supportsStmt_write`：supportsStmt_write {S : Finset (Λ' Γ Λ
+ σ)} {l : List Bool} {q : Stmt Bool (Λ' Γ Λ σ) σ} : SupportsStmt S (write l q) =
+ SupportsStmt S q
+· 使用定理 `Turing.TM1.SupportsStmt.eq_6`：∀ {Γ : Type u_1} {Λ : Type u_2} {σ : Type 
+u_3} (S : Finset Λ), Turing.TM1.SupportsStmt S Turing.TM1.Stmt.halt = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `Finset.mem_insert`：mem_insert : a in insert b s ↔ a = b ∨ a in s
 -/
 theorem tr_supports [Inhabited Λ] {S : Finset Λ} (ss : Supports M S) :
     Supports (tr enc dec M) (trSupp M S) :=
-  ⟨Finset.mem_biUnion.2 ⟨_, ss.1, Finset.mem_insert_self _ _⟩, fun q h => by
-    suffices forall q, SupportsStmt S q -> (forall q' in writes q, q' in trSupp M S) ->
+  ⟨Finset.mem_biUnion.2 ⟨_, ss.1, Finset.mem_insert_self _ _⟩, fun q h ↦ by
+    suffices ∀ q, SupportsStmt S q → (∀ q' ∈ writes q, q' ∈ trSupp M S) →
         SupportsStmt (trSupp M S) (trNormal dec q) ∧
-        forall q' in writes q, SupportsStmt (trSupp M S) (tr enc dec M q') by
+        ∀ q' ∈ writes q, SupportsStmt (trSupp M S) (tr enc dec M q') by
       rcases Finset.mem_biUnion.1 h with ⟨l, hl, h⟩
       have :=
-        this _ (ss.2 _ hl) fun q' hq => Finset.mem_biUnion.2 ⟨_, hl, Finset.mem_insert_of_mem hq⟩
+        this _ (ss.2 _ hl) fun q' hq ↦ Finset.mem_biUnion.2 ⟨_, hl, Finset.mem_insert_of_mem hq⟩
       rcases Finset.mem_insert.1 h with (rfl | h)
       exacts [this.1, this.2 _ h]
     intro q hs hw
@@ -2392,27 +2074,27 @@ theorem tr_supports [Inhabited Λ] {S : Finset Λ} (ss : Supports M S) :
       unfold writes at hw ⊢
       simp only [Finset.mem_image, Finset.mem_union, Finset.mem_univ, true_and]
         at hw ⊢
-      replace IH := IH hs fun q hq => hw q (Or.inr hq)
-      refine ⟨supportsStmt_read _ fun a _ s => hw _ (Or.inl ⟨_, rfl⟩), fun q' hq => ?_⟩
+      replace IH := IH hs fun q hq ↦ hw q (Or.inr hq)
+      refine ⟨supportsStmt_read _ fun a _ s ↦ hw _ (Or.inl ⟨_, rfl⟩), fun q' hq ↦ ?_⟩
       rcases hq with (⟨a, q₂, rfl⟩ | hq)
       · simp only [tr, supportsStmt_write, supportsStmt_move, IH.1]
       · exact IH.2 _ hq
     | load a q IH =>
       unfold writes at hw ⊢
       replace IH := IH hs hw
-      exact ⟨supportsStmt_read _ fun _ => IH.1, IH.2⟩
+      exact ⟨supportsStmt_read _ fun _ ↦ IH.1, IH.2⟩
     | branch p q₁ q₂ IH₁ IH₂ =>
       unfold writes at hw ⊢
       simp only [Finset.mem_union] at hw ⊢
-      replace IH₁ := IH₁ hs.1 fun q hq => hw q (Or.inl hq)
-      replace IH₂ := IH₂ hs.2 fun q hq => hw q (Or.inr hq)
-      exact ⟨supportsStmt_read _ fun _ => ⟨IH₁.1, IH₂.1⟩, fun q => Or.rec (IH₁.2 _) (IH₂.2 _)⟩
+      replace IH₁ := IH₁ hs.1 fun q hq ↦ hw q (Or.inl hq)
+      replace IH₂ := IH₂ hs.2 fun q hq ↦ hw q (Or.inr hq)
+      exact ⟨supportsStmt_read _ fun _ ↦ ⟨IH₁.1, IH₂.1⟩, fun q ↦ Or.rec (IH₁.2 _) (IH₂.2 _)⟩
     | goto l =>
-      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
-      refine supportsStmt_read _ fun a _ s => ?_
+      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ ↦ False.elim⟩
+      refine supportsStmt_read _ fun a _ s ↦ ?_
       exact Finset.mem_biUnion.2 ⟨_, hs _ _, Finset.mem_insert_self _ _⟩
     | halt =>
-      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ => False.elim⟩
+      simp only [writes, Finset.notMem_empty]; refine ⟨?_, fun _ ↦ False.elim⟩
       simp only [SupportsStmt, trNormal]⟩
 
 end TM1to1
@@ -2437,41 +2119,28 @@ namespace TM0to1
 variable (Γ : Type*) [Inhabited Γ]
 variable (Λ : Type*) [Inhabited Λ]
 
-/--
-Inductive type `Λ'` / 归纳类型 `Λ'`
+/-- The machine states for a TM1 emulating a TM0 machine. States of the TM0 machine are embedded
+as `normal q` states, but the actual operation is split into two parts, a jump to `act s q`
+followed by the action and a jump to the next `normal` state. -/
+/-
+**Turing.TM0to1.** 是 Mathlib 中的一个归纳类型，位于命名空间 `Turing.TM0to1`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Λ'
-  constructors (2):
-    - normal: Λ -> Λ'
-    - act: TM0.Stmt Γ -> Λ -> Λ'
-
-中文:
-归纳类型 Λ'
-  构造子 (2 个):
-    - normal: Λ -> Λ'
-    - act: TM0.Stmt Γ -> Λ -> Λ'
+--- 原说明 ---
+The machine states for a TM1 emulating a TM0 machine. States of the TM0 machine 
+are embedded
+as `normal q` states, but the actual operation is split into two parts, a jump t
+o `act s q`
+followed by the action and a jump to the next `normal` state.
 -/
 inductive Λ'
-  | normal : Λ -> Λ'
-  | act : TM0.Stmt Γ -> Λ -> Λ'
+  | normal : Λ → Λ'
+  | act : TM0.Stmt Γ → Λ → Λ'
 
 variable {Γ Λ}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Λ' Γ Λ)
-  body: ⟨Λ'.normal default⟩
-
-中文:
-实例 :
-  签名: 可居 (Λ' Γ Λ)
-  定义体: ⟨Λ'.normal default⟩
-
-Depends on / 依赖: normal
+/-
+**Turing.TM0to1.** 是 Mathlib 中的一个实例，位于命名空间 `Turing.TM0to1`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Λ' Γ Λ) :=
   ⟨Λ'.normal default⟩
@@ -2480,79 +2149,66 @@ variable (M : TM0.Machine Γ Λ)
 
 open TM1.Stmt
 
-/--
-Definition of `tr` / `tr` 的定义
+/-- The program. -/
+/-
+**Turing.TM0to1.tr** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0to1`。
+形式化陈述：{Γ : Type u_1} →   {Λ : Type u_2} →     [inst : Inhabited Λ] → Turing.TM0.
+Machine Γ Λ → Turing.TM0to1.Λ' Γ Λ → Turing.TM1.Stmt Γ (Turing.TM0to1.Λ' Γ Λ) Un
+it
+参数：Turing.TM0to1.Λ' Γ Λ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tr
-  signature: : Λ' Γ Λ -> TM1.Stmt Γ (Λ' Γ Λ) Unit
-
-中文:
-定义 tr
-  签名: : Λ' Γ Λ -> TM1.Stmt Γ (Λ' Γ Λ) 单元
+--- 原说明 ---
+The program.
 -/
-def tr : Λ' Γ Λ -> TM1.Stmt Γ (Λ' Γ Λ) Unit
+def tr : Λ' Γ Λ → TM1.Stmt Γ (Λ' Γ Λ) Unit
   | Λ'.normal q =>
-branch (fun a _ => (M q a).isNone) halt
-      goto fun a _ => match M q a with
+    branch (fun a _ ↦ (M q a).isNone) halt <|
+      goto fun a _ ↦ match M q a with
       | none => default -- unreachable
       | some (q', s) => Λ'.act s q'
-| Λ'.act (TM0.Stmt.move d) q => move d goto fun _ _ => Λ'.normal q
-| Λ'.act (TM0.Stmt.write a) q => (write fun _ _ => a) goto fun _ _ => Λ'.normal q
+  | Λ'.act (TM0.Stmt.move d) q => move d <| goto fun _ _ ↦ Λ'.normal q
+  | Λ'.act (TM0.Stmt.write a) q => (write fun _ _ ↦ a) <| goto fun _ _ ↦ Λ'.normal q
 
-/--
-Definition of `trCfg` / `trCfg` 的定义
+/-- The configuration translation. -/
+/-
+**Turing.TM0to1.trCfg** 是 Mathlib 中的一个定义，位于命名空间 `Turing.TM0to1`。
+形式化陈述：{Γ : Type u_1} →   [inst : Inhabited Γ] →     {Λ : Type u_2} →       [inst
+_1 : Inhabited Λ] →         Turing.TM0.Machine Γ Λ → Turing.TM0.Cfg Γ Λ → Turing
+.TM1.Cfg Γ (Turing.TM0to1.Λ' Γ Λ) Unit
+参数：Turing.TM0to1.Λ' Γ Λ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trCfg
-  signature: : TM0.Cfg Γ Λ -> TM1.Cfg Γ (Λ' Γ Λ) Unit
-
-中文:
-定义 trCfg
-  签名: : TM0.Cfg Γ Λ -> TM1.Cfg Γ (Λ' Γ Λ) 单元
+--- 原说明 ---
+The configuration translation.
 -/
-def trCfg : TM0.Cfg Γ Λ -> TM1.Cfg Γ (Λ' Γ Λ) Unit
+def trCfg : TM0.Cfg Γ Λ → TM1.Cfg Γ (Λ' Γ Λ) Unit
   | ⟨q, T⟩ => ⟨cond (M q T.1).isSome (some (Λ'.normal q)) none, (), T⟩
-
-/--
-theorem `tr_respects` / 定理 `tr_respects`
-
-English:
-theorem tr_respects
-  statement: Respects (TM0.step M) (TM1.step (tr M)) fun a b => trCfg M a = b
-  proof: fun_respects.2 fun ⟨q, T⟩ => by
-    rcases e : M q T.1 with - | val
-    · simp only [TM0.step, trCfg, e]; exact Eq.refl none
-    obtain ⟨q', s⟩ := val
-    simp only [FRespects, TM0.step, trCfg, e, Option.isSome, cond, Option.map_some]
-    revert e
-    have : TM1.step (tr M) ⟨some (Λ'.act s q'), (), T⟩ = some ⟨some (Λ'.normal q'), (), match s with
-        | TM0.Stmt.move d => T.move d
-        | TM0.Stmt.write a => T.write a⟩ := by
-      cases s <;> rfl
-    intro e
-    refine TransGen.head ?_ (TransGen.head' this ?_) <;> grind [TM1.step, TM1.stepAux, tr]
-
-中文:
-定理 tr_respects
-  结论: Respects (TM0.step M) (TM1.step (tr M)) fun a b => trCfg M a = b
-  证明: fun_respects.2 fun ⟨q, T⟩ => by
-    rcases e : M q T.1 with - | val
-    · simp only [TM0.step, trCfg, e]; exact Eq.refl none
-    obtain ⟨q', s⟩ := val
-    simp only [FRespects, TM0.step, trCfg, e, Option.isSome, cond, Option.map_some]
-    revert e
-    have : TM1.step (tr M) ⟨some (Λ'.act s q'), (), T⟩ = some ⟨some (Λ'.normal q'), (), match s with
-        | TM0.Stmt.move d => T.move d
-        | TM0.Stmt.write a => T.write a⟩ := by
-      cases s <;> rfl
-    intro e
-    refine TransGen.head ?_ (TransGen.head' this ?_) <;> grind [TM1.step, TM1.stepAux, tr]
-
-Depends on / 依赖: Eq.refl, FRespects, Option.isSome, Option.map_some, T.move, T.write, TM0.Stmt.move, TM0.Stmt.write, TM0.step, TM1.step, TM1.stepAux, TransGen, TransGen.head, fun_respects, isSome, map_some, normal, revert, stepAux
+/-
+**Turing.TM0to1.tr_respects** 是 Mathlib 中的一个定理，位于命名空间 `Turing.TM0to1`。
+形式化陈述：tr_respects : Respects (TM0.step M) (TM1.step (tr M)) fun a b => trCfg M a
+ = b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `StateTransition.fun_respects`：fun_respects {σ₁ σ₂ f₁ f₂} {tr : σ₁ -> σ₂}
+ : (Respects f₁ f₂ fun a b => tr a = b) ↔ forall ⦃a₁⦄, FRespects f₂ tr (tr a₁) (
+f₁ a₁)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Relation.TransGen.head`：head (hab : r a b) (hbc : TransGen r b c) : Tran
+sGen r a c
+· 使用定理 `Relation.TransGen.head'`：head' (hab : r a b) (hbc : ReflTransGen r b c) 
+: TransGen r a c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem tr_respects : Respects (TM0.step M) (TM1.step (tr M)) fun a b => trCfg M a = b :=
-  fun_respects.2 fun ⟨q, T⟩ => by
+theorem tr_respects : Respects (TM0.step M) (TM1.step (tr M)) fun a b ↦ trCfg M a = b :=
+  fun_respects.2 fun ⟨q, T⟩ ↦ by
     rcases e : M q T.1 with - | val
     · simp only [TM0.step, trCfg, e]; exact Eq.refl none
     obtain ⟨q', s⟩ := val
@@ -2568,3 +2224,4 @@ theorem tr_respects : Respects (TM0.step M) (TM1.step (tr M)) fun a b => trCfg M
 end TM0to1
 
 end Turing
+

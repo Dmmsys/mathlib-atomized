@@ -31,109 +31,55 @@ the *covariant* functor which sends a type `α` to `αᵒᵈ`.
 This functor sends the object `⦋n⦌` to `⦋n⦌` and a map `f : ⦋n⦌ ⟶ ⦋m⦌`
 is sent to the monotone map `(i : Fin (n + 1)) ↦ (f i.rev).rev`. -/
 @[simps obj, simps -isSimp map, implicit_reducible]
-/--
-Definition of `rev` / `rev` 的定义
+/-
+**SimplexCategory.rev** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：rev : SimplexCategory ⥤ SimplexCategory where obj n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rev
-  signature: : SimplexCategory ⥤ SimplexCategory where
-  body: n
-  map {n m} f := Hom.mk ⟨fun i => (f i.rev).rev, fun i j hij => by
-    rw [Fin.rev_le_rev]
-    exact f.toOrderHom.monotone (by rwa [Fin.rev_le_rev])⟩
-
-@[simp]
-
-中文:
-定义 rev
-  签名: : 单纯形范畴 ⥤ 单纯形范畴 where
-  定义体: n
-  map {n m} f := Hom.mk ⟨fun i => (f i.rev).rev, fun i j hij => by
-    rw [Fin.rev_le_rev]
-    exact f.toOrderHom.monotone (by rwa [Fin.rev_le_rev])⟩
-
-@[simp]
+--- 原说明 ---
+The covariant involution `rev : SimplexCategory ⥤ SimplexCategory` which,
+via the equivalence between the simplex category and the
+category of nonempty finite linearly ordered types, corresponds to
+the *covariant* functor which sends a type `α` to `αᵒᵈ`.
+This functor sends the object `⦋n⦌` to `⦋n⦌` and a map `f : ⦋n⦌ ⟶ ⦋m⦌`
+is sent to the monotone map `(i : Fin (n + 1)) ↦ (f i.rev).rev`.
 -/
 def rev : SimplexCategory ⥤ SimplexCategory where
   obj n := n
-  map {n m} f := Hom.mk ⟨fun i => (f i.rev).rev, fun i j hij => by
+  map {n m} f := Hom.mk ⟨fun i ↦ (f i.rev).rev, fun i j hij ↦ by
     rw [Fin.rev_le_rev]
     exact f.toOrderHom.monotone (by rwa [Fin.rev_le_rev])⟩
 
 @[simp]
-/--
-lemma `rev_map_apply` / 引理 `rev_map_apply`
-
-English:
-lemma rev_map_apply
-  given: {n m : SimplexCategory} (f : n ⟶ m) (i : Fin (n.len + 1))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 rev_map_apply
-  条件: {n m : 单纯形范畴} (f : n ⟶ m) (i : 有限集 (n.len + 1))
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: f.toOrderHom, i.rev, toOrderHom
+/-
+**SimplexCategory.rev_map_apply** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：rev_map_apply {n m : SimplexCategory} (f : n ⟶ m) (i : Fin (n.len + 1)) : 
+(rev.map f).toOrderHom (a
+参数：f : n ⟶ m；i : Fin (n.len + 1)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rev_map_apply {n m : SimplexCategory} (f : n ⟶ m) (i : Fin (n.len + 1)) :
     (rev.map f).toOrderHom (a := n) (b := m) i = (f.toOrderHom i.rev).rev :=
   rfl
 
 @[simp]
-/--
-lemma `rev_map_δ` / 引理 `rev_map_δ`
-
-English:
-lemma rev_map_δ
-  given: {n : Nat} (i : Fin (n + 2))
-  proof: by
-  ext j : 3
-  simp [δ, Fin.succAbove_rev_right, Fin.rev_rev, rev_map_apply]
-
-@[simp]
-
-中文:
-引理 rev_map_δ
-  条件: {n : 自然数} (i : 有限集 (n + 2))
-  证明: by
-  ext j : 3
-  simp [δ, Fin.succAbove_rev_right, Fin.rev_rev, rev_map_apply]
-
-@[simp]
-
-Depends on / 依赖: Fin.rev_rev, Fin.succAbove_rev_right, rev_map_apply, rev_rev, succAbove_rev_right
+/-
+**SimplexCategory.rev_map_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma rev_map_δ {n : Nat} (i : Fin (n + 2)) :
+lemma rev_map_δ {n : ℕ} (i : Fin (n + 2)) :
     rev.map (δ i) = δ i.rev := by
   ext j : 3
   simp [δ, Fin.succAbove_rev_right, Fin.rev_rev, rev_map_apply]
 
 @[simp]
-/--
-lemma `rev_map_σ` / 引理 `rev_map_σ`
-
-English:
-lemma rev_map_σ
-  given: {n : Nat} (i : Fin (n + 1))
-  proof: by
-  ext j : 3
-  simp [σ, Fin.predAbove_rev_right, Fin.rev_rev, rev_map_apply]
-
-中文:
-引理 rev_map_σ
-  条件: {n : 自然数} (i : 有限集 (n + 1))
-  证明: by
-  ext j : 3
-  simp [σ, Fin.predAbove_rev_right, Fin.rev_rev, rev_map_apply]
-
-Depends on / 依赖: Fin.predAbove_rev_right, Fin.rev_rev, predAbove_rev_right, rev_map_apply, rev_rev
+/-
+**SimplexCategory.rev_map_** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma rev_map_σ {n : Nat} (i : Fin (n + 1)) :
+lemma rev_map_σ {n : ℕ} (i : Fin (n + 1)) :
     rev.map (σ i) = σ i.rev := by
   ext j : 3
   simp [σ, Fin.predAbove_rev_right, Fin.rev_rev, rev_map_apply]
@@ -141,43 +87,41 @@ lemma rev_map_σ {n : Nat} (i : Fin (n + 1)) :
 /-- The functor `SimplexCategory.rev : SimplexCategory ⥤ SimplexCategory`
 is a covariant involution. -/
 @[simps! hom_app inv_app]
-/--
-Definition of `revCompRevIso` / `revCompRevIso` 的定义
+/-
+**SimplexCategory.revCompRevIso** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：revCompRevIso : rev ⋙ rev ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition revCompRevIso
-  signature: : rev ⋙ rev ≅ 𝟭 _
-  body: NatIso.ofComponents (fun _ => Iso.refl _)
-
-@[simp]
-
-中文:
-定义 revCompRevIso
-  签名: : rev ⋙ rev ≅ 𝟭 _
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _)
-
-@[simp]
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The functor `SimplexCategory.rev : SimplexCategory ⥤ SimplexCategory`
+is a covariant involution.
 -/
 def revCompRevIso : rev ⋙ rev ≅ 𝟭 _ :=
-  NatIso.ofComponents (fun _ => Iso.refl _)
+  NatIso.ofComponents (fun _ ↦ Iso.refl _)
 
 @[simp]
-/--
-lemma `rev_map_rev_map` / 引理 `rev_map_rev_map`
-
-English:
-lemma rev_map_rev_map
-  given: {n m : SimplexCategory} (f : n ⟶ m)
-  proof: by
-  aesop
-
-中文:
-引理 rev_map_rev_map
-  条件: {n m : 单纯形范畴} (f : n ⟶ m)
-  证明: by
-  aesop
+/-
+**SimplexCategory.rev_map_rev_map** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory`。
+形式化陈述：rev_map_rev_map {n m : SimplexCategory} (f : n ⟶ m) : rev.map (rev.map f) 
+= f
+参数：f : n ⟶ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.Hom.ext`：∀ {a b : SimplexCategory} (f g : a ⟶ b), Simple
+xCategory.Hom.toOrderHom f = SimplexCategory.Hom.toOrderHom g → f = g
+· 使用定理 `OrderHom.ext`：ext (f g : α ->o β) (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.rev_rev`：∀ {n : ℕ} (i : Fin n), i.rev.rev = i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rev_map_rev_map {n m : SimplexCategory} (f : n ⟶ m) :
     rev.map (rev.map f) = f := by
@@ -186,46 +130,26 @@ lemma rev_map_rev_map {n m : SimplexCategory} (f : n ⟶ m) :
 /-- The functor `SimplexCategory.rev : SimplexCategory ⥤ SimplexCategory`
 as an equivalence of category. -/
 @[simps]
-/--
-Definition of `revEquivalence` / `revEquivalence` 的定义
+/-
+**SimplexCategory.revEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategory`。
+形式化陈述：revEquivalence : SimplexCategory ≌ SimplexCategory where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition revEquivalence
-  signature: : SimplexCategory ≌ SimplexCategory where
-  body: rev
-  inverse := rev
-  unitIso := revCompRevIso.symm
-  counitIso := revCompRevIso
-
-中文:
-定义 revEquivalence
-  签名: : 单纯形范畴 ≌ 单纯形范畴 where
-  定义体: rev
-  inverse := rev
-  unitIso := revCompRevIso.symm
-  counitIso := revCompRevIso
+--- 原说明 ---
+The functor `SimplexCategory.rev : SimplexCategory ⥤ SimplexCategory`
+as an equivalence of category.
 -/
 def revEquivalence : SimplexCategory ≌ SimplexCategory where
   functor := rev
   inverse := rev
   unitIso := revCompRevIso.symm
   counitIso := revCompRevIso
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: rev.IsEquivalence
-  body: revEquivalence.isEquivalence_functor
-
-中文:
-实例 :
-  签名: rev.是等价
-  定义体: revEquivalence.isEquivalence_functor
-
-Depends on / 依赖: isEquivalence_functor, revEquivalence, revEquivalence.isEquivalence_functor
+/-
+**SimplexCategory.** 是 Mathlib 中的一个实例，位于命名空间 `SimplexCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : rev.IsEquivalence := revEquivalence.isEquivalence_functor
 
 end SimplexCategory
+

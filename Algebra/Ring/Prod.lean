@@ -31,45 +31,31 @@ variable {R R' S S' T : Type*}
 
 namespace Prod
 
-/--
-Instance `instDistrib` / 实例 `instDistrib`
+/-- Product of two distributive types is distributive. -/
+/-
+**Prod.instDistrib** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instDistrib [Distrib R] [Distrib S] : Distrib (R × S) where left_distrib _
+ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instDistrib
-  signature: [Distrib R] [Distrib S]
-  body: by ext <;> exact left_distrib ..
-  right_distrib _ _ _ := by ext <;> exact right_distrib ..
-
-中文:
-实例 instDistrib
-  签名: [Distrib R] [Distrib S]
-  定义体: by ext <;> exact left_distrib ..
-  right_distrib _ _ _ := by ext <;> exact right_distrib ..
-
-Depends on / 依赖: left_distrib, right_distrib
+--- 原说明 ---
+Product of two distributive types is distributive.
 -/
 instance instDistrib [Distrib R] [Distrib S] : Distrib (R × S) where
   left_distrib _ _ _ := by ext <;> exact left_distrib ..
   right_distrib _ _ _ := by ext <;> exact right_distrib ..
 
-/--
-Instance `instNonUnitalNonAssocSemiring` / 实例 `instNonUnitalNonAssocSemiring`
+/-- Product of two `NonUnitalNonAssocSemiring`s is a `NonUnitalNonAssocSemiring`. -/
+/-
+**Prod.instNonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] [NonUnitalNonA
+ssocSemiring S] : NonUnitalNonAssocSemiring (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instNonUnitalNonAssocSemiring
-  signature: [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
-  body: { (inferInstance : AddCommMonoid (R × S)),
-    (inferInstance : Distrib (R × S)),
-    (inferInstance : MulZeroClass (R × S)) with }
-
-中文:
-实例 instNonUnitalNonAssocSemiring
-  签名: [非幺非结合半环 R] [非幺非结合半环 S]
-  定义体: { (inferInstance : AddCommMonoid (R × S)),
-    (inferInstance : Distrib (R × S)),
-    (inferInstance : MulZeroClass (R × S)) with }
-
-Depends on / 依赖: AddCommMonoid, Distrib, MulZeroClass
+--- 原说明 ---
+Product of two `NonUnitalNonAssocSemiring`s is a `NonUnitalNonAssocSemiring`.
 -/
 instance instNonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S] :
     NonUnitalNonAssocSemiring (R × S) :=
@@ -77,46 +63,32 @@ instance instNonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] [NonUnitalN
     (inferInstance : Distrib (R × S)),
     (inferInstance : MulZeroClass (R × S)) with }
 
-/--
-Instance `instNonUnitalSemiring` / 实例 `instNonUnitalSemiring`
+/-- Product of two `NonUnitalSemiring`s is a `NonUnitalSemiring`. -/
+/-
+**Prod.instNonUnitalSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonUnitalSemiring [NonUnitalSemiring R] [NonUnitalSemiring S] : NonUni
+talSemiring (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instNonUnitalSemiring
-  signature: [NonUnitalSemiring R] [NonUnitalSemiring S]
-  body: { (inferInstance : NonUnitalNonAssocSemiring (R × S)),
-    (inferInstance : SemigroupWithZero (R × S)) with }
-
-中文:
-实例 instNonUnitalSemiring
-  签名: [非幺半环 R] [非幺半环 S]
-  定义体: { (inferInstance : NonUnitalNonAssocSemiring (R × S)),
-    (inferInstance : SemigroupWithZero (R × S)) with }
-
-Depends on / 依赖: NonUnitalNonAssocSemiring, SemigroupWithZero
+--- 原说明 ---
+Product of two `NonUnitalSemiring`s is a `NonUnitalSemiring`.
 -/
 instance instNonUnitalSemiring [NonUnitalSemiring R] [NonUnitalSemiring S] :
     NonUnitalSemiring (R × S) :=
   { (inferInstance : NonUnitalNonAssocSemiring (R × S)),
     (inferInstance : SemigroupWithZero (R × S)) with }
 
-/--
-Instance `instNonAssocSemiring` / 实例 `instNonAssocSemiring`
+/-- Product of two `NonAssocSemiring`s is a `NonAssocSemiring`. -/
+/-
+**Prod.instNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonAssocSemiring [NonAssocSemiring R] [NonAssocSemiring S] : NonAssocS
+emiring (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instNonAssocSemiring
-  signature: [NonAssocSemiring R] [NonAssocSemiring S]
-  body: { (inferInstance : NonUnitalNonAssocSemiring (R × S)),
-    (inferInstance : MulZeroOneClass (R × S)),
-    (inferInstance : AddMonoidWithOne (R × S)) with }
-
-中文:
-实例 instNonAssocSemiring
-  签名: [非结合半环 R] [非结合半环 S]
-  定义体: { (inferInstance : NonUnitalNonAssocSemiring (R × S)),
-    (inferInstance : MulZeroOneClass (R × S)),
-    (inferInstance : AddMonoidWithOne (R × S)) with }
-
-Depends on / 依赖: AddMonoidWithOne, MulZeroOneClass, NonUnitalNonAssocSemiring
+--- 原说明 ---
+Product of two `NonAssocSemiring`s is a `NonAssocSemiring`.
 -/
 instance instNonAssocSemiring [NonAssocSemiring R] [NonAssocSemiring S] :
     NonAssocSemiring (R × S) :=
@@ -124,191 +96,119 @@ instance instNonAssocSemiring [NonAssocSemiring R] [NonAssocSemiring S] :
     (inferInstance : MulZeroOneClass (R × S)),
     (inferInstance : AddMonoidWithOne (R × S)) with }
 
-/--
-Instance `instSemiring` / 实例 `instSemiring`
+/-- Product of two semirings is a semiring. -/
+/-
+**Prod.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instSemiring [Semiring R] [Semiring S] : Semiring (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSemiring
-  signature: [Semiring R] [Semiring S]
-  body: { (inferInstance : NonUnitalSemiring (R × S)),
-    (inferInstance : NonAssocSemiring (R × S)),
-    (inferInstance : MonoidWithZero (R × S)) with }
-
-中文:
-实例 instSemiring
-  签名: [半环 R] [半环 S]
-  定义体: { (inferInstance : NonUnitalSemiring (R × S)),
-    (inferInstance : NonAssocSemiring (R × S)),
-    (inferInstance : MonoidWithZero (R × S)) with }
-
-Depends on / 依赖: MonoidWithZero, NonAssocSemiring, NonUnitalSemiring
+--- 原说明 ---
+Product of two semirings is a semiring.
 -/
 instance instSemiring [Semiring R] [Semiring S] : Semiring (R × S) :=
   { (inferInstance : NonUnitalSemiring (R × S)),
     (inferInstance : NonAssocSemiring (R × S)),
     (inferInstance : MonoidWithZero (R × S)) with }
 
-/--
-Instance `instNonUnitalCommSemiring` / 实例 `instNonUnitalCommSemiring`
+/-- Product of two `NonUnitalCommSemiring`s is a `NonUnitalCommSemiring`. -/
+/-
+**Prod.instNonUnitalCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonUnitalCommSemiring [NonUnitalCommSemiring R] [NonUnitalCommSemiring
+ S] : NonUnitalCommSemiring (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instNonUnitalCommSemiring
-  signature: [NonUnitalCommSemiring R] [NonUnitalCommSemiring S]
-  body: { (inferInstance : NonUnitalSemiring (R × S)), (inferInstance : CommSemigroup (R × S)) with }
-
-中文:
-实例 instNonUnitalCommSemiring
-  签名: [非幺交换半环 R] [非幺交换半环 S]
-  定义体: { (inferInstance : NonUnitalSemiring (R × S)), (inferInstance : CommSemigroup (R × S)) with }
-
-Depends on / 依赖: CommSemigroup, NonUnitalSemiring
+--- 原说明 ---
+Product of two `NonUnitalCommSemiring`s is a `NonUnitalCommSemiring`.
 -/
 instance instNonUnitalCommSemiring [NonUnitalCommSemiring R] [NonUnitalCommSemiring S] :
     NonUnitalCommSemiring (R × S) :=
   { (inferInstance : NonUnitalSemiring (R × S)), (inferInstance : CommSemigroup (R × S)) with }
 
-/--
-Instance `instCommSemiring` / 实例 `instCommSemiring`
+/-- Product of two commutative semirings is a commutative semiring. -/
+/-
+**Prod.instCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instCommSemiring [CommSemiring R] [CommSemiring S] : CommSemiring (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCommSemiring
-  signature: [CommSemiring R] [CommSemiring S]
-  body: { (inferInstance : Semiring (R × S)), (inferInstance : CommMonoid (R × S)) with }
-
-中文:
-实例 instCommSemiring
-  签名: [交换半环 R] [交换半环 S]
-  定义体: { (inferInstance : Semiring (R × S)), (inferInstance : CommMonoid (R × S)) with }
-
-Depends on / 依赖: CommMonoid, Semiring
+--- 原说明 ---
+Product of two commutative semirings is a commutative semiring.
 -/
 instance instCommSemiring [CommSemiring R] [CommSemiring S] : CommSemiring (R × S) :=
   { (inferInstance : Semiring (R × S)), (inferInstance : CommMonoid (R × S)) with }
-
-/--
-Instance `instNonUnitalNonAssocRing` / 实例 `instNonUnitalNonAssocRing`
-
-English:
-instance instNonUnitalNonAssocRing
-  signature: [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S]
-  body: { (inferInstance : AddCommGroup (R × S)),
-    (inferInstance : NonUnitalNonAssocSemiring (R × S)) with }
-
-中文:
-实例 instNonUnitalNonAssocRing
-  签名: [非幺非结合环 R] [非幺非结合环 S]
-  定义体: { (inferInstance : AddCommGroup (R × S)),
-    (inferInstance : NonUnitalNonAssocSemiring (R × S)) with }
-
-Depends on / 依赖: AddCommGroup, NonUnitalNonAssocSemiring
+/-
+**Prod.instNonUnitalNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonUnitalNonAssocRing [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing
+ S] : NonUnitalNonAssocRing (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalNonAssocRing [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S] :
     NonUnitalNonAssocRing (R × S) :=
   { (inferInstance : AddCommGroup (R × S)),
     (inferInstance : NonUnitalNonAssocSemiring (R × S)) with }
-
-/--
-Instance `instNonUnitalRing` / 实例 `instNonUnitalRing`
-
-English:
-instance instNonUnitalRing
-  signature: [NonUnitalRing R] [NonUnitalRing S]
-  body: { (inferInstance : NonUnitalNonAssocRing (R × S)),
-    (inferInstance : NonUnitalSemiring (R × S)) with }
-
-中文:
-实例 instNonUnitalRing
-  签名: [非幺环 R] [非幺环 S]
-  定义体: { (inferInstance : NonUnitalNonAssocRing (R × S)),
-    (inferInstance : NonUnitalSemiring (R × S)) with }
-
-Depends on / 依赖: NonUnitalNonAssocRing, NonUnitalSemiring
+/-
+**Prod.instNonUnitalRing** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonUnitalRing [NonUnitalRing R] [NonUnitalRing S] : NonUnitalRing (R ×
+ S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalRing [NonUnitalRing R] [NonUnitalRing S] : NonUnitalRing (R × S) :=
   { (inferInstance : NonUnitalNonAssocRing (R × S)),
     (inferInstance : NonUnitalSemiring (R × S)) with }
-
-/--
-Instance `instNonAssocRing` / 实例 `instNonAssocRing`
-
-English:
-instance instNonAssocRing
-  signature: [NonAssocRing R] [NonAssocRing S]
-  body: { (inferInstance : NonUnitalNonAssocRing (R × S)),
-    (inferInstance : NonAssocSemiring (R × S)),
-    (inferInstance : AddGroupWithOne (R × S)) with }
-
-中文:
-实例 instNonAssocRing
-  签名: [非结合环 R] [非结合环 S]
-  定义体: { (inferInstance : NonUnitalNonAssocRing (R × S)),
-    (inferInstance : NonAssocSemiring (R × S)),
-    (inferInstance : AddGroupWithOne (R × S)) with }
-
-Depends on / 依赖: AddGroupWithOne, NonAssocSemiring, NonUnitalNonAssocRing
+/-
+**Prod.instNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonAssocRing [NonAssocRing R] [NonAssocRing S] : NonAssocRing (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocRing [NonAssocRing R] [NonAssocRing S] : NonAssocRing (R × S) :=
   { (inferInstance : NonUnitalNonAssocRing (R × S)),
     (inferInstance : NonAssocSemiring (R × S)),
     (inferInstance : AddGroupWithOne (R × S)) with }
 
-/--
-Instance `instRing` / 实例 `instRing`
+/-- Product of two rings is a ring. -/
+/-
+**Prod.instRing** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instRing [Ring R] [Ring S] : Ring (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instRing
-  signature: [Ring R] [Ring S]
-  body: { (inferInstance : Semiring (R × S)),
-    (inferInstance : AddCommGroup (R × S)),
-    (inferInstance : AddGroupWithOne (R × S)) with }
-
-中文:
-实例 instRing
-  签名: [环 R] [环 S]
-  定义体: { (inferInstance : Semiring (R × S)),
-    (inferInstance : AddCommGroup (R × S)),
-    (inferInstance : AddGroupWithOne (R × S)) with }
-
-Depends on / 依赖: AddCommGroup, AddGroupWithOne, Semiring
+--- 原说明 ---
+Product of two rings is a ring.
 -/
 instance instRing [Ring R] [Ring S] : Ring (R × S) :=
   { (inferInstance : Semiring (R × S)),
     (inferInstance : AddCommGroup (R × S)),
     (inferInstance : AddGroupWithOne (R × S)) with }
 
-/--
-Instance `instNonUnitalCommRing` / 实例 `instNonUnitalCommRing`
+/-- Product of two `NonUnitalCommRing`s is a `NonUnitalCommRing`. -/
+/-
+**Prod.instNonUnitalCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instNonUnitalCommRing [NonUnitalCommRing R] [NonUnitalCommRing S] : NonUni
+talCommRing (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instNonUnitalCommRing
-  signature: [NonUnitalCommRing R] [NonUnitalCommRing S]
-  body: { (inferInstance : NonUnitalRing (R × S)), (inferInstance : CommSemigroup (R × S)) with }
-
-中文:
-实例 instNonUnitalCommRing
-  签名: [非幺交换环 R] [非幺交换环 S]
-  定义体: { (inferInstance : NonUnitalRing (R × S)), (inferInstance : CommSemigroup (R × S)) with }
-
-Depends on / 依赖: CommSemigroup, NonUnitalRing
+--- 原说明 ---
+Product of two `NonUnitalCommRing`s is a `NonUnitalCommRing`.
 -/
 instance instNonUnitalCommRing [NonUnitalCommRing R] [NonUnitalCommRing S] :
     NonUnitalCommRing (R × S) :=
   { (inferInstance : NonUnitalRing (R × S)), (inferInstance : CommSemigroup (R × S)) with }
 
-/--
-Instance `instCommRing` / 实例 `instCommRing`
+/-- Product of two commutative rings is a commutative ring. -/
+/-
+**Prod.instCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instCommRing [CommRing R] [CommRing S] : CommRing (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCommRing
-  signature: [CommRing R] [CommRing S]
-  body: { (inferInstance : Ring (R × S)), (inferInstance : CommMonoid (R × S)) with }
-
-中文:
-实例 instCommRing
-  签名: [交换环 R] [交换环 S]
-  定义体: { (inferInstance : Ring (R × S)), (inferInstance : CommMonoid (R × S)) with }
-
-Depends on / 依赖: CommMonoid
+--- 原说明 ---
+Product of two commutative rings is a commutative ring.
 -/
 instance instCommRing [CommRing R] [CommRing S] : CommRing (R × S) :=
   { (inferInstance : Ring (R × S)), (inferInstance : CommMonoid (R × S)) with }
@@ -319,188 +219,126 @@ namespace NonUnitalRingHom
 
 variable (R S) [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- Given non-unital semirings `R`, `S`, the natural projection homomorphism from `R × S` to `R`. -/
+/-
+**NonUnitalRingHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：fst : R × S ->ₙ+* R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fst
-  signature: : R × S ->ₙ+* R
-  body: { MulHom.fst R S, AddMonoidHom.fst R S with toFun := Prod.fst }
-
-中文:
-定义 fst
-  签名: : R × S ->ₙ+* R
-  定义体: { MulHom.fst R S, AddMonoidHom.fst R S with toFun := Prod.fst }
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.fst, MulHom, MulHom.fst, Prod.fst
+--- 原说明 ---
+Given non-unital semirings `R`, `S`, the natural projection homomorphism from `R
+ × S` to `R`.
 -/
-def fst : R × S ->ₙ+* R :=
+def fst : R × S →ₙ+* R :=
   { MulHom.fst R S, AddMonoidHom.fst R S with toFun := Prod.fst }
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- Given non-unital semirings `R`, `S`, the natural projection homomorphism from `R × S` to `S`. -/
+/-
+**NonUnitalRingHom.snd** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：snd : R × S ->ₙ+* S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snd
-  signature: : R × S ->ₙ+* S
-  body: { MulHom.snd R S, AddMonoidHom.snd R S with toFun := Prod.snd }
-
-中文:
-定义 snd
-  签名: : R × S ->ₙ+* S
-  定义体: { MulHom.snd R S, AddMonoidHom.snd R S with toFun := Prod.snd }
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.snd, MulHom, MulHom.snd, Prod.snd
+--- 原说明 ---
+Given non-unital semirings `R`, `S`, the natural projection homomorphism from `R
+ × S` to `S`.
 -/
-def snd : R × S ->ₙ+* S :=
+def snd : R × S →ₙ+* S :=
   { MulHom.snd R S, AddMonoidHom.snd R S with toFun := Prod.snd }
 
 variable {R S}
 
 @[simp]
-/--
-theorem `coe_fst` / 定理 `coe_fst`
-
-English:
-theorem coe_fst
-  statement: ⇑(fst R S) = Prod.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_fst
-  结论: ⇑(fst R S) = 积类型.fst
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalRingHom.coe_fst** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：coe_fst : ⇑(fst R S) = Prod.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_fst : ⇑(fst R S) = Prod.fst :=
   rfl
 
 @[simp]
-/--
-theorem `coe_snd` / 定理 `coe_snd`
-
-English:
-theorem coe_snd
-  statement: ⇑(snd R S) = Prod.snd
-  proof: rfl
-
-中文:
-定理 coe_snd
-  结论: ⇑(snd R S) = 积类型.snd
-  证明: rfl
+/-
+**NonUnitalRingHom.coe_snd** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：coe_snd : ⇑(snd R S) = Prod.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_snd : ⇑(snd R S) = Prod.snd :=
   rfl
 
 section Prod
 
-variable [NonUnitalNonAssocSemiring T] (f : R ->ₙ+* S) (g : R ->ₙ+* T)
+variable [NonUnitalNonAssocSemiring T] (f : R →ₙ+* S) (g : R →ₙ+* T)
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- Combine two non-unital ring homomorphisms `f : R →ₙ+* S`, `g : R →ₙ+* T` into
+`f.prod g : R →ₙ+* S × T` given by `(f.prod g) x = (f x, g x)` -/
+/-
+**NonUnitalRingHom.prod** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：{R : Type u_1} →   {S : Type u_3} →     {T : Type u_5} →       [inst : Non
+UnitalNonAssocSemiring R] →         [inst_1 : NonUnitalNonAssocSemiring S] →    
+       [inst_2 : NonUnitalNonAssocSemiring T] → (R →ₙ+* S) → (R →ₙ+* T) → R →ₙ+*
+ S × T
+参数：R →ₙ+* S；R →ₙ+* T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (f : R ->ₙ+* S) (g : R ->ₙ+* T)
-  body: { MulHom.prod (f : MulHom R S) (g : MulHom R T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
-    toFun := fun x => (f x, g x) }
-
-@[simp]
-
-中文:
-定义 乘积
-  签名: (f : R ->ₙ+* S) (g : R ->ₙ+* T)
-  定义体: { MulHom.prod (f : MulHom R S) (g : MulHom R T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
-    toFun := fun x => (f x, g x) }
-
-@[simp]
+--- 原说明 ---
+Combine two non-unital ring homomorphisms `f : R →ₙ+* S`, `g : R →ₙ+* T` into
+`f.prod g : R →ₙ+* S × T` given by `(f.prod g) x = (f x, g x)`
 -/
-protected def prod (f : R ->ₙ+* S) (g : R ->ₙ+* T) : R ->ₙ+* S × T :=
-  { MulHom.prod (f : MulHom R S) (g : MulHom R T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
+protected def prod (f : R →ₙ+* S) (g : R →ₙ+* T) : R →ₙ+* S × T :=
+  { MulHom.prod (f : MulHom R S) (g : MulHom R T), AddMonoidHom.prod (f : R →+ S) (g : R →+ T) with
     toFun := fun x => (f x, g x) }
 
 @[simp]
-/--
-theorem `prod_apply` / 定理 `prod_apply`
-
-English:
-theorem prod_apply
-  given: (x)
-  statement: f.prod g x = (f x, g x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prod_apply
-  条件: (x)
-  结论: f.乘积 g x = (f x, g x)
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalRingHom.prod_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：prod_apply (x) : f.prod g x = (f x, g x)
+参数：x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_apply (x) : f.prod g x = (f x, g x) :=
   rfl
 
 @[simp]
-/--
-theorem `fst_comp_prod` / 定理 `fst_comp_prod`
-
-English:
-theorem fst_comp_prod
-  statement: (fst S T).comp (f.prod g) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 fst_comp_prod
-  结论: (fst S T).comp (f.乘积 g) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**NonUnitalRingHom.fst_comp_prod** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：fst_comp_prod : (fst S T).comp (f.prod g) = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalRingHom.ext`：ext ⦃f g : α ->ₙ+* β⦄ : (forall x, f x = g x) -> f
+ = g
 -/
 theorem fst_comp_prod : (fst S T).comp (f.prod g) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `snd_comp_prod` / 定理 `snd_comp_prod`
-
-English:
-theorem snd_comp_prod
-  statement: (snd S T).comp (f.prod g) = g
-  proof: ext fun _ => rfl
-
-中文:
-定理 snd_comp_prod
-  结论: (snd S T).comp (f.乘积 g) = g
-  证明: ext fun _ => rfl
+/-
+**NonUnitalRingHom.snd_comp_prod** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：snd_comp_prod : (snd S T).comp (f.prod g) = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalRingHom.ext`：ext ⦃f g : α ->ₙ+* β⦄ : (forall x, f x = g x) -> f
+ = g
 -/
 theorem snd_comp_prod : (snd S T).comp (f.prod g) = g :=
   ext fun _ => rfl
-
-/--
-theorem `prod_unique` / 定理 `prod_unique`
-
-English:
-theorem prod_unique
-  given: (f : R ->ₙ+* S × T)
-  statement: ((fst S T).comp f).prod ((snd S T).comp f) = f
-  proof: ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
-
-中文:
-定理 prod_unique
-  条件: (f : R ->ₙ+* S × T)
-  结论: ((fst S T).comp f).乘积 ((snd S T).comp f) = f
-  证明: ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
-
-Depends on / 依赖: coe_fst, coe_snd, comp_apply, prod_apply
+/-
+**NonUnitalRingHom.prod_unique** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：prod_unique (f : R ->ₙ+* S × T) : ((fst S T).comp f).prod ((snd S T).comp 
+f) = f
+参数：f : R ->ₙ+* S × T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalRingHom.ext`：ext ⦃f g : α ->ₙ+* β⦄ : (forall x, f x = g x) -> f
+ = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_unique (f : R ->ₙ+* S × T) : ((fst S T).comp f).prod ((snd S T).comp f) = f :=
+theorem prod_unique (f : R →ₙ+* S × T) : ((fst S T).comp f).prod ((snd S T).comp f) = f :=
   ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
 
 end Prod
@@ -508,77 +346,48 @@ end Prod
 section prodMap
 
 variable [NonUnitalNonAssocSemiring R'] [NonUnitalNonAssocSemiring S'] [NonUnitalNonAssocSemiring T]
-variable (f : R ->ₙ+* R') (g : S ->ₙ+* S')
+variable (f : R →ₙ+* R') (g : S →ₙ+* S')
 
-/--
-Definition of `prodMap` / `prodMap` 的定义
+/-- `Prod.map` as a `NonUnitalRingHom`. -/
+/-
+**NonUnitalRingHom.prodMap** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：prodMap : R × S ->ₙ+* R' × S'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodMap
-  signature: : R × S ->ₙ+* R' × S'
-  body: (f.comp (fst R S)).prod (g.comp (snd R S))
-
-中文:
-定义 prodMap
-  签名: : R × S ->ₙ+* R' × S'
-  定义体: (f.comp (fst R S)).prod (g.comp (snd R S))
-
-Depends on / 依赖: f.comp, g.comp
+--- 原说明 ---
+`Prod.map` as a `NonUnitalRingHom`.
 -/
-def prodMap : R × S ->ₙ+* R' × S' :=
+def prodMap : R × S →ₙ+* R' × S' :=
   (f.comp (fst R S)).prod (g.comp (snd R S))
-
-/--
-theorem `prodMap_def` / 定理 `prodMap_def`
-
-English:
-theorem prodMap_def
-  statement: prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodMap_def
-  结论: prodMap f g = (f.comp (fst R S)).乘积 (g.comp (snd R S))
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalRingHom.prodMap_def** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：prodMap_def : prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodMap_def : prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S)) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_prodMap` / 定理 `coe_prodMap`
-
-English:
-theorem coe_prodMap
-  statement: ⇑(prodMap f g) = Prod.map f g
-  proof: rfl
-
-中文:
-定理 coe_prodMap
-  结论: ⇑(prodMap f g) = 积类型.map f g
-  证明: rfl
+/-
+**NonUnitalRingHom.coe_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom`。
+形式化陈述：coe_prodMap : ⇑(prodMap f g) = Prod.map f g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodMap : ⇑(prodMap f g) = Prod.map f g :=
   rfl
-
-/--
-theorem `prod_comp_prodMap` / 定理 `prod_comp_prodMap`
-
-English:
-theorem prod_comp_prodMap
-  given: (f : T ->ₙ+* R) (g : T ->ₙ+* S) (f' : R ->ₙ+* R') (g' : S ->ₙ+* S')
-  proof: rfl
-
-中文:
-定理 prod_comp_prodMap
-  条件: (f : T ->ₙ+* R) (g : T ->ₙ+* S) (f' : R ->ₙ+* R') (g' : S ->ₙ+* S')
-  证明: rfl
+/-
+**NonUnitalRingHom.prod_comp_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalRingHom
+`。
+形式化陈述：prod_comp_prodMap (f : T ->ₙ+* R) (g : T ->ₙ+* S) (f' : R ->ₙ+* R') (g' : 
+S ->ₙ+* S') : (f'.prodMap g').comp (f.prod g) = (f'.comp f).prod (g'.comp g)
+参数：f : T ->ₙ+* R；g : T ->ₙ+* S；f' : R ->ₙ+* R'；g' : S ->ₙ+* S'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_comp_prodMap (f : T ->ₙ+* R) (g : T ->ₙ+* S) (f' : R ->ₙ+* R') (g' : S ->ₙ+* S') :
+theorem prod_comp_prodMap (f : T →ₙ+* R) (g : T →ₙ+* S) (f' : R →ₙ+* R') (g' : S →ₙ+* S') :
     (f'.prodMap g').comp (f.prod g) = (f'.comp f).prod (g'.comp g) :=
   rfl
 
@@ -590,195 +399,133 @@ namespace RingHom
 
 variable (R S) [NonAssocSemiring R] [NonAssocSemiring S]
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- Given semirings `R`, `S`, the natural projection homomorphism from `R × S` to `R`. -/
+/-
+**RingHom.fst** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：fst : R × S ->+* R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fst
-  signature: : R × S ->+* R
-  body: { MonoidHom.fst R S, AddMonoidHom.fst R S with toFun := Prod.fst }
-
-中文:
-定义 fst
-  签名: : R × S ->+* R
-  定义体: { MonoidHom.fst R S, AddMonoidHom.fst R S with toFun := Prod.fst }
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.fst, MonoidHom, MonoidHom.fst, Prod.fst
+--- 原说明 ---
+Given semirings `R`, `S`, the natural projection homomorphism from `R × S` to `R
+`.
 -/
-def fst : R × S ->+* R :=
+def fst : R × S →+* R :=
   { MonoidHom.fst R S, AddMonoidHom.fst R S with toFun := Prod.fst }
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- Given semirings `R`, `S`, the natural projection homomorphism from `R × S` to `S`. -/
+/-
+**RingHom.snd** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：snd : R × S ->+* S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snd
-  signature: : R × S ->+* S
-  body: { MonoidHom.snd R S, AddMonoidHom.snd R S with toFun := Prod.snd }
-
-中文:
-定义 snd
-  签名: : R × S ->+* S
-  定义体: { MonoidHom.snd R S, AddMonoidHom.snd R S with toFun := Prod.snd }
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.snd, MonoidHom, MonoidHom.snd, Prod.snd
+--- 原说明 ---
+Given semirings `R`, `S`, the natural projection homomorphism from `R × S` to `S
+`.
 -/
-def snd : R × S ->+* S :=
+def snd : R × S →+* S :=
   { MonoidHom.snd R S, AddMonoidHom.snd R S with toFun := Prod.snd }
-
+/-
+**RingHom.** 是 Mathlib 中的一个实例，位于命名空间 `RingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R S) [Semiring R] [Semiring S] : RingHomSurjective (fst R S) := ⟨(⟨⟨·, 0⟩, rfl⟩)⟩
+/-
+**RingHom.** 是 Mathlib 中的一个实例，位于命名空间 `RingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R S) [Semiring R] [Semiring S] : RingHomSurjective (snd R S) := ⟨(⟨⟨0, ·⟩, rfl⟩)⟩
 
 variable {R S}
 
 @[simp]
-/--
-theorem `coe_fst` / 定理 `coe_fst`
-
-English:
-theorem coe_fst
-  statement: ⇑(fst R S) = Prod.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_fst
-  结论: ⇑(fst R S) = 积类型.fst
-  证明: rfl
-
-@[simp]
+/-
+**RingHom.coe_fst** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：coe_fst : ⇑(fst R S) = Prod.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_fst : ⇑(fst R S) = Prod.fst :=
   rfl
 
 @[simp]
-/--
-theorem `coe_snd` / 定理 `coe_snd`
-
-English:
-theorem coe_snd
-  statement: ⇑(snd R S) = Prod.snd
-  proof: rfl
-
-中文:
-定理 coe_snd
-  结论: ⇑(snd R S) = 积类型.snd
-  证明: rfl
-
-Depends on / 依赖: IsPreimmersion, IsPreimmersion.comp_iff, Scheme, Scheme.fromSpecResidueField, comp_iff, fromSpecResidueField, infer_instance
+/-
+**RingHom.coe_snd** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：coe_snd : ⇑(snd R S) = Prod.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_snd : ⇑(snd R S) = Prod.snd :=
   rfl
 
 section Prod
 
-variable [NonAssocSemiring T] (f : R ->+* S) (g : R ->+* T)
+variable [NonAssocSemiring T] (f : R →+* S) (g : R →+* T)
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- Combine two ring homomorphisms `f : R →+* S`, `g : R →+* T` into `f.prod g : R →+* S × T`
+given by `(f.prod g) x = (f x, g x)` -/
+/-
+**RingHom.prod** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：{R : Type u_1} →   {S : Type u_3} →     {T : Type u_5} →       [inst : Non
+AssocSemiring R] →         [inst_1 : NonAssocSemiring S] → [inst_2 : NonAssocSem
+iring T] → (R →+* S) → (R →+* T) → R →+* S × T
+参数：R →+* S；R →+* T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (f : R ->+* S) (g : R ->+* T)
-  body: { MonoidHom.prod (f : R ->* S) (g : R ->* T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
-    toFun := fun x => (f x, g x) }
-
-@[simp]
-
-中文:
-定义 乘积
-  签名: (f : R ->+* S) (g : R ->+* T)
-  定义体: { MonoidHom.prod (f : R ->* S) (g : R ->* T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
-    toFun := fun x => (f x, g x) }
-
-@[simp]
-
-Depends on / 依赖: X.fromSpecResidueField, fromSpecResidueField
+--- 原说明 ---
+Combine two ring homomorphisms `f : R →+* S`, `g : R →+* T` into `f.prod g : R →
++* S × T`
+given by `(f.prod g) x = (f x, g x)`
 -/
-protected def prod (f : R ->+* S) (g : R ->+* T) : R ->+* S × T :=
-  { MonoidHom.prod (f : R ->* S) (g : R ->* T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
+protected def prod (f : R →+* S) (g : R →+* T) : R →+* S × T :=
+  { MonoidHom.prod (f : R →* S) (g : R →* T), AddMonoidHom.prod (f : R →+ S) (g : R →+ T) with
     toFun := fun x => (f x, g x) }
 
 @[simp]
-/--
-theorem `prod_apply` / 定理 `prod_apply`
-
-English:
-theorem prod_apply
-  given: (x)
-  statement: f.prod g x = (f x, g x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prod_apply
-  条件: (x)
-  结论: f.乘积 g x = (f x, g x)
-  证明: rfl
-
-@[simp]
+/-
+**RingHom.prod_apply** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：prod_apply (x) : f.prod g x = (f x, g x)
+参数：x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_apply (x) : f.prod g x = (f x, g x) :=
   rfl
 
 @[simp]
-/--
-theorem `fst_comp_prod` / 定理 `fst_comp_prod`
-
-English:
-theorem fst_comp_prod
-  statement: (fst S T).comp (f.prod g) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 fst_comp_prod
-  结论: (fst S T).comp (f.乘积 g) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**RingHom.fst_comp_prod** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：fst_comp_prod : (fst S T).comp (f.prod g) = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
 -/
 theorem fst_comp_prod : (fst S T).comp (f.prod g) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `snd_comp_prod` / 定理 `snd_comp_prod`
-
-English:
-theorem snd_comp_prod
-  statement: (snd S T).comp (f.prod g) = g
-  proof: ext fun _ => rfl
-
-中文:
-定理 snd_comp_prod
-  结论: (snd S T).comp (f.乘积 g) = g
-  证明: ext fun _ => rfl
+/-
+**RingHom.snd_comp_prod** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：snd_comp_prod : (snd S T).comp (f.prod g) = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
 -/
 theorem snd_comp_prod : (snd S T).comp (f.prod g) = g :=
   ext fun _ => rfl
-
-/--
-theorem `prod_unique` / 定理 `prod_unique`
-
-English:
-theorem prod_unique
-  given: (f : R ->+* S × T)
-  statement: ((fst S T).comp f).prod ((snd S T).comp f) = f
-  proof: ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
-
-中文:
-定理 prod_unique
-  条件: (f : R ->+* S × T)
-  结论: ((fst S T).comp f).乘积 ((snd S T).comp f) = f
-  证明: ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
-
-Depends on / 依赖: coe_fst, coe_snd, comp_apply, prod_apply
+/-
+**RingHom.prod_unique** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：prod_unique (f : R ->+* S × T) : ((fst S T).comp f).prod ((snd S T).comp f
+) = f
+参数：f : R ->+* S × T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_unique (f : R ->+* S × T) : ((fst S T).comp f).prod ((snd S T).comp f) = f :=
+theorem prod_unique (f : R →+* S × T) : ((fst S T).comp f).prod ((snd S T).comp f) = f :=
   ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
 
 end Prod
@@ -786,77 +533,47 @@ end Prod
 section prodMap
 
 variable [NonAssocSemiring R'] [NonAssocSemiring S'] [NonAssocSemiring T]
-variable (f : R ->+* R') (g : S ->+* S')
+variable (f : R →+* R') (g : S →+* S')
 
-/--
-Definition of `prodMap` / `prodMap` 的定义
+/-- `Prod.map` as a `RingHom`. -/
+/-
+**RingHom.prodMap** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：prodMap : R × S ->+* R' × S'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodMap
-  signature: : R × S ->+* R' × S'
-  body: (f.comp (fst R S)).prod (g.comp (snd R S))
-
-中文:
-定义 prodMap
-  签名: : R × S ->+* R' × S'
-  定义体: (f.comp (fst R S)).prod (g.comp (snd R S))
-
-Depends on / 依赖: f.comp, g.comp
+--- 原说明 ---
+`Prod.map` as a `RingHom`.
 -/
-def prodMap : R × S ->+* R' × S' :=
+def prodMap : R × S →+* R' × S' :=
   (f.comp (fst R S)).prod (g.comp (snd R S))
-
-/--
-theorem `prodMap_def` / 定理 `prodMap_def`
-
-English:
-theorem prodMap_def
-  statement: prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodMap_def
-  结论: prodMap f g = (f.comp (fst R S)).乘积 (g.comp (snd R S))
-  证明: rfl
-
-@[simp]
+/-
+**RingHom.prodMap_def** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：prodMap_def : prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodMap_def : prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S)) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_prodMap` / 定理 `coe_prodMap`
-
-English:
-theorem coe_prodMap
-  statement: ⇑(prodMap f g) = Prod.map f g
-  proof: rfl
-
-中文:
-定理 coe_prodMap
-  结论: ⇑(prodMap f g) = 积类型.map f g
-  证明: rfl
+/-
+**RingHom.coe_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：coe_prodMap : ⇑(prodMap f g) = Prod.map f g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodMap : ⇑(prodMap f g) = Prod.map f g :=
   rfl
-
-/--
-theorem `prod_comp_prodMap` / 定理 `prod_comp_prodMap`
-
-English:
-theorem prod_comp_prodMap
-  given: (f : T ->+* R) (g : T ->+* S) (f' : R ->+* R') (g' : S ->+* S')
-  proof: rfl
-
-中文:
-定理 prod_comp_prodMap
-  条件: (f : T ->+* R) (g : T ->+* S) (f' : R ->+* R') (g' : S ->+* S')
-  证明: rfl
+/-
+**RingHom.prod_comp_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：prod_comp_prodMap (f : T ->+* R) (g : T ->+* S) (f' : R ->+* R') (g' : S -
+>+* S') : (f'.prodMap g').comp (f.prod g) = (f'.comp f).prod (g'.comp g)
+参数：f : T ->+* R；g : T ->+* S；f' : R ->+* R'；g' : S ->+* S'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_comp_prodMap (f : T ->+* R) (g : T ->+* S) (f' : R ->+* R') (g' : S ->+* S') :
+theorem prod_comp_prodMap (f : T →+* R) (g : T →+* S) (f' : R →+* R') (g' : S →+* S') :
     (f'.prodMap g').comp (f.prod g) = (f'.comp f).prod (g'.comp g) :=
   rfl
 
@@ -868,105 +585,72 @@ namespace RingEquiv
 
 variable [NonAssocSemiring R] [NonAssocSemiring S] [NonAssocSemiring R'] [NonAssocSemiring S']
 
-/--
-Definition of `prodComm` / `prodComm` 的定义
+/-- Swapping components as an equivalence of (semi)rings. -/
+/-
+**RingEquiv.prodComm** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：prodComm : R × S ≃+* S × R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodComm
-  signature: : R × S ≃+* S × R
-  body: { AddEquiv.prodComm, MulEquiv.prodComm with }
-
-@[simp]
-
-中文:
-定义 prodComm
-  签名: : R × S ≃+* S × R
-  定义体: { AddEquiv.prodComm, MulEquiv.prodComm with }
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.prodComm, MulEquiv, MulEquiv.prodComm, prodComm
+--- 原说明 ---
+Swapping components as an equivalence of (semi)rings.
 -/
 def prodComm : R × S ≃+* S × R :=
   { AddEquiv.prodComm, MulEquiv.prodComm with }
 
 @[simp]
-/--
-theorem `coe_prodComm` / 定理 `coe_prodComm`
-
-English:
-theorem coe_prodComm
-  statement: ⇑(prodComm : R × S ≃+* S × R) = Prod.swap
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prodComm
-  结论: ⇑(prodComm : R × S ≃+* S × R) = 积类型.swap
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.coe_prodComm** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：coe_prodComm : ⇑(prodComm : R × S ≃+* S × R) = Prod.swap
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodComm : ⇑(prodComm : R × S ≃+* S × R) = Prod.swap :=
   rfl
 
 @[simp]
-/--
-theorem `coe_prodComm_symm` / 定理 `coe_prodComm_symm`
-
-English:
-theorem coe_prodComm_symm
-  statement: ⇑(prodComm : R × S ≃+* S × R).symm = Prod.swap
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prodComm_symm
-  结论: ⇑(prodComm : R × S ≃+* S × R).symm = 积类型.swap
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.coe_prodComm_symm** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：coe_prodComm_symm : ⇑(prodComm : R × S ≃+* S × R).symm = Prod.swap
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodComm_symm : ⇑(prodComm : R × S ≃+* S × R).symm = Prod.swap :=
   rfl
 
 @[simp]
-/--
-theorem `fst_comp_coe_prodComm` / 定理 `fst_comp_coe_prodComm`
-
-English:
-theorem fst_comp_coe_prodComm
-  proof: RingHom.ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 fst_comp_coe_prodComm
-  证明: RingHom.ext fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.ext
+/-
+**RingEquiv.fst_comp_coe_prodComm** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：fst_comp_coe_prodComm : (RingHom.fst S R).comp ↑(prodComm : R × S ≃+* S × 
+R) = RingHom.snd R S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 theorem fst_comp_coe_prodComm :
     (RingHom.fst S R).comp ↑(prodComm : R × S ≃+* S × R) = RingHom.snd R S :=
   RingHom.ext fun _ => rfl
 
 @[simp]
-/--
-theorem `snd_comp_coe_prodComm` / 定理 `snd_comp_coe_prodComm`
-
-English:
-theorem snd_comp_coe_prodComm
-  proof: RingHom.ext fun _ => rfl
-
-中文:
-定理 snd_comp_coe_prodComm
-  证明: RingHom.ext fun _ => rfl
-
-Depends on / 依赖: RingHom, RingHom.ext
+/-
+**RingEquiv.snd_comp_coe_prodComm** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：snd_comp_coe_prodComm : (RingHom.snd S R).comp ↑(prodComm : R × S ≃+* S × 
+R) = RingHom.fst R S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 theorem snd_comp_coe_prodComm :
     (RingHom.snd S R).comp ↑(prodComm : R × S ≃+* S × R) = RingHom.fst R S :=
@@ -978,28 +662,14 @@ variable (R R' S S')
 
 /-- Four-way commutativity of `Prod`. The name matches `mul_mul_mul_comm`. -/
 @[simps apply]
-/--
-Definition of `prodProdProdComm` / `prodProdProdComm` 的定义
+/-
+**RingEquiv.prodProdProdComm** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：prodProdProdComm : (R × R') × S × S' ≃+* (R × S) × R' × S'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodProdProdComm
-  signature: : (R × R') × S × S' ≃+* (R × S) × R' × S'
-  body: { AddEquiv.prodProdProdComm R R' S S', MulEquiv.prodProdProdComm R R' S S' with
-    toFun := fun rrss => ((rrss.1.1, rrss.2.1), (rrss.1.2, rrss.2.2))
-    invFun := fun rsrs => ((rsrs.1.1, rsrs.2.1), (rsrs.1.2, rsrs.2.2)) }
-
-@[simp]
-
-中文:
-定义 prodProdProdComm
-  签名: : (R × R') × S × S' ≃+* (R × S) × R' × S'
-  定义体: { AddEquiv.prodProdProdComm R R' S S', MulEquiv.prodProdProdComm R R' S S' with
-    toFun := fun rrss => ((rrss.1.1, rrss.2.1), (rrss.1.2, rrss.2.2))
-    invFun := fun rsrs => ((rsrs.1.1, rsrs.2.1), (rsrs.1.2, rsrs.2.2)) }
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.prodProdProdComm, MulEquiv, MulEquiv.prodProdProdComm, invFun, prodProdProdComm
+--- 原说明 ---
+Four-way commutativity of `Prod`. The name matches `mul_mul_mul_comm`.
 -/
 def prodProdProdComm : (R × R') × S × S' ≃+* (R × S) × R' × S' :=
   { AddEquiv.prodProdProdComm R R' S S', MulEquiv.prodProdProdComm R R' S S' with
@@ -1007,77 +677,59 @@ def prodProdProdComm : (R × R') × S × S' ≃+* (R × S) × R' × S' :=
     invFun := fun rsrs => ((rsrs.1.1, rsrs.2.1), (rsrs.1.2, rsrs.2.2)) }
 
 @[simp]
-/--
-theorem `prodProdProdComm_symm` / 定理 `prodProdProdComm_symm`
-
-English:
-theorem prodProdProdComm_symm
-  statement: (prodProdProdComm R R' S S').symm = prodProdProdComm R S R' S'
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodProdProdComm_symm
-  结论: (prodProdProdComm R R' S S').symm = prodProdProdComm R S R' S'
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.prodProdProdComm_symm** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：prodProdProdComm_symm : (prodProdProdComm R R' S S').symm = prodProdProdCo
+mm R S R' S'
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodProdProdComm_symm : (prodProdProdComm R R' S S').symm = prodProdProdComm R S R' S' :=
   rfl
 
 @[simp]
-/--
-theorem `prodProdProdComm_toAddEquiv` / 定理 `prodProdProdComm_toAddEquiv`
-
-English:
-theorem prodProdProdComm_toAddEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodProdProdComm_toAddEquiv
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.prodProdProdComm_toAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：prodProdProdComm_toAddEquiv : (prodProdProdComm R R' S S' : _ ≃+ _) = AddE
+quiv.prodProdProdComm R R' S S'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toAddEquivClass`：∀ {F : Type u_1} {R : Type u_4} {S : Typ
+e u_5} [inst : EquivLike F R S] [inst_1 : Mul R] [inst_2 : Add R]   [inst_3 : Mu
+l S] [inst_4 : Add S…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 theorem prodProdProdComm_toAddEquiv :
     (prodProdProdComm R R' S S' : _ ≃+ _) = AddEquiv.prodProdProdComm R R' S S' :=
   rfl
 
 @[simp]
-/--
-theorem `prodProdProdComm_toMulEquiv` / 定理 `prodProdProdComm_toMulEquiv`
-
-English:
-theorem prodProdProdComm_toMulEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 prodProdProdComm_toMulEquiv
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.prodProdProdComm_toMulEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：prodProdProdComm_toMulEquiv : (prodProdProdComm R R' S S' : _ ≃* _) = MulE
+quiv.prodProdProdComm R R' S S'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toMulEquivClass`：∀ {F : Type u_7} {R : Type u_8} {S : Typ
+e u_9} {inst : Mul R} {inst_1 : Add R} {inst_2 : Mul S} {inst_3 : Add S}   {inst
+_4 : EquivLike F R S…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
 theorem prodProdProdComm_toMulEquiv :
     (prodProdProdComm R R' S S' : _ ≃* _) = MulEquiv.prodProdProdComm R R' S S' :=
   rfl
 
 @[simp]
-/--
-theorem `prodProdProdComm_toEquiv` / 定理 `prodProdProdComm_toEquiv`
-
-English:
-theorem prodProdProdComm_toEquiv
-  proof: rfl
-
-中文:
-定理 prodProdProdComm_toEquiv
-  证明: rfl
+/-
+**RingEquiv.prodProdProdComm_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：prodProdProdComm_toEquiv : (prodProdProdComm R R' S S' : _ ≃ _) = Equiv.pr
+odProdProdComm R R' S S'
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodProdProdComm_toEquiv :
     (prodProdProdComm R R' S S' : _ ≃ _) = Equiv.prodProdProdComm R R' S S' :=
@@ -1089,26 +741,14 @@ variable (R S) [Subsingleton S]
 
 /-- A ring `R` is isomorphic to `R × S` when `S` is the zero ring -/
 @[simps]
-/--
-Definition of `prodZeroRing` / `prodZeroRing` 的定义
+/-
+**RingEquiv.prodZeroRing** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：prodZeroRing : R ≃+* R × S where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodZeroRing
-  signature: : R ≃+* R × S where
-  body: (x, 0)
-  invFun := Prod.fst
-  map_add' := by simp
-  map_mul' := by simp
-  right_inv x := by cases x; simp [eq_iff_true_of_subsingleton]
-
-中文:
-定义 prodZeroRing
-  签名: : R ≃+* R × S where
-  定义体: (x, 0)
-  invFun := Prod.fst
-  map_add' := by simp
-  map_mul' := by simp
-  right_inv x := by cases x; simp [eq_iff_true_of_subsingleton]
+--- 原说明 ---
+A ring `R` is isomorphic to `R × S` when `S` is the zero ring
 -/
 def prodZeroRing : R ≃+* R × S where
   toFun x := (x, 0)
@@ -1119,26 +759,14 @@ def prodZeroRing : R ≃+* R × S where
 
 /-- A ring `R` is isomorphic to `S × R` when `S` is the zero ring -/
 @[simps]
-/--
-Definition of `zeroRingProd` / `zeroRingProd` 的定义
+/-
+**RingEquiv.zeroRingProd** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：zeroRingProd : R ≃+* S × R where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zeroRingProd
-  signature: : R ≃+* S × R where
-  body: (0, x)
-  invFun := Prod.snd
-  map_add' := by simp
-  map_mul' := by simp
-  right_inv x := by cases x; simp [eq_iff_true_of_subsingleton]
-
-中文:
-定义 zeroRingProd
-  签名: : R ≃+* S × R where
-  定义体: (0, x)
-  invFun := Prod.snd
-  map_add' := by simp
-  map_mul' := by simp
-  right_inv x := by cases x; simp [eq_iff_true_of_subsingleton]
+--- 原说明 ---
+A ring `R` is isomorphic to `S × R` when `S` is the zero ring
 -/
 def zeroRingProd : R ≃+* S × R where
   toFun x := (0, x)
@@ -1149,38 +777,46 @@ def zeroRingProd : R ≃+* S × R where
 
 end RingEquiv
 
-/--
-theorem `false_of_nontrivial_of_product_domain` / 定理 `false_of_nontrivial_of_product_domain`
+/-- The product of two nontrivial rings is not a domain -/
+/-
+**false_of_nontrivial_of_product_domain** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：false_of_nontrivial_of_product_domain (R S : Type*) [Semiring R] [Semiring
+ S] [IsDomain (R × S)] [Nontrivial R] [Nontrivial S] : False
+参数：R S : Type*；R × S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero`：∀ {M₀ : Type u_2} {ins
+t : Mul M₀} {inst_1 : Zero M₀} [self : NoZeroDivisors M₀] {a b : M₀}, a * b = 0 
+→ a = 0 ∨ b = 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Prod.mk_eq_zero`：∀ {M : Type u_3} {N : Type u_4} [inst : Zero M] [inst_1
+ : Zero N] {x : M} {y : N}, (x, y) = 0 ↔ x = 0 ∧ y = 0
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem false_of_nontrivial_of_product_domain
-  statement: (R S : Type*) [Semiring R] [Semiring S]
-  proof: by
-  have :=
-    NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero (show ((0 : R), (1 : S)) * (1, 0) = 0 by simp)
-  rw [Prod.mk_eq_zero]; rw [Prod.mk_eq_zero] at this
-  rcases this with (⟨_, h⟩ | ⟨h, _⟩)
-  · exact zero_ne_one h.symm
-  · exact zero_ne_one h.symm
-
-中文:
-定理 false_of_nontrivial_of_product_domain
-  结论: (R S : 类型) [半环 R] [半环 S]
-  证明: by
-  have :=
-    NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero (show ((0 : R), (1 : S)) * (1, 0) = 0 by simp)
-  rw [Prod.mk_eq_zero]; rw [Prod.mk_eq_zero] at this
-  rcases this with (⟨_, h⟩ | ⟨h, _⟩)
-  · exact zero_ne_one h.symm
-  · exact zero_ne_one h.symm
-
-Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero, Prod.mk_eq_zero, eq_zero_or_eq_zero_of_mul_eq_zero, h.symm, mk_eq_zero, zero_ne_one
+--- 原说明 ---
+The product of two nontrivial rings is not a domain
 -/
 theorem false_of_nontrivial_of_product_domain (R S : Type*) [Semiring R] [Semiring S]
     [IsDomain (R × S)] [Nontrivial R] [Nontrivial S] : False := by
   have :=
     NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero (show ((0 : R), (1 : S)) * (1, 0) = 0 by simp)
-  rw [Prod.mk_eq_zero]; rw [Prod.mk_eq_zero] at this
+  rw [Prod.mk_eq_zero, Prod.mk_eq_zero] at this
   rcases this with (⟨_, h⟩ | ⟨h, _⟩)
   · exact zero_ne_one h.symm
   · exact zero_ne_one h.symm

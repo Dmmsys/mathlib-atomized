@@ -25,475 +25,516 @@ variable {α G M : Type*}
 namespace Finset
 
 section Generic
-variable [CommMonoid M] {s₂ s₁ s : Finset α} {a : α} {g f : α -> M}
+variable [CommMonoid M] {s₂ s₁ s : Finset α} {a : α} {g f : α → M}
 
 @[to_additive]
-/--
-theorem `prod_Ico_add'` / 定理 `prod_Ico_add'`
-
-English:
-theorem prod_Ico_add'
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  rw [← map_add_right_Ico]; rw [prod_map]
-  rfl
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_add'
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  rw [← map_add_right_Ico]; rw [prod_map]
-  rfl
-
-@[to_additive]
-
-Depends on / 依赖: map_add_right_Ico, prod_map
+/-
+**Finset.prod_Ico_add'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_add' [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid
+ α] [ExistsAddOfLE α] [LocallyFiniteOrder α] (f : α -> M) (a b c : α) : (∏ x in 
+Ico a b, f (x + c)) = ∏ x in Ico (a + c) (b + c), f x
+参数：f : α -> M；a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_right_Ico`：∀ {α : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] 
+[inst_4 : Loca…
+· 使用定理 `Finset.prod_map`：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x 
+in s.map e, f x = ∏ x in s, f (e x)
 -/
 theorem prod_Ico_add' [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
     [ExistsAddOfLE α] [LocallyFiniteOrder α]
-    (f : α -> M) (a b c : α) : (∏ x in Ico a b, f (x + c)) = ∏ x in Ico (a + c) (b + c), f x := by
-  rw [← map_add_right_Ico]; rw [prod_map]
+    (f : α → M) (a b c : α) : (∏ x ∈ Ico a b, f (x + c)) = ∏ x ∈ Ico (a + c) (b + c), f x := by
+  rw [← map_add_right_Ico, prod_map]
   rfl
 
 @[to_additive]
-/--
-theorem `prod_Ico_add` / 定理 `prod_Ico_add`
-
-English:
-theorem prod_Ico_add
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  convert! prod_Ico_add' f a b c using 2
-  rw [add_comm]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_Ico_add
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  convert! prod_Ico_add' f a b c using 2
-  rw [add_comm]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: add_comm, convert, prod_Ico_add
+/-
+**Finset.prod_Ico_add** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_add [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid 
+α] [ExistsAddOfLE α] [LocallyFiniteOrder α] (f : α -> M) (a b c : α) : (∏ x in I
+co a b, f (c + x)) = ∏ x in Ico (a + c) (b + c), f x
+参数：f : α -> M；a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Finset.prod_Ico_add'`：prod_Ico_add' [AddCommMonoid α] [PartialOrder α] [
+IsOrderedCancelAddMonoid α] [ExistsAddOfLE α] [LocallyFiniteOrder α] (f : α -> M
+) (a b c :…
 -/
 theorem prod_Ico_add [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
     [ExistsAddOfLE α] [LocallyFiniteOrder α]
-    (f : α -> M) (a b c : α) : (∏ x in Ico a b, f (c + x)) = ∏ x in Ico (a + c) (b + c), f x := by
+    (f : α → M) (a b c : α) : (∏ x ∈ Ico a b, f (c + x)) = ∏ x ∈ Ico (a + c) (b + c), f x := by
   convert! prod_Ico_add' f a b c using 2
   rw [add_comm]
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_Ico_add_right_sub_eq` / 定理 `prod_Ico_add_right_sub_eq`
-
-English:
-theorem prod_Ico_add_right_sub_eq
-  statement: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
-  proof: by
-  simp only [← map_add_right_Ico, prod_map, addRightEmbedding_apply, add_tsub_cancel_right]
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_add_right_sub_eq
-  结论: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
-  证明: by
-  simp only [← map_add_right_Ico, prod_map, addRightEmbedding_apply, add_tsub_cancel_right]
-
-@[to_additive]
-
-Depends on / 依赖: addRightEmbedding_apply, add_tsub_cancel_right, map_add_right_Ico, prod_map
+/-
+**Finset.prod_Ico_add_right_sub_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_add_right_sub_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCan
+celAddMonoid α] [ExistsAddOfLE α] [LocallyFiniteOrder α] [Sub α] [OrderedSub α] 
+(a b c : α) : ∏ x in Ico (a + c) (b + c), f (x - c) = ∏ x in Ico a b, f x
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Finset.prod_map`：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x 
+in s.map e, f x = ∏ x in s, f (e x)
+· 使用定理 `addRightEmbedding_apply`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsRig
+htCancelAdd G] (g h : G), (addRightEmbedding g) h = h + g
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prod_Ico_add_right_sub_eq [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
     [ExistsAddOfLE α] [LocallyFiniteOrder α] [Sub α] [OrderedSub α] (a b c : α) :
-    ∏ x in Ico (a + c) (b + c), f (x - c) = ∏ x in Ico a b, f x := by
+    ∏ x ∈ Ico (a + c) (b + c), f (x - c) = ∏ x ∈ Ico a b, f x := by
   simp only [← map_add_right_Ico, prod_map, addRightEmbedding_apply, add_tsub_cancel_right]
 
 @[to_additive]
-/--
-theorem `prod_Ico_succ_top` / 定理 `prod_Ico_succ_top`
-
-English:
-theorem prod_Ico_succ_top
-  given: {a b : Nat} (hab : a <= b) (f : Nat -> M)
-  proof: by
-  rw [← Finset.insert_Ico_right_eq_Ico_add_one hab]; rw [prod_insert right_notMem_Ico]; rw [mul_comm]
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_succ_top
-  条件: {a b : 自然数} (hab : a <= b) (f : 自然数 -> M)
-  证明: by
-  rw [← Finset.insert_Ico_right_eq_Ico_add_one hab]; rw [prod_insert right_notMem_Ico]; rw [mul_comm]
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.insert_Ico_right_eq_Ico_add_one, insert_Ico_right_eq_Ico_add_one, mul_comm, prod_insert, right_notMem_Ico
+/-
+**Finset.prod_Ico_succ_top** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_succ_top {a b : Nat} (hab : a <= b) (f : Nat -> M) : (∏ k in Ico 
+a (b + 1), f k) = (∏ k in Ico a b, f k) * f b
+参数：hab : a <= b；f : Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.insert_Ico_right_eq_Ico_add_one`：insert_Ico_right_eq_Ico_add_one 
+(h : a <= b) : insert b (Ico a b) = Ico a (b + 1)
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `Finset.right_notMem_Ico`：right_notMem_Ico : b ∉ Ico a b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem prod_Ico_succ_top {a b : Nat} (hab : a <= b) (f : Nat -> M) :
-    (∏ k in Ico a (b + 1), f k) = (∏ k in Ico a b, f k) * f b := by
-  rw [← Finset.insert_Ico_right_eq_Ico_add_one hab]; rw [prod_insert right_notMem_Ico]; rw [mul_comm]
+theorem prod_Ico_succ_top {a b : ℕ} (hab : a ≤ b) (f : ℕ → M) :
+    (∏ k ∈ Ico a (b + 1), f k) = (∏ k ∈ Ico a b, f k) * f b := by
+  rw [← Finset.insert_Ico_right_eq_Ico_add_one hab, prod_insert right_notMem_Ico, mul_comm]
 
 @[to_additive]
-/--
-theorem `prod_Ico_consecutive` / 定理 `prod_Ico_consecutive`
-
-English:
-theorem prod_Ico_consecutive
-  given: (f : Nat -> M) {m n k : Nat} (hmn : m <= n) (hnk : n <= k)
-  proof: Ico_union_Ico_eq_Ico hmn hnk ▸ Eq.symm (prod_union (Ico_disjoint_Ico_consecutive m n k))
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_consecutive
-  条件: (f : 自然数 -> M) {m n k : 自然数} (hmn : m <= n) (hnk : n <= k)
-  证明: Ico_union_Ico_eq_Ico hmn hnk ▸ Eq.symm (prod_union (Ico_disjoint_Ico_consecutive m n k))
-
-@[to_additive]
-
-Depends on / 依赖: Eq.symm, Ico_disjoint_Ico_consecutive, Ico_union_Ico_eq_Ico, prod_union
+/-
+**Finset.prod_Ico_consecutive** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_consecutive (f : Nat -> M) {m n k : Nat} (hmn : m <= n) (hnk : n 
+<= k) : ((∏ i in Ico m n, f i) * ∏ i in Ico n k, f i) = ∏ i in Ico m k, f i
+参数：f : Nat -> M；hmn : m <= n；hnk : n <= k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_union`：prod_union [DecidableEq ι] (h : Disjoint s₁ s₂) : ∏ x
+ in s₁ union s₂, f x = (∏ x in s₁, f x) * ∏ x in s₂, f x
+· 使用定理 `Finset.Ico_disjoint_Ico_consecutive`：Ico_disjoint_Ico_consecutive (a b c
+ : α) : Disjoint (Ico a b) (Ico b c)
+· 使用定理 `Finset.Ico_union_Ico_eq_Ico`：Ico_union_Ico_eq_Ico {a b c : α} (hab : a <
+= b) (hbc : b <= c) : Ico a b union Ico b c = Ico a c
 -/
-theorem prod_Ico_consecutive (f : Nat -> M) {m n k : Nat} (hmn : m <= n) (hnk : n <= k) :
-    ((∏ i in Ico m n, f i) * ∏ i in Ico n k, f i) = ∏ i in Ico m k, f i :=
+theorem prod_Ico_consecutive (f : ℕ → M) {m n k : ℕ} (hmn : m ≤ n) (hnk : n ≤ k) :
+    ((∏ i ∈ Ico m n, f i) * ∏ i ∈ Ico n k, f i) = ∏ i ∈ Ico m k, f i :=
   Ico_union_Ico_eq_Ico hmn hnk ▸ Eq.symm (prod_union (Ico_disjoint_Ico_consecutive m n k))
 
 @[to_additive]
-/--
-theorem `prod_Ioc_consecutive` / 定理 `prod_Ioc_consecutive`
-
-English:
-theorem prod_Ioc_consecutive
-  given: (f : Nat -> M) {m n k : Nat} (hmn : m <= n) (hnk : n <= k)
-  proof: by
-  rw [← Ioc_union_Ioc_eq_Ioc hmn hnk]; rw [prod_union]
+/-
+**Finset.prod_Ioc_consecutive** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ioc_consecutive (f : Nat -> M) {m n k : Nat} (hmn : m <= n) (hnk : n 
+<= k) : ((∏ i in Ioc m n, f i) * ∏ i in Ioc n k, f i) = ∏ i in Ioc m k, f i
+参数：f : Nat -> M；hmn : m <= n；hnk : n <= k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.Ioc_union_Ioc_eq_Ioc`：Ioc_union_Ioc_eq_Ioc {a b c : α} (h₁ : a <=
+ b) (h₂ : b <= c) : Ioc a b union Ioc b c = Ioc a c
+· 使用定理 `Finset.prod_union`：prod_union [DecidableEq ι] (h : Disjoint s₁ s₂) : ∏ x
+ in s₁ union s₂, f x = (∏ x in s₁, f x) * ∏ x in s₂, f x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s 
+-> a ∉ t
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_Ioc`：mem_Ioc : x in Ioc a b ↔ a < x ∧ x <= b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+-/
+theorem prod_Ioc_consecutive (f : ℕ → M) {m n k : ℕ} (hmn : m ≤ n) (hnk : n ≤ k) :
+    ((∏ i ∈ Ioc m n, f i) * ∏ i ∈ Ioc n k, f i) = ∏ i ∈ Ioc m k, f i := by
+  rw [← Ioc_union_Ioc_eq_Ioc hmn hnk, prod_union]
   apply disjoint_left.2 fun x hx h'x => _
   intro x hx h'x
   exact lt_irrefl _ ((mem_Ioc.1 h'x).1.trans_le (mem_Ioc.1 hx).2)
 
 @[to_additive]
-
-中文:
-定理 prod_Ioc_consecutive
-  条件: (f : 自然数 -> M) {m n k : 自然数} (hmn : m <= n) (hnk : n <= k)
-  证明: by
-  rw [← Ioc_union_Ioc_eq_Ioc hmn hnk]; rw [prod_union]
-  apply disjoint_left.2 fun x hx h'x => _
-  intro x hx h'x
-  exact lt_irrefl _ ((mem_Ioc.1 h'x).1.trans_le (mem_Ioc.1 hx).2)
-
-@[to_additive]
-
-Depends on / 依赖: Ioc_union_Ioc_eq_Ioc, disjoint_left, lt_irrefl, mem_Ioc, prod_union, trans_le
+/-
+**Finset.prod_Ioc_succ_top** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ioc_succ_top {a b : Nat} (hab : a <= b) (f : Nat -> M) : (∏ k in Ioc 
+a (b + 1), f k) = (∏ k in Ioc a b, f k) * f (b + 1)
+参数：hab : a <= b；f : Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_Ioc_consecutive`：prod_Ioc_consecutive (f : Nat -> M) {m n k 
+: Nat} (hmn : m <= n) (hnk : n <= k) : ((∏ i in Ioc m n, f i) * ∏ i in Ioc n k, 
+f i) = ∏ i in Ioc…
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `Nat.Ioc_succ_singleton`：Ioc_succ_singleton : Ioc b (b + 1) = {b + 1}
+· 使用定理 `Finset.prod_singleton`：prod_singleton (f : ι -> M) (a : ι) : ∏ x in sing
+leton a, f x = f a
 -/
-theorem prod_Ioc_consecutive (f : Nat -> M) {m n k : Nat} (hmn : m <= n) (hnk : n <= k) :
-    ((∏ i in Ioc m n, f i) * ∏ i in Ioc n k, f i) = ∏ i in Ioc m k, f i := by
-  rw [← Ioc_union_Ioc_eq_Ioc hmn hnk]; rw [prod_union]
-  apply disjoint_left.2 fun x hx h'x => _
-  intro x hx h'x
-  exact lt_irrefl _ ((mem_Ioc.1 h'x).1.trans_le (mem_Ioc.1 hx).2)
+theorem prod_Ioc_succ_top {a b : ℕ} (hab : a ≤ b) (f : ℕ → M) :
+    (∏ k ∈ Ioc a (b + 1), f k) = (∏ k ∈ Ioc a b, f k) * f (b + 1) := by
+  rw [← prod_Ioc_consecutive _ hab (Nat.le_succ b), Nat.Ioc_succ_singleton, prod_singleton]
 
 @[to_additive]
-/--
-theorem `prod_Ioc_succ_top` / 定理 `prod_Ioc_succ_top`
-
-English:
-theorem prod_Ioc_succ_top
-  given: {a b : Nat} (hab : a <= b) (f : Nat -> M)
-  proof: by
-  rw [← prod_Ioc_consecutive _ hab (Nat.le_succ b)]; rw [Nat.Ioc_succ_singleton]; rw [prod_singleton]
-
-@[to_additive]
-
-中文:
-定理 prod_Ioc_succ_top
-  条件: {a b : 自然数} (hab : a <= b) (f : 自然数 -> M)
-  证明: by
-  rw [← prod_Ioc_consecutive _ hab (Nat.le_succ b)]; rw [Nat.Ioc_succ_singleton]; rw [prod_singleton]
-
-@[to_additive]
-
-Depends on / 依赖: Ioc_succ_singleton, Nat.Ioc_succ_singleton, Nat.le_succ, le_succ, prod_Ioc_consecutive, prod_singleton
+/-
+**Finset.prod_Icc_succ_top** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Icc_succ_top {a b : Nat} (hab : a <= b + 1) (f : Nat -> M) : (∏ k in 
+Icc a (b + 1), f k) = (∏ k in Icc a b, f k) * f (b + 1)
+参数：hab : a <= b + 1；f : Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.Ico_add_one_right_eq_Icc`：Ico_add_one_right_eq_Icc (a b : α) : Ic
+o a (b + 1) = Icc a b
+· 使用定理 `Finset.prod_Ico_succ_top`：prod_Ico_succ_top {a b : Nat} (hab : a <= b) (
+f : Nat -> M) : (∏ k in Ico a (b + 1), f k) = (∏ k in Ico a b, f k) * f b
 -/
-theorem prod_Ioc_succ_top {a b : Nat} (hab : a <= b) (f : Nat -> M) :
-    (∏ k in Ioc a (b + 1), f k) = (∏ k in Ioc a b, f k) * f (b + 1) := by
-  rw [← prod_Ioc_consecutive _ hab (Nat.le_succ b)]; rw [Nat.Ioc_succ_singleton]; rw [prod_singleton]
+theorem prod_Icc_succ_top {a b : ℕ} (hab : a ≤ b + 1) (f : ℕ → M) :
+    (∏ k ∈ Icc a (b + 1), f k) = (∏ k ∈ Icc a b, f k) * f (b + 1) := by
+  rw [← Ico_add_one_right_eq_Icc, prod_Ico_succ_top hab, Ico_add_one_right_eq_Icc]
 
 @[to_additive]
-/--
-theorem `prod_Icc_succ_top` / 定理 `prod_Icc_succ_top`
-
-English:
-theorem prod_Icc_succ_top
-  given: {a b : Nat} (hab : a <= b + 1) (f : Nat -> M)
-  proof: by
-  rw [← Ico_add_one_right_eq_Icc]; rw [prod_Ico_succ_top hab]; rw [Ico_add_one_right_eq_Icc]
-
-@[to_additive]
-
-中文:
-定理 prod_Icc_succ_top
-  条件: {a b : 自然数} (hab : a <= b + 1) (f : 自然数 -> M)
-  证明: by
-  rw [← Ico_add_one_right_eq_Icc]; rw [prod_Ico_succ_top hab]; rw [Ico_add_one_right_eq_Icc]
-
-@[to_additive]
-
-Depends on / 依赖: Ico_add_one_right_eq_Icc, prod_Ico_succ_top
+/-
+**Finset.prod_range_mul_prod_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_range_mul_prod_Ico (f : Nat -> M) {m n : Nat} (h : m <= n) : ((∏ k in
+ range m, f k) * ∏ k in Ico m n, f k) = ∏ k in range n, f k
+参数：f : Nat -> M；h : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_Ico_consecutive`：prod_Ico_consecutive (f : Nat -> M) {m n k 
+: Nat} (hmn : m <= n) (hnk : n <= k) : ((∏ i in Ico m n, f i) * ∏ i in Ico n k, 
+f i) = ∏ i in Ico…
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Nat.Ico_zero_eq_range`：Ico_zero_eq_range : Ico 0 a = range a
 -/
-theorem prod_Icc_succ_top {a b : Nat} (hab : a <= b + 1) (f : Nat -> M) :
-    (∏ k in Icc a (b + 1), f k) = (∏ k in Icc a b, f k) * f (b + 1) := by
-  rw [← Ico_add_one_right_eq_Icc]; rw [prod_Ico_succ_top hab]; rw [Ico_add_one_right_eq_Icc]
-
-@[to_additive]
-/--
-theorem `prod_range_mul_prod_Ico` / 定理 `prod_range_mul_prod_Ico`
-
-English:
-theorem prod_range_mul_prod_Ico
-  given: (f : Nat -> M) {m n : Nat} (h : m <= n)
-  proof: Nat.Ico_zero_eq_range m ▸ Nat.Ico_zero_eq_range n ▸ prod_Ico_consecutive f m.zero_le h
-
-@[to_additive]
-
-中文:
-定理 prod_range_mul_prod_Ico
-  条件: (f : 自然数 -> M) {m n : 自然数} (h : m <= n)
-  证明: Nat.Ico_zero_eq_range m ▸ Nat.Ico_zero_eq_range n ▸ prod_Ico_consecutive f m.zero_le h
-
-@[to_additive]
-
-Depends on / 依赖: Ico_zero_eq_range, Nat.Ico_zero_eq_range, m.zero_le, prod_Ico_consecutive, zero_le
--/
-theorem prod_range_mul_prod_Ico (f : Nat -> M) {m n : Nat} (h : m <= n) :
-    ((∏ k in range m, f k) * ∏ k in Ico m n, f k) = ∏ k in range n, f k :=
+theorem prod_range_mul_prod_Ico (f : ℕ → M) {m n : ℕ} (h : m ≤ n) :
+    ((∏ k ∈ range m, f k) * ∏ k ∈ Ico m n, f k) = ∏ k ∈ range n, f k :=
   Nat.Ico_zero_eq_range m ▸ Nat.Ico_zero_eq_range n ▸ prod_Ico_consecutive f m.zero_le h
 
 @[to_additive]
-/--
-theorem `prod_range_eq_mul_Ico` / 定理 `prod_range_eq_mul_Ico`
-
-English:
-theorem prod_range_eq_mul_Ico
-  given: (f : Nat -> M) {n : Nat} (hn : 0 < n)
-  proof: Finset.range_eq_Ico n ▸ Finset.prod_eq_prod_Ico_succ_bot hn f
-
-@[to_additive]
-
-中文:
-定理 prod_range_eq_mul_Ico
-  条件: (f : 自然数 -> M) {n : 自然数} (hn : 0 < n)
-  证明: Finset.range_eq_Ico n ▸ Finset.prod_eq_prod_Ico_succ_bot hn f
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.prod_eq_prod_Ico_succ_bot, Finset.range_eq_Ico, prod_eq_prod_Ico_succ_bot, range_eq_Ico
+/-
+**Finset.prod_range_eq_mul_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_range_eq_mul_Ico (f : Nat -> M) {n : Nat} (hn : 0 < n) : ∏ x in Finse
+t.range n, f x = f 0 * ∏ x in Ico 1 n, f x
+参数：f : Nat -> M；hn : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_eq_prod_Ico_succ_bot`：prod_eq_prod_Ico_succ_bot {a b : Nat} 
+(hab : a < b) (f : Nat -> M) : ∏ k in Ico a b, f k = f a * ∏ k in Ico (a + 1) b,
+ f k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.range_eq_Ico`：∀ (a : ℕ), Finset.range a = Finset.Ico 0 a
 -/
-theorem prod_range_eq_mul_Ico (f : Nat -> M) {n : Nat} (hn : 0 < n) :
-    ∏ x in Finset.range n, f x = f 0 * ∏ x in Ico 1 n, f x :=
+theorem prod_range_eq_mul_Ico (f : ℕ → M) {n : ℕ} (hn : 0 < n) :
+    ∏ x ∈ Finset.range n, f x = f 0 * ∏ x ∈ Ico 1 n, f x :=
   Finset.range_eq_Ico n ▸ Finset.prod_eq_prod_Ico_succ_bot hn f
 
 @[to_additive]
-/--
-theorem `prod_Ico_eq_mul_inv` / 定理 `prod_Ico_eq_mul_inv`
-
-English:
-theorem prod_Ico_eq_mul_inv
-  given: {δ : Type*} [CommGroup δ] (f : Nat -> δ) {m n : Nat} (h : m <= n)
-  proof: eq_mul_inv_iff_mul_eq.2 by (rw [mul_comm]; exact prod_range_mul_prod_Ico f h)
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_eq_mul_inv
-  条件: {δ : 类型} [交换群 δ] (f : 自然数 -> δ) {m n : 自然数} (h : m <= n)
-  证明: eq_mul_inv_iff_mul_eq.2 by (rw [mul_comm]; exact prod_range_mul_prod_Ico f h)
-
-@[to_additive]
-
-Depends on / 依赖: eq_mul_inv_iff_mul_eq, mul_comm, prod_range_mul_prod_Ico
+/-
+**Finset.prod_Ico_eq_mul_inv** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_eq_mul_inv {δ : Type*} [CommGroup δ] (f : Nat -> δ) {m n : Nat} (
+h : m <= n) : ∏ k in Ico m n, f k = (∏ k in range n, f k) * (∏ k in range m, f k
+)⁻¹
+参数：f : Nat -> δ；h : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_mul_inv_iff_mul_eq`：eq_mul_inv_iff_mul_eq : a = b * c⁻¹ ↔ a * c = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Finset.prod_range_mul_prod_Ico`：prod_range_mul_prod_Ico (f : Nat -> M) {
+m n : Nat} (h : m <= n) : ((∏ k in range m, f k) * ∏ k in Ico m n, f k) = ∏ k in
+ range n, f k
 -/
-theorem prod_Ico_eq_mul_inv {δ : Type*} [CommGroup δ] (f : Nat -> δ) {m n : Nat} (h : m <= n) :
-    ∏ k in Ico m n, f k = (∏ k in range n, f k) * (∏ k in range m, f k)⁻¹ :=
-eq_mul_inv_iff_mul_eq.2 by (rw [mul_comm]; exact prod_range_mul_prod_Ico f h)
+theorem prod_Ico_eq_mul_inv {δ : Type*} [CommGroup δ] (f : ℕ → δ) {m n : ℕ} (h : m ≤ n) :
+    ∏ k ∈ Ico m n, f k = (∏ k ∈ range n, f k) * (∏ k ∈ range m, f k)⁻¹ :=
+  eq_mul_inv_iff_mul_eq.2 <| by (rw [mul_comm]; exact prod_range_mul_prod_Ico f h)
 
 @[to_additive]
-/--
-theorem `prod_Ico_eq_div` / 定理 `prod_Ico_eq_div`
-
-English:
-theorem prod_Ico_eq_div
-  given: {δ : Type*} [CommGroup δ] (f : Nat -> δ) {m n : Nat} (h : m <= n)
-  proof: by
-  simpa only [div_eq_mul_inv] using prod_Ico_eq_mul_inv f h
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_eq_div
-  条件: {δ : 类型} [交换群 δ] (f : 自然数 -> δ) {m n : 自然数} (h : m <= n)
-  证明: by
-  simpa only [div_eq_mul_inv] using prod_Ico_eq_mul_inv f h
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, prod_Ico_eq_mul_inv
+/-
+**Finset.prod_Ico_eq_div** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_eq_div {δ : Type*} [CommGroup δ] (f : Nat -> δ) {m n : Nat} (h : 
+m <= n) : ∏ k in Ico m n, f k = (∏ k in range n, f k) / ∏ k in range m, f k
+参数：f : Nat -> δ；h : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Finset.prod_Ico_eq_mul_inv`：prod_Ico_eq_mul_inv {δ : Type*} [CommGroup δ
+] (f : Nat -> δ) {m n : Nat} (h : m <= n) : ∏ k in Ico m n, f k = (∏ k in range 
+n, f k) * (∏ k i…
 -/
-theorem prod_Ico_eq_div {δ : Type*} [CommGroup δ] (f : Nat -> δ) {m n : Nat} (h : m <= n) :
-    ∏ k in Ico m n, f k = (∏ k in range n, f k) / ∏ k in range m, f k := by
+theorem prod_Ico_eq_div {δ : Type*} [CommGroup δ] (f : ℕ → δ) {m n : ℕ} (h : m ≤ n) :
+    ∏ k ∈ Ico m n, f k = (∏ k ∈ range n, f k) / ∏ k ∈ range m, f k := by
   simpa only [div_eq_mul_inv] using prod_Ico_eq_mul_inv f h
 
 @[to_additive]
-/--
-theorem `prod_range_div_prod_range` / 定理 `prod_range_div_prod_range`
-
-English:
-theorem prod_range_div_prod_range
-  given: {G : Type*} [CommGroup G] {f : Nat -> G} {n m : Nat} (hnm : n <= m)
-  proof: by
+/-
+**Finset.prod_range_div_prod_range** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_range_div_prod_range {G : Type*} [CommGroup G] {f : Nat -> G} {n m : 
+Nat} (hnm : n <= m) : ((∏ k in range m, f k) / ∏ k in range n, f k) = ∏ k in ran
+ge m with n <= k, f k
+参数：hnm : n <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_Ico_eq_div`：prod_Ico_eq_div {δ : Type*} [CommGroup δ] (f : N
+at -> δ) {m n : Nat} (h : m <= n) : ∏ k in Ico m n, f k = (∏ k in range n, f k) 
+/ ∏ k in ran…
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+-/
+theorem prod_range_div_prod_range {G : Type*} [CommGroup G] {f : ℕ → G} {n m : ℕ} (hnm : n ≤ m) :
+    ((∏ k ∈ range m, f k) / ∏ k ∈ range n, f k) = ∏ k ∈ range m with n ≤ k, f k := by
   rw [← prod_Ico_eq_div f hnm]
   congr
   apply Finset.ext
   simp only [mem_Ico, mem_filter, mem_range, *]
   tauto
 
-中文:
-定理 prod_range_div_prod_range
-  条件: {G : 类型} [交换群 G] {f : 自然数 -> G} {n m : 自然数} (hnm : n <= m)
-  证明: by
-  rw [← prod_Ico_eq_div f hnm]
-  congr
-  apply Finset.ext
-  simp only [mem_Ico, mem_filter, mem_range, *]
-  tauto
+/-- The two ways of summing over `(i, j)` in the range `a ≤ i ≤ j < b` are equal. -/
+/-
+**Finset.sum_Ico_Ico_comm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_Ico_Ico_comm {M : Type*} [AddCommMonoid M] (a b : Nat) (f : Nat -> Nat
+ -> M) : (∑ i in Finset.Ico a b, ∑ j in Finset.Ico i b, f i j) = ∑ j in Finset.I
+co a b, ∑ i in Finset.Ico a (j + 1), f i j
+参数：a b : Nat；f : Nat -> Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_sigma'`：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommMonoid
+ β] {σ : α → Type u_6} (s : Finset α) (t : (a : α) → Finset (σ a))   (f : (a : α
+) → σ a…
+· 使用定理 `Finset.sum_nbij'`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst :
+ AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (i : ι
+ → κ) …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 
-Depends on / 依赖: Finset, Finset.ext, mem_Ico, mem_filter, mem_range, prod_Ico_eq_div
+--- 原说明 ---
+The two ways of summing over `(i, j)` in the range `a ≤ i ≤ j < b` are equal.
 -/
-theorem prod_range_div_prod_range {G : Type*} [CommGroup G] {f : Nat -> G} {n m : Nat} (hnm : n <= m) :
-    ((∏ k in range m, f k) / ∏ k in range n, f k) = ∏ k in range m with n <= k, f k := by
-  rw [← prod_Ico_eq_div f hnm]
-  congr
-  apply Finset.ext
-  simp only [mem_Ico, mem_filter, mem_range, *]
-  tauto
-
-/--
-theorem `sum_Ico_Ico_comm` / 定理 `sum_Ico_Ico_comm`
-
-English:
-theorem sum_Ico_Ico_comm
-  given: {M : Type*} [AddCommMonoid M] (a b : Nat) (f : Nat -> Nat -> M)
-  proof: by
-  rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
-  refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) <;>
+theorem sum_Ico_Ico_comm {M : Type*} [AddCommMonoid M] (a b : ℕ) (f : ℕ → ℕ → M) :
+    (∑ i ∈ Finset.Ico a b, ∑ j ∈ Finset.Ico i b, f i j) =
+      ∑ j ∈ Finset.Ico a b, ∑ i ∈ Finset.Ico a (j + 1), f i j := by
+  rw [Finset.sum_sigma', Finset.sum_sigma']
+  refine sum_nbij' (fun x ↦ ⟨x.2, x.1⟩) (fun x ↦ ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+    (fun _ _ ↦ rfl) <;>
   simp only [Finset.mem_Ico, Sigma.forall, Finset.mem_sigma] <;>
   lia
 
-中文:
-定理 sum_Ico_Ico_comm
-  条件: {M : 类型} [加法交换幺半群 M] (a b : 自然数) (f : 自然数 -> 自然数 -> M)
-  证明: by
-  rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
-  refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) <;>
-  simp only [Finset.mem_Ico, Sigma.forall, Finset.mem_sigma] <;>
-  lia
+/-- The two ways of summing over `(i, j)` in the range `a ≤ i < j < b` are equal. -/
+/-
+**Finset.sum_Ico_Ico_comm'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_Ico_Ico_comm' {M : Type*} [AddCommMonoid M] (a b : Nat) (f : Nat -> Na
+t -> M) : (∑ i in Finset.Ico a b, ∑ j in Finset.Ico (i + 1) b, f i j) = ∑ j in F
+inset.Ico a b, ∑ i in Finset.Ico a j, f i j
+参数：a b : Nat；f : Nat -> Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_sigma'`：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommMonoid
+ β] {σ : α → Type u_6} (s : Finset α) (t : (a : α) → Finset (σ a))   (f : (a : α
+) → σ a…
+· 使用定理 `Finset.sum_nbij'`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst :
+ AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} (i : ι
+ → κ) …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 
-Depends on / 依赖: Finset, Finset.mem_Ico, Finset.mem_sigma, Finset.sum_sigma, Sigma.forall, mem_Ico, mem_sigma, sum_nbij, sum_sigma
+--- 原说明 ---
+The two ways of summing over `(i, j)` in the range `a ≤ i < j < b` are equal.
 -/
-theorem sum_Ico_Ico_comm {M : Type*} [AddCommMonoid M] (a b : Nat) (f : Nat -> Nat -> M) :
-    (∑ i in Finset.Ico a b, ∑ j in Finset.Ico i b, f i j) =
-      ∑ j in Finset.Ico a b, ∑ i in Finset.Ico a (j + 1), f i j := by
-  rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
-  refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) <;>
-  simp only [Finset.mem_Ico, Sigma.forall, Finset.mem_sigma] <;>
-  lia
-
-/--
-theorem `sum_Ico_Ico_comm'` / 定理 `sum_Ico_Ico_comm'`
-
-English:
-theorem sum_Ico_Ico_comm'
-  given: {M : Type*} [AddCommMonoid M] (a b : Nat) (f : Nat -> Nat -> M)
-  proof: by
-  rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
-  refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) <;>
+theorem sum_Ico_Ico_comm' {M : Type*} [AddCommMonoid M] (a b : ℕ) (f : ℕ → ℕ → M) :
+    (∑ i ∈ Finset.Ico a b, ∑ j ∈ Finset.Ico (i + 1) b, f i j) =
+      ∑ j ∈ Finset.Ico a b, ∑ i ∈ Finset.Ico a j, f i j := by
+  rw [Finset.sum_sigma', Finset.sum_sigma']
+  refine sum_nbij' (fun x ↦ ⟨x.2, x.1⟩) (fun x ↦ ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+    (fun _ _ ↦ rfl) <;>
   simp only [Finset.mem_Ico, Sigma.forall, Finset.mem_sigma] <;>
   lia
 
 @[to_additive]
-
-中文:
-定理 sum_Ico_Ico_comm'
-  条件: {M : 类型} [加法交换幺半群 M] (a b : 自然数) (f : 自然数 -> 自然数 -> M)
-  证明: by
-  rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
-  refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) <;>
-  simp only [Finset.mem_Ico, Sigma.forall, Finset.mem_sigma] <;>
-  lia
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.mem_Ico, Finset.mem_sigma, Finset.sum_sigma, Sigma.forall, mem_Ico, mem_sigma, sum_nbij, sum_sigma
+/-
+**Finset.prod_Ico_eq_prod_range** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_eq_prod_range (f : Nat -> M) (m n : Nat) : ∏ k in Ico m n, f k = 
+∏ k in range (n - m), f (m + k)
+参数：f : Nat -> M；m n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.Ico_zero_eq_range`：Ico_zero_eq_range : Ico 0 a = range a
+· 使用定理 `Finset.prod_Ico_add`：prod_Ico_add [AddCommMonoid α] [PartialOrder α] [Is
+OrderedCancelAddMonoid α] [ExistsAddOfLE α] [LocallyFiniteOrder α] (f : α -> M) 
+(a b c : …
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Finset.Ico_eq_empty_of_le`：Ico_eq_empty_of_le (h : b <= a) : Ico a b = ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_eq_zero_iff_le`：tsub_eq_zero_iff_le : a - b = 0 ↔ a <= b
+· 使用定理 `Finset.range_zero`：range_zero : range 0 = ∅
+· 使用定理 `Finset.prod_empty`：prod_empty : ∏ x in ∅, f x = 1
 -/
-theorem sum_Ico_Ico_comm' {M : Type*} [AddCommMonoid M] (a b : Nat) (f : Nat -> Nat -> M) :
-    (∑ i in Finset.Ico a b, ∑ j in Finset.Ico (i + 1) b, f i j) =
-      ∑ j in Finset.Ico a b, ∑ i in Finset.Ico a j, f i j := by
-  rw [Finset.sum_sigma']; rw [Finset.sum_sigma']
-  refine sum_nbij' (fun x => ⟨x.2, x.1⟩) (fun x => ⟨x.2, x.1⟩) ?_ ?_ (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) <;>
-  simp only [Finset.mem_Ico, Sigma.forall, Finset.mem_sigma] <;>
-  lia
-
-@[to_additive]
-/--
-theorem `prod_Ico_eq_prod_range` / 定理 `prod_Ico_eq_prod_range`
-
-English:
-theorem prod_Ico_eq_prod_range
-  given: (f : Nat -> M) (m n : Nat)
-  proof: by
-  by_cases! h : m <= n
+theorem prod_Ico_eq_prod_range (f : ℕ → M) (m n : ℕ) :
+    ∏ k ∈ Ico m n, f k = ∏ k ∈ range (n - m), f (m + k) := by
+  by_cases! h : m ≤ n
   · rw [← Nat.Ico_zero_eq_range, prod_Ico_add, zero_add, tsub_add_cancel_of_le h]
   · replace h := h.le
-    rw [Ico_eq_empty_of_le h]; rw [tsub_eq_zero_iff_le.mpr h]; rw [range_zero]; rw [prod_empty]; rw [prod_empty]
-
-中文:
-定理 prod_Ico_eq_prod_range
-  条件: (f : 自然数 -> M) (m n : 自然数)
-  证明: by
-  by_cases! h : m <= n
-  · rw [← Nat.Ico_zero_eq_range, prod_Ico_add, zero_add, tsub_add_cancel_of_le h]
-  · replace h := h.le
-    rw [Ico_eq_empty_of_le h]; rw [tsub_eq_zero_iff_le.mpr h]; rw [range_zero]; rw [prod_empty]; rw [prod_empty]
-
-Depends on / 依赖: Ico_eq_empty_of_le, Ico_zero_eq_range, Nat.Ico_zero_eq_range, h.le, prod_Ico_add, prod_empty, range_zero, replace, tsub_add_cancel_of_le, tsub_eq_zero_iff_le, tsub_eq_zero_iff_le.mpr, zero_add
+    rw [Ico_eq_empty_of_le h, tsub_eq_zero_iff_le.mpr h, range_zero, prod_empty, prod_empty]
+/-
+**Finset.prod_Ico_reflect** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_reflect (f : Nat -> M) (k : Nat) {m n : Nat} (h : m <= n + 1) : (
+∏ j in Ico k m, f (n - j)) = ∏ j in Ico (n + 1 - m) (n + 1 - k), f j
+参数：f : Nat -> M；k : Nat；h : m <= n + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `add_le_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [A
+ddRightMono α] [AddRightReflectLE α] (a : α) {b c : α},   b + a ≤ c + a ↔ b ≤ c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Nat.lt_iff_add_one_le`：∀ {m n : ℕ}, m < n ↔ m + 1 ≤ n
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.Ico_image_const_sub_eq_Ico`：Ico_image_const_sub_eq_Ico (hac : a <= c
+) : ((Ico a b).image fun x => c - x) = Ico (c + 1 - b) (c + 1 - a)
+· 使用定理 `Finset.prod_image`：prod_image [DecidableEq ι] {s : Finset κ} {g : κ -> ι
+} : Set.InjOn g s -> ∏ x in s.image g, f x = ∏ x in s, f (g x)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `tsub_tsub_cancel_of_le`：tsub_tsub_cancel_of_le (h : a <= b) : b - (b - a
+) = a
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `tsub_le_tsub_iff_left`：tsub_le_tsub_iff_left (h : c <= a) : a - b <= a -
+ c ↔ c <= b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Finset.Ico_eq_empty_of_le`：Ico_eq_empty_of_le (h : b <= a) : Ico a b = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_Ico_eq_prod_range (f : Nat -> M) (m n : Nat) :
-    ∏ k in Ico m n, f k = ∏ k in range (n - m), f (m + k) := by
-  by_cases! h : m <= n
-  · rw [← Nat.Ico_zero_eq_range, prod_Ico_add, zero_add, tsub_add_cancel_of_le h]
-  · replace h := h.le
-    rw [Ico_eq_empty_of_le h]; rw [tsub_eq_zero_iff_le.mpr h]; rw [range_zero]; rw [prod_empty]; rw [prod_empty]
-
-/--
-theorem `prod_Ico_reflect` / 定理 `prod_Ico_reflect`
-
-English:
-theorem prod_Ico_reflect
-  given: (f : Nat -> M) (k : Nat) {m n : Nat} (h : m <= n + 1)
-  proof: by
-  have : forall i < m, i <= n := by
+theorem prod_Ico_reflect (f : ℕ → M) (k : ℕ) {m n : ℕ} (h : m ≤ n + 1) :
+    (∏ j ∈ Ico k m, f (n - j)) = ∏ j ∈ Ico (n + 1 - m) (n + 1 - k), f j := by
+  have : ∀ i < m, i ≤ n := by
     intro i hi
     exact (add_le_add_iff_right 1).1 (le_trans (Nat.lt_iff_add_one_le.1 hi) h)
   rcases lt_or_ge k m with hkm | hkm
@@ -501,398 +542,341 @@ theorem prod_Ico_reflect
     refine (prod_image ?_).symm
     simp only [mem_Ico, Set.InjOn, mem_coe]
     rintro i ⟨_, im⟩ j ⟨_, jm⟩ Hij
-    rw [← tsub_tsub_cancel_of_le (this _ im)]; rw [Hij]; rw [tsub_tsub_cancel_of_le (this _ jm)]
-  · have : n + 1 - k <= n + 1 - m := by
+    rw [← tsub_tsub_cancel_of_le (this _ im), Hij, tsub_tsub_cancel_of_le (this _ jm)]
+  · have : n + 1 - k ≤ n + 1 - m := by
       rw [tsub_le_tsub_iff_left h]
       exact hkm
     simp only [hkm, Ico_eq_empty_of_le, prod_empty, Ico_eq_empty_of_le this]
-
-中文:
-定理 prod_Ico_reflect
-  条件: (f : 自然数 -> M) (k : 自然数) {m n : 自然数} (h : m <= n + 1)
-  证明: by
-  have : forall i < m, i <= n := by
-    intro i hi
-    exact (add_le_add_iff_right 1).1 (le_trans (Nat.lt_iff_add_one_le.1 hi) h)
-  rcases lt_or_ge k m with hkm | hkm
-  · rw [← Nat.Ico_image_const_sub_eq_Ico (this _ hkm)]
-    refine (prod_image ?_).symm
-    simp only [mem_Ico, Set.InjOn, mem_coe]
-    rintro i ⟨_, im⟩ j ⟨_, jm⟩ Hij
-    rw [← tsub_tsub_cancel_of_le (this _ im)]; rw [Hij]; rw [tsub_tsub_cancel_of_le (this _ jm)]
-  · have : n + 1 - k <= n + 1 - m := by
-      rw [tsub_le_tsub_iff_left h]
-      exact hkm
-    simp only [hkm, Ico_eq_empty_of_le, prod_empty, Ico_eq_empty_of_le this]
-
-Depends on / 依赖: Ico_, Ico_image_const_sub_eq_Ico, Nat.Ico_image_const_sub_eq_Ico, Nat.lt_iff_add_one_le, Set.InjOn, add_le_add_iff_right, le_trans, lt_iff_add_one_le, lt_or_ge, mem_Ico, mem_coe, prod_image, tsub_le_tsub_iff_left, tsub_tsub_cancel_of_le
+/-
+**Finset.sum_Ico_reflect** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_Ico_reflect {δ : Type*} [AddCommMonoid δ] (f : Nat -> δ) (k : Nat) {m 
+n : Nat} (h : m <= n + 1) : (∑ j in Ico k m, f (n - j)) = ∑ j in Ico (n + 1 - m)
+ (n + 1 - k), f j
+参数：f : Nat -> δ；k : Nat；h : m <= n + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_Ico_reflect`：prod_Ico_reflect (f : Nat -> M) (k : Nat) {m n 
+: Nat} (h : m <= n + 1) : (∏ j in Ico k m, f (n - j)) = ∏ j in Ico (n + 1 - m) (
+n + 1 - k), f…
 -/
-theorem prod_Ico_reflect (f : Nat -> M) (k : Nat) {m n : Nat} (h : m <= n + 1) :
-    (∏ j in Ico k m, f (n - j)) = ∏ j in Ico (n + 1 - m) (n + 1 - k), f j := by
-  have : forall i < m, i <= n := by
-    intro i hi
-    exact (add_le_add_iff_right 1).1 (le_trans (Nat.lt_iff_add_one_le.1 hi) h)
-  rcases lt_or_ge k m with hkm | hkm
-  · rw [← Nat.Ico_image_const_sub_eq_Ico (this _ hkm)]
-    refine (prod_image ?_).symm
-    simp only [mem_Ico, Set.InjOn, mem_coe]
-    rintro i ⟨_, im⟩ j ⟨_, jm⟩ Hij
-    rw [← tsub_tsub_cancel_of_le (this _ im)]; rw [Hij]; rw [tsub_tsub_cancel_of_le (this _ jm)]
-  · have : n + 1 - k <= n + 1 - m := by
-      rw [tsub_le_tsub_iff_left h]
-      exact hkm
-    simp only [hkm, Ico_eq_empty_of_le, prod_empty, Ico_eq_empty_of_le this]
-
-/--
-theorem `sum_Ico_reflect` / 定理 `sum_Ico_reflect`
-
-English:
-theorem sum_Ico_reflect
-  statement: {δ : Type*} [AddCommMonoid δ] (f : Nat -> δ) (k : Nat) {m n : Nat}
-  proof: @prod_Ico_reflect (Multiplicative δ) _ f k m n h
-
-中文:
-定理 sum_Ico_reflect
-  结论: {δ : 类型} [加法交换幺半群 δ] (f : 自然数 -> δ) (k : 自然数) {m n : 自然数}
-  证明: @prod_Ico_reflect (Multiplicative δ) _ f k m n h
-
-Depends on / 依赖: Multiplicative, prod_Ico_reflect
--/
-theorem sum_Ico_reflect {δ : Type*} [AddCommMonoid δ] (f : Nat -> δ) (k : Nat) {m n : Nat}
-    (h : m <= n + 1) : (∑ j in Ico k m, f (n - j)) = ∑ j in Ico (n + 1 - m) (n + 1 - k), f j :=
+theorem sum_Ico_reflect {δ : Type*} [AddCommMonoid δ] (f : ℕ → δ) (k : ℕ) {m n : ℕ}
+    (h : m ≤ n + 1) : (∑ j ∈ Ico k m, f (n - j)) = ∑ j ∈ Ico (n + 1 - m) (n + 1 - k), f j :=
   @prod_Ico_reflect (Multiplicative δ) _ f k m n h
-
-/--
-theorem `prod_range_reflect` / 定理 `prod_range_reflect`
-
-English:
-theorem prod_range_reflect
-  given: (f : Nat -> M) (n : Nat)
-  proof: by
-  cases n
-  · simp
-  · simp only [← Nat.Ico_zero_eq_range, Nat.succ_sub_succ_eq_sub, tsub_zero]
-    rw [prod_Ico_reflect _ _ le_rfl]
-    simp
-
-中文:
-定理 prod_range_reflect
-  条件: (f : 自然数 -> M) (n : 自然数)
-  证明: by
-  cases n
-  · simp
-  · simp only [← Nat.Ico_zero_eq_range, Nat.succ_sub_succ_eq_sub, tsub_zero]
-    rw [prod_Ico_reflect _ _ le_rfl]
-    simp
-
-Depends on / 依赖: Ico_zero_eq_range, Nat.Ico_zero_eq_range, Nat.succ_sub_succ_eq_sub, le_rfl, prod_Ico_reflect, succ_sub_succ_eq_sub, tsub_zero
+/-
+**Finset.prod_range_reflect** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_range_reflect (f : Nat -> M) (n : Nat) : (∏ j in range n, f (n - 1 - 
+j)) = ∏ j in range n, f j
+参数：f : Nat -> M；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zero_tsub`：zero_tsub (a : α) : 0 - a = 0
+· 使用定理 `Finset.prod_const`：prod_const (b : M) : ∏ _x in s, b = b ^ #s
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Nat.succ_sub_succ_eq_sub`：∀ (n m : ℕ), n.succ - m.succ = n - m
+· 使用定理 `tsub_zero`：tsub_zero (a : α) : a - 0 = a
+· 使用定理 `Finset.prod_Ico_reflect`：prod_Ico_reflect (f : Nat -> M) (k : Nat) {m n 
+: Nat} (h : m <= n + 1) : (∏ j in Ico k m, f (n - j)) = ∏ j in Ico (n + 1 - m) (
+n + 1 - k), f…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `Nat.Ico_zero_eq_range`：Ico_zero_eq_range : Ico 0 a = range a
 -/
-theorem prod_range_reflect (f : Nat -> M) (n : Nat) :
-    (∏ j in range n, f (n - 1 - j)) = ∏ j in range n, f j := by
+theorem prod_range_reflect (f : ℕ → M) (n : ℕ) :
+    (∏ j ∈ range n, f (n - 1 - j)) = ∏ j ∈ range n, f j := by
   cases n
   · simp
   · simp only [← Nat.Ico_zero_eq_range, Nat.succ_sub_succ_eq_sub, tsub_zero]
     rw [prod_Ico_reflect _ _ le_rfl]
     simp
-
-/--
-theorem `sum_range_reflect` / 定理 `sum_range_reflect`
-
-English:
-theorem sum_range_reflect
-  given: {δ : Type*} [AddCommMonoid δ] (f : Nat -> δ) (n : Nat)
-  proof: @prod_range_reflect (Multiplicative δ) _ f n
-
-@[simp]
-
-中文:
-定理 sum_range_reflect
-  条件: {δ : 类型} [加法交换幺半群 δ] (f : 自然数 -> δ) (n : 自然数)
-  证明: @prod_range_reflect (Multiplicative δ) _ f n
-
-@[simp]
-
-Depends on / 依赖: Multiplicative, prod_range_reflect
+/-
+**Finset.sum_range_reflect** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_range_reflect {δ : Type*} [AddCommMonoid δ] (f : Nat -> δ) (n : Nat) :
+ (∑ j in range n, f (n - 1 - j)) = ∑ j in range n, f j
+参数：f : Nat -> δ；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_range_reflect`：prod_range_reflect (f : Nat -> M) (n : Nat) :
+ (∏ j in range n, f (n - 1 - j)) = ∏ j in range n, f j
 -/
-theorem sum_range_reflect {δ : Type*} [AddCommMonoid δ] (f : Nat -> δ) (n : Nat) :
-    (∑ j in range n, f (n - 1 - j)) = ∑ j in range n, f j :=
+theorem sum_range_reflect {δ : Type*} [AddCommMonoid δ] (f : ℕ → δ) (n : ℕ) :
+    (∑ j ∈ range n, f (n - 1 - j)) = ∑ j ∈ range n, f j :=
   @prod_range_reflect (Multiplicative δ) _ f n
 
 @[simp]
-/--
-theorem `prod_Ico_id_eq_factorial` / 定理 `prod_Ico_id_eq_factorial`
-
-English:
-theorem prod_Ico_id_eq_factorial
-  statement: forall n : Nat, (∏ x in Ico 1 (n + 1), x) = n !
-
-中文:
-定理 prod_Ico_id_eq_factorial
-  结论: 对任意 n : 自然数, (∏ x in 左闭右开区间 1 (n + 1), x) = n !
+/-
+**Finset.prod_Ico_id_eq_factorial** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ (n : ℕ), ∏ x ∈ Finset.Ico 1 (n + 1), x = n.factorial
+参数：n : ℕ；n + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem prod_Ico_id_eq_factorial : forall n : Nat, (∏ x in Ico 1 (n + 1), x) = n !
+theorem prod_Ico_id_eq_factorial : ∀ n : ℕ, (∏ x ∈ Ico 1 (n + 1), x) = n !
   | 0 => rfl
   | n + 1 => by
-    rw [prod_Ico_succ_top <| Nat.succ_le_succ <| Nat.zero_le n]; rw [Nat.factorial_succ]; rw [prod_Ico_id_eq_factorial n]; rw [Nat.succ_eq_add_one]; rw [mul_comm]
+    rw [prod_Ico_succ_top <| Nat.succ_le_succ <| Nat.zero_le n, Nat.factorial_succ,
+      prod_Ico_id_eq_factorial n, Nat.succ_eq_add_one, mul_comm]
 
 section GaussSum
 
-/--
-theorem `sum_range_id_mul_two` / 定理 `sum_range_id_mul_two`
+/-- Gauss' summation formula -/
+/-
+**Finset.sum_range_id_mul_two** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_range_id_mul_two (n : Nat) : (∑ i in range n, i) * 2 = n * (n - 1)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_range_reflect`：sum_range_reflect {δ : Type*} [AddCommMonoid δ
+] (f : Nat -> δ) (n : Nat) : (∑ j in range n, f (n - 1 - j)) = ∑ j in range n, f
+ j
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `mul_two`：mul_two (n : α) : n * 2 = n + n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `add_tsub_cancel_of_le`：add_tsub_cancel_of_le (h : a <= b) : a + (b - a) 
+= b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.le_sub_one_of_lt`：∀ {a b : ℕ}, a < b → a ≤ b - 1
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_range`：card_range (n : Nat) : #(range n) = n
+· 使用定理 `Nat.nsmul_eq_mul`：∀ (m n : ℕ), m • n = m * n
 
-English:
-theorem sum_range_id_mul_two
-  given: (n : Nat)
-  statement: (∑ i in range n, i) * 2 = n * (n - 1)
-  proof: calc
-    (∑ i in range n, i) * 2 = (∑ i in range n, i) + ∑ i in range n, (n - 1 - i) := by
-      rw [sum_range_reflect (fun i => i) n]; rw [mul_two]
-    _ = ∑ i in range n, (i + (n - 1 - i)) := sum_add_distrib.symm
-    _ = ∑ _ in range n, (n - 1) :=
-sum_congr rfl fun _ hi => add_tsub_cancel_of_le Nat.le_sub_one_of_lt mem_range.1 hi
-    _ = n * (n - 1) := by rw [sum_const, card_range, Nat.nsmul_eq_mul]
-
-中文:
-定理 sum_range_id_mul_two
-  条件: (n : 自然数)
-  结论: (∑ i in range n, i) * 2 = n * (n - 1)
-  证明: calc
-    (∑ i in range n, i) * 2 = (∑ i in range n, i) + ∑ i in range n, (n - 1 - i) := by
-      rw [sum_range_reflect (fun i => i) n]; rw [mul_two]
-    _ = ∑ i in range n, (i + (n - 1 - i)) := sum_add_distrib.symm
-    _ = ∑ _ in range n, (n - 1) :=
-sum_congr rfl fun _ hi => add_tsub_cancel_of_le Nat.le_sub_one_of_lt mem_range.1 hi
-    _ = n * (n - 1) := by rw [sum_const, card_range, Nat.nsmul_eq_mul]
-
-Depends on / 依赖: Nat.le_sub_one_of_lt, Nat.nsmul_eq_mul, add_tsub_cancel_of_le, card_range, le_sub_one_of_lt, mem_range, mul_two, nsmul_eq_mul, sum_add_distrib, sum_add_distrib.symm, sum_congr, sum_const, sum_range_reflect
+--- 原说明 ---
+Gauss' summation formula
 -/
-theorem sum_range_id_mul_two (n : Nat) : (∑ i in range n, i) * 2 = n * (n - 1) :=
+theorem sum_range_id_mul_two (n : ℕ) : (∑ i ∈ range n, i) * 2 = n * (n - 1) :=
   calc
-    (∑ i in range n, i) * 2 = (∑ i in range n, i) + ∑ i in range n, (n - 1 - i) := by
-      rw [sum_range_reflect (fun i => i) n]; rw [mul_two]
-    _ = ∑ i in range n, (i + (n - 1 - i)) := sum_add_distrib.symm
-    _ = ∑ _ in range n, (n - 1) :=
-sum_congr rfl fun _ hi => add_tsub_cancel_of_le Nat.le_sub_one_of_lt mem_range.1 hi
+    (∑ i ∈ range n, i) * 2 = (∑ i ∈ range n, i) + ∑ i ∈ range n, (n - 1 - i) := by
+      rw [sum_range_reflect (fun i => i) n, mul_two]
+    _ = ∑ i ∈ range n, (i + (n - 1 - i)) := sum_add_distrib.symm
+    _ = ∑ _ ∈ range n, (n - 1) :=
+      sum_congr rfl fun _ hi => add_tsub_cancel_of_le <| Nat.le_sub_one_of_lt <| mem_range.1 hi
     _ = n * (n - 1) := by rw [sum_const, card_range, Nat.nsmul_eq_mul]
 
-/--
-theorem `sum_range_id` / 定理 `sum_range_id`
+/-- Gauss' summation formula -/
+/-
+**Finset.sum_range_id** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：sum_range_id (n : Nat) : ∑ i in range n, i = n * (n - 1) / 2
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_range_id_mul_two`：sum_range_id_mul_two (n : Nat) : (∑ i in ra
+nge n, i) * 2 = n * (n - 1)
+· 使用定理 `Nat.mul_div_cancel`：∀ (m : ℕ) {n : ℕ}, 0 < n → m * n / n = m
+· 使用定理 `Nat.zero_lt_two`：0 < 2
 
-English:
-theorem sum_range_id
-  given: (n : Nat)
-  statement: ∑ i in range n, i = n * (n - 1) / 2
-  proof: by
-  rw [← sum_range_id_mul_two n]; rw [Nat.mul_div_cancel _ Nat.zero_lt_two]
-
-中文:
-定理 sum_range_id
-  条件: (n : 自然数)
-  结论: ∑ i in range n, i = n * (n - 1) / 2
-  证明: by
-  rw [← sum_range_id_mul_two n]; rw [Nat.mul_div_cancel _ Nat.zero_lt_two]
-
-Depends on / 依赖: Nat.mul_div_cancel, Nat.zero_lt_two, mul_div_cancel, sum_range_id_mul_two, zero_lt_two
+--- 原说明 ---
+Gauss' summation formula
 -/
-theorem sum_range_id (n : Nat) : ∑ i in range n, i = n * (n - 1) / 2 := by
-  rw [← sum_range_id_mul_two n]; rw [Nat.mul_div_cancel _ Nat.zero_lt_two]
+theorem sum_range_id (n : ℕ) : ∑ i ∈ range n, i = n * (n - 1) / 2 := by
+  rw [← sum_range_id_mul_two n, Nat.mul_div_cancel _ Nat.zero_lt_two]
 
 end GaussSum
 
 @[to_additive]
-/--
-lemma `prod_range_diag_flip` / 引理 `prod_range_diag_flip`
-
-English:
-lemma prod_range_diag_flip
-  given: (n : Nat) (f : Nat -> Nat -> M)
-  proof: by
-  rw [prod_sigma']; rw [prod_sigma']
-  refine prod_nbij' (fun a => ⟨a.2, a.1 - a.2⟩) (fun a => ⟨a.1 + a.2, a.1⟩) ?_ ?_ ?_ ?_ ?_ <;>
-    simp +contextual only [mem_sigma, mem_range, lt_tsub_iff_left,
-      Nat.lt_succ_iff, le_add_iff_nonneg_right, Nat.zero_le, and_true, and_imp, implies_true,
-      Sigma.forall, add_tsub_cancel_of_le, add_tsub_cancel_left]
-  exact fun a b han hba => lt_of_le_of_lt hba han
-
-中文:
-引理 prod_range_diag_flip
-  条件: (n : 自然数) (f : 自然数 -> 自然数 -> M)
-  证明: by
-  rw [prod_sigma']; rw [prod_sigma']
-  refine prod_nbij' (fun a => ⟨a.2, a.1 - a.2⟩) (fun a => ⟨a.1 + a.2, a.1⟩) ?_ ?_ ?_ ?_ ?_ <;>
-    simp +contextual only [mem_sigma, mem_range, lt_tsub_iff_left,
-      Nat.lt_succ_iff, le_add_iff_nonneg_right, Nat.zero_le, and_true, and_imp, implies_true,
-      Sigma.forall, add_tsub_cancel_of_le, add_tsub_cancel_left]
-  exact fun a b han hba => lt_of_le_of_lt hba han
-
-Depends on / 依赖: Nat.lt_succ_iff, Nat.zero_le, Sigma.forall, add_tsub_cancel_left, add_tsub_cancel_of_le, and_imp, and_true, contextual, implies_true, le_add_iff_nonneg_right, lt_of_le_of_lt, lt_succ_iff, lt_tsub_iff_left, mem_range, mem_sigma, prod_nbij, prod_sigma, zero_le
+/-
+**Finset.prod_range_diag_flip** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：prod_range_diag_flip (n : Nat) (f : Nat -> Nat -> M) : (∏ m in range n, ∏ 
+k in range (m + 1), f k (m - k)) = ∏ m in range n, ∏ k in range (n - m), f m k
+参数：n : Nat；f : Nat -> Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_sigma'`：prod_sigma' {σ : α -> Type*} (s : Finset α) (t : for
+all a, Finset (σ a)) (f : forall a, σ a -> β) : (∏ a in s, ∏ s in t a, f a s) = 
+∏ x in s…
+· 使用引理 `Finset.prod_nbij'`：prod_nbij' (i : ι -> κ) (j : κ -> ι) (hi : forall a i
+n s, i a in t) (hj : forall a in t, j a in s) (left_inv : forall a in s, j (i a)
+ = a) (…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_tsub_cancel_of_le`：add_tsub_cancel_of_le (h : a <= b) : a + (b - a) 
+= b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_tsub_cancel_left`：add_tsub_cancel_left (a b : α) : a + b - a = b
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
-lemma prod_range_diag_flip (n : Nat) (f : Nat -> Nat -> M) :
-    (∏ m in range n, ∏ k in range (m + 1), f k (m - k)) =
-      ∏ m in range n, ∏ k in range (n - m), f m k := by
-  rw [prod_sigma']; rw [prod_sigma']
-  refine prod_nbij' (fun a => ⟨a.2, a.1 - a.2⟩) (fun a => ⟨a.1 + a.2, a.1⟩) ?_ ?_ ?_ ?_ ?_ <;>
+lemma prod_range_diag_flip (n : ℕ) (f : ℕ → ℕ → M) :
+    (∏ m ∈ range n, ∏ k ∈ range (m + 1), f k (m - k)) =
+      ∏ m ∈ range n, ∏ k ∈ range (n - m), f m k := by
+  rw [prod_sigma', prod_sigma']
+  refine prod_nbij' (fun a ↦ ⟨a.2, a.1 - a.2⟩) (fun a ↦ ⟨a.1 + a.2, a.1⟩) ?_ ?_ ?_ ?_ ?_ <;>
     simp +contextual only [mem_sigma, mem_range, lt_tsub_iff_left,
       Nat.lt_succ_iff, le_add_iff_nonneg_right, Nat.zero_le, and_true, and_imp, implies_true,
       Sigma.forall, add_tsub_cancel_of_le, add_tsub_cancel_left]
-  exact fun a b han hba => lt_of_le_of_lt hba han
+  exact fun a b han hba ↦ lt_of_le_of_lt hba han
 
 end Generic
 
 section Nat
 
 variable {M : Type*}
-variable (f g : Nat -> M) {m n : Nat}
+variable (f g : ℕ → M) {m n : ℕ}
 
 section Group
 
 variable [CommGroup M]
 
 @[to_additive]
-/--
-theorem `prod_range_succ_div_prod` / 定理 `prod_range_succ_div_prod`
-
-English:
-theorem prod_range_succ_div_prod
-  statement: ((∏ i in range (n + 1), f i) / ∏ i in range n, f i) = f n
-  proof: div_eq_iff_eq_mul'.mpr prod_range_succ f n
-
-@[to_additive]
-
-中文:
-定理 prod_range_succ_div_prod
-  结论: ((∏ i in range (n + 1), f i) / ∏ i in range n, f i) = f n
-  证明: div_eq_iff_eq_mul'.mpr prod_range_succ f n
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_iff_eq_mul, prod_range_succ
+/-
+**Finset.prod_range_succ_div_prod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_range_succ_div_prod : ((∏ i in range (n + 1), f i) / ∏ i in range n, 
+f i) = f n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `div_eq_iff_eq_mul'`：div_eq_iff_eq_mul' : a / b = c ↔ a = b * c
+· 使用定理 `Finset.prod_range_succ`：prod_range_succ (f : Nat -> M) (n : Nat) : (∏ x 
+in range (n + 1), f x) = (∏ x in range n, f x) * f n
 -/
-theorem prod_range_succ_div_prod : ((∏ i in range (n + 1), f i) / ∏ i in range n, f i) = f n :=
-div_eq_iff_eq_mul'.mpr prod_range_succ f n
+theorem prod_range_succ_div_prod : ((∏ i ∈ range (n + 1), f i) / ∏ i ∈ range n, f i) = f n :=
+  div_eq_iff_eq_mul'.mpr <| prod_range_succ f n
 
 @[to_additive]
-/--
-theorem `prod_range_succ_div_top` / 定理 `prod_range_succ_div_top`
-
-English:
-theorem prod_range_succ_div_top
-  statement: (∏ i in range (n + 1), f i) / f n = ∏ i in range n, f i
-  proof: div_eq_iff_eq_mul.mpr prod_range_succ f n
-
-@[to_additive]
-
-中文:
-定理 prod_range_succ_div_top
-  结论: (∏ i in range (n + 1), f i) / f n = ∏ i in range n, f i
-  证明: div_eq_iff_eq_mul.mpr prod_range_succ f n
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_iff_eq_mul, div_eq_iff_eq_mul.mpr, prod_range_succ
+/-
+**Finset.prod_range_succ_div_top** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_range_succ_div_top : (∏ i in range (n + 1), f i) / f n = ∏ i in range
+ n, f i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `div_eq_iff_eq_mul`：div_eq_iff_eq_mul : a / b = c ↔ a = c * b
+· 使用定理 `Finset.prod_range_succ`：prod_range_succ (f : Nat -> M) (n : Nat) : (∏ x 
+in range (n + 1), f x) = (∏ x in range n, f x) * f n
 -/
-theorem prod_range_succ_div_top : (∏ i in range (n + 1), f i) / f n = ∏ i in range n, f i :=
-div_eq_iff_eq_mul.mpr prod_range_succ f n
+theorem prod_range_succ_div_top : (∏ i ∈ range (n + 1), f i) / f n = ∏ i ∈ range n, f i :=
+  div_eq_iff_eq_mul.mpr <| prod_range_succ f n
 
 @[to_additive]
-/--
-theorem `prod_Ico_div_bot` / 定理 `prod_Ico_div_bot`
-
-English:
-theorem prod_Ico_div_bot
-  given: (hmn : m < n)
-  statement: (∏ i in Ico m n, f i) / f m = ∏ i in Ico (m + 1) n, f i
-  proof: div_eq_iff_eq_mul'.mpr prod_eq_prod_Ico_succ_bot hmn _
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_div_bot
-  条件: (hmn : m < n)
-  结论: (∏ i in 左闭右开区间 m n, f i) / f m = ∏ i in 左闭右开区间 (m + 1) n, f i
-  证明: div_eq_iff_eq_mul'.mpr prod_eq_prod_Ico_succ_bot hmn _
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_iff_eq_mul, prod_eq_prod_Ico_succ_bot
+/-
+**Finset.prod_Ico_div_bot** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_div_bot (hmn : m < n) : (∏ i in Ico m n, f i) / f m = ∏ i in Ico 
+(m + 1) n, f i
+参数：hmn : m < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `div_eq_iff_eq_mul'`：div_eq_iff_eq_mul' : a / b = c ↔ a = b * c
+· 使用定理 `Finset.prod_eq_prod_Ico_succ_bot`：prod_eq_prod_Ico_succ_bot {a b : Nat} 
+(hab : a < b) (f : Nat -> M) : ∏ k in Ico a b, f k = f a * ∏ k in Ico (a + 1) b,
+ f k
 -/
-theorem prod_Ico_div_bot (hmn : m < n) : (∏ i in Ico m n, f i) / f m = ∏ i in Ico (m + 1) n, f i :=
-div_eq_iff_eq_mul'.mpr prod_eq_prod_Ico_succ_bot hmn _
+theorem prod_Ico_div_bot (hmn : m < n) : (∏ i ∈ Ico m n, f i) / f m = ∏ i ∈ Ico (m + 1) n, f i :=
+  div_eq_iff_eq_mul'.mpr <| prod_eq_prod_Ico_succ_bot hmn _
 
 @[to_additive]
-/--
-theorem `prod_Ico_succ_div_top` / 定理 `prod_Ico_succ_div_top`
-
-English:
-theorem prod_Ico_succ_div_top
-  given: (hmn : m <= n)
-  proof: div_eq_iff_eq_mul.mpr prod_Ico_succ_top hmn _
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_succ_div_top
-  条件: (hmn : m <= n)
-  证明: div_eq_iff_eq_mul.mpr prod_Ico_succ_top hmn _
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_iff_eq_mul, div_eq_iff_eq_mul.mpr, prod_Ico_succ_top
+/-
+**Finset.prod_Ico_succ_div_top** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_succ_div_top (hmn : m <= n) : (∏ i in Ico m (n + 1), f i) / f n =
+ ∏ i in Ico m n, f i
+参数：hmn : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `div_eq_iff_eq_mul`：div_eq_iff_eq_mul : a / b = c ↔ a = c * b
+· 使用定理 `Finset.prod_Ico_succ_top`：prod_Ico_succ_top {a b : Nat} (hab : a <= b) (
+f : Nat -> M) : (∏ k in Ico a (b + 1), f k) = (∏ k in Ico a b, f k) * f b
 -/
-theorem prod_Ico_succ_div_top (hmn : m <= n) :
-    (∏ i in Ico m (n + 1), f i) / f n = ∏ i in Ico m n, f i :=
-div_eq_iff_eq_mul.mpr prod_Ico_succ_top hmn _
+theorem prod_Ico_succ_div_top (hmn : m ≤ n) :
+    (∏ i ∈ Ico m (n + 1), f i) / f n = ∏ i ∈ Ico m n, f i :=
+  div_eq_iff_eq_mul.mpr <| prod_Ico_succ_top hmn _
 
 @[to_additive]
-/--
-theorem `prod_Ico_div` / 定理 `prod_Ico_div`
-
-English:
-theorem prod_Ico_div
-  given: (hmn : m <= n)
-  statement: ∏ i in Ico m n, f (i + 1) / f i = f n / f m
-  proof: by
-  rw [prod_Ico_eq_div _ hmn]; rw [prod_range_div]; rw [prod_range_div]; rw [div_div_div_cancel_right]
-
-@[to_additive]
-
-中文:
-定理 prod_Ico_div
-  条件: (hmn : m <= n)
-  结论: ∏ i in 左闭右开区间 m n, f (i + 1) / f i = f n / f m
-  证明: by
-  rw [prod_Ico_eq_div _ hmn]; rw [prod_range_div]; rw [prod_range_div]; rw [div_div_div_cancel_right]
-
-@[to_additive]
-
-Depends on / 依赖: div_div_div_cancel_right, prod_Ico_eq_div, prod_range_div
+/-
+**Finset.prod_Ico_div** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Ico_div (hmn : m <= n) : ∏ i in Ico m n, f (i + 1) / f i = f n / f m
+参数：hmn : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_Ico_eq_div`：prod_Ico_eq_div {δ : Type*} [CommGroup δ] (f : N
+at -> δ) {m n : Nat} (h : m <= n) : ∏ k in Ico m n, f k = (∏ k in range n, f k) 
+/ ∏ k in ran…
+· 使用引理 `Finset.prod_range_div`：prod_range_div (f : Nat -> G) (n : Nat) : (∏ i in
+ range n, f (i + 1) / f i) = f n / f 0
+· 使用定理 `div_div_div_cancel_right`：div_div_div_cancel_right (a b c : G) : a / c /
+ (b / c) = a / b
 -/
-theorem prod_Ico_div (hmn : m <= n) : ∏ i in Ico m n, f (i + 1) / f i = f n / f m := by
-  rw [prod_Ico_eq_div _ hmn]; rw [prod_range_div]; rw [prod_range_div]; rw [div_div_div_cancel_right]
+theorem prod_Ico_div (hmn : m ≤ n) : ∏ i ∈ Ico m n, f (i + 1) / f i = f n / f m := by
+  rw [prod_Ico_eq_div _ hmn, prod_range_div, prod_range_div, div_div_div_cancel_right]
 
 @[to_additive]
-/--
-theorem `prod_Icc_div` / 定理 `prod_Icc_div`
-
-English:
-theorem prod_Icc_div
-  given: (hmn : m <= n) (f : Nat -> M)
-  proof: by
-  rw [← Finset.Ico_add_one_right_eq_Icc]; rw [prod_Ico_div]
-  omega
-
-中文:
-定理 prod_Icc_div
-  条件: (hmn : m <= n) (f : 自然数 -> M)
-  证明: by
-  rw [← Finset.Ico_add_one_right_eq_Icc]; rw [prod_Ico_div]
-  omega
-
-Depends on / 依赖: Finset, Finset.Ico_add_one_right_eq_Icc, Ico_add_one_right_eq_Icc, prod_Ico_div
+/-
+**Finset.prod_Icc_div** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：prod_Icc_div (hmn : m <= n) (f : Nat -> M) : ∏ i in Icc m n, f (i + 1) / f
+ i = f (n + 1) / f m
+参数：hmn : m <= n；f : Nat -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.Ico_add_one_right_eq_Icc`：Ico_add_one_right_eq_Icc (a b : α) : Ic
+o a (b + 1) = Icc a b
+· 使用定理 `Finset.prod_Ico_div`：prod_Ico_div (hmn : m <= n) : ∏ i in Ico m n, f (i 
++ 1) / f i = f n / f m
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
 -/
-theorem prod_Icc_div (hmn : m <= n) (f : Nat -> M) :
-    ∏ i in Icc m n, f (i + 1) / f i = f (n + 1) / f m := by
-  rw [← Finset.Ico_add_one_right_eq_Icc]; rw [prod_Ico_div]
+theorem prod_Icc_div (hmn : m ≤ n) (f : ℕ → M) :
+    ∏ i ∈ Icc m n, f (i + 1) / f i = f (n + 1) / f m := by
+  rw [← Finset.Ico_add_one_right_eq_Icc, prod_Ico_div]
   omega
 
 end Group
@@ -903,101 +887,135 @@ end Finset
 section Fin
 
 @[to_additive]
-/--
-lemma `Finset.prod_fin_Icc_eq_prod_nat_Icc` / 引理 `Finset.prod_fin_Icc_eq_prod_nat_Icc`
-
-English:
-lemma Finset.prod_fin_Icc_eq_prod_nat_Icc
-  given: [CommMonoid α] {n : Nat} (a b : Fin n) (f : Fin n -> α)
-  proof: by
-  rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
-  apply prod_congr_of_eq_on_inter <;> grind
-
-中文:
-引理 有限集.prod_fin_Icc_eq_prod_nat_Icc
-  条件: [交换幺半群 α] {n : 自然数} (a b : 有限集 n) (f : 有限集 n -> α)
-  证明: by
-  rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
-  apply prod_congr_of_eq_on_inter <;> grind
-
-Depends on / 依赖: prod_congr_of_eq_on_inter, prod_fin_eq_prod_range, prod_ite_mem_eq
+/-
+**Finset.prod_fin_Icc_eq_prod_nat_Icc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Finset.prod_fin_Icc_eq_prod_nat_Icc [CommMonoid α] {n : Nat} (a b : Fin n)
+ (f : Fin n -> α) : ∏ i in Icc a b, f i = ∏ i in Icc (a : Nat) b, if h : i < n t
+hen f ⟨i, h⟩ else 1
+参数：a b : Fin n；f : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.prod_ite_mem_eq`：prod_ite_mem_eq [Fintype ι] (s : Finset ι) (f : 
+ι -> M) [DecidablePred (· in s)] : (∏ i, if i in s then f i else 1) = ∏ i in s, 
+f i
+· 使用定理 `Finset.prod_fin_eq_prod_range`：Finset.prod_fin_eq_prod_range [CommMonoid
+ β] {n : Nat} (c : Fin n -> β) : ∏ i, c i = ∏ i in Finset.range n, if h : i < n 
+then c ⟨i, h⟩ else …
+· 使用引理 `Finset.prod_congr_of_eq_on_inter`：prod_congr_of_eq_on_inter {ι M : Type*
+} {s₁ s₂ : Finset ι} {f g : ι -> M} [CommMonoid M] (h₁ : forall a in s₁, a ∉ s₂ 
+-> f a = 1) (h₂ : fora…
 -/
-lemma Finset.prod_fin_Icc_eq_prod_nat_Icc [CommMonoid α] {n : Nat} (a b : Fin n) (f : Fin n -> α) :
-    ∏ i in Icc a b, f i = ∏ i in Icc (a : Nat) b, if h : i < n then f ⟨i, h⟩ else 1 := by
-  rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
+lemma Finset.prod_fin_Icc_eq_prod_nat_Icc [CommMonoid α] {n : ℕ} (a b : Fin n) (f : Fin n → α) :
+    ∏ i ∈ Icc a b, f i = ∏ i ∈ Icc (a : ℕ) b, if h : i < n then f ⟨i, h⟩ else 1 := by
+  rw [← prod_ite_mem_eq, prod_fin_eq_prod_range]
   apply prod_congr_of_eq_on_inter <;> grind
 
 /-- Telescopic product over `Fin`. -/
 @[to_additive /-- Telescopic sum over `Fin`. -/]
-/--
-lemma `Fin.prod_Iic_div` / 引理 `Fin.prod_Iic_div`
+/-
+**Fin.prod_Iic_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Fin.prod_Iic_div [CommGroup M] {n : Nat} (a : Fin n) (f : Fin (n + 1) -> M
+) : ∏ i in Iic a, (f i.succ / f i.castSucc) = f a.succ / f 0
+参数：a : Fin n；f : Fin (n + 1) -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.prod_ite_mem_eq`：prod_ite_mem_eq [Fintype ι] (s : Finset ι) (f : 
+ι -> M) [DecidablePred (· in s)] : (∏ i, if i in s then f i else 1) = ∏ i in s, 
+f i
+· 使用定理 `Finset.prod_fin_eq_prod_range`：Finset.prod_fin_eq_prod_range [CommMonoid
+ β] {n : Nat} (c : Fin n -> β) : ∏ i, c i = ∏ i in Finset.range n, if h : i < n 
+then c ⟨i, h⟩ else …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用引理 `Finset.prod_congr_of_eq_on_inter`：prod_congr_of_eq_on_inter {ι M : Type*
+} {s₁ s₂ : Finset ι} {f g : ι -> M} [CommMonoid M] (h₁ : forall a in s₁, a ∉ s₂ 
+-> f a = 1) (h₂ : fora…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `Nat.lt_succ_of_lt`：∀ {a b : ℕ}, a < b → a < b.succ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_dep_congr_ctx`：∀ {p₁ p₂ q₁ : Prop}, p₁ = p₂ → ∀ {q₂ : p₂ → Prop}
+, (∀ (h : p₂), q₁ = q₂ h) → (p₁ → q₁) = ∀ (h : p₂), q₂ h
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用引理 `Finset.prod_range_div`：prod_range_div (f : Nat -> G) (n : Nat) : (∏ i in
+ range n, f (i + 1) / f i) = f n / f 0
 
-English:
-lemma Fin.prod_Iic_div
-  given: [CommGroup M] {n : Nat} (a : Fin n) (f : Fin (n + 1) -> M)
-  proof: by
-  rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
-  convert! prod_range_div (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1) (a + 1) using 1 with k
-    hk
-  · exact prod_congr_of_eq_on_inter (by grind) (by grind) (by simp_all; grind)
-  · grind
-
-中文:
-引理 有限集.prod_Iic_div
-  条件: [交换群 M] {n : 自然数} (a : 有限集 n) (f : 有限集 (n + 1) -> M)
-  证明: by
-  rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
-  convert! prod_range_div (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1) (a + 1) using 1 with k
-    hk
-  · exact prod_congr_of_eq_on_inter (by grind) (by grind) (by simp_all; grind)
-  · grind
-
-Depends on / 依赖: convert, prod_congr_of_eq_on_inter, prod_fin_eq_prod_range, prod_ite_mem_eq, prod_range_div
+--- 原说明 ---
+Telescopic product over `Fin`.
 -/
-lemma Fin.prod_Iic_div [CommGroup M] {n : Nat} (a : Fin n) (f : Fin (n + 1) -> M) :
-    ∏ i in Iic a, (f i.succ / f i.castSucc) = f a.succ / f 0 := by
-  rw [← prod_ite_mem_eq]; rw [prod_fin_eq_prod_range]
-  convert! prod_range_div (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1) (a + 1) using 1 with k
+lemma Fin.prod_Iic_div [CommGroup M] {n : ℕ} (a : Fin n) (f : Fin (n + 1) → M) :
+    ∏ i ∈ Iic a, (f i.succ / f i.castSucc) = f a.succ / f 0 := by
+  rw [← prod_ite_mem_eq, prod_fin_eq_prod_range]
+  convert! prod_range_div (fun i ↦ if hi : i < n + 1 then f ⟨i, hi⟩ else 1) (a + 1) using 1 with k
     hk
   · exact prod_congr_of_eq_on_inter (by grind) (by grind) (by simp_all; grind)
   · grind
 
 /-- Telescopic product over `Fin`. -/
 @[to_additive /-- Telescopic sum over `Fin`. -/]
-/--
-lemma `Fin.prod_Icc_div` / 引理 `Fin.prod_Icc_div`
+/-
+**Fin.prod_Icc_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Fin.prod_Icc_div [CommGroup M] {n : Nat} {a b : Fin n} (hab : a <= b) (f :
+ Fin (n + 1) -> M) : ∏ i in Icc a b, (f i.succ / f i.castSucc) = f b.succ / f a.
+castSucc
+参数：hab : a <= b；f : Fin (n + 1) -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finset.prod_fin_Icc_eq_prod_nat_Icc`：Finset.prod_fin_Icc_eq_prod_nat_Icc
+ [CommMonoid α] {n : Nat} (a b : Fin n) (f : Fin n -> α) : ∏ i in Icc a b, f i =
+ ∏ i in Icc (a : Nat) b, …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Nat.lt_succ_of_lt`：∀ {a b : ℕ}, a < b → a < b.succ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Finset.prod_Icc_div`：prod_Icc_div (hmn : m <= n) (f : Nat -> M) : ∏ i in
+ Icc m n, f (i + 1) / f i = f (n + 1) / f m
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Fin.le_def`：∀ {n : ℕ} {a b : Fin n}, a ≤ b ↔ ↑a ≤ ↑b
 
-English:
-lemma Fin.prod_Icc_div
-  statement: [CommGroup M] {n : Nat} {a b : Fin n} (hab : a <= b)
-  proof: by
-  rw [prod_fin_Icc_eq_prod_nat_Icc]
-  convert! Finset.prod_Icc_div (Fin.le_def.1 hab) (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1)
-  · simp_all
-    grind
-  · grind
-  · simp only [Order.lt_add_one_iff, is_le', ↓reduceDIte]
-    rfl
-
-中文:
-引理 有限集.prod_Icc_div
-  结论: [交换群 M] {n : 自然数} {a b : 有限集 n} (hab : a <= b)
-  证明: by
-  rw [prod_fin_Icc_eq_prod_nat_Icc]
-  convert! Finset.prod_Icc_div (Fin.le_def.1 hab) (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1)
-  · simp_all
-    grind
-  · grind
-  · simp only [Order.lt_add_one_iff, is_le', ↓reduceDIte]
-    rfl
-
-Depends on / 依赖: Fin.le_def, Finset, Finset.prod_Icc_div, Order.lt_add_one_iff, convert, is_le, le_def, lt_add_one_iff, prod_Icc_div, prod_fin_Icc_eq_prod_nat_Icc, reduceDIte
+--- 原说明 ---
+Telescopic product over `Fin`.
 -/
-lemma Fin.prod_Icc_div [CommGroup M] {n : Nat} {a b : Fin n} (hab : a <= b)
-    (f : Fin (n + 1) -> M) :
-    ∏ i in Icc a b, (f i.succ / f i.castSucc) = f b.succ / f a.castSucc := by
+lemma Fin.prod_Icc_div [CommGroup M] {n : ℕ} {a b : Fin n} (hab : a ≤ b)
+    (f : Fin (n + 1) → M) :
+    ∏ i ∈ Icc a b, (f i.succ / f i.castSucc) = f b.succ / f a.castSucc := by
   rw [prod_fin_Icc_eq_prod_nat_Icc]
-  convert! Finset.prod_Icc_div (Fin.le_def.1 hab) (fun i => if hi : i < n + 1 then f ⟨i, hi⟩ else 1)
+  convert! Finset.prod_Icc_div (Fin.le_def.1 hab) (fun i ↦ if hi : i < n + 1 then f ⟨i, hi⟩ else 1)
   · simp_all
     grind
   · grind
@@ -1005,3 +1023,4 @@ lemma Fin.prod_Icc_div [CommGroup M] {n : Nat} {a b : Fin n} (hab : a <= b)
     rfl
 
 end Fin
+

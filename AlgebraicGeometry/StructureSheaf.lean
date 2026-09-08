@@ -65,20 +65,15 @@ namespace AlgebraicGeometry
 @[expose] public section Public
 
 variable (R) in
-/--
-Definition of `PrimeSpectrum.Top` / `PrimeSpectrum.Top` 的定义
+/-- The prime spectrum as an object of `TopCat`. -/
+/-
+**AlgebraicGeometry.PrimeSpectrum.Top** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeomet
+ry.PrimeSpectrum`。
+形式化陈述：(R : Type u) → [CommRing R] → TopCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PrimeSpectrum.Top
-  signature: : TopCat
-  body: TopCat.of (PrimeSpectrum R)
-
-中文:
-定义 素谱.顶元素
-  签名: : 顶元素范畴
-  定义体: TopCat.of (PrimeSpectrum R)
-
-Depends on / 依赖: PrimeSpectrum, TopCat, TopCat.of
+--- 原说明 ---
+The prime spectrum as an object of `TopCat`.
 -/
 def PrimeSpectrum.Top : TopCat := TopCat.of (PrimeSpectrum R)
 
@@ -88,120 +83,122 @@ variable {P : PrimeSpectrum.Top R}
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (M P) in
-/--
-Definition of `Localizations` / `Localizations` 的定义
+/-- The type family over `PrimeSpectrum R` consisting of the localization over each point. -/
+/-
+**AlgebraicGeometry.StructureSheaf.Localizations** 是 Mathlib 中的一个缩写定义，位于命名空间 `Al
+gebraicGeometry.StructureSheaf`。
+形式化陈述：Localizations : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Localizations
-  signature: : Type u
-  body: LocalizedModule P.asIdeal.primeCompl M
-
-中文:
-缩写 Localizations
-  签名: : 类型u
-  定义体: LocalizedModule P.asIdeal.primeCompl M
-
-Depends on / 依赖: LocalizedModule, P.asIdeal.primeCompl, asIdeal, primeCompl
+--- 原说明 ---
+The type family over `PrimeSpectrum R` consisting of the localization over each 
+point.
 -/
 abbrev Localizations : Type u := LocalizedModule P.asIdeal.primeCompl M
 
-/--
-Definition of `IsFraction` / `IsFraction` 的定义
+/-- The predicate saying that a dependent function on an open `U` is realised as a fixed fraction
+`r / s` in each of the stalks (which are localizations at various prime ideals).
+-/
+/-
+**AlgebraicGeometry.StructureSheaf.IsFraction** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.StructureSheaf`。
+形式化陈述：IsFraction {U : Opens (PrimeSpectrum.Top R)} (f : Π x : U, Localizations M
+ x.1) : Prop
+参数：PrimeSpectrum.Top R；f : Π x : U, Localizations M x.1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsFraction
-  signature: {U : Opens (PrimeSpectrum.Top R)} (f : Π x : U, Localizations M x.1)
-  body: exists r s, forall x : U, exists hs : s ∉ x.1.asIdeal, f x = LocalizedModule.mk r ⟨s, hs⟩
-
-中文:
-定义 IsFraction
-  签名: {U : Opens (素谱.顶元素 R)} (f : Π x : U, Localizations M x.1)
-  定义体: exists r s, forall x : U, exists hs : s ∉ x.1.asIdeal, f x = LocalizedModule.mk r ⟨s, hs⟩
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk, asIdeal
+--- 原说明 ---
+The predicate saying that a dependent function on an open `U` is realised as a f
+ixed fraction
+`r / s` in each of the stalks (which are localizations at various prime ideals).
 -/
 def IsFraction {U : Opens (PrimeSpectrum.Top R)} (f : Π x : U, Localizations M x.1) : Prop :=
-  exists r s, forall x : U, exists hs : s ∉ x.1.asIdeal, f x = LocalizedModule.mk r ⟨s, hs⟩
+  ∃ r s, ∀ x : U, ∃ hs : s ∉ x.1.asIdeal, f x = LocalizedModule.mk r ⟨s, hs⟩
 
 variable (R M) in
-/--
-Definition of `isFractionPrelocal` / `isFractionPrelocal` 的定义
+/-- The predicate `IsFraction` is "prelocal",
+in the sense that if it holds on `U` it holds on any open subset `V` of `U`.
+-/
+/-
+**AlgebraicGeometry.StructureSheaf.isFractionPrelocal** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.StructureSheaf`。
+形式化陈述：isFractionPrelocal : PrelocalPredicate (Localizations (R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isFractionPrelocal
-  signature: : PrelocalPredicate (Localizations (R := R) M) where
-  body: IsFraction f
-  res := by rintro V U i f ⟨r, s, w⟩; exact ⟨r, s, fun x => w (i x)⟩
-
-中文:
-定义 isFractionPrelocal
-  签名: : PrelocalPredicate (Localizations (R := R) M) where
-  定义体: IsFraction f
-  res := by rintro V U i f ⟨r, s, w⟩; exact ⟨r, s, fun x => w (i x)⟩
+--- 原说明 ---
+The predicate `IsFraction` is "prelocal",
+in the sense that if it holds on `U` it holds on any open subset `V` of `U`.
 -/
 def isFractionPrelocal : PrelocalPredicate (Localizations (R := R) M) where
   pred {_} f := IsFraction f
   res := by rintro V U i f ⟨r, s, w⟩; exact ⟨r, s, fun x => w (i x)⟩
 
 variable (R M) in
-/--
-Definition of `isLocallyFraction` / `isLocallyFraction` 的定义
+/-- We will define the structure sheaf as
+the subsheaf of all dependent functions in `Π x : U, Localizations R x`
+consisting of those functions which can locally be expressed as a ratio of
+(the images in the localization of) elements of `R`.
 
-English:
-definition isLocallyFraction
-  signature: : LocalPredicate (Localizations (R := R) M)
-  body: (isFractionPrelocal R M).sheafify
+Quoting Hartshorne:
 
-中文:
-定义 isLocallyFraction
-  签名: : LocalPredicate (Localizations (R := R) M)
-  定义体: (isFractionPrelocal R M).sheafify
+For an open set $U ⊆ Spec A$, we define $𝒪(U)$ to be the set of functions
+$s : U → ⨆_{𝔭 ∈ U} A_𝔭$, such that $s(𝔭) ∈ A_𝔭$ for each $𝔭$,
+and such that $s$ is locally a quotient of elements of $A$:
+to be precise, we require that for each $𝔭 ∈ U$, there is a neighborhood $V$ of $𝔭$,
+contained in $U$, and elements $a, f ∈ A$, such that for each $𝔮 ∈ V, f ∉ 𝔮$,
+and $s(𝔮) = a/f$ in $A_𝔮$.
+
+Now Hartshorne had the disadvantage of not knowing about dependent functions,
+so we replace his circumlocution about functions into a disjoint union with
+`Π x : U, Localizations x`.
+-/
+/-
+**AlgebraicGeometry.StructureSheaf.isLocallyFraction** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.StructureSheaf`。
+形式化陈述：isLocallyFraction : LocalPredicate (Localizations (R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We will define the structure sheaf as
+the subsheaf of all dependent functions in `Π x : U, Localizations R x`
+consisting of those functions which can locally be expressed as a ratio of
+(the images in the localization of) elements of `R`.
+
+Quoting Hartshorne:
+
+For an open set $U ⊆ Spec A$, we define $𝒪(U)$ to be the set of functions
+$s : U → ⨆_{𝔭 ∈ U} A_𝔭$, such that $s(𝔭) ∈ A_𝔭$ for each $𝔭$,
+and such that $s$ is locally a quotient of elements of $A$:
+to be precise, we require that for each $𝔭 ∈ U$, there is a neighborhood $V$ of 
+$𝔭$,
+contained in $U$, and elements $a, f ∈ A$, such that for each $𝔮 ∈ V, f ∉ 𝔮$,
+and $s(𝔮) = a/f$ in $A_𝔮$.
+
+Now Hartshorne had the disadvantage of not knowing about dependent functions,
+so we replace his circumlocution about functions into a disjoint union with
+`Π x : U, Localizations x`.
 -/
 def isLocallyFraction : LocalPredicate (Localizations (R := R) M) :=
   (isFractionPrelocal R M).sheafify
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (M) in
-/--
-Definition of `sectionsSubmodule` / `sectionsSubmodule` 的定义
+/-- The functions satisfying `isLocallyFraction` form a submodule. -/
+/-
+**AlgebraicGeometry.StructureSheaf.sectionsSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.StructureSheaf`。
+形式化陈述：sectionsSubmodule (U : (Opens (PrimeSpectrum.Top R))) : Submodule R (Π x :
+ U, Localizations M x.1) where carrier
+参数：U : (Opens (PrimeSpectrum.Top R))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectionsSubmodule
-  signature: (U : (Opens (PrimeSpectrum.Top R)))
-  body: { f | (isLocallyFraction R M).pred f }
-  add_mem' {a b} ha hb x := by
-    obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
-    obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
-    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, sb • ra + sa • rb, sa * sb, fun x => ?_⟩
-    obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
-    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
-      congr($hsa + $hsb).trans (LocalizedModule.mk_add_mk ..)⟩
-  zero_mem' x := ⟨U, x.2, 𝟙 _, 0, 1, fun y => by simp [Ideal.IsPrime.one_notMem]⟩
-  smul_mem' r {a} ha x := by
-    obtain ⟨V, m, i, ra, sa, wa⟩ := ha x
-    exact ⟨V, m, i, r • ra, sa, fun x => ⟨(wa x).1,
-      congr(r • $((wa x).2)).trans (LocalizedModule.smul'_mk ..)⟩⟩
-
-中文:
-定义 sectionsSubmodule
-  签名: (U : (Opens (素谱.顶元素 R)))
-  定义体: { f | (isLocallyFraction R M).pred f }
-  add_mem' {a b} ha hb x := by
-    obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
-    obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
-    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, sb • ra + sa • rb, sa * sb, fun x => ?_⟩
-    obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
-    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
-      congr($hsa + $hsb).trans (LocalizedModule.mk_add_mk ..)⟩
-  zero_mem' x := ⟨U, x.2, 𝟙 _, 0, 1, fun y => by simp [Ideal.IsPrime.one_notMem]⟩
-  smul_mem' r {a} ha x := by
-    obtain ⟨V, m, i, ra, sa, wa⟩ := ha x
-    exact ⟨V, m, i, r • ra, sa, fun x => ⟨(wa x).1,
-      congr(r • $((wa x).2)).trans (LocalizedModule.smul'_mk ..)⟩⟩
-
-Depends on / 依赖: isLocallyFraction
+--- 原说明 ---
+The functions satisfying `isLocallyFraction` form a submodule.
 -/
 def sectionsSubmodule (U : (Opens (PrimeSpectrum.Top R))) :
     Submodule R (Π x : U, Localizations M x.1) where
@@ -209,53 +206,31 @@ def sectionsSubmodule (U : (Opens (PrimeSpectrum.Top R))) :
   add_mem' {a b} ha hb x := by
     obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
     obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
-    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, sb • ra + sa • rb, sa * sb, fun x => ?_⟩
+    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, sb • ra + sa • rb, sa * sb, fun x ↦ ?_⟩
     obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
     obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
     exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
       congr($hsa + $hsb).trans (LocalizedModule.mk_add_mk ..)⟩
-  zero_mem' x := ⟨U, x.2, 𝟙 _, 0, 1, fun y => by simp [Ideal.IsPrime.one_notMem]⟩
+  zero_mem' x := ⟨U, x.2, 𝟙 _, 0, 1, fun y ↦ by simp [Ideal.IsPrime.one_notMem]⟩
   smul_mem' r {a} ha x := by
     obtain ⟨V, m, i, ra, sa, wa⟩ := ha x
-    exact ⟨V, m, i, r • ra, sa, fun x => ⟨(wa x).1,
+    exact ⟨V, m, i, r • ra, sa, fun x ↦ ⟨(wa x).1,
       congr(r • $((wa x).2)).trans (LocalizedModule.smul'_mk ..)⟩⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (A) in
-/--
-Definition of `sectionsSubalgebra` / `sectionsSubalgebra` 的定义
+/-- The functions satisfying `isLocallyFraction` form a subalgebra. -/
+/-
+**AlgebraicGeometry.StructureSheaf.sectionsSubalgebra** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.StructureSheaf`。
+形式化陈述：sectionsSubalgebra (U : (Opens (PrimeSpectrum.Top R))) : Subalgebra R (Π x
+ : U, Localizations A x.1) where __
+参数：U : (Opens (PrimeSpectrum.Top R))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectionsSubalgebra
-  signature: (U : (Opens (PrimeSpectrum.Top R)))
-  body: sectionsSubmodule A U
-  mul_mem' {a b} ha hb x := by
-    obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
-    obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
-    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ra * rb, sa * sb, fun x => ?_⟩
-    obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
-    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
-      congr($hsa * $hsb).trans (LocalizedModule.mk_mul_mk ..)⟩
-  algebraMap_mem' r x :=
-    ⟨U, x.2, 𝟙 _, algebraMap R A r, 1, fun y => ⟨by simp [Ideal.IsPrime.one_notMem], rfl⟩⟩
-
-中文:
-定义 sectionsSubalgebra
-  签名: (U : (Opens (素谱.顶元素 R)))
-  定义体: sectionsSubmodule A U
-  mul_mem' {a b} ha hb x := by
-    obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
-    obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
-    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ra * rb, sa * sb, fun x => ?_⟩
-    obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
-    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
-      congr($hsa * $hsb).trans (LocalizedModule.mk_mul_mk ..)⟩
-  algebraMap_mem' r x :=
-    ⟨U, x.2, 𝟙 _, algebraMap R A r, 1, fun y => ⟨by simp [Ideal.IsPrime.one_notMem], rfl⟩⟩
-
-Depends on / 依赖: sectionsSubmodule
+--- 原说明 ---
+The functions satisfying `isLocallyFraction` form a subalgebra.
 -/
 def sectionsSubalgebra (U : (Opens (PrimeSpectrum.Top R))) :
     Subalgebra R (Π x : U, Localizations A x.1) where
@@ -263,44 +238,28 @@ def sectionsSubalgebra (U : (Opens (PrimeSpectrum.Top R))) :
   mul_mem' {a b} ha hb x := by
     obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
     obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
-    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ra * rb, sa * sb, fun x => ?_⟩
+    refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ra * rb, sa * sb, fun x ↦ ?_⟩
     obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
     obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
     exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
       congr($hsa * $hsb).trans (LocalizedModule.mk_mul_mk ..)⟩
   algebraMap_mem' r x :=
-    ⟨U, x.2, 𝟙 _, algebraMap R A r, 1, fun y => ⟨by simp [Ideal.IsPrime.one_notMem], rfl⟩⟩
+    ⟨U, x.2, 𝟙 _, algebraMap R A r, 1, fun y ↦ ⟨by simp [Ideal.IsPrime.one_notMem], rfl⟩⟩
 
 set_option backward.isDefEq.respectTransparency false in
 variable (M) in
-/--
-Definition of `sectionsSubalgebraSubmodule` / `sectionsSubalgebraSubmodule` 的定义
+/-- The functions satisfying `isLocallyFraction` form a submodule. -/
+/-
+**AlgebraicGeometry.StructureSheaf.sectionsSubalgebraSubmodule** 是 Mathlib 中的一个定
+义，位于命名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：sectionsSubalgebraSubmodule (U : (Opens (PrimeSpectrum.Top R))) : Submodul
+e (sectionsSubalgebra R U) (Π x : U, Localizations M x.1) where __
+参数：U : (Opens (PrimeSpectrum.Top R))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectionsSubalgebraSubmodule
-  signature: (U : (Opens (PrimeSpectrum.Top R)))
-  body: sectionsSubmodule M U
-  smul_mem' r {a} ha x := by
-    obtain ⟨V, hxV, hVU, rx, rs, hr⟩ := r.2 x
-    obtain ⟨W, hxW, hWU, ax, as, ha⟩ := ha x
-    refine ⟨V ⊓ W, ⟨hxV, hxW⟩, homOfLE (inf_le_left.trans hVU.le), rx • ax, as * rs, fun y => ?_⟩
-    obtain ⟨hrsy, hry⟩ := hr ⟨y.1, y.2.1⟩
-    obtain ⟨hasy, hay⟩ := ha ⟨y.1, y.2.2⟩
-    exact ⟨y.1.asIdeal.primeCompl.mul_mem hasy hrsy, congr($hry • $hay)⟩
-
-中文:
-定义 sectionsSubalgebraSubmodule
-  签名: (U : (Opens (素谱.顶元素 R)))
-  定义体: sectionsSubmodule M U
-  smul_mem' r {a} ha x := by
-    obtain ⟨V, hxV, hVU, rx, rs, hr⟩ := r.2 x
-    obtain ⟨W, hxW, hWU, ax, as, ha⟩ := ha x
-    refine ⟨V ⊓ W, ⟨hxV, hxW⟩, homOfLE (inf_le_left.trans hVU.le), rx • ax, as * rs, fun y => ?_⟩
-    obtain ⟨hrsy, hry⟩ := hr ⟨y.1, y.2.1⟩
-    obtain ⟨hasy, hay⟩ := ha ⟨y.1, y.2.2⟩
-    exact ⟨y.1.asIdeal.primeCompl.mul_mem hasy hrsy, congr($hry • $hay)⟩
-
-Depends on / 依赖: sectionsSubmodule
+--- 原说明 ---
+The functions satisfying `isLocallyFraction` form a submodule.
 -/
 def sectionsSubalgebraSubmodule (U : (Opens (PrimeSpectrum.Top R))) :
     Submodule (sectionsSubalgebra R U) (Π x : U, Localizations M x.1) where
@@ -308,7 +267,7 @@ def sectionsSubalgebraSubmodule (U : (Opens (PrimeSpectrum.Top R))) :
   smul_mem' r {a} ha x := by
     obtain ⟨V, hxV, hVU, rx, rs, hr⟩ := r.2 x
     obtain ⟨W, hxW, hWU, ax, as, ha⟩ := ha x
-    refine ⟨V ⊓ W, ⟨hxV, hxW⟩, homOfLE (inf_le_left.trans hVU.le), rx • ax, as * rs, fun y => ?_⟩
+    refine ⟨V ⊓ W, ⟨hxV, hxW⟩, homOfLE (inf_le_left.trans hVU.le), rx • ax, as * rs, fun y ↦ ?_⟩
     obtain ⟨hrsy, hry⟩ := hr ⟨y.1, y.2.1⟩
     obtain ⟨hasy, hay⟩ := ha ⟨y.1, y.2.2⟩
     exact ⟨y.1.asIdeal.primeCompl.mul_mem hasy hrsy, congr($hry • $hay)⟩
@@ -318,36 +277,47 @@ end StructureSheaf
 open StructureSheaf
 
 variable (R M) in
-/--
-Definition of `structureSheafInType` / `structureSheafInType` 的定义
+/-- The structure sheaf (valued in `Type`, not yet `CommRingCat`) is the subsheaf consisting of
+functions satisfying `isLocallyFraction`. -/
+/-
+**AlgebraicGeometry.structureSheafInType** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeo
+metry`。
+形式化陈述：structureSheafInType : Sheaf (Type u) (PrimeSpectrum.Top R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structureSheafInType
-  signature: : Sheaf (Type u) (PrimeSpectrum.Top R)
-  body: subsheafToTypes (isLocallyFraction R M)
-
-中文:
-定义 structureSheafInType
-  签名: : 层 (类型u) (素谱.顶元素 R)
-  定义体: subsheafToTypes (isLocallyFraction R M)
-
-Depends on / 依赖: isLocallyFraction, subsheafToTypes
+--- 原说明 ---
+The structure sheaf (valued in `Type`, not yet `CommRingCat`) is the subsheaf co
+nsisting of
+functions satisfying `isLocallyFraction`.
 -/
 def structureSheafInType : Sheaf (Type u) (PrimeSpectrum.Top R) :=
   subsheafToTypes (isLocallyFraction R M)
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : (Opens (PrimeSpectrum.Top R))ᵒᵖ) :
     AddCommGroup ((structureSheafInType R M).obj.obj U) :=
   (sectionsSubmodule M U.unop).toAddSubgroup.toAddCommGroup
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : (Opens (PrimeSpectrum.Top R))ᵒᵖ) :
     Module R ((structureSheafInType R M).obj.obj U) :=
   (sectionsSubmodule M U.unop).module
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : (Opens (PrimeSpectrum.Top R))ᵒᵖ) :
     CommRing ((structureSheafInType R A).obj.obj U) :=
   (sectionsSubalgebra A U.unop).toCommRing
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : (Opens (PrimeSpectrum.Top R))ᵒᵖ) :
     Algebra R ((structureSheafInType R A).obj.obj U) :=
   (sectionsSubalgebra A U.unop).algebra
@@ -356,60 +326,46 @@ local notation "Γ(" M ", " U ")" =>
   (Functor.obj (ObjectProperty.FullSubcategory.obj (structureSheafInType _ M))) (Opposite.op U)
 
 @[simp]
-/--
-lemma `structureSheafInType.add_apply` / 引理 `structureSheafInType.add_apply`
-
-English:
-lemma structureSheafInType.add_apply
-  given: {U : Opens (PrimeSpectrum.Top R)} (s t : Γ(M, U)) (x : U)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 structureSheafInType.add_apply
-  条件: {U : Opens (素谱.顶元素 R)} (s t : Γ(M, U)) (x : U)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.structureSheafInType.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicGeometry.structureSheafInType`。
+形式化陈述：∀ {R M : Type u} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _
+root_.Module R M]   {U : TopologicalSpace.Opens ↑(AlgebraicGeometry.PrimeSpectru
+m.Top R)}   (s t : (AlgebraicGeometry.structureSheafInType R M).obj.obj (Opposit
+e.op U)) (x : ↥U), ↑(s + t) x = ↑s x + ↑t x
+参数：AlgebraicGeometry.PrimeSpectrum.Top R；s t : (AlgebraicGeometry.structureSheaf
+InType R M).obj.obj (Opposite.op U)；x : ↥U；s + t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma structureSheafInType.add_apply {U : Opens (PrimeSpectrum.Top R)} (s t : Γ(M, U)) (x : U) :
   (s + t).1 x = s.1 x + t.1 x := rfl
 
 @[simp]
-/--
-lemma `structureSheafInType.mul_apply` / 引理 `structureSheafInType.mul_apply`
-
-English:
-lemma structureSheafInType.mul_apply
-  given: {U : Opens (PrimeSpectrum.Top R)} (s t : Γ(A, U)) (x : U)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 structureSheafInType.mul_apply
-  条件: {U : Opens (素谱.顶元素 R)} (s t : Γ(A, U)) (x : U)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.structureSheafInType.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicGeometry.structureSheafInType`。
+形式化陈述：∀ {R A : Type u} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algeb
+ra R A]   {U : TopologicalSpace.Opens ↑(AlgebraicGeometry.PrimeSpectrum.Top R)} 
+  (s t : (AlgebraicGeometry.structureSheafInType R A).obj.obj (Opposite.op U)) (
+x : ↥U), ↑(s * t) x = ↑s x * ↑t x
+参数：AlgebraicGeometry.PrimeSpectrum.Top R；s t : (AlgebraicGeometry.structureSheaf
+InType R A).obj.obj (Opposite.op U)；x : ↥U；s * t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma structureSheafInType.mul_apply {U : Opens (PrimeSpectrum.Top R)} (s t : Γ(A, U)) (x : U) :
   (s * t).1 x = s.1 x * t.1 x := rfl
 
 @[simp]
-/--
-lemma `structureSheafInType.smul_apply` / 引理 `structureSheafInType.smul_apply`
-
-English:
-lemma structureSheafInType.smul_apply
-  statement: {U : Opens (PrimeSpectrum.Top R)}
-  proof: rfl
-
-中文:
-引理 structureSheafInType.smul_apply
-  结论: {U : Opens (素谱.顶元素 R)}
-  证明: rfl
+/-
+**AlgebraicGeometry.structureSheafInType.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.structureSheafInType`。
+形式化陈述：∀ {R M : Type u} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _
+root_.Module R M]   {U : TopologicalSpace.Opens ↑(AlgebraicGeometry.PrimeSpectru
+m.Top R)} (r : R)   (s : (AlgebraicGeometry.structureSheafInType R M).obj.obj (O
+pposite.op U)) (x : ↥U), ↑(r • s) x = r • ↑s x
+参数：AlgebraicGeometry.PrimeSpectrum.Top R；r : R；s : (AlgebraicGeometry.structureS
+heafInType R M).obj.obj (Opposite.op U)；x : ↥U；r • s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma structureSheafInType.smul_apply {U : Opens (PrimeSpectrum.Top R)}
     (r : R) (s : Γ(M, U)) (x : U) :
@@ -417,30 +373,24 @@ lemma structureSheafInType.smul_apply {U : Opens (PrimeSpectrum.Top R)}
 
 variable (R M) in
 /-- The structure presheaf, valued in `ModuleCat`, constructed by dressing up the `Type`-valued
+/-
+**AlgebraicGeometry.presheaf.** 是 Mathlib 中的一个结构，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure presheaf. -/
 @[simps obj_carrier]
-/--
-Definition of `structurePresheafInModuleCat` / `structurePresheafInModuleCat` 的定义
+/-
+**AlgebraicGeometry.structurePresheafInModuleCat** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry`。
+形式化陈述：structurePresheafInModuleCat : Presheaf (ModuleCat R) (PrimeSpectrum.Top R
+) where obj U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structurePresheafInModuleCat
-  signature: : Presheaf (ModuleCat R) (PrimeSpectrum.Top R) where
-  body: ModuleCat.of R ((structureSheafInType R M).1.obj U)
-  map i := ModuleCat.ofHom
-    { toFun := (structureSheafInType R M).1.map i
-      map_add' _ _ := rfl
-      map_smul' _ _ := rfl }
-
-中文:
-定义 structurePresheafInModuleCat
-  签名: : 预层 (模范畴 R) (素谱.顶元素 R) where
-  定义体: ModuleCat.of R ((structureSheafInType R M).1.obj U)
-  map i := ModuleCat.ofHom
-    { toFun := (structureSheafInType R M).1.map i
-      map_add' _ _ := rfl
-      map_smul' _ _ := rfl }
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, structureSheafInType
+--- 原说明 ---
+The structure presheaf, valued in `ModuleCat`, constructed by dressing up the `T
+ype`-valued
+structure presheaf.
 -/
 def structurePresheafInModuleCat : Presheaf (ModuleCat R) (PrimeSpectrum.Top R) where
   obj U := ModuleCat.of R ((structureSheafInType R M).1.obj U)
@@ -451,34 +401,24 @@ def structurePresheafInModuleCat : Presheaf (ModuleCat R) (PrimeSpectrum.Top R) 
 
 variable (R) in
 /-- The structure presheaf, valued in `CommRingCat`, constructed by dressing up the `Type`-valued
+/-
+**AlgebraicGeometry.presheaf.** 是 Mathlib 中的一个结构，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure presheaf. -/
 @[simps obj_carrier]
-/--
-Definition of `structurePresheafInCommRingCat` / `structurePresheafInCommRingCat` 的定义
+/-
+**AlgebraicGeometry.structurePresheafInCommRingCat** 是 Mathlib 中的一个定义，位于命名空间 `Al
+gebraicGeometry`。
+形式化陈述：structurePresheafInCommRingCat : Presheaf CommRingCat (PrimeSpectrum.Top R
+) where obj U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structurePresheafInCommRingCat
-  signature: : Presheaf CommRingCat (PrimeSpectrum.Top R) where
-  body: .of ((structureSheafInType R R).1.obj U)
-  map i := CommRingCat.ofHom
-    { toFun := (structureSheafInType R R).1.map i
-      map_add' _ _ := rfl
-      map_mul' _ _ := rfl
-      map_one' := rfl
-      map_zero' := rfl }
-
-中文:
-定义 structurePresheafInCommRingCat
-  签名: : 预层 交换环范畴 (素谱.顶元素 R) where
-  定义体: .of ((structureSheafInType R R).1.obj U)
-  map i := CommRingCat.ofHom
-    { toFun := (structureSheafInType R R).1.map i
-      map_add' _ _ := rfl
-      map_mul' _ _ := rfl
-      map_one' := rfl
-      map_zero' := rfl }
-
-Depends on / 依赖: structureSheafInType
+--- 原说明 ---
+The structure presheaf, valued in `CommRingCat`, constructed by dressing up the 
+`Type`-valued
+structure presheaf.
 -/
 def structurePresheafInCommRingCat : Presheaf CommRingCat (PrimeSpectrum.Top R) where
   obj U := .of ((structureSheafInType R R).1.obj U)
@@ -488,64 +428,60 @@ def structurePresheafInCommRingCat : Presheaf CommRingCat (PrimeSpectrum.Top R) 
       map_mul' _ _ := rfl
       map_one' := rfl
       map_zero' := rfl }
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : (Opens (PrimeSpectrum.Top R))ᵒᵖ) :
     Module ((structureSheafInType R R).obj.obj U) ((structureSheafInType R M).obj.obj U) :=
   inferInstanceAs (Module (sectionsSubalgebra R _) (sectionsSubalgebraSubmodule M _))
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (U : (Opens (PrimeSpectrum.Top R))ᵒᵖ) :
     IsScalarTower R ((structureSheafInType R R).obj.obj U) ((structureSheafInType R M).obj.obj U) :=
-.of_algebraMap_smul fun r m => Subtype.ext funext fun x =>
+  .of_algebraMap_smul fun r m ↦ Subtype.ext <| funext fun x ↦
     IsScalarTower.algebraMap_smul (Localizations R x.1) r (m.1 x)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable (R M) in
-/--
-Definition of `moduleStructurePresheaf` / `moduleStructurePresheaf` 的定义
+/-- The structure sheaf of a module as a presheaf of modules on `Spec R`.
+We will later package this into a `Scheme.Modules` in `Tilde.lean`. -/
+/-
+**AlgebraicGeometry.moduleStructurePresheaf** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry`。
+形式化陈述：moduleStructurePresheaf : PresheafOfModules (structurePresheafInCommRingCa
+t R ⋙ forget₂ _ _)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition moduleStructurePresheaf
-  signature: : PresheafOfModules (structurePresheafInCommRingCat R ⋙ forget₂ _ _)
-  body: letI (X : (Opens ↑(PrimeSpectrum.Top R))ᵒᵖ) :
-    Module ↑((structurePresheafInCommRingCat R ⋙ forget₂ CommRingCat RingCat).obj X)
-      ↑((structurePresheafInModuleCat R M ⋙ forget₂ (ModuleCat R) Ab).obj X) := by
-    dsimp; infer_instance
-  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ _) fun X Y f r m => rfl
-
-中文:
-定义 moduleStructurePresheaf
-  签名: : 预模层 (structurePresheafInCommRingCat R ⋙ forget₂ _ _)
-  定义体: letI (X : (Opens ↑(PrimeSpectrum.Top R))ᵒᵖ) :
-    Module ↑((structurePresheafInCommRingCat R ⋙ forget₂ CommRingCat RingCat).obj X)
-      ↑((structurePresheafInModuleCat R M ⋙ forget₂ (ModuleCat R) Ab).obj X) := by
-    dsimp; infer_instance
-  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ _) fun X Y f r m => rfl
-
-Depends on / 依赖: CommRingCat, Module, ModuleCat, PrimeSpectrum, PrimeSpectrum.Top, RingCat, infer_instance, ofPresheaf, structurePresheafInCommRingCat, structurePresheafInModuleCat
+--- 原说明 ---
+The structure sheaf of a module as a presheaf of modules on `Spec R`.
+We will later package this into a `Scheme.Modules` in `Tilde.lean`.
 -/
 def moduleStructurePresheaf : PresheafOfModules (structurePresheafInCommRingCat R ⋙ forget₂ _ _) :=
   letI (X : (Opens ↑(PrimeSpectrum.Top R))ᵒᵖ) :
     Module ↑((structurePresheafInCommRingCat R ⋙ forget₂ CommRingCat RingCat).obj X)
       ↑((structurePresheafInModuleCat R M ⋙ forget₂ (ModuleCat R) Ab).obj X) := by
     dsimp; infer_instance
-  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ _) fun X Y f r m => rfl
+  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ _) fun X Y f r m ↦ rfl
 
 variable (R) in
-/--
-Definition of `structurePresheafCompForget` / `structurePresheafCompForget` 的定义
+/-- Some glue, verifying that the structure presheaf valued in `CommRingCat` agrees
+with the `Type`-valued structure presheaf. -/
+/-
+**AlgebraicGeometry.structurePresheafCompForget** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry`。
+形式化陈述：structurePresheafCompForget : structurePresheafInCommRingCat R ⋙ forget Co
+mmRingCat ≅ (structureSheafInType R R).1
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structurePresheafCompForget
-  signature: :
-  body: NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 structurePresheafCompForget
-  签名: :
-  定义体: NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Some glue, verifying that the structure presheaf valued in `CommRingCat` agrees
+with the `Type`-valued structure presheaf.
 -/
 def structurePresheafCompForget :
     structurePresheafInCommRingCat R ⋙ forget CommRingCat ≅ (structureSheafInType R R).1 :=
@@ -559,110 +495,138 @@ open TopCat.Presheaf
 namespace StructureSheaf
 
 @[simp]
-/--
-theorem `res_apply` / 定理 `res_apply`
-
-English:
-theorem res_apply
-  statement: (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U)
-  proof: rfl
-
-中文:
-定理 res_apply
-  结论: (U V : Opens (素谱.顶元素 R)) (i : V ⟶ U)
-  证明: rfl
+/-
+**AlgebraicGeometry.StructureSheaf.res_apply** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.StructureSheaf`。
+形式化陈述：res_apply (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U) (s : Γ(M, U)) (x
+ : V) : ((structureSheafInType R M).1.map i.op s).1 x = s.1 (i x)
+参数：U V : Opens (PrimeSpectrum.Top R)；i : V ⟶ U；s : Γ(M, U)；x : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem res_apply (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U)
     (s : Γ(M, U)) (x : V) : ((structureSheafInType R M).1.map i.op s).1 x = s.1 (i x) :=
   rfl
 
-/--
-Definition of `const` / `const` 的定义
+/-- The section of `structureSheaf R` on an open `U` sending each `x ∈ U` to the element
+`f/g` in the localization of `R` at `x`. -/
+/-
+**AlgebraicGeometry.StructureSheaf.const** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeo
+metry.StructureSheaf`。
+形式化陈述：const (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R)) (hu : U <= basicOp
+en g) : Γ(M, U)
+参数：f : M；g : R；U : Opens (PrimeSpectrum.Top R)；hu : U <= basicOpen g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
-  body: ⟨fun x => .mk f ⟨g, hu x.2⟩, fun x => ⟨U, x.2, 𝟙 _, f, g, fun y => ⟨hu y.2, rfl⟩⟩⟩
-
-中文:
-定义 const
-  签名: (f : M) (g : R) (U : Opens (素谱.顶元素 R))
-  定义体: ⟨fun x => .mk f ⟨g, hu x.2⟩, fun x => ⟨U, x.2, 𝟙 _, f, g, fun y => ⟨hu y.2, rfl⟩⟩⟩
+--- 原说明 ---
+The section of `structureSheaf R` on an open `U` sending each `x ∈ U` to the ele
+ment
+`f/g` in the localization of `R` at `x`.
 -/
 def const (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
-    (hu : U <= basicOpen g) :
+    (hu : U ≤ basicOpen g) :
     Γ(M, U) :=
-  ⟨fun x => .mk f ⟨g, hu x.2⟩, fun x => ⟨U, x.2, 𝟙 _, f, g, fun y => ⟨hu y.2, rfl⟩⟩⟩
+  ⟨fun x => .mk f ⟨g, hu x.2⟩, fun x ↦ ⟨U, x.2, 𝟙 _, f, g, fun y ↦ ⟨hu y.2, rfl⟩⟩⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `const_apply` / 定理 `const_apply`
-
-English:
-theorem const_apply
-  statement: (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
-  proof: rfl
-
-中文:
-定理 const_apply
-  结论: (f : M) (g : R) (U : Opens (素谱.顶元素 R))
-  证明: rfl
+/-
+**AlgebraicGeometry.StructureSheaf.const_apply** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.StructureSheaf`。
+形式化陈述：const_apply (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R)) (hu : forall
+ x in U, g in (x : PrimeSpectrum.Top R).asIdeal.primeCompl) (x : U) : (const f g
+ U hu).1 x = .mk f ⟨g, hu x x.2⟩
+参数：f : M；g : R；U : Opens (PrimeSpectrum.Top R)；hu : forall x in U, g in (x : Pri
+meSpectrum.Top R).asIdeal.primeCompl；x : U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
 -/
 theorem const_apply (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
-    (hu : forall x in U, g in (x : PrimeSpectrum.Top R).asIdeal.primeCompl) (x : U) :
+    (hu : ∀ x ∈ U, g ∈ (x : PrimeSpectrum.Top R).asIdeal.primeCompl) (x : U) :
     (const f g U hu).1 x = .mk f ⟨g, hu x x.2⟩ :=
   rfl
-
-/--
-theorem `exists_const` / 定理 `exists_const`
-
-English:
-theorem exists_const
-  statement: (U) (s : Γ(M, U)) (x : PrimeSpectrum.Top R)
-  proof: by
-  obtain ⟨V, hxV, iVU, f, g, hfg⟩ := s.2 ⟨x, hx⟩
-  obtain ⟨_, ⟨_, ⟨g', rfl⟩, rfl⟩, hxg', hg'U⟩ :=
-    PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxV V.2
-refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ <;>
-    simp only [PrimeSpectrum.basicOpen_mul]
-  · exact ⟨hxg', (hfg ⟨x, hxV⟩).1⟩
-  · exact inf_le_left.trans (hg'U.trans iVU.le)
-  · rw [PrimeSpectrum.basicOpen_mul] at hy
-    obtain ⟨hgy, H⟩ := hfg ⟨y, hg'U hy.1⟩
-    refine (LocalizedModule.mk_eq.mpr ⟨1, ?_⟩).trans H.symm
-    simp [Submonoid.smul_def, ← smul_assoc]; ring_nf
-
-@[simp]
-
-中文:
-定理 存在_const
-  结论: (U) (s : Γ(M, U)) (x : 素谱.顶元素 R)
-  证明: by
-  obtain ⟨V, hxV, iVU, f, g, hfg⟩ := s.2 ⟨x, hx⟩
-  obtain ⟨_, ⟨_, ⟨g', rfl⟩, rfl⟩, hxg', hg'U⟩ :=
-    PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxV V.2
-refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ <;>
-    simp only [PrimeSpectrum.basicOpen_mul]
-  · exact ⟨hxg', (hfg ⟨x, hxV⟩).1⟩
-  · exact inf_le_left.trans (hg'U.trans iVU.le)
-  · rw [PrimeSpectrum.basicOpen_mul] at hy
-    obtain ⟨hgy, H⟩ := hfg ⟨y, hg'U hy.1⟩
-    refine (LocalizedModule.mk_eq.mpr ⟨1, ?_⟩).trans H.symm
-    simp [Submonoid.smul_def, ← smul_assoc]; ring_nf
-
-@[simp]
-
-Depends on / 依赖: H.symm, LocalizedModule, LocalizedModule.mk_eq.mpr, PrimeSpectrum, PrimeSpectrum.basicOpen_mul, PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open, Subtype, Subtype.ext, U.trans, basicOpen_mul, exists_subset_of_mem_open, iVU.le, inf_le_left, inf_le_left.trans, isBasis_basic_opens, mk_eq
+/-
+**AlgebraicGeometry.StructureSheaf.exists_const** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.StructureSheaf`。
+形式化陈述：exists_const (U) (s : Γ(M, U)) (x : PrimeSpectrum.Top R) (hx : x in U) : e
+xists (g : R) (_ : x in basicOpen g) (i : basicOpen g <= U) (f : M), const f g _
+ le_rfl = (structureSheafInType R M).1.map i.hom.op s
+参数：U；s : Γ(M, U)；x : PrimeSpectrum.Top R；hx : x in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.exists_subset_of_mem_open`：∀ {α : Ty
+pe u} [t : TopologicalSpace α] {b : Set (Set α)},   TopologicalSpace.IsTopologic
+alBasis b → ∀ {a : α} {u : Set α}, a ∈ u → IsOpen u…
+· 使用定理 `PrimeSpectrum.isBasis_basic_opens`：isBasis_basic_opens : TopologicalSpac
+e.Opens.IsBasis (Set.range (@basicOpen R _))
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PrimeSpectrum.basicOpen_mul`：basicOpen_mul (f g : R) : basicOpen (f * g)
+ = basicOpen f ⊓ basicOpen g
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LocalizedModule.mk_eq`：mk_eq {m m' : M} {s s' : S} : mk m s = mk m' s' ↔
+ exists u : S, u • s' • m = u • s • m'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+（共 38 条，此处仅展示前 30 条）
 -/
 theorem exists_const (U) (s : Γ(M, U)) (x : PrimeSpectrum.Top R)
-    (hx : x in U) :
-    exists (g : R) (_ : x in basicOpen g) (i : basicOpen g <= U) (f : M),
+    (hx : x ∈ U) :
+    ∃ (g : R) (_ : x ∈ basicOpen g) (i : basicOpen g ≤ U) (f : M),
       const f g _ le_rfl = (structureSheafInType R M).1.map i.hom.op s := by
   obtain ⟨V, hxV, iVU, f, g, hfg⟩ := s.2 ⟨x, hx⟩
   obtain ⟨_, ⟨_, ⟨g', rfl⟩, rfl⟩, hxg', hg'U⟩ :=
     PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxV V.2
-refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ <;>
+  refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext <| funext fun ⟨y, hy⟩ ↦ ?_⟩ <;>
     simp only [PrimeSpectrum.basicOpen_mul]
   · exact ⟨hxg', (hfg ⟨x, hxV⟩).1⟩
   · exact inf_le_left.trans (hg'U.trans iVU.le)
@@ -672,18 +636,14 @@ refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ 
     simp [Submonoid.smul_def, ← smul_assoc]; ring_nf
 
 @[simp]
-/--
-theorem `res_const` / 定理 `res_const`
-
-English:
-theorem res_const
-  given: (f : M) (g : R) (U hu V hv i)
-  proof: rfl
-
-中文:
-定理 res_const
-  条件: (f : M) (g : R) (U hu V hv i)
-  证明: rfl
+/-
+**AlgebraicGeometry.StructureSheaf.res_const** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.StructureSheaf`。
+形式化陈述：res_const (f : M) (g : R) (U hu V hv i) : (structureSheafInType R M).1.map
+ i (const f g U hu) = const f g V hv
+参数：f : M；g : R；U hu V hv i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem res_const (f : M) (g : R) (U hu V hv i) :
     (structureSheafInType R M).1.map i (const f g U hu) = const f g V hv :=
@@ -691,327 +651,370 @@ theorem res_const (f : M) (g : R) (U hu V hv i) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `const_zero` / 定理 `const_zero`
-
-English:
-theorem const_zero
-  given: (f : R) (U hu)
-  statement: const (0 : M) f U hu = 0
-  proof: Subtype.ext funext fun x => by simp; rfl
-
-@[simp]
-
-中文:
-定理 const_zero
-  条件: (f : R) (U hu)
-  结论: const (0 : M) f U hu = 0
-  证明: Subtype.ext funext fun x => by simp; rfl
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**AlgebraicGeometry.StructureSheaf.const_zero** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.StructureSheaf`。
+形式化陈述：const_zero (f : R) (U hu) : const (0 : M) f U hu = 0
+参数：f : R；U hu。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OreLocalization.zero_oreDiv`：zero_oreDiv (s : S) : (0 : X) /ₒ s = 0
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem const_zero (f : R) (U hu) : const (0 : M) f U hu = 0 :=
-Subtype.ext funext fun x => by simp; rfl
+  Subtype.ext <| funext fun x ↦ by simp; rfl
 
 @[simp]
-/--
-theorem `const_algebraMap` / 定理 `const_algebraMap`
-
-English:
-theorem const_algebraMap
-  given: (f : R) (U hu)
-  statement: const (algebraMap R A f) f U hu = 1
-  proof: Subtype.ext funext fun _ => (LocalizedModule.mk_eq.mpr
-      ⟨1, by simp [Algebra.smul_def, Submonoid.smul_def]⟩).trans
-    OreLocalization.one_def.symm
-
-@[simp]
-
-中文:
-定理 const_algebraMap
-  条件: (f : R) (U hu)
-  结论: const (algebraMap R A f) f U hu = 1
-  证明: Subtype.ext funext fun _ => (LocalizedModule.mk_eq.mpr
-      ⟨1, by simp [Algebra.smul_def, Submonoid.smul_def]⟩).trans
-    OreLocalization.one_def.symm
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, LocalizedModule, LocalizedModule.mk_eq.mpr, OreLocalization, OreLocalization.one_def.symm, Submonoid, Submonoid.smul_def, Subtype, Subtype.ext, mk_eq, one_def, smul_def
+/-
+**AlgebraicGeometry.StructureSheaf.const_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.StructureSheaf`。
+形式化陈述：const_algebraMap (f : R) (U hu) : const (algebraMap R A f) f U hu = 1
+参数：f : R；U hu。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LocalizedModule.mk_eq`：mk_eq {m m' : M} {s s' : S} : mk m s = mk m' s' ↔
+ exists u : S, u • s' • m = u • s • m'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OreLocalization.one_def`：∀ {R : Type u_1} [inst : Monoid R] {S : Submono
+id R} [inst_1 : OreLocalization.OreSet S] {X : Type u_2}   [inst_2 : MulAction R
+ X] [inst_3 :…
 -/
 theorem const_algebraMap (f : R) (U hu) : const (algebraMap R A f) f U hu = 1 :=
-Subtype.ext funext fun _ => (LocalizedModule.mk_eq.mpr
+  Subtype.ext <| funext fun _ ↦ (LocalizedModule.mk_eq.mpr
       ⟨1, by simp [Algebra.smul_def, Submonoid.smul_def]⟩).trans
     OreLocalization.one_def.symm
 
 @[simp]
-/--
-theorem `const_self` / 定理 `const_self`
-
-English:
-theorem const_self
-  given: (f : R) (U hu)
-  statement: const f f U hu = 1
-  proof: const_algebraMap ..
-
-中文:
-定理 const_self
-  条件: (f : R) (U hu)
-  结论: const f f U hu = 1
-  证明: const_algebraMap ..
-
-Depends on / 依赖: const_algebraMap
+/-
+**AlgebraicGeometry.StructureSheaf.const_self** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.StructureSheaf`。
+形式化陈述：const_self (f : R) (U hu) : const f f U hu = 1
+参数：f : R；U hu。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_algebraMap`：const_algebraMap (f :
+ R) (U hu) : const (algebraMap R A f) f U hu = 1
 -/
 theorem const_self (f : R) (U hu) : const f f U hu = 1 :=
   const_algebraMap ..
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `const_one` / 定理 `const_one`
-
-English:
-theorem const_one
-  given: (U)
-  statement: const (1 : A) (1 : R) U (by simp) = 1
-  proof: by
-  simpa using const_algebraMap 1 (A := A) U
-
-中文:
-定理 const_one
-  条件: (U)
-  结论: const (1 : A) (1 : R) U (by simp) = 1
-  证明: by
-  simpa using const_algebraMap 1 (A := A) U
-
-Depends on / 依赖: const_algebraMap
+/-
+**AlgebraicGeometry.StructureSheaf.const_one** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.StructureSheaf`。
+形式化陈述：const_one (U) : const (1 : A) (1 : R) U (by simp) = 1
+参数：U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PrimeSpectrum.basicOpen_one`：basicOpen_one : basicOpen (1 : R) = ⊤
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const.congr_simp`：∀ {R M : Type u} [ins
+t : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] (f f_1 : 
+M),   f = f_1 →     ∀ (g g_1 : R) (e_g …
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_algebraMap`：const_algebraMap (f :
+ R) (U hu) : const (algebraMap R A f) f U hu = 1
 -/
 theorem const_one (U) : const (1 : A) (1 : R) U (by simp) = 1 := by
   simpa using const_algebraMap 1 (A := A) U
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `const_add` / 定理 `const_add`
-
-English:
-theorem const_add
-  given: (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂)
-  proof: Subtype.ext funext fun _ => LocalizedModule.mk_add_mk
-
-中文:
-定理 const_add
-  条件: (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂)
-  证明: Subtype.ext funext fun _ => LocalizedModule.mk_add_mk
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk_add_mk, Subtype, Subtype.ext, mk_add_mk
+/-
+**AlgebraicGeometry.StructureSheaf.const_add** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.StructureSheaf`。
+形式化陈述：const_add (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂) : const f₁ g₁ U hu₁ + const 
+f₂ g₂ U hu₂ = const (g₂ • f₁ + g₁ • f₂) (g₁ * g₂) U (by simp [*, PrimeSpectrum.b
+asicOpen_mul])
+参数：f₁ f₂ : M；g₁ g₂ : R；U hu₁ hu₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LocalizedModule.mk_add_mk`：mk_add_mk {m1 m2 : M} {s1 s2 : S} : mk m1 s1 
++ mk m2 s2 = mk (s2 • m1 + s1 • m2) (s1 * s2)
 -/
 theorem const_add (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂) :
     const f₁ g₁ U hu₁ + const f₂ g₂ U hu₂ =
       const (g₂ • f₁ + g₁ • f₂) (g₁ * g₂) U (by simp [*, PrimeSpectrum.basicOpen_mul]) :=
-Subtype.ext funext fun _ => LocalizedModule.mk_add_mk
-
-/--
-theorem `smul_const` / 定理 `smul_const`
-
-English:
-theorem smul_const
-  given: (f : M) (r g : R) (U hu)
-  proof: Subtype.ext funext fun _ => LocalizedModule.smul'_mk _ _ _
-
-中文:
-定理 smul_const
-  条件: (f : M) (r g : R) (U hu)
-  证明: Subtype.ext funext fun _ => LocalizedModule.smul'_mk _ _ _
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.smul, Subtype, Subtype.ext
+  Subtype.ext <| funext fun _ ↦ LocalizedModule.mk_add_mk
+/-
+**AlgebraicGeometry.StructureSheaf.smul_const** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.StructureSheaf`。
+形式化陈述：smul_const (f : M) (r g : R) (U hu) : r • const f g U hu = const (r • f) g
+ U hu
+参数：f : M；r g : R；U hu。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LocalizedModule.smul'_mk`：∀ {R : Type u} [inst : CommSemiring R] {S : Su
+bmonoid R} {M : Type v} [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] {R₀ : Type u…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 theorem smul_const (f : M) (r g : R) (U hu) :
     r • const f g U hu = const (r • f) g U hu :=
-Subtype.ext funext fun _ => LocalizedModule.smul'_mk _ _ _
+  Subtype.ext <| funext fun _ ↦ LocalizedModule.smul'_mk _ _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `const_mul` / 定理 `const_mul`
-
-English:
-theorem const_mul
-  given: (f₁ f₂ : A) (g₁ g₂ : R) (U hu₁ hu₂)
-  proof: Subtype.ext funext fun _ => LocalizedModule.mk_mul_mk
-
-中文:
-定理 const_mul
-  条件: (f₁ f₂ : A) (g₁ g₂ : R) (U hu₁ hu₂)
-  证明: Subtype.ext funext fun _ => LocalizedModule.mk_mul_mk
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk_mul_mk, Subtype, Subtype.ext, mk_mul_mk
+/-
+**AlgebraicGeometry.StructureSheaf.const_mul** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.StructureSheaf`。
+形式化陈述：const_mul (f₁ f₂ : A) (g₁ g₂ : R) (U hu₁ hu₂) : const f₁ g₁ U hu₁ * const 
+f₂ g₂ U hu₂ = const (f₁ * f₂) (g₁ * g₂) U (by simp [*, PrimeSpectrum.basicOpen_m
+ul])
+参数：f₁ f₂ : A；g₁ g₂ : R；U hu₁ hu₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LocalizedModule.mk_mul_mk`：mk_mul_mk {A : Type*} [Semiring A] [Algebra R
+ A] {a₁ a₂ : A} {s₁ s₂ : S} : mk a₁ s₁ * mk a₂ s₂ = mk (a₁ * a₂) (s₁ * s₂)
 -/
 theorem const_mul (f₁ f₂ : A) (g₁ g₂ : R) (U hu₁ hu₂) :
     const f₁ g₁ U hu₁ * const f₂ g₂ U hu₂ =
       const (f₁ * f₂) (g₁ * g₂) U (by simp [*, PrimeSpectrum.basicOpen_mul]) :=
-Subtype.ext funext fun _ => LocalizedModule.mk_mul_mk
-
-/--
-theorem `const_ext` / 定理 `const_ext`
-
-English:
-theorem const_ext
-  given: {f₁ f₂ : M} {g₁ g₂ : R} {U hu₁ hu₂} (h : g₂ • f₁ = g₁ • f₂)
-  proof: Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr (by simp [h, Submonoid.smul_def])
-
-中文:
-定理 const_ext
-  条件: {f₁ f₂ : M} {g₁ g₂ : R} {U hu₁ hu₂} (h : g₂ • f₁ = g₁ • f₂)
-  证明: Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr (by simp [h, Submonoid.smul_def])
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk_eq.mpr, Submonoid, Submonoid.smul_def, Subtype, Subtype.ext, mk_eq, smul_def
+  Subtype.ext <| funext fun _ ↦ LocalizedModule.mk_mul_mk
+/-
+**AlgebraicGeometry.StructureSheaf.const_ext** 是 Mathlib 中的一个定理，位于命名空间 `Algebrai
+cGeometry.StructureSheaf`。
+形式化陈述：const_ext {f₁ f₂ : M} {g₁ g₂ : R} {U hu₁ hu₂} (h : g₂ • f₁ = g₁ • f₂) : co
+nst f₁ g₁ U hu₁ = const f₂ g₂ U hu₂
+参数：h : g₂ • f₁ = g₁ • f₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LocalizedModule.mk_eq`：mk_eq {m m' : M} {s s' : S} : mk m s = mk m' s' ↔
+ exists u : S, u • s' • m = u • s • m'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
 -/
 theorem const_ext {f₁ f₂ : M} {g₁ g₂ : R} {U hu₁ hu₂} (h : g₂ • f₁ = g₁ • f₂) :
     const f₁ g₁ U hu₁ = const f₂ g₂ U hu₂ :=
-Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr (by simp [h, Submonoid.smul_def])
-
-/--
-theorem `const_congr` / 定理 `const_congr`
-
-English:
-theorem const_congr
-  given: {f₁ f₂ : M} {g₁ g₂ : R} {U hu} (hf : f₁ = f₂) (hg : g₁ = g₂)
-  proof: by subst hf hg; rfl
-
-中文:
-定理 const_congr
-  条件: {f₁ f₂ : M} {g₁ g₂ : R} {U hu} (hf : f₁ = f₂) (hg : g₁ = g₂)
-  证明: by subst hf hg; rfl
+  Subtype.ext <| funext fun x ↦ LocalizedModule.mk_eq.mpr (by simp [h, Submonoid.smul_def])
+/-
+**AlgebraicGeometry.StructureSheaf.const_congr** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.StructureSheaf`。
+形式化陈述：const_congr {f₁ f₂ : M} {g₁ g₂ : R} {U hu} (hf : f₁ = f₂) (hg : g₁ = g₂) :
+ const f₁ g₁ U hu = const f₂ g₂ U (hg ▸ hu)
+参数：hf : f₁ = f₂；hg : g₁ = g₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_congr {f₁ f₂ : M} {g₁ g₂ : R} {U hu} (hf : f₁ = f₂) (hg : g₁ = g₂) :
     const f₁ g₁ U hu = const f₂ g₂ U (hg ▸ hu) := by subst hf hg; rfl
-
-/--
-theorem `const_mul_rev` / 定理 `const_mul_rev`
-
-English:
-theorem const_mul_rev
-  given: (f g : R) (U hu₁ hu₂)
-  statement: const f g U hu₁ * const g f U hu₂ = 1
-  proof: by
-  rw [const_mul]; rw [const_congr rfl (mul_comm g f)]; rw [const_self]
-
-中文:
-定理 const_mul_rev
-  条件: (f g : R) (U hu₁ hu₂)
-  结论: const f g U hu₁ * const g f U hu₂ = 1
-  证明: by
-  rw [const_mul]; rw [const_congr rfl (mul_comm g f)]; rw [const_self]
-
-Depends on / 依赖: const_congr, const_mul, const_self, mul_comm
+/-
+**AlgebraicGeometry.StructureSheaf.const_mul_rev** 是 Mathlib 中的一个定理，位于命名空间 `Alge
+braicGeometry.StructureSheaf`。
+形式化陈述：const_mul_rev (f g : R) (U hu₁ hu₂) : const f g U hu₁ * const g f U hu₂ = 
+1
+参数：f g : R；U hu₁ hu₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_mul`：const_mul (f₁ f₂ : A) (g₁ g₂
+ : R) (U hu₁ hu₂) : const f₁ g₁ U hu₁ * const f₂ g₂ U hu₂ = const (f₁ * f₂) (g₁ 
+* g₂) U (by simp [*, PrimeSpectr…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_congr`：const_congr {f₁ f₂ : M} {g
+₁ g₂ : R} {U hu} (hf : f₁ = f₂) (hg : g₁ = g₂) : const f₁ g₁ U hu = const f₂ g₂ 
+U (hg ▸ hu)
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_self`：const_self (f : R) (U hu) :
+ const f f U hu = 1
 -/
 theorem const_mul_rev (f g : R) (U hu₁ hu₂) : const f g U hu₁ * const g f U hu₂ = 1 := by
-  rw [const_mul]; rw [const_congr rfl (mul_comm g f)]; rw [const_self]
-
-/--
-theorem `const_mul_cancel` / 定理 `const_mul_cancel`
-
-English:
-theorem const_mul_cancel
-  given: (f g₁ g₂ : R) (U hu₁ hu₂)
-  proof: by
-  rw [const_mul]; rw [const_ext]; simp; ring
-
-中文:
-定理 const_mul_cancel
-  条件: (f g₁ g₂ : R) (U hu₁ hu₂)
-  证明: by
-  rw [const_mul]; rw [const_ext]; simp; ring
-
-Depends on / 依赖: const_ext, const_mul
+  rw [const_mul, const_congr rfl (mul_comm g f), const_self]
+/-
+**AlgebraicGeometry.StructureSheaf.const_mul_cancel** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.StructureSheaf`。
+形式化陈述：const_mul_cancel (f g₁ g₂ : R) (U hu₁ hu₂) : const f g₁ U hu₁ * const g₁ g
+₂ U hu₂ = const f g₂ U hu₂
+参数：f g₁ g₂ : R；U hu₁ hu₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_mul`：const_mul (f₁ f₂ : A) (g₁ g₂
+ : R) (U hu₁ hu₂) : const f₁ g₁ U hu₁ * const f₂ g₂ U hu₂ = const (f₁ * f₂) (g₁ 
+* g₂) U (by simp [*, PrimeSpectr…
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_ext`：const_ext {f₁ f₂ : M} {g₁ g₂
+ : R} {U hu₁ hu₂} (h : g₂ • f₁ = g₁ • f₂) : const f₁ g₁ U hu₁ = const f₂ g₂ U hu
+₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
 -/
 theorem const_mul_cancel (f g₁ g₂ : R) (U hu₁ hu₂) :
     const f g₁ U hu₁ * const g₁ g₂ U hu₂ = const f g₂ U hu₂ := by
-  rw [const_mul]; rw [const_ext]; simp; ring
-
-/--
-theorem `const_mul_cancel'` / 定理 `const_mul_cancel'`
-
-English:
-theorem const_mul_cancel'
-  given: (f g₁ g₂ : R) (U hu₁ hu₂)
-  proof: by
-  rw [mul_comm]; rw [const_mul_cancel]
-
-中文:
-定理 const_mul_cancel'
-  条件: (f g₁ g₂ : R) (U hu₁ hu₂)
-  证明: by
-  rw [mul_comm]; rw [const_mul_cancel]
-
-Depends on / 依赖: const_mul_cancel, mul_comm
+  rw [const_mul, const_ext]; simp; ring
+/-
+**AlgebraicGeometry.StructureSheaf.const_mul_cancel'** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.StructureSheaf`。
+形式化陈述：const_mul_cancel' (f g₁ g₂ : R) (U hu₁ hu₂) : const g₁ g₂ U hu₂ * const f 
+g₁ U hu₁ = const f g₂ U hu₂
+参数：f g₁ g₂ : R；U hu₁ hu₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `AlgebraicGeometry.StructureSheaf.const_mul_cancel`：const_mul_cancel (f g
+₁ g₂ : R) (U hu₁ hu₂) : const f g₁ U hu₁ * const g₁ g₂ U hu₂ = const f g₂ U hu₂
 -/
 theorem const_mul_cancel' (f g₁ g₂ : R) (U hu₁ hu₂) :
     const g₁ g₂ U hu₂ * const f g₁ U hu₁ = const f g₂ U hu₂ := by
-  rw [mul_comm]; rw [const_mul_cancel]
+  rw [mul_comm, const_mul_cancel]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `const_eq_const_of_smul_eq_smul` / 定理 `const_eq_const_of_smul_eq_smul`
-
-English:
-theorem const_eq_const_of_smul_eq_smul
-  given: (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂) (H : g₁ • f₂ = g₂ • f₁)
-  proof: Subtype.ext (funext fun x => by
-    simp [LocalizedModule.mk_eq, Localizations, Submonoid.smul_def, H])
-
-中文:
-定理 const_eq_const_of_smul_eq_smul
-  条件: (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂) (H : g₁ • f₂ = g₂ • f₁)
-  证明: Subtype.ext (funext fun x => by
-    simp [LocalizedModule.mk_eq, Localizations, Submonoid.smul_def, H])
-
-Depends on / 依赖: Localizations, LocalizedModule, LocalizedModule.mk_eq, Submonoid, Submonoid.smul_def, Subtype, Subtype.ext, mk_eq, smul_def
+/-
+**AlgebraicGeometry.StructureSheaf.const_eq_const_of_smul_eq_smul** 是 Mathlib 中的
+一个定理，位于命名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：const_eq_const_of_smul_eq_smul (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂) (H : g₁
+ • f₂ = g₂ • f₁) : const f₁ g₁ U hu₁ = const f₂ g₂ U hu₂
+参数：f₁ f₂ : M；g₁ g₂ : R；U hu₁ hu₂；H : g₁ • f₂ = g₂ • f₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
 -/
 theorem const_eq_const_of_smul_eq_smul (f₁ f₂ : M) (g₁ g₂ : R) (U hu₁ hu₂) (H : g₁ • f₂ = g₂ • f₁) :
     const f₁ g₁ U hu₁ = const f₂ g₂ U hu₂ :=
-  Subtype.ext (funext fun x => by
+  Subtype.ext (funext fun x ↦ by
     simp [LocalizedModule.mk_eq, Localizations, Submonoid.smul_def, H])
 
 set_option backward.isDefEq.respectTransparency false in
 variable (R M) in
-/--
-Definition of `toOpenₗ` / `toOpenₗ` 的定义
+/-- The canonical linear map interpreting an element of `M` as
+a section of the structure sheaf. -/
+/-
+**AlgebraicGeometry.StructureSheaf.toOpen** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.StructureSheaf`。
+形式化陈述：toOpen (U : Opens (PrimeSpectrum.Top R)) : CommRingCat.of R ⟶ (structureSh
+eaf R).1.obj (op U)
+参数：U : Opens (PrimeSpectrum.Top R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOpenₗ
-  signature: (U : Opens (PrimeSpectrum.Top R))
-  body: const m 1 U (by simp)
-  map_add' _ _ := by simp [const_add]
-  map_smul' _ _ := by simp [smul_const]
-
-中文:
-定义 toOpenₗ
-  签名: (U : Opens (素谱.顶元素 R))
-  定义体: const m 1 U (by simp)
-  map_add' _ _ := by simp [const_add]
-  map_smul' _ _ := by simp [smul_const]
+--- 原说明 ---
+The canonical linear map interpreting an element of `M` as
+a section of the structure sheaf.
 -/
 def toOpenₗ (U : Opens (PrimeSpectrum.Top R)) :
-    M ->ₗ[R] Γ(M, U) where
+    M →ₗ[R] Γ(M, U) where
   toFun m := const m 1 U (by simp)
   map_add' _ _ := by simp [const_add]
   map_smul' _ _ := by simp [smul_const]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toOpenₗ_eq_const` / 定理 `toOpenₗ_eq_const`
-
-English:
-theorem toOpenₗ_eq_const
-  given: (U : Opens (PrimeSpectrum.Top R)) (f : M)
-  proof: rfl
-
-中文:
-定理 toOpenₗ_eq_const
-  条件: (U : Opens (素谱.顶元素 R)) (f : M)
-  证明: rfl
+/-
+**AlgebraicGeometry.StructureSheaf.toOpen** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.StructureSheaf`。
+形式化陈述：toOpen (U : Opens (PrimeSpectrum.Top R)) : CommRingCat.of R ⟶ (structureSh
+eaf R).1.obj (op U)
+参数：U : Opens (PrimeSpectrum.Top R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toOpenₗ_eq_const (U : Opens (PrimeSpectrum.Top R)) (f : M) :
     toOpenₗ R M U f = const f 1 U (by simp) := rfl
@@ -1028,51 +1031,25 @@ namespace StructureSheaf
 section basicOpen
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isUnit_basicOpen` / 引理 `isUnit_basicOpen`
-
-English:
-lemma isUnit_basicOpen
-  given: (f : R)
-  proof: isUnit_iff_exists_inv.mpr ⟨const 1 f _ le_rfl, const_mul_rev _ _ _ (by simp) _⟩
-
-中文:
-引理 isUnit_basicOpen
-  条件: (f : R)
-  证明: isUnit_iff_exists_inv.mpr ⟨const 1 f _ le_rfl, const_mul_rev _ _ _ (by simp) _⟩
-
-Depends on / 依赖: const_mul_rev, isUnit_iff_exists_inv, isUnit_iff_exists_inv.mpr, le_rfl
+/-
+**AlgebraicGeometry.StructureSheaf.isUnit_basicOpen** 是 Mathlib 中的一个引理，位于命名空间 `A
+lgebraicGeometry.StructureSheaf`。
+形式化陈述：isUnit_basicOpen (f : R) : IsUnit ((algebraMap R Γ(R, basicOpen f)) f)
+参数：f : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isUnit_basicOpen (f : R) :
     IsUnit ((algebraMap R Γ(R, basicOpen f)) f) :=
   isUnit_iff_exists_inv.mpr ⟨const 1 f _ le_rfl, const_mul_rev _ _ _ (by simp) _⟩
-
-/--
-lemma `isUnit_basicOpen_end` / 引理 `isUnit_basicOpen_end`
-
-English:
-lemma isUnit_basicOpen_end
-  given: (f : R)
-  proof: by
-  have := (isUnit_basicOpen f).map
-    (algebraMap _ (Module.End Γ(R, basicOpen f) Γ(M, basicOpen f)))
-  rw [Module.End.isUnit_iff] at this ⊢
-  convert! this
-  ext a
-  simp
-
-中文:
-引理 isUnit_basicOpen_end
-  条件: (f : R)
-  证明: by
-  have := (isUnit_basicOpen f).map
-    (algebraMap _ (Module.End Γ(R, basicOpen f) Γ(M, basicOpen f)))
-  rw [Module.End.isUnit_iff] at this ⊢
-  convert! this
-  ext a
-  simp
-
-Depends on / 依赖: Module, Module.End, Module.End.isUnit_iff, algebraMap, basicOpen, convert, isUnit_basicOpen, isUnit_iff
+/-
+**AlgebraicGeometry.StructureSheaf.isUnit_basicOpen_end** 是 Mathlib 中的一个引理，位于命名空
+间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：isUnit_basicOpen_end (f : R) : IsUnit ((algebraMap R (Module.End R Γ(M, ba
+sicOpen f))) f)
+参数：f : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isUnit_basicOpen_end (f : R) :
     IsUnit ((algebraMap R (Module.End R Γ(M, basicOpen f))) f) := by
@@ -1084,64 +1061,31 @@ lemma isUnit_basicOpen_end (f : R) :
   simp
 
 variable (R M) in
-/--
-Definition of `toBasicOpenₗ` / `toBasicOpenₗ` 的定义
+/-- The canonical linear map interpreting `s ∈ M_f` as a section of the structure sheaf
+on the basic open defined by `f ∈ R`. -/
+/-
+**AlgebraicGeometry.StructureSheaf.toBasicOpen** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toBasicOpenₗ
-  signature: (f : R)
-  body: IsLocalizedModule.lift (.powers f) (LocalizedModule.mkLinearMap ..) (toOpenₗ R M _) by
-    simp only [Subtype.forall]
-    exact Submonoid.powers_le (P := (IsUnit.submonoid _).comap (algebraMap R _)).mpr
-      (isUnit_basicOpen_end ..)
-
-中文:
-定义 toBasicOpenₗ
-  签名: (f : R)
-  定义体: IsLocalizedModule.lift (.powers f) (LocalizedModule.mkLinearMap ..) (toOpenₗ R M _) by
-    simp only [Subtype.forall]
-    exact Submonoid.powers_le (P := (IsUnit.submonoid _).comap (algebraMap R _)).mpr
-      (isUnit_basicOpen_end ..)
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift, IsUnit, IsUnit.submonoid, LocalizedModule, LocalizedModule.mkLinearMap, Submonoid, Submonoid.powers_le, Subtype, Subtype.forall, algebraMap, isUnit_basicOpen_end, mkLinearMap, powers, powers_le, submonoid
+--- 原说明 ---
+The canonical linear map interpreting `s ∈ M_f` as a section of the structure sh
+eaf
+on the basic open defined by `f ∈ R`.
 -/
 def toBasicOpenₗ (f : R) :
-    LocalizedModule.Away f M ->ₗ[R] Γ(M, PrimeSpectrum.basicOpen f) :=
-IsLocalizedModule.lift (.powers f) (LocalizedModule.mkLinearMap ..) (toOpenₗ R M _) by
+    LocalizedModule.Away f M →ₗ[R] Γ(M, PrimeSpectrum.basicOpen f) :=
+  IsLocalizedModule.lift (.powers f) (LocalizedModule.mkLinearMap ..) (toOpenₗ R M _) <| by
     simp only [Subtype.forall]
     exact Submonoid.powers_le (P := (IsUnit.submonoid _).comap (algebraMap R _)).mpr
       (isUnit_basicOpen_end ..)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `toBasicOpenₗ_mk` / 定理 `toBasicOpenₗ_mk`
-
-English:
-theorem toBasicOpenₗ_mk
-  given: (s : R) (f : M) (g : Submonoid.powers s)
-  proof: by
-  obtain ⟨_, n, rfl⟩ := g
-  apply ((Module.End.isUnit_iff _).mp ((isUnit_basicOpen_end ..).pow n)).1 ?_
-  rw [← map_pow]
-  dsimp [toBasicOpenₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.mk_smul (S := .powers s) _ ⟨n]; rw [rfl⟩]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [smul_const]
-  dsimp [toOpenₗ]
-  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
-
-中文:
-定理 toBasicOpenₗ_mk
-  条件: (s : R) (f : M) (g : 子幺半群.powers s)
-  证明: by
-  obtain ⟨_, n, rfl⟩ := g
-  apply ((Module.End.isUnit_iff _).mp ((isUnit_basicOpen_end ..).pow n)).1 ?_
-  rw [← map_pow]
-  dsimp [toBasicOpenₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.mk_smul (S := .powers s) _ ⟨n]; rw [rfl⟩]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [smul_const]
-  dsimp [toOpenₗ]
-  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift_apply, LocalizedModule, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_cancel, LocalizedModule.smul, Module, Module.End.isUnit_iff, PrimeSpectrum, PrimeSpectrum.le_basicOpen_pow, Submonoid, Submonoid.mem_powers_iff, Submonoid.mk_smul, const_eq_const_of_smul_eq, isUnit_basicOpen_end, isUnit_iff, le_basicOpen_pow, lift_apply, map_pow, map_smul
+/-
+**AlgebraicGeometry.StructureSheaf.toBasicOpen** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBasicOpenₗ_mk (s : R) (f : M) (g : Submonoid.powers s) :
     toBasicOpenₗ R M s (.mk f g) = const f g.1 (basicOpen s) (by
@@ -1150,270 +1094,125 @@ theorem toBasicOpenₗ_mk (s : R) (f : M) (g : Submonoid.powers s) :
   apply ((Module.End.isUnit_iff _).mp ((isUnit_basicOpen_end ..).pow n)).1 ?_
   rw [← map_pow]
   dsimp [toBasicOpenₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.mk_smul (S := .powers s) _ ⟨n]; rw [rfl⟩]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [smul_const]
+  rw [← map_smul, LocalizedModule.smul'_mk, ← Submonoid.mk_smul (S := .powers s) _ ⟨n, rfl⟩,
+    LocalizedModule.mk_cancel, ← LocalizedModule.mkLinearMap_apply, IsLocalizedModule.lift_apply,
+    smul_const]
   dsimp [toOpenₗ]
   exact const_eq_const_of_smul_eq_smul (H := by simp) ..
-
-/--
-theorem `toBasicOpenₗ_injective` / 定理 `toBasicOpenₗ_injective`
-
-English:
-theorem toBasicOpenₗ_injective
-  given: (f : R)
-  statement: Function.Injective (toBasicOpenₗ R M f)
-  proof: by
-  intro s t h_eq
-  induction s using LocalizedModule.induction_on with | h a b =>
-  induction t using LocalizedModule.induction_on with | h c d =>
-  suffices f in ((⊥ : Submodule R M).colon {d • a - b • c}).radical by
-    rw [LocalizedModule.mk_eq]
-    obtain ⟨n, hn⟩ := this
-    exact ⟨⟨f ^ n, n, rfl⟩, by simpa [sub_eq_zero, smul_sub] using! Submodule.mem_colon.mp hn _ rfl⟩
-  simp only [toBasicOpenₗ_mk] at h_eq
-  rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.mem_vanishingIdeal]
-  intro p hfp
-  contrapose hfp
-  obtain ⟨u, hu⟩ := LocalizedModule.mk_eq.mp congr(($h_eq).1 ⟨p, hfp⟩)
-  rw [PrimeSpectrum.mem_zeroLocus]; rw [Set.not_subset]
-  exact ⟨u.1, by simpa [sub_eq_zero, smul_sub], u.2⟩
-
-中文:
-定理 toBasicOpenₗ_injective
-  条件: (f : R)
-  结论: 函数.单射 (toBasicOpenₗ R M f)
-  证明: by
-  intro s t h_eq
-  induction s using LocalizedModule.induction_on with | h a b =>
-  induction t using LocalizedModule.induction_on with | h c d =>
-  suffices f in ((⊥ : Submodule R M).colon {d • a - b • c}).radical by
-    rw [LocalizedModule.mk_eq]
-    obtain ⟨n, hn⟩ := this
-    exact ⟨⟨f ^ n, n, rfl⟩, by simpa [sub_eq_zero, smul_sub] using! Submodule.mem_colon.mp hn _ rfl⟩
-  simp only [toBasicOpenₗ_mk] at h_eq
-  rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.mem_vanishingIdeal]
-  intro p hfp
-  contrapose hfp
-  obtain ⟨u, hu⟩ := LocalizedModule.mk_eq.mp congr(($h_eq).1 ⟨p, hfp⟩)
-  rw [PrimeSpectrum.mem_zeroLocus]; rw [Set.not_subset]
-  exact ⟨u.1, by simpa [sub_eq_zero, smul_sub], u.2⟩
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.induction_on, LocalizedModule.mk_eq, PrimeSpectrum, PrimeSpectrum.mem_vanishingIdeal, PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical, Submodule, Submodule.mem_colon.mp, h_eq, induction_on, mem_colon, mem_vanishingIdeal, mk_eq, radical, smul_sub, sub_eq_zero, vanishingIdeal_zeroLocus_eq_radical
+/-
+**AlgebraicGeometry.StructureSheaf.toBasicOpen** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBasicOpenₗ_injective (f : R) : Function.Injective (toBasicOpenₗ R M f) := by
   intro s t h_eq
   induction s using LocalizedModule.induction_on with | h a b =>
   induction t using LocalizedModule.induction_on with | h c d =>
-  suffices f in ((⊥ : Submodule R M).colon {d • a - b • c}).radical by
+  suffices f ∈ ((⊥ : Submodule R M).colon {d • a - b • c}).radical by
     rw [LocalizedModule.mk_eq]
     obtain ⟨n, hn⟩ := this
     exact ⟨⟨f ^ n, n, rfl⟩, by simpa [sub_eq_zero, smul_sub] using! Submodule.mem_colon.mp hn _ rfl⟩
   simp only [toBasicOpenₗ_mk] at h_eq
-  rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.mem_vanishingIdeal]
+  rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical, PrimeSpectrum.mem_vanishingIdeal]
   intro p hfp
   contrapose hfp
   obtain ⟨u, hu⟩ := LocalizedModule.mk_eq.mp congr(($h_eq).1 ⟨p, hfp⟩)
-  rw [PrimeSpectrum.mem_zeroLocus]; rw [Set.not_subset]
+  rw [PrimeSpectrum.mem_zeroLocus, Set.not_subset]
   exact ⟨u.1, by simpa [sub_eq_zero, smul_sub], u.2⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const` / 定理 `exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const`
+/-
+Auxiliary lemma for surjectivity of `toBasicOpen`.
+A local representation of a section `s` as fractions `a i / h i` on finitely many basic opens
+`basicOpen (h i)` can be "normalized" in such a way that `a i * h j = h i * a j` for all `i, j`
+-/
+/-
+**AlgebraicGeometry.StructureSheaf.exists_le_iSup_basicOpen_and_smul_eq_smul_and
+_eq_const** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const (U : Opens (PrimeSp
+ectrum.Top R)) (hU : IsCompact (U : Set (PrimeSpectrum.Top R))) (s : Γ(M, U)) : 
+exists (ι : Type u) (_ : Fintype ι) (a : ι -> M) (b : ι -> R) (ibU : forall i, b
+asicOpen (b i) <= U), (U <= ⨆ i, basicOpen (b i)) ∧ (forall i j, b j • a i = b i
+ • a j) ∧ forall i, (structureSheafInType R M).presheaf.map (ibU i).hom.op s = c
+onst (a i) (b i) _ le_rfl
+参数：U : Opens (PrimeSpectrum.Top R)；hU : IsCompact (U : Set (PrimeSpectrum.Top R)
+)；s : Γ(M, U)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
-  proof: by
-  choose g hxg igU f H using fun x : U => exists_const U s x.1 x.2
-  have (i j : _) : LocalizedModule.mk (g i • f j) ⟨g i * g j, Submonoid.mem_powers _⟩ =
-      LocalizedModule.mk (g j • f i) ⟨g i * g j, Submonoid.mem_powers _⟩ := by
-    refine toBasicOpenₗ_injective (g i * g j) ?_
-    simp only [toBasicOpenₗ_mk]
-    have := H i
-    trans (structureSheafInType R M).obj.map (homOfLE ?_).op s
-    · refine .trans (Subtype.ext <| funext fun a => ?_) congr((structureSheafInType R M).obj.map
-(homOfLE ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right)).op (H j))
-      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]; ring_nf⟩
-    · refine congr((structureSheafInType R M).obj.map (homOfLE ((PrimeSpectrum.basicOpen_mul (g i)
-        (g j)).trans_le inf_le_left)).op $(H i)).symm.trans (Subtype.ext <| funext fun a => ?_)
-      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]⟩
-    · exact ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right).trans (igU _)
-  simp only [LocalizedModule.mk_eq, Submonoid.smul_def, Subtype.exists, Submonoid.mem_powers_iff,
-    exists_prop, exists_exists_eq_and, ← mul_smul, ← pow_succ, ← mul_assoc _ (_ * _)] at this
-  choose n hn using this
-  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun i => (basicOpen (g i) : Set (PrimeSpectrum R)))
-    (fun _ => (basicOpen _).2) (fun x hx => Set.mem_iUnion_of_mem ⟨x, hx⟩ (hxg _))
-  let N := (t ×ˢ t).sup fun x => n x.1 x.2 + 1
-  refine ⟨t, inferInstance, fun i => g i ^ N • f i, fun i => (g i) ^ (N + 1),
-    fun x => by simpa using igU x.1, fun x hx => by simpa using ht hx, fun i j => ?_, fun i => ?_⟩
-  · dsimp
-    convert_to (g i * g ↑j) ^ N • g j • f i = (g i * g ↑j) ^ N • g i • f j
-    · module
-    · module
-    have : n i j + 1 <= N := (t ×ˢ t).le_sup (f := fun x => n x.1 x.2 + 1) (b := ⟨_, _⟩) (by simp)
-    rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]
-    congr 1
-    convert! (hn i j).symm using 1 <;> module
-  · convert! congr((structureSheafInType R M).presheaf.map (homOfLE ?_).op $((H i).symm)) using 1
-· refine Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
-      simp [Submonoid.smul_def, pow_succ', mul_smul]
-    · simp
-
-中文:
-定理 存在_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
-  证明: by
-  choose g hxg igU f H using fun x : U => exists_const U s x.1 x.2
-  have (i j : _) : LocalizedModule.mk (g i • f j) ⟨g i * g j, Submonoid.mem_powers _⟩ =
-      LocalizedModule.mk (g j • f i) ⟨g i * g j, Submonoid.mem_powers _⟩ := by
-    refine toBasicOpenₗ_injective (g i * g j) ?_
-    simp only [toBasicOpenₗ_mk]
-    have := H i
-    trans (structureSheafInType R M).obj.map (homOfLE ?_).op s
-    · refine .trans (Subtype.ext <| funext fun a => ?_) congr((structureSheafInType R M).obj.map
-(homOfLE ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right)).op (H j))
-      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]; ring_nf⟩
-    · refine congr((structureSheafInType R M).obj.map (homOfLE ((PrimeSpectrum.basicOpen_mul (g i)
-        (g j)).trans_le inf_le_left)).op $(H i)).symm.trans (Subtype.ext <| funext fun a => ?_)
-      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]⟩
-    · exact ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right).trans (igU _)
-  simp only [LocalizedModule.mk_eq, Submonoid.smul_def, Subtype.exists, Submonoid.mem_powers_iff,
-    exists_prop, exists_exists_eq_and, ← mul_smul, ← pow_succ, ← mul_assoc _ (_ * _)] at this
-  choose n hn using this
-  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun i => (basicOpen (g i) : Set (PrimeSpectrum R)))
-    (fun _ => (basicOpen _).2) (fun x hx => Set.mem_iUnion_of_mem ⟨x, hx⟩ (hxg _))
-  let N := (t ×ˢ t).sup fun x => n x.1 x.2 + 1
-  refine ⟨t, inferInstance, fun i => g i ^ N • f i, fun i => (g i) ^ (N + 1),
-    fun x => by simpa using igU x.1, fun x hx => by simpa using ht hx, fun i j => ?_, fun i => ?_⟩
-  · dsimp
-    convert_to (g i * g ↑j) ^ N • g j • f i = (g i * g ↑j) ^ N • g i • f j
-    · module
-    · module
-    have : n i j + 1 <= N := (t ×ˢ t).le_sup (f := fun x => n x.1 x.2 + 1) (b := ⟨_, _⟩) (by simp)
-    rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]
-    congr 1
-    convert! (hn i j).symm using 1 <;> module
-  · convert! congr((structureSheafInType R M).presheaf.map (homOfLE ?_).op $((H i).symm)) using 1
-· refine Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
-      simp [Submonoid.smul_def, pow_succ', mul_smul]
-    · simp
-
-Depends on / 依赖: LocalizedModule, LocalizedModule.mk, PrimeSpectrum, PrimeSpectrum.basicOpen_m, Submonoid, Submonoid.mem_powers, Subtype, Subtype.ext, basicOpen_m, exists_const, homOfLE, mem_powers, obj.map, structureSheafInType
+--- 原说明 ---
+Auxiliary lemma for surjectivity of `toBasicOpen`.
+A local representation of a section `s` as fractions `a i / h i` on finitely man
+y basic opens
+`basicOpen (h i)` can be "normalized" in such a way that `a i * h j = h i * a j`
+ for all `i, j`
 -/
 theorem exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
     (U : Opens (PrimeSpectrum.Top R)) (hU : IsCompact (U : Set (PrimeSpectrum.Top R)))
     (s : Γ(M, U)) :
-    exists (ι : Type u) (_ : Fintype ι) (a : ι -> M) (b : ι -> R) (ibU : forall i, basicOpen (b i) <= U),
-      (U <= ⨆ i, basicOpen (b i)) ∧ (forall i j, b j • a i = b i • a j) ∧
-          forall i, (structureSheafInType R M).presheaf.map (ibU i).hom.op s =
+    ∃ (ι : Type u) (_ : Fintype ι) (a : ι → M) (b : ι → R) (ibU : ∀ i, basicOpen (b i) ≤ U),
+      (U ≤ ⨆ i, basicOpen (b i)) ∧ (∀ i j, b j • a i = b i • a j) ∧
+          ∀ i, (structureSheafInType R M).presheaf.map (ibU i).hom.op s =
               const (a i) (b i) _ le_rfl := by
-  choose g hxg igU f H using fun x : U => exists_const U s x.1 x.2
+  choose g hxg igU f H using fun x : U ↦ exists_const U s x.1 x.2
   have (i j : _) : LocalizedModule.mk (g i • f j) ⟨g i * g j, Submonoid.mem_powers _⟩ =
       LocalizedModule.mk (g j • f i) ⟨g i * g j, Submonoid.mem_powers _⟩ := by
     refine toBasicOpenₗ_injective (g i * g j) ?_
     simp only [toBasicOpenₗ_mk]
     have := H i
     trans (structureSheafInType R M).obj.map (homOfLE ?_).op s
-    · refine .trans (Subtype.ext <| funext fun a => ?_) congr((structureSheafInType R M).obj.map
-(homOfLE ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right)).op (H j))
+    · refine .trans (Subtype.ext <| funext fun a ↦ ?_) congr((structureSheafInType R M).obj.map
+        (homOfLE ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right)).op $(H j))
       exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]; ring_nf⟩
     · refine congr((structureSheafInType R M).obj.map (homOfLE ((PrimeSpectrum.basicOpen_mul (g i)
-        (g j)).trans_le inf_le_left)).op $(H i)).symm.trans (Subtype.ext <| funext fun a => ?_)
+        (g j)).trans_le inf_le_left)).op $(H i)).symm.trans (Subtype.ext <| funext fun a ↦ ?_)
       exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]⟩
     · exact ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right).trans (igU _)
   simp only [LocalizedModule.mk_eq, Submonoid.smul_def, Subtype.exists, Submonoid.mem_powers_iff,
     exists_prop, exists_exists_eq_and, ← mul_smul, ← pow_succ, ← mul_assoc _ (_ * _)] at this
   choose n hn using this
-  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun i => (basicOpen (g i) : Set (PrimeSpectrum R)))
-    (fun _ => (basicOpen _).2) (fun x hx => Set.mem_iUnion_of_mem ⟨x, hx⟩ (hxg _))
-  let N := (t ×ˢ t).sup fun x => n x.1 x.2 + 1
-  refine ⟨t, inferInstance, fun i => g i ^ N • f i, fun i => (g i) ^ (N + 1),
-    fun x => by simpa using igU x.1, fun x hx => by simpa using ht hx, fun i j => ?_, fun i => ?_⟩
+  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun i ↦ (basicOpen (g i) : Set (PrimeSpectrum R)))
+    (fun _ ↦ (basicOpen _).2) (fun x hx ↦ Set.mem_iUnion_of_mem ⟨x, hx⟩ (hxg _))
+  let N := (t ×ˢ t).sup fun x ↦ n x.1 x.2 + 1
+  refine ⟨t, inferInstance, fun i ↦ g i ^ N • f i, fun i ↦ (g i) ^ (N + 1),
+    fun x ↦ by simpa using igU x.1, fun x hx ↦ by simpa using ht hx, fun i j ↦ ?_, fun i ↦ ?_⟩
   · dsimp
     convert_to (g i * g ↑j) ^ N • g j • f i = (g i * g ↑j) ^ N • g i • f j
     · module
     · module
-    have : n i j + 1 <= N := (t ×ˢ t).le_sup (f := fun x => n x.1 x.2 + 1) (b := ⟨_, _⟩) (by simp)
-    rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]
+    have : n i j + 1 ≤ N := (t ×ˢ t).le_sup (f := fun x ↦ n x.1 x.2 + 1) (b := ⟨_, _⟩) (by simp)
+    rw [← Nat.sub_add_cancel this, pow_add, mul_smul, mul_smul]
     congr 1
     convert! (hn i j).symm using 1 <;> module
   · convert! congr((structureSheafInType R M).presheaf.map (homOfLE ?_).op $((H i).symm)) using 1
-· refine Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
+    · refine Subtype.ext <| funext fun x ↦ LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
       simp [Submonoid.smul_def, pow_succ', mul_smul]
     · simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toBasicOpenₗ_surjective` / 定理 `toBasicOpenₗ_surjective`
-
-English:
-theorem toBasicOpenₗ_surjective
-  given: (f : R)
-  statement: Function.Surjective (toBasicOpenₗ R M f)
-  proof: by
-  intro s
-  obtain ⟨ι, _, a, b, ibU, iU, hab, H⟩ := exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const _
-    (PrimeSpectrum.isCompact_basicOpen _) s
-  obtain ⟨n, hn⟩ : f in (Ideal.span (Set.range b)).radical := by
-    have : PrimeSpectrum.zeroLocus (Set.range b) subseteq PrimeSpectrum.zeroLocus {f} := by
-      simpa [← SetLike.coe_subset_coe, ← Set.compl_iInter,
-        ← PrimeSpectrum.zeroLocus_iUnion, PrimeSpectrum.Top] using iU
-    rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.zeroLocus_span]; rw [PrimeSpectrum.mem_vanishingIdeal]
-    exact fun x hx => by simpa using this hx
-  replace hn := Ideal.mul_mem_right f _ hn
-  rw [← pow_succ]; rw [Ideal.span]; rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn
-  obtain ⟨c, hc⟩ := hn
-  rw [Finsupp.sum_fintype _ _ (by simp)] at hc
-  refine ⟨LocalizedModule.mk (∑ i, c i • a i) ⟨f ^ (n + 1), _, rfl⟩, ?_⟩
-  refine (structureSheafInType R M).eq_of_locally_eq' (fun i => basicOpen (b i)) _
-    (fun i => (ibU _).hom) iU _ _ fun i => (Subtype.ext (funext fun x => ?_)).trans (H _).symm
-  rw [toBasicOpenₗ_mk]
-  refine LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
-  simp_rw [one_smul, Finset.smul_sum, Submonoid.smul_def, smul_comm (b i), hab _ i, ← smul_assoc,
-    ← Finset.sum_smul, hc]
-
-中文:
-定理 toBasicOpenₗ_surjective
-  条件: (f : R)
-  结论: 函数.满射 (toBasicOpenₗ R M f)
-  证明: by
-  intro s
-  obtain ⟨ι, _, a, b, ibU, iU, hab, H⟩ := exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const _
-    (PrimeSpectrum.isCompact_basicOpen _) s
-  obtain ⟨n, hn⟩ : f in (Ideal.span (Set.range b)).radical := by
-    have : PrimeSpectrum.zeroLocus (Set.range b) subseteq PrimeSpectrum.zeroLocus {f} := by
-      simpa [← SetLike.coe_subset_coe, ← Set.compl_iInter,
-        ← PrimeSpectrum.zeroLocus_iUnion, PrimeSpectrum.Top] using iU
-    rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.zeroLocus_span]; rw [PrimeSpectrum.mem_vanishingIdeal]
-    exact fun x hx => by simpa using this hx
-  replace hn := Ideal.mul_mem_right f _ hn
-  rw [← pow_succ]; rw [Ideal.span]; rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn
-  obtain ⟨c, hc⟩ := hn
-  rw [Finsupp.sum_fintype _ _ (by simp)] at hc
-  refine ⟨LocalizedModule.mk (∑ i, c i • a i) ⟨f ^ (n + 1), _, rfl⟩, ?_⟩
-  refine (structureSheafInType R M).eq_of_locally_eq' (fun i => basicOpen (b i)) _
-    (fun i => (ibU _).hom) iU _ _ fun i => (Subtype.ext (funext fun x => ?_)).trans (H _).symm
-  rw [toBasicOpenₗ_mk]
-  refine LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
-  simp_rw [one_smul, Finset.smul_sum, Submonoid.smul_def, smul_comm (b i), hab _ i, ← smul_assoc,
-    ← Finset.sum_smul, hc]
-
-Depends on / 依赖: Ideal.span, PrimeSpectrum, PrimeSpectrum.Top, PrimeSpectrum.isCompact_basicOpen, PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical, PrimeSpectrum.zeroLocus, PrimeSpectrum.zeroLocus_, PrimeSpectrum.zeroLocus_iUnion, Set.compl_iInter, Set.range, SetLike, SetLike.coe_subset_coe, coe_subset_coe, compl_iInter, exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const, isCompact_basicOpen, radical, subseteq, vanishingIdeal_zeroLocus_eq_radical, zeroLocus
+/-
+**AlgebraicGeometry.StructureSheaf.toBasicOpen** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBasicOpenₗ_surjective (f : R) : Function.Surjective (toBasicOpenₗ R M f) := by
   intro s
   obtain ⟨ι, _, a, b, ibU, iU, hab, H⟩ := exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const _
     (PrimeSpectrum.isCompact_basicOpen _) s
-  obtain ⟨n, hn⟩ : f in (Ideal.span (Set.range b)).radical := by
-    have : PrimeSpectrum.zeroLocus (Set.range b) subseteq PrimeSpectrum.zeroLocus {f} := by
+  obtain ⟨n, hn⟩ : f ∈ (Ideal.span (Set.range b)).radical := by
+    have : PrimeSpectrum.zeroLocus (Set.range b) ⊆ PrimeSpectrum.zeroLocus {f} := by
       simpa [← SetLike.coe_subset_coe, ← Set.compl_iInter,
         ← PrimeSpectrum.zeroLocus_iUnion, PrimeSpectrum.Top] using iU
-    rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.zeroLocus_span]; rw [PrimeSpectrum.mem_vanishingIdeal]
-    exact fun x hx => by simpa using this hx
+    rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical, PrimeSpectrum.zeroLocus_span,
+      PrimeSpectrum.mem_vanishingIdeal]
+    exact fun x hx ↦ by simpa using this hx
   replace hn := Ideal.mul_mem_right f _ hn
-  rw [← pow_succ]; rw [Ideal.span]; rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn
+  rw [← pow_succ, Ideal.span, Finsupp.mem_span_range_iff_exists_finsupp] at hn
   obtain ⟨c, hc⟩ := hn
   rw [Finsupp.sum_fintype _ _ (by simp)] at hc
   refine ⟨LocalizedModule.mk (∑ i, c i • a i) ⟨f ^ (n + 1), _, rfl⟩, ?_⟩
-  refine (structureSheafInType R M).eq_of_locally_eq' (fun i => basicOpen (b i)) _
-    (fun i => (ibU _).hom) iU _ _ fun i => (Subtype.ext (funext fun x => ?_)).trans (H _).symm
+  refine (structureSheafInType R M).eq_of_locally_eq' (fun i ↦ basicOpen (b i)) _
+    (fun i ↦ (ibU _).hom) iU _ _ fun i ↦ (Subtype.ext (funext fun x ↦ ?_)).trans (H _).symm
   rw [toBasicOpenₗ_mk]
   refine LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
   simp_rw [one_smul, Finset.smul_sum, Submonoid.smul_def, smul_comm (b i), hab _ i, ← smul_assoc,
@@ -1426,21 +1225,10 @@ public instance (f : R) : IsLocalizedModule.Away f (toOpenₗ R M (basicOpen f))
       (.ofBijective _ ⟨toBasicOpenₗ_injective _, toBasicOpenₗ_surjective _⟩)
   ext x
   simp [toOpenₗ]
-
-/--
-Instance `isIso_toBasicOpenₗ` / 实例 `isIso_toBasicOpenₗ`
-
-English:
-instance isIso_toBasicOpenₗ
-  signature: (f : R)
-  body: (ConcreteCategory.isIso_iff_bijective _).mpr ⟨toBasicOpenₗ_injective _, toBasicOpenₗ_surjective _⟩
-
-中文:
-实例 isIso_toBasicOpenₗ
-  签名: (f : R)
-  定义体: (ConcreteCategory.isIso_iff_bijective _).mpr ⟨toBasicOpenₗ_injective _, toBasicOpenₗ_surjective _⟩
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.isIso_iff_bijective, isIso_iff_bijective
+/-
+**AlgebraicGeometry.StructureSheaf.isIso_toBasicOpen** 是 Mathlib 中的一个实例，位于命名空间 `
+AlgebraicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isIso_toBasicOpenₗ (f : R) :
     IsIso (ModuleCat.ofHom (toBasicOpenₗ R M f)) :=
@@ -1450,8 +1238,8 @@ set_option backward.isDefEq.respectTransparency false in
 public lemma toOpenₗ_top_bijective : Function.Bijective (toOpenₗ R M ⊤) := by
   have : IsLocalizedModule ⊥ (toOpenₗ R M ⊤) := by
     convert! (inferInstance : IsLocalizedModule (.powers 1) (toOpenₗ R M (basicOpen 1)))
-    rw [PrimeSpectrum.basicOpen_one]; rw [Submonoid.powers_one]
-  refine ⟨fun x y e => by simpa using (IsLocalizedModule.eq_iff_exists ⊥ _).mp e, fun x => ?_⟩
+    rw [PrimeSpectrum.basicOpen_one, Submonoid.powers_one]
+  refine ⟨fun x y e ↦ by simpa using (IsLocalizedModule.eq_iff_exists ⊥ _).mp e, fun x ↦ ?_⟩
   obtain ⟨⟨x, _, rfl⟩, rfl⟩ := IsLocalizedModule.mk'_surjective ⊥ (toOpenₗ R M ⊤) x
   exact ⟨x, (IsLocalizedModule.mk'_one ..).symm⟩
 
@@ -1461,7 +1249,7 @@ public lemma algebraMap_obj_top_bijective :
 
 set_option backward.isDefEq.respectTransparency false in
 public instance (f : R) : IsLocalization.Away f Γ(R, basicOpen f) :=
-(isLocalizedModule_iff_isLocalization' _ _).mp
+  (isLocalizedModule_iff_isLocalization' _ _).mp <|
     inferInstanceAs (IsLocalizedModule.Away f (toOpenₗ R R (basicOpen f)))
 
 end basicOpen
@@ -1480,58 +1268,42 @@ the stalk of `structureSheaf R` at `x`. -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[elementwise, reassoc]
 public lemma algebraMap_germ
-    (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hxU : x in U) :
+    (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hxU : x ∈ U) :
     CommRingCat.ofHom (algebraMap R Γ(R, U)) ≫ (structurePresheafInCommRingCat R).germ U x hxU =
       toStalk R x := by
   dsimp [toStalk]
-  rw [← (structurePresheafInCommRingCat R).germ_res (homOfLE (le_top : U <= ⊤)) _ hxU]
+  rw [← (structurePresheafInCommRingCat R).germ_res (homOfLE (le_top : U ≤ ⊤)) _ hxU]
   rfl
 
 @[deprecated (since := "2026-02-10")] public alias toOpen_germ := algebraMap_germ
 
 public
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) : Algebra R ((structurePresheafInCommRingCat R).stalk x) :=
   (toStalk R x).hom.toAlgebra
 
 public
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) :
     Module R ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x) :=
   .compHom _ (toStalk R x).hom
 
 variable (M) in
-/--
-Definition of `germₗ` / `germₗ` 的定义
-
-English:
-definition germₗ
-  signature: (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hxU : x in U)
-  body: (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU).hom
-  map_smul' r m := by
-    change _ = toStalk R x _ • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
-    rw [← algebraMap_germ_apply U x hxU]
-    refine .trans ?_ (PresheafOfModules.germ_smul ..)
-    congr 1
-    exact (IsScalarTower.algebraMap_smul Γ(R, U) r m).symm
-
-public
-
-中文:
-定义 germₗ
-  签名: (U : Opens (素谱.顶元素 R)) (x : 素谱.顶元素 R) (hxU : x in U)
-  定义体: (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU).hom
-  map_smul' r m := by
-    change _ = toStalk R x _ • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
-    rw [← algebraMap_germ_apply U x hxU]
-    refine .trans ?_ (PresheafOfModules.germ_smul ..)
-    congr 1
-    exact (IsScalarTower.algebraMap_smul Γ(R, U) r m).symm
-
-public
-
-Depends on / 依赖: Presheaf, TopCat, TopCat.Presheaf.germ, moduleStructurePresheaf, presheaf
+/-
+**AlgebraicGeometry.StructureSheaf.germ** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def germₗ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hxU : x in U) :
-    Γ(M, U) ->ₗ[R] ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x) where
+def germₗ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hxU : x ∈ U) :
+    Γ(M, U) →ₗ[R] ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x) where
   __ := (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU).hom
   map_smul' r m := by
     change _ = toStalk R x _ • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
@@ -1541,69 +1313,27 @@ def germₗ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hxU : x
     exact (IsScalarTower.algebraMap_smul Γ(R, U) r m).symm
 
 public
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) :
     IsScalarTower R ((structurePresheafInCommRingCat R).stalk x)
       ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x) :=
-  .of_algebraMap_smul fun _ _ => rfl
+  .of_algebraMap_smul fun _ _ ↦ rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (R M) in
-/--
-Definition of `modulePresheafStalkIso` / `modulePresheafStalkIso` 的定义
-
-English:
-definition modulePresheafStalkIso
-  signature: (x : PrimeSpectrum.Top R)
-  body: (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves (forget₂ (ModuleCat R) Ab)
-    (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-      structurePresheafInModuleCat R M))⟩:).addCommGroupIsoToAddEquiv
-  map_smul' r m := by
-    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x ≅
-      (forget₂ _ _).obj ((structurePresheafInModuleCat R M).stalk x) :=
-      Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves (forget₂ (ModuleCat R) Ab)
-      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-        structurePresheafInModuleCat R M))⟩
-    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
-    have : TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU ≫ α.hom =
-        (forget₂ _ _).map ((structurePresheafInModuleCat R M).germ U x hxU) :=
-      Limits.colimit.isoColimitCocone_ι_hom (C := Ab) ..
-    have (m : _) : α.hom (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU m) =
-        (structurePresheafInModuleCat R M).germ U x hxU m := congr($this m)
-    change α.hom (r • germₗ M U x hxU _) =
-      r • (show (structurePresheafInModuleCat R M).stalk x from _)
-    rw [← map_smul]
-    refine (this _).trans ?_
-    dsimp [toStalk]
-    erw [this]
-    exact ((structurePresheafInModuleCat R M).germ U x hxU).hom.map_smul _ _
-
-中文:
-定义 modulePresheafStalkIso
-  签名: (x : 素谱.顶元素 R)
-  定义体: (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves (forget₂ (ModuleCat R) Ab)
-    (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-      structurePresheafInModuleCat R M))⟩:).addCommGroupIsoToAddEquiv
-  map_smul' r m := by
-    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x ≅
-      (forget₂ _ _).obj ((structurePresheafInModuleCat R M).stalk x) :=
-      Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves (forget₂ (ModuleCat R) Ab)
-      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-        structurePresheafInModuleCat R M))⟩
-    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
-    have : TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU ≫ α.hom =
-        (forget₂ _ _).map ((structurePresheafInModuleCat R M).germ U x hxU) :=
-      Limits.colimit.isoColimitCocone_ι_hom (C := Ab) ..
-    have (m : _) : α.hom (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU m) =
-        (structurePresheafInModuleCat R M).germ U x hxU m := congr($this m)
-    change α.hom (r • germₗ M U x hxU _) =
-      r • (show (structurePresheafInModuleCat R M).stalk x from _)
-    rw [← map_smul]
-    refine (this _).trans ?_
-    dsimp [toStalk]
-    erw [this]
-    exact ((structurePresheafInModuleCat R M).germ U x hxU).hom.map_smul _ _
-
-Depends on / 依赖: Limits, Limits.colimit.isoColimitCocone, Limits.isColimitOfPreserves, ModuleCat, colimit, isColimitOfPreserves, isoColimitCocone
+/-
+**AlgebraicGeometry.StructureSheaf.modulePresheafStalkIso** 是 Mathlib 中的一个定义，位于命
+名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：modulePresheafStalkIso (x : PrimeSpectrum.Top R) : ↑(TopCat.Presheaf.stalk
+ (moduleStructurePresheaf R M).presheaf x) ≃ₗ[R] (structurePresheafInModuleCat R
+ M).stalk x where __
+参数：x : PrimeSpectrum.Top R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def modulePresheafStalkIso (x : PrimeSpectrum.Top R) :
     ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x) ≃ₗ[R]
@@ -1630,55 +1360,47 @@ def modulePresheafStalkIso (x : PrimeSpectrum.Top R) :
     dsimp [toStalk]
     erw [this]
     exact ((structurePresheafInModuleCat R M).germ U x hxU).hom.map_smul _ _
-
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) :
     Module ((structurePresheafInCommRingCat R).stalk x)
       ((structurePresheafInModuleCat R M).stalk x) :=
   (modulePresheafStalkIso R M x).toAddEquiv.symm.module _
-
-/--
-lemma `toStalk_smul` / 引理 `toStalk_smul`
-
-English:
-lemma toStalk_smul
-  statement: (x : PrimeSpectrum.Top R) (r : R)
-  proof: by
-  change modulePresheafStalkIso R M x (toStalk R x r • (modulePresheafStalkIso R M x).symm m) = _
-  rw [← (modulePresheafStalkIso R M x).eq_symm_apply]; rw [map_smul]
-  rfl
-
-中文:
-引理 toStalk_smul
-  结论: (x : 素谱.顶元素 R) (r : R)
-  证明: by
-  change modulePresheafStalkIso R M x (toStalk R x r • (modulePresheafStalkIso R M x).symm m) = _
-  rw [← (modulePresheafStalkIso R M x).eq_symm_apply]; rw [map_smul]
-  rfl
-
-Depends on / 依赖: eq_symm_apply, map_smul, modulePresheafStalkIso, toStalk
+/-
+**AlgebraicGeometry.StructureSheaf.toStalk_smul** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry.StructureSheaf`。
+形式化陈述：toStalk_smul (x : PrimeSpectrum.Top R) (r : R) (m : (structurePresheafInMo
+duleCat R M).stalk x) : toStalk R x r • m = r • m
+参数：x : PrimeSpectrum.Top R；r : R；m : (structurePresheafInModuleCat R M).stalk x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toStalk_smul (x : PrimeSpectrum.Top R) (r : R)
     (m : (structurePresheafInModuleCat R M).stalk x) :
     toStalk R x r • m = r • m := by
   change modulePresheafStalkIso R M x (toStalk R x r • (modulePresheafStalkIso R M x).symm m) = _
-  rw [← (modulePresheafStalkIso R M x).eq_symm_apply]; rw [map_smul]
+  rw [← (modulePresheafStalkIso R M x).eq_symm_apply, map_smul]
   rfl
 
 variable (R M) in
-/--
-Definition of `toStalkₗ'` / `toStalkₗ'` 的定义
+/-- The canonical ring homomorphism interpreting an element of `R` as an element of
+the stalk of `structureSheaf R` at `x`. -/
+/-
+**AlgebraicGeometry.StructureSheaf.toStalk** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.StructureSheaf`。
+形式化陈述：(R : Type u) →   [inst : CommRing R] →     (x : ↑(AlgebraicGeometry.PrimeS
+pectrum.Top R)) →       CommRingCat.of R ⟶ (AlgebraicGeometry.structurePresheafI
+nCommRingCat R).stalk x
+参数：AlgebraicGeometry.PrimeSpectrum.Top R。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition toStalkₗ'
-  signature: (x : PrimeSpectrum.Top R)
-  body: ModuleCat.ofHom (toOpenₗ R M ⊤) ≫ (structurePresheafInModuleCat R M).germ _ x trivial
-
-中文:
-定义 toStalkₗ'
-  签名: (x : 素谱.顶元素 R)
-  定义体: ModuleCat.ofHom (toOpenₗ R M ⊤) ≫ (structurePresheafInModuleCat R M).germ _ x trivial
-
-Depends on / 依赖: ModuleCat, ModuleCat.ofHom, structurePresheafInModuleCat
+--- 原说明 ---
+The canonical ring homomorphism interpreting an element of `R` as an element of
+the stalk of `structureSheaf R` at `x`.
 -/
 def toStalkₗ' (x : PrimeSpectrum.Top R) :
     ModuleCat.of R M ⟶ (structurePresheafInModuleCat R M).stalk x :=
@@ -1686,90 +1408,44 @@ def toStalkₗ' (x : PrimeSpectrum.Top R) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toOpenₗ_germ` / 定理 `toOpenₗ_germ`
-
-English:
-theorem toOpenₗ_germ
-  given: (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x in U)
-  proof: by
-  rw [toStalkₗ']; rw [← Presheaf.germ_res _ (homOfLE le_top) _ hx]; rw [← Category.assoc]
-  rfl
-
-中文:
-定理 toOpenₗ_germ
-  条件: (U : Opens (素谱.顶元素 R)) (x : 素谱.顶元素 R) (hx : x in U)
-  证明: by
-  rw [toStalkₗ']; rw [← Presheaf.germ_res _ (homOfLE le_top) _ hx]; rw [← Category.assoc]
-  rfl
-
-Depends on / 依赖: Category, Category.assoc, Presheaf, Presheaf.germ_res, germ_res, homOfLE, le_top
+/-
+**AlgebraicGeometry.StructureSheaf.toOpen** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.StructureSheaf`。
+形式化陈述：toOpen (U : Opens (PrimeSpectrum.Top R)) : CommRingCat.of R ⟶ (structureSh
+eaf R).1.obj (op U)
+参数：U : Opens (PrimeSpectrum.Top R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOpenₗ_germ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x in U) :
+theorem toOpenₗ_germ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x ∈ U) :
     ModuleCat.ofHom (toOpenₗ R M U) ≫
       (structurePresheafInModuleCat R M).germ U x hx = toStalkₗ' R M x := by
-  rw [toStalkₗ']; rw [← Presheaf.germ_res _ (homOfLE le_top) _ hx]; rw [← Category.assoc]
+  rw [toStalkₗ', ← Presheaf.germ_res _ (homOfLE le_top) _ hx, ← Category.assoc]
   rfl
-
-/--
-theorem `isUnit_toStalk` / 定理 `isUnit_toStalk`
-
-English:
-theorem isUnit_toStalk
-  given: (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f)
-  proof: by
-  convert! (isUnit_basicOpen f).map ((structurePresheafInCommRingCat R).germ _ x hf).hom
-  exact ((structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : basicOpen f <= ⊤))
-    x hf (algebraMap R Γ(R, ⊤) f)).symm
-
-中文:
-定理 isUnit_toStalk
-  条件: (x : 素谱.顶元素 R) (f : R) (hf : x in basicOpen f)
-  证明: by
-  convert! (isUnit_basicOpen f).map ((structurePresheafInCommRingCat R).germ _ x hf).hom
-  exact ((structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : basicOpen f <= ⊤))
-    x hf (algebraMap R Γ(R, ⊤) f)).symm
-
-Depends on / 依赖: algebraMap, basicOpen, convert, germ_res_apply, homOfLE, isUnit_basicOpen, le_top, structurePresheafInCommRingCat
+/-
+**AlgebraicGeometry.StructureSheaf.isUnit_toStalk** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.StructureSheaf`。
+形式化陈述：isUnit_toStalk (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f) :
+ IsUnit (toStalk R x f)
+参数：x : PrimeSpectrum.Top R；f : R；hf : x in basicOpen f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isUnit_toStalk (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f) :
+theorem isUnit_toStalk (x : PrimeSpectrum.Top R) (f : R) (hf : x ∈ basicOpen f) :
     IsUnit (toStalk R x f) := by
   convert! (isUnit_basicOpen f).map ((structurePresheafInCommRingCat R).germ _ x hf).hom
-  exact ((structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : basicOpen f <= ⊤))
+  exact ((structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : basicOpen f ≤ ⊤))
     x hf (algebraMap R Γ(R, ⊤) f)).symm
-
-/--
-theorem `isUnit_toStalkₗ'` / 定理 `isUnit_toStalkₗ'`
-
-English:
-theorem isUnit_toStalkₗ'
-  given: (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f)
-  proof: by
-  have := (isUnit_toStalk x f hf).map (algebraMap _
-    (Module.End ((structurePresheafInCommRingCat R).stalk x)
-      ((structurePresheafInModuleCat R M).stalk x)))
-  rw [Module.End.isUnit_iff] at this ⊢
-  convert! this
-  ext a
-  simp only [Module.algebraMap_end_apply]
-  rw [toStalk_smul]
-
-中文:
-定理 isUnit_toStalkₗ'
-  条件: (x : 素谱.顶元素 R) (f : R) (hf : x in basicOpen f)
-  证明: by
-  have := (isUnit_toStalk x f hf).map (algebraMap _
-    (Module.End ((structurePresheafInCommRingCat R).stalk x)
-      ((structurePresheafInModuleCat R M).stalk x)))
-  rw [Module.End.isUnit_iff] at this ⊢
-  convert! this
-  ext a
-  simp only [Module.algebraMap_end_apply]
-  rw [toStalk_smul]
-
-Depends on / 依赖: Module, Module.End, Module.End.isUnit_iff, Module.algebraMap_end_apply, algebraMap, algebraMap_end_apply, convert, isUnit_iff, isUnit_toStalk, structurePresheafInCommRingCat, structurePresheafInModuleCat, toStalk_smul
+/-
+**AlgebraicGeometry.StructureSheaf.isUnit_toStalk** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.StructureSheaf`。
+形式化陈述：isUnit_toStalk (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f) :
+ IsUnit (toStalk R x f)
+参数：x : PrimeSpectrum.Top R；f : R；hf : x in basicOpen f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isUnit_toStalkₗ' (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f) :
+theorem isUnit_toStalkₗ' (x : PrimeSpectrum.Top R) (f : R) (hf : x ∈ basicOpen f) :
     IsUnit (algebraMap R (Module.End R ((structurePresheafInModuleCat R M).stalk x)) f) := by
   have := (isUnit_toStalk x f hf).map (algebraMap _
     (Module.End ((structurePresheafInCommRingCat R).stalk x)
@@ -1782,95 +1458,61 @@ theorem isUnit_toStalkₗ' (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpe
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (R M) in
-/--
-Definition of `localizationtoStalkₗ` / `localizationtoStalkₗ` 的定义
+/-- The canonical ring homomorphism from the localization of `R` at `p` to the stalk
+of the structure sheaf at the point `p`. -/
+/-
+**AlgebraicGeometry.StructureSheaf.localizationtoStalk** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition localizationtoStalkₗ
-  signature: (x : PrimeSpectrum.Top R)
-  body: ModuleCat.ofHom (IsLocalizedModule.lift x.asIdeal.primeCompl
-    (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
-    (toStalkₗ' R M x).hom fun f => isUnit_toStalkₗ' x f.1 f.2 :)
-
-中文:
-定义 localizationtoStalkₗ
-  签名: (x : 素谱.顶元素 R)
-  定义体: ModuleCat.ofHom (IsLocalizedModule.lift x.asIdeal.primeCompl
-    (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
-    (toStalkₗ' R M x).hom fun f => isUnit_toStalkₗ' x f.1 f.2 :)
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift, LocalizedModule, LocalizedModule.mkLinearMap, ModuleCat, ModuleCat.ofHom, asIdeal, mkLinearMap, primeCompl, x.asIdeal.primeCompl
+--- 原说明 ---
+The canonical ring homomorphism from the localization of `R` at `p` to the stalk
+of the structure sheaf at the point `p`.
 -/
 def localizationtoStalkₗ (x : PrimeSpectrum.Top R) :
     ModuleCat.of R (LocalizedModule x.asIdeal.primeCompl M) ⟶
       (structurePresheafInModuleCat R M).stalk x :=
   ModuleCat.ofHom (IsLocalizedModule.lift x.asIdeal.primeCompl
     (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
-    (toStalkₗ' R M x).hom fun f => isUnit_toStalkₗ' x f.1 f.2 :)
+    (toStalkₗ' R M x).hom fun f ↦ isUnit_toStalkₗ' x f.1 f.2 :)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `localizationtoStalkₗ_mk` / 定理 `localizationtoStalkₗ_mk`
-
-English:
-theorem localizationtoStalkₗ_mk
-  given: (x : PrimeSpectrum.Top R) (f : M) (s)
-  proof: by
-  apply ((Module.End.isUnit_iff _).mp (isUnit_toStalkₗ' _ s.1 s.2)).1 ?_
-  dsimp [localizationtoStalkₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [← map_smul]; rw [← toOpenₗ_germ (basicOpen ↑s) _ s.2]; rw [smul_const]
-  dsimp [toOpenₗ]
-  congr 1
-  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
-
-中文:
-定理 localizationtoStalkₗ_mk
-  条件: (x : 素谱.顶元素 R) (f : M) (s)
-  证明: by
-  apply ((Module.End.isUnit_iff _).mp (isUnit_toStalkₗ' _ s.1 s.2)).1 ?_
-  dsimp [localizationtoStalkₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [← map_smul]; rw [← toOpenₗ_germ (basicOpen ↑s) _ s.2]; rw [smul_const]
-  dsimp [toOpenₗ]
-  congr 1
-  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift_apply, LocalizedModule, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_cancel, LocalizedModule.smul, Module, Module.End.isUnit_iff, Submonoid, Submonoid.smul_def, basicOpen, const_eq_const_of_smul_eq_smul, isUnit_iff, lift_apply, map_smul, mkLinearMap_apply, mk_cancel, smul_const, smul_def
+/-
+**AlgebraicGeometry.StructureSheaf.localizationtoStalk** 是 Mathlib 中的一个定理，位于命名空间
+ `AlgebraicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem localizationtoStalkₗ_mk (x : PrimeSpectrum.Top R) (f : M) (s) :
     localizationtoStalkₗ R M x (.mk f s) = (structurePresheafInModuleCat R M).germ
-      (PrimeSpectrum.basicOpen (s : R)) x s.2 (const f (s : R) _ fun _ => id) := by
+      (PrimeSpectrum.basicOpen (s : R)) x s.2 (const f (s : R) _ fun _ ↦ id) := by
   apply ((Module.End.isUnit_iff _).mp (isUnit_toStalkₗ' _ s.1 s.2)).1 ?_
   dsimp [localizationtoStalkₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [← map_smul]; rw [← toOpenₗ_germ (basicOpen ↑s) _ s.2]; rw [smul_const]
+  rw [← map_smul, LocalizedModule.smul'_mk, ← Submonoid.smul_def, LocalizedModule.mk_cancel,
+    ← LocalizedModule.mkLinearMap_apply, IsLocalizedModule.lift_apply, ← map_smul,
+    ← toOpenₗ_germ (basicOpen ↑s) _ s.2, smul_const]
   dsimp [toOpenₗ]
   congr 1
   exact const_eq_const_of_smul_eq_smul (H := by simp) ..
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (R M) in
-/--
-Definition of `openToLocalizationₗ` / `openToLocalizationₗ` 的定义
+/-- The ring homomorphism that takes a section of the structure sheaf of `R` on the open set `U`,
+implemented as a subtype of dependent functions to localizations at prime ideals, and evaluates
+the section on the point corresponding to a given prime ideal. -/
+/-
+**AlgebraicGeometry.StructureSheaf.openToLocalization** 是 Mathlib 中的一个定义，位于命名空间 
+`AlgebraicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition openToLocalizationₗ
-  signature: (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x in U)
-  body: ModuleCat.ofHom
-  { toFun s := s.1 ⟨x, hx⟩
-    map_smul' _ _ := rfl
-    map_add' _ _ := rfl }
-
-中文:
-定义 openToLocalizationₗ
-  签名: (U : Opens (素谱.顶元素 R)) (x : 素谱.顶元素 R) (hx : x in U)
-  定义体: ModuleCat.ofHom
-  { toFun s := s.1 ⟨x, hx⟩
-    map_smul' _ _ := rfl
-    map_add' _ _ := rfl }
-
-Depends on / 依赖: ModuleCat, ModuleCat.ofHom, map_add, map_smul
+--- 原说明 ---
+The ring homomorphism that takes a section of the structure sheaf of `R` on the 
+open set `U`,
+implemented as a subtype of dependent functions to localizations at prime ideals
+, and evaluates
+the section on the point corresponding to a given prime ideal.
 -/
-def openToLocalizationₗ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x in U) :
+def openToLocalizationₗ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x ∈ U) :
     (structurePresheafInModuleCat R M).obj (op U) ⟶
       .of R (LocalizedModule x.asIdeal.primeCompl M) :=
   ModuleCat.ofHom
@@ -1880,28 +1522,19 @@ def openToLocalizationₗ (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.T
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (R M) in
-/--
-Definition of `stalkToLocalizationₗ` / `stalkToLocalizationₗ` 的定义
+/-- The ring homomorphism from the stalk of the structure sheaf of `R` at a point corresponding to
+a prime ideal `p` to the localization of `R` at `p`,
+formed by gluing the `openToLocalization` maps. -/
+/-
+**AlgebraicGeometry.StructureSheaf.stalkToLocalization** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stalkToLocalizationₗ
-  signature: (x : PrimeSpectrum.Top R)
-  body: Limits.colimit.desc ((OpenNhds.inclusion x).op ⋙ structurePresheafInModuleCat R M)
-    { pt := _
-      ι.app U := openToLocalizationₗ R M ((OpenNhds.inclusion _).obj (unop U)) x (unop U).2 }
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 stalkToLocalizationₗ
-  签名: (x : 素谱.顶元素 R)
-  定义体: Limits.colimit.desc ((OpenNhds.inclusion x).op ⋙ structurePresheafInModuleCat R M)
-    { pt := _
-      ι.app U := openToLocalizationₗ R M ((OpenNhds.inclusion _).obj (unop U)) x (unop U).2 }
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Limits, Limits.colimit.desc, OpenNhds, OpenNhds.inclusion, colimit, inclusion, structurePresheafInModuleCat
+--- 原说明 ---
+The ring homomorphism from the stalk of the structure sheaf of `R` at a point co
+rresponding to
+a prime ideal `p` to the localization of `R` at `p`,
+formed by gluing the `openToLocalization` maps.
 -/
 def stalkToLocalizationₗ (x : PrimeSpectrum.Top R) :
     (structurePresheafInModuleCat R M).stalk x ⟶ .of R (LocalizedModule x.asIdeal.primeCompl M) :=
@@ -1910,46 +1543,33 @@ def stalkToLocalizationₗ (x : PrimeSpectrum.Top R) :
       ι.app U := openToLocalizationₗ R M ((OpenNhds.inclusion _).obj (unop U)) x (unop U).2 }
 
 @[reassoc (attr := simp)]
-/--
-theorem `germ_stalkToLocalizationₗ` / 定理 `germ_stalkToLocalizationₗ`
-
-English:
-theorem germ_stalkToLocalizationₗ
-  proof: Limits.colimit.ι_desc _ _
-
-中文:
-定理 germ_stalkToLocalizationₗ
-  证明: Limits.colimit.ι_desc _ _
-
-Depends on / 依赖: Limits, Limits.colimit, colimit
+/-
+**AlgebraicGeometry.StructureSheaf.germ_stalkToLocalization** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem germ_stalkToLocalizationₗ
-    (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x in U) :
+    (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x ∈ U) :
     (structurePresheafInModuleCat R M).germ U x hx ≫ stalkToLocalizationₗ R M x =
       openToLocalizationₗ R M U x hx :=
   Limits.colimit.ι_desc _ _
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toStalkₗ'_stalkToFiberRingHom` / 定理 `toStalkₗ'_stalkToFiberRingHom`
-
-English:
-theorem toStalkₗ'_stalkToFiberRingHom
-  given: (x : PrimeSpectrum.Top R)
-  proof: by
-  rw [toStalkₗ']; rw [Category.assoc]; rw [germ_stalkToLocalizationₗ]; rfl
-
-中文:
-定理 toStalkₗ'_stalkToFiberRingHom
-  条件: (x : 素谱.顶元素 R)
-  证明: by
-  rw [toStalkₗ']; rw [Category.assoc]; rw [germ_stalkToLocalizationₗ]; rfl
+/-
+**AlgebraicGeometry.StructureSheaf.toStalk** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.StructureSheaf`。
+形式化陈述：(R : Type u) →   [inst : CommRing R] →     (x : ↑(AlgebraicGeometry.PrimeS
+pectrum.Top R)) →       CommRingCat.of R ⟶ (AlgebraicGeometry.structurePresheafI
+nCommRingCat R).stalk x
+参数：AlgebraicGeometry.PrimeSpectrum.Top R。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 theorem toStalkₗ'_stalkToFiberRingHom (x : PrimeSpectrum.Top R) :
     toStalkₗ' R M x ≫ stalkToLocalizationₗ R M x =
       ModuleCat.ofHom (LocalizedModule.mkLinearMap _ _) := by
-  rw [toStalkₗ']; rw [Category.assoc]; rw [germ_stalkToLocalizationₗ]; rfl
+  rw [toStalkₗ', Category.assoc, germ_stalkToLocalizationₗ]; rfl
 
 open TopCat.Presheaf
 
@@ -1959,56 +1579,23 @@ variable (R M) in
 /-- The ring isomorphism between the stalk of the structure sheaf of `R` at a point `p`
 corresponding to a prime ideal in `R` and the localization of `R` at `p`. -/
 @[simps]
-/--
-Definition of `stalkIsoₗ` / `stalkIsoₗ` 的定义
+/-
+**AlgebraicGeometry.StructureSheaf.stalkIso** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.StructureSheaf`。
+形式化陈述：(R : Type u) →   [inst : CommRing R] →     (x : PrimeSpectrum R) →       L
+ocalization.AtPrime x.asIdeal ≃ₐ[R] ↑((AlgebraicGeometry.structurePresheafInComm
+RingCat R).stalk x)
+参数：AlgebraicGeometry.structurePresheafInCommRingCat R。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.StructureSheaf.instAtPrimeCarrierStalkCommRingCatStruc
+turePresheafInCommRingCatAsIdeal`：∀ {R : Type u} [inst : CommRing R] (x : ↑(Alge
+braicGeometry.PrimeSpectrum.Top R)),   IsLocalization.AtPrime (↑((AlgebraicGeome
+try.structureP…
 
-English:
-definition stalkIsoₗ
-  signature: (x : PrimeSpectrum.Top R)
-  body: stalkToLocalizationₗ R M x
-  inv := localizationtoStalkₗ R M x
-  hom_inv_id := by
-    apply stalk_hom_ext
-    intro U hxU
-    ext s
-    obtain ⟨g, hxg, igU, f, hs⟩ :=
-      exists_const _ s x hxU
-    rw [germ_stalkToLocalizationₗ_assoc]; rw [Category.comp_id]; rw [← germ_res_apply _ igU.hom _ hxg]
-    refine congr(localizationtoStalkₗ R M x (openToLocalizationₗ R M _ x hxg $hs)).symm.trans ?_
-    refine (localizationtoStalkₗ_mk ..).trans
-      congr((structurePresheafInModuleCat R M).germ _ x hxg $hs)
-  inv_hom_id := by
-    ext1
-    refine IsLocalizedModule.ext x.asIdeal.primeCompl (LocalizedModule.mkLinearMap ..)
-      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap ..)) ?_
-    ext
-    dsimp [localizationtoStalkₗ]
-    rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [elementwise_of% toStalkₗ'_stalkToFiberRingHom (M := M) x]
-    simp
-
-中文:
-定义 stalkIsoₗ
-  签名: (x : 素谱.顶元素 R)
-  定义体: stalkToLocalizationₗ R M x
-  inv := localizationtoStalkₗ R M x
-  hom_inv_id := by
-    apply stalk_hom_ext
-    intro U hxU
-    ext s
-    obtain ⟨g, hxg, igU, f, hs⟩ :=
-      exists_const _ s x hxU
-    rw [germ_stalkToLocalizationₗ_assoc]; rw [Category.comp_id]; rw [← germ_res_apply _ igU.hom _ hxg]
-    refine congr(localizationtoStalkₗ R M x (openToLocalizationₗ R M _ x hxg $hs)).symm.trans ?_
-    refine (localizationtoStalkₗ_mk ..).trans
-      congr((structurePresheafInModuleCat R M).germ _ x hxg $hs)
-  inv_hom_id := by
-    ext1
-    refine IsLocalizedModule.ext x.asIdeal.primeCompl (LocalizedModule.mkLinearMap ..)
-      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap ..)) ?_
-    ext
-    dsimp [localizationtoStalkₗ]
-    rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [elementwise_of% toStalkₗ'_stalkToFiberRingHom (M := M) x]
-    simp
+--- 原说明 ---
+The ring isomorphism between the stalk of the structure sheaf of `R` at a point 
+`p`
+corresponding to a prime ideal in `R` and the localization of `R` at `p`.
 -/
 def stalkIsoₗ (x : PrimeSpectrum.Top R) :
     (structurePresheafInModuleCat R M).stalk x ≅
@@ -2021,7 +1608,7 @@ def stalkIsoₗ (x : PrimeSpectrum.Top R) :
     ext s
     obtain ⟨g, hxg, igU, f, hs⟩ :=
       exists_const _ s x hxU
-    rw [germ_stalkToLocalizationₗ_assoc]; rw [Category.comp_id]; rw [← germ_res_apply _ igU.hom _ hxg]
+    rw [germ_stalkToLocalizationₗ_assoc, Category.comp_id, ← germ_res_apply _ igU.hom _ hxg]
     refine congr(localizationtoStalkₗ R M x (openToLocalizationₗ R M _ x hxg $hs)).symm.trans ?_
     refine (localizationtoStalkₗ_mk ..).trans
       congr((structurePresheafInModuleCat R M).germ _ x hxg $hs)
@@ -2031,60 +1618,58 @@ def stalkIsoₗ (x : PrimeSpectrum.Top R) :
       (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap ..)) ?_
     ext
     dsimp [localizationtoStalkₗ]
-    rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [elementwise_of% toStalkₗ'_stalkToFiberRingHom (M := M) x]
+    rw [← LocalizedModule.mkLinearMap_apply, IsLocalizedModule.lift_apply,
+      elementwise_of% toStalkₗ'_stalkToFiberRingHom (M := M) x]
     simp
-
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum R) : IsIso (stalkToLocalizationₗ R M x) :=
   (stalkIsoₗ R M x).isIso_hom
-
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum R) : IsIso (localizationtoStalkₗ R M x) :=
   (stalkIsoₗ R M x).isIso_inv
 
 @[simp, reassoc]
-/--
-theorem `stalkToFiberRingHom_localizationToStalk` / 定理 `stalkToFiberRingHom_localizationToStalk`
-
-English:
-theorem stalkToFiberRingHom_localizationToStalk
-  given: (x : PrimeSpectrum.Top R)
-  proof: (stalkIsoₗ R M x).hom_inv_id
-
-@[simp, reassoc]
-
-中文:
-定理 stalkToFiberRingHom_localizationToStalk
-  条件: (x : 素谱.顶元素 R)
-  证明: (stalkIsoₗ R M x).hom_inv_id
-
-@[simp, reassoc]
-
-Depends on / 依赖: hom_inv_id
+/-
+**AlgebraicGeometry.StructureSheaf.stalkToFiberRingHom_localizationToStalk** 是 M
+athlib 中的一个定理，位于命名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：stalkToFiberRingHom_localizationToStalk (x : PrimeSpectrum.Top R) : stalkT
+oLocalizationₗ R M x ≫ localizationtoStalkₗ R M x = 𝟙 _
+参数：x : PrimeSpectrum.Top R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem stalkToFiberRingHom_localizationToStalk (x : PrimeSpectrum.Top R) :
     stalkToLocalizationₗ R M x ≫ localizationtoStalkₗ R M x = 𝟙 _ :=
   (stalkIsoₗ R M x).hom_inv_id
 
 @[simp, reassoc]
-/--
-theorem `localizationToStalk_stalkToFiberRingHom` / 定理 `localizationToStalk_stalkToFiberRingHom`
-
-English:
-theorem localizationToStalk_stalkToFiberRingHom
-  given: (x : PrimeSpectrum.Top R)
-  proof: (stalkIsoₗ R M x).inv_hom_id
-
-中文:
-定理 localizationToStalk_stalkToFiberRingHom
-  条件: (x : 素谱.顶元素 R)
-  证明: (stalkIsoₗ R M x).inv_hom_id
-
-Depends on / 依赖: inv_hom_id
+/-
+**AlgebraicGeometry.StructureSheaf.localizationToStalk_stalkToFiberRingHom** 是 M
+athlib 中的一个定理，位于命名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：localizationToStalk_stalkToFiberRingHom (x : PrimeSpectrum.Top R) : locali
+zationtoStalkₗ R M x ≫ stalkToLocalizationₗ R M x = 𝟙 _
+参数：x : PrimeSpectrum.Top R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem localizationToStalk_stalkToFiberRingHom (x : PrimeSpectrum.Top R) :
     localizationtoStalkₗ R M x ≫ stalkToLocalizationₗ R M x = 𝟙 _ :=
   (stalkIsoₗ R M x).inv_hom_id
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) :
     IsLocalizedModule x.asIdeal.primeCompl (toStalkₗ' R M x).hom := by
   convert!
@@ -2101,37 +1686,22 @@ variable (R M) in
 /-- The canonical ring homomorphism interpreting an element of `R` as an element of
 the stalk of `structureSheaf R` at `x`. -/
 @[expose] public
-/--
-Definition of `toStalkₗ` / `toStalkₗ` 的定义
+/-
+**AlgebraicGeometry.StructureSheaf.toStalk** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.StructureSheaf`。
+形式化陈述：(R : Type u) →   [inst : CommRing R] →     (x : ↑(AlgebraicGeometry.PrimeS
+pectrum.Top R)) →       CommRingCat.of R ⟶ (AlgebraicGeometry.structurePresheafI
+nCommRingCat R).stalk x
+参数：AlgebraicGeometry.PrimeSpectrum.Top R。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition toStalkₗ
-  signature: (x : PrimeSpectrum.Top R)
-  body: TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf ⊤ x (by simp) (toOpenₗ R M ⊤ m)
-  map_add' := by simp
-  map_smul' r m := by
-    change _ = toStalk R x r • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
-    rw [map_smul]
-    refine .trans ?_ ((moduleStructurePresheaf R M).germ_smul ..)
-    congr 1
-    exact (IsScalarTower.algebraMap_smul Γ(R, _) (M := Γ(M, _)) _ _).symm
-
-中文:
-定义 toStalkₗ
-  签名: (x : 素谱.顶元素 R)
-  定义体: TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf ⊤ x (by simp) (toOpenₗ R M ⊤ m)
-  map_add' := by simp
-  map_smul' r m := by
-    change _ = toStalk R x r • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
-    rw [map_smul]
-    refine .trans ?_ ((moduleStructurePresheaf R M).germ_smul ..)
-    congr 1
-    exact (IsScalarTower.algebraMap_smul Γ(R, _) (M := Γ(M, _)) _ _).symm
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_smul, Presheaf, TopCat, TopCat.Presheaf.germ, algebraMap_smul, germ_smul, map_add, map_smul, moduleStructurePresheaf, presheaf, toStalk
+--- 原说明 ---
+The canonical ring homomorphism interpreting an element of `R` as an element of
+the stalk of `structureSheaf R` at `x`.
 -/
 def toStalkₗ (x : PrimeSpectrum.Top R) :
-    M ->ₗ[R] ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x) where
+    M →ₗ[R] ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x) where
   toFun m :=
     TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf ⊤ x (by simp) (toOpenₗ R M ⊤ m)
   map_add' := by simp
@@ -2144,6 +1714,11 @@ def toStalkₗ (x : PrimeSpectrum.Top R) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 public
+/-
+**AlgebraicGeometry.StructureSheaf.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) : IsLocalizedModule x.asIdeal.primeCompl (toStalkₗ R M x) := by
   convert!
     IsLocalizedModule.of_linearEquiv x.asIdeal.primeCompl (toStalkₗ' R M x).hom
@@ -2165,70 +1740,20 @@ set_option backward.isDefEq.respectTransparency.types false in
 variable (R) in
 /-- The stalk of `Spec R` at `x` is isomorphic to the stalk of `R^~` at `x`. -/
 @[expose] public
-/--
-Definition of `commRingCatStalkEquivModuleStalk` / `commRingCatStalkEquivModuleStalk` 的定义
+/-
+**AlgebraicGeometry.StructureSheaf.commRingCatStalkEquivModuleStalk** 是 Mathlib 
+中的一个定义，位于命名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：commRingCatStalkEquivModuleStalk (x : PrimeSpectrum.Top R) : ↑(TopCat.Pres
+heaf.stalk (moduleStructurePresheaf R R).presheaf x) ≃ₗ[R] (structurePresheafInC
+ommRingCat R).stalk x where __
+参数：x : PrimeSpectrum.Top R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGrpCat.hasColimitsOfSize`：∀ [UnivLE.{u, w}], CategoryTheory.Limit
+s.HasColimitsOfSize.{v, u, w, w + 1} AddCommGrpCat
 
-English:
-definition commRingCatStalkEquivModuleStalk
-  signature: (x : PrimeSpectrum.Top R)
-  body: (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat)
-    (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-      structurePresheafInCommRingCat R))⟩).addCommGroupIsoToAddEquiv
-  map_smul' r m := by
-    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R R).presheaf x ≅
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj
-        ((structurePresheafInCommRingCat R).stalk x) :=
-      (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat)
-      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-        structurePresheafInCommRingCat R))⟩)
-    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
-    have : (TopCat.Presheaf.germ (moduleStructurePresheaf R R).presheaf U x hxU) ≫ α.hom =
-        (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
-          ((structurePresheafInCommRingCat R).germ U x hxU) :=
-      Limits.colimit.isoColimitCocone_ι_hom ..
-    change α.hom (r • germₗ R U x hxU _) = toStalk R _ _ * _
-    rw [← map_smul]; rw [Algebra.smul_def]
-    refine congr($this _).trans ?_
-    refine (((structurePresheafInCommRingCat R).germ U x hxU).hom.map_mul _ _).trans ?_
-    congr 1
-    · dsimp [toStalk]
-      erw [← (structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : U <= ⊤)) _ hxU]
-      rfl
-    · exact congr($this _).symm
-
-中文:
-定义 commRingCatStalkEquivModuleStalk
-  签名: (x : 素谱.顶元素 R)
-  定义体: (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat)
-    (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-      structurePresheafInCommRingCat R))⟩).addCommGroupIsoToAddEquiv
-  map_smul' r m := by
-    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R R).presheaf x ≅
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj
-        ((structurePresheafInCommRingCat R).stalk x) :=
-      (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves
-      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat)
-      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
-        structurePresheafInCommRingCat R))⟩)
-    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
-    have : (TopCat.Presheaf.germ (moduleStructurePresheaf R R).presheaf U x hxU) ≫ α.hom =
-        (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
-          ((structurePresheafInCommRingCat R).germ U x hxU) :=
-      Limits.colimit.isoColimitCocone_ι_hom ..
-    change α.hom (r • germₗ R U x hxU _) = toStalk R _ _ * _
-    rw [← map_smul]; rw [Algebra.smul_def]
-    refine congr($this _).trans ?_
-    refine (((structurePresheafInCommRingCat R).germ U x hxU).hom.map_mul _ _).trans ?_
-    congr 1
-    · dsimp [toStalk]
-      erw [← (structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : U <= ⊤)) _ hxU]
-      rfl
-    · exact congr($this _).symm
-
-Depends on / 依赖: Limits, Limits.colimit.isoColimitCocone, Limits.isColimitOfPreserves, colimit, isColimitOfPreserves, isoColimitCocone
+--- 原说明 ---
+The stalk of `Spec R` at `x` is isomorphic to the stalk of `R^~` at `x`.
 -/
 def commRingCatStalkEquivModuleStalk (x : PrimeSpectrum.Top R) :
     ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R R).presheaf x) ≃ₗ[R]
@@ -2251,12 +1776,12 @@ def commRingCatStalkEquivModuleStalk (x : PrimeSpectrum.Top R) :
           ((structurePresheafInCommRingCat R).germ U x hxU) :=
       Limits.colimit.isoColimitCocone_ι_hom ..
     change α.hom (r • germₗ R U x hxU _) = toStalk R _ _ * _
-    rw [← map_smul]; rw [Algebra.smul_def]
+    rw [← map_smul, Algebra.smul_def]
     refine congr($this _).trans ?_
     refine (((structurePresheafInCommRingCat R).germ U x hxU).hom.map_mul _ _).trans ?_
     congr 1
     · dsimp [toStalk]
-      erw [← (structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : U <= ⊤)) _ hxU]
+      erw [← (structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : U ≤ ⊤)) _ hxU]
       rfl
     · exact congr($this _).symm
 
@@ -2299,24 +1824,18 @@ end Stalk
 
 variable (R)
 
-/--
-Definition of `_root_.AlgebraicGeometry.Spec.structureSheaf` / `_root_.AlgebraicGeometry.Spec.structureSheaf` 的定义
+/-- The structure sheaf on $Spec R$, valued in `CommRingCat`.
 
-English:
-definition _root_.AlgebraicGeometry.Spec.structureSheaf
-  signature: : Sheaf CommRingCat (PrimeSpectrum.Top R)
-  body: ⟨structurePresheafInCommRingCat R,
-    (TopCat.Presheaf.isSheaf_iff_isSheaf_comp _ _).mpr (TopCat.Presheaf.isSheaf_of_iso
-      (structurePresheafCompForget R).symm (structureSheafInType R R).property)⟩
+This is provided as a bundled `SheafedSpace` as `Spec.SheafedSpace R` later. -/
+/-
+**AlgebraicGeometry.StructureSheaf._root_.AlgebraicGeometry.Spec.structureSheaf*
+* 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.StructureSheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 _root_.AlgebraicGeometry.Spec.structureSheaf
-  签名: : 层 交换环范畴 (素谱.顶元素 R)
-  定义体: ⟨structurePresheafInCommRingCat R,
-    (TopCat.Presheaf.isSheaf_iff_isSheaf_comp _ _).mpr (TopCat.Presheaf.isSheaf_of_iso
-      (structurePresheafCompForget R).symm (structureSheafInType R R).property)⟩
+--- 原说明 ---
+The structure sheaf on $Spec R$, valued in `CommRingCat`.
 
-Depends on / 依赖: Presheaf, TopCat, TopCat.Presheaf.isSheaf_iff_isSheaf_comp, TopCat.Presheaf.isSheaf_of_iso, isSheaf_iff_isSheaf_comp, isSheaf_of_iso, property, structurePresheafCompForget, structurePresheafInCommRingCat, structureSheafInType
+This is provided as a bundled `SheafedSpace` as `Spec.SheafedSpace R` later.
 -/
 def _root_.AlgebraicGeometry.Spec.structureSheaf : Sheaf CommRingCat (PrimeSpectrum.Top R) :=
   ⟨structurePresheafInCommRingCat R,
@@ -2328,45 +1847,32 @@ open Spec (structureSheaf)
 /-- The canonical ring homomorphism interpreting an element of `R` as
 a section of the structure sheaf. -/
 @[deprecated "algebraMap" (since := "2026-02-10")]
-/--
-Definition of `toOpen` / `toOpen` 的定义
+/-
+**AlgebraicGeometry.StructureSheaf.toOpen** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.StructureSheaf`。
+形式化陈述：toOpen (U : Opens (PrimeSpectrum.Top R)) : CommRingCat.of R ⟶ (structureSh
+eaf R).1.obj (op U)
+参数：U : Opens (PrimeSpectrum.Top R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOpen
-  signature: (U : Opens (PrimeSpectrum.Top R))
-  body: CommRingCat.ofHom (algebraMap _ _)
-
-@[simp]
-
-中文:
-定义 toOpen
-  签名: (U : Opens (素谱.顶元素 R))
-  定义体: CommRingCat.ofHom (algebraMap _ _)
-
-@[simp]
-
-Depends on / 依赖: CommRingCat, CommRingCat.ofHom, algebraMap
+--- 原说明 ---
+The canonical ring homomorphism interpreting an element of `R` as
+a section of the structure sheaf.
 -/
 def toOpen (U : Opens (PrimeSpectrum.Top R)) :
     CommRingCat.of R ⟶ (structureSheaf R).1.obj (op U) := CommRingCat.ofHom (algebraMap _ _)
 
 @[simp]
-/--
-theorem `algebraMap_self_map` / 定理 `algebraMap_self_map`
-
-English:
-theorem algebraMap_self_map
-  given: (U V : (Opens (PrimeSpectrum.Top R))ᵒᵖ) (i : V ⟶ U)
-  proof: rfl
-
-@[deprecated (since := "2026-02-10")] alias toOpen_res := algebraMap_self_map
-
-中文:
-定理 algebraMap_self_map
-  条件: (U V : (Opens (素谱.顶元素 R))ᵒᵖ) (i : V ⟶ U)
-  证明: rfl
-
-@[deprecated (since := "2026-02-10")] alias toOpen_res := algebraMap_self_map
+/-
+**AlgebraicGeometry.StructureSheaf.algebraMap_self_map** 是 Mathlib 中的一个定理，位于命名空间
+ `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：algebraMap_self_map (U V : (Opens (PrimeSpectrum.Top R))ᵒᵖ) (i : V ⟶ U) : 
+CommRingCat.ofHom (algebraMap R _) ≫ (Spec.structureSheaf R).1.map i = CommRingC
+at.ofHom (algebraMap R _)
+参数：U V : (Opens (PrimeSpectrum.Top R))ᵒᵖ；i : V ⟶ U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_self_map (U V : (Opens (PrimeSpectrum.Top R))ᵒᵖ) (i : V ⟶ U) :
     CommRingCat.ofHom (algebraMap R _) ≫ (Spec.structureSheaf R).1.map i =
@@ -2374,123 +1880,102 @@ theorem algebraMap_self_map (U V : (Opens (PrimeSpectrum.Top R))ᵒᵖ) (i : V �
   rfl
 
 @[deprecated (since := "2026-02-10")] alias toOpen_res := algebraMap_self_map
-
-/--
-Instance `stalkAlgebra` / 实例 `stalkAlgebra`
-
-English:
-instance stalkAlgebra
-  signature: (p : PrimeSpectrum R)
-  body: (toStalk R p).hom.toAlgebra
-
-@[simp]
-
-中文:
-实例 stalkAlgebra
-  签名: (p : 素谱 R)
-  定义体: (toStalk R p).hom.toAlgebra
-
-@[simp]
-
-Depends on / 依赖: hom.toAlgebra, toAlgebra, toStalk
+/-
+**AlgebraicGeometry.StructureSheaf.stalkAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Algeb
+raicGeometry.StructureSheaf`。
+形式化陈述：stalkAlgebra (p : PrimeSpectrum R) : Algebra R ((structureSheaf R).preshea
+f.stalk p)
+参数：p : PrimeSpectrum R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance stalkAlgebra (p : PrimeSpectrum R) : Algebra R ((structureSheaf R).presheaf.stalk p) :=
   (toStalk R p).hom.toAlgebra
 
 @[simp]
-/--
-theorem `stalkAlgebra_map` / 定理 `stalkAlgebra_map`
-
-English:
-theorem stalkAlgebra_map
-  given: (p : PrimeSpectrum R) (r : R)
-  proof: rfl
-
-中文:
-定理 stalkAlgebra_map
-  条件: (p : 素谱 R) (r : R)
-  证明: rfl
+/-
+**AlgebraicGeometry.StructureSheaf.stalkAlgebra_map** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.StructureSheaf`。
+形式化陈述：stalkAlgebra_map (p : PrimeSpectrum R) (r : R) : algebraMap R ((structureS
+heaf R).presheaf.stalk p) r = toStalk R p r
+参数：p : PrimeSpectrum R；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem stalkAlgebra_map (p : PrimeSpectrum R) (r : R) :
     algebraMap R ((structureSheaf R).presheaf.stalk p) r = toStalk R p r :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `IsLocalization.to_stalk` / 实例 `IsLocalization.to_stalk`
+/-- Stalk of the structure sheaf at a prime p as localization of R -/
+/-
+**AlgebraicGeometry.StructureSheaf.IsLocalization.to_stalk** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.StructureSheaf.IsLocalization`。
+形式化陈述：∀ (R : Type u) [inst : CommRing R] (p : PrimeSpectrum R),   IsLocalization
+.AtPrime (↑((AlgebraicGeometry.Spec.structureSheaf R).presheaf.stalk p)) p.asIde
+al
+参数：R : Type u；p : PrimeSpectrum R；↑((AlgebraicGeometry.Spec.structureSheaf R).pr
+esheaf.stalk p)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance IsLocalization.to_stalk
-  signature: (p : PrimeSpectrum R)
-  body: inferInstanceAs (IsLocalization.AtPrime ((structurePresheafInCommRingCat R).stalk p) p.asIdeal)
-
-中文:
-实例 是Localization.to_stalk
-  签名: (p : 素谱 R)
-  定义体: inferInstanceAs (IsLocalization.AtPrime ((structurePresheafInCommRingCat R).stalk p) p.asIdeal)
-
-Depends on / 依赖: AtPrime, IsLocalization, IsLocalization.AtPrime, asIdeal, p.asIdeal, structurePresheafInCommRingCat
+--- 原说明 ---
+Stalk of the structure sheaf at a prime p as localization of R
 -/
 instance IsLocalization.to_stalk (p : PrimeSpectrum R) :
     IsLocalization.AtPrime ((structureSheaf R).presheaf.stalk p) p.asIdeal :=
   inferInstanceAs (IsLocalization.AtPrime ((structurePresheafInCommRingCat R).stalk p) p.asIdeal)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `openAlgebra` / 实例 `openAlgebra`
-
-English:
-instance openAlgebra
-  signature: (U : (Opens (PrimeSpectrum R))ᵒᵖ)
-  body: inferInstanceAs (Algebra R ((structureSheafInType R R).presheaf.obj _))
-
-中文:
-实例 openAlgebra
-  签名: (U : (Opens (素谱 R))ᵒᵖ)
-  定义体: inferInstanceAs (Algebra R ((structureSheafInType R R).presheaf.obj _))
-
-Depends on / 依赖: Algebra, presheaf, presheaf.obj, structureSheafInType
+/-
+**AlgebraicGeometry.StructureSheaf.openAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Algebr
+aicGeometry.StructureSheaf`。
+形式化陈述：openAlgebra (U : (Opens (PrimeSpectrum R))ᵒᵖ) : Algebra R ((structureSheaf
+ R).obj.obj U)
+参数：U : (Opens (PrimeSpectrum R))ᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance openAlgebra (U : (Opens (PrimeSpectrum R))ᵒᵖ) : Algebra R ((structureSheaf R).obj.obj U) :=
   inferInstanceAs (Algebra R ((structureSheafInType R R).presheaf.obj _))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `IsLocalization.to_basicOpen` / 实例 `IsLocalization.to_basicOpen`
+/-- Sections of the structure sheaf of Spec R on a basic open as localization of R -/
+/-
+**AlgebraicGeometry.StructureSheaf.IsLocalization.to_basicOpen** 是 Mathlib 中的一个定
+理，位于命名空间 `AlgebraicGeometry.StructureSheaf.IsLocalization`。
+形式化陈述：∀ (R : Type u) [inst : CommRing R] (r : R),   IsLocalization.Away r ↑((Alg
+ebraicGeometry.Spec.structureSheaf R).obj.obj (Opposite.op (PrimeSpectrum.basicO
+pen r)))
+参数：R : Type u；r : R；(AlgebraicGeometry.Spec.structureSheaf R).obj.obj (Opposite.
+op (PrimeSpectrum.basicOpen r))。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance IsLocalization.to_basicOpen
-  signature: (r : R)
-  body: inferInstanceAs (IsLocalization.Away r Γ(R, basicOpen r))
-
-中文:
-实例 是Localization.to_basicOpen
-  签名: (r : R)
-  定义体: inferInstanceAs (IsLocalization.Away r Γ(R, basicOpen r))
-
-Depends on / 依赖: IsLocalization, IsLocalization.Away, basicOpen
+--- 原说明 ---
+Sections of the structure sheaf of Spec R on a basic open as localization of R
 -/
 instance IsLocalization.to_basicOpen (r : R) :
     IsLocalization.Away r ((structureSheaf R).obj.obj (op <| basicOpen r)) :=
   inferInstanceAs (IsLocalization.Away r Γ(R, basicOpen r))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `to_basicOpen_epi` / 实例 `to_basicOpen_epi`
-
-English:
-instance to_basicOpen_epi
-  signature: (r : R)
-  body: ⟨fun _ _ h => CommRingCat.hom_ext (IsLocalization.ringHom_ext (Submonoid.powers r)
-    (CommRingCat.hom_ext_iff.mp h))⟩
-
-中文:
-实例 to_basicOpen_epi
-  签名: (r : R)
-  定义体: ⟨fun _ _ h => CommRingCat.hom_ext (IsLocalization.ringHom_ext (Submonoid.powers r)
-    (CommRingCat.hom_ext_iff.mp h))⟩
-
-Depends on / 依赖: CommRingCat, CommRingCat.hom_ext, CommRingCat.hom_ext_iff.mp, IsLocalization, IsLocalization.ringHom_ext, Submonoid, Submonoid.powers, hom_ext, hom_ext_iff, powers, ringHom_ext
+/-
+**AlgebraicGeometry.StructureSheaf.to_basicOpen_epi** 是 Mathlib 中的一个实例，位于命名空间 `A
+lgebraicGeometry.StructureSheaf`。
+形式化陈述：to_basicOpen_epi (r : R) : Epi (CommRingCat.ofHom <| algebraMap R ((struct
+ureSheaf R).obj.obj (op <| basicOpen r)))
+参数：r : R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CommRingCat.hom_ext`：hom_ext {R S : CommRingCat} {f g : R ⟶ S} (hf : f.h
+om = g.hom) : f = g
+· 使用定理 `IsLocalization.ringHom_ext`：ringHom_ext {P : Type*} [Semiring P] ⦃j k : 
+S ->+* P⦄ (h : j.comp (algebraMap R S) = k.comp (algebraMap R S)) : j = k
+· 使用定理 `AlgebraicGeometry.StructureSheaf.IsLocalization.to_basicOpen`：∀ (R : Typ
+e u) [inst : CommRing R] (r : R),   IsLocalization.Away r ↑((AlgebraicGeometry.S
+pec.structureSheaf R).obj.obj (Opposite.op (PrimeS…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CommRingCat.hom_ext_iff`：∀ {R S : CommRingCat} {f g : R ⟶ S}, f = g ↔ Co
+mmRingCat.Hom.hom f = CommRingCat.Hom.hom g
 -/
 instance to_basicOpen_epi (r : R) :
     Epi (CommRingCat.ofHom <|
@@ -2500,36 +1985,29 @@ instance to_basicOpen_epi (r : R) :
 
 /-- The ring isomorphism between the ring `R` and the global sections `Γ(X, 𝒪ₓ)`. -/
 @[simps! inv]
-/--
-Definition of `globalSectionsIso` / `globalSectionsIso` 的定义
+/-
+**AlgebraicGeometry.StructureSheaf.globalSectionsIso** 是 Mathlib 中的一个定义，位于命名空间 `
+AlgebraicGeometry.StructureSheaf`。
+形式化陈述：globalSectionsIso : CommRingCat.of R ≅ (structureSheaf R).1.obj (op ⊤)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.StructureSheaf.algebraMap_obj_top_bijective`：∀ {R : Ty
+pe u} [inst : CommRing R],   Function.Bijective ⇑(algebraMap R ((AlgebraicGeomet
+ry.structureSheafInType R R).obj.obj (Opposite.op ⊤…
 
-English:
-definition globalSectionsIso
-  signature: : CommRingCat.of R ≅ (structureSheaf R).1.obj (op ⊤)
-  body: RingEquiv.toCommRingCatIso (.ofBijective _ algebraMap_obj_top_bijective)
-
-中文:
-定义 globalSectionsIso
-  签名: : 交换环范畴.of R ≅ (structureSheaf R).1.obj (op ⊤)
-  定义体: RingEquiv.toCommRingCatIso (.ofBijective _ algebraMap_obj_top_bijective)
-
-Depends on / 依赖: RingEquiv, RingEquiv.toCommRingCatIso, algebraMap_obj_top_bijective, ofBijective, toCommRingCatIso
+--- 原说明 ---
+The ring isomorphism between the ring `R` and the global sections `Γ(X, 𝒪ₓ)`.
 -/
 def globalSectionsIso : CommRingCat.of R ≅ (structureSheaf R).1.obj (op ⊤) :=
   RingEquiv.toCommRingCatIso (.ofBijective _ algebraMap_obj_top_bijective)
-
-/--
-theorem `globalSectionsIso_hom` / 定理 `globalSectionsIso_hom`
-
-English:
-theorem globalSectionsIso_hom
-  given: (R : CommRingCat)
-  proof: rfl
-
-中文:
-定理 globalSectionsIso_hom
-  条件: (R : 交换环范畴)
-  证明: rfl
+/-
+**AlgebraicGeometry.StructureSheaf.globalSectionsIso_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：globalSectionsIso_hom (R : CommRingCat) : (globalSectionsIso R).hom = Comm
+RingCat.ofHom (algebraMap _ _)
+参数：R : CommRingCat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem globalSectionsIso_hom (R : CommRingCat) :
     (globalSectionsIso R).hom = CommRingCat.ofHom (algebraMap _ _) :=
@@ -2537,24 +2015,33 @@ theorem globalSectionsIso_hom (R : CommRingCat) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp, reassoc, elementwise nosimp]
-/--
-theorem `toStalk_stalkSpecializes` / 定理 `toStalk_stalkSpecializes`
-
-English:
-theorem toStalk_stalkSpecializes
-  given: {R : Type*} [CommRing R] {x y : PrimeSpectrum R} (h : x ⤳ y)
-  proof: by
-  dsimp [toStalk]
-  simp [structureSheaf]
-
-中文:
-定理 toStalk_stalkSpecializes
-  条件: {R : 类型} [交换环 R] {x y : 素谱 R} (h : x ⤳ y)
-  证明: by
-  dsimp [toStalk]
-  simp [structureSheaf]
-
-Depends on / 依赖: structureSheaf, toStalk
+/-
+**AlgebraicGeometry.StructureSheaf.toStalk_stalkSpecializes** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.StructureSheaf`。
+形式化陈述：toStalk_stalkSpecializes {R : Type*} [CommRing R] {x y : PrimeSpectrum R} 
+(h : x ⤳ y) : toStalk R y ≫ (structureSheaf R).presheaf.stalkSpecializes h = toS
+talk R x
+参数：h : x ⤳ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `trivial`：True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Specializes.mem_open`：Specializes.mem_open (h : x ⤳ y) (hs : IsOpen s) (
+hy : y in s) : x in s
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `TopCat.Presheaf.germ_stalkSpecializes`：germ_stalkSpecializes (F : X.Pres
+heaf C) {U : Opens X} {y : X} (hy : y in U) {x : X} (h : x ⤳ y) : F.germ U y hy 
+≫ F.stalkSpecializes h = F.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toStalk_stalkSpecializes {R : Type*} [CommRing R] {x y : PrimeSpectrum R} (h : x ⤳ y) :
     toStalk R y ≫ (structureSheaf R).presheaf.stalkSpecializes h = toStalk R x := by
@@ -2566,61 +2053,25 @@ end StructureSheaf
 @[expose] public section Comap
 
 variable {S : Type u} [CommRing S] {N : Type u} [AddCommGroup N] [Module S N]
-  {σ : R ->+* S} (f : M ->ₛₗ[σ] N)
+  {σ : R →+* S} (f : M →ₛₗ[σ] N)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Localizations.comapFun` / `Localizations.comapFun` 的定义
+/-- The map `M_{f y} ⟶ N_{y}` used to build maps between structure sheaves. -/
+/-
+**AlgebraicGeometry.Localizations.comapFun** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Localizations.comapFun
-  signature: (y : PrimeSpectrum.Top S)
-  body: letI := Module.compHom N σ
-  letI := σ.toAlgebra
-  haveI : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
-  letI f' : M ->ₗ[R] N := { __ := f }
-  letI g : LocalizedModule (y.comap σ).asIdeal.primeCompl M ->ₗ[R]
-      LocalizedModule y.asIdeal.primeCompl N :=
-    IsLocalizedModule.lift (y.comap σ).asIdeal.primeCompl (LocalizedModule.mkLinearMap _ _)
-      ((LocalizedModule.mkLinearMap _ _).restrictScalars R ∘ₗ f') (by
-      intro x
-      have := IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
-        (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ x, x.2⟩
-      rw [Module.End.isUnit_iff] at this ⊢
-      convert! this using 2 with a
-      exact (IsScalarTower.algebraMap_smul ..).symm)
-  { __ := g,
-    map_smul' r x := by simpa [Localizations] using! (IsScalarTower.algebraMap_smul ..).symm }
-
-中文:
-定义 Localizations.comapFun
-  签名: (y : 素谱.顶元素 S)
-  定义体: letI := Module.compHom N σ
-  letI := σ.toAlgebra
-  haveI : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
-  letI f' : M ->ₗ[R] N := { __ := f }
-  letI g : LocalizedModule (y.comap σ).asIdeal.primeCompl M ->ₗ[R]
-      LocalizedModule y.asIdeal.primeCompl N :=
-    IsLocalizedModule.lift (y.comap σ).asIdeal.primeCompl (LocalizedModule.mkLinearMap _ _)
-      ((LocalizedModule.mkLinearMap _ _).restrictScalars R ∘ₗ f') (by
-      intro x
-      have := IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
-        (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ x, x.2⟩
-      rw [Module.End.isUnit_iff] at this ⊢
-      convert! this using 2 with a
-      exact (IsScalarTower.algebraMap_smul ..).symm)
-  { __ := g,
-    map_smul' r x := by simpa [Localizations] using! (IsScalarTower.algebraMap_smul ..).symm }
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift, IsLocalizedModule.map_units, IsScalarTower, LocalizedModule, LocalizedModule.mkL, LocalizedModule.mkLinearMap, Module, Module.compHom, asIdeal, asIdeal.primeCompl, compHom, map_units, mkLinearMap, of_algebraMap_smul, primeCompl, restrictScalars, toAlgebra, y.asIdeal.primeCompl, y.comap
+--- 原说明 ---
+The map `M_{f y} ⟶ N_{y}` used to build maps between structure sheaves.
 -/
 def Localizations.comapFun (y : PrimeSpectrum.Top S) :
-    Localizations M (y.comap σ) ->ₛₗ[σ] Localizations N y :=
+    Localizations M (y.comap σ) →ₛₗ[σ] Localizations N y :=
   letI := Module.compHom N σ
   letI := σ.toAlgebra
-  haveI : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
-  letI f' : M ->ₗ[R] N := { __ := f }
-  letI g : LocalizedModule (y.comap σ).asIdeal.primeCompl M ->ₗ[R]
+  haveI : IsScalarTower R S N := .of_algebraMap_smul fun _ _ ↦ rfl
+  letI f' : M →ₗ[R] N := { __ := f }
+  letI g : LocalizedModule (y.comap σ).asIdeal.primeCompl M →ₗ[R]
       LocalizedModule y.asIdeal.primeCompl N :=
     IsLocalizedModule.lift (y.comap σ).asIdeal.primeCompl (LocalizedModule.mkLinearMap _ _)
       ((LocalizedModule.mkLinearMap _ _).restrictScalars R ∘ₗ f') (by
@@ -2636,130 +2087,78 @@ def Localizations.comapFun (y : PrimeSpectrum.Top S) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `Localizations.comapFun_mk` / 引理 `Localizations.comapFun_mk`
-
-English:
-lemma Localizations.comapFun_mk
-  statement: (y : PrimeSpectrum.Top S)
-  proof: by
-  let := Module.compHom N σ
-  let := σ.toAlgebra
-  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
-  apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
-    (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ b, b.2⟩)).1
-  dsimp
-  rw [← (comapFun f y).map_smulₛₗ]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]
-  dsimp [comapFun, Localizations]
-  refine (IsLocalizedModule.lift_apply ..).trans ?_
-  dsimp
-  rw [← LocalizedModule.mk_cancel ⟨σ b.1]; rw [b.2⟩]; rw [LocalizedModule.smul'_mk]
-  rfl
-
-中文:
-引理 Localizations.comapFun_mk
-  结论: (y : 素谱.顶元素 S)
-  证明: by
-  let := Module.compHom N σ
-  let := σ.toAlgebra
-  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
-  apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
-    (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ b, b.2⟩)).1
-  dsimp
-  rw [← (comapFun f y).map_smulₛₗ]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]
-  dsimp [comapFun, Localizations]
-  refine (IsLocalizedModule.lift_apply ..).trans ?_
-  dsimp
-  rw [← LocalizedModule.mk_cancel ⟨σ b.1]; rw [b.2⟩]; rw [LocalizedModule.smul'_mk]
-  rfl
-
-Depends on / 依赖: IsLocalizedModu, IsLocalizedModule, IsLocalizedModule.map_units, IsScalarTower, Localizations, LocalizedModule, LocalizedModule.mkLinearMap, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_cancel, LocalizedModule.smul, Module, Module.End.isUnit_iff, Module.compHom, Submonoid, Submonoid.smul_def, asIdeal, comapFun, compHom, isUnit_iff, map_units
+/-
+**AlgebraicGeometry.Localizations.comapFun_mk** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Localizations.comapFun_mk (y : PrimeSpectrum.Top S)
     (a : M) (b : (y.comap σ).asIdeal.primeCompl) :
     Localizations.comapFun f y (.mk a b) = .mk (f a) ⟨σ b.1, b.2⟩ := by
   let := Module.compHom N σ
   let := σ.toAlgebra
-  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
+  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ ↦ rfl
   apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
     (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ b, b.2⟩)).1
   dsimp
-  rw [← (comapFun f y).map_smulₛₗ]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]
+  rw [← (comapFun f y).map_smulₛₗ, LocalizedModule.smul'_mk, ← Submonoid.smul_def,
+    LocalizedModule.mk_cancel, ← LocalizedModule.mkLinearMap_apply]
   dsimp [comapFun, Localizations]
   refine (IsLocalizedModule.lift_apply ..).trans ?_
   dsimp
-  rw [← LocalizedModule.mk_cancel ⟨σ b.1]; rw [b.2⟩]; rw [LocalizedModule.smul'_mk]
+  rw [← LocalizedModule.mk_cancel ⟨σ b.1, b.2⟩, LocalizedModule.smul'_mk]
   rfl
 
 /--
-Definition of `comapFun` / `comapFun` 的定义
+Given a ring homomorphism `f : R →+* S`, an open set `U` of the prime spectrum of `R` and an open
+set `V` of the prime spectrum of `S`, such that `V ⊆ (comap f) ⁻¹' U`, we can push a section `s`
+on `U` to a section on `V`, by composing with `Localization.localRingHom _ _ f` from the left and
+`comap f` from the right. Explicitly, if `s` evaluates on `comap f p` to `a / b`, its image on `V`
+evaluates on `p` to `f(a) / f(b)`.
 
-English:
-definition comapFun
-  signature: (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-  body: Localizations.comapFun f _ (s ⟨y.1.comap σ, hUV y.2⟩)
+At the moment, we work with arbitrary dependent functions `s : Π x : U, Localizations R x`. Below,
+we prove the predicate `isLocallyFraction` is preserved by this map, hence it can be extended to
+a morphism between the structure sheaves of `R` and `S`.
+-/
+/-
+**AlgebraicGeometry.comapFun** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 comapFun
-  签名: (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
-  定义体: Localizations.comapFun f _ (s ⟨y.1.comap σ, hUV y.2⟩)
+--- 原说明 ---
+Given a ring homomorphism `f : R →+* S`, an open set `U` of the prime spectrum o
+f `R` and an open
+set `V` of the prime spectrum of `S`, such that `V ⊆ (comap f) ⁻¹' U`, we can pu
+sh a section `s`
+on `U` to a section on `V`, by composing with `Localization.localRingHom _ _ f` 
+from the left and
+`comap f` from the right. Explicitly, if `s` evaluates on `comap f p` to `a / b`
+, its image on `V`
+evaluates on `p` to `f(a) / f(b)`.
 
-Depends on / 依赖: Localizations, Localizations.comapFun, comapFun
+At the moment, we work with arbitrary dependent functions `s : Π x : U, Localiza
+tions R x`. Below,
+we prove the predicate `isLocallyFraction` is preserved by this map, hence it ca
+n be extended to
+a morphism between the structure sheaves of `R` and `S`.
 -/
 def comapFun (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-    (hUV : V.1 subseteq PrimeSpectrum.comap σ ⁻¹' U.1) (s : forall x : U, Localizations M x.1) (y : V) :
+    (hUV : V.1 ⊆ PrimeSpectrum.comap σ ⁻¹' U.1) (s : ∀ x : U, Localizations M x.1) (y : V) :
     Localizations N y.1 :=
   Localizations.comapFun f _ (s ⟨y.1.comap σ, hUV y.2⟩)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isLocallyFraction_comapFun` / 定理 `isLocallyFraction_comapFun`
-
-English:
-theorem isLocallyFraction_comapFun
-  statement: (U : Opens (PrimeSpectrum.Top R))
-  proof: by
-  let := Module.compHom N σ
-  let := σ.toAlgebra
-  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
-  rintro ⟨p, hpV⟩
-  obtain ⟨W, m, iWU, a, b, h_frac⟩ := hs ⟨PrimeSpectrum.comap σ p, hUV hpV⟩
-  refine ⟨⟨_, (PrimeSpectrum.continuous_comap σ).isOpen_preimage _ W.2⟩ ⊓ V,
-    ⟨m, hpV⟩, Opens.infLERight _ _, f a, σ b, ?_⟩
-  rintro ⟨q, ⟨hqW, hqV⟩⟩
-  obtain ⟨hs, H⟩ := h_frac ⟨PrimeSpectrum.comap σ q, hqW⟩
-  refine ⟨hs, ?_⟩
-  dsimp [comapFun] at H ⊢
-  rw [H]
-  simp
-
-中文:
-定理 isLocallyFraction_comapFun
-  结论: (U : Opens (素谱.顶元素 R))
-  证明: by
-  let := Module.compHom N σ
-  let := σ.toAlgebra
-  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
-  rintro ⟨p, hpV⟩
-  obtain ⟨W, m, iWU, a, b, h_frac⟩ := hs ⟨PrimeSpectrum.comap σ p, hUV hpV⟩
-  refine ⟨⟨_, (PrimeSpectrum.continuous_comap σ).isOpen_preimage _ W.2⟩ ⊓ V,
-    ⟨m, hpV⟩, Opens.infLERight _ _, f a, σ b, ?_⟩
-  rintro ⟨q, ⟨hqW, hqV⟩⟩
-  obtain ⟨hs, H⟩ := h_frac ⟨PrimeSpectrum.comap σ q, hqW⟩
-  refine ⟨hs, ?_⟩
-  dsimp [comapFun] at H ⊢
-  rw [H]
-  simp
-
-Depends on / 依赖: IsScalarTower, Module, Module.compHom, Opens.infLERight, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.continuous_comap, comapFun, compHom, continuous_comap, h_frac, infLERight, isOpen_preimage, of_algebraMap_smul, toAlgebra
+/-
+**AlgebraicGeometry.isLocallyFraction_comapFun** 是 Mathlib 中的一个定理，位于命名空间 `Algebr
+aicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isLocallyFraction_comapFun (U : Opens (PrimeSpectrum.Top R))
-    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 subseteq PrimeSpectrum.comap σ ⁻¹' U.1)
-    (s : forall x : U, Localizations M x.1) (hs : (isLocallyFraction R M).toPrelocalPredicate.pred s) :
+    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 ⊆ PrimeSpectrum.comap σ ⁻¹' U.1)
+    (s : ∀ x : U, Localizations M x.1) (hs : (isLocallyFraction R M).toPrelocalPredicate.pred s) :
     (isLocallyFraction S N).toPrelocalPredicate.pred (comapFun f U V hUV s) := by
   let := Module.compHom N σ
   let := σ.toAlgebra
-  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
+  have : IsScalarTower R S N := .of_algebraMap_smul fun _ _ ↦ rfl
   rintro ⟨p, hpV⟩
   obtain ⟨W, m, iWU, a, b, h_frac⟩ := hs ⟨PrimeSpectrum.comap σ p, hUV hpV⟩
   refine ⟨⟨_, (PrimeSpectrum.continuous_comap σ).isOpen_preimage _ W.2⟩ ⊓ V,
@@ -2772,58 +2171,47 @@ theorem isLocallyFraction_comapFun (U : Opens (PrimeSpectrum.Top R))
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `comapₗ` / `comapₗ` 的定义
+/-- For a ring homomorphism `f : R →+* S` and open sets `U` and `V` of the prime spectra of `R` and
+`S` such that `V ⊆ (comap f) ⁻¹ U`, the induced ring homomorphism from the structure sheaf of `R`
+at `U` to the structure sheaf of `S` at `V`.
 
-English:
-definition comapₗ
-  signature: (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-  body: ⟨comapFun f U V hUV s.1, isLocallyFraction_comapFun f U V hUV s.1 s.2⟩
-map_add' s t := Subtype.ext funext fun _ => by dsimp [comapFun]; rw [map_add]
-map_smul' r m := Subtype.ext funext fun _ => by
-    dsimp [comapFun]
-    rw [map_smulₛₗ]; rw [← IsScalarTower.algebraMap_smul S]
+Explicitly, this map is given as follows: For a point `p : V`, if the section `s` evaluates on `p`
+to the fraction `a / b`, its image on `V` evaluates on `p` to the fraction `f(a) / f(b)`.
+-/
+/-
+**AlgebraicGeometry.comap** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 comapₗ
-  签名: (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
-  定义体: ⟨comapFun f U V hUV s.1, isLocallyFraction_comapFun f U V hUV s.1 s.2⟩
-map_add' s t := Subtype.ext funext fun _ => by dsimp [comapFun]; rw [map_add]
-map_smul' r m := Subtype.ext funext fun _ => by
-    dsimp [comapFun]
-    rw [map_smulₛₗ]; rw [← IsScalarTower.algebraMap_smul S]
+--- 原说明 ---
+For a ring homomorphism `f : R →+* S` and open sets `U` and `V` of the prime spe
+ctra of `R` and
+`S` such that `V ⊆ (comap f) ⁻¹ U`, the induced ring homomorphism from the struc
+ture sheaf of `R`
+at `U` to the structure sheaf of `S` at `V`.
 
-Depends on / 依赖: comapFun, isLocallyFraction_comapFun
+Explicitly, this map is given as follows: For a point `p : V`, if the section `s
+` evaluates on `p`
+to the fraction `a / b`, its image on `V` evaluates on `p` to the fraction `f(a)
+ / f(b)`.
 -/
 def comapₗ (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-    (hUV : V.1 subseteq PrimeSpectrum.comap σ ⁻¹' U.1) :
-    Γ(M, U) ->ₛₗ[σ] Γ(N, V) where
+    (hUV : V.1 ⊆ PrimeSpectrum.comap σ ⁻¹' U.1) :
+    Γ(M, U) →ₛₗ[σ] Γ(N, V) where
   toFun s := ⟨comapFun f U V hUV s.1, isLocallyFraction_comapFun f U V hUV s.1 s.2⟩
-map_add' s t := Subtype.ext funext fun _ => by dsimp [comapFun]; rw [map_add]
-map_smul' r m := Subtype.ext funext fun _ => by
+  map_add' s t := Subtype.ext <| funext fun _ ↦ by dsimp [comapFun]; rw [map_add]
+  map_smul' r m := Subtype.ext <| funext fun _ ↦ by
     dsimp [comapFun]
-    rw [map_smulₛₗ]; rw [← IsScalarTower.algebraMap_smul S]
+    rw [map_smulₛₗ, ← IsScalarTower.algebraMap_smul S]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comapₗ_const` / 定理 `comapₗ_const`
-
-English:
-theorem comapₗ_const
-  statement: (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-  proof: Subtype.ext funext fun _ => by simp [comapₗ, comapFun]
-
-中文:
-定理 comapₗ_const
-  结论: (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
-  证明: Subtype.ext funext fun _ => by simp [comapₗ, comapFun]
-
-Depends on / 依赖: Subtype, Subtype.ext, comapFun
+/-
+**AlgebraicGeometry.comap** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comapₗ_const (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-    (hUV : V.1 subseteq PrimeSpectrum.comap σ ⁻¹' U.1) (a : M) (b : R) (hb : U <= basicOpen b) :
+    (hUV : V.1 ⊆ PrimeSpectrum.comap σ ⁻¹' U.1) (a : M) (b : R) (hb : U ≤ basicOpen b) :
     comapₗ f U V hUV (const a b U hb) = const (f a) (σ b) V (hUV.trans (Set.preimage_mono hb)) :=
-Subtype.ext funext fun _ => by simp [comapₗ, comapFun]
+  Subtype.ext <| funext fun _ ↦ by simp [comapₗ, comapFun]
 
 section Ring
 
@@ -2833,43 +2221,12 @@ variable {S : Type u} [CommRing S] {P : Type u} [CommRing P]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `comapₗ_eq_localRingHom` / 定理 `comapₗ_eq_localRingHom`
-
-English:
-theorem comapₗ_eq_localRingHom
-  statement: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
-  proof: by
-  dsimp [comapₗ, comapFun]
-  suffices ⇑(Localizations.comapFun f.toSemilinearMap p.1) =
-      ⇑(Localization.localRingHom (PrimeSpectrum.comap f p.1).asIdeal _ f rfl) from
-    congr($this _)
-  ext m
-  induction m using LocalizedModule.induction_on with | h m s =>
-  trans LocalizedModule.mk (f m) ⟨f ↑s, s.2⟩
-  · simp
-  convert_to! Localization.mk _ _ = Localization.localRingHom _ _ _ _ (Localization.mk _ _)
-  simp [Localization.mk_eq_mk']
-
-中文:
-定理 comapₗ_eq_localRingHom
-  结论: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
-  证明: by
-  dsimp [comapₗ, comapFun]
-  suffices ⇑(Localizations.comapFun f.toSemilinearMap p.1) =
-      ⇑(Localization.localRingHom (PrimeSpectrum.comap f p.1).asIdeal _ f rfl) from
-    congr($this _)
-  ext m
-  induction m using LocalizedModule.induction_on with | h m s =>
-  trans LocalizedModule.mk (f m) ⟨f ↑s, s.2⟩
-  · simp
-  convert_to! Localization.mk _ _ = Localization.localRingHom _ _ _ _ (Localization.mk _ _)
-  simp [Localization.mk_eq_mk']
-
-Depends on / 依赖: Localization, Localization.localRingHom, Localization.mk, Localization.mk_eq_mk, Localizations, Localizations.comapFun, LocalizedModule, LocalizedModule.induction_on, LocalizedModule.mk, PrimeSpectrum, PrimeSpectrum.comap, asIdeal, comapFun, convert_to, f.toSemilinearMap, induction_on, localRingHom, mk_eq_mk, toSemilinearMap
+/-
+**AlgebraicGeometry.comap** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comapₗ_eq_localRingHom (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
-    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 subseteq PrimeSpectrum.comap f ⁻¹' U.1)
+theorem comapₗ_eq_localRingHom (f : R →+* S) (U : Opens (PrimeSpectrum.Top R))
+    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 ⊆ PrimeSpectrum.comap f ⁻¹' U.1)
     (s : (structureSheaf R).1.obj (op U)) (p : V) :
     (comapₗ f.toSemilinearMap U V hUV s).1 p =
       Localization.localRingHom (PrimeSpectrum.comap f p.1).asIdeal _ f rfl
@@ -2886,82 +2243,55 @@ theorem comapₗ_eq_localRingHom (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R)
   simp [Localization.mk_eq_mk']
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `comap` / `comap` 的定义
+/-- For a ring homomorphism `f : R →+* S` and open sets `U` and `V` of the prime spectra of `R` and
+`S` such that `V ⊆ (comap f) ⁻¹ U`, the induced ring homomorphism from the structure sheaf of `R`
+at `U` to the structure sheaf of `S` at `V`.
 
-English:
-definition comap
-  signature: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-  body: comapₗ f.toSemilinearMap U V hUV
-map_one' := Subtype.ext funext fun _ => by
-    dsimp
-    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
-    exact (Localization.localRingHom ..).map_one
-map_mul' r s := Subtype.ext funext fun p => by
-    dsimp
-    change _ = (comapₗ f.toSemilinearMap U V hUV r).1 p * (comapₗ f.toSemilinearMap U V hUV s).1 p
-    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
-    exact (Localization.localRingHom ..).map_mul _ _
-map_zero' := Subtype.ext funext fun _ => by
-    dsimp
-    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
-    exact (Localization.localRingHom ..).map_zero
-
-中文:
-定义 comap
-  签名: (f : R ->+* S) (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
-  定义体: comapₗ f.toSemilinearMap U V hUV
-map_one' := Subtype.ext funext fun _ => by
-    dsimp
-    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
-    exact (Localization.localRingHom ..).map_one
-map_mul' r s := Subtype.ext funext fun p => by
-    dsimp
-    change _ = (comapₗ f.toSemilinearMap U V hUV r).1 p * (comapₗ f.toSemilinearMap U V hUV s).1 p
-    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
-    exact (Localization.localRingHom ..).map_mul _ _
-map_zero' := Subtype.ext funext fun _ => by
-    dsimp
-    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
-    exact (Localization.localRingHom ..).map_zero
-
-Depends on / 依赖: f.toSemilinearMap, toSemilinearMap
+Explicitly, this map is given as follows: For a point `p : V`, if the section `s` evaluates on `p`
+to the fraction `a / b`, its image on `V` evaluates on `p` to the fraction `f(a) / f(b)`.
 -/
-def comap (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
-    (hUV : V.1 subseteq PrimeSpectrum.comap f ⁻¹' U.1) :
-    (structureSheaf R).1.obj (op U) ->+* (structureSheaf S).1.obj (op V) where
+/-
+**AlgebraicGeometry.comap** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+For a ring homomorphism `f : R →+* S` and open sets `U` and `V` of the prime spe
+ctra of `R` and
+`S` such that `V ⊆ (comap f) ⁻¹ U`, the induced ring homomorphism from the struc
+ture sheaf of `R`
+at `U` to the structure sheaf of `S` at `V`.
+
+Explicitly, this map is given as follows: For a point `p : V`, if the section `s
+` evaluates on `p`
+to the fraction `a / b`, its image on `V` evaluates on `p` to the fraction `f(a)
+ / f(b)`.
+-/
+def comap (f : R →+* S) (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
+    (hUV : V.1 ⊆ PrimeSpectrum.comap f ⁻¹' U.1) :
+    (structureSheaf R).1.obj (op U) →+* (structureSheaf S).1.obj (op V) where
   __ := comapₗ f.toSemilinearMap U V hUV
-map_one' := Subtype.ext funext fun _ => by
+  map_one' := Subtype.ext <| funext fun _ ↦ by
     dsimp
     simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
     exact (Localization.localRingHom ..).map_one
-map_mul' r s := Subtype.ext funext fun p => by
+  map_mul' r s := Subtype.ext <| funext fun p ↦ by
     dsimp
     change _ = (comapₗ f.toSemilinearMap U V hUV r).1 p * (comapₗ f.toSemilinearMap U V hUV s).1 p
     simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
     exact (Localization.localRingHom ..).map_mul _ _
-map_zero' := Subtype.ext funext fun _ => by
+  map_zero' := Subtype.ext <| funext fun _ ↦ by
     dsimp
     simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
     exact (Localization.localRingHom ..).map_zero
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `comap_apply` / 定理 `comap_apply`
-
-English:
-theorem comap_apply
-  statement: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
-  proof: comapₗ_eq_localRingHom ..
-
-中文:
-定理 comap_apply
-  结论: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
-  证明: comapₗ_eq_localRingHom ..
+/-
+**AlgebraicGeometry.comap_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comap_apply (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
-    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 subseteq PrimeSpectrum.comap f ⁻¹' U.1)
+theorem comap_apply (f : R →+* S) (U : Opens (PrimeSpectrum.Top R))
+    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 ⊆ PrimeSpectrum.comap f ⁻¹' U.1)
     (s : (structureSheaf R).1.obj (op U)) (p : V) :
     (comap f U V hUV s).1 p =
       Localization.localRingHom (PrimeSpectrum.comap f p.1).asIdeal _ f rfl
@@ -2969,204 +2299,124 @@ theorem comap_apply (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
   comapₗ_eq_localRingHom ..
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comap_const` / 定理 `comap_const`
-
-English:
-theorem comap_const
-  statement: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
-  proof: Subtype.ext funext fun p => by
-    rw [comap_apply]; rw [const_apply]; rw [const_apply]
-    convert_to! Localization.localRingHom _ _ _ _ (Localization.mk _ _) = Localization.mk _ _
-    simp [Localization.mk_eq_mk']
-
-中文:
-定理 comap_const
-  结论: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
-  证明: Subtype.ext funext fun p => by
-    rw [comap_apply]; rw [const_apply]; rw [const_apply]
-    convert_to! Localization.localRingHom _ _ _ _ (Localization.mk _ _) = Localization.mk _ _
-    simp [Localization.mk_eq_mk']
-
-Depends on / 依赖: Localization, Localization.localRingHom, Localization.mk, Localization.mk_eq_mk, Subtype, Subtype.ext, comap_apply, const_apply, convert_to, localRingHom, mk_eq_mk
+/-
+**AlgebraicGeometry.comap_const** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comap_const (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
-    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 subseteq PrimeSpectrum.comap f ⁻¹' U.1) (a b : R)
-    (hb : forall x : PrimeSpectrum R, x in U -> b in x.asIdeal.primeCompl) :
+theorem comap_const (f : R →+* S) (U : Opens (PrimeSpectrum.Top R))
+    (V : Opens (PrimeSpectrum.Top S)) (hUV : V.1 ⊆ PrimeSpectrum.comap f ⁻¹' U.1) (a b : R)
+    (hb : ∀ x : PrimeSpectrum R, x ∈ U → b ∈ x.asIdeal.primeCompl) :
     comap f U V hUV (const a b U hb) =
       const (f a) (f b) V fun p hpV => hb (PrimeSpectrum.comap f p) (hUV hpV) :=
-Subtype.ext funext fun p => by
-    rw [comap_apply]; rw [const_apply]; rw [const_apply]
+  Subtype.ext <| funext fun p => by
+    rw [comap_apply, const_apply, const_apply]
     convert_to! Localization.localRingHom _ _ _ _ (Localization.mk _ _) = Localization.mk _ _
     simp [Localization.mk_eq_mk']
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `comap_id_eq_map` / 定理 `comap_id_eq_map`
+/-- For an inclusion `i : V ⟶ U` between open sets of the prime spectrum of `R`, the comap of the
+identity from OO_X(U) to OO_X(V) equals as the restriction map of the structure sheaf.
 
-English:
-theorem comap_id_eq_map
-  given: (U V : Opens (PrimeSpectrum.Top R)) (iVU : V ⟶ U)
-  proof: RingHom.ext fun s => Subtype.ext funext fun p => by
-    rw [comap_apply]
-    exact congr($(Localization.localRingHom_id ..) _)
+This is a generalization of the fact that, for fixed `U`, the comap of the identity from OO_X(U)
+to OO_X(U) is the identity.
+-/
+/-
+**AlgebraicGeometry.comap_id_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 comap_id_eq_map
-  条件: (U V : Opens (素谱.顶元素 R)) (iVU : V ⟶ U)
-  证明: RingHom.ext fun s => Subtype.ext funext fun p => by
-    rw [comap_apply]
-    exact congr($(Localization.localRingHom_id ..) _)
+--- 原说明 ---
+For an inclusion `i : V ⟶ U` between open sets of the prime spectrum of `R`, the
+ comap of the
+identity from OO_X(U) to OO_X(V) equals as the restriction map of the structure 
+sheaf.
 
-Depends on / 依赖: Localization, Localization.localRingHom_id, RingHom, RingHom.ext, Subtype, Subtype.ext, comap_apply, localRingHom_id
+This is a generalization of the fact that, for fixed `U`, the comap of the ident
+ity from OO_X(U)
+to OO_X(U) is the identity.
 -/
 theorem comap_id_eq_map (U V : Opens (PrimeSpectrum.Top R)) (iVU : V ⟶ U) :
     (comap (RingHom.id R) U V fun _ hpV => leOfHom iVU <| hpV) =
       ((structureSheaf R).1.map iVU.op).hom :=
-RingHom.ext fun s => Subtype.ext funext fun p => by
+  RingHom.ext fun s => Subtype.ext <| funext fun p => by
     rw [comap_apply]
     exact congr($(Localization.localRingHom_id ..) _)
 
 /--
-theorem `comap_id` / 定理 `comap_id`
+The comap of the identity is the identity. In this variant of the lemma, two open subsets `U` and
+`V` are given as arguments, together with a proof that `U = V`. This is useful when `U` and `V`
+are not definitionally equal.
+-/
+/-
+**AlgebraicGeometry.comap_id** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem comap_id
-  given: {U V : Opens (PrimeSpectrum.Top R)} (hUV : U = V)
-  proof: by
-  rw [comap_id_eq_map U V (eqToHom hUV.symm)]; rw [eqToHom_op]; rw [eqToHom_map]
-
-@[simp]
-
-中文:
-定理 comap_id
-  条件: {U V : Opens (素谱.顶元素 R)} (hUV : U = V)
-  证明: by
-  rw [comap_id_eq_map U V (eqToHom hUV.symm)]; rw [eqToHom_op]; rw [eqToHom_map]
-
-@[simp]
-
-Depends on / 依赖: comap_id_eq_map, eqToHom, eqToHom_map, eqToHom_op, hUV.symm
+--- 原说明 ---
+The comap of the identity is the identity. In this variant of the lemma, two ope
+n subsets `U` and
+`V` are given as arguments, together with a proof that `U = V`. This is useful w
+hen `U` and `V`
+are not definitionally equal.
 -/
 theorem comap_id {U V : Opens (PrimeSpectrum.Top R)} (hUV : U = V) :
     (comap (RingHom.id R) U V fun p hpV => by rwa [hUV, PrimeSpectrum.comap_id]) =
       (eqToHom (show (structureSheaf R).1.obj (op U) = _ by rw [hUV])).hom := by
-  rw [comap_id_eq_map U V (eqToHom hUV.symm)]; rw [eqToHom_op]; rw [eqToHom_map]
+  rw [comap_id_eq_map U V (eqToHom hUV.symm), eqToHom_op, eqToHom_map]
 
 @[simp]
-/--
-theorem `comap_id'` / 定理 `comap_id'`
-
-English:
-theorem comap_id'
-  given: (U : Opens (PrimeSpectrum.Top R))
-  proof: by
-  rw [comap_id rfl]; rfl
-
-中文:
-定理 comap_id'
-  条件: (U : Opens (素谱.顶元素 R))
-  证明: by
-  rw [comap_id rfl]; rfl
-
-Depends on / 依赖: comap_id
+/-
+**AlgebraicGeometry.comap_id'** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comap_id' (U : Opens (PrimeSpectrum.Top R)) :
     (comap (RingHom.id R) U U fun p hpU => by rwa [PrimeSpectrum.comap_id]) = RingHom.id _ := by
   rw [comap_id rfl]; rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comap_comp` / 定理 `comap_comp`
-
-English:
-theorem comap_comp
-  statement: (f : R ->+* S) (g : S ->+* P) (U : Opens (PrimeSpectrum.Top R))
-  proof: RingHom.ext fun s =>
-Subtype.ext
-      funext fun p => by
-        rw [comap_apply]; rw [Localization.localRingHom_comp _ (PrimeSpectrum.comap g p.1).asIdeal] <;>
-        simp
-
-中文:
-定理 comap_comp
-  结论: (f : R ->+* S) (g : S ->+* P) (U : Opens (素谱.顶元素 R))
-  证明: RingHom.ext fun s =>
-Subtype.ext
-      funext fun p => by
-        rw [comap_apply]; rw [Localization.localRingHom_comp _ (PrimeSpectrum.comap g p.1).asIdeal] <;>
-        simp
-
-Depends on / 依赖: Localization, Localization.localRingHom_comp, PrimeSpectrum, PrimeSpectrum.comap, RingHom, RingHom.ext, Subtype, Subtype.ext, asIdeal, comap_apply, localRingHom_comp
+/-
+**AlgebraicGeometry.comap_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comap_comp (f : R ->+* S) (g : S ->+* P) (U : Opens (PrimeSpectrum.Top R))
+theorem comap_comp (f : R →+* S) (g : S →+* P) (U : Opens (PrimeSpectrum.Top R))
     (V : Opens (PrimeSpectrum.Top S)) (W : Opens (PrimeSpectrum.Top P))
-    (hUV : forall p in V, PrimeSpectrum.comap f p in U) (hVW : forall p in W, PrimeSpectrum.comap g p in V) :
+    (hUV : ∀ p ∈ V, PrimeSpectrum.comap f p ∈ U) (hVW : ∀ p ∈ W, PrimeSpectrum.comap g p ∈ V) :
     (comap (g.comp f) U W fun p hpW => hUV (PrimeSpectrum.comap g p) (hVW p hpW)) =
       (comap g V W hVW).comp (comap f U V hUV) :=
   RingHom.ext fun s =>
-Subtype.ext
+    Subtype.ext <|
       funext fun p => by
-        rw [comap_apply]; rw [Localization.localRingHom_comp _ (PrimeSpectrum.comap g p.1).asIdeal] <;>
+        rw [comap_apply, Localization.localRingHom_comp _ (PrimeSpectrum.comap g p.1).asIdeal] <;>
         simp
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[elementwise, reassoc]
-/--
-theorem `toOpen_comp_comap` / 定理 `toOpen_comp_comap`
-
-English:
-theorem toOpen_comp_comap
-  given: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
-  proof: CommRingCat.hom_ext RingHom.ext fun _ => Subtype.ext funext fun x => by
-    dsimp
-    rw [comap_apply]
-    exact Localization.localRingHom_to_map _ _ _ _ _
-
-中文:
-定理 toOpen_comp_comap
-  条件: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
-  证明: CommRingCat.hom_ext RingHom.ext fun _ => Subtype.ext funext fun x => by
-    dsimp
-    rw [comap_apply]
-    exact Localization.localRingHom_to_map _ _ _ _ _
-
-Depends on / 依赖: CommRingCat, CommRingCat.hom_ext, Localization, Localization.localRingHom_to_map, RingHom, RingHom.ext, Subtype, Subtype.ext, comap_apply, hom_ext, localRingHom_to_map
+/-
+**AlgebraicGeometry.toOpen_comp_comap** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeomet
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOpen_comp_comap (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R)) :
+theorem toOpen_comp_comap (f : R →+* S) (U : Opens (PrimeSpectrum.Top R)) :
     CommRingCat.ofHom (algebraMap _ _) ≫
       CommRingCat.ofHom (comap f U (Opens.comap ⟨_, PrimeSpectrum.continuous_comap f⟩ U)
-        fun _ => id) =
+        fun _ ↦ id) =
       CommRingCat.ofHom f ≫ CommRingCat.ofHom (algebraMap _ _) :=
-CommRingCat.hom_ext RingHom.ext fun _ => Subtype.ext funext fun x => by
+  CommRingCat.hom_ext <| RingHom.ext fun _ ↦ Subtype.ext <| funext fun x ↦ by
     dsimp
     rw [comap_apply]
     exact Localization.localRingHom_to_map _ _ _ _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `comap_basicOpen` / 引理 `comap_basicOpen`
-
-English:
-lemma comap_basicOpen
-  given: (f : R ->+* S) (x : R)
-  proof: IsLocalization.ringHom_ext (.powers x) by
-    simpa [CommRingCat.hom_ext_iff] using! toOpen_comp_comap f _
-
-中文:
-引理 comap_basicOpen
-  条件: (f : R ->+* S) (x : R)
-  证明: IsLocalization.ringHom_ext (.powers x) by
-    simpa [CommRingCat.hom_ext_iff] using! toOpen_comp_comap f _
-
-Depends on / 依赖: powers
+/-
+**AlgebraicGeometry.comap_basicOpen** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comap_basicOpen (f : R ->+* S) (x : R) :
+lemma comap_basicOpen (f : R →+* S) (x : R) :
     comap f (PrimeSpectrum.basicOpen x) (PrimeSpectrum.basicOpen (f x))
         (PrimeSpectrum.comap_basicOpen f x).le =
       IsLocalization.map (M := .powers x) (T := .powers (f x)) _ f
         (Submonoid.powers_le.mpr (Submonoid.mem_powers _)) :=
-IsLocalization.ringHom_ext (.powers x) by
+  IsLocalization.ringHom_ext (.powers x) <| by
     simpa [CommRingCat.hom_ext_iff] using! toOpen_comp_comap f _
 
 end Ring
@@ -3176,3 +2426,4 @@ end Comap
 end StructureSheaf
 
 end AlgebraicGeometry
+

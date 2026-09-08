@@ -33,42 +33,14 @@ variable [HasFiniteCoproducts C]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `finiteSubcoproductsCocone_ι_app_eq_sum` / 定理 `finiteSubcoproductsCocone_ι_app_eq_sum`
-
-English:
-theorem finiteSubcoproductsCocone_ι_app_eq_sum
-  statement: {α : Type w} [DecidableEq α] (f : α -> C)
-  proof: by
-  dsimp only [liftToFinsetObj_obj, Discrete.functor_obj_eq_as, finiteSubcoproductsCocone_pt,
-    Functor.const_obj_obj, finiteSubcoproductsCocone_ι_app]
-  ext v
-  simp only [colimit.ι_desc, Cofan.mk_pt, Cofan.mk_ι_app, Preadditive.comp_sum]
-  rw [Finset.sum_eq_single v]
-  · simp
-  · intro b hb hb₁
-    rw [Sigma.ι_π_of_ne_assoc _ (Ne.symm hb₁)]; rw [zero_comp]
-  · simp
-
-中文:
-定理 finiteSubcoproductsCocone_ι_app_eq_sum
-  结论: {α : 类型 w} [DecidableEq α] (f : α -> C)
-  证明: by
-  dsimp only [liftToFinsetObj_obj, Discrete.functor_obj_eq_as, finiteSubcoproductsCocone_pt,
-    Functor.const_obj_obj, finiteSubcoproductsCocone_ι_app]
-  ext v
-  simp only [colimit.ι_desc, Cofan.mk_pt, Cofan.mk_ι_app, Preadditive.comp_sum]
-  rw [Finset.sum_eq_single v]
-  · simp
-  · intro b hb hb₁
-    rw [Sigma.ι_π_of_ne_assoc _ (Ne.symm hb₁)]; rw [zero_comp]
-  · simp
-
-Depends on / 依赖: Cofan.mk_, Cofan.mk_pt, Discrete, Discrete.functor_obj_eq_as, Finset, Finset.sum_eq_single, Functor, Functor.const_obj_obj, Ne.symm, Preadditive, Preadditive.comp_sum, colimit, comp_sum, const_obj_obj, finiteSubcoproductsCocone_pt, functor_obj_eq_as, liftToFinsetObj_obj, mk_pt, sum_eq_single, zero_comp
+/-
+**CategoryTheory.Limits.CoproductsFromFiniteFiltered.finiteSubcoproductsCocone_*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.CoproductsFromFiniteFiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem finiteSubcoproductsCocone_ι_app_eq_sum {α : Type w} [DecidableEq α] (f : α -> C)
+theorem finiteSubcoproductsCocone_ι_app_eq_sum {α : Type w} [DecidableEq α] (f : α → C)
     [HasCoproduct f] (S : Finset (Discrete α)) :
-    (finiteSubcoproductsCocone f).ι.app S = ∑ a in S.attach, Sigma.π _ a ≫ Sigma.ι _ a.1.as := by
+    (finiteSubcoproductsCocone f).ι.app S = ∑ a ∈ S.attach, Sigma.π _ a ≫ Sigma.ι _ a.1.as := by
   dsimp only [liftToFinsetObj_obj, Discrete.functor_obj_eq_as, finiteSubcoproductsCocone_pt,
     Functor.const_obj_obj, finiteSubcoproductsCocone_ι_app]
   ext v
@@ -76,7 +48,7 @@ theorem finiteSubcoproductsCocone_ι_app_eq_sum {α : Type w} [DecidableEq α] (
   rw [Finset.sum_eq_single v]
   · simp
   · intro b hb hb₁
-    rw [Sigma.ι_π_of_ne_assoc _ (Ne.symm hb₁)]; rw [zero_comp]
+    rw [Sigma.ι_π_of_ne_assoc _ (Ne.symm hb₁), zero_comp]
   · simp
 
 end CoproductsFromFiniteFiltered
@@ -87,43 +59,15 @@ variable [HasFiniteProducts C]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `finiteSubproductsCocone_π_app_eq_sum` / 定理 `finiteSubproductsCocone_π_app_eq_sum`
-
-English:
-theorem finiteSubproductsCocone_π_app_eq_sum
-  statement: {α : Type w} [DecidableEq α] (f : α -> C) [HasProduct f]
-  proof: by
-  dsimp only [finiteSubproductsCone_pt, Functor.const_obj_obj, liftToFinsetObj_obj,
-    Discrete.functor_obj_eq_as, finiteSubproductsCone_π_app]
-  ext v
-  simp only [limit.lift_π, Fan.mk_pt, Fan.mk_π_app, Preadditive.sum_comp, Category.assoc]
-  rw [Finset.sum_eq_single v]
-  · simp
-  · intro b hb hb₁
-    rw [Pi.ι_π_of_ne _ hb₁]; rw [comp_zero]
-  · simp
-
-中文:
-定理 finiteSubproductsCocone_π_app_eq_sum
-  结论: {α : 类型 w} [DecidableEq α] (f : α -> C) [HasProduct f]
-  证明: by
-  dsimp only [finiteSubproductsCone_pt, Functor.const_obj_obj, liftToFinsetObj_obj,
-    Discrete.functor_obj_eq_as, finiteSubproductsCone_π_app]
-  ext v
-  simp only [limit.lift_π, Fan.mk_pt, Fan.mk_π_app, Preadditive.sum_comp, Category.assoc]
-  rw [Finset.sum_eq_single v]
-  · simp
-  · intro b hb hb₁
-    rw [Pi.ι_π_of_ne _ hb₁]; rw [comp_zero]
-  · simp
-
-Depends on / 依赖: Category, Category.assoc, Discrete, Discrete.functor_obj_eq_as, Fan.mk_, Fan.mk_pt, Finset, Finset.sum_eq_single, Functor, Functor.const_obj_obj, Preadditive, Preadditive.sum_comp, comp_zero, const_obj_obj, finiteSubproductsCone_pt, functor_obj_eq_as, liftToFinsetObj_obj, limit.lift_, mk_pt, sum_comp
+/-
+**CategoryTheory.Limits.ProductsFromFiniteCofiltered.finiteSubproductsCocone_** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.ProductsFromFiniteCofiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem finiteSubproductsCocone_π_app_eq_sum {α : Type w} [DecidableEq α] (f : α -> C) [HasProduct f]
+theorem finiteSubproductsCocone_π_app_eq_sum {α : Type w} [DecidableEq α] (f : α → C) [HasProduct f]
     (S : (Finset (Discrete α))ᵒᵖ) :
     (finiteSubproductsCone f).π.app S =
-      ∑ a in S.unop.attach, Pi.π f a.1.as ≫ Pi.ι (fun a => f a.1.as) a := by
+      ∑ a ∈ S.unop.attach, Pi.π f a.1.as ≫ Pi.ι (fun a => f a.1.as) a := by
   dsimp only [finiteSubproductsCone_pt, Functor.const_obj_obj, liftToFinsetObj_obj,
     Discrete.functor_obj_eq_as, finiteSubproductsCone_π_app]
   ext v
@@ -131,9 +75,10 @@ theorem finiteSubproductsCocone_π_app_eq_sum {α : Type w} [DecidableEq α] (f 
   rw [Finset.sum_eq_single v]
   · simp
   · intro b hb hb₁
-    rw [Pi.ι_π_of_ne _ hb₁]; rw [comp_zero]
+    rw [Pi.ι_π_of_ne _ hb₁, comp_zero]
   · simp
 
 end ProductsFromFiniteCofiltered
 
 end CategoryTheory.Limits
+

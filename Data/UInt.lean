@@ -35,76 +35,36 @@ run_cmd
   for typeName' in [`UInt8, `UInt16, `UInt32, `UInt64, `USize] do
   let typeName := Lean.mkIdent typeName'
   Lean.Elab.Command.elabCommand (← `(
-namespace typeName
+    namespace $typeName
 
-open typeName (toBitVec_mul) in
-/--
-theorem `toBitVec_nsmul` / 定理 `toBitVec_nsmul`
-
-English:
-theorem toBitVec_nsmul
-  given: (n : Nat) (a : $typeName)
-  proof: by
-        rw [Lean.Grind.Semiring.nsmul_eq_natCast_mul]; rw [toBitVec_mul]; rw [nsmul_eq_mul]; rw [BitVec.natCast_eq_ofNat]
-        rfl
-
-中文:
-定理 toBitVec_nsmul
-  条件: (n : 自然数) (a : $typeName)
-  证明: by
-        rw [Lean.Grind.Semiring.nsmul_eq_natCast_mul]; rw [toBitVec_mul]; rw [nsmul_eq_mul]; rw [BitVec.natCast_eq_ofNat]
-        rfl
+      open $typeName (toBitVec_mul) in
+/-
+**toBitVec_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-      protected theorem toBitVec_nsmul (n : Nat) (a : $typeName) :
+      protected theorem toBitVec_nsmul (n : ℕ) (a : $typeName) :
           (n • a).toBitVec = n • a.toBitVec := by
-        rw [Lean.Grind.Semiring.nsmul_eq_natCast_mul]; rw [toBitVec_mul]; rw [nsmul_eq_mul]; rw [BitVec.natCast_eq_ofNat]
+        rw [Lean.Grind.Semiring.nsmul_eq_natCast_mul, toBitVec_mul,
+          nsmul_eq_mul, BitVec.natCast_eq_ofNat]
         rfl
 
       attribute [local instance] natCast intCast
 
       @[simp, int_toBitVec]
-/--
-theorem `toBitVec_natCast` / 定理 `toBitVec_natCast`
-
-English:
-theorem toBitVec_natCast
-  given: (n : Nat)
-  proof: rfl
-
-中文:
-定理 toBitVec_natCast
-  条件: (n : 自然数)
-  证明: rfl
+/-
+**toBitVec_natCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-      protected theorem toBitVec_natCast (n : Nat) :
+      protected theorem toBitVec_natCast (n : ℕ) :
           (n : $typeName).toBitVec = n := rfl
 
-open typeName (toBitVec_neg) in
+      open $typeName (toBitVec_neg) in
       @[simp, int_toBitVec]
-/--
-theorem `toBitVec_intCast` / 定理 `toBitVec_intCast`
-
-English:
-theorem toBitVec_intCast
-  given: (z : Int)
-  proof: by
-        obtain ⟨z, rfl | rfl⟩ := z.eq_nat_or_neg
-        · erw [intCast_ofNat]; rfl
-        · rw [intCast_neg, toBitVec_neg]
-          erw [intCast_ofNat]
-          simp
-
-中文:
-定理 toBitVec_intCast
-  条件: (z : 整数)
-  证明: by
-        obtain ⟨z, rfl | rfl⟩ := z.eq_nat_or_neg
-        · erw [intCast_ofNat]; rfl
-        · rw [intCast_neg, toBitVec_neg]
-          erw [intCast_ofNat]
-          simp
+/-
+**toBitVec_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-      protected theorem toBitVec_intCast (z : Int) :
+      protected theorem toBitVec_intCast (z : ℤ) :
           (z : $typeName).toBitVec = z := by
         obtain ⟨z, rfl | rfl⟩ := z.eq_nat_or_neg
         · erw [intCast_ofNat]; rfl
@@ -112,32 +72,13 @@ theorem toBitVec_intCast
           erw [intCast_ofNat]
           simp
 
-open typeName (toBitVec_mul toBitVec_intCast) in
+      open $typeName (toBitVec_mul toBitVec_intCast) in
       @[simp, int_toBitVec]
-/--
-theorem `toBitVec_zsmul` / 定理 `toBitVec_zsmul`
-
-English:
-theorem toBitVec_zsmul
-  given: (z : Int) (a : $typeName)
-  proof: by
-        change (z * a).toBitVec = BitVec.ofInt _ z * a.toBitVec
-        rw [toBitVec_mul]
-        congr 1
-        rw [toBitVec_intCast]
-        rfl
-
-中文:
-定理 toBitVec_zsmul
-  条件: (z : 整数) (a : $typeName)
-  证明: by
-        change (z * a).toBitVec = BitVec.ofInt _ z * a.toBitVec
-        rw [toBitVec_mul]
-        congr 1
-        rw [toBitVec_intCast]
-        rfl
+/-
+**toBitVec_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-      protected theorem toBitVec_zsmul (z : Int) (a : $typeName) :
+      protected theorem toBitVec_zsmul (z : ℤ) (a : $typeName) :
           (z • a).toBitVec = z • a.toBitVec := by
         change (z * a).toBitVec = BitVec.ofInt _ z * a.toBitVec
         rw [toBitVec_mul]
@@ -145,7 +86,7 @@ theorem toBitVec_zsmul
         rw [toBitVec_intCast]
         rfl
 
-end typeName
+    end $typeName
   ))
 
 set_option linter.style.emptyLine false in
@@ -155,95 +96,39 @@ run_cmd
   for typeName' in [`UInt8, `UInt16, `UInt32, `UInt64, `USize] do
   let typeName := Lean.mkIdent typeName'
   Lean.Elab.Command.elabCommand (← `(
-namespace typeName
+    namespace $typeName
 
-open typeName (eq_of_toFin_eq) in
-/--
-lemma `toFin_injective` / 引理 `toFin_injective`
-
-English:
-lemma toFin_injective
-  statement: Function.Injective toFin
-  proof: @eq_of_toFin_eq
-
-中文:
-引理 toFin_injective
-  结论: 函数.单射 toFin
-  证明: @eq_of_toFin_eq
-
-Depends on / 依赖: eq_of_toFin_eq
+      open $typeName (eq_of_toFin_eq) in
+/-
+**toFin_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
       lemma toFin_injective : Function.Injective toFin := @eq_of_toFin_eq
 
-open typeName (eq_of_toBitVec_eq) in
-/--
-lemma `toBitVec_injective` / 引理 `toBitVec_injective`
-
-English:
-lemma toBitVec_injective
-  statement: Function.Injective toBitVec
-  proof: @eq_of_toBitVec_eq
-
-中文:
-引理 toBitVec_injective
-  结论: 函数.单射 toBitVec
-  证明: @eq_of_toBitVec_eq
-
-Depends on / 依赖: eq_of_toBitVec_eq
+      open $typeName (eq_of_toBitVec_eq) in
+/-
+**toBitVec_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
       lemma toBitVec_injective : Function.Injective toBitVec := @eq_of_toBitVec_eq
 
-open typeName (toBitVec_one toBitVec_mul toBitVec_pow) in
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: : CommMonoid typeName
-  body: Function.Injective.commMonoid toBitVec toBitVec_injective
-          toBitVec_one (fun _ _ => toBitVec_mul) (fun _ _ => toBitVec_pow _ _)
-
-中文:
-实例 instCommMonoid
-  签名: : 交换幺半群 typeName
-  定义体: Function.Injective.commMonoid toBitVec toBitVec_injective
-          toBitVec_one (fun _ _ => toBitVec_mul) (fun _ _ => toBitVec_pow _ _)
-
-Depends on / 依赖: Function, Function.Injective.commMonoid, Injective, commMonoid, toBitVec, toBitVec_injective, toBitVec_mul, toBitVec_one, toBitVec_pow
+      open $typeName (toBitVec_one toBitVec_mul toBitVec_pow) in
+/-
+**instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCommMonoid : CommMonoid typeName :=
+      instance instCommMonoid : CommMonoid $typeName :=
         Function.Injective.commMonoid toBitVec toBitVec_injective
           toBitVec_one (fun _ _ => toBitVec_mul) (fun _ _ => toBitVec_pow _ _)
 
-open typeName (
+      open $typeName (
         toBitVec_zero toBitVec_add toBitVec_mul toBitVec_neg toBitVec_sub toBitVec_nsmul
         toBitVec_zsmul) in
-/--
-Instance `instNonUnitalCommRing` / 实例 `instNonUnitalCommRing`
-
-English:
-instance instNonUnitalCommRing
-  signature: : NonUnitalCommRing typeName
-  body: Function.Injective.nonUnitalCommRing toBitVec toBitVec_injective
-          toBitVec_zero (fun _ _ => toBitVec_add) (fun _ _ => toBitVec_mul) (fun _ => toBitVec_neg)
-          (fun _ _ => toBitVec_sub)
-          (fun _ _ => toBitVec_nsmul _ _) (fun _ _ => toBitVec_zsmul _ _)
-
-      attribute [local instance] intCast natCast
-
-中文:
-实例 instNonUnitalCommRing
-  签名: : 非幺交换环 typeName
-  定义体: Function.Injective.nonUnitalCommRing toBitVec toBitVec_injective
-          toBitVec_zero (fun _ _ => toBitVec_add) (fun _ _ => toBitVec_mul) (fun _ => toBitVec_neg)
-          (fun _ _ => toBitVec_sub)
-          (fun _ _ => toBitVec_nsmul _ _) (fun _ _ => toBitVec_zsmul _ _)
-
-      attribute [local instance] intCast natCast
-
-Depends on / 依赖: Function, Function.Injective.nonUnitalCommRing, Injective, nonUnitalCommRing, toBitVec, toBitVec_add, toBitVec_injective, toBitVec_mul, toBitVec_neg, toBitVec_nsmul, toBitVec_sub, toBitVec_zero, toBitVec_zsmul
+/-
+**instNonUnitalCommRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNonUnitalCommRing : NonUnitalCommRing typeName :=
+      instance instNonUnitalCommRing : NonUnitalCommRing $typeName :=
         Function.Injective.nonUnitalCommRing toBitVec toBitVec_injective
           toBitVec_zero (fun _ _ => toBitVec_add) (fun _ _ => toBitVec_mul) (fun _ => toBitVec_neg)
           (fun _ _ => toBitVec_sub)
@@ -251,12 +136,12 @@ instance instNonUnitalCommRing : NonUnitalCommRing typeName :=
 
       attribute [local instance] intCast natCast
 
-open typeName (
+      open $typeName (
         toBitVec_zero toBitVec_one toBitVec_add toBitVec_mul toBitVec_neg
         toBitVec_sub toBitVec_nsmul toBitVec_zsmul toBitVec_pow
         toBitVec_natCast toBitVec_intCast) in
       -- `noncomputable` should not be necessary but triggers some codegen assertion
-noncomputable local instance instCommRing : CommRing typeName :=
+      noncomputable local instance instCommRing : CommRing $typeName :=
         Function.Injective.commRing toBitVec toBitVec_injective
           toBitVec_zero toBitVec_one (fun _ _ => toBitVec_add) (fun _ _ => toBitVec_mul)
           (fun _ => toBitVec_neg) (fun _ _ => toBitVec_sub)
@@ -268,7 +153,7 @@ noncomputable local instance instCommRing : CommRing typeName :=
       attribute [scoped instance] instCommRing natCast intCast
       end CommRing
 
-end typeName
+    end $typeName
   ))
   -- interpolating docstrings above is more trouble than it's worth
   let docString :=
@@ -281,105 +166,89 @@ end typeName
 
 namespace UInt8
 
-/--
-Definition of `isASCIIUpper` / `isASCIIUpper` 的定义
+/-- Is this an uppercase ASCII letter? -/
+/-
+**UInt8.isASCIIUpper** 是 Mathlib 中的一个定义，位于命名空间 `UInt8`。
+形式化陈述：isASCIIUpper (c : UInt8) : Bool
+参数：c : UInt8。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isASCIIUpper
-  signature: (c : UInt8)
-  body: c >= 65 && c <= 90
-
-中文:
-定义 isASCIIUpper
-  签名: (c : U整数8)
-  定义体: c >= 65 && c <= 90
+--- 原说明 ---
+Is this an uppercase ASCII letter?
 -/
 def isASCIIUpper (c : UInt8) : Bool :=
-  c >= 65 && c <= 90
+  c ≥ 65 && c ≤ 90
 
-/--
-Definition of `isASCIILower` / `isASCIILower` 的定义
+/-- Is this a lowercase ASCII letter? -/
+/-
+**UInt8.isASCIILower** 是 Mathlib 中的一个定义，位于命名空间 `UInt8`。
+形式化陈述：isASCIILower (c : UInt8) : Bool
+参数：c : UInt8。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isASCIILower
-  signature: (c : UInt8)
-  body: c >= 97 && c <= 122
-
-中文:
-定义 isASCIILower
-  签名: (c : U整数8)
-  定义体: c >= 97 && c <= 122
+--- 原说明 ---
+Is this a lowercase ASCII letter?
 -/
 def isASCIILower (c : UInt8) : Bool :=
-  c >= 97 && c <= 122
+  c ≥ 97 && c ≤ 122
 
-/--
-Definition of `isASCIIAlpha` / `isASCIIAlpha` 的定义
+/-- Is this an alphabetic ASCII character? -/
+/-
+**UInt8.isASCIIAlpha** 是 Mathlib 中的一个定义，位于命名空间 `UInt8`。
+形式化陈述：isASCIIAlpha (c : UInt8) : Bool
+参数：c : UInt8。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isASCIIAlpha
-  signature: (c : UInt8)
-  body: c.isASCIIUpper || c.isASCIILower
-
-中文:
-定义 isASCIIAlpha
-  签名: (c : U整数8)
-  定义体: c.isASCIIUpper || c.isASCIILower
-
-Depends on / 依赖: c.isASCIILower, c.isASCIIUpper, isASCIILower, isASCIIUpper
+--- 原说明 ---
+Is this an alphabetic ASCII character?
 -/
 def isASCIIAlpha (c : UInt8) : Bool :=
   c.isASCIIUpper || c.isASCIILower
 
-/--
-Definition of `isASCIIDigit` / `isASCIIDigit` 的定义
+/-- Is this an ASCII digit character? -/
+/-
+**UInt8.isASCIIDigit** 是 Mathlib 中的一个定义，位于命名空间 `UInt8`。
+形式化陈述：isASCIIDigit (c : UInt8) : Bool
+参数：c : UInt8。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isASCIIDigit
-  signature: (c : UInt8)
-  body: c >= 48 && c <= 57
-
-中文:
-定义 isASCIIDigit
-  签名: (c : U整数8)
-  定义体: c >= 48 && c <= 57
+--- 原说明 ---
+Is this an ASCII digit character?
 -/
 def isASCIIDigit (c : UInt8) : Bool :=
-  c >= 48 && c <= 57
+  c ≥ 48 && c ≤ 57
 
-/--
-Definition of `isASCIIAlphanum` / `isASCIIAlphanum` 的定义
+/-- Is this an alphanumeric ASCII character? -/
+/-
+**UInt8.isASCIIAlphanum** 是 Mathlib 中的一个定义，位于命名空间 `UInt8`。
+形式化陈述：isASCIIAlphanum (c : UInt8) : Bool
+参数：c : UInt8。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isASCIIAlphanum
-  signature: (c : UInt8)
-  body: c.isASCIIAlpha || c.isASCIIDigit
-
-中文:
-定义 isASCIIAlphanum
-  签名: (c : U整数8)
-  定义体: c.isASCIIAlpha || c.isASCIIDigit
-
-Depends on / 依赖: c.isASCIIAlpha, c.isASCIIDigit, isASCIIAlpha, isASCIIDigit
+--- 原说明 ---
+Is this an alphanumeric ASCII character?
 -/
 def isASCIIAlphanum (c : UInt8) : Bool :=
   c.isASCIIAlpha || c.isASCIIDigit
 
-/--
-Definition of `toChar` / `toChar` 的定义
+/-- The numbers from 0 to 256 are all valid UTF-8 characters, so we can embed one in the other. -/
+/-
+**UInt8.toChar** 是 Mathlib 中的一个定义，位于命名空间 `UInt8`。
+形式化陈述：toChar (n : UInt8) : Char
+参数：n : UInt8。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toChar
-  signature: (n : UInt8)
-  body: ⟨n.toUInt32, .inl (Nat.lt_trans n.toBitVec.isLt (by decide))⟩
-
-中文:
-定义 toChar
-  签名: (n : U整数8)
-  定义体: ⟨n.toUInt32, .inl (Nat.lt_trans n.toBitVec.isLt (by decide))⟩
-
-Depends on / 依赖: Nat.lt_trans, lt_trans, n.toBitVec.isLt, n.toUInt32, toBitVec, toUInt32
+--- 原说明 ---
+The numbers from 0 to 256 are all valid UTF-8 characters, so we can embed one in
+ the other.
 -/
 def toChar (n : UInt8) : Char := ⟨n.toUInt32, .inl (Nat.lt_trans n.toBitVec.isLt (by decide))⟩
 
 end UInt8
+

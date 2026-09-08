@@ -42,112 +42,110 @@ namespace AlgebraicGeometry
 
 namespace Scheme
 
-/--
-Definition of `zariskiPretopology` / `zariskiPretopology` 的定义
+/-- The Zariski pretopology on the category of schemes. -/
+/-
+**AlgebraicGeometry.Scheme.zariskiPretopology** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.Scheme`。
+形式化陈述：zariskiPretopology : Pretopology Scheme.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zariskiPretopology
-  signature: : Pretopology Scheme.{u}
-  body: pretopology @IsOpenImmersion
-
-中文:
-定义 zariskiPretopology
-  签名: : Pretopology 概形.{u}
-  定义体: pretopology @IsOpenImmersion
-
-Depends on / 依赖: IsOpenImmersion, pretopology
+--- 原说明 ---
+The Zariski pretopology on the category of schemes.
 -/
 def zariskiPretopology : Pretopology Scheme.{u} :=
   pretopology @IsOpenImmersion
 
-/--
-Definition of `zariskiTopology` / `zariskiTopology` 的定义
+/-- The Zariski topology on the category of schemes. -/
+/-
+**AlgebraicGeometry.Scheme.zariskiTopology** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebrai
+cGeometry.Scheme`。
+形式化陈述：zariskiTopology : GrothendieckTopology Scheme.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation zariskiTopology
-  signature: : GrothendieckTopology Scheme.{u}
-  body: grothendieckTopology IsOpenImmersion
-
-中文:
-缩写 zariskiTopology
-  签名: : Grothendieck拓扑 概形.{u}
-  定义体: grothendieckTopology IsOpenImmersion
-
-Depends on / 依赖: IsOpenImmersion, grothendieckTopology
+--- 原说明 ---
+The Zariski topology on the category of schemes.
 -/
 abbrev zariskiTopology : GrothendieckTopology Scheme.{u} :=
   grothendieckTopology IsOpenImmersion
-
-/--
-lemma `zariskiTopology_eq` / 引理 `zariskiTopology_eq`
-
-English:
-lemma zariskiTopology_eq
-  statement: zariskiTopology.{u} = zariskiPretopology.toGrothendieck
-  proof: Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck.symm
-
-中文:
-引理 zariskiTopology_eq
-  结论: zariskiTopology.{u} = zariskiPretopology.toGrothendieck
-  证明: Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck.symm
-
-Depends on / 依赖: Precoverage, Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck.symm, toGrothendieck_toPretopology_eq_toGrothendieck
+/-
+**AlgebraicGeometry.Scheme.zariskiTopology_eq** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry.Scheme`。
+形式化陈述：zariskiTopology_eq : zariskiTopology.{u} = zariskiPretopology.toGrothendie
+ck
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `AlgebraicGeometry.Scheme.instHasIsosPrecoverageOfContainsIdentitiesOfRes
+pectsIso`：∀ (P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme) [P.Co
+ntainsIdentities] [P.RespectsIso],   (AlgebraicGeometry.Scheme.precove…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toContainsIdentities`：∀
+ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheory.Morp
+hismProperty C}   [self : W.IsMultiplicative], W.ContainsId…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderBaseChangePrecoverageOfIsJoint
+lySurjectivePreservingOfIsStableUnderBaseChange`：∀ (P : CategoryTheory.MorphismP
+roperty AlgebraicGeometry.Scheme)   [AlgebraicGeometry.Scheme.IsJointlySurjectiv
+ePreserving P] [P.IsStableUnd…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsJointlySurjectivePreservingIsOpenImmersio
+n`：AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving AlgebraicGeometry.IsOp
+enImmersion
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderCompositionPrecoverageOfIsStab
+leUnderComposition`：∀ (P : CategoryTheory.MorphismProperty AlgebraicGeometry.Sch
+eme) [P.IsStableUnderComposition],   (AlgebraicGeometry.Scheme.precoverage P).Is
+…
+· 使用引理 `CategoryTheory.Precoverage.toGrothendieck_toPretopology_eq_toGrothendiec
+k`：toGrothendieck_toPretopology_eq_toGrothendieck [IsStableUnderComposition J] [
+IsStableUnderBaseChange J] [Limits.HasPullbacks C] [HasIsos J] …
 -/
 lemma zariskiTopology_eq : zariskiTopology.{u} = zariskiPretopology.toGrothendieck :=
   Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck.symm
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `subcanonical_zariskiTopology` / 实例 `subcanonical_zariskiTopology`
-
-English:
-instance subcanonical_zariskiTopology
-  signature: : zariskiTopology.Subcanonical
-  body: by
-  apply GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj
-  intro X
-  rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
-  rintro Y S hS x hx
-  obtain ⟨(𝓤 : OpenCover Y), rfl⟩ := exists_cover_of_mem_pretopology hS
-let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk _)) by
-    intro i j
-    apply hx
-    exact Limits.pullback.condition
-  refine ⟨e, ?_, ?_⟩
-  · rintro Z e ⟨j⟩
-    dsimp [e]
-    rw [𝓤.ι_glueMorphisms]
-  · intro e' h
-    apply 𝓤.hom_ext
-    intro j
-    rw [𝓤.ι_glueMorphisms]
-    exact h (𝓤.f j) (.mk j)
-
-中文:
-实例 subcanonical_zariskiTopology
-  签名: : zariskiTopology.子典范
-  定义体: by
-  apply GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj
-  intro X
-  rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
-  rintro Y S hS x hx
-  obtain ⟨(𝓤 : OpenCover Y), rfl⟩ := exists_cover_of_mem_pretopology hS
-let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk _)) by
-    intro i j
-    apply hx
-    exact Limits.pullback.condition
-  refine ⟨e, ?_, ?_⟩
-  · rintro Z e ⟨j⟩
-    dsimp [e]
-    rw [𝓤.ι_glueMorphisms]
-  · intro e' h
-    apply 𝓤.hom_ext
-    intro j
-    rw [𝓤.ι_glueMorphisms]
-    exact h (𝓤.f j) (.mk j)
-
-Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj, Limits, Limits.pullback.condition, OpenCover, Precoverage, Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, Subcanonical, condition, exists_cover_of_mem_pretopology, glueMorphisms, hom_ext, isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, of_isSheaf_yoneda_obj, pullback
+/-
+**AlgebraicGeometry.Scheme.subcanonical_zariskiTopology** 是 Mathlib 中的一个实例，位于命名空
+间 `AlgebraicGeometry.Scheme`。
+形式化陈述：subcanonical_zariskiTopology : zariskiTopology.Subcanonical
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj`：
+of_isSheaf_yoneda_obj (J : GrothendieckTopology C) (h : forall X, Presieve.IsShe
+af J (yoneda.obj X)) : Subcanonical J where le_canonical
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBa
+seChange`：∀ {C : Type u_2} [inst : CategoryTheory.Category.{v_1, u_2} C] {J : Ca
+tegoryTheory.Precoverage C} [J.HasPullbacks]   [J.IsStableUnderBaseCha…
+· 使用定理 `AlgebraicGeometry.Scheme.instHasPullbacksPrecoverageOfHasPullbacks`：∀ (P
+ : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme) [P.HasPullbacks],  
+ (AlgebraicGeometry.Scheme.precoverage P).HasPullbacks
+· 使用定理 `AlgebraicGeometry.Scheme.instHasPullbacksIsOpenImmersion`：AlgebraicGeome
+try.IsOpenImmersion.HasPullbacks
+· 使用定理 `AlgebraicGeometry.Scheme.instIsStableUnderBaseChangePrecoverageOfIsJoint
+lySurjectivePreservingOfIsStableUnderBaseChange`：∀ (P : CategoryTheory.MorphismP
+roperty AlgebraicGeometry.Scheme)   [AlgebraicGeometry.Scheme.IsJointlySurjectiv
+ePreserving P] [P.IsStableUnd…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsJointlySurjectivePreservingIsOpenImmersio
+n`：AlgebraicGeometry.Scheme.IsJointlySurjectivePreserving AlgebraicGeometry.IsOp
+enImmersion
+· 使用定理 `AlgebraicGeometry.Scheme.exists_cover_of_mem_pretopology`：∀ {P : Categor
+yTheory.MorphismProperty AlgebraicGeometry.Scheme} [inst : P.IsStableUnderBaseCh
+ange]   [inst_1 : P.IsMultiplicative] {X : Alg…
+· 使用定理 `AlgebraicGeometry.Scheme.instIsOpenImmersionF`：∀ {X : AlgebraicGeometry.
+Scheme} (𝒰 : X.OpenCover) (i : 𝒰.I₀), AlgebraicGeometry.IsOpenImmersion (𝒰.f i)
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.ι_glueMorphisms`：ι_glueMorphisms (𝒰 : Ope
+nCover.{v} X) {Y : Scheme} (f : forall x, 𝒰.X x ⟶ Y) (hf : forall x y, pullback.
+fst (𝒰.f x) (𝒰.f y) ≫ f x = pullback…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.hom_ext`：hom_ext (𝒰 : OpenCover.{v} X) {Y
+ : Scheme} (f₁ f₂ : X ⟶ Y) (h : forall x, 𝒰.f x ≫ f₁ = 𝒰.f x ≫ f₂) : f₁ = f₂
 -/
 instance subcanonical_zariskiTopology : zariskiTopology.Subcanonical := by
   apply GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj
@@ -155,7 +153,7 @@ instance subcanonical_zariskiTopology : zariskiTopology.Subcanonical := by
   rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
   rintro Y S hS x hx
   obtain ⟨(𝓤 : OpenCover Y), rfl⟩ := exists_cover_of_mem_pretopology hS
-let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk _)) by
+  let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk _)) <| by
     intro i j
     apply hx
     exact Limits.pullback.condition
@@ -168,138 +166,108 @@ let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk _)) by
     intro j
     rw [𝓤.ι_glueMorphisms]
     exact h (𝓤.f j) (.mk j)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Scheme.forgetToTop.{u}.IsContinuous zariskiTopology TopCat.grothendieckTopology
-  body: by
-  rw [zariskiTopology]; rw [grothendieckTopology]
-  have : (precoverage IsOpenImmersion).PullbacksPreservedBy forgetToTop := by
-    refine ⟨fun _ _ hR => ⟨fun _ _ f _ hf _ => ?_⟩⟩
-    have : IsOpenImmersion f := hR.2 hf
-    infer_instance
-  apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
-  rw [TopCat.precoverage]; rw [Precoverage.comap_inf]; rw [precoverage]
-  gcongr
-  · rw [← Precoverage.comap_comp, forgetToTop_comp_forget]
-  · rw [MorphismProperty.comap_precoverage]
-    exact MorphismProperty.precoverage_monotone fun X Y f hf => f.isOpenEmbedding
-
-中文:
-实例 :
-  签名: 概形.forgetToTop.{u}.是连续 zariskiTopology 顶元素范畴.grothendieckTopology
-  定义体: by
-  rw [zariskiTopology]; rw [grothendieckTopology]
-  have : (precoverage IsOpenImmersion).PullbacksPreservedBy forgetToTop := by
-    refine ⟨fun _ _ hR => ⟨fun _ _ f _ hf _ => ?_⟩⟩
-    have : IsOpenImmersion f := hR.2 hf
-    infer_instance
-  apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
-  rw [TopCat.precoverage]; rw [Precoverage.comap_inf]; rw [precoverage]
-  gcongr
-  · rw [← Precoverage.comap_comp, forgetToTop_comp_forget]
-  · rw [MorphismProperty.comap_precoverage]
-    exact MorphismProperty.precoverage_monotone fun X Y f hf => f.isOpenEmbedding
-
-Depends on / 依赖: Functor, Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy, IsOpenImmersion, MorphismProperty, MorphismProperty.comap_precoverage, MorphismProperty.precovera, Precoverage, Precoverage.comap_comp, Precoverage.comap_inf, PullbacksPreservedBy, TopCat, TopCat.precoverage, comap_comp, comap_inf, comap_precoverage, forgetToTop, forgetToTop_comp_forget, grothendieckTopology, infer_instance, isContinuous_toGrothendieck_of_pullbacksPreservedBy
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Scheme.forgetToTop.{u}.IsContinuous zariskiTopology TopCat.grothendieckTopology := by
-  rw [zariskiTopology]; rw [grothendieckTopology]
+  rw [zariskiTopology, grothendieckTopology]
   have : (precoverage IsOpenImmersion).PullbacksPreservedBy forgetToTop := by
-    refine ⟨fun _ _ hR => ⟨fun _ _ f _ hf _ => ?_⟩⟩
+    refine ⟨fun _ _ hR ↦ ⟨fun _ _ f _ hf _ ↦ ?_⟩⟩
     have : IsOpenImmersion f := hR.2 hf
     infer_instance
   apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
-  rw [TopCat.precoverage]; rw [Precoverage.comap_inf]; rw [precoverage]
+  rw [TopCat.precoverage, Precoverage.comap_inf, precoverage]
   gcongr
   · rw [← Precoverage.comap_comp, forgetToTop_comp_forget]
   · rw [MorphismProperty.comap_precoverage]
-    exact MorphismProperty.precoverage_monotone fun X Y f hf => f.isOpenEmbedding
+    exact MorphismProperty.precoverage_monotone fun X Y f hf ↦ f.isOpenEmbedding
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A Zariski-`1`-hypercover of a scheme where all components are affine. -/
 @[simps! toPreOneHypercover_toPreZeroHypercover]
 noncomputable
-/--
-Definition of `affineOneHypercover` / `affineOneHypercover` 的定义
-
-English:
-definition affineOneHypercover
-  signature: (X : Scheme.{u})
-  body: .mk'
-    (X.affineCover.refineOneHypercover fun i j =>
-      (pullback (X.affineCover.f i) (X.affineCover.f j)).affineCover.toPreZeroHypercover)
-    X.affineCover.mem_grothendieckTopology
-    fun i j => by simpa using! Cover.mem_grothendieckTopology _
-
-中文:
-定义 affineOneHypercover
-  签名: (X : 概形.{u})
-  定义体: .mk'
-    (X.affineCover.refineOneHypercover fun i j =>
-      (pullback (X.affineCover.f i) (X.affineCover.f j)).affineCover.toPreZeroHypercover)
-    X.affineCover.mem_grothendieckTopology
-    fun i j => by simpa using! Cover.mem_grothendieckTopology _
-
-Depends on / 依赖: Cover.mem_grothendieckTopology, X.affineCover.f, X.affineCover.mem_grothendieckTopology, X.affineCover.refineOneHypercover, affineCover, affineCover.toPreZeroHypercover, mem_grothendieckTopology, pullback, refineOneHypercover, toPreZeroHypercover
+/-
+**AlgebraicGeometry.Scheme.affineOneHypercover** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme`。
+形式化陈述：affineOneHypercover (X : Scheme.{u}) : zariskiTopology.OneHypercover X
+参数：X : Scheme.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def affineOneHypercover (X : Scheme.{u}) : zariskiTopology.OneHypercover X :=
   .mk'
-    (X.affineCover.refineOneHypercover fun i j =>
+    (X.affineCover.refineOneHypercover fun i j ↦
       (pullback (X.affineCover.f i) (X.affineCover.f j)).affineCover.toPreZeroHypercover)
     X.affineCover.mem_grothendieckTopology
-    fun i j => by simpa using! Cover.mem_grothendieckTopology _
+    fun i j ↦ by simpa using! Cover.mem_grothendieckTopology _
 
 end Scheme
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology` / 引理 `preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology`
+/-- Zariski sheaves preserve products. -/
+/-
+**AlgebraicGeometry.preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology**
+ 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology {F : Scheme.{u}
+ᵒᵖ ⥤ Type v} {ι : Type*} [Small.{u} ι] [Small.{v} ι] (hF : Presieve.IsSheaf Sche
+me.zariskiTopology F) : PreservesLimitsOfShape (Discrete ι) F
+参数：hF : Presieve.IsSheaf Scheme.zariskiTopology F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimitsOfShape_of_discrete`：preservesLimit
+sOfShape_of_discrete (F : C ⥤ D) [forall (f : J -> C), PreservesLimit (Discrete.
+functor f) F] : PreservesLimitsOfShape (Discre…
+· 使用定理 `AlgebraicGeometry.Scheme.IsLocallyDirected.instHasColimit`：∀ {J : Type w
+} [inst : CategoryTheory.Category.{v, w} J] (F : CategoryTheory.Functor J Algebr
+aicGeometry.Scheme)   [∀ {i j : J} (f : i ⟶ j),…
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Discrete.instIsIso`：∀ {I : Type u₁} {i j : CategoryTheory
+.Discrete I} (f : i ⟶ j), CategoryTheory.IsIso f
+· 使用定理 `CategoryTheory.instIsLocallyDirectedDiscrete`：∀ {J : Type u_1} (F : Cate
+goryTheory.Functor (CategoryTheory.Discrete J) (Type u_2)), F.IsLocallyDirected
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用引理 `CategoryTheory.Presieve.preservesProduct_of_isSheafFor`：preservesProduct
+_of_isSheafFor (hF' : (ofArrows X c.inj).IsSheafFor F) : PreservesLimit (Discret
+e.functor (fun x => op (X x))) F
+· 使用定理 `AlgebraicGeometry.instHasInitialScheme`：CategoryTheory.Limits.HasInitial
+ AlgebraicGeometry.Scheme
+· 使用定理 `CategoryTheory.Presieve.IsSheaf.isSheafFor`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {X : C} {J : CategoryTheory.GrothendieckTopology C}
+   {P : CategoryTheory.Functor C…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用引理 `AlgebraicGeometry.Scheme.bot_mem_grothendieckTopology`：bot_mem_grothendi
+eckTopology (X : Scheme.{u}) [IsEmpty X] : ⊥ in grothendieckTopology P X
+· 使用定理 `CategoryTheory.Presieve.instHasPairwisePullbacksOfHasPullbacks`：∀ {C : T
+ype u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (R : CategoryTheory.
+Presieve X)   [CategoryTheory.Limits.HasPullbacks C]…
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `CategoryTheory.Limits.CoproductDisjoint.isPullback_of_isInitial`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {ι : Type u_1} {X : ι → C}   [
+CategoryTheory.Limits.CoproductDisjoint X] {c : Categ…
+· 使用定理 `CategoryTheory.Limits.CoproductsOfShapeDisjoint.coproductDisjoint`：∀ {C 
+: Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {ι : Type u_2}   [self
+ : CategoryTheory.Limits.CoproductsOfShapeDisjoint C ι]…
+· 使用定理 `AlgebraicGeometry.instCoproductsOfShapeDisjointSchemeOfSmall`：∀ {σ : Typ
+e v} [Small.{u, v} σ], CategoryTheory.Limits.CoproductsOfShapeDisjoint Algebraic
+Geometry.Scheme σ
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `AlgebraicGeometry.Scheme.Cover.mem_grothendieckTopology`：∀ {P : Category
+Theory.MorphismProperty AlgebraicGeometry.Scheme} {X : AlgebraicGeometry.Scheme}
+   (𝒰 : AlgebraicGeometry.Scheme.Cover (Algeb…
 
-English:
-lemma preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology
-  statement: {F : Scheme.{u}ᵒᵖ ⥤ Type v}
-  proof: by
-  apply (config := { allowSynthFailures := true }) preservesLimitsOfShape_of_discrete
-  intro X
-  have (i : ι) : Mono (Cofan.inj (Sigma.cocone (Discrete.functor <| unop ∘ X)) i) :=
-inferInstanceAs Mono (Sigma.ι _ _)
-  refine Presieve.preservesProduct_of_isSheafFor F ?_ initialIsInitial
-      (Sigma.cocone (Discrete.functor <| unop ∘ X)) (coproductIsCoproduct' _) ?_ ?_
-  · apply hF.isSheafFor
-    convert! (⊥_ Scheme).bot_mem_grothendieckTopology
-    rw [eq_bot_iff]
-    rintro Y f ⟨g, _, _, ⟨i⟩, _⟩
-    exact i.elim
-  · intro i j
-    exact CoproductDisjoint.isPullback_of_isInitial
-      (coproductIsCoproduct' <| Discrete.functor <| unop ∘ X) initialIsInitial
-  · exact hF.isSheafFor _ (sigmaOpenCover _).mem_grothendieckTopology
-
-中文:
-引理 preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology
-  结论: {F : 概形.{u}ᵒᵖ ⥤ 类型v}
-  证明: by
-  apply (config := { allowSynthFailures := true }) preservesLimitsOfShape_of_discrete
-  intro X
-  have (i : ι) : Mono (Cofan.inj (Sigma.cocone (Discrete.functor <| unop ∘ X)) i) :=
-inferInstanceAs Mono (Sigma.ι _ _)
-  refine Presieve.preservesProduct_of_isSheafFor F ?_ initialIsInitial
-      (Sigma.cocone (Discrete.functor <| unop ∘ X)) (coproductIsCoproduct' _) ?_ ?_
-  · apply hF.isSheafFor
-    convert! (⊥_ Scheme).bot_mem_grothendieckTopology
-    rw [eq_bot_iff]
-    rintro Y f ⟨g, _, _, ⟨i⟩, _⟩
-    exact i.elim
-  · intro i j
-    exact CoproductDisjoint.isPullback_of_isInitial
-      (coproductIsCoproduct' <| Discrete.functor <| unop ∘ X) initialIsInitial
-  · exact hF.isSheafFor _ (sigmaOpenCover _).mem_grothendieckTopology
-
-Depends on / 依赖: Cofan.inj, Discrete, Discrete.functor, Presieve, Presieve.preservesProduct_of_isSheafFor, Scheme, Sigma.cocone, allowSynthFailures, bot_mem_grothendieckTopology, cocone, config, convert, coproductIsCoproduct, eq_bot_iff, functor, hF.isSheafFor, i.elim, initialIsInitial, isSheafFor, preservesLimitsOfShape_of_discrete
+--- 原说明 ---
+Zariski sheaves preserve products.
 -/
 lemma preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology {F : Scheme.{u}ᵒᵖ ⥤ Type v}
     {ι : Type*} [Small.{u} ι] [Small.{v} ι] (hF : Presieve.IsSheaf Scheme.zariskiTopology F) :
@@ -307,7 +275,7 @@ lemma preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology {F : Scheme.{u}
   apply (config := { allowSynthFailures := true }) preservesLimitsOfShape_of_discrete
   intro X
   have (i : ι) : Mono (Cofan.inj (Sigma.cocone (Discrete.functor <| unop ∘ X)) i) :=
-inferInstanceAs Mono (Sigma.ι _ _)
+    inferInstanceAs <| Mono (Sigma.ι _ _)
   refine Presieve.preservesProduct_of_isSheafFor F ?_ initialIsInitial
       (Sigma.cocone (Discrete.functor <| unop ∘ X)) (coproductIsCoproduct' _) ?_ ?_
   · apply hF.isSheafFor
@@ -320,42 +288,28 @@ inferInstanceAs Mono (Sigma.ι _ _)
       (coproductIsCoproduct' <| Discrete.functor <| unop ∘ X) initialIsInitial
   · exact hF.isSheafFor _ (sigmaOpenCover _).mem_grothendieckTopology
 
-/--
-lemma `ofArrows_ι_mem_zariskiTopology_of_isColimit` / 引理 `ofArrows_ι_mem_zariskiTopology_of_isColimit`
+/-- Let `F` be a locally directed diagram of open immersions, i.e., a diagram of schemes
+for which whenever `xᵢ ∈ Fᵢ` and `xⱼ ∈ Fⱼ` map to the same `xₖ ∈ Fₖ`, there exists
+some `xₗ ∈ Fₗ` that maps to `xᵢ` and `xⱼ` (e.g, the diagram indexing a coproduct).
+Then the colimit inclusions are a Zariski covering. -/
+/-
+**AlgebraicGeometry.ofArrows_** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ofArrows_ι_mem_zariskiTopology_of_isColimit
-  statement: {J : Type*} [Category J]
-  proof: by
-  let iso : c.pt ≅ colimit F := hc.coconePointUniqueUpToIso (colimit.isColimit F)
-  rw [← GrothendieckTopology.pullback_mem_iff_of_isIso (i := iso.inv)]
-  apply GrothendieckTopology.superset_covering _ ?_ ?_
-  · exact Sieve.ofArrows _ (colimit.ι F)
-  · rw [Sieve.ofArrows, Sieve.generate_le_iff]
-    rintro - - ⟨i⟩
-    exact ⟨_, 𝟙 _, c.ι.app i, ⟨i⟩, by simp [iso]⟩
-  · exact (Scheme.IsLocallyDirected.openCover F).mem_grothendieckTopology
-
-中文:
-引理 ofArrows_ι_mem_zariskiTopology_of_isColimit
-  结论: {J : 类型} [范畴 J]
-  证明: by
-  let iso : c.pt ≅ colimit F := hc.coconePointUniqueUpToIso (colimit.isColimit F)
-  rw [← GrothendieckTopology.pullback_mem_iff_of_isIso (i := iso.inv)]
-  apply GrothendieckTopology.superset_covering _ ?_ ?_
-  · exact Sieve.ofArrows _ (colimit.ι F)
-  · rw [Sieve.ofArrows, Sieve.generate_le_iff]
-    rintro - - ⟨i⟩
-    exact ⟨_, 𝟙 _, c.ι.app i, ⟨i⟩, by simp [iso]⟩
-  · exact (Scheme.IsLocallyDirected.openCover F).mem_grothendieckTopology
-
-Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.pullback_mem_iff_of_isIso, GrothendieckTopology.superset_covering, IsLocallyDirected, Scheme, Scheme.IsLocallyDirected.openCover, Sieve.generate_le_iff, Sieve.ofArrows, c.pt, coconePointUniqueUpToIso, colimit, colimit.isColimit, generate_le_iff, hc.coconePointUniqueUpToIso, isColimit, iso.inv, mem_grothendieckTopology, ofArrows, openCover, pullback_mem_iff_of_isIso
+--- 原说明 ---
+Let `F` be a locally directed diagram of open immersions, i.e., a diagram of sch
+emes
+for which whenever `xᵢ ∈ Fᵢ` and `xⱼ ∈ Fⱼ` map to the same `xₖ ∈ Fₖ`, there exis
+ts
+some `xₗ ∈ Fₗ` that maps to `xᵢ` and `xⱼ` (e.g, the diagram indexing a coproduct
+).
+Then the colimit inclusions are a Zariski covering.
 -/
 lemma ofArrows_ι_mem_zariskiTopology_of_isColimit {J : Type*} [Category J]
-    (F : J ⥤ Scheme.{u}) [forall {i j : J} (f : i ⟶ j), IsOpenImmersion (F.map f)]
+    (F : J ⥤ Scheme.{u}) [∀ {i j : J} (f : i ⟶ j), IsOpenImmersion (F.map f)]
     [(F.comp Scheme.forget).IsLocallyDirected] [Quiver.IsThin J] [Small.{u} J]
     (c : Cocone F) (hc : IsColimit c) :
-    Sieve.ofArrows _ c.ι.app in Scheme.zariskiTopology c.pt := by
+    Sieve.ofArrows _ c.ι.app ∈ Scheme.zariskiTopology c.pt := by
   let iso : c.pt ≅ colimit F := hc.coconePointUniqueUpToIso (colimit.isColimit F)
   rw [← GrothendieckTopology.pullback_mem_iff_of_isIso (i := iso.inv)]
   apply GrothendieckTopology.superset_covering _ ?_ ?_
@@ -367,40 +321,73 @@ lemma ofArrows_ι_mem_zariskiTopology_of_isColimit {J : Type*} [Category J]
 
 -- TODO: This holds more generally if `𝒰.J` is `u`-small and can be generalized
 -- when we have `PreExtensive` categories
-/--
-lemma `Scheme.Cover.isSheafFor_sigma_iff` / 引理 `Scheme.Cover.isSheafFor_sigma_iff`
-
-English:
-lemma Scheme.Cover.isSheafFor_sigma_iff
-  statement: {P : MorphismProperty Scheme.{u}}
-  proof: by
-  have : PreservesLimitsOfShape (Discrete (𝒰.I₀ × 𝒰.I₀)) F :=
-    preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology hF
-  have : PreservesLimitsOfShape (Discrete 𝒰.I₀) F :=
-    preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology hF
-  let c : Cofan 𝒰.X := Cofan.mk _ (Sigma.ι 𝒰.X)
-  rw [← Presieve.isSheafFor_sigmaDesc_iff 𝒰.f (coproductIsCoproduct _)
-    (FinitaryExtensive.isVanKampen_finiteCoproducts (coproductIsCoproduct _)).isUniversal]
-  congr!
-  rw [← PreZeroHypercover.presieve₀]; rw [𝒰.presieve₀_sigma]
-  rfl
-
-中文:
-引理 概形.Cover.isSheafFor_sigma_iff
-  结论: {P : MorphismProperty 概形.{u}}
-  证明: by
-  have : PreservesLimitsOfShape (Discrete (𝒰.I₀ × 𝒰.I₀)) F :=
-    preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology hF
-  have : PreservesLimitsOfShape (Discrete 𝒰.I₀) F :=
-    preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology hF
-  let c : Cofan 𝒰.X := Cofan.mk _ (Sigma.ι 𝒰.X)
-  rw [← Presieve.isSheafFor_sigmaDesc_iff 𝒰.f (coproductIsCoproduct _)
-    (FinitaryExtensive.isVanKampen_finiteCoproducts (coproductIsCoproduct _)).isUniversal]
-  congr!
-  rw [← PreZeroHypercover.presieve₀]; rw [𝒰.presieve₀_sigma]
-  rfl
-
-Depends on / 依赖: Cofan.mk, Discrete, FinitaryExtensive, FinitaryExtensive.isVanKampen_finiteCoproducts, PreZeroHypercover, PreZeroHypercover.presieve, PreservesLimitsOfShape, Presieve, Presieve.isSheafFor_sigmaDesc_iff, coproductIsCoproduct, isSheafFor_sigmaDesc_iff, isUniversal, isVanKampen_finiteCoproducts, preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology
+/-
+**AlgebraicGeometry.Scheme.Cover.isSheafFor_sigma_iff** 是 Mathlib 中的一个定理，位于命名空间 
+`AlgebraicGeometry.Scheme.Cover`。
+形式化陈述：∀ {P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme}   {F : Ca
+tegoryTheory.Functor AlgebraicGeometry.Schemeᵒᵖ (Type u_1)}   [inst : AlgebraicG
+eometry.IsZariskiLocalAtSource P],   CategoryTheory.Presieve.IsSheaf AlgebraicGe
+ometry.Scheme.zariskiTopology F →     ∀ {S : AlgebraicGeometry.Scheme} (𝒰 : Alge
+braicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precoverage P) S)       [Fi
+nite 𝒰.I₀],       CategoryTheory.Presieve.IsSheafFor F (CategoryTheory.Presieve.
+ofArrows 𝒰.sigma.X 𝒰.sigma.f) ↔         CategoryTheory.Presieve.IsSheafFor F (Ca
+tegoryTheory.Presieve.ofArrows 𝒰.X 𝒰.f)
+参数：Type u_1；𝒰 : AlgebraicGeometry.Scheme.Cover (AlgebraicGeometry.Scheme.precove
+rage P) S；CategoryTheory.Presieve.ofArrows 𝒰.sigma.X 𝒰.sigma.f；CategoryTheory.Pr
+esieve.ofArrows 𝒰.X 𝒰.f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopo
+logy`：preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology {F : Scheme.{u}
+ᵒᵖ ⥤ Type v} {ι : Type*} [Small.{u} ι] [Small.{v} ι] (hF : Presiev…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Countable.toSmall`：∀ (α : Type v) [Countable α], Small.{w, v} α
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `AlgebraicGeometry.Scheme.IsLocallyDirected.instHasColimit`：∀ {J : Type w
+} [inst : CategoryTheory.Category.{v, w} J] (F : CategoryTheory.Functor J Algebr
+aicGeometry.Scheme)   [∀ {i j : J} (f : i ⟶ j),…
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Discrete.instIsIso`：∀ {I : Type u₁} {i j : CategoryTheory
+.Discrete I} (f : i ⟶ j), CategoryTheory.IsIso f
+· 使用定理 `CategoryTheory.instIsLocallyDirectedDiscrete`：∀ {J : Type u_1} (F : Cate
+goryTheory.Functor (CategoryTheory.Discrete J) (Type u_2)), F.IsLocallyDirected
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_sigmaDesc_iff`：∀ {C : Type u_1} [inst
+ : CategoryTheory.Category.{v_1, u_1} C] {S : C} {ι : Type u_3} {X : ι → C}   (f
+ : (i : ι) → X i ⟶ S) [inst_1 : (Categ…
+· 使用定理 `CategoryTheory.Presieve.instHasPairwisePullbacksOfHasPullbacks`：∀ {C : T
+ype u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (R : CategoryTheory.
+Presieve X)   [CategoryTheory.Limits.HasPullbacks C]…
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `CategoryTheory.IsVanKampenColimit.isUniversal`：∀ {J : Type v'} [inst : C
+ategoryTheory.Category.{u', v'} J] {C : Type u} [inst_1 : CategoryTheory.Categor
+y.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.FinitaryExtensive.isVanKampen_finiteCoproducts`：∀ {C : Ty
+pe u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.FinitaryExtensiv
+e C] {ι : Type u_1} [Finite ι]   {F : CategoryTheor…
+· 使用定理 `AlgebraicGeometry.instFinitaryExtensiveScheme`：CategoryTheory.FinitaryEx
+tensive AlgebraicGeometry.Scheme
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Presieve.instHasPullbackOfHasPairwisePullbacksOfArrows`：∀
+ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {α : Type v₂} {X : α 
+→ C} {B : C} (π : (a : α) → X a ⟶ B)   [(CategoryTheory.Pre…
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `CategoryTheory.PreZeroHypercover.presieve₀.eq_1`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {S : C} (E : CategoryTheory.PreZeroHypercover 
+S),   E.presieve₀ = CategoryTheory.Pr…
+· 使用引理 `AlgebraicGeometry.Scheme.Cover.presieve₀_sigma`：presieve₀_sigma {S : Sch
+eme.{u}} (𝒰 : Cover.{v} (precoverage P) S) : 𝒰.sigma.presieve₀ = Presieve.single
+ton (Sigma.desc 𝒰.f)
 -/
 lemma Scheme.Cover.isSheafFor_sigma_iff {P : MorphismProperty Scheme.{u}}
     {F : Scheme.{u}ᵒᵖ ⥤ Type*} [IsZariskiLocalAtSource P]
@@ -416,7 +403,8 @@ lemma Scheme.Cover.isSheafFor_sigma_iff {P : MorphismProperty Scheme.{u}}
   rw [← Presieve.isSheafFor_sigmaDesc_iff 𝒰.f (coproductIsCoproduct _)
     (FinitaryExtensive.isVanKampen_finiteCoproducts (coproductIsCoproduct _)).isUniversal]
   congr!
-  rw [← PreZeroHypercover.presieve₀]; rw [𝒰.presieve₀_sigma]
+  rw [← PreZeroHypercover.presieve₀, 𝒰.presieve₀_sigma]
   rfl
 
 end AlgebraicGeometry
+

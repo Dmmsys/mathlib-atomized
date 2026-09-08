@@ -5,7 +5,7 @@ Authors: Mario Carneiro, Kyle Miller
 -/
 module
 
-public import Mathlib.Tactic.Linter.Header --shake: keep
+public import Mathlib.Tactic.Linter.Header  --shake: keep
 
 /-!
 # Support for `lemma` as a synonym for `theorem`.
@@ -20,30 +20,14 @@ open Lean
 syntax (name := lemma) (priority := default + 1) declModifiers
   group("lemma " declId ppIndent(declSig) declVal) : command
 
-/--
-Definition of `expandLemma` / `expandLemma` 的定义
+/-- Implementation of the `lemma` command, by macro expansion to `theorem`. -/
+/-
+**expandLemma** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Macro
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition expandLemma
-  signature: : Macro
-  body: fun stx =>
-  -- Not using a macro match, to be more resilient against changes to `lemma`.
-  -- This implementation ensures that any future changes to `theorem` are reflected in `lemma`
-  let stx := stx.modifyArg 1 fun stx =>
-    let stx := stx.modifyArg 0 (mkAtomFrom · "theorem" (canonical := true))
-    stx.setKind ``Parser.Command.theorem
-pure stx.setKind ``Parser.Command.declaration
-
-中文:
-定义 expandLemma
-  签名: : Macro
-  定义体: fun stx =>
-  -- Not using a macro match, to be more resilient against changes to `lemma`.
-  -- This implementation ensures that any future changes to `theorem` are reflected in `lemma`
-  let stx := stx.modifyArg 1 fun stx =>
-    let stx := stx.modifyArg 0 (mkAtomFrom · "theorem" (canonical := true))
-    stx.setKind ``Parser.Command.theorem
-pure stx.setKind ``Parser.Command.declaration
+--- 原说明 ---
+Implementation of the `lemma` command, by macro expansion to `theorem`.
 -/
 @[macro «lemma»] def expandLemma : Macro := fun stx =>
   -- Not using a macro match, to be more resilient against changes to `lemma`.
@@ -51,4 +35,4 @@ pure stx.setKind ``Parser.Command.declaration
   let stx := stx.modifyArg 1 fun stx =>
     let stx := stx.modifyArg 0 (mkAtomFrom · "theorem" (canonical := true))
     stx.setKind ``Parser.Command.theorem
-pure stx.setKind ``Parser.Command.declaration
+  pure <| stx.setKind ``Parser.Command.declaration

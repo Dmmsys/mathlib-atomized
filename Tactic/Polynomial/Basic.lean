@@ -40,24 +40,15 @@ namespace Mathlib.Tactic.Polynomial
 
 /-- Infer base ring for `Polynomial R` -/
 @[polynomial_infer_base]
-/--
-Definition of `polynomialInferBase` / `polynomialInferBase` 的定义
+/-
+**Mathlib.Tactic.Polynomial.polynomialInferBase** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.Polynomial`。
+形式化陈述：polynomialInferBase : PolynomialExt where infer e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition polynomialInferBase
-  signature: : PolynomialExt where
-  body: do
-  match_expr e with
-  | Polynomial R _ => pure R
-  | _ => failure
-
-中文:
-定义 polynomialInferBase
-  签名: : PolynomialExt where
-  定义体: do
-  match_expr e with
-  | Polynomial R _ => pure R
-  | _ => failure
+--- 原说明 ---
+Infer base ring for `Polynomial R`
 -/
 def polynomialInferBase : PolynomialExt where
   infer e := do
@@ -72,44 +63,42 @@ variable {σ R A : Type*} [CommSemiring R] [CommSemiring A] [Algebra R A]
 attribute [polynomial_post] mul_one Algebra.smul_def Polynomial.algebraMap_eq
 
 @[polynomial_pre]
-/--
-theorem `monomial_eq_smul` / 定理 `monomial_eq_smul`
-
-English:
-theorem monomial_eq_smul
-  given: (a : R) (n : Nat)
-  statement: Polynomial.monomial n a = a • (.X ^ n)
-  proof: by
-  rw [← Polynomial.C_mul_X_pow_eq_monomial]; rw [Polynomial.smul_eq_C_mul]
-
-中文:
-定理 monomial_eq_smul
-  条件: (a : R) (n : 自然数)
-  结论: 多项式.monomial n a = a • (.X ^ n)
-  证明: by
-  rw [← Polynomial.C_mul_X_pow_eq_monomial]; rw [Polynomial.smul_eq_C_mul]
-
-Depends on / 依赖: C_mul_X_pow_eq_monomial, Polynomial, Polynomial.C_mul_X_pow_eq_monomial, Polynomial.smul_eq_C_mul, smul_eq_C_mul
+/-
+**Mathlib.Tactic.Polynomial.monomial_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.
+Tactic.Polynomial`。
+形式化陈述：monomial_eq_smul (a : R) (n : Nat) : Polynomial.monomial n a = a • (.X ^ n
+)
+参数：a : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_mul_X_pow_eq_monomial`：∀ {R : Type u} {a : R} [inst : Semir
+ing R] {n : ℕ}, Polynomial.C a * Polynomial.X ^ n = (Polynomial.monomial n) a
+· 使用定理 `Polynomial.smul_eq_C_mul`：smul_eq_C_mul (a : R) : a • p = C a * p
 -/
-theorem monomial_eq_smul (a : R) (n : Nat) : Polynomial.monomial n a = a • (.X ^ n) := by
-  rw [← Polynomial.C_mul_X_pow_eq_monomial]; rw [Polynomial.smul_eq_C_mul]
+theorem monomial_eq_smul (a : R) (n : ℕ) : Polynomial.monomial n a = a • (.X ^ n) := by
+  rw [← Polynomial.C_mul_X_pow_eq_monomial, Polynomial.smul_eq_C_mul]
 
 -- `polynomial_pre` contains a lemma sending `C -> algebraMap`, so `C` is not simp normal form.
 @[polynomial_pre]
-/--
-theorem `map_algebraMap` / 定理 `map_algebraMap`
-
-English:
-theorem map_algebraMap
-  given: (r : R)
-  proof: by
-  simp
-
-中文:
-定理 map_algebraMap
-  条件: (r : R)
-  证明: by
-  simp
+/-
+**Mathlib.Tactic.Polynomial.map_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Ta
+ctic.Polynomial`。
+形式化陈述：map_algebraMap (r : R) : Polynomial.map (algebraMap R A) (algebraMap R (Po
+lynomial R) r) = algebraMap A (Polynomial A) (algebraMap R A r)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_algebraMap (r : R) :
     Polynomial.map (algebraMap R A) (algebraMap R (Polynomial R) r) =
@@ -126,24 +115,20 @@ attribute [polynomial_pre] Polynomial.C_eq_algebraMap
 
 /- TODO: we don't currently have a good way to normalize monomials of MvPolynomials. These are
 indexed by finsupps, making it difficult to turn into the appropriate normal form. -/
-/--
-Definition of `preprocess` / `preprocess` 的定义
+/-- Run the `polynomial_pre` simpset to turn nonstandard spellings of `algebraMap` such as
+`Polynomial.C` into `algebraMap` -/
+/-
+**Mathlib.Tactic.Polynomial.preprocess** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Polynomial`。
+形式化陈述：preprocess (e : Expr) : MetaM Simp.Result
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preprocess
-  signature: (e : Expr)
-  body: do
-  let preThms ← polynomialPreExt.getTheorems
-  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[preThms])
-  pure (← Simp.main e ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
-
-中文:
-定义 preprocess
-  签名: (e : Expr)
-  定义体: do
-  let preThms ← polynomialPreExt.getTheorems
-  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[preThms])
-  pure (← Simp.main e ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
+--- 原说明 ---
+Run the `polynomial_pre` simpset to turn nonstandard spellings of `algebraMap` s
+uch as
+`Polynomial.C` into `algebraMap`
 -/
 def preprocess (e : Expr) : MetaM Simp.Result := do
   let preThms ← polynomialPreExt.getTheorems
@@ -192,9 +177,9 @@ elab (name := polynomial) "polynomial" tk:"!"? : tactic =>
       β ← Polynomial.inferBase α
     catch _ =>
       throwError "polynomial failed: not an equality of (mv)polynomials"
-    let some g ← transformAtTarget (fun e _ => Polynomial.preprocess e) "polynomial" .silent g
+    let some g ← transformAtTarget (fun e _ ↦ Polynomial.preprocess e) "polynomial" .silent g
       default | done
-    let some g ← transformAtTarget (fun e _ => Algebra.preprocess e) "polynomial" .silent g
+    let some g ← transformAtTarget (fun e _ ↦ Algebra.preprocess e) "polynomial" .silent g
       default | done
     AtomM.run (if tk.isSome then .default else .reducible)
       (Algebra.proveEq (some (← getLevelQ' β)) g)
@@ -202,38 +187,23 @@ elab (name := polynomial) "polynomial" tk:"!"? : tactic =>
 @[tactic_alt polynomial]
 macro "polynomial!" : tactic => `(tactic| polynomial !)
 
-/--
-Definition of `cleanup` / `cleanup` 的定义
+/-- A cleanup routine, which simplifies normalized expressions to a more human-friendly format.
+This is the `algebra_nf` cleanup routine with a little extra work to turn scalar multiplication
+into `(MV)Polynomial.C` -/
+/-
+**Mathlib.Tactic.Polynomial.cleanup** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Po
+lynomial`。
+形式化陈述：cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result
+参数：cfg : RingNF.Config；r : Simp.Result。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cleanup
-  signature: (cfg : RingNF.Config) (r : Simp.Result)
-  body: do
-  match cfg.mode with
-  | .raw => pure r
-  | .SOP => do
-    let r ← cleanupSMul cfg r
-    let thms : SimpTheorems ← polynomialPostExt.getTheorems
-    let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
-      (simpTheorems := #[thms])
-      (congrTheorems := ← getSimpCongrTheorems)
-pure ←
-      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
-
-中文:
-定义 cleanup
-  签名: (cfg : RingNF.余nfig) (r : Simp.Result)
-  定义体: do
-  match cfg.mode with
-  | .raw => pure r
-  | .SOP => do
-    let r ← cleanupSMul cfg r
-    let thms : SimpTheorems ← polynomialPostExt.getTheorems
-    let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
-      (simpTheorems := #[thms])
-      (congrTheorems := ← getSimpCongrTheorems)
-pure ←
-      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
+--- 原说明 ---
+A cleanup routine, which simplifies normalized expressions to a more human-frien
+dly format.
+This is the `algebra_nf` cleanup routine with a little extra work to turn scalar
+ multiplication
+into `(MV)Polynomial.C`
 -/
 def cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
   match cfg.mode with
@@ -244,43 +214,20 @@ def cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
     let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
       (simpTheorems := #[thms])
       (congrTheorems := ← getSimpCongrTheorems)
-pure ←
+    pure <| ←
       r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 
-/--
-Definition of `evalExprPoly` / `evalExprPoly` 的定义
+/-- Normalize a polynomial expression into standard form. Used by `polynomial_nf`. -/
+/-
+**Mathlib.Tactic.Polynomial.evalExprPoly** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Polynomial`。
+形式化陈述：evalExprPoly (e : Expr) : AtomM Simp.Result
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalExprPoly
-  signature: (e : Expr)
-  body: do
-  let ⟨_, α, e⟩ ← inferTypeQ e
-  let mut R : Expr := default
-  try R ← inferBase α
-  catch _ => throwError "not a polynomial"
-  let r₁ ← Polynomial.preprocess e
-  let r₂ ← Algebra.preprocess r₁.expr
-  let ⟨_, R'⟩ ← getLevelQ' R
-  let r₃ ← evalExpr R' r₂.expr
-  (← r₁.mkEqTrans r₂).mkEqTrans r₃
-
-@[tactic_alt polynomial]
-
-中文:
-定义 evalExprPoly
-  签名: (e : Expr)
-  定义体: do
-  let ⟨_, α, e⟩ ← inferTypeQ e
-  let mut R : Expr := default
-  try R ← inferBase α
-  catch _ => throwError "not a polynomial"
-  let r₁ ← Polynomial.preprocess e
-  let r₂ ← Algebra.preprocess r₁.expr
-  let ⟨_, R'⟩ ← getLevelQ' R
-  let r₃ ← evalExpr R' r₂.expr
-  (← r₁.mkEqTrans r₂).mkEqTrans r₃
-
-@[tactic_alt polynomial]
+--- 原说明 ---
+Normalize a polynomial expression into standard form. Used by `polynomial_nf`.
 -/
 def evalExprPoly (e : Expr) : AtomM Simp.Result := do
   let ⟨_, α, e⟩ ← inferTypeQ e
@@ -311,3 +258,4 @@ end Mathlib.Tactic.Polynomial
 open Polynomial
 
 end
+

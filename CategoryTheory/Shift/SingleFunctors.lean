@@ -36,26 +36,20 @@ variable (C D E E' : Type*) [Category* C] [Category* D] [Category* E] [Category*
 
 namespace CategoryTheory
 
-/--
-Definition of `SingleFunctors` / `SingleFunctors` 的定义
+/-- The type of families of functors `A → C ⥤ D` which are compatible with
+the shift by `A` on the category `D`. -/
+/-
+**CategoryTheory.SingleFunctors** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u_1) →   (D : Type u_2) →     [CategoryTheory.Category.{v_1, u_1
+} C] →       [inst : CategoryTheory.Category.{v_2, u_2} D] →         (A : Type u
+_5) →           [inst_1 : AddMonoid A] → [CategoryTheory.HasShift D A] → Type (m
+ax (max (max (max u_1 u_2) u_5) v_1) v_2)
+参数：max (max (max u_1 u_2) u_5) v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SingleFunctors
-  parameters: where
-  axioms and operations (4):
-    - functor((a : A)) : C ⥤ D
-    - shiftIso((n a a' : A) (ha' : n + a = a')) : functor a' ⋙ shiftFunctor D n ≅ functor a
-    - shiftIso_zero((a : A)) : shiftIso 0 a a (zero_add a) = isoWhiskerLeft _ (shiftFunctorZero D A)
-    - shiftIso_add((n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'')) : shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerLeft _ (shiftFunctorAdd D m n) ≪≫ (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight (shiftIso m a' a'' ha'') _ ≪≫ shiftIso n a a' ha'
-
-中文:
-结构 SingleFunctors
-  参数: where
-  公理与运算 (4 个):
-    - functor((a : A)) : C ⥤ D
-    - shiftIso((n a a' : A) (ha' : n + a = a')) : functor a' ⋙ shiftFunctor D n ≅ functor a
-    - shiftIso_zero((a : A)) : shiftIso 0 a a (zero_add a) = isoWhiskerLeft _ (shiftFunctorZero D A)
-    - shiftIso_add((n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'')) : shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerLeft _ (shiftFunctorAdd D m n) ≪≫ (函子.associator _ _ _).symm ≪≫ isoWhiskerRight (shiftIso m a' a'' ha'') _ ≪≫ shiftIso n a a' ha'
+--- 原说明 ---
+The type of families of functors `A → C ⥤ D` which are compatible with
+the shift by `A` on the category `D`.
 -/
 structure SingleFunctors where
   /-- a family of functors `C ⥤ D` indexed by the elements of the additive monoid `A` -/
@@ -77,22 +71,31 @@ variable (F G H : SingleFunctors C D A)
 namespace SingleFunctors
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add_hom_app` / 引理 `shiftIso_add_hom_app`
-
-English:
-lemma shiftIso_add_hom_app
-  given: (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  proof: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-中文:
-引理 shiftIso_add_hom_app
-  条件: (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  证明: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-Depends on / 依赖: F.shiftIso_add, shiftIso_add
+/-
+**CategoryTheory.SingleFunctors.shiftIso_add_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.SingleFunctors`。
+形式化陈述：shiftIso_add_hom_app (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' 
+= a'') (X : C) : (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).hom.a
+pp X = (shiftFunctorAdd D m n).hom.app ((F.functor a'').obj X) ≫ ((F.shiftIso m 
+a' a'' ha'').hom.app X)⟦n⟧' ≫ (F.shiftIso n a a' ha').hom.app X
+参数：n m a a' a'' : A；ha' : n + a = a'；ha'' : m + a' = a''；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.SingleFunctors.shiftIso_add`：∀ {C : Type u_1} {D : Type u
+_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D] {A : Type u_…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add_hom_app (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
     (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).hom.app X =
@@ -102,22 +105,34 @@ lemma shiftIso_add_hom_app (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' 
   simp [F.shiftIso_add n m a a' a'' ha' ha'']
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add_inv_app` / 引理 `shiftIso_add_inv_app`
-
-English:
-lemma shiftIso_add_inv_app
-  given: (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  proof: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-中文:
-引理 shiftIso_add_inv_app
-  条件: (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  证明: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-Depends on / 依赖: F.shiftIso_add, shiftIso_add
+/-
+**CategoryTheory.SingleFunctors.shiftIso_add_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.SingleFunctors`。
+形式化陈述：shiftIso_add_inv_app (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' 
+= a'') (X : C) : (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).inv.a
+pp X = (F.shiftIso n a a' ha').inv.app X ≫ ((F.shiftIso m a' a'' ha'').inv.app X
+)⟦n⟧' ≫ (shiftFunctorAdd D m n).inv.app ((F.functor a'').obj X)
+参数：n m a a' a'' : A；ha' : n + a = a'；ha'' : m + a' = a''；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.SingleFunctors.shiftIso_add`：∀ {C : Type u_1} {D : Type u
+_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D] {A : Type u_…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add_inv_app (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
     (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).inv.app X =
@@ -125,25 +140,26 @@ lemma shiftIso_add_inv_app (n m a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' 
       ((F.shiftIso m a' a'' ha'').inv.app X)⟦n⟧' ≫
       (shiftFunctorAdd D m n).inv.app ((F.functor a'').obj X) := by
   simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-/--
-lemma `shiftIso_add'` / 引理 `shiftIso_add'`
-
-English:
-lemma shiftIso_add'
-  statement: (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
-  proof: by
-  subst hnm
-  rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftIso_add]
-
-中文:
-引理 shiftIso_add'
-  结论: (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
-  证明: by
-  subst hnm
-  rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftIso_add]
-
-Depends on / 依赖: _eq_shiftFunctorAdd, shiftFunctorAdd, shiftIso_add
+/-
+**CategoryTheory.SingleFunctors.shiftIso_add'** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.SingleFunctors`。
+形式化陈述：shiftIso_add' (n m mn : A) (hnm : m + n = mn) (a a' a'' : A) (ha' : n + a 
+= a') (ha'' : m + a' = a'') : F.shiftIso mn a a'' (by rw [← hnm, ← ha'', ← ha', 
+add_assoc]) = isoWhiskerLeft _ (shiftFunctorAdd' D m n mn hnm) ≪≫ (Functor.assoc
+iator _ _ _).symm ≪≫ isoWhiskerRight (F.shiftIso m a' a'' ha'') _ ≪≫ F.shiftIso 
+n a a' ha'
+参数：n m mn : A；hnm : m + n = mn；a a' a'' : A；ha' : n + a = a'；ha'' : m + a' = a''
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.shiftFunctorAdd'_eq_shiftFunctorAdd`：∀ (C : Type u) {A : 
+Type u_1} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : AddMonoid A]   [in
+st_2 : CategoryTheory.HasShift C A] (i j…
+· 使用定理 `CategoryTheory.SingleFunctors.shiftIso_add`：∀ {C : Type u_1} {D : Type u
+_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D] {A : Type u_…
 -/
 lemma shiftIso_add' (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
     (ha' : n + a = a') (ha'' : m + a' = a'') :
@@ -151,23 +167,42 @@ lemma shiftIso_add' (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
       isoWhiskerLeft _ (shiftFunctorAdd' D m n mn hnm) ≪≫ (Functor.associator _ _ _).symm ≪≫
         isoWhiskerRight (F.shiftIso m a' a'' ha'') _ ≪≫ F.shiftIso n a a' ha' := by
   subst hnm
-  rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftIso_add]
+  rw [shiftFunctorAdd'_eq_shiftFunctorAdd, shiftIso_add]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add'_hom_app` / 引理 `shiftIso_add'_hom_app`
-
-English:
-lemma shiftIso_add'_hom_app
-  statement: (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
-  proof: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
-
-中文:
-引理 shiftIso_add'_hom_app
-  结论: (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
-  证明: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
+/-
+**CategoryTheory.SingleFunctors.shiftIso_add'_hom_app** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.SingleFunctors`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] {A : Type u_5} [inst_2 : A
+ddMonoid A]   [inst_3 : CategoryTheory.HasShift D A] (F : CategoryTheory.SingleF
+unctors C D A) (n m mn : A) (hnm : m + n = mn)   (a a' a'' : A) (ha' : n + a = a
+') (ha'' : m + a' = a'') (X : C),   (F.shiftIso mn a a'' ⋯).hom.app X =     Cate
+goryTheory.CategoryStruct.comp ((CategoryTheory.shiftFunctorAdd' D m n mn hnm).h
+om.app ((F.functor a'').obj X))       (CategoryTheory.CategoryStruct.comp ((Cate
+goryTheory.shiftFunctor D n).map ((F.shiftIso m a' a'' ha'').hom.app X))        
+ ((F.shiftIso n a a' ha').hom.app X))
+参数：F : CategoryTheory.SingleFunctors C D A；n m mn : A；hnm : m + n = mn；a a' a'' 
+: A；ha' : n + a = a'；ha'' : m + a' = a''；X : C；F.shiftIso mn a a'' ⋯；(CategoryTh
+eory.shiftFunctorAdd' D m n mn hnm).hom.app ((F.functor a'').obj X)；CategoryTheo
+ry.CategoryStruct.comp ((CategoryTheory.shiftFunctor D n).map ((F.shiftIso m a' 
+a'' ha'').hom.app X))         ((F.shiftIso n a a' ha').hom.app X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.SingleFunctors.shiftIso_add'`：shiftIso_add' (n m mn : A) 
+(hnm : m + n = mn) (a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') : F.s
+hiftIso mn a a'' (by rw [← hnm, ←…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add'_hom_app (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
     (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
@@ -177,24 +212,42 @@ lemma shiftIso_add'_hom_app (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
   simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add'_inv_app` / 引理 `shiftIso_add'_inv_app`
-
-English:
-lemma shiftIso_add'_inv_app
-  statement: (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
-  proof: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
-
-@[simp]
-
-中文:
-引理 shiftIso_add'_inv_app
-  结论: (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
-  证明: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
-
-@[simp]
+/-
+**CategoryTheory.SingleFunctors.shiftIso_add'_inv_app** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.SingleFunctors`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] {A : Type u_5} [inst_2 : A
+ddMonoid A]   [inst_3 : CategoryTheory.HasShift D A] (F : CategoryTheory.SingleF
+unctors C D A) (n m mn : A) (hnm : m + n = mn)   (a a' a'' : A) (ha' : n + a = a
+') (ha'' : m + a' = a'') (X : C),   (F.shiftIso mn a a'' ⋯).inv.app X =     Cate
+goryTheory.CategoryStruct.comp ((F.shiftIso n a a' ha').inv.app X)       (Catego
+ryTheory.CategoryStruct.comp ((CategoryTheory.shiftFunctor D n).map ((F.shiftIso
+ m a' a'' ha'').inv.app X))         ((CategoryTheory.shiftFunctorAdd' D m n mn h
+nm).inv.app ((F.functor a'').obj X)))
+参数：F : CategoryTheory.SingleFunctors C D A；n m mn : A；hnm : m + n = mn；a a' a'' 
+: A；ha' : n + a = a'；ha'' : m + a' = a''；X : C；F.shiftIso mn a a'' ⋯；(F.shiftIso
+ n a a' ha').inv.app X；CategoryTheory.CategoryStruct.comp ((CategoryTheory.shift
+Functor D n).map ((F.shiftIso m a' a'' ha'').inv.app X))         ((CategoryTheor
+y.shiftFunctorAdd' D m n mn hnm).inv.app ((F.functor a'').obj X))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.SingleFunctors.shiftIso_add'`：shiftIso_add' (n m mn : A) 
+(hnm : m + n = mn) (a a' a'' : A) (ha' : n + a = a') (ha'' : m + a' = a'') : F.s
+hiftIso mn a a'' (by rw [← hnm, ←…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add'_inv_app (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
     (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
@@ -205,28 +258,20 @@ lemma shiftIso_add'_inv_app (n m mn : A) (hnm : m + n = mn) (a a' a'' : A)
   simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
 
 @[simp]
-/--
-lemma `shiftIso_zero_hom_app` / 引理 `shiftIso_zero_hom_app`
-
-English:
-lemma shiftIso_zero_hom_app
-  given: (a : A) (X : C)
-  proof: by
-  rw [shiftIso_zero]
-  rfl
-
-@[simp]
-
-中文:
-引理 shiftIso_zero_hom_app
-  条件: (a : A) (X : C)
-  证明: by
-  rw [shiftIso_zero]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: shiftIso_zero
+/-
+**CategoryTheory.SingleFunctors.shiftIso_zero_hom_app** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.SingleFunctors`。
+形式化陈述：shiftIso_zero_hom_app (a : A) (X : C) : (F.shiftIso 0 a a (zero_add a)).ho
+m.app X = (shiftFunctorZero D A).hom.app _
+参数：a : A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SingleFunctors.shiftIso_zero`：∀ {C : Type u_1} {D : Type 
+u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Ca
+tegory.{v_2, u_2} D] {A : Type u_…
 -/
 lemma shiftIso_zero_hom_app (a : A) (X : C) :
     (F.shiftIso 0 a a (zero_add a)).hom.app X = (shiftFunctorZero D A).hom.app _ := by
@@ -234,24 +279,20 @@ lemma shiftIso_zero_hom_app (a : A) (X : C) :
   rfl
 
 @[simp]
-/--
-lemma `shiftIso_zero_inv_app` / 引理 `shiftIso_zero_inv_app`
-
-English:
-lemma shiftIso_zero_inv_app
-  given: (a : A) (X : C)
-  proof: by
-  rw [shiftIso_zero]
-  rfl
-
-中文:
-引理 shiftIso_zero_inv_app
-  条件: (a : A) (X : C)
-  证明: by
-  rw [shiftIso_zero]
-  rfl
-
-Depends on / 依赖: shiftIso_zero
+/-
+**CategoryTheory.SingleFunctors.shiftIso_zero_inv_app** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.SingleFunctors`。
+形式化陈述：shiftIso_zero_inv_app (a : A) (X : C) : (F.shiftIso 0 a a (zero_add a)).in
+v.app X = (shiftFunctorZero D A).inv.app _
+参数：a : A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SingleFunctors.shiftIso_zero`：∀ {C : Type u_1} {D : Type 
+u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Ca
+tegory.{v_2, u_2} D] {A : Type u_…
 -/
 lemma shiftIso_zero_inv_app (a : A) (X : C) :
     (F.shiftIso 0 a a (zero_add a)).inv.app X = (shiftFunctorZero D A).inv.app _ := by
@@ -260,24 +301,18 @@ lemma shiftIso_zero_inv_app (a : A) (X : C) :
 
 /-- The morphisms in the category `SingleFunctors C D A` -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.SingleFunctors.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Si
+ngleFunctors`。
+形式化陈述：Hom where /-- a family of natural transformations `F.functor a ⟶ G.functor
+ a` -/ hom (a : A) : F.functor a ⟶ G.functor a comm (n a a' : A) (ha' : n + a = 
+a') : (F.shiftIso n a a' ha').hom ≫ hom a = whiskerRight (hom a') (shiftFunctor 
+D n) ≫ (G.shiftIso n a a' ha').hom
+参数：a : A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: where
-  axioms and operations (2):
-    - hom((a : A)) : F.functor a ⟶ G.functor a
-    - comm((n a a' : A) (ha' : n + a = a')) : (F.shiftIso n a a' ha').hom ≫ hom a = whiskerRight (hom a') (shiftFunctor D n) ≫ (G.shiftIso n a a' ha').hom  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: where
-  公理与运算 (2 个):
-    - hom((a : A)) : F.functor a ⟶ G.functor a
-    - comm((n a a' : A) (ha' : n + a = a')) : (F.shiftIso n a a' ha').hom ≫ hom a = whiskerRight (hom a') (shiftFunctor D n) ≫ (G.shiftIso n a a' ha').hom  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+The morphisms in the category `SingleFunctors C D A`
 -/
 structure Hom where
   /-- a family of natural transformations `F.functor a ⟶ G.functor a` -/
@@ -292,18 +327,15 @@ attribute [local simp] comm comm_assoc
 
 /-- The identity morphism in `SingleFunctors C D A`. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.SingleFunctors.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.SingleFunctors.Hom`。
+形式化陈述：id : Hom F F where hom _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : Hom F F where
-  body: 𝟙 _
-
-中文:
-定义 id
-  签名: : 态射 F F where
-  定义体: 𝟙 _
+--- 原说明 ---
+The identity morphism in `SingleFunctors C D A`.
 -/
 def id : Hom F F where
   hom _ := 𝟙 _
@@ -312,44 +344,26 @@ variable {F G H}
 
 /-- The composition of morphisms in `SingleFunctors C D A`. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.SingleFunctors.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.SingleFunctors.Hom`。
+形式化陈述：comp (α : Hom F G) (β : Hom G H) : Hom F H where hom a
+参数：α : Hom F G；β : Hom G H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (α : Hom F G) (β : Hom G H)
-  body: α.hom a ≫ β.hom a
-
-中文:
-定义 comp
-  签名: (α : 态射 F G) (β : 态射 G H)
-  定义体: α.hom a ≫ β.hom a
+--- 原说明 ---
+The composition of morphisms in `SingleFunctors C D A`.
 -/
 def comp (α : Hom F G) (β : Hom G H) : Hom F H where
   hom a := α.hom a ≫ β.hom a
 
 end Hom
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (SingleFunctors C D A)
-  body: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[simp]
-
-中文:
-实例 :
-  签名: 范畴 (SingleFunctors C D A)
-  定义体: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[simp]
+/-
+**CategoryTheory.SingleFunctors.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Singl
+eFunctors`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (SingleFunctors C D A) where
   Hom := Hom
@@ -357,97 +371,67 @@ instance : Category (SingleFunctors C D A) where
   comp := Hom.comp
 
 @[simp]
-/--
-lemma `id_hom` / 引理 `id_hom`
-
-English:
-lemma id_hom
-  given: (a : A)
-  statement: Hom.hom (𝟙 F) a = 𝟙 _
-  proof: rfl
-
-中文:
-引理 id_hom
-  条件: (a : A)
-  结论: 态射.hom (𝟙 F) a = 𝟙 _
-  证明: rfl
+/-
+**CategoryTheory.SingleFunctors.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.SingleFunctors`。
+形式化陈述：id_hom (a : A) : Hom.hom (𝟙 F) a = 𝟙 _
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom (a : A) : Hom.hom (𝟙 F) a = 𝟙 _ := rfl
 
 variable {F G H}
 
 @[simp, reassoc]
-/--
-lemma `comp_hom` / 引理 `comp_hom`
-
-English:
-lemma comp_hom
-  given: (f : F ⟶ G) (g : G ⟶ H) (a : A)
-  statement: (f ≫ g).hom a = f.hom a ≫ g.hom a
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 comp_hom
-  条件: (f : F ⟶ G) (g : G ⟶ H) (a : A)
-  结论: (f ≫ g).hom a = f.hom a ≫ g.hom a
-  证明: rfl
-
-@[ext]
+/-
+**CategoryTheory.SingleFunctors.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.SingleFunctors`。
+形式化陈述：comp_hom (f : F ⟶ G) (g : G ⟶ H) (a : A) : (f ≫ g).hom a = f.hom a ≫ g.hom
+ a
+参数：f : F ⟶ G；g : G ⟶ H；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom (f : F ⟶ G) (g : G ⟶ H) (a : A) : (f ≫ g).hom a = f.hom a ≫ g.hom a := rfl
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: (f g : F ⟶ G) (h : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: (f g : F ⟶ G) (h : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext, IsColoop, M.IsColoop, closure_eq_right, hIX.isBasis_closure_right.closure_eq_right, heI.mem_closure_iff_mem, isBasis_closure_right, mem_closure_iff_mem
+/-
+**CategoryTheory.SingleFunctors.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.SingleFunctors`。
+形式化陈述：hom_ext (f g : F ⟶ G) (h : f.hom = g.hom) : f = g
+参数：f g : F ⟶ G；h : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.SingleFunctors.Hom.ext`：∀ {C : Type u_1} {D : Type u_2} {
+inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTheory.Category
+.{v_2, u_2} D} {A : Type u_…
 -/
 lemma hom_ext (f g : F ⟶ G) (h : f.hom = g.hom) : f = g := Hom.ext h
 
 /-- Construct an isomorphism in `SingleFunctors C D A` by giving
 level-wise isomorphisms and checking compatibility only in the forward direction. -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.SingleFunctors.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+SingleFunctors`。
+形式化陈述：isoMk (iso : forall a, (F.functor a ≅ G.functor a)) (comm : forall (n a a'
+ : A) (ha' : n + a = a'), (F.shiftIso n a a' ha').hom ≫ (iso a).hom = whiskerRig
+ht (iso a').hom (shiftFunctor D n) ≫ (G.shiftIso n a a' ha').hom) : F ≅ G where 
+hom
+参数：iso : forall a, (F.functor a ≅ G.functor a)；comm : forall (n a a' : A) (ha' :
+ n + a = a'), (F.shiftIso n a a' ha').hom ≫ (iso a).hom = whiskerRight (iso a').
+hom (shiftFunctor D n) ≫ (G.shiftIso n a a' ha').hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: (iso : forall a, (F.functor a ≅ G.functor a))
-  body: { hom := fun a => (iso a).hom
-      comm := comm }
-  inv :=
-    { hom := fun a => (iso a).inv
-      comm := fun n a a' ha' => by
-        rw [← cancel_mono (iso a).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [comm]; rw [← whiskerRight_comp_assoc]; rw [Iso.inv_hom_id]; rw [whiskerRight_id']; rw [id_comp] }
-
-中文:
-定义 isoMk
-  签名: (iso : 对任意 a, (F.functor a ≅ G.functor a))
-  定义体: { hom := fun a => (iso a).hom
-      comm := comm }
-  inv :=
-    { hom := fun a => (iso a).inv
-      comm := fun n a a' ha' => by
-        rw [← cancel_mono (iso a).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [comm]; rw [← whiskerRight_comp_assoc]; rw [Iso.inv_hom_id]; rw [whiskerRight_id']; rw [id_comp] }
-
-Depends on / 依赖: Iso.inv_hom_id, cancel_mono, comp_id, id_comp, inv_hom_id, whiskerRight_comp_assoc, whiskerRight_id
+--- 原说明 ---
+Construct an isomorphism in `SingleFunctors C D A` by giving
+level-wise isomorphisms and checking compatibility only in the forward direction
+.
 -/
-def isoMk (iso : forall a, (F.functor a ≅ G.functor a))
-    (comm : forall (n a a' : A) (ha' : n + a = a'), (F.shiftIso n a a' ha').hom ≫ (iso a).hom =
+def isoMk (iso : ∀ a, (F.functor a ≅ G.functor a))
+    (comm : ∀ (n a a' : A) (ha' : n + a = a'), (F.shiftIso n a a' ha').hom ≫ (iso a).hom =
       whiskerRight (iso a').hom (shiftFunctor D n) ≫ (G.shiftIso n a a' ha').hom) :
     F ≅ G where
   hom :=
@@ -456,28 +440,23 @@ def isoMk (iso : forall a, (F.functor a ≅ G.functor a))
   inv :=
     { hom := fun a => (iso a).inv
       comm := fun n a a' ha' => by
-        rw [← cancel_mono (iso a).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [comm]; rw [← whiskerRight_comp_assoc]; rw [Iso.inv_hom_id]; rw [whiskerRight_id']; rw [id_comp] }
+        rw [← cancel_mono (iso a).hom, assoc, assoc, Iso.inv_hom_id, comp_id, comm,
+          ← whiskerRight_comp_assoc, Iso.inv_hom_id, whiskerRight_id', id_comp] }
 
 variable (C D)
 
 /-- The evaluation `SingleFunctors C D A ⥤ C ⥤ D` for some `a : A`. -/
 @[simps]
-/--
-Definition of `evaluation` / `evaluation` 的定义
+/-
+**CategoryTheory.SingleFunctors.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.SingleFunctors`。
+形式化陈述：evaluation (a : A) : SingleFunctors C D A ⥤ C ⥤ D where obj F
+参数：a : A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evaluation
-  signature: (a : A)
-  body: F.functor a
-  map {_ _} φ := φ.hom a
-
-中文:
-定义 evaluation
-  签名: (a : A)
-  定义体: F.functor a
-  map {_ _} φ := φ.hom a
-
-Depends on / 依赖: F.functor, functor
+--- 原说明 ---
+The evaluation `SingleFunctors C D A ⥤ C ⥤ D` for some `a : A`.
 -/
 def evaluation (a : A) : SingleFunctors C D A ⥤ C ⥤ D where
   obj F := F.functor a
@@ -486,109 +465,101 @@ def evaluation (a : A) : SingleFunctors C D A ⥤ C ⥤ D where
 variable {C D}
 
 @[reassoc (attr := simp)]
-/--
-lemma `hom_inv_id_hom` / 引理 `hom_inv_id_hom`
-
-English:
-lemma hom_inv_id_hom
-  given: (e : F ≅ G) (n : A)
-  statement: e.hom.hom n ≫ e.inv.hom n = 𝟙 _
-  proof: by
-  rw [← comp_hom]; rw [e.hom_inv_id]; rw [id_hom]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 hom_inv_id_hom
-  条件: (e : F ≅ G) (n : A)
-  结论: e.hom.hom n ≫ e.inv.hom n = 𝟙 _
-  证明: by
-  rw [← comp_hom]; rw [e.hom_inv_id]; rw [id_hom]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_hom, e.hom_inv_id, hom_inv_id, id_hom
+/-
+**CategoryTheory.SingleFunctors.hom_inv_id_hom** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.SingleFunctors`。
+形式化陈述：hom_inv_id_hom (e : F ≅ G) (n : A) : e.hom.hom n ≫ e.inv.hom n = 𝟙 _
+参数：e : F ≅ G；n : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.SingleFunctors.comp_hom`：comp_hom (f : F ⟶ G) (g : G ⟶ H)
+ (a : A) : (f ≫ g).hom a = f.hom a ≫ g.hom a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用引理 `CategoryTheory.SingleFunctors.id_hom`：id_hom (a : A) : Hom.hom (𝟙 F) a =
+ 𝟙 _
 -/
 lemma hom_inv_id_hom (e : F ≅ G) (n : A) : e.hom.hom n ≫ e.inv.hom n = 𝟙 _ := by
-  rw [← comp_hom]; rw [e.hom_inv_id]; rw [id_hom]
+  rw [← comp_hom, e.hom_inv_id, id_hom]
 
 @[reassoc (attr := simp)]
-/--
-lemma `inv_hom_id_hom` / 引理 `inv_hom_id_hom`
-
-English:
-lemma inv_hom_id_hom
-  given: (e : F ≅ G) (n : A)
-  statement: e.inv.hom n ≫ e.hom.hom n = 𝟙 _
-  proof: by
-  rw [← comp_hom]; rw [e.inv_hom_id]; rw [id_hom]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 inv_hom_id_hom
-  条件: (e : F ≅ G) (n : A)
-  结论: e.inv.hom n ≫ e.hom.hom n = 𝟙 _
-  证明: by
-  rw [← comp_hom]; rw [e.inv_hom_id]; rw [id_hom]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_hom, e.inv_hom_id, id_hom, inv_hom_id
+/-
+**CategoryTheory.SingleFunctors.inv_hom_id_hom** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.SingleFunctors`。
+形式化陈述：inv_hom_id_hom (e : F ≅ G) (n : A) : e.inv.hom n ≫ e.hom.hom n = 𝟙 _
+参数：e : F ≅ G；n : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.SingleFunctors.comp_hom`：comp_hom (f : F ⟶ G) (g : G ⟶ H)
+ (a : A) : (f ≫ g).hom a = f.hom a ≫ g.hom a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用引理 `CategoryTheory.SingleFunctors.id_hom`：id_hom (a : A) : Hom.hom (𝟙 F) a =
+ 𝟙 _
 -/
 lemma inv_hom_id_hom (e : F ≅ G) (n : A) : e.inv.hom n ≫ e.hom.hom n = 𝟙 _ := by
-  rw [← comp_hom]; rw [e.inv_hom_id]; rw [id_hom]
+  rw [← comp_hom, e.inv_hom_id, id_hom]
 
 @[reassoc (attr := simp)]
-/--
-lemma `hom_inv_id_hom_app` / 引理 `hom_inv_id_hom_app`
-
-English:
-lemma hom_inv_id_hom_app
-  given: (e : F ≅ G) (n : A) (X : C)
-  proof: by
-  rw [← NatTrans.comp_app]; rw [hom_inv_id_hom]; rw [NatTrans.id_app]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 hom_inv_id_hom_app
-  条件: (e : F ≅ G) (n : A) (X : C)
-  证明: by
-  rw [← NatTrans.comp_app]; rw [hom_inv_id_hom]; rw [NatTrans.id_app]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: NatTrans, NatTrans.comp_app, NatTrans.id_app, comp_app, hom_inv_id_hom, id_app
+/-
+**CategoryTheory.SingleFunctors.hom_inv_id_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.SingleFunctors`。
+形式化陈述：hom_inv_id_hom_app (e : F ≅ G) (n : A) (X : C) : (e.hom.hom n).app X ≫ (e.
+inv.hom n).app X = 𝟙 _
+参数：e : F ≅ G；n : A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.comp_app`：comp_app {F G H : C ⥤ D} (α : F ⟶ G) (
+β : G ⟶ H) (X : C) : (α ≫ β).app X = α.app X ≫ β.app X
+· 使用引理 `CategoryTheory.SingleFunctors.hom_inv_id_hom`：hom_inv_id_hom (e : F ≅ G)
+ (n : A) : e.hom.hom n ≫ e.inv.hom n = 𝟙 _
+· 使用定理 `CategoryTheory.NatTrans.id_app`：id_app (F : C ⥤ D) (X : C) : (𝟙 F : F ⟶ 
+F).app X = 𝟙 (F.obj X)
 -/
 lemma hom_inv_id_hom_app (e : F ≅ G) (n : A) (X : C) :
     (e.hom.hom n).app X ≫ (e.inv.hom n).app X = 𝟙 _ := by
-  rw [← NatTrans.comp_app]; rw [hom_inv_id_hom]; rw [NatTrans.id_app]
+  rw [← NatTrans.comp_app, hom_inv_id_hom, NatTrans.id_app]
 
 @[reassoc (attr := simp)]
-/--
-lemma `inv_hom_id_hom_app` / 引理 `inv_hom_id_hom_app`
-
-English:
-lemma inv_hom_id_hom_app
-  given: (e : F ≅ G) (n : A) (X : C)
-  proof: by
-  rw [← NatTrans.comp_app]; rw [inv_hom_id_hom]; rw [NatTrans.id_app]
-
-中文:
-引理 inv_hom_id_hom_app
-  条件: (e : F ≅ G) (n : A) (X : C)
-  证明: by
-  rw [← NatTrans.comp_app]; rw [inv_hom_id_hom]; rw [NatTrans.id_app]
-
-Depends on / 依赖: NatTrans, NatTrans.comp_app, NatTrans.id_app, comp_app, id_app, inv_hom_id_hom
+/-
+**CategoryTheory.SingleFunctors.inv_hom_id_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.SingleFunctors`。
+形式化陈述：inv_hom_id_hom_app (e : F ≅ G) (n : A) (X : C) : (e.inv.hom n).app X ≫ (e.
+hom.hom n).app X = 𝟙 _
+参数：e : F ≅ G；n : A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.comp_app`：comp_app {F G H : C ⥤ D} (α : F ⟶ G) (
+β : G ⟶ H) (X : C) : (α ≫ β).app X = α.app X ≫ β.app X
+· 使用引理 `CategoryTheory.SingleFunctors.inv_hom_id_hom`：inv_hom_id_hom (e : F ≅ G)
+ (n : A) : e.inv.hom n ≫ e.hom.hom n = 𝟙 _
+· 使用定理 `CategoryTheory.NatTrans.id_app`：id_app (F : C ⥤ D) (X : C) : (𝟙 F : F ⟶ 
+F).app X = 𝟙 (F.obj X)
 -/
 lemma inv_hom_id_hom_app (e : F ≅ G) (n : A) (X : C) :
     (e.inv.hom n).app X ≫ (e.hom.hom n).app X = 𝟙 _ := by
-  rw [← NatTrans.comp_app]; rw [inv_hom_id_hom]; rw [NatTrans.id_app]
-
+  rw [← NatTrans.comp_app, inv_hom_id_hom, NatTrans.id_app]
+/-
+**CategoryTheory.SingleFunctors.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Singl
+eFunctors`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : F ⟶ G) [IsIso f] (n : A) : IsIso (f.hom n) :=
-inferInstanceAs IsIso ((evaluation C D n).map f)
+  inferInstanceAs <| IsIso ((evaluation C D n).map f)
 
 variable (F)
 
@@ -596,52 +567,19 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Given `F : SingleFunctors C D A`, and a functor `G : D ⥤ E` which commutes
 with the shift by `A`, this is the "composition" of `F` and `G` in `SingleFunctors C E A`. -/
 @[simps! functor shiftIso_hom_app shiftIso_inv_app]
-/--
-Definition of `postcomp` / `postcomp` 的定义
+/-
+**CategoryTheory.SingleFunctors.postcomp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.SingleFunctors`。
+形式化陈述：postcomp (G : D ⥤ E) [G.CommShift A] : SingleFunctors C E A where functor 
+a
+参数：G : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcomp
-  signature: (G : D ⥤ E) [G.CommShift A]
-  body: F.functor a ⋙ G
-  shiftIso n a a' ha' :=
-    Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (G.commShiftIso n).symm ≪≫
-      (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight (F.shiftIso n a a' ha') G
-  shiftIso_zero a := by
-    ext X
-    dsimp
-    simp only [Functor.commShiftIso_zero, Functor.CommShift.isoZero_inv_app,
-      SingleFunctors.shiftIso_zero_hom_app, id_comp, assoc, ← G.map_comp, Iso.inv_hom_id_app,
-      Functor.map_id, Functor.id_obj, comp_id]
-  shiftIso_add n m a a' a'' ha' ha'' := by
-    ext X
-    dsimp
-    simp only [F.shiftIso_add_hom_app n m a a' a'' ha' ha'', Functor.commShiftIso_add,
-      Functor.CommShift.isoAdd_inv_app, Functor.map_comp, id_comp, assoc,
-      Functor.commShiftIso_inv_naturality_assoc]
-    simp only [← G.map_comp, Iso.inv_hom_id_app_assoc]
-
-中文:
-定义 postcomp
-  签名: (G : D ⥤ E) [G.交换Shift A]
-  定义体: F.functor a ⋙ G
-  shiftIso n a a' ha' :=
-    Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (G.commShiftIso n).symm ≪≫
-      (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight (F.shiftIso n a a' ha') G
-  shiftIso_zero a := by
-    ext X
-    dsimp
-    simp only [Functor.commShiftIso_zero, Functor.CommShift.isoZero_inv_app,
-      SingleFunctors.shiftIso_zero_hom_app, id_comp, assoc, ← G.map_comp, Iso.inv_hom_id_app,
-      Functor.map_id, Functor.id_obj, comp_id]
-  shiftIso_add n m a a' a'' ha' ha'' := by
-    ext X
-    dsimp
-    simp only [F.shiftIso_add_hom_app n m a a' a'' ha' ha'', Functor.commShiftIso_add,
-      Functor.CommShift.isoAdd_inv_app, Functor.map_comp, id_comp, assoc,
-      Functor.commShiftIso_inv_naturality_assoc]
-    simp only [← G.map_comp, Iso.inv_hom_id_app_assoc]
-
-Depends on / 依赖: F.functor, functor
+--- 原说明 ---
+Given `F : SingleFunctors C D A`, and a functor `G : D ⥤ E` which commutes
+with the shift by `A`, this is the "composition" of `F` and `G` in `SingleFuncto
+rs C E A`.
 -/
 def postcomp (G : D ⥤ E) [G.CommShift A] :
     SingleFunctors C E A where
@@ -669,30 +607,19 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The functor `SingleFunctors C D A ⥤ SingleFunctors C E A` given by the postcomposition
 by a functor `G : D ⥤ E` which commutes with the shift. -/
 @[simps]
-/--
-Definition of `postcompFunctor` / `postcompFunctor` 的定义
+/-
+**CategoryTheory.SingleFunctors.postcompFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.SingleFunctors`。
+形式化陈述：postcompFunctor (G : D ⥤ E) [G.CommShift A] : SingleFunctors C D A ⥤ Singl
+eFunctors C E A where obj F
+参数：G : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcompFunctor
-  signature: (G : D ⥤ E) [G.CommShift A]
-  body: F.postcomp G
-  map {F₁ F₂} φ :=
-    { hom := fun a => whiskerRight (φ.hom a) G
-      comm := fun n a a' ha' => by
-        ext X
-        simpa using G.congr_map (congr_app (φ.comm n a a' ha') X) }
-
-中文:
-定义 postcompFunctor
-  签名: (G : D ⥤ E) [G.交换Shift A]
-  定义体: F.postcomp G
-  map {F₁ F₂} φ :=
-    { hom := fun a => whiskerRight (φ.hom a) G
-      comm := fun n a a' ha' => by
-        ext X
-        simpa using G.congr_map (congr_app (φ.comm n a a' ha') X) }
-
-Depends on / 依赖: F.postcomp, postcomp
+--- 原说明 ---
+The functor `SingleFunctors C D A ⥤ SingleFunctors C E A` given by the postcompo
+sition
+by a functor `G : D ⥤ E` which commutes with the shift.
 -/
 def postcompFunctor (G : D ⥤ E) [G.CommShift A] :
     SingleFunctors C D A ⥤ SingleFunctors C E A where
@@ -708,24 +635,17 @@ variable {C E' A}
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical isomorphism `(F.postcomp G).postcomp G' ≅ F.postcomp (G ⋙ G')`. -/
 @[simps!]
-/--
-Definition of `postcompPostcompIso` / `postcompPostcompIso` 的定义
+/-
+**CategoryTheory.SingleFunctors.postcompPostcompIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.SingleFunctors`。
+形式化陈述：postcompPostcompIso (G : D ⥤ E) (G' : E ⥤ E') [G.CommShift A] [G'.CommShif
+t A] : (F.postcomp G).postcomp G' ≅ F.postcomp (G ⋙ G')
+参数：G : D ⥤ E；G' : E ⥤ E'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcompPostcompIso
-  signature: (G : D ⥤ E) (G' : E ⥤ E') [G.CommShift A] [G'.CommShift A]
-  body: isoMk (fun _ => Functor.associator _ _ _) (fun n a a' ha' => by
-    ext X
-    simp [Functor.commShiftIso_comp_inv_app])
-
-中文:
-定义 postcompPostcompIso
-  签名: (G : D ⥤ E) (G' : E ⥤ E') [G.交换Shift A] [G'.交换Shift A]
-  定义体: isoMk (fun _ => Functor.associator _ _ _) (fun n a a' ha' => by
-    ext X
-    simp [Functor.commShiftIso_comp_inv_app])
-
-Depends on / 依赖: Functor, Functor.associator, Functor.commShiftIso_comp_inv_app, associator, commShiftIso_comp_inv_app
+--- 原说明 ---
+The canonical isomorphism `(F.postcomp G).postcomp G' ≅ F.postcomp (G ⋙ G')`.
 -/
 def postcompPostcompIso (G : D ⥤ E) (G' : E ⥤ E') [G.CommShift A] [G'.CommShift A] :
     (F.postcomp G).postcomp G' ≅ F.postcomp (G ⋙ G') :=
@@ -737,24 +657,19 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The isomorphism `F.postcomp G ≅ F.postcomp G'` induced by an isomorphism `e : G ≅ G'`
 which commutes with the shift. -/
 @[simps!]
-/--
-Definition of `postcompIsoOfIso` / `postcompIsoOfIso` 的定义
+/-
+**CategoryTheory.SingleFunctors.postcompIsoOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.SingleFunctors`。
+形式化陈述：postcompIsoOfIso {G G' : D ⥤ E} (e : G ≅ G') [G.CommShift A] [G'.CommShift
+ A] [NatTrans.CommShift e.hom A] : F.postcomp G ≅ F.postcomp G'
+参数：e : G ≅ G'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcompIsoOfIso
-  signature: {G G' : D ⥤ E} (e : G ≅ G') [G.CommShift A] [G'.CommShift A]
-  body: isoMk (fun a => isoWhiskerLeft (F.functor a) e) (fun n a a' ha' => by
-    ext X
-    simp [NatTrans.shift_app e.hom n])
-
-中文:
-定义 postcompIsoOfIso
-  签名: {G G' : D ⥤ E} (e : G ≅ G') [G.交换Shift A] [G'.交换Shift A]
-  定义体: isoMk (fun a => isoWhiskerLeft (F.functor a) e) (fun n a a' ha' => by
-    ext X
-    simp [NatTrans.shift_app e.hom n])
-
-Depends on / 依赖: F.functor, NatTrans, NatTrans.shift_app, e.hom, functor, isoWhiskerLeft, shift_app
+--- 原说明 ---
+The isomorphism `F.postcomp G ≅ F.postcomp G'` induced by an isomorphism `e : G 
+≅ G'`
+which commutes with the shift.
 -/
 def postcompIsoOfIso {G G' : D ⥤ E} (e : G ≅ G') [G.CommShift A] [G'.CommShift A]
     [NatTrans.CommShift e.hom A] :
@@ -766,3 +681,4 @@ def postcompIsoOfIso {G G' : D ⥤ E} (e : G ≅ G') [G.CommShift A] [G'.CommShi
 end SingleFunctors
 
 end CategoryTheory
+

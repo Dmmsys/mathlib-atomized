@@ -51,22 +51,15 @@ open MonoidalCategory CopyDiscardCategory ComonObj Limits
 
 variable {C : Type u} [Category.{v} C] [MonoidalCategory.{v} C]
 
-/--
-Definition of `MarkovCategory` / `MarkovCategory` 的定义
+/-- Copy-discard category where discard is natural. -/
+/-
+**CategoryTheory.MarkovCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.MonoidalCategory C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MarkovCategory
-  parameters: (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
-  extends: CopyDiscardCategory C
-  axioms and operations (1):
-    - discard_natural({X Y : C} (f : X ⟶ Y)) : f ≫ ε[Y] = ε[X]
-
-中文:
-类 Markov范畴
-  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
-  继承: 余pyDiscard范畴 C
-  公理与运算 (1 个):
-    - discard_natural({X Y : C} (f : X ⟶ Y)) : f ≫ ε[Y] = ε[X]
+--- 原说明 ---
+Copy-discard category where discard is natural.
 -/
 class MarkovCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
     extends CopyDiscardCategory C where
@@ -79,50 +72,62 @@ variable [MarkovCategory C]
 
 attribute [reassoc (attr := simp)] discard_natural
 
-/--
-theorem `eq_discard` / 定理 `eq_discard`
+/-- Any morphism to the unit equals discard. -/
+/-
+**CategoryTheory.MarkovCategory.eq_discard** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.MarkovCategory`。
+形式化陈述：eq_discard (X : C) (f : X ⟶ 𝟙_ C) : f = ε[X]
+参数：X : C；f : X ⟶ 𝟙_ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.CopyDiscardCategory.discard_unit`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.MonoidalCategory C}  
+ [self : CategoryTheory.CopyDiscardCa…
+· 使用定理 `CategoryTheory.MarkovCategory.discard_natural`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.MonoidalCategory C}   [
+self : CategoryTheory.MarkovCategor…
 
-English:
-theorem eq_discard
-  given: (X : C) (f : X ⟶ 𝟙_ C)
-  statement: f = ε[X]
-  proof: by
-  rw [← Category.comp_id f]; rw [← discard_unit]; rw [discard_natural]
-
-中文:
-定理 eq_discard
-  条件: (X : C) (f : X ⟶ 𝟙_ C)
-  结论: f = ε[X]
-  证明: by
-  rw [← Category.comp_id f]; rw [← discard_unit]; rw [discard_natural]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, discard_natural, discard_unit
+--- 原说明 ---
+Any morphism to the unit equals discard.
 -/
 theorem eq_discard (X : C) (f : X ⟶ 𝟙_ C) : f = ε[X] := by
-  rw [← Category.comp_id f]; rw [← discard_unit]; rw [discard_natural]
+  rw [← Category.comp_id f, ← discard_unit, discard_natural]
 
-/--
-Definition of `isTerminalUnit` / `isTerminalUnit` 的定义
+/-- The monoidal unit is a terminal object. -/
+/-
+**CategoryTheory.MarkovCategory.isTerminalUnit** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MarkovCategory`。
+形式化陈述：isTerminalUnit : IsTerminal (𝟙_ C)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MarkovCategory.eq_discard`：eq_discard (X : C) (f : X ⟶ 𝟙_
+ C) : f = ε[X]
 
-English:
-definition isTerminalUnit
-  signature: : IsTerminal (𝟙_ C)
-  body: IsTerminal.ofUniqueHom _ eq_discard
-
-中文:
-定义 isTerminalUnit
-  签名: : 是终止 (𝟙_ C)
-  定义体: IsTerminal.ofUniqueHom _ eq_discard
-
-Depends on / 依赖: IsTerminal, IsTerminal.ofUniqueHom, eq_discard, ofUniqueHom
+--- 原说明 ---
+The monoidal unit is a terminal object.
 -/
 def isTerminalUnit : IsTerminal (𝟙_ C) :=
   IsTerminal.ofUniqueHom _ eq_discard
 
 /-- There is a unique morphism to the unit (it is terminal). -/
+/-
+**CategoryTheory.MarkovCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Marko
+vCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+There is a unique morphism to the unit (it is terminal).
+-/
 instance (X : C) : Subsingleton (X ⟶ 𝟙_ C) where
   allEq := isTerminalUnit.hom_ext
 
 end MarkovCategory
 
 end CategoryTheory
+

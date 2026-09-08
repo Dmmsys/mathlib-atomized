@@ -31,244 +31,124 @@ namespace Sum
 section SMul
 
 variable [SMul M α] [SMul M β] [SMul N α] [SMul N β] (a : M) (b : α) (c : β)
-  (x : α oplus β)
+  (x : α ⊕ β)
 
 @[to_additive]
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: : SMul M (α oplus β)
-  body: ⟨fun a => Sum.map (a • ·) (a • ·)⟩
-
-@[to_additive]
-
-中文:
-实例 instSMul
-  签名: : 标量乘法 M (α oplus β)
-  定义体: ⟨fun a => Sum.map (a • ·) (a • ·)⟩
-
-@[to_additive]
-
-Depends on / 依赖: Sum.map
+/-
+**Sum.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+形式化陈述：instSMul : SMul M (α oplus β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSMul : SMul M (α oplus β) :=
+instance instSMul : SMul M (α ⊕ β) :=
   ⟨fun a => Sum.map (a • ·) (a • ·)⟩
 
 @[to_additive]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  statement: a • x = x.map (a • ·) (a • ·)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_def
-  结论: a • x = x.map (a • ·) (a • ·)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Sum.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Sum`。
+形式化陈述：smul_def : a • x = x.map (a • ·) (a • ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_def : a • x = x.map (a • ·) (a • ·) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_inl` / 定理 `smul_inl`
-
-English:
-theorem smul_inl
-  statement: a • (inl b : α oplus β) = inl (a • b)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_inl
-  结论: a • (inl b : α oplus β) = inl (a • b)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Sum.smul_inl** 是 Mathlib 中的一个定理，位于命名空间 `Sum`。
+形式化陈述：smul_inl : a • (inl b : α oplus β) = inl (a • b)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_inl : a • (inl b : α oplus β) = inl (a • b) :=
+theorem smul_inl : a • (inl b : α ⊕ β) = inl (a • b) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_inr` / 定理 `smul_inr`
-
-English:
-theorem smul_inr
-  statement: a • (inr c : α oplus β) = inr (a • c)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_inr
-  结论: a • (inr c : α oplus β) = inr (a • c)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Sum.smul_inr** 是 Mathlib 中的一个定理，位于命名空间 `Sum`。
+形式化陈述：smul_inr : a • (inr c : α oplus β) = inr (a • c)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_inr : a • (inr c : α oplus β) = inr (a • c) :=
+theorem smul_inr : a • (inr c : α ⊕ β) = inr (a • c) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_swap` / 定理 `smul_swap`
-
-English:
-theorem smul_swap
-  statement: (a • x).swap = a • x.swap
-  proof: by cases x <;> rfl
-
-中文:
-定理 smul_swap
-  结论: (a • x).swap = a • x.swap
-  证明: by cases x <;> rfl
+/-
+**Sum.smul_swap** 是 Mathlib 中的一个定理，位于命名空间 `Sum`。
+形式化陈述：smul_swap : (a • x).swap = a • x.swap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem smul_swap : (a • x).swap = a • x.swap := by cases x <;> rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M N] [IsScalarTower M N α] [IsScalarTower M N β] : IsScalarTower M N (α oplus β)
-  body: ⟨fun a b x => by
-    cases x
-    exacts [congr_arg inl (smul_assoc _ _ _), congr_arg inr (smul_assoc _ _ _)]⟩
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: M N] [标量塔 M N α] [标量塔 M N β] : 标量塔 M N (α oplus β)
-  定义体: ⟨fun a b x => by
-    cases x
-    exacts [congr_arg inl (smul_assoc _ _ _), congr_arg inr (smul_assoc _ _ _)]⟩
-
-@[to_additive]
-
-Depends on / 依赖: congr_arg, exacts, smul_assoc
+/-
+**Sum.** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M N] [IsScalarTower M N α] [IsScalarTower M N β] : IsScalarTower M N (α oplus β) :=
+instance [SMul M N] [IsScalarTower M N α] [IsScalarTower M N β] : IsScalarTower M N (α ⊕ β) :=
   ⟨fun a b x => by
     cases x
     exacts [congr_arg inl (smul_assoc _ _ _), congr_arg inr (smul_assoc _ _ _)]⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: M N α] [SMulCommClass M N β] : SMulCommClass M N (α oplus β)
-  body: ⟨fun a b x => by
-    cases x
-    exacts [congr_arg inl (smul_comm _ _ _), congr_arg inr (smul_comm _ _ _)]⟩
-
-@[to_additive]
-
-中文:
-实例 [标量交换类
-  签名: M N α] [标量交换类 M N β] : 标量交换类 M N (α oplus β)
-  定义体: ⟨fun a b x => by
-    cases x
-    exacts [congr_arg inl (smul_comm _ _ _), congr_arg inr (smul_comm _ _ _)]⟩
-
-@[to_additive]
-
-Depends on / 依赖: congr_arg, exacts, smul_comm
+/-
+**Sum.** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMulCommClass M N α] [SMulCommClass M N β] : SMulCommClass M N (α oplus β) :=
+instance [SMulCommClass M N α] [SMulCommClass M N β] : SMulCommClass M N (α ⊕ β) :=
   ⟨fun a b x => by
     cases x
     exacts [congr_arg inl (smul_comm _ _ _), congr_arg inr (smul_comm _ _ _)]⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: Mᵐᵒᵖ α] [SMul Mᵐᵒᵖ β] [IsCentralScalar M α] [IsCentralScalar M β] :
-  body: ⟨fun a x => by
-    cases x
-    exacts [congr_arg inl (op_smul_eq_smul _ _), congr_arg inr (op_smul_eq_smul _ _)]⟩
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: Mᵐᵒᵖ α] [标量乘法 Mᵐᵒᵖ β] [中心标量 M α] [中心标量 M β] :
-  定义体: ⟨fun a x => by
-    cases x
-    exacts [congr_arg inl (op_smul_eq_smul _ _), congr_arg inr (op_smul_eq_smul _ _)]⟩
-
-@[to_additive]
-
-Depends on / 依赖: congr_arg, exacts, op_smul_eq_smul
+/-
+**Sum.** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul Mᵐᵒᵖ α] [SMul Mᵐᵒᵖ β] [IsCentralScalar M α] [IsCentralScalar M β] :
-    IsCentralScalar M (α oplus β) :=
+    IsCentralScalar M (α ⊕ β) :=
   ⟨fun a x => by
     cases x
     exacts [congr_arg inl (op_smul_eq_smul _ _), congr_arg inr (op_smul_eq_smul _ _)]⟩
 
 @[to_additive]
-/--
-Instance `FaithfulSMulLeft` / 实例 `FaithfulSMulLeft`
-
-English:
-instance FaithfulSMulLeft
-  signature: [FaithfulSMul M α]
-  body: ⟨fun h => eq_of_smul_eq_smul fun a : α => by injection h (inl a)⟩
-
-@[to_additive]
-
-中文:
-实例 FaithfulSMulLeft
-  签名: [忠实标量乘法 M α]
-  定义体: ⟨fun h => eq_of_smul_eq_smul fun a : α => by injection h (inl a)⟩
-
-@[to_additive]
-
-Depends on / 依赖: eq_of_smul_eq_smul, injection
+/-
+**Sum.FaithfulSMulLeft** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+形式化陈述：FaithfulSMulLeft [FaithfulSMul M α] : FaithfulSMul M (α oplus β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FaithfulSMul.eq_of_smul_eq_smul`：∀ {M : Type u_4} {α : Type u_5} {inst :
+ SMul M α} [self : FaithfulSMul M α] {m₁ m₂ : M},   (∀ (a : α), m₁ • a = m₂ • a)
+ → m₁ = m₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-instance FaithfulSMulLeft [FaithfulSMul M α] : FaithfulSMul M (α oplus β) :=
+instance FaithfulSMulLeft [FaithfulSMul M α] : FaithfulSMul M (α ⊕ β) :=
   ⟨fun h => eq_of_smul_eq_smul fun a : α => by injection h (inl a)⟩
 
 @[to_additive]
-/--
-Instance `FaithfulSMulRight` / 实例 `FaithfulSMulRight`
-
-English:
-instance FaithfulSMulRight
-  signature: [FaithfulSMul M β]
-  body: ⟨fun h => eq_of_smul_eq_smul fun b : β => by injection h (inr b)⟩
-
-中文:
-实例 FaithfulSMulRight
-  签名: [忠实标量乘法 M β]
-  定义体: ⟨fun h => eq_of_smul_eq_smul fun b : β => by injection h (inr b)⟩
-
-Depends on / 依赖: eq_of_smul_eq_smul, injection
+/-
+**Sum.FaithfulSMulRight** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+形式化陈述：FaithfulSMulRight [FaithfulSMul M β] : FaithfulSMul M (α oplus β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FaithfulSMul.eq_of_smul_eq_smul`：∀ {M : Type u_4} {α : Type u_5} {inst :
+ SMul M α} [self : FaithfulSMul M α] {m₁ m₂ : M},   (∀ (a : α), m₁ • a = m₂ • a)
+ → m₁ = m₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-instance FaithfulSMulRight [FaithfulSMul M β] : FaithfulSMul M (α oplus β) :=
+instance FaithfulSMulRight [FaithfulSMul M β] : FaithfulSMul M (α ⊕ β) :=
   ⟨fun h => eq_of_smul_eq_smul fun b : β => by injection h (inr b)⟩
 
 end SMul
 
 @[to_additive]
+/-
+**Sum.** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {m : Monoid M} [MulAction M α] [MulAction M β] :
-    MulAction M (α oplus β) where
+    MulAction M (α ⊕ β) where
   mul_smul a b x := by
     cases x
     exacts [congr_arg inl (mul_smul _ _ _), congr_arg inr (mul_smul _ _ _)]
@@ -277,3 +157,4 @@ instance {m : Monoid M} [MulAction M α] [MulAction M β] :
     exacts [congr_arg inl (one_smul _ _), congr_arg inr (one_smul _ _)]
 
 end Sum
+

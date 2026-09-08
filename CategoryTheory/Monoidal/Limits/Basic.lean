@@ -39,124 +39,9 @@ open Functor.LaxMonoidal
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (lim (J := J) (C := C)).LaxMonoidal
-  body: Functor.LaxMonoidal.ofTensorHom
-    (ε :=
-      limit.lift _
-        { pt := _
-          π := { app := fun _ => 𝟙 _ } })
-    (μ := fun F G =>
-      limit.lift (F otimes G)
-        { pt := limit F otimes limit G
-          π :=
-            { app := fun j => limit.π F j otimesₘ limit.π G j
-              naturality := fun j j' f => by
-                dsimp
-                simp only [Category.id_comp, tensorHom_comp_tensorHom, limit.w] } })
-    (μ_natural := fun f g => limit.hom_ext (fun j => by
-      dsimp
-      simp only [limit.lift_π, Cone.postcompose_obj_π, Monoidal.tensorHom_app, limit.lift_map,
-        NatTrans.comp_app, Category.assoc, tensorHom_comp_tensorHom, limMap_π]))
-    (associativity := fun F G H => limit.hom_ext (fun j => by
-      dsimp
-      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π,
-        id_tensorHom]
-      dsimp
-      conv_lhs => rw [tensorHom_def, Category.assoc, ← comp_whiskerRight_assoc,
-        limit.lift_π, tensor_whiskerLeft, Category.assoc, Category.assoc,
-        Iso.inv_hom_id, Category.comp_id,
-        ← associator_naturality_right, ← tensorHom_def_assoc]
-      dsimp
-      conv_rhs => rw [tensorHom_def, ← whisker_exchange,
-        ← whiskerLeft_comp_assoc, limit.lift_π,
-        whisker_exchange, ← associator_naturality_left_assoc]
-      dsimp only
-      conv_rhs => rw [tensorHom_def, whiskerLeft_comp,
-        ← associator_naturality_middle_assoc,
-        ← associator_naturality_right, ← comp_whiskerRight_assoc,
-        ← tensorHom_def, ← tensorHom_def_assoc]))
-    (left_unitality := fun F => limit.hom_ext (fun j => by
-      dsimp
-      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π]
-      dsimp
-      simp only [tensorHom_def, id_whiskerLeft, Category.assoc,
-        Iso.inv_hom_id, Category.comp_id, ← comp_whiskerRight_assoc]
-      erw [limit.lift_π]
-      rw [id_whiskerRight]; rw [Category.id_comp]))
-    (right_unitality := fun F => limit.hom_ext (fun j => by
-      dsimp
-      simp only [id_tensorHom, limit.lift_map, Category.assoc, limit.lift_π]
-      dsimp
-      simp only [tensorHom_def, ← whisker_exchange, whiskerRight_id, Category.assoc, Iso.inv_hom_id,
-        Category.comp_id, ← whiskerLeft_comp_assoc]
-      erw [limit.lift_π]
-      rw [whiskerLeft_id]; rw [Category.id_comp]))
-
-#adaptation_note
-
-中文:
-实例 :
-  签名: (lim (J := J) (C := C)).松弛幺半群
-  定义体: Functor.LaxMonoidal.ofTensorHom
-    (ε :=
-      limit.lift _
-        { pt := _
-          π := { app := fun _ => 𝟙 _ } })
-    (μ := fun F G =>
-      limit.lift (F otimes G)
-        { pt := limit F otimes limit G
-          π :=
-            { app := fun j => limit.π F j otimesₘ limit.π G j
-              naturality := fun j j' f => by
-                dsimp
-                simp only [Category.id_comp, tensorHom_comp_tensorHom, limit.w] } })
-    (μ_natural := fun f g => limit.hom_ext (fun j => by
-      dsimp
-      simp only [limit.lift_π, Cone.postcompose_obj_π, Monoidal.tensorHom_app, limit.lift_map,
-        NatTrans.comp_app, Category.assoc, tensorHom_comp_tensorHom, limMap_π]))
-    (associativity := fun F G H => limit.hom_ext (fun j => by
-      dsimp
-      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π,
-        id_tensorHom]
-      dsimp
-      conv_lhs => rw [tensorHom_def, Category.assoc, ← comp_whiskerRight_assoc,
-        limit.lift_π, tensor_whiskerLeft, Category.assoc, Category.assoc,
-        Iso.inv_hom_id, Category.comp_id,
-        ← associator_naturality_right, ← tensorHom_def_assoc]
-      dsimp
-      conv_rhs => rw [tensorHom_def, ← whisker_exchange,
-        ← whiskerLeft_comp_assoc, limit.lift_π,
-        whisker_exchange, ← associator_naturality_left_assoc]
-      dsimp only
-      conv_rhs => rw [tensorHom_def, whiskerLeft_comp,
-        ← associator_naturality_middle_assoc,
-        ← associator_naturality_right, ← comp_whiskerRight_assoc,
-        ← tensorHom_def, ← tensorHom_def_assoc]))
-    (left_unitality := fun F => limit.hom_ext (fun j => by
-      dsimp
-      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π]
-      dsimp
-      simp only [tensorHom_def, id_whiskerLeft, Category.assoc,
-        Iso.inv_hom_id, Category.comp_id, ← comp_whiskerRight_assoc]
-      erw [limit.lift_π]
-      rw [id_whiskerRight]; rw [Category.id_comp]))
-    (right_unitality := fun F => limit.hom_ext (fun j => by
-      dsimp
-      simp only [id_tensorHom, limit.lift_map, Category.assoc, limit.lift_π]
-      dsimp
-      simp only [tensorHom_def, ← whisker_exchange, whiskerRight_id, Category.assoc, Iso.inv_hom_id,
-        Category.comp_id, ← whiskerLeft_comp_assoc]
-      erw [limit.lift_π]
-      rw [whiskerLeft_id]; rw [Category.id_comp]))
-
-#adaptation_note
-
-Depends on / 依赖: LaxMonoidal
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (lim (J := J) (C := C)).LaxMonoidal :=
   Functor.LaxMonoidal.ofTensorHom
@@ -164,19 +49,19 @@ instance : (lim (J := J) (C := C)).LaxMonoidal :=
       limit.lift _
         { pt := _
           π := { app := fun _ => 𝟙 _ } })
-    (μ := fun F G =>
-      limit.lift (F otimes G)
-        { pt := limit F otimes limit G
+    (μ := fun F G ↦
+      limit.lift (F ⊗ G)
+        { pt := limit F ⊗ limit G
           π :=
-            { app := fun j => limit.π F j otimesₘ limit.π G j
+            { app := fun j => limit.π F j ⊗ₘ limit.π G j
               naturality := fun j j' f => by
                 dsimp
                 simp only [Category.id_comp, tensorHom_comp_tensorHom, limit.w] } })
-    (μ_natural := fun f g => limit.hom_ext (fun j => by
+    (μ_natural := fun f g ↦ limit.hom_ext (fun j ↦ by
       dsimp
       simp only [limit.lift_π, Cone.postcompose_obj_π, Monoidal.tensorHom_app, limit.lift_map,
         NatTrans.comp_app, Category.assoc, tensorHom_comp_tensorHom, limMap_π]))
-    (associativity := fun F G H => limit.hom_ext (fun j => by
+    (associativity := fun F G H ↦ limit.hom_ext (fun j ↦ by
       dsimp
       simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π,
         id_tensorHom]
@@ -194,70 +79,46 @@ instance : (lim (J := J) (C := C)).LaxMonoidal :=
         ← associator_naturality_middle_assoc,
         ← associator_naturality_right, ← comp_whiskerRight_assoc,
         ← tensorHom_def, ← tensorHom_def_assoc]))
-    (left_unitality := fun F => limit.hom_ext (fun j => by
+    (left_unitality := fun F ↦ limit.hom_ext (fun j ↦ by
       dsimp
       simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π]
       dsimp
       simp only [tensorHom_def, id_whiskerLeft, Category.assoc,
         Iso.inv_hom_id, Category.comp_id, ← comp_whiskerRight_assoc]
       erw [limit.lift_π]
-      rw [id_whiskerRight]; rw [Category.id_comp]))
-    (right_unitality := fun F => limit.hom_ext (fun j => by
+      rw [id_whiskerRight, Category.id_comp]))
+    (right_unitality := fun F ↦ limit.hom_ext (fun j ↦ by
       dsimp
       simp only [id_tensorHom, limit.lift_map, Category.assoc, limit.lift_π]
       dsimp
       simp only [tensorHom_def, ← whisker_exchange, whiskerRight_id, Category.assoc, Iso.inv_hom_id,
         Category.comp_id, ← whiskerLeft_comp_assoc]
       erw [limit.lift_π]
-      rw [whiskerLeft_id]; rw [Category.id_comp]))
+      rw [whiskerLeft_id, Category.id_comp]))
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `lim_ε_π` / 引理 `lim_ε_π`
+/-
+**CategoryTheory.Limits.lim_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma lim_ε_π
-  given: (j : J)
-  statement: ε (lim (J := J) (C := C)) ≫ limit.π _ j = 𝟙 _
-  proof: limit.lift_π _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lim_ε_π
-  条件: (j : J)
-  结论: ε (lim (J := J) (C := C)) ≫ limit.π _ j = 𝟙 _
-  证明: limit.lift_π _ _
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma lim_ε_π (j : J) : ε (lim (J := J) (C := C)) ≫ limit.π _ j = 𝟙 _ :=
   limit.lift_π _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `lim_μ_π` / 引理 `lim_μ_π`
-
-English:
-lemma lim_μ_π
-  given: (F G : J ⥤ C) (j : J)
-  statement: μ lim F G ≫ limit.π _ j = limit.π F j otimesₘ limit.π G j
-  proof: limit.lift_π _ _
-
-中文:
-引理 lim_μ_π
-  条件: (F G : J ⥤ C) (j : J)
-  结论: μ lim F G ≫ limit.π _ j = limit.π F j otimesₘ limit.π G j
-  证明: limit.lift_π _ _
-
-Depends on / 依赖: limit.lift_
+/-
+**CategoryTheory.Limits.lim_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma lim_μ_π (F G : J ⥤ C) (j : J) : μ lim F G ≫ limit.π _ j = limit.π F j otimesₘ limit.π G j :=
+lemma lim_μ_π (F G : J ⥤ C) (j : J) : μ lim F G ≫ limit.π _ j = limit.π F j ⊗ₘ limit.π G j :=
   limit.lift_π _ _
 
 end
 
 end CategoryTheory.Limits
+

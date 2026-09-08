@@ -22,22 +22,15 @@ universe u v
 
 open CategoryTheory
 
-/--
-Definition of `BddOrd` / `BddOrd` 的定义
+/-- The category of bounded orders with monotone functions. -/
+/-
+**BddOrd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u_1 + 1)
+参数：u_1 + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BddOrd
-  parameters: extends PartOrd
-  extends: PartOrd
-  axioms and operations (1):
-    - [isBoundedOrder : BoundedOrder toPartOrd]
-
-中文:
-结构 有界序
-  参数: extends 偏序
-  继承: 偏序
-  公理与运算 (1 个):
-    - [isBoundedOrder : 有界序 toPartOrd]
+--- 原说明 ---
+The category of bounded orders with monotone functions.
 -/
 structure BddOrd extends PartOrd where
   [isBoundedOrder : BoundedOrder toPartOrd]
@@ -47,62 +40,40 @@ add_decl_doc BddOrd.toPartOrd
 
 attribute [instance] BddOrd.isBoundedOrder
 
-initialize_simps_projections BddOrd (carrier -> coe, -str)
+initialize_simps_projections BddOrd (carrier → coe, -str)
 
 namespace BddOrd
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort BddOrd Type*
-  body: InducedCategory.hasCoeToSort toPartOrd
-
-中文:
-实例 :
-  签名: CoeSort 有界序 类型
-  定义体: InducedCategory.hasCoeToSort toPartOrd
-
-Depends on / 依赖: InducedCategory, InducedCategory.hasCoeToSort, hasCoeToSort, toPartOrd
+/-
+**BddOrd.** 是 Mathlib 中的一个实例，位于命名空间 `BddOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort BddOrd Type* :=
   InducedCategory.hasCoeToSort toPartOrd
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a bundled `BddOrd` from the underlying type and typeclass. -/
+/-
+**BddOrd.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `BddOrd`。
+形式化陈述：of (X : Type*) [PartialOrder X] [BoundedOrder X] : BddOrd where carrier
+参数：X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (X : Type*) [PartialOrder X] [BoundedOrder X]
-  body: X
-
-中文:
-缩写 of
-  签名: (X : 类型) [偏序 X] [有界序 X]
-  定义体: X
+--- 原说明 ---
+Construct a bundled `BddOrd` from the underlying type and typeclass.
 -/
 abbrev of (X : Type*) [PartialOrder X] [BoundedOrder X] : BddOrd where
   carrier := X
 
 /-- The type of morphisms in `BddOrd R`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**BddOrd.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `BddOrd`。
+形式化陈述：BddOrd → BddOrd → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : BddOrd.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : BoundedOrderHom X Y
-
-中文:
-结构 态射
-  参数: (X Y : 有界序.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : 有界序态射 X Y
+--- 原说明 ---
+The type of morphisms in `BddOrd R`.
 -/
 structure Hom (X Y : BddOrd.{u}) where
   private mk ::
@@ -111,22 +82,9 @@ structure Hom (X Y : BddOrd.{u}) where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category BddOrd.{u}
-  body: Hom X Y
-  id _ := ⟨BoundedOrderHom.id _⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 有界序.{u}
-  定义体: Hom X Y
-  id _ := ⟨BoundedOrderHom.id _⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**BddOrd.** 是 Mathlib 中的一个实例，位于命名空间 `BddOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category BddOrd.{u} where
   Hom X Y := Hom X Y
@@ -135,493 +93,306 @@ instance : Category BddOrd.{u} where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory BddOrd (BoundedOrderHom · ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 有界序 (有界序态射 · ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**BddOrd.** 是 Mathlib 中的一个实例，位于命名空间 `BddOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConcreteCategory BddOrd (BoundedOrderHom · ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `BddOrd` back into a `BoundedOrderHom`. -/
+/-
+**BddOrd.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `BddOrd.Hom`。
+形式化陈述：{X Y : BddOrd} → X.Hom Y → BoundedOrderHom ↑X.toPartOrd ↑Y.toPartOrd
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : BddOrd.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := BddOrd) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 有界序.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := BddOrd) f
+--- 原说明 ---
+Turn a morphism in `BddOrd` back into a `BoundedOrderHom`.
 -/
 abbrev Hom.hom {X Y : BddOrd.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := BddOrd) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `BoundedOrderHom` as a morphism in `BddOrd`. -/
+/-
+**BddOrd.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `BddOrd`。
+形式化陈述：ofHom {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [B
+oundedOrder Y] (f : BoundedOrderHom X Y) : of X ⟶ of Y
+参数：f : BoundedOrderHom X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
-  body: ConcreteCategory.ofHom (C := BddOrd) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [偏序 X] [有界序 X] [偏序 Y] [有界序 Y]
-  定义体: ConcreteCategory.ofHom (C := BddOrd) f
-
-Depends on / 依赖: BddOrd, ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a `BoundedOrderHom` as a morphism in `BddOrd`.
 -/
 abbrev ofHom {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
     (f : BoundedOrderHom X Y) : of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := BddOrd) f
 
 variable {R} in
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**BddOrd.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `BddOrd.Hom.Simps`。
+形式化陈述：(X Y : BddOrd) → X.Hom Y → BoundedOrderHom ↑X.toPartOrd ↑Y.toPartOrd
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : BddOrd.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 有界序.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : BddOrd.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[simp]
-/--
-lemma `coe_id` / 引理 `coe_id`
+/-
+**BddOrd.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：coe_id {X : BddOrd} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_id
-  given: {X : BddOrd}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_id
-  条件: {X : 有界序}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_id {X : BddOrd} : (𝟙 X : X -> X) = id := rfl
+lemma coe_id {X : BddOrd} : (𝟙 X : X → X) = id := rfl
 
 @[simp]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: {X Y Z : BddOrd} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 有界序} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[simp]
+/-
+**BddOrd.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：coe_comp {X Y Z : BddOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘
+ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_comp {X Y Z : BddOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
+lemma coe_comp {X Y Z : BddOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[simp]
-/--
-lemma `forget_map` / 引理 `forget_map`
-
-English:
-lemma forget_map
-  given: {X Y : BddOrd} (f : X ⟶ Y)
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 forget_map
-  条件: {X Y : 有界序} (f : X ⟶ Y)
-  证明: rfl
-
-@[ext]
+/-
+**BddOrd.forget_map** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：forget_map {X Y : BddOrd} (f : X ⟶ Y) : (forget BddOrd).map f = (f : _ -> 
+_)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forget_map {X Y : BddOrd} (f : X ⟶ Y) :
-    (forget BddOrd).map f = (f : _ -> _) := rfl
+    (forget BddOrd).map f = (f : _ → _) := rfl
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : BddOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-中文:
-引理 ext
-  条件: {X Y : 有界序} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
+/-
+**BddOrd.ext** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：ext {X Y : BddOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma ext {X Y : BddOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : BddOrd} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 -- This is not `simp` to avoid rewriting in types of terms.
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [PartialOrder X] [BoundedOrder X]
-  statement: (BddOrd.of X : Type u) = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [偏序 X] [有界序 X]
-  结论: (有界序.of X : 类型u) = X
-  证明: rfl
-
-@[simp]
+/-
+**BddOrd.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `BddOrd`。
+形式化陈述：coe_of (X : Type u) [PartialOrder X] [BoundedOrder X] : (BddOrd.of X : Typ
+e u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [PartialOrder X] [BoundedOrder X] : (BddOrd.of X : Type u) = X := rfl
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {X : BddOrd}
-  statement: (𝟙 X : X ⟶ X).hom = BoundedOrderHom.id _
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {X : 有界序}
-  结论: (𝟙 X : X ⟶ X).hom = 有界序态射.id _
-  证明: rfl
+/-
+**BddOrd.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：hom_id {X : BddOrd} : (𝟙 X : X ⟶ X).hom = BoundedOrderHom.id _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {X : BddOrd} : (𝟙 X : X ⟶ X).hom = BoundedOrderHom.id _ := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**BddOrd.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：id_apply (X : BddOrd) (x : X) : (𝟙 X : X ⟶ X) x = x
+参数：X : BddOrd；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (X : BddOrd) (x : X)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (X : 有界序) (x : X)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (X : BddOrd) (x : X) :
     (𝟙 X : X ⟶ X) x = x := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {X Y Z : 有界序} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**BddOrd.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：hom_comp {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom = g.hom.co
+mp f.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**BddOrd.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：comp_apply {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = 
+g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {X Y Z : 有界序} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {X Y Z : BddOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) :
     (f ≫ g) x = g (f x) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : BddOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {X Y : 有界序} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**BddOrd.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：hom_ext {X Y : BddOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BddOrd.Hom.ext`：∀ {X Y : BddOrd} {x y : X.Hom Y}, x.hom' = y.hom' → x = 
+y
 -/
 lemma hom_ext {X Y : BddOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  statement: {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  结论: {X Y : 类型u} [偏序 X] [有界序 X] [偏序 Y] [有界序 Y]
-  证明: rfl
-
-@[simp]
+/-
+**BddOrd.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：hom_ofHom {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y
+] [BoundedOrder Y] (f : BoundedOrderHom X Y) : (ofHom f).hom = f
+参数：f : BoundedOrderHom X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ofHom {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
     (f : BoundedOrderHom X Y) :
     (ofHom f).hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {X Y : BddOrd} (f : X ⟶ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {X Y : 有界序} (f : X ⟶ Y)
-  证明: rfl
-
-@[simp]
+/-
+**BddOrd.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：ofHom_hom {X Y : BddOrd} (f : X ⟶ Y) : ofHom f.hom = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {X Y : BddOrd} (f : X ⟶ Y) :
     ofHom f.hom = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {X : Type u} [PartialOrder X] [BoundedOrder X]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {X : 类型u} [偏序 X] [有界序 X]
-  证明: rfl
-
-@[simp]
+/-
+**BddOrd.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：ofHom_id {X : Type u} [PartialOrder X] [BoundedOrder X] : ofHom (BoundedOr
+derHom.id _) = 𝟙 (of X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {X : Type u} [PartialOrder X] [BoundedOrder X] :
     ofHom (BoundedOrderHom.id _) = 𝟙 (of X) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {X Y Z : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {X Y Z : 类型u} [偏序 X] [有界序 X] [偏序 Y]
-  证明: rfl
+/-
+**BddOrd.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：ofHom_comp {X Y Z : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrde
+r Y] [BoundedOrder Y] [PartialOrder Z] [BoundedOrder Z] (f : BoundedOrderHom X Y
+) (g : BoundedOrderHom Y Z) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : BoundedOrderHom X Y；g : BoundedOrderHom Y Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {X Y Z : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y]
     [BoundedOrder Y] [PartialOrder Z] [BoundedOrder Z]
     (f : BoundedOrderHom X Y) (g : BoundedOrderHom Y Z) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  statement: {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  结论: {X Y : 类型u} [偏序 X] [有界序 X] [偏序 Y] [有界序 Y]
-  证明: rfl
+/-
+**BddOrd.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：ofHom_apply {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder
+ Y] [BoundedOrder Y] (f : BoundedOrderHom X Y) (x : X) : ofHom f x = f x
+参数：f : BoundedOrderHom X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_apply {X Y : Type u} [PartialOrder X] [BoundedOrder X] [PartialOrder Y] [BoundedOrder Y]
     (f : BoundedOrderHom X Y) (x : X) :
     ofHom f x = f x := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {X Y : BddOrd} (e : X ≅ Y) (x : X)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {X Y : 有界序} (e : X ≅ Y) (x : X)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
+/-
+**BddOrd.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：inv_hom_apply {X Y : BddOrd} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x
+参数：e : X ≅ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {X Y : BddOrd} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {X Y : BddOrd} (e : X ≅ Y) (s : Y)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {X Y : 有界序} (e : X ≅ Y) (s : Y)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**BddOrd.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `BddOrd`。
+形式化陈述：hom_inv_apply {X Y : BddOrd} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s
+参数：e : X ≅ Y；s : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {X Y : BddOrd} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited BddOrd
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 有界序
-  定义体: ⟨of PUnit⟩
+/-
+**BddOrd.** 是 Mathlib 中的一个实例，位于命名空间 `BddOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited BddOrd :=
   ⟨of PUnit⟩
-
-/--
-Instance `hasForgetToPartOrd` / 实例 `hasForgetToPartOrd`
-
-English:
-instance hasForgetToPartOrd
-  signature: : HasForget₂ BddOrd PartOrd where
-  body: X.toPartOrd
-  forget₂.map f := PartOrd.ofHom f.hom.toOrderHom
-
-中文:
-实例 hasForgetToPartOrd
-  签名: : 有Forget₂ 有界序 偏序 where
-  定义体: X.toPartOrd
-  forget₂.map f := PartOrd.ofHom f.hom.toOrderHom
-
-Depends on / 依赖: X.toPartOrd, toPartOrd
+/-
+**BddOrd.hasForgetToPartOrd** 是 Mathlib 中的一个实例，位于命名空间 `BddOrd`。
+形式化陈述：hasForgetToPartOrd : HasForget₂ BddOrd PartOrd where forget₂.obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToPartOrd : HasForget₂ BddOrd PartOrd where
   forget₂.obj X := X.toPartOrd
   forget₂.map f := PartOrd.ofHom f.hom.toOrderHom
-
-/--
-Instance `hasForgetToBipointed` / 实例 `hasForgetToBipointed`
-
-English:
-instance hasForgetToBipointed
-  signature: : HasForget₂ BddOrd Bipointed where
-  body: { obj := fun X => ⟨X, ⊥, ⊤⟩
-      map := fun f => ⟨f, f.hom.map_bot', f.hom.map_top'⟩ }
-  forget_comp := rfl
-
-中文:
-实例 hasForgetToBipointed
-  签名: : 有Forget₂ 有界序 Bipointed where
-  定义体: { obj := fun X => ⟨X, ⊥, ⊤⟩
-      map := fun f => ⟨f, f.hom.map_bot', f.hom.map_top'⟩ }
-  forget_comp := rfl
-
-Depends on / 依赖: f.hom.map_bot, f.hom.map_top, forget_comp, map_bot, map_top
+/-
+**BddOrd.hasForgetToBipointed** 是 Mathlib 中的一个实例，位于命名空间 `BddOrd`。
+形式化陈述：hasForgetToBipointed : HasForget₂ BddOrd Bipointed where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToBipointed : HasForget₂ BddOrd Bipointed where
   forget₂ :=
@@ -631,20 +402,14 @@ instance hasForgetToBipointed : HasForget₂ BddOrd Bipointed where
 
 /-- `OrderDual` as a functor. -/
 @[simps map]
-/--
-Definition of `dual` / `dual` 的定义
+/-
+**BddOrd.dual** 是 Mathlib 中的一个定义，位于命名空间 `BddOrd`。
+形式化陈述：dual : BddOrd ⥤ BddOrd where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dual
-  signature: : BddOrd ⥤ BddOrd where
-  body: of Xᵒᵈ
-  map f := ofHom f.hom.dual
-
-中文:
-定义 dual
-  签名: : 有界序 ⥤ 有界序 where
-  定义体: of Xᵒᵈ
-  map f := ofHom f.hom.dual
+--- 原说明 ---
+`OrderDual` as a functor.
 -/
 def dual : BddOrd ⥤ BddOrd where
   obj X := of Xᵒᵈ
@@ -652,24 +417,15 @@ def dual : BddOrd ⥤ BddOrd where
 
 /-- Constructs an equivalence between bounded orders from an order isomorphism between them. -/
 @[simps]
-/--
-Definition of `Iso.mk` / `Iso.mk` 的定义
+/-
+**BddOrd.Iso.mk** 是 Mathlib 中的一个定义，位于命名空间 `BddOrd.Iso`。
+形式化陈述：{α β : BddOrd} → ↑α.toPartOrd ≃o ↑β.toPartOrd → (α ≅ β)
+参数：α ≅ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iso.mk
-  signature: {α β : BddOrd.{u}} (e : α ≃o β)
-  body: ofHom e
-  inv := ofHom e.symm
-  hom_inv_id := by ext; exact e.symm_apply_apply _
-  inv_hom_id := by ext; exact e.apply_symm_apply _
-
-中文:
-定义 同构.mk
-  签名: {α β : 有界序.{u}} (e : α ≃o β)
-  定义体: ofHom e
-  inv := ofHom e.symm
-  hom_inv_id := by ext; exact e.symm_apply_apply _
-  inv_hom_id := by ext; exact e.apply_symm_apply _
+--- 原说明 ---
+Constructs an equivalence between bounded orders from an order isomorphism betwe
+en them.
 -/
 def Iso.mk {α β : BddOrd.{u}} (e : α ≃o β) : α ≅ β where
   hom := ofHom e
@@ -679,59 +435,40 @@ def Iso.mk {α β : BddOrd.{u}} (e : α ≃o β) : α ≅ β where
 
 /-- The equivalence between `BddOrd` and itself induced by `OrderDual` both ways. -/
 @[simps functor inverse]
-/--
-Definition of `dualEquiv` / `dualEquiv` 的定义
+/-
+**BddOrd.dualEquiv** 是 Mathlib 中的一个定义，位于命名空间 `BddOrd`。
+形式化陈述：dualEquiv : BddOrd ≌ BddOrd where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualEquiv
-  signature: : BddOrd ≌ BddOrd where
-  body: dual
-  inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-
-中文:
-定义 dualEquiv
-  签名: : 有界序 ≌ 有界序 where
-  定义体: dual
-  inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
+--- 原说明 ---
+The equivalence between `BddOrd` and itself induced by `OrderDual` both ways.
 -/
 def dualEquiv : BddOrd ≌ BddOrd where
   functor := dual
   inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
+  unitIso := NatIso.ofComponents fun X => Iso.mk <| OrderIso.dualDual X
+  counitIso := NatIso.ofComponents fun X => Iso.mk <| OrderIso.dualDual X
 
 end BddOrd
 
-/--
-theorem `bddOrd_dual_comp_forget_to_partOrd` / 定理 `bddOrd_dual_comp_forget_to_partOrd`
-
-English:
-theorem bddOrd_dual_comp_forget_to_partOrd
-  proof: rfl
-
-中文:
-定理 bddOrd_dual_comp_forget_to_partOrd
-  证明: rfl
+/-
+**bddOrd_dual_comp_forget_to_partOrd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bddOrd_dual_comp_forget_to_partOrd : BddOrd.dual ⋙ forget₂ BddOrd PartOrd 
+= forget₂ BddOrd PartOrd ⋙ PartOrd.dual
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bddOrd_dual_comp_forget_to_partOrd :
     BddOrd.dual ⋙ forget₂ BddOrd PartOrd =
     forget₂ BddOrd PartOrd ⋙ PartOrd.dual :=
   rfl
-
-/--
-theorem `bddOrd_dual_comp_forget_to_bipointed` / 定理 `bddOrd_dual_comp_forget_to_bipointed`
-
-English:
-theorem bddOrd_dual_comp_forget_to_bipointed
-  proof: rfl
-
-中文:
-定理 bddOrd_dual_comp_forget_to_bipointed
-  证明: rfl
+/-
+**bddOrd_dual_comp_forget_to_bipointed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bddOrd_dual_comp_forget_to_bipointed : BddOrd.dual ⋙ forget₂ BddOrd Bipoin
+ted = forget₂ BddOrd Bipointed ⋙ Bipointed.swap
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bddOrd_dual_comp_forget_to_bipointed :
     BddOrd.dual ⋙ forget₂ BddOrd Bipointed =

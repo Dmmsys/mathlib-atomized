@@ -80,26 +80,11 @@ variable [One α] {f : Filter α} {s : Set α}
 /-- `1 : Filter α` is defined as the filter of sets containing `1 : α` in scope `Pointwise`. -/
 @[to_additive (attr := instance_reducible)
 /-- `0 : Filter α` is defined as the filter of sets containing `0 : α` in scope `Pointwise`. -/]
-/--
-Definition of `instOne` / `instOne` 的定义
-
-English:
-definition instOne
-  signature: : One (Filter α)
-  body: ⟨pure 1⟩
-
-scoped[Pointwise] attribute [instance] Filter.instOne Filter.instZero
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 instOne
-  签名: : 幺 (滤子 α)
-  定义体: ⟨pure 1⟩
-
-scoped[Pointwise] attribute [instance] Filter.instOne Filter.instZero
-
-@[to_additive (attr := simp)]
+/-
+**Filter.instOne** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [One α] → One (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def instOne : One (Filter α) :=
   ⟨pure 1⟩
@@ -107,166 +92,80 @@ protected def instOne : One (Filter α) :=
 scoped[Pointwise] attribute [instance] Filter.instOne Filter.instZero
 
 @[to_additive (attr := simp)]
-/--
-theorem `mem_one` / 定理 `mem_one`
-
-English:
-theorem mem_one
-  statement: s in (1 : Filter α) ↔ (1 : α) in s
-  proof: mem_pure
-
-@[to_additive]
-
-中文:
-定理 mem_one
-  结论: s in (1 : 滤子 α) ↔ (1 : α) in s
-  证明: mem_pure
-
-@[to_additive]
-
-Depends on / 依赖: mem_pure
+/-
+**Filter.mem_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_one : s in (1 : Filter α) ↔ (1 : α) in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mem_pure`：mem_pure {a : α} {s : Set α} : s in (pure a : Filter α)
+ ↔ a in s
 -/
-theorem mem_one : s in (1 : Filter α) ↔ (1 : α) in s :=
+theorem mem_one : s ∈ (1 : Filter α) ↔ (1 : α) ∈ s :=
   mem_pure
 
 @[to_additive]
-/--
-theorem `one_mem_one` / 定理 `one_mem_one`
-
-English:
-theorem one_mem_one
-  statement: (1 : Set α) in (1 : Filter α)
-  proof: mem_pure.2 Set.one_mem_one
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 one_mem_one
-  结论: (1 : 集合 α) in (1 : 滤子 α)
-  证明: mem_pure.2 Set.one_mem_one
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Set.one_mem_one, mem_pure, one_mem_one
+/-
+**Filter.one_mem_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：one_mem_one : (1 : Set α) in (1 : Filter α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_pure`：mem_pure {a : α} {s : Set α} : s in (pure a : Filter α)
+ ↔ a in s
+· 使用定理 `Set.one_mem_one`：one_mem_one : (1 : α) in (1 : Set α)
 -/
-theorem one_mem_one : (1 : Set α) in (1 : Filter α) :=
+theorem one_mem_one : (1 : Set α) ∈ (1 : Filter α) :=
   mem_pure.2 Set.one_mem_one
 
 @[to_additive (attr := simp)]
-/--
-theorem `pure_one` / 定理 `pure_one`
-
-English:
-theorem pure_one
-  statement: pure 1 = (1 : Filter α)
-  proof: rfl
-
-@[to_additive (attr := simp) zero_prod]
-
-中文:
-定理 pure_one
-  结论: pure 1 = (1 : 滤子 α)
-  证明: rfl
-
-@[to_additive (attr := simp) zero_prod]
+/-
+**Filter.pure_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_one : pure 1 = (1 : Filter α)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pure_one : pure 1 = (1 : Filter α) :=
   rfl
 
 @[to_additive (attr := simp) zero_prod]
-/--
-theorem `one_prod` / 定理 `one_prod`
-
-English:
-theorem one_prod
-  given: {l : Filter β}
-  statement: (1 : Filter α) ×ˢ l = map (1, ·) l
-  proof: pure_prod
-
-@[to_additive (attr := simp) prod_zero]
-
-中文:
-定理 one_prod
-  条件: {l : 滤子 β}
-  结论: (1 : 滤子 α) ×ˢ l = map (1, ·) l
-  证明: pure_prod
-
-@[to_additive (attr := simp) prod_zero]
-
-Depends on / 依赖: pure_prod
+/-
+**Filter.one_prod** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：one_prod {l : Filter β} : (1 : Filter α) ×ˢ l = map (1, ·) l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.pure_prod`：pure_prod {a : α} {f : Filter β} : pure a ×ˢ f = map (
+Prod.mk a) f
 -/
 theorem one_prod {l : Filter β} : (1 : Filter α) ×ˢ l = map (1, ·) l := pure_prod
 
 @[to_additive (attr := simp) prod_zero]
-/--
-theorem `prod_one` / 定理 `prod_one`
-
-English:
-theorem prod_one
-  given: {l : Filter β}
-  statement: l ×ˢ (1 : Filter α) = map (·, 1) l
-  proof: prod_pure
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 prod_one
-  条件: {l : 滤子 β}
-  结论: l ×ˢ (1 : 滤子 α) = map (·, 1) l
-  证明: prod_pure
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: prod_pure
+/-
+**Filter.prod_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：prod_one {l : Filter β} : l ×ˢ (1 : Filter α) = map (·, 1) l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.prod_pure`：prod_pure {b : β} : f ×ˢ pure b = map (fun a => (a, b)
+) f
 -/
 theorem prod_one {l : Filter β} : l ×ˢ (1 : Filter α) = map (·, 1) l := prod_pure
 
 @[to_additive (attr := simp)]
-/--
-theorem `principal_one` / 定理 `principal_one`
-
-English:
-theorem principal_one
-  statement: 𝓟 1 = (1 : Filter α)
-  proof: principal_singleton _
-
-@[to_additive]
-
-中文:
-定理 principal_one
-  结论: 𝓟 1 = (1 : 滤子 α)
-  证明: principal_singleton _
-
-@[to_additive]
-
-Depends on / 依赖: principal_singleton
+/-
+**Filter.principal_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：principal_one : 𝓟 1 = (1 : Filter α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.principal_singleton`：principal_singleton (a : α) : 𝓟 {a} = pure a
 -/
 theorem principal_one : 𝓟 1 = (1 : Filter α) :=
   principal_singleton _
 
 @[to_additive]
-/--
-theorem `one_neBot` / 定理 `one_neBot`
-
-English:
-theorem one_neBot
-  statement: (1 : Filter α).NeBot
-  proof: Filter.pure_neBot
-
-scoped[Pointwise] attribute [instance] one_neBot zero_neBot
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 one_neBot
-  结论: (1 : 滤子 α).NeBot
-  证明: Filter.pure_neBot
-
-scoped[Pointwise] attribute [instance] one_neBot zero_neBot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Filter, Filter.pure_neBot, pure_neBot
+/-
+**Filter.one_neBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：one_neBot : (1 : Filter α).NeBot
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_neBot : (1 : Filter α).NeBot :=
   Filter.pure_neBot
@@ -274,230 +173,121 @@ theorem one_neBot : (1 : Filter α).NeBot :=
 scoped[Pointwise] attribute [instance] one_neBot zero_neBot
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_one'` / 定理 `map_one'`
-
-English:
-theorem map_one'
-  given: (f : α -> β)
-  statement: (1 : Filter α).map f = pure (f 1)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_one'
-  条件: (f : α -> β)
-  结论: (1 : 滤子 α).map f = pure (f 1)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Filter.map_one'** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : One α] (f : α → β), Filter.map f 1
+ = pure (f 1)
+参数：f : α → β；f 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem map_one' (f : α -> β) : (1 : Filter α).map f = pure (f 1) :=
+protected theorem map_one' (f : α → β) : (1 : Filter α).map f = pure (f 1) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `le_one_iff` / 定理 `le_one_iff`
-
-English:
-theorem le_one_iff
-  statement: f <= 1 ↔ (1 : Set α) in f
-  proof: le_pure_iff
-
-@[to_additive]
-
-中文:
-定理 le_one_iff
-  结论: f <= 1 ↔ (1 : 集合 α) in f
-  证明: le_pure_iff
-
-@[to_additive]
-
-Depends on / 依赖: le_pure_iff
+/-
+**Filter.le_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：le_one_iff : f <= 1 ↔ (1 : Set α) in f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.le_pure_iff`：le_pure_iff {f : Filter α} {a : α} : f <= pure a ↔ {
+a} in f
 -/
-theorem le_one_iff : f <= 1 ↔ (1 : Set α) in f :=
+theorem le_one_iff : f ≤ 1 ↔ (1 : Set α) ∈ f :=
   le_pure_iff
 
 @[to_additive]
-/--
-theorem `NeBot.le_one_iff` / 定理 `NeBot.le_one_iff`
-
-English:
-theorem NeBot.le_one_iff
-  given: (h : f.NeBot)
-  statement: f <= 1 ↔ f = 1
-  proof: h.le_pure_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 NeBot.le_one_iff
-  条件: (h : f.NeBot)
-  结论: f <= 1 ↔ f = 1
-  证明: h.le_pure_iff
-
-@[to_additive (attr := simp)]
+/-
+**Filter.NeBot.le_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : One α] {f : Filter α}, f.NeBot → (f ≤ 1 ↔ f = 1)
+参数：f ≤ 1 ↔ f = 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.le_pure_iff`：∀ {α : Type u} {f : Filter α} {a : α}, f.NeBot
+ → (f ≤ pure a ↔ f = pure a)
 -/
-protected theorem NeBot.le_one_iff (h : f.NeBot) : f <= 1 ↔ f = 1 :=
+protected theorem NeBot.le_one_iff (h : f.NeBot) : f ≤ 1 ↔ f = 1 :=
   h.le_pure_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `eventually_one` / 定理 `eventually_one`
-
-English:
-theorem eventually_one
-  given: {p : α -> Prop}
-  statement: (forallᶠ x in 1, p x) ↔ p 1
-  proof: eventually_pure
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 eventually_one
-  条件: {p : α -> 命题}
-  结论: (对任意ᶠ x in 1, p x) ↔ p 1
-  证明: eventually_pure
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eventually_pure
+/-
+**Filter.eventually_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：eventually_one {p : α -> Prop} : (forallᶠ x in 1, p x) ↔ p 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_pure`：eventually_pure {a : α} {p : α -> Prop} : (foral
+lᶠ x in pure a, p x) ↔ p a
 -/
-theorem eventually_one {p : α -> Prop} : (forallᶠ x in 1, p x) ↔ p 1 :=
+theorem eventually_one {p : α → Prop} : (∀ᶠ x in 1, p x) ↔ p 1 :=
   eventually_pure
 
 @[to_additive (attr := simp)]
-/--
-theorem `frequently_one` / 定理 `frequently_one`
-
-English:
-theorem frequently_one
-  given: {p : α -> Prop}
-  statement: (existsᶠ x in 1, p x) ↔ p 1
-  proof: frequently_pure
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 frequently_one
-  条件: {p : α -> 命题}
-  结论: (存在ᶠ x in 1, p x) ↔ p 1
-  证明: frequently_pure
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: frequently_pure
+/-
+**Filter.frequently_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：frequently_one {p : α -> Prop} : (existsᶠ x in 1, p x) ↔ p 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.frequently_pure`：frequently_pure {a : α} {p : α -> Prop} : (exist
+sᶠ x in pure a, p x) ↔ p a
 -/
-theorem frequently_one {p : α -> Prop} : (existsᶠ x in 1, p x) ↔ p 1 :=
+theorem frequently_one {p : α → Prop} : (∃ᶠ x in 1, p x) ↔ p 1 :=
   frequently_pure
 
 @[to_additive (attr := simp)]
-/--
-theorem `tendsto_one` / 定理 `tendsto_one`
-
-English:
-theorem tendsto_one
-  given: {a : Filter β} {f : β -> α}
-  statement: Tendsto f a 1 ↔ forallᶠ x in a, f x = 1
-  proof: tendsto_pure
-
-@[to_additive zero_prod_zero]
-
-中文:
-定理 tendsto_one
-  条件: {a : 滤子 β} {f : β -> α}
-  结论: 收敛 f a 1 ↔ 对任意ᶠ x in a, f x = 1
-  证明: tendsto_pure
-
-@[to_additive zero_prod_zero]
-
-Depends on / 依赖: tendsto_pure
+/-
+**Filter.tendsto_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：tendsto_one {a : Filter β} {f : β -> α} : Tendsto f a 1 ↔ forallᶠ x in a, 
+f x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.tendsto_pure`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {a : Fi
+lter α} {b : β},   Filter.Tendsto f a (pure b) ↔ ∀ᶠ (x : α) in a, f x = b
 -/
-theorem tendsto_one {a : Filter β} {f : β -> α} : Tendsto f a 1 ↔ forallᶠ x in a, f x = 1 :=
+theorem tendsto_one {a : Filter β} {f : β → α} : Tendsto f a 1 ↔ ∀ᶠ x in a, f x = 1 :=
   tendsto_pure
 
 @[to_additive zero_prod_zero]
-/--
-theorem `one_prod_one` / 定理 `one_prod_one`
-
-English:
-theorem one_prod_one
-  given: [One β]
-  statement: (1 : Filter α) ×ˢ (1 : Filter β) = 1
-  proof: prod_pure_pure
-
-中文:
-定理 one_prod_one
-  条件: [幺 β]
-  结论: (1 : 滤子 α) ×ˢ (1 : 滤子 β) = 1
-  证明: prod_pure_pure
-
-Depends on / 依赖: prod_pure_pure
+/-
+**Filter.one_prod_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：one_prod_one [One β] : (1 : Filter α) ×ˢ (1 : Filter β) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.prod_pure_pure`：prod_pure_pure {a : α} {b : β} : (pure a : Filter
+ α) ×ˢ (pure b : Filter β) = pure (a, b)
 -/
 theorem one_prod_one [One β] : (1 : Filter α) ×ˢ (1 : Filter β) = 1 :=
   prod_pure_pure
 
 /-- `pure` as a `OneHom`. -/
 @[to_additive /-- `pure` as a `ZeroHom`. -/]
-/--
-Definition of `pureOneHom` / `pureOneHom` 的定义
+/-
+**Filter.pureOneHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：pureOneHom : OneHom α (Filter α) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.pure_one`：pure_one : pure 1 = (1 : Filter α)
 
-English:
-definition pureOneHom
-  signature: : OneHom α (Filter α) where
-  body: pure; map_one' := pure_one
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 pureOneHom
-  签名: : 幺态射 α (滤子 α) where
-  定义体: pure; map_one' := pure_one
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_one, pure_one
+--- 原说明 ---
+`pure` as a `OneHom`.
 -/
 def pureOneHom : OneHom α (Filter α) where
   toFun := pure; map_one' := pure_one
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_pureOneHom` / 定理 `coe_pureOneHom`
-
-English:
-theorem coe_pureOneHom
-  statement: (pureOneHom : α -> Filter α) = pure
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_pureOneHom
-  结论: (pureOneHom : α -> 滤子 α) = pure
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Filter.coe_pureOneHom** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：coe_pureOneHom : (pureOneHom : α -> Filter α) = pure
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pureOneHom : (pureOneHom : α -> Filter α) = pure :=
+theorem coe_pureOneHom : (pureOneHom : α → Filter α) = pure :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `pureOneHom_apply` / 定理 `pureOneHom_apply`
-
-English:
-theorem pureOneHom_apply
-  given: (a : α)
-  statement: pureOneHom a = pure a
-  proof: rfl
-
-中文:
-定理 pureOneHom_apply
-  条件: (a : α)
-  结论: pureOneHom a = pure a
-  证明: rfl
+/-
+**Filter.pureOneHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pureOneHom_apply (a : α) : pureOneHom a = pure a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pureOneHom_apply (a : α) : pureOneHom a = pure a :=
   rfl
@@ -505,22 +295,21 @@ theorem pureOneHom_apply (a : α) : pureOneHom a = pure a :=
 variable [One β]
 
 @[to_additive]
-/--
-theorem `map_one` / 定理 `map_one`
-
-English:
-theorem map_one
-  given: [FunLike F α β] [OneHomClass F α β] (φ : F)
-  statement: map φ 1 = 1
-  proof: by
-  simp
-
-中文:
-定理 map_one
-  条件: [函数状 F α β] [幺态射类 F α β] (φ : F)
-  结论: map φ 1 = 1
-  证明: by
-  simp
+/-
+**Filter.map_one** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : One α] [inst_1 : On
+e β] [inst_2 : FunLike F α β]   [OneHomClass F α β] (φ : F), Filter.map (⇑φ) 1 =
+ 1
+参数：φ : F；⇑φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem map_one [FunLike F α β] [OneHomClass F α β] (φ : F) : map φ 1 = 1 := by
   simp
@@ -537,28 +326,11 @@ variable [Inv α] {f g : Filter α} {s : Set α} {a : α}
 /-- The inverse of a filter is the pointwise preimage under `⁻¹` of its sets. -/
 @[to_additive (attr := instance_reducible)
   /-- The negation of a filter is the pointwise preimage under `-` of its sets. -/]
-/--
-Definition of `instInv` / `instInv` 的定义
-
-English:
-definition instInv
-  signature: : Inv (Filter α)
-  body: ⟨map Inv.inv⟩
-
-scoped[Pointwise] attribute [instance] instInv instNeg
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 instInv
-  签名: : 取逆 (滤子 α)
-  定义体: ⟨map Inv.inv⟩
-
-scoped[Pointwise] attribute [instance] instInv instNeg
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Inv.inv
+/-
+**Filter.instInv** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：instInv : Inv (Filter α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def instInv : Inv (Filter α) :=
   ⟨map Inv.inv⟩
@@ -566,231 +338,114 @@ def instInv : Inv (Filter α) :=
 scoped[Pointwise] attribute [instance] instInv instNeg
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_inv` / 定理 `map_inv`
-
-English:
-theorem map_inv
-  statement: f.map Inv.inv = f⁻¹
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 map_inv
-  结论: f.map 取逆.inv = f⁻¹
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.map_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Inv α] {f : Filter α}, Filter.map Inv.inv f = f⁻¹
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem map_inv : f.map Inv.inv = f⁻¹ :=
   rfl
 
 @[to_additive]
-/--
-theorem `mem_inv` / 定理 `mem_inv`
-
-English:
-theorem mem_inv
-  statement: s in f⁻¹ ↔ Inv.inv ⁻¹' s in f
-  proof: Iff.rfl
-
-@[to_additive (attr := gcongr)]
-
-中文:
-定理 mem_inv
-  结论: s in f⁻¹ ↔ 取逆.inv ⁻¹' s in f
-  证明: Iff.rfl
-
-@[to_additive (attr := gcongr)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_inv : s in f⁻¹ ↔ Inv.inv ⁻¹' s in f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inv : s in f⁻¹ ↔ Inv.inv ⁻¹' s in f :=
+theorem mem_inv : s ∈ f⁻¹ ↔ Inv.inv ⁻¹' s ∈ f :=
   Iff.rfl
 
 @[to_additive (attr := gcongr)]
-/--
-theorem `inv_le_inv` / 定理 `inv_le_inv`
-
-English:
-theorem inv_le_inv
-  given: (hf : f <= g)
-  statement: f⁻¹ <= g⁻¹
-  proof: map_mono hf
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 inv_le_inv
-  条件: (hf : f <= g)
-  结论: f⁻¹ <= g⁻¹
-  证明: map_mono hf
-
-@[to_additive (attr := simp)]
+/-
+**Filter.inv_le_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Inv α] {f g : Filter α}, f ≤ g → f⁻¹ ≤ g⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_mono`：map_mono : Monotone (map m)
 -/
-protected theorem inv_le_inv (hf : f <= g) : f⁻¹ <= g⁻¹ :=
+protected theorem inv_le_inv (hf : f ≤ g) : f⁻¹ ≤ g⁻¹ :=
   map_mono hf
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_pure` / 定理 `inv_pure`
-
-English:
-theorem inv_pure
-  statement: (pure a : Filter α)⁻¹ = pure a⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 inv_pure
-  结论: (pure a : 滤子 α)⁻¹ = pure a⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Filter.inv_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：inv_pure : (pure a : Filter α)⁻¹ = pure a⁻¹
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_pure : (pure a : Filter α)⁻¹ = pure a⁻¹ :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_eq_bot_iff` / 定理 `inv_eq_bot_iff`
-
-English:
-theorem inv_eq_bot_iff
-  statement: f⁻¹ = ⊥ ↔ f = ⊥
-  proof: map_eq_bot_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 inv_eq_bot_iff
-  结论: f⁻¹ = ⊥ ↔ f = ⊥
-  证明: map_eq_bot_iff
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_eq_bot_iff
+/-
+**Filter.inv_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：inv_eq_bot_iff : f⁻¹ = ⊥ ↔ f = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_eq_bot_iff`：map_eq_bot_iff : map m f = ⊥ ↔ f = ⊥
 -/
 theorem inv_eq_bot_iff : f⁻¹ = ⊥ ↔ f = ⊥ :=
   map_eq_bot_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `neBot_inv_iff` / 定理 `neBot_inv_iff`
-
-English:
-theorem neBot_inv_iff
-  statement: f⁻¹.NeBot ↔ NeBot f
-  proof: map_neBot_iff _
-
-@[to_additive]
-
-中文:
-定理 neBot_inv_iff
-  结论: f⁻¹.NeBot ↔ NeBot f
-  证明: map_neBot_iff _
-
-@[to_additive]
-
-Depends on / 依赖: map_neBot_iff
+/-
+**Filter.neBot_inv_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：neBot_inv_iff : f⁻¹.NeBot ↔ NeBot f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_neBot_iff`：map_neBot_iff (f : α -> β) {F : Filter α} : NeBot 
+(map f F) ↔ NeBot F
 -/
 theorem neBot_inv_iff : f⁻¹.NeBot ↔ NeBot f :=
   map_neBot_iff _
 
 @[to_additive]
-/--
-theorem `NeBot.inv` / 定理 `NeBot.inv`
-
-English:
-theorem NeBot.inv
-  statement: f.NeBot -> f⁻¹.NeBot
-  proof: fun h => h.map _
-
-@[to_additive neg.instNeBot]
-
-中文:
-定理 NeBot.inv
-  结论: f.NeBot -> f⁻¹.NeBot
-  证明: fun h => h.map _
-
-@[to_additive neg.instNeBot]
+/-
+**Filter.NeBot.inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Inv α] {f : Filter α}, f.NeBot → f⁻¹.NeBot
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.map`：∀ {α : Type u_1} {β : Type u_2} {f : Filter α}, f.NeBo
+t → ∀ (m : α → β), (Filter.map m f).NeBot
 -/
-protected theorem NeBot.inv : f.NeBot -> f⁻¹.NeBot := fun h => h.map _
+protected theorem NeBot.inv : f.NeBot → f⁻¹.NeBot := fun h => h.map _
 
 @[to_additive neg.instNeBot]
-/--
-lemma `inv.instNeBot` / 引理 `inv.instNeBot`
-
-English:
-lemma inv.instNeBot
-  given: [NeBot f]
-  statement: NeBot f⁻¹
-  proof: .inv ‹_›
-
-scoped[Pointwise] attribute [instance] inv.instNeBot neg.instNeBot
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 inv.instNeBot
-  条件: [NeBot f]
-  结论: NeBot f⁻¹
-  证明: .inv ‹_›
-
-scoped[Pointwise] attribute [instance] inv.instNeBot neg.instNeBot
-
-@[to_additive (attr := simp)]
+/-
+**Filter.inv.instNeBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.inv`。
+形式化陈述：∀ {α : Type u_2} [inst : Inv α] {f : Filter α} [f.NeBot], f⁻¹.NeBot
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.inv`：∀ {α : Type u_2} [inst : Inv α] {f : Filter α}, f.NeBo
+t → f⁻¹.NeBot
 -/
 lemma inv.instNeBot [NeBot f] : NeBot f⁻¹ := .inv ‹_›
 
 scoped[Pointwise] attribute [instance] inv.instNeBot neg.instNeBot
 
 @[to_additive (attr := simp)]
-/--
-lemma `eventually_inv` / 引理 `eventually_inv`
-
-English:
-lemma eventually_inv
-  given: {p : α -> Prop}
-  statement: (forallᶠ x in f⁻¹, p x) ↔ (forallᶠ x in f, p x⁻¹)
-  proof: eventually_map
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 eventually_inv
-  条件: {p : α -> 命题}
-  结论: (对任意ᶠ x in f⁻¹, p x) ↔ (对任意ᶠ x in f, p x⁻¹)
-  证明: eventually_map
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eventually_map
+/-
+**Filter.eventually_inv** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：eventually_inv {p : α -> Prop} : (forallᶠ x in f⁻¹, p x) ↔ (forallᶠ x in f
+, p x⁻¹)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
 -/
-lemma eventually_inv {p : α -> Prop} : (forallᶠ x in f⁻¹, p x) ↔ (forallᶠ x in f, p x⁻¹) :=
+lemma eventually_inv {p : α → Prop} : (∀ᶠ x in f⁻¹, p x) ↔ (∀ᶠ x in f, p x⁻¹) :=
   eventually_map
 
 @[to_additive (attr := simp)]
-/--
-lemma `frequently_inv` / 引理 `frequently_inv`
-
-English:
-lemma frequently_inv
-  given: {p : α -> Prop}
-  statement: (existsᶠ x in f⁻¹, p x) ↔ (existsᶠ x in f, p x⁻¹)
-  proof: frequently_map
-
-中文:
-引理 frequently_inv
-  条件: {p : α -> 命题}
-  结论: (存在ᶠ x in f⁻¹, p x) ↔ (存在ᶠ x in f, p x⁻¹)
-  证明: frequently_map
-
-Depends on / 依赖: frequently_map
+/-
+**Filter.frequently_inv** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：frequently_inv {p : α -> Prop} : (existsᶠ x in f⁻¹, p x) ↔ (existsᶠ x in f
+, p x⁻¹)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.frequently_map`：frequently_map {P : β -> Prop} : (existsᶠ b in ma
+p m f, P b) ↔ existsᶠ a in f, P (m a)
 -/
-lemma frequently_inv {p : α -> Prop} : (existsᶠ x in f⁻¹, p x) ↔ (existsᶠ x in f, p x⁻¹) :=
+lemma frequently_inv {p : α → Prop} : (∃ᶠ x in f⁻¹, p x) ↔ (∃ᶠ x in f, p x⁻¹) :=
   frequently_map
 
 end Inv
@@ -800,181 +455,127 @@ section InvolutiveInv
 variable [InvolutiveInv α] {f g : Filter α} {s : Set α}
 
 @[to_additive (attr := simp)]
-/--
-lemma `comap_inv` / 引理 `comap_inv`
-
-English:
-lemma comap_inv
-  statement: comap Inv.inv f = f⁻¹
-  proof: .symm map_eq_comap_of_inverse (inv_comp_inv _) (inv_comp_inv _)
-
-@[to_additive]
-
-中文:
-引理 comap_inv
-  结论: comap 取逆.inv f = f⁻¹
-  证明: .symm map_eq_comap_of_inverse (inv_comp_inv _) (inv_comp_inv _)
-
-@[to_additive]
+/-
+**Filter.comap_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : InvolutiveInv α] {f : Filter α}, Filter.comap Inv
+.inv f = f⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.map_eq_comap_of_inverse`：map_eq_comap_of_inverse {f : Filter α} {
+m : α -> β} {n : β -> α} (h₁ : m ∘ n = id) (h₂ : n ∘ m = id) : map m f = comap n
+ f
+· 使用定理 `inv_comp_inv`：inv_comp_inv : Inv.inv ∘ Inv.inv = @id G
 -/
 protected lemma comap_inv : comap Inv.inv f = f⁻¹ :=
-.symm map_eq_comap_of_inverse (inv_comp_inv _) (inv_comp_inv _)
+  .symm <| map_eq_comap_of_inverse (inv_comp_inv _) (inv_comp_inv _)
 
 @[to_additive]
-/--
-theorem `inv_mem_inv` / 定理 `inv_mem_inv`
-
-English:
-theorem inv_mem_inv
-  given: (hs : s in f)
-  statement: s⁻¹ in f⁻¹
-  proof: by rwa [mem_inv, inv_preimage, inv_inv]
-
-@[to_additive]
-
-中文:
-定理 inv_mem_inv
-  条件: (hs : s in f)
-  结论: s⁻¹ in f⁻¹
-  证明: by rwa [mem_inv, inv_preimage, inv_inv]
-
-@[to_additive]
-
-Depends on / 依赖: inv_inv, inv_preimage, mem_inv
+/-
+**Filter.inv_mem_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：inv_mem_inv (hs : s in f) : s⁻¹ in f⁻¹
+参数：hs : s in f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_inv`：mem_inv : s in f⁻¹ ↔ Inv.inv ⁻¹' s in f
+· 使用定理 `Set.inv_preimage`：inv_preimage : Inv.inv ⁻¹' s = s⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
-theorem inv_mem_inv (hs : s in f) : s⁻¹ in f⁻¹ := by rwa [mem_inv, inv_preimage, inv_inv]
+theorem inv_mem_inv (hs : s ∈ f) : s⁻¹ ∈ f⁻¹ := by rwa [mem_inv, inv_preimage, inv_inv]
 
 @[to_additive]
-/--
-theorem `HasBasis.inv` / 定理 `HasBasis.inv`
-
-English:
-theorem HasBasis.inv
-  statement: {ι : Sort*} {p : ι -> Prop} {s : ι -> Set α}
-  proof: by
-  simpa using h.map Inv.inv
-
-中文:
-定理 有基.inv
-  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 α}
-  证明: by
-  simpa using h.map Inv.inv
+/-
+**Filter.HasBasis.inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasBasis`。
+形式化陈述：∀ {α : Type u_2} [inst : InvolutiveInv α] {f : Filter α} {ι : Sort u_7} {p
+ : ι → Prop} {s : ι → Set α},   f.HasBasis p s → f⁻¹.HasBasis p fun i => (s i)⁻¹
+参数：s i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.image_inv_eq_inv`：image_inv_eq_inv : (·⁻¹) '' s = s⁻¹
+· 使用定理 `Filter.HasBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α} (f : α → β),   l.HasBasis p s → (Filte
+r.map f l…
 -/
-protected theorem HasBasis.inv {ι : Sort*} {p : ι -> Prop} {s : ι -> Set α}
-    (h : f.HasBasis p s) : f⁻¹.HasBasis p fun i => (s i)⁻¹ := by
+protected theorem HasBasis.inv {ι : Sort*} {p : ι → Prop} {s : ι → Set α}
+    (h : f.HasBasis p s) : f⁻¹.HasBasis p fun i ↦ (s i)⁻¹ := by
   simpa using h.map Inv.inv
 
 /-- Inversion is involutive on `Filter α` if it is on `α`. -/
 @[to_additive (attr := instance_reducible)
   /-- Negation is involutive on `Filter α` if it is on `α`. -/]
-/--
-Definition of `instInvolutiveInv` / `instInvolutiveInv` 的定义
-
-English:
-definition instInvolutiveInv
-  signature: : InvolutiveInv (Filter α)
-  body: { Filter.instInv with
-inv_inv := fun f => map_map.trans by rw [inv_involutive.comp_self, map_id] }
-
-scoped[Pointwise] attribute [instance] Filter.instInvolutiveInv Filter.instInvolutiveNeg
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 instInvolutiveInv
-  签名: : InvolutiveInv (滤子 α)
-  定义体: { Filter.instInv with
-inv_inv := fun f => map_map.trans by rw [inv_involutive.comp_self, map_id] }
-
-scoped[Pointwise] attribute [instance] Filter.instInvolutiveInv Filter.instInvolutiveNeg
-
-@[to_additive (attr := simp)]
+/-
+**Filter.instInvolutiveInv** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [InvolutiveInv α] → InvolutiveInv (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def instInvolutiveInv : InvolutiveInv (Filter α) :=
   { Filter.instInv with
-inv_inv := fun f => map_map.trans by rw [inv_involutive.comp_self, map_id] }
+    inv_inv := fun f => map_map.trans <| by rw [inv_involutive.comp_self, map_id] }
 
 scoped[Pointwise] attribute [instance] Filter.instInvolutiveInv Filter.instInvolutiveNeg
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_le_inv_iff` / 定理 `inv_le_inv_iff`
-
-English:
-theorem inv_le_inv_iff
-  statement: f⁻¹ <= g⁻¹ ↔ f <= g
-  proof: ⟨fun h => inv_inv f ▸ inv_inv g ▸ Filter.inv_le_inv h, Filter.inv_le_inv⟩
-
-@[to_additive]
-
-中文:
-定理 inv_le_inv_iff
-  结论: f⁻¹ <= g⁻¹ ↔ f <= g
-  证明: ⟨fun h => inv_inv f ▸ inv_inv g ▸ Filter.inv_le_inv h, Filter.inv_le_inv⟩
-
-@[to_additive]
+/-
+**Filter.inv_le_inv_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : InvolutiveInv α] {f g : Filter α}, f⁻¹ ≤ g⁻¹ ↔ f 
+≤ g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.inv_le_inv`：∀ {α : Type u_2} [inst : Inv α] {f g : Filter α}, f ≤
+ g → f⁻¹ ≤ g⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
-protected theorem inv_le_inv_iff : f⁻¹ <= g⁻¹ ↔ f <= g :=
+protected theorem inv_le_inv_iff : f⁻¹ ≤ g⁻¹ ↔ f ≤ g :=
   ⟨fun h => inv_inv f ▸ inv_inv g ▸ Filter.inv_le_inv h, Filter.inv_le_inv⟩
 
 @[to_additive]
-/--
-theorem `inv_le_iff_le_inv` / 定理 `inv_le_iff_le_inv`
-
-English:
-theorem inv_le_iff_le_inv
-  statement: f⁻¹ <= g ↔ f <= g⁻¹
-  proof: by rw [← Filter.inv_le_inv_iff, inv_inv]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 inv_le_iff_le_inv
-  结论: f⁻¹ <= g ↔ f <= g⁻¹
-  证明: by rw [← Filter.inv_le_inv_iff, inv_inv]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Filter, Filter.inv_le_inv_iff, inv_inv, inv_le_inv_iff
+/-
+**Filter.inv_le_iff_le_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：inv_le_iff_le_inv : f⁻¹ <= g ↔ f <= g⁻¹
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.inv_le_inv_iff`：∀ {α : Type u_2} [inst : InvolutiveInv α] {f g : 
+Filter α}, f⁻¹ ≤ g⁻¹ ↔ f ≤ g
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem inv_le_iff_le_inv : f⁻¹ <= g ↔ f <= g⁻¹ := by rw [← Filter.inv_le_inv_iff, inv_inv]
+theorem inv_le_iff_le_inv : f⁻¹ ≤ g ↔ f ≤ g⁻¹ := by rw [← Filter.inv_le_inv_iff, inv_inv]
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_le_self` / 定理 `inv_le_self`
-
-English:
-theorem inv_le_self
-  statement: f⁻¹ <= f ↔ f⁻¹ = f
-  proof: ⟨fun h => h.antisymm inv_le_iff_le_inv.1 h, Eq.le⟩
-
-中文:
-定理 inv_le_self
-  结论: f⁻¹ <= f ↔ f⁻¹ = f
-  证明: ⟨fun h => h.antisymm inv_le_iff_le_inv.1 h, Eq.le⟩
-
-Depends on / 依赖: Eq.le, antisymm, h.antisymm, inv_le_iff_le_inv
+/-
+**Filter.inv_le_self** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：inv_le_self : f⁻¹ <= f ↔ f⁻¹ = f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.inv_le_iff_le_inv`：inv_le_iff_le_inv : f⁻¹ <= g ↔ f <= g⁻¹
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-theorem inv_le_self : f⁻¹ <= f ↔ f⁻¹ = f :=
-⟨fun h => h.antisymm inv_le_iff_le_inv.1 h, Eq.le⟩
+theorem inv_le_self : f⁻¹ ≤ f ↔ f⁻¹ = f :=
+  ⟨fun h => h.antisymm <| inv_le_iff_le_inv.1 h, Eq.le⟩
 
 end InvolutiveInv
 
 @[to_additive (attr := simp)]
-/--
-lemma `inv_atTop` / 引理 `inv_atTop`
-
-English:
-lemma inv_atTop
-  given: {G : Type*} [CommGroup G] [Preorder G] [IsOrderedMonoid G]
-  proof: (OrderIso.inv G).map_atTop
-
-中文:
-引理 inv_atTop
-  条件: {G : 类型} [交换群 G] [预序 G] [是Ordered幺半群 G]
-  证明: (OrderIso.inv G).map_atTop
-
-Depends on / 依赖: OrderIso, OrderIso.inv, map_atTop
+/-
+**Filter.inv_atTop** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：inv_atTop {G : Type*} [CommGroup G] [Preorder G] [IsOrderedMonoid G] : (at
+Top : Filter G)⁻¹ = atBot
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_atTop`：map_atTop (e : α ≃o β) : map (e : α -> β) atTop = at
+Top
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
 lemma inv_atTop {G : Type*} [CommGroup G] [Preorder G] [IsOrderedMonoid G] :
     (atTop : Filter G)⁻¹ = atBot :=
@@ -989,510 +590,303 @@ variable [Mul α] [Mul β] {f f₁ f₂ g g₁ g₂ h : Filter α} {s t : Set α
 /-- The filter `f * g` is generated by `{s * t | s ∈ f, t ∈ g}` in scope `Pointwise`. -/
 @[to_additive (attr := instance_reducible)
 /-- The filter `f + g` is generated by `{s + t | s ∈ f, t ∈ g}` in scope `Pointwise`. -/]
-/--
-Definition of `instMul` / `instMul` 的定义
-
-English:
-definition instMul
-  signature: : Mul (Filter α)
-  body: ⟨/- This is defeq to `map₂ (· * ·) f g`, but the hypothesis unfolds to `t₁ * t₂ ⊆ s` rather
-  than all the way to `Set.image2 (· * ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· * ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instMul Filter.instAdd
-
-@[to_additive]
-
-中文:
-定义 instMul
-  签名: : 乘法 (滤子 α)
-  定义体: ⟨/- This is defeq to `map₂ (· * ·) f g`, but the hypothesis unfolds to `t₁ * t₂ ⊆ s` rather
-  than all the way to `Set.image2 (· * ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· * ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instMul Filter.instAdd
-
-@[to_additive]
+/-
+**Filter.instMul** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [Mul α] → Mul (Filter α)
+参数：Filter α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_sets`：∀ {α : Type u_1} (self : Filter α), Set.univ ∈ self.se
+ts
+· 使用定理 `Filter.sets_of_superset`：∀ {α : Type u_1} (self : Filter α) {x y : Set α
+}, x ∈ self.sets → x ⊆ y → y ∈ self.sets
+· 使用定理 `Filter.inter_sets`：∀ {α : Type u_1} (self : Filter α) {x y : Set α}, x ∈
+ self.sets → y ∈ self.sets → x ∩ y ∈ self.sets
 -/
 protected def instMul : Mul (Filter α) :=
   ⟨/- This is defeq to `map₂ (· * ·) f g`, but the hypothesis unfolds to `t₁ * t₂ ⊆ s` rather
   than all the way to `Set.image2 (· * ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· * ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s } }⟩
+  fun f g => { map₂ (· * ·) f g with sets := { s | ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ * t₂ ⊆ s } }⟩
 
 scoped[Pointwise] attribute [instance] Filter.instMul Filter.instAdd
 
 @[to_additive]
-/--
-theorem `HasBasis.mul` / 定理 `HasBasis.mul`
-
-English:
-theorem HasBasis.mul
-  statement: {ιf ιg : Type*} {pf : ιf -> Prop} {sf : ιf -> Set α}
-  proof: hf.map₂ (· * ·) hg
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 有基.mul
-  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> 集合 α}
-  证明: hf.map₂ (· * ·) hg
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: hf.map
+/-
+**Filter.HasBasis.mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasBasis`。
+形式化陈述：∀ {α : Type u_2} [inst : Mul α] {f g : Filter α} {ιf : Type u_7} {ιg : Typ
+e u_8} {pf : ιf → Prop} {sf : ιf → Set α}   {pg : ιg → Prop} {sg : ιg → Set α}, 
+  f.HasBasis pf sf → g.HasBasis pg sg → (f * g).HasBasis (fun i => pf i.1 ∧ pg i
+.2) fun i => sf i.1 * sg i.2
+参数：f * g；fun i => pf i.1 ∧ pg i.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.map₂`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {f 
+: Filter α} {g : Filter β} {ι : Type u_11} {ι' : Type u_12}   {p : ι → Prop} {q 
+: ι' → Pro…
 -/
-theorem HasBasis.mul {ιf ιg : Type*} {pf : ιf -> Prop} {sf : ιf -> Set α}
-    {pg : ιg -> Prop} {sg : ιg -> Set α} (hf : f.HasBasis pf sf) (hg : g.HasBasis pg sg) :
-    (f * g).HasBasis (fun i : ιf × ιg => pf i.1 ∧ pg i.2) fun i => sf i.1 * sg i.2 :=
+theorem HasBasis.mul {ιf ιg : Type*} {pf : ιf → Prop} {sf : ιf → Set α}
+    {pg : ιg → Prop} {sg : ιg → Set α} (hf : f.HasBasis pf sf) (hg : g.HasBasis pg sg) :
+    (f * g).HasBasis (fun i : ιf × ιg ↦ pf i.1 ∧ pg i.2) fun i ↦ sf i.1 * sg i.2 :=
   hf.map₂ (· * ·) hg
 
 @[to_additive (attr := simp)]
-/--
-theorem `map₂_mul` / 定理 `map₂_mul`
-
-English:
-theorem map₂_mul
-  statement: map₂ (· * ·) f g = f * g
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 map₂_mul
-  结论: map₂ (· * ·) f g = f * g
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：map (m : α -> β) (f : Filter α) : Filter β where sets
+参数：m : α -> β；f : Filter α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 -/
 theorem map₂_mul : map₂ (· * ·) f g = f * g :=
   rfl
 
 @[to_additive]
-/--
-theorem `mem_mul` / 定理 `mem_mul`
-
-English:
-theorem mem_mul
-  statement: s in f * g ↔ exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_mul
-  结论: s in f * g ↔ 存在 t₁ in f, 存在 t₂ in g, t₁ * t₂ subseteq s
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_mul : s in f * g ↔ exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mul : s in f * g ↔ exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s :=
+theorem mem_mul : s ∈ f * g ↔ ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ * t₂ ⊆ s :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `mul_mem_mul` / 定理 `mul_mem_mul`
-
-English:
-theorem mul_mem_mul
-  statement: s in f -> t in g -> s * t in f * g
-  proof: image2_mem_map₂
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mul_mem_mul
-  结论: s in f -> t in g -> s * t in f * g
-  证明: image2_mem_map₂
-
-@[to_additive (attr := simp)]
+/-
+**Filter.mul_mem_mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mul_mem_mul : s in f -> t in g -> s * t in f * g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.image2_mem_map₂`：image2_mem_map₂ (hs : s in f) (ht : t in g) : im
+age2 m s t in map₂ m f g
 -/
-theorem mul_mem_mul : s in f -> t in g -> s * t in f * g :=
+theorem mul_mem_mul : s ∈ f → t ∈ g → s * t ∈ f * g :=
   image2_mem_map₂
 
 @[to_additive (attr := simp)]
-/--
-theorem `bot_mul` / 定理 `bot_mul`
-
-English:
-theorem bot_mul
-  statement: ⊥ * g = ⊥
-  proof: map₂_bot_left
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 bot_mul
-  结论: ⊥ * g = ⊥
-  证明: map₂_bot_left
-
-@[to_additive (attr := simp)]
+/-
+**Filter.bot_mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：bot_mul : ⊥ * g = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_left`：map₂_bot_left : map₂ m ⊥ g = ⊥
 -/
 theorem bot_mul : ⊥ * g = ⊥ :=
   map₂_bot_left
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_bot` / 定理 `mul_bot`
-
-English:
-theorem mul_bot
-  statement: f * ⊥ = ⊥
-  proof: map₂_bot_right
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 mul_bot
-  结论: f * ⊥ = ⊥
-  证明: map₂_bot_right
-
-@[to_additive (attr := simp)]
+/-
+**Filter.mul_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mul_bot : f * ⊥ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_right`：map₂_bot_right : map₂ m f ⊥ = ⊥
 -/
 theorem mul_bot : f * ⊥ = ⊥ :=
   map₂_bot_right
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_eq_bot_iff` / 定理 `mul_eq_bot_iff`
-
-English:
-theorem mul_eq_bot_iff
-  statement: f * g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  proof: map₂_eq_bot_iff
-
-@[to_additive (attr := simp)] -- TODO: make this a scoped instance in the `Pointwise` namespace
-
-中文:
-定理 mul_eq_bot_iff
-  结论: f * g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  证明: map₂_eq_bot_iff
-
-@[to_additive (attr := simp)] -- TODO: make this a scoped instance in the `Pointwise` namespace
+/-
+**Filter.mul_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mul_eq_bot_iff : f * g = ⊥ ↔ f = ⊥ ∨ g = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_eq_bot_iff`：map₂_eq_bot_iff : map₂ m f g = ⊥ ↔ f = ⊥ ∨ g = ⊥
 -/
 theorem mul_eq_bot_iff : f * g = ⊥ ↔ f = ⊥ ∨ g = ⊥ :=
   map₂_eq_bot_iff
 
 @[to_additive (attr := simp)] -- TODO: make this a scoped instance in the `Pointwise` namespace
-/--
-lemma `mul_neBot_iff` / 引理 `mul_neBot_iff`
-
-English:
-lemma mul_neBot_iff
-  statement: (f * g).NeBot ↔ f.NeBot ∧ g.NeBot
-  proof: map₂_neBot_iff
-
-@[to_additive]
-
-中文:
-引理 mul_neBot_iff
-  结论: (f * g).NeBot ↔ f.NeBot ∧ g.NeBot
-  证明: map₂_neBot_iff
-
-@[to_additive]
+/-
+**Filter.mul_neBot_iff** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：mul_neBot_iff : (f * g).NeBot ↔ f.NeBot ∧ g.NeBot
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_neBot_iff`：map₂_neBot_iff : (map₂ m f g).NeBot ↔ f.NeBot ∧ g
+.NeBot
 -/
 lemma mul_neBot_iff : (f * g).NeBot ↔ f.NeBot ∧ g.NeBot :=
   map₂_neBot_iff
 
 @[to_additive]
-/--
-theorem `NeBot.mul` / 定理 `NeBot.mul`
-
-English:
-theorem NeBot.mul
-  statement: NeBot f -> NeBot g -> NeBot (f * g)
-  proof: NeBot.map₂
-
-@[to_additive]
-
-中文:
-定理 NeBot.mul
-  结论: NeBot f -> NeBot g -> NeBot (f * g)
-  证明: NeBot.map₂
-
-@[to_additive]
+/-
+**Filter.NeBot.mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Mul α] {f g : Filter α}, f.NeBot → g.NeBot → (f *
+ g).NeBot
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.map₂`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {m : α
+ → β → γ} {f : Filter α} {g : Filter β},   f.NeBot → g.NeBot → (Filter.map₂ m f 
+g).NeBo…
 -/
-protected theorem NeBot.mul : NeBot f -> NeBot g -> NeBot (f * g) :=
+protected theorem NeBot.mul : NeBot f → NeBot g → NeBot (f * g) :=
   NeBot.map₂
 
 @[to_additive]
-/--
-theorem `NeBot.of_mul_left` / 定理 `NeBot.of_mul_left`
-
-English:
-theorem NeBot.of_mul_left
-  statement: (f * g).NeBot -> f.NeBot
-  proof: NeBot.of_map₂_left
-
-@[to_additive]
-
-中文:
-定理 NeBot.of_mul_left
-  结论: (f * g).NeBot -> f.NeBot
-  证明: NeBot.of_map₂_left
-
-@[to_additive]
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Mul α] {f g : Filter α}, (f * g).NeBot → f.NeBot
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_left`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5
+} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → f
+.NeBot
 -/
-theorem NeBot.of_mul_left : (f * g).NeBot -> f.NeBot :=
+theorem NeBot.of_mul_left : (f * g).NeBot → f.NeBot :=
   NeBot.of_map₂_left
 
 @[to_additive]
-/--
-theorem `NeBot.of_mul_right` / 定理 `NeBot.of_mul_right`
-
-English:
-theorem NeBot.of_mul_right
-  statement: (f * g).NeBot -> g.NeBot
-  proof: NeBot.of_map₂_right
-
-@[to_additive add.instNeBot]
-
-中文:
-定理 NeBot.of_mul_right
-  结论: (f * g).NeBot -> g.NeBot
-  证明: NeBot.of_map₂_right
-
-@[to_additive add.instNeBot]
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Mul α] {f g : Filter α}, (f * g).NeBot → g.NeBot
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_right`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_
+5} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → 
+g.NeBot
 -/
-theorem NeBot.of_mul_right : (f * g).NeBot -> g.NeBot :=
+theorem NeBot.of_mul_right : (f * g).NeBot → g.NeBot :=
   NeBot.of_map₂_right
 
 @[to_additive add.instNeBot]
-/--
-lemma `mul.instNeBot` / 引理 `mul.instNeBot`
-
-English:
-lemma mul.instNeBot
-  given: [NeBot f] [NeBot g]
-  statement: NeBot (f * g)
-  proof: .mul ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] mul.instNeBot add.instNeBot
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mul.instNeBot
-  条件: [NeBot f] [NeBot g]
-  结论: NeBot (f * g)
-  证明: .mul ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] mul.instNeBot add.instNeBot
-
-@[to_additive (attr := simp)]
+/-
+**Filter.mul.instNeBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.mul`。
+形式化陈述：∀ {α : Type u_2} [inst : Mul α] {f g : Filter α} [f.NeBot] [g.NeBot], (f *
+ g).NeBot
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.mul`：∀ {α : Type u_2} [inst : Mul α] {f g : Filter α}, f.Ne
+Bot → g.NeBot → (f * g).NeBot
 -/
 protected lemma mul.instNeBot [NeBot f] [NeBot g] : NeBot (f * g) := .mul ‹_› ‹_›
 
 scoped[Pointwise] attribute [instance] mul.instNeBot add.instNeBot
 
 @[to_additive (attr := simp)]
-/--
-theorem `pure_mul` / 定理 `pure_mul`
-
-English:
-theorem pure_mul
-  statement: pure a * g = g.map (a * ·)
-  proof: map₂_pure_left
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 pure_mul
-  结论: pure a * g = g.map (a * ·)
-  证明: map₂_pure_left
-
-@[to_additive (attr := simp)]
+/-
+**Filter.pure_mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_mul : pure a * g = g.map (a * ·)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_left`：map₂_pure_left : map₂ m (pure a) g = g.map (m a)
 -/
 theorem pure_mul : pure a * g = g.map (a * ·) :=
   map₂_pure_left
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_pure` / 定理 `mul_pure`
-
-English:
-theorem mul_pure
-  statement: f * pure b = f.map (· * b)
-  proof: map₂_pure_right
-
-@[to_additive]
-
-中文:
-定理 mul_pure
-  结论: f * pure b = f.map (· * b)
-  证明: map₂_pure_right
-
-@[to_additive]
+/-
+**Filter.mul_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mul_pure : f * pure b = f.map (· * b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_right`：map₂_pure_right : map₂ m f (pure b) = f.map (m ·
+ b)
 -/
 theorem mul_pure : f * pure b = f.map (· * b) :=
   map₂_pure_right
 
 @[to_additive]
-/--
-theorem `pure_mul_pure` / 定理 `pure_mul_pure`
-
-English:
-theorem pure_mul_pure
-  statement: (pure a : Filter α) * pure b = pure (a * b)
-  proof: by simp
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 pure_mul_pure
-  结论: (pure a : 滤子 α) * pure b = pure (a * b)
-  证明: by simp
-
-@[to_additive (attr := simp)]
+/-
+**Filter.pure_mul_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_mul_pure : (pure a : Filter α) * pure b = pure (a * b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mul_pure`：mul_pure : f * pure b = f.map (· * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pure_mul_pure : (pure a : Filter α) * pure b = pure (a * b) := by simp
 
 @[to_additive (attr := simp)]
-/--
-theorem `le_mul_iff` / 定理 `le_mul_iff`
-
-English:
-theorem le_mul_iff
-  statement: h <= f * g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s * t in h
-  proof: le_map₂_iff
-
-@[to_additive]
-
-中文:
-定理 le_mul_iff
-  结论: h <= f * g ↔ 对任意 ⦃s⦄, s in f -> 对任意 ⦃t⦄, t in g -> s * t in h
-  证明: le_map₂_iff
-
-@[to_additive]
+/-
+**Filter.le_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：le_mul_iff : h <= f * g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s * 
+t in h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.le_map₂_iff`：le_map₂_iff {h : Filter γ} : h <= map₂ m f g ↔ foral
+l ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> image2 m s t in h
 -/
-theorem le_mul_iff : h <= f * g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s * t in h :=
+theorem le_mul_iff : h ≤ f * g ↔ ∀ ⦃s⦄, s ∈ f → ∀ ⦃t⦄, t ∈ g → s * t ∈ h :=
   le_map₂_iff
 
 @[to_additive]
-/--
-Instance `mulLeftMono` / 实例 `mulLeftMono`
-
-English:
-instance mulLeftMono
-  signature: : MulLeftMono (Filter α)
-  body: ⟨fun _ _ _ => map₂_mono_left⟩
-
-@[to_additive]
-
-中文:
-实例 mulLeftMono
-  签名: : MulLeftMono (滤子 α)
-  定义体: ⟨fun _ _ _ => map₂_mono_left⟩
-
-@[to_additive]
+/-
+**Filter.mulLeftMono** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：mulLeftMono : MulLeftMono (Filter α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_left`：map₂_mono_left (h : g₁ <= g₂) : map₂ m f g₁ <= ma
+p₂ m f g₂
 -/
 instance mulLeftMono : MulLeftMono (Filter α) :=
   ⟨fun _ _ _ => map₂_mono_left⟩
 
 @[to_additive]
-/--
-Instance `mulRightMono` / 实例 `mulRightMono`
-
-English:
-instance mulRightMono
-  signature: : MulRightMono (Filter α)
-  body: ⟨fun _ _ _ => map₂_mono_right⟩
-
-@[to_additive]
-
-中文:
-实例 mulRightMono
-  签名: : MulRightMono (滤子 α)
-  定义体: ⟨fun _ _ _ => map₂_mono_right⟩
-
-@[to_additive]
+/-
+**Filter.mulRightMono** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：mulRightMono : MulRightMono (Filter α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_right`：map₂_mono_right (h : f₁ <= f₂) : map₂ m f₁ g <= 
+map₂ m f₂ g
 -/
 instance mulRightMono : MulRightMono (Filter α) :=
   ⟨fun _ _ _ => map₂_mono_right⟩
 
 @[to_additive]
-/--
-theorem `map_mul` / 定理 `map_mul`
-
-English:
-theorem map_mul
-  given: [FunLike F α β] [MulHomClass F α β] (m : F)
-  proof: map_map₂_distrib map_mul m
-
-中文:
-定理 map_mul
-  条件: [函数状 F α β] [乘法态射类 F α β] (m : F)
-  证明: map_map₂_distrib map_mul m
+/-
+**Filter.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : Mul α] [inst_1 : Mu
+l β] {f₁ f₂ : Filter α}   [inst_2 : FunLike F α β] [MulHomClass F α β] (m : F), 
+  Filter.map (⇑m) (f₁ * f₂) = Filter.map (⇑m) f₁ * Filter.map (⇑m) f₂
+参数：m : F；⇑m；f₁ * f₂；⇑m；⇑m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_map₂_distrib`：map_map₂_distrib {n : γ -> δ} {m' : α' -> β' ->
+ δ} {n₁ : α -> α'} {n₂ : β -> β'} (h_distrib : forall a b, n (m a b) = m' (n₁ a)
+ (n₂ b)) : (m…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
 -/
 protected theorem map_mul [FunLike F α β] [MulHomClass F α β] (m : F) :
     (f₁ * f₂).map m = f₁.map m * f₂.map m :=
-map_map₂_distrib map_mul m
+  map_map₂_distrib <| map_mul m
 
 /-- `pure` operation as a `MulHom`. -/
 @[to_additive /-- The singleton operation as an `AddHom`. -/]
-/--
-Definition of `pureMulHom` / `pureMulHom` 的定义
+/-
+**Filter.pureMulHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：pureMulHom : α ->ₙ* Filter α where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pureMulHom
-  signature: : α ->ₙ* Filter α where
-  body: pure; map_mul' _ _ := pure_mul_pure.symm
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 pureMulHom
-  签名: : α ->ₙ* 滤子 α where
-  定义体: pure; map_mul' _ _ := pure_mul_pure.symm
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_mul, pure_mul_pure, pure_mul_pure.symm
+--- 原说明 ---
+`pure` operation as a `MulHom`.
 -/
-def pureMulHom : α ->ₙ* Filter α where
+def pureMulHom : α →ₙ* Filter α where
   toFun := pure; map_mul' _ _ := pure_mul_pure.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_pureMulHom` / 定理 `coe_pureMulHom`
-
-English:
-theorem coe_pureMulHom
-  statement: (pureMulHom : α -> Filter α) = pure
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_pureMulHom
-  结论: (pureMulHom : α -> 滤子 α) = pure
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Filter.coe_pureMulHom** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：coe_pureMulHom : (pureMulHom : α -> Filter α) = pure
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pureMulHom : (pureMulHom : α -> Filter α) = pure :=
+theorem coe_pureMulHom : (pureMulHom : α → Filter α) = pure :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `pureMulHom_apply` / 定理 `pureMulHom_apply`
-
-English:
-theorem pureMulHom_apply
-  given: (a : α)
-  statement: pureMulHom a = pure a
-  proof: rfl
-
-中文:
-定理 pureMulHom_apply
-  条件: (a : α)
-  结论: pureMulHom a = pure a
-  证明: rfl
+/-
+**Filter.pureMulHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pureMulHom_apply (a : α) : pureMulHom a = pure a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pureMulHom_apply (a : α) : pureMulHom a = pure a :=
   rfl
@@ -1508,489 +902,289 @@ variable [Div α] {f f₁ f₂ g g₁ g₂ h : Filter α} {s t : Set α} {a b : 
 /-- The filter `f / g` is generated by `{s / t | s ∈ f, t ∈ g}` in scope `Pointwise`. -/
 @[to_additive (attr := instance_reducible)
 /-- The filter `f - g` is generated by `{s - t | s ∈ f, t ∈ g}` in scope `Pointwise`. -/]
-/--
-Definition of `instDiv` / `instDiv` 的定义
-
-English:
-definition instDiv
-  signature: : Div (Filter α)
-  body: ⟨/- This is defeq to `map₂ (· / ·) f g`, but the hypothesis unfolds to `t₁ / t₂ ⊆ s`
-  rather than all the way to `Set.image2 (· / ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· / ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instDiv Filter.instSub
-
-@[to_additive]
-
-中文:
-定义 instDiv
-  签名: : 除法 (滤子 α)
-  定义体: ⟨/- This is defeq to `map₂ (· / ·) f g`, but the hypothesis unfolds to `t₁ / t₂ ⊆ s`
-  rather than all the way to `Set.image2 (· / ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· / ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instDiv Filter.instSub
-
-@[to_additive]
+/-
+**Filter.instDiv** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [Div α] → Div (Filter α)
+参数：Filter α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_sets`：∀ {α : Type u_1} (self : Filter α), Set.univ ∈ self.se
+ts
+· 使用定理 `Filter.sets_of_superset`：∀ {α : Type u_1} (self : Filter α) {x y : Set α
+}, x ∈ self.sets → x ⊆ y → y ∈ self.sets
+· 使用定理 `Filter.inter_sets`：∀ {α : Type u_1} (self : Filter α) {x y : Set α}, x ∈
+ self.sets → y ∈ self.sets → x ∩ y ∈ self.sets
 -/
 protected def instDiv : Div (Filter α) :=
   ⟨/- This is defeq to `map₂ (· / ·) f g`, but the hypothesis unfolds to `t₁ / t₂ ⊆ s`
   rather than all the way to `Set.image2 (· / ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· / ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s } }⟩
+  fun f g => { map₂ (· / ·) f g with sets := { s | ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ / t₂ ⊆ s } }⟩
 
 scoped[Pointwise] attribute [instance] Filter.instDiv Filter.instSub
 
 @[to_additive]
-/--
-theorem `HasBasis.div` / 定理 `HasBasis.div`
-
-English:
-theorem HasBasis.div
-  statement: {ιf ιg : Type*} {pf : ιf -> Prop} {sf : ιf -> Set α}
-  proof: hf.map₂ (· / ·) hg
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 有基.div
-  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> 集合 α}
-  证明: hf.map₂ (· / ·) hg
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: hf.map
+/-
+**Filter.HasBasis.div** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasBasis`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f g : Filter α} {ιf : Type u_7} {ιg : Typ
+e u_8} {pf : ιf → Prop} {sf : ιf → Set α}   {pg : ιg → Prop} {sg : ιg → Set α}, 
+  f.HasBasis pf sf → g.HasBasis pg sg → (f / g).HasBasis (fun i => pf i.1 ∧ pg i
+.2) fun i => sf i.1 / sg i.2
+参数：f / g；fun i => pf i.1 ∧ pg i.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.map₂`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {f 
+: Filter α} {g : Filter β} {ι : Type u_11} {ι' : Type u_12}   {p : ι → Prop} {q 
+: ι' → Pro…
 -/
-theorem HasBasis.div {ιf ιg : Type*} {pf : ιf -> Prop} {sf : ιf -> Set α}
-    {pg : ιg -> Prop} {sg : ιg -> Set α} (hf : f.HasBasis pf sf) (hg : g.HasBasis pg sg) :
-    (f / g).HasBasis (fun i : ιf × ιg => pf i.1 ∧ pg i.2) fun i => sf i.1 / sg i.2 :=
+theorem HasBasis.div {ιf ιg : Type*} {pf : ιf → Prop} {sf : ιf → Set α}
+    {pg : ιg → Prop} {sg : ιg → Set α} (hf : f.HasBasis pf sf) (hg : g.HasBasis pg sg) :
+    (f / g).HasBasis (fun i : ιf × ιg ↦ pf i.1 ∧ pg i.2) fun i ↦ sf i.1 / sg i.2 :=
   hf.map₂ (· / ·) hg
 
 @[to_additive (attr := simp)]
-/--
-theorem `map₂_div` / 定理 `map₂_div`
-
-English:
-theorem map₂_div
-  statement: map₂ (· / ·) f g = f / g
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 map₂_div
-  结论: map₂ (· / ·) f g = f / g
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：map (m : α -> β) (f : Filter α) : Filter β where sets
+参数：m : α -> β；f : Filter α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 -/
 theorem map₂_div : map₂ (· / ·) f g = f / g :=
   rfl
 
 @[to_additive]
-/--
-theorem `mem_div` / 定理 `mem_div`
-
-English:
-theorem mem_div
-  statement: s in f / g ↔ exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_div
-  结论: s in f / g ↔ 存在 t₁ in f, 存在 t₂ in g, t₁ / t₂ subseteq s
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_div : s in f / g ↔ exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_div : s in f / g ↔ exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s :=
+theorem mem_div : s ∈ f / g ↔ ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ / t₂ ⊆ s :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `div_mem_div` / 定理 `div_mem_div`
-
-English:
-theorem div_mem_div
-  statement: s in f -> t in g -> s / t in f / g
-  proof: image2_mem_map₂
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 div_mem_div
-  结论: s in f -> t in g -> s / t in f / g
-  证明: image2_mem_map₂
-
-@[to_additive (attr := simp)]
+/-
+**Filter.div_mem_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：div_mem_div : s in f -> t in g -> s / t in f / g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.image2_mem_map₂`：image2_mem_map₂ (hs : s in f) (ht : t in g) : im
+age2 m s t in map₂ m f g
 -/
-theorem div_mem_div : s in f -> t in g -> s / t in f / g :=
+theorem div_mem_div : s ∈ f → t ∈ g → s / t ∈ f / g :=
   image2_mem_map₂
 
 @[to_additive (attr := simp)]
-/--
-theorem `bot_div` / 定理 `bot_div`
-
-English:
-theorem bot_div
-  statement: ⊥ / g = ⊥
-  proof: map₂_bot_left
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 bot_div
-  结论: ⊥ / g = ⊥
-  证明: map₂_bot_left
-
-@[to_additive (attr := simp)]
+/-
+**Filter.bot_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：bot_div : ⊥ / g = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_left`：map₂_bot_left : map₂ m ⊥ g = ⊥
 -/
 theorem bot_div : ⊥ / g = ⊥ :=
   map₂_bot_left
 
 @[to_additive (attr := simp)]
-/--
-theorem `div_bot` / 定理 `div_bot`
-
-English:
-theorem div_bot
-  statement: f / ⊥ = ⊥
-  proof: map₂_bot_right
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 div_bot
-  结论: f / ⊥ = ⊥
-  证明: map₂_bot_right
-
-@[to_additive (attr := simp)]
+/-
+**Filter.div_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：div_bot : f / ⊥ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_right`：map₂_bot_right : map₂ m f ⊥ = ⊥
 -/
 theorem div_bot : f / ⊥ = ⊥ :=
   map₂_bot_right
 
 @[to_additive (attr := simp)]
-/--
-theorem `div_eq_bot_iff` / 定理 `div_eq_bot_iff`
-
-English:
-theorem div_eq_bot_iff
-  statement: f / g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  proof: map₂_eq_bot_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 div_eq_bot_iff
-  结论: f / g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  证明: map₂_eq_bot_iff
-
-@[to_additive (attr := simp)]
+/-
+**Filter.div_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：div_eq_bot_iff : f / g = ⊥ ↔ f = ⊥ ∨ g = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_eq_bot_iff`：map₂_eq_bot_iff : map₂ m f g = ⊥ ↔ f = ⊥ ∨ g = ⊥
 -/
 theorem div_eq_bot_iff : f / g = ⊥ ↔ f = ⊥ ∨ g = ⊥ :=
   map₂_eq_bot_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `div_neBot_iff` / 定理 `div_neBot_iff`
-
-English:
-theorem div_neBot_iff
-  statement: (f / g).NeBot ↔ f.NeBot ∧ g.NeBot
-  proof: map₂_neBot_iff
-
-@[to_additive]
-
-中文:
-定理 div_neBot_iff
-  结论: (f / g).NeBot ↔ f.NeBot ∧ g.NeBot
-  证明: map₂_neBot_iff
-
-@[to_additive]
+/-
+**Filter.div_neBot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：div_neBot_iff : (f / g).NeBot ↔ f.NeBot ∧ g.NeBot
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_neBot_iff`：map₂_neBot_iff : (map₂ m f g).NeBot ↔ f.NeBot ∧ g
+.NeBot
 -/
 theorem div_neBot_iff : (f / g).NeBot ↔ f.NeBot ∧ g.NeBot :=
   map₂_neBot_iff
 
 @[to_additive]
-/--
-theorem `NeBot.div` / 定理 `NeBot.div`
-
-English:
-theorem NeBot.div
-  statement: NeBot f -> NeBot g -> NeBot (f / g)
-  proof: NeBot.map₂
-
-@[to_additive]
-
-中文:
-定理 NeBot.div
-  结论: NeBot f -> NeBot g -> NeBot (f / g)
-  证明: NeBot.map₂
-
-@[to_additive]
+/-
+**Filter.NeBot.div** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f g : Filter α}, f.NeBot → g.NeBot → (f /
+ g).NeBot
+参数：f / g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.map₂`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {m : α
+ → β → γ} {f : Filter α} {g : Filter β},   f.NeBot → g.NeBot → (Filter.map₂ m f 
+g).NeBo…
 -/
-protected theorem NeBot.div : NeBot f -> NeBot g -> NeBot (f / g) :=
+protected theorem NeBot.div : NeBot f → NeBot g → NeBot (f / g) :=
   NeBot.map₂
 
 @[to_additive]
-/--
-theorem `NeBot.of_div_left` / 定理 `NeBot.of_div_left`
-
-English:
-theorem NeBot.of_div_left
-  statement: (f / g).NeBot -> f.NeBot
-  proof: NeBot.of_map₂_left
-
-@[to_additive]
-
-中文:
-定理 NeBot.of_div_left
-  结论: (f / g).NeBot -> f.NeBot
-  证明: NeBot.of_map₂_left
-
-@[to_additive]
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_div_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f g : Filter α}, (f / g).NeBot → f.NeBot
+参数：f / g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_left`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5
+} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → f
+.NeBot
 -/
-theorem NeBot.of_div_left : (f / g).NeBot -> f.NeBot :=
+theorem NeBot.of_div_left : (f / g).NeBot → f.NeBot :=
   NeBot.of_map₂_left
 
 @[to_additive]
-/--
-theorem `NeBot.of_div_right` / 定理 `NeBot.of_div_right`
-
-English:
-theorem NeBot.of_div_right
-  statement: (f / g).NeBot -> g.NeBot
-  proof: NeBot.of_map₂_right
-
-@[to_additive sub.instNeBot]
-
-中文:
-定理 NeBot.of_div_right
-  结论: (f / g).NeBot -> g.NeBot
-  证明: NeBot.of_map₂_right
-
-@[to_additive sub.instNeBot]
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_div_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f g : Filter α}, (f / g).NeBot → g.NeBot
+参数：f / g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_right`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_
+5} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → 
+g.NeBot
 -/
-theorem NeBot.of_div_right : (f / g).NeBot -> g.NeBot :=
+theorem NeBot.of_div_right : (f / g).NeBot → g.NeBot :=
   NeBot.of_map₂_right
 
 @[to_additive sub.instNeBot]
-/--
-lemma `div.instNeBot` / 引理 `div.instNeBot`
-
-English:
-lemma div.instNeBot
-  given: [NeBot f] [NeBot g]
-  statement: NeBot (f / g)
-  proof: .div ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] div.instNeBot sub.instNeBot
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 div.instNeBot
-  条件: [NeBot f] [NeBot g]
-  结论: NeBot (f / g)
-  证明: .div ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] div.instNeBot sub.instNeBot
-
-@[to_additive (attr := simp)]
+/-
+**Filter.div.instNeBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.div`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f g : Filter α} [f.NeBot] [g.NeBot], (f /
+ g).NeBot
+参数：f / g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.div`：∀ {α : Type u_2} [inst : Div α] {f g : Filter α}, f.Ne
+Bot → g.NeBot → (f / g).NeBot
 -/
 lemma div.instNeBot [NeBot f] [NeBot g] : NeBot (f / g) := .div ‹_› ‹_›
 
 scoped[Pointwise] attribute [instance] div.instNeBot sub.instNeBot
 
 @[to_additive (attr := simp)]
-/--
-theorem `pure_div` / 定理 `pure_div`
-
-English:
-theorem pure_div
-  statement: pure a / g = g.map (a / ·)
-  proof: map₂_pure_left
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 pure_div
-  结论: pure a / g = g.map (a / ·)
-  证明: map₂_pure_left
-
-@[to_additive (attr := simp)]
+/-
+**Filter.pure_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_div : pure a / g = g.map (a / ·)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_left`：map₂_pure_left : map₂ m (pure a) g = g.map (m a)
 -/
 theorem pure_div : pure a / g = g.map (a / ·) :=
   map₂_pure_left
 
 @[to_additive (attr := simp)]
-/--
-theorem `div_pure` / 定理 `div_pure`
-
-English:
-theorem div_pure
-  statement: f / pure b = f.map (· / b)
-  proof: map₂_pure_right
-
-@[to_additive]
-
-中文:
-定理 div_pure
-  结论: f / pure b = f.map (· / b)
-  证明: map₂_pure_right
-
-@[to_additive]
+/-
+**Filter.div_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：div_pure : f / pure b = f.map (· / b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_right`：map₂_pure_right : map₂ m f (pure b) = f.map (m ·
+ b)
 -/
 theorem div_pure : f / pure b = f.map (· / b) :=
   map₂_pure_right
 
 @[to_additive]
-/--
-theorem `pure_div_pure` / 定理 `pure_div_pure`
-
-English:
-theorem pure_div_pure
-  statement: (pure a : Filter α) / pure b = pure (a / b)
-  proof: by simp
-
-@[to_additive (attr := gcongr)]
-
-中文:
-定理 pure_div_pure
-  结论: (pure a : 滤子 α) / pure b = pure (a / b)
-  证明: by simp
-
-@[to_additive (attr := gcongr)]
+/-
+**Filter.pure_div_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_div_pure : (pure a : Filter α) / pure b = pure (a / b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.div_pure`：div_pure : f / pure b = f.map (· / b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pure_div_pure : (pure a : Filter α) / pure b = pure (a / b) := by simp
 
 @[to_additive (attr := gcongr)]
-/--
-theorem `div_le_div` / 定理 `div_le_div`
-
-English:
-theorem div_le_div
-  statement: f₁ <= f₂ -> g₁ <= g₂ -> f₁ / g₁ <= f₂ / g₂
-  proof: map₂_mono
-
-@[to_additive]
-
-中文:
-定理 div_le_div
-  结论: f₁ <= f₂ -> g₁ <= g₂ -> f₁ / g₁ <= f₂ / g₂
-  证明: map₂_mono
-
-@[to_additive]
+/-
+**Filter.div_le_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f₁ f₂ g₁ g₂ : Filter α}, f₁ ≤ f₂ → g₁ ≤ g
+₂ → f₁ / g₁ ≤ f₂ / g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono`：map₂_mono (hf : f₁ <= f₂) (hg : g₁ <= g₂) : map₂ m f₁ 
+g₁ <= map₂ m f₂ g₂
 -/
-protected theorem div_le_div : f₁ <= f₂ -> g₁ <= g₂ -> f₁ / g₁ <= f₂ / g₂ :=
+protected theorem div_le_div : f₁ ≤ f₂ → g₁ ≤ g₂ → f₁ / g₁ ≤ f₂ / g₂ :=
   map₂_mono
 
 @[to_additive]
-/--
-theorem `div_le_div_left` / 定理 `div_le_div_left`
-
-English:
-theorem div_le_div_left
-  statement: g₁ <= g₂ -> f / g₁ <= f / g₂
-  proof: map₂_mono_left
-
-@[to_additive]
-
-中文:
-定理 div_le_div_left
-  结论: g₁ <= g₂ -> f / g₁ <= f / g₂
-  证明: map₂_mono_left
-
-@[to_additive]
+/-
+**Filter.div_le_div_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f g₁ g₂ : Filter α}, g₁ ≤ g₂ → f / g₁ ≤ f
+ / g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_left`：map₂_mono_left (h : g₁ <= g₂) : map₂ m f g₁ <= ma
+p₂ m f g₂
 -/
-protected theorem div_le_div_left : g₁ <= g₂ -> f / g₁ <= f / g₂ :=
+protected theorem div_le_div_left : g₁ ≤ g₂ → f / g₁ ≤ f / g₂ :=
   map₂_mono_left
 
 @[to_additive]
-/--
-theorem `div_le_div_right` / 定理 `div_le_div_right`
-
-English:
-theorem div_le_div_right
-  statement: f₁ <= f₂ -> f₁ / g <= f₂ / g
-  proof: map₂_mono_right
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 div_le_div_right
-  结论: f₁ <= f₂ -> f₁ / g <= f₂ / g
-  证明: map₂_mono_right
-
-@[to_additive (attr := simp)]
+/-
+**Filter.div_le_div_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f₁ f₂ g : Filter α}, f₁ ≤ f₂ → f₁ / g ≤ f
+₂ / g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_right`：map₂_mono_right (h : f₁ <= f₂) : map₂ m f₁ g <= 
+map₂ m f₂ g
 -/
-protected theorem div_le_div_right : f₁ <= f₂ -> f₁ / g <= f₂ / g :=
+protected theorem div_le_div_right : f₁ ≤ f₂ → f₁ / g ≤ f₂ / g :=
   map₂_mono_right
 
 @[to_additive (attr := simp)]
-/--
-theorem `le_div_iff` / 定理 `le_div_iff`
-
-English:
-theorem le_div_iff
-  statement: h <= f / g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s / t in h
-  proof: le_map₂_iff
-
-@[to_additive]
-
-中文:
-定理 le_div_iff
-  结论: h <= f / g ↔ 对任意 ⦃s⦄, s in f -> 对任意 ⦃t⦄, t in g -> s / t in h
-  证明: le_map₂_iff
-
-@[to_additive]
+/-
+**Filter.le_div_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Div α] {f g h : Filter α}, h ≤ f / g ↔ ∀ ⦃s : Set
+ α⦄, s ∈ f → ∀ ⦃t : Set α⦄, t ∈ g → s / t ∈ h
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.le_map₂_iff`：le_map₂_iff {h : Filter γ} : h <= map₂ m f g ↔ foral
+l ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> image2 m s t in h
 -/
-protected theorem le_div_iff : h <= f / g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s / t in h :=
+protected theorem le_div_iff : h ≤ f / g ↔ ∀ ⦃s⦄, s ∈ f → ∀ ⦃t⦄, t ∈ g → s / t ∈ h :=
   le_map₂_iff
 
 @[to_additive]
-/--
-Instance `covariant_div` / 实例 `covariant_div`
-
-English:
-instance covariant_div
-  signature: : CovariantClass (Filter α) (Filter α) (· / ·) (· <= ·)
-  body: ⟨fun _ _ _ => map₂_mono_left⟩
-
-@[to_additive]
-
-中文:
-实例 covariant_div
-  签名: : 协变类 (滤子 α) (滤子 α) (· / ·) (· <= ·)
-  定义体: ⟨fun _ _ _ => map₂_mono_left⟩
-
-@[to_additive]
+/-
+**Filter.covariant_div** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：covariant_div : CovariantClass (Filter α) (Filter α) (· / ·) (· <= ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_left`：map₂_mono_left (h : g₁ <= g₂) : map₂ m f g₁ <= ma
+p₂ m f g₂
 -/
-instance covariant_div : CovariantClass (Filter α) (Filter α) (· / ·) (· <= ·) :=
+instance covariant_div : CovariantClass (Filter α) (Filter α) (· / ·) (· ≤ ·) :=
   ⟨fun _ _ _ => map₂_mono_left⟩
 
 @[to_additive]
-/--
-Instance `covariant_swap_div` / 实例 `covariant_swap_div`
-
-English:
-instance covariant_swap_div
-  signature: : CovariantClass (Filter α) (Filter α) (swap (· / ·)) (· <= ·)
-  body: ⟨fun _ _ _ => map₂_mono_right⟩
-
-中文:
-实例 covariant_swap_div
-  签名: : 协变类 (滤子 α) (滤子 α) (swap (· / ·)) (· <= ·)
-  定义体: ⟨fun _ _ _ => map₂_mono_right⟩
+/-
+**Filter.covariant_swap_div** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：covariant_swap_div : CovariantClass (Filter α) (Filter α) (swap (· / ·)) (
+· <= ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_right`：map₂_mono_right (h : f₁ <= f₂) : map₂ m f₁ g <= 
+map₂ m f₂ g
 -/
-instance covariant_swap_div : CovariantClass (Filter α) (Filter α) (swap (· / ·)) (· <= ·) :=
+instance covariant_swap_div : CovariantClass (Filter α) (Filter α) (swap (· / ·)) (· ≤ ·) :=
   ⟨fun _ _ _ => map₂_mono_right⟩
 
 end Div
@@ -2000,20 +1194,13 @@ end Div
 @[to_additive (attr := instance_reducible)
 /-- Repeated pointwise addition (not the same as pointwise repeated addition!) of a `Filter`. See
 Note [pointwise nat action]. -/]
-/--
-Definition of `instNPow` / `instNPow` 的定义
-
-English:
-definition instNPow
-  signature: [One α] [Mul α]
-  body: ⟨fun s n => npowRec n s⟩
-
-中文:
-定义 instNPow
-  签名: [幺 α] [乘法 α]
-  定义体: ⟨fun s n => npowRec n s⟩
+/-
+**Filter.instNPow** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [One α] → [Mul α] → Pow (Filter α) ℕ
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def instNPow [One α] [Mul α] : Pow (Filter α) Nat :=
+protected def instNPow [One α] [Mul α] : Pow (Filter α) ℕ :=
   ⟨fun s n => npowRec n s⟩
 
 /-- Repeated pointwise multiplication/division (not the same as pointwise repeated
@@ -2021,26 +1208,13 @@ multiplication/division!) of a `Filter`. See Note [pointwise nat action]. -/
 @[to_additive (attr := instance_reducible)
 /-- Repeated pointwise addition/subtraction (not the same as pointwise repeated
 addition/subtraction!) of a `Filter`. See Note [pointwise nat action]. -/]
-/--
-Definition of `instZPow` / `instZPow` 的定义
-
-English:
-definition instZPow
-  signature: [One α] [Mul α] [Inv α]
-  body: ⟨fun s n => zpowRec npowRec n s⟩
-
-scoped[Pointwise] attribute [instance] Filter.instNSMul Filter.instNPow
-  Filter.instZSMul Filter.instZPow
-
-中文:
-定义 instZPow
-  签名: [幺 α] [乘法 α] [取逆 α]
-  定义体: ⟨fun s n => zpowRec npowRec n s⟩
-
-scoped[Pointwise] attribute [instance] Filter.instNSMul Filter.instNPow
-  Filter.instZSMul Filter.instZPow
+/-
+**Filter.instZPow** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [One α] → [Mul α] → [Inv α] → Pow (Filter α) ℤ
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected def instZPow [One α] [Mul α] [Inv α] : Pow (Filter α) Int :=
+protected def instZPow [One α] [Mul α] [Inv α] : Pow (Filter α) ℤ :=
   ⟨fun s n => zpowRec npowRec n s⟩
 
 scoped[Pointwise] attribute [instance] Filter.instNSMul Filter.instNPow
@@ -2049,18 +1223,11 @@ scoped[Pointwise] attribute [instance] Filter.instNSMul Filter.instNPow
 /-- `Filter α` is a `Semigroup` under pointwise operations if `α` is. -/
 @[to_additive (attr := instance_reducible)
   /-- `Filter α` is an `AddSemigroup` under pointwise operations if `α` is. -/]
-/--
-Definition of `semigroup` / `semigroup` 的定义
-
-English:
-definition semigroup
-  signature: [Semigroup α]
-  body: map₂_assoc mul_assoc
-
-中文:
-定义 semigroup
-  签名: [半群 α]
-  定义体: map₂_assoc mul_assoc
+/-
+**Filter.semigroup** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [Semigroup α] → Semigroup (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def semigroup [Semigroup α] : Semigroup (Filter α) where
   mul_assoc _ _ _ := map₂_assoc mul_assoc
@@ -2068,18 +1235,11 @@ protected def semigroup [Semigroup α] : Semigroup (Filter α) where
 /-- `Filter α` is a `CommSemigroup` under pointwise operations if `α` is. -/
 @[to_additive (attr := instance_reducible)
   /-- `Filter α` is an `AddCommSemigroup` under pointwise operations if `α` is. -/]
-/--
-Definition of `commSemigroup` / `commSemigroup` 的定义
-
-English:
-definition commSemigroup
-  signature: [CommSemigroup α]
-  body: { Filter.semigroup with mul_comm := fun _ _ => map₂_comm mul_comm }
-
-中文:
-定义 commSemigroup
-  签名: [交换半群 α]
-  定义体: { Filter.semigroup with mul_comm := fun _ _ => map₂_comm mul_comm }
+/-
+**Filter.commSemigroup** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [CommSemigroup α] → CommSemigroup (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def commSemigroup [CommSemigroup α] : CommSemigroup (Filter α) :=
   { Filter.semigroup with mul_comm := fun _ _ => map₂_comm mul_comm }
@@ -2091,26 +1251,11 @@ variable [MulOneClass α] [MulOneClass β]
 /-- `Filter α` is a `MulOneClass` under pointwise operations if `α` is. -/
 @[to_additive (attr := instance_reducible)
   /-- `Filter α` is an `AddZeroClass` under pointwise operations if `α` is. -/]
-/--
-Definition of `mulOneClass` / `mulOneClass` 的定义
-
-English:
-definition mulOneClass
-  signature: : MulOneClass (Filter α) where
-  body: map₂_left_identity one_mul
-  mul_one := map₂_right_identity mul_one
-
-scoped[Pointwise] attribute [instance] Filter.semigroup Filter.addSemigroup
-  Filter.commSemigroup Filter.addCommSemigroup Filter.mulOneClass Filter.addZeroClass
-
-中文:
-定义 mulOneClass
-  签名: : MulOne类 (滤子 α) where
-  定义体: map₂_left_identity one_mul
-  mul_one := map₂_right_identity mul_one
-
-scoped[Pointwise] attribute [instance] Filter.semigroup Filter.addSemigroup
-  Filter.commSemigroup Filter.addCommSemigroup Filter.mulOneClass Filter.addZeroClass
+/-
+**Filter.mulOneClass** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [MulOneClass α] → MulOneClass (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def mulOneClass : MulOneClass (Filter α) where
   one_mul := map₂_left_identity one_mul
@@ -2125,136 +1270,93 @@ variable [FunLike F α β]
 `Filter α →* Filter β` induced by `map φ`. -/
 @[to_additive /-- If `φ : α →+ β` then `mapAddMonoidHom φ` is the monoid homomorphism
 `Filter α →+ Filter β` induced by `map φ`. -/]
-/--
-Definition of `mapMonoidHom` / `mapMonoidHom` 的定义
-
-English:
-definition mapMonoidHom
-  signature: [MonoidHomClass F α β] (φ : F)
-  body: map φ
-  map_one' := Filter.map_one φ
-  map_mul' _ _ := Filter.map_mul φ
-
-中文:
-定义 mapMonoidHom
-  签名: [幺半群态射类 F α β] (φ : F)
-  定义体: map φ
-  map_one' := Filter.map_one φ
-  map_mul' _ _ := Filter.map_mul φ
+/-
+**Filter.mapMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：mapMonoidHom [MonoidHomClass F α β] (φ : F) : Filter α ->* Filter β where 
+toFun
+参数：φ : F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mapMonoidHom [MonoidHomClass F α β] (φ : F) : Filter α ->* Filter β where
+def mapMonoidHom [MonoidHomClass F α β] (φ : F) : Filter α →* Filter β where
   toFun := map φ
   map_one' := Filter.map_one φ
   map_mul' _ _ := Filter.map_mul φ
 
 -- The other direction does not hold in general
 @[to_additive]
-/--
-theorem `comap_mul_comap_le` / 定理 `comap_mul_comap_le`
-
-English:
-theorem comap_mul_comap_le
-  given: [MulHomClass F α β] (m : F) {f g : Filter β}
-  proof: fun _ ⟨_, ⟨t₁, ht₁, t₂, ht₂, t₁t₂⟩, mt⟩ =>
-  ⟨m ⁻¹' t₁, ⟨t₁, ht₁, Subset.rfl⟩, m ⁻¹' t₂, ⟨t₂, ht₂, Subset.rfl⟩,
-(preimage_mul_preimage_subset _).trans (preimage_mono t₁t₂).trans mt⟩
-
-@[to_additive]
-
-中文:
-定理 comap_mul_comap_le
-  条件: [乘法态射类 F α β] (m : F) {f g : 滤子 β}
-  证明: fun _ ⟨_, ⟨t₁, ht₁, t₂, ht₂, t₁t₂⟩, mt⟩ =>
-  ⟨m ⁻¹' t₁, ⟨t₁, ht₁, Subset.rfl⟩, m ⁻¹' t₂, ⟨t₂, ht₂, Subset.rfl⟩,
-(preimage_mul_preimage_subset _).trans (preimage_mono t₁t₂).trans mt⟩
-
-@[to_additive]
+/-
+**Filter.comap_mul_comap_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：comap_mul_comap_le [MulHomClass F α β] (m : F) {f g : Filter β} : f.comap 
+m * g.comap m <= (f * g).comap m
+参数：m : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.preimage_mul_preimage_subset`：preimage_mul_preimage_subset {s t : Se
+t β} : m ⁻¹' s * m ⁻¹' t subseteq m ⁻¹' (s * t)
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
 -/
 theorem comap_mul_comap_le [MulHomClass F α β] (m : F) {f g : Filter β} :
-    f.comap m * g.comap m <= (f * g).comap m := fun _ ⟨_, ⟨t₁, ht₁, t₂, ht₂, t₁t₂⟩, mt⟩ =>
+    f.comap m * g.comap m ≤ (f * g).comap m := fun _ ⟨_, ⟨t₁, ht₁, t₂, ht₂, t₁t₂⟩, mt⟩ =>
   ⟨m ⁻¹' t₁, ⟨t₁, ht₁, Subset.rfl⟩, m ⁻¹' t₂, ⟨t₂, ht₂, Subset.rfl⟩,
-(preimage_mul_preimage_subset _).trans (preimage_mono t₁t₂).trans mt⟩
+    (preimage_mul_preimage_subset _).trans <| (preimage_mono t₁t₂).trans mt⟩
 
 @[to_additive]
-/--
-theorem `Tendsto.mul_mul` / 定理 `Tendsto.mul_mul`
-
-English:
-theorem Tendsto.mul_mul
-  given: [MulHomClass F α β] (m : F) {f₁ g₁ : Filter α} {f₂ g₂ : Filter β}
-  proof: fun hf hg =>
-(Filter.map_mul m).trans_le mul_le_mul' hf hg
-
-中文:
-定理 收敛.mul_mul
-  条件: [乘法态射类 F α β] (m : F) {f₁ g₁ : 滤子 α} {f₂ g₂ : 滤子 β}
-  证明: fun hf hg =>
-(Filter.map_mul m).trans_le mul_le_mul' hf hg
+/-
+**Filter.Tendsto.mul_mul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tendsto`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : MulOneClass α] [ins
+t_1 : MulOneClass β] [inst_2 : FunLike F α β]   [MulHomClass F α β] (m : F) {f₁ 
+g₁ : Filter α} {f₂ g₂ : Filter β},   Filter.Tendsto (⇑m) f₁ f₂ → Filter.Tendsto 
+(⇑m) g₁ g₂ → Filter.Tendsto (⇑m) (f₁ * g₁) (f₂ * g₂)
+参数：m : F；⇑m；⇑m；⇑m；f₁ * g₁；f₂ * g₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `Filter.map_mul`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : M
+ul α] [inst_1 : Mul β] {f₁ f₂ : Filter α}   [inst_2 : FunLike F α β] [MulHomClas
+s F …
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
 -/
 theorem Tendsto.mul_mul [MulHomClass F α β] (m : F) {f₁ g₁ : Filter α} {f₂ g₂ : Filter β} :
-    Tendsto m f₁ f₂ -> Tendsto m g₁ g₂ -> Tendsto m (f₁ * g₁) (f₂ * g₂) := fun hf hg =>
-(Filter.map_mul m).trans_le mul_le_mul' hf hg
+    Tendsto m f₁ f₂ → Tendsto m g₁ g₂ → Tendsto m (f₁ * g₁) (f₂ * g₂) := fun hf hg =>
+  (Filter.map_mul m).trans_le <| mul_le_mul' hf hg
 
 /-- `pure` as a `MonoidHom`. -/
 @[to_additive /-- `pure` as an `AddMonoidHom`. -/]
-/--
-Definition of `pureMonoidHom` / `pureMonoidHom` 的定义
+/-
+**Filter.pureMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：pureMonoidHom : α ->* Filter α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pureMonoidHom
-  signature: : α ->* Filter α
-  body: { pureMulHom, pureOneHom with }
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 pureMonoidHom
-  签名: : α ->* 滤子 α
-  定义体: { pureMulHom, pureOneHom with }
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: pureMulHom, pureOneHom
+--- 原说明 ---
+`pure` as a `MonoidHom`.
 -/
-def pureMonoidHom : α ->* Filter α :=
+def pureMonoidHom : α →* Filter α :=
   { pureMulHom, pureOneHom with }
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_pureMonoidHom` / 定理 `coe_pureMonoidHom`
-
-English:
-theorem coe_pureMonoidHom
-  statement: (pureMonoidHom : α -> Filter α) = pure
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_pureMonoidHom
-  结论: (pureMonoidHom : α -> 滤子 α) = pure
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Filter.coe_pureMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：coe_pureMonoidHom : (pureMonoidHom : α -> Filter α) = pure
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_pureMonoidHom : (pureMonoidHom : α -> Filter α) = pure :=
+theorem coe_pureMonoidHom : (pureMonoidHom : α → Filter α) = pure :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `pureMonoidHom_apply` / 定理 `pureMonoidHom_apply`
-
-English:
-theorem pureMonoidHom_apply
-  given: (a : α)
-  statement: pureMonoidHom a = pure a
-  proof: rfl
-
-中文:
-定理 pureMonoidHom_apply
-  条件: (a : α)
-  结论: pureMonoidHom a = pure a
-  证明: rfl
+/-
+**Filter.pureMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pureMonoidHom_apply (a : α) : pureMonoidHom a = pure a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pureMonoidHom_apply (a : α) : pureMonoidHom a = pure a :=
   rfl
@@ -2263,31 +1365,16 @@ end MulOneClass
 
 section Monoid
 
-variable [Monoid α] {f g : Filter α} {s : Set α} {a : α} {m n : Nat}
+variable [Monoid α] {f g : Filter α} {s : Set α} {a : α} {m n : ℕ}
 
 /-- `Filter α` is a `Monoid` under pointwise operations if `α` is. -/
 @[to_additive (attr := instance_reducible)
   /-- `Filter α` is an `AddMonoid` under pointwise operations if `α` is. -/]
-/--
-Definition of `monoid` / `monoid` 的定义
-
-English:
-definition monoid
-  signature: : Monoid (Filter α)
-  body: { Filter.mulOneClass, Filter.semigroup, @Filter.instNPow α _ _ with }
-
-scoped[Pointwise] attribute [instance] Filter.monoid Filter.addMonoid
-
-@[to_additive]
-
-中文:
-定义 monoid
-  签名: : 幺半群 (滤子 α)
-  定义体: { Filter.mulOneClass, Filter.semigroup, @Filter.instNPow α _ _ with }
-
-scoped[Pointwise] attribute [instance] Filter.monoid Filter.addMonoid
-
-@[to_additive]
+/-
+**Filter.monoid** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [Monoid α] → Monoid (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def monoid : Monoid (Filter α) :=
   { Filter.mulOneClass, Filter.semigroup, @Filter.instNPow α _ _ with }
@@ -2295,20 +1382,14 @@ protected def monoid : Monoid (Filter α) :=
 scoped[Pointwise] attribute [instance] Filter.monoid Filter.addMonoid
 
 @[to_additive]
-/--
-theorem `pow_mem_pow` / 定理 `pow_mem_pow`
-
-English:
-theorem pow_mem_pow
-  given: (hs : s in f)
-  statement: forall n : Nat, s ^ n in f ^ n
-
-中文:
-定理 pow_mem_pow
-  条件: (hs : s in f)
-  结论: 对任意 n : 自然数, s ^ n in f ^ n
+/-
+**Filter.pow_mem_pow** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Monoid α] {f : Filter α} {s : Set α}, s ∈ f → ∀ (
+n : ℕ), s ^ n ∈ f ^ n
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pow_mem_pow (hs : s in f) : forall n : Nat, s ^ n in f ^ n
+theorem pow_mem_pow (hs : s ∈ f) : ∀ n : ℕ, s ^ n ∈ f ^ n
   | 0 => by
     rw [pow_zero]
     exact one_mem_one
@@ -2317,178 +1398,124 @@ theorem pow_mem_pow (hs : s in f) : forall n : Nat, s ^ n in f ^ n
     exact mul_mem_mul (pow_mem_pow hs n) hs
 
 @[to_additive (attr := simp) nsmul_bot]
-/--
-theorem `bot_pow` / 定理 `bot_pow`
-
-English:
-theorem bot_pow
-  given: {n : Nat} (hn : n != 0)
-  statement: (⊥ : Filter α) ^ n = ⊥
-  proof: by
-  rw [← Nat.sub_one_add_one hn]; rw [pow_succ']; rw [bot_mul]
-
-@[to_additive]
-
-中文:
-定理 bot_pow
-  条件: {n : 自然数} (hn : n != 0)
-  结论: (⊥ : 滤子 α) ^ n = ⊥
-  证明: by
-  rw [← Nat.sub_one_add_one hn]; rw [pow_succ']; rw [bot_mul]
-
-@[to_additive]
-
-Depends on / 依赖: Nat.sub_one_add_one, bot_mul, pow_succ, sub_one_add_one
+/-
+**Filter.bot_pow** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：bot_pow {n : Nat} (hn : n != 0) : (⊥ : Filter α) ^ n = ⊥
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.sub_one_add_one`：∀ {a : ℕ}, a ≠ 0 → a - 1 + 1 = a
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Filter.bot_mul`：bot_mul : ⊥ * g = ⊥
 -/
-theorem bot_pow {n : Nat} (hn : n != 0) : (⊥ : Filter α) ^ n = ⊥ := by
-  rw [← Nat.sub_one_add_one hn]; rw [pow_succ']; rw [bot_mul]
+theorem bot_pow {n : ℕ} (hn : n ≠ 0) : (⊥ : Filter α) ^ n = ⊥ := by
+  rw [← Nat.sub_one_add_one hn, pow_succ', bot_mul]
 
 @[to_additive]
-/--
-theorem `mul_top_of_one_le` / 定理 `mul_top_of_one_le`
-
-English:
-theorem mul_top_of_one_le
-  given: (hf : 1 <= f)
-  statement: f * ⊤ = ⊤
-  proof: by
+/-
+**Filter.mul_top_of_one_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mul_top_of_one_le (hf : 1 <= f) : f * ⊤ = ⊤
+参数：hf : 1 <= f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `Set.mul_univ_of_one_mem`：mul_univ_of_one_mem (hs : (1 : α) in s) : s * u
+niv = univ
+· 使用定理 `Filter.mem_one`：mem_one : s in (1 : Filter α) ↔ (1 : α) in s
+-/
+theorem mul_top_of_one_le (hf : 1 ≤ f) : f * ⊤ = ⊤ := by
   refine top_le_iff.1 fun s => ?_
   simp only [mem_mul, mem_top, exists_eq_left]
   rintro ⟨t, ht, hs⟩
   rwa [mul_univ_of_one_mem (mem_one.1 <| hf ht), univ_subset_iff] at hs
 
 @[to_additive]
-
-中文:
-定理 mul_top_of_one_le
-  条件: (hf : 1 <= f)
-  结论: f * ⊤ = ⊤
-  证明: by
-  refine top_le_iff.1 fun s => ?_
-  simp only [mem_mul, mem_top, exists_eq_left]
-  rintro ⟨t, ht, hs⟩
-  rwa [mul_univ_of_one_mem (mem_one.1 <| hf ht), univ_subset_iff] at hs
-
-@[to_additive]
-
-Depends on / 依赖: exists_eq_left, mem_mul, mem_one, mem_top, mul_univ_of_one_mem, top_le_iff, univ_subset_iff
+/-
+**Filter.top_mul_of_one_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：top_mul_of_one_le (hf : 1 <= f) : ⊤ * f = ⊤
+参数：hf : 1 <= f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `Set.univ_mul_of_one_mem`：univ_mul_of_one_mem (ht : (1 : α) in t) : univ 
+* t = univ
+· 使用定理 `Filter.mem_one`：mem_one : s in (1 : Filter α) ↔ (1 : α) in s
 -/
-theorem mul_top_of_one_le (hf : 1 <= f) : f * ⊤ = ⊤ := by
-  refine top_le_iff.1 fun s => ?_
-  simp only [mem_mul, mem_top, exists_eq_left]
-  rintro ⟨t, ht, hs⟩
-  rwa [mul_univ_of_one_mem (mem_one.1 <| hf ht), univ_subset_iff] at hs
-
-@[to_additive]
-/--
-theorem `top_mul_of_one_le` / 定理 `top_mul_of_one_le`
-
-English:
-theorem top_mul_of_one_le
-  given: (hf : 1 <= f)
-  statement: ⊤ * f = ⊤
-  proof: by
+theorem top_mul_of_one_le (hf : 1 ≤ f) : ⊤ * f = ⊤ := by
   refine top_le_iff.1 fun s => ?_
   simp only [mem_mul, mem_top, exists_eq_left]
   rintro ⟨t, ht, hs⟩
   rwa [univ_mul_of_one_mem (mem_one.1 <| hf ht), univ_subset_iff] at hs
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 top_mul_of_one_le
-  条件: (hf : 1 <= f)
-  结论: ⊤ * f = ⊤
-  证明: by
-  refine top_le_iff.1 fun s => ?_
-  simp only [mem_mul, mem_top, exists_eq_left]
-  rintro ⟨t, ht, hs⟩
-  rwa [univ_mul_of_one_mem (mem_one.1 <| hf ht), univ_subset_iff] at hs
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: exists_eq_left, mem_mul, mem_one, mem_top, top_le_iff, univ_mul_of_one_mem, univ_subset_iff
--/
-theorem top_mul_of_one_le (hf : 1 <= f) : ⊤ * f = ⊤ := by
-  refine top_le_iff.1 fun s => ?_
-  simp only [mem_mul, mem_top, exists_eq_left]
-  rintro ⟨t, ht, hs⟩
-  rwa [univ_mul_of_one_mem (mem_one.1 <| hf ht), univ_subset_iff] at hs
-
-@[to_additive (attr := simp)]
-/--
-theorem `top_mul_top` / 定理 `top_mul_top`
-
-English:
-theorem top_mul_top
-  statement: (⊤ : Filter α) * ⊤ = ⊤
-  proof: mul_top_of_one_le le_top
-
-@[to_additive nsmul_top]
-
-中文:
-定理 top_mul_top
-  结论: (⊤ : 滤子 α) * ⊤ = ⊤
-  证明: mul_top_of_one_le le_top
-
-@[to_additive nsmul_top]
-
-Depends on / 依赖: le_top, mul_top_of_one_le
+/-
+**Filter.top_mul_top** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：top_mul_top : (⊤ : Filter α) * ⊤ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mul_top_of_one_le`：mul_top_of_one_le (hf : 1 <= f) : f * ⊤ = ⊤
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
 theorem top_mul_top : (⊤ : Filter α) * ⊤ = ⊤ :=
   mul_top_of_one_le le_top
 
 @[to_additive nsmul_top]
-/--
-theorem `top_pow` / 定理 `top_pow`
-
-English:
-theorem top_pow
-  statement: forall {n : Nat}, n != 0 -> (⊤ : Filter α) ^ n = ⊤
-
-中文:
-定理 top_pow
-  结论: 对任意 {n : 自然数}, n != 0 -> (⊤ : 滤子 α) ^ n = ⊤
+/-
+**Filter.top_pow** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Monoid α] {n : ℕ}, n ≠ 0 → ⊤ ^ n = ⊤
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem top_pow : forall {n : Nat}, n != 0 -> (⊤ : Filter α) ^ n = ⊤
+theorem top_pow : ∀ {n : ℕ}, n ≠ 0 → (⊤ : Filter α) ^ n = ⊤
   | 0 => fun h => (h rfl).elim
   | 1 => fun _ => pow_one _
   | n + 2 => fun _ => by rw [pow_succ, top_pow n.succ_ne_zero, top_mul_top]
 
 @[to_additive]
-/--
-theorem `_root_.IsUnit.filter` / 定理 `_root_.IsUnit.filter`
-
-English:
-theorem _root_.IsUnit.filter
-  statement: IsUnit a -> IsUnit (pure a : Filter α)
-  proof: IsUnit.map (pureMonoidHom : α ->* Filter α)
-
-中文:
-定理 _root_.是单位.filter
-  结论: 是单位 a -> 是单位 (pure a : 滤子 α)
-  证明: IsUnit.map (pureMonoidHom : α ->* Filter α)
+/-
+**Filter._root_.IsUnit.filter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem _root_.IsUnit.filter : IsUnit a -> IsUnit (pure a : Filter α) :=
-  IsUnit.map (pureMonoidHom : α ->* Filter α)
+protected theorem _root_.IsUnit.filter : IsUnit a → IsUnit (pure a : Filter α) :=
+  IsUnit.map (pureMonoidHom : α →* Filter α)
 
 end Monoid
 
 /-- `Filter α` is a `CommMonoid` under pointwise operations if `α` is. -/
 @[to_additive (attr := instance_reducible)
   /-- `Filter α` is an `AddCommMonoid` under pointwise operations if `α` is. -/]
-/--
-Definition of `commMonoid` / `commMonoid` 的定义
-
-English:
-definition commMonoid
-  signature: [CommMonoid α]
-  body: { Filter.mulOneClass, Filter.commSemigroup with }
-
-中文:
-定义 commMonoid
-  签名: [交换幺半群 α]
-  定义体: { Filter.mulOneClass, Filter.commSemigroup with }
+/-
+**Filter.commMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [CommMonoid α] → CommMonoid (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def commMonoid [CommMonoid α] : CommMonoid (Filter α) :=
   { Filter.mulOneClass, Filter.commSemigroup with }
@@ -2498,127 +1525,92 @@ section DivisionMonoid
 variable [DivisionMonoid α] {f g : Filter α}
 
 @[to_additive]
-/--
-theorem `mul_eq_one_iff` / 定理 `mul_eq_one_iff`
-
-English:
-theorem mul_eq_one_iff
-  statement: f * g = 1 ↔ exists a b, f = pure a ∧ g = pure b ∧ a * b = 1
-  proof: by
-  refine ⟨fun hfg => ?_, ?_⟩
-  · obtain ⟨t₁, h₁, t₂, h₂, h⟩ : (1 : Set α) in f * g := hfg.symm ▸ one_mem_one
-    have hfg : (f * g).NeBot := hfg.symm.subst one_neBot
-    rw [(hfg.nonempty_of_mem <| mul_mem_mul h₁ h₂).subset_one_iff]; rw [Set.mul_eq_one_iff] at h
-    obtain ⟨a, b, rfl, rfl, h⟩ := h
-    refine ⟨a, b, ?_, ?_, h⟩
-    · rwa [← hfg.of_mul_left.le_pure_iff, le_pure_iff]
-    · rwa [← hfg.of_mul_right.le_pure_iff, le_pure_iff]
-  · rintro ⟨a, b, rfl, rfl, h⟩
-    rw [pure_mul_pure]; rw [h]; rw [pure_one]
-
-中文:
-定理 mul_eq_one_iff
-  结论: f * g = 1 ↔ 存在 a b, f = pure a ∧ g = pure b ∧ a * b = 1
-  证明: by
-  refine ⟨fun hfg => ?_, ?_⟩
-  · obtain ⟨t₁, h₁, t₂, h₂, h⟩ : (1 : Set α) in f * g := hfg.symm ▸ one_mem_one
-    have hfg : (f * g).NeBot := hfg.symm.subst one_neBot
-    rw [(hfg.nonempty_of_mem <| mul_mem_mul h₁ h₂).subset_one_iff]; rw [Set.mul_eq_one_iff] at h
-    obtain ⟨a, b, rfl, rfl, h⟩ := h
-    refine ⟨a, b, ?_, ?_, h⟩
-    · rwa [← hfg.of_mul_left.le_pure_iff, le_pure_iff]
-    · rwa [← hfg.of_mul_right.le_pure_iff, le_pure_iff]
-  · rintro ⟨a, b, rfl, rfl, h⟩
-    rw [pure_mul_pure]; rw [h]; rw [pure_one]
+/-
+**Filter.mul_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : DivisionMonoid α] {f g : Filter α}, f * g = 1 ↔ ∃
+ a b, f = pure a ∧ g = pure b ∧ a * b = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.one_mem_one`：one_mem_one : (1 : Set α) in (1 : Filter α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.subst`：∀ {α : Sort u} {motive : α → Prop} {a b : α}, a = b → motive a
+ → motive b
+· 使用定理 `Filter.one_neBot`：one_neBot : (1 : Filter α).NeBot
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mul_eq_one_iff`：∀ {α : Type u_2} [inst : DivisionMonoid α] {s t : Se
+t α}, s * t = 1 ↔ ∃ a b, s = {a} ∧ t = {b} ∧ a * b = 1
+· 使用定理 `Set.Nonempty.subset_one_iff`：∀ {α : Type u_2} [inst : One α] {s : Set α}
+, s.Nonempty → (s ⊆ 1 ↔ s = 1)
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `Filter.mul_mem_mul`：mul_mem_mul : s in f -> t in g -> s * t in f * g
+· 使用定理 `Filter.NeBot.le_pure_iff`：∀ {α : Type u} {f : Filter α} {a : α}, f.NeBot
+ → (f ≤ pure a ↔ f = pure a)
+· 使用定理 `Filter.NeBot.of_mul_left`：∀ {α : Type u_2} [inst : Mul α] {f g : Filter 
+α}, (f * g).NeBot → f.NeBot
+· 使用定理 `Filter.le_pure_iff`：le_pure_iff {f : Filter α} {a : α} : f <= pure a ↔ {
+a} in f
+· 使用定理 `Filter.NeBot.of_mul_right`：∀ {α : Type u_2} [inst : Mul α] {f g : Filter
+ α}, (f * g).NeBot → g.NeBot
+· 使用定理 `Filter.pure_mul_pure`：pure_mul_pure : (pure a : Filter α) * pure b = pur
+e (a * b)
+· 使用定理 `Filter.pure_one`：pure_one : pure 1 = (1 : Filter α)
 -/
-protected theorem mul_eq_one_iff : f * g = 1 ↔ exists a b, f = pure a ∧ g = pure b ∧ a * b = 1 := by
+protected theorem mul_eq_one_iff : f * g = 1 ↔ ∃ a b, f = pure a ∧ g = pure b ∧ a * b = 1 := by
   refine ⟨fun hfg => ?_, ?_⟩
-  · obtain ⟨t₁, h₁, t₂, h₂, h⟩ : (1 : Set α) in f * g := hfg.symm ▸ one_mem_one
+  · obtain ⟨t₁, h₁, t₂, h₂, h⟩ : (1 : Set α) ∈ f * g := hfg.symm ▸ one_mem_one
     have hfg : (f * g).NeBot := hfg.symm.subst one_neBot
-    rw [(hfg.nonempty_of_mem <| mul_mem_mul h₁ h₂).subset_one_iff]; rw [Set.mul_eq_one_iff] at h
+    rw [(hfg.nonempty_of_mem <| mul_mem_mul h₁ h₂).subset_one_iff, Set.mul_eq_one_iff] at h
     obtain ⟨a, b, rfl, rfl, h⟩ := h
     refine ⟨a, b, ?_, ?_, h⟩
     · rwa [← hfg.of_mul_left.le_pure_iff, le_pure_iff]
     · rwa [← hfg.of_mul_right.le_pure_iff, le_pure_iff]
   · rintro ⟨a, b, rfl, rfl, h⟩
-    rw [pure_mul_pure]; rw [h]; rw [pure_one]
+    rw [pure_mul_pure, h, pure_one]
 
 /-- `Filter α` is a division monoid under pointwise operations if `α` is. -/
 @[to_additive (attr := instance_reducible)
   /-- `Filter α` is a subtraction monoid under pointwise operations if `α` is. -/]
-/--
-Definition of `divisionMonoid` / `divisionMonoid` 的定义
-
-English:
-definition divisionMonoid
-  signature: : DivisionMonoid (Filter α)
-  body: { Filter.monoid, Filter.instInvolutiveInv, Filter.instDiv, Filter.instZPow (α := α) with
-    mul_inv_rev := fun _ _ => map_map₂_antidistrib mul_inv_rev
-    inv_eq_of_mul := fun s t h => by
-      obtain ⟨a, b, rfl, rfl, hab⟩ := Filter.mul_eq_one_iff.1 h
-      rw [inv_pure]; rw [inv_eq_of_mul_eq_one_right hab]
-    div_eq_mul_inv := fun _ _ => map_map₂_distrib_right div_eq_mul_inv }
-
-@[to_additive]
-
-中文:
-定义 divisionMonoid
-  签名: : Division幺半群 (滤子 α)
-  定义体: { Filter.monoid, Filter.instInvolutiveInv, Filter.instDiv, Filter.instZPow (α := α) with
-    mul_inv_rev := fun _ _ => map_map₂_antidistrib mul_inv_rev
-    inv_eq_of_mul := fun s t h => by
-      obtain ⟨a, b, rfl, rfl, hab⟩ := Filter.mul_eq_one_iff.1 h
-      rw [inv_pure]; rw [inv_eq_of_mul_eq_one_right hab]
-    div_eq_mul_inv := fun _ _ => map_map₂_distrib_right div_eq_mul_inv }
-
-@[to_additive]
+/-
+**Filter.divisionMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [DivisionMonoid α] → DivisionMonoid (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def divisionMonoid : DivisionMonoid (Filter α) :=
   { Filter.monoid, Filter.instInvolutiveInv, Filter.instDiv, Filter.instZPow (α := α) with
     mul_inv_rev := fun _ _ => map_map₂_antidistrib mul_inv_rev
     inv_eq_of_mul := fun s t h => by
       obtain ⟨a, b, rfl, rfl, hab⟩ := Filter.mul_eq_one_iff.1 h
-      rw [inv_pure]; rw [inv_eq_of_mul_eq_one_right hab]
+      rw [inv_pure, inv_eq_of_mul_eq_one_right hab]
     div_eq_mul_inv := fun _ _ => map_map₂_distrib_right div_eq_mul_inv }
 
 @[to_additive]
-/--
-theorem `isUnit_iff` / 定理 `isUnit_iff`
-
-English:
-theorem isUnit_iff
-  statement: IsUnit f ↔ exists a, f = pure a ∧ IsUnit a
-  proof: by
-  constructor
-  · rintro ⟨u, rfl⟩
-    obtain ⟨a, b, ha, hb, h⟩ := Filter.mul_eq_one_iff.1 u.mul_inv
-    refine ⟨a, ha, ⟨a, b, h, pure_injective ?_⟩, rfl⟩
-    rw [← pure_mul_pure]; rw [← ha]; rw [← hb]
-    exact u.inv_mul
-  · rintro ⟨a, rfl, ha⟩
-    exact ha.filter
-
-中文:
-定理 isUnit_iff
-  结论: 是单位 f ↔ 存在 a, f = pure a ∧ 是单位 a
-  证明: by
-  constructor
-  · rintro ⟨u, rfl⟩
-    obtain ⟨a, b, ha, hb, h⟩ := Filter.mul_eq_one_iff.1 u.mul_inv
-    refine ⟨a, ha, ⟨a, b, h, pure_injective ?_⟩, rfl⟩
-    rw [← pure_mul_pure]; rw [← ha]; rw [← hb]
-    exact u.inv_mul
-  · rintro ⟨a, rfl, ha⟩
-    exact ha.filter
-
-Depends on / 依赖: Filter, Filter.mul_eq_one_iff, filter, ha.filter, inv_mul, mul_eq_one_iff, mul_inv, pure_injective, pure_mul_pure, u.inv_mul, u.mul_inv
+/-
+**Filter.isUnit_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isUnit_iff : IsUnit f ↔ exists a, f = pure a ∧ IsUnit a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.mul_eq_one_iff`：∀ {α : Type u_2} [inst : DivisionMonoid α] {f g :
+ Filter α}, f * g = 1 ↔ ∃ a b, f = pure a ∧ g = pure b ∧ a * b = 1
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
+· 使用定理 `Filter.pure_injective`：pure_injective : Injective (pure : α -> Filter α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.pure_mul_pure`：pure_mul_pure : (pure a : Filter α) * pure b = pur
+e (a * b)
+· 使用定理 `Units.inv_mul`：inv_mul : (↑a⁻¹ * a : α) = 1
+· 使用定理 `IsUnit.filter`：∀ {α : Type u_2} [inst : Monoid α] {a : α}, IsUnit a → Is
+Unit (pure a)
 -/
-theorem isUnit_iff : IsUnit f ↔ exists a, f = pure a ∧ IsUnit a := by
+theorem isUnit_iff : IsUnit f ↔ ∃ a, f = pure a ∧ IsUnit a := by
   constructor
   · rintro ⟨u, rfl⟩
     obtain ⟨a, b, ha, hb, h⟩ := Filter.mul_eq_one_iff.1 u.mul_inv
     refine ⟨a, ha, ⟨a, b, h, pure_injective ?_⟩, rfl⟩
-    rw [← pure_mul_pure]; rw [← ha]; rw [← hb]
+    rw [← pure_mul_pure, ← ha, ← hb]
     exact u.inv_mul
   · rintro ⟨a, rfl, ha⟩
     exact ha.filter
@@ -2628,48 +1620,26 @@ end DivisionMonoid
 /-- `Filter α` is a commutative division monoid under pointwise operations if `α` is. -/
 @[to_additive (attr := instance_reducible) subtractionCommMonoid
 /-- `Filter α` is a commutative subtraction monoid under pointwise operations if `α` is. -/]
-/--
-Definition of `divisionCommMonoid` / `divisionCommMonoid` 的定义
-
-English:
-definition divisionCommMonoid
-  signature: [DivisionCommMonoid α]
-  body: { Filter.divisionMonoid, Filter.commSemigroup with }
-
-中文:
-定义 divisionCommMonoid
-  签名: [DivisionComm幺半群 α]
-  定义体: { Filter.divisionMonoid, Filter.commSemigroup with }
+/-
+**Filter.divisionCommMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [DivisionCommMonoid α] → DivisionCommMonoid (Filter α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def divisionCommMonoid [DivisionCommMonoid α] : DivisionCommMonoid (Filter α) :=
   { Filter.divisionMonoid, Filter.commSemigroup with }
 
 /-- `Filter α` has distributive negation if `α` has. -/
 @[instance_reducible]
-/--
-Definition of `instDistribNeg` / `instDistribNeg` 的定义
+/-
+**Filter.instDistribNeg** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → [inst : Mul α] → [HasDistribNeg α] → HasDistribNeg (Filte
+r α)
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition instDistribNeg
-  signature: [Mul α] [HasDistribNeg α]
-  body: { Filter.instInvolutiveNeg with
-    neg_mul := fun _ _ => map₂_map_left_comm neg_mul
-    mul_neg := fun _ _ => map_map₂_right_comm mul_neg }
-
-scoped[Pointwise] attribute [instance] Filter.commMonoid Filter.addCommMonoid Filter.divisionMonoid
-  Filter.subtractionMonoid Filter.divisionCommMonoid Filter.subtractionCommMonoid
-  Filter.instDistribNeg
-
-中文:
-定义 instDistribNeg
-  签名: [乘法 α] [有DistribNeg α]
-  定义体: { Filter.instInvolutiveNeg with
-    neg_mul := fun _ _ => map₂_map_left_comm neg_mul
-    mul_neg := fun _ _ => map_map₂_right_comm mul_neg }
-
-scoped[Pointwise] attribute [instance] Filter.commMonoid Filter.addCommMonoid Filter.divisionMonoid
-  Filter.subtractionMonoid Filter.divisionCommMonoid Filter.subtractionCommMonoid
-  Filter.instDistribNeg
+--- 原说明 ---
+`Filter α` has distributive negation if `α` has.
 -/
 protected def instDistribNeg [Mul α] [HasDistribNeg α] : HasDistribNeg (Filter α) :=
   { Filter.instInvolutiveNeg with
@@ -2684,41 +1654,45 @@ section Distrib
 
 variable [Distrib α] {f g h : Filter α}
 
-
-/--
-theorem `mul_add_subset` / 定理 `mul_add_subset`
-
-English:
-theorem mul_add_subset
-  statement: f * (g + h) <= f * g + f * h
-  proof: map₂_distrib_le_left mul_add
-
-中文:
-定理 mul_add_subset
-  结论: f * (g + h) <= f * g + f * h
-  证明: map₂_distrib_le_left mul_add
-
-Depends on / 依赖: mul_add
+/-!
+Note that `Filter α` is not a `Distrib` because `f * g + f * h` has cross terms that `f * (g + h)`
+lacks.
 -/
-theorem mul_add_subset : f * (g + h) <= f * g + f * h :=
+
+/-
+**Filter.mul_add_subset** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mul_add_subset : f * (g + h) <= f * g + f * h
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_distrib_le_left`：map₂_distrib_le_left {m : α -> δ -> ε} {n :
+ β -> γ -> δ} {m₁ : α -> β -> β'} {m₂ : α -> γ -> γ'} {n' : β' -> γ' -> ε} (h_di
+strib : forall a …
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+
+--- 原说明 ---
+Note that `Filter α` is not a `Distrib` because `f * g + f * h` has cross terms 
+that `f * (g + h)`
+lacks.
+-/
+theorem mul_add_subset : f * (g + h) ≤ f * g + f * h :=
   map₂_distrib_le_left mul_add
-
-/--
-theorem `add_mul_subset` / 定理 `add_mul_subset`
-
-English:
-theorem add_mul_subset
-  statement: (f + g) * h <= f * h + g * h
-  proof: map₂_distrib_le_right add_mul
-
-中文:
-定理 add_mul_subset
-  结论: (f + g) * h <= f * h + g * h
-  证明: map₂_distrib_le_right add_mul
-
-Depends on / 依赖: add_mul
+/-
+**Filter.add_mul_subset** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：add_mul_subset : (f + g) * h <= f * h + g * h
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_distrib_le_right`：map₂_distrib_le_right {m : δ -> γ -> ε} {n
+ : α -> β -> δ} {m₁ : α -> γ -> α'} {m₂ : β -> γ -> β'} {n' : α' -> β' -> ε} (h_
+distrib : forall a…
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
 -/
-theorem add_mul_subset : (f + g) * h <= f * h + g * h :=
+theorem add_mul_subset : (f + g) * h ≤ f * h + g * h :=
   map₂_distrib_le_right add_mul
 
 end Distrib
@@ -2727,55 +1701,42 @@ section MulZeroClass
 
 variable [MulZeroClass α] {f g : Filter α}
 
+/-! Note that `Filter` is not a `MulZeroClass` because `0 * ⊥ ≠ 0`. -/
 
-/--
-theorem `NeBot.mul_zero_nonneg` / 定理 `NeBot.mul_zero_nonneg`
+/-
+**Filter.NeBot.mul_zero_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : MulZeroClass α] {f : Filter α}, f.NeBot → 0 ≤ f *
+ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_mul_iff`：le_mul_iff : h <= f * g ↔ forall ⦃s⦄, s in f -> foral
+l ⦃t⦄, t in g -> s * t in h
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 
-English:
-theorem NeBot.mul_zero_nonneg
-  given: (hf : f.NeBot)
-  statement: 0 <= f * 0
-  proof: le_mul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
-    ⟨_, ha, _, h₂, mul_zero _⟩
-
-中文:
-定理 NeBot.mul_zero_nonneg
-  条件: (hf : f.NeBot)
-  结论: 0 <= f * 0
-  证明: le_mul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
-    ⟨_, ha, _, h₂, mul_zero _⟩
-
-Depends on / 依赖: hf.nonempty_of_mem, le_mul_iff, mul_zero, nonempty_of_mem
+--- 原说明 ---
+Note that `Filter` is not a `MulZeroClass` because `0 * ⊥ ≠ 0`.
 -/
-theorem NeBot.mul_zero_nonneg (hf : f.NeBot) : 0 <= f * 0 :=
+theorem NeBot.mul_zero_nonneg (hf : f.NeBot) : 0 ≤ f * 0 :=
   le_mul_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
     ⟨_, ha, _, h₂, mul_zero _⟩
-
-/--
-theorem `NeBot.zero_mul_nonneg` / 定理 `NeBot.zero_mul_nonneg`
-
-English:
-theorem NeBot.zero_mul_nonneg
-  given: (hg : g.NeBot)
-  statement: 0 <= 0 * g
-  proof: le_mul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
-    ⟨_, h₁, _, hb, zero_mul _⟩
-
-中文:
-定理 NeBot.zero_mul_nonneg
-  条件: (hg : g.NeBot)
-  结论: 0 <= 0 * g
-  证明: le_mul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
-    ⟨_, h₁, _, hb, zero_mul _⟩
-
-Depends on / 依赖: hg.nonempty_of_mem, le_mul_iff, nonempty_of_mem, zero_mul
+/-
+**Filter.NeBot.zero_mul_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : MulZeroClass α] {g : Filter α}, g.NeBot → 0 ≤ 0 *
+ g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_mul_iff`：le_mul_iff : h <= f * g ↔ forall ⦃s⦄, s in f -> foral
+l ⦃t⦄, t in g -> s * t in h
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem NeBot.zero_mul_nonneg (hg : g.NeBot) : 0 <= 0 * g :=
+theorem NeBot.zero_mul_nonneg (hg : g.NeBot) : 0 ≤ 0 * g :=
   le_mul_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
     ⟨_, h₁, _, hb, zero_mul _⟩
@@ -2790,224 +1751,164 @@ variable [Group α] [DivisionMonoid β] [FunLike F α β] [MonoidHomClass F α �
 /-! Note that `Filter α` is not a group because `f / f ≠ 1` in general -/
 
 @[to_additive (attr := simp high)] -- Ensure this fires before `le_div_iff`.
-/--
-theorem `one_le_div_iff` / 定理 `one_le_div_iff`
+/-
+**Filter.one_le_div_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} [inst : Group α] {f g : Filter α}, 1 ≤ f / g ↔ ¬Disjoint 
+f g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.le_bot`：Disjoint.le_bot : Disjoint a b -> a ⊓ b <= ⊥
+· 使用定理 `Filter.mem_bot`：mem_bot {s : Set α} : s in (⊥ : Filter α)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.one_mem_div_iff`：one_mem_div_iff : (1 : α) in s / t ↔ ¬Disjoint s t
+· 使用定理 `Filter.div_mem_div`：div_mem_div : s in f -> t in g -> s / t in f / g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `disjoint_iff`：disjoint_iff : Disjoint a b ↔ a ⊓ b = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.disjoint_of_disjoint_of_mem`：disjoint_of_disjoint_of_mem {f g : F
+ilter α} {s t : Set α} (h : Disjoint s t) (hs : s in f) (ht : t in g) : Disjoint
+ f g
 
-English:
-theorem one_le_div_iff
-  statement: 1 <= f / g ↔ ¬Disjoint f g
-  proof: by
-  refine ⟨fun h hfg => ?_, ?_⟩
-  · obtain ⟨s, hs, t, ht, hst⟩ := hfg.le_bot (mem_bot : ∅ in ⊥)
-    exact Set.one_mem_div_iff.1 (h <| div_mem_div hs ht) (disjoint_iff.2 hst.symm)
-  · rintro h s ⟨t₁, h₁, t₂, h₂, hs⟩
-    exact hs (Set.one_mem_div_iff.2 fun ht => h <| disjoint_of_disjoint_of_mem ht h₁ h₂)
-
-@[to_additive]
-
-中文:
-定理 one_le_div_iff
-  结论: 1 <= f / g ↔ ¬Disjoint f g
-  证明: by
-  refine ⟨fun h hfg => ?_, ?_⟩
-  · obtain ⟨s, hs, t, ht, hst⟩ := hfg.le_bot (mem_bot : ∅ in ⊥)
-    exact Set.one_mem_div_iff.1 (h <| div_mem_div hs ht) (disjoint_iff.2 hst.symm)
-  · rintro h s ⟨t₁, h₁, t₂, h₂, hs⟩
-    exact hs (Set.one_mem_div_iff.2 fun ht => h <| disjoint_of_disjoint_of_mem ht h₁ h₂)
-
-@[to_additive]
+--- 原说明 ---
+Note that `Filter α` is not a group because `f / f ≠ 1` in general
 -/
-protected theorem one_le_div_iff : 1 <= f / g ↔ ¬Disjoint f g := by
+protected theorem one_le_div_iff : 1 ≤ f / g ↔ ¬Disjoint f g := by
   refine ⟨fun h hfg => ?_, ?_⟩
-  · obtain ⟨s, hs, t, ht, hst⟩ := hfg.le_bot (mem_bot : ∅ in ⊥)
+  · obtain ⟨s, hs, t, ht, hst⟩ := hfg.le_bot (mem_bot : ∅ ∈ ⊥)
     exact Set.one_mem_div_iff.1 (h <| div_mem_div hs ht) (disjoint_iff.2 hst.symm)
   · rintro h s ⟨t₁, h₁, t₂, h₂, hs⟩
     exact hs (Set.one_mem_div_iff.2 fun ht => h <| disjoint_of_disjoint_of_mem ht h₁ h₂)
 
 @[to_additive]
-/--
-theorem `not_one_le_div_iff` / 定理 `not_one_le_div_iff`
-
-English:
-theorem not_one_le_div_iff
-  statement: ¬1 <= f / g ↔ Disjoint f g
-  proof: Filter.one_le_div_iff.not_left
-
-@[to_additive]
-
-中文:
-定理 not_one_le_div_iff
-  结论: ¬1 <= f / g ↔ Disjoint f g
-  证明: Filter.one_le_div_iff.not_left
-
-@[to_additive]
-
-Depends on / 依赖: Filter, Filter.one_le_div_iff.not_left, not_left, one_le_div_iff
+/-
+**Filter.not_one_le_div_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：not_one_le_div_iff : ¬1 <= f / g ↔ Disjoint f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not_left`：Iff.not_left (h : a ↔ ¬b) : ¬a ↔ b
+· 使用定理 `Filter.one_le_div_iff`：∀ {α : Type u_2} [inst : Group α] {f g : Filter α
+}, 1 ≤ f / g ↔ ¬Disjoint f g
 -/
-theorem not_one_le_div_iff : ¬1 <= f / g ↔ Disjoint f g :=
+theorem not_one_le_div_iff : ¬1 ≤ f / g ↔ Disjoint f g :=
   Filter.one_le_div_iff.not_left
 
 @[to_additive]
-/--
-theorem `NeBot.one_le_div` / 定理 `NeBot.one_le_div`
-
-English:
-theorem NeBot.one_le_div
-  given: (h : f.NeBot)
-  statement: 1 <= f / f
-  proof: by
-  simpa using neBot_iff.mp h
-
-@[to_additive]
-
-中文:
-定理 NeBot.one_le_div
-  条件: (h : f.NeBot)
-  结论: 1 <= f / f
-  证明: by
-  simpa using neBot_iff.mp h
-
-@[to_additive]
-
-Depends on / 依赖: neBot_iff, neBot_iff.mp
+/-
+**Filter.NeBot.one_le_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : Group α] {f : Filter α}, f.NeBot → 1 ≤ f / f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.neBot_iff`：neBot_iff {f : Filter α} : NeBot f ↔ f != ⊥
 -/
-theorem NeBot.one_le_div (h : f.NeBot) : 1 <= f / f := by
+theorem NeBot.one_le_div (h : f.NeBot) : 1 ≤ f / f := by
   simpa using neBot_iff.mp h
 
 @[to_additive]
-/--
-theorem `isUnit_pure` / 定理 `isUnit_pure`
-
-English:
-theorem isUnit_pure
-  given: (a : α)
-  statement: IsUnit (pure a : Filter α)
-  proof: (Group.isUnit a).filter
-
-@[simp]
-
-中文:
-定理 isUnit_pure
-  条件: (a : α)
-  结论: 是单位 (pure a : 滤子 α)
-  证明: (Group.isUnit a).filter
-
-@[simp]
-
-Depends on / 依赖: Group.isUnit, filter, isUnit
+/-
+**Filter.isUnit_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isUnit_pure (a : α) : IsUnit (pure a : Filter α)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.filter`：∀ {α : Type u_2} [inst : Monoid α] {a : α}, IsUnit a → Is
+Unit (pure a)
+· 使用引理 `Group.isUnit`：Group.isUnit [Group α] (a : α) : IsUnit a
 -/
 theorem isUnit_pure (a : α) : IsUnit (pure a : Filter α) :=
   (Group.isUnit a).filter
 
 @[simp]
-/--
-theorem `isUnit_iff_singleton` / 定理 `isUnit_iff_singleton`
-
-English:
-theorem isUnit_iff_singleton
-  statement: IsUnit f ↔ exists a, f = pure a
-  proof: by
-  simp only [isUnit_iff, Group.isUnit, and_true]
-
-@[to_additive]
-
-中文:
-定理 isUnit_iff_singleton
-  结论: 是单位 f ↔ 存在 a, f = pure a
-  证明: by
-  simp only [isUnit_iff, Group.isUnit, and_true]
-
-@[to_additive]
-
-Depends on / 依赖: Group.isUnit, and_true, isUnit, isUnit_iff
+/-
+**Filter.isUnit_iff_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isUnit_iff_singleton : IsUnit f ↔ exists a, f = pure a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isUnit_iff_singleton : IsUnit f ↔ exists a, f = pure a := by
+theorem isUnit_iff_singleton : IsUnit f ↔ ∃ a, f = pure a := by
   simp only [isUnit_iff, Group.isUnit, and_true]
 
 @[to_additive]
-/--
-theorem `map_inv'` / 定理 `map_inv'`
-
-English:
-theorem map_inv'
-  statement: f⁻¹.map m = (f.map m)⁻¹
-  proof: Semiconj.filter_map (map_inv m) f
-
-@[to_additive]
-
-中文:
-定理 map_inv'
-  结论: f⁻¹.map m = (f.map m)⁻¹
-  证明: Semiconj.filter_map (map_inv m) f
-
-@[to_additive]
-
-Depends on / 依赖: Semiconj, Semiconj.filter_map, filter_map, map_inv
+/-
+**Filter.map_inv'** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：map_inv' : f⁻¹.map m = (f.map m)⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Semiconj.filter_map`：∀ {α : Type u_1} {β : Type u_2} {f : α → β
+} {ga : α → α} {gb : β → β},   Function.Semiconj f ga gb → Function.Semiconj (Fi
+lter.map f) (Filte…
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
 -/
 theorem map_inv' : f⁻¹.map m = (f.map m)⁻¹ :=
   Semiconj.filter_map (map_inv m) f
 
 @[to_additive]
-/--
-theorem `Tendsto.inv_inv` / 定理 `Tendsto.inv_inv`
-
-English:
-theorem Tendsto.inv_inv
-  statement: Tendsto m f₁ f₂ -> Tendsto m f₁⁻¹ f₂⁻¹
-  proof: fun hf =>
-(Filter.map_inv' m).trans_le Filter.inv_le_inv hf
-
-@[to_additive]
-
-中文:
-定理 收敛.inv_inv
-  结论: 收敛 m f₁ f₂ -> 收敛 m f₁⁻¹ f₂⁻¹
-  证明: fun hf =>
-(Filter.map_inv' m).trans_le Filter.inv_le_inv hf
-
-@[to_additive]
+/-
+**Filter.Tendsto.inv_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tendsto`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : Group α] [inst_1 : 
+DivisionMonoid β] [inst_2 : FunLike F α β]   [MonoidHomClass F α β] (m : F) {f₁ 
+: Filter α} {f₂ : Filter β},   Filter.Tendsto (⇑m) f₁ f₂ → Filter.Tendsto (⇑m) f
+₁⁻¹ f₂⁻¹
+参数：m : F；⇑m；⇑m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `Filter.map_inv'`：map_inv' : f⁻¹.map m = (f.map m)⁻¹
+· 使用定理 `Filter.inv_le_inv`：∀ {α : Type u_2} [inst : Inv α] {f g : Filter α}, f ≤
+ g → f⁻¹ ≤ g⁻¹
 -/
-protected theorem Tendsto.inv_inv : Tendsto m f₁ f₂ -> Tendsto m f₁⁻¹ f₂⁻¹ := fun hf =>
-(Filter.map_inv' m).trans_le Filter.inv_le_inv hf
+protected theorem Tendsto.inv_inv : Tendsto m f₁ f₂ → Tendsto m f₁⁻¹ f₂⁻¹ := fun hf =>
+  (Filter.map_inv' m).trans_le <| Filter.inv_le_inv hf
 
 @[to_additive]
-/--
-theorem `map_div` / 定理 `map_div`
-
-English:
-theorem map_div
-  statement: (f / g).map m = f.map m / g.map m
-  proof: map_map₂_distrib map_div m
-
-@[to_additive]
-
-中文:
-定理 map_div
-  结论: (f / g).map m = f.map m / g.map m
-  证明: map_map₂_distrib map_div m
-
-@[to_additive]
+/-
+**Filter.map_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : Group α] [inst_1 : 
+DivisionMonoid β] [inst_2 : FunLike F α β]   [MonoidHomClass F α β] (m : F) {f g
+ : Filter α}, Filter.map (⇑m) (f / g) = Filter.map (⇑m) f / Filter.map (⇑m) g
+参数：m : F；⇑m；f / g；⇑m；⇑m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_map₂_distrib`：map_map₂_distrib {n : γ -> δ} {m' : α' -> β' ->
+ δ} {n₁ : α -> α'} {n₂ : β -> β'} (h_distrib : forall a b, n (m a b) = m' (n₁ a)
+ (n₂ b)) : (m…
+· 使用定理 `map_div`：map_div [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) : forall a b, f (a / b) = f a / f b
 -/
 protected theorem map_div : (f / g).map m = f.map m / g.map m :=
-map_map₂_distrib map_div m
+  map_map₂_distrib <| map_div m
 
 @[to_additive]
-/--
-theorem `Tendsto.div_div` / 定理 `Tendsto.div_div`
-
-English:
-theorem Tendsto.div_div
-  given: (hf : Tendsto m f₁ f₂) (hg : Tendsto m g₁ g₂)
-  proof: (Filter.map_div m).trans_le Filter.div_le_div hf hg
-
-中文:
-定理 收敛.div_div
-  条件: (hf : 收敛 m f₁ f₂) (hg : 收敛 m g₁ g₂)
-  证明: (Filter.map_div m).trans_le Filter.div_le_div hf hg
+/-
+**Filter.Tendsto.div_div** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tendsto`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : Group α] [inst_1 : 
+DivisionMonoid β] [inst_2 : FunLike F α β]   [MonoidHomClass F α β] (m : F) {f₁ 
+g₁ : Filter α} {f₂ g₂ : Filter β},   Filter.Tendsto (⇑m) f₁ f₂ → Filter.Tendsto 
+(⇑m) g₁ g₂ → Filter.Tendsto (⇑m) (f₁ / g₁) (f₂ / g₂)
+参数：m : F；⇑m；⇑m；⇑m；f₁ / g₁；f₂ / g₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `Filter.map_div`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [inst : G
+roup α] [inst_1 : DivisionMonoid β] [inst_2 : FunLike F α β]   [MonoidHomClass F
+ α β…
+· 使用定理 `Filter.div_le_div`：∀ {α : Type u_2} [inst : Div α] {f₁ f₂ g₁ g₂ : Filter
+ α}, f₁ ≤ f₂ → g₁ ≤ g₂ → f₁ / g₁ ≤ f₂ / g₂
 -/
 protected theorem Tendsto.div_div (hf : Tendsto m f₁ f₂) (hg : Tendsto m g₁ g₂) :
     Tendsto m (f₁ / g₁) (f₂ / g₂) :=
-(Filter.map_div m).trans_le Filter.div_le_div hf hg
+  (Filter.map_div m).trans_le <| Filter.div_le_div hf hg
 
 end Group
 
@@ -3015,54 +1916,35 @@ section GroupWithZero
 
 variable [GroupWithZero α] {f g : Filter α}
 
-/--
-theorem `NeBot.div_zero_nonneg` / 定理 `NeBot.div_zero_nonneg`
-
-English:
-theorem NeBot.div_zero_nonneg
-  given: (hf : f.NeBot)
-  statement: 0 <= f / 0
-  proof: Filter.le_div_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
-    ⟨_, ha, _, h₂, div_zero _⟩
-
-中文:
-定理 NeBot.div_zero_nonneg
-  条件: (hf : f.NeBot)
-  结论: 0 <= f / 0
-  证明: Filter.le_div_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
-    ⟨_, ha, _, h₂, div_zero _⟩
-
-Depends on / 依赖: Filter, Filter.le_div_iff, div_zero, hf.nonempty_of_mem, le_div_iff, nonempty_of_mem
+/-
+**Filter.NeBot.div_zero_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : GroupWithZero α] {f : Filter α}, f.NeBot → 0 ≤ f 
+/ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_div_iff`：∀ {α : Type u_2} [inst : Div α] {f g h : Filter α}, h
+ ≤ f / g ↔ ∀ ⦃s : Set α⦄, s ∈ f → ∀ ⦃t : Set α⦄, t ∈ g → s / t ∈ h
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
 -/
-theorem NeBot.div_zero_nonneg (hf : f.NeBot) : 0 <= f / 0 :=
+theorem NeBot.div_zero_nonneg (hf : f.NeBot) : 0 ≤ f / 0 :=
   Filter.le_div_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
     ⟨_, ha, _, h₂, div_zero _⟩
-
-/--
-theorem `NeBot.zero_div_nonneg` / 定理 `NeBot.zero_div_nonneg`
-
-English:
-theorem NeBot.zero_div_nonneg
-  given: (hg : g.NeBot)
-  statement: 0 <= 0 / g
-  proof: Filter.le_div_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
-    ⟨_, h₁, _, hb, zero_div _⟩
-
-中文:
-定理 NeBot.zero_div_nonneg
-  条件: (hg : g.NeBot)
-  结论: 0 <= 0 / g
-  证明: Filter.le_div_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
-    ⟨_, h₁, _, hb, zero_div _⟩
-
-Depends on / 依赖: Filter, Filter.le_div_iff, hg.nonempty_of_mem, le_div_iff, nonempty_of_mem, zero_div
+/-
+**Filter.NeBot.zero_div_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} [inst : GroupWithZero α] {g : Filter α}, g.NeBot → 0 ≤ 0 
+/ g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_div_iff`：∀ {α : Type u_2} [inst : Div α] {f g h : Filter α}, h
+ ≤ f / g ↔ ∀ ⦃s : Set α⦄, s ∈ f → ∀ ⦃t : Set α⦄, t ∈ g → s / t ∈ h
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `zero_div`：zero_div (a : G₀) : 0 / a = 0
 -/
-theorem NeBot.zero_div_nonneg (hg : g.NeBot) : 0 <= 0 / g :=
+theorem NeBot.zero_div_nonneg (hg : g.NeBot) : 0 ≤ 0 / g :=
   Filter.le_div_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
     ⟨_, h₁, _, hb, zero_div _⟩
@@ -3081,468 +1963,278 @@ variable [SMul α β] {f f₁ f₂ : Filter α} {g g₁ g₂ h : Filter β} {s :
 @[to_additive (attr := instance_reducible)
   /-- The filter `f +ᵥ g` is generated by `{s +ᵥ t | s ∈ f, t ∈ g}` in locale
 `Pointwise`. -/]
-/--
-Definition of `instSMul` / `instSMul` 的定义
-
-English:
-definition instSMul
-  signature: : SMul (Filter α) (Filter β)
-  body: ⟨/- This is defeq to `map₂ (· • ·) f g`, but the hypothesis unfolds to `t₁ • t₂ ⊆ s`
-  rather than all the way to `Set.image2 (· • ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· • ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instSMul Filter.instVAdd
-
-@[to_additive]
-
-中文:
-定义 instSMul
-  签名: : 标量乘法 (滤子 α) (滤子 β)
-  定义体: ⟨/- This is defeq to `map₂ (· • ·) f g`, but the hypothesis unfolds to `t₁ • t₂ ⊆ s`
-  rather than all the way to `Set.image2 (· • ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· • ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instSMul Filter.instVAdd
-
-@[to_additive]
+/-
+**Filter.instSMul** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [SMul α β] → SMul (Filter α) (Filter β)
+参数：Filter α；Filter β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_sets`：∀ {α : Type u_1} (self : Filter α), Set.univ ∈ self.se
+ts
+· 使用定理 `Filter.sets_of_superset`：∀ {α : Type u_1} (self : Filter α) {x y : Set α
+}, x ∈ self.sets → x ⊆ y → y ∈ self.sets
+· 使用定理 `Filter.inter_sets`：∀ {α : Type u_1} (self : Filter α) {x y : Set α}, x ∈
+ self.sets → y ∈ self.sets → x ∩ y ∈ self.sets
 -/
 protected def instSMul : SMul (Filter α) (Filter β) :=
   ⟨/- This is defeq to `map₂ (· • ·) f g`, but the hypothesis unfolds to `t₁ • t₂ ⊆ s`
   rather than all the way to `Set.image2 (· • ·) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· • ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq s } }⟩
+  fun f g => { map₂ (· • ·) f g with sets := { s | ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ • t₂ ⊆ s } }⟩
 
 scoped[Pointwise] attribute [instance] Filter.instSMul Filter.instVAdd
 
 @[to_additive]
-/--
-theorem `HasBasis.smul` / 定理 `HasBasis.smul`
-
-English:
-theorem HasBasis.smul
-  statement: {ιf ιg : Type*} {pf : ιf -> Prop} {sf : ιf -> Set α}
-  proof: hf.map₂ (· • ·) hg
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 有基.smul
-  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> 集合 α}
-  证明: hf.map₂ (· • ·) hg
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: hf.map
+/-
+**Filter.HasBasis.smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.HasBasis`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter α} {g : Filt
+er β} {ιf : Type u_7} {ιg : Type u_8}   {pf : ιf → Prop} {sf : ιf → Set α} {pg :
+ ιg → Prop} {sg : ιg → Set β},   f.HasBasis pf sf → g.HasBasis pg sg → (f • g).H
+asBasis (fun i => pf i.1 ∧ pg i.2) fun i => sf i.1 • sg i.2
+参数：f • g；fun i => pf i.1 ∧ pg i.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.map₂`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {f 
+: Filter α} {g : Filter β} {ι : Type u_11} {ι' : Type u_12}   {p : ι → Prop} {q 
+: ι' → Pro…
 -/
-theorem HasBasis.smul {ιf ιg : Type*} {pf : ιf -> Prop} {sf : ιf -> Set α}
-    {pg : ιg -> Prop} {sg : ιg -> Set β} (hf : f.HasBasis pf sf) (hg : g.HasBasis pg sg) :
-    (f • g).HasBasis (fun i : ιf × ιg => pf i.1 ∧ pg i.2) fun i => sf i.1 • sg i.2 :=
+theorem HasBasis.smul {ιf ιg : Type*} {pf : ιf → Prop} {sf : ιf → Set α}
+    {pg : ιg → Prop} {sg : ιg → Set β} (hf : f.HasBasis pf sf) (hg : g.HasBasis pg sg) :
+    (f • g).HasBasis (fun i : ιf × ιg ↦ pf i.1 ∧ pg i.2) fun i ↦ sf i.1 • sg i.2 :=
   hf.map₂ (· • ·) hg
 
 @[to_additive (attr := simp)]
-/--
-theorem `map₂_smul` / 定理 `map₂_smul`
-
-English:
-theorem map₂_smul
-  statement: map₂ (· • ·) f g = f • g
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 map₂_smul
-  结论: map₂ (· • ·) f g = f • g
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：map (m : α -> β) (f : Filter α) : Filter β where sets
+参数：m : α -> β；f : Filter α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 -/
 theorem map₂_smul : map₂ (· • ·) f g = f • g :=
   rfl
 
 @[to_additive]
-/--
-theorem `mem_smul` / 定理 `mem_smul`
-
-English:
-theorem mem_smul
-  statement: t in f • g ↔ exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq t
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_smul
-  结论: t in f • g ↔ 存在 t₁ in f, 存在 t₂ in g, t₁ • t₂ subseteq t
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_smul : t in f • g ↔ exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_smul : t in f • g ↔ exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq t :=
+theorem mem_smul : t ∈ f • g ↔ ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ • t₂ ⊆ t :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `smul_mem_smul` / 定理 `smul_mem_smul`
-
-English:
-theorem smul_mem_smul
-  statement: s in f -> t in g -> s • t in f • g
-  proof: image2_mem_map₂
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_mem_smul
-  结论: s in f -> t in g -> s • t in f • g
-  证明: image2_mem_map₂
-
-@[to_additive (attr := simp)]
+/-
+**Filter.smul_mem_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_mem_smul : s in f -> t in g -> s • t in f • g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.image2_mem_map₂`：image2_mem_map₂ (hs : s in f) (ht : t in g) : im
+age2 m s t in map₂ m f g
 -/
-theorem smul_mem_smul : s in f -> t in g -> s • t in f • g :=
+theorem smul_mem_smul : s ∈ f → t ∈ g → s • t ∈ f • g :=
   image2_mem_map₂
 
 @[to_additive (attr := simp)]
-/--
-theorem `bot_smul` / 定理 `bot_smul`
-
-English:
-theorem bot_smul
-  statement: (⊥ : Filter α) • g = ⊥
-  proof: map₂_bot_left
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 bot_smul
-  结论: (⊥ : 滤子 α) • g = ⊥
-  证明: map₂_bot_left
-
-@[to_additive (attr := simp)]
+/-
+**Filter.bot_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：bot_smul : (⊥ : Filter α) • g = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_left`：map₂_bot_left : map₂ m ⊥ g = ⊥
 -/
 theorem bot_smul : (⊥ : Filter α) • g = ⊥ :=
   map₂_bot_left
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_bot` / 定理 `smul_bot`
-
-English:
-theorem smul_bot
-  statement: f • (⊥ : Filter β) = ⊥
-  proof: map₂_bot_right
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_bot
-  结论: f • (⊥ : 滤子 β) = ⊥
-  证明: map₂_bot_right
-
-@[to_additive (attr := simp)]
+/-
+**Filter.smul_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_bot : f • (⊥ : Filter β) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_right`：map₂_bot_right : map₂ m f ⊥ = ⊥
 -/
 theorem smul_bot : f • (⊥ : Filter β) = ⊥ :=
   map₂_bot_right
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_eq_bot_iff` / 定理 `smul_eq_bot_iff`
-
-English:
-theorem smul_eq_bot_iff
-  statement: f • g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  proof: map₂_eq_bot_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_eq_bot_iff
-  结论: f • g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  证明: map₂_eq_bot_iff
-
-@[to_additive (attr := simp)]
+/-
+**Filter.smul_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_eq_bot_iff : f • g = ⊥ ↔ f = ⊥ ∨ g = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_eq_bot_iff`：map₂_eq_bot_iff : map₂ m f g = ⊥ ↔ f = ⊥ ∨ g = ⊥
 -/
 theorem smul_eq_bot_iff : f • g = ⊥ ↔ f = ⊥ ∨ g = ⊥ :=
   map₂_eq_bot_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_neBot_iff` / 定理 `smul_neBot_iff`
-
-English:
-theorem smul_neBot_iff
-  statement: (f • g).NeBot ↔ f.NeBot ∧ g.NeBot
-  proof: map₂_neBot_iff
-
-@[to_additive]
-
-中文:
-定理 smul_neBot_iff
-  结论: (f • g).NeBot ↔ f.NeBot ∧ g.NeBot
-  证明: map₂_neBot_iff
-
-@[to_additive]
+/-
+**Filter.smul_neBot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_neBot_iff : (f • g).NeBot ↔ f.NeBot ∧ g.NeBot
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_neBot_iff`：map₂_neBot_iff : (map₂ m f g).NeBot ↔ f.NeBot ∧ g
+.NeBot
 -/
 theorem smul_neBot_iff : (f • g).NeBot ↔ f.NeBot ∧ g.NeBot :=
   map₂_neBot_iff
 
 @[to_additive]
-/--
-theorem `NeBot.smul` / 定理 `NeBot.smul`
-
-English:
-theorem NeBot.smul
-  statement: NeBot f -> NeBot g -> NeBot (f • g)
-  proof: NeBot.map₂
-
-@[to_additive]
-
-中文:
-定理 NeBot.smul
-  结论: NeBot f -> NeBot g -> NeBot (f • g)
-  证明: NeBot.map₂
-
-@[to_additive]
+/-
+**Filter.NeBot.smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter α} {g : Filt
+er β}, f.NeBot → g.NeBot → (f • g).NeBot
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.map₂`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {m : α
+ → β → γ} {f : Filter α} {g : Filter β},   f.NeBot → g.NeBot → (Filter.map₂ m f 
+g).NeBo…
 -/
-protected theorem NeBot.smul : NeBot f -> NeBot g -> NeBot (f • g) :=
+protected theorem NeBot.smul : NeBot f → NeBot g → NeBot (f • g) :=
   NeBot.map₂
 
 @[to_additive]
-/--
-theorem `NeBot.of_smul_left` / 定理 `NeBot.of_smul_left`
-
-English:
-theorem NeBot.of_smul_left
-  statement: (f • g).NeBot -> f.NeBot
-  proof: NeBot.of_map₂_left
-
-@[to_additive]
-
-中文:
-定理 NeBot.of_smul_left
-  结论: (f • g).NeBot -> f.NeBot
-  证明: NeBot.of_map₂_left
-
-@[to_additive]
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_smul_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter α} {g : Filt
+er β}, (f • g).NeBot → f.NeBot
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_left`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5
+} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → f
+.NeBot
 -/
-theorem NeBot.of_smul_left : (f • g).NeBot -> f.NeBot :=
+theorem NeBot.of_smul_left : (f • g).NeBot → f.NeBot :=
   NeBot.of_map₂_left
 
 @[to_additive]
-/--
-theorem `NeBot.of_smul_right` / 定理 `NeBot.of_smul_right`
-
-English:
-theorem NeBot.of_smul_right
-  statement: (f • g).NeBot -> g.NeBot
-  proof: NeBot.of_map₂_right
-
-@[to_additive vadd.instNeBot]
-
-中文:
-定理 NeBot.of_smul_right
-  结论: (f • g).NeBot -> g.NeBot
-  证明: NeBot.of_map₂_right
-
-@[to_additive vadd.instNeBot]
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_smul_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter α} {g : Filt
+er β}, (f • g).NeBot → g.NeBot
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_right`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_
+5} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → 
+g.NeBot
 -/
-theorem NeBot.of_smul_right : (f • g).NeBot -> g.NeBot :=
+theorem NeBot.of_smul_right : (f • g).NeBot → g.NeBot :=
   NeBot.of_map₂_right
 
 @[to_additive vadd.instNeBot]
-/--
-lemma `smul.instNeBot` / 引理 `smul.instNeBot`
-
-English:
-lemma smul.instNeBot
-  given: [NeBot f] [NeBot g]
-  statement: NeBot (f • g)
-  proof: .smul ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] smul.instNeBot vadd.instNeBot
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul.instNeBot
-  条件: [NeBot f] [NeBot g]
-  结论: NeBot (f • g)
-  证明: .smul ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] smul.instNeBot vadd.instNeBot
-
-@[to_additive (attr := simp)]
+/-
+**Filter.smul.instNeBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.smul`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter α} {g : Filt
+er β} [f.NeBot] [g.NeBot], (f • g).NeBot
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.smul`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f 
+: Filter α} {g : Filter β}, f.NeBot → g.NeBot → (f • g).NeBot
 -/
 lemma smul.instNeBot [NeBot f] [NeBot g] : NeBot (f • g) := .smul ‹_› ‹_›
 
 scoped[Pointwise] attribute [instance] smul.instNeBot vadd.instNeBot
 
 @[to_additive (attr := simp)]
-/--
-theorem `pure_smul` / 定理 `pure_smul`
-
-English:
-theorem pure_smul
-  statement: (pure a : Filter α) • g = g.map (a • ·)
-  proof: map₂_pure_left
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 pure_smul
-  结论: (pure a : 滤子 α) • g = g.map (a • ·)
-  证明: map₂_pure_left
-
-@[to_additive (attr := simp)]
+/-
+**Filter.pure_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_smul : (pure a : Filter α) • g = g.map (a • ·)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_left`：map₂_pure_left : map₂ m (pure a) g = g.map (m a)
 -/
 theorem pure_smul : (pure a : Filter α) • g = g.map (a • ·) :=
   map₂_pure_left
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_pure` / 定理 `smul_pure`
-
-English:
-theorem smul_pure
-  statement: f • pure b = f.map (· • b)
-  proof: map₂_pure_right
-
-@[to_additive]
-
-中文:
-定理 smul_pure
-  结论: f • pure b = f.map (· • b)
-  证明: map₂_pure_right
-
-@[to_additive]
+/-
+**Filter.smul_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_pure : f • pure b = f.map (· • b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_right`：map₂_pure_right : map₂ m f (pure b) = f.map (m ·
+ b)
 -/
 theorem smul_pure : f • pure b = f.map (· • b) :=
   map₂_pure_right
 
 @[to_additive]
-/--
-theorem `pure_smul_pure` / 定理 `pure_smul_pure`
-
-English:
-theorem pure_smul_pure
-  statement: (pure a : Filter α) • (pure b : Filter β) = pure (a • b)
-  proof: by simp
-
-@[to_additive (attr := gcongr)]
-
-中文:
-定理 pure_smul_pure
-  结论: (pure a : 滤子 α) • (pure b : 滤子 β) = pure (a • b)
-  证明: by simp
-
-@[to_additive (attr := gcongr)]
+/-
+**Filter.pure_smul_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_smul_pure : (pure a : Filter α) • (pure b : Filter β) = pure (a • b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.smul_pure`：smul_pure : f • pure b = f.map (· • b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pure_smul_pure : (pure a : Filter α) • (pure b : Filter β) = pure (a • b) := by simp
 
 @[to_additive (attr := gcongr)]
-/--
-theorem `smul_le_smul` / 定理 `smul_le_smul`
-
-English:
-theorem smul_le_smul
-  statement: f₁ <= f₂ -> g₁ <= g₂ -> f₁ • g₁ <= f₂ • g₂
-  proof: map₂_mono
-
-@[to_additive]
-
-中文:
-定理 smul_le_smul
-  结论: f₁ <= f₂ -> g₁ <= g₂ -> f₁ • g₁ <= f₂ • g₂
-  证明: map₂_mono
-
-@[to_additive]
+/-
+**Filter.smul_le_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_le_smul : f₁ <= f₂ -> g₁ <= g₂ -> f₁ • g₁ <= f₂ • g₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono`：map₂_mono (hf : f₁ <= f₂) (hg : g₁ <= g₂) : map₂ m f₁ 
+g₁ <= map₂ m f₂ g₂
 -/
-theorem smul_le_smul : f₁ <= f₂ -> g₁ <= g₂ -> f₁ • g₁ <= f₂ • g₂ :=
+theorem smul_le_smul : f₁ ≤ f₂ → g₁ ≤ g₂ → f₁ • g₁ ≤ f₂ • g₂ :=
   map₂_mono
 
 @[to_additive]
-/--
-theorem `smul_le_smul_left` / 定理 `smul_le_smul_left`
-
-English:
-theorem smul_le_smul_left
-  statement: g₁ <= g₂ -> f • g₁ <= f • g₂
-  proof: map₂_mono_left
-
-@[to_additive]
-
-中文:
-定理 smul_le_smul_left
-  结论: g₁ <= g₂ -> f • g₁ <= f • g₂
-  证明: map₂_mono_left
-
-@[to_additive]
+/-
+**Filter.smul_le_smul_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_le_smul_left : g₁ <= g₂ -> f • g₁ <= f • g₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_left`：map₂_mono_left (h : g₁ <= g₂) : map₂ m f g₁ <= ma
+p₂ m f g₂
 -/
-theorem smul_le_smul_left : g₁ <= g₂ -> f • g₁ <= f • g₂ :=
+theorem smul_le_smul_left : g₁ ≤ g₂ → f • g₁ ≤ f • g₂ :=
   map₂_mono_left
 
 @[to_additive]
-/--
-theorem `smul_le_smul_right` / 定理 `smul_le_smul_right`
-
-English:
-theorem smul_le_smul_right
-  statement: f₁ <= f₂ -> f₁ • g <= f₂ • g
-  proof: map₂_mono_right
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_le_smul_right
-  结论: f₁ <= f₂ -> f₁ • g <= f₂ • g
-  证明: map₂_mono_right
-
-@[to_additive (attr := simp)]
+/-
+**Filter.smul_le_smul_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_le_smul_right : f₁ <= f₂ -> f₁ • g <= f₂ • g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_right`：map₂_mono_right (h : f₁ <= f₂) : map₂ m f₁ g <= 
+map₂ m f₂ g
 -/
-theorem smul_le_smul_right : f₁ <= f₂ -> f₁ • g <= f₂ • g :=
+theorem smul_le_smul_right : f₁ ≤ f₂ → f₁ • g ≤ f₂ • g :=
   map₂_mono_right
 
 @[to_additive (attr := simp)]
-/--
-theorem `le_smul_iff` / 定理 `le_smul_iff`
-
-English:
-theorem le_smul_iff
-  statement: h <= f • g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s • t in h
-  proof: le_map₂_iff
-
-@[to_additive]
-
-中文:
-定理 le_smul_iff
-  结论: h <= f • g ↔ 对任意 ⦃s⦄, s in f -> 对任意 ⦃t⦄, t in g -> s • t in h
-  证明: le_map₂_iff
-
-@[to_additive]
+/-
+**Filter.le_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：le_smul_iff : h <= f • g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s •
+ t in h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.le_map₂_iff`：le_map₂_iff {h : Filter γ} : h <= map₂ m f g ↔ foral
+l ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> image2 m s t in h
 -/
-theorem le_smul_iff : h <= f • g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s • t in h :=
+theorem le_smul_iff : h ≤ f • g ↔ ∀ ⦃s⦄, s ∈ f → ∀ ⦃t⦄, t ∈ g → s • t ∈ h :=
   le_map₂_iff
 
 @[to_additive]
-/--
-Instance `covariant_smul` / 实例 `covariant_smul`
-
-English:
-instance covariant_smul
-  signature: : CovariantClass (Filter α) (Filter β) (· • ·) (· <= ·)
-  body: ⟨fun _ _ _ => map₂_mono_left⟩
-
-中文:
-实例 covariant_smul
-  签名: : 协变类 (滤子 α) (滤子 β) (· • ·) (· <= ·)
-  定义体: ⟨fun _ _ _ => map₂_mono_left⟩
+/-
+**Filter.covariant_smul** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：covariant_smul : CovariantClass (Filter α) (Filter β) (· • ·) (· <= ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_left`：map₂_mono_left (h : g₁ <= g₂) : map₂ m f g₁ <= ma
+p₂ m f g₂
 -/
-instance covariant_smul : CovariantClass (Filter α) (Filter β) (· • ·) (· <= ·) :=
+instance covariant_smul : CovariantClass (Filter α) (Filter β) (· • ·) (· ≤ ·) :=
   ⟨fun _ _ _ => map₂_mono_left⟩
 
 end SMul
@@ -3556,379 +2248,236 @@ variable [VSub α β] {f f₁ f₂ g g₁ g₂ : Filter β} {h : Filter α} {s t
 
 /-- The filter `f -ᵥ g` is generated by `{s -ᵥ t | s ∈ f, t ∈ g}` in scope `Pointwise`. -/
 @[instance_reducible]
-/--
-Definition of `instVSub` / `instVSub` 的定义
+/-
+**Filter.instVSub** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [VSub α β] → VSub (Filter α) (Filter β)
+参数：Filter α；Filter β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_sets`：∀ {α : Type u_1} (self : Filter α), Set.univ ∈ self.se
+ts
+· 使用定理 `Filter.sets_of_superset`：∀ {α : Type u_1} (self : Filter α) {x y : Set α
+}, x ∈ self.sets → x ⊆ y → y ∈ self.sets
+· 使用定理 `Filter.inter_sets`：∀ {α : Type u_1} (self : Filter α) {x y : Set α}, x ∈
+ self.sets → y ∈ self.sets → x ∩ y ∈ self.sets
 
-English:
-definition instVSub
-  signature: : VSub (Filter α) (Filter β)
-  body: ⟨/- This is defeq to `map₂ (-ᵥ) f g`, but the hypothesis unfolds to `t₁ -ᵥ t₂ ⊆ s` rather than all
-  the way to `Set.image2 (-ᵥ) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· -ᵥ ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instVSub
-
-@[simp]
-
-中文:
-定义 instVSub
-  签名: : 向量减法 (滤子 α) (滤子 β)
-  定义体: ⟨/- This is defeq to `map₂ (-ᵥ) f g`, but the hypothesis unfolds to `t₁ -ᵥ t₂ ⊆ s` rather than all
-  the way to `Set.image2 (-ᵥ) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· -ᵥ ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s } }⟩
-
-scoped[Pointwise] attribute [instance] Filter.instVSub
-
-@[simp]
+--- 原说明 ---
+The filter `f -ᵥ g` is generated by `{s -ᵥ t | s ∈ f, t ∈ g}` in scope `Pointwis
+e`.
 -/
 protected def instVSub : VSub (Filter α) (Filter β) :=
   ⟨/- This is defeq to `map₂ (-ᵥ) f g`, but the hypothesis unfolds to `t₁ -ᵥ t₂ ⊆ s` rather than all
   the way to `Set.image2 (-ᵥ) t₁ t₂ ⊆ s`. -/
-  fun f g => { map₂ (· -ᵥ ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s } }⟩
+  fun f g => { map₂ (· -ᵥ ·) f g with sets := { s | ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ -ᵥ t₂ ⊆ s } }⟩
 
 scoped[Pointwise] attribute [instance] Filter.instVSub
 
 @[simp]
-/--
-theorem `map₂_vsub` / 定理 `map₂_vsub`
-
-English:
-theorem map₂_vsub
-  statement: map₂ (· -ᵥ ·) f g = f -ᵥ g
-  proof: rfl
-
-中文:
-定理 map₂_vsub
-  结论: map₂ (· -ᵥ ·) f g = f -ᵥ g
-  证明: rfl
+/-
+**Filter.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：map (m : α -> β) (f : Filter α) : Filter β where sets
+参数：m : α -> β；f : Filter α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 -/
 theorem map₂_vsub : map₂ (· -ᵥ ·) f g = f -ᵥ g :=
   rfl
-
-/--
-theorem `mem_vsub` / 定理 `mem_vsub`
-
-English:
-theorem mem_vsub
-  given: {s : Set α}
-  statement: s in f -ᵥ g ↔ exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s
-  proof: Iff.rfl
-
-中文:
-定理 mem_vsub
-  条件: {s : 集合 α}
-  结论: s in f -ᵥ g ↔ 存在 t₁ in f, 存在 t₂ in g, t₁ -ᵥ t₂ subseteq s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_vsub** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_vsub {s : Set α} : s in f -ᵥ g ↔ exists t₁ in f, exists t₂ in g, t₁ -ᵥ
+ t₂ subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_vsub {s : Set α} : s in f -ᵥ g ↔ exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s :=
+theorem mem_vsub {s : Set α} : s ∈ f -ᵥ g ↔ ∃ t₁ ∈ f, ∃ t₂ ∈ g, t₁ -ᵥ t₂ ⊆ s :=
   Iff.rfl
-
-/--
-theorem `vsub_mem_vsub` / 定理 `vsub_mem_vsub`
-
-English:
-theorem vsub_mem_vsub
-  statement: s in f -> t in g -> s -ᵥ t in f -ᵥ g
-  proof: image2_mem_map₂
-
-@[simp]
-
-中文:
-定理 vsub_mem_vsub
-  结论: s in f -> t in g -> s -ᵥ t in f -ᵥ g
-  证明: image2_mem_map₂
-
-@[simp]
+/-
+**Filter.vsub_mem_vsub** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_mem_vsub : s in f -> t in g -> s -ᵥ t in f -ᵥ g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.image2_mem_map₂`：image2_mem_map₂ (hs : s in f) (ht : t in g) : im
+age2 m s t in map₂ m f g
 -/
-theorem vsub_mem_vsub : s in f -> t in g -> s -ᵥ t in f -ᵥ g :=
+theorem vsub_mem_vsub : s ∈ f → t ∈ g → s -ᵥ t ∈ f -ᵥ g :=
   image2_mem_map₂
 
 @[simp]
-/--
-theorem `bot_vsub` / 定理 `bot_vsub`
-
-English:
-theorem bot_vsub
-  statement: (⊥ : Filter β) -ᵥ g = ⊥
-  proof: map₂_bot_left
-
-@[simp]
-
-中文:
-定理 bot_vsub
-  结论: (⊥ : 滤子 β) -ᵥ g = ⊥
-  证明: map₂_bot_left
-
-@[simp]
+/-
+**Filter.bot_vsub** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：bot_vsub : (⊥ : Filter β) -ᵥ g = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_left`：map₂_bot_left : map₂ m ⊥ g = ⊥
 -/
 theorem bot_vsub : (⊥ : Filter β) -ᵥ g = ⊥ :=
   map₂_bot_left
 
 @[simp]
-/--
-theorem `vsub_bot` / 定理 `vsub_bot`
-
-English:
-theorem vsub_bot
-  statement: f -ᵥ (⊥ : Filter β) = ⊥
-  proof: map₂_bot_right
-
-@[simp]
-
-中文:
-定理 vsub_bot
-  结论: f -ᵥ (⊥ : 滤子 β) = ⊥
-  证明: map₂_bot_right
-
-@[simp]
+/-
+**Filter.vsub_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_bot : f -ᵥ (⊥ : Filter β) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_bot_right`：map₂_bot_right : map₂ m f ⊥ = ⊥
 -/
 theorem vsub_bot : f -ᵥ (⊥ : Filter β) = ⊥ :=
   map₂_bot_right
 
 @[simp]
-/--
-theorem `vsub_eq_bot_iff` / 定理 `vsub_eq_bot_iff`
-
-English:
-theorem vsub_eq_bot_iff
-  statement: f -ᵥ g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  proof: map₂_eq_bot_iff
-
-@[simp]
-
-中文:
-定理 vsub_eq_bot_iff
-  结论: f -ᵥ g = ⊥ ↔ f = ⊥ ∨ g = ⊥
-  证明: map₂_eq_bot_iff
-
-@[simp]
+/-
+**Filter.vsub_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_eq_bot_iff : f -ᵥ g = ⊥ ↔ f = ⊥ ∨ g = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_eq_bot_iff`：map₂_eq_bot_iff : map₂ m f g = ⊥ ↔ f = ⊥ ∨ g = ⊥
 -/
 theorem vsub_eq_bot_iff : f -ᵥ g = ⊥ ↔ f = ⊥ ∨ g = ⊥ :=
   map₂_eq_bot_iff
 
 @[simp]
-/--
-theorem `vsub_neBot_iff` / 定理 `vsub_neBot_iff`
-
-English:
-theorem vsub_neBot_iff
-  statement: (f -ᵥ g : Filter α).NeBot ↔ f.NeBot ∧ g.NeBot
-  proof: map₂_neBot_iff
-
-中文:
-定理 vsub_neBot_iff
-  结论: (f -ᵥ g : 滤子 α).NeBot ↔ f.NeBot ∧ g.NeBot
-  证明: map₂_neBot_iff
+/-
+**Filter.vsub_neBot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_neBot_iff : (f -ᵥ g : Filter α).NeBot ↔ f.NeBot ∧ g.NeBot
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_neBot_iff`：map₂_neBot_iff : (map₂ m f g).NeBot ↔ f.NeBot ∧ g
+.NeBot
 -/
 theorem vsub_neBot_iff : (f -ᵥ g : Filter α).NeBot ↔ f.NeBot ∧ g.NeBot :=
   map₂_neBot_iff
-
-/--
-theorem `NeBot.vsub` / 定理 `NeBot.vsub`
-
-English:
-theorem NeBot.vsub
-  statement: NeBot f -> NeBot g -> NeBot (f -ᵥ g)
-  proof: NeBot.map₂
-
-中文:
-定理 NeBot.vsub
-  结论: NeBot f -> NeBot g -> NeBot (f -ᵥ g)
-  证明: NeBot.map₂
+/-
+**Filter.NeBot.vsub** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : VSub α β] {f g : Filter β}, f.NeBo
+t → g.NeBot → (f -ᵥ g).NeBot
+参数：f -ᵥ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.map₂`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} {m : α
+ → β → γ} {f : Filter α} {g : Filter β},   f.NeBot → g.NeBot → (Filter.map₂ m f 
+g).NeBo…
 -/
-protected theorem NeBot.vsub : NeBot f -> NeBot g -> NeBot (f -ᵥ g) :=
+protected theorem NeBot.vsub : NeBot f → NeBot g → NeBot (f -ᵥ g) :=
   NeBot.map₂
-
-/--
-theorem `NeBot.of_vsub_left` / 定理 `NeBot.of_vsub_left`
-
-English:
-theorem NeBot.of_vsub_left
-  statement: (f -ᵥ g : Filter α).NeBot -> f.NeBot
-  proof: NeBot.of_map₂_left
-
-中文:
-定理 NeBot.of_vsub_left
-  结论: (f -ᵥ g : 滤子 α).NeBot -> f.NeBot
-  证明: NeBot.of_map₂_left
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_vsub_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : VSub α β] {f g : Filter β}, (f -ᵥ 
+g).NeBot → f.NeBot
+参数：f -ᵥ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_left`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5
+} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → f
+.NeBot
 -/
-theorem NeBot.of_vsub_left : (f -ᵥ g : Filter α).NeBot -> f.NeBot :=
+theorem NeBot.of_vsub_left : (f -ᵥ g : Filter α).NeBot → f.NeBot :=
   NeBot.of_map₂_left
-
-/--
-theorem `NeBot.of_vsub_right` / 定理 `NeBot.of_vsub_right`
-
-English:
-theorem NeBot.of_vsub_right
-  statement: (f -ᵥ g : Filter α).NeBot -> g.NeBot
-  proof: NeBot.of_map₂_right
-
-中文:
-定理 NeBot.of_vsub_right
-  结论: (f -ᵥ g : 滤子 α).NeBot -> g.NeBot
-  证明: NeBot.of_map₂_right
-
-Depends on / 依赖: NeBot.of_map
+/-
+**Filter.NeBot.of_vsub_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : VSub α β] {f g : Filter β}, (f -ᵥ 
+g).NeBot → g.NeBot
+参数：f -ᵥ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map₂_right`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_
+5} {m : α → β → γ} {f : Filter α} {g : Filter β},   (Filter.map₂ m f g).NeBot → 
+g.NeBot
 -/
-theorem NeBot.of_vsub_right : (f -ᵥ g : Filter α).NeBot -> g.NeBot :=
+theorem NeBot.of_vsub_right : (f -ᵥ g : Filter α).NeBot → g.NeBot :=
   NeBot.of_map₂_right
-
-/--
-lemma `vsub.instNeBot` / 引理 `vsub.instNeBot`
-
-English:
-lemma vsub.instNeBot
-  given: [NeBot f] [NeBot g]
-  statement: NeBot (f -ᵥ g)
-  proof: .vsub ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] vsub.instNeBot
-
-@[simp]
-
-中文:
-引理 vsub.instNeBot
-  条件: [NeBot f] [NeBot g]
-  结论: NeBot (f -ᵥ g)
-  证明: .vsub ‹_› ‹_›
-
-scoped[Pointwise] attribute [instance] vsub.instNeBot
-
-@[simp]
+/-
+**Filter.vsub.instNeBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.vsub`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : VSub α β] {f g : Filter β} [f.NeBo
+t] [g.NeBot], (f -ᵥ g).NeBot
+参数：f -ᵥ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.vsub`：∀ {α : Type u_2} {β : Type u_3} [inst : VSub α β] {f 
+g : Filter β}, f.NeBot → g.NeBot → (f -ᵥ g).NeBot
 -/
 lemma vsub.instNeBot [NeBot f] [NeBot g] : NeBot (f -ᵥ g) := .vsub ‹_› ‹_›
 
 scoped[Pointwise] attribute [instance] vsub.instNeBot
 
 @[simp]
-/--
-theorem `pure_vsub` / 定理 `pure_vsub`
-
-English:
-theorem pure_vsub
-  statement: (pure a : Filter β) -ᵥ g = g.map (a -ᵥ ·)
-  proof: map₂_pure_left
-
-@[simp]
-
-中文:
-定理 pure_vsub
-  结论: (pure a : 滤子 β) -ᵥ g = g.map (a -ᵥ ·)
-  证明: map₂_pure_left
-
-@[simp]
+/-
+**Filter.pure_vsub** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_vsub : (pure a : Filter β) -ᵥ g = g.map (a -ᵥ ·)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_left`：map₂_pure_left : map₂ m (pure a) g = g.map (m a)
 -/
 theorem pure_vsub : (pure a : Filter β) -ᵥ g = g.map (a -ᵥ ·) :=
   map₂_pure_left
 
 @[simp]
-/--
-theorem `vsub_pure` / 定理 `vsub_pure`
-
-English:
-theorem vsub_pure
-  statement: f -ᵥ pure b = f.map (· -ᵥ b)
-  proof: map₂_pure_right
-
-中文:
-定理 vsub_pure
-  结论: f -ᵥ pure b = f.map (· -ᵥ b)
-  证明: map₂_pure_right
+/-
+**Filter.vsub_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_pure : f -ᵥ pure b = f.map (· -ᵥ b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_pure_right`：map₂_pure_right : map₂ m f (pure b) = f.map (m ·
+ b)
 -/
 theorem vsub_pure : f -ᵥ pure b = f.map (· -ᵥ b) :=
   map₂_pure_right
-
-/--
-theorem `pure_vsub_pure` / 定理 `pure_vsub_pure`
-
-English:
-theorem pure_vsub_pure
-  statement: (pure a : Filter β) -ᵥ pure b = (pure (a -ᵥ b) : Filter α)
-  proof: by simp
-
-@[gcongr]
-
-中文:
-定理 pure_vsub_pure
-  结论: (pure a : 滤子 β) -ᵥ pure b = (pure (a -ᵥ b) : 滤子 α)
-  证明: by simp
-
-@[gcongr]
+/-
+**Filter.pure_vsub_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：pure_vsub_pure : (pure a : Filter β) -ᵥ pure b = (pure (a -ᵥ b) : Filter α
+)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.vsub_pure`：vsub_pure : f -ᵥ pure b = f.map (· -ᵥ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pure_vsub_pure : (pure a : Filter β) -ᵥ pure b = (pure (a -ᵥ b) : Filter α) := by simp
 
 @[gcongr]
-/--
-theorem `vsub_le_vsub` / 定理 `vsub_le_vsub`
-
-English:
-theorem vsub_le_vsub
-  statement: f₁ <= f₂ -> g₁ <= g₂ -> f₁ -ᵥ g₁ <= f₂ -ᵥ g₂
-  proof: map₂_mono
-
-中文:
-定理 vsub_le_vsub
-  结论: f₁ <= f₂ -> g₁ <= g₂ -> f₁ -ᵥ g₁ <= f₂ -ᵥ g₂
-  证明: map₂_mono
+/-
+**Filter.vsub_le_vsub** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_le_vsub : f₁ <= f₂ -> g₁ <= g₂ -> f₁ -ᵥ g₁ <= f₂ -ᵥ g₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono`：map₂_mono (hf : f₁ <= f₂) (hg : g₁ <= g₂) : map₂ m f₁ 
+g₁ <= map₂ m f₂ g₂
 -/
-theorem vsub_le_vsub : f₁ <= f₂ -> g₁ <= g₂ -> f₁ -ᵥ g₁ <= f₂ -ᵥ g₂ :=
+theorem vsub_le_vsub : f₁ ≤ f₂ → g₁ ≤ g₂ → f₁ -ᵥ g₁ ≤ f₂ -ᵥ g₂ :=
   map₂_mono
-
-/--
-theorem `vsub_le_vsub_left` / 定理 `vsub_le_vsub_left`
-
-English:
-theorem vsub_le_vsub_left
-  statement: g₁ <= g₂ -> f -ᵥ g₁ <= f -ᵥ g₂
-  proof: map₂_mono_left
-
-中文:
-定理 vsub_le_vsub_left
-  结论: g₁ <= g₂ -> f -ᵥ g₁ <= f -ᵥ g₂
-  证明: map₂_mono_left
+/-
+**Filter.vsub_le_vsub_left** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_le_vsub_left : g₁ <= g₂ -> f -ᵥ g₁ <= f -ᵥ g₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_left`：map₂_mono_left (h : g₁ <= g₂) : map₂ m f g₁ <= ma
+p₂ m f g₂
 -/
-theorem vsub_le_vsub_left : g₁ <= g₂ -> f -ᵥ g₁ <= f -ᵥ g₂ :=
+theorem vsub_le_vsub_left : g₁ ≤ g₂ → f -ᵥ g₁ ≤ f -ᵥ g₂ :=
   map₂_mono_left
-
-/--
-theorem `vsub_le_vsub_right` / 定理 `vsub_le_vsub_right`
-
-English:
-theorem vsub_le_vsub_right
-  statement: f₁ <= f₂ -> f₁ -ᵥ g <= f₂ -ᵥ g
-  proof: map₂_mono_right
-
-@[simp]
-
-中文:
-定理 vsub_le_vsub_right
-  结论: f₁ <= f₂ -> f₁ -ᵥ g <= f₂ -ᵥ g
-  证明: map₂_mono_right
-
-@[simp]
+/-
+**Filter.vsub_le_vsub_right** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：vsub_le_vsub_right : f₁ <= f₂ -> f₁ -ᵥ g <= f₂ -ᵥ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_mono_right`：map₂_mono_right (h : f₁ <= f₂) : map₂ m f₁ g <= 
+map₂ m f₂ g
 -/
-theorem vsub_le_vsub_right : f₁ <= f₂ -> f₁ -ᵥ g <= f₂ -ᵥ g :=
+theorem vsub_le_vsub_right : f₁ ≤ f₂ → f₁ -ᵥ g ≤ f₂ -ᵥ g :=
   map₂_mono_right
 
 @[simp]
-/--
-theorem `le_vsub_iff` / 定理 `le_vsub_iff`
-
-English:
-theorem le_vsub_iff
-  statement: h <= f -ᵥ g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s -ᵥ t in h
-  proof: le_map₂_iff
-
-中文:
-定理 le_vsub_iff
-  结论: h <= f -ᵥ g ↔ 对任意 ⦃s⦄, s in f -> 对任意 ⦃t⦄, t in g -> s -ᵥ t in h
-  证明: le_map₂_iff
+/-
+**Filter.le_vsub_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：le_vsub_iff : h <= f -ᵥ g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s 
+-ᵥ t in h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.le_map₂_iff`：le_map₂_iff {h : Filter γ} : h <= map₂ m f g ↔ foral
+l ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> image2 m s t in h
 -/
-theorem le_vsub_iff : h <= f -ᵥ g ↔ forall ⦃s⦄, s in f -> forall ⦃t⦄, t in g -> s -ᵥ t in h :=
+theorem le_vsub_iff : h ≤ f -ᵥ g ↔ ∀ ⦃s⦄, s ∈ f → ∀ ⦃t⦄, t ∈ g → s -ᵥ t ∈ h :=
   le_map₂_iff
 
 end Vsub
@@ -3943,26 +2492,11 @@ variable [SMul α β] {f f₁ f₂ : Filter β} {s : Set β} {a : α}
 /-- `a • f` is the map of `f` under `a •` in scope `Pointwise`. -/
 @[to_additive (attr := instance_reducible)
   /-- `a +ᵥ f` is the map of `f` under `a +ᵥ` in scope `Pointwise`. -/]
-/--
-Definition of `instSMulFilter` / `instSMulFilter` 的定义
-
-English:
-definition instSMulFilter
-  signature: : SMul α (Filter β)
-  body: ⟨fun a => map (a • ·)⟩
-
-scoped[Pointwise] attribute [instance] Filter.instSMulFilter Filter.instVAddFilter
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 instSMulFilter
-  签名: : 标量乘法 α (滤子 β)
-  定义体: ⟨fun a => map (a • ·)⟩
-
-scoped[Pointwise] attribute [instance] Filter.instSMulFilter Filter.instVAddFilter
-
-@[to_additive (attr := simp)]
+/-
+**Filter.instSMulFilter** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [SMul α β] → SMul α (Filter β)
+参数：Filter β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def instSMulFilter : SMul α (Filter β) :=
   ⟨fun a => map (a • ·)⟩
@@ -3970,380 +2504,208 @@ protected def instSMulFilter : SMul α (Filter β) :=
 scoped[Pointwise] attribute [instance] Filter.instSMulFilter Filter.instVAddFilter
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  statement: map (fun b => a • b) f = a • f
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 map_smul
-  结论: map (fun b => a • b) f = a • f
-  证明: rfl
-
-@[to_additive]
+/-
+**Filter.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter β} {a : α}, 
+Filter.map (fun b => a • b) f = a • f
+参数：fun b => a • b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem map_smul : map (fun b => a • b) f = a • f :=
   rfl
 
 @[to_additive]
-/--
-theorem `mem_smul_filter` / 定理 `mem_smul_filter`
-
-English:
-theorem mem_smul_filter
-  statement: s in a • f ↔ (a • ·) ⁻¹' s in f
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mem_smul_filter
-  结论: s in a • f ↔ (a • ·) ⁻¹' s in f
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_smul_filter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_smul_filter : s in a • f ↔ (a • ·) ⁻¹' s in f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_smul_filter : s in a • f ↔ (a • ·) ⁻¹' s in f := Iff.rfl
+theorem mem_smul_filter : s ∈ a • f ↔ (a • ·) ⁻¹' s ∈ f := Iff.rfl
 
 @[to_additive]
-/--
-theorem `smul_set_mem_smul_filter` / 定理 `smul_set_mem_smul_filter`
-
-English:
-theorem smul_set_mem_smul_filter
-  statement: s in f -> a • s in a • f
-  proof: image_mem_map
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_set_mem_smul_filter
-  结论: s in f -> a • s in a • f
-  证明: image_mem_map
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: image_mem_map
+/-
+**Filter.smul_set_mem_smul_filter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_set_mem_smul_filter : s in f -> a • s in a • f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.image_mem_map`：image_mem_map (hs : s in f) : m '' s in map m f
 -/
-theorem smul_set_mem_smul_filter : s in f -> a • s in a • f :=
+theorem smul_set_mem_smul_filter : s ∈ f → a • s ∈ a • f :=
   image_mem_map
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_filter_bot` / 定理 `smul_filter_bot`
-
-English:
-theorem smul_filter_bot
-  statement: a • (⊥ : Filter β) = ⊥
-  proof: map_bot
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_filter_bot
-  结论: a • (⊥ : 滤子 β) = ⊥
-  证明: map_bot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_bot
+/-
+**Filter.smul_filter_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_filter_bot : a • (⊥ : Filter β) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_bot`：∀ {α : Type u_1} {β : Type u_2} {m : α → β}, Filter.map 
+m ⊥ = ⊥
 -/
 theorem smul_filter_bot : a • (⊥ : Filter β) = ⊥ :=
   map_bot
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_filter_eq_bot_iff` / 定理 `smul_filter_eq_bot_iff`
-
-English:
-theorem smul_filter_eq_bot_iff
-  statement: a • f = ⊥ ↔ f = ⊥
-  proof: map_eq_bot_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_filter_eq_bot_iff
-  结论: a • f = ⊥ ↔ f = ⊥
-  证明: map_eq_bot_iff
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_eq_bot_iff
+/-
+**Filter.smul_filter_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_filter_eq_bot_iff : a • f = ⊥ ↔ f = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_eq_bot_iff`：map_eq_bot_iff : map m f = ⊥ ↔ f = ⊥
 -/
 theorem smul_filter_eq_bot_iff : a • f = ⊥ ↔ f = ⊥ :=
   map_eq_bot_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_filter_neBot_iff` / 定理 `smul_filter_neBot_iff`
-
-English:
-theorem smul_filter_neBot_iff
-  statement: (a • f).NeBot ↔ f.NeBot
-  proof: map_neBot_iff _
-
-@[to_additive]
-
-中文:
-定理 smul_filter_neBot_iff
-  结论: (a • f).NeBot ↔ f.NeBot
-  证明: map_neBot_iff _
-
-@[to_additive]
-
-Depends on / 依赖: map_neBot_iff
+/-
+**Filter.smul_filter_neBot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_filter_neBot_iff : (a • f).NeBot ↔ f.NeBot
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_neBot_iff`：map_neBot_iff (f : α -> β) {F : Filter α} : NeBot 
+(map f F) ↔ NeBot F
 -/
 theorem smul_filter_neBot_iff : (a • f).NeBot ↔ f.NeBot :=
   map_neBot_iff _
 
 @[to_additive]
-/--
-theorem `NeBot.smul_filter` / 定理 `NeBot.smul_filter`
-
-English:
-theorem NeBot.smul_filter
-  statement: f.NeBot -> (a • f).NeBot
-  proof: fun h => h.map _
-
-@[to_additive]
-
-中文:
-定理 NeBot.smul_filter
-  结论: f.NeBot -> (a • f).NeBot
-  证明: fun h => h.map _
-
-@[to_additive]
-
-Depends on / 依赖: h.map
+/-
+**Filter.NeBot.smul_filter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter β} {a : α}, 
+f.NeBot → (a • f).NeBot
+参数：a • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.map`：∀ {α : Type u_1} {β : Type u_2} {f : Filter α}, f.NeBo
+t → ∀ (m : α → β), (Filter.map m f).NeBot
 -/
-theorem NeBot.smul_filter : f.NeBot -> (a • f).NeBot := fun h => h.map _
+theorem NeBot.smul_filter : f.NeBot → (a • f).NeBot := fun h => h.map _
 
 @[to_additive]
-/--
-theorem `NeBot.of_smul_filter` / 定理 `NeBot.of_smul_filter`
-
-English:
-theorem NeBot.of_smul_filter
-  statement: (a • f).NeBot -> f.NeBot
-  proof: NeBot.of_map
-
-@[to_additive vadd_filter.instNeBot]
-
-中文:
-定理 NeBot.of_smul_filter
-  结论: (a • f).NeBot -> f.NeBot
-  证明: NeBot.of_map
-
-@[to_additive vadd_filter.instNeBot]
-
-Depends on / 依赖: NeBot.of_map, of_map
+/-
+**Filter.NeBot.of_smul_filter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter β} {a : α}, 
+(a • f).NeBot → f.NeBot
+参数：a • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.of_map`：∀ {α : Type u_1} {β : Type u_2} {f : Filter α} {m :
+ α → β}, (Filter.map m f).NeBot → f.NeBot
 -/
-theorem NeBot.of_smul_filter : (a • f).NeBot -> f.NeBot :=
+theorem NeBot.of_smul_filter : (a • f).NeBot → f.NeBot :=
   NeBot.of_map
 
 @[to_additive vadd_filter.instNeBot]
-/--
-lemma `smul_filter.instNeBot` / 引理 `smul_filter.instNeBot`
-
-English:
-lemma smul_filter.instNeBot
-  given: [NeBot f]
-  statement: NeBot (a • f)
-  proof: .smul_filter ‹_›
-
-scoped[Pointwise] attribute [instance] smul_filter.instNeBot vadd_filter.instNeBot
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_filter.instNeBot
-  条件: [NeBot f]
-  结论: NeBot (a • f)
-  证明: .smul_filter ‹_›
-
-scoped[Pointwise] attribute [instance] smul_filter.instNeBot vadd_filter.instNeBot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: smul_filter
+/-
+**Filter.smul_filter.instNeBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.smul_filter`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β] {f : Filter β} {a : α} [
+f.NeBot], (a • f).NeBot
+参数：a • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.smul_filter`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α
+ β] {f : Filter β} {a : α}, f.NeBot → (a • f).NeBot
 -/
 lemma smul_filter.instNeBot [NeBot f] : NeBot (a • f) := .smul_filter ‹_›
 
 scoped[Pointwise] attribute [instance] smul_filter.instNeBot vadd_filter.instNeBot
 
 @[to_additive (attr := simp)]
-/--
-lemma `eventually_smul_filter` / 引理 `eventually_smul_filter`
-
-English:
-lemma eventually_smul_filter
-  given: {p : β -> Prop}
-  statement: (forallᶠ y in a • f, p y) ↔ (forallᶠ x in f, p (a • x))
-  proof: eventually_map
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 eventually_smul_filter
-  条件: {p : β -> 命题}
-  结论: (对任意ᶠ y in a • f, p y) ↔ (对任意ᶠ x in f, p (a • x))
-  证明: eventually_map
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eventually_map
+/-
+**Filter.eventually_smul_filter** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：eventually_smul_filter {p : β -> Prop} : (forallᶠ y in a • f, p y) ↔ (fora
+llᶠ x in f, p (a • x))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
 -/
-lemma eventually_smul_filter {p : β -> Prop} : (forallᶠ y in a • f, p y) ↔ (forallᶠ x in f, p (a • x)) :=
+lemma eventually_smul_filter {p : β → Prop} : (∀ᶠ y in a • f, p y) ↔ (∀ᶠ x in f, p (a • x)) :=
   eventually_map
 
 @[to_additive (attr := simp)]
-/--
-lemma `frequently_inv_filter` / 引理 `frequently_inv_filter`
-
-English:
-lemma frequently_inv_filter
-  given: {p : β -> Prop}
-  statement: (existsᶠ y in a • f, p y) ↔ (existsᶠ x in f, p (a • x))
-  proof: frequently_map
-
-@[to_additive (attr := gcongr)]
-
-中文:
-引理 frequently_inv_filter
-  条件: {p : β -> 命题}
-  结论: (存在ᶠ y in a • f, p y) ↔ (存在ᶠ x in f, p (a • x))
-  证明: frequently_map
-
-@[to_additive (attr := gcongr)]
-
-Depends on / 依赖: frequently_map
+/-
+**Filter.frequently_inv_filter** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：frequently_inv_filter {p : β -> Prop} : (existsᶠ y in a • f, p y) ↔ (exist
+sᶠ x in f, p (a • x))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.frequently_map`：frequently_map {P : β -> Prop} : (existsᶠ b in ma
+p m f, P b) ↔ existsᶠ a in f, P (m a)
 -/
-lemma frequently_inv_filter {p : β -> Prop} : (existsᶠ y in a • f, p y) ↔ (existsᶠ x in f, p (a • x)) :=
+lemma frequently_inv_filter {p : β → Prop} : (∃ᶠ y in a • f, p y) ↔ (∃ᶠ x in f, p (a • x)) :=
   frequently_map
 
 @[to_additive (attr := gcongr)]
-/--
-theorem `smul_filter_le_smul_filter` / 定理 `smul_filter_le_smul_filter`
-
-English:
-theorem smul_filter_le_smul_filter
-  given: (hf : f₁ <= f₂)
-  statement: a • f₁ <= a • f₂
-  proof: map_mono hf
-
-@[to_additive]
-
-中文:
-定理 smul_filter_le_smul_filter
-  条件: (hf : f₁ <= f₂)
-  结论: a • f₁ <= a • f₂
-  证明: map_mono hf
-
-@[to_additive]
-
-Depends on / 依赖: map_mono
+/-
+**Filter.smul_filter_le_smul_filter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_filter_le_smul_filter (hf : f₁ <= f₂) : a • f₁ <= a • f₂
+参数：hf : f₁ <= f₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_mono`：map_mono : Monotone (map m)
 -/
-theorem smul_filter_le_smul_filter (hf : f₁ <= f₂) : a • f₁ <= a • f₂ :=
+theorem smul_filter_le_smul_filter (hf : f₁ ≤ f₂) : a • f₁ ≤ a • f₂ :=
   map_mono hf
 
 @[to_additive]
-/--
-Instance `covariant_smul_filter` / 实例 `covariant_smul_filter`
-
-English:
-instance covariant_smul_filter
-  signature: : CovariantClass α (Filter β) (· • ·) (· <= ·)
-  body: ⟨fun _ => @map_mono β β _⟩
-
-中文:
-实例 covariant_smul_filter
-  签名: : 协变类 α (滤子 β) (· • ·) (· <= ·)
-  定义体: ⟨fun _ => @map_mono β β _⟩
-
-Depends on / 依赖: map_mono
+/-
+**Filter.covariant_smul_filter** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：covariant_smul_filter : CovariantClass α (Filter β) (· • ·) (· <= ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_mono`：map_mono : Monotone (map m)
 -/
-instance covariant_smul_filter : CovariantClass α (Filter β) (· • ·) (· <= ·) :=
+instance covariant_smul_filter : CovariantClass α (Filter β) (· • ·) (· ≤ ·) :=
   ⟨fun _ => @map_mono β β _⟩
 
 end SMul
 
 @[to_additive]
-/--
-Instance `smulCommClass_filter` / 实例 `smulCommClass_filter`
-
-English:
-instance smulCommClass_filter
-  signature: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
-  body: ⟨fun _ _ _ => map_comm (funext <| smul_comm _ _) _⟩
-
-@[to_additive]
-
-中文:
-实例 smulCommClass_filter
-  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
-  定义体: ⟨fun _ _ _ => map_comm (funext <| smul_comm _ _) _⟩
-
-@[to_additive]
-
-Depends on / 依赖: map_comm, smul_comm
+/-
+**Filter.smulCommClass_filter** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：smulCommClass_filter [SMul α γ] [SMul β γ] [SMulCommClass α β γ] : SMulCom
+mClass α β (Filter γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_comm`：map_comm (H : ψ ∘ φ = ρ ∘ θ) (F : Filter α) : map ψ (ma
+p φ F) = map ρ (map θ F)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance smulCommClass_filter [SMul α γ] [SMul β γ] [SMulCommClass α β γ] :
     SMulCommClass α β (Filter γ) :=
   ⟨fun _ _ _ => map_comm (funext <| smul_comm _ _) _⟩
 
 @[to_additive]
-/--
-Instance `smulCommClass_filter'` / 实例 `smulCommClass_filter'`
-
-English:
-instance smulCommClass_filter'
-  signature: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
-  body: ⟨fun a _ _ => map_map₂_distrib_right smul_comm a⟩
-
-@[to_additive]
-
-中文:
-实例 smulCommClass_filter'
-  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
-  定义体: ⟨fun a _ _ => map_map₂_distrib_right smul_comm a⟩
-
-@[to_additive]
-
-Depends on / 依赖: smul_comm
+/-
+**Filter.smulCommClass_filter'** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：smulCommClass_filter' [SMul α γ] [SMul β γ] [SMulCommClass α β γ] : SMulCo
+mmClass α (Filter β) (Filter γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map_map₂_distrib_right`：map_map₂_distrib_right {n : γ -> δ} {m' :
+ α -> β' -> δ} {n' : β -> β'} (h_distrib : forall a b, n (m a b) = m' a (n' b)) 
+: (map₂ m f g).map …
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance smulCommClass_filter' [SMul α γ] [SMul β γ] [SMulCommClass α β γ] :
     SMulCommClass α (Filter β) (Filter γ) :=
-⟨fun a _ _ => map_map₂_distrib_right smul_comm a⟩
+  ⟨fun a _ _ => map_map₂_distrib_right <| smul_comm a⟩
 
 @[to_additive]
-/--
-Instance `smulCommClass_filter''` / 实例 `smulCommClass_filter''`
-
-English:
-instance smulCommClass_filter''
-  signature: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
-  body: haveI := SMulCommClass.symm α β γ
-  SMulCommClass.symm _ _ _
-
-@[to_additive]
-
-中文:
-实例 smulCommClass_filter''
-  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
-  定义体: haveI := SMulCommClass.symm α β γ
-  SMulCommClass.symm _ _ _
-
-@[to_additive]
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**Filter.smulCommClass_filter''** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：smulCommClass_filter'' [SMul α γ] [SMul β γ] [SMulCommClass α β γ] : SMulC
+ommClass (Filter α) β (Filter γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance smulCommClass_filter'' [SMul α γ] [SMul β γ] [SMulCommClass α β γ] :
     SMulCommClass (Filter α) β (Filter γ) :=
@@ -4351,76 +2713,60 @@ instance smulCommClass_filter'' [SMul α γ] [SMul β γ] [SMulCommClass α β �
   SMulCommClass.symm _ _ _
 
 @[to_additive]
-/--
-Instance `smulCommClass` / 实例 `smulCommClass`
-
-English:
-instance smulCommClass
-  signature: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
-  body: ⟨fun _ _ _ => map₂_left_comm smul_comm⟩
-
-@[to_additive]
-
-中文:
-实例 smulCommClass
-  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
-  定义体: ⟨fun _ _ _ => map₂_left_comm smul_comm⟩
-
-@[to_additive]
-
-Depends on / 依赖: smul_comm
+/-
+**Filter.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：smulCommClass [SMul α γ] [SMul β γ] [SMulCommClass α β γ] : SMulCommClass 
+(Filter α) (Filter β) (Filter γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_left_comm`：map₂_left_comm {m : α -> δ -> ε} {n : β -> γ -> δ
+} {m' : α -> γ -> δ'} {n' : β -> δ' -> ε} (h_left_comm : forall a b c, m a (n b 
+c) = n' b (…
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance smulCommClass [SMul α γ] [SMul β γ] [SMulCommClass α β γ] :
     SMulCommClass (Filter α) (Filter β) (Filter γ) :=
   ⟨fun _ _ _ => map₂_left_comm smul_comm⟩
 
 @[to_additive]
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
-
-English:
-instance isScalarTower
-  signature: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
-  body: ⟨fun a b f => by simp only [← Filter.map_smul, map_map, smul_assoc]; rfl⟩
-
-@[to_additive]
-
-中文:
-实例 isScalarTower
-  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
-  定义体: ⟨fun a b f => by simp only [← Filter.map_smul, map_map, smul_assoc]; rfl⟩
-
-@[to_additive]
-
-Depends on / 依赖: Filter, Filter.map_smul, map_map, map_smul, smul_assoc
+/-
+**Filter.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：isScalarTower [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ] : IsS
+calarTower α β (Filter γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用定理 `Filter.map_map`：map_map : Filter.map m' (Filter.map m f) = Filter.map (m
+' ∘ m) f
 -/
 instance isScalarTower [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ] :
     IsScalarTower α β (Filter γ) :=
   ⟨fun a b f => by simp only [← Filter.map_smul, map_map, smul_assoc]; rfl⟩
 
 @[to_additive]
-/--
-Instance `isScalarTower'` / 实例 `isScalarTower'`
-
-English:
-instance isScalarTower'
-  signature: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
-  body: ⟨fun a f g => by
-    refine (map_map₂_distrib_left fun _ _ => ?_).symm
-    exact (smul_assoc a _ _).symm⟩
-
-@[to_additive]
-
-中文:
-实例 isScalarTower'
-  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
-  定义体: ⟨fun a f g => by
-    refine (map_map₂_distrib_left fun _ _ => ?_).symm
-    exact (smul_assoc a _ _).symm⟩
-
-@[to_additive]
-
-Depends on / 依赖: smul_assoc
+/-
+**Filter.isScalarTower'** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：isScalarTower' [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ] : Is
+ScalarTower α (Filter β) (Filter γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.map_map₂_distrib_left`：map_map₂_distrib_left {n : γ -> δ} {m' : α
+' -> β -> δ} {n' : α -> α'} (h_distrib : forall a b, n (m a b) = m' (n' a) b) : 
+(map₂ m f g).map n…
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower' [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ] :
     IsScalarTower α (Filter β) (Filter γ) :=
@@ -4429,71 +2775,55 @@ instance isScalarTower' [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α
     exact (smul_assoc a _ _).symm⟩
 
 @[to_additive]
-/--
-Instance `isScalarTower''` / 实例 `isScalarTower''`
-
-English:
-instance isScalarTower''
-  signature: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
-  body: ⟨fun _ _ _ => map₂_assoc smul_assoc⟩
-
-@[to_additive]
-
-中文:
-实例 isScalarTower''
-  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
-  定义体: ⟨fun _ _ _ => map₂_assoc smul_assoc⟩
-
-@[to_additive]
-
-Depends on / 依赖: smul_assoc
+/-
+**Filter.isScalarTower''** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：isScalarTower'' [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ] : I
+sScalarTower (Filter α) (Filter β) (Filter γ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.map₂_assoc`：map₂_assoc {m : δ -> γ -> ε} {n : α -> β -> δ} {m' : 
+α -> ε' -> ε} {n' : β -> γ -> ε'} {h : Filter γ} (h_assoc : forall a b c, m (n a
+ b) c =…
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower'' [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ] :
     IsScalarTower (Filter α) (Filter β) (Filter γ) :=
   ⟨fun _ _ _ => map₂_assoc smul_assoc⟩
 
 @[to_additive]
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: [SMul α β] [SMul αᵐᵒᵖ β] [IsCentralScalar α β]
-  body: ⟨fun _ f => (congr_arg fun m => map m f) funext fun _ => op_smul_eq_smul _ _⟩
-
-中文:
-实例 isCentralScalar
-  签名: [标量乘法 α β] [标量乘法 αᵐᵒᵖ β] [中心标量 α β]
-  定义体: ⟨fun _ f => (congr_arg fun m => map m f) funext fun _ => op_smul_eq_smul _ _⟩
-
-Depends on / 依赖: congr_arg, op_smul_eq_smul
+/-
+**Filter.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：isCentralScalar [SMul α β] [SMul αᵐᵒᵖ β] [IsCentralScalar α β] : IsCentral
+Scalar α (Filter β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance isCentralScalar [SMul α β] [SMul αᵐᵒᵖ β] [IsCentralScalar α β] :
     IsCentralScalar α (Filter β) :=
-⟨fun _ f => (congr_arg fun m => map m f) funext fun _ => op_smul_eq_smul _ _⟩
+  ⟨fun _ f => (congr_arg fun m => map m f) <| funext fun _ => op_smul_eq_smul _ _⟩
 
 /-- A multiplicative action of a monoid `α` on a type `β` gives a multiplicative action of
 `Filter α` on `Filter β`. -/
 @[to_additive (attr := instance_reducible)
   /-- An additive action of an additive monoid `α` on a type `β` gives an additive
 action of `Filter α` on `Filter β`. -/]
-/--
-Definition of `mulAction` / `mulAction` 的定义
-
-English:
-definition mulAction
-  signature: [Monoid α] [MulAction α β]
-  body: map₂_pure_left.trans by simp_rw [one_smul, map_id']
-  mul_smul _ _ _ := map₂_assoc mul_smul
-
-中文:
-定义 mulAction
-  签名: [幺半群 α] [乘法作用 α β]
-  定义体: map₂_pure_left.trans by simp_rw [one_smul, map_id']
-  mul_smul _ _ _ := map₂_assoc mul_smul
+/-
+**Filter.mulAction** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [inst : Monoid α] → [MulAction α β] → Mu
+lAction (Filter α) (Filter β)
+参数：Filter α；Filter β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def mulAction [Monoid α] [MulAction α β] : MulAction (Filter α) (Filter β) where
-one_smul f := map₂_pure_left.trans by simp_rw [one_smul, map_id']
+  one_smul f := map₂_pure_left.trans <| by simp_rw [one_smul, map_id']
   mul_smul _ _ _ := map₂_assoc mul_smul
 
 /-- A multiplicative action of a monoid on a type `β` gives a multiplicative action on `Filter β`.
@@ -4501,26 +2831,12 @@ one_smul f := map₂_pure_left.trans by simp_rw [one_smul, map_id']
 @[to_additive (attr := instance_reducible)
   /-- An additive action of an additive monoid on a type `β` gives an additive action on
 `Filter β`. -/]
-/--
-Definition of `mulActionFilter` / `mulActionFilter` 的定义
-
-English:
-definition mulActionFilter
-  signature: [Monoid α] [MulAction α β]
-  body: by simp only [← Filter.map_smul, map_map, Function.comp_def, ← mul_smul]
-  one_smul f := by simp only [← Filter.map_smul, one_smul, map_id']
-
-scoped[Pointwise] attribute [instance] Filter.mulAction Filter.addAction Filter.mulActionFilter
-  Filter.addActionFilter
-
-中文:
-定义 mulActionFilter
-  签名: [幺半群 α] [乘法作用 α β]
-  定义体: by simp only [← Filter.map_smul, map_map, Function.comp_def, ← mul_smul]
-  one_smul f := by simp only [← Filter.map_smul, one_smul, map_id']
-
-scoped[Pointwise] attribute [instance] Filter.mulAction Filter.addAction Filter.mulActionFilter
-  Filter.addActionFilter
+/-
+**Filter.mulActionFilter** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → {β : Type u_3} → [inst : Monoid α] → [MulAction α β] → Mu
+lAction α (Filter β)
+参数：Filter β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected def mulActionFilter [Monoid α] [MulAction α β] : MulAction α (Filter β) where
   mul_smul a b f := by simp only [← Filter.map_smul, map_map, Function.comp_def, ← mul_smul]
@@ -4532,53 +2848,40 @@ scoped[Pointwise] attribute [instance] Filter.mulAction Filter.addAction Filter.
 /-- A distributive multiplicative action of a monoid on an additive monoid `β` gives a distributive
 multiplicative action on `Filter β`. -/
 @[instance_reducible]
-/--
-Definition of `distribMulActionFilter` / `distribMulActionFilter` 的定义
+/-
+**Filter.distribMulActionFilter** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} → [inst : Monoid α] → [inst_1 : AddMonoi
+d β] → [DistribMulAction α β] → DistribMulAction α (Filter β)
+参数：Filter β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition distribMulActionFilter
-  signature: [Monoid α] [AddMonoid β] [DistribMulAction α β]
-  body: map_map₂_distrib smul_add _
-smul_zero _ := (map_pure _ _).trans by rw [smul_zero, pure_zero]
-
-中文:
-定义 distribMulActionFilter
-  签名: [幺半群 α] [加法幺半群 β] [分配乘法作用 α β]
-  定义体: map_map₂_distrib smul_add _
-smul_zero _ := (map_pure _ _).trans by rw [smul_zero, pure_zero]
+--- 原说明 ---
+A distributive multiplicative action of a monoid on an additive monoid `β` gives
+ a distributive
+multiplicative action on `Filter β`.
 -/
 protected def distribMulActionFilter [Monoid α] [AddMonoid β] [DistribMulAction α β] :
     DistribMulAction α (Filter β) where
-smul_add _ _ _ := map_map₂_distrib smul_add _
-smul_zero _ := (map_pure _ _).trans by rw [smul_zero, pure_zero]
+  smul_add _ _ _ := map_map₂_distrib <| smul_add _
+  smul_zero _ := (map_pure _ _).trans <| by rw [smul_zero, pure_zero]
 
 /-- A multiplicative action of a monoid on a monoid `β` gives a multiplicative action on `Set β`. -/
 @[instance_reducible]
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-
+**Filter.mulDistribMulActionFilter** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} → [inst : Monoid α] → [inst_1 : Monoid β
+] → [MulDistribMulAction α β] → MulDistribMulAction α (Set β)
+参数：Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def mulDistribMulActionFilter
-  body: image_image2_distrib smul_mul' _
-smul_one _ := image_singleton.trans by rw [smul_one, singleton_one]
-
-scoped[Pointwise]
-  attribute [instance] Filter.distribMulActionFilter Filter.mulDistribMulActionFilter
-
-中文:
-定义 noncomputable
-  签名: def mulDistribMulActionFilter
-  定义体: image_image2_distrib smul_mul' _
-smul_one _ := image_singleton.trans by rw [smul_one, singleton_one]
-
-scoped[Pointwise]
-  attribute [instance] Filter.distribMulActionFilter Filter.mulDistribMulActionFilter
+--- 原说明 ---
+A multiplicative action of a monoid on a monoid `β` gives a multiplicative actio
+n on `Set β`.
 -/
 protected noncomputable def mulDistribMulActionFilter
     [Monoid α] [Monoid β] [MulDistribMulAction α β] : MulDistribMulAction α (Set β) where
-smul_mul _ _ _ := image_image2_distrib smul_mul' _
-smul_one _ := image_singleton.trans by rw [smul_one, singleton_one]
+  smul_mul _ _ _ := image_image2_distrib <| smul_mul' _
+  smul_one _ := image_singleton.trans <| by rw [smul_one, singleton_one]
 
 scoped[Pointwise]
   attribute [instance] Filter.distribMulActionFilter Filter.mulDistribMulActionFilter
@@ -4587,113 +2890,98 @@ section SMulWithZero
 
 variable [Zero α] [Zero β] [SMulWithZero α β] {f : Filter α} {g : Filter β}
 
-
-/--
-theorem `NeBot.smul_zero_nonneg` / 定理 `NeBot.smul_zero_nonneg`
-
-English:
-theorem NeBot.smul_zero_nonneg
-  given: (hf : f.NeBot)
-  statement: 0 <= f • (0 : Filter β)
-  proof: le_smul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
-    ⟨_, ha, _, h₂, smul_zero _⟩
-
-中文:
-定理 NeBot.smul_zero_nonneg
-  条件: (hf : f.NeBot)
-  结论: 0 <= f • (0 : 滤子 β)
-  证明: le_smul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
-    ⟨_, ha, _, h₂, smul_zero _⟩
-
-Depends on / 依赖: hf.nonempty_of_mem, le_smul_iff, nonempty_of_mem, smul_zero
+/-!
+Note that we have neither `SMulWithZero α (Filter β)` nor `SMulWithZero (Filter α) (Filter β)`
+because `0 * ⊥ ≠ 0`.
 -/
-theorem NeBot.smul_zero_nonneg (hf : f.NeBot) : 0 <= f • (0 : Filter β) :=
+
+/-
+**Filter.NeBot.smul_zero_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Zero α] [inst_1 : Zero β] [inst_2 
+: SMulWithZero α β] {f : Filter α},   f.NeBot → 0 ≤ f • 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_smul_iff`：le_smul_iff : h <= f • g ↔ forall ⦃s⦄, s in f -> for
+all ⦃t⦄, t in g -> s • t in h
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+
+--- 原说明 ---
+Note that we have neither `SMulWithZero α (Filter β)` nor `SMulWithZero (Filter 
+α) (Filter β)`
+because `0 * ⊥ ≠ 0`.
+-/
+theorem NeBot.smul_zero_nonneg (hf : f.NeBot) : 0 ≤ f • (0 : Filter β) :=
   le_smul_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
     ⟨_, ha, _, h₂, smul_zero _⟩
-
-/--
-theorem `NeBot.zero_smul_nonneg` / 定理 `NeBot.zero_smul_nonneg`
-
-English:
-theorem NeBot.zero_smul_nonneg
-  given: (hg : g.NeBot)
-  statement: 0 <= (0 : Filter α) • g
-  proof: le_smul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
-    ⟨_, h₁, _, hb, zero_smul _ _⟩
-
-中文:
-定理 NeBot.zero_smul_nonneg
-  条件: (hg : g.NeBot)
-  结论: 0 <= (0 : 滤子 α) • g
-  证明: le_smul_iff.2 fun _ h₁ _ h₂ =>
-    let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
-    ⟨_, h₁, _, hb, zero_smul _ _⟩
-
-Depends on / 依赖: hg.nonempty_of_mem, le_smul_iff, nonempty_of_mem, zero_smul
+/-
+**Filter.NeBot.zero_smul_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Filter.NeBot`。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} [inst : Zero α] [inst_1 : Zero β] [inst_2 
+: SMulWithZero α β] {g : Filter β},   g.NeBot → 0 ≤ 0 • g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_smul_iff`：le_smul_iff : h <= f • g ↔ forall ⦃s⦄, s in f -> for
+all ⦃t⦄, t in g -> s • t in h
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 -/
-theorem NeBot.zero_smul_nonneg (hg : g.NeBot) : 0 <= (0 : Filter α) • g :=
+theorem NeBot.zero_smul_nonneg (hg : g.NeBot) : 0 ≤ (0 : Filter α) • g :=
   le_smul_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
     ⟨_, h₁, _, hb, zero_smul _ _⟩
-
-/--
-theorem `zero_smul_filter_nonpos` / 定理 `zero_smul_filter_nonpos`
-
-English:
-theorem zero_smul_filter_nonpos
-  statement: (0 : α) • g <= 0
-  proof: by
-  refine fun s hs => mem_smul_filter.2 ?_
-  convert! @univ_mem _ g
-  refine eq_univ_iff_forall.2 fun a => ?_
-  rwa [mem_preimage, zero_smul]
-
-中文:
-定理 zero_smul_filter_nonpos
-  结论: (0 : α) • g <= 0
-  证明: by
-  refine fun s hs => mem_smul_filter.2 ?_
-  convert! @univ_mem _ g
-  refine eq_univ_iff_forall.2 fun a => ?_
-  rwa [mem_preimage, zero_smul]
-
-Depends on / 依赖: convert, eq_univ_iff_forall, mem_preimage, mem_smul_filter, univ_mem, zero_smul
+/-
+**Filter.zero_smul_filter_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：zero_smul_filter_nonpos : (0 : α) • g <= 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_smul_filter`：mem_smul_filter : s in a • f ↔ (a • ·) ⁻¹' s in 
+f
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 -/
-theorem zero_smul_filter_nonpos : (0 : α) • g <= 0 := by
+theorem zero_smul_filter_nonpos : (0 : α) • g ≤ 0 := by
   refine fun s hs => mem_smul_filter.2 ?_
   convert! @univ_mem _ g
   refine eq_univ_iff_forall.2 fun a => ?_
   rwa [mem_preimage, zero_smul]
-
-/--
-theorem `zero_smul_filter` / 定理 `zero_smul_filter`
-
-English:
-theorem zero_smul_filter
-  given: (hg : g.NeBot)
-  statement: (0 : α) • g = 0
-  proof: zero_smul_filter_nonpos.antisymm
-    le_map_iff.2 fun s hs => by
-      simp_rw [zero_smul, (hg.nonempty_of_mem hs).image_const]
-      exact zero_mem_zero
-
-中文:
-定理 zero_smul_filter
-  条件: (hg : g.NeBot)
-  结论: (0 : α) • g = 0
-  证明: zero_smul_filter_nonpos.antisymm
-    le_map_iff.2 fun s hs => by
-      simp_rw [zero_smul, (hg.nonempty_of_mem hs).image_const]
-      exact zero_mem_zero
-
-Depends on / 依赖: antisymm, hg.nonempty_of_mem, image_const, le_map_iff, nonempty_of_mem, simp_rw, zero_mem_zero, zero_smul, zero_smul_filter_nonpos, zero_smul_filter_nonpos.antisymm
+/-
+**Filter.zero_smul_filter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：zero_smul_filter (hg : g.NeBot) : (0 : α) • g = 0
+参数：hg : g.NeBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Filter.zero_smul_filter_nonpos`：zero_smul_filter_nonpos : (0 : α) • g <=
+ 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_map_iff`：le_map_iff {f : Filter α} {m : α -> β} {g : Filter β}
+ : g <= f.map m ↔ forall s in f, m '' s in g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Set.Nonempty.image_const`：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s
+.Nonempty → ∀ (a : β), (fun x => a) '' s = {a}
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `Filter.zero_mem_zero`：∀ {α : Type u_2} [inst : Zero α], 0 ∈ 0
 -/
 theorem zero_smul_filter (hg : g.NeBot) : (0 : α) • g = 0 :=
-zero_smul_filter_nonpos.antisymm
+  zero_smul_filter_nonpos.antisymm <|
     le_map_iff.2 fun s hs => by
       simp_rw [zero_smul, (hg.nonempty_of_mem hs).image_const]
       exact zero_mem_zero
@@ -4703,77 +2991,48 @@ end SMulWithZero
 section Cancel
 
 @[to_additive]
-/--
-theorem `_root_.IsUnit.smul_tendsto_smul_iff` / 定理 `_root_.IsUnit.smul_tendsto_smul_iff`
-
-English:
-theorem _root_.IsUnit.smul_tendsto_smul_iff
-  statement: [Monoid γ] [MulAction γ β] {m : α -> β} {c : γ}
-  proof: by
-  rcases hc.exists_left_inv with ⟨d, hd⟩
-  refine ⟨fun H => ?_, fun H => tendsto_map.comp H⟩
-  simpa [Function.comp_def, smul_smul, hd] using (tendsto_map (f := (d • ·))).comp H
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 _root_.是单位.smul_tendsto_smul_iff
-  结论: [幺半群 γ] [乘法作用 γ β] {m : α -> β} {c : γ}
-  证明: by
-  rcases hc.exists_left_inv with ⟨d, hd⟩
-  refine ⟨fun H => ?_, fun H => tendsto_map.comp H⟩
-  simpa [Function.comp_def, smul_smul, hd] using (tendsto_map (f := (d • ·))).comp H
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, exists_left_inv, hc.exists_left_inv, smul_smul, tendsto_map, tendsto_map.comp
+/-
+**Filter._root_.IsUnit.smul_tendsto_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.IsUnit.smul_tendsto_smul_iff [Monoid γ] [MulAction γ β] {m : α -> β} {c : γ}
+theorem _root_.IsUnit.smul_tendsto_smul_iff [Monoid γ] [MulAction γ β] {m : α → β} {c : γ}
     {f : Filter α} {g : Filter β} (hc : IsUnit c) :
     Tendsto (c • m) f (c • g) ↔ Tendsto m f g := by
   rcases hc.exists_left_inv with ⟨d, hd⟩
-  refine ⟨fun H => ?_, fun H => tendsto_map.comp H⟩
+  refine ⟨fun H ↦ ?_, fun H ↦ tendsto_map.comp H⟩
   simpa [Function.comp_def, smul_smul, hd] using (tendsto_map (f := (d • ·))).comp H
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_tendsto_smul_iff` / 定理 `smul_tendsto_smul_iff`
-
-English:
-theorem smul_tendsto_smul_iff
-  statement: [Group γ] [MulAction γ β] {m : α -> β} {c : γ} {f : Filter α}
-  proof: .smul_tendsto_smul_iff Group.isUnit _
-
-中文:
-定理 smul_tendsto_smul_iff
-  结论: [群 γ] [乘法作用 γ β] {m : α -> β} {c : γ} {f : 滤子 α}
-  证明: .smul_tendsto_smul_iff Group.isUnit _
-
-Depends on / 依赖: Group.isUnit, isUnit, smul_tendsto_smul_iff
+/-
+**Filter.smul_tendsto_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_tendsto_smul_iff [Group γ] [MulAction γ β] {m : α -> β} {c : γ} {f : 
+Filter α} {g : Filter β} : Tendsto (c • m) f (c • g) ↔ Tendsto m f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.smul_tendsto_smul_iff`：∀ {α : Type u_2} {β : Type u_3} {γ : Type 
+u_4} [inst : Monoid γ] [inst_1 : MulAction γ β] {m : α → β} {c : γ}   {f : Filte
+r α} {g : Filter β…
+· 使用引理 `Group.isUnit`：Group.isUnit [Group α] (a : α) : IsUnit a
 -/
-theorem smul_tendsto_smul_iff [Group γ] [MulAction γ β] {m : α -> β} {c : γ} {f : Filter α}
+theorem smul_tendsto_smul_iff [Group γ] [MulAction γ β] {m : α → β} {c : γ} {f : Filter α}
     {g : Filter β} : Tendsto (c • m) f (c • g) ↔ Tendsto m f g :=
-.smul_tendsto_smul_iff Group.isUnit _
-
-/--
-theorem `smul_tendsto_smul_iff₀` / 定理 `smul_tendsto_smul_iff₀`
-
-English:
-theorem smul_tendsto_smul_iff₀
-  statement: [GroupWithZero γ] [MulAction γ β] {m : α -> β} {c : γ} {f : Filter α}
-  proof: hc.isUnit.smul_tendsto_smul_iff
-
-中文:
-定理 smul_tendsto_smul_iff₀
-  结论: [带零群 γ] [乘法作用 γ β] {m : α -> β} {c : γ} {f : 滤子 α}
-  证明: hc.isUnit.smul_tendsto_smul_iff
-
-Depends on / 依赖: hc.isUnit.smul_tendsto_smul_iff, isUnit, smul_tendsto_smul_iff
+  Group.isUnit _ |>.smul_tendsto_smul_iff
+/-
+**Filter.smul_tendsto_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：smul_tendsto_smul_iff [Group γ] [MulAction γ β] {m : α -> β} {c : γ} {f : 
+Filter α} {g : Filter β} : Tendsto (c • m) f (c • g) ↔ Tendsto m f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.smul_tendsto_smul_iff`：∀ {α : Type u_2} {β : Type u_3} {γ : Type 
+u_4} [inst : Monoid γ] [inst_1 : MulAction γ β] {m : α → β} {c : γ}   {f : Filte
+r α} {g : Filter β…
+· 使用引理 `Group.isUnit`：Group.isUnit [Group α] (a : α) : IsUnit a
 -/
-theorem smul_tendsto_smul_iff₀ [GroupWithZero γ] [MulAction γ β] {m : α -> β} {c : γ} {f : Filter α}
-    {g : Filter β} (hc : c != 0) : Tendsto (c • m) f (c • g) ↔ Tendsto m f g :=
+theorem smul_tendsto_smul_iff₀ [GroupWithZero γ] [MulAction γ β] {m : α → β} {c : γ} {f : Filter α}
+    {g : Filter β} (hc : c ≠ 0) : Tendsto (c • m) f (c • g) ↔ Tendsto m f g :=
   hc.isUnit.smul_tendsto_smul_iff
 
 end Cancel
 
 end Filter
+

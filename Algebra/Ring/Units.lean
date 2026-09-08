@@ -29,18 +29,13 @@ section HasDistribNeg
 
 variable [Monoid α] [HasDistribNeg α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Each element of the group of units of a ring has an additive inverse. -/
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Neg αˣ
-  body: ⟨fun u => ⟨-↑u, -↑u⁻¹, by simp, by simp⟩⟩
-
-中文:
-实例 :
-  签名: 取负 αˣ
-  定义体: ⟨fun u => ⟨-↑u, -↑u⁻¹, by simp, by simp⟩⟩
+--- 原说明 ---
+Each element of the group of units of a ring has an additive inverse.
 -/
 instance : Neg αˣ :=
   ⟨fun u => ⟨-↑u, -↑u⁻¹, by simp, by simp⟩⟩
@@ -48,105 +43,64 @@ instance : Neg αˣ :=
 /-- Representing an element of a ring's unit group as an element of the ring commutes with
 mapping this element to its additive inverse. -/
 @[simp, norm_cast]
-/--
-theorem `val_neg` / 定理 `val_neg`
+/-
+**Units.val_neg** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] (u : αˣ), ↑(-u
+) = -↑u
+参数：u : αˣ；-u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem val_neg
-  given: (u : αˣ)
-  statement: (↑(-u) : α) = -u
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 val_neg
-  条件: (u : αˣ)
-  结论: (↑(-u) : α) = -u
-  证明: rfl
-
-@[simp, norm_cast]
+--- 原说明 ---
+Representing an element of a ring's unit group as an element of the ring commute
+s with
+mapping this element to its additive inverse.
 -/
 protected theorem val_neg (u : αˣ) : (↑(-u) : α) = -u :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_neg_one` / 定理 `coe_neg_one`
-
-English:
-theorem coe_neg_one
-  statement: ((-1 : αˣ) : α) = -1
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_neg_one
-  结论: ((-1 : αˣ) : α) = -1
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Units.coe_neg_one** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α], ↑(-1) = -1
+参数：-1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem coe_neg_one : ((-1 : αˣ) : α) = -1 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `val_eq_neg_one` / 定理 `val_eq_neg_one`
-
-English:
-theorem val_eq_neg_one
-  given: {a : αˣ}
-  statement: (a : α) = -1 ↔ a = -1
-  proof: by
-  rw [← Units.coe_neg_one]; rw [val_inj]
-
-中文:
-定理 val_eq_neg_one
-  条件: {a : αˣ}
-  结论: (a : α) = -1 ↔ a = -1
-  证明: by
-  rw [← Units.coe_neg_one]; rw [val_inj]
-
-Depends on / 依赖: Units.coe_neg_one, coe_neg_one, val_inj
+/-
+**Units.val_eq_neg_one** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：val_eq_neg_one {a : αˣ} : (a : α) = -1 ↔ a = -1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Units.coe_neg_one`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistrib
+Neg α], ↑(-1) = -1
+· 使用定理 `Units.val_inj`：val_inj {a b : αˣ} : (a : α) = b ↔ a = b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem val_eq_neg_one {a : αˣ} : (a : α) = -1 ↔ a = -1 := by
-  rw [← Units.coe_neg_one]; rw [val_inj]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasDistribNeg αˣ
-  body: val_injective.hasDistribNeg _ Units.val_neg val_mul
-
-中文:
-实例 :
-  签名: 有DistribNeg αˣ
-  定义体: val_injective.hasDistribNeg _ Units.val_neg val_mul
-
-Depends on / 依赖: Units.val_neg, hasDistribNeg, val_injective, val_injective.hasDistribNeg, val_mul, val_neg
+  rw [← Units.coe_neg_one, val_inj]
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasDistribNeg αˣ := val_injective.hasDistribNeg _ Units.val_neg val_mul
-
-/--
-theorem `neg_divp` / 定理 `neg_divp`
-
-English:
-theorem neg_divp
-  given: (a : α) (u : αˣ)
-  statement: -(a /ₚ u) = -a /ₚ u
-  proof: by simp only [divp, neg_mul]
-
-中文:
-定理 neg_divp
-  条件: (a : α) (u : αˣ)
-  结论: -(a /ₚ u) = -a /ₚ u
-  证明: by simp only [divp, neg_mul]
-
-Depends on / 依赖: neg_mul
+/-
+**Units.neg_divp** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：neg_divp (a : α) (u : αˣ) : -(a /ₚ u) = -a /ₚ u
+参数：a : α；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neg_divp (a : α) (u : αˣ) : -(a /ₚ u) = -a /ₚ u := by simp only [divp, neg_mul]
 
@@ -156,68 +110,63 @@ section Semiring
 
 variable [Semiring α]
 
-/--
-theorem `divp_add_divp_same` / 定理 `divp_add_divp_same`
-
-English:
-theorem divp_add_divp_same
-  given: (a b : α) (u : αˣ)
-  statement: a /ₚ u + b /ₚ u = (a + b) /ₚ u
-  proof: by
-  simp only [divp, add_mul]
-
-中文:
-定理 divp_add_divp_same
-  条件: (a b : α) (u : αˣ)
-  结论: a /ₚ u + b /ₚ u = (a + b) /ₚ u
-  证明: by
-  simp only [divp, add_mul]
-
-Depends on / 依赖: add_mul
+/-
+**Units.divp_add_divp_same** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：divp_add_divp_same (a b : α) (u : αˣ) : a /ₚ u + b /ₚ u = (a + b) /ₚ u
+参数：a b : α；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem divp_add_divp_same (a b : α) (u : αˣ) : a /ₚ u + b /ₚ u = (a + b) /ₚ u := by
   simp only [divp, add_mul]
-
-/--
-theorem `add_divp` / 定理 `add_divp`
-
-English:
-theorem add_divp
-  given: (a b : α) (u : αˣ)
-  statement: a + b /ₚ u = (a * u + b) /ₚ u
-  proof: by
-  simp only [divp, add_mul, Units.mul_inv_cancel_right]
-
-中文:
-定理 add_divp
-  条件: (a b : α) (u : αˣ)
-  结论: a + b /ₚ u = (a * u + b) /ₚ u
-  证明: by
-  simp only [divp, add_mul, Units.mul_inv_cancel_right]
-
-Depends on / 依赖: Units.mul_inv_cancel_right, add_mul, mul_inv_cancel_right
+/-
+**Units.add_divp** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：add_divp (a b : α) (u : αˣ) : a + b /ₚ u = (a * u + b) /ₚ u
+参数：a b : α；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Units.mul_inv_cancel_right`：mul_inv_cancel_right (a : α) (b : αˣ) : a * 
+b * ↑b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem add_divp (a b : α) (u : αˣ) : a + b /ₚ u = (a * u + b) /ₚ u := by
   simp only [divp, add_mul, Units.mul_inv_cancel_right]
-
-/--
-theorem `divp_add` / 定理 `divp_add`
-
-English:
-theorem divp_add
-  given: (a b : α) (u : αˣ)
-  statement: a /ₚ u + b = (a + b * u) /ₚ u
-  proof: by
-  simp only [divp, add_mul, Units.mul_inv_cancel_right]
-
-中文:
-定理 divp_add
-  条件: (a b : α) (u : αˣ)
-  结论: a /ₚ u + b = (a + b * u) /ₚ u
-  证明: by
-  simp only [divp, add_mul, Units.mul_inv_cancel_right]
-
-Depends on / 依赖: Units.mul_inv_cancel_right, add_mul, mul_inv_cancel_right
+/-
+**Units.divp_add** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：divp_add (a b : α) (u : αˣ) : a /ₚ u + b = (a + b * u) /ₚ u
+参数：a b : α；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `Units.mul_inv_cancel_right`：mul_inv_cancel_right (a : α) (b : αˣ) : a * 
+b * ↑b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem divp_add (a b : α) (u : αˣ) : a /ₚ u + b = (a + b * u) /ₚ u := by
   simp only [divp, add_mul, Units.mul_inv_cancel_right]
@@ -228,270 +177,256 @@ section Ring
 
 variable [Ring α]
 
-/--
-theorem `divp_sub_divp_same` / 定理 `divp_sub_divp_same`
-
-English:
-theorem divp_sub_divp_same
-  given: (a b : α) (u : αˣ)
-  statement: a /ₚ u - b /ₚ u = (a - b) /ₚ u
-  proof: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [neg_divp]; rw [divp_add_divp_same]
-
-中文:
-定理 divp_sub_divp_same
-  条件: (a b : α) (u : αˣ)
-  结论: a /ₚ u - b /ₚ u = (a - b) /ₚ u
-  证明: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [neg_divp]; rw [divp_add_divp_same]
-
-Depends on / 依赖: divp_add_divp_same, neg_divp, sub_eq_add_neg
+/-
+**Units.divp_sub_divp_same** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：divp_sub_divp_same (a b : α) (u : αˣ) : a /ₚ u - b /ₚ u = (a - b) /ₚ u
+参数：a b : α；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Units.neg_divp`：neg_divp (a : α) (u : αˣ) : -(a /ₚ u) = -a /ₚ u
+· 使用定理 `Units.divp_add_divp_same`：divp_add_divp_same (a b : α) (u : αˣ) : a /ₚ u
+ + b /ₚ u = (a + b) /ₚ u
 -/
 theorem divp_sub_divp_same (a b : α) (u : αˣ) : a /ₚ u - b /ₚ u = (a - b) /ₚ u := by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [neg_divp]; rw [divp_add_divp_same]
-
-/--
-theorem `sub_divp` / 定理 `sub_divp`
-
-English:
-theorem sub_divp
-  given: (a b : α) (u : αˣ)
-  statement: a - b /ₚ u = (a * u - b) /ₚ u
-  proof: by
-  simp only [divp, sub_mul, Units.mul_inv_cancel_right]
-
-中文:
-定理 sub_divp
-  条件: (a b : α) (u : αˣ)
-  结论: a - b /ₚ u = (a * u - b) /ₚ u
-  证明: by
-  simp only [divp, sub_mul, Units.mul_inv_cancel_right]
-
-Depends on / 依赖: Units.mul_inv_cancel_right, mul_inv_cancel_right, sub_mul
+  rw [sub_eq_add_neg, sub_eq_add_neg, neg_divp, divp_add_divp_same]
+/-
+**Units.sub_divp** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：sub_divp (a b : α) (u : αˣ) : a - b /ₚ u = (a * u - b) /ₚ u
+参数：a b : α；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Units.mul_inv_cancel_right`：mul_inv_cancel_right (a : α) (b : αˣ) : a * 
+b * ↑b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sub_divp (a b : α) (u : αˣ) : a - b /ₚ u = (a * u - b) /ₚ u := by
   simp only [divp, sub_mul, Units.mul_inv_cancel_right]
-
-/--
-theorem `divp_sub` / 定理 `divp_sub`
-
-English:
-theorem divp_sub
-  given: (a b : α) (u : αˣ)
-  statement: a /ₚ u - b = (a - b * u) /ₚ u
-  proof: by
-  simp only [divp, sub_mul, sub_right_inj]
-  rw [mul_assoc]; rw [Units.mul_inv]; rw [mul_one]
-
-@[simp]
-
-中文:
-定理 divp_sub
-  条件: (a b : α) (u : αˣ)
-  结论: a /ₚ u - b = (a - b * u) /ₚ u
-  证明: by
-  simp only [divp, sub_mul, sub_right_inj]
-  rw [mul_assoc]; rw [Units.mul_inv]; rw [mul_one]
-
-@[simp]
-
-Depends on / 依赖: Units.mul_inv, mul_assoc, mul_inv, mul_one, sub_mul, sub_right_inj
+/-
+**Units.divp_sub** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：divp_sub (a b : α) (u : αˣ) : a /ₚ u - b = (a - b * u) /ₚ u
+参数：a b : α；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem divp_sub (a b : α) (u : αˣ) : a /ₚ u - b = (a - b * u) /ₚ u := by
   simp only [divp, sub_mul, sub_right_inj]
-  rw [mul_assoc]; rw [Units.mul_inv]; rw [mul_one]
+  rw [mul_assoc, Units.mul_inv, mul_one]
 
 @[simp]
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  statement: {F : Type*} [Ring β] [FunLike F α β] [RingHomClass F α β]
-  proof: ext (by simp only [coe_map, Units.val_neg, MonoidHom.coe_coe, map_neg])
-
-中文:
-定理 map_neg
-  结论: {F : 类型} [环 β] [函数状 F α β] [环态射类 F α β]
-  证明: ext (by simp only [coe_map, Units.val_neg, MonoidHom.coe_coe, map_neg])
+/-
+**Units.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Ring α] {F : Type u_1} [inst_1 : Ring 
+β] [inst_2 : FunLike F α β]   [inst_3 : RingHomClass F α β] (f : F) (u : αˣ), (U
+nits.map ↑f) (-u) = -(Units.map ↑f) u
+参数：f : F；u : αˣ；Units.map ↑f；-u；Units.map ↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem map_neg {F : Type*} [Ring β] [FunLike F α β] [RingHomClass F α β]
-    (f : F) (u : αˣ) : map (f : α ->* β) (-u) = -map (f : α ->* β) u :=
+    (f : F) (u : αˣ) : map (f : α →* β) (-u) = -map (f : α →* β) u :=
   ext (by simp only [coe_map, Units.val_neg, MonoidHom.coe_coe, map_neg])
-
-/--
-theorem `map_neg_one` / 定理 `map_neg_one`
-
-English:
-theorem map_neg_one
-  statement: {F : Type*} [Ring β] [FunLike F α β] [RingHomClass F α β]
-  proof: by
-  simp only [Units.map_neg, map_one]
-
-中文:
-定理 map_neg_one
-  结论: {F : 类型} [环 β] [函数状 F α β] [环态射类 F α β]
-  证明: by
-  simp only [Units.map_neg, map_one]
+/-
+**Units.map_neg_one** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : Ring α] {F : Type u_1} [inst_1 : Ring 
+β] [inst_2 : FunLike F α β]   [inst_3 : RingHomClass F α β] (f : F), (Units.map 
+↑f) (-1) = -1
+参数：f : F；Units.map ↑f；-1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Units.map_neg`：∀ {α : Type u} {β : Type v} [inst : Ring α] {F : Type u_1
+} [inst_1 : Ring β] [inst_2 : FunLike F α β]   [inst_3 : RingHomClass F α β] (f 
+: F…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem map_neg_one {F : Type*} [Ring β] [FunLike F α β] [RingHomClass F α β]
-    (f : F) : map (f : α ->* β) (-1) = -1 := by
+    (f : F) : map (f : α →* β) (-1) = -1 := by
   simp only [Units.map_neg, map_one]
 
 end Ring
 
 end Units
 
-/--
-theorem `IsUnit.neg` / 定理 `IsUnit.neg`
-
-English:
-theorem IsUnit.neg
-  given: [Monoid α] [HasDistribNeg α] {a : α}
-  statement: IsUnit a -> IsUnit (-a)
-
-中文:
-定理 是单位.neg
-  条件: [幺半群 α] [有DistribNeg α] {a : α}
-  结论: 是单位 a -> 是单位 (-a)
+/-
+**IsUnit.neg** 是 Mathlib 中的一个定理，位于命名空间 `IsUnit`。
+形式化陈述：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] {a : α}, IsUni
+t a → IsUnit (-a)
+参数：-a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-theorem IsUnit.neg [Monoid α] [HasDistribNeg α] {a : α} : IsUnit a -> IsUnit (-a)
+theorem IsUnit.neg [Monoid α] [HasDistribNeg α] {a : α} : IsUnit a → IsUnit (-a)
   | ⟨x, hx⟩ => hx ▸ (-x).isUnit
 
 @[simp]
-/--
-theorem `IsUnit.neg_iff` / 定理 `IsUnit.neg_iff`
-
-English:
-theorem IsUnit.neg_iff
-  given: [Monoid α] [HasDistribNeg α] (a : α)
-  statement: IsUnit (-a) ↔ IsUnit a
-  proof: ⟨fun h => neg_neg a ▸ h.neg, IsUnit.neg⟩
-
-中文:
-定理 是单位.neg_iff
-  条件: [幺半群 α] [有DistribNeg α] (a : α)
-  结论: 是单位 (-a) ↔ 是单位 a
-  证明: ⟨fun h => neg_neg a ▸ h.neg, IsUnit.neg⟩
-
-Depends on / 依赖: IsUnit, IsUnit.neg, h.neg, neg_neg
+/-
+**IsUnit.neg_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUnit.neg_iff [Monoid α] [HasDistribNeg α] (a : α) : IsUnit (-a) ↔ IsUnit
+ a
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
 theorem IsUnit.neg_iff [Monoid α] [HasDistribNeg α] (a : α) : IsUnit (-a) ↔ IsUnit a :=
   ⟨fun h => neg_neg a ▸ h.neg, IsUnit.neg⟩
-
-/--
-theorem `isUnit_neg_one` / 定理 `isUnit_neg_one`
-
-English:
-theorem isUnit_neg_one
-  given: [Monoid α] [HasDistribNeg α]
-  statement: IsUnit (-1 : α)
-  proof: isUnit_one.neg
-
-中文:
-定理 isUnit_neg_one
-  条件: [幺半群 α] [有DistribNeg α]
-  结论: 是单位 (-1 : α)
-  证明: isUnit_one.neg
-
-Depends on / 依赖: isUnit_one, isUnit_one.neg
+/-
+**isUnit_neg_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isUnit_neg_one [Monoid α] [HasDistribNeg α] : IsUnit (-1 : α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
 -/
 theorem isUnit_neg_one [Monoid α] [HasDistribNeg α] : IsUnit (-1 : α) := isUnit_one.neg
-
-/--
-theorem `IsUnit.sub_iff` / 定理 `IsUnit.sub_iff`
-
-English:
-theorem IsUnit.sub_iff
-  given: [Ring α] {x y : α}
-  statement: IsUnit (x - y) ↔ IsUnit (y - x)
-  proof: (IsUnit.neg_iff _).symm.trans neg_sub x y ▸ Iff.rfl
-
-中文:
-定理 是单位.sub_iff
-  条件: [环 α] {x y : α}
-  结论: 是单位 (x - y) ↔ 是单位 (y - x)
-  证明: (IsUnit.neg_iff _).symm.trans neg_sub x y ▸ Iff.rfl
-
-Depends on / 依赖: Iff.rfl, IsUnit, IsUnit.neg_iff, neg_iff, neg_sub, symm.trans
+/-
+**IsUnit.sub_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsUnit.sub_iff [Ring α] {x y : α} : IsUnit (x - y) ↔ IsUnit (y - x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `IsUnit.neg_iff`：IsUnit.neg_iff [Monoid α] [HasDistribNeg α] (a : α) : Is
+Unit (-a) ↔ IsUnit a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
 -/
 theorem IsUnit.sub_iff [Ring α] {x y : α} : IsUnit (x - y) ↔ IsUnit (y - x) :=
-(IsUnit.neg_iff _).symm.trans neg_sub x y ▸ Iff.rfl
+  (IsUnit.neg_iff _).symm.trans <| neg_sub x y ▸ Iff.rfl
 
 namespace Units
 
-/--
-theorem `divp_add_divp` / 定理 `divp_add_divp`
-
-English:
-theorem divp_add_divp
-  given: [CommSemiring α] (a b : α) (u₁ u₂ : αˣ)
-  proof: by
-  simp only [divp, add_mul, mul_inv_rev, val_mul]
-  rw [mul_comm (↑u₁ * b)]; rw [mul_comm b]
-  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_assoc a]; rw [mul_assoc (↑u₂⁻¹ : α)]; rw [mul_inv]; rw [inv_mul]; rw [mul_one]; rw [mul_one]
-  -- Porting note: `assoc_rw` not ported: `assoc_rw [mul_inv, mul_inv, mul_one, mul_one]`
-
-中文:
-定理 divp_add_divp
-  条件: [交换半环 α] (a b : α) (u₁ u₂ : αˣ)
-  证明: by
-  simp only [divp, add_mul, mul_inv_rev, val_mul]
-  rw [mul_comm (↑u₁ * b)]; rw [mul_comm b]
-  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_assoc a]; rw [mul_assoc (↑u₂⁻¹ : α)]; rw [mul_inv]; rw [inv_mul]; rw [mul_one]; rw [mul_one]
-  -- Porting note: `assoc_rw` not ported: `assoc_rw [mul_inv, mul_inv, mul_one, mul_one]`
-
-Depends on / 依赖: add_mul, inv_mul, mul_assoc, mul_comm, mul_inv, mul_inv_rev, mul_one, val_mul
+/-
+**Units.divp_add_divp** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：divp_add_divp [CommSemiring α] (a b : α) (u₁ u₂ : αˣ) : a /ₚ u₁ + b /ₚ u₂ 
+= (a * u₂ + u₁ * b) /ₚ (u₁ * u₂)
+参数：a b : α；u₁ u₂ : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
+· 使用定理 `Units.inv_mul`：inv_mul : (↑a⁻¹ * a : α) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem divp_add_divp [CommSemiring α] (a b : α) (u₁ u₂ : αˣ) :
     a /ₚ u₁ + b /ₚ u₂ = (a * u₂ + u₁ * b) /ₚ (u₁ * u₂) := by
   simp only [divp, add_mul, mul_inv_rev, val_mul]
-  rw [mul_comm (↑u₁ * b)]; rw [mul_comm b]
-  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_assoc a]; rw [mul_assoc (↑u₂⁻¹ : α)]; rw [mul_inv]; rw [inv_mul]; rw [mul_one]; rw [mul_one]
+  rw [mul_comm (↑u₁ * b), mul_comm b]
+  rw [← mul_assoc, ← mul_assoc, mul_assoc a, mul_assoc (↑u₂⁻¹ : α), mul_inv, inv_mul, mul_one,
+    mul_one]
   -- Porting note: `assoc_rw` not ported: `assoc_rw [mul_inv, mul_inv, mul_one, mul_one]`
-
-/--
-theorem `divp_sub_divp` / 定理 `divp_sub_divp`
-
-English:
-theorem divp_sub_divp
-  given: [CommRing α] (a b : α) (u₁ u₂ : αˣ)
-  proof: by
-  simp only [sub_eq_add_neg, neg_divp, divp_add_divp, mul_neg]
-
-中文:
-定理 divp_sub_divp
-  条件: [交换环 α] (a b : α) (u₁ u₂ : αˣ)
-  证明: by
-  simp only [sub_eq_add_neg, neg_divp, divp_add_divp, mul_neg]
-
-Depends on / 依赖: divp_add_divp, mul_neg, neg_divp, sub_eq_add_neg
+/-
+**Units.divp_sub_divp** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：divp_sub_divp [CommRing α] (a b : α) (u₁ u₂ : αˣ) : a /ₚ u₁ - b /ₚ u₂ = (a
+ * u₂ - u₁ * b) /ₚ (u₁ * u₂)
+参数：a b : α；u₁ u₂ : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Units.neg_divp`：neg_divp (a : α) (u : αˣ) : -(a /ₚ u) = -a /ₚ u
+· 使用定理 `Units.divp_add_divp`：divp_add_divp [CommSemiring α] (a b : α) (u₁ u₂ : α
+ˣ) : a /ₚ u₁ + b /ₚ u₂ = (a * u₂ + u₁ * b) /ₚ (u₁ * u₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem divp_sub_divp [CommRing α] (a b : α) (u₁ u₂ : αˣ) :
     a /ₚ u₁ - b /ₚ u₂ = (a * u₂ - u₁ * b) /ₚ (u₁ * u₂) := by
   simp only [sub_eq_add_neg, neg_divp, divp_add_divp, mul_neg]
-
-/--
-theorem `add_eq_mul_one_add_div` / 定理 `add_eq_mul_one_add_div`
-
-English:
-theorem add_eq_mul_one_add_div
-  given: [Semiring R] {a : Rˣ} {b : R}
-  statement: ↑a + b = a * (1 + ↑a⁻¹ * b)
-  proof: by
-  rw [mul_add]; rw [mul_one]; rw [← mul_assoc]; rw [Units.mul_inv]; rw [one_mul]
-
-中文:
-定理 add_eq_mul_one_add_div
-  条件: [半环 R] {a : Rˣ} {b : R}
-  结论: ↑a + b = a * (1 + ↑a⁻¹ * b)
-  证明: by
-  rw [mul_add]; rw [mul_one]; rw [← mul_assoc]; rw [Units.mul_inv]; rw [one_mul]
-
-Depends on / 依赖: Units.mul_inv, mul_add, mul_assoc, mul_inv, mul_one, one_mul
+/-
+**Units.add_eq_mul_one_add_div** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：add_eq_mul_one_add_div [Semiring R] {a : Rˣ} {b : R} : ↑a + b = a * (1 + ↑
+a⁻¹ * b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem add_eq_mul_one_add_div [Semiring R] {a : Rˣ} {b : R} : ↑a + b = a * (1 + ↑a⁻¹ * b) := by
-  rw [mul_add]; rw [mul_one]; rw [← mul_assoc]; rw [Units.mul_inv]; rw [one_mul]
+  rw [mul_add, mul_one, ← mul_assoc, Units.mul_inv, one_mul]
 
 end Units
 
@@ -501,26 +436,25 @@ section Semiring
 
 variable [Semiring α] [Semiring β]
 
-/--
-theorem `isUnit_map` / 定理 `isUnit_map`
-
-English:
-theorem isUnit_map
-  given: (f : α ->+* β) {a : α}
-  statement: IsUnit a -> IsUnit (f a)
-  proof: IsUnit.map f
-
-中文:
-定理 isUnit_map
-  条件: (f : α ->+* β) {a : α}
-  结论: 是单位 a -> 是单位 (f a)
-  证明: IsUnit.map f
-
-Depends on / 依赖: IsUnit, IsUnit.map
+/-
+**RingHom.isUnit_map** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：isUnit_map (f : α ->+* β) {a : α} : IsUnit a -> IsUnit (f a)
+参数：f : α ->+* β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem isUnit_map (f : α ->+* β) {a : α} : IsUnit a -> IsUnit (f a) :=
+theorem isUnit_map (f : α →+* β) {a : α} : IsUnit a → IsUnit (f a) :=
   IsUnit.map f
 
 end Semiring
 
 end RingHom
+

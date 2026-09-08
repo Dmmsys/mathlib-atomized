@@ -31,52 +31,46 @@ open Bornology Filter Function Set
 
 variable {F α β γ δ : Type*}
 
-/--
-Definition of `LocallyBoundedMap` / `LocallyBoundedMap` 的定义
+/-- The type of bounded maps from `α` to `β`, the maps which send a bounded set to a bounded set. -/
+/-
+**LocallyBoundedMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_6) → (β : Type u_7) → [Bornology α] → [Bornology β] → Type (ma
+x u_6 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LocallyBoundedMap
-  parameters: (α β : Type*) [Bornology α] [Bornology β]
-  axioms and operations (2):
-    - toFun : α -> β
-    - comap_cobounded_le' : (cobounded β).comap toFun <= cobounded α
-
-中文:
-结构 LocallyBounded映射
-  参数: (α β : 类型) [有界结构 α] [有界结构 β]
-  公理与运算 (2 个):
-    - toFun : α -> β
-    - comap_cobounded_le' : (cobounded β).comap toFun <= cobounded α
+--- 原说明 ---
+The type of bounded maps from `α` to `β`, the maps which send a bounded set to a
+ bounded set.
 -/
 structure LocallyBoundedMap (α β : Type*) [Bornology α] [Bornology β] where
   /-- The function underlying a locally bounded map -/
-  toFun : α -> β
+  toFun : α → β
   /-- The pullback of the `Bornology.cobounded` filter under the function is contained in the
   cobounded filter. Equivalently, the function maps bounded sets to bounded sets. -/
-  comap_cobounded_le' : (cobounded β).comap toFun <= cobounded α
+  comap_cobounded_le' : (cobounded β).comap toFun ≤ cobounded α
 
 section
 
-/--
-Definition of `LocallyBoundedMapClass` / `LocallyBoundedMapClass` 的定义
+/-- `LocallyBoundedMapClass F α β` states that `F` is a type of bounded maps.
 
-English:
-class LocallyBoundedMapClass
-  parameters: (F : Type*) (α β : outParam Type*) [Bornology α]
-  axioms and operations (1):
-    - comap_cobounded_le((f : F)) : (cobounded β).comap f <= cobounded α
+You should extend this class when you extend `LocallyBoundedMap`. -/
+/-
+**LocallyBoundedMapClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_6) →   (α : outParam (Type u_7)) → (β : outParam (Type u_8)) →
+ [Bornology α] → [Bornology β] → [FunLike F α β] → Prop
+参数：Type u_7；Type u_8。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 LocallyBounded映射类
-  参数: (F : 类型) (α β : outParam 类型) [有界结构 α]
-  公理与运算 (1 个):
-    - comap_cobounded_le((f : F)) : (cobounded β).comap f <= cobounded α
+--- 原说明 ---
+`LocallyBoundedMapClass F α β` states that `F` is a type of bounded maps.
+
+You should extend this class when you extend `LocallyBoundedMap`.
 -/
 class LocallyBoundedMapClass (F : Type*) (α β : outParam Type*) [Bornology α]
     [Bornology β] [FunLike F α β] : Prop where
   /-- The pullback of the `Bornology.cobounded` filter under the function is contained in the
   cobounded filter. Equivalently, the function maps bounded sets to bounded sets. -/
-  comap_cobounded_le (f : F) : (cobounded β).comap f <= cobounded α
+  comap_cobounded_le (f : F) : (cobounded β).comap f ≤ cobounded α
 
 end
 
@@ -84,20 +78,20 @@ export LocallyBoundedMapClass (comap_cobounded_le)
 
 variable [FunLike F α β]
 
-/--
-theorem `Bornology.IsBounded.image` / 定理 `Bornology.IsBounded.image`
-
-English:
-theorem Bornology.IsBounded.image
-  statement: [Bornology α] [Bornology β] [LocallyBoundedMapClass F α β] (f : F)
-  proof: comap_cobounded_le_iff.1 (comap_cobounded_le f) hs
-
-中文:
-定理 有界结构.IsBounded.像
-  结论: [有界结构 α] [有界结构 β] [LocallyBounded映射类 F α β] (f : F)
-  证明: comap_cobounded_le_iff.1 (comap_cobounded_le f) hs
-
-Depends on / 依赖: comap_cobounded_le, comap_cobounded_le_iff
+/-
+**Bornology.IsBounded.image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bornology.IsBounded.image [Bornology α] [Bornology β] [LocallyBoundedMapCl
+ass F α β] (f : F) {s : Set α} (hs : IsBounded s) : IsBounded (f '' s)
+参数：f : F；hs : IsBounded s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Bornology.comap_cobounded_le_iff`：comap_cobounded_le_iff [Bornology β] {
+f : α -> β} : (cobounded β).comap f <= cobounded α ↔ forall ⦃s⦄, IsBounded s -> 
+IsBounded (f '' s)
+· 使用定理 `LocallyBoundedMapClass.comap_cobounded_le`：∀ {F : Type u_6} {α : outPara
+m (Type u_7)} {β : outParam (Type u_8)} {inst : Bornology α} {inst_1 : Bornology
+ β}   {inst_2 : FunLike F α β} …
 -/
 theorem Bornology.IsBounded.image [Bornology α] [Bornology β] [LocallyBoundedMapClass F α β] (f : F)
     {s : Set α} (hs : IsBounded s) : IsBounded (f '' s) :=
@@ -107,40 +101,30 @@ theorem Bornology.IsBounded.image [Bornology α] [Bornology β] [LocallyBoundedM
 `LocallyBoundedMap`. This is declared as the default coercion from `F` to
 `LocallyBoundedMap α β`. -/
 @[coe]
-/--
-Definition of `LocallyBoundedMapClass.toLocallyBoundedMap` / `LocallyBoundedMapClass.toLocallyBoundedMap` 的定义
+/-
+**LocallyBoundedMapClass.toLocallyBoundedMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LocallyBoundedMapClass.toLocallyBoundedMap [Bornology α] [Bornology β] [Lo
+callyBoundedMapClass F α β] (f : F) : LocallyBoundedMap α β where toFun
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyBoundedMapClass.comap_cobounded_le`：∀ {F : Type u_6} {α : outPara
+m (Type u_7)} {β : outParam (Type u_8)} {inst : Bornology α} {inst_1 : Bornology
+ β}   {inst_2 : FunLike F α β} …
 
-English:
-definition LocallyBoundedMapClass.toLocallyBoundedMap
-  signature: [Bornology α] [Bornology β]
-  body: f
-  comap_cobounded_le' := comap_cobounded_le f
-
-中文:
-定义 LocallyBounded映射类.toLocallyBoundedMap
-  签名: [有界结构 α] [有界结构 β]
-  定义体: f
-  comap_cobounded_le' := comap_cobounded_le f
+--- 原说明 ---
+Turn an element of a type `F` satisfying `LocallyBoundedMapClass F α β` into an 
+actual
+`LocallyBoundedMap`. This is declared as the default coercion from `F` to
+`LocallyBoundedMap α β`.
 -/
 def LocallyBoundedMapClass.toLocallyBoundedMap [Bornology α] [Bornology β]
     [LocallyBoundedMapClass F α β] (f : F) : LocallyBoundedMap α β where
   toFun := f
   comap_cobounded_le' := comap_cobounded_le f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Bornology
-  signature: α] [Bornology β] [LocallyBoundedMapClass F α β] :
-  body: ⟨fun f => ⟨f, comap_cobounded_le f⟩⟩
-
-中文:
-实例 [有界结构
-  签名: α] [有界结构 β] [LocallyBounded映射类 F α β] :
-  定义体: ⟨fun f => ⟨f, comap_cobounded_le f⟩⟩
-
-Depends on / 依赖: comap_cobounded_le
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Bornology α] [Bornology β] [LocallyBoundedMapClass F α β] :
     CoeTC F (LocallyBoundedMap α β) :=
@@ -150,28 +134,9 @@ namespace LocallyBoundedMap
 
 variable [Bornology α] [Bornology β] [Bornology γ] [Bornology δ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (LocallyBoundedMap α β) α β
-  body: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-
-中文:
-实例 :
-  签名: 函数状 (LocallyBounded映射 α β) α β
-  定义体: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-
-Depends on / 依赖: f.toFun
+/-
+**LocallyBoundedMap.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyBoundedMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (LocallyBoundedMap α β) α β where
   coe f := f.toFun
@@ -179,227 +144,136 @@ instance : FunLike (LocallyBoundedMap α β) α β where
     cases f
     cases g
     congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LocallyBoundedMapClass (LocallyBoundedMap α β) α β
-  body: f.comap_cobounded_le'
-
-@[ext]
-
-中文:
-实例 :
-  签名: LocallyBounded映射类 (LocallyBounded映射 α β) α β
-  定义体: f.comap_cobounded_le'
-
-@[ext]
-
-Depends on / 依赖: comap_cobounded_le, f.comap_cobounded_le
+/-
+**LocallyBoundedMap.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyBoundedMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LocallyBoundedMapClass (LocallyBoundedMap α β) α β where
   comap_cobounded_le f := f.comap_cobounded_le'
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : LocallyBoundedMap α β} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : LocallyBounded映射 α β} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**LocallyBoundedMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：ext {f g : LocallyBoundedMap α β} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : LocallyBoundedMap α β} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : LocallyBoundedMap α β} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `LocallyBoundedMap` with a new `toFun` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**LocallyBoundedMap.copy** 是 Mathlib 中的一个定义，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : Bornology α] →       [inst
+_1 : Bornology β] → (f : LocallyBoundedMap α β) → (f' : α → β) → f' = ⇑f → Local
+lyBoundedMap α β
+参数：f : LocallyBoundedMap α β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f)
-  body: ⟨f', h.symm ▸ f.comap_cobounded_le'⟩
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : LocallyBounded映射 α β) (f' : α -> β) (h : f' = f)
-  定义体: ⟨f', h.symm ▸ f.comap_cobounded_le'⟩
-
-@[simp]
+--- 原说明 ---
+Copy of a `LocallyBoundedMap` with a new `toFun` equal to the old one. Useful to
+ fix
+definitional equalities.
 -/
-protected def copy (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f) : LocallyBoundedMap α β :=
+protected def copy (f : LocallyBoundedMap α β) (f' : α → β) (h : f' = f) : LocallyBoundedMap α β :=
   ⟨f', h.symm ▸ f.comap_cobounded_le'⟩
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : LocallyBounded映射 α β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**LocallyBoundedMap.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：coe_copy (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy
+ f' h) = f'
+参数：f : LocallyBoundedMap α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : LocallyBoundedMap α β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : LocallyBounded映射 α β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**LocallyBoundedMap.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：copy_eq (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f) : f.copy f'
+ h = f
+参数：f : LocallyBoundedMap α β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : LocallyBoundedMap α β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : LocallyBoundedMap α β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
-/--
-Definition of `ofMapBounded` / `ofMapBounded` 的定义
+/-- Construct a `LocallyBoundedMap` from the fact that the function maps bounded sets to bounded
+sets. -/
+/-
+**LocallyBoundedMap.ofMapBounded** 是 Mathlib 中的一个定义，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：ofMapBounded (f : α -> β) (h : forall ⦃s : Set α⦄, IsBounded s -> IsBounde
+d (f '' s)) : LocallyBoundedMap α β
+参数：f : α -> β；h : forall ⦃s : Set α⦄, IsBounded s -> IsBounded (f '' s)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMapBounded
-  signature: (f : α -> β) (h : forall ⦃s : Set α⦄, IsBounded s -> IsBounded (f '' s))
-  body: ⟨f, comap_cobounded_le_iff.2 h⟩
-
-@[simp]
-
-中文:
-定义 ofMapBounded
-  签名: (f : α -> β) (h : 对任意 ⦃s : 集合 α⦄, IsBounded s -> IsBounded (f '' s))
-  定义体: ⟨f, comap_cobounded_le_iff.2 h⟩
-
-@[simp]
-
-Depends on / 依赖: comap_cobounded_le_iff
+--- 原说明 ---
+Construct a `LocallyBoundedMap` from the fact that the function maps bounded set
+s to bounded
+sets.
 -/
-def ofMapBounded (f : α -> β) (h : forall ⦃s : Set α⦄, IsBounded s -> IsBounded (f '' s)) :
+def ofMapBounded (f : α → β) (h : ∀ ⦃s : Set α⦄, IsBounded s → IsBounded (f '' s)) :
     LocallyBoundedMap α β :=
   ⟨f, comap_cobounded_le_iff.2 h⟩
 
 @[simp]
-/--
-theorem `coe_ofMapBounded` / 定理 `coe_ofMapBounded`
-
-English:
-theorem coe_ofMapBounded
-  given: (f : α -> β) {h}
-  statement: ⇑(ofMapBounded f h) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_ofMapBounded
-  条件: (f : α -> β) {h}
-  结论: ⇑(ofMapBounded f h) = f
-  证明: rfl
-
-@[simp]
+/-
+**LocallyBoundedMap.coe_ofMapBounded** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMa
+p`。
+形式化陈述：coe_ofMapBounded (f : α -> β) {h} : ⇑(ofMapBounded f h) = f
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_ofMapBounded (f : α -> β) {h} : ⇑(ofMapBounded f h) = f :=
+theorem coe_ofMapBounded (f : α → β) {h} : ⇑(ofMapBounded f h) = f :=
   rfl
 
 @[simp]
-/--
-theorem `ofMapBounded_apply` / 定理 `ofMapBounded_apply`
-
-English:
-theorem ofMapBounded_apply
-  given: (f : α -> β) {h} (a : α)
-  statement: ofMapBounded f h a = f a
-  proof: rfl
-
-中文:
-定理 ofMapBounded_apply
-  条件: (f : α -> β) {h} (a : α)
-  结论: ofMapBounded f h a = f a
-  证明: rfl
+/-
+**LocallyBoundedMap.ofMapBounded_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBounded
+Map`。
+形式化陈述：ofMapBounded_apply (f : α -> β) {h} (a : α) : ofMapBounded f h a = f a
+参数：f : α -> β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofMapBounded_apply (f : α -> β) {h} (a : α) : ofMapBounded f h a = f a :=
+theorem ofMapBounded_apply (f : α → β) {h} (a : α) : ofMapBounded f h a = f a :=
   rfl
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- `id` as a `LocallyBoundedMap`. -/
+/-
+**LocallyBoundedMap.id** 是 Mathlib 中的一个定义，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：(α : Type u_2) → [inst : Bornology α] → LocallyBoundedMap α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : LocallyBoundedMap α α
-  body: ⟨id, comap_id.le⟩
-
-中文:
-定义 id
-  签名: : LocallyBounded映射 α α
-  定义体: ⟨id, comap_id.le⟩
+--- 原说明 ---
+`id` as a `LocallyBoundedMap`.
 -/
 protected def id : LocallyBoundedMap α α :=
   ⟨id, comap_id.le⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (LocallyBoundedMap α α)
-  body: ⟨LocallyBoundedMap.id α⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 可居 (LocallyBounded映射 α α)
-  定义体: ⟨LocallyBoundedMap.id α⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: LocallyBoundedMap, LocallyBoundedMap.id
+/-
+**LocallyBoundedMap.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyBoundedMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (LocallyBoundedMap α α) :=
   ⟨LocallyBoundedMap.id α⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(LocallyBoundedMap.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(LocallyBounded映射.id α) = id
-  证明: rfl
+/-
+**LocallyBoundedMap.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：coe_id : ⇑(LocallyBoundedMap.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(LocallyBoundedMap.id α) = id :=
   rfl
@@ -407,205 +281,142 @@ theorem coe_id : ⇑(LocallyBoundedMap.id α) = id :=
 variable {α}
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (a : α)
-  statement: LocallyBoundedMap.id α a = a
-  proof: rfl
-
-中文:
-定理 id_apply
-  条件: (a : α)
-  结论: LocallyBounded映射.id α a = a
-  证明: rfl
+/-
+**LocallyBoundedMap.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：id_apply (a : α) : LocallyBoundedMap.id α a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (a : α) : LocallyBoundedMap.id α a = a :=
   rfl
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of `LocallyBoundedMap`s as a `LocallyBoundedMap`. -/
+/-
+**LocallyBoundedMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：comp (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) : LocallyBoun
+dedMap α γ where toFun
+参数：f : LocallyBoundedMap β γ；g : LocallyBoundedMap α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β)
-  body: f ∘ g
-  comap_cobounded_le' :=
-comap_comap.ge.trans (comap_mono f.comap_cobounded_le').trans g.comap_cobounded_le'
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : LocallyBounded映射 β γ) (g : LocallyBounded映射 α β)
-  定义体: f ∘ g
-  comap_cobounded_le' :=
-comap_comap.ge.trans (comap_mono f.comap_cobounded_le').trans g.comap_cobounded_le'
-
-@[simp]
+--- 原说明 ---
+Composition of `LocallyBoundedMap`s as a `LocallyBoundedMap`.
 -/
 def comp (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) : LocallyBoundedMap α γ where
   toFun := f ∘ g
   comap_cobounded_le' :=
-comap_comap.ge.trans (comap_mono f.comap_cobounded_le').trans g.comap_cobounded_le'
+    comap_comap.ge.trans <| (comap_mono f.comap_cobounded_le').trans g.comap_cobounded_le'
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β)
-  statement: ⇑(f.comp g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : LocallyBounded映射 β γ) (g : LocallyBounded映射 α β)
-  结论: ⇑(f.comp g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**LocallyBoundedMap.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：coe_comp (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) : ⇑(f.com
+p g) = f ∘ g
+参数：f : LocallyBoundedMap β γ；g : LocallyBoundedMap α β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) : ⇑(f.comp g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) (a : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : LocallyBounded映射 β γ) (g : LocallyBounded映射 α β) (a : α)
-  证明: rfl
-
-@[simp]
+/-
+**LocallyBoundedMap.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：comp_apply (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) (a : α)
+ : f.comp g a = f (g a)
+参数：f : LocallyBoundedMap β γ；g : LocallyBoundedMap α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : LocallyBoundedMap β γ) (g : LocallyBoundedMap α β) (a : α) :
     f.comp g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  statement: (f : LocallyBoundedMap γ δ) (g : LocallyBoundedMap β γ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  结论: (f : LocallyBounded映射 γ δ) (g : LocallyBounded映射 β γ)
-  证明: rfl
-
-@[simp]
+/-
+**LocallyBoundedMap.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：comp_assoc (f : LocallyBoundedMap γ δ) (g : LocallyBoundedMap β γ) (h : Lo
+callyBoundedMap α β) : (f.comp g).comp h = f.comp (g.comp h)
+参数：f : LocallyBoundedMap γ δ；g : LocallyBoundedMap β γ；h : LocallyBoundedMap α β
+。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : LocallyBoundedMap γ δ) (g : LocallyBoundedMap β γ)
     (h : LocallyBoundedMap α β) : (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : LocallyBoundedMap α β)
-  statement: f.comp (LocallyBoundedMap.id α) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : LocallyBounded映射 α β)
-  结论: f.comp (LocallyBounded映射.id α) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**LocallyBoundedMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：comp_id (f : LocallyBoundedMap α β) : f.comp (LocallyBoundedMap.id α) = f
+参数：f : LocallyBoundedMap α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyBoundedMap.ext`：ext {f g : LocallyBoundedMap α β} (h : forall a, 
+f a = g a) : f = g
 -/
 theorem comp_id (f : LocallyBoundedMap α β) : f.comp (LocallyBoundedMap.id α) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : LocallyBoundedMap α β)
-  statement: (LocallyBoundedMap.id β).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : LocallyBounded映射 α β)
-  结论: (LocallyBounded映射.id β).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**LocallyBoundedMap.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：id_comp (f : LocallyBoundedMap α β) : (LocallyBoundedMap.id β).comp f = f
+参数：f : LocallyBoundedMap α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyBoundedMap.ext`：ext {f g : LocallyBoundedMap α β} (h : forall a, 
+f a = g a) : f = g
 -/
 theorem id_comp (f : LocallyBoundedMap α β) : (LocallyBoundedMap.id β).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  statement: {g₁ g₂ : LocallyBoundedMap β γ} {f : LocallyBoundedMap α β}
-  proof: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congrArg (comp · _)⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  结论: {g₁ g₂ : LocallyBounded映射 β γ} {f : LocallyBounded映射 α β}
-  证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congrArg (comp · _)⟩
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, hf.forall
+/-
+**LocallyBoundedMap.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：cancel_right {g₁ g₂ : LocallyBoundedMap β γ} {f : LocallyBoundedMap α β} (
+hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyBoundedMap.ext`：ext {f g : LocallyBoundedMap α β} (h : forall a, 
+f a = g a) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem cancel_right {g₁ g₂ : LocallyBoundedMap β γ} {f : LocallyBoundedMap α β}
     (hf : Surjective f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congrArg (comp · _)⟩
+  ⟨fun h => ext <| hf.forall.2 <| DFunLike.ext_iff.1 h, congrArg (comp · _)⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: {g : LocallyBoundedMap β γ} {f₁ f₂ : LocallyBoundedMap α β} (hg : Injective g)
-  proof: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: {g : LocallyBounded映射 β γ} {f₁ f₂ : LocallyBounded映射 α β} (hg : 单射 g)
-  证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: comp_apply, congr_arg
+/-
+**LocallyBoundedMap.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `LocallyBoundedMap`。
+形式化陈述：cancel_left {g : LocallyBoundedMap β γ} {f₁ f₂ : LocallyBoundedMap α β} (h
+g : Injective g) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyBoundedMap.ext`：ext {f g : LocallyBoundedMap α β} (h : forall a, 
+f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LocallyBoundedMap.comp_apply`：comp_apply (f : LocallyBoundedMap β γ) (g 
+: LocallyBoundedMap α β) (a : α) : f.comp g a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_left {g : LocallyBoundedMap β γ} {f₁ f₂ : LocallyBoundedMap α β} (hg : Injective g) :
     g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+  ⟨fun h => ext fun a => hg <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 end LocallyBoundedMap
+

@@ -45,331 +45,176 @@ variable {α : Type*}
 
 namespace Nonneg
 
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: [Preorder α] {a : α}
-  body: ⟨⟨a, le_rfl⟩⟩
-
-中文:
-实例 inhabited
-  签名: [预序 α] {a : α}
-  定义体: ⟨⟨a, le_rfl⟩⟩
-
-Depends on / 依赖: le_rfl
+/-
+**Nonneg.inhabited** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：inhabited [Preorder α] {a : α} : Inhabited { x : α // a <= x }
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-instance inhabited [Preorder α] {a : α} : Inhabited { x : α // a <= x } :=
+instance inhabited [Preorder α] {a : α} : Inhabited { x : α // a ≤ x } :=
   ⟨⟨a, le_rfl⟩⟩
-
-/--
-Instance `zero` / 实例 `zero`
-
-English:
-instance zero
-  signature: [Zero α] [Preorder α]
-  body: ⟨⟨0, le_rfl⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 zero
-  签名: [零 α] [预序 α]
-  定义体: ⟨⟨0, le_rfl⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: le_rfl
+/-
+**Nonneg.zero** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：zero [Zero α] [Preorder α] : Zero { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance zero [Zero α] [Preorder α] : Zero { x : α // 0 <= x } :=
+instance zero [Zero α] [Preorder α] : Zero { x : α // 0 ≤ x } :=
   ⟨⟨0, le_rfl⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  given: [Zero α] [Preorder α]
-  statement: ((0 : { x : α // 0 <= x }) : α) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  条件: [零 α] [预序 α]
-  结论: ((0 : { x : α // 0 <= x }) : α) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Nonneg.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：∀ {α : Type u_1} [inst : Zero α] [inst_1 : Preorder α], ↑0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem coe_zero [Zero α] [Preorder α] : ((0 : { x : α // 0 <= x }) : α) = 0 :=
+protected theorem coe_zero [Zero α] [Preorder α] : ((0 : { x : α // 0 ≤ x }) : α) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `mk_eq_zero` / 定理 `mk_eq_zero`
-
-English:
-theorem mk_eq_zero
-  given: [Zero α] [Preorder α] {x : α} (hx : 0 <= x)
-  proof: Subtype.ext_iff
-
-中文:
-定理 mk_eq_zero
-  条件: [零 α] [预序 α] {x : α} (hx : 0 <= x)
-  证明: Subtype.ext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
+/-
+**Nonneg.mk_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：mk_eq_zero [Zero α] [Preorder α] {x : α} (hx : 0 <= x) : (⟨x, hx⟩ : { x : 
+α // 0 <= x }) = 0 ↔ x = 0
+参数：hx : 0 <= x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
-theorem mk_eq_zero [Zero α] [Preorder α] {x : α} (hx : 0 <= x) :
-    (⟨x, hx⟩ : { x : α // 0 <= x }) = 0 ↔ x = 0 :=
+theorem mk_eq_zero [Zero α] [Preorder α] {x : α} (hx : 0 ≤ x) :
+    (⟨x, hx⟩ : { x : α // 0 ≤ x }) = 0 ↔ x = 0 :=
   Subtype.ext_iff
-
-/--
-Instance `add` / 实例 `add`
-
-English:
-instance add
-  signature: [AddZeroClass α] [Preorder α] [AddLeftMono α]
-  body: ⟨fun x y => ⟨x + y, add_nonneg x.2 y.2⟩⟩
-
-@[simp]
-
-中文:
-实例 add
-  签名: [加法零类 α] [预序 α] [AddLeftMono α]
-  定义体: ⟨fun x y => ⟨x + y, add_nonneg x.2 y.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: add_nonneg
+/-
+**Nonneg.add** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：add [AddZeroClass α] [Preorder α] [AddLeftMono α] : Add { x : α // 0 <= x 
+}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance add [AddZeroClass α] [Preorder α] [AddLeftMono α] : Add { x : α // 0 <= x } :=
+instance add [AddZeroClass α] [Preorder α] [AddLeftMono α] : Add { x : α // 0 ≤ x } :=
   ⟨fun x y => ⟨x + y, add_nonneg x.2 y.2⟩⟩
 
 @[simp]
-/--
-theorem `mk_add_mk` / 定理 `mk_add_mk`
-
-English:
-theorem mk_add_mk
-  statement: [AddZeroClass α] [Preorder α] [AddLeftMono α] {x y : α}
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_add_mk
-  结论: [加法零类 α] [预序 α] [AddLeftMono α] {x y : α}
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Nonneg.mk_add_mk** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：mk_add_mk [AddZeroClass α] [Preorder α] [AddLeftMono α] {x y : α} (hx : 0 
+<= x) (hy : 0 <= y) : (⟨x, hx⟩ : { x : α // 0 <= x }) + ⟨y, hy⟩ = ⟨x + y, add_no
+nneg hx hy⟩
+参数：hx : 0 <= x；hy : 0 <= y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_add_mk [AddZeroClass α] [Preorder α] [AddLeftMono α] {x y : α}
-    (hx : 0 <= x) (hy : 0 <= y) :
-    (⟨x, hx⟩ : { x : α // 0 <= x }) + ⟨y, hy⟩ = ⟨x + y, add_nonneg hx hy⟩ :=
+    (hx : 0 ≤ x) (hy : 0 ≤ y) :
+    (⟨x, hx⟩ : { x : α // 0 ≤ x }) + ⟨y, hy⟩ = ⟨x + y, add_nonneg hx hy⟩ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  statement: [AddZeroClass α] [Preorder α] [AddLeftMono α]
-  proof: rfl
-
-中文:
-定理 coe_add
-  结论: [加法零类 α] [预序 α] [AddLeftMono α]
-  证明: rfl
+/-
+**Nonneg.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder α] [inst_2 : A
+ddLeftMono α] (a b : { x // 0 ≤ x }),   ↑(a + b) = ↑a + ↑b
+参数：a b : { x // 0 ≤ x }；a + b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem coe_add [AddZeroClass α] [Preorder α] [AddLeftMono α]
-    (a b : { x : α // 0 <= x }) : ((a + b : { x : α // 0 <= x }) : α) = a + b :=
+    (a b : { x : α // 0 ≤ x }) : ((a + b : { x : α // 0 ≤ x }) : α) = a + b :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: α] [Preorder α] [AddLeftMono α] [IsLeftCancelAdd α] :
-  body: Subtype.ext (add_left_cancel congr($eq))
-
-中文:
-实例 [加法零类
-  签名: α] [预序 α] [AddLeftMono α] [是左消去加法 α] :
-  定义体: Subtype.ext (add_left_cancel congr($eq))
-
-Depends on / 依赖: Subtype, Subtype.ext, add_left_cancel
+/-
+**Nonneg.** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass α] [Preorder α] [AddLeftMono α] [IsLeftCancelAdd α] :
-    IsLeftCancelAdd { x : α // 0 <= x } where
+    IsLeftCancelAdd { x : α // 0 ≤ x } where
   add_left_cancel _ _ _ eq := Subtype.ext (add_left_cancel congr($eq))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: α] [Preorder α] [AddLeftMono α] [IsRightCancelAdd α] :
-  body: Subtype.ext (add_right_cancel congr($eq))
-
-中文:
-实例 [加法零类
-  签名: α] [预序 α] [AddLeftMono α] [是右消去加法 α] :
-  定义体: Subtype.ext (add_right_cancel congr($eq))
-
-Depends on / 依赖: Subtype, Subtype.ext, add_right_cancel
+/-
+**Nonneg.** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass α] [Preorder α] [AddLeftMono α] [IsRightCancelAdd α] :
-    IsRightCancelAdd { x : α // 0 <= x } where
+    IsRightCancelAdd { x : α // 0 ≤ x } where
   add_right_cancel _ _ _ eq := Subtype.ext (add_right_cancel congr($eq))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: α] [Preorder α] [AddLeftMono α] [IsCancelAdd α] :
-
-中文:
-实例 [加法零类
-  签名: α] [预序 α] [AddLeftMono α] [是消去加法 α] :
+/-
+**Nonneg.** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass α] [Preorder α] [AddLeftMono α] [IsCancelAdd α] :
-    IsCancelAdd { x : α // 0 <= x } where
-
-/--
-Instance `nsmul` / 实例 `nsmul`
-
-English:
-instance nsmul
-  signature: [AddMonoid α] [Preorder α] [AddLeftMono α]
-  body: ⟨fun n x => ⟨n • (x : α), nsmul_nonneg x.prop n⟩⟩
-
-@[simp]
-
-中文:
-实例 nsmul
-  签名: [加法幺半群 α] [预序 α] [AddLeftMono α]
-  定义体: ⟨fun n x => ⟨n • (x : α), nsmul_nonneg x.prop n⟩⟩
-
-@[simp]
-
-Depends on / 依赖: nsmul_nonneg, x.prop
+    IsCancelAdd { x : α // 0 ≤ x } where
+/-
+**Nonneg.nsmul** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：nsmul [AddMonoid α] [Preorder α] [AddLeftMono α] : SMul Nat { x : α // 0 <
+= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance nsmul [AddMonoid α] [Preorder α] [AddLeftMono α] : SMul Nat { x : α // 0 <= x } :=
+instance nsmul [AddMonoid α] [Preorder α] [AddLeftMono α] : SMul ℕ { x : α // 0 ≤ x } :=
   ⟨fun n x => ⟨n • (x : α), nsmul_nonneg x.prop n⟩⟩
 
 @[simp]
-/--
-theorem `nsmul_mk` / 定理 `nsmul_mk`
-
-English:
-theorem nsmul_mk
-  statement: [AddMonoid α] [Preorder α] [AddLeftMono α] (n : Nat) {x : α}
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 nsmul_mk
-  结论: [加法幺半群 α] [预序 α] [AddLeftMono α] (n : 自然数) {x : α}
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Nonneg.nsmul_mk** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：nsmul_mk [AddMonoid α] [Preorder α] [AddLeftMono α] (n : Nat) {x : α} (hx 
+: 0 <= x) : (n • (⟨x, hx⟩ : { x : α // 0 <= x })) = ⟨n • x, nsmul_nonneg hx n⟩
+参数：n : Nat；hx : 0 <= x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nsmul_mk [AddMonoid α] [Preorder α] [AddLeftMono α] (n : Nat) {x : α}
-    (hx : 0 <= x) : (n • (⟨x, hx⟩ : { x : α // 0 <= x })) = ⟨n • x, nsmul_nonneg hx n⟩ :=
+theorem nsmul_mk [AddMonoid α] [Preorder α] [AddLeftMono α] (n : ℕ) {x : α}
+    (hx : 0 ≤ x) : (n • (⟨x, hx⟩ : { x : α // 0 ≤ x })) = ⟨n • x, nsmul_nonneg hx n⟩ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_nsmul` / 定理 `coe_nsmul`
-
-English:
-theorem coe_nsmul
-  statement: [AddMonoid α] [Preorder α] [AddLeftMono α]
-  proof: rfl
-
-中文:
-定理 coe_nsmul
-  结论: [加法幺半群 α] [预序 α] [AddLeftMono α]
-  证明: rfl
+/-
+**Nonneg.coe_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：∀ {α : Type u_1} [inst : AddMonoid α] [inst_1 : Preorder α] [inst_2 : AddL
+eftMono α] (n : ℕ) (a : { x // 0 ≤ x }),   ↑(n • a) = n • ↑a
+参数：n : ℕ；a : { x // 0 ≤ x }；n • a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem coe_nsmul [AddMonoid α] [Preorder α] [AddLeftMono α]
-    (n : Nat) (a : { x : α // 0 <= x }) : ((n • a : { x : α // 0 <= x }) : α) = n • (a : α) :=
+    (n : ℕ) (a : { x : α // 0 ≤ x }) : ((n • a : { x : α // 0 ≤ x }) : α) = n • (a : α) :=
   rfl
 
 section One
 
 variable [Zero α] [One α] [LE α] [ZeroLEOneClass α]
 
-/--
-Instance `one` / 实例 `one`
-
-English:
-instance one
-  signature: : One { x : α // 0 <= x } where
-  body: ⟨1, zero_le_one⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 one
-  签名: : 幺 { x : α // 0 <= x } where
-  定义体: ⟨1, zero_le_one⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: zero_le_one
+/-
+**Nonneg.one** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：one : One { x : α // 0 <= x } where one
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 -/
-instance one : One { x : α // 0 <= x } where
+instance one : One { x : α // 0 ≤ x } where
   one := ⟨1, zero_le_one⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : { x : α // 0 <= x }) : α) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_one
-  结论: ((1 : { x : α // 0 <= x }) : α) = 1
-  证明: rfl
-
-@[simp]
+/-
+**Nonneg.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 : LE α] [inst_3 
+: ZeroLEOneClass α], ↑1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem coe_one : ((1 : { x : α // 0 <= x }) : α) = 1 :=
+protected theorem coe_one : ((1 : { x : α // 0 ≤ x }) : α) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `mk_eq_one` / 定理 `mk_eq_one`
-
-English:
-theorem mk_eq_one
-  given: {x : α} (hx : 0 <= x)
-  proof: Subtype.ext_iff
-
-中文:
-定理 mk_eq_one
-  条件: {x : α} (hx : 0 <= x)
-  证明: Subtype.ext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff
+/-
+**Nonneg.mk_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：mk_eq_one {x : α} (hx : 0 <= x) : (⟨x, hx⟩ : { x : α // 0 <= x }) = 1 ↔ x 
+= 1
+参数：hx : 0 <= x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
-theorem mk_eq_one {x : α} (hx : 0 <= x) :
-    (⟨x, hx⟩ : { x : α // 0 <= x }) = 1 ↔ x = 1 :=
+theorem mk_eq_one {x : α} (hx : 0 ≤ x) :
+    (⟨x, hx⟩ : { x : α // 0 ≤ x }) = 1 ↔ x = 1 :=
   Subtype.ext_iff
 
 end One
@@ -378,66 +223,38 @@ section Mul
 
 variable [MulZeroClass α] [Preorder α] [PosMulMono α]
 
-/--
-Instance `mul` / 实例 `mul`
-
-English:
-instance mul
-  signature: : Mul { x : α // 0 <= x } where
-  body: ⟨x * y, mul_nonneg x.2 y.2⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 mul
-  签名: : 乘法 { x : α // 0 <= x } where
-  定义体: ⟨x * y, mul_nonneg x.2 y.2⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: mul_nonneg
+/-
+**Nonneg.mul** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：mul : Mul { x : α // 0 <= x } where mul x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance mul : Mul { x : α // 0 <= x } where
+instance mul : Mul { x : α // 0 ≤ x } where
   mul x y := ⟨x * y, mul_nonneg x.2 y.2⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (a b : { x : α // 0 <= x })
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mul
-  条件: (a b : { x : α // 0 <= x })
-  证明: rfl
-
-@[simp]
+/-
+**Nonneg.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：∀ {α : Type u_1} [inst : MulZeroClass α] [inst_1 : Preorder α] [inst_2 : P
+osMulMono α] (a b : { x // 0 ≤ x }),   ↑(a * b) = ↑a * ↑b
+参数：a b : { x // 0 ≤ x }；a * b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem coe_mul (a b : { x : α // 0 <= x }) :
-    ((a * b : { x : α // 0 <= x }) : α) = a * b :=
+protected theorem coe_mul (a b : { x : α // 0 ≤ x }) :
+    ((a * b : { x : α // 0 ≤ x }) : α) = a * b :=
   rfl
 
 @[simp]
-/--
-theorem `mk_mul_mk` / 定理 `mk_mul_mk`
-
-English:
-theorem mk_mul_mk
-  given: {x y : α} (hx : 0 <= x) (hy : 0 <= y)
-  proof: rfl
-
-中文:
-定理 mk_mul_mk
-  条件: {x y : α} (hx : 0 <= x) (hy : 0 <= y)
-  证明: rfl
+/-
+**Nonneg.mk_mul_mk** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：mk_mul_mk {x y : α} (hx : 0 <= x) (hy : 0 <= y) : (⟨x, hx⟩ : { x : α // 0 
+<= x }) * ⟨y, hy⟩ = ⟨x * y, mul_nonneg hx hy⟩
+参数：hx : 0 <= x；hy : 0 <= y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_mul_mk {x y : α} (hx : 0 <= x) (hy : 0 <= y) :
-    (⟨x, hx⟩ : { x : α // 0 <= x }) * ⟨y, hy⟩ = ⟨x * y, mul_nonneg hx hy⟩ :=
+theorem mk_mul_mk {x y : α} (hx : 0 ≤ x) (hy : 0 ≤ y) :
+    (⟨x, hx⟩ : { x : α // 0 ≤ x }) * ⟨y, hy⟩ = ⟨x * y, mul_nonneg hx hy⟩ :=
   rfl
 
 end Mul
@@ -446,71 +263,42 @@ section AddMonoid
 
 variable [AddMonoid α] [Preorder α] [AddLeftMono α]
 
-/--
-Instance `addMonoid` / 实例 `addMonoid`
-
-English:
-instance addMonoid
-  signature: : AddMonoid { x : α // 0 <= x }
-  body: fast_instance% Subtype.coe_injective.addMonoid _ Nonneg.coe_zero (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 addMonoid
-  签名: : 加法幺半群 { x : α // 0 <= x }
-  定义体: fast_instance% Subtype.coe_injective.addMonoid _ Nonneg.coe_zero (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: Nonneg, Nonneg.coe_zero, Subtype, Subtype.coe_injective.addMonoid, addMonoid, coe_injective, coe_zero, fast_instance
+/-
+**Nonneg.addMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：addMonoid : AddMonoid { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance addMonoid : AddMonoid { x : α // 0 <= x } :=
+instance addMonoid : AddMonoid { x : α // 0 ≤ x } :=
   fast_instance% Subtype.coe_injective.addMonoid _ Nonneg.coe_zero (fun _ _ => rfl) fun _ _ => rfl
 
 /-- Coercion `{x : α // 0 ≤ x} → α` as an `AddMonoidHom`. -/
 @[simps]
-/--
-Definition of `coeAddMonoidHom` / `coeAddMonoidHom` 的定义
+/-
+**Nonneg.coeAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Nonneg`。
+形式化陈述：coeAddMonoidHom : { x : α // 0 <= x } ->+ α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeAddMonoidHom
-  signature: : { x : α // 0 <= x } ->+ α
-  body: { toFun := ((↑) : { x : α // 0 <= x } -> α)
-    map_zero' := Nonneg.coe_zero
-    map_add' := Nonneg.coe_add }
-
-@[norm_cast]
-
-中文:
-定义 coeAddMonoidHom
-  签名: : { x : α // 0 <= x } ->+ α
-  定义体: { toFun := ((↑) : { x : α // 0 <= x } -> α)
-    map_zero' := Nonneg.coe_zero
-    map_add' := Nonneg.coe_add }
-
-@[norm_cast]
-
-Depends on / 依赖: Nonneg, Nonneg.coe_add, Nonneg.coe_zero, coe_add, coe_zero, map_add, map_zero
+--- 原说明 ---
+Coercion `{x : α // 0 ≤ x} → α` as an `AddMonoidHom`.
 -/
-def coeAddMonoidHom : { x : α // 0 <= x } ->+ α :=
-  { toFun := ((↑) : { x : α // 0 <= x } -> α)
+def coeAddMonoidHom : { x : α // 0 ≤ x } →+ α :=
+  { toFun := ((↑) : { x : α // 0 ≤ x } → α)
     map_zero' := Nonneg.coe_zero
     map_add' := Nonneg.coe_add }
 
 @[norm_cast]
-/--
-theorem `nsmul_coe` / 定理 `nsmul_coe`
-
-English:
-theorem nsmul_coe
-  given: (n : Nat) (r : { x : α // 0 <= x })
-  proof: Nonneg.coeAddMonoidHom.map_nsmul _ _
-
-中文:
-定理 nsmul_coe
-  条件: (n : 自然数) (r : { x : α // 0 <= x })
-  证明: Nonneg.coeAddMonoidHom.map_nsmul _ _
-
-Depends on / 依赖: Nonneg, Nonneg.coeAddMonoidHom.map_nsmul, coeAddMonoidHom, map_nsmul
+/-
+**Nonneg.nsmul_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：nsmul_coe (n : Nat) (r : { x : α // 0 <= x }) : ↑(n • r) = n • (r : α)
+参数：n : Nat；r : { x : α // 0 <= x }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_nsmul`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoi
+d M] [inst_1 : AddMonoid N] (f : M →+ N) (n : ℕ) (a : M),   f (n • a) = n • f a
 -/
-theorem nsmul_coe (n : Nat) (r : { x : α // 0 <= x }) :
+theorem nsmul_coe (n : ℕ) (r : { x : α // 0 ≤ x }) :
     ↑(n • r) = n • (r : α) :=
   Nonneg.coeAddMonoidHom.map_nsmul _ _
 
@@ -520,24 +308,13 @@ section AddCommMonoid
 
 variable [AddCommMonoid α] [Preorder α] [AddLeftMono α]
 
-/--
-Instance `addCommMonoid` / 实例 `addCommMonoid`
-
-English:
-instance addCommMonoid
-  signature: : AddCommMonoid { x : α // 0 <= x }
-  body: fast_instance%
-    Subtype.coe_injective.addCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 addCommMonoid
-  签名: : 加法交换幺半群 { x : α // 0 <= x }
-  定义体: fast_instance%
-    Subtype.coe_injective.addCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: Nonneg, Nonneg.coe_zero, Subtype, Subtype.coe_injective.addCommMonoid, addCommMonoid, coe_injective, coe_zero, fast_instance
+/-
+**Nonneg.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：addCommMonoid : AddCommMonoid { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance addCommMonoid : AddCommMonoid { x : α // 0 <= x } :=
+instance addCommMonoid : AddCommMonoid { x : α // 0 ≤ x } :=
   fast_instance%
     Subtype.coe_injective.addCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -546,24 +323,13 @@ end AddCommMonoid
 section AddCancelCommMonoid
 variable [AddCancelCommMonoid α] [Preorder α] [AddLeftMono α]
 
-/--
-Instance `addCancelCommMonoid` / 实例 `addCancelCommMonoid`
-
-English:
-instance addCancelCommMonoid
-  signature: : AddCancelCommMonoid {x : α // 0 <= x}
-  body: fast_instance%
-    Subtype.coe_injective.addCancelCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 addCancelCommMonoid
-  签名: : 加法消去交换幺半群 {x : α // 0 <= x}
-  定义体: fast_instance%
-    Subtype.coe_injective.addCancelCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: Nonneg, Nonneg.coe_zero, Subtype, Subtype.coe_injective.addCancelCommMonoid, addCancelCommMonoid, coe_injective, coe_zero, fast_instance
+/-
+**Nonneg.addCancelCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：addCancelCommMonoid : AddCancelCommMonoid {x : α // 0 <= x}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance addCancelCommMonoid : AddCancelCommMonoid {x : α // 0 <= x} :=
+instance addCancelCommMonoid : AddCancelCommMonoid {x : α // 0 ≤ x} :=
   fast_instance%
     Subtype.coe_injective.addCancelCommMonoid _ Nonneg.coe_zero (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -573,92 +339,45 @@ section AddMonoidWithOne
 
 variable [AddMonoidWithOne α] [PartialOrder α] [AddLeftMono α] [ZeroLEOneClass α]
 
-/--
-Instance `natCast` / 实例 `natCast`
-
-English:
-instance natCast
-  signature: : NatCast { x : α // 0 <= x }
-  body: ⟨fun n => ⟨n, Nat.cast_nonneg' n⟩⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 natCast
-  签名: : 自然数嵌入 { x : α // 0 <= x }
-  定义体: ⟨fun n => ⟨n, Nat.cast_nonneg' n⟩⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Nat.cast_nonneg, cast_nonneg
+/-
+**Nonneg.natCast** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：natCast : NatCast { x : α // 0 <= x }
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
 -/
-instance natCast : NatCast { x : α // 0 <= x } :=
+instance natCast : NatCast { x : α // 0 ≤ x } :=
   ⟨fun n => ⟨n, Nat.cast_nonneg' n⟩⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_natCast` / 定理 `coe_natCast`
-
-English:
-theorem coe_natCast
-  given: (n : Nat)
-  statement: ((↑n : { x : α // 0 <= x }) : α) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_natCast
-  条件: (n : 自然数)
-  结论: ((↑n : { x : α // 0 <= x }) : α) = n
-  证明: rfl
-
-@[simp]
+/-
+**Nonneg.coe_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : PartialOrder α] [in
+st_2 : AddLeftMono α]   [inst_3 : ZeroLEOneClass α] (n : ℕ), ↑↑n = ↑n
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem coe_natCast (n : Nat) : ((↑n : { x : α // 0 <= x }) : α) = n :=
+protected theorem coe_natCast (n : ℕ) : ((↑n : { x : α // 0 ≤ x }) : α) = n :=
   rfl
 
 @[simp]
-/--
-theorem `mk_natCast` / 定理 `mk_natCast`
-
-English:
-theorem mk_natCast
-  given: (n : Nat)
-  statement: (⟨n, n.cast_nonneg'⟩ : { x : α // 0 <= x }) = n
-  proof: rfl
-
-中文:
-定理 mk_natCast
-  条件: (n : 自然数)
-  结论: (⟨n, n.cast_nonneg'⟩ : { x : α // 0 <= x }) = n
-  证明: rfl
+/-
+**Nonneg.mk_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：mk_natCast (n : Nat) : (⟨n, n.cast_nonneg'⟩ : { x : α // 0 <= x }) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
 -/
-theorem mk_natCast (n : Nat) : (⟨n, n.cast_nonneg'⟩ : { x : α // 0 <= x }) = n :=
+theorem mk_natCast (n : ℕ) : (⟨n, n.cast_nonneg'⟩ : { x : α // 0 ≤ x }) = n :=
   rfl
-
-/--
-Instance `addMonoidWithOne` / 实例 `addMonoidWithOne`
-
-English:
-instance addMonoidWithOne
-  signature: : AddMonoidWithOne { x : α // 0 <= x }
-  body: { Nonneg.one (α := α) with
-    toNatCast := Nonneg.natCast
-    natCast_zero := by ext; simp
-    natCast_succ := fun _ => by ext; simp }
-
-中文:
-实例 addMonoidWithOne
-  签名: : 加法带幺幺半群 { x : α // 0 <= x }
-  定义体: { Nonneg.one (α := α) with
-    toNatCast := Nonneg.natCast
-    natCast_zero := by ext; simp
-    natCast_succ := fun _ => by ext; simp }
-
-Depends on / 依赖: Nonneg, Nonneg.natCast, Nonneg.one, natCast, natCast_succ, natCast_zero, toNatCast
+/-
+**Nonneg.addMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：addMonoidWithOne : AddMonoidWithOne { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance addMonoidWithOne : AddMonoidWithOne { x : α // 0 <= x } :=
+instance addMonoidWithOne : AddMonoidWithOne { x : α // 0 ≤ x } :=
   { Nonneg.one (α := α) with
     toNatCast := Nonneg.natCast
     natCast_zero := by ext; simp
@@ -670,66 +389,39 @@ section Pow
 
 variable [MonoidWithZero α] [Preorder α] [ZeroLEOneClass α] [PosMulMono α]
 
-/--
-Instance `pow` / 实例 `pow`
-
-English:
-instance pow
-  signature: : Pow { x : α // 0 <= x } Nat where
-  body: ⟨(x : α) ^ n, pow_nonneg x.2 n⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 pow
-  签名: : 幂 { x : α // 0 <= x } 自然数 where
-  定义体: ⟨(x : α) ^ n, pow_nonneg x.2 n⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: pow_nonneg
+/-
+**Nonneg.pow** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：pow : Pow { x : α // 0 <= x } Nat where pow x n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance pow : Pow { x : α // 0 <= x } Nat where
+instance pow : Pow { x : α // 0 ≤ x } ℕ where
   pow x n := ⟨(x : α) ^ n, pow_nonneg x.2 n⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (a : { x : α // 0 <= x }) (n : Nat)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_pow
-  条件: (a : { x : α // 0 <= x }) (n : 自然数)
-  证明: rfl
-
-@[simp]
+/-
+**Nonneg.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：∀ {α : Type u_1} [inst : MonoidWithZero α] [inst_1 : Preorder α] [inst_2 :
+ ZeroLEOneClass α] [inst_3 : PosMulMono α]   (a : { x // 0 ≤ x }) (n : ℕ), ↑(a ^
+ n) = ↑a ^ n
+参数：a : { x // 0 ≤ x }；n : ℕ；a ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem coe_pow (a : { x : α // 0 <= x }) (n : Nat) :
+protected theorem coe_pow (a : { x : α // 0 ≤ x }) (n : ℕ) :
     (↑(a ^ n) : α) = (a : α) ^ n :=
   rfl
 
 @[simp]
-/--
-theorem `mk_pow` / 定理 `mk_pow`
-
-English:
-theorem mk_pow
-  given: {x : α} (hx : 0 <= x) (n : Nat)
-  proof: rfl
-
-中文:
-定理 mk_pow
-  条件: {x : α} (hx : 0 <= x) (n : 自然数)
-  证明: rfl
+/-
+**Nonneg.mk_pow** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：mk_pow {x : α} (hx : 0 <= x) (n : Nat) : (⟨x, hx⟩ : { x : α // 0 <= x }) ^
+ n = ⟨x ^ n, pow_nonneg hx n⟩
+参数：hx : 0 <= x；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_pow {x : α} (hx : 0 <= x) (n : Nat) :
-    (⟨x, hx⟩ : { x : α // 0 <= x }) ^ n = ⟨x ^ n, pow_nonneg hx n⟩ :=
+theorem mk_pow {x : α} (hx : 0 ≤ x) (n : ℕ) :
+    (⟨x, hx⟩ : { x : α // 0 ≤ x }) ^ n = ⟨x ^ n, pow_nonneg hx n⟩ :=
   rfl
 
 end Pow
@@ -739,72 +431,36 @@ section Semiring
 variable [Semiring α] [PartialOrder α] [ZeroLEOneClass α]
   [AddLeftMono α] [PosMulMono α]
 
-/--
-Instance `semiring` / 实例 `semiring`
-
-English:
-instance semiring
-  signature: : Semiring { x : α // 0 <= x }
-  body: fast_instance% Subtype.coe_injective.semiring _ Nonneg.coe_zero Nonneg.coe_one
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 semiring
-  签名: : 半环 { x : α // 0 <= x }
-  定义体: fast_instance% Subtype.coe_injective.semiring _ Nonneg.coe_zero Nonneg.coe_one
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: Nonneg, Nonneg.coe_one, Nonneg.coe_zero, Subtype, Subtype.coe_injective.semiring, coe_injective, coe_one, coe_zero, fast_instance, semiring
+/-
+**Nonneg.semiring** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：semiring : Semiring { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance semiring : Semiring { x : α // 0 <= x } :=
+instance semiring : Semiring { x : α // 0 ≤ x } :=
   fast_instance% Subtype.coe_injective.semiring _ Nonneg.coe_zero Nonneg.coe_one
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `monoidWithZero` / 实例 `monoidWithZero`
-
-English:
-instance monoidWithZero
-  signature: : MonoidWithZero { x : α // 0 <= x }
-  body: by infer_instance
-
-中文:
-实例 monoidWithZero
-  签名: : 带零幺半群 { x : α // 0 <= x }
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**Nonneg.monoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：monoidWithZero : MonoidWithZero { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance monoidWithZero : MonoidWithZero { x : α // 0 <= x } := by infer_instance
+instance monoidWithZero : MonoidWithZero { x : α // 0 ≤ x } := by infer_instance
 
-/--
-Definition of `coeRingHom` / `coeRingHom` 的定义
+/-- Coercion `{x : α // 0 ≤ x} → α` as a `RingHom`. -/
+/-
+**Nonneg.coeRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Nonneg`。
+形式化陈述：coeRingHom : { x : α // 0 <= x } ->+* α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeRingHom
-  signature: : { x : α // 0 <= x } ->+* α
-  body: { toFun := ((↑) : { x : α // 0 <= x } -> α)
-    map_one' := Nonneg.coe_one
-    map_mul' := Nonneg.coe_mul
-    map_zero' := Nonneg.coe_zero,
-    map_add' := Nonneg.coe_add }
-
-中文:
-定义 coeRingHom
-  签名: : { x : α // 0 <= x } ->+* α
-  定义体: { toFun := ((↑) : { x : α // 0 <= x } -> α)
-    map_one' := Nonneg.coe_one
-    map_mul' := Nonneg.coe_mul
-    map_zero' := Nonneg.coe_zero,
-    map_add' := Nonneg.coe_add }
-
-Depends on / 依赖: Nonneg, Nonneg.coe_add, Nonneg.coe_mul, Nonneg.coe_one, Nonneg.coe_zero, coe_add, coe_mul, coe_one, coe_zero, map_add, map_mul, map_one, map_zero
+--- 原说明 ---
+Coercion `{x : α // 0 ≤ x} → α` as a `RingHom`.
 -/
-def coeRingHom : { x : α // 0 <= x } ->+* α :=
-  { toFun := ((↑) : { x : α // 0 <= x } -> α)
+def coeRingHom : { x : α // 0 ≤ x } →+* α :=
+  { toFun := ((↑) : { x : α // 0 ≤ x } → α)
     map_one' := Nonneg.coe_one
     map_mul' := Nonneg.coe_mul
     map_zero' := Nonneg.coe_zero,
@@ -817,208 +473,127 @@ section CommSemiring
 variable [CommSemiring α] [PartialOrder α] [ZeroLEOneClass α]
   [AddLeftMono α] [PosMulMono α]
 
-/--
-Instance `commSemiring` / 实例 `commSemiring`
-
-English:
-instance commSemiring
-  signature: : CommSemiring { x : α // 0 <= x }
-  body: fast_instance% Subtype.coe_injective.commSemiring _ Nonneg.coe_zero Nonneg.coe_one
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 commSemiring
-  签名: : 交换半环 { x : α // 0 <= x }
-  定义体: fast_instance% Subtype.coe_injective.commSemiring _ Nonneg.coe_zero Nonneg.coe_one
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: Nonneg, Nonneg.coe_one, Nonneg.coe_zero, Subtype, Subtype.coe_injective.commSemiring, coe_injective, coe_one, coe_zero, commSemiring, fast_instance
+/-
+**Nonneg.commSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：commSemiring : CommSemiring { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance commSemiring : CommSemiring { x : α // 0 <= x } :=
+instance commSemiring : CommSemiring { x : α // 0 ≤ x } :=
   fast_instance% Subtype.coe_injective.commSemiring _ Nonneg.coe_zero Nonneg.coe_one
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `commMonoidWithZero` / 实例 `commMonoidWithZero`
-
-English:
-instance commMonoidWithZero
-  signature: : CommMonoidWithZero { x : α // 0 <= x }
-  body: inferInstance
-
-中文:
-实例 commMonoidWithZero
-  签名: : 带零交换幺半群 { x : α // 0 <= x }
-  定义体: inferInstance
+/-
+**Nonneg.commMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：commMonoidWithZero : CommMonoidWithZero { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance commMonoidWithZero : CommMonoidWithZero { x : α // 0 <= x } := inferInstance
+instance commMonoidWithZero : CommMonoidWithZero { x : α // 0 ≤ x } := inferInstance
 
 end CommSemiring
 
 section SemilatticeSup
 variable [Zero α] [SemilatticeSup α]
 
-/--
-Definition of `toNonneg` / `toNonneg` 的定义
+/-- The function `a ↦ max a 0` of type `α → {x : α // 0 ≤ x}`. -/
+/-
+**Nonneg.toNonneg** 是 Mathlib 中的一个定义，位于命名空间 `Nonneg`。
+形式化陈述：toNonneg (a : α) : { x : α // 0 <= x }
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNonneg
-  signature: (a : α)
-  body: ⟨max a 0, le_sup_right⟩
-
-@[simp]
-
-中文:
-定义 toNonneg
-  签名: (a : α)
-  定义体: ⟨max a 0, le_sup_right⟩
-
-@[simp]
-
-Depends on / 依赖: le_sup_right
+--- 原说明 ---
+The function `a ↦ max a 0` of type `α → {x : α // 0 ≤ x}`.
 -/
-def toNonneg (a : α) : { x : α // 0 <= x } :=
+def toNonneg (a : α) : { x : α // 0 ≤ x } :=
   ⟨max a 0, le_sup_right⟩
 
 @[simp]
-/--
-theorem `coe_toNonneg` / 定理 `coe_toNonneg`
-
-English:
-theorem coe_toNonneg
-  given: {a : α}
-  statement: (toNonneg a : α) = max a 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toNonneg
-  条件: {a : α}
-  结论: (toNonneg a : α) = 最大值 a 0
-  证明: rfl
-
-@[simp]
+/-
+**Nonneg.coe_toNonneg** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：coe_toNonneg {a : α} : (toNonneg a : α) = max a 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toNonneg {a : α} : (toNonneg a : α) = max a 0 :=
   rfl
 
 @[simp]
-/--
-theorem `toNonneg_of_nonneg` / 定理 `toNonneg_of_nonneg`
-
-English:
-theorem toNonneg_of_nonneg
-  given: {a : α} (h : 0 <= a)
-  statement: toNonneg a = ⟨a, h⟩
-  proof: by simp [toNonneg, h]
-
-@[simp]
-
-中文:
-定理 toNonneg_of_nonneg
-  条件: {a : α} (h : 0 <= a)
-  结论: toNonneg a = ⟨a, h⟩
-  证明: by simp [toNonneg, h]
-
-@[simp]
-
-Depends on / 依赖: toNonneg
+/-
+**Nonneg.toNonneg_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：toNonneg_of_nonneg {a : α} (h : 0 <= a) : toNonneg a = ⟨a, h⟩
+参数：h : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toNonneg_of_nonneg {a : α} (h : 0 <= a) : toNonneg a = ⟨a, h⟩ := by simp [toNonneg, h]
+theorem toNonneg_of_nonneg {a : α} (h : 0 ≤ a) : toNonneg a = ⟨a, h⟩ := by simp [toNonneg, h]
 
 @[simp]
-/--
-theorem `toNonneg_coe` / 定理 `toNonneg_coe`
-
-English:
-theorem toNonneg_coe
-  given: {a : { x : α // 0 <= x }}
-  statement: toNonneg (a : α) = a
-  proof: toNonneg_of_nonneg a.2
-
-@[simp]
-
-中文:
-定理 toNonneg_coe
-  条件: {a : { x : α // 0 <= x }}
-  结论: toNonneg (a : α) = a
-  证明: toNonneg_of_nonneg a.2
-
-@[simp]
-
-Depends on / 依赖: toNonneg_of_nonneg
+/-
+**Nonneg.toNonneg_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：toNonneg_coe {a : { x : α // 0 <= x }} : toNonneg (a : α) = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonneg.toNonneg_of_nonneg`：toNonneg_of_nonneg {a : α} (h : 0 <= a) : toN
+onneg a = ⟨a, h⟩
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem toNonneg_coe {a : { x : α // 0 <= x }} : toNonneg (a : α) = a :=
+theorem toNonneg_coe {a : { x : α // 0 ≤ x }} : toNonneg (a : α) = a :=
   toNonneg_of_nonneg a.2
 
 @[simp]
-/--
-theorem `toNonneg_le` / 定理 `toNonneg_le`
-
-English:
-theorem toNonneg_le
-  given: {a : α} {b : { x : α // 0 <= x }}
-  statement: toNonneg a <= b ↔ a <= b
-  proof: by
-  obtain ⟨b, hb⟩ := b
-  simp [toNonneg, hb]
-
-中文:
-定理 toNonneg_le
-  条件: {a : α} {b : { x : α // 0 <= x }}
-  结论: toNonneg a <= b ↔ a <= b
-  证明: by
-  obtain ⟨b, hb⟩ := b
-  simp [toNonneg, hb]
-
-Depends on / 依赖: toNonneg
+/-
+**Nonneg.toNonneg_le** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：toNonneg_le {a : α} {b : { x : α // 0 <= x }} : toNonneg a <= b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toNonneg_le {a : α} {b : { x : α // 0 <= x }} : toNonneg a <= b ↔ a <= b := by
+theorem toNonneg_le {a : α} {b : { x : α // 0 ≤ x }} : toNonneg a ≤ b ↔ a ≤ b := by
   obtain ⟨b, hb⟩ := b
   simp [toNonneg, hb]
-
-/--
-Instance `sub` / 实例 `sub`
-
-English:
-instance sub
-  signature: [Sub α]
-  body: ⟨fun x y => toNonneg (x - y)⟩
-
-@[simp]
-
-中文:
-实例 sub
-  签名: [减法 α]
-  定义体: ⟨fun x y => toNonneg (x - y)⟩
-
-@[simp]
-
-Depends on / 依赖: toNonneg
+/-
+**Nonneg.sub** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：sub [Sub α] : Sub { x : α // 0 <= x }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance sub [Sub α] : Sub { x : α // 0 <= x } :=
+instance sub [Sub α] : Sub { x : α // 0 ≤ x } :=
   ⟨fun x y => toNonneg (x - y)⟩
 
 @[simp]
-/--
-theorem `mk_sub_mk` / 定理 `mk_sub_mk`
-
-English:
-theorem mk_sub_mk
-  given: [Sub α] {x y : α} (hx : 0 <= x) (hy : 0 <= y)
-  proof: rfl
-
-中文:
-定理 mk_sub_mk
-  条件: [减法 α] {x y : α} (hx : 0 <= x) (hy : 0 <= y)
-  证明: rfl
+/-
+**Nonneg.mk_sub_mk** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：mk_sub_mk [Sub α] {x y : α} (hx : 0 <= x) (hy : 0 <= y) : (⟨x, hx⟩ : { x :
+ α // 0 <= x }) - ⟨y, hy⟩ = toNonneg (x - y)
+参数：hx : 0 <= x；hy : 0 <= y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_sub_mk [Sub α] {x y : α} (hx : 0 <= x) (hy : 0 <= y) :
-    (⟨x, hx⟩ : { x : α // 0 <= x }) - ⟨y, hy⟩ = toNonneg (x - y) :=
+theorem mk_sub_mk [Sub α] {x y : α} (hx : 0 ≤ x) (hy : 0 ≤ y) :
+    (⟨x, hx⟩ : { x : α // 0 ≤ x }) - ⟨y, hy⟩ = toNonneg (x - y) :=
   rfl
 
 end SemilatticeSup
@@ -1027,31 +602,28 @@ section LinearOrder
 variable [Zero α] [LinearOrder α]
 
 @[simp]
-/--
-theorem `toNonneg_lt` / 定理 `toNonneg_lt`
-
-English:
-theorem toNonneg_lt
-  given: {a : { x : α // 0 <= x }} {b : α}
-  statement: a < toNonneg b ↔ ↑a < b
-  proof: by
-  obtain ⟨a, ha⟩ := a
-  simp [toNonneg, ha.not_gt]
-
-中文:
-定理 toNonneg_lt
-  条件: {a : { x : α // 0 <= x }} {b : α}
-  结论: a < toNonneg b ↔ ↑a < b
-  证明: by
-  obtain ⟨a, ha⟩ := a
-  simp [toNonneg, ha.not_gt]
-
-Depends on / 依赖: ha.not_gt, not_gt, toNonneg
+/-
+**Nonneg.toNonneg_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：toNonneg_lt {a : { x : α // 0 <= x }} {b : α} : a < toNonneg b ↔ ↑a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toNonneg_lt {a : { x : α // 0 <= x }} {b : α} : a < toNonneg b ↔ ↑a < b := by
+theorem toNonneg_lt {a : { x : α // 0 ≤ x }} {b : α} : a < toNonneg b ↔ ↑a < b := by
   obtain ⟨a, ha⟩ := a
   simp [toNonneg, ha.not_gt]
 
 end LinearOrder
 
 end Nonneg
+

@@ -62,22 +62,16 @@ open Limits
 
 variable {X : C} (Y Z : Over X)
 
-/--
-Definition of `binaryFan` / `binaryFan` 的定义
+/-- The binary fan provided by `fst'` and `snd'`. -/
+/-
+**CategoryTheory.ChosenPullbacksAlong.binaryFan** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cat
+egoryTheory.ChosenPullbacksAlong`。
+形式化陈述：binaryFan [ChosenPullbacksAlong Z.hom] : BinaryFan Y Z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation binaryFan
-  signature: [ChosenPullbacksAlong Z.hom]
-  body: BinaryFan.mk (P := (pullback Z.hom ⋙ Over.map Z.hom).obj (Over.mk Y.hom))
-    (fst' Y.hom Z.hom) (snd' Y.hom Z.hom)
-
-中文:
-缩写 binaryFan
-  签名: [ChosenPullbacksAlong Z.hom]
-  定义体: BinaryFan.mk (P := (pullback Z.hom ⋙ Over.map Z.hom).obj (Over.mk Y.hom))
-    (fst' Y.hom Z.hom) (snd' Y.hom Z.hom)
-
-Depends on / 依赖: BinaryFan, BinaryFan.mk, Over.map, Over.mk, Y.hom, Z.hom, pullback
+--- 原说明 ---
+The binary fan provided by `fst'` and `snd'`.
 -/
 abbrev binaryFan [ChosenPullbacksAlong Z.hom] : BinaryFan Y Z :=
   BinaryFan.mk (P := (pullback Z.hom ⋙ Over.map Z.hom).obj (Over.mk Y.hom))
@@ -85,32 +79,17 @@ abbrev binaryFan [ChosenPullbacksAlong Z.hom] : BinaryFan Y Z :=
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `binaryFanIsBinaryProduct` / `binaryFanIsBinaryProduct` 的定义
+/-- The binary fan provided by `fst'` and `snd'` is a binary product in `Over X`. -/
+/-
+**CategoryTheory.ChosenPullbacksAlong.binaryFanIsBinaryProduct** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.ChosenPullbacksAlong`。
+形式化陈述：binaryFanIsBinaryProduct [ChosenPullbacksAlong Z.hom] : IsLimit (binaryFan
+ Y Z)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryFanIsBinaryProduct
-  signature: [ChosenPullbacksAlong Z.hom]
-  body: BinaryFan.IsLimit.mk (binaryFan Y Z)
-    (fun u v => Over.homMk (lift (u.left) (v.left) (by rw [Over.w u, Over.w v])) (by simp))
-    (by cat_disch) (by cat_disch)
-    (fun a b m h₁ h₂ => by
-      ext
-      dsimp [Over.map, Comma.mapRight]
-      cat_disch)
-
-中文:
-定义 binaryFanIsBinaryProduct
-  签名: [ChosenPullbacksAlong Z.hom]
-  定义体: BinaryFan.IsLimit.mk (binaryFan Y Z)
-    (fun u v => Over.homMk (lift (u.left) (v.left) (by rw [Over.w u, Over.w v])) (by simp))
-    (by cat_disch) (by cat_disch)
-    (fun a b m h₁ h₂ => by
-      ext
-      dsimp [Over.map, Comma.mapRight]
-      cat_disch)
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.mk, Comma.mapRight, IsLimit, Over.homMk, Over.map, Over.w, binaryFan, cat_disch, mapRight, u.left, v.left
+--- 原说明 ---
+The binary fan provided by `fst'` and `snd'` is a binary product in `Over X`.
 -/
 def binaryFanIsBinaryProduct [ChosenPullbacksAlong Z.hom] :
     IsLimit (binaryFan Y Z) :=
@@ -131,33 +110,26 @@ chosen pullbacks. Contrast this with the noncomputable instance provided by
 `CategoryTheory.Over.cartesianMonoidalCategory`.
 -/
 @[instance_reducible]
-/--
-Definition of `cartesianMonoidalCategoryOver` / `cartesianMonoidalCategoryOver` 的定义
+/-
+**CategoryTheory.ChosenPullbacksAlong.cartesianMonoidalCategoryOver** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.ChosenPullbacksAlong`。
+形式化陈述：cartesianMonoidalCategoryOver [ChosenPullbacks C] (X : C) : CartesianMonoi
+dalCategory (Over X)
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cartesianMonoidalCategoryOver
-  signature: [ChosenPullbacks C] (X : C)
-  body: ofChosenFiniteProducts (C := Over X)
-    ⟨Limits.asEmptyCone (Over.mk (𝟙 X)), Limits.IsTerminal.ofUniqueHom (fun Y => Over.homMk Y.hom)
-      fun Y m => Over.OverMorphism.ext (by simpa using m.w)⟩
-    (fun Y Z => ⟨ _ , binaryFanIsBinaryProduct Y Z⟩)
-
-中文:
-定义 cartesianMonoidalCategoryOver
-  签名: [ChosenPullbacks C] (X : C)
-  定义体: ofChosenFiniteProducts (C := Over X)
-    ⟨Limits.asEmptyCone (Over.mk (𝟙 X)), Limits.IsTerminal.ofUniqueHom (fun Y => Over.homMk Y.hom)
-      fun Y m => Over.OverMorphism.ext (by simpa using m.w)⟩
-    (fun Y Z => ⟨ _ , binaryFanIsBinaryProduct Y Z⟩)
-
-Depends on / 依赖: IsTerminal, Limits, Limits.IsTerminal.ofUniqueHom, Limits.asEmptyCone, Over.OverMorphism.ext, Over.homMk, Over.mk, OverMorphism, Y.hom, asEmptyCone, binaryFanIsBinaryProduct, ofChosenFiniteProducts, ofUniqueHom
+--- 原说明 ---
+A computable instance of `CartesianMonoidalCategory` for `Over X` when `C` has
+chosen pullbacks. Contrast this with the noncomputable instance provided by
+`CategoryTheory.Over.cartesianMonoidalCategory`.
 -/
 def cartesianMonoidalCategoryOver [ChosenPullbacks C] (X : C) :
     CartesianMonoidalCategory (Over X) :=
   ofChosenFiniteProducts (C := Over X)
-    ⟨Limits.asEmptyCone (Over.mk (𝟙 X)), Limits.IsTerminal.ofUniqueHom (fun Y => Over.homMk Y.hom)
-      fun Y m => Over.OverMorphism.ext (by simpa using m.w)⟩
-    (fun Y Z => ⟨ _ , binaryFanIsBinaryProduct Y Z⟩)
+    ⟨Limits.asEmptyCone (Over.mk (𝟙 X)), Limits.IsTerminal.ofUniqueHom (fun Y ↦ Over.homMk Y.hom)
+      fun Y m ↦ Over.OverMorphism.ext (by simpa using m.w)⟩
+    (fun Y Z ↦ ⟨ _ , binaryFanIsBinaryProduct Y Z⟩)
 
 namespace Over
 
@@ -168,188 +140,112 @@ variable [ChosenPullbacks C] {X : C}
 attribute [local instance] cartesianMonoidalCategoryOver
 
 @[ext]
-/--
-lemma `tensorObj_ext` / 引理 `tensorObj_ext`
-
-English:
-lemma tensorObj_ext
-  statement: {A : C} {Y Z : Over X} (f₁ f₂ : A ⟶ (Y otimes Z).left)
-  proof: hom_ext Y.hom Z.hom e₁ e₂
-
-@[simp]
-
-中文:
-引理 tensorObj_ext
-  结论: {A : C} {Y Z : Over X} (f₁ f₂ : A ⟶ (Y otimes Z).left)
-  证明: hom_ext Y.hom Z.hom e₁ e₂
-
-@[simp]
-
-Depends on / 依赖: Y.hom, Z.hom, hom_ext
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorObj_ext** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorObj_ext {A : C} {Y Z : Over X} (f₁ f₂ : A ⟶ (Y otimes Z).left) (e₁ :
+ f₁ ≫ fst Y.hom Z.hom = f₂ ≫ fst Y.hom Z.hom) (e₂ : f₁ ≫ snd Y.hom Z.hom = f₂ ≫ 
+snd Y.hom Z.hom) : f₁ = f₂
+参数：f₁ f₂ : A ⟶ (Y otimes Z).left；e₁ : f₁ ≫ fst Y.hom Z.hom = f₂ ≫ fst Y.hom Z.ho
+m；e₂ : f₁ ≫ snd Y.hom Z.hom = f₂ ≫ snd Y.hom Z.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ChosenPullbacksAlong.hom_ext`：hom_ext {W : C} {φ₁ φ₂ : W 
+⟶ pullbackObj f g} (h₁ : φ₁ ≫ fst _ _ = φ₂ ≫ fst _ _) (h₂ : φ₁ ≫ snd _ _ = φ₂ ≫ 
+snd _ _) : φ₁ = φ₂
 -/
-lemma tensorObj_ext {A : C} {Y Z : Over X} (f₁ f₂ : A ⟶ (Y otimes Z).left)
+lemma tensorObj_ext {A : C} {Y Z : Over X} (f₁ f₂ : A ⟶ (Y ⊗ Z).left)
     (e₁ : f₁ ≫ fst Y.hom Z.hom = f₂ ≫ fst Y.hom Z.hom)
     (e₂ : f₁ ≫ snd Y.hom Z.hom = f₂ ≫ snd Y.hom Z.hom) : f₁ = f₂ :=
   hom_ext Y.hom Z.hom e₁ e₂
 
 @[simp]
-/--
-lemma `tensorObj_left` / 引理 `tensorObj_left`
-
-English:
-lemma tensorObj_left
-  given: (Y Z : Over X)
-  statement: (Y otimes Z).left = pullbackObj Y.hom Z.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 tensorObj_left
-  条件: (Y Z : Over X)
-  结论: (Y otimes Z).left = pullbackObj Y.hom Z.hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorObj_left** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorObj_left (Y Z : Over X) : (Y otimes Z).left = pullbackObj Y.hom Z.ho
+m
+参数：Y Z : Over X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorObj_left (Y Z : Over X) : (Y otimes Z).left = pullbackObj Y.hom Z.hom := rfl
+lemma tensorObj_left (Y Z : Over X) : (Y ⊗ Z).left = pullbackObj Y.hom Z.hom := rfl
 
 @[simp]
-/--
-lemma `tensorObj_hom` / 引理 `tensorObj_hom`
-
-English:
-lemma tensorObj_hom
-  given: (Y Z : Over X)
-  statement: (Y otimes Z).hom = snd Y.hom Z.hom ≫ Z.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 tensorObj_hom
-  条件: (Y Z : Over X)
-  结论: (Y otimes Z).hom = snd Y.hom Z.hom ≫ Z.hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorObj_hom** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorObj_hom (Y Z : Over X) : (Y otimes Z).hom = snd Y.hom Z.hom ≫ Z.hom
+参数：Y Z : Over X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorObj_hom (Y Z : Over X) : (Y otimes Z).hom = snd Y.hom Z.hom ≫ Z.hom := rfl
+lemma tensorObj_hom (Y Z : Over X) : (Y ⊗ Z).hom = snd Y.hom Z.hom ≫ Z.hom := rfl
 
 @[simp]
-/--
-lemma `tensorUnit_left` / 引理 `tensorUnit_left`
-
-English:
-lemma tensorUnit_left
-  statement: (𝟙_ (Over X)).left = X
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 tensorUnit_left
-  结论: (𝟙_ (Over X)).left = X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorUnit_left** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorUnit_left : (𝟙_ (Over X)).left = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorUnit_left : (𝟙_ (Over X)).left = X := rfl
 
 @[simp]
-/--
-lemma `tensorUnit_hom` / 引理 `tensorUnit_hom`
-
-English:
-lemma tensorUnit_hom
-  statement: (𝟙_ (Over X)).hom = 𝟙 X
-  proof: rfl
-
-中文:
-引理 tensorUnit_hom
-  结论: (𝟙_ (Over X)).hom = 𝟙 X
-  证明: rfl
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorUnit_hom** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorUnit_hom : (𝟙_ (Over X)).hom = 𝟙 X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorUnit_hom : (𝟙_ (Over X)).hom = 𝟙 X := rfl
-
-/--
-lemma `fst_eq_fst'` / 引理 `fst_eq_fst'`
-
-English:
-lemma fst_eq_fst'
-  given: (Y Z : Over X)
-  proof: rfl
-
-中文:
-引理 fst_eq_fst'
-  条件: (Y Z : Over X)
-  证明: rfl
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.fst_eq_fst'** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：fst_eq_fst' (Y Z : Over X) : CartesianMonoidalCategory.fst Y Z = fst' Y.ho
+m Z.hom
+参数：Y Z : Over X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fst_eq_fst' (Y Z : Over X) :
     CartesianMonoidalCategory.fst Y Z = fst' Y.hom Z.hom :=
   rfl
-
-/--
-lemma `snd_eq_snd'` / 引理 `snd_eq_snd'`
-
-English:
-lemma snd_eq_snd'
-  given: (Y Z : Over X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 snd_eq_snd'
-  条件: (Y Z : Over X)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.snd_eq_snd'** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：snd_eq_snd' (Y Z : Over X) : CartesianMonoidalCategory.snd Y Z = snd' Y.ho
+m Z.hom
+参数：Y Z : Over X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma snd_eq_snd' (Y Z : Over X) :
     CartesianMonoidalCategory.snd Y Z = snd' Y.hom Z.hom :=
   rfl
 
 @[simp]
-/--
-lemma `lift_left` / 引理 `lift_left`
-
-English:
-lemma lift_left
-  given: {W Y Z : Over X} (f : W ⟶ Y) (g : W ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 lift_left
-  条件: {W Y Z : Over X} (f : W ⟶ Y) (g : W ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.lift_left** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：lift_left {W Y Z : Over X} (f : W ⟶ Y) (g : W ⟶ Z) : (CartesianMonoidalCat
+egory.lift f g).left = lift f.left g.left
+参数：f : W ⟶ Y；g : W ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lift_left {W Y Z : Over X} (f : W ⟶ Y) (g : W ⟶ Z) :
     (CartesianMonoidalCategory.lift f g).left = lift f.left g.left := rfl
 
 @[simp]
-/--
-lemma `toUnit_left` / 引理 `toUnit_left`
-
-English:
-lemma toUnit_left
-  given: {Z : Over X}
-  statement: (toUnit Z).left = Z.hom
-  proof: rfl
-
-#adaptation_note
-
-中文:
-引理 toUnit_left
-  条件: {Z : Over X}
-  结论: (toUnit Z).left = Z.hom
-  证明: rfl
-
-#adaptation_note
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.toUnit_left** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：toUnit_left {Z : Over X} : (toUnit Z).left = Z.hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toUnit_left {Z : Over X} : (toUnit Z).left = Z.hom := rfl
 
@@ -357,338 +253,265 @@ lemma toUnit_left {Z : Over X} : (toUnit Z).left = Z.hom := rfl
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `associator_hom_left_fst` / 引理 `associator_hom_left_fst`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.associator_hom_left_fst** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：associator_hom_left_fst (R S T : Over X) : (α_ R S T).hom.left ≫ fst R.hom
+ (snd S.hom T.hom ≫ T.hom) = fst (R otimes S).hom T.hom ≫ fst R.hom S.hom
+参数：R S T : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_hom_fst`：associator_
+hom_fst (X Y Z : C) : (α_ X Y Z).hom ≫ fst _ _ = fst _ _ ≫ fst _ _
 
-English:
-lemma associator_hom_left_fst
-  given: (R S T : Over X)
-  proof: congr_arg CommaMorphism.left (associator_hom_fst R S T)
-
-#adaptation_note
-
-中文:
-引理 associator_hom_left_fst
-  条件: (R S T : Over X)
-  证明: congr_arg CommaMorphism.left (associator_hom_fst R S T)
-
-#adaptation_note
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, associator_hom_fst, congr_arg
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma associator_hom_left_fst (R S T : Over X) :
     (α_ R S T).hom.left ≫ fst R.hom (snd S.hom T.hom ≫ T.hom) =
-      fst (R otimes S).hom T.hom ≫ fst R.hom S.hom :=
+      fst (R ⊗ S).hom T.hom ≫ fst R.hom S.hom :=
   congr_arg CommaMorphism.left (associator_hom_fst R S T)
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `associator_hom_left_snd_fst` / 引理 `associator_hom_left_snd_fst`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.associator_hom_left_snd_fst** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：associator_hom_left_snd_fst (R S T : Over X) : (α_ R S T).hom.left ≫ snd R
+.hom (snd S.hom T.hom ≫ T.hom) ≫ fst S.hom T.hom = fst (R otimes S).hom T.hom ≫ 
+snd R.hom S.hom
+参数：R S T : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_hom_snd_fst`：associa
+tor_hom_snd_fst (X Y Z : C) : (α_ X Y Z).hom ≫ snd _ _ ≫ fst _ _ = fst _ _ ≫ snd
+ _ _
 
-English:
-lemma associator_hom_left_snd_fst
-  given: (R S T : Over X)
-  proof: congr_arg CommaMorphism.left (associator_hom_snd_fst R S T)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_hom_left_snd_fst
-  条件: (R S T : Over X)
-  证明: congr_arg CommaMorphism.left (associator_hom_snd_fst R S T)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, associator_hom_snd_fst, congr_arg
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma associator_hom_left_snd_fst (R S T : Over X) :
     (α_ R S T).hom.left ≫ snd R.hom (snd S.hom T.hom ≫ T.hom) ≫ fst S.hom T.hom =
-      fst (R otimes S).hom T.hom ≫ snd R.hom S.hom :=
+      fst (R ⊗ S).hom T.hom ≫ snd R.hom S.hom :=
   congr_arg CommaMorphism.left (associator_hom_snd_fst R S T)
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_hom_left_snd_snd` / 引理 `associator_hom_left_snd_snd`
-
-English:
-lemma associator_hom_left_snd_snd
-  given: (R S T : Over X)
-  proof: congr_arg CommaMorphism.left (associator_hom_snd_snd R S T)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 associator_hom_left_snd_snd
-  条件: (R S T : Over X)
-  证明: congr_arg CommaMorphism.left (associator_hom_snd_snd R S T)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, associator_hom_snd_snd, congr_arg
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.associator_hom_left_snd_snd** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：associator_hom_left_snd_snd (R S T : Over X) : (α_ R S T).hom.left ≫ snd R
+.hom (snd S.hom T.hom ≫ T.hom) ≫ snd S.hom T.hom = snd (R otimes S).hom T.hom
+参数：R S T : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_hom_snd_snd`：associa
+tor_hom_snd_snd (X Y Z : C) : (α_ X Y Z).hom ≫ snd _ _ ≫ snd _ _ = snd _ _
 -/
 lemma associator_hom_left_snd_snd (R S T : Over X) :
     (α_ R S T).hom.left ≫ snd R.hom (snd S.hom T.hom ≫ T.hom) ≫ snd S.hom T.hom =
-      snd (R otimes S).hom T.hom :=
+      snd (R ⊗ S).hom T.hom :=
   congr_arg CommaMorphism.left (associator_hom_snd_snd R S T)
 
 @[reassoc (attr := simp)]
-/--
-lemma `associator_inv_left_fst_fst` / 引理 `associator_inv_left_fst_fst`
-
-English:
-lemma associator_inv_left_fst_fst
-  given: (R S T : Over X)
-  proof: congr_arg CommaMorphism.left (associator_inv_fst_fst R S T)
-
-#adaptation_note
-
-中文:
-引理 associator_inv_left_fst_fst
-  条件: (R S T : Over X)
-  证明: congr_arg CommaMorphism.left (associator_inv_fst_fst R S T)
-
-#adaptation_note
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, associator_inv_fst_fst, congr_arg
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.associator_inv_left_fst_fst** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：associator_inv_left_fst_fst (R S T : Over X) : (α_ R S T).inv.left ≫ fst (
+snd R.hom S.hom ≫ S.hom) T.hom ≫ fst R.hom S.hom = fst R.hom (S otimes T).hom
+参数：R S T : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_inv_fst_fst`：associa
+tor_inv_fst_fst (X Y Z : C) : (α_ X Y Z).inv ≫ fst _ _ ≫ fst _ _ = fst _ _
 -/
 lemma associator_inv_left_fst_fst (R S T : Over X) :
     (α_ R S T).inv.left ≫ fst (snd R.hom S.hom ≫ S.hom) T.hom ≫ fst R.hom S.hom =
-      fst R.hom (S otimes T).hom :=
+      fst R.hom (S ⊗ T).hom :=
   congr_arg CommaMorphism.left (associator_inv_fst_fst R S T)
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `associator_inv_left_fst_snd` / 引理 `associator_inv_left_fst_snd`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.associator_inv_left_fst_snd** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：associator_inv_left_fst_snd (R S T : Over X) : (α_ R S T).inv.left ≫ fst (
+snd R.hom S.hom ≫ S.hom) T.hom ≫ snd R.hom S.hom = snd R.hom (S otimes T).hom ≫ 
+fst S.hom T.hom
+参数：R S T : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_inv_fst_snd`：associa
+tor_inv_fst_snd (X Y Z : C) : (α_ X Y Z).inv ≫ fst _ _ ≫ snd _ _ = snd _ _ ≫ fst
+ _ _
 
-English:
-lemma associator_inv_left_fst_snd
-  given: (R S T : Over X)
-  proof: congr_arg CommaMorphism.left (associator_inv_fst_snd R S T)
-
-#adaptation_note
-
-中文:
-引理 associator_inv_left_fst_snd
-  条件: (R S T : Over X)
-  证明: congr_arg CommaMorphism.left (associator_inv_fst_snd R S T)
-
-#adaptation_note
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, associator_inv_fst_snd, congr_arg
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma associator_inv_left_fst_snd (R S T : Over X) :
     (α_ R S T).inv.left ≫ fst (snd R.hom S.hom ≫ S.hom) T.hom ≫ snd R.hom S.hom =
-      snd R.hom (S otimes T).hom ≫ fst S.hom T.hom :=
+      snd R.hom (S ⊗ T).hom ≫ fst S.hom T.hom :=
   congr_arg CommaMorphism.left (associator_inv_fst_snd R S T)
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `associator_inv_left_snd` / 引理 `associator_inv_left_snd`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.associator_inv_left_snd** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：associator_inv_left_snd (R S T : Over X) : (α_ R S T).inv.left ≫ snd (snd 
+R.hom S.hom ≫ S.hom) T.hom = snd R.hom (S otimes T).hom ≫ snd S.hom T.hom
+参数：R S T : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.associator_inv_snd`：associator_
+inv_snd (X Y Z : C) : (α_ X Y Z).inv ≫ snd _ _ = snd _ _ ≫ snd _ _
 
-English:
-lemma associator_inv_left_snd
-  given: (R S T : Over X)
-  proof: congr_arg CommaMorphism.left (associator_inv_snd R S T)
-
-@[simp]
-
-中文:
-引理 associator_inv_left_snd
-  条件: (R S T : Over X)
-  证明: congr_arg CommaMorphism.left (associator_inv_snd R S T)
-
-@[simp]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, associator_inv_snd, congr_arg
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma associator_inv_left_snd (R S T : Over X) :
     (α_ R S T).inv.left ≫ snd (snd R.hom S.hom ≫ S.hom) T.hom =
-      snd R.hom (S otimes T).hom ≫ snd S.hom T.hom :=
+      snd R.hom (S ⊗ T).hom ≫ snd S.hom T.hom :=
   congr_arg CommaMorphism.left (associator_inv_snd R S T)
 
 @[simp]
-/--
-lemma `leftUnitor_hom_left` / 引理 `leftUnitor_hom_left`
-
-English:
-lemma leftUnitor_hom_left
-  given: (Z : Over X)
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 leftUnitor_hom_left
-  条件: (Z : Over X)
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.leftUnitor_hom_left** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：leftUnitor_hom_left (Z : Over X) : (fun_ Z).hom.left = snd _ Z.hom
+参数：Z : Over X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma leftUnitor_hom_left (Z : Over X) :
-    (fun_ Z).hom.left = snd _ Z.hom := rfl
+    (λ_ Z).hom.left = snd _ Z.hom := rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `leftUnitor_inv_left_fst` / 引理 `leftUnitor_inv_left_fst`
-
-English:
-lemma leftUnitor_inv_left_fst
-  given: (Z : Over X)
-  proof: congr_arg CommaMorphism.left (leftUnitor_inv_fst Z)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 leftUnitor_inv_left_fst
-  条件: (Z : Over X)
-  证明: congr_arg CommaMorphism.left (leftUnitor_inv_fst Z)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, leftUnitor_inv_fst
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.leftUnitor_inv_left_fst** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：leftUnitor_inv_left_fst (Z : Over X) : (fun_ Z).inv.left ≫ fst (𝟙 X) Z.hom
+ = Z.hom
+参数：Z : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.leftUnitor_inv_fst`：leftUnitor_
+inv_fst (X : C) : (fun_ X).inv ≫ fst _ _ = toUnit _
 -/
 lemma leftUnitor_inv_left_fst (Z : Over X) :
-    (fun_ Z).inv.left ≫ fst (𝟙 X) Z.hom = Z.hom :=
+    (λ_ Z).inv.left ≫ fst (𝟙 X) Z.hom = Z.hom :=
   congr_arg CommaMorphism.left (leftUnitor_inv_fst Z)
 
 @[reassoc (attr := simp)]
-/--
-lemma `leftUnitor_inv_left_snd` / 引理 `leftUnitor_inv_left_snd`
-
-English:
-lemma leftUnitor_inv_left_snd
-  given: (Y : Over X)
-  proof: congr_arg CommaMorphism.left (leftUnitor_inv_snd Y)
-
-@[simp]
-
-中文:
-引理 leftUnitor_inv_left_snd
-  条件: (Y : Over X)
-  证明: congr_arg CommaMorphism.left (leftUnitor_inv_snd Y)
-
-@[simp]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, leftUnitor_inv_snd
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.leftUnitor_inv_left_snd** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：leftUnitor_inv_left_snd (Y : Over X) : (fun_ Y).inv.left ≫ snd (𝟙 X) Y.hom
+ = 𝟙 Y.left
+参数：Y : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.leftUnitor_inv_snd`：leftUnitor_
+inv_snd (X : C) : (fun_ X).inv ≫ snd _ _ = 𝟙 X
 -/
 lemma leftUnitor_inv_left_snd (Y : Over X) :
-    (fun_ Y).inv.left ≫ snd (𝟙 X) Y.hom = 𝟙 Y.left :=
+    (λ_ Y).inv.left ≫ snd (𝟙 X) Y.hom = 𝟙 Y.left :=
   congr_arg CommaMorphism.left (leftUnitor_inv_snd Y)
 
 @[simp]
-/--
-lemma `rightUnitor_hom_left` / 引理 `rightUnitor_hom_left`
-
-English:
-lemma rightUnitor_hom_left
-  given: (Y : Over X)
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 rightUnitor_hom_left
-  条件: (Y : Over X)
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.rightUnitor_hom_left** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：rightUnitor_hom_left (Y : Over X) : (ρ_ Y).hom.left = fst _ (𝟙 X)
+参数：Y : Over X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_hom_left (Y : Over X) :
     (ρ_ Y).hom.left = fst _ (𝟙 X) := rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `rightUnitor_inv_left_fst` / 引理 `rightUnitor_inv_left_fst`
-
-English:
-lemma rightUnitor_inv_left_fst
-  given: (Y : Over X)
-  proof: congr_arg CommaMorphism.left (rightUnitor_inv_fst Y)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 rightUnitor_inv_left_fst
-  条件: (Y : Over X)
-  证明: congr_arg CommaMorphism.left (rightUnitor_inv_fst Y)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, rightUnitor_inv_fst
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.rightUnitor_inv_left_fst** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：rightUnitor_inv_left_fst (Y : Over X) : (ρ_ Y).inv.left ≫ fst Y.hom (𝟙 X) 
+= 𝟙 Y.left
+参数：Y : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.rightUnitor_inv_fst`：rightUnito
+r_inv_fst (X : C) : (ρ_ X).inv ≫ fst _ _ = 𝟙 X
 -/
 lemma rightUnitor_inv_left_fst (Y : Over X) :
     (ρ_ Y).inv.left ≫ fst Y.hom (𝟙 X) = 𝟙 Y.left :=
   congr_arg CommaMorphism.left (rightUnitor_inv_fst Y)
 
 @[reassoc (attr := simp)]
-/--
-lemma `rightUnitor_inv_left_snd` / 引理 `rightUnitor_inv_left_snd`
-
-English:
-lemma rightUnitor_inv_left_snd
-  given: (Y : Over X)
-  proof: congr_arg CommaMorphism.left (rightUnitor_inv_snd Y)
-
-中文:
-引理 rightUnitor_inv_left_snd
-  条件: (Y : Over X)
-  证明: congr_arg CommaMorphism.left (rightUnitor_inv_snd Y)
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, rightUnitor_inv_snd
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.rightUnitor_inv_left_snd** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：rightUnitor_inv_left_snd (Y : Over X) : (ρ_ Y).inv.left ≫ snd Y.hom (𝟙 X) 
+= Y.hom
+参数：Y : Over X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.rightUnitor_inv_snd`：rightUnito
+r_inv_snd (X : C) : (ρ_ X).inv ≫ snd _ _ = toUnit _
 -/
 lemma rightUnitor_inv_left_snd (Y : Over X) :
     (ρ_ Y).inv.left ≫ snd Y.hom (𝟙 X) = Y.hom :=
   congr_arg CommaMorphism.left (rightUnitor_inv_snd Y)
-
-/--
-lemma `whiskerLeft_left` / 引理 `whiskerLeft_left`
-
-English:
-lemma whiskerLeft_left
-  given: {R S T : Over X} (f : S ⟶ T)
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 whiskerLeft_left
-  条件: {R S T : Over X} (f : S ⟶ T)
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.whiskerLeft_left** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：whiskerLeft_left {R S T : Over X} (f : S ⟶ T) : (R ◁ f).left = pullbackMap
+ R.hom T.hom R.hom S.hom (𝟙 _) f.left (𝟙 _)
+参数：f : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft_left {R S T : Over X} (f : S ⟶ T) :
     (R ◁ f).left = pullbackMap R.hom T.hom R.hom S.hom (𝟙 _) f.left (𝟙 _) :=
   rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerLeft_left_fst` / 引理 `whiskerLeft_left_fst`
-
-English:
-lemma whiskerLeft_left_fst
-  given: {R S T : Over X} (f : S ⟶ T)
-  proof: congr_arg CommaMorphism.left (whiskerLeft_fst R f)
-
-#adaptation_note
-
-中文:
-引理 whiskerLeft_left_fst
-  条件: {R S T : Over X} (f : S ⟶ T)
-  证明: congr_arg CommaMorphism.left (whiskerLeft_fst R f)
-
-#adaptation_note
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, whiskerLeft_fst
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.whiskerLeft_left_fst** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：whiskerLeft_left_fst {R S T : Over X} (f : S ⟶ T) : (R ◁ f).left ≫ fst R.h
+om T.hom = fst R.hom S.hom
+参数：f : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst`：whiskerLeft_fs
+t (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
 -/
 lemma whiskerLeft_left_fst {R S T : Over X} (f : S ⟶ T) :
     (R ◁ f).left ≫ fst R.hom T.hom = fst R.hom S.hom :=
@@ -698,41 +521,33 @@ lemma whiskerLeft_left_fst {R S T : Over X} (f : S ⟶ T) :
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerLeft_left_snd` / 引理 `whiskerLeft_left_snd`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.whiskerLeft_left_snd** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：whiskerLeft_left_snd {R S T : Over X} (f : S ⟶ T) : (R ◁ f).left ≫ snd R.h
+om T.hom = snd R.hom S.hom ≫ f.left
+参数：f : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd`：whiskerLeft_sn
+d (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f
 
-English:
-lemma whiskerLeft_left_snd
-  given: {R S T : Over X} (f : S ⟶ T)
-  proof: congr_arg CommaMorphism.left (whiskerLeft_snd R f)
-
-中文:
-引理 whiskerLeft_left_snd
-  条件: {R S T : Over X} (f : S ⟶ T)
-  证明: congr_arg CommaMorphism.left (whiskerLeft_snd R f)
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, whiskerLeft_snd
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma whiskerLeft_left_snd {R S T : Over X} (f : S ⟶ T) :
     (R ◁ f).left ≫ snd R.hom T.hom = snd R.hom S.hom ≫ f.left :=
   congr_arg CommaMorphism.left (whiskerLeft_snd R f)
-
-/--
-lemma `whiskerRight_left` / 引理 `whiskerRight_left`
-
-English:
-lemma whiskerRight_left
-  given: {R S T : Over X} (f : S ⟶ T)
-  proof: rfl
-
-#adaptation_note
-
-中文:
-引理 whiskerRight_left
-  条件: {R S T : Over X} (f : S ⟶ T)
-  证明: rfl
-
-#adaptation_note
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.whiskerRight_left** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：whiskerRight_left {R S T : Over X} (f : S ⟶ T) : (f ▷ R).left = pullbackMa
+p T.hom R.hom S.hom R.hom f.left (𝟙 _) (𝟙 _)
+参数：f : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerRight_left {R S T : Over X} (f : S ⟶ T) :
     (f ▷ R).left = pullbackMap T.hom R.hom S.hom R.hom f.left (𝟙 _) (𝟙 _) :=
@@ -742,118 +557,104 @@ lemma whiskerRight_left {R S T : Over X} (f : S ⟶ T) :
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerRight_left_fst` / 引理 `whiskerRight_left_fst`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.whiskerRight_left_fst** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：whiskerRight_left_fst {R S T : Over X} (f : S ⟶ T) : (f ▷ R).left ≫ fst T.
+hom R.hom = fst S.hom R.hom ≫ f.left
+参数：f : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_fst`：whiskerRight_
+fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
 
-English:
-lemma whiskerRight_left_fst
-  given: {R S T : Over X} (f : S ⟶ T)
-  proof: congr_arg CommaMorphism.left (whiskerRight_fst f R)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 whiskerRight_left_fst
-  条件: {R S T : Over X} (f : S ⟶ T)
-  证明: congr_arg CommaMorphism.left (whiskerRight_fst f R)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, whiskerRight_fst
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma whiskerRight_left_fst {R S T : Over X} (f : S ⟶ T) :
     (f ▷ R).left ≫ fst T.hom R.hom = fst S.hom R.hom ≫ f.left :=
   congr_arg CommaMorphism.left (whiskerRight_fst f R)
 
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerRight_left_snd` / 引理 `whiskerRight_left_snd`
-
-English:
-lemma whiskerRight_left_snd
-  given: {R S T : Over X} (f : S ⟶ T)
-  proof: congr_arg CommaMorphism.left (whiskerRight_snd f R)
-
-中文:
-引理 whiskerRight_left_snd
-  条件: {R S T : Over X} (f : S ⟶ T)
-  证明: congr_arg CommaMorphism.left (whiskerRight_snd f R)
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, whiskerRight_snd
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.whiskerRight_left_snd** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：whiskerRight_left_snd {R S T : Over X} (f : S ⟶ T) : (f ▷ R).left ≫ snd T.
+hom R.hom = snd S.hom R.hom
+参数：f : S ⟶ T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd`：whiskerRight_
+snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _
 -/
 lemma whiskerRight_left_snd {R S T : Over X} (f : S ⟶ T) :
     (f ▷ R).left ≫ snd T.hom R.hom = snd S.hom R.hom :=
   congr_arg CommaMorphism.left (whiskerRight_snd f R)
-
-/--
-lemma `tensorHom_left` / 引理 `tensorHom_left`
-
-English:
-lemma tensorHom_left
-  given: {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U)
-  proof: rfl
-
-#adaptation_note
-
-中文:
-引理 tensorHom_left
-  条件: {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U)
-  证明: rfl
-
-#adaptation_note
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorHom_left** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorHom_left {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U) : (f otimesₘ g).
+left = pullbackMap S.hom U.hom R.hom T.hom f.left g.left (𝟙 _)
+参数：f : R ⟶ S；g : T ⟶ U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorHom_left {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U) :
-    (f otimesₘ g).left = pullbackMap S.hom U.hom R.hom T.hom f.left g.left (𝟙 _) :=
+    (f ⊗ₘ g).left = pullbackMap S.hom U.hom R.hom T.hom f.left g.left (𝟙 _) :=
   rfl
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `tensorHom_left_fst` / 引理 `tensorHom_left_fst`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorHom_left_fst** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorHom_left_fst {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U) : (f otimesₘ
+ g).left ≫ fst S.hom U.hom = fst R.hom T.hom ≫ f.left
+参数：f : R ⟶ S；g : T ⟶ U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_fst`：tensorHom_fst {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ fst _ _ = fst _ _ 
+≫ f
 
-English:
-lemma tensorHom_left_fst
-  given: {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U)
-  proof: congr_arg CommaMorphism.left (tensorHom_fst f g)
-
-#adaptation_note
-
-中文:
-引理 tensorHom_left_fst
-  条件: {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U)
-  证明: congr_arg CommaMorphism.left (tensorHom_fst f g)
-
-#adaptation_note
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, tensorHom_fst
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma tensorHom_left_fst {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U) :
-    (f otimesₘ g).left ≫ fst S.hom U.hom = fst R.hom T.hom ≫ f.left :=
+    (f ⊗ₘ g).left ≫ fst S.hom U.hom = fst R.hom T.hom ≫ f.left :=
   congr_arg CommaMorphism.left (tensorHom_fst f g)
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `tensorHom_left_snd` / 引理 `tensorHom_left_snd`
+/-
+**CategoryTheory.ChosenPullbacksAlong.Over.tensorHom_left_snd** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ChosenPullbacksAlong.Over`。
+形式化陈述：tensorHom_left_snd {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U) : (f otimesₘ
+ g).left ≫ snd S.hom U.hom = snd R.hom T.hom ≫ g.left
+参数：f : R ⟶ S；g : T ⟶ U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.tensorHom_snd`：tensorHom_snd {X
+₁ X₂ Y₁ Y₂ : C} (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) : (f otimesₘ g) ≫ snd _ _ = snd _ _ 
+≫ g
 
-English:
-lemma tensorHom_left_snd
-  given: {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U)
-  proof: congr_arg CommaMorphism.left (tensorHom_snd f g)
-
-中文:
-引理 tensorHom_left_snd
-  条件: {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U)
-  证明: congr_arg CommaMorphism.left (tensorHom_snd f g)
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, congr_arg, tensorHom_snd
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma tensorHom_left_snd {R S T U : Over X} (f : R ⟶ S) (g : T ⟶ U) :
-    (f otimesₘ g).left ≫ snd S.hom U.hom = snd R.hom T.hom ≫ g.left :=
+    (f ⊗ₘ g).left ≫ snd S.hom U.hom = snd R.hom T.hom ≫ g.left :=
   congr_arg CommaMorphism.left (tensorHom_snd f g)
 
 end Over
@@ -870,45 +671,33 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The functor which maps an object `A` in `C` to the projection `A ⊗ X ⟶ X` in `Over X`.
 This is the computable analogue of the functor `Over.star`. -/
 @[simps! obj_left obj_hom]
-/--
-Definition of `toOver` / `toOver` 的定义
+/-
+**CategoryTheory.toOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toOver (X : C) : C ⥤ Over X where obj A
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOver
-  signature: (X : C)
-  body: Over.mk CartesianMonoidalCategory.snd A X
-  map f := Over.homMk (f ▷ X)
-
-中文:
-定义 toOver
-  签名: (X : C)
-  定义体: Over.mk CartesianMonoidalCategory.snd A X
-  map f := Over.homMk (f ▷ X)
-
-Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.snd, Over.mk
+--- 原说明 ---
+The functor which maps an object `A` in `C` to the projection `A ⊗ X ⟶ X` in `Ov
+er X`.
+This is the computable analogue of the functor `Over.star`.
 -/
 def toOver (X : C) : C ⥤ Over X where
-obj A := Over.mk CartesianMonoidalCategory.snd A X
+  obj A := Over.mk <| CartesianMonoidalCategory.snd A X
   map f := Over.homMk (f ▷ X)
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `toOver_map` / 引理 `toOver_map`
-
-English:
-lemma toOver_map
-  given: {X : C} {A A' : C} (f : A ⟶ A')
-  proof: by
-  simp [toOver]
-
-中文:
-引理 toOver_map
-  条件: {X : C} {A A' : C} (f : A ⟶ A')
-  证明: by
-  simp [toOver]
-
-Depends on / 依赖: toOver
+/-
+**CategoryTheory.toOver_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：toOver_map {X : C} {A A' : C} (f : A ⟶ A') : (toOver X).map f = Over.homMk
+ (f ▷ X)
+参数：f : A ⟶ A'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toOver_map {X : C} {A A' : C} (f : A ⟶ A') :
     (toOver X).map f = Over.homMk (f ▷ X) := by
@@ -918,51 +707,33 @@ variable (C)
 
 /-- The functor from `C` to `Over (𝟙_ C)` which sends `X : C` to `Over.mk <| toUnit X`. -/
 @[simps! obj_left obj_hom map_left]
-/--
-Definition of `toOverUnit` / `toOverUnit` 的定义
+/-
+**CategoryTheory.toOverUnit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toOverUnit : C ⥤ Over (𝟙_ C) where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOverUnit
-  signature: : C ⥤ Over (𝟙_ C) where
-  body: Over.mk toUnit X
-  map f := Over.homMk f
-
-中文:
-定义 toOverUnit
-  签名: : C ⥤ Over (𝟙_ C) where
-  定义体: Over.mk toUnit X
-  map f := Over.homMk f
-
-Depends on / 依赖: Over.mk, toUnit
+--- 原说明 ---
+The functor from `C` to `Over (𝟙_ C)` which sends `X : C` to `Over.mk <| toUnit 
+X`.
 -/
 def toOverUnit : C ⥤ Over (𝟙_ C) where
-obj X := Over.mk toUnit X
+  obj X := Over.mk <| toUnit X
   map f := Over.homMk f
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The slice category over the terminal unit object is equivalent to the original category. -/
 @[simps]
-/--
-Definition of `equivToOverUnit` / `equivToOverUnit` 的定义
+/-
+**CategoryTheory.equivToOverUnit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：equivToOverUnit : Over (𝟙_ C) ≌ C where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivToOverUnit
-  signature: : Over (𝟙_ C) ≌ C where
-  body: Over.forget _
-  inverse := toOverUnit _
-  unitIso := NatIso.ofComponents fun X => Over.isoMk (Iso.refl _)
-  counitIso := NatIso.ofComponents fun X => Iso.refl _
-
-中文:
-定义 equivToOverUnit
-  签名: : Over (𝟙_ C) ≌ C where
-  定义体: Over.forget _
-  inverse := toOverUnit _
-  unitIso := NatIso.ofComponents fun X => Over.isoMk (Iso.refl _)
-  counitIso := NatIso.ofComponents fun X => Iso.refl _
-
-Depends on / 依赖: Over.forget, forget
+--- 原说明 ---
+The slice category over the terminal unit object is equivalent to the original c
+ategory.
 -/
 def equivToOverUnit : Over (𝟙_ C) ≌ C where
   functor := Over.forget _
@@ -979,20 +750,17 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The isomorphism of functors `toOverUnit C ⋙ ChosenPullbacksAlong.pullback (toUnit X)` and
 `toOver X`. -/
 @[simps!]
-/--
-Definition of `toOverUnitPullback` / `toOverUnitPullback` 的定义
+/-
+**CategoryTheory.toOverUnitPullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toOverUnitPullback (X : C) : toOverUnit C ⋙ pullback (toUnit X) ≅ toOver X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOverUnitPullback
-  signature: (X : C)
-  body: NatIso.ofComponents fun X => Iso.refl _
-
-中文:
-定义 toOverUnitPullback
-  签名: (X : C)
-  定义体: NatIso.ofComponents fun X => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The isomorphism of functors `toOverUnit C ⋙ ChosenPullbacksAlong.pullback (toUni
+t X)` and
+`toOver X`.
 -/
 def toOverUnitPullback (X : C) :
     toOverUnit C ⋙ pullback (toUnit X) ≅ toOver X :=
@@ -1002,72 +770,60 @@ set_option backward.isDefEq.respectTransparency false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The functor `toOver X` is the right adjoint to the functor `Over.forget X`. -/
 @[simps! unit_app counit_app]
-/--
-Definition of `forgetAdjToOver` / `forgetAdjToOver` 的定义
+/-
+**CategoryTheory.forgetAdjToOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：forgetAdjToOver (X : C) : Over.forget X ⊣ toOver X where unit.app Z
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetAdjToOver
-  signature: (X : C)
-  body: Over.homMk (lift (𝟙 Z.left) (Z.hom))
-  counit.app Z := fst Z X
-
-中文:
-定义 forgetAdjToOver
-  签名: (X : C)
-  定义体: Over.homMk (lift (𝟙 Z.left) (Z.hom))
-  counit.app Z := fst Z X
-
-Depends on / 依赖: Over.homMk, Z.hom, Z.left
+--- 原说明 ---
+The functor `toOver X` is the right adjoint to the functor `Over.forget X`.
 -/
 def forgetAdjToOver (X : C) : Over.forget X ⊣ toOver X where
   unit.app Z := Over.homMk (lift (𝟙 Z.left) (Z.hom))
   counit.app Z := fst Z X
-
-/--
-theorem `forgetAdjToOver.homEquiv_symm` / 定理 `forgetAdjToOver.homEquiv_symm`
-
-English:
-theorem forgetAdjToOver.homEquiv_symm
-  given: {X : C} (Z : Over X) (A : C) (f : Z ⟶ (toOver X).obj A)
-  proof: by
-  rw [Adjunction.homEquiv_counit]; rw [forgetAdjToOver_counit_app]
-  simp
-
-中文:
-定理 forgetAdjToOver.homEquiv_symm
-  条件: {X : C} (Z : Over X) (A : C) (f : Z ⟶ (toOver X).obj A)
-  证明: by
-  rw [Adjunction.homEquiv_counit]; rw [forgetAdjToOver_counit_app]
-  simp
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_counit, forgetAdjToOver_counit_app, homEquiv_counit
+/-
+**CategoryTheory.forgetAdjToOver.homEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.forgetAdjToOver`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.CartesianMonoidalCategory C]   {X : C} (Z : CategoryTheory.Over X) (A
+ : C) (f : Z ⟶ (CategoryTheory.toOver X).obj A),   ((CategoryTheory.forgetAdjToO
+ver X).homEquiv Z A).symm f =     CategoryTheory.CategoryStruct.comp (CategoryTh
+eory.Over.Hom.left f)       (CategoryTheory.SemiCartesianMonoidalCategory.fst A 
+X)
+参数：Z : CategoryTheory.Over X；A : C；f : Z ⟶ (CategoryTheory.toOver X).obj A；(Cate
+goryTheory.forgetAdjToOver X).homEquiv Z A；CategoryTheory.Over.Hom.left f；Catego
+ryTheory.SemiCartesianMonoidalCategory.fst A X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_counit`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.forgetAdjToOver_counit_app`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategor
+y C]   (X Z : C), (CategoryTheo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem forgetAdjToOver.homEquiv_symm {X : C} (Z : Over X) (A : C) (f : Z ⟶ (toOver X).obj A) :
     ((forgetAdjToOver X).homEquiv Z A).symm f = f.left ≫ (fst _ _) := by
-  rw [Adjunction.homEquiv_counit]; rw [forgetAdjToOver_counit_app]
+  rw [Adjunction.homEquiv_counit, forgetAdjToOver_counit_app]
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The isomorphism of functors `toOver (𝟙_ C)` and `toOverUnit C`. -/
 @[simps!]
-/--
-Definition of `toOverIsoToOverUnit` / `toOverIsoToOverUnit` 的定义
+/-
+**CategoryTheory.toOverIsoToOverUnit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toOverIsoToOverUnit : toOver (𝟙_ C) ≅ toOverUnit C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOverIsoToOverUnit
-  signature: : toOver (𝟙_ C) ≅ toOverUnit C
-  body: (forgetAdjToOver (𝟙_ C)).rightAdjointUniq (equivToOverUnit C |>.toAdjunction)
-
-#adaptation_note
-
-中文:
-定义 toOverIsoToOverUnit
-  签名: : toOver (𝟙_ C) ≅ toOverUnit C
-  定义体: (forgetAdjToOver (𝟙_ C)).rightAdjointUniq (equivToOverUnit C |>.toAdjunction)
-
-#adaptation_note
-
-Depends on / 依赖: equivToOverUnit, forgetAdjToOver, rightAdjointUniq, toAdjunction
+--- 原说明 ---
+The isomorphism of functors `toOver (𝟙_ C)` and `toOverUnit C`.
 -/
 def toOverIsoToOverUnit : toOver (𝟙_ C) ≅ toOverUnit C :=
   (forgetAdjToOver (𝟙_ C)).rightAdjointUniq (equivToOverUnit C |>.toAdjunction)
@@ -1078,22 +834,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- A natural isomorphism between the functors `toOver Y` and `toOver X ⋙ pullback f`
 for any morphism `f : X ⟶ Y`. -/
 @[simps!]
-/--
-Definition of `toOverPullbackIsoToOver` / `toOverPullbackIsoToOver` 的定义
+/-
+**CategoryTheory.toOverPullbackIsoToOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：toOverPullbackIsoToOver {X Y : C} (f : Y ⟶ X) [ChosenPullbacksAlong f] : t
+oOver X ⋙ pullback f ≅ toOver Y
+参数：f : Y ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOverPullbackIsoToOver
-  signature: {X Y : C} (f : Y ⟶ X) [ChosenPullbacksAlong f]
-  body: conjugateIsoEquiv ((mapPullbackAdj f).comp (forgetAdjToOver X))
-    (forgetAdjToOver Y) (Over.mapForget f)
-
-中文:
-定义 toOverPullbackIsoToOver
-  签名: {X Y : C} (f : Y ⟶ X) [ChosenPullbacksAlong f]
-  定义体: conjugateIsoEquiv ((mapPullbackAdj f).comp (forgetAdjToOver X))
-    (forgetAdjToOver Y) (Over.mapForget f)
-
-Depends on / 依赖: Over.mapForget, conjugateIsoEquiv, forgetAdjToOver, mapForget, mapPullbackAdj
+--- 原说明 ---
+A natural isomorphism between the functors `toOver Y` and `toOver X ⋙ pullback f
+`
+for any morphism `f : X ⟶ Y`.
 -/
 def toOverPullbackIsoToOver {X Y : C} (f : Y ⟶ X) [ChosenPullbacksAlong f] :
     toOver X ⋙ pullback f ≅ toOver Y :=
@@ -1108,22 +861,19 @@ omit [CartesianMonoidalCategory C] in
 `toOver : Over X ⥤ Over (Over.mk f)` post-composed with the
 iterated slice equivalence `Over (Over.mk f) ⥤ Over Y`. -/
 @[simps!]
-/--
-Definition of `toOverIteratedSliceForwardIsoPullback` / `toOverIteratedSliceForwardIsoPullback` 的定义
+/-
+**CategoryTheory.toOverIteratedSliceForwardIsoPullback** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory`。
+形式化陈述：toOverIteratedSliceForwardIsoPullback [ChosenPullbacks C] {X Y : C} (f : Y
+ ⟶ X) : toOver (Over.mk f) ⋙ (Over.mk f).iteratedSliceForward ≅ pullback f
+参数：f : Y ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOverIteratedSliceForwardIsoPullback
-  signature: [ChosenPullbacks C] {X Y : C} (f : Y ⟶ X)
-  body: conjugateIsoEquiv ((Over.mk f).iteratedSliceEquiv.symm.toAdjunction.comp (forgetAdjToOver _))
-  (mapPullbackAdj f) (eqToIso (Over.iteratedSliceBackward_forget (Over.mk f)))
-
-中文:
-定义 toOverIteratedSliceForwardIsoPullback
-  签名: [ChosenPullbacks C] {X Y : C} (f : Y ⟶ X)
-  定义体: conjugateIsoEquiv ((Over.mk f).iteratedSliceEquiv.symm.toAdjunction.comp (forgetAdjToOver _))
-  (mapPullbackAdj f) (eqToIso (Over.iteratedSliceBackward_forget (Over.mk f)))
-
-Depends on / 依赖: Over.iteratedSliceBackward_forget, Over.mk, conjugateIsoEquiv, eqToIso, forgetAdjToOver, iteratedSliceBackward_forget, iteratedSliceEquiv, iteratedSliceEquiv.symm.toAdjunction.comp, mapPullbackAdj, toAdjunction
+--- 原说明 ---
+The functor `pullback f : Over X ⥤ Over Y` is naturally isomorphic to
+`toOver : Over X ⥤ Over (Over.mk f)` post-composed with the
+iterated slice equivalence `Over (Over.mk f) ⥤ Over Y`.
 -/
 def toOverIteratedSliceForwardIsoPullback [ChosenPullbacks C] {X Y : C} (f : Y ⟶ X) :
     toOver (Over.mk f) ⋙ (Over.mk f).iteratedSliceForward ≅ pullback f :=
@@ -1133,3 +883,4 @@ def toOverIteratedSliceForwardIsoPullback [ChosenPullbacks C] {X Y : C} (f : Y �
 end ToOver
 
 end CategoryTheory
+

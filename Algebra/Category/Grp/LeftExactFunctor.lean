@@ -53,53 +53,43 @@ private noncomputable local instance : CartesianMonoidalCategory C := .ofHasFini
 set_option backward.privateInPublic true in
 private noncomputable local instance : BraidedCategory C := .ofCartesianMonoidalCategory
 
-/--
-Definition of `inverseAux` / `inverseAux` 的定义
+/-- Implementation, see `leftExactFunctorForgetEquivalence`. -/
+/-
+**AddCommGrpCat.leftExactFunctorForgetEquivalence.inverseAux** 是 Mathlib 中的一个定义，
+位于命名空间 `AddCommGrpCat.leftExactFunctorForgetEquivalence`。
+形式化陈述：inverseAux : (C ⥤ₗ Type v) ⥤ C ⥤ AddCommGrpCat.{v}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverseAux
-  signature: : (C ⥤ₗ Type v) ⥤ C ⥤ AddCommGrpCat.{v}
-  body: Functor.mapCommGrpFunctor ⋙
-    (Functor.whiskeringLeft _ _ _).obj Preadditive.commGrpEquivalence.functor ⋙
-      (Functor.whiskeringRight _ _ _).obj
-        (commGrpTypeEquivalenceCommGrp.functor ⋙ commGroupAddCommGroupEquivalence.functor)
-
-中文:
-定义 inverseAux
-  签名: : (C ⥤ₗ 类型v) ⥤ C ⥤ 加法交换群范畴.{v}
-  定义体: Functor.mapCommGrpFunctor ⋙
-    (Functor.whiskeringLeft _ _ _).obj Preadditive.commGrpEquivalence.functor ⋙
-      (Functor.whiskeringRight _ _ _).obj
-        (commGrpTypeEquivalenceCommGrp.functor ⋙ commGroupAddCommGroupEquivalence.functor)
-
-Depends on / 依赖: Functor, Functor.mapCommGrpFunctor, Functor.whiskeringLeft, Functor.whiskeringRight, Preadditive, Preadditive.commGrpEquivalence.functor, commGroupAddCommGroupEquivalence, commGroupAddCommGroupEquivalence.functor, commGrpEquivalence, commGrpTypeEquivalenceCommGrp, commGrpTypeEquivalenceCommGrp.functor, functor, mapCommGrpFunctor, whiskeringLeft, whiskeringRight
+--- 原说明 ---
+Implementation, see `leftExactFunctorForgetEquivalence`.
 -/
 noncomputable def inverseAux : (C ⥤ₗ Type v) ⥤ C ⥤ AddCommGrpCat.{v} :=
   Functor.mapCommGrpFunctor ⋙
     (Functor.whiskeringLeft _ _ _).obj Preadditive.commGrpEquivalence.functor ⋙
       (Functor.whiskeringRight _ _ _).obj
         (commGrpTypeEquivalenceCommGrp.functor ⋙ commGroupAddCommGroupEquivalence.functor)
-
+/-
+**AddCommGrpCat.leftExactFunctorForgetEquivalence.** 是 Mathlib 中的一个实例，位于命名空间 `Ad
+dCommGrpCat.leftExactFunctorForgetEquivalence`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ₗ Type v) : PreservesFiniteLimits (inverseAux.obj F) where
   preservesFiniteLimits J _ _ :=
     have : PreservesLimitsOfShape J (inverseAux.obj F ⋙ forget AddCommGrpCat) :=
       inferInstanceAs (PreservesLimitsOfShape J F.1)
     preservesLimitsOfShape_of_reflects_of_preserves _ (forget AddCommGrpCat)
 
-/--
-Definition of `inverse` / `inverse` 的定义
+/-- Implementation, see `leftExactFunctorForgetEquivalence`. -/
+/-
+**AddCommGrpCat.leftExactFunctorForgetEquivalence.inverse** 是 Mathlib 中的一个定义，位于命
+名空间 `AddCommGrpCat.leftExactFunctorForgetEquivalence`。
+形式化陈述：inverse : (C ⥤ₗ Type v) ⥤ (C ⥤ₗ AddCommGrpCat.{v})
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: : (C ⥤ₗ Type v) ⥤ (C ⥤ₗ AddCommGrpCat.{v})
-  body: ObjectProperty.lift _ inverseAux (by simp only [leftExactFunctor_iff]; infer_instance)
-
-中文:
-定义 inverse
-  签名: : (C ⥤ₗ 类型v) ⥤ (C ⥤ₗ 加法交换群范畴.{v})
-  定义体: ObjectProperty.lift _ inverseAux (by simp only [leftExactFunctor_iff]; infer_instance)
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.lift, infer_instance, inverseAux, leftExactFunctor_iff
+--- 原说明 ---
+Implementation, see `leftExactFunctorForgetEquivalence`.
 -/
 noncomputable def inverse : (C ⥤ₗ Type v) ⥤ (C ⥤ₗ AddCommGrpCat.{v}) :=
   ObjectProperty.lift _ inverseAux (by simp only [leftExactFunctor_iff]; infer_instance)
@@ -109,56 +99,23 @@ open scoped MonObj
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 attribute [-instance] Functor.LaxMonoidal.comp Functor.Monoidal.instComp in
-/--
-Definition of `unitIsoAux` / `unitIsoAux` 的定义
+/-- Implementation, see `leftExactFunctorForgetEquivalence`.
+This is the complicated bit, where we show that forgetting the group structure in the image of
+`F` and then reconstructing it recovers the group structure we started with. -/
+/-
+**AddCommGrpCat.leftExactFunctorForgetEquivalence.unitIsoAux** 是 Mathlib 中的一个定义，
+位于命名空间 `AddCommGrpCat.leftExactFunctorForgetEquivalence`。
+形式化陈述：unitIsoAux (F : C ⥤ AddCommGrpCat.{v}) [PreservesFiniteLimits F] (X : C) :
+ letI : (F ⋙ forget AddCommGrpCat).Braided
+参数：F : C ⥤ AddCommGrpCat.{v}；X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIsoAux
-  signature: (F : C ⥤ AddCommGrpCat.{v}) [PreservesFiniteLimits F] (X : C)
-  body: .ofChosenFiniteProducts _
-    commGrpTypeEquivalenceCommGrp.inverse.obj (AddCommGrpCat.toCommGrp.obj (F.obj X)) ≅
-      (F ⋙ forget AddCommGrpCat).mapCommGrp.obj (Preadditive.commGrpEquivalence.functor.obj X) := by
-  letI : (F ⋙ forget AddCommGrpCat).Braided := .ofChosenFiniteProducts _
-  letI : F.Monoidal := .ofChosenFiniteProducts _
-  refine CommGrp.mkIso Multiplicative.toAdd.toIso (by
-    rw [Functor.obj.η_def X (F := F ⋙ forget AddCommGrpCat)]
-    cat_disch) ?_
-  dsimp [-Functor.comp_map, -ConcreteCategory.forget_map_eq_ofHom]
-  have : F.Additive := Functor.additive_of_preserves_binary_products _
-  simp only [Category.id_comp]
-  rw [Functor.obj.μ_def X (F := F ⋙ forget AddCommGrpCat)]; rw [Preadditive.mul_def X]; rw [Functor.comp_map]; rw [F.map_add]; rw [Functor.Monoidal.μ_comp F (forget AddCommGrpCat) X X]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [Preadditive.comp_add]; rw [Functor.Monoidal.μ_fst]; rw [Functor.Monoidal.μ_snd]
-  ext
-  -- `simp [types_tensorObj_def]` says
-  simp only [types_tensorObj_def, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
-    Equiv.toIso_hom_hom_apply, Functor.comp_obj, hom_add, tensor_apply, TypeCat.hom_ofHom,
-    TypeCat.Fun.coe_mk, AddMonoidHom.add_apply]
-  rw [dsimp% [types_tensorObj_def]; rw [types_tensorUnit_def] μ_forget_apply]
-  rfl
-
-中文:
-定义 unitIsoAux
-  签名: (F : C ⥤ 加法交换群范畴.{v}) [保持FiniteLimits F] (X : C)
-  定义体: .ofChosenFiniteProducts _
-    commGrpTypeEquivalenceCommGrp.inverse.obj (AddCommGrpCat.toCommGrp.obj (F.obj X)) ≅
-      (F ⋙ forget AddCommGrpCat).mapCommGrp.obj (Preadditive.commGrpEquivalence.functor.obj X) := by
-  letI : (F ⋙ forget AddCommGrpCat).Braided := .ofChosenFiniteProducts _
-  letI : F.Monoidal := .ofChosenFiniteProducts _
-  refine CommGrp.mkIso Multiplicative.toAdd.toIso (by
-    rw [Functor.obj.η_def X (F := F ⋙ forget AddCommGrpCat)]
-    cat_disch) ?_
-  dsimp [-Functor.comp_map, -ConcreteCategory.forget_map_eq_ofHom]
-  have : F.Additive := Functor.additive_of_preserves_binary_products _
-  simp only [Category.id_comp]
-  rw [Functor.obj.μ_def X (F := F ⋙ forget AddCommGrpCat)]; rw [Preadditive.mul_def X]; rw [Functor.comp_map]; rw [F.map_add]; rw [Functor.Monoidal.μ_comp F (forget AddCommGrpCat) X X]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [Preadditive.comp_add]; rw [Functor.Monoidal.μ_fst]; rw [Functor.Monoidal.μ_snd]
-  ext
-  -- `simp [types_tensorObj_def]` says
-  simp only [types_tensorObj_def, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
-    Equiv.toIso_hom_hom_apply, Functor.comp_obj, hom_add, tensor_apply, TypeCat.hom_ofHom,
-    TypeCat.Fun.coe_mk, AddMonoidHom.add_apply]
-  rw [dsimp% [types_tensorObj_def]; rw [types_tensorUnit_def] μ_forget_apply]
-  rfl
-
-Depends on / 依赖: ofChosenFiniteProducts
+--- 原说明 ---
+Implementation, see `leftExactFunctorForgetEquivalence`.
+This is the complicated bit, where we show that forgetting the group structure i
+n the image of
+`F` and then reconstructing it recovers the group structure we started with.
 -/
 noncomputable def unitIsoAux (F : C ⥤ AddCommGrpCat.{v}) [PreservesFiniteLimits F] (X : C) :
     letI : (F ⋙ forget AddCommGrpCat).Braided := .ofChosenFiniteProducts _
@@ -172,39 +129,33 @@ noncomputable def unitIsoAux (F : C ⥤ AddCommGrpCat.{v}) [PreservesFiniteLimit
   dsimp [-Functor.comp_map, -ConcreteCategory.forget_map_eq_ofHom]
   have : F.Additive := Functor.additive_of_preserves_binary_products _
   simp only [Category.id_comp]
-  rw [Functor.obj.μ_def X (F := F ⋙ forget AddCommGrpCat)]; rw [Preadditive.mul_def X]; rw [Functor.comp_map]; rw [F.map_add]; rw [Functor.Monoidal.μ_comp F (forget AddCommGrpCat) X X]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [Preadditive.comp_add]; rw [Functor.Monoidal.μ_fst]; rw [Functor.Monoidal.μ_snd]
+  rw [Functor.obj.μ_def X (F := F ⋙ forget AddCommGrpCat), Preadditive.mul_def X,
+    Functor.comp_map, F.map_add,
+    Functor.Monoidal.μ_comp F (forget AddCommGrpCat) X X,
+    Category.assoc, ← Functor.map_comp, Preadditive.comp_add, Functor.Monoidal.μ_fst,
+    Functor.Monoidal.μ_snd]
   ext
   -- `simp [types_tensorObj_def]` says
   simp only [types_tensorObj_def, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
     Equiv.toIso_hom_hom_apply, Functor.comp_obj, hom_add, tensor_apply, TypeCat.hom_ofHom,
     TypeCat.Fun.coe_mk, AddMonoidHom.add_apply]
-  rw [dsimp% [types_tensorObj_def]; rw [types_tensorUnit_def] μ_forget_apply]
+  rw [dsimp% [types_tensorObj_def, types_tensorUnit_def] μ_forget_apply]
   rfl
 
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-- Implementation, see `leftExactFunctorForgetEquivalence`. -/
+/-
+**AddCommGrpCat.leftExactFunctorForgetEquivalence.unitIso** 是 Mathlib 中的一个定义，位于命
+名空间 `AddCommGrpCat.leftExactFunctorForgetEquivalence`。
+形式化陈述：unitIso : 𝟭 (C ⥤ₗ AddCommGrpCat) ≅ (LeftExactFunctor.whiskeringRight _ _ _
+).obj (LeftExactFunctor.of (forget _)) ⋙ inverse
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instPreservesFiniteLimitsObjFunctorLeftExactFunctor`：∀ {C
+ : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : 
+CategoryTheory.Category.{v₂, u₂} D]   (F : C ⥤ₗ D), Cate…
 
-English:
-definition unitIso
-  signature: : 𝟭 (C ⥤ₗ AddCommGrpCat) ≅
-  body: NatIso.ofComponents (fun F => InducedCategory.isoMk (NatIso.ofComponents (fun X =>
-    commGroupAddCommGroupEquivalence.counitIso.app _ ≪≫
-      (CommGrpCat.toAddCommGrp.mapIso (commGrpTypeEquivalenceCommGrp.counitIso.app
-        (AddCommGrpCat.toCommGrp.obj (F.obj.obj X)))).symm ≪≫
-      CommGrpCat.toAddCommGrp.mapIso
-        (CommGrpTypeEquivalenceCommGrp.functor.mapIso (unitIsoAux F.obj X)))))
-
-中文:
-定义 unitIso
-  签名: : 𝟭 (C ⥤ₗ 加法交换群范畴) ≅
-  定义体: NatIso.ofComponents (fun F => InducedCategory.isoMk (NatIso.ofComponents (fun X =>
-    commGroupAddCommGroupEquivalence.counitIso.app _ ≪≫
-      (CommGrpCat.toAddCommGrp.mapIso (commGrpTypeEquivalenceCommGrp.counitIso.app
-        (AddCommGrpCat.toCommGrp.obj (F.obj.obj X)))).symm ≪≫
-      CommGrpCat.toAddCommGrp.mapIso
-        (CommGrpTypeEquivalenceCommGrp.functor.mapIso (unitIsoAux F.obj X)))))
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.toCommGrp.obj, BoolAlg, BoolAlg.str, CommGrpCat, CommGrpCat.toAddCommGrp.mapIso, CommGrpTypeEquivalenceCommGrp, CommGrpTypeEquivalenceCommGrp.functor.mapIso, F.obj, F.obj.obj, InducedCategory, InducedCategory.isoMk, NatIso, NatIso.ofComponents, commGroupAddCommGroupEquivalence, commGroupAddCommGroupEquivalence.counitIso.app, commGrpTypeEquivalenceCommGrp, commGrpTypeEquivalenceCommGrp.counitIso.app, counitIso, functor
+--- 原说明 ---
+Implementation, see `leftExactFunctorForgetEquivalence`.
 -/
 noncomputable def unitIso : 𝟭 (C ⥤ₗ AddCommGrpCat) ≅
     (LeftExactFunctor.whiskeringRight _ _ _).obj (LeftExactFunctor.of (forget _)) ⋙ inverse :=
@@ -218,26 +169,20 @@ noncomputable def unitIso : 𝟭 (C ⥤ₗ AddCommGrpCat) ≅
 end leftExactFunctorForgetEquivalence
 
 variable (C) in
-/--
-Definition of `leftExactFunctorForgetEquivalence` / `leftExactFunctorForgetEquivalence` 的定义
+/-- If `C` is an additive category, the forgetful functor `(C ⥤ₗ AddCommGroup) ⥤ (C ⥤ₗ Type v)` is
+an equivalence. -/
+/-
+**AddCommGrpCat.leftExactFunctorForgetEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Add
+CommGrpCat`。
+形式化陈述：leftExactFunctorForgetEquivalence : (C ⥤ₗ AddCommGrpCat.{v}) ≌ (C ⥤ₗ Type 
+v) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftExactFunctorForgetEquivalence
-  signature: :
-  body: (LeftExactFunctor.whiskeringRight _ _ _).obj (LeftExactFunctor.of (forget _))
-  inverse := leftExactFunctorForgetEquivalence.inverse
-  unitIso := leftExactFunctorForgetEquivalence.unitIso
-  counitIso := Iso.refl _
-
-中文:
-定义 leftExactFunctorForgetEquivalence
-  签名: :
-  定义体: (LeftExactFunctor.whiskeringRight _ _ _).obj (LeftExactFunctor.of (forget _))
-  inverse := leftExactFunctorForgetEquivalence.inverse
-  unitIso := leftExactFunctorForgetEquivalence.unitIso
-  counitIso := Iso.refl _
-
-Depends on / 依赖: BooleanRing, LeftExactFunctor, LeftExactFunctor.of, LeftExactFunctor.whiskeringRight, forget, whiskeringRight
+--- 原说明 ---
+If `C` is an additive category, the forgetful functor `(C ⥤ₗ AddCommGroup) ⥤ (C 
+⥤ₗ Type v)` is
+an equivalence.
 -/
 noncomputable def leftExactFunctorForgetEquivalence :
     (C ⥤ₗ AddCommGrpCat.{v}) ≌ (C ⥤ₗ Type v) where
@@ -249,3 +194,4 @@ noncomputable def leftExactFunctorForgetEquivalence :
 end
 
 end AddCommGrpCat
+

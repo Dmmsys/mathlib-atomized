@@ -40,29 +40,36 @@ assert_not_exists Equiv.Perm.equivUnitsEnd Prod.fst_mul
 
 universe u v
 
-/--
-Definition of `MulSemiringAction` / `MulSemiringAction` 的定义
+/-- Typeclass for multiplicative actions by monoids on semirings.
 
-English:
-class MulSemiringAction
-  parameters: (M : Type u) (R : Type v) [Monoid M] [Semiring R]
-  axioms and operations (2):
-    - smul_one : forall g : M, (g • (1 : R) : R) = 1
-    - smul_mul : forall (g : M) (x y : R), g • (x * y) = g • x * g • y
+This combines `DistribMulAction` with `MulDistribMulAction`: it expresses
+the interplay between the action and both addition and multiplication on the target.
+Two key axioms are `g • (x + y) = (g • x) + (g • y)` and `g • (x * y) = (g • x) * (g • y)`.
 
-中文:
-类 MulSemiring作用
-  参数: (M : 类型u) (R : 类型v) [幺半群 M] [半环 R]
-  公理与运算 (2 个):
-    - smul_one : 对任意 g : M, (g • (1 : R) : R) = 1
-    - smul_mul : 对任意 (g : M) (x y : R), g • (x * y) = g • x * g • y
+A typical use case is the action of a Galois group $Gal(L/K)$ on the field `L`.
+-/
+/-
+**MulSemiringAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u) → (R : Type v) → [Monoid M] → [Semiring R] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Typeclass for multiplicative actions by monoids on semirings.
+
+This combines `DistribMulAction` with `MulDistribMulAction`: it expresses
+the interplay between the action and both addition and multiplication on the tar
+get.
+Two key axioms are `g • (x + y) = (g • x) + (g • y)` and `g • (x * y) = (g • x) 
+* (g • y)`.
+
+A typical use case is the action of a Galois group $Gal(L/K)$ on the field `L`.
 -/
 class MulSemiringAction (M : Type u) (R : Type v) [Monoid M] [Semiring R] extends
   DistribMulAction M R where
   /-- Multiplying `1` by a scalar gives `1` -/
-  smul_one : forall g : M, (g • (1 : R) : R) = 1
+  smul_one : ∀ g : M, (g • (1 : R) : R) = 1
   /-- Scalar multiplication distributes across multiplication -/
-  smul_mul : forall (g : M) (x y : R), g • (x * y) = g • x * g • y
+  smul_mul : ∀ (g : M) (x y : R), g • (x * y) = g • x * g • y
 
 section Semiring
 
@@ -70,6 +77,10 @@ variable (M N : Type*) [Monoid M] [Monoid N]
 variable (R : Type v) [Semiring R]
 
 -- note we could not use `extends` since these typeclasses are made with `old_structure_cmd`
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulSemiringAction.toMulDistribMulAction
     (M R) {_ : Monoid M} {_ : Semiring R} [h : MulSemiringAction M R] :
     MulDistribMulAction M R :=
@@ -77,73 +88,51 @@ instance (priority := 100) MulSemiringAction.toMulDistribMulAction
 
 /-- Each element of the monoid defines a semiring homomorphism. -/
 @[simps!]
-/--
-Definition of `MulSemiringAction.toRingHom` / `MulSemiringAction.toRingHom` 的定义
+/-
+**MulSemiringAction.toRingHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulSemiringAction.toRingHom [MulSemiringAction M R] (x : M) : R ->+* R
+参数：x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulSemiringAction.toRingHom
-  signature: [MulSemiringAction M R] (x : M)
-  body: { MulDistribMulAction.toMonoidHom R x, DistribSMul.toAddMonoidHom R x with }
-
-中文:
-定义 MulSemiring作用.toRingHom
-  签名: [MulSemiring作用 M R] (x : M)
-  定义体: { MulDistribMulAction.toMonoidHom R x, DistribSMul.toAddMonoidHom R x with }
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, MulDistribMulAction, MulDistribMulAction.toMonoidHom, toAddMonoidHom, toMonoidHom
+--- 原说明 ---
+Each element of the monoid defines a semiring homomorphism.
 -/
-def MulSemiringAction.toRingHom [MulSemiringAction M R] (x : M) : R ->+* R :=
+def MulSemiringAction.toRingHom [MulSemiringAction M R] (x : M) : R →+* R :=
   { MulDistribMulAction.toMonoidHom R x, DistribSMul.toAddMonoidHom R x with }
-
-/--
-theorem `toRingHom_injective` / 定理 `toRingHom_injective`
-
-English:
-theorem toRingHom_injective
-  given: [MulSemiringAction M R] [FaithfulSMul M R]
-  proof: fun _ _ h =>
-  eq_of_smul_eq_smul fun r => RingHom.ext_iff.1 h r
-
-中文:
-定理 toRingHom_injective
-  条件: [MulSemiring作用 M R] [忠实标量乘法 M R]
-  证明: fun _ _ h =>
-  eq_of_smul_eq_smul fun r => RingHom.ext_iff.1 h r
+/-
+**toRingHom_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toRingHom_injective [MulSemiringAction M R] [FaithfulSMul M R] : Function.
+Injective (MulSemiringAction.toRingHom M R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FaithfulSMul.eq_of_smul_eq_smul`：∀ {M : Type u_4} {α : Type u_5} {inst :
+ SMul M α} [self : FaithfulSMul M α] {m₁ m₂ : M},   (∀ (a : α), m₁ • a = m₂ • a)
+ → m₁ = m₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RingHom.ext_iff`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g ↔ ∀ (x_2 : α), f x_2 = g x
+_2
 -/
 theorem toRingHom_injective [MulSemiringAction M R] [FaithfulSMul M R] :
     Function.Injective (MulSemiringAction.toRingHom M R) := fun _ _ h =>
   eq_of_smul_eq_smul fun r => RingHom.ext_iff.1 h r
 
-/--
-Instance `RingHom.applyMulSemiringAction` / 实例 `RingHom.applyMulSemiringAction`
+/-- The tautological action by `R →+* R` on `R`.
 
-English:
-instance RingHom.applyMulSemiringAction
-  signature: : MulSemiringAction (R ->+* R) R where
-  body: (· <| ·)
-  smul_one := map_one
-  smul_mul := map_mul
-  smul_zero := map_zero
-  smul_add := map_add
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
+This generalizes `Function.End.applyMulAction`. -/
+/-
+**RingHom.applyMulSemiringAction** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：RingHom.applyMulSemiringAction : MulSemiringAction (R ->+* R) R where smul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+The tautological action by `R →+* R` on `R`.
 
-中文:
-实例 环态射.applyMulSemiringAction
-  签名: : MulSemiring作用 (R ->+* R) R where
-  定义体: (· <| ·)
-  smul_one := map_one
-  smul_mul := map_mul
-  smul_zero := map_zero
-  smul_add := map_add
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-
-@[simp]
+This generalizes `Function.End.applyMulAction`.
 -/
-instance RingHom.applyMulSemiringAction : MulSemiringAction (R ->+* R) R where
+instance RingHom.applyMulSemiringAction : MulSemiringAction (R →+* R) R where
   smul := (· <| ·)
   smul_one := map_one
   smul_mul := map_mul
@@ -153,62 +142,48 @@ instance RingHom.applyMulSemiringAction : MulSemiringAction (R ->+* R) R where
   mul_smul _ _ _ := rfl
 
 @[simp]
-/--
-theorem `RingHom.smul_def` / 定理 `RingHom.smul_def`
-
-English:
-theorem RingHom.smul_def
-  given: (f : R ->+* R) (a : R)
-  statement: f • a = f a
-  proof: rfl
-
-中文:
-定理 环态射.smul_def
-  条件: (f : R ->+* R) (a : R)
-  结论: f • a = f a
-  证明: rfl
+/-
+**RingHom.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：∀ (R : Type v) [inst : Semiring R] (f : R →+* R) (a : R), f • a = f a
+参数：R : Type v；f : R →+* R；a : R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem RingHom.smul_def (f : R ->+* R) (a : R) : f • a = f a :=
+protected theorem RingHom.smul_def (f : R →+* R) (a : R) : f • a = f a :=
   rfl
 
-/--
-Instance `RingHom.applyFaithfulSMul` / 实例 `RingHom.applyFaithfulSMul`
+/-- `RingHom.applyMulSemiringAction` is faithful. -/
+/-
+**RingHom.applyFaithfulSMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：RingHom.applyFaithfulSMul : FaithfulSMul (R ->+* R) R
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
 
-English:
-instance RingHom.applyFaithfulSMul
-  signature: : FaithfulSMul (R ->+* R) R
-  body: ⟨fun {_ _} h => RingHom.ext h⟩
-
-中文:
-实例 环态射.applyFaithfulSMul
-  签名: : 忠实标量乘法 (R ->+* R) R
-  定义体: ⟨fun {_ _} h => RingHom.ext h⟩
-
-Depends on / 依赖: RingHom, RingHom.ext
+--- 原说明 ---
+`RingHom.applyMulSemiringAction` is faithful.
 -/
-instance RingHom.applyFaithfulSMul : FaithfulSMul (R ->+* R) R :=
+instance RingHom.applyFaithfulSMul : FaithfulSMul (R →+* R) R :=
   ⟨fun {_ _} h => RingHom.ext h⟩
 
 section
 
 variable {M N}
 
-/--
-Definition of `MulSemiringAction.compHom` / `MulSemiringAction.compHom` 的定义
+/-- Compose a `MulSemiringAction` with a `MonoidHom`, with action `f r' • m`.
+See note [reducible non-instances]. -/
+/-
+**MulSemiringAction.compHom** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：MulSemiringAction.compHom (f : N ->* M) [MulSemiringAction M R] : MulSemir
+ingAction N R
+参数：f : N ->* M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation MulSemiringAction.compHom
-  signature: (f : N ->* M) [MulSemiringAction M R]
-  body: { DistribMulAction.compHom R f, MulDistribMulAction.compHom R f with }
-
-中文:
-缩写 MulSemiring作用.compHom
-  签名: (f : N ->* M) [MulSemiring作用 M R]
-  定义体: { DistribMulAction.compHom R f, MulDistribMulAction.compHom R f with }
-
-Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, MulDistribMulAction, MulDistribMulAction.compHom, compHom
+--- 原说明 ---
+Compose a `MulSemiringAction` with a `MonoidHom`, with action `f r' • m`.
+See note [reducible non-instances].
 -/
-abbrev MulSemiringAction.compHom (f : N ->* M) [MulSemiringAction M R] : MulSemiringAction N R :=
+abbrev MulSemiringAction.compHom (f : N →* M) [MulSemiringAction M R] : MulSemiringAction N R :=
   { DistribMulAction.compHom R f, MulDistribMulAction.compHom R f with }
 
 end
@@ -220,3 +195,4 @@ attribute [simp] smul_one smul_mul' smul_zero smul_add
 end SimpLemmas
 
 end Semiring
+

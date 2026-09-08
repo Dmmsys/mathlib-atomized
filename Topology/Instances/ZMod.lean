@@ -18,36 +18,22 @@ public section
 
 namespace ZMod
 
-variable {N : Nat}
+variable {N : ℕ}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The discrete topology (every set is open). -/
+/-
+**ZMod.** 是 Mathlib 中的一个实例，位于命名空间 `ZMod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: TopologicalSpace (ZMod N)
-  body: ⊥
-
-中文:
-实例 :
-  签名: 拓扑空间 (ZMod N)
-  定义体: ⊥
+--- 原说明 ---
+The discrete topology (every set is open).
 -/
 instance : TopologicalSpace (ZMod N) := ⊥
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DiscreteTopology (ZMod N)
-  body: ⟨rfl⟩
-
-中文:
-实例 :
-  签名: 离散拓扑 (ZMod N)
-  定义体: ⟨rfl⟩
+/-
+**ZMod.** 是 Mathlib 中的一个实例，位于命名空间 `ZMod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DiscreteTopology (ZMod N) := ⟨rfl⟩
 
 end ZMod
+

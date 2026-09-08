@@ -45,256 +45,138 @@ open scoped MeasureTheory NNReal ENNReal Topology
 
 namespace MeasureTheory
 
-/--
-Definition of `Filtration` / `Filtration` 的定义
+/-- A `Filtration` on a measurable space `Ω` with σ-algebra `m` is a monotone
+sequence of sub-σ-algebras of `m`. -/
+/-
+**MeasureTheory.Filtration** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`。
+形式化陈述：{Ω : Type u_1} → (ι : Type u_2) → [Preorder ι] → MeasurableSpace Ω → Type 
+(max u_1 u_2)
+参数：ι : Type u_2；max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Filtration
-  parameters: {Ω : Type*} (ι : Type*) [Preorder ι] (m : MeasurableSpace Ω)
-  axioms and operations (3):
-    - seq : ι -> MeasurableSpace Ω
-    - mono' : Monotone seq
-    - le' : forall i : ι, seq i <= m
-
-中文:
-结构 滤子
-  参数: {Ω : 类型} (ι : 类型) [预序 ι] (m : 可测空间 Ω)
-  公理与运算 (3 个):
-    - seq : ι -> 可测空间 Ω
-    - mono' : 递增 seq
-    - le' : 对任意 i : ι, seq i <= m
+--- 原说明 ---
+A `Filtration` on a measurable space `Ω` with σ-algebra `m` is a monotone
+sequence of sub-σ-algebras of `m`.
 -/
 structure Filtration {Ω : Type*} (ι : Type*) [Preorder ι] (m : MeasurableSpace Ω) where
   /-- The sequence of sub-σ-algebras of `m` -/
-  seq : ι -> MeasurableSpace Ω
+  seq : ι → MeasurableSpace Ω
   mono' : Monotone seq
-  le' : forall i : ι, seq i <= m
+  le' : ∀ i : ι, seq i ≤ m
 
 attribute [coe] Filtration.seq
 
 variable {Ω ι : Type*} {m : MeasurableSpace Ω}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preorder
-  signature: ι] : CoeFun (Filtration ι m) fun _ => ι -> MeasurableSpace Ω
-  body: ⟨fun f => f.seq⟩
-
-中文:
-实例 [预序
-  签名: ι] : CoeFun (滤子 ι m) fun _ => ι -> 可测空间 Ω
-  定义体: ⟨fun f => f.seq⟩
-
-Depends on / 依赖: f.seq
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Preorder ι] : CoeFun (Filtration ι m) fun _ => ι -> MeasurableSpace Ω :=
+instance [Preorder ι] : CoeFun (Filtration ι m) fun _ => ι → MeasurableSpace Ω :=
   ⟨fun f => f.seq⟩
 
 namespace Filtration
 
 variable [Preorder ι]
 
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: {i j : ι} (f : Filtration ι m) (hij : i <= j)
-  statement: f i <= f j
-  proof: f.mono' hij
-
-中文:
-定理 mono
-  条件: {i j : ι} (f : 滤子 ι m) (hij : i <= j)
-  结论: f i <= f j
-  证明: f.mono' hij
+/-
+**MeasureTheory.Filtration.mono** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Filtrat
+ion`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι
+] {i j : ι}   (f : MeasureTheory.Filtration ι m), i ≤ j → ↑f i ≤ ↑f j
+参数：f : MeasureTheory.Filtration ι m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.mono'`：∀ {Ω : Type u_1} {ι : Type u_2} [inst : 
+Preorder ι] {m : MeasurableSpace Ω} (self : MeasureTheory.Filtration ι m),   Mon
+otone ↑self
 -/
-protected theorem mono {i j : ι} (f : Filtration ι m) (hij : i <= j) : f i <= f j :=
+protected theorem mono {i j : ι} (f : Filtration ι m) (hij : i ≤ j) : f i ≤ f j :=
   f.mono' hij
-
-/--
-theorem `le` / 定理 `le`
-
-English:
-theorem le
-  given: (f : Filtration ι m) (i : ι)
-  statement: f i <= m
-  proof: f.le' i
-
-@[ext]
-
-中文:
-定理 le
-  条件: (f : 滤子 ι m) (i : ι)
-  结论: f i <= m
-  证明: f.le' i
-
-@[ext]
+/-
+**MeasureTheory.Filtration.le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Filtratio
+n`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι
+] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑f i ≤ m
+参数：f : MeasureTheory.Filtration ι m；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.le'`：∀ {Ω : Type u_1} {ι : Type u_2} [inst : Pr
+eorder ι] {m : MeasurableSpace Ω} (self : MeasureTheory.Filtration ι m)   (i : ι
+), ↑self i ≤ m
 -/
-protected theorem le (f : Filtration ι m) (i : ι) : f i <= m :=
+protected theorem le (f : Filtration ι m) (i : ι) : f i ≤ m :=
   f.le' i
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : Filtration ι m} (h : (f : ι -> MeasurableSpace Ω) = g)
-  statement: f = g
-  proof: by
-  cases f; cases g; congr
-
-中文:
-定理 ext
-  条件: {f g : 滤子 ι m} (h : (f : ι -> 可测空间 Ω) = g)
-  结论: f = g
-  证明: by
-  cases f; cases g; congr
+/-
+**MeasureTheory.Filtration.ext** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Filtrati
+on`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι
+] {f g : MeasureTheory.Filtration ι m},   ↑f = ↑g → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-protected theorem ext {f g : Filtration ι m} (h : (f : ι -> MeasurableSpace Ω) = g) : f = g := by
+protected theorem ext {f g : Filtration ι m} (h : (f : ι → MeasurableSpace Ω) = g) : f = g := by
   cases f; cases g; congr
 
 variable (ι) in
-/--
-Definition of `const` / `const` 的定义
+/-- The constant filtration which is equal to `m` for all `i : ι`. -/
+/-
+**MeasureTheory.Filtration.const** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Filtra
+tion`。
+形式化陈述：const (m' : MeasurableSpace Ω) (hm' : m' <= m) : Filtration ι m
+参数：m' : MeasurableSpace Ω；hm' : m' <= m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: (m' : MeasurableSpace Ω) (hm' : m' <= m)
-  body: ⟨fun _ => m', monotone_const, fun _ => hm'⟩
-
-@[simp]
-
-中文:
-定义 const
-  签名: (m' : 可测空间 Ω) (hm' : m' <= m)
-  定义体: ⟨fun _ => m', monotone_const, fun _ => hm'⟩
-
-@[simp]
-
-Depends on / 依赖: monotone_const
+--- 原说明 ---
+The constant filtration which is equal to `m` for all `i : ι`.
 -/
-def const (m' : MeasurableSpace Ω) (hm' : m' <= m) : Filtration ι m :=
+def const (m' : MeasurableSpace Ω) (hm' : m' ≤ m) : Filtration ι m :=
   ⟨fun _ => m', monotone_const, fun _ => hm'⟩
 
 @[simp]
-/--
-theorem `const_apply` / 定理 `const_apply`
-
-English:
-theorem const_apply
-  given: {m' : MeasurableSpace Ω} {hm' : m' <= m} (i : ι)
-  statement: const ι m' hm' i = m'
-  proof: rfl
-
-中文:
-定理 const_apply
-  条件: {m' : 可测空间 Ω} {hm' : m' <= m} (i : ι)
-  结论: const ι m' hm' i = m'
-  证明: rfl
+/-
+**MeasureTheory.Filtration.const_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.
+Filtration`。
+形式化陈述：const_apply {m' : MeasurableSpace Ω} {hm' : m' <= m} (i : ι) : const ι m' 
+hm' i = m'
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem const_apply {m' : MeasurableSpace Ω} {hm' : m' <= m} (i : ι) : const ι m' hm' i = m' :=
+theorem const_apply {m' : MeasurableSpace Ω} {hm' : m' ≤ m} (i : ι) : const ι m' hm' i = m' :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Filtration ι m)
-  body: ⟨const ι m le_rfl⟩
-
-中文:
-实例 :
-  签名: 可居 (滤子 ι m)
-  定义体: ⟨const ι m le_rfl⟩
-
-Depends on / 依赖: le_rfl
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Filtration ι m) :=
   ⟨const ι m le_rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (Filtration ι m)
-  body: ⟨fun f g => forall i, f i <= g i⟩
-
-中文:
-实例 :
-  签名: LE (滤子 ι m)
-  定义体: ⟨fun f g => forall i, f i <= g i⟩
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE (Filtration ι m) :=
-  ⟨fun f g => forall i, f i <= g i⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (Filtration ι m)
-  body: ⟨const ι ⊥ bot_le⟩
-
-中文:
-实例 :
-  签名: 底元素 (滤子 ι m)
-  定义体: ⟨const ι ⊥ bot_le⟩
-
-Depends on / 依赖: bot_le
+  ⟨fun f g => ∀ i, f i ≤ g i⟩
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (Filtration ι m) :=
   ⟨const ι ⊥ bot_le⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (Filtration ι m)
-  body: ⟨const ι m le_rfl⟩
-
-中文:
-实例 :
-  签名: 顶元素 (滤子 ι m)
-  定义体: ⟨const ι m le_rfl⟩
-
-Depends on / 依赖: le_rfl
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (Filtration ι m) :=
   ⟨const ι m le_rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (Filtration ι m)
-  body: ⟨fun f g =>
-    { seq := fun i => f i ⊔ g i
-      mono' := fun _ _ hij =>
-        sup_le ((f.mono hij).trans le_sup_left) ((g.mono hij).trans le_sup_right)
-      le' := fun i => sup_le (f.le i) (g.le i) }⟩
-
-@[norm_cast]
-
-中文:
-实例 :
-  签名: 最大值 (滤子 ι m)
-  定义体: ⟨fun f g =>
-    { seq := fun i => f i ⊔ g i
-      mono' := fun _ _ hij =>
-        sup_le ((f.mono hij).trans le_sup_left) ((g.mono hij).trans le_sup_right)
-      le' := fun i => sup_le (f.le i) (g.le i) }⟩
-
-@[norm_cast]
-
-Depends on / 依赖: f.le, f.mono, g.le, g.mono, le_sup_left, le_sup_right, sup_le
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (Filtration ι m) :=
   ⟨fun f g =>
@@ -304,50 +186,19 @@ instance : Max (Filtration ι m) :=
       le' := fun i => sup_le (f.le i) (g.le i) }⟩
 
 @[norm_cast]
-/--
-theorem `coeFn_sup` / 定理 `coeFn_sup`
-
-English:
-theorem coeFn_sup
-  given: {f g : Filtration ι m}
-  statement: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
-  proof: rfl
-
-中文:
-定理 coeFn_sup
-  条件: {f g : 滤子 ι m}
-  结论: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
-  证明: rfl
+/-
+**MeasureTheory.Filtration.coeFn_sup** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Fi
+ltration`。
+形式化陈述：coeFn_sup {f g : Filtration ι m} : ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeFn_sup {f g : Filtration ι m} : ⇑(f ⊔ g) = ⇑f ⊔ ⇑g :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (Filtration ι m)
-  body: ⟨fun f g =>
-    { seq := fun i => f i ⊓ g i
-      mono' := fun _ _ hij =>
-        le_inf (inf_le_left.trans (f.mono hij)) (inf_le_right.trans (g.mono hij))
-      le' := fun i => inf_le_left.trans (f.le i) }⟩
-
-@[norm_cast]
-
-中文:
-实例 :
-  签名: 最小值 (滤子 ι m)
-  定义体: ⟨fun f g =>
-    { seq := fun i => f i ⊓ g i
-      mono' := fun _ _ hij =>
-        le_inf (inf_le_left.trans (f.mono hij)) (inf_le_right.trans (g.mono hij))
-      le' := fun i => inf_le_left.trans (f.le i) }⟩
-
-@[norm_cast]
-
-Depends on / 依赖: f.le, f.mono, g.mono, inf_le_left, inf_le_left.trans, inf_le_right, inf_le_right.trans, le_inf
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (Filtration ι m) :=
   ⟨fun f g =>
@@ -357,68 +208,19 @@ instance : Min (Filtration ι m) :=
       le' := fun i => inf_le_left.trans (f.le i) }⟩
 
 @[norm_cast]
-/--
-theorem `coeFn_inf` / 定理 `coeFn_inf`
-
-English:
-theorem coeFn_inf
-  given: {f g : Filtration ι m}
-  statement: ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
-  proof: rfl
-
-中文:
-定理 coeFn_inf
-  条件: {f g : 滤子 ι m}
-  结论: ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
-  证明: rfl
+/-
+**MeasureTheory.Filtration.coeFn_inf** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Fi
+ltration`。
+形式化陈述：coeFn_inf {f g : Filtration ι m} : ⇑(f ⊓ g) = ⇑f ⊓ ⇑g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeFn_inf {f g : Filtration ι m} : ⇑(f ⊓ g) = ⇑f ⊓ ⇑g :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (Filtration ι m)
-  body: ⟨fun s =>
-    { seq := fun i => sSup ((fun f : Filtration ι m => f i) '' s)
-      mono' := fun i j hij => by
-        refine sSup_le fun m' hm' => ?_
-        rw [Set.mem_image] at hm'
-        obtain ⟨f, hf_mem, hfm'⟩ := hm'
-        rw [← hfm']
-        refine (f.mono hij).trans ?_
-        have hfj_mem : f j in (fun g : Filtration ι m => g j) '' s := ⟨f, hf_mem, rfl⟩
-        exact le_sSup hfj_mem
-      le' := fun i => by
-        refine sSup_le fun m' hm' => ?_
-        rw [Set.mem_image] at hm'
-        obtain ⟨f, _, hfm'⟩ := hm'
-        rw [← hfm']
-        exact f.le i }⟩
-
-中文:
-实例 :
-  签名: 上确界集 (滤子 ι m)
-  定义体: ⟨fun s =>
-    { seq := fun i => sSup ((fun f : Filtration ι m => f i) '' s)
-      mono' := fun i j hij => by
-        refine sSup_le fun m' hm' => ?_
-        rw [Set.mem_image] at hm'
-        obtain ⟨f, hf_mem, hfm'⟩ := hm'
-        rw [← hfm']
-        refine (f.mono hij).trans ?_
-        have hfj_mem : f j in (fun g : Filtration ι m => g j) '' s := ⟨f, hf_mem, rfl⟩
-        exact le_sSup hfj_mem
-      le' := fun i => by
-        refine sSup_le fun m' hm' => ?_
-        rw [Set.mem_image] at hm'
-        obtain ⟨f, _, hfm'⟩ := hm'
-        rw [← hfm']
-        exact f.le i }⟩
-
-Depends on / 依赖: Filtration, Set.mem_image, f.le, f.mono, hf_mem, hfj_mem, le_sSup, mem_image, sSup_le
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (Filtration ι m) :=
   ⟨fun s =>
@@ -429,7 +231,7 @@ instance : SupSet (Filtration ι m) :=
         obtain ⟨f, hf_mem, hfm'⟩ := hm'
         rw [← hfm']
         refine (f.mono hij).trans ?_
-        have hfj_mem : f j in (fun g : Filtration ι m => g j) '' s := ⟨f, hf_mem, rfl⟩
+        have hfj_mem : f j ∈ (fun g : Filtration ι m => g j) '' s := ⟨f, hf_mem, rfl⟩
         exact le_sSup hfj_mem
       le' := fun i => by
         refine sSup_le fun m' hm' => ?_
@@ -437,69 +239,24 @@ instance : SupSet (Filtration ι m) :=
         obtain ⟨f, _, hfm'⟩ := hm'
         rw [← hfm']
         exact f.le i }⟩
-
-/--
-theorem `sSup_def` / 定理 `sSup_def`
-
-English:
-theorem sSup_def
-  given: (s : Set (Filtration ι m)) (i : ι)
-  proof: rfl
-
-中文:
-定理 sSup_def
-  条件: (s : 集合 (滤子 ι m)) (i : ι)
-  证明: rfl
+/-
+**MeasureTheory.Filtration.sSup_def** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Fil
+tration`。
+形式化陈述：sSup_def (s : Set (Filtration ι m)) (i : ι) : sSup s i = sSup ((fun f : Fi
+ltration ι m => f i) '' s)
+参数：s : Set (Filtration ι m)；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sSup_def (s : Set (Filtration ι m)) (i : ι) :
     sSup s i = sSup ((fun f : Filtration ι m => f i) '' s) :=
   rfl
 
 open scoped Classical in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Filtration ι m)
-  body: ⟨fun s =>
-    { seq := fun i => if Set.Nonempty s then sInf ((fun f : Filtration ι m => f i) '' s) else m
-      mono' := fun i j hij => by
-        by_cases h_nonempty : Set.Nonempty s
-        swap; · simp only [h_nonempty, if_false, le_refl]
-        simp only [h_nonempty, if_true, le_sInf_iff, Set.mem_image, forall_exists_index, and_imp,
-          forall_apply_eq_imp_iff₂]
-        refine fun f hf_mem => le_trans ?_ (f.mono hij)
-        have hfi_mem : f i in (fun g : Filtration ι m => g i) '' s := ⟨f, hf_mem, rfl⟩
-        exact sInf_le hfi_mem
-      le' := fun i => by
-        by_cases h_nonempty : Set.Nonempty s
-        swap; · simp only [h_nonempty, if_false, le_refl]
-        simp only [h_nonempty, if_true]
-        obtain ⟨f, hf_mem⟩ := h_nonempty
-        exact le_trans (sInf_le ⟨f, hf_mem, rfl⟩) (f.le i) }⟩
-
-中文:
-实例 :
-  签名: 下确界集 (滤子 ι m)
-  定义体: ⟨fun s =>
-    { seq := fun i => if Set.Nonempty s then sInf ((fun f : Filtration ι m => f i) '' s) else m
-      mono' := fun i j hij => by
-        by_cases h_nonempty : Set.Nonempty s
-        swap; · simp only [h_nonempty, if_false, le_refl]
-        simp only [h_nonempty, if_true, le_sInf_iff, Set.mem_image, forall_exists_index, and_imp,
-          forall_apply_eq_imp_iff₂]
-        refine fun f hf_mem => le_trans ?_ (f.mono hij)
-        have hfi_mem : f i in (fun g : Filtration ι m => g i) '' s := ⟨f, hf_mem, rfl⟩
-        exact sInf_le hfi_mem
-      le' := fun i => by
-        by_cases h_nonempty : Set.Nonempty s
-        swap; · simp only [h_nonempty, if_false, le_refl]
-        simp only [h_nonempty, if_true]
-        obtain ⟨f, hf_mem⟩ := h_nonempty
-        exact le_trans (sInf_le ⟨f, hf_mem, rfl⟩) (f.le i) }⟩
-
-Depends on / 依赖: Filtration, Nonempty, Set.Nonempty, Set.mem_image, and_imp, f.mono, forall_exists_index, h_nonempty, hf_mem, hfi_mem, if_false, if_true, le_refl, le_sInf_iff, le_trans, mem_image, sInf_le
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : InfSet (Filtration ι m) :=
   ⟨fun s =>
@@ -510,7 +267,7 @@ noncomputable instance : InfSet (Filtration ι m) :=
         simp only [h_nonempty, if_true, le_sInf_iff, Set.mem_image, forall_exists_index, and_imp,
           forall_apply_eq_imp_iff₂]
         refine fun f hf_mem => le_trans ?_ (f.mono hij)
-        have hfi_mem : f i in (fun g : Filtration ι m => g i) '' s := ⟨f, hf_mem, rfl⟩
+        have hfi_mem : f i ∈ (fun g : Filtration ι m => g i) '' s := ⟨f, hf_mem, rfl⟩
         exact sInf_le hfi_mem
       le' := fun i => by
         by_cases h_nonempty : Set.Nonempty s
@@ -520,96 +277,40 @@ noncomputable instance : InfSet (Filtration ι m) :=
         exact le_trans (sInf_le ⟨f, hf_mem, rfl⟩) (f.le i) }⟩
 
 open scoped Classical in
-/--
-theorem `sInf_def` / 定理 `sInf_def`
-
-English:
-theorem sInf_def
-  given: (s : Set (Filtration ι m)) (i : ι)
-  proof: rfl
-
-中文:
-定理 sInf_def
-  条件: (s : 集合 (滤子 ι m)) (i : ι)
-  证明: rfl
+/-
+**MeasureTheory.Filtration.sInf_def** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Fil
+tration`。
+形式化陈述：sInf_def (s : Set (Filtration ι m)) (i : ι) : sInf s i = if Set.Nonempty s
+ then sInf ((fun f : Filtration ι m => f i) '' s) else m
+参数：s : Set (Filtration ι m)；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sInf_def (s : Set (Filtration ι m)) (i : ι) :
     sInf s i = if Set.Nonempty s then sInf ((fun f : Filtration ι m => f i) '' s) else m :=
   rfl
-
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: : PartialOrder (Filtration ι m) where
-  body: le_rfl
-  le_trans _ _ _ h_fg h_gh i := (h_fg i).trans (h_gh i)
-le_antisymm _ _ h_fg h_gf := Filtration.ext funext fun i => (h_fg i).antisymm (h_gf i)
-
-中文:
-实例 instPartialOrder
-  签名: : 偏序 (滤子 ι m) where
-  定义体: le_rfl
-  le_trans _ _ _ h_fg h_gh i := (h_fg i).trans (h_gh i)
-le_antisymm _ _ h_fg h_gf := Filtration.ext funext fun i => (h_fg i).antisymm (h_gf i)
-
-Depends on / 依赖: le_rfl
+/-
+**MeasureTheory.Filtration.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTh
+eory.Filtration`。
+形式化陈述：instPartialOrder : PartialOrder (Filtration ι m) where le_refl _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instPartialOrder : PartialOrder (Filtration ι m) where
   le_refl _ _ := le_rfl
   le_trans _ _ _ h_fg h_gh i := (h_fg i).trans (h_gh i)
-le_antisymm _ _ h_fg h_gf := Filtration.ext funext fun i => (h_fg i).antisymm (h_gf i)
+  le_antisymm _ _ h_fg h_gf := Filtration.ext <| funext fun i => (h_fg i).antisymm (h_gf i)
 
 set_option linter.style.longLine false in
-/--
-Instance `instCompleteLattice` / 实例 `instCompleteLattice`
-
-English:
-instance instCompleteLattice
-  signature: : CompleteLattice (Filtration ι m) where
-  body: (· ⊔ ·)
-  le_sup_left _ _ _ := le_sup_left
-  le_sup_right _ _ _ := le_sup_right
-  sup_le _ _ _ h_fh h_gh i := sup_le (h_fh i) (h_gh _)
-  inf := (· ⊓ ·)
-  inf_le_left _ _ _ := inf_le_left
-  inf_le_right _ _ _ := inf_le_right
-  le_inf _ _ _ h_fg h_fh i := le_inf (h_fg i) (h_fh i)
-  isLUB_sSup _ :=
-    .of_image (f := seq) .rfl (by simpa only [isLUB_pi, Set.image_image] using! fun _ => isLUB_sSup _)
-  isGLB_sInf _ := by
-    dsimp +instances [instInfSet]
-    split_ifs with hn
-    · refine .of_image (f := seq) .rfl ?_
-      simpa only [isGLB_pi, Set.image_image] using! fun _ => isGLB_sInf _
-    · rw [Set.not_nonempty_iff_eq_empty] at hn
-      simpa [hn] using! Filtration.le
-  le_top f i := f.le' i
-  bot_le _ _ := bot_le
-
-中文:
-实例 instCompleteLattice
-  签名: : 完备格 (滤子 ι m) where
-  定义体: (· ⊔ ·)
-  le_sup_left _ _ _ := le_sup_left
-  le_sup_right _ _ _ := le_sup_right
-  sup_le _ _ _ h_fh h_gh i := sup_le (h_fh i) (h_gh _)
-  inf := (· ⊓ ·)
-  inf_le_left _ _ _ := inf_le_left
-  inf_le_right _ _ _ := inf_le_right
-  le_inf _ _ _ h_fg h_fh i := le_inf (h_fg i) (h_fh i)
-  isLUB_sSup _ :=
-    .of_image (f := seq) .rfl (by simpa only [isLUB_pi, Set.image_image] using! fun _ => isLUB_sSup _)
-  isGLB_sInf _ := by
-    dsimp +instances [instInfSet]
-    split_ifs with hn
-    · refine .of_image (f := seq) .rfl ?_
-      simpa only [isGLB_pi, Set.image_image] using! fun _ => isGLB_sInf _
-    · rw [Set.not_nonempty_iff_eq_empty] at hn
-      simpa [hn] using! Filtration.le
-  le_top f i := f.le' i
-  bot_le _ _ := bot_le
+/-
+**MeasureTheory.Filtration.instCompleteLattice** 是 Mathlib 中的一个实例，位于命名空间 `Measur
+eTheory.Filtration`。
+形式化陈述：instCompleteLattice : CompleteLattice (Filtration ι m) where sup
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.le'`：∀ {Ω : Type u_1} {ι : Type u_2} [inst : Pr
+eorder ι] {m : MeasurableSpace Ω} (self : MeasureTheory.Filtration ι m)   (i : ι
+), ↑self i ≤ m
 -/
 noncomputable instance instCompleteLattice : CompleteLattice (Filtration ι m) where
   sup := (· ⊔ ·)
@@ -621,12 +322,12 @@ noncomputable instance instCompleteLattice : CompleteLattice (Filtration ι m) w
   inf_le_right _ _ _ := inf_le_right
   le_inf _ _ _ h_fg h_fh i := le_inf (h_fg i) (h_fh i)
   isLUB_sSup _ :=
-    .of_image (f := seq) .rfl (by simpa only [isLUB_pi, Set.image_image] using! fun _ => isLUB_sSup _)
+    .of_image (f := seq) .rfl (by simpa only [isLUB_pi, Set.image_image] using! fun _ ↦ isLUB_sSup _)
   isGLB_sInf _ := by
     dsimp +instances [instInfSet]
     split_ifs with hn
     · refine .of_image (f := seq) .rfl ?_
-      simpa only [isGLB_pi, Set.image_image] using! fun _ => isGLB_sInf _
+      simpa only [isGLB_pi, Set.image_image] using! fun _ ↦ isGLB_sInf _
     · rw [Set.not_nonempty_iff_eq_empty] at hn
       simpa [hn] using! Filtration.le
   le_top f i := f.le' i
@@ -634,169 +335,166 @@ noncomputable instance instCompleteLattice : CompleteLattice (Filtration ι m) w
 
 end Filtration
 
-/--
-theorem `measurableSet_of_filtration` / 定理 `measurableSet_of_filtration`
-
-English:
-theorem measurableSet_of_filtration
-  statement: [Preorder ι] {f : Filtration ι m} {s : Set Ω} {i : ι}
-  proof: f.le i s hs
-
-中文:
-定理 measurableSet_of_filtration
-  结论: [预序 ι] {f : 滤子 ι m} {s : 集合 Ω} {i : ι}
-  证明: f.le i s hs
-
-Depends on / 依赖: f.le
+/-
+**MeasureTheory.measurableSet_of_filtration** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：measurableSet_of_filtration [Preorder ι] {f : Filtration ι m} {s : Set Ω} 
+{i : ι} (hs : MeasurableSet[f i] s) : MeasurableSet[m] s
+参数：hs : MeasurableSet[f i] s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
 -/
 theorem measurableSet_of_filtration [Preorder ι] {f : Filtration ι m} {s : Set Ω} {i : ι}
     (hs : MeasurableSet[f i] s) : MeasurableSet[m] s :=
   f.le i s hs
 
-/--
-Definition of `SigmaFiniteFiltration` / `SigmaFiniteFiltration` 的定义
+/-- A measure is σ-finite with respect to filtration if it is σ-finite with respect
+to all the sub-σ-algebra of the filtration. -/
+/-
+**MeasureTheory.SigmaFiniteFiltration** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory
+`。
+形式化陈述：{Ω : Type u_1} →   {ι : Type u_2} →     {m : MeasurableSpace Ω} → [inst : 
+Preorder ι] → MeasureTheory.Measure Ω → MeasureTheory.Filtration ι m → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SigmaFiniteFiltration
-  parameters: [Preorder ι] (μ : Measure Ω) (f : Filtration ι m)
-  axioms and operations (1):
-    - SigmaFinite : forall i : ι, SigmaFinite (μ.trim (f.le i))
-
-中文:
-类 σ有限滤子
-  参数: [预序 ι] (μ : 测度 Ω) (f : 滤子 ι m)
-  公理与运算 (1 个):
-    - SigmaFinite : 对任意 i : ι, σ有限 (μ.trim (f.le i))
+--- 原说明 ---
+A measure is σ-finite with respect to filtration if it is σ-finite with respect
+to all the sub-σ-algebra of the filtration.
 -/
 class SigmaFiniteFiltration [Preorder ι] (μ : Measure Ω) (f : Filtration ι m) : Prop where
-  SigmaFinite : forall i : ι, SigmaFinite (μ.trim (f.le i))
-
-/--
-Instance `sigmaFinite_of_sigmaFiniteFiltration` / 实例 `sigmaFinite_of_sigmaFiniteFiltration`
-
-English:
-instance sigmaFinite_of_sigmaFiniteFiltration
-  signature: [Preorder ι] (μ : Measure Ω) (f : Filtration ι m)
-  body: hf.SigmaFinite _
-
-中文:
-实例 sigmaFinite_of_sigmaFiniteFiltration
-  签名: [预序 ι] (μ : 测度 Ω) (f : 滤子 ι m)
-  定义体: hf.SigmaFinite _
-
-Depends on / 依赖: SigmaFinite, hf.SigmaFinite
+  SigmaFinite : ∀ i : ι, SigmaFinite (μ.trim (f.le i))
+/-
+**MeasureTheory.sigmaFinite_of_sigmaFiniteFiltration** 是 Mathlib 中的一个实例，位于命名空间 `
+MeasureTheory`。
+形式化陈述：sigmaFinite_of_sigmaFiniteFiltration [Preorder ι] (μ : Measure Ω) (f : Fil
+tration ι m) [hf : SigmaFiniteFiltration μ f] (i : ι) : SigmaFinite (μ.trim (f.l
+e i))
+参数：μ : Measure Ω；f : Filtration ι m；i : ι。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.SigmaFiniteFiltration.SigmaFinite`：∀ {Ω : Type u_1} {ι : T
+ype u_2} {m : MeasurableSpace Ω} {inst : Preorder ι} {μ : MeasureTheory.Measure 
+Ω}   {f : MeasureTheory.Filtration ι …
 -/
 instance sigmaFinite_of_sigmaFiniteFiltration [Preorder ι] (μ : Measure Ω) (f : Filtration ι m)
     [hf : SigmaFiniteFiltration μ f] (i : ι) : SigmaFinite (μ.trim (f.le i)) :=
   hf.SigmaFinite _
-
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsFiniteMeasure.sigmaFiniteFiltration [Preorder ι] (μ : Measure Ω)
     (f : Filtration ι m) [IsFiniteMeasure μ] : SigmaFiniteFiltration μ f :=
   ⟨fun n => by infer_instance⟩
 
-/--
-theorem `Integrable.uniformIntegrable_condExp_filtration` / 定理 `Integrable.uniformIntegrable_condExp_filtration`
+/-- Given an integrable function `g`, the conditional expectations of `g` with respect to a
+filtration is uniformly integrable. -/
+/-
+**MeasureTheory.Integrable.uniformIntegrable_condExp_filtration** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory.Integrable`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι
+] {μ : MeasureTheory.Measure Ω}   [MeasureTheory.IsFiniteMeasure μ] {f : Measure
+Theory.Filtration ι m} {g : Ω → ℝ},   MeasureTheory.Integrable g μ → MeasureTheo
+ry.UniformIntegrable (fun i => μ[g | ↑f i]) 1 μ
+参数：fun i => μ[g | ↑f i]。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Integrable.uniformIntegrable_condExp`：∀ {α : Type u_1} {m0
+ : MeasurableSpace α} {μ : MeasureTheory.Measure α} {ι : Type u_2} [MeasureTheor
+y.IsFiniteMeasure μ]   {g : α → ℝ},   Me…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
 
-English:
-theorem Integrable.uniformIntegrable_condExp_filtration
-  statement: [Preorder ι] {μ : Measure Ω}
-  proof: hg.uniformIntegrable_condExp f.le
-
-中文:
-定理 可积.uniform整数egrable_condExp_filtration
-  结论: [预序 ι] {μ : 测度 Ω}
-  证明: hg.uniformIntegrable_condExp f.le
-
-Depends on / 依赖: f.le, hg.uniformIntegrable_condExp, uniformIntegrable_condExp
+--- 原说明 ---
+Given an integrable function `g`, the conditional expectations of `g` with respe
+ct to a
+filtration is uniformly integrable.
 -/
 theorem Integrable.uniformIntegrable_condExp_filtration [Preorder ι] {μ : Measure Ω}
-    [IsFiniteMeasure μ] {f : Filtration ι m} {g : Ω -> Real} (hg : Integrable g μ) :
+    [IsFiniteMeasure μ] {f : Filtration ι m} {g : Ω → ℝ} (hg : Integrable g μ) :
     UniformIntegrable (fun i => μ[g | f i]) 1 μ :=
   hg.uniformIntegrable_condExp f.le
-
-/--
-theorem `Filtration.condExp_condExp` / 定理 `Filtration.condExp_condExp`
-
-English:
-theorem Filtration.condExp_condExp
-  statement: [Preorder ι] {E : Type*} [NormedAddCommGroup E]
-  proof: condExp_condExp_of_le (ℱ.mono hij) (ℱ.le j)
-
-中文:
-定理 滤子.condExp_condExp
-  结论: [预序 ι] {E : 类型} [赋范交换加群 E]
-  证明: condExp_condExp_of_le (ℱ.mono hij) (ℱ.le j)
-
-Depends on / 依赖: condExp_condExp_of_le
+/-
+**MeasureTheory.Filtration.condExp_condExp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.Filtration`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι
+] {E : Type u_3}   [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace ℝ E] [C
+ompleteSpace E] (f : Ω → E) {μ : MeasureTheory.Measure Ω}   (ℱ : MeasureTheory.F
+iltration ι m) {i j : ι},   i ≤ j → ∀ [MeasureTheory.SigmaFinite (μ.trim ⋯)], μ[
+μ[f | ↑ℱ j] | ↑ℱ i] =ᵐ[μ] μ[f | ↑ℱ i]
+参数：f : Ω → E；ℱ : MeasureTheory.Filtration ι m；μ.trim ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.condExp_condExp_of_le`：condExp_condExp_of_le {m₁ m₂ m₀ : M
+easurableSpace α} {μ : Measure α} (hm₁₂ : m₁ <= m₂) (hm₂ : m₂ <= m₀) [SigmaFinit
+e (μ.trim hm₂)] : μ[μ[f |…
+· 使用定理 `MeasureTheory.Filtration.mono`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Meas
+urableSpace Ω} [inst : Preorder ι] {i j : ι}   (f : MeasureTheory.Filtration ι m
+), i ≤ j → ↑f i ≤ ↑…
 -/
 theorem Filtration.condExp_condExp [Preorder ι] {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace Real E] [CompleteSpace E] (f : Ω -> E) {μ : Measure Ω} (ℱ : Filtration ι m)
-    {i j : ι} (hij : i <= j) [SigmaFinite (μ.trim (ℱ.le j))] :
+    [NormedSpace ℝ E] [CompleteSpace E] (f : Ω → E) {μ : Measure Ω} (ℱ : Filtration ι m)
+    {i j : ι} (hij : i ≤ j) [SigmaFinite (μ.trim (ℱ.le j))] :
     μ[μ[f | ℱ j] | ℱ i] =ᵐ[μ] μ[f | ℱ i] := condExp_condExp_of_le (ℱ.mono hij) (ℱ.le j)
 
 section OfSet
 
 variable [Preorder ι]
 
-/--
-Definition of `filtrationOfSet` / `filtrationOfSet` 的定义
+/-- Given a sequence of measurable sets `(sₙ)`, `filtrationOfSet` is the smallest filtration
+such that `sₙ` is measurable with respect to the `n`-th sub-σ-algebra in `filtrationOfSet`. -/
+/-
+**MeasureTheory.filtrationOfSet** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：filtrationOfSet {s : ι -> Set Ω} (hsm : forall i, MeasurableSet (s i)) : F
+iltration ι m where seq i
+参数：hsm : forall i, MeasurableSet (s i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition filtrationOfSet
-  signature: {s : ι -> Set Ω} (hsm : forall i, MeasurableSet (s i))
-  body: MeasurableSpace.generateFrom {t | exists j <= i, s j = t}
-  mono' _ _ hnm := MeasurableSpace.generateFrom_mono fun _ ⟨k, hk₁, hk₂⟩ => ⟨k, hk₁.trans hnm, hk₂⟩
-  le' _ := MeasurableSpace.generateFrom_le fun _ ⟨k, _, hk₂⟩ => hk₂ ▸ hsm k
-
-中文:
-定义 filtrationOfSet
-  签名: {s : ι -> 集合 Ω} (hsm : 对任意 i, 可测集 (s i))
-  定义体: MeasurableSpace.generateFrom {t | exists j <= i, s j = t}
-  mono' _ _ hnm := MeasurableSpace.generateFrom_mono fun _ ⟨k, hk₁, hk₂⟩ => ⟨k, hk₁.trans hnm, hk₂⟩
-  le' _ := MeasurableSpace.generateFrom_le fun _ ⟨k, _, hk₂⟩ => hk₂ ▸ hsm k
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.generateFrom, generateFrom
+--- 原说明 ---
+Given a sequence of measurable sets `(sₙ)`, `filtrationOfSet` is the smallest fi
+ltration
+such that `sₙ` is measurable with respect to the `n`-th sub-σ-algebra in `filtra
+tionOfSet`.
 -/
-def filtrationOfSet {s : ι -> Set Ω} (hsm : forall i, MeasurableSet (s i)) : Filtration ι m where
-  seq i := MeasurableSpace.generateFrom {t | exists j <= i, s j = t}
+def filtrationOfSet {s : ι → Set Ω} (hsm : ∀ i, MeasurableSet (s i)) : Filtration ι m where
+  seq i := MeasurableSpace.generateFrom {t | ∃ j ≤ i, s j = t}
   mono' _ _ hnm := MeasurableSpace.generateFrom_mono fun _ ⟨k, hk₁, hk₂⟩ => ⟨k, hk₁.trans hnm, hk₂⟩
   le' _ := MeasurableSpace.generateFrom_le fun _ ⟨k, _, hk₂⟩ => hk₂ ▸ hsm k
-
-/--
-theorem `measurableSet_filtrationOfSet` / 定理 `measurableSet_filtrationOfSet`
-
-English:
-theorem measurableSet_filtrationOfSet
-  statement: {s : ι -> Set Ω} (hsm : forall i, MeasurableSet[m] (s i)) (i : ι)
-  proof: MeasurableSpace.measurableSet_generateFrom ⟨j, hj, rfl⟩
-
-中文:
-定理 measurableSet_filtrationOfSet
-  结论: {s : ι -> 集合 Ω} (hsm : 对任意 i, 可测集[m] (s i)) (i : ι)
-  证明: MeasurableSpace.measurableSet_generateFrom ⟨j, hj, rfl⟩
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.measurableSet_generateFrom, measurableSet_generateFrom
+/-
+**MeasureTheory.measurableSet_filtrationOfSet** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：measurableSet_filtrationOfSet {s : ι -> Set Ω} (hsm : forall i, Measurable
+Set[m] (s i)) (i : ι) {j : ι} (hj : j <= i) : MeasurableSet[filtrationOfSet hsm 
+i] (s j)
+参数：hsm : forall i, MeasurableSet[m] (s i)；i : ι；hj : j <= i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
 -/
-theorem measurableSet_filtrationOfSet {s : ι -> Set Ω} (hsm : forall i, MeasurableSet[m] (s i)) (i : ι)
-    {j : ι} (hj : j <= i) : MeasurableSet[filtrationOfSet hsm i] (s j) :=
+theorem measurableSet_filtrationOfSet {s : ι → Set Ω} (hsm : ∀ i, MeasurableSet[m] (s i)) (i : ι)
+    {j : ι} (hj : j ≤ i) : MeasurableSet[filtrationOfSet hsm i] (s j) :=
   MeasurableSpace.measurableSet_generateFrom ⟨j, hj, rfl⟩
-
-/--
-theorem `measurableSet_filtrationOfSet'` / 定理 `measurableSet_filtrationOfSet'`
-
-English:
-theorem measurableSet_filtrationOfSet'
-  statement: {s : ι -> Set Ω} (hsm : forall n, MeasurableSet[m] (s n))
-  proof: measurableSet_filtrationOfSet hsm i le_rfl
-
-中文:
-定理 measurableSet_filtrationOfSet'
-  结论: {s : ι -> 集合 Ω} (hsm : 对任意 n, 可测集[m] (s n))
-  证明: measurableSet_filtrationOfSet hsm i le_rfl
-
-Depends on / 依赖: le_rfl, measurableSet_filtrationOfSet
+/-
+**MeasureTheory.measurableSet_filtrationOfSet'** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory`。
+形式化陈述：measurableSet_filtrationOfSet' {s : ι -> Set Ω} (hsm : forall n, Measurabl
+eSet[m] (s n)) (i : ι) : MeasurableSet[filtrationOfSet hsm i] (s i)
+参数：hsm : forall n, MeasurableSet[m] (s n)；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.measurableSet_filtrationOfSet`：measurableSet_filtrationOfS
+et {s : ι -> Set Ω} (hsm : forall i, MeasurableSet[m] (s i)) (i : ι) {j : ι} (hj
+ : j <= i) : MeasurableSet[filtra…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem measurableSet_filtrationOfSet' {s : ι -> Set Ω} (hsm : forall n, MeasurableSet[m] (s n))
+theorem measurableSet_filtrationOfSet' {s : ι → Set Ω} (hsm : ∀ n, MeasurableSet[m] (s n))
     (i : ι) : MeasurableSet[filtrationOfSet hsm i] (s i) :=
   measurableSet_filtrationOfSet hsm i le_rfl
 
@@ -832,11 +530,11 @@ noncomputable irreducible_def rightCont [PartialOrder ι] (𝓕 : Filtration ι 
     mono' i j hij := by
       simp only [gt_iff_lt]
       split_ifs with hi hj hj
-      · exact le_iInf₂ fun k hkj => iInf₂_le k (hij.trans_lt hkj)
+      · exact le_iInf₂ fun k hkj ↦ iInf₂_le k (hij.trans_lt hkj)
       · obtain rfl | hj := eq_or_ne j i
         · contradiction
         · exact iInf₂_le j (lt_of_le_of_ne hij hj.symm)
-      · exact le_iInf₂ fun k hk => 𝓕.mono (hij.trans hk.le)
+      · exact le_iInf₂ fun k hk ↦ 𝓕.mono (hij.trans hk.le)
       · exact 𝓕.mono hij
     le' i := by
       split_ifs with hi
@@ -847,172 +545,191 @@ noncomputable irreducible_def rightCont [PartialOrder ι] (𝓕 : Filtration ι 
 @[inherit_doc] scoped postfix:max "₊" => rightCont
 
 open scoped Classical in
-/--
-lemma `rightCont_apply` / 引理 `rightCont_apply`
-
-English:
-lemma rightCont_apply
-  statement: [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
-  proof: by
-  simp +instances only [rightCont, OrderTopology.topology_eq_generate_intervals]
-
-中文:
-引理 rightCont_apply
-  结论: [偏序 ι] [拓扑空间 ι] [Order拓扑 ι]
-  证明: by
-  simp +instances only [rightCont, OrderTopology.topology_eq_generate_intervals]
-
-Depends on / 依赖: OrderTopology, OrderTopology.topology_eq_generate_intervals, instances, rightCont, topology_eq_generate_intervals
+/-
+**MeasureTheory.Filtration.rightCont_apply** 是 Mathlib 中的一个引理，位于命名空间 `MeasureThe
+ory.Filtration`。
+形式化陈述：rightCont_apply [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕
+ : Filtration ι m) (i : ι) : 𝓕₊ i = if (𝓝[>] i).NeBot then ⨅ j > i, 𝓕 j else 𝓕 i
+参数：𝓕 : Filtration ι m；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.Filtration.rightCont_def`：∀ {Ω : Type u_3} {ι : Type u_4} 
+{m : MeasurableSpace Ω} [inst : PartialOrder ι] (𝓕 : MeasureTheory.Filtration ι 
+m),   𝓕.rightCont =     { se…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `OrderTopology.topology_eq_generate_intervals`：∀ {α : Type u_1} {t : Topo
+logicalSpace α} {inst : Preorder α} [self : OrderTopology α], t = Preorder.topol
+ogy α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rightCont_apply [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
     (𝓕 : Filtration ι m) (i : ι) :
     𝓕₊ i = if (𝓝[>] i).NeBot then ⨅ j > i, 𝓕 j else 𝓕 i := by
   simp +instances only [rightCont, OrderTopology.topology_eq_generate_intervals]
-
-/--
-lemma `rightCont_eq_of_nhdsGT_eq_bot` / 引理 `rightCont_eq_of_nhdsGT_eq_bot`
-
-English:
-lemma rightCont_eq_of_nhdsGT_eq_bot
-  statement: [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
-  proof: by
-  rw [rightCont_apply]; rw [hi]; rw [neBot_iff]; rw [ne_self_iff_false]; rw [if_false]
-
-中文:
-引理 rightCont_eq_of_nhdsGT_eq_bot
-  结论: [偏序 ι] [拓扑空间 ι] [Order拓扑 ι]
-  证明: by
-  rw [rightCont_apply]; rw [hi]; rw [neBot_iff]; rw [ne_self_iff_false]; rw [if_false]
-
-Depends on / 依赖: if_false, neBot_iff, ne_self_iff_false, rightCont_apply
+/-
+**MeasureTheory.Filtration.rightCont_eq_of_nhdsGT_eq_bot** 是 Mathlib 中的一个引理，位于命名
+空间 `MeasureTheory.Filtration`。
+形式化陈述：rightCont_eq_of_nhdsGT_eq_bot [PartialOrder ι] [TopologicalSpace ι] [Order
+Topology ι] (𝓕 : Filtration ι m) {i : ι} (hi : 𝓝[>] i = ⊥) : 𝓕₊ i = 𝓕 i
+参数：𝓕 : Filtration ι m；hi : 𝓝[>] i = ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Filtration.rightCont_apply`：rightCont_apply [PartialOrder 
+ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtration ι m) (i : ι) : 𝓕₊ i = 
+if (𝓝[>] i).NeBot then ⨅ j > i…
+· 使用定理 `Filter.neBot_iff`：neBot_iff {f : Filter α} : NeBot f ↔ f != ⊥
+· 使用定理 `ne_self_iff_false`：∀ {α : Sort u_1} (a : α), a ≠ a ↔ False
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
 -/
 lemma rightCont_eq_of_nhdsGT_eq_bot [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
     (𝓕 : Filtration ι m) {i : ι} (hi : 𝓝[>] i = ⊥) :
     𝓕₊ i = 𝓕 i := by
-  rw [rightCont_apply]; rw [hi]; rw [neBot_iff]; rw [ne_self_iff_false]; rw [if_false]
+  rw [rightCont_apply, hi, neBot_iff, ne_self_iff_false, if_false]
 
-/--
-lemma `rightCont_eq_self` / 引理 `rightCont_eq_self`
+/-- If the index type is a `SuccOrder`, then `𝓕₊ = 𝓕`. -/
+/-
+**MeasureTheory.Filtration.rightCont_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.Filtration`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : LinearOrde
+r ι] [SuccOrder ι]   (𝓕 : MeasureTheory.Filtration ι m), 𝓕.rightCont = 𝓕
+参数：𝓕 : MeasureTheory.Filtration ι m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.ext`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measu
+rableSpace Ω} [inst : Preorder ι] {f g : MeasureTheory.Filtration ι m},   ↑f = ↑
+g → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasurableSpace.ext`：MeasurableSpace.ext {m₁ m₂ : MeasurableSpace α} (h 
+: forall s : Set α, MeasurableSet[m₁] s ↔ MeasurableSet[m₂] s) : m₁ = m₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Filtration.rightCont_eq_of_nhdsGT_eq_bot`：rightCont_eq_of_
+nhdsGT_eq_bot [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtr
+ation ι m) {i : ι} (hi : 𝓝[>] i = ⊥) : 𝓕₊ i …
+· 使用定理 `SuccOrder.nhdsGT`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : L
+inearOrder α] [ClosedIciTopology α] {a : α} [SuccOrder α],   nhdsWithin a (Set.I
+oi a) …
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma rightCont_eq_self
-  given: [LinearOrder ι] [SuccOrder ι] (𝓕 : Filtration ι m)
-  proof: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  ext _
-  rw [rightCont_eq_of_nhdsGT_eq_bot _ SuccOrder.nhdsGT]
-
-中文:
-引理 rightCont_eq_self
-  条件: [线性序 ι] [Succ序 ι] (𝓕 : 滤子 ι m)
-  证明: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  ext _
-  rw [rightCont_eq_of_nhdsGT_eq_bot _ SuccOrder.nhdsGT]
+--- 原说明 ---
+If the index type is a `SuccOrder`, then `𝓕₊ = 𝓕`.
 -/
 @[simp] lemma rightCont_eq_self [LinearOrder ι] [SuccOrder ι] (𝓕 : Filtration ι m) :
     𝓕₊ = 𝓕 := by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   ext _
   rw [rightCont_eq_of_nhdsGT_eq_bot _ SuccOrder.nhdsGT]
-
-/--
-lemma `rightCont_eq_of_isMax` / 引理 `rightCont_eq_of_isMax`
-
-English:
-lemma rightCont_eq_of_isMax
-  given: [PartialOrder ι] (𝓕 : Filtration ι m) {i : ι} (hi : IsMax i)
-  proof: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  exact rightCont_eq_of_nhdsGT_eq_bot _ (hi.Ioi_eq ▸ nhdsWithin_empty i)
-
-中文:
-引理 rightCont_eq_of_isMax
-  条件: [偏序 ι] (𝓕 : 滤子 ι m) {i : ι} (hi : IsMax i)
-  证明: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  exact rightCont_eq_of_nhdsGT_eq_bot _ (hi.Ioi_eq ▸ nhdsWithin_empty i)
-
-Depends on / 依赖: Ioi_eq, OrderTopology, Preorder, Preorder.topology, hi.Ioi_eq, nhdsWithin_empty, rightCont_eq_of_nhdsGT_eq_bot, topology
+/-
+**MeasureTheory.Filtration.rightCont_eq_of_isMax** 是 Mathlib 中的一个引理，位于命名空间 `Meas
+ureTheory.Filtration`。
+形式化陈述：rightCont_eq_of_isMax [PartialOrder ι] (𝓕 : Filtration ι m) {i : ι} (hi : 
+IsMax i) : 𝓕₊ i = 𝓕 i
+参数：𝓕 : Filtration ι m；hi : IsMax i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.Filtration.rightCont_eq_of_nhdsGT_eq_bot`：rightCont_eq_of_
+nhdsGT_eq_bot [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtr
+ation ι m) {i : ι} (hi : 𝓝[>] i = ⊥) : 𝓕₊ i …
+· 使用定理 `nhdsWithin_empty`：nhdsWithin_empty (a : α) : 𝓝[∅] a = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsMax.Ioi_eq`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, IsMax a → Se
+t.Ioi a = ∅
 -/
 lemma rightCont_eq_of_isMax [PartialOrder ι] (𝓕 : Filtration ι m) {i : ι} (hi : IsMax i) :
     𝓕₊ i = 𝓕 i := by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   exact rightCont_eq_of_nhdsGT_eq_bot _ (hi.Ioi_eq ▸ nhdsWithin_empty i)
-
-/--
-lemma `rightCont_eq_of_exists_gt` / 引理 `rightCont_eq_of_exists_gt`
-
-English:
-lemma rightCont_eq_of_exists_gt
-  statement: [LinearOrder ι] (𝓕 : Filtration ι m) {i : ι}
-  proof: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  obtain ⟨j, hij, hIoo⟩ := hi
-  have hcov : i ⋖ j := covBy_iff_Ioo_eq.mpr ⟨hij, hIoo⟩
-exact rightCont_eq_of_nhdsGT_eq_bot _ CovBy.nhdsGT hcov
-
-中文:
-引理 rightCont_eq_of_存在_gt
-  结论: [线性序 ι] (𝓕 : 滤子 ι m) {i : ι}
-  证明: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  obtain ⟨j, hij, hIoo⟩ := hi
-  have hcov : i ⋖ j := covBy_iff_Ioo_eq.mpr ⟨hij, hIoo⟩
-exact rightCont_eq_of_nhdsGT_eq_bot _ CovBy.nhdsGT hcov
-
-Depends on / 依赖: CovBy.nhdsGT, OrderTopology, Preorder, Preorder.topology, covBy_iff_Ioo_eq, covBy_iff_Ioo_eq.mpr, nhdsGT, rightCont_eq_of_nhdsGT_eq_bot, topology
+/-
+**MeasureTheory.Filtration.rightCont_eq_of_exists_gt** 是 Mathlib 中的一个引理，位于命名空间 `
+MeasureTheory.Filtration`。
+形式化陈述：rightCont_eq_of_exists_gt [LinearOrder ι] (𝓕 : Filtration ι m) {i : ι} (hi
+ : exists j > i, Set.Ioo i j = ∅) : 𝓕₊ i = 𝓕 i
+参数：𝓕 : Filtration ι m；hi : exists j > i, Set.Ioo i j = ∅。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `covBy_iff_Ioo_eq`：covBy_iff_Ioo_eq : a ⋖ b ↔ a < b ∧ Ioo a b = ∅
+· 使用引理 `MeasureTheory.Filtration.rightCont_eq_of_nhdsGT_eq_bot`：rightCont_eq_of_
+nhdsGT_eq_bot [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtr
+ation ι m) {i : ι} (hi : 𝓝[>] i = ⊥) : 𝓕₊ i …
+· 使用定理 `CovBy.nhdsGT`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Linea
+rOrder α] [ClosedIciTopology α] {a b : α},   b ⋖ a → nhdsWithin b (Set.Ioi b) = 
+⊥
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
 -/
 lemma rightCont_eq_of_exists_gt [LinearOrder ι] (𝓕 : Filtration ι m) {i : ι}
-    (hi : exists j > i, Set.Ioo i j = ∅) :
+    (hi : ∃ j > i, Set.Ioo i j = ∅) :
     𝓕₊ i = 𝓕 i := by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   obtain ⟨j, hij, hIoo⟩ := hi
   have hcov : i ⋖ j := covBy_iff_Ioo_eq.mpr ⟨hij, hIoo⟩
-exact rightCont_eq_of_nhdsGT_eq_bot _ CovBy.nhdsGT hcov
+  exact rightCont_eq_of_nhdsGT_eq_bot _ <| CovBy.nhdsGT hcov
 
-/--
-lemma `rightCont_eq_of_neBot_nhdsGT` / 引理 `rightCont_eq_of_neBot_nhdsGT`
+/-- If `i` is not isolated on the right, then `𝓕₊ i = ⨅ j > i, 𝓕 j`. This is for instance the case
+when `ι` is a densely ordered linear order with no maximal elements and equipped with the order
+topology, see `rightCont_eq`. -/
+/-
+**MeasureTheory.Filtration.rightCont_eq_of_neBot_nhdsGT** 是 Mathlib 中的一个引理，位于命名空
+间 `MeasureTheory.Filtration`。
+形式化陈述：rightCont_eq_of_neBot_nhdsGT [PartialOrder ι] [TopologicalSpace ι] [OrderT
+opology ι] (𝓕 : Filtration ι m) (i : ι) [(𝓝[>] i).NeBot] : 𝓕₊ i = ⨅ j > i, 𝓕 j
+参数：𝓕 : Filtration ι m；i : ι；𝓝[>] i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Filtration.rightCont_apply`：rightCont_apply [PartialOrder 
+ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtration ι m) (i : ι) : 𝓕₊ i = 
+if (𝓝[>] i).NeBot then ⨅ j > i…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 
-English:
-lemma rightCont_eq_of_neBot_nhdsGT
-  statement: [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
-  proof: by
-  rw [rightCont_apply]; rw [if_pos ‹(𝓝[>] i).NeBot›]
-
-中文:
-引理 rightCont_eq_of_neBot_nhdsGT
-  结论: [偏序 ι] [拓扑空间 ι] [Order拓扑 ι]
-  证明: by
-  rw [rightCont_apply]; rw [if_pos ‹(𝓝[>] i).NeBot›]
-
-Depends on / 依赖: if_pos, rightCont_apply
+--- 原说明 ---
+If `i` is not isolated on the right, then `𝓕₊ i = ⨅ j > i, 𝓕 j`. This is for ins
+tance the case
+when `ι` is a densely ordered linear order with no maximal elements and equipped
+ with the order
+topology, see `rightCont_eq`.
 -/
 lemma rightCont_eq_of_neBot_nhdsGT [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι]
     (𝓕 : Filtration ι m) (i : ι) [(𝓝[>] i).NeBot] :
     𝓕₊ i = ⨅ j > i, 𝓕 j := by
-  rw [rightCont_apply]; rw [if_pos ‹(𝓝[>] i).NeBot›]
-
-/--
-lemma `rightCont_eq_of_not_isMax` / 引理 `rightCont_eq_of_not_isMax`
-
-English:
-lemma rightCont_eq_of_not_isMax
-  statement: [LinearOrder ι] [DenselyOrdered ι]
-  proof: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  have : (𝓝[>] i).NeBot := nhdsGT_neBot_of_exists_gt (not_isMax_iff.mp hi)
-  exact rightCont_eq_of_neBot_nhdsGT _ _
-
-中文:
-引理 rightCont_eq_of_not_isMax
-  结论: [线性序 ι] [稠密序 ι]
-  证明: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  have : (𝓝[>] i).NeBot := nhdsGT_neBot_of_exists_gt (not_isMax_iff.mp hi)
-  exact rightCont_eq_of_neBot_nhdsGT _ _
-
-Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, nhdsGT_neBot_of_exists_gt, not_isMax_iff, not_isMax_iff.mp, rightCont_eq_of_neBot_nhdsGT, topology
+  rw [rightCont_apply, if_pos ‹(𝓝[>] i).NeBot›]
+/-
+**MeasureTheory.Filtration.rightCont_eq_of_not_isMax** 是 Mathlib 中的一个引理，位于命名空间 `
+MeasureTheory.Filtration`。
+形式化陈述：rightCont_eq_of_not_isMax [LinearOrder ι] [DenselyOrdered ι] (𝓕 : Filtrati
+on ι m) {i : ι} (hi : ¬IsMax i) : 𝓕₊ i = ⨅ j > i, 𝓕 j
+参数：𝓕 : Filtration ι m；hi : ¬IsMax i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nhdsGT_neBot_of_exists_gt`：nhdsGT_neBot_of_exists_gt {a : α} (H : exists
+ b, a < b) : NeBot (𝓝[>] a)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_isMax_iff`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, ¬IsMax a ↔ 
+∃ b, a < b
+· 使用引理 `MeasureTheory.Filtration.rightCont_eq_of_neBot_nhdsGT`：rightCont_eq_of_n
+eBot_nhdsGT [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtrat
+ion ι m) (i : ι) [(𝓝[>] i).NeBot] : 𝓕₊ i = …
 -/
 lemma rightCont_eq_of_not_isMax [LinearOrder ι] [DenselyOrdered ι]
     (𝓕 : Filtration ι m) {i : ι} (hi : ¬IsMax i) :
@@ -1021,128 +738,140 @@ lemma rightCont_eq_of_not_isMax [LinearOrder ι] [DenselyOrdered ι]
   have : (𝓝[>] i).NeBot := nhdsGT_neBot_of_exists_gt (not_isMax_iff.mp hi)
   exact rightCont_eq_of_neBot_nhdsGT _ _
 
-/--
-lemma `rightCont_eq` / 引理 `rightCont_eq`
+/-- If `ι` is a densely ordered linear order with no maximal element, then no point is isolated
+on the right, so that `𝓕₊ i = ⨅ j > i, 𝓕 j` holds for all `i`. This is in particular the
+case when `ι := ℝ≥0`. -/
+/-
+**MeasureTheory.Filtration.rightCont_eq** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory
+.Filtration`。
+形式化陈述：rightCont_eq [LinearOrder ι] [DenselyOrdered ι] [NoMaxOrder ι] (𝓕 : Filtra
+tion ι m) (i : ι) : 𝓕₊ i = ⨅ j > i, 𝓕 j
+参数：𝓕 : Filtration ι m；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.Filtration.rightCont_eq_of_not_isMax`：rightCont_eq_of_not_
+isMax [LinearOrder ι] [DenselyOrdered ι] (𝓕 : Filtration ι m) {i : ι} (hi : ¬IsM
+ax i) : 𝓕₊ i = ⨅ j > i, 𝓕 j
+· 使用定理 `not_isMax`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxOrder α] (a : α), 
+¬IsMax a
 
-English:
-lemma rightCont_eq
-  statement: [LinearOrder ι] [DenselyOrdered ι] [NoMaxOrder ι]
-  proof: 𝓕.rightCont_eq_of_not_isMax (not_isMax i)
-
-中文:
-引理 rightCont_eq
-  结论: [线性序 ι] [稠密序 ι] [NoMax序 ι]
-  证明: 𝓕.rightCont_eq_of_not_isMax (not_isMax i)
-
-Depends on / 依赖: not_isMax, rightCont_eq_of_not_isMax
+--- 原说明 ---
+If `ι` is a densely ordered linear order with no maximal element, then no point 
+is isolated
+on the right, so that `𝓕₊ i = ⨅ j > i, 𝓕 j` holds for all `i`. This is in partic
+ular the
+case when `ι := ℝ≥0`.
 -/
 lemma rightCont_eq [LinearOrder ι] [DenselyOrdered ι] [NoMaxOrder ι]
     (𝓕 : Filtration ι m) (i : ι) :
     𝓕₊ i = ⨅ j > i, 𝓕 j := 𝓕.rightCont_eq_of_not_isMax (not_isMax i)
 
 variable [PartialOrder ι]
-
-/--
-lemma `le_rightCont` / 引理 `le_rightCont`
-
-English:
-lemma le_rightCont
-  given: (𝓕 : Filtration ι m)
-  statement: 𝓕 <= 𝓕₊
-  proof: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  intro i
-  by_cases hne : (𝓝[>] i).NeBot
-  · rw [rightCont_eq_of_neBot_nhdsGT]
-    exact le_iInf₂ fun _ he => 𝓕.mono he.le
-  · rw [rightCont_apply, if_neg hne]
-
-中文:
-引理 le_rightCont
-  条件: (𝓕 : 滤子 ι m)
-  结论: 𝓕 <= 𝓕₊
-  证明: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  intro i
-  by_cases hne : (𝓝[>] i).NeBot
-  · rw [rightCont_eq_of_neBot_nhdsGT]
-    exact le_iInf₂ fun _ he => 𝓕.mono he.le
-  · rw [rightCont_apply, if_neg hne]
-
-Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, he.le, if_neg, rightCont_apply, rightCont_eq_of_neBot_nhdsGT, topology
+/-
+**MeasureTheory.Filtration.le_rightCont** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory
+.Filtration`。
+形式化陈述：le_rightCont (𝓕 : Filtration ι m) : 𝓕 <= 𝓕₊
+参数：𝓕 : Filtration ι m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.Filtration.rightCont_eq_of_neBot_nhdsGT`：rightCont_eq_of_n
+eBot_nhdsGT [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtrat
+ion ι m) (i : ι) [(𝓝[>] i).NeBot] : 𝓕₊ i = …
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `MeasureTheory.Filtration.mono`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Meas
+urableSpace Ω} [inst : Preorder ι] {i j : ι}   (f : MeasureTheory.Filtration ι m
+), i ≤ j → ↑f i ≤ ↑…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `MeasureTheory.Filtration.rightCont_apply`：rightCont_apply [PartialOrder 
+ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtration ι m) (i : ι) : 𝓕₊ i = 
+if (𝓝[>] i).NeBot then ⨅ j > i…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma le_rightCont (𝓕 : Filtration ι m) : 𝓕 <= 𝓕₊ := by
+lemma le_rightCont (𝓕 : Filtration ι m) : 𝓕 ≤ 𝓕₊ := by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   intro i
   by_cases hne : (𝓝[>] i).NeBot
   · rw [rightCont_eq_of_neBot_nhdsGT]
     exact le_iInf₂ fun _ he => 𝓕.mono he.le
   · rw [rightCont_apply, if_neg hne]
-
-/--
-lemma `rightCont_self` / 引理 `rightCont_self`
-
-English:
-lemma rightCont_self
-  given: (𝓕 : Filtration ι m)
-  statement: 𝓕₊₊ = 𝓕₊
-  proof: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  apply le_antisymm _ 𝓕₊.le_rightCont
-  intro i
-  by_cases hne : (𝓝[>] i).NeBot
-  · have hineq : (⨅ j > i, 𝓕₊ j) <= ⨅ j > i, 𝓕 j := by
-      apply le_iInf₂ fun u hu => ?_
-      have hiou : Set.Ioo i u in 𝓝[>] i := by
-        rw [mem_nhdsWithin_iff_exists_mem_nhds_inter]
-        exact ⟨Set.Iio u, (isOpen_Iio' u).mem_nhds hu, fun _ hx => ⟨hx.2, hx.1⟩⟩
-      obtain ⟨v, hv⟩ := hne.nonempty_of_mem hiou
-      have hle₁ : (⨅ j > i, 𝓕₊ j) <= 𝓕₊ v := iInf₂_le_of_le v hv.1 le_rfl
-      have hle₂ : 𝓕₊ v <= 𝓕 u := by
-        by_cases hnv : (𝓝[>] v).NeBot
-        · simpa [rightCont_eq_of_neBot_nhdsGT] using iInf₂_le_of_le u hv.2 le_rfl
-        · simpa [rightCont_apply, hnv] using 𝓕.mono hv.2.le
-      exact hle₁.trans hle₂
-    simpa [rightCont_eq_of_neBot_nhdsGT] using hineq
-  · rw [rightCont_apply, if_neg hne]
-
-中文:
-引理 rightCont_self
-  条件: (𝓕 : 滤子 ι m)
-  结论: 𝓕₊₊ = 𝓕₊
-  证明: by
-  let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
-  apply le_antisymm _ 𝓕₊.le_rightCont
-  intro i
-  by_cases hne : (𝓝[>] i).NeBot
-  · have hineq : (⨅ j > i, 𝓕₊ j) <= ⨅ j > i, 𝓕 j := by
-      apply le_iInf₂ fun u hu => ?_
-      have hiou : Set.Ioo i u in 𝓝[>] i := by
-        rw [mem_nhdsWithin_iff_exists_mem_nhds_inter]
-        exact ⟨Set.Iio u, (isOpen_Iio' u).mem_nhds hu, fun _ hx => ⟨hx.2, hx.1⟩⟩
-      obtain ⟨v, hv⟩ := hne.nonempty_of_mem hiou
-      have hle₁ : (⨅ j > i, 𝓕₊ j) <= 𝓕₊ v := iInf₂_le_of_le v hv.1 le_rfl
-      have hle₂ : 𝓕₊ v <= 𝓕 u := by
-        by_cases hnv : (𝓝[>] v).NeBot
-        · simpa [rightCont_eq_of_neBot_nhdsGT] using iInf₂_le_of_le u hv.2 le_rfl
-        · simpa [rightCont_apply, hnv] using 𝓕.mono hv.2.le
-      exact hle₁.trans hle₂
-    simpa [rightCont_eq_of_neBot_nhdsGT] using hineq
-  · rw [rightCont_apply, if_neg hne]
+/-
+**MeasureTheory.Filtration.rightCont_self** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.Filtration`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : PartialOrd
+er ι] (𝓕 : MeasureTheory.Filtration ι m),   𝓕.rightCont.rightCont = 𝓕.rightCont
+参数：𝓕 : MeasureTheory.Filtration ι m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_nhdsWithin_iff_exists_mem_nhds_inter`：mem_nhdsWithin_iff_exists_mem_
+nhds_inter {t : Set α} {a : α} {s : Set α} : t in 𝓝[s] a ↔ exists u in 𝓝 a, u in
+ter s subseteq t
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `isOpen_Iio'`：∀ {α : Type u} [ts : TopologicalSpace α] [inst : Preorder α
+] [OrderTopology α] (a : α), IsOpen (Set.Iio a)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.NeBot.nonempty_of_mem`：∀ {α : Type u} {f : Filter α}, f.NeBot → ∀
+ {s : Set α}, s ∈ f → s.Nonempty
+· 使用定理 `iInf₂_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst
+ : CompleteLattice α] {a : α} {f : (i : ι) → κ i → α} (i : ι)   (j : κ i), f i j
+ ≤ a…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `MeasureTheory.Filtration.rightCont_eq_of_neBot_nhdsGT`：rightCont_eq_of_n
+eBot_nhdsGT [PartialOrder ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtrat
+ion ι m) (i : ι) [(𝓝[>] i).NeBot] : 𝓕₊ i = …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `MeasureTheory.Filtration.rightCont_apply`：rightCont_apply [PartialOrder 
+ι] [TopologicalSpace ι] [OrderTopology ι] (𝓕 : Filtration ι m) (i : ι) : 𝓕₊ i = 
+if (𝓝[>] i).NeBot then ⨅ j > i…
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `MeasureTheory.Filtration.mono`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Meas
+urableSpace Ω} [inst : Preorder ι] {i j : ι}   (f : MeasureTheory.Filtration ι m
+), i ≤ j → ↑f i ≤ ↑…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `MeasureTheory.Filtration.le_rightCont`：le_rightCont (𝓕 : Filtration ι m)
+ : 𝓕 <= 𝓕₊
 -/
 @[simp] lemma rightCont_self (𝓕 : Filtration ι m) : 𝓕₊₊ = 𝓕₊ := by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
   apply le_antisymm _ 𝓕₊.le_rightCont
   intro i
   by_cases hne : (𝓝[>] i).NeBot
-  · have hineq : (⨅ j > i, 𝓕₊ j) <= ⨅ j > i, 𝓕 j := by
+  · have hineq : (⨅ j > i, 𝓕₊ j) ≤ ⨅ j > i, 𝓕 j := by
       apply le_iInf₂ fun u hu => ?_
-      have hiou : Set.Ioo i u in 𝓝[>] i := by
+      have hiou : Set.Ioo i u ∈ 𝓝[>] i := by
         rw [mem_nhdsWithin_iff_exists_mem_nhds_inter]
-        exact ⟨Set.Iio u, (isOpen_Iio' u).mem_nhds hu, fun _ hx => ⟨hx.2, hx.1⟩⟩
+        exact ⟨Set.Iio u, (isOpen_Iio' u).mem_nhds hu, fun _ hx ↦ ⟨hx.2, hx.1⟩⟩
       obtain ⟨v, hv⟩ := hne.nonempty_of_mem hiou
-      have hle₁ : (⨅ j > i, 𝓕₊ j) <= 𝓕₊ v := iInf₂_le_of_le v hv.1 le_rfl
-      have hle₂ : 𝓕₊ v <= 𝓕 u := by
+      have hle₁ : (⨅ j > i, 𝓕₊ j) ≤ 𝓕₊ v := iInf₂_le_of_le v hv.1 le_rfl
+      have hle₂ : 𝓕₊ v ≤ 𝓕 u := by
         by_cases hnv : (𝓝[>] v).NeBot
         · simpa [rightCont_eq_of_neBot_nhdsGT] using iInf₂_le_of_le u hv.2 le_rfl
         · simpa [rightCont_apply, hnv] using 𝓕.mono hv.2.le
@@ -1150,59 +879,54 @@ lemma rightCont_self
     simpa [rightCont_eq_of_neBot_nhdsGT] using hineq
   · rw [rightCont_apply, if_neg hne]
 
-/--
-Definition of `IsRightContinuous` / `IsRightContinuous` 的定义
+/-- A filtration `𝓕` is right continuous if it is equal to its right continuation `𝓕₊`. -/
+/-
+**MeasureTheory.Filtration.IsRightContinuous** 是 Mathlib 中的一个归纳类型，位于命名空间 `Measur
+eTheory.Filtration`。
+形式化陈述：{Ω : Type u_1} →   {ι : Type u_2} → {m : MeasurableSpace Ω} → [inst : Part
+ialOrder ι] → MeasureTheory.Filtration ι m → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRightContinuous
-  parameters: (𝓕 : Filtration ι m)
-  axioms and operations (1):
-    - RC : 𝓕₊ <= 𝓕
-
-中文:
-类 是RightContinuous
-  参数: (𝓕 : 滤子 ι m)
-  公理与运算 (1 个):
-    - RC : 𝓕₊ <= 𝓕
+--- 原说明 ---
+A filtration `𝓕` is right continuous if it is equal to its right continuation `𝓕
+₊`.
 -/
 class IsRightContinuous (𝓕 : Filtration ι m) where
   /-- The right continuity property. -/
-  RC : 𝓕₊ <= 𝓕
-
-/--
-lemma `IsRightContinuous.eq` / 引理 `IsRightContinuous.eq`
-
-English:
-lemma IsRightContinuous.eq
-  given: {𝓕 : Filtration ι m} [h : IsRightContinuous 𝓕]
-  proof: (le_antisymm 𝓕.le_rightCont h.RC).symm
-
-中文:
-引理 是RightContinuous.eq
-  条件: {𝓕 : 滤子 ι m} [h : 是RightContinuous 𝓕]
-  证明: (le_antisymm 𝓕.le_rightCont h.RC).symm
-
-Depends on / 依赖: h.RC, le_antisymm, le_rightCont
+  RC : 𝓕₊ ≤ 𝓕
+/-
+**MeasureTheory.Filtration.IsRightContinuous.eq** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.Filtration.IsRightContinuous`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : PartialOrd
+er ι] {𝓕 : MeasureTheory.Filtration ι m}   [h : 𝓕.IsRightContinuous], 𝓕.rightCon
+t = 𝓕
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `MeasureTheory.Filtration.le_rightCont`：le_rightCont (𝓕 : Filtration ι m)
+ : 𝓕 <= 𝓕₊
+· 使用定理 `MeasureTheory.Filtration.IsRightContinuous.RC`：∀ {Ω : Type u_1} {ι : Typ
+e u_2} {m : MeasurableSpace Ω} {inst : PartialOrder ι} {𝓕 : MeasureTheory.Filtra
+tion ι m}   [self : 𝓕.IsRightContin…
 -/
 lemma IsRightContinuous.eq {𝓕 : Filtration ι m} [h : IsRightContinuous 𝓕] :
     𝓕₊ = 𝓕 := (le_antisymm 𝓕.le_rightCont h.RC).symm
-
+/-
+**MeasureTheory.Filtration.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory.Filtration`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {𝓕 : Filtration ι m} : 𝓕₊.IsRightContinuous := ⟨(rightCont_self 𝓕).le⟩
-
-/--
-lemma `IsRightContinuous.measurableSet` / 引理 `IsRightContinuous.measurableSet`
-
-English:
-lemma IsRightContinuous.measurableSet
-  statement: {𝓕 : Filtration ι m} [IsRightContinuous 𝓕] {i : ι}
-  proof: IsRightContinuous.eq (𝓕 := 𝓕) ▸ hs
-
-中文:
-引理 是RightContinuous.measurableSet
-  结论: {𝓕 : 滤子 ι m} [是RightContinuous 𝓕] {i : ι}
-  证明: IsRightContinuous.eq (𝓕 := 𝓕) ▸ hs
-
-Depends on / 依赖: IsRightContinuous, IsRightContinuous.eq
+/-
+**MeasureTheory.Filtration.IsRightContinuous.measurableSet** 是 Mathlib 中的一个定理，位于
+命名空间 `MeasureTheory.Filtration.IsRightContinuous`。
+形式化陈述：∀ {Ω : Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : PartialOrd
+er ι] {𝓕 : MeasureTheory.Filtration ι m}   [𝓕.IsRightContinuous] {i : ι} {s : Se
+t Ω}, MeasurableSet s → MeasurableSet s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.IsRightContinuous.eq`：∀ {Ω : Type u_1} {ι : Typ
+e u_2} {m : MeasurableSpace Ω} [inst : PartialOrder ι] {𝓕 : MeasureTheory.Filtra
+tion ι m}   [h : 𝓕.IsRightContinuou…
 -/
 lemma IsRightContinuous.measurableSet {𝓕 : Filtration ι m} [IsRightContinuous 𝓕] {i : ι}
     {s : Set Ω} (hs : MeasurableSet[𝓕₊ i] s) :
@@ -1210,64 +934,55 @@ lemma IsRightContinuous.measurableSet {𝓕 : Filtration ι m} [IsRightContinuou
 
 end IsRightContinuous
 
-variable {β : ι -> Type*} [forall i, TopologicalSpace (β i)] [forall i, MetrizableSpace (β i)]
-  [mβ : forall i, MeasurableSpace (β i)] [forall i, BorelSpace (β i)]
+variable {β : ι → Type*} [∀ i, TopologicalSpace (β i)] [∀ i, MetrizableSpace (β i)]
+  [mβ : ∀ i, MeasurableSpace (β i)] [∀ i, BorelSpace (β i)]
   [Preorder ι]
 
-/--
-Definition of `natural` / `natural` 的定义
+/-- Given a sequence of functions, the natural filtration is the smallest sequence
+of σ-algebras such that the sequence of functions is measurable with respect to
+the filtration. -/
+/-
+**MeasureTheory.Filtration.natural** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Filt
+ration`。
+形式化陈述：natural (u : (i : ι) -> Ω -> β i) (hum : forall i, StronglyMeasurable (u i
+)) : Filtration ι m where seq i
+参数：u : (i : ι) -> Ω -> β i；hum : forall i, StronglyMeasurable (u i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natural
-  signature: (u : (i : ι) -> Ω -> β i) (hum : forall i, StronglyMeasurable (u i))
-  body: ⨆ j <= i, MeasurableSpace.comap (u j) (mβ j)
-  mono' _ _ hij := biSup_mono fun _ => ge_trans hij
-  le' i := by
-    refine iSup₂_le ?_
-    rintro j _ s ⟨t, ht, rfl⟩
-    exact (hum j).measurable ht
-
-中文:
-定义 natural
-  签名: (u : (i : ι) -> Ω -> β i) (hum : 对任意 i, StronglyMeasurable (u i))
-  定义体: ⨆ j <= i, MeasurableSpace.comap (u j) (mβ j)
-  mono' _ _ hij := biSup_mono fun _ => ge_trans hij
-  le' i := by
-    refine iSup₂_le ?_
-    rintro j _ s ⟨t, ht, rfl⟩
-    exact (hum j).measurable ht
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap
+--- 原说明 ---
+Given a sequence of functions, the natural filtration is the smallest sequence
+of σ-algebras such that the sequence of functions is measurable with respect to
+the filtration.
 -/
-def natural (u : (i : ι) -> Ω -> β i) (hum : forall i, StronglyMeasurable (u i)) : Filtration ι m where
-  seq i := ⨆ j <= i, MeasurableSpace.comap (u j) (mβ j)
+def natural (u : (i : ι) → Ω → β i) (hum : ∀ i, StronglyMeasurable (u i)) : Filtration ι m where
+  seq i := ⨆ j ≤ i, MeasurableSpace.comap (u j) (mβ j)
   mono' _ _ hij := biSup_mono fun _ => ge_trans hij
   le' i := by
     refine iSup₂_le ?_
     rintro j _ s ⟨t, ht, rfl⟩
     exact (hum j).measurable ht
-
-/--
-lemma `natural_eq_comap` / 引理 `natural_eq_comap`
-
-English:
-lemma natural_eq_comap
-  given: (u : (i : ι) -> Ω -> β i) (hum : forall (i : ι), StronglyMeasurable (u i)) (i : ι)
-  proof: by
-  simp_rw [natural, MeasurableSpace.comap_process_pi, iSup_subtype']
-  rfl
-
-中文:
-引理 natural_eq_comap
-  条件: (u : (i : ι) -> Ω -> β i) (hum : 对任意 (i : ι), StronglyMeasurable (u i)) (i : ι)
-  证明: by
-  simp_rw [natural, MeasurableSpace.comap_process_pi, iSup_subtype']
-  rfl
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap_process_pi, comap_process_pi, iSup_subtype, natural, simp_rw
+/-
+**MeasureTheory.Filtration.natural_eq_comap** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTh
+eory.Filtration`。
+形式化陈述：natural_eq_comap (u : (i : ι) -> Ω -> β i) (hum : forall (i : ι), Strongly
+Measurable (u i)) (i : ι) : natural u hum i = .comap (fun ω (j : Set.Iic i) => u
+ j ω) inferInstance
+参数：u : (i : ι) -> Ω -> β i；hum : forall (i : ι), StronglyMeasurable (u i)；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasurableSpace.comap_process_pi`：MeasurableSpace.comap_process_pi (X : 
+(a : δ) -> β -> X a) : MeasurableSpace.comap (fun b a => X a b) inferInstance = 
+⨆ a, MeasurableSpace.c…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iSup_subtype'`：iSup_subtype' {p : ι -> Prop} {f : forall i, p i -> α} : 
+⨆ (i) (h), f i h = ⨆ x : Subtype p, f x x.property
 -/
-lemma natural_eq_comap (u : (i : ι) -> Ω -> β i) (hum : forall (i : ι), StronglyMeasurable (u i)) (i : ι) :
-    natural u hum i = .comap (fun ω (j : Set.Iic i) => u j ω) inferInstance := by
+lemma natural_eq_comap (u : (i : ι) → Ω → β i) (hum : ∀ (i : ι), StronglyMeasurable (u i)) (i : ι) :
+    natural u hum i = .comap (fun ω (j : Set.Iic i) ↦ u j ω) inferInstance := by
   simp_rw [natural, MeasurableSpace.comap_process_pi, iSup_subtype']
   rfl
 
@@ -1276,66 +991,82 @@ section
 open MeasurableSpace
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `filtrationOfSet_eq_natural` / 定理 `filtrationOfSet_eq_natural`
-
-English:
-theorem filtrationOfSet_eq_natural
-  statement: [forall i, MulZeroOneClass (β i)] [forall i, Nontrivial (β i)]
-  proof: by
-  simp only [filtrationOfSet, natural, measurableSpace_iSup_eq, exists_prop, mk.injEq]
-  ext1 i
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_)
-  · rintro _ ⟨j, hij, rfl⟩
-    refine measurableSet_generateFrom ⟨j, measurableSet_generateFrom ⟨hij, ?_⟩⟩
-    rw [comap_eq_generateFrom]
-    refine measurableSet_generateFrom ⟨{1}, measurableSet_singleton 1, ?_⟩
-    ext x
-    simp
-  · rintro t ⟨n, ht⟩
-    suffices MeasurableSpace.generateFrom {t | n <= i ∧
-      MeasurableSet[MeasurableSpace.comap ((s n).indicator (fun _ => 1 : Ω -> β n)) (mβ n)] t} <=
-        MeasurableSpace.generateFrom {t | exists (j : ι), j <= i ∧ s j = t} by
-      exact this _ ht
-    refine generateFrom_le ?_
-    rintro t ⟨hn, u, _, hu'⟩
-    obtain heq | heq | heq | heq := Set.indicator_const_preimage (s n) u (1 : β n)
-    on_goal 4 => rw [Set.mem_singleton_iff] at heq
-    all_goals rw [heq] at hu'; rw [← hu']
-    exacts [MeasurableSet.univ, measurableSet_generateFrom ⟨n, hn, rfl⟩,
-      MeasurableSet.compl (measurableSet_generateFrom ⟨n, hn, rfl⟩), measurableSet_empty _]
-
-中文:
-定理 filtrationOfSet_eq_natural
-  结论: [对任意 i, 乘零幺类 (β i)] [对任意 i, 非平凡 (β i)]
-  证明: by
-  simp only [filtrationOfSet, natural, measurableSpace_iSup_eq, exists_prop, mk.injEq]
-  ext1 i
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_)
-  · rintro _ ⟨j, hij, rfl⟩
-    refine measurableSet_generateFrom ⟨j, measurableSet_generateFrom ⟨hij, ?_⟩⟩
-    rw [comap_eq_generateFrom]
-    refine measurableSet_generateFrom ⟨{1}, measurableSet_singleton 1, ?_⟩
-    ext x
-    simp
-  · rintro t ⟨n, ht⟩
-    suffices MeasurableSpace.generateFrom {t | n <= i ∧
-      MeasurableSet[MeasurableSpace.comap ((s n).indicator (fun _ => 1 : Ω -> β n)) (mβ n)] t} <=
-        MeasurableSpace.generateFrom {t | exists (j : ι), j <= i ∧ s j = t} by
-      exact this _ ht
-    refine generateFrom_le ?_
-    rintro t ⟨hn, u, _, hu'⟩
-    obtain heq | heq | heq | heq := Set.indicator_const_preimage (s n) u (1 : β n)
-    on_goal 4 => rw [Set.mem_singleton_iff] at heq
-    all_goals rw [heq] at hu'; rw [← hu']
-    exacts [MeasurableSet.univ, measurableSet_generateFrom ⟨n, hn, rfl⟩,
-      MeasurableSet.compl (measurableSet_generateFrom ⟨n, hn, rfl⟩), measurableSet_empty _]
-
-Depends on / 依赖: MeasurableSet, MeasurableSpace, MeasurableSpace.comap, MeasurableSpace.generateFrom, comap_eq_generateFrom, exists_prop, filtrationOfSet, generateFrom, generateFrom_le, indicator, le_antisymm, measurableSet_generateFrom, measurableSet_singleton, measurableSpace_iSup_eq, mk.injEq, natural
+/-
+**MeasureTheory.Filtration.filtrationOfSet_eq_natural** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.Filtration`。
+形式化陈述：filtrationOfSet_eq_natural [forall i, MulZeroOneClass (β i)] [forall i, No
+ntrivial (β i)] {s : ι -> Set Ω} (hsm : forall i, MeasurableSet[m] (s i)) : filt
+rationOfSet hsm = natural (fun i => (s i).indicator (fun _ => 1 : Ω -> β i)) fun
+ i => stronglyMeasurable_one.indicator (hsm i)
+参数：β i；β i；hsm : forall i, MeasurableSet[m] (s i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.StronglyMeasurable.indicator`：∀ {α : Type u_1} {β : Type u
+_2} {f : α → β} {x : MeasurableSpace α} [inst : TopologicalSpace β] [inst_1 : Ze
+ro β],   MeasureTheory.StronglyM…
+· 使用定理 `MeasureTheory.stronglyMeasurable_one`：stronglyMeasurable_one [One β] : S
+tronglyMeasurable (1 : α -> β)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `MeasurableSpace.measurableSpace_iSup_eq`：measurableSpace_iSup_eq (m : ι 
+-> MeasurableSpace α) : ⨆ n, m n = generateFrom { s | exists n, MeasurableSet[m 
+n] s }
+· 使用定理 `MeasureTheory.Filtration.mk.congr_simp`：∀ {Ω : Type u_1} {ι : Type u_2} 
+[inst : Preorder ι] {m : MeasurableSpace Ω} (seq seq_1 : ι → MeasurableSpace Ω) 
+  (e_seq : seq = seq_1) (mon…
+· 使用定理 `MeasureTheory.Filtration.mk.injEq`：∀ {Ω : Type u_1} {ι : Type u_2} [inst
+ : Preorder ι] {m : MeasurableSpace Ω} (seq : ι → MeasurableSpace Ω)   (mono' : 
+Monotone seq) (le' : ∀ …
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
+· 使用定理 `MeasurableSpace.comap_eq_generateFrom`：comap_eq_generateFrom (m : Measur
+ableSpace β) (f : α -> β) : m.comap f = generateFrom { t | exists s, MeasurableS
+et s ∧ f ⁻¹' s = t }
+· 使用定理 `MeasurableSingletonClass.measurableSet_singleton`：∀ {α : Type u_7} {inst
+ : MeasurableSpace α} [self : MeasurableSingletonClass α] (x : α), MeasurableSet
+ {x}
+· 使用定理 `OpensMeasurableSpace.toMeasurableSingletonClass`：∀ {α : Type u_1} [inst 
+: TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α] [T1S
+pace α],   MeasurableSingletonClass α
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `T5Space.toT1Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T5
+Space X], T1Space X
+· 使用定理 `T6Space.toT5Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T6Space
+ X], T5Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Set.indicator_const_preimage`：∀ {α : Type u_1} {M : Type u_3} [inst : Ze
+ro M] (U : Set α) (s : Set M) (a : M),   (U.indicator fun x => a) ⁻¹' s ∈ {Set.u
+niv, U, Uᶜ, ∅}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem filtrationOfSet_eq_natural [forall i, MulZeroOneClass (β i)] [forall i, Nontrivial (β i)]
-    {s : ι -> Set Ω} (hsm : forall i, MeasurableSet[m] (s i)) :
-    filtrationOfSet hsm = natural (fun i => (s i).indicator (fun _ => 1 : Ω -> β i)) fun i =>
+theorem filtrationOfSet_eq_natural [∀ i, MulZeroOneClass (β i)] [∀ i, Nontrivial (β i)]
+    {s : ι → Set Ω} (hsm : ∀ i, MeasurableSet[m] (s i)) :
+    filtrationOfSet hsm = natural (fun i => (s i).indicator (fun _ => 1 : Ω → β i)) fun i =>
       stronglyMeasurable_one.indicator (hsm i) := by
   simp only [filtrationOfSet, natural, measurableSpace_iSup_eq, exists_prop, mk.injEq]
   ext1 i
@@ -1347,9 +1078,9 @@ theorem filtrationOfSet_eq_natural [forall i, MulZeroOneClass (β i)] [forall i,
     ext x
     simp
   · rintro t ⟨n, ht⟩
-    suffices MeasurableSpace.generateFrom {t | n <= i ∧
-      MeasurableSet[MeasurableSpace.comap ((s n).indicator (fun _ => 1 : Ω -> β n)) (mβ n)] t} <=
-        MeasurableSpace.generateFrom {t | exists (j : ι), j <= i ∧ s j = t} by
+    suffices MeasurableSpace.generateFrom {t | n ≤ i ∧
+      MeasurableSet[MeasurableSpace.comap ((s n).indicator (fun _ => 1 : Ω → β n)) (mβ n)] t} ≤
+        MeasurableSpace.generateFrom {t | ∃ (j : ι), j ≤ i ∧ s j = t} by
       exact this _ ht
     refine generateFrom_le ?_
     rintro t ⟨hn, u, _, hu'⟩
@@ -1363,115 +1094,148 @@ end
 
 section Limit
 
-variable {E : Type*} [Zero E] [TopologicalSpace E] {ℱ : Filtration ι m} {f : ι -> Ω -> E}
+variable {E : Type*} [Zero E] [TopologicalSpace E] {ℱ : Filtration ι m} {f : ι → Ω → E}
   {μ : Measure Ω}
 
 open scoped Classical in
-/--
-Definition of `limitProcess` / `limitProcess` 的定义
+/-- Given a process `f` and a filtration `ℱ`, if `f` converges to some `g` almost everywhere and
+`g` is `⨆ n, ℱ n`-measurable, then `limitProcess f ℱ μ` chooses said `g`, else it returns 0.
 
-English:
-definition limitProcess
-  signature: (f : ι -> Ω -> E) (ℱ : Filtration ι m)
-  body: if h : exists g : Ω -> E,
-    StronglyMeasurable[⨆ n, ℱ n] g ∧ forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) then
-  Classical.choose h else 0
+This definition is used to phrase the a.e. martingale convergence theorem
+`Submartingale.ae_tendsto_limitProcess` where an L¹-bounded submartingale `f` adapted to `ℱ`
+converges to `limitProcess f ℱ μ` `μ`-almost everywhere. -/
+/-
+**MeasureTheory.Filtration.limitProcess** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory
+.Filtration`。
+形式化陈述：limitProcess (f : ι -> Ω -> E) (ℱ : Filtration ι m) (μ : Measure Ω)
+参数：f : ι -> Ω -> E；ℱ : Filtration ι m；μ : Measure Ω。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
 
-中文:
-定义 limitProcess
-  签名: (f : ι -> Ω -> E) (ℱ : 滤子 ι m)
-  定义体: if h : exists g : Ω -> E,
-    StronglyMeasurable[⨆ n, ℱ n] g ∧ forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) then
-  Classical.choose h else 0
+--- 原说明 ---
+Given a process `f` and a filtration `ℱ`, if `f` converges to some `g` almost ev
+erywhere and
+`g` is `⨆ n, ℱ n`-measurable, then `limitProcess f ℱ μ` chooses said `g`, else i
+t returns 0.
 
-Depends on / 依赖: Classical, Classical.choose, StronglyMeasurable, Tendsto
+This definition is used to phrase the a.e. martingale convergence theorem
+`Submartingale.ae_tendsto_limitProcess` where an L¹-bounded submartingale `f` ad
+apted to `ℱ`
+converges to `limitProcess f ℱ μ` `μ`-almost everywhere.
 -/
-noncomputable def limitProcess (f : ι -> Ω -> E) (ℱ : Filtration ι m)
+noncomputable def limitProcess (f : ι → Ω → E) (ℱ : Filtration ι m)
     (μ : Measure Ω) :=
-  if h : exists g : Ω -> E,
-    StronglyMeasurable[⨆ n, ℱ n] g ∧ forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) then
+  if h : ∃ g : Ω → E,
+    StronglyMeasurable[⨆ n, ℱ n] g ∧ ∀ᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) then
   Classical.choose h else 0
-
-/--
-theorem `stronglyMeasurable_limitProcess` / 定理 `stronglyMeasurable_limitProcess`
-
-English:
-theorem stronglyMeasurable_limitProcess
-  statement: StronglyMeasurable[⨆ n, ℱ n] (limitProcess f ℱ μ)
-  proof: by
-  rw [limitProcess]
-  split_ifs with h
-  exacts [(Classical.choose_spec h).1, stronglyMeasurable_zero]
-
-中文:
-定理 stronglyMeasurable_limitProcess
-  结论: StronglyMeasurable[⨆ n, ℱ n] (limitProcess f ℱ μ)
-  证明: by
-  rw [limitProcess]
-  split_ifs with h
-  exacts [(Classical.choose_spec h).1, stronglyMeasurable_zero]
-
-Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exacts, limitProcess, split_ifs, stronglyMeasurable_zero
+/-
+**MeasureTheory.Filtration.stronglyMeasurable_limitProcess** 是 Mathlib 中的一个定理，位于
+命名空间 `MeasureTheory.Filtration`。
+形式化陈述：stronglyMeasurable_limitProcess : StronglyMeasurable[⨆ n, ℱ n] (limitProce
+ss f ℱ μ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Filtration.limitProcess.eq_1`：∀ {Ω : Type u_1} {ι : Type u
+_2} {m : MeasurableSpace Ω} [inst : Preorder ι] {E : Type u_4} [inst_1 : Zero E]
+   [inst_2 : TopologicalSpace E]…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `MeasureTheory.stronglyMeasurable_zero`：∀ {α : Type u_1} {β : Type u_2} {
+x : MeasurableSpace α} [inst : TopologicalSpace β] [inst_1 : Zero β],   MeasureT
+heory.StronglyMeasurable 0
 -/
 theorem stronglyMeasurable_limitProcess : StronglyMeasurable[⨆ n, ℱ n] (limitProcess f ℱ μ) := by
   rw [limitProcess]
   split_ifs with h
   exacts [(Classical.choose_spec h).1, stronglyMeasurable_zero]
-
-/--
-theorem `stronglyMeasurable_limit_process'` / 定理 `stronglyMeasurable_limit_process'`
-
-English:
-theorem stronglyMeasurable_limit_process'
-  statement: StronglyMeasurable[m] (limitProcess f ℱ μ)
-  proof: stronglyMeasurable_limitProcess.mono (sSup_le fun _ ⟨_, hn⟩ => hn ▸ ℱ.le _)
-
-中文:
-定理 stronglyMeasurable_limit_process'
-  结论: StronglyMeasurable[m] (limitProcess f ℱ μ)
-  证明: stronglyMeasurable_limitProcess.mono (sSup_le fun _ ⟨_, hn⟩ => hn ▸ ℱ.le _)
-
-Depends on / 依赖: sSup_le, stronglyMeasurable_limitProcess, stronglyMeasurable_limitProcess.mono
+/-
+**MeasureTheory.Filtration.stronglyMeasurable_limit_process'** 是 Mathlib 中的一个定理，
+位于命名空间 `MeasureTheory.Filtration`。
+形式化陈述：stronglyMeasurable_limit_process' : StronglyMeasurable[m] (limitProcess f 
+ℱ μ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.StronglyMeasurable.mono`：∀ {α : Type u_1} {β : Type u_2} {
+f : α → β} {m m' : MeasurableSpace α} [inst : TopologicalSpace β],   MeasureTheo
+ry.StronglyMeasurable f → m…
+· 使用定理 `MeasureTheory.Filtration.stronglyMeasurable_limitProcess`：stronglyMeasur
+able_limitProcess : StronglyMeasurable[⨆ n, ℱ n] (limitProcess f ℱ μ)
+· 使用定理 `sSup_le`：sSup_le (h : forall b in s, b <= a) : sSup s <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
 -/
 theorem stronglyMeasurable_limit_process' : StronglyMeasurable[m] (limitProcess f ℱ μ) :=
   stronglyMeasurable_limitProcess.mono (sSup_le fun _ ⟨_, hn⟩ => hn ▸ ℱ.le _)
-
-/--
-theorem `memLp_limitProcess_of_eLpNorm_bdd` / 定理 `memLp_limitProcess_of_eLpNorm_bdd`
-
-English:
-theorem memLp_limitProcess_of_eLpNorm_bdd
-  statement: {R : Real>=0} {p : Real>=0∞} {F : Type*} [NormedAddCommGroup F]
-  proof: by
-  rw [limitProcess]
-  split_ifs with h
-  · refine ⟨StronglyMeasurable.aestronglyMeasurable
-      ((Classical.choose_spec h).1.mono (sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _)),
-      lt_of_le_of_lt (Lp.eLpNorm_lim_le_liminf_eLpNorm hfm _ (Classical.choose_spec h).2)
-        (lt_of_le_of_lt ?_ (ENNReal.coe_lt_top : ↑R < ∞))⟩
-    simp_rw [liminf_eq, eventually_atTop]
-    exact sSup_le fun b ⟨a, ha⟩ => (ha a le_rfl).trans (hbdd _)
-  · exact MemLp.zero
-
-中文:
-定理 memLp_limitProcess_of_eLpNorm_bdd
-  结论: {R : 实数>=0} {p : 实数>=0∞} {F : 类型} [赋范交换加群 F]
-  证明: by
-  rw [limitProcess]
-  split_ifs with h
-  · refine ⟨StronglyMeasurable.aestronglyMeasurable
-      ((Classical.choose_spec h).1.mono (sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _)),
-      lt_of_le_of_lt (Lp.eLpNorm_lim_le_liminf_eLpNorm hfm _ (Classical.choose_spec h).2)
-        (lt_of_le_of_lt ?_ (ENNReal.coe_lt_top : ↑R < ∞))⟩
-    simp_rw [liminf_eq, eventually_atTop]
-    exact sSup_le fun b ⟨a, ha⟩ => (ha a le_rfl).trans (hbdd _)
-  · exact MemLp.zero
-
-Depends on / 依赖: Classical, Classical.choose_spec, ENNReal, ENNReal.coe_lt_top, Lp.eLpNorm_lim_le_liminf_eLpNorm, MemLp.zero, StronglyMeasurable, StronglyMeasurable.aestronglyMeasurable, aestronglyMeasurable, choose_spec, coe_lt_top, eLpNorm_lim_le_liminf_eLpNorm, eventually_atTop, le_rfl, liminf_eq, limitProcess, lt_of_le_of_lt, sSup_le, simp_rw, split_ifs
+/-
+**MeasureTheory.Filtration.memLp_limitProcess_of_eLpNorm_bdd** 是 Mathlib 中的一个定理，
+位于命名空间 `MeasureTheory.Filtration`。
+形式化陈述：memLp_limitProcess_of_eLpNorm_bdd {R : Real>=0} {p : Real>=0∞} {F : Type*}
+ [NormedAddCommGroup F] {ℱ : Filtration Nat m} {f : Nat -> Ω -> F} (hfm : forall
+ n, AEStronglyMeasurable (f n) μ) (hbdd : forall n, eLpNorm (f n) p μ <= R) : Me
+mLp (limitProcess f ℱ μ) p μ
+参数：hfm : forall n, AEStronglyMeasurable (f n) μ；hbdd : forall n, eLpNorm (f n) p
+ μ <= R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Filtration.limitProcess.eq_1`：∀ {Ω : Type u_1} {ι : Type u
+_2} {m : MeasurableSpace Ω} [inst : Preorder ι] {E : Type u_4} [inst_1 : Zero E]
+   [inst_2 : TopologicalSpace E]…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.StronglyMeasurable.mono`：∀ {α : Type u_1} {β : Type u_2} {
+f : α → β} {m m' : MeasurableSpace α} [inst : TopologicalSpace β],   MeasureTheo
+ry.StronglyMeasurable f → m…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `sSup_le`：sSup_le (h : forall b in s, b <= a) : sSup s <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `MeasureTheory.Lp.eLpNorm_lim_le_liminf_eLpNorm`：eLpNorm_lim_le_liminf_eL
+pNorm {f : Nat -> α -> E} (hf : forall n, AEStronglyMeasurable (f n) μ) (f_lim :
+ α -> E) (h_lim : forallᵐ x : α ∂μ, …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `ENNReal.coe_lt_top`：∀ {r : NNReal}, ↑r < ⊤
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `MeasureTheory.MemLp.zero`：∀ {α : Type u_1} {m0 : MeasurableSpace α} {p :
+ ENNReal} {μ : MeasureTheory.Measure α} {ε : Type u_7}   [inst : TopologicalSpac
+e ε] [inst_1 :…
 -/
-theorem memLp_limitProcess_of_eLpNorm_bdd {R : Real>=0} {p : Real>=0∞} {F : Type*} [NormedAddCommGroup F]
-    {ℱ : Filtration Nat m} {f : Nat -> Ω -> F} (hfm : forall n, AEStronglyMeasurable (f n) μ)
-    (hbdd : forall n, eLpNorm (f n) p μ <= R) : MemLp (limitProcess f ℱ μ) p μ := by
+theorem memLp_limitProcess_of_eLpNorm_bdd {R : ℝ≥0} {p : ℝ≥0∞} {F : Type*} [NormedAddCommGroup F]
+    {ℱ : Filtration ℕ m} {f : ℕ → Ω → F} (hfm : ∀ n, AEStronglyMeasurable (f n) μ)
+    (hbdd : ∀ n, eLpNorm (f n) p μ ≤ R) : MemLp (limitProcess f ℱ μ) p μ := by
   rw [limitProcess]
   split_ifs with h
   · refine ⟨StronglyMeasurable.aestronglyMeasurable
@@ -1490,77 +1254,67 @@ section piLE
 
 open MeasurableSpace Preorder
 
-variable {X : ι -> Type*} [forall i, MeasurableSpace (X i)]
+variable {X : ι → Type*} [∀ i, MeasurableSpace (X i)]
 
-/--
-Definition of `piLE` / `piLE` 的定义
+/-- The canonical filtration on the product space `Π i, X i`, where `piLE i`
+consists of measurable sets depending only on coordinates `≤ i`. -/
+/-
+**MeasureTheory.Filtration.piLE** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Filtrat
+ion`。
+形式化陈述：piLE : @Filtration (Π i, X i) ι _ pi where seq i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piLE
-  signature: : @Filtration (Π i, X i) ι _ pi where
-  body: pi.comap (restrictLe i)
-  mono' i j hij := by
-    simp only
-    rw [← restrictLe₂_comp_restrictLe hij]; rw [← comap_comp]
-    exact comap_mono (measurable_restrictLe₂ _).comap_le
-  le' i := (measurable_restrictLe i).comap_le
-
-中文:
-定义 piLE
-  签名: : @滤子 (Π i, X i) ι _ pi where
-  定义体: pi.comap (restrictLe i)
-  mono' i j hij := by
-    simp only
-    rw [← restrictLe₂_comp_restrictLe hij]; rw [← comap_comp]
-    exact comap_mono (measurable_restrictLe₂ _).comap_le
-  le' i := (measurable_restrictLe i).comap_le
-
-Depends on / 依赖: pi.comap, restrictLe
+--- 原说明 ---
+The canonical filtration on the product space `Π i, X i`, where `piLE i`
+consists of measurable sets depending only on coordinates `≤ i`.
 -/
 def piLE : @Filtration (Π i, X i) ι _ pi where
   seq i := pi.comap (restrictLe i)
   mono' i j hij := by
     simp only
-    rw [← restrictLe₂_comp_restrictLe hij]; rw [← comap_comp]
+    rw [← restrictLe₂_comp_restrictLe hij, ← comap_comp]
     exact comap_mono (measurable_restrictLe₂ _).comap_le
   le' i := (measurable_restrictLe i).comap_le
 
 variable [LocallyFiniteOrderBot ι]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `piLE_eq_comap_frestrictLe` / 引理 `piLE_eq_comap_frestrictLe`
-
-English:
-lemma piLE_eq_comap_frestrictLe
-  given: (i : ι)
-  statement: piLE (X := X) i = pi.comap (frestrictLe i)
-  proof: by
-  apply le_antisymm
-  · simp_rw [piLE, ← piCongrLeft_comp_frestrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
-  · rw [← piCongrLeft_comp_restrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
-
-中文:
-引理 piLE_eq_comap_frestrictLe
-  条件: (i : ι)
-  结论: piLE (X := X) i = pi.comap (frestrictLe i)
-  证明: by
-  apply le_antisymm
-  · simp_rw [piLE, ← piCongrLeft_comp_frestrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
-  · rw [← piCongrLeft_comp_restrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
-
-Depends on / 依赖: Measurable, Measurable.comap_le, MeasurableEquiv, MeasurableEquiv.coe_piCongrLeft, MeasurableSpace, MeasurableSpace.comap_mono, coe_piCongrLeft, comap_comp, comap_le, comap_mono, frestrictLe, fun_prop, le_antisymm, pi.comap, piCongrLeft_comp_frestrictLe, piCongrLeft_comp_restrictLe, simp_rw
+/-
+**MeasureTheory.Filtration.piLE_eq_comap_frestrictLe** 是 Mathlib 中的一个引理，位于命名空间 `
+MeasureTheory.Filtration`。
+形式化陈述：piLE_eq_comap_frestrictLe (i : ι) : piLE (X
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableSpace.comap_mono`：comap_mono (h : m₁ <= m₂) : m₁.comap g <= m₂
+.comap g
+· 使用定理 `Measurable.comap_le`：∀ {α : Type u_1} {β : Type u_2} {m₁ : MeasurableSpa
+ce α} {m₂ : MeasurableSpace β} {f : α → β},   Measurable f → MeasurableSpace.com
+ap f m₂ ≤…
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Preorder.piCongrLeft_comp_restrictLe`：piCongrLeft_comp_restrictLe {a : α
+} : ((Equiv.IicFinsetSet a).symm.piCongrLeft (fun i : Iic a => π i)) ∘ (restrict
+Le a) = frestrictLe a
+· 使用定理 `MeasurableEquiv.coe_piCongrLeft`：coe_piCongrLeft (f : δ ≃ δ') : ⇑(Measur
+ableEquiv.piCongrLeft π f) = f.piCongrLeft π
+· 使用定理 `MeasurableSpace.comap_comp`：comap_comp {f : β -> α} {g : γ -> β} : (m.co
+map f).comap g = m.comap (f ∘ g)
 -/
 lemma piLE_eq_comap_frestrictLe (i : ι) : piLE (X := X) i = pi.comap (frestrictLe i) := by
   apply le_antisymm
   · simp_rw [piLE, ← piCongrLeft_comp_frestrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
+    exact MeasurableSpace.comap_mono <| Measurable.comap_le (by fun_prop)
   · rw [← piCongrLeft_comp_restrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
+    exact MeasurableSpace.comap_mono <| Measurable.comap_le (by fun_prop)
 
 end piLE
 
@@ -1568,55 +1322,38 @@ section piFinset
 
 open MeasurableSpace Finset
 
-variable {ι : Type*} {X : ι -> Type*} [forall i, MeasurableSpace (X i)]
+variable {ι : Type*} {X : ι → Type*} [∀ i, MeasurableSpace (X i)]
 
-/--
-Definition of `piFinset` / `piFinset` 的定义
+/-- The filtration of events which only depends on finitely many coordinates
+on the product space `Π i, X i`, `piFinset s` consists of measurable sets depending only on
+coordinates in `s`, where `s : Finset ι`. -/
+/-
+**MeasureTheory.Filtration.piFinset** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Fil
+tration`。
+形式化陈述：piFinset : @Filtration (Π i, X i) (Finset ι) _ pi where seq s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piFinset
-  signature: : @Filtration (Π i, X i) (Finset ι) _ pi where
-  body: pi.comap s.restrict
-  mono' s t hst := by
-    simp only
-    rw [← restrict₂_comp_restrict hst]; rw [← comap_comp]
-    exact comap_mono (measurable_restrict₂ hst).comap_le
-  le' s := s.measurable_restrict.comap_le
-
-中文:
-定义 piFinset
-  签名: : @滤子 (Π i, X i) (有限集 ι) _ pi where
-  定义体: pi.comap s.restrict
-  mono' s t hst := by
-    simp only
-    rw [← restrict₂_comp_restrict hst]; rw [← comap_comp]
-    exact comap_mono (measurable_restrict₂ hst).comap_le
-  le' s := s.measurable_restrict.comap_le
-
-Depends on / 依赖: pi.comap, restrict, s.restrict
+--- 原说明 ---
+The filtration of events which only depends on finitely many coordinates
+on the product space `Π i, X i`, `piFinset s` consists of measurable sets depend
+ing only on
+coordinates in `s`, where `s : Finset ι`.
 -/
 def piFinset : @Filtration (Π i, X i) (Finset ι) _ pi where
   seq s := pi.comap s.restrict
   mono' s t hst := by
     simp only
-    rw [← restrict₂_comp_restrict hst]; rw [← comap_comp]
+    rw [← restrict₂_comp_restrict hst, ← comap_comp]
     exact comap_mono (measurable_restrict₂ hst).comap_le
   le' s := s.measurable_restrict.comap_le
-
-/--
-lemma `piFinset_eq_comap_restrict` / 引理 `piFinset_eq_comap_restrict`
-
-English:
-lemma piFinset_eq_comap_restrict
-  given: (s : Finset ι)
-  proof: rfl
-
-中文:
-引理 piFinset_eq_comap_restrict
-  条件: (s : 有限集 ι)
-  证明: rfl
-
-Depends on / 依赖: domRestrict, pi.comap
+/-
+**MeasureTheory.Filtration.piFinset_eq_comap_restrict** 是 Mathlib 中的一个引理，位于命名空间 
+`MeasureTheory.Filtration`。
+形式化陈述：piFinset_eq_comap_restrict (s : Finset ι) : piFinset (X
+参数：s : Finset ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma piFinset_eq_comap_restrict (s : Finset ι) :
     piFinset (X := X) s = pi.comap (s : Set ι).domRestrict := rfl
@@ -1625,28 +1362,24 @@ end piFinset
 
 variable {α : Type*}
 
-/--
-Definition of `cylinderEventsCompl` / `cylinderEventsCompl` 的定义
+/-- The exterior σ-algebras of finite sets of `α` form a cofiltration indexed by `Finset α`. -/
+/-
+**MeasureTheory.Filtration.cylinderEventsCompl** 是 Mathlib 中的一个定义，位于命名空间 `Measur
+eTheory.Filtration`。
+形式化陈述：cylinderEventsCompl : Filtration (Finset α)ᵒᵈ (.pi (X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cylinderEventsCompl
-  signature: : Filtration (Finset α)ᵒᵈ (.pi (X := fun _ : α => Ω)) where
-  body: cylinderEvents (↑(OrderDual.ofDual Λ))ᶜ
-mono' _ _ h := cylinderEvents_mono Set.compl_subset_compl_of_subset h
-  le' _ := cylinderEvents_le_pi
-
-中文:
-定义 cylinderEventsCompl
-  签名: : 滤子 (有限集 α)ᵒᵈ (.pi (X := fun _ : α => Ω)) where
-  定义体: cylinderEvents (↑(OrderDual.ofDual Λ))ᶜ
-mono' _ _ h := cylinderEvents_mono Set.compl_subset_compl_of_subset h
-  le' _ := cylinderEvents_le_pi
+--- 原说明 ---
+The exterior σ-algebras of finite sets of `α` form a cofiltration indexed by `Fi
+nset α`.
 -/
-def cylinderEventsCompl : Filtration (Finset α)ᵒᵈ (.pi (X := fun _ : α => Ω)) where
+def cylinderEventsCompl : Filtration (Finset α)ᵒᵈ (.pi (X := fun _ : α ↦ Ω)) where
   seq Λ := cylinderEvents (↑(OrderDual.ofDual Λ))ᶜ
-mono' _ _ h := cylinderEvents_mono Set.compl_subset_compl_of_subset h
+  mono' _ _ h := cylinderEvents_mono <| Set.compl_subset_compl_of_subset h
   le' _ := cylinderEvents_le_pi
 
 end Filtration
 
 end MeasureTheory
+

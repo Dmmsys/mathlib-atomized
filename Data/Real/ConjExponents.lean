@@ -46,89 +46,73 @@ namespace Real
 /-- Real numbers `p q r : ℝ` are said to be a **Hölder triple** if `p` and `q` are positive
 and `p⁻¹ + q⁻¹ = r⁻¹`. -/
 @[mk_iff]
-/--
-Definition of `HolderTriple` / `HolderTriple` 的定义
+/-
+**Real.HolderTriple** 是 Mathlib 中的一个归纳类型，位于命名空间 `Real`。
+形式化陈述：ℝ → ℝ → ℝ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HolderTriple
-  parameters: (p q r : Real)
-  axioms and operations (3):
-    - inv_add_inv_eq_inv : p⁻¹ + q⁻¹ = r⁻¹
-    - left_pos : 0 < p
-    - right_pos : 0 < q
-
-中文:
-结构 HolderTriple
-  参数: (p q r : 实数)
-  公理与运算 (3 个):
-    - inv_add_inv_eq_inv : p⁻¹ + q⁻¹ = r⁻¹
-    - left_pos : 0 < p
-    - right_pos : 0 < q
+--- 原说明 ---
+Real numbers `p q r : ℝ` are said to be a **Hölder triple** if `p` and `q` are p
+ositive
+and `p⁻¹ + q⁻¹ = r⁻¹`.
 -/
-structure HolderTriple (p q r : Real) : Prop where
+structure HolderTriple (p q r : ℝ) : Prop where
   inv_add_inv_eq_inv : p⁻¹ + q⁻¹ = r⁻¹
   left_pos : 0 < p
   right_pos : 0 < q
 
-/--
-Definition of `HolderConjugate` / `HolderConjugate` 的定义
+/-- Real numbers `p q : ℝ` are **Hölder conjugate** if they are positive and satisfy the
+equality `p⁻¹ + q⁻¹ = 1`. This is an abbreviation for `Real.HolderTriple p q 1`. This condition
+shows up in many theorems in analysis, notably related to `L^p` norms.
 
-English:
-abbreviation HolderConjugate
-  signature: (p q : Real)
-  body: HolderTriple p q 1
+It is equivalent that `1 < p` and `p⁻¹ + q⁻¹ = 1`. See `Real.holderConjugate_iff`. -/
+/-
+**Real.HolderConjugate** 是 Mathlib 中的一个缩写定义，位于命名空间 `Real`。
+形式化陈述：HolderConjugate (p q : Real)
+参数：p q : Real。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 HolderConjugate
-  签名: (p q : 实数)
-  定义体: HolderTriple p q 1
+--- 原说明 ---
+Real numbers `p q : ℝ` are **Hölder conjugate** if they are positive and satisfy
+ the
+equality `p⁻¹ + q⁻¹ = 1`. This is an abbreviation for `Real.HolderTriple p q 1`.
+ This condition
+shows up in many theorems in analysis, notably related to `L^p` norms.
 
-Depends on / 依赖: HolderTriple
+It is equivalent that `1 < p` and `p⁻¹ + q⁻¹ = 1`. See `Real.holderConjugate_iff
+`.
 -/
-abbrev HolderConjugate (p q : Real) := HolderTriple p q 1
+abbrev HolderConjugate (p q : ℝ) := HolderTriple p q 1
 
-/--
-Definition of `conjExponent` / `conjExponent` 的定义
+/-- The conjugate exponent of `p` is `q = p / (p-1)`, so that `p⁻¹ + q⁻¹ = 1`. -/
+/-
+**Real.conjExponent** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：conjExponent (p : Real) : Real
+参数：p : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conjExponent
-  signature: (p : Real)
-  body: p / (p - 1)
-
-中文:
-定义 conjExponent
-  签名: (p : 实数)
-  定义体: p / (p - 1)
+--- 原说明 ---
+The conjugate exponent of `p` is `q = p / (p-1)`, so that `p⁻¹ + q⁻¹ = 1`.
 -/
-def conjExponent (p : Real) : Real := p / (p - 1)
+def conjExponent (p : ℝ) : ℝ := p / (p - 1)
 
-variable {a b p q r : Real}
+variable {a b p q r : ℝ}
 
 namespace HolderTriple
 
-/--
-lemma `of_pos` / 引理 `of_pos`
-
-English:
-lemma of_pos
-  given: (hp : 0 < p) (hq : 0 < q)
-  statement: HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where
-  proof: inv_inv _
-  left_pos := hp
-  right_pos := hq
-
-中文:
-引理 of_pos
-  条件: (hp : 0 < p) (hq : 0 < q)
-  结论: HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where
-  证明: inv_inv _
-  left_pos := hp
-  right_pos := hq
-
-Depends on / 依赖: inv_inv
+/-
+**Real.HolderTriple.of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：of_pos (hp : 0 < p) (hq : 0 < q) : HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where .s
+ymm inv_add_inv_eq_inv
+参数：hp : 0 < p；hq : 0 < q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 lemma of_pos (hp : 0 < p) (hq : 0 < q) : HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where
-.symm inv_add_inv_eq_inv := inv_inv _
+  inv_add_inv_eq_inv := inv_inv _ |>.symm
   left_pos := hp
   right_pos := hq
 
@@ -136,466 +120,452 @@ variable (h : p.HolderTriple q r)
 include h
 
 @[symm]
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  statement: q.HolderTriple p r where
-  proof: add_comm p⁻¹ q⁻¹ ▸ h.inv_add_inv_eq_inv
-  left_pos := h.right_pos
-  right_pos := h.left_pos
-
-中文:
-引理 symm
-  结论: q.HolderTriple p r where
-  证明: add_comm p⁻¹ q⁻¹ ▸ h.inv_add_inv_eq_inv
-  left_pos := h.right_pos
-  right_pos := h.left_pos
+/-
+**Real.HolderTriple.symm** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → q.HolderTriple p r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Real.HolderTriple.right_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < q
+· 使用定理 `Real.HolderTriple.left_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p
 -/
 protected lemma symm : q.HolderTriple p r where
   inv_add_inv_eq_inv := add_comm p⁻¹ q⁻¹ ▸ h.inv_add_inv_eq_inv
   left_pos := h.right_pos
   right_pos := h.left_pos
-
-/--
-theorem `pos` / 定理 `pos`
-
-English:
-theorem pos
-  statement: 0 < p
-  proof: h.left_pos
-
-中文:
-定理 pos
-  结论: 0 < p
-  证明: h.left_pos
-
-Depends on / 依赖: h.left_pos, left_pos
+/-
+**Real.HolderTriple.pos** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：pos : 0 < p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderTriple.left_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p
 -/
 theorem pos : 0 < p := h.left_pos
-/--
-theorem `nonneg` / 定理 `nonneg`
-
-English:
-theorem nonneg
-  statement: 0 <= p
-  proof: h.pos.le
-
-中文:
-定理 nonneg
-  结论: 0 <= p
-  证明: h.pos.le
-
-Depends on / 依赖: h.pos.le
+/-
+**Real.HolderTriple.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：nonneg : 0 <= p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.HolderTriple.pos`：pos : 0 < p
 -/
-theorem nonneg : 0 <= p := h.pos.le
-/--
-theorem `ne_zero` / 定理 `ne_zero`
-
-English:
-theorem ne_zero
-  statement: p != 0
-  proof: h.pos.ne'
-
-中文:
-定理 ne_zero
-  结论: p != 0
-  证明: h.pos.ne'
-
-Depends on / 依赖: h.pos.ne
+theorem nonneg : 0 ≤ p := h.pos.le
+/-
+**Real.HolderTriple.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：ne_zero : p != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.HolderTriple.pos`：pos : 0 < p
 -/
-theorem ne_zero : p != 0 := h.pos.ne'
-/--
-lemma `inv_pos` / 引理 `inv_pos`
-
-English:
-lemma inv_pos
-  statement: 0 < p⁻¹
-  proof: inv_pos.2 h.pos
-
-中文:
-引理 inv_pos
-  结论: 0 < p⁻¹
-  证明: inv_pos.2 h.pos
+theorem ne_zero : p ≠ 0 := h.pos.ne'
+/-
+**Real.HolderTriple.inv_pos** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Real.HolderTriple.pos`：pos : 0 < p
 -/
 protected lemma inv_pos : 0 < p⁻¹ := inv_pos.2 h.pos
-/--
-lemma `inv_nonneg` / 引理 `inv_nonneg`
-
-English:
-lemma inv_nonneg
-  statement: 0 <= p⁻¹
-  proof: h.inv_pos.le
-
-中文:
-引理 inv_nonneg
-  结论: 0 <= p⁻¹
-  证明: h.inv_pos.le
+/-
+**Real.HolderTriple.inv_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → 0 ≤ p⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.HolderTriple.inv_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p⁻¹
 -/
-protected lemma inv_nonneg : 0 <= p⁻¹ := h.inv_pos.le
-/--
-lemma `inv_ne_zero` / 引理 `inv_ne_zero`
-
-English:
-lemma inv_ne_zero
-  statement: p⁻¹ != 0
-  proof: h.inv_pos.ne'
-
-中文:
-引理 inv_ne_zero
-  结论: p⁻¹ != 0
-  证明: h.inv_pos.ne'
+protected lemma inv_nonneg : 0 ≤ p⁻¹ := h.inv_pos.le
+/-
+**Real.HolderTriple.inv_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → p⁻¹ ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.HolderTriple.inv_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p⁻¹
 -/
-protected lemma inv_ne_zero : p⁻¹ != 0 := h.inv_pos.ne'
-/--
-theorem `one_div_pos` / 定理 `one_div_pos`
-
-English:
-theorem one_div_pos
-  statement: 0 < 1 / p
-  proof: _root_.one_div_pos.2 h.pos
-
-中文:
-定理 one_div_pos
-  结论: 0 < 1 / p
-  证明: _root_.one_div_pos.2 h.pos
-
-Depends on / 依赖: _root_, _root_.one_div_pos, h.pos, one_div_pos
+protected lemma inv_ne_zero : p⁻¹ ≠ 0 := h.inv_pos.ne'
+/-
+**Real.HolderTriple.one_div_pos** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：one_div_pos : 0 < 1 / p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `one_div_pos`：one_div_pos : 0 < 1 / a ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Real.HolderTriple.pos`：pos : 0 < p
 -/
 theorem one_div_pos : 0 < 1 / p := _root_.one_div_pos.2 h.pos
-/--
-theorem `one_div_nonneg` / 定理 `one_div_nonneg`
-
-English:
-theorem one_div_nonneg
-  statement: 0 <= 1 / p
-  proof: le_of_lt h.one_div_pos
-
-中文:
-定理 one_div_nonneg
-  结论: 0 <= 1 / p
-  证明: le_of_lt h.one_div_pos
-
-Depends on / 依赖: h.one_div_pos, le_of_lt, one_div_pos
+/-
+**Real.HolderTriple.one_div_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`
+。
+形式化陈述：one_div_nonneg : 0 <= 1 / p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.HolderTriple.one_div_pos`：one_div_pos : 0 < 1 / p
 -/
-theorem one_div_nonneg : 0 <= 1 / p := le_of_lt h.one_div_pos
-/--
-theorem `one_div_ne_zero` / 定理 `one_div_ne_zero`
-
-English:
-theorem one_div_ne_zero
-  statement: 1 / p != 0
-  proof: ne_of_gt h.one_div_pos
-
-中文:
-定理 one_div_ne_zero
-  结论: 1 / p != 0
-  证明: ne_of_gt h.one_div_pos
-
-Depends on / 依赖: h.one_div_pos, ne_of_gt, one_div_pos
+theorem one_div_nonneg : 0 ≤ 1 / p := le_of_lt h.one_div_pos
+/-
+**Real.HolderTriple.one_div_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple
+`。
+形式化陈述：one_div_ne_zero : 1 / p != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.HolderTriple.one_div_pos`：one_div_pos : 0 < 1 / p
 -/
-theorem one_div_ne_zero : 1 / p != 0 := ne_of_gt h.one_div_pos
+theorem one_div_ne_zero : 1 / p ≠ 0 := ne_of_gt h.one_div_pos
 
-/--
-theorem `pos'` / 定理 `pos'`
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.pos'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：pos' : 0 < r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `add_pos`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder α] 
+[AddLeftStrictMono α] {a b : α},   0 < a → 0 < b → 0 < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.HolderTriple.inv_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p⁻¹
+· 使用定理 `Real.HolderTriple.symm`：∀ {p q r : ℝ}, p.HolderTriple q r → q.HolderTrip
+le p r
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
 
-English:
-theorem pos'
-  statement: 0 < r
-  proof: inv_pos.mp h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
-
-中文:
-定理 pos'
-  结论: 0 < r
-  证明: inv_pos.mp h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
-
-Depends on / 依赖: add_pos, h.inv_add_inv_eq_inv, h.inv_pos, h.symm.inv_pos, inv_add_inv_eq_inv, inv_pos, inv_pos.mp
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem pos' : 0 < r := inv_pos.mp h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
-/--
-theorem `nonneg'` / 定理 `nonneg'`
+theorem pos' : 0 < r := inv_pos.mp <| h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：nonneg' : 0 <= r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem nonneg'
-  statement: 0 <= r
-  proof: h.pos'.le
-
-中文:
-定理 nonneg'
-  结论: 0 <= r
-  证明: h.pos'.le
-
-Depends on / 依赖: h.pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem nonneg' : 0 <= r := h.pos'.le
-/--
-theorem `ne_zero'` / 定理 `ne_zero'`
+theorem nonneg' : 0 ≤ r := h.pos'.le
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：ne_zero' : r != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem ne_zero'
-  statement: r != 0
-  proof: h.pos'.ne'
-
-中文:
-定理 ne_zero'
-  结论: r != 0
-  证明: h.pos'.ne'
-
-Depends on / 依赖: h.pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem ne_zero' : r != 0 := h.pos'.ne'
-/--
-lemma `inv_pos'` / 引理 `inv_pos'`
+theorem ne_zero' : r ≠ 0 := h.pos'.ne'
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.inv_pos'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < r⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Real.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-lemma inv_pos'
-  statement: 0 < r⁻¹
-  proof: inv_pos.2 h.pos'
-
-中文:
-引理 inv_pos'
-  结论: 0 < r⁻¹
-  证明: inv_pos.2 h.pos'
+--- 原说明 ---
+For `r`, instead of `p`
 -/
 protected lemma inv_pos' : 0 < r⁻¹ := inv_pos.2 h.pos'
-/--
-lemma `inv_nonneg'` / 引理 `inv_nonneg'`
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.inv_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → 0 ≤ r⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.HolderTriple.inv_pos'`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < r⁻¹
 
-English:
-lemma inv_nonneg'
-  statement: 0 <= r⁻¹
-  proof: h.inv_pos'.le
-
-中文:
-引理 inv_nonneg'
-  结论: 0 <= r⁻¹
-  证明: h.inv_pos'.le
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-protected lemma inv_nonneg' : 0 <= r⁻¹ := h.inv_pos'.le
-/--
-lemma `inv_ne_zero'` / 引理 `inv_ne_zero'`
+protected lemma inv_nonneg' : 0 ≤ r⁻¹ := h.inv_pos'.le
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.inv_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → r⁻¹ ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.HolderTriple.inv_pos'`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < r⁻¹
 
-English:
-lemma inv_ne_zero'
-  statement: r⁻¹ != 0
-  proof: h.inv_pos'.ne'
-
-中文:
-引理 inv_ne_zero'
-  结论: r⁻¹ != 0
-  证明: h.inv_pos'.ne'
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-protected lemma inv_ne_zero' : r⁻¹ != 0 := h.inv_pos'.ne'
-/--
-theorem `one_div_pos'` / 定理 `one_div_pos'`
+protected lemma inv_ne_zero' : r⁻¹ ≠ 0 := h.inv_pos'.ne'
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.one_div_pos'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：one_div_pos' : 0 < 1 / r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `one_div_pos`：one_div_pos : 0 < 1 / a ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Real.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem one_div_pos'
-  statement: 0 < 1 / r
-  proof: _root_.one_div_pos.2 h.pos'
-
-中文:
-定理 one_div_pos'
-  结论: 0 < 1 / r
-  证明: _root_.one_div_pos.2 h.pos'
-
-Depends on / 依赖: _root_, _root_.one_div_pos, h.pos, one_div_pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
 theorem one_div_pos' : 0 < 1 / r := _root_.one_div_pos.2 h.pos'
-/--
-theorem `one_div_nonneg'` / 定理 `one_div_nonneg'`
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.one_div_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple
+`。
+形式化陈述：one_div_nonneg' : 0 <= 1 / r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.HolderTriple.one_div_pos'`：one_div_pos' : 0 < 1 / r
 
-English:
-theorem one_div_nonneg'
-  statement: 0 <= 1 / r
-  proof: le_of_lt h.one_div_pos'
-
-中文:
-定理 one_div_nonneg'
-  结论: 0 <= 1 / r
-  证明: le_of_lt h.one_div_pos'
-
-Depends on / 依赖: h.one_div_pos, le_of_lt, one_div_pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem one_div_nonneg' : 0 <= 1 / r := le_of_lt h.one_div_pos'
-/--
-theorem `one_div_ne_zero'` / 定理 `one_div_ne_zero'`
+theorem one_div_nonneg' : 0 ≤ 1 / r := le_of_lt h.one_div_pos'
+/-- For `r`, instead of `p` -/
+/-
+**Real.HolderTriple.one_div_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTripl
+e`。
+形式化陈述：one_div_ne_zero' : 1 / r != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.HolderTriple.one_div_pos'`：one_div_pos' : 0 < 1 / r
 
-English:
-theorem one_div_ne_zero'
-  statement: 1 / r != 0
-  proof: ne_of_gt h.one_div_pos'
-
-中文:
-定理 one_div_ne_zero'
-  结论: 1 / r != 0
-  证明: ne_of_gt h.one_div_pos'
-
-Depends on / 依赖: h.one_div_pos, ne_of_gt, one_div_pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem one_div_ne_zero' : 1 / r != 0 := ne_of_gt h.one_div_pos'
+theorem one_div_ne_zero' : 1 / r ≠ 0 := ne_of_gt h.one_div_pos'
 
 /-- useful for introducing all three facts simultaneously within a proof. -/
-@[grind ->]
-/--
-theorem `all_pos` / 定理 `all_pos`
+@[grind →]
+/-
+**Real.HolderTriple.all_pos** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：all_pos : 0 < p ∧ 0 < q ∧ 0 < r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderTriple.pos`：pos : 0 < p
+· 使用定理 `Real.HolderTriple.symm`：∀ {p q r : ℝ}, p.HolderTriple q r → q.HolderTrip
+le p r
+· 使用定理 `Real.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem all_pos
-  statement: 0 < p ∧ 0 < q ∧ 0 < r
-  proof: ⟨h.pos, h.symm.pos, h.pos'⟩
-
-中文:
-定理 all_pos
-  结论: 0 < p ∧ 0 < q ∧ 0 < r
-  证明: ⟨h.pos, h.symm.pos, h.pos'⟩
-
-Depends on / 依赖: h.pos, h.symm.pos
+--- 原说明 ---
+useful for introducing all three facts simultaneously within a proof.
 -/
 theorem all_pos : 0 < p ∧ 0 < q ∧ 0 < r := ⟨h.pos, h.symm.pos, h.pos'⟩
-
-/--
-lemma `inv_eq` / 引理 `inv_eq`
-
-English:
-lemma inv_eq
-  statement: r⁻¹ = p⁻¹ + q⁻¹
-  proof: h.inv_add_inv_eq_inv.symm
-
-中文:
-引理 inv_eq
-  结论: r⁻¹ = p⁻¹ + q⁻¹
-  证明: h.inv_add_inv_eq_inv.symm
-
-Depends on / 依赖: h.inv_add_inv_eq_inv.symm, inv_add_inv_eq_inv
+/-
+**Real.HolderTriple.inv_eq** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：inv_eq : r⁻¹ = p⁻¹ + q⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
 -/
 lemma inv_eq : r⁻¹ = p⁻¹ + q⁻¹ := h.inv_add_inv_eq_inv.symm
-/--
-lemma `one_div_add_one_div` / 引理 `one_div_add_one_div`
-
-English:
-lemma one_div_add_one_div
-  statement: 1 / p + 1 / q = 1 / r
-  proof: by simpa using h.inv_add_inv_eq_inv
-
-中文:
-引理 one_div_add_one_div
-  结论: 1 / p + 1 / q = 1 / r
-  证明: by simpa using h.inv_add_inv_eq_inv
-
-Depends on / 依赖: h.inv_add_inv_eq_inv, inv_add_inv_eq_inv
+/-
+**Real.HolderTriple.one_div_add_one_div** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderTr
+iple`。
+形式化陈述：one_div_add_one_div : 1 / p + 1 / q = 1 / r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
 -/
 lemma one_div_add_one_div : 1 / p + 1 / q = 1 / r := by simpa using h.inv_add_inv_eq_inv
-/--
-lemma `one_div_eq` / 引理 `one_div_eq`
-
-English:
-lemma one_div_eq
-  statement: 1 / r = 1 / p + 1 / q
-  proof: h.one_div_add_one_div.symm
-
-中文:
-引理 one_div_eq
-  结论: 1 / r = 1 / p + 1 / q
-  证明: h.one_div_add_one_div.symm
-
-Depends on / 依赖: h.one_div_add_one_div.symm, one_div_add_one_div
+/-
+**Real.HolderTriple.one_div_eq** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：one_div_eq : 1 / r = 1 / p + 1 / q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Real.HolderTriple.one_div_add_one_div`：one_div_add_one_div : 1 / p + 1 /
+ q = 1 / r
 -/
 lemma one_div_eq : 1 / r = 1 / p + 1 / q := h.one_div_add_one_div.symm
-/--
-lemma `inv_inv_add_inv` / 引理 `inv_inv_add_inv`
-
-English:
-lemma inv_inv_add_inv
-  statement: (p⁻¹ + q⁻¹)⁻¹ = r
-  proof: by simp [h.inv_add_inv_eq_inv]
-
-中文:
-引理 inv_inv_add_inv
-  结论: (p⁻¹ + q⁻¹)⁻¹ = r
-  证明: by simp [h.inv_add_inv_eq_inv]
-
-Depends on / 依赖: h.inv_add_inv_eq_inv, inv_add_inv_eq_inv
+/-
+**Real.HolderTriple.inv_inv_add_inv** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderTriple
+`。
+形式化陈述：inv_inv_add_inv : (p⁻¹ + q⁻¹)⁻¹ = r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_inv_add_inv : (p⁻¹ + q⁻¹)⁻¹ = r := by simp [h.inv_add_inv_eq_inv]
-
-/--
-lemma `inv_lt_inv` / 引理 `inv_lt_inv`
-
-English:
-lemma inv_lt_inv
-  statement: p⁻¹ < r⁻¹
-  proof: calc
-.symm p⁻¹ = p⁻¹ + 0 := add_zero _
-  _ < p⁻¹ + q⁻¹ := by gcongr; exact h.symm.inv_pos
-  _ = r⁻¹ := h.inv_add_inv_eq_inv
-
-中文:
-引理 inv_lt_inv
-  结论: p⁻¹ < r⁻¹
-  证明: calc
-.symm p⁻¹ = p⁻¹ + 0 := add_zero _
-  _ < p⁻¹ + q⁻¹ := by gcongr; exact h.symm.inv_pos
-  _ = r⁻¹ := h.inv_add_inv_eq_inv
+/-
+**Real.HolderTriple.inv_lt_inv** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → p⁻¹ < r⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.HolderTriple.inv_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p⁻¹
+· 使用定理 `Real.HolderTriple.symm`：∀ {p q r : ℝ}, p.HolderTriple q r → q.HolderTrip
+le p r
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
 -/
 protected lemma inv_lt_inv : p⁻¹ < r⁻¹ := calc
-.symm p⁻¹ = p⁻¹ + 0 := add_zero _
+  p⁻¹ = p⁻¹ + 0 := add_zero _ |>.symm
   _ < p⁻¹ + q⁻¹ := by gcongr; exact h.symm.inv_pos
   _ = r⁻¹ := h.inv_add_inv_eq_inv
-/--
-lemma `lt` / 引理 `lt`
-
-English:
-lemma lt
-  statement: r < p
-  proof: by simpa using inv_strictAnti₀ h.inv_pos h.inv_lt_inv
-
-中文:
-引理 lt
-  结论: r < p
-  证明: by simpa using inv_strictAnti₀ h.inv_pos h.inv_lt_inv
-
-Depends on / 依赖: h.inv_lt_inv, h.inv_pos, inv_lt_inv, inv_pos
+/-
+**Real.HolderTriple.lt** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：lt : r < p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用引理 `inv_strictAnti₀`：inv_strictAnti₀ (hb : 0 < b) (hba : b < a) : a⁻¹ < b⁻¹
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `Real.HolderTriple.inv_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p⁻¹
+· 使用定理 `Real.HolderTriple.inv_lt_inv`：∀ {p q r : ℝ}, p.HolderTriple q r → p⁻¹ < 
+r⁻¹
 -/
 lemma lt : r < p := by simpa using inv_strictAnti₀ h.inv_pos h.inv_lt_inv
-/--
-lemma `inv_sub_inv_eq_inv` / 引理 `inv_sub_inv_eq_inv`
-
-English:
-lemma inv_sub_inv_eq_inv
-  statement: r⁻¹ - q⁻¹ = p⁻¹
-  proof: sub_eq_of_eq_add h.inv_eq
-
-中文:
-引理 inv_sub_inv_eq_inv
-  结论: r⁻¹ - q⁻¹ = p⁻¹
-  证明: sub_eq_of_eq_add h.inv_eq
-
-Depends on / 依赖: h.inv_eq, inv_eq, sub_eq_of_eq_add
+/-
+**Real.HolderTriple.inv_sub_inv_eq_inv** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderTri
+ple`。
+形式化陈述：inv_sub_inv_eq_inv : r⁻¹ - q⁻¹ = p⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_eq_of_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a = 
+c + b → a - b = c
+· 使用引理 `Real.HolderTriple.inv_eq`：inv_eq : r⁻¹ = p⁻¹ + q⁻¹
 -/
 lemma inv_sub_inv_eq_inv : r⁻¹ - q⁻¹ = p⁻¹ := sub_eq_of_eq_add h.inv_eq
-
-/--
-lemma `holderConjugate_div_div` / 引理 `holderConjugate_div_div`
-
-English:
-lemma holderConjugate_div_div
-  statement: (p / r).HolderConjugate (q / r) where
-  proof: by
-    simp [div_eq_mul_inv, ← mul_add, h.inv_add_inv_eq_inv, h.ne_zero']
-  left_pos := by have := h.left_pos; have := h.pos'; positivity
-  right_pos := by have := h.right_pos; have := h.pos'; positivity
-
-中文:
-引理 holderConjugate_div_div
-  结论: (p / r).HolderConjugate (q / r) where
-  证明: by
-    simp [div_eq_mul_inv, ← mul_add, h.inv_add_inv_eq_inv, h.ne_zero']
-  left_pos := by have := h.left_pos; have := h.pos'; positivity
-  right_pos := by have := h.right_pos; have := h.pos'; positivity
-
-Depends on / 依赖: div_eq_mul_inv, h.inv_add_inv_eq_inv, h.left_pos, h.ne_zero, h.pos, h.right_pos, inv_add_inv_eq_inv, left_pos, mul_add, ne_zero, right_pos
+/-
+**Real.HolderTriple.holderConjugate_div_div** 是 Mathlib 中的一个引理，位于命名空间 `Real.Hold
+erTriple`。
+形式化陈述：holderConjugate_div_div : (p / r).HolderConjugate (q / r) where inv_add_in
+v_eq_inv
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Real.HolderTriple.ne_zero'`：ne_zero' : r != 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Real.HolderTriple.left_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < p
+· 使用定理 `Real.HolderTriple.pos'`：pos' : 0 < r
+· 使用引理 `div_pos`：div_pos (ha : 0 < a) (hb : 0 < b) : 0 < a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Real.HolderTriple.right_pos`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 < q
 -/
 lemma holderConjugate_div_div : (p / r).HolderConjugate (q / r) where
   inv_add_inv_eq_inv := by
@@ -607,24 +577,39 @@ end HolderTriple
 
 namespace HolderConjugate
 
-/--
-lemma `two_two` / 引理 `two_two`
-
-English:
-lemma two_two
-  statement: HolderConjugate 2 2 where
-  proof: by norm_num
-  left_pos := zero_lt_two
-  right_pos := zero_lt_two
-
-中文:
-引理 two_two
-  结论: HolderConjugate 2 2 where
-  证明: by norm_num
-  left_pos := zero_lt_two
-  right_pos := zero_lt_two
-
-Depends on / 依赖: left_pos, right_pos, zero_lt_two
+/-
+**Real.HolderConjugate.two_two** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderConjugate`。
+形式化陈述：two_two : HolderConjugate 2 2 where inv_add_inv_eq_inv
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Mathlib.Meta.NormNum.isNat_eq_true`：∀ {α : Type u} [inst : AddMonoidWith
+One α] {a b : α} {c : ℕ},   Mathlib.Meta.NormNum.IsNat a c → Mathlib.Meta.NormNu
+m.IsNat b c → a = b
+· 使用定理 `Mathlib.Meta.NormNum.IsNNRat.to_isNat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNNRat a n 1 → Mathlib.Meta.NormNum
+.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_add`：isNNRat_add {α} [Semiring α] {f : α ->
+ α -> α} {a b : α} {na nb nc : Nat} {da db dc k : Nat} : f = HAdd.hAdd -> IsNNRa
+t a na da -> IsNNRat b…
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_inv_pos`：isNNRat_inv_pos {α} [DivisionSemir
+ing α] [CharZero α] {a : α} {n d : Nat} : IsNNRat a (Nat.succ n) d -> IsNNRat a⁻
+¹ d (Nat.succ n)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isNNRat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsN
+NRat a n 1
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 lemma two_two : HolderConjugate 2 2 where
   inv_add_inv_eq_inv := by norm_num
@@ -636,397 +621,514 @@ variable (h : p.HolderConjugate q)
 include h
 
 @[symm]
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  statement: q.HolderConjugate p
-  proof: HolderTriple.symm h
-
-中文:
-引理 symm
-  结论: q.HolderConjugate p
-  证明: HolderTriple.symm h
+/-
+**Real.HolderConjugate.symm** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderConjugate`。
+形式化陈述：∀ {p q : ℝ}, p.HolderConjugate q → q.HolderConjugate p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderTriple.symm`：∀ {p q r : ℝ}, p.HolderTriple q r → q.HolderTrip
+le p r
 -/
 protected lemma symm : q.HolderConjugate p := HolderTriple.symm h
-
-/--
-theorem `inv_add_inv_eq_one` / 定理 `inv_add_inv_eq_one`
-
-English:
-theorem inv_add_inv_eq_one
-  statement: p⁻¹ + q⁻¹ = 1
-  proof: inv_one (G := Real) ▸ h.inv_add_inv_eq_inv
-
-中文:
-定理 inv_add_inv_eq_one
-  结论: p⁻¹ + q⁻¹ = 1
-  证明: inv_one (G := Real) ▸ h.inv_add_inv_eq_inv
-
-Depends on / 依赖: h.inv_add_inv_eq_inv, inv_add_inv_eq_inv, inv_one
+/-
+**Real.HolderConjugate.inv_add_inv_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Real.Holder
+Conjugate`。
+形式化陈述：inv_add_inv_eq_one : p⁻¹ + q⁻¹ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : ℝ}, p.HolderTriple q r 
+→ p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
 -/
-theorem inv_add_inv_eq_one : p⁻¹ + q⁻¹ = 1 := inv_one (G := Real) ▸ h.inv_add_inv_eq_inv
-
-/--
-theorem `sub_one_pos` / 定理 `sub_one_pos`
-
-English:
-theorem sub_one_pos
-  statement: 0 < p - 1
-  proof: sub_pos.2 h.lt
-
-中文:
-定理 sub_one_pos
-  结论: 0 < p - 1
-  证明: sub_pos.2 h.lt
-
-Depends on / 依赖: h.lt, sub_pos
+theorem inv_add_inv_eq_one : p⁻¹ + q⁻¹ = 1 := inv_one (G := ℝ) ▸ h.inv_add_inv_eq_inv
+/-
+**Real.HolderConjugate.sub_one_pos** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderConjuga
+te`。
+形式化陈述：sub_one_pos : 0 < p - 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_pos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddRightStr
+ictMono α] {a b : α}, 0 < a - b ↔ b < a
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `Real.HolderTriple.lt`：lt : r < p
 -/
 theorem sub_one_pos : 0 < p - 1 := sub_pos.2 h.lt
-/--
-theorem `sub_one_ne_zero` / 定理 `sub_one_ne_zero`
-
-English:
-theorem sub_one_ne_zero
-  statement: p - 1 != 0
-  proof: h.sub_one_pos.ne'
-
-中文:
-定理 sub_one_ne_zero
-  结论: p - 1 != 0
-  证明: h.sub_one_pos.ne'
-
-Depends on / 依赖: h.sub_one_pos.ne, sub_one_pos
+/-
+**Real.HolderConjugate.sub_one_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderCon
+jugate`。
+形式化陈述：sub_one_ne_zero : p - 1 != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.HolderConjugate.sub_one_pos`：sub_one_pos : 0 < p - 1
 -/
-theorem sub_one_ne_zero : p - 1 != 0 := h.sub_one_pos.ne'
-
-/--
-theorem `conjugate_eq` / 定理 `conjugate_eq`
-
-English:
-theorem conjugate_eq
-  statement: q = p / (p - 1)
-  proof: by
-  convert! inv_inv q ▸ congr($(h.symm.inv_sub_inv_eq_inv.symm)⁻¹) using 1
-  field [h.ne_zero]
-
-中文:
-定理 conjugate_eq
-  结论: q = p / (p - 1)
-  证明: by
-  convert! inv_inv q ▸ congr($(h.symm.inv_sub_inv_eq_inv.symm)⁻¹) using 1
-  field [h.ne_zero]
-
-Depends on / 依赖: convert, h.ne_zero, h.symm.inv_sub_inv_eq_inv.symm, inv_inv, inv_sub_inv_eq_inv, ne_zero
+theorem sub_one_ne_zero : p - 1 ≠ 0 := h.sub_one_pos.ne'
+/-
+**Real.HolderConjugate.conjugate_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderConjug
+ate`。
+形式化陈述：conjugate_eq : q = p / (p - 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval`：div_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al / l₂.eval = l.eval) : x₁ /…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_sub`：subst_sub {M : Type*} [Ring M] {x₁ x
+₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ - X₂ = Y) 
+(hy : a * Y = y) : x₁ - …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.one_eq_eval`：one_eq_eval [GroupWithZero M] :
+ (1:M) = NF.eval (M
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval₃`：div_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval / l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval`：eval_cons_mul_eval [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : ((n, e) ::ᵣ L).eval * l.eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_subst`：eq_div_of_subst {M : Type*} [D
+iv M] {l l_n l_d n d : M} (h : l = l_n / l_d) (hn : l_n = n) (hd : l_d = d) : l 
+= n / d
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div'`：cons_eq_div_of_eq_di
+v' [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.
+eval / t_d.eval) : ((-n, e) ::ᵣ t).eval …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.inv_eq_eval`：inv_eq_eval [CommGroupWithZero 
+M] {l : NF M} {x : M} (h : x = l.eval) : x⁻¹ = (l⁻¹).eval
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval_cons_neg`：eval_cons_mul_e
+val_cons_neg [CommGroupWithZero M] (n : Int) {e : M} (he : e != 0) {L l l' : NF 
+M} (h : L.eval * l.eval = l'.eval) : ((n, e) …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Real.HolderTriple.ne_zero`：ne_zero : p != 0
+（共 64 条，此处仅展示前 30 条）
 -/
 theorem conjugate_eq : q = p / (p - 1) := by
   convert! inv_inv q ▸ congr($(h.symm.inv_sub_inv_eq_inv.symm)⁻¹) using 1
   field [h.ne_zero]
-
-/--
-lemma `conjExponent_eq` / 引理 `conjExponent_eq`
-
-English:
-lemma conjExponent_eq
-  statement: conjExponent p = q
-  proof: h.conjugate_eq.symm
-
-中文:
-引理 conjExponent_eq
-  结论: conjExponent p = q
-  证明: h.conjugate_eq.symm
-
-Depends on / 依赖: conjugate_eq, h.conjugate_eq.symm
+/-
+**Real.HolderConjugate.conjExponent_eq** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderCon
+jugate`。
+形式化陈述：conjExponent_eq : conjExponent p = q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.HolderConjugate.conjugate_eq`：conjugate_eq : q = p / (p - 1)
 -/
 lemma conjExponent_eq : conjExponent p = q := h.conjugate_eq.symm
-
-/--
-lemma `one_sub_inv` / 引理 `one_sub_inv`
-
-English:
-lemma one_sub_inv
-  statement: 1 - p⁻¹ = q⁻¹
-  proof: sub_eq_of_eq_add h.symm.inv_add_inv_eq_one.symm
-
-中文:
-引理 one_sub_inv
-  结论: 1 - p⁻¹ = q⁻¹
-  证明: sub_eq_of_eq_add h.symm.inv_add_inv_eq_one.symm
-
-Depends on / 依赖: h.symm.inv_add_inv_eq_one.symm, inv_add_inv_eq_one, sub_eq_of_eq_add
+/-
+**Real.HolderConjugate.one_sub_inv** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderConjuga
+te`。
+形式化陈述：one_sub_inv : 1 - p⁻¹ = q⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_eq_of_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a = 
+c + b → a - b = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.HolderConjugate.inv_add_inv_eq_one`：inv_add_inv_eq_one : p⁻¹ + q⁻¹ 
+= 1
+· 使用定理 `Real.HolderConjugate.symm`：∀ {p q : ℝ}, p.HolderConjugate q → q.HolderCo
+njugate p
 -/
 lemma one_sub_inv : 1 - p⁻¹ = q⁻¹ := sub_eq_of_eq_add h.symm.inv_add_inv_eq_one.symm
-/--
-lemma `inv_sub_one` / 引理 `inv_sub_one`
-
-English:
-lemma inv_sub_one
-  statement: p⁻¹ - 1 = -q⁻¹
-  proof: by simpa using congr(-$(h.one_sub_inv))
-
-中文:
-引理 inv_sub_one
-  结论: p⁻¹ - 1 = -q⁻¹
-  证明: by simpa using congr(-$(h.one_sub_inv))
-
-Depends on / 依赖: h.one_sub_inv, one_sub_inv
+/-
+**Real.HolderConjugate.inv_sub_one** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderConjuga
+te`。
+形式化陈述：inv_sub_one : p⁻¹ - 1 = -q⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用引理 `Real.HolderConjugate.one_sub_inv`：one_sub_inv : 1 - p⁻¹ = q⁻¹
 -/
 lemma inv_sub_one : p⁻¹ - 1 = -q⁻¹ := by simpa using congr(-$(h.one_sub_inv))
-
-/--
-theorem `sub_one_mul_conj` / 定理 `sub_one_mul_conj`
-
-English:
-theorem sub_one_mul_conj
-  statement: (p - 1) * q = p
-  proof: mul_comm q (p - 1) ▸ (eq_div_iff h.sub_one_ne_zero).1 h.conjugate_eq
-
-中文:
-定理 sub_one_mul_conj
-  结论: (p - 1) * q = p
-  证明: mul_comm q (p - 1) ▸ (eq_div_iff h.sub_one_ne_zero).1 h.conjugate_eq
-
-Depends on / 依赖: conjugate_eq, eq_div_iff, h.conjugate_eq, h.sub_one_ne_zero, mul_comm, sub_one_ne_zero
+/-
+**Real.HolderConjugate.sub_one_mul_conj** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderCo
+njugate`。
+形式化陈述：sub_one_mul_conj : (p - 1) * q = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `eq_div_iff`：eq_div_iff (hb : b != 0) : c = a / b ↔ c * b = a
+· 使用定理 `Real.HolderConjugate.sub_one_ne_zero`：sub_one_ne_zero : p - 1 != 0
+· 使用定理 `Real.HolderConjugate.conjugate_eq`：conjugate_eq : q = p / (p - 1)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem sub_one_mul_conj : (p - 1) * q = p :=
   mul_comm q (p - 1) ▸ (eq_div_iff h.sub_one_ne_zero).1 h.conjugate_eq
-
-/--
-theorem `mul_eq_add` / 定理 `mul_eq_add`
-
-English:
-theorem mul_eq_add
-  statement: p * q = p + q
-  proof: by
-  simpa only [sub_mul, sub_eq_iff_eq_add, one_mul] using h.sub_one_mul_conj
-
-中文:
-定理 mul_eq_add
-  结论: p * q = p + q
-  证明: by
-  simpa only [sub_mul, sub_eq_iff_eq_add, one_mul] using h.sub_one_mul_conj
-
-Depends on / 依赖: h.sub_one_mul_conj, one_mul, sub_eq_iff_eq_add, sub_mul, sub_one_mul_conj
+/-
+**Real.HolderConjugate.mul_eq_add** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderConjugat
+e`。
+形式化陈述：mul_eq_add : p * q = p + q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Real.HolderConjugate.sub_one_mul_conj`：sub_one_mul_conj : (p - 1) * q = 
+p
 -/
 theorem mul_eq_add : p * q = p + q := by
   simpa only [sub_mul, sub_eq_iff_eq_add, one_mul] using h.sub_one_mul_conj
-
-/--
-theorem `div_conj_eq_sub_one` / 定理 `div_conj_eq_sub_one`
-
-English:
-theorem div_conj_eq_sub_one
-  statement: p / q = p - 1
-  proof: by
-  field_simp [h.symm.ne_zero]
-  linear_combination -h.sub_one_mul_conj
-
-中文:
-定理 div_conj_eq_sub_one
-  结论: p / q = p - 1
-  证明: by
-  field_simp [h.symm.ne_zero]
-  linear_combination -h.sub_one_mul_conj
-
-Depends on / 依赖: h.sub_one_mul_conj, h.symm.ne_zero, linear_combination, ne_zero, sub_one_mul_conj
+/-
+**Real.HolderConjugate.div_conj_eq_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Real.Holde
+rConjugate`。
+形式化陈述：div_conj_eq_sub_one : p / q = p - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval`：div_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al / l₂.eval = l.eval) : x₁ /…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval₃`：div_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval / l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval`：eval_cons_mul_eval [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : ((n, e) ::ᵣ L).eval * l.eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_sub`：subst_sub {M : Type*} [Ring M] {x₁ x
+₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ - X₂ = Y) 
+(hy : a * Y = y) : x₁ - …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.one_eq_eval`：one_eq_eval [GroupWithZero M] :
+ (1:M) = NF.eval (M
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval_cons_neg`：eval_cons_mul_e
+val_cons_neg [CommGroupWithZero M] (n : Int) {e : M} (he : e != 0) {L l l' : NF 
+M} (h : L.eval * l.eval = l'.eval) : ((n, e) …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Real.HolderTriple.ne_zero`：ne_zero : p != 0
+· 使用定理 `Real.HolderConjugate.symm`：∀ {p q : ℝ}, p.HolderConjugate q → q.HolderCo
+njugate p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_ne_zero`：cons_ne_zero [GroupWithZero M]
+ (r : Int) {x : M} (hx : x != 0) {l : NF M} (hl : l.eval != 0) : ((r, x) ::ᵣ l).
+eval != 0
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
+（共 74 条，此处仅展示前 30 条）
 -/
 theorem div_conj_eq_sub_one : p / q = p - 1 := by
   field_simp [h.symm.ne_zero]
   linear_combination -h.sub_one_mul_conj
-
-/--
-theorem `inv_add_inv_ennreal` / 定理 `inv_add_inv_ennreal`
-
-English:
-theorem inv_add_inv_ennreal
-  statement: (ENNReal.ofReal p)⁻¹ + (ENNReal.ofReal q)⁻¹ = 1
-  proof: by
-  rw [← ENNReal.ofReal_one]; rw [← ENNReal.ofReal_inv_of_pos h.pos]; rw [← ENNReal.ofReal_inv_of_pos h.symm.pos]; rw [← ENNReal.ofReal_add h.inv_nonneg h.symm.inv_nonneg]; rw [h.inv_add_inv_eq_one]
-
-中文:
-定理 inv_add_inv_ennreal
-  结论: (广义非负实数.of实数 p)⁻¹ + (广义非负实数.of实数 q)⁻¹ = 1
-  证明: by
-  rw [← ENNReal.ofReal_one]; rw [← ENNReal.ofReal_inv_of_pos h.pos]; rw [← ENNReal.ofReal_inv_of_pos h.symm.pos]; rw [← ENNReal.ofReal_add h.inv_nonneg h.symm.inv_nonneg]; rw [h.inv_add_inv_eq_one]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_add, ENNReal.ofReal_inv_of_pos, ENNReal.ofReal_one, h.inv_add_inv_eq_one, h.inv_nonneg, h.pos, h.symm.inv_nonneg, h.symm.pos, inv_add_inv_eq_one, inv_nonneg, ofReal_add, ofReal_inv_of_pos, ofReal_one
+/-
+**Real.HolderConjugate.inv_add_inv_ennreal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Holde
+rConjugate`。
+形式化陈述：inv_add_inv_ennreal : (ENNReal.ofReal p)⁻¹ + (ENNReal.ofReal q)⁻¹ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.ofReal_one`：ENNReal.ofReal 1 = 1
+· 使用定理 `ENNReal.ofReal_inv_of_pos`：ofReal_inv_of_pos {x : Real} (hx : 0 < x) : E
+NNReal.ofReal x⁻¹ = (ENNReal.ofReal x)⁻¹
+· 使用定理 `Real.HolderTriple.pos`：pos : 0 < p
+· 使用定理 `Real.HolderConjugate.symm`：∀ {p q : ℝ}, p.HolderConjugate q → q.HolderCo
+njugate p
+· 使用定理 `ENNReal.ofReal_add`：ofReal_add {p q : Real} (hp : 0 <= p) (hq : 0 <= q) 
+: ENNReal.ofReal (p + q) = ENNReal.ofReal p + ENNReal.ofReal q
+· 使用定理 `Real.HolderTriple.inv_nonneg`：∀ {p q r : ℝ}, p.HolderTriple q r → 0 ≤ p⁻
+¹
+· 使用定理 `Real.HolderConjugate.inv_add_inv_eq_one`：inv_add_inv_eq_one : p⁻¹ + q⁻¹ 
+= 1
 -/
 theorem inv_add_inv_ennreal : (ENNReal.ofReal p)⁻¹ + (ENNReal.ofReal q)⁻¹ = 1 := by
-  rw [← ENNReal.ofReal_one]; rw [← ENNReal.ofReal_inv_of_pos h.pos]; rw [← ENNReal.ofReal_inv_of_pos h.symm.pos]; rw [← ENNReal.ofReal_add h.inv_nonneg h.symm.inv_nonneg]; rw [h.inv_add_inv_eq_one]
+  rw [← ENNReal.ofReal_one, ← ENNReal.ofReal_inv_of_pos h.pos,
+    ← ENNReal.ofReal_inv_of_pos h.symm.pos, ← ENNReal.ofReal_add h.inv_nonneg h.symm.inv_nonneg,
+    h.inv_add_inv_eq_one]
 
 end
 
-/--
-lemma `_root_.Real.holderConjugate_iff` / 引理 `_root_.Real.holderConjugate_iff`
-
-English:
-lemma _root_.Real.holderConjugate_iff
-  statement: p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1
-  proof: by
-  refine ⟨fun h => ⟨h.lt, h.inv_add_inv_eq_one⟩, ?_⟩
-  rintro ⟨hp, h⟩
-  have hp' := zero_lt_one.trans hp
-.symm ▸ h, hp', ?_⟩ refine ⟨inv_one (G := Real)
-  rw [← inv_lt_one₀ hp']; rw [← sub_pos] at hp
-exact inv_pos.mp eq_sub_of_add_eq' h ▸ hp
-
-中文:
-引理 _root_.实数.holderConjugate_iff
-  结论: p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1
-  证明: by
-  refine ⟨fun h => ⟨h.lt, h.inv_add_inv_eq_one⟩, ?_⟩
-  rintro ⟨hp, h⟩
-  have hp' := zero_lt_one.trans hp
-.symm ▸ h, hp', ?_⟩ refine ⟨inv_one (G := Real)
-  rw [← inv_lt_one₀ hp']; rw [← sub_pos] at hp
-exact inv_pos.mp eq_sub_of_add_eq' h ▸ hp
-
-Depends on / 依赖: eq_sub_of_add_eq, h.inv_add_inv_eq_one, h.lt, inv_add_inv_eq_one, inv_one, inv_pos, inv_pos.mp, sub_pos, zero_lt_one, zero_lt_one.trans
+/-
+**Real.HolderConjugate._root_.Real.holderConjugate_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `Real.HolderConjugate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Real.holderConjugate_iff : p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1 := by
-  refine ⟨fun h => ⟨h.lt, h.inv_add_inv_eq_one⟩, ?_⟩
+  refine ⟨fun h ↦ ⟨h.lt, h.inv_add_inv_eq_one⟩, ?_⟩
   rintro ⟨hp, h⟩
   have hp' := zero_lt_one.trans hp
-.symm ▸ h, hp', ?_⟩ refine ⟨inv_one (G := Real)
-  rw [← inv_lt_one₀ hp']; rw [← sub_pos] at hp
-exact inv_pos.mp eq_sub_of_add_eq' h ▸ hp
-
-/--
-lemma `inv_inv` / 引理 `inv_inv`
-
-English:
-lemma inv_inv
-  given: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  statement: a⁻¹.HolderConjugate b⁻¹ where
-  proof: by simpa using hab
-  left_pos := inv_pos.mpr ha
-  right_pos := inv_pos.mpr hb
-
-中文:
-引理 inv_inv
-  条件: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  结论: a⁻¹.HolderConjugate b⁻¹ where
-  证明: by simpa using hab
-  left_pos := inv_pos.mpr ha
-  right_pos := inv_pos.mpr hb
+  refine ⟨inv_one (G := ℝ) |>.symm ▸ h, hp', ?_⟩
+  rw [← inv_lt_one₀ hp', ← sub_pos] at hp
+  exact inv_pos.mp <| eq_sub_of_add_eq' h ▸ hp
+/-
+**Real.HolderConjugate.inv_inv** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderConjugate`。
+形式化陈述：∀ {a b : ℝ}, 0 < a → 0 < b → a + b = 1 → a⁻¹.HolderConjugate b⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 protected lemma inv_inv (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1) : a⁻¹.HolderConjugate b⁻¹ where
   inv_add_inv_eq_inv := by simpa using hab
   left_pos := inv_pos.mpr ha
   right_pos := inv_pos.mpr hb
-
-/--
-lemma `inv_one_sub_inv` / 引理 `inv_one_sub_inv`
-
-English:
-lemma inv_one_sub_inv
-  given: (ha₀ : 0 < a) (ha₁ : a < 1)
-  statement: a⁻¹.HolderConjugate (1 - a)⁻¹
-  proof: .mpr ha₁, by simp⟩ holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀
-
-中文:
-引理 inv_one_sub_inv
-  条件: (ha₀ : 0 < a) (ha₁ : a < 1)
-  结论: a⁻¹.HolderConjugate (1 - a)⁻¹
-  证明: .mpr ha₁, by simp⟩ holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀
-
-Depends on / 依赖: holderConjugate_iff, holderConjugate_iff.mpr
+/-
+**Real.HolderConjugate.inv_one_sub_inv** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderCon
+jugate`。
+形式化陈述：inv_one_sub_inv (ha₀ : 0 < a) (ha₁ : a < 1) : a⁻¹.HolderConjugate (1 - a)⁻
+¹
+参数：ha₀ : 0 < a；ha₁ : a < 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.holderConjugate_iff`：∀ {p q : ℝ}, p.HolderConjugate q ↔ 1 < p ∧ p⁻¹
+ + q⁻¹ = 1
+· 使用引理 `one_lt_inv₀`：one_lt_inv₀ (ha : 0 < a) : 1 < a⁻¹ ↔ a < 1
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_one_sub_inv (ha₀ : 0 < a) (ha₁ : a < 1) : a⁻¹.HolderConjugate (1 - a)⁻¹ :=
-.mpr ha₁, by simp⟩ holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀
-
-/--
-lemma `one_sub_inv_inv` / 引理 `one_sub_inv_inv`
-
-English:
-lemma one_sub_inv_inv
-  given: (ha₀ : 0 < a) (ha₁ : a < 1)
-  statement: (1 - a)⁻¹.HolderConjugate a⁻¹
-  proof: (inv_one_sub_inv ha₀ ha₁).symm
-
-中文:
-引理 one_sub_inv_inv
-  条件: (ha₀ : 0 < a) (ha₁ : a < 1)
-  结论: (1 - a)⁻¹.HolderConjugate a⁻¹
-  证明: (inv_one_sub_inv ha₀ ha₁).symm
-
-Depends on / 依赖: inv_one_sub_inv
+  holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀ |>.mpr ha₁, by simp⟩
+/-
+**Real.HolderConjugate.one_sub_inv_inv** 是 Mathlib 中的一个引理，位于命名空间 `Real.HolderCon
+jugate`。
+形式化陈述：one_sub_inv_inv (ha₀ : 0 < a) (ha₁ : a < 1) : (1 - a)⁻¹.HolderConjugate a⁻
+¹
+参数：ha₀ : 0 < a；ha₁ : a < 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderConjugate.symm`：∀ {p q : ℝ}, p.HolderConjugate q → q.HolderCo
+njugate p
+· 使用引理 `Real.HolderConjugate.inv_one_sub_inv`：inv_one_sub_inv (ha₀ : 0 < a) (ha₁
+ : a < 1) : a⁻¹.HolderConjugate (1 - a)⁻¹
 -/
 lemma one_sub_inv_inv (ha₀ : 0 < a) (ha₁ : a < 1) : (1 - a)⁻¹.HolderConjugate a⁻¹ :=
   (inv_one_sub_inv ha₀ ha₁).symm
 
 end HolderConjugate
 
-/--
-lemma `holderConjugate_comm` / 引理 `holderConjugate_comm`
-
-English:
-lemma holderConjugate_comm
-  statement: p.HolderConjugate q ↔ q.HolderConjugate p
-  proof: ⟨.symm, .symm⟩
-
-中文:
-引理 holderConjugate_comm
-  结论: p.HolderConjugate q ↔ q.HolderConjugate p
-  证明: ⟨.symm, .symm⟩
+/-
+**Real.holderConjugate_comm** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：holderConjugate_comm : p.HolderConjugate q ↔ q.HolderConjugate p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderConjugate.symm`：∀ {p q : ℝ}, p.HolderConjugate q → q.HolderCo
+njugate p
 -/
 lemma holderConjugate_comm : p.HolderConjugate q ↔ q.HolderConjugate p := ⟨.symm, .symm⟩
-
-/--
-lemma `holderConjugate_iff_eq_conjExponent` / 引理 `holderConjugate_iff_eq_conjExponent`
-
-English:
-lemma holderConjugate_iff_eq_conjExponent
-  given: (hp : 1 < p)
-  statement: p.HolderConjugate q ↔ q = p / (p - 1)
-  proof: ⟨HolderConjugate.conjugate_eq, fun h => holderConjugate_iff.mpr ⟨hp, by simp [field, h]⟩⟩
-
-中文:
-引理 holderConjugate_iff_eq_conjExponent
-  条件: (hp : 1 < p)
-  结论: p.HolderConjugate q ↔ q = p / (p - 1)
-  证明: ⟨HolderConjugate.conjugate_eq, fun h => holderConjugate_iff.mpr ⟨hp, by simp [field, h]⟩⟩
-
-Depends on / 依赖: HolderConjugate, HolderConjugate.conjugate_eq, conjugate_eq, holderConjugate_iff, holderConjugate_iff.mpr
+/-
+**Real.holderConjugate_iff_eq_conjExponent** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：holderConjugate_iff_eq_conjExponent (hp : 1 < p) : p.HolderConjugate q ↔ q
+ = p / (p - 1)
+参数：hp : 1 < p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderConjugate.conjugate_eq`：conjugate_eq : q = p / (p - 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.holderConjugate_iff`：∀ {p q : ℝ}, p.HolderConjugate q ↔ 1 < p ∧ p⁻¹
+ + q⁻¹ = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_add`：subst_add {M : Type*} [Semiring M] {
+x₁ x₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ + X₂ =
+ Y) (hy : a * Y = y) : x…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.inv_eq_eval`：inv_eq_eval [CommGroupWithZero 
+M] {l : NF M} {x : M} (h : x = l.eval) : x⁻¹ = (l⁻¹).eval
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval`：eval_cons_mul_eval [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : ((n, e) ::ᵣ L).eval * l.eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval`：div_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al / l₂.eval = l.eval) : x₁ /…
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_sub`：subst_sub {M : Type*} [Ring M] {x₁ x
+₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ - X₂ = Y) 
+(hy : a * Y = y) : x₁ - …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.one_eq_eval`：one_eq_eval [GroupWithZero M] :
+ (1:M) = NF.eval (M
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval₁`：div_eq_eval₁ [CommGroupWithZer
+o M] (a₁ : Int × M) {a₂ : Int × M} {l₁ l₂ l : NF M} (h : l₁.eval / (a₂ ::ᵣ l₂).e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+（共 44 条，此处仅展示前 30 条）
 -/
 lemma holderConjugate_iff_eq_conjExponent (hp : 1 < p) : p.HolderConjugate q ↔ q = p / (p - 1) :=
-  ⟨HolderConjugate.conjugate_eq, fun h => holderConjugate_iff.mpr ⟨hp, by simp [field, h]⟩⟩
-
-/--
-lemma `HolderConjugate.conjExponent` / 引理 `HolderConjugate.conjExponent`
-
-English:
-lemma HolderConjugate.conjExponent
-  given: (h : 1 < p)
-  statement: p.HolderConjugate (conjExponent p)
-  proof: (holderConjugate_iff_eq_conjExponent h).2 rfl
-
-中文:
-引理 HolderConjugate.conjExponent
-  条件: (h : 1 < p)
-  结论: p.HolderConjugate (conjExponent p)
-  证明: (holderConjugate_iff_eq_conjExponent h).2 rfl
-
-Depends on / 依赖: holderConjugate_iff_eq_conjExponent
+  ⟨HolderConjugate.conjugate_eq, fun h ↦ holderConjugate_iff.mpr ⟨hp, by simp [field, h]⟩⟩
+/-
+**Real.HolderConjugate.conjExponent** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderConjug
+ate`。
+形式化陈述：∀ {p : ℝ}, 1 < p → p.HolderConjugate p.conjExponent
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Real.holderConjugate_iff_eq_conjExponent`：holderConjugate_iff_eq_conjExp
+onent (hp : 1 < p) : p.HolderConjugate q ↔ q = p / (p - 1)
 -/
 lemma HolderConjugate.conjExponent (h : 1 < p) : p.HolderConjugate (conjExponent p) :=
   (holderConjugate_iff_eq_conjExponent h).2 rfl
-
-/--
-lemma `holderConjugate_one_div` / 引理 `holderConjugate_one_div`
-
-English:
-lemma holderConjugate_one_div
-  given: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  proof: by simpa using HolderConjugate.inv_inv ha hb hab
-
-中文:
-引理 holderConjugate_one_div
-  条件: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  证明: by simpa using HolderConjugate.inv_inv ha hb hab
-
-Depends on / 依赖: HolderConjugate, HolderConjugate.inv_inv, inv_inv
+/-
+**Real.holderConjugate_one_div** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：holderConjugate_one_div (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1) : (1 /
+ a).HolderConjugate (1 / b)
+参数：ha : 0 < a；hb : 0 < b；hab : a + b = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `Real.HolderConjugate.inv_inv`：∀ {a b : ℝ}, 0 < a → 0 < b → a + b = 1 → a
+⁻¹.HolderConjugate b⁻¹
 -/
 lemma holderConjugate_one_div (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1) :
     (1 / a).HolderConjugate (1 / b) := by simpa using HolderConjugate.inv_inv ha hb hab
@@ -1038,151 +1140,117 @@ namespace NNReal
 /-- Nonnegative real numbers `p q r : ℝ≥0` are said to be a **Hölder triple** if `p` and `q` are
 positive and `p⁻¹ + q⁻¹ = r⁻¹`. -/
 @[mk_iff]
-/--
-Definition of `HolderTriple` / `HolderTriple` 的定义
+/-
+**NNReal.HolderTriple** 是 Mathlib 中的一个归纳类型，位于命名空间 `NNReal`。
+形式化陈述：NNReal → NNReal → NNReal → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HolderTriple
-  parameters: (p q r : Real>=0)
-  axioms and operations (3):
-    - inv_add_inv_eq_inv : p⁻¹ + q⁻¹ = r⁻¹
-    - left_pos : 0 < p
-    - right_pos : 0 < q
-
-中文:
-结构 HolderTriple
-  参数: (p q r : 实数>=0)
-  公理与运算 (3 个):
-    - inv_add_inv_eq_inv : p⁻¹ + q⁻¹ = r⁻¹
-    - left_pos : 0 < p
-    - right_pos : 0 < q
+--- 原说明 ---
+Nonnegative real numbers `p q r : ℝ≥0` are said to be a **Hölder triple** if `p`
+ and `q` are
+positive and `p⁻¹ + q⁻¹ = r⁻¹`.
 -/
-structure HolderTriple (p q r : Real>=0) : Prop where
+structure HolderTriple (p q r : ℝ≥0) : Prop where
   inv_add_inv_eq_inv : p⁻¹ + q⁻¹ = r⁻¹
   left_pos : 0 < p
   right_pos : 0 < q
 
-/--
-Definition of `HolderConjugate` / `HolderConjugate` 的定义
+/-- Nonnegative real numbers `p q : ℝ≥0` are **Hölder conjugate** if they are positive and satisfy
+the equality `p⁻¹ + q⁻¹ = 1`. This is an abbreviation for `NNReal.HolderTriple p q 1`. This
+condition shows up in many theorems in analysis, notably related to `L^p` norms.
 
-English:
-abbreviation HolderConjugate
-  signature: (p q : Real>=0)
-  body: HolderTriple p q 1
+It is equivalent that `1 < p` and `p⁻¹ + q⁻¹ = 1`. See `NNReal.holderConjugate_iff`. -/
+/-
+**NNReal.HolderConjugate** 是 Mathlib 中的一个缩写定义，位于命名空间 `NNReal`。
+形式化陈述：HolderConjugate (p q : Real>=0)
+参数：p q : Real>=0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 HolderConjugate
-  签名: (p q : 实数>=0)
-  定义体: HolderTriple p q 1
+--- 原说明 ---
+Nonnegative real numbers `p q : ℝ≥0` are **Hölder conjugate** if they are positi
+ve and satisfy
+the equality `p⁻¹ + q⁻¹ = 1`. This is an abbreviation for `NNReal.HolderTriple p
+ q 1`. This
+condition shows up in many theorems in analysis, notably related to `L^p` norms.
 
-Depends on / 依赖: HolderTriple
+It is equivalent that `1 < p` and `p⁻¹ + q⁻¹ = 1`. See `NNReal.holderConjugate_i
+ff`.
 -/
-abbrev HolderConjugate (p q : Real>=0) := HolderTriple p q 1
+abbrev HolderConjugate (p q : ℝ≥0) := HolderTriple p q 1
 
-/--
-Definition of `conjExponent` / `conjExponent` 的定义
+/-- The conjugate exponent of `p` is `q = p/(p-1)`, so that `p⁻¹ + q⁻¹ = 1`. -/
+/-
+**NNReal.conjExponent** 是 Mathlib 中的一个定义，位于命名空间 `NNReal`。
+形式化陈述：conjExponent (p : Real>=0) : Real>=0
+参数：p : Real>=0。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conjExponent
-  signature: (p : Real>=0)
-  body: p / (p - 1)
-
-@[simp, norm_cast]
-
-中文:
-定义 conjExponent
-  签名: (p : 实数>=0)
-  定义体: p / (p - 1)
-
-@[simp, norm_cast]
+--- 原说明 ---
+The conjugate exponent of `p` is `q = p/(p-1)`, so that `p⁻¹ + q⁻¹ = 1`.
 -/
-def conjExponent (p : Real>=0) : Real>=0 := p / (p - 1)
+def conjExponent (p : ℝ≥0) : ℝ≥0 := p / (p - 1)
 
 @[simp, norm_cast]
-/--
-lemma `holderTriple_coe_iff` / 引理 `holderTriple_coe_iff`
-
-English:
-lemma holderTriple_coe_iff
-  given: {p q r : Real>=0}
-  proof: by
+/-
+**NNReal.holderTriple_coe_iff** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：holderTriple_coe_iff {p q r : Real>=0} : Real.HolderTriple (p : Real) (q :
+ Real) (r : Real) ↔ HolderTriple p q r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.holderTriple_iff`：∀ (p q r : ℝ), p.HolderTriple q r ↔ p⁻¹ + q⁻¹ = r
+⁻¹ ∧ 0 < p ∧ 0 < q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `NNReal.holderTriple_iff`：∀ (p q r : NNReal), p.HolderTriple q r ↔ p⁻¹ + 
+q⁻¹ = r⁻¹ ∧ 0 < p ∧ 0 < q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+lemma holderTriple_coe_iff {p q r : ℝ≥0} :
+    Real.HolderTriple (p : ℝ) (q : ℝ) (r : ℝ) ↔ HolderTriple p q r := by
   rw_mod_cast [Real.holderTriple_iff, holderTriple_iff]
 
 alias ⟨_, HolderTriple.coe⟩ := holderTriple_coe_iff
 
 @[simp, norm_cast]
-
-中文:
-引理 holderTriple_coe_iff
-  条件: {p q r : 实数>=0}
-  证明: by
-  rw_mod_cast [Real.holderTriple_iff, holderTriple_iff]
-
-alias ⟨_, HolderTriple.coe⟩ := holderTriple_coe_iff
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Real.holderTriple_iff, holderTriple_iff, rw_mod_cast
+/-
+**NNReal.holderConjugate_coe_iff** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：holderConjugate_coe_iff {p q : Real>=0} : Real.HolderConjugate (p : Real) 
+(q : Real) ↔ HolderConjugate p q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NNReal.holderTriple_coe_iff`：holderTriple_coe_iff {p q r : Real>=0} : Re
+al.HolderTriple (p : Real) (q : Real) (r : Real) ↔ HolderTriple p q r
 -/
-lemma holderTriple_coe_iff {p q r : Real>=0} :
-    Real.HolderTriple (p : Real) (q : Real) (r : Real) ↔ HolderTriple p q r := by
-  rw_mod_cast [Real.holderTriple_iff, holderTriple_iff]
-
-alias ⟨_, HolderTriple.coe⟩ := holderTriple_coe_iff
-
-@[simp, norm_cast]
-/--
-lemma `holderConjugate_coe_iff` / 引理 `holderConjugate_coe_iff`
-
-English:
-lemma holderConjugate_coe_iff
-  given: {p q : Real>=0}
-  proof: holderTriple_coe_iff (r := 1)
-
-alias ⟨_, HolderConjugate.coe⟩ := holderConjugate_coe_iff
-
-中文:
-引理 holderConjugate_coe_iff
-  条件: {p q : 实数>=0}
-  证明: holderTriple_coe_iff (r := 1)
-
-alias ⟨_, HolderConjugate.coe⟩ := holderConjugate_coe_iff
-
-Depends on / 依赖: holderTriple_coe_iff
--/
-lemma holderConjugate_coe_iff {p q : Real>=0} :
-    Real.HolderConjugate (p : Real) (q : Real) ↔ HolderConjugate p q :=
+lemma holderConjugate_coe_iff {p q : ℝ≥0} :
+    Real.HolderConjugate (p : ℝ) (q : ℝ) ↔ HolderConjugate p q :=
   holderTriple_coe_iff (r := 1)
 
 alias ⟨_, HolderConjugate.coe⟩ := holderConjugate_coe_iff
 
-variable {a b p q r : Real>=0}
+variable {a b p q r : ℝ≥0}
 
 namespace HolderTriple
 
-/--
-lemma `of_pos` / 引理 `of_pos`
-
-English:
-lemma of_pos
-  given: (hp : 0 < p) (hq : 0 < q)
-  statement: HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where
-  proof: inv_inv _
-  left_pos := hp
-  right_pos := hq
-
-中文:
-引理 of_pos
-  条件: (hp : 0 < p) (hq : 0 < q)
-  结论: HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where
-  证明: inv_inv _
-  left_pos := hp
-  right_pos := hq
-
-Depends on / 依赖: inv_inv
+/-
+**NNReal.HolderTriple.of_pos** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：of_pos (hp : 0 < p) (hq : 0 < q) : HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where .s
+ymm inv_add_inv_eq_inv
+参数：hp : 0 < p；hq : 0 < q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 lemma of_pos (hp : 0 < p) (hq : 0 < q) : HolderTriple p q (p⁻¹ + q⁻¹)⁻¹ where
-.symm inv_add_inv_eq_inv := inv_inv _
+  inv_add_inv_eq_inv := inv_inv _ |>.symm
   left_pos := hp
   right_pos := hq
 
@@ -1190,463 +1258,442 @@ variable (h : p.HolderTriple q r)
 include h
 
 @[symm]
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  statement: q.HolderTriple p r where
-  proof: add_comm p⁻¹ q⁻¹ ▸ h.inv_add_inv_eq_inv
-  left_pos := h.right_pos
-  right_pos := h.left_pos
-
-中文:
-引理 symm
-  结论: q.HolderTriple p r where
-  证明: add_comm p⁻¹ q⁻¹ ▸ h.inv_add_inv_eq_inv
-  left_pos := h.right_pos
-  right_pos := h.left_pos
+/-
+**NNReal.HolderTriple.symm** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → q.HolderTriple p r
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : NNReal}, p.HolderTrip
+le q r → p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `NNReal.HolderTriple.right_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 
+0 < q
+· 使用定理 `NNReal.HolderTriple.left_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 0
+ < p
 -/
 protected lemma symm : q.HolderTriple p r where
   inv_add_inv_eq_inv := add_comm p⁻¹ q⁻¹ ▸ h.inv_add_inv_eq_inv
   left_pos := h.right_pos
   right_pos := h.left_pos
-
-/--
-theorem `pos` / 定理 `pos`
-
-English:
-theorem pos
-  statement: 0 < p
-  proof: h.left_pos
-
-中文:
-定理 pos
-  结论: 0 < p
-  证明: h.left_pos
-
-Depends on / 依赖: h.left_pos, left_pos
+/-
+**NNReal.HolderTriple.pos** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：pos : 0 < p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.HolderTriple.left_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 0
+ < p
 -/
 theorem pos : 0 < p := h.left_pos
-/--
-theorem `nonneg` / 定理 `nonneg`
-
-English:
-theorem nonneg
-  statement: 0 <= p
-  proof: h.pos.le
-
-中文:
-定理 nonneg
-  结论: 0 <= p
-  证明: h.pos.le
-
-Depends on / 依赖: h.pos.le
+/-
+**NNReal.HolderTriple.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：nonneg : 0 <= p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `NNReal.HolderTriple.pos`：pos : 0 < p
 -/
-theorem nonneg : 0 <= p := h.pos.le
-/--
-theorem `ne_zero` / 定理 `ne_zero`
-
-English:
-theorem ne_zero
-  statement: p != 0
-  proof: h.pos.ne'
-
-中文:
-定理 ne_zero
-  结论: p != 0
-  证明: h.pos.ne'
-
-Depends on / 依赖: h.pos.ne
+theorem nonneg : 0 ≤ p := h.pos.le
+/-
+**NNReal.HolderTriple.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：ne_zero : p != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.HolderTriple.pos`：pos : 0 < p
 -/
-theorem ne_zero : p != 0 := h.pos.ne'
-/--
-lemma `inv_pos` / 引理 `inv_pos`
-
-English:
-lemma inv_pos
-  statement: 0 < p⁻¹
-  proof: inv_pos.2 h.pos
-
-中文:
-引理 inv_pos
-  结论: 0 < p⁻¹
-  证明: inv_pos.2 h.pos
+theorem ne_zero : p ≠ 0 := h.pos.ne'
+/-
+**NNReal.HolderTriple.inv_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → 0 < p⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `NNReal.HolderTriple.pos`：pos : 0 < p
 -/
 protected lemma inv_pos : 0 < p⁻¹ := inv_pos.2 h.pos
-/--
-lemma `inv_nonneg` / 引理 `inv_nonneg`
-
-English:
-lemma inv_nonneg
-  statement: 0 <= p⁻¹
-  proof: h.inv_pos.le
-
-中文:
-引理 inv_nonneg
-  结论: 0 <= p⁻¹
-  证明: h.inv_pos.le
+/-
+**NNReal.HolderTriple.inv_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`
+。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → 0 ≤ p⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `NNReal.HolderTriple.inv_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 0 
+< p⁻¹
 -/
-protected lemma inv_nonneg : 0 <= p⁻¹ := h.inv_pos.le
-/--
-lemma `inv_ne_zero` / 引理 `inv_ne_zero`
-
-English:
-lemma inv_ne_zero
-  statement: p⁻¹ != 0
-  proof: h.inv_pos.ne'
-
-中文:
-引理 inv_ne_zero
-  结论: p⁻¹ != 0
-  证明: h.inv_pos.ne'
+protected lemma inv_nonneg : 0 ≤ p⁻¹ := h.inv_pos.le
+/-
+**NNReal.HolderTriple.inv_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple
+`。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → p⁻¹ ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.HolderTriple.inv_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 0 
+< p⁻¹
 -/
-protected lemma inv_ne_zero : p⁻¹ != 0 := h.inv_pos.ne'
-/--
-theorem `one_div_pos` / 定理 `one_div_pos`
-
-English:
-theorem one_div_pos
-  statement: 0 < 1 / p
-  proof: _root_.one_div_pos.2 h.pos
-
-中文:
-定理 one_div_pos
-  结论: 0 < 1 / p
-  证明: _root_.one_div_pos.2 h.pos
-
-Depends on / 依赖: _root_, _root_.one_div_pos, h.pos, one_div_pos
+protected lemma inv_ne_zero : p⁻¹ ≠ 0 := h.inv_pos.ne'
+/-
+**NNReal.HolderTriple.one_div_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple
+`。
+形式化陈述：one_div_pos : 0 < 1 / p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `one_div_pos`：one_div_pos : 0 < 1 / a ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `NNReal.HolderTriple.pos`：pos : 0 < p
 -/
 theorem one_div_pos : 0 < 1 / p := _root_.one_div_pos.2 h.pos
-/--
-theorem `one_div_nonneg` / 定理 `one_div_nonneg`
-
-English:
-theorem one_div_nonneg
-  statement: 0 <= 1 / p
-  proof: le_of_lt h.one_div_pos
-
-中文:
-定理 one_div_nonneg
-  结论: 0 <= 1 / p
-  证明: le_of_lt h.one_div_pos
-
-Depends on / 依赖: h.one_div_pos, le_of_lt, one_div_pos
+/-
+**NNReal.HolderTriple.one_div_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTri
+ple`。
+形式化陈述：one_div_nonneg : 0 <= 1 / p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `NNReal.HolderTriple.one_div_pos`：one_div_pos : 0 < 1 / p
 -/
-theorem one_div_nonneg : 0 <= 1 / p := le_of_lt h.one_div_pos
-/--
-theorem `one_div_ne_zero` / 定理 `one_div_ne_zero`
-
-English:
-theorem one_div_ne_zero
-  statement: 1 / p != 0
-  proof: ne_of_gt h.one_div_pos
-
-中文:
-定理 one_div_ne_zero
-  结论: 1 / p != 0
-  证明: ne_of_gt h.one_div_pos
-
-Depends on / 依赖: h.one_div_pos, ne_of_gt, one_div_pos
+theorem one_div_nonneg : 0 ≤ 1 / p := le_of_lt h.one_div_pos
+/-
+**NNReal.HolderTriple.one_div_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTr
+iple`。
+形式化陈述：one_div_ne_zero : 1 / p != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.HolderTriple.one_div_pos`：one_div_pos : 0 < 1 / p
 -/
-theorem one_div_ne_zero : 1 / p != 0 := ne_of_gt h.one_div_pos
+theorem one_div_ne_zero : 1 / p ≠ 0 := ne_of_gt h.one_div_pos
 
-/--
-theorem `pos'` / 定理 `pos'`
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.pos'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：pos' : 0 < r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `add_pos`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder α] 
+[AddLeftStrictMono α] {a b : α},   0 < a → 0 < b → 0 < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `NNReal.instIsStrictOrderedRing_1`：IsStrictOrderedRing NNReal
+· 使用定理 `NNReal.HolderTriple.inv_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 0 
+< p⁻¹
+· 使用定理 `NNReal.HolderTriple.symm`：∀ {p q r : NNReal}, p.HolderTriple q r → q.Hol
+derTriple p r
+· 使用定理 `NNReal.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : NNReal}, p.HolderTrip
+le q r → p⁻¹ + q⁻¹ = r⁻¹
 
-English:
-theorem pos'
-  statement: 0 < r
-  proof: inv_pos.mp h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
-
-中文:
-定理 pos'
-  结论: 0 < r
-  证明: inv_pos.mp h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
-
-Depends on / 依赖: add_pos, h.inv_add_inv_eq_inv, h.inv_pos, h.symm.inv_pos, inv_add_inv_eq_inv, inv_pos, inv_pos.mp
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem pos' : 0 < r := inv_pos.mp h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
-/--
-theorem `nonneg'` / 定理 `nonneg'`
+theorem pos' : 0 < r := inv_pos.mp <| h.inv_add_inv_eq_inv ▸ add_pos h.inv_pos h.symm.inv_pos
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：nonneg' : 0 <= r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `NNReal.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem nonneg'
-  statement: 0 <= r
-  proof: h.pos'.le
-
-中文:
-定理 nonneg'
-  结论: 0 <= r
-  证明: h.pos'.le
-
-Depends on / 依赖: h.pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem nonneg' : 0 <= r := h.pos'.le
-/--
-theorem `ne_zero'` / 定理 `ne_zero'`
+theorem nonneg' : 0 ≤ r := h.pos'.le
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：ne_zero' : r != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem ne_zero'
-  statement: r != 0
-  proof: h.pos'.ne'
-
-中文:
-定理 ne_zero'
-  结论: r != 0
-  证明: h.pos'.ne'
-
-Depends on / 依赖: h.pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem ne_zero' : r != 0 := h.pos'.ne'
-/--
-lemma `inv_pos'` / 引理 `inv_pos'`
+theorem ne_zero' : r ≠ 0 := h.pos'.ne'
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.inv_pos'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → 0 < r⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `NNReal.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-lemma inv_pos'
-  statement: 0 < r⁻¹
-  proof: inv_pos.2 h.pos'
-
-中文:
-引理 inv_pos'
-  结论: 0 < r⁻¹
-  证明: inv_pos.2 h.pos'
+--- 原说明 ---
+For `r`, instead of `p`
 -/
 protected lemma inv_pos' : 0 < r⁻¹ := inv_pos.2 h.pos'
-/--
-lemma `inv_nonneg'` / 引理 `inv_nonneg'`
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.inv_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple
+`。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → 0 ≤ r⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `NNReal.HolderTriple.inv_pos'`：∀ {p q r : NNReal}, p.HolderTriple q r → 0
+ < r⁻¹
 
-English:
-lemma inv_nonneg'
-  statement: 0 <= r⁻¹
-  proof: h.inv_pos'.le
-
-中文:
-引理 inv_nonneg'
-  结论: 0 <= r⁻¹
-  证明: h.inv_pos'.le
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-protected lemma inv_nonneg' : 0 <= r⁻¹ := h.inv_pos'.le
-/--
-lemma `inv_ne_zero'` / 引理 `inv_ne_zero'`
+protected lemma inv_nonneg' : 0 ≤ r⁻¹ := h.inv_pos'.le
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.inv_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTripl
+e`。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → r⁻¹ ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.HolderTriple.inv_pos'`：∀ {p q r : NNReal}, p.HolderTriple q r → 0
+ < r⁻¹
 
-English:
-lemma inv_ne_zero'
-  statement: r⁻¹ != 0
-  proof: h.inv_pos'.ne'
-
-中文:
-引理 inv_ne_zero'
-  结论: r⁻¹ != 0
-  证明: h.inv_pos'.ne'
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-protected lemma inv_ne_zero' : r⁻¹ != 0 := h.inv_pos'.ne'
-/--
-theorem `one_div_pos'` / 定理 `one_div_pos'`
+protected lemma inv_ne_zero' : r⁻¹ ≠ 0 := h.inv_pos'.ne'
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.one_div_pos'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTripl
+e`。
+形式化陈述：one_div_pos' : 0 < 1 / r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `one_div_pos`：one_div_pos : 0 < 1 / a ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `NNReal.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem one_div_pos'
-  statement: 0 < 1 / r
-  proof: _root_.one_div_pos.2 h.pos'
-
-中文:
-定理 one_div_pos'
-  结论: 0 < 1 / r
-  证明: _root_.one_div_pos.2 h.pos'
-
-Depends on / 依赖: _root_, _root_.one_div_pos, h.pos, one_div_pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
 theorem one_div_pos' : 0 < 1 / r := _root_.one_div_pos.2 h.pos'
-/--
-theorem `one_div_nonneg'` / 定理 `one_div_nonneg'`
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.one_div_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTr
+iple`。
+形式化陈述：one_div_nonneg' : 0 <= 1 / r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `NNReal.HolderTriple.one_div_pos'`：one_div_pos' : 0 < 1 / r
 
-English:
-theorem one_div_nonneg'
-  statement: 0 <= 1 / r
-  proof: le_of_lt h.one_div_pos'
-
-中文:
-定理 one_div_nonneg'
-  结论: 0 <= 1 / r
-  证明: le_of_lt h.one_div_pos'
-
-Depends on / 依赖: h.one_div_pos, le_of_lt, one_div_pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem one_div_nonneg' : 0 <= 1 / r := le_of_lt h.one_div_pos'
-/--
-theorem `one_div_ne_zero'` / 定理 `one_div_ne_zero'`
+theorem one_div_nonneg' : 0 ≤ 1 / r := le_of_lt h.one_div_pos'
+/-- For `r`, instead of `p` -/
+/-
+**NNReal.HolderTriple.one_div_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderT
+riple`。
+形式化陈述：one_div_ne_zero' : 1 / r != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.HolderTriple.one_div_pos'`：one_div_pos' : 0 < 1 / r
 
-English:
-theorem one_div_ne_zero'
-  statement: 1 / r != 0
-  proof: ne_of_gt h.one_div_pos'
-
-中文:
-定理 one_div_ne_zero'
-  结论: 1 / r != 0
-  证明: ne_of_gt h.one_div_pos'
-
-Depends on / 依赖: h.one_div_pos, ne_of_gt, one_div_pos
+--- 原说明 ---
+For `r`, instead of `p`
 -/
-theorem one_div_ne_zero' : 1 / r != 0 := ne_of_gt h.one_div_pos'
+theorem one_div_ne_zero' : 1 / r ≠ 0 := ne_of_gt h.one_div_pos'
 
 /-- useful for introducing all three facts simultaneously within a proof. -/
-@[grind ->]
-/--
-theorem `all_pos` / 定理 `all_pos`
+@[grind →]
+/-
+**NNReal.HolderTriple.all_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：all_pos : 0 < p ∧ 0 < q ∧ 0 < r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.HolderTriple.pos`：pos : 0 < p
+· 使用定理 `NNReal.HolderTriple.symm`：∀ {p q r : NNReal}, p.HolderTriple q r → q.Hol
+derTriple p r
+· 使用定理 `NNReal.HolderTriple.pos'`：pos' : 0 < r
 
-English:
-theorem all_pos
-  statement: 0 < p ∧ 0 < q ∧ 0 < r
-  proof: ⟨h.pos, h.symm.pos, h.pos'⟩
-
-中文:
-定理 all_pos
-  结论: 0 < p ∧ 0 < q ∧ 0 < r
-  证明: ⟨h.pos, h.symm.pos, h.pos'⟩
-
-Depends on / 依赖: h.pos, h.symm.pos
+--- 原说明 ---
+useful for introducing all three facts simultaneously within a proof.
 -/
 theorem all_pos : 0 < p ∧ 0 < q ∧ 0 < r := ⟨h.pos, h.symm.pos, h.pos'⟩
-
-/--
-lemma `inv_eq` / 引理 `inv_eq`
-
-English:
-lemma inv_eq
-  statement: r⁻¹ = p⁻¹ + q⁻¹
-  proof: h.inv_add_inv_eq_inv.symm
-
-中文:
-引理 inv_eq
-  结论: r⁻¹ = p⁻¹ + q⁻¹
-  证明: h.inv_add_inv_eq_inv.symm
-
-Depends on / 依赖: h.inv_add_inv_eq_inv.symm, inv_add_inv_eq_inv
+/-
+**NNReal.HolderTriple.inv_eq** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：inv_eq : r⁻¹ = p⁻¹ + q⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : NNReal}, p.HolderTrip
+le q r → p⁻¹ + q⁻¹ = r⁻¹
 -/
 lemma inv_eq : r⁻¹ = p⁻¹ + q⁻¹ := h.inv_add_inv_eq_inv.symm
-/--
-lemma `one_div_add_one_div` / 引理 `one_div_add_one_div`
-
-English:
-lemma one_div_add_one_div
-  statement: 1 / p + 1 / q = 1 / r
-  proof: by exact_mod_cast h.coe.one_div_add_one_div
-
-中文:
-引理 one_div_add_one_div
-  结论: 1 / p + 1 / q = 1 / r
-  证明: by exact_mod_cast h.coe.one_div_add_one_div
-
-Depends on / 依赖: h.coe.one_div_add_one_div, one_div_add_one_div
+/-
+**NNReal.HolderTriple.one_div_add_one_div** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.Hold
+erTriple`。
+形式化陈述：one_div_add_one_div : 1 / p + 1 / q = 1 / r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用引理 `Real.HolderTriple.one_div_add_one_div`：one_div_add_one_div : 1 / p + 1 /
+ q = 1 / r
+· 使用定理 `NNReal.HolderTriple.coe`：∀ {p q r : NNReal}, p.HolderTriple q r → (↑p).H
+olderTriple ↑q ↑r
 -/
 lemma one_div_add_one_div : 1 / p + 1 / q = 1 / r := by exact_mod_cast h.coe.one_div_add_one_div
-/--
-lemma `one_div_eq` / 引理 `one_div_eq`
-
-English:
-lemma one_div_eq
-  statement: 1 / r = 1 / p + 1 / q
-  proof: h.one_div_add_one_div.symm
-
-中文:
-引理 one_div_eq
-  结论: 1 / r = 1 / p + 1 / q
-  证明: h.one_div_add_one_div.symm
-
-Depends on / 依赖: h.one_div_add_one_div.symm, one_div_add_one_div
+/-
+**NNReal.HolderTriple.one_div_eq** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.HolderTriple`
+。
+形式化陈述：one_div_eq : 1 / r = 1 / p + 1 / q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `NNReal.HolderTriple.one_div_add_one_div`：one_div_add_one_div : 1 / p + 1
+ / q = 1 / r
 -/
 lemma one_div_eq : 1 / r = 1 / p + 1 / q := h.one_div_add_one_div.symm
-/--
-lemma `inv_inv_add_inv` / 引理 `inv_inv_add_inv`
-
-English:
-lemma inv_inv_add_inv
-  statement: (p⁻¹ + q⁻¹)⁻¹ = r
-  proof: by exact_mod_cast h.coe.inv_inv_add_inv
-
-中文:
-引理 inv_inv_add_inv
-  结论: (p⁻¹ + q⁻¹)⁻¹ = r
-  证明: by exact_mod_cast h.coe.inv_inv_add_inv
-
-Depends on / 依赖: h.coe.inv_inv_add_inv, inv_inv_add_inv
+/-
+**NNReal.HolderTriple.inv_inv_add_inv** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.HolderTr
+iple`。
+形式化陈述：inv_inv_add_inv : (p⁻¹ + q⁻¹)⁻¹ = r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.HolderTriple.inv_inv_add_inv`：inv_inv_add_inv : (p⁻¹ + q⁻¹)⁻¹ = r
+· 使用定理 `NNReal.HolderTriple.coe`：∀ {p q r : NNReal}, p.HolderTriple q r → (↑p).H
+olderTriple ↑q ↑r
 -/
 lemma inv_inv_add_inv : (p⁻¹ + q⁻¹)⁻¹ = r := by exact_mod_cast h.coe.inv_inv_add_inv
-
-/--
-lemma `inv_lt_inv` / 引理 `inv_lt_inv`
-
-English:
-lemma inv_lt_inv
-  statement: p⁻¹ < r⁻¹
-  proof: h.coe.inv_lt_inv
-
-中文:
-引理 inv_lt_inv
-  结论: p⁻¹ < r⁻¹
-  证明: h.coe.inv_lt_inv
+/-
+**NNReal.HolderTriple.inv_lt_inv** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderTriple`
+。
+形式化陈述：∀ {p q r : NNReal}, p.HolderTriple q r → p⁻¹ < r⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderTriple.inv_lt_inv`：∀ {p q r : ℝ}, p.HolderTriple q r → p⁻¹ < 
+r⁻¹
+· 使用定理 `NNReal.HolderTriple.coe`：∀ {p q r : NNReal}, p.HolderTriple q r → (↑p).H
+olderTriple ↑q ↑r
 -/
 protected lemma inv_lt_inv : p⁻¹ < r⁻¹ := h.coe.inv_lt_inv
-/--
-lemma `lt` / 引理 `lt`
-
-English:
-lemma lt
-  statement: r < p
-  proof: h.coe.lt
-
-中文:
-引理 lt
-  结论: r < p
-  证明: h.coe.lt
-
-Depends on / 依赖: h.coe.lt
+/-
+**NNReal.HolderTriple.lt** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.HolderTriple`。
+形式化陈述：lt : r < p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.HolderTriple.lt`：lt : r < p
+· 使用定理 `NNReal.HolderTriple.coe`：∀ {p q r : NNReal}, p.HolderTriple q r → (↑p).H
+olderTriple ↑q ↑r
 -/
 lemma lt : r < p := h.coe.lt
-/--
-lemma `inv_sub_inv_eq_inv` / 引理 `inv_sub_inv_eq_inv`
-
-English:
-lemma inv_sub_inv_eq_inv
-  statement: r⁻¹ - q⁻¹ = p⁻¹
-  proof: by
-  have := h.symm.inv_lt_inv.le
-  exact_mod_cast h.coe.inv_sub_inv_eq_inv
-
-中文:
-引理 inv_sub_inv_eq_inv
-  结论: r⁻¹ - q⁻¹ = p⁻¹
-  证明: by
-  have := h.symm.inv_lt_inv.le
-  exact_mod_cast h.coe.inv_sub_inv_eq_inv
-
-Depends on / 依赖: h.coe.inv_sub_inv_eq_inv, h.symm.inv_lt_inv.le, inv_lt_inv, inv_sub_inv_eq_inv
+/-
+**NNReal.HolderTriple.inv_sub_inv_eq_inv** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.Holde
+rTriple`。
+形式化陈述：inv_sub_inv_eq_inv : r⁻¹ - q⁻¹ = p⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `NNReal.HolderTriple.inv_lt_inv`：∀ {p q r : NNReal}, p.HolderTriple q r →
+ p⁻¹ < r⁻¹
+· 使用定理 `NNReal.HolderTriple.symm`：∀ {p q r : NNReal}, p.HolderTriple q r → q.Hol
+derTriple p r
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Real.HolderTriple.inv_sub_inv_eq_inv`：inv_sub_inv_eq_inv : r⁻¹ - q⁻¹ = p
+⁻¹
+· 使用定理 `NNReal.HolderTriple.coe`：∀ {p q r : NNReal}, p.HolderTriple q r → (↑p).H
+olderTriple ↑q ↑r
 -/
 lemma inv_sub_inv_eq_inv : r⁻¹ - q⁻¹ = p⁻¹ := by
   have := h.symm.inv_lt_inv.le
   exact_mod_cast h.coe.inv_sub_inv_eq_inv
-
-/--
-lemma `holderConjugate_div_div` / 引理 `holderConjugate_div_div`
-
-English:
-lemma holderConjugate_div_div
-  statement: (p / r).HolderConjugate (q / r) where
-  proof: by
-    simp [div_eq_mul_inv, ← mul_add, h.inv_add_inv_eq_inv, h.ne_zero']
-  left_pos := by have := h.left_pos; have := h.pos'; positivity
-  right_pos := by have := h.right_pos; have := h.pos'; positivity
-
-中文:
-引理 holderConjugate_div_div
-  结论: (p / r).HolderConjugate (q / r) where
-  证明: by
-    simp [div_eq_mul_inv, ← mul_add, h.inv_add_inv_eq_inv, h.ne_zero']
-  left_pos := by have := h.left_pos; have := h.pos'; positivity
-  right_pos := by have := h.right_pos; have := h.pos'; positivity
-
-Depends on / 依赖: div_eq_mul_inv, h.inv_add_inv_eq_inv, h.left_pos, h.ne_zero, h.pos, h.right_pos, inv_add_inv_eq_inv, left_pos, mul_add, ne_zero, right_pos
+/-
+**NNReal.HolderTriple.holderConjugate_div_div** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.
+HolderTriple`。
+形式化陈述：holderConjugate_div_div : (p / r).HolderConjugate (q / r) where inv_add_in
+v_eq_inv
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `NNReal.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : NNReal}, p.HolderTrip
+le q r → p⁻¹ + q⁻¹ = r⁻¹
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `NNReal.HolderTriple.ne_zero'`：ne_zero' : r != 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `NNReal.HolderTriple.left_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 0
+ < p
+· 使用定理 `NNReal.HolderTriple.pos'`：pos' : 0 < r
+· 使用引理 `div_pos`：div_pos (ha : 0 < a) (hb : 0 < b) : 0 < a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `NNReal.HolderTriple.right_pos`：∀ {p q r : NNReal}, p.HolderTriple q r → 
+0 < q
 -/
 lemma holderConjugate_div_div : (p / r).HolderConjugate (q / r) where
   inv_add_inv_eq_inv := by
@@ -1658,27 +1705,34 @@ end HolderTriple
 
 namespace HolderConjugate
 
-/--
-lemma `two_two` / 引理 `two_two`
-
-English:
-lemma two_two
-  statement: HolderConjugate 2 2 where
-  proof: by simpa using add_halves (1 : Real>=0)
-  left_pos := zero_lt_two
-  right_pos := zero_lt_two
-
-中文:
-引理 two_two
-  结论: HolderConjugate 2 2 where
-  证明: by simpa using add_halves (1 : Real>=0)
-  left_pos := zero_lt_two
-  right_pos := zero_lt_two
-
-Depends on / 依赖: add_halves, left_pos, right_pos, zero_lt_two
+/-
+**NNReal.HolderConjugate.two_two** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.HolderConjuga
+te`。
+形式化陈述：two_two : HolderConjugate 2 2 where inv_add_inv_eq_inv
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `add_halves`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2] (a :
+ K), a / 2 + a / 2 = a
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `NNReal.instIsStrictOrderedRing_1`：IsStrictOrderedRing NNReal
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
 -/
 lemma two_two : HolderConjugate 2 2 where
-  inv_add_inv_eq_inv := by simpa using add_halves (1 : Real>=0)
+  inv_add_inv_eq_inv := by simpa using add_halves (1 : ℝ≥0)
   left_pos := zero_lt_two
   right_pos := zero_lt_two
 
@@ -1687,461 +1741,519 @@ variable (h : p.HolderConjugate q)
 include h
 
 @[symm]
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  statement: q.HolderConjugate p
-  proof: HolderTriple.symm h
-
-中文:
-引理 symm
-  结论: q.HolderConjugate p
-  证明: HolderTriple.symm h
+/-
+**NNReal.HolderConjugate.symm** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderConjugate`
+。
+形式化陈述：∀ {p q : NNReal}, p.HolderConjugate q → q.HolderConjugate p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.HolderTriple.symm`：∀ {p q r : NNReal}, p.HolderTriple q r → q.Hol
+derTriple p r
 -/
 protected lemma symm : q.HolderConjugate p := HolderTriple.symm h
-
-/--
-theorem `inv_add_inv_eq_one` / 定理 `inv_add_inv_eq_one`
-
-English:
-theorem inv_add_inv_eq_one
-  statement: p⁻¹ + q⁻¹ = 1
-  proof: inv_one (G := Real>=0) ▸ h.inv_add_inv_eq_inv
-
-中文:
-定理 inv_add_inv_eq_one
-  结论: p⁻¹ + q⁻¹ = 1
-  证明: inv_one (G := Real>=0) ▸ h.inv_add_inv_eq_inv
-
-Depends on / 依赖: h.inv_add_inv_eq_inv, inv_add_inv_eq_inv, inv_one
+/-
+**NNReal.HolderConjugate.inv_add_inv_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.Ho
+lderConjugate`。
+形式化陈述：inv_add_inv_eq_one : p⁻¹ + q⁻¹ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : NNReal}, p.HolderTrip
+le q r → p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
 -/
-theorem inv_add_inv_eq_one : p⁻¹ + q⁻¹ = 1 := inv_one (G := Real>=0) ▸ h.inv_add_inv_eq_inv
-
-/--
-theorem `sub_one_pos` / 定理 `sub_one_pos`
-
-English:
-theorem sub_one_pos
-  statement: 0 < p - 1
-  proof: tsub_pos_of_lt h.lt
-
-中文:
-定理 sub_one_pos
-  结论: 0 < p - 1
-  证明: tsub_pos_of_lt h.lt
-
-Depends on / 依赖: h.lt, tsub_pos_of_lt
+theorem inv_add_inv_eq_one : p⁻¹ + q⁻¹ = 1 := inv_one (G := ℝ≥0) ▸ h.inv_add_inv_eq_inv
+/-
+**NNReal.HolderConjugate.sub_one_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderCon
+jugate`。
+形式化陈述：sub_one_pos : 0 < p - 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsub_pos_of_lt`：tsub_pos_of_lt (h : a < b) : 0 < b - a
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `NNReal.instOrderedSub`：OrderedSub NNReal
+· 使用引理 `NNReal.HolderTriple.lt`：lt : r < p
 -/
 theorem sub_one_pos : 0 < p - 1 := tsub_pos_of_lt h.lt
-/--
-theorem `sub_one_ne_zero` / 定理 `sub_one_ne_zero`
-
-English:
-theorem sub_one_ne_zero
-  statement: p - 1 != 0
-  proof: h.sub_one_pos.ne'
-
-中文:
-定理 sub_one_ne_zero
-  结论: p - 1 != 0
-  证明: h.sub_one_pos.ne'
-
-Depends on / 依赖: h.sub_one_pos.ne, sub_one_pos
+/-
+**NNReal.HolderConjugate.sub_one_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.Holde
+rConjugate`。
+形式化陈述：sub_one_ne_zero : p - 1 != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NNReal.HolderConjugate.sub_one_pos`：sub_one_pos : 0 < p - 1
 -/
-theorem sub_one_ne_zero : p - 1 != 0 := h.sub_one_pos.ne'
-
-/--
-theorem `conjugate_eq` / 定理 `conjugate_eq`
-
-English:
-theorem conjugate_eq
-  statement: q = p / (p - 1)
-  proof: by
-  have : ((1 : Real>=0) : Real) <= p := h.coe.lt.le
-  exact_mod_cast NNReal.coe_sub this ▸ coe_one ▸ h.coe.conjugate_eq
-
-中文:
-定理 conjugate_eq
-  结论: q = p / (p - 1)
-  证明: by
-  have : ((1 : Real>=0) : Real) <= p := h.coe.lt.le
-  exact_mod_cast NNReal.coe_sub this ▸ coe_one ▸ h.coe.conjugate_eq
-
-Depends on / 依赖: NNReal, NNReal.coe_sub, coe_one, coe_sub, conjugate_eq, h.coe.conjugate_eq, h.coe.lt.le
+theorem sub_one_ne_zero : p - 1 ≠ 0 := h.sub_one_pos.ne'
+/-
+**NNReal.HolderConjugate.conjugate_eq** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderCo
+njugate`。
+形式化陈述：conjugate_eq : q = p / (p - 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `Real.HolderTriple.lt`：lt : r < p
+· 使用定理 `NNReal.HolderConjugate.coe`：∀ {p q : NNReal}, p.HolderConjugate q → (↑p)
+.HolderConjugate ↑q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Real.HolderConjugate.conjugate_eq`：conjugate_eq : q = p / (p - 1)
+· 使用定理 `NNReal.coe_one`：↑1 = 1
+· 使用定理 `NNReal.coe_sub`：∀ {r₁ r₂ : NNReal}, r₂ ≤ r₁ → ↑(r₁ - r₂) = ↑r₁ - ↑r₂
 -/
 theorem conjugate_eq : q = p / (p - 1) := by
-  have : ((1 : Real>=0) : Real) <= p := h.coe.lt.le
+  have : ((1 : ℝ≥0) : ℝ) ≤ p := h.coe.lt.le
   exact_mod_cast NNReal.coe_sub this ▸ coe_one ▸ h.coe.conjugate_eq
-
-/--
-lemma `conjExponent_eq` / 引理 `conjExponent_eq`
-
-English:
-lemma conjExponent_eq
-  statement: conjExponent p = q
-  proof: h.conjugate_eq.symm
-
-中文:
-引理 conjExponent_eq
-  结论: conjExponent p = q
-  证明: h.conjugate_eq.symm
-
-Depends on / 依赖: conjugate_eq, h.conjugate_eq.symm
+/-
+**NNReal.HolderConjugate.conjExponent_eq** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.Holde
+rConjugate`。
+形式化陈述：conjExponent_eq : conjExponent p = q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.HolderConjugate.conjugate_eq`：conjugate_eq : q = p / (p - 1)
 -/
 lemma conjExponent_eq : conjExponent p = q := h.conjugate_eq.symm
-
-/--
-lemma `one_sub_inv` / 引理 `one_sub_inv`
-
-English:
-lemma one_sub_inv
-  statement: 1 - p⁻¹ = q⁻¹
-  proof: tsub_eq_of_eq_add h.symm.inv_add_inv_eq_one.symm
-
-中文:
-引理 one_sub_inv
-  结论: 1 - p⁻¹ = q⁻¹
-  证明: tsub_eq_of_eq_add h.symm.inv_add_inv_eq_one.symm
-
-Depends on / 依赖: h.symm.inv_add_inv_eq_one.symm, inv_add_inv_eq_one, tsub_eq_of_eq_add
+/-
+**NNReal.HolderConjugate.one_sub_inv** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.HolderCon
+jugate`。
+形式化陈述：one_sub_inv : 1 - p⁻¹ = q⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsub_eq_of_eq_add`：tsub_eq_of_eq_add (h : a = c + b) : a - b = c
+· 使用定理 `NNReal.instOrderedSub`：OrderedSub NNReal
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNReal.HolderConjugate.inv_add_inv_eq_one`：inv_add_inv_eq_one : p⁻¹ + q⁻
+¹ = 1
+· 使用定理 `NNReal.HolderConjugate.symm`：∀ {p q : NNReal}, p.HolderConjugate q → q.H
+olderConjugate p
 -/
 lemma one_sub_inv : 1 - p⁻¹ = q⁻¹ := tsub_eq_of_eq_add h.symm.inv_add_inv_eq_one.symm
-
-/--
-theorem `sub_one_mul_conj` / 定理 `sub_one_mul_conj`
-
-English:
-theorem sub_one_mul_conj
-  statement: (p - 1) * q = p
-  proof: mul_comm q (p - 1) ▸ (eq_div_iff h.sub_one_ne_zero).1 h.conjugate_eq
-
-中文:
-定理 sub_one_mul_conj
-  结论: (p - 1) * q = p
-  证明: mul_comm q (p - 1) ▸ (eq_div_iff h.sub_one_ne_zero).1 h.conjugate_eq
-
-Depends on / 依赖: conjugate_eq, eq_div_iff, h.conjugate_eq, h.sub_one_ne_zero, mul_comm, sub_one_ne_zero
+/-
+**NNReal.HolderConjugate.sub_one_mul_conj** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.Hold
+erConjugate`。
+形式化陈述：sub_one_mul_conj : (p - 1) * q = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `eq_div_iff`：eq_div_iff (hb : b != 0) : c = a / b ↔ c * b = a
+· 使用定理 `NNReal.HolderConjugate.sub_one_ne_zero`：sub_one_ne_zero : p - 1 != 0
+· 使用定理 `NNReal.HolderConjugate.conjugate_eq`：conjugate_eq : q = p / (p - 1)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem sub_one_mul_conj : (p - 1) * q = p :=
   mul_comm q (p - 1) ▸ (eq_div_iff h.sub_one_ne_zero).1 h.conjugate_eq
-
-/--
-theorem `mul_eq_add` / 定理 `mul_eq_add`
-
-English:
-theorem mul_eq_add
-  statement: p * q = p + q
-  proof: by
-  simpa [mul_add, add_mul, h.ne_zero, h.symm.ne_zero, add_comm q] using congr(p * $(h.inv_eq) * q)
-
-中文:
-定理 mul_eq_add
-  结论: p * q = p + q
-  证明: by
-  simpa [mul_add, add_mul, h.ne_zero, h.symm.ne_zero, add_comm q] using congr(p * $(h.inv_eq) * q)
-
-Depends on / 依赖: add_comm, add_mul, h.inv_eq, h.ne_zero, h.symm.ne_zero, inv_eq, mul_add, ne_zero
+/-
+**NNReal.HolderConjugate.mul_eq_add** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderConj
+ugate`。
+形式化陈述：mul_eq_add : p * q = p + q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `NNReal.HolderTriple.ne_zero`：ne_zero : p != 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `inv_mul_cancel_right₀`：inv_mul_cancel_right₀ (h : b != 0) (a : G₀) : a *
+ b⁻¹ * b = a
+· 使用定理 `NNReal.HolderConjugate.symm`：∀ {p q : NNReal}, p.HolderConjugate q → q.H
+olderConjugate p
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `NNReal.HolderTriple.inv_eq`：inv_eq : r⁻¹ = p⁻¹ + q⁻¹
 -/
 theorem mul_eq_add : p * q = p + q := by
   simpa [mul_add, add_mul, h.ne_zero, h.symm.ne_zero, add_comm q] using congr(p * $(h.inv_eq) * q)
-
-/--
-theorem `div_conj_eq_sub_one` / 定理 `div_conj_eq_sub_one`
-
-English:
-theorem div_conj_eq_sub_one
-  statement: p / q = p - 1
-  proof: by
-  field_simp [h.symm.ne_zero]
-  linear_combination -h.sub_one_mul_conj
-
-中文:
-定理 div_conj_eq_sub_one
-  结论: p / q = p - 1
-  证明: by
-  field_simp [h.symm.ne_zero]
-  linear_combination -h.sub_one_mul_conj
-
-Depends on / 依赖: h.sub_one_mul_conj, h.symm.ne_zero, linear_combination, ne_zero, sub_one_mul_conj
+/-
+**NNReal.HolderConjugate.div_conj_eq_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.H
+olderConjugate`。
+形式化陈述：div_conj_eq_sub_one : p / q = p - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval`：div_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al / l₂.eval = l.eval) : x₁ /…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval₃`：div_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval / l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval`：eval_cons_mul_eval [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : ((n, e) ::ᵣ L).eval * l.eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval_cons_neg`：eval_cons_mul_e
+val_cons_neg [CommGroupWithZero M] (n : Int) {e : M} (he : e != 0) {L l l' : NF 
+M} (h : L.eval * l.eval = l'.eval) : ((n, e) …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `NNReal.HolderTriple.ne_zero`：ne_zero : p != 0
+· 使用定理 `NNReal.HolderConjugate.symm`：∀ {p q : NNReal}, p.HolderConjugate q → q.H
+olderConjugate p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_ne_zero`：cons_ne_zero [GroupWithZero M]
+ (r : Int) {x : M} (hx : x != 0) {l : NF M} (hl : l.eval != 0) : ((r, x) ::ᵣ l).
+eval != 0
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
+· 使用定理 `Mathlib.Tactic.LinearCombination.eq_of_eq`：eq_of_eq [Add α] [IsRightCanc
+elAdd α] (p : (a : α) = b) (H : a' + b = b' + a) : a' = b'
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+（共 51 条，此处仅展示前 30 条）
 -/
 theorem div_conj_eq_sub_one : p / q = p - 1 := by
   field_simp [h.symm.ne_zero]
   linear_combination -h.sub_one_mul_conj
-
-/--
-lemma `inv_add_inv_ennreal` / 引理 `inv_add_inv_ennreal`
-
-English:
-lemma inv_add_inv_ennreal
-  statement: (p⁻¹ + q⁻¹ : Real>=0∞) = 1
-  proof: by norm_cast; exact h.inv_add_inv_eq_one
-
-中文:
-引理 inv_add_inv_ennreal
-  结论: (p⁻¹ + q⁻¹ : 实数>=0∞) = 1
-  证明: by norm_cast; exact h.inv_add_inv_eq_one
-
-Depends on / 依赖: h.inv_add_inv_eq_one, inv_add_inv_eq_one
+/-
+**NNReal.HolderConjugate.inv_add_inv_ennreal** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.H
+olderConjugate`。
+形式化陈述：inv_add_inv_ennreal : (p⁻¹ + q⁻¹ : Real>=0∞) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `NNReal.HolderConjugate.inv_add_inv_eq_one`：inv_add_inv_eq_one : p⁻¹ + q⁻
+¹ = 1
 -/
-lemma inv_add_inv_ennreal : (p⁻¹ + q⁻¹ : Real>=0∞) = 1 := by norm_cast; exact h.inv_add_inv_eq_one
+lemma inv_add_inv_ennreal : (p⁻¹ + q⁻¹ : ℝ≥0∞) = 1 := by norm_cast; exact h.inv_add_inv_eq_one
 
 end
 
-/--
-lemma `_root_.NNReal.holderConjugate_iff` / 引理 `_root_.NNReal.holderConjugate_iff`
-
-English:
-lemma _root_.NNReal.holderConjugate_iff
-  statement: p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1
-  proof: by
-  rw [← holderConjugate_coe_iff]; rw [Real.holderConjugate_iff]; rw [← coe_one]
-  exact_mod_cast Iff.rfl
-
-中文:
-引理 _root_.非负实数.holderConjugate_iff
-  结论: p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1
-  证明: by
-  rw [← holderConjugate_coe_iff]; rw [Real.holderConjugate_iff]; rw [← coe_one]
-  exact_mod_cast Iff.rfl
-
-Depends on / 依赖: Iff.rfl, Real.holderConjugate_iff, coe_one, holderConjugate_coe_iff, holderConjugate_iff
+/-
+**NNReal.HolderConjugate._root_.NNReal.holderConjugate_iff** 是 Mathlib 中的一个引理，位于
+命名空间 `NNReal.HolderConjugate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.NNReal.holderConjugate_iff : p.HolderConjugate q ↔ 1 < p ∧ p⁻¹ + q⁻¹ = 1 := by
-  rw [← holderConjugate_coe_iff]; rw [Real.holderConjugate_iff]; rw [← coe_one]
+  rw [← holderConjugate_coe_iff, Real.holderConjugate_iff, ← coe_one]
   exact_mod_cast Iff.rfl
-
-/--
-lemma `inv_inv` / 引理 `inv_inv`
-
-English:
-lemma inv_inv
-  given: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  statement: a⁻¹.HolderConjugate b⁻¹ where
-  proof: by simpa using hab
-  left_pos := inv_pos.mpr ha
-  right_pos := inv_pos.mpr hb
-
-中文:
-引理 inv_inv
-  条件: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  结论: a⁻¹.HolderConjugate b⁻¹ where
-  证明: by simpa using hab
-  left_pos := inv_pos.mpr ha
-  right_pos := inv_pos.mpr hb
+/-
+**NNReal.HolderConjugate.inv_inv** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderConjuga
+te`。
+形式化陈述：∀ {a b : NNReal}, 0 < a → 0 < b → a + b = 1 → a⁻¹.HolderConjugate b⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
 -/
 protected lemma inv_inv (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1) : a⁻¹.HolderConjugate b⁻¹ where
   inv_add_inv_eq_inv := by simpa using hab
   left_pos := inv_pos.mpr ha
   right_pos := inv_pos.mpr hb
-
-/--
-lemma `inv_one_sub_inv` / 引理 `inv_one_sub_inv`
-
-English:
-lemma inv_one_sub_inv
-  given: (ha₀ : 0 < a) (ha₁ : a < 1)
-  statement: a⁻¹.HolderConjugate (1 - a)⁻¹
-  proof: .mpr ha₁, by simpa using add_tsub_cancel_of_le ha₁.le⟩ holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀
-
-中文:
-引理 inv_one_sub_inv
-  条件: (ha₀ : 0 < a) (ha₁ : a < 1)
-  结论: a⁻¹.HolderConjugate (1 - a)⁻¹
-  证明: .mpr ha₁, by simpa using add_tsub_cancel_of_le ha₁.le⟩ holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀
-
-Depends on / 依赖: add_tsub_cancel_of_le, holderConjugate_iff, holderConjugate_iff.mpr
+/-
+**NNReal.HolderConjugate.inv_one_sub_inv** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.Holde
+rConjugate`。
+形式化陈述：inv_one_sub_inv (ha₀ : 0 < a) (ha₁ : a < 1) : a⁻¹.HolderConjugate (1 - a)⁻
+¹
+参数：ha₀ : 0 < a；ha₁ : a < 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `NNReal.holderConjugate_iff`：∀ {p q : NNReal}, p.HolderConjugate q ↔ 1 < 
+p ∧ p⁻¹ + q⁻¹ = 1
+· 使用引理 `one_lt_inv₀`：one_lt_inv₀ (ha : 0 < a) : 1 < a⁻¹ ↔ a < 1
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `add_tsub_cancel_of_le`：add_tsub_cancel_of_le (h : a <= b) : a + (b - a) 
+= b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `NNReal.instOrderedSub`：OrderedSub NNReal
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 lemma inv_one_sub_inv (ha₀ : 0 < a) (ha₁ : a < 1) : a⁻¹.HolderConjugate (1 - a)⁻¹ :=
-.mpr ha₁, by simpa using add_tsub_cancel_of_le ha₁.le⟩ holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀
-
-/--
-lemma `one_sub_inv_inv` / 引理 `one_sub_inv_inv`
-
-English:
-lemma one_sub_inv_inv
-  given: (ha₀ : 0 < a) (ha₁ : a < 1)
-  statement: (1 - a)⁻¹.HolderConjugate a⁻¹
-  proof: (inv_one_sub_inv ha₀ ha₁).symm
-
-中文:
-引理 one_sub_inv_inv
-  条件: (ha₀ : 0 < a) (ha₁ : a < 1)
-  结论: (1 - a)⁻¹.HolderConjugate a⁻¹
-  证明: (inv_one_sub_inv ha₀ ha₁).symm
-
-Depends on / 依赖: inv_one_sub_inv
+  holderConjugate_iff.mpr ⟨one_lt_inv₀ ha₀ |>.mpr ha₁, by simpa using add_tsub_cancel_of_le ha₁.le⟩
+/-
+**NNReal.HolderConjugate.one_sub_inv_inv** 是 Mathlib 中的一个引理，位于命名空间 `NNReal.Holde
+rConjugate`。
+形式化陈述：one_sub_inv_inv (ha₀ : 0 < a) (ha₁ : a < 1) : (1 - a)⁻¹.HolderConjugate a⁻
+¹
+参数：ha₀ : 0 < a；ha₁ : a < 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.HolderConjugate.symm`：∀ {p q : NNReal}, p.HolderConjugate q → q.H
+olderConjugate p
+· 使用引理 `NNReal.HolderConjugate.inv_one_sub_inv`：inv_one_sub_inv (ha₀ : 0 < a) (h
+a₁ : a < 1) : a⁻¹.HolderConjugate (1 - a)⁻¹
 -/
 lemma one_sub_inv_inv (ha₀ : 0 < a) (ha₁ : a < 1) : (1 - a)⁻¹.HolderConjugate a⁻¹ :=
   (inv_one_sub_inv ha₀ ha₁).symm
 
 end HolderConjugate
 
-/--
-lemma `holderConjugate_comm` / 引理 `holderConjugate_comm`
-
-English:
-lemma holderConjugate_comm
-  statement: p.HolderConjugate q ↔ q.HolderConjugate p
-  proof: ⟨.symm, .symm⟩
-
-中文:
-引理 holderConjugate_comm
-  结论: p.HolderConjugate q ↔ q.HolderConjugate p
-  证明: ⟨.symm, .symm⟩
+/-
+**NNReal.holderConjugate_comm** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：holderConjugate_comm : p.HolderConjugate q ↔ q.HolderConjugate p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.HolderConjugate.symm`：∀ {p q : NNReal}, p.HolderConjugate q → q.H
+olderConjugate p
 -/
 lemma holderConjugate_comm : p.HolderConjugate q ↔ q.HolderConjugate p := ⟨.symm, .symm⟩
-
-/--
-lemma `holderConjugate_iff_eq_conjExponent` / 引理 `holderConjugate_iff_eq_conjExponent`
-
-English:
-lemma holderConjugate_iff_eq_conjExponent
-  given: (hp : 1 < p)
-  statement: p.HolderConjugate q ↔ q = p / (p - 1)
-  proof: by
-  rw [← holderConjugate_coe_iff]; rw [Real.holderConjugate_iff_eq_conjExponent (by exact_mod_cast hp)]; rw [← coe_one]; rw [← NNReal.coe_sub hp.le]
-  exact_mod_cast Iff.rfl
-
-中文:
-引理 holderConjugate_iff_eq_conjExponent
-  条件: (hp : 1 < p)
-  结论: p.HolderConjugate q ↔ q = p / (p - 1)
-  证明: by
-  rw [← holderConjugate_coe_iff]; rw [Real.holderConjugate_iff_eq_conjExponent (by exact_mod_cast hp)]; rw [← coe_one]; rw [← NNReal.coe_sub hp.le]
-  exact_mod_cast Iff.rfl
-
-Depends on / 依赖: Iff.rfl, NNReal, NNReal.coe_sub, Real.holderConjugate_iff_eq_conjExponent, coe_one, coe_sub, holderConjugate_coe_iff, holderConjugate_iff_eq_conjExponent, hp.le
+/-
+**NNReal.holderConjugate_iff_eq_conjExponent** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：holderConjugate_iff_eq_conjExponent (hp : 1 < p) : p.HolderConjugate q ↔ q
+ = p / (p - 1)
+参数：hp : 1 < p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `NNReal.holderConjugate_coe_iff`：holderConjugate_coe_iff {p q : Real>=0} 
+: Real.HolderConjugate (p : Real) (q : Real) ↔ HolderConjugate p q
+· 使用引理 `Real.holderConjugate_iff_eq_conjExponent`：holderConjugate_iff_eq_conjExp
+onent (hp : 1 < p) : p.HolderConjugate q ↔ q = p / (p - 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `NNReal.coe_one`：↑1 = 1
+· 使用定理 `NNReal.coe_sub`：∀ {r₁ r₂ : NNReal}, r₂ ≤ r₁ → ↑(r₁ - r₂) = ↑r₁ - ↑r₂
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma holderConjugate_iff_eq_conjExponent (hp : 1 < p) : p.HolderConjugate q ↔ q = p / (p - 1) := by
-  rw [← holderConjugate_coe_iff]; rw [Real.holderConjugate_iff_eq_conjExponent (by exact_mod_cast hp)]; rw [← coe_one]; rw [← NNReal.coe_sub hp.le]
+  rw [← holderConjugate_coe_iff, Real.holderConjugate_iff_eq_conjExponent (by exact_mod_cast hp),
+    ← coe_one, ← NNReal.coe_sub hp.le]
   exact_mod_cast Iff.rfl
-
-/--
-lemma `HolderConjugate.conjExponent` / 引理 `HolderConjugate.conjExponent`
-
-English:
-lemma HolderConjugate.conjExponent
-  given: (h : 1 < p)
-  statement: p.HolderConjugate (conjExponent p)
-  proof: (holderConjugate_iff_eq_conjExponent h).2 rfl
-
-中文:
-引理 HolderConjugate.conjExponent
-  条件: (h : 1 < p)
-  结论: p.HolderConjugate (conjExponent p)
-  证明: (holderConjugate_iff_eq_conjExponent h).2 rfl
+/-
+**NNReal.HolderConjugate.conjExponent** 是 Mathlib 中的一个定理，位于命名空间 `NNReal.HolderCo
+njugate`。
+形式化陈述：∀ {p : NNReal}, 1 < p → p.HolderConjugate p.conjExponent
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `NNReal.holderConjugate_iff_eq_conjExponent`：holderConjugate_iff_eq_conjE
+xponent (hp : 1 < p) : p.HolderConjugate q ↔ q = p / (p - 1)
 -/
 lemma HolderConjugate.conjExponent (h : 1 < p) : p.HolderConjugate (conjExponent p) :=
   (holderConjugate_iff_eq_conjExponent h).2 rfl
-
-/--
-lemma `holderConjugate_one_div` / 引理 `holderConjugate_one_div`
-
-English:
-lemma holderConjugate_one_div
-  given: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  proof: by simpa using HolderConjugate.inv_inv ha hb hab
-
-中文:
-引理 holderConjugate_one_div
-  条件: (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1)
-  证明: by simpa using HolderConjugate.inv_inv ha hb hab
-
-Depends on / 依赖: HolderConjugate, HolderConjugate.inv_inv, inv_inv
+/-
+**NNReal.holderConjugate_one_div** 是 Mathlib 中的一个引理，位于命名空间 `NNReal`。
+形式化陈述：holderConjugate_one_div (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1) : (1 /
+ a).HolderConjugate (1 / b)
+参数：ha : 0 < a；hb : 0 < b；hab : a + b = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `NNReal.HolderConjugate.inv_inv`：∀ {a b : NNReal}, 0 < a → 0 < b → a + b 
+= 1 → a⁻¹.HolderConjugate b⁻¹
 -/
 lemma holderConjugate_one_div (ha : 0 < a) (hb : 0 < b) (hab : a + b = 1) :
     (1 / a).HolderConjugate (1 / b) := by simpa using HolderConjugate.inv_inv ha hb hab
 
 end NNReal
 
-/--
-lemma `Real.HolderTriple.toNNReal` / 引理 `Real.HolderTriple.toNNReal`
-
-English:
-lemma Real.HolderTriple.toNNReal
-  given: {p q r : Real} (h : p.HolderTriple q r)
-  proof: by
-  simpa [← NNReal.holderTriple_coe_iff, h.nonneg, h.symm.nonneg, h.nonneg']
-
-中文:
-引理 实数.HolderTriple.toNN实数
-  条件: {p q r : 实数} (h : p.HolderTriple q r)
-  证明: by
-  simpa [← NNReal.holderTriple_coe_iff, h.nonneg, h.symm.nonneg, h.nonneg']
+/-
+**Real.HolderTriple.toNNReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderTriple`。
+形式化陈述：∀ {p q r : ℝ}, p.HolderTriple q r → p.toNNReal.HolderTriple q.toNNReal r.t
+oNNReal
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `Real.HolderTriple.nonneg`：nonneg : 0 <= p
+· 使用定理 `Real.HolderTriple.symm`：∀ {p q r : ℝ}, p.HolderTriple q r → q.HolderTrip
+le p r
+· 使用定理 `Real.HolderTriple.nonneg'`：nonneg' : 0 <= r
 -/
-protected lemma Real.HolderTriple.toNNReal {p q r : Real} (h : p.HolderTriple q r) :
+protected lemma Real.HolderTriple.toNNReal {p q r : ℝ} (h : p.HolderTriple q r) :
     p.toNNReal.HolderTriple q.toNNReal r.toNNReal := by
   simpa [← NNReal.holderTriple_coe_iff, h.nonneg, h.symm.nonneg, h.nonneg']
-
-/--
-lemma `Real.HolderConjugate.toNNReal` / 引理 `Real.HolderConjugate.toNNReal`
-
-English:
-lemma Real.HolderConjugate.toNNReal
-  given: {p q : Real} (h : p.HolderConjugate q)
-  proof: by
-  simpa using Real.HolderTriple.toNNReal h
-
-中文:
-引理 实数.HolderConjugate.toNN实数
-  条件: {p q : 实数} (h : p.HolderConjugate q)
-  证明: by
-  simpa using Real.HolderTriple.toNNReal h
+/-
+**Real.HolderConjugate.toNNReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.HolderConjugate`
+。
+形式化陈述：∀ {p q : ℝ}, p.HolderConjugate q → p.toNNReal.HolderConjugate q.toNNReal
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.toNNReal_one`：toNNReal_one : Real.toNNReal 1 = 1
+· 使用定理 `Real.HolderTriple.toNNReal`：∀ {p q r : ℝ}, p.HolderTriple q r → p.toNNRe
+al.HolderTriple q.toNNReal r.toNNReal
 -/
-protected lemma Real.HolderConjugate.toNNReal {p q : Real} (h : p.HolderConjugate q) :
+protected lemma Real.HolderConjugate.toNNReal {p q : ℝ} (h : p.HolderConjugate q) :
     p.toNNReal.HolderConjugate q.toNNReal := by
   simpa using Real.HolderTriple.toNNReal h
 
 namespace ENNReal
 
-/--
-Definition of `conjExponent` / `conjExponent` 的定义
+/-- The conjugate exponent of `p` is `q = 1 + (p - 1)⁻¹`, so that `p⁻¹ + q⁻¹ = 1`. -/
+/-
+**ENNReal.conjExponent** 是 Mathlib 中的一个定义，位于命名空间 `ENNReal`。
+形式化陈述：conjExponent (p : Real>=0∞) : Real>=0∞
+参数：p : Real>=0∞。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conjExponent
-  signature: (p : Real>=0∞)
-  body: 1 + (p - 1)⁻¹
-
-中文:
-定义 conjExponent
-  签名: (p : 实数>=0∞)
-  定义体: 1 + (p - 1)⁻¹
+--- 原说明 ---
+The conjugate exponent of `p` is `q = 1 + (p - 1)⁻¹`, so that `p⁻¹ + q⁻¹ = 1`.
 -/
-noncomputable def conjExponent (p : Real>=0∞) : Real>=0∞ := 1 + (p - 1)⁻¹
-
-/--
-lemma `coe_conjExponent` / 引理 `coe_conjExponent`
-
-English:
-lemma coe_conjExponent
-  given: {p : Real>=0} (hp : 1 < p)
-  statement: p.conjExponent = conjExponent p
-  proof: by
-  rw [NNReal.conjExponent]; rw [conjExponent]
-  norm_cast
-  rw [← coe_inv (tsub_pos_of_lt hp).ne']
-  norm_cast
-  field_simp [(tsub_pos_of_lt hp).ne']
-  rw [tsub_add_cancel_of_le hp.le]
-
-中文:
-引理 coe_conjExponent
-  条件: {p : 实数>=0} (hp : 1 < p)
-  结论: p.conjExponent = conjExponent p
-  证明: by
-  rw [NNReal.conjExponent]; rw [conjExponent]
-  norm_cast
-  rw [← coe_inv (tsub_pos_of_lt hp).ne']
-  norm_cast
-  field_simp [(tsub_pos_of_lt hp).ne']
-  rw [tsub_add_cancel_of_le hp.le]
-
-Depends on / 依赖: NNReal, NNReal.conjExponent, coe_inv, conjExponent, hp.le, tsub_add_cancel_of_le, tsub_pos_of_lt
+noncomputable def conjExponent (p : ℝ≥0∞) : ℝ≥0∞ := 1 + (p - 1)⁻¹
+/-
+**ENNReal.coe_conjExponent** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：coe_conjExponent {p : Real>=0} (hp : 1 < p) : p.conjExponent = conjExponen
+t p
+参数：hp : 1 < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.conjExponent.eq_1`：∀ (p : NNReal), p.conjExponent = p / (p - 1)
+· 使用定理 `ENNReal.conjExponent.eq_1`：∀ (p : ENNReal), p.conjExponent = 1 + (p - 1)
+⁻¹
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `ENNReal.coe_inv`：coe_inv (hr : r != 0) : (↑r⁻¹ : Real>=0∞) = (↑r)⁻¹
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `tsub_pos_of_lt`：tsub_pos_of_lt (h : a < b) : 0 < b - a
+· 使用定理 `NNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd NNReal
+· 使用定理 `NNReal.instOrderedSub`：OrderedSub NNReal
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval`：div_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al / l₂.eval = l.eval) : x₁ /…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval₃`：div_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval / l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval`：eval_cons_mul_eval [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : ((n, e) ::ᵣ L).eval * l.eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_mul_eval_cons`：eval_mul_eval_cons [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : L.eval * ((n, e) ::ᵣ l).eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_one`：∀ {α : Type u_1} [inst : GroupWithZe
+ro α] (a : α), Mathlib.Tactic.FieldSimp.zpow' a 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_add`：subst_add {M : Type*} [Semiring M] {
+x₁ x₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ + X₂ =
+ Y) (hy : a * Y = y) : x…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.one_eq_eval`：one_eq_eval [GroupWithZero M] :
+ (1:M) = NF.eval (M
+（共 44 条，此处仅展示前 30 条）
 -/
-lemma coe_conjExponent {p : Real>=0} (hp : 1 < p) : p.conjExponent = conjExponent p := by
-  rw [NNReal.conjExponent]; rw [conjExponent]
+lemma coe_conjExponent {p : ℝ≥0} (hp : 1 < p) : p.conjExponent = conjExponent p := by
+  rw [NNReal.conjExponent, conjExponent]
   norm_cast
   rw [← coe_inv (tsub_pos_of_lt hp).ne']
   norm_cast
@@ -2149,19 +2261,45 @@ lemma coe_conjExponent {p : Real>=0} (hp : 1 < p) : p.conjExponent = conjExponen
   rw [tsub_add_cancel_of_le hp.le]
 
 
-variable {a b p q r : Real>=0∞}
+variable {a b p q r : ℝ≥0∞}
 
 @[simp, norm_cast]
-/--
-lemma `holderTriple_coe_iff` / 引理 `holderTriple_coe_iff`
-
-English:
-lemma holderTriple_coe_iff
-  given: {p q r : Real>=0} (hr : r != 0)
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+/-
+**ENNReal.holderTriple_coe_iff** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：holderTriple_coe_iff {p q r : Real>=0} (hr : r != 0) : HolderTriple (p : R
+eal>=0∞) (q : Real>=0∞) (r : Real>=0∞) ↔ NNReal.HolderTriple p q r
+参数：hr : r != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.holderTriple_iff`：∀ (p q r : NNReal), p.HolderTriple q r ↔ p⁻¹ + 
+q⁻¹ = r⁻¹ ∧ 0 < p ∧ 0 < q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用引理 `ENNReal.HolderTriple.unique`：unique (r' : Real>=0∞) [hr' : HolderTriple 
+p q r'] : r = r'
+· 使用定理 `ENNReal.coe_zero`：↑0 = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ENNReal.HolderTriple.inv_add_inv_eq_inv`：∀ (p q : ENNReal) (r : semiOutP
+aram ENNReal) [self : p.HolderTriple q r], p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `Ne.bot_lt`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α] 
+{a : α}, a ≠ ⊥ → ⊥ < a
+· 使用定理 `ENNReal.holderTriple_iff`：∀ (p q : ENNReal) (r : semiOutParam ENNReal), 
+p.HolderTriple q r ↔ p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `NNReal.HolderTriple.ne_zero`：ne_zero : p != 0
+· 使用定理 `NNReal.HolderTriple.symm`：∀ {p q r : NNReal}, p.HolderTriple q r → q.Hol
+derTriple p r
+· 使用定理 `NNReal.HolderTriple.inv_add_inv_eq_inv`：∀ {p q r : NNReal}, p.HolderTrip
+le q r → p⁻¹ + q⁻¹ = r⁻¹
+-/
+lemma holderTriple_coe_iff {p q r : ℝ≥0} (hr : r ≠ 0) :
+    HolderTriple (p : ℝ≥0∞) (q : ℝ≥0∞) (r : ℝ≥0∞) ↔ NNReal.HolderTriple p q r := by
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · rw [NNReal.holderTriple_iff]
-    obtain ⟨hp, hq⟩ : p != 0 ∧ q != 0 := by
+    obtain ⟨hp, hq⟩ : p ≠ 0 ∧ q ≠ 0 := by
       constructor
       all_goals
         rintro rfl
@@ -2176,148 +2314,73 @@ lemma holderTriple_coe_iff
 alias ⟨_, _root_.NNReal.HolderTriple.coe_ennreal⟩ := holderTriple_coe_iff
 
 @[simp, norm_cast]
-
-中文:
-引理 holderTriple_coe_iff
-  条件: {p q r : 实数>=0} (hr : r != 0)
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [NNReal.holderTriple_iff]
-    obtain ⟨hp, hq⟩ : p != 0 ∧ q != 0 := by
-      constructor
-      all_goals
-        rintro rfl
-        apply hr
-        exact_mod_cast (coe_zero ▸ h).unique _ _ r 0
-    exact ⟨by exact_mod_cast h.inv_add_inv_eq_inv, hp.bot_lt, hq.bot_lt⟩
-  · rw [holderTriple_iff]
-    have hp := h.ne_zero
-    have hq := h.symm.ne_zero
-    exact_mod_cast h.inv_add_inv_eq_inv
-
-alias ⟨_, _root_.NNReal.HolderTriple.coe_ennreal⟩ := holderTriple_coe_iff
-
-@[simp, norm_cast]
-
-Depends on / 依赖: NNReal, NNReal.holderTriple_iff, all_goals, bot_lt, coe_zero, h.inv_add_inv_eq_inv, h.ne_zero, h.symm.ne_zero, holderTriple_iff, hp.bot_lt, hq.bot_lt, inv_add_inv_eq_inv, ne_zero, unique
+/-
+**ENNReal.holderConjugate_coe_iff** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：holderConjugate_coe_iff {p q : Real>=0} : HolderConjugate (p : Real>=0∞) (
+q : Real>=0∞) ↔ NNReal.HolderConjugate p q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.holderTriple_coe_iff`：holderTriple_coe_iff {p q r : Real>=0} (hr
+ : r != 0) : HolderTriple (p : Real>=0∞) (q : Real>=0∞) (r : Real>=0∞) ↔ NNReal.
+HolderTriple p q r
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `NNReal.instIsStrictOrderedRing_1`：IsStrictOrderedRing NNReal
 -/
-lemma holderTriple_coe_iff {p q r : Real>=0} (hr : r != 0) :
-    HolderTriple (p : Real>=0∞) (q : Real>=0∞) (r : Real>=0∞) ↔ NNReal.HolderTriple p q r := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [NNReal.holderTriple_iff]
-    obtain ⟨hp, hq⟩ : p != 0 ∧ q != 0 := by
-      constructor
-      all_goals
-        rintro rfl
-        apply hr
-        exact_mod_cast (coe_zero ▸ h).unique _ _ r 0
-    exact ⟨by exact_mod_cast h.inv_add_inv_eq_inv, hp.bot_lt, hq.bot_lt⟩
-  · rw [holderTriple_iff]
-    have hp := h.ne_zero
-    have hq := h.symm.ne_zero
-    exact_mod_cast h.inv_add_inv_eq_inv
-
-alias ⟨_, _root_.NNReal.HolderTriple.coe_ennreal⟩ := holderTriple_coe_iff
-
-@[simp, norm_cast]
-/--
-lemma `holderConjugate_coe_iff` / 引理 `holderConjugate_coe_iff`
-
-English:
-lemma holderConjugate_coe_iff
-  given: {p q : Real>=0}
-  proof: holderTriple_coe_iff one_ne_zero
-
-alias ⟨_, _root_.NNReal.HolderConjugate.coe_ennreal⟩ := holderConjugate_coe_iff
-
-中文:
-引理 holderConjugate_coe_iff
-  条件: {p q : 实数>=0}
-  证明: holderTriple_coe_iff one_ne_zero
-
-alias ⟨_, _root_.NNReal.HolderConjugate.coe_ennreal⟩ := holderConjugate_coe_iff
-
-Depends on / 依赖: holderTriple_coe_iff, infer_instance, one_ne_zero, orthRadius
--/
-lemma holderConjugate_coe_iff {p q : Real>=0} :
-    HolderConjugate (p : Real>=0∞) (q : Real>=0∞) ↔ NNReal.HolderConjugate p q :=
+lemma holderConjugate_coe_iff {p q : ℝ≥0} :
+    HolderConjugate (p : ℝ≥0∞) (q : ℝ≥0∞) ↔ NNReal.HolderConjugate p q :=
   holderTriple_coe_iff one_ne_zero
 
 alias ⟨_, _root_.NNReal.HolderConjugate.coe_ennreal⟩ := holderConjugate_coe_iff
 
 namespace HolderTriple
 
-/--
-lemma `_root_.Real.HolderTriple.ennrealOfReal` / 引理 `_root_.Real.HolderTriple.ennrealOfReal`
-
-English:
-lemma _root_.Real.HolderTriple.ennrealOfReal
-  given: {p q r : Real} (h : p.HolderTriple q r)
-  proof: by
-  simpa [holderTriple_iff, ofReal_inv_of_pos, h.pos, h.symm.pos, h.pos', ofReal_add, h.nonneg,
-h.symm.nonneg] using congr(ENNReal.ofReal (h.inv_add_inv_eq_inv))
-
-中文:
-引理 _root_.实数.HolderTriple.ennrealOf实数
-  条件: {p q r : 实数} (h : p.HolderTriple q r)
-  证明: by
-  simpa [holderTriple_iff, ofReal_inv_of_pos, h.pos, h.symm.pos, h.pos', ofReal_add, h.nonneg,
-h.symm.nonneg] using congr(ENNReal.ofReal (h.inv_add_inv_eq_inv))
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, h.inv_add_inv_eq_inv, h.nonneg, h.pos, h.symm.nonneg, h.symm.pos, holderTriple_iff, inv_add_inv_eq_inv, nonneg, ofReal, ofReal_add, ofReal_inv_of_pos
+/-
+**ENNReal.HolderTriple._root_.Real.HolderTriple.ennrealOfReal** 是 Mathlib 中的一个引理
+，位于命名空间 `ENNReal.HolderTriple`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Real.HolderTriple.ennrealOfReal {p q r : Real} (h : p.HolderTriple q r) :
+lemma _root_.Real.HolderTriple.ennrealOfReal {p q r : ℝ} (h : p.HolderTriple q r) :
     HolderTriple (ENNReal.ofReal p) (ENNReal.ofReal q) (ENNReal.ofReal r) := by
   simpa [holderTriple_iff, ofReal_inv_of_pos, h.pos, h.symm.pos, h.pos', ofReal_add, h.nonneg,
-h.symm.nonneg] using congr(ENNReal.ofReal (h.inv_add_inv_eq_inv))
-
-/--
-lemma `_root_.Real.HolderConjugate.ennrealOfReal` / 引理 `_root_.Real.HolderConjugate.ennrealOfReal`
-
-English:
-lemma _root_.Real.HolderConjugate.ennrealOfReal
-  given: {p q : Real} (h : p.HolderConjugate q)
-  proof: by
-  simpa using Real.HolderTriple.ennrealOfReal h
-
-中文:
-引理 _root_.实数.HolderConjugate.ennrealOf实数
-  条件: {p q : 实数} (h : p.HolderConjugate q)
-  证明: by
-  simpa using Real.HolderTriple.ennrealOfReal h
-
-Depends on / 依赖: HolderTriple, Real.HolderTriple.ennrealOfReal, ennrealOfReal
+    h.symm.nonneg] using congr(ENNReal.ofReal $(h.inv_add_inv_eq_inv))
+/-
+**ENNReal.HolderTriple._root_.Real.HolderConjugate.ennrealOfReal** 是 Mathlib 中的一
+个引理，位于命名空间 `ENNReal.HolderTriple`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Real.HolderConjugate.ennrealOfReal {p q : Real} (h : p.HolderConjugate q) :
+lemma _root_.Real.HolderConjugate.ennrealOfReal {p q : ℝ} (h : p.HolderConjugate q) :
     HolderConjugate (ENNReal.ofReal p) (ENNReal.ofReal q) := by
   simpa using Real.HolderTriple.ennrealOfReal h
-
-/--
-lemma `of_toReal` / 引理 `of_toReal`
-
-English:
-lemma of_toReal
-  given: (h : Real.HolderTriple p.toReal q.toReal r.toReal)
-  statement: HolderTriple p q r
-  proof: by
-  have hp := h.pos
-  have hq := h.symm.pos
-  have hr := h.pos'
-  rw [toReal_pos_iff] at hp hq hr
-  simpa [hp.2.ne, hq.2.ne, hr.2.ne] using h.ennrealOfReal
-
-中文:
-引理 of_to实数
-  条件: (h : 实数.HolderTriple p.to实数 q.to实数 r.to实数)
-  结论: HolderTriple p q r
-  证明: by
-  have hp := h.pos
-  have hq := h.symm.pos
-  have hr := h.pos'
-  rw [toReal_pos_iff] at hp hq hr
-  simpa [hp.2.ne, hq.2.ne, hr.2.ne] using h.ennrealOfReal
-
-Depends on / 依赖: direction_orthRadius, ennrealOfReal, h.ennrealOfReal, h.pos, h.symm.pos, infer_instance, toReal_pos_iff
+/-
+**ENNReal.HolderTriple.of_toReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderTriple
+`。
+形式化陈述：of_toReal (h : Real.HolderTriple p.toReal q.toReal r.toReal) : HolderTripl
+e p q r
+参数：h : Real.HolderTriple p.toReal q.toReal r.toReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.HolderTriple.pos`：pos : 0 < p
+· 使用定理 `Real.HolderTriple.symm`：∀ {p q r : ℝ}, p.HolderTriple q r → q.HolderTrip
+le p r
+· 使用定理 `Real.HolderTriple.pos'`：pos' : 0 < r
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal_toReal`：ofReal_toReal {a : Real>=0∞} (h : a != ∞) : ENNRe
+al.ofReal a.toReal = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `ENNReal.toReal_pos_iff`：toReal_pos_iff : 0 < a.toReal ↔ 0 < a ∧ a < ∞
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Real.HolderTriple.ennrealOfReal`：∀ {p q r : ℝ}, p.HolderTriple q r → (EN
+NReal.ofReal p).HolderTriple (ENNReal.ofReal q) (ENNReal.ofReal r)
 -/
 lemma of_toReal (h : Real.HolderTriple p.toReal q.toReal r.toReal) : HolderTriple p q r := by
   have hp := h.pos
@@ -2327,96 +2390,87 @@ lemma of_toReal (h : Real.HolderTriple p.toReal q.toReal r.toReal) : HolderTripl
   simpa [hp.2.ne, hq.2.ne, hr.2.ne] using h.ennrealOfReal
 
 variable (r) in
-/--
-lemma `toReal_iff` / 引理 `toReal_iff`
-
-English:
-lemma toReal_iff
-  given: (hp : 0 < p.toReal) (hq : 0 < q.toReal)
-  proof: by
-  refine ⟨of_toReal, fun h => ⟨?_, hp, hq⟩⟩
-  rw [toReal_pos_iff] at hp hq
-  simpa [toReal_add, Finiteness.inv_ne_top, hp.1.ne', hq.1.ne']
-    using congr(ENNReal.toReal $(h.inv_add_inv_eq_inv))
-
-中文:
-引理 to实数_iff
-  条件: (hp : 0 < p.to实数) (hq : 0 < q.to实数)
-  证明: by
-  refine ⟨of_toReal, fun h => ⟨?_, hp, hq⟩⟩
-  rw [toReal_pos_iff] at hp hq
-  simpa [toReal_add, Finiteness.inv_ne_top, hp.1.ne', hq.1.ne']
-    using congr(ENNReal.toReal $(h.inv_add_inv_eq_inv))
-
-Depends on / 依赖: ENNReal, ENNReal.toReal, Finiteness, Finiteness.inv_ne_top, h.inv_add_inv_eq_inv, inv_add_inv_eq_inv, inv_ne_top, of_toReal, toReal, toReal_add, toReal_pos_iff
+/-
+**ENNReal.HolderTriple.toReal_iff** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderTripl
+e`。
+形式化陈述：toReal_iff (hp : 0 < p.toReal) (hq : 0 < q.toReal) : Real.HolderTriple p.t
+oReal q.toReal r.toReal ↔ HolderTriple p q r
+参数：hp : 0 < p.toReal；hq : 0 < q.toReal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderTriple.of_toReal`：of_toReal (h : Real.HolderTriple p.toRea
+l q.toReal r.toReal) : HolderTriple p q r
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ENNReal.toReal_add`：toReal_add (ha : a != ∞) (hb : b != ∞) : (a + b).toR
+eal = a.toReal + b.toReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `ENNReal.toReal_pos_iff`：toReal_pos_iff : 0 < a.toReal ↔ 0 < a ∧ a < ∞
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `ENNReal.toReal_inv`：∀ (a : ENNReal), a⁻¹.toReal = a.toReal⁻¹
+· 使用定理 `ENNReal.HolderTriple.inv_add_inv_eq_inv`：∀ (p q : ENNReal) (r : semiOutP
+aram ENNReal) [self : p.HolderTriple q r], p⁻¹ + q⁻¹ = r⁻¹
 -/
 lemma toReal_iff (hp : 0 < p.toReal) (hq : 0 < q.toReal) :
     Real.HolderTriple p.toReal q.toReal r.toReal ↔ HolderTriple p q r := by
-  refine ⟨of_toReal, fun h => ⟨?_, hp, hq⟩⟩
+  refine ⟨of_toReal, fun h ↦ ⟨?_, hp, hq⟩⟩
   rw [toReal_pos_iff] at hp hq
   simpa [toReal_add, Finiteness.inv_ne_top, hp.1.ne', hq.1.ne']
     using congr(ENNReal.toReal $(h.inv_add_inv_eq_inv))
 
 variable (r) in
-/--
-lemma `toReal` / 引理 `toReal`
-
-English:
-lemma toReal
-  given: (hp : 0 < p.toReal) (hq : 0 < q.toReal) [HolderTriple p q r]
-  proof: .mpr ‹_› toReal_iff r hp hq
-
-中文:
-引理 to实数
-  条件: (hp : 0 < p.to实数) (hq : 0 < q.to实数) [HolderTriple p q r]
-  证明: .mpr ‹_› toReal_iff r hp hq
-
-Depends on / 依赖: toReal_iff
+/-
+**ENNReal.HolderTriple.toReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderTriple`。
+形式化陈述：toReal (hp : 0 < p.toReal) (hq : 0 < q.toReal) [HolderTriple p q r] : Real
+.HolderTriple p.toReal q.toReal r.toReal
+参数：hp : 0 < p.toReal；hq : 0 < q.toReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `ENNReal.HolderTriple.toReal_iff`：toReal_iff (hp : 0 < p.toReal) (hq : 0 
+< q.toReal) : Real.HolderTriple p.toReal q.toReal r.toReal ↔ HolderTriple p q r
 -/
 lemma toReal (hp : 0 < p.toReal) (hq : 0 < q.toReal) [HolderTriple p q r] :
     Real.HolderTriple p.toReal q.toReal r.toReal :=
-.mpr ‹_› toReal_iff r hp hq
-
-/--
-lemma `of_toNNReal` / 引理 `of_toNNReal`
-
-English:
-lemma of_toNNReal
-  given: (h : NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal)
-  proof: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
-
-中文:
-引理 of_toNN实数
-  条件: (h : 非负实数.HolderTriple p.toNN实数 q.toNN实数 r.toNN实数)
-  证明: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
-
-Depends on / 依赖: coe_toNNReal_eq_toReal, h.coe, of_toReal
+  toReal_iff r hp hq |>.mpr ‹_›
+/-
+**ENNReal.HolderTriple.of_toNNReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderTrip
+le`。
+形式化陈述：of_toNNReal (h : NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal) : H
+olderTriple p q r
+参数：h : NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderTriple.of_toReal`：of_toReal (h : Real.HolderTriple p.toRea
+l q.toReal r.toReal) : HolderTriple p q r
+· 使用定理 `NNReal.HolderTriple.coe`：∀ {p q r : NNReal}, p.HolderTriple q r → (↑p).H
+olderTriple ↑q ↑r
 -/
 lemma of_toNNReal (h : NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal) :
     HolderTriple p q r :=
-.of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
+  .of_toReal <| by simpa only [coe_toNNReal_eq_toReal] using h.coe
 
 variable (r) in
-/--
-lemma `toNNReal_iff` / 引理 `toNNReal_iff`
-
-English:
-lemma toNNReal_iff
-  given: (hp : 0 < p.toNNReal) (hq : 0 < q.toNNReal)
-  proof: by
-  simp_rw [← NNReal.holderTriple_coe_iff, coe_toNNReal_eq_toReal]
-  apply toReal_iff r ?_ ?_
-  all_goals simpa [← coe_toNNReal_eq_toReal]
-
-中文:
-引理 toNN实数_iff
-  条件: (hp : 0 < p.toNN实数) (hq : 0 < q.toNN实数)
-  证明: by
-  simp_rw [← NNReal.holderTriple_coe_iff, coe_toNNReal_eq_toReal]
-  apply toReal_iff r ?_ ?_
-  all_goals simpa [← coe_toNNReal_eq_toReal]
-
-Depends on / 依赖: NNReal, NNReal.holderTriple_coe_iff, all_goals, coe_toNNReal_eq_toReal, holderTriple_coe_iff, simp_rw, toReal_iff
+/-
+**ENNReal.HolderTriple.toNNReal_iff** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderTri
+ple`。
+形式化陈述：toNNReal_iff (hp : 0 < p.toNNReal) (hq : 0 < q.toNNReal) : NNReal.HolderTr
+iple p.toNNReal q.toNNReal r.toNNReal ↔ HolderTriple p q r
+参数：hp : 0 < p.toNNReal；hq : 0 < q.toNNReal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ENNReal.HolderTriple.toReal_iff`：toReal_iff (hp : 0 < p.toReal) (hq : 0 
+< q.toReal) : Real.HolderTriple p.toReal q.toReal r.toReal ↔ HolderTriple p q r
 -/
 lemma toNNReal_iff (hp : 0 < p.toNNReal) (hq : 0 < q.toNNReal) :
     NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal ↔ HolderTriple p q r := by
@@ -2425,241 +2479,231 @@ lemma toNNReal_iff (hp : 0 < p.toNNReal) (hq : 0 < q.toNNReal) :
   all_goals simpa [← coe_toNNReal_eq_toReal]
 
 variable (r) in
-/--
-lemma `toNNReal` / 引理 `toNNReal`
-
-English:
-lemma toNNReal
-  given: (hp : 0 < p.toNNReal) (hq : 0 < q.toNNReal) [HolderTriple p q r]
-  proof: .mpr ‹_› toNNReal_iff r hp hq
-
-中文:
-引理 toNN实数
-  条件: (hp : 0 < p.toNN实数) (hq : 0 < q.toNN实数) [HolderTriple p q r]
-  证明: .mpr ‹_› toNNReal_iff r hp hq
-
-Depends on / 依赖: toNNReal_iff
+/-
+**ENNReal.HolderTriple.toNNReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderTriple`
+。
+形式化陈述：toNNReal (hp : 0 < p.toNNReal) (hq : 0 < q.toNNReal) [HolderTriple p q r] 
+: NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal
+参数：hp : 0 < p.toNNReal；hq : 0 < q.toNNReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `ENNReal.HolderTriple.toNNReal_iff`：toNNReal_iff (hp : 0 < p.toNNReal) (h
+q : 0 < q.toNNReal) : NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal ↔ Hol
+derTriple p q r
 -/
 lemma toNNReal (hp : 0 < p.toNNReal) (hq : 0 < q.toNNReal) [HolderTriple p q r] :
     NNReal.HolderTriple p.toNNReal q.toNNReal r.toNNReal :=
-.mpr ‹_› toNNReal_iff r hp hq
+  toNNReal_iff r hp hq |>.mpr ‹_›
 
 end HolderTriple
 
 namespace HolderConjugate
 
-/--
-lemma `of_toReal` / 引理 `of_toReal`
-
-English:
-lemma of_toReal
-  given: (h : p.toReal.HolderConjugate q.toReal)
-  statement: p.HolderConjugate q
-  proof: by
-  rw [Real.HolderConjugate] at h
-  exact HolderTriple.of_toReal (toReal_one ▸ h)
-
-中文:
-引理 of_to实数
-  条件: (h : p.to实数.HolderConjugate q.to实数)
-  结论: p.HolderConjugate q
-  证明: by
-  rw [Real.HolderConjugate] at h
-  exact HolderTriple.of_toReal (toReal_one ▸ h)
-
-Depends on / 依赖: HolderConjugate, HolderTriple, HolderTriple.of_toReal, Real.HolderConjugate, of_toReal, toReal_one
+/-
+**ENNReal.HolderConjugate.of_toReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderCon
+jugate`。
+形式化陈述：of_toReal (h : p.toReal.HolderConjugate q.toReal) : p.HolderConjugate q
+参数：h : p.toReal.HolderConjugate q.toReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderTriple.of_toReal`：of_toReal (h : Real.HolderTriple p.toRea
+l q.toReal r.toReal) : HolderTriple p q r
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.HolderConjugate.eq_1`：∀ (p q : ℝ), p.HolderConjugate q = p.HolderTr
+iple q 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.toReal_one`：ENNReal.toReal 1 = 1
 -/
 lemma of_toReal (h : p.toReal.HolderConjugate q.toReal) : p.HolderConjugate q := by
   rw [Real.HolderConjugate] at h
   exact HolderTriple.of_toReal (toReal_one ▸ h)
-
-/--
-lemma `toReal_iff` / 引理 `toReal_iff`
-
-English:
-lemma toReal_iff
-  given: (hp : 1 < p.toReal)
-  proof: by
-  refine ⟨of_toReal, fun h => ?_⟩
-  have hq : 0 < q.toReal := by
-    rw [toReal_pos_iff]
-.mpr ?_⟩ refine ⟨pos q p, lt_top_iff_one_lt q p
-    contrapose! hp
-    exact toReal_mono one_ne_top hp
-  simpa using HolderTriple.toReal 1 (zero_lt_one.trans hp) hq
-
-中文:
-引理 to实数_iff
-  条件: (hp : 1 < p.to实数)
-  证明: by
-  refine ⟨of_toReal, fun h => ?_⟩
-  have hq : 0 < q.toReal := by
-    rw [toReal_pos_iff]
-.mpr ?_⟩ refine ⟨pos q p, lt_top_iff_one_lt q p
-    contrapose! hp
-    exact toReal_mono one_ne_top hp
-  simpa using HolderTriple.toReal 1 (zero_lt_one.trans hp) hq
-
-Depends on / 依赖: HolderTriple, HolderTriple.toReal, contrapose, lt_top_iff_one_lt, of_toReal, one_ne_top, q.toReal, toReal, toReal_mono, toReal_pos_iff, zero_lt_one, zero_lt_one.trans
+/-
+**ENNReal.HolderConjugate.toReal_iff** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderCo
+njugate`。
+形式化陈述：toReal_iff (hp : 1 < p.toReal) : p.toReal.HolderConjugate q.toReal ↔ p.Hol
+derConjugate q
+参数：hp : 1 < p.toReal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderConjugate.of_toReal`：of_toReal (h : p.toReal.HolderConjuga
+te q.toReal) : p.HolderConjugate q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_pos_iff`：toReal_pos_iff : 0 < a.toReal ↔ 0 < a ∧ a < ∞
+· 使用引理 `ENNReal.HolderConjugate.pos`：pos : 0 < p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `ENNReal.HolderConjugate.lt_top_iff_one_lt`：lt_top_iff_one_lt : p < ∞ ↔ 1
+ < q
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `ENNReal.one_ne_top`：1 ≠ ⊤
+· 使用引理 `ENNReal.HolderTriple.toReal`：toReal (hp : 0 < p.toReal) (hq : 0 < q.toRe
+al) [HolderTriple p q r] : Real.HolderTriple p.toReal q.toReal r.toReal
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
 lemma toReal_iff (hp : 1 < p.toReal) :
     p.toReal.HolderConjugate q.toReal ↔ p.HolderConjugate q := by
-  refine ⟨of_toReal, fun h => ?_⟩
+  refine ⟨of_toReal, fun h ↦ ?_⟩
   have hq : 0 < q.toReal := by
     rw [toReal_pos_iff]
-.mpr ?_⟩ refine ⟨pos q p, lt_top_iff_one_lt q p
+    refine ⟨pos q p, lt_top_iff_one_lt q p |>.mpr ?_⟩
     contrapose! hp
     exact toReal_mono one_ne_top hp
   simpa using HolderTriple.toReal 1 (zero_lt_one.trans hp) hq
-
-/--
-lemma `toReal` / 引理 `toReal`
-
-English:
-lemma toReal
-  given: (hp : 1 < p.toReal) [HolderConjugate p q]
-  proof: .mpr ‹_› toReal_iff hp
-
-中文:
-引理 to实数
-  条件: (hp : 1 < p.to实数) [HolderConjugate p q]
-  证明: .mpr ‹_› toReal_iff hp
-
-Depends on / 依赖: toReal_iff
+/-
+**ENNReal.HolderConjugate.toReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderConjug
+ate`。
+形式化陈述：toReal (hp : 1 < p.toReal) [HolderConjugate p q] : p.toReal.HolderConjugat
+e q.toReal
+参数：hp : 1 < p.toReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `ENNReal.HolderConjugate.toReal_iff`：toReal_iff (hp : 1 < p.toReal) : p.t
+oReal.HolderConjugate q.toReal ↔ p.HolderConjugate q
 -/
 lemma toReal (hp : 1 < p.toReal) [HolderConjugate p q] :
     p.toReal.HolderConjugate q.toReal :=
-.mpr ‹_› toReal_iff hp
-
-/--
-lemma `toReal_of_ne_top` / 引理 `toReal_of_ne_top`
-
-English:
-lemma toReal_of_ne_top
-  given: (hp : p != ∞) (hq : q != ∞) [HolderConjugate p q]
-  proof: toReal ((toReal_lt_toReal one_ne_top hp).mpr ((lt_top_iff_one_lt q p).mp hq.lt_top))
-
-中文:
-引理 to实数_of_ne_top
-  条件: (hp : p != ∞) (hq : q != ∞) [HolderConjugate p q]
-  证明: toReal ((toReal_lt_toReal one_ne_top hp).mpr ((lt_top_iff_one_lt q p).mp hq.lt_top))
-
-Depends on / 依赖: hq.lt_top, lt_top, lt_top_iff_one_lt, one_ne_top, toReal, toReal_lt_toReal
+  toReal_iff hp |>.mpr ‹_›
+/-
+**ENNReal.HolderConjugate.toReal_of_ne_top** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.Ho
+lderConjugate`。
+形式化陈述：toReal_of_ne_top (hp : p != ∞) (hq : q != ∞) [HolderConjugate p q] : p.toR
+eal.HolderConjugate q.toReal
+参数：hp : p != ∞；hq : q != ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderConjugate.toReal`：toReal (hp : 1 < p.toReal) [HolderConjug
+ate p q] : p.toReal.HolderConjugate q.toReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.toReal_lt_toReal`：toReal_lt_toReal (ha : a != ∞) (hb : b != ∞) :
+ a.toReal < b.toReal ↔ a < b
+· 使用定理 `ENNReal.one_ne_top`：1 ≠ ⊤
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ENNReal.HolderConjugate.lt_top_iff_one_lt`：lt_top_iff_one_lt : p < ∞ ↔ 1
+ < q
+· 使用定理 `Ne.lt_top`：Ne.lt_top (h : a != ⊤) : a < ⊤
 -/
-lemma toReal_of_ne_top (hp : p != ∞) (hq : q != ∞) [HolderConjugate p q] :
+lemma toReal_of_ne_top (hp : p ≠ ∞) (hq : q ≠ ∞) [HolderConjugate p q] :
     p.toReal.HolderConjugate q.toReal :=
   toReal ((toReal_lt_toReal one_ne_top hp).mpr ((lt_top_iff_one_lt q p).mp hq.lt_top))
-
-/--
-lemma `of_toNNReal` / 引理 `of_toNNReal`
-
-English:
-lemma of_toNNReal
-  given: (h : NNReal.HolderConjugate p.toNNReal q.toNNReal)
-  proof: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
-
-中文:
-引理 of_toNN实数
-  条件: (h : 非负实数.HolderConjugate p.toNN实数 q.toNN实数)
-  证明: .of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
-
-Depends on / 依赖: coe_toNNReal_eq_toReal, h.coe, of_toReal
+/-
+**ENNReal.HolderConjugate.of_toNNReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderC
+onjugate`。
+形式化陈述：of_toNNReal (h : NNReal.HolderConjugate p.toNNReal q.toNNReal) : HolderCon
+jugate p q
+参数：h : NNReal.HolderConjugate p.toNNReal q.toNNReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderConjugate.of_toReal`：of_toReal (h : p.toReal.HolderConjuga
+te q.toReal) : p.HolderConjugate q
+· 使用定理 `NNReal.HolderConjugate.coe`：∀ {p q : NNReal}, p.HolderConjugate q → (↑p)
+.HolderConjugate ↑q
 -/
 lemma of_toNNReal (h : NNReal.HolderConjugate p.toNNReal q.toNNReal) :
     HolderConjugate p q :=
-.of_toReal by simpa only [coe_toNNReal_eq_toReal] using h.coe
-
-/--
-lemma `toNNReal_iff` / 引理 `toNNReal_iff`
-
-English:
-lemma toNNReal_iff
-  given: (hp : 1 < p.toNNReal)
-  proof: by
-  simp_rw [← NNReal.holderTriple_coe_iff, coe_toNNReal_eq_toReal]
-  apply toReal_iff ?_
-  all_goals simpa [← coe_toNNReal_eq_toReal]
-
-中文:
-引理 toNN实数_iff
-  条件: (hp : 1 < p.toNN实数)
-  证明: by
-  simp_rw [← NNReal.holderTriple_coe_iff, coe_toNNReal_eq_toReal]
-  apply toReal_iff ?_
-  all_goals simpa [← coe_toNNReal_eq_toReal]
-
-Depends on / 依赖: NNReal, NNReal.holderTriple_coe_iff, all_goals, coe_toNNReal_eq_toReal, holderTriple_coe_iff, simp_rw, toReal_iff
+  .of_toReal <| by simpa only [coe_toNNReal_eq_toReal] using h.coe
+/-
+**ENNReal.HolderConjugate.toNNReal_iff** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.Holder
+Conjugate`。
+形式化陈述：toNNReal_iff (hp : 1 < p.toNNReal) : NNReal.HolderConjugate p.toNNReal q.t
+oNNReal ↔ HolderConjugate p q
+参数：hp : 1 < p.toNNReal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ENNReal.HolderConjugate.toReal_iff`：toReal_iff (hp : 1 < p.toReal) : p.t
+oReal.HolderConjugate q.toReal ↔ p.HolderConjugate q
 -/
 lemma toNNReal_iff (hp : 1 < p.toNNReal) :
     NNReal.HolderConjugate p.toNNReal q.toNNReal ↔ HolderConjugate p q := by
   simp_rw [← NNReal.holderTriple_coe_iff, coe_toNNReal_eq_toReal]
   apply toReal_iff ?_
   all_goals simpa [← coe_toNNReal_eq_toReal]
-
-/--
-lemma `toNNReal` / 引理 `toNNReal`
-
-English:
-lemma toNNReal
-  given: (hp : 1 < p.toNNReal) [HolderConjugate p q]
-  proof: .mpr ‹_› toNNReal_iff hp
-
-中文:
-引理 toNN实数
-  条件: (hp : 1 < p.toNN实数) [HolderConjugate p q]
-  证明: .mpr ‹_› toNNReal_iff hp
-
-Depends on / 依赖: toNNReal_iff
+/-
+**ENNReal.HolderConjugate.toNNReal** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderConj
+ugate`。
+形式化陈述：toNNReal (hp : 1 < p.toNNReal) [HolderConjugate p q] : NNReal.HolderConjug
+ate p.toNNReal q.toNNReal
+参数：hp : 1 < p.toNNReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `ENNReal.HolderConjugate.toNNReal_iff`：toNNReal_iff (hp : 1 < p.toNNReal)
+ : NNReal.HolderConjugate p.toNNReal q.toNNReal ↔ HolderConjugate p q
 -/
 lemma toNNReal (hp : 1 < p.toNNReal) [HolderConjugate p q] :
     NNReal.HolderConjugate p.toNNReal q.toNNReal :=
-.mpr ‹_› toNNReal_iff hp
-
-/--
-lemma `conjExponent` / 引理 `conjExponent`
-
-English:
-lemma conjExponent
-  given: {p : Real>=0∞} (hp : 1 <= p)
-  statement: p.HolderConjugate (conjExponent p)
-  proof: by
-  have : p != 0 := (zero_lt_one.trans_le hp).ne'
-  rw [HolderConjugate]; rw [holderTriple_iff]; rw [conjExponent]; rw [add_comm]
-  refine (AddLECancellable.eq_tsub_iff_add_eq_of_le (α := Real>=0∞) (by simpa) (by simpa)).1 ?_
-  rw [inv_eq_iff_eq_inv]
-  obtain rfl | hp₁ := hp.eq_or_lt
-  · simp
-  obtain rfl | hp := eq_or_ne p ∞
-  · simp
-  calc
-    1 + (p - 1)⁻¹ = (p - 1 + 1) / (p - 1) := by
-      rw [ENNReal.add_div]; rw [ENNReal.div_self ((tsub_pos_of_lt hp₁).ne') (sub_ne_top hp)]; rw [one_div]
-    _ = (1⁻¹ - p⁻¹)⁻¹ := by
-      rw [tsub_add_cancel_of_le]; rw [← inv_eq_iff_eq_inv]; rw [div_eq_mul_inv]; rw [ENNReal.mul_inv]; rw [inv_inv]; rw [ENNReal.mul_sub]; rw [ENNReal.inv_mul_cancel]; rw [mul_one] <;> simp [*]
-
-中文:
-引理 conjExponent
-  条件: {p : 实数>=0∞} (hp : 1 <= p)
-  结论: p.HolderConjugate (conjExponent p)
-  证明: by
-  have : p != 0 := (zero_lt_one.trans_le hp).ne'
-  rw [HolderConjugate]; rw [holderTriple_iff]; rw [conjExponent]; rw [add_comm]
-  refine (AddLECancellable.eq_tsub_iff_add_eq_of_le (α := Real>=0∞) (by simpa) (by simpa)).1 ?_
-  rw [inv_eq_iff_eq_inv]
-  obtain rfl | hp₁ := hp.eq_or_lt
-  · simp
-  obtain rfl | hp := eq_or_ne p ∞
-  · simp
-  calc
-    1 + (p - 1)⁻¹ = (p - 1 + 1) / (p - 1) := by
-      rw [ENNReal.add_div]; rw [ENNReal.div_self ((tsub_pos_of_lt hp₁).ne') (sub_ne_top hp)]; rw [one_div]
-    _ = (1⁻¹ - p⁻¹)⁻¹ := by
-      rw [tsub_add_cancel_of_le]; rw [← inv_eq_iff_eq_inv]; rw [div_eq_mul_inv]; rw [ENNReal.mul_inv]; rw [inv_inv]; rw [ENNReal.mul_sub]; rw [ENNReal.inv_mul_cancel]; rw [mul_one] <;> simp [*]
+  toNNReal_iff hp |>.mpr ‹_›
+/-
+**ENNReal.HolderConjugate.conjExponent** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal.Holder
+Conjugate`。
+形式化陈述：∀ {p : ENNReal}, 1 ≤ p → p.HolderConjugate p.conjExponent
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
+· 使用定理 `ENNReal.instIsOrderedRing`：IsOrderedRing ENNReal
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.HolderConjugate.eq_1`：∀ (p q : ENNReal), p.HolderConjugate q = p
+.HolderTriple q 1
+· 使用定理 `ENNReal.holderTriple_iff`：∀ (p q : ENNReal) (r : semiOutParam ENNReal), 
+p.HolderTriple q r ↔ p⁻¹ + q⁻¹ = r⁻¹
+· 使用定理 `ENNReal.conjExponent.eq_1`：∀ (p : ENNReal), p.conjExponent = 1 + (p - 1)
+⁻¹
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AddLECancellable.eq_tsub_iff_add_eq_of_le`：∀ {α : Type u_1} [inst : AddC
+ommSemigroup α] [inst_1 : PartialOrder α] [ExistsAddOfLE α] [AddLeftMono α]   [i
+nst_4 : Sub α] [OrderedSub α] {…
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `ENNReal.instOrderedSub`：OrderedSub ENNReal
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `inv_eq_iff_eq_inv`：inv_eq_iff_eq_inv : a⁻¹ = b ↔ a = b⁻¹
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `ENNReal.inv_zero`：0⁻¹ = ⊤
+· 使用定理 `add_top`：add_top (a : α) : a + ⊤ = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `ENNReal.top_sub`：∀ {a : ENNReal}, a ≠ ⊤ → ⊤ - a = ⊤
+（共 54 条，此处仅展示前 30 条）
 -/
-protected lemma conjExponent {p : Real>=0∞} (hp : 1 <= p) : p.HolderConjugate (conjExponent p) := by
-  have : p != 0 := (zero_lt_one.trans_le hp).ne'
-  rw [HolderConjugate]; rw [holderTriple_iff]; rw [conjExponent]; rw [add_comm]
-  refine (AddLECancellable.eq_tsub_iff_add_eq_of_le (α := Real>=0∞) (by simpa) (by simpa)).1 ?_
+protected lemma conjExponent {p : ℝ≥0∞} (hp : 1 ≤ p) : p.HolderConjugate (conjExponent p) := by
+  have : p ≠ 0 := (zero_lt_one.trans_le hp).ne'
+  rw [HolderConjugate, holderTriple_iff, conjExponent, add_comm]
+  refine (AddLECancellable.eq_tsub_iff_add_eq_of_le (α := ℝ≥0∞) (by simpa) (by simpa)).1 ?_
   rw [inv_eq_iff_eq_inv]
   obtain rfl | hp₁ := hp.eq_or_lt
   · simp
@@ -2667,80 +2711,88 @@ protected lemma conjExponent {p : Real>=0∞} (hp : 1 <= p) : p.HolderConjugate 
   · simp
   calc
     1 + (p - 1)⁻¹ = (p - 1 + 1) / (p - 1) := by
-      rw [ENNReal.add_div]; rw [ENNReal.div_self ((tsub_pos_of_lt hp₁).ne') (sub_ne_top hp)]; rw [one_div]
+      rw [ENNReal.add_div, ENNReal.div_self ((tsub_pos_of_lt hp₁).ne') (sub_ne_top hp), one_div]
     _ = (1⁻¹ - p⁻¹)⁻¹ := by
-      rw [tsub_add_cancel_of_le]; rw [← inv_eq_iff_eq_inv]; rw [div_eq_mul_inv]; rw [ENNReal.mul_inv]; rw [inv_inv]; rw [ENNReal.mul_sub]; rw [ENNReal.inv_mul_cancel]; rw [mul_one] <;> simp [*]
-
-instance {p : Real>=0∞} [Fact (1 <= p)] : p.HolderConjugate (conjExponent p) := .conjExponent Fact.out
+      rw [tsub_add_cancel_of_le, ← inv_eq_iff_eq_inv, div_eq_mul_inv, ENNReal.mul_inv, inv_inv,
+        ENNReal.mul_sub, ENNReal.inv_mul_cancel, mul_one] <;> simp [*]
+/-
+**ENNReal.HolderConjugate.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal.HolderConjugate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {p : ℝ≥0∞} [Fact (1 ≤ p)] : p.HolderConjugate (conjExponent p) := .conjExponent Fact.out
 
 section
 
 variable [h : HolderConjugate p q]
 
-/--
-lemma `conjExponent_eq` / 引理 `conjExponent_eq`
-
-English:
-lemma conjExponent_eq
-  statement: conjExponent p = q
-  proof: have : Fact (1 <= p) := ⟨one_le p q⟩
-  unique p (conjExponent p) q
-
-中文:
-引理 conjExponent_eq
-  结论: conjExponent p = q
-  证明: have : Fact (1 <= p) := ⟨one_le p q⟩
-  unique p (conjExponent p) q
-
-Depends on / 依赖: conjExponent, one_le, unique
+/-
+**ENNReal.HolderConjugate.conjExponent_eq** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.Hol
+derConjugate`。
+形式化陈述：conjExponent_eq : conjExponent p = q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderConjugate.one_le`：one_le : 1 <= p
+· 使用引理 `ENNReal.HolderConjugate.unique`：unique (q' : Real>=0∞) [hq' : HolderConj
+ugate p q'] : q = q'
+· 使用定理 `ENNReal.HolderConjugate.instConjExponentOfFactLeOfNat`：∀ {p : ENNReal} [
+Fact (1 ≤ p)], p.HolderConjugate p.conjExponent
 -/
 lemma conjExponent_eq : conjExponent p = q :=
-  have : Fact (1 <= p) := ⟨one_le p q⟩
+  have : Fact (1 ≤ p) := ⟨one_le p q⟩
   unique p (conjExponent p) q
-
-/--
-lemma `conj_eq` / 引理 `conj_eq`
-
-English:
-lemma conj_eq
-  statement: q = 1 + (p - 1)⁻¹
-  proof: conjExponent_eq.symm
-
-中文:
-引理 conj_eq
-  结论: q = 1 + (p - 1)⁻¹
-  证明: conjExponent_eq.symm
-
-Depends on / 依赖: conjExponent_eq, conjExponent_eq.symm
+/-
+**ENNReal.HolderConjugate.conj_eq** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderConju
+gate`。
+形式化陈述：conj_eq : q = 1 + (p - 1)⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ENNReal.HolderConjugate.conjExponent_eq`：conjExponent_eq : conjExponent 
+p = q
 -/
 lemma conj_eq : q = 1 + (p - 1)⁻¹ := conjExponent_eq.symm
-
-/--
-lemma `mul_eq_add` / 引理 `mul_eq_add`
-
-English:
-lemma mul_eq_add
-  statement: p * q = p + q
-  proof: by
-  obtain rfl | hp := eq_or_ne p ∞
-  · simp [ne_zero q ∞]
-  obtain rfl | hq := eq_or_ne q ∞
-  · simp [ne_zero p ∞]
-  simpa [add_comm p, mul_add, add_mul, hp, hq, ne_zero p q, ne_zero q p, ENNReal.mul_inv_cancel,
-ENNReal.inv_mul_cancel_right] using congr(p * ((inv_add_inv_eq_one p q).symm) * q)
-
-中文:
-引理 mul_eq_add
-  结论: p * q = p + q
-  证明: by
-  obtain rfl | hp := eq_or_ne p ∞
-  · simp [ne_zero q ∞]
-  obtain rfl | hq := eq_or_ne q ∞
-  · simp [ne_zero p ∞]
-  simpa [add_comm p, mul_add, add_mul, hp, hq, ne_zero p q, ne_zero q p, ENNReal.mul_inv_cancel,
-ENNReal.inv_mul_cancel_right] using congr(p * ((inv_add_inv_eq_one p q).symm) * q)
-
-Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel_right, ENNReal.mul_inv_cancel, add_comm, add_mul, eq_or_ne, inv_add_inv_eq_one, inv_mul_cancel_right, mul_add, mul_inv_cancel, ne_zero
+/-
+**ENNReal.HolderConjugate.mul_eq_add** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderCo
+njugate`。
+形式化陈述：mul_eq_add : p * q = p + q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.top_mul`：∀ {a : ENNReal}, a ≠ 0 → ⊤ * a = ⊤
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `ENNReal.HolderConjugate.ne_zero`：∀ (p q : ENNReal) [p.HolderConjugate q]
+, p ≠ 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `top_add`：top_add (a : α) : ⊤ + a = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.mul_top`：∀ {a : ENNReal}, a ≠ 0 → a * ⊤ = ⊤
+· 使用定理 `add_top`：add_top (a : α) : a + ⊤ = ⊤
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `ENNReal.mul_inv_cancel`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a * a⁻¹ = 1
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `ENNReal.inv_mul_cancel_right`：∀ {a b : ENNReal}, b ≠ 0 → b ≠ ⊤ → a * b⁻¹
+ * b = a
+· 使用引理 `ENNReal.HolderConjugate.inv_add_inv_eq_one`：inv_add_inv_eq_one : p⁻¹ + q
+⁻¹ = 1
 -/
 lemma mul_eq_add : p * q = p + q := by
   obtain rfl | hp := eq_or_ne p ∞
@@ -2748,185 +2800,176 @@ lemma mul_eq_add : p * q = p + q := by
   obtain rfl | hq := eq_or_ne q ∞
   · simp [ne_zero p ∞]
   simpa [add_comm p, mul_add, add_mul, hp, hq, ne_zero p q, ne_zero q p, ENNReal.mul_inv_cancel,
-ENNReal.inv_mul_cancel_right] using congr(p * ((inv_add_inv_eq_one p q).symm) * q)
-
-/--
-lemma `div_conj_eq_sub_one` / 引理 `div_conj_eq_sub_one`
-
-English:
-lemma div_conj_eq_sub_one
-  statement: p / q = p - 1
-  proof: by
-  obtain rfl | hq := eq_or_ne q ∞
-  · obtain rfl := unique ∞ p 1
-    simp
-  refine ENNReal.eq_sub_of_add_eq one_ne_top ?_
-  rw [← ENNReal.div_self (ne_zero q p) hq]; rw [← ENNReal.add_div]; rw [← h.mul_eq_add]; rw [mul_div_assoc]; rw [ENNReal.div_self (ne_zero q p) hq]; rw [mul_one]
-
-中文:
-引理 div_conj_eq_sub_one
-  结论: p / q = p - 1
-  证明: by
-  obtain rfl | hq := eq_or_ne q ∞
-  · obtain rfl := unique ∞ p 1
-    simp
-  refine ENNReal.eq_sub_of_add_eq one_ne_top ?_
-  rw [← ENNReal.div_self (ne_zero q p) hq]; rw [← ENNReal.add_div]; rw [← h.mul_eq_add]; rw [mul_div_assoc]; rw [ENNReal.div_self (ne_zero q p) hq]; rw [mul_one]
-
-Depends on / 依赖: ENNReal, ENNReal.add_div, ENNReal.div_self, ENNReal.eq_sub_of_add_eq, add_div, div_self, eq_or_ne, eq_sub_of_add_eq, h.mul_eq_add, mul_div_assoc, mul_eq_add, mul_one, ne_zero, one_ne_top, unique
+    ENNReal.inv_mul_cancel_right] using congr(p * $((inv_add_inv_eq_one p q).symm) * q)
+/-
+**ENNReal.HolderConjugate.div_conj_eq_sub_one** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal
+.HolderConjugate`。
+形式化陈述：div_conj_eq_sub_one : p / q = p - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `ENNReal.inv_top`：⊤⁻¹ = 0
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `ENNReal.instOrderedSub`：OrderedSub ENNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ENNReal.HolderConjugate.unique`：unique (q' : Real>=0∞) [hq' : HolderConj
+ugate p q'] : q = q'
+· 使用定理 `ENNReal.eq_sub_of_add_eq`：∀ {a b c : ENNReal}, c ≠ ⊤ → a + c = b → a = b
+ - c
+· 使用定理 `ENNReal.one_ne_top`：1 ≠ ⊤
+· 使用定理 `ENNReal.div_self`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a / a = 1
+· 使用定理 `ENNReal.HolderConjugate.ne_zero`：∀ (p q : ENNReal) [p.HolderConjugate q]
+, p ≠ 0
+· 使用定理 `ENNReal.add_div`：∀ {a b c : ENNReal}, (a + b) / c = a / c + b / c
+· 使用引理 `ENNReal.HolderConjugate.mul_eq_add`：mul_eq_add : p * q = p + q
+· 使用定理 `mul_div_assoc`：mul_div_assoc (a b c : G) : a * b / c = a * (b / c)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 lemma div_conj_eq_sub_one : p / q = p - 1 := by
   obtain rfl | hq := eq_or_ne q ∞
   · obtain rfl := unique ∞ p 1
     simp
   refine ENNReal.eq_sub_of_add_eq one_ne_top ?_
-  rw [← ENNReal.div_self (ne_zero q p) hq]; rw [← ENNReal.add_div]; rw [← h.mul_eq_add]; rw [mul_div_assoc]; rw [ENNReal.div_self (ne_zero q p) hq]; rw [mul_one]
+  rw [← ENNReal.div_self (ne_zero q p) hq, ← ENNReal.add_div, ← h.mul_eq_add, mul_div_assoc,
+    ENNReal.div_self (ne_zero q p) hq, mul_one]
 
 end
 
-/--
-lemma `inv_inv` / 引理 `inv_inv`
-
-English:
-lemma inv_inv
-  given: (hab : a + b = 1)
-  statement: a⁻¹.HolderConjugate b⁻¹ where
-  proof: by simpa [inv_inv] using hab
-
-中文:
-引理 inv_inv
-  条件: (hab : a + b = 1)
-  结论: a⁻¹.HolderConjugate b⁻¹ where
-  证明: by simpa [inv_inv] using hab
+/-
+**ENNReal.HolderConjugate.inv_inv** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal.HolderConju
+gate`。
+形式化陈述：∀ {a b : ENNReal}, a + b = 1 → a⁻¹.HolderConjugate b⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
 -/
 protected lemma inv_inv (hab : a + b = 1) : a⁻¹.HolderConjugate b⁻¹ where
   inv_add_inv_eq_inv := by simpa [inv_inv] using hab
-
-/--
-lemma `inv_one_sub_inv` / 引理 `inv_one_sub_inv`
-
-English:
-lemma inv_one_sub_inv
-  given: (ha : a <= 1)
-  statement: a⁻¹.HolderConjugate (1 - a)⁻¹
-  proof: .inv_inv add_tsub_cancel_of_le ha
-
-中文:
-引理 inv_one_sub_inv
-  条件: (ha : a <= 1)
-  结论: a⁻¹.HolderConjugate (1 - a)⁻¹
-  证明: .inv_inv add_tsub_cancel_of_le ha
-
-Depends on / 依赖: add_tsub_cancel_of_le, inv_inv
+/-
+**ENNReal.HolderConjugate.inv_one_sub_inv** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.Hol
+derConjugate`。
+形式化陈述：inv_one_sub_inv (ha : a <= 1) : a⁻¹.HolderConjugate (1 - a)⁻¹
+参数：ha : a <= 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.HolderConjugate.inv_inv`：∀ {a b : ENNReal}, a + b = 1 → a⁻¹.Hold
+erConjugate b⁻¹
+· 使用定理 `add_tsub_cancel_of_le`：add_tsub_cancel_of_le (h : a <= b) : a + (b - a) 
+= b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `ENNReal.instOrderedSub`：OrderedSub ENNReal
 -/
-lemma inv_one_sub_inv (ha : a <= 1) : a⁻¹.HolderConjugate (1 - a)⁻¹ :=
-.inv_inv add_tsub_cancel_of_le ha
-
-/--
-lemma `inv_one_sub_inv'` / 引理 `inv_one_sub_inv'`
-
-English:
-lemma inv_one_sub_inv'
-  given: (ha : 1 <= a)
-  statement: a.HolderConjugate (1 - a⁻¹)⁻¹
-  proof: by
-  simpa using inv_one_sub_inv (ENNReal.inv_le_one.mpr ha)
-
-中文:
-引理 inv_one_sub_inv'
-  条件: (ha : 1 <= a)
-  结论: a.HolderConjugate (1 - a⁻¹)⁻¹
-  证明: by
-  simpa using inv_one_sub_inv (ENNReal.inv_le_one.mpr ha)
-
-Depends on / 依赖: ENNReal, ENNReal.inv_le_one.mpr, inv_le_one, inv_one_sub_inv
+lemma inv_one_sub_inv (ha : a ≤ 1) : a⁻¹.HolderConjugate (1 - a)⁻¹ :=
+  .inv_inv <| add_tsub_cancel_of_le ha
+/-
+**ENNReal.HolderConjugate.inv_one_sub_inv'** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.Ho
+lderConjugate`。
+形式化陈述：inv_one_sub_inv' (ha : 1 <= a) : a.HolderConjugate (1 - a⁻¹)⁻¹
+参数：ha : 1 <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用引理 `ENNReal.HolderConjugate.inv_one_sub_inv`：inv_one_sub_inv (ha : a <= 1) :
+ a⁻¹.HolderConjugate (1 - a)⁻¹
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.inv_le_one`：∀ {a : ENNReal}, a⁻¹ ≤ 1 ↔ 1 ≤ a
 -/
-lemma inv_one_sub_inv' (ha : 1 <= a) : a.HolderConjugate (1 - a⁻¹)⁻¹ := by
+lemma inv_one_sub_inv' (ha : 1 ≤ a) : a.HolderConjugate (1 - a⁻¹)⁻¹ := by
   simpa using inv_one_sub_inv (ENNReal.inv_le_one.mpr ha)
-
-/--
-lemma `one_sub_inv_inv` / 引理 `one_sub_inv_inv`
-
-English:
-lemma one_sub_inv_inv
-  given: (ha : a <= 1)
-  statement: (1 - a)⁻¹.HolderConjugate a⁻¹
-  proof: (inv_one_sub_inv ha).symm
-
-中文:
-引理 one_sub_inv_inv
-  条件: (ha : a <= 1)
-  结论: (1 - a)⁻¹.HolderConjugate a⁻¹
-  证明: (inv_one_sub_inv ha).symm
-
-Depends on / 依赖: inv_one_sub_inv
+/-
+**ENNReal.HolderConjugate.one_sub_inv_inv** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.Hol
+derConjugate`。
+形式化陈述：one_sub_inv_inv (ha : a <= 1) : (1 - a)⁻¹.HolderConjugate a⁻¹
+参数：ha : a <= 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderConjugate.inv_one_sub_inv`：inv_one_sub_inv (ha : a <= 1) :
+ a⁻¹.HolderConjugate (1 - a)⁻¹
 -/
-lemma one_sub_inv_inv (ha : a <= 1) : (1 - a)⁻¹.HolderConjugate a⁻¹ := (inv_one_sub_inv ha).symm
-
-/--
-lemma `top_one` / 引理 `top_one`
-
-English:
-lemma top_one
-  statement: HolderConjugate ∞ 1
-  proof: ⟨by simp⟩
-
-中文:
-引理 top_one
-  结论: HolderConjugate ∞ 1
-  证明: ⟨by simp⟩
+lemma one_sub_inv_inv (ha : a ≤ 1) : (1 - a)⁻¹.HolderConjugate a⁻¹ := (inv_one_sub_inv ha).symm
+/-
+**ENNReal.HolderConjugate.top_one** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderConju
+gate`。
+形式化陈述：top_one : HolderConjugate ∞ 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.inv_top`：⊤⁻¹ = 0
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma top_one : HolderConjugate ∞ 1 := ⟨by simp⟩
-/--
-lemma `one_top` / 引理 `one_top`
-
-English:
-lemma one_top
-  statement: HolderConjugate 1 ∞
-  proof: ⟨by simp⟩
-
-中文:
-引理 one_top
-  结论: HolderConjugate 1 ∞
-  证明: ⟨by simp⟩
+/-
+**ENNReal.HolderConjugate.one_top** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal.HolderConju
+gate`。
+形式化陈述：one_top : HolderConjugate 1 ∞
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `ENNReal.inv_top`：⊤⁻¹ = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma one_top : HolderConjugate 1 ∞ := ⟨by simp⟩
 
 end HolderConjugate
 
-/--
-lemma `isConjExponent_comm` / 引理 `isConjExponent_comm`
-
-English:
-lemma isConjExponent_comm
-  statement: p.HolderConjugate q ↔ q.HolderConjugate p
-  proof: ⟨(·.symm), (·.symm)⟩
-
-中文:
-引理 isConjExponent_comm
-  结论: p.HolderConjugate q ↔ q.HolderConjugate p
-  证明: ⟨(·.symm), (·.symm)⟩
+/-
+**ENNReal.isConjExponent_comm** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：isConjExponent_comm : p.HolderConjugate q ↔ q.HolderConjugate p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isConjExponent_comm : p.HolderConjugate q ↔ q.HolderConjugate p := ⟨(·.symm), (·.symm)⟩
-
-/--
-lemma `isConjExponent_iff_eq_conjExponent` / 引理 `isConjExponent_iff_eq_conjExponent`
-
-English:
-lemma isConjExponent_iff_eq_conjExponent
-  given: (hp : 1 <= p)
-  statement: p.HolderConjugate q ↔ q = 1 + (p - 1)⁻¹
-  proof: ⟨fun h => h.conj_eq, by rintro rfl; exact .conjExponent hp⟩
-
-中文:
-引理 isConjExponent_iff_eq_conjExponent
-  条件: (hp : 1 <= p)
-  结论: p.HolderConjugate q ↔ q = 1 + (p - 1)⁻¹
-  证明: ⟨fun h => h.conj_eq, by rintro rfl; exact .conjExponent hp⟩
-
-Depends on / 依赖: conjExponent, conj_eq, h.conj_eq
+/-
+**ENNReal.isConjExponent_iff_eq_conjExponent** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`
+。
+形式化陈述：isConjExponent_iff_eq_conjExponent (hp : 1 <= p) : p.HolderConjugate q ↔ q
+ = 1 + (p - 1)⁻¹
+参数：hp : 1 <= p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENNReal.HolderConjugate.conj_eq`：conj_eq : q = 1 + (p - 1)⁻¹
+· 使用定理 `ENNReal.HolderConjugate.conjExponent`：∀ {p : ENNReal}, 1 ≤ p → p.HolderC
+onjugate p.conjExponent
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma isConjExponent_iff_eq_conjExponent (hp : 1 <= p) : p.HolderConjugate q ↔ q = 1 + (p - 1)⁻¹ :=
-  ⟨fun h => h.conj_eq, by rintro rfl; exact .conjExponent hp⟩
+lemma isConjExponent_iff_eq_conjExponent (hp : 1 ≤ p) : p.HolderConjugate q ↔ q = 1 + (p - 1)⁻¹ :=
+  ⟨fun h ↦ h.conj_eq, by rintro rfl; exact .conjExponent hp⟩
 
 end ENNReal
+

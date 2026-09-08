@@ -39,52 +39,58 @@ open Set Fin Function Function.Embedding
 
 namespace Fin.Embedding
 
-variable {α : Type*} {m n : Nat} {s : Set α}
+variable {α : Type*} {m n : ℕ} {s : Set α}
 
-/--
-theorem `exists_embedding_disjoint_range_of_add_le_ENat_card` / 定理 `exists_embedding_disjoint_range_of_add_le_ENat_card`
-
-English:
-theorem exists_embedding_disjoint_range_of_add_le_ENat_card
-  proof: by
-  rsuffices ⟨y⟩ : Nonempty (Fin n ↪ (sᶜ : Set α))
-  · use y.trans (subtype _)
-    rw [Set.disjoint_right]
-    rintro _ ⟨i, rfl⟩
-    simpa only [← mem_compl_iff] using! Subtype.coe_prop (y i)
-  rcases finite_or_infinite α with hα | hα
-  · let _ : Fintype α := Fintype.ofFinite α
-    classical
-    apply nonempty_of_card_le
-    rwa [Fintype.card_fin, ← add_le_add_iff_left s.ncard,
-      ← Nat.card_eq_fintype_card, Nat.card_coe_set_eq,
-        ncard_add_ncard_compl, ← ENat.natCast_le_natCast,
-        ← ENat.card_eq_coe_natCard, ENat.natCast_add]
-  · exact ⟨valEmbedding.trans s.toFinite.infinite_compl.to_subtype.natEmbedding⟩
-
-中文:
-定理 存在_embedding_disjoint_range_of_add_le_E自然数_card
-  证明: by
-  rsuffices ⟨y⟩ : Nonempty (Fin n ↪ (sᶜ : Set α))
-  · use y.trans (subtype _)
-    rw [Set.disjoint_right]
-    rintro _ ⟨i, rfl⟩
-    simpa only [← mem_compl_iff] using! Subtype.coe_prop (y i)
-  rcases finite_or_infinite α with hα | hα
-  · let _ : Fintype α := Fintype.ofFinite α
-    classical
-    apply nonempty_of_card_le
-    rwa [Fintype.card_fin, ← add_le_add_iff_left s.ncard,
-      ← Nat.card_eq_fintype_card, Nat.card_coe_set_eq,
-        ncard_add_ncard_compl, ← ENat.natCast_le_natCast,
-        ← ENat.card_eq_coe_natCard, ENat.natCast_add]
-  · exact ⟨valEmbedding.trans s.toFinite.infinite_compl.to_subtype.natEmbedding⟩
-
-Depends on / 依赖: ENat.card_eq_coe_natCard, ENat.natCast_add, ENat.natCast_le_natCast, Fintype, Fintype.card_fin, Fintype.ofFinite, Nat.card_coe_set_eq, Nat.card_eq_fintype_card, Nonempty, Set.disjoint_right, Subtype, Subtype.coe_prop, add_le_add_iff_left, card_coe_set_eq, card_eq_coe_natCard, card_eq_fintype_card, card_fin, classical, coe_prop, disjoint_right
+/-
+**Fin.Embedding.exists_embedding_disjoint_range_of_add_le_ENat_card** 是 Mathlib 
+中的一个定理，位于命名空间 `Fin.Embedding`。
+形式化陈述：exists_embedding_disjoint_range_of_add_le_ENat_card [Finite s] (hs : s.nca
+rd + n <= ENat.card α) : exists y : Fin n ↪ α, Disjoint s (range y)
+参数：hs : s.ncard + n <= ENat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `Function.Embedding.nonempty_of_card_le`：nonempty_of_card_le [Fintype α] 
+[Fintype β] (h : Fintype.card α <= Fintype.card β) : Nonempty (α ↪ β)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_le_add_iff_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [Ad
+dLeftMono α] [AddLeftReflectLE α] (a : α) {b c : α},   a + b ≤ a + c ↔ b ≤ c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Nat.card_coe_set_eq`：∀ {α : Type u_1} (s : Set α), Nat.card ↑s = s.ncard
+· 使用定理 `Set.ncard_add_ncard_compl`：ncard_add_ncard_compl (s : Set α) (hs : s.Fin
+ite
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用引理 `ENat.natCast_le_natCast`：natCast_le_natCast {n m : Nat} : (n : Nat∞) <= 
+(m : Nat∞) ↔ n <= m
+· 使用定理 `ENat.card_eq_coe_natCard`：card_eq_coe_natCard (α : Type*) [Finite α] : c
+ard α = Nat.card α
+· 使用定理 `ENat.natCast_add`：natCast_add (m n : Nat) : ↑(m + n) = (m + n : Nat∞)
+· 使用定理 `Set.Infinite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Infinite → Infini
+te ↑s
+· 使用定理 `Set.Finite.infinite_compl`：∀ {α : Type u} [Infinite α] {s : Set α}, s.Fi
+nite → sᶜ.Infinite
+· 使用定理 `Set.disjoint_right`：disjoint_right : Disjoint s t ↔ forall ⦃a⦄, a in t -
+> a ∉ s
+· 使用定理 `Subtype.coe_prop`：coe_prop {S : Set α} (a : { a // a in S }) : ↑a in S
 -/
 theorem exists_embedding_disjoint_range_of_add_le_ENat_card
-    [Finite s] (hs : s.ncard + n <= ENat.card α) :
-    exists y : Fin n ↪ α, Disjoint s (range y) := by
+    [Finite s] (hs : s.ncard + n ≤ ENat.card α) :
+    ∃ y : Fin n ↪ α, Disjoint s (range y) := by
   rsuffices ⟨y⟩ : Nonempty (Fin n ↪ (sᶜ : Set α))
   · use y.trans (subtype _)
     rw [Set.disjoint_right]
@@ -99,37 +105,66 @@ theorem exists_embedding_disjoint_range_of_add_le_ENat_card
         ncard_add_ncard_compl, ← ENat.natCast_le_natCast,
         ← ENat.card_eq_coe_natCard, ENat.natCast_add]
   · exact ⟨valEmbedding.trans s.toFinite.infinite_compl.to_subtype.natEmbedding⟩
-
-/--
-theorem `exists_embedding_disjoint_range_of_add_le_Nat_card` / 定理 `exists_embedding_disjoint_range_of_add_le_Nat_card`
-
-English:
-theorem exists_embedding_disjoint_range_of_add_le_Nat_card
-  proof: by
-  apply exists_embedding_disjoint_range_of_add_le_ENat_card
-  rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
-
-中文:
-定理 存在_embedding_disjoint_range_of_add_le_自然数_card
-  证明: by
-  apply exists_embedding_disjoint_range_of_add_le_ENat_card
-  rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
-
-Depends on / 依赖: ENat.card_eq_coe_natCard, ENat.natCast_add, ENat.natCast_le_natCast, card_eq_coe_natCard, exists_embedding_disjoint_range_of_add_le_ENat_card, natCast_add, natCast_le_natCast
+/-
+**Fin.Embedding.exists_embedding_disjoint_range_of_add_le_Nat_card** 是 Mathlib 中
+的一个定理，位于命名空间 `Fin.Embedding`。
+形式化陈述：exists_embedding_disjoint_range_of_add_le_Nat_card [Finite α] (hs : s.ncar
+d + n <= Nat.card α) : exists y : Fin n ↪ α, Disjoint s (range y)
+参数：hs : s.ncard + n <= Nat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.Embedding.exists_embedding_disjoint_range_of_add_le_ENat_card`：exist
+s_embedding_disjoint_range_of_add_le_ENat_card [Finite s] (hs : s.ncard + n <= E
+Nat.card α) : exists y : Fin n ↪ α, Disjoint s (range y…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENat.natCast_add`：natCast_add (m n : Nat) : ↑(m + n) = (m + n : Nat∞)
+· 使用定理 `ENat.card_eq_coe_natCard`：card_eq_coe_natCard (α : Type*) [Finite α] : c
+ard α = Nat.card α
+· 使用引理 `ENat.natCast_le_natCast`：natCast_le_natCast {n m : Nat} : (n : Nat∞) <= 
+(m : Nat∞) ↔ n <= m
 -/
 theorem exists_embedding_disjoint_range_of_add_le_Nat_card
-    [Finite α] (hs : s.ncard + n <= Nat.card α) :
-    exists y : Fin n ↪ α, Disjoint s (range y) := by
+    [Finite α] (hs : s.ncard + n ≤ Nat.card α) :
+    ∃ y : Fin n ↪ α, Disjoint s (range y) := by
   apply exists_embedding_disjoint_range_of_add_le_ENat_card
   rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
-
-/--
-theorem `restrictSurjective_of_add_le_ENatCard` / 定理 `restrictSurjective_of_add_le_ENatCard`
-
-English:
-theorem restrictSurjective_of_add_le_ENatCard
-  given: (hn : m + n <= ENat.card α)
-  proof: by
+/-
+**Fin.Embedding.restrictSurjective_of_add_le_ENatCard** 是 Mathlib 中的一个定理，位于命名空间 
+`Fin.Embedding`。
+形式化陈述：restrictSurjective_of_add_le_ENatCard (hn : m + n <= ENat.card α) : Surjec
+tive (fun (x : Fin (m + n) ↪ α) => (Fin.castAddEmb n).trans x)
+参数：hn : m + n <= ENat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.Embedding.exists_embedding_disjoint_range_of_add_le_ENat_card`：exist
+s_embedding_disjoint_range_of_add_le_ENat_card [Finite s] (hs : s.ncard + n <= E
+Nat.card α) : exists y : Fin n ↪ α, Disjoint s (range y…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Nat.card_range_of_injective`：card_range_of_injective {f : α -> β} (hf : 
+Injective f) : Nat.card (range f) = Nat.card α
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
+· 使用定理 `Function.Embedding.ext`：ext {α β} {f g : Embedding α β} (h : forall x, f
+ x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Function.Embedding.trans_apply`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α ↪ β) (g : β ↪ γ) (a : α), (f.trans g) a = g (f a)
+· 使用定理 `Fin.append_left`：append_left (u : Fin m -> α) (v : Fin n -> α) (i : Fin 
+m) : append u v (Fin.castAdd n i) = u i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem restrictSurjective_of_add_le_ENatCard (hn : m + n ≤ ENat.card α) :
+    Surjective (fun (x : Fin (m + n) ↪ α) ↦ (Fin.castAddEmb n).trans x) := by
   intro x
   obtain ⟨y, hxy⟩ :=
     exists_embedding_disjoint_range_of_add_le_ENat_card (s := range x)
@@ -137,101 +172,66 @@ theorem restrictSurjective_of_add_le_ENatCard
   use append hxy
   ext i
   simp [trans_apply, coe_castAddEmb, append]
-
-中文:
-定理 restrictSurjective_of_add_le_E自然数Card
-  条件: (hn : m + n <= E自然数.card α)
-  证明: by
-  intro x
-  obtain ⟨y, hxy⟩ :=
-    exists_embedding_disjoint_range_of_add_le_ENat_card (s := range x)
-      (by simpa [← Nat.card_coe_set_eq, Nat.card_range_of_injective x.injective])
-  use append hxy
-  ext i
-  simp [trans_apply, coe_castAddEmb, append]
-
-Depends on / 依赖: Nat.card_coe_set_eq, Nat.card_range_of_injective, append, card_coe_set_eq, card_range_of_injective, coe_castAddEmb, exists_embedding_disjoint_range_of_add_le_ENat_card, injective, trans_apply, x.injective
+/-
+**Fin.Embedding.restrictSurjective_of_le_ENatCard** 是 Mathlib 中的一个定理，位于命名空间 `Fin
+.Embedding`。
+形式化陈述：restrictSurjective_of_le_ENatCard (hmn : m <= n) (hn : n <= ENat.card α) :
+ Function.Surjective (fun x : Fin n ↪ α => (castLEEmb hmn).trans x)
+参数：hmn : m <= n；hn : n <= ENat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = m + k
+· 使用定理 `Fin.Embedding.restrictSurjective_of_add_le_ENatCard`：restrictSurjective_
+of_add_le_ENatCard (hn : m + n <= ENat.card α) : Surjective (fun (x : Fin (m + n
+) ↪ α) => (Fin.castAddEmb n).trans x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem restrictSurjective_of_add_le_ENatCard (hn : m + n <= ENat.card α) :
-    Surjective (fun (x : Fin (m + n) ↪ α) => (Fin.castAddEmb n).trans x) := by
-  intro x
-  obtain ⟨y, hxy⟩ :=
-    exists_embedding_disjoint_range_of_add_le_ENat_card (s := range x)
-      (by simpa [← Nat.card_coe_set_eq, Nat.card_range_of_injective x.injective])
-  use append hxy
-  ext i
-  simp [trans_apply, coe_castAddEmb, append]
-
-/--
-theorem `restrictSurjective_of_le_ENatCard` / 定理 `restrictSurjective_of_le_ENatCard`
-
-English:
-theorem restrictSurjective_of_le_ENatCard
-  given: (hmn : m <= n) (hn : n <= ENat.card α)
-  proof: by
+theorem restrictSurjective_of_le_ENatCard (hmn : m ≤ n) (hn : n ≤ ENat.card α) :
+    Function.Surjective (fun x : Fin n ↪ α ↦ (castLEEmb hmn).trans x) := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
   exact Fin.Embedding.restrictSurjective_of_add_le_ENatCard hn
-
-中文:
-定理 restrictSurjective_of_le_E自然数Card
-  条件: (hmn : m <= n) (hn : n <= E自然数.card α)
-  证明: by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
-  exact Fin.Embedding.restrictSurjective_of_add_le_ENatCard hn
-
-Depends on / 依赖: Embedding, Fin.Embedding.restrictSurjective_of_add_le_ENatCard, Nat.exists_eq_add_of_le, exists_eq_add_of_le, restrictSurjective_of_add_le_ENatCard
+/-
+**Fin.Embedding.restrictSurjective_of_add_le_natCard** 是 Mathlib 中的一个定理，位于命名空间 `
+Fin.Embedding`。
+形式化陈述：restrictSurjective_of_add_le_natCard [Finite α] (hn : m + n <= Nat.card α)
+ : Surjective (fun x : Fin (m + n) ↪ α => (castAddEmb n).trans x)
+参数：hn : m + n <= Nat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.Embedding.restrictSurjective_of_add_le_ENatCard`：restrictSurjective_
+of_add_le_ENatCard (hn : m + n <= ENat.card α) : Surjective (fun (x : Fin (m + n
+) ↪ α) => (Fin.castAddEmb n).trans x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENat.natCast_add`：natCast_add (m n : Nat) : ↑(m + n) = (m + n : Nat∞)
+· 使用定理 `ENat.card_eq_coe_natCard`：card_eq_coe_natCard (α : Type*) [Finite α] : c
+ard α = Nat.card α
+· 使用引理 `ENat.natCast_le_natCast`：natCast_le_natCast {n m : Nat} : (n : Nat∞) <= 
+(m : Nat∞) ↔ n <= m
 -/
-theorem restrictSurjective_of_le_ENatCard (hmn : m <= n) (hn : n <= ENat.card α) :
-    Function.Surjective (fun x : Fin n ↪ α => (castLEEmb hmn).trans x) := by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
-  exact Fin.Embedding.restrictSurjective_of_add_le_ENatCard hn
-
-/--
-theorem `restrictSurjective_of_add_le_natCard` / 定理 `restrictSurjective_of_add_le_natCard`
-
-English:
-theorem restrictSurjective_of_add_le_natCard
-  given: [Finite α] (hn : m + n <= Nat.card α)
-  proof: by
+theorem restrictSurjective_of_add_le_natCard [Finite α] (hn : m + n ≤ Nat.card α) :
+    Surjective (fun x : Fin (m + n) ↪ α ↦ (castAddEmb n).trans x) := by
   apply restrictSurjective_of_add_le_ENatCard
   rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
-
-中文:
-定理 restrictSurjective_of_add_le_natCard
-  条件: [有限 α] (hn : m + n <= 自然数.card α)
-  证明: by
-  apply restrictSurjective_of_add_le_ENatCard
-  rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
-
-Depends on / 依赖: ENat.card_eq_coe_natCard, ENat.natCast_add, ENat.natCast_le_natCast, card_eq_coe_natCard, natCast_add, natCast_le_natCast, restrictSurjective_of_add_le_ENatCard
+/-
+**Fin.Embedding.restrictSurjective_of_le_natCard** 是 Mathlib 中的一个定理，位于命名空间 `Fin.
+Embedding`。
+形式化陈述：restrictSurjective_of_le_natCard [Finite α] (hmn : m <= n) (hn : n <= Nat.
+card α) : Function.Surjective (fun x : Fin n ↪ α => (castLEEmb hmn).trans x)
+参数：hmn : m <= n；hn : n <= Nat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = m + k
+· 使用定理 `Fin.Embedding.restrictSurjective_of_add_le_natCard`：restrictSurjective_o
+f_add_le_natCard [Finite α] (hn : m + n <= Nat.card α) : Surjective (fun x : Fin
+ (m + n) ↪ α => (castAddEmb n).trans x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem restrictSurjective_of_add_le_natCard [Finite α] (hn : m + n <= Nat.card α) :
-    Surjective (fun x : Fin (m + n) ↪ α => (castAddEmb n).trans x) := by
-  apply restrictSurjective_of_add_le_ENatCard
-  rwa [← ENat.natCast_add, ENat.card_eq_coe_natCard, ENat.natCast_le_natCast]
-
-/--
-theorem `restrictSurjective_of_le_natCard` / 定理 `restrictSurjective_of_le_natCard`
-
-English:
-theorem restrictSurjective_of_le_natCard
-  given: [Finite α] (hmn : m <= n) (hn : n <= Nat.card α)
-  proof: by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
-  exact Fin.Embedding.restrictSurjective_of_add_le_natCard hn
-
-中文:
-定理 restrictSurjective_of_le_natCard
-  条件: [有限 α] (hmn : m <= n) (hn : n <= 自然数.card α)
-  证明: by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
-  exact Fin.Embedding.restrictSurjective_of_add_le_natCard hn
-
-Depends on / 依赖: Embedding, Fin.Embedding.restrictSurjective_of_add_le_natCard, Nat.exists_eq_add_of_le, exists_eq_add_of_le, restrictSurjective_of_add_le_natCard
--/
-theorem restrictSurjective_of_le_natCard [Finite α] (hmn : m <= n) (hn : n <= Nat.card α) :
-    Function.Surjective (fun x : Fin n ↪ α => (castLEEmb hmn).trans x) := by
+theorem restrictSurjective_of_le_natCard [Finite α] (hmn : m ≤ n) (hn : n ≤ Nat.card α) :
+    Function.Surjective (fun x : Fin n ↪ α ↦ (castLEEmb hmn).trans x) := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
   exact Fin.Embedding.restrictSurjective_of_add_le_natCard hn
 
 end Fin.Embedding
+

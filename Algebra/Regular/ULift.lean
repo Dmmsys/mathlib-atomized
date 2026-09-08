@@ -24,149 +24,95 @@ section
 variable [Mul R]
 
 @[to_additive (attr := simp)]
-/--
-theorem `isLeftRegular_up` / 定理 `isLeftRegular_up`
-
-English:
-theorem isLeftRegular_up
-  given: {a : R}
-  statement: IsLeftRegular (ULift.up.{u} a) ↔ IsLeftRegular a
-  proof: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isLeftRegular_up
-  条件: {a : R}
-  结论: IsLeftRegular (类型层提升.up.{u} a) ↔ IsLeftRegular a
-  证明: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.ulift.symm.comp_injective, Equiv.ulift.symm.injective_comp, comp_injective, injective_comp
+/-
+**ULift.isLeftRegular_up** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：isLeftRegular_up {a : R} : IsLeftRegular (ULift.up.{u} a) ↔ IsLeftRegular 
+a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.comp_injective`：comp_injective (f : α -> β) (e : β ≃ γ) : Injectiv
+e (e ∘ f) ↔ Injective f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.injective_comp`：injective_comp (e : α ≃ β) (f : β -> γ) : Injectiv
+e (f ∘ e) ↔ Injective f
 -/
 theorem isLeftRegular_up {a : R} : IsLeftRegular (ULift.up.{u} a) ↔ IsLeftRegular a :=
-.trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
+  Equiv.ulift.symm.comp_injective _ |>.trans <| Equiv.ulift.symm.injective_comp _ |>.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRightRegular_up` / 定理 `isRightRegular_up`
-
-English:
-theorem isRightRegular_up
-  given: {a : R}
-  statement: IsRightRegular (ULift.up.{u} a) ↔ IsRightRegular a
-  proof: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isRightRegular_up
-  条件: {a : R}
-  结论: IsRightRegular (类型层提升.up.{u} a) ↔ IsRightRegular a
-  证明: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Equiv.ulift.symm.comp_injective, Equiv.ulift.symm.injective_comp, comp_injective, injective_comp
+/-
+**ULift.isRightRegular_up** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：isRightRegular_up {a : R} : IsRightRegular (ULift.up.{u} a) ↔ IsRightRegul
+ar a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.comp_injective`：comp_injective (f : α -> β) (e : β ≃ γ) : Injectiv
+e (e ∘ f) ↔ Injective f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.injective_comp`：injective_comp (e : α ≃ β) (f : β -> γ) : Injectiv
+e (f ∘ e) ↔ Injective f
 -/
 theorem isRightRegular_up {a : R} : IsRightRegular (ULift.up.{u} a) ↔ IsRightRegular a :=
-.trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
+  Equiv.ulift.symm.comp_injective _ |>.trans <| Equiv.ulift.symm.injective_comp _ |>.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRegular_up` / 定理 `isRegular_up`
-
-English:
-theorem isRegular_up
-  given: {a : R}
-  statement: IsRegular (ULift.up.{u} a) ↔ IsRegular a
-  proof: by
-  simp [isRegular_iff]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isRegular_up
-  条件: {a : R}
-  结论: 是正则 (类型层提升.up.{u} a) ↔ 是正则 a
-  证明: by
-  simp [isRegular_iff]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: isRegular_iff
+/-
+**ULift.isRegular_up** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：isRegular_up {a : R} : IsRegular (ULift.up.{u} a) ↔ IsRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isRegular_up {a : R} : IsRegular (ULift.up.{u} a) ↔ IsRegular a := by
   simp [isRegular_iff]
 
 @[to_additive (attr := simp)]
-/--
-theorem `isLeftRegular_down` / 定理 `isLeftRegular_down`
-
-English:
-theorem isLeftRegular_down
-  given: {a : ULift.{u} R}
-  statement: IsLeftRegular a.down ↔ IsLeftRegular a
-  proof: isLeftRegular_up.symm
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isLeftRegular_down
-  条件: {a : 类型层提升.{u} R}
-  结论: IsLeftRegular a.down ↔ IsLeftRegular a
-  证明: isLeftRegular_up.symm
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: isLeftRegular_up, isLeftRegular_up.symm
+/-
+**ULift.isLeftRegular_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：isLeftRegular_down {a : ULift.{u} R} : IsLeftRegular a.down ↔ IsLeftRegula
+r a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `ULift.isLeftRegular_up`：isLeftRegular_up {a : R} : IsLeftRegular (ULift.
+up.{u} a) ↔ IsLeftRegular a
 -/
 theorem isLeftRegular_down {a : ULift.{u} R} : IsLeftRegular a.down ↔ IsLeftRegular a :=
   isLeftRegular_up.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRightRegular_down` / 定理 `isRightRegular_down`
-
-English:
-theorem isRightRegular_down
-  given: {a : ULift.{u} R}
-  statement: IsRightRegular a.down ↔ IsRightRegular a
-  proof: isRightRegular_up.symm
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isRightRegular_down
-  条件: {a : 类型层提升.{u} R}
-  结论: IsRightRegular a.down ↔ IsRightRegular a
-  证明: isRightRegular_up.symm
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: isRightRegular_up, isRightRegular_up.symm
+/-
+**ULift.isRightRegular_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：isRightRegular_down {a : ULift.{u} R} : IsRightRegular a.down ↔ IsRightReg
+ular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `ULift.isRightRegular_up`：isRightRegular_up {a : R} : IsRightRegular (ULi
+ft.up.{u} a) ↔ IsRightRegular a
 -/
 theorem isRightRegular_down {a : ULift.{u} R} : IsRightRegular a.down ↔ IsRightRegular a :=
   isRightRegular_up.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRegular_down` / 定理 `isRegular_down`
-
-English:
-theorem isRegular_down
-  given: {a : ULift.{u} R}
-  statement: IsRegular a.down ↔ IsRegular a
-  proof: isRegular_up.symm
-
-中文:
-定理 isRegular_down
-  条件: {a : 类型层提升.{u} R}
-  结论: 是正则 a.down ↔ 是正则 a
-  证明: isRegular_up.symm
-
-Depends on / 依赖: isRegular_up, isRegular_up.symm
+/-
+**ULift.isRegular_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：isRegular_down {a : ULift.{u} R} : IsRegular a.down ↔ IsRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `ULift.isRegular_up`：isRegular_up {a : R} : IsRegular (ULift.up.{u} a) ↔ 
+IsRegular a
 -/
 theorem isRegular_down {a : ULift.{u} R} : IsRegular a.down ↔ IsRegular a :=
   isRegular_up.symm
@@ -174,23 +120,23 @@ theorem isRegular_down {a : ULift.{u} R} : IsRegular a.down ↔ IsRegular a :=
 end
 
 @[simp]
-/--
-theorem `isSMulRegular_iff` / 定理 `isSMulRegular_iff`
-
-English:
-theorem isSMulRegular_iff
-  given: [SMul α R] {r : α}
-  proof: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
-
-中文:
-定理 isSMulRegular_iff
-  条件: [标量乘法 α R] {r : α}
-  证明: .trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
-
-Depends on / 依赖: Equiv.ulift.symm.comp_injective, Equiv.ulift.symm.injective_comp, comp_injective, injective_comp
+/-
+**ULift.isSMulRegular_iff** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：isSMulRegular_iff [SMul α R] {r : α} : IsSMulRegular (ULift R) r ↔ IsSMulR
+egular R r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.comp_injective`：comp_injective (f : α -> β) (e : β ≃ γ) : Injectiv
+e (e ∘ f) ↔ Injective f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.injective_comp`：injective_comp (e : α ≃ β) (f : β -> γ) : Injectiv
+e (f ∘ e) ↔ Injective f
 -/
 theorem isSMulRegular_iff [SMul α R] {r : α} :
     IsSMulRegular (ULift R) r ↔ IsSMulRegular R r :=
-.trans .symm Equiv.ulift.symm.injective_comp _ Equiv.ulift.symm.comp_injective _
+  Equiv.ulift.symm.comp_injective _ |>.trans <| Equiv.ulift.symm.injective_comp _ |>.symm
 
 end ULift
+

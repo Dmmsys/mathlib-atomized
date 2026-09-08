@@ -25,673 +25,608 @@ open scoped Topology
 
 variable {ι : Sort*} {X : Type*} [TopologicalSpace X] {s t : Set X} {x y : X}
 
-/--
-lemma `nhdsKer_singleton_eq_ker_nhds` / 引理 `nhdsKer_singleton_eq_ker_nhds`
-
-English:
-lemma nhdsKer_singleton_eq_ker_nhds
-  given: (x : X)
-  statement: nhdsKer {x} = (𝓝 x).ker
-  proof: by simp [nhdsKer]
-
-@[simp]
-
-中文:
-引理 nhdsKer_singleton_eq_ker_nhds
-  条件: (x : X)
-  结论: nhdsKer {x} = (𝓝 x).ker
-  证明: by simp [nhdsKer]
-
-@[simp]
-
-Depends on / 依赖: nhdsKer
+/-
+**nhdsKer_singleton_eq_ker_nhds** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nhdsKer_singleton_eq_ker_nhds (x : X) : nhdsKer {x} = (𝓝 x).ker
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsSet_singleton`：nhdsSet_singleton : 𝓝ˢ {x} = 𝓝 x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma nhdsKer_singleton_eq_ker_nhds (x : X) : nhdsKer {x} = (𝓝 x).ker := by simp [nhdsKer]
 
 @[simp]
-/--
-theorem `mem_nhdsKer_singleton` / 定理 `mem_nhdsKer_singleton`
-
-English:
-theorem mem_nhdsKer_singleton
-  statement: x in nhdsKer {y} ↔ x ⤳ y
-  proof: by
-  rw [nhdsKer_singleton_eq_ker_nhds]; rw [ker_nhds_eq_specializes]; rw [mem_ofPred]
-
-中文:
-定理 mem_nhdsKer_singleton
-  结论: x in nhdsKer {y} ↔ x ⤳ y
-  证明: by
-  rw [nhdsKer_singleton_eq_ker_nhds]; rw [ker_nhds_eq_specializes]; rw [mem_ofPred]
-
-Depends on / 依赖: ker_nhds_eq_specializes, mem_ofPred, nhdsKer_singleton_eq_ker_nhds
+/-
+**mem_nhdsKer_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nhdsKer_singleton : x in nhdsKer {y} ↔ x ⤳ y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nhdsKer_singleton_eq_ker_nhds`：nhdsKer_singleton_eq_ker_nhds (x : X) : n
+hdsKer {x} = (𝓝 x).ker
+· 使用定理 `ker_nhds_eq_specializes`：ker_nhds_eq_specializes : (𝓝 x).ker = {y | y ⤳ 
+x}
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_nhdsKer_singleton : x in nhdsKer {y} ↔ x ⤳ y := by
-  rw [nhdsKer_singleton_eq_ker_nhds]; rw [ker_nhds_eq_specializes]; rw [mem_ofPred]
-
-/--
-lemma `nhdsKer_def` / 引理 `nhdsKer_def`
-
-English:
-lemma nhdsKer_def
-  given: (s : Set X)
-  statement: nhdsKer s = ⋂₀ {t : Set X | IsOpen t ∧ s subseteq t}
-  proof: (hasBasis_nhdsSet _).ker.trans sInter_eq_biInter.symm
-
-中文:
-引理 nhdsKer_def
-  条件: (s : 集合 X)
-  结论: nhdsKer s = ⋂₀ {t : 集合 X | 是开集 t ∧ s subseteq t}
-  证明: (hasBasis_nhdsSet _).ker.trans sInter_eq_biInter.symm
-
-Depends on / 依赖: hasBasis_nhdsSet, ker.trans, sInter_eq_biInter, sInter_eq_biInter.symm
+theorem mem_nhdsKer_singleton : x ∈ nhdsKer {y} ↔ x ⤳ y := by
+  rw [nhdsKer_singleton_eq_ker_nhds, ker_nhds_eq_specializes, mem_ofPred]
+/-
+**nhdsKer_def** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nhdsKer_def (s : Set X) : nhdsKer s = ⋂₀ {t : Set X | IsOpen t ∧ s subsete
+q t}
+参数：s : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Filter.HasBasis.ker`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} {p :
+ ι → Prop} {s : ι → Set α},   l.HasBasis p s → l.ker = ⋂ i, ⋂ (_ : p i), s i
+· 使用定理 `hasBasis_nhdsSet`：hasBasis_nhdsSet (s : Set X) : (𝓝ˢ s).HasBasis (fun U 
+=> IsOpen U ∧ s subseteq U) fun U => U
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.sInter_eq_biInter`：sInter_eq_biInter {s : Set (Set α)} : ⋂₀ s = ⋂ (i
+ : Set α) (_ : i in s), i
 -/
-lemma nhdsKer_def (s : Set X) : nhdsKer s = ⋂₀ {t : Set X | IsOpen t ∧ s subseteq t} :=
+lemma nhdsKer_def (s : Set X) : nhdsKer s = ⋂₀ {t : Set X | IsOpen t ∧ s ⊆ t} :=
   (hasBasis_nhdsSet _).ker.trans sInter_eq_biInter.symm
-
-/--
-lemma `mem_nhdsKer` / 引理 `mem_nhdsKer`
-
-English:
-lemma mem_nhdsKer
-  statement: x in nhdsKer s ↔ forall U, IsOpen U -> s subseteq U -> x in U
-  proof: by simp [nhdsKer_def]
-
-中文:
-引理 mem_nhdsKer
-  结论: x in nhdsKer s ↔ 对任意 U, 是开集 U -> s subseteq U -> x in U
-  证明: by simp [nhdsKer_def]
-
-Depends on / 依赖: nhdsKer_def
+/-
+**mem_nhdsKer** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_nhdsKer : x in nhdsKer s ↔ forall U, IsOpen U -> s subseteq U -> x in 
+U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nhdsKer_def`：nhdsKer_def (s : Set X) : nhdsKer s = ⋂₀ {t : Set X | IsOpe
+n t ∧ s subseteq t}
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_nhdsKer : x in nhdsKer s ↔ forall U, IsOpen U -> s subseteq U -> x in U := by simp [nhdsKer_def]
-
-/--
-lemma `subset_nhdsKer_iff` / 引理 `subset_nhdsKer_iff`
-
-English:
-lemma subset_nhdsKer_iff
-  statement: s subseteq nhdsKer t ↔ forall U, IsOpen U -> t subseteq U -> s subseteq U
-  proof: by
+lemma mem_nhdsKer : x ∈ nhdsKer s ↔ ∀ U, IsOpen U → s ⊆ U → x ∈ U := by simp [nhdsKer_def]
+/-
+**subset_nhdsKer_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：subset_nhdsKer_iff : s subseteq nhdsKer t ↔ forall U, IsOpen U -> t subset
+eq U -> s subseteq U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nhdsKer_def`：nhdsKer_def (s : Set X) : nhdsKer s = ⋂₀ {t : Set X | IsOpe
+n t ∧ s subseteq t}
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma subset_nhdsKer_iff : s ⊆ nhdsKer t ↔ ∀ U, IsOpen U → t ⊆ U → s ⊆ U := by
   simp [nhdsKer_def]
-
-中文:
-引理 subset_nhdsKer_iff
-  结论: s subseteq nhdsKer t ↔ 对任意 U, 是开集 U -> t subseteq U -> s subseteq U
-  证明: by
-  simp [nhdsKer_def]
-
-Depends on / 依赖: nhdsKer_def
+/-
+**subset_nhdsKer** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：subset_nhdsKer : s subseteq nhdsKer s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `subset_nhdsKer_iff`：subset_nhdsKer_iff : s subseteq nhdsKer t ↔ forall U
+, IsOpen U -> t subseteq U -> s subseteq U
 -/
-lemma subset_nhdsKer_iff : s subseteq nhdsKer t ↔ forall U, IsOpen U -> t subseteq U -> s subseteq U := by
-  simp [nhdsKer_def]
-
-/--
-lemma `subset_nhdsKer` / 引理 `subset_nhdsKer`
-
-English:
-lemma subset_nhdsKer
-  statement: s subseteq nhdsKer s
-  proof: subset_nhdsKer_iff.2 fun _ _ => id
-
-中文:
-引理 subset_nhdsKer
-  结论: s subseteq nhdsKer s
-  证明: subset_nhdsKer_iff.2 fun _ _ => id
-
-Depends on / 依赖: subset_nhdsKer_iff
+lemma subset_nhdsKer : s ⊆ nhdsKer s := subset_nhdsKer_iff.2 fun _ _ ↦ id
+/-
+**nhdsKer_minimal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nhdsKer_minimal (h₁ : s subseteq t) (h₂ : IsOpen t) : nhdsKer s subseteq t
+参数：h₁ : s subseteq t；h₂ : IsOpen t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nhdsKer_def`：nhdsKer_def (s : Set X) : nhdsKer s = ⋂₀ {t : Set X | IsOpe
+n t ∧ s subseteq t}
+· 使用定理 `Set.sInter_subset_of_mem`：sInter_subset_of_mem {S : Set (Set α)} {t : Se
+t α} (tS : t in S) : ⋂₀ S subseteq t
 -/
-lemma subset_nhdsKer : s subseteq nhdsKer s := subset_nhdsKer_iff.2 fun _ _ => id
-
-/--
-lemma `nhdsKer_minimal` / 引理 `nhdsKer_minimal`
-
-English:
-lemma nhdsKer_minimal
-  given: (h₁ : s subseteq t) (h₂ : IsOpen t)
-  statement: nhdsKer s subseteq t
-  proof: by
+lemma nhdsKer_minimal (h₁ : s ⊆ t) (h₂ : IsOpen t) : nhdsKer s ⊆ t := by
   rw [nhdsKer_def]; exact sInter_subset_of_mem ⟨h₂, h₁⟩
-
-中文:
-引理 nhdsKer_minimal
-  条件: (h₁ : s subseteq t) (h₂ : 是开集 t)
-  结论: nhdsKer s subseteq t
-  证明: by
-  rw [nhdsKer_def]; exact sInter_subset_of_mem ⟨h₂, h₁⟩
-
-Depends on / 依赖: nhdsKer_def, sInter_subset_of_mem
--/
-lemma nhdsKer_minimal (h₁ : s subseteq t) (h₂ : IsOpen t) : nhdsKer s subseteq t := by
-  rw [nhdsKer_def]; exact sInter_subset_of_mem ⟨h₂, h₁⟩
-
-/--
-lemma `IsOpen.nhdsKer_eq` / 引理 `IsOpen.nhdsKer_eq`
-
-English:
-lemma IsOpen.nhdsKer_eq
-  given: (h : IsOpen s)
-  statement: nhdsKer s = s
-  proof: (nhdsKer_minimal Subset.rfl h).antisymm subset_nhdsKer
-
-中文:
-引理 是开集.nhdsKer_eq
-  条件: (h : 是开集 s)
-  结论: nhdsKer s = s
-  证明: (nhdsKer_minimal Subset.rfl h).antisymm subset_nhdsKer
-
-Depends on / 依赖: Subset, Subset.rfl, antisymm, nhdsKer_minimal, subset_nhdsKer
+/-
+**IsOpen.nhdsKer_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOpen.nhdsKer_eq (h : IsOpen s) : nhdsKer s = s
+参数：h : IsOpen s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用引理 `nhdsKer_minimal`：nhdsKer_minimal (h₁ : s subseteq t) (h₂ : IsOpen t) : n
+hdsKer s subseteq t
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用引理 `subset_nhdsKer`：subset_nhdsKer : s subseteq nhdsKer s
 -/
 lemma IsOpen.nhdsKer_eq (h : IsOpen s) : nhdsKer s = s :=
   (nhdsKer_minimal Subset.rfl h).antisymm subset_nhdsKer
-
-/--
-lemma `IsOpen.nhdsKer_subset` / 引理 `IsOpen.nhdsKer_subset`
-
-English:
-lemma IsOpen.nhdsKer_subset
-  given: (ht : IsOpen t)
-  statement: nhdsKer s subseteq t ↔ s subseteq t
-  proof: ⟨subset_nhdsKer.trans, fun h => nhdsKer_minimal h ht⟩
-
-@[simp]
-
-中文:
-引理 是开集.nhdsKer_subset
-  条件: (ht : 是开集 t)
-  结论: nhdsKer s subseteq t ↔ s subseteq t
-  证明: ⟨subset_nhdsKer.trans, fun h => nhdsKer_minimal h ht⟩
-
-@[simp]
-
-Depends on / 依赖: nhdsKer_minimal, subset_nhdsKer, subset_nhdsKer.trans
+/-
+**IsOpen.nhdsKer_subset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOpen.nhdsKer_subset (ht : IsOpen t) : nhdsKer s subseteq t ↔ s subseteq 
+t
+参数：ht : IsOpen t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `subset_nhdsKer`：subset_nhdsKer : s subseteq nhdsKer s
+· 使用引理 `nhdsKer_minimal`：nhdsKer_minimal (h₁ : s subseteq t) (h₂ : IsOpen t) : n
+hdsKer s subseteq t
 -/
-lemma IsOpen.nhdsKer_subset (ht : IsOpen t) : nhdsKer s subseteq t ↔ s subseteq t :=
-  ⟨subset_nhdsKer.trans, fun h => nhdsKer_minimal h ht⟩
+lemma IsOpen.nhdsKer_subset (ht : IsOpen t) : nhdsKer s ⊆ t ↔ s ⊆ t :=
+  ⟨subset_nhdsKer.trans, fun h ↦ nhdsKer_minimal h ht⟩
 
 @[simp]
-/--
-theorem `nhdsKer_iUnion` / 定理 `nhdsKer_iUnion`
-
-English:
-theorem nhdsKer_iUnion
-  given: (s : ι -> Set X)
-  statement: nhdsKer (⋃ i, s i) = ⋃ i, nhdsKer (s i)
-  proof: by
-  simp only [nhdsKer, nhdsSet_iUnion, ker_iSup]
-
-中文:
-定理 nhdsKer_iUnion
-  条件: (s : ι -> 集合 X)
-  结论: nhdsKer (⋃ i, s i) = ⋃ i, nhdsKer (s i)
-  证明: by
-  simp only [nhdsKer, nhdsSet_iUnion, ker_iSup]
-
-Depends on / 依赖: ker_iSup, nhdsKer, nhdsSet_iUnion
+/-
+**nhdsKer_iUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_iUnion (s : ι -> Set X) : nhdsKer (⋃ i, s i) = ⋃ i, nhdsKer (s i)
+参数：s : ι -> Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsSet_iUnion`：nhdsSet_iUnion {ι : Sort*} (s : ι -> Set X) : 𝓝ˢ (⋃ i, s
+ i) = ⨆ i, 𝓝ˢ (s i)
+· 使用定理 `Filter.ker_iSup`：ker_iSup (f : ι -> Filter α) : ker (⨆ i, f i) = ⋃ i, ke
+r (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nhdsKer_iUnion (s : ι -> Set X) : nhdsKer (⋃ i, s i) = ⋃ i, nhdsKer (s i) := by
+theorem nhdsKer_iUnion (s : ι → Set X) : nhdsKer (⋃ i, s i) = ⋃ i, nhdsKer (s i) := by
   simp only [nhdsKer, nhdsSet_iUnion, ker_iSup]
-
-/--
-theorem `nhdsKer_biUnion` / 定理 `nhdsKer_biUnion`
-
-English:
-theorem nhdsKer_biUnion
-  given: {ι : Type*} (s : Set ι) (t : ι -> Set X)
-  proof: by
+/-
+**nhdsKer_biUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_biUnion {ι : Type*} (s : Set ι) (t : ι -> Set X) : nhdsKer (⋃ i in
+ s, t i) = ⋃ i in s, nhdsKer (t i)
+参数：s : Set ι；t : ι -> Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsKer_iUnion`：nhdsKer_iUnion (s : ι -> Set X) : nhdsKer (⋃ i, s i) = ⋃
+ i, nhdsKer (s i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem nhdsKer_biUnion {ι : Type*} (s : Set ι) (t : ι → Set X) :
+    nhdsKer (⋃ i ∈ s, t i) = ⋃ i ∈ s, nhdsKer (t i) := by
   simp only [nhdsKer_iUnion]
 
 @[simp]
-
-中文:
-定理 nhdsKer_biUnion
-  条件: {ι : 类型} (s : 集合 ι) (t : ι -> 集合 X)
-  证明: by
-  simp only [nhdsKer_iUnion]
-
-@[simp]
-
-Depends on / 依赖: nhdsKer_iUnion
+/-
+**nhdsKer_union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_union (s t : Set X) : nhdsKer (s union t) = nhdsKer s union nhdsKe
+r t
+参数：s t : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsSet_union`：nhdsSet_union (s t : Set X) : 𝓝ˢ (s union t) = 𝓝ˢ s ⊔ 𝓝ˢ 
+t
+· 使用定理 `Filter.ker_sup`：ker_sup (f g : Filter α) : ker (f ⊔ g) = ker f union ker
+ g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nhdsKer_biUnion {ι : Type*} (s : Set ι) (t : ι -> Set X) :
-    nhdsKer (⋃ i in s, t i) = ⋃ i in s, nhdsKer (t i) := by
-  simp only [nhdsKer_iUnion]
-
-@[simp]
-/--
-theorem `nhdsKer_union` / 定理 `nhdsKer_union`
-
-English:
-theorem nhdsKer_union
-  given: (s t : Set X)
-  statement: nhdsKer (s union t) = nhdsKer s union nhdsKer t
-  proof: by
+theorem nhdsKer_union (s t : Set X) : nhdsKer (s ∪ t) = nhdsKer s ∪ nhdsKer t := by
   simp only [nhdsKer, nhdsSet_union, ker_sup]
 
 @[simp]
-
-中文:
-定理 nhdsKer_union
-  条件: (s t : 集合 X)
-  结论: nhdsKer (s union t) = nhdsKer s union nhdsKer t
-  证明: by
-  simp only [nhdsKer, nhdsSet_union, ker_sup]
-
-@[simp]
-
-Depends on / 依赖: ker_sup, nhdsKer, nhdsSet_union
+/-
+**nhdsKer_sUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_sUnion (S : Set (Set X)) : nhdsKer (⋃₀ S) = ⋃ s in S, nhdsKer s
+参数：S : Set (Set X)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sUnion_eq_biUnion`：sUnion_eq_biUnion {s : Set (Set α)} : ⋃₀ s = ⋃ (i
+ : Set α) (_ : i in s), i
+· 使用定理 `nhdsKer_iUnion`：nhdsKer_iUnion (s : ι -> Set X) : nhdsKer (⋃ i, s i) = ⋃
+ i, nhdsKer (s i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nhdsKer_union (s t : Set X) : nhdsKer (s union t) = nhdsKer s union nhdsKer t := by
-  simp only [nhdsKer, nhdsSet_union, ker_sup]
-
-@[simp]
-/--
-theorem `nhdsKer_sUnion` / 定理 `nhdsKer_sUnion`
-
-English:
-theorem nhdsKer_sUnion
-  given: (S : Set (Set X))
-  statement: nhdsKer (⋃₀ S) = ⋃ s in S, nhdsKer s
-  proof: by
+theorem nhdsKer_sUnion (S : Set (Set X)) : nhdsKer (⋃₀ S) = ⋃ s ∈ S, nhdsKer s := by
   simp only [sUnion_eq_biUnion, nhdsKer_iUnion]
-
-中文:
-定理 nhdsKer_sUnion
-  条件: (S : 集合 (集合 X))
-  结论: nhdsKer (⋃₀ S) = ⋃ s in S, nhdsKer s
-  证明: by
-  simp only [sUnion_eq_biUnion, nhdsKer_iUnion]
-
-Depends on / 依赖: nhdsKer_iUnion, sUnion_eq_biUnion
+/-
+**mem_nhdsKer_iff_specializes** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nhdsKer_iff_specializes : x in nhdsKer s ↔ exists y in s, x ⤳ y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.biUnion_of_singleton`：biUnion_of_singleton (s : Set α) : ⋃ x in s, {
+x} = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `nhdsKer_iUnion`：nhdsKer_iUnion (s : ι -> Set X) : nhdsKer (⋃ i, s i) = ⋃
+ i, nhdsKer (s i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
 -/
-theorem nhdsKer_sUnion (S : Set (Set X)) : nhdsKer (⋃₀ S) = ⋃ s in S, nhdsKer s := by
-  simp only [sUnion_eq_biUnion, nhdsKer_iUnion]
-
-/--
-theorem `mem_nhdsKer_iff_specializes` / 定理 `mem_nhdsKer_iff_specializes`
-
-English:
-theorem mem_nhdsKer_iff_specializes
-  statement: x in nhdsKer s ↔ exists y in s, x ⤳ y
-  proof: calc
-  x in nhdsKer s ↔ x in nhdsKer (⋃ y in s, {y}) := by simp
-  _ ↔ exists y in s, x ⤳ y := by
+theorem mem_nhdsKer_iff_specializes : x ∈ nhdsKer s ↔ ∃ y ∈ s, x ⤳ y := calc
+  x ∈ nhdsKer s ↔ x ∈ nhdsKer (⋃ y ∈ s, {y}) := by simp
+  _ ↔ ∃ y ∈ s, x ⤳ y := by
     simp only [nhdsKer_iUnion, mem_nhdsKer_singleton, mem_iUnion₂, exists_prop]
-
-中文:
-定理 mem_nhdsKer_iff_specializes
-  结论: x in nhdsKer s ↔ 存在 y in s, x ⤳ y
-  证明: calc
-  x in nhdsKer s ↔ x in nhdsKer (⋃ y in s, {y}) := by simp
-  _ ↔ exists y in s, x ⤳ y := by
-    simp only [nhdsKer_iUnion, mem_nhdsKer_singleton, mem_iUnion₂, exists_prop]
+/-
+**nhdsKer_mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], Monotone nhdsKer
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Filter.ker_mono`：ker_mono : Monotone (ker : Filter α -> Set α)
+· 使用定理 `nhdsSet_mono`：nhdsSet_mono (h : s subseteq t) : 𝓝ˢ s <= 𝓝ˢ t
 -/
-theorem mem_nhdsKer_iff_specializes : x in nhdsKer s ↔ exists y in s, x ⤳ y := calc
-  x in nhdsKer s ↔ x in nhdsKer (⋃ y in s, {y}) := by simp
-  _ ↔ exists y in s, x ⤳ y := by
-    simp only [nhdsKer_iUnion, mem_nhdsKer_singleton, mem_iUnion₂, exists_prop]
+@[gcongr, mono] lemma nhdsKer_mono : Monotone (nhdsKer : Set X → Set X) :=
+  fun _s _t h ↦ ker_mono <| nhdsSet_mono h
 
-/--
-lemma `nhdsKer_mono` / 引理 `nhdsKer_mono`
-
-English:
-lemma nhdsKer_mono
-  statement: Monotone (nhdsKer : Set X -> Set X)
-  proof: fun _s _t h => ker_mono nhdsSet_mono h
-
-中文:
-引理 nhdsKer_mono
-  结论: 递增 (nhdsKer : 集合 X -> 集合 X)
-  证明: fun _s _t h => ker_mono nhdsSet_mono h
+/-- This name was used to be used for the `Iff` version,
+see `nhdsKer_subset_nhdsKer_iff_nhdsSet`.
 -/
-@[gcongr, mono] lemma nhdsKer_mono : Monotone (nhdsKer : Set X -> Set X) :=
-fun _s _t h => ker_mono nhdsSet_mono h
+/-
+**nhdsKer_subset_nhdsKer** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X}, s ⊆ t → nhdsKe
+r s ⊆ nhdsKer t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nhdsKer_mono`：∀ {X : Type u_2} [inst : TopologicalSpace X], Monotone nhd
+sKer
 
-/--
-lemma `nhdsKer_subset_nhdsKer` / 引理 `nhdsKer_subset_nhdsKer`
-
-English:
-lemma nhdsKer_subset_nhdsKer
-  given: (h : s subseteq t)
-  statement: nhdsKer s subseteq nhdsKer t
-  proof: nhdsKer_mono h
-
-中文:
-引理 nhdsKer_subset_nhdsKer
-  条件: (h : s subseteq t)
-  结论: nhdsKer s subseteq nhdsKer t
-  证明: nhdsKer_mono h
+--- 原说明 ---
+This name was used to be used for the `Iff` version,
+see `nhdsKer_subset_nhdsKer_iff_nhdsSet`.
 -/
-@[gcongr] lemma nhdsKer_subset_nhdsKer (h : s subseteq t) : nhdsKer s subseteq nhdsKer t := nhdsKer_mono h
+@[gcongr] lemma nhdsKer_subset_nhdsKer (h : s ⊆ t) : nhdsKer s ⊆ nhdsKer t := nhdsKer_mono h
+/-
+**nhdsKer_subset_nhdsKer_iff_nhdsSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X}, nhdsKer s ⊆ nh
+dsKer t ↔ nhdsSet s ≤ nhdsSet t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Filter.HasBasis.ge_iff`：∀ {α : Type u_1} {ι' : Sort u_5} {l l' : Filter 
+α} {p' : ι' → Prop} {s' : ι' → Set α},   l'.HasBasis p' s' → (l ≤ l' ↔ ∀ (i' : ι
+'), p' i' → …
+· 使用定理 `hasBasis_nhdsSet`：hasBasis_nhdsSet (s : Set X) : (𝓝ˢ s).HasBasis (fun U 
+=> IsOpen U ∧ s subseteq U) fun U => U
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-/--
-lemma `nhdsKer_subset_nhdsKer_iff_nhdsSet` / 引理 `nhdsKer_subset_nhdsKer_iff_nhdsSet`
-
-English:
-lemma nhdsKer_subset_nhdsKer_iff_nhdsSet
-  statement: nhdsKer s subseteq nhdsKer t ↔ 𝓝ˢ s <= 𝓝ˢ t
-  proof: by
+--- 原说明 ---
+This name was used to be used for the `Iff` version,
+see `nhdsKer_subset_nhdsKer_iff_nhdsSet`.
+-/
+@[simp] lemma nhdsKer_subset_nhdsKer_iff_nhdsSet : nhdsKer s ⊆ nhdsKer t ↔ 𝓝ˢ s ≤ 𝓝ˢ t := by
   simp +contextual only [subset_nhdsKer_iff, (hasBasis_nhdsSet _).ge_iff,
     and_imp, IsOpen.mem_nhdsSet, IsOpen.nhdsKer_subset]
-
-中文:
-引理 nhdsKer_subset_nhdsKer_iff_nhdsSet
-  结论: nhdsKer s subseteq nhdsKer t ↔ 𝓝ˢ s <= 𝓝ˢ t
-  证明: by
-  simp +contextual only [subset_nhdsKer_iff, (hasBasis_nhdsSet _).ge_iff,
-    and_imp, IsOpen.mem_nhdsSet, IsOpen.nhdsKer_subset]
--/
-@[simp] lemma nhdsKer_subset_nhdsKer_iff_nhdsSet : nhdsKer s subseteq nhdsKer t ↔ 𝓝ˢ s <= 𝓝ˢ t := by
-  simp +contextual only [subset_nhdsKer_iff, (hasBasis_nhdsSet _).ge_iff,
-    and_imp, IsOpen.mem_nhdsSet, IsOpen.nhdsKer_subset]
-
-/--
-theorem `nhdsKer_eq_nhdsKer_iff_nhdsSet` / 定理 `nhdsKer_eq_nhdsKer_iff_nhdsSet`
-
-English:
-theorem nhdsKer_eq_nhdsKer_iff_nhdsSet
-  statement: nhdsKer s = nhdsKer t ↔ 𝓝ˢ s = 𝓝ˢ t
-  proof: by
-  simp [le_antisymm_iff]
-
-中文:
-定理 nhdsKer_eq_nhdsKer_iff_nhdsSet
-  结论: nhdsKer s = nhdsKer t ↔ 𝓝ˢ s = 𝓝ˢ t
-  证明: by
-  simp [le_antisymm_iff]
-
-Depends on / 依赖: le_antisymm_iff
+/-
+**nhdsKer_eq_nhdsKer_iff_nhdsSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_eq_nhdsKer_iff_nhdsSet : nhdsKer s = nhdsKer t ↔ 𝓝ˢ s = 𝓝ˢ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem nhdsKer_eq_nhdsKer_iff_nhdsSet : nhdsKer s = nhdsKer t ↔ 𝓝ˢ s = 𝓝ˢ t := by
   simp [le_antisymm_iff]
-
-/--
-lemma `specializes_iff_nhdsKer_subset` / 引理 `specializes_iff_nhdsKer_subset`
-
-English:
-lemma specializes_iff_nhdsKer_subset
-  statement: x ⤳ y ↔ nhdsKer {x} subseteq nhdsKer {y}
-  proof: by
-  simp [Specializes]
-
-中文:
-引理 specializes_iff_nhdsKer_subset
-  结论: x ⤳ y ↔ nhdsKer {x} subseteq nhdsKer {y}
-  证明: by
-  simp [Specializes]
-
-Depends on / 依赖: Specializes
+/-
+**specializes_iff_nhdsKer_subset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：specializes_iff_nhdsKer_subset : x ⤳ y ↔ nhdsKer {x} subseteq nhdsKer {y}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `nhdsSet_singleton`：nhdsSet_singleton : 𝓝ˢ {x} = 𝓝 x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma specializes_iff_nhdsKer_subset : x ⤳ y ↔ nhdsKer {x} subseteq nhdsKer {y} := by
+lemma specializes_iff_nhdsKer_subset : x ⤳ y ↔ nhdsKer {x} ⊆ nhdsKer {y} := by
   simp [Specializes]
-
-/--
-theorem `nhdsKer_iInter_subset` / 定理 `nhdsKer_iInter_subset`
-
-English:
-theorem nhdsKer_iInter_subset
-  given: {s : ι -> Set X}
-  statement: nhdsKer (⋂ i, s i) subseteq ⋂ i, nhdsKer (s i)
-  proof: nhdsKer_mono.map_iInf_le
-
-中文:
-定理 nhdsKer_i整数er_subset
-  条件: {s : ι -> 集合 X}
-  结论: nhdsKer (⋂ i, s i) subseteq ⋂ i, nhdsKer (s i)
-  证明: nhdsKer_mono.map_iInf_le
-
-Depends on / 依赖: map_iInf_le, nhdsKer_mono, nhdsKer_mono.map_iInf_le
+/-
+**nhdsKer_iInter_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_iInter_subset {s : ι -> Set X} : nhdsKer (⋂ i, s i) subseteq ⋂ i, 
+nhdsKer (s i)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_iInf_le`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [in
+st : CompleteLattice α] {s : ι → α} [inst_1 : CompleteLattice β]   {f : α → β}, 
+Monotone f…
+· 使用定理 `nhdsKer_mono`：∀ {X : Type u_2} [inst : TopologicalSpace X], Monotone nhd
+sKer
 -/
-theorem nhdsKer_iInter_subset {s : ι -> Set X} : nhdsKer (⋂ i, s i) subseteq ⋂ i, nhdsKer (s i) :=
+theorem nhdsKer_iInter_subset {s : ι → Set X} : nhdsKer (⋂ i, s i) ⊆ ⋂ i, nhdsKer (s i) :=
   nhdsKer_mono.map_iInf_le
-
-/--
-theorem `nhdsKer_inter_subset` / 定理 `nhdsKer_inter_subset`
-
-English:
-theorem nhdsKer_inter_subset
-  given: {s t : Set X}
-  statement: nhdsKer (s inter t) subseteq nhdsKer s inter nhdsKer t
-  proof: nhdsKer_mono.map_inf_le _ _
-
-中文:
-定理 nhdsKer_inter_subset
-  条件: {s t : 集合 X}
-  结论: nhdsKer (s inter t) subseteq nhdsKer s inter nhdsKer t
-  证明: nhdsKer_mono.map_inf_le _ _
-
-Depends on / 依赖: map_inf_le, nhdsKer_mono, nhdsKer_mono.map_inf_le
+/-
+**nhdsKer_inter_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_inter_subset {s t : Set X} : nhdsKer (s inter t) subseteq nhdsKer 
+s inter nhdsKer t
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_inf_le`：∀ {α : Type u} {β : Type v} [inst : SemilatticeInf 
+α] [inst_1 : SemilatticeInf β] {f : α → β},   Monotone f → ∀ (x y : α), f (x ⊓ y
+) ≤ f x ⊓…
+· 使用定理 `nhdsKer_mono`：∀ {X : Type u_2} [inst : TopologicalSpace X], Monotone nhd
+sKer
 -/
-theorem nhdsKer_inter_subset {s t : Set X} : nhdsKer (s inter t) subseteq nhdsKer s inter nhdsKer t :=
+theorem nhdsKer_inter_subset {s t : Set X} : nhdsKer (s ∩ t) ⊆ nhdsKer s ∩ nhdsKer t :=
   nhdsKer_mono.map_inf_le _ _
-
-/--
-theorem `nhdsKer_sInter_subset` / 定理 `nhdsKer_sInter_subset`
-
-English:
-theorem nhdsKer_sInter_subset
-  given: {s : Set (Set X)}
-  statement: nhdsKer (⋂₀ s) subseteq ⋂ x in s, nhdsKer x
-  proof: nhdsKer_mono.map_sInf_le
-
-中文:
-定理 nhdsKer_s整数er_subset
-  条件: {s : 集合 (集合 X)}
-  结论: nhdsKer (⋂₀ s) subseteq ⋂ x in s, nhdsKer x
-  证明: nhdsKer_mono.map_sInf_le
-
-Depends on / 依赖: map_sInf_le, nhdsKer_mono, nhdsKer_mono.map_sInf_le
+/-
+**nhdsKer_sInter_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsKer_sInter_subset {s : Set (Set X)} : nhdsKer (⋂₀ s) subseteq ⋂ x in s
+, nhdsKer x
+参数：Set X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_sInf_le`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLa
+ttice α] [inst_1 : CompleteLattice β] {s : Set α} {f : α → β},   Monotone f → f 
+(sInf s) ≤…
+· 使用定理 `nhdsKer_mono`：∀ {X : Type u_2} [inst : TopologicalSpace X], Monotone nhd
+sKer
 -/
-theorem nhdsKer_sInter_subset {s : Set (Set X)} : nhdsKer (⋂₀ s) subseteq ⋂ x in s, nhdsKer x :=
+theorem nhdsKer_sInter_subset {s : Set (Set X)} : nhdsKer (⋂₀ s) ⊆ ⋂ x ∈ s, nhdsKer x :=
   nhdsKer_mono.map_sInf_le
-
-/--
-lemma `nhdsKer_empty` / 引理 `nhdsKer_empty`
-
-English:
-lemma nhdsKer_empty
-  statement: nhdsKer (∅ : Set X) = ∅
-  proof: isOpen_empty.nhdsKer_eq
-
-中文:
-引理 nhdsKer_empty
-  结论: nhdsKer (∅ : 集合 X) = ∅
-  证明: isOpen_empty.nhdsKer_eq
+/-
+**nhdsKer_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], nhdsKer ∅ = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOpen.nhdsKer_eq`：IsOpen.nhdsKer_eq (h : IsOpen s) : nhdsKer s = s
+· 使用定理 `isOpen_empty`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen ∅
 -/
 @[simp] lemma nhdsKer_empty : nhdsKer (∅ : Set X) = ∅ := isOpen_empty.nhdsKer_eq
-
-/--
-lemma `nhdsKer_univ` / 引理 `nhdsKer_univ`
-
-English:
-lemma nhdsKer_univ
-  statement: nhdsKer (univ : Set X) = univ
-  proof: isOpen_univ.nhdsKer_eq
-
-中文:
-引理 nhdsKer_univ
-  结论: nhdsKer (univ : 集合 X) = univ
-  证明: isOpen_univ.nhdsKer_eq
+/-
+**nhdsKer_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], nhdsKer Set.univ = Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOpen.nhdsKer_eq`：IsOpen.nhdsKer_eq (h : IsOpen s) : nhdsKer s = s
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
 -/
 @[simp] lemma nhdsKer_univ : nhdsKer (univ : Set X) = univ := isOpen_univ.nhdsKer_eq
-
-/--
-lemma `nhdsKer_eq_empty` / 引理 `nhdsKer_eq_empty`
-
-English:
-lemma nhdsKer_eq_empty
-  statement: nhdsKer s = ∅ ↔ s = ∅
-  proof: ⟨eq_bot_mono subset_nhdsKer, by rintro rfl; exact nhdsKer_empty⟩
-
-中文:
-引理 nhdsKer_eq_empty
-  结论: nhdsKer s = ∅ ↔ s = ∅
-  证明: ⟨eq_bot_mono subset_nhdsKer, by rintro rfl; exact nhdsKer_empty⟩
+/-
+**nhdsKer_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X}, nhdsKer s = ∅ ↔ 
+s = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_bot_mono`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α
+] {a b : α}, b ≤ a → a = ⊥ → b = ⊥
+· 使用引理 `subset_nhdsKer`：subset_nhdsKer : s subseteq nhdsKer s
+· 使用定理 `nhdsKer_empty`：∀ {X : Type u_2} [inst : TopologicalSpace X], nhdsKer ∅ =
+ ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] lemma nhdsKer_eq_empty : nhdsKer s = ∅ ↔ s = ∅ :=
   ⟨eq_bot_mono subset_nhdsKer, by rintro rfl; exact nhdsKer_empty⟩
-
-/--
-lemma `nhdsSet_nhdsKer` / 引理 `nhdsSet_nhdsKer`
-
-English:
-lemma nhdsSet_nhdsKer
-  given: (s : Set X)
-  statement: 𝓝ˢ (nhdsKer s) = 𝓝ˢ s
-  proof: by
-  refine le_antisymm ((hasBasis_nhdsSet _).ge_iff.2 ?_) (nhdsSet_mono subset_nhdsKer)
-exact fun U ⟨hUo, hsU⟩ => hUo.mem_nhdsSet.2 hUo.nhdsKer_subset.2 hsU
-
-中文:
-引理 nhdsSet_nhdsKer
-  条件: (s : 集合 X)
-  结论: 𝓝ˢ (nhdsKer s) = 𝓝ˢ s
-  证明: by
-  refine le_antisymm ((hasBasis_nhdsSet _).ge_iff.2 ?_) (nhdsSet_mono subset_nhdsKer)
-exact fun U ⟨hUo, hsU⟩ => hUo.mem_nhdsSet.2 hUo.nhdsKer_subset.2 hsU
+/-
+**nhdsSet_nhdsKer** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] (s : Set X), nhdsSet (nhdsKer
+ s) = nhdsSet s
+参数：s : Set X；nhdsKer s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.ge_iff`：∀ {α : Type u_1} {ι' : Sort u_5} {l l' : Filter 
+α} {p' : ι' → Prop} {s' : ι' → Set α},   l'.HasBasis p' s' → (l ≤ l' ↔ ∀ (i' : ι
+'), p' i' → …
+· 使用定理 `hasBasis_nhdsSet`：hasBasis_nhdsSet (s : Set X) : (𝓝ˢ s).HasBasis (fun U 
+=> IsOpen U ∧ s subseteq U) fun U => U
+· 使用定理 `IsOpen.mem_nhdsSet`：IsOpen.mem_nhdsSet (hU : IsOpen s) : s in 𝓝ˢ t ↔ t s
+ubseteq s
+· 使用引理 `IsOpen.nhdsKer_subset`：IsOpen.nhdsKer_subset (ht : IsOpen t) : nhdsKer s
+ subseteq t ↔ s subseteq t
+· 使用定理 `nhdsSet_mono`：nhdsSet_mono (h : s subseteq t) : 𝓝ˢ s <= 𝓝ˢ t
+· 使用引理 `subset_nhdsKer`：subset_nhdsKer : s subseteq nhdsKer s
 -/
 @[simp] lemma nhdsSet_nhdsKer (s : Set X) : 𝓝ˢ (nhdsKer s) = 𝓝ˢ s := by
   refine le_antisymm ((hasBasis_nhdsSet _).ge_iff.2 ?_) (nhdsSet_mono subset_nhdsKer)
-exact fun U ⟨hUo, hsU⟩ => hUo.mem_nhdsSet.2 hUo.nhdsKer_subset.2 hsU
-
-/--
-lemma `nhdsKer_nhdsKer` / 引理 `nhdsKer_nhdsKer`
-
-English:
-lemma nhdsKer_nhdsKer
-  given: (s : Set X)
-  statement: nhdsKer (nhdsKer s) = nhdsKer s
-  proof: by
-  simp only [nhdsKer_eq_nhdsKer_iff_nhdsSet, nhdsSet_nhdsKer]
-
-中文:
-引理 nhdsKer_nhdsKer
-  条件: (s : 集合 X)
-  结论: nhdsKer (nhdsKer s) = nhdsKer s
-  证明: by
-  simp only [nhdsKer_eq_nhdsKer_iff_nhdsSet, nhdsSet_nhdsKer]
+  exact fun U ⟨hUo, hsU⟩ ↦ hUo.mem_nhdsSet.2 <| hUo.nhdsKer_subset.2 hsU
+/-
+**nhdsKer_nhdsKer** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] (s : Set X), nhdsKer (nhdsKer
+ s) = nhdsKer s
+参数：s : Set X；nhdsKer s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsSet_nhdsKer`：∀ {X : Type u_2} [inst : TopologicalSpace X] (s : Set X
+), nhdsSet (nhdsKer s) = nhdsSet s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma nhdsKer_nhdsKer (s : Set X) : nhdsKer (nhdsKer s) = nhdsKer s := by
   simp only [nhdsKer_eq_nhdsKer_iff_nhdsSet, nhdsSet_nhdsKer]
-
-/--
-lemma `nhdsKer_pair` / 引理 `nhdsKer_pair`
-
-English:
-lemma nhdsKer_pair
-  statement: {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-  proof: by
-  simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_prod_eq, ker_prod]
-
-中文:
-引理 nhdsKer_pair
-  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
-  证明: by
-  simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_prod_eq, ker_prod]
-
-Depends on / 依赖: ker_prod, nhdsKer_singleton_eq_ker_nhds, nhds_prod_eq, simp_rw
+/-
+**nhdsKer_pair** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nhdsKer_pair {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] (x : 
+X) (y : Y) : nhdsKer {(x, y)} = nhdsKer {x} ×ˢ nhdsKer {y}
+参数：x : X；y : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nhdsKer_singleton_eq_ker_nhds`：nhdsKer_singleton_eq_ker_nhds (x : X) : n
+hdsKer {x} = (𝓝 x).ker
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `nhds_prod_eq`：nhds_prod_eq {x : X} {y : Y} : 𝓝 (x, y) = 𝓝 x ×ˢ 𝓝 y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Filter.ker_prod`：ker_prod (f : Filter α) (g : Filter β) : ker (f ×ˢ g) =
+ ker f ×ˢ ker g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma nhdsKer_pair {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     (x : X) (y : Y) : nhdsKer {(x, y)} = nhdsKer {x} ×ˢ nhdsKer {y} := by
   simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_prod_eq, ker_prod]
-
-/--
-lemma `nhdsKer_prod` / 引理 `nhdsKer_prod`
-
-English:
-lemma nhdsKer_prod
-  given: {Y : Type*} [TopologicalSpace Y] (s : Set X) (t : Set Y)
-  proof: calc
-  _ = ⋃ (p in s ×ˢ t), nhdsKer {p} := by
-    conv_lhs => rw [← biUnion_of_singleton (s ×ˢ t), nhdsKer_biUnion]
-  _ = ⋃ (p in s ×ˢ t), nhdsKer {p.1} ×ˢ nhdsKer {p.2} := by
-    congr! with ⟨x, y⟩ _; rw [nhdsKer_pair]
-  _ = (⋃ x in s, nhdsKer {x}) ×ˢ (⋃ y in t, nhdsKer {y}) :=
-    biUnion_prod s t (fun x => nhdsKer {x}) (fun y => nhdsKer {y})
-  _ = nhdsKer s ×ˢ nhdsKer t := by
-    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
-
-中文:
-引理 nhdsKer_prod
-  条件: {Y : 类型} [拓扑空间 Y] (s : 集合 X) (t : 集合 Y)
-  证明: calc
-  _ = ⋃ (p in s ×ˢ t), nhdsKer {p} := by
-    conv_lhs => rw [← biUnion_of_singleton (s ×ˢ t), nhdsKer_biUnion]
-  _ = ⋃ (p in s ×ˢ t), nhdsKer {p.1} ×ˢ nhdsKer {p.2} := by
-    congr! with ⟨x, y⟩ _; rw [nhdsKer_pair]
-  _ = (⋃ x in s, nhdsKer {x}) ×ˢ (⋃ y in t, nhdsKer {y}) :=
-    biUnion_prod s t (fun x => nhdsKer {x}) (fun y => nhdsKer {y})
-  _ = nhdsKer s ×ˢ nhdsKer t := by
-    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
+/-
+**nhdsKer_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nhdsKer_prod {Y : Type*} [TopologicalSpace Y] (s : Set X) (t : Set Y) : nh
+dsKer (s ×ˢ t) = nhdsKer s ×ˢ nhdsKer t
+参数：s : Set X；t : Set Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.biUnion_of_singleton`：biUnion_of_singleton (s : Set α) : ⋃ x in s, {
+x} = s
+· 使用定理 `nhdsKer_biUnion`：nhdsKer_biUnion {ι : Type*} (s : Set ι) (t : ι -> Set X
+) : nhdsKer (⋃ i in s, t i) = ⋃ i in s, nhdsKer (t i)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `nhdsKer_pair`：nhdsKer_pair {X Y : Type*} [TopologicalSpace X] [Topologic
+alSpace Y] (x : X) (y : Y) : nhdsKer {(x, y)} = nhdsKer {x} ×ˢ nhdsKer {y}
+· 使用引理 `Set.biUnion_prod`：biUnion_prod {α β γ} (s : Set α) (t : Set β) (f : α ->
+ Set γ) (g : β -> Set δ) : ⋃ x in s ×ˢ t, f x.1 ×ˢ g x.2 = (⋃ x in s, f x) ×ˢ (⋃
+ x in …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma nhdsKer_prod {Y : Type*} [TopologicalSpace Y] (s : Set X) (t : Set Y) :
     nhdsKer (s ×ˢ t) = nhdsKer s ×ˢ nhdsKer t := calc
-  _ = ⋃ (p in s ×ˢ t), nhdsKer {p} := by
+  _ = ⋃ (p ∈ s ×ˢ t), nhdsKer {p} := by
     conv_lhs => rw [← biUnion_of_singleton (s ×ˢ t), nhdsKer_biUnion]
-  _ = ⋃ (p in s ×ˢ t), nhdsKer {p.1} ×ˢ nhdsKer {p.2} := by
+  _ = ⋃ (p ∈ s ×ˢ t), nhdsKer {p.1} ×ˢ nhdsKer {p.2} := by
     congr! with ⟨x, y⟩ _; rw [nhdsKer_pair]
-  _ = (⋃ x in s, nhdsKer {x}) ×ˢ (⋃ y in t, nhdsKer {y}) :=
+  _ = (⋃ x ∈ s, nhdsKer {x}) ×ˢ (⋃ y ∈ t, nhdsKer {y}) :=
     biUnion_prod s t (fun x => nhdsKer {x}) (fun y => nhdsKer {y})
   _ = nhdsKer s ×ˢ nhdsKer t := by
     simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
-
-/--
-lemma `nhdsKer_singleton_pi` / 引理 `nhdsKer_singleton_pi`
-
-English:
-lemma nhdsKer_singleton_pi
-  statement: {ι : Type*} {X : ι -> Type*} [Π (i : ι), TopologicalSpace (X i)]
-  proof: by
-  simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_pi, ker_pi]
-
-中文:
-引理 nhdsKer_singleton_pi
-  结论: {ι : 类型} {X : ι -> 类型} [Π (i : ι), 拓扑空间 (X i)]
-  证明: by
-  simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_pi, ker_pi]
-
-Depends on / 依赖: ker_pi, nhdsKer_singleton_eq_ker_nhds, nhds_pi, simp_rw
+/-
+**nhdsKer_singleton_pi** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nhdsKer_singleton_pi {ι : Type*} {X : ι -> Type*} [Π (i : ι), TopologicalS
+pace (X i)] (p : Π (i : ι), X i) : nhdsKer {p} = univ.pi (fun i => nhdsKer {p i}
+)
+参数：i : ι；X i；p : Π (i : ι), X i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `nhdsKer_singleton_eq_ker_nhds`：nhdsKer_singleton_eq_ker_nhds (x : X) : n
+hdsKer {x} = (𝓝 x).ker
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `nhds_pi`：nhds_pi {a : forall i, A i} : 𝓝 a = pi fun i => 𝓝 (a i)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Filter.ker_pi`：ker_pi {ι : Type*} {α : ι -> Type*} (f : (i : ι) -> Filte
+r (α i)) : ker (Filter.pi f) = univ.pi (fun i => ker (f i))
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma nhdsKer_singleton_pi {ι : Type*} {X : ι -> Type*} [Π (i : ι), TopologicalSpace (X i)]
+lemma nhdsKer_singleton_pi {ι : Type*} {X : ι → Type*} [Π (i : ι), TopologicalSpace (X i)]
     (p : Π (i : ι), X i) : nhdsKer {p} = univ.pi (fun i => nhdsKer {p i}) := by
   simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_pi, ker_pi]
-
-/--
-lemma `nhdsKer_pi` / 引理 `nhdsKer_pi`
-
-English:
-lemma nhdsKer_pi
-  statement: {ι : Type*} {X : ι -> Type*} [Π (i : ι), TopologicalSpace (X i)]
-  proof: calc
-  _ = ⋃ (p in univ.pi s), nhdsKer {p} := by
-    conv_lhs => rw [← biUnion_of_singleton (univ.pi s), nhdsKer_biUnion]
-  _ = ⋃ (p in univ.pi s), univ.pi fun i => nhdsKer {p i} := by
-    congr! with p _; rw [nhdsKer_singleton_pi]
-  _ = univ.pi fun i => ⋃ x in s i, nhdsKer {x} :=
-    biUnion_univ_pi s fun i x => nhdsKer {x}
-  _ = univ.pi (fun i => nhdsKer (s i)) := by
-    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
-
-中文:
-引理 nhdsKer_pi
-  结论: {ι : 类型} {X : ι -> 类型} [Π (i : ι), 拓扑空间 (X i)]
-  证明: calc
-  _ = ⋃ (p in univ.pi s), nhdsKer {p} := by
-    conv_lhs => rw [← biUnion_of_singleton (univ.pi s), nhdsKer_biUnion]
-  _ = ⋃ (p in univ.pi s), univ.pi fun i => nhdsKer {p i} := by
-    congr! with p _; rw [nhdsKer_singleton_pi]
-  _ = univ.pi fun i => ⋃ x in s i, nhdsKer {x} :=
-    biUnion_univ_pi s fun i x => nhdsKer {x}
-  _ = univ.pi (fun i => nhdsKer (s i)) := by
-    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
+/-
+**nhdsKer_pi** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nhdsKer_pi {ι : Type*} {X : ι -> Type*} [Π (i : ι), TopologicalSpace (X i)
+] (s : Π (i : ι), Set (X i)) : nhdsKer (univ.pi s) = univ.pi (fun i => nhdsKer (
+s i))
+参数：i : ι；X i；s : Π (i : ι), Set (X i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.biUnion_of_singleton`：biUnion_of_singleton (s : Set α) : ⋃ x in s, {
+x} = s
+· 使用定理 `nhdsKer_biUnion`：nhdsKer_biUnion {ι : Type*} (s : Set ι) (t : ι -> Set X
+) : nhdsKer (⋃ i in s, t i) = ⋃ i in s, nhdsKer (t i)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `nhdsKer_singleton_pi`：nhdsKer_singleton_pi {ι : Type*} {X : ι -> Type*} 
+[Π (i : ι), TopologicalSpace (X i)] (p : Π (i : ι), X i) : nhdsKer {p} = univ.pi
+ (fun i =>…
+· 使用定理 `Set.biUnion_univ_pi`：biUnion_univ_pi {ι : α -> Type*} (s : (a : α) -> Se
+t (ι a)) (t : (a : α) -> ι a -> Set (π a)) : ⋃ x in univ.pi s, pi univ (fun a =>
+ t a (x a…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma nhdsKer_pi {ι : Type*} {X : ι -> Type*} [Π (i : ι), TopologicalSpace (X i)]
+lemma nhdsKer_pi {ι : Type*} {X : ι → Type*} [Π (i : ι), TopologicalSpace (X i)]
     (s : Π (i : ι), Set (X i)) : nhdsKer (univ.pi s) = univ.pi (fun i => nhdsKer (s i)) := calc
-  _ = ⋃ (p in univ.pi s), nhdsKer {p} := by
+  _ = ⋃ (p ∈ univ.pi s), nhdsKer {p} := by
     conv_lhs => rw [← biUnion_of_singleton (univ.pi s), nhdsKer_biUnion]
-  _ = ⋃ (p in univ.pi s), univ.pi fun i => nhdsKer {p i} := by
+  _ = ⋃ (p ∈ univ.pi s), univ.pi fun i => nhdsKer {p i} := by
     congr! with p _; rw [nhdsKer_singleton_pi]
-  _ = univ.pi fun i => ⋃ x in s i, nhdsKer {x} :=
+  _ = univ.pi fun i => ⋃ x ∈ s i, nhdsKer {x} :=
     biUnion_univ_pi s fun i x => nhdsKer {x}
   _ = univ.pi (fun i => nhdsKer (s i)) := by
     simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]

@@ -29,30 +29,23 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Given an adjunction `F ⊣ G`, this provides the natural adjunction
   `(whiskeringRight C _ _).obj F ⊣ (whiskeringRight C _ _).obj G`. -/
 @[simps! unit_app_app counit_app_app]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.Adjunction.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Adjunction`。
+形式化陈述：(C : Type u_1) →   {D : Type u_2} →     {E : Type u_3} →       [inst : Cat
+egoryTheory.Category.{v_1, u_1} C] →         [inst_1 : CategoryTheory.Category.{
+v_2, u_2} D] →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       {F : CategoryTheory.Functor D E} →               {G : CategoryTheory.Func
+tor E D} →                 (F ⊣ G) →                   ((CategoryTheory.Functor.
+whiskeringRight C D E).obj F ⊣                     (CategoryTheory.Functor.whisk
+eringRight C E D).obj G)
+参数：CategoryTheory.Functor.whiskeringRight C D E；CategoryTheory.Functor.whiskerin
+gRight C E D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: (adj : F ⊣ G)
-  body: { app := fun X =>
-        (rightUnitor _).inv ≫ whiskerLeft X adj.unit ≫ (associator _ _ _).inv
-      naturality := by intros; ext; simp }
-  counit :=
-    { app := fun X =>
-        (associator _ _ _).hom ≫ whiskerLeft X adj.counit ≫ (rightUnitor _).hom
-      naturality := by intros; ext; simp }
-
-中文:
-定义 whiskerRight
-  签名: (adj : F ⊣ G)
-  定义体: { app := fun X =>
-        (rightUnitor _).inv ≫ whiskerLeft X adj.unit ≫ (associator _ _ _).inv
-      naturality := by intros; ext; simp }
-  counit :=
-    { app := fun X =>
-        (associator _ _ _).hom ≫ whiskerLeft X adj.counit ≫ (rightUnitor _).hom
-      naturality := by intros; ext; simp }
+--- 原说明 ---
+Given an adjunction `F ⊣ G`, this provides the natural adjunction
+  `(whiskeringRight C _ _).obj F ⊣ (whiskeringRight C _ _).obj G`.
 -/
 protected def whiskerRight (adj : F ⊣ G) :
     (whiskeringRight C D E).obj F ⊣ (whiskeringRight C E D).obj G where
@@ -69,30 +62,23 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Given an adjunction `F ⊣ G`, this provides the natural adjunction
   `(whiskeringLeft _ _ C).obj G ⊣ (whiskeringLeft _ _ C).obj F`. -/
 @[simps! unit_app_app counit_app_app]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.Adjunction.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Adjunction`。
+形式化陈述：(C : Type u_1) →   {D : Type u_2} →     {E : Type u_3} →       [inst : Cat
+egoryTheory.Category.{v_1, u_1} C] →         [inst_1 : CategoryTheory.Category.{
+v_2, u_2} D] →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       {F : CategoryTheory.Functor D E} →               {G : CategoryTheory.Func
+tor E D} →                 (F ⊣ G) →                   ((CategoryTheory.Functor.
+whiskeringLeft E D C).obj G ⊣                     (CategoryTheory.Functor.whiske
+ringLeft D E C).obj F)
+参数：CategoryTheory.Functor.whiskeringLeft E D C；CategoryTheory.Functor.whiskering
+Left D E C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: (adj : F ⊣ G)
-  body: { app := fun X =>
-        (leftUnitor _).inv ≫ whiskerRight adj.unit X ≫ (associator _ _ _).hom }
-  counit :=
-    { app := fun X =>
-        (associator _ _ _).inv ≫ whiskerRight adj.counit X ≫ (leftUnitor _).hom }
-  left_triangle_components X := by ext; simp [← X.map_comp]
-  right_triangle_components X := by ext; simp [← X.map_comp]
-
-中文:
-定义 whiskerLeft
-  签名: (adj : F ⊣ G)
-  定义体: { app := fun X =>
-        (leftUnitor _).inv ≫ whiskerRight adj.unit X ≫ (associator _ _ _).hom }
-  counit :=
-    { app := fun X =>
-        (associator _ _ _).inv ≫ whiskerRight adj.counit X ≫ (leftUnitor _).hom }
-  left_triangle_components X := by ext; simp [← X.map_comp]
-  right_triangle_components X := by ext; simp [← X.map_comp]
+--- 原说明 ---
+Given an adjunction `F ⊣ G`, this provides the natural adjunction
+  `(whiskeringLeft _ _ C).obj G ⊣ (whiskeringLeft _ _ C).obj F`.
 -/
 protected def whiskerLeft (adj : F ⊣ G) :
     (whiskeringLeft E D C).obj G ⊣ (whiskeringLeft D E C).obj F where
@@ -106,3 +92,4 @@ protected def whiskerLeft (adj : F ⊣ G) :
   right_triangle_components X := by ext; simp [← X.map_comp]
 
 end CategoryTheory.Adjunction
+

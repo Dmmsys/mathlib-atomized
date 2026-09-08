@@ -58,10 +58,10 @@ finite correctness proof (`of_correctness_of_terminates`) of `GenContFract.of` t
 -/
 
 
-variable (v : K) (n : Nat)
+variable (v : K) (n : ℕ)
 
 nonrec theorem exists_gcf_pair_rat_eq_of_nth_contsAux :
-    exists conts : Pair Rat, (of v).contsAux n = (conts.map (↑) : Pair K) :=
+    ∃ conts : Pair ℚ, (of v).contsAux n = (conts.map (↑) : Pair K) :=
   Nat.strong_induction_on n
     (by
       clear n
@@ -69,15 +69,15 @@ nonrec theorem exists_gcf_pair_rat_eq_of_nth_contsAux :
       intro n IH
       rcases n with (_ | _ | n)
       -- n = 0
-      · suffices exists gp : Pair Rat, Pair.mk (1 : K) 0 = gp.map (↑) by simpa [contsAux]
+      · suffices ∃ gp : Pair ℚ, Pair.mk (1 : K) 0 = gp.map (↑) by simpa [contsAux]
         use Pair.mk 1 0
         simp
       -- n = 1
-      · suffices exists conts : Pair Rat, Pair.mk g.h 1 = conts.map (↑) by simpa [contsAux]
+      · suffices ∃ conts : Pair ℚ, Pair.mk g.h 1 = conts.map (↑) by simpa [contsAux]
         use Pair.mk ⌊v⌋ 1
         simp [g]
       -- 2 ≤ n
-· obtain ⟨pred_conts, pred_conts_eq⟩ := IH (n + 1) lt_add_one (n + 1)
+      · obtain ⟨pred_conts, pred_conts_eq⟩ := IH (n + 1) <| lt_add_one (n + 1)
         -- invoke the IH
         rcases s_ppred_nth_eq : g.s.get? n with gp_n | gp_n
         -- option.none
@@ -88,111 +88,99 @@ nonrec theorem exists_gcf_pair_rat_eq_of_nth_contsAux :
         -- option.some
         · -- invoke the IH a second time
           obtain ⟨ppred_conts, ppred_conts_eq⟩ :=
-IH n lt_of_le_of_lt n.le_succ lt_add_one n + 1
-          obtain ⟨a_eq_one, z, b_eq_z⟩ : gp_n.a = 1 ∧ exists z : Int, gp_n.b = (z : K) :=
+            IH n <| lt_of_le_of_lt n.le_succ <| lt_add_one <| n + 1
+          obtain ⟨a_eq_one, z, b_eq_z⟩ : gp_n.a = 1 ∧ ∃ z : ℤ, gp_n.b = (z : K) :=
             of_partNum_eq_one_and_exists_int_partDen_eq s_ppred_nth_eq
           -- finally, unfold the recurrence to obtain the required rational value.
           simp only [g, a_eq_one, b_eq_z,
             contsAux_recurrence s_ppred_nth_eq ppred_conts_eq pred_conts_eq]
-          use nextConts 1 (z : Rat) ppred_conts pred_conts
+          use nextConts 1 (z : ℚ) ppred_conts pred_conts
           cases ppred_conts; cases pred_conts
           simp [nextConts, nextNum, nextDen])
 
-/--
-theorem `exists_gcf_pair_rat_eq_nth_conts` / 定理 `exists_gcf_pair_rat_eq_nth_conts`
-
-English:
-theorem exists_gcf_pair_rat_eq_nth_conts
-  proof: by
-rw [nth_cont_eq_succ_nth_contAux]; exact exists_gcf_pair_rat_eq_of_nth_contsAux v n + 1
-
-中文:
-定理 存在_gcf_pair_rat_eq_nth_conts
-  证明: by
-rw [nth_cont_eq_succ_nth_contAux]; exact exists_gcf_pair_rat_eq_of_nth_contsAux v n + 1
-
-Depends on / 依赖: exists_gcf_pair_rat_eq_of_nth_contsAux, nth_cont_eq_succ_nth_contAux
+/-
+**GenContFract.exists_gcf_pair_rat_eq_nth_conts** 是 Mathlib 中的一个定理，位于命名空间 `GenCo
+ntFract`。
+形式化陈述：exists_gcf_pair_rat_eq_nth_conts : exists conts : Pair Rat, (of v).conts n
+ = (conts.map (↑) : Pair K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GenContFract.nth_cont_eq_succ_nth_contAux`：nth_cont_eq_succ_nth_contAux 
+: g.conts n = g.contsAux (n + 1)
+· 使用定理 `GenContFract.exists_gcf_pair_rat_eq_of_nth_contsAux`：∀ {K : Type u_1} [i
+nst : Field K] [inst_1 : LinearOrder K] [inst_2 : FloorRing K] (v : K) (n : ℕ), 
+  ∃ conts, (GenContFract.of v).contsAux n…
 -/
 theorem exists_gcf_pair_rat_eq_nth_conts :
-    exists conts : Pair Rat, (of v).conts n = (conts.map (↑) : Pair K) := by
-rw [nth_cont_eq_succ_nth_contAux]; exact exists_gcf_pair_rat_eq_of_nth_contsAux v n + 1
-
-/--
-theorem `exists_rat_eq_nth_num` / 定理 `exists_rat_eq_nth_num`
-
-English:
-theorem exists_rat_eq_nth_num
-  statement: exists q : Rat, (of v).nums n = (q : K)
-  proof: by
-  rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨a, _⟩, nth_cont_eq⟩
-  use a
-  simp [num_eq_conts_a, nth_cont_eq]
-
-中文:
-定理 存在_rat_eq_nth_num
-  结论: 存在 q : 有理数, (of v).nums n = (q : K)
-  证明: by
-  rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨a, _⟩, nth_cont_eq⟩
-  use a
-  simp [num_eq_conts_a, nth_cont_eq]
-
-Depends on / 依赖: exists_gcf_pair_rat_eq_nth_conts, nth_cont_eq, num_eq_conts_a
+    ∃ conts : Pair ℚ, (of v).conts n = (conts.map (↑) : Pair K) := by
+  rw [nth_cont_eq_succ_nth_contAux]; exact exists_gcf_pair_rat_eq_of_nth_contsAux v <| n + 1
+/-
+**GenContFract.exists_rat_eq_nth_num** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：exists_rat_eq_nth_num : exists q : Rat, (of v).nums n = (q : K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GenContFract.exists_gcf_pair_rat_eq_nth_conts`：exists_gcf_pair_rat_eq_nt
+h_conts : exists conts : Pair Rat, (of v).conts n = (conts.map (↑) : Pair K)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem exists_rat_eq_nth_num : exists q : Rat, (of v).nums n = (q : K) := by
+theorem exists_rat_eq_nth_num : ∃ q : ℚ, (of v).nums n = (q : K) := by
   rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨a, _⟩, nth_cont_eq⟩
   use a
   simp [num_eq_conts_a, nth_cont_eq]
-
-/--
-theorem `exists_rat_eq_nth_den` / 定理 `exists_rat_eq_nth_den`
-
-English:
-theorem exists_rat_eq_nth_den
-  statement: exists q : Rat, (of v).dens n = (q : K)
-  proof: by
+/-
+**GenContFract.exists_rat_eq_nth_den** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：exists_rat_eq_nth_den : exists q : Rat, (of v).dens n = (q : K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GenContFract.exists_gcf_pair_rat_eq_nth_conts`：exists_gcf_pair_rat_eq_nt
+h_conts : exists conts : Pair Rat, (of v).conts n = (conts.map (↑) : Pair K)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem exists_rat_eq_nth_den : ∃ q : ℚ, (of v).dens n = (q : K) := by
   rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨_, b⟩, nth_cont_eq⟩
   use b
   simp [den_eq_conts_b, nth_cont_eq]
 
-中文:
-定理 存在_rat_eq_nth_den
-  结论: 存在 q : 有理数, (of v).dens n = (q : K)
-  证明: by
-  rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨_, b⟩, nth_cont_eq⟩
-  use b
-  simp [den_eq_conts_b, nth_cont_eq]
+/-- Every finite convergent corresponds to a rational number. -/
+/-
+**GenContFract.exists_rat_eq_nth_conv** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：exists_rat_eq_nth_conv : exists q : Rat, (of v).convs n = (q : K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GenContFract.exists_rat_eq_nth_num`：exists_rat_eq_nth_num : exists q : R
+at, (of v).nums n = (q : K)
+· 使用定理 `GenContFract.exists_rat_eq_nth_den`：exists_rat_eq_nth_den : exists q : R
+at, (of v).dens n = (q : K)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_div`：∀ {α : Type u_3} [inst : DivisionRing α] [CharZero α] (p q
+ : ℚ), ↑(p / q) = ↑p / ↑q
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: den_eq_conts_b, exists_gcf_pair_rat_eq_nth_conts, nth_cont_eq
+--- 原说明 ---
+Every finite convergent corresponds to a rational number.
 -/
-theorem exists_rat_eq_nth_den : exists q : Rat, (of v).dens n = (q : K) := by
-  rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨_, b⟩, nth_cont_eq⟩
-  use b
-  simp [den_eq_conts_b, nth_cont_eq]
-
-/--
-theorem `exists_rat_eq_nth_conv` / 定理 `exists_rat_eq_nth_conv`
-
-English:
-theorem exists_rat_eq_nth_conv
-  statement: exists q : Rat, (of v).convs n = (q : K)
-  proof: by
-  rcases exists_rat_eq_nth_num v n with ⟨Aₙ, nth_num_eq⟩
-  rcases exists_rat_eq_nth_den v n with ⟨Bₙ, nth_den_eq⟩
-  use Aₙ / Bₙ
-  simp [nth_num_eq, nth_den_eq, conv_eq_num_div_den]
-
-中文:
-定理 存在_rat_eq_nth_conv
-  结论: 存在 q : 有理数, (of v).convs n = (q : K)
-  证明: by
-  rcases exists_rat_eq_nth_num v n with ⟨Aₙ, nth_num_eq⟩
-  rcases exists_rat_eq_nth_den v n with ⟨Bₙ, nth_den_eq⟩
-  use Aₙ / Bₙ
-  simp [nth_num_eq, nth_den_eq, conv_eq_num_div_den]
-
-Depends on / 依赖: conv_eq_num_div_den, exists_rat_eq_nth_den, exists_rat_eq_nth_num, nth_den_eq, nth_num_eq
--/
-theorem exists_rat_eq_nth_conv : exists q : Rat, (of v).convs n = (q : K) := by
+theorem exists_rat_eq_nth_conv : ∃ q : ℚ, (of v).convs n = (q : K) := by
   rcases exists_rat_eq_nth_num v n with ⟨Aₙ, nth_num_eq⟩
   rcases exists_rat_eq_nth_den v n with ⟨Bₙ, nth_den_eq⟩
   use Aₙ / Bₙ
@@ -200,34 +188,27 @@ theorem exists_rat_eq_nth_conv : exists q : Rat, (of v).convs n = (q : K) := by
 
 variable {v}
 
-/--
-theorem `exists_rat_eq_of_terminates` / 定理 `exists_rat_eq_of_terminates`
+/-- Every terminating continued fraction corresponds to a rational number. -/
+/-
+**GenContFract.exists_rat_eq_of_terminates** 是 Mathlib 中的一个定理，位于命名空间 `GenContFra
+ct`。
+形式化陈述：exists_rat_eq_of_terminates (terminates : (of v).Terminates) : exists q : 
+Rat, v = ↑q
+参数：terminates : (of v).Terminates。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GenContFract.of_correctness_of_terminates`：of_correctness_of_terminates 
+(terminates : (of v).Terminates) : exists n : Nat, v = (of v).convs n
+· 使用定理 `GenContFract.exists_rat_eq_nth_conv`：exists_rat_eq_nth_conv : exists q :
+ Rat, (of v).convs n = (q : K)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 
-English:
-theorem exists_rat_eq_of_terminates
-  given: (terminates : (of v).Terminates)
-  statement: exists q : Rat, v = ↑q
-  proof: by
-  obtain ⟨n, v_eq_conv⟩ : exists n, v = (of v).convs n := of_correctness_of_terminates terminates
-  obtain ⟨q, conv_eq_q⟩ : exists q : Rat, (of v).convs n = (↑q : K) := exists_rat_eq_nth_conv v n
-  have : v = (↑q : K) := Eq.trans v_eq_conv conv_eq_q
-  use q, this
-
-中文:
-定理 存在_rat_eq_of_terminates
-  条件: (terminates : (of v).Terminates)
-  结论: 存在 q : 有理数, v = ↑q
-  证明: by
-  obtain ⟨n, v_eq_conv⟩ : exists n, v = (of v).convs n := of_correctness_of_terminates terminates
-  obtain ⟨q, conv_eq_q⟩ : exists q : Rat, (of v).convs n = (↑q : K) := exists_rat_eq_nth_conv v n
-  have : v = (↑q : K) := Eq.trans v_eq_conv conv_eq_q
-  use q, this
-
-Depends on / 依赖: Eq.trans, conv_eq_q, exists_rat_eq_nth_conv, of_correctness_of_terminates, terminates, v_eq_conv
+--- 原说明 ---
+Every terminating continued fraction corresponds to a rational number.
 -/
-theorem exists_rat_eq_of_terminates (terminates : (of v).Terminates) : exists q : Rat, v = ↑q := by
-  obtain ⟨n, v_eq_conv⟩ : exists n, v = (of v).convs n := of_correctness_of_terminates terminates
-  obtain ⟨q, conv_eq_q⟩ : exists q : Rat, (of v).convs n = (↑q : K) := exists_rat_eq_nth_conv v n
+theorem exists_rat_eq_of_terminates (terminates : (of v).Terminates) : ∃ q : ℚ, v = ↑q := by
+  obtain ⟨n, v_eq_conv⟩ : ∃ n, v = (of v).convs n := of_correctness_of_terminates terminates
+  obtain ⟨q, conv_eq_q⟩ : ∃ q : ℚ, (of v).convs n = (↑q : K) := exists_rat_eq_nth_conv v n
   have : v = (↑q : K) := Eq.trans v_eq_conv conv_eq_q
   use q, this
 
@@ -253,7 +234,7 @@ the Computation first and then lift the results step-by-step.
 
 
 -- The lifting works for arbitrary linear ordered fields with a floor function.
-variable [IsStrictOrderedRing K] {v : K} {q : Rat}
+variable [IsStrictOrderedRing K] {v : K} {q : ℚ}
 
 /-! First, we show the correspondence for the very basic functions in
 `GenContFract.IntFractPair`. -/
@@ -261,71 +242,62 @@ variable [IsStrictOrderedRing K] {v : K} {q : Rat}
 
 namespace IntFractPair
 
-/--
-theorem `coe_of_rat_eq` / 定理 `coe_of_rat_eq`
-
-English:
-theorem coe_of_rat_eq
-  given: (v_eq_q : v = (↑q : K))
-  proof: by
-  simp [IntFractPair.of, v_eq_q]
-
-中文:
-定理 coe_of_rat_eq
-  条件: (v_eq_q : v = (↑q : K))
-  证明: by
-  simp [IntFractPair.of, v_eq_q]
-
-Depends on / 依赖: IntFractPair, IntFractPair.of, v_eq_q
+/-
+**GenContFract.IntFractPair.coe_of_rat_eq** 是 Mathlib 中的一个定理，位于命名空间 `GenContFrac
+t.IntFractPair`。
+形式化陈述：coe_of_rat_eq (v_eq_q : v = (↑q : K)) : ((IntFractPair.of q).mapFr (↑) : I
+ntFractPair K) = IntFractPair.of v
+参数：v_eq_q : v = (↑q : K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_fract`：cast_fract (x : Rat) : (↑(fract x) : α) = fract (x : α)
+· 使用定理 `Rat.floor_cast`：floor_cast (x : Rat) : ⌊(x : α)⌋ = ⌊x⌋
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_of_rat_eq (v_eq_q : v = (↑q : K)) :
     ((IntFractPair.of q).mapFr (↑) : IntFractPair K) = IntFractPair.of v := by
   simp [IntFractPair.of, v_eq_q]
-
-/--
-theorem `coe_stream_nth_rat_eq` / 定理 `coe_stream_nth_rat_eq`
-
-English:
-theorem coe_stream_nth_rat_eq
-  given: (v_eq_q : v = (↑q : K)) (n : Nat)
-  proof: by
-  induction n with
-  | zero =>
-    simp only [IntFractPair.stream, Option.map_some, coe_of_rat_eq v_eq_q]
-  | succ n IH =>
-    rw [v_eq_q] at IH
-    cases stream_q_nth_eq : IntFractPair.stream q n with
-    | none => simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq]
-    | some ifp_n =>
-      obtain ⟨b, fr⟩ := ifp_n
-      rcases Decidable.em (fr = 0) with fr_zero | fr_ne_zero
-      · simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_zero]
-      · have : (fr : K)⁻¹ = ((fr⁻¹ : Rat) : K) := by norm_cast
-        have coe_of_fr := coe_of_rat_eq this
-        simpa [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_ne_zero]
-
-中文:
-定理 coe_stream_nth_rat_eq
-  条件: (v_eq_q : v = (↑q : K)) (n : 自然数)
-  证明: by
-  induction n with
-  | zero =>
-    simp only [IntFractPair.stream, Option.map_some, coe_of_rat_eq v_eq_q]
-  | succ n IH =>
-    rw [v_eq_q] at IH
-    cases stream_q_nth_eq : IntFractPair.stream q n with
-    | none => simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq]
-    | some ifp_n =>
-      obtain ⟨b, fr⟩ := ifp_n
-      rcases Decidable.em (fr = 0) with fr_zero | fr_ne_zero
-      · simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_zero]
-      · have : (fr : K)⁻¹ = ((fr⁻¹ : Rat) : K) := by norm_cast
-        have coe_of_fr := coe_of_rat_eq this
-        simpa [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_ne_zero]
-
-Depends on / 依赖: Decidable, Decidable.em, IH.symm, IntFractPair, IntFractPair.stream, Option.map_some, coe_of_fr, coe_of_rat_eq, fr_ne_zero, fr_zero, ifp_n, map_some, stream, stream_q_nth_eq, v_eq_q
+/-
+**GenContFract.IntFractPair.coe_stream_nth_rat_eq** 是 Mathlib 中的一个定理，位于命名空间 `Gen
+ContFract.IntFractPair`。
+形式化陈述：coe_stream_nth_rat_eq (v_eq_q : v = (↑q : K)) (n : Nat) : ((IntFractPair.s
+tream q n).map (mapFr (↑)) : Option <| IntFractPair K) = IntFractPair.stream v n
+参数：v_eq_q : v = (↑q : K)；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GenContFract.IntFractPair.coe_of_rat_eq`：coe_of_rat_eq (v_eq_q : v = (↑q
+ : K)) : ((IntFractPair.of q).mapFr (↑) : IntFractPair K) = IntFractPair.of v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Option.bind_congr'`：bind_congr' {f g : α -> Option β} {x y : Option α} (
+hx : x = y) (hf : forall a in y, f a = g a) : x.bind f = y.bind g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Decidable.em`：∀ (p : Prop) [Decidable p], p ∨ ¬p
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Rat.cast_zero`：cast_zero : ((0 : Rat) : α) = 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
 -/
-theorem coe_stream_nth_rat_eq (v_eq_q : v = (↑q : K)) (n : Nat) :
+theorem coe_stream_nth_rat_eq (v_eq_q : v = (↑q : K)) (n : ℕ) :
     ((IntFractPair.stream q n).map (mapFr (↑)) : Option <| IntFractPair K) =
       IntFractPair.stream v n := by
   induction n with
@@ -339,26 +311,24 @@ theorem coe_stream_nth_rat_eq (v_eq_q : v = (↑q : K)) (n : Nat) :
       obtain ⟨b, fr⟩ := ifp_n
       rcases Decidable.em (fr = 0) with fr_zero | fr_ne_zero
       · simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_zero]
-      · have : (fr : K)⁻¹ = ((fr⁻¹ : Rat) : K) := by norm_cast
+      · have : (fr : K)⁻¹ = ((fr⁻¹ : ℚ) : K) := by norm_cast
         have coe_of_fr := coe_of_rat_eq this
         simpa [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_ne_zero]
-
-/--
-theorem `coe_stream'_rat_eq` / 定理 `coe_stream'_rat_eq`
-
-English:
-theorem coe_stream'_rat_eq
-  given: (v_eq_q : v = (↑q : K))
-  proof: by
-  funext n; exact IntFractPair.coe_stream_nth_rat_eq v_eq_q n
-
-中文:
-定理 coe_stream'_rat_eq
-  条件: (v_eq_q : v = (↑q : K))
-  证明: by
-  funext n; exact IntFractPair.coe_stream_nth_rat_eq v_eq_q n
-
-Depends on / 依赖: IntFractPair, IntFractPair.coe_stream_nth_rat_eq, coe_stream_nth_rat_eq, v_eq_q
+/-
+**GenContFract.IntFractPair.coe_stream'_rat_eq** 是 Mathlib 中的一个定理，位于命名空间 `GenCon
+tFract.IntFractPair`。
+形式化陈述：∀ {K : Type u_1} [inst : Field K] [inst_1 : LinearOrder K] [inst_2 : Floor
+Ring K] [IsStrictOrderedRing K] {v : K}   {q : ℚ},   v = ↑q →     Stream'.map (O
+ption.map (GenContFract.IntFractPair.mapFr Rat.cast)) (GenContFract.IntFractPair
+.stream q) =       GenContFract.IntFractPair.stream v
+参数：Option.map (GenContFract.IntFractPair.mapFr Rat.cast)；GenContFract.IntFractPa
+ir.stream q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `GenContFract.IntFractPair.coe_stream_nth_rat_eq`：coe_stream_nth_rat_eq (
+v_eq_q : v = (↑q : K)) (n : Nat) : ((IntFractPair.stream q n).map (mapFr (↑)) : 
+Option <| IntFractPair K) = IntFractP…
 -/
 theorem coe_stream'_rat_eq (v_eq_q : v = (↑q : K)) :
     ((IntFractPair.stream q).map (Option.map (mapFr (↑))) : Stream' <| Option <| IntFractPair K) =
@@ -367,130 +337,117 @@ theorem coe_stream'_rat_eq (v_eq_q : v = (↑q : K)) :
 
 end IntFractPair
 
+/-! Now we lift the coercion results to the continued fraction computation. -/
 
 
-/--
-theorem `coe_of_h_rat_eq` / 定理 `coe_of_h_rat_eq`
+/-
+**GenContFract.coe_of_h_rat_eq** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：coe_of_h_rat_eq (v_eq_q : v = (↑q : K)) : (↑((of q).h : Rat) : K) = (of v)
+.h
+参数：v_eq_q : v = (↑q : K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Rat.floor_cast`：floor_cast (x : Rat) : ⌊(x : α)⌋ = ⌊x⌋
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem coe_of_h_rat_eq
-  given: (v_eq_q : v = (↑q : K))
-  statement: (↑((of q).h : Rat) : K) = (of v).h
-  proof: by
-  simp_all
-
-中文:
-定理 coe_of_h_rat_eq
-  条件: (v_eq_q : v = (↑q : K))
-  结论: (↑((of q).h : 有理数) : K) = (of v).h
-  证明: by
-  simp_all
+--- 原说明 ---
+Now we lift the coercion results to the continued fraction computation.
 -/
-theorem coe_of_h_rat_eq (v_eq_q : v = (↑q : K)) : (↑((of q).h : Rat) : K) = (of v).h := by
+theorem coe_of_h_rat_eq (v_eq_q : v = (↑q : K)) : (↑((of q).h : ℚ) : K) = (of v).h := by
   simp_all
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_of_s_get?_rat_eq` / 定理 `coe_of_s_get?_rat_eq`
-
-English:
-theorem coe_of_s_get?_rat_eq
-  given: (v_eq_q : v = (↑q : K)) (n : Nat)
-  proof: by
-  simp only [of, IntFractPair.seq1, Stream'.Seq.map_get?, Stream'.Seq.get?_tail]
-  simp only [Stream'.Seq.get?]
-  rw [← IntFractPair.coe_stream'_rat_eq v_eq_q]
-  rcases succ_nth_stream_eq : IntFractPair.stream q (n + 1) with (_ | ⟨_, _⟩) <;>
-    simp [Stream'.map, Stream'.get, succ_nth_stream_eq]
-
-中文:
-定理 coe_of_s_get?_rat_eq
-  条件: (v_eq_q : v = (↑q : K)) (n : 自然数)
-  证明: by
-  simp only [of, IntFractPair.seq1, Stream'.Seq.map_get?, Stream'.Seq.get?_tail]
-  simp only [Stream'.Seq.get?]
-  rw [← IntFractPair.coe_stream'_rat_eq v_eq_q]
-  rcases succ_nth_stream_eq : IntFractPair.stream q (n + 1) with (_ | ⟨_, _⟩) <;>
-    simp [Stream'.map, Stream'.get, succ_nth_stream_eq]
-
-Depends on / 依赖: IntFractPair, IntFractPair.coe_stream, IntFractPair.seq1, IntFractPair.stream, Seq.get, Seq.map_get, Stream, _rat_eq, _tail, coe_stream, map_get, stream, succ_nth_stream_eq, v_eq_q
+/-
+**GenContFract.coe_of_s_get** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：coe_of_s_get?_rat_eq (v_eq_q : v = (↑q : K)) (n : Nat) : (((of q).s.get? n
+).map (Pair.map (↑)) : Option <| Pair K) = (of v).s.get? n
+参数：v_eq_q : v = (↑q : K)；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_of_s_get?_rat_eq (v_eq_q : v = (↑q : K)) (n : Nat) :
+theorem coe_of_s_get?_rat_eq (v_eq_q : v = (↑q : K)) (n : ℕ) :
     (((of q).s.get? n).map (Pair.map (↑)) : Option <| Pair K) = (of v).s.get? n := by
   simp only [of, IntFractPair.seq1, Stream'.Seq.map_get?, Stream'.Seq.get?_tail]
   simp only [Stream'.Seq.get?]
   rw [← IntFractPair.coe_stream'_rat_eq v_eq_q]
   rcases succ_nth_stream_eq : IntFractPair.stream q (n + 1) with (_ | ⟨_, _⟩) <;>
     simp [Stream'.map, Stream'.get, succ_nth_stream_eq]
-
-/--
-theorem `coe_of_s_rat_eq` / 定理 `coe_of_s_rat_eq`
-
-English:
-theorem coe_of_s_rat_eq
-  given: (v_eq_q : v = (↑q : K))
-  proof: by
-  ext n; rw [← coe_of_s_get?_rat_eq v_eq_q]; rfl
-
-中文:
-定理 coe_of_s_rat_eq
-  条件: (v_eq_q : v = (↑q : K))
-  证明: by
-  ext n; rw [← coe_of_s_get?_rat_eq v_eq_q]; rfl
-
-Depends on / 依赖: _rat_eq, coe_of_s_get, v_eq_q
+/-
+**GenContFract.coe_of_s_rat_eq** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：coe_of_s_rat_eq (v_eq_q : v = (↑q : K)) : ((of q).s.map (Pair.map ((↑))) :
+ Stream'.Seq <| Pair K) = (of v).s
+参数：v_eq_q : v = (↑q : K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Stream'.Seq.ext`：∀ {α : Type u} {s t : Stream'.Seq α}, (∀ (n : ℕ), s.get
+? n = t.get? n) → s = t
+· 使用定理 `Option.ext`：∀ {α : Type u_1} {o₁ o₂ : Option α}, (∀ (a : α), o₁ = some a
+ ↔ o₂ = some a) → o₁ = o₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `GenContFract.coe_of_s_get?_rat_eq`：∀ {K : Type u_1} [inst : Field K] [in
+st_1 : LinearOrder K] [inst_2 : FloorRing K] [IsStrictOrderedRing K] {v : K}   {
+q : ℚ},   v = ↑q →     …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_of_s_rat_eq (v_eq_q : v = (↑q : K)) :
     ((of q).s.map (Pair.map ((↑))) : Stream'.Seq <| Pair K) = (of v).s := by
   ext n; rw [← coe_of_s_get?_rat_eq v_eq_q]; rfl
 
-/--
-theorem `coe_of_rat_eq` / 定理 `coe_of_rat_eq`
+/-- Given `(v : K), (q : ℚ), and v = q`, we have that `of q = of v` -/
+/-
+**GenContFract.coe_of_rat_eq** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：coe_of_rat_eq (v_eq_q : v = (↑q : K)) : (⟨(of q).h, (of q).s.map (Pair.map
+ (↑))⟩ : GenContFract K) = of v
+参数：v_eq_q : v = (↑q : K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `GenContFract.coe_of_s_rat_eq`：coe_of_s_rat_eq (v_eq_q : v = (↑q : K)) : 
+((of q).s.map (Pair.map ((↑))) : Stream'.Seq <| Pair K) = (of v).s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Rat.floor_cast`：floor_cast (x : Rat) : ⌊(x : α)⌋ = ⌊x⌋
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `GenContFract.IntFractPair.stream_isSeq`：stream_isSeq (v : K) : (IntFract
+Pair.stream v).IsSeq
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem coe_of_rat_eq
-  given: (v_eq_q : v = (↑q : K))
-  proof: by
-  rcases gcf_v_eq : of v with ⟨h, s⟩; subst v
-  obtain rfl : ↑⌊(q : K)⌋ = h := by injection gcf_v_eq
-  simp [coe_of_s_rat_eq rfl, gcf_v_eq]
-
-中文:
-定理 coe_of_rat_eq
-  条件: (v_eq_q : v = (↑q : K))
-  证明: by
-  rcases gcf_v_eq : of v with ⟨h, s⟩; subst v
-  obtain rfl : ↑⌊(q : K)⌋ = h := by injection gcf_v_eq
-  simp [coe_of_s_rat_eq rfl, gcf_v_eq]
-
-Depends on / 依赖: coe_of_s_rat_eq, gcf_v_eq, injection
+--- 原说明 ---
+Given `(v : K), (q : ℚ), and v = q`, we have that `of q = of v`
 -/
 theorem coe_of_rat_eq (v_eq_q : v = (↑q : K)) :
     (⟨(of q).h, (of q).s.map (Pair.map (↑))⟩ : GenContFract K) = of v := by
   rcases gcf_v_eq : of v with ⟨h, s⟩; subst v
   obtain rfl : ↑⌊(q : K)⌋ = h := by injection gcf_v_eq
   simp [coe_of_s_rat_eq rfl, gcf_v_eq]
-
-/--
-theorem `of_terminates_iff_of_rat_terminates` / 定理 `of_terminates_iff_of_rat_terminates`
-
-English:
-theorem of_terminates_iff_of_rat_terminates
-  given: {v : K} {q : Rat} (v_eq_q : v = (q : K))
-  proof: by
-  refine exists_congr fun n => ?_
-  rcases h : (of q).s.get? n <;> grind [Stream'.Seq.TerminatedAt, coe_of_s_get?_rat_eq v_eq_q n]
-
-中文:
-定理 of_terminates_iff_of_rat_terminates
-  条件: {v : K} {q : 有理数} (v_eq_q : v = (q : K))
-  证明: by
-  refine exists_congr fun n => ?_
-  rcases h : (of q).s.get? n <;> grind [Stream'.Seq.TerminatedAt, coe_of_s_get?_rat_eq v_eq_q n]
-
-Depends on / 依赖: Seq.TerminatedAt, Stream, TerminatedAt, _rat_eq, coe_of_s_get, exists_congr, s.get, v_eq_q
+/-
+**GenContFract.of_terminates_iff_of_rat_terminates** 是 Mathlib 中的一个定理，位于命名空间 `Ge
+nContFract`。
+形式化陈述：of_terminates_iff_of_rat_terminates {v : K} {q : Rat} (v_eq_q : v = (q : K
+)) : (of v).Terminates ↔ (of q).Terminates
+参数：v_eq_q : v = (q : K)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
 -/
-theorem of_terminates_iff_of_rat_terminates {v : K} {q : Rat} (v_eq_q : v = (q : K)) :
+theorem of_terminates_iff_of_rat_terminates {v : K} {q : ℚ} (v_eq_q : v = (q : K)) :
     (of v).Terminates ↔ (of q).Terminates := by
   refine exists_congr fun n => ?_
   rcases h : (of q).s.get? n <;> grind [Stream'.Seq.TerminatedAt, coe_of_s_get?_rat_eq v_eq_q n]
@@ -514,125 +471,119 @@ this process must stop after finite number of steps, and the computation hence t
 
 namespace IntFractPair
 
-variable {q : Rat} {n : Nat}
+variable {q : ℚ} {n : ℕ}
 
-/--
-theorem `of_inv_fr_num_lt_num_of_pos` / 定理 `of_inv_fr_num_lt_num_of_pos`
+/-- Shows that for any `q : ℚ` with `0 < q < 1`, the numerator of the fractional part of
+`IntFractPair.of q⁻¹` is smaller than the numerator of `q`.
+-/
+/-
+**GenContFract.IntFractPair.of_inv_fr_num_lt_num_of_pos** 是 Mathlib 中的一个定理，位于命名空
+间 `GenContFract.IntFractPair`。
+形式化陈述：of_inv_fr_num_lt_num_of_pos (q_pos : 0 < q) : (IntFractPair.of q⁻¹).fr.num
+ < q.num
+参数：q_pos : 0 < q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.fract_inv_num_lt_num_of_pos`：fract_inv_num_lt_num_of_pos {q : Rat} (
+q_pos : 0 < q) : (fract q⁻¹).num < q.num
 
-English:
-theorem of_inv_fr_num_lt_num_of_pos
-  given: (q_pos : 0 < q)
-  statement: (IntFractPair.of q⁻¹).fr.num < q.num
-  proof: Rat.fract_inv_num_lt_num_of_pos q_pos
-
-中文:
-定理 of_inv_fr_num_lt_num_of_pos
-  条件: (q_pos : 0 < q)
-  结论: (整数FractPair.of q⁻¹).fr.num < q.num
-  证明: Rat.fract_inv_num_lt_num_of_pos q_pos
-
-Depends on / 依赖: Rat.fract_inv_num_lt_num_of_pos, fract_inv_num_lt_num_of_pos, q_pos
+--- 原说明 ---
+Shows that for any `q : ℚ` with `0 < q < 1`, the numerator of the fractional par
+t of
+`IntFractPair.of q⁻¹` is smaller than the numerator of `q`.
 -/
 theorem of_inv_fr_num_lt_num_of_pos (q_pos : 0 < q) : (IntFractPair.of q⁻¹).fr.num < q.num :=
   Rat.fract_inv_num_lt_num_of_pos q_pos
 
-/--
-theorem `stream_succ_nth_fr_num_lt_nth_fr_num_rat` / 定理 `stream_succ_nth_fr_num_lt_nth_fr_num_rat`
+/-- Shows that the sequence of numerators of the fractional parts of the stream is strictly
+antitone. -/
+/-
+**GenContFract.IntFractPair.stream_succ_nth_fr_num_lt_nth_fr_num_rat** 是 Mathlib
+ 中的一个定理，位于命名空间 `GenContFract.IntFractPair`。
+形式化陈述：stream_succ_nth_fr_num_lt_nth_fr_num_rat {ifp_n ifp_succ_n : IntFractPair 
+Rat} (stream_nth_eq : IntFractPair.stream q n = some ifp_n) (stream_succ_nth_eq 
+: IntFractPair.stream q (n + 1) = some ifp_succ_n) : ifp_succ_n.fr.num < ifp_n.f
+r.num
+参数：stream_nth_eq : IntFractPair.stream q n = some ifp_n；stream_succ_nth_eq : Int
+FractPair.stream q (n + 1) = some ifp_succ_n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `GenContFract.IntFractPair.succ_nth_stream_eq_some_iff`：succ_nth_stream_e
+q_some_iff {ifp_succ_n : IntFractPair K} : IntFractPair.stream v (n + 1) = some 
+ifp_succ_n ↔ exists ifp_n : IntFractPair K,…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GenContFract.IntFractPair.nth_stream_fr_nonneg_lt_one`：nth_stream_fr_non
+neg_lt_one {ifp_n : IntFractPair K} (nth_stream_eq : IntFractPair.stream v n = s
+ome ifp_n) : 0 <= ifp_n.fr ∧ ifp_n.fr < 1
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `GenContFract.IntFractPair.of_inv_fr_num_lt_num_of_pos`：of_inv_fr_num_lt_
+num_of_pos (q_pos : 0 < q) : (IntFractPair.of q⁻¹).fr.num < q.num
 
-English:
-theorem stream_succ_nth_fr_num_lt_nth_fr_num_rat
-  statement: {ifp_n ifp_succ_n : IntFractPair Rat}
-  proof: by
-  obtain ⟨ifp_n', stream_nth_eq', ifp_n_fract_ne_zero, IntFractPair.of_eq_ifp_succ_n⟩ :
-    exists ifp_n',
-      IntFractPair.stream q n = some ifp_n' ∧
-        ifp_n'.fr != 0 ∧ IntFractPair.of ifp_n'.fr⁻¹ = ifp_succ_n :=
-    succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq
-  have : ifp_n = ifp_n' := by injection Eq.trans stream_nth_eq.symm stream_nth_eq'
-  cases this
-  rw [← IntFractPair.of_eq_ifp_succ_n]
-  obtain ⟨zero_le_ifp_n_fract, _⟩ := nth_stream_fr_nonneg_lt_one stream_nth_eq
-have : 0 < ifp_n.fr := lt_of_le_of_ne zero_le_ifp_n_fract ifp_n_fract_ne_zero.symm
-  exact of_inv_fr_num_lt_num_of_pos this
-
-中文:
-定理 stream_succ_nth_fr_num_lt_nth_fr_num_rat
-  结论: {ifp_n ifp_succ_n : 整数FractPair 有理数}
-  证明: by
-  obtain ⟨ifp_n', stream_nth_eq', ifp_n_fract_ne_zero, IntFractPair.of_eq_ifp_succ_n⟩ :
-    exists ifp_n',
-      IntFractPair.stream q n = some ifp_n' ∧
-        ifp_n'.fr != 0 ∧ IntFractPair.of ifp_n'.fr⁻¹ = ifp_succ_n :=
-    succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq
-  have : ifp_n = ifp_n' := by injection Eq.trans stream_nth_eq.symm stream_nth_eq'
-  cases this
-  rw [← IntFractPair.of_eq_ifp_succ_n]
-  obtain ⟨zero_le_ifp_n_fract, _⟩ := nth_stream_fr_nonneg_lt_one stream_nth_eq
-have : 0 < ifp_n.fr := lt_of_le_of_ne zero_le_ifp_n_fract ifp_n_fract_ne_zero.symm
-  exact of_inv_fr_num_lt_num_of_pos this
-
-Depends on / 依赖: Eq.trans, IntFractPair, IntFractPair.of, IntFractPair.of_eq_ifp_succ_n, IntFractPair.stream, ifp_n, ifp_n.fr, ifp_n_fract_ne_zero, ifp_succ_n, injection, lt_of_le_of_ne, nth_stream_fr_nonneg_lt_one, of_eq_ifp_succ_n, stream, stream_nth_eq, stream_nth_eq.symm, stream_succ_nth_eq, succ_nth_stream_eq_some_iff, succ_nth_stream_eq_some_iff.mp, zero_le_ifp_n_fract
+--- 原说明 ---
+Shows that the sequence of numerators of the fractional parts of the stream is s
+trictly
+antitone.
 -/
-theorem stream_succ_nth_fr_num_lt_nth_fr_num_rat {ifp_n ifp_succ_n : IntFractPair Rat}
+theorem stream_succ_nth_fr_num_lt_nth_fr_num_rat {ifp_n ifp_succ_n : IntFractPair ℚ}
     (stream_nth_eq : IntFractPair.stream q n = some ifp_n)
     (stream_succ_nth_eq : IntFractPair.stream q (n + 1) = some ifp_succ_n) :
     ifp_succ_n.fr.num < ifp_n.fr.num := by
   obtain ⟨ifp_n', stream_nth_eq', ifp_n_fract_ne_zero, IntFractPair.of_eq_ifp_succ_n⟩ :
-    exists ifp_n',
+    ∃ ifp_n',
       IntFractPair.stream q n = some ifp_n' ∧
-        ifp_n'.fr != 0 ∧ IntFractPair.of ifp_n'.fr⁻¹ = ifp_succ_n :=
+        ifp_n'.fr ≠ 0 ∧ IntFractPair.of ifp_n'.fr⁻¹ = ifp_succ_n :=
     succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq
   have : ifp_n = ifp_n' := by injection Eq.trans stream_nth_eq.symm stream_nth_eq'
   cases this
   rw [← IntFractPair.of_eq_ifp_succ_n]
   obtain ⟨zero_le_ifp_n_fract, _⟩ := nth_stream_fr_nonneg_lt_one stream_nth_eq
-have : 0 < ifp_n.fr := lt_of_le_of_ne zero_le_ifp_n_fract ifp_n_fract_ne_zero.symm
+  have : 0 < ifp_n.fr := lt_of_le_of_ne zero_le_ifp_n_fract <| ifp_n_fract_ne_zero.symm
   exact of_inv_fr_num_lt_num_of_pos this
-
-/--
-theorem `stream_nth_fr_num_le_fr_num_sub_n_rat` / 定理 `stream_nth_fr_num_le_fr_num_sub_n_rat`
-
-English:
-theorem stream_nth_fr_num_le_fr_num_sub_n_rat
-  proof: by
-  induction n with
-  | zero =>
-    intro ifp_zero stream_zero_eq
-    have : IntFractPair.of q = ifp_zero := by injection stream_zero_eq
-    simp [this.symm]
-  | succ n IH =>
-    intro ifp_succ_n stream_succ_nth_eq
-    suffices ifp_succ_n.fr.num + 1 <= (IntFractPair.of q).fr.num - n by
-      rw [Int.natCast_succ]; rw [sub_add_eq_sub_sub]
-      solve_by_elim [le_sub_right_of_add_le]
-    rcases succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq with ⟨ifp_n, stream_nth_eq, -⟩
-    have : ifp_succ_n.fr.num < ifp_n.fr.num :=
-      stream_succ_nth_fr_num_lt_nth_fr_num_rat stream_nth_eq stream_succ_nth_eq
-    exact le_trans this (IH stream_nth_eq)
-
-中文:
-定理 stream_nth_fr_num_le_fr_num_sub_n_rat
-  证明: by
-  induction n with
-  | zero =>
-    intro ifp_zero stream_zero_eq
-    have : IntFractPair.of q = ifp_zero := by injection stream_zero_eq
-    simp [this.symm]
-  | succ n IH =>
-    intro ifp_succ_n stream_succ_nth_eq
-    suffices ifp_succ_n.fr.num + 1 <= (IntFractPair.of q).fr.num - n by
-      rw [Int.natCast_succ]; rw [sub_add_eq_sub_sub]
-      solve_by_elim [le_sub_right_of_add_le]
-    rcases succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq with ⟨ifp_n, stream_nth_eq, -⟩
-    have : ifp_succ_n.fr.num < ifp_n.fr.num :=
-      stream_succ_nth_fr_num_lt_nth_fr_num_rat stream_nth_eq stream_succ_nth_eq
-    exact le_trans this (IH stream_nth_eq)
-
-Depends on / 依赖: Int.natCast_succ, IntFractPair, IntFractPair.of, fr.num, ifp_n, ifp_n.fr.num, ifp_succ_n, ifp_succ_n.fr.num, ifp_zero, injection, le_sub_right_of_add_le, natCast_succ, solve_by_elim, stream_nth_eq, stream_succ_nth_eq, stream_succ_nth_fr_n, stream_zero_eq, sub_add_eq_sub_sub, succ_nth_stream_eq_some_iff, succ_nth_stream_eq_some_iff.mp
+/-
+**GenContFract.IntFractPair.stream_nth_fr_num_le_fr_num_sub_n_rat** 是 Mathlib 中的
+一个定理，位于命名空间 `GenContFract.IntFractPair`。
+形式化陈述：stream_nth_fr_num_le_fr_num_sub_n_rat : forall {ifp_n : IntFractPair Rat},
+ IntFractPair.stream q n = some ifp_n -> ifp_n.fr.num <= (IntFractPair.of q).fr.
+num - n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `GenContFract.IntFractPair.succ_nth_stream_eq_some_iff`：succ_nth_stream_e
+q_some_iff {ifp_succ_n : IntFractPair K} : IntFractPair.stream v (n + 1) = some 
+ifp_succ_n ↔ exists ifp_n : IntFractPair K,…
+· 使用定理 `GenContFract.IntFractPair.stream_succ_nth_fr_num_lt_nth_fr_num_rat`：stre
+am_succ_nth_fr_num_lt_nth_fr_num_rat {ifp_n ifp_succ_n : IntFractPair Rat} (stre
+am_nth_eq : IntFractPair.stream q n = some ifp_n) (strea…
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Int.natCast_succ`：∀ (n : ℕ), ↑n.succ = ↑n + 1
+· 使用定理 `sub_add_eq_sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a - (b + c) = a - b - c
+· 使用定理 `le_sub_right_of_add_le`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE 
+α] [AddRightMono α] {a b c : α}, a + b ≤ c → a ≤ c - b
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 -/
 theorem stream_nth_fr_num_le_fr_num_sub_n_rat :
-    forall {ifp_n : IntFractPair Rat},
-      IntFractPair.stream q n = some ifp_n -> ifp_n.fr.num <= (IntFractPair.of q).fr.num - n := by
+    ∀ {ifp_n : IntFractPair ℚ},
+      IntFractPair.stream q n = some ifp_n → ifp_n.fr.num ≤ (IntFractPair.of q).fr.num - n := by
   induction n with
   | zero =>
     intro ifp_zero stream_zero_eq
@@ -640,101 +591,92 @@ theorem stream_nth_fr_num_le_fr_num_sub_n_rat :
     simp [this.symm]
   | succ n IH =>
     intro ifp_succ_n stream_succ_nth_eq
-    suffices ifp_succ_n.fr.num + 1 <= (IntFractPair.of q).fr.num - n by
-      rw [Int.natCast_succ]; rw [sub_add_eq_sub_sub]
+    suffices ifp_succ_n.fr.num + 1 ≤ (IntFractPair.of q).fr.num - n by
+      rw [Int.natCast_succ, sub_add_eq_sub_sub]
       solve_by_elim [le_sub_right_of_add_le]
     rcases succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq with ⟨ifp_n, stream_nth_eq, -⟩
     have : ifp_succ_n.fr.num < ifp_n.fr.num :=
       stream_succ_nth_fr_num_lt_nth_fr_num_rat stream_nth_eq stream_succ_nth_eq
     exact le_trans this (IH stream_nth_eq)
-
-/--
-theorem `exists_nth_stream_eq_none_of_rat` / 定理 `exists_nth_stream_eq_none_of_rat`
-
-English:
-theorem exists_nth_stream_eq_none_of_rat
-  given: (q : Rat)
-  statement: exists n : Nat, IntFractPair.stream q n = none
-  proof: by
-  let fract_q_num := (Int.fract q).num; let n := fract_q_num.natAbs + 1
-  rcases stream_nth_eq : IntFractPair.stream q n with ifp | ifp
-  · use n, stream_nth_eq
-  · -- arrive at a contradiction since the numerator decreased num + 1 times but every fractional
-    -- value is nonnegative.
-    have ifp_fr_num_le_q_fr_num_sub_n : ifp.fr.num <= fract_q_num - n :=
-      stream_nth_fr_num_le_fr_num_sub_n_rat stream_nth_eq
-    have : fract_q_num - n = -1 := by
-      have : 0 <= fract_q_num := Rat.num_nonneg.mpr (Int.fract_nonneg q)
-      simp only [n, Nat.cast_add, Int.natAbs_of_nonneg this, Nat.cast_one,
-        sub_add_eq_sub_sub_swap, sub_right_comm, sub_self, zero_sub]
-    have : 0 <= ifp.fr := (nth_stream_fr_nonneg_lt_one stream_nth_eq).left
-    have : 0 <= ifp.fr.num := Rat.num_nonneg.mpr this
-    lia
-
-中文:
-定理 存在_nth_stream_eq_none_of_rat
-  条件: (q : 有理数)
-  结论: 存在 n : 自然数, 整数FractPair.stream q n = none
-  证明: by
-  let fract_q_num := (Int.fract q).num; let n := fract_q_num.natAbs + 1
-  rcases stream_nth_eq : IntFractPair.stream q n with ifp | ifp
-  · use n, stream_nth_eq
-  · -- arrive at a contradiction since the numerator decreased num + 1 times but every fractional
-    -- value is nonnegative.
-    have ifp_fr_num_le_q_fr_num_sub_n : ifp.fr.num <= fract_q_num - n :=
-      stream_nth_fr_num_le_fr_num_sub_n_rat stream_nth_eq
-    have : fract_q_num - n = -1 := by
-      have : 0 <= fract_q_num := Rat.num_nonneg.mpr (Int.fract_nonneg q)
-      simp only [n, Nat.cast_add, Int.natAbs_of_nonneg this, Nat.cast_one,
-        sub_add_eq_sub_sub_swap, sub_right_comm, sub_self, zero_sub]
-    have : 0 <= ifp.fr := (nth_stream_fr_nonneg_lt_one stream_nth_eq).left
-    have : 0 <= ifp.fr.num := Rat.num_nonneg.mpr this
-    lia
-
-Depends on / 依赖: Int.fract, IntFractPair, IntFractPair.stream, arrive, decreased, fract_q_num, fract_q_num.natAbs, fractional, natAbs, numerator, stream, stream_nth_eq
+/-
+**GenContFract.IntFractPair.exists_nth_stream_eq_none_of_rat** 是 Mathlib 中的一个定理，
+位于命名空间 `GenContFract.IntFractPair`。
+形式化陈述：exists_nth_stream_eq_none_of_rat (q : Rat) : exists n : Nat, IntFractPair.
+stream q n = none
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GenContFract.IntFractPair.stream_nth_fr_num_le_fr_num_sub_n_rat`：stream_
+nth_fr_num_le_fr_num_sub_n_rat : forall {ifp_n : IntFractPair Rat}, IntFractPair
+.stream q n = some ifp_n -> ifp_n.fr.num <= (IntFract…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.num_nonneg`：∀ {q : ℚ}, 0 ≤ q.num ↔ 0 ≤ q
+· 使用定理 `Int.fract_nonneg`：fract_nonneg (a : R) : 0 <= fract a
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.natAbs_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.natAbs = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `sub_add_eq_sub_sub_swap`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (
+a b c : α), a - (b + c) = a - c - b
+· 使用定理 `sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c
+ : α), a - b - c = a - c - b
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `GenContFract.IntFractPair.nth_stream_fr_nonneg_lt_one`：nth_stream_fr_non
+neg_lt_one {ifp_n : IntFractPair K} (nth_stream_eq : IntFractPair.stream v n = s
+ome ifp_n) : 0 <= ifp_n.fr ∧ ifp_n.fr < 1
 -/
-theorem exists_nth_stream_eq_none_of_rat (q : Rat) : exists n : Nat, IntFractPair.stream q n = none := by
+theorem exists_nth_stream_eq_none_of_rat (q : ℚ) : ∃ n : ℕ, IntFractPair.stream q n = none := by
   let fract_q_num := (Int.fract q).num; let n := fract_q_num.natAbs + 1
   rcases stream_nth_eq : IntFractPair.stream q n with ifp | ifp
   · use n, stream_nth_eq
   · -- arrive at a contradiction since the numerator decreased num + 1 times but every fractional
     -- value is nonnegative.
-    have ifp_fr_num_le_q_fr_num_sub_n : ifp.fr.num <= fract_q_num - n :=
+    have ifp_fr_num_le_q_fr_num_sub_n : ifp.fr.num ≤ fract_q_num - n :=
       stream_nth_fr_num_le_fr_num_sub_n_rat stream_nth_eq
     have : fract_q_num - n = -1 := by
-      have : 0 <= fract_q_num := Rat.num_nonneg.mpr (Int.fract_nonneg q)
+      have : 0 ≤ fract_q_num := Rat.num_nonneg.mpr (Int.fract_nonneg q)
       simp only [n, Nat.cast_add, Int.natAbs_of_nonneg this, Nat.cast_one,
         sub_add_eq_sub_sub_swap, sub_right_comm, sub_self, zero_sub]
-    have : 0 <= ifp.fr := (nth_stream_fr_nonneg_lt_one stream_nth_eq).left
-    have : 0 <= ifp.fr.num := Rat.num_nonneg.mpr this
+    have : 0 ≤ ifp.fr := (nth_stream_fr_nonneg_lt_one stream_nth_eq).left
+    have : 0 ≤ ifp.fr.num := Rat.num_nonneg.mpr this
     lia
 
 end IntFractPair
 
-/--
-theorem `terminates_of_rat` / 定理 `terminates_of_rat`
+/-- The continued fraction of a rational number terminates. -/
+/-
+**GenContFract.terminates_of_rat** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：terminates_of_rat (q : Rat) : (of q).Terminates
+参数：q : Rat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `GenContFract.IntFractPair.exists_nth_stream_eq_none_of_rat`：exists_nth_s
+tream_eq_none_of_rat (q : Rat) : exists n : Nat, IntFractPair.stream q n = none
+· 使用定理 `GenContFract.IntFractPair.stream_isSeq`：stream_isSeq (v : K) : (IntFract
+Pair.stream v).IsSeq
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `GenContFract.of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none`
+：of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none : (of v).TerminatedA
+t n ↔ IntFractPair.stream v (n + 1) = none
 
-English:
-theorem terminates_of_rat
-  given: (q : Rat)
-  statement: (of q).Terminates
-  proof: Exists.elim (IntFractPair.exists_nth_stream_eq_none_of_rat q) fun n stream_nth_eq_none =>
-    Exists.intro n
-      (have : IntFractPair.stream q (n + 1) = none := IntFractPair.stream_isSeq q stream_nth_eq_none
-      of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none.mpr this)
-
-中文:
-定理 terminates_of_rat
-  条件: (q : 有理数)
-  结论: (of q).Terminates
-  证明: Exists.elim (IntFractPair.exists_nth_stream_eq_none_of_rat q) fun n stream_nth_eq_none =>
-    Exists.intro n
-      (have : IntFractPair.stream q (n + 1) = none := IntFractPair.stream_isSeq q stream_nth_eq_none
-      of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none.mpr this)
-
-Depends on / 依赖: Exists, Exists.elim, Exists.intro, IntFractPair, IntFractPair.exists_nth_stream_eq_none_of_rat, IntFractPair.stream, IntFractPair.stream_isSeq, exists_nth_stream_eq_none_of_rat, of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none, of_terminatedAt_n_iff_succ_nth_intFractPair_stream_eq_none.mpr, stream, stream_isSeq, stream_nth_eq_none
+--- 原说明 ---
+The continued fraction of a rational number terminates.
 -/
-theorem terminates_of_rat (q : Rat) : (of q).Terminates :=
+theorem terminates_of_rat (q : ℚ) : (of q).Terminates :=
   Exists.elim (IntFractPair.exists_nth_stream_eq_none_of_rat q) fun n stream_nth_eq_none =>
     Exists.intro n
       (have : IntFractPair.stream q (n + 1) = none := IntFractPair.stream_isSeq q stream_nth_eq_none
@@ -742,35 +684,35 @@ theorem terminates_of_rat (q : Rat) : (of q).Terminates :=
 
 end TerminatesOfRat
 
-/--
-theorem `terminates_iff_rat` / 定理 `terminates_iff_rat`
+/-- The continued fraction `GenContFract.of v` terminates if and only if `v ∈ ℚ`. -/
+/-
+**GenContFract.terminates_iff_rat** 是 Mathlib 中的一个定理，位于命名空间 `GenContFract`。
+形式化陈述：terminates_iff_rat [IsStrictOrderedRing K] (v : K) : (of v).Terminates ↔ e
+xists q : Rat, v = (q : K)
+参数：v : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GenContFract.exists_rat_eq_of_terminates`：exists_rat_eq_of_terminates (t
+erminates : (of v).Terminates) : exists q : Rat, v = ↑q
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `GenContFract.terminates_of_rat`：terminates_of_rat (q : Rat) : (of q).Ter
+minates
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `GenContFract.of_terminates_iff_of_rat_terminates`：of_terminates_iff_of_r
+at_terminates {v : K} {q : Rat} (v_eq_q : v = (q : K)) : (of v).Terminates ↔ (of
+ q).Terminates
 
-English:
-theorem terminates_iff_rat
-  given: [IsStrictOrderedRing K] (v : K)
-  proof: Iff.intro exists_rat_eq_of_terminates
-    fun exists_q_eq_v : exists q : Rat, v = (↑q : K) =>
-    Exists.elim exists_q_eq_v fun q => fun v_eq_q : v = ↑q =>
-      have : (of q).Terminates := terminates_of_rat q
-      (of_terminates_iff_of_rat_terminates v_eq_q).mpr this
-
-中文:
-定理 terminates_iff_rat
-  条件: [是StrictOrdered环 K] (v : K)
-  证明: Iff.intro exists_rat_eq_of_terminates
-    fun exists_q_eq_v : exists q : Rat, v = (↑q : K) =>
-    Exists.elim exists_q_eq_v fun q => fun v_eq_q : v = ↑q =>
-      have : (of q).Terminates := terminates_of_rat q
-      (of_terminates_iff_of_rat_terminates v_eq_q).mpr this
-
-Depends on / 依赖: Exists, Exists.elim, Iff.intro, Terminates, exists_q_eq_v, exists_rat_eq_of_terminates, of_terminates_iff_of_rat_terminates, terminates_of_rat, v_eq_q
+--- 原说明 ---
+The continued fraction `GenContFract.of v` terminates if and only if `v ∈ ℚ`.
 -/
 theorem terminates_iff_rat [IsStrictOrderedRing K] (v : K) :
-    (of v).Terminates ↔ exists q : Rat, v = (q : K) :=
+    (of v).Terminates ↔ ∃ q : ℚ, v = (q : K) :=
   Iff.intro exists_rat_eq_of_terminates
-    fun exists_q_eq_v : exists q : Rat, v = (↑q : K) =>
+    fun exists_q_eq_v : ∃ q : ℚ, v = (↑q : K) =>
     Exists.elim exists_q_eq_v fun q => fun v_eq_q : v = ↑q =>
       have : (of q).Terminates := terminates_of_rat q
       (of_terminates_iff_of_rat_terminates v_eq_q).mpr this
 
 end GenContFract
+

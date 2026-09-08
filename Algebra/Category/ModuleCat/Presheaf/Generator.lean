@@ -53,20 +53,21 @@ namespace PresheafOfModules
 
 variable {C : Type u} [Category.{v} C] {R : Cᵒᵖ ⥤ RingCat.{v}}
 
-/--
-Definition of `freeYonedaEquiv` / `freeYonedaEquiv` 的定义
+/-- When `R : Cᵒᵖ ⥤ RingCat`, `M : PresheafOfModules R`, and `X : C`, this is the
+bijection `((free R).obj (yoneda.obj X) ⟶ M) ≃ M.obj (Opposite.op X)`. -/
+/-
+**PresheafOfModules.freeYonedaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfModules
+`。
+形式化陈述：freeYonedaEquiv {M : PresheafOfModules.{v} R} {X : C} : ((free R).obj (yon
+eda.obj X) ⟶ M) ≃ M.obj (Opposite.op X)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition freeYonedaEquiv
-  signature: {M : PresheafOfModules.{v} R} {X : C}
-  body: freeHomEquiv.trans yonedaEquiv
-
-中文:
-定义 freeYonedaEquiv
-  签名: {M : 预模层.{v} R} {X : C}
-  定义体: freeHomEquiv.trans yonedaEquiv
-
-Depends on / 依赖: freeHomEquiv, freeHomEquiv.trans, yonedaEquiv
+--- 原说明 ---
+When `R : Cᵒᵖ ⥤ RingCat`, `M : PresheafOfModules R`, and `X : C`, this is the
+bijection `((free R).obj (yoneda.obj X) ⟶ M) ≃ M.obj (Opposite.op X)`.
 -/
 noncomputable def freeYonedaEquiv {M : PresheafOfModules.{v} R} {X : C} :
     ((free R).obj (yoneda.obj X) ⟶ M) ≃ M.obj (Opposite.op X) :=
@@ -74,190 +75,179 @@ noncomputable def freeYonedaEquiv {M : PresheafOfModules.{v} R} {X : C} :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `freeYonedaEquiv_symm_app` / 引理 `freeYonedaEquiv_symm_app`
-
-English:
-lemma freeYonedaEquiv_symm_app
-  statement: (M : PresheafOfModules.{v} R) (X : C)
-  proof: by
-  simp [freeYonedaEquiv, freeHomEquiv, yonedaEquiv]
-
-中文:
-引理 freeYonedaEquiv_symm_app
-  结论: (M : 预模层.{v} R) (X : C)
-  证明: by
-  simp [freeYonedaEquiv, freeHomEquiv, yonedaEquiv]
-
-Depends on / 依赖: freeHomEquiv, freeYonedaEquiv, yonedaEquiv
+/-
+**PresheafOfModules.freeYonedaEquiv_symm_app** 是 Mathlib 中的一个引理，位于命名空间 `Presheaf
+OfModules`。
+形式化陈述：freeYonedaEquiv_symm_app (M : PresheafOfModules.{v} R) (X : C) (x : M.obj 
+(Opposite.op X)) : (freeYonedaEquiv.symm x).app (Opposite.op X) (ModuleCat.freeM
+k (𝟙 _)) = x
+参数：M : PresheafOfModules.{v} R；X : C；x : M.obj (Opposite.op X)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ModuleCat.freeDesc_apply`：freeDesc_apply {X : Type u} {M : ModuleCat.{u}
+ R} (f : X ⟶ M) (x : X) : freeDesc f (freeMk x) = f x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma freeYonedaEquiv_symm_app (M : PresheafOfModules.{v} R) (X : C)
     (x : M.obj (Opposite.op X)) :
     (freeYonedaEquiv.symm x).app (Opposite.op X) (ModuleCat.freeMk (𝟙 _)) = x := by
   simp [freeYonedaEquiv, freeHomEquiv, yonedaEquiv]
-
-/--
-lemma `freeYonedaEquiv_comp` / 引理 `freeYonedaEquiv_comp`
-
-English:
-lemma freeYonedaEquiv_comp
-  statement: {M N : PresheafOfModules.{v} R} {X : C}
-  proof: rfl
-
-中文:
-引理 freeYonedaEquiv_comp
-  结论: {M N : 预模层.{v} R} {X : C}
-  证明: rfl
+/-
+**PresheafOfModules.freeYonedaEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfMo
+dules`。
+形式化陈述：freeYonedaEquiv_comp {M N : PresheafOfModules.{v} R} {X : C} (m : ((free R
+).obj (yoneda.obj X) ⟶ M)) (φ : M ⟶ N) : freeYonedaEquiv (m ≫ φ) = φ.app _ (free
+YonedaEquiv m)
+参数：m : ((free R).obj (yoneda.obj X) ⟶ M)；φ : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma freeYonedaEquiv_comp {M N : PresheafOfModules.{v} R} {X : C}
     (m : ((free R).obj (yoneda.obj X) ⟶ M)) (φ : M ⟶ N) :
     freeYonedaEquiv (m ≫ φ) = φ.app _ (freeYonedaEquiv m) := rfl
 
 variable (R) in
-/--
-Definition of `freeYoneda` / `freeYoneda` 的定义
+/-- The set of `PresheafOfModules.{v} R` consisting of objects of the
+form `(free R).obj (yoneda.obj X)` for some `X`. -/
+/-
+**PresheafOfModules.freeYoneda** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfModules`。
+形式化陈述：freeYoneda : ObjectProperty (PresheafOfModules.{v} R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition freeYoneda
-  signature: : ObjectProperty (PresheafOfModules.{v} R)
-  body: .ofObj (yoneda ⋙ free R).obj
-
-中文:
-定义 freeYoneda
-  签名: : ObjectProperty (预模层.{v} R)
-  定义体: .ofObj (yoneda ⋙ free R).obj
-
-Depends on / 依赖: yoneda
+--- 原说明 ---
+The set of `PresheafOfModules.{v} R` consisting of objects of the
+form `(free R).obj (yoneda.obj X)` for some `X`.
 -/
 def freeYoneda : ObjectProperty (PresheafOfModules.{v} R) := .ofObj (yoneda ⋙ free R).obj
 
 namespace freeYoneda
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ObjectProperty.Small.{u} (freeYoneda R)
-  body: by
-  dsimp [freeYoneda]
-  infer_instance
-
-中文:
-实例 :
-  签名: ObjectProperty.Small.{u} (freeYoneda R)
-  定义体: by
-  dsimp [freeYoneda]
-  infer_instance
-
-Depends on / 依赖: freeYoneda, infer_instance
+/-
+**PresheafOfModules.freeYoneda.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules.fre
+eYoneda`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ObjectProperty.Small.{u} (freeYoneda R) := by
   dsimp [freeYoneda]
   infer_instance
 
 variable (R)
-
-/--
-lemma `isSeparating` / 引理 `isSeparating`
-
-English:
-lemma isSeparating
-  statement: ObjectProperty.IsSeparating (freeYoneda R)
-  proof: by
-  intro M N f₁ f₂ h
-  ext ⟨X⟩ m
-  obtain ⟨g, rfl⟩ := freeYonedaEquiv.surjective m
-  exact congr_arg freeYonedaEquiv (h _ ⟨X⟩ g)
-
-中文:
-引理 isSeparating
-  结论: ObjectProperty.IsSeparating (freeYoneda R)
-  证明: by
-  intro M N f₁ f₂ h
-  ext ⟨X⟩ m
-  obtain ⟨g, rfl⟩ := freeYonedaEquiv.surjective m
-  exact congr_arg freeYonedaEquiv (h _ ⟨X⟩ g)
-
-Depends on / 依赖: congr_arg, freeYonedaEquiv, freeYonedaEquiv.surjective, surjective
+/-
+**PresheafOfModules.freeYoneda.isSeparating** 是 Mathlib 中的一个引理，位于命名空间 `PresheafO
+fModules.freeYoneda`。
+形式化陈述：isSeparating : ObjectProperty.IsSeparating (freeYoneda R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.hom_ext`：hom_ext {f g : M₁ ⟶ M₂} (h : forall (X : Cᵒᵖ)
+, f.app X = g.app X) : f = g
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma isSeparating : ObjectProperty.IsSeparating (freeYoneda R) := by
   intro M N f₁ f₂ h
   ext ⟨X⟩ m
   obtain ⟨g, rfl⟩ := freeYonedaEquiv.surjective m
   exact congr_arg freeYonedaEquiv (h _ ⟨X⟩ g)
-
-/--
-lemma `isDetecting` / 引理 `isDetecting`
-
-English:
-lemma isDetecting
-  statement: ObjectProperty.IsDetecting (freeYoneda R)
-  proof: (isSeparating R).isDetecting
-
-中文:
-引理 isDetecting
-  结论: ObjectProperty.IsDetecting (freeYoneda R)
-  证明: (isSeparating R).isDetecting
-
-Depends on / 依赖: isDetecting, isSeparating
+/-
+**PresheafOfModules.freeYoneda.isDetecting** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOf
+Modules.freeYoneda`。
+形式化陈述：isDetecting : ObjectProperty.IsDetecting (freeYoneda R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsSeparating.isDetecting`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.ObjectProperty C
+}   [CategoryTheory.Balanced C], P.IsSeparat…
+· 使用定理 `CategoryTheory.balanced_of_strongMonoCategory`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [CategoryTheory.StrongMonoCategory C],   Categor
+yTheory.Balanced C
+· 使用定理 `CategoryTheory.strongMonoCategory_of_regularMonoCategory`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] [CategoryTheory.IsRegularMonoCateg
+ory C],   CategoryTheory.StrongMonoCategory C
+· 使用定理 `CategoryTheory.regularMonoCategoryOfNormalMonoCategory`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Limits.HasZ
+eroMorphisms C]   [CategoryTheory.IsNormalMo…
+· 使用定理 `PresheafOfModules.instIsNormalMonoCategory`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] (R : CategoryTheory.Functor Cᵒᵖ RingCat),   Cate
+goryTheory.IsNormalMonoCategory …
+· 使用引理 `PresheafOfModules.freeYoneda.isSeparating`：isSeparating : ObjectProperty
+.IsSeparating (freeYoneda R)
 -/
 lemma isDetecting : ObjectProperty.IsDetecting (freeYoneda R) :=
   (isSeparating R).isDetecting
 
 end freeYoneda
 
-/--
-Instance `wellPowered` / 实例 `wellPowered`
-
-English:
-instance wellPowered
-  signature: {C₀ : Type u} [SmallCategory C₀] (R₀ : C₀ᵒᵖ ⥤ RingCat.{u})
-  body: wellPowered_of_isDetecting (freeYoneda.isDetecting R₀)
-
-中文:
-实例 wellPowered
-  签名: {C₀ : 类型u} [小范畴 C₀] (R₀ : C₀ᵒᵖ ⥤ 环范畴.{u})
-  定义体: wellPowered_of_isDetecting (freeYoneda.isDetecting R₀)
-
-Depends on / 依赖: freeYoneda, freeYoneda.isDetecting, isDetecting, wellPowered_of_isDetecting
+/-
+**PresheafOfModules.wellPowered** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+形式化陈述：wellPowered {C₀ : Type u} [SmallCategory C₀] (R₀ : C₀ᵒᵖ ⥤ RingCat.{u}) : W
+ellPowered.{u} (PresheafOfModules.{u} R₀)
+参数：R₀ : C₀ᵒᵖ ⥤ RingCat.{u}。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.wellPowered_of_isDetecting`：wellPowered_of_isDetecting [H
+asPullbacks C] {𝒢 : ObjectProperty C} [ObjectProperty.Small.{w} 𝒢] [LocallySmall
+.{w} C] (h𝒢 : 𝒢.IsDetecting) : …
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `PresheafOfModules.freeYoneda.instSmall`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {R : CategoryTheory.Functor Cᵒᵖ RingCat},   CategoryThe
+ory.ObjectProperty.Small.{u,…
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用引理 `PresheafOfModules.freeYoneda.isDetecting`：isDetecting : ObjectProperty.I
+sDetecting (freeYoneda R)
 -/
 instance wellPowered {C₀ : Type u} [SmallCategory C₀] (R₀ : C₀ᵒᵖ ⥤ RingCat.{u}) :
     WellPowered.{u} (PresheafOfModules.{u} R₀) :=
   wellPowered_of_isDetecting (freeYoneda.isDetecting R₀)
 
-/--
-Definition of `Elements` / `Elements` 的定义
+/-- The type of elements of a presheaf of modules. A term of this type is a pair
+`⟨X, a⟩` with `X : Cᵒᵖ` and `a : M.obj X`. -/
+/-
+**PresheafOfModules.Elements** 是 Mathlib 中的一个缩写定义，位于命名空间 `PresheafOfModules`。
+形式化陈述：Elements {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}} (M : Pres
+heafOfModules.{v} R)
+参数：M : PresheafOfModules.{v} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Elements
-  signature: {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
-  body: ((toPresheaf R).obj M ⋙ forget Ab).Elements
-
-中文:
-缩写 Elements
-  签名: {C : 类型u₁} [范畴.{v₁} C] {R : Cᵒᵖ ⥤ 环范畴.{u}}
-  定义体: ((toPresheaf R).obj M ⋙ forget Ab).Elements
-
-Depends on / 依赖: Elements, forget, toPresheaf
+--- 原说明 ---
+The type of elements of a presheaf of modules. A term of this type is a pair
+`⟨X, a⟩` with `X : Cᵒᵖ` and `a : M.obj X`.
 -/
 abbrev Elements {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
     (M : PresheafOfModules.{v} R) := ((toPresheaf R).obj M ⋙ forget Ab).Elements
 
-/--
-Definition of `elementsMk` / `elementsMk` 的定义
+/-- Given a presheaf of modules `M`, this is a constructor for the type `M.Elements`. -/
+/-
+**PresheafOfModules.elementsMk** 是 Mathlib 中的一个缩写定义，位于命名空间 `PresheafOfModules`。
+形式化陈述：elementsMk {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}} (M : Pr
+esheafOfModules.{v} R) (X : Cᵒᵖ) (x : M.obj X) : M.Elements
+参数：M : PresheafOfModules.{v} R；X : Cᵒᵖ；x : M.obj X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation elementsMk
-  signature: {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
-  body: Functor.elementsMk _ X x
-
-中文:
-缩写 elementsMk
-  签名: {C : 类型u₁} [范畴.{v₁} C] {R : Cᵒᵖ ⥤ 环范畴.{u}}
-  定义体: Functor.elementsMk _ X x
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, Functor, Functor.elementsMk, ModuleCat, elementsMk
+--- 原说明 ---
+Given a presheaf of modules `M`, this is a constructor for the type `M.Elements`
+.
 -/
 noncomputable abbrev elementsMk {C : Type u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
     (M : PresheafOfModules.{v} R) (X : Cᵒᵖ) (x : M.obj X) : M.Elements :=
@@ -267,59 +257,54 @@ namespace Elements
 
 variable {C : Type u} [Category.{v} C] {R : Cᵒᵖ ⥤ RingCat.{v}} {M : PresheafOfModules.{v} R}
 
-/--
-Definition of `freeYoneda` / `freeYoneda` 的定义
+/-- Given an element `m : M.Elements` of a presheaf of modules `M`, this is the
+free presheaf of modules on the Yoneda presheaf of types corresponding to the
+underlying object of `m`. -/
+/-
+**PresheafOfModules.Elements.freeYoneda** 是 Mathlib 中的一个缩写定义，位于命名空间 `PresheafOfM
+odules.Elements`。
+形式化陈述：freeYoneda (m : M.Elements) : PresheafOfModules.{v} R
+参数：m : M.Elements。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation freeYoneda
-  signature: (m : M.Elements)
-  body: (free R).obj (yoneda.obj m.1.unop)
-
-中文:
-缩写 freeYoneda
-  签名: (m : M.Elements)
-  定义体: (free R).obj (yoneda.obj m.1.unop)
-
-Depends on / 依赖: yoneda, yoneda.obj
+--- 原说明 ---
+Given an element `m : M.Elements` of a presheaf of modules `M`, this is the
+free presheaf of modules on the Yoneda presheaf of types corresponding to the
+underlying object of `m`.
 -/
 noncomputable abbrev freeYoneda (m : M.Elements) :
     PresheafOfModules.{v} R := (free R).obj (yoneda.obj m.1.unop)
 
-/--
-Definition of `fromFreeYoneda` / `fromFreeYoneda` 的定义
+/-- Given an element `m : M.Elements` of a presheaf of modules `M`, this is
+the canonical morphism `m.freeYoneda ⟶ M`. -/
+/-
+**PresheafOfModules.Elements.fromFreeYoneda** 是 Mathlib 中的一个缩写定义，位于命名空间 `Preshea
+fOfModules.Elements`。
+形式化陈述：fromFreeYoneda (m : M.Elements) : m.freeYoneda ⟶ M
+参数：m : M.Elements。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation fromFreeYoneda
-  signature: (m : M.Elements)
-  body: freeYonedaEquiv.symm m.2
-
-中文:
-缩写 fromFreeYoneda
-  签名: (m : M.Elements)
-  定义体: freeYonedaEquiv.symm m.2
-
-Depends on / 依赖: f.hom, freeYonedaEquiv, freeYonedaEquiv.symm
+--- 原说明 ---
+Given an element `m : M.Elements` of a presheaf of modules `M`, this is
+the canonical morphism `m.freeYoneda ⟶ M`.
 -/
 noncomputable abbrev fromFreeYoneda (m : M.Elements) :
     m.freeYoneda ⟶ M :=
   freeYonedaEquiv.symm m.2
-
-/--
-lemma `fromFreeYoneda_app_apply` / 引理 `fromFreeYoneda_app_apply`
-
-English:
-lemma fromFreeYoneda_app_apply
-  given: (m : M.Elements)
-  proof: by
-  apply freeYonedaEquiv_symm_app
-
-中文:
-引理 fromFreeYoneda_app_apply
-  条件: (m : M.Elements)
-  证明: by
-  apply freeYonedaEquiv_symm_app
-
-Depends on / 依赖: freeYonedaEquiv_symm_app
+/-
+**PresheafOfModules.Elements.fromFreeYoneda_app_apply** 是 Mathlib 中的一个引理，位于命名空间 
+`PresheafOfModules.Elements`。
+形式化陈述：fromFreeYoneda_app_apply (m : M.Elements) : m.fromFreeYoneda.app m.1 (Modu
+leCat.freeMk (𝟙 _)) = m.2
+参数：m : M.Elements。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.freeYonedaEquiv_symm_app`：freeYonedaEquiv_symm_app (M 
+: PresheafOfModules.{v} R) (X : C) (x : M.obj (Opposite.op X)) : (freeYonedaEqui
+v.symm x).app (Opposite.op X) (M…
 -/
 lemma fromFreeYoneda_app_apply (m : M.Elements) :
     m.fromFreeYoneda.app m.1 (ModuleCat.freeMk (𝟙 _)) = m.2 := by
@@ -331,119 +316,82 @@ section
 
 variable {C : Type u} [SmallCategory.{u} C] {R : Cᵒᵖ ⥤ RingCat.{u}} (M : PresheafOfModules.{u} R)
 
-/--
-Definition of `freeYonedaCoproduct` / `freeYonedaCoproduct` 的定义
+/-- Given a presheaf of modules `M`, this is the coproduct of
+all free Yoneda presheaves `m.freeYoneda` for all `m : M.Elements`. -/
+/-
+**PresheafOfModules.freeYonedaCoproduct** 是 Mathlib 中的一个缩写定义，位于命名空间 `PresheafOfM
+odules`。
+形式化陈述：freeYonedaCoproduct : PresheafOfModules.{u} R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation freeYonedaCoproduct
-  signature: : PresheafOfModules.{u} R
-  body: ∐ (Elements.freeYoneda (M := M))
-
-中文:
-缩写 freeYonedaCoproduct
-  签名: : 预模层.{u} R
-  定义体: ∐ (Elements.freeYoneda (M := M))
-
-Depends on / 依赖: Elements, Elements.freeYoneda, freeYoneda
+--- 原说明 ---
+Given a presheaf of modules `M`, this is the coproduct of
+all free Yoneda presheaves `m.freeYoneda` for all `m : M.Elements`.
 -/
 noncomputable abbrev freeYonedaCoproduct : PresheafOfModules.{u} R :=
   ∐ (Elements.freeYoneda (M := M))
 
-/--
-Definition of `ιFreeYonedaCoproduct` / `ιFreeYonedaCoproduct` 的定义
+/-- Given an element `m : M.Elements` of a presheaf of modules `M`, this is the
+canonical inclusion `m.freeYoneda ⟶ M.freeYonedaCoproduct`. -/
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个缩写定义，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ιFreeYonedaCoproduct
-  signature: (m : M.Elements)
-  body: Sigma.ι _ m
-
-中文:
-缩写 ιFreeYonedaCoproduct
-  签名: (m : M.Elements)
-  定义体: Sigma.ι _ m
+--- 原说明 ---
+Given an element `m : M.Elements` of a presheaf of modules `M`, this is the
+canonical inclusion `m.freeYoneda ⟶ M.freeYonedaCoproduct`.
 -/
 noncomputable abbrev ιFreeYonedaCoproduct (m : M.Elements) :
     m.freeYoneda ⟶ M.freeYonedaCoproduct :=
   Sigma.ι _ m
 
-/--
-Definition of `fromFreeYonedaCoproduct` / `fromFreeYonedaCoproduct` 的定义
+/-- Given a presheaf of modules `M`, this is the
+canonical morphism `M.freeYonedaCoproduct ⟶ M`. -/
+/-
+**PresheafOfModules.fromFreeYonedaCoproduct** 是 Mathlib 中的一个定义，位于命名空间 `PresheafO
+fModules`。
+形式化陈述：fromFreeYonedaCoproduct : M.freeYonedaCoproduct ⟶ M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromFreeYonedaCoproduct
-  signature: :
-  body: Sigma.desc Elements.fromFreeYoneda
-
-中文:
-定义 fromFreeYonedaCoproduct
-  签名: :
-  定义体: Sigma.desc Elements.fromFreeYoneda
-
-Depends on / 依赖: Elements, Elements.fromFreeYoneda, Sigma.desc, fromFreeYoneda
+--- 原说明 ---
+Given a presheaf of modules `M`, this is the
+canonical morphism `M.freeYonedaCoproduct ⟶ M`.
 -/
 noncomputable def fromFreeYonedaCoproduct :
     M.freeYonedaCoproduct ⟶ M :=
   Sigma.desc Elements.fromFreeYoneda
 
-/--
-Definition of `freeYonedaCoproductMk` / `freeYonedaCoproductMk` 的定义
+/-- Given an element `m` of a presheaf of modules `M`, this is the associated
+canonical section of the presheaf `M.freeYonedaCoproduct` over the object `m.1`. -/
+/-
+**PresheafOfModules.freeYonedaCoproductMk** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfM
+odules`。
+形式化陈述：freeYonedaCoproductMk (m : M.Elements) : M.freeYonedaCoproduct.obj m.1
+参数：m : M.Elements。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition freeYonedaCoproductMk
-  signature: (m : M.Elements)
-  body: (M.ιFreeYonedaCoproduct m).app _ (ModuleCat.freeMk (𝟙 _))
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 freeYonedaCoproductMk
-  签名: (m : M.Elements)
-  定义体: (M.ιFreeYonedaCoproduct m).app _ (ModuleCat.freeMk (𝟙 _))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: ModuleCat, ModuleCat.freeMk, freeMk
+--- 原说明 ---
+Given an element `m` of a presheaf of modules `M`, this is the associated
+canonical section of the presheaf `M.freeYonedaCoproduct` over the object `m.1`.
 -/
 noncomputable def freeYonedaCoproductMk (m : M.Elements) :
     M.freeYonedaCoproduct.obj m.1 :=
   (M.ιFreeYonedaCoproduct m).app _ (ModuleCat.freeMk (𝟙 _))
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι_fromFreeYonedaCoproduct` / 引理 `ι_fromFreeYonedaCoproduct`
-
-English:
-lemma ι_fromFreeYonedaCoproduct
-  given: (m : M.Elements)
-  proof: by
-  apply Sigma.ι_desc
-
-中文:
-引理 ι_fromFreeYonedaCoproduct
-  条件: (m : M.Elements)
-  证明: by
-  apply Sigma.ι_desc
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_fromFreeYonedaCoproduct (m : M.Elements) :
     M.ιFreeYonedaCoproduct m ≫ M.fromFreeYonedaCoproduct = m.fromFreeYoneda := by
   apply Sigma.ι_desc
-
-/--
-lemma `ι_fromFreeYonedaCoproduct_apply` / 引理 `ι_fromFreeYonedaCoproduct_apply`
-
-English:
-lemma ι_fromFreeYonedaCoproduct_apply
-  given: (m : M.Elements) (X : Cᵒᵖ) (x : m.freeYoneda.obj X)
-  proof: ConcreteCategory.congr_hom
-    ((evaluation R X ⋙ forget _).congr_map (M.ι_fromFreeYonedaCoproduct m)) x
-
-中文:
-引理 ι_fromFreeYonedaCoproduct_apply
-  条件: (m : M.Elements) (X : Cᵒᵖ) (x : m.freeYoneda.obj X)
-  证明: ConcreteCategory.congr_hom
-    ((evaluation R X ⋙ forget _).congr_map (M.ι_fromFreeYonedaCoproduct m)) x
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, congr_map, evaluation, forget
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_fromFreeYonedaCoproduct_apply (m : M.Elements) (X : Cᵒᵖ) (x : m.freeYoneda.obj X) :
     M.fromFreeYonedaCoproduct.app X ((M.ιFreeYonedaCoproduct m).app X x) =
@@ -453,140 +401,126 @@ lemma ι_fromFreeYonedaCoproduct_apply (m : M.Elements) (X : Cᵒᵖ) (x : m.fre
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `fromFreeYonedaCoproduct_app_mk` / 引理 `fromFreeYonedaCoproduct_app_mk`
-
-English:
-lemma fromFreeYonedaCoproduct_app_mk
-  given: (m : M.Elements)
-  proof: by
-  rw [freeYonedaCoproductMk]; rw [M.ι_fromFreeYonedaCoproduct_apply m]; rw [m.fromFreeYoneda_app_apply]
-
-中文:
-引理 fromFreeYonedaCoproduct_app_mk
-  条件: (m : M.Elements)
-  证明: by
-  rw [freeYonedaCoproductMk]; rw [M.ι_fromFreeYonedaCoproduct_apply m]; rw [m.fromFreeYoneda_app_apply]
-
-Depends on / 依赖: freeYonedaCoproductMk, fromFreeYoneda_app_apply, m.fromFreeYoneda_app_apply
+/-
+**PresheafOfModules.fromFreeYonedaCoproduct_app_mk** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+esheafOfModules`。
+形式化陈述：fromFreeYonedaCoproduct_app_mk (m : M.Elements) : M.fromFreeYonedaCoproduc
+t.app _ (M.freeYonedaCoproductMk m) = m.2
+参数：m : M.Elements。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PresheafOfModules.freeYonedaCoproductMk.eq_1`：∀ {C : Type u} [inst : Cat
+egoryTheory.SmallCategory C] {R : CategoryTheory.Functor Cᵒᵖ RingCat}   (M : Pre
+sheafOfModules R) (m : M.Elements)…
+· 使用引理 `PresheafOfModules.ι_fromFreeYonedaCoproduct_apply`：ι_fromFreeYonedaCopro
+duct_apply (m : M.Elements) (X : Cᵒᵖ) (x : m.freeYoneda.obj X) : M.fromFreeYoned
+aCoproduct.app X ((M.ιFreeYonedaCoprodu…
+· 使用引理 `PresheafOfModules.Elements.fromFreeYoneda_app_apply`：fromFreeYoneda_app_
+apply (m : M.Elements) : m.fromFreeYoneda.app m.1 (ModuleCat.freeMk (𝟙 _)) = m.2
 -/
 lemma fromFreeYonedaCoproduct_app_mk (m : M.Elements) :
     M.fromFreeYonedaCoproduct.app _ (M.freeYonedaCoproductMk m) = m.2 := by
-  rw [freeYonedaCoproductMk]; rw [M.ι_fromFreeYonedaCoproduct_apply m]; rw [m.fromFreeYoneda_app_apply]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Epi M.fromFreeYonedaCoproduct
-  body: epi_of_surjective (fun X m => ⟨M.freeYonedaCoproductMk (M.elementsMk X m),
-    M.fromFreeYonedaCoproduct_app_mk (M.elementsMk X m)⟩)
-
-中文:
-实例 :
-  签名: 满态射 M.fromFreeYonedaCoproduct
-  定义体: epi_of_surjective (fun X m => ⟨M.freeYonedaCoproductMk (M.elementsMk X m),
-    M.fromFreeYonedaCoproduct_app_mk (M.elementsMk X m)⟩)
-
-Depends on / 依赖: M.elementsMk, M.freeYonedaCoproductMk, M.fromFreeYonedaCoproduct_app_mk, elementsMk, epi_of_surjective, freeYonedaCoproductMk, fromFreeYonedaCoproduct_app_mk
+  rw [freeYonedaCoproductMk, M.ι_fromFreeYonedaCoproduct_apply m, m.fromFreeYoneda_app_apply]
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Epi M.fromFreeYonedaCoproduct :=
-  epi_of_surjective (fun X m => ⟨M.freeYonedaCoproductMk (M.elementsMk X m),
+  epi_of_surjective (fun X m ↦ ⟨M.freeYonedaCoproductMk (M.elementsMk X m),
     M.fromFreeYonedaCoproduct_app_mk (M.elementsMk X m)⟩)
 
-/--
-Definition of `toFreeYonedaCoproduct` / `toFreeYonedaCoproduct` 的定义
+/-- Given a presheaf of modules `M`, this is a morphism between coproducts
+of free presheaves of modules on Yoneda presheaves which gives a presentation
+of the module `M`, see `isColimitFreeYonedaCoproductsCokernelCofork`. -/
+/-
+**PresheafOfModules.toFreeYonedaCoproduct** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfM
+odules`。
+形式化陈述：toFreeYonedaCoproduct : (kernel M.fromFreeYonedaCoproduct).freeYonedaCopro
+duct ⟶ M.freeYonedaCoproduct
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFreeYonedaCoproduct
-  signature: :
-  body: (kernel M.fromFreeYonedaCoproduct).fromFreeYonedaCoproduct ≫ kernel.ι _
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 toFreeYonedaCoproduct
-  签名: :
-  定义体: (kernel M.fromFreeYonedaCoproduct).fromFreeYonedaCoproduct ≫ kernel.ι _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: M.fromFreeYonedaCoproduct, fromFreeYonedaCoproduct, kernel
+--- 原说明 ---
+Given a presheaf of modules `M`, this is a morphism between coproducts
+of free presheaves of modules on Yoneda presheaves which gives a presentation
+of the module `M`, see `isColimitFreeYonedaCoproductsCokernelCofork`.
 -/
 noncomputable def toFreeYonedaCoproduct :
     (kernel M.fromFreeYonedaCoproduct).freeYonedaCoproduct ⟶ M.freeYonedaCoproduct :=
   (kernel M.fromFreeYonedaCoproduct).fromFreeYonedaCoproduct ≫ kernel.ι _
 
 @[reassoc (attr := simp)]
-/--
-lemma `toFreeYonedaCoproduct_fromFreeYonedaCoproduct` / 引理 `toFreeYonedaCoproduct_fromFreeYonedaCoproduct`
-
-English:
-lemma toFreeYonedaCoproduct_fromFreeYonedaCoproduct
-  proof: by
-  simp [toFreeYonedaCoproduct]
-
-中文:
-引理 toFreeYonedaCoproduct_fromFreeYonedaCoproduct
-  证明: by
-  simp [toFreeYonedaCoproduct]
-
-Depends on / 依赖: toFreeYonedaCoproduct
+/-
+**PresheafOfModules.toFreeYonedaCoproduct_fromFreeYonedaCoproduct** 是 Mathlib 中的
+一个引理，位于命名空间 `PresheafOfModules`。
+形式化陈述：toFreeYonedaCoproduct_fromFreeYonedaCoproduct : M.toFreeYonedaCoproduct ≫ 
+M.fromFreeYonedaCoproduct = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.kernel.condition`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] {X 
+Y : C}   (f : X ⟶ Y) [inst_2…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toFreeYonedaCoproduct_fromFreeYonedaCoproduct :
     M.toFreeYonedaCoproduct ≫ M.fromFreeYonedaCoproduct = 0 := by
   simp [toFreeYonedaCoproduct]
 
-/--
-Definition of `freeYonedaCoproductsCokernelCofork` / `freeYonedaCoproductsCokernelCofork` 的定义
+/-- (Colimit) cofork which gives a presentation of a presheaf of modules `M` using
+coproducts of free presheaves of modules on Yoneda presheaves. -/
+/-
+**PresheafOfModules.freeYonedaCoproductsCokernelCofork** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `PresheafOfModules`。
+形式化陈述：freeYonedaCoproductsCokernelCofork : CokernelCofork M.toFreeYonedaCoproduc
+t
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.toFreeYonedaCoproduct_fromFreeYonedaCoproduct`：toFreeY
+onedaCoproduct_fromFreeYonedaCoproduct : M.toFreeYonedaCoproduct ≫ M.fromFreeYon
+edaCoproduct = 0
 
-English:
-abbreviation freeYonedaCoproductsCokernelCofork
-  signature: :
-  body: CokernelCofork.ofπ _ M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct
-
-中文:
-缩写 freeYonedaCoproductsCokernelCofork
-  签名: :
-  定义体: CokernelCofork.ofπ _ M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.of, M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct, toFreeYonedaCoproduct_fromFreeYonedaCoproduct
+--- 原说明 ---
+(Colimit) cofork which gives a presentation of a presheaf of modules `M` using
+coproducts of free presheaves of modules on Yoneda presheaves.
 -/
 noncomputable abbrev freeYonedaCoproductsCokernelCofork :
     CokernelCofork M.toFreeYonedaCoproduct :=
   CokernelCofork.ofπ _ M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct
 
-/--
-Definition of `isColimitFreeYonedaCoproductsCokernelCofork` / `isColimitFreeYonedaCoproductsCokernelCofork` 的定义
+/-- If `M` is a presheaf of modules, the cokernel cofork
+`M.freeYonedaCoproductsCokernelCofork` is a colimit, which means that
+`M` can be expressed as a cokernel of the morphism `M.toFreeYonedaCoproduct`
+between coproducts of free presheaves of modules on Yoneda presheaves. -/
+/-
+**PresheafOfModules.isColimitFreeYonedaCoproductsCokernelCofork** 是 Mathlib 中的一个
+定义，位于命名空间 `PresheafOfModules`。
+形式化陈述：isColimitFreeYonedaCoproductsCokernelCofork : IsColimit M.freeYonedaCoprod
+uctsCokernelCofork
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.toFreeYonedaCoproduct_fromFreeYonedaCoproduct`：toFreeY
+onedaCoproduct_fromFreeYonedaCoproduct : M.toFreeYonedaCoproduct ≫ M.fromFreeYon
+edaCoproduct = 0
 
-English:
-definition isColimitFreeYonedaCoproductsCokernelCofork
-  signature: :
-  body: by
-  let S := ShortComplex.mk _ _ M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct
-  let T := ShortComplex.mk _ _ (kernel.condition M.fromFreeYonedaCoproduct)
-  let φ : S ⟶ T :=
-    { τ₁ := fromFreeYonedaCoproduct _
-      τ₂ := 𝟙 _
-      τ₃ := 𝟙 _ }
-  exact ((ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).2
-    (T.exact_of_f_is_kernel (kernelIsKernel _))).gIsCokernel
-
-中文:
-定义 isColimitFreeYonedaCoproductsCokernelCofork
-  签名: :
-  定义体: by
-  let S := ShortComplex.mk _ _ M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct
-  let T := ShortComplex.mk _ _ (kernel.condition M.fromFreeYonedaCoproduct)
-  let φ : S ⟶ T :=
-    { τ₁ := fromFreeYonedaCoproduct _
-      τ₂ := 𝟙 _
-      τ₃ := 𝟙 _ }
-  exact ((ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).2
-    (T.exact_of_f_is_kernel (kernelIsKernel _))).gIsCokernel
-
-Depends on / 依赖: M.fromFreeYonedaCoproduct, M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct, ShortComplex, ShortComplex.exact_iff_of_epi_of_isIso_of_mono, ShortComplex.mk, T.exact_of_f_is_kernel, condition, exact_iff_of_epi_of_isIso_of_mono, exact_of_f_is_kernel, fromFreeYonedaCoproduct, gIsCokernel, kernel, kernel.condition, kernelIsKernel, toFreeYonedaCoproduct_fromFreeYonedaCoproduct
+--- 原说明 ---
+If `M` is a presheaf of modules, the cokernel cofork
+`M.freeYonedaCoproductsCokernelCofork` is a colimit, which means that
+`M` can be expressed as a cokernel of the morphism `M.toFreeYonedaCoproduct`
+between coproducts of free presheaves of modules on Yoneda presheaves.
 -/
 noncomputable def isColimitFreeYonedaCoproductsCokernelCofork :
     IsColimit M.freeYonedaCoproductsCokernelCofork := by
@@ -602,3 +536,4 @@ noncomputable def isColimitFreeYonedaCoproductsCokernelCofork :
 end
 
 end PresheafOfModules
+

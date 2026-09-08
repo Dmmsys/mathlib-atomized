@@ -56,80 +56,55 @@ namespace Localization
 
 namespace Construction
 
-/--
-Definition of `LocQuiver` / `LocQuiver` 的定义
+/-- If `W : MorphismProperty C`, `LocQuiver W` is a quiver with the same objects
+as `C`, and whose morphisms are those in `C` and placeholders for formal
+inverses of the morphisms in `W`. -/
+/-
+**CategoryTheory.Localization.Construction.LocQuiver** 是 Mathlib 中的一个归纳类型，位于命名空间
+ `CategoryTheory.Localization.Construction`。
+形式化陈述：{C : Type uC} → [inst : CategoryTheory.Category.{uC', uC} C] → CategoryThe
+ory.MorphismProperty C → Type uC
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LocQuiver
-  parameters: (W : MorphismProperty C)
-  axioms and operations (1):
-    - obj : C
-
-中文:
-结构 LocQuiver
-  参数: (W : MorphismProperty C)
-  公理与运算 (1 个):
-    - obj : C
+--- 原说明 ---
+If `W : MorphismProperty C`, `LocQuiver W` is a quiver with the same objects
+as `C`, and whose morphisms are those in `C` and placeholders for formal
+inverses of the morphisms in `W`.
 -/
 structure LocQuiver (W : MorphismProperty C) where
   /-- underlying object -/
   obj : C
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Quiver (LocQuiver W)
-  body: (A.obj ⟶ B.obj) oplus { f : B.obj ⟶ A.obj // W f }
-
-中文:
-实例 :
-  签名: 箭图 (LocQuiver W)
-  定义体: (A.obj ⟶ B.obj) oplus { f : B.obj ⟶ A.obj // W f }
-
-Depends on / 依赖: A.obj, B.obj
+/-
+**CategoryTheory.Localization.Construction.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Localization.Construction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Quiver (LocQuiver W) where Hom A B := (A.obj ⟶ B.obj) oplus { f : B.obj ⟶ A.obj // W f }
+instance : Quiver (LocQuiver W) where Hom A B := (A.obj ⟶ B.obj) ⊕ { f : B.obj ⟶ A.obj // W f }
 
-/--
-Definition of `ιPaths` / `ιPaths` 的定义
+/-- The object in the path category of `LocQuiver W` attached to an object in
+the category `C` -/
+/-
+**CategoryTheory.Localization.Construction.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Localization.Construction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιPaths
-  signature: (X : C)
-  body: ⟨X⟩
-
-中文:
-定义 ιPaths
-  签名: (X : C)
-  定义体: ⟨X⟩
+--- 原说明 ---
+The object in the path category of `LocQuiver W` attached to an object in
+the category `C`
 -/
 def ιPaths (X : C) : Paths (LocQuiver W) :=
   ⟨X⟩
 
 /-- The morphism in the path category associated to a morphism in the original category. -/
 @[simp]
-/--
-Definition of `ψ₁` / `ψ₁` 的定义
+/-
+**CategoryTheory.Localization.Construction.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Localization.Construction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ψ₁
-  signature: {X Y : C} (f : X ⟶ Y)
-  body: (Paths.of _).map (Sum.inl f)
-
-#adaptation_note /-- As of nightly-2026-04-29, the simpNF linter is failing here.
-Assistance investigating this would be appreciated. -/
-
-中文:
-定义 ψ₁
-  签名: {X Y : C} (f : X ⟶ Y)
-  定义体: (Paths.of _).map (Sum.inl f)
-
-#adaptation_note /-- As of nightly-2026-04-29, the simpNF linter is failing here.
-Assistance investigating this would be appreciated. -/
-
-Depends on / 依赖: Paths.of, Sum.inl
+--- 原说明 ---
+The morphism in the path category associated to a morphism in the original categ
+ory.
 -/
 def ψ₁ {X Y : C} (f : X ⟶ Y) : ιPaths W X ⟶ ιPaths W Y := (Paths.of _).map (Sum.inl f)
 
@@ -139,26 +114,13 @@ attribute [nolint simpNF] ψ₁.eq_1
 
 /-- The morphism in the path category corresponding to a formal inverse. -/
 @[simp]
-/--
-Definition of `ψ₂` / `ψ₂` 的定义
+/-
+**CategoryTheory.Localization.Construction.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Localization.Construction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ψ₂
-  signature: {X Y : C} (w : X ⟶ Y) (hw : W w)
-  body: (Paths.of _).map (Sum.inr ⟨w, hw⟩)
-
-#adaptation_note /-- As of nightly-2026-04-29, the simpNF linter is failing here.
-Assistance investigating this would be appreciated. -/
-
-中文:
-定义 ψ₂
-  签名: {X Y : C} (w : X ⟶ Y) (hw : W w)
-  定义体: (Paths.of _).map (Sum.inr ⟨w, hw⟩)
-
-#adaptation_note /-- As of nightly-2026-04-29, the simpNF linter is failing here.
-Assistance investigating this would be appreciated. -/
-
-Depends on / 依赖: Paths.of, Sum.inr
+--- 原说明 ---
+The morphism in the path category corresponding to a formal inverse.
 -/
 def ψ₂ {X Y : C} (w : X ⟶ Y) (hw : W w) : ιPaths W Y ⟶ ιPaths W X :=
   (Paths.of _).map (Sum.inr ⟨w, hw⟩)
@@ -167,26 +129,20 @@ def ψ₂ {X Y : C} (w : X ⟶ Y) (hw : W w) : ιPaths W Y ⟶ ιPaths W X :=
 Assistance investigating this would be appreciated. -/
 attribute [nolint simpNF] ψ₂.eq_1
 
-/--
-Inductive type `relations` / 归纳类型 `relations`
+/-- The relations by which we take the quotient in order to get the localized category. -/
+/-
+**CategoryTheory.Localization.Construction.relations** 是 Mathlib 中的一个归纳类型，位于命名空间
+ `CategoryTheory.Localization.Construction`。
+形式化陈述：{C : Type uC} →   [inst : CategoryTheory.Category.{uC', uC} C] →     (W : 
+CategoryTheory.MorphismProperty C) →       HomRel (CategoryTheory.Paths (Categor
+yTheory.Localization.Construction.LocQuiver W))
+参数：W : CategoryTheory.MorphismProperty C；CategoryTheory.Paths (CategoryTheory.Lo
+calization.Construction.LocQuiver W)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive relations
-  parameters: : HomRel (Paths (LocQuiver W))
-  constructors (4):
-    - id: (X : C) : relations (ψ₁ W (𝟙 X)) (𝟙 _)
-    - comp: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : relations (ψ₁ W (f ≫ g)) (ψ₁ W f ≫ ψ₁ W g)
-    - Winv₁: {X Y : C} (w : X ⟶ Y) (hw : W w) : relations (ψ₁ W w ≫ ψ₂ W w hw) (𝟙 _)
-    - Winv₂: {X Y : C} (w : X ⟶ Y) (hw : W w) : relations (ψ₂ W w hw ≫ ψ₁ W w) (𝟙 _)
-
-中文:
-归纳类型 relations
-  参数: : HomRel (Paths (LocQuiver W))
-  构造子 (4 个):
-    - id: (X : C) : relations (ψ₁ W (𝟙 X)) (𝟙 _)
-    - comp: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : relations (ψ₁ W (f ≫ g)) (ψ₁ W f ≫ ψ₁ W g)
-    - Winv₁: {X Y : C} (w : X ⟶ Y) (hw : W w) : relations (ψ₁ W w ≫ ψ₂ W w hw) (𝟙 _)
-    - Winv₂: {X Y : C} (w : X ⟶ Y) (hw : W w) : relations (ψ₂ W w hw ≫ ψ₁ W w) (𝟙 _)
+--- 原说明 ---
+The relations by which we take the quotient in order to get the localized catego
+ry.
 -/
 inductive relations : HomRel (Paths (LocQuiver W))
   | id (X : C) : relations (ψ₁ W (𝟙 X)) (𝟙 _)
@@ -202,45 +158,32 @@ namespace MorphismProperty
 
 open Localization.Construction
 
-/--
-Definition of `Localization` / `Localization` 的定义
+/-- The localized category obtained by formally inverting the morphisms
+in `W : MorphismProperty C` -/
+/-
+**CategoryTheory.MorphismProperty.Localization** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MorphismProperty`。
+形式化陈述：Localization
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Localization
-  body: CategoryTheory.Quotient (Localization.Construction.relations W)
-deriving Category
-
-中文:
-定义 Localization
-  定义体: CategoryTheory.Quotient (Localization.Construction.relations W)
-deriving Category
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient, Construction, Localization, Localization.Construction.relations, Quotient, functor, map_surjective, relations, small_of_surjective
+--- 原说明 ---
+The localized category obtained by formally inverting the morphisms
+in `W : MorphismProperty C`
 -/
 def Localization :=
   CategoryTheory.Quotient (Localization.Construction.relations W)
 deriving Category
 
-/--
-Definition of `Q` / `Q` 的定义
+/-- The obvious functor `C ⥤ W.Localization` -/
+/-
+**CategoryTheory.MorphismProperty.Q** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mo
+rphismProperty`。
+形式化陈述：Q : C ⥤ W.Localization where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Q
-  signature: : C ⥤ W.Localization where
-  body: (Quotient.functor _).obj ((Paths.of _).obj ⟨X⟩)
-  map f := (Quotient.functor _).map (ψ₁ W f)
-  map_id X := Quotient.sound _ (relations.id X)
-  map_comp f g := Quotient.sound _ (relations.comp f g)
-
-中文:
-定义 Q
-  签名: : C ⥤ W.Localization where
-  定义体: (Quotient.functor _).obj ((Paths.of _).obj ⟨X⟩)
-  map f := (Quotient.functor _).map (ψ₁ W f)
-  map_id X := Quotient.sound _ (relations.id X)
-  map_comp f g := Quotient.sound _ (relations.comp f g)
-
-Depends on / 依赖: Paths.of, Quotient, Quotient.functor, functor
+--- 原说明 ---
+The obvious functor `C ⥤ W.Localization`
 -/
 def Q : C ⥤ W.Localization where
   obj X := (Quotient.functor _).obj ((Paths.of _).obj ⟨X⟩)
@@ -255,26 +198,18 @@ namespace Localization
 namespace Construction
 
 variable {W}
-/--
-Definition of `wIso` / `wIso` 的定义
+/-- The isomorphism in `W.Localization` associated to a morphism `w` in W -/
+/-
+**CategoryTheory.Localization.Construction.wIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Localization.Construction`。
+形式化陈述：wIso {X Y : C} (w : X ⟶ Y) (hw : W w) : Iso (W.Q.obj X) (W.Q.obj Y) where 
+hom
+参数：w : X ⟶ Y；hw : W w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wIso
-  signature: {X Y : C} (w : X ⟶ Y) (hw : W w)
-  body: W.Q.map w
-  inv := (Quotient.functor _).map (by dsimp; exact (Paths.of _).map (Sum.inr ⟨w, hw⟩))
-  hom_inv_id := Quotient.sound _ (relations.Winv₁ w hw)
-  inv_hom_id := Quotient.sound _ (relations.Winv₂ w hw)
-
-中文:
-定义 wIso
-  签名: {X Y : C} (w : X ⟶ Y) (hw : W w)
-  定义体: W.Q.map w
-  inv := (Quotient.functor _).map (by dsimp; exact (Paths.of _).map (Sum.inr ⟨w, hw⟩))
-  hom_inv_id := Quotient.sound _ (relations.Winv₁ w hw)
-  inv_hom_id := Quotient.sound _ (relations.Winv₂ w hw)
-
-Depends on / 依赖: W.Q.map
+--- 原说明 ---
+The isomorphism in `W.Localization` associated to a morphism `w` in W
 -/
 def wIso {X Y : C} (w : X ⟶ Y) (hw : W w) : Iso (W.Q.obj X) (W.Q.obj Y) where
   hom := W.Q.map w
@@ -282,37 +217,26 @@ def wIso {X Y : C} (w : X ⟶ Y) (hw : W w) : Iso (W.Q.obj X) (W.Q.obj Y) where
   hom_inv_id := Quotient.sound _ (relations.Winv₁ w hw)
   inv_hom_id := Quotient.sound _ (relations.Winv₂ w hw)
 
-/--
-Definition of `wInv` / `wInv` 的定义
+/-- The formal inverse in `W.Localization` of a morphism `w` in `W`. -/
+/-
+**CategoryTheory.Localization.Construction.wInv** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cat
+egoryTheory.Localization.Construction`。
+形式化陈述：wInv {X Y : C} (w : X ⟶ Y) (hw : W w)
+参数：w : X ⟶ Y；hw : W w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation wInv
-  signature: {X Y : C} (w : X ⟶ Y) (hw : W w)
-  body: (wIso w hw).inv
-
-中文:
-缩写 wInv
-  签名: {X Y : C} (w : X ⟶ Y) (hw : W w)
-  定义体: (wIso w hw).inv
+--- 原说明 ---
+The formal inverse in `W.Localization` of a morphism `w` in `W`.
 -/
 abbrev wInv {X Y : C} (w : X ⟶ Y) (hw : W w) :=
   (wIso w hw).inv
 
 variable (W) in
-/--
-theorem `_root_.CategoryTheory.MorphismProperty.Q_inverts` / 定理 `_root_.CategoryTheory.MorphismProperty.Q_inverts`
-
-English:
-theorem _root_.CategoryTheory.MorphismProperty.Q_inverts
-  statement: W.IsInvertedBy W.Q
-  proof: fun _ _ w hw =>
-  (Localization.Construction.wIso w hw).isIso_hom
-
-中文:
-定理 _root_.范畴论.MorphismProperty.Q_inverts
-  结论: W.IsInvertedBy W.Q
-  证明: fun _ _ w hw =>
-  (Localization.Construction.wIso w hw).isIso_hom
+/-
+**CategoryTheory.Localization.Construction._root_.CategoryTheory.MorphismPropert
+y.Q_inverts** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Localization.Construction`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.CategoryTheory.MorphismProperty.Q_inverts : W.IsInvertedBy W.Q := fun _ _ w hw =>
   (Localization.Construction.wIso w hw).isIso_hom
@@ -321,34 +245,15 @@ variable (G : C ⥤ D) (hG : W.IsInvertedBy G)
 
 /-- The lifting of a functor to the path category of `LocQuiver W` -/
 @[simps!]
-/--
-Definition of `liftToPathCategory` / `liftToPathCategory` 的定义
+/-
+**CategoryTheory.Localization.Construction.liftToPathCategory** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：liftToPathCategory : Paths (LocQuiver W) ⥤ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftToPathCategory
-  signature: : Paths (LocQuiver W) ⥤ D
-  body: Quiv.lift
-    { obj := fun X => G.obj X.obj
-      map := by
-        intro X Y
-        rintro (f | ⟨g, hg⟩)
-        · exact G.map f
-        · haveI := hG g hg
-          exact inv (G.map g) }
-
-中文:
-定义 liftToPathCategory
-  签名: : Paths (LocQuiver W) ⥤ D
-  定义体: Quiv.lift
-    { obj := fun X => G.obj X.obj
-      map := by
-        intro X Y
-        rintro (f | ⟨g, hg⟩)
-        · exact G.map f
-        · haveI := hG g hg
-          exact inv (G.map g) }
-
-Depends on / 依赖: G.map, G.obj, IsPullback, IsPullback.of_hasPullback, MorphismProperty, MorphismProperty.regularEpi, Quiv.lift, Regular, Regular.regularEpiIsStableUnderBaseChange.of_isPullback, X.obj, infer_instance, of_hasPullback, of_isPullback, regularEpi, regularEpiIsStableUnderBaseChange
+--- 原说明 ---
+The lifting of a functor to the path category of `LocQuiver W`
 -/
 def liftToPathCategory : Paths (LocQuiver W) ⥤ D :=
   Quiv.lift
@@ -363,26 +268,15 @@ def liftToPathCategory : Paths (LocQuiver W) ⥤ D :=
 set_option backward.isDefEq.respectTransparency false in
 /-- The lifting of a functor `C ⥤ D` inverting `W` as a functor `W.Localization ⥤ D` -/
 @[simps!]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.Localization.Construction.lift** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Localization.Construction`。
+形式化陈述：lift : W.Localization ⥤ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : W.Localization ⥤ D
-  body: Quotient.lift (relations W) (liftToPathCategory G hG)
-    (by
-      rintro ⟨X⟩ ⟨Y⟩ f₁ f₂ r
-      rcases r with ⟨⟩ <;> all_goals aesop)
-
-中文:
-定义 lift
-  签名: : W.Localization ⥤ D
-  定义体: Quotient.lift (relations W) (liftToPathCategory G hG)
-    (by
-      rintro ⟨X⟩ ⟨Y⟩ f₁ f₂ r
-      rcases r with ⟨⟩ <;> all_goals aesop)
-
-Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, MorphismProperty, MorphismProperty.regularEpi, Quotient, Quotient.lift, Regular, Regular.regularEpiIsStableUnderBaseChange.of_isPullback, all_goals, infer_instance, liftToPathCategory, of_hasPullback, of_isPullback, regularEpi, regularEpiIsStableUnderBaseChange, relations
+--- 原说明 ---
+The lifting of a functor `C ⥤ D` inverting `W` as a functor `W.Localization ⥤ D`
 -/
 def lift : W.Localization ⥤ D :=
   Quotient.lift (relations W) (liftToPathCategory G hG)
@@ -392,30 +286,27 @@ def lift : W.Localization ⥤ D :=
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `fac` / 定理 `fac`
-
-English:
-theorem fac
-  statement: W.Q ⋙ lift G hG = G
-  proof: Functor.ext (fun _ => rfl)
-    (by
-      intro X Y f
-      simp only [Functor.comp_map, eqToHom_refl, comp_id, id_comp]
-      dsimp [MorphismProperty.Q, Quot.liftOn, Quotient.functor]
-      rw [composePath_toPath])
-
-中文:
-定理 fac
-  结论: W.Q ⋙ lift G hG = G
-  证明: Functor.ext (fun _ => rfl)
-    (by
-      intro X Y f
-      simp only [Functor.comp_map, eqToHom_refl, comp_id, id_comp]
-      dsimp [MorphismProperty.Q, Quot.liftOn, Quotient.functor]
-      rw [composePath_toPath])
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.ext, MorphismProperty, MorphismProperty.Q, Quot.liftOn, Quotient, Quotient.functor, comp_id, comp_map, composePath_toPath, eqToHom_refl, functor, id_comp, liftOn
+/-
+**CategoryTheory.Localization.Construction.fac** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Localization.Construction`。
+形式化陈述：fac : W.Q ⋙ lift G hG = G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ext`：ext {F G : C ⥤ D} (h_obj : forall X, F.obj X
+ = G.obj X) (h_map : forall X Y f, F.map f = eqToHom (h_obj X) ≫ G.map f ≫ eqToH
+om (h_obj Y).sym…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.composePath_toPath`：composePath_toPath {X Y : C} (f : X ⟶
+ Y) : composePath f.toPath = f
 -/
 theorem fac : W.Q ⋙ lift G hG = G :=
   Functor.ext (fun _ => rfl)
@@ -424,57 +315,38 @@ theorem fac : W.Q ⋙ lift G hG = G :=
       simp only [Functor.comp_map, eqToHom_refl, comp_id, id_comp]
       dsimp [MorphismProperty.Q, Quot.liftOn, Quotient.functor]
       rw [composePath_toPath])
-
-/--
-theorem `uniq` / 定理 `uniq`
-
-English:
-theorem uniq
-  given: (G₁ G₂ : W.Localization ⥤ D) (h : W.Q ⋙ G₁ = W.Q ⋙ G₂)
-  statement: G₁ = G₂
-  proof: by
-  suffices h' : Quotient.functor _ ⋙ G₁ = Quotient.functor _ ⋙ G₂ by
-    refine Functor.ext ?_ ?_
-    · rintro ⟨⟨X⟩⟩
-      apply Functor.congr_obj h
-    · rintro ⟨⟨X⟩⟩ ⟨⟨Y⟩⟩ ⟨f⟩
-      apply Functor.congr_hom h'
-  refine Paths.ext_functor ?_ ?_
-  · ext X
-    cases X
-    apply Functor.congr_obj h
-  · rintro ⟨X⟩ ⟨Y⟩ (f | ⟨w, hw⟩)
-    · simpa only using! Functor.congr_hom h f
-    · have hw : W.Q.map w = (wIso w hw).hom := rfl
-      have hw' := Functor.congr_hom h w
-      simp only [Functor.comp_map, hw] at hw'
-      refine Functor.congr_inv_of_congr_hom _ _ _ ?_ ?_ hw'
-      all_goals apply Functor.congr_obj h
-
-中文:
-定理 uniq
-  条件: (G₁ G₂ : W.Localization ⥤ D) (h : W.Q ⋙ G₁ = W.Q ⋙ G₂)
-  结论: G₁ = G₂
-  证明: by
-  suffices h' : Quotient.functor _ ⋙ G₁ = Quotient.functor _ ⋙ G₂ by
-    refine Functor.ext ?_ ?_
-    · rintro ⟨⟨X⟩⟩
-      apply Functor.congr_obj h
-    · rintro ⟨⟨X⟩⟩ ⟨⟨Y⟩⟩ ⟨f⟩
-      apply Functor.congr_hom h'
-  refine Paths.ext_functor ?_ ?_
-  · ext X
-    cases X
-    apply Functor.congr_obj h
-  · rintro ⟨X⟩ ⟨Y⟩ (f | ⟨w, hw⟩)
-    · simpa only using! Functor.congr_hom h f
-    · have hw : W.Q.map w = (wIso w hw).hom := rfl
-      have hw' := Functor.congr_hom h w
-      simp only [Functor.comp_map, hw] at hw'
-      refine Functor.congr_inv_of_congr_hom _ _ _ ?_ ?_ hw'
-      all_goals apply Functor.congr_obj h
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.congr_hom, Functor.congr_inv_of_congr_hom, Functor.congr_obj, Functor.ext, Paths.ext_functor, Quotient, Quotient.functor, W.Q.map, comp_map, congr_hom, congr_inv_of_congr_hom, congr_obj, ext_functor, functor
+/-
+**CategoryTheory.Localization.Construction.uniq** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Localization.Construction`。
+形式化陈述：uniq (G₁ G₂ : W.Localization ⥤ D) (h : W.Q ⋙ G₁ = W.Q ⋙ G₂) : G₁ = G₂
+参数：G₁ G₂ : W.Localization ⥤ D；h : W.Q ⋙ G₁ = W.Q ⋙ G₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Paths.ext_functor`：ext_functor {C} [Category* C] {F G : P
+aths V ⥤ C} (h_obj : F.obj = G.obj) (h : forall (a b : V) (e : a ⟶ b), F.map e.t
+oPath = eqToHom (congr…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.congr_hom`：congr_hom {F G : C ⥤ D} (h : F = G) {X
+ Y} (f : X ⟶ Y) : F.map f = eqToHom (congr_obj h X) ≫ G.map f ≫ eqToHom (congr_o
+bj h Y).symm
+· 使用定理 `CategoryTheory.Functor.congr_inv_of_congr_hom`：congr_inv_of_congr_hom (F
+ G : C ⥤ D) {X Y : C} (e : X ≅ Y) (hX : F.obj X = G.obj X) (hY : F.obj Y = G.obj
+ Y) (h₂ : F.map e.hom = eqToHom (by…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.ext`：ext {F G : C ⥤ D} (h_obj : forall X, F.obj X
+ = G.obj X) (h_map : forall X Y f, F.map f = eqToHom (h_obj X) ≫ G.map f ≫ eqToH
+om (h_obj Y).sym…
 -/
 theorem uniq (G₁ G₂ : W.Localization ⥤ D) (h : W.Q ⋙ G₁ = W.Q ⋙ G₂) : G₁ = G₂ := by
   suffices h' : Quotient.functor _ ⋙ G₁ = Quotient.functor _ ⋙ G₂ by
@@ -499,28 +371,16 @@ variable (W) in
 /-- The canonical bijection between objects in a category and its
 localization with respect to a `MorphismProperty` `W` -/
 @[simps]
-/--
-Definition of `objEquiv` / `objEquiv` 的定义
+/-
+**CategoryTheory.Localization.Construction.objEquiv** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Localization.Construction`。
+形式化陈述：objEquiv : C ≃ W.Localization where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition objEquiv
-  signature: : C ≃ W.Localization where
-  body: W.Q.obj
-  invFun X := X.as.obj
-  right_inv := by
-    rintro ⟨⟨X⟩⟩
-    rfl
-
-中文:
-定义 objEquiv
-  签名: : C ≃ W.Localization where
-  定义体: W.Q.obj
-  invFun X := X.as.obj
-  right_inv := by
-    rintro ⟨⟨X⟩⟩
-    rfl
-
-Depends on / 依赖: W.Q.obj
+--- 原说明 ---
+The canonical bijection between objects in a category and its
+localization with respect to a `MorphismProperty` `W`
 -/
 def objEquiv : C ≃ W.Localization where
   toFun := W.Q.obj
@@ -528,88 +388,56 @@ def objEquiv : C ≃ W.Localization where
   right_inv := by
     rintro ⟨⟨X⟩⟩
     rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: W.Q.EssSurj
-  body: ⟨(objEquiv W).symm Y, ⟨Iso.refl _⟩⟩
-
-中文:
-实例 :
-  签名: W.Q.本质满射
-  定义体: ⟨(objEquiv W).symm Y, ⟨Iso.refl _⟩⟩
-
-Depends on / 依赖: Iso.refl, objEquiv
+/-
+**CategoryTheory.Localization.Construction.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Localization.Construction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : W.Q.EssSurj where
   mem_essImage Y := ⟨(objEquiv W).symm Y, ⟨Iso.refl _⟩⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `morphismProperty_eq_top` / 定理 `morphismProperty_eq_top`
+/-- A `MorphismProperty` in `W.Localization` is satisfied by all
+morphisms in the localized category if it contains the image of the
+morphisms in the original category, the inverses of the morphisms
+in `W` and if it is stable under composition -/
+/-
+**CategoryTheory.Localization.Construction.morphismProperty_eq_top** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：morphismProperty_eq_top (P : MorphismProperty W.Localization) [P.IsStableU
+nderComposition] (hP₁ : forall ⦃X Y : C⦄ (f : X ⟶ Y), P (W.Q.map f)) (hP₂ : fora
+ll ⦃X Y : C⦄ (w : X ⟶ Y) (hw : W w), P (wInv w hw)) : P = ⊤
+参数：P : MorphismProperty W.Localization；hP₁ : forall ⦃X Y : C⦄ (f : X ⟶ Y), P (W.
+Q.map f)；hP₂ : forall ⦃X Y : C⦄ (w : X ⟶ Y) (hw : W w), P (wInv w hw)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.MorphismProperty.top_apply`：top_apply {X Y : C} (f : X ⟶ 
+Y) : (⊤ : MorphismProperty C) f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `CategoryTheory.MorphismProperty.comp_mem`：comp_mem (W : MorphismProperty
+ C) [W.IsStableUnderComposition] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W f) 
+(hg : W g) : W (f ≫ g)
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
 
-English:
-theorem morphismProperty_eq_top
-  statement: (P : MorphismProperty W.Localization)
-  proof: by
-  funext X Y f
-  ext
-  constructor
-  · intro
-    apply MorphismProperty.top_apply
-  · intro
-    let G : _ ⥤ W.Localization := Quotient.functor _
-    have : G.Full := Quotient.full_functor _
-    suffices forall (X₁ X₂ : Paths (LocQuiver W)) (f : X₁ ⟶ X₂), P (G.map f) by
-      rcases X with ⟨⟨X⟩⟩
-      rcases Y with ⟨⟨Y⟩⟩
-      simpa only [Functor.map_preimage] using! this _ _ (G.preimage f)
-    intro X₁ X₂ p
-    induction p with
-    | nil => simpa only [Functor.map_id] using! hP₁ (𝟙 X₁.obj)
-    | @cons X₂ X₃ p g hp =>
-      let p' : X₁ ⟶ X₂ := p
-      rw [show p'.cons g = p' ≫ Quiver.Hom.toPath g by rfl]; rw [G.map_comp]
-      refine P.comp_mem _ _ hp ?_
-      rcases g with (g | ⟨g, hg⟩)
-      · apply hP₁
-      · apply hP₂
-
-中文:
-定理 morphismProperty_eq_top
-  结论: (P : MorphismProperty W.Localization)
-  证明: by
-  funext X Y f
-  ext
-  constructor
-  · intro
-    apply MorphismProperty.top_apply
-  · intro
-    let G : _ ⥤ W.Localization := Quotient.functor _
-    have : G.Full := Quotient.full_functor _
-    suffices forall (X₁ X₂ : Paths (LocQuiver W)) (f : X₁ ⟶ X₂), P (G.map f) by
-      rcases X with ⟨⟨X⟩⟩
-      rcases Y with ⟨⟨Y⟩⟩
-      simpa only [Functor.map_preimage] using! this _ _ (G.preimage f)
-    intro X₁ X₂ p
-    induction p with
-    | nil => simpa only [Functor.map_id] using! hP₁ (𝟙 X₁.obj)
-    | @cons X₂ X₃ p g hp =>
-      let p' : X₁ ⟶ X₂ := p
-      rw [show p'.cons g = p' ≫ Quiver.Hom.toPath g by rfl]; rw [G.map_comp]
-      refine P.comp_mem _ _ hp ?_
-      rcases g with (g | ⟨g, hg⟩)
-      · apply hP₁
-      · apply hP₂
-
-Depends on / 依赖: Functor, Functor.map_id, Functor.map_preimage, G.Full, G.map, G.preimage, LocQuiver, Localization, MorphismProperty, MorphismProperty.top_apply, Quotient, Quotient.full_functor, Quotient.functor, W.Localization, full_functor, functor, map_id, map_preimage, preimage, top_apply
+--- 原说明 ---
+A `MorphismProperty` in `W.Localization` is satisfied by all
+morphisms in the localized category if it contains the image of the
+morphisms in the original category, the inverses of the morphisms
+in `W` and if it is stable under composition
 -/
 theorem morphismProperty_eq_top (P : MorphismProperty W.Localization)
-    [P.IsStableUnderComposition] (hP₁ : forall ⦃X Y : C⦄ (f : X ⟶ Y), P (W.Q.map f))
-    (hP₂ : forall ⦃X Y : C⦄ (w : X ⟶ Y) (hw : W w), P (wInv w hw)) :
+    [P.IsStableUnderComposition] (hP₁ : ∀ ⦃X Y : C⦄ (f : X ⟶ Y), P (W.Q.map f))
+    (hP₂ : ∀ ⦃X Y : C⦄ (w : X ⟶ Y) (hw : W w), P (wInv w hw)) :
     P = ⊤ := by
   funext X Y f
   ext
@@ -619,7 +447,7 @@ theorem morphismProperty_eq_top (P : MorphismProperty W.Localization)
   · intro
     let G : _ ⥤ W.Localization := Quotient.functor _
     have : G.Full := Quotient.full_functor _
-    suffices forall (X₁ X₂ : Paths (LocQuiver W)) (f : X₁ ⟶ X₂), P (G.map f) by
+    suffices ∀ (X₁ X₂ : Paths (LocQuiver W)) (f : X₁ ⟶ X₂), P (G.map f) by
       rcases X with ⟨⟨X⟩⟩
       rcases Y with ⟨⟨Y⟩⟩
       simpa only [Functor.map_preimage] using! this _ _ (G.preimage f)
@@ -628,52 +456,60 @@ theorem morphismProperty_eq_top (P : MorphismProperty W.Localization)
     | nil => simpa only [Functor.map_id] using! hP₁ (𝟙 X₁.obj)
     | @cons X₂ X₃ p g hp =>
       let p' : X₁ ⟶ X₂ := p
-      rw [show p'.cons g = p' ≫ Quiver.Hom.toPath g by rfl]; rw [G.map_comp]
+      rw [show p'.cons g = p' ≫ Quiver.Hom.toPath g by rfl, G.map_comp]
       refine P.comp_mem _ _ hp ?_
       rcases g with (g | ⟨g, hg⟩)
       · apply hP₁
       · apply hP₂
 
-/--
-theorem `morphismProperty_eq_top'` / 定理 `morphismProperty_eq_top'`
+/-- A `MorphismProperty` in `W.Localization` is satisfied by all
+morphisms in the localized category if it contains the image of the
+morphisms in the original category, if is stable under composition
+and if the property is stable by passing to inverses. -/
+/-
+**CategoryTheory.Localization.Construction.morphismProperty_eq_top'** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：morphismProperty_eq_top' (P : MorphismProperty W.Localization) [P.IsStable
+UnderComposition] (hP₁ : forall ⦃X Y : C⦄ (f : X ⟶ Y), P (W.Q.map f)) (hP₂ : for
+all ⦃X Y : W.Localization⦄ (e : X ≅ Y) (_ : P e.hom), P e.inv) : P = ⊤
+参数：P : MorphismProperty W.Localization；hP₁ : forall ⦃X Y : C⦄ (f : X ⟶ Y), P (W.
+Q.map f)；hP₂ : forall ⦃X Y : W.Localization⦄ (e : X ≅ Y) (_ : P e.hom), P e.inv。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.Construction.morphismProperty_eq_top`：morphi
+smProperty_eq_top (P : MorphismProperty W.Localization) [P.IsStableUnderComposit
+ion] (hP₁ : forall ⦃X Y : C⦄ (f : X ⟶ Y), P (W.Q.map f…
 
-English:
-theorem morphismProperty_eq_top'
-  statement: (P : MorphismProperty W.Localization)
-  proof: morphismProperty_eq_top P hP₁ (fun _ _ w _ => hP₂ _ (hP₁ w))
-
-中文:
-定理 morphismProperty_eq_top'
-  结论: (P : MorphismProperty W.Localization)
-  证明: morphismProperty_eq_top P hP₁ (fun _ _ w _ => hP₂ _ (hP₁ w))
-
-Depends on / 依赖: morphismProperty_eq_top
+--- 原说明 ---
+A `MorphismProperty` in `W.Localization` is satisfied by all
+morphisms in the localized category if it contains the image of the
+morphisms in the original category, if is stable under composition
+and if the property is stable by passing to inverses.
 -/
 theorem morphismProperty_eq_top' (P : MorphismProperty W.Localization)
-    [P.IsStableUnderComposition] (hP₁ : forall ⦃X Y : C⦄ (f : X ⟶ Y), P (W.Q.map f))
-    (hP₂ : forall ⦃X Y : W.Localization⦄ (e : X ≅ Y) (_ : P e.hom), P e.inv) : P = ⊤ :=
+    [P.IsStableUnderComposition] (hP₁ : ∀ ⦃X Y : C⦄ (f : X ⟶ Y), P (W.Q.map f))
+    (hP₂ : ∀ ⦃X Y : W.Localization⦄ (e : X ≅ Y) (_ : P e.hom), P e.inv) : P = ⊤ :=
   morphismProperty_eq_top P hP₁ (fun _ _ w _ => hP₂ _ (hP₁ w))
 
 namespace NatTransExtension
 
 variable {F₁ F₂ : W.Localization ⥤ D} (τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂)
 
-/--
-Definition of `app` / `app` 的定义
+/-- If `F₁` and `F₂` are functors `W.Localization ⥤ D` and if we have
+`τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂`, we shall define a natural transformation `F₁ ⟶ F₂`.
+This is the `app` field of this natural transformation. -/
+/-
+**CategoryTheory.Localization.Construction.NatTransExtension.app** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Localization.Construction.NatTransExtension`。
+形式化陈述：app (X : W.Localization) : F₁.obj X ⟶ F₂.obj X
+参数：X : W.Localization。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition app
-  signature: (X : W.Localization)
-  body: eqToHom (congr_arg F₁.obj ((objEquiv W).right_inv X).symm) ≫
-    τ.app ((objEquiv W).invFun X) ≫ eqToHom (congr_arg F₂.obj ((objEquiv W).right_inv X))
-
-中文:
-定义 app
-  签名: (X : W.Localization)
-  定义体: eqToHom (congr_arg F₁.obj ((objEquiv W).right_inv X).symm) ≫
-    τ.app ((objEquiv W).invFun X) ≫ eqToHom (congr_arg F₂.obj ((objEquiv W).right_inv X))
-
-Depends on / 依赖: congr_arg, eqToHom, invFun, objEquiv, right_inv
+--- 原说明 ---
+If `F₁` and `F₂` are functors `W.Localization ⥤ D` and if we have
+`τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂`, we shall define a natural transformation `F₁ ⟶ F₂`.
+This is the `app` field of this natural transformation.
 -/
 def app (X : W.Localization) : F₁.obj X ⟶ F₂.obj X :=
   eqToHom (congr_arg F₁.obj ((objEquiv W).right_inv X).symm) ≫
@@ -681,26 +517,24 @@ def app (X : W.Localization) : F₁.obj X ⟶ F₂.obj X :=
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `app_eq` / 定理 `app_eq`
-
-English:
-theorem app_eq
-  given: (X : C)
-  statement: (app τ) (W.Q.obj X) = τ.app X
-  proof: by
-  simp only [app, eqToHom_refl, comp_id, id_comp]
-  rfl
-
-中文:
-定理 app_eq
-  条件: (X : C)
-  结论: (app τ) (W.Q.obj X) = τ.app X
-  证明: by
-  simp only [app, eqToHom_refl, comp_id, id_comp]
-  rfl
-
-Depends on / 依赖: comp_id, eqToHom_refl, id_comp
+/-
+**CategoryTheory.Localization.Construction.NatTransExtension.app_eq** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Localization.Construction.NatTransExtension`。
+形式化陈述：app_eq (X : C) : (app τ) (W.Q.obj X) = τ.app X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem app_eq (X : C) : (app τ) (W.Q.obj X) = τ.app X := by
   simp only [app, eqToHom_refl, comp_id, id_comp]
@@ -711,44 +545,19 @@ end NatTransExtension
 /-- If `F₁` and `F₂` are functors `W.Localization ⥤ D`, a natural transformation `F₁ ⟶ F₂`
 can be obtained from a natural transformation `W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂`. -/
 @[simps]
-/--
-Definition of `natTransExtension` / `natTransExtension` 的定义
+/-
+**CategoryTheory.Localization.Construction.natTransExtension** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：natTransExtension {F₁ F₂ : W.Localization ⥤ D} (τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂) :
+ F₁ ⟶ F₂ where app
+参数：τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natTransExtension
-  signature: {F₁ F₂ : W.Localization ⥤ D} (τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂)
-  body: NatTransExtension.app τ
-  naturality := by
-    suffices MorphismProperty.naturalityProperty (NatTransExtension.app τ) = ⊤ by
-      intro X Y f
-      simpa only [← this] using! MorphismProperty.top_apply f
-    refine morphismProperty_eq_top'
-      (MorphismProperty.naturalityProperty (NatTransExtension.app τ))
-      ?_ (MorphismProperty.naturalityProperty.stableUnderInverse _)
-    intro X Y f
-    dsimp
-    simpa only [NatTransExtension.app_eq] using! τ.naturality f
-
-@[simp]
-
-中文:
-定义 natTransExtension
-  签名: {F₁ F₂ : W.Localization ⥤ D} (τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂)
-  定义体: NatTransExtension.app τ
-  naturality := by
-    suffices MorphismProperty.naturalityProperty (NatTransExtension.app τ) = ⊤ by
-      intro X Y f
-      simpa only [← this] using! MorphismProperty.top_apply f
-    refine morphismProperty_eq_top'
-      (MorphismProperty.naturalityProperty (NatTransExtension.app τ))
-      ?_ (MorphismProperty.naturalityProperty.stableUnderInverse _)
-    intro X Y f
-    dsimp
-    simpa only [NatTransExtension.app_eq] using! τ.naturality f
-
-@[simp]
-
-Depends on / 依赖: NatTransExtension, NatTransExtension.app
+--- 原说明 ---
+If `F₁` and `F₂` are functors `W.Localization ⥤ D`, a natural transformation `F₁
+ ⟶ F₂`
+can be obtained from a natural transformation `W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂`.
 -/
 def natTransExtension {F₁ F₂ : W.Localization ⥤ D} (τ : W.Q ⋙ F₁ ⟶ W.Q ⋙ F₂) : F₁ ⟶ F₂ where
   app := NatTransExtension.app τ
@@ -764,70 +573,81 @@ def natTransExtension {F₁ F₂ : W.Localization ⥤ D} (τ : W.Q ⋙ F₁ ⟶ 
     simpa only [NatTransExtension.app_eq] using! τ.naturality f
 
 @[simp]
-/--
-theorem `whiskerLeft_natTransExtension` / 定理 `whiskerLeft_natTransExtension`
-
-English:
-theorem whiskerLeft_natTransExtension
-  given: {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G)
-  proof: by cat_disch
-
-中文:
-定理 whiskerLeft_natTransExtension
-  条件: {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Localization.Construction.whiskerLeft_natTransExtension** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：whiskerLeft_natTransExtension {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.
+Q ⋙ G) : whiskerLeft W.Q (natTransExtension τ) = τ
+参数：τ : W.Q ⋙ F ⟶ W.Q ⋙ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Localization.Construction.NatTransExtension.app_eq`：app_e
+q (X : C) : (app τ) (W.Q.obj X) = τ.app X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_natTransExtension {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G) :
     whiskerLeft W.Q (natTransExtension τ) = τ := by cat_disch
 
 -- This is not a simp lemma, because the simp norm form of the left-hand side uses `whiskerLeft`.
-/--
-theorem `natTransExtension_hcomp` / 定理 `natTransExtension_hcomp`
-
-English:
-theorem natTransExtension_hcomp
-  given: {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G)
-  proof: by simp
-
-中文:
-定理 natTransExtension_hcomp
-  条件: {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G)
-  证明: by simp
+/-
+**CategoryTheory.Localization.Construction.natTransExtension_hcomp** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：natTransExtension_hcomp {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G)
+ : 𝟙 W.Q ◫ natTransExtension τ = τ
+参数：τ : W.Q ⋙ F ⟶ W.Q ⋙ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.id_hcomp`：id_hcomp (F : C ⥤ D) {G H : D ⥤ E} (α :
+ G ⟶ H) : 𝟙 F ◫ α = whiskerLeft F α
+· 使用定理 `CategoryTheory.Localization.Construction.whiskerLeft_natTransExtension`：
+whiskerLeft_natTransExtension {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G)
+ : whiskerLeft W.Q (natTransExtension τ) = τ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem natTransExtension_hcomp {F G : W.Localization ⥤ D} (τ : W.Q ⋙ F ⟶ W.Q ⋙ G) :
     𝟙 W.Q ◫ natTransExtension τ = τ := by simp
-
-/--
-theorem `natTrans_hcomp_injective` / 定理 `natTrans_hcomp_injective`
-
-English:
-theorem natTrans_hcomp_injective
-  statement: {F G : W.Localization ⥤ D} {τ₁ τ₂ : F ⟶ G}
-  proof: by
-  ext X
-  have eq := (objEquiv W).right_inv X
-  simp only [objEquiv] at eq
-  rw [← eq]; rw [← NatTrans.id_hcomp_app]; rw [← NatTrans.id_hcomp_app]; rw [h]
-
-中文:
-定理 natTrans_hcomp_injective
-  结论: {F G : W.Localization ⥤ D} {τ₁ τ₂ : F ⟶ G}
-  证明: by
-  ext X
-  have eq := (objEquiv W).right_inv X
-  simp only [objEquiv] at eq
-  rw [← eq]; rw [← NatTrans.id_hcomp_app]; rw [← NatTrans.id_hcomp_app]; rw [h]
-
-Depends on / 依赖: NatTrans, NatTrans.id_hcomp_app, id_hcomp_app, objEquiv, right_inv
+/-
+**CategoryTheory.Localization.Construction.natTrans_hcomp_injective** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：natTrans_hcomp_injective {F G : W.Localization ⥤ D} {τ₁ τ₂ : F ⟶ G} (h : 𝟙
+ W.Q ◫ τ₁ = 𝟙 W.Q ◫ τ₂) : τ₁ = τ₂
+参数：h : 𝟙 W.Q ◫ τ₁ = 𝟙 W.Q ◫ τ₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.id_hcomp_app`：id_hcomp_app {H : E ⥤ C} (α : F ⟶ 
+G) (X : E) : (𝟙 H ◫ α).app X = α.app _
 -/
 theorem natTrans_hcomp_injective {F G : W.Localization ⥤ D} {τ₁ τ₂ : F ⟶ G}
     (h : 𝟙 W.Q ◫ τ₁ = 𝟙 W.Q ◫ τ₂) : τ₁ = τ₂ := by
   ext X
   have eq := (objEquiv W).right_inv X
   simp only [objEquiv] at eq
-  rw [← eq]; rw [← NatTrans.id_hcomp_app]; rw [← NatTrans.id_hcomp_app]; rw [h]
+  rw [← eq, ← NatTrans.id_hcomp_app, ← NatTrans.id_hcomp_app, h]
 
 variable (W D)
 
@@ -836,22 +656,17 @@ namespace WhiskeringLeftEquivalence
 /-- The functor `(W.Localization ⥤ D) ⥤ (W.FunctorsInverting D)` induced by the
 composition with `W.Q : C ⥤ W.Localization`. -/
 @[simps!]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CategoryTheory.Localization.Construction.WhiskeringLeftEquivalence.functor** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Localization.Construction.WhiskeringLeftE
+quivalence`。
+形式化陈述：functor : (W.Localization ⥤ D) ⥤ W.FunctorsInverting D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : (W.Localization ⥤ D) ⥤ W.FunctorsInverting D
-  body: ObjectProperty.lift _ ((whiskeringLeft _ _ D).obj W.Q) fun _ =>
-    MorphismProperty.IsInvertedBy.of_comp W W.Q W.Q_inverts _
-
-中文:
-定义 functor
-  签名: : (W.Localization ⥤ D) ⥤ W.FunctorsInverting D
-  定义体: ObjectProperty.lift _ ((whiskeringLeft _ _ D).obj W.Q) fun _ =>
-    MorphismProperty.IsInvertedBy.of_comp W W.Q W.Q_inverts _
-
-Depends on / 依赖: IsInvertedBy, MorphismProperty, MorphismProperty.IsInvertedBy.of_comp, ObjectProperty, ObjectProperty.lift, Q_inverts, W.Q_inverts, of_comp, whiskeringLeft
+--- 原说明 ---
+The functor `(W.Localization ⥤ D) ⥤ (W.FunctorsInverting D)` induced by the
+composition with `W.Q : C ⥤ W.Localization`.
 -/
 def functor : (W.Localization ⥤ D) ⥤ W.FunctorsInverting D :=
   ObjectProperty.lift _ ((whiskeringLeft _ _ D).obj W.Q) fun _ =>
@@ -861,54 +676,17 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The function `(W.FunctorsInverting D) ⥤ (W.Localization ⥤ D)` induced by
 `Construction.lift`. -/
 @[simps!]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**CategoryTheory.Localization.Construction.WhiskeringLeftEquivalence.inverse** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Localization.Construction.WhiskeringLeftE
+quivalence`。
+形式化陈述：inverse : W.FunctorsInverting D ⥤ W.Localization ⥤ D where obj G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: : W.FunctorsInverting D ⥤ W.Localization ⥤ D where
-  body: lift G.obj G.property
-  map τ := natTransExtension (eqToHom (by rw [fac]) ≫ τ.hom ≫ eqToHom (by rw [fac]))
-  map_id G :=
-    natTrans_hcomp_injective
-      (by
-        rw [natTransExtension_hcomp]
-        ext X
-        simp only [NatTrans.comp_app, eqToHom_app, eqToHom_refl, comp_id, id_comp,
-          NatTrans.hcomp_id_app, NatTrans.id_app, Functor.map_id]
-        rfl)
-  map_comp τ₁ τ₂ :=
-    natTrans_hcomp_injective
-      (by
-        ext X
-        simp only [natTransExtension_hcomp, NatTrans.comp_app, eqToHom_app, eqToHom_refl,
-          id_comp, comp_id, NatTrans.hcomp_app, NatTrans.id_app, Functor.map_id,
-          natTransExtension_app, NatTransExtension.app_eq]
-        rfl)
-
-中文:
-定义 inverse
-  签名: : W.FunctorsInverting D ⥤ W.Localization ⥤ D where
-  定义体: lift G.obj G.property
-  map τ := natTransExtension (eqToHom (by rw [fac]) ≫ τ.hom ≫ eqToHom (by rw [fac]))
-  map_id G :=
-    natTrans_hcomp_injective
-      (by
-        rw [natTransExtension_hcomp]
-        ext X
-        simp only [NatTrans.comp_app, eqToHom_app, eqToHom_refl, comp_id, id_comp,
-          NatTrans.hcomp_id_app, NatTrans.id_app, Functor.map_id]
-        rfl)
-  map_comp τ₁ τ₂ :=
-    natTrans_hcomp_injective
-      (by
-        ext X
-        simp only [natTransExtension_hcomp, NatTrans.comp_app, eqToHom_app, eqToHom_refl,
-          id_comp, comp_id, NatTrans.hcomp_app, NatTrans.id_app, Functor.map_id,
-          natTransExtension_app, NatTransExtension.app_eq]
-        rfl)
-
-Depends on / 依赖: G.obj, G.property, property
+--- 原说明 ---
+The function `(W.FunctorsInverting D) ⥤ (W.Localization ⥤ D)` induced by
+`Construction.lift`.
 -/
 def inverse : W.FunctorsInverting D ⥤ W.Localization ⥤ D where
   obj G := lift G.obj G.property
@@ -933,34 +711,17 @@ def inverse : W.FunctorsInverting D ⥤ W.Localization ⥤ D where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The unit isomorphism of the equivalence of categories `whiskeringLeftEquivalence W D`. -/
 @[simps!]
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-
+**CategoryTheory.Localization.Construction.WhiskeringLeftEquivalence.unitIso** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Localization.Construction.WhiskeringLeftE
+quivalence`。
+形式化陈述：unitIso : 𝟭 (W.Localization ⥤ D) ≅ functor W D ⋙ inverse W D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIso
-  signature: : 𝟭 (W.Localization ⥤ D) ≅ functor W D ⋙ inverse W D
-  body: eqToIso
-    (by
-      refine Functor.ext (fun G => ?_) fun G₁ G₂ τ => ?_
-      · apply uniq
-        simp [functor, inverse, fac]
-      · apply natTrans_hcomp_injective
-        ext X
-        simp)
-
-中文:
-定义 unitIso
-  签名: : 𝟭 (W.Localization ⥤ D) ≅ functor W D ⋙ inverse W D
-  定义体: eqToIso
-    (by
-      refine Functor.ext (fun G => ?_) fun G₁ G₂ τ => ?_
-      · apply uniq
-        simp [functor, inverse, fac]
-      · apply natTrans_hcomp_injective
-        ext X
-        simp)
-
-Depends on / 依赖: Functor, Functor.ext, eqToIso, functor, inverse, natTrans_hcomp_injective
+--- 原说明 ---
+The unit isomorphism of the equivalence of categories `whiskeringLeftEquivalence
+ W D`.
 -/
 def unitIso : 𝟭 (W.Localization ⥤ D) ≅ functor W D ⋙ inverse W D :=
   eqToIso
@@ -975,42 +736,17 @@ def unitIso : 𝟭 (W.Localization ⥤ D) ≅ functor W D ⋙ inverse W D :=
 set_option backward.isDefEq.respectTransparency false in
 /-- The counit isomorphism of the equivalence of categories `WhiskeringLeftEquivalence W D`. -/
 @[simps!]
-/--
-Definition of `counitIso` / `counitIso` 的定义
+/-
+**CategoryTheory.Localization.Construction.WhiskeringLeftEquivalence.counitIso**
+ 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Localization.Construction.WhiskeringLef
+tEquivalence`。
+形式化陈述：counitIso : inverse W D ⋙ functor W D ≅ 𝟭 (W.FunctorsInverting D)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIso
-  signature: : inverse W D ⋙ functor W D ≅ 𝟭 (W.FunctorsInverting D)
-  body: eqToIso
-    (by
-      refine Functor.ext ?_ ?_
-      · rintro ⟨G, hG⟩
-        ext
-        exact fac G hG
-      · rintro ⟨G₁, hG₁⟩ ⟨G₂, hG₂⟩ f
-        ext
-        dsimp
-        -- Why does `rw` work but not `simp`?
-        rw [NatTransExtension.app_eq]; rw [InducedCategory.eqToHom_hom]; rw [InducedCategory.eqToHom_hom]
-        simp)
-
-中文:
-定义 counitIso
-  签名: : inverse W D ⋙ functor W D ≅ 𝟭 (W.FunctorsInverting D)
-  定义体: eqToIso
-    (by
-      refine Functor.ext ?_ ?_
-      · rintro ⟨G, hG⟩
-        ext
-        exact fac G hG
-      · rintro ⟨G₁, hG₁⟩ ⟨G₂, hG₂⟩ f
-        ext
-        dsimp
-        -- Why does `rw` work but not `simp`?
-        rw [NatTransExtension.app_eq]; rw [InducedCategory.eqToHom_hom]; rw [InducedCategory.eqToHom_hom]
-        simp)
-
-Depends on / 依赖: Functor, Functor.ext, eqToIso
+--- 原说明 ---
+The counit isomorphism of the equivalence of categories `WhiskeringLeftEquivalen
+ce W D`.
 -/
 def counitIso : inverse W D ⋙ functor W D ≅ 𝟭 (W.FunctorsInverting D) :=
   eqToIso
@@ -1023,39 +759,25 @@ def counitIso : inverse W D ⋙ functor W D ≅ 𝟭 (W.FunctorsInverting D) :=
         ext
         dsimp
         -- Why does `rw` work but not `simp`?
-        rw [NatTransExtension.app_eq]; rw [InducedCategory.eqToHom_hom]; rw [InducedCategory.eqToHom_hom]
+        rw [NatTransExtension.app_eq, InducedCategory.eqToHom_hom,
+          InducedCategory.eqToHom_hom]
         simp)
 
 end WhiskeringLeftEquivalence
 
-/--
-Definition of `whiskeringLeftEquivalence` / `whiskeringLeftEquivalence` 的定义
+/-- The equivalence of categories `(W.Localization ⥤ D) ≌ (W.FunctorsInverting D)`
+induced by the composition with `W.Q : C ⥤ W.Localization`. -/
+/-
+**CategoryTheory.Localization.Construction.whiskeringLeftEquivalence** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Localization.Construction`。
+形式化陈述：whiskeringLeftEquivalence : W.Localization ⥤ D ≌ W.FunctorsInverting D whe
+re functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskeringLeftEquivalence
-  signature: : W.Localization ⥤ D ≌ W.FunctorsInverting D where
-  body: WhiskeringLeftEquivalence.functor W D
-  inverse := WhiskeringLeftEquivalence.inverse W D
-  unitIso := WhiskeringLeftEquivalence.unitIso W D
-  counitIso := WhiskeringLeftEquivalence.counitIso W D
-  functor_unitIso_comp F := by
-    ext
-    simp only [WhiskeringLeftEquivalence.unitIso_hom, eqToHom_app, eqToHom_refl,
-      WhiskeringLeftEquivalence.counitIso_hom, eqToHom_map, eqToHom_trans]
-
-中文:
-定义 whiskeringLeftEquivalence
-  签名: : W.Localization ⥤ D ≌ W.FunctorsInverting D where
-  定义体: WhiskeringLeftEquivalence.functor W D
-  inverse := WhiskeringLeftEquivalence.inverse W D
-  unitIso := WhiskeringLeftEquivalence.unitIso W D
-  counitIso := WhiskeringLeftEquivalence.counitIso W D
-  functor_unitIso_comp F := by
-    ext
-    simp only [WhiskeringLeftEquivalence.unitIso_hom, eqToHom_app, eqToHom_refl,
-      WhiskeringLeftEquivalence.counitIso_hom, eqToHom_map, eqToHom_trans]
-
-Depends on / 依赖: WhiskeringLeftEquivalence, WhiskeringLeftEquivalence.functor, functor
+--- 原说明 ---
+The equivalence of categories `(W.Localization ⥤ D) ≌ (W.FunctorsInverting D)`
+induced by the composition with `W.Q : C ⥤ W.Localization`.
 -/
 def whiskeringLeftEquivalence : W.Localization ⥤ D ≌ W.FunctorsInverting D where
   functor := WhiskeringLeftEquivalence.functor W D
@@ -1072,3 +794,4 @@ end Construction
 end Localization
 
 end CategoryTheory
+

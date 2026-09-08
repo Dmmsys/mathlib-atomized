@@ -34,20 +34,16 @@ open CategoryTheory.Functor
 universe v₁ v₂ v₃ v₄ u₁ u₂ u₃ u₄
 
 -- morphism levels before object levels. See note [category theory universes].
-/--
-Definition of `Core` / `Core` 的定义
+/-- The core of a category C is the groupoid whose morphisms are all the
+isomorphisms of C. -/
+/-
+**CategoryTheory.Core** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：Type u₁ → Type u₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Core
-  parameters: (C : Type u₁)
-  axioms and operations (1):
-    - of : C
-
-中文:
-结构 核
-  参数: (C : 类型u₁)
-  公理与运算 (1 个):
-    - of : C
+--- 原说明 ---
+The core of a category C is the groupoid whose morphisms are all the
+isomorphisms of C.
 -/
 structure Core (C : Type u₁) where
   /-- The object of the base category underlying an object in `Core C`. -/
@@ -58,70 +54,42 @@ variable {C : Type u₁} [Category.{v₁} C]
 /-- The hom-type between two objects of `Core C`.
 It is defined as a one-field structure to prevent defeq abuses. -/
 @[ext]
-/--
-Definition of `CoreHom` / `CoreHom` 的定义
+/-
+**CategoryTheory.CoreHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} → [CategoryTheory.Category.{v₁, u₁} C] → CategoryTheory.Core
+ C → CategoryTheory.Core C → Type v₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CoreHom
-  parameters: (X Y : Core C)
-  axioms and operations (1):
-    - iso : X.of ≅ Y.of
-
-中文:
-结构 核态射
-  参数: (X Y : 核 C)
-  公理与运算 (1 个):
-    - iso : X.of ≅ Y.of
+--- 原说明 ---
+The hom-type between two objects of `Core C`.
+It is defined as a one-field structure to prevent defeq abuses.
 -/
 structure CoreHom (X Y : Core C) where
   /-- The isomorphism of objects of `C` underlying a morphism in `Core C`. -/
   iso : X.of ≅ Y.of
 
 @[simps! id_iso inv_iso]
-/--
-Instance `coreCategory` / 实例 `coreCategory`
-
-English:
-instance coreCategory
-  signature: : Groupoid.{v₁} (Core C) where
-  body: CoreHom X Y
-id (X : Core C) := .mk Iso.refl X.of
-comp f g := .mk Iso.trans f.iso g.iso
-inv {_ _} f := .mk Iso.symm f.iso
-
-@[simp]
-
-中文:
-实例 coreCategory
-  签名: : 群胚.{v₁} (核 C) where
-  定义体: CoreHom X Y
-id (X : Core C) := .mk Iso.refl X.of
-comp f g := .mk Iso.trans f.iso g.iso
-inv {_ _} f := .mk Iso.symm f.iso
-
-@[simp]
-
-Depends on / 依赖: CoreHom
+/-
+**CategoryTheory.coreCategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：coreCategory : Groupoid.{v₁} (Core C) where Hom (X Y : Core C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance coreCategory : Groupoid.{v₁} (Core C) where
   Hom (X Y : Core C) := CoreHom X Y
-id (X : Core C) := .mk Iso.refl X.of
-comp f g := .mk Iso.trans f.iso g.iso
-inv {_ _} f := .mk Iso.symm f.iso
+  id (X : Core C) := .mk <| Iso.refl X.of
+  comp f g := .mk <| Iso.trans f.iso g.iso
+  inv {_ _} f := .mk <| Iso.symm f.iso
 
 @[simp]
-/--
-lemma `coreCategory_comp_iso` / 引理 `coreCategory_comp_iso`
-
-English:
-lemma coreCategory_comp_iso
-  given: {x y z : Core C} (f : x ⟶ y) (g : y ⟶ z)
-  proof: rfl
-
-中文:
-引理 coreCategory_comp_iso
-  条件: {x y z : 核 C} (f : x ⟶ y) (g : y ⟶ z)
-  证明: rfl
+/-
+**CategoryTheory.coreCategory_comp_iso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：coreCategory_comp_iso {x y z : Core C} (f : x ⟶ y) (g : y ⟶ z) : (f ≫ g).i
+so = f.iso ≪≫ g.iso
+参数：f : x ⟶ y；g : y ⟶ z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coreCategory_comp_iso {x y z : Core C} (f : x ⟶ y) (g : y ⟶ z) :
     (f ≫ g).iso = f.iso ≪≫ g.iso := rfl
@@ -131,48 +99,30 @@ namespace Core
 variable (C) in
 /-- The core of a category is naturally included in the category. -/
 @[simps!]
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-
+**CategoryTheory.Core.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Core`。
+形式化陈述：inclusion : Core C ⥤ C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: : Core C ⥤ C where
-  body: of
-  map f := f.iso.hom
-
-@[ext]
-
-中文:
-定义 inclusion
-  签名: : 核 C ⥤ C where
-  定义体: of
-  map f := f.iso.hom
-
-@[ext]
+--- 原说明 ---
+The core of a category is naturally included in the category.
 -/
 def inclusion : Core C ⥤ C where
   obj := of
   map f := f.iso.hom
 
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  given: {X Y : Core C} {f g : X ⟶ Y} (h : f.iso.hom = g.iso.hom)
-  proof: by
-  apply CoreHom.ext
-  exact Iso.ext h
-
-中文:
-定理 hom_ext
-  条件: {X Y : 核 C} {f g : X ⟶ Y} (h : f.iso.hom = g.iso.hom)
-  证明: by
-  apply CoreHom.ext
-  exact Iso.ext h
-
-Depends on / 依赖: CoreHom, CoreHom.ext, Iso.ext
+/-
+**CategoryTheory.Core.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Core`。
+形式化陈述：hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f.iso.hom = g.iso.hom) : f = g
+参数：h : f.iso.hom = g.iso.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CoreHom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Categ
+ory.{v₁, u₁} C} {X Y : CategoryTheory.Core C}   {x y : CategoryTheory.CoreHom X 
+Y}, x.iso = y.is…
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
 -/
 theorem hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f.iso.hom = g.iso.hom) :
     f = g := by
@@ -181,36 +131,24 @@ theorem hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f.iso.hom = g.iso.hom) :
 
 /-- Construct an isomorphism in `Core C` from an isomorphism in `C`. -/
 @[simps! hom_iso inv_iso]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.Core.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Core`。
+形式化陈述：isoMk {x y : Core C} (e : x.of ≅ y.of) : x ≅ y
+参数：e : x.of ≅ y.of。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isoMk
-  signature: {x y : Core C} (e : x.of ≅ y.of)
-  body: .symm (.mk e) Groupoid.isoEquivHom _ _
-
-中文:
-定义 isoMk
-  签名: {x y : 核 C} (e : x.of ≅ y.of)
-  定义体: .symm (.mk e) Groupoid.isoEquivHom _ _
-
-Depends on / 依赖: Groupoid, Groupoid.isoEquivHom, isoEquivHom
+--- 原说明 ---
+Construct an isomorphism in `Core C` from an isomorphism in `C`.
 -/
 def isoMk {x y : Core C} (e : x.of ≅ y.of) : x ≅ y :=
-.symm (.mk e) Groupoid.isoEquivHom _ _
+  Groupoid.isoEquivHom _ _ |>.symm (.mk e)
 
 variable (C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (inclusion C).Faithful
-
-中文:
-实例 :
-  签名: (inclusion C).忠实
+/-
+**CategoryTheory.Core.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Core`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (inclusion C).Faithful where
 
@@ -220,45 +158,37 @@ variable {C} {G : Type u₂} [Groupoid.{v₂} G]
 -- (consider the two functors from [0] to [1], and the natural transformation between them).
 /-- A functor from a groupoid to a category C factors through the core of C. -/
 @[simps!]
-/--
-Definition of `functorToCore` / `functorToCore` 的定义
+/-
+**CategoryTheory.Core.functorToCore** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Co
+re`。
+形式化陈述：functorToCore (F : G ⥤ C) : G ⥤ Core C where obj X
+参数：F : G ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToCore
-  signature: (F : G ⥤ C)
-  body: .mk F.obj X
-map f := .mk { hom := F.map f, inv := F.map (Groupoid.inv f) }
-
-中文:
-定义 functorToCore
-  签名: (F : G ⥤ C)
-  定义体: .mk F.obj X
-map f := .mk { hom := F.map f, inv := F.map (Groupoid.inv f) }
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A functor from a groupoid to a category C factors through the core of C.
 -/
 def functorToCore (F : G ⥤ C) : G ⥤ Core C where
-obj X := .mk F.obj X
-map f := .mk { hom := F.map f, inv := F.map (Groupoid.inv f) }
+  obj X := .mk <| F.obj X
+  map f := .mk <| { hom := F.map f, inv := F.map (Groupoid.inv f) }
 
 /-- We can functorially associate to any functor from a groupoid to the core of a category `C`,
 a functor from the groupoid to `C`, simply by composing with the embedding `Core C ⥤ C`.
 -/
 @[simps!]
-/--
-Definition of `forgetFunctorToCore` / `forgetFunctorToCore` 的定义
+/-
+**CategoryTheory.Core.forgetFunctorToCore** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Core`。
+形式化陈述：forgetFunctorToCore : (G ⥤ Core C) ⥤ G ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetFunctorToCore
-  signature: : (G ⥤ Core C) ⥤ G ⥤ C
-  body: (whiskeringRight _ _ _).obj (inclusion C)
-
-中文:
-定义 forgetFunctorToCore
-  签名: : (G ⥤ 核 C) ⥤ G ⥤ C
-  定义体: (whiskeringRight _ _ _).obj (inclusion C)
-
-Depends on / 依赖: inclusion, whiskeringRight
+--- 原说明 ---
+We can functorially associate to any functor from a groupoid to the core of a ca
+tegory `C`,
+a functor from the groupoid to `C`, simply by composing with the embedding `Core
+ C ⥤ C`.
 -/
 def forgetFunctorToCore : (G ⥤ Core C) ⥤ G ⥤ C :=
   (whiskeringRight _ _ _).obj (inclusion C)
@@ -273,59 +203,47 @@ variable {D : Type u₂} [Category.{v₂} D]
 
 /-- A functor `C ⥤ D` induces a functor `Core C ⥤ Core D`. -/
 @[simps!]
-/--
-Definition of `core` / `core` 的定义
+/-
+**CategoryTheory.Functor.core** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`
+。
+形式化陈述：core (F : C ⥤ D) : Core C ⥤ Core D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition core
-  signature: (F : C ⥤ D)
-  body: Core.functorToCore (Core.inclusion _ ⋙ F)
-
-中文:
-定义 core
-  签名: (F : C ⥤ D)
-  定义体: Core.functorToCore (Core.inclusion _ ⋙ F)
-
-Depends on / 依赖: Core.functorToCore, Core.inclusion, functorToCore, inclusion
+--- 原说明 ---
+A functor `C ⥤ D` induces a functor `Core C ⥤ Core D`.
 -/
 def core (F : C ⥤ D) : Core C ⥤ Core D := Core.functorToCore (Core.inclusion _ ⋙ F)
 
 variable (C) in
 /-- The core of the identity functor is the identity functor on the cores. -/
 @[simps!]
-/--
-Definition of `coreId` / `coreId` 的定义
+/-
+**CategoryTheory.Functor.coreId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functo
+r`。
+形式化陈述：coreId : (𝟭 C).core ≅ 𝟭 (Core C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreId
-  signature: : (𝟭 C).core ≅ 𝟭 (Core C)
-  body: Iso.refl _
-
-中文:
-定义 coreId
-  签名: : (𝟭 C).core ≅ 𝟭 (核 C)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The core of the identity functor is the identity functor on the cores.
 -/
 def coreId : (𝟭 C).core ≅ 𝟭 (Core C) := Iso.refl _
 
 /-- The core of the composition of F and G is the composition of the cores. -/
 @[simps!]
-/--
-Definition of `coreComp` / `coreComp` 的定义
+/-
+**CategoryTheory.Functor.coreComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：coreComp {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E) : (F ⋙ G)
+.core ≅ F.core ⋙ G.core
+参数：F : C ⥤ D；G : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreComp
-  signature: {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
-  body: Iso.refl _
-
-中文:
-定义 coreComp
-  签名: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The core of the composition of F and G is the composition of the cores.
 -/
 def coreComp {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E) :
     (F ⋙ G).core ≅ F.core ⋙ G.core := Iso.refl _
@@ -334,48 +252,51 @@ def coreComp {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E) :
 ```
                   F.core
             Core C ⥤ Core D
- inclusion C ‖ ‖ inclusion D
-              V V
-              C ⥤ D
+ inclusion C  ‖          ‖  inclusion D
+              V          V
+              C    ⥤    D
                     F
 ```
 thought of as pseudonaturality of `inclusion`,
 when viewing `Core` as a pseudofunctor.
 -/
 @[simps!]
-/--
-Definition of `coreCompInclusionIso` / `coreCompInclusionIso` 的定义
+/-
+**CategoryTheory.Functor.coreCompInclusionIso** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：coreCompInclusionIso (F : C ⥤ D) : F.core ⋙ Core.inclusion D ≅ Core.inclus
+ion C ⋙ F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreCompInclusionIso
-  signature: (F : C ⥤ D)
-  body: Iso.refl _
-
-中文:
-定义 coreCompInclusionIso
-  签名: (F : C ⥤ D)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The natural isomorphism
+```
+                  F.core
+            Core C ⥤ Core D
+ inclusion C  ‖          ‖  inclusion D
+              V          V
+              C    ⥤    D
+                    F
+```
+thought of as pseudonaturality of `inclusion`,
+when viewing `Core` as a pseudofunctor.
 -/
 def coreCompInclusionIso (F : C ⥤ D) :
     F.core ⋙ Core.inclusion D ≅ Core.inclusion C ⋙ F :=
   Iso.refl _
-
-/--
-lemma `core_comp_inclusion` / 引理 `core_comp_inclusion`
-
-English:
-lemma core_comp_inclusion
-  given: (F : C ⥤ D)
-  proof: Functor.ext_of_iso (coreCompInclusionIso F) (by cat_disch)
-
-中文:
-引理 core_comp_inclusion
-  条件: (F : C ⥤ D)
-  证明: Functor.ext_of_iso (coreCompInclusionIso F) (by cat_disch)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, coreCompInclusionIso, ext_of_iso
+/-
+**CategoryTheory.Functor.core_comp_inclusion** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：core_comp_inclusion (F : C ⥤ D) : F.core ⋙ Core.inclusion D = Core.inclusi
+on C ⋙ F
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
 -/
 lemma core_comp_inclusion (F : C ⥤ D) :
     F.core ⋙ Core.inclusion D = Core.inclusion C ⋙ F :=
@@ -390,82 +311,72 @@ variable {D : Type u₂} [Category.{v₂} D]
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A natural isomorphism of functors induces a natural isomorphism between their cores. -/
 @[simps!]
-/--
-Definition of `core` / `core` 的定义
+/-
+**CategoryTheory.Iso.core** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：core {F G : C ⥤ D} (α : F ≅ G) : F.core ≅ G.core
+参数：α : F ≅ G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition core
-  signature: {F G : C ⥤ D} (α : F ≅ G)
-  body: NatIso.ofComponents
-    (fun x => Groupoid.isoEquivHom _ _ |>.symm <| .mk <| α.app x.of)
-
-中文:
-定义 core
-  签名: {F G : C ⥤ D} (α : F ≅ G)
-  定义体: NatIso.ofComponents
-    (fun x => Groupoid.isoEquivHom _ _ |>.symm <| .mk <| α.app x.of)
-
-Depends on / 依赖: Groupoid, Groupoid.isoEquivHom, NatIso, NatIso.ofComponents, isoEquivHom, ofComponents, x.of
+--- 原说明 ---
+A natural isomorphism of functors induces a natural isomorphism between their co
+res.
 -/
 def core {F G : C ⥤ D} (α : F ≅ G) : F.core ≅ G.core :=
   NatIso.ofComponents
-    (fun x => Groupoid.isoEquivHom _ _ |>.symm <| .mk <| α.app x.of)
+    (fun x ↦ Groupoid.isoEquivHom _ _ |>.symm <| .mk <| α.app x.of)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `coreComp` / 引理 `coreComp`
-
-English:
-lemma coreComp
-  given: {F G H : C ⥤ D} (α : F ≅ G) (β : G ≅ H)
-  statement: (α ≪≫ β).core = α.core ≪≫ β.core
-  proof: rfl
-
-中文:
-引理 coreComp
-  条件: {F G H : C ⥤ D} (α : F ≅ G) (β : G ≅ H)
-  结论: (α ≪≫ β).core = α.core ≪≫ β.core
-  证明: rfl
+/-
+**CategoryTheory.Iso.coreComp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：coreComp {F G H : C ⥤ D} (α : F ≅ G) (β : G ≅ H) : (α ≪≫ β).core = α.core 
+≪≫ β.core
+参数：α : F ≅ G；β : G ≅ H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coreComp {F G H : C ⥤ D} (α : F ≅ G) (β : G ≅ H) : (α ≪≫ β).core = α.core ≪≫ β.core := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `coreId` / 引理 `coreId`
-
-English:
-lemma coreId
-  given: {F : C ⥤ D}
-  statement: (Iso.refl F).core = Iso.refl F.core
-  proof: rfl
-
-中文:
-引理 coreId
-  条件: {F : C ⥤ D}
-  结论: (同构.refl F).core = 同构.refl F.core
-  证明: rfl
+/-
+**CategoryTheory.Iso.coreId** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：coreId {F : C ⥤ D} : (Iso.refl F).core = Iso.refl F.core
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coreId {F : C ⥤ D} : (Iso.refl F).core = Iso.refl F.core := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `coreWhiskerLeft` / 引理 `coreWhiskerLeft`
-
-English:
-lemma coreWhiskerLeft
-  given: {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) {G H : D ⥤ E} (η : G ≅ H)
-  proof: by
-  cat_disch
-
-中文:
-引理 coreWhiskerLeft
-  条件: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) {G H : D ⥤ E} (η : G ≅ H)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Iso.coreWhiskerLeft** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.I
+so`。
+形式化陈述：coreWhiskerLeft {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) {G H : D ⥤ E} 
+(η : G ≅ H) : (isoWhiskerLeft F η).core = F.coreComp G ≪≫ isoWhiskerLeft F.core 
+η.core ≪≫ (F.coreComp H).symm
+参数：F : C ⥤ D；η : G ≅ H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Core.hom_ext`：hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f
+.iso.hom = g.iso.hom) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coreWhiskerLeft {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) {G H : D ⥤ E} (η : G ≅ H) :
     (isoWhiskerLeft F η).core =
@@ -473,22 +384,33 @@ lemma coreWhiskerLeft {E : Type u₃} [Category.{v₃} E] (F : C ⥤ D) {G H : D
   cat_disch
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `coreWhiskerRight` / 引理 `coreWhiskerRight`
-
-English:
-lemma coreWhiskerRight
-  given: {E : Type u₃} [Category.{v₃} E] {F G : C ⥤ D} (η : F ≅ G) (H : D ⥤ E)
-  proof: by
-  cat_disch
-
-中文:
-引理 coreWhiskerRight
-  条件: {E : 类型u₃} [范畴.{v₃} E] {F G : C ⥤ D} (η : F ≅ G) (H : D ⥤ E)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Iso.coreWhiskerRight** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Iso`。
+形式化陈述：coreWhiskerRight {E : Type u₃} [Category.{v₃} E] {F G : C ⥤ D} (η : F ≅ G)
+ (H : D ⥤ E) : (isoWhiskerRight η H).core = F.coreComp H ≪≫ isoWhiskerRight η.co
+re H.core ≪≫ (G.coreComp H).symm
+参数：η : F ≅ G；H : D ⥤ E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Core.hom_ext`：hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f
+.iso.hom = g.iso.hom) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coreWhiskerRight {E : Type u₃} [Category.{v₃} E] {F G : C ⥤ D} (η : F ≅ G) (H : D ⥤ E) :
     (isoWhiskerRight η H).core =
@@ -496,22 +418,31 @@ lemma coreWhiskerRight {E : Type u₃} [Category.{v₃} E] {F G : C ⥤ D} (η :
   cat_disch
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `coreLeftUnitor` / 引理 `coreLeftUnitor`
-
-English:
-lemma coreLeftUnitor
-  given: {F : C ⥤ D}
-  proof: by
-  cat_disch
-
-中文:
-引理 coreLeftUnitor
-  条件: {F : C ⥤ D}
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Iso.coreLeftUnitor** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Is
+o`。
+形式化陈述：coreLeftUnitor {F : C ⥤ D} : F.leftUnitor.core = (𝟭 C).coreComp F ≪≫ isoWh
+iskerRight (Functor.coreId C) _ ≪≫ F.core.leftUnitor
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Core.hom_ext`：hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f
+.iso.hom = g.iso.hom) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coreLeftUnitor {F : C ⥤ D} :
     F.leftUnitor.core =
@@ -519,22 +450,28 @@ lemma coreLeftUnitor {F : C ⥤ D} :
   cat_disch
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `coreRightUnitor` / 引理 `coreRightUnitor`
-
-English:
-lemma coreRightUnitor
-  given: {F : C ⥤ D}
-  proof: by
-  cat_disch
-
-中文:
-引理 coreRightUnitor
-  条件: {F : C ⥤ D}
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Iso.coreRightUnitor** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.I
+so`。
+形式化陈述：coreRightUnitor {F : C ⥤ D} : F.rightUnitor.core = (F).coreComp (𝟭 D) ≪≫ i
+soWhiskerLeft _ (Functor.coreId D) ≪≫ F.core.rightUnitor
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Core.hom_ext`：hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f
+.iso.hom = g.iso.hom) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coreRightUnitor {F : C ⥤ D} :
     F.rightUnitor.core =
@@ -542,22 +479,40 @@ lemma coreRightUnitor {F : C ⥤ D} :
   cat_disch
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `coreAssociator` / 引理 `coreAssociator`
-
-English:
-lemma coreAssociator
-  statement: {E : Type u₃} [Category.{v₃} E] {E' : Type u₄} [Category.{v₄} E']
-  proof: by
-  cat_disch
-
-中文:
-引理 coreAssociator
-  结论: {E : 类型u₃} [范畴.{v₃} E] {E' : 类型u₄} [范畴.{v₄} E']
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Iso.coreAssociator** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Is
+o`。
+形式化陈述：coreAssociator {E : Type u₃} [Category.{v₃} E] {E' : Type u₄} [Category.{v
+₄} E'] (F : C ⥤ D) (G : D ⥤ E) (H : E ⥤ E') : (Functor.associator F G H).core = 
+(F ⋙ G).coreComp H ≪≫ isoWhiskerRight (F.coreComp G) H.core ≪≫ Functor.associato
+r F.core G.core H.core ≪≫ (isoWhiskerLeft F.core (G.coreComp H)).symm ≪≫ (F.core
+Comp (G ⋙ H)).symm
+参数：F : C ⥤ D；G : D ⥤ E；H : E ⥤ E'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Core.hom_ext`：hom_ext {X Y : Core C} {f g : X ⟶ Y} (h : f
+.iso.hom = g.iso.hom) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coreAssociator {E : Type u₃} [Category.{v₃} E] {E' : Type u₄} [Category.{v₄} E']
     (F : C ⥤ D) (G : D ⥤ E) (H : E ⥤ E') :
@@ -574,153 +529,126 @@ namespace Core
 variable {G : Type u₂} [Groupoid.{v₂} G]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `functorToCoreCompLeftIso` / `functorToCoreCompLeftIso` 的定义
+/-- The functor `functorToCore (F ⋙ H)` factors through `functorToCore H`. -/
+/-
+**CategoryTheory.Core.functorToCoreCompLeftIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Core`。
+形式化陈述：functorToCoreCompLeftIso {G' : Type u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F 
+: G' ⥤ G) : functorToCore (F ⋙ H) ≅ F ⋙ functorToCore H
+参数：H : G ⥤ C；F : G' ⥤ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToCoreCompLeftIso
-  signature: {G' : Type u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
-  body: NatIso.ofComponents (fun _ => Iso.refl _)
-
-中文:
-定义 functorToCoreCompLeftIso
-  签名: {G' : 类型u₃} [群胚.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The functor `functorToCore (F ⋙ H)` factors through `functorToCore H`.
 -/
 def functorToCoreCompLeftIso {G' : Type u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G) :
     functorToCore (F ⋙ H) ≅ F ⋙ functorToCore H :=
-  NatIso.ofComponents (fun _ => Iso.refl _)
+  NatIso.ofComponents (fun _ ↦ Iso.refl _)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `functorToCore_comp_left` / 引理 `functorToCore_comp_left`
-
-English:
-lemma functorToCore_comp_left
-  given: {G' : Type u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
-  proof: Functor.ext_of_iso (functorToCoreCompLeftIso H F) (by cat_disch)
-
-中文:
-引理 functorToCore_comp_left
-  条件: {G' : 类型u₃} [群胚.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G)
-  证明: Functor.ext_of_iso (functorToCoreCompLeftIso H F) (by cat_disch)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, functorToCoreCompLeftIso
+/-
+**CategoryTheory.Core.functorToCore_comp_left** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Core`。
+形式化陈述：functorToCore_comp_left {G' : Type u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F :
+ G' ⥤ G) : functorToCore (F ⋙ H) = F ⋙ functorToCore H
+参数：H : G ⥤ C；F : G' ⥤ G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
 -/
 lemma functorToCore_comp_left {G' : Type u₃} [Groupoid.{v₃} G'] (H : G ⥤ C) (F : G' ⥤ G) :
     functorToCore (F ⋙ H) = F ⋙ functorToCore H :=
   Functor.ext_of_iso (functorToCoreCompLeftIso H F) (by cat_disch)
 
-/--
-Definition of `functorToCoreCompRightIso` / `functorToCoreCompRightIso` 的定义
+/-- The functor `functorToCore (H ⋙ F)` factors through `functorToCore H`. -/
+/-
+**CategoryTheory.Core.functorToCoreCompRightIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Core`。
+形式化陈述：functorToCoreCompRightIso {C' : Type u₄} [Category.{v₄} C'] (H : G ⥤ C) (F
+ : C ⥤ C') : functorToCore (H ⋙ F) ≅ functorToCore H ⋙ F.core
+参数：H : G ⥤ C；F : C ⥤ C'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToCoreCompRightIso
-  signature: {C' : Type u₄} [Category.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
-  body: Iso.refl _
-
-中文:
-定义 functorToCoreCompRightIso
-  签名: {C' : 类型u₄} [范畴.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The functor `functorToCore (H ⋙ F)` factors through `functorToCore H`.
 -/
 def functorToCoreCompRightIso {C' : Type u₄} [Category.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C') :
     functorToCore (H ⋙ F) ≅ functorToCore H ⋙ F.core :=
   Iso.refl _
-
-/--
-lemma `functorToCore_comp_right` / 引理 `functorToCore_comp_right`
-
-English:
-lemma functorToCore_comp_right
-  given: {C' : Type u₄} [Category.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
-  proof: Functor.ext_of_iso (functorToCoreCompRightIso H F) (by cat_disch)
-
-中文:
-引理 functorToCore_comp_right
-  条件: {C' : 类型u₄} [范畴.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C')
-  证明: Functor.ext_of_iso (functorToCoreCompRightIso H F) (by cat_disch)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, functorToCoreCompRightIso
+/-
+**CategoryTheory.Core.functorToCore_comp_right** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Core`。
+形式化陈述：functorToCore_comp_right {C' : Type u₄} [Category.{v₄} C'] (H : G ⥤ C) (F 
+: C ⥤ C') : functorToCore (H ⋙ F) = functorToCore H ⋙ F.core
+参数：H : G ⥤ C；F : C ⥤ C'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
 -/
 lemma functorToCore_comp_right {C' : Type u₄} [Category.{v₄} C'] (H : G ⥤ C) (F : C ⥤ C') :
     functorToCore (H ⋙ F) = functorToCore H ⋙ F.core :=
   Functor.ext_of_iso (functorToCoreCompRightIso H F) (by cat_disch)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `inclusionCompFunctorToCoreIso` / `inclusionCompFunctorToCoreIso` 的定义
+/-- The functor `functorToCore (𝟭 G)` is a section of `inclusion G`. -/
+/-
+**CategoryTheory.Core.inclusionCompFunctorToCoreIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Core`。
+形式化陈述：inclusionCompFunctorToCoreIso : inclusion G ⋙ functorToCore (𝟭 G) ≅ 𝟭 (Cor
+e G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusionCompFunctorToCoreIso
-  signature: : inclusion G ⋙ functorToCore (𝟭 G) ≅ 𝟭 (Core G)
-  body: NatIso.ofComponents (fun _ => Iso.refl _)
-
-中文:
-定义 inclusionCompFunctorToCoreIso
-  签名: : inclusion G ⋙ functorToCore (𝟭 G) ≅ 𝟭 (核 G)
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The functor `functorToCore (𝟭 G)` is a section of `inclusion G`.
 -/
 def inclusionCompFunctorToCoreIso : inclusion G ⋙ functorToCore (𝟭 G) ≅ 𝟭 (Core G) :=
-  NatIso.ofComponents (fun _ => Iso.refl _)
+  NatIso.ofComponents (fun _ ↦ Iso.refl _)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `inclusion_comp_functorToCore` / 定理 `inclusion_comp_functorToCore`
-
-English:
-theorem inclusion_comp_functorToCore
-  statement: inclusion G ⋙ functorToCore (𝟭 G) = 𝟭 (Core G)
-  proof: Functor.ext_of_iso inclusionCompFunctorToCoreIso (by cat_disch)
-
-中文:
-定理 inclusion_comp_functorToCore
-  结论: inclusion G ⋙ functorToCore (𝟭 G) = 𝟭 (核 G)
-  证明: Functor.ext_of_iso inclusionCompFunctorToCoreIso (by cat_disch)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, inclusionCompFunctorToCoreIso
+/-
+**CategoryTheory.Core.inclusion_comp_functorToCore** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Core`。
+形式化陈述：inclusion_comp_functorToCore : inclusion G ⋙ functorToCore (𝟭 G) = 𝟭 (Core
+ G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
 -/
 theorem inclusion_comp_functorToCore : inclusion G ⋙ functorToCore (𝟭 G) = 𝟭 (Core G) :=
   Functor.ext_of_iso inclusionCompFunctorToCoreIso (by cat_disch)
 
-/--
-Definition of `functorToCoreInclusionIso` / `functorToCoreInclusionIso` 的定义
+/-- The functor `functorToCore (inclusion C)` is isomorphic to the identity on `Core C`. -/
+/-
+**CategoryTheory.Core.functorToCoreInclusionIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Core`。
+形式化陈述：functorToCoreInclusionIso : functorToCore (inclusion C) ≅ 𝟭 (Core C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToCoreInclusionIso
-  signature: : functorToCore (inclusion C) ≅ 𝟭 (Core C)
-  body: Iso.refl _
-
-中文:
-定义 functorToCoreInclusionIso
-  签名: : functorToCore (inclusion C) ≅ 𝟭 (核 C)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The functor `functorToCore (inclusion C)` is isomorphic to the identity on `Core
+ C`.
 -/
 def functorToCoreInclusionIso : functorToCore (inclusion C) ≅ 𝟭 (Core C) :=
   Iso.refl _
-
-/--
-theorem `functorToCore_inclusion` / 定理 `functorToCore_inclusion`
-
-English:
-theorem functorToCore_inclusion
-  statement: functorToCore (inclusion C) = 𝟭 (Core C)
-  proof: Functor.ext_of_iso functorToCoreInclusionIso (by cat_disch)
-
-中文:
-定理 functorToCore_inclusion
-  结论: functorToCore (inclusion C) = 𝟭 (核 C)
-  证明: Functor.ext_of_iso functorToCoreInclusionIso (by cat_disch)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, cat_disch, ext_of_iso, functorToCoreInclusionIso
+/-
+**CategoryTheory.Core.functorToCore_inclusion** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Core`。
+形式化陈述：functorToCore_inclusion : functorToCore (inclusion C) = 𝟭 (Core C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
 -/
 theorem functorToCore_inclusion : functorToCore (inclusion C) = 𝟭 (Core C) :=
   Functor.ext_of_iso functorToCoreInclusionIso (by cat_disch)
@@ -735,26 +663,16 @@ set_option backward.isDefEq.respectTransparency.types false in
 variable {D} in
 /-- Equivalent categories have equivalent cores. -/
 @[simps!]
-/--
-Definition of `core` / `core` 的定义
+/-
+**CategoryTheory.Equivalence.core** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equi
+valence`。
+形式化陈述：core (E : C ≌ D) : Core C ≌ Core D where functor
+参数：E : C ≌ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition core
-  signature: (E : C ≌ D)
-  body: E.functor.core
-  inverse := E.inverse.core
-  unitIso := E.unitIso.core
-  counitIso := E.counitIso.core
-
-中文:
-定义 core
-  签名: (E : C ≌ D)
-  定义体: E.functor.core
-  inverse := E.inverse.core
-  unitIso := E.unitIso.core
-  counitIso := E.counitIso.core
-
-Depends on / 依赖: E.functor.core, functor
+--- 原说明 ---
+Equivalent categories have equivalent cores.
 -/
 def core (E : C ≌ D) : Core C ≌ Core D where
   functor := E.functor.core
@@ -769,22 +687,15 @@ variable (C) in
 /-- Taking the core of a functor is functorial if we discard non-invertible natural
 transformations. -/
 @[simps!]
-/--
-Definition of `coreFunctor` / `coreFunctor` 的定义
+/-
+**CategoryTheory.coreFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coreFunctor : Core (C ⥤ D) ⥤ Core C ⥤ Core D where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coreFunctor
-  signature: : Core (C ⥤ D) ⥤ Core C ⥤ Core D where
-  body: F.of.core
-  map η := η.iso.core.hom
-
-中文:
-定义 coreFunctor
-  签名: : 核 (C ⥤ D) ⥤ 核 C ⥤ 核 D where
-  定义体: F.of.core
-  map η := η.iso.core.hom
-
-Depends on / 依赖: F.of.core
+--- 原说明 ---
+Taking the core of a functor is functorial if we discard non-invertible natural
+transformations.
 -/
 def coreFunctor : Core (C ⥤ D) ⥤ Core C ⥤ Core D where
   obj F := F.of.core
@@ -792,38 +703,29 @@ def coreFunctor : Core (C ⥤ D) ⥤ Core C ⥤ Core D where
 
 end
 
-/--
-Definition of `ofEquivFunctor` / `ofEquivFunctor` 的定义
-
-English:
-definition ofEquivFunctor
-  signature: (m : Type u₁ -> Type u₂) [EquivFunctor m]
-  body: .mk m x.of
-map f := .mk (EquivFunctor.mapEquiv m f.iso.toEquiv).toIso
-  map_id α := by ext x; exact congr_fun (EquivFunctor.map_refl' _) x
-  map_comp f g := by
-    ext
-    simp [Equiv.toIso, EquivFunctor.map_trans']
-
-中文:
-定义 ofEquivFunctor
-  签名: (m : 类型u₁ -> 类型u₂) [等价函子 m]
-  定义体: .mk m x.of
-map f := .mk (EquivFunctor.mapEquiv m f.iso.toEquiv).toIso
-  map_id α := by ext x; exact congr_fun (EquivFunctor.map_refl' _) x
-  map_comp f g := by
-    ext
-    simp [Equiv.toIso, EquivFunctor.map_trans']
-
-Depends on / 依赖: x.of
+/-- `ofEquivFunctor m` lifts a type-level `EquivFunctor`
+to a categorical functor `Core (Type u₁) ⥤ Core (Type u₂)`.
 -/
-def ofEquivFunctor (m : Type u₁ -> Type u₂) [EquivFunctor m] :
+/-
+**CategoryTheory.ofEquivFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ofEquivFunctor (m : Type u₁ -> Type u₂) [EquivFunctor m] : Core (Type u₁) 
+⥤ Core (Type u₂) where obj x
+参数：m : Type u₁ -> Type u₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`ofEquivFunctor m` lifts a type-level `EquivFunctor`
+to a categorical functor `Core (Type u₁) ⥤ Core (Type u₂)`.
+-/
+def ofEquivFunctor (m : Type u₁ → Type u₂) [EquivFunctor m] :
     Core (Type u₁) ⥤ Core (Type u₂) where
-obj x := .mk m x.of
-map f := .mk (EquivFunctor.mapEquiv m f.iso.toEquiv).toIso
+  obj x := .mk <| m x.of
+  map f := .mk <| (EquivFunctor.mapEquiv m f.iso.toEquiv).toIso
   map_id α := by ext x; exact congr_fun (EquivFunctor.map_refl' _) x
   map_comp f g := by
     ext
     simp [Equiv.toIso, EquivFunctor.map_trans']
 
 end CategoryTheory
+

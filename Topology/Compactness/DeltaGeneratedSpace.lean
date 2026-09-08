@@ -35,234 +35,82 @@ are a particular case of the notion of `X`-generated topological spaces where
 
 open TopologicalSpace Topology
 
-/--
-Definition of `DeltaGeneratedSpace` / `DeltaGeneratedSpace` 的定义
+/-- A topological space is Delta-generated if its topology is generated
+by the continuous maps from topological spaces of the form `Fin n → ℝ`. -/
+/-
+**DeltaGeneratedSpace** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：DeltaGeneratedSpace (Y : Type*) [TopologicalSpace Y] : Prop
+参数：Y : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation DeltaGeneratedSpace
-  signature: (Y : Type*) [TopologicalSpace Y]
-  body: IsGeneratedBy (fun n => Fin n -> Real) Y
-
-中文:
-缩写 DeltaGeneratedSpace
-  签名: (Y : 类型) [拓扑空间 Y]
-  定义体: IsGeneratedBy (fun n => Fin n -> Real) Y
-
-Depends on / 依赖: IsGeneratedBy
+--- 原说明 ---
+A topological space is Delta-generated if its topology is generated
+by the continuous maps from topological spaces of the form `Fin n → ℝ`.
 -/
 abbrev DeltaGeneratedSpace (Y : Type*) [TopologicalSpace Y] : Prop :=
-    IsGeneratedBy (fun n => Fin n -> Real) Y
+    IsGeneratedBy (fun n ↦ Fin n → ℝ) Y
 
 namespace DeltaGeneratedSpace
 
 variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
 
-/--
-Definition of `of` / `of` 的定义
+/-- Type synonym to be equipped with the delta-generated topology. -/
+/-
+**DeltaGeneratedSpace.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `DeltaGeneratedSpace`。
+形式化陈述：of : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: : Type _
-  body: WithGeneratedByTopology (fun n => Fin n -> Real) Y
-
-中文:
-缩写 of
-  签名: : 类型 _
-  定义体: WithGeneratedByTopology (fun n => Fin n -> Real) Y
-
-Depends on / 依赖: WithGeneratedByTopology
+--- 原说明 ---
+Type synonym to be equipped with the delta-generated topology.
 -/
-abbrev of : Type _ := WithGeneratedByTopology (fun n => Fin n -> Real) Y
+abbrev of : Type _ := WithGeneratedByTopology (fun n ↦ Fin n → ℝ) Y
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Delta-generated spaces are locally path-connected. -/
+/-
+**DeltaGeneratedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `DeltaGeneratedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [DeltaGeneratedSpace
-  signature: X] :
-  body: by
-  rw [← IsGeneratedBy.generatedBy_eq (X := fun n => Fin n -> Real) (Y := X)]; rw [generatedBy_eq_coinduced]
-  exact LocallyPathConnectedSpace.coinduced _
-
-中文:
-实例 [DeltaGeneratedSpace
-  签名: X] :
-  定义体: by
-  rw [← IsGeneratedBy.generatedBy_eq (X := fun n => Fin n -> Real) (Y := X)]; rw [generatedBy_eq_coinduced]
-  exact LocallyPathConnectedSpace.coinduced _
-
-Depends on / 依赖: IsGeneratedBy, IsGeneratedBy.generatedBy_eq, LocallyPathConnectedSpace, LocallyPathConnectedSpace.coinduced, coinduced, generatedBy_eq, generatedBy_eq_coinduced
+--- 原说明 ---
+Delta-generated spaces are locally path-connected.
 -/
 instance [DeltaGeneratedSpace X] :
     LocallyPathConnectedSpace X := by
-  rw [← IsGeneratedBy.generatedBy_eq (X := fun n => Fin n -> Real) (Y := X)]; rw [generatedBy_eq_coinduced]
+  rw [← IsGeneratedBy.generatedBy_eq (X := fun n ↦ Fin n → ℝ) (Y := X),
+    generatedBy_eq_coinduced]
   exact LocallyPathConnectedSpace.coinduced _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Delta-generated spaces are sequential. -/
+/-
+**DeltaGeneratedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `DeltaGeneratedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [DeltaGeneratedSpace
-  signature: X] : SequentialSpace X
-  body: by
-  rw [← IsGeneratedBy.generatedBy_eq (X := fun n => Fin n -> Real) (Y := X)]
-  exact SequentialSpace.iSup (fun n => SequentialSpace.iSup
-    (fun f => SequentialSpace.coinduced _))
-
-中文:
-实例 [DeltaGeneratedSpace
-  签名: X] : Sequential空间 X
-  定义体: by
-  rw [← IsGeneratedBy.generatedBy_eq (X := fun n => Fin n -> Real) (Y := X)]
-  exact SequentialSpace.iSup (fun n => SequentialSpace.iSup
-    (fun f => SequentialSpace.coinduced _))
-
-Depends on / 依赖: IsGeneratedBy, IsGeneratedBy.generatedBy_eq, SequentialSpace, SequentialSpace.coinduced, SequentialSpace.iSup, coinduced, generatedBy_eq
+--- 原说明 ---
+Delta-generated spaces are sequential.
 -/
 instance [DeltaGeneratedSpace X] : SequentialSpace X := by
-  rw [← IsGeneratedBy.generatedBy_eq (X := fun n => Fin n -> Real) (Y := X)]
-  exact SequentialSpace.iSup (fun n => SequentialSpace.iSup
-    (fun f => SequentialSpace.coinduced _))
+  rw [← IsGeneratedBy.generatedBy_eq (X := fun n ↦ Fin n → ℝ) (Y := X)]
+  exact SequentialSpace.iSup (fun n ↦ SequentialSpace.iSup
+    (fun f ↦ SequentialSpace.coinduced _))
 
 end DeltaGeneratedSpace
 
 /-- The topology coinduced by all maps from ℝⁿ into a space. -/
 @[implicit_reducible, deprecated "Use TopologicalSpace.generatedBy" (since := "2026-04-23")]
-/--
-Definition of `TopologicalSpace.deltaGenerated` / `TopologicalSpace.deltaGenerated` 的定义
+/-
+**TopologicalSpace.deltaGenerated** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：TopologicalSpace.deltaGenerated (X : Type*) [TopologicalSpace X] : Topolog
+icalSpace X
+参数：X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TopologicalSpace.deltaGenerated
-  signature: (X : Type*) [TopologicalSpace X]
-  body: ⨆ f : (n : Nat) × C(((Fin n) -> Real), X), coinduced f.2 inferInstance
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGenerated_eq_coinduced := generatedBy_eq_coinduced
-
-@[deprecated (since := "2026-04-23")] alias deltaGenerated_le := generatedBy_le
-
-@[deprecated (since := "2026-04-23")]
-alias isOpen_deltaGenerated_iff := WithGeneratedByTopology.isOpen_iff
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGenerated_deltaGenerated_eq := generatedBy_generatedBy
-
-@[deprecated (since := "2026-04-23")]
-alias eq_deltaGenerated := IsGeneratedBy.generatedBy_eq
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.isOpen_iff := IsGeneratedBy.isOpen_iff
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.continuous_iff := IsGeneratedBy.continuous_iff
-
-@[deprecated (since := "2026-04-23")]
-alias continuous_to_deltaGenerated := WithGeneratedByTopology.continuous_equiv
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGeneratedSpace_deltaGenerated := IsGeneratedBy.instWithGeneratedByTopology
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGenerated_mono := generatedBy_mono
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.counit := WithGeneratedByTopology.equiv
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.continuous_counit := WithGeneratedByTopology.continuous_equiv
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.coinduced := IsGeneratedBy.coinduced
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.iSup := IsGeneratedBy.iSup
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.sup := IsGeneratedBy.sup
-
-@[deprecated (since := "2026-04-23")]
-alias Topology.IsQuotientMap.deltaGeneratedSpace := Topology.IsQuotientMap.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Quot.deltaGeneratedSpace := Quot.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Quotient.deltaGeneratedSpace := Quotient.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Sum.deltaGeneratedSpace := Sum.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Sigma.deltaGeneratedSpace := Sigma.isGeneratedBy
-
-中文:
-定义 拓扑空间.deltaGenerated
-  签名: (X : 类型) [拓扑空间 X]
-  定义体: ⨆ f : (n : Nat) × C(((Fin n) -> Real), X), coinduced f.2 inferInstance
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGenerated_eq_coinduced := generatedBy_eq_coinduced
-
-@[deprecated (since := "2026-04-23")] alias deltaGenerated_le := generatedBy_le
-
-@[deprecated (since := "2026-04-23")]
-alias isOpen_deltaGenerated_iff := WithGeneratedByTopology.isOpen_iff
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGenerated_deltaGenerated_eq := generatedBy_generatedBy
-
-@[deprecated (since := "2026-04-23")]
-alias eq_deltaGenerated := IsGeneratedBy.generatedBy_eq
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.isOpen_iff := IsGeneratedBy.isOpen_iff
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.continuous_iff := IsGeneratedBy.continuous_iff
-
-@[deprecated (since := "2026-04-23")]
-alias continuous_to_deltaGenerated := WithGeneratedByTopology.continuous_equiv
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGeneratedSpace_deltaGenerated := IsGeneratedBy.instWithGeneratedByTopology
-
-@[deprecated (since := "2026-04-23")]
-alias deltaGenerated_mono := generatedBy_mono
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.counit := WithGeneratedByTopology.equiv
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.continuous_counit := WithGeneratedByTopology.continuous_equiv
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.coinduced := IsGeneratedBy.coinduced
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.iSup := IsGeneratedBy.iSup
-
-@[deprecated (since := "2026-04-23")]
-alias DeltaGeneratedSpace.sup := IsGeneratedBy.sup
-
-@[deprecated (since := "2026-04-23")]
-alias Topology.IsQuotientMap.deltaGeneratedSpace := Topology.IsQuotientMap.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Quot.deltaGeneratedSpace := Quot.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Quotient.deltaGeneratedSpace := Quotient.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Sum.deltaGeneratedSpace := Sum.isGeneratedBy
-
-@[deprecated (since := "2026-04-23")]
-alias Sigma.deltaGeneratedSpace := Sigma.isGeneratedBy
-
-Depends on / 依赖: coinduced
+--- 原说明 ---
+The topology coinduced by all maps from ℝⁿ into a space.
 -/
 def TopologicalSpace.deltaGenerated (X : Type*) [TopologicalSpace X] : TopologicalSpace X :=
-  ⨆ f : (n : Nat) × C(((Fin n) -> Real), X), coinduced f.2 inferInstance
+  ⨆ f : (n : ℕ) × C(((Fin n) → ℝ), X), coinduced f.2 inferInstance
 
 @[deprecated (since := "2026-04-23")]
 alias deltaGenerated_eq_coinduced := generatedBy_eq_coinduced

@@ -20,247 +20,156 @@ public section
 
 open Finset Fintype
 
-variable {ι : Type*} {α : ι -> Type*} [Fintype ι] [DecidableEq ι] [forall i, DecidableEq (α i)]
+variable {ι : Type*} {α : ι → Type*} [Fintype ι] [DecidableEq ι] [∀ i, DecidableEq (α i)]
 
 namespace Pi
 section PartialOrder
-variable [forall i, PartialOrder (α i)]
+variable [∀ i, PartialOrder (α i)]
 
 section LocallyFiniteOrder
-variable [forall i, LocallyFiniteOrder (α i)]
+variable [∀ i, LocallyFiniteOrder (α i)]
 
-/--
-Instance `instLocallyFiniteOrder` / 实例 `instLocallyFiniteOrder`
-
-English:
-instance instLocallyFiniteOrder
-  signature: : LocallyFiniteOrder (forall i, α i)
-  body: LocallyFiniteOrder.ofIcc _ (fun a b => piFinset fun i => Icc (a i) (b i)) fun a b x => by
-    simp_rw [mem_piFinset, mem_Icc, le_def, forall_and]
-
-中文:
-实例 instLocallyFiniteOrder
-  签名: : 局部有限序 (对任意 i, α i)
-  定义体: LocallyFiniteOrder.ofIcc _ (fun a b => piFinset fun i => Icc (a i) (b i)) fun a b x => by
-    simp_rw [mem_piFinset, mem_Icc, le_def, forall_and]
-
-Depends on / 依赖: LocallyFiniteOrder, LocallyFiniteOrder.ofIcc, forall_and, le_def, mem_Icc, mem_piFinset, piFinset, simp_rw
+/-
+**Pi.instLocallyFiniteOrder** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：instLocallyFiniteOrder : LocallyFiniteOrder (forall i, α i)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instLocallyFiniteOrder : LocallyFiniteOrder (forall i, α i) :=
+instance instLocallyFiniteOrder : LocallyFiniteOrder (∀ i, α i) :=
   LocallyFiniteOrder.ofIcc _ (fun a b => piFinset fun i => Icc (a i) (b i)) fun a b x => by
     simp_rw [mem_piFinset, mem_Icc, le_def, forall_and]
 
-variable (a b : forall i, α i)
-
-/--
-theorem `Icc_eq` / 定理 `Icc_eq`
-
-English:
-theorem Icc_eq
-  statement: Icc a b = piFinset fun i => Icc (a i) (b i)
-  proof: rfl
-
-中文:
-定理 Icc_eq
-  结论: 闭区间 a b = piFinset fun i => 闭区间 (a i) (b i)
-  证明: rfl
+variable (a b : ∀ i, α i)
+/-
+**Pi.Icc_eq** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：Icc_eq : Icc a b = piFinset fun i => Icc (a i) (b i)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Icc_eq : Icc a b = piFinset fun i => Icc (a i) (b i) :=
   rfl
-
-/--
-theorem `card_Icc` / 定理 `card_Icc`
-
-English:
-theorem card_Icc
-  statement: #(Icc a b) = ∏ i, #(Icc (a i) (b i))
-  proof: card_piFinset _
-
-中文:
-定理 card_Icc
-  结论: #(闭区间 a b) = ∏ i, #(闭区间 (a i) (b i))
-  证明: card_piFinset _
-
-Depends on / 依赖: card_piFinset
+/-
+**Pi.card_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：card_Icc : #(Icc a b) = ∏ i, #(Icc (a i) (b i))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_piFinset`：∀ {ι : Type u_4} {α : ι → Type u_6} [inst : Decid
+ableEq ι] [inst_1 : Fintype ι] (s : (i : ι) → Finset (α i)),   (Fintype.piFinset
+ s).card = …
 -/
 theorem card_Icc : #(Icc a b) = ∏ i, #(Icc (a i) (b i)) :=
   card_piFinset _
-
-/--
-theorem `card_Ico` / 定理 `card_Ico`
-
-English:
-theorem card_Ico
-  statement: #(Ico a b) = ∏ i, #(Icc (a i) (b i)) - 1
-  proof: by
-  rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-中文:
-定理 card_Ico
-  结论: #(左闭右开区间 a b) = ∏ i, #(闭区间 (a i) (b i)) - 1
-  证明: by
-  rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-Depends on / 依赖: card_Icc, card_Ico_eq_card_Icc_sub_one
+/-
+**Pi.card_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：card_Ico : #(Ico a b) = ∏ i, #(Icc (a i) (b i)) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ico_eq_card_Icc_sub_one`：card_Ico_eq_card_Icc_sub_one (a b :
+ α) : #(Ico a b) = #(Icc a b) - 1
+· 使用定理 `Pi.card_Icc`：card_Icc : #(Icc a b) = ∏ i, #(Icc (a i) (b i))
 -/
 theorem card_Ico : #(Ico a b) = ∏ i, #(Icc (a i) (b i)) - 1 := by
-  rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-/--
-theorem `card_Ioc` / 定理 `card_Ioc`
-
-English:
-theorem card_Ioc
-  statement: #(Ioc a b) = ∏ i, #(Icc (a i) (b i)) - 1
-  proof: by
-  rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-中文:
-定理 card_Ioc
-  结论: #(左开右闭区间 a b) = ∏ i, #(闭区间 (a i) (b i)) - 1
-  证明: by
-  rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-Depends on / 依赖: card_Icc, card_Ioc_eq_card_Icc_sub_one
+  rw [card_Ico_eq_card_Icc_sub_one, card_Icc]
+/-
+**Pi.card_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：card_Ioc : #(Ioc a b) = ∏ i, #(Icc (a i) (b i)) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ioc_eq_card_Icc_sub_one`：card_Ioc_eq_card_Icc_sub_one (a b :
+ α) : #(Ioc a b) = #(Icc a b) - 1
+· 使用定理 `Pi.card_Icc`：card_Icc : #(Icc a b) = ∏ i, #(Icc (a i) (b i))
 -/
 theorem card_Ioc : #(Ioc a b) = ∏ i, #(Icc (a i) (b i)) - 1 := by
-  rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-/--
-theorem `card_Ioo` / 定理 `card_Ioo`
-
-English:
-theorem card_Ioo
-  statement: #(Ioo a b) = ∏ i, #(Icc (a i) (b i)) - 2
-  proof: by
-  rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
-
-中文:
-定理 card_Ioo
-  结论: #(开区间 a b) = ∏ i, #(闭区间 (a i) (b i)) - 2
-  证明: by
-  rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
-
-Depends on / 依赖: card_Icc, card_Ioo_eq_card_Icc_sub_two
+  rw [card_Ioc_eq_card_Icc_sub_one, card_Icc]
+/-
+**Pi.card_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：card_Ioo : #(Ioo a b) = ∏ i, #(Icc (a i) (b i)) - 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ioo_eq_card_Icc_sub_two`：card_Ioo_eq_card_Icc_sub_two (a b :
+ α) : #(Ioo a b) = #(Icc a b) - 2
+· 使用定理 `Pi.card_Icc`：card_Icc : #(Icc a b) = ∏ i, #(Icc (a i) (b i))
 -/
 theorem card_Ioo : #(Ioo a b) = ∏ i, #(Icc (a i) (b i)) - 2 := by
-  rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
+  rw [card_Ioo_eq_card_Icc_sub_two, card_Icc]
 
 end LocallyFiniteOrder
 
 section LocallyFiniteOrderBot
-variable [forall i, LocallyFiniteOrderBot (α i)] (b : forall i, α i)
+variable [∀ i, LocallyFiniteOrderBot (α i)] (b : ∀ i, α i)
 
-/--
-Instance `instLocallyFiniteOrderBot` / 实例 `instLocallyFiniteOrderBot`
-
-English:
-instance instLocallyFiniteOrderBot
-  signature: : LocallyFiniteOrderBot (forall i, α i)
-  body: .ofIic _ (fun b => piFinset fun i => Iic (b i)) fun b x => by
-    simp_rw [mem_piFinset, mem_Iic, le_def]
-
-中文:
-实例 instLocallyFiniteOrderBot
-  签名: : LocallyFiniteOrderBot (对任意 i, α i)
-  定义体: .ofIic _ (fun b => piFinset fun i => Iic (b i)) fun b x => by
-    simp_rw [mem_piFinset, mem_Iic, le_def]
-
-Depends on / 依赖: le_def, mem_Iic, mem_piFinset, piFinset, simp_rw
+/-
+**Pi.instLocallyFiniteOrderBot** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：instLocallyFiniteOrderBot : LocallyFiniteOrderBot (forall i, α i)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instLocallyFiniteOrderBot : LocallyFiniteOrderBot (forall i, α i) :=
+instance instLocallyFiniteOrderBot : LocallyFiniteOrderBot (∀ i, α i) :=
   .ofIic _ (fun b => piFinset fun i => Iic (b i)) fun b x => by
     simp_rw [mem_piFinset, mem_Iic, le_def]
-
-/--
-lemma `card_Iic` / 引理 `card_Iic`
-
-English:
-lemma card_Iic
-  statement: #(Iic b) = ∏ i, #(Iic (b i))
-  proof: card_piFinset _
-
-中文:
-引理 card_Iic
-  结论: #(左无界右闭区间 b) = ∏ i, #(左无界右闭区间 (b i))
-  证明: card_piFinset _
-
-Depends on / 依赖: card_piFinset
+/-
+**Pi.card_Iic** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：card_Iic : #(Iic b) = ∏ i, #(Iic (b i))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_piFinset`：∀ {ι : Type u_4} {α : ι → Type u_6} [inst : Decid
+ableEq ι] [inst_1 : Fintype ι] (s : (i : ι) → Finset (α i)),   (Fintype.piFinset
+ s).card = …
 -/
 lemma card_Iic : #(Iic b) = ∏ i, #(Iic (b i)) := card_piFinset _
-/--
-lemma `card_Iio` / 引理 `card_Iio`
-
-English:
-lemma card_Iio
-  statement: #(Iio b) = ∏ i, #(Iic (b i)) - 1
-  proof: by rw [card_Iio_eq_card_Iic_sub_one, card_Iic]
-
-中文:
-引理 card_Iio
-  结论: #(左无界右开区间 b) = ∏ i, #(左无界右闭区间 (b i)) - 1
-  证明: by rw [card_Iio_eq_card_Iic_sub_one, card_Iic]
-
-Depends on / 依赖: card_Iic, card_Iio_eq_card_Iic_sub_one
+/-
+**Pi.card_Iio** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：card_Iio : #(Iio b) = ∏ i, #(Iic (b i)) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Iio_eq_card_Iic_sub_one`：card_Iio_eq_card_Iic_sub_one (a : α
+) : #(Iio a) = #(Iic a) - 1
+· 使用引理 `Pi.card_Iic`：card_Iic : #(Iic b) = ∏ i, #(Iic (b i))
 -/
 lemma card_Iio : #(Iio b) = ∏ i, #(Iic (b i)) - 1 := by rw [card_Iio_eq_card_Iic_sub_one, card_Iic]
 
 end LocallyFiniteOrderBot
 
 section LocallyFiniteOrderTop
-variable [forall i, LocallyFiniteOrderTop (α i)] (a : forall i, α i)
+variable [∀ i, LocallyFiniteOrderTop (α i)] (a : ∀ i, α i)
 
-/--
-Instance `instLocallyFiniteOrderTop` / 实例 `instLocallyFiniteOrderTop`
-
-English:
-instance instLocallyFiniteOrderTop
-  signature: : LocallyFiniteOrderTop (forall i, α i)
-  body: LocallyFiniteOrderTop.ofIci _ (fun a => piFinset fun i => Ici (a i)) fun a x => by
-    simp_rw [mem_piFinset, mem_Ici, le_def]
-
-中文:
-实例 instLocallyFiniteOrderTop
-  签名: : LocallyFiniteOrderTop (对任意 i, α i)
-  定义体: LocallyFiniteOrderTop.ofIci _ (fun a => piFinset fun i => Ici (a i)) fun a x => by
-    simp_rw [mem_piFinset, mem_Ici, le_def]
-
-Depends on / 依赖: LocallyFiniteOrderTop, LocallyFiniteOrderTop.ofIci, le_def, mem_Ici, mem_piFinset, piFinset, simp_rw
+/-
+**Pi.instLocallyFiniteOrderTop** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：instLocallyFiniteOrderTop : LocallyFiniteOrderTop (forall i, α i)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instLocallyFiniteOrderTop : LocallyFiniteOrderTop (forall i, α i) :=
+instance instLocallyFiniteOrderTop : LocallyFiniteOrderTop (∀ i, α i) :=
   LocallyFiniteOrderTop.ofIci _ (fun a => piFinset fun i => Ici (a i)) fun a x => by
     simp_rw [mem_piFinset, mem_Ici, le_def]
-
-/--
-lemma `card_Ici` / 引理 `card_Ici`
-
-English:
-lemma card_Ici
-  statement: #(Ici a) = ∏ i, #(Ici (a i))
-  proof: card_piFinset _
-
-中文:
-引理 card_Ici
-  结论: #(左闭右无界区间 a) = ∏ i, #(左闭右无界区间 (a i))
-  证明: card_piFinset _
-
-Depends on / 依赖: card_piFinset
+/-
+**Pi.card_Ici** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：card_Ici : #(Ici a) = ∏ i, #(Ici (a i))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_piFinset`：∀ {ι : Type u_4} {α : ι → Type u_6} [inst : Decid
+ableEq ι] [inst_1 : Fintype ι] (s : (i : ι) → Finset (α i)),   (Fintype.piFinset
+ s).card = …
 -/
 lemma card_Ici : #(Ici a) = ∏ i, #(Ici (a i)) := card_piFinset _
-/--
-lemma `card_Ioi` / 引理 `card_Ioi`
-
-English:
-lemma card_Ioi
-  statement: #(Ioi a) = ∏ i, #(Ici (a i)) - 1
-  proof: by rw [card_Ioi_eq_card_Ici_sub_one, card_Ici]
-
-中文:
-引理 card_Ioi
-  结论: #(左开右无界区间 a) = ∏ i, #(左闭右无界区间 (a i)) - 1
-  证明: by rw [card_Ioi_eq_card_Ici_sub_one, card_Ici]
-
-Depends on / 依赖: card_Ici, card_Ioi_eq_card_Ici_sub_one
+/-
+**Pi.card_Ioi** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：card_Ioi : #(Ioi a) = ∏ i, #(Ici (a i)) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ioi_eq_card_Ici_sub_one`：card_Ioi_eq_card_Ici_sub_one (a : α
+) : #(Ioi a) = #(Ici a) - 1
+· 使用引理 `Pi.card_Ici`：card_Ici : #(Ici a) = ∏ i, #(Ici (a i))
 -/
 lemma card_Ioi : #(Ioi a) = ∏ i, #(Ici (a i)) - 1 := by rw [card_Ioi_eq_card_Ici_sub_one, card_Ici]
 
@@ -268,39 +177,24 @@ end LocallyFiniteOrderTop
 end PartialOrder
 
 section Lattice
-variable [forall i, Lattice (α i)] [forall i, LocallyFiniteOrder (α i)] (a b : forall i, α i)
+variable [∀ i, Lattice (α i)] [∀ i, LocallyFiniteOrder (α i)] (a b : ∀ i, α i)
 
-/--
-theorem `uIcc_eq` / 定理 `uIcc_eq`
-
-English:
-theorem uIcc_eq
-  statement: uIcc a b = piFinset fun i => uIcc (a i) (b i)
-  proof: rfl
-
-中文:
-定理 uIcc_eq
-  结论: uIcc a b = piFinset fun i => uIcc (a i) (b i)
-  证明: rfl
+/-
+**Pi.uIcc_eq** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：uIcc_eq : uIcc a b = piFinset fun i => uIcc (a i) (b i)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uIcc_eq : uIcc a b = piFinset fun i => uIcc (a i) (b i) := rfl
-
-/--
-theorem `card_uIcc` / 定理 `card_uIcc`
-
-English:
-theorem card_uIcc
-  statement: #(uIcc a b) = ∏ i, #(uIcc (a i) (b i))
-  proof: card_Icc _ _
-
-中文:
-定理 card_uIcc
-  结论: #(uIcc a b) = ∏ i, #(uIcc (a i) (b i))
-  证明: card_Icc _ _
-
-Depends on / 依赖: card_Icc
+/-
+**Pi.card_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：card_uIcc : #(uIcc a b) = ∏ i, #(uIcc (a i) (b i))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.card_Icc`：card_Icc : #(Icc a b) = ∏ i, #(Icc (a i) (b i))
 -/
 theorem card_uIcc : #(uIcc a b) = ∏ i, #(uIcc (a i) (b i)) := card_Icc _ _
 
 end Lattice
 end Pi
+

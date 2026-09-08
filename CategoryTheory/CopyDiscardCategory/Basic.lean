@@ -48,47 +48,34 @@ open MonoidalCategory ComonObj
 
 variable {C : Type u} [Category.{v} C] [MonoidalCategory.{v} C]
 
-/--
-Definition of `CopyDiscardCategory` / `CopyDiscardCategory` 的定义
+/-- Category where objects have compatible copy and discard operations. -/
+/-
+**CategoryTheory.CopyDiscardCategory** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：CopyDiscardCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
+ extends SymmetricCategory C where /-- Every object has commutative comonoid str
+ucture. -/ [comonObj : (X : C) -> ComonObj X] /-- Every object's comonoid struct
+ure is commutative. -/ [isCommComonObj : (X : C) -> IsCommComonObj X] /-- Tensor
+ products of copies equal copies of tensor products. -/ copy_tensor (X Y : C) : 
+Δ[X otimes Y] = (Δ[X] otimesₘ Δ[Y]) ≫ tensorμ X X Y Y
+参数：C : Type u；X : C；X : C；X Y : C。
+继承自：SymmetricCategory C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CopyDiscardCategory
-  parameters: (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
-  extends: SymmetricCategory C
-  axioms and operations (6):
-    - [comonObj : (X : C) -> ComonObj X]
-    - [isCommComonObj : (X : C) -> IsCommComonObj X]
-    - copy_tensor((X Y : C)) : Δ[X otimes Y] = (Δ[X] otimesₘ Δ[Y]) ≫ tensorμ X X Y Y  [default: by cat_disch]
-    - discard_tensor((X Y : C)) : ε[X otimes Y] = (ε[X] otimesₘ ε[Y]) ≫ (fun_ (𝟙_ C)).hom  [default: by cat_disch]
-    - copy_unit : Δ[𝟙_ C] = (fun_ (𝟙_ C)).inv  [default: by cat_disch]
-    - discard_unit : ε[𝟙_ C] = 𝟙 (𝟙_ C)  [default: by cat_disch]
-
-中文:
-类 余pyDiscard范畴
-  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
-  继承: 对称范畴 C
-  公理与运算 (6 个):
-    - [comonObj : (X : C) -> 余monObj X]
-    - [isCommComonObj : (X : C) -> 是交换余monObj X]
-    - copy_tensor((X Y : C)) : Δ[X otimes Y] = (Δ[X] otimesₘ Δ[Y]) ≫ tensorμ X X Y Y  [默认: by cat_disch]
-    - discard_tensor((X Y : C)) : ε[X otimes Y] = (ε[X] otimesₘ ε[Y]) ≫ (fun_ (𝟙_ C)).hom  [默认: by cat_disch]
-    - copy_unit : Δ[𝟙_ C] = (fun_ (𝟙_ C)).inv  [默认: by cat_disch]
-    - discard_unit : ε[𝟙_ C] = 𝟙 (𝟙_ C)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Category where objects have compatible copy and discard operations.
 -/
 class CopyDiscardCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
     extends SymmetricCategory C where
   /-- Every object has commutative comonoid structure. -/
-  [comonObj : (X : C) -> ComonObj X]
+  [comonObj : (X : C) → ComonObj X]
   /-- Every object's comonoid structure is commutative. -/
-  [isCommComonObj : (X : C) -> IsCommComonObj X]
+  [isCommComonObj : (X : C) → IsCommComonObj X]
   /-- Tensor products of copies equal copies of tensor products. -/
-  copy_tensor (X Y : C) : Δ[X otimes Y] = (Δ[X] otimesₘ Δ[Y]) ≫ tensorμ X X Y Y := by cat_disch
+  copy_tensor (X Y : C) : Δ[X ⊗ Y] = (Δ[X] ⊗ₘ Δ[Y]) ≫ tensorμ X X Y Y := by cat_disch
   /-- Discard distributes over tensor. -/
-  discard_tensor (X Y : C) : ε[X otimes Y] = (ε[X] otimesₘ ε[Y]) ≫ (fun_ (𝟙_ C)).hom := by cat_disch
+  discard_tensor (X Y : C) : ε[X ⊗ Y] = (ε[X] ⊗ₘ ε[Y]) ≫ (λ_ (𝟙_ C)).hom := by cat_disch
     /-- Copy on the unit object. -/
-  copy_unit : Δ[𝟙_ C] = (fun_ (𝟙_ C)).inv := by cat_disch
+  copy_unit : Δ[𝟙_ C] = (λ_ (𝟙_ C)).inv := by cat_disch
     /-- Discard on the unit object. -/
   discard_unit : ε[𝟙_ C] = 𝟙 (𝟙_ C) := by cat_disch
 
@@ -96,3 +83,4 @@ attribute [instance_reducible] CopyDiscardCategory.comonObj
 attribute [instance] CopyDiscardCategory.comonObj CopyDiscardCategory.isCommComonObj
 
 end CategoryTheory
+

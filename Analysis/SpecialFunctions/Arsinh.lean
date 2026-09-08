@@ -47,273 +47,288 @@ open scoped Topology
 
 namespace Real
 
-variable {x y : Real}
+variable {x y : ℝ}
 
 /-- `arsinh` is defined using a logarithm, `arsinh x = log (x + √(1 + x^2))`. -/
 @[pp_nodot]
-/--
-Definition of `arsinh` / `arsinh` 的定义
+/-
+**Real.arsinh** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：arsinh (x : Real)
+参数：x : Real。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arsinh
-  signature: (x : Real)
-  body: log (x + √(1 + x ^ 2))
-
-中文:
-定义 arsinh
-  签名: (x : 实数)
-  定义体: log (x + √(1 + x ^ 2))
+--- 原说明 ---
+`arsinh` is defined using a logarithm, `arsinh x = log (x + √(1 + x^2))`.
 -/
-def arsinh (x : Real) :=
+def arsinh (x : ℝ) :=
   log (x + √(1 + x ^ 2))
-
-/--
-theorem `exp_arsinh` / 定理 `exp_arsinh`
-
-English:
-theorem exp_arsinh
-  given: (x : Real)
-  statement: exp (arsinh x) = x + √(1 + x ^ 2)
-  proof: by
-  apply exp_log
-  rw [← neg_lt_iff_pos_add']
-  apply lt_sqrt_of_sq_lt
-  simp
-
-@[simp]
-
-中文:
-定理 exp_arsinh
-  条件: (x : 实数)
-  结论: exp (arsinh x) = x + √(1 + x ^ 2)
-  证明: by
-  apply exp_log
-  rw [← neg_lt_iff_pos_add']
-  apply lt_sqrt_of_sq_lt
-  simp
-
-@[simp]
-
-Depends on / 依赖: exp_log, lt_sqrt_of_sq_lt, neg_lt_iff_pos_add
+/-
+**Real.exp_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：exp_arsinh (x : Real) : exp (arsinh x) = x + √(1 + x ^ 2)
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.exp_log`：exp_log (hx : 0 < x) : exp (log x) = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_lt_iff_pos_add'`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] 
+[AddLeftStrictMono α] {a b : α}, -a < b ↔ 0 < a + b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.lt_sqrt_of_sq_lt`：lt_sqrt_of_sq_lt (h : x ^ 2 < y) : x < √y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Even.neg_pow`：∀ {α : Type u_2} [inst : Monoid α] [inst_1 : HasDistribNeg
+ α] {n : ℕ}, Even n → ∀ (a : α), (-a) ^ n = a ^ n
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem exp_arsinh (x : Real) : exp (arsinh x) = x + √(1 + x ^ 2) := by
+theorem exp_arsinh (x : ℝ) : exp (arsinh x) = x + √(1 + x ^ 2) := by
   apply exp_log
   rw [← neg_lt_iff_pos_add']
   apply lt_sqrt_of_sq_lt
   simp
 
 @[simp]
-/--
-theorem `arsinh_zero` / 定理 `arsinh_zero`
-
-English:
-theorem arsinh_zero
-  statement: arsinh 0 = 0
-  proof: by simp [arsinh]
-
-@[simp]
-
-中文:
-定理 arsinh_zero
-  结论: arsinh 0 = 0
-  证明: by simp [arsinh]
-
-@[simp]
-
-Depends on / 依赖: arsinh
+/-
+**Real.arsinh_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_zero : arsinh 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Real.sqrt_one`：sqrt_one : √1 = 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Real.log_one`：log_one : log 1 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem arsinh_zero : arsinh 0 = 0 := by simp [arsinh]
 
 @[simp]
-/--
-theorem `arsinh_neg` / 定理 `arsinh_neg`
-
-English:
-theorem arsinh_neg
-  given: (x : Real)
-  statement: arsinh (-x) = -arsinh x
-  proof: by
-  rw [← exp_eq_exp]; rw [exp_arsinh]; rw [exp_neg]; rw [exp_arsinh]
-  apply eq_inv_of_mul_eq_one_left
-  rw [neg_sq]; rw [neg_add_eq_sub]; rw [add_comm x]; rw [mul_comm]; rw [← sq_sub_sq]; rw [sq_sqrt]; rw [add_sub_cancel_right]
-  exact add_nonneg zero_le_one (sq_nonneg _)
-
-中文:
-定理 arsinh_neg
-  条件: (x : 实数)
-  结论: arsinh (-x) = -arsinh x
-  证明: by
-  rw [← exp_eq_exp]; rw [exp_arsinh]; rw [exp_neg]; rw [exp_arsinh]
-  apply eq_inv_of_mul_eq_one_left
-  rw [neg_sq]; rw [neg_add_eq_sub]; rw [add_comm x]; rw [mul_comm]; rw [← sq_sub_sq]; rw [sq_sqrt]; rw [add_sub_cancel_right]
-  exact add_nonneg zero_le_one (sq_nonneg _)
-
-Depends on / 依赖: add_comm, add_nonneg, add_sub_cancel_right, eq_inv_of_mul_eq_one_left, exp_arsinh, exp_eq_exp, exp_neg, mul_comm, neg_add_eq_sub, neg_sq, sq_nonneg, sq_sqrt, sq_sub_sq, zero_le_one
+/-
+**Real.arsinh_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_neg (x : Real) : arsinh (-x) = -arsinh x
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.exp_eq_exp`：exp_eq_exp {x y : Real} : exp x = exp y ↔ x = y
+· 使用定理 `Real.exp_arsinh`：exp_arsinh (x : Real) : exp (arsinh x) = x + √(1 + x ^ 
+2)
+· 使用定理 `Real.exp_neg`：∀ (x : ℝ), Real.exp (-x) = (Real.exp x)⁻¹
+· 使用定理 `eq_inv_of_mul_eq_one_left`：eq_inv_of_mul_eq_one_left (h : a * b = 1) : a
+ = b⁻¹
+· 使用引理 `neg_sq`：neg_sq (a : R) : (-a) ^ 2 = a ^ 2
+· 使用定理 `neg_add_eq_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), -a + b = b - a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用引理 `sq_sub_sq`：sq_sub_sq (a b : R) : a ^ 2 - b ^ 2 = (a + b) * (a - b)
+· 使用定理 `Real.sq_sqrt`：sq_sqrt (h : 0 <= x) : √x ^ 2 = x
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用引理 `sq_nonneg`：sq_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLeftMono R] (a
+ : R) : 0 <= a ^ 2
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
 -/
-theorem arsinh_neg (x : Real) : arsinh (-x) = -arsinh x := by
-  rw [← exp_eq_exp]; rw [exp_arsinh]; rw [exp_neg]; rw [exp_arsinh]
+theorem arsinh_neg (x : ℝ) : arsinh (-x) = -arsinh x := by
+  rw [← exp_eq_exp, exp_arsinh, exp_neg, exp_arsinh]
   apply eq_inv_of_mul_eq_one_left
-  rw [neg_sq]; rw [neg_add_eq_sub]; rw [add_comm x]; rw [mul_comm]; rw [← sq_sub_sq]; rw [sq_sqrt]; rw [add_sub_cancel_right]
+  rw [neg_sq, neg_add_eq_sub, add_comm x, mul_comm, ← sq_sub_sq, sq_sqrt, add_sub_cancel_right]
   exact add_nonneg zero_le_one (sq_nonneg _)
 
 /-- `arsinh` is the right inverse of `sinh`. -/
 @[simp]
-/--
-theorem `sinh_arsinh` / 定理 `sinh_arsinh`
+/-
+**Real.sinh_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_arsinh (x : Real) : sinh (arsinh x) = x
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sinh_eq`：∀ (x : ℝ), Real.sinh x = (Real.exp x - Real.exp (-x)) / 2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.arsinh_neg`：arsinh_neg (x : Real) : arsinh (-x) = -arsinh x
+· 使用定理 `Real.exp_arsinh`：exp_arsinh (x : Real) : exp (arsinh x) = x + √(1 + x ^ 
+2)
+· 使用引理 `neg_sq`：neg_sq (a : R) : (-a) ^ 2 = a ^ 2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_sub_add_right_eq_sub`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : 
+G), a + c - (b + c) = a - b
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `add_self_div_two`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2
+] (a : K), (a + a) / 2 = a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem sinh_arsinh
-  given: (x : Real)
-  statement: sinh (arsinh x) = x
-  proof: by
-  rw [sinh_eq]; rw [← arsinh_neg]; rw [exp_arsinh]; rw [exp_arsinh]; rw [neg_sq]; simp
-
-@[simp]
-
-中文:
-定理 sinh_arsinh
-  条件: (x : 实数)
-  结论: sinh (arsinh x) = x
-  证明: by
-  rw [sinh_eq]; rw [← arsinh_neg]; rw [exp_arsinh]; rw [exp_arsinh]; rw [neg_sq]; simp
-
-@[simp]
-
-Depends on / 依赖: arsinh_neg, exp_arsinh, neg_sq, sinh_eq
+--- 原说明 ---
+`arsinh` is the right inverse of `sinh`.
 -/
-theorem sinh_arsinh (x : Real) : sinh (arsinh x) = x := by
-  rw [sinh_eq]; rw [← arsinh_neg]; rw [exp_arsinh]; rw [exp_arsinh]; rw [neg_sq]; simp
+theorem sinh_arsinh (x : ℝ) : sinh (arsinh x) = x := by
+  rw [sinh_eq, ← arsinh_neg, exp_arsinh, exp_arsinh, neg_sq]; simp
 
 @[simp]
-/--
-theorem `cosh_arsinh` / 定理 `cosh_arsinh`
-
-English:
-theorem cosh_arsinh
-  given: (x : Real)
-  statement: cosh (arsinh x) = √(1 + x ^ 2)
-  proof: by
-  rw [← sqrt_sq (cosh_pos _).le]; rw [cosh_sq']; rw [sinh_arsinh]
-
-@[simp]
-
-中文:
-定理 cosh_arsinh
-  条件: (x : 实数)
-  结论: cosh (arsinh x) = √(1 + x ^ 2)
-  证明: by
-  rw [← sqrt_sq (cosh_pos _).le]; rw [cosh_sq']; rw [sinh_arsinh]
-
-@[simp]
-
-Depends on / 依赖: cosh_pos, cosh_sq, sinh_arsinh, sqrt_sq
+/-
+**Real.cosh_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：cosh_arsinh (x : Real) : cosh (arsinh x) = √(1 + x ^ 2)
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sqrt_sq`：sqrt_sq (h : 0 <= x) : √(x ^ 2) = x
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.cosh_pos`：cosh_pos (x : Real) : 0 < Real.cosh x
+· 使用定理 `Real.cosh_sq'`：cosh_sq' : cosh x ^ 2 = 1 + sinh x ^ 2
+· 使用定理 `Real.sinh_arsinh`：sinh_arsinh (x : Real) : sinh (arsinh x) = x
 -/
-theorem cosh_arsinh (x : Real) : cosh (arsinh x) = √(1 + x ^ 2) := by
-  rw [← sqrt_sq (cosh_pos _).le]; rw [cosh_sq']; rw [sinh_arsinh]
+theorem cosh_arsinh (x : ℝ) : cosh (arsinh x) = √(1 + x ^ 2) := by
+  rw [← sqrt_sq (cosh_pos _).le, cosh_sq', sinh_arsinh]
 
 @[simp]
-/--
-theorem `tanh_arsinh` / 定理 `tanh_arsinh`
-
-English:
-theorem tanh_arsinh
-  given: (x : Real)
-  statement: tanh (arsinh x) = x / √(1 + x ^ 2)
-  proof: by
-  rw [tanh_eq_sinh_div_cosh]; rw [sinh_arsinh]; rw [cosh_arsinh]
-
-中文:
-定理 tanh_arsinh
-  条件: (x : 实数)
-  结论: tanh (arsinh x) = x / √(1 + x ^ 2)
-  证明: by
-  rw [tanh_eq_sinh_div_cosh]; rw [sinh_arsinh]; rw [cosh_arsinh]
-
-Depends on / 依赖: cosh_arsinh, sinh_arsinh, tanh_eq_sinh_div_cosh
+/-
+**Real.tanh_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：tanh_arsinh (x : Real) : tanh (arsinh x) = x / √(1 + x ^ 2)
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.tanh_eq_sinh_div_cosh`：∀ (x : ℝ), Real.tanh x = Real.sinh x / Real.
+cosh x
+· 使用定理 `Real.sinh_arsinh`：sinh_arsinh (x : Real) : sinh (arsinh x) = x
+· 使用定理 `Real.cosh_arsinh`：cosh_arsinh (x : Real) : cosh (arsinh x) = √(1 + x ^ 2
+)
 -/
-theorem tanh_arsinh (x : Real) : tanh (arsinh x) = x / √(1 + x ^ 2) := by
-  rw [tanh_eq_sinh_div_cosh]; rw [sinh_arsinh]; rw [cosh_arsinh]
+theorem tanh_arsinh (x : ℝ) : tanh (arsinh x) = x / √(1 + x ^ 2) := by
+  rw [tanh_eq_sinh_div_cosh, sinh_arsinh, cosh_arsinh]
 
-/--
-theorem `sinh_surjective` / 定理 `sinh_surjective`
+/-- `sinh` is surjective, `∀ b, ∃ a, sinh a = b`. In this case, we use `a = arsinh b`. -/
+/-
+**Real.sinh_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_surjective : Surjective sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.LeftInverse f g → Function.Surjective f
+· 使用定理 `Real.sinh_arsinh`：sinh_arsinh (x : Real) : sinh (arsinh x) = x
 
-English:
-theorem sinh_surjective
-  statement: Surjective sinh
-  proof: LeftInverse.surjective sinh_arsinh
-
-中文:
-定理 sinh_surjective
-  结论: 满射 sinh
-  证明: LeftInverse.surjective sinh_arsinh
-
-Depends on / 依赖: LeftInverse, LeftInverse.surjective, sinh_arsinh, surjective
+--- 原说明 ---
+`sinh` is surjective, `∀ b, ∃ a, sinh a = b`. In this case, we use `a = arsinh b
+`.
 -/
 theorem sinh_surjective : Surjective sinh :=
   LeftInverse.surjective sinh_arsinh
 
-/--
-theorem `sinh_bijective` / 定理 `sinh_bijective`
+/-- `sinh` is bijective, both injective and surjective. -/
+/-
+**Real.sinh_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_bijective : Bijective sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.sinh_injective`：sinh_injective : Function.Injective sinh
+· 使用定理 `Real.sinh_surjective`：sinh_surjective : Surjective sinh
 
-English:
-theorem sinh_bijective
-  statement: Bijective sinh
-  proof: ⟨sinh_injective, sinh_surjective⟩
-
-中文:
-定理 sinh_bijective
-  结论: 双射 sinh
-  证明: ⟨sinh_injective, sinh_surjective⟩
-
-Depends on / 依赖: sinh_injective, sinh_surjective
+--- 原说明 ---
+`sinh` is bijective, both injective and surjective.
 -/
 theorem sinh_bijective : Bijective sinh :=
   ⟨sinh_injective, sinh_surjective⟩
 
 /-- `arsinh` is the left inverse of `sinh`. -/
 @[simp]
-/--
-theorem `arsinh_sinh` / 定理 `arsinh_sinh`
+/-
+**Real.arsinh_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_sinh (x : Real) : arsinh (sinh x) = x
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.rightInverse_of_injective_of_leftInverse`：∀ {α : Sort u_1} {β :
+ Sort u_2} {f : α → β} {g : β → α},   Function.Injective f → Function.LeftInvers
+e f g → Function.RightInverse f g
+· 使用定理 `Real.sinh_injective`：sinh_injective : Function.Injective sinh
+· 使用定理 `Real.sinh_arsinh`：sinh_arsinh (x : Real) : sinh (arsinh x) = x
 
-English:
-theorem arsinh_sinh
-  given: (x : Real)
-  statement: arsinh (sinh x) = x
-  proof: rightInverse_of_injective_of_leftInverse sinh_injective sinh_arsinh x
-
-中文:
-定理 arsinh_sinh
-  条件: (x : 实数)
-  结论: arsinh (sinh x) = x
-  证明: rightInverse_of_injective_of_leftInverse sinh_injective sinh_arsinh x
-
-Depends on / 依赖: rightInverse_of_injective_of_leftInverse, sinh_arsinh, sinh_injective
+--- 原说明 ---
+`arsinh` is the left inverse of `sinh`.
 -/
-theorem arsinh_sinh (x : Real) : arsinh (sinh x) = x :=
+theorem arsinh_sinh (x : ℝ) : arsinh (sinh x) = x :=
   rightInverse_of_injective_of_leftInverse sinh_injective sinh_arsinh x
 
 /-- `Real.sinh` as an `Equiv`. -/
 @[simps]
-/--
-Definition of `sinhEquiv` / `sinhEquiv` 的定义
+/-
+**Real.sinhEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：sinhEquiv : Real ≃ Real where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.arsinh_sinh`：arsinh_sinh (x : Real) : arsinh (sinh x) = x
+· 使用定理 `Real.sinh_arsinh`：sinh_arsinh (x : Real) : sinh (arsinh x) = x
 
-English:
-definition sinhEquiv
-  signature: : Real ≃ Real where
-  body: sinh
-  invFun := arsinh
-  left_inv := arsinh_sinh
-  right_inv := sinh_arsinh
-
-中文:
-定义 sinhEquiv
-  签名: : 实数 ≃ 实数 where
-  定义体: sinh
-  invFun := arsinh
-  left_inv := arsinh_sinh
-  right_inv := sinh_arsinh
+--- 原说明 ---
+`Real.sinh` as an `Equiv`.
 -/
-def sinhEquiv : Real ≃ Real where
+def sinhEquiv : ℝ ≃ ℝ where
   toFun := sinh
   invFun := arsinh
   left_inv := arsinh_sinh
@@ -321,529 +336,378 @@ def sinhEquiv : Real ≃ Real where
 
 /-- `Real.sinh` as an `OrderIso`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `sinhOrderIso` / `sinhOrderIso` 的定义
+/-
+**Real.sinhOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：sinhOrderIso : Real ≃o Real where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.sinh_le_sinh`：sinh_le_sinh : sinh x <= sinh y ↔ x <= y
 
-English:
-definition sinhOrderIso
-  signature: : Real ≃o Real where
-  body: sinhEquiv
-  map_rel_iff' := @sinh_le_sinh
-
-中文:
-定义 sinhOrderIso
-  签名: : 实数 ≃o 实数 where
-  定义体: sinhEquiv
-  map_rel_iff' := @sinh_le_sinh
-
-Depends on / 依赖: sinhEquiv
+--- 原说明 ---
+`Real.sinh` as an `OrderIso`.
 -/
-def sinhOrderIso : Real ≃o Real where
+def sinhOrderIso : ℝ ≃o ℝ where
   toEquiv := sinhEquiv
   map_rel_iff' := @sinh_le_sinh
 
 /-- `Real.sinh` as a `Homeomorph`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `sinhHomeomorph` / `sinhHomeomorph` 的定义
+/-
+**Real.sinhHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：sinhHomeomorph : Real ≃ₜ Real
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
 
-English:
-definition sinhHomeomorph
-  signature: : Real ≃ₜ Real
-  body: sinhOrderIso.toHomeomorph
-
-中文:
-定义 sinhHomeomorph
-  签名: : 实数 ≃ₜ 实数
-  定义体: sinhOrderIso.toHomeomorph
-
-Depends on / 依赖: sinhOrderIso, sinhOrderIso.toHomeomorph, toHomeomorph
+--- 原说明 ---
+`Real.sinh` as a `Homeomorph`.
 -/
-def sinhHomeomorph : Real ≃ₜ Real :=
+def sinhHomeomorph : ℝ ≃ₜ ℝ :=
   sinhOrderIso.toHomeomorph
-
-/--
-theorem `arsinh_bijective` / 定理 `arsinh_bijective`
-
-English:
-theorem arsinh_bijective
-  statement: Bijective arsinh
-  proof: sinhEquiv.symm.bijective
-
-中文:
-定理 arsinh_bijective
-  结论: 双射 arsinh
-  证明: sinhEquiv.symm.bijective
-
-Depends on / 依赖: bijective, sinhEquiv, sinhEquiv.symm.bijective
+/-
+**Real.arsinh_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_bijective : Bijective arsinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem arsinh_bijective : Bijective arsinh :=
   sinhEquiv.symm.bijective
-
-/--
-theorem `arsinh_injective` / 定理 `arsinh_injective`
-
-English:
-theorem arsinh_injective
-  statement: Injective arsinh
-  proof: sinhEquiv.symm.injective
-
-中文:
-定理 arsinh_injective
-  结论: 单射 arsinh
-  证明: sinhEquiv.symm.injective
-
-Depends on / 依赖: injective, sinhEquiv, sinhEquiv.symm.injective
+/-
+**Real.arsinh_injective** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_injective : Injective arsinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem arsinh_injective : Injective arsinh :=
   sinhEquiv.symm.injective
-
-/--
-theorem `arsinh_surjective` / 定理 `arsinh_surjective`
-
-English:
-theorem arsinh_surjective
-  statement: Surjective arsinh
-  proof: sinhEquiv.symm.surjective
-
-中文:
-定理 arsinh_surjective
-  结论: 满射 arsinh
-  证明: sinhEquiv.symm.surjective
-
-Depends on / 依赖: sinhEquiv, sinhEquiv.symm.surjective, surjective
+/-
+**Real.arsinh_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_surjective : Surjective arsinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem arsinh_surjective : Surjective arsinh :=
   sinhEquiv.symm.surjective
-
-/--
-theorem `arsinh_strictMono` / 定理 `arsinh_strictMono`
-
-English:
-theorem arsinh_strictMono
-  statement: StrictMono arsinh
-  proof: sinhOrderIso.symm.strictMono
-
-@[simp]
-
-中文:
-定理 arsinh_strictMono
-  结论: 严格递增 arsinh
-  证明: sinhOrderIso.symm.strictMono
-
-@[simp]
-
-Depends on / 依赖: sinhOrderIso, sinhOrderIso.symm.strictMono, strictMono
+/-
+**Real.arsinh_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_strictMono : StrictMono arsinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
 -/
 theorem arsinh_strictMono : StrictMono arsinh :=
   sinhOrderIso.symm.strictMono
 
 @[simp]
-/--
-theorem `arsinh_inj` / 定理 `arsinh_inj`
-
-English:
-theorem arsinh_inj
-  statement: arsinh x = arsinh y ↔ x = y
-  proof: arsinh_injective.eq_iff
-
-@[simp, gcongr]
-
-中文:
-定理 arsinh_inj
-  结论: arsinh x = arsinh y ↔ x = y
-  证明: arsinh_injective.eq_iff
-
-@[simp, gcongr]
-
-Depends on / 依赖: arsinh_injective, arsinh_injective.eq_iff, eq_iff
+/-
+**Real.arsinh_inj** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_inj : arsinh x = arsinh y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Real.arsinh_injective`：arsinh_injective : Injective arsinh
 -/
 theorem arsinh_inj : arsinh x = arsinh y ↔ x = y :=
   arsinh_injective.eq_iff
 
 @[simp, gcongr]
-/--
-theorem `arsinh_le_arsinh` / 定理 `arsinh_le_arsinh`
-
-English:
-theorem arsinh_le_arsinh
-  statement: arsinh x <= arsinh y ↔ x <= y
-  proof: sinhOrderIso.symm.le_iff_le
-
-@[simp]
-
-中文:
-定理 arsinh_le_arsinh
-  结论: arsinh x <= arsinh y ↔ x <= y
-  证明: sinhOrderIso.symm.le_iff_le
-
-@[simp]
-
-Depends on / 依赖: le_iff_le, sinhOrderIso, sinhOrderIso.symm.le_iff_le
+/-
+**Real.arsinh_le_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_le_arsinh : arsinh x <= arsinh y ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.le_iff_le`：le_iff_le (e : α ≃o β) {x y : α} : e x <= e y ↔ x <=
+ y
 -/
-theorem arsinh_le_arsinh : arsinh x <= arsinh y ↔ x <= y :=
+theorem arsinh_le_arsinh : arsinh x ≤ arsinh y ↔ x ≤ y :=
   sinhOrderIso.symm.le_iff_le
 
 @[simp]
-/--
-theorem `arsinh_lt_arsinh` / 定理 `arsinh_lt_arsinh`
-
-English:
-theorem arsinh_lt_arsinh
-  statement: arsinh x < arsinh y ↔ x < y
-  proof: sinhOrderIso.symm.lt_iff_lt
-
-@[simp]
-
-中文:
-定理 arsinh_lt_arsinh
-  结论: arsinh x < arsinh y ↔ x < y
-  证明: sinhOrderIso.symm.lt_iff_lt
-
-@[simp]
-
-Depends on / 依赖: lt_iff_lt, sinhOrderIso, sinhOrderIso.symm.lt_iff_lt
+/-
+**Real.arsinh_lt_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_lt_arsinh : arsinh x < arsinh y ↔ x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.lt_iff_lt`：lt_iff_lt (e : α ≃o β) {x y : α} : e x < e y ↔ x < y
 -/
 theorem arsinh_lt_arsinh : arsinh x < arsinh y ↔ x < y :=
   sinhOrderIso.symm.lt_iff_lt
 
 @[simp]
-/--
-theorem `arsinh_eq_zero_iff` / 定理 `arsinh_eq_zero_iff`
-
-English:
-theorem arsinh_eq_zero_iff
-  statement: arsinh x = 0 ↔ x = 0
-  proof: arsinh_injective.eq_iff' arsinh_zero
-
-@[simp]
-
-中文:
-定理 arsinh_eq_zero_iff
-  结论: arsinh x = 0 ↔ x = 0
-  证明: arsinh_injective.eq_iff' arsinh_zero
-
-@[simp]
-
-Depends on / 依赖: arsinh_injective, arsinh_injective.eq_iff, arsinh_zero, eq_iff
+/-
+**Real.arsinh_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_eq_zero_iff : arsinh x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Real.arsinh_injective`：arsinh_injective : Injective arsinh
+· 使用定理 `Real.arsinh_zero`：arsinh_zero : arsinh 0 = 0
 -/
 theorem arsinh_eq_zero_iff : arsinh x = 0 ↔ x = 0 :=
   arsinh_injective.eq_iff' arsinh_zero
 
 @[simp]
-/--
-theorem `arsinh_nonneg_iff` / 定理 `arsinh_nonneg_iff`
-
-English:
-theorem arsinh_nonneg_iff
-  statement: 0 <= arsinh x ↔ 0 <= x
-  proof: by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
-
-@[simp]
-
-中文:
-定理 arsinh_nonneg_iff
-  结论: 0 <= arsinh x ↔ 0 <= x
-  证明: by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
-
-@[simp]
-
-Depends on / 依赖: sinh_arsinh, sinh_le_sinh, sinh_zero
+/-
+**Real.arsinh_nonneg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_nonneg_iff : 0 <= arsinh x ↔ 0 <= x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sinh_le_sinh`：sinh_le_sinh : sinh x <= sinh y ↔ x <= y
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `Real.sinh_arsinh`：sinh_arsinh (x : Real) : sinh (arsinh x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem arsinh_nonneg_iff : 0 <= arsinh x ↔ 0 <= x := by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
+theorem arsinh_nonneg_iff : 0 ≤ arsinh x ↔ 0 ≤ x := by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
 
 @[simp]
-/--
-theorem `arsinh_nonpos_iff` / 定理 `arsinh_nonpos_iff`
-
-English:
-theorem arsinh_nonpos_iff
-  statement: arsinh x <= 0 ↔ x <= 0
-  proof: by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
-
-@[simp]
-
-中文:
-定理 arsinh_nonpos_iff
-  结论: arsinh x <= 0 ↔ x <= 0
-  证明: by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
-
-@[simp]
-
-Depends on / 依赖: sinh_arsinh, sinh_le_sinh, sinh_zero
+/-
+**Real.arsinh_nonpos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_nonpos_iff : arsinh x <= 0 ↔ x <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sinh_le_sinh`：sinh_le_sinh : sinh x <= sinh y ↔ x <= y
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `Real.sinh_arsinh`：sinh_arsinh (x : Real) : sinh (arsinh x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem arsinh_nonpos_iff : arsinh x <= 0 ↔ x <= 0 := by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
+theorem arsinh_nonpos_iff : arsinh x ≤ 0 ↔ x ≤ 0 := by rw [← sinh_le_sinh, sinh_zero, sinh_arsinh]
 
 @[simp]
-/--
-theorem `arsinh_pos_iff` / 定理 `arsinh_pos_iff`
-
-English:
-theorem arsinh_pos_iff
-  statement: 0 < arsinh x ↔ 0 < x
-  proof: lt_iff_lt_of_le_iff_le arsinh_nonpos_iff
-
-@[simp]
-
-中文:
-定理 arsinh_pos_iff
-  结论: 0 < arsinh x ↔ 0 < x
-  证明: lt_iff_lt_of_le_iff_le arsinh_nonpos_iff
-
-@[simp]
-
-Depends on / 依赖: arsinh_nonpos_iff, lt_iff_lt_of_le_iff_le
+/-
+**Real.arsinh_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_pos_iff : 0 < arsinh x ↔ 0 < x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Real.arsinh_nonpos_iff`：arsinh_nonpos_iff : arsinh x <= 0 ↔ x <= 0
 -/
 theorem arsinh_pos_iff : 0 < arsinh x ↔ 0 < x :=
   lt_iff_lt_of_le_iff_le arsinh_nonpos_iff
 
 @[simp]
-/--
-theorem `arsinh_neg_iff` / 定理 `arsinh_neg_iff`
-
-English:
-theorem arsinh_neg_iff
-  statement: arsinh x < 0 ↔ x < 0
-  proof: lt_iff_lt_of_le_iff_le arsinh_nonneg_iff
-
-中文:
-定理 arsinh_neg_iff
-  结论: arsinh x < 0 ↔ x < 0
-  证明: lt_iff_lt_of_le_iff_le arsinh_nonneg_iff
-
-Depends on / 依赖: arsinh_nonneg_iff, lt_iff_lt_of_le_iff_le
+/-
+**Real.arsinh_neg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：arsinh_neg_iff : arsinh x < 0 ↔ x < 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Real.arsinh_nonneg_iff`：arsinh_nonneg_iff : 0 <= arsinh x ↔ 0 <= x
 -/
 theorem arsinh_neg_iff : arsinh x < 0 ↔ x < 0 :=
   lt_iff_lt_of_le_iff_le arsinh_nonneg_iff
-
-/--
-theorem `hasStrictDerivAt_arsinh` / 定理 `hasStrictDerivAt_arsinh`
-
-English:
-theorem hasStrictDerivAt_arsinh
-  given: (x : Real)
-  statement: HasStrictDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
-  proof: by
-  convert!
-    sinhHomeomorph.toOpenPartialHomeomorph.hasStrictDerivAt_symm (mem_univ x) (cosh_pos _).ne'
-      (hasStrictDerivAt_sinh _) using 2
-  exact (cosh_arsinh _).symm
-
-中文:
-定理 hasStrictDerivAt_arsinh
-  条件: (x : 实数)
-  结论: HasStrictDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
-  证明: by
-  convert!
-    sinhHomeomorph.toOpenPartialHomeomorph.hasStrictDerivAt_symm (mem_univ x) (cosh_pos _).ne'
-      (hasStrictDerivAt_sinh _) using 2
-  exact (cosh_arsinh _).symm
-
-Depends on / 依赖: convert, cosh_arsinh, cosh_pos, hasStrictDerivAt_sinh, hasStrictDerivAt_symm, mem_univ, sinhHomeomorph, sinhHomeomorph.toOpenPartialHomeomorph.hasStrictDerivAt_symm, toOpenPartialHomeomorph
+/-
+**Real.hasStrictDerivAt_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：hasStrictDerivAt_arsinh (x : Real) : HasStrictDerivAt arsinh (√(1 + x ^ 2)
+)⁻¹ x
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Real.cosh_arsinh`：cosh_arsinh (x : Real) : cosh (arsinh x) = √(1 + x ^ 2
+)
+· 使用定理 `OpenPartialHomeomorph.hasStrictDerivAt_symm`：OpenPartialHomeomorph.hasSt
+rictDerivAt_symm (f : OpenPartialHomeomorph 𝕜 𝕜) {a f' : 𝕜} (ha : a in f.target)
+ (hf' : f' != 0) (htff' : HasStri…
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.cosh_pos`：cosh_pos (x : Real) : 0 < Real.cosh x
+· 使用定理 `Real.hasStrictDerivAt_sinh`：hasStrictDerivAt_sinh (x : Real) : HasStrict
+DerivAt sinh (cosh x) x
 -/
-theorem hasStrictDerivAt_arsinh (x : Real) : HasStrictDerivAt arsinh (√(1 + x ^ 2))⁻¹ x := by
+theorem hasStrictDerivAt_arsinh (x : ℝ) : HasStrictDerivAt arsinh (√(1 + x ^ 2))⁻¹ x := by
   convert!
     sinhHomeomorph.toOpenPartialHomeomorph.hasStrictDerivAt_symm (mem_univ x) (cosh_pos _).ne'
       (hasStrictDerivAt_sinh _) using 2
   exact (cosh_arsinh _).symm
-
-/--
-theorem `hasDerivAt_arsinh` / 定理 `hasDerivAt_arsinh`
-
-English:
-theorem hasDerivAt_arsinh
-  given: (x : Real)
-  statement: HasDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
-  proof: (hasStrictDerivAt_arsinh x).hasDerivAt
-
-@[fun_prop]
-
-中文:
-定理 hasDerivAt_arsinh
-  条件: (x : 实数)
-  结论: 在点处可导 arsinh (√(1 + x ^ 2))⁻¹ x
-  证明: (hasStrictDerivAt_arsinh x).hasDerivAt
-
-@[fun_prop]
-
-Depends on / 依赖: hasDerivAt, hasStrictDerivAt_arsinh
+/-
+**Real.hasDerivAt_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：hasDerivAt_arsinh (x : Real) : HasDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.hasDerivAt`：HasStrictDerivAt.hasDerivAt (h : HasStrictD
+erivAt f f' x) : HasDerivAt f f' x
+· 使用定理 `Real.hasStrictDerivAt_arsinh`：hasStrictDerivAt_arsinh (x : Real) : HasSt
+rictDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
 -/
-theorem hasDerivAt_arsinh (x : Real) : HasDerivAt arsinh (√(1 + x ^ 2))⁻¹ x :=
+theorem hasDerivAt_arsinh (x : ℝ) : HasDerivAt arsinh (√(1 + x ^ 2))⁻¹ x :=
   (hasStrictDerivAt_arsinh x).hasDerivAt
 
 @[fun_prop]
-/--
-theorem `differentiable_arsinh` / 定理 `differentiable_arsinh`
-
-English:
-theorem differentiable_arsinh
-  statement: Differentiable Real arsinh
-  proof: fun x =>
-  (hasDerivAt_arsinh x).differentiableAt
-
-@[fun_prop]
-
-中文:
-定理 differentiable_arsinh
-  结论: 可微 实数 arsinh
-  证明: fun x =>
-  (hasDerivAt_arsinh x).differentiableAt
-
-@[fun_prop]
+/-
+**Real.differentiable_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：differentiable_arsinh : Differentiable Real arsinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.differentiableAt`：HasDerivAt.differentiableAt (h : HasDerivAt
+ f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Real.hasDerivAt_arsinh`：hasDerivAt_arsinh (x : Real) : HasDerivAt arsinh
+ (√(1 + x ^ 2))⁻¹ x
 -/
-theorem differentiable_arsinh : Differentiable Real arsinh := fun x =>
+theorem differentiable_arsinh : Differentiable ℝ arsinh := fun x =>
   (hasDerivAt_arsinh x).differentiableAt
 
 @[fun_prop]
-/--
-theorem `contDiff_arsinh` / 定理 `contDiff_arsinh`
-
-English:
-theorem contDiff_arsinh
-  given: {n : WithTop Nat∞}
-  statement: ContDiff Real n arsinh
-  proof: sinhHomeomorph.contDiff_symm_deriv (fun x => (cosh_pos x).ne') hasDerivAt_sinh contDiff_sinh
-
-@[continuity]
-
-中文:
-定理 contDiff_arsinh
-  条件: {n : WithTop 自然数∞}
-  结论: 连续可微 实数 n arsinh
-  证明: sinhHomeomorph.contDiff_symm_deriv (fun x => (cosh_pos x).ne') hasDerivAt_sinh contDiff_sinh
-
-@[continuity]
-
-Depends on / 依赖: contDiff_sinh, contDiff_symm_deriv, cosh_pos, hasDerivAt_sinh, sinhHomeomorph, sinhHomeomorph.contDiff_symm_deriv
+/-
+**Real.contDiff_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real n arsinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.contDiff_symm_deriv`：Homeomorph.contDiff_symm_deriv [Complete
+Space 𝕜] (f : 𝕜 ≃ₜ 𝕜) {f' : 𝕜 -> 𝕜} (h₀ : forall x, f' x != 0) (hf' : forall x, 
+HasDerivAt f (f' x) …
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.cosh_pos`：cosh_pos (x : Real) : 0 < Real.cosh x
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 -/
-theorem contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real n arsinh :=
+theorem contDiff_arsinh {n : WithTop ℕ∞} : ContDiff ℝ n arsinh :=
   sinhHomeomorph.contDiff_symm_deriv (fun x => (cosh_pos x).ne') hasDerivAt_sinh contDiff_sinh
 
 @[continuity]
-/--
-theorem `continuous_arsinh` / 定理 `continuous_arsinh`
-
-English:
-theorem continuous_arsinh
-  statement: Continuous arsinh
-  proof: sinhHomeomorph.symm.continuous
-
-中文:
-定理 continuous_arsinh
-  结论: 连续 arsinh
-  证明: sinhHomeomorph.symm.continuous
-
-Depends on / 依赖: continuous, sinhHomeomorph, sinhHomeomorph.symm.continuous
+/-
+**Real.continuous_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：continuous_arsinh : Continuous arsinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), Continuous ⇑h
 -/
 theorem continuous_arsinh : Continuous arsinh :=
   sinhHomeomorph.symm.continuous
 
 /-- The function `Real.arsinh` is real analytic. -/
 @[fun_prop]
-/--
-lemma `analyticAt_arsinh` / 引理 `analyticAt_arsinh`
+/-
+**Real.analyticAt_arsinh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticAt_arsinh : AnalyticAt Real arsinh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.analyticAt`：ContDiffAt.analyticAt (h : ContDiffAt 𝕜 ω f x) : 
+AnalyticAt 𝕜 f x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_arsinh`：contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real
+ n arsinh
 
-English:
-lemma analyticAt_arsinh
-  statement: AnalyticAt Real arsinh x
-  proof: contDiff_arsinh.contDiffAt.analyticAt
-
-中文:
-引理 analyticAt_arsinh
-  结论: AnalyticAt 实数 arsinh x
-  证明: contDiff_arsinh.contDiffAt.analyticAt
-
-Depends on / 依赖: analyticAt, contDiffAt, contDiff_arsinh, contDiff_arsinh.contDiffAt.analyticAt
+--- 原说明 ---
+The function `Real.arsinh` is real analytic.
 -/
-lemma analyticAt_arsinh : AnalyticAt Real arsinh x :=
+lemma analyticAt_arsinh : AnalyticAt ℝ arsinh x :=
   contDiff_arsinh.contDiffAt.analyticAt
 
-/--
-lemma `analyticWithinAt_arsinh` / 引理 `analyticWithinAt_arsinh`
+/-- The function `Real.arsinh` is real analytic. -/
+/-
+**Real.analyticWithinAt_arsinh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticWithinAt_arsinh {s : Set Real} : AnalyticWithinAt Real arsinh s x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContDiffWithinAt.analyticWithinAt`：ContDiffWithinAt.analyticWithinAt (h 
+: ContDiffWithinAt 𝕜 ω f s x) : AnalyticWithinAt 𝕜 f s x
+· 使用定理 `ContDiff.contDiffWithinAt`：ContDiff.contDiffWithinAt (h : ContDiff 𝕜 n f
+) : ContDiffWithinAt 𝕜 n f s x
+· 使用定理 `Real.contDiff_arsinh`：contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real
+ n arsinh
 
-English:
-lemma analyticWithinAt_arsinh
-  given: {s : Set Real}
-  statement: AnalyticWithinAt Real arsinh s x
-  proof: contDiff_arsinh.contDiffWithinAt.analyticWithinAt
-
-中文:
-引理 analyticWithinAt_arsinh
-  条件: {s : 集合 实数}
-  结论: AnalyticWithinAt 实数 arsinh s x
-  证明: contDiff_arsinh.contDiffWithinAt.analyticWithinAt
-
-Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_arsinh, contDiff_arsinh.contDiffWithinAt.analyticWithinAt
+--- 原说明 ---
+The function `Real.arsinh` is real analytic.
 -/
-lemma analyticWithinAt_arsinh {s : Set Real} : AnalyticWithinAt Real arsinh s x :=
+lemma analyticWithinAt_arsinh {s : Set ℝ} : AnalyticWithinAt ℝ arsinh s x :=
   contDiff_arsinh.contDiffWithinAt.analyticWithinAt
 
-/--
-theorem `analyticOnNhd_arsinh` / 定理 `analyticOnNhd_arsinh`
+/-- The function `Real.arsinh` is real analytic. -/
+/-
+**Real.analyticOnNhd_arsinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：analyticOnNhd_arsinh {s : Set Real} : AnalyticOnNhd Real arsinh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.analyticAt_arsinh`：analyticAt_arsinh : AnalyticAt Real arsinh x
 
-English:
-theorem analyticOnNhd_arsinh
-  given: {s : Set Real}
-  statement: AnalyticOnNhd Real arsinh s
-  proof: fun _ _ => analyticAt_arsinh
-
-中文:
-定理 analyticOnNhd_arsinh
-  条件: {s : 集合 实数}
-  结论: AnalyticOnNhd 实数 arsinh s
-  证明: fun _ _ => analyticAt_arsinh
-
-Depends on / 依赖: analyticAt_arsinh
+--- 原说明 ---
+The function `Real.arsinh` is real analytic.
 -/
-theorem analyticOnNhd_arsinh {s : Set Real} : AnalyticOnNhd Real arsinh s :=
-  fun _ _ => analyticAt_arsinh
+theorem analyticOnNhd_arsinh {s : Set ℝ} : AnalyticOnNhd ℝ arsinh s :=
+  fun _ _ ↦ analyticAt_arsinh
 
-/--
-lemma `analyticOn_arsinh` / 引理 `analyticOn_arsinh`
+/-- The function `Real.arsinh` is real analytic. -/
+/-
+**Real.analyticOn_arsinh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticOn_arsinh {s : Set Real} : AnalyticOn Real arsinh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffOn.analyticOn`：ContDiffOn.analyticOn (h : ContDiffOn 𝕜 ω f s) : 
+AnalyticOn 𝕜 f s
+· 使用定理 `ContDiff.contDiffOn`：ContDiff.contDiffOn (h : ContDiff 𝕜 n f) : ContDiff
+On 𝕜 n f s
+· 使用定理 `Real.contDiff_arsinh`：contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real
+ n arsinh
 
-English:
-lemma analyticOn_arsinh
-  given: {s : Set Real}
-  statement: AnalyticOn Real arsinh s
-  proof: contDiff_arsinh.contDiffOn.analyticOn
-
-中文:
-引理 analyticOn_arsinh
-  条件: {s : 集合 实数}
-  结论: AnalyticOn 实数 arsinh s
-  证明: contDiff_arsinh.contDiffOn.analyticOn
-
-Depends on / 依赖: analyticOn, contDiffOn, contDiff_arsinh, contDiff_arsinh.contDiffOn.analyticOn
+--- 原说明 ---
+The function `Real.arsinh` is real analytic.
 -/
-lemma analyticOn_arsinh {s : Set Real} : AnalyticOn Real arsinh s :=
+lemma analyticOn_arsinh {s : Set ℝ} : AnalyticOn ℝ arsinh s :=
   contDiff_arsinh.contDiffOn.analyticOn
 
 end Real
 
 open Real
 
-/--
-theorem `Filter.Tendsto.arsinh` / 定理 `Filter.Tendsto.arsinh`
-
-English:
-theorem Filter.Tendsto.arsinh
-  statement: {α : Type*} {l : Filter α} {f : α -> Real} {a : Real}
-  proof: (continuous_arsinh.tendsto _).comp h
-
-中文:
-定理 滤子.收敛.arsinh
-  结论: {α : 类型} {l : 滤子 α} {f : α -> 实数} {a : 实数}
-  证明: (continuous_arsinh.tendsto _).comp h
-
-Depends on / 依赖: continuous_arsinh, continuous_arsinh.tendsto, tendsto
+/-
+**Filter.Tendsto.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Tendsto.arsinh {α : Type*} {l : Filter α} {f : α -> Real} {a : Real
+} (h : Tendsto f l (𝓝 a)) : Tendsto (fun x => arsinh (f x)) l (𝓝 (arsinh a))
+参数：h : Tendsto f l (𝓝 a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
+· 使用定理 `Real.continuous_arsinh`：continuous_arsinh : Continuous arsinh
 -/
-theorem Filter.Tendsto.arsinh {α : Type*} {l : Filter α} {f : α -> Real} {a : Real}
+theorem Filter.Tendsto.arsinh {α : Type*} {l : Filter α} {f : α → ℝ} {a : ℝ}
     (h : Tendsto f l (𝓝 a)) : Tendsto (fun x => arsinh (f x)) l (𝓝 (arsinh a)) :=
   (continuous_arsinh.tendsto _).comp h
 
 section Continuous
 
-variable {X : Type*} [TopologicalSpace X] {f : X -> Real} {s : Set X} {a : X}
+variable {X : Type*} [TopologicalSpace X] {f : X → ℝ} {s : Set X} {a : X}
 
 nonrec theorem ContinuousAt.arsinh (h : ContinuousAt f a) :
     ContinuousAt (fun x => arsinh (f x)) a :=
@@ -853,42 +717,28 @@ nonrec theorem ContinuousWithinAt.arsinh (h : ContinuousWithinAt f s a) :
     ContinuousWithinAt (fun x => arsinh (f x)) s a :=
   h.arsinh
 
-/--
-theorem `ContinuousOn.arsinh` / 定理 `ContinuousOn.arsinh`
-
-English:
-theorem ContinuousOn.arsinh
-  given: (h : ContinuousOn f s)
-  statement: ContinuousOn (fun x => arsinh (f x)) s
-  proof: fun x hx => (h x hx).arsinh
-
-中文:
-定理 ContinuousOn.arsinh
-  条件: (h : ContinuousOn f s)
-  结论: ContinuousOn (fun x => arsinh (f x)) s
-  证明: fun x hx => (h x hx).arsinh
-
-Depends on / 依赖: arsinh
+/-
+**ContinuousOn.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.arsinh (h : ContinuousOn f s) : ContinuousOn (fun x => arsinh
+ (f x)) s
+参数：h : ContinuousOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousWithinAt.arsinh`：∀ {X : Type u_1} [inst : TopologicalSpace X] 
+{f : X → ℝ} {s : Set X} {a : X},   ContinuousWithinAt f s a → ContinuousWithinAt
+ (fun x => Real…
 -/
 theorem ContinuousOn.arsinh (h : ContinuousOn f s) : ContinuousOn (fun x => arsinh (f x)) s :=
   fun x hx => (h x hx).arsinh
-
-/--
-theorem `Continuous.arsinh` / 定理 `Continuous.arsinh`
-
-English:
-theorem Continuous.arsinh
-  given: (h : Continuous f)
-  statement: Continuous fun x => arsinh (f x)
-  proof: continuous_arsinh.comp h
-
-中文:
-定理 连续.arsinh
-  条件: (h : 连续 f)
-  结论: 连续 fun x => arsinh (f x)
-  证明: continuous_arsinh.comp h
-
-Depends on / 依赖: continuous_arsinh, continuous_arsinh.comp
+/-
+**Continuous.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.arsinh (h : Continuous f) : Continuous fun x => arsinh (f x)
+参数：h : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `Real.continuous_arsinh`：continuous_arsinh : Continuous arsinh
 -/
 theorem Continuous.arsinh (h : Continuous f) : Continuous fun x => arsinh (f x) :=
   continuous_arsinh.comp h
@@ -897,322 +747,267 @@ end Continuous
 
 section fderiv
 
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] {f : E -> Real} {s : Set E} {a : E}
-  {f' : StrongDual Real E} {n : Nat∞}
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] {f : E → ℝ} {s : Set E} {a : E}
+  {f' : StrongDual ℝ E} {n : ℕ∞}
 
-/--
-theorem `HasStrictFDerivAt.arsinh` / 定理 `HasStrictFDerivAt.arsinh`
-
-English:
-theorem HasStrictFDerivAt.arsinh
-  given: (hf : HasStrictFDerivAt f f' a)
-  proof: (hasStrictDerivAt_arsinh _).comp_hasStrictFDerivAt a hf
-
-中文:
-定理 HasStrictFDerivAt.arsinh
-  条件: (hf : HasStrictFDerivAt f f' a)
-  证明: (hasStrictDerivAt_arsinh _).comp_hasStrictFDerivAt a hf
-
-Depends on / 依赖: comp_hasStrictFDerivAt, hasStrictDerivAt_arsinh
+/-
+**HasStrictFDerivAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.arsinh (hf : HasStrictFDerivAt f f' a) : HasStrictFDeriv
+At (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') a
+参数：hf : HasStrictFDerivAt f f' a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.comp_hasStrictFDerivAt`：HasStrictDerivAt.comp_hasStrict
+FDerivAt {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} (x) (hh : HasStrictDerivAt h₂ h₂' (f x
+)) (hf : HasStrictFDerivAt f …
+· 使用定理 `Real.hasStrictDerivAt_arsinh`：hasStrictDerivAt_arsinh (x : Real) : HasSt
+rictDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
 -/
 theorem HasStrictFDerivAt.arsinh (hf : HasStrictFDerivAt f f' a) :
     HasStrictFDerivAt (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') a :=
   (hasStrictDerivAt_arsinh _).comp_hasStrictFDerivAt a hf
-
-/--
-theorem `HasFDerivAt.arsinh` / 定理 `HasFDerivAt.arsinh`
-
-English:
-theorem HasFDerivAt.arsinh
-  given: (hf : HasFDerivAt f f' a)
-  proof: (hasDerivAt_arsinh _).comp_hasFDerivAt a hf
-
-中文:
-定理 在点处Fréchet可导.arsinh
-  条件: (hf : 在点处Fréchet可导 f f' a)
-  证明: (hasDerivAt_arsinh _).comp_hasFDerivAt a hf
-
-Depends on / 依赖: comp_hasFDerivAt, hasDerivAt_arsinh
+/-
+**HasFDerivAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.arsinh (hf : HasFDerivAt f f' a) : HasFDerivAt (fun x => arsin
+h (f x)) ((√(1 + f a ^ 2))⁻¹ • f') a
+参数：hf : HasFDerivAt f f' a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivAt`：HasDerivAt.comp_hasFDerivAt {f : E -> 𝕜'} {
+f' : E ->L[𝕜] 𝕜'} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFDerivAt f f' x) :
+ HasFDerivAt (h₂ …
+· 使用定理 `Real.hasDerivAt_arsinh`：hasDerivAt_arsinh (x : Real) : HasDerivAt arsinh
+ (√(1 + x ^ 2))⁻¹ x
 -/
 theorem HasFDerivAt.arsinh (hf : HasFDerivAt f f' a) :
     HasFDerivAt (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') a :=
   (hasDerivAt_arsinh _).comp_hasFDerivAt a hf
-
-/--
-theorem `HasFDerivWithinAt.arsinh` / 定理 `HasFDerivWithinAt.arsinh`
-
-English:
-theorem HasFDerivWithinAt.arsinh
-  given: (hf : HasFDerivWithinAt f f' s a)
-  proof: (hasDerivAt_arsinh _).comp_hasFDerivWithinAt a hf
-
-@[fun_prop]
-
-中文:
-定理 HasFDerivWithinAt.arsinh
-  条件: (hf : HasFDerivWithinAt f f' s a)
-  证明: (hasDerivAt_arsinh _).comp_hasFDerivWithinAt a hf
-
-@[fun_prop]
-
-Depends on / 依赖: comp_hasFDerivWithinAt, hasDerivAt_arsinh
+/-
+**HasFDerivWithinAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.arsinh (hf : HasFDerivWithinAt f f' s a) : HasFDerivWith
+inAt (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') s a
+参数：hf : HasFDerivWithinAt f f' s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivWithinAt`：HasDerivAt.comp_hasFDerivWithinAt {f 
+: E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} {s} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFD
+erivWithinAt f f' s x) …
+· 使用定理 `Real.hasDerivAt_arsinh`：hasDerivAt_arsinh (x : Real) : HasDerivAt arsinh
+ (√(1 + x ^ 2))⁻¹ x
 -/
 theorem HasFDerivWithinAt.arsinh (hf : HasFDerivWithinAt f f' s a) :
     HasFDerivWithinAt (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') s a :=
   (hasDerivAt_arsinh _).comp_hasFDerivWithinAt a hf
 
 @[fun_prop]
-/--
-theorem `DifferentiableAt.arsinh` / 定理 `DifferentiableAt.arsinh`
-
-English:
-theorem DifferentiableAt.arsinh
-  given: (h : DifferentiableAt Real f a)
-  proof: (differentiable_arsinh _).comp a h
-
-@[fun_prop]
-
-中文:
-定理 DifferentiableAt.arsinh
-  条件: (h : DifferentiableAt 实数 f a)
-  证明: (differentiable_arsinh _).comp a h
-
-@[fun_prop]
-
-Depends on / 依赖: differentiable_arsinh
+/-
+**DifferentiableAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.arsinh (h : DifferentiableAt Real f a) : DifferentiableAt
+ Real (fun x => arsinh (f x)) a
+参数：h : DifferentiableAt Real f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.comp`：DifferentiableAt.comp {g : F -> G} (hg : Differen
+tiableAt 𝕜 g (f x)) (hf : DifferentiableAt 𝕜 f x) : DifferentiableAt 𝕜 (g ∘ f) x
+· 使用定理 `Real.differentiable_arsinh`：differentiable_arsinh : Differentiable Real 
+arsinh
 -/
-theorem DifferentiableAt.arsinh (h : DifferentiableAt Real f a) :
-    DifferentiableAt Real (fun x => arsinh (f x)) a :=
+theorem DifferentiableAt.arsinh (h : DifferentiableAt ℝ f a) :
+    DifferentiableAt ℝ (fun x => arsinh (f x)) a :=
   (differentiable_arsinh _).comp a h
 
 @[fun_prop]
-/--
-theorem `DifferentiableWithinAt.arsinh` / 定理 `DifferentiableWithinAt.arsinh`
-
-English:
-theorem DifferentiableWithinAt.arsinh
-  given: (h : DifferentiableWithinAt Real f s a)
-  proof: (differentiable_arsinh _).comp_differentiableWithinAt a h
-
-@[fun_prop]
-
-中文:
-定理 DifferentiableWithinAt.arsinh
-  条件: (h : DifferentiableWithinAt 实数 f s a)
-  证明: (differentiable_arsinh _).comp_differentiableWithinAt a h
-
-@[fun_prop]
-
-Depends on / 依赖: comp_differentiableWithinAt, differentiable_arsinh
+/-
+**DifferentiableWithinAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.arsinh (h : DifferentiableWithinAt Real f s a) : Di
+fferentiableWithinAt Real (fun x => arsinh (f x)) s a
+参数：h : DifferentiableWithinAt Real f s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.comp_differentiableWithinAt`：DifferentiableAt.comp_diff
+erentiableWithinAt {g : F -> G} (hg : DifferentiableAt 𝕜 g (f x)) (hf : Differen
+tiableWithinAt 𝕜 f s x) : Differen…
+· 使用定理 `Real.differentiable_arsinh`：differentiable_arsinh : Differentiable Real 
+arsinh
 -/
-theorem DifferentiableWithinAt.arsinh (h : DifferentiableWithinAt Real f s a) :
-    DifferentiableWithinAt Real (fun x => arsinh (f x)) s a :=
+theorem DifferentiableWithinAt.arsinh (h : DifferentiableWithinAt ℝ f s a) :
+    DifferentiableWithinAt ℝ (fun x => arsinh (f x)) s a :=
   (differentiable_arsinh _).comp_differentiableWithinAt a h
 
 @[fun_prop]
-/--
-theorem `DifferentiableOn.arsinh` / 定理 `DifferentiableOn.arsinh`
-
-English:
-theorem DifferentiableOn.arsinh
-  given: (h : DifferentiableOn Real f s)
-  proof: fun x hx => (h x hx).arsinh
-
-@[fun_prop]
-
-中文:
-定理 DifferentiableOn.arsinh
-  条件: (h : DifferentiableOn 实数 f s)
-  证明: fun x hx => (h x hx).arsinh
-
-@[fun_prop]
-
-Depends on / 依赖: arsinh
+/-
+**DifferentiableOn.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.arsinh (h : DifferentiableOn Real f s) : DifferentiableOn
+ Real (fun x => arsinh (f x)) s
+参数：h : DifferentiableOn Real f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.arsinh`：DifferentiableWithinAt.arsinh (h : Differ
+entiableWithinAt Real f s a) : DifferentiableWithinAt Real (fun x => arsinh (f x
+)) s a
 -/
-theorem DifferentiableOn.arsinh (h : DifferentiableOn Real f s) :
-    DifferentiableOn Real (fun x => arsinh (f x)) s := fun x hx => (h x hx).arsinh
+theorem DifferentiableOn.arsinh (h : DifferentiableOn ℝ f s) :
+    DifferentiableOn ℝ (fun x => arsinh (f x)) s := fun x hx => (h x hx).arsinh
 
 @[fun_prop]
-/--
-theorem `Differentiable.arsinh` / 定理 `Differentiable.arsinh`
-
-English:
-theorem Differentiable.arsinh
-  given: (h : Differentiable Real f)
-  statement: Differentiable Real fun x => arsinh (f x)
-  proof: differentiable_arsinh.comp h
-
-@[fun_prop]
-
-中文:
-定理 可微.arsinh
-  条件: (h : 可微 实数 f)
-  结论: 可微 实数 fun x => arsinh (f x)
-  证明: differentiable_arsinh.comp h
-
-@[fun_prop]
-
-Depends on / 依赖: differentiable_arsinh, differentiable_arsinh.comp
+/-
+**Differentiable.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Differentiable.arsinh (h : Differentiable Real f) : Differentiable Real fu
+n x => arsinh (f x)
+参数：h : Differentiable Real f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Differentiable.comp`：Differentiable.comp {g : F -> G} (hg : Differentiab
+le 𝕜 g) (hf : Differentiable 𝕜 f) : Differentiable 𝕜 (g ∘ f)
+· 使用定理 `Real.differentiable_arsinh`：differentiable_arsinh : Differentiable Real 
+arsinh
 -/
-theorem Differentiable.arsinh (h : Differentiable Real f) : Differentiable Real fun x => arsinh (f x) :=
+theorem Differentiable.arsinh (h : Differentiable ℝ f) : Differentiable ℝ fun x => arsinh (f x) :=
   differentiable_arsinh.comp h
 
 @[fun_prop]
-/--
-theorem `ContDiffAt.arsinh` / 定理 `ContDiffAt.arsinh`
-
-English:
-theorem ContDiffAt.arsinh
-  given: (h : ContDiffAt Real n f a)
-  statement: ContDiffAt Real n (fun x => arsinh (f x)) a
-  proof: contDiff_arsinh.contDiffAt.comp a h
-
-@[fun_prop]
-
-中文:
-定理 ContDiffAt.arsinh
-  条件: (h : ContDiffAt 实数 n f a)
-  结论: ContDiffAt 实数 n (fun x => arsinh (f x)) a
-  证明: contDiff_arsinh.contDiffAt.comp a h
-
-@[fun_prop]
-
-Depends on / 依赖: contDiffAt, contDiff_arsinh, contDiff_arsinh.contDiffAt.comp
+/-
+**ContDiffAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffAt.arsinh (h : ContDiffAt Real n f a) : ContDiffAt Real n (fun x =
+> arsinh (f x)) a
+参数：h : ContDiffAt Real n f a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} {G : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_arsinh`：contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real
+ n arsinh
 -/
-theorem ContDiffAt.arsinh (h : ContDiffAt Real n f a) : ContDiffAt Real n (fun x => arsinh (f x)) a :=
+theorem ContDiffAt.arsinh (h : ContDiffAt ℝ n f a) : ContDiffAt ℝ n (fun x => arsinh (f x)) a :=
   contDiff_arsinh.contDiffAt.comp a h
 
 @[fun_prop]
-/--
-theorem `ContDiffWithinAt.arsinh` / 定理 `ContDiffWithinAt.arsinh`
-
-English:
-theorem ContDiffWithinAt.arsinh
-  given: (h : ContDiffWithinAt Real n f s a)
-  proof: contDiff_arsinh.contDiffAt.comp_contDiffWithinAt a h
-
-@[fun_prop]
-
-中文:
-定理 ContDiffWithinAt.arsinh
-  条件: (h : ContDiffWithinAt 实数 n f s a)
-  证明: contDiff_arsinh.contDiffAt.comp_contDiffWithinAt a h
-
-@[fun_prop]
-
-Depends on / 依赖: comp_contDiffWithinAt, contDiffAt, contDiff_arsinh, contDiff_arsinh.contDiffAt.comp_contDiffWithinAt
+/-
+**ContDiffWithinAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffWithinAt.arsinh (h : ContDiffWithinAt Real n f s a) : ContDiffWith
+inAt Real n (fun x => arsinh (f x)) s a
+参数：h : ContDiffWithinAt Real n f s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp_contDiffWithinAt`：ContDiffAt.comp_contDiffWithinAt (x : 
+E) (hg : ContDiffAt 𝕜 n g (f x)) (hf : ContDiffWithinAt 𝕜 n f s x) : ContDiffWit
+hinAt 𝕜 n (g ∘ f) s x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_arsinh`：contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real
+ n arsinh
 -/
-theorem ContDiffWithinAt.arsinh (h : ContDiffWithinAt Real n f s a) :
-    ContDiffWithinAt Real n (fun x => arsinh (f x)) s a :=
+theorem ContDiffWithinAt.arsinh (h : ContDiffWithinAt ℝ n f s a) :
+    ContDiffWithinAt ℝ n (fun x => arsinh (f x)) s a :=
   contDiff_arsinh.contDiffAt.comp_contDiffWithinAt a h
 
 @[fun_prop]
-/--
-theorem `ContDiff.arsinh` / 定理 `ContDiff.arsinh`
-
-English:
-theorem ContDiff.arsinh
-  given: (h : ContDiff Real n f)
-  statement: ContDiff Real n fun x => arsinh (f x)
-  proof: contDiff_arsinh.comp h
-
-@[fun_prop]
-
-中文:
-定理 连续可微.arsinh
-  条件: (h : 连续可微 实数 n f)
-  结论: 连续可微 实数 n fun x => arsinh (f x)
-  证明: contDiff_arsinh.comp h
-
-@[fun_prop]
-
-Depends on / 依赖: contDiff_arsinh, contDiff_arsinh.comp
+/-
+**ContDiff.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiff.arsinh (h : ContDiff Real n f) : ContDiff Real n fun x => arsinh 
+(f x)
+参数：h : ContDiff Real n f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp`：ContDiff.comp {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 
+n g) (hf : ContDiff 𝕜 n f) : ContDiff 𝕜 n (g ∘ f)
+· 使用定理 `Real.contDiff_arsinh`：contDiff_arsinh {n : WithTop Nat∞} : ContDiff Real
+ n arsinh
 -/
-theorem ContDiff.arsinh (h : ContDiff Real n f) : ContDiff Real n fun x => arsinh (f x) :=
+theorem ContDiff.arsinh (h : ContDiff ℝ n f) : ContDiff ℝ n fun x => arsinh (f x) :=
   contDiff_arsinh.comp h
 
 @[fun_prop]
-/--
-theorem `ContDiffOn.arsinh` / 定理 `ContDiffOn.arsinh`
-
-English:
-theorem ContDiffOn.arsinh
-  given: (h : ContDiffOn Real n f s)
-  statement: ContDiffOn Real n (fun x => arsinh (f x)) s
-  proof: fun x hx => (h x hx).arsinh
-
-中文:
-定理 ContDiffOn.arsinh
-  条件: (h : ContDiffOn 实数 n f s)
-  结论: ContDiffOn 实数 n (fun x => arsinh (f x)) s
-  证明: fun x hx => (h x hx).arsinh
-
-Depends on / 依赖: arsinh
+/-
+**ContDiffOn.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffOn.arsinh (h : ContDiffOn Real n f s) : ContDiffOn Real n (fun x =
+> arsinh (f x)) s
+参数：h : ContDiffOn Real n f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffWithinAt.arsinh`：ContDiffWithinAt.arsinh (h : ContDiffWithinAt R
+eal n f s a) : ContDiffWithinAt Real n (fun x => arsinh (f x)) s a
 -/
-theorem ContDiffOn.arsinh (h : ContDiffOn Real n f s) : ContDiffOn Real n (fun x => arsinh (f x)) s :=
+theorem ContDiffOn.arsinh (h : ContDiffOn ℝ n f s) : ContDiffOn ℝ n (fun x => arsinh (f x)) s :=
   fun x hx => (h x hx).arsinh
 
 end fderiv
 
 section deriv
 
-variable {f : Real -> Real} {s : Set Real} {a f' : Real}
+variable {f : ℝ → ℝ} {s : Set ℝ} {a f' : ℝ}
 
-/--
-theorem `HasStrictDerivAt.arsinh` / 定理 `HasStrictDerivAt.arsinh`
-
-English:
-theorem HasStrictDerivAt.arsinh
-  given: (hf : HasStrictDerivAt f f' a)
-  proof: (hasStrictDerivAt_arsinh _).comp a hf
-
-中文:
-定理 HasStrictDerivAt.arsinh
-  条件: (hf : HasStrictDerivAt f f' a)
-  证明: (hasStrictDerivAt_arsinh _).comp a hf
-
-Depends on / 依赖: hasStrictDerivAt_arsinh
+/-
+**HasStrictDerivAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictDerivAt.arsinh (hf : HasStrictDerivAt f f' a) : HasStrictDerivAt 
+(fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') a
+参数：hf : HasStrictDerivAt f f' a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasStrictDerivAt.comp`：HasStrictDerivAt.comp (hh₂ : HasStrictDerivAt h₂ 
+h₂' (h x)) (hh : HasStrictDerivAt h h' x) : HasStrictDerivAt (h₂ ∘ h) (h₂' * h')
+ x
+· 使用定理 `Real.hasStrictDerivAt_arsinh`：hasStrictDerivAt_arsinh (x : Real) : HasSt
+rictDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
 -/
 theorem HasStrictDerivAt.arsinh (hf : HasStrictDerivAt f f' a) :
     HasStrictDerivAt (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') a :=
   (hasStrictDerivAt_arsinh _).comp a hf
-
-/--
-theorem `HasDerivAt.arsinh` / 定理 `HasDerivAt.arsinh`
-
-English:
-theorem HasDerivAt.arsinh
-  given: (hf : HasDerivAt f f' a)
-  proof: (hasDerivAt_arsinh _).comp a hf
-
-中文:
-定理 在点处可导.arsinh
-  条件: (hf : 在点处可导 f f' a)
-  证明: (hasDerivAt_arsinh _).comp a hf
-
-Depends on / 依赖: hasDerivAt_arsinh
+/-
+**HasDerivAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivAt.arsinh (hf : HasDerivAt f f' a) : HasDerivAt (fun x => arsinh (
+f x)) ((√(1 + f a ^ 2))⁻¹ • f') a
+参数：hf : HasDerivAt f f' a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasDerivAt.comp`：HasDerivAt.comp (hh₂ : HasDerivAt h₂ h₂' (h x)) (hh : H
+asDerivAt h h' x) : HasDerivAt (h₂ ∘ h) (h₂' * h') x
+· 使用定理 `Real.hasDerivAt_arsinh`：hasDerivAt_arsinh (x : Real) : HasDerivAt arsinh
+ (√(1 + x ^ 2))⁻¹ x
 -/
 theorem HasDerivAt.arsinh (hf : HasDerivAt f f' a) :
     HasDerivAt (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') a :=
   (hasDerivAt_arsinh _).comp a hf
-
-/--
-theorem `HasDerivWithinAt.arsinh` / 定理 `HasDerivWithinAt.arsinh`
-
-English:
-theorem HasDerivWithinAt.arsinh
-  given: (hf : HasDerivWithinAt f f' s a)
-  proof: (hasDerivAt_arsinh _).comp_hasDerivWithinAt a hf
-
-中文:
-定理 HasDerivWithinAt.arsinh
-  条件: (hf : HasDerivWithinAt f f' s a)
-  证明: (hasDerivAt_arsinh _).comp_hasDerivWithinAt a hf
-
-Depends on / 依赖: comp_hasDerivWithinAt, hasDerivAt_arsinh
+/-
+**HasDerivWithinAt.arsinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivWithinAt.arsinh (hf : HasDerivWithinAt f f' s a) : HasDerivWithinA
+t (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') s a
+参数：hf : HasDerivWithinAt f f' s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasDerivAt.comp_hasDerivWithinAt`：HasDerivAt.comp_hasDerivWithinAt (hh₂ 
+: HasDerivAt h₂ h₂' (h x)) (hh : HasDerivWithinAt h h' s x) : HasDerivWithinAt (
+h₂ ∘ h) (h₂' * h') s x
+· 使用定理 `Real.hasDerivAt_arsinh`：hasDerivAt_arsinh (x : Real) : HasDerivAt arsinh
+ (√(1 + x ^ 2))⁻¹ x
 -/
 theorem HasDerivWithinAt.arsinh (hf : HasDerivWithinAt f f' s a) :
     HasDerivWithinAt (fun x => arsinh (f x)) ((√(1 + f a ^ 2))⁻¹ • f') s a :=
   (hasDerivAt_arsinh _).comp_hasDerivWithinAt a hf
 
 end deriv
+

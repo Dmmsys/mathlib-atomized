@@ -41,63 +41,53 @@ variable [CommMonoid α]
 variable [DecidableEq α]
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (s : Finset ι) (f : ι -> Finset α)
-  proof: map_prod (coeMonoidHom : Finset α ->* Set α) _ _
-
-omit [DecidableEq α]
-
-中文:
-定理 coe_prod
-  条件: (s : 有限集 ι) (f : ι -> 有限集 α)
-  证明: map_prod (coeMonoidHom : Finset α ->* Set α) _ _
-
-omit [DecidableEq α]
-
-Depends on / 依赖: Finset, coeMonoidHom, map_prod
+/-
+**Finset.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_prod (s : Finset ι) (f : ι -> Finset α) : ↑(∏ i in s, f i) = ∏ i in s,
+ (f i : Set α)
+参数：s : Finset ι；f : ι -> Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
 -/
-theorem coe_prod (s : Finset ι) (f : ι -> Finset α) :
-    ↑(∏ i in s, f i) = ∏ i in s, (f i : Set α) :=
-  map_prod (coeMonoidHom : Finset α ->* Set α) _ _
+theorem coe_prod (s : Finset ι) (f : ι → Finset α) :
+    ↑(∏ i ∈ s, f i) = ∏ i ∈ s, (f i : Set α) :=
+  map_prod (coeMonoidHom : Finset α →* Set α) _ _
 
 omit [DecidableEq α]
 variable [DecidableEq ι]
-
-/--
-lemma `prod_inv_index` / 引理 `prod_inv_index`
-
-English:
-lemma prod_inv_index
-  given: [InvolutiveInv ι] (s : Finset ι) (f : ι -> α)
-  proof: prod_image inv_injective.injOn
-
-中文:
-引理 prod_inv_index
-  条件: [InvolutiveInv ι] (s : 有限集 ι) (f : ι -> α)
-  证明: prod_image inv_injective.injOn
+/-
+**Finset.prod_inv_index** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : CommMonoid α] [inst_1 : DecidableE
+q ι] [inst_2 : InvolutiveInv ι] (s : Finset ι)   (f : ι → α), ∏ i ∈ s⁻¹, f i = ∏
+ i ∈ s, f i⁻¹
+参数：s : Finset ι；f : ι → α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_image`：prod_image [DecidableEq ι] {s : Finset κ} {g : κ -> ι
+} : Set.InjOn g s -> ∏ x in s.image g, f x = ∏ x in s, f (g x)
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `inv_injective`：inv_injective : Function.Injective (Inv.inv : G -> G)
 -/
-@[to_additive (attr := simp)] lemma prod_inv_index [InvolutiveInv ι] (s : Finset ι) (f : ι -> α) :
-    ∏ i in s⁻¹, f i = ∏ i in s, f i⁻¹ := prod_image inv_injective.injOn
-
-/--
-lemma `prod_neg_index` / 引理 `prod_neg_index`
-
-English:
-lemma prod_neg_index
-  given: [InvolutiveNeg ι] (s : Finset ι) (f : ι -> α)
-  proof: prod_image neg_injective.injOn
-
-中文:
-引理 prod_neg_index
-  条件: [InvolutiveNeg ι] (s : 有限集 ι) (f : ι -> α)
-  证明: prod_image neg_injective.injOn
+@[to_additive (attr := simp)] lemma prod_inv_index [InvolutiveInv ι] (s : Finset ι) (f : ι → α) :
+    ∏ i ∈ s⁻¹, f i = ∏ i ∈ s, f i⁻¹ := prod_image inv_injective.injOn
+/-
+**Finset.prod_neg_index** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : CommMonoid α] [inst_1 : DecidableE
+q ι] [inst_2 : InvolutiveNeg ι] (s : Finset ι)   (f : ι → α), ∏ i ∈ -s, f i = ∏ 
+i ∈ s, f (-i)
+参数：s : Finset ι；f : ι → α；-i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_image`：prod_image [DecidableEq ι] {s : Finset κ} {g : κ -> ι
+} : Set.InjOn g s -> ∏ x in s.image g, f x = ∏ x in s, f (g x)
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `neg_injective`：∀ {G : Type u_3} [inst : InvolutiveNeg G], Function.Injec
+tive Neg.neg
 -/
-@[to_additive existing, simp] lemma prod_neg_index [InvolutiveNeg ι] (s : Finset ι) (f : ι -> α) :
-    ∏ i in -s, f i = ∏ i in s, f (-i) := prod_image neg_injective.injOn
+@[to_additive existing, simp] lemma prod_neg_index [InvolutiveNeg ι] (s : Finset ι) (f : ι → α) :
+    ∏ i ∈ -s, f i = ∏ i ∈ s, f (-i) := prod_image neg_injective.injOn
 
 end CommMonoid
 
@@ -105,22 +95,24 @@ section AddCommMonoid
 
 variable [AddCommMonoid α] [DecidableEq ι]
 
-/--
-lemma `sum_inv_index` / 引理 `sum_inv_index`
-
-English:
-lemma sum_inv_index
-  given: [InvolutiveInv ι] (s : Finset ι) (f : ι -> α)
-  proof: sum_image inv_injective.injOn
-
-中文:
-引理 sum_inv_index
-  条件: [InvolutiveInv ι] (s : 有限集 ι) (f : ι -> α)
-  证明: sum_image inv_injective.injOn
+/-
+**Finset.sum_inv_index** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} [inst : AddCommMonoid α] [inst_1 : Decidab
+leEq ι] [inst_2 : InvolutiveInv ι]   (s : Finset ι) (f : ι → α), ∑ i ∈ s⁻¹, f i 
+= ∑ i ∈ s, f i⁻¹
+参数：s : Finset ι；f : ι → α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_image`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_4} [inst :
+ AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι]   {s : Finset κ} {g : κ →
+ ι}, S…
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `inv_injective`：inv_injective : Function.Injective (Inv.inv : G -> G)
 -/
-@[to_additive existing, simp] lemma sum_inv_index [InvolutiveInv ι] (s : Finset ι) (f : ι -> α) :
-    ∑ i in s⁻¹, f i = ∑ i in s, f i⁻¹ := sum_image inv_injective.injOn
+@[to_additive existing, simp] lemma sum_inv_index [InvolutiveInv ι] (s : Finset ι) (f : ι → α) :
+    ∑ i ∈ s⁻¹, f i = ∑ i ∈ s, f i⁻¹ := sum_image inv_injective.injOn
 
 end AddCommMonoid
 
 end Finset
+

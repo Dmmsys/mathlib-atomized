@@ -42,104 +42,66 @@ attribute [local instance] Set.monad
 /-- If `s : Set α` is a set with `Fintype` instance and `f : α → Set β` is a function such that
 each `f a`, `a ∈ s`, has a `Fintype` structure, then `s >>= f` has a `Fintype` structure. -/
 @[instance_reducible]
-/--
-Definition of `fintypeBind` / `fintypeBind` 的定义
+/-
+**Set.fintypeBind** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：fintypeBind {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β)
+ (H : forall a in s, Fintype (f a)) : Fintype (s >>= f)
+参数：s : Set α；f : α -> Set β；H : forall a in s, Fintype (f a)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fintypeBind
-  signature: {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β)
-  body: Set.fintypeBiUnion s f H
-
-中文:
-定义 fintypeBind
-  签名: {α β} [DecidableEq β] (s : 集合 α) [有限类型 s] (f : α -> 集合 β)
-  定义体: Set.fintypeBiUnion s f H
-
-Depends on / 依赖: Set.fintypeBiUnion, fintypeBiUnion
+--- 原说明 ---
+If `s : Set α` is a set with `Fintype` instance and `f : α → Set β` is a functio
+n such that
+each `f a`, `a ∈ s`, has a `Fintype` structure, then `s >>= f` has a `Fintype` s
+tructure.
 -/
-def fintypeBind {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β)
-    (H : forall a in s, Fintype (f a)) : Fintype (s >>= f) :=
+def fintypeBind {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α → Set β)
+    (H : ∀ a ∈ s, Fintype (f a)) : Fintype (s >>= f) :=
   Set.fintypeBiUnion s f H
-
-/--
-Instance `fintypeBind'` / 实例 `fintypeBind'`
-
-English:
-instance fintypeBind'
-  signature: {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β)
-  body: Set.fintypeBiUnion' s f
-
-中文:
-实例 fintypeBind'
-  签名: {α β} [DecidableEq β] (s : 集合 α) [有限类型 s] (f : α -> 集合 β)
-  定义体: Set.fintypeBiUnion' s f
-
-Depends on / 依赖: Set.fintypeBiUnion, fintypeBiUnion
+/-
+**Set.fintypeBind'** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：fintypeBind' {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β
+) [forall a, Fintype (f a)] : Fintype (s >>= f)
+参数：s : Set α；f : α -> Set β；f a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeBind' {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α -> Set β)
-    [forall a, Fintype (f a)] : Fintype (s >>= f) :=
+instance fintypeBind' {α β} [DecidableEq β] (s : Set α) [Fintype s] (f : α → Set β)
+    [∀ a, Fintype (f a)] : Fintype (s >>= f) :=
   Set.fintypeBiUnion' s f
 
 end monad
 
-/--
-Instance `fintypePure` / 实例 `fintypePure`
-
-English:
-instance fintypePure
-  signature: : forall a : α, Fintype (pure a : Set α)
-  body: Set.fintypeSingleton
-
-中文:
-实例 fintypePure
-  签名: : 对任意 a : α, 有限类型 (pure a : 集合 α)
-  定义体: Set.fintypeSingleton
-
-Depends on / 依赖: Set.fintypeSingleton, fintypeSingleton
+/-
+**Set.fintypePure** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：fintypePure : forall a : α, Fintype (pure a : Set α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypePure : forall a : α, Fintype (pure a : Set α) :=
+instance fintypePure : ∀ a : α, Fintype (pure a : Set α) :=
   Set.fintypeSingleton
-
-/--
-Instance `fintypeSeq` / 实例 `fintypeSeq`
-
-English:
-instance fintypeSeq
-  signature: [DecidableEq β] (f : Set (α -> β)) (s : Set α) [Fintype f] [Fintype s]
-  body: by
-  rw [seq_def]
-  apply Set.fintypeBiUnion'
-
-中文:
-实例 fintypeSeq
-  签名: [DecidableEq β] (f : 集合 (α -> β)) (s : 集合 α) [有限类型 f] [有限类型 s]
-  定义体: by
-  rw [seq_def]
-  apply Set.fintypeBiUnion'
-
-Depends on / 依赖: Set.fintypeBiUnion, fintypeBiUnion, seq_def
+/-
+**Set.fintypeSeq** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：fintypeSeq [DecidableEq β] (f : Set (α -> β)) (s : Set α) [Fintype f] [Fin
+type s] : Fintype (f.seq s)
+参数：f : Set (α -> β)；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSeq [DecidableEq β] (f : Set (α -> β)) (s : Set α) [Fintype f] [Fintype s] :
+instance fintypeSeq [DecidableEq β] (f : Set (α → β)) (s : Set α) [Fintype f] [Fintype s] :
     Fintype (f.seq s) := by
   rw [seq_def]
   apply Set.fintypeBiUnion'
-
-/--
-Instance `fintypeSeq'` / 实例 `fintypeSeq'`
-
-English:
-instance fintypeSeq'
-  signature: {α β : Type u} [DecidableEq β] (f : Set (α -> β)) (s : Set α) [Fintype f]
-  body: Set.fintypeSeq f s
-
-中文:
-实例 fintypeSeq'
-  签名: {α β : 类型u} [DecidableEq β] (f : 集合 (α -> β)) (s : 集合 α) [有限类型 f]
-  定义体: Set.fintypeSeq f s
-
-Depends on / 依赖: Set.fintypeSeq, fintypeSeq
+/-
+**Set.fintypeSeq'** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：fintypeSeq' {α β : Type u} [DecidableEq β] (f : Set (α -> β)) (s : Set α) 
+[Fintype f] [Fintype s] : Fintype (f <*> s)
+参数：f : Set (α -> β)；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance fintypeSeq' {α β : Type u} [DecidableEq β] (f : Set (α -> β)) (s : Set α) [Fintype f]
+instance fintypeSeq' {α β : Type u} [DecidableEq β] (f : Set (α → β)) (s : Set α) [Fintype f]
     [Fintype s] : Fintype (f <*> s) :=
   Set.fintypeSeq f s
 
@@ -161,46 +123,30 @@ Some set instances do not appear here since they are consequences of others, for
 
 namespace Finite.Set
 
-/--
-theorem `finite_pure` / 定理 `finite_pure`
-
-English:
-theorem finite_pure
-  given: (a : α)
-  statement: (pure a : Set α).Finite
-  proof: toFinite _
-
-中文:
-定理 finite_pure
-  条件: (a : α)
-  结论: (pure a : 集合 α).有限
-  证明: toFinite _
-
-Depends on / 依赖: toFinite
+/-
+**Finite.Set.finite_pure** 是 Mathlib 中的一个定理，位于命名空间 `Finite.Set`。
+形式化陈述：finite_pure (a : α) : (pure a : Set α).Finite
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 theorem finite_pure (a : α) : (pure a : Set α).Finite :=
   toFinite _
-
-/--
-Instance `finite_seq` / 实例 `finite_seq`
-
-English:
-instance finite_seq
-  signature: (f : Set (α -> β)) (s : Set α) [Finite f] [Finite s]
-  body: by
-  rw [seq_def]
-  infer_instance
-
-中文:
-实例 finite_seq
-  签名: (f : 集合 (α -> β)) (s : 集合 α) [有限 f] [有限 s]
-  定义体: by
-  rw [seq_def]
-  infer_instance
-
-Depends on / 依赖: infer_instance, seq_def
+/-
+**Finite.Set.finite_seq** 是 Mathlib 中的一个实例，位于命名空间 `Finite.Set`。
+形式化陈述：finite_seq (f : Set (α -> β)) (s : Set α) [Finite f] [Finite s] : Finite (
+f.seq s)
+参数：f : Set (α -> β)；s : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.seq_def`：seq_def {s : Set (α -> β)} {t : Set α} : seq s t = ⋃ f in s
+, f '' t
 -/
-instance finite_seq (f : Set (α -> β)) (s : Set α) [Finite f] [Finite s] : Finite (f.seq s) := by
+instance finite_seq (f : Set (α → β)) (s : Set α) [Finite f] [Finite s] : Finite (f.seq s) := by
   rw [seq_def]
   infer_instance
 
@@ -223,65 +169,48 @@ section SetFiniteConstructors
 section monad
 attribute [local instance] Set.monad
 
-/--
-theorem `Finite.bind` / 定理 `Finite.bind`
-
-English:
-theorem Finite.bind
-  given: {α β} {s : Set α} {f : α -> Set β} (h : s.Finite) (hf : forall a in s, (f a).Finite)
-  proof: h.biUnion hf
-
-中文:
-定理 有限.bind
-  条件: {α β} {s : 集合 α} {f : α -> 集合 β} (h : s.有限) (hf : 对任意 a in s, (f a).有限)
-  证明: h.biUnion hf
-
-Depends on / 依赖: biUnion, h.biUnion
+/-
+**Set.Finite.bind** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α β : Type u_1} {s : Set α} {f : α → Set β}, s.Finite → (∀ a ∈ s, (f a)
+.Finite) → (s >>= f).Finite
+参数：∀ a ∈ s, (f a).Finite；s >>= f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.biUnion`：∀ {α : Type u} {ι : Type u_1} {s : Set ι}, s.Finite 
+→ ∀ {t : ι → Set α}, (∀ i ∈ s, (t i).Finite) → (⋃ i ∈ s, t i).Finite
 -/
-theorem Finite.bind {α β} {s : Set α} {f : α -> Set β} (h : s.Finite) (hf : forall a in s, (f a).Finite) :
+theorem Finite.bind {α β} {s : Set α} {f : α → Set β} (h : s.Finite) (hf : ∀ a ∈ s, (f a).Finite) :
     (s >>= f).Finite :=
   h.biUnion hf
 
 end monad
 
-/--
-theorem `Finite.seq` / 定理 `Finite.seq`
-
-English:
-theorem Finite.seq
-  given: {f : Set (α -> β)} {s : Set α} (hf : f.Finite) (hs : s.Finite)
-  proof: hf.image2 _ hs
-
-中文:
-定理 有限.seq
-  条件: {f : 集合 (α -> β)} {s : 集合 α} (hf : f.有限) (hs : s.有限)
-  证明: hf.image2 _ hs
-
-Depends on / 依赖: hf.image2, image2
+/-
+**Set.Finite.seq** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u} {β : Type v} {f : Set (α → β)} {s : Set α}, f.Finite → s.Fi
+nite → (f.seq s).Finite
+参数：α → β；f.seq s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.image2`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {s : S
+et α} {t : Set β} (f : α → β → γ),   s.Finite → t.Finite → (Set.image2 f s t).Fi
+nite
 -/
-theorem Finite.seq {f : Set (α -> β)} {s : Set α} (hf : f.Finite) (hs : s.Finite) :
+theorem Finite.seq {f : Set (α → β)} {s : Set α} (hf : f.Finite) (hs : s.Finite) :
     (f.seq s).Finite :=
   hf.image2 _ hs
-
-/--
-theorem `Finite.seq'` / 定理 `Finite.seq'`
-
-English:
-theorem Finite.seq'
-  given: {α β : Type u} {f : Set (α -> β)} {s : Set α} (hf : f.Finite) (hs : s.Finite)
-  proof: hf.seq hs
-
-中文:
-定理 有限.seq'
-  条件: {α β : 类型u} {f : 集合 (α -> β)} {s : 集合 α} (hf : f.有限) (hs : s.有限)
-  证明: hf.seq hs
-
-Depends on / 依赖: hf.seq
+/-
+**Set.Finite.seq'** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α β : Type u} {f : Set (α → β)} {s : Set α}, f.Finite → s.Finite → (f <
+*> s).Finite
+参数：α → β；f <*> s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.seq`：∀ {α : Type u} {β : Type v} {f : Set (α → β)} {s : Set α
+}, f.Finite → s.Finite → (f.seq s).Finite
 -/
-theorem Finite.seq' {α β : Type u} {f : Set (α -> β)} {s : Set α} (hf : f.Finite) (hs : s.Finite) :
+theorem Finite.seq' {α β : Type u} {f : Set (α → β)} {s : Set α} (hf : f.Finite) (hs : s.Finite) :
     (f <*> s).Finite :=
   hf.seq hs
 
 end SetFiniteConstructors
 
 end Set
+

@@ -48,27 +48,27 @@ more accurate diagram would have the chain on the left embedded within each node
 on the right.
 
 ```
-┌─────────┐ ┌──────────────────────┐
-│ │ │ │
-│ Complex │ │ Isometric unital ├──────────┐
-│ │ │ │ │
-└────┬────┘ └───────────┬──────────┘ │
-     │ │ │
-     │ │ │
-     ▼ ▼ ▼
-┌─────────┐ ┌──────────────────────┐ ┌────────┐
-│ │ │ │ │ │
-│ Real │ │ Isometric non-unital │ │ Unital │
-│ │ │ │ │ │
-└────┬────┘ └───────────┬──────────┘ └────┬───┘
-     : │ │
-     : │ │
-     ▼ ▼ │
-┌─────────┐ ┌──────────────────────┐ │
-│ │ │ │ │
-│ NNReal │ │ Non-unital │◄─────────┘
-│ │ │ │
-└─────────┘ └──────────────────────┘
+┌─────────┐     ┌──────────────────────┐
+│         │     │                      │
+│ Complex │     │   Isometric unital   ├──────────┐
+│         │     │                      │          │
+└────┬────┘     └───────────┬──────────┘          │
+     │                      │                     │
+     │                      │                     │
+     ▼                      ▼                     ▼
+┌─────────┐     ┌──────────────────────┐     ┌────────┐
+│         │     │                      │     │        │
+│   Real  │     │ Isometric non-unital │     │ Unital │
+│         │     │                      │     │        │
+└────┬────┘     └───────────┬──────────┘     └────┬───┘
+     :                      │                     │
+     :                      │                     │
+     ▼                      ▼                     │
+┌─────────┐     ┌──────────────────────┐          │
+│         │     │                      │          │
+│  NNReal │     │      Non-unital      │◄─────────┘
+│         │     │                      │
+└─────────┘     └──────────────────────┘
 ```
 
 ## Developing general theory
@@ -140,17 +140,6 @@ works is `ℂ`.
 Unless you are developing theory over arbitrary scalar rings, it should never be necessary to
 assume `ContinuousMap.UniqueHom` or `ContinuousMapZero.UniqueHom`, despite the fact that these
 hypotheses are necessary for certain lemmas (in particular, `cfc_comp`). Over `ℝ` and `ℂ`, this
-/--
-Instance `should` / 实例 `should`
-
-English:
-instance should
-  signature: always be available, and for `ℝ≥0`, one needs only to have the additional
-
-中文:
-实例 should
-  签名: always be available, and for `ℝ≥0`, one needs only to have the additional
--/
 instance should always be available, and for `ℝ≥0`, one needs only to have the additional
 assumptions `T2Space A` and `IsTopologicalRing A` (as before, the algebra `A` should still be an
 `ℝ`-algebra).
@@ -189,3 +178,4 @@ then the appropriate location is `Mathlib/Analysis/CStarAlgebra/SpecialFunctions
 If, as is often the case, some results need the import and others do not, there should be two files,
 one in each location.
 -/
+

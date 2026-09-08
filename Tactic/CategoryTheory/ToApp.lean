@@ -35,32 +35,17 @@ open Lean Meta Elab Tactic
 open CategoryTheory
 namespace Mathlib.Tactic.CategoryTheory.ToApp
 
-/--
-Definition of `catAppSimp` / `catAppSimp` 的定义
+/-- Simplify an expression in `Cat` using basic properties of `NatTrans.app`. -/
+/-
+**Mathlib.Tactic.CategoryTheory.ToApp.catAppSimp** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.CategoryTheory.ToApp`。
+形式化陈述：catAppSimp (e : Expr) : MetaM Simp.Result
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition catAppSimp
-  signature: (e : Expr)
-  body: simpOnlyNames [
-    ``Cat.Hom.comp_toFunctor, ``Functor.comp_obj, ``Cat.Hom.comp_obj, ``Cat.whiskerLeft_app,
-    ``Cat.whiskerRight_app, ``Cat.Hom₂.id_app, ``Cat.Hom₂.comp_app, ``Cat.eqToHom_app,
-    ``Cat.leftUnitor_hom_app, ``Cat.leftUnitor_inv_app, ``Cat.rightUnitor_hom_app,
-    ``Cat.rightUnitor_inv_app, ``Cat.associator_hom_app, ``Cat.associator_inv_app, ``eqToHom_refl,
-    ``Category.comp_id, ``Category.id_comp] e
-    (config := { decide := false })
-
-中文:
-定义 catAppSimp
-  签名: (e : Expr)
-  定义体: simpOnlyNames [
-    ``Cat.Hom.comp_toFunctor, ``Functor.comp_obj, ``Cat.Hom.comp_obj, ``Cat.whiskerLeft_app,
-    ``Cat.whiskerRight_app, ``Cat.Hom₂.id_app, ``Cat.Hom₂.comp_app, ``Cat.eqToHom_app,
-    ``Cat.leftUnitor_hom_app, ``Cat.leftUnitor_inv_app, ``Cat.rightUnitor_hom_app,
-    ``Cat.rightUnitor_inv_app, ``Cat.associator_hom_app, ``Cat.associator_inv_app, ``eqToHom_refl,
-    ``Category.comp_id, ``Category.id_comp] e
-    (config := { decide := false })
-
-Depends on / 依赖: Cat.Hom, Cat.Hom.comp_obj, Cat.Hom.comp_toFunctor, Cat.associator_hom_app, Cat.associator_inv_app, Cat.eqToHom_app, Cat.leftUnitor_hom_app, Cat.leftUnitor_inv_app, Cat.rightUnitor_hom_app, Cat.rightUnitor_inv_app, Cat.whiskerLeft_app, Cat.whiskerRight_app, Category, Category.comp_id, Category.id_comp, Functor, Functor.comp_obj, associator_hom_app, associator_inv_app, comp_app
+--- 原说明 ---
+Simplify an expression in `Cat` using basic properties of `NatTrans.app`.
 -/
 def catAppSimp (e : Expr) : MetaM Simp.Result :=
   simpOnlyNames [
@@ -72,99 +57,28 @@ def catAppSimp (e : Expr) : MetaM Simp.Result :=
     (config := { decide := false })
 
 /--
-Definition of `toCatExpr` / `toCatExpr` 的定义
+Given a term of type `∀ ..., η = θ`, where `η θ : f ⟶ g` are 2-morphisms in some bicategory
+`B`, which is bound by the `∀` binder, get the corresponding equation in the bicategory `Cat`.
 
-English:
-definition toCatExpr
-  signature: (e : Expr)
-  body: do
-  let (args, binderInfos, conclusion) ← forallMetaTelescope (← inferType e)
-  -- Find the expression corresponding to the bicategory, by analyzing `η = θ` (i.e. conclusion)
-  let B ←
-    match conclusion.getAppFnArgs with
-    | (`Eq, #[_, η, _]) =>
-      match (← inferType η).getAppFnArgs with
-      | (`Quiver.Hom, #[_, _, f, _]) =>
-        match (← inferType f).getAppFnArgs with
-        | (`Quiver.Hom, #[_, _, a, _]) => inferType a
-        | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
-      | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
-    | _ => throwError "The conclusion {conclusion} is not an equality!"
-  -- Create level metavariables to be used for `Cat.{v, u}`
-  let u ← mkFreshLevelMVar
-  let v ← mkFreshLevelMVar
-  -- Assign `B` to `Cat.{v, u}`
-  let _ ← isDefEq B (.const ``Cat [v, u])
-  -- Assign the right bicategory instance to `Cat.{v, u}`
-  let some inst ← args.findM? fun x => do
-      return (← inferType x).getAppFnArgs == (`CategoryTheory.Bicategory, #[B])
-    | throwError "Cannot find the argument for the bicategory instance of the bicategory in which \
-      the equality is taking place."
-  let _ ← isDefEq inst (.const ``CategoryTheory.Cat.bicategory [v, u])
-  -- Construct the new expression
-  let value := mkAppN e args
-  let rec
-  /-- Recursive function which applies `mkLambdaFVars` stepwise
-  (so that each step can have different binderinfos) -/
-    apprec (i : Nat) (e : Expr) : MetaM Expr := do
-      if h : i < args.size then
-        let arg := args[i]
-        let bi := binderInfos[i]!
-        let e' ← apprec (i + 1) e
-        unless arg != B && arg != inst do return e'
-        mkLambdaFVars #[arg] e' (binderInfoForMVars := bi)
-      else
-        return e
-  let value ← apprec 0 value
-  return value
+It is important here that the levels in the term are level metavariables, as otherwise these will
+not be reassignable to the corresponding levels of `Cat`. -/
+/-
+**Mathlib.Tactic.CategoryTheory.ToApp.toCatExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.CategoryTheory.ToApp`。
+形式化陈述：toCatExpr (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-universe v u in
+--- 原说明 ---
+Given a term of type `∀ ..., η = θ`, where `η θ : f ⟶ g` are 2-morphisms in some
+ bicategory
+`B`, which is bound by the `∀` binder, get the corresponding equation in the bic
+ategory `Cat`.
 
-中文:
-定义 toCatExpr
-  签名: (e : Expr)
-  定义体: do
-  let (args, binderInfos, conclusion) ← forallMetaTelescope (← inferType e)
-  -- Find the expression corresponding to the bicategory, by analyzing `η = θ` (i.e. conclusion)
-  let B ←
-    match conclusion.getAppFnArgs with
-    | (`Eq, #[_, η, _]) =>
-      match (← inferType η).getAppFnArgs with
-      | (`Quiver.Hom, #[_, _, f, _]) =>
-        match (← inferType f).getAppFnArgs with
-        | (`Quiver.Hom, #[_, _, a, _]) => inferType a
-        | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
-      | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
-    | _ => throwError "The conclusion {conclusion} is not an equality!"
-  -- Create level metavariables to be used for `Cat.{v, u}`
-  let u ← mkFreshLevelMVar
-  let v ← mkFreshLevelMVar
-  -- Assign `B` to `Cat.{v, u}`
-  let _ ← isDefEq B (.const ``Cat [v, u])
-  -- Assign the right bicategory instance to `Cat.{v, u}`
-  let some inst ← args.findM? fun x => do
-      return (← inferType x).getAppFnArgs == (`CategoryTheory.Bicategory, #[B])
-    | throwError "Cannot find the argument for the bicategory instance of the bicategory in which \
-      the equality is taking place."
-  let _ ← isDefEq inst (.const ``CategoryTheory.Cat.bicategory [v, u])
-  -- Construct the new expression
-  let value := mkAppN e args
-  let rec
-  /-- Recursive function which applies `mkLambdaFVars` stepwise
-  (so that each step can have different binderinfos) -/
-    apprec (i : Nat) (e : Expr) : MetaM Expr := do
-      if h : i < args.size then
-        let arg := args[i]
-        let bi := binderInfos[i]!
-        let e' ← apprec (i + 1) e
-        unless arg != B && arg != inst do return e'
-        mkLambdaFVars #[arg] e' (binderInfoForMVars := bi)
-      else
-        return e
-  let value ← apprec 0 value
-  return value
-
-universe v u in
+It is important here that the levels in the term are level metavariables, as oth
+erwise these will
+not be reassignable to the corresponding levels of `Cat`.
 -/
 def toCatExpr (e : Expr) : MetaM Expr := do
   let (args, binderInfos, conclusion) ← forallMetaTelescope (← inferType e)
@@ -208,56 +122,59 @@ def toCatExpr (e : Expr) : MetaM Expr := do
   return value
 
 universe v u in
-/--
-lemma `toNatTrans_congr` / 引理 `toNatTrans_congr`
-
-English:
-lemma toNatTrans_congr
-  given: {C D : Cat.{v, u}} {F G : C ⟶ D} {η θ : F ⟶ G} (h : η = θ)
-  proof: congr(($h).toNatTrans)
-
-中文:
-引理 to自然数Trans_congr
-  条件: {C D : Cat.{v, u}} {F G : C ⟶ D} {η θ : F ⟶ G} (h : η = θ)
-  证明: congr(($h).toNatTrans)
-
-Depends on / 依赖: toNatTrans
+/-
+**Mathlib.Tactic.CategoryTheory.ToApp.toNatTrans_congr** 是 Mathlib 中的一个引理，位于命名空间
+ `Mathlib.Tactic.CategoryTheory.ToApp`。
+形式化陈述：toNatTrans_congr {C D : Cat.{v, u}} {F G : C ⟶ D} {η θ : F ⟶ G} (h : η = θ
+) : η.toNatTrans = θ.toNatTrans
+参数：h : η = θ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma toNatTrans_congr {C D : Cat.{v, u}} {F G : C ⟶ D} {η θ : F ⟶ G} (h : η = θ) :
   η.toNatTrans = θ.toNatTrans := congr(($h).toNatTrans)
 
 /--
-Definition of `toNatTransExpr` / `toNatTransExpr` 的定义
+Given morphisms `f g : C ⟶ D` in the bicategory `Cat`, and an equation `η = θ` between 2-morphisms
+(possibly after a `∀` binder), produce the equation `η.toNatTrans = θ.toNatTrans`
+-/
+/-
+**Mathlib.Tactic.CategoryTheory.ToApp.toNatTransExpr** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.CategoryTheory.ToApp`。
+形式化陈述：toNatTransExpr (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNatTransExpr
-  signature: (e : Expr)
-  body: do
-  mapForallTelescope (fun e => mkAppM ``toNatTrans_congr #[e]) e
-
-中文:
-定义 to自然数TransExpr
-  签名: (e : Expr)
-  定义体: do
-  mapForallTelescope (fun e => mkAppM ``toNatTrans_congr #[e]) e
+--- 原说明 ---
+Given morphisms `f g : C ⟶ D` in the bicategory `Cat`, and an equation `η = θ` b
+etween 2-morphisms
+(possibly after a `∀` binder), produce the equation `η.toNatTrans = θ.toNatTrans
+`
 -/
 def toNatTransExpr (e : Expr) : MetaM Expr := do
   mapForallTelescope (fun e => mkAppM ``toNatTrans_congr #[e]) e
 
 /--
-Definition of `toAppExpr` / `toAppExpr` 的定义
+Given functors `F G : C ⥤ D`, and an equation `η = θ` between natural transformations
+(possibly after a `∀` binder), produce the equation `∀ (X : C), η.app X = θ.app X`, and simplify
+it using basic lemmas about `NatTrans.app`. -/
+/-
+**Mathlib.Tactic.CategoryTheory.ToApp.toAppExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.CategoryTheory.ToApp`。
+形式化陈述：toAppExpr (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAppExpr
-  signature: (e : Expr)
-  body: do
-  mapForallTelescope (fun e => do simpType catAppSimp (← mkAppM ``NatTrans.congr_app #[e])) e
-
-中文:
-定义 toAppExpr
-  签名: (e : Expr)
-  定义体: do
-  mapForallTelescope (fun e => do simpType catAppSimp (← mkAppM ``NatTrans.congr_app #[e])) e
+--- 原说明 ---
+Given functors `F G : C ⥤ D`, and an equation `η = θ` between natural transforma
+tions
+(possibly after a `∀` binder), produce the equation `∀ (X : C), η.app X = θ.app 
+X`, and simplify
+it using basic lemmas about `NatTrans.app`.
 -/
 def toAppExpr (e : Expr) : MetaM Expr := do
   mapForallTelescope (fun e => do simpType catAppSimp (← mkAppM ``NatTrans.congr_app #[e])) e
@@ -310,3 +227,4 @@ elab "to_app_of% " t:term : term => do
   toAppExpr (← elabTerm t none)
 
 end Mathlib.Tactic.CategoryTheory.ToApp
+

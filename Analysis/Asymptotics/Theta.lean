@@ -35,54 +35,30 @@ variable [SeminormedAddCommGroup E'] [SeminormedAddCommGroup F'] [SeminormedAddC
   [SeminormedRing R']
 
 variable [NormedField 𝕜] [NormedField 𝕜']
-variable {c c' c₁ c₂ : Real} {f : α -> E} {g : α -> F} {k : α -> G}
-variable {f' : α -> E'} {g' : α -> F'} {k' : α -> G'}
-variable {f'' : α -> E''} {g'' : α -> F''}
+variable {c c' c₁ c₂ : ℝ} {f : α → E} {g : α → F} {k : α → G}
+variable {f' : α → E'} {g' : α → F'} {k' : α → G'}
+variable {f'' : α → E''} {g'' : α → F''}
 variable {l l' : Filter α}
 
 @[refl]
-/--
-theorem `isTheta_refl` / 定理 `isTheta_refl`
-
-English:
-theorem isTheta_refl
-  given: (f : α -> E) (l : Filter α)
-  statement: f =Θ[l] f
-  proof: ⟨isBigO_refl _ _, isBigO_refl _ _⟩
-
-中文:
-定理 isTheta_refl
-  条件: (f : α -> E) (l : 滤子 α)
-  结论: f =Θ[l] f
-  证明: ⟨isBigO_refl _ _, isBigO_refl _ _⟩
-
-Depends on / 依赖: isBigO_refl
+/-
+**Asymptotics.isTheta_refl** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_refl (f : α -> E) (l : Filter α) : f =Θ[l] f
+参数：f : α -> E；l : Filter α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isBigO_refl`：isBigO_refl (f : α -> E) (l : Filter α) : f =O[
+l] f
 -/
-theorem isTheta_refl (f : α -> E) (l : Filter α) : f =Θ[l] f :=
+theorem isTheta_refl (f : α → E) (l : Filter α) : f =Θ[l] f :=
   ⟨isBigO_refl _ _, isBigO_refl _ _⟩
-
-/--
-theorem `isTheta_rfl` / 定理 `isTheta_rfl`
-
-English:
-theorem isTheta_rfl
-  statement: f =Θ[l] f
-  proof: isTheta_refl _ _
-
-@[symm]
-nonrec theorem IsTheta.symm (h : f =Θ[l] g) : g =Θ[l] f :=
-  h.symm
-
-中文:
-定理 isTheta_rfl
-  结论: f =Θ[l] f
-  证明: isTheta_refl _ _
-
-@[symm]
-nonrec theorem IsTheta.symm (h : f =Θ[l] g) : g =Θ[l] f :=
-  h.symm
-
-Depends on / 依赖: isTheta_refl
+/-
+**Asymptotics.isTheta_rfl** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_rfl : f =Θ[l] f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isTheta_refl`：isTheta_refl (f : α -> E) (l : Filter α) : f =
+Θ[l] f
 -/
 theorem isTheta_rfl : f =Θ[l] f :=
   isTheta_refl _ _
@@ -90,1218 +66,1020 @@ theorem isTheta_rfl : f =Θ[l] f :=
 @[symm]
 nonrec theorem IsTheta.symm (h : f =Θ[l] g) : g =Θ[l] f :=
   h.symm
-
-/--
-theorem `isTheta_comm` / 定理 `isTheta_comm`
-
-English:
-theorem isTheta_comm
-  statement: f =Θ[l] g ↔ g =Θ[l] f
-  proof: ⟨fun h => h.symm, fun h => h.symm⟩
-
-@[trans]
-
-中文:
-定理 isTheta_comm
-  结论: f =Θ[l] g ↔ g =Θ[l] f
-  证明: ⟨fun h => h.symm, fun h => h.symm⟩
-
-@[trans]
-
-Depends on / 依赖: h.symm
+/-
+**Asymptotics.isTheta_comm** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_comm : f =Θ[l] g ↔ g =Θ[l] f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
 theorem isTheta_comm : f =Θ[l] g ↔ g =Θ[l] f :=
-  ⟨fun h => h.symm, fun h => h.symm⟩
+  ⟨fun h ↦ h.symm, fun h ↦ h.symm⟩
 
 @[trans]
-/--
-theorem `IsTheta.trans` / 定理 `IsTheta.trans`
-
-English:
-theorem IsTheta.trans
-  given: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g) (h₂ : g =Θ[l] k)
-  proof: ⟨h₁.1.trans h₂.1, h₂.2.trans h₁.2⟩
-
-中文:
-定理 IsTheta.trans
-  条件: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g) (h₂ : g =Θ[l] k)
-  证明: ⟨h₁.1.trans h₂.1, h₂.2.trans h₁.2⟩
+/-
+**Asymptotics.IsTheta.trans** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5} {F' : Type u_7} [inst : Nor
+m E] [inst_1 : Norm G]   [inst_2 : SeminormedAddCommGroup F'] {l : Filter α} {f 
+: α → E} {g : α → F'} {k : α → G},   f =Θ[l] g → g =Θ[l] k → f =Θ[l] k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5}
+ {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddComm
+Group F'] {l :…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsTheta.trans {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g) (h₂ : g =Θ[l] k) :
+theorem IsTheta.trans {f : α → E} {g : α → F'} {k : α → G} (h₁ : f =Θ[l] g) (h₂ : g =Θ[l] k) :
     f =Θ[l] k :=
   ⟨h₁.1.trans h₂.1, h₂.2.trans h₁.2⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsTheta l) (IsTheta l)
-  body: ⟨IsTheta.trans⟩
-
-@[trans]
-
-中文:
-实例 :
-  签名: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsTheta l) (IsTheta l)
-  定义体: ⟨IsTheta.trans⟩
-
-@[trans]
-
-Depends on / 依赖: IsTheta
+/-
+**Asymptotics.** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsTheta l) (IsTheta l) :=
+instance : Trans (α := α → E) (β := α → F') (γ := α → G) (IsTheta l) (IsTheta l) (IsTheta l) :=
   ⟨IsTheta.trans⟩
 
 @[trans]
-/--
-theorem `IsBigO.trans_isTheta` / 定理 `IsBigO.trans_isTheta`
-
-English:
-theorem IsBigO.trans_isTheta
-  statement: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =O[l] g)
-  proof: h₁.trans h₂.1
-
-中文:
-定理 IsBigO.trans_isTheta
-  结论: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =O[l] g)
-  证明: h₁.trans h₂.1
+/-
+**Asymptotics.IsBigO.trans_isTheta** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsBigO
+`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5} {F' : Type u_7} [inst : Nor
+m E] [inst_1 : Norm G]   [inst_2 : SeminormedAddCommGroup F'] {l : Filter α} {f 
+: α → E} {g : α → F'} {k : α → G},   f =O[l] g → g =Θ[l] k → f =O[l] k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5}
+ {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddComm
+Group F'] {l :…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem IsBigO.trans_isTheta {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =O[l] g)
+theorem IsBigO.trans_isTheta {f : α → E} {g : α → F'} {k : α → G} (h₁ : f =O[l] g)
     (h₂ : g =Θ[l] k) : f =O[l] k :=
   h₁.trans h₂.1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsBigO l) (IsTheta l) (IsBigO l)
-  body: ⟨IsBigO.trans_isTheta⟩
-
-@[trans]
-
-中文:
-实例 :
-  签名: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsBigO l) (IsTheta l) (IsBigO l)
-  定义体: ⟨IsBigO.trans_isTheta⟩
-
-@[trans]
-
-Depends on / 依赖: IsBigO, IsTheta
+/-
+**Asymptotics.** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsBigO l) (IsTheta l) (IsBigO l) :=
+instance : Trans (α := α → E) (β := α → F') (γ := α → G) (IsBigO l) (IsTheta l) (IsBigO l) :=
   ⟨IsBigO.trans_isTheta⟩
 
 @[trans]
-/--
-theorem `IsTheta.trans_isBigO` / 定理 `IsTheta.trans_isBigO`
-
-English:
-theorem IsTheta.trans_isBigO
-  statement: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g)
-  proof: h₁.1.trans h₂
-
-中文:
-定理 IsTheta.trans_isBigO
-  结论: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g)
-  证明: h₁.1.trans h₂
+/-
+**Asymptotics.IsTheta.trans_isBigO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsThet
+a`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5} {F' : Type u_7} [inst : Nor
+m E] [inst_1 : Norm G]   [inst_2 : SeminormedAddCommGroup F'] {l : Filter α} {f 
+: α → E} {g : α → F'} {k : α → G},   f =Θ[l] g → g =O[l] k → f =O[l] k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5}
+ {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddComm
+Group F'] {l :…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem IsTheta.trans_isBigO {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g)
+theorem IsTheta.trans_isBigO {f : α → E} {g : α → F'} {k : α → G} (h₁ : f =Θ[l] g)
     (h₂ : g =O[l] k) : f =O[l] k :=
   h₁.1.trans h₂
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsBigO l) (IsBigO l)
-  body: ⟨IsTheta.trans_isBigO⟩
-
-@[trans]
-
-中文:
-实例 :
-  签名: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsBigO l) (IsBigO l)
-  定义体: ⟨IsTheta.trans_isBigO⟩
-
-@[trans]
-
-Depends on / 依赖: IsBigO, IsTheta
+/-
+**Asymptotics.** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsBigO l) (IsBigO l) :=
+instance : Trans (α := α → E) (β := α → F') (γ := α → G) (IsTheta l) (IsBigO l) (IsBigO l) :=
   ⟨IsTheta.trans_isBigO⟩
 
 @[trans]
-/--
-theorem `IsLittleO.trans_isTheta` / 定理 `IsLittleO.trans_isTheta`
-
-English:
-theorem IsLittleO.trans_isTheta
-  statement: {f : α -> E} {g : α -> F} {k : α -> G'} (h₁ : f =o[l] g)
-  proof: h₁.trans_isBigO h₂.1
-
-中文:
-定理 IsLittleO.trans_isTheta
-  结论: {f : α -> E} {g : α -> F} {k : α -> G'} (h₁ : f =o[l] g)
-  证明: h₁.trans_isBigO h₂.1
-
-Depends on / 依赖: trans_isBigO
+/-
+**Asymptotics.IsLittleO.trans_isTheta** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsL
+ittleO`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4} {G' : Type u_8} [inst : Nor
+m E] [inst_1 : Norm F]   [inst_2 : SeminormedAddCommGroup G'] {l : Filter α} {f 
+: α → E} {g : α → F} {k : α → G'},   f =o[l] g → g =Θ[l] k → f =o[l] k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.trans_isBigO`：∀ {α : Type u_1} {E : Type u_3} {F :
+ Type u_4} {G' : Type u_8} [inst : Norm E] [inst_1 : Norm F]   [inst_2 : Seminor
+medAddCommGroup G'] {l :…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem IsLittleO.trans_isTheta {f : α -> E} {g : α -> F} {k : α -> G'} (h₁ : f =o[l] g)
+theorem IsLittleO.trans_isTheta {f : α → E} {g : α → F} {k : α → G'} (h₁ : f =o[l] g)
     (h₂ : g =Θ[l] k) : f =o[l] k :=
   h₁.trans_isBigO h₂.1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans (α := α -> E) (β := α -> F') (γ := α -> G') (IsLittleO l) (IsTheta l) (IsLittleO l)
-  body: ⟨IsLittleO.trans_isTheta⟩
-
-@[trans]
-
-中文:
-实例 :
-  签名: Trans (α := α -> E) (β := α -> F') (γ := α -> G') (IsLittleO l) (IsTheta l) (IsLittleO l)
-  定义体: ⟨IsLittleO.trans_isTheta⟩
-
-@[trans]
-
-Depends on / 依赖: IsLittleO, IsTheta
+/-
+**Asymptotics.** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Trans (α := α -> E) (β := α -> F') (γ := α -> G') (IsLittleO l) (IsTheta l) (IsLittleO l) :=
+instance : Trans (α := α → E) (β := α → F') (γ := α → G') (IsLittleO l) (IsTheta l) (IsLittleO l) :=
   ⟨IsLittleO.trans_isTheta⟩
 
 @[trans]
-/--
-theorem `IsTheta.trans_isLittleO` / 定理 `IsTheta.trans_isLittleO`
-
-English:
-theorem IsTheta.trans_isLittleO
-  statement: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g)
-  proof: h₁.1.trans_isLittleO h₂
-
-中文:
-定理 IsTheta.trans_isLittleO
-  结论: {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g)
-  证明: h₁.1.trans_isLittleO h₂
-
-Depends on / 依赖: trans_isLittleO
+/-
+**Asymptotics.IsTheta.trans_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsT
+heta`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5} {F' : Type u_7} [inst : Nor
+m E] [inst_1 : Norm G]   [inst_2 : SeminormedAddCommGroup F'] {l : Filter α} {f 
+: α → E} {g : α → F'} {k : α → G},   f =Θ[l] g → g =o[l] k → f =o[l] k
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans_isLittleO`：∀ {α : Type u_1} {E : Type u_3} {G :
+ Type u_5} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : Seminor
+medAddCommGroup F'] {l :…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem IsTheta.trans_isLittleO {f : α -> E} {g : α -> F'} {k : α -> G} (h₁ : f =Θ[l] g)
+theorem IsTheta.trans_isLittleO {f : α → E} {g : α → F'} {k : α → G} (h₁ : f =Θ[l] g)
     (h₂ : g =o[l] k) : f =o[l] k :=
   h₁.1.trans_isLittleO h₂
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsLittleO l) (IsLittleO l)
-  body: ⟨IsTheta.trans_isLittleO⟩
-
-@[trans]
-
-中文:
-实例 :
-  签名: Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsLittleO l) (IsLittleO l)
-  定义体: ⟨IsTheta.trans_isLittleO⟩
-
-@[trans]
-
-Depends on / 依赖: IsLittleO, IsTheta
+/-
+**Asymptotics.** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Trans (α := α -> E) (β := α -> F') (γ := α -> G) (IsTheta l) (IsLittleO l) (IsLittleO l) :=
+instance : Trans (α := α → E) (β := α → F') (γ := α → G) (IsTheta l) (IsLittleO l) (IsLittleO l) :=
   ⟨IsTheta.trans_isLittleO⟩
 
 @[trans]
-/--
-theorem `IsTheta.trans_eventuallyEq` / 定理 `IsTheta.trans_eventuallyEq`
-
-English:
-theorem IsTheta.trans_eventuallyEq
-  given: {f : α -> E} {g₁ g₂ : α -> F} (h : f =Θ[l] g₁) (hg : g₁ =ᶠ[l] g₂)
-  proof: ⟨h.1.trans_eventuallyEq hg, hg.symm.trans_isBigO h.2⟩
-
-中文:
-定理 IsTheta.trans_eventuallyEq
-  条件: {f : α -> E} {g₁ g₂ : α -> F} (h : f =Θ[l] g₁) (hg : g₁ =ᶠ[l] g₂)
-  证明: ⟨h.1.trans_eventuallyEq hg, hg.symm.trans_isBigO h.2⟩
-
-Depends on / 依赖: hg.symm.trans_isBigO, trans_eventuallyEq, trans_isBigO
+/-
+**Asymptotics.IsTheta.trans_eventuallyEq** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4} [inst : Norm E] [inst_1 : N
+orm F] {l : Filter α} {f : α → E}   {g₁ g₂ : α → F}, f =Θ[l] g₁ → g₁ =ᶠ[l] g₂ → 
+f =Θ[l] g₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans_eventuallyEq`：∀ {α : Type u_1} {E : Type u_3} {
+F : Type u_4} [inst : Norm E] [inst_1 : Norm F] {l : Filter α} {f : α → E}   {g₁
+ g₂ : α → F}, f =O[l] g₁ → …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.EventuallyEq.trans_isBigO`：∀ {α : Type u_1} {E : Type u_3} {F : T
+ype u_4} [inst : Norm E] [inst_1 : Norm F] {l : Filter α} {f₁ f₂ : α → E}   {g :
+ α → F}, f₁ =ᶠ[l] f₂ →…
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsTheta.trans_eventuallyEq {f : α -> E} {g₁ g₂ : α -> F} (h : f =Θ[l] g₁) (hg : g₁ =ᶠ[l] g₂) :
+theorem IsTheta.trans_eventuallyEq {f : α → E} {g₁ g₂ : α → F} (h : f =Θ[l] g₁) (hg : g₁ =ᶠ[l] g₂) :
     f =Θ[l] g₂ :=
   ⟨h.1.trans_eventuallyEq hg, hg.symm.trans_isBigO h.2⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans (α := α -> E) (β := α -> F) (γ := α -> F) (IsTheta l) (EventuallyEq l) (IsTheta l)
-  body: ⟨IsTheta.trans_eventuallyEq⟩
-
-@[trans]
-
-中文:
-实例 :
-  签名: Trans (α := α -> E) (β := α -> F) (γ := α -> F) (IsTheta l) (EventuallyEq l) (IsTheta l)
-  定义体: ⟨IsTheta.trans_eventuallyEq⟩
-
-@[trans]
-
-Depends on / 依赖: EventuallyEq, IsTheta
+/-
+**Asymptotics.** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Trans (α := α -> E) (β := α -> F) (γ := α -> F) (IsTheta l) (EventuallyEq l) (IsTheta l) :=
+instance : Trans (α := α → E) (β := α → F) (γ := α → F) (IsTheta l) (EventuallyEq l) (IsTheta l) :=
   ⟨IsTheta.trans_eventuallyEq⟩
 
 @[trans]
-/--
-theorem `_root_.Filter.EventuallyEq.trans_isTheta` / 定理 `_root_.Filter.EventuallyEq.trans_isTheta`
-
-English:
-theorem _root_.Filter.EventuallyEq.trans_isTheta
-  statement: {f₁ f₂ : α -> E} {g : α -> F} (hf : f₁ =ᶠ[l] f₂)
-  proof: ⟨hf.trans_isBigO h.1, h.2.trans_eventuallyEq hf.symm⟩
-
-中文:
-定理 _root_.滤子.EventuallyEq.trans_isTheta
-  结论: {f₁ f₂ : α -> E} {g : α -> F} (hf : f₁ =ᶠ[l] f₂)
-  证明: ⟨hf.trans_isBigO h.1, h.2.trans_eventuallyEq hf.symm⟩
-
-Depends on / 依赖: hf.symm, hf.trans_isBigO, trans_eventuallyEq, trans_isBigO
+/-
+**Asymptotics._root_.Filter.EventuallyEq.trans_isTheta** 是 Mathlib 中的一个定理，位于命名空间
+ `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Filter.EventuallyEq.trans_isTheta {f₁ f₂ : α -> E} {g : α -> F} (hf : f₁ =ᶠ[l] f₂)
+theorem _root_.Filter.EventuallyEq.trans_isTheta {f₁ f₂ : α → E} {g : α → F} (hf : f₁ =ᶠ[l] f₂)
     (h : f₂ =Θ[l] g) : f₁ =Θ[l] g :=
   ⟨hf.trans_isBigO h.1, h.2.trans_eventuallyEq hf.symm⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Trans (α := α -> E) (β := α -> E) (γ := α -> F) (EventuallyEq l) (IsTheta l) (IsTheta l)
-  body: ⟨EventuallyEq.trans_isTheta⟩
-
-中文:
-实例 :
-  签名: Trans (α := α -> E) (β := α -> E) (γ := α -> F) (EventuallyEq l) (IsTheta l) (IsTheta l)
-  定义体: ⟨EventuallyEq.trans_isTheta⟩
-
-Depends on / 依赖: EventuallyEq, IsTheta
+/-
+**Asymptotics.** 是 Mathlib 中的一个实例，位于命名空间 `Asymptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Trans (α := α -> E) (β := α -> E) (γ := α -> F) (EventuallyEq l) (IsTheta l) (IsTheta l) :=
+instance : Trans (α := α → E) (β := α → E) (γ := α → F) (EventuallyEq l) (IsTheta l) (IsTheta l) :=
   ⟨EventuallyEq.trans_isTheta⟩
-
-/--
-lemma `_root_.Filter.EventuallyEq.isTheta` / 引理 `_root_.Filter.EventuallyEq.isTheta`
-
-English:
-lemma _root_.Filter.EventuallyEq.isTheta
-  given: {f g : α -> E} (h : f =ᶠ[l] g)
-  statement: f =Θ[l] g
-  proof: h.trans_isTheta isTheta_rfl
-
-@[simp]
-
-中文:
-引理 _root_.滤子.EventuallyEq.isTheta
-  条件: {f g : α -> E} (h : f =ᶠ[l] g)
-  结论: f =Θ[l] g
-  证明: h.trans_isTheta isTheta_rfl
-
-@[simp]
-
-Depends on / 依赖: h.trans_isTheta, isTheta_rfl, trans_isTheta
+/-
+**Asymptotics._root_.Filter.EventuallyEq.isTheta** 是 Mathlib 中的一个引理，位于命名空间 `Asym
+ptotics`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Filter.EventuallyEq.isTheta {f g : α -> E} (h : f =ᶠ[l] g) : f =Θ[l] g :=
+lemma _root_.Filter.EventuallyEq.isTheta {f g : α → E} (h : f =ᶠ[l] g) : f =Θ[l] g :=
   h.trans_isTheta isTheta_rfl
 
 @[simp]
-/--
-theorem `isTheta_bot` / 定理 `isTheta_bot`
-
-English:
-theorem isTheta_bot
-  statement: f =Θ[⊥] g
-  proof: by simp [IsTheta]
-
-@[simp]
-
-中文:
-定理 isTheta_bot
-  结论: f =Θ[⊥] g
-  证明: by simp [IsTheta]
-
-@[simp]
-
-Depends on / 依赖: IsTheta
+/-
+**Asymptotics.isTheta_bot** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_bot : f =Θ[⊥] g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem isTheta_bot : f =Θ[⊥] g := by simp [IsTheta]
 
 @[simp]
-/--
-theorem `isTheta_norm_left` / 定理 `isTheta_norm_left`
-
-English:
-theorem isTheta_norm_left
-  statement: (fun x => ‖f' x‖) =Θ[l] g ↔ f' =Θ[l] g
-  proof: by simp [IsTheta]
-
-@[simp]
-
-中文:
-定理 isTheta_norm_left
-  结论: (fun x => ‖f' x‖) =Θ[l] g ↔ f' =Θ[l] g
-  证明: by simp [IsTheta]
-
-@[simp]
-
-Depends on / 依赖: IsTheta
+/-
+**Asymptotics.isTheta_norm_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_norm_left : (fun x => ‖f' x‖) =Θ[l] g ↔ f' =Θ[l] g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isTheta_norm_left : (fun x => ‖f' x‖) =Θ[l] g ↔ f' =Θ[l] g := by simp [IsTheta]
+theorem isTheta_norm_left : (fun x ↦ ‖f' x‖) =Θ[l] g ↔ f' =Θ[l] g := by simp [IsTheta]
 
 @[simp]
-/--
-theorem `isTheta_norm_right` / 定理 `isTheta_norm_right`
-
-English:
-theorem isTheta_norm_right
-  statement: (f =Θ[l] fun x => ‖g' x‖) ↔ f =Θ[l] g'
-  proof: by simp [IsTheta]
+/-
+**Asymptotics.isTheta_norm_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_norm_right : (f =Θ[l] fun x => ‖g' x‖) ↔ f =Θ[l] g'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem isTheta_norm_right : (f =Θ[l] fun x ↦ ‖g' x‖) ↔ f =Θ[l] g' := by simp [IsTheta]
 
 alias ⟨IsTheta.of_norm_left, IsTheta.norm_left⟩ := isTheta_norm_left
 
 alias ⟨IsTheta.of_norm_right, IsTheta.norm_right⟩ := isTheta_norm_right
-
-中文:
-定理 isTheta_norm_right
-  结论: (f =Θ[l] fun x => ‖g' x‖) ↔ f =Θ[l] g'
-  证明: by simp [IsTheta]
-
-alias ⟨IsTheta.of_norm_left, IsTheta.norm_left⟩ := isTheta_norm_left
-
-alias ⟨IsTheta.of_norm_right, IsTheta.norm_right⟩ := isTheta_norm_right
-
-Depends on / 依赖: IsTheta
+/-
+**Asymptotics.IsTheta.of_norm_eventuallyEq_norm** 是 Mathlib 中的一个定理，位于命名空间 `Asymp
+totics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4} [inst : Norm E] [inst_1 : N
+orm F] {f : α → E} {g : α → F} {l : Filter α},   ((fun x => ‖f x‖) =ᶠ[l] fun x =
+> ‖g x‖) → f =Θ[l] g
+参数：(fun x => ‖f x‖) =ᶠ[l] fun x => ‖g x‖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.of_bound'`：∀ {α : Type u_1} {E : Type u_3} {F : Type 
+u_4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},  
+ (∀ᶠ (x : α) in l,…
+· 使用定理 `Filter.EventuallyEq.le`：∀ {α : Type u} {β : Type v} [inst : Preorder β] 
+{l : Filter α} {f g : α → β}, f =ᶠ[l] g → f ≤ᶠ[l] g
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
 -/
-theorem isTheta_norm_right : (f =Θ[l] fun x => ‖g' x‖) ↔ f =Θ[l] g' := by simp [IsTheta]
-
-alias ⟨IsTheta.of_norm_left, IsTheta.norm_left⟩ := isTheta_norm_left
-
-alias ⟨IsTheta.of_norm_right, IsTheta.norm_right⟩ := isTheta_norm_right
-
-/--
-theorem `IsTheta.of_norm_eventuallyEq_norm` / 定理 `IsTheta.of_norm_eventuallyEq_norm`
-
-English:
-theorem IsTheta.of_norm_eventuallyEq_norm
-  given: (h : (fun x => ‖f x‖) =ᶠ[l] fun x => ‖g x‖)
-  statement: f =Θ[l] g
-  proof: ⟨.of_bound' h.le, .of_bound' h.symm.le⟩
-
-中文:
-定理 IsTheta.of_norm_eventuallyEq_norm
-  条件: (h : (fun x => ‖f x‖) =ᶠ[l] fun x => ‖g x‖)
-  结论: f =Θ[l] g
-  证明: ⟨.of_bound' h.le, .of_bound' h.symm.le⟩
-
-Depends on / 依赖: h.le, h.symm.le, of_bound
--/
-theorem IsTheta.of_norm_eventuallyEq_norm (h : (fun x => ‖f x‖) =ᶠ[l] fun x => ‖g x‖) : f =Θ[l] g :=
+theorem IsTheta.of_norm_eventuallyEq_norm (h : (fun x ↦ ‖f x‖) =ᶠ[l] fun x ↦ ‖g x‖) : f =Θ[l] g :=
   ⟨.of_bound' h.le, .of_bound' h.symm.le⟩
-
-/--
-theorem `IsTheta.of_norm_eventuallyEq` / 定理 `IsTheta.of_norm_eventuallyEq`
-
-English:
-theorem IsTheta.of_norm_eventuallyEq
-  given: {g : α -> Real} (h : (fun x => ‖f' x‖) =ᶠ[l] g)
-  statement: f' =Θ[l] g
-  proof: of_norm_eventuallyEq_norm h.mono fun x hx => by simp only [← hx, norm_norm]
-
-中文:
-定理 IsTheta.of_norm_eventuallyEq
-  条件: {g : α -> 实数} (h : (fun x => ‖f' x‖) =ᶠ[l] g)
-  结论: f' =Θ[l] g
-  证明: of_norm_eventuallyEq_norm h.mono fun x hx => by simp only [← hx, norm_norm]
-
-Depends on / 依赖: h.mono, norm_norm, of_norm_eventuallyEq_norm
+/-
+**Asymptotics.IsTheta.of_norm_eventuallyEq** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotic
+s.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E' : Type u_6} [inst : SeminormedAddCommGroup E'] {f' : 
+α → E'} {l : Filter α} {g : α → ℝ},   (fun x => ‖f' x‖) =ᶠ[l] g → f' =Θ[l] g
+参数：fun x => ‖f' x‖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.of_norm_eventuallyEq_norm`：∀ {α : Type u_1} {E : Typ
+e u_3} {F : Type u_4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} 
+{l : Filter α},   ((fun x => ‖f x‖)…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem IsTheta.of_norm_eventuallyEq {g : α -> Real} (h : (fun x => ‖f' x‖) =ᶠ[l] g) : f' =Θ[l] g :=
-of_norm_eventuallyEq_norm h.mono fun x hx => by simp only [← hx, norm_norm]
-
-/--
-theorem `IsTheta.isLittleO_congr_left` / 定理 `IsTheta.isLittleO_congr_left`
-
-English:
-theorem IsTheta.isLittleO_congr_left
-  given: (h : f' =Θ[l] g')
-  statement: f' =o[l] k ↔ g' =o[l] k
-  proof: ⟨h.symm.trans_isLittleO, h.trans_isLittleO⟩
-
-中文:
-定理 IsTheta.isLittleO_congr_left
-  条件: (h : f' =Θ[l] g')
-  结论: f' =o[l] k ↔ g' =o[l] k
-  证明: ⟨h.symm.trans_isLittleO, h.trans_isLittleO⟩
-
-Depends on / 依赖: h.symm.trans_isLittleO, h.trans_isLittleO, trans_isLittleO
+theorem IsTheta.of_norm_eventuallyEq {g : α → ℝ} (h : (fun x ↦ ‖f' x‖) =ᶠ[l] g) : f' =Θ[l] g :=
+  of_norm_eventuallyEq_norm <| h.mono fun x hx ↦ by simp only [← hx, norm_norm]
+/-
+**Asymptotics.IsTheta.isLittleO_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotic
+s.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_5} {E' : Type u_6} {F' : Type u_7} [inst : No
+rm G] [inst_1 : SeminormedAddCommGroup E']   [inst_2 : SeminormedAddCommGroup F'
+] {k : α → G} {f' : α → E'} {g' : α → F'} {l : Filter α},   f' =Θ[l] g' → (f' =o
+[l] k ↔ g' =o[l] k)
+参数：f' =o[l] k ↔ g' =o[l] k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.trans_isLittleO`：∀ {α : Type u_1} {E : Type u_3} {G 
+: Type u_5} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : Semino
+rmedAddCommGroup F'] {l :…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
 theorem IsTheta.isLittleO_congr_left (h : f' =Θ[l] g') : f' =o[l] k ↔ g' =o[l] k :=
   ⟨h.symm.trans_isLittleO, h.trans_isLittleO⟩
-
-/--
-theorem `IsTheta.isLittleO_congr_right` / 定理 `IsTheta.isLittleO_congr_right`
-
-English:
-theorem IsTheta.isLittleO_congr_right
-  given: (h : g' =Θ[l] k')
-  statement: f =o[l] g' ↔ f =o[l] k'
-  proof: ⟨fun H => H.trans_isTheta h, fun H => H.trans_isTheta h.symm⟩
-
-中文:
-定理 IsTheta.isLittleO_congr_right
-  条件: (h : g' =Θ[l] k')
-  结论: f =o[l] g' ↔ f =o[l] k'
-  证明: ⟨fun H => H.trans_isTheta h, fun H => H.trans_isTheta h.symm⟩
-
-Depends on / 依赖: H.trans_isTheta, h.symm, trans_isTheta
+/-
+**Asymptotics.IsTheta.isLittleO_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptoti
+cs.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {F' : Type u_7} {G' : Type u_8} [inst : No
+rm E] [inst_1 : SeminormedAddCommGroup F']   [inst_2 : SeminormedAddCommGroup G'
+] {f : α → E} {g' : α → F'} {k' : α → G'} {l : Filter α},   g' =Θ[l] k' → (f =o[
+l] g' ↔ f =o[l] k')
+参数：f =o[l] g' ↔ f =o[l] k'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.trans_isTheta`：∀ {α : Type u_1} {E : Type u_3} {F 
+: Type u_4} {G' : Type u_8} [inst : Norm E] [inst_1 : Norm F]   [inst_2 : Semino
+rmedAddCommGroup G'] {l :…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
 theorem IsTheta.isLittleO_congr_right (h : g' =Θ[l] k') : f =o[l] g' ↔ f =o[l] k' :=
-  ⟨fun H => H.trans_isTheta h, fun H => H.trans_isTheta h.symm⟩
-
-/--
-theorem `IsTheta.isBigO_congr_left` / 定理 `IsTheta.isBigO_congr_left`
-
-English:
-theorem IsTheta.isBigO_congr_left
-  given: (h : f' =Θ[l] g')
-  statement: f' =O[l] k ↔ g' =O[l] k
-  proof: ⟨h.symm.trans_isBigO, h.trans_isBigO⟩
-
-中文:
-定理 IsTheta.isBigO_congr_left
-  条件: (h : f' =Θ[l] g')
-  结论: f' =O[l] k ↔ g' =O[l] k
-  证明: ⟨h.symm.trans_isBigO, h.trans_isBigO⟩
-
-Depends on / 依赖: h.symm.trans_isBigO, h.trans_isBigO, trans_isBigO
+  ⟨fun H ↦ H.trans_isTheta h, fun H ↦ H.trans_isTheta h.symm⟩
+/-
+**Asymptotics.IsTheta.isBigO_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.I
+sTheta`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_5} {E' : Type u_6} {F' : Type u_7} [inst : No
+rm G] [inst_1 : SeminormedAddCommGroup E']   [inst_2 : SeminormedAddCommGroup F'
+] {k : α → G} {f' : α → E'} {g' : α → F'} {l : Filter α},   f' =Θ[l] g' → (f' =O
+[l] k ↔ g' =O[l] k)
+参数：f' =O[l] k ↔ g' =O[l] k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.trans_isBigO`：∀ {α : Type u_1} {E : Type u_3} {G : T
+ype u_5} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : Seminorme
+dAddCommGroup F'] {l :…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
 theorem IsTheta.isBigO_congr_left (h : f' =Θ[l] g') : f' =O[l] k ↔ g' =O[l] k :=
   ⟨h.symm.trans_isBigO, h.trans_isBigO⟩
-
-/--
-theorem `IsTheta.isBigO_congr_right` / 定理 `IsTheta.isBigO_congr_right`
-
-English:
-theorem IsTheta.isBigO_congr_right
-  given: (h : g' =Θ[l] k')
-  statement: f =O[l] g' ↔ f =O[l] k'
-  proof: ⟨fun H => H.trans_isTheta h, fun H => H.trans_isTheta h.symm⟩
-
-中文:
-定理 IsTheta.isBigO_congr_right
-  条件: (h : g' =Θ[l] k')
-  结论: f =O[l] g' ↔ f =O[l] k'
-  证明: ⟨fun H => H.trans_isTheta h, fun H => H.trans_isTheta h.symm⟩
-
-Depends on / 依赖: H.trans_isTheta, h.symm, trans_isTheta
+/-
+**Asymptotics.IsTheta.isBigO_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {F' : Type u_7} {G' : Type u_8} [inst : No
+rm E] [inst_1 : SeminormedAddCommGroup F']   [inst_2 : SeminormedAddCommGroup G'
+] {f : α → E} {g' : α → F'} {k' : α → G'} {l : Filter α},   g' =Θ[l] k' → (f =O[
+l] g' ↔ f =O[l] k')
+参数：f =O[l] g' ↔ f =O[l] k'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.trans_isTheta`：∀ {α : Type u_1} {E : Type u_3} {G : T
+ype u_5} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : Seminorme
+dAddCommGroup F'] {l :…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
 theorem IsTheta.isBigO_congr_right (h : g' =Θ[l] k') : f =O[l] g' ↔ f =O[l] k' :=
-  ⟨fun H => H.trans_isTheta h, fun H => H.trans_isTheta h.symm⟩
-
-/--
-lemma `IsTheta.isTheta_congr_left` / 引理 `IsTheta.isTheta_congr_left`
-
-English:
-lemma IsTheta.isTheta_congr_left
-  given: (h : f' =Θ[l] g')
-  statement: f' =Θ[l] k ↔ g' =Θ[l] k
-  proof: h.isBigO_congr_left.and h.isBigO_congr_right
-
-中文:
-引理 IsTheta.isTheta_congr_left
-  条件: (h : f' =Θ[l] g')
-  结论: f' =Θ[l] k ↔ g' =Θ[l] k
-  证明: h.isBigO_congr_left.and h.isBigO_congr_right
-
-Depends on / 依赖: h.isBigO_congr_left.and, h.isBigO_congr_right, isBigO_congr_left, isBigO_congr_right
+  ⟨fun H ↦ H.trans_isTheta h, fun H ↦ H.trans_isTheta h.symm⟩
+/-
+**Asymptotics.IsTheta.isTheta_congr_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.
+IsTheta`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_5} {E' : Type u_6} {F' : Type u_7} [inst : No
+rm G] [inst_1 : SeminormedAddCommGroup E']   [inst_2 : SeminormedAddCommGroup F'
+] {k : α → G} {f' : α → E'} {g' : α → F'} {l : Filter α},   f' =Θ[l] g' → (f' =Θ
+[l] k ↔ g' =Θ[l] k)
+参数：f' =Θ[l] k ↔ g' =Θ[l] k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Asymptotics.IsTheta.isBigO_congr_left`：∀ {α : Type u_1} {G : Type u_5} {
+E' : Type u_6} {F' : Type u_7} [inst : Norm G] [inst_1 : SeminormedAddCommGroup 
+E']   [inst_2 : SeminormedA…
+· 使用定理 `Asymptotics.IsTheta.isBigO_congr_right`：∀ {α : Type u_1} {E : Type u_3} 
+{F' : Type u_7} {G' : Type u_8} [inst : Norm E] [inst_1 : SeminormedAddCommGroup
+ F']   [inst_2 : SeminormedA…
 -/
 lemma IsTheta.isTheta_congr_left (h : f' =Θ[l] g') : f' =Θ[l] k ↔ g' =Θ[l] k :=
   h.isBigO_congr_left.and h.isBigO_congr_right
-
-/--
-lemma `IsTheta.isTheta_congr_right` / 引理 `IsTheta.isTheta_congr_right`
-
-English:
-lemma IsTheta.isTheta_congr_right
-  given: (h : f' =Θ[l] g')
-  statement: k =Θ[l] f' ↔ k =Θ[l] g'
-  proof: h.isBigO_congr_right.and h.isBigO_congr_left
-
-中文:
-引理 IsTheta.isTheta_congr_right
-  条件: (h : f' =Θ[l] g')
-  结论: k =Θ[l] f' ↔ k =Θ[l] g'
-  证明: h.isBigO_congr_right.and h.isBigO_congr_left
-
-Depends on / 依赖: h.isBigO_congr_left, h.isBigO_congr_right.and, isBigO_congr_left, isBigO_congr_right
+/-
+**Asymptotics.IsTheta.isTheta_congr_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics
+.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_5} {E' : Type u_6} {F' : Type u_7} [inst : No
+rm G] [inst_1 : SeminormedAddCommGroup E']   [inst_2 : SeminormedAddCommGroup F'
+] {k : α → G} {f' : α → E'} {g' : α → F'} {l : Filter α},   f' =Θ[l] g' → (k =Θ[
+l] f' ↔ k =Θ[l] g')
+参数：k =Θ[l] f' ↔ k =Θ[l] g'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Asymptotics.IsTheta.isBigO_congr_right`：∀ {α : Type u_1} {E : Type u_3} 
+{F' : Type u_7} {G' : Type u_8} [inst : Norm E] [inst_1 : SeminormedAddCommGroup
+ F']   [inst_2 : SeminormedA…
+· 使用定理 `Asymptotics.IsTheta.isBigO_congr_left`：∀ {α : Type u_1} {G : Type u_5} {
+E' : Type u_6} {F' : Type u_7} [inst : Norm G] [inst_1 : SeminormedAddCommGroup 
+E']   [inst_2 : SeminormedA…
 -/
 lemma IsTheta.isTheta_congr_right (h : f' =Θ[l] g') : k =Θ[l] f' ↔ k =Θ[l] g' :=
   h.isBigO_congr_right.and h.isBigO_congr_left
-
-/--
-theorem `IsTheta.mono` / 定理 `IsTheta.mono`
-
-English:
-theorem IsTheta.mono
-  given: (h : f =Θ[l] g) (hl : l' <= l)
-  statement: f =Θ[l'] g
-  proof: ⟨h.1.mono hl, h.2.mono hl⟩
-
-中文:
-定理 IsTheta.mono
-  条件: (h : f =Θ[l] g) (hl : l' <= l)
-  结论: f =Θ[l'] g
-  证明: ⟨h.1.mono hl, h.2.mono hl⟩
+/-
+**Asymptotics.IsTheta.mono** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4} [inst : Norm E] [inst_1 : N
+orm F] {f : α → E} {g : α → F}   {l l' : Filter α}, f =Θ[l] g → l' ≤ l → f =Θ[l'
+] g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.mono`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4} 
+[inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F}   {l l' : Filter α}, f
+ =O[l'] g → l…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsTheta.mono (h : f =Θ[l] g) (hl : l' <= l) : f =Θ[l'] g :=
+theorem IsTheta.mono (h : f =Θ[l] g) (hl : l' ≤ l) : f =Θ[l'] g :=
   ⟨h.1.mono hl, h.2.mono hl⟩
-
-/--
-theorem `IsTheta.sup` / 定理 `IsTheta.sup`
-
-English:
-theorem IsTheta.sup
-  given: (h : f' =Θ[l] g') (h' : f' =Θ[l'] g')
-  statement: f' =Θ[l ⊔ l'] g'
-  proof: ⟨h.1.sup h'.1, h.2.sup h'.2⟩
-
-@[simp]
-
-中文:
-定理 IsTheta.上确界
-  条件: (h : f' =Θ[l] g') (h' : f' =Θ[l'] g')
-  结论: f' =Θ[l ⊔ l'] g'
-  证明: ⟨h.1.sup h'.1, h.2.sup h'.2⟩
-
-@[simp]
+/-
+**Asymptotics.IsTheta.sup** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E' : Type u_6} {F' : Type u_7} [inst : SeminormedAddComm
+Group E'] [inst_1 : SeminormedAddCommGroup F']   {f' : α → E'} {g' : α → F'} {l 
+l' : Filter α}, f' =Θ[l] g' → f' =Θ[l'] g' → f' =Θ[l ⊔ l'] g'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.sup`：∀ {α : Type u_1} {E : Type u_3} {F' : Type u_7} 
+[inst : Norm E] [inst_1 : SeminormedAddCommGroup F'] {f : α → E}   {g' : α → F'}
+ {l l' : Fil…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsTheta.sup (h : f' =Θ[l] g') (h' : f' =Θ[l'] g') : f' =Θ[l ⊔ l'] g' :=
   ⟨h.1.sup h'.1, h.2.sup h'.2⟩
 
 @[simp]
-/--
-theorem `isTheta_sup` / 定理 `isTheta_sup`
-
-English:
-theorem isTheta_sup
-  statement: f' =Θ[l ⊔ l'] g' ↔ f' =Θ[l] g' ∧ f' =Θ[l'] g'
-  proof: ⟨fun h => ⟨h.mono le_sup_left, h.mono le_sup_right⟩, fun h => h.1.sup h.2⟩
-
-中文:
-定理 isTheta_sup
-  结论: f' =Θ[l ⊔ l'] g' ↔ f' =Θ[l] g' ∧ f' =Θ[l'] g'
-  证明: ⟨fun h => ⟨h.mono le_sup_left, h.mono le_sup_right⟩, fun h => h.1.sup h.2⟩
-
-Depends on / 依赖: h.mono, le_sup_left, le_sup_right
+/-
+**Asymptotics.isTheta_sup** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_sup : f' =Θ[l ⊔ l'] g' ↔ f' =Θ[l] g' ∧ f' =Θ[l'] g'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.mono`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F}   {l l' : Filter α}, 
+f =Θ[l] g → l'…
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `Asymptotics.IsTheta.sup`：∀ {α : Type u_1} {E' : Type u_6} {F' : Type u_7
+} [inst : SeminormedAddCommGroup E'] [inst_1 : SeminormedAddCommGroup F']   {f' 
+: α → E'} {g'…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem isTheta_sup : f' =Θ[l ⊔ l'] g' ↔ f' =Θ[l] g' ∧ f' =Θ[l'] g' :=
-  ⟨fun h => ⟨h.mono le_sup_left, h.mono le_sup_right⟩, fun h => h.1.sup h.2⟩
-
-/--
-theorem `IsTheta.eq_zero_iff` / 定理 `IsTheta.eq_zero_iff`
-
-English:
-theorem IsTheta.eq_zero_iff
-  given: (h : f'' =Θ[l] g'')
-  statement: forallᶠ x in l, f'' x = 0 ↔ g'' x = 0
-  proof: h.1.eq_zero_imp.mp h.2.eq_zero_imp.mono fun _ => Iff.intro
-
-中文:
-定理 IsTheta.eq_zero_iff
-  条件: (h : f'' =Θ[l] g'')
-  结论: 对任意ᶠ x in l, f'' x = 0 ↔ g'' x = 0
-  证明: h.1.eq_zero_imp.mp h.2.eq_zero_imp.mono fun _ => Iff.intro
-
-Depends on / 依赖: Iff.intro, eq_zero_imp, eq_zero_imp.mono, eq_zero_imp.mp
+  ⟨fun h ↦ ⟨h.mono le_sup_left, h.mono le_sup_right⟩, fun h ↦ h.1.sup h.2⟩
+/-
+**Asymptotics.IsTheta.eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta
+`。
+形式化陈述：∀ {α : Type u_1} {E'' : Type u_9} {F'' : Type u_10} [inst : NormedAddCommG
+roup E''] [inst_1 : NormedAddCommGroup F'']   {f'' : α → E''} {g'' : α → F''} {l
+ : Filter α}, f'' =Θ[l] g'' → ∀ᶠ (x : α) in l, f'' x = 0 ↔ g'' x = 0
+参数：x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Asymptotics.IsBigO.eq_zero_imp`：∀ {α : Type u_1} {E'' : Type u_9} {F'' :
+ Type u_10} [inst : NormedAddCommGroup E''] [inst_1 : NormedAddCommGroup F'']   
+{f'' : α → E''} {g''…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsTheta.eq_zero_iff (h : f'' =Θ[l] g'') : forallᶠ x in l, f'' x = 0 ↔ g'' x = 0 :=
-h.1.eq_zero_imp.mp h.2.eq_zero_imp.mono fun _ => Iff.intro
-
-/--
-theorem `IsTheta.tendsto_zero_iff` / 定理 `IsTheta.tendsto_zero_iff`
-
-English:
-theorem IsTheta.tendsto_zero_iff
-  given: (h : f'' =Θ[l] g'')
-  proof: by
-  simp only [← isLittleO_one_iff Real, h.isLittleO_congr_left]
-
-中文:
-定理 IsTheta.tendsto_zero_iff
-  条件: (h : f'' =Θ[l] g'')
-  证明: by
-  simp only [← isLittleO_one_iff Real, h.isLittleO_congr_left]
-
-Depends on / 依赖: h.isLittleO_congr_left, isLittleO_congr_left, isLittleO_one_iff
+theorem IsTheta.eq_zero_iff (h : f'' =Θ[l] g'') : ∀ᶠ x in l, f'' x = 0 ↔ g'' x = 0 :=
+  h.1.eq_zero_imp.mp <| h.2.eq_zero_imp.mono fun _ ↦ Iff.intro
+/-
+**Asymptotics.IsTheta.tendsto_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.Is
+Theta`。
+形式化陈述：∀ {α : Type u_1} {E'' : Type u_9} {F'' : Type u_10} [inst : NormedAddCommG
+roup E''] [inst_1 : NormedAddCommGroup F'']   {f'' : α → E''} {g'' : α → F''} {l
+ : Filter α},   f'' =Θ[l] g'' → (Filter.Tendsto f'' l (nhds 0) ↔ Filter.Tendsto 
+g'' l (nhds 0))
+参数：Filter.Tendsto f'' l (nhds 0) ↔ Filter.Tendsto g'' l (nhds 0)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Asymptotics.isLittleO_one_iff`：isLittleO_one_iff {f : α -> E'''} : f =o[
+l] (fun _x => 1 : α -> F) ↔ Tendsto f l (𝓝 0)
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `Asymptotics.IsTheta.isLittleO_congr_left`：∀ {α : Type u_1} {G : Type u_5
+} {E' : Type u_6} {F' : Type u_7} [inst : Norm G] [inst_1 : SeminormedAddCommGro
+up E']   [inst_2 : SeminormedA…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem IsTheta.tendsto_zero_iff (h : f'' =Θ[l] g'') :
     Tendsto f'' l (𝓝 0) ↔ Tendsto g'' l (𝓝 0) := by
-  simp only [← isLittleO_one_iff Real, h.isLittleO_congr_left]
-
-/--
-theorem `IsTheta.tendsto_norm_atTop_iff` / 定理 `IsTheta.tendsto_norm_atTop_iff`
-
-English:
-theorem IsTheta.tendsto_norm_atTop_iff
-  given: (h : f' =Θ[l] g')
-  proof: by
-  simp only [Function.comp_def, ← isLittleO_const_left_of_ne (one_ne_zero' Real),
-    h.isLittleO_congr_right]
-
-中文:
-定理 IsTheta.tendsto_norm_atTop_iff
-  条件: (h : f' =Θ[l] g')
-  证明: by
-  simp only [Function.comp_def, ← isLittleO_const_left_of_ne (one_ne_zero' Real),
-    h.isLittleO_congr_right]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, h.isLittleO_congr_right, isLittleO_congr_right, isLittleO_const_left_of_ne, one_ne_zero
+  simp only [← isLittleO_one_iff ℝ, h.isLittleO_congr_left]
+/-
+**Asymptotics.IsTheta.tendsto_norm_atTop_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptot
+ics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E' : Type u_6} {F' : Type u_7} [inst : SeminormedAddComm
+Group E'] [inst_1 : SeminormedAddCommGroup F']   {f' : α → E'} {g' : α → F'} {l 
+: Filter α},   f' =Θ[l] g' → (Filter.Tendsto (norm ∘ f') l Filter.atTop ↔ Filter
+.Tendsto (norm ∘ g') l Filter.atTop)
+参数：Filter.Tendsto (norm ∘ f') l Filter.atTop ↔ Filter.Tendsto (norm ∘ g') l Filt
+er.atTop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Asymptotics.isLittleO_const_left_of_ne`：isLittleO_const_left_of_ne {c : 
+E''} (hc : c != 0) : (fun _x => c) =o[l] g ↔ Tendsto (fun x => ‖g x‖) l atTop
+· 使用引理 `one_ne_zero'`：one_ne_zero' [One α] [NeZero (1 : α)] : (1 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Asymptotics.IsTheta.isLittleO_congr_right`：∀ {α : Type u_1} {E : Type u_
+3} {F' : Type u_7} {G' : Type u_8} [inst : Norm E] [inst_1 : SeminormedAddCommGr
+oup F']   [inst_2 : SeminormedA…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem IsTheta.tendsto_norm_atTop_iff (h : f' =Θ[l] g') :
     Tendsto (norm ∘ f') l atTop ↔ Tendsto (norm ∘ g') l atTop := by
-  simp only [Function.comp_def, ← isLittleO_const_left_of_ne (one_ne_zero' Real),
+  simp only [Function.comp_def, ← isLittleO_const_left_of_ne (one_ne_zero' ℝ),
     h.isLittleO_congr_right]
-
-/--
-theorem `IsTheta.isBoundedUnder_le_iff` / 定理 `IsTheta.isBoundedUnder_le_iff`
-
-English:
-theorem IsTheta.isBoundedUnder_le_iff
-  given: (h : f' =Θ[l] g')
-  proof: by
-  simp only [← isBigO_const_of_ne (one_ne_zero' Real), h.isBigO_congr_left]
-
-中文:
-定理 IsTheta.isBoundedUnder_le_iff
-  条件: (h : f' =Θ[l] g')
-  证明: by
-  simp only [← isBigO_const_of_ne (one_ne_zero' Real), h.isBigO_congr_left]
-
-Depends on / 依赖: h.isBigO_congr_left, isBigO_congr_left, isBigO_const_of_ne, one_ne_zero
+/-
+**Asymptotics.IsTheta.isBoundedUnder_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptoti
+cs.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E' : Type u_6} {F' : Type u_7} [inst : SeminormedAddComm
+Group E'] [inst_1 : SeminormedAddCommGroup F']   {f' : α → E'} {g' : α → F'} {l 
+: Filter α},   f' =Θ[l] g' →     (Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) l
+ (norm ∘ f') ↔       Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) l (norm ∘ g'))
+参数：Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) l (norm ∘ f') ↔       Filter.IsB
+oundedUnder (fun x1 x2 => x1 ≤ x2) l (norm ∘ g')。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Asymptotics.isBigO_const_of_ne`：isBigO_const_of_ne {c : F''} (hc : c != 
+0) : (f =O[l] fun _x => c) ↔ IsBoundedUnder (· <= ·) l (norm ∘ f)
+· 使用引理 `one_ne_zero'`：one_ne_zero' [One α] [NeZero (1 : α)] : (1 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Asymptotics.IsTheta.isBigO_congr_left`：∀ {α : Type u_1} {G : Type u_5} {
+E' : Type u_6} {F' : Type u_7} [inst : Norm G] [inst_1 : SeminormedAddCommGroup 
+E']   [inst_2 : SeminormedA…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem IsTheta.isBoundedUnder_le_iff (h : f' =Θ[l] g') :
-    IsBoundedUnder (· <= ·) l (norm ∘ f') ↔ IsBoundedUnder (· <= ·) l (norm ∘ g') := by
-  simp only [← isBigO_const_of_ne (one_ne_zero' Real), h.isBigO_congr_left]
-
-/--
-theorem `IsTheta.smul` / 定理 `IsTheta.smul`
-
-English:
-theorem IsTheta.smul
-  statement: [NormedSpace 𝕜 E'] [NormedSpace 𝕜' F'] {f₁ : α -> 𝕜} {f₂ : α -> 𝕜'} {g₁ : α -> E'}
-  proof: ⟨hf.1.smul hg.1, hf.2.smul hg.2⟩
-
-中文:
-定理 IsTheta.smul
-  结论: [赋范空间 𝕜 E'] [赋范空间 𝕜' F'] {f₁ : α -> 𝕜} {f₂ : α -> 𝕜'} {g₁ : α -> E'}
-  证明: ⟨hf.1.smul hg.1, hf.2.smul hg.2⟩
+    IsBoundedUnder (· ≤ ·) l (norm ∘ f') ↔ IsBoundedUnder (· ≤ ·) l (norm ∘ g') := by
+  simp only [← isBigO_const_of_ne (one_ne_zero' ℝ), h.isBigO_congr_left]
+/-
+**Asymptotics.IsTheta.smul** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {E' : Type u_6} {F' : Type u_7} {𝕜 : Type u_14} {𝕜' : Typ
+e u_15} [inst : SeminormedAddCommGroup E']   [inst_1 : SeminormedAddCommGroup F'
+] [inst_2 : NormedField 𝕜] [inst_3 : NormedField 𝕜'] {l : Filter α}   [inst_4 : 
+NormedSpace 𝕜 E'] [inst_5 : NormedSpace 𝕜' F'] {f₁ : α → 𝕜} {f₂ : α → 𝕜'} {g₁ : 
+α → E'} {g₂ : α → F'},   f₁ =Θ[l] f₂ → g₁ =Θ[l] g₂ → (fun x => f₁ x • g₁ x) =Θ[l
+] fun x => f₂ x • g₂ x
+参数：fun x => f₁ x • g₁ x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.smul`：∀ {α : Type u_1} {E' : Type u_6} {F' : Type u_7
+} {R : Type u_13} {𝕜' : Type u_16} [inst : SeminormedAddCommGroup E']   [inst_1 
+: SeminormedA…
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsTheta.smul [NormedSpace 𝕜 E'] [NormedSpace 𝕜' F'] {f₁ : α -> 𝕜} {f₂ : α -> 𝕜'} {g₁ : α -> E'}
-    {g₂ : α -> F'} (hf : f₁ =Θ[l] f₂) (hg : g₁ =Θ[l] g₂) :
-    (fun x => f₁ x • g₁ x) =Θ[l] fun x => f₂ x • g₂ x :=
+theorem IsTheta.smul [NormedSpace 𝕜 E'] [NormedSpace 𝕜' F'] {f₁ : α → 𝕜} {f₂ : α → 𝕜'} {g₁ : α → E'}
+    {g₂ : α → F'} (hf : f₁ =Θ[l] f₂) (hg : g₁ =Θ[l] g₂) :
+    (fun x ↦ f₁ x • g₁ x) =Θ[l] fun x ↦ f₂ x • g₂ x :=
   ⟨hf.1.smul hg.1, hf.2.smul hg.2⟩
-
-/--
-theorem `IsTheta.mul` / 定理 `IsTheta.mul`
-
-English:
-theorem IsTheta.mul
-  given: {f₁ f₂ : α -> 𝕜} {g₁ g₂ : α -> 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂)
-  proof: h₁.smul h₂
-
-中文:
-定理 IsTheta.mul
-  条件: {f₁ f₂ : α -> 𝕜} {g₁ g₂ : α -> 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂)
-  证明: h₁.smul h₂
+/-
+**Asymptotics.IsTheta.mul** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {f₁ f₂ : α → 𝕜} {g₁ g₂ : α → 𝕜'}, f₁ =
+Θ[l] g₁ → f₂ =Θ[l] g₂ → (fun x => f₁ x * f₂ x) =Θ[l] fun x => g₁ x * g₂ x
+参数：fun x => f₁ x * f₂ x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.smul`：∀ {α : Type u_1} {E' : Type u_6} {F' : Type u_
+7} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : SeminormedAddCommGroup E']   [inst_1
+ : SeminormedA…
 -/
-theorem IsTheta.mul {f₁ f₂ : α -> 𝕜} {g₁ g₂ : α -> 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂) :
-    (fun x => f₁ x * f₂ x) =Θ[l] fun x => g₁ x * g₂ x :=
+theorem IsTheta.mul {f₁ f₂ : α → 𝕜} {g₁ g₂ : α → 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂) :
+    (fun x ↦ f₁ x * f₂ x) =Θ[l] fun x ↦ g₁ x * g₂ x :=
   h₁.smul h₂
-
-/--
-theorem `IsTheta.listProd` / 定理 `IsTheta.listProd`
-
-English:
-theorem IsTheta.listProd
-  statement: {ι : Type*} {L : List ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-  proof: ⟨.listProd fun i hi => (h i hi).isBigO, .listProd fun i hi => (h i hi).symm.isBigO⟩
-
-中文:
-定理 IsTheta.listProd
-  结论: {ι : 类型} {L : 列表 ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-  证明: ⟨.listProd fun i hi => (h i hi).isBigO, .listProd fun i hi => (h i hi).symm.isBigO⟩
-
-Depends on / 依赖: isBigO, listProd, symm.isBigO
+/-
+**Asymptotics.IsTheta.listProd** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {ι : Type u_16} {L : List ι} {f : ι → 
+α → 𝕜} {g : ι → α → 𝕜'},   (∀ i ∈ L, f i =Θ[l] g i) →     (fun x => (List.map (f
+un x_1 => f x_1 x) L).prod) =Θ[l] fun x => (List.map (fun x_1 => g x_1 x) L).pro
+d
+参数：∀ i ∈ L, f i =Θ[l] g i；fun x => (List.map (fun x_1 => f x_1 x) L).prod；List.m
+ap (fun x_1 => g x_1 x) L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.listProd`：∀ {α : Type u_1} {R : Type u_13} {𝕜 : Type 
+u_15} [inst : SeminormedRing R] [inst_1 : NormedDivisionRing 𝕜]   {l : Filter α}
+ {ι : Type u_17} …
+· 使用定理 `Asymptotics.IsTheta.isBigO`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_
+4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f
+ =Θ[l] g → f =O[…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
-theorem IsTheta.listProd {ι : Type*} {L : List ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-    (h : forall i in L, f i =Θ[l] g i) :
-    (fun x => (L.map (f · x)).prod) =Θ[l] (fun x => (L.map (g · x)).prod) :=
-  ⟨.listProd fun i hi => (h i hi).isBigO, .listProd fun i hi => (h i hi).symm.isBigO⟩
-
-/--
-theorem `IsTheta.multisetProd` / 定理 `IsTheta.multisetProd`
-
-English:
-theorem IsTheta.multisetProd
-  statement: {ι : Type*} {s : Multiset ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-  proof: ⟨.multisetProd fun i hi => (h i hi).isBigO, .multisetProd fun i hi => (h i hi).symm.isBigO⟩
-
-中文:
-定理 IsTheta.multisetProd
-  结论: {ι : 类型} {s : Multiset ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-  证明: ⟨.multisetProd fun i hi => (h i hi).isBigO, .multisetProd fun i hi => (h i hi).symm.isBigO⟩
-
-Depends on / 依赖: isBigO, multisetProd, symm.isBigO
+theorem IsTheta.listProd {ι : Type*} {L : List ι} {f : ι → α → 𝕜} {g : ι → α → 𝕜'}
+    (h : ∀ i ∈ L, f i =Θ[l] g i) :
+    (fun x ↦ (L.map (f · x)).prod) =Θ[l] (fun x ↦ (L.map (g · x)).prod) :=
+  ⟨.listProd fun i hi ↦ (h i hi).isBigO, .listProd fun i hi ↦ (h i hi).symm.isBigO⟩
+/-
+**Asymptotics.IsTheta.multisetProd** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsThet
+a`。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {ι : Type u_16} {s : Multiset ι} {f : 
+ι → α → 𝕜} {g : ι → α → 𝕜'},   (∀ i ∈ s, f i =Θ[l] g i) →     (fun x => (Multise
+t.map (fun x_1 => f x_1 x) s).prod) =Θ[l] fun x => (Multiset.map (fun x_1 => g x
+_1 x) s).prod
+参数：∀ i ∈ s, f i =Θ[l] g i；fun x => (Multiset.map (fun x_1 => f x_1 x) s).prod；Mu
+ltiset.map (fun x_1 => g x_1 x) s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.multisetProd`：∀ {α : Type u_1} {l : Filter α} {ι : Ty
+pe u_17} {R : Type u_18} {𝕜 : Type u_19} [inst : SeminormedCommRing R]   [inst_1
+ : NormedField 𝕜] {s …
+· 使用定理 `Asymptotics.IsTheta.isBigO`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_
+4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f
+ =Θ[l] g → f =O[…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
-theorem IsTheta.multisetProd {ι : Type*} {s : Multiset ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-    (h : forall i in s, f i =Θ[l] g i) :
-    (fun x => (s.map (f · x)).prod) =Θ[l] (fun x => (s.map (g · x)).prod) :=
-  ⟨.multisetProd fun i hi => (h i hi).isBigO, .multisetProd fun i hi => (h i hi).symm.isBigO⟩
-
-/--
-theorem `IsTheta.finsetProd` / 定理 `IsTheta.finsetProd`
-
-English:
-theorem IsTheta.finsetProd
-  statement: {ι : Type*} {s : Finset ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-  proof: ⟨.finsetProd fun i hi => (h i hi).isBigO, .finsetProd fun i hi => (h i hi).symm.isBigO⟩
-
-中文:
-定理 IsTheta.finsetProd
-  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-  证明: ⟨.finsetProd fun i hi => (h i hi).isBigO, .finsetProd fun i hi => (h i hi).symm.isBigO⟩
-
-Depends on / 依赖: finsetProd, isBigO, symm.isBigO
+theorem IsTheta.multisetProd {ι : Type*} {s : Multiset ι} {f : ι → α → 𝕜} {g : ι → α → 𝕜'}
+    (h : ∀ i ∈ s, f i =Θ[l] g i) :
+    (fun x ↦ (s.map (f · x)).prod) =Θ[l] (fun x ↦ (s.map (g · x)).prod) :=
+  ⟨.multisetProd fun i hi ↦ (h i hi).isBigO, .multisetProd fun i hi ↦ (h i hi).symm.isBigO⟩
+/-
+**Asymptotics.IsTheta.finsetProd** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`
+。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {ι : Type u_16} {s : Finset ι} {f : ι 
+→ α → 𝕜} {g : ι → α → 𝕜'},   (∀ i ∈ s, f i =Θ[l] g i) → (fun x => ∏ i ∈ s, f i x
+) =Θ[l] fun x => ∏ i ∈ s, g i x
+参数：∀ i ∈ s, f i =Θ[l] g i；fun x => ∏ i ∈ s, f i x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.finsetProd`：∀ {α : Type u_1} {l : Filter α} {ι : Type
+ u_17} {R : Type u_18} {𝕜 : Type u_19} [inst : SeminormedCommRing R]   [inst_1 :
+ NormedField 𝕜] {s …
+· 使用定理 `Asymptotics.IsTheta.isBigO`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_
+4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f
+ =Θ[l] g → f =O[…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
 -/
-theorem IsTheta.finsetProd {ι : Type*} {s : Finset ι} {f : ι -> α -> 𝕜} {g : ι -> α -> 𝕜'}
-    (h : forall i in s, f i =Θ[l] g i) : (∏ i in s, f i ·) =Θ[l] (∏ i in s, g i ·) :=
-  ⟨.finsetProd fun i hi => (h i hi).isBigO, .finsetProd fun i hi => (h i hi).symm.isBigO⟩
-
-/--
-theorem `IsTheta.inv` / 定理 `IsTheta.inv`
-
-English:
-theorem IsTheta.inv
-  given: {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g)
-  proof: ⟨h.2.inv_rev h.1.eq_zero_imp, h.1.inv_rev h.2.eq_zero_imp⟩
-
-@[simp]
-
-中文:
-定理 IsTheta.inv
-  条件: {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g)
-  证明: ⟨h.2.inv_rev h.1.eq_zero_imp, h.1.inv_rev h.2.eq_zero_imp⟩
-
-@[simp]
-
-Depends on / 依赖: eq_zero_imp, inv_rev
+theorem IsTheta.finsetProd {ι : Type*} {s : Finset ι} {f : ι → α → 𝕜} {g : ι → α → 𝕜'}
+    (h : ∀ i ∈ s, f i =Θ[l] g i) : (∏ i ∈ s, f i ·) =Θ[l] (∏ i ∈ s, g i ·) :=
+  ⟨.finsetProd fun i hi ↦ (h i hi).isBigO, .finsetProd fun i hi ↦ (h i hi).symm.isBigO⟩
+/-
+**Asymptotics.IsTheta.inv** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {f : α → 𝕜} {g : α → 𝕜'}, f =Θ[l] g → 
+(fun x => (f x)⁻¹) =Θ[l] fun x => (g x)⁻¹
+参数：fun x => (f x)⁻¹；g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.inv_rev`：∀ {α : Type u_1} {𝕜 : Type u_15} {𝕜' : Type 
+u_16} [inst : NormedDivisionRing 𝕜] [inst_1 : NormedDivisionRing 𝕜']   {l : Filt
+er α} {f : α → 𝕜…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Asymptotics.IsBigO.eq_zero_imp`：∀ {α : Type u_1} {E'' : Type u_9} {F'' :
+ Type u_10} [inst : NormedAddCommGroup E''] [inst_1 : NormedAddCommGroup F'']   
+{f'' : α → E''} {g''…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem IsTheta.inv {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g) :
-    (fun x => (f x)⁻¹) =Θ[l] fun x => (g x)⁻¹ :=
+theorem IsTheta.inv {f : α → 𝕜} {g : α → 𝕜'} (h : f =Θ[l] g) :
+    (fun x ↦ (f x)⁻¹) =Θ[l] fun x ↦ (g x)⁻¹ :=
   ⟨h.2.inv_rev h.1.eq_zero_imp, h.1.inv_rev h.2.eq_zero_imp⟩
 
 @[simp]
-/--
-theorem `isTheta_inv` / 定理 `isTheta_inv`
-
-English:
-theorem isTheta_inv
-  given: {f : α -> 𝕜} {g : α -> 𝕜'}
-  proof: ⟨fun h => by simpa only [inv_inv] using h.inv, IsTheta.inv⟩
-
-中文:
-定理 isTheta_inv
-  条件: {f : α -> 𝕜} {g : α -> 𝕜'}
-  证明: ⟨fun h => by simpa only [inv_inv] using h.inv, IsTheta.inv⟩
-
-Depends on / 依赖: IsTheta, IsTheta.inv, h.inv, inv_inv
+/-
+**Asymptotics.isTheta_inv** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_inv {f : α -> 𝕜} {g : α -> 𝕜'} : ((fun x => (f x)⁻¹) =Θ[l] fun x =
+> (g x)⁻¹) ↔ f =Θ[l] g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Asymptotics.IsTheta.inv`：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_1
+5} [inst : NormedField 𝕜] [inst_1 : NormedField 𝕜'] {l : Filter α}   {f : α → 𝕜}
+ {g : α → 𝕜'}…
 -/
-theorem isTheta_inv {f : α -> 𝕜} {g : α -> 𝕜'} :
-    ((fun x => (f x)⁻¹) =Θ[l] fun x => (g x)⁻¹) ↔ f =Θ[l] g :=
-  ⟨fun h => by simpa only [inv_inv] using h.inv, IsTheta.inv⟩
-
-/--
-theorem `IsTheta.div` / 定理 `IsTheta.div`
-
-English:
-theorem IsTheta.div
-  given: {f₁ f₂ : α -> 𝕜} {g₁ g₂ : α -> 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂)
-  proof: by
-  simpa only [div_eq_mul_inv] using h₁.mul h₂.inv
-
-中文:
-定理 IsTheta.div
-  条件: {f₁ f₂ : α -> 𝕜} {g₁ g₂ : α -> 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂)
-  证明: by
-  simpa only [div_eq_mul_inv] using h₁.mul h₂.inv
-
-Depends on / 依赖: div_eq_mul_inv
+theorem isTheta_inv {f : α → 𝕜} {g : α → 𝕜'} :
+    ((fun x ↦ (f x)⁻¹) =Θ[l] fun x ↦ (g x)⁻¹) ↔ f =Θ[l] g :=
+  ⟨fun h ↦ by simpa only [inv_inv] using h.inv, IsTheta.inv⟩
+/-
+**Asymptotics.IsTheta.div** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {f₁ f₂ : α → 𝕜} {g₁ g₂ : α → 𝕜'}, f₁ =
+Θ[l] g₁ → f₂ =Θ[l] g₂ → (fun x => f₁ x / f₂ x) =Θ[l] fun x => g₁ x / g₂ x
+参数：fun x => f₁ x / f₂ x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Asymptotics.IsTheta.mul`：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_1
+5} [inst : NormedField 𝕜] [inst_1 : NormedField 𝕜'] {l : Filter α}   {f₁ f₂ : α 
+→ 𝕜} {g₁ g₂ :…
+· 使用定理 `Asymptotics.IsTheta.inv`：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_1
+5} [inst : NormedField 𝕜] [inst_1 : NormedField 𝕜'] {l : Filter α}   {f : α → 𝕜}
+ {g : α → 𝕜'}…
 -/
-theorem IsTheta.div {f₁ f₂ : α -> 𝕜} {g₁ g₂ : α -> 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂) :
-    (fun x => f₁ x / f₂ x) =Θ[l] fun x => g₁ x / g₂ x := by
+theorem IsTheta.div {f₁ f₂ : α → 𝕜} {g₁ g₂ : α → 𝕜'} (h₁ : f₁ =Θ[l] g₁) (h₂ : f₂ =Θ[l] g₂) :
+    (fun x ↦ f₁ x / f₂ x) =Θ[l] fun x ↦ g₁ x / g₂ x := by
   simpa only [div_eq_mul_inv] using h₁.mul h₂.inv
-
-/--
-theorem `IsTheta.pow` / 定理 `IsTheta.pow`
-
-English:
-theorem IsTheta.pow
-  given: {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g) (n : Nat)
-  proof: ⟨h.1.pow n, h.2.pow n⟩
-
-中文:
-定理 IsTheta.pow
-  条件: {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g) (n : 自然数)
-  证明: ⟨h.1.pow n, h.2.pow n⟩
+/-
+**Asymptotics.IsTheta.pow** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {f : α → 𝕜} {g : α → 𝕜'}, f =Θ[l] g → 
+∀ (n : ℕ), (fun x => f x ^ n) =Θ[l] fun x => g x ^ n
+参数：n : ℕ；fun x => f x ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.pow`：∀ {α : Type u_1} {R : Type u_13} [inst : Seminor
+medRing R] {S : Type u_17} [inst_1 : NormedRing S] [NormMulClass S]   {l : Filte
+r α} [NormOn…
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem IsTheta.pow {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g) (n : Nat) :
-    (fun x => f x ^ n) =Θ[l] fun x => g x ^ n :=
+theorem IsTheta.pow {f : α → 𝕜} {g : α → 𝕜'} (h : f =Θ[l] g) (n : ℕ) :
+    (fun x ↦ f x ^ n) =Θ[l] fun x ↦ g x ^ n :=
   ⟨h.1.pow n, h.2.pow n⟩
-
-/--
-theorem `IsTheta.zpow` / 定理 `IsTheta.zpow`
-
-English:
-theorem IsTheta.zpow
-  given: {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g) (n : Int)
-  proof: by
-  cases n
-  · simpa only [Int.ofNat_eq_natCast, zpow_natCast] using h.pow _
-  · simpa only [zpow_negSucc] using (h.pow _).inv
-
-中文:
-定理 IsTheta.zpow
-  条件: {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g) (n : 整数)
-  证明: by
-  cases n
-  · simpa only [Int.ofNat_eq_natCast, zpow_natCast] using h.pow _
-  · simpa only [zpow_negSucc] using (h.pow _).inv
-
-Depends on / 依赖: Int.ofNat_eq_natCast, h.pow, ofNat_eq_natCast, zpow_natCast, zpow_negSucc
+/-
+**Asymptotics.IsTheta.zpow** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_15} [inst : NormedField 𝕜] [
+inst_1 : NormedField 𝕜'] {l : Filter α}   {f : α → 𝕜} {g : α → 𝕜'}, f =Θ[l] g → 
+∀ (n : ℤ), (fun x => f x ^ n) =Θ[l] fun x => g x ^ n
+参数：n : ℤ；fun x => f x ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Asymptotics.IsTheta.pow`：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_1
+5} [inst : NormedField 𝕜] [inst_1 : NormedField 𝕜'] {l : Filter α}   {f : α → 𝕜}
+ {g : α → 𝕜'}…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用定理 `Asymptotics.IsTheta.inv`：∀ {α : Type u_1} {𝕜 : Type u_14} {𝕜' : Type u_1
+5} [inst : NormedField 𝕜] [inst_1 : NormedField 𝕜'] {l : Filter α}   {f : α → 𝕜}
+ {g : α → 𝕜'}…
 -/
-theorem IsTheta.zpow {f : α -> 𝕜} {g : α -> 𝕜'} (h : f =Θ[l] g) (n : Int) :
-    (fun x => f x ^ n) =Θ[l] fun x => g x ^ n := by
+theorem IsTheta.zpow {f : α → 𝕜} {g : α → 𝕜'} (h : f =Θ[l] g) (n : ℤ) :
+    (fun x ↦ f x ^ n) =Θ[l] fun x ↦ g x ^ n := by
   cases n
   · simpa only [Int.ofNat_eq_natCast, zpow_natCast] using h.pow _
   · simpa only [zpow_negSucc] using (h.pow _).inv
-
-/--
-theorem `isTheta_const_const` / 定理 `isTheta_const_const`
-
-English:
-theorem isTheta_const_const
-  given: {c₁ : E''} {c₂ : F''} (h₁ : c₁ != 0) (h₂ : c₂ != 0)
-  proof: ⟨isBigO_const_const _ h₂ _, isBigO_const_const _ h₁ _⟩
-
-@[simp]
-
-中文:
-定理 isTheta_const_const
-  条件: {c₁ : E''} {c₂ : F''} (h₁ : c₁ != 0) (h₂ : c₂ != 0)
-  证明: ⟨isBigO_const_const _ h₂ _, isBigO_const_const _ h₁ _⟩
-
-@[simp]
-
-Depends on / 依赖: isBigO_const_const
+/-
+**Asymptotics.isTheta_const_const** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_const_const {c₁ : E''} {c₂ : F''} (h₁ : c₁ != 0) (h₂ : c₂ != 0) : 
+(fun _ : α => c₁) =Θ[l] fun _ => c₂
+参数：h₁ : c₁ != 0；h₂ : c₂ != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isBigO_const_const`：isBigO_const_const (c : E) {c' : F''} (h
+c' : c' != 0) (l : Filter α) : (fun _x : α => c) =O[l] fun _x => c'
 -/
-theorem isTheta_const_const {c₁ : E''} {c₂ : F''} (h₁ : c₁ != 0) (h₂ : c₂ != 0) :
-    (fun _ : α => c₁) =Θ[l] fun _ => c₂ :=
+theorem isTheta_const_const {c₁ : E''} {c₂ : F''} (h₁ : c₁ ≠ 0) (h₂ : c₂ ≠ 0) :
+    (fun _ : α ↦ c₁) =Θ[l] fun _ ↦ c₂ :=
   ⟨isBigO_const_const _ h₂ _, isBigO_const_const _ h₁ _⟩
 
 @[simp]
-/--
-theorem `isTheta_const_const_iff` / 定理 `isTheta_const_const_iff`
-
-English:
-theorem isTheta_const_const_iff
-  given: [NeBot l] {c₁ : E''} {c₂ : F''}
-  proof: by
-  simpa only [IsTheta, isBigO_const_const_iff, ← iff_def] using Iff.comm
-
-@[simp]
-
-中文:
-定理 isTheta_const_const_iff
-  条件: [NeBot l] {c₁ : E''} {c₂ : F''}
-  证明: by
-  simpa only [IsTheta, isBigO_const_const_iff, ← iff_def] using Iff.comm
-
-@[simp]
-
-Depends on / 依赖: Iff.comm, IsTheta, iff_def, isBigO_const_const_iff
+/-
+**Asymptotics.isTheta_const_const_iff** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_const_const_iff [NeBot l] {c₁ : E''} {c₂ : F''} : ((fun _ : α => c
+₁) =Θ[l] fun _ => c₂) ↔ (c₁ = 0 ↔ c₂ = 0)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.comm`：∀ {a b : Prop}, (a ↔ b) ↔ (b ↔ a)
 -/
 theorem isTheta_const_const_iff [NeBot l] {c₁ : E''} {c₂ : F''} :
-    ((fun _ : α => c₁) =Θ[l] fun _ => c₂) ↔ (c₁ = 0 ↔ c₂ = 0) := by
+    ((fun _ : α ↦ c₁) =Θ[l] fun _ ↦ c₂) ↔ (c₁ = 0 ↔ c₂ = 0) := by
   simpa only [IsTheta, isBigO_const_const_iff, ← iff_def] using Iff.comm
 
 @[simp]
-/--
-theorem `isTheta_zero_left` / 定理 `isTheta_zero_left`
-
-English:
-theorem isTheta_zero_left
-  statement: (fun _ => (0 : E')) =Θ[l] g'' ↔ g'' =ᶠ[l] 0
-  proof: by
-  simp only [IsTheta, isBigO_zero, isBigO_zero_right_iff, true_and]
-
-@[simp]
-
-中文:
-定理 isTheta_zero_left
-  结论: (fun _ => (0 : E')) =Θ[l] g'' ↔ g'' =ᶠ[l] 0
-  证明: by
-  simp only [IsTheta, isBigO_zero, isBigO_zero_right_iff, true_and]
-
-@[simp]
-
-Depends on / 依赖: IsTheta, isBigO_zero, isBigO_zero_right_iff, true_and
+/-
+**Asymptotics.isTheta_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_zero_left : (fun _ => (0 : E')) =Θ[l] g'' ↔ g'' =ᶠ[l] 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isTheta_zero_left : (fun _ => (0 : E')) =Θ[l] g'' ↔ g'' =ᶠ[l] 0 := by
+theorem isTheta_zero_left : (fun _ ↦ (0 : E')) =Θ[l] g'' ↔ g'' =ᶠ[l] 0 := by
   simp only [IsTheta, isBigO_zero, isBigO_zero_right_iff, true_and]
 
 @[simp]
-/--
-theorem `isTheta_zero_right` / 定理 `isTheta_zero_right`
-
-English:
-theorem isTheta_zero_right
-  statement: (f'' =Θ[l] fun _ => (0 : F')) ↔ f'' =ᶠ[l] 0
-  proof: isTheta_comm.trans isTheta_zero_left
-
-中文:
-定理 isTheta_zero_right
-  结论: (f'' =Θ[l] fun _ => (0 : F')) ↔ f'' =ᶠ[l] 0
-  证明: isTheta_comm.trans isTheta_zero_left
-
-Depends on / 依赖: isTheta_comm, isTheta_comm.trans, isTheta_zero_left
+/-
+**Asymptotics.isTheta_zero_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_zero_right : (f'' =Θ[l] fun _ => (0 : F')) ↔ f'' =ᶠ[l] 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Asymptotics.isTheta_comm`：isTheta_comm : f =Θ[l] g ↔ g =Θ[l] f
+· 使用定理 `Asymptotics.isTheta_zero_left`：isTheta_zero_left : (fun _ => (0 : E')) =
+Θ[l] g'' ↔ g'' =ᶠ[l] 0
 -/
-theorem isTheta_zero_right : (f'' =Θ[l] fun _ => (0 : F')) ↔ f'' =ᶠ[l] 0 :=
+theorem isTheta_zero_right : (f'' =Θ[l] fun _ ↦ (0 : F')) ↔ f'' =ᶠ[l] 0 :=
   isTheta_comm.trans isTheta_zero_left
-
-/--
-theorem `isTheta_const_smul_left` / 定理 `isTheta_const_smul_left`
-
-English:
-theorem isTheta_const_smul_left
-  given: [NormedSpace 𝕜 E'] {c : 𝕜} (hc : c != 0)
-  proof: and_congr (isBigO_const_smul_left hc) (isBigO_const_smul_right hc)
-
-alias ⟨IsTheta.of_const_smul_left, IsTheta.const_smul_left⟩ := isTheta_const_smul_left
-
-中文:
-定理 isTheta_const_smul_left
-  条件: [赋范空间 𝕜 E'] {c : 𝕜} (hc : c != 0)
-  证明: and_congr (isBigO_const_smul_left hc) (isBigO_const_smul_right hc)
-
-alias ⟨IsTheta.of_const_smul_left, IsTheta.const_smul_left⟩ := isTheta_const_smul_left
-
-Depends on / 依赖: and_congr, isBigO_const_smul_left, isBigO_const_smul_right
+/-
+**Asymptotics.isTheta_const_smul_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_const_smul_left [NormedSpace 𝕜 E'] {c : 𝕜} (hc : c != 0) : (fun x 
+=> c • f' x) =Θ[l] g ↔ f' =Θ[l] g
+参数：hc : c != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Asymptotics.isBigO_const_smul_left`：isBigO_const_smul_left {c : 𝕜} (hc :
+ c != 0) : (fun x => c • f' x) =O[l] g ↔ f' =O[l] g
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `Asymptotics.isBigO_const_smul_right`：isBigO_const_smul_right {c : 𝕜} (hc
+ : c != 0) : (f =O[l] fun x => c • f' x) ↔ f =O[l] f'
 -/
-theorem isTheta_const_smul_left [NormedSpace 𝕜 E'] {c : 𝕜} (hc : c != 0) :
-    (fun x => c • f' x) =Θ[l] g ↔ f' =Θ[l] g :=
+theorem isTheta_const_smul_left [NormedSpace 𝕜 E'] {c : 𝕜} (hc : c ≠ 0) :
+    (fun x ↦ c • f' x) =Θ[l] g ↔ f' =Θ[l] g :=
   and_congr (isBigO_const_smul_left hc) (isBigO_const_smul_right hc)
 
 alias ⟨IsTheta.of_const_smul_left, IsTheta.const_smul_left⟩ := isTheta_const_smul_left
-
-/--
-theorem `isTheta_const_smul_right` / 定理 `isTheta_const_smul_right`
-
-English:
-theorem isTheta_const_smul_right
-  given: [NormedSpace 𝕜 F'] {c : 𝕜} (hc : c != 0)
-  proof: and_congr (isBigO_const_smul_right hc) (isBigO_const_smul_left hc)
-
-alias ⟨IsTheta.of_const_smul_right, IsTheta.const_smul_right⟩ := isTheta_const_smul_right
-
-中文:
-定理 isTheta_const_smul_right
-  条件: [赋范空间 𝕜 F'] {c : 𝕜} (hc : c != 0)
-  证明: and_congr (isBigO_const_smul_right hc) (isBigO_const_smul_left hc)
-
-alias ⟨IsTheta.of_const_smul_right, IsTheta.const_smul_right⟩ := isTheta_const_smul_right
-
-Depends on / 依赖: and_congr, isBigO_const_smul_left, isBigO_const_smul_right
+/-
+**Asymptotics.isTheta_const_smul_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_const_smul_right [NormedSpace 𝕜 F'] {c : 𝕜} (hc : c != 0) : (f =Θ[
+l] fun x => c • g' x) ↔ f =Θ[l] g'
+参数：hc : c != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Asymptotics.isBigO_const_smul_right`：isBigO_const_smul_right {c : 𝕜} (hc
+ : c != 0) : (f =O[l] fun x => c • f' x) ↔ f =O[l] f'
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `Asymptotics.isBigO_const_smul_left`：isBigO_const_smul_left {c : 𝕜} (hc :
+ c != 0) : (fun x => c • f' x) =O[l] g ↔ f' =O[l] g
 -/
-theorem isTheta_const_smul_right [NormedSpace 𝕜 F'] {c : 𝕜} (hc : c != 0) :
-    (f =Θ[l] fun x => c • g' x) ↔ f =Θ[l] g' :=
+theorem isTheta_const_smul_right [NormedSpace 𝕜 F'] {c : 𝕜} (hc : c ≠ 0) :
+    (f =Θ[l] fun x ↦ c • g' x) ↔ f =Θ[l] g' :=
   and_congr (isBigO_const_smul_right hc) (isBigO_const_smul_left hc)
 
 alias ⟨IsTheta.of_const_smul_right, IsTheta.const_smul_right⟩ := isTheta_const_smul_right
-
-/--
-theorem `isTheta_const_mul_left` / 定理 `isTheta_const_mul_left`
-
-English:
-theorem isTheta_const_mul_left
-  given: {c : 𝕜} {f : α -> 𝕜} (hc : c != 0)
-  proof: by
+/-
+**Asymptotics.isTheta_const_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_const_mul_left {c : 𝕜} {f : α -> 𝕜} (hc : c != 0) : (fun x => c * 
+f x) =Θ[l] g ↔ f =Θ[l] g
+参数：hc : c != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isTheta_const_smul_left`：isTheta_const_smul_left [NormedSpac
+e 𝕜 E'] {c : 𝕜} (hc : c != 0) : (fun x => c • f' x) =Θ[l] g ↔ f' =Θ[l] g
+-/
+theorem isTheta_const_mul_left {c : 𝕜} {f : α → 𝕜} (hc : c ≠ 0) :
+    (fun x ↦ c * f x) =Θ[l] g ↔ f =Θ[l] g := by
   simpa only [← smul_eq_mul] using isTheta_const_smul_left hc
 
 alias ⟨IsTheta.of_const_mul_left, IsTheta.const_mul_left⟩ := isTheta_const_mul_left
-
-中文:
-定理 isTheta_const_mul_left
-  条件: {c : 𝕜} {f : α -> 𝕜} (hc : c != 0)
-  证明: by
-  simpa only [← smul_eq_mul] using isTheta_const_smul_left hc
-
-alias ⟨IsTheta.of_const_mul_left, IsTheta.const_mul_left⟩ := isTheta_const_mul_left
-
-Depends on / 依赖: isTheta_const_smul_left, smul_eq_mul
+/-
+**Asymptotics.isTheta_const_mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics`。
+形式化陈述：isTheta_const_mul_right {c : 𝕜} {g : α -> 𝕜} (hc : c != 0) : (f =Θ[l] fun 
+x => c * g x) ↔ f =Θ[l] g
+参数：hc : c != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isTheta_const_smul_right`：isTheta_const_smul_right [NormedSp
+ace 𝕜 F'] {c : 𝕜} (hc : c != 0) : (f =Θ[l] fun x => c • g' x) ↔ f =Θ[l] g'
 -/
-theorem isTheta_const_mul_left {c : 𝕜} {f : α -> 𝕜} (hc : c != 0) :
-    (fun x => c * f x) =Θ[l] g ↔ f =Θ[l] g := by
-  simpa only [← smul_eq_mul] using isTheta_const_smul_left hc
-
-alias ⟨IsTheta.of_const_mul_left, IsTheta.const_mul_left⟩ := isTheta_const_mul_left
-
-/--
-theorem `isTheta_const_mul_right` / 定理 `isTheta_const_mul_right`
-
-English:
-theorem isTheta_const_mul_right
-  given: {c : 𝕜} {g : α -> 𝕜} (hc : c != 0)
-  proof: by
+theorem isTheta_const_mul_right {c : 𝕜} {g : α → 𝕜} (hc : c ≠ 0) :
+    (f =Θ[l] fun x ↦ c * g x) ↔ f =Θ[l] g := by
   simpa only [← smul_eq_mul] using isTheta_const_smul_right hc
 
 alias ⟨IsTheta.of_const_mul_right, IsTheta.const_mul_right⟩ := isTheta_const_mul_right
-
-中文:
-定理 isTheta_const_mul_right
-  条件: {c : 𝕜} {g : α -> 𝕜} (hc : c != 0)
-  证明: by
-  simpa only [← smul_eq_mul] using isTheta_const_smul_right hc
-
-alias ⟨IsTheta.of_const_mul_right, IsTheta.const_mul_right⟩ := isTheta_const_mul_right
-
-Depends on / 依赖: isTheta_const_smul_right, smul_eq_mul
+/-
+**Asymptotics.IsLittleO.right_isTheta_add** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics
+.IsLittleO`。
+形式化陈述：∀ {α : Type u_1} {E' : Type u_6} [inst : SeminormedAddCommGroup E'] {l : F
+ilter α} {f₁ f₂ : α → E'},   f₁ =o[l] f₂ → f₂ =Θ[l] (f₁ + f₂)
+参数：f₁ + f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.right_isBigO_add`：∀ {α : Type u_1} {E' : Type u_6}
+ [inst : SeminormedAddCommGroup E'] {l : Filter α} {f₁ f₂ : α → E'},   f₁ =o[l] 
+f₂ → f₂ =O[l] fun x => f₁ x …
+· 使用定理 `Asymptotics.IsLittleO.add_isBigO`：∀ {α : Type u_1} {F : Type u_4} {E' : 
+Type u_6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {g : α → F}   {l 
+: Filter α} {f₁ f₂ : α…
+· 使用定理 `Asymptotics.isBigO_refl`：isBigO_refl (f : α -> E) (l : Filter α) : f =O[
+l] f
 -/
-theorem isTheta_const_mul_right {c : 𝕜} {g : α -> 𝕜} (hc : c != 0) :
-    (f =Θ[l] fun x => c * g x) ↔ f =Θ[l] g := by
-  simpa only [← smul_eq_mul] using isTheta_const_smul_right hc
-
-alias ⟨IsTheta.of_const_mul_right, IsTheta.const_mul_right⟩ := isTheta_const_mul_right
-
-/--
-theorem `IsLittleO.right_isTheta_add` / 定理 `IsLittleO.right_isTheta_add`
-
-English:
-theorem IsLittleO.right_isTheta_add
-  given: {f₁ f₂ : α -> E'} (h : f₁ =o[l] f₂)
-  proof: ⟨h.right_isBigO_add, h.add_isBigO (isBigO_refl _ _)⟩
-
-中文:
-定理 IsLittleO.right_isTheta_add
-  条件: {f₁ f₂ : α -> E'} (h : f₁ =o[l] f₂)
-  证明: ⟨h.right_isBigO_add, h.add_isBigO (isBigO_refl _ _)⟩
-
-Depends on / 依赖: add_isBigO, h.add_isBigO, h.right_isBigO_add, isBigO_refl, right_isBigO_add
--/
-theorem IsLittleO.right_isTheta_add {f₁ f₂ : α -> E'} (h : f₁ =o[l] f₂) :
+theorem IsLittleO.right_isTheta_add {f₁ f₂ : α → E'} (h : f₁ =o[l] f₂) :
     f₂ =Θ[l] (f₁ + f₂) :=
   ⟨h.right_isBigO_add, h.add_isBigO (isBigO_refl _ _)⟩
-
-/--
-theorem `IsLittleO.right_isTheta_add'` / 定理 `IsLittleO.right_isTheta_add'`
-
-English:
-theorem IsLittleO.right_isTheta_add'
-  given: {f₁ f₂ : α -> E'} (h : f₁ =o[l] f₂)
-  proof: add_comm f₁ f₂ ▸ h.right_isTheta_add
-
-中文:
-定理 IsLittleO.right_isTheta_add'
-  条件: {f₁ f₂ : α -> E'} (h : f₁ =o[l] f₂)
-  证明: add_comm f₁ f₂ ▸ h.right_isTheta_add
-
-Depends on / 依赖: add_comm, h.right_isTheta_add, right_isTheta_add
+/-
+**Asymptotics.IsLittleO.right_isTheta_add'** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotic
+s.IsLittleO`。
+形式化陈述：∀ {α : Type u_1} {E' : Type u_6} [inst : SeminormedAddCommGroup E'] {l : F
+ilter α} {f₁ f₂ : α → E'},   f₁ =o[l] f₂ → f₂ =Θ[l] (f₂ + f₁)
+参数：f₂ + f₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsLittleO.right_isTheta_add`：∀ {α : Type u_1} {E' : Type u_6
+} [inst : SeminormedAddCommGroup E'] {l : Filter α} {f₁ f₂ : α → E'},   f₁ =o[l]
+ f₂ → f₂ =Θ[l] (f₁ + f₂)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
-theorem IsLittleO.right_isTheta_add' {f₁ f₂ : α -> E'} (h : f₁ =o[l] f₂) :
+theorem IsLittleO.right_isTheta_add' {f₁ f₂ : α → E'} (h : f₁ =o[l] f₂) :
     f₂ =Θ[l] (f₂ + f₁) :=
   add_comm f₁ f₂ ▸ h.right_isTheta_add
-
-/--
-lemma `IsTheta.add_isLittleO` / 引理 `IsTheta.add_isLittleO`
-
-English:
-lemma IsTheta.add_isLittleO
-  statement: {f₁ f₂ : α -> E'} {g : α -> F}
-  proof: (ho.trans_isTheta hΘ.symm).right_isTheta_add'.symm.trans hΘ
-
-中文:
-引理 IsTheta.add_isLittleO
-  结论: {f₁ f₂ : α -> E'} {g : α -> F}
-  证明: (ho.trans_isTheta hΘ.symm).right_isTheta_add'.symm.trans hΘ
-
-Depends on / 依赖: ho.trans_isTheta, right_isTheta_add, symm.trans, trans_isTheta
+/-
+**Asymptotics.IsTheta.add_isLittleO** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsThe
+ta`。
+形式化陈述：∀ {α : Type u_1} {F : Type u_4} {E' : Type u_6} [inst : Norm F] [inst_1 : 
+SeminormedAddCommGroup E'] {l : Filter α}   {f₁ f₂ : α → E'} {g : α → F}, f₁ =Θ[
+l] g → f₂ =o[l] g → (f₁ + f₂) =Θ[l] g
+参数：f₁ + f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.trans`：∀ {α : Type u_1} {E : Type u_3} {G : Type u_5
+} {F' : Type u_7} [inst : Norm E] [inst_1 : Norm G]   [inst_2 : SeminormedAddCom
+mGroup F'] {l :…
+· 使用定理 `Asymptotics.IsTheta.symm`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4}
+ [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F} {l : Filter α},   f =
+Θ[l] g → g =Θ[…
+· 使用定理 `Asymptotics.IsLittleO.right_isTheta_add'`：∀ {α : Type u_1} {E' : Type u_
+6} [inst : SeminormedAddCommGroup E'] {l : Filter α} {f₁ f₂ : α → E'},   f₁ =o[l
+] f₂ → f₂ =Θ[l] (f₂ + f₁)
+· 使用定理 `Asymptotics.IsLittleO.trans_isTheta`：∀ {α : Type u_1} {E : Type u_3} {F 
+: Type u_4} {G' : Type u_8} [inst : Norm E] [inst_1 : Norm F]   [inst_2 : Semino
+rmedAddCommGroup G'] {l :…
 -/
-lemma IsTheta.add_isLittleO {f₁ f₂ : α -> E'} {g : α -> F}
+lemma IsTheta.add_isLittleO {f₁ f₂ : α → E'} {g : α → F}
     (hΘ : f₁ =Θ[l] g) (ho : f₂ =o[l] g) : (f₁ + f₂) =Θ[l] g :=
   (ho.trans_isTheta hΘ.symm).right_isTheta_add'.symm.trans hΘ
-
-/--
-lemma `IsLittleO.add_isTheta` / 引理 `IsLittleO.add_isTheta`
-
-English:
-lemma IsLittleO.add_isTheta
-  statement: {f₁ f₂ : α -> E'} {g : α -> F}
-  proof: add_comm f₁ f₂ ▸ hΘ.add_isLittleO ho
-
-中文:
-引理 IsLittleO.add_isTheta
-  结论: {f₁ f₂ : α -> E'} {g : α -> F}
-  证明: add_comm f₁ f₂ ▸ hΘ.add_isLittleO ho
-
-Depends on / 依赖: add_comm, add_isLittleO
+/-
+**Asymptotics.IsLittleO.add_isTheta** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsLit
+tleO`。
+形式化陈述：∀ {α : Type u_1} {F : Type u_4} {E' : Type u_6} [inst : Norm F] [inst_1 : 
+SeminormedAddCommGroup E'] {l : Filter α}   {f₁ f₂ : α → E'} {g : α → F}, f₁ =o[
+l] g → f₂ =Θ[l] g → (f₁ + f₂) =Θ[l] g
+参数：f₁ + f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsTheta.add_isLittleO`：∀ {α : Type u_1} {F : Type u_4} {E' :
+ Type u_6} [inst : Norm F] [inst_1 : SeminormedAddCommGroup E'] {l : Filter α}  
+ {f₁ f₂ : α → E'} {g : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
-lemma IsLittleO.add_isTheta {f₁ f₂ : α -> E'} {g : α -> F}
+lemma IsLittleO.add_isTheta {f₁ f₂ : α → E'} {g : α → F}
     (ho : f₁ =o[l] g) (hΘ : f₂ =Θ[l] g) : (f₁ + f₂) =Θ[l] g :=
   add_comm f₁ f₂ ▸ hΘ.add_isLittleO ho
-
-/--
-theorem `isTheta_of_div_tendsto_nhds_ne_zero` / 定理 `isTheta_of_div_tendsto_nhds_ne_zero`
-
-English:
-theorem isTheta_of_div_tendsto_nhds_ne_zero
-  statement: {c : 𝕜} {f g : α -> 𝕜}
-  proof: by
-  refine ⟨isBigO_of_div_tendsto_nhds_of_ne_zero h hc,
-    isBigO_of_div_tendsto_nhds_of_ne_zero ?_ (inv_ne_zero hc)⟩
-  convert! h.inv₀ hc using 1
-  ext
-  simp
-
-中文:
-定理 isTheta_of_div_tendsto_nhds_ne_zero
-  结论: {c : 𝕜} {f g : α -> 𝕜}
-  证明: by
-  refine ⟨isBigO_of_div_tendsto_nhds_of_ne_zero h hc,
-    isBigO_of_div_tendsto_nhds_of_ne_zero ?_ (inv_ne_zero hc)⟩
-  convert! h.inv₀ hc using 1
-  ext
-  simp
-
-Depends on / 依赖: convert, h.inv, inv_ne_zero, isBigO_of_div_tendsto_nhds_of_ne_zero
+/-
+**Asymptotics.isTheta_of_div_tendsto_nhds_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Asy
+mptotics`。
+形式化陈述：isTheta_of_div_tendsto_nhds_ne_zero {c : 𝕜} {f g : α -> 𝕜} (h : Tendsto (f
+un x => g x / f x) l (𝓝 c)) (hc : c != 0) : f =Θ[l] g
+参数：h : Tendsto (fun x => g x / f x) l (𝓝 c)；hc : c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.isBigO_of_div_tendsto_nhds_of_ne_zero`：isBigO_of_div_tendsto
+_nhds_of_ne_zero {l : Filter α} {f g : α -> 𝕜} {a : 𝕜} (h : Tendsto (fun x => g 
+x / f x) l (𝓝 a)) (ha : a != 0) : f =O[…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Filter.Tendsto.inv₀`：Filter.Tendsto.inv₀ {a : G₀} (hf : Tendsto f l (𝓝 a
+)) (ha : a != 0) : Tendsto (fun x => (f x)⁻¹) l (𝓝 a⁻¹)
+· 使用定理 `IsTopologicalDivisionRing.toContinuousInv₀`：∀ {K : Type u_1} {inst : Div
+isionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing K],
+   ContinuousInv₀ K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `inv_ne_zero`：inv_ne_zero (h : a != 0) : a⁻¹ != 0
 -/
-theorem isTheta_of_div_tendsto_nhds_ne_zero {c : 𝕜} {f g : α -> 𝕜}
-    (h : Tendsto (fun x => g x / f x) l (𝓝 c)) (hc : c != 0) :
+theorem isTheta_of_div_tendsto_nhds_ne_zero {c : 𝕜} {f g : α → 𝕜}
+    (h : Tendsto (fun x ↦ g x / f x) l (𝓝 c)) (hc : c ≠ 0) :
     f =Θ[l] g := by
   refine ⟨isBigO_of_div_tendsto_nhds_of_ne_zero h hc,
     isBigO_of_div_tendsto_nhds_of_ne_zero ?_ (inv_ne_zero hc)⟩
@@ -1311,47 +1089,46 @@ theorem isTheta_of_div_tendsto_nhds_ne_zero {c : 𝕜} {f g : α -> 𝕜}
 
 section
 
-variable {f : α × β -> E} {g : α × β -> F} {l' : Filter β}
+variable {f : α × β → E} {g : α × β → F} {l' : Filter β}
 
-/--
-theorem `IsTheta.fiberwise_right` / 定理 `IsTheta.fiberwise_right`
-
-English:
-theorem IsTheta.fiberwise_right
-  proof: by
-  simp only [IsTheta, eventually_and]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.fiberwise_right, h₂.fiberwise_right⟩
-
-中文:
-定理 IsTheta.fiberwise_right
-  证明: by
-  simp only [IsTheta, eventually_and]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.fiberwise_right, h₂.fiberwise_right⟩
+/-
+**Asymptotics.IsTheta.fiberwise_right** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsT
+heta`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {E : Type u_3} {F : Type u_4} [inst : Norm
+ E] [inst_1 : Norm F] {l : Filter α}   {f : α × β → E} {g : α × β → F} {l' : Fil
+ter β},   f =Θ[l ×ˢ l'] g → ∀ᶠ (x : α) in l, (fun x_1 => f (x, x_1)) =Θ[l'] fun 
+x_1 => g (x, x_1)
+参数：x : α；fun x_1 => f (x, x_1)；x, x_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Asymptotics.IsBigO.fiberwise_right`：∀ {α : Type u_1} {β : Type u_2} {E :
+ Type u_3} {F : Type u_4} [inst : Norm E] [inst_1 : Norm F] {l : Filter α}   {f 
+: α × β → E} {g : α × β …
 -/
 protected theorem IsTheta.fiberwise_right :
-    f =Θ[l ×ˢ l'] g -> forallᶠ x in l, (f ⟨x, ·⟩) =Θ[l'] (g ⟨x, ·⟩) := by
+    f =Θ[l ×ˢ l'] g → ∀ᶠ x in l, (f ⟨x, ·⟩) =Θ[l'] (g ⟨x, ·⟩) := by
   simp only [IsTheta, eventually_and]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.fiberwise_right, h₂.fiberwise_right⟩
-
-/--
-theorem `IsTheta.fiberwise_left` / 定理 `IsTheta.fiberwise_left`
-
-English:
-theorem IsTheta.fiberwise_left
-  proof: by
-  simp only [IsTheta, eventually_and]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.fiberwise_left, h₂.fiberwise_left⟩
-
-中文:
-定理 IsTheta.fiberwise_left
-  证明: by
-  simp only [IsTheta, eventually_and]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.fiberwise_left, h₂.fiberwise_left⟩
+  exact fun ⟨h₁, h₂⟩ ↦ ⟨h₁.fiberwise_right, h₂.fiberwise_right⟩
+/-
+**Asymptotics.IsTheta.fiberwise_left** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTh
+eta`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {E : Type u_3} {F : Type u_4} [inst : Norm
+ E] [inst_1 : Norm F] {l : Filter α}   {f : α × β → E} {g : α × β → F} {l' : Fil
+ter β},   f =Θ[l ×ˢ l'] g → ∀ᶠ (y : β) in l', (fun x => f (x, y)) =Θ[l] fun x =>
+ g (x, y)
+参数：y : β；fun x => f (x, y)；x, y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Asymptotics.IsBigO.fiberwise_left`：∀ {α : Type u_1} {β : Type u_2} {E : 
+Type u_3} {F : Type u_4} [inst : Norm E] [inst_1 : Norm F] {l : Filter α}   {f :
+ α × β → E} {g : α × β …
 -/
 protected theorem IsTheta.fiberwise_left :
-    f =Θ[l ×ˢ l'] g -> forallᶠ y in l', (f ⟨·, y⟩) =Θ[l] (g ⟨·, y⟩) := by
+    f =Θ[l ×ˢ l'] g → ∀ᶠ y in l', (f ⟨·, y⟩) =Θ[l] (g ⟨·, y⟩) := by
   simp only [IsTheta, eventually_and]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.fiberwise_left, h₂.fiberwise_left⟩
+  exact fun ⟨h₁, h₂⟩ ↦ ⟨h₁.fiberwise_left, h₂.fiberwise_left⟩
 
 end
 
@@ -1359,47 +1136,34 @@ section
 
 variable (l' : Filter β)
 
-/--
-theorem `IsTheta.comp_fst` / 定理 `IsTheta.comp_fst`
-
-English:
-theorem IsTheta.comp_fst
-  statement: f =Θ[l] g -> (f ∘ Prod.fst) =Θ[l ×ˢ l'] (g ∘ Prod.fst)
-  proof: by
-  simp only [IsTheta]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_fst l', h₂.comp_fst l'⟩
-
-中文:
-定理 IsTheta.comp_fst
-  结论: f =Θ[l] g -> (f ∘ 积类型.fst) =Θ[l ×ˢ l'] (g ∘ 积类型.fst)
-  证明: by
-  simp only [IsTheta]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_fst l', h₂.comp_fst l'⟩
+/-
+**Asymptotics.IsTheta.comp_fst** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {E : Type u_3} {F : Type u_4} [inst : Norm
+ E] [inst_1 : Norm F] {f : α → E} {g : α → F}   {l : Filter α} (l' : Filter β), 
+f =Θ[l] g → (f ∘ Prod.fst) =Θ[l ×ˢ l'] (g ∘ Prod.fst)
+参数：l' : Filter β；f ∘ Prod.fst；g ∘ Prod.fst。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.comp_fst`：∀ {α : Type u_1} {β : Type u_2} {E : Type u
+_3} {F : Type u_4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F}   {
+l : Filter α} (l'…
 -/
-protected theorem IsTheta.comp_fst : f =Θ[l] g -> (f ∘ Prod.fst) =Θ[l ×ˢ l'] (g ∘ Prod.fst) := by
+protected theorem IsTheta.comp_fst : f =Θ[l] g → (f ∘ Prod.fst) =Θ[l ×ˢ l'] (g ∘ Prod.fst) := by
   simp only [IsTheta]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_fst l', h₂.comp_fst l'⟩
-
-/--
-theorem `IsTheta.comp_snd` / 定理 `IsTheta.comp_snd`
-
-English:
-theorem IsTheta.comp_snd
-  statement: f =Θ[l] g -> (f ∘ Prod.snd) =Θ[l' ×ˢ l] (g ∘ Prod.snd)
-  proof: by
-  simp only [IsTheta]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_snd l', h₂.comp_snd l'⟩
-
-中文:
-定理 IsTheta.comp_snd
-  结论: f =Θ[l] g -> (f ∘ 积类型.snd) =Θ[l' ×ˢ l] (g ∘ 积类型.snd)
-  证明: by
-  simp only [IsTheta]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_snd l', h₂.comp_snd l'⟩
+  exact fun ⟨h₁, h₂⟩ ↦ ⟨h₁.comp_fst l', h₂.comp_fst l'⟩
+/-
+**Asymptotics.IsTheta.comp_snd** 是 Mathlib 中的一个定理，位于命名空间 `Asymptotics.IsTheta`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {E : Type u_3} {F : Type u_4} [inst : Norm
+ E] [inst_1 : Norm F] {f : α → E} {g : α → F}   {l : Filter α} (l' : Filter β), 
+f =Θ[l] g → (f ∘ Prod.snd) =Θ[l' ×ˢ l] (g ∘ Prod.snd)
+参数：l' : Filter β；f ∘ Prod.snd；g ∘ Prod.snd。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Asymptotics.IsBigO.comp_snd`：∀ {α : Type u_1} {β : Type u_2} {E : Type u
+_3} {F : Type u_4} [inst : Norm E] [inst_1 : Norm F] {f : α → E} {g : α → F}   {
+l : Filter α} (l'…
 -/
-protected theorem IsTheta.comp_snd : f =Θ[l] g -> (f ∘ Prod.snd) =Θ[l' ×ˢ l] (g ∘ Prod.snd) := by
+protected theorem IsTheta.comp_snd : f =Θ[l] g → (f ∘ Prod.snd) =Θ[l' ×ˢ l] (g ∘ Prod.snd) := by
   simp only [IsTheta]
-  exact fun ⟨h₁, h₂⟩ => ⟨h₁.comp_snd l', h₂.comp_snd l'⟩
+  exact fun ⟨h₁, h₂⟩ ↦ ⟨h₁.comp_snd l', h₂.comp_snd l'⟩
 
 end
 
@@ -1408,22 +1172,27 @@ end Asymptotics
 namespace ContinuousOn
 
 variable {α E F : Type*} [NormedAddGroup E] [SeminormedAddGroup F] [TopologicalSpace α]
-  {s : Set α} {f : α -> E} {c : F}
+  {s : Set α} {f : α → E} {c : F}
 
-/--
-theorem `isTheta_principal` / 定理 `isTheta_principal`
-
-English:
-theorem isTheta_principal
-  proof: ⟨hf.isBigO_principal hs hc, hf.isBigO_rev_principal hs hC c⟩
-
-中文:
-定理 isTheta_principal
-  证明: ⟨hf.isBigO_principal hs hc, hf.isBigO_rev_principal hs hC c⟩
+/-
+**ContinuousOn.isTheta_principal** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousOn`。
+形式化陈述：∀ {α : Type u_1} {E : Type u_2} {F : Type u_3} [inst : NormedAddGroup E] [
+inst_1 : SeminormedAddGroup F]   [inst_2 : TopologicalSpace α] {s : Set α} {f : 
+α → E} {c : F},   ContinuousOn f s → IsCompact s → ‖c‖ ≠ 0 → (∀ i ∈ s, f i ≠ 0) 
+→ f =Θ[Filter.principal s] fun x => c
+参数：∀ i ∈ s, f i ≠ 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.isBigO_principal`：∀ {α : Type u_1} {E : Type u_2} {F : Type
+ u_3} [inst : TopologicalSpace α] {s : Set α} {f : α → E} {c : F}   [inst_1 : Se
+minormedAddGroup E]…
+· 使用定理 `ContinuousOn.isBigO_rev_principal`：∀ {α : Type u_1} {E : Type u_2} {F : 
+Type u_3} [inst : TopologicalSpace α] {s : Set α} {f : α → E}   [inst_1 : Normed
+AddGroup E] [inst_2 : S…
 -/
 protected theorem isTheta_principal
-    (hf : ContinuousOn f s) (hs : IsCompact s) (hc : ‖c‖ != 0) (hC : forall i in s, f i != 0) :
+    (hf : ContinuousOn f s) (hs : IsCompact s) (hc : ‖c‖ ≠ 0) (hC : ∀ i ∈ s, f i ≠ 0) :
     f =Θ[𝓟 s] fun _ => c :=
   ⟨hf.isBigO_principal hs hc, hf.isBigO_rev_principal hs hC c⟩
 
 end ContinuousOn
+

@@ -35,63 +35,60 @@ squares. We define the predicate `IsSemireal R` for structures `R` equipped with
 a multiplication, an addition, a multiplicative unit and an additive unit.
 -/
 @[mk_iff]
-/--
-Definition of `IsSemireal` / `IsSemireal` 的定义
+/-
+**IsSemireal** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [Add R] → [Mul R] → [One R] → [Zero R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSemireal
-  parameters: [Add R] [Mul R] [One R] [Zero R]
-  axioms and operations (1):
-    - one_add_ne_zero({s : R} (hs : IsSumSq s)) : 1 + s != 0
-
-中文:
-类 是Semireal
-  参数: [加法 R] [乘法 R] [幺 R] [零 R]
-  公理与运算 (1 个):
-    - one_add_ne_zero({s : R} (hs : 是SumSq s)) : 1 + s != 0
+--- 原说明 ---
+A semireal ring is a commutative ring (with unit) in which `-1` is *not* a sum o
+f
+squares. We define the predicate `IsSemireal R` for structures `R` equipped with
+a multiplication, an addition, a multiplicative unit and an additive unit.
 -/
 class IsSemireal [Add R] [Mul R] [One R] [Zero R] : Prop where
-  one_add_ne_zero {s : R} (hs : IsSumSq s) : 1 + s != 0
+  one_add_ne_zero {s : R} (hs : IsSumSq s) : 1 + s ≠ 0
 
-/--
-theorem `IsSemireal.not_isSumSq_neg_one` / 定理 `IsSemireal.not_isSumSq_neg_one`
+/-- In a semireal ring, `-1` is not a sum of squares. -/
+/-
+**IsSemireal.not_isSumSq_neg_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSemireal.not_isSumSq_neg_one [AddGroup R] [One R] [Mul R] [IsSemireal R]
+ : ¬ IsSumSq (-1 : R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `IsSemireal.one_add_ne_zero`：∀ {R : Type u_1} {inst : Add R} {inst_1 : Mu
+l R} {inst_2 : One R} {inst_3 : Zero R} [self : IsSemireal R] {s : R},   IsSumSq
+ s → 1 + s ≠ 0
 
-English:
-theorem IsSemireal.not_isSumSq_neg_one
-  given: [AddGroup R] [One R] [Mul R] [IsSemireal R]
-  proof: (by simpa using one_add_ne_zero ·)
-
-中文:
-定理 是Semireal.not_isSumSq_neg_one
-  条件: [加法群 R] [幺 R] [乘法 R] [是Semireal R]
-  证明: (by simpa using one_add_ne_zero ·)
-
-Depends on / 依赖: one_add_ne_zero
+--- 原说明 ---
+In a semireal ring, `-1` is not a sum of squares.
 -/
 theorem IsSemireal.not_isSumSq_neg_one [AddGroup R] [One R] [Mul R] [IsSemireal R] :
     ¬ IsSumSq (-1 : R) := (by simpa using one_add_ne_zero ·)
 
 variable {R} in
-/--
-theorem `isSemireal_iff_not_isSumSq_neg_one` / 定理 `isSemireal_iff_not_isSumSq_neg_one`
-
-English:
-theorem isSemireal_iff_not_isSumSq_neg_one
-  given: [AddGroup R] [One R] [Mul R]
-  proof: IsSemireal.not_isSumSq_neg_one _
-  mpr h := ⟨by aesop (add simp add_eq_zero_iff_neg_eq)⟩
-
-alias ⟨_, IsSemireal.of_not_isSumSq_neg_one⟩ := isSemireal_iff_not_isSumSq_neg_one
-
-中文:
-定理 isSemireal_iff_not_isSumSq_neg_one
-  条件: [加法群 R] [幺 R] [乘法 R]
-  证明: IsSemireal.not_isSumSq_neg_one _
-  mpr h := ⟨by aesop (add simp add_eq_zero_iff_neg_eq)⟩
-
-alias ⟨_, IsSemireal.of_not_isSumSq_neg_one⟩ := isSemireal_iff_not_isSumSq_neg_one
-
-Depends on / 依赖: IsSemireal, IsSemireal.not_isSumSq_neg_one, not_isSumSq_neg_one
+/-
+**isSemireal_iff_not_isSumSq_neg_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSemireal_iff_not_isSumSq_neg_one [AddGroup R] [One R] [Mul R] : IsSemire
+al R ↔ ¬ IsSumSq (-1 : R) where mp _
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemireal.not_isSumSq_neg_one`：IsSemireal.not_isSumSq_neg_one [AddGroup
+ R] [One R] [Mul R] [IsSemireal R] : ¬ IsSumSq (-1 : R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
 theorem isSemireal_iff_not_isSumSq_neg_one [AddGroup R] [One R] [Mul R] :
     IsSemireal R ↔ ¬ IsSumSq (-1 : R) where
@@ -101,28 +98,26 @@ theorem isSemireal_iff_not_isSumSq_neg_one [AddGroup R] [One R] [Mul R] :
 alias ⟨_, IsSemireal.of_not_isSumSq_neg_one⟩ := isSemireal_iff_not_isSumSq_neg_one
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+Linearly ordered semirings with the property `a ≤ b → ∃ c, a + c = b` (e.g. `ℕ`)
+are semireal.
+-/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Semiring
-  signature: R] [LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R] : IsSemireal R where
-  body: zero_ne_one' R (le_antisymm zero_le_one
-                              (le_of_le_of_eq (le_add_of_nonneg_right hs.nonneg) amo))
-
-中文:
-实例 [半环
-  签名: R] [线性序 R] [是StrictOrdered环 R] [ExistsAddOfLE R] : 是Semireal R where
-  定义体: zero_ne_one' R (le_antisymm zero_le_one
-                              (le_of_le_of_eq (le_add_of_nonneg_right hs.nonneg) amo))
-
-Depends on / 依赖: le_antisymm, zero_le_one, zero_ne_one
+--- 原说明 ---
+Linearly ordered semirings with the property `a ≤ b → ∃ c, a + c = b` (e.g. `ℕ`)
+are semireal.
 -/
 instance [Semiring R] [LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R] : IsSemireal R where
   one_add_ne_zero hs amo := zero_ne_one' R (le_antisymm zero_le_one
                               (le_of_le_of_eq (le_add_of_nonneg_right hs.nonneg) amo))
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 90) [NonAssocRing R] [IsSemireal R] : CharZero R :=
-  charZero_of_inj_zero fun n hn => by
+  charZero_of_inj_zero fun n hn ↦ by
     cases n with
     | zero => rfl
     | succ n =>

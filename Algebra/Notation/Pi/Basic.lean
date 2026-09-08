@@ -20,236 +20,155 @@ assert_not_exists Monoid Preorder
 
 open Function
 
-variable {ι ι' α β : Type*} {G M N O : ι -> Type*}
+variable {ι ι' α β : Type*} {G M N O : ι → Type*}
 
 namespace Pi
-variable [forall i, One (M i)] [forall i, One (N i)] [forall i, One (O i)] [DecidableEq ι] {i : ι} {x : M i}
+variable [∀ i, One (M i)] [∀ i, One (N i)] [∀ i, One (O i)] [DecidableEq ι] {i : ι} {x : M i}
 
 /-- The function supported at `i`, with value `x` there, and `1` elsewhere. -/
 @[to_additive /-- The function supported at `i`, with value `x` there, and `0` elsewhere. -/]
-/--
-Definition of `mulSingle` / `mulSingle` 的定义
+/-
+**Pi.mulSingle** 是 Mathlib 中的一个定义，位于命名空间 `Pi`。
+形式化陈述：mulSingle (i : ι) (x : M i) : forall j, M j
+参数：i : ι；x : M i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulSingle
-  signature: (i : ι) (x : M i)
-  body: Function.update 1 i x
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 mulSingle
-  签名: (i : ι) (x : M i)
-  定义体: Function.update 1 i x
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Function, Function.update, update
+--- 原说明 ---
+The function supported at `i`, with value `x` there, and `1` elsewhere.
 -/
-def mulSingle (i : ι) (x : M i) : forall j, M j := Function.update 1 i x
+def mulSingle (i : ι) (x : M i) : ∀ j, M j := Function.update 1 i x
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulSingle_eq_same` / 引理 `mulSingle_eq_same`
-
-English:
-lemma mulSingle_eq_same
-  given: (i : ι) (x : M i)
-  statement: mulSingle i x i = x
-  proof: Function.update_self i x _
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mulSingle_eq_same
-  条件: (i : ι) (x : M i)
-  结论: mulSingle i x i = x
-  证明: Function.update_self i x _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Function, Function.update_self, update_self
+/-
+**Pi.mulSingle_eq_same** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_eq_same (i : ι) (x : M i) : mulSingle i x i = x
+参数：i : ι；x : M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
 -/
 lemma mulSingle_eq_same (i : ι) (x : M i) : mulSingle i x i = x := Function.update_self i x _
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulSingle_eq_of_ne` / 引理 `mulSingle_eq_of_ne`
-
-English:
-lemma mulSingle_eq_of_ne
-  given: {i i' : ι} (h : i' != i) (x : M i)
-  statement: mulSingle i x i' = 1
-  proof: Function.update_of_ne h x _
-
-中文:
-引理 mulSingle_eq_of_ne
-  条件: {i i' : ι} (h : i' != i) (x : M i)
-  结论: mulSingle i x i' = 1
-  证明: Function.update_of_ne h x _
-
-Depends on / 依赖: Function, Function.update_of_ne, update_of_ne
+/-
+**Pi.mulSingle_eq_of_ne** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_eq_of_ne {i i' : ι} (h : i' != i) (x : M i) : mulSingle i x i' =
+ 1
+参数：h : i' != i；x : M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
 -/
-lemma mulSingle_eq_of_ne {i i' : ι} (h : i' != i) (x : M i) : mulSingle i x i' = 1 :=
+lemma mulSingle_eq_of_ne {i i' : ι} (h : i' ≠ i) (x : M i) : mulSingle i x i' = 1 :=
   Function.update_of_ne h x _
 
 /-- Abbreviation for `mulSingle_eq_of_ne h.symm`, for ease of use by `simp`. -/
 @[to_additive (attr := simp)
   /-- Abbreviation for `single_eq_of_ne h.symm`, for ease of use by `simp`. -/]
-/--
-lemma `mulSingle_eq_of_ne'` / 引理 `mulSingle_eq_of_ne'`
-
-English:
-lemma mulSingle_eq_of_ne'
-  given: {i i' : ι} (h : i != i') (x : M i)
-  statement: mulSingle i x i' = 1
-  proof: mulSingle_eq_of_ne h.symm x
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mulSingle_eq_of_ne'
-  条件: {i i' : ι} (h : i != i') (x : M i)
-  结论: mulSingle i x i' = 1
-  证明: mulSingle_eq_of_ne h.symm x
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: h.symm, mulSingle_eq_of_ne
+/-
+**Pi.mulSingle_eq_of_ne'** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_eq_of_ne' {i i' : ι} (h : i != i') (x : M i) : mulSingle i x i' 
+= 1
+参数：h : i != i'；x : M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Pi.mulSingle_eq_of_ne`：mulSingle_eq_of_ne {i i' : ι} (h : i' != i) (x : 
+M i) : mulSingle i x i' = 1
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-lemma mulSingle_eq_of_ne' {i i' : ι} (h : i != i') (x : M i) : mulSingle i x i' = 1 :=
+lemma mulSingle_eq_of_ne' {i i' : ι} (h : i ≠ i') (x : M i) : mulSingle i x i' = 1 :=
   mulSingle_eq_of_ne h.symm x
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulSingle_one` / 引理 `mulSingle_one`
-
-English:
-lemma mulSingle_one
-  given: (i : ι)
-  statement: mulSingle i (1 : M i) = 1
-  proof: Function.update_eq_self _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mulSingle_one
-  条件: (i : ι)
-  结论: mulSingle i (1 : M i) = 1
-  证明: Function.update_eq_self _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Function, Function.update_eq_self, update_eq_self
+/-
+**Pi.mulSingle_one** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_one (i : ι) : mulSingle i (1 : M i) = 1
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_eq_self`：update_eq_self (a : α) (f : forall a, β a) : up
+date f a (f a) = f
 -/
 lemma mulSingle_one (i : ι) : mulSingle i (1 : M i) = 1 := Function.update_eq_self _ _
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulSingle_eq_one_iff` / 引理 `mulSingle_eq_one_iff`
-
-English:
-lemma mulSingle_eq_one_iff
-  statement: mulSingle i x = 1 ↔ x = 1
-  proof: by
-  refine ⟨fun h => ?_, fun h => h.symm ▸ mulSingle_one i⟩
-  rw [← mulSingle_eq_same i x]; rw [h]; rw [one_apply]
-
-@[to_additive]
-
-中文:
-引理 mulSingle_eq_one_iff
-  结论: mulSingle i x = 1 ↔ x = 1
-  证明: by
-  refine ⟨fun h => ?_, fun h => h.symm ▸ mulSingle_one i⟩
-  rw [← mulSingle_eq_same i x]; rw [h]; rw [one_apply]
-
-@[to_additive]
-
-Depends on / 依赖: h.symm, mulSingle_eq_same, mulSingle_one, one_apply
+/-
+**Pi.mulSingle_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_eq_one_iff : mulSingle i x = 1 ↔ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Pi.mulSingle_eq_same`：mulSingle_eq_same (i : ι) (x : M i) : mulSingle i 
+x i = x
+· 使用引理 `Pi.one_apply`：one_apply (i : ι) : (1 : forall i, M i) i = 1
+· 使用引理 `Pi.mulSingle_one`：mulSingle_one (i : ι) : mulSingle i (1 : M i) = 1
 -/
 lemma mulSingle_eq_one_iff : mulSingle i x = 1 ↔ x = 1 := by
   refine ⟨fun h => ?_, fun h => h.symm ▸ mulSingle_one i⟩
-  rw [← mulSingle_eq_same i x]; rw [h]; rw [one_apply]
+  rw [← mulSingle_eq_same i x, h, one_apply]
 
 @[to_additive]
-/--
-lemma `mulSingle_ne_one_iff` / 引理 `mulSingle_ne_one_iff`
-
-English:
-lemma mulSingle_ne_one_iff
-  statement: mulSingle i x != 1 ↔ x != 1
-  proof: mulSingle_eq_one_iff.ne
-
-@[to_additive]
-
-中文:
-引理 mulSingle_ne_one_iff
-  结论: mulSingle i x != 1 ↔ x != 1
-  证明: mulSingle_eq_one_iff.ne
-
-@[to_additive]
-
-Depends on / 依赖: mulSingle_eq_one_iff, mulSingle_eq_one_iff.ne
+/-
+**Pi.mulSingle_ne_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_ne_one_iff : mulSingle i x != 1 ↔ x != 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.ne`：∀ {α : Sort u_1} {β : Sort u_2} {a b : α} {c d : β}, (a = b ↔ c 
+= d) → (a ≠ b ↔ c ≠ d)
+· 使用引理 `Pi.mulSingle_eq_one_iff`：mulSingle_eq_one_iff : mulSingle i x = 1 ↔ x = 
+1
 -/
-lemma mulSingle_ne_one_iff : mulSingle i x != 1 ↔ x != 1 :=
+lemma mulSingle_ne_one_iff : mulSingle i x ≠ 1 ↔ x ≠ 1 :=
   mulSingle_eq_one_iff.ne
 
 @[to_additive]
-/--
-lemma `apply_mulSingle` / 引理 `apply_mulSingle`
-
-English:
-lemma apply_mulSingle
-  given: (f' : forall i, M i -> N i) (hf' : forall i, f' i 1 = 1) (i : ι) (x : M i) (j : ι)
-  proof: by
-  simpa only [Pi.one_apply, hf', mulSingle] using! Function.apply_update f' 1 i x j
-
-@[to_additive apply_single₂]
-
-中文:
-引理 apply_mulSingle
-  条件: (f' : 对任意 i, M i -> N i) (hf' : 对任意 i, f' i 1 = 1) (i : ι) (x : M i) (j : ι)
-  证明: by
-  simpa only [Pi.one_apply, hf', mulSingle] using! Function.apply_update f' 1 i x j
-
-@[to_additive apply_single₂]
-
-Depends on / 依赖: Function, Function.apply_update, Pi.one_apply, apply_update, mulSingle, one_apply
+/-
+**Pi.apply_mulSingle** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：apply_mulSingle (f' : forall i, M i -> N i) (hf' : forall i, f' i 1 = 1) (
+i : ι) (x : M i) (j : ι) : f' j (mulSingle i x j) = mulSingle i (f' i x) j
+参数：f' : forall i, M i -> N i；hf' : forall i, f' i 1 = 1；i : ι；x : M i；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.update.congr_simp`：∀ {α : Sort u} {β : α → Sort v} {inst : Deci
+dableEq α} [inst_1 : DecidableEq α] (f f_1 : (a : α) → β a),   f = f_1 → ∀ (a' :
+ α) (v v_1 : β a…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.apply_update`：apply_update {ι : Sort*} [DecidableEq ι] {α β : ι
+ -> Sort*} (f : forall i, α i -> β i) (g : forall i, α i) (i : ι) (v : α i) (j :
+ ι) : f j (…
 -/
-lemma apply_mulSingle (f' : forall i, M i -> N i) (hf' : forall i, f' i 1 = 1) (i : ι) (x : M i) (j : ι) :
+lemma apply_mulSingle (f' : ∀ i, M i → N i) (hf' : ∀ i, f' i 1 = 1) (i : ι) (x : M i) (j : ι) :
     f' j (mulSingle i x j) = mulSingle i (f' i x) j := by
   simpa only [Pi.one_apply, hf', mulSingle] using! Function.apply_update f' 1 i x j
 
 @[to_additive apply_single₂]
-/--
-lemma `apply_mulSingle₂` / 引理 `apply_mulSingle₂`
-
-English:
-lemma apply_mulSingle₂
-  statement: (f' : forall i, M i -> N i -> O i) (hf' : forall i, f' i 1 1 = 1) (i : ι)
-  proof: by
-  by_cases h : j = i
-  · subst h
-    simp only [mulSingle_eq_same]
-  · simp only [mulSingle_eq_of_ne h, hf']
-
-@[to_additive]
-
-中文:
-引理 apply_mulSingle₂
-  结论: (f' : 对任意 i, M i -> N i -> O i) (hf' : 对任意 i, f' i 1 1 = 1) (i : ι)
-  证明: by
-  by_cases h : j = i
-  · subst h
-    simp only [mulSingle_eq_same]
-  · simp only [mulSingle_eq_of_ne h, hf']
-
-@[to_additive]
-
-Depends on / 依赖: mulSingle_eq_of_ne, mulSingle_eq_same
+/-
+**Pi.apply_mulSingle** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：apply_mulSingle (f' : forall i, M i -> N i) (hf' : forall i, f' i 1 = 1) (
+i : ι) (x : M i) (j : ι) : f' j (mulSingle i x j) = mulSingle i (f' i x) j
+参数：f' : forall i, M i -> N i；hf' : forall i, f' i 1 = 1；i : ι；x : M i；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.update.congr_simp`：∀ {α : Sort u} {β : α → Sort v} {inst : Deci
+dableEq α} [inst_1 : DecidableEq α] (f f_1 : (a : α) → β a),   f = f_1 → ∀ (a' :
+ α) (v v_1 : β a…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.apply_update`：apply_update {ι : Sort*} [DecidableEq ι] {α β : ι
+ -> Sort*} (f : forall i, α i -> β i) (g : forall i, α i) (i : ι) (v : α i) (j :
+ ι) : f j (…
 -/
-lemma apply_mulSingle₂ (f' : forall i, M i -> N i -> O i) (hf' : forall i, f' i 1 1 = 1) (i : ι)
+lemma apply_mulSingle₂ (f' : ∀ i, M i → N i → O i) (hf' : ∀ i, f' i 1 1 = 1) (i : ι)
     (x : M i) (y : N i) (j : ι) :
     f' j (mulSingle i x j) (mulSingle i y j) = mulSingle i (f' i x y) j := by
   by_cases h : j = i
@@ -258,93 +177,68 @@ lemma apply_mulSingle₂ (f' : forall i, M i -> N i -> O i) (hf' : forall i, f' 
   · simp only [mulSingle_eq_of_ne h, hf']
 
 @[to_additive]
-/--
-lemma `mulSingle_op` / 引理 `mulSingle_op`
-
-English:
-lemma mulSingle_op
-  given: (op : forall i, M i -> N i) (h : forall i, op i 1 = 1) (i : ι) (x : M i)
-  proof: .symm funext apply_mulSingle op h i x
-
-@[to_additive]
-
-中文:
-引理 mulSingle_op
-  条件: (op : 对任意 i, M i -> N i) (h : 对任意 i, op i 1 = 1) (i : ι) (x : M i)
-  证明: .symm funext apply_mulSingle op h i x
-
-@[to_additive]
-
-Depends on / 依赖: apply_mulSingle
+/-
+**Pi.mulSingle_op** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_op (op : forall i, M i -> N i) (h : forall i, op i 1 = 1) (i : ι
+) (x : M i) : mulSingle i (op i x) = fun j => op j (mulSingle i x j)
+参数：op : forall i, M i -> N i；h : forall i, op i 1 = 1；i : ι；x : M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Pi.apply_mulSingle`：apply_mulSingle (f' : forall i, M i -> N i) (hf' : f
+orall i, f' i 1 = 1) (i : ι) (x : M i) (j : ι) : f' j (mulSingle i x j) = mulSin
+gle i (f…
 -/
-lemma mulSingle_op (op : forall i, M i -> N i) (h : forall i, op i 1 = 1) (i : ι) (x : M i) :
+lemma mulSingle_op (op : ∀ i, M i → N i) (h : ∀ i, op i 1 = 1) (i : ι) (x : M i) :
     mulSingle i (op i x) = fun j => op j (mulSingle i x j) :=
-.symm funext apply_mulSingle op h i x
+  .symm <| funext <| apply_mulSingle op h i x
 
 @[to_additive]
-/--
-lemma `mulSingle_op₂` / 引理 `mulSingle_op₂`
-
-English:
-lemma mulSingle_op₂
-  statement: (op : forall i, M i -> N i -> O i) (h : forall i, op i 1 1 = 1) (i : ι) (x : M i)
-  proof: .symm funext apply_mulSingle₂ op h i x y
-
-@[to_additive]
-
-中文:
-引理 mulSingle_op₂
-  结论: (op : 对任意 i, M i -> N i -> O i) (h : 对任意 i, op i 1 1 = 1) (i : ι) (x : M i)
-  证明: .symm funext apply_mulSingle₂ op h i x y
-
-@[to_additive]
+/-
+**Pi.mulSingle_op** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_op (op : forall i, M i -> N i) (h : forall i, op i 1 = 1) (i : ι
+) (x : M i) : mulSingle i (op i x) = fun j => op j (mulSingle i x j)
+参数：op : forall i, M i -> N i；h : forall i, op i 1 = 1；i : ι；x : M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Pi.apply_mulSingle`：apply_mulSingle (f' : forall i, M i -> N i) (hf' : f
+orall i, f' i 1 = 1) (i : ι) (x : M i) (j : ι) : f' j (mulSingle i x j) = mulSin
+gle i (f…
 -/
-lemma mulSingle_op₂ (op : forall i, M i -> N i -> O i) (h : forall i, op i 1 1 = 1) (i : ι) (x : M i)
-    (y : N i) : mulSingle i (op i x y) = fun j => op j (mulSingle i x j) (mulSingle i y j) :=
-.symm funext apply_mulSingle₂ op h i x y
+lemma mulSingle_op₂ (op : ∀ i, M i → N i → O i) (h : ∀ i, op i 1 1 = 1) (i : ι) (x : M i)
+    (y : N i) : mulSingle i (op i x y) = fun j ↦ op j (mulSingle i x j) (mulSingle i y j) :=
+  .symm <| funext <| apply_mulSingle₂ op h i x y
 
 @[to_additive]
-/--
-lemma `mulSingle_injective` / 引理 `mulSingle_injective`
-
-English:
-lemma mulSingle_injective
-  given: (i : ι)
-  statement: Function.Injective (mulSingle i : M i -> forall i, M i)
-  proof: Function.update_injective _ i
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mulSingle_injective
-  条件: (i : ι)
-  结论: 函数.单射 (mulSingle i : M i -> 对任意 i, M i)
-  证明: Function.update_injective _ i
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Function, Function.update_injective, update_injective
+/-
+**Pi.mulSingle_injective** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_injective (i : ι) : Function.Injective (mulSingle i : M i -> for
+all i, M i)
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_injective`：update_injective (f : forall a, β a) (a' : α)
+ : Injective (update f a')
 -/
-lemma mulSingle_injective (i : ι) : Function.Injective (mulSingle i : M i -> forall i, M i) :=
+lemma mulSingle_injective (i : ι) : Function.Injective (mulSingle i : M i → ∀ i, M i) :=
   Function.update_injective _ i
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulSingle_inj` / 引理 `mulSingle_inj`
-
-English:
-lemma mulSingle_inj
-  given: (i : ι) {x y : M i}
-  statement: mulSingle i x = mulSingle i y ↔ x = y
-  proof: (mulSingle_injective _).eq_iff
-
-中文:
-引理 mulSingle_inj
-  条件: (i : ι) {x y : M i}
-  结论: mulSingle i x = mulSingle i y ↔ x = y
-  证明: (mulSingle_injective _).eq_iff
-
-Depends on / 依赖: eq_iff, mulSingle_injective
+/-
+**Pi.mulSingle_inj** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_inj (i : ι) {x y : M i} : mulSingle i x = mulSingle i y ↔ x = y
+参数：i : ι。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `Pi.mulSingle_injective`：mulSingle_injective (i : ι) : Function.Injective
+ (mulSingle i : M i -> forall i, M i)
 -/
 lemma mulSingle_inj (i : ι) {x y : M i} : mulSingle i x = mulSingle i y ↔ x = y :=
   (mulSingle_injective _).eq_iff
@@ -361,113 +255,101 @@ A congruence lemma for `Pi.single`, specialized for the non-dependent case. With
 `simp` can't rewrite in the first and third argument (`i` and `j`) because of dependence.
 See also https://github.com/leanprover/lean4/issues/12478.
 -/]
-/--
-lemma `mulSingle_congr` / 引理 `mulSingle_congr`
-
-English:
-lemma mulSingle_congr
-  statement: {i₁ i₂ : ι} (hi : i₁ = i₂)
-  proof: update_congr rfl hi hx hj
-
-中文:
-引理 mulSingle_congr
-  结论: {i₁ i₂ : ι} (hi : i₁ = i₂)
-  证明: update_congr rfl hi hx hj
-
-Depends on / 依赖: update_congr
+/-
+**Pi.mulSingle_congr** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_congr {i₁ i₂ : ι} (hi : i₁ = i₂) {x₁ x₂ : M} (hx : x₁ = x₂) {j₁ 
+j₂ : ι} (hj : j₁ = j₂) : (mulSingle i₁ x₁ : ι -> M) j₁ = (mulSingle i₂ x₂ : ι ->
+ M) j₂
+参数：hi : i₁ = i₂；hx : x₁ = x₂；hj : j₁ = j₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.update_congr`：update_congr {β : Sort*} {f₁ f₂ : α -> β} (hf : f
+₁ = f₂) {a'₁ a'₂ : α} (ha' : a'₁ = a'₂) {v₁ v₂ : β} (hv : v₁ = v₂) {a₁ a₂ : α} (
+ha : a₁ = a…
 -/
 lemma mulSingle_congr {i₁ i₂ : ι} (hi : i₁ = i₂)
     {x₁ x₂ : M} (hx : x₁ = x₂) {j₁ j₂ : ι} (hj : j₁ = j₂) :
-    (mulSingle i₁ x₁ : ι -> M) j₁ = (mulSingle i₂ x₂ : ι -> M) j₂ :=
+    (mulSingle i₁ x₁ : ι → M) j₁ = (mulSingle i₂ x₂ : ι → M) j₂ :=
   update_congr rfl hi hx hj
 
 /-- On non-dependent functions, `Pi.mulSingle` can be expressed as an `ite` -/
 @[to_additive (attr := grind =)
   /-- On non-dependent functions, `Pi.single` can be expressed as an `ite` -/]
-/--
-lemma `mulSingle_apply` / 引理 `mulSingle_apply`
-
-English:
-lemma mulSingle_apply
-  given: (i : ι) (x : M) (i' : ι)
-  proof: Function.update_apply (1 : ι -> M) i x i'
-
-中文:
-引理 mulSingle_apply
-  条件: (i : ι) (x : M) (i' : ι)
-  证明: Function.update_apply (1 : ι -> M) i x i'
-
-Depends on / 依赖: Function, Function.update_apply, update_apply
+/-
+**Pi.mulSingle_apply** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_apply (i : ι) (x : M) (i' : ι) : (mulSingle i x : ι -> M) i' = i
+f i' = i then x else 1
+参数：i : ι；x : M；i' : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_apply`：update_apply {β : Sort*} (f : α -> β) (a' : α) (b
+ : β) (a : α) : update f a' b a = if a = a' then b else f a
 -/
 lemma mulSingle_apply (i : ι) (x : M) (i' : ι) :
-    (mulSingle i x : ι -> M) i' = if i' = i then x else 1 :=
-  Function.update_apply (1 : ι -> M) i x i'
+    (mulSingle i x : ι → M) i' = if i' = i then x else 1 :=
+  Function.update_apply (1 : ι → M) i x i'
 
 -- Porting note: added type ascription (_ : ι → M)
 /-- On non-dependent functions, `Pi.mulSingle` is symmetric in the two indices. -/
 @[to_additive /-- On non-dependent functions, `Pi.single` is symmetric in the two indices. -/]
-/--
-lemma `mulSingle_comm` / 引理 `mulSingle_comm`
+/-
+**Pi.mulSingle_comm** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：mulSingle_comm (i : ι) (x : M) (j : ι) : (mulSingle i x : ι -> M) j = (mul
+Single j x : ι -> M) i
+参数：i : ι；x : M；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Pi.mulSingle_apply`：mulSingle_apply (i : ι) (x : M) (i' : ι) : (mulSingl
+e i x : ι -> M) i' = if i' = i then x else 1
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mulSingle_comm
-  given: (i : ι) (x : M) (j : ι)
-  proof: by simp [mulSingle_apply, eq_comm]
-
-中文:
-引理 mulSingle_comm
-  条件: (i : ι) (x : M) (j : ι)
-  证明: by simp [mulSingle_apply, eq_comm]
-
-Depends on / 依赖: eq_comm, mulSingle_apply
+--- 原说明 ---
+On non-dependent functions, `Pi.mulSingle` is symmetric in the two indices.
 -/
 lemma mulSingle_comm (i : ι) (x : M) (j : ι) :
-    (mulSingle i x : ι -> M) j = (mulSingle j x : ι -> M) i := by simp [mulSingle_apply, eq_comm]
+    (mulSingle i x : ι → M) j = (mulSingle j x : ι → M) i := by simp [mulSingle_apply, eq_comm]
 
 variable [DecidableEq ι']
 
 @[to_additive (attr := simp)]
-/--
-theorem `curry_mulSingle` / 定理 `curry_mulSingle`
-
-English:
-theorem curry_mulSingle
-  given: (i : ι × ι') (b : M)
-  proof: curry_update _ _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 curry_mulSingle
-  条件: (i : ι × ι') (b : M)
-  证明: curry_update _ _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: curry_update
+/-
+**Pi.curry_mulSingle** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：curry_mulSingle (i : ι × ι') (b : M) : curry (Pi.mulSingle i b) = Pi.mulSi
+ngle i.1 (Pi.mulSingle i.2 b)
+参数：i : ι × ι'；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.curry_update`：curry_update {α α' β : Type*} [DecidableEq α] [De
+cidableEq α'] (f : α × α' -> β) (aa' : α × α') (b : β) : curry (Function.update 
+f aa' b) = …
 -/
 theorem curry_mulSingle (i : ι × ι') (b : M) :
     curry (Pi.mulSingle i b) = Pi.mulSingle i.1 (Pi.mulSingle i.2 b) :=
   curry_update _ _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `uncurry_mulSingle_mulSingle` / 定理 `uncurry_mulSingle_mulSingle`
-
-English:
-theorem uncurry_mulSingle_mulSingle
-  given: (i : ι) (i' : ι') (b : M)
-  proof: uncurry_update_update _ _ _ _
-
-中文:
-定理 uncurry_mulSingle_mulSingle
-  条件: (i : ι) (i' : ι') (b : M)
-  证明: uncurry_update_update _ _ _ _
-
-Depends on / 依赖: uncurry_update_update
+/-
+**Pi.uncurry_mulSingle_mulSingle** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：uncurry_mulSingle_mulSingle (i : ι) (i' : ι') (b : M) : uncurry (Pi.mulSin
+gle i (Pi.mulSingle i' b)) = Pi.mulSingle (i, i') b
+参数：i : ι；i' : ι'；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.uncurry_update_update`：uncurry_update_update {α α' β : Type*} [
+DecidableEq α] [DecidableEq α'] (f : α -> α' -> β) (a : α) (a' : α') (b : β) : u
+ncurry (Function.upd…
 -/
 theorem uncurry_mulSingle_mulSingle (i : ι) (i' : ι') (b : M) :
     uncurry (Pi.mulSingle i (Pi.mulSingle i' b)) = Pi.mulSingle (i, i') b :=
   uncurry_update_update _ _ _ _
 
 end Pi
+

@@ -30,31 +30,25 @@ namespace Finsupp
 variable [AddZeroClass M]
 
 @[simp]
-/--
-theorem `add_closure_setOfPred_eq_single` / 定理 `add_closure_setOfPred_eq_single`
-
-English:
-theorem add_closure_setOfPred_eq_single
-  proof: top_unique fun x _hx =>
-    Finsupp.induction x (AddSubmonoid.zero_mem _) fun a b _f _ha _hb hf =>
-      AddSubmonoid.add_mem _ (AddSubmonoid.subset_closure <| ⟨a, b, rfl⟩) hf
-
-@[deprecated (since := "2026-07-09")]
-alias add_closure_setOf_eq_single := add_closure_setOfPred_eq_single
-
-中文:
-定理 add_closure_setOfPred_eq_single
-  证明: top_unique fun x _hx =>
-    Finsupp.induction x (AddSubmonoid.zero_mem _) fun a b _f _ha _hb hf =>
-      AddSubmonoid.add_mem _ (AddSubmonoid.subset_closure <| ⟨a, b, rfl⟩) hf
-
-@[deprecated (since := "2026-07-09")]
-alias add_closure_setOf_eq_single := add_closure_setOfPred_eq_single
-
-Depends on / 依赖: AddSubmonoid, AddSubmonoid.add_mem, AddSubmonoid.subset_closure, AddSubmonoid.zero_mem, Finsupp, Finsupp.induction, add_mem, subset_closure, top_unique, zero_mem
+/-
+**Finsupp.add_closure_setOfPred_eq_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：add_closure_setOfPred_eq_single : AddSubmonoid.closure { f : α ->₀ M | exi
+sts a b, f = single a b } = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `Finsupp.induction`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass 
+M] {motive : (ι →₀ M) → Prop} (f : ι →₀ M),   motive 0 →     (∀ (a : ι) (b : M) 
+(f : ι …
+· 使用定理 `AddSubmonoid.zero_mem`：∀ {M : Type u_1} [inst : AddZeroClass M] (S : Add
+Submonoid M), 0 ∈ S
+· 使用定理 `AddSubmonoid.add_mem`：∀ {M : Type u_1} [inst : AddZeroClass M] (S : AddS
+ubmonoid M) {x y : M}, x ∈ S → y ∈ S → x + y ∈ S
+· 使用定理 `AddSubmonoid.subset_closure`：∀ {M : Type u_1} [inst : AddZeroClass M] {s
+ : Set M}, s ⊆ ↑(AddSubmonoid.closure s)
 -/
 theorem add_closure_setOfPred_eq_single :
-    AddSubmonoid.closure { f : α ->₀ M | exists a b, f = single a b } = ⊤ :=
+    AddSubmonoid.closure { f : α →₀ M | ∃ a b, f = single a b } = ⊤ :=
   top_unique fun x _hx =>
     Finsupp.induction x (AddSubmonoid.zero_mem _) fun a b _f _ha _hb hf =>
       AddSubmonoid.add_mem _ (AddSubmonoid.subset_closure <| ⟨a, b, rfl⟩) hf
@@ -62,31 +56,27 @@ theorem add_closure_setOfPred_eq_single :
 @[deprecated (since := "2026-07-09")]
 alias add_closure_setOf_eq_single := add_closure_setOfPred_eq_single
 
-/--
-theorem `addHom_ext` / 定理 `addHom_ext`
+/-- If two additive homomorphisms from `α →₀ M` are equal on each `single a b`,
+then they are equal. -/
+/-
+**Finsupp.addHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：addHom_ext [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄ (H : forall x y, f (si
+ngle x y) = g (single x y)) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.eq_of_eqOn_denseM`：∀ {M : Type u_1} {N : Type u_2} [inst : 
+AddZeroClass M] [inst_1 : AddZeroClass N] {s : Set M},   AddSubmonoid.closure s 
+= ⊤ → ∀ {f g : M →+ …
+· 使用定理 `Finsupp.add_closure_setOfPred_eq_single`：add_closure_setOfPred_eq_single
+ : AddSubmonoid.closure { f : α ->₀ M | exists a b, f = single a b } = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem addHom_ext
-  given: [AddZeroClass N] ⦃f g
-  statement: (α ->₀ M) ->+ N⦄
-  proof: by
-  refine AddMonoidHom.eq_of_eqOn_denseM add_closure_setOfPred_eq_single ?_
-  rintro _ ⟨x, y, rfl⟩
-  apply H
-
-中文:
-定理 addHom_ext
-  条件: [加法零类 N] ⦃f g
-  结论: (α ->₀ M) ->+ N⦄
-  证明: by
-  refine AddMonoidHom.eq_of_eqOn_denseM add_closure_setOfPred_eq_single ?_
-  rintro _ ⟨x, y, rfl⟩
-  apply H
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.eq_of_eqOn_denseM, add_closure_setOfPred_eq_single, eq_of_eqOn_denseM
+--- 原说明 ---
+If two additive homomorphisms from `α →₀ M` are equal on each `single a b`,
+then they are equal.
 -/
-theorem addHom_ext [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄
-    (H : forall x y, f (single x y) = g (single x y)) : f = g := by
+theorem addHom_ext [AddZeroClass N] ⦃f g : (α →₀ M) →+ N⦄
+    (H : ∀ x y, f (single x y) = g (single x y)) : f = g := by
   refine AddMonoidHom.eq_of_eqOn_denseM add_closure_setOfPred_eq_single ?_
   rintro _ ⟨x, y, rfl⟩
   apply H
@@ -95,91 +85,90 @@ theorem addHom_ext [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄
 then they are equal.
 
 We formulate this using equality of `AddMonoidHom`s so that `ext` tactic can apply a type-specific
-extensionality lemma after this one. E.g., if the fiber `M` is `ℕ` or `ℤ`, then it suffices to
+extensionality lemma after this one.  E.g., if the fiber `M` is `ℕ` or `ℤ`, then it suffices to
 verify `f (single a 1) = g (single a 1)`. -/
 @[ext high]
-/--
-theorem `addHom_ext'` / 定理 `addHom_ext'`
+/-
+**Finsupp.addHom_ext'** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：addHom_ext' [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄ (H : forall x, f.comp
+ (singleAddHom x) = g.comp (singleAddHom x)) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.addHom_ext`：addHom_ext [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄ 
+(H : forall x y, f (single x y) = g (single x y)) : f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-English:
-theorem addHom_ext'
-  given: [AddZeroClass N] ⦃f g
-  statement: (α ->₀ M) ->+ N⦄
-  proof: addHom_ext fun x => DFunLike.congr_fun (H x)
+--- 原说明 ---
+If two additive homomorphisms from `α →₀ M` are equal on each `single a b`,
+then they are equal.
 
-中文:
-定理 addHom_ext'
-  条件: [加法零类 N] ⦃f g
-  结论: (α ->₀ M) ->+ N⦄
-  证明: addHom_ext fun x => DFunLike.congr_fun (H x)
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, addHom_ext, congr_fun
+We formulate this using equality of `AddMonoidHom`s so that `ext` tactic can app
+ly a type-specific
+extensionality lemma after this one.  E.g., if the fiber `M` is `ℕ` or `ℤ`, then
+ it suffices to
+verify `f (single a 1) = g (single a 1)`.
 -/
-theorem addHom_ext' [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄
-    (H : forall x, f.comp (singleAddHom x) = g.comp (singleAddHom x)) : f = g :=
+theorem addHom_ext' [AddZeroClass N] ⦃f g : (α →₀ M) →+ N⦄
+    (H : ∀ x, f.comp (singleAddHom x) = g.comp (singleAddHom x)) : f = g :=
   addHom_ext fun x => DFunLike.congr_fun (H x)
-
-/--
-theorem `mulHom_ext` / 定理 `mulHom_ext`
-
-English:
-theorem mulHom_ext
-  given: [MulOneClass N] ⦃f g
-  statement: Multiplicative (α ->₀ M) ->* N⦄
-  proof: MonoidHom.ext
-DFunLike.congr_fun by
-      have := addHom_ext (f := f.toAdditiveRight) (g := g.toAdditiveRight) H
-      ext
-      rw [DFunLike.ext_iff] at this
-      apply this
-
-@[ext]
-
-中文:
-定理 mulHom_ext
-  条件: [MulOne类 N] ⦃f g
-  结论: Multiplicative (α ->₀ M) ->* N⦄
-  证明: MonoidHom.ext
-DFunLike.congr_fun by
-      have := addHom_ext (f := f.toAdditiveRight) (g := g.toAdditiveRight) H
-      ext
-      rw [DFunLike.ext_iff] at this
-      apply this
-
-@[ext]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, DFunLike.ext_iff, MonoidHom, MonoidHom.ext, addHom_ext, congr_fun, ext_iff, f.toAdditiveRight, g.toAdditiveRight, toAdditiveRight
+/-
+**Finsupp.mulHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mulHom_ext [MulOneClass N] ⦃f g : Multiplicative (α ->₀ M) ->* N⦄ (H : for
+all x y, f (Multiplicative.ofAdd <| single x y) = g (Multiplicative.ofAdd <| sin
+gle x y)) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Finsupp.addHom_ext`：addHom_ext [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N⦄ 
+(H : forall x y, f (single x y) = g (single x y)) : f = g
+· 使用引理 `Multiplicative.monoidHom_ext`：Multiplicative.monoidHom_ext [AddZeroClass
+ α] [MulOneClass β] (f g : Multiplicative α ->* β) (h : f.toAdditiveRight = g.to
+AdditiveRight) : f…
+· 使用定理 `Finsupp.addHom_ext'`：addHom_ext' [AddZeroClass N] ⦃f g : (α ->₀ M) ->+ N
+⦄ (H : forall x, f.comp (singleAddHom x) = g.comp (singleAddHom x)) : f = g
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Additive.ext`：∀ {α : Type u} {a b : Additive α}, Additive.toMul a = Addi
+tive.toMul b → a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-theorem mulHom_ext [MulOneClass N] ⦃f g : Multiplicative (α ->₀ M) ->* N⦄
-    (H : forall x y, f (Multiplicative.ofAdd <| single x y) = g (Multiplicative.ofAdd <| single x y)) :
+theorem mulHom_ext [MulOneClass N] ⦃f g : Multiplicative (α →₀ M) →* N⦄
+    (H : ∀ x y, f (Multiplicative.ofAdd <| single x y) = g (Multiplicative.ofAdd <| single x y)) :
     f = g :=
-MonoidHom.ext
-DFunLike.congr_fun by
+  MonoidHom.ext <|
+    DFunLike.congr_fun <| by
       have := addHom_ext (f := f.toAdditiveRight) (g := g.toAdditiveRight) H
       ext
       rw [DFunLike.ext_iff] at this
       apply this
 
 @[ext]
-/--
-theorem `mulHom_ext'` / 定理 `mulHom_ext'`
-
-English:
-theorem mulHom_ext'
-  statement: [MulOneClass N] {f g : Multiplicative (α ->₀ M) ->* N}
-  proof: mulHom_ext fun x => DFunLike.congr_fun (H x)
-
-中文:
-定理 mulHom_ext'
-  结论: [MulOne类 N] {f g : Multiplicative (α ->₀ M) ->* N}
-  证明: mulHom_ext fun x => DFunLike.congr_fun (H x)
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, mulHom_ext
+/-
+**Finsupp.mulHom_ext'** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mulHom_ext' [MulOneClass N] {f g : Multiplicative (α ->₀ M) ->* N} (H : fo
+rall x, f.comp (AddMonoidHom.toMultiplicative (singleAddHom x)) = g.comp (AddMon
+oidHom.toMultiplicative (singleAddHom x))) : f = g
+参数：α ->₀ M；H : forall x, f.comp (AddMonoidHom.toMultiplicative (singleAddHom x))
+ = g.comp (AddMonoidHom.toMultiplicative (singleAddHom x))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.mulHom_ext`：mulHom_ext [MulOneClass N] ⦃f g : Multiplicative (α 
+->₀ M) ->* N⦄ (H : forall x y, f (Multiplicative.ofAdd <| single x y) = g (Multi
+plicativ…
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem mulHom_ext' [MulOneClass N] {f g : Multiplicative (α ->₀ M) ->* N}
-    (H : forall x, f.comp (AddMonoidHom.toMultiplicative (singleAddHom x)) =
+theorem mulHom_ext' [MulOneClass N] {f g : Multiplicative (α →₀ M) →* N}
+    (H : ∀ x, f.comp (AddMonoidHom.toMultiplicative (singleAddHom x)) =
               g.comp (AddMonoidHom.toMultiplicative (singleAddHom x))) :
     f = g :=
   mulHom_ext fun x => DFunLike.congr_fun (H x)
 
 end Finsupp
+

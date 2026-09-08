@@ -23,51 +23,45 @@ open Set
 namespace Filter
 
 @[to_dual disjoint_atTop_principal_Iio]
-/--
-theorem `disjoint_atBot_principal_Ioi` / 定理 `disjoint_atBot_principal_Ioi`
-
-English:
-theorem disjoint_atBot_principal_Ioi
-  given: [Preorder α] (x : α)
-  statement: Disjoint atBot (𝓟 (Ioi x))
-  proof: disjoint_of_disjoint_of_mem (Iic_disjoint_Ioi le_rfl) (Iic_mem_atBot x) (mem_principal_self _)
-
-@[to_dual disjoint_atBot_principal_Ici]
-
-中文:
-定理 disjoint_atBot_principal_Ioi
-  条件: [预序 α] (x : α)
-  结论: Disjoint atBot (𝓟 (左开右无界区间 x))
-  证明: disjoint_of_disjoint_of_mem (Iic_disjoint_Ioi le_rfl) (Iic_mem_atBot x) (mem_principal_self _)
-
-@[to_dual disjoint_atBot_principal_Ici]
-
-Depends on / 依赖: Iic_disjoint_Ioi, Iic_mem_atBot, disjoint_of_disjoint_of_mem, le_rfl, mem_principal_self
+/-
+**Filter.disjoint_atBot_principal_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：disjoint_atBot_principal_Ioi [Preorder α] (x : α) : Disjoint atBot (𝓟 (Ioi
+ x))
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.disjoint_of_disjoint_of_mem`：disjoint_of_disjoint_of_mem {f g : F
+ilter α} {s t : Set α} (h : Disjoint s t) (hs : s in f) (ht : t in g) : Disjoint
+ f g
+· 使用定理 `Set.Iic_disjoint_Ioi`：Iic_disjoint_Ioi (h : a <= b) : Disjoint (Iic a) (
+Ioi b)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
 -/
 theorem disjoint_atBot_principal_Ioi [Preorder α] (x : α) : Disjoint atBot (𝓟 (Ioi x)) :=
   disjoint_of_disjoint_of_mem (Iic_disjoint_Ioi le_rfl) (Iic_mem_atBot x) (mem_principal_self _)
 
 @[to_dual disjoint_atBot_principal_Ici]
-/--
-theorem `disjoint_atTop_principal_Iic` / 定理 `disjoint_atTop_principal_Iic`
-
-English:
-theorem disjoint_atTop_principal_Iic
-  given: [Preorder α] [NoTopOrder α] (x : α)
-  proof: disjoint_of_disjoint_of_mem (Iic_disjoint_Ioi le_rfl).symm (Ioi_mem_atTop x)
-    (mem_principal_self _)
-
-@[to_dual disjoint_pure_atBot]
-
-中文:
-定理 disjoint_atTop_principal_Iic
-  条件: [预序 α] [无顶序 α] (x : α)
-  证明: disjoint_of_disjoint_of_mem (Iic_disjoint_Ioi le_rfl).symm (Ioi_mem_atTop x)
-    (mem_principal_self _)
-
-@[to_dual disjoint_pure_atBot]
-
-Depends on / 依赖: Iic_disjoint_Ioi, Ioi_mem_atTop, disjoint_of_disjoint_of_mem, le_rfl, mem_principal_self
+/-
+**Filter.disjoint_atTop_principal_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：disjoint_atTop_principal_Iic [Preorder α] [NoTopOrder α] (x : α) : Disjoin
+t atTop (𝓟 (Iic x))
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.disjoint_of_disjoint_of_mem`：disjoint_of_disjoint_of_mem {f g : F
+ilter α} {s t : Set α} (h : Disjoint s t) (hs : s in f) (ht : t in g) : Disjoint
+ f g
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `Set.Iic_disjoint_Ioi`：Iic_disjoint_Ioi (h : a <= b) : Disjoint (Iic a) (
+Ioi b)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Filter.Ioi_mem_atTop`：Ioi_mem_atTop [Preorder α] [NoTopOrder α] (x : α) 
+: Ioi x in (atTop : Filter α)
+· 使用定理 `Filter.mem_principal_self`：mem_principal_self (s : Set α) : s in 𝓟 s
 -/
 theorem disjoint_atTop_principal_Iic [Preorder α] [NoTopOrder α] (x : α) :
     Disjoint atTop (𝓟 (Iic x)) :=
@@ -75,68 +69,63 @@ theorem disjoint_atTop_principal_Iic [Preorder α] [NoTopOrder α] (x : α) :
     (mem_principal_self _)
 
 @[to_dual disjoint_pure_atBot]
-/--
-theorem `disjoint_pure_atTop` / 定理 `disjoint_pure_atTop`
-
-English:
-theorem disjoint_pure_atTop
-  given: [Preorder α] [NoTopOrder α] (x : α)
-  statement: Disjoint (pure x) atTop
-  proof: Disjoint.symm (disjoint_atTop_principal_Iic x).mono_right le_principal_iff.2
-    mem_pure.2 self_mem_Iic
-
-@[to_dual disjoint_atTop_atBot]
-
-中文:
-定理 disjoint_pure_atTop
-  条件: [预序 α] [无顶序 α] (x : α)
-  结论: Disjoint (pure x) atTop
-  证明: Disjoint.symm (disjoint_atTop_principal_Iic x).mono_right le_principal_iff.2
-    mem_pure.2 self_mem_Iic
-
-@[to_dual disjoint_atTop_atBot]
-
-Depends on / 依赖: Disjoint, Disjoint.symm, disjoint_atTop_principal_Iic, le_principal_iff, mem_pure, mono_right, self_mem_Iic
+/-
+**Filter.disjoint_pure_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：disjoint_pure_atTop [Preorder α] [NoTopOrder α] (x : α) : Disjoint (pure x
+) atTop
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `Filter.mem_pure`：mem_pure {a : α} {s : Set α} : s in (pure a : Filter α)
+ ↔ a in s
+· 使用定理 `Set.self_mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Iic a
+· 使用定理 `Filter.disjoint_atTop_principal_Iic`：disjoint_atTop_principal_Iic [Preor
+der α] [NoTopOrder α] (x : α) : Disjoint atTop (𝓟 (Iic x))
 -/
 theorem disjoint_pure_atTop [Preorder α] [NoTopOrder α] (x : α) : Disjoint (pure x) atTop :=
-Disjoint.symm (disjoint_atTop_principal_Iic x).mono_right le_principal_iff.2
+  Disjoint.symm <| (disjoint_atTop_principal_Iic x).mono_right <| le_principal_iff.2 <|
     mem_pure.2 self_mem_Iic
 
 @[to_dual disjoint_atTop_atBot]
-/--
-theorem `disjoint_atBot_atTop` / 定理 `disjoint_atBot_atTop`
-
-English:
-theorem disjoint_atBot_atTop
-  given: [PartialOrder α] [Nontrivial α]
-  proof: by
-  rcases exists_pair_ne α with ⟨x, y, hne⟩
-  by_cases hle : x <= y
-  · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot x) (Ici_mem_atTop y)
-    exact Iic_disjoint_Ici.2 (hle.lt_of_ne hne).not_ge
-  · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot y) (Ici_mem_atTop x)
-    exact Iic_disjoint_Ici.2 hle
-
-中文:
-定理 disjoint_atBot_atTop
-  条件: [偏序 α] [非平凡 α]
-  证明: by
-  rcases exists_pair_ne α with ⟨x, y, hne⟩
-  by_cases hle : x <= y
-  · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot x) (Ici_mem_atTop y)
-    exact Iic_disjoint_Ici.2 (hle.lt_of_ne hne).not_ge
-  · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot y) (Ici_mem_atTop x)
-    exact Iic_disjoint_Ici.2 hle
-
-Depends on / 依赖: Ici_mem_atTop, Iic_disjoint_Ici, Iic_mem_atBot, disjoint_of_disjoint_of_mem, exists_pair_ne, hle.lt_of_ne, lt_of_ne, not_ge
+/-
+**Filter.disjoint_atBot_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：disjoint_atBot_atTop [PartialOrder α] [Nontrivial α] : Disjoint (atBot : F
+ilter α) atTop
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pair_ne`：exists_pair_ne (α : Type*) [Nontrivial α] : exists x y :
+ α, x != y
+· 使用定理 `Filter.disjoint_of_disjoint_of_mem`：disjoint_of_disjoint_of_mem {f g : F
+ilter α} {s t : Set α} (h : Disjoint s t) (hs : s in f) (ht : t in g) : Disjoint
+ f g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.Iic_disjoint_Ici`：∀ {α : Type v} [inst : Preorder α] {a b : α}, Disj
+oint (Set.Iic a) (Set.Ici b) ↔ ¬b ≤ a
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
+· 使用定理 `Filter.Ici_mem_atTop`：Ici_mem_atTop [Preorder α] (a : α) : Ici a in (atT
+op : Filter α)
 -/
 theorem disjoint_atBot_atTop [PartialOrder α] [Nontrivial α] :
     Disjoint (atBot : Filter α) atTop := by
   rcases exists_pair_ne α with ⟨x, y, hne⟩
-  by_cases hle : x <= y
+  by_cases hle : x ≤ y
   · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot x) (Ici_mem_atTop y)
     exact Iic_disjoint_Ici.2 (hle.lt_of_ne hne).not_ge
   · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot y) (Ici_mem_atTop x)
     exact Iic_disjoint_Ici.2 hle
 
 end Filter
+

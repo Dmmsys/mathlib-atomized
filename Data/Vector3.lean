@@ -23,36 +23,24 @@ open Fin2 Nat
 
 universe u
 
-variable {α : Type*} {m n : Nat}
+variable {α : Type*} {m n : ℕ}
 
-/--
-Definition of `Vector3` / `Vector3` 的定义
+/-- Alternate definition of `Vector` based on `Fin2`. -/
+/-
+**Vector3** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Vector3 (α : Type u) (n : Nat) : Type u
+参数：α : Type u；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Vector3
-  signature: (α : Type u) (n : Nat)
-  body: Fin2 n -> α
-
-中文:
-定义 Vector3
-  签名: (α : 类型u) (n : 自然数)
-  定义体: Fin2 n -> α
+--- 原说明 ---
+Alternate definition of `Vector` based on `Fin2`.
 -/
-def Vector3 (α : Type u) (n : Nat) : Type u :=
-  Fin2 n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (Vector3 α n) where
-  body: fun _ => default
-
-中文:
-实例 [可居
-  签名: α] : 可居 (Vector3 α n) where
-  定义体: fun _ => default
+def Vector3 (α : Type u) (n : ℕ) : Type u :=
+  Fin2 n → α
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (Vector3 α n) where
   default := fun _ => default
@@ -61,44 +49,29 @@ namespace Vector3
 
 /-- The empty vector -/
 @[match_pattern]
-/--
-Definition of `nil` / `nil` 的定义
+/-
+**Vector3.nil** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：nil : Vector3 α 0
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nil
-  signature: : Vector3 α 0
-  body: nofun
-
-中文:
-定义 nil
-  签名: : Vector3 α 0
-  定义体: nofun
+--- 原说明 ---
+The empty vector
 -/
 def nil : Vector3 α 0 :=
   nofun
 
 /-- The vector cons operation -/
 @[match_pattern]
-/--
-Definition of `cons` / `cons` 的定义
+/-
+**Vector3.cons** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：cons (a : α) (v : Vector3 α n) : Vector3 α (n + 1)
+参数：a : α；v : Vector3 α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cons
-  signature: (a : α) (v : Vector3 α n)
-  body: fun i => by
-  refine i.cases' ?_ ?_
-  · exact a
-  · exact v
-
-中文:
-定义 cons
-  签名: (a : α) (v : Vector3 α n)
-  定义体: fun i => by
-  refine i.cases' ?_ ?_
-  · exact a
-  · exact v
-
-Depends on / 依赖: i.cases
+--- 原说明 ---
+The vector cons operation
 -/
 def cons (a : α) (v : Vector3 α n) : Vector3 α (n + 1) := fun i => by
   refine i.cases' ?_ ?_
@@ -118,9 +91,9 @@ scoped macro_rules | `([$l,*]) => `(expand_foldr% (h t => cons h t) nil [$(.ofEl
 -- this is copied from `Init/NotationExtra.lean` (Lean core)
 /-- Unexpander for `Vector3.cons` -/
 @[app_unexpander Vector3.cons] meta def unexpandCons : Lean.PrettyPrinter.Unexpander
-  | `($(_) $x []) => `([$x])
+  | `($(_) $x [])      => `([$x])
   | `($(_) $x [$xs,*]) => `([$x, $xs,*])
-  | _ => throw ()
+  | _                  => throw ()
 
 end
 
@@ -129,299 +102,197 @@ end
 scoped notation a " :: " b => cons a b
 
 @[simp]
-/--
-theorem `cons_fz` / 定理 `cons_fz`
-
-English:
-theorem cons_fz
-  given: (a : α) (v : Vector3 α n)
-  statement: (a :: v) fz = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cons_fz
-  条件: (a : α) (v : Vector3 α n)
-  结论: (a :: v) fz = a
-  证明: rfl
-
-@[simp]
+/-
+**Vector3.cons_fz** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：cons_fz (a : α) (v : Vector3 α n) : (a :: v) fz = a
+参数：a : α；v : Vector3 α n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cons_fz (a : α) (v : Vector3 α n) : (a :: v) fz = a :=
   rfl
 
 @[simp]
-/--
-theorem `cons_fs` / 定理 `cons_fs`
-
-English:
-theorem cons_fs
-  given: (a : α) (v : Vector3 α n) (i)
-  statement: (a :: v) (fs i) = v i
-  proof: rfl
-
-中文:
-定理 cons_fs
-  条件: (a : α) (v : Vector3 α n) (i)
-  结论: (a :: v) (fs i) = v i
-  证明: rfl
+/-
+**Vector3.cons_fs** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：cons_fs (a : α) (v : Vector3 α n) (i) : (a :: v) (fs i) = v i
+参数：a : α；v : Vector3 α n；i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cons_fs (a : α) (v : Vector3 α n) (i) : (a :: v) (fs i) = v i :=
   rfl
 
-/--
-Definition of `nth` / `nth` 的定义
+/-- Get the `i`th element of a vector -/
+/-
+**Vector3.nth** 是 Mathlib 中的一个缩写定义，位于命名空间 `Vector3`。
+形式化陈述：nth (i : Fin2 n) (v : Vector3 α n) : α
+参数：i : Fin2 n；v : Vector3 α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation nth
-  signature: (i : Fin2 n) (v : Vector3 α n)
-  body: v i
-
-中文:
-缩写 nth
-  签名: (i : Fin2 n) (v : Vector3 α n)
-  定义体: v i
+--- 原说明 ---
+Get the `i`th element of a vector
 -/
 abbrev nth (i : Fin2 n) (v : Vector3 α n) : α :=
   v i
 
-/--
-Definition of `ofFn` / `ofFn` 的定义
+/-- Construct a vector from a function on `Fin2`. -/
+/-
+**Vector3.ofFn** 是 Mathlib 中的一个缩写定义，位于命名空间 `Vector3`。
+形式化陈述：ofFn (f : Fin2 n -> α) : Vector3 α n
+参数：f : Fin2 n -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofFn
-  signature: (f : Fin2 n -> α)
-  body: f
-
-中文:
-缩写 ofFn
-  签名: (f : Fin2 n -> α)
-  定义体: f
+--- 原说明 ---
+Construct a vector from a function on `Fin2`.
 -/
-abbrev ofFn (f : Fin2 n -> α) : Vector3 α n :=
+abbrev ofFn (f : Fin2 n → α) : Vector3 α n :=
   f
 
-/--
-Definition of `head` / `head` 的定义
+/-- Get the head of a nonempty vector. -/
+/-
+**Vector3.head** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：head (v : Vector3 α (n + 1)) : α
+参数：v : Vector3 α (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition head
-  signature: (v : Vector3 α (n + 1))
-  body: v fz
-
-中文:
-定义 head
-  签名: (v : Vector3 α (n + 1))
-  定义体: v fz
+--- 原说明 ---
+Get the head of a nonempty vector.
 -/
 def head (v : Vector3 α (n + 1)) : α :=
   v fz
 
-/--
-Definition of `tail` / `tail` 的定义
+/-- Get the tail of a nonempty vector. -/
+/-
+**Vector3.tail** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：tail (v : Vector3 α (n + 1)) : Vector3 α n
+参数：v : Vector3 α (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tail
-  signature: (v : Vector3 α (n + 1))
-  body: fun i => v (fs i)
-
-中文:
-定义 tail
-  签名: (v : Vector3 α (n + 1))
-  定义体: fun i => v (fs i)
+--- 原说明 ---
+Get the tail of a nonempty vector.
 -/
 def tail (v : Vector3 α (n + 1)) : Vector3 α n := fun i => v (fs i)
-
-/--
-theorem `eq_nil` / 定理 `eq_nil`
-
-English:
-theorem eq_nil
-  given: (v : Vector3 α 0)
-  statement: v = []
-  proof: funext fun i => nomatch i
-
-中文:
-定理 eq_nil
-  条件: (v : Vector3 α 0)
-  结论: v = []
-  证明: funext fun i => nomatch i
-
-Depends on / 依赖: nomatch
+/-
+**Vector3.eq_nil** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：eq_nil (v : Vector3 α 0) : v = []
+参数：v : Vector3 α 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem eq_nil (v : Vector3 α 0) : v = [] :=
   funext fun i => nomatch i
-
-/--
-theorem `cons_head_tail` / 定理 `cons_head_tail`
-
-English:
-theorem cons_head_tail
-  given: (v : Vector3 α (n + 1))
-  statement: (head v :: tail v) = v
-  proof: funext fun i => Fin2.cases' rfl (fun _ => rfl) i
-
-中文:
-定理 cons_head_tail
-  条件: (v : Vector3 α (n + 1))
-  结论: (head v :: tail v) = v
-  证明: funext fun i => Fin2.cases' rfl (fun _ => rfl) i
-
-Depends on / 依赖: Fin2.cases
+/-
+**Vector3.cons_head_tail** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：cons_head_tail (v : Vector3 α (n + 1)) : (head v :: tail v) = v
+参数：v : Vector3 α (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem cons_head_tail (v : Vector3 α (n + 1)) : (head v :: tail v) = v :=
   funext fun i => Fin2.cases' rfl (fun _ => rfl) i
 
 /-- Eliminator for an empty vector. -/
 @[elab_as_elim]
-/--
-Definition of `nilElim` / `nilElim` 的定义
+/-
+**Vector3.nilElim** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：nilElim {C : Vector3 α 0 -> Sort u} (H : C []) (v : Vector3 α 0) : C v
+参数：H : C []；v : Vector3 α 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nilElim
-  signature: {C : Vector3 α 0 -> Sort u} (H : C []) (v : Vector3 α 0)
-  body: by
-  rw [eq_nil v]; apply H
-
-中文:
-定义 nilElim
-  签名: {C : Vector3 α 0 -> 类型层 u} (H : C []) (v : Vector3 α 0)
-  定义体: by
-  rw [eq_nil v]; apply H
-
-Depends on / 依赖: eq_nil
+--- 原说明 ---
+Eliminator for an empty vector.
 -/
-def nilElim {C : Vector3 α 0 -> Sort u} (H : C []) (v : Vector3 α 0) : C v := by
+def nilElim {C : Vector3 α 0 → Sort u} (H : C []) (v : Vector3 α 0) : C v := by
   rw [eq_nil v]; apply H
 
 /-- Recursion principle for a nonempty vector. -/
 @[elab_as_elim]
-/--
-Definition of `consElim` / `consElim` 的定义
+/-
+**Vector3.consElim** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：consElim {C : Vector3 α (n + 1) -> Sort u} (H : forall (a : α) (t : Vector
+3 α n), C (a :: t)) (v : Vector3 α (n + 1)) : C v
+参数：n + 1；H : forall (a : α) (t : Vector3 α n), C (a :: t)；v : Vector3 α (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition consElim
-  signature: {C : Vector3 α (n + 1) -> Sort u} (H : forall (a : α) (t : Vector3 α n), C (a :: t))
-  body: by rw [← cons_head_tail v]; apply H
-
-@[simp]
-
-中文:
-定义 consElim
-  签名: {C : Vector3 α (n + 1) -> 类型层 u} (H : 对任意 (a : α) (t : Vector3 α n), C (a :: t))
-  定义体: by rw [← cons_head_tail v]; apply H
-
-@[simp]
-
-Depends on / 依赖: cons_head_tail
+--- 原说明 ---
+Recursion principle for a nonempty vector.
 -/
-def consElim {C : Vector3 α (n + 1) -> Sort u} (H : forall (a : α) (t : Vector3 α n), C (a :: t))
+def consElim {C : Vector3 α (n + 1) → Sort u} (H : ∀ (a : α) (t : Vector3 α n), C (a :: t))
     (v : Vector3 α (n + 1)) : C v := by rw [← cons_head_tail v]; apply H
 
 @[simp]
-/--
-theorem `consElim_cons` / 定理 `consElim_cons`
-
-English:
-theorem consElim_cons
-  given: {C H a t}
-  statement: @consElim α n C H (a :: t) = H a t
-  proof: rfl
-
-中文:
-定理 consElim_cons
-  条件: {C H a t}
-  结论: @consElim α n C H (a :: t) = H a t
-  证明: rfl
+/-
+**Vector3.consElim_cons** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：consElim_cons {C H a t} : @consElim α n C H (a :: t) = H a t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem consElim_cons {C H a t} : @consElim α n C H (a :: t) = H a t :=
   rfl
 
 /-- Recursion principle with the vector as first argument. -/
 @[elab_as_elim]
-/--
-Definition of `recOn` / `recOn` 的定义
+/-
+**Vector3.recOn** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：{α : Type u_1} →   {C : {n : ℕ} → Vector3 α n → Sort u} →     {n : ℕ} → (v
+ : Vector3 α n) → C [] → ({n : ℕ} → (a : α) → (w : Vector3 α n) → C w → C (Vecto
+r3.cons a w)) → C v
+参数：v : Vector3 α n；{n : ℕ} → (a : α) → (w : Vector3 α n) → C w → C (Vector3.cons
+ a w)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition recOn
-  signature: {C : forall {n}, Vector3 α n -> Sort u} {n} (v : Vector3 α n) (H0 : C [])
-  body: match n with
-  | 0 => v.nilElim H0
-  | _ + 1 => v.consElim fun a t => Hs a t (Vector3.recOn t H0 Hs)
-
-@[simp]
-
-中文:
-定义 recOn
-  签名: {C : 对任意 {n}, Vector3 α n -> 类型层 u} {n} (v : Vector3 α n) (H0 : C [])
-  定义体: match n with
-  | 0 => v.nilElim H0
-  | _ + 1 => v.consElim fun a t => Hs a t (Vector3.recOn t H0 Hs)
-
-@[simp]
+--- 原说明 ---
+Recursion principle with the vector as first argument.
 -/
-protected def recOn {C : forall {n}, Vector3 α n -> Sort u} {n} (v : Vector3 α n) (H0 : C [])
-    (Hs : forall {n} (a) (w : Vector3 α n), C w -> C (a :: w)) : C v :=
+protected def recOn {C : ∀ {n}, Vector3 α n → Sort u} {n} (v : Vector3 α n) (H0 : C [])
+    (Hs : ∀ {n} (a) (w : Vector3 α n), C w → C (a :: w)) : C v :=
   match n with
   | 0 => v.nilElim H0
   | _ + 1 => v.consElim fun a t => Hs a t (Vector3.recOn t H0 Hs)
 
 @[simp]
-/--
-theorem `recOn_nil` / 定理 `recOn_nil`
-
-English:
-theorem recOn_nil
-  given: {C H0 Hs}
-  statement: @Vector3.recOn α (@C) 0 [] H0 @Hs = H0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 recOn_nil
-  条件: {C H0 Hs}
-  结论: @Vector3.recOn α (@C) 0 [] H0 @Hs = H0
-  证明: rfl
-
-@[simp]
+/-
+**Vector3.recOn_nil** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：recOn_nil {C H0 Hs} : @Vector3.recOn α (@C) 0 [] H0 @Hs = H0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem recOn_nil {C H0 Hs} : @Vector3.recOn α (@C) 0 [] H0 @Hs = H0 :=
   rfl
 
 @[simp]
-/--
-theorem `recOn_cons` / 定理 `recOn_cons`
-
-English:
-theorem recOn_cons
-  given: {C H0 Hs n a v}
-  proof: rfl
-
-中文:
-定理 recOn_cons
-  条件: {C H0 Hs n a v}
-  证明: rfl
+/-
+**Vector3.recOn_cons** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：recOn_cons {C H0 Hs n a v} : @Vector3.recOn α (@C) (n + 1) (a :: v) H0 @Hs
+ = Hs a v (@Vector3.recOn α (@C) n v H0 @Hs)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem recOn_cons {C H0 Hs n a v} :
     @Vector3.recOn α (@C) (n + 1) (a :: v) H0 @Hs = Hs a v (@Vector3.recOn α (@C) n v H0 @Hs) :=
   rfl
 
-/--
-Definition of `append` / `append` 的定义
+/-- Append two vectors -/
+/-
+**Vector3.append** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：append (v : Vector3 α m) (w : Vector3 α n) : Vector3 α (n + m)
+参数：v : Vector3 α m；w : Vector3 α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition append
-  signature: (v : Vector3 α m) (w : Vector3 α n)
-  body: v.recOn w (fun a _ IH => a :: IH)
-
-中文:
-定义 append
-  签名: (v : Vector3 α m) (w : Vector3 α n)
-  定义体: v.recOn w (fun a _ IH => a :: IH)
-
-Depends on / 依赖: v.recOn
+--- 原说明 ---
+Append two vectors
 -/
 def append (v : Vector3 α m) (w : Vector3 α n) : Vector3 α (n + m) :=
   v.recOn w (fun a _ IH => a :: IH)
@@ -432,151 +303,112 @@ A local infix notation for `Vector3.append`
 local infixl:65 " +-+ " => Vector3.append
 
 @[simp]
-/--
-theorem `append_nil` / 定理 `append_nil`
-
-English:
-theorem append_nil
-  given: (w : Vector3 α n)
-  statement: [] +-+ w = w
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 append_nil
-  条件: (w : Vector3 α n)
-  结论: [] +-+ w = w
-  证明: rfl
-
-@[simp]
+/-
+**Vector3.append_nil** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：append_nil (w : Vector3 α n) : [] +-+ w = w
+参数：w : Vector3 α n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem append_nil (w : Vector3 α n) : [] +-+ w = w :=
   rfl
 
 @[simp]
-/--
-theorem `append_cons` / 定理 `append_cons`
-
-English:
-theorem append_cons
-  given: (a : α) (v : Vector3 α m) (w : Vector3 α n)
-  statement: (a :: v) +-+ w = a :: v +-+ w
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 append_cons
-  条件: (a : α) (v : Vector3 α m) (w : Vector3 α n)
-  结论: (a :: v) +-+ w = a :: v +-+ w
-  证明: rfl
-
-@[simp]
+/-
+**Vector3.append_cons** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：append_cons (a : α) (v : Vector3 α m) (w : Vector3 α n) : (a :: v) +-+ w =
+ a :: v +-+ w
+参数：a : α；v : Vector3 α m；w : Vector3 α n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem append_cons (a : α) (v : Vector3 α m) (w : Vector3 α n) : (a :: v) +-+ w = a :: v +-+ w :=
   rfl
 
 @[simp]
-/--
-theorem `append_left` / 定理 `append_left`
-
-English:
-theorem append_left
-
-中文:
-定理 append_left
+/-
+**Vector3.append_left** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：∀ {α : Type u_1} {m : ℕ} (i : Fin2 m) (v : Vector3 α m) {n : ℕ} (w : Vecto
+r3 α n), v.append w (Fin2.left n i) = v i
+参数：i : Fin2 m；v : Vector3 α m；w : Vector3 α n；Fin2.left n i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem append_left :
-    forall {m} (i : Fin2 m) (v : Vector3 α m) {n} (w : Vector3 α n), (v +-+ w) (left n i) = v i
+    ∀ {m} (i : Fin2 m) (v : Vector3 α m) {n} (w : Vector3 α n), (v +-+ w) (left n i) = v i
   | _, @fz m, v, _, _ => v.consElim fun a _t => by simp [*, left]
   | _, @fs m i, v, n, w => v.consElim fun _a t => by simp [append_left, left]
 
 @[simp]
-/--
-theorem `append_add` / 定理 `append_add`
-
-English:
-theorem append_add
-
-中文:
-定理 append_add
+/-
+**Vector3.append_add** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：∀ {α : Type u_1} {m : ℕ} (v : Vector3 α m) {n : ℕ} (w : Vector3 α n) (i : 
+Fin2 n), v.append w (i.add m) = w i
+参数：v : Vector3 α m；w : Vector3 α n；i : Fin2 n；i.add m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem append_add :
-    forall {m} (v : Vector3 α m) {n} (w : Vector3 α n) (i : Fin2 n), (v +-+ w) (add i m) = w i
+    ∀ {m} (v : Vector3 α m) {n} (w : Vector3 α n) (i : Fin2 n), (v +-+ w) (add i m) = w i
   | 0, _, _, _, _ => rfl
   | m + 1, v, n, w, i => v.consElim fun _a t => by simp [append_add, add]
 
-/--
-Definition of `insert` / `insert` 的定义
+/-- Insert `a` into `v` at index `i`. -/
+/-
+**Vector3.insert** 是 Mathlib 中的一个定义，位于命名空间 `Vector3`。
+形式化陈述：insert (a : α) (v : Vector3 α n) (i : Fin2 (n + 1)) : Vector3 α (n + 1)
+参数：a : α；v : Vector3 α n；i : Fin2 (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition insert
-  signature: (a : α) (v : Vector3 α n) (i : Fin2 (n + 1))
-  body: fun j =>
-  (a :: v) (insertPerm i j)
-
-@[simp]
-
-中文:
-定义 insert
-  签名: (a : α) (v : Vector3 α n) (i : Fin2 (n + 1))
-  定义体: fun j =>
-  (a :: v) (insertPerm i j)
-
-@[simp]
+--- 原说明 ---
+Insert `a` into `v` at index `i`.
 -/
 def insert (a : α) (v : Vector3 α n) (i : Fin2 (n + 1)) : Vector3 α (n + 1) := fun j =>
   (a :: v) (insertPerm i j)
 
 @[simp]
-/--
-theorem `insert_fz` / 定理 `insert_fz`
-
-English:
-theorem insert_fz
-  given: (a : α) (v : Vector3 α n)
-  statement: insert a v fz = a :: v
-  proof: by
-  refine funext fun j => j.cases' ?_ ?_ <;> intros <;> rfl
-
-@[simp]
-
-中文:
-定理 insert_fz
-  条件: (a : α) (v : Vector3 α n)
-  结论: insert a v fz = a :: v
-  证明: by
-  refine funext fun j => j.cases' ?_ ?_ <;> intros <;> rfl
-
-@[simp]
-
-Depends on / 依赖: intros, j.cases
+/-
+**Vector3.insert_fz** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：insert_fz (a : α) (v : Vector3 α n) : insert a v fz = a :: v
+参数：a : α；v : Vector3 α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem insert_fz (a : α) (v : Vector3 α n) : insert a v fz = a :: v := by
   refine funext fun j => j.cases' ?_ ?_ <;> intros <;> rfl
 
 @[simp]
-/--
-theorem `insert_fs` / 定理 `insert_fs`
-
-English:
-theorem insert_fs
-  given: (a : α) (b : α) (v : Vector3 α n) (i : Fin2 (n + 1))
-  proof: funext fun j => by
-    refine j.cases' (by simp [insert, insertPerm]) fun j => ?_
-    simp only [insert, insertPerm, succ_eq_add_one, cons_fs]
-    refine Fin2.cases' ?_ ?_ (insertPerm i j) <;> simp
-
-中文:
-定理 insert_fs
-  条件: (a : α) (b : α) (v : Vector3 α n) (i : Fin2 (n + 1))
-  证明: funext fun j => by
-    refine j.cases' (by simp [insert, insertPerm]) fun j => ?_
-    simp only [insert, insertPerm, succ_eq_add_one, cons_fs]
-    refine Fin2.cases' ?_ ?_ (insertPerm i j) <;> simp
-
-Depends on / 依赖: Fin2.cases, cons_fs, insert, insertPerm, j.cases, succ_eq_add_one
+/-
+**Vector3.insert_fs** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：insert_fs (a : α) (b : α) (v : Vector3 α n) (i : Fin2 (n + 1)) : insert a 
+(b :: v) (fs i) = b :: insert a v i
+参数：a : α；b : α；v : Vector3 α n；i : Fin2 (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin2.insertPerm.eq_3`：∀ (a : ℕ) (a_1 : Fin2 a.succ), a_1.fs.insertPerm F
+in2.fz = Fin2.fz.fs
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Fin2.insertPerm.eq_4`：∀ (a : ℕ) (i : Fin2 a.succ) (j : Fin2 (a + 1)),   
+i.fs.insertPerm j.fs =     match i.insertPerm j with     | Fin2.fz => Fin2.fz   
+  | k.fs =…
+· 使用定理 `_private.Mathlib.Data.Vector3.0.Fin2.cases'.match_1.eq_1`：∀ {n : ℕ} (mot
+ive : Fin2 n.succ → Sort u_1) (h_1 : Unit → motive Fin2.fz) (h_2 : (n_1 : Fin2 n
+) → motive n_1.fs),   (match Fin2.fz with     …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `_private.Mathlib.Data.Vector3.0.Fin2.cases'.match_1.eq_2`：∀ {n : ℕ} (mot
+ive : Fin2 n.succ → Sort u_1) (n_1 : Fin2 n) (h_1 : Unit → motive Fin2.fz)   (h_
+2 : (n_2 : Fin2 n) → motive n_2.fs),   (match …
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem insert_fs (a : α) (b : α) (v : Vector3 α n) (i : Fin2 (n + 1)) :
     insert a (b :: v) (fs i) = b :: insert a v i :=
@@ -584,43 +416,25 @@ theorem insert_fs (a : α) (b : α) (v : Vector3 α n) (i : Fin2 (n + 1)) :
     refine j.cases' (by simp [insert, insertPerm]) fun j => ?_
     simp only [insert, insertPerm, succ_eq_add_one, cons_fs]
     refine Fin2.cases' ?_ ?_ (insertPerm i j) <;> simp
-
-/--
-theorem `append_insert` / 定理 `append_insert`
-
-English:
-theorem append_insert
-  statement: (a : α) (t : Vector3 α m) (v : Vector3 α n) (i : Fin2 (n + 1))
-  proof: by
-  refine Vector3.recOn t (fun e => ?_) (@fun k b t IH _ => ?_) e
-  · rfl
-  have e' : (n + 1) + k = (n + k) + 1 := by lia
-  change
-    insert a (b :: t +-+ v)
-      (Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (add i k))) =
-      Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (b :: t +-+ insert a v i)
-  rw [← (Eq.recOn e' rfl :
-      fs (Eq.recOn e' (i.add k) : Fin2 ((n + k) + 1)) =
-        Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (i.add k)))]
-  simpa [IH] using Eq.recOn e' rfl
-
-中文:
-定理 append_insert
-  结论: (a : α) (t : Vector3 α m) (v : Vector3 α n) (i : Fin2 (n + 1))
-  证明: by
-  refine Vector3.recOn t (fun e => ?_) (@fun k b t IH _ => ?_) e
-  · rfl
-  have e' : (n + 1) + k = (n + k) + 1 := by lia
-  change
-    insert a (b :: t +-+ v)
-      (Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (add i k))) =
-      Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (b :: t +-+ insert a v i)
-  rw [← (Eq.recOn e' rfl :
-      fs (Eq.recOn e' (i.add k) : Fin2 ((n + k) + 1)) =
-        Eq.recOn (congr_arg (· + 1) e' : _ + 1 = _) (fs (i.add k)))]
-  simpa [IH] using Eq.recOn e' rfl
-
-Depends on / 依赖: Eq.recOn, Vector3, Vector3.recOn, congr_arg, i.add, insert
+/-
+**Vector3.append_insert** 是 Mathlib 中的一个定理，位于命名空间 `Vector3`。
+形式化陈述：append_insert (a : α) (t : Vector3 α m) (v : Vector3 α n) (i : Fin2 (n + 1
+)) (e : (n + 1) + m = (n + m) + 1) : insert a (t +-+ v) (Eq.recOn e (i.add m)) =
+ Eq.recOn e (t +-+ insert a v i)
+参数：a : α；t : Vector3 α m；v : Vector3 α n；i : Fin2 (n + 1)；e : (n + 1) + m = (n +
+ m) + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Vector3.insert_fs`：insert_fs (a : α) (b : α) (v : Vector3 α n) (i : Fin2
+ (n + 1)) : insert a (b :: v) (fs i) = b :: insert a v i
 -/
 theorem append_insert (a : α) (t : Vector3 α m) (v : Vector3 α n) (i : Fin2 (n + 1))
     (e : (n + 1) + m = (n + m) + 1) :
@@ -643,237 +457,161 @@ section Vector3
 
 open Vector3
 
-/--
-Definition of `VectorEx` / `VectorEx` 的定义
+/-- "Curried" exists, i.e. `∃ x₁ ... xₙ, f [x₁, ..., xₙ]`. -/
+/-
+**VectorEx** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → (k : ℕ) → (Vector3 α k → Prop) → Prop
+参数：k : ℕ；Vector3 α k → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition VectorEx
-  signature: : forall k, (Vector3 α k -> Prop) -> Prop
-
-中文:
-定义 VectorEx
-  签名: : 对任意 k, (Vector3 α k -> 命题) -> 命题
+--- 原说明 ---
+"Curried" exists, i.e. `∃ x₁ ... xₙ, f [x₁, ..., xₙ]`.
 -/
-def VectorEx : forall k, (Vector3 α k -> Prop) -> Prop
+def VectorEx : ∀ k, (Vector3 α k → Prop) → Prop
   | 0, f => f []
-  | succ k, f => exists x : α, VectorEx k fun v => f (x :: v)
+  | succ k, f => ∃ x : α, VectorEx k fun v => f (x :: v)
 
-/--
-Definition of `VectorAll` / `VectorAll` 的定义
+/-- "Curried" forall, i.e. `∀ x₁ ... xₙ, f [x₁, ..., xₙ]`. -/
+/-
+**VectorAll** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → (k : ℕ) → (Vector3 α k → Prop) → Prop
+参数：k : ℕ；Vector3 α k → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition VectorAll
-  signature: : forall k, (Vector3 α k -> Prop) -> Prop
-
-中文:
-定义 VectorAll
-  签名: : 对任意 k, (Vector3 α k -> 命题) -> 命题
+--- 原说明 ---
+"Curried" forall, i.e. `∀ x₁ ... xₙ, f [x₁, ..., xₙ]`.
 -/
-def VectorAll : forall k, (Vector3 α k -> Prop) -> Prop
+def VectorAll : ∀ k, (Vector3 α k → Prop) → Prop
   | 0, f => f []
-  | succ k, f => forall x : α, VectorAll k fun v => f (x :: v)
-
-/--
-theorem `exists_vector_zero` / 定理 `exists_vector_zero`
-
-English:
-theorem exists_vector_zero
-  given: (f : Vector3 α 0 -> Prop)
-  statement: Exists f ↔ f []
-  proof: ⟨fun ⟨v, fv⟩ => by rw [← eq_nil v]; exact fv, fun f0 => ⟨[], f0⟩⟩
-
-中文:
-定理 存在_vector_zero
-  条件: (f : Vector3 α 0 -> 命题)
-  结论: 存在 f ↔ f []
-  证明: ⟨fun ⟨v, fv⟩ => by rw [← eq_nil v]; exact fv, fun f0 => ⟨[], f0⟩⟩
-
-Depends on / 依赖: eq_nil
+  | succ k, f => ∀ x : α, VectorAll k fun v => f (x :: v)
+/-
+**exists_vector_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_vector_zero (f : Vector3 α 0 -> Prop) : Exists f ↔ f []
+参数：f : Vector3 α 0 -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Vector3.eq_nil`：eq_nil (v : Vector3 α 0) : v = []
 -/
-theorem exists_vector_zero (f : Vector3 α 0 -> Prop) : Exists f ↔ f [] :=
+theorem exists_vector_zero (f : Vector3 α 0 → Prop) : Exists f ↔ f [] :=
   ⟨fun ⟨v, fv⟩ => by rw [← eq_nil v]; exact fv, fun f0 => ⟨[], f0⟩⟩
-
-/--
-theorem `exists_vector_succ` / 定理 `exists_vector_succ`
-
-English:
-theorem exists_vector_succ
-  given: (f : Vector3 α (succ n) -> Prop)
-  statement: Exists f ↔ exists x v, f (x :: v)
-  proof: ⟨fun ⟨v, fv⟩ => ⟨_, _, by rw [cons_head_tail v]; exact fv⟩, fun ⟨_, _, fxv⟩ => ⟨_, fxv⟩⟩
-
-中文:
-定理 存在_vector_succ
-  条件: (f : Vector3 α (succ n) -> 命题)
-  结论: 存在 f ↔ 存在 x v, f (x :: v)
-  证明: ⟨fun ⟨v, fv⟩ => ⟨_, _, by rw [cons_head_tail v]; exact fv⟩, fun ⟨_, _, fxv⟩ => ⟨_, fxv⟩⟩
-
-Depends on / 依赖: cons_head_tail
+/-
+**exists_vector_succ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_vector_succ (f : Vector3 α (succ n) -> Prop) : Exists f ↔ exists x 
+v, f (x :: v)
+参数：f : Vector3 α (succ n) -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Vector3.cons_head_tail`：cons_head_tail (v : Vector3 α (n + 1)) : (head v
+ :: tail v) = v
 -/
-theorem exists_vector_succ (f : Vector3 α (succ n) -> Prop) : Exists f ↔ exists x v, f (x :: v) :=
+theorem exists_vector_succ (f : Vector3 α (succ n) → Prop) : Exists f ↔ ∃ x v, f (x :: v) :=
   ⟨fun ⟨v, fv⟩ => ⟨_, _, by rw [cons_head_tail v]; exact fv⟩, fun ⟨_, _, fxv⟩ => ⟨_, fxv⟩⟩
-
-/--
-theorem `vectorEx_iff_exists` / 定理 `vectorEx_iff_exists`
-
-English:
-theorem vectorEx_iff_exists
-  statement: forall {n} (f : Vector3 α n -> Prop), VectorEx n f ↔ Exists f
-
-中文:
-定理 vectorEx_iff_存在
-  结论: 对任意 {n} (f : Vector3 α n -> 命题), VectorEx n f ↔ 存在 f
+/-
+**vectorEx_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} {n : ℕ} (f : Vector3 α n → Prop), VectorEx n f ↔ Exists f
+参数：f : Vector3 α n → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vectorEx_iff_exists : forall {n} (f : Vector3 α n -> Prop), VectorEx n f ↔ Exists f
+theorem vectorEx_iff_exists : ∀ {n} (f : Vector3 α n → Prop), VectorEx n f ↔ Exists f
   | 0, f => (exists_vector_zero f).symm
   | succ _, f =>
     Iff.trans (exists_congr fun _ => vectorEx_iff_exists _) (exists_vector_succ f).symm
-
-/--
-theorem `vectorAll_iff_forall` / 定理 `vectorAll_iff_forall`
-
-English:
-theorem vectorAll_iff_forall
-  statement: forall {n} (f : Vector3 α n -> Prop), VectorAll n f ↔ forall v, f v
-
-中文:
-定理 vectorAll_iff_对任意
-  结论: 对任意 {n} (f : Vector3 α n -> 命题), VectorAll n f ↔ 对任意 v, f v
+/-
+**vectorAll_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} {n : ℕ} (f : Vector3 α n → Prop), VectorAll n f ↔ ∀ (v : 
+Vector3 α n), f v
+参数：f : Vector3 α n → Prop；v : Vector3 α n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vectorAll_iff_forall : forall {n} (f : Vector3 α n -> Prop), VectorAll n f ↔ forall v, f v
+theorem vectorAll_iff_forall : ∀ {n} (f : Vector3 α n → Prop), VectorAll n f ↔ ∀ v, f v
   | 0, _ => ⟨fun f0 v => v.nilElim f0, fun al => al []⟩
   | succ _, f =>
     (forall_congr' fun x => vectorAll_iff_forall fun v => f (x :: v)).trans
       ⟨fun al v => v.consElim al, fun al x v => al (x :: v)⟩
 
-/--
-Definition of `VectorAllP` / `VectorAllP` 的定义
+/-- `VectorAllP p v` is equivalent to `∀ i, p (v i)`, but unfolds directly to a conjunction,
+  i.e. `VectorAllP p [0, 1, 2] = p 0 ∧ p 1 ∧ p 2`. -/
+/-
+**VectorAllP** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：VectorAllP (p : α -> Prop) (v : Vector3 α n) : Prop
+参数：p : α -> Prop；v : Vector3 α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition VectorAllP
-  signature: (p : α -> Prop) (v : Vector3 α n)
-  body: Vector3.recOn v True fun a v IH =>
-    @Vector3.recOn _ (fun _ => Prop) _ v (p a) fun _ _ _ => p a ∧ IH
-
-@[simp]
-
-中文:
-定义 VectorAllP
-  签名: (p : α -> 命题) (v : Vector3 α n)
-  定义体: Vector3.recOn v True fun a v IH =>
-    @Vector3.recOn _ (fun _ => Prop) _ v (p a) fun _ _ _ => p a ∧ IH
-
-@[simp]
-
-Depends on / 依赖: Vector3, Vector3.recOn
+--- 原说明 ---
+`VectorAllP p v` is equivalent to `∀ i, p (v i)`, but unfolds directly to a conj
+unction,
+  i.e. `VectorAllP p [0, 1, 2] = p 0 ∧ p 1 ∧ p 2`.
 -/
-def VectorAllP (p : α -> Prop) (v : Vector3 α n) : Prop :=
+def VectorAllP (p : α → Prop) (v : Vector3 α n) : Prop :=
   Vector3.recOn v True fun a v IH =>
     @Vector3.recOn _ (fun _ => Prop) _ v (p a) fun _ _ _ => p a ∧ IH
 
 @[simp]
-/--
-theorem `vectorAllP_nil` / 定理 `vectorAllP_nil`
-
-English:
-theorem vectorAllP_nil
-  given: (p : α -> Prop)
-  statement: VectorAllP p [] = True
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 vectorAllP_nil
-  条件: (p : α -> 命题)
-  结论: VectorAllP p [] = 真
-  证明: rfl
-
-@[simp]
+/-
+**vectorAllP_nil** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：vectorAllP_nil (p : α -> Prop) : VectorAllP p [] = True
+参数：p : α -> Prop。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vectorAllP_nil (p : α -> Prop) : VectorAllP p [] = True :=
+theorem vectorAllP_nil (p : α → Prop) : VectorAllP p [] = True :=
   rfl
 
 @[simp]
-/--
-theorem `vectorAllP_singleton` / 定理 `vectorAllP_singleton`
-
-English:
-theorem vectorAllP_singleton
-  given: (p : α -> Prop) (x : α)
-  statement: VectorAllP p (cons x []) = p x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 vectorAllP_singleton
-  条件: (p : α -> 命题) (x : α)
-  结论: VectorAllP p (cons x []) = p x
-  证明: rfl
-
-@[simp]
+/-
+**vectorAllP_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：vectorAllP_singleton (p : α -> Prop) (x : α) : VectorAllP p (cons x []) = 
+p x
+参数：p : α -> Prop；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem vectorAllP_singleton (p : α -> Prop) (x : α) : VectorAllP p (cons x []) = p x :=
+theorem vectorAllP_singleton (p : α → Prop) (x : α) : VectorAllP p (cons x []) = p x :=
   rfl
 
 @[simp]
-/--
-theorem `vectorAllP_cons` / 定理 `vectorAllP_cons`
-
-English:
-theorem vectorAllP_cons
-  given: (p : α -> Prop) (x : α) (v : Vector3 α n)
-  proof: Vector3.recOn v (iff_of_eq (and_true _)).symm fun _ _ _ => Iff.rfl
-
-中文:
-定理 vectorAllP_cons
-  条件: (p : α -> 命题) (x : α) (v : Vector3 α n)
-  证明: Vector3.recOn v (iff_of_eq (and_true _)).symm fun _ _ _ => Iff.rfl
-
-Depends on / 依赖: Iff.rfl, Vector3, Vector3.recOn, and_true, iff_of_eq
+/-
+**vectorAllP_cons** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：vectorAllP_cons (p : α -> Prop) (x : α) (v : Vector3 α n) : VectorAllP p (
+x :: v) ↔ p x ∧ VectorAllP p v
+参数：p : α -> Prop；x : α；v : Vector3 α n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem vectorAllP_cons (p : α -> Prop) (x : α) (v : Vector3 α n) :
+theorem vectorAllP_cons (p : α → Prop) (x : α) (v : Vector3 α n) :
     VectorAllP p (x :: v) ↔ p x ∧ VectorAllP p v :=
   Vector3.recOn v (iff_of_eq (and_true _)).symm fun _ _ _ => Iff.rfl
-
-/--
-theorem `vectorAllP_iff_forall` / 定理 `vectorAllP_iff_forall`
-
-English:
-theorem vectorAllP_iff_forall
-  given: (p : α -> Prop) (v : Vector3 α n)
-  proof: by
-  refine v.recOn ?_ ?_
-  · exact ⟨fun _ => Fin2.elim0, fun _ => trivial⟩
-  · simp only [vectorAllP_cons]
-    refine fun {n} a v IH =>
-      (and_congr_right fun _ => IH).trans
-        ⟨fun ⟨pa, h⟩ i => by
-          refine i.cases' ?_ ?_
-          exacts [pa, h], fun h => ⟨?_, fun i => ?_⟩⟩
-    · simpa using h fz
-    · simpa using h (fs i)
-
-中文:
-定理 vectorAllP_iff_对任意
-  条件: (p : α -> 命题) (v : Vector3 α n)
-  证明: by
-  refine v.recOn ?_ ?_
-  · exact ⟨fun _ => Fin2.elim0, fun _ => trivial⟩
-  · simp only [vectorAllP_cons]
-    refine fun {n} a v IH =>
-      (and_congr_right fun _ => IH).trans
-        ⟨fun ⟨pa, h⟩ i => by
-          refine i.cases' ?_ ?_
-          exacts [pa, h], fun h => ⟨?_, fun i => ?_⟩⟩
-    · simpa using h fz
-    · simpa using h (fs i)
-
-Depends on / 依赖: Fin2.elim0, and_congr_right, exacts, i.cases, v.recOn, vectorAllP_cons
+/-
+**vectorAllP_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：vectorAllP_iff_forall (p : α -> Prop) (v : Vector3 α n) : VectorAllP p v ↔
+ forall i, p (v i)
+参数：p : α -> Prop；v : Vector3 α n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `and_congr_right`：∀ {a b c : Prop}, (a → (b ↔ c)) → (a ∧ b ↔ a ∧ c)
 -/
-theorem vectorAllP_iff_forall (p : α -> Prop) (v : Vector3 α n) :
-    VectorAllP p v ↔ forall i, p (v i) := by
+theorem vectorAllP_iff_forall (p : α → Prop) (v : Vector3 α n) :
+    VectorAllP p v ↔ ∀ i, p (v i) := by
   refine v.recOn ?_ ?_
   · exact ⟨fun _ => Fin2.elim0, fun _ => trivial⟩
   · simp only [vectorAllP_cons]
@@ -884,24 +622,21 @@ theorem vectorAllP_iff_forall (p : α -> Prop) (v : Vector3 α n) :
           exacts [pa, h], fun h => ⟨?_, fun i => ?_⟩⟩
     · simpa using h fz
     · simpa using h (fs i)
-
-/--
-theorem `VectorAllP.imp` / 定理 `VectorAllP.imp`
-
-English:
-theorem VectorAllP.imp
-  statement: {p q : α -> Prop} (h : forall x, p x -> q x) {v : Vector3 α n}
-  proof: (vectorAllP_iff_forall _ _).2 fun _ => h _ (vectorAllP_iff_forall _ _).1 al _
-
-中文:
-定理 VectorAllP.imp
-  结论: {p q : α -> 命题} (h : 对任意 x, p x -> q x) {v : Vector3 α n}
-  证明: (vectorAllP_iff_forall _ _).2 fun _ => h _ (vectorAllP_iff_forall _ _).1 al _
-
-Depends on / 依赖: vectorAllP_iff_forall
+/-
+**VectorAllP.imp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：VectorAllP.imp {p q : α -> Prop} (h : forall x, p x -> q x) {v : Vector3 α
+ n} (al : VectorAllP p v) : VectorAllP q v
+参数：h : forall x, p x -> q x；al : VectorAllP p v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `vectorAllP_iff_forall`：vectorAllP_iff_forall (p : α -> Prop) (v : Vector
+3 α n) : VectorAllP p v ↔ forall i, p (v i)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem VectorAllP.imp {p q : α -> Prop} (h : forall x, p x -> q x) {v : Vector3 α n}
+theorem VectorAllP.imp {p q : α → Prop} (h : ∀ x, p x → q x) {v : Vector3 α n}
     (al : VectorAllP p v) : VectorAllP q v :=
-(vectorAllP_iff_forall _ _).2 fun _ => h _ (vectorAllP_iff_forall _ _).1 al _
+  (vectorAllP_iff_forall _ _).2 fun _ => h _ <| (vectorAllP_iff_forall _ _).1 al _
 
 end Vector3
+

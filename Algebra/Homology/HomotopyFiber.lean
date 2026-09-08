@@ -34,36 +34,27 @@ variable [DecidableRel c.Rel]
 
 section
 
-/--
-Definition of `HasHomotopyFiber` / `HasHomotopyFiber` 的定义
+/-- A morphism of homological complexes `φ : F ⟶ G` has a homotopy fiber if for all
+indices `i` and `j` such that `c.Rel i j`, the binary biproduct `F.X i ⊞ G.X j` exists. -/
+/-
+**HomologicalComplex.HasHomotopyFiber** 是 Mathlib 中的一个归纳类型，位于命名空间 `HomologicalCo
+mplex`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.Preadditive C] →       {α : Type u_2} → {c : ComplexShape 
+α} → {F G : HomologicalComplex C c} → (F ⟶ G) → Prop
+参数：F ⟶ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasHomotopyFiber
-  parameters: (φ : F ⟶ G)
-  axioms and operations (1):
-    - hasBinaryBiproduct((φ) (i j : α) (hij : c.Rel i j)) : HasBinaryBiproduct (G.X i) (F.X j)
-
-中文:
-类 有HomotopyFiber
-  参数: (φ : F ⟶ G)
-  公理与运算 (1 个):
-    - hasBinaryBiproduct((φ) (i j : α) (hij : c.关系 i j)) : 有BinaryBiproduct (G.X i) (F.X j)
+--- 原说明 ---
+A morphism of homological complexes `φ : F ⟶ G` has a homotopy fiber if for all
+indices `i` and `j` such that `c.Rel i j`, the binary biproduct `F.X i ⊞ G.X j` 
+exists.
 -/
 class HasHomotopyFiber (φ : F ⟶ G) : Prop where
   hasBinaryBiproduct (φ) (i j : α) (hij : c.Rel i j) : HasBinaryBiproduct (G.X i) (F.X j)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasBinaryBiproducts
-  signature: C] : HasHomotopyFiber φ where
-  body: inferInstance
-
-中文:
-实例 [有BinaryBiproducts
-  签名: C] : 有HomotopyFiber φ where
-  定义体: inferInstance
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasBinaryBiproducts C] : HasHomotopyFiber φ where
   hasBinaryBiproduct _ _ _ := inferInstance
@@ -71,26 +62,9 @@ instance [HasBinaryBiproducts C] : HasHomotopyFiber φ where
 variable [HasHomotopyFiber φ]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasHomotopyCofiber ((opFunctor C c).map φ.op)
-  body: by
-    have := HasHomotopyFiber.hasBinaryBiproduct φ j i hij
-    dsimp
-    infer_instance
-
-中文:
-实例 :
-  签名: 有HomotopyCofiber ((opFunctor C c).map φ.op)
-  定义体: by
-    have := HasHomotopyFiber.hasBinaryBiproduct φ j i hij
-    dsimp
-    infer_instance
-
-Depends on / 依赖: HasHomotopyFiber, HasHomotopyFiber.hasBinaryBiproduct, hasBinaryBiproduct, infer_instance
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasHomotopyCofiber ((opFunctor C c).map φ.op) where
   hasBinaryBiproduct i j hij := by
@@ -98,71 +72,56 @@ instance : HasHomotopyCofiber ((opFunctor C c).map φ.op) where
     dsimp
     infer_instance
 
-/--
-Definition of `homotopyFiber` / `homotopyFiber` 的定义
+/-- The homotopy fiber of a morphism between homological complexes. -/
+/-
+**HomologicalComplex.homotopyFiber** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex
+`。
+形式化陈述：homotopyFiber : HomologicalComplex C c
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.instHasHomotopyCofiberOppositeMapSymmOpFunctorOp`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTh
+eory.Preadditive C] {α : Type u_2}   {c : ComplexShape α}…
 
-English:
-definition homotopyFiber
-  signature: : HomologicalComplex C c
-  body: (unopFunctor C c.symm).obj (op (homotopyCofiber ((opFunctor C c).map φ.op)))
-
-中文:
-定义 homotopyFiber
-  签名: : 同调复形 C c
-  定义体: (unopFunctor C c.symm).obj (op (homotopyCofiber ((opFunctor C c).map φ.op)))
-
-Depends on / 依赖: c.symm, homotopyCofiber, opFunctor, unopFunctor
+--- 原说明 ---
+The homotopy fiber of a morphism between homological complexes.
 -/
 noncomputable def homotopyFiber : HomologicalComplex C c :=
   (unopFunctor C c.symm).obj (op (homotopyCofiber ((opFunctor C c).map φ.op)))
 
 end
 
-variable (K) [forall i, HasBinaryBiproduct (K.X i) (K.X i)]
+variable (K) [∀ i, HasBinaryBiproduct (K.X i) (K.X i)]
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : α) : HasBinaryBiproduct (K.op.X i) (K.op.X i) := by
   dsimp; infer_instance
 
-/--
-Definition of `HasPathObject` / `HasPathObject` 的定义
+/-- The property that a homological complex `K` has a path object,
+i.e. that the morphism `K ⟶ K ⊞ K` induced by `𝟙 K` and `-𝟙 K`
+has a homotopy fiber. -/
+/-
+**HomologicalComplex.HasPathObject** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalCompl
+ex`。
+形式化陈述：HasPathObject
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.instHasBinaryBiproduct`：∀ {C : Type u_1} {ι : Type u_
+2} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadd
+itive C]   {c : ComplexShape ι}…
 
-English:
-abbreviation HasPathObject
-  body: HasHomotopyFiber (biprod.desc (𝟙 K) (-𝟙 K))
-
-中文:
-缩写 HasPathObject
-  定义体: HasHomotopyFiber (biprod.desc (𝟙 K) (-𝟙 K))
-
-Depends on / 依赖: HasHomotopyFiber, biprod, biprod.desc
+--- 原说明 ---
+The property that a homological complex `K` has a path object,
+i.e. that the morphism `K ⟶ K ⊞ K` induced by `𝟙 K` and `-𝟙 K`
+has a homotopy fiber.
 -/
 abbrev HasPathObject := HasHomotopyFiber (biprod.desc (𝟙 K) (-𝟙 K))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [K.HasPathObject]
-  signature: :
-  body: by
-    have := HasHomotopyFiber.hasBinaryBiproduct (biprod.desc (𝟙 K) (-𝟙 K)) j i hij
-    exact hasBinaryBiproduct_of_iso (Iso.refl _ : op (K.X j) ≅ K.op.X j)
-      (show op ((K ⊞ K).X i) ≅ (K.op ⊞ K.op).X i from
-        ((eval _ _ i).mapBiprod K K).op.symm ≪≫ biprod.opIso _ _ ≪≫
-          ((eval _ _ i).mapBiprod K.op K.op).symm)
-
-中文:
-实例 [K.HasPathObject]
-  签名: :
-  定义体: by
-    have := HasHomotopyFiber.hasBinaryBiproduct (biprod.desc (𝟙 K) (-𝟙 K)) j i hij
-    exact hasBinaryBiproduct_of_iso (Iso.refl _ : op (K.X j) ≅ K.op.X j)
-      (show op ((K ⊞ K).X i) ≅ (K.op ⊞ K.op).X i from
-        ((eval _ _ i).mapBiprod K K).op.symm ≪≫ biprod.opIso _ _ ≪≫
-          ((eval _ _ i).mapBiprod K.op K.op).symm)
-
-Depends on / 依赖: HasHomotopyFiber, HasHomotopyFiber.hasBinaryBiproduct, Iso.refl, K.op, K.op.X, biprod, biprod.desc, biprod.opIso, hasBinaryBiproduct, hasBinaryBiproduct_of_iso, mapBiprod, op.symm
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [K.HasPathObject] :
     HasHomotopyCofiber (biprod.lift (𝟙 K.op) (-𝟙 K.op)) where
@@ -178,206 +137,154 @@ variable [K.HasPathObject]
 /-- The path object of a homological complex is defined here by dualizing
 the cylinder object of `K.op`. -/
 @[no_expose]
-/--
-Definition of `pathObject` / `pathObject` 的定义
+/-
+**HomologicalComplex.pathObject** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：pathObject
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.instHasBinaryBiproductOppositeXOp`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditiv
+e C] {α : Type u_2}   {c : ComplexShape α}…
+· 使用定理 `HomologicalComplex.instHasHomotopyCofiberOppositeLiftSymmIdOpNegHomOfHas
+PathObject`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst
+_1 : CategoryTheory.Preadditive C] {α : Type u_2}   {c : ComplexShape α}…
 
-English:
-definition pathObject
-  body: (unopFunctor C c.symm).obj (op K.op.cylinder)
-
-中文:
-定义 pathObject
-  定义体: (unopFunctor C c.symm).obj (op K.op.cylinder)
-
-Depends on / 依赖: K.op.cylinder, c.symm, cylinder, unopFunctor
+--- 原说明 ---
+The path object of a homological complex is defined here by dualizing
+the cylinder object of `K.op`.
 -/
 noncomputable def pathObject := (unopFunctor C c.symm).obj (op K.op.cylinder)
 
 namespace pathObject
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isZero_X` / 引理 `isZero_X`
-
-English:
-lemma isZero_X
-  given: (i : α) (h₁ : IsZero (K.X i)) (h₂ : forall (j : α), c.Rel j i -> IsZero (K.X j))
-  proof: by
-  apply IsZero.unop
-  dsimp [pathObject]
-  refine homotopyCofiber.isZero_X _ _ ?_ (fun j hj => IsZero.op (h₂ _ hj))
-  exact IsZero.of_iso (by simpa using h₁.op)
-    ((eval Cᵒᵖ c.symm i).mapBiprod K.op K.op)
-
-中文:
-引理 isZero_X
-  条件: (i : α) (h₁ : 是零 (K.X i)) (h₂ : 对任意 (j : α), c.关系 j i -> 是零 (K.X j))
-  证明: by
-  apply IsZero.unop
-  dsimp [pathObject]
-  refine homotopyCofiber.isZero_X _ _ ?_ (fun j hj => IsZero.op (h₂ _ hj))
-  exact IsZero.of_iso (by simpa using h₁.op)
-    ((eval Cᵒᵖ c.symm i).mapBiprod K.op K.op)
-
-Depends on / 依赖: IsZero, IsZero.of_iso, IsZero.op, IsZero.unop, K.op, c.symm, homotopyCofiber, homotopyCofiber.isZero_X, isZero_X, mapBiprod, of_iso, pathObject
+/-
+**HomologicalComplex.pathObject.isZero_X** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalC
+omplex.pathObject`。
+形式化陈述：isZero_X (i : α) (h₁ : IsZero (K.X i)) (h₂ : forall (j : α), c.Rel j i -> 
+IsZero (K.X j)) : IsZero (K.pathObject.X i)
+参数：i : α；h₁ : IsZero (K.X i)；h₂ : forall (j : α), c.Rel j i -> IsZero (K.X j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.unop`：unop {X : Cᵒᵖ} (h : IsZero X) : IsZer
+o (Opposite.unop X)
+· 使用引理 `HomologicalComplex.homotopyCofiber.isZero_X`：isZero_X (i : ι) (hG : IsZe
+ro (G.X i)) (hF : forall (j : ι), c.Rel i j -> IsZero (F.X j)) : IsZero (X φ i)
+· 使用定理 `HomologicalComplex.instHasBinaryBiproduct`：∀ {C : Type u_1} {ι : Type u_
+2} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadd
+itive C]   {c : ComplexShape ι}…
+· 使用定理 `HomologicalComplex.instHasBinaryBiproductOppositeXOp`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditiv
+e C] {α : Type u_2}   {c : ComplexShape α}…
+· 使用定理 `HomologicalComplex.instHasHomotopyCofiberOppositeLiftSymmIdOpNegHomOfHas
+PathObject`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst
+_1 : CategoryTheory.Preadditive C] {α : Type u_2}   {c : ComplexShape α}…
+· 使用定理 `CategoryTheory.Limits.IsZero.of_iso`：of_iso (hY : IsZero Y) (e : X ≅ Y) 
+: IsZero X
+· 使用定理 `HomologicalComplex.instPreservesZeroMorphismsEval`：∀ {ι : Type u_1} (V :
+ Type u) [inst : CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms V] (c : ComplexSh…
+· 使用定理 `HomologicalComplex.instPreservesBinaryBiproductEval`：∀ {C : Type u_1} {ι
+ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryThe
+ory.Preadditive C]   {c : ComplexShape ι}…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `CategoryTheory.Limits.IsZero.op`：op (h : IsZero X) : IsZero (Opposite.op
+ X)
 -/
-lemma isZero_X (i : α) (h₁ : IsZero (K.X i)) (h₂ : forall (j : α), c.Rel j i -> IsZero (K.X j)) :
+lemma isZero_X (i : α) (h₁ : IsZero (K.X i)) (h₂ : ∀ (j : α), c.Rel j i → IsZero (K.X j)) :
     IsZero (K.pathObject.X i) := by
   apply IsZero.unop
   dsimp [pathObject]
-  refine homotopyCofiber.isZero_X _ _ ?_ (fun j hj => IsZero.op (h₂ _ hj))
+  refine homotopyCofiber.isZero_X _ _ ?_ (fun j hj ↦ IsZero.op (h₂ _ hj))
   exact IsZero.of_iso (by simpa using h₁.op)
     ((eval Cᵒᵖ c.symm i).mapBiprod K.op K.op)
 
 /-- The first projection `K.pathObject ⟶ K`. -/
 @[no_expose]
-/--
-Definition of `π₀` / `π₀` 的定义
+/-
+**HomologicalComplex.pathObject.** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex.p
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₀
-  signature: : K.pathObject ⟶ K
-  body: (unopFunctor C c.symm).map (cylinder.ι₀ K.op).op
-
-中文:
-定义 π₀
-  签名: : K.pathObject ⟶ K
-  定义体: (unopFunctor C c.symm).map (cylinder.ι₀ K.op).op
-
-Depends on / 依赖: K.op, c.symm, cylinder, unopFunctor
+--- 原说明 ---
+The first projection `K.pathObject ⟶ K`.
 -/
 noncomputable def π₀ : K.pathObject ⟶ K :=
   (unopFunctor C c.symm).map (cylinder.ι₀ K.op).op
 
 /-- The second projection `K.pathObject ⟶ K`. -/
 @[no_expose]
-/--
-Definition of `π₁` / `π₁` 的定义
+/-
+**HomologicalComplex.pathObject.** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex.p
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₁
-  signature: : K.pathObject ⟶ K
-  body: (unopFunctor C c.symm).map (cylinder.ι₁ K.op).op
-
-中文:
-定义 π₁
-  签名: : K.pathObject ⟶ K
-  定义体: (unopFunctor C c.symm).map (cylinder.ι₁ K.op).op
-
-Depends on / 依赖: K.op, c.symm, cylinder, unopFunctor
+--- 原说明 ---
+The second projection `K.pathObject ⟶ K`.
 -/
 noncomputable def π₁ : K.pathObject ⟶ K :=
   (unopFunctor C c.symm).map (cylinder.ι₁ K.op).op
 
 /-- The inclusion `K ⟶ K.pathObject`. -/
 @[no_expose]
-/--
-Definition of `ι` / `ι` 的定义
+/-
+**HomologicalComplex.pathObject.** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex.p
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι
-  signature: : K ⟶ K.pathObject
-  body: (unopFunctor C c.symm).map (cylinder.π K.op).op
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 ι
-  签名: : K ⟶ K.pathObject
-  定义体: (unopFunctor C c.symm).map (cylinder.π K.op).op
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: K.op, c.symm, cylinder, unopFunctor
+--- 原说明 ---
+The inclusion `K ⟶ K.pathObject`.
 -/
 noncomputable def ι : K ⟶ K.pathObject :=
   (unopFunctor C c.symm).map (cylinder.π K.op).op
 
 @[reassoc (attr := simp)]
-/--
-lemma `π₀_ι` / 引理 `π₀_ι`
-
-English:
-lemma π₀_ι
-  statement: ι K ≫ π₀ K = 𝟙 K
-  proof: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₀_π K.op))
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 π₀_ι
-  结论: ι K ≫ π₀ K = 𝟙 K
-  证明: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₀_π K.op))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: K.op, Quiver, Quiver.Hom.op_inj, cylinder, map_injective, opFunctor, op_inj
+/-
+**HomologicalComplex.pathObject.** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex.p
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma π₀_ι : ι K ≫ π₀ K = 𝟙 K :=
   Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₀_π K.op))
 
 @[reassoc (attr := simp)]
-/--
-lemma `π₁_ι` / 引理 `π₁_ι`
-
-English:
-lemma π₁_ι
-  statement: ι K ≫ π₁ K = 𝟙 K
-  proof: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₁_π K.op))
-
-中文:
-引理 π₁_ι
-  结论: ι K ≫ π₁ K = 𝟙 K
-  证明: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₁_π K.op))
-
-Depends on / 依赖: K.op, Quiver, Quiver.Hom.op_inj, cylinder, map_injective, opFunctor, op_inj
+/-
+**HomologicalComplex.pathObject.** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex.p
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma π₁_ι : ι K ≫ π₁ K = 𝟙 K :=
   Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₁_π K.op))
 
 /-- The homotopy between `π₀ K ≫ ι K` and `𝟙 K.pathObject`. -/
 @[no_expose]
-/--
-Definition of `π₀CompιHomotopy` / `π₀CompιHomotopy` 的定义
+/-
+**HomologicalComplex.pathObject.** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex.p
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₀CompιHomotopy
-  signature: (hc : forall (i : α), exists j, c.Rel i j)
-  body: (cylinder.πCompι₀Homotopy K.op hc).unop
-
-中文:
-定义 π₀CompιHomotopy
-  签名: (hc : 对任意 (i : α), 存在 j, c.关系 i j)
-  定义体: (cylinder.πCompι₀Homotopy K.op hc).unop
-
-Depends on / 依赖: K.op, cylinder
+--- 原说明 ---
+The homotopy between `π₀ K ≫ ι K` and `𝟙 K.pathObject`.
 -/
-noncomputable def π₀CompιHomotopy (hc : forall (i : α), exists j, c.Rel i j) :
+noncomputable def π₀CompιHomotopy (hc : ∀ (i : α), ∃ j, c.Rel i j) :
     Homotopy (π₀ K ≫ ι K) (𝟙 K.pathObject) :=
   (cylinder.πCompι₀Homotopy K.op hc).unop
 
 /-- The homotopy equivalence between `K` and `K.pathObject`. -/
 @[simps]
-/--
-Definition of `homotopyEquiv` / `homotopyEquiv` 的定义
+/-
+**HomologicalComplex.pathObject.homotopyEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Homolog
+icalComplex.pathObject`。
+形式化陈述：homotopyEquiv (hc : forall (i : α), exists j, c.Rel i j) : HomotopyEquiv K
+ K.pathObject where hom
+参数：hc : forall (i : α), exists j, c.Rel i j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homotopyEquiv
-  signature: (hc : forall (i : α), exists j, c.Rel i j)
-  body: ι K
-  inv := π₀ K
-  homotopyHomInvId := Homotopy.ofEq (by simp)
-  homotopyInvHomId := π₀CompιHomotopy K hc
-
-中文:
-定义 homotopyEquiv
-  签名: (hc : 对任意 (i : α), 存在 j, c.关系 i j)
-  定义体: ι K
-  inv := π₀ K
-  homotopyHomInvId := Homotopy.ofEq (by simp)
-  homotopyInvHomId := π₀CompιHomotopy K hc
+--- 原说明 ---
+The homotopy equivalence between `K` and `K.pathObject`.
 -/
-noncomputable def homotopyEquiv (hc : forall (i : α), exists j, c.Rel i j) :
+noncomputable def homotopyEquiv (hc : ∀ (i : α), ∃ j, c.Rel i j) :
     HomotopyEquiv K K.pathObject where
   hom := ι K
   inv := π₀ K
@@ -386,22 +293,15 @@ noncomputable def homotopyEquiv (hc : forall (i : α), exists j, c.Rel i j) :
 
 /-- The homotopy between `pathObject.ι₀ K` and `pathObject.ι₁ K`. -/
 @[no_expose]
-/--
-Definition of `homotopy₀₁` / `homotopy₀₁` 的定义
+/-
+**HomologicalComplex.pathObject.homotopy** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalC
+omplex.pathObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homotopy₀₁
-  signature: (hc : forall (i : α), exists j, c.Rel i j)
-  body: (cylinder.homotopy₀₁ K.op hc).unop
-
-中文:
-定义 homotopy₀₁
-  签名: (hc : 对任意 (i : α), 存在 j, c.关系 i j)
-  定义体: (cylinder.homotopy₀₁ K.op hc).unop
-
-Depends on / 依赖: K.op, cylinder, cylinder.homotopy
+--- 原说明 ---
+The homotopy between `pathObject.ι₀ K` and `pathObject.ι₁ K`.
 -/
-noncomputable def homotopy₀₁ (hc : forall (i : α), exists j, c.Rel i j) : Homotopy (π₀ K) (π₁ K) :=
+noncomputable def homotopy₀₁ (hc : ∀ (i : α), ∃ j, c.Rel i j) : Homotopy (π₀ K) (π₁ K) :=
   (cylinder.homotopy₀₁ K.op hc).unop
 
 section
@@ -411,30 +311,22 @@ variable {K} (φ₀ φ₁ : F ⟶ K) (h : Homotopy φ₀ φ₁)
 /-- The morphism `F ⟶ K.pathObject` that is induced by two morphisms `φ₀ φ₁ : F ⟶ K`
 and a homotopy `h : Homotopy φ₀ φ₁`. -/
 @[no_expose]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**HomologicalComplex.pathObject.lift** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalCompl
+ex.pathObject`。
+形式化陈述：lift : F ⟶ K.pathObject
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.instHasBinaryBiproductOppositeXOp`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditiv
+e C] {α : Type u_2}   {c : ComplexShape α}…
+· 使用定理 `HomologicalComplex.instHasHomotopyCofiberOppositeLiftSymmIdOpNegHomOfHas
+PathObject`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst
+_1 : CategoryTheory.Preadditive C] {α : Type u_2}   {c : ComplexShape α}…
 
-English:
-definition lift
-  signature: : F ⟶ K.pathObject
-  body: letI φ : K.op.cylinder ⟶ (opFunctor C c).obj (op F) :=
-    cylinder.desc ((opFunctor C c).map φ₀.op)
-      ((opFunctor C c).map φ₁.op) h.op
-  (unopFunctor C c.symm).map φ.op
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lift
-  签名: : F ⟶ K.pathObject
-  定义体: letI φ : K.op.cylinder ⟶ (opFunctor C c).obj (op F) :=
-    cylinder.desc ((opFunctor C c).map φ₀.op)
-      ((opFunctor C c).map φ₁.op) h.op
-  (unopFunctor C c.symm).map φ.op
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: K.op.cylinder, c.symm, cylinder, cylinder.desc, h.op, opFunctor, unopFunctor
+--- 原说明 ---
+The morphism `F ⟶ K.pathObject` that is induced by two morphisms `φ₀ φ₁ : F ⟶ K`
+and a homotopy `h : Homotopy φ₀ φ₁`.
 -/
 noncomputable def lift : F ⟶ K.pathObject :=
   letI φ : K.op.cylinder ⟶ (opFunctor C c).obj (op F) :=
@@ -443,43 +335,19 @@ noncomputable def lift : F ⟶ K.pathObject :=
   (unopFunctor C c.symm).map φ.op
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_π₀` / 引理 `lift_π₀`
-
-English:
-lemma lift_π₀
-  statement: lift φ₀ φ₁ h ≫ π₀ K = φ₀
-  proof: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₀_desc _ _ _))
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 lift_π₀
-  结论: lift φ₀ φ₁ h ≫ π₀ K = φ₀
-  证明: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₀_desc _ _ _))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj, cylinder, map_injective, opFunctor, op_inj
+/-
+**HomologicalComplex.pathObject.lift_** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComp
+lex.pathObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lift_π₀ : lift φ₀ φ₁ h ≫ π₀ K = φ₀ :=
   Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₀_desc _ _ _))
 
 @[reassoc (attr := simp)]
-/--
-lemma `lift_π₁` / 引理 `lift_π₁`
-
-English:
-lemma lift_π₁
-  statement: lift φ₀ φ₁ h ≫ π₁ K = φ₁
-  proof: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₁_desc _ _ _))
-
-中文:
-引理 lift_π₁
-  结论: lift φ₀ φ₁ h ≫ π₁ K = φ₁
-  证明: Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₁_desc _ _ _))
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj, cylinder, map_injective, opFunctor, op_inj
+/-
+**HomologicalComplex.pathObject.lift_** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComp
+lex.pathObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lift_π₁ : lift φ₀ φ₁ h ≫ π₁ K = φ₁ :=
   Quiver.Hom.op_inj ((opFunctor C c).map_injective (cylinder.ι₁_desc _ _ _))
@@ -489,42 +357,44 @@ end
 section
 
 variable (F) {D : Type*} [Category* D] [Preadditive D] (H : C ⥤ D) [H.Additive]
-  [forall (i : α), HasBinaryBiproduct (((H.mapHomologicalComplex c).obj K).X i)
+  [∀ (i : α), HasBinaryBiproduct (((H.mapHomologicalComplex c).obj K).X i)
     (((H.mapHomologicalComplex c).obj K).X i)]
   [((H.mapHomologicalComplex c).obj K).HasPathObject]
 
 variable
-  [forall (i : α),
+  [∀ (i : α),
     HasBinaryBiproduct (((H.op.mapHomologicalComplex c.symm).obj K.op).X i)
       (((H.op.mapHomologicalComplex c.symm).obj K.op).X i)]
   [HasHomotopyCofiber (biprod.lift (𝟙 ((H.op.mapHomologicalComplex c.symm).obj K.op))
     (-𝟙 ((H.op.mapHomologicalComplex c.symm).obj K.op)))]
   [HasHomotopyCofiber ((H.op.mapHomologicalComplex c.symm).map (biprod.lift (𝟙 K.op) (-𝟙 K.op)))]
-  [forall (i : α), HasBinaryBiproduct (K.op.X i) (K.op.X i)]
+  [∀ (i : α), HasBinaryBiproduct (K.op.X i) (K.op.X i)]
 
-variable (hc : forall (i : α), exists j, c.Rel i j)
+variable (hc : ∀ (i : α), ∃ j, c.Rel i j)
 
 /-- The isomorphism expressing the commutation between taking
 the path object of a homological complex and applying an additive functor. -/
 @[no_expose]
-/--
-Definition of `mapHomologicalComplexObjIso` / `mapHomologicalComplexObjIso` 的定义
+/-
+**HomologicalComplex.pathObject.mapHomologicalComplexObjIso** 是 Mathlib 中的一个定义，位
+于命名空间 `HomologicalComplex.pathObject`。
+形式化陈述：mapHomologicalComplexObjIso : (H.mapHomologicalComplex c).obj (K.pathObjec
+t) ≅ pathObject ((H.mapHomologicalComplex c).obj K)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `HomologicalComplex.instHasHomotopyCofiberOppositeLiftSymmIdOpNegHomOfHas
+PathObject`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst
+_1 : CategoryTheory.Preadditive C] {α : Type u_2}   {c : ComplexShape α}…
+· 使用定理 `CategoryTheory.Functor.op_additive`：∀ {C : Type u_1} [inst : CategoryThe
+ory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C] {D : Type u_2
+}   [inst_2 : CategoryTh…
 
-English:
-definition mapHomologicalComplexObjIso
-  signature: :
-  body: (unopFunctor _ _).mapIso (cylinder.mapHomologicalComplexObjIso K.op H.op hc).op.symm
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 mapHomologicalComplexObjIso
-  签名: :
-  定义体: (unopFunctor _ _).mapIso (cylinder.mapHomologicalComplexObjIso K.op H.op hc).op.symm
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: H.op, K.op, cylinder, cylinder.mapHomologicalComplexObjIso, mapHomologicalComplexObjIso, mapIso, op.symm, unopFunctor
+--- 原说明 ---
+The isomorphism expressing the commutation between taking
+the path object of a homological complex and applying an additive functor.
 -/
 noncomputable def mapHomologicalComplexObjIso :
     (H.mapHomologicalComplex c).obj (K.pathObject) ≅
@@ -532,24 +402,10 @@ noncomputable def mapHomologicalComplexObjIso :
   (unopFunctor _ _).mapIso (cylinder.mapHomologicalComplexObjIso K.op H.op hc).op.symm
 
 @[reassoc (attr := simp)]
-/--
-lemma `mapHomologicalComplexObjIso_inv_map_π₀` / 引理 `mapHomologicalComplexObjIso_inv_map_π₀`
-
-English:
-lemma mapHomologicalComplexObjIso_inv_map_π₀
-  proof: Quiver.Hom.op_inj ((opFunctor _ _).map_injective
-    (cylinder.map_ι₀_mapHomologicalComplexObjIso_hom K.op H.op hc))
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 mapHomologicalComplexObjIso_inv_map_π₀
-  证明: Quiver.Hom.op_inj ((opFunctor _ _).map_injective
-    (cylinder.map_ι₀_mapHomologicalComplexObjIso_hom K.op H.op hc))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: H.op, K.op, Quiver, Quiver.Hom.op_inj, cylinder, cylinder.map_, map_injective, opFunctor, op_inj
+/-
+**HomologicalComplex.pathObject.mapHomologicalComplexObjIso_inv_map_** 是 Mathlib
+ 中的一个引理，位于命名空间 `HomologicalComplex.pathObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapHomologicalComplexObjIso_inv_map_π₀ :
     (mapHomologicalComplexObjIso K H hc).inv ≫ (H.mapHomologicalComplex c).map (π₀ K) =
@@ -558,20 +414,10 @@ lemma mapHomologicalComplexObjIso_inv_map_π₀ :
     (cylinder.map_ι₀_mapHomologicalComplexObjIso_hom K.op H.op hc))
 
 @[reassoc (attr := simp)]
-/--
-lemma `mapHomologicalComplexObjIso_inv_map_π₁` / 引理 `mapHomologicalComplexObjIso_inv_map_π₁`
-
-English:
-lemma mapHomologicalComplexObjIso_inv_map_π₁
-  proof: Quiver.Hom.op_inj ((opFunctor _ _).map_injective
-    (cylinder.map_ι₁_mapHomologicalComplexObjIso_hom K.op H.op hc))
-
-中文:
-引理 mapHomologicalComplexObjIso_inv_map_π₁
-  证明: Quiver.Hom.op_inj ((opFunctor _ _).map_injective
-    (cylinder.map_ι₁_mapHomologicalComplexObjIso_hom K.op H.op hc))
-
-Depends on / 依赖: H.op, K.op, Quiver, Quiver.Hom.op_inj, cylinder, cylinder.map_, map_injective, opFunctor, op_inj
+/-
+**HomologicalComplex.pathObject.mapHomologicalComplexObjIso_inv_map_** 是 Mathlib
+ 中的一个引理，位于命名空间 `HomologicalComplex.pathObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mapHomologicalComplexObjIso_inv_map_π₁ :
     (mapHomologicalComplexObjIso K H hc).inv ≫ (H.mapHomologicalComplex c).map (π₁ K) =
@@ -584,3 +430,4 @@ end
 end pathObject
 
 end HomologicalComplex
+

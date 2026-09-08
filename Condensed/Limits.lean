@@ -20,115 +20,64 @@ universe u
 
 open CategoryTheory Limits
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimits CondensedSet.{u}
-  body: by
-  change HasLimits (Sheaf _ _)
-  infer_instance
-
-中文:
-实例 :
-  签名: 有极限 CondensedSet.{u}
-  定义体: by
-  change HasLimits (Sheaf _ _)
-  infer_instance
-
-Depends on / 依赖: HasLimits, infer_instance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimits CondensedSet.{u} := by
   change HasLimits (Sheaf _ _)
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimitsOfSize.{u, u + 1} CondensedSet.{u}
-  body: hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
-
-中文:
-实例 :
-  签名: 有LimitsOfSize.{u, u + 1} CondensedSet.{u}
-  定义体: hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
-
-Depends on / 依赖: hasLimitsOfSizeShrink
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimitsOfSize.{u, u + 1} CondensedSet.{u} :=
   hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
 
 variable (R : Type (u + 1)) [Ring R]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimits (CondensedMod.{u} R)
-  body: inferInstanceAs (HasLimits (Sheaf _ _))
-
-中文:
-实例 :
-  签名: 有极限 (CondensedMod.{u} R)
-  定义体: inferInstanceAs (HasLimits (Sheaf _ _))
-
-Depends on / 依赖: HasLimits
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimits (CondensedMod.{u} R) :=
   inferInstanceAs (HasLimits (Sheaf _ _))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimits (CondensedMod.{u} R)
-  body: inferInstanceAs (HasColimits (Sheaf _ _))
-
-中文:
-实例 :
-  签名: 有余极限 (CondensedMod.{u} R)
-  定义体: inferInstanceAs (HasColimits (Sheaf _ _))
-
-Depends on / 依赖: HasColimits
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimits (CondensedMod.{u} R) :=
   inferInstanceAs (HasColimits (Sheaf _ _))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimitsOfSize.{u, u + 1} (CondensedMod.{u} R)
-  body: hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
-
-中文:
-实例 :
-  签名: 有LimitsOfSize.{u, u + 1} (CondensedMod.{u} R)
-  定义体: hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
-
-Depends on / 依赖: hasLimitsOfSizeShrink
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimitsOfSize.{u, u + 1} (CondensedMod.{u} R) :=
   hasLimitsOfSizeShrink.{u, u + 1, u + 1, u} _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A J : Type*} [Category* A] [Category* J] [HasColimitsOfShape J A]
     [HasWeakSheafify (coherentTopology CompHaus.{u}) A] :
     HasColimitsOfShape J (Condensed.{u} A) :=
   inferInstanceAs (HasColimitsOfShape J (Sheaf _ _))
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A J : Type*} [Category* A] [Category* J] [HasLimitsOfShape J A] :
     HasLimitsOfShape J (Condensed.{u} A) :=
   inferInstanceAs (HasLimitsOfShape J (Sheaf _ _))
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A : Type*} [Category* A] [HasFiniteLimits A] : HasFiniteLimits (Condensed.{u} A) :=
   inferInstanceAs (HasFiniteLimits (Sheaf _ _))
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A : Type*} [Category* A] [HasFiniteColimits A]
     [HasWeakSheafify (coherentTopology CompHaus.{u}) A] : HasFiniteColimits (Condensed.{u} A) :=
   inferInstanceAs (HasFiniteColimits (Sheaf _ _))

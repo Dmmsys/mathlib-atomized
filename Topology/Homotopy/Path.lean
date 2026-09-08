@@ -45,20 +45,16 @@ open unitInterval
 
 namespace Path
 
-/--
-Definition of `Homotopy` / `Homotopy` 的定义
+/-- The type of homotopies between two paths.
+-/
+/-
+**Path.Homotopy** 是 Mathlib 中的一个缩写定义，位于命名空间 `Path`。
+形式化陈述：Homotopy (p₀ p₁ : Path x₀ x₁)
+参数：p₀ p₁ : Path x₀ x₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Homotopy
-  signature: (p₀ p₁ : Path x₀ x₁)
-  body: ContinuousMap.HomotopyRel p₀.toContinuousMap p₁.toContinuousMap {0, 1}
-
-中文:
-缩写 同伦
-  签名: (p₀ p₁ : 道路 x₀ x₁)
-  定义体: ContinuousMap.HomotopyRel p₀.toContinuousMap p₁.toContinuousMap {0, 1}
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel, HomotopyRel, toContinuousMap
+--- 原说明 ---
+The type of homotopies between two paths.
 -/
 abbrev Homotopy (p₀ p₁ : Path x₀ x₁) :=
   ContinuousMap.HomotopyRel p₀.toContinuousMap p₁.toContinuousMap {0, 1}
@@ -69,75 +65,45 @@ section
 
 variable {p₀ p₁ : Path x₀ x₁}
 
-/--
-theorem `coeFn_injective` / 定理 `coeFn_injective`
-
-English:
-theorem coeFn_injective
-  statement: @Function.Injective (Homotopy p₀ p₁) (I × I -> X) (⇑)
-  proof: DFunLike.coe_injective
-
-@[simp]
-
-中文:
-定理 coeFn_injective
-  结论: @函数.单射 (同伦 p₀ p₁) (I × I -> X) (⇑)
-  证明: DFunLike.coe_injective
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Path.Homotopy.coeFn_injective** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：coeFn_injective : @Function.Injective (Homotopy p₀ p₁) (I × I -> X) (⇑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coeFn_injective : @Function.Injective (Homotopy p₀ p₁) (I × I -> X) (⇑) :=
+theorem coeFn_injective : @Function.Injective (Homotopy p₀ p₁) (I × I → X) (⇑) :=
   DFunLike.coe_injective
 
 @[simp]
-/--
-theorem `source` / 定理 `source`
-
-English:
-theorem source
-  given: (F : Homotopy p₀ p₁) (t : I)
-  statement: F (t, 0) = x₀
-  proof: calc F (t, 0) = p₀ 0 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inl rfl)
-  _ = x₀ := p₀.source
-
-@[simp]
-
-中文:
-定理 source
-  条件: (F : 同伦 p₀ p₁) (t : I)
-  结论: F (t, 0) = x₀
-  证明: calc F (t, 0) = p₀ 0 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inl rfl)
-  _ = x₀ := p₀.source
-
-@[simp]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.eq_fst, HomotopyRel, eq_fst, source
+/-
+**Path.Homotopy.source** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：source (F : Homotopy p₀ p₁) (t : I) : F (t, 0) = x₀
+参数：F : Homotopy p₀ p₁；t : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.HomotopyRel.eq_fst`：eq_fst (F : HomotopyRel f₀ f₁ S) (t : 
+I) {x : X} (hx : x in S) : F (t, x) = f₀ x
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
 -/
 theorem source (F : Homotopy p₀ p₁) (t : I) : F (t, 0) = x₀ :=
   calc F (t, 0) = p₀ 0 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inl rfl)
   _ = x₀ := p₀.source
 
 @[simp]
-/--
-theorem `target` / 定理 `target`
-
-English:
-theorem target
-  given: (F : Homotopy p₀ p₁) (t : I)
-  statement: F (t, 1) = x₁
-  proof: calc F (t, 1) = p₀ 1 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inr rfl)
-  _ = x₁ := p₀.target
-
-中文:
-定理 target
-  条件: (F : 同伦 p₀ p₁) (t : I)
-  结论: F (t, 1) = x₁
-  证明: calc F (t, 1) = p₀ 1 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inr rfl)
-  _ = x₁ := p₀.target
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.eq_fst, HomotopyRel, eq_fst, target
+/-
+**Path.Homotopy.target** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：target (F : Homotopy p₀ p₁) (t : I) : F (t, 1) = x₁
+参数：F : Homotopy p₀ p₁；t : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.HomotopyRel.eq_fst`：eq_fst (F : HomotopyRel f₀ f₁ S) (t : 
+I) {x : X} (hx : x in S) : F (t, x) = f₀ x
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
 -/
 theorem target (F : Homotopy p₀ p₁) (t : I) : F (t, 1) = x₁ :=
   calc F (t, 1) = p₀ 1 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inr rfl)
@@ -146,28 +112,15 @@ theorem target (F : Homotopy p₀ p₁) (t : I) : F (t, 1) = x₁ :=
 /-- Evaluating a path homotopy at an intermediate point, giving us a `Path`.
 -/
 @[simps]
-/--
-Definition of `eval` / `eval` 的定义
+/-
+**Path.Homotopy.eval** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：eval (F : Homotopy p₀ p₁) (t : I) : Path x₀ x₁ where toFun
+参数：F : Homotopy p₀ p₁；t : I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (F : Homotopy p₀ p₁) (t : I)
-  body: F.toHomotopy.curry t
-  source' := by simp
-  target' := by simp
-
-@[simp]
-
-中文:
-定义 eval
-  签名: (F : 同伦 p₀ p₁) (t : I)
-  定义体: F.toHomotopy.curry t
-  source' := by simp
-  target' := by simp
-
-@[simp]
-
-Depends on / 依赖: F.toHomotopy.curry, toHomotopy
+--- 原说明 ---
+Evaluating a path homotopy at an intermediate point, giving us a `Path`.
 -/
 def eval (F : Homotopy p₀ p₁) (t : I) : Path x₀ x₁ where
   toFun := F.toHomotopy.curry t
@@ -175,52 +128,58 @@ def eval (F : Homotopy p₀ p₁) (t : I) : Path x₀ x₁ where
   target' := by simp
 
 @[simp]
-/--
-theorem `eval_zero` / 定理 `eval_zero`
-
-English:
-theorem eval_zero
-  given: (F : Homotopy p₀ p₁)
-  statement: F.eval 0 = p₀
-  proof: by
-  ext t
-  simp
-
-@[simp]
-
-中文:
-定理 eval_zero
-  条件: (F : 同伦 p₀ p₁)
-  结论: F.eval 0 = p₀
-  证明: by
-  ext t
-  simp
-
-@[simp]
+/-
+**Path.Homotopy.eval_zero** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：eval_zero (F : Homotopy p₀ p₁) : F.eval 0 = p₀
+参数：F : Homotopy p₀ p₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.Homotopy.eval_apply`：∀ {X : Type u} [inst : TopologicalSpace X] {x₀
+ x₁ : X} {p₀ p₁ : Path x₀ x₁} (F : p₀.Homotopy p₁) (t a : ↑unitInterval),   (F.e
+val t) a = (F.…
+· 使用定理 `ContinuousMap.Homotopy.curry_zero`：∀ {X : Type u} {Y : Type v} [inst : T
+opologicalSpace X] [inst_1 : TopologicalSpace Y] {f₀ f₁ : C(X, Y)}   (F : f₀.Hom
+otopy f₁), F.curry 0 = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_zero (F : Homotopy p₀ p₁) : F.eval 0 = p₀ := by
   ext t
   simp
 
 @[simp]
-/--
-theorem `eval_one` / 定理 `eval_one`
-
-English:
-theorem eval_one
-  given: (F : Homotopy p₀ p₁)
-  statement: F.eval 1 = p₁
-  proof: by
-  ext t
-  simp
-
-中文:
-定理 eval_one
-  条件: (F : 同伦 p₀ p₁)
-  结论: F.eval 1 = p₁
-  证明: by
-  ext t
-  simp
+/-
+**Path.Homotopy.eval_one** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：eval_one (F : Homotopy p₀ p₁) : F.eval 1 = p₁
+参数：F : Homotopy p₀ p₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.Homotopy.eval_apply`：∀ {X : Type u} [inst : TopologicalSpace X] {x₀
+ x₁ : X} {p₀ p₁ : Path x₀ x₁} (F : p₀.Homotopy p₁) (t a : ↑unitInterval),   (F.e
+val t) a = (F.…
+· 使用定理 `ContinuousMap.Homotopy.curry_one`：∀ {X : Type u} {Y : Type v} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] {f₀ f₁ : C(X, Y)}   (F : f₀.Homo
+topy f₁), F.curry 1 = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_one (F : Homotopy p₀ p₁) : F.eval 1 = p₁ := by
   ext t
@@ -235,20 +194,15 @@ variable {p₀ p₁ p₂ : Path x₀ x₁}
 /-- Given a path `p`, we can define a `Homotopy p p` by `F (t, x) = p x`.
 -/
 @[simps!]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**Path.Homotopy.refl** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：refl (p : Path x₀ x₁) : Homotopy p p
+参数：p : Path x₀ x₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (p : Path x₀ x₁)
-  body: ContinuousMap.HomotopyRel.refl p.toContinuousMap {0, 1}
-
-中文:
-定义 refl
-  签名: (p : 道路 x₀ x₁)
-  定义体: ContinuousMap.HomotopyRel.refl p.toContinuousMap {0, 1}
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.refl, HomotopyRel, p.toContinuousMap, toContinuousMap
+--- 原说明 ---
+Given a path `p`, we can define a `Homotopy p p` by `F (t, x) = p x`.
 -/
 def refl (p : Path x₀ x₁) : Homotopy p p :=
   ContinuousMap.HomotopyRel.refl p.toContinuousMap {0, 1}
@@ -256,122 +210,94 @@ def refl (p : Path x₀ x₁) : Homotopy p p :=
 /-- Given a `Homotopy p₀ p₁`, we can define a `Homotopy p₁ p₀` by reversing the homotopy.
 -/
 @[simps!]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**Path.Homotopy.symm** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：symm (F : Homotopy p₀ p₁) : Homotopy p₁ p₀
+参数：F : Homotopy p₀ p₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: (F : Homotopy p₀ p₁)
-  body: ContinuousMap.HomotopyRel.symm F
-
-@[simp]
-
-中文:
-定义 symm
-  签名: (F : 同伦 p₀ p₁)
-  定义体: ContinuousMap.HomotopyRel.symm F
-
-@[simp]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.symm, HomotopyRel
+--- 原说明 ---
+Given a `Homotopy p₀ p₁`, we can define a `Homotopy p₁ p₀` by reversing the homo
+topy.
 -/
 def symm (F : Homotopy p₀ p₁) : Homotopy p₁ p₀ :=
   ContinuousMap.HomotopyRel.symm F
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (F : Homotopy p₀ p₁)
-  statement: F.symm.symm = F
-  proof: ContinuousMap.HomotopyRel.symm_symm F
-
-中文:
-定理 symm_symm
-  条件: (F : 同伦 p₀ p₁)
-  结论: F.symm.symm = F
-  证明: ContinuousMap.HomotopyRel.symm_symm F
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.symm_symm, HomotopyRel, symm_symm
+/-
+**Path.Homotopy.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：symm_symm (F : Homotopy p₀ p₁) : F.symm.symm = F
+参数：F : Homotopy p₀ p₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.HomotopyRel.symm_symm`：symm_symm (F : HomotopyRel f₀ f₁ S)
+ : F.symm.symm = F
 -/
 theorem symm_symm (F : Homotopy p₀ p₁) : F.symm.symm = F :=
   ContinuousMap.HomotopyRel.symm_symm F
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (Homotopy.symm : Homotopy p₀ p₁ -> Homotopy p₁ p₀)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (同伦.symm : 同伦 p₀ p₁ -> 同伦 p₁ p₀)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**Path.Homotopy.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：symm_bijective : Function.Bijective (Homotopy.symm : Homotopy p₀ p₁ -> Hom
+otopy p₁ p₀)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `Path.Homotopy.symm_symm`：symm_symm (F : Homotopy p₀ p₁) : F.symm.symm = 
+F
 -/
-theorem symm_bijective : Function.Bijective (Homotopy.symm : Homotopy p₀ p₁ -> Homotopy p₁ p₀) :=
+theorem symm_bijective : Function.Bijective (Homotopy.symm : Homotopy p₀ p₁ → Homotopy p₁ p₀) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 /--
-Definition of `trans` / `trans` 的定义
+Given `Homotopy p₀ p₁` and `Homotopy p₁ p₂`, we can define a `Homotopy p₀ p₂` by putting the first
+homotopy on `[0, 1/2]` and the second on `[1/2, 1]`.
+-/
+/-
+**Path.Homotopy.trans** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：trans (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) : Homotopy p₀ p₂
+参数：F : Homotopy p₀ p₁；G : Homotopy p₁ p₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂)
-  body: ContinuousMap.HomotopyRel.trans F G
-
-中文:
-定义 trans
-  签名: (F : 同伦 p₀ p₁) (G : 同伦 p₁ p₂)
-  定义体: ContinuousMap.HomotopyRel.trans F G
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.trans, HomotopyRel
+--- 原说明 ---
+Given `Homotopy p₀ p₁` and `Homotopy p₁ p₂`, we can define a `Homotopy p₀ p₂` by
+ putting the first
+homotopy on `[0, 1/2]` and the second on `[1/2, 1]`.
 -/
 def trans (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) : Homotopy p₀ p₂ :=
   ContinuousMap.HomotopyRel.trans F G
-
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) (x : I × I)
-  proof: ContinuousMap.HomotopyRel.trans_apply _ _ _
-
-中文:
-定理 trans_apply
-  条件: (F : 同伦 p₀ p₁) (G : 同伦 p₁ p₂) (x : I × I)
-  证明: ContinuousMap.HomotopyRel.trans_apply _ _ _
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.trans_apply, HomotopyRel, trans_apply
+/-
+**Path.Homotopy.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：trans_apply (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) (x : I × I) : (F.tra
+ns G) x = if h : (x.1 : Real) <= 1 / 2 then F (⟨2 * x.1, (unitInterval.mul_pos_m
+em_iff zero_lt_two).2 ⟨x.1.2.1, h⟩⟩, x.2) else G (⟨2 * x.1 - 1, unitInterval.two
+_mul_sub_one_mem_iff.2 ⟨(not_le.1 h).le, x.1.2.2⟩⟩, x.2)
+参数：F : Homotopy p₀ p₁；G : Homotopy p₁ p₂；x : I × I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.HomotopyRel.trans_apply`：trans_apply (F : HomotopyRel f₀ f
+₁ S) (G : HomotopyRel f₁ f₂ S) (x : I × X) : (F.trans G) x = if h : (x.1 : Real)
+ <= 1 / 2 then F (⟨2 * x.1,…
 -/
 theorem trans_apply (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) (x : I × I) :
     (F.trans G) x =
-      if h : (x.1 : Real) <= 1 / 2 then
+      if h : (x.1 : ℝ) ≤ 1 / 2 then
         F (⟨2 * x.1, (unitInterval.mul_pos_mem_iff zero_lt_two).2 ⟨x.1.2.1, h⟩⟩, x.2)
       else
         G (⟨2 * x.1 - 1, unitInterval.two_mul_sub_one_mem_iff.2 ⟨(not_le.1 h).le, x.1.2.2⟩⟩, x.2) :=
   ContinuousMap.HomotopyRel.trans_apply _ _ _
-
-/--
-theorem `symm_trans` / 定理 `symm_trans`
-
-English:
-theorem symm_trans
-  given: (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂)
-  proof: ContinuousMap.HomotopyRel.symm_trans _ _
-
-中文:
-定理 symm_trans
-  条件: (F : 同伦 p₀ p₁) (G : 同伦 p₁ p₂)
-  证明: ContinuousMap.HomotopyRel.symm_trans _ _
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.symm_trans, HomotopyRel, symm_trans
+/-
+**Path.Homotopy.symm_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：symm_trans (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) : (F.trans G).symm = 
+G.symm.trans F.symm
+参数：F : Homotopy p₀ p₁；G : Homotopy p₁ p₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.HomotopyRel.symm_trans`：symm_trans (F : HomotopyRel f₀ f₁ 
+S) (G : HomotopyRel f₁ f₂ S) : (F.trans G).symm = G.symm.trans F.symm
 -/
 theorem symm_trans (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) :
     (F.trans G).symm = G.symm.trans F.symm :=
@@ -379,20 +305,16 @@ theorem symm_trans (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) :
 
 /-- Casting a `Homotopy p₀ p₁` to a `Homotopy q₀ q₁` where `p₀ = q₀` and `p₁ = q₁`. -/
 @[simps!]
-/--
-Definition of `cast` / `cast` 的定义
+/-
+**Path.Homotopy.cast** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：cast {p₀ p₁ q₀ q₁ : Path x₀ x₁} (F : Homotopy p₀ p₁) (h₀ : p₀ = q₀) (h₁ : 
+p₁ = q₁) : Homotopy q₀ q₁
+参数：F : Homotopy p₀ p₁；h₀ : p₀ = q₀；h₁ : p₁ = q₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cast
-  signature: {p₀ p₁ q₀ q₁ : Path x₀ x₁} (F : Homotopy p₀ p₁) (h₀ : p₀ = q₀) (h₁ : p₁ = q₁)
-  body: ContinuousMap.HomotopyRel.cast F (congr_arg _ h₀) (congr_arg _ h₁)
-
-中文:
-定义 cast
-  签名: {p₀ p₁ q₀ q₁ : 道路 x₀ x₁} (F : 同伦 p₀ p₁) (h₀ : p₀ = q₀) (h₁ : p₁ = q₁)
-  定义体: ContinuousMap.HomotopyRel.cast F (congr_arg _ h₀) (congr_arg _ h₁)
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.cast, HomotopyRel, congr_arg
+--- 原说明 ---
+Casting a `Homotopy p₀ p₁` to a `Homotopy q₀ q₁` where `p₀ = q₀` and `p₁ = q₁`.
 -/
 def cast {p₀ p₁ q₀ q₁ : Path x₀ x₁} (F : Homotopy p₀ p₁) (h₀ : p₀ = q₀) (h₁ : p₁ = q₁) :
     Homotopy q₀ q₁ :=
@@ -401,18 +323,17 @@ def cast {p₀ p₁ q₀ q₁ : Path x₀ x₁} (F : Homotopy p₀ p₁) (h₀ :
 /-- If paths `p` and `q` are homotopic as paths `x ⟶ y`,
 then they are homotopic as paths `x' ⟶ y'`, where `x' = x` and `y' = y`. -/
 @[simp]
-/--
-Definition of `pathCast` / `pathCast` 的定义
+/-
+**Path.Homotopy.pathCast** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：pathCast {x x' y y' : X} {p q : Path x y} (F : p.Homotopy q) (hx : x' = x)
+ (hy : y' = y) : (p.cast hx hy).Homotopy (q.cast hx hy)
+参数：F : p.Homotopy q；hx : x' = x；hy : y' = y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pathCast
-  signature: {x x' y y' : X} {p q : Path x y} (F : p.Homotopy q) (hx : x' = x) (hy : y' = y)
-  body: F
-
-中文:
-定义 pathCast
-  签名: {x x' y y' : X} {p q : 道路 x y} (F : p.同伦 q) (hx : x' = x) (hy : y' = y)
-  定义体: F
+--- 原说明 ---
+If paths `p` and `q` are homotopic as paths `x ⟶ y`,
+then they are homotopic as paths `x' ⟶ y'`, where `x' = x` and `y' = y`.
 -/
 def pathCast {x x' y y' : X} {p q : Path x y} (F : p.Homotopy q) (hx : x' = x) (hy : y' = y) :
     (p.cast hx hy).Homotopy (q.cast hx hy) :=
@@ -424,47 +345,31 @@ section
 
 variable {p₀ q₀ : Path x₀ x₁} {p₁ q₁ : Path x₁ x₂}
 
-/--
-Definition of `hcomp` / `hcomp` 的定义
+/-- Suppose `p₀` and `q₀` are paths from `x₀` to `x₁`, `p₁` and `q₁` are paths from `x₁` to `x₂`.
+Furthermore, suppose `F : Homotopy p₀ q₀` and `G : Homotopy p₁ q₁`. Then we can define a homotopy
+from `p₀.trans p₁` to `q₀.trans q₁`.
+-/
+/-
+**Path.Homotopy.hcomp** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：hcomp (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) : Homotopy (p₀.trans p₁) (
+q₀.trans q₁) where toFun x
+参数：F : Homotopy p₀ q₀；G : Homotopy p₁ q₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hcomp
-  signature: (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁)
-  body: if (x.2 : Real) <= 1 / 2 then (F.eval x.1).extend (2 * x.2) else (G.eval x.1).extend (2 * x.2 - 1)
-  continuous_toFun := continuous_if_le (continuous_induced_dom.comp continuous_snd) continuous_const
-    (F.toHomotopy.continuous.comp (by fun_prop)).continuousOn
-    (G.toHomotopy.continuous.comp (by fun_prop)).continuousOn fun x hx => by norm_num [hx]
-  map_zero_left x := by simp [Path.trans]
-  map_one_left x := by simp [Path.trans]
-  prop' x t ht := by
-    rcases ht with ht | ht
-    · norm_num [ht]
-    · rw [Set.mem_singleton_iff] at ht
-      norm_num [ht]
-
-中文:
-定义 hcomp
-  签名: (F : 同伦 p₀ q₀) (G : 同伦 p₁ q₁)
-  定义体: if (x.2 : Real) <= 1 / 2 then (F.eval x.1).extend (2 * x.2) else (G.eval x.1).extend (2 * x.2 - 1)
-  continuous_toFun := continuous_if_le (continuous_induced_dom.comp continuous_snd) continuous_const
-    (F.toHomotopy.continuous.comp (by fun_prop)).continuousOn
-    (G.toHomotopy.continuous.comp (by fun_prop)).continuousOn fun x hx => by norm_num [hx]
-  map_zero_left x := by simp [Path.trans]
-  map_one_left x := by simp [Path.trans]
-  prop' x t ht := by
-    rcases ht with ht | ht
-    · norm_num [ht]
-    · rw [Set.mem_singleton_iff] at ht
-      norm_num [ht]
-
-Depends on / 依赖: F.eval, F.toHomotopy.continuous.comp, G.eval, G.toHomotopy.continuous.comp, Path.trans, Set.mem_single, continuous, continuousOn, continuous_const, continuous_if_le, continuous_induced_dom, continuous_induced_dom.comp, continuous_snd, continuous_toFun, extend, fun_prop, map_one_left, map_zero_left, mem_single, toHomotopy
+--- 原说明 ---
+Suppose `p₀` and `q₀` are paths from `x₀` to `x₁`, `p₁` and `q₁` are paths from 
+`x₁` to `x₂`.
+Furthermore, suppose `F : Homotopy p₀ q₀` and `G : Homotopy p₁ q₁`. Then we can 
+define a homotopy
+from `p₀.trans p₁` to `q₀.trans q₁`.
 -/
 def hcomp (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) : Homotopy (p₀.trans p₁) (q₀.trans q₁) where
   toFun x :=
-    if (x.2 : Real) <= 1 / 2 then (F.eval x.1).extend (2 * x.2) else (G.eval x.1).extend (2 * x.2 - 1)
+    if (x.2 : ℝ) ≤ 1 / 2 then (F.eval x.1).extend (2 * x.2) else (G.eval x.1).extend (2 * x.2 - 1)
   continuous_toFun := continuous_if_le (continuous_induced_dom.comp continuous_snd) continuous_const
     (F.toHomotopy.continuous.comp (by fun_prop)).continuousOn
-    (G.toHomotopy.continuous.comp (by fun_prop)).continuousOn fun x hx => by norm_num [hx]
+    (G.toHomotopy.continuous.comp (by fun_prop)).continuousOn fun x hx ↦ by norm_num [hx]
   map_zero_left x := by simp [Path.trans]
   map_one_left x := by simp [Path.trans]
   prop' x t ht := by
@@ -472,43 +377,130 @@ def hcomp (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) : Homotopy (p₀.tra
     · norm_num [ht]
     · rw [Set.mem_singleton_iff] at ht
       norm_num [ht]
-
-/--
-theorem `hcomp_apply` / 定理 `hcomp_apply`
-
-English:
-theorem hcomp_apply
-  given: (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (x : I × I)
-  proof: show ite _ _ _ = _ by split_ifs <;> exact Path.extend_apply _ _
-
-中文:
-定理 hcomp_apply
-  条件: (F : 同伦 p₀ q₀) (G : 同伦 p₁ q₁) (x : I × I)
-  证明: show ite _ _ _ = _ by split_ifs <;> exact Path.extend_apply _ _
-
-Depends on / 依赖: Path.extend_apply, extend_apply, split_ifs
+/-
+**Path.Homotopy.hcomp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：hcomp_apply (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (x : I × I) : F.hcom
+p G x = if h : (x.2 : Real) <= 1 / 2 then F.eval x.1 ⟨2 * x.2, (unitInterval.mul
+_pos_mem_iff zero_lt_two).2 ⟨x.2.2.1, h⟩⟩ else G.eval x.1 ⟨2 * x.2 - 1, unitInte
+rval.two_mul_sub_one_mem_iff.2 ⟨(not_le.1 h).le, x.2.2.2⟩⟩
+参数：F : Homotopy p₀ q₀；G : Homotopy p₁ q₁；x : I × I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `unitInterval.mul_pos_mem_iff`：mul_pos_mem_iff {a t : Real} (ha : 0 < a) 
+: a * t in I ↔ t in Set.Icc (0 : Real) (1 / a)
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `unitInterval.two_mul_sub_one_mem_iff`：two_mul_sub_one_mem_iff {t : Real}
+ : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Path.extend_apply`：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht 
+: t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem hcomp_apply (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (x : I × I) :
     F.hcomp G x =
-      if h : (x.2 : Real) <= 1 / 2 then
+      if h : (x.2 : ℝ) ≤ 1 / 2 then
         F.eval x.1 ⟨2 * x.2, (unitInterval.mul_pos_mem_iff zero_lt_two).2 ⟨x.2.2.1, h⟩⟩
       else
         G.eval x.1
           ⟨2 * x.2 - 1, unitInterval.two_mul_sub_one_mem_iff.2 ⟨(not_le.1 h).le, x.2.2.2⟩⟩ :=
   show ite _ _ _ = _ by split_ifs <;> exact Path.extend_apply _ _
-
-/--
-theorem `hcomp_half` / 定理 `hcomp_half`
-
-English:
-theorem hcomp_half
-  given: (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (t : I)
-  proof: show ite _ _ _ = _ by norm_num
-
-中文:
-定理 hcomp_half
-  条件: (F : 同伦 p₀ q₀) (G : 同伦 p₁ q₁) (t : I)
-  证明: show ite _ _ _ = _ by norm_num
+/-
+**Path.Homotopy.hcomp_half** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopy`。
+形式化陈述：hcomp_half (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (t : I) : F.hcomp G (
+t, ⟨1 / 2, by norm_num, by norm_num⟩) = x₁
+参数：F : Homotopy p₀ q₀；G : Homotopy p₁ q₁；t : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Mathlib.Meta.NormNum.isRat_le_true`：isRat_le_true [Ring α] [LinearOrder 
+α] [IsStrictOrderedRing α] : {a b : α} -> {na nb : Int} -> {da db : Nat} -> IsRa
+t a na da -> IsRat b nb …
+· 使用定理 `Mathlib.Meta.NormNum.IsNNRat.to_isRat`：∀ {α : Type u_1} [inst : Ring α] 
+{a : α} {n d : ℕ},   Mathlib.Meta.NormNum.IsNNRat a n d → Mathlib.Meta.NormNum.I
+sRat a (Int.ofNat n) d
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_div`：∀ {α : Type u} [inst : DivisionSemirin
+g α] {a b : α} {cn cd : ℕ},   Mathlib.Meta.NormNum.IsNNRat (a * b⁻¹) cn cd → Mat
+hlib.Meta.NormNum.IsNN…
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_mul`：isNNRat_mul {α} [Semiring α] {f : α ->
+ α -> α} {a b : α} {na nb nc : Nat} {da db dc k : Nat} : f = HMul.hMul -> IsNNRa
+t a na da -> IsNNRat b…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isNNRat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsN
+NRat a n 1
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_inv_pos`：isNNRat_inv_pos {α} [DivisionSemir
+ing α] [CharZero α] {a : α} {n d : Nat} : IsNNRat a (Nat.succ n) d -> IsNNRat a⁻
+¹ d (Nat.succ n)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Mathlib.Meta.NormNum.isNat_le_true`：∀ {α : Type u_1} [inst : Semiring α]
+ [inst_1 : PartialOrder α] [IsOrderedRing α] {a b : α} {a' b' : ℕ},   Mathlib.Me
+ta.NormNum.IsNat a a' → …
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Mathlib.Meta.NormNum.IsNNRat.to_isNat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNNRat a n 1 → Mathlib.Meta.NormNum
+.IsNat a n
+· 使用定理 `Path.extend_apply`：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht 
+: t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_sub`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HSub.hSub →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
+（共 32 条，此处仅展示前 30 条）
 -/
 theorem hcomp_half (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (t : I) :
     F.hcomp G (t, ⟨1 / 2, by norm_num, by norm_num⟩) = x₁ :=
@@ -517,46 +509,24 @@ theorem hcomp_half (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (t : I) :
 end
 
 /--
-Definition of `reparam` / `reparam` 的定义
-
-English:
-definition reparam
-  signature: (p : Path x₀ x₁) (f : I -> I) (hf : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
-  body: p ⟨σ x.1 * x.2 + x.1 * f x.2,
-    show (σ x.1 : Real) • (x.2 : Real) + (x.1 : Real) • (f x.2 : Real) in I from
-      convex_Icc _ _ x.2.2 (f x.2).2 (by unit_interval) (by unit_interval) (by simp)⟩
-  map_zero_left x := by norm_num
-  map_one_left x := by norm_num
-  prop' t x hx := by
-    rcases hx with hx | hx
-    · rw [hx]
-      simp [hf₀]
-    · rw [Set.mem_singleton_iff] at hx
-      rw [hx]
-      simp [hf₁]
-  continuous_toFun := by fun_prop
-
-中文:
-定义 reparam
-  签名: (p : 道路 x₀ x₁) (f : I -> I) (hf : 连续 f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
-  定义体: p ⟨σ x.1 * x.2 + x.1 * f x.2,
-    show (σ x.1 : Real) • (x.2 : Real) + (x.1 : Real) • (f x.2 : Real) in I from
-      convex_Icc _ _ x.2.2 (f x.2).2 (by unit_interval) (by unit_interval) (by simp)⟩
-  map_zero_left x := by norm_num
-  map_one_left x := by norm_num
-  prop' t x hx := by
-    rcases hx with hx | hx
-    · rw [hx]
-      simp [hf₀]
-    · rw [Set.mem_singleton_iff] at hx
-      rw [hx]
-      simp [hf₁]
-  continuous_toFun := by fun_prop
+Suppose `p` is a path, then we have a homotopy from `p` to `p.reparam f` by the convexity of `I`.
 -/
-def reparam (p : Path x₀ x₁) (f : I -> I) (hf : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1) :
+/-
+**Path.Homotopy.reparam** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：reparam (p : Path x₀ x₁) (f : I -> I) (hf : Continuous f) (hf₀ : f 0 = 0) 
+(hf₁ : f 1 = 1) : Homotopy p (p.reparam f hf hf₀ hf₁) where toFun x
+参数：p : Path x₀ x₁；f : I -> I；hf : Continuous f；hf₀ : f 0 = 0；hf₁ : f 1 = 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Suppose `p` is a path, then we have a homotopy from `p` to `p.reparam f` by the 
+convexity of `I`.
+-/
+def reparam (p : Path x₀ x₁) (f : I → I) (hf : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1) :
     Homotopy p (p.reparam f hf hf₀ hf₁) where
   toFun x := p ⟨σ x.1 * x.2 + x.1 * f x.2,
-    show (σ x.1 : Real) • (x.2 : Real) + (x.1 : Real) • (f x.2 : Real) in I from
+    show (σ x.1 : ℝ) • (x.2 : ℝ) + (x.1 : ℝ) • (f x.2 : ℝ) ∈ I from
       convex_Icc _ _ x.2.2 (f x.2).2 (by unit_interval) (by unit_interval) (by simp)⟩
   map_zero_left x := by norm_num
   map_one_left x := by norm_num
@@ -573,36 +543,17 @@ def reparam (p : Path x₀ x₁) (f : I -> I) (hf : Continuous f) (hf₀ : f 0 =
 argument.
 -/
 @[simps]
-/--
-Definition of `symm₂` / `symm₂` 的定义
+/-
+**Path.Homotopy.symm** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：symm (F : Homotopy p₀ p₁) : Homotopy p₁ p₀
+参数：F : Homotopy p₀ p₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm₂
-  signature: {p q : Path x₀ x₁} (F : p.Homotopy q)
-  body: F ⟨x.1, σ x.2⟩
-  map_zero_left := by simp [Path.symm]
-  map_one_left := by simp [Path.symm]
-  prop' t x hx := by
-    rcases hx with hx | hx
-    · rw [hx]
-      simp
-    · rw [Set.mem_singleton_iff] at hx
-      rw [hx]
-      simp
-
-中文:
-定义 symm₂
-  签名: {p q : 道路 x₀ x₁} (F : p.同伦 q)
-  定义体: F ⟨x.1, σ x.2⟩
-  map_zero_left := by simp [Path.symm]
-  map_one_left := by simp [Path.symm]
-  prop' t x hx := by
-    rcases hx with hx | hx
-    · rw [hx]
-      simp
-    · rw [Set.mem_singleton_iff] at hx
-      rw [hx]
-      simp
+--- 原说明 ---
+Suppose `F : Homotopy p q`. Then we have a `Homotopy p.symm q.symm` by reversing
+ the second
+argument.
 -/
 def symm₂ {p q : Path x₀ x₁} (F : p.Homotopy q) : p.symm.Homotopy q.symm where
   toFun x := F ⟨x.1, σ x.2⟩
@@ -621,32 +572,20 @@ Given `F : Homotopy p q`, and `f : C(X, Y)`, we can define a homotopy from `p.ma
 `q.map f.continuous`.
 -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**Path.Homotopy.map** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopy`。
+形式化陈述：map {p q : Path x₀ x₁} (F : p.Homotopy q) (f : C(X, Y)) : Homotopy (p.map 
+f.continuous) (q.map f.continuous) where toFun
+参数：F : p.Homotopy q；f : C(X, Y)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 
-English:
-definition map
-  signature: {p q : Path x₀ x₁} (F : p.Homotopy q) (f : C(X, Y))
-  body: f ∘ F
-  map_zero_left := by simp
-  map_one_left := by simp
-  prop' t x hx := by
-    rcases hx with hx | hx
-    · simp [hx]
-    · rw [Set.mem_singleton_iff] at hx
-      simp [hx]
-
-中文:
-定义 map
-  签名: {p q : 道路 x₀ x₁} (F : p.同伦 q) (f : C(X, Y))
-  定义体: f ∘ F
-  map_zero_left := by simp
-  map_one_left := by simp
-  prop' t x hx := by
-    rcases hx with hx | hx
-    · simp [hx]
-    · rw [Set.mem_singleton_iff] at hx
-      simp [hx]
+--- 原说明 ---
+Given `F : Homotopy p q`, and `f : C(X, Y)`, we can define a homotopy from `p.ma
+p f.continuous` to
+`q.map f.continuous`.
 -/
 def map {p q : Path x₀ x₁} (F : p.Homotopy q) (f : C(X, Y)) :
     Homotopy (p.map f.continuous) (q.map f.continuous) where
@@ -661,20 +600,18 @@ def map {p q : Path x₀ x₁} (F : p.Homotopy q) (f : C(X, Y)) :
 
 end Homotopy
 
-/--
-Definition of `Homotopic` / `Homotopic` 的定义
+/-- Two paths `p₀` and `p₁` are `Path.Homotopic` if there exists a `Homotopy` between them.
+-/
+/-
+**Path.Homotopic** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：Homotopic (p₀ p₁ : Path x₀ x₁) : Prop
+参数：p₀ p₁ : Path x₀ x₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Homotopic
-  signature: (p₀ p₁ : Path x₀ x₁)
-  body: Nonempty (p₀.Homotopy p₁)
-
-中文:
-定义 同伦
-  签名: (p₀ p₁ : 道路 x₀ x₁)
-  定义体: Nonempty (p₀.Homotopy p₁)
-
-Depends on / 依赖: Homotopy, Nonempty
+--- 原说明 ---
+Two paths `p₀` and `p₁` are `Path.Homotopic` if there exists a `Homotopy` betwee
+n them.
 -/
 def Homotopic (p₀ p₁ : Path x₀ x₁) : Prop :=
   Nonempty (p₀.Homotopy p₁)
@@ -682,137 +619,69 @@ def Homotopic (p₀ p₁ : Path x₀ x₁) : Prop :=
 namespace Homotopic
 
 @[refl]
-/--
-theorem `refl` / 定理 `refl`
-
-English:
-theorem refl
-  given: (p : Path x₀ x₁)
-  statement: p.Homotopic p
-  proof: ⟨Homotopy.refl p⟩
-
-@[symm]
-
-中文:
-定理 refl
-  条件: (p : 道路 x₀ x₁)
-  结论: p.同伦 p
-  证明: ⟨Homotopy.refl p⟩
-
-@[symm]
-
-Depends on / 依赖: Homotopy, Homotopy.refl
+/-
+**Path.Homotopic.refl** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：refl (p : Path x₀ x₁) : p.Homotopic p
+参数：p : Path x₀ x₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl (p : Path x₀ x₁) : p.Homotopic p :=
   ⟨Homotopy.refl p⟩
 
 @[symm]
-/--
-theorem `symm` / 定理 `symm`
-
-English:
-theorem symm
-  given: ⦃p₀ p₁
-  statement: Path x₀ x₁⦄ (h : p₀.Homotopic p₁) : p₁.Homotopic p₀
-  proof: h.map Homotopy.symm
-
-中文:
-定理 symm
-  条件: ⦃p₀ p₁
-  结论: 道路 x₀ x₁⦄ (h : p₀.同伦 p₁) : p₁.同伦 p₀
-  证明: h.map Homotopy.symm
-
-Depends on / 依赖: Homotopy, Homotopy.symm, h.map
+/-
+**Path.Homotopic.symm** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：symm ⦃p₀ p₁ : Path x₀ x₁⦄ (h : p₀.Homotopic p₁) : p₁.Homotopic p₀
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
 -/
 theorem symm ⦃p₀ p₁ : Path x₀ x₁⦄ (h : p₀.Homotopic p₁) : p₁.Homotopic p₀ :=
   h.map Homotopy.symm
-
-/--
-theorem `symm₂` / 定理 `symm₂`
-
-English:
-theorem symm₂
-  given: {p q : Path x₀ x₁} (h : p.Homotopic q)
-  statement: p.symm.Homotopic q.symm
-  proof: h.map Homotopy.symm₂
-
-@[trans]
-
-中文:
-定理 symm₂
-  条件: {p q : 道路 x₀ x₁} (h : p.同伦 q)
-  结论: p.symm.同伦 q.symm
-  证明: h.map Homotopy.symm₂
-
-@[trans]
-
-Depends on / 依赖: Homotopy, Homotopy.symm, h.map
+/-
+**Path.Homotopic.symm** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：symm ⦃p₀ p₁ : Path x₀ x₁⦄ (h : p₀.Homotopic p₁) : p₁.Homotopic p₀
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
 -/
 theorem symm₂ {p q : Path x₀ x₁} (h : p.Homotopic q) : p.symm.Homotopic q.symm :=
   h.map Homotopy.symm₂
 
 @[trans]
-/--
-theorem `trans` / 定理 `trans`
-
-English:
-theorem trans
-  given: ⦃p₀ p₁ p₂
-  statement: Path x₀ x₁⦄ (h₀ : p₀.Homotopic p₁) (h₁ : p₁.Homotopic p₂) :
-  proof: h₀.map2 Homotopy.trans h₁
-
-中文:
-定理 trans
-  条件: ⦃p₀ p₁ p₂
-  结论: 道路 x₀ x₁⦄ (h₀ : p₀.同伦 p₁) (h₁ : p₁.同伦 p₂) :
-  证明: h₀.map2 Homotopy.trans h₁
-
-Depends on / 依赖: Homotopy, Homotopy.trans
+/-
+**Path.Homotopic.trans** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：trans ⦃p₀ p₁ p₂ : Path x₀ x₁⦄ (h₀ : p₀.Homotopic p₁) (h₁ : p₁.Homotopic p₂
+) : p₀.Homotopic p₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map2`：∀ {α : Sort u_3} {β : Sort u_4} {γ : Sort u_5} (f : α → β
+ → γ), Nonempty α → Nonempty β → Nonempty γ
 -/
 theorem trans ⦃p₀ p₁ p₂ : Path x₀ x₁⦄ (h₀ : p₀.Homotopic p₁) (h₁ : p₁.Homotopic p₂) :
     p₀.Homotopic p₂ :=
   h₀.map2 Homotopy.trans h₁
-
-/--
-theorem `equivalence` / 定理 `equivalence`
-
-English:
-theorem equivalence
-  statement: Equivalence (@Homotopic X _ x₀ x₁)
-  proof: ⟨refl, (symm ·), (trans · ·)⟩
-
-中文:
-定理 equivalence
-  结论: 等价 (@同伦 X _ x₀ x₁)
-  证明: ⟨refl, (symm ·), (trans · ·)⟩
+/-
+**Path.Homotopic.equivalence** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：equivalence : Equivalence (@Homotopic X _ x₀ x₁)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.refl`：refl (p : Path x₀ x₁) : p.Homotopic p
+· 使用定理 `Path.Homotopic.symm`：symm ⦃p₀ p₁ : Path x₀ x₁⦄ (h : p₀.Homotopic p₁) : p
+₁.Homotopic p₀
+· 使用定理 `Path.Homotopic.trans`：trans ⦃p₀ p₁ p₂ : Path x₀ x₁⦄ (h₀ : p₀.Homotopic p
+₁) (h₁ : p₁.Homotopic p₂) : p₀.Homotopic p₂
 -/
 theorem equivalence : Equivalence (@Homotopic X _ x₀ x₁) :=
   ⟨refl, (symm ·), (trans · ·)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsEquiv (Path x₀ x₁) Homotopic
-  body: refl
-  symm := symm
-  trans := trans
-
-nonrec theorem map {p q : Path x₀ x₁} (h : p.Homotopic q) (f : C(X, Y)) :
-    Homotopic (p.map f.continuous) (q.map f.continuous) :=
-  h.map fun F => F.map f
-
-中文:
-实例 :
-  签名: Is等价 (道路 x₀ x₁) 同伦
-  定义体: refl
-  symm := symm
-  trans := trans
-
-nonrec theorem map {p q : Path x₀ x₁} (h : p.Homotopic q) (f : C(X, Y)) :
-    Homotopic (p.map f.continuous) (q.map f.continuous) :=
-  h.map fun F => F.map f
+/-
+**Path.Homotopic.** 是 Mathlib 中的一个实例，位于命名空间 `Path.Homotopic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsEquiv (Path x₀ x₁) Homotopic where
   refl := refl
@@ -822,38 +691,33 @@ instance : IsEquiv (Path x₀ x₁) Homotopic where
 nonrec theorem map {p q : Path x₀ x₁} (h : p.Homotopic q) (f : C(X, Y)) :
     Homotopic (p.map f.continuous) (q.map f.continuous) :=
   h.map fun F => F.map f
-
-/--
-theorem `hcomp` / 定理 `hcomp`
-
-English:
-theorem hcomp
-  statement: {p₀ p₁ : Path x₀ x₁} {q₀ q₁ : Path x₁ x₂} (hp : p₀.Homotopic p₁)
-  proof: hp.map2 Homotopy.hcomp hq
-
-中文:
-定理 hcomp
-  结论: {p₀ p₁ : 道路 x₀ x₁} {q₀ q₁ : 道路 x₁ x₂} (hp : p₀.同伦 p₁)
-  证明: hp.map2 Homotopy.hcomp hq
-
-Depends on / 依赖: Homotopy, Homotopy.hcomp, hp.map2
+/-
+**Path.Homotopic.hcomp** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：hcomp {p₀ p₁ : Path x₀ x₁} {q₀ q₁ : Path x₁ x₂} (hp : p₀.Homotopic p₁) (hq
+ : q₀.Homotopic q₁) : (p₀.trans q₀).Homotopic (p₁.trans q₁)
+参数：hp : p₀.Homotopic p₁；hq : q₀.Homotopic q₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map2`：∀ {α : Sort u_3} {β : Sort u_4} {γ : Sort u_5} (f : α → β
+ → γ), Nonempty α → Nonempty β → Nonempty γ
 -/
 theorem hcomp {p₀ p₁ : Path x₀ x₁} {q₀ q₁ : Path x₁ x₂} (hp : p₀.Homotopic p₁)
     (hq : q₀.Homotopic q₁) : (p₀.trans q₀).Homotopic (p₁.trans q₁) :=
   hp.map2 Homotopy.hcomp hq
 
-/--
-theorem `pathCast` / 定理 `pathCast`
+/-- If paths `p` and `q` are homotopic as paths `x ⟶ y`,
+then they are homotopic as paths `x' ⟶ y'`, where `x' = x` and `y' = y`. -/
+/-
+**Path.Homotopic.pathCast** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：pathCast {p q : Path x₀ x₁} (hpq : p.Homotopic q) (hsource : x₂ = x₀) (hta
+rget : x₃ = x₁) : (p.cast hsource htarget).Homotopic (q.cast hsource htarget)
+参数：hpq : p.Homotopic q；hsource : x₂ = x₀；htarget : x₃ = x₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem pathCast
-  given: {p q : Path x₀ x₁} (hpq : p.Homotopic q) (hsource : x₂ = x₀) (htarget : x₃ = x₁)
-  proof: hpq
-
-中文:
-定理 pathCast
-  条件: {p q : 道路 x₀ x₁} (hpq : p.同伦 q) (hsource : x₂ = x₀) (htarget : x₃ = x₁)
-  证明: hpq
+--- 原说明 ---
+If paths `p` and `q` are homotopic as paths `x ⟶ y`,
+then they are homotopic as paths `x' ⟶ y'`, where `x' = x` and `y' = y`.
 -/
 theorem pathCast {p q : Path x₀ x₁} (hpq : p.Homotopic q) (hsource : x₂ = x₀) (htarget : x₃ = x₁) :
     (p.cast hsource htarget).Homotopic (q.cast hsource htarget) :=
@@ -864,166 +728,128 @@ The setoid on `Path`s defined by the equivalence relation `Path.Homotopic`. That
 equivalent if there is a `Homotopy` between them.
 -/
 @[instance_reducible]
-/--
-Definition of `setoid` / `setoid` 的定义
+/-
+**Path.Homotopic.setoid** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：{X : Type u} → [inst : TopologicalSpace X] → (x₀ x₁ : X) → Setoid (Path x₀
+ x₁)
+参数：x₀ x₁ : X；Path x₀ x₁。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.equivalence`：equivalence : Equivalence (@Homotopic X _ x₀
+ x₁)
 
-English:
-definition setoid
-  signature: (x₀ x₁ : X)
-  body: ⟨Homotopic, equivalence⟩
-
-中文:
-定义 setoid
-  签名: (x₀ x₁ : X)
-  定义体: ⟨Homotopic, equivalence⟩
+--- 原说明 ---
+The setoid on `Path`s defined by the equivalence relation `Path.Homotopic`. That
+ is, two paths are
+equivalent if there is a `Homotopy` between them.
 -/
 protected def setoid (x₀ x₁ : X) : Setoid (Path x₀ x₁) :=
   ⟨Homotopic, equivalence⟩
 
-/--
-Definition of `Quotient` / `Quotient` 的定义
+/-- The quotient on `Path x₀ x₁` by the equivalence relation `Path.Homotopic`.
+-/
+/-
+**Path.Homotopic.Quotient** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic`。
+形式化陈述：{X : Type u} → [TopologicalSpace X] → X → X → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Quotient
-  signature: (x₀ x₁ : X)
-  body: Quotient (Homotopic.setoid x₀ x₁)
-
-中文:
-定义 商
-  签名: (x₀ x₁ : X)
-  定义体: Quotient (Homotopic.setoid x₀ x₁)
+--- 原说明 ---
+The quotient on `Path x₀ x₁` by the equivalence relation `Path.Homotopic`.
 -/
 protected def Quotient (x₀ x₁ : X) :=
   Quotient (Homotopic.setoid x₀ x₁)
 
 attribute [local instance] Homotopic.setoid
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Homotopic.Quotient () ())
-  body: ⟨Quotient.mk' Path.refl ()⟩
-
-中文:
-实例 :
-  签名: 可居 (同伦.商 () ())
-  定义体: ⟨Quotient.mk' Path.refl ()⟩
-
-Depends on / 依赖: Path.refl, Quotient, Quotient.mk
+/-
+**Path.Homotopic.** 是 Mathlib 中的一个实例，位于命名空间 `Path.Homotopic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Homotopic.Quotient () ()) :=
-⟨Quotient.mk' Path.refl ()⟩
+  ⟨Quotient.mk' <| Path.refl ()⟩
 
 namespace Quotient
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The canonical map from `Path x₀ x₁` to `Path.Homotopic.Quotient x₀ x₁`. -/
+/-
+**Path.Homotopic.Quotient.mk** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic.Quotient`
+。
+形式化陈述：mk (p : Path x₀ x₁) : Path.Homotopic.Quotient x₀ x₁
+参数：p : Path x₀ x₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 
-English:
-definition mk
-  signature: (p : Path x₀ x₁)
-  body: Quotient.mk' p
-
-中文:
-定义 mk
-  签名: (p : 道路 x₀ x₁)
-  定义体: Quotient.mk' p
-
-Depends on / 依赖: Quotient, Quotient.mk
+--- 原说明 ---
+The canonical map from `Path x₀ x₁` to `Path.Homotopic.Quotient x₀ x₁`.
 -/
 def mk (p : Path x₀ x₁) : Path.Homotopic.Quotient x₀ x₁ :=
   Quotient.mk' p
-
-/--
-theorem `mk_surjective` / 定理 `mk_surjective`
-
-English:
-theorem mk_surjective
-  statement: Function.Surjective (@mk X _ x₀ x₁)
-  proof: Quotient.mk'_surjective
-
-中文:
-定理 mk_surjective
-  结论: 函数.满射 (@mk X _ x₀ x₁)
-  证明: Quotient.mk'_surjective
-
-Depends on / 依赖: Quotient, Quotient.mk, _surjective
+/-
+**Path.Homotopic.Quotient.mk_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopi
+c.Quotient`。
+形式化陈述：mk_surjective : Function.Surjective (@mk X _ x₀ x₁)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'_surjective`：∀ {α : Sort u_1} [s : Setoid α], Function.Surje
+ctive Quotient.mk'
 -/
 theorem mk_surjective : Function.Surjective (@mk X _ x₀ x₁) :=
   Quotient.mk'_surjective
 
-/--
-theorem `mk'_eq_mk` / 定理 `mk'_eq_mk`
+/-- `Path.Homotopic.Quotient.mk` is the simp normal form. -/
+/-
+**Path.Homotopic.Quotient.mk'_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Qu
+otient`。
+形式化陈述：∀ {X : Type u} [inst : TopologicalSpace X] {x₀ x₁ : X} (p : Path x₀ x₁), Q
+uotient.mk' p = Path.Homotopic.Quotient.mk p
+参数：p : Path x₀ x₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 
-English:
-theorem mk'_eq_mk
-  given: (p : Path x₀ x₁)
-  statement: Quotient.mk' p = mk p
-  proof: rfl
-
-中文:
-定理 mk'_eq_mk
-  条件: (p : 道路 x₀ x₁)
-  结论: 商.mk' p = mk p
-  证明: rfl
+--- 原说明 ---
+`Path.Homotopic.Quotient.mk` is the simp normal form.
 -/
 @[simp] theorem mk'_eq_mk (p : Path x₀ x₁) : Quotient.mk' p = mk p := rfl
-/--
-theorem `mk''_eq_mk` / 定理 `mk''_eq_mk`
+/-
+**Path.Homotopic.Quotient.mk''_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Q
+uotient`。
+形式化陈述：∀ {X : Type u} [inst : TopologicalSpace X] {x₀ x₁ : X} (p : Path x₀ x₁), Q
+uotient.mk'' p = Path.Homotopic.Quotient.mk p
+参数：p : Path x₀ x₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 
-English:
-theorem mk''_eq_mk
-  given: (p : Path x₀ x₁)
-  statement: Quotient.mk'' p = mk p
-  proof: rfl
-
-中文:
-定理 mk''_eq_mk
-  条件: (p : 道路 x₀ x₁)
-  结论: 商.mk'' p = mk p
-  证明: rfl
+--- 原说明 ---
+`Path.Homotopic.Quotient.mk` is the simp normal form.
 -/
 @[simp] theorem mk''_eq_mk (p : Path x₀ x₁) : Quotient.mk'' p = mk p := rfl
+/-
+**Path.Homotopic.Quotient.exact** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quotie
+nt`。
+形式化陈述：exact {p q : Path x₀ x₁} (h : Quotient.mk p = Quotient.mk q) : Homotopic p
+ q
+参数：h : Quotient.mk p = Quotient.mk q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.exact`：∀ {α : Sort u} {s : Setoid α} {a b : α}, ⟦a⟧ = ⟦b⟧ → a ≈
+ b
 
-/--
-theorem `exact` / 定理 `exact`
-
-English:
-theorem exact
-  given: {p q : Path x₀ x₁} (h : Quotient.mk p = Quotient.mk q)
-  proof: by
-  exact _root_.Quotient.exact h
-
-中文:
-定理 exact
-  条件: {p q : 道路 x₀ x₁} (h : 商.mk p = 商.mk q)
-  证明: by
-  exact _root_.Quotient.exact h
-
-Depends on / 依赖: Quotient, _root_, _root_.Quotient.exact
+--- 原说明 ---
+`Path.Homotopic.Quotient.mk` is the simp normal form.
 -/
 theorem exact {p q : Path x₀ x₁} (h : Quotient.mk p = Quotient.mk q) :
     Homotopic p q := by
   exact _root_.Quotient.exact h
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: {p q : Path x₀ x₁}
-  statement: mk p = mk q ↔ Homotopic p q
-  proof: _root_.Quotient.eq
-
-中文:
-定理 eq
-  条件: {p q : 道路 x₀ x₁}
-  结论: mk p = mk q ↔ 同伦 p q
-  证明: _root_.Quotient.eq
-
-Depends on / 依赖: Quotient, _root_, _root_.Quotient.eq
+/-
+**Path.Homotopic.Quotient.eq** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quotient`
+。
+形式化陈述：eq {p q : Path x₀ x₁} : mk p = mk q ↔ Homotopic p q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 theorem eq {p q : Path x₀ x₁} : mk p = mk q ↔ Homotopic p q :=
   _root_.Quotient.eq
@@ -1033,21 +859,23 @@ A reasoning principle for quotients that allows proofs about quotients to assume
 constructed with `Quotient.mk`.
 -/
 @[induction_eliminator]
-/--
-theorem `ind` / 定理 `ind`
+/-
+**Path.Homotopic.Quotient.ind** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quotient
+`。
+形式化陈述：∀ {X : Type u} [inst : TopologicalSpace X] {x y : X} {motive : Path.Homoto
+pic.Quotient x y → Prop},   (∀ (a : Path x y), motive (Path.Homotopic.Quotient.m
+k a)) → ∀ (q : Path.Homotopic.Quotient x y), motive q
+参数：∀ (a : Path x y), motive (Path.Homotopic.Quotient.mk a)；q : Path.Homotopic.Qu
+otient x y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ind
-  given: {x y : X} {motive : Homotopic.Quotient x y -> Prop}
-  proof: Quot.ind
-
-中文:
-定理 ind
-  条件: {x y : X} {motive : 同伦.商 x y -> 命题}
-  证明: Quot.ind
+--- 原说明 ---
+A reasoning principle for quotients that allows proofs about quotients to assume
+ that all values are
+constructed with `Quotient.mk`.
 -/
-protected theorem ind {x y : X} {motive : Homotopic.Quotient x y -> Prop} :
-    (mk : (a : Path x y) -> motive (Quotient.mk a)) -> (q : Homotopic.Quotient x y) -> motive q :=
+protected theorem ind {x y : X} {motive : Homotopic.Quotient x y → Prop} :
+    (mk : (a : Path x y) → motive (Quotient.mk a)) → (q : Homotopic.Quotient x y) → motive q :=
   Quot.ind
 
 /--
@@ -1055,351 +883,268 @@ A reasoning principle for quotients that allows proofs about quotients to assume
 constructed with `Quotient.mk`. This is the two-variable version of `ind`.
 -/
 @[elab_as_elim]
-/--
-theorem `ind₂` / 定理 `ind₂`
+/-
+**Path.Homotopic.Quotient.ind** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quotient
+`。
+形式化陈述：∀ {X : Type u} [inst : TopologicalSpace X] {x y : X} {motive : Path.Homoto
+pic.Quotient x y → Prop},   (∀ (a : Path x y), motive (Path.Homotopic.Quotient.m
+k a)) → ∀ (q : Path.Homotopic.Quotient x y), motive q
+参数：∀ (a : Path x y), motive (Path.Homotopic.Quotient.mk a)；q : Path.Homotopic.Qu
+otient x y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ind₂
-  statement: {Y : Type*} [TopologicalSpace Y] {x₀ y₀ : X} {x₁ y₁ : Y}
-  proof: by
-  induction q₀ using Quot.ind with | mk a =>
-  induction q₁ using Quot.ind with | mk b =>
-  exact mk a b
-
-中文:
-定理 ind₂
-  结论: {Y : 类型} [拓扑空间 Y] {x₀ y₀ : X} {x₁ y₁ : Y}
-  证明: by
-  induction q₀ using Quot.ind with | mk a =>
-  induction q₁ using Quot.ind with | mk b =>
-  exact mk a b
+--- 原说明 ---
+A reasoning principle for quotients that allows proofs about quotients to assume
+ that all values are
+constructed with `Quotient.mk`. This is the two-variable version of `ind`.
 -/
 protected theorem ind₂ {Y : Type*} [TopologicalSpace Y] {x₀ y₀ : X} {x₁ y₁ : Y}
-    {motive : Homotopic.Quotient x₀ y₀ -> Path.Homotopic.Quotient x₁ y₁ -> Prop}
-    (mk : (a : Path x₀ y₀) -> (b : Path x₁ y₁) -> motive (Quotient.mk a) (Quotient.mk b))
+    {motive : Homotopic.Quotient x₀ y₀ → Path.Homotopic.Quotient x₁ y₁ → Prop}
+    (mk : (a : Path x₀ y₀) → (b : Path x₁ y₁) → motive (Quotient.mk a) (Quotient.mk b))
     (q₀ : Homotopic.Quotient x₀ y₀) (q₁ : Path.Homotopic.Quotient x₁ y₁) : motive q₀ q₁ := by
   induction q₀ using Quot.ind with | mk a =>
   induction q₁ using Quot.ind with | mk b =>
   exact mk a b
 
-/--
-Definition of `refl` / `refl` 的定义
+/-- The constant path homotopy class at a point. This is `Path.refl` descended to the quotient. -/
+/-
+**Path.Homotopic.Quotient.refl** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic.Quotien
+t`。
+形式化陈述：refl (x : X) : Path.Homotopic.Quotient x x
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (x : X)
-  body: mk (Path.refl x)
-
-@[simp, grind =]
-
-中文:
-定义 refl
-  签名: (x : X)
-  定义体: mk (Path.refl x)
-
-@[simp, grind =]
-
-Depends on / 依赖: Path.refl
+--- 原说明 ---
+The constant path homotopy class at a point. This is `Path.refl` descended to th
+e quotient.
 -/
 def refl (x : X) : Path.Homotopic.Quotient x x :=
   mk (Path.refl x)
 
 @[simp, grind =]
-/--
-theorem `mk_refl` / 定理 `mk_refl`
-
-English:
-theorem mk_refl
-  given: (x : X)
-  statement: mk (Path.refl x) = refl x
-  proof: rfl
-
-中文:
-定理 mk_refl
-  条件: (x : X)
-  结论: mk (道路.refl x) = refl x
-  证明: rfl
+/-
+**Path.Homotopic.Quotient.mk_refl** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quot
+ient`。
+形式化陈述：mk_refl (x : X) : mk (Path.refl x) = refl x
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_refl (x : X) : mk (Path.refl x) = refl x :=
   rfl
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- The reverse of a path homotopy class. This is `Path.symm` descended to the quotient. -/
+/-
+**Path.Homotopic.Quotient.symm** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic.Quotien
+t`。
+形式化陈述：symm (P : Path.Homotopic.Quotient x₀ x₁) : Path.Homotopic.Quotient x₁ x₀
+参数：P : Path.Homotopic.Quotient x₀ x₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.symm₂`：symm₂ {p q : Path x₀ x₁} (h : p.Homotopic q) : p.s
+ymm.Homotopic q.symm
 
-English:
-definition symm
-  signature: (P : Path.Homotopic.Quotient x₀ x₁)
-  body: _root_.Quotient.map Path.symm (fun _ _ h => Homotopic.symm₂ h) P
-
-@[simp, grind =]
-
-中文:
-定义 symm
-  签名: (P : 道路.同伦.商 x₀ x₁)
-  定义体: _root_.Quotient.map Path.symm (fun _ _ h => Homotopic.symm₂ h) P
-
-@[simp, grind =]
-
-Depends on / 依赖: Homotopic, Homotopic.symm, Path.symm, Quotient, _root_, _root_.Quotient.map
+--- 原说明 ---
+The reverse of a path homotopy class. This is `Path.symm` descended to the quoti
+ent.
 -/
 def symm (P : Path.Homotopic.Quotient x₀ x₁) : Path.Homotopic.Quotient x₁ x₀ :=
   _root_.Quotient.map Path.symm (fun _ _ h => Homotopic.symm₂ h) P
 
 @[simp, grind =]
-/--
-theorem `mk_symm` / 定理 `mk_symm`
-
-English:
-theorem mk_symm
-  given: (P : Path x₀ x₁)
-  statement: mk P.symm = symm (mk P)
-  proof: rfl
-
-中文:
-定理 mk_symm
-  条件: (P : 道路 x₀ x₁)
-  结论: mk P.symm = symm (mk P)
-  证明: rfl
+/-
+**Path.Homotopic.Quotient.mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quot
+ient`。
+形式化陈述：mk_symm (P : Path x₀ x₁) : mk P.symm = symm (mk P)
+参数：P : Path x₀ x₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_symm (P : Path x₀ x₁) : mk P.symm = symm (mk P) :=
   rfl
 
-/--
-Definition of `cast` / `cast` 的定义
+/-- Cast a path homotopy class using equalities of endpoints. -/
+/-
+**Path.Homotopic.Quotient.cast** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic.Quotien
+t`。
+形式化陈述：cast {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy : y'
+ = y) : Homotopic.Quotient x' y'
+参数：γ : Homotopic.Quotient x y；hx : x' = x；hy : y' = y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cast
-  signature: {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  body: _root_.Quotient.map (fun p => p.cast hx hy) (fun _ _ h => h) γ
-
-@[simp, grind =]
-
-中文:
-定义 cast
-  签名: {x y : X} (γ : 同伦.商 x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  定义体: _root_.Quotient.map (fun p => p.cast hx hy) (fun _ _ h => h) γ
-
-@[simp, grind =]
-
-Depends on / 依赖: Quotient, _root_, _root_.Quotient.map, p.cast
+--- 原说明 ---
+Cast a path homotopy class using equalities of endpoints.
 -/
 def cast {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy : y' = y) :
     Homotopic.Quotient x' y' :=
   _root_.Quotient.map (fun p => p.cast hx hy) (fun _ _ h => h) γ
 
 @[simp, grind =]
-/--
-theorem `mk_cast` / 定理 `mk_cast`
-
-English:
-theorem mk_cast
-  given: {x y : X} (P : Path x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 mk_cast
-  条件: {x y : X} (P : 道路 x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Path.Homotopic.Quotient.mk_cast** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quot
+ient`。
+形式化陈述：mk_cast {x y : X} (P : Path x y) {x' y'} (hx : x' = x) (hy : y' = y) : mk 
+(P.cast hx hy) = (mk P).cast hx hy
+参数：P : Path x y；hx : x' = x；hy : y' = y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_cast {x y : X} (P : Path x y) {x' y'} (hx : x' = x) (hy : y' = y) :
     mk (P.cast hx hy) = (mk P).cast hx hy :=
   rfl
 
 @[simp, grind =]
-/--
-theorem `cast_rfl_rfl` / 定理 `cast_rfl_rfl`
-
-English:
-theorem cast_rfl_rfl
-  given: {x y : X} (γ : Homotopic.Quotient x y)
-  statement: γ.cast rfl rfl = γ
-  proof: by
-  induction γ using Quotient.ind with | mk γ =>
-  rfl
-
-@[simp, grind =]
-
-中文:
-定理 cast_rfl_rfl
-  条件: {x y : X} (γ : 同伦.商 x y)
-  结论: γ.cast rfl rfl = γ
-  证明: by
-  induction γ using Quotient.ind with | mk γ =>
-  rfl
-
-@[simp, grind =]
-
-Depends on / 依赖: Quotient, Quotient.ind
+/-
+**Path.Homotopic.Quotient.cast_rfl_rfl** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic
+.Quotient`。
+形式化陈述：cast_rfl_rfl {x y : X} (γ : Homotopic.Quotient x y) : γ.cast rfl rfl = γ
+参数：γ : Homotopic.Quotient x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.Quotient.ind`：∀ {X : Type u} [inst : TopologicalSpace X] 
+{x y : X} {motive : Path.Homotopic.Quotient x y → Prop},   (∀ (a : Path x y), mo
+tive (Path.Homoto…
 -/
 theorem cast_rfl_rfl {x y : X} (γ : Homotopic.Quotient x y) : γ.cast rfl rfl = γ := by
   induction γ using Quotient.ind with | mk γ =>
   rfl
 
 @[simp, grind =]
-/--
-theorem `cast_cast` / 定理 `cast_cast`
-
-English:
-theorem cast_cast
-  statement: {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  proof: by
-  induction γ using Quotient.ind with | mk γ =>
-  rfl
-
-中文:
-定理 cast_cast
-  结论: {x y : X} (γ : 同伦.商 x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  证明: by
-  induction γ using Quotient.ind with | mk γ =>
-  rfl
-
-Depends on / 依赖: Quotient, Quotient.ind
+/-
+**Path.Homotopic.Quotient.cast_cast** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Qu
+otient`。
+形式化陈述：cast_cast {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy
+ : y' = y) {x'' y''} (hx' : x'' = x') (hy' : y'' = y') : (γ.cast hx hy).cast hx'
+ hy' = γ.cast (hx'.trans hx) (hy'.trans hy)
+参数：γ : Homotopic.Quotient x y；hx : x' = x；hy : y' = y；hx' : x'' = x'；hy' : y'' =
+ y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.Quotient.ind`：∀ {X : Type u} [inst : TopologicalSpace X] 
+{x y : X} {motive : Path.Homotopic.Quotient x y → Prop},   (∀ (a : Path x y), mo
+tive (Path.Homoto…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem cast_cast {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy : y' = y)
     {x'' y''} (hx' : x'' = x') (hy' : y'' = y') :
     (γ.cast hx hy).cast hx' hy' = γ.cast (hx'.trans hx) (hy'.trans hy) := by
   induction γ using Quotient.ind with | mk γ =>
   rfl
-
-/--
-theorem `cast_heq` / 定理 `cast_heq`
-
-English:
-theorem cast_heq
-  given: {x y x' y' : X} (hx : x' = x) (hy : y' = y) {γ : Homotopic.Quotient x y}
-  proof: by
-  cases hx; cases hy; exact heq_of_eq γ.cast_rfl_rfl
-
-中文:
-定理 cast_heq
-  条件: {x y x' y' : X} (hx : x' = x) (hy : y' = y) {γ : 同伦.商 x y}
-  证明: by
-  cases hx; cases hy; exact heq_of_eq γ.cast_rfl_rfl
-
-Depends on / 依赖: cast_rfl_rfl, heq_of_eq
+/-
+**Path.Homotopic.Quotient.cast_heq** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quo
+tient`。
+形式化陈述：cast_heq {x y x' y' : X} (hx : x' = x) (hy : y' = y) {γ : Homotopic.Quotie
+nt x y} : γ.cast hx hy ≍ γ
+参数：hx : x' = x；hy : y' = y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Path.Homotopic.Quotient.cast_rfl_rfl`：cast_rfl_rfl {x y : X} (γ : Homoto
+pic.Quotient x y) : γ.cast rfl rfl = γ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem cast_heq {x y x' y' : X} (hx : x' = x) (hy : y' = y) {γ : Homotopic.Quotient x y} :
     γ.cast hx hy ≍ γ := by
   cases hx; cases hy; exact heq_of_eq γ.cast_rfl_rfl
 
-/--
-Definition of `trans` / `trans` 的定义
+/-- The composition of path homotopy classes. This is `Path.trans` descended to the quotient. -/
+/-
+**Path.Homotopic.Quotient.trans** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic.Quotie
+nt`。
+形式化陈述：trans (P₀ : Path.Homotopic.Quotient x₀ x₁) (P₁ : Path.Homotopic.Quotient x
+₁ x₂) : Path.Homotopic.Quotient x₀ x₂
+参数：P₀ : Path.Homotopic.Quotient x₀ x₁；P₁ : Path.Homotopic.Quotient x₁ x₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.hcomp`：hcomp {p₀ p₁ : Path x₀ x₁} {q₀ q₁ : Path x₁ x₂} (h
+p : p₀.Homotopic p₁) (hq : q₀.Homotopic q₁) : (p₀.trans q₀).Homotopic (p₁.trans 
+q₁)
 
-English:
-definition trans
-  signature: (P₀ : Path.Homotopic.Quotient x₀ x₁) (P₁ : Path.Homotopic.Quotient x₁ x₂)
-  body: Quotient.map₂ Path.trans (fun (_ : Path x₀ x₁) _ hp (_ : Path x₁ x₂) _ hq => hcomp hp hq) P₀ P₁
-
-@[simp, grind =]
-
-中文:
-定义 trans
-  签名: (P₀ : 道路.同伦.商 x₀ x₁) (P₁ : 道路.同伦.商 x₁ x₂)
-  定义体: Quotient.map₂ Path.trans (fun (_ : Path x₀ x₁) _ hp (_ : Path x₁ x₂) _ hq => hcomp hp hq) P₀ P₁
-
-@[simp, grind =]
-
-Depends on / 依赖: Path.trans, Quotient, Quotient.map
+--- 原说明 ---
+The composition of path homotopy classes. This is `Path.trans` descended to the 
+quotient.
 -/
 def trans (P₀ : Path.Homotopic.Quotient x₀ x₁) (P₁ : Path.Homotopic.Quotient x₁ x₂) :
     Path.Homotopic.Quotient x₀ x₂ :=
   Quotient.map₂ Path.trans (fun (_ : Path x₀ x₁) _ hp (_ : Path x₁ x₂) _ hq => hcomp hp hq) P₀ P₁
 
 @[simp, grind =]
-/--
-theorem `mk_trans` / 定理 `mk_trans`
-
-English:
-theorem mk_trans
-  given: (P₀ : Path x₀ x₁) (P₁ : Path x₁ x₂)
-  proof: rfl
-
-中文:
-定理 mk_trans
-  条件: (P₀ : 道路 x₀ x₁) (P₁ : 道路 x₁ x₂)
-  证明: rfl
+/-
+**Path.Homotopic.Quotient.mk_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quo
+tient`。
+形式化陈述：mk_trans (P₀ : Path x₀ x₁) (P₁ : Path x₁ x₂) : mk (P₀.trans P₁) = Quotient
+.trans (mk P₀) (mk P₁)
+参数：P₀ : Path x₀ x₁；P₁ : Path x₁ x₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_trans (P₀ : Path x₀ x₁) (P₁ : Path x₁ x₂) :
     mk (P₀.trans P₁) = Quotient.trans (mk P₀) (mk P₁) :=
   rfl
 
-/--
-Definition of `map` / `map` 的定义
+/-- The image of a path homotopy class `P₀` under a map `f`.
+This is `Path.map` descended to the quotient. -/
+/-
+**Path.Homotopic.Quotient.map** 是 Mathlib 中的一个定义，位于命名空间 `Path.Homotopic.Quotient
+`。
+形式化陈述：map (P₀ : Path.Homotopic.Quotient x₀ x₁) (f : C(X, Y)) : Path.Homotopic.Qu
+otient (f x₀) (f x₁)
+参数：P₀ : Path.Homotopic.Quotient x₀ x₁；f : C(X, Y)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `Path.Homotopic.map`：∀ {X : Type u} {Y : Type v} [inst : TopologicalSpace
+ X] [inst_1 : TopologicalSpace Y] {x₀ x₁ : X} {p q : Path x₀ x₁},   p.Homotopic 
+q → ∀ (f…
 
-English:
-definition map
-  signature: (P₀ : Path.Homotopic.Quotient x₀ x₁) (f : C(X, Y))
-  body: _root_.Quotient.map
-    (fun q : Path x₀ x₁ => q.map f.continuous) (fun _ _ h => Path.Homotopic.map h f) P₀
-
-中文:
-定义 map
-  签名: (P₀ : 道路.同伦.商 x₀ x₁) (f : C(X, Y))
-  定义体: _root_.Quotient.map
-    (fun q : Path x₀ x₁ => q.map f.continuous) (fun _ _ h => Path.Homotopic.map h f) P₀
-
-Depends on / 依赖: Homotopic, Path.Homotopic.map, Quotient, _root_, _root_.Quotient.map, continuous, f.continuous, q.map
+--- 原说明 ---
+The image of a path homotopy class `P₀` under a map `f`.
+This is `Path.map` descended to the quotient.
 -/
 def map (P₀ : Path.Homotopic.Quotient x₀ x₁) (f : C(X, Y)) :
     Path.Homotopic.Quotient (f x₀) (f x₁) :=
   _root_.Quotient.map
     (fun q : Path x₀ x₁ => q.map f.continuous) (fun _ _ h => Path.Homotopic.map h f) P₀
-
-/--
-theorem `mk_map` / 定理 `mk_map`
-
-English:
-theorem mk_map
-  given: (P₀ : Path x₀ x₁) (f : C(X, Y))
-  statement: mk (P₀.map f.continuous) = map (mk P₀) f
-  proof: rfl
-
-中文:
-定理 mk_map
-  条件: (P₀ : 道路 x₀ x₁) (f : C(X, Y))
-  结论: mk (P₀.map f.continuous) = map (mk P₀) f
-  证明: rfl
+/-
+**Path.Homotopic.Quotient.mk_map** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quoti
+ent`。
+形式化陈述：mk_map (P₀ : Path x₀ x₁) (f : C(X, Y)) : mk (P₀.map f.continuous) = map (m
+k P₀) f
+参数：P₀ : Path x₀ x₁；f : C(X, Y)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 -/
 theorem mk_map (P₀ : Path x₀ x₁) (f : C(X, Y)) : mk (P₀.map f.continuous) = map (mk P₀) f :=
   rfl
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  statement: {Z} [TopologicalSpace Z] {p : Path.Homotopic.Quotient x₀ x₁}
-  proof: by
-  rcases p; rfl
-
-中文:
-定理 map_comp
-  结论: {Z} [拓扑空间 Z] {p : 道路.同伦.商 x₀ x₁}
-  证明: by
-  rcases p; rfl
+/-
+**Path.Homotopic.Quotient.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quo
+tient`。
+形式化陈述：map_comp {Z} [TopologicalSpace Z] {p : Path.Homotopic.Quotient x₀ x₁} {f :
+ C(X, Y)} {g : C(Y, Z)} : p.map (g.comp f) = (p.map f).map g
+参数：X, Y；Y, Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_comp {Z} [TopologicalSpace Z] {p : Path.Homotopic.Quotient x₀ x₁}
     {f : C(X, Y)} {g : C(Y, Z)} : p.map (g.comp f) = (p.map f).map g := by
   rcases p; rfl
-
-/--
-theorem `map_cast` / 定理 `map_cast`
-
-English:
-theorem map_cast
-  statement: {x y : X} (p : Homotopic.Quotient x y) {x' y'} {hx : x' = x} {hy : y' = y}
-  proof: by
-  rcases p; rfl
-
-中文:
-定理 map_cast
-  结论: {x y : X} (p : 同伦.商 x y) {x' y'} {hx : x' = x} {hy : y' = y}
-  证明: by
-  rcases p; rfl
+/-
+**Path.Homotopic.Quotient.map_cast** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic.Quo
+tient`。
+形式化陈述：map_cast {x y : X} (p : Homotopic.Quotient x y) {x' y'} {hx : x' = x} {hy 
+: y' = y} {f : C(X, Y)} : (p.cast hx hy).map f = (p.map f).cast congr(f $hx) con
+gr(f $hy)
+参数：p : Homotopic.Quotient x y；X, Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem map_cast {x y : X} (p : Homotopic.Quotient x y) {x' y'} {hx : x' = x} {hy : y' = y}
     {f : C(X, Y)} : (p.cast hx hy).map f = (p.map f).cast congr(f $hx) congr(f $hy) := by
@@ -1409,28 +1154,31 @@ end Quotient
 
 set_option backward.isDefEq.respectTransparency false in
 -- Porting note: we didn't previously need the `α := ...` and `β := ...` hints.
-/--
-theorem `hpath_hext` / 定理 `hpath_hext`
-
-English:
-theorem hpath_hext
-  given: {p₁ : Path x₀ x₁} {p₂ : Path x₂ x₃} (hp : forall t, p₁ t = p₂ t)
-  proof: by
-  obtain rfl : x₀ = x₂ := by convert! hp 0 <;> simp
-  obtain rfl : x₁ = x₃ := by convert! hp 1 <;> simp
-  rw [heq_iff_eq]; congr; ext t; exact hp t
-
-中文:
-定理 hpath_hext
-  条件: {p₁ : 道路 x₀ x₁} {p₂ : 道路 x₂ x₃} (hp : 对任意 t, p₁ t = p₂ t)
-  证明: by
-  obtain rfl : x₀ = x₂ := by convert! hp 0 <;> simp
-  obtain rfl : x₁ = x₃ := by convert! hp 1 <;> simp
-  rw [heq_iff_eq]; congr; ext t; exact hp t
-
-Depends on / 依赖: Homotopic, Path.Homotopic.Quotient, Quotient, convert, heq_iff_eq
+/-
+**Path.Homotopic.hpath_hext** 是 Mathlib 中的一个定理，位于命名空间 `Path.Homotopic`。
+形式化陈述：hpath_hext {p₁ : Path x₀ x₁} {p₂ : Path x₂ x₃} (hp : forall t, p₁ t = p₂ t
+) : HEq (α
+参数：hp : forall t, p₁ t = p₂ t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `heq_iff_eq`：∀ {α : Sort u_1} {a b : α}, a ≍ b ↔ a = b
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
 -/
-theorem hpath_hext {p₁ : Path x₀ x₁} {p₂ : Path x₂ x₃} (hp : forall t, p₁ t = p₂ t) :
+theorem hpath_hext {p₁ : Path x₀ x₁} {p₂ : Path x₂ x₃} (hp : ∀ t, p₁ t = p₂ t) :
     HEq (α := Path.Homotopic.Quotient _ _) ⟦p₁⟧ (β := Path.Homotopic.Quotient _ _) ⟦p₂⟧ := by
   obtain rfl : x₀ = x₂ := by convert! hp 0 <;> simp
   obtain rfl : x₁ = x₃ := by convert! hp 1 <;> simp
@@ -1441,24 +1189,22 @@ end Homotopic
 /-- A path `Path x₀ x₁` generates a homotopy between constant functions `fun _ ↦ x₀` and
 `fun _ ↦ x₁`. -/
 @[simps!]
-/--
-Definition of `toHomotopyConst` / `toHomotopyConst` 的定义
+/-
+**Path.toHomotopyConst** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：toHomotopyConst (p : Path x₀ x₁) : (ContinuousMap.const Y x₀).Homotopy (Co
+ntinuousMap.const Y x₁) where toContinuousMap
+参数：p : Path x₀ x₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
 
-English:
-definition toHomotopyConst
-  signature: (p : Path x₀ x₁)
-  body: p.toContinuousMap.comp ContinuousMap.fst
-  map_zero_left _ := p.source
-  map_one_left _ := p.target
-
-中文:
-定义 toHomotopyConst
-  签名: (p : 道路 x₀ x₁)
-  定义体: p.toContinuousMap.comp ContinuousMap.fst
-  map_zero_left _ := p.source
-  map_one_left _ := p.target
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.fst, p.toContinuousMap.comp, toContinuousMap
+--- 原说明 ---
+A path `Path x₀ x₁` generates a homotopy between constant functions `fun _ ↦ x₀`
+ and
+`fun _ ↦ x₁`.
 -/
 def toHomotopyConst (p : Path x₀ x₁) :
     (ContinuousMap.const Y x₀).Homotopy (ContinuousMap.const Y x₁) where
@@ -1471,32 +1217,37 @@ end Path
 /-- Two constant continuous maps with nonempty domain are homotopic if and only if their values are
 joined by a path in the codomain. -/
 @[simp]
-/--
-theorem `ContinuousMap.homotopic_const_iff` / 定理 `ContinuousMap.homotopic_const_iff`
+/-
+**ContinuousMap.homotopic_const_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousMap.homotopic_const_iff [Nonempty Y] : (ContinuousMap.const Y x₀
+).Homotopic (ContinuousMap.const Y x₁) ↔ Joined x₀ x₁
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.prodSwap_apply`：∀ {α : Type u_1} {β : Type u_2} [inst : To
+pologicalSpace α] [inst_1 : TopologicalSpace β] (x : α × β),   ContinuousMap.pro
+dSwap x = (x.2, x.…
+· 使用定理 `ContinuousMap.Homotopy.apply_zero`：apply_zero (F : Homotopy f₀ f₁) (x : 
+X) : F (0, x) = f₀ x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ContinuousMap.Homotopy.apply_one`：apply_one (F : Homotopy f₀ f₁) (x : X)
+ : F (1, x) = f₁ x
 
-English:
-theorem ContinuousMap.homotopic_const_iff
-  given: [Nonempty Y]
-  proof: by
-  inhabit Y
-  refine ⟨fun ⟨H⟩ => ⟨⟨(H.toContinuousMap.comp .prodSwap).curry default, ?_, ?_⟩⟩,
-    fun ⟨p⟩ => ⟨p.toHomotopyConst⟩⟩ <;> simp
-
-中文:
-定理 连续映射.homotopic_const_iff
-  条件: [非空 Y]
-  证明: by
-  inhabit Y
-  refine ⟨fun ⟨H⟩ => ⟨⟨(H.toContinuousMap.comp .prodSwap).curry default, ?_, ?_⟩⟩,
-    fun ⟨p⟩ => ⟨p.toHomotopyConst⟩⟩ <;> simp
-
-Depends on / 依赖: H.toContinuousMap.comp, inhabit, p.toHomotopyConst, prodSwap, toContinuousMap, toHomotopyConst
+--- 原说明 ---
+Two constant continuous maps with nonempty domain are homotopic if and only if t
+heir values are
+joined by a path in the codomain.
 -/
 theorem ContinuousMap.homotopic_const_iff [Nonempty Y] :
     (ContinuousMap.const Y x₀).Homotopic (ContinuousMap.const Y x₁) ↔ Joined x₀ x₁ := by
   inhabit Y
-  refine ⟨fun ⟨H⟩ => ⟨⟨(H.toContinuousMap.comp .prodSwap).curry default, ?_, ?_⟩⟩,
-    fun ⟨p⟩ => ⟨p.toHomotopyConst⟩⟩ <;> simp
+  refine ⟨fun ⟨H⟩ ↦ ⟨⟨(H.toContinuousMap.comp .prodSwap).curry default, ?_, ?_⟩⟩,
+    fun ⟨p⟩ ↦ ⟨p.toHomotopyConst⟩⟩ <;> simp
 
 namespace ContinuousMap.Homotopy
 
@@ -1504,26 +1255,23 @@ namespace ContinuousMap.Homotopy
 `f x` to `g x`.
 -/
 @[simps]
-/--
-Definition of `evalAt` / `evalAt` 的定义
+/-
+**ContinuousMap.Homotopy.evalAt** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap.Homotop
+y`。
+形式化陈述：evalAt {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) (x : X) : Path (f 
+x) (g x) where toFun t
+参数：X, Y；H : ContinuousMap.Homotopy f g；x : X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.Homotopy.apply_zero`：apply_zero (F : Homotopy f₀ f₁) (x : 
+X) : F (0, x) = f₀ x
+· 使用定理 `ContinuousMap.Homotopy.apply_one`：apply_one (F : Homotopy f₀ f₁) (x : X)
+ : F (1, x) = f₁ x
 
-English:
-definition evalAt
-  signature: {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) (x : X)
-  body: H (t, x)
-  source' := H.apply_zero x
-  target' := H.apply_one x
-
-@[simp]
-
-中文:
-定义 evalAt
-  签名: {f g : C(X, Y)} (H : 连续映射.同伦 f g) (x : X)
-  定义体: H (t, x)
-  source' := H.apply_zero x
-  target' := H.apply_one x
-
-@[simp]
+--- 原说明 ---
+Given a homotopy `H : f ∼ g`, get the path traced by the point `x` as it moves f
+rom
+`f x` to `g x`.
 -/
 def evalAt {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) (x : X) : Path (f x) (g x) where
   toFun t := H (t, x)
@@ -1531,20 +1279,17 @@ def evalAt {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) (x : X) : Path (f x)
   target' := H.apply_one x
 
 @[simp]
-/--
-theorem `pathExtend_evalAt` / 定理 `pathExtend_evalAt`
-
-English:
-theorem pathExtend_evalAt
-  given: {f g : C(X, Y)} (H : f.Homotopy g) (x : X)
-  proof: rfl
-
-中文:
-定理 pathExtend_evalAt
-  条件: {f g : C(X, Y)} (H : f.同伦 g) (x : X)
-  证明: rfl
+/-
+**ContinuousMap.Homotopy.pathExtend_evalAt** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+Map.Homotopy`。
+形式化陈述：pathExtend_evalAt {f g : C(X, Y)} (H : f.Homotopy g) (x : X) : (H.evalAt x
+).extend = (fun t => H.extend t x)
+参数：X, Y；H : f.Homotopy g；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pathExtend_evalAt {f g : C(X, Y)} (H : f.Homotopy g) (x : X) :
-    (H.evalAt x).extend = (fun t => H.extend t x) := rfl
+    (H.evalAt x).extend = (fun t ↦ H.extend t x) := rfl
 
 end ContinuousMap.Homotopy
+

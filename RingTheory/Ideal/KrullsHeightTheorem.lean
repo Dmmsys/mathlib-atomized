@@ -45,137 +45,159 @@ public section
 
 variable {R : Type*} [CommRing R] [IsNoetherianRing R]
 
-/--
-lemma `IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing` / 引理 `IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing`
-
-English:
-lemma IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing
-  proof: have : Ring.KrullDimLE 0 (R ⧸ I) := Ring.krullDimLE_zero_iff.mpr fun J prime =>
-Ideal.isMaximal_of_isIntegral_of_isMaximal_comap _ by
-      convert! IsLocalRing.maximalIdeal.isMaximal R
-      rw [Ideal.minimalPrimes]; rw [Set.mem_ofPred] at hp
-      have := prime.comap (Ideal.Quotient.mk I)
-      exact hp.eq_of_le ⟨this, .trans (by simp) (Ideal.ker_le_comap _)⟩ (le_maximalIdeal this.1)
-  IsNoetherianRing.isArtinianRing_of_krullDimLE_zero
-
-中文:
-引理 是局部环.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing
-  证明: have : Ring.KrullDimLE 0 (R ⧸ I) := Ring.krullDimLE_zero_iff.mpr fun J prime =>
-Ideal.isMaximal_of_isIntegral_of_isMaximal_comap _ by
-      convert! IsLocalRing.maximalIdeal.isMaximal R
-      rw [Ideal.minimalPrimes]; rw [Set.mem_ofPred] at hp
-      have := prime.comap (Ideal.Quotient.mk I)
-      exact hp.eq_of_le ⟨this, .trans (by simp) (Ideal.ker_le_comap _)⟩ (le_maximalIdeal this.1)
-  IsNoetherianRing.isArtinianRing_of_krullDimLE_zero
-
-Depends on / 依赖: Ideal.Quotient.mk, Ideal.isMaximal_of_isIntegral_of_isMaximal_comap, Ideal.ker_le_comap, Ideal.minimalPrimes, IsLocalRing, IsLocalRing.maximalIdeal.isMaximal, IsNoetherianRing, IsNoetherianRing.isArtinianRing_of_krullDimLE_zero, KrullDimLE, Quotient, Ring.KrullDimLE, Ring.krullDimLE_zero_iff.mpr, Set.mem_ofPred, convert, eq_of_le, hp.eq_of_le, isArtinianRing_of_krullDimLE_zero, isMaximal, isMaximal_of_isIntegral_of_isMaximal_comap, ker_le_comap
+/-
+**IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing** 是 Mathlib 
+中的一个引理，位于命名空间 ``。
+形式化陈述：IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing [IsLocal
+Ring R] (I : Ideal R) (hp : IsLocalRing.maximalIdeal R in I.minimalPrimes) : IsA
+rtinianRing (R ⧸ I)
+参数：I : Ideal R；hp : IsLocalRing.maximalIdeal R in I.minimalPrimes。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Ring.krullDimLE_zero_iff`：Ring.krullDimLE_zero_iff : Ring.KrullDimLE 0 R
+ ↔ forall I : Ideal R, I.IsPrime -> I.IsMaximal
+· 使用定理 `Ideal.isMaximal_of_isIntegral_of_isMaximal_comap`：isMaximal_of_isIntegra
+l_of_isMaximal_comap [Algebra R S] [Algebra.IsIntegral R S] (I : Ideal S) [I.IsP
+rime] (hI : IsMaximal (I.comap (algebr…
+· 使用定理 `instIsIntegralQuotientIdeal`：∀ {R : Type u_1} {A : Type u_2} [inst : Com
+mRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {I : Ideal A}   [Algebra.I
+sIntegral R A], A…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.IsPrime.comap`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : 
+Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   {K : Ideal 
+S} [inst_…
+· 使用定理 `Minimal.eq_of_le`：Minimal.eq_of_le (hx : Minimal P x) (hy : P y) (hle : 
+y <= x) : y = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `Ideal.minimalPrimes.eq_1`：∀ {R : Type u_1} [inst : CommSemiring R] (I : 
+Ideal R), I.minimalPrimes = {p | I.IsMinimalPrime p}
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.mk_ker`：mk_ker {I : Ideal R} [I.IsTwoSided] : ker (Quotient.mk I) 
+= I
+· 使用定理 `Ideal.ker_le_comap`：ker_le_comap {K : Ideal S} (f : F) : RingHom.ker f <
+= comap f K
+· 使用定理 `IsLocalRing.le_maximalIdeal`：le_maximalIdeal {J : Ideal R} (hJ : J != ⊤)
+ : J <= maximalIdeal R
+· 使用定理 `Ideal.IsPrime.ne_top'`：∀ {α : Type u} {inst : Semiring α} {I : Ideal α} 
+[self : I.IsPrime], I ≠ ⊤
+· 使用定理 `IsLocalRing.maximalIdeal.isMaximal`：∀ (R : Type u_1) [inst : CommSemirin
+g R] [inst_1 : IsLocalRing R], (IsLocalRing.maximalIdeal R).IsMaximal
+· 使用定理 `IsNoetherianRing.isArtinianRing_of_krullDimLE_zero`：IsNoetherianRing.isA
+rtinianRing_of_krullDimLE_zero {R} [CommRing R] [IsNoetherianRing R] [Ring.Krull
+DimLE 0 R] : IsArtinianRing R
 -/
 lemma IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing
-    [IsLocalRing R] (I : Ideal R) (hp : IsLocalRing.maximalIdeal R in I.minimalPrimes) :
+    [IsLocalRing R] (I : Ideal R) (hp : IsLocalRing.maximalIdeal R ∈ I.minimalPrimes) :
     IsArtinianRing (R ⧸ I) :=
-  have : Ring.KrullDimLE 0 (R ⧸ I) := Ring.krullDimLE_zero_iff.mpr fun J prime =>
-Ideal.isMaximal_of_isIntegral_of_isMaximal_comap _ by
+  have : Ring.KrullDimLE 0 (R ⧸ I) := Ring.krullDimLE_zero_iff.mpr fun J prime ↦
+    Ideal.isMaximal_of_isIntegral_of_isMaximal_comap _ <| by
       convert! IsLocalRing.maximalIdeal.isMaximal R
-      rw [Ideal.minimalPrimes]; rw [Set.mem_ofPred] at hp
+      rw [Ideal.minimalPrimes, Set.mem_ofPred] at hp
       have := prime.comap (Ideal.Quotient.mk I)
       exact hp.eq_of_le ⟨this, .trans (by simp) (Ideal.ker_le_comap _)⟩ (le_maximalIdeal this.1)
   IsNoetherianRing.isArtinianRing_of_krullDimLE_zero
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing` / 引理 `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing`
-
-English:
-lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
-  proof: by
-  refine Ideal.height_le_iff.mpr fun q h₁ h₂ => ?_
-  suffices q.height = 0 by rw [this]; exact zero_lt_one
-  rw [← WithBot.coe_inj]; rw [← IsLocalization.AtPrime.ringKrullDim_eq_height q (Localization.AtPrime q)]; rw [WithBot.coe_zero]; rw [← ringKrullDimZero_iff_ringKrullDim_eq_zero]; rw [← isArtinianRing_iff_krullDimLE_zero]; rw [isArtinianRing_iff_isNilpotent_maximalIdeal]; rw [← Localization.AtPrime.map_eq_maximalIdeal]
-  have : IsArtinianRing (R ⧸ I) :=
-    IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing I hp
-  let f := algebraMap R (Localization.AtPrime q)
-  let qs : Nat ->o (Ideal (R ⧸ I))ᵒᵈ :=
-    { toFun n := ((q.map f ^ n).comap f).map (Ideal.Quotient.mk I)
-      monotone' i j e := Ideal.map_mono (Ideal.comap_mono (Ideal.pow_le_pow_right e)) }
-  obtain ⟨n, hn⟩ := IsArtinian.monotone_stabilizes qs
-  refine ⟨n, ?_⟩
-  apply Submodule.eq_bot_of_le_smul_of_le_jacobson_bot (q.map f) _ (IsNoetherian.noetherian _)
-  rotate_left
-  · rw [IsLocalRing.jacobson_eq_maximalIdeal, Localization.AtPrime.map_eq_maximalIdeal]
-    exact bot_ne_top
-  rw [smul_eq_mul]; rw [← pow_succ']; rw [← (IsLocalization.orderEmbedding q.primeCompl (Localization.AtPrime q)).map_rel_iff]
-  refine Submodule.le_of_le_smul_of_le_jacobson_bot (I := I) (IsNoetherian.noetherian _) ?_ ?_
-  · rw [IsLocalRing.jacobson_eq_maximalIdeal]
-    exacts [hp.le, bot_ne_top]
-  · replace hn := congr(Ideal.comap (Ideal.Quotient.mk I) $(hn _ n.le_succ))
-    simp only [qs, OrderHom.coe_mk, ← RingHom.ker_eq_comap_bot, Ideal.mk_ker,
-      Ideal.comap_map_of_surjective _ Ideal.Quotient.mk_surjective] at hn
-    intro x hx
-    obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.mp (hn.le (Ideal.mem_sup_left hx))
-    refine Submodule.add_mem_sup hy ?_
-    obtain ⟨z, rfl⟩ := (Submodule.IsPrincipal.mem_iff_eq_smul_generator I).mp hz
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]
-    refine Ideal.mul_mem_mul ?_ (Submodule.IsPrincipal.generator_mem _)
-    dsimp [IsLocalization.orderEmbedding] at hx
-    rwa [Ideal.mem_comap, f.map_add, f.map_mul, Ideal.add_mem_iff_right _
-      (Ideal.pow_le_pow_right n.le_succ hy), mul_comm, Ideal.unit_mul_mem_iff_mem] at hx
-    refine IsLocalization.map_units (M := q.primeCompl) _ ⟨_, ?_⟩
-    change Submodule.IsPrincipal.generator I ∉ (↑q : Set R)
-    rw [← Set.singleton_subset_iff]; rw [← Ideal.span_le]; rw [Ideal.span_singleton_generator]
-    exact fun e => h₂.not_ge (hp.2 ⟨h₁, e⟩ h₂.le)
-
-中文:
-引理 理想.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
-  证明: by
-  refine Ideal.height_le_iff.mpr fun q h₁ h₂ => ?_
-  suffices q.height = 0 by rw [this]; exact zero_lt_one
-  rw [← WithBot.coe_inj]; rw [← IsLocalization.AtPrime.ringKrullDim_eq_height q (Localization.AtPrime q)]; rw [WithBot.coe_zero]; rw [← ringKrullDimZero_iff_ringKrullDim_eq_zero]; rw [← isArtinianRing_iff_krullDimLE_zero]; rw [isArtinianRing_iff_isNilpotent_maximalIdeal]; rw [← Localization.AtPrime.map_eq_maximalIdeal]
-  have : IsArtinianRing (R ⧸ I) :=
-    IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing I hp
-  let f := algebraMap R (Localization.AtPrime q)
-  let qs : Nat ->o (Ideal (R ⧸ I))ᵒᵈ :=
-    { toFun n := ((q.map f ^ n).comap f).map (Ideal.Quotient.mk I)
-      monotone' i j e := Ideal.map_mono (Ideal.comap_mono (Ideal.pow_le_pow_right e)) }
-  obtain ⟨n, hn⟩ := IsArtinian.monotone_stabilizes qs
-  refine ⟨n, ?_⟩
-  apply Submodule.eq_bot_of_le_smul_of_le_jacobson_bot (q.map f) _ (IsNoetherian.noetherian _)
-  rotate_left
-  · rw [IsLocalRing.jacobson_eq_maximalIdeal, Localization.AtPrime.map_eq_maximalIdeal]
-    exact bot_ne_top
-  rw [smul_eq_mul]; rw [← pow_succ']; rw [← (IsLocalization.orderEmbedding q.primeCompl (Localization.AtPrime q)).map_rel_iff]
-  refine Submodule.le_of_le_smul_of_le_jacobson_bot (I := I) (IsNoetherian.noetherian _) ?_ ?_
-  · rw [IsLocalRing.jacobson_eq_maximalIdeal]
-    exacts [hp.le, bot_ne_top]
-  · replace hn := congr(Ideal.comap (Ideal.Quotient.mk I) $(hn _ n.le_succ))
-    simp only [qs, OrderHom.coe_mk, ← RingHom.ker_eq_comap_bot, Ideal.mk_ker,
-      Ideal.comap_map_of_surjective _ Ideal.Quotient.mk_surjective] at hn
-    intro x hx
-    obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.mp (hn.le (Ideal.mem_sup_left hx))
-    refine Submodule.add_mem_sup hy ?_
-    obtain ⟨z, rfl⟩ := (Submodule.IsPrincipal.mem_iff_eq_smul_generator I).mp hz
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]
-    refine Ideal.mul_mem_mul ?_ (Submodule.IsPrincipal.generator_mem _)
-    dsimp [IsLocalization.orderEmbedding] at hx
-    rwa [Ideal.mem_comap, f.map_add, f.map_mul, Ideal.add_mem_iff_right _
-      (Ideal.pow_le_pow_right n.le_succ hy), mul_comm, Ideal.unit_mul_mem_iff_mem] at hx
-    refine IsLocalization.map_units (M := q.primeCompl) _ ⟨_, ?_⟩
-    change Submodule.IsPrincipal.generator I ∉ (↑q : Set R)
-    rw [← Set.singleton_subset_iff]; rw [← Ideal.span_le]; rw [Ideal.span_singleton_generator]
-    exact fun e => h₂.not_ge (hp.2 ⟨h₁, e⟩ h₂.le)
-
-Depends on / 依赖: AtPrime, Ideal.height_le_iff.mpr, IsArtinianRing, IsLocalRing, IsLocalRing.quotient_artinian_of_mem_minim, IsLocalization, IsLocalization.AtPrime.ringKrullDim_eq_height, Localization, Localization.AtPrime, Localization.AtPrime.map_eq_maximalIdeal, WithBot, WithBot.coe_inj, WithBot.coe_zero, coe_inj, coe_zero, height, height_le_iff, isArtinianRing_iff_isNilpotent_maximalIdeal, isArtinianRing_iff_krullDimLE_zero, map_eq_maximalIdeal
+/-
+**Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing** 是 Mat
+hlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing [Is
+LocalRing R] (I : Ideal R) [I.IsPrincipal] (hp : (IsLocalRing.maximalIdeal R) in
+ I.minimalPrimes) : (IsLocalRing.maximalIdeal R).height <= 1
+参数：I : Ideal R；hp : (IsLocalRing.maximalIdeal R) in I.minimalPrimes。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Ideal.height_le_iff`：Ideal.height_le_iff {p : Ideal R} {n : Nat} [p.IsPr
+ime] : p.height <= n ↔ forall q : Ideal R, q.IsPrime -> q < p -> q.height < n
+· 使用定理 `Ideal.IsMaximal.isPrime'`：∀ {α : Type u} [inst : CommSemiring α] (I : Id
+eal α) [_H : I.IsMaximal], I.IsPrime
+· 使用定理 `IsLocalRing.maximalIdeal.isMaximal`：∀ (R : Type u_1) [inst : CommSemirin
+g R] [inst_1 : IsLocalRing R], (IsLocalRing.maximalIdeal R).IsMaximal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WithBot.coe_inj`：coe_inj : (a : WithBot α) = b ↔ a = b
+· 使用定理 `IsLocalization.AtPrime.ringKrullDim_eq_height`：IsLocalization.AtPrime.ri
+ngKrullDim_eq_height (I : Ideal R) [I.IsPrime] (A : Type*) [CommRing A] [Algebra
+ R A] [IsLocalization.AtPrime A I] …
+· 使用定理 `WithBot.coe_zero`：∀ {α : Type u} [inst : Zero α], ↑0 = 0
+· 使用引理 `ringKrullDimZero_iff_ringKrullDim_eq_zero`：ringKrullDimZero_iff_ringKrul
+lDim_eq_zero [Nontrivial R] : Ring.KrullDimLE 0 R ↔ ringKrullDim R = 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Localization.AtPrime.isLocalRing`：∀ {R : Type u_1} [inst : CommSemiring 
+R] (P : Ideal R) [hp : P.IsPrime], IsLocalRing (Localization P.primeCompl)
+· 使用定理 `isArtinianRing_iff_krullDimLE_zero`：isArtinianRing_iff_krullDimLE_zero {
+R : Type*} [CommRing R] [IsNoetherianRing R] : IsArtinianRing R ↔ Ring.KrullDimL
+E 0 R
+· 使用定理 `IsLocalization.instIsNoetherianRingLocalization`：∀ {R : Type u_3} [inst 
+: CommRing R] [IsNoetherianRing R] (S : Submonoid R), IsNoetherianRing (Localiza
+tion S)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `isArtinianRing_iff_isNilpotent_maximalIdeal`：isArtinianRing_iff_isNilpot
+ent_maximalIdeal (R : Type*) [CommRing R] [IsNoetherianRing R] [IsLocalRing R] :
+ IsArtinianRing R ↔ IsNilpotent (…
+· 使用定理 `Localization.AtPrime.map_eq_maximalIdeal`：∀ {R : Type u_1} [inst : CommS
+emiring R] {I : Ideal R} [hI : I.IsPrime],   Ideal.map (algebraMap R (Localizati
+on.AtPrime I)) I = IsLocalRing…
+· 使用引理 `IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing`：IsLoc
+alRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing [IsLocalRing R] (I 
+: Ideal R) (hp : IsLocalRing.maximalIdeal R in I.minima…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.map_mono`：map_mono (h : I <= J) : map f I <= map f J
+· 使用定理 `Ideal.comap_mono`：comap_mono [RingHomClass F R S] (h : K <= L) : comap f
+ K <= comap f L
+· 使用定理 `Ideal.pow_le_pow_right`：pow_le_pow_right {m n : Nat} (h : m <= n) : I ^ 
+n <= I ^ m
+· 使用定理 `IsArtinian.monotone_stabilizes`：monotone_stabilizes (f : Nat ->o (Submod
+ule R M)ᵒᵈ) : exists n, forall m, n <= m -> f n = f m
+· 使用定理 `Submodule.eq_bot_of_le_smul_of_le_jacobson_bot`：eq_bot_of_le_smul_of_le_
+jacobson_bot (I : Ideal R) (N : Submodule R M) (hN : N.FG) (hIN : N <= I • N) (h
+Ijac : I <= jacobson ⊥) : N = ⊥
+· 使用定理 `IsNoetherian.noetherian`：∀ {R : Type u_1} {M : Type u_2} {inst : Semirin
+g R} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : IsNoether
+ian R M] (s :…
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `RelEmbedding.map_rel_iff`：map_rel_iff (f : r ↪r s) {a b} : s (f a) (f b)
+ ↔ r a b
+· 使用定理 `Submodule.le_of_le_smul_of_le_jacobson_bot`：le_of_le_smul_of_le_jacobson
+_bot {R M} [CommRing R] [AddCommGroup M] [Module R M] {I : Ideal R} {N N' : Subm
+odule R M} (hN' : N'.FG) (hIJ : …
+· 使用定理 `IsLocalRing.jacobson_eq_maximalIdeal`：jacobson_eq_maximalIdeal (I : Idea
+l R) (h : I != ⊤) : I.jacobson = IsLocalRing.maximalIdeal R
+（共 65 条，此处仅展示前 30 条）
 -/
 lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
     [IsLocalRing R] (I : Ideal R) [I.IsPrincipal]
-    (hp : (IsLocalRing.maximalIdeal R) in I.minimalPrimes) :
-    (IsLocalRing.maximalIdeal R).height <= 1 := by
-  refine Ideal.height_le_iff.mpr fun q h₁ h₂ => ?_
+    (hp : (IsLocalRing.maximalIdeal R) ∈ I.minimalPrimes) :
+    (IsLocalRing.maximalIdeal R).height ≤ 1 := by
+  refine Ideal.height_le_iff.mpr fun q h₁ h₂ ↦ ?_
   suffices q.height = 0 by rw [this]; exact zero_lt_one
-  rw [← WithBot.coe_inj]; rw [← IsLocalization.AtPrime.ringKrullDim_eq_height q (Localization.AtPrime q)]; rw [WithBot.coe_zero]; rw [← ringKrullDimZero_iff_ringKrullDim_eq_zero]; rw [← isArtinianRing_iff_krullDimLE_zero]; rw [isArtinianRing_iff_isNilpotent_maximalIdeal]; rw [← Localization.AtPrime.map_eq_maximalIdeal]
+  rw [← WithBot.coe_inj,
+    ← IsLocalization.AtPrime.ringKrullDim_eq_height q (Localization.AtPrime q),
+    WithBot.coe_zero, ← ringKrullDimZero_iff_ringKrullDim_eq_zero,
+    ← isArtinianRing_iff_krullDimLE_zero, isArtinianRing_iff_isNilpotent_maximalIdeal,
+    ← Localization.AtPrime.map_eq_maximalIdeal]
   have : IsArtinianRing (R ⧸ I) :=
     IsLocalRing.quotient_artinian_of_mem_minimalPrimes_of_isLocalRing I hp
   let f := algebraMap R (Localization.AtPrime q)
-  let qs : Nat ->o (Ideal (R ⧸ I))ᵒᵈ :=
+  let qs : ℕ →o (Ideal (R ⧸ I))ᵒᵈ :=
     { toFun n := ((q.map f ^ n).comap f).map (Ideal.Quotient.mk I)
       monotone' i j e := Ideal.map_mono (Ideal.comap_mono (Ideal.pow_le_pow_right e)) }
   obtain ⟨n, hn⟩ := IsArtinian.monotone_stabilizes qs
@@ -184,7 +206,8 @@ lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
   rotate_left
   · rw [IsLocalRing.jacobson_eq_maximalIdeal, Localization.AtPrime.map_eq_maximalIdeal]
     exact bot_ne_top
-  rw [smul_eq_mul]; rw [← pow_succ']; rw [← (IsLocalization.orderEmbedding q.primeCompl (Localization.AtPrime q)).map_rel_iff]
+  rw [smul_eq_mul, ← pow_succ',
+    ← (IsLocalization.orderEmbedding q.primeCompl (Localization.AtPrime q)).map_rel_iff]
   refine Submodule.le_of_le_smul_of_le_jacobson_bot (I := I) (IsNoetherian.noetherian _) ?_ ?_
   · rw [IsLocalRing.jacobson_eq_maximalIdeal]
     exacts [hp.le, bot_ne_top]
@@ -195,45 +218,64 @@ lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing
     obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.mp (hn.le (Ideal.mem_sup_left hx))
     refine Submodule.add_mem_sup hy ?_
     obtain ⟨z, rfl⟩ := (Submodule.IsPrincipal.mem_iff_eq_smul_generator I).mp hz
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]
+    rw [smul_eq_mul, smul_eq_mul, mul_comm]
     refine Ideal.mul_mem_mul ?_ (Submodule.IsPrincipal.generator_mem _)
     dsimp [IsLocalization.orderEmbedding] at hx
     rwa [Ideal.mem_comap, f.map_add, f.map_mul, Ideal.add_mem_iff_right _
       (Ideal.pow_le_pow_right n.le_succ hy), mul_comm, Ideal.unit_mul_mem_iff_mem] at hx
     refine IsLocalization.map_units (M := q.primeCompl) _ ⟨_, ?_⟩
     change Submodule.IsPrincipal.generator I ∉ (↑q : Set R)
-    rw [← Set.singleton_subset_iff]; rw [← Ideal.span_le]; rw [Ideal.span_singleton_generator]
-    exact fun e => h₂.not_ge (hp.2 ⟨h₁, e⟩ h₂.le)
+    rw [← Set.singleton_subset_iff, ← Ideal.span_le, Ideal.span_singleton_generator]
+    exact fun e ↦ h₂.not_ge (hp.2 ⟨h₁, e⟩ h₂.le)
 
-/--
-lemma `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes` / 引理 `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes`
+/-- **Krull's principal ideal theorem** (also known as **Krullscher Hauptidealsatz**) :
+  In a commutative Noetherian ring `R`, any prime ideal that is minimal over a principal ideal
+  has height at most 1. -/
+/-
+**Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes** 是 Mathlib 中的一个引理，位于命
+名空间 ``。
+形式化陈述：Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes (I : Ideal R) [I.I
+sPrincipal] (p : Ideal R) (hp : p in I.minimalPrimes) : p.height <= 1
+参数：I : Ideal R；p : Ideal R；hp : p in I.minimalPrimes。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Ideal.IsMinimalPrime.isPrime`：Ideal.IsMinimalPrime.isPrime {p : Ideal R}
+ (h : I.IsMinimalPrime p) : p.IsPrime
+· 使用定理 `Localization.AtPrime.isLocalRing`：∀ {R : Type u_1} [inst : CommSemiring 
+R] (P : Ideal R) [hp : P.IsPrime], IsLocalRing (Localization P.primeCompl)
+· 使用引理 `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing`：
+Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing [IsLocalR
+ing R] (I : Ideal R) [I.IsPrincipal] (hp : (IsLocalRing.maxi…
+· 使用定理 `IsLocalization.instIsNoetherianRingLocalization`：∀ {R : Type u_3} [inst 
+: CommRing R] [IsNoetherianRing R] (S : Submonoid R), IsNoetherianRing (Localiza
+tion S)
+· 使用定理 `instIsPrincipalMapRingHom`：∀ {R : Type u_1} {S : Type u_2} [inst : Semir
+ing R] [inst_1 : Semiring S] (f : R →+* S) (I : Ideal R)   [Submodule.IsPrincipa
+l I], Submodule…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.minimalPrimes_map`：IsLocalization.minimalPrimes_map [IsLo
+calization S A] (J : Ideal R) : (J.map (algebraMap R A)).minimalPrimes = Ideal.u
+nder R ⁻¹' J.minimalPr…
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `Localization.AtPrime.under_maximalIdeal`：∀ {R : Type u_1} [inst : CommSe
+miring R] {I : Ideal R} [hI : I.IsPrime],   Ideal.under R (IsLocalRing.maximalId
+eal (Localization I.primeComp…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.height_under`：IsLocalization.height_under (S : Submonoid 
+R) {A : Type*} [CommRing A] [Algebra R A] [IsLocalization S A] (J : Ideal A) : (
+J.under R).height…
 
-English:
-lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes
-  proof: by
-  have := hp.isPrime
-  let f := algebraMap R (Localization.AtPrime p)
-  have := Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing (I.map f) ?_
-  · rwa [← IsLocalization.height_under p.primeCompl,
-      Localization.AtPrime.under_maximalIdeal] at this
-  · rwa [IsLocalization.minimalPrimes_map p.primeCompl (Localization.AtPrime p) I,
-      Set.mem_preimage, Localization.AtPrime.under_maximalIdeal]
-
-中文:
-引理 理想.height_le_one_of_isPrincipal_of_mem_minimalPrimes
-  证明: by
-  have := hp.isPrime
-  let f := algebraMap R (Localization.AtPrime p)
-  have := Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing (I.map f) ?_
-  · rwa [← IsLocalization.height_under p.primeCompl,
-      Localization.AtPrime.under_maximalIdeal] at this
-  · rwa [IsLocalization.minimalPrimes_map p.primeCompl (Localization.AtPrime p) I,
-      Set.mem_preimage, Localization.AtPrime.under_maximalIdeal]
-
-Depends on / 依赖: AtPrime, I.map, Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing, IsLocalization, IsLocalization.height_under, IsLocalization.minimalPrimes_map, Localization, Localization.AtPrime, Localization.AtPrime.under_maximalIdeal, Set.mem_preimage, algebraMap, height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing, height_under, hp.isPrime, isPrime, mem_preimage, minimalPrimes_map, p.primeCompl, primeCompl, under_maximalIdeal
+--- 原说明 ---
+**Krull's principal ideal theorem** (also known as **Krullscher Hauptidealsatz**
+) :
+  In a commutative Noetherian ring `R`, any prime ideal that is minimal over a p
+rincipal ideal
+  has height at most 1.
 -/
 lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes
-    (I : Ideal R) [I.IsPrincipal] (p : Ideal R) (hp : p in I.minimalPrimes) : p.height <= 1 := by
+    (I : Ideal R) [I.IsPrincipal] (p : Ideal R) (hp : p ∈ I.minimalPrimes) : p.height ≤ 1 := by
   have := hp.isPrime
   let f := algebraMap R (Localization.AtPrime p)
   have := Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes_of_isLocalRing (I.map f) ?_
@@ -241,201 +283,237 @@ lemma Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes
       Localization.AtPrime.under_maximalIdeal] at this
   · rwa [IsLocalization.minimalPrimes_map p.primeCompl (Localization.AtPrime p) I,
       Set.mem_preimage, Localization.AtPrime.under_maximalIdeal]
-
-/--
-theorem `Ideal.map_height_le_one_of_mem_minimalPrimes` / 定理 `Ideal.map_height_le_one_of_mem_minimalPrimes`
-
-English:
-theorem Ideal.map_height_le_one_of_mem_minimalPrimes
-  statement: {I p : Ideal R} {x : R}
-  proof: let f := Ideal.Quotient.mk I
-  have : p.IsPrime := hp.isPrime
-  have hfp : RingHom.ker f <= p := I.mk_ker.trans_le (le_sup_left.trans hp.le)
-  height_le_one_of_isPrincipal_of_mem_minimalPrimes ((span {x}).map f) (p.map f)
-    ⟨⟨map_isPrime_of_surjective Quotient.mk_surjective hfp,
-      map_mono (le_sup_right.trans hp.le)⟩,
-fun _ ⟨hr, hxr⟩ hrp => map_le_iff_le_comap.mpr hp.2 ⟨hr.comap f, sup_le_iff.mpr
-⟨I.mk_ker.symm.trans_le ker_le_comap (Ideal.Quotient.mk I), le_comap_of_map_le hxr⟩⟩
-(comap_mono hrp).trans Eq.le
-(p.comap_map_of_surjective _ Quotient.mk_surjective).trans sup_eq_left.mpr hfp⟩
-
-中文:
-定理 理想.map_height_le_one_of_mem_minimalPrimes
-  结论: {I p : 理想 R} {x : R}
-  证明: let f := Ideal.Quotient.mk I
-  have : p.IsPrime := hp.isPrime
-  have hfp : RingHom.ker f <= p := I.mk_ker.trans_le (le_sup_left.trans hp.le)
-  height_le_one_of_isPrincipal_of_mem_minimalPrimes ((span {x}).map f) (p.map f)
-    ⟨⟨map_isPrime_of_surjective Quotient.mk_surjective hfp,
-      map_mono (le_sup_right.trans hp.le)⟩,
-fun _ ⟨hr, hxr⟩ hrp => map_le_iff_le_comap.mpr hp.2 ⟨hr.comap f, sup_le_iff.mpr
-⟨I.mk_ker.symm.trans_le ker_le_comap (Ideal.Quotient.mk I), le_comap_of_map_le hxr⟩⟩
-(comap_mono hrp).trans Eq.le
-(p.comap_map_of_surjective _ Quotient.mk_surjective).trans sup_eq_left.mpr hfp⟩
-
-Depends on / 依赖: I.mk_ker.symm.trans_le, I.mk_ker.trans_le, Ideal.Quotient.mk, IsPrime, Quotient, Quotient.mk_surjective, RingHom, RingHom.ker, comap_mono, height_le_one_of_isPrincipal_of_mem_minimalPrimes, hp.isPrime, hp.le, hr.comap, isPrime, ker_le_comap, le_comap_of_map_le, le_sup_left, le_sup_left.trans, le_sup_right, le_sup_right.trans
+/-
+**Ideal.map_height_le_one_of_mem_minimalPrimes** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.map_height_le_one_of_mem_minimalPrimes {I p : Ideal R} {x : R} (hp :
+ p in (I ⊔ span {x}).minimalPrimes) : (p.map (Ideal.Quotient.mk I)).height <= 1
+参数：hp : p in (I ⊔ span {x}).minimalPrimes。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `Ideal.IsMinimalPrime.isPrime`：Ideal.IsMinimalPrime.isPrime {p : Ideal R}
+ (h : I.IsMinimalPrime p) : p.IsPrime
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `Ideal.mk_ker`：mk_ker {I : Ideal R} [I.IsTwoSided] : ker (Quotient.mk I) 
+= I
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用引理 `Ideal.IsMinimalPrime.le`：Ideal.IsMinimalPrime.le {p : Ideal R} (h : I.Is
+MinimalPrime p) : I <= p
+· 使用引理 `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes`：Ideal.height_le
+_one_of_isPrincipal_of_mem_minimalPrimes (I : Ideal R) [I.IsPrincipal] (p : Idea
+l R) (hp : p in I.minimalPrimes) : p.height <…
+· 使用定理 `instIsPrincipalMapRingHom`：∀ {R : Type u_1} {S : Type u_2} [inst : Semir
+ing R] [inst_1 : Semiring S] (f : R →+* S) (I : Ideal R)   [Submodule.IsPrincipa
+l I], Submodule…
+· 使用定理 `instIsPrincipalSpanSingletonSet`：∀ {R : Type u_1} [inst : Semiring R] {x
+ : R}, Submodule.IsPrincipal (Ideal.span {x})
+· 使用定理 `Ideal.map_isPrime_of_surjective`：map_isPrime_of_surjective {f : F} (hf :
+ Function.Surjective f) {I : Ideal R} [H : IsPrime I] (hk : RingHom.ker f <= I) 
+: IsPrime (map f I)
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `Ideal.map_mono`：map_mono (h : I <= J) : map f I <= map f J
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.map_le_iff_le_comap`：map_le_iff_le_comap [RingHomClass F R S] : ma
+p f I <= K ↔ I <= comap f K
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ideal.IsPrime.comap`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : 
+Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   {K : Ideal 
+S} [inst_…
+· 使用定理 `sup_le_iff`：sup_le_iff : a ⊔ b <= c ↔ a <= c ∧ b <= c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.ker_le_comap`：ker_le_comap {K : Ideal S} (f : F) : RingHom.ker f <
+= comap f K
+· 使用定理 `Ideal.le_comap_of_map_le`：le_comap_of_map_le : I.map f <= K -> I <= K.co
+map f
+· 使用定理 `Ideal.comap_mono`：comap_mono [RingHomClass F R S] (h : K <= L) : comap f
+ K <= comap f L
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.comap_map_of_surjective`：comap_map_of_surjective (hf : Function.Su
+rjective f) (I : Ideal R) : comap f (map f I) = I ⊔ comap f ⊥
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
 -/
 theorem Ideal.map_height_le_one_of_mem_minimalPrimes {I p : Ideal R} {x : R}
-    (hp : p in (I ⊔ span {x}).minimalPrimes) : (p.map (Ideal.Quotient.mk I)).height <= 1 :=
+    (hp : p ∈ (I ⊔ span {x}).minimalPrimes) : (p.map (Ideal.Quotient.mk I)).height ≤ 1 :=
   let f := Ideal.Quotient.mk I
   have : p.IsPrime := hp.isPrime
-  have hfp : RingHom.ker f <= p := I.mk_ker.trans_le (le_sup_left.trans hp.le)
+  have hfp : RingHom.ker f ≤ p := I.mk_ker.trans_le (le_sup_left.trans hp.le)
   height_le_one_of_isPrincipal_of_mem_minimalPrimes ((span {x}).map f) (p.map f)
     ⟨⟨map_isPrime_of_surjective Quotient.mk_surjective hfp,
       map_mono (le_sup_right.trans hp.le)⟩,
-fun _ ⟨hr, hxr⟩ hrp => map_le_iff_le_comap.mpr hp.2 ⟨hr.comap f, sup_le_iff.mpr
-⟨I.mk_ker.symm.trans_le ker_le_comap (Ideal.Quotient.mk I), le_comap_of_map_le hxr⟩⟩
-(comap_mono hrp).trans Eq.le
-(p.comap_map_of_surjective _ Quotient.mk_surjective).trans sup_eq_left.mpr hfp⟩
+        fun _ ⟨hr, hxr⟩ hrp ↦ map_le_iff_le_comap.mpr <| hp.2 ⟨hr.comap f, sup_le_iff.mpr
+          ⟨I.mk_ker.symm.trans_le <| ker_le_comap (Ideal.Quotient.mk I), le_comap_of_map_le hxr⟩⟩ <|
+            (comap_mono hrp).trans <| Eq.le <|
+              (p.comap_map_of_surjective _ Quotient.mk_surjective).trans <| sup_eq_left.mpr hfp⟩
 
-/--
-lemma `Ideal.height_span_singleton_le_one` / 引理 `Ideal.height_span_singleton_le_one`
+/-- In a Noetherian ring, the height of a principal ideal spanned by a non-unit is at most one. -/
+/-
+**Ideal.height_span_singleton_le_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_span_singleton_le_one {x : R} (hx' : ¬ IsUnit x) : (span {x})
+.height <= 1
+参数：hx' : ¬ IsUnit x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.nonempty_minimalPrimes`：Ideal.nonempty_minimalPrimes (h : I != ⊤) 
+: Nonempty I.minimalPrimes
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Ideal.height_mono`：Ideal.height_mono {I J : Ideal R} (h : I <= J) : I.he
+ight <= J.height
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes`：Ideal.height_le
+_one_of_isPrincipal_of_mem_minimalPrimes (I : Ideal R) [I.IsPrincipal] (p : Idea
+l R) (hp : p in I.minimalPrimes) : p.height <…
+· 使用定理 `instIsPrincipalSpanSingletonSet`：∀ {R : Type u_1} [inst : Semiring R] {x
+ : R}, Submodule.IsPrincipal (Ideal.span {x})
 
-English:
-lemma Ideal.height_span_singleton_le_one
-  given: {x : R} (hx' : ¬ IsUnit x)
-  proof: by
-  obtain ⟨p, hp⟩ := (span {x}).nonempty_minimalPrimes (by simpa)
-  refine le_trans (height_mono hp.1.2) ?_
-  exact Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes (span {x}) _ hp
-
-中文:
-引理 理想.height_span_singleton_le_one
-  条件: {x : R} (hx' : ¬ 是单位 x)
-  证明: by
-  obtain ⟨p, hp⟩ := (span {x}).nonempty_minimalPrimes (by simpa)
-  refine le_trans (height_mono hp.1.2) ?_
-  exact Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes (span {x}) _ hp
-
-Depends on / 依赖: Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes, height_le_one_of_isPrincipal_of_mem_minimalPrimes, height_mono, le_trans, nonempty_minimalPrimes
+--- 原说明 ---
+In a Noetherian ring, the height of a principal ideal spanned by a non-unit is a
+t most one.
 -/
 lemma Ideal.height_span_singleton_le_one {x : R} (hx' : ¬ IsUnit x) :
-    (span {x}).height <= 1 := by
+    (span {x}).height ≤ 1 := by
   obtain ⟨p, hp⟩ := (span {x}).nonempty_minimalPrimes (by simpa)
   refine le_trans (height_mono hp.1.2) ?_
   exact Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes (span {x}) _ hp
 
-/--
-lemma `Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors` / 引理 `Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors`
+/-- In a Noetherian ring, the height of a principal ideal spanned by a non-unit non-zero-divisor
+is one. -/
+/-
+**Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors** 是 Mathlib 中的一个引理，位
+于命名空间 ``。
+形式化陈述：Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors {x : R} (hx : x 
+in nonZeroDivisors R) (hx' : ¬ IsUnit x) : (span {x}).height = 1
+参数：hx : x in nonZeroDivisors R；hx' : ¬ IsUnit x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `Ideal.height_span_singleton_le_one`：Ideal.height_span_singleton_le_one {
+x : R} (hx' : ¬ IsUnit x) : (span {x}).height <= 1
+· 使用引理 `Ideal.one_le_height_span_singleton_of_mem_nonZeroDivisors`：Ideal.one_le_
+height_span_singleton_of_mem_nonZeroDivisors {x : R} (hx : x in nonZeroDivisors 
+R) : 1 <= (span {x}).height
 
-English:
-lemma Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors
-  statement: {x : R}
-  proof: le_antisymm (height_span_singleton_le_one hx')
-    (one_le_height_span_singleton_of_mem_nonZeroDivisors hx)
-
-中文:
-引理 理想.height_span_singleton_eq_one_of_mem_nonZeroDivisors
-  结论: {x : R}
-  证明: le_antisymm (height_span_singleton_le_one hx')
-    (one_le_height_span_singleton_of_mem_nonZeroDivisors hx)
-
-Depends on / 依赖: height_span_singleton_le_one, le_antisymm, one_le_height_span_singleton_of_mem_nonZeroDivisors
+--- 原说明 ---
+In a Noetherian ring, the height of a principal ideal spanned by a non-unit non-
+zero-divisor
+is one.
 -/
 lemma Ideal.height_span_singleton_eq_one_of_mem_nonZeroDivisors {x : R}
-    (hx : x in nonZeroDivisors R) (hx' : ¬ IsUnit x) : (span {x}).height = 1 :=
+    (hx : x ∈ nonZeroDivisors R) (hx' : ¬ IsUnit x) : (span {x}).height = 1 :=
   le_antisymm (height_span_singleton_le_one hx')
     (one_le_height_span_singleton_of_mem_nonZeroDivisors hx)
 
-/--
-theorem `Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert` / 定理 `Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert`
+/-- If `q < p` are prime ideals such that `p` is minimal over `span (s ∪ {x})` and
+`t` is a set contained in `q` such that `s ⊆ √span (t ∪ {x})`, then `q` is minimal over `span t`.
+This is used in the induction step for the proof of Krull's height theorem. -/
+/-
+**Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert** 是 Mathlib 中的一个
+定理，位于命名空间 ``。
+形式化陈述：Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert {q p : Ideal
+ R} [q.IsPrime] (hqp : q < p) (x : R) (s : Set R) (hp : p in (span (insert x s))
+.minimalPrimes) (t : Set R) (htq : t subseteq q) (hsp : s subseteq (span (insert
+ x t)).radical) : q in (span t).minimalPrimes
+参数：hqp : q < p；x : R；s : Set R；hp : p in (span (insert x s)).minimalPrimes；t : S
+et R；htq : t subseteq q；hsp : s subseteq (span (insert x t)).radical。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `Ideal.IsMinimalPrime.isPrime`：Ideal.IsMinimalPrime.isPrime {p : Ideal R}
+ (h : I.IsMinimalPrime p) : p.IsPrime
+· 使用定理 `Ideal.map_isPrime_of_surjective`：map_isPrime_of_surjective {f : F} (hf :
+ Function.Surjective f) {I : Ideal R} [H : IsPrime I] (hk : RingHom.ker f <= I) 
+: IsPrime (map f I)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mk_ker`：mk_ker {I : Ideal R} [I.IsTwoSided] : ker (Quotient.mk I) 
+= I
+· 使用引理 `Ideal.height_le_one_of_isPrincipal_of_mem_minimalPrimes`：Ideal.height_le
+_one_of_isPrincipal_of_mem_minimalPrimes (I : Ideal R) [I.IsPrincipal] (p : Idea
+l R) (hp : p in I.minimalPrimes) : p.height <…
+· 使用定理 `instIsPrincipalMapRingHom`：∀ {R : Type u_1} {S : Type u_2} [inst : Semir
+ing R] [inst_1 : Semiring S] (f : R →+* S) (I : Ideal R)   [Submodule.IsPrincipa
+l I], Submodule…
+· 使用定理 `instIsPrincipalSpanSingletonSet`：∀ {R : Type u_1} [inst : Semiring R] {x
+ : R}, Submodule.IsPrincipal (Ideal.span {x})
+· 使用定理 `Ideal.map_mono`：map_mono (h : I <= J) : map f I <= map f J
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用引理 `Ideal.IsMinimalPrime.le`：Ideal.IsMinimalPrime.le {p : Ideal R} (h : I.Is
+MinimalPrime p) : I <= p
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Ideal.map_le_iff_le_comap`：map_le_iff_le_comap [RingHomClass F R S] : ma
+p f I <= K ↔ I <= comap f K
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ideal.IsPrime.comap`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : 
+Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   {K : Ideal 
+S} [inst_…
+· 使用定理 `Set.insert_subset_iff`：insert_subset_iff : insert a s subseteq t ↔ a in 
+t ∧ s subseteq t
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.IsRadical.radical_le_iff`：∀ {R : Type u} [inst : CommSemiring R] {
+I J : Ideal R}, J.IsRadical → (I.radical ≤ J ↔ I ≤ J)
+· 使用定理 `Ideal.IsPrime.isRadical`：∀ {R : Type u} [inst : CommSemiring R] {I : Ide
+al R}, I.IsPrime → I.IsRadical
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.ker_le_comap`：ker_le_comap {K : Ideal S} (f : F) : RingHom.ker f <
+= comap f K
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
+· 使用定理 `RingHom.ker_eq_comap_bot`：ker_eq_comap_bot (f : F) : ker f = Ideal.comap
+ f ⊥
+（共 46 条，此处仅展示前 30 条）
 
-English:
-theorem Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert
-  statement: {q p : Ideal R} [q.IsPrime]
-  proof: by
-  let f := Quotient.mk (span t)
-  have hf : Function.Surjective f := Quotient.mk_surjective
-  have hI'q : span t <= q := span_le.mpr htq
-  have hI'p : span t <= p := hI'q.trans hqp.le
-  have := hp.isPrime
-  have : (p.map f).IsPrime := map_isPrime_of_surjective hf (by rwa [mk_ker])
-  suffices h : (p.map f).height <= 1 by
-have h_lt : q.map f < p.map f := (map_mono hqp.le).lt_of_not_ge fun e => hqp.not_ge by
-      simpa only [comap_map_of_surjective f hf, ← RingHom.ker_eq_comap_bot, f, mk_ker,
-        sup_eq_left.mpr hI'q, sup_eq_left.mpr hI'p] using comap_mono (f := f) e
-    have : (q.map f).IsPrime := map_isPrime_of_surjective hf (by rwa [mk_ker])
-    have : (p.map f).FiniteHeight := ⟨Or.inr (h.trans_lt (WithTop.coe_lt_top 1)).ne⟩
-    have := (height_strict_mono_of_isPrime_of_isPrime h_lt).trans_le h
-    rw [Order.lt_one_iff]; rw [height_eq_zero_iff] at this
-    have := minimalPrimes_comap_of_surjective hf this
-    rwa [comap_map_of_surjective f hf, ← RingHom.ker_eq_comap_bot,
-      mk_ker, sup_eq_left.mpr hI'q] at this
-  refine height_le_one_of_isPrincipal_of_mem_minimalPrimes ((span {x}).map f) (p.map f) ⟨⟨this,
-map_mono span_le.mpr Set.singleton_subset_iff.mpr hp.le subset_span .inl rfl⟩,
-    fun r ⟨hr, hxr⟩ hrp => map_le_iff_le_comap.mpr (hp.2 ⟨hr.comap f, ?_⟩ ?_)⟩
-  · rw [span_le, Set.insert_subset_iff]
-    have := map_le_iff_le_comap.mp hxr (subset_span rfl)
-    refine ⟨this, hsp.trans ((hr.comap f).isRadical.radical_le_iff.mpr ?_)⟩
-    rw [span_le]; rw [Set.insert_subset_iff]
-    exact ⟨this, span_le.mp (mk_ker.symm.trans_le (ker_le_comap _))⟩
-  · conv_rhs => rw [← sup_eq_left.mpr hI'p, ← (span t).mk_ker, RingHom.ker_eq_comap_bot,
-      ← comap_map_of_surjective f hf p]
-    exact comap_mono hrp
-
-中文:
-定理 理想.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert
-  结论: {q p : 理想 R} [q.是素]
-  证明: by
-  let f := Quotient.mk (span t)
-  have hf : Function.Surjective f := Quotient.mk_surjective
-  have hI'q : span t <= q := span_le.mpr htq
-  have hI'p : span t <= p := hI'q.trans hqp.le
-  have := hp.isPrime
-  have : (p.map f).IsPrime := map_isPrime_of_surjective hf (by rwa [mk_ker])
-  suffices h : (p.map f).height <= 1 by
-have h_lt : q.map f < p.map f := (map_mono hqp.le).lt_of_not_ge fun e => hqp.not_ge by
-      simpa only [comap_map_of_surjective f hf, ← RingHom.ker_eq_comap_bot, f, mk_ker,
-        sup_eq_left.mpr hI'q, sup_eq_left.mpr hI'p] using comap_mono (f := f) e
-    have : (q.map f).IsPrime := map_isPrime_of_surjective hf (by rwa [mk_ker])
-    have : (p.map f).FiniteHeight := ⟨Or.inr (h.trans_lt (WithTop.coe_lt_top 1)).ne⟩
-    have := (height_strict_mono_of_isPrime_of_isPrime h_lt).trans_le h
-    rw [Order.lt_one_iff]; rw [height_eq_zero_iff] at this
-    have := minimalPrimes_comap_of_surjective hf this
-    rwa [comap_map_of_surjective f hf, ← RingHom.ker_eq_comap_bot,
-      mk_ker, sup_eq_left.mpr hI'q] at this
-  refine height_le_one_of_isPrincipal_of_mem_minimalPrimes ((span {x}).map f) (p.map f) ⟨⟨this,
-map_mono span_le.mpr Set.singleton_subset_iff.mpr hp.le subset_span .inl rfl⟩,
-    fun r ⟨hr, hxr⟩ hrp => map_le_iff_le_comap.mpr (hp.2 ⟨hr.comap f, ?_⟩ ?_)⟩
-  · rw [span_le, Set.insert_subset_iff]
-    have := map_le_iff_le_comap.mp hxr (subset_span rfl)
-    refine ⟨this, hsp.trans ((hr.comap f).isRadical.radical_le_iff.mpr ?_)⟩
-    rw [span_le]; rw [Set.insert_subset_iff]
-    exact ⟨this, span_le.mp (mk_ker.symm.trans_le (ker_le_comap _))⟩
-  · conv_rhs => rw [← sup_eq_left.mpr hI'p, ← (span t).mk_ker, RingHom.ker_eq_comap_bot,
-      ← comap_map_of_surjective f hf p]
-    exact comap_mono hrp
-
-Depends on / 依赖: Function, Function.Surjective, IsPrime, Quotient, Quotient.mk, Quotient.mk_surjective, RingHom, RingHom.ker_eq_comap_bot, Surjective, comap_map_of_surjective, h_lt, height, hp.isPrime, hqp.le, hqp.not_ge, isPrime, ker_eq_comap_bot, lt_of_not_ge, map_isPrime_of_surjective, map_mono
+--- 原说明 ---
+If `q < p` are prime ideals such that `p` is minimal over `span (s ∪ {x})` and
+`t` is a set contained in `q` such that `s ⊆ √span (t ∪ {x})`, then `q` is minim
+al over `span t`.
+This is used in the induction step for the proof of Krull's height theorem.
 -/
 theorem Ideal.mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert {q p : Ideal R} [q.IsPrime]
-    (hqp : q < p) (x : R) (s : Set R) (hp : p in (span (insert x s)).minimalPrimes)
-    (t : Set R) (htq : t subseteq q) (hsp : s subseteq (span (insert x t)).radical) :
-    q in (span t).minimalPrimes := by
+    (hqp : q < p) (x : R) (s : Set R) (hp : p ∈ (span (insert x s)).minimalPrimes)
+    (t : Set R) (htq : t ⊆ q) (hsp : s ⊆ (span (insert x t)).radical) :
+    q ∈ (span t).minimalPrimes := by
   let f := Quotient.mk (span t)
   have hf : Function.Surjective f := Quotient.mk_surjective
-  have hI'q : span t <= q := span_le.mpr htq
-  have hI'p : span t <= p := hI'q.trans hqp.le
+  have hI'q : span t ≤ q := span_le.mpr htq
+  have hI'p : span t ≤ p := hI'q.trans hqp.le
   have := hp.isPrime
   have : (p.map f).IsPrime := map_isPrime_of_surjective hf (by rwa [mk_ker])
-  suffices h : (p.map f).height <= 1 by
-have h_lt : q.map f < p.map f := (map_mono hqp.le).lt_of_not_ge fun e => hqp.not_ge by
+  suffices h : (p.map f).height ≤ 1 by
+    have h_lt : q.map f < p.map f := (map_mono hqp.le).lt_of_not_ge fun e ↦ hqp.not_ge <| by
       simpa only [comap_map_of_surjective f hf, ← RingHom.ker_eq_comap_bot, f, mk_ker,
         sup_eq_left.mpr hI'q, sup_eq_left.mpr hI'p] using comap_mono (f := f) e
     have : (q.map f).IsPrime := map_isPrime_of_surjective hf (by rwa [mk_ker])
     have : (p.map f).FiniteHeight := ⟨Or.inr (h.trans_lt (WithTop.coe_lt_top 1)).ne⟩
     have := (height_strict_mono_of_isPrime_of_isPrime h_lt).trans_le h
-    rw [Order.lt_one_iff]; rw [height_eq_zero_iff] at this
+    rw [Order.lt_one_iff, height_eq_zero_iff] at this
     have := minimalPrimes_comap_of_surjective hf this
     rwa [comap_map_of_surjective f hf, ← RingHom.ker_eq_comap_bot,
       mk_ker, sup_eq_left.mpr hI'q] at this
   refine height_le_one_of_isPrincipal_of_mem_minimalPrimes ((span {x}).map f) (p.map f) ⟨⟨this,
-map_mono span_le.mpr Set.singleton_subset_iff.mpr hp.le subset_span .inl rfl⟩,
-    fun r ⟨hr, hxr⟩ hrp => map_le_iff_le_comap.mpr (hp.2 ⟨hr.comap f, ?_⟩ ?_)⟩
+    map_mono <| span_le.mpr <| Set.singleton_subset_iff.mpr <| hp.le <| subset_span <| .inl rfl⟩,
+    fun r ⟨hr, hxr⟩ hrp ↦ map_le_iff_le_comap.mpr (hp.2 ⟨hr.comap f, ?_⟩ ?_)⟩
   · rw [span_le, Set.insert_subset_iff]
     have := map_le_iff_le_comap.mp hxr (subset_span rfl)
     refine ⟨this, hsp.trans ((hr.comap f).isRadical.radical_le_iff.mpr ?_)⟩
-    rw [span_le]; rw [Set.insert_subset_iff]
+    rw [span_le, Set.insert_subset_iff]
     exact ⟨this, span_le.mp (mk_ker.symm.trans_le (ker_le_comap _))⟩
   · conv_rhs => rw [← sup_eq_left.mpr hI'p, ← (span t).mk_ker, RingHom.ker_eq_comap_bot,
       ← comap_map_of_surjective f hf p]
@@ -446,244 +524,214 @@ open IsLocalRing in
   In a commutative Noetherian ring `R`, any prime ideal that is minimal over an ideal generated
   by `n` elements has height at most `n`. -/
 nonrec lemma Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes
-    (I : Ideal R) (p : Ideal R) (hp : p in I.minimalPrimes) :
-    p.height <= I.spanRank.toENat := by
+    (I : Ideal R) (p : Ideal R) (hp : p ∈ I.minimalPrimes) :
+    p.height ≤ I.spanRank.toENat := by
   classical
-  rw [I.spanRank_toENat_eq_iInf_finset_card]; rw [le_iInf_iff]
+  rw [I.spanRank_toENat_eq_iInf_finset_card, le_iInf_iff]
   rintro ⟨s, (rfl : span s = I)⟩
   induction hn : s.card using Nat.strong_induction_on generalizing R with
   | h n H =>
-    replace hn : s.card <= n := hn.le
+    replace hn : s.card ≤ n := hn.le
     have := hp.isPrime
     cases n with
     | zero =>
-      rw [ENat.natCast_zero]; rw [nonpos_iff_eq_zero]; rw [height_eq_zero_iff]; rw [minimalPrimes]
+      rw [ENat.natCast_zero, nonpos_iff_eq_zero, height_eq_zero_iff, minimalPrimes]
       simp_all
     | succ n =>
-      wlog hR : exists (_ : IsLocalRing R), p = maximalIdeal R
+      wlog hR : ∃ (_ : IsLocalRing R), p = maximalIdeal R
       · rw [← Localization.AtPrime.under_maximalIdeal (I := p)] at hp ⊢
         rw [IsLocalization.height_under p.primeCompl]
-        rw [← Set.mem_preimage]; rw [← IsLocalization.minimalPrimes_map p.primeCompl]; rw [map_span] at hp
+        rw [← Set.mem_preimage, ← IsLocalization.minimalPrimes_map p.primeCompl, map_span] at hp
         exact this _ (s.image (algebraMap R (Localization p.primeCompl))) (by simpa using hp)
           inferInstance _ H (Finset.card_image_le.trans hn) ⟨inferInstance, rfl⟩
       obtain ⟨_, rfl⟩ := hR
       simp_rw [height_le_iff_covBy, ENat.natCast_add, ENat.natCast_one, ENat.lt_natCast_add_one_iff]
       intro q hq hpq hq'
-      obtain ⟨x, s', hxs', rfl, hxq⟩ : exists x s', x ∉ s' ∧ s = insert x s' ∧ x ∉ q := by
-        have : ¬(s : Set R) subseteq q := by
+      obtain ⟨x, s', hxs', rfl, hxq⟩ : ∃ x s', x ∉ s' ∧ s = insert x s' ∧ x ∉ q := by
+        have : ¬(s : Set R) ⊆ q := by
           rw [← span_le]
-          exact fun e => lt_irrefl _ ((hp.2 ⟨hq, e⟩ hpq.le).trans_lt hpq)
+          exact fun e ↦ lt_irrefl _ ((hp.2 ⟨hq, e⟩ hpq.le).trans_lt hpq)
         obtain ⟨x, hxt, hxq⟩ := Set.not_subset.mp this
-        exact ⟨x, _, fun e => (Finset.mem_erase.mp e).1 rfl, (Finset.insert_erase hxt).symm, hxq⟩
-      have : maximalIdeal R <= (q ⊔ span {x}).radical := by
-        rw [radical_eq_sInf]; rw [le_sInf_iff]
-        exact fun J ⟨hJ, hJ'⟩ => by_contra fun h => hq' J hJ' ((SetLike.lt_iff_le_and_exists.mpr
+        exact ⟨x, _, fun e ↦ (Finset.mem_erase.mp e).1 rfl, (Finset.insert_erase hxt).symm, hxq⟩
+      have : maximalIdeal R ≤ (q ⊔ span {x}).radical := by
+        rw [radical_eq_sInf, le_sInf_iff]
+        exact fun J ⟨hJ, hJ'⟩ ↦ by_contra fun h ↦ hq' J hJ' ((SetLike.lt_iff_le_and_exists.mpr
           ⟨le_sup_left, x, mem_sup_right (mem_span_singleton_self _), hxq⟩).trans_le hJ)
           ((le_maximalIdeal hJ'.ne_top).lt_of_not_ge h)
-      have h : (s' : Set R) subseteq (q ⊔ span {x}).radical := by
+      have h : (s' : Set R) ⊆ (q ⊔ span {x}).radical := by
         have := hp.le.trans this
-        rw [span_le]; rw [Finset.coe_insert]; rw [Set.insert_subset_iff] at this
+        rw [span_le, Finset.coe_insert, Set.insert_subset_iff] at this
         exact this.2
       obtain ⟨t, ht, hspan⟩ := exists_subset_radical_span_sup_of_subset_radical_sup _ _ _ h
       let t := Finset.univ.image t
-      suffices hq : q in (span t).minimalPrimes from
-        have tcard : t.card <= n := Nat.le_of_lt_succ ((Finset.card_image_le.trans_lt <| by
+      suffices hq : q ∈ (span t).minimalPrimes from
+        have tcard : t.card ≤ n := Nat.le_of_lt_succ ((Finset.card_image_le.trans_lt <| by
           simpa using Finset.card_lt_card (Finset.ssubset_insert hxs')).trans_le hn)
         (H _ (tcard.trans_lt n.lt_succ_self) q t hq rfl).trans (by norm_cast)
       rw [Finset.coe_insert] at hp
       convert! mem_minimalPrimes_span_of_mem_minimalPrimes_span_insert hpq _ _ hp _ ht ?_
       · simp [t]
-refine hspan.trans radical_mono ?_
-      rw [← Set.union_singleton]; rw [span_union]
+      refine hspan.trans <| radical_mono ?_
+      rw [← Set.union_singleton, span_union]
 
 @[deprecated (since := "2026-04-01")] alias Ideal.height_le_spanRank_toENat_of_mem_minimal_primes :=
     Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes
 
-/--
-lemma `Ideal.height_le_card_of_mem_minimalPrimes_span_finset` / 引理 `Ideal.height_le_card_of_mem_minimalPrimes_span_finset`
-
-English:
-lemma Ideal.height_le_card_of_mem_minimalPrimes_span_finset
-  statement: {p : Ideal R} {s : Finset R}
-  proof: by
-  trans (Cardinal.toENat (Submodule.spanRank (Ideal.span (s : Set R))))
-  · exact Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes _ _ hI
-  · simpa using Submodule.spanRank_span_le_card (s : Set R)
-
-中文:
-引理 理想.height_le_card_of_mem_minimalPrimes_span_finset
-  结论: {p : 理想 R} {s : 有限集 R}
-  证明: by
-  trans (Cardinal.toENat (Submodule.spanRank (Ideal.span (s : Set R))))
-  · exact Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes _ _ hI
-  · simpa using Submodule.spanRank_span_le_card (s : Set R)
-
-Depends on / 依赖: Cardinal, Cardinal.toENat, Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes, Ideal.span, Submodule, Submodule.spanRank, Submodule.spanRank_span_le_card, height_le_spanRank_toENat_of_mem_minimalPrimes, spanRank, spanRank_span_le_card, toENat
+/-
+**Ideal.height_le_card_of_mem_minimalPrimes_span_finset** 是 Mathlib 中的一个引理，位于命名空
+间 ``。
+形式化陈述：Ideal.height_le_card_of_mem_minimalPrimes_span_finset {p : Ideal R} {s : F
+inset R} (hI : p in (Ideal.span s).minimalPrimes) : p.height <= s.card
+参数：hI : p in (Ideal.span s).minimalPrimes。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes`：∀ {R : Type u_1} [
+inst : CommRing R] [IsNoetherianRing R] (I p : Ideal R),   p ∈ I.minimalPrimes →
+ p.height ≤ Cardinal.toENat (Submodule.spa…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.mk_fintype`：mk_fintype (α : Type u) [h : Fintype α] : #α = Fint
+ype.card α
+· 使用定理 `Fintype.card_coe`：Fintype.card_coe (s : Finset α) [Fintype s] : Fintype.
+card s = #s
+· 使用引理 `Submodule.spanRank_span_le_card`：spanRank_span_le_card (s : Set M) : (Su
+bmodule.span R s).spanRank <= #s
 -/
 lemma Ideal.height_le_card_of_mem_minimalPrimes_span_finset {p : Ideal R} {s : Finset R}
-    (hI : p in (Ideal.span s).minimalPrimes) :
-    p.height <= s.card := by
+    (hI : p ∈ (Ideal.span s).minimalPrimes) :
+    p.height ≤ s.card := by
   trans (Cardinal.toENat (Submodule.spanRank (Ideal.span (s : Set R))))
   · exact Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes _ _ hI
   · simpa using Submodule.spanRank_span_le_card (s : Set R)
-
-/--
-lemma `Ideal.height_le_card_of_mem_minimalPrimes_span` / 引理 `Ideal.height_le_card_of_mem_minimalPrimes_span`
-
-English:
-lemma Ideal.height_le_card_of_mem_minimalPrimes_span
-  statement: {p : Ideal R} {s : Set R}
-  proof: by
-  rw [s.ncard_eq_toFinset_card hs]
-  exact Ideal.height_le_card_of_mem_minimalPrimes_span_finset (by simpa)
-
-中文:
-引理 理想.height_le_card_of_mem_minimalPrimes_span
-  结论: {p : 理想 R} {s : 集合 R}
-  证明: by
-  rw [s.ncard_eq_toFinset_card hs]
-  exact Ideal.height_le_card_of_mem_minimalPrimes_span_finset (by simpa)
-
-Depends on / 依赖: Ideal.height_le_card_of_mem_minimalPrimes_span_finset, height_le_card_of_mem_minimalPrimes_span_finset, ncard_eq_toFinset_card, s.ncard_eq_toFinset_card
+/-
+**Ideal.height_le_card_of_mem_minimalPrimes_span** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_card_of_mem_minimalPrimes_span {p : Ideal R} {s : Set R} (
+hs : s.Finite) (hI : p in (Ideal.span s).minimalPrimes) : p.height <= s.ncard
+参数：hs : s.Finite；hI : p in (Ideal.span s).minimalPrimes。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.ncard_eq_toFinset_card`：ncard_eq_toFinset_card (s : Set α) (hs : s.F
+inite
+· 使用引理 `Ideal.height_le_card_of_mem_minimalPrimes_span_finset`：Ideal.height_le_c
+ard_of_mem_minimalPrimes_span_finset {p : Ideal R} {s : Finset R} (hI : p in (Id
+eal.span s).minimalPrimes) : p.height <= s.…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
 -/
 lemma Ideal.height_le_card_of_mem_minimalPrimes_span {p : Ideal R} {s : Set R}
-    (hs : s.Finite) (hI : p in (Ideal.span s).minimalPrimes) :
-    p.height <= s.ncard := by
+    (hs : s.Finite) (hI : p ∈ (Ideal.span s).minimalPrimes) :
+    p.height ≤ s.ncard := by
   rw [s.ncard_eq_toFinset_card hs]
   exact Ideal.height_le_card_of_mem_minimalPrimes_span_finset (by simpa)
 
-/--
-lemma `Ideal.height_le_spanRank_toENat` / 引理 `Ideal.height_le_spanRank_toENat`
+/-- In a commutative Noetherian ring `R`, the height of a (finitely-generated) ideal is smaller
+than or equal to the minimum number of generators for this ideal. -/
+/-
+**Ideal.height_le_spanRank_toENat** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_spanRank_toENat (I : Ideal R) (hI : I != ⊤) : I.height <= 
+I.spanRank.toENat
+参数：I : Ideal R；hI : I != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.nonempty_minimalPrimes`：Ideal.nonempty_minimalPrimes (h : I != ⊤) 
+: Nonempty I.minimalPrimes
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Ideal.height_eq_inf_minimalPrimes`：Ideal.height_eq_inf_minimalPrimes : I
+.height = ⨅ J in I.minimalPrimes, J.height
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `iInf₂_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {f : (i : ι) → κ i → α} (i : ι) (j : κ i),   ⨅ i, ⨅ j, f i j ≤…
+· 使用定理 `Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes`：∀ {R : Type u_1} [
+inst : CommRing R] [IsNoetherianRing R] (I p : Ideal R),   p ∈ I.minimalPrimes →
+ p.height ≤ Cardinal.toENat (Submodule.spa…
 
-English:
-lemma Ideal.height_le_spanRank_toENat
-  given: (I : Ideal R) (hI : I != ⊤)
-  proof: by
+--- 原说明 ---
+In a commutative Noetherian ring `R`, the height of a (finitely-generated) ideal
+ is smaller
+than or equal to the minimum number of generators for this ideal.
+-/
+lemma Ideal.height_le_spanRank_toENat (I : Ideal R) (hI : I ≠ ⊤) :
+    I.height ≤ I.spanRank.toENat := by
   obtain ⟨J, hJ⟩ := nonempty_minimalPrimes hI
   rw [I.height_eq_inf_minimalPrimes]
   exact (iInf₂_le J hJ).trans (I.height_le_spanRank_toENat_of_mem_minimalPrimes J hJ)
-
-中文:
-引理 理想.height_le_spanRank_toE自然数
-  条件: (I : 理想 R) (hI : I != ⊤)
-  证明: by
-  obtain ⟨J, hJ⟩ := nonempty_minimalPrimes hI
-  rw [I.height_eq_inf_minimalPrimes]
-  exact (iInf₂_le J hJ).trans (I.height_le_spanRank_toENat_of_mem_minimalPrimes J hJ)
-
-Depends on / 依赖: I.height_eq_inf_minimalPrimes, I.height_le_spanRank_toENat_of_mem_minimalPrimes, height_eq_inf_minimalPrimes, height_le_spanRank_toENat_of_mem_minimalPrimes, nonempty_minimalPrimes
+/-
+**Ideal.height_le_spanFinrank** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_spanFinrank (I : Ideal R) (hI : I != ⊤) : I.height <= I.sp
+anFinrank
+参数：I : Ideal R；hI : I != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.fg_iff_spanRank_eq_spanFinrank`：fg_iff_spanRank_eq_spanFinrank
+ {p : Submodule R M} : p.spanRank = p.spanFinrank ↔ p.FG
+· 使用定理 `IsNoetherian.noetherian`：∀ {R : Type u_1} {M : Type u_2} {inst : Semirin
+g R} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : IsNoether
+ian R M] (s :…
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `OrderRingHom.instRingHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : N
+onAssocSemiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3
+ : Preorder β], Rin…
+· 使用引理 `Ideal.height_le_spanRank_toENat`：Ideal.height_le_spanRank_toENat (I : Id
+eal R) (hI : I != ⊤) : I.height <= I.spanRank.toENat
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma Ideal.height_le_spanRank_toENat (I : Ideal R) (hI : I != ⊤) :
-    I.height <= I.spanRank.toENat := by
-  obtain ⟨J, hJ⟩ := nonempty_minimalPrimes hI
-  rw [I.height_eq_inf_minimalPrimes]
-  exact (iInf₂_le J hJ).trans (I.height_le_spanRank_toENat_of_mem_minimalPrimes J hJ)
-
-/--
-lemma `Ideal.height_le_spanFinrank` / 引理 `Ideal.height_le_spanFinrank`
-
-English:
-lemma Ideal.height_le_spanFinrank
-  given: (I : Ideal R) (hI : I != ⊤)
-  proof: by
+lemma Ideal.height_le_spanFinrank (I : Ideal R) (hI : I ≠ ⊤) :
+    I.height ≤ I.spanFinrank := by
   have : I.spanFinrank = I.spanRank.toENat := by
-    rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I)]; rw [map_natCast]
+    rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I), map_natCast]
   exact this ▸ height_le_spanRank_toENat I hI
-
-中文:
-引理 理想.height_le_spanFinrank
-  条件: (I : 理想 R) (hI : I != ⊤)
-  证明: by
-  have : I.spanFinrank = I.spanRank.toENat := by
-    rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I)]; rw [map_natCast]
-  exact this ▸ height_le_spanRank_toENat I hI
-
-Depends on / 依赖: I.spanFinrank, I.spanRank.toENat, IsNoetherian, IsNoetherian.noetherian, Submodule, Submodule.fg_iff_spanRank_eq_spanFinrank.mpr, fg_iff_spanRank_eq_spanFinrank, height_le_spanRank_toENat, map_natCast, noetherian, spanFinrank, spanRank, toENat
+/-
+**Ideal.height_le_spanRank** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_spanRank (I : Ideal R) (hI : I != ⊤) : I.height <= I.spanR
+ank
+参数：I : Ideal R；hI : I != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Ideal.height_le_spanRank_toENat`：Ideal.height_le_spanRank_toENat (I : Id
+eal R) (hI : I != ⊤) : I.height <= I.spanRank.toENat
+· 使用引理 `Cardinal.ofENat_toENat_le`：ofENat_toENat_le (a : Cardinal) : ↑(toENat a)
+ <= a
 -/
-lemma Ideal.height_le_spanFinrank (I : Ideal R) (hI : I != ⊤) :
-    I.height <= I.spanFinrank := by
-  have : I.spanFinrank = I.spanRank.toENat := by
-    rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I)]; rw [map_natCast]
-  exact this ▸ height_le_spanRank_toENat I hI
-
-/--
-lemma `Ideal.height_le_spanRank` / 引理 `Ideal.height_le_spanRank`
-
-English:
-lemma Ideal.height_le_spanRank
-  given: (I : Ideal R) (hI : I != ⊤)
-  proof: by
+lemma Ideal.height_le_spanRank (I : Ideal R) (hI : I ≠ ⊤) :
+    I.height ≤ I.spanRank := by
   trans ↑I.spanRank.toENat
   · exact_mod_cast I.height_le_spanRank_toENat hI
   · exact I.spanRank.ofENat_toENat_le
-
-中文:
-引理 理想.height_le_spanRank
-  条件: (I : 理想 R) (hI : I != ⊤)
-  证明: by
-  trans ↑I.spanRank.toENat
-  · exact_mod_cast I.height_le_spanRank_toENat hI
-  · exact I.spanRank.ofENat_toENat_le
-
-Depends on / 依赖: I.height_le_spanRank_toENat, I.spanRank.ofENat_toENat_le, I.spanRank.toENat, height_le_spanRank_toENat, ofENat_toENat_le, spanRank, toENat
--/
-lemma Ideal.height_le_spanRank (I : Ideal R) (hI : I != ⊤) :
-    I.height <= I.spanRank := by
-  trans ↑I.spanRank.toENat
-  · exact_mod_cast I.height_le_spanRank_toENat hI
-  · exact I.spanRank.ofENat_toENat_le
-
-/--
-Instance `Ideal.finiteHeight_of_isNoetherianRing` / 实例 `Ideal.finiteHeight_of_isNoetherianRing`
-
-English:
-instance Ideal.finiteHeight_of_isNoetherianRing
-  signature: (I : Ideal R)
-  body: finiteHeight_iff_lt.mpr Or.elim (em (I = ⊤)) Or.inl
-fun h => Or.inr (I.height_le_spanFinrank h).trans_lt (ENat.natCast_lt_top _)
-
-中文:
-实例 理想.finiteHeight_of_isNoetherianRing
-  签名: (I : 理想 R)
-  定义体: finiteHeight_iff_lt.mpr Or.elim (em (I = ⊤)) Or.inl
-fun h => Or.inr (I.height_le_spanFinrank h).trans_lt (ENat.natCast_lt_top _)
-
-Depends on / 依赖: Or.elim, Or.inl, finiteHeight_iff_lt, finiteHeight_iff_lt.mpr
+/-
+**Ideal.finiteHeight_of_isNoetherianRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Ideal.finiteHeight_of_isNoetherianRing (I : Ideal R) : I.FiniteHeight
+参数：I : Ideal R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Ideal.finiteHeight_iff_lt`：Ideal.finiteHeight_iff_lt {I : Ideal R} : Ide
+al.FiniteHeight I ↔ I = ⊤ ∨ I.height < ⊤
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用引理 `Ideal.height_le_spanFinrank`：Ideal.height_le_spanFinrank (I : Ideal R) (
+hI : I != ⊤) : I.height <= I.spanFinrank
+· 使用引理 `ENat.natCast_lt_top`：natCast_lt_top (n : Nat) : (n : Nat∞) < ⊤
 -/
 instance Ideal.finiteHeight_of_isNoetherianRing (I : Ideal R) :
-I.FiniteHeight := finiteHeight_iff_lt.mpr Or.elim (em (I = ⊤)) Or.inl
-fun h => Or.inr (I.height_le_spanFinrank h).trans_lt (ENat.natCast_lt_top _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsLocalRing
-  signature: R] : FiniteRingKrullDim R
-  body: by
-  apply finiteRingKrullDim_iff_ne_bot_and_top.mpr
-  rw [← IsLocalRing.maximalIdeal_height_eq_ringKrullDim]
-  constructor
-  · exact WithBot.coe_ne_bot
-  · rw [← WithBot.coe_top, ne_eq, WithBot.coe_inj]
-    exact ((IsLocalRing.maximalIdeal R).finiteHeight_iff.mp
-      (IsLocalRing.maximalIdeal R).finiteHeight_of_isNoetherianRing).resolve_left
-        Ideal.IsPrime.ne_top'
-
-中文:
-实例 [是局部环
-  签名: R] : FiniteRingKrullDim R
-  定义体: by
-  apply finiteRingKrullDim_iff_ne_bot_and_top.mpr
-  rw [← IsLocalRing.maximalIdeal_height_eq_ringKrullDim]
-  constructor
-  · exact WithBot.coe_ne_bot
-  · rw [← WithBot.coe_top, ne_eq, WithBot.coe_inj]
-    exact ((IsLocalRing.maximalIdeal R).finiteHeight_iff.mp
-      (IsLocalRing.maximalIdeal R).finiteHeight_of_isNoetherianRing).resolve_left
-        Ideal.IsPrime.ne_top'
-
-Depends on / 依赖: Ideal.IsPrime.ne_top, IsLocalRing, IsLocalRing.maximalIdeal, IsLocalRing.maximalIdeal_height_eq_ringKrullDim, IsPrime, WithBot, WithBot.coe_inj, WithBot.coe_ne_bot, WithBot.coe_top, coe_inj, coe_ne_bot, coe_top, finiteHeight_iff, finiteHeight_iff.mp, finiteHeight_of_isNoetherianRing, finiteRingKrullDim_iff_ne_bot_and_top, finiteRingKrullDim_iff_ne_bot_and_top.mpr, maximalIdeal, maximalIdeal_height_eq_ringKrullDim, ne_eq
+    I.FiniteHeight := finiteHeight_iff_lt.mpr <| Or.elim (em (I = ⊤)) Or.inl
+  fun h ↦ Or.inr <| (I.height_le_spanFinrank h).trans_lt (ENat.natCast_lt_top _)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsLocalRing R] : FiniteRingKrullDim R := by
   apply finiteRingKrullDim_iff_ne_bot_and_top.mpr
@@ -694,44 +742,41 @@ instance [IsLocalRing R] : FiniteRingKrullDim R := by
     exact ((IsLocalRing.maximalIdeal R).finiteHeight_iff.mp
       (IsLocalRing.maximalIdeal R).finiteHeight_of_isNoetherianRing).resolve_left
         Ideal.IsPrime.ne_top'
-
-/--
-lemma `Ideal.exists_spanRank_eq_and_height_eq` / 引理 `Ideal.exists_spanRank_eq_and_height_eq`
-
-English:
-lemma Ideal.exists_spanRank_eq_and_height_eq
-  given: (I : Ideal R) (hI : I != ⊤)
-  proof: by
-  obtain ⟨J, hJ₁, hJ₂, hJ₃⟩ := exists_spanRank_le_and_le_height_of_le_height I _
-    (ENat.natCast_toNat_le_self I.height)
-  rw [ENat.natCast_toNat_eq_self.mpr (Ideal.height_ne_top hI)] at hJ₃
-  refine ⟨J, hJ₁, le_antisymm ?_ (le_trans ?_ (J.height_le_spanRank ?_)),
-    le_antisymm (Ideal.height_mono hJ₁) hJ₃⟩
-  · convert! hJ₂
-    exact Cardinal.ofENat_eq_nat.mpr (ENat.natCast_toNat (I.height_ne_top hI)).symm
-  · exact Cardinal.ofENat_le_ofENat_of_le hJ₃
-  · rintro rfl
-    exact hI (top_le_iff.mp hJ₁)
-
-中文:
-引理 理想.存在_spanRank_eq_and_height_eq
-  条件: (I : 理想 R) (hI : I != ⊤)
-  证明: by
-  obtain ⟨J, hJ₁, hJ₂, hJ₃⟩ := exists_spanRank_le_and_le_height_of_le_height I _
-    (ENat.natCast_toNat_le_self I.height)
-  rw [ENat.natCast_toNat_eq_self.mpr (Ideal.height_ne_top hI)] at hJ₃
-  refine ⟨J, hJ₁, le_antisymm ?_ (le_trans ?_ (J.height_le_spanRank ?_)),
-    le_antisymm (Ideal.height_mono hJ₁) hJ₃⟩
-  · convert! hJ₂
-    exact Cardinal.ofENat_eq_nat.mpr (ENat.natCast_toNat (I.height_ne_top hI)).symm
-  · exact Cardinal.ofENat_le_ofENat_of_le hJ₃
-  · rintro rfl
-    exact hI (top_le_iff.mp hJ₁)
-
-Depends on / 依赖: Cardinal, Cardinal.ofENat_eq_nat.mpr, Cardinal.ofENat_le_ofENat_of_le, ENat.natCast_toNat, ENat.natCast_toNat_eq_self.mpr, ENat.natCast_toNat_le_self, I.height, I.height_ne_top, Ideal.height_mono, Ideal.height_ne_top, J.height_le_spanRank, convert, exists_spanRank_le_and_le_height_of_le_height, height, height_le_spanRank, height_mono, height_ne_top, le_antisymm, le_trans, natCast_toNat
+/-
+**Ideal.exists_spanRank_eq_and_height_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.exists_spanRank_eq_and_height_eq (I : Ideal R) (hI : I != ⊤) : exist
+s J <= I, J.spanRank = I.height ∧ J.height = I.height
+参数：I : Ideal R；hI : I != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `exists_spanRank_le_and_le_height_of_le_height`：exists_spanRank_le_and_le
+_height_of_le_height [IsNoetherianRing R] (I : Ideal R) (r : Nat) (hr : r <= I.h
+eight) : exists J <= I, J.spanRank …
+· 使用定理 `ENat.natCast_toNat_le_self`：natCast_toNat_le_self (n : Nat∞) : ↑(toNat n
+) <= n
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.ofENat_eq_nat`：∀ {m : ℕ∞} {n : ℕ}, ↑m = ↑n ↔ m = ↑n
+· 使用定理 `ENat.natCast_toNat`：∀ {n : ℕ∞}, n ≠ ⊤ → ↑n.toNat = n
+· 使用引理 `Ideal.height_ne_top`：Ideal.height_ne_top {I : Ideal R} (hI : I != ⊤) [I.
+FiniteHeight] : I.height != ⊤
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Cardinal.ofENat_le_ofENat_of_le`：∀ {m n : ℕ∞}, m ≤ n → ↑m ≤ ↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENat.natCast_toNat_eq_self`：natCast_toNat_eq_self : ENat.toNat n = n ↔ n
+ != ⊤
+· 使用引理 `Ideal.height_le_spanRank`：Ideal.height_le_spanRank (I : Ideal R) (hI : I
+ != ⊤) : I.height <= I.spanRank
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Ideal.height_mono`：Ideal.height_mono {I J : Ideal R} (h : I <= J) : I.he
+ight <= J.height
 -/
-lemma Ideal.exists_spanRank_eq_and_height_eq (I : Ideal R) (hI : I != ⊤) :
-    exists J <= I, J.spanRank = I.height ∧ J.height = I.height := by
+lemma Ideal.exists_spanRank_eq_and_height_eq (I : Ideal R) (hI : I ≠ ⊤) :
+    ∃ J ≤ I, J.spanRank = I.height ∧ J.height = I.height := by
   obtain ⟨J, hJ₁, hJ₂, hJ₃⟩ := exists_spanRank_le_and_le_height_of_le_height I _
     (ENat.natCast_toNat_le_self I.height)
   rw [ENat.natCast_toNat_eq_self.mpr (Ideal.height_ne_top hI)] at hJ₃
@@ -743,41 +788,60 @@ lemma Ideal.exists_spanRank_eq_and_height_eq (I : Ideal R) (hI : I != ⊤) :
   · rintro rfl
     exact hI (top_le_iff.mp hJ₁)
 
-/--
-lemma `Ideal.height_le_iff_exists_minimalPrimes` / 引理 `Ideal.height_le_iff_exists_minimalPrimes`
+/-- In a commutative Noetherian ring `R`, a prime ideal `p` has height no greater than `n` if and
+only if it is a minimal ideal over some ideal generated by no more than `n` elements. -/
+/-
+**Ideal.height_le_iff_exists_minimalPrimes** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_iff_exists_minimalPrimes (p : Ideal R) [p.IsPrime] (n : Na
+t∞) : p.height <= n ↔ exists I : Ideal R, p in I.minimalPrimes ∧ I.spanRank <= n
+参数：p : Ideal R；n : Nat∞。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Ideal.exists_spanRank_eq_and_height_eq`：Ideal.exists_spanRank_eq_and_hei
+ght_eq (I : Ideal R) (hI : I != ⊤) : exists J <= I, J.spanRank = I.height ∧ J.he
+ight = I.height
+· 使用定理 `Ideal.IsPrime.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}, 
+I.IsPrime → I ≠ ⊤
+· 使用引理 `Ideal.mem_minimalPrimes_of_height_le`：Ideal.mem_minimalPrimes_of_height_
+le {I J : Ideal R} (e : I <= J) [J.IsPrime] [FiniteHeight J] (e' : J.height <= I
+.height) : J in I.minimalP…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes`：∀ {R : Type u_1} [
+inst : CommRing R] [IsNoetherianRing R] (I p : Ideal R),   p ∈ I.minimalPrimes →
+ p.height ≤ Cardinal.toENat (Submodule.spa…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `OrderRingHom.instRingHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : N
+onAssocSemiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3
+ : Preorder β], Rin…
+· 使用定理 `OrderRingHom.toRingHom_eq_coe`：toRingHom_eq_coe (f : α ->+*o β) : f.toRi
+ngHom = f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Cardinal.toENat_ofENat`：∀ (n : ℕ∞), Cardinal.toENat ↑n = n
+· 使用定理 `OrderRingHom.monotone'`：∀ {α : Type u_6} {β : Type u_7} [inst : NonAssoc
+Semiring α] [inst_1 : Preorder α] [inst_2 : NonAssocSemiring β]   [inst_3 : Preo
+rder β] (sel…
 
-English:
-lemma Ideal.height_le_iff_exists_minimalPrimes
-  statement: (p : Ideal R) [p.IsPrime]
-  proof: by
-  constructor
-  · intro h
-    obtain ⟨I, hI, e₁, e₂⟩ := exists_spanRank_eq_and_height_eq p (IsPrime.ne_top ‹_›)
-    refine ⟨I, Ideal.mem_minimalPrimes_of_height_le hI e₂.ge, e₁.symm ▸ ?_⟩
-    norm_cast
-  · rintro ⟨I, hp, hI⟩
-    exact le_trans
-      (Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes I p hp)
-      (by simpa using (Cardinal.toENat.monotone' hI))
-
-中文:
-引理 理想.height_le_iff_存在_minimalPrimes
-  结论: (p : 理想 R) [p.是素]
-  证明: by
-  constructor
-  · intro h
-    obtain ⟨I, hI, e₁, e₂⟩ := exists_spanRank_eq_and_height_eq p (IsPrime.ne_top ‹_›)
-    refine ⟨I, Ideal.mem_minimalPrimes_of_height_le hI e₂.ge, e₁.symm ▸ ?_⟩
-    norm_cast
-  · rintro ⟨I, hp, hI⟩
-    exact le_trans
-      (Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes I p hp)
-      (by simpa using (Cardinal.toENat.monotone' hI))
-
-Depends on / 依赖: Cardinal, Cardinal.toENat.monotone, Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes, Ideal.mem_minimalPrimes_of_height_le, IsPrime, IsPrime.ne_top, exists_spanRank_eq_and_height_eq, height_le_spanRank_toENat_of_mem_minimalPrimes, le_trans, mem_minimalPrimes_of_height_le, monotone, ne_top, toENat
+--- 原说明 ---
+In a commutative Noetherian ring `R`, a prime ideal `p` has height no greater th
+an `n` if and
+only if it is a minimal ideal over some ideal generated by no more than `n` elem
+ents.
 -/
 lemma Ideal.height_le_iff_exists_minimalPrimes (p : Ideal R) [p.IsPrime]
-    (n : Nat∞) : p.height <= n ↔ exists I : Ideal R, p in I.minimalPrimes ∧ I.spanRank <= n := by
+    (n : ℕ∞) : p.height ≤ n ↔ ∃ I : Ideal R, p ∈ I.minimalPrimes ∧ I.spanRank ≤ n := by
   constructor
   · intro h
     obtain ⟨I, hI, e₁, e₂⟩ := exists_spanRank_eq_and_height_eq p (IsPrime.ne_top ‹_›)
@@ -788,135 +852,159 @@ lemma Ideal.height_le_iff_exists_minimalPrimes (p : Ideal R) [p.IsPrime]
       (Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes I p hp)
       (by simpa using (Cardinal.toENat.monotone' hI))
 
-/--
-lemma `Ideal.exists_finset_card_eq_height_of_isNoetherianRing` / 引理 `Ideal.exists_finset_card_eq_height_of_isNoetherianRing`
+/-- If `p` is a prime in a Noetherian ring `R`, there exists a `p`-primary ideal `I`
+spanned by `p.height` elements. -/
+/-
+**Ideal.exists_finset_card_eq_height_of_isNoetherianRing** 是 Mathlib 中的一个引理，位于命名
+空间 ``。
+形式化陈述：Ideal.exists_finset_card_eq_height_of_isNoetherianRing (p : Ideal R) [p.Is
+Prime] : exists s : Finset R, p in (span s).minimalPrimes ∧ s.card = p.height
+参数：p : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Ideal.height_le_iff_exists_minimalPrimes`：Ideal.height_le_iff_exists_min
+imalPrimes (p : Ideal R) [p.IsPrime] (n : Nat∞) : p.height <= n ↔ exists I : Ide
+al R, p in I.minimalPrimes ∧ I…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Submodule.FG.finite_generators`：∀ {R : Type u_1} {M : Type u} [inst : Se
+miring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodu
+le R M}, p.FG → p.ge…
+· 使用定理 `IsNoetherian.noetherian`：∀ {R : Type u_1} {M : Type u_2} {inst : Semirin
+g R} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : IsNoether
+ian R M] (s :…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用引理 `Submodule.span_generators`：span_generators (p : Submodule R M) : span R 
+(generators p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ncard_eq_toFinset_card`：ncard_eq_toFinset_card (s : Set α) (hs : s.F
+inite
+· 使用定理 `Submodule.FG.generators_ncard`：∀ {R : Type u_1} {M : Type u} [inst : Sem
+iring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodul
+e R M}, p.FG → p.ge…
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Cardinal.nat_le_ofENat`：∀ {m : ℕ} {n : ℕ∞}, ↑m ≤ ↑n ↔ ↑m ≤ n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.fg_iff_spanRank_eq_spanFinrank`：fg_iff_spanRank_eq_spanFinrank
+ {p : Submodule R M} : p.spanRank = p.spanFinrank ↔ p.FG
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.height_le_spanRank_toENat_of_mem_minimalPrimes`：∀ {R : Type u_1} [
+inst : CommRing R] [IsNoetherianRing R] (I p : Ideal R),   p ∈ I.minimalPrimes →
+ p.height ≤ Cardinal.toENat (Submodule.spa…
 
-English:
-lemma Ideal.exists_finset_card_eq_height_of_isNoetherianRing
-  given: (p : Ideal R) [p.IsPrime]
-  proof: by
-  obtain ⟨I, hI, hr⟩ := (p.height_le_iff_exists_minimalPrimes <| p.height).mp le_rfl
-  have hs : I.generators.Finite := (IsNoetherian.noetherian I).finite_generators
-  refine ⟨hs.toFinset, by rwa [hs.coe_toFinset, span, I.span_generators], ?_⟩
-  rw [← Set.ncard_eq_toFinset_card (hs := hs)]; rw [(IsNoetherian.noetherian I).generators_ncard]
-  refine le_antisymm ?_ ?_
-  · rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I)] at hr
-    exact Cardinal.nat_le_ofENat.mp hr
-  · convert_to! p.height <= I.spanRank.toENat
-    · symm
-      simpa [Submodule.fg_iff_spanRank_eq_spanFinrank] using (IsNoetherian.noetherian I)
-    · exact I.height_le_spanRank_toENat_of_mem_minimalPrimes _ hI
-
-中文:
-引理 理想.存在_finset_card_eq_height_of_isNoetherianRing
-  条件: (p : 理想 R) [p.是素]
-  证明: by
-  obtain ⟨I, hI, hr⟩ := (p.height_le_iff_exists_minimalPrimes <| p.height).mp le_rfl
-  have hs : I.generators.Finite := (IsNoetherian.noetherian I).finite_generators
-  refine ⟨hs.toFinset, by rwa [hs.coe_toFinset, span, I.span_generators], ?_⟩
-  rw [← Set.ncard_eq_toFinset_card (hs := hs)]; rw [(IsNoetherian.noetherian I).generators_ncard]
-  refine le_antisymm ?_ ?_
-  · rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I)] at hr
-    exact Cardinal.nat_le_ofENat.mp hr
-  · convert_to! p.height <= I.spanRank.toENat
-    · symm
-      simpa [Submodule.fg_iff_spanRank_eq_spanFinrank] using (IsNoetherian.noetherian I)
-    · exact I.height_le_spanRank_toENat_of_mem_minimalPrimes _ hI
-
-Depends on / 依赖: Cardinal, Cardinal.nat_le_ofENat.mp, Finite, I.generators.Finite, I.span_generators, IsNoetherian, IsNoetherian.noetherian, Set.ncard_eq_toFinset_card, Submodule, Submodule.fg_iff_spanRank_eq_spanFinrank.mpr, coe_toFinset, convert_to, fg_iff_spanRank_eq_spanFinrank, finite_generators, generators, generators_ncard, height, height_le_iff_exists_minimalPrimes, hs.coe_toFinset, hs.toFinset
+--- 原说明 ---
+If `p` is a prime in a Noetherian ring `R`, there exists a `p`-primary ideal `I`
+spanned by `p.height` elements.
 -/
 lemma Ideal.exists_finset_card_eq_height_of_isNoetherianRing (p : Ideal R) [p.IsPrime] :
-    exists s : Finset R, p in (span s).minimalPrimes ∧ s.card = p.height := by
+    ∃ s : Finset R, p ∈ (span s).minimalPrimes ∧ s.card = p.height := by
   obtain ⟨I, hI, hr⟩ := (p.height_le_iff_exists_minimalPrimes <| p.height).mp le_rfl
   have hs : I.generators.Finite := (IsNoetherian.noetherian I).finite_generators
   refine ⟨hs.toFinset, by rwa [hs.coe_toFinset, span, I.span_generators], ?_⟩
-  rw [← Set.ncard_eq_toFinset_card (hs := hs)]; rw [(IsNoetherian.noetherian I).generators_ncard]
+  rw [← Set.ncard_eq_toFinset_card (hs := hs), (IsNoetherian.noetherian I).generators_ncard]
   refine le_antisymm ?_ ?_
   · rw [Submodule.fg_iff_spanRank_eq_spanFinrank.mpr (IsNoetherian.noetherian I)] at hr
     exact Cardinal.nat_le_ofENat.mp hr
-  · convert_to! p.height <= I.spanRank.toENat
+  · convert_to! p.height ≤ I.spanRank.toENat
     · symm
       simpa [Submodule.fg_iff_spanRank_eq_spanFinrank] using (IsNoetherian.noetherian I)
     · exact I.height_le_spanRank_toENat_of_mem_minimalPrimes _ hI
 
-/--
-lemma `Ideal.height_le_height_add_spanFinrank_of_le` / 引理 `Ideal.height_le_height_add_spanFinrank_of_le`
+/-- If `I ≤ p` and `p` is prime, the height of `p` is bounded by the height of `p ⧸ I R` plus
+the span rank of `I`. -/
+/-
+**Ideal.height_le_height_add_spanFinrank_of_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_height_add_spanFinrank_of_le {I p : Ideal R} [p.IsPrime] (
+hrp : I <= p) : p.height <= (p.map (Quotient.mk I)).height + I.spanFinrank
+参数：hrp : I <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Ideal.isPrime_map_quotientMk_of_isPrime`：isPrime_map_quotientMk_of_isPri
+me {I : Ideal R} [I.IsTwoSided] {p : Ideal R} [p.IsPrime] (hIP : I <= p) : (p.ma
+p (Ideal.Quotient.mk I)).IsPr…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `Ideal.exists_finset_card_eq_height_of_isNoetherianRing`：Ideal.exists_fin
+set_card_eq_height_of_isNoetherianRing (p : Ideal R) [p.IsPrime] : exists s : Fi
+nset R, p in (span s).minimalPrimes ∧ s.card…
+· 使用引理 `Ideal.IsMinimalPrime.le`：Ideal.IsMinimalPrime.le {p : Ideal R} (h : I.Is
+MinimalPrime p) : I <= p
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Set.SurjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂
+ t₁
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用引理 `Finset.exists_subset_injOn_image_eq_of_surjOn`：exists_subset_injOn_image
+_eq_of_surjOn [DecidableEq β] {f : α -> β} (s : Set α) (t : Finset β) (hfs : s.S
+urjOn f t) : exists u : Finset α, ↑…
+· 使用定理 `IsNoetherian.noetherian`：∀ {R : Type u_1} {M : Type u_2} {inst : Semirin
+g R} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : IsNoether
+ian R M] (s :…
+· 使用定理 `Submodule.FG.finite_generators`：∀ {R : Type u_1} {M : Type u} [inst : Se
+miring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {p : Submodu
+le R M}, p.FG → p.ge…
+· 使用引理 `Ideal.height_le_card_of_mem_minimalPrimes_span_finset`：Ideal.height_le_c
+ard_of_mem_minimalPrimes_span_finset {p : Ideal R} {s : Finset R} (hI : p in (Id
+eal.span s).minimalPrimes) : p.height <= s.…
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `Ideal.span_union`：span_union (s t : Set α) : span (s union t) = span s ⊔
+ span t
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用引理 `Submodule.span_generators`：span_generators (p : Submodule R M) : span R 
+(generators p) = p
+· 使用引理 `Ideal.mem_minimalPrimes_sup`：Ideal.mem_minimalPrimes_sup {R : Type*} [Co
+mmRing R] {p I J : Ideal R} [p.IsPrime] (hle : I <= p) (h : p.map (Ideal.Quotien
+t.mk I) in (J.map…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+（共 39 条，此处仅展示前 30 条）
 
-English:
-lemma Ideal.height_le_height_add_spanFinrank_of_le
-  given: {I p : Ideal R} [p.IsPrime] (hrp : I <= p)
-  proof: by
-  classical
-  let p' := p.map (algebraMap R (R ⧸ I))
-  have : p'.IsPrime := isPrime_map_quotientMk_of_isPrime hrp
-  obtain ⟨s, hps, hs⟩ := exists_finset_card_eq_height_of_isNoetherianRing p'
-  have hsp' : (s : Set (R ⧸ I)) subseteq (p' : Set _) := fun _ hx => hps.le (subset_span hx)
-  have : Set.SurjOn (Ideal.Quotient.mk I) p s := by
-    refine Set.SurjOn.mono subset_rfl hsp' fun x hx => ?_
-    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-    exact ⟨x, by simpa [hrp, sup_of_le_left, p'] using hx⟩
-  obtain ⟨o, hsubset, ho, himgo⟩ := s.exists_subset_injOn_image_eq_of_surjOn (p : Set R) this
-  have hI : I.FG := IsNoetherian.noetherian I
-  let t : Finset R := o union (Submodule.FG.finite_generators hI).toFinset
-  suffices h : p.height <= t.card by
-    refine le_trans h (hs ▸ ?_)
-    norm_cast
-    have : (Submodule.FG.finite_generators hI).toFinset.card = I.spanFinrank := by
-      rw [← Set.ncard_eq_toFinset_card (hs := Submodule.FG.finite_generators hI)]
-      exact Submodule.FG.generators_ncard hI
-    grind
-  refine Ideal.height_le_card_of_mem_minimalPrimes_span_finset ?_
-  rw [Finset.coe_union]; rw [Set.Finite.coe_toFinset]; rw [span_union]; rw [sup_comm]; rw [span]; rw [Submodule.span_generators]
-  refine Ideal.mem_minimalPrimes_sup hrp ?_
-  convert! hps
-  simp [Ideal.map_span, ← himgo]
-
-中文:
-引理 理想.height_le_height_add_spanFinrank_of_le
-  条件: {I p : 理想 R} [p.是素] (hrp : I <= p)
-  证明: by
-  classical
-  let p' := p.map (algebraMap R (R ⧸ I))
-  have : p'.IsPrime := isPrime_map_quotientMk_of_isPrime hrp
-  obtain ⟨s, hps, hs⟩ := exists_finset_card_eq_height_of_isNoetherianRing p'
-  have hsp' : (s : Set (R ⧸ I)) subseteq (p' : Set _) := fun _ hx => hps.le (subset_span hx)
-  have : Set.SurjOn (Ideal.Quotient.mk I) p s := by
-    refine Set.SurjOn.mono subset_rfl hsp' fun x hx => ?_
-    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-    exact ⟨x, by simpa [hrp, sup_of_le_left, p'] using hx⟩
-  obtain ⟨o, hsubset, ho, himgo⟩ := s.exists_subset_injOn_image_eq_of_surjOn (p : Set R) this
-  have hI : I.FG := IsNoetherian.noetherian I
-  let t : Finset R := o union (Submodule.FG.finite_generators hI).toFinset
-  suffices h : p.height <= t.card by
-    refine le_trans h (hs ▸ ?_)
-    norm_cast
-    have : (Submodule.FG.finite_generators hI).toFinset.card = I.spanFinrank := by
-      rw [← Set.ncard_eq_toFinset_card (hs := Submodule.FG.finite_generators hI)]
-      exact Submodule.FG.generators_ncard hI
-    grind
-  refine Ideal.height_le_card_of_mem_minimalPrimes_span_finset ?_
-  rw [Finset.coe_union]; rw [Set.Finite.coe_toFinset]; rw [span_union]; rw [sup_comm]; rw [span]; rw [Submodule.span_generators]
-  refine Ideal.mem_minimalPrimes_sup hrp ?_
-  convert! hps
-  simp [Ideal.map_span, ← himgo]
-
-Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsPrime, Quotient, Set.SurjOn, Set.SurjOn.mono, SurjOn, algebraMap, classical, exists_finset_card_eq_height_of_isNoetherianRing, hps.le, isPrime_map_quotientMk_of_isPrime, mk_surjective, p.map, subset_rfl, subset_span, subseteq, sup_of_le_left
+--- 原说明 ---
+If `I ≤ p` and `p` is prime, the height of `p` is bounded by the height of `p ⧸ 
+I R` plus
+the span rank of `I`.
 -/
-lemma Ideal.height_le_height_add_spanFinrank_of_le {I p : Ideal R} [p.IsPrime] (hrp : I <= p) :
-    p.height <= (p.map (Quotient.mk I)).height + I.spanFinrank := by
+lemma Ideal.height_le_height_add_spanFinrank_of_le {I p : Ideal R} [p.IsPrime] (hrp : I ≤ p) :
+    p.height ≤ (p.map (Quotient.mk I)).height + I.spanFinrank := by
   classical
   let p' := p.map (algebraMap R (R ⧸ I))
   have : p'.IsPrime := isPrime_map_quotientMk_of_isPrime hrp
   obtain ⟨s, hps, hs⟩ := exists_finset_card_eq_height_of_isNoetherianRing p'
-  have hsp' : (s : Set (R ⧸ I)) subseteq (p' : Set _) := fun _ hx => hps.le (subset_span hx)
+  have hsp' : (s : Set (R ⧸ I)) ⊆ (p' : Set _) := fun _ hx ↦ hps.le (subset_span hx)
   have : Set.SurjOn (Ideal.Quotient.mk I) p s := by
-    refine Set.SurjOn.mono subset_rfl hsp' fun x hx => ?_
+    refine Set.SurjOn.mono subset_rfl hsp' fun x hx ↦ ?_
     obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
     exact ⟨x, by simpa [hrp, sup_of_le_left, p'] using hx⟩
   obtain ⟨o, hsubset, ho, himgo⟩ := s.exists_subset_injOn_image_eq_of_surjOn (p : Set R) this
   have hI : I.FG := IsNoetherian.noetherian I
-  let t : Finset R := o union (Submodule.FG.finite_generators hI).toFinset
-  suffices h : p.height <= t.card by
+  let t : Finset R := o ∪ (Submodule.FG.finite_generators hI).toFinset
+  suffices h : p.height ≤ t.card by
     refine le_trans h (hs ▸ ?_)
     norm_cast
     have : (Submodule.FG.finite_generators hI).toFinset.card = I.spanFinrank := by
@@ -924,235 +1012,272 @@ lemma Ideal.height_le_height_add_spanFinrank_of_le {I p : Ideal R} [p.IsPrime] (
       exact Submodule.FG.generators_ncard hI
     grind
   refine Ideal.height_le_card_of_mem_minimalPrimes_span_finset ?_
-  rw [Finset.coe_union]; rw [Set.Finite.coe_toFinset]; rw [span_union]; rw [sup_comm]; rw [span]; rw [Submodule.span_generators]
+  rw [Finset.coe_union, Set.Finite.coe_toFinset, span_union, sup_comm, span,
+    Submodule.span_generators]
   refine Ideal.mem_minimalPrimes_sup hrp ?_
   convert! hps
   simp [Ideal.map_span, ← himgo]
-
-/--
-lemma `height_le_ringKrullDim_quotient_add_spanFinrank` / 引理 `height_le_ringKrullDim_quotient_add_spanFinrank`
-
-English:
-lemma height_le_ringKrullDim_quotient_add_spanFinrank
-  given: {p I : Ideal R} [p.IsPrime] (h : I <= p)
-  proof: by
-  trans (p.map (Ideal.Quotient.mk I)).height + I.spanFinrank
-  · norm_cast; exact Ideal.height_le_height_add_spanFinrank_of_le h
-  · gcongr
-    have : (Ideal.map (Ideal.Quotient.mk I) p).IsPrime :=
-      Ideal.isPrime_map_quotientMk_of_isPrime h
-    exact Ideal.height_le_ringKrullDim_of_ne_top Ideal.IsPrime.ne_top'
-
-中文:
-引理 height_le_ringKrullDim_quotient_add_spanFinrank
-  条件: {p I : 理想 R} [p.是素] (h : I <= p)
-  证明: by
-  trans (p.map (Ideal.Quotient.mk I)).height + I.spanFinrank
-  · norm_cast; exact Ideal.height_le_height_add_spanFinrank_of_le h
-  · gcongr
-    have : (Ideal.map (Ideal.Quotient.mk I) p).IsPrime :=
-      Ideal.isPrime_map_quotientMk_of_isPrime h
-    exact Ideal.height_le_ringKrullDim_of_ne_top Ideal.IsPrime.ne_top'
-
-Depends on / 依赖: I.spanFinrank, Ideal.IsPrime.ne_top, Ideal.Quotient.mk, Ideal.height_le_height_add_spanFinrank_of_le, Ideal.height_le_ringKrullDim_of_ne_top, Ideal.isPrime_map_quotientMk_of_isPrime, Ideal.map, IsPrime, Quotient, height, height_le_height_add_spanFinrank_of_le, height_le_ringKrullDim_of_ne_top, isPrime_map_quotientMk_of_isPrime, ne_top, p.map, spanFinrank
+/-
+**height_le_ringKrullDim_quotient_add_spanFinrank** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：height_le_ringKrullDim_quotient_add_spanFinrank {p I : Ideal R} [p.IsPrime
+] (h : I <= p) : p.height <= ringKrullDim (R ⧸ I) + I.spanFinrank
+参数：h : I <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `Ideal.height_le_height_add_spanFinrank_of_le`：Ideal.height_le_height_add
+_spanFinrank_of_le {I p : Ideal R} [p.IsPrime] (hrp : I <= p) : p.height <= (p.m
+ap (Quotient.mk I)).height + I.spa…
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `Ideal.isPrime_map_quotientMk_of_isPrime`：isPrime_map_quotientMk_of_isPri
+me {I : Ideal R} [I.IsTwoSided] {p : Ideal R} [p.IsPrime] (hIP : I <= p) : (p.ma
+p (Ideal.Quotient.mk I)).IsPr…
+· 使用引理 `Ideal.height_le_ringKrullDim_of_ne_top`：Ideal.height_le_ringKrullDim_of_
+ne_top {I : Ideal R} (h : I != ⊤) : I.height <= ringKrullDim R
+· 使用定理 `Ideal.IsPrime.ne_top'`：∀ {α : Type u} {inst : Semiring α} {I : Ideal α} 
+[self : I.IsPrime], I ≠ ⊤
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma height_le_ringKrullDim_quotient_add_spanFinrank {p I : Ideal R} [p.IsPrime] (h : I <= p) :
-    p.height <= ringKrullDim (R ⧸ I) + I.spanFinrank := by
+lemma height_le_ringKrullDim_quotient_add_spanFinrank {p I : Ideal R} [p.IsPrime] (h : I ≤ p) :
+    p.height ≤ ringKrullDim (R ⧸ I) + I.spanFinrank := by
   trans (p.map (Ideal.Quotient.mk I)).height + I.spanFinrank
   · norm_cast; exact Ideal.height_le_height_add_spanFinrank_of_le h
   · gcongr
     have : (Ideal.map (Ideal.Quotient.mk I) p).IsPrime :=
       Ideal.isPrime_map_quotientMk_of_isPrime h
     exact Ideal.height_le_ringKrullDim_of_ne_top Ideal.IsPrime.ne_top'
-
-/--
-lemma `ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank` / 引理 `ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank`
-
-English:
-lemma ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank
-  statement: (I : Ideal R)
-  proof: by
-  nontriviality R
-  rw [ringKrullDim_le_iff_isMaximal_height_le]
-  intro m hm
-exact height_le_ringKrullDim_quotient_add_spanFinrank
-le_trans h Ring.jacobson_le_of_isMaximal m
-
-中文:
-引理 ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank
-  结论: (I : 理想 R)
-  证明: by
-  nontriviality R
-  rw [ringKrullDim_le_iff_isMaximal_height_le]
-  intro m hm
-exact height_le_ringKrullDim_quotient_add_spanFinrank
-le_trans h Ring.jacobson_le_of_isMaximal m
-
-Depends on / 依赖: Ring.jacobson_le_of_isMaximal, height_le_ringKrullDim_quotient_add_spanFinrank, jacobson_le_of_isMaximal, le_trans, nontriviality, ringKrullDim_le_iff_isMaximal_height_le
+/-
+**ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank** 是 Mathlib 中的一个引理，位于命名空
+间 ``。
+形式化陈述：ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank (I : Ideal R) (h : I
+ <= Ring.jacobson R) : ringKrullDim R <= ringKrullDim (R ⧸ I) + I.spanFinrank
+参数：I : Ideal R；h : I <= Ring.jacobson R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ringKrullDim_eq_bot_of_subsingleton`：ringKrullDim_eq_bot_of_subsingleton
+ [Subsingleton R] : ringKrullDim R = ⊥
+· 使用定理 `Submodule.Quotient.instSubsingletonQuotient`：∀ {R : Type u_1} {M : Type 
+u_2} [inst : Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {p
+ : Submodule R M} [Subsingleton M…
+· 使用引理 `Submodule.spanFinrank_subsingleton`：spanFinrank_subsingleton [Subsinglet
+on R] (p : Submodule R M) : p.spanFinrank = 0
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `ringKrullDim_le_iff_isMaximal_height_le`：ringKrullDim_le_iff_isMaximal_h
+eight_le {R : Type*} [CommRing R] (n : WithBot Nat∞) : ringKrullDim R <= n ↔ for
+all ⦃m : Ideal R⦄, m.IsMaxima…
+· 使用引理 `height_le_ringKrullDim_quotient_add_spanFinrank`：height_le_ringKrullDim_
+quotient_add_spanFinrank {p I : Ideal R} [p.IsPrime] (h : I <= p) : p.height <= 
+ringKrullDim (R ⧸ I) + I.spanFinrank
+· 使用定理 `Ideal.IsMaximal.isPrime'`：∀ {α : Type u} [inst : CommSemiring α] (I : Id
+eal α) [_H : I.IsMaximal], I.IsPrime
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `Ring.jacobson_le_of_isMaximal`：jacobson_le_of_isMaximal (m : Ideal R) [m
+.IsMaximal] : jacobson R <= m
 -/
 lemma ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank (I : Ideal R)
-    (h : I <= Ring.jacobson R) :
-    ringKrullDim R <= ringKrullDim (R ⧸ I) + I.spanFinrank := by
+    (h : I ≤ Ring.jacobson R) :
+    ringKrullDim R ≤ ringKrullDim (R ⧸ I) + I.spanFinrank := by
   nontriviality R
   rw [ringKrullDim_le_iff_isMaximal_height_le]
   intro m hm
-exact height_le_ringKrullDim_quotient_add_spanFinrank
-le_trans h Ring.jacobson_le_of_isMaximal m
+  exact height_le_ringKrullDim_quotient_add_spanFinrank <|
+    le_trans h <| Ring.jacobson_le_of_isMaximal m
 
-/--
-lemma `Ideal.height_le_height_add_encard_of_subset` / 引理 `Ideal.height_le_height_add_encard_of_subset`
+/-- If `p` is a prime ideal containing `s`, the height of `p` is bounded
+by the sum of the height of the image of `p` in `R ⧸ (s)` and the cardinality of `s`. -/
+/-
+**Ideal.height_le_height_add_encard_of_subset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_height_add_encard_of_subset (s : Set R) {p : Ideal R} [p.I
+sPrime] (hrm : s subseteq p) : p.height <= (p.map (Quotient.mk (span s))).height
+ + s.encard
+参数：s : Set R；hrm : s subseteq p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `Ideal.height_le_height_add_spanFinrank_of_le`：Ideal.height_le_height_add
+_spanFinrank_of_le {I p : Ideal R} [p.IsPrime] (hrp : I <= p) : p.height <= (p.m
+ap (Quotient.mk I)).height + I.spa…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `Submodule.spanFinrank_span_le_encard`：spanFinrank_span_le_encard (s : Se
+t M) : (span R s).spanFinrank <= s.encard
 
-English:
-lemma Ideal.height_le_height_add_encard_of_subset
-  statement: (s : Set R) {p : Ideal R} [p.IsPrime]
-  proof: by
-  apply le_trans (Ideal.height_le_height_add_spanFinrank_of_le (I := span s) (p := p) ?_) ?_
-  · rwa [span_le]
-  · gcongr
-    exact Submodule.spanFinrank_span_le_encard _
-
-中文:
-引理 理想.height_le_height_add_encard_of_subset
-  结论: (s : 集合 R) {p : 理想 R} [p.是素]
-  证明: by
-  apply le_trans (Ideal.height_le_height_add_spanFinrank_of_le (I := span s) (p := p) ?_) ?_
-  · rwa [span_le]
-  · gcongr
-    exact Submodule.spanFinrank_span_le_encard _
-
-Depends on / 依赖: Ideal.height_le_height_add_spanFinrank_of_le, Submodule, Submodule.spanFinrank_span_le_encard, height_le_height_add_spanFinrank_of_le, le_trans, spanFinrank_span_le_encard, span_le
+--- 原说明 ---
+If `p` is a prime ideal containing `s`, the height of `p` is bounded
+by the sum of the height of the image of `p` in `R ⧸ (s)` and the cardinality of
+ `s`.
 -/
 lemma Ideal.height_le_height_add_encard_of_subset (s : Set R) {p : Ideal R} [p.IsPrime]
-    (hrm : s subseteq p) : p.height <= (p.map (Quotient.mk (span s))).height + s.encard := by
+    (hrm : s ⊆ p) : p.height ≤ (p.map (Quotient.mk (span s))).height + s.encard := by
   apply le_trans (Ideal.height_le_height_add_spanFinrank_of_le (I := span s) (p := p) ?_) ?_
   · rwa [span_le]
   · gcongr
     exact Submodule.spanFinrank_span_le_encard _
-
-/--
-lemma `Ideal.height_le_ringKrullDim_quotient_add_encard` / 引理 `Ideal.height_le_ringKrullDim_quotient_add_encard`
-
-English:
-lemma Ideal.height_le_ringKrullDim_quotient_add_encard
-  statement: {p : Ideal R} [p.IsPrime]
-  proof: by
-  refine le_trans (height_le_ringKrullDim_quotient_add_spanFinrank (I := .span s) ?_) ?_
-  · simpa [span_le]
-  · gcongr; norm_cast; exact Submodule.spanFinrank_span_le_encard _
-
-中文:
-引理 理想.height_le_ringKrullDim_quotient_add_encard
-  结论: {p : 理想 R} [p.是素]
-  证明: by
-  refine le_trans (height_le_ringKrullDim_quotient_add_spanFinrank (I := .span s) ?_) ?_
-  · simpa [span_le]
-  · gcongr; norm_cast; exact Submodule.spanFinrank_span_le_encard _
-
-Depends on / 依赖: Submodule, Submodule.spanFinrank_span_le_encard, height_le_ringKrullDim_quotient_add_spanFinrank, le_trans, spanFinrank_span_le_encard, span_le
+/-
+**Ideal.height_le_ringKrullDim_quotient_add_encard** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_ringKrullDim_quotient_add_encard {p : Ideal R} [p.IsPrime]
+ (s : Set R) (hs : s subseteq p) : p.height <= ringKrullDim (R ⧸ span s) + s.enc
+ard
+参数：s : Set R；hs : s subseteq p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `height_le_ringKrullDim_quotient_add_spanFinrank`：height_le_ringKrullDim_
+quotient_add_spanFinrank {p I : Ideal R} [p.IsPrime] (h : I <= p) : p.height <= 
+ringKrullDim (R ⧸ I) + I.spanFinrank
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `Submodule.spanFinrank_span_le_encard`：spanFinrank_span_le_encard (s : Se
+t M) : (span R s).spanFinrank <= s.encard
 -/
 lemma Ideal.height_le_ringKrullDim_quotient_add_encard {p : Ideal R} [p.IsPrime]
-    (s : Set R) (hs : s subseteq p) : p.height <= ringKrullDim (R ⧸ span s) + s.encard := by
+    (s : Set R) (hs : s ⊆ p) : p.height ≤ ringKrullDim (R ⧸ span s) + s.encard := by
   refine le_trans (height_le_ringKrullDim_quotient_add_spanFinrank (I := .span s) ?_) ?_
   · simpa [span_le]
   · gcongr; norm_cast; exact Submodule.spanFinrank_span_le_encard _
-
-/--
-lemma `Ideal.height_le_height_add_one_of_mem` / 引理 `Ideal.height_le_height_add_one_of_mem`
-
-English:
-lemma Ideal.height_le_height_add_one_of_mem
-  given: {r : R} {p : Ideal R} [p.IsPrime] (hrm : r in p)
-  proof: by
-  convert! height_le_height_add_encard_of_subset { r } (p := p) (by simpa)
-  simp
-
-中文:
-引理 理想.height_le_height_add_one_of_mem
-  条件: {r : R} {p : 理想 R} [p.是素] (hrm : r in p)
-  证明: by
-  convert! height_le_height_add_encard_of_subset { r } (p := p) (by simpa)
-  simp
-
-Depends on / 依赖: convert, height_le_height_add_encard_of_subset
+/-
+**Ideal.height_le_height_add_one_of_mem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_height_add_one_of_mem {r : R} {p : Ideal R} [p.IsPrime] (h
+rm : r in p) : p.height <= (p.map (Quotient.mk (span {r}))).height + 1
+参数：hrm : r in p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.encard_singleton`：∀ {α : Type u_1} (e : α), {e}.encard = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Ideal.height_le_height_add_encard_of_subset`：Ideal.height_le_height_add_
+encard_of_subset (s : Set R) {p : Ideal R} [p.IsPrime] (hrm : s subseteq p) : p.
+height <= (p.map (Quotient.mk (sp…
 -/
-lemma Ideal.height_le_height_add_one_of_mem {r : R} {p : Ideal R} [p.IsPrime] (hrm : r in p) :
-    p.height <= (p.map (Quotient.mk (span {r}))).height + 1 := by
+lemma Ideal.height_le_height_add_one_of_mem {r : R} {p : Ideal R} [p.IsPrime] (hrm : r ∈ p) :
+    p.height ≤ (p.map (Quotient.mk (span {r}))).height + 1 := by
   convert! height_le_height_add_encard_of_subset { r } (p := p) (by simpa)
   simp
-
-/--
-lemma `Ideal.height_le_ringKrullDim_quotient_add_one` / 引理 `Ideal.height_le_ringKrullDim_quotient_add_one`
-
-English:
-lemma Ideal.height_le_ringKrullDim_quotient_add_one
-  statement: {r : R} {p : Ideal R} [p.IsPrime]
-  proof: by
-  convert! Ideal.height_le_ringKrullDim_quotient_add_encard { r } (by simpa)
-  simp
-
-中文:
-引理 理想.height_le_ringKrullDim_quotient_add_one
-  结论: {r : R} {p : 理想 R} [p.是素]
-  证明: by
-  convert! Ideal.height_le_ringKrullDim_quotient_add_encard { r } (by simpa)
-  simp
-
-Depends on / 依赖: Ideal.height_le_ringKrullDim_quotient_add_encard, convert, height_le_ringKrullDim_quotient_add_encard
+/-
+**Ideal.height_le_ringKrullDim_quotient_add_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_ringKrullDim_quotient_add_one {r : R} {p : Ideal R} [p.IsP
+rime] (hrp : r in p) : p.height <= ringKrullDim (R ⧸ span {r}) + 1
+参数：hrp : r in p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.encard_singleton`：∀ {α : Type u_1} (e : α), {e}.encard = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Ideal.height_le_ringKrullDim_quotient_add_encard`：Ideal.height_le_ringKr
+ullDim_quotient_add_encard {p : Ideal R} [p.IsPrime] (s : Set R) (hs : s subsete
+q p) : p.height <= ringKrullDim (R ⧸ s…
 -/
 lemma Ideal.height_le_ringKrullDim_quotient_add_one {r : R} {p : Ideal R} [p.IsPrime]
-    (hrp : r in p) : p.height <= ringKrullDim (R ⧸ span {r}) + 1 := by
+    (hrp : r ∈ p) : p.height ≤ ringKrullDim (R ⧸ span {r}) + 1 := by
   convert! Ideal.height_le_ringKrullDim_quotient_add_encard { r } (by simpa)
   simp
-
-/--
-lemma `ringKrullDim_le_ringKrullDim_quotient_add_encard` / 引理 `ringKrullDim_le_ringKrullDim_quotient_add_encard`
-
-English:
-lemma ringKrullDim_le_ringKrullDim_quotient_add_encard
-  given: (s : Set R) (hs : s subseteq Ring.jacobson R)
-  proof: by
-  refine le_trans (ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank (Ideal.span s) ?_) ?_
-  · simpa [Ideal.span_le]
-  · gcongr; norm_cast; exact Submodule.spanFinrank_span_le_encard _
-
-中文:
-引理 ringKrullDim_le_ringKrullDim_quotient_add_encard
-  条件: (s : 集合 R) (hs : s subseteq 环.jacobson R)
-  证明: by
-  refine le_trans (ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank (Ideal.span s) ?_) ?_
-  · simpa [Ideal.span_le]
-  · gcongr; norm_cast; exact Submodule.spanFinrank_span_le_encard _
-
-Depends on / 依赖: Ideal.span, Ideal.span_le, Submodule, Submodule.spanFinrank_span_le_encard, le_trans, ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank, spanFinrank_span_le_encard, span_le
+/-
+**ringKrullDim_le_ringKrullDim_quotient_add_encard** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ringKrullDim_le_ringKrullDim_quotient_add_encard (s : Set R) (hs : s subse
+teq Ring.jacobson R) : ringKrullDim R <= ringKrullDim (R ⧸ Ideal.span s) + s.enc
+ard
+参数：s : Set R；hs : s subseteq Ring.jacobson R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank`：ringKrullDim_le_r
+ingKrullDim_quotient_add_spanFinrank (I : Ideal R) (h : I <= Ring.jacobson R) : 
+ringKrullDim R <= ringKrullDim (R ⧸ I) + I.…
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `Submodule.spanFinrank_span_le_encard`：spanFinrank_span_le_encard (s : Se
+t M) : (span R s).spanFinrank <= s.encard
 -/
-lemma ringKrullDim_le_ringKrullDim_quotient_add_encard (s : Set R) (hs : s subseteq Ring.jacobson R) :
-    ringKrullDim R <= ringKrullDim (R ⧸ Ideal.span s) + s.encard := by
+lemma ringKrullDim_le_ringKrullDim_quotient_add_encard (s : Set R) (hs : s ⊆ Ring.jacobson R) :
+    ringKrullDim R ≤ ringKrullDim (R ⧸ Ideal.span s) + s.encard := by
   refine le_trans (ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank (Ideal.span s) ?_) ?_
   · simpa [Ideal.span_le]
   · gcongr; norm_cast; exact Submodule.spanFinrank_span_le_encard _
-
-/--
-lemma `ringKrullDim_le_ringKrullDim_quotient_add_card` / 引理 `ringKrullDim_le_ringKrullDim_quotient_add_card`
-
-English:
-lemma ringKrullDim_le_ringKrullDim_quotient_add_card
-  statement: (s : Finset R)
-  proof: by
-  convert! ringKrullDim_le_ringKrullDim_quotient_add_encard s hs
-  norm_cast
-
-中文:
-引理 ringKrullDim_le_ringKrullDim_quotient_add_card
-  结论: (s : 有限集 R)
-  证明: by
-  convert! ringKrullDim_le_ringKrullDim_quotient_add_encard s hs
-  norm_cast
-
-Depends on / 依赖: convert, ringKrullDim_le_ringKrullDim_quotient_add_encard
+/-
+**ringKrullDim_le_ringKrullDim_quotient_add_card** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ringKrullDim_le_ringKrullDim_quotient_add_card (s : Finset R) (hs : (s : S
+et R) subseteq Ring.jacobson R) : ringKrullDim R <= ringKrullDim (R ⧸ Ideal.span
+ (s : Set R)) + s.card
+参数：s : Finset R；hs : (s : Set R) subseteq Ring.jacobson R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.encard_coe_eq_coe_finsetCard`：∀ {α : Type u_1} (s : Finset α), (↑s).
+encard = ↑s.card
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用引理 `ringKrullDim_le_ringKrullDim_quotient_add_encard`：ringKrullDim_le_ringKr
+ullDim_quotient_add_encard (s : Set R) (hs : s subseteq Ring.jacobson R) : ringK
+rullDim R <= ringKrullDim (R ⧸ Ideal.s…
 -/
 lemma ringKrullDim_le_ringKrullDim_quotient_add_card (s : Finset R)
-    (hs : (s : Set R) subseteq Ring.jacobson R) :
-    ringKrullDim R <= ringKrullDim (R ⧸ Ideal.span (s : Set R)) + s.card := by
+    (hs : (s : Set R) ⊆ Ring.jacobson R) :
+    ringKrullDim R ≤ ringKrullDim (R ⧸ Ideal.span (s : Set R)) + s.card := by
   convert! ringKrullDim_le_ringKrullDim_quotient_add_encard s hs
   norm_cast
 
@@ -1167,97 +1292,101 @@ Equality holds if `S` satisfies going-down as an `R`-algebra
 (see `Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown`).
 -/
 @[stacks 00OM]
-/--
-lemma `Ideal.height_le_height_add_of_liesOver` / 引理 `Ideal.height_le_height_add_of_liesOver`
+/-
+**Ideal.height_le_height_add_of_liesOver** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.height_le_height_add_of_liesOver [IsNoetherianRing S] (p : Ideal R) 
+[p.IsPrime] (P : Ideal S) [P.IsPrime] [P.LiesOver p] : P.height <= p.height + (P
+.map (Ideal.Quotient.mk <| p.map (algebraMap R S))).height
+参数：p : Ideal R；P : Ideal S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `Ideal.exists_finset_card_eq_height_of_isNoetherianRing`：Ideal.exists_fin
+set_card_eq_height_of_isNoetherianRing (p : Ideal R) [p.IsPrime] : exists s : Fi
+nset R, p in (span s).minimalPrimes ∧ s.card…
+· 使用定理 `Ideal.Quotient.instIsPrimeQuotientMapRingHomAlgebraMapMkOfLiesOver`：∀ (R
+ : Type u_2) [inst : CommSemiring R] {A : Type u_3} [inst_1 : CommRing A] [inst_
+2 : Algebra R A] (p : Ideal R)   (P : Ideal A) [P.IsPrim…
+· 使用引理 `Ideal.IsMinimalPrime.le`：Ideal.IsMinimalPrime.le {p : Ideal R} (h : I.Is
+MinimalPrime p) : I <= p
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Set.SurjOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s₁ s₂ : Set α} {t₁ t₂ 
+: Set β} {f : α → β},   s₁ ⊆ s₂ → t₁ ⊆ t₂ → Set.SurjOn f s₁ t₂ → Set.SurjOn f s₂
+ t₁
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mem_quotient_iff_mem`：mem_quotient_iff_mem {I J : Ideal R} [I.IsTw
+oSided] (hIJ : I <= J) {x : R} : Quotient.mk I x in J.map (Quotient.mk I) ↔ x in
+ J
+· 使用定理 `Ideal.map_le_iff_le_comap`：map_le_iff_le_comap [RingHomClass F R S] : ma
+p f I <= K ↔ I <= comap f K
+· 使用定理 `Ideal.LiesOver.over`：∀ {A : Type u_2} {inst : CommSemiring A} {B : Type 
+u_3} {inst_1 : Semiring B} {inst_2 : Algebra A B} {P : Ideal B}   {p : Ideal A} 
+[self : P…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用引理 `Finset.exists_subset_injOn_image_eq_of_surjOn`：exists_subset_injOn_image
+_eq_of_surjOn [DecidableEq β] {f : α -> β} (s : Set α) (t : Finset β) (hfs : s.S
+urjOn f t) : exists u : Finset α, ↑…
+· 使用引理 `Ideal.height_le_card_of_mem_minimalPrimes_span_finset`：Ideal.height_le_c
+ard_of_mem_minimalPrimes_span_finset {p : Ideal R} {s : Finset R} (hI : p in (Id
+eal.span s).minimalPrimes) : p.height <= s.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Submodule.span_union`：span_union (s t : Set M) : span R (s union t) = sp
+an R s ⊔ span R t
+· 使用定理 `Ideal.map_span`：map_span (s : Set R) : map f (span s) = span (f '' s)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Ideal.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes`：Ide
+al.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes {I p : Ideal R}
+ {P : Ideal S} [P.IsPrime] [P.LiesOver p] (hI : p in I.mi…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 41 条，此处仅展示前 30 条）
 
-English:
-lemma Ideal.height_le_height_add_of_liesOver
-  statement: [IsNoetherianRing S] (p : Ideal R) [p.IsPrime]
-  proof: by
-  classical
-  obtain ⟨s, hp, heq⟩ := p.exists_finset_card_eq_height_of_isNoetherianRing
-  let P' := P.map (Ideal.Quotient.mk <| p.map (algebraMap R S))
-  obtain ⟨s', hP', heq'⟩ := P'.exists_finset_card_eq_height_of_isNoetherianRing
-  have hsP'sub : (s' : Set <| S ⧸ (Ideal.map (algebraMap R S) p)) subseteq (P' : Set <| S ⧸ _) :=
-    fun x hx => hP'.le (Ideal.subset_span hx)
-  have : Set.SurjOn (Ideal.Quotient.mk (p.map (algebraMap R S))) P s' := by
-    refine Set.SurjOn.mono subset_rfl hsP'sub fun x hx => ?_
-    obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective x
-    rw [SetLike.mem_coe]; rw [Ideal.mem_quotient_iff_mem] at hx
-    · use y, hx
-    · rw [Ideal.map_le_iff_le_comap, Ideal.LiesOver.over (p := p) (P := P)]
-  obtain ⟨o, ho, hinj, himgo⟩ := s'.exists_subset_injOn_image_eq_of_surjOn (P : Set S) this
-  let t : Finset S := Finset.image (algebraMap R S) s union o
-  suffices h : P.height <= t.card by
-    rw [← heq]; rw [← heq']
-    apply le_trans h
-    norm_cast
-    refine le_trans (Finset.card_union_le _ _) (add_le_add Finset.card_image_le ?_)
-    rw [← himgo]; rw [Finset.card_image_of_injOn hinj]
-  refine Ideal.height_le_card_of_mem_minimalPrimes_span_finset ?_
-  have : Ideal.span t = Ideal.map (algebraMap R S) (.span s) ⊔ .span o := by
-    simp [t, Ideal.map_span]
-  refine this ▸ map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes hp (span_le.mpr ho) ?_
-  convert! hP'
-  simp [Ideal.map_span, ← himgo]
-
-中文:
-引理 理想.height_le_height_add_of_liesOver
-  结论: [是Noether环 S] (p : 理想 R) [p.是素]
-  证明: by
-  classical
-  obtain ⟨s, hp, heq⟩ := p.exists_finset_card_eq_height_of_isNoetherianRing
-  let P' := P.map (Ideal.Quotient.mk <| p.map (algebraMap R S))
-  obtain ⟨s', hP', heq'⟩ := P'.exists_finset_card_eq_height_of_isNoetherianRing
-  have hsP'sub : (s' : Set <| S ⧸ (Ideal.map (algebraMap R S) p)) subseteq (P' : Set <| S ⧸ _) :=
-    fun x hx => hP'.le (Ideal.subset_span hx)
-  have : Set.SurjOn (Ideal.Quotient.mk (p.map (algebraMap R S))) P s' := by
-    refine Set.SurjOn.mono subset_rfl hsP'sub fun x hx => ?_
-    obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective x
-    rw [SetLike.mem_coe]; rw [Ideal.mem_quotient_iff_mem] at hx
-    · use y, hx
-    · rw [Ideal.map_le_iff_le_comap, Ideal.LiesOver.over (p := p) (P := P)]
-  obtain ⟨o, ho, hinj, himgo⟩ := s'.exists_subset_injOn_image_eq_of_surjOn (P : Set S) this
-  let t : Finset S := Finset.image (algebraMap R S) s union o
-  suffices h : P.height <= t.card by
-    rw [← heq]; rw [← heq']
-    apply le_trans h
-    norm_cast
-    refine le_trans (Finset.card_union_le _ _) (add_le_add Finset.card_image_le ?_)
-    rw [← himgo]; rw [Finset.card_image_of_injOn hinj]
-  refine Ideal.height_le_card_of_mem_minimalPrimes_span_finset ?_
-  have : Ideal.span t = Ideal.map (algebraMap R S) (.span s) ⊔ .span o := by
-    simp [t, Ideal.map_span]
-  refine this ▸ map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes hp (span_le.mpr ho) ?_
-  convert! hP'
-  simp [Ideal.map_span, ← himgo]
-
-Depends on / 依赖: Ideal.Quotient.mk, Ideal.map, Ideal.subset_span, P.map, Quotient, Set.SurjOn, Set.SurjOn.mono, SurjOn, _closure, algebraMap, classical, clusterPt_iff_lift, exists_finset_card_eq_height_of_isNoetherianRing, forall_mem_nonempty_iff_neBot, inf_comm, mem_inf_iff, p.exists_finset_card_eq_height_of_isNoetherianRing, p.map, pure_neBot, simp_rw
+--- 原说明 ---
+If `P` lies over `p`, the height of `P` is bounded by the height of `p` plus
+the height of the image of `P` in `S ⧸ p S`.
+Equality holds if `S` satisfies going-down as an `R`-algebra
+(see `Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown`).
 -/
 lemma Ideal.height_le_height_add_of_liesOver [IsNoetherianRing S] (p : Ideal R) [p.IsPrime]
       (P : Ideal S) [P.IsPrime] [P.LiesOver p] :
-    P.height <= p.height +
+    P.height ≤ p.height +
       (P.map (Ideal.Quotient.mk <| p.map (algebraMap R S))).height := by
   classical
   obtain ⟨s, hp, heq⟩ := p.exists_finset_card_eq_height_of_isNoetherianRing
   let P' := P.map (Ideal.Quotient.mk <| p.map (algebraMap R S))
   obtain ⟨s', hP', heq'⟩ := P'.exists_finset_card_eq_height_of_isNoetherianRing
-  have hsP'sub : (s' : Set <| S ⧸ (Ideal.map (algebraMap R S) p)) subseteq (P' : Set <| S ⧸ _) :=
-    fun x hx => hP'.le (Ideal.subset_span hx)
+  have hsP'sub : (s' : Set <| S ⧸ (Ideal.map (algebraMap R S) p)) ⊆ (P' : Set <| S ⧸ _) :=
+    fun x hx ↦ hP'.le (Ideal.subset_span hx)
   have : Set.SurjOn (Ideal.Quotient.mk (p.map (algebraMap R S))) P s' := by
-    refine Set.SurjOn.mono subset_rfl hsP'sub fun x hx => ?_
+    refine Set.SurjOn.mono subset_rfl hsP'sub fun x hx ↦ ?_
     obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective x
-    rw [SetLike.mem_coe]; rw [Ideal.mem_quotient_iff_mem] at hx
+    rw [SetLike.mem_coe, Ideal.mem_quotient_iff_mem] at hx
     · use y, hx
     · rw [Ideal.map_le_iff_le_comap, Ideal.LiesOver.over (p := p) (P := P)]
   obtain ⟨o, ho, hinj, himgo⟩ := s'.exists_subset_injOn_image_eq_of_surjOn (P : Set S) this
-  let t : Finset S := Finset.image (algebraMap R S) s union o
-  suffices h : P.height <= t.card by
-    rw [← heq]; rw [← heq']
+  let t : Finset S := Finset.image (algebraMap R S) s ∪ o
+  suffices h : P.height ≤ t.card by
+    rw [← heq, ← heq']
     apply le_trans h
     norm_cast
     refine le_trans (Finset.card_union_le _ _) (add_le_add Finset.card_image_le ?_)
-    rw [← himgo]; rw [Finset.card_image_of_injOn hinj]
+    rw [← himgo, Finset.card_image_of_injOn hinj]
   refine Ideal.height_le_card_of_mem_minimalPrimes_span_finset ?_
   have : Ideal.span t = Ideal.map (algebraMap R S) (.span s) ⊔ .span o := by
     simp [t, Ideal.map_span]
@@ -1271,64 +1400,82 @@ to the height of `p` plus the height of the image of `P` in `S ⧸ p S`
 (Matsumura 13.B Th. 19 (2)).
 -/
 @[stacks 00ON]
-/--
-lemma `Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown` / 引理 `Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown`
+/-
+**Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown** 是 Mathlib 中的一个引理，位于命名
+空间 ``。
+形式化陈述：Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown [IsNoetherianRing S
+] [Algebra.HasGoingDown R S] (p : Ideal R) [p.IsPrime] (P : Ideal S) [P.IsPrime]
+ [P.LiesOver p] : P.height = p.height + (P.map (Ideal.Quotient.mk <| p.map (alge
+braMap R S))).height
+参数：p : Ideal R；P : Ideal S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `Ideal.height_le_height_add_of_liesOver`：Ideal.height_le_height_add_of_li
+esOver [IsNoetherianRing S] (p : Ideal R) [p.IsPrime] (P : Ideal S) [P.IsPrime] 
+[P.LiesOver p] : P.height <=…
+· 使用引理 `Ideal.exists_ltSeries_length_eq_height`：Ideal.exists_ltSeries_length_eq_
+height (p : Ideal R) [p.IsPrime] [p.FiniteHeight] : exists (l : LTSeries (PrimeS
+pectrum R)), RelSeries.last …
+· 使用定理 `Ideal.Quotient.instIsPrimeQuotientMapRingHomAlgebraMapMkOfLiesOver`：∀ (R
+ : Type u_2) [inst : CommSemiring R] {A : Type u_3} [inst_1 : CommRing A] [inst_
+2 : Algebra R A] (p : Ideal R)   (P : Ideal A) [P.IsPrim…
+· 使用引理 `RingHom.strictMono_comap_of_surjective`：RingHom.strictMono_comap_of_surj
+ective {S : Type*} [CommRing S] {f : R ->+* S} (hf : Function.Surjective f) : St
+rictMono (comap f)
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.map_le_iff_le_comap`：map_le_iff_le_comap [RingHomClass F R S] : ma
+p f I <= K ↔ I <= comap f K
+· 使用定理 `PrimeSpectrum.comap_asIdeal`：comap_asIdeal (y : PrimeSpectrum S) : (coma
+p f y).asIdeal = Ideal.comap f y.asIdeal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Ideal.map_quotient_self`：map_quotient_self (I : Ideal R) [I.IsTwoSided] 
+: map (Quotient.mk I) I = ⊥
+· 使用定理 `Ideal.LiesOver.over`：∀ {A : Type u_2} {inst : CommSemiring A} {B : Type 
+u_3} {inst_1 : Semiring B} {inst_2 : Algebra A B} {P : Ideal B}   {p : Ideal A} 
+[self : P…
+· 使用定理 `Ideal.under_def`：under_def : P.under A = Ideal.comap (algebraMap A B) P
+· 使用定理 `Ideal.comap_mono`：comap_mono [RingHomClass F R S] (h : K <= L) : comap f
+ K <= comap f L
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `LTSeries.head_le_last`：head_le_last (x : LTSeries α) : x.head <= x.last
+· 使用定理 `Ideal.comap.congr_simp`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst
+ : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   (f f_1 : F),   f
+ = f_1 → ∀ […
+· 使用引理 `Ideal.comap_map_quotientMk`：comap_map_quotientMk (I J : Ideal R) [I.IsTw
+oSided] : (J.map <| Ideal.Quotient.mk I).comap (Ideal.Quotient.mk I) = I ⊔ J
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用引理 `Ideal.exists_ltSeries_of_hasGoingDown`：Ideal.exists_ltSeries_of_hasGoing
+Down [Algebra.HasGoingDown R S] (l : LTSeries (PrimeSpectrum R)) (P : Ideal S) [
+P.IsPrime] [lo : P.LiesOver…
+· 使用定理 `RelSeries.smash_length`：∀ {α : Type u_1} {r : SetRel α α} (p q : RelSeri
+es r) (connect : p.last = q.head),   (p.smash q connect).length = p.length + q.l
+ength
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LTSeries.map_length`：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α]
+ [inst_1 : Preorder β] (p : LTSeries α) (f : α → β)   (hf : StrictMono f), (p.ma
+p f hf).l…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+（共 33 条，此处仅展示前 30 条）
 
-English:
-lemma Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown
-  statement: [IsNoetherianRing S]
-  proof: by
-  refine le_antisymm (height_le_height_add_of_liesOver p P) ?_
-  obtain ⟨lp, hlp, hlenp⟩ := p.exists_ltSeries_length_eq_height
-  obtain ⟨lq, hlq, hlenq⟩ :=
-    (P.map (Quotient.mk (p.map (algebraMap R S)))).exists_ltSeries_length_eq_height
-  let l' : LTSeries (PrimeSpectrum S) :=
-    lq.map (PrimeSpectrum.comap (Quotient.mk (p.map (algebraMap R S))))
-      (RingHom.strictMono_comap_of_surjective Quotient.mk_surjective)
-  have : l'.head.asIdeal.LiesOver lp.last.asIdeal := by
-    simp only [LTSeries.head_map, hlp, l']
-    refine ⟨?_⟩
-    refine le_antisymm ?_ ?_
-    · rw [← map_le_iff_le_comap, PrimeSpectrum.comap_asIdeal, ← map_le_iff_le_comap]
-      simp
-    · conv_rhs => rw [LiesOver.over (p := p) (P := P), under_def]
-      refine comap_mono (le_trans (comap_mono (lq.head_le_last)) ?_)
-      simp [hlq, map_le_iff_le_comap, LiesOver.over (p := p) (P := P)]
-  obtain ⟨lp', hlp'len, hlp', _⟩ := exists_ltSeries_of_hasGoingDown lp l'.head.asIdeal
-  have : (lp'.smash l' hlp').length = lp.length + lq.length := by simp [hlp'len, l']
-  rw [← hlenp]; rw [← hlenq]; rw [← Nat.cast_add]; rw [← this]; rw [(⟨P]; rw [‹_›⟩ : PrimeSpectrum S).height_eq_orderHeight]
-  apply Order.length_le_height
-  simp [hlq, l', ← PrimeSpectrum.asIdeal_le_asIdeal, map_le_iff_le_comap,
-    LiesOver.over (p := p) (P := P)]
-
-中文:
-引理 理想.height_eq_height_add_of_liesOver_of_hasGoingDown
-  结论: [是Noether环 S]
-  证明: by
-  refine le_antisymm (height_le_height_add_of_liesOver p P) ?_
-  obtain ⟨lp, hlp, hlenp⟩ := p.exists_ltSeries_length_eq_height
-  obtain ⟨lq, hlq, hlenq⟩ :=
-    (P.map (Quotient.mk (p.map (algebraMap R S)))).exists_ltSeries_length_eq_height
-  let l' : LTSeries (PrimeSpectrum S) :=
-    lq.map (PrimeSpectrum.comap (Quotient.mk (p.map (algebraMap R S))))
-      (RingHom.strictMono_comap_of_surjective Quotient.mk_surjective)
-  have : l'.head.asIdeal.LiesOver lp.last.asIdeal := by
-    simp only [LTSeries.head_map, hlp, l']
-    refine ⟨?_⟩
-    refine le_antisymm ?_ ?_
-    · rw [← map_le_iff_le_comap, PrimeSpectrum.comap_asIdeal, ← map_le_iff_le_comap]
-      simp
-    · conv_rhs => rw [LiesOver.over (p := p) (P := P), under_def]
-      refine comap_mono (le_trans (comap_mono (lq.head_le_last)) ?_)
-      simp [hlq, map_le_iff_le_comap, LiesOver.over (p := p) (P := P)]
-  obtain ⟨lp', hlp'len, hlp', _⟩ := exists_ltSeries_of_hasGoingDown lp l'.head.asIdeal
-  have : (lp'.smash l' hlp').length = lp.length + lq.length := by simp [hlp'len, l']
-  rw [← hlenp]; rw [← hlenq]; rw [← Nat.cast_add]; rw [← this]; rw [(⟨P]; rw [‹_›⟩ : PrimeSpectrum S).height_eq_orderHeight]
-  apply Order.length_le_height
-  simp [hlq, l', ← PrimeSpectrum.asIdeal_le_asIdeal, map_le_iff_le_comap,
-    LiesOver.over (p := p) (P := P)]
-
-Depends on / 依赖: LTSeries, LTSeries.head_map, LiesOver, P.map, PrimeSpectrum, PrimeSpectrum.comap, Quotient, Quotient.mk, Quotient.mk_surjective, RingHom, RingHom.strictMono_comap_of_surjective, algebraMap, asIdeal, exists_ltSeries_length_eq_height, head.asIdeal.LiesOver, head_map, height_le_height_add_of_liesOver, le_antisymm, lp.last.asIdeal, lq.map
+--- 原说明 ---
+If `S` satisfies going-down as an `R`-algebra and `P` lies over `p`, the height 
+of `P` is equal
+to the height of `p` plus the height of the image of `P` in `S ⧸ p S`
+(Matsumura 13.B Th. 19 (2)).
 -/
 lemma Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown [IsNoetherianRing S]
     [Algebra.HasGoingDown R S] (p : Ideal R) [p.IsPrime] (P : Ideal S) [P.IsPrime] [P.LiesOver p] :
@@ -1352,35 +1499,40 @@ lemma Ideal.height_eq_height_add_of_liesOver_of_hasGoingDown [IsNoetherianRing S
       simp [hlq, map_le_iff_le_comap, LiesOver.over (p := p) (P := P)]
   obtain ⟨lp', hlp'len, hlp', _⟩ := exists_ltSeries_of_hasGoingDown lp l'.head.asIdeal
   have : (lp'.smash l' hlp').length = lp.length + lq.length := by simp [hlp'len, l']
-  rw [← hlenp]; rw [← hlenq]; rw [← Nat.cast_add]; rw [← this]; rw [(⟨P]; rw [‹_›⟩ : PrimeSpectrum S).height_eq_orderHeight]
+  rw [← hlenp, ← hlenq, ← Nat.cast_add, ← this, (⟨P, ‹_›⟩ : PrimeSpectrum S).height_eq_orderHeight]
   apply Order.length_le_height
   simp [hlq, l', ← PrimeSpectrum.asIdeal_le_asIdeal, map_le_iff_le_comap,
     LiesOver.over (p := p) (P := P)]
 
 variable (R) in
-/--
-lemma `ringKrullDim_le_spanFinrank_maximalIdeal` / 引理 `ringKrullDim_le_spanFinrank_maximalIdeal`
-
-English:
-lemma ringKrullDim_le_spanFinrank_maximalIdeal
-  given: [IsLocalRing R]
-  proof: le_of_eq_of_le IsLocalRing.maximalIdeal_height_eq_ringKrullDim.symm
-    (WithBot.coe_le_coe.mpr (Ideal.height_le_spanFinrank (IsLocalRing.maximalIdeal R)
-      Ideal.IsPrime.ne_top'))
-
-中文:
-引理 ringKrullDim_le_spanFinrank_maximalIdeal
-  条件: [是局部环 R]
-  证明: le_of_eq_of_le IsLocalRing.maximalIdeal_height_eq_ringKrullDim.symm
-    (WithBot.coe_le_coe.mpr (Ideal.height_le_spanFinrank (IsLocalRing.maximalIdeal R)
-      Ideal.IsPrime.ne_top'))
-
-Depends on / 依赖: Ideal.IsPrime.ne_top, Ideal.height_le_spanFinrank, IsLocalRing, IsLocalRing.maximalIdeal, IsLocalRing.maximalIdeal_height_eq_ringKrullDim.symm, IsPrime, WithBot, WithBot.coe_le_coe.mpr, coe_le_coe, height_le_spanFinrank, le_of_eq_of_le, maximalIdeal, maximalIdeal_height_eq_ringKrullDim, ne_top
+/-
+**ringKrullDim_le_spanFinrank_maximalIdeal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ringKrullDim_le_spanFinrank_maximalIdeal [IsLocalRing R] : ringKrullDim R 
+<= (IsLocalRing.maximalIdeal R).spanFinrank
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_eq_of_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ 
+c → a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalRing.maximalIdeal_height_eq_ringKrullDim`：IsLocalRing.maximalIdea
+l_height_eq_ringKrullDim [IsLocalRing R] : (IsLocalRing.maximalIdeal R).height =
+ ringKrullDim R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WithBot.coe_le_coe`：coe_le_coe : (a : WithBot α) <= b ↔ a <= b
+· 使用引理 `Ideal.height_le_spanFinrank`：Ideal.height_le_spanFinrank (I : Ideal R) (
+hI : I != ⊤) : I.height <= I.spanFinrank
+· 使用定理 `Ideal.IsPrime.ne_top'`：∀ {α : Type u} {inst : Semiring α} {I : Ideal α} 
+[self : I.IsPrime], I ≠ ⊤
+· 使用定理 `Ideal.IsMaximal.isPrime'`：∀ {α : Type u} [inst : CommSemiring α] (I : Id
+eal α) [_H : I.IsMaximal], I.IsPrime
+· 使用定理 `IsLocalRing.maximalIdeal.isMaximal`：∀ (R : Type u_1) [inst : CommSemirin
+g R] [inst_1 : IsLocalRing R], (IsLocalRing.maximalIdeal R).IsMaximal
 -/
 lemma ringKrullDim_le_spanFinrank_maximalIdeal [IsLocalRing R] :
-    ringKrullDim R <= (IsLocalRing.maximalIdeal R).spanFinrank :=
+    ringKrullDim R ≤ (IsLocalRing.maximalIdeal R).spanFinrank :=
   le_of_eq_of_le IsLocalRing.maximalIdeal_height_eq_ringKrullDim.symm
     (WithBot.coe_le_coe.mpr (Ideal.height_le_spanFinrank (IsLocalRing.maximalIdeal R)
       Ideal.IsPrime.ne_top'))
 
 end Algebra
+

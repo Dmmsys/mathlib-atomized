@@ -38,66 +38,46 @@ namespace HomologicalComplex
 variable {P Q : Karoubi (HomologicalComplex C c)} (f : P ⟶ Q) (n : ι)
 
 @[simp, reassoc]
-/--
-theorem `p_comp_d` / 定理 `p_comp_d`
-
-English:
-theorem p_comp_d
-  statement: P.p.f n ≫ f.f.f n = f.f.f n
-  proof: HomologicalComplex.congr_hom (p_comp f) n
-
-@[simp, reassoc]
-
-中文:
-定理 p_comp_d
-  结论: P.p.f n ≫ f.f.f n = f.f.f n
-  证明: HomologicalComplex.congr_hom (p_comp f) n
-
-@[simp, reassoc]
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.congr_hom, congr_hom, p_comp
+/-
+**CategoryTheory.Idempotents.Karoubi.HomologicalComplex.p_comp_d** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Idempotents.Karoubi.HomologicalComplex`。
+形式化陈述：p_comp_d : P.p.f n ≫ f.f.f n = f.f.f n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.congr_hom`：congr_hom {C D : HomologicalComplex V c} {
+f g : C ⟶ D} (w : f = g) (i : ι) : f.f i = g.f i
+· 使用定理 `CategoryTheory.Idempotents.Karoubi.p_comp`：p_comp {P Q : Karoubi C} (f :
+ Hom P Q) : P.p ≫ f.f = f.f
 -/
 theorem p_comp_d : P.p.f n ≫ f.f.f n = f.f.f n :=
   HomologicalComplex.congr_hom (p_comp f) n
 
 @[simp, reassoc]
-/--
-theorem `comp_p_d` / 定理 `comp_p_d`
-
-English:
-theorem comp_p_d
-  statement: f.f.f n ≫ Q.p.f n = f.f.f n
-  proof: HomologicalComplex.congr_hom (comp_p f) n
-
-@[reassoc]
-
-中文:
-定理 comp_p_d
-  结论: f.f.f n ≫ Q.p.f n = f.f.f n
-  证明: HomologicalComplex.congr_hom (comp_p f) n
-
-@[reassoc]
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.congr_hom, comp_p, congr_hom
+/-
+**CategoryTheory.Idempotents.Karoubi.HomologicalComplex.comp_p_d** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Idempotents.Karoubi.HomologicalComplex`。
+形式化陈述：comp_p_d : f.f.f n ≫ Q.p.f n = f.f.f n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.congr_hom`：congr_hom {C D : HomologicalComplex V c} {
+f g : C ⟶ D} (w : f = g) (i : ι) : f.f i = g.f i
+· 使用定理 `CategoryTheory.Idempotents.Karoubi.comp_p`：comp_p {P Q : Karoubi C} (f :
+ Hom P Q) : f.f ≫ Q.p = f.f
 -/
 theorem comp_p_d : f.f.f n ≫ Q.p.f n = f.f.f n :=
   HomologicalComplex.congr_hom (comp_p f) n
 
 @[reassoc]
-/--
-theorem `p_comm_f` / 定理 `p_comm_f`
-
-English:
-theorem p_comm_f
-  statement: P.p.f n ≫ f.f.f n = f.f.f n ≫ Q.p.f n
-  proof: HomologicalComplex.congr_hom (p_comm f) n
-
-中文:
-定理 p_comm_f
-  结论: P.p.f n ≫ f.f.f n = f.f.f n ≫ Q.p.f n
-  证明: HomologicalComplex.congr_hom (p_comm f) n
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.congr_hom, congr_hom, p_comm
+/-
+**CategoryTheory.Idempotents.Karoubi.HomologicalComplex.p_comm_f** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Idempotents.Karoubi.HomologicalComplex`。
+形式化陈述：p_comm_f : P.p.f n ≫ f.f.f n = f.f.f n ≫ Q.p.f n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.congr_hom`：congr_hom {C D : HomologicalComplex V c} {
+f g : C ⟶ D} (w : f = g) (i : ι) : f.f i = g.f i
+· 使用定理 `CategoryTheory.Idempotents.Karoubi.p_comm`：p_comm {P Q : Karoubi C} (f :
+ Hom P Q) : P.p ≫ f.f = f.f ≫ Q.p
 -/
 theorem p_comm_f : P.p.f n ≫ f.f.f n = f.f.f n ≫ Q.p.f n :=
   HomologicalComplex.congr_hom (p_comm f) n
@@ -105,20 +85,17 @@ theorem p_comm_f : P.p.f n ≫ f.f.f n = f.f.f n ≫ Q.p.f n :=
 variable (P)
 
 @[simp, reassoc]
-/--
-theorem `p_idem` / 定理 `p_idem`
-
-English:
-theorem p_idem
-  statement: P.p.f n ≫ P.p.f n = P.p.f n
-  proof: HomologicalComplex.congr_hom P.idem n
-
-中文:
-定理 p_idem
-  结论: P.p.f n ≫ P.p.f n = P.p.f n
-  证明: HomologicalComplex.congr_hom P.idem n
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.congr_hom, P.idem, congr_hom
+/-
+**CategoryTheory.Idempotents.Karoubi.HomologicalComplex.p_idem** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Idempotents.Karoubi.HomologicalComplex`。
+形式化陈述：p_idem : P.p.f n ≫ P.p.f n = P.p.f n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.congr_hom`：congr_hom {C D : HomologicalComplex V c} {
+f g : C ⟶ D} (w : f = g) (i : ι) : f.f i = g.f i
+· 使用定理 `CategoryTheory.Idempotents.Karoubi.idem`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] (self : CategoryTheory.Idempotents.Karoubi C),  
+ CategoryTheory.CategoryStruc…
 -/
 theorem p_idem : P.p.f n ≫ P.p.f n = P.p.f n :=
   HomologicalComplex.congr_hom P.idem n
@@ -136,26 +113,20 @@ namespace Functor
 /-- The functor `Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c`,
 on objects. -/
 @[simps]
-/--
-Definition of `obj` / `obj` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.Functor.obj** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEqu
+ivalence.Functor`。
+形式化陈述：obj (P : Karoubi (HomologicalComplex C c)) : HomologicalComplex (Karoubi C
+) c where X n
+参数：P : Karoubi (HomologicalComplex C c)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition obj
-  signature: (P : Karoubi (HomologicalComplex C c))
-  body: ⟨P.X.X n, P.p.f n, by
-      simpa only [HomologicalComplex.comp_f] using HomologicalComplex.congr_hom P.idem n⟩
-  d i j := { f := P.p.f i ≫ P.X.d i j }
-  shape i j hij := by simp only [hom_eq_zero_iff]; cat_disch
-
-中文:
-定义 obj
-  签名: (P : Karoubi (同调复形 C c))
-  定义体: ⟨P.X.X n, P.p.f n, by
-      simpa only [HomologicalComplex.comp_f] using HomologicalComplex.congr_hom P.idem n⟩
-  d i j := { f := P.p.f i ≫ P.X.d i j }
-  shape i j hij := by simp only [hom_eq_zero_iff]; cat_disch
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.comp_f, HomologicalComplex.congr_hom, P.X.X, P.X.d, P.idem, P.p.f, cat_disch, comp_f, congr_hom, hom_eq_zero_iff
+--- 原说明 ---
+The functor `Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c
+`,
+on objects.
 -/
 def obj (P : Karoubi (HomologicalComplex C c)) : HomologicalComplex (Karoubi C) c where
   X n :=
@@ -168,20 +139,20 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The functor `Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c`,
 on morphisms. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.Functor.map** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEqu
+ivalence.Functor`。
+形式化陈述：map {P Q : Karoubi (HomologicalComplex C c)} (f : P ⟶ Q) : obj P ⟶ obj Q w
+here f n
+参数：HomologicalComplex C c；f : P ⟶ Q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {P Q : Karoubi (HomologicalComplex C c)} (f : P ⟶ Q)
-  body: { f := f.f.f n }
-
-中文:
-定义 map
-  签名: {P Q : Karoubi (同调复形 C c)} (f : P ⟶ Q)
-  定义体: { f := f.f.f n }
-
-Depends on / 依赖: f.f.f
+--- 原说明 ---
+The functor `Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c
+`,
+on morphisms.
 -/
 def map {P Q : Karoubi (HomologicalComplex C c)} (f : P ⟶ Q) : obj P ⟶ obj Q where
   f n :=
@@ -191,22 +162,18 @@ end Functor
 
 /-- The functor `Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c`. -/
 @[simps]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.functor** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEquival
+ence`。
+形式化陈述：functor : Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C
+) c where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c where
-  body: Functor.obj
-  map f := Functor.map f
-
-中文:
-定义 functor
-  签名: : Karoubi (同调复形 C c) ⥤ 同调复形 (Karoubi C) c where
-  定义体: Functor.obj
-  map f := Functor.map f
-
-Depends on / 依赖: Functor, Functor.obj
+--- 原说明 ---
+The functor `Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c
+`.
 -/
 def functor : Karoubi (HomologicalComplex C c) ⥤ HomologicalComplex (Karoubi C) c where
   obj := Functor.obj
@@ -217,30 +184,20 @@ namespace Inverse
 /-- The functor `HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c)`,
 on objects -/
 @[simps]
-/--
-Definition of `obj` / `obj` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.Inverse.obj** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEqu
+ivalence.Inverse`。
+形式化陈述：obj (K : HomologicalComplex (Karoubi C) c) : Karoubi (HomologicalComplex C
+ c) where X
+参数：K : HomologicalComplex (Karoubi C) c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition obj
-  signature: (K : HomologicalComplex (Karoubi C) c)
-  body: { X := fun n => (K.X n).X
-      d := fun i j => (K.d i j).f
-      shape := fun i j hij => hom_eq_zero_iff.mp (K.shape i j hij)
-      d_comp_d' := fun i j k _ _ => by
-        simpa only [comp_f] using hom_eq_zero_iff.mp (K.d_comp_d i j k) }
-  p := { f := fun n => (K.X n).p }
-
-中文:
-定义 obj
-  签名: (K : 同调复形 (Karoubi C) c)
-  定义体: { X := fun n => (K.X n).X
-      d := fun i j => (K.d i j).f
-      shape := fun i j hij => hom_eq_zero_iff.mp (K.shape i j hij)
-      d_comp_d' := fun i j k _ _ => by
-        simpa only [comp_f] using hom_eq_zero_iff.mp (K.d_comp_d i j k) }
-  p := { f := fun n => (K.X n).p }
-
-Depends on / 依赖: K.d_comp_d, K.shape, comp_f, d_comp_d, hom_eq_zero_iff, hom_eq_zero_iff.mp
+--- 原说明 ---
+The functor `HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c)
+`,
+on objects
 -/
 def obj (K : HomologicalComplex (Karoubi C) c) : Karoubi (HomologicalComplex C c) where
   X :=
@@ -255,22 +212,20 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The functor `HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c)`,
 on morphisms -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.Inverse.map** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEqu
+ivalence.Inverse`。
+形式化陈述：map {K L : HomologicalComplex (Karoubi C) c} (f : K ⟶ L) : obj K ⟶ obj L w
+here f
+参数：Karoubi C；f : K ⟶ L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {K L : HomologicalComplex (Karoubi C) c} (f : K ⟶ L)
-  body: { f := fun n => (f.f n).f
-      comm' := fun i j hij => by simpa only [comp_f] using! hom_ext_iff.mp (f.comm' i j hij) }
-
-中文:
-定义 map
-  签名: {K L : 同调复形 (Karoubi C) c} (f : K ⟶ L)
-  定义体: { f := fun n => (f.f n).f
-      comm' := fun i j hij => by simpa only [comp_f] using! hom_ext_iff.mp (f.comm' i j hij) }
-
-Depends on / 依赖: comp_f, f.comm, hom_ext_iff, hom_ext_iff.mp
+--- 原说明 ---
+The functor `HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c)
+`,
+on morphisms
 -/
 def map {K L : HomologicalComplex (Karoubi C) c} (f : K ⟶ L) : obj K ⟶ obj L where
   f :=
@@ -281,22 +236,18 @@ end Inverse
 
 /-- The functor `HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c)`. -/
 @[simps]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.inverse** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEquival
+ence`。
+形式化陈述：inverse : HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C
+ c) where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: : HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c) where
-  body: Inverse.obj
-  map f := Inverse.map f
-
-中文:
-定义 inverse
-  签名: : 同调复形 (Karoubi C) c ⥤ Karoubi (同调复形 C c) where
-  定义体: Inverse.obj
-  map f := Inverse.map f
-
-Depends on / 依赖: Inverse, Inverse.obj
+--- 原说明 ---
+The functor `HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c)
+`.
 -/
 def inverse : HomologicalComplex (Karoubi C) c ⥤ Karoubi (HomologicalComplex C c) where
   obj := Inverse.obj
@@ -307,22 +258,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The counit isomorphism of the equivalence
 `Karoubi (HomologicalComplex C c) ≌ HomologicalComplex (Karoubi C) c`. -/
 @[simps!]
-/--
-Definition of `counitIso` / `counitIso` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.counitIso** 是 
+Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEquiv
+alence`。
+形式化陈述：counitIso : inverse ⋙ functor ≅ 𝟭 (HomologicalComplex (Karoubi C) c)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIso
-  signature: : inverse ⋙ functor ≅ 𝟭 (HomologicalComplex (Karoubi C) c)
-  body: eqToIso (Functor.ext (fun P => HomologicalComplex.ext (by cat_disch) (by simp))
-    (by cat_disch))
-
-中文:
-定义 counitIso
-  签名: : inverse ⋙ functor ≅ 𝟭 (同调复形 (Karoubi C) c)
-  定义体: eqToIso (Functor.ext (fun P => HomologicalComplex.ext (by cat_disch) (by simp))
-    (by cat_disch))
-
-Depends on / 依赖: Functor, Functor.ext, HomologicalComplex, HomologicalComplex.ext, cat_disch, eqToIso
+--- 原说明 ---
+The counit isomorphism of the equivalence
+`Karoubi (HomologicalComplex C c) ≌ HomologicalComplex (Karoubi C) c`.
 -/
 def counitIso : inverse ⋙ functor ≅ 𝟭 (HomologicalComplex (Karoubi C) c) :=
   eqToIso (Functor.ext (fun P => HomologicalComplex.ext (by cat_disch) (by simp))
@@ -332,96 +278,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The unit isomorphism of the equivalence
 `Karoubi (HomologicalComplex C c) ≌ HomologicalComplex (Karoubi C) c`. -/
 @[simps]
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-
+**CategoryTheory.Idempotents.KaroubiHomologicalComplexEquivalence.unitIso** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.Idempotents.KaroubiHomologicalComplexEquival
+ence`。
+形式化陈述：unitIso : 𝟭 (Karoubi (HomologicalComplex C c)) ≅ functor ⋙ inverse where h
+om
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIso
-  signature: : 𝟭 (Karoubi (HomologicalComplex C c)) ≅ functor ⋙ inverse where
-  body: { app := fun P =>
-        { f :=
-            { f := fun n => P.p.f n
-              comm' := fun i j _ => by
-                dsimp
-                simp only [HomologicalComplex.Hom.comm, HomologicalComplex.Hom.comm_assoc,
-                  HomologicalComplex.p_idem] }
-          comm := by
-            ext n
-            dsimp
-            simp only [HomologicalComplex.p_idem] }
-      naturality := fun P Q φ => by
-        ext
-        dsimp
-        simp only [HomologicalComplex.comp_p_d,
-          HomologicalComplex.p_comp_d] }
-  inv :=
-    { app := fun P =>
-        { f :=
-            { f := fun n => P.p.f n
-              comm' := fun i j _ => by
-                dsimp
-                simp only [HomologicalComplex.Hom.comm, assoc, HomologicalComplex.p_idem] }
-          comm := by
-            ext n
-            dsimp
-            simp only [HomologicalComplex.p_idem] }
-      naturality := fun P Q φ => by
-        ext
-        dsimp
-        simp only [HomologicalComplex.comp_p_d, HomologicalComplex.p_comp_d] }
-  hom_inv_id := by
-    ext
-    dsimp
-    simp only [HomologicalComplex.p_idem]
-  inv_hom_id := by
-    ext
-    dsimp
-    simp only [HomologicalComplex.p_idem]
-
-中文:
-定义 unitIso
-  签名: : 𝟭 (Karoubi (同调复形 C c)) ≅ functor ⋙ inverse where
-  定义体: { app := fun P =>
-        { f :=
-            { f := fun n => P.p.f n
-              comm' := fun i j _ => by
-                dsimp
-                simp only [HomologicalComplex.Hom.comm, HomologicalComplex.Hom.comm_assoc,
-                  HomologicalComplex.p_idem] }
-          comm := by
-            ext n
-            dsimp
-            simp only [HomologicalComplex.p_idem] }
-      naturality := fun P Q φ => by
-        ext
-        dsimp
-        simp only [HomologicalComplex.comp_p_d,
-          HomologicalComplex.p_comp_d] }
-  inv :=
-    { app := fun P =>
-        { f :=
-            { f := fun n => P.p.f n
-              comm' := fun i j _ => by
-                dsimp
-                simp only [HomologicalComplex.Hom.comm, assoc, HomologicalComplex.p_idem] }
-          comm := by
-            ext n
-            dsimp
-            simp only [HomologicalComplex.p_idem] }
-      naturality := fun P Q φ => by
-        ext
-        dsimp
-        simp only [HomologicalComplex.comp_p_d, HomologicalComplex.p_comp_d] }
-  hom_inv_id := by
-    ext
-    dsimp
-    simp only [HomologicalComplex.p_idem]
-  inv_hom_id := by
-    ext
-    dsimp
-    simp only [HomologicalComplex.p_idem]
-
-Depends on / 依赖: Homologi, HomologicalComplex, HomologicalComplex.Hom.comm, HomologicalComplex.Hom.comm_assoc, HomologicalComplex.comp_p_d, HomologicalComplex.p_comp_d, HomologicalComplex.p_idem, P.p.f, comm_assoc, comp_p_d, naturality, p_comp_d, p_idem
+--- 原说明 ---
+The unit isomorphism of the equivalence
+`Karoubi (HomologicalComplex C c) ≌ HomologicalComplex (Karoubi C) c`.
 -/
 def unitIso : 𝟭 (Karoubi (HomologicalComplex C c)) ≅ functor ⋙ inverse where
   hom :=
@@ -473,26 +341,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The equivalence `Karoubi (HomologicalComplex C c) ≌ HomologicalComplex (Karoubi C) c`. -/
 @[simps]
-/--
-Definition of `karoubiHomologicalComplexEquivalence` / `karoubiHomologicalComplexEquivalence` 的定义
+/-
+**CategoryTheory.Idempotents.karoubiHomologicalComplexEquivalence** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Idempotents`。
+形式化陈述：karoubiHomologicalComplexEquivalence : Karoubi (HomologicalComplex C c) ≌ 
+HomologicalComplex (Karoubi C) c where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition karoubiHomologicalComplexEquivalence
-  signature: :
-  body: KaroubiHomologicalComplexEquivalence.functor
-  inverse := KaroubiHomologicalComplexEquivalence.inverse
-  unitIso := KaroubiHomologicalComplexEquivalence.unitIso
-  counitIso := KaroubiHomologicalComplexEquivalence.counitIso
-
-中文:
-定义 karoubiHomologicalComplexEquivalence
-  签名: :
-  定义体: KaroubiHomologicalComplexEquivalence.functor
-  inverse := KaroubiHomologicalComplexEquivalence.inverse
-  unitIso := KaroubiHomologicalComplexEquivalence.unitIso
-  counitIso := KaroubiHomologicalComplexEquivalence.counitIso
-
-Depends on / 依赖: KaroubiHomologicalComplexEquivalence, KaroubiHomologicalComplexEquivalence.functor, functor
+--- 原说明 ---
+The equivalence `Karoubi (HomologicalComplex C c) ≌ HomologicalComplex (Karoubi 
+C) c`.
 -/
 def karoubiHomologicalComplexEquivalence :
     Karoubi (HomologicalComplex C c) ≌ HomologicalComplex (Karoubi C) c where
@@ -506,20 +365,18 @@ variable (α : Type*) [AddRightCancelSemigroup α] [One α]
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The equivalence `Karoubi (ChainComplex C α) ≌ ChainComplex (Karoubi C) α`. -/
 @[simps!]
-/--
-Definition of `karoubiChainComplexEquivalence` / `karoubiChainComplexEquivalence` 的定义
+/-
+**CategoryTheory.Idempotents.karoubiChainComplexEquivalence** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Idempotents`。
+形式化陈述：karoubiChainComplexEquivalence : Karoubi (ChainComplex C α) ≌ ChainComplex
+ (Karoubi C) α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 
-English:
-definition karoubiChainComplexEquivalence
-  signature: : Karoubi (ChainComplex C α) ≌ ChainComplex (Karoubi C) α
-  body: karoubiHomologicalComplexEquivalence C (ComplexShape.down α)
-
-中文:
-定义 karoubiChainComplexEquivalence
-  签名: : Karoubi (链复形 C α) ≌ 链复形 (Karoubi C) α
-  定义体: karoubiHomologicalComplexEquivalence C (ComplexShape.down α)
-
-Depends on / 依赖: ComplexShape, ComplexShape.down, karoubiHomologicalComplexEquivalence
+--- 原说明 ---
+The equivalence `Karoubi (ChainComplex C α) ≌ ChainComplex (Karoubi C) α`.
 -/
 def karoubiChainComplexEquivalence : Karoubi (ChainComplex C α) ≌ ChainComplex (Karoubi C) α :=
   karoubiHomologicalComplexEquivalence C (ComplexShape.down α)
@@ -527,51 +384,34 @@ def karoubiChainComplexEquivalence : Karoubi (ChainComplex C α) ≌ ChainComple
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The equivalence `Karoubi (CochainComplex C α) ≌ CochainComplex (Karoubi C) α`. -/
 @[simps!]
-/--
-Definition of `karoubiCochainComplexEquivalence` / `karoubiCochainComplexEquivalence` 的定义
+/-
+**CategoryTheory.Idempotents.karoubiCochainComplexEquivalence** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Idempotents`。
+形式化陈述：karoubiCochainComplexEquivalence : Karoubi (CochainComplex C α) ≌ CochainC
+omplex (Karoubi C) α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 
-English:
-definition karoubiCochainComplexEquivalence
-  signature: :
-  body: karoubiHomologicalComplexEquivalence C (ComplexShape.up α)
-
-中文:
-定义 karoubiCochainComplexEquivalence
-  签名: :
-  定义体: karoubiHomologicalComplexEquivalence C (ComplexShape.up α)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, karoubiHomologicalComplexEquivalence
+--- 原说明 ---
+The equivalence `Karoubi (CochainComplex C α) ≌ CochainComplex (Karoubi C) α`.
 -/
 def karoubiCochainComplexEquivalence :
     Karoubi (CochainComplex C α) ≌ CochainComplex (Karoubi C) α :=
   karoubiHomologicalComplexEquivalence C (ComplexShape.up α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIdempotentComplete
-  signature: C] : IsIdempotentComplete (HomologicalComplex C c)
-  body: by
-  rw [isIdempotentComplete_iff_of_equivalence
-      ((toKaroubiEquivalence C).mapHomologicalComplex c)]; rw [← isIdempotentComplete_iff_of_equivalence (karoubiHomologicalComplexEquivalence C c)]
-  infer_instance
-
-中文:
-实例 [是IdempotentComplete
-  签名: C] : 是IdempotentComplete (同调复形 C c)
-  定义体: by
-  rw [isIdempotentComplete_iff_of_equivalence
-      ((toKaroubiEquivalence C).mapHomologicalComplex c)]; rw [← isIdempotentComplete_iff_of_equivalence (karoubiHomologicalComplexEquivalence C c)]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isIdempotentComplete_iff_of_equivalence, karoubiHomologicalComplexEquivalence, mapHomologicalComplex, toKaroubiEquivalence
+/-
+**CategoryTheory.Idempotents.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Idempote
+nts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIdempotentComplete C] : IsIdempotentComplete (HomologicalComplex C c) := by
   rw [isIdempotentComplete_iff_of_equivalence
-      ((toKaroubiEquivalence C).mapHomologicalComplex c)]; rw [← isIdempotentComplete_iff_of_equivalence (karoubiHomologicalComplexEquivalence C c)]
+      ((toKaroubiEquivalence C).mapHomologicalComplex c),
+    ← isIdempotentComplete_iff_of_equivalence (karoubiHomologicalComplexEquivalence C c)]
   infer_instance
 
 end Idempotents
 
 end CategoryTheory
+

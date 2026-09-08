@@ -12,7 +12,7 @@ public import Mathlib.Order.SetNotation
 /-!
 # Relations as sets of pairs
 
-This file provides API to regard relations between `α` and `β` as sets of pairs `Set (α × β)`.
+This file provides API to regard relations between `α` and `β`  as sets of pairs `Set (α × β)`.
 
 This is in particular useful in the study of uniform spaces, which are topological spaces equipped
 with a *uniformity*, namely a filter of pairs `α × α` whose elements can be viewed as "proximity"
@@ -74,18 +74,21 @@ Simultaneously, uniform spaces need a theory of relations on a type `α` as elem
 
 variable {α β γ δ : Type*} {ι : Sort*}
 
-/--
-Definition of `SetRel` / `SetRel` 的定义
+/-- A relation on `α` and `β`, aka a set-valued function, aka a partial multifunction.
 
-English:
-abbreviation SetRel
-  signature: (α β : Type*)
-  body: Set (α × β)
+We represent them as sets due to how relations are used in the context of uniform spaces. -/
+/-
+**SetRel** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SetRel (α β : Type*)
+参数：α β : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 SetRel
-  签名: (α β : 类型)
-  定义体: Set (α × β)
+--- 原说明 ---
+A relation on `α` and `β`, aka a set-valued function, aka a partial multifunctio
+n.
+
+We represent them as sets due to how relations are used in the context of unifor
+m spaces.
 -/
 abbrev SetRel (α β : Type*) := Set (α × β)
 
@@ -98,781 +101,644 @@ scoped to the `SetRel` namespace.
 
 Since `SetRel α β := Set (α × β)`, `a ~[R] b` is simply notation for `(a, b) ∈ R`, but this should
 be considered an implementation detail. -/
-scoped notation:50 a:50 " ~[" R "] " b:50 => (a, b) in R
+scoped notation:50 a:50 " ~[" R "] " b:50 => (a, b) ∈ R
 
 variable (R) in
-/--
-Definition of `inv` / `inv` 的定义
+/-- The inverse relation : `R.inv x y ↔ R y x`. Note that this is *not* a groupoid inverse. -/
+/-
+**SetRel.inv** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：inv (R : SetRel α β) : SetRel β α
+参数：R : SetRel α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv
-  signature: (R : SetRel α β)
-  body: Prod.swap ⁻¹' R
-
-中文:
-定义 inv
-  签名: (R : SetRel α β)
-  定义体: Prod.swap ⁻¹' R
-
-Depends on / 依赖: Prod.swap, euclideanHausdorffMeasure_def, infer_instance
+--- 原说明 ---
+The inverse relation : `R.inv x y ↔ R y x`. Note that this is *not* a groupoid i
+nverse.
 -/
 def inv (R : SetRel α β) : SetRel β α := Prod.swap ⁻¹' R
-
-/--
-lemma `mem_inv` / 引理 `mem_inv`
-
-English:
-lemma mem_inv
-  statement: b ~[R.inv] a ↔ a ~[R] b
-  proof: .rfl
-
-中文:
-引理 mem_inv
-  结论: b ~[R.inv] a ↔ a ~[R] b
-  证明: .rfl
+/-
+**SetRel.mem_inv** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {a : α} {b : β}, (b, a) ∈
+ R.inv ↔ (a, b) ∈ R
+参数：b, a；a, b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma mem_inv : b ~[R.inv] a ↔ a ~[R] b := .rfl
-
-/--
-lemma `inv_inv` / 引理 `inv_inv`
-
-English:
-lemma inv_inv
-  statement: R.inv.inv = R
-  proof: rfl
-
-中文:
-引理 inv_inv
-  结论: R.inv.inv = R
-  证明: rfl
+/-
+**SetRel.inv_inv** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.inv.inv = R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma inv_inv : R.inv.inv = R := rfl
-
-/--
-lemma `inv_mono` / 引理 `inv_mono`
-
-English:
-lemma inv_mono
-  given: (h : R₁ subseteq R₂)
-  statement: R₁.inv subseteq R₂.inv
-  proof: fun (_a, _b) hab => h hab
-
-中文:
-引理 inv_mono
-  条件: (h : R₁ subseteq R₂)
-  结论: R₁.inv subseteq R₂.inv
-  证明: fun (_a, _b) hab => h hab
+/-
+**SetRel.inv_mono** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R₁ R₂ : SetRel α β}, R₁ ⊆ R₂ → R₁.inv ⊆ R
+₂.inv
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] lemma inv_mono (h : R₁ subseteq R₂) : R₁.inv subseteq R₂.inv := fun (_a, _b) hab => h hab
-
-/--
-lemma `inv_empty` / 引理 `inv_empty`
-
-English:
-lemma inv_empty
-  statement: (∅ : SetRel α β).inv = ∅
-  proof: rfl
-
-中文:
-引理 inv_empty
-  结论: (∅ : SetRel α β).inv = ∅
-  证明: rfl
+@[gcongr] lemma inv_mono (h : R₁ ⊆ R₂) : R₁.inv ⊆ R₂.inv := fun (_a, _b) hab ↦ h hab
+/-
+**SetRel.inv_empty** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, ∅.inv = ∅
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma inv_empty : (∅ : SetRel α β).inv = ∅ := rfl
-/--
-lemma `inv_univ` / 引理 `inv_univ`
-
-English:
-lemma inv_univ
-  statement: inv (.univ : SetRel α β) = .univ
-  proof: rfl
-
-中文:
-引理 inv_univ
-  结论: inv (.univ : SetRel α β) = .univ
-  证明: rfl
+/-
+**SetRel.inv_univ** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, SetRel.inv Set.univ = Set.univ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma inv_univ : inv (.univ : SetRel α β) = .univ := rfl
 
 variable (R) in
-/--
-Definition of `dom` / `dom` 的定义
+/-- Domain of a relation. -/
+/-
+**SetRel.dom** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：dom : Set α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dom
-  signature: : Set α
-  body: {a | exists b, a ~[R] b}
-
-中文:
-定义 dom
-  签名: : 集合 α
-  定义体: {a | exists b, a ~[R] b}
+--- 原说明 ---
+Domain of a relation.
 -/
-def dom : Set α := {a | exists b, a ~[R] b}
+def dom : Set α := {a | ∃ b, a ~[R] b}
 
 variable (R) in
-/--
-Definition of `cod` / `cod` 的定义
+/-- Codomain of a relation, aka range. -/
+/-
+**SetRel.cod** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：cod : Set β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cod
-  signature: : Set β
-  body: {b | exists a, a ~[R] b}
-
-中文:
-定义 cod
-  签名: : 集合 β
-  定义体: {b | exists a, a ~[R] b}
+--- 原说明 ---
+Codomain of a relation, aka range.
 -/
-def cod : Set β := {b | exists a, a ~[R] b}
-
-/--
-lemma `mem_dom` / 引理 `mem_dom`
-
-English:
-lemma mem_dom
-  statement: a in R.dom ↔ exists b, a ~[R] b
-  proof: .rfl
-
-中文:
-引理 mem_dom
-  结论: a in R.dom ↔ 存在 b, a ~[R] b
-  证明: .rfl
+def cod : Set β := {b | ∃ a, a ~[R] b}
+/-
+**SetRel.mem_dom** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {a : α}, a ∈ R.dom ↔ ∃ b,
+ (a, b) ∈ R
+参数：a, b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_dom : a in R.dom ↔ exists b, a ~[R] b := .rfl
-/--
-lemma `mem_cod` / 引理 `mem_cod`
-
-English:
-lemma mem_cod
-  statement: b in R.cod ↔ exists a, a ~[R] b
-  proof: .rfl
-
-中文:
-引理 mem_cod
-  结论: b in R.cod ↔ 存在 a, a ~[R] b
-  证明: .rfl
+@[simp] lemma mem_dom : a ∈ R.dom ↔ ∃ b, a ~[R] b := .rfl
+/-
+**SetRel.mem_cod** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {b : β}, b ∈ R.cod ↔ ∃ a,
+ (a, b) ∈ R
+参数：a, b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_cod : b in R.cod ↔ exists a, a ~[R] b := .rfl
-
-/--
-lemma `dom_mono` / 引理 `dom_mono`
-
-English:
-lemma dom_mono
-  given: (h : R₁ <= R₂)
-  statement: R₁.dom subseteq R₂.dom
-  proof: fun _a ⟨b, hab⟩ => ⟨b, h hab⟩
-
-中文:
-引理 dom_mono
-  条件: (h : R₁ <= R₂)
-  结论: R₁.dom subseteq R₂.dom
-  证明: fun _a ⟨b, hab⟩ => ⟨b, h hab⟩
+@[simp] lemma mem_cod : b ∈ R.cod ↔ ∃ a, a ~[R] b := .rfl
+/-
+**SetRel.dom_mono** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R₁ R₂ : SetRel α β}, R₁ ⊆ R₂ → R₁.dom ⊆ R
+₂.dom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] lemma dom_mono (h : R₁ <= R₂) : R₁.dom subseteq R₂.dom := fun _a ⟨b, hab⟩ => ⟨b, h hab⟩
-/--
-lemma `cod_mono` / 引理 `cod_mono`
-
-English:
-lemma cod_mono
-  given: (h : R₁ <= R₂)
-  statement: R₁.cod subseteq R₂.cod
-  proof: fun _b ⟨a, hab⟩ => ⟨a, h hab⟩
-
-中文:
-引理 cod_mono
-  条件: (h : R₁ <= R₂)
-  结论: R₁.cod subseteq R₂.cod
-  证明: fun _b ⟨a, hab⟩ => ⟨a, h hab⟩
+@[gcongr] lemma dom_mono (h : R₁ ≤ R₂) : R₁.dom ⊆ R₂.dom := fun _a ⟨b, hab⟩ ↦ ⟨b, h hab⟩
+/-
+**SetRel.cod_mono** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R₁ R₂ : SetRel α β}, R₁ ⊆ R₂ → R₁.cod ⊆ R
+₂.cod
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] lemma cod_mono (h : R₁ <= R₂) : R₁.cod subseteq R₂.cod := fun _b ⟨a, hab⟩ => ⟨a, h hab⟩
-
-/--
-lemma `dom_empty` / 引理 `dom_empty`
-
-English:
-lemma dom_empty
-  statement: (∅ : SetRel α β).dom = ∅
-  proof: by aesop
-
-中文:
-引理 dom_empty
-  结论: (∅ : SetRel α β).dom = ∅
-  证明: by aesop
+@[gcongr] lemma cod_mono (h : R₁ ≤ R₂) : R₁.cod ⊆ R₂.cod := fun _b ⟨a, hab⟩ ↦ ⟨a, h hab⟩
+/-
+**SetRel.dom_empty** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, ∅.dom = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma dom_empty : (∅ : SetRel α β).dom = ∅ := by aesop
-/--
-lemma `cod_empty` / 引理 `cod_empty`
-
-English:
-lemma cod_empty
-  statement: (∅ : SetRel α β).cod = ∅
-  proof: by aesop
-
-中文:
-引理 cod_empty
-  结论: (∅ : SetRel α β).cod = ∅
-  证明: by aesop
+/-
+**SetRel.cod_empty** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2}, ∅.cod = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma cod_empty : (∅ : SetRel α β).cod = ∅ := by aesop
-
-/--
-lemma `dom_eq_empty_iff` / 引理 `dom_eq_empty_iff`
-
-English:
-lemma dom_eq_empty_iff
-  statement: R.dom = ∅ ↔ R = (∅ : SetRel α β)
-  proof: ⟨fun h => Set.eq_empty_iff_forall_notMem.mpr by simp_all [Set.eq_empty_iff_forall_notMem],
-   (· ▸ dom_empty)⟩
-
-中文:
-引理 dom_eq_empty_iff
-  结论: R.dom = ∅ ↔ R = (∅ : SetRel α β)
-  证明: ⟨fun h => Set.eq_empty_iff_forall_notMem.mpr by simp_all [Set.eq_empty_iff_forall_notMem],
-   (· ▸ dom_empty)⟩
-
-Depends on / 依赖: s.topSpaceM, topSpaceM
+/-
+**SetRel.dom_eq_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.dom = ∅ ↔ R = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_empty_iff_forall_notMem`：eq_empty_iff_forall_notMem {s : Set α} :
+ s = ∅ ↔ forall x, x ∉ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `SetRel.dom_empty`：∀ {α : Type u_1} {β : Type u_2}, ∅.dom = ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] lemma dom_eq_empty_iff : R.dom = ∅ ↔ R = (∅ : SetRel α β) :=
-⟨fun h => Set.eq_empty_iff_forall_notMem.mpr by simp_all [Set.eq_empty_iff_forall_notMem],
+  ⟨fun h ↦ Set.eq_empty_iff_forall_notMem.mpr <| by simp_all [Set.eq_empty_iff_forall_notMem],
    (· ▸ dom_empty)⟩
-
-/--
-lemma `cod_eq_empty_iff` / 引理 `cod_eq_empty_iff`
-
-English:
-lemma cod_eq_empty_iff
-  statement: R.cod = ∅ ↔ R = (∅ : SetRel α β)
-  proof: ⟨fun h => Set.eq_empty_iff_forall_notMem.mpr by simp_all [Set.eq_empty_iff_forall_notMem],
-   (· ▸ cod_empty)⟩
-
-中文:
-引理 cod_eq_empty_iff
-  结论: R.cod = ∅ ↔ R = (∅ : SetRel α β)
-  证明: ⟨fun h => Set.eq_empty_iff_forall_notMem.mpr by simp_all [Set.eq_empty_iff_forall_notMem],
-   (· ▸ cod_empty)⟩
-
-Depends on / 依赖: chartedSpace, s.chartedSpace
+/-
+**SetRel.cod_eq_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.cod = ∅ ↔ R = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_empty_iff_forall_notMem`：eq_empty_iff_forall_notMem {s : Set α} :
+ s = ∅ ↔ forall x, x ∉ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `SetRel.cod_empty`：∀ {α : Type u_1} {β : Type u_2}, ∅.cod = ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] lemma cod_eq_empty_iff : R.cod = ∅ ↔ R = (∅ : SetRel α β) :=
-⟨fun h => Set.eq_empty_iff_forall_notMem.mpr by simp_all [Set.eq_empty_iff_forall_notMem],
+  ⟨fun h ↦ Set.eq_empty_iff_forall_notMem.mpr <| by simp_all [Set.eq_empty_iff_forall_notMem],
    (· ▸ cod_empty)⟩
-
-/--
-lemma `dom_univ` / 引理 `dom_univ`
-
-English:
-lemma dom_univ
-  given: [Nonempty β]
-  statement: dom (.univ : SetRel α β) = .univ
-  proof: by aesop
-
-中文:
-引理 dom_univ
-  条件: [非空 β]
-  结论: dom (.univ : SetRel α β) = .univ
-  证明: by aesop
-
-Depends on / 依赖: isManifold, s.isManifold
+/-
+**SetRel.dom_univ** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [Nonempty β], SetRel.dom Set.univ = Set.un
+iv
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma dom_univ [Nonempty β] : dom (.univ : SetRel α β) = .univ := by aesop
-/--
-lemma `cod_univ` / 引理 `cod_univ`
-
-English:
-lemma cod_univ
-  given: [Nonempty α]
-  statement: cod (.univ : SetRel α β) = .univ
-  proof: by aesop
-
-中文:
-引理 cod_univ
-  条件: [非空 α]
-  结论: cod (.univ : SetRel α β) = .univ
-  证明: by aesop
-
-Depends on / 依赖: compactSpace, s.compactSpace
+/-
+**SetRel.cod_univ** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [Nonempty α], SetRel.cod Set.univ = Set.un
+iv
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma cod_univ [Nonempty α] : cod (.univ : SetRel α β) = .univ := by aesop
-
-/--
-lemma `cod_inv` / 引理 `cod_inv`
-
-English:
-lemma cod_inv
-  statement: R.inv.cod = R.dom
-  proof: rfl
-
-中文:
-引理 cod_inv
-  结论: R.inv.cod = R.dom
-  证明: rfl
-
-Depends on / 依赖: boundaryless, s.boundaryless
+/-
+**SetRel.cod_inv** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.inv.cod = R.dom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma cod_inv : R.inv.cod = R.dom := rfl
-/--
-lemma `dom_inv` / 引理 `dom_inv`
-
-English:
-lemma dom_inv
-  statement: R.inv.dom = R.cod
-  proof: rfl
-
-中文:
-引理 dom_inv
-  结论: R.inv.dom = R.cod
-  证明: rfl
+/-
+**SetRel.dom_inv** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.inv.dom = R.cod
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma dom_inv : R.inv.dom = R.cod := rfl
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity relation. -/
+/-
+**SetRel.id** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：{α : Type u_1} → SetRel α α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : SetRel α α
-  body: {(a₁, a₂) | a₁ = a₂}
-
-中文:
-定义 id
-  签名: : SetRel α α
-  定义体: {(a₁, a₂) | a₁ = a₂}
+--- 原说明 ---
+The identity relation.
 -/
 protected def id : SetRel α α := {(a₁, a₂) | a₁ = a₂}
-
-/--
-lemma `mem_id` / 引理 `mem_id`
-
-English:
-lemma mem_id
-  statement: a₁ ~[SetRel.id] a₂ ↔ a₁ = a₂
-  proof: .rfl
-
-中文:
-引理 mem_id
-  结论: a₁ ~[SetRel.id] a₂ ↔ a₁ = a₂
-  证明: .rfl
+/-
+**SetRel.mem_id** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {a₁ a₂ : α}, (a₁, a₂) ∈ SetRel.id ↔ a₁ = a₂
+参数：a₁, a₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma mem_id : a₁ ~[SetRel.id] a₂ ↔ a₁ = a₂ := .rfl
 
 -- Not simp because `SetRel.inv_eq_self` already proves it
-/--
-lemma `inv_id` / 引理 `inv_id`
-
-English:
-lemma inv_id
-  statement: (.id : SetRel α α).inv = .id
-  proof: by aesop
-
-中文:
-引理 inv_id
-  结论: (.id : SetRel α α).inv = .id
-  证明: by aesop
+/-
+**SetRel.inv_id** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：inv_id : (.id : SetRel α α).inv = .id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_id : (.id : SetRel α α).inv = .id := by aesop
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of relation.
 
-English:
-definition comp
-  signature: (R : SetRel α β) (S : SetRel β γ)
-  body: {(a, c) | exists b, a ~[R] b ∧ b ~[S] c}
+Note that this follows the `CategoryTheory` order of arguments. -/
+/-
+**SetRel.comp** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：comp (R : SetRel α β) (S : SetRel β γ) : SetRel α γ
+参数：R : SetRel α β；S : SetRel β γ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[inherit_doc] scoped infixl:62 " ○ " => comp
+--- 原说明 ---
+Composition of relation.
 
-中文:
-定义 comp
-  签名: (R : SetRel α β) (S : SetRel β γ)
-  定义体: {(a, c) | exists b, a ~[R] b ∧ b ~[S] c}
-
-@[inherit_doc] scoped infixl:62 " ○ " => comp
+Note that this follows the `CategoryTheory` order of arguments.
 -/
-def comp (R : SetRel α β) (S : SetRel β γ) : SetRel α γ := {(a, c) | exists b, a ~[R] b ∧ b ~[S] c}
+def comp (R : SetRel α β) (S : SetRel β γ) : SetRel α γ := {(a, c) | ∃ b, a ~[R] b ∧ b ~[S] c}
 
 @[inherit_doc] scoped infixl:62 " ○ " => comp
-
-/--
-lemma `mem_comp` / 引理 `mem_comp`
-
-English:
-lemma mem_comp
-  statement: a ~[R ○ S] c ↔ exists b, a ~[R] b ∧ b ~[S] c
-  proof: .rfl
-
-中文:
-引理 mem_comp
-  结论: a ~[R ○ S] c ↔ 存在 b, a ~[R] b ∧ b ~[S] c
-  证明: .rfl
+/-
+**SetRel.mem_comp** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {R : SetRel α β} {S : SetRe
+l β γ} {a : α} {c : γ},   (a, c) ∈ R.comp S ↔ ∃ b, (a, b) ∈ R ∧ (b, c) ∈ S
+参数：a, c；a, b；b, c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_comp : a ~[R ○ S] c ↔ exists b, a ~[R] b ∧ b ~[S] c := .rfl
-
-/--
-lemma `prodMk_mem_comp` / 引理 `prodMk_mem_comp`
-
-English:
-lemma prodMk_mem_comp
-  given: (hab : a ~[R] b) (hbc : b ~[S] c)
-  statement: a ~[R ○ S] c
-  proof: ⟨b, hab, hbc⟩
-
-中文:
-引理 prodMk_mem_comp
-  条件: (hab : a ~[R] b) (hbc : b ~[S] c)
-  结论: a ~[R ○ S] c
-  证明: ⟨b, hab, hbc⟩
+@[simp] lemma mem_comp : a ~[R ○ S] c ↔ ∃ b, a ~[R] b ∧ b ~[S] c := .rfl
+/-
+**SetRel.prodMk_mem_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：prodMk_mem_comp (hab : a ~[R] b) (hbc : b ~[S] c) : a ~[R ○ S] c
+参数：hab : a ~[R] b；hbc : b ~[S] c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prodMk_mem_comp (hab : a ~[R] b) (hbc : b ~[S] c) : a ~[R ○ S] c := ⟨b, hab, hbc⟩
-
-/--
-lemma `comp_assoc` / 引理 `comp_assoc`
-
-English:
-lemma comp_assoc
-  given: (R : SetRel α β) (S : SetRel β γ) (t : SetRel γ δ)
-  proof: by aesop
-
-中文:
-引理 comp_assoc
-  条件: (R : SetRel α β) (S : SetRel β γ) (t : SetRel γ δ)
-  证明: by aesop
+/-
+**SetRel.comp_assoc** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_assoc (R : SetRel α β) (S : SetRel β γ) (t : SetRel γ δ) : (R ○ S) ○ 
+t = R ○ (S ○ t)
+参数：R : SetRel α β；S : SetRel β γ；t : SetRel γ δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 lemma comp_assoc (R : SetRel α β) (S : SetRel β γ) (t : SetRel γ δ) :
     (R ○ S) ○ t = R ○ (S ○ t) := by aesop
-
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  given: (R : SetRel α β)
-  statement: R ○ .id = R
-  proof: by aesop
-
-中文:
-引理 comp_id
-  条件: (R : SetRel α β)
-  结论: R ○ .id = R
-  证明: by aesop
+/-
+**SetRel.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β), R.comp SetRel.id = R
+参数：R : SetRel α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma comp_id (R : SetRel α β) : R ○ .id = R := by aesop
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  given: (R : SetRel α β)
-  statement: .id ○ R = R
-  proof: by aesop
-
-中文:
-引理 id_comp
-  条件: (R : SetRel α β)
-  结论: .id ○ R = R
-  证明: by aesop
+/-
+**SetRel.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β), SetRel.id.comp R = R
+参数：R : SetRel α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma id_comp (R : SetRel α β) : .id ○ R = R := by aesop
-
-/--
-lemma `inv_comp` / 引理 `inv_comp`
-
-English:
-lemma inv_comp
-  given: (R : SetRel α β) (S : SetRel β γ)
-  statement: (R ○ S).inv = S.inv ○ R.inv
-  proof: by aesop
-
-中文:
-引理 inv_comp
-  条件: (R : SetRel α β) (S : SetRel β γ)
-  结论: (R ○ S).inv = S.inv ○ R.inv
-  证明: by aesop
+/-
+**SetRel.inv_comp** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} (R : SetRel α β) (S : SetRe
+l β γ), (R.comp S).inv = S.inv.comp R.inv
+参数：R : SetRel α β；S : SetRel β γ；R.comp S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 @[simp] lemma inv_comp (R : SetRel α β) (S : SetRel β γ) : (R ○ S).inv = S.inv ○ R.inv := by aesop
-
-/--
-lemma `comp_empty` / 引理 `comp_empty`
-
-English:
-lemma comp_empty
-  given: (R : SetRel α β)
-  statement: R ○ (∅ : SetRel β γ) = ∅
-  proof: by aesop
-
-中文:
-引理 comp_empty
-  条件: (R : SetRel α β)
-  结论: R ○ (∅ : SetRel β γ) = ∅
-  证明: by aesop
+/-
+**SetRel.comp_empty** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} (R : SetRel α β), R.comp ∅ 
+= ∅
+参数：R : SetRel α β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 @[simp] lemma comp_empty (R : SetRel α β) : R ○ (∅ : SetRel β γ) = ∅ := by aesop
-/--
-lemma `empty_comp` / 引理 `empty_comp`
-
-English:
-lemma empty_comp
-  given: (S : SetRel β γ)
-  statement: (∅ : SetRel α β) ○ S = ∅
-  proof: by aesop
-
-中文:
-引理 empty_comp
-  条件: (S : SetRel β γ)
-  结论: (∅ : SetRel α β) ○ S = ∅
-  证明: by aesop
+/-
+**SetRel.empty_comp** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} (S : SetRel β γ), ∅.comp S 
+= ∅
+参数：S : SetRel β γ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 @[simp] lemma empty_comp (S : SetRel β γ) : (∅ : SetRel α β) ○ S = ∅ := by aesop
-
-/--
-lemma `comp_univ` / 引理 `comp_univ`
-
-English:
-lemma comp_univ
-  given: (R : SetRel α β)
-  proof: by
-  aesop
-
-中文:
-引理 comp_univ
-  条件: (R : SetRel α β)
-  证明: by
-  aesop
+/-
+**SetRel.comp_univ** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} (R : SetRel α β), R.comp Se
+t.univ = {(a, _c) | a ∈ R.dom}
+参数：R : SetRel α β；a, _c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma comp_univ (R : SetRel α β) :
-    R ○ (.univ : SetRel β γ) = {(a, _c) : α × γ | a in R.dom} := by
+    R ○ (.univ : SetRel β γ) = {(a, _c) : α × γ | a ∈ R.dom} := by
   aesop
-
-/--
-lemma `univ_comp` / 引理 `univ_comp`
-
-English:
-lemma univ_comp
-  given: (S : SetRel β γ)
-  proof: by
-  aesop
-
-中文:
-引理 univ_comp
-  条件: (S : SetRel β γ)
-  证明: by
-  aesop
+/-
+**SetRel.univ_comp** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} (S : SetRel β γ), SetRel.co
+mp Set.univ S = {(_b, c) | c ∈ S.cod}
+参数：S : SetRel β γ；_b, c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma univ_comp (S : SetRel β γ) :
-    (.univ : SetRel α β) ○ S = {(_b, c) : α × γ | c in S.cod} := by
+    (.univ : SetRel α β) ○ S = {(_b, c) : α × γ | c ∈ S.cod} := by
   aesop
-
-/--
-lemma `comp_iUnion` / 引理 `comp_iUnion`
-
-English:
-lemma comp_iUnion
-  given: (R : SetRel α β) (S : ι -> SetRel β γ)
-  statement: R ○ ⋃ i, S i = ⋃ i, R ○ S i
-  proof: by aesop
-
-中文:
-引理 comp_iUnion
-  条件: (R : SetRel α β) (S : ι -> SetRel β γ)
-  结论: R ○ ⋃ i, S i = ⋃ i, R ○ S i
-  证明: by aesop
+/-
+**SetRel.comp_iUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_iUnion (R : SetRel α β) (S : ι -> SetRel β γ) : R ○ ⋃ i, S i = ⋃ i, R
+ ○ S i
+参数：R : SetRel α β；S : ι -> SetRel β γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-lemma comp_iUnion (R : SetRel α β) (S : ι -> SetRel β γ) : R ○ ⋃ i, S i = ⋃ i, R ○ S i := by aesop
-/--
-lemma `iUnion_comp` / 引理 `iUnion_comp`
-
-English:
-lemma iUnion_comp
-  given: (R : ι -> SetRel α β) (S : SetRel β γ)
-  statement: (⋃ i, R i) ○ S = ⋃ i, R i ○ S
-  proof: by aesop
-
-中文:
-引理 iUnion_comp
-  条件: (R : ι -> SetRel α β) (S : SetRel β γ)
-  结论: (⋃ i, R i) ○ S = ⋃ i, R i ○ S
-  证明: by aesop
+lemma comp_iUnion (R : SetRel α β) (S : ι → SetRel β γ) : R ○ ⋃ i, S i = ⋃ i, R ○ S i := by aesop
+/-
+**SetRel.iUnion_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：iUnion_comp (R : ι -> SetRel α β) (S : SetRel β γ) : (⋃ i, R i) ○ S = ⋃ i,
+ R i ○ S
+参数：R : ι -> SetRel α β；S : SetRel β γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma iUnion_comp (R : ι -> SetRel α β) (S : SetRel β γ) : (⋃ i, R i) ○ S = ⋃ i, R i ○ S := by aesop
-/--
-lemma `comp_sUnion` / 引理 `comp_sUnion`
-
-English:
-lemma comp_sUnion
-  given: (R : SetRel α β) (𝒮 : Set (SetRel β γ))
-  statement: R ○ ⋃₀ 𝒮 = ⋃ S in 𝒮, R ○ S
-  proof: by aesop
-
-中文:
-引理 comp_sUnion
-  条件: (R : SetRel α β) (𝒮 : 集合 (SetRel β γ))
-  结论: R ○ ⋃₀ 𝒮 = ⋃ S in 𝒮, R ○ S
-  证明: by aesop
+lemma iUnion_comp (R : ι → SetRel α β) (S : SetRel β γ) : (⋃ i, R i) ○ S = ⋃ i, R i ○ S := by aesop
+/-
+**SetRel.comp_sUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_sUnion (R : SetRel α β) (𝒮 : Set (SetRel β γ)) : R ○ ⋃₀ 𝒮 = ⋃ S in 𝒮,
+ R ○ S
+参数：R : SetRel α β；𝒮 : Set (SetRel β γ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-lemma comp_sUnion (R : SetRel α β) (𝒮 : Set (SetRel β γ)) : R ○ ⋃₀ 𝒮 = ⋃ S in 𝒮, R ○ S := by aesop
-/--
-lemma `sUnion_comp` / 引理 `sUnion_comp`
-
-English:
-lemma sUnion_comp
-  given: (ℛ : Set (SetRel α β)) (S : SetRel β γ)
-  statement: ⋃₀ ℛ ○ S = ⋃ R in ℛ, R ○ S
-  proof: by aesop
-
-@[gcongr]
-
-中文:
-引理 sUnion_comp
-  条件: (ℛ : 集合 (SetRel α β)) (S : SetRel β γ)
-  结论: ⋃₀ ℛ ○ S = ⋃ R in ℛ, R ○ S
-  证明: by aesop
-
-@[gcongr]
+lemma comp_sUnion (R : SetRel α β) (𝒮 : Set (SetRel β γ)) : R ○ ⋃₀ 𝒮 = ⋃ S ∈ 𝒮, R ○ S := by aesop
+/-
+**SetRel.sUnion_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：sUnion_comp (ℛ : Set (SetRel α β)) (S : SetRel β γ) : ⋃₀ ℛ ○ S = ⋃ R in ℛ,
+ R ○ S
+参数：ℛ : Set (SetRel α β)；S : SetRel β γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma sUnion_comp (ℛ : Set (SetRel α β)) (S : SetRel β γ) : ⋃₀ ℛ ○ S = ⋃ R in ℛ, R ○ S := by aesop
+lemma sUnion_comp (ℛ : Set (SetRel α β)) (S : SetRel β γ) : ⋃₀ ℛ ○ S = ⋃ R ∈ ℛ, R ○ S := by aesop
 
 @[gcongr]
-/--
-lemma `comp_subset_comp` / 引理 `comp_subset_comp`
-
-English:
-lemma comp_subset_comp
-  given: {S₁ S₂ : SetRel β γ} (hR : R₁ subseteq R₂) (hS : S₁ subseteq S₂)
-  statement: R₁ ○ S₁ subseteq R₂ ○ S₂
-  proof: fun _ => .imp fun _ => .imp (@hR _) (@hS _)
-
-@[gcongr]
-
-中文:
-引理 comp_subset_comp
-  条件: {S₁ S₂ : SetRel β γ} (hR : R₁ subseteq R₂) (hS : S₁ subseteq S₂)
-  结论: R₁ ○ S₁ subseteq R₂ ○ S₂
-  证明: fun _ => .imp fun _ => .imp (@hR _) (@hS _)
-
-@[gcongr]
+/-
+**SetRel.comp_subset_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ subseteq R₂) (hS : S₁ subse
+teq S₂) : R₁ ○ S₁ subseteq R₂ ○ S₂
+参数：hR : R₁ subseteq R₂；hS : S₁ subseteq S₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
 -/
-lemma comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ subseteq R₂) (hS : S₁ subseteq S₂) : R₁ ○ S₁ subseteq R₂ ○ S₂ :=
-  fun _ => .imp fun _ => .imp (@hR _) (@hS _)
+lemma comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ ⊆ R₂) (hS : S₁ ⊆ S₂) : R₁ ○ S₁ ⊆ R₂ ○ S₂ :=
+  fun _ ↦ .imp fun _ ↦ .imp (@hR _) (@hS _)
 
 @[gcongr]
-/--
-lemma `comp_subset_comp_left` / 引理 `comp_subset_comp_left`
-
-English:
-lemma comp_subset_comp_left
-  given: {S : SetRel β γ} (hR : R₁ subseteq R₂)
-  statement: R₁ ○ S subseteq R₂ ○ S
-  proof: comp_subset_comp hR .rfl
-
-@[gcongr]
-
-中文:
-引理 comp_subset_comp_left
-  条件: {S : SetRel β γ} (hR : R₁ subseteq R₂)
-  结论: R₁ ○ S subseteq R₂ ○ S
-  证明: comp_subset_comp hR .rfl
-
-@[gcongr]
-
-Depends on / 依赖: comp_subset_comp
+/-
+**SetRel.comp_subset_comp_left** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_subset_comp_left {S : SetRel β γ} (hR : R₁ subseteq R₂) : R₁ ○ S subs
+eteq R₂ ○ S
+参数：hR : R₁ subseteq R₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SetRel.comp_subset_comp`：comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ 
+subseteq R₂) (hS : S₁ subseteq S₂) : R₁ ○ S₁ subseteq R₂ ○ S₂
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-lemma comp_subset_comp_left {S : SetRel β γ} (hR : R₁ subseteq R₂) : R₁ ○ S subseteq R₂ ○ S :=
+lemma comp_subset_comp_left {S : SetRel β γ} (hR : R₁ ⊆ R₂) : R₁ ○ S ⊆ R₂ ○ S :=
   comp_subset_comp hR .rfl
 
 @[gcongr]
-/--
-lemma `comp_subset_comp_right` / 引理 `comp_subset_comp_right`
-
-English:
-lemma comp_subset_comp_right
-  given: {S₁ S₂ : SetRel β γ} (hS : S₁ subseteq S₂)
-  statement: R ○ S₁ subseteq R ○ S₂
-  proof: comp_subset_comp .rfl hS
-
-中文:
-引理 comp_subset_comp_right
-  条件: {S₁ S₂ : SetRel β γ} (hS : S₁ subseteq S₂)
-  结论: R ○ S₁ subseteq R ○ S₂
-  证明: comp_subset_comp .rfl hS
-
-Depends on / 依赖: comp_subset_comp
+/-
+**SetRel.comp_subset_comp_right** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_subset_comp_right {S₁ S₂ : SetRel β γ} (hS : S₁ subseteq S₂) : R ○ S₁
+ subseteq R ○ S₂
+参数：hS : S₁ subseteq S₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SetRel.comp_subset_comp`：comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ 
+subseteq R₂) (hS : S₁ subseteq S₂) : R₁ ○ S₁ subseteq R₂ ○ S₂
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-lemma comp_subset_comp_right {S₁ S₂ : SetRel β γ} (hS : S₁ subseteq S₂) : R ○ S₁ subseteq R ○ S₂ :=
+lemma comp_subset_comp_right {S₁ S₂ : SetRel β γ} (hS : S₁ ⊆ S₂) : R ○ S₁ ⊆ R ○ S₂ :=
   comp_subset_comp .rfl hS
-
-/--
-lemma `_root_.Monotone.relComp` / 引理 `_root_.Monotone.relComp`
-
-English:
-lemma _root_.Monotone.relComp
-  statement: {ι : Type*} [Preorder ι] {f : ι -> SetRel α β}
-  proof: fun _i _j hij ⟨_a, _c⟩ ⟨b, hab, hbc⟩ => ⟨b, hf hij hab, hg hij hbc⟩
-
-中文:
-引理 _root_.递增.relComp
-  结论: {ι : 类型} [预序 ι] {f : ι -> SetRel α β}
-  证明: fun _i _j hij ⟨_a, _c⟩ ⟨b, hab, hbc⟩ => ⟨b, hf hij hab, hg hij hbc⟩
+/-
+**SetRel._root_.Monotone.relComp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected lemma _root_.Monotone.relComp {ι : Type*} [Preorder ι] {f : ι -> SetRel α β}
-    {g : ι -> SetRel β γ} (hf : Monotone f) (hg : Monotone g) : Monotone fun x => f x ○ g x :=
-  fun _i _j hij ⟨_a, _c⟩ ⟨b, hab, hbc⟩ => ⟨b, hf hij hab, hg hij hbc⟩
-
-/--
-lemma `prod_comp_prod_of_inter_nonempty` / 引理 `prod_comp_prod_of_inter_nonempty`
-
-English:
-lemma prod_comp_prod_of_inter_nonempty
-  given: (ht : (t₁ inter t₂).Nonempty) (s : Set α) (u : Set γ)
-  proof: by aesop
-
-中文:
-引理 prod_comp_prod_of_inter_nonempty
-  条件: (ht : (t₁ inter t₂).非空) (s : 集合 α) (u : 集合 γ)
-  证明: by aesop
+protected lemma _root_.Monotone.relComp {ι : Type*} [Preorder ι] {f : ι → SetRel α β}
+    {g : ι → SetRel β γ} (hf : Monotone f) (hg : Monotone g) : Monotone fun x ↦ f x ○ g x :=
+  fun _i _j hij ⟨_a, _c⟩ ⟨b, hab, hbc⟩ ↦ ⟨b, hf hij hab, hg hij hbc⟩
+/-
+**SetRel.prod_comp_prod_of_inter_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：prod_comp_prod_of_inter_nonempty (ht : (t₁ inter t₂).Nonempty) (s : Set α)
+ (u : Set γ) : s ×ˢ t₁ ○ t₂ ×ˢ u = s ×ˢ u
+参数：ht : (t₁ inter t₂).Nonempty；s : Set α；u : Set γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-lemma prod_comp_prod_of_inter_nonempty (ht : (t₁ inter t₂).Nonempty) (s : Set α) (u : Set γ) :
+lemma prod_comp_prod_of_inter_nonempty (ht : (t₁ ∩ t₂).Nonempty) (s : Set α) (u : Set γ) :
     s ×ˢ t₁ ○ t₂ ×ˢ u = s ×ˢ u := by aesop
-
-/--
-lemma `prod_comp_prod_of_disjoint` / 引理 `prod_comp_prod_of_disjoint`
-
-English:
-lemma prod_comp_prod_of_disjoint
-  given: (ht : Disjoint t₁ t₂) (s : Set α) (u : Set γ)
-  proof: Set.eq_empty_of_forall_notMem fun _ ⟨_z, ⟨_, hzs⟩, hzu, _⟩ => Set.disjoint_left.1 ht hzs hzu
-
-中文:
-引理 prod_comp_prod_of_disjoint
-  条件: (ht : Disjoint t₁ t₂) (s : 集合 α) (u : 集合 γ)
-  证明: Set.eq_empty_of_forall_notMem fun _ ⟨_z, ⟨_, hzs⟩, hzu, _⟩ => Set.disjoint_left.1 ht hzs hzu
-
-Depends on / 依赖: Set.disjoint_left, Set.eq_empty_of_forall_notMem, disjoint_left, eq_empty_of_forall_notMem
+/-
+**SetRel.prod_comp_prod_of_disjoint** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：prod_comp_prod_of_disjoint (ht : Disjoint t₁ t₂) (s : Set α) (u : Set γ) :
+ s ×ˢ t₁ ○ t₂ ×ˢ u = ∅
+参数：ht : Disjoint t₁ t₂；s : Set α；u : Set γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem (h : forall x, 
+x ∉ s) : s = ∅
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
 -/
 lemma prod_comp_prod_of_disjoint (ht : Disjoint t₁ t₂) (s : Set α) (u : Set γ) :
     s ×ˢ t₁ ○ t₂ ×ˢ u = ∅ :=
-  Set.eq_empty_of_forall_notMem fun _ ⟨_z, ⟨_, hzs⟩, hzu, _⟩ => Set.disjoint_left.1 ht hzs hzu
-
-/--
-lemma `prod_comp_prod` / 引理 `prod_comp_prod`
-
-English:
-lemma prod_comp_prod
-  given: (s : Set α) (t₁ t₂ : Set β) (u : Set γ) [Decidable (Disjoint t₁ t₂)]
-  proof: by
-  split_ifs with hst
-  · exact prod_comp_prod_of_disjoint hst ..
-  · rw [prod_comp_prod_of_inter_nonempty <| Set.not_disjoint_iff_nonempty_inter.1 hst]
-
-中文:
-引理 prod_comp_prod
-  条件: (s : 集合 α) (t₁ t₂ : 集合 β) (u : 集合 γ) [可判定 (Disjoint t₁ t₂)]
-  证明: by
-  split_ifs with hst
-  · exact prod_comp_prod_of_disjoint hst ..
-  · rw [prod_comp_prod_of_inter_nonempty <| Set.not_disjoint_iff_nonempty_inter.1 hst]
-
-Depends on / 依赖: Set.not_disjoint_iff_nonempty_inter, not_disjoint_iff_nonempty_inter, prod_comp_prod_of_disjoint, prod_comp_prod_of_inter_nonempty, split_ifs
+  Set.eq_empty_of_forall_notMem fun _ ⟨_z, ⟨_, hzs⟩, hzu, _⟩ ↦ Set.disjoint_left.1 ht hzs hzu
+/-
+**SetRel.prod_comp_prod** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：prod_comp_prod (s : Set α) (t₁ t₂ : Set β) (u : Set γ) [Decidable (Disjoin
+t t₁ t₂)] : s ×ˢ t₁ ○ t₂ ×ˢ u = if Disjoint t₁ t₂ then ∅ else s ×ˢ u
+参数：s : Set α；t₁ t₂ : Set β；u : Set γ；Disjoint t₁ t₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用引理 `SetRel.prod_comp_prod_of_disjoint`：prod_comp_prod_of_disjoint (ht : Disj
+oint t₁ t₂) (s : Set α) (u : Set γ) : s ×ˢ t₁ ○ t₂ ×ˢ u = ∅
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用引理 `SetRel.prod_comp_prod_of_inter_nonempty`：prod_comp_prod_of_inter_nonempt
+y (ht : (t₁ inter t₂).Nonempty) (s : Set α) (u : Set γ) : s ×ˢ t₁ ○ t₂ ×ˢ u = s 
+×ˢ u
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Set.not_disjoint_iff_nonempty_inter`：not_disjoint_iff_nonempty_inter : ¬
+ Disjoint s t ↔ (s inter t).Nonempty
 -/
 lemma prod_comp_prod (s : Set α) (t₁ t₂ : Set β) (u : Set γ) [Decidable (Disjoint t₁ t₂)] :
     s ×ˢ t₁ ○ t₂ ×ˢ u = if Disjoint t₁ t₂ then ∅ else s ×ˢ u := by
@@ -881,866 +747,840 @@ lemma prod_comp_prod (s : Set α) (t₁ t₂ : Set β) (u : Set γ) [Decidable (
   · rw [prod_comp_prod_of_inter_nonempty <| Set.not_disjoint_iff_nonempty_inter.1 hst]
 
 variable (R s) in
-/--
-Definition of `image` / `image` 的定义
+/-- Image of a set under a relation. -/
+/-
+**SetRel.image** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：image : Set β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: : Set β
-  body: {b | exists a in s, a ~[R] b}
-
-中文:
-定义 像
-  签名: : 集合 β
-  定义体: {b | exists a in s, a ~[R] b}
+--- 原说明 ---
+Image of a set under a relation.
 -/
-def image : Set β := {b | exists a in s, a ~[R] b}
+def image : Set β := {b | ∃ a ∈ s, a ~[R] b}
 
 variable (R t) in
-/--
-Definition of `preimage` / `preimage` 的定义
+/-- Preimage of a set `t` under a relation `R`. Same as the image of `t` under `R.inv`. -/
+/-
+**SetRel.preimage** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：preimage : Set α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preimage
-  signature: : Set α
-  body: {a | exists b in t, a ~[R] b}
-
-中文:
-定义 原像
-  签名: : 集合 α
-  定义体: {a | exists b in t, a ~[R] b}
+--- 原说明 ---
+Preimage of a set `t` under a relation `R`. Same as the image of `t` under `R.in
+v`.
 -/
-def preimage : Set α := {a | exists b in t, a ~[R] b}
-
-/--
-lemma `mem_image` / 引理 `mem_image`
-
-English:
-lemma mem_image
-  statement: b in image R s ↔ exists a in s, a ~[R] b
-  proof: .rfl
-
-中文:
-引理 mem_image
-  结论: b in 像 R s ↔ 存在 a in s, a ~[R] b
-  证明: .rfl
+def preimage : Set α := {a | ∃ b ∈ t, a ~[R] b}
+/-
+**SetRel.mem_image** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {s : Set α} {b : β}, b ∈ 
+R.image s ↔ ∃ a ∈ s, (a, b) ∈ R
+参数：a, b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_image : b in image R s ↔ exists a in s, a ~[R] b := .rfl
-/--
-lemma `mem_preimage` / 引理 `mem_preimage`
-
-English:
-lemma mem_preimage
-  statement: a in preimage R t ↔ exists b in t, a ~[R] b
-  proof: .rfl
-
-中文:
-引理 mem_preimage
-  结论: a in 原像 R t ↔ 存在 b in t, a ~[R] b
-  证明: .rfl
+@[simp] lemma mem_image : b ∈ image R s ↔ ∃ a ∈ s, a ~[R] b := .rfl
+/-
+**SetRel.mem_preimage** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {t : Set β} {a : α}, a ∈ 
+R.preimage t ↔ ∃ b ∈ t, (a, b) ∈ R
+参数：a, b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_preimage : a in preimage R t ↔ exists b in t, a ~[R] b := .rfl
-
-/--
-lemma `image_subset_image` / 引理 `image_subset_image`
-
-English:
-lemma image_subset_image
-  given: (hs : s₁ subseteq s₂)
-  statement: image R s₁ subseteq image R s₂
-  proof: fun _ ⟨a, ha, hab⟩ => ⟨a, hs ha, hab⟩
-
-中文:
-引理 image_subset_image
-  条件: (hs : s₁ subseteq s₂)
-  结论: 像 R s₁ subseteq 像 R s₂
-  证明: fun _ ⟨a, ha, hab⟩ => ⟨a, hs ha, hab⟩
+@[simp] lemma mem_preimage : a ∈ preimage R t ↔ ∃ b ∈ t, a ~[R] b := .rfl
+/-
+**SetRel.image_subset_image** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {s₁ s₂ : Set α}, s₁ ⊆ s₂ 
+→ R.image s₁ ⊆ R.image s₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] lemma image_subset_image (hs : s₁ subseteq s₂) : image R s₁ subseteq image R s₂ :=
-  fun _ ⟨a, ha, hab⟩ => ⟨a, hs ha, hab⟩
-
-/--
-lemma `image_subset_image_left` / 引理 `image_subset_image_left`
-
-English:
-lemma image_subset_image_left
-  given: (hR : R₁ subseteq R₂)
-  statement: image R₁ s subseteq image R₂ s
-  proof: fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
-
-中文:
-引理 image_subset_image_left
-  条件: (hR : R₁ subseteq R₂)
-  结论: 像 R₁ s subseteq 像 R₂ s
-  证明: fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
+@[gcongr] lemma image_subset_image (hs : s₁ ⊆ s₂) : image R s₁ ⊆ image R s₂ :=
+  fun _ ⟨a, ha, hab⟩ ↦ ⟨a, hs ha, hab⟩
+/-
+**SetRel.image_subset_image_left** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R₁ R₂ : SetRel α β} {s : Set α}, R₁ ⊆ R₂ 
+→ R₁.image s ⊆ R₂.image s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] lemma image_subset_image_left (hR : R₁ subseteq R₂) : image R₁ s subseteq image R₂ s :=
-  fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
-
-/--
-lemma `preimage_subset_preimage` / 引理 `preimage_subset_preimage`
-
-English:
-lemma preimage_subset_preimage
-  given: (ht : t₁ subseteq t₂)
-  statement: preimage R t₁ subseteq preimage R t₂
-  proof: fun _ ⟨a, ha, hab⟩ => ⟨a, ht ha, hab⟩
-
-中文:
-引理 preimage_subset_preimage
-  条件: (ht : t₁ subseteq t₂)
-  结论: 原像 R t₁ subseteq 原像 R t₂
-  证明: fun _ ⟨a, ha, hab⟩ => ⟨a, ht ha, hab⟩
+@[gcongr] lemma image_subset_image_left (hR : R₁ ⊆ R₂) : image R₁ s ⊆ image R₂ s :=
+  fun _ ⟨a, ha, hab⟩ ↦ ⟨a, ha, hR hab⟩
+/-
+**SetRel.preimage_subset_preimage** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {t₁ t₂ : Set β}, t₁ ⊆ t₂ 
+→ R.preimage t₁ ⊆ R.preimage t₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] lemma preimage_subset_preimage (ht : t₁ subseteq t₂) : preimage R t₁ subseteq preimage R t₂ :=
-  fun _ ⟨a, ha, hab⟩ => ⟨a, ht ha, hab⟩
-
-/--
-lemma `preimage_subset_preimage_left` / 引理 `preimage_subset_preimage_left`
-
-English:
-lemma preimage_subset_preimage_left
-  given: (hR : R₁ subseteq R₂)
-  statement: preimage R₁ t subseteq preimage R₂ t
-  proof: fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
-
-中文:
-引理 preimage_subset_preimage_left
-  条件: (hR : R₁ subseteq R₂)
-  结论: 原像 R₁ t subseteq 原像 R₂ t
-  证明: fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
+@[gcongr] lemma preimage_subset_preimage (ht : t₁ ⊆ t₂) : preimage R t₁ ⊆ preimage R t₂ :=
+  fun _ ⟨a, ha, hab⟩ ↦ ⟨a, ht ha, hab⟩
+/-
+**SetRel.preimage_subset_preimage_left** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R₁ R₂ : SetRel α β} {t : Set β}, R₁ ⊆ R₂ 
+→ R₁.preimage t ⊆ R₂.preimage t
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[gcongr] lemma preimage_subset_preimage_left (hR : R₁ subseteq R₂) : preimage R₁ t subseteq preimage R₂ t :=
-  fun _ ⟨a, ha, hab⟩ => ⟨a, ha, hR hab⟩
+@[gcongr] lemma preimage_subset_preimage_left (hR : R₁ ⊆ R₂) : preimage R₁ t ⊆ preimage R₂ t :=
+  fun _ ⟨a, ha, hab⟩ ↦ ⟨a, ha, hR hab⟩
 
 variable (R t) in
-/--
-lemma `image_inv` / 引理 `image_inv`
-
-English:
-lemma image_inv
-  statement: R.inv.image t = preimage R t
-  proof: rfl
-
-中文:
-引理 image_inv
-  结论: R.inv.像 t = 原像 R t
-  证明: rfl
+/-
+**SetRel.image_inv** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β) (t : Set β), R.inv.image 
+t = R.preimage t
+参数：R : SetRel α β；t : Set β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma image_inv : R.inv.image t = preimage R t := rfl
 
 variable (R s) in
-/--
-lemma `preimage_inv` / 引理 `preimage_inv`
-
-English:
-lemma preimage_inv
-  statement: R.inv.preimage s = image R s
-  proof: rfl
-
-中文:
-引理 preimage_inv
-  结论: R.inv.原像 s = 像 R s
-  证明: rfl
+/-
+**SetRel.preimage_inv** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β) (s : Set α), R.inv.preima
+ge s = R.image s
+参数：R : SetRel α β；s : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma preimage_inv : R.inv.preimage s = image R s := rfl
-
-/--
-lemma `image_mono` / 引理 `image_mono`
-
-English:
-lemma image_mono
-  statement: Monotone R.image
-  proof: fun _ _ => image_subset_image
-
-中文:
-引理 image_mono
-  结论: 递增 R.像
-  证明: fun _ _ => image_subset_image
-
-Depends on / 依赖: image_subset_image
+/-
+**SetRel.image_mono** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_mono : Monotone R.image
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.image_subset_image`：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α
+ β} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → R.image s₁ ⊆ R.image s₂
 -/
-lemma image_mono : Monotone R.image := fun _ _ => image_subset_image
-/--
-lemma `preimage_mono` / 引理 `preimage_mono`
-
-English:
-lemma preimage_mono
-  statement: Monotone R.preimage
-  proof: fun _ _ => preimage_subset_preimage
-
-中文:
-引理 preimage_mono
-  结论: 递增 R.原像
-  证明: fun _ _ => preimage_subset_preimage
-
-Depends on / 依赖: preimage_subset_preimage
+lemma image_mono : Monotone R.image := fun _ _ ↦ image_subset_image
+/-
+**SetRel.preimage_mono** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_mono : Monotone R.preimage
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.preimage_subset_preimage`：∀ {α : Type u_1} {β : Type u_2} {R : Se
+tRel α β} {t₁ t₂ : Set β}, t₁ ⊆ t₂ → R.preimage t₁ ⊆ R.preimage t₂
 -/
-lemma preimage_mono : Monotone R.preimage := fun _ _ => preimage_subset_preimage
-
-/--
-lemma `image_empty_right` / 引理 `image_empty_right`
-
-English:
-lemma image_empty_right
-  statement: image R ∅ = ∅
-  proof: by aesop
-
-中文:
-引理 image_empty_right
-  结论: 像 R ∅ = ∅
-  证明: by aesop
+lemma preimage_mono : Monotone R.preimage := fun _ _ ↦ preimage_subset_preimage
+/-
+**SetRel.image_empty_right** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.image ∅ = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma image_empty_right : image R ∅ = ∅ := by aesop
-/--
-lemma `preimage_empty_right` / 引理 `preimage_empty_right`
-
-English:
-lemma preimage_empty_right
-  statement: preimage R ∅ = ∅
-  proof: by aesop
-
-中文:
-引理 preimage_empty_right
-  结论: 原像 R ∅ = ∅
-  证明: by aesop
+/-
+**SetRel.preimage_empty_right** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.preimage ∅ = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma preimage_empty_right : preimage R ∅ = ∅ := by aesop
-
-/--
-lemma `image_univ_right` / 引理 `image_univ_right`
-
-English:
-lemma image_univ_right
-  statement: image R .univ = R.cod
-  proof: by aesop
-
-中文:
-引理 image_univ_right
-  结论: 像 R .univ = R.cod
-  证明: by aesop
+/-
+**SetRel.image_univ_right** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.image Set.univ = R.cod
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma image_univ_right : image R .univ = R.cod := by aesop
-/--
-lemma `preimage_univ_right` / 引理 `preimage_univ_right`
-
-English:
-lemma preimage_univ_right
-  statement: preimage R .univ = R.dom
-  proof: by aesop
-
-中文:
-引理 preimage_univ_right
-  结论: 原像 R .univ = R.dom
-  证明: by aesop
+/-
+**SetRel.preimage_univ_right** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.preimage Set.univ = R.
+dom
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma preimage_univ_right : preimage R .univ = R.dom := by aesop
 
 variable (R) in
-/--
-lemma `image_inter_subset` / 引理 `image_inter_subset`
-
-English:
-lemma image_inter_subset
-  statement: image R (s₁ inter s₂) subseteq image R s₁ inter image R s₂
-  proof: image_mono.map_inf_le ..
-
-中文:
-引理 image_inter_subset
-  结论: 像 R (s₁ inter s₂) subseteq 像 R s₁ inter 像 R s₂
-  证明: image_mono.map_inf_le ..
-
-Depends on / 依赖: image_mono, image_mono.map_inf_le, map_inf_le
+/-
+**SetRel.image_inter_subset** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_inter_subset : image R (s₁ inter s₂) subseteq image R s₁ inter image
+ R s₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_inf_le`：∀ {α : Type u} {β : Type v} [inst : SemilatticeInf 
+α] [inst_1 : SemilatticeInf β] {f : α → β},   Monotone f → ∀ (x y : α), f (x ⊓ y
+) ≤ f x ⊓…
+· 使用引理 `SetRel.image_mono`：image_mono : Monotone R.image
 -/
-lemma image_inter_subset : image R (s₁ inter s₂) subseteq image R s₁ inter image R s₂ := image_mono.map_inf_le ..
+lemma image_inter_subset : image R (s₁ ∩ s₂) ⊆ image R s₁ ∩ image R s₂ := image_mono.map_inf_le ..
 
 variable (R) in
-/--
-lemma `preimage_inter_subset` / 引理 `preimage_inter_subset`
-
-English:
-lemma preimage_inter_subset
-  statement: preimage R (t₁ inter t₂) subseteq preimage R t₁ inter preimage R t₂
-  proof: preimage_mono.map_inf_le ..
-
-中文:
-引理 preimage_inter_subset
-  结论: 原像 R (t₁ inter t₂) subseteq 原像 R t₁ inter 原像 R t₂
-  证明: preimage_mono.map_inf_le ..
-
-Depends on / 依赖: map_inf_le, preimage_mono, preimage_mono.map_inf_le
+/-
+**SetRel.preimage_inter_subset** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_inter_subset : preimage R (t₁ inter t₂) subseteq preimage R t₁ in
+ter preimage R t₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_inf_le`：∀ {α : Type u} {β : Type v} [inst : SemilatticeInf 
+α] [inst_1 : SemilatticeInf β] {f : α → β},   Monotone f → ∀ (x y : α), f (x ⊓ y
+) ≤ f x ⊓…
+· 使用引理 `SetRel.preimage_mono`：preimage_mono : Monotone R.preimage
 -/
-lemma preimage_inter_subset : preimage R (t₁ inter t₂) subseteq preimage R t₁ inter preimage R t₂ :=
+lemma preimage_inter_subset : preimage R (t₁ ∩ t₂) ⊆ preimage R t₁ ∩ preimage R t₂ :=
   preimage_mono.map_inf_le ..
 
 variable (R s₁ s₂) in
-/--
-lemma `image_union` / 引理 `image_union`
-
-English:
-lemma image_union
-  statement: image R (s₁ union s₂) = image R s₁ union image R s₂
-  proof: by aesop
-
-中文:
-引理 image_union
-  结论: 像 R (s₁ union s₂) = 像 R s₁ union 像 R s₂
-  证明: by aesop
+/-
+**SetRel.image_union** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_union : image R (s₁ union s₂) = image R s₁ union image R s₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
-lemma image_union : image R (s₁ union s₂) = image R s₁ union image R s₂ := by aesop
+lemma image_union : image R (s₁ ∪ s₂) = image R s₁ ∪ image R s₂ := by aesop
 
 variable (R) in
-/--
-lemma `image_iUnion` / 引理 `image_iUnion`
-
-English:
-lemma image_iUnion
-  given: (s : ι -> Set α)
-  statement: image R (⋃ i, s i) = ⋃ i, image R (s i)
-  proof: by aesop
-
-中文:
-引理 image_iUnion
-  条件: (s : ι -> 集合 α)
-  结论: 像 R (⋃ i, s i) = ⋃ i, 像 R (s i)
-  证明: by aesop
+/-
+**SetRel.image_iUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_iUnion (s : ι -> Set α) : image R (⋃ i, s i) = ⋃ i, image R (s i)
+参数：s : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma image_iUnion (s : ι -> Set α) : image R (⋃ i, s i) = ⋃ i, image R (s i) := by aesop
+lemma image_iUnion (s : ι → Set α) : image R (⋃ i, s i) = ⋃ i, image R (s i) := by aesop
 
 variable (R) in
-/--
-lemma `image_sUnion` / 引理 `image_sUnion`
-
-English:
-lemma image_sUnion
-  given: (S : Set (Set α))
-  statement: image R (⋃₀ S) = ⋃ s in S, image R s
-  proof: by aesop
-
-中文:
-引理 image_sUnion
-  条件: (S : 集合 (集合 α))
-  结论: 像 R (⋃₀ S) = ⋃ s in S, 像 R s
-  证明: by aesop
+/-
+**SetRel.image_sUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_sUnion (S : Set (Set α)) : image R (⋃₀ S) = ⋃ s in S, image R s
+参数：S : Set (Set α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
 -/
-lemma image_sUnion (S : Set (Set α)) : image R (⋃₀ S) = ⋃ s in S, image R s := by aesop
+lemma image_sUnion (S : Set (Set α)) : image R (⋃₀ S) = ⋃ s ∈ S, image R s := by aesop
 
 variable (R t₁ t₂) in
-/--
-lemma `preimage_union` / 引理 `preimage_union`
-
-English:
-lemma preimage_union
-  statement: preimage R (t₁ union t₂) = preimage R t₁ union preimage R t₂
-  proof: by aesop
-
-中文:
-引理 preimage_union
-  结论: 原像 R (t₁ union t₂) = 原像 R t₁ union 原像 R t₂
-  证明: by aesop
+/-
+**SetRel.preimage_union** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_union : preimage R (t₁ union t₂) = preimage R t₁ union preimage R
+ t₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
-lemma preimage_union : preimage R (t₁ union t₂) = preimage R t₁ union preimage R t₂ := by aesop
+lemma preimage_union : preimage R (t₁ ∪ t₂) = preimage R t₁ ∪ preimage R t₂ := by aesop
 
 variable (R) in
-/--
-lemma `preimage_iUnion` / 引理 `preimage_iUnion`
-
-English:
-lemma preimage_iUnion
-  given: (t : ι -> Set β)
-  statement: preimage R (⋃ i, t i) = ⋃ i, preimage R (t i)
-  proof: by aesop
-
-中文:
-引理 preimage_iUnion
-  条件: (t : ι -> 集合 β)
-  结论: 原像 R (⋃ i, t i) = ⋃ i, 原像 R (t i)
-  证明: by aesop
+/-
+**SetRel.preimage_iUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_iUnion (t : ι -> Set β) : preimage R (⋃ i, t i) = ⋃ i, preimage R
+ (t i)
+参数：t : ι -> Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma preimage_iUnion (t : ι -> Set β) : preimage R (⋃ i, t i) = ⋃ i, preimage R (t i) := by aesop
+lemma preimage_iUnion (t : ι → Set β) : preimage R (⋃ i, t i) = ⋃ i, preimage R (t i) := by aesop
 
 variable (R) in
-/--
-lemma `preimage_sUnion` / 引理 `preimage_sUnion`
-
-English:
-lemma preimage_sUnion
-  given: (T : Set (Set β))
-  statement: preimage R (⋃₀ T) = ⋃ t in T, preimage R t
-  proof: by aesop
-
-中文:
-引理 preimage_sUnion
-  条件: (T : 集合 (集合 β))
-  结论: 原像 R (⋃₀ T) = ⋃ t in T, 原像 R t
-  证明: by aesop
+/-
+**SetRel.preimage_sUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_sUnion (T : Set (Set β)) : preimage R (⋃₀ T) = ⋃ t in T, preimage
+ R t
+参数：T : Set (Set β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
 -/
-lemma preimage_sUnion (T : Set (Set β)) : preimage R (⋃₀ T) = ⋃ t in T, preimage R t := by aesop
+lemma preimage_sUnion (T : Set (Set β)) : preimage R (⋃₀ T) = ⋃ t ∈ T, preimage R t := by aesop
 
 variable (s) in
-/--
-lemma `image_id` / 引理 `image_id`
-
-English:
-lemma image_id
-  statement: image .id s = s
-  proof: by aesop
-
-中文:
-引理 image_id
-  结论: 像 .id s = s
-  证明: by aesop
+/-
+**SetRel.image_id** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (s : Set α), SetRel.id.image s = s
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma image_id : image .id s = s := by aesop
 
 variable (s) in
-/--
-lemma `preimage_id` / 引理 `preimage_id`
-
-English:
-lemma preimage_id
-  statement: preimage .id s = s
-  proof: by aesop
-
-中文:
-引理 preimage_id
-  结论: 原像 .id s = s
-  证明: by aesop
+/-
+**SetRel.preimage_id** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (s : Set α), SetRel.id.preimage s = s
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma preimage_id : preimage .id s = s := by aesop
 
 variable (R S s) in
-/--
-lemma `image_comp` / 引理 `image_comp`
-
-English:
-lemma image_comp
-  statement: image (R ○ S) s = image S (image R s)
-  proof: by aesop
-
-中文:
-引理 image_comp
-  结论: 像 (R ○ S) s = 像 S (像 R s)
-  证明: by aesop
+/-
+**SetRel.image_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_comp : image (R ○ S) s = image S (image R s)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 lemma image_comp : image (R ○ S) s = image S (image R s) := by aesop
 
 variable (R S u) in
-/--
-lemma `preimage_comp` / 引理 `preimage_comp`
-
-English:
-lemma preimage_comp
-  statement: preimage (R ○ S) u = preimage R (preimage S u)
-  proof: by aesop
-
-中文:
-引理 preimage_comp
-  结论: 原像 (R ○ S) u = 原像 R (原像 S u)
-  证明: by aesop
+/-
+**SetRel.preimage_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_comp : preimage (R ○ S) u = preimage R (preimage S u)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 lemma preimage_comp : preimage (R ○ S) u = preimage R (preimage S u) := by aesop
 
 variable (s) in
-/--
-lemma `image_empty_left` / 引理 `image_empty_left`
-
-English:
-lemma image_empty_left
-  statement: image (∅ : SetRel α β) s = ∅
-  proof: by aesop
-
-中文:
-引理 image_empty_left
-  结论: 像 (∅ : SetRel α β) s = ∅
-  证明: by aesop
+/-
+**SetRel.image_empty_left** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (s : Set α), ∅.image s = ∅
+参数：s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma image_empty_left : image (∅ : SetRel α β) s = ∅ := by aesop
 
 variable (t) in
-/--
-lemma `preimage_empty_left` / 引理 `preimage_empty_left`
-
-English:
-lemma preimage_empty_left
-  statement: preimage (∅ : SetRel α β) t = ∅
-  proof: by aesop
-
-中文:
-引理 preimage_empty_left
-  结论: 原像 (∅ : SetRel α β) t = ∅
-  证明: by aesop
+/-
+**SetRel.preimage_empty_left** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (t : Set β), ∅.preimage t = ∅
+参数：t : Set β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma preimage_empty_left : preimage (∅ : SetRel α β) t = ∅ := by aesop
-
-/--
-lemma `image_univ_left` / 引理 `image_univ_left`
-
-English:
-lemma image_univ_left
-  given: (hs : s.Nonempty)
-  statement: image (.univ : SetRel α β) s = .univ
-  proof: by aesop
-
-中文:
-引理 image_univ_left
-  条件: (hs : s.非空)
-  结论: 像 (.univ : SetRel α β) s = .univ
-  证明: by aesop
+/-
+**SetRel.image_univ_left** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s.Nonempty → SetRel.image Set
+.univ s = Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
 -/
 @[simp] lemma image_univ_left (hs : s.Nonempty) : image (.univ : SetRel α β) s = .univ := by aesop
-/--
-lemma `preimage_univ_left` / 引理 `preimage_univ_left`
-
-English:
-lemma preimage_univ_left
-  given: (ht : t.Nonempty)
-  statement: preimage (.univ : SetRel α β) t = .univ
-  proof: by
-  aesop
-
-中文:
-引理 preimage_univ_left
-  条件: (ht : t.非空)
-  结论: 原像 (.univ : SetRel α β) t = .univ
-  证明: by
-  aesop
+/-
+**SetRel.preimage_univ_left** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {t : Set β}, t.Nonempty → SetRel.preimage 
+Set.univ t = Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
 -/
 @[simp] lemma preimage_univ_left (ht : t.Nonempty) : preimage (.univ : SetRel α β) t = .univ := by
   aesop
-
-/--
-lemma `image_eq_cod_of_dom_subset` / 引理 `image_eq_cod_of_dom_subset`
-
-English:
-lemma image_eq_cod_of_dom_subset
-  given: (h : R.dom subseteq s)
-  statement: R.image s = R.cod
-  proof: by aesop
-
-中文:
-引理 image_eq_cod_of_dom_subset
-  条件: (h : R.dom subseteq s)
-  结论: R.像 s = R.cod
-  证明: by aesop
+/-
+**SetRel.image_eq_cod_of_dom_subset** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_eq_cod_of_dom_subset (h : R.dom subseteq s) : R.image s = R.cod
+参数：h : R.dom subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma image_eq_cod_of_dom_subset (h : R.dom subseteq s) : R.image s = R.cod := by aesop
-/--
-lemma `preimage_eq_dom_of_cod_subset` / 引理 `preimage_eq_dom_of_cod_subset`
-
-English:
-lemma preimage_eq_dom_of_cod_subset
-  given: (h : R.cod subseteq t)
-  statement: R.preimage t = R.dom
-  proof: by aesop
-
-中文:
-引理 preimage_eq_dom_of_cod_subset
-  条件: (h : R.cod subseteq t)
-  结论: R.原像 t = R.dom
-  证明: by aesop
+lemma image_eq_cod_of_dom_subset (h : R.dom ⊆ s) : R.image s = R.cod := by aesop
+/-
+**SetRel.preimage_eq_dom_of_cod_subset** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_eq_dom_of_cod_subset (h : R.cod subseteq t) : R.preimage t = R.do
+m
+参数：h : R.cod subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma preimage_eq_dom_of_cod_subset (h : R.cod subseteq t) : R.preimage t = R.dom := by aesop
+lemma preimage_eq_dom_of_cod_subset (h : R.cod ⊆ t) : R.preimage t = R.dom := by aesop
 
 variable (R s) in
-/--
-lemma `image_inter_dom` / 引理 `image_inter_dom`
-
-English:
-lemma image_inter_dom
-  statement: image R (s inter R.dom) = image R s
-  proof: by aesop
-
-中文:
-引理 image_inter_dom
-  结论: 像 R (s inter R.dom) = 像 R s
-  证明: by aesop
+/-
+**SetRel.image_inter_dom** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β) (s : Set α), R.image (s ∩
+ R.dom) = R.image s
+参数：R : SetRel α β；s : Set α；s ∩ R.dom。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
-@[simp] lemma image_inter_dom : image R (s inter R.dom) = image R s := by aesop
+@[simp] lemma image_inter_dom : image R (s ∩ R.dom) = image R s := by aesop
 
 variable (R t) in
-/--
-lemma `preimage_inter_cod` / 引理 `preimage_inter_cod`
-
-English:
-lemma preimage_inter_cod
-  statement: preimage R (t inter R.cod) = preimage R t
-  proof: by aesop
-
-中文:
-引理 preimage_inter_cod
-  结论: 原像 R (t inter R.cod) = 原像 R t
-  证明: by aesop
+/-
+**SetRel.preimage_inter_cod** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β) (t : Set β), R.preimage (
+t ∩ R.cod) = R.preimage t
+参数：R : SetRel α β；t : Set β；t ∩ R.cod。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
-@[simp] lemma preimage_inter_cod : preimage R (t inter R.cod) = preimage R t := by aesop
-
-/--
-lemma `inter_dom_subset_preimage_image` / 引理 `inter_dom_subset_preimage_image`
-
-English:
-lemma inter_dom_subset_preimage_image
-  statement: s inter R.dom subseteq R.preimage (image R s)
-  proof: by
-  aesop (add simp [Set.subset_def])
-
-中文:
-引理 inter_dom_subset_preimage_image
-  结论: s inter R.dom subseteq R.原像 (像 R s)
-  证明: by
-  aesop (add simp [Set.subset_def])
-
-Depends on / 依赖: Set.subset_def, subset_def
+@[simp] lemma preimage_inter_cod : preimage R (t ∩ R.cod) = preimage R t := by aesop
+/-
+**SetRel.inter_dom_subset_preimage_image** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：inter_dom_subset_preimage_image : s inter R.dom subseteq R.preimage (image
+ R s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma inter_dom_subset_preimage_image : s inter R.dom subseteq R.preimage (image R s) := by
+lemma inter_dom_subset_preimage_image : s ∩ R.dom ⊆ R.preimage (image R s) := by
   aesop (add simp [Set.subset_def])
-
-/--
-lemma `inter_cod_subset_image_preimage` / 引理 `inter_cod_subset_image_preimage`
-
-English:
-lemma inter_cod_subset_image_preimage
-  statement: t inter R.cod subseteq image R (R.preimage t)
-  proof: by
-  aesop (add simp [Set.subset_def])
-
-中文:
-引理 inter_cod_subset_image_preimage
-  结论: t inter R.cod subseteq 像 R (R.原像 t)
-  证明: by
-  aesop (add simp [Set.subset_def])
-
-Depends on / 依赖: Set.subset_def, subset_def
+/-
+**SetRel.inter_cod_subset_image_preimage** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：inter_cod_subset_image_preimage : t inter R.cod subseteq image R (R.preima
+ge t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma inter_cod_subset_image_preimage : t inter R.cod subseteq image R (R.preimage t) := by
+lemma inter_cod_subset_image_preimage : t ∩ R.cod ⊆ image R (R.preimage t) := by
   aesop (add simp [Set.subset_def])
-
-/--
-lemma `image_eq_biUnion` / 引理 `image_eq_biUnion`
-
-English:
-lemma image_eq_biUnion
-  statement: R.image s = ⋃ x in s, {y | x ~[R] y}
-  proof: by aesop
-
-中文:
-引理 image_eq_biUnion
-  结论: R.像 s = ⋃ x in s, {y | x ~[R] y}
-  证明: by aesop
+/-
+**SetRel.image_eq_biUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_eq_biUnion : R.image s = ⋃ x in s, {y | x ~[R] y}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma image_eq_biUnion : R.image s = ⋃ x in s, {y | x ~[R] y} := by aesop
-
-/--
-lemma `preimage_eq_biUnion` / 引理 `preimage_eq_biUnion`
-
-English:
-lemma preimage_eq_biUnion
-  statement: R.preimage t = ⋃ y in t, {x | x ~[R] y}
-  proof: by aesop
-
-中文:
-引理 preimage_eq_biUnion
-  结论: R.原像 t = ⋃ y in t, {x | x ~[R] y}
-  证明: by aesop
+lemma image_eq_biUnion : R.image s = ⋃ x ∈ s, {y | x ~[R] y} := by aesop
+/-
+**SetRel.preimage_eq_biUnion** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_eq_biUnion : R.preimage t = ⋃ y in t, {x | x ~[R] y}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma preimage_eq_biUnion : R.preimage t = ⋃ y in t, {x | x ~[R] y} := by aesop
+lemma preimage_eq_biUnion : R.preimage t = ⋃ y ∈ t, {x | x ~[R] y} := by aesop
 
 variable (R t) in
-/--
-Definition of `core` / `core` 的定义
+/-- Core of a set `S : Set β` w.R.t `R : SetRel α β` is the set of `x : α` that are related *only*
+to elements of `S`. Other generalization of `Function.preimage`. -/
+/-
+**SetRel.core** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：core : Set α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition core
-  signature: : Set α
-  body: {a | forall ⦃b⦄, a ~[R] b -> b in t}
-
-中文:
-定义 core
-  签名: : 集合 α
-  定义体: {a | forall ⦃b⦄, a ~[R] b -> b in t}
+--- 原说明 ---
+Core of a set `S : Set β` w.R.t `R : SetRel α β` is the set of `x : α` that are 
+related *only*
+to elements of `S`. Other generalization of `Function.preimage`.
 -/
-def core : Set α := {a | forall ⦃b⦄, a ~[R] b -> b in t}
-
-/--
-lemma `mem_core` / 引理 `mem_core`
-
-English:
-lemma mem_core
-  statement: a in R.core t ↔ forall ⦃b⦄, a ~[R] b -> b in t
-  proof: .rfl
+def core : Set α := {a | ∀ ⦃b⦄, a ~[R] b → b ∈ t}
+/-
+**SetRel.mem_core** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β} {t : Set β} {a : α}, a ∈ 
+R.core t ↔ ∀ ⦃b : β⦄, (a, b) ∈ R → b ∈ t
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+@[simp] lemma mem_core : a ∈ R.core t ↔ ∀ ⦃b⦄, a ~[R] b → b ∈ t := .rfl
 
 @[gcongr]
-
-中文:
-引理 mem_core
-  结论: a in R.core t ↔ 对任意 ⦃b⦄, a ~[R] b -> b in t
-  证明: .rfl
-
-@[gcongr]
+/-
+**SetRel.core_subset_core** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：core_subset_core (ht : t₁ subseteq t₂) : R.core t₁ subseteq R.core t₂
+参数：ht : t₁ subseteq t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma mem_core : a in R.core t ↔ forall ⦃b⦄, a ~[R] b -> b in t := .rfl
-
-@[gcongr]
-/--
-lemma `core_subset_core` / 引理 `core_subset_core`
-
-English:
-lemma core_subset_core
-  given: (ht : t₁ subseteq t₂)
-  statement: R.core t₁ subseteq R.core t₂
-  proof: fun _a ha _b hab => ht ha hab
-
-中文:
-引理 core_subset_core
-  条件: (ht : t₁ subseteq t₂)
-  结论: R.core t₁ subseteq R.core t₂
-  证明: fun _a ha _b hab => ht ha hab
+lemma core_subset_core (ht : t₁ ⊆ t₂) : R.core t₁ ⊆ R.core t₂ := fun _a ha _b hab ↦ ht <| ha hab
+/-
+**SetRel.core_mono** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：core_mono : Monotone R.core
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SetRel.core_subset_core`：core_subset_core (ht : t₁ subseteq t₂) : R.core
+ t₁ subseteq R.core t₂
 -/
-lemma core_subset_core (ht : t₁ subseteq t₂) : R.core t₁ subseteq R.core t₂ := fun _a ha _b hab => ht ha hab
-
-/--
-lemma `core_mono` / 引理 `core_mono`
-
-English:
-lemma core_mono
-  statement: Monotone R.core
-  proof: fun _ _ => core_subset_core
-
-中文:
-引理 core_mono
-  结论: 递增 R.core
-  证明: fun _ _ => core_subset_core
-
-Depends on / 依赖: core_subset_core
--/
-lemma core_mono : Monotone R.core := fun _ _ => core_subset_core
+lemma core_mono : Monotone R.core := fun _ _ ↦ core_subset_core
 
 variable (R t₁ t₂) in
-/--
-lemma `core_inter` / 引理 `core_inter`
-
-English:
-lemma core_inter
-  statement: R.core (t₁ inter t₂) = R.core t₁ inter R.core t₂
-  proof: by aesop
-
-中文:
-引理 core_inter
-  结论: R.core (t₁ inter t₂) = R.core t₁ inter R.core t₂
-  证明: by aesop
+/-
+**SetRel.core_inter** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：core_inter : R.core (t₁ inter t₂) = R.core t₁ inter R.core t₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma core_inter : R.core (t₁ inter t₂) = R.core t₁ inter R.core t₂ := by aesop
-
-/--
-lemma `core_union_subset` / 引理 `core_union_subset`
-
-English:
-lemma core_union_subset
-  statement: R.core t₁ union R.core t₂ subseteq R.core (t₁ union t₂)
-  proof: core_mono.le_map_sup ..
-
-中文:
-引理 core_union_subset
-  结论: R.core t₁ union R.core t₂ subseteq R.core (t₁ union t₂)
-  证明: core_mono.le_map_sup ..
-
-Depends on / 依赖: core_mono, core_mono.le_map_sup, le_map_sup
+lemma core_inter : R.core (t₁ ∩ t₂) = R.core t₁ ∩ R.core t₂ := by aesop
+/-
+**SetRel.core_union_subset** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：core_union_subset : R.core t₁ union R.core t₂ subseteq R.core (t₁ union t₂
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.le_map_sup`：le_map_sup [SemilatticeSup α] [SemilatticeSup β] {f
+ : α -> β} (h : Monotone f) (x y : α) : f x ⊔ f y <= f (x ⊔ y)
+· 使用引理 `SetRel.core_mono`：core_mono : Monotone R.core
 -/
-lemma core_union_subset : R.core t₁ union R.core t₂ subseteq R.core (t₁ union t₂) := core_mono.le_map_sup ..
-
-/--
-lemma `core_univ` / 引理 `core_univ`
-
-English:
-lemma core_univ
-  statement: R.core Set.univ = Set.univ
-  proof: by aesop
-
-中文:
-引理 core_univ
-  结论: R.core 集合.univ = 集合.univ
-  证明: by aesop
+lemma core_union_subset : R.core t₁ ∪ R.core t₂ ⊆ R.core (t₁ ∪ t₂) := core_mono.le_map_sup ..
+/-
+**SetRel.core_univ** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α β}, R.core Set.univ = Set.un
+iv
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma core_univ : R.core Set.univ = Set.univ := by aesop
 
 variable (t) in
-/--
-lemma `core_id` / 引理 `core_id`
-
-English:
-lemma core_id
-  statement: core .id t = t
-  proof: by aesop
-
-中文:
-引理 core_id
-  结论: core .id t = t
-  证明: by aesop
+/-
+**SetRel.core_id** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {β : Type u_2} (t : Set β), SetRel.id.core t = t
+参数：t : Set β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma core_id : core .id t = t := by aesop
 
 variable (R S u) in
-/--
-lemma `core_comp` / 引理 `core_comp`
-
-English:
-lemma core_comp
-  statement: core (R ○ S) u = core R (core S u)
-  proof: by aesop
-
-中文:
-引理 core_comp
-  结论: core (R ○ S) u = core R (core S u)
-  证明: by aesop
+/-
+**SetRel.core_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：core_comp : core (R ○ S) u = core R (core S u)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
 -/
 lemma core_comp : core (R ○ S) u = core R (core S u) := by aesop
-
-/--
-lemma `image_subset_iff` / 引理 `image_subset_iff`
-
-English:
-lemma image_subset_iff
-  statement: image R s subseteq t ↔ s subseteq core R t
-  proof: by aesop (add simp [Set.subset_def])
-
-中文:
-引理 image_subset_iff
-  结论: 像 R s subseteq t ↔ s subseteq core R t
-  证明: by aesop (add simp [Set.subset_def])
-
-Depends on / 依赖: Set.subset_def, subset_def
+/-
+**SetRel.image_subset_iff** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_subset_iff : image R s subseteq t ↔ s subseteq core R t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
 -/
-lemma image_subset_iff : image R s subseteq t ↔ s subseteq core R t := by aesop (add simp [Set.subset_def])
-
-/--
-lemma `image_core_gc` / 引理 `image_core_gc`
-
-English:
-lemma image_core_gc
-  statement: GaloisConnection R.image R.core
-  proof: fun _ _ => image_subset_iff
-
-中文:
-引理 image_core_gc
-  结论: GaloisConnection R.像 R.core
-  证明: fun _ _ => image_subset_iff
-
-Depends on / 依赖: image_subset_iff
+lemma image_subset_iff : image R s ⊆ t ↔ s ⊆ core R t := by aesop (add simp [Set.subset_def])
+/-
+**SetRel.image_core_gc** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：image_core_gc : GaloisConnection R.image R.core
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SetRel.image_subset_iff`：image_subset_iff : image R s subseteq t ↔ s sub
+seteq core R t
 -/
-lemma image_core_gc : GaloisConnection R.image R.core := fun _ _ => image_subset_iff
+lemma image_core_gc : GaloisConnection R.image R.core := fun _ _ ↦ image_subset_iff
 
 variable (R s) in
-/--
-Definition of `restrictDomain` / `restrictDomain` 的定义
+/-- Restrict the domain of a relation to a subtype. -/
+/-
+**SetRel.restrictDomain** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：restrictDomain : SetRel s β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictDomain
-  signature: : SetRel s β
-  body: {(a, b) | ↑a ~[R] b}
-
-中文:
-定义 restrictDomain
-  签名: : SetRel s β
-  定义体: {(a, b) | ↑a ~[R] b}
+--- 原说明 ---
+Restrict the domain of a relation to a subtype.
 -/
 def restrictDomain : SetRel s β := {(a, b) | ↑a ~[R] b}
 
@@ -1749,343 +1589,226 @@ variable {R R₁ R₂ : SetRel α α} {S : SetRel β β} {a b c : α}
 /-! ### Reflexive relations -/
 
 variable (R) in
-/--
-Definition of `IsRefl` / `IsRefl` 的定义
+/-- A relation `R` is reflexive if `a ~[R] a`. -/
+/-
+**SetRel.IsRefl** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：{α : Type u_1} → SetRel α α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsRefl
-  signature: : Prop
-  body: Std.Refl (· ~[R] ·)
-
-中文:
-缩写 IsRefl
-  签名: : 命题
-  定义体: Std.Refl (· ~[R] ·)
+--- 原说明 ---
+A relation `R` is reflexive if `a ~[R] a`.
 -/
 protected abbrev IsRefl : Prop := Std.Refl (· ~[R] ·)
 
 variable (R) in
-/--
-lemma `refl` / 引理 `refl`
-
-English:
-lemma refl
-  given: [R.IsRefl] (a : α)
-  statement: a ~[R] a
-  proof: refl_of (· ~[R] ·) a
-
-中文:
-引理 refl
-  条件: [R.IsRefl] (a : α)
-  结论: a ~[R] a
-  证明: refl_of (· ~[R] ·) a
+/-
+**SetRel.refl** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (R : SetRel α α) [R.IsRefl] (a : α), (a, a) ∈ R
+参数：R : SetRel α α；a : α；a, a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `refl_of`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Refl r] (a : α), r a a
 -/
 protected lemma refl [R.IsRefl] (a : α) : a ~[R] a := refl_of (· ~[R] ·) a
 
 variable (R) in
-/--
-lemma `rfl` / 引理 `rfl`
-
-English:
-lemma rfl
-  given: [R.IsRefl]
-  statement: a ~[R] a
-  proof: R.refl a
-
-中文:
-引理 rfl
-  条件: [R.IsRefl]
-  结论: a ~[R] a
-  证明: R.refl a
+/-
+**SetRel.rfl** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a) ∈ R
+参数：R : SetRel α α；a, a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.refl`：∀ {α : Type u_1} (R : SetRel α α) [R.IsRefl] (a : α), (a, a
+) ∈ R
 -/
 protected lemma rfl [R.IsRefl] : a ~[R] a := R.refl a
-
-/--
-lemma `id_subset` / 引理 `id_subset`
-
-English:
-lemma id_subset
-  given: [R.IsRefl]
-  statement: .id subseteq R
-  proof: by rintro ⟨_, _⟩ rfl; exact R.rfl
-
-中文:
-引理 id_subset
-  条件: [R.IsRefl]
-  结论: .id subseteq R
-  证明: by rintro ⟨_, _⟩ rfl; exact R.rfl
-
-Depends on / 依赖: R.rfl, TopologicalSpace
+/-
+**SetRel.id_subset** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：id_subset [R.IsRefl] : .id subseteq R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.rfl`：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a)
+ ∈ R
 -/
-lemma id_subset [R.IsRefl] : .id subseteq R := by rintro ⟨_, _⟩ rfl; exact R.rfl
-
-/--
-lemma `id_subset_iff` / 引理 `id_subset_iff`
-
-English:
-lemma id_subset_iff
-  statement: .id subseteq R ↔ R.IsRefl where
-  proof: ⟨fun _ => h rfl⟩
-  mpr _ := id_subset
-
-中文:
-引理 id_subset_iff
-  结论: .id subseteq R ↔ R.IsRefl where
-  证明: ⟨fun _ => h rfl⟩
-  mpr _ := id_subset
+lemma id_subset [R.IsRefl] : .id ⊆ R := by rintro ⟨_, _⟩ rfl; exact R.rfl
+/-
+**SetRel.id_subset_iff** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：id_subset_iff : .id subseteq R ↔ R.IsRefl where mp h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SetRel.id_subset`：id_subset [R.IsRefl] : .id subseteq R
 -/
-lemma id_subset_iff : .id subseteq R ↔ R.IsRefl where
-  mp h := ⟨fun _ => h rfl⟩
+lemma id_subset_iff : .id ⊆ R ↔ R.IsRefl where
+  mp h := ⟨fun _ ↦ h rfl⟩
   mpr _ := id_subset
-
-/--
-Instance `isRefl_univ` / 实例 `isRefl_univ`
-
-English:
-instance isRefl_univ
-  signature: : SetRel.IsRefl (.univ : SetRel α α) where
-  body: trivial
-
-中文:
-实例 isRefl_univ
-  签名: : SetRel.IsRefl (.univ : SetRel α α) where
-  定义体: trivial
+/-
+**SetRel.isRefl_univ** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isRefl_univ : SetRel.IsRefl (.univ : SetRel α α) where refl _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 instance isRefl_univ : SetRel.IsRefl (.univ : SetRel α α) where
   refl _ := trivial
-
-/--
-Instance `isRefl_inter` / 实例 `isRefl_inter`
-
-English:
-instance isRefl_inter
-  signature: [R₁.IsRefl] [R₂.IsRefl]
-  body: ⟨R₁.rfl, R₂.rfl⟩
-
-中文:
-实例 isRefl_inter
-  签名: [R₁.IsRefl] [R₂.IsRefl]
-  定义体: ⟨R₁.rfl, R₂.rfl⟩
+/-
+**SetRel.isRefl_inter** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isRefl_inter [R₁.IsRefl] [R₂.IsRefl] : (R₁ inter R₂).IsRefl where refl _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.rfl`：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a)
+ ∈ R
 -/
-instance isRefl_inter [R₁.IsRefl] [R₂.IsRefl] : (R₁ inter R₂).IsRefl where
+instance isRefl_inter [R₁.IsRefl] [R₂.IsRefl] : (R₁ ∩ R₂).IsRefl where
   refl _ := ⟨R₁.rfl, R₂.rfl⟩
-
-/--
-Instance `IsRefl.comp` / 实例 `IsRefl.comp`
-
-English:
-instance IsRefl.comp
-  signature: [R₁.IsRefl] [R₂.IsRefl]
-  body: ⟨_, R₁.rfl, R₂.rfl⟩
-
-中文:
-实例 IsRefl.comp
-  签名: [R₁.IsRefl] [R₂.IsRefl]
-  定义体: ⟨_, R₁.rfl, R₂.rfl⟩
+/-
+**SetRel.IsRefl.comp** 是 Mathlib 中的一个定理，位于命名空间 `SetRel.IsRefl`。
+形式化陈述：∀ {α : Type u_1} {R₁ R₂ : SetRel α α} [R₁.IsRefl] [R₂.IsRefl], (R₁.comp R₂
+).IsRefl
+参数：R₁.comp R₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.rfl`：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a)
+ ∈ R
 -/
 instance IsRefl.comp [R₁.IsRefl] [R₂.IsRefl] : (R₁.comp R₂).IsRefl where
   refl _ := ⟨_, R₁.rfl, R₂.rfl⟩
-
-/--
-lemma `IsRefl.sInter` / 引理 `IsRefl.sInter`
-
-English:
-lemma IsRefl.sInter
-  given: {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsRefl)
-  proof: (hℛ R hR).refl _
-
-中文:
-引理 IsRefl.集合交集
-  条件: {ℛ : 集合 <| SetRel α α} (hℛ : 对任意 R in ℛ, R.IsRefl)
-  证明: (hℛ R hR).refl _
+/-
+**SetRel.IsRefl.sInter** 是 Mathlib 中的一个定理，位于命名空间 `SetRel.IsRefl`。
+形式化陈述：∀ {α : Type u_1} {ℛ : Set (SetRel α α)}, (∀ R ∈ ℛ, R.IsRefl) → SetRel.IsRe
+fl (⋂₀ ℛ)
+参数：SetRel α α；∀ R ∈ ℛ, R.IsRefl；⋂₀ ℛ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.Refl.refl`：∀ {α : Sort u} {r : α → α → Prop} [self : Std.Refl r] (a 
+: α), r a a
 -/
-protected lemma IsRefl.sInter {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsRefl) :
+protected lemma IsRefl.sInter {ℛ : Set <| SetRel α α} (hℛ : ∀ R ∈ ℛ, R.IsRefl) :
     SetRel.IsRefl (⋂₀ ℛ) where
   refl _a R hR := (hℛ R hR).refl _
-
-/--
-Instance `isRefl_iInter` / 实例 `isRefl_iInter`
-
-English:
-instance isRefl_iInter
-  signature: {R : ι -> SetRel α α} [forall i, (R i).IsRefl]
-  body: .sInter by simpa
-
-中文:
-实例 isRefl_i整数er
-  签名: {R : ι -> SetRel α α} [对任意 i, (R i).IsRefl]
-  定义体: .sInter by simpa
-
-Depends on / 依赖: sInter
+/-
+**SetRel.isRefl_iInter** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isRefl_iInter {R : ι -> SetRel α α} [forall i, (R i).IsRefl] : SetRel.IsRe
+fl (⋂ i, R i)
+参数：R i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.IsRefl.sInter`：∀ {α : Type u_1} {ℛ : Set (SetRel α α)}, (∀ R ∈ ℛ,
+ R.IsRefl) → SetRel.IsRefl (⋂₀ ℛ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-instance isRefl_iInter {R : ι -> SetRel α α} [forall i, (R i).IsRefl] :
-SetRel.IsRefl (⋂ i, R i) := .sInter by simpa
-
-/--
-Instance `isRefl_preimage` / 实例 `isRefl_preimage`
-
-English:
-instance isRefl_preimage
-  signature: {f : β -> α} [R.IsRefl]
-  body: R.rfl
-
-中文:
-实例 isRefl_preimage
-  签名: {f : β -> α} [R.IsRefl]
-  定义体: R.rfl
-
-Depends on / 依赖: R.rfl
+instance isRefl_iInter {R : ι → SetRel α α} [∀ i, (R i).IsRefl] :
+    SetRel.IsRefl (⋂ i, R i) := .sInter <| by simpa
+/-
+**SetRel.isRefl_preimage** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isRefl_preimage {f : β -> α} [R.IsRefl] : SetRel.IsRefl (Prod.map f f ⁻¹' 
+R) where refl _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.rfl`：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a)
+ ∈ R
 -/
-instance isRefl_preimage {f : β -> α} [R.IsRefl] : SetRel.IsRefl (Prod.map f f ⁻¹' R) where
+instance isRefl_preimage {f : β → α} [R.IsRefl] : SetRel.IsRefl (Prod.map f f ⁻¹' R) where
   refl _ := R.rfl
-
-/--
-lemma `isRefl_mono` / 引理 `isRefl_mono`
-
-English:
-lemma isRefl_mono
-  given: [R₁.IsRefl] (hR : R₁ subseteq R₂)
-  statement: R₂.IsRefl where refl _
-  proof: hR R₁.rfl
-
-中文:
-引理 isRefl_mono
-  条件: [R₁.IsRefl] (hR : R₁ subseteq R₂)
-  结论: R₂.IsRefl where refl _
-  证明: hR R₁.rfl
+/-
+**SetRel.isRefl_mono** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：isRefl_mono [R₁.IsRefl] (hR : R₁ subseteq R₂) : R₂.IsRefl where refl _
+参数：hR : R₁ subseteq R₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.rfl`：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a)
+ ∈ R
 -/
-lemma isRefl_mono [R₁.IsRefl] (hR : R₁ subseteq R₂) : R₂.IsRefl where refl _ := hR R₁.rfl
-
-/--
-lemma `left_subset_comp` / 引理 `left_subset_comp`
-
-English:
-lemma left_subset_comp
-  given: {R : SetRel α β} [S.IsRefl]
-  statement: R subseteq R ○ S
-  proof: by
+lemma isRefl_mono [R₁.IsRefl] (hR : R₁ ⊆ R₂) : R₂.IsRefl where refl _ := hR R₁.rfl
+/-
+**SetRel.left_subset_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：left_subset_comp {R : SetRel α β} [S.IsRefl] : R subseteq R ○ S
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SetRel.comp_id`：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β), R.comp
+ SetRel.id = R
+· 使用引理 `SetRel.comp_subset_comp_right`：comp_subset_comp_right {S₁ S₂ : SetRel β 
+γ} (hS : S₁ subseteq S₂) : R ○ S₁ subseteq R ○ S₂
+· 使用引理 `SetRel.id_subset`：id_subset [R.IsRefl] : .id subseteq R
+-/
+lemma left_subset_comp {R : SetRel α β} [S.IsRefl] : R ⊆ R ○ S := by
   simpa using comp_subset_comp_right id_subset
-
-中文:
-引理 left_subset_comp
-  条件: {R : SetRel α β} [S.IsRefl]
-  结论: R subseteq R ○ S
-  证明: by
-  simpa using comp_subset_comp_right id_subset
-
-Depends on / 依赖: comp_subset_comp_right, id_subset
+/-
+**SetRel.right_subset_comp** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：right_subset_comp [R.IsRefl] {S : SetRel α β} : S subseteq R ○ S
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SetRel.id_comp`：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β), SetRel
+.id.comp R = R
+· 使用引理 `SetRel.comp_subset_comp_left`：comp_subset_comp_left {S : SetRel β γ} (hR
+ : R₁ subseteq R₂) : R₁ ○ S subseteq R₂ ○ S
+· 使用引理 `SetRel.id_subset`：id_subset [R.IsRefl] : .id subseteq R
 -/
-lemma left_subset_comp {R : SetRel α β} [S.IsRefl] : R subseteq R ○ S := by
-  simpa using comp_subset_comp_right id_subset
-
-/--
-lemma `right_subset_comp` / 引理 `right_subset_comp`
-
-English:
-lemma right_subset_comp
-  given: [R.IsRefl] {S : SetRel α β}
-  statement: S subseteq R ○ S
-  proof: by
+lemma right_subset_comp [R.IsRefl] {S : SetRel α β} : S ⊆ R ○ S := by
   simpa using comp_subset_comp_left id_subset
-
-中文:
-引理 right_subset_comp
-  条件: [R.IsRefl] {S : SetRel α β}
-  结论: S subseteq R ○ S
-  证明: by
-  simpa using comp_subset_comp_left id_subset
-
-Depends on / 依赖: comp_subset_comp_left, id_subset
+/-
+**SetRel.subset_iterate_comp** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {R : SetRel α α} [R.IsRefl] {S : SetRel α 
+β} {n : ℕ}, S ⊆ (fun x => R.comp x)^[n] S
+参数：fun x => R.comp x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma right_subset_comp [R.IsRefl] {S : SetRel α β} : S subseteq R ○ S := by
-  simpa using comp_subset_comp_left id_subset
-
-/--
-lemma `subset_iterate_comp` / 引理 `subset_iterate_comp`
-
-English:
-lemma subset_iterate_comp
-  given: [R.IsRefl] {S : SetRel α β}
-  statement: forall {n}, S subseteq (R ○ ·)^[n] S
-
-中文:
-引理 subset_iterate_comp
-  条件: [R.IsRefl] {S : SetRel α β}
-  结论: 对任意 {n}, S subseteq (R ○ ·)^[n] S
--/
-lemma subset_iterate_comp [R.IsRefl] {S : SetRel α β} : forall {n}, S subseteq (R ○ ·)^[n] S
+lemma subset_iterate_comp [R.IsRefl] {S : SetRel α β} : ∀ {n}, S ⊆ (R ○ ·)^[n] S
   | 0 => .rfl
   | _n + 1 => right_subset_comp.trans subset_iterate_comp
-
-/--
-lemma `self_subset_image` / 引理 `self_subset_image`
-
-English:
-lemma self_subset_image
-  given: [R.IsRefl] (s : Set α)
-  statement: s subseteq R.image s
-  proof: fun x hx => ⟨x, hx, R.rfl⟩
-
-中文:
-引理 self_subset_image
-  条件: [R.IsRefl] (s : 集合 α)
-  结论: s subseteq R.像 s
-  证明: fun x hx => ⟨x, hx, R.rfl⟩
-
-Depends on / 依赖: R.rfl
+/-
+**SetRel.self_subset_image** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：self_subset_image [R.IsRefl] (s : Set α) : s subseteq R.image s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.rfl`：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a)
+ ∈ R
 -/
-lemma self_subset_image [R.IsRefl] (s : Set α) : s subseteq R.image s :=
+lemma self_subset_image [R.IsRefl] (s : Set α) : s ⊆ R.image s :=
   fun x hx => ⟨x, hx, R.rfl⟩
-
-/--
-lemma `self_subset_preimage` / 引理 `self_subset_preimage`
-
-English:
-lemma self_subset_preimage
-  given: [R.IsRefl] (s : Set α)
-  statement: s subseteq R.preimage s
-  proof: fun x hx => ⟨x, hx, R.rfl⟩
-
-中文:
-引理 self_subset_preimage
-  条件: [R.IsRefl] (s : 集合 α)
-  结论: s subseteq R.原像 s
-  证明: fun x hx => ⟨x, hx, R.rfl⟩
-
-Depends on / 依赖: R.rfl
+/-
+**SetRel.self_subset_preimage** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：self_subset_preimage [R.IsRefl] (s : Set α) : s subseteq R.preimage s
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.rfl`：∀ {α : Type u_1} (R : SetRel α α) {a : α} [R.IsRefl], (a, a)
+ ∈ R
 -/
-lemma self_subset_preimage [R.IsRefl] (s : Set α) : s subseteq R.preimage s :=
+lemma self_subset_preimage [R.IsRefl] (s : Set α) : s ⊆ R.preimage s :=
   fun x hx => ⟨x, hx, R.rfl⟩
-
-/--
-lemma `exists_eq_singleton_of_prod_subset_id` / 引理 `exists_eq_singleton_of_prod_subset_id`
-
-English:
-lemma exists_eq_singleton_of_prod_subset_id
-  statement: {s t : Set α} (hs : s.Nonempty) (ht : t.Nonempty)
-  proof: by
-  obtain ⟨a, ha⟩ := hs
-  obtain ⟨b, hb⟩ := ht
-  simp only [Set.prod_subset_iff, mem_id] at hst
-  obtain rfl := hst _ ha _ hb
-  simp only [Set.eq_singleton_iff_unique_mem, and_assoc]
-  exact ⟨a, ha, (hst · · _ hb), hb, (hst _ ha · · |>.symm)⟩
-
-中文:
-引理 存在_eq_singleton_of_prod_subset_id
-  结论: {s t : 集合 α} (hs : s.非空) (ht : t.非空)
-  证明: by
-  obtain ⟨a, ha⟩ := hs
-  obtain ⟨b, hb⟩ := ht
-  simp only [Set.prod_subset_iff, mem_id] at hst
-  obtain rfl := hst _ ha _ hb
-  simp only [Set.eq_singleton_iff_unique_mem, and_assoc]
-  exact ⟨a, ha, (hst · · _ hb), hb, (hst _ ha · · |>.symm)⟩
-
-Depends on / 依赖: Set.eq_singleton_iff_unique_mem, Set.prod_subset_iff, and_assoc, eq_singleton_iff_unique_mem, mem_id, prod_subset_iff
+/-
+**SetRel.exists_eq_singleton_of_prod_subset_id** 是 Mathlib 中的一个引理，位于命名空间 `SetRel
+`。
+形式化陈述：exists_eq_singleton_of_prod_subset_id {s t : Set α} (hs : s.Nonempty) (ht 
+: t.Nonempty) (hst : s ×ˢ t subseteq SetRel.id) : exists x, s = {x} ∧ t = {x}
+参数：hs : s.Nonempty；ht : t.Nonempty；hst : s ×ˢ t subseteq SetRel.id。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma exists_eq_singleton_of_prod_subset_id {s t : Set α} (hs : s.Nonempty) (ht : t.Nonempty)
-    (hst : s ×ˢ t subseteq SetRel.id) : exists x, s = {x} ∧ t = {x} := by
+    (hst : s ×ˢ t ⊆ SetRel.id) : ∃ x, s = {x} ∧ t = {x} := by
   obtain ⟨a, ha⟩ := hs
   obtain ⟨b, hb⟩ := ht
   simp only [Set.prod_subset_iff, mem_id] at hst
@@ -2096,767 +1819,543 @@ lemma exists_eq_singleton_of_prod_subset_id {s t : Set α} (hs : s.Nonempty) (ht
 /-! ### Symmetric relations -/
 
 variable (R) in
-/--
-Definition of `IsSymm` / `IsSymm` 的定义
+/-- A relation `R` is symmetric if `a ~[R] b ↔ b ~[R] a`. -/
+/-
+**SetRel.IsSymm** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：{α : Type u_1} → SetRel α α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsSymm
-  signature: : Prop
-  body: Std.Symm (· ~[R] ·)
-
-中文:
-缩写 是Symm
-  签名: : 命题
-  定义体: Std.Symm (· ~[R] ·)
+--- 原说明 ---
+A relation `R` is symmetric if `a ~[R] b ↔ b ~[R] a`.
 -/
 protected abbrev IsSymm : Prop := Std.Symm (· ~[R] ·)
 
 variable (R) in
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  given: [R.IsSymm] (hab : a ~[R] b)
-  statement: b ~[R] a
-  proof: symm_of (· ~[R] ·) hab
-
-中文:
-引理 symm
-  条件: [R.是Symm] (hab : a ~[R] b)
-  结论: b ~[R] a
-  证明: symm_of (· ~[R] ·) hab
+/-
+**SetRel.symm** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a, b) ∈ R → (b, a
+) ∈ R
+参数：R : SetRel α α；a, b；b, a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `symm_of`：∀ {α : Sort u_1} (r : α → α → Prop) {a b : α} [Std.Symm r], r a
+ b → r b a
 -/
 protected lemma symm [R.IsSymm] (hab : a ~[R] b) : b ~[R] a := symm_of (· ~[R] ·) hab
 
 variable (R) in
-/--
-lemma `comm` / 引理 `comm`
-
-English:
-lemma comm
-  given: [R.IsSymm]
-  statement: a ~[R] b ↔ b ~[R] a
-  proof: comm_of (· ~[R] ·)
-
-中文:
-引理 comm
-  条件: [R.是Symm]
-  结论: a ~[R] b ↔ b ~[R] a
-  证明: comm_of (· ~[R] ·)
+/-
+**SetRel.comm** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a, b) ∈ R ↔ (b, a
+) ∈ R
+参数：R : SetRel α α；a, b；b, a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comm_of`：comm_of (r : α -> α -> Prop) [Std.Symm r] {a b : α} : r a b ↔ r
+ b a
 -/
 protected lemma comm [R.IsSymm] : a ~[R] b ↔ b ~[R] a := comm_of (· ~[R] ·)
 
 variable (R) in
-/--
-lemma `inv_eq_self` / 引理 `inv_eq_self`
-
-English:
-lemma inv_eq_self
-  given: [R.IsSymm]
-  statement: R.inv = R
-  proof: by ext; exact R.comm
-
-中文:
-引理 inv_eq_self
-  条件: [R.是Symm]
-  结论: R.inv = R
-  证明: by ext; exact R.comm
+/-
+**SetRel.inv_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (R : SetRel α α) [R.IsSymm], R.inv = R
+参数：R : SetRel α α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `SetRel.comm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R ↔ (b, a) ∈ R
 -/
 @[simp] lemma inv_eq_self [R.IsSymm] : R.inv = R := by ext; exact R.comm
-
-/--
-lemma `inv_eq_self_iff` / 引理 `inv_eq_self_iff`
-
-English:
-lemma inv_eq_self_iff
-  statement: R.inv = R ↔ R.IsSymm where
-  proof: ⟨fun a b hab => by rwa [← hR]⟩
-  mpr _ := inv_eq_self _
-
-中文:
-引理 inv_eq_self_iff
-  结论: R.inv = R ↔ R.是Symm where
-  证明: ⟨fun a b hab => by rwa [← hR]⟩
-  mpr _ := inv_eq_self _
+/-
+**SetRel.inv_eq_self_iff** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：inv_eq_self_iff : R.inv = R ↔ R.IsSymm where mp hR
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetRel.inv_eq_self`：∀ {α : Type u_1} (R : SetRel α α) [R.IsSymm], R.inv 
+= R
 -/
 lemma inv_eq_self_iff : R.inv = R ↔ R.IsSymm where
-  mp hR := ⟨fun a b hab => by rwa [← hR]⟩
+  mp hR := ⟨fun a b hab ↦ by rwa [← hR]⟩
   mpr _ := inv_eq_self _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [R.IsSymm]
-  signature: : R.inv.IsSymm
-  body: by simpa
-
-中文:
-实例 [R.是Symm]
-  签名: : R.inv.是Symm
-  定义体: by simpa
+/-
+**SetRel.** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [R.IsSymm] : R.inv.IsSymm := by simpa
-
-/--
-Instance `isSymm_empty` / 实例 `isSymm_empty`
-
-English:
-instance isSymm_empty
-  signature: : (∅ : SetRel α α).IsSymm where symm _ _
-  body: by simp
-
-中文:
-实例 isSymm_empty
-  签名: : (∅ : SetRel α α).是Symm where symm _ _
-  定义体: by simp
+/-
+**SetRel.isSymm_empty** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_empty : (∅ : SetRel α α).IsSymm where symm _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 instance isSymm_empty : (∅ : SetRel α α).IsSymm where symm _ _ := by simp
-/--
-Instance `isSymm_univ` / 实例 `isSymm_univ`
-
-English:
-instance isSymm_univ
-  signature: : SetRel.IsSymm (Set.univ : SetRel α α) where symm _ _
-  body: by simp
-
-中文:
-实例 isSymm_univ
-  签名: : SetRel.是Symm (集合.univ : SetRel α α) where symm _ _
-  定义体: by simp
+/-
+**SetRel.isSymm_univ** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_univ : SetRel.IsSymm (Set.univ : SetRel α α) where symm _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 instance isSymm_univ : SetRel.IsSymm (Set.univ : SetRel α α) where symm _ _ := by simp
-
-/--
-Instance `isSymm_inter` / 实例 `isSymm_inter`
-
-English:
-instance isSymm_inter
-  signature: [R₁.IsSymm] [R₂.IsSymm]
-  body: .imp R₁.symm R₂.symm
-
-中文:
-实例 isSymm_inter
-  签名: [R₁.是Symm] [R₂.是Symm]
-  定义体: .imp R₁.symm R₂.symm
+/-
+**SetRel.isSymm_inter** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_inter [R₁.IsSymm] [R₂.IsSymm] : (R₁ inter R₂).IsSymm where symm _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `SetRel.symm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R → (b, a) ∈ R
 -/
-instance isSymm_inter [R₁.IsSymm] [R₂.IsSymm] : (R₁ inter R₂).IsSymm where
+instance isSymm_inter [R₁.IsSymm] [R₂.IsSymm] : (R₁ ∩ R₂).IsSymm where
   symm _ _ := .imp R₁.symm R₂.symm
-
-/--
-lemma `IsSymm.sInter` / 引理 `IsSymm.sInter`
-
-English:
-lemma IsSymm.sInter
-  given: {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsSymm)
-  proof: (hℛ R hR).symm _ _ hab R hR
-
-中文:
-引理 是Symm.集合交集
-  条件: {ℛ : 集合 <| SetRel α α} (hℛ : 对任意 R in ℛ, R.是Symm)
-  证明: (hℛ R hR).symm _ _ hab R hR
+/-
+**SetRel.IsSymm.sInter** 是 Mathlib 中的一个定理，位于命名空间 `SetRel.IsSymm`。
+形式化陈述：∀ {α : Type u_1} {ℛ : Set (SetRel α α)}, (∀ R ∈ ℛ, R.IsSymm) → SetRel.IsSy
+mm (⋂₀ ℛ)
+参数：SetRel α α；∀ R ∈ ℛ, R.IsSymm；⋂₀ ℛ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.Symm.symm`：∀ {α : Sort u} {r : α → α → Prop} [self : Std.Symm r] (a 
+b : α), r a b → r b a
 -/
-protected lemma IsSymm.sInter {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsSymm) :
+protected lemma IsSymm.sInter {ℛ : Set <| SetRel α α} (hℛ : ∀ R ∈ ℛ, R.IsSymm) :
     SetRel.IsSymm (⋂₀ ℛ) where
-symm _a _b hab R hR := (hℛ R hR).symm _ _ hab R hR
-
-/--
-Instance `isSymm_iInter` / 实例 `isSymm_iInter`
-
-English:
-instance isSymm_iInter
-  signature: {R : ι -> SetRel α α} [forall i, (R i).IsSymm]
-  body: .sInter by simpa
-
-中文:
-实例 isSymm_i整数er
-  签名: {R : ι -> SetRel α α} [对任意 i, (R i).是Symm]
-  定义体: .sInter by simpa
-
-Depends on / 依赖: sInter
+  symm _a _b hab R hR := (hℛ R hR).symm _ _ <| hab R hR
+/-
+**SetRel.isSymm_iInter** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_iInter {R : ι -> SetRel α α} [forall i, (R i).IsSymm] : SetRel.IsSy
+mm (⋂ i, R i)
+参数：R i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.IsSymm.sInter`：∀ {α : Type u_1} {ℛ : Set (SetRel α α)}, (∀ R ∈ ℛ,
+ R.IsSymm) → SetRel.IsSymm (⋂₀ ℛ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-instance isSymm_iInter {R : ι -> SetRel α α} [forall i, (R i).IsSymm] :
-SetRel.IsSymm (⋂ i, R i) := .sInter by simpa
-
-/--
-Instance `isSymm_id` / 实例 `isSymm_id`
-
-English:
-instance isSymm_id
-  signature: : (SetRel.id : SetRel α α).IsSymm where symm _ _
-  body: .symm
-
-中文:
-实例 isSymm_id
-  签名: : (SetRel.id : SetRel α α).是Symm where symm _ _
-  定义体: .symm
+instance isSymm_iInter {R : ι → SetRel α α} [∀ i, (R i).IsSymm] :
+    SetRel.IsSymm (⋂ i, R i) := .sInter <| by simpa
+/-
+**SetRel.isSymm_id** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_id : (SetRel.id : SetRel α α).IsSymm where symm _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 instance isSymm_id : (SetRel.id : SetRel α α).IsSymm where symm _ _ := .symm
-
-/--
-Instance `isSymm_preimage` / 实例 `isSymm_preimage`
-
-English:
-instance isSymm_preimage
-  signature: {f : β -> α} [R.IsSymm]
-  body: R.symm
-
-中文:
-实例 isSymm_preimage
-  签名: {f : β -> α} [R.是Symm]
-  定义体: R.symm
-
-Depends on / 依赖: R.symm
+/-
+**SetRel.isSymm_preimage** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_preimage {f : β -> α} [R.IsSymm] : SetRel.IsSymm (Prod.map f f ⁻¹' 
+R) where symm _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.symm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R → (b, a) ∈ R
 -/
-instance isSymm_preimage {f : β -> α} [R.IsSymm] : SetRel.IsSymm (Prod.map f f ⁻¹' R) where
+instance isSymm_preimage {f : β → α} [R.IsSymm] : SetRel.IsSymm (Prod.map f f ⁻¹' R) where
   symm _ _ := R.symm
-
-/--
-Instance `isSymm_image` / 实例 `isSymm_image`
-
-English:
-instance isSymm_image
-  signature: {f : α -> β} [R.IsSymm]
-  body: by
-    simp only [Set.mem_image, Prod.exists, Prod.map_apply, Prod.mk.injEq, forall_exists_index,
-      and_imp]
-    rintro _ _ a₁ a₂ ha rfl rfl
-    exact ⟨_, _, R.symm ha, rfl, rfl⟩
-
-中文:
-实例 isSymm_image
-  签名: {f : α -> β} [R.是Symm]
-  定义体: by
-    simp only [Set.mem_image, Prod.exists, Prod.map_apply, Prod.mk.injEq, forall_exists_index,
-      and_imp]
-    rintro _ _ a₁ a₂ ha rfl rfl
-    exact ⟨_, _, R.symm ha, rfl, rfl⟩
-
-Depends on / 依赖: Prod.exists, Prod.map_apply, Prod.mk.injEq, R.symm, Set.mem_image, and_imp, forall_exists_index, map_apply, mem_image
+/-
+**SetRel.isSymm_image** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_image {f : α -> β} [R.IsSymm] : SetRel.IsSymm (Prod.map f f '' R) w
+here symm
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `SetRel.symm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R → (b, a) ∈ R
 -/
-instance isSymm_image {f : α -> β} [R.IsSymm] : SetRel.IsSymm (Prod.map f f '' R) where
+instance isSymm_image {f : α → β} [R.IsSymm] : SetRel.IsSymm (Prod.map f f '' R) where
   symm := by
     simp only [Set.mem_image, Prod.exists, Prod.map_apply, Prod.mk.injEq, forall_exists_index,
       and_imp]
     rintro _ _ a₁ a₂ ha rfl rfl
     exact ⟨_, _, R.symm ha, rfl, rfl⟩
-
-/--
-Instance `isSymm_comp_inv` / 实例 `isSymm_comp_inv`
-
-English:
-instance isSymm_comp_inv
-  signature: : (R ○ R.inv).IsSymm where
-  body: by rintro ⟨b, hab, hbc⟩; exact ⟨b, hbc, hab⟩
-
-中文:
-实例 isSymm_comp_inv
-  签名: : (R ○ R.inv).是Symm where
-  定义体: by rintro ⟨b, hab, hbc⟩; exact ⟨b, hbc, hab⟩
+/-
+**SetRel.isSymm_comp_inv** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_comp_inv : (R ○ R.inv).IsSymm where symm a c
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isSymm_comp_inv : (R ○ R.inv).IsSymm where
   symm a c := by rintro ⟨b, hab, hbc⟩; exact ⟨b, hbc, hab⟩
-
-/--
-Instance `isSymm_inv_comp` / 实例 `isSymm_inv_comp`
-
-English:
-instance isSymm_inv_comp
-  signature: : (R.inv ○ R).IsSymm
-  body: isSymm_comp_inv
-
-中文:
-实例 isSymm_inv_comp
-  签名: : (R.inv ○ R).是Symm
-  定义体: isSymm_comp_inv
-
-Depends on / 依赖: isSymm_comp_inv
+/-
+**SetRel.isSymm_inv_comp** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_inv_comp : (R.inv ○ R).IsSymm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isSymm_inv_comp : (R.inv ○ R).IsSymm := isSymm_comp_inv
-
-/--
-Instance `isSymm_comp_self` / 实例 `isSymm_comp_self`
-
-English:
-instance isSymm_comp_self
-  signature: [R.IsSymm]
-  body: by simpa using R.isSymm_comp_inv
-
-中文:
-实例 isSymm_comp_self
-  签名: [R.是Symm]
-  定义体: by simpa using R.isSymm_comp_inv
-
-Depends on / 依赖: R.isSymm_comp_inv, isSymm_comp_inv
+/-
+**SetRel.isSymm_comp_self** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_comp_self [R.IsSymm] : (R ○ R).IsSymm
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SetRel.inv_eq_self`：∀ {α : Type u_1} (R : SetRel α α) [R.IsSymm], R.inv 
+= R
 -/
 instance isSymm_comp_self [R.IsSymm] : (R ○ R).IsSymm := by simpa using R.isSymm_comp_inv
-
-/--
-lemma `prod_subset_comm` / 引理 `prod_subset_comm`
-
-English:
-lemma prod_subset_comm
-  given: [R.IsSymm]
-  statement: s₁ ×ˢ s₂ subseteq R ↔ s₂ ×ˢ s₁ subseteq R
-  proof: by
-  rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← Set.image_subset_iff]; rw [Set.image_swap_prod]; rw [← SetRel.inv]; rw [R.inv_eq_self]
-
-中文:
-引理 prod_subset_comm
-  条件: [R.是Symm]
-  结论: s₁ ×ˢ s₂ subseteq R ↔ s₂ ×ˢ s₁ subseteq R
-  证明: by
-  rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← Set.image_subset_iff]; rw [Set.image_swap_prod]; rw [← SetRel.inv]; rw [R.inv_eq_self]
-
-Depends on / 依赖: R.inv_eq_self, Set.image_subset_iff, Set.image_swap_prod, SetRel, SetRel.inv, image_subset_iff, image_swap_prod, inv_eq_self
+/-
+**SetRel.prod_subset_comm** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：prod_subset_comm [R.IsSymm] : s₁ ×ˢ s₂ subseteq R ↔ s₂ ×ˢ s₁ subseteq R
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetRel.inv_eq_self`：∀ {α : Type u_1} (R : SetRel α α) [R.IsSymm], R.inv 
+= R
+· 使用定理 `SetRel.inv.eq_1`：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β), R.inv
+ = Prod.swap ⁻¹' R
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `Set.image_swap_prod`：image_swap_prod (s : Set α) (t : Set β) : Prod.swap
+ '' s ×ˢ t = t ×ˢ s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma prod_subset_comm [R.IsSymm] : s₁ ×ˢ s₂ subseteq R ↔ s₂ ×ˢ s₁ subseteq R := by
-  rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← Set.image_subset_iff]; rw [Set.image_swap_prod]; rw [← SetRel.inv]; rw [R.inv_eq_self]
-
-/--
-lemma `preimage_eq_image` / 引理 `preimage_eq_image`
-
-English:
-lemma preimage_eq_image
-  given: [R.IsSymm]
-  statement: R.preimage s = R.image s
-  proof: by
-  rw [← preimage_inv]; rw [inv_eq_self]
-
-中文:
-引理 preimage_eq_image
-  条件: [R.是Symm]
-  结论: R.原像 s = R.像 s
-  证明: by
-  rw [← preimage_inv]; rw [inv_eq_self]
-
-Depends on / 依赖: inv_eq_self, preimage_inv
+lemma prod_subset_comm [R.IsSymm] : s₁ ×ˢ s₂ ⊆ R ↔ s₂ ×ˢ s₁ ⊆ R := by
+  rw [← R.inv_eq_self, SetRel.inv, ← Set.image_subset_iff, Set.image_swap_prod, ← SetRel.inv,
+    R.inv_eq_self]
+/-
+**SetRel.preimage_eq_image** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：preimage_eq_image [R.IsSymm] : R.preimage s = R.image s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetRel.preimage_inv`：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β) (s
+ : Set α), R.inv.preimage s = R.image s
+· 使用定理 `SetRel.inv_eq_self`：∀ {α : Type u_1} (R : SetRel α α) [R.IsSymm], R.inv 
+= R
 -/
 lemma preimage_eq_image [R.IsSymm] : R.preimage s = R.image s := by
-  rw [← preimage_inv]; rw [inv_eq_self]
+  rw [← preimage_inv, inv_eq_self]
 
 variable (R) in
-/--
-Definition of `symmetrize` / `symmetrize` 的定义
+/-- The maximal symmetric relation contained in a given relation. -/
+/-
+**SetRel.symmetrize** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：symmetrize : SetRel α α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symmetrize
-  signature: : SetRel α α
-  body: R inter R.inv
-
-中文:
-定义 symmetrize
-  签名: : SetRel α α
-  定义体: R inter R.inv
-
-Depends on / 依赖: R.inv
+--- 原说明 ---
+The maximal symmetric relation contained in a given relation.
 -/
-def symmetrize : SetRel α α := R inter R.inv
-
-/--
-Instance `isSymm_symmetrize` / 实例 `isSymm_symmetrize`
-
-English:
-instance isSymm_symmetrize
-  signature: : R.symmetrize.IsSymm where symm _ _
-  body: .symm
-
-中文:
-实例 isSymm_symmetrize
-  签名: : R.symmetrize.是Symm where symm _ _
-  定义体: .symm
+def symmetrize : SetRel α α := R ∩ R.inv
+/-
+**SetRel.isSymm_symmetrize** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isSymm_symmetrize : R.symmetrize.IsSymm where symm _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.symm`：∀ {a b : Prop}, a ∧ b → b ∧ a
 -/
 instance isSymm_symmetrize : R.symmetrize.IsSymm where symm _ _ := .symm
-
-/--
-lemma `symmetrize_subset_self` / 引理 `symmetrize_subset_self`
-
-English:
-lemma symmetrize_subset_self
-  statement: R.symmetrize subseteq R
-  proof: Set.inter_subset_left
-
-中文:
-引理 symmetrize_subset_self
-  结论: R.symmetrize subseteq R
-  证明: Set.inter_subset_left
-
-Depends on / 依赖: Set.inter_subset_left, inter_subset_left
+/-
+**SetRel.symmetrize_subset_self** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：symmetrize_subset_self : R.symmetrize subseteq R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-lemma symmetrize_subset_self : R.symmetrize subseteq R := Set.inter_subset_left
-/--
-lemma `symmetrize_subset_inv` / 引理 `symmetrize_subset_inv`
-
-English:
-lemma symmetrize_subset_inv
-  statement: R.symmetrize subseteq R.inv
-  proof: Set.inter_subset_right
-
-中文:
-引理 symmetrize_subset_inv
-  结论: R.symmetrize subseteq R.inv
-  证明: Set.inter_subset_right
-
-Depends on / 依赖: Set.inter_subset_right, inter_subset_right
+lemma symmetrize_subset_self : R.symmetrize ⊆ R := Set.inter_subset_left
+/-
+**SetRel.symmetrize_subset_inv** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：symmetrize_subset_inv : R.symmetrize subseteq R.inv
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
-lemma symmetrize_subset_inv : R.symmetrize subseteq R.inv := Set.inter_subset_right
-/--
-lemma `subset_symmetrize` / 引理 `subset_symmetrize`
-
-English:
-lemma subset_symmetrize
-  given: {S : SetRel α α}
-  statement: S subseteq R.symmetrize ↔ S subseteq R ∧ S subseteq R.inv
-  proof: Set.subset_inter_iff
-
-@[gcongr]
-
-中文:
-引理 subset_symmetrize
-  条件: {S : SetRel α α}
-  结论: S subseteq R.symmetrize ↔ S subseteq R ∧ S subseteq R.inv
-  证明: Set.subset_inter_iff
-
-@[gcongr]
-
-Depends on / 依赖: Set.subset_inter_iff, subset_inter_iff
+lemma symmetrize_subset_inv : R.symmetrize ⊆ R.inv := Set.inter_subset_right
+/-
+**SetRel.subset_symmetrize** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：subset_symmetrize {S : SetRel α α} : S subseteq R.symmetrize ↔ S subseteq 
+R ∧ S subseteq R.inv
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subset_inter_iff`：subset_inter_iff {s t r : Set α} : r subseteq s in
+ter t ↔ r subseteq s ∧ r subseteq t
 -/
-lemma subset_symmetrize {S : SetRel α α} : S subseteq R.symmetrize ↔ S subseteq R ∧ S subseteq R.inv :=
+lemma subset_symmetrize {S : SetRel α α} : S ⊆ R.symmetrize ↔ S ⊆ R ∧ S ⊆ R.inv :=
   Set.subset_inter_iff
 
 @[gcongr]
-/--
-lemma `symmetrize_mono` / 引理 `symmetrize_mono`
-
-English:
-lemma symmetrize_mono
-  given: (h : R₁ subseteq R₂)
-  statement: R₁.symmetrize subseteq R₂.symmetrize
-  proof: Set.inter_subset_inter h Set.preimage_mono h
-
-中文:
-引理 symmetrize_mono
-  条件: (h : R₁ subseteq R₂)
-  结论: R₁.symmetrize subseteq R₂.symmetrize
-  证明: Set.inter_subset_inter h Set.preimage_mono h
-
-Depends on / 依赖: Set.inter_subset_inter, Set.preimage_mono, inter_subset_inter, preimage_mono
+/-
+**SetRel.symmetrize_mono** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：symmetrize_mono (h : R₁ subseteq R₂) : R₁.symmetrize subseteq R₂.symmetriz
+e
+参数：h : R₁ subseteq R₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_subset_inter`：inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s
+₁ subseteq t₁) (h₂ : s₂ subseteq t₂) : s₁ inter s₂ subseteq t₁ inter t₂
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
 -/
-lemma symmetrize_mono (h : R₁ subseteq R₂) : R₁.symmetrize subseteq R₂.symmetrize :=
-Set.inter_subset_inter h Set.preimage_mono h
+lemma symmetrize_mono (h : R₁ ⊆ R₂) : R₁.symmetrize ⊆ R₂.symmetrize :=
+  Set.inter_subset_inter h <| Set.preimage_mono h
 
 /-! ### Transitive relations -/
 
 variable (R) in
-/--
-Definition of `IsTrans` / `IsTrans` 的定义
+/-- A relation `R` is transitive if `a ~[R] b` and `b ~[R] c` together imply `a ~[R] c`. -/
+/-
+**SetRel.IsTrans** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：{α : Type u_1} → SetRel α α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTrans
-  signature: : Prop
-  body: IsTrans α (· ~[R] ·)
-
-中文:
-缩写 是Trans
-  签名: : 命题
-  定义体: IsTrans α (· ~[R] ·)
+--- 原说明 ---
+A relation `R` is transitive if `a ~[R] b` and `b ~[R] c` together imply `a ~[R]
+ c`.
 -/
 protected abbrev IsTrans : Prop := IsTrans α (· ~[R] ·)
 
 variable (R) in
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  given: [R.IsTrans] (hab : a ~[R] b) (hbc : b ~[R] c)
-  statement: a ~[R] c
-  proof: trans_of (· ~[R] ·) hab hbc
-
-中文:
-引理 trans
-  条件: [R.是Trans] (hab : a ~[R] b) (hbc : b ~[R] c)
-  结论: a ~[R] c
-  证明: trans_of (· ~[R] ·) hab hbc
+/-
+**SetRel.trans** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (R : SetRel α α) {a b c : α} [R.IsTrans], (a, b) ∈ R → (b
+, c) ∈ R → (a, c) ∈ R
+参数：R : SetRel α α；a, b；b, c；a, c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trans_of`：∀ {α : Sort u_1} (r : α → α → Prop) {a b c : α} [IsTrans α r],
+ r a b → r b c → r a c
 -/
 protected lemma trans [R.IsTrans] (hab : a ~[R] b) (hbc : b ~[R] c) : a ~[R] c :=
   trans_of (· ~[R] ·) hab hbc
-
-instance {R : α -> α -> Prop} [IsTrans α R] : SetRel.IsTrans {(a, b) | R a b} := ‹_›
-
-/--
-lemma `comp_subset_self` / 引理 `comp_subset_self`
-
-English:
-lemma comp_subset_self
-  given: [R.IsTrans]
-  statement: R ○ R subseteq R
-  proof: fun ⟨_, _⟩ ⟨_, hab, hbc⟩ => R.trans hab hbc
-
-中文:
-引理 comp_subset_self
-  条件: [R.是Trans]
-  结论: R ○ R subseteq R
-  证明: fun ⟨_, _⟩ ⟨_, hab, hbc⟩ => R.trans hab hbc
-
-Depends on / 依赖: R.trans
+/-
+**SetRel.** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comp_subset_self [R.IsTrans] : R ○ R subseteq R := fun ⟨_, _⟩ ⟨_, hab, hbc⟩ => R.trans hab hbc
-
-/--
-lemma `comp_eq_self` / 引理 `comp_eq_self`
-
-English:
-lemma comp_eq_self
-  given: [R.IsRefl] [R.IsTrans]
-  statement: R ○ R = R
-  proof: subset_antisymm comp_subset_self left_subset_comp
-
-中文:
-引理 comp_eq_self
-  条件: [R.IsRefl] [R.是Trans]
-  结论: R ○ R = R
-  证明: subset_antisymm comp_subset_self left_subset_comp
-
-Depends on / 依赖: comp_subset_self, left_subset_comp, subset_antisymm
+instance {R : α → α → Prop} [IsTrans α R] : SetRel.IsTrans {(a, b) | R a b} := ‹_›
+/-
+**SetRel.comp_subset_self** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_subset_self [R.IsTrans] : R ○ R subseteq R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.trans`：∀ {α : Type u_1} (R : SetRel α α) {a b c : α} [R.IsTrans],
+ (a, b) ∈ R → (b, c) ∈ R → (a, c) ∈ R
+-/
+lemma comp_subset_self [R.IsTrans] : R ○ R ⊆ R := fun ⟨_, _⟩ ⟨_, hab, hbc⟩ ↦ R.trans hab hbc
+/-
+**SetRel.comp_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：comp_eq_self [R.IsRefl] [R.IsTrans] : R ○ R = R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `SetRel.comp_subset_self`：comp_subset_self [R.IsTrans] : R ○ R subseteq R
+· 使用引理 `SetRel.left_subset_comp`：left_subset_comp {R : SetRel α β} [S.IsRefl] : 
+R subseteq R ○ S
 -/
 lemma comp_eq_self [R.IsRefl] [R.IsTrans] : R ○ R = R :=
   subset_antisymm comp_subset_self left_subset_comp
-
-/--
-lemma `isTrans_iff_comp_subset_self` / 引理 `isTrans_iff_comp_subset_self`
-
-English:
-lemma isTrans_iff_comp_subset_self
-  statement: R.IsTrans ↔ R ○ R subseteq R where
-  proof: comp_subset_self
-  mpr h := ⟨fun _ _ _ hx hy => h ⟨_, hx, hy⟩⟩
-
-中文:
-引理 isTrans_iff_comp_subset_self
-  结论: R.是Trans ↔ R ○ R subseteq R where
-  证明: comp_subset_self
-  mpr h := ⟨fun _ _ _ hx hy => h ⟨_, hx, hy⟩⟩
-
-Depends on / 依赖: comp_subset_self
+/-
+**SetRel.isTrans_iff_comp_subset_self** 是 Mathlib 中的一个引理，位于命名空间 `SetRel`。
+形式化陈述：isTrans_iff_comp_subset_self : R.IsTrans ↔ R ○ R subseteq R where mp _
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SetRel.comp_subset_self`：comp_subset_self [R.IsTrans] : R ○ R subseteq R
 -/
-lemma isTrans_iff_comp_subset_self : R.IsTrans ↔ R ○ R subseteq R where
+lemma isTrans_iff_comp_subset_self : R.IsTrans ↔ R ○ R ⊆ R where
   mp _ := comp_subset_self
-  mpr h := ⟨fun _ _ _ hx hy => h ⟨_, hx, hy⟩⟩
-
-/--
-Instance `isTrans_empty` / 实例 `isTrans_empty`
-
-English:
-instance isTrans_empty
-  signature: : (∅ : SetRel α α).IsTrans where trans _ _ _
-  body: by simp
-
-中文:
-实例 isTrans_empty
-  签名: : (∅ : SetRel α α).是Trans where trans _ _ _
-  定义体: by simp
+  mpr h := ⟨fun _ _ _ hx hy ↦ h ⟨_, hx, hy⟩⟩
+/-
+**SetRel.isTrans_empty** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_empty : (∅ : SetRel α α).IsTrans where trans _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance isTrans_empty : (∅ : SetRel α α).IsTrans where trans _ _ _ := by simp
-/--
-Instance `isTrans_univ` / 实例 `isTrans_univ`
-
-English:
-instance isTrans_univ
-  signature: : SetRel.IsTrans (Set.univ : SetRel α α) where trans _ _ _
-  body: by simp
-
-中文:
-实例 isTrans_univ
-  签名: : SetRel.是Trans (集合.univ : SetRel α α) where trans _ _ _
-  定义体: by simp
+/-
+**SetRel.isTrans_univ** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_univ : SetRel.IsTrans (Set.univ : SetRel α α) where trans _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 instance isTrans_univ : SetRel.IsTrans (Set.univ : SetRel α α) where trans _ _ _ := by simp
-/--
-Instance `isTrans_singleton` / 实例 `isTrans_singleton`
-
-English:
-instance isTrans_singleton
-  signature: (x : α × α)
-  body: by aesop
-
-中文:
-实例 isTrans_singleton
-  签名: (x : α × α)
-  定义体: by aesop
+/-
+**SetRel.isTrans_singleton** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_singleton (x : α × α) : SetRel.IsTrans {x} where trans _ _ _
+参数：x : α × α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance isTrans_singleton (x : α × α) : SetRel.IsTrans {x} where trans _ _ _ := by aesop
-
-/--
-Instance `isTrans_inter` / 实例 `isTrans_inter`
-
-English:
-instance isTrans_inter
-  signature: [R₁.IsTrans] [R₂.IsTrans]
-  body: ⟨R₁.trans hab.1 hbc.1, R₂.trans hab.2 hbc.2⟩
-
-中文:
-实例 isTrans_inter
-  签名: [R₁.是Trans] [R₂.是Trans]
-  定义体: ⟨R₁.trans hab.1 hbc.1, R₂.trans hab.2 hbc.2⟩
+/-
+**SetRel.isTrans_inter** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_inter [R₁.IsTrans] [R₂.IsTrans] : (R₁ inter R₂).IsTrans where tran
+s _a _b _c hab hbc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.trans`：∀ {α : Type u_1} (R : SetRel α α) {a b c : α} [R.IsTrans],
+ (a, b) ∈ R → (b, c) ∈ R → (a, c) ∈ R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-instance isTrans_inter [R₁.IsTrans] [R₂.IsTrans] : (R₁ inter R₂).IsTrans where
+instance isTrans_inter [R₁.IsTrans] [R₂.IsTrans] : (R₁ ∩ R₂).IsTrans where
   trans _a _b _c hab hbc := ⟨R₁.trans hab.1 hbc.1, R₂.trans hab.2 hbc.2⟩
-
-/--
-lemma `IsTrans.sInter` / 引理 `IsTrans.sInter`
-
-English:
-lemma IsTrans.sInter
-  given: {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsTrans)
-  proof: (hℛ R hR).trans _ _ _ (hab R hR) hbc R hR
-
-中文:
-引理 是Trans.集合交集
-  条件: {ℛ : 集合 <| SetRel α α} (hℛ : 对任意 R in ℛ, R.是Trans)
-  证明: (hℛ R hR).trans _ _ _ (hab R hR) hbc R hR
+/-
+**SetRel.IsTrans.sInter** 是 Mathlib 中的一个定理，位于命名空间 `SetRel.IsTrans`。
+形式化陈述：∀ {α : Type u_1} {ℛ : Set (SetRel α α)}, (∀ R ∈ ℛ, R.IsTrans) → SetRel.IsT
+rans (⋂₀ ℛ)
+参数：SetRel α α；∀ R ∈ ℛ, R.IsTrans；⋂₀ ℛ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTrans.trans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsTrans α r] 
+(a b c : α), r a b → r b c → r a c
 -/
-protected lemma IsTrans.sInter {ℛ : Set <| SetRel α α} (hℛ : forall R in ℛ, R.IsTrans) :
+protected lemma IsTrans.sInter {ℛ : Set <| SetRel α α} (hℛ : ∀ R ∈ ℛ, R.IsTrans) :
     SetRel.IsTrans (⋂₀ ℛ) where
-trans _a _b _c hab hbc R hR := (hℛ R hR).trans _ _ _ (hab R hR) hbc R hR
-
-/--
-Instance `isTrans_iInter` / 实例 `isTrans_iInter`
-
-English:
-instance isTrans_iInter
-  signature: {R : ι -> SetRel α α} [forall i, (R i).IsTrans]
-  body: .sInter by simpa
-
-中文:
-实例 isTrans_i整数er
-  签名: {R : ι -> SetRel α α} [对任意 i, (R i).是Trans]
-  定义体: .sInter by simpa
-
-Depends on / 依赖: sInter
+  trans _a _b _c hab hbc R hR := (hℛ R hR).trans _ _ _ (hab R hR) <| hbc R hR
+/-
+**SetRel.isTrans_iInter** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_iInter {R : ι -> SetRel α α} [forall i, (R i).IsTrans] : SetRel.Is
+Trans (⋂ i, R i)
+参数：R i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.IsTrans.sInter`：∀ {α : Type u_1} {ℛ : Set (SetRel α α)}, (∀ R ∈ ℛ
+, R.IsTrans) → SetRel.IsTrans (⋂₀ ℛ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-instance isTrans_iInter {R : ι -> SetRel α α} [forall i, (R i).IsTrans] :
-SetRel.IsTrans (⋂ i, R i) := .sInter by simpa
-
-/--
-Instance `isTrans_id` / 实例 `isTrans_id`
-
-English:
-instance isTrans_id
-  signature: : (.id : SetRel α α).IsTrans where trans _ _ _
-  body: .trans
-
-中文:
-实例 isTrans_id
-  签名: : (.id : SetRel α α).是Trans where trans _ _ _
-  定义体: .trans
+instance isTrans_iInter {R : ι → SetRel α α} [∀ i, (R i).IsTrans] :
+    SetRel.IsTrans (⋂ i, R i) := .sInter <| by simpa
+/-
+**SetRel.isTrans_id** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_id : (.id : SetRel α α).IsTrans where trans _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 instance isTrans_id : (.id : SetRel α α).IsTrans where trans _ _ _ := .trans
-
-/--
-Instance `isTrans_preimage` / 实例 `isTrans_preimage`
-
-English:
-instance isTrans_preimage
-  signature: {f : β -> α} [R.IsTrans]
-  body: R.trans
-
-中文:
-实例 isTrans_preimage
-  签名: {f : β -> α} [R.是Trans]
-  定义体: R.trans
-
-Depends on / 依赖: R.trans
+/-
+**SetRel.isTrans_preimage** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_preimage {f : β -> α} [R.IsTrans] : SetRel.IsTrans (Prod.map f f ⁻
+¹' R) where trans _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.trans`：∀ {α : Type u_1} (R : SetRel α α) {a b c : α} [R.IsTrans],
+ (a, b) ∈ R → (b, c) ∈ R → (a, c) ∈ R
 -/
-instance isTrans_preimage {f : β -> α} [R.IsTrans] : SetRel.IsTrans (Prod.map f f ⁻¹' R) where
+instance isTrans_preimage {f : β → α} [R.IsTrans] : SetRel.IsTrans (Prod.map f f ⁻¹' R) where
   trans _ _ _ := R.trans
-
-/--
-Instance `isTrans_symmetrize` / 实例 `isTrans_symmetrize`
-
-English:
-instance isTrans_symmetrize
-  signature: [R.IsTrans]
-  body: ⟨R.trans hab.1 hbc.1, R.trans hbc.2 hab.2⟩
-
-中文:
-实例 isTrans_symmetrize
-  签名: [R.是Trans]
-  定义体: ⟨R.trans hab.1 hbc.1, R.trans hbc.2 hab.2⟩
-
-Depends on / 依赖: R.trans
+/-
+**SetRel.isTrans_symmetrize** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+形式化陈述：isTrans_symmetrize [R.IsTrans] : R.symmetrize.IsTrans where trans _a _b _c
+ hab hbc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.trans`：∀ {α : Type u_1} (R : SetRel α α) {a b c : α} [R.IsTrans],
+ (a, b) ∈ R → (b, c) ∈ R → (a, c) ∈ R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 instance isTrans_symmetrize [R.IsTrans] : R.symmetrize.IsTrans where
   trans _a _b _c hab hbc := ⟨R.trans hab.1 hbc.1, R.trans hbc.2 hab.2⟩
 
 variable (R) in
-/--
-Definition of `IsIrrefl` / `IsIrrefl` 的定义
+/-- A relation `R` is irreflexive if `¬ a ~[R] a`. -/
+/-
+**SetRel.IsIrrefl** 是 Mathlib 中的一个定义，位于命名空间 `SetRel`。
+形式化陈述：{α : Type u_1} → SetRel α α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsIrrefl
-  signature: : Prop
-  body: Std.Irrefl (· ~[R] ·)
-
-中文:
-缩写 IsIrrefl
-  签名: : 命题
-  定义体: Std.Irrefl (· ~[R] ·)
+--- 原说明 ---
+A relation `R` is irreflexive if `¬ a ~[R] a`.
 -/
 protected abbrev IsIrrefl : Prop := Std.Irrefl (· ~[R] ·)
 
 variable (R a) in
-/--
-lemma `irrefl` / 引理 `irrefl`
-
-English:
-lemma irrefl
-  given: [R.IsIrrefl]
-  statement: ¬ a ~[R] a
-  proof: irrefl_of (· ~[R] ·) _
-
-中文:
-引理 irrefl
-  条件: [R.IsIrrefl]
-  结论: ¬ a ~[R] a
-  证明: irrefl_of (· ~[R] ·) _
+/-
+**SetRel.irrefl** 是 Mathlib 中的一个定理，位于命名空间 `SetRel`。
+形式化陈述：∀ {α : Type u_1} (R : SetRel α α) (a : α) [R.IsIrrefl], (a, a) ∉ R
+参数：R : SetRel α α；a : α；a, a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `irrefl_of`：∀ {α : Sort u_1} (r : α → α → Prop) [Std.Irrefl r] (a : α), ¬
+r a a
 -/
 protected lemma irrefl [R.IsIrrefl] : ¬ a ~[R] a := irrefl_of (· ~[R] ·) _
-
-instance {R : α -> α -> Prop} [Std.Irrefl R] : SetRel.IsIrrefl {(a, b) | R a b} := ‹_›
+/-
+**SetRel.** 是 Mathlib 中的一个实例，位于命名空间 `SetRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {R : α → α → Prop} [Std.Irrefl R] : SetRel.IsIrrefl {(a, b) | R a b} := ‹_›
 
 variable (R) in
-/--
-Definition of `IsWellFounded` / `IsWellFounded` 的定义
+/-- A relation `R` on a type `α` is well-founded if all elements of `α` are accessible within `R`.
+-/
+/-
+**SetRel.IsWellFounded** 是 Mathlib 中的一个缩写定义，位于命名空间 `SetRel`。
+形式化陈述：IsWellFounded : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsWellFounded
-  signature: : Prop
-  body: WellFounded (· ~[R] ·)
-
-中文:
-缩写 是良基
-  签名: : 命题
-  定义体: WellFounded (· ~[R] ·)
-
-Depends on / 依赖: WellFounded
+--- 原说明 ---
+A relation `R` on a type `α` is well-founded if all elements of `α` are accessib
+le within `R`.
 -/
 abbrev IsWellFounded : Prop := WellFounded (· ~[R] ·)
 
 variable (R S) in
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- A relation homomorphism with respect to a given pair of relations `R` and `S` s is a function
+`f : α → β` such that `a ~[R] b → f a ~[s] f b`. -/
+/-
+**SetRel.Hom** 是 Mathlib 中的一个缩写定义，位于命名空间 `SetRel`。
+形式化陈述：Hom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom
-  body: (· ~[R] ·) ->r (· ~[S] ·)
-
-中文:
-缩写 态射
-  定义体: (· ~[R] ·) ->r (· ~[S] ·)
+--- 原说明 ---
+A relation homomorphism with respect to a given pair of relations `R` and `S` s 
+is a function
+`f : α → β` such that `a ~[R] b → f a ~[s] f b`.
 -/
-abbrev Hom := (· ~[R] ·) ->r (· ~[S] ·)
+abbrev Hom := (· ~[R] ·) →r (· ~[S] ·)
 
 end SetRel
 
@@ -2864,191 +2363,164 @@ open Set
 open scoped SetRel
 
 namespace Function
-variable {f : α -> β} {a : α} {b : β}
+variable {f : α → β} {a : α} {b : β}
 
-/--
-Definition of `graph` / `graph` 的定义
+/-- The graph of a function as a relation. -/
+/-
+**Function.graph** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：graph (f : α -> β) : SetRel α β
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition graph
-  signature: (f : α -> β)
-  body: {(a, b) | f a = b}
-
-中文:
-定义 graph
-  签名: (f : α -> β)
-  定义体: {(a, b) | f a = b}
+--- 原说明 ---
+The graph of a function as a relation.
 -/
-def graph (f : α -> β) : SetRel α β := {(a, b) | f a = b}
-
-/--
-lemma `mem_graph` / 引理 `mem_graph`
-
-English:
-lemma mem_graph
-  statement: a ~[f.graph] b ↔ f a = b
-  proof: .rfl
-
-中文:
-引理 mem_graph
-  结论: a ~[f.graph] b ↔ f a = b
-  证明: .rfl
-
-Depends on / 依赖: Algebra
+def graph (f : α → β) : SetRel α β := {(a, b) | f a = b}
+/-
+**Function.mem_graph** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {a : α} {b : β}, (a, b) ∈ Func
+tion.graph f ↔ f a = b
+参数：a, b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma mem_graph : a ~[f.graph] b ↔ f a = b := .rfl
-
-/--
-theorem `graph_injective` / 定理 `graph_injective`
-
-English:
-theorem graph_injective
-  statement: Injective (graph : (α -> β) -> SetRel α β)
-  proof: by
+/-
+**Function.graph_injective** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：graph_injective : Injective (graph : (α -> β) -> SetRel α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem graph_injective : Injective (graph : (α → β) → SetRel α β) := by
   aesop (add simp [Injective, Set.ext_iff])
-
-中文:
-定理 graph_injective
-  结论: 单射 (graph : (α -> β) -> SetRel α β)
-  证明: by
-  aesop (add simp [Injective, Set.ext_iff])
-
-Depends on / 依赖: Injective, IsScalarTower, IsScalarTower.right, Set.ext_iff, ext_iff
+/-
+**Function.graph_inj** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f g : α → β}, Function.graph f = Function
+.graph g ↔ f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.graph_injective`：graph_injective : Injective (graph : (α -> β) 
+-> SetRel α β)
 -/
-theorem graph_injective : Injective (graph : (α -> β) -> SetRel α β) := by
-  aesop (add simp [Injective, Set.ext_iff])
-
-/--
-lemma `graph_inj` / 引理 `graph_inj`
-
-English:
-lemma graph_inj
-  given: {f g : α -> β}
-  statement: f.graph = g.graph ↔ f = g
-  proof: graph_injective.eq_iff
-
-中文:
-引理 graph_inj
-  条件: {f g : α -> β}
-  结论: f.graph = g.graph ↔ f = g
-  证明: graph_injective.eq_iff
+@[simp] lemma graph_inj {f g : α → β} : f.graph = g.graph ↔ f = g := graph_injective.eq_iff
+/-
+**Function.graph_id** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：∀ {α : Type u_1}, Function.graph id = SetRel.id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma graph_inj {f g : α -> β} : f.graph = g.graph ↔ f = g := graph_injective.eq_iff
-
-/--
-lemma `graph_id` / 引理 `graph_id`
-
-English:
-lemma graph_id
-  statement: graph (id : α -> α) = .id
-  proof: by aesop
-
-中文:
-引理 graph_id
-  结论: graph (id : α -> α) = .id
-  证明: by aesop
+@[simp] lemma graph_id : graph (id : α → α) = .id := by aesop
+/-
+**Function.graph_comp** 是 Mathlib 中的一个定理，位于命名空间 `Function`。
+形式化陈述：graph_comp (f : β -> γ) (g : α -> β) : graph (f ∘ g) = graph g ○ graph f
+参数：f : β -> γ；g : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma graph_id : graph (id : α -> α) = .id := by aesop
+theorem graph_comp (f : β → γ) (g : α → β) : graph (f ∘ g) = graph g ○ graph f := by aesop
 
-/--
-theorem `graph_comp` / 定理 `graph_comp`
+/-- The higher-arity graph of a function. Describes α-argument functions from β to β. -/
+/-
+**Function.tupleGraph** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：tupleGraph (f : (α -> β) -> β) : Set (Option α -> β)
+参数：f : (α -> β) -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem graph_comp
-  given: (f : β -> γ) (g : α -> β)
-  statement: graph (f ∘ g) = graph g ○ graph f
-  proof: by aesop
-
-中文:
-定理 graph_comp
-  条件: (f : β -> γ) (g : α -> β)
-  结论: graph (f ∘ g) = graph g ○ graph f
-  证明: by aesop
+--- 原说明 ---
+The higher-arity graph of a function. Describes α-argument functions from β to β
+.
 -/
-theorem graph_comp (f : β -> γ) (g : α -> β) : graph (f ∘ g) = graph g ○ graph f := by aesop
-
-/--
-Definition of `tupleGraph` / `tupleGraph` 的定义
-
-English:
-definition tupleGraph
-  signature: (f : (α -> β) -> β)
-  body: { v | f (v ∘ some) = v none }
-
-中文:
-定义 tupleGraph
-  签名: (f : (α -> β) -> β)
-  定义体: { v | f (v ∘ some) = v none }
-
-Depends on / 依赖: ContMDiffMap, ContMDiffMap.coe_smul, Pi.smul_apply, coe_smul, mul_assoc, smul_apply, smul_def, smul_eq_mul
--/
-def tupleGraph (f : (α -> β) -> β) : Set (Option α -> β) :=
+def tupleGraph (f : (α → β) → β) : Set (Option α → β) :=
   { v | f (v ∘ some) = v none }
 
 end Function
 
-/--
-theorem `Equiv.graph_inv` / 定理 `Equiv.graph_inv`
-
-English:
-theorem Equiv.graph_inv
-  given: (f : α ≃ β)
-  statement: (f.symm : β -> α).graph = SetRel.inv (f : α -> β).graph
-  proof: by
-  aesop
-
-中文:
-定理 等价.graph_inv
-  条件: (f : α ≃ β)
-  结论: (f.symm : β -> α).graph = SetRel.inv (f : α -> β).graph
-  证明: by
-  aesop
+/-
+**Equiv.graph_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.graph_inv (f : α ≃ β) : (f.symm : β -> α).graph = SetRel.inv (f : α 
+-> β).graph
+参数：f : α ≃ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-theorem Equiv.graph_inv (f : α ≃ β) : (f.symm : β -> α).graph = SetRel.inv (f : α -> β).graph := by
+theorem Equiv.graph_inv (f : α ≃ β) : (f.symm : β → α).graph = SetRel.inv (f : α → β).graph := by
   aesop
-
-/--
-lemma `SetRel.exists_graph_eq_iff` / 引理 `SetRel.exists_graph_eq_iff`
-
-English:
-lemma SetRel.exists_graph_eq_iff
-  given: (R : SetRel α β)
-  proof: by
-  constructor
-  · rintro ⟨f, rfl, _⟩ x
-    simp
-  intro h
-  choose f hf using fun x => (h x).exists
-  refine ⟨f, ?_, by aesop⟩
-  ext ⟨a, b⟩
-  constructor
-  · aesop
-  · exact (h _).unique (hf _)
-
-中文:
-引理 SetRel.存在_graph_eq_iff
-  条件: (R : SetRel α β)
-  证明: by
-  constructor
-  · rintro ⟨f, rfl, _⟩ x
-    simp
-  intro h
-  choose f hf using fun x => (h x).exists
-  refine ⟨f, ?_, by aesop⟩
-  ext ⟨a, b⟩
-  constructor
-  · aesop
-  · exact (h _).unique (hf _)
-
-Depends on / 依赖: unique
+/-
+**SetRel.exists_graph_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SetRel.exists_graph_eq_iff (R : SetRel α β) : (exists! f, Function.graph f
+ = R) ↔ forall a, exists! b, a ~[R] b
+参数：R : SetRel α β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ExistsUnique.exists`：∀ {α : Sort u_1} {p : α → Prop}, (∃! x, p x) → ∃ x,
+ p x
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma SetRel.exists_graph_eq_iff (R : SetRel α β) :
-    (exists! f, Function.graph f = R) ↔ forall a, exists! b, a ~[R] b := by
+    (∃! f, Function.graph f = R) ↔ ∀ a, ∃! b, a ~[R] b := by
   constructor
   · rintro ⟨f, rfl, _⟩ x
     simp
   intro h
-  choose f hf using fun x => (h x).exists
+  choose f hf using fun x ↦ (h x).exists
   refine ⟨f, ?_, by aesop⟩
   ext ⟨a, b⟩
   constructor
@@ -3057,83 +2529,69 @@ lemma SetRel.exists_graph_eq_iff (R : SetRel α β) :
 
 namespace Set
 
-/--
-theorem `image_eq` / 定理 `image_eq`
-
-English:
-theorem image_eq
-  given: (f : α -> β) (s : Set α)
-  statement: f '' s = (Function.graph f).image s
-  proof: by
-  rfl
-
-中文:
-定理 image_eq
-  条件: (f : α -> β) (s : 集合 α)
-  结论: f '' s = (函数.graph f).像 s
-  证明: by
-  rfl
+/-
+**Set.image_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：image_eq (f : α -> β) (s : Set α) : f '' s = (Function.graph f).image s
+参数：f : α -> β；s : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem image_eq (f : α -> β) (s : Set α) : f '' s = (Function.graph f).image s := by
+theorem image_eq (f : α → β) (s : Set α) : f '' s = (Function.graph f).image s := by
   rfl
-
-/--
-theorem `preimage_eq` / 定理 `preimage_eq`
-
-English:
-theorem preimage_eq
-  given: (f : α -> β) (s : Set β)
-  statement: f ⁻¹' s = (Function.graph f).preimage s
-  proof: by
-  simp [Set.preimage, SetRel.preimage]
-
-中文:
-定理 preimage_eq
-  条件: (f : α -> β) (s : 集合 β)
-  结论: f ⁻¹' s = (函数.graph f).原像 s
-  证明: by
-  simp [Set.preimage, SetRel.preimage]
-
-Depends on / 依赖: Set.preimage, SetRel, SetRel.preimage, preimage
+/-
+**Set.preimage_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：preimage_eq (f : α -> β) (s : Set β) : f ⁻¹' s = (Function.graph f).preima
+ge s
+参数：f : α -> β；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem preimage_eq (f : α -> β) (s : Set β) : f ⁻¹' s = (Function.graph f).preimage s := by
+theorem preimage_eq (f : α → β) (s : Set β) : f ⁻¹' s = (Function.graph f).preimage s := by
   simp [Set.preimage, SetRel.preimage]
-
-/--
-theorem `preimage_eq_core` / 定理 `preimage_eq_core`
-
-English:
-theorem preimage_eq_core
-  given: (f : α -> β) (s : Set β)
-  statement: f ⁻¹' s = (Function.graph f).core s
-  proof: by
-  simp [Set.preimage, SetRel.core]
-
-中文:
-定理 preimage_eq_core
-  条件: (f : α -> β) (s : 集合 β)
-  结论: f ⁻¹' s = (函数.graph f).core s
-  证明: by
-  simp [Set.preimage, SetRel.core]
-
-Depends on / 依赖: Set.preimage, SetRel, SetRel.core, preimage
+/-
+**Set.preimage_eq_core** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：preimage_eq_core (f : α -> β) (s : Set β) : f ⁻¹' s = (Function.graph f).c
+ore s
+参数：f : α -> β；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem preimage_eq_core (f : α -> β) (s : Set β) : f ⁻¹' s = (Function.graph f).core s := by
+theorem preimage_eq_core (f : α → β) (s : Set β) : f ⁻¹' s = (Function.graph f).core s := by
   simp [Set.preimage, SetRel.core]
 
 end Set
 
-/--
-Definition of `Rel` / `Rel` 的定义
+/-- A shorthand for `α → β → Prop`.
 
-English:
-abbreviation Rel
-  signature: (α β : Type*)
-  body: α -> β -> Prop
+Consider using `SetRel` instead if you want extra API for relations. -/
+/-
+**Rel** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Rel (α β : Type*) : Type _
+参数：α β : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 关系
-  签名: (α β : 类型)
-  定义体: α -> β -> Prop
+--- 原说明 ---
+A shorthand for `α → β → Prop`.
+
+Consider using `SetRel` instead if you want extra API for relations.
 -/
-abbrev Rel (α β : Type*) : Type _ := α -> β -> Prop
+abbrev Rel (α β : Type*) : Type _ := α → β → Prop

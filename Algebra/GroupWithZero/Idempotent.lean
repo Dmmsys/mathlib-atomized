@@ -22,50 +22,24 @@ namespace IsIdempotentElem
 section MulZeroClass
 variable [MulZeroClass M₀]
 
-/--
-lemma `zero` / 引理 `zero`
-
-English:
-lemma zero
-  statement: IsIdempotentElem (0 : M₀)
-  proof: mul_zero _
-
-中文:
-引理 zero
-  结论: IsIdempotentElem (0 : M₀)
-  证明: mul_zero _
-
-Depends on / 依赖: mul_zero
+/-
+**IsIdempotentElem.zero** 是 Mathlib 中的一个引理，位于命名空间 `IsIdempotentElem`。
+形式化陈述：zero : IsIdempotentElem (0 : M₀)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 lemma zero : IsIdempotentElem (0 : M₀) := mul_zero _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero { p : M₀ // IsIdempotentElem p }
-  body: ⟨0, zero⟩
-
-中文:
-实例 :
-  签名: 零 { p : M₀ // IsIdempotentElem p }
-  定义体: ⟨0, zero⟩
+/-
+**IsIdempotentElem.** 是 Mathlib 中的一个实例，位于命名空间 `IsIdempotentElem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero { p : M₀ // IsIdempotentElem p } where zero := ⟨0, zero⟩
-
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  statement: ↑(0 : { p : M₀ // IsIdempotentElem p }) = (0 : M₀)
-  proof: rfl
-
-中文:
-引理 coe_zero
-  结论: ↑(0 : { p : M₀ // IsIdempotentElem p }) = (0 : M₀)
-  证明: rfl
+/-
+**IsIdempotentElem.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsIdempotentElem`。
+形式化陈述：∀ {M₀ : Type u_1} [inst : MulZeroClass M₀], ↑0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_zero : ↑(0 : { p : M₀ // IsIdempotentElem p }) = (0 : M₀) := rfl
 
@@ -75,28 +49,28 @@ section CancelMonoidWithZero
 variable {G₀ : Type*} [MonoidWithZero G₀] [IsLeftCancelMulZero G₀]
 
 @[simp]
-/--
-lemma `iff_eq_zero_or_one` / 引理 `iff_eq_zero_or_one`
-
-English:
-lemma iff_eq_zero_or_one
-  given: {p : G₀}
-  statement: IsIdempotentElem p ↔ p = 0 ∨ p = 1 where
-  proof: or_iff_not_imp_left.mpr fun hp => mul_left_cancel₀ hp (h.trans (mul_one p).symm)
-  mpr h := h.elim (fun hp => hp.symm ▸ zero) fun hp => hp.symm ▸ one
-
-中文:
-引理 iff_eq_zero_or_one
-  条件: {p : G₀}
-  结论: IsIdempotentElem p ↔ p = 0 ∨ p = 1 where
-  证明: or_iff_not_imp_left.mpr fun hp => mul_left_cancel₀ hp (h.trans (mul_one p).symm)
-  mpr h := h.elim (fun hp => hp.symm ▸ zero) fun hp => hp.symm ▸ one
-
-Depends on / 依赖: h.trans, mul_one, or_iff_not_imp_left, or_iff_not_imp_left.mpr
+/-
+**IsIdempotentElem.iff_eq_zero_or_one** 是 Mathlib 中的一个引理，位于命名空间 `IsIdempotentEle
+m`。
+形式化陈述：iff_eq_zero_or_one {p : G₀} : IsIdempotentElem p ↔ p = 0 ∨ p = 1 where mp 
+h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用引理 `IsIdempotentElem.zero`：zero : IsIdempotentElem (0 : M₀)
+· 使用引理 `IsIdempotentElem.one`：one : IsIdempotentElem (1 : M)
 -/
 lemma iff_eq_zero_or_one {p : G₀} : IsIdempotentElem p ↔ p = 0 ∨ p = 1 where
-  mp h := or_iff_not_imp_left.mpr fun hp => mul_left_cancel₀ hp (h.trans (mul_one p).symm)
+  mp h := or_iff_not_imp_left.mpr fun hp ↦ mul_left_cancel₀ hp (h.trans (mul_one p).symm)
   mpr h := h.elim (fun hp => hp.symm ▸ zero) fun hp => hp.symm ▸ one
 
 end CancelMonoidWithZero
 end IsIdempotentElem
+

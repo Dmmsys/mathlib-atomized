@@ -87,458 +87,622 @@ namespace Projective
 /-! ## Negation on projective point representatives -/
 
 variable (W') in
-/--
-Definition of `neg` / `neg` 的定义
+/-- The negation of a projective point representative on a Weierstrass curve. -/
+/-
+**WeierstrassCurve.Projective.neg** 是 Mathlib 中的一个定义，位于命名空间 `WeierstrassCurve.Pr
+ojective`。
+形式化陈述：neg (P : Fin 3 -> R) : Fin 3 -> R
+参数：P : Fin 3 -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition neg
-  signature: (P : Fin 3 -> R)
-  body: ![P x, W'.negY P, P z]
-
-中文:
-定义 neg
-  签名: (P : 有限集 3 -> R)
-  定义体: ![P x, W'.negY P, P z]
+--- 原说明 ---
+The negation of a projective point representative on a Weierstrass curve.
 -/
-def neg (P : Fin 3 -> R) : Fin 3 -> R :=
+def neg (P : Fin 3 → R) : Fin 3 → R :=
   ![P x, W'.negY P, P z]
-
-/--
-lemma `neg_X` / 引理 `neg_X`
-
-English:
-lemma neg_X
-  given: (P : Fin 3 -> R)
-  statement: W'.neg P x = P x
-  proof: rfl
-
-中文:
-引理 neg_X
-  条件: (P : 有限集 3 -> R)
-  结论: W'.neg P x = P x
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.neg_X** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCurve.
+Projective`。
+形式化陈述：neg_X (P : Fin 3 -> R) : W'.neg P x = P x
+参数：P : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma neg_X (P : Fin 3 -> R) : W'.neg P x = P x :=
+lemma neg_X (P : Fin 3 → R) : W'.neg P x = P x :=
   rfl
-
-/--
-lemma `neg_Y` / 引理 `neg_Y`
-
-English:
-lemma neg_Y
-  given: (P : Fin 3 -> R)
-  statement: W'.neg P y = W'.negY P
-  proof: rfl
-
-中文:
-引理 neg_Y
-  条件: (P : 有限集 3 -> R)
-  结论: W'.neg P y = W'.negY P
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.neg_Y** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCurve.
+Projective`。
+形式化陈述：neg_Y (P : Fin 3 -> R) : W'.neg P y = W'.negY P
+参数：P : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma neg_Y (P : Fin 3 -> R) : W'.neg P y = W'.negY P :=
+lemma neg_Y (P : Fin 3 → R) : W'.neg P y = W'.negY P :=
   rfl
-
-/--
-lemma `neg_Z` / 引理 `neg_Z`
-
-English:
-lemma neg_Z
-  given: (P : Fin 3 -> R)
-  statement: W'.neg P z = P z
-  proof: rfl
-
-中文:
-引理 neg_Z
-  条件: (P : 有限集 3 -> R)
-  结论: W'.neg P z = P z
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.neg_Z** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCurve.
+Projective`。
+形式化陈述：neg_Z (P : Fin 3 -> R) : W'.neg P z = P z
+参数：P : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-lemma neg_Z (P : Fin 3 -> R) : W'.neg P z = P z :=
+lemma neg_Z (P : Fin 3 → R) : W'.neg P z = P z :=
   rfl
-
-/--
-lemma `neg_smul` / 引理 `neg_smul`
-
-English:
-lemma neg_smul
-  given: (P : Fin 3 -> R) (u : R)
-  statement: W'.neg (u • P) = u • W'.neg P
-  proof: by
-  simpa only [neg, negY_smul] using! (smul_fin3 (W'.neg P) u).symm
-
-中文:
-引理 neg_smul
-  条件: (P : 有限集 3 -> R) (u : R)
-  结论: W'.neg (u • P) = u • W'.neg P
-  证明: by
-  simpa only [neg, negY_smul] using! (smul_fin3 (W'.neg P) u).symm
+/-
+**WeierstrassCurve.Projective.neg_smul** 是 Mathlib 中的一个定理，位于命名空间 `WeierstrassCur
+ve.Projective`。
+形式化陈述：∀ {R : Type r} [inst : CommRing R] {W' : WeierstrassCurve.Projective R} (P
+ : Fin 3 → R) (u : R),   W'.neg (u • P) = u • W'.neg P
+参数：P : Fin 3 → R；u : R；u • P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.negY_smul`：negY_smul (P : Fin 3 -> R) (u : R
+) : W'.negY (u • P) = u * W'.negY P
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `WeierstrassCurve.Projective.smul_fin3`：smul_fin3 (P : Fin 3 -> R) (u : R
+) : u • P = ![u * P x, u * P y, u * P z]
 -/
-protected lemma neg_smul (P : Fin 3 -> R) (u : R) : W'.neg (u • P) = u • W'.neg P := by
+protected lemma neg_smul (P : Fin 3 → R) (u : R) : W'.neg (u • P) = u • W'.neg P := by
   simpa only [neg, negY_smul] using! (smul_fin3 (W'.neg P) u).symm
-
-/--
-lemma `neg_smul_equiv` / 引理 `neg_smul_equiv`
-
-English:
-lemma neg_smul_equiv
-  given: (P : Fin 3 -> R) {u : R} (hu : IsUnit u)
-  statement: W'.neg (u • P) ≈ W'.neg P
-  proof: ⟨hu.unit, (W'.neg_smul ..).symm⟩
-
-中文:
-引理 neg_smul_equiv
-  条件: (P : 有限集 3 -> R) {u : R} (hu : 是单位 u)
-  结论: W'.neg (u • P) ≈ W'.neg P
-  证明: ⟨hu.unit, (W'.neg_smul ..).symm⟩
-
-Depends on / 依赖: hu.unit, neg_smul
+/-
+**WeierstrassCurve.Projective.neg_smul_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Weierstr
+assCurve.Projective`。
+形式化陈述：neg_smul_equiv (P : Fin 3 -> R) {u : R} (hu : IsUnit u) : W'.neg (u • P) ≈
+ W'.neg P
+参数：P : Fin 3 -> R；hu : IsUnit u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `WeierstrassCurve.Projective.neg_smul`：∀ {R : Type r} [inst : CommRing R]
+ {W' : WeierstrassCurve.Projective R} (P : Fin 3 → R) (u : R),   W'.neg (u • P) 
+= u • W'.neg P
 -/
-lemma neg_smul_equiv (P : Fin 3 -> R) {u : R} (hu : IsUnit u) : W'.neg (u • P) ≈ W'.neg P :=
+lemma neg_smul_equiv (P : Fin 3 → R) {u : R} (hu : IsUnit u) : W'.neg (u • P) ≈ W'.neg P :=
   ⟨hu.unit, (W'.neg_smul ..).symm⟩
-
-/--
-lemma `neg_equiv` / 引理 `neg_equiv`
-
-English:
-lemma neg_equiv
-  given: {P Q : Fin 3 -> R} (h : P ≈ Q)
-  statement: W'.neg P ≈ W'.neg Q
-  proof: by
-  rcases h with ⟨u, rfl⟩
-  exact neg_smul_equiv Q u.isUnit
-
-中文:
-引理 neg_equiv
-  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
-  结论: W'.neg P ≈ W'.neg Q
-  证明: by
-  rcases h with ⟨u, rfl⟩
-  exact neg_smul_equiv Q u.isUnit
-
-Depends on / 依赖: isUnit, neg_smul_equiv, u.isUnit
+/-
+**WeierstrassCurve.Projective.neg_equiv** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCu
+rve.Projective`。
+形式化陈述：neg_equiv {P Q : Fin 3 -> R} (h : P ≈ Q) : W'.neg P ≈ W'.neg Q
+参数：h : P ≈ Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.neg_smul_equiv`：neg_smul_equiv (P : Fin 3 ->
+ R) {u : R} (hu : IsUnit u) : W'.neg (u • P) ≈ W'.neg P
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-lemma neg_equiv {P Q : Fin 3 -> R} (h : P ≈ Q) : W'.neg P ≈ W'.neg Q := by
+lemma neg_equiv {P Q : Fin 3 → R} (h : P ≈ Q) : W'.neg P ≈ W'.neg Q := by
   rcases h with ⟨u, rfl⟩
   exact neg_smul_equiv Q u.isUnit
-
-/--
-lemma `neg_of_Z_eq_zero` / 引理 `neg_of_Z_eq_zero`
-
-English:
-lemma neg_of_Z_eq_zero
-  given: [NoZeroDivisors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
-  proof: by
-  simp [neg, X_eq_zero_of_Z_eq_zero hP hPz, negY_of_Z_eq_zero hP hPz, hPz]
-
-中文:
-引理 neg_of_Z_eq_zero
-  条件: [无零因子 R] {P : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
-  证明: by
-  simp [neg, X_eq_zero_of_Z_eq_zero hP hPz, negY_of_Z_eq_zero hP hPz, hPz]
-
-Depends on / 依赖: X_eq_zero_of_Z_eq_zero, negY_of_Z_eq_zero
+/-
+**WeierstrassCurve.Projective.neg_of_Z_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Weiers
+trassCurve.Projective`。
+形式化陈述：neg_of_Z_eq_zero [NoZeroDivisors R] {P : Fin 3 -> R} (hP : W'.Equation P) 
+(hPz : P z = 0) : W'.neg P = -P y • ![0, 1, 0]
+参数：hP : W'.Equation P；hPz : P z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.X_eq_zero_of_Z_eq_zero`：X_eq_zero_of_Z_eq_ze
+ro [NoZeroDivisors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) : P 
+x = 0
+· 使用引理 `WeierstrassCurve.Projective.negY_of_Z_eq_zero`：negY_of_Z_eq_zero [NoZero
+Divisors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) : W'.negY P = 
+-P y
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `Matrix.smul_cons`：∀ {α : Type u_1} {M : Type u_2} {n : ℕ} [inst : SMul M
+ α] (x : M) (y : α) (v : Fin n → α),   x • Matrix.vecCons y v = Matrix.vecCons (
+x • y)…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Matrix.smul_empty`：∀ {α : Type u_1} {M : Type u_2} [inst : SMul M α] (x 
+: M) (v : Fin 0 → α), x • v = ![]
+· 使用定理 `Matrix.neg_cons`：∀ {α : Type u_1} {n : ℕ} [inst : Neg α] (x : α) (v : Fi
+n n → α), -Matrix.vecCons x v = Matrix.vecCons (-x) (-v)
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `Matrix.neg_empty`：∀ {α : Type u_1} [inst : Neg α] (v : Fin 0 → α), -v = 
+![]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma neg_of_Z_eq_zero [NoZeroDivisors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) :
+lemma neg_of_Z_eq_zero [NoZeroDivisors R] {P : Fin 3 → R} (hP : W'.Equation P) (hPz : P z = 0) :
     W'.neg P = -P y • ![0, 1, 0] := by
   simp [neg, X_eq_zero_of_Z_eq_zero hP hPz, negY_of_Z_eq_zero hP hPz, hPz]
-
-/--
-lemma `neg_of_Z_ne_zero` / 引理 `neg_of_Z_ne_zero`
-
-English:
-lemma neg_of_Z_ne_zero
-  given: {P : Fin 3 -> F} (hPz : P z != 0)
-  proof: by
-  erw [neg, smul_fin3, mul_div_cancel₀ _ hPz, ← negY_of_Z_ne_zero hPz, mul_div_cancel₀ _ hPz,
-    mul_one]
-
-中文:
-引理 neg_of_Z_ne_zero
-  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
-  证明: by
-  erw [neg, smul_fin3, mul_div_cancel₀ _ hPz, ← negY_of_Z_ne_zero hPz, mul_div_cancel₀ _ hPz,
-    mul_one]
-
-Depends on / 依赖: mul_one, negY_of_Z_ne_zero, smul_fin3
+/-
+**WeierstrassCurve.Projective.neg_of_Z_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Weiers
+trassCurve.Projective`。
+形式化陈述：neg_of_Z_ne_zero {P : Fin 3 -> F} (hPz : P z != 0) : W.neg P = P z • ![P x
+ / P z, W.toAffine.negY (P x / P z) (P y / P z), 1]
+参数：hPz : P z != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.neg.eq_1`：∀ {R : Type r} [inst : CommRing R]
+ (W' : WeierstrassCurve.Projective R) (P : Fin 3 → R),   W'.neg P = ![P 0, W'.ne
+gY P, P 2]
+· 使用引理 `WeierstrassCurve.Projective.smul_fin3`：smul_fin3 (P : Fin 3 -> R) (u : R
+) : u • P = ![u * P x, u * P y, u * P z]
+· 使用引理 `mul_div_cancel₀`：mul_div_cancel₀ (a : G₀) (hb : b != 0) : b * (a / b) = 
+a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `WeierstrassCurve.Projective.negY_of_Z_ne_zero`：negY_of_Z_ne_zero {P : Fi
+n 3 -> F} (hPz : P z != 0) : W.negY P / P z = W.toAffine.negY (P x / P z) (P y /
+ P z)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-lemma neg_of_Z_ne_zero {P : Fin 3 -> F} (hPz : P z != 0) :
+lemma neg_of_Z_ne_zero {P : Fin 3 → F} (hPz : P z ≠ 0) :
     W.neg P = P z • ![P x / P z, W.toAffine.negY (P x / P z) (P y / P z), 1] := by
   erw [neg, smul_fin3, mul_div_cancel₀ _ hPz, ← negY_of_Z_ne_zero hPz, mul_div_cancel₀ _ hPz,
     mul_one]
-
-/--
-lemma `nonsingular_neg_of_Z_ne_zero` / 引理 `nonsingular_neg_of_Z_ne_zero`
-
-English:
-lemma nonsingular_neg_of_Z_ne_zero
-  given: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0)
-  proof: (nonsingular_some ..).mpr (Affine.nonsingular_neg ..).mpr
-    (nonsingular_of_Z_ne_zero hPz).mp hP
-
-中文:
-引理 nonsingular_neg_of_Z_ne_zero
-  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z != 0)
-  证明: (nonsingular_some ..).mpr (Affine.nonsingular_neg ..).mpr
-    (nonsingular_of_Z_ne_zero hPz).mp hP
+/-
+**WeierstrassCurve.Projective.nonsingular_neg_of_Z_ne_zero** 是 Mathlib 中的一个引理，位于
+命名空间 `WeierstrassCurve.Projective`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma nonsingular_neg_of_Z_ne_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) :
+private lemma nonsingular_neg_of_Z_ne_zero {P : Fin 3 → F} (hP : W.Nonsingular P) (hPz : P z ≠ 0) :
     W.Nonsingular ![P x / P z, W.toAffine.negY (P x / P z) (P y / P z), 1] :=
-(nonsingular_some ..).mpr (Affine.nonsingular_neg ..).mpr
+  (nonsingular_some ..).mpr <| (Affine.nonsingular_neg ..).mpr <|
     (nonsingular_of_Z_ne_zero hPz).mp hP
-
-/--
-lemma `nonsingular_neg` / 引理 `nonsingular_neg`
-
-English:
-lemma nonsingular_neg
-  given: {P : Fin 3 -> F} (hP : W.Nonsingular P)
-  statement: W.Nonsingular W.neg P
-  proof: by
+/-
+**WeierstrassCurve.Projective.nonsingular_neg** 是 Mathlib 中的一个引理，位于命名空间 `Weierst
+rassCurve.Projective`。
+形式化陈述：nonsingular_neg {P : Fin 3 -> F} (hP : W.Nonsingular P) : W.Nonsingular W.
+neg P
+参数：hP : W.Nonsingular P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.neg_of_Z_eq_zero`：neg_of_Z_eq_zero [NoZeroDi
+visors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) : W'.neg P = -P 
+y • ![0, 1, 0]
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_smul`：nonsingular_smul (P : Fin 
+3 -> R) {u : R} (hu : IsUnit u) : W'.Nonsingular (u • P) ↔ W'.Nonsingular P
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用引理 `WeierstrassCurve.Projective.isUnit_Y_of_Z_eq_zero`：isUnit_Y_of_Z_eq_zero
+ {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : IsUnit (P y)
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用引理 `WeierstrassCurve.Projective.neg_of_Z_ne_zero`：neg_of_Z_ne_zero {P : Fin 
+3 -> F} (hPz : P z != 0) : W.neg P = P z • ![P x / P z, W.toAffine.negY (P x / P
+ z) (P y / P z), 1]
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `_private.Mathlib.AlgebraicGeometry.EllipticCurve.Projective.Point.0.Weie
+rstrassCurve.Projective.nonsingular_neg_of_Z_ne_zero`：∀ {F : Type u} [inst : Fie
+ld F] {W : WeierstrassCurve.Projective F} {P : Fin 3 → F},   W.Nonsingular P → P
+ 2 ≠ 0 → W.Nonsingular ![P 0 / P 2…
+-/
+lemma nonsingular_neg {P : Fin 3 → F} (hP : W.Nonsingular P) : W.Nonsingular <| W.neg P := by
   by_cases hPz : P z = 0
   · simp only [neg_of_Z_eq_zero hP.left hPz, nonsingular_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).neg,
       nonsingular_zero]
   · simp only [neg_of_Z_ne_zero hPz, nonsingular_smul _ <| Ne.isUnit hPz,
       nonsingular_neg_of_Z_ne_zero hP hPz]
-
-中文:
-引理 nonsingular_neg
-  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P)
-  结论: W.非奇异 W.neg P
-  证明: by
-  by_cases hPz : P z = 0
-  · simp only [neg_of_Z_eq_zero hP.left hPz, nonsingular_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).neg,
-      nonsingular_zero]
-  · simp only [neg_of_Z_ne_zero hPz, nonsingular_smul _ <| Ne.isUnit hPz,
-      nonsingular_neg_of_Z_ne_zero hP hPz]
-
-Depends on / 依赖: Ne.isUnit, hP.left, isUnit, isUnit_Y_of_Z_eq_zero, neg_of_Z_eq_zero, neg_of_Z_ne_zero, nonsingular_neg_of_Z_ne_zero, nonsingular_smul, nonsingular_zero
+/-
+**WeierstrassCurve.Projective.addZ_neg** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCur
+ve.Projective`。
+形式化陈述：addZ_neg (P : Fin 3 -> R) : W'.addZ P (W'.neg P) = 0
+参数：P : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.addZ.eq_1`：∀ {R : Type r} [inst : CommRing R
+] (W' : WeierstrassCurve.Projective R) (P Q : Fin 3 → R),   W'.addZ P Q =     -3
+ * P 0 ^ 2 * Q 0 * Q 2 + 3 …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `WeierstrassCurve.Projective.neg_X`：neg_X (P : Fin 3 -> R) : W'.neg P x =
+ P x
+· 使用引理 `WeierstrassCurve.Projective.neg_Y`：neg_Y (P : Fin 3 -> R) : W'.neg P y =
+ W'.negY P
+· 使用引理 `WeierstrassCurve.Projective.neg_Z`：neg_Z (P : Fin 3 -> R) : W'.neg P z =
+ P z
+· 使用定理 `WeierstrassCurve.Projective.negY.eq_1`：∀ {R : Type r} [inst : CommRing R
+] (W' : WeierstrassCurve.Projective R) (P : Fin 3 → R),   W'.negY P = -P 1 - W'.
+a₁ * P 0 - W'.a₃ * P 2
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' c : R} {b b' : ℕ}, a = a' → b = b' → a' ^ b' = c → a ^ b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a c₁ c₂ : R} {b₁ b₂ : ℕ} {d : R},   a ^ b₁ = c₁ → a ^ b₂ = c₂ → c₁ * c₂ = 
+d → a ^ (b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.single_pow`：∀ {R : Type u_1} [inst : CommSemi
+ring R] {a c : R} {b : ℕ}, a ^ b = c → (a + 0) ^ b = c + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pow_mul`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₂ c₂ : R} {ea₁ b c₁ : ℕ} {xa₁ c₃ d : R},   ea₁ * b = c₁ → a₂ ^ b = c₂
+ → xa₁ ^ c₁ * Nat.rawCast 1 …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Tactic.Ring.Common.one_pow`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a : R} (b : ℕ), Mathlib.Meta.NormNum.IsNat a 1 → a ^ b = a
+（共 60 条，此处仅展示前 30 条）
 -/
-lemma nonsingular_neg {P : Fin 3 -> F} (hP : W.Nonsingular P) : W.Nonsingular W.neg P := by
-  by_cases hPz : P z = 0
-  · simp only [neg_of_Z_eq_zero hP.left hPz, nonsingular_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).neg,
-      nonsingular_zero]
-  · simp only [neg_of_Z_ne_zero hPz, nonsingular_smul _ <| Ne.isUnit hPz,
-      nonsingular_neg_of_Z_ne_zero hP hPz]
-
-/--
-lemma `addZ_neg` / 引理 `addZ_neg`
-
-English:
-lemma addZ_neg
-  given: (P : Fin 3 -> R)
-  statement: W'.addZ P (W'.neg P) = 0
-  proof: by
-  rw [addZ]; rw [neg_X]; rw [neg_Y]; rw [neg_Z]; rw [negY]
+lemma addZ_neg (P : Fin 3 → R) : W'.addZ P (W'.neg P) = 0 := by
+  rw [addZ, neg_X, neg_Y, neg_Z, negY]
   ring1
-
-中文:
-引理 addZ_neg
-  条件: (P : 有限集 3 -> R)
-  结论: W'.addZ P (W'.neg P) = 0
-  证明: by
-  rw [addZ]; rw [neg_X]; rw [neg_Y]; rw [neg_Z]; rw [negY]
-  ring1
-
-Depends on / 依赖: neg_X, neg_Y, neg_Z
+/-
+**WeierstrassCurve.Projective.addX_neg** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCur
+ve.Projective`。
+形式化陈述：addX_neg (P : Fin 3 -> R) : W'.addX P (W'.neg P) = 0
+参数：P : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.addX.eq_1`：∀ {R : Type r} [inst : CommRing R
+] (W' : WeierstrassCurve.Projective R) (P Q : Fin 3 → R),   W'.addX P Q =     -P
+ 0 * Q 1 ^ 2 * P 2 + Q 0 * …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `WeierstrassCurve.Projective.neg_X`：neg_X (P : Fin 3 -> R) : W'.neg P x =
+ P x
+· 使用引理 `WeierstrassCurve.Projective.neg_Y`：neg_Y (P : Fin 3 -> R) : W'.neg P y =
+ W'.negY P
+· 使用引理 `WeierstrassCurve.Projective.neg_Z`：neg_Z (P : Fin 3 -> R) : W'.neg P z =
+ P z
+· 使用定理 `WeierstrassCurve.Projective.negY.eq_1`：∀ {R : Type r} [inst : CommRing R
+] (W' : WeierstrassCurve.Projective R) (P : Fin 3 → R),   W'.negY P = -P 1 - W'.
+a₁ * P 0 - W'.a₃ * P 2
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' c : R} {b b' : ℕ}, a = a' → b = b' → a' ^ b' = c → a ^ b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 60 条，此处仅展示前 30 条）
 -/
-lemma addZ_neg (P : Fin 3 -> R) : W'.addZ P (W'.neg P) = 0 := by
-  rw [addZ]; rw [neg_X]; rw [neg_Y]; rw [neg_Z]; rw [negY]
+lemma addX_neg (P : Fin 3 → R) : W'.addX P (W'.neg P) = 0 := by
+  rw [addX, neg_X, neg_Y, neg_Z, negY]
   ring1
-
-/--
-lemma `addX_neg` / 引理 `addX_neg`
-
-English:
-lemma addX_neg
-  given: (P : Fin 3 -> R)
-  statement: W'.addX P (W'.neg P) = 0
-  proof: by
-  rw [addX]; rw [neg_X]; rw [neg_Y]; rw [neg_Z]; rw [negY]
-  ring1
-
-中文:
-引理 addX_neg
-  条件: (P : 有限集 3 -> R)
-  结论: W'.addX P (W'.neg P) = 0
-  证明: by
-  rw [addX]; rw [neg_X]; rw [neg_Y]; rw [neg_Z]; rw [negY]
-  ring1
-
-Depends on / 依赖: neg_X, neg_Y, neg_Z
+/-
+**WeierstrassCurve.Projective.negAddY_neg** 是 Mathlib 中的一个引理，位于命名空间 `Weierstrass
+Curve.Projective`。
+形式化陈述：negAddY_neg {P : Fin 3 -> R} (hP : W'.Equation P) : W'.negAddY P (W'.neg P
+) = W'.dblZ P
+参数：hP : W'.Equation P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.LinearCombination.eq_of_eq`：eq_of_eq [Add α] [IsRightCanc
+elAdd α] (p : (a : α) = b) (H : a' + b = b' + a) : a' = b'
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Mathlib.Tactic.LinearCombination.mul_const_eq`：mul_const_eq [Mul α] (p :
+ b = c) (a : α) : a * b = a * c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.equation_iff`：equation_iff (P : Fin 3 -> R) 
+: W'.Equation P ↔ P y ^ 2 * P z + W'.a₁ * P x * P y * P z + W'.a₃ * P y * P z ^ 
+2 - (P x ^ 3 + W'.a₂ * P x ^ 2…
+· 使用定理 `Mathlib.Tactic.LinearCombination.eq_rearrange`：∀ {G : Type u_3} [inst : 
+AddGroup G] {a b : G}, a - b = 0 → a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.negAddY.eq_1`：∀ {R : Type r} [inst : CommRin
+g R] (W' : WeierstrassCurve.Projective R) (P Q : Fin 3 → R),   W'.negAddY P Q = 
+    -3 * P 0 ^ 2 * Q 0 * Q 1 +…
+· 使用引理 `WeierstrassCurve.Projective.neg_X`：neg_X (P : Fin 3 -> R) : W'.neg P x =
+ P x
+· 使用引理 `WeierstrassCurve.Projective.neg_Y`：neg_Y (P : Fin 3 -> R) : W'.neg P y =
+ W'.negY P
+· 使用引理 `WeierstrassCurve.Projective.neg_Z`：neg_Z (P : Fin 3 -> R) : W'.neg P z =
+ P z
+· 使用定理 `WeierstrassCurve.Projective.dblZ.eq_1`：∀ {R : Type r} [inst : CommRing R
+] (W' : WeierstrassCurve.Projective R) (P : Fin 3 → R),   W'.dblZ P = P 2 * (P 1
+ - W'.negY P) ^ 3
+· 使用定理 `WeierstrassCurve.Projective.negY.eq_1`：∀ {R : Type r} [inst : CommRing R
+] (W' : WeierstrassCurve.Projective R) (P : Fin 3 → R),   W'.negY P = -P 1 - W'.
+a₁ * P 0 - W'.a₃ * P 2
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' c : R} {b b' : ℕ}, a = a' → b = b' → a' ^ b' = c → a ^ b = c
+（共 69 条，此处仅展示前 30 条）
 -/
-lemma addX_neg (P : Fin 3 -> R) : W'.addX P (W'.neg P) = 0 := by
-  rw [addX]; rw [neg_X]; rw [neg_Y]; rw [neg_Z]; rw [negY]
-  ring1
-
-/--
-lemma `negAddY_neg` / 引理 `negAddY_neg`
-
-English:
-lemma negAddY_neg
-  given: {P : Fin 3 -> R} (hP : W'.Equation P)
-  statement: W'.negAddY P (W'.neg P) = W'.dblZ P
-  proof: by
+lemma negAddY_neg {P : Fin 3 → R} (hP : W'.Equation P) : W'.negAddY P (W'.neg P) = W'.dblZ P := by
   linear_combination (norm := (rw [negAddY, neg_X, neg_Y, neg_Z, dblZ, negY]; ring1))
     -3 * (P y - W'.negY P) * (equation_iff _).mp hP
-
-中文:
-引理 negAddY_neg
-  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
-  结论: W'.negAddY P (W'.neg P) = W'.dblZ P
-  证明: by
-  linear_combination (norm := (rw [negAddY, neg_X, neg_Y, neg_Z, dblZ, negY]; ring1))
-    -3 * (P y - W'.negY P) * (equation_iff _).mp hP
-
-Depends on / 依赖: equation_iff, linear_combination, negAddY, neg_X, neg_Y, neg_Z
+/-
+**WeierstrassCurve.Projective.addY_neg** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCur
+ve.Projective`。
+形式化陈述：addY_neg {P : Fin 3 -> R} (hP : W'.Equation P) : W'.addY P (W'.neg P) = -W
+'.dblZ P
+参数：hP : W'.Equation P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `WeierstrassCurve.Projective.addX_neg`：addX_neg (P : Fin 3 -> R) : W'.add
+X P (W'.neg P) = 0
+· 使用引理 `WeierstrassCurve.Projective.negAddY_neg`：negAddY_neg {P : Fin 3 -> R} (h
+P : W'.Equation P) : W'.negAddY P (W'.neg P) = W'.dblZ P
+· 使用引理 `WeierstrassCurve.Projective.addZ_neg`：addZ_neg (P : Fin 3 -> R) : W'.add
+Z P (W'.neg P) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma negAddY_neg {P : Fin 3 -> R} (hP : W'.Equation P) : W'.negAddY P (W'.neg P) = W'.dblZ P := by
-  linear_combination (norm := (rw [negAddY, neg_X, neg_Y, neg_Z, dblZ, negY]; ring1))
-    -3 * (P y - W'.negY P) * (equation_iff _).mp hP
-
-/--
-lemma `addY_neg` / 引理 `addY_neg`
-
-English:
-lemma addY_neg
-  given: {P : Fin 3 -> R} (hP : W'.Equation P)
-  statement: W'.addY P (W'.neg P) = -W'.dblZ P
-  proof: by
+lemma addY_neg {P : Fin 3 → R} (hP : W'.Equation P) : W'.addY P (W'.neg P) = -W'.dblZ P := by
   simp only [addY, addX_neg, negAddY_neg hP, addZ_neg, negY, fin3_def_ext, mul_zero, sub_zero]
-
-中文:
-引理 addY_neg
-  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
-  结论: W'.addY P (W'.neg P) = -W'.dblZ P
-  证明: by
-  simp only [addY, addX_neg, negAddY_neg hP, addZ_neg, negY, fin3_def_ext, mul_zero, sub_zero]
-
-Depends on / 依赖: addX_neg, addZ_neg, fin3_def_ext, mul_zero, negAddY_neg, sub_zero
+/-
+**WeierstrassCurve.Projective.addXYZ_neg** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassC
+urve.Projective`。
+形式化陈述：addXYZ_neg {P : Fin 3 -> R} (hP : W'.Equation P) : W'.addXYZ P (W'.neg P) 
+= -W'.dblZ P • ![0, 1, 0]
+参数：hP : W'.Equation P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.addXYZ.eq_1`：∀ {R : Type r} [inst : CommRing
+ R] (W' : WeierstrassCurve.Projective R) (P Q : Fin 3 → R),   W'.addXYZ P Q = ![
+W'.addX P Q, W'.addY P Q, W'.…
+· 使用引理 `WeierstrassCurve.Projective.addX_neg`：addX_neg (P : Fin 3 -> R) : W'.add
+X P (W'.neg P) = 0
+· 使用引理 `WeierstrassCurve.Projective.addY_neg`：addY_neg {P : Fin 3 -> R} (hP : W'
+.Equation P) : W'.addY P (W'.neg P) = -W'.dblZ P
+· 使用引理 `WeierstrassCurve.Projective.addZ_neg`：addZ_neg (P : Fin 3 -> R) : W'.add
+Z P (W'.neg P) = 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `WeierstrassCurve.Projective.smul_fin3`：smul_fin3 (P : Fin 3 -> R) (u : R
+) : u • P = ![u * P x, u * P y, u * P z]
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-lemma addY_neg {P : Fin 3 -> R} (hP : W'.Equation P) : W'.addY P (W'.neg P) = -W'.dblZ P := by
-  simp only [addY, addX_neg, negAddY_neg hP, addZ_neg, negY, fin3_def_ext, mul_zero, sub_zero]
-
-/--
-lemma `addXYZ_neg` / 引理 `addXYZ_neg`
-
-English:
-lemma addXYZ_neg
-  given: {P : Fin 3 -> R} (hP : W'.Equation P)
-  proof: by
-  erw [addXYZ, addX_neg, addY_neg hP, addZ_neg, smul_fin3, mul_zero, mul_one]
-
-中文:
-引理 addXYZ_neg
-  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
-  证明: by
-  erw [addXYZ, addX_neg, addY_neg hP, addZ_neg, smul_fin3, mul_zero, mul_one]
-
-Depends on / 依赖: addXYZ, addX_neg, addY_neg, addZ_neg, mul_one, mul_zero, smul_fin3
--/
-lemma addXYZ_neg {P : Fin 3 -> R} (hP : W'.Equation P) :
+lemma addXYZ_neg {P : Fin 3 → R} (hP : W'.Equation P) :
     W'.addXYZ P (W'.neg P) = -W'.dblZ P • ![0, 1, 0] := by
   erw [addXYZ, addX_neg, addY_neg hP, addZ_neg, smul_fin3, mul_zero, mul_one]
 
 variable (W') in
-/--
-Definition of `negMap` / `negMap` 的定义
+/-- The negation of a projective point class on a Weierstrass curve `W`.
 
-English:
-definition negMap
-  signature: (P : PointClass R)
-  body: P.map W'.neg fun _ _ => neg_equiv
+If `P` is a projective point representative on `W`, then `W.negMap ⟦P⟧` is definitionally equivalent
+to `W.neg P`. -/
+/-
+**WeierstrassCurve.Projective.negMap** 是 Mathlib 中的一个定义，位于命名空间 `WeierstrassCurve
+.Projective`。
+形式化陈述：negMap (P : PointClass R) : PointClass R
+参数：P : PointClass R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.neg_equiv`：neg_equiv {P Q : Fin 3 -> R} (h :
+ P ≈ Q) : W'.neg P ≈ W'.neg Q
 
-中文:
-定义 negMap
-  签名: (P : PointClass R)
-  定义体: P.map W'.neg fun _ _ => neg_equiv
+--- 原说明 ---
+The negation of a projective point class on a Weierstrass curve `W`.
 
-Depends on / 依赖: P.map, neg_equiv
+If `P` is a projective point representative on `W`, then `W.negMap ⟦P⟧` is defin
+itionally equivalent
+to `W.neg P`.
 -/
 def negMap (P : PointClass R) : PointClass R :=
   P.map W'.neg fun _ _ => neg_equiv
-
-/--
-lemma `negMap_eq` / 引理 `negMap_eq`
-
-English:
-lemma negMap_eq
-  given: (P : Fin 3 -> R)
-  statement: W'.negMap ⟦P⟧ = ⟦W'.neg P⟧
-  proof: rfl
-
-中文:
-引理 negMap_eq
-  条件: (P : 有限集 3 -> R)
-  结论: W'.negMap ⟦P⟧ = ⟦W'.neg P⟧
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.negMap_eq** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCu
+rve.Projective`。
+形式化陈述：negMap_eq (P : Fin 3 -> R) : W'.negMap ⟦P⟧ = ⟦W'.neg P⟧
+参数：P : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma negMap_eq (P : Fin 3 -> R) : W'.negMap ⟦P⟧ = ⟦W'.neg P⟧ :=
+lemma negMap_eq (P : Fin 3 → R) : W'.negMap ⟦P⟧ = ⟦W'.neg P⟧ :=
   rfl
-
-/--
-lemma `negMap_of_Z_eq_zero` / 引理 `negMap_of_Z_eq_zero`
-
-English:
-lemma negMap_of_Z_eq_zero
-  given: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0)
-  proof: by
-  rw [negMap_eq]; rw [neg_of_Z_eq_zero hP.left hPz]; rw [smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).neg]
-
-中文:
-引理 negMap_of_Z_eq_zero
-  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z = 0)
-  证明: by
-  rw [negMap_eq]; rw [neg_of_Z_eq_zero hP.left hPz]; rw [smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).neg]
-
-Depends on / 依赖: hP.left, isUnit_Y_of_Z_eq_zero, negMap_eq, neg_of_Z_eq_zero, smul_eq
+/-
+**WeierstrassCurve.Projective.negMap_of_Z_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Wei
+erstrassCurve.Projective`。
+形式化陈述：negMap_of_Z_eq_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0
+) : W.negMap ⟦P⟧ = ⟦![0, 1, 0]⟧
+参数：hP : W.Nonsingular P；hPz : P z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.negMap_eq`：negMap_eq (P : Fin 3 -> R) : W'.n
+egMap ⟦P⟧ = ⟦W'.neg P⟧
+· 使用引理 `WeierstrassCurve.Projective.neg_of_Z_eq_zero`：neg_of_Z_eq_zero [NoZeroDi
+visors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) : W'.neg P = -P 
+y • ![0, 1, 0]
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `WeierstrassCurve.Projective.smul_eq`：smul_eq (P : Fin 3 -> R) {u : R} (h
+u : IsUnit u) : (⟦u • P⟧ : PointClass R) = ⟦P⟧
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用引理 `WeierstrassCurve.Projective.isUnit_Y_of_Z_eq_zero`：isUnit_Y_of_Z_eq_zero
+ {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : IsUnit (P y)
 -/
-lemma negMap_of_Z_eq_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) :
+lemma negMap_of_Z_eq_zero {P : Fin 3 → F} (hP : W.Nonsingular P) (hPz : P z = 0) :
     W.negMap ⟦P⟧ = ⟦![0, 1, 0]⟧ := by
-  rw [negMap_eq]; rw [neg_of_Z_eq_zero hP.left hPz]; rw [smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).neg]
-
-/--
-lemma `negMap_of_Z_ne_zero` / 引理 `negMap_of_Z_ne_zero`
-
-English:
-lemma negMap_of_Z_ne_zero
-  given: {P : Fin 3 -> F} (hPz : P z != 0)
-  proof: by
-  rw [negMap_eq]; rw [neg_of_Z_ne_zero hPz]; rw [smul_eq _ <| Ne.isUnit hPz]
-
-中文:
-引理 negMap_of_Z_ne_zero
-  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
-  证明: by
-  rw [negMap_eq]; rw [neg_of_Z_ne_zero hPz]; rw [smul_eq _ <| Ne.isUnit hPz]
-
-Depends on / 依赖: Ne.isUnit, isUnit, negMap_eq, neg_of_Z_ne_zero, smul_eq
+  rw [negMap_eq, neg_of_Z_eq_zero hP.left hPz, smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).neg]
+/-
+**WeierstrassCurve.Projective.negMap_of_Z_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Wei
+erstrassCurve.Projective`。
+形式化陈述：negMap_of_Z_ne_zero {P : Fin 3 -> F} (hPz : P z != 0) : W.negMap ⟦P⟧ = ⟦![
+P x / P z, W.toAffine.negY (P x / P z) (P y / P z), 1]⟧
+参数：hPz : P z != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.negMap_eq`：negMap_eq (P : Fin 3 -> R) : W'.n
+egMap ⟦P⟧ = ⟦W'.neg P⟧
+· 使用引理 `WeierstrassCurve.Projective.neg_of_Z_ne_zero`：neg_of_Z_ne_zero {P : Fin 
+3 -> F} (hPz : P z != 0) : W.neg P = P z • ![P x / P z, W.toAffine.negY (P x / P
+ z) (P y / P z), 1]
+· 使用引理 `WeierstrassCurve.Projective.smul_eq`：smul_eq (P : Fin 3 -> R) {u : R} (h
+u : IsUnit u) : (⟦u • P⟧ : PointClass R) = ⟦P⟧
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
 -/
-lemma negMap_of_Z_ne_zero {P : Fin 3 -> F} (hPz : P z != 0) :
+lemma negMap_of_Z_ne_zero {P : Fin 3 → F} (hPz : P z ≠ 0) :
     W.negMap ⟦P⟧ = ⟦![P x / P z, W.toAffine.negY (P x / P z) (P y / P z), 1]⟧ := by
-  rw [negMap_eq]; rw [neg_of_Z_ne_zero hPz]; rw [smul_eq _ <| Ne.isUnit hPz]
-
-/--
-lemma `nonsingularLift_negMap` / 引理 `nonsingularLift_negMap`
-
-English:
-lemma nonsingularLift_negMap
-  given: {P : PointClass F} (hP : W.NonsingularLift P)
-  proof: by
-  rcases P with ⟨_⟩
-  exact nonsingular_neg hP
-
-中文:
-引理 nonsingularLift_negMap
-  条件: {P : PointClass F} (hP : W.NonsingularLift P)
-  证明: by
-  rcases P with ⟨_⟩
-  exact nonsingular_neg hP
-
-Depends on / 依赖: nonsingular_neg
+  rw [negMap_eq, neg_of_Z_ne_zero hPz, smul_eq _ <| Ne.isUnit hPz]
+/-
+**WeierstrassCurve.Projective.nonsingularLift_negMap** 是 Mathlib 中的一个引理，位于命名空间 `
+WeierstrassCurve.Projective`。
+形式化陈述：nonsingularLift_negMap {P : PointClass F} (hP : W.NonsingularLift P) : W.N
+onsingularLift W.negMap P
+参数：hP : W.NonsingularLift P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_neg`：nonsingular_neg {P : Fin 3 
+-> F} (hP : W.Nonsingular P) : W.Nonsingular W.neg P
 -/
 lemma nonsingularLift_negMap {P : PointClass F} (hP : W.NonsingularLift P) :
-W.NonsingularLift W.negMap P := by
+    W.NonsingularLift <| W.negMap P := by
   rcases P with ⟨_⟩
   exact nonsingular_neg hP
 
@@ -546,449 +710,439 @@ W.NonsingularLift W.negMap P := by
 
 open scoped Classical in
 variable (W') in
-/--
-Definition of `add` / `add` 的定义
+/-- The addition of two projective point representatives on a Weierstrass curve. -/
+/-
+**WeierstrassCurve.Projective.add** 是 Mathlib 中的一个定义，位于命名空间 `WeierstrassCurve.Pr
+ojective`。
+形式化陈述：add (P Q : Fin 3 -> R) : Fin 3 -> R
+参数：P Q : Fin 3 -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition add
-  signature: (P Q : Fin 3 -> R)
-  body: if P ≈ Q then W'.dblXYZ P else W'.addXYZ P Q
-
-中文:
-定义 add
-  签名: (P Q : 有限集 3 -> R)
-  定义体: if P ≈ Q then W'.dblXYZ P else W'.addXYZ P Q
-
-Depends on / 依赖: addXYZ, dblXYZ
+--- 原说明 ---
+The addition of two projective point representatives on a Weierstrass curve.
 -/
-noncomputable def add (P Q : Fin 3 -> R) : Fin 3 -> R :=
+noncomputable def add (P Q : Fin 3 → R) : Fin 3 → R :=
   if P ≈ Q then W'.dblXYZ P else W'.addXYZ P Q
-
-/--
-lemma `add_of_equiv` / 引理 `add_of_equiv`
-
-English:
-lemma add_of_equiv
-  given: {P Q : Fin 3 -> R} (h : P ≈ Q)
-  statement: W'.add P Q = W'.dblXYZ P
-  proof: if_pos h
-
-中文:
-引理 add_of_equiv
-  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
-  结论: W'.add P Q = W'.dblXYZ P
-  证明: if_pos h
-
-Depends on / 依赖: if_pos
+/-
+**WeierstrassCurve.Projective.add_of_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Weierstras
+sCurve.Projective`。
+形式化陈述：add_of_equiv {P Q : Fin 3 -> R} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P
+参数：h : P ≈ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-lemma add_of_equiv {P Q : Fin 3 -> R} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P :=
+lemma add_of_equiv {P Q : Fin 3 → R} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P :=
   if_pos h
-
-/--
-lemma `add_smul_of_equiv` / 引理 `add_smul_of_equiv`
-
-English:
-lemma add_smul_of_equiv
-  given: {P Q : Fin 3 -> R} (h : P ≈ Q) {u v : R} (hu : IsUnit u) (hv : IsUnit v)
-  proof: by
-  rw [add_of_equiv <| (smul_equiv_smul P Q hu hv).mpr h]; rw [dblXYZ_smul]; rw [add_of_equiv h]
-
-中文:
-引理 add_smul_of_equiv
-  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q) {u v : R} (hu : 是单位 u) (hv : 是单位 v)
-  证明: by
-  rw [add_of_equiv <| (smul_equiv_smul P Q hu hv).mpr h]; rw [dblXYZ_smul]; rw [add_of_equiv h]
-
-Depends on / 依赖: add_of_equiv, dblXYZ_smul, smul_equiv_smul
+/-
+**WeierstrassCurve.Projective.add_smul_of_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Weier
+strassCurve.Projective`。
+形式化陈述：add_smul_of_equiv {P Q : Fin 3 -> R} (h : P ≈ Q) {u v : R} (hu : IsUnit u)
+ (hv : IsUnit v) : W'.add (u • P) (v • Q) = u ^ 4 • W'.add P Q
+参数：h : P ≈ Q；hu : IsUnit u；hv : IsUnit v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_equiv`：add_of_equiv {P Q : Fin 3 -> R
+} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WeierstrassCurve.Projective.smul_equiv_smul`：smul_equiv_smul (P Q : Fin 
+3 -> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v) : u • P ≈ v • Q ↔ P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.dblXYZ_smul`：dblXYZ_smul (P : Fin 3 -> R) (u
+ : R) : W'.dblXYZ (u • P) = u ^ 4 • W'.dblXYZ P
 -/
-lemma add_smul_of_equiv {P Q : Fin 3 -> R} (h : P ≈ Q) {u v : R} (hu : IsUnit u) (hv : IsUnit v) :
+lemma add_smul_of_equiv {P Q : Fin 3 → R} (h : P ≈ Q) {u v : R} (hu : IsUnit u) (hv : IsUnit v) :
     W'.add (u • P) (v • Q) = u ^ 4 • W'.add P Q := by
-  rw [add_of_equiv <| (smul_equiv_smul P Q hu hv).mpr h]; rw [dblXYZ_smul]; rw [add_of_equiv h]
-
-/--
-lemma `add_self` / 引理 `add_self`
-
-English:
-lemma add_self
-  given: (P : Fin 3 -> R)
-  statement: W'.add P P = W'.dblXYZ P
-  proof: add_of_equiv Setoid.refl _
-
-中文:
-引理 add_self
-  条件: (P : 有限集 3 -> R)
-  结论: W'.add P P = W'.dblXYZ P
-  证明: add_of_equiv Setoid.refl _
-
-Depends on / 依赖: Setoid, Setoid.refl, add_of_equiv
+  rw [add_of_equiv <| (smul_equiv_smul P Q hu hv).mpr h, dblXYZ_smul, add_of_equiv h]
+/-
+**WeierstrassCurve.Projective.add_self** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCur
+ve.Projective`。
+形式化陈述：add_self (P : Fin 3 -> R) : W'.add P P = W'.dblXYZ P
+参数：P : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.add_of_equiv`：add_of_equiv {P Q : Fin 3 -> R
+} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
 -/
-lemma add_self (P : Fin 3 -> R) : W'.add P P = W'.dblXYZ P :=
-add_of_equiv Setoid.refl _
-
-/--
-lemma `add_of_eq` / 引理 `add_of_eq`
-
-English:
-lemma add_of_eq
-  given: {P Q : Fin 3 -> R} (h : P = Q)
-  statement: W'.add P Q = W'.dblXYZ P
-  proof: h ▸ add_self P
-
-中文:
-引理 add_of_eq
-  条件: {P Q : 有限集 3 -> R} (h : P = Q)
-  结论: W'.add P Q = W'.dblXYZ P
-  证明: h ▸ add_self P
-
-Depends on / 依赖: add_self
+lemma add_self (P : Fin 3 → R) : W'.add P P = W'.dblXYZ P :=
+  add_of_equiv <| Setoid.refl _
+/-
+**WeierstrassCurve.Projective.add_of_eq** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCu
+rve.Projective`。
+形式化陈述：add_of_eq {P Q : Fin 3 -> R} (h : P = Q) : W'.add P Q = W'.dblXYZ P
+参数：h : P = Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.add_self`：add_self (P : Fin 3 -> R) : W'.add
+ P P = W'.dblXYZ P
 -/
-lemma add_of_eq {P Q : Fin 3 -> R} (h : P = Q) : W'.add P Q = W'.dblXYZ P :=
+lemma add_of_eq {P Q : Fin 3 → R} (h : P = Q) : W'.add P Q = W'.dblXYZ P :=
   h ▸ add_self P
-
-/--
-lemma `add_of_not_equiv` / 引理 `add_of_not_equiv`
-
-English:
-lemma add_of_not_equiv
-  given: {P Q : Fin 3 -> R} (h : ¬P ≈ Q)
-  statement: W'.add P Q = W'.addXYZ P Q
-  proof: if_neg h
-
-中文:
-引理 add_of_not_equiv
-  条件: {P Q : 有限集 3 -> R} (h : ¬P ≈ Q)
-  结论: W'.add P Q = W'.addXYZ P Q
-  证明: if_neg h
-
-Depends on / 依赖: if_neg
+/-
+**WeierstrassCurve.Projective.add_of_not_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Weiers
+trassCurve.Projective`。
+形式化陈述：add_of_not_equiv {P Q : Fin 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ 
+P Q
+参数：h : ¬P ≈ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-lemma add_of_not_equiv {P Q : Fin 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q :=
+lemma add_of_not_equiv {P Q : Fin 3 → R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q :=
   if_neg h
-
-/--
-lemma `add_smul_of_not_equiv` / 引理 `add_smul_of_not_equiv`
-
-English:
-lemma add_smul_of_not_equiv
-  statement: {P Q : Fin 3 -> R} (h : ¬P ≈ Q) {u v : R} (hu : IsUnit u)
-  proof: by
-  rw [add_of_not_equiv <| h.comp (smul_equiv_smul P Q hu hv).mp]; rw [addXYZ_smul]; rw [add_of_not_equiv h]
-
-中文:
-引理 add_smul_of_not_equiv
-  结论: {P Q : 有限集 3 -> R} (h : ¬P ≈ Q) {u v : R} (hu : 是单位 u)
-  证明: by
-  rw [add_of_not_equiv <| h.comp (smul_equiv_smul P Q hu hv).mp]; rw [addXYZ_smul]; rw [add_of_not_equiv h]
-
-Depends on / 依赖: addXYZ_smul, add_of_not_equiv, h.comp, smul_equiv_smul
+/-
+**WeierstrassCurve.Projective.add_smul_of_not_equiv** 是 Mathlib 中的一个引理，位于命名空间 `W
+eierstrassCurve.Projective`。
+形式化陈述：add_smul_of_not_equiv {P Q : Fin 3 -> R} (h : ¬P ≈ Q) {u v : R} (hu : IsUn
+it u) (hv : IsUnit v) : W'.add (u • P) (v • Q) = (u * v) ^ 2 • W'.add P Q
+参数：h : ¬P ≈ Q；hu : IsUnit u；hv : IsUnit v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_not_equiv`：add_of_not_equiv {P Q : Fi
+n 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.smul_equiv_smul`：smul_equiv_smul (P Q : Fin 
+3 -> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v) : u • P ≈ v • Q ↔ P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.addXYZ_smul`：addXYZ_smul (P Q : Fin 3 -> R) 
+(u v : R) : W'.addXYZ (u • P) (v • Q) = (u * v) ^ 2 • W'.addXYZ P Q
 -/
-lemma add_smul_of_not_equiv {P Q : Fin 3 -> R} (h : ¬P ≈ Q) {u v : R} (hu : IsUnit u)
+lemma add_smul_of_not_equiv {P Q : Fin 3 → R} (h : ¬P ≈ Q) {u v : R} (hu : IsUnit u)
     (hv : IsUnit v) : W'.add (u • P) (v • Q) = (u * v) ^ 2 • W'.add P Q := by
-  rw [add_of_not_equiv <| h.comp (smul_equiv_smul P Q hu hv).mp]; rw [addXYZ_smul]; rw [add_of_not_equiv h]
-
-/--
-lemma `add_smul_equiv` / 引理 `add_smul_equiv`
-
-English:
-lemma add_smul_equiv
-  given: (P Q : Fin 3 -> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v)
-  proof: by
-  by_cases h : P ≈ Q
-  · exact ⟨hu.unit ^ 4, by convert! (add_smul_of_equiv h hu hv).symm⟩
-  · exact ⟨(hu.unit * hv.unit) ^ 2, by convert! (add_smul_of_not_equiv h hu hv).symm⟩
-
-中文:
-引理 add_smul_equiv
-  条件: (P Q : 有限集 3 -> R) {u v : R} (hu : 是单位 u) (hv : 是单位 v)
-  证明: by
-  by_cases h : P ≈ Q
-  · exact ⟨hu.unit ^ 4, by convert! (add_smul_of_equiv h hu hv).symm⟩
-  · exact ⟨(hu.unit * hv.unit) ^ 2, by convert! (add_smul_of_not_equiv h hu hv).symm⟩
-
-Depends on / 依赖: add_smul_of_equiv, add_smul_of_not_equiv, cofibrations_over_iff, convert, hu.unit, hv.unit
+  rw [add_of_not_equiv <| h.comp (smul_equiv_smul P Q hu hv).mp, addXYZ_smul, add_of_not_equiv h]
+/-
+**WeierstrassCurve.Projective.add_smul_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Weierstr
+assCurve.Projective`。
+形式化陈述：add_smul_equiv (P Q : Fin 3 -> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v
+) : W'.add (u • P) (v • Q) ≈ W'.add P Q
+参数：P Q : Fin 3 -> R；hu : IsUnit u；hv : IsUnit v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `WeierstrassCurve.Projective.add_smul_of_equiv`：add_smul_of_equiv {P Q : 
+Fin 3 -> R} (h : P ≈ Q) {u v : R} (hu : IsUnit u) (hv : IsUnit v) : W'.add (u • 
+P) (v • Q) = u ^ 4 • W'.add P Q
+· 使用引理 `WeierstrassCurve.Projective.add_smul_of_not_equiv`：add_smul_of_not_equiv
+ {P Q : Fin 3 -> R} (h : ¬P ≈ Q) {u v : R} (hu : IsUnit u) (hv : IsUnit v) : W'.
+add (u • P) (v • Q) = (u * v) ^ 2 • W'.…
 -/
-lemma add_smul_equiv (P Q : Fin 3 -> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v) :
+lemma add_smul_equiv (P Q : Fin 3 → R) {u v : R} (hu : IsUnit u) (hv : IsUnit v) :
     W'.add (u • P) (v • Q) ≈ W'.add P Q := by
   by_cases h : P ≈ Q
   · exact ⟨hu.unit ^ 4, by convert! (add_smul_of_equiv h hu hv).symm⟩
   · exact ⟨(hu.unit * hv.unit) ^ 2, by convert! (add_smul_of_not_equiv h hu hv).symm⟩
-
-/--
-lemma `add_equiv` / 引理 `add_equiv`
-
-English:
-lemma add_equiv
-  given: {P P' Q Q' : Fin 3 -> R} (hP : P ≈ P') (hQ : Q ≈ Q')
-  proof: by
-  rcases hP, hQ with ⟨⟨u, rfl⟩, ⟨v, rfl⟩⟩
-  exact add_smul_equiv P' Q' u.isUnit v.isUnit
-
-中文:
-引理 add_equiv
-  条件: {P P' Q Q' : 有限集 3 -> R} (hP : P ≈ P') (hQ : Q ≈ Q')
-  证明: by
-  rcases hP, hQ with ⟨⟨u, rfl⟩, ⟨v, rfl⟩⟩
-  exact add_smul_equiv P' Q' u.isUnit v.isUnit
-
-Depends on / 依赖: add_smul_equiv, isUnit, u.isUnit, v.isUnit
+/-
+**WeierstrassCurve.Projective.add_equiv** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCu
+rve.Projective`。
+形式化陈述：add_equiv {P P' Q Q' : Fin 3 -> R} (hP : P ≈ P') (hQ : Q ≈ Q') : W'.add P 
+Q ≈ W'.add P' Q'
+参数：hP : P ≈ P'；hQ : Q ≈ Q'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.add_smul_equiv`：add_smul_equiv (P Q : Fin 3 
+-> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v) : W'.add (u • P) (v • Q) ≈ W'.ad
+d P Q
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-lemma add_equiv {P P' Q Q' : Fin 3 -> R} (hP : P ≈ P') (hQ : Q ≈ Q') :
+lemma add_equiv {P P' Q Q' : Fin 3 → R} (hP : P ≈ P') (hQ : Q ≈ Q') :
     W'.add P Q ≈ W'.add P' Q' := by
   rcases hP, hQ with ⟨⟨u, rfl⟩, ⟨v, rfl⟩⟩
   exact add_smul_equiv P' Q' u.isUnit v.isUnit
-
-/--
-lemma `add_of_Z_eq_zero` / 引理 `add_of_Z_eq_zero`
-
-English:
-lemma add_of_Z_eq_zero
-  statement: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
-  proof: by
-  rw [add_of_equiv <| equiv_of_Z_eq_zero hP hQ hPz hQz]; rw [dblXYZ_of_Z_eq_zero hP.left hPz]
-
-中文:
-引理 add_of_Z_eq_zero
-  结论: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.非奇异 Q)
-  证明: by
-  rw [add_of_equiv <| equiv_of_Z_eq_zero hP hQ hPz hQz]; rw [dblXYZ_of_Z_eq_zero hP.left hPz]
-
-Depends on / 依赖: add_of_equiv, dblXYZ_of_Z_eq_zero, equiv_of_Z_eq_zero, hP.left
+/-
+**WeierstrassCurve.Projective.add_of_Z_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Weiers
+trassCurve.Projective`。
+形式化陈述：add_of_Z_eq_zero {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsing
+ular Q) (hPz : P z = 0) (hQz : Q z = 0) : W.add P Q = P y ^ 4 • ![0, 1, 0]
+参数：hP : W.Nonsingular P；hQ : W.Nonsingular Q；hPz : P z = 0；hQz : Q z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_equiv`：add_of_equiv {P Q : Fin 3 -> R
+} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P
+· 使用引理 `WeierstrassCurve.Projective.equiv_of_Z_eq_zero`：equiv_of_Z_eq_zero {P Q 
+: Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z = 0) (hQz
+ : Q z = 0) : P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.dblXYZ_of_Z_eq_zero`：dblXYZ_of_Z_eq_zero [No
+ZeroDivisors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) : W'.dblXY
+Z P = P y ^ 4 • ![0, 1, 0]
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma add_of_Z_eq_zero {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
+lemma add_of_Z_eq_zero {P Q : Fin 3 → F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
     (hPz : P z = 0) (hQz : Q z = 0) : W.add P Q = P y ^ 4 • ![0, 1, 0] := by
-  rw [add_of_equiv <| equiv_of_Z_eq_zero hP hQ hPz hQz]; rw [dblXYZ_of_Z_eq_zero hP.left hPz]
-
-/--
-lemma `add_of_Z_eq_zero_left` / 引理 `add_of_Z_eq_zero_left`
-
-English:
-lemma add_of_Z_eq_zero_left
-  statement: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P)
-  proof: by
-  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_left hPz hQz]; rw [addXYZ_of_Z_eq_zero_left hP hPz]
-
-中文:
-引理 add_of_Z_eq_zero_left
-  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hP : W'.方程 P)
-  证明: by
-  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_left hPz hQz]; rw [addXYZ_of_Z_eq_zero_left hP hPz]
-
-Depends on / 依赖: addXYZ_of_Z_eq_zero_left, add_of_not_equiv, not_equiv_of_Z_eq_zero_left
+  rw [add_of_equiv <| equiv_of_Z_eq_zero hP hQ hPz hQz, dblXYZ_of_Z_eq_zero hP.left hPz]
+/-
+**WeierstrassCurve.Projective.add_of_Z_eq_zero_left** 是 Mathlib 中的一个引理，位于命名空间 `W
+eierstrassCurve.Projective`。
+形式化陈述：add_of_Z_eq_zero_left [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equat
+ion P) (hPz : P z = 0) (hQz : Q z != 0) : W'.add P Q = (P y ^ 2 * Q z) • Q
+参数：hP : W'.Equation P；hPz : P z = 0；hQz : Q z != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_not_equiv`：add_of_not_equiv {P Q : Fi
+n 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q
+· 使用引理 `WeierstrassCurve.Projective.not_equiv_of_Z_eq_zero_left`：not_equiv_of_Z_
+eq_zero_left {P Q : Fin 3 -> R} (hPz : P z = 0) (hQz : Q z != 0) : ¬P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.addXYZ_of_Z_eq_zero_left`：addXYZ_of_Z_eq_zer
+o_left [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0
+) : W'.addXYZ P Q = (P y ^ 2 * Q z) • Q
 -/
-lemma add_of_Z_eq_zero_left [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P)
-    (hPz : P z = 0) (hQz : Q z != 0) : W'.add P Q = (P y ^ 2 * Q z) • Q := by
-  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_left hPz hQz]; rw [addXYZ_of_Z_eq_zero_left hP hPz]
-
-/--
-lemma `add_of_Z_eq_zero_right` / 引理 `add_of_Z_eq_zero_right`
-
-English:
-lemma add_of_Z_eq_zero_right
-  statement: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQ : W'.Equation Q)
-  proof: by
-  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_right hPz hQz]; rw [addXYZ_of_Z_eq_zero_right hQ hQz]
-
-中文:
-引理 add_of_Z_eq_zero_right
-  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hQ : W'.方程 Q)
-  证明: by
-  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_right hPz hQz]; rw [addXYZ_of_Z_eq_zero_right hQ hQz]
-
-Depends on / 依赖: addXYZ_of_Z_eq_zero_right, add_of_not_equiv, not_equiv_of_Z_eq_zero_right
+lemma add_of_Z_eq_zero_left [NoZeroDivisors R] {P Q : Fin 3 → R} (hP : W'.Equation P)
+    (hPz : P z = 0) (hQz : Q z ≠ 0) : W'.add P Q = (P y ^ 2 * Q z) • Q := by
+  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_left hPz hQz, addXYZ_of_Z_eq_zero_left hP hPz]
+/-
+**WeierstrassCurve.Projective.add_of_Z_eq_zero_right** 是 Mathlib 中的一个引理，位于命名空间 `
+WeierstrassCurve.Projective`。
+形式化陈述：add_of_Z_eq_zero_right [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQ : W'.Equa
+tion Q) (hPz : P z != 0) (hQz : Q z = 0) : W'.add P Q = -(Q y ^ 2 * P z) • P
+参数：hQ : W'.Equation Q；hPz : P z != 0；hQz : Q z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_not_equiv`：add_of_not_equiv {P Q : Fi
+n 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q
+· 使用引理 `WeierstrassCurve.Projective.not_equiv_of_Z_eq_zero_right`：not_equiv_of_Z
+_eq_zero_right {P Q : Fin 3 -> R} (hPz : P z != 0) (hQz : Q z = 0) : ¬P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.addXYZ_of_Z_eq_zero_right`：addXYZ_of_Z_eq_ze
+ro_right [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hQz : Q z =
+ 0) : W'.addXYZ P Q = -(Q y ^ 2 * P z) • P
 -/
-lemma add_of_Z_eq_zero_right [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQ : W'.Equation Q)
-    (hPz : P z != 0) (hQz : Q z = 0) : W'.add P Q = -(Q y ^ 2 * P z) • P := by
-  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_right hPz hQz]; rw [addXYZ_of_Z_eq_zero_right hQ hQz]
-
-/--
-lemma `add_of_Y_eq` / 引理 `add_of_Y_eq`
-
-English:
-lemma add_of_Y_eq
-  statement: {P Q : Fin 3 -> F} (hP : W.Equation P) (hPz : P z != 0) (hQz : Q z != 0)
-  proof: by
-  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx hy]; rw [dblXYZ_of_Y_eq hP hPz hQz hx hy hy']
-
-中文:
-引理 add_of_Y_eq
-  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hPz : P z != 0) (hQz : Q z != 0)
-  证明: by
-  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx hy]; rw [dblXYZ_of_Y_eq hP hPz hQz hx hy hy']
-
-Depends on / 依赖: add_of_equiv, dblXYZ_of_Y_eq, equiv_of_X_eq_of_Y_eq, fibrations_over_iff
+lemma add_of_Z_eq_zero_right [NoZeroDivisors R] {P Q : Fin 3 → R} (hQ : W'.Equation Q)
+    (hPz : P z ≠ 0) (hQz : Q z = 0) : W'.add P Q = -(Q y ^ 2 * P z) • P := by
+  rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_right hPz hQz, addXYZ_of_Z_eq_zero_right hQ hQz]
+/-
+**WeierstrassCurve.Projective.add_of_Y_eq** 是 Mathlib 中的一个引理，位于命名空间 `Weierstrass
+Curve.Projective`。
+形式化陈述：add_of_Y_eq {P Q : Fin 3 -> F} (hP : W.Equation P) (hPz : P z != 0) (hQz :
+ Q z != 0) (hx : P x * Q z = Q x * P z) (hy : P y * Q z = Q y * P z) (hy' : P y 
+* Q z = W.negY Q * P z) : W.add P Q = W.dblU P • ![0, 1, 0]
+参数：hP : W.Equation P；hPz : P z != 0；hQz : Q z != 0；hx : P x * Q z = Q x * P z；hy
+ : P y * Q z = Q y * P z；hy' : P y * Q z = W.negY Q * P z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_equiv`：add_of_equiv {P Q : Fin 3 -> R
+} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P
+· 使用引理 `WeierstrassCurve.Projective.equiv_of_X_eq_of_Y_eq`：equiv_of_X_eq_of_Y_eq
+ {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P 
+z) (hy : P y * Q z = Q y * P z) : P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.dblXYZ_of_Y_eq`：dblXYZ_of_Y_eq {P Q : Fin 3 
+-> F} (hP : W.Equation P) (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q 
+x * P z) (hy : P y * Q z = Q y *…
 -/
-lemma add_of_Y_eq {P Q : Fin 3 -> F} (hP : W.Equation P) (hPz : P z != 0) (hQz : Q z != 0)
+lemma add_of_Y_eq {P Q : Fin 3 → F} (hP : W.Equation P) (hPz : P z ≠ 0) (hQz : Q z ≠ 0)
     (hx : P x * Q z = Q x * P z) (hy : P y * Q z = Q y * P z) (hy' : P y * Q z = W.negY Q * P z) :
     W.add P Q = W.dblU P • ![0, 1, 0] := by
-  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx hy]; rw [dblXYZ_of_Y_eq hP hPz hQz hx hy hy']
-
-/--
-lemma `add_of_Y_ne` / 引理 `add_of_Y_ne`
-
-English:
-lemma add_of_Y_ne
-  statement: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
-  proof: by
-  rw [add_of_not_equiv <| not_equiv_of_Y_ne hy]; rw [addXYZ_of_X_eq hP hQ hPz hQz hx]
-
-中文:
-引理 add_of_Y_ne
-  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
-  证明: by
-  rw [add_of_not_equiv <| not_equiv_of_Y_ne hy]; rw [addXYZ_of_X_eq hP hQ hPz hQz hx]
-
-Depends on / 依赖: addXYZ_of_X_eq, add_of_not_equiv, not_equiv_of_Y_ne
+  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx hy, dblXYZ_of_Y_eq hP hPz hQz hx hy hy']
+/-
+**WeierstrassCurve.Projective.add_of_Y_ne** 是 Mathlib 中的一个引理，位于命名空间 `Weierstrass
+Curve.Projective`。
+形式化陈述：add_of_Y_ne {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hP
+z : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P z) (hy : P y * Q z != Q
+ y * P z) : W.add P Q = addU P Q • ![0, 1, 0]
+参数：hP : W.Equation P；hQ : W.Equation Q；hPz : P z != 0；hQz : Q z != 0；hx : P x * 
+Q z = Q x * P z；hy : P y * Q z != Q y * P z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_not_equiv`：add_of_not_equiv {P Q : Fi
+n 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q
+· 使用引理 `WeierstrassCurve.Projective.not_equiv_of_Y_ne`：not_equiv_of_Y_ne {P Q : 
+Fin 3 -> R} (hy : P y * Q z != Q y * P z) : ¬P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.addXYZ_of_X_eq`：addXYZ_of_X_eq {P Q : Fin 3 
+-> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz : Q z != 0) 
+(hx : P x * Q z = Q x * P z) : W…
 -/
-lemma add_of_Y_ne {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
-    (hQz : Q z != 0) (hx : P x * Q z = Q x * P z) (hy : P y * Q z != Q y * P z) :
+lemma add_of_Y_ne {P Q : Fin 3 → F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z ≠ 0)
+    (hQz : Q z ≠ 0) (hx : P x * Q z = Q x * P z) (hy : P y * Q z ≠ Q y * P z) :
     W.add P Q = addU P Q • ![0, 1, 0] := by
-  rw [add_of_not_equiv <| not_equiv_of_Y_ne hy]; rw [addXYZ_of_X_eq hP hQ hPz hQz hx]
-
-/--
-lemma `add_of_Y_ne'` / 引理 `add_of_Y_ne'`
-
-English:
-lemma add_of_Y_ne'
-  statement: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
-  proof: by
-  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx <| Y_eq_of_Y_ne' hP hQ hPz hQz hx hy]; rw [dblXYZ_of_Z_ne_zero hP hQ hPz hQz hx hy]
-
-中文:
-引理 add_of_Y_ne'
-  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
-  证明: by
-  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx <| Y_eq_of_Y_ne' hP hQ hPz hQz hx hy]; rw [dblXYZ_of_Z_ne_zero hP hQ hPz hQz hx hy]
-
-Depends on / 依赖: Y_eq_of_Y_ne, add_of_equiv, dblXYZ_of_Z_ne_zero, equiv_of_X_eq_of_Y_eq
+  rw [add_of_not_equiv <| not_equiv_of_Y_ne hy, addXYZ_of_X_eq hP hQ hPz hQz hx]
+/-
+**WeierstrassCurve.Projective.add_of_Y_ne'** 是 Mathlib 中的一个引理，位于命名空间 `Weierstras
+sCurve.Projective`。
+形式化陈述：add_of_Y_ne' [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : 
+W.Equation Q) (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P z) (hy
+ : P y * Q z != W.negY Q * P z) : W.add P Q = W.dblZ P • ![W.toAffine.addX (P x 
+/ P z) (Q x / Q z) (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / 
+Q z)), W.toAffine.addY (P x / P z) (Q x / Q z) (P y / P z) (W.toAffine.slope (P 
+x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)), 1]
+参数：hP : W.Equation P；hQ : W.Equation Q；hPz : P z != 0；hQz : Q z != 0；hx : P x * 
+Q z = Q x * P z；hy : P y * Q z != W.negY Q * P z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_equiv`：add_of_equiv {P Q : Fin 3 -> R
+} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P
+· 使用引理 `WeierstrassCurve.Projective.equiv_of_X_eq_of_Y_eq`：equiv_of_X_eq_of_Y_eq
+ {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P 
+z) (hy : P y * Q z = Q y * P z) : P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.Y_eq_of_Y_ne'`：Y_eq_of_Y_ne' [NoZeroDivisors
+ R] {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q) (hPz : P z != 0
+) (hQz : Q z != 0) (hx : P x * …
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用引理 `WeierstrassCurve.Projective.dblXYZ_of_Z_ne_zero`：dblXYZ_of_Z_ne_zero [De
+cidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P
+ z != 0) (hQz : Q z != 0) (hx : P x *…
 -/
-lemma add_of_Y_ne' [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
-    (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P z) (hy : P y * Q z != W.negY Q * P z) :
+lemma add_of_Y_ne' [DecidableEq F] {P Q : Fin 3 → F} (hP : W.Equation P) (hQ : W.Equation Q)
+    (hPz : P z ≠ 0) (hQz : Q z ≠ 0) (hx : P x * Q z = Q x * P z) (hy : P y * Q z ≠ W.negY Q * P z) :
     W.add P Q = W.dblZ P •
       ![W.toAffine.addX (P x / P z) (Q x / Q z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)),
         W.toAffine.addY (P x / P z) (Q x / Q z) (P y / P z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)), 1] := by
-  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx <| Y_eq_of_Y_ne' hP hQ hPz hQz hx hy]; rw [dblXYZ_of_Z_ne_zero hP hQ hPz hQz hx hy]
-
-/--
-lemma `add_of_X_ne` / 引理 `add_of_X_ne`
-
-English:
-lemma add_of_X_ne
-  statement: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
-  proof: by
-  rw [add_of_not_equiv <| not_equiv_of_X_ne hx]; rw [addXYZ_of_Z_ne_zero hP hQ hPz hQz hx]
-
-中文:
-引理 add_of_X_ne
-  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
-  证明: by
-  rw [add_of_not_equiv <| not_equiv_of_X_ne hx]; rw [addXYZ_of_Z_ne_zero hP hQ hPz hQz hx]
-
-Depends on / 依赖: addXYZ_of_Z_ne_zero, add_of_not_equiv, not_equiv_of_X_ne
+  rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx <| Y_eq_of_Y_ne' hP hQ hPz hQz hx hy,
+    dblXYZ_of_Z_ne_zero hP hQ hPz hQz hx hy]
+/-
+**WeierstrassCurve.Projective.add_of_X_ne** 是 Mathlib 中的一个引理，位于命名空间 `Weierstrass
+Curve.Projective`。
+形式化陈述：add_of_X_ne [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W
+.Equation Q) (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z != Q x * P z) : W
+.add P Q = W.addZ P Q • ![W.toAffine.addX (P x / P z) (Q x / Q z) (W.toAffine.sl
+ope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)), W.toAffine.addY (P x / P z
+) (Q x / Q z) (P y / P z) (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) 
+(Q y / Q z)), 1]
+参数：hP : W.Equation P；hQ : W.Equation Q；hPz : P z != 0；hQz : Q z != 0；hx : P x * 
+Q z != Q x * P z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_not_equiv`：add_of_not_equiv {P Q : Fi
+n 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q
+· 使用引理 `WeierstrassCurve.Projective.not_equiv_of_X_ne`：not_equiv_of_X_ne {P Q : 
+Fin 3 -> R} (hx : P x * Q z != Q x * P z) : ¬P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.addXYZ_of_Z_ne_zero`：addXYZ_of_Z_ne_zero [De
+cidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P
+ z != 0) (hQz : Q z != 0) (hx : P x *…
 -/
-lemma add_of_X_ne [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
-    (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z != Q x * P z) : W.add P Q = W.addZ P Q •
+lemma add_of_X_ne [DecidableEq F] {P Q : Fin 3 → F} (hP : W.Equation P) (hQ : W.Equation Q)
+    (hPz : P z ≠ 0) (hQz : Q z ≠ 0) (hx : P x * Q z ≠ Q x * P z) : W.add P Q = W.addZ P Q •
       ![W.toAffine.addX (P x / P z) (Q x / Q z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)),
         W.toAffine.addY (P x / P z) (Q x / Q z) (P y / P z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)), 1] := by
-  rw [add_of_not_equiv <| not_equiv_of_X_ne hx]; rw [addXYZ_of_Z_ne_zero hP hQ hPz hQz hx]
-
-/--
-lemma `nonsingular_add_of_Z_ne_zero` / 引理 `nonsingular_add_of_Z_ne_zero`
-
-English:
-lemma nonsingular_add_of_Z_ne_zero
-  statement: [DecidableEq F] {P Q : Fin 3 -> F}
-  proof: (nonsingular_some ..).mpr Affine.nonsingular_add ((nonsingular_of_Z_ne_zero hPz).mp hP)
-((nonsingular_of_Z_ne_zero hQz).mp hQ) by rwa [← X_eq_iff hPz hQz, ← Y_eq_iff' hPz hQz]
-
-中文:
-引理 nonsingular_add_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
-  证明: (nonsingular_some ..).mpr Affine.nonsingular_add ((nonsingular_of_Z_ne_zero hPz).mp hP)
-((nonsingular_of_Z_ne_zero hQz).mp hQ) by rwa [← X_eq_iff hPz hQz, ← Y_eq_iff' hPz hQz]
+  rw [add_of_not_equiv <| not_equiv_of_X_ne hx, addXYZ_of_Z_ne_zero hP hQ hPz hQz hx]
+/-
+**WeierstrassCurve.Projective.nonsingular_add_of_Z_ne_zero** 是 Mathlib 中的一个引理，位于
+命名空间 `WeierstrassCurve.Projective`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma nonsingular_add_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 -> F}
-    (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z != 0) (hQz : Q z != 0)
+private lemma nonsingular_add_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 → F}
+    (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z ≠ 0) (hQz : Q z ≠ 0)
     (hxy : ¬(P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z)) : W.Nonsingular
       ![W.toAffine.addX (P x / P z) (Q x / Q z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)),
         W.toAffine.addY (P x / P z) (Q x / Q z) (P y / P z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)), 1] :=
-(nonsingular_some ..).mpr Affine.nonsingular_add ((nonsingular_of_Z_ne_zero hPz).mp hP)
-((nonsingular_of_Z_ne_zero hQz).mp hQ) by rwa [← X_eq_iff hPz hQz, ← Y_eq_iff' hPz hQz]
-
-/--
-lemma `nonsingular_add` / 引理 `nonsingular_add`
-
-English:
-lemma nonsingular_add
-  given: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
-  proof: by
-  by_cases hPz : P z = 0
-  · by_cases hQz : Q z = 0
-    · simp only [add_of_Z_eq_zero hP hQ hPz hQz,
-nonsingular_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, nonsingular_zero]
-    · simpa only [add_of_Z_eq_zero_left hP.left hPz hQz,
-nonsingular_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
-  · by_cases hQz : Q z = 0
-    · simpa only [add_of_Z_eq_zero_right hQ.left hPz hQz,
-        nonsingular_smul _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg]
-    · by_cases hxy : P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z
-      · by_cases hy : P y * Q z = Q y * P z
-        · simp only [add_of_Y_eq hP.left hPz hQz hxy.left hy hxy.right, nonsingular_smul _ <|
-              isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, nonsingular_zero]
-        · simp only [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
-nonsingular_smul _ isUnit_addU_of_Y_ne hPz hQz hy, nonsingular_zero]
-      · classical
-        have := nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy
-        by_cases hx : P x * Q z = Q x * P z
-        · simpa only [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
-nonsingular_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx
-              not_and.mp hxy hx]
-        · simpa only [add_of_X_ne hP.left hQ.left hPz hQz hx,
-nonsingular_smul _ isUnit_addZ_of_X_ne hP.left hQ.left hx]
-
-中文:
-引理 nonsingular_add
-  条件: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.非奇异 Q)
-  证明: by
-  by_cases hPz : P z = 0
-  · by_cases hQz : Q z = 0
-    · simp only [add_of_Z_eq_zero hP hQ hPz hQz,
-nonsingular_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, nonsingular_zero]
-    · simpa only [add_of_Z_eq_zero_left hP.left hPz hQz,
-nonsingular_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
-  · by_cases hQz : Q z = 0
-    · simpa only [add_of_Z_eq_zero_right hQ.left hPz hQz,
-        nonsingular_smul _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg]
-    · by_cases hxy : P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z
-      · by_cases hy : P y * Q z = Q y * P z
-        · simp only [add_of_Y_eq hP.left hPz hQz hxy.left hy hxy.right, nonsingular_smul _ <|
-              isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, nonsingular_zero]
-        · simp only [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
-nonsingular_smul _ isUnit_addU_of_Y_ne hPz hQz hy, nonsingular_zero]
-      · classical
-        have := nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy
-        by_cases hx : P x * Q z = Q x * P z
-        · simpa only [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
-nonsingular_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx
-              not_and.mp hxy hx]
-        · simpa only [add_of_X_ne hP.left hQ.left hPz hQz hx,
-nonsingular_smul _ isUnit_addZ_of_X_ne hP.left hQ.left hx]
-
-Depends on / 依赖: Ne.isUnit, add_of_Z_eq_zero, add_of_Z_eq_zero_left, add_of_Z_eq_zero_right, hP.left, hQ.left, isUnit, isUnit_Y_of_Z_eq_zero, nonsingular_smul, nonsingular_zero, weakEquivalences_over_iff
+  (nonsingular_some ..).mpr <| Affine.nonsingular_add ((nonsingular_of_Z_ne_zero hPz).mp hP)
+    ((nonsingular_of_Z_ne_zero hQz).mp hQ) <| by rwa [← X_eq_iff hPz hQz, ← Y_eq_iff' hPz hQz]
+/-
+**WeierstrassCurve.Projective.nonsingular_add** 是 Mathlib 中的一个引理，位于命名空间 `Weierst
+rassCurve.Projective`。
+形式化陈述：nonsingular_add {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingu
+lar Q) : W.Nonsingular W.add P Q
+参数：hP : W.Nonsingular P；hQ : W.Nonsingular Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero`：add_of_Z_eq_zero {P Q : Fi
+n 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z = 0) (hQz : Q
+ z = 0) : W.add P Q = P y ^ 4 • ![…
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_smul`：nonsingular_smul (P : Fin 
+3 -> R) {u : R} (hu : IsUnit u) : W'.Nonsingular (u • P) ↔ W'.Nonsingular P
+· 使用定理 `IsUnit.pow`：∀ {M : Type u_1} [inst : Monoid M] {a : M} (n : ℕ), IsUnit a
+ → IsUnit (a ^ n)
+· 使用引理 `WeierstrassCurve.Projective.isUnit_Y_of_Z_eq_zero`：isUnit_Y_of_Z_eq_zero
+ {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : IsUnit (P y)
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero_left`：add_of_Z_eq_zero_left
+ [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) (hQz
+ : Q z != 0) : W'.add P Q = (P y ^ 2 * …
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsUnit.mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, IsUnit a → IsU
+nit b → IsUnit (a * b)
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero_right`：add_of_Z_eq_zero_rig
+ht [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hPz : P z != 0) (
+hQz : Q z = 0) : W'.add P Q = -(Q y ^ 2 …
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_eq`：add_of_Y_eq {P Q : Fin 3 -> F} 
+(hP : W.Equation P) (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P 
+z) (hy : P y * Q z = Q y * P …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `WeierstrassCurve.Projective.isUnit_dblU_of_Y_eq`：isUnit_dblU_of_Y_eq {P 
+Q : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) (hQz : Q z != 0) (hx : P
+ x * Q z = Q x * P z) (hy : P y * Q z…
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_ne`：add_of_Y_ne {P Q : Fin 3 -> F} 
+(hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz : Q z != 0) (hx : 
+P x * Q z = Q x * P z) (hy : …
+· 使用引理 `WeierstrassCurve.Projective.isUnit_addU_of_Y_ne`：isUnit_addU_of_Y_ne {P 
+Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) (hy : P y * Q z != Q y * P z) 
+: IsUnit (addU P Q)
+· 使用定理 `_private.Mathlib.AlgebraicGeometry.EllipticCurve.Projective.Point.0.Weie
+rstrassCurve.Projective.nonsingular_add_of_Z_ne_zero`：∀ {F : Type u} [inst : Fie
+ld F] {W : WeierstrassCurve.Projective F} [inst_1 : DecidableEq F] {P Q : Fin 3 
+→ F},   W.Nonsingular P →     W.No…
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_ne'`：add_of_Y_ne' [DecidableEq F] {
+P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz 
+: Q z != 0) (hx : P x * Q z = …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_and`：∀ {a b : Prop}, ¬(a ∧ b) ↔ a → ¬b
+· 使用引理 `WeierstrassCurve.Projective.isUnit_dblZ_of_Y_ne'`：isUnit_dblZ_of_Y_ne' {
+P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz 
+: Q z != 0) (hx : P x * Q z = Q x * P …
+· 使用引理 `WeierstrassCurve.Projective.add_of_X_ne`：add_of_X_ne [DecidableEq F] {P 
+Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz : 
+Q z != 0) (hx : P x * Q z != …
+· 使用引理 `WeierstrassCurve.Projective.isUnit_addZ_of_X_ne`：isUnit_addZ_of_X_ne {P 
+Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hx : P x * Q z != Q x *
+ P z) : IsUnit W.addZ P Q
 -/
-lemma nonsingular_add {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) :
-W.Nonsingular W.add P Q := by
+lemma nonsingular_add {P Q : Fin 3 → F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) :
+    W.Nonsingular <| W.add P Q := by
   by_cases hPz : P z = 0
   · by_cases hQz : Q z = 0
     · simp only [add_of_Z_eq_zero hP hQ hPz hQz,
-nonsingular_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, nonsingular_zero]
+        nonsingular_smul _ <| (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, nonsingular_zero]
     · simpa only [add_of_Z_eq_zero_left hP.left hPz hQz,
-nonsingular_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
+        nonsingular_smul _ <| ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul <| Ne.isUnit hQz]
   · by_cases hQz : Q z = 0
     · simpa only [add_of_Z_eq_zero_right hQ.left hPz hQz,
         nonsingular_smul _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg]
@@ -997,196 +1151,230 @@ nonsingular_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
         · simp only [add_of_Y_eq hP.left hPz hQz hxy.left hy hxy.right, nonsingular_smul _ <|
               isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, nonsingular_zero]
         · simp only [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
-nonsingular_smul _ isUnit_addU_of_Y_ne hPz hQz hy, nonsingular_zero]
+            nonsingular_smul _ <| isUnit_addU_of_Y_ne hPz hQz hy, nonsingular_zero]
       · classical
         have := nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy
         by_cases hx : P x * Q z = Q x * P z
         · simpa only [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
-nonsingular_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx
+            nonsingular_smul _ <| isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx <|
               not_and.mp hxy hx]
         · simpa only [add_of_X_ne hP.left hQ.left hPz hQz hx,
-nonsingular_smul _ isUnit_addZ_of_X_ne hP.left hQ.left hx]
+            nonsingular_smul _ <| isUnit_addZ_of_X_ne hP.left hQ.left hx]
 
 variable (W') in
-/--
-Definition of `addMap` / `addMap` 的定义
+/-- The addition of two projective point classes on a Weierstrass curve `W`.
 
-English:
-definition addMap
-  signature: (P Q : PointClass R)
-  body: Quotient.map₂ W'.add (fun _ _ hP _ _ hQ => add_equiv hP hQ) P Q
+If `P` and `Q` are two projective point representatives on `W`, then `W.addMap ⟦P⟧ ⟦Q⟧` is
+definitionally equivalent to `W.add P Q`. -/
+/-
+**WeierstrassCurve.Projective.addMap** 是 Mathlib 中的一个定义，位于命名空间 `WeierstrassCurve
+.Projective`。
+形式化陈述：addMap (P Q : PointClass R) : PointClass R
+参数：P Q : PointClass R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.add_equiv`：add_equiv {P P' Q Q' : Fin 3 -> R
+} (hP : P ≈ P') (hQ : Q ≈ Q') : W'.add P Q ≈ W'.add P' Q'
 
-中文:
-定义 addMap
-  签名: (P Q : PointClass R)
-  定义体: Quotient.map₂ W'.add (fun _ _ hP _ _ hQ => add_equiv hP hQ) P Q
+--- 原说明 ---
+The addition of two projective point classes on a Weierstrass curve `W`.
 
-Depends on / 依赖: Quotient, Quotient.map, add_equiv
+If `P` and `Q` are two projective point representatives on `W`, then `W.addMap ⟦
+P⟧ ⟦Q⟧` is
+definitionally equivalent to `W.add P Q`.
 -/
 noncomputable def addMap (P Q : PointClass R) : PointClass R :=
   Quotient.map₂ W'.add (fun _ _ hP _ _ hQ => add_equiv hP hQ) P Q
-
-/--
-lemma `addMap_eq` / 引理 `addMap_eq`
-
-English:
-lemma addMap_eq
-  given: (P Q : Fin 3 -> R)
-  statement: W'.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
-  proof: rfl
-
-中文:
-引理 addMap_eq
-  条件: (P Q : 有限集 3 -> R)
-  结论: W'.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.addMap_eq** 是 Mathlib 中的一个引理，位于命名空间 `WeierstrassCu
+rve.Projective`。
+形式化陈述：addMap_eq (P Q : Fin 3 -> R) : W'.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
+参数：P Q : Fin 3 -> R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma addMap_eq (P Q : Fin 3 -> R) : W'.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧ :=
+lemma addMap_eq (P Q : Fin 3 → R) : W'.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧ :=
   rfl
-
-/--
-lemma `addMap_of_Z_eq_zero_left` / 引理 `addMap_of_Z_eq_zero_left`
-
-English:
-lemma addMap_of_Z_eq_zero_left
-  statement: {P : Fin 3 -> F} {Q : PointClass F} (hP : W.Nonsingular P)
-  proof: by
-  revert hQ
-  refine Q.inductionOn (motive := fun Q => _ -> W.addMap _ Q = Q) fun Q hQ => ?_
-  by_cases hQz : Q z = 0
-  · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
-smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
-exact Setoid.symm equiv_zero_of_Z_eq_zero hQ hQz
-  · rw [addMap_eq, add_of_Z_eq_zero_left hP.left hPz hQz,
-smul_eq _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
-
-中文:
-引理 addMap_of_Z_eq_zero_left
-  结论: {P : 有限集 3 -> F} {Q : PointClass F} (hP : W.非奇异 P)
-  证明: by
-  revert hQ
-  refine Q.inductionOn (motive := fun Q => _ -> W.addMap _ Q = Q) fun Q hQ => ?_
-  by_cases hQz : Q z = 0
-  · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
-smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
-exact Setoid.symm equiv_zero_of_Z_eq_zero hQ hQz
-  · rw [addMap_eq, add_of_Z_eq_zero_left hP.left hPz hQz,
-smul_eq _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
-
-Depends on / 依赖: Ne.isUnit, Q.inductionOn, Quotient, Quotient.eq, Setoid, Setoid.symm, W.addMap, addMap, addMap_eq, add_of_Z_eq_zero, add_of_Z_eq_zero_left, equiv_zero_of_Z_eq_zero, hP.left, inductionOn, isUnit, isUnit_Y_of_Z_eq_zero, motive, revert, smul_eq
+/-
+**WeierstrassCurve.Projective.addMap_of_Z_eq_zero_left** 是 Mathlib 中的一个引理，位于命名空间
+ `WeierstrassCurve.Projective`。
+形式化陈述：addMap_of_Z_eq_zero_left {P : Fin 3 -> F} {Q : PointClass F} (hP : W.Nonsi
+ngular P) (hQ : W.NonsingularLift Q) (hPz : P z = 0) : W.addMap ⟦P⟧ Q = Q
+参数：hP : W.Nonsingular P；hQ : W.NonsingularLift Q；hPz : P z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.addMap_eq`：addMap_eq (P Q : Fin 3 -> R) : W'
+.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero`：add_of_Z_eq_zero {P Q : Fi
+n 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z = 0) (hQz : Q
+ z = 0) : W.add P Q = P y ^ 4 • ![…
+· 使用引理 `WeierstrassCurve.Projective.smul_eq`：smul_eq (P : Fin 3 -> R) {u : R} (h
+u : IsUnit u) : (⟦u • P⟧ : PointClass R) = ⟦P⟧
+· 使用定理 `IsUnit.pow`：∀ {M : Type u_1} [inst : Monoid M] {a : M} (n : ℕ), IsUnit a
+ → IsUnit (a ^ n)
+· 使用引理 `WeierstrassCurve.Projective.isUnit_Y_of_Z_eq_zero`：isUnit_Y_of_Z_eq_zero
+ {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : IsUnit (P y)
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用引理 `WeierstrassCurve.Projective.equiv_zero_of_Z_eq_zero`：equiv_zero_of_Z_eq_
+zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : P ≈ ![0, 1, 0]
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero_left`：add_of_Z_eq_zero_left
+ [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) (hQz
+ : Q z != 0) : W'.add P Q = (P y ^ 2 * …
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsUnit.mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, IsUnit a → IsU
+nit b → IsUnit (a * b)
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
 -/
-lemma addMap_of_Z_eq_zero_left {P : Fin 3 -> F} {Q : PointClass F} (hP : W.Nonsingular P)
+lemma addMap_of_Z_eq_zero_left {P : Fin 3 → F} {Q : PointClass F} (hP : W.Nonsingular P)
     (hQ : W.NonsingularLift Q) (hPz : P z = 0) : W.addMap ⟦P⟧ Q = Q := by
   revert hQ
-  refine Q.inductionOn (motive := fun Q => _ -> W.addMap _ Q = Q) fun Q hQ => ?_
+  refine Q.inductionOn (motive := fun Q => _ → W.addMap _ Q = Q) fun Q hQ => ?_
   by_cases hQz : Q z = 0
   · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
-smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
-exact Setoid.symm equiv_zero_of_Z_eq_zero hQ hQz
+      smul_eq _ <| (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
+    exact Setoid.symm <| equiv_zero_of_Z_eq_zero hQ hQz
   · rw [addMap_eq, add_of_Z_eq_zero_left hP.left hPz hQz,
-smul_eq _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
-
-/--
-lemma `addMap_of_Z_eq_zero_right` / 引理 `addMap_of_Z_eq_zero_right`
-
-English:
-lemma addMap_of_Z_eq_zero_right
-  statement: {P : PointClass F} {Q : Fin 3 -> F} (hP : W.NonsingularLift P)
-  proof: by
-  revert hP
-  refine P.inductionOn (motive := fun P => _ -> W.addMap P _ = P) fun P hP => ?_
-  by_cases hPz : P z = 0
-  · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
-smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
-exact Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-  · rw [addMap_eq, add_of_Z_eq_zero_right hQ.left hPz hQz,
-      smul_eq _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg]
-
-中文:
-引理 addMap_of_Z_eq_zero_right
-  结论: {P : PointClass F} {Q : 有限集 3 -> F} (hP : W.NonsingularLift P)
-  证明: by
-  revert hP
-  refine P.inductionOn (motive := fun P => _ -> W.addMap P _ = P) fun P hP => ?_
-  by_cases hPz : P z = 0
-  · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
-smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
-exact Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-  · rw [addMap_eq, add_of_Z_eq_zero_right hQ.left hPz hQz,
-      smul_eq _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg]
-
-Depends on / 依赖: Ne.isUnit, P.inductionOn, Quotient, Quotient.eq, Setoid, Setoid.symm, W.addMap, addMap, addMap_eq, add_of_Z_eq_zero, add_of_Z_eq_zero_right, equiv_zero_of_Z_eq_zero, hQ.left, inductionOn, isUnit, isUnit_Y_of_Z_eq_zero, motive, revert, smul_eq
+      smul_eq _ <| ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul <| Ne.isUnit hQz]
+/-
+**WeierstrassCurve.Projective.addMap_of_Z_eq_zero_right** 是 Mathlib 中的一个引理，位于命名空
+间 `WeierstrassCurve.Projective`。
+形式化陈述：addMap_of_Z_eq_zero_right {P : PointClass F} {Q : Fin 3 -> F} (hP : W.Nons
+ingularLift P) (hQ : W.Nonsingular Q) (hQz : Q z = 0) : W.addMap P ⟦Q⟧ = P
+参数：hP : W.NonsingularLift P；hQ : W.Nonsingular Q；hQz : Q z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.addMap_eq`：addMap_eq (P Q : Fin 3 -> R) : W'
+.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero`：add_of_Z_eq_zero {P Q : Fi
+n 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z = 0) (hQz : Q
+ z = 0) : W.add P Q = P y ^ 4 • ![…
+· 使用引理 `WeierstrassCurve.Projective.smul_eq`：smul_eq (P : Fin 3 -> R) {u : R} (h
+u : IsUnit u) : (⟦u • P⟧ : PointClass R) = ⟦P⟧
+· 使用定理 `IsUnit.pow`：∀ {M : Type u_1} [inst : Monoid M] {a : M} (n : ℕ), IsUnit a
+ → IsUnit (a ^ n)
+· 使用引理 `WeierstrassCurve.Projective.isUnit_Y_of_Z_eq_zero`：isUnit_Y_of_Z_eq_zero
+ {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : IsUnit (P y)
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用引理 `WeierstrassCurve.Projective.equiv_zero_of_Z_eq_zero`：equiv_zero_of_Z_eq_
+zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : P ≈ ![0, 1, 0]
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero_right`：add_of_Z_eq_zero_rig
+ht [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hPz : P z != 0) (
+hQz : Q z = 0) : W'.add P Q = -(Q y ^ 2 …
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用定理 `IsUnit.mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, IsUnit a → IsU
+nit b → IsUnit (a * b)
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
 -/
-lemma addMap_of_Z_eq_zero_right {P : PointClass F} {Q : Fin 3 -> F} (hP : W.NonsingularLift P)
+lemma addMap_of_Z_eq_zero_right {P : PointClass F} {Q : Fin 3 → F} (hP : W.NonsingularLift P)
     (hQ : W.Nonsingular Q) (hQz : Q z = 0) : W.addMap P ⟦Q⟧ = P := by
   revert hP
-  refine P.inductionOn (motive := fun P => _ -> W.addMap P _ = P) fun P hP => ?_
+  refine P.inductionOn (motive := fun P => _ → W.addMap P _ = P) fun P hP => ?_
   by_cases hPz : P z = 0
   · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
-smul_eq _ (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
-exact Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
+      smul_eq _ <| (isUnit_Y_of_Z_eq_zero hP hPz).pow 4, Quotient.eq]
+    exact Setoid.symm <| equiv_zero_of_Z_eq_zero hP hPz
   · rw [addMap_eq, add_of_Z_eq_zero_right hQ.left hPz hQz,
       smul_eq _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg]
-
-/--
-lemma `addMap_of_Y_eq` / 引理 `addMap_of_Y_eq`
-
-English:
-lemma addMap_of_Y_eq
-  statement: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Equation Q) (hPz : P z != 0)
-  proof: by
-  by_cases hy : P y * Q z = Q y * P z
-  · rw [addMap_eq, add_of_Y_eq hP.left hPz hQz hx hy hy',
-smul_eq _ isUnit_dblU_of_Y_eq hP hPz hQz hx hy hy']
-  · rw [addMap_eq, add_of_Y_ne hP.left hQ hPz hQz hx hy,
-smul_eq _ isUnit_addU_of_Y_ne hPz hQz hy]
-
-中文:
-引理 addMap_of_Y_eq
-  结论: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.方程 Q) (hPz : P z != 0)
-  证明: by
-  by_cases hy : P y * Q z = Q y * P z
-  · rw [addMap_eq, add_of_Y_eq hP.left hPz hQz hx hy hy',
-smul_eq _ isUnit_dblU_of_Y_eq hP hPz hQz hx hy hy']
-  · rw [addMap_eq, add_of_Y_ne hP.left hQ hPz hQz hx hy,
-smul_eq _ isUnit_addU_of_Y_ne hPz hQz hy]
-
-Depends on / 依赖: addMap_eq, add_of_Y_eq, add_of_Y_ne, hP.left, isUnit_addU_of_Y_ne, isUnit_dblU_of_Y_eq, smul_eq
+/-
+**WeierstrassCurve.Projective.addMap_of_Y_eq** 是 Mathlib 中的一个引理，位于命名空间 `Weierstr
+assCurve.Projective`。
+形式化陈述：addMap_of_Y_eq {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Equation 
+Q) (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P z) (hy' : P y * Q
+ z = W.negY Q * P z) : W.addMap ⟦P⟧ ⟦Q⟧ = ⟦![0, 1, 0]⟧
+参数：hP : W.Nonsingular P；hQ : W.Equation Q；hPz : P z != 0；hQz : Q z != 0；hx : P x
+ * Q z = Q x * P z；hy' : P y * Q z = W.negY Q * P z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.addMap_eq`：addMap_eq (P Q : Fin 3 -> R) : W'
+.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_eq`：add_of_Y_eq {P Q : Fin 3 -> F} 
+(hP : W.Equation P) (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P 
+z) (hy : P y * Q z = Q y * P …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `WeierstrassCurve.Projective.smul_eq`：smul_eq (P : Fin 3 -> R) {u : R} (h
+u : IsUnit u) : (⟦u • P⟧ : PointClass R) = ⟦P⟧
+· 使用引理 `WeierstrassCurve.Projective.isUnit_dblU_of_Y_eq`：isUnit_dblU_of_Y_eq {P 
+Q : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) (hQz : Q z != 0) (hx : P
+ x * Q z = Q x * P z) (hy : P y * Q z…
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_ne`：add_of_Y_ne {P Q : Fin 3 -> F} 
+(hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz : Q z != 0) (hx : 
+P x * Q z = Q x * P z) (hy : …
+· 使用引理 `WeierstrassCurve.Projective.isUnit_addU_of_Y_ne`：isUnit_addU_of_Y_ne {P 
+Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) (hy : P y * Q z != Q y * P z) 
+: IsUnit (addU P Q)
 -/
-lemma addMap_of_Y_eq {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Equation Q) (hPz : P z != 0)
-    (hQz : Q z != 0) (hx : P x * Q z = Q x * P z) (hy' : P y * Q z = W.negY Q * P z) :
+lemma addMap_of_Y_eq {P Q : Fin 3 → F} (hP : W.Nonsingular P) (hQ : W.Equation Q) (hPz : P z ≠ 0)
+    (hQz : Q z ≠ 0) (hx : P x * Q z = Q x * P z) (hy' : P y * Q z = W.negY Q * P z) :
     W.addMap ⟦P⟧ ⟦Q⟧ = ⟦![0, 1, 0]⟧ := by
   by_cases hy : P y * Q z = Q y * P z
   · rw [addMap_eq, add_of_Y_eq hP.left hPz hQz hx hy hy',
-smul_eq _ isUnit_dblU_of_Y_eq hP hPz hQz hx hy hy']
+      smul_eq _ <| isUnit_dblU_of_Y_eq hP hPz hQz hx hy hy']
   · rw [addMap_eq, add_of_Y_ne hP.left hQ hPz hQz hx hy,
-smul_eq _ isUnit_addU_of_Y_ne hPz hQz hy]
-
-/--
-lemma `addMap_of_Z_ne_zero` / 引理 `addMap_of_Z_ne_zero`
-
-English:
-lemma addMap_of_Z_ne_zero
-  statement: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
-  proof: by
-  by_cases hx : P x * Q z = Q x * P z
-  · rw [addMap_eq, add_of_Y_ne' hP hQ hPz hQz hx <| not_and.mp hxy hx,
-smul_eq _ isUnit_dblZ_of_Y_ne' hP hQ hPz hQz hx not_and.mp hxy hx]
-  · rw [addMap_eq, add_of_X_ne hP hQ hPz hQz hx, smul_eq _ <| isUnit_addZ_of_X_ne hP hQ hx]
-
-中文:
-引理 addMap_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
-  证明: by
-  by_cases hx : P x * Q z = Q x * P z
-  · rw [addMap_eq, add_of_Y_ne' hP hQ hPz hQz hx <| not_and.mp hxy hx,
-smul_eq _ isUnit_dblZ_of_Y_ne' hP hQ hPz hQz hx not_and.mp hxy hx]
-  · rw [addMap_eq, add_of_X_ne hP hQ hPz hQz hx, smul_eq _ <| isUnit_addZ_of_X_ne hP hQ hx]
-
-Depends on / 依赖: addMap_eq, add_of_X_ne, add_of_Y_ne, isUnit_addZ_of_X_ne, isUnit_dblZ_of_Y_ne, not_and, not_and.mp, smul_eq
+      smul_eq _ <| isUnit_addU_of_Y_ne hPz hQz hy]
+/-
+**WeierstrassCurve.Projective.addMap_of_Z_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Wei
+erstrassCurve.Projective`。
+形式化陈述：addMap_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P)
+ (hQ : W.Equation Q) (hPz : P z != 0) (hQz : Q z != 0) (hxy : ¬(P x * Q z = Q x 
+* P z ∧ P y * Q z = W.negY Q * P z)) : W.addMap ⟦P⟧ ⟦Q⟧ = ⟦![W.toAffine.addX (P 
+x / P z) (Q x / Q z) (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y 
+/ Q z)), W.toAffine.addY (P x / P z) (Q x / Q z) (P y / P z) (W.toAffine.slope (
+P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)), 1]⟧
+参数：hP : W.Equation P；hQ : W.Equation Q；hPz : P z != 0；hQz : Q z != 0；hxy : ¬(P x
+ * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.addMap_eq`：addMap_eq (P Q : Fin 3 -> R) : W'
+.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_ne'`：add_of_Y_ne' [DecidableEq F] {
+P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz 
+: Q z != 0) (hx : P x * Q z = …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_and`：∀ {a b : Prop}, ¬(a ∧ b) ↔ a → ¬b
+· 使用引理 `WeierstrassCurve.Projective.smul_eq`：smul_eq (P : Fin 3 -> R) {u : R} (h
+u : IsUnit u) : (⟦u • P⟧ : PointClass R) = ⟦P⟧
+· 使用引理 `WeierstrassCurve.Projective.isUnit_dblZ_of_Y_ne'`：isUnit_dblZ_of_Y_ne' {
+P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz 
+: Q z != 0) (hx : P x * Q z = Q x * P …
+· 使用引理 `WeierstrassCurve.Projective.add_of_X_ne`：add_of_X_ne [DecidableEq F] {P 
+Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz : 
+Q z != 0) (hx : P x * Q z != …
+· 使用引理 `WeierstrassCurve.Projective.isUnit_addZ_of_X_ne`：isUnit_addZ_of_X_ne {P 
+Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hx : P x * Q z != Q x *
+ P z) : IsUnit W.addZ P Q
 -/
-lemma addMap_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
-    (hPz : P z != 0) (hQz : Q z != 0) (hxy : ¬(P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z)) :
+lemma addMap_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 → F} (hP : W.Equation P) (hQ : W.Equation Q)
+    (hPz : P z ≠ 0) (hQz : Q z ≠ 0) (hxy : ¬(P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z)) :
     W.addMap ⟦P⟧ ⟦Q⟧ =
       ⟦![W.toAffine.addX (P x / P z) (Q x / Q z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)),
@@ -1194,30 +1382,21 @@ lemma addMap_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)), 1]⟧ := by
   by_cases hx : P x * Q z = Q x * P z
   · rw [addMap_eq, add_of_Y_ne' hP hQ hPz hQz hx <| not_and.mp hxy hx,
-smul_eq _ isUnit_dblZ_of_Y_ne' hP hQ hPz hQz hx not_and.mp hxy hx]
+      smul_eq _ <| isUnit_dblZ_of_Y_ne' hP hQ hPz hQz hx <| not_and.mp hxy hx]
   · rw [addMap_eq, add_of_X_ne hP hQ hPz hQz hx, smul_eq _ <| isUnit_addZ_of_X_ne hP hQ hx]
-
-/--
-lemma `nonsingularLift_addMap` / 引理 `nonsingularLift_addMap`
-
-English:
-lemma nonsingularLift_addMap
-  statement: {P Q : PointClass F} (hP : W.NonsingularLift P)
-  proof: by
-  rcases P; rcases Q
-  exact nonsingular_add hP hQ
-
-中文:
-引理 nonsingularLift_addMap
-  结论: {P Q : PointClass F} (hP : W.NonsingularLift P)
-  证明: by
-  rcases P; rcases Q
-  exact nonsingular_add hP hQ
-
-Depends on / 依赖: nonsingular_add
+/-
+**WeierstrassCurve.Projective.nonsingularLift_addMap** 是 Mathlib 中的一个引理，位于命名空间 `
+WeierstrassCurve.Projective`。
+形式化陈述：nonsingularLift_addMap {P Q : PointClass F} (hP : W.NonsingularLift P) (hQ
+ : W.NonsingularLift Q) : W.NonsingularLift W.addMap P Q
+参数：hP : W.NonsingularLift P；hQ : W.NonsingularLift Q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_add`：nonsingular_add {P Q : Fin 
+3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) : W.Nonsingular W.add P Q
 -/
 lemma nonsingularLift_addMap {P Q : PointClass F} (hP : W.NonsingularLift P)
-(hQ : W.NonsingularLift Q) : W.NonsingularLift W.addMap P Q := by
+    (hQ : W.NonsingularLift Q) : W.NonsingularLift <| W.addMap P Q := by
   rcases P; rcases Q
   exact nonsingular_add hP hQ
 
@@ -1226,22 +1405,14 @@ lemma nonsingularLift_addMap {P Q : PointClass F} (hP : W.NonsingularLift P)
 variable (W') in
 /-- A nonsingular projective point on a Weierstrass curve `W`. -/
 @[ext]
-/--
-Definition of `Point` / `Point` 的定义
+/-
+**WeierstrassCurve.Projective.Point** 是 Mathlib 中的一个归纳类型，位于命名空间 `WeierstrassCurv
+e.Projective`。
+形式化陈述：{R : Type r} → [CommRing R] → WeierstrassCurve.Projective R → Type r
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Point
-  parameters: where
-  axioms and operations (2):
-    - {point : PointClass R}
-    - (nonsingular : W'.NonsingularLift point)
-
-中文:
-结构 Point
-  参数: where
-  公理与运算 (2 个):
-    - {point : PointClass R}
-    - (nonsingular : W'.NonsingularLift point)
+--- 原说明 ---
+A nonsingular projective point on a Weierstrass curve `W`.
 -/
 structure Point where
   /-- The projective point class underlying a nonsingular projective point on `W`. -/
@@ -1251,303 +1422,209 @@ structure Point where
 
 namespace Point
 
-/--
-lemma `mk_point` / 引理 `mk_point`
-
-English:
-lemma mk_point
-  given: {P : PointClass R} (h : W'.NonsingularLift P)
-  statement: (mk h).point = P
-  proof: rfl
-
-中文:
-引理 mk_point
-  条件: {P : PointClass R} (h : W'.NonsingularLift P)
-  结论: (mk h).point = P
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.mk_point** 是 Mathlib 中的一个引理，位于命名空间 `Weierstr
+assCurve.Projective.Point`。
+形式化陈述：mk_point {P : PointClass R} (h : W'.NonsingularLift P) : (mk h).point = P
+参数：h : W'.NonsingularLift P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_point {P : PointClass R} (h : W'.NonsingularLift P) : (mk h).point = P :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: R] : Zero W'.Point
-  body: ⟨⟨nonsingularLift_zero⟩⟩
-
-中文:
-实例 [非平凡
-  签名: R] : 零 W'.Point
-  定义体: ⟨⟨nonsingularLift_zero⟩⟩
-
-Depends on / 依赖: nonsingularLift_zero
+/-
+**WeierstrassCurve.Projective.Point.** 是 Mathlib 中的一个实例，位于命名空间 `WeierstrassCurve
+.Projective.Point`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial R] : Zero W'.Point :=
   ⟨⟨nonsingularLift_zero⟩⟩
-
-/--
-lemma `zero_def` / 引理 `zero_def`
-
-English:
-lemma zero_def
-  given: [Nontrivial R]
-  statement: (0 : W'.Point) = ⟨nonsingularLift_zero⟩
-  proof: rfl
-
-中文:
-引理 zero_def
-  条件: [非平凡 R]
-  结论: (0 : W'.Point) = ⟨nonsingularLift_zero⟩
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.zero_def** 是 Mathlib 中的一个引理，位于命名空间 `Weierstr
+assCurve.Projective.Point`。
+形式化陈述：zero_def [Nontrivial R] : (0 : W'.Point) = ⟨nonsingularLift_zero⟩
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma zero_def [Nontrivial R] : (0 : W'.Point) = ⟨nonsingularLift_zero⟩ :=
   rfl
-
-/--
-lemma `zero_point` / 引理 `zero_point`
-
-English:
-lemma zero_point
-  given: [Nontrivial R]
-  statement: (0 : W'.Point).point = ⟦![0, 1, 0]⟧
-  proof: rfl
-
-中文:
-引理 zero_point
-  条件: [非平凡 R]
-  结论: (0 : W'.Point).point = ⟦![0, 1, 0]⟧
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.zero_point** 是 Mathlib 中的一个引理，位于命名空间 `Weiers
+trassCurve.Projective.Point`。
+形式化陈述：zero_point [Nontrivial R] : (0 : W'.Point).point = ⟦![0, 1, 0]⟧
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma zero_point [Nontrivial R] : (0 : W'.Point).point = ⟦![0, 1, 0]⟧ :=
   rfl
-
-/--
-lemma `mk_ne_zero` / 引理 `mk_ne_zero`
-
-English:
-lemma mk_ne_zero
-  given: [Nontrivial R] {X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧)
-  statement: mk h != 0
-  proof: (not_equiv_of_Z_eq_zero_right one_ne_zero rfl).comp Quotient.eq.mp.comp Point.ext_iff.mp
-
-中文:
-引理 mk_ne_zero
-  条件: [非平凡 R] {X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧)
-  结论: mk h != 0
-  证明: (not_equiv_of_Z_eq_zero_right one_ne_zero rfl).comp Quotient.eq.mp.comp Point.ext_iff.mp
-
-Depends on / 依赖: Point.ext_iff.mp, Quotient, Quotient.eq.mp.comp, ext_iff, not_equiv_of_Z_eq_zero_right, one_ne_zero
+/-
+**WeierstrassCurve.Projective.Point.mk_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Weiers
+trassCurve.Projective.Point`。
+形式化陈述：mk_ne_zero [Nontrivial R] {X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧) 
+: mk h != 0
+参数：h : W'.NonsingularLift ⟦![X, Y, 1]⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.not_equiv_of_Z_eq_zero_right`：not_equiv_of_Z
+_eq_zero_right {P Q : Fin 3 -> R} (hPz : P z != 0) (hQz : Q z = 0) : ¬P ≈ Q
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
+· 使用定理 `WeierstrassCurve.Projective.Point.ext_iff`：∀ {R : Type r} {inst : CommRi
+ng R} {W' : WeierstrassCurve.Projective R} {x y : W'.Point}, x = y ↔ x.point = y
+.point
 -/
-lemma mk_ne_zero [Nontrivial R] {X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧) : mk h != 0 :=
-(not_equiv_of_Z_eq_zero_right one_ne_zero rfl).comp Quotient.eq.mp.comp Point.ext_iff.mp
+lemma mk_ne_zero [Nontrivial R] {X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧) : mk h ≠ 0 :=
+  (not_equiv_of_Z_eq_zero_right one_ne_zero rfl).comp <| Quotient.eq.mp.comp Point.ext_iff.mp
 
-/--
-Definition of `fromAffine` / `fromAffine` 的定义
+/-- The natural map from a nonsingular point on a Weierstrass curve in affine coordinates to its
+corresponding nonsingular projective point. -/
+/-
+**WeierstrassCurve.Projective.Point.fromAffine** 是 Mathlib 中的一个定义，位于命名空间 `Weiers
+trassCurve.Projective.Point`。
+形式化陈述：{R : Type r} →   [inst : CommRing R] → {W' : WeierstrassCurve.Projective R
+} → [Nontrivial R] → W'.toAffine.Point → W'.Point
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromAffine
-  signature: [Nontrivial R]
-
-中文:
-定义 fromAffine
-  签名: [非平凡 R]
+--- 原说明 ---
+The natural map from a nonsingular point on a Weierstrass curve in affine coordi
+nates to its
+corresponding nonsingular projective point.
 -/
-def fromAffine [Nontrivial R] : W'.toAffine.Point -> W'.Point
+def fromAffine [Nontrivial R] : W'.toAffine.Point → W'.Point
   | 0 => 0
   | .some _ _ h => ⟨(nonsingularLift_some ..).mpr h⟩
-
-/--
-lemma `fromAffine_zero` / 引理 `fromAffine_zero`
-
-English:
-lemma fromAffine_zero
-  given: [Nontrivial R]
-  statement: fromAffine 0 = (0 : W'.Point)
-  proof: rfl
-
-中文:
-引理 fromAffine_zero
-  条件: [非平凡 R]
-  结论: fromAffine 0 = (0 : W'.Point)
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.fromAffine_zero** 是 Mathlib 中的一个引理，位于命名空间 `W
+eierstrassCurve.Projective.Point`。
+形式化陈述：fromAffine_zero [Nontrivial R] : fromAffine 0 = (0 : W'.Point)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromAffine_zero [Nontrivial R] : fromAffine 0 = (0 : W'.Point) :=
   rfl
-
-/--
-lemma `fromAffine_some` / 引理 `fromAffine_some`
-
-English:
-lemma fromAffine_some
-  given: [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y)
-  proof: rfl
-
-中文:
-引理 fromAffine_some
-  条件: [非平凡 R] {X Y : R} (h : W'.toAffine.非奇异 X Y)
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.fromAffine_some** 是 Mathlib 中的一个引理，位于命名空间 `W
+eierstrassCurve.Projective.Point`。
+形式化陈述：fromAffine_some [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y)
+ : fromAffine (.some _ _ h) = ⟨(nonsingularLift_some ..).mpr h⟩
+参数：h : W'.toAffine.Nonsingular X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromAffine_some [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y) :
     fromAffine (.some _ _ h) = ⟨(nonsingularLift_some ..).mpr h⟩ :=
   rfl
-
-/--
-lemma `fromAffine_some_ne_zero` / 引理 `fromAffine_some_ne_zero`
-
-English:
-lemma fromAffine_some_ne_zero
-  given: [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y)
-  proof: mk_ne_zero (nonsingularLift_some ..).mpr h
-
-中文:
-引理 fromAffine_some_ne_zero
-  条件: [非平凡 R] {X Y : R} (h : W'.toAffine.非奇异 X Y)
-  证明: mk_ne_zero (nonsingularLift_some ..).mpr h
-
-Depends on / 依赖: mk_ne_zero, nonsingularLift_some
+/-
+**WeierstrassCurve.Projective.Point.fromAffine_some_ne_zero** 是 Mathlib 中的一个引理，位
+于命名空间 `WeierstrassCurve.Projective.Point`。
+形式化陈述：fromAffine_some_ne_zero [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingu
+lar X Y) : fromAffine (.some _ _ h) != 0
+参数：h : W'.toAffine.Nonsingular X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.mk_ne_zero`：mk_ne_zero [Nontrivial R] 
+{X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧) : mk h != 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WeierstrassCurve.Projective.nonsingularLift_some`：nonsingularLift_some (
+a b : R) : W'.NonsingularLift ⟦![a, b, 1]⟧ ↔ W'.toAffine.Nonsingular a b
 -/
 lemma fromAffine_some_ne_zero [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y) :
-    fromAffine (.some _ _ h) != 0 :=
-mk_ne_zero (nonsingularLift_some ..).mpr h
+    fromAffine (.some _ _ h) ≠ 0 :=
+  mk_ne_zero <| (nonsingularLift_some ..).mpr h
 
-/--
-Definition of `neg` / `neg` 的定义
+/-- The negation of a nonsingular projective point on a Weierstrass curve `W`.
 
-English:
-definition neg
-  signature: (P : W.Point)
-  body: ⟨nonsingularLift_negMap P.nonsingular⟩
+Given a nonsingular projective point `P` on `W`, use `-P` instead of `neg P`. -/
+/-
+**WeierstrassCurve.Projective.Point.neg** 是 Mathlib 中的一个定义，位于命名空间 `WeierstrassCu
+rve.Projective.Point`。
+形式化陈述：neg (P : W.Point) : W.Point
+参数：P : W.Point。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 neg
-  签名: (P : W.Point)
-  定义体: ⟨nonsingularLift_negMap P.nonsingular⟩
+--- 原说明 ---
+The negation of a nonsingular projective point on a Weierstrass curve `W`.
 
-Depends on / 依赖: P.nonsingular, nonsingular, nonsingularLift_negMap
+Given a nonsingular projective point `P` on `W`, use `-P` instead of `neg P`.
 -/
 def neg (P : W.Point) : W.Point :=
   ⟨nonsingularLift_negMap P.nonsingular⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg W.Point
-  body: ⟨neg⟩
-
-中文:
-实例 :
-  签名: 取负 W.Point
-  定义体: ⟨neg⟩
+/-
+**WeierstrassCurve.Projective.Point.** 是 Mathlib 中的一个实例，位于命名空间 `WeierstrassCurve
+.Projective.Point`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg W.Point :=
   ⟨neg⟩
-
-/--
-lemma `neg_def` / 引理 `neg_def`
-
-English:
-lemma neg_def
-  given: (P : W.Point)
-  statement: -P = P.neg
-  proof: rfl
-
-中文:
-引理 neg_def
-  条件: (P : W.Point)
-  结论: -P = P.neg
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.neg_def** 是 Mathlib 中的一个引理，位于命名空间 `Weierstra
+ssCurve.Projective.Point`。
+形式化陈述：neg_def (P : W.Point) : -P = P.neg
+参数：P : W.Point。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma neg_def (P : W.Point) : -P = P.neg :=
   rfl
-
-/--
-lemma `neg_point` / 引理 `neg_point`
-
-English:
-lemma neg_point
-  given: (P : W.Point)
-  statement: (-P).point = W.negMap P.point
-  proof: rfl
-
-中文:
-引理 neg_point
-  条件: (P : W.Point)
-  结论: (-P).point = W.negMap P.point
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.neg_point** 是 Mathlib 中的一个引理，位于命名空间 `Weierst
+rassCurve.Projective.Point`。
+形式化陈述：neg_point (P : W.Point) : (-P).point = W.negMap P.point
+参数：P : W.Point。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma neg_point (P : W.Point) : (-P).point = W.negMap P.point :=
   rfl
 
-/--
-Definition of `add` / `add` 的定义
+/-- The addition of two nonsingular projective points on a Weierstrass curve `W`.
 
-English:
-definition add
-  signature: (P Q : W.Point)
-  body: ⟨nonsingularLift_addMap P.nonsingular Q.nonsingular⟩
+Given two nonsingular projective points `P` and `Q` on `W`, use `P + Q` instead of `add P Q`. -/
+/-
+**WeierstrassCurve.Projective.Point.add** 是 Mathlib 中的一个定义，位于命名空间 `WeierstrassCu
+rve.Projective.Point`。
+形式化陈述：add (P Q : W.Point) : W.Point
+参数：P Q : W.Point。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 add
-  签名: (P Q : W.Point)
-  定义体: ⟨nonsingularLift_addMap P.nonsingular Q.nonsingular⟩
+--- 原说明 ---
+The addition of two nonsingular projective points on a Weierstrass curve `W`.
 
-Depends on / 依赖: P.nonsingular, Q.nonsingular, nonsingular, nonsingularLift_addMap
+Given two nonsingular projective points `P` and `Q` on `W`, use `P + Q` instead 
+of `add P Q`.
 -/
 noncomputable def add (P Q : W.Point) : W.Point :=
   ⟨nonsingularLift_addMap P.nonsingular Q.nonsingular⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add W.Point
-  body: ⟨add⟩
-
-中文:
-实例 :
-  签名: 加法 W.Point
-  定义体: ⟨add⟩
+/-
+**WeierstrassCurve.Projective.Point.** 是 Mathlib 中的一个实例，位于命名空间 `WeierstrassCurve
+.Projective.Point`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Add W.Point :=
   ⟨add⟩
-
-/--
-lemma `add_def` / 引理 `add_def`
-
-English:
-lemma add_def
-  given: (P Q : W.Point)
-  statement: P + Q = P.add Q
-  proof: rfl
-
-中文:
-引理 add_def
-  条件: (P Q : W.Point)
-  结论: P + Q = P.add Q
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.add_def** 是 Mathlib 中的一个引理，位于命名空间 `Weierstra
+ssCurve.Projective.Point`。
+形式化陈述：add_def (P Q : W.Point) : P + Q = P.add Q
+参数：P Q : W.Point。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma add_def (P Q : W.Point) : P + Q = P.add Q :=
   rfl
-
-/--
-lemma `add_point` / 引理 `add_point`
-
-English:
-lemma add_point
-  given: (P Q : W.Point)
-  statement: (P + Q).point = W.addMap P.point Q.point
-  proof: rfl
-
-中文:
-引理 add_point
-  条件: (P Q : W.Point)
-  结论: (P + Q).point = W.addMap P.point Q.point
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.add_point** 是 Mathlib 中的一个引理，位于命名空间 `Weierst
+rassCurve.Projective.Point`。
+形式化陈述：add_point (P Q : W.Point) : (P + Q).point = W.addMap P.point Q.point
+参数：P Q : W.Point。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma add_point (P Q : W.Point) : (P + Q).point = W.addMap P.point Q.point :=
   rfl
@@ -1556,158 +1633,189 @@ lemma add_point (P Q : W.Point) : (P + Q).point = W.addMap P.point Q.point :=
 
 open scoped Classical in
 variable (W) in
-/--
-Definition of `toAffine` / `toAffine` 的定义
+/-- The natural map from a nonsingular projective point representative on a Weierstrass curve to its
+corresponding nonsingular point in affine coordinates. -/
+/-
+**WeierstrassCurve.Projective.Point.toAffine** 是 Mathlib 中的一个定义，位于命名空间 `Weierstr
+assCurve.Projective.Point`。
+形式化陈述：toAffine (P : Fin 3 -> F) : W.toAffine.Point
+参数：P : Fin 3 -> F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAffine
-  signature: (P : Fin 3 -> F)
-  body: if hP : W.Nonsingular P ∧ P z != 0 then .some _ _ (nonsingular_of_Z_ne_zero hP.2).mp hP.1 else 0
-
-中文:
-定义 toAffine
-  签名: (P : 有限集 3 -> F)
-  定义体: if hP : W.Nonsingular P ∧ P z != 0 then .some _ _ (nonsingular_of_Z_ne_zero hP.2).mp hP.1 else 0
-
-Depends on / 依赖: Nonsingular, W.Nonsingular, nonsingular_of_Z_ne_zero
+--- 原说明 ---
+The natural map from a nonsingular projective point representative on a Weierstr
+ass curve to its
+corresponding nonsingular point in affine coordinates.
 -/
-noncomputable def toAffine (P : Fin 3 -> F) : W.toAffine.Point :=
-if hP : W.Nonsingular P ∧ P z != 0 then .some _ _ (nonsingular_of_Z_ne_zero hP.2).mp hP.1 else 0
-
-/--
-lemma `toAffine_of_singular` / 引理 `toAffine_of_singular`
-
-English:
-lemma toAffine_of_singular
-  given: {P : Fin 3 -> F} (hP : ¬W.Nonsingular P)
-  statement: toAffine W P = 0
-  proof: by
-  rw [toAffine]; rw [dif_neg <| not_and_of_not_left _ hP]
-
-中文:
-引理 toAffine_of_singular
-  条件: {P : 有限集 3 -> F} (hP : ¬W.非奇异 P)
-  结论: toAffine W P = 0
-  证明: by
-  rw [toAffine]; rw [dif_neg <| not_and_of_not_left _ hP]
-
-Depends on / 依赖: dif_neg, not_and_of_not_left, toAffine
+noncomputable def toAffine (P : Fin 3 → F) : W.toAffine.Point :=
+  if hP : W.Nonsingular P ∧ P z ≠ 0 then .some _ _ <| (nonsingular_of_Z_ne_zero hP.2).mp hP.1 else 0
+/-
+**WeierstrassCurve.Projective.Point.toAffine_of_singular** 是 Mathlib 中的一个引理，位于命名
+空间 `WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffine_of_singular {P : Fin 3 -> F} (hP : ¬W.Nonsingular P) : toAffine W
+ P = 0
+参数：hP : ¬W.Nonsingular P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.Point.toAffine.eq_1`：∀ {F : Type u} [inst : 
+Field F] (W : WeierstrassCurve.Projective F) (P : Fin 3 → F),   WeierstrassCurve
+.Projective.Point.toAffine W P =     …
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `not_and_of_not_left`：∀ {a : Prop} (b : Prop), ¬a → ¬(a ∧ b)
 -/
-lemma toAffine_of_singular {P : Fin 3 -> F} (hP : ¬W.Nonsingular P) : toAffine W P = 0 := by
-  rw [toAffine]; rw [dif_neg <| not_and_of_not_left _ hP]
-
-/--
-lemma `toAffine_of_Z_eq_zero` / 引理 `toAffine_of_Z_eq_zero`
-
-English:
-lemma toAffine_of_Z_eq_zero
-  given: {P : Fin 3 -> F} (hPz : P z = 0)
-  statement: toAffine W P = 0
-  proof: by
-  rw [toAffine]; rw [dif_neg <| not_and_not_right.mpr fun _ => hPz]
-
-中文:
-引理 toAffine_of_Z_eq_zero
-  条件: {P : 有限集 3 -> F} (hPz : P z = 0)
-  结论: toAffine W P = 0
-  证明: by
-  rw [toAffine]; rw [dif_neg <| not_and_not_right.mpr fun _ => hPz]
-
-Depends on / 依赖: dif_neg, not_and_not_right, not_and_not_right.mpr, toAffine
+lemma toAffine_of_singular {P : Fin 3 → F} (hP : ¬W.Nonsingular P) : toAffine W P = 0 := by
+  rw [toAffine, dif_neg <| not_and_of_not_left _ hP]
+/-
+**WeierstrassCurve.Projective.Point.toAffine_of_Z_eq_zero** 是 Mathlib 中的一个引理，位于命
+名空间 `WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffine_of_Z_eq_zero {P : Fin 3 -> F} (hPz : P z = 0) : toAffine W P = 0
+参数：hPz : P z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.Point.toAffine.eq_1`：∀ {F : Type u} [inst : 
+Field F] (W : WeierstrassCurve.Projective F) (P : Fin 3 → F),   WeierstrassCurve
+.Projective.Point.toAffine W P =     …
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_and_not_right`：not_and_not_right : ¬(a ∧ ¬b) ↔ a -> b
 -/
-lemma toAffine_of_Z_eq_zero {P : Fin 3 -> F} (hPz : P z = 0) : toAffine W P = 0 := by
-  rw [toAffine]; rw [dif_neg <| not_and_not_right.mpr fun _ => hPz]
-
-/--
-lemma `toAffine_zero` / 引理 `toAffine_zero`
-
-English:
-lemma toAffine_zero
-  statement: toAffine W ![0, 1, 0] = 0
-  proof: toAffine_of_Z_eq_zero rfl
-
-中文:
-引理 toAffine_zero
-  结论: toAffine W ![0, 1, 0] = 0
-  证明: toAffine_of_Z_eq_zero rfl
-
-Depends on / 依赖: toAffine_of_Z_eq_zero
+lemma toAffine_of_Z_eq_zero {P : Fin 3 → F} (hPz : P z = 0) : toAffine W P = 0 := by
+  rw [toAffine, dif_neg <| not_and_not_right.mpr fun _ => hPz]
+/-
+**WeierstrassCurve.Projective.Point.toAffine_zero** 是 Mathlib 中的一个引理，位于命名空间 `Wei
+erstrassCurve.Projective.Point`。
+形式化陈述：toAffine_zero : toAffine W ![0, 1, 0] = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_eq_zero`：toAffine_of_Z_e
+q_zero {P : Fin 3 -> F} (hPz : P z = 0) : toAffine W P = 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma toAffine_zero : toAffine W ![0, 1, 0] = 0 :=
   toAffine_of_Z_eq_zero rfl
-
-/--
-lemma `toAffine_of_Z_ne_zero` / 引理 `toAffine_of_Z_ne_zero`
-
-English:
-lemma toAffine_of_Z_ne_zero
-  given: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0)
-  proof: by
-  rw [toAffine]; rw [dif_pos ⟨hP]; rw [hPz⟩]
-
-中文:
-引理 toAffine_of_Z_ne_zero
-  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z != 0)
-  证明: by
-  rw [toAffine]; rw [dif_pos ⟨hP]; rw [hPz⟩]
-
-Depends on / 依赖: dif_pos, toAffine
+/-
+**WeierstrassCurve.Projective.Point.toAffine_of_Z_ne_zero** 是 Mathlib 中的一个引理，位于命
+名空间 `WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffine_of_Z_ne_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z !
+= 0) : toAffine W P = .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp hP)
+参数：hP : W.Nonsingular P；hPz : P z != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_of_Z_ne_zero`：nonsingular_of_Z_n
+e_zero {P : Fin 3 -> F} (hPz : P z != 0) : W.Nonsingular P ↔ W.toAffine.Nonsingu
+lar (P x / P z) (P y / P z)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WeierstrassCurve.Projective.Point.toAffine.eq_1`：∀ {F : Type u} [inst : 
+Field F] (W : WeierstrassCurve.Projective F) (P : Fin 3 → F),   WeierstrassCurve
+.Projective.Point.toAffine W P =     …
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-lemma toAffine_of_Z_ne_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) :
+lemma toAffine_of_Z_ne_zero {P : Fin 3 → F} (hP : W.Nonsingular P) (hPz : P z ≠ 0) :
     toAffine W P = .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp hP) := by
-  rw [toAffine]; rw [dif_pos ⟨hP]; rw [hPz⟩]
-
-/--
-lemma `toAffine_some` / 引理 `toAffine_some`
-
-English:
-lemma toAffine_some
-  given: {X Y : F} (h : W.Nonsingular ![X, Y, 1])
-  proof: by
-  simp only [toAffine_of_Z_ne_zero h one_ne_zero, fin3_def_ext, div_one]
-
-中文:
-引理 toAffine_some
-  条件: {X Y : F} (h : W.非奇异 ![X, Y, 1])
-  证明: by
-  simp only [toAffine_of_Z_ne_zero h one_ne_zero, fin3_def_ext, div_one]
-
-Depends on / 依赖: div_one, fin3_def_ext, one_ne_zero, toAffine_of_Z_ne_zero
+  rw [toAffine, dif_pos ⟨hP, hPz⟩]
+/-
+**WeierstrassCurve.Projective.Point.toAffine_some** 是 Mathlib 中的一个引理，位于命名空间 `Wei
+erstrassCurve.Projective.Point`。
+形式化陈述：toAffine_some {X Y : F} (h : W.Nonsingular ![X, Y, 1]) : toAffine W ![X, Y
+, 1] = .some _ _ ((nonsingular_some ..).mp h)
+参数：h : W.Nonsingular ![X, Y, 1]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_some`：nonsingular_some (a b : R)
+ : W'.Nonsingular ![a, b, 1] ↔ W'.toAffine.Nonsingular a b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_of_Z_ne_zero`：nonsingular_of_Z_n
+e_zero {P : Fin 3 -> F} (hPz : P z != 0) : W.Nonsingular P ↔ W.toAffine.Nonsingu
+lar (P x / P z) (P y / P z)
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_ne_zero`：toAffine_of_Z_n
+e_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) : toAffine W P =
+ .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp…
+· 使用定理 `WeierstrassCurve.Affine.Point.some.congr_simp`：∀ {R : Type r} [inst : Co
+mmRing R] {W' : WeierstrassCurve.Affine R} (x x_1 : R) (e_x : x = x_1) (y y_1 : 
+R)   (e_y : y = y_1) (h : W'.Nonsin…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toAffine_some {X Y : F} (h : W.Nonsingular ![X, Y, 1]) :
     toAffine W ![X, Y, 1] = .some _ _ ((nonsingular_some ..).mp h) := by
   simp only [toAffine_of_Z_ne_zero h one_ne_zero, fin3_def_ext, div_one]
-
-/--
-lemma `toAffine_smul` / 引理 `toAffine_smul`
-
-English:
-lemma toAffine_smul
-  given: (P : Fin 3 -> F) {u : F} (hu : IsUnit u)
-  proof: by
-  by_cases hP : W.Nonsingular P
-  · by_cases hPz : P z = 0
-    · rw [toAffine_of_Z_eq_zero <| mul_eq_zero_of_right u hPz, toAffine_of_Z_eq_zero hPz]
-    · rw [toAffine_of_Z_ne_zero ((nonsingular_smul P hu).mpr hP) <| mul_ne_zero hu.ne_zero hPz,
-        toAffine_of_Z_ne_zero hP hPz, Affine.Point.some.injEq]
-      simp only [smul_fin3_ext, mul_div_mul_left _ _ hu.ne_zero, and_self]
-  · rw [toAffine_of_singular <| hP.comp (nonsingular_smul P hu).mp, toAffine_of_singular hP]
-
-中文:
-引理 toAffine_smul
-  条件: (P : 有限集 3 -> F) {u : F} (hu : 是单位 u)
-  证明: by
-  by_cases hP : W.Nonsingular P
-  · by_cases hPz : P z = 0
-    · rw [toAffine_of_Z_eq_zero <| mul_eq_zero_of_right u hPz, toAffine_of_Z_eq_zero hPz]
-    · rw [toAffine_of_Z_ne_zero ((nonsingular_smul P hu).mpr hP) <| mul_ne_zero hu.ne_zero hPz,
-        toAffine_of_Z_ne_zero hP hPz, Affine.Point.some.injEq]
-      simp only [smul_fin3_ext, mul_div_mul_left _ _ hu.ne_zero, and_self]
-  · rw [toAffine_of_singular <| hP.comp (nonsingular_smul P hu).mp, toAffine_of_singular hP]
-
-Depends on / 依赖: Affine, Affine.Point.some.injEq, Nonsingular, W.Nonsingular, and_self, hP.comp, hu.ne_zero, mul_div_mul_left, mul_eq_zero_of_right, mul_ne_zero, ne_zero, nonsingular_smul, smul_fin3_ext, toAffine_of_Z_eq_zero, toAffine_of_Z_ne_zero, toAffine_of_singular
+/-
+**WeierstrassCurve.Projective.Point.toAffine_smul** 是 Mathlib 中的一个引理，位于命名空间 `Wei
+erstrassCurve.Projective.Point`。
+形式化陈述：toAffine_smul (P : Fin 3 -> F) {u : F} (hu : IsUnit u) : toAffine W (u • P
+) = toAffine W P
+参数：P : Fin 3 -> F；hu : IsUnit u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_eq_zero`：toAffine_of_Z_e
+q_zero {P : Fin 3 -> F} (hPz : P z = 0) : toAffine W P = 0
+· 使用定理 `mul_eq_zero_of_right`：mul_eq_zero_of_right (a : M₀) {b : M₀} (h : b = 0)
+ : a * b = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_of_Z_ne_zero`：nonsingular_of_Z_n
+e_zero {P : Fin 3 -> F} (hPz : P z != 0) : W.Nonsingular P ↔ W.toAffine.Nonsingu
+lar (P x / P z) (P y / P z)
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsUnit.ne_zero`：ne_zero [Nontrivial M₀] {a : M₀} (ha : IsUnit a) : a != 
+0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_smul`：nonsingular_smul (P : Fin 
+3 -> R) {u : R} (hu : IsUnit u) : W'.Nonsingular (u • P) ↔ W'.Nonsingular P
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_ne_zero`：toAffine_of_Z_n
+e_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) : toAffine W P =
+ .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp…
+· 使用定理 `WeierstrassCurve.Affine.Point.some.injEq`：∀ {R : Type r} [inst : CommRin
+g R] {W' : WeierstrassCurve.Affine R} (x y : R) (h : W'.Nonsingular x y) (x_1 y_
+1 : R)   (h_1 : W'.Nonsingular…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `mul_div_mul_left`：mul_div_mul_left (a b : G₀) (hc : c != 0) : c * a / (c
+ * b) = a / b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_singular`：toAffine_of_sing
+ular {P : Fin 3 -> F} (hP : ¬W.Nonsingular P) : toAffine W P = 0
 -/
-lemma toAffine_smul (P : Fin 3 -> F) {u : F} (hu : IsUnit u) :
+lemma toAffine_smul (P : Fin 3 → F) {u : F} (hu : IsUnit u) :
     toAffine W (u • P) = toAffine W P := by
   by_cases hP : W.Nonsingular P
   · by_cases hPz : P z = 0
@@ -1716,159 +1824,178 @@ lemma toAffine_smul (P : Fin 3 -> F) {u : F} (hu : IsUnit u) :
         toAffine_of_Z_ne_zero hP hPz, Affine.Point.some.injEq]
       simp only [smul_fin3_ext, mul_div_mul_left _ _ hu.ne_zero, and_self]
   · rw [toAffine_of_singular <| hP.comp (nonsingular_smul P hu).mp, toAffine_of_singular hP]
-
-/--
-lemma `toAffine_of_equiv` / 引理 `toAffine_of_equiv`
-
-English:
-lemma toAffine_of_equiv
-  given: {P Q : Fin 3 -> F} (h : P ≈ Q)
-  statement: toAffine W P = toAffine W Q
-  proof: by
-  rcases h with ⟨u, rfl⟩
-  exact toAffine_smul Q u.isUnit
-
-中文:
-引理 toAffine_of_equiv
-  条件: {P Q : 有限集 3 -> F} (h : P ≈ Q)
-  结论: toAffine W P = toAffine W Q
-  证明: by
-  rcases h with ⟨u, rfl⟩
-  exact toAffine_smul Q u.isUnit
-
-Depends on / 依赖: isUnit, toAffine_smul, u.isUnit
+/-
+**WeierstrassCurve.Projective.Point.toAffine_of_equiv** 是 Mathlib 中的一个引理，位于命名空间 
+`WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffine_of_equiv {P Q : Fin 3 -> F} (h : P ≈ Q) : toAffine W P = toAffine
+ W Q
+参数：h : P ≈ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_smul`：toAffine_smul (P : Fin 
+3 -> F) {u : F} (hu : IsUnit u) : toAffine W (u • P) = toAffine W P
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
-lemma toAffine_of_equiv {P Q : Fin 3 -> F} (h : P ≈ Q) : toAffine W P = toAffine W Q := by
+lemma toAffine_of_equiv {P Q : Fin 3 → F} (h : P ≈ Q) : toAffine W P = toAffine W Q := by
   rcases h with ⟨u, rfl⟩
   exact toAffine_smul Q u.isUnit
-
-/--
-lemma `toAffine_neg` / 引理 `toAffine_neg`
-
-English:
-lemma toAffine_neg
-  given: {P : Fin 3 -> F} (hP : W.Nonsingular P)
-  proof: by
-  by_cases hPz : P z = 0
-  · rw [neg_of_Z_eq_zero hP.left hPz, toAffine_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).neg,
-      toAffine_zero, toAffine_of_Z_eq_zero hPz, Affine.Point.neg_zero]
-  · rw [neg_of_Z_ne_zero hPz, toAffine_smul _ <| Ne.isUnit hPz, toAffine_some <|
-(nonsingular_smul _ <| Ne.isUnit hPz).mp neg_of_Z_ne_zero hPz ▸ nonsingular_neg hP,
-      toAffine_of_Z_ne_zero hP hPz, Affine.Point.neg_some]
-
-中文:
-引理 toAffine_neg
-  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P)
-  证明: by
-  by_cases hPz : P z = 0
-  · rw [neg_of_Z_eq_zero hP.left hPz, toAffine_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).neg,
-      toAffine_zero, toAffine_of_Z_eq_zero hPz, Affine.Point.neg_zero]
-  · rw [neg_of_Z_ne_zero hPz, toAffine_smul _ <| Ne.isUnit hPz, toAffine_some <|
-(nonsingular_smul _ <| Ne.isUnit hPz).mp neg_of_Z_ne_zero hPz ▸ nonsingular_neg hP,
-      toAffine_of_Z_ne_zero hP hPz, Affine.Point.neg_some]
-
-Depends on / 依赖: Affine, Affine.Point.neg_some, Affine.Point.neg_zero, Ne.isUnit, hP.left, isUnit, isUnit_Y_of_Z_eq_zero, neg_of_Z_eq_zero, neg_of_Z_ne_zero, neg_some, neg_zero, nonsingular_neg, nonsingular_smul, toAffine_of_Z_eq_zero, toAffine_of_Z_ne_zero, toAffine_smul, toAffine_some, toAffine_zero
+/-
+**WeierstrassCurve.Projective.Point.toAffine_neg** 是 Mathlib 中的一个引理，位于命名空间 `Weie
+rstrassCurve.Projective.Point`。
+形式化陈述：toAffine_neg {P : Fin 3 -> F} (hP : W.Nonsingular P) : toAffine W (W.neg P
+) = -toAffine W P
+参数：hP : W.Nonsingular P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.neg_of_Z_eq_zero`：neg_of_Z_eq_zero [NoZeroDi
+visors R] {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) : W'.neg P = -P 
+y • ![0, 1, 0]
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_smul`：toAffine_smul (P : Fin 
+3 -> F) {u : F} (hu : IsUnit u) : toAffine W (u • P) = toAffine W P
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用引理 `WeierstrassCurve.Projective.isUnit_Y_of_Z_eq_zero`：isUnit_Y_of_Z_eq_zero
+ {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : IsUnit (P y)
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_zero`：toAffine_zero : toAffin
+e W ![0, 1, 0] = 0
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_eq_zero`：toAffine_of_Z_e
+q_zero {P : Fin 3 -> F} (hPz : P z = 0) : toAffine W P = 0
+· 使用引理 `WeierstrassCurve.Affine.Point.neg_zero`：neg_zero : (-0 : W'.Point) = 0
+· 使用引理 `WeierstrassCurve.Projective.neg_of_Z_ne_zero`：neg_of_Z_ne_zero {P : Fin 
+3 -> F} (hPz : P z != 0) : W.neg P = P z • ![P x / P z, W.toAffine.negY (P x / P
+ z) (P y / P z), 1]
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_some`：nonsingular_some (a b : R)
+ : W'.Nonsingular ![a, b, 1] ↔ W'.toAffine.Nonsingular a b
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_smul`：nonsingular_smul (P : Fin 
+3 -> R) {u : R} (hu : IsUnit u) : W'.Nonsingular (u • P) ↔ W'.Nonsingular P
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_neg`：nonsingular_neg {P : Fin 3 
+-> F} (hP : W.Nonsingular P) : W.Nonsingular W.neg P
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_some`：toAffine_some {X Y : F}
+ (h : W.Nonsingular ![X, Y, 1]) : toAffine W ![X, Y, 1] = .some _ _ ((nonsingula
+r_some ..).mp h)
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_of_Z_ne_zero`：nonsingular_of_Z_n
+e_zero {P : Fin 3 -> F} (hPz : P z != 0) : W.Nonsingular P ↔ W.toAffine.Nonsingu
+lar (P x / P z) (P y / P z)
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_ne_zero`：toAffine_of_Z_n
+e_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) : toAffine W P =
+ .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WeierstrassCurve.Affine.nonsingular_neg`：nonsingular_neg (x y : R) : W'.
+Nonsingular x (W'.negY x y) ↔ W'.Nonsingular x y
+· 使用引理 `WeierstrassCurve.Affine.Point.neg_some`：neg_some {x y : R} (h : W'.Nonsi
+ngular x y) : -some _ _ h = some _ _ ((nonsingular_neg ..).mpr h)
 -/
-lemma toAffine_neg {P : Fin 3 -> F} (hP : W.Nonsingular P) :
+lemma toAffine_neg {P : Fin 3 → F} (hP : W.Nonsingular P) :
     toAffine W (W.neg P) = -toAffine W P := by
   by_cases hPz : P z = 0
   · rw [neg_of_Z_eq_zero hP.left hPz, toAffine_smul _ (isUnit_Y_of_Z_eq_zero hP hPz).neg,
       toAffine_zero, toAffine_of_Z_eq_zero hPz, Affine.Point.neg_zero]
   · rw [neg_of_Z_ne_zero hPz, toAffine_smul _ <| Ne.isUnit hPz, toAffine_some <|
-(nonsingular_smul _ <| Ne.isUnit hPz).mp neg_of_Z_ne_zero hPz ▸ nonsingular_neg hP,
+        (nonsingular_smul _ <| Ne.isUnit hPz).mp <| neg_of_Z_ne_zero hPz ▸ nonsingular_neg hP,
       toAffine_of_Z_ne_zero hP hPz, Affine.Point.neg_some]
-
-/--
-lemma `toAffine_add_of_Z_ne_zero` / 引理 `toAffine_add_of_Z_ne_zero`
-
-English:
-lemma toAffine_add_of_Z_ne_zero
-  statement: [DecidableEq F] {P Q : Fin 3 -> F}
-  proof: by
-  rw [toAffine_some <| nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy]; rw [toAffine_of_Z_ne_zero hP hPz]; rw [toAffine_of_Z_ne_zero hQ hQz]; rw [Affine.Point.add_some by rwa [← X_eq_iff hPz hQz]; rw [← Y_eq_iff' hPz hQz]]
-
-中文:
-引理 toAffine_add_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
-  证明: by
-  rw [toAffine_some <| nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy]; rw [toAffine_of_Z_ne_zero hP hPz]; rw [toAffine_of_Z_ne_zero hQ hQz]; rw [Affine.Point.add_some by rwa [← X_eq_iff hPz hQz]; rw [← Y_eq_iff' hPz hQz]]
+/-
+**WeierstrassCurve.Projective.Point.toAffine_add_of_Z_ne_zero** 是 Mathlib 中的一个引理
+，位于命名空间 `WeierstrassCurve.Projective.Point`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma toAffine_add_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 -> F}
-    (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z != 0) (hQz : Q z != 0)
+private lemma toAffine_add_of_Z_ne_zero [DecidableEq F] {P Q : Fin 3 → F}
+    (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z ≠ 0) (hQz : Q z ≠ 0)
     (hxy : ¬(P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z)) : toAffine W
       ![W.toAffine.addX (P x / P z) (Q x / Q z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)),
         W.toAffine.addY (P x / P z) (Q x / Q z) (P y / P z)
           (W.toAffine.slope (P x / P z) (Q x / Q z) (P y / P z) (Q y / Q z)),
         1] = toAffine W P + toAffine W Q := by
-  rw [toAffine_some <| nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy]; rw [toAffine_of_Z_ne_zero hP hPz]; rw [toAffine_of_Z_ne_zero hQ hQz]; rw [Affine.Point.add_some by rwa [← X_eq_iff hPz hQz]; rw [← Y_eq_iff' hPz hQz]]
-
-/--
-lemma `toAffine_add` / 引理 `toAffine_add`
-
-English:
-lemma toAffine_add
-  given: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
-  proof: by
-  by_cases hPz : P z = 0
-  · rw [toAffine_of_Z_eq_zero hPz, zero_add]
-    by_cases hQz : Q z = 0
-    · rw [add_of_Z_eq_zero hP hQ hPz hQz, toAffine_smul _ <| (isUnit_Y_of_Z_eq_zero hP hPz).pow 4,
-        toAffine_zero, toAffine_of_Z_eq_zero hQz]
-    · rw [add_of_Z_eq_zero_left hP.left hPz hQz,
-toAffine_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
-  · by_cases hQz : Q z = 0
-    · rw [add_of_Z_eq_zero_right hQ.left hPz hQz,
-        toAffine_smul _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg,
-        toAffine_of_Z_eq_zero hQz, add_zero]
-    · by_cases hxy : P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z
-      · rw [toAffine_of_Z_ne_zero hP hPz, toAffine_of_Z_ne_zero hQ hQz, Affine.Point.add_of_Y_eq
-            ((X_eq_iff hPz hQz).mp hxy.left) ((Y_eq_iff' hPz hQz).mp hxy.right)]
-        by_cases hy : P y * Q z = Q y * P z
-        · rw [add_of_Y_eq hP.left hPz hQz hxy.left hy hxy.right,
-toAffine_smul _ isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, toAffine_zero]
-        · rw [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
-toAffine_smul _ isUnit_addU_of_Y_ne hPz hQz hy, toAffine_zero]
-      · have := toAffine_add_of_Z_ne_zero hP hQ hPz hQz hxy
-        by_cases hx : P x * Q z = Q x * P z
-        · rwa [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
-toAffine_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx not_and.mp hxy hx]
-        · rwa [add_of_X_ne hP.left hQ.left hPz hQz hx,
-toAffine_smul _ isUnit_addZ_of_X_ne hP.left hQ.left hx]
-
-中文:
-引理 toAffine_add
-  条件: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.非奇异 Q)
-  证明: by
-  by_cases hPz : P z = 0
-  · rw [toAffine_of_Z_eq_zero hPz, zero_add]
-    by_cases hQz : Q z = 0
-    · rw [add_of_Z_eq_zero hP hQ hPz hQz, toAffine_smul _ <| (isUnit_Y_of_Z_eq_zero hP hPz).pow 4,
-        toAffine_zero, toAffine_of_Z_eq_zero hQz]
-    · rw [add_of_Z_eq_zero_left hP.left hPz hQz,
-toAffine_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
-  · by_cases hQz : Q z = 0
-    · rw [add_of_Z_eq_zero_right hQ.left hPz hQz,
-        toAffine_smul _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg,
-        toAffine_of_Z_eq_zero hQz, add_zero]
-    · by_cases hxy : P x * Q z = Q x * P z ∧ P y * Q z = W.negY Q * P z
-      · rw [toAffine_of_Z_ne_zero hP hPz, toAffine_of_Z_ne_zero hQ hQz, Affine.Point.add_of_Y_eq
-            ((X_eq_iff hPz hQz).mp hxy.left) ((Y_eq_iff' hPz hQz).mp hxy.right)]
-        by_cases hy : P y * Q z = Q y * P z
-        · rw [add_of_Y_eq hP.left hPz hQz hxy.left hy hxy.right,
-toAffine_smul _ isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, toAffine_zero]
-        · rw [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
-toAffine_smul _ isUnit_addU_of_Y_ne hPz hQz hy, toAffine_zero]
-      · have := toAffine_add_of_Z_ne_zero hP hQ hPz hQz hxy
-        by_cases hx : P x * Q z = Q x * P z
-        · rwa [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
-toAffine_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx not_and.mp hxy hx]
-        · rwa [add_of_X_ne hP.left hQ.left hPz hQz hx,
-toAffine_smul _ isUnit_addZ_of_X_ne hP.left hQ.left hx]
-
-Depends on / 依赖: Ne.isUnit, add_of_Z_eq_zero, add_of_Z_eq_zero_left, add_of_Z_eq_zero_right, hP.left, hQ.left, isUnit, isUnit_Y_of_Z_eq_zero, toAffine_of_Z_eq_zero, toAffine_smul, toAffine_zero, zero_add
+  rw [toAffine_some <| nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy, toAffine_of_Z_ne_zero hP hPz,
+    toAffine_of_Z_ne_zero hQ hQz,
+    Affine.Point.add_some <| by rwa [← X_eq_iff hPz hQz, ← Y_eq_iff' hPz hQz]]
+/-
+**WeierstrassCurve.Projective.Point.toAffine_add** 是 Mathlib 中的一个引理，位于命名空间 `Weie
+rstrassCurve.Projective.Point`。
+形式化陈述：toAffine_add [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ
+ : W.Nonsingular Q) : toAffine W (W.add P Q) = toAffine W P + toAffine W Q
+参数：hP : W.Nonsingular P；hQ : W.Nonsingular Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_eq_zero`：toAffine_of_Z_e
+q_zero {P : Fin 3 -> F} (hPz : P z = 0) : toAffine W P = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero`：add_of_Z_eq_zero {P Q : Fi
+n 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) (hPz : P z = 0) (hQz : Q
+ z = 0) : W.add P Q = P y ^ 4 • ![…
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_smul`：toAffine_smul (P : Fin 
+3 -> F) {u : F} (hu : IsUnit u) : toAffine W (u • P) = toAffine W P
+· 使用定理 `IsUnit.pow`：∀ {M : Type u_1} [inst : Monoid M] {a : M} (n : ℕ), IsUnit a
+ → IsUnit (a ^ n)
+· 使用引理 `WeierstrassCurve.Projective.isUnit_Y_of_Z_eq_zero`：isUnit_Y_of_Z_eq_zero
+ {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0) : IsUnit (P y)
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_zero`：toAffine_zero : toAffin
+e W ![0, 1, 0] = 0
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero_left`：add_of_Z_eq_zero_left
+ [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) (hQz
+ : Q z != 0) : W'.add P Q = (P y ^ 2 * …
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsUnit.mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, IsUnit a → IsU
+nit b → IsUnit (a * b)
+· 使用定理 `Ne.isUnit`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 →
+ IsUnit a
+· 使用引理 `WeierstrassCurve.Projective.add_of_Z_eq_zero_right`：add_of_Z_eq_zero_rig
+ht [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hPz : P z != 0) (
+hQz : Q z = 0) : W'.add P Q = -(Q y ^ 2 …
+· 使用定理 `IsUnit.neg`：∀ {α : Type u} [inst : Monoid α] [inst_1 : HasDistribNeg α] 
+{a : α}, IsUnit a → IsUnit (-a)
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.nonsingular_of_Z_ne_zero`：nonsingular_of_Z_n
+e_zero {P : Fin 3 -> F} (hPz : P z != 0) : W.Nonsingular P ↔ W.toAffine.Nonsingu
+lar (P x / P z) (P y / P z)
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_ne_zero`：toAffine_of_Z_n
+e_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) : toAffine W P =
+ .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp…
+· 使用引理 `WeierstrassCurve.Affine.Point.add_of_Y_eq`：add_of_Y_eq {x₁ x₂ y₁ y₂ : F}
+ {h₁ : W.Nonsingular x₁ y₁} {h₂ : W.Nonsingular x₂ y₂} (hx : x₁ = x₂) (hy : y₁ =
+ W.negY x₂ y₂) : some _ _ h₁ + …
+· 使用引理 `WeierstrassCurve.Projective.X_eq_iff`：X_eq_iff {P Q : Fin 3 -> F} (hPz :
+ P z != 0) (hQz : Q z != 0) : P x * Q z = Q x * P z ↔ P x / P z = Q x / Q z
+· 使用引理 `WeierstrassCurve.Projective.Y_eq_iff'`：Y_eq_iff' {P Q : Fin 3 -> F} (hPz
+ : P z != 0) (hQz : Q z != 0) : P y * Q z = W.negY Q * P z ↔ P y / P z = W.toAff
+ine.negY (Q x / Q z) (Q y /…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_eq`：add_of_Y_eq {P Q : Fin 3 -> F} 
+(hP : W.Equation P) (hPz : P z != 0) (hQz : Q z != 0) (hx : P x * Q z = Q x * P 
+z) (hy : P y * Q z = Q y * P …
+· 使用引理 `WeierstrassCurve.Projective.isUnit_dblU_of_Y_eq`：isUnit_dblU_of_Y_eq {P 
+Q : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) (hQz : Q z != 0) (hx : P
+ x * Q z = Q x * P z) (hy : P y * Q z…
+· 使用引理 `WeierstrassCurve.Projective.add_of_Y_ne`：add_of_Y_ne {P Q : Fin 3 -> F} 
+(hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0) (hQz : Q z != 0) (hx : 
+P x * Q z = Q x * P z) (hy : …
+· 使用引理 `WeierstrassCurve.Projective.isUnit_addU_of_Y_ne`：isUnit_addU_of_Y_ne {P 
+Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) (hy : P y * Q z != Q y * P z) 
+: IsUnit (addU P Q)
+· 使用定理 `_private.Mathlib.AlgebraicGeometry.EllipticCurve.Projective.Point.0.Weie
+rstrassCurve.Projective.Point.toAffine_add_of_Z_ne_zero`：∀ {F : Type u} [inst : 
+Field F] {W : WeierstrassCurve.Projective F} [inst_1 : DecidableEq F] {P Q : Fin
+ 3 → F},   W.Nonsingular P →     W.No…
+（共 35 条，此处仅展示前 30 条）
 -/
-lemma toAffine_add [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) :
+lemma toAffine_add [DecidableEq F] {P Q : Fin 3 → F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) :
     toAffine W (W.add P Q) = toAffine W P + toAffine W Q := by
   by_cases hPz : P z = 0
   · rw [toAffine_of_Z_eq_zero hPz, zero_add]
@@ -1876,7 +2003,7 @@ lemma toAffine_add [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ
     · rw [add_of_Z_eq_zero hP hQ hPz hQz, toAffine_smul _ <| (isUnit_Y_of_Z_eq_zero hP hPz).pow 4,
         toAffine_zero, toAffine_of_Z_eq_zero hQz]
     · rw [add_of_Z_eq_zero_left hP.left hPz hQz,
-toAffine_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
+        toAffine_smul _ <| ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul <| Ne.isUnit hQz]
   · by_cases hQz : Q z = 0
     · rw [add_of_Z_eq_zero_right hQ.left hPz hQz,
         toAffine_smul _ (((isUnit_Y_of_Z_eq_zero hQ hQz).pow 2).mul <| Ne.isUnit hPz).neg,
@@ -1886,169 +2013,136 @@ toAffine_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).pow 2).mul Ne.isUnit hQz]
             ((X_eq_iff hPz hQz).mp hxy.left) ((Y_eq_iff' hPz hQz).mp hxy.right)]
         by_cases hy : P y * Q z = Q y * P z
         · rw [add_of_Y_eq hP.left hPz hQz hxy.left hy hxy.right,
-toAffine_smul _ isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, toAffine_zero]
+            toAffine_smul _ <| isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, toAffine_zero]
         · rw [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
-toAffine_smul _ isUnit_addU_of_Y_ne hPz hQz hy, toAffine_zero]
+            toAffine_smul _ <| isUnit_addU_of_Y_ne hPz hQz hy, toAffine_zero]
       · have := toAffine_add_of_Z_ne_zero hP hQ hPz hQz hxy
         by_cases hx : P x * Q z = Q x * P z
         · rwa [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
-toAffine_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx not_and.mp hxy hx]
+            toAffine_smul _ <| isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx]
         · rwa [add_of_X_ne hP.left hQ.left hPz hQz hx,
-toAffine_smul _ isUnit_addZ_of_X_ne hP.left hQ.left hx]
+            toAffine_smul _ <| isUnit_addZ_of_X_ne hP.left hQ.left hx]
 
-/--
-Definition of `toAffineLift` / `toAffineLift` 的定义
+/-- The natural map from a nonsingular projective point on a Weierstrass curve `W` to its
+corresponding nonsingular point in affine coordinates.
 
-English:
-definition toAffineLift
-  signature: (P : W.Point)
-  body: P.point.lift _ fun _ _ => toAffine_of_equiv
+If `hP` is the nonsingular condition underlying a nonsingular projective point `P` on `W`, then
+`toAffineLift ⟨hP⟩` is definitionally equivalent to `toAffine W P`. -/
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift** 是 Mathlib 中的一个定义，位于命名空间 `Weie
+rstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift (P : W.Point) : W.toAffine.Point
+参数：P : W.Point。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_equiv`：toAffine_of_equiv {
+P Q : Fin 3 -> F} (h : P ≈ Q) : toAffine W P = toAffine W Q
 
-中文:
-定义 toAffineLift
-  签名: (P : W.Point)
-  定义体: P.point.lift _ fun _ _ => toAffine_of_equiv
+--- 原说明 ---
+The natural map from a nonsingular projective point on a Weierstrass curve `W` t
+o its
+corresponding nonsingular point in affine coordinates.
 
-Depends on / 依赖: P.point.lift, toAffine_of_equiv
+If `hP` is the nonsingular condition underlying a nonsingular projective point `
+P` on `W`, then
+`toAffineLift ⟨hP⟩` is definitionally equivalent to `toAffine W P`.
 -/
 noncomputable def toAffineLift (P : W.Point) : W.toAffine.Point :=
   P.point.lift _ fun _ _ => toAffine_of_equiv
-
-/--
-lemma `toAffineLift_eq` / 引理 `toAffineLift_eq`
-
-English:
-lemma toAffineLift_eq
-  given: {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧)
-  proof: rfl
-
-中文:
-引理 toAffineLift_eq
-  条件: {P : 有限集 3 -> F} (hP : W.NonsingularLift ⟦P⟧)
-  证明: rfl
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift_eq** 是 Mathlib 中的一个引理，位于命名空间 `W
+eierstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift_eq {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧) : toAffineLi
+ft ⟨hP⟩ = toAffine W P
+参数：hP : W.NonsingularLift ⟦P⟧。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toAffineLift_eq {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧) :
+lemma toAffineLift_eq {P : Fin 3 → F} (hP : W.NonsingularLift ⟦P⟧) :
     toAffineLift ⟨hP⟩ = toAffine W P :=
   rfl
-
-/--
-lemma `toAffineLift_of_Z_eq_zero` / 引理 `toAffineLift_of_Z_eq_zero`
-
-English:
-lemma toAffineLift_of_Z_eq_zero
-  given: {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧) (hPz : P z = 0)
-  proof: toAffine_of_Z_eq_zero hPz
-
-中文:
-引理 toAffineLift_of_Z_eq_zero
-  条件: {P : 有限集 3 -> F} (hP : W.NonsingularLift ⟦P⟧) (hPz : P z = 0)
-  证明: toAffine_of_Z_eq_zero hPz
-
-Depends on / 依赖: toAffine_of_Z_eq_zero
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift_of_Z_eq_zero** 是 Mathlib 中的一个引理
+，位于命名空间 `WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift_of_Z_eq_zero {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧) (h
+Pz : P z = 0) : toAffineLift ⟨hP⟩ = 0
+参数：hP : W.NonsingularLift ⟦P⟧；hPz : P z = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_eq_zero`：toAffine_of_Z_e
+q_zero {P : Fin 3 -> F} (hPz : P z = 0) : toAffine W P = 0
 -/
-lemma toAffineLift_of_Z_eq_zero {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧) (hPz : P z = 0) :
+lemma toAffineLift_of_Z_eq_zero {P : Fin 3 → F} (hP : W.NonsingularLift ⟦P⟧) (hPz : P z = 0) :
     toAffineLift ⟨hP⟩ = 0 :=
   toAffine_of_Z_eq_zero hPz
-
-/--
-lemma `toAffineLift_zero` / 引理 `toAffineLift_zero`
-
-English:
-lemma toAffineLift_zero
-  statement: toAffineLift (0 : W.Point) = 0
-  proof: toAffine_zero
-
-中文:
-引理 toAffineLift_zero
-  结论: toAffineLift (0 : W.Point) = 0
-  证明: toAffine_zero
-
-Depends on / 依赖: toAffine_zero
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift_zero** 是 Mathlib 中的一个引理，位于命名空间 
+`WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift_zero : toAffineLift (0 : W.Point) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_zero`：toAffine_zero : toAffin
+e W ![0, 1, 0] = 0
 -/
 lemma toAffineLift_zero : toAffineLift (0 : W.Point) = 0 :=
   toAffine_zero
-
-/--
-lemma `toAffineLift_of_Z_ne_zero` / 引理 `toAffineLift_of_Z_ne_zero`
-
-English:
-lemma toAffineLift_of_Z_ne_zero
-  given: {P : Fin 3 -> F} {hP : W.NonsingularLift ⟦P⟧} (hPz : P z != 0)
-  proof: toAffine_of_Z_ne_zero hP hPz
-
-中文:
-引理 toAffineLift_of_Z_ne_zero
-  条件: {P : 有限集 3 -> F} {hP : W.NonsingularLift ⟦P⟧} (hPz : P z != 0)
-  证明: toAffine_of_Z_ne_zero hP hPz
-
-Depends on / 依赖: toAffine_of_Z_ne_zero
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift_of_Z_ne_zero** 是 Mathlib 中的一个引理
+，位于命名空间 `WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift_of_Z_ne_zero {P : Fin 3 -> F} {hP : W.NonsingularLift ⟦P⟧} (h
+Pz : P z != 0) : toAffineLift ⟨hP⟩ = .some _ _ ((nonsingular_of_Z_ne_zero hPz).m
+p hP)
+参数：hPz : P z != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_of_Z_ne_zero`：toAffine_of_Z_n
+e_zero {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) : toAffine W P =
+ .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp…
 -/
-lemma toAffineLift_of_Z_ne_zero {P : Fin 3 -> F} {hP : W.NonsingularLift ⟦P⟧} (hPz : P z != 0) :
+lemma toAffineLift_of_Z_ne_zero {P : Fin 3 → F} {hP : W.NonsingularLift ⟦P⟧} (hPz : P z ≠ 0) :
     toAffineLift ⟨hP⟩ = .some _ _ ((nonsingular_of_Z_ne_zero hPz).mp hP) :=
   toAffine_of_Z_ne_zero hP hPz
-
-/--
-lemma `toAffineLift_some` / 引理 `toAffineLift_some`
-
-English:
-lemma toAffineLift_some
-  given: {X Y : F} (h : W.NonsingularLift ⟦![X, Y, 1]⟧)
-  proof: toAffine_some h
-
-中文:
-引理 toAffineLift_some
-  条件: {X Y : F} (h : W.NonsingularLift ⟦![X, Y, 1]⟧)
-  证明: toAffine_some h
-
-Depends on / 依赖: toAffine_some
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift_some** 是 Mathlib 中的一个引理，位于命名空间 
+`WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift_some {X Y : F} (h : W.NonsingularLift ⟦![X, Y, 1]⟧) : toAffin
+eLift ⟨h⟩ = .some _ _ ((nonsingular_some ..).mp h)
+参数：h : W.NonsingularLift ⟦![X, Y, 1]⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_some`：toAffine_some {X Y : F}
+ (h : W.Nonsingular ![X, Y, 1]) : toAffine W ![X, Y, 1] = .some _ _ ((nonsingula
+r_some ..).mp h)
 -/
 lemma toAffineLift_some {X Y : F} (h : W.NonsingularLift ⟦![X, Y, 1]⟧) :
     toAffineLift ⟨h⟩ = .some _ _ ((nonsingular_some ..).mp h) :=
   toAffine_some h
-
-/--
-lemma `toAffineLift_neg` / 引理 `toAffineLift_neg`
-
-English:
-lemma toAffineLift_neg
-  given: (P : W.Point)
-  statement: (-P).toAffineLift = -P.toAffineLift
-  proof: by
-  rcases P with @⟨⟨_⟩, hP⟩
-  exact toAffine_neg hP
-
-中文:
-引理 toAffineLift_neg
-  条件: (P : W.Point)
-  结论: (-P).toAffineLift = -P.toAffineLift
-  证明: by
-  rcases P with @⟨⟨_⟩, hP⟩
-  exact toAffine_neg hP
-
-Depends on / 依赖: toAffine_neg
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift_neg** 是 Mathlib 中的一个引理，位于命名空间 `
+WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift_neg (P : W.Point) : (-P).toAffineLift = -P.toAffineLift
+参数：P : W.Point。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_neg`：toAffine_neg {P : Fin 3 
+-> F} (hP : W.Nonsingular P) : toAffine W (W.neg P) = -toAffine W P
 -/
 lemma toAffineLift_neg (P : W.Point) : (-P).toAffineLift = -P.toAffineLift := by
   rcases P with @⟨⟨_⟩, hP⟩
   exact toAffine_neg hP
-
-/--
-lemma `toAffineLift_add` / 引理 `toAffineLift_add`
-
-English:
-lemma toAffineLift_add
-  given: [DecidableEq F] (P Q : W.Point)
-  proof: by
-  rcases P, Q with ⟨@⟨⟨_⟩, hP⟩, @⟨⟨_⟩, hQ⟩⟩
-  exact toAffine_add hP hQ
-
-中文:
-引理 toAffineLift_add
-  条件: [DecidableEq F] (P Q : W.Point)
-  证明: by
-  rcases P, Q with ⟨@⟨⟨_⟩, hP⟩, @⟨⟨_⟩, hQ⟩⟩
-  exact toAffine_add hP hQ
-
-Depends on / 依赖: toAffine_add
+/-
+**WeierstrassCurve.Projective.Point.toAffineLift_add** 是 Mathlib 中的一个引理，位于命名空间 `
+WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffineLift_add [DecidableEq F] (P Q : W.Point) : (P + Q).toAffineLift = 
+P.toAffineLift + Q.toAffineLift
+参数：P Q : W.Point。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffine_add`：toAffine_add [DecidableE
+q F] {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) : toAffine
+ W (W.add P Q) = toAffine W P + toAf…
 -/
 lemma toAffineLift_add [DecidableEq F] (P Q : W.Point) :
     (P + Q).toAffineLift = P.toAffineLift + Q.toAffineLift := by
@@ -2060,46 +2154,20 @@ variable (W) in
 /-- The addition-preserving equivalence between the type of nonsingular projective points on a
 Weierstrass curve `W` and the type of nonsingular points in affine coordinates. -/
 @[simps]
-/--
-Definition of `toAffineAddEquiv` / `toAffineAddEquiv` 的定义
+/-
+**WeierstrassCurve.Projective.Point.toAffineAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+WeierstrassCurve.Projective.Point`。
+形式化陈述：toAffineAddEquiv [DecidableEq F] : W.Point ≃+ W.toAffine.Point where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `WeierstrassCurve.Projective.Point.toAffineLift_add`：toAffineLift_add [De
+cidableEq F] (P Q : W.Point) : (P + Q).toAffineLift = P.toAffineLift + Q.toAffin
+eLift
 
-English:
-definition toAffineAddEquiv
-  signature: [DecidableEq F]
-  body: toAffineLift
-  invFun := fromAffine
-  left_inv := by
-    rintro @⟨⟨P⟩, hP⟩
-    by_cases hPz : P z = 0
-    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_eq_zero hPz]
-exact Quotient.eq.mpr Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_ne_zero hP hPz]
-exact Quotient.eq.mpr Setoid.symm equiv_some_of_Z_ne_zero hPz
-  right_inv := by
-    rintro (_ | _)
-    · rw [← Affine.Point.zero_def, fromAffine_zero, toAffineLift_zero]
-    · rw [fromAffine_some, toAffineLift_some]
-  map_add' := toAffineLift_add
-
-中文:
-定义 toAffineAddEquiv
-  签名: [DecidableEq F]
-  定义体: toAffineLift
-  invFun := fromAffine
-  left_inv := by
-    rintro @⟨⟨P⟩, hP⟩
-    by_cases hPz : P z = 0
-    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_eq_zero hPz]
-exact Quotient.eq.mpr Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_ne_zero hP hPz]
-exact Quotient.eq.mpr Setoid.symm equiv_some_of_Z_ne_zero hPz
-  right_inv := by
-    rintro (_ | _)
-    · rw [← Affine.Point.zero_def, fromAffine_zero, toAffineLift_zero]
-    · rw [fromAffine_some, toAffineLift_some]
-  map_add' := toAffineLift_add
-
-Depends on / 依赖: toAffineLift
+--- 原说明 ---
+The addition-preserving equivalence between the type of nonsingular projective p
+oints on a
+Weierstrass curve `W` and the type of nonsingular points in affine coordinates.
 -/
 noncomputable def toAffineAddEquiv [DecidableEq F] : W.Point ≃+ W.toAffine.Point where
   toFun := toAffineLift
@@ -2108,71 +2176,18 @@ noncomputable def toAffineAddEquiv [DecidableEq F] : W.Point ≃+ W.toAffine.Poi
     rintro @⟨⟨P⟩, hP⟩
     by_cases hPz : P z = 0
     · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_eq_zero hPz]
-exact Quotient.eq.mpr Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
+      exact Quotient.eq.mpr <| Setoid.symm <| equiv_zero_of_Z_eq_zero hP hPz
     · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_ne_zero hP hPz]
-exact Quotient.eq.mpr Setoid.symm equiv_some_of_Z_ne_zero hPz
+      exact Quotient.eq.mpr <| Setoid.symm <| equiv_some_of_Z_ne_zero hPz
   right_inv := by
     rintro (_ | _)
     · rw [← Affine.Point.zero_def, fromAffine_zero, toAffineLift_zero]
     · rw [fromAffine_some, toAffineLift_some]
   map_add' := toAffineLift_add
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup W.Point
-  body: nsmulRec
-  zsmul := zsmulRec
-  zero_add _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_zero, zero_add]
-  add_zero _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_zero, add_zero]
-  neg_add_cancel P := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_neg, neg_add_cancel, toAffineLift_zero]
-  add_comm _ _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, add_comm]
-  add_assoc _ _ _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, add_assoc]
-
-中文:
-实例 :
-  签名: 加法交换群 W.Point
-  定义体: nsmulRec
-  zsmul := zsmulRec
-  zero_add _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_zero, zero_add]
-  add_zero _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_zero, add_zero]
-  neg_add_cancel P := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_neg, neg_add_cancel, toAffineLift_zero]
-  add_comm _ _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, add_comm]
-  add_assoc _ _ _ := by
-    classical
-    apply (toAffineAddEquiv W).injective
-    simp only [map_add, add_assoc]
-
-Depends on / 依赖: nsmulRec
+/-
+**WeierstrassCurve.Projective.Point.** 是 Mathlib 中的一个实例，位于命名空间 `WeierstrassCurve
+.Projective.Point`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : AddCommGroup W.Point where
   nsmul := nsmulRec
@@ -2203,123 +2218,139 @@ end Point
 /-! ## Maps and base changes -/
 
 @[simp]
-/--
-lemma `map_neg` / 引理 `map_neg`
+/-
+**WeierstrassCurve.Projective.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `WeierstrassCurv
+e.Projective`。
+形式化陈述：∀ {R : Type r} {S : Type s} [inst : CommRing R] [inst_1 : CommRing S] {W' 
+: WeierstrassCurve.Projective R} (f : R →+* S)   (P : Fin 3 → R), (W'.map f).neg
+ (⇑f ∘ P) = ⇑f ∘ W'.neg P
+参数：f : R →+* S；P : Fin 3 → R；W'.map f；⇑f ∘ P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `WeierstrassCurve.Projective.map_negY`：map_negY : (W'.map f).negY (f ∘ P)
+ = f (W'.negY P)
+· 使用引理 `WeierstrassCurve.Projective.comp_fin3`：comp_fin3 {S : Type s} (f : R -> 
+S) (a b c : R) : f ∘ ![a, b, c] = ![f a, f b, f c]
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma map_neg
-  given: (f : R ->+* S) (P : Fin 3 -> R)
-  statement: (W'.map f).neg (f ∘ P) = f ∘ W'.neg P
-  proof: by
-  simp only [neg, map_negY, comp_fin3]
-  map_simp
-
-@[simp]
-
-中文:
-引理 map_neg
-  条件: (f : R ->+* S) (P : 有限集 3 -> R)
-  结论: (W'.map f).neg (f ∘ P) = f ∘ W'.neg P
-  证明: by
-  simp only [neg, map_negY, comp_fin3]
-  map_simp
-
-@[simp]
+--- 原说明 ---
+## Maps and base changes
 -/
-protected lemma map_neg (f : R ->+* S) (P : Fin 3 -> R) : (W'.map f).neg (f ∘ P) = f ∘ W'.neg P := by
+protected lemma map_neg (f : R →+* S) (P : Fin 3 → R) : (W'.map f).neg (f ∘ P) = f ∘ W'.neg P := by
   simp only [neg, map_negY, comp_fin3]
   map_simp
 
 @[simp]
-/--
-lemma `map_add` / 引理 `map_add`
-
-English:
-lemma map_add
-  statement: (f : F ->+* K) {P Q : Fin 3 -> F} (hP : W.Nonsingular P)
-  proof: by
-  by_cases h : P ≈ Q
-  · rw [add_of_equiv <| (comp_equiv_comp f hP hQ).mpr h, add_of_equiv h, map_dblXYZ]
-  · rw [add_of_not_equiv <| h.comp (comp_equiv_comp f hP hQ).mp, add_of_not_equiv h, map_addXYZ]
-
-中文:
-引理 map_add
-  结论: (f : F ->+* K) {P Q : 有限集 3 -> F} (hP : W.非奇异 P)
-  证明: by
-  by_cases h : P ≈ Q
-  · rw [add_of_equiv <| (comp_equiv_comp f hP hQ).mpr h, add_of_equiv h, map_dblXYZ]
-  · rw [add_of_not_equiv <| h.comp (comp_equiv_comp f hP hQ).mp, add_of_not_equiv h, map_addXYZ]
+/-
+**WeierstrassCurve.Projective.map_add** 是 Mathlib 中的一个定理，位于命名空间 `WeierstrassCurv
+e.Projective`。
+形式化陈述：∀ {F : Type u} {K : Type v} [inst : Field F] [inst_1 : Field K] {W : Weier
+strassCurve.Projective F} (f : F →+* K)   {P Q : Fin 3 → F}, W.Nonsingular P → W
+.Nonsingular Q → (W.map f).add (⇑f ∘ P) (⇑f ∘ Q) = ⇑f ∘ W.add P Q
+参数：f : F →+* K；W.map f；⇑f ∘ P；⇑f ∘ Q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `WeierstrassCurve.Projective.add_of_equiv`：add_of_equiv {P Q : Fin 3 -> R
+} (h : P ≈ Q) : W'.add P Q = W'.dblXYZ P
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `WeierstrassCurve.Projective.comp_equiv_comp`：comp_equiv_comp (f : F ->+*
+ K) {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q) : f ∘ P ≈ f
+ ∘ Q ↔ P ≈ Q
+· 使用引理 `WeierstrassCurve.Projective.map_dblXYZ`：map_dblXYZ : (W'.map f).dblXYZ (
+f ∘ P) = f ∘ dblXYZ W' P
+· 使用引理 `WeierstrassCurve.Projective.add_of_not_equiv`：add_of_not_equiv {P Q : Fi
+n 3 -> R} (h : ¬P ≈ Q) : W'.add P Q = W'.addXYZ P Q
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WeierstrassCurve.Projective.map_addXYZ`：map_addXYZ : (W'.map f).addXYZ (
+f ∘ P) (f ∘ Q) = f ∘ addXYZ W' P Q
 -/
-protected lemma map_add (f : F ->+* K) {P Q : Fin 3 -> F} (hP : W.Nonsingular P)
+protected lemma map_add (f : F →+* K) {P Q : Fin 3 → F} (hP : W.Nonsingular P)
     (hQ : W.Nonsingular Q) : (W.map f).add (f ∘ P) (f ∘ Q) = f ∘ W.add P Q := by
   by_cases h : P ≈ Q
   · rw [add_of_equiv <| (comp_equiv_comp f hP hQ).mpr h, add_of_equiv h, map_dblXYZ]
   · rw [add_of_not_equiv <| h.comp (comp_equiv_comp f hP hQ).mp, add_of_not_equiv h, map_addXYZ]
-
-/--
-lemma `baseChange_neg` / 引理 `baseChange_neg`
-
-English:
-lemma baseChange_neg
-  statement: [Algebra R S] [Algebra R A] [Algebra S A] [IsScalarTower R S A] [Algebra R B]
-  proof: by
-  rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Projective.map_neg]; rw [map_baseChange]
-
-中文:
-引理 baseChange_neg
-  结论: [代数 R S] [代数 R A] [代数 S A] [标量塔 R S A] [代数 R B]
-  证明: by
-  rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Projective.map_neg]; rw [map_baseChange]
-
-Depends on / 依赖: Projective, RingHom, RingHom.coe_coe, WeierstrassCurve, WeierstrassCurve.Projective.map_neg, coe_coe, map_baseChange, map_neg
+/-
+**WeierstrassCurve.Projective.baseChange_neg** 是 Mathlib 中的一个引理，位于命名空间 `Weierstr
+assCurve.Projective`。
+形式化陈述：baseChange_neg [Algebra R S] [Algebra R A] [Algebra S A] [IsScalarTower R 
+S A] [Algebra R B] [Algebra S B] [IsScalarTower R S B] (f : A ->ₐ[S] B) (P : Fin
+ 3 -> A) : (W'⁄B).neg (f ∘ P) = f ∘ (W'⁄A).neg P
+参数：f : A ->ₐ[S] B；P : Fin 3 -> A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.coe_coe`：coe_coe {F : Type*} [FunLike F α β] [RingHomClass F α β
+] (f : F) : ((f : α ->+* β) : α -> β) = f
+· 使用定理 `WeierstrassCurve.Projective.map_neg`：∀ {R : Type r} {S : Type s} [inst :
+ CommRing R] [inst_1 : CommRing S] {W' : WeierstrassCurve.Projective R} (f : R →
++* S)   (P : Fin 3 → R), …
+· 使用引理 `WeierstrassCurve.Projective.map_baseChange`：map_baseChange : (W'⁄A).map 
+f = W'⁄B
 -/
 lemma baseChange_neg [Algebra R S] [Algebra R A] [Algebra S A] [IsScalarTower R S A] [Algebra R B]
-    [Algebra S B] [IsScalarTower R S B] (f : A ->ₐ[S] B) (P : Fin 3 -> A) :
+    [Algebra S B] [IsScalarTower R S B] (f : A →ₐ[S] B) (P : Fin 3 → A) :
     (W'⁄B).neg (f ∘ P) = f ∘ (W'⁄A).neg P := by
-  rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Projective.map_neg]; rw [map_baseChange]
-
-/--
-lemma `baseChange_add` / 引理 `baseChange_add`
-
-English:
-lemma baseChange_add
-  statement: [Algebra R S] [Algebra R F] [Algebra S F] [IsScalarTower R S F] [Algebra R K]
-  proof: by
-  rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Projective.map_add _ hP hQ]; rw [map_baseChange]
-
-中文:
-引理 baseChange_add
-  结论: [代数 R S] [代数 R F] [代数 S F] [标量塔 R S F] [代数 R K]
-  证明: by
-  rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Projective.map_add _ hP hQ]; rw [map_baseChange]
-
-Depends on / 依赖: Projective, RingHom, RingHom.coe_coe, WeierstrassCurve, WeierstrassCurve.Projective.map_add, coe_coe, map_add, map_baseChange
+  rw [← RingHom.coe_coe, ← WeierstrassCurve.Projective.map_neg, map_baseChange]
+/-
+**WeierstrassCurve.Projective.baseChange_add** 是 Mathlib 中的一个引理，位于命名空间 `Weierstr
+assCurve.Projective`。
+形式化陈述：baseChange_add [Algebra R S] [Algebra R F] [Algebra S F] [IsScalarTower R 
+S F] [Algebra R K] [Algebra S K] [IsScalarTower R S K] (f : F ->ₐ[S] K) {P Q : F
+in 3 -> F} (hP : (W'⁄F).Nonsingular P) (hQ : (W'⁄F).Nonsingular Q) : (W'⁄K).add 
+(f ∘ P) (f ∘ Q) = f ∘ (W'⁄F).add P Q
+参数：f : F ->ₐ[S] K；hP : (W'⁄F).Nonsingular P；hQ : (W'⁄F).Nonsingular Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.coe_coe`：coe_coe {F : Type*} [FunLike F α β] [RingHomClass F α β
+] (f : F) : ((f : α ->+* β) : α -> β) = f
+· 使用定理 `WeierstrassCurve.Projective.map_add`：∀ {F : Type u} {K : Type v} [inst :
+ Field F] [inst_1 : Field K] {W : WeierstrassCurve.Projective F} (f : F →+* K)  
+ {P Q : Fin 3 → F}, W.Non…
+· 使用引理 `WeierstrassCurve.Projective.map_baseChange`：map_baseChange : (W'⁄A).map 
+f = W'⁄B
 -/
 lemma baseChange_add [Algebra R S] [Algebra R F] [Algebra S F] [IsScalarTower R S F] [Algebra R K]
-    [Algebra S K] [IsScalarTower R S K] (f : F ->ₐ[S] K) {P Q : Fin 3 -> F}
+    [Algebra S K] [IsScalarTower R S K] (f : F →ₐ[S] K) {P Q : Fin 3 → F}
     (hP : (W'⁄F).Nonsingular P) (hQ : (W'⁄F).Nonsingular Q) :
     (W'⁄K).add (f ∘ P) (f ∘ Q) = f ∘ (W'⁄F).add P Q := by
-  rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Projective.map_add _ hP hQ]; rw [map_baseChange]
+  rw [← RingHom.coe_coe, ← WeierstrassCurve.Projective.map_add _ hP hQ, map_baseChange]
 
 end Projective
 
-/--
-Definition of `Affine.Point.toProjective` / `Affine.Point.toProjective` 的定义
+/-- An abbreviation for `WeierstrassCurve.Projective.Point.fromAffine` for dot notation. -/
+/-
+**WeierstrassCurve.Affine.Point.toProjective** 是 Mathlib 中的一个定义，位于命名空间 `Weierstr
+assCurve.Affine.Point`。
+形式化陈述：{R : Type r} →   [inst : CommRing R] →     [Nontrivial R] → {W : Weierstra
+ssCurve.Affine R} → W.Point → (WeierstrassCurve.toProjective W).Point
+参数：WeierstrassCurve.toProjective W。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Affine.Point.toProjective
-  signature: [Nontrivial R] {W : Affine R} (P : W.Point)
-  body: Projective.Point.fromAffine P
-
-中文:
-缩写 仿射.Point.toProjective
-  签名: [非平凡 R] {W : 仿射 R} (P : W.Point)
-  定义体: Projective.Point.fromAffine P
-
-Depends on / 依赖: Projective, Projective.Point.fromAffine, fromAffine
+--- 原说明 ---
+An abbreviation for `WeierstrassCurve.Projective.Point.fromAffine` for dot notat
+ion.
 -/
 abbrev Affine.Point.toProjective [Nontrivial R] {W : Affine R} (P : W.Point) :
     W.toProjective.Point :=
   Projective.Point.fromAffine P
 
 end WeierstrassCurve
+

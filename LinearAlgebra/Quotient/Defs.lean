@@ -37,754 +37,492 @@ variable (p p' : Submodule R M)
 
 open QuotientAddGroup
 
-/--
-Definition of `quotientRel` / `quotientRel` 的定义
+/-- The equivalence relation associated to a submodule `p`, defined by `x ≈ y` iff `-x + y ∈ p`.
 
-English:
-definition quotientRel
-  signature: : Setoid M
-  body: QuotientAddGroup.leftRel p.toAddSubgroup
+Note this is equivalent to `y - x ∈ p`, but defined this way to be defeq to the `AddSubgroup`
+version, where commutativity can't be assumed. -/
+/-
+**Submodule.quotientRel** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：quotientRel : Setoid M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 quotientRel
-  签名: : 集合等价关系 M
-  定义体: QuotientAddGroup.leftRel p.toAddSubgroup
+--- 原说明 ---
+The equivalence relation associated to a submodule `p`, defined by `x ≈ y` iff `
+-x + y ∈ p`.
 
-Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.leftRel, leftRel, p.toAddSubgroup, toAddSubgroup
+Note this is equivalent to `y - x ∈ p`, but defined this way to be defeq to the 
+`AddSubgroup`
+version, where commutativity can't be assumed.
 -/
 def quotientRel : Setoid M :=
   QuotientAddGroup.leftRel p.toAddSubgroup
-
-/--
-theorem `quotientRel_def` / 定理 `quotientRel_def`
-
-English:
-theorem quotientRel_def
-  given: {x y : M}
-  statement: p.quotientRel x y ↔ x - y in p
-  proof: Iff.trans
-    (by
-      rw [quotientRel]; rw [leftRel_apply]; rw [sub_eq_add_neg]; rw [neg_add]; rw [neg_neg]
-      rfl)
-    neg_mem_iff
-
-中文:
-定理 quotientRel_def
-  条件: {x y : M}
-  结论: p.quotientRel x y ↔ x - y in p
-  证明: Iff.trans
-    (by
-      rw [quotientRel]; rw [leftRel_apply]; rw [sub_eq_add_neg]; rw [neg_add]; rw [neg_neg]
-      rfl)
-    neg_mem_iff
-
-Depends on / 依赖: Iff.trans, MeasurableSet, Set.inter_subset_left, Set.inter_subset_right, Set.subset_inter, hs_subset, hs_subset_t, ht.inter, iInf_eq_top, inter_subset_left, inter_subset_right, leftRel_apply, measurableSet_sigmaFiniteSetWRT, measure_eq_iInf, measure_mono_top, neg_add, neg_mem_iff, neg_neg, quotientRel, sigmaFiniteSetWRT
+/-
+**Submodule.quotientRel_def** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：quotientRel_def {x y : M} : p.quotientRel x y ↔ x - y in p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.quotientRel.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring
+ R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M)
+, p.quotientRel …
+· 使用定理 `QuotientAddGroup.leftRel_apply`：∀ {α : Type u_1} [inst : AddGroup α] {s 
+: AddSubgroup α} {x y : α}, (QuotientAddGroup.leftRel s) x y ↔ -x + y ∈ s
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `neg_mem_iff`：∀ {S : Type u_3} {G : Type u_4} [inst : InvolutiveNeg G] {x
+ : SetLike S G} [NegMemClass S G] {H : S} {x_1 : G},   -x_1 ∈ H ↔ x_1 ∈ H
+· 使用定理 `AddSubgroupClass.toNegMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass S G],
+   NegMemClass S G
 -/
-theorem quotientRel_def {x y : M} : p.quotientRel x y ↔ x - y in p :=
+theorem quotientRel_def {x y : M} : p.quotientRel x y ↔ x - y ∈ p :=
   Iff.trans
     (by
-      rw [quotientRel]; rw [leftRel_apply]; rw [sub_eq_add_neg]; rw [neg_add]; rw [neg_neg]
+      rw [quotientRel, leftRel_apply, sub_eq_add_neg, neg_add, neg_neg]
       rfl)
     neg_mem_iff
 
-/--
-Instance `hasQuotient` / 实例 `hasQuotient`
+/-- The quotient of a module `M` by a submodule `p ⊆ M`. -/
+/-
+**Submodule.hasQuotient** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：hasQuotient : HasQuotient M (Submodule R M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance hasQuotient
-  signature: : HasQuotient M (Submodule R M)
-  body: ⟨fun p => Quotient (quotientRel p)⟩
-
-中文:
-实例 hasQuotient
-  签名: : 有商 M (子模 R M)
-  定义体: ⟨fun p => Quotient (quotientRel p)⟩
-
-Depends on / 依赖: Quotient, quotientRel
+--- 原说明 ---
+The quotient of a module `M` by a submodule `p ⊆ M`.
 -/
 instance hasQuotient : HasQuotient M (Submodule R M) :=
   ⟨fun p => Quotient (quotientRel p)⟩
 
 namespace Quotient
-/--
-Definition of `mk` / `mk` 的定义
+/-- Map associating to an element of `M` the corresponding element of `M/p`,
+when `p` is a submodule of `M`. -/
+/-
+**Submodule.Quotient.mk** 是 Mathlib 中的一个定义，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk {p : Submodule R M} : M -> M ⧸ p
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 
-English:
-definition mk
-  signature: {p : Submodule R M}
-  body: Quotient.mk''
-
-中文:
-定义 mk
-  签名: {p : 子模 R M}
-  定义体: Quotient.mk''
-
-Depends on / 依赖: Quotient, Quotient.mk
+--- 原说明 ---
+Map associating to an element of `M` the corresponding element of `M/p`,
+when `p` is a submodule of `M`.
 -/
-def mk {p : Submodule R M} : M -> M ⧸ p :=
+def mk {p : Submodule R M} : M → M ⧸ p :=
   Quotient.mk''
-
-/--
-theorem `mk'_eq_mk'` / 定理 `mk'_eq_mk'`
-
-English:
-theorem mk'_eq_mk'
-  given: {p : Submodule R M} (x : M)
-  proof: rfl
-
-中文:
-定理 mk'_eq_mk'
-  条件: {p : 子模 R M} (x : M)
-  证明: rfl
+/-
+**Submodule.Quotient.mk'_eq_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {p : Submodule R M} (x : M), Quotient.mk' x = Sub
+module.Quotient.mk x
+参数：x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 -/
 theorem mk'_eq_mk' {p : Submodule R M} (x : M) :
     @Quotient.mk' _ (quotientRel p) x = mk x :=
   rfl
-
-/--
-theorem `mk''_eq_mk` / 定理 `mk''_eq_mk`
-
-English:
-theorem mk''_eq_mk
-  given: {p : Submodule R M} (x : M)
-  statement: (Quotient.mk'' x : M ⧸ p) = mk x
-  proof: rfl
-
-中文:
-定理 mk''_eq_mk
-  条件: {p : 子模 R M} (x : M)
-  结论: (商.mk'' x : M ⧸ p) = mk x
-  证明: rfl
+/-
+**Submodule.Quotient.mk''_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   {p : Submodule R M} (x : M), Quotient.mk'' x = Su
+bmodule.Quotient.mk x
+参数：x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
 -/
 theorem mk''_eq_mk {p : Submodule R M} (x : M) : (Quotient.mk'' x : M ⧸ p) = mk x :=
   rfl
-
-/--
-theorem `quot_mk_eq_mk` / 定理 `quot_mk_eq_mk`
-
-English:
-theorem quot_mk_eq_mk
-  given: {p : Submodule R M} (x : M)
-  statement: (Quot.mk _ x : M ⧸ p) = mk x
-  proof: rfl
-
-中文:
-定理 quot_mk_eq_mk
-  条件: {p : 子模 R M} (x : M)
-  结论: (商.mk _ x : M ⧸ p) = mk x
-  证明: rfl
+/-
+**Submodule.Quotient.quot_mk_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient
+`。
+形式化陈述：quot_mk_eq_mk {p : Submodule R M} (x : M) : (Quot.mk _ x : M ⧸ p) = mk x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quot_mk_eq_mk {p : Submodule R M} (x : M) : (Quot.mk _ x : M ⧸ p) = mk x :=
   rfl
-
-/--
-theorem `quotientAddGroupMk_eq_mk` / 定理 `quotientAddGroupMk_eq_mk`
-
-English:
-theorem quotientAddGroupMk_eq_mk
-  given: {p : Submodule R M} (x : M)
-  proof: rfl
-
-中文:
-定理 quotientAddGroupMk_eq_mk
-  条件: {p : 子模 R M} (x : M)
-  证明: rfl
+/-
+**Submodule.Quotient.quotientAddGroupMk_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le.Quotient`。
+形式化陈述：quotientAddGroupMk_eq_mk {p : Submodule R M} (x : M) : (QuotientAddGroup.m
+k x : M ⧸ p) = mk x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotientAddGroupMk_eq_mk {p : Submodule R M} (x : M) :
     (QuotientAddGroup.mk x : M ⧸ p) = mk x :=
   rfl
-
-/--
-theorem `eq'` / 定理 `eq'`
-
-English:
-theorem eq'
-  given: {x y : M}
-  statement: (mk x : M ⧸ p) = mk y ↔ -x + y in p
-  proof: QuotientAddGroup.eq
-
-中文:
-定理 eq'
-  条件: {x y : M}
-  结论: (mk x : M ⧸ p) = mk y ↔ -x + y in p
-  证明: QuotientAddGroup.eq
+/-
+**Submodule.Quotient.eq'** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   (p : Submodule R M) {x y : M}, Submodule.Quotient
+.mk x = Submodule.Quotient.mk y ↔ -x + y ∈ p
+参数：p : Submodule R M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientAddGroup.eq`：∀ {α : Type u_1} [inst : AddGroup α] {s : AddSubgro
+up α} {a b : α}, ↑a = ↑b ↔ -a + b ∈ s
 -/
-protected theorem eq' {x y : M} : (mk x : M ⧸ p) = mk y ↔ -x + y in p :=
+protected theorem eq' {x y : M} : (mk x : M ⧸ p) = mk y ↔ -x + y ∈ p :=
   QuotientAddGroup.eq
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: {x y : M}
-  statement: (mk x : M ⧸ p) = mk y ↔ x - y in p
-  proof: (Submodule.Quotient.eq' p).trans (leftRel_apply.symm.trans p.quotientRel_def)
-
-中文:
-定理 eq
-  条件: {x y : M}
-  结论: (mk x : M ⧸ p) = mk y ↔ x - y in p
-  证明: (Submodule.Quotient.eq' p).trans (leftRel_apply.symm.trans p.quotientRel_def)
+/-
+**Submodule.Quotient.eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   (p : Submodule R M) {x y : M}, Submodule.Quotient
+.mk x = Submodule.Quotient.mk y ↔ x - y ∈ p
+参数：p : Submodule R M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Submodule.Quotient.eq'`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] 
+[inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M) {x 
+y : M}, Subm…
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `QuotientAddGroup.leftRel_apply`：∀ {α : Type u_1} [inst : AddGroup α] {s 
+: AddSubgroup α} {x y : α}, (QuotientAddGroup.leftRel s) x y ↔ -x + y ∈ s
+· 使用定理 `Submodule.quotientRel_def`：quotientRel_def {x y : M} : p.quotientRel x y
+ ↔ x - y in p
 -/
-protected theorem eq {x y : M} : (mk x : M ⧸ p) = mk y ↔ x - y in p :=
+protected theorem eq {x y : M} : (mk x : M ⧸ p) = mk y ↔ x - y ∈ p :=
   (Submodule.Quotient.eq' p).trans (leftRel_apply.symm.trans p.quotientRel_def)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (M ⧸ p)
-  body: Quotient.mk'' 0
-
-中文:
-实例 :
-  签名: 零 (M ⧸ p)
-  定义体: Quotient.mk'' 0
-
-Depends on / 依赖: Quotient, Quotient.mk
+/-
+**Submodule.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (M ⧸ p) where
   -- Use Quotient.mk'' instead of mk here because mk is not reducible.
   -- This would lead to non-defeq diamonds.
   -- See also the same comment at the One instance for Con.
   zero := Quotient.mk'' 0
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (M ⧸ p)
-  body: ⟨0⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 可居 (M ⧸ p)
-  定义体: ⟨0⟩
-
-@[simp]
+/-
+**Submodule.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (M ⧸ p) :=
   ⟨0⟩
 
 @[simp]
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  statement: mk 0 = (0 : M ⧸ p)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_zero
-  结论: mk 0 = (0 : M ⧸ p)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.Quotient.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk_zero : mk 0 = (0 : M ⧸ p)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_zero : mk 0 = (0 : M ⧸ p) :=
   rfl
 
 @[simp]
-/--
-theorem `mk_eq_zero` / 定理 `mk_eq_zero`
-
-English:
-theorem mk_eq_zero
-  statement: (mk x : M ⧸ p) = 0 ↔ x in p
-  proof: by simpa using (Quotient.eq' p : mk x = 0 ↔ _)
-
-中文:
-定理 mk_eq_zero
-  结论: (mk x : M ⧸ p) = 0 ↔ x in p
-  证明: by simpa using (Quotient.eq' p : mk x = 0 ↔ _)
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**Submodule.Quotient.mk_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `AddSubgroupClass.toNegMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass S G],
+   NegMemClass S G
+· 使用定理 `Submodule.Quotient.eq'`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] 
+[inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M) {x 
+y : M}, Subm…
 -/
-theorem mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p := by simpa using (Quotient.eq' p : mk x = 0 ↔ _)
+theorem mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x ∈ p := by simpa using (Quotient.eq' p : mk x = 0 ↔ _)
 
 section SMul
 
 variable {S : Type*} [SMul S R] [SMul S M] [IsScalarTower S R M] (P : Submodule R M)
 
-/--
-Instance `instSMul'` / 实例 `instSMul'`
-
-English:
-instance instSMul'
-  signature: : SMul S (M ⧸ P)
-  body: ⟨fun a =>
-    Quotient.map' (a • ·) fun x y h =>
-leftRel_apply.mpr by simpa using Submodule.smul_mem P (a • (1 : R)) (leftRel_apply.mp h)⟩
-
-中文:
-实例 instSMul'
-  签名: : 标量乘法 S (M ⧸ P)
-  定义体: ⟨fun a =>
-    Quotient.map' (a • ·) fun x y h =>
-leftRel_apply.mpr by simpa using Submodule.smul_mem P (a • (1 : R)) (leftRel_apply.mp h)⟩
-
-Depends on / 依赖: Quotient, Quotient.map, Submodule, Submodule.smul_mem, leftRel_apply, leftRel_apply.mp, leftRel_apply.mpr, smul_mem
+/-
+**Submodule.Quotient.instSMul'** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：instSMul' : SMul S (M ⧸ P)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.map'`：map'_mk'' (f : α -> β) (h) (x : α) : (Quotient.mk'' x : Q
+uotient s₁).map' f h = (Quotient.mk'' (f x) : Quotient s₂)
 -/
 instance instSMul' : SMul S (M ⧸ P) :=
   ⟨fun a =>
     Quotient.map' (a • ·) fun x y h =>
-leftRel_apply.mpr by simpa using Submodule.smul_mem P (a • (1 : R)) (leftRel_apply.mp h)⟩
+      leftRel_apply.mpr <| by simpa using Submodule.smul_mem P (a • (1 : R)) (leftRel_apply.mp h)⟩
 
-/--
-Instance `instSMul` / 实例 `instSMul`
+/-- Shortcut to help the elaborator in the common case. -/
+/-
+**Submodule.Quotient.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：instSMul : SMul R (M ⧸ P)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSMul
-  signature: : SMul R (M ⧸ P)
-  body: Quotient.instSMul' P
-
-@[simp]
-
-中文:
-实例 instSMul
-  签名: : 标量乘法 R (M ⧸ P)
-  定义体: Quotient.instSMul' P
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.instSMul, instSMul
+--- 原说明 ---
+Shortcut to help the elaborator in the common case.
 -/
 instance instSMul : SMul R (M ⧸ P) :=
   Quotient.instSMul' P
 
 @[simp]
-/--
-theorem `mk_smul` / 定理 `mk_smul`
-
-English:
-theorem mk_smul
-  given: (r : S) (x : M)
-  statement: (mk (r • x) : M ⧸ p) = r • mk x
-  proof: rfl
-
-中文:
-定理 mk_smul
-  条件: (r : S) (x : M)
-  结论: (mk (r • x) : M ⧸ p) = r • mk x
-  证明: rfl
+/-
+**Submodule.Quotient.mk_smul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk_smul (r : S) (x : M) : (mk (r • x) : M ⧸ p) = r • mk x
+参数：r : S；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_smul (r : S) (x : M) : (mk (r • x) : M ⧸ p) = r • mk x :=
   rfl
-
-/--
-Instance `smulCommClass` / 实例 `smulCommClass`
-
-English:
-instance smulCommClass
-  signature: (T : Type*) [SMul T R] [SMul T M] [IsScalarTower T R M]
-  body: Quotient.ind' fun _z => congr_arg mk (smul_comm _ _ _)
-
-中文:
-实例 smulCommClass
-  签名: (T : 类型) [标量乘法 T R] [标量乘法 T M] [标量塔 T R M]
-  定义体: Quotient.ind' fun _z => congr_arg mk (smul_comm _ _ _)
-
-Depends on / 依赖: Quotient, Quotient.ind, congr_arg, smul_comm
+/-
+**Submodule.Quotient.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient
+`。
+形式化陈述：smulCommClass (T : Type*) [SMul T R] [SMul T M] [IsScalarTower T R M] [SMu
+lCommClass S T M] : SMulCommClass S T (M ⧸ P) where smul_comm _x _y
+参数：T : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁ → Prop}
+, (∀ (a : α), p (Quotient.mk'' a)) → ∀ (q : Quotient s₁), p q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 instance smulCommClass (T : Type*) [SMul T R] [SMul T M] [IsScalarTower T R M]
     [SMulCommClass S T M] : SMulCommClass S T (M ⧸ P) where
   smul_comm _x _y := Quotient.ind' fun _z => congr_arg mk (smul_comm _ _ _)
-
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
-
-English:
-instance isScalarTower
-  signature: (T : Type*) [SMul T R] [SMul T M] [IsScalarTower T R M] [SMul S T]
-  body: Quotient.ind' fun _z => congr_arg mk (smul_assoc _ _ _)
-
-中文:
-实例 isScalarTower
-  签名: (T : 类型) [标量乘法 T R] [标量乘法 T M] [标量塔 T R M] [标量乘法 S T]
-  定义体: Quotient.ind' fun _z => congr_arg mk (smul_assoc _ _ _)
-
-Depends on / 依赖: Quotient, Quotient.ind, congr_arg, smul_assoc
+/-
+**Submodule.Quotient.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient
+`。
+形式化陈述：isScalarTower (T : Type*) [SMul T R] [SMul T M] [IsScalarTower T R M] [SMu
+l S T] [IsScalarTower S T M] : IsScalarTower S T (M ⧸ P) where smul_assoc _x _y
+参数：T : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁ → Prop}
+, (∀ (a : α), p (Quotient.mk'' a)) → ∀ (q : Quotient s₁), p q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower (T : Type*) [SMul T R] [SMul T M] [IsScalarTower T R M] [SMul S T]
     [IsScalarTower S T M] : IsScalarTower S T (M ⧸ P) where
   smul_assoc _x _y := Quotient.ind' fun _z => congr_arg mk (smul_assoc _ _ _)
-
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M]
-  body: Quotient.ind' fun _z => congr_arg mk op_smul_eq_smul _ _
-
-中文:
-实例 isCentralScalar
-  签名: [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ M] [标量塔 Sᵐᵒᵖ R M]
-  定义体: Quotient.ind' fun _z => congr_arg mk op_smul_eq_smul _ _
-
-Depends on / 依赖: Quotient, Quotient.ind, congr_arg, op_smul_eq_smul
+/-
+**Submodule.Quotient.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotie
+nt`。
+形式化陈述：isCentralScalar [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M] [IsCe
+ntralScalar S M] : IsCentralScalar S (M ⧸ P) where op_smul_eq_smul _x
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁ → Prop}
+, (∀ (a : α), p (Quotient.mk'' a)) → ∀ (q : Quotient s₁), p q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance isCentralScalar [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M]
     [IsCentralScalar S M] : IsCentralScalar S (M ⧸ P) where
-op_smul_eq_smul _x := Quotient.ind' fun _z => congr_arg mk op_smul_eq_smul _ _
+  op_smul_eq_smul _x := Quotient.ind' fun _z => congr_arg mk <| op_smul_eq_smul _ _
 
 end SMul
 
-/--
-Instance `addMonoid` / 实例 `addMonoid`
-
-English:
-instance addMonoid
-  signature: : AddMonoid (M ⧸ p)
-  body: inferInstanceAs AddMonoid (M ⧸ p.toAddSubgroup)
-
-中文:
-实例 addMonoid
-  签名: : 加法幺半群 (M ⧸ p)
-  定义体: inferInstanceAs AddMonoid (M ⧸ p.toAddSubgroup)
-
-Depends on / 依赖: AddMonoid, p.toAddSubgroup, toAddSubgroup
+/-
+**Submodule.Quotient.addMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：addMonoid : AddMonoid (M ⧸ p)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addMonoid : AddMonoid (M ⧸ p) :=
-inferInstanceAs AddMonoid (M ⧸ p.toAddSubgroup)
-
-/--
-Instance `addCommMonoid` / 实例 `addCommMonoid`
-
-English:
-instance addCommMonoid
-  signature: : AddCommMonoid (M ⧸ p)
-  body: inferInstanceAs AddCommMonoid (M ⧸ p.toAddSubgroup)
-
-中文:
-实例 addCommMonoid
-  签名: : 加法交换幺半群 (M ⧸ p)
-  定义体: inferInstanceAs AddCommMonoid (M ⧸ p.toAddSubgroup)
-
-Depends on / 依赖: AddCommMonoid, p.toAddSubgroup, toAddSubgroup
+  inferInstanceAs <| AddMonoid (M ⧸ p.toAddSubgroup)
+/-
+**Submodule.Quotient.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient
+`。
+形式化陈述：addCommMonoid : AddCommMonoid (M ⧸ p)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommMonoid : AddCommMonoid (M ⧸ p) :=
-inferInstanceAs AddCommMonoid (M ⧸ p.toAddSubgroup)
-
-/--
-Instance `addCommGroup` / 实例 `addCommGroup`
-
-English:
-instance addCommGroup
-  signature: : AddCommGroup (M ⧸ p)
-  body: inferInstanceAs AddCommGroup (M ⧸ p.toAddSubgroup)
-
-@[simp]
-
-中文:
-实例 addCommGroup
-  签名: : 加法交换群 (M ⧸ p)
-  定义体: inferInstanceAs AddCommGroup (M ⧸ p.toAddSubgroup)
-
-@[simp]
-
-Depends on / 依赖: AddCommGroup, p.toAddSubgroup, toAddSubgroup
+  inferInstanceAs <| AddCommMonoid (M ⧸ p.toAddSubgroup)
+/-
+**Submodule.Quotient.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`
+。
+形式化陈述：addCommGroup : AddCommGroup (M ⧸ p)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommGroup : AddCommGroup (M ⧸ p) :=
-inferInstanceAs AddCommGroup (M ⧸ p.toAddSubgroup)
+  inferInstanceAs <| AddCommGroup (M ⧸ p.toAddSubgroup)
 
 @[simp]
-/--
-theorem `mk_add` / 定理 `mk_add`
-
-English:
-theorem mk_add
-  statement: (mk (x + y) : M ⧸ p) = mk x + mk y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_add
-  结论: (mk (x + y) : M ⧸ p) = mk x + mk y
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.Quotient.mk_add** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk_add : (mk (x + y) : M ⧸ p) = mk x + mk y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_add : (mk (x + y) : M ⧸ p) = mk x + mk y :=
   rfl
 
 @[simp]
-/--
-theorem `mk_neg` / 定理 `mk_neg`
-
-English:
-theorem mk_neg
-  statement: (mk (-x) : M ⧸ p) = -(mk x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_neg
-  结论: (mk (-x) : M ⧸ p) = -(mk x)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.Quotient.mk_neg** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk_neg : (mk (-x) : M ⧸ p) = -(mk x)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_neg : (mk (-x) : M ⧸ p) = -(mk x) :=
   rfl
 
 @[simp]
-/--
-theorem `mk_sub` / 定理 `mk_sub`
-
-English:
-theorem mk_sub
-  statement: (mk (x - y) : M ⧸ p) = mk x - mk y
-  proof: rfl
-
-中文:
-定理 mk_sub
-  结论: (mk (x - y) : M ⧸ p) = mk x - mk y
-  证明: rfl
+/-
+**Submodule.Quotient.mk_sub** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk_sub : (mk (x - y) : M ⧸ p) = mk x - mk y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_sub : (mk (x - y) : M ⧸ p) = mk x - mk y :=
   rfl
 
 variable {p} in
 @[simp]
-/--
-theorem `mk_out` / 定理 `mk_out`
-
-English:
-theorem mk_out
-  given: (m : M ⧸ p)
-  statement: Submodule.Quotient.mk (Quotient.out m) = m
-  proof: Quotient.out_eq m
-
-protected nonrec lemma «forall» {P : M ⧸ p -> Prop} : (forall a, P a) ↔ forall a, P (mk a) := Quotient.forall
-
-中文:
-定理 mk_out
-  条件: (m : M ⧸ p)
-  结论: 子模.商.mk (商.out m) = m
-  证明: Quotient.out_eq m
-
-protected nonrec lemma «forall» {P : M ⧸ p -> Prop} : (forall a, P a) ↔ forall a, P (mk a) := Quotient.forall
-
-Depends on / 依赖: Quotient, Quotient.out_eq, out_eq
+/-
+**Submodule.Quotient.mk_out** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mk_out (m : M ⧸ p) : Submodule.Quotient.mk (Quotient.out m) = m
+参数：m : M ⧸ p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
 theorem mk_out (m : M ⧸ p) : Submodule.Quotient.mk (Quotient.out m) = m :=
   Quotient.out_eq m
 
-protected nonrec lemma «forall» {P : M ⧸ p -> Prop} : (forall a, P a) ↔ forall a, P (mk a) := Quotient.forall
+protected nonrec lemma «forall» {P : M ⧸ p → Prop} : (∀ a, P a) ↔ ∀ a, P (mk a) := Quotient.forall
 
 section Module
 
 variable {S : Type*}
 
-/--
-Instance `mulAction'` / 实例 `mulAction'`
-
-English:
-instance mulAction'
-  signature: [Monoid S] [SMul S R] [MulAction S M] [IsScalarTower S R M]
-  body: fast_instance%
-Function.Surjective.mulAction mk Quot.mk_surjective Submodule.Quotient.mk_smul P
-
-中文:
-实例 mulAction'
-  签名: [幺半群 S] [标量乘法 S R] [乘法作用 S M] [标量塔 S R M]
-  定义体: fast_instance%
-Function.Surjective.mulAction mk Quot.mk_surjective Submodule.Quotient.mk_smul P
-
-Depends on / 依赖: fast_instance
+/-
+**Submodule.Quotient.mulAction'** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mulAction' [Monoid S] [SMul S R] [MulAction S M] [IsScalarTower S R M] (P 
+: Submodule R M) : MulAction S (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction' [Monoid S] [SMul S R] [MulAction S M] [IsScalarTower S R M]
     (P : Submodule R M) : MulAction S (M ⧸ P) := fast_instance%
-Function.Surjective.mulAction mk Quot.mk_surjective Submodule.Quotient.mk_smul P
-
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: (P : Submodule R M)
-  body: Quotient.mulAction' P
-
-中文:
-实例 mulAction
-  签名: (P : 子模 R M)
-  定义体: Quotient.mulAction' P
-
-Depends on / 依赖: Quotient, Quotient.mulAction, mulAction
+  Function.Surjective.mulAction mk Quot.mk_surjective <| Submodule.Quotient.mk_smul P
+/-
+**Submodule.Quotient.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：mulAction (P : Submodule R M) : MulAction R (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction (P : Submodule R M) : MulAction R (M ⧸ P) :=
   Quotient.mulAction' P
-
-/--
-Instance `smulZeroClass'` / 实例 `smulZeroClass'`
-
-English:
-instance smulZeroClass'
-  signature: [SMul S R] [SMulZeroClass S M] [IsScalarTower S R M] (P : Submodule R M)
-  body: ZeroHom.smulZeroClass ⟨mk, mk_zero _⟩ Submodule.Quotient.mk_smul P
-
-中文:
-实例 smulZeroClass'
-  签名: [标量乘法 S R] [SMulZero类 S M] [标量塔 S R M] (P : 子模 R M)
-  定义体: ZeroHom.smulZeroClass ⟨mk, mk_zero _⟩ Submodule.Quotient.mk_smul P
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk_smul, ZeroHom, ZeroHom.smulZeroClass, mk_smul, mk_zero, smulZeroClass
+/-
+**Submodule.Quotient.smulZeroClass'** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotien
+t`。
+形式化陈述：smulZeroClass' [SMul S R] [SMulZeroClass S M] [IsScalarTower S R M] (P : S
+ubmodule R M) : SMulZeroClass S (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.Quotient.mk_zero`：mk_zero : mk 0 = (0 : M ⧸ p)
 -/
 instance smulZeroClass' [SMul S R] [SMulZeroClass S M] [IsScalarTower S R M] (P : Submodule R M) :
     SMulZeroClass S (M ⧸ P) :=
-ZeroHom.smulZeroClass ⟨mk, mk_zero _⟩ Submodule.Quotient.mk_smul P
-
-/--
-Instance `smulZeroClass` / 实例 `smulZeroClass`
-
-English:
-instance smulZeroClass
-  signature: (P : Submodule R M)
-  body: Quotient.smulZeroClass' P
-
-中文:
-实例 smulZeroClass
-  签名: (P : 子模 R M)
-  定义体: Quotient.smulZeroClass' P
-
-Depends on / 依赖: Quotient, Quotient.smulZeroClass, smulZeroClass
+  ZeroHom.smulZeroClass ⟨mk, mk_zero _⟩ <| Submodule.Quotient.mk_smul P
+/-
+**Submodule.Quotient.smulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient
+`。
+形式化陈述：smulZeroClass (P : Submodule R M) : SMulZeroClass R (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulZeroClass (P : Submodule R M) : SMulZeroClass R (M ⧸ P) :=
   Quotient.smulZeroClass' P
-
-/--
-Instance `distribSMul'` / 实例 `distribSMul'`
-
-English:
-instance distribSMul'
-  signature: [SMul S R] [DistribSMul S M] [IsScalarTower S R M] (P : Submodule R M)
-  body: fast_instance%
-  Function.Surjective.distribSMul { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
-    Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-中文:
-实例 distribSMul'
-  签名: [标量乘法 S R] [分配标量乘法 S M] [标量塔 S R M] (P : 子模 R M)
-  定义体: fast_instance%
-  Function.Surjective.distribSMul { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
-    Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-Depends on / 依赖: fast_instance
+/-
+**Submodule.Quotient.distribSMul'** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`
+。
+形式化陈述：distribSMul' [SMul S R] [DistribSMul S M] [IsScalarTower S R M] (P : Submo
+dule R M) : DistribSMul S (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribSMul' [SMul S R] [DistribSMul S M] [IsScalarTower S R M] (P : Submodule R M) :
     DistribSMul S (M ⧸ P) := fast_instance%
   Function.Surjective.distribSMul { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
     Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-/--
-Instance `distribSMul` / 实例 `distribSMul`
-
-English:
-instance distribSMul
-  signature: (P : Submodule R M)
-  body: Quotient.distribSMul' P
-
-中文:
-实例 distribSMul
-  签名: (P : 子模 R M)
-  定义体: Quotient.distribSMul' P
-
-Depends on / 依赖: Quotient, Quotient.distribSMul, distribSMul
+/-
+**Submodule.Quotient.distribSMul** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：distribSMul (P : Submodule R M) : DistribSMul R (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribSMul (P : Submodule R M) : DistribSMul R (M ⧸ P) :=
   Quotient.distribSMul' P
-
-/--
-Instance `distribMulAction'` / 实例 `distribMulAction'`
-
-English:
-instance distribMulAction'
-  signature: [Monoid S] [SMul S R] [DistribMulAction S M] [IsScalarTower S R M]
-  body: fast_instance%
-  Function.Surjective.distribMulAction { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
-    Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-中文:
-实例 distribMulAction'
-  签名: [幺半群 S] [标量乘法 S R] [分配乘法作用 S M] [标量塔 S R M]
-  定义体: fast_instance%
-  Function.Surjective.distribMulAction { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
-    Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-Depends on / 依赖: fast_instance
+/-
+**Submodule.Quotient.distribMulAction'** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quot
+ient`。
+形式化陈述：distribMulAction' [Monoid S] [SMul S R] [DistribMulAction S M] [IsScalarTo
+wer S R M] (P : Submodule R M) : DistribMulAction S (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction' [Monoid S] [SMul S R] [DistribMulAction S M] [IsScalarTower S R M]
     (P : Submodule R M) : DistribMulAction S (M ⧸ P) := fast_instance%
   Function.Surjective.distribMulAction { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
     Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
-
-English:
-instance distribMulAction
-  signature: (P : Submodule R M)
-  body: Quotient.distribMulAction' P
-
-中文:
-实例 distribMulAction
-  签名: (P : 子模 R M)
-  定义体: Quotient.distribMulAction' P
-
-Depends on / 依赖: Quotient, Quotient.distribMulAction, distribMulAction
+/-
+**Submodule.Quotient.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quoti
+ent`。
+形式化陈述：distribMulAction (P : Submodule R M) : DistribMulAction R (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction (P : Submodule R M) : DistribMulAction R (M ⧸ P) :=
   Quotient.distribMulAction' P
-
-/--
-Instance `module'` / 实例 `module'`
-
-English:
-instance module'
-  signature: [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M] (P : Submodule R M)
-  body: fast_instance%
-  Function.Surjective.module _ { toFun := mk, map_zero' := by rfl, map_add' := fun _ _ => by rfl }
-    Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-中文:
-实例 module'
-  签名: [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M] (P : 子模 R M)
-  定义体: fast_instance%
-  Function.Surjective.module _ { toFun := mk, map_zero' := by rfl, map_add' := fun _ _ => by rfl }
-    Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-Depends on / 依赖: fast_instance
+/-
+**Submodule.Quotient.module'** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：module' [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M] (P : Su
+bmodule R M) : Module S (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module' [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M] (P : Submodule R M) :
     Module S (M ⧸ P) := fast_instance%
   Function.Surjective.module _ { toFun := mk, map_zero' := by rfl, map_add' := fun _ _ => by rfl }
     Quot.mk_surjective (Submodule.Quotient.mk_smul P)
-
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: (P : Submodule R M)
-  body: Quotient.module' P
-
-中文:
-实例 module
-  签名: (P : 子模 R M)
-  定义体: Quotient.module' P
-
-Depends on / 依赖: Quotient, Quotient.module, module
+/-
+**Submodule.Quotient.module** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+形式化陈述：module (P : Submodule R M) : Module R (M ⧸ P)
+参数：P : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module (P : Submodule R M) : Module R (M ⧸ P) :=
   Quotient.module' P
@@ -792,50 +530,35 @@ instance module (P : Submodule R M) : Module R (M ⧸ P) :=
 end Module
 
 @[elab_as_elim]
-/--
-theorem `induction_on` / 定理 `induction_on`
-
-English:
-theorem induction_on
-  given: {C : M ⧸ p -> Prop} (x : M ⧸ p) (H : forall z, C (Submodule.Quotient.mk z))
-  proof: Quotient.inductionOn' x H
-
-中文:
-定理 induction_on
-  条件: {C : M ⧸ p -> 命题} (x : M ⧸ p) (H : 对任意 z, C (子模.商.mk z))
-  证明: Quotient.inductionOn' x H
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Submodule.Quotient.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient`
+。
+形式化陈述：induction_on {C : M ⧸ p -> Prop} (x : M ⧸ p) (H : forall z, C (Submodule.Q
+uotient.mk z)) : C x
+参数：x : M ⧸ p；H : forall z, C (Submodule.Quotient.mk z)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
 -/
-theorem induction_on {C : M ⧸ p -> Prop} (x : M ⧸ p) (H : forall z, C (Submodule.Quotient.mk z)) :
+theorem induction_on {C : M ⧸ p → Prop} (x : M ⧸ p) (H : ∀ z, C (Submodule.Quotient.mk z)) :
     C x := Quotient.inductionOn' x H
-
-/--
-theorem `mk_surjective` / 定理 `mk_surjective`
-
-English:
-theorem mk_surjective
-  statement: Function.Surjective (@mk _ _ _ _ _ p)
-  proof: by
-  rintro ⟨x⟩
-  exact ⟨x, rfl⟩
-
-universe u in
-
-中文:
-定理 mk_surjective
-  结论: 函数.满射 (@mk _ _ _ _ _ p)
-  证明: by
-  rintro ⟨x⟩
-  exact ⟨x, rfl⟩
-
-universe u in
+/-
+**Submodule.Quotient.mk_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.Quotient
+`。
+形式化陈述：mk_surjective : Function.Surjective (@mk _ _ _ _ _ p)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_surjective : Function.Surjective (@mk _ _ _ _ _ p) := by
   rintro ⟨x⟩
   exact ⟨x, rfl⟩
 
 universe u in
+/-
+**Submodule.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R M : Type*} [Ring R] [AddCommGroup M] [Module R M] {N : Submodule R M} [Small.{u} M] :
     Small.{u} (M ⧸ N) :=
   small_of_surjective (Submodule.Quotient.mk_surjective _)
@@ -846,153 +569,101 @@ section
 
 variable {M₂ : Type*} [AddCommGroup M₂] [Module R M₂]
 
-/--
-theorem `quot_hom_ext` / 定理 `quot_hom_ext`
-
-English:
-theorem quot_hom_ext
-  given: (f g : (M ⧸ p) ->ₗ[R] M₂) (h : forall x : M, f (Quotient.mk x) = g (Quotient.mk x))
-  proof: LinearMap.ext fun x => Submodule.Quotient.induction_on _ x h
-
-中文:
-定理 quot_hom_ext
-  条件: (f g : (M ⧸ p) ->ₗ[R] M₂) (h : 对任意 x : M, f (商.mk x) = g (商.mk x))
-  证明: LinearMap.ext fun x => Submodule.Quotient.induction_on _ x h
-
-Depends on / 依赖: LinearMap, LinearMap.ext, Quotient, Submodule, Submodule.Quotient.induction_on, induction_on
+/-
+**Submodule.quot_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：quot_hom_ext (f g : (M ⧸ p) ->ₗ[R] M₂) (h : forall x : M, f (Quotient.mk x
+) = g (Quotient.mk x)) : f = g
+参数：f g : (M ⧸ p) ->ₗ[R] M₂；h : forall x : M, f (Quotient.mk x) = g (Quotient.mk 
+x)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Submodule.Quotient.induction_on`：induction_on {C : M ⧸ p -> Prop} (x : M
+ ⧸ p) (H : forall z, C (Submodule.Quotient.mk z)) : C x
 -/
-theorem quot_hom_ext (f g : (M ⧸ p) ->ₗ[R] M₂) (h : forall x : M, f (Quotient.mk x) = g (Quotient.mk x)) :
+theorem quot_hom_ext (f g : (M ⧸ p) →ₗ[R] M₂) (h : ∀ x : M, f (Quotient.mk x) = g (Quotient.mk x)) :
     f = g :=
   LinearMap.ext fun x => Submodule.Quotient.induction_on _ x h
 
-/--
-Definition of `mkQ` / `mkQ` 的定义
+/-- The map from a module `M` to the quotient of `M` by a submodule `p` as a linear map. -/
+/-
+**Submodule.mkQ** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：mkQ : M ->ₗ[R] M ⧸ p where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkQ
-  signature: : M ->ₗ[R] M ⧸ p where
-  body: Quotient.mk
-  map_add' := by simp
-  map_smul' := by simp
-
-@[simp]
-
-中文:
-定义 mkQ
-  签名: : M ->ₗ[R] M ⧸ p where
-  定义体: Quotient.mk
-  map_add' := by simp
-  map_smul' := by simp
-
-@[simp]
-
-Depends on / 依赖: Quotient, Quotient.mk
+--- 原说明 ---
+The map from a module `M` to the quotient of `M` by a submodule `p` as a linear 
+map.
 -/
-def mkQ : M ->ₗ[R] M ⧸ p where
+def mkQ : M →ₗ[R] M ⧸ p where
   toFun := Quotient.mk
   map_add' := by simp
   map_smul' := by simp
 
 @[simp]
-/--
-theorem `mkQ_apply` / 定理 `mkQ_apply`
-
-English:
-theorem mkQ_apply
-  given: (x : M)
-  statement: p.mkQ x = Quotient.mk x
-  proof: rfl
-
-中文:
-定理 mkQ_apply
-  条件: (x : M)
-  结论: p.mkQ x = 商.mk x
-  证明: rfl
+/-
+**Submodule.mkQ_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mkQ_apply (x : M) : p.mkQ x = Quotient.mk x :=
   rfl
-
-/--
-theorem `mkQ_surjective` / 定理 `mkQ_surjective`
-
-English:
-theorem mkQ_surjective
-  statement: Function.Surjective p.mkQ
-  proof: by
-  rintro ⟨x⟩; exact ⟨x, rfl⟩
-
-中文:
-定理 mkQ_surjective
-  结论: 函数.满射 p.mkQ
-  证明: by
-  rintro ⟨x⟩; exact ⟨x, rfl⟩
+/-
+**Submodule.mkQ_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mkQ_surjective : Function.Surjective p.mkQ
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mkQ_surjective : Function.Surjective p.mkQ := by
   rintro ⟨x⟩; exact ⟨x, rfl⟩
 
 end
 
-variable {R₂ M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R ->+* R₂}
+variable {R₂ M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R →+* R₂}
 
 /-- Two `LinearMap`s from a quotient module are equal if their compositions with
 `submodule.mkQ` are equal.
 
 See note [partially-applied ext lemmas]. -/
 @[ext high] -- Increase priority so this applies before `LinearMap.ext`
-/--
-theorem `linearMap_qext` / 定理 `linearMap_qext`
+/-
+**Submodule.linearMap_qext** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h : f.comp p.mkQ = g.comp p.mkQ
+) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Submodule.Quotient.induction_on`：induction_on {C : M ⧸ p -> Prop} (x : M
+ ⧸ p) (H : forall z, C (Submodule.Quotient.mk z)) : C x
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
 
-English:
-theorem linearMap_qext
-  given: ⦃f g
-  statement: M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h : f.comp p.mkQ = g.comp p.mkQ) : f = g
-  proof: LinearMap.ext fun x => Submodule.Quotient.induction_on _ x (LinearMap.congr_fun h :)
+--- 原说明 ---
+Two `LinearMap`s from a quotient module are equal if their compositions with
+`submodule.mkQ` are equal.
 
-中文:
-定理 linearMap_qext
-  条件: ⦃f g
-  结论: M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h : f.comp p.mkQ = g.comp p.mkQ) : f = g
-  证明: LinearMap.ext fun x => Submodule.Quotient.induction_on _ x (LinearMap.congr_fun h :)
-
-Depends on / 依赖: LinearMap, LinearMap.congr_fun, LinearMap.ext, Quotient, Submodule, Submodule.Quotient.induction_on, congr_fun, induction_on
+See note [partially-applied ext lemmas].
 -/
-theorem linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h : f.comp p.mkQ = g.comp p.mkQ) : f = g :=
-LinearMap.ext fun x => Submodule.Quotient.induction_on _ x (LinearMap.congr_fun h :)
+theorem linearMap_qext ⦃f g : M ⧸ p →ₛₗ[τ₁₂] M₂⦄ (h : f.comp p.mkQ = g.comp p.mkQ) : f = g :=
+  LinearMap.ext fun x => Submodule.Quotient.induction_on _ x <| (LinearMap.congr_fun h :)
 
-/--
-Definition of `quotEquivOfEq` / `quotEquivOfEq` 的定义
+/-- Quotienting by equal submodules gives linearly equivalent quotients. -/
+/-
+**Submodule.quotEquivOfEq** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：quotEquivOfEq (h : p = p') : (M ⧸ p) ≃ₗ[R] M ⧸ p'
+参数：h : p = p'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition quotEquivOfEq
-  signature: (h : p = p')
-  body: { @Quotient.congr _ _ (quotientRel p) (quotientRel p') (Equiv.refl _) fun a b => by
-      subst h
-      rfl with
-    map_add' := by
-      rintro ⟨x⟩ ⟨y⟩
-      rfl
-    map_smul' := by
-      rintro x ⟨y⟩
-      rfl }
-
-@[simp]
-
-中文:
-定义 quotEquivOfEq
-  签名: (h : p = p')
-  定义体: { @Quotient.congr _ _ (quotientRel p) (quotientRel p') (Equiv.refl _) fun a b => by
-      subst h
-      rfl with
-    map_add' := by
-      rintro ⟨x⟩ ⟨y⟩
-      rfl
-    map_smul' := by
-      rintro x ⟨y⟩
-      rfl }
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl, Quotient, Quotient.congr, map_add, map_smul, quotientRel
+--- 原说明 ---
+Quotienting by equal submodules gives linearly equivalent quotients.
 -/
 def quotEquivOfEq (h : p = p') : (M ⧸ p) ≃ₗ[R] M ⧸ p' :=
   { @Quotient.congr _ _ (quotientRel p) (quotientRel p') (Equiv.refl _) fun a b => by
@@ -1006,18 +677,13 @@ def quotEquivOfEq (h : p = p') : (M ⧸ p) ≃ₗ[R] M ⧸ p' :=
       rfl }
 
 @[simp]
-/--
-theorem `quotEquivOfEq_mk` / 定理 `quotEquivOfEq_mk`
-
-English:
-theorem quotEquivOfEq_mk
-  given: (h : p = p') (x : M)
-  proof: rfl
-
-中文:
-定理 quotEquivOfEq_mk
-  条件: (h : p = p') (x : M)
-  证明: rfl
+/-
+**Submodule.quotEquivOfEq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：quotEquivOfEq_mk (h : p = p') (x : M) : Submodule.quotEquivOfEq p p' h (Su
+bmodule.Quotient.mk x) = (Submodule.Quotient.mk x)
+参数：h : p = p'；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotEquivOfEq_mk (h : p = p') (x : M) :
     Submodule.quotEquivOfEq p p' h (Submodule.Quotient.mk x) =
@@ -1027,3 +693,4 @@ theorem quotEquivOfEq_mk (h : p = p') (x : M) :
 end Submodule
 
 end Ring
+

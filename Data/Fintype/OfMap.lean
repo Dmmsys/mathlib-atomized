@@ -38,92 +38,67 @@ namespace Fintype
 
 /-- Construct a proof of `Fintype α` from a universal multiset -/
 @[instance_reducible]
-/--
-Definition of `ofMultiset` / `ofMultiset` 的定义
+/-
+**Fintype.ofMultiset** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofMultiset [DecidableEq α] (s : Multiset α) (H : forall x : α, x in s) : F
+intype α
+参数：s : Multiset α；H : forall x : α, x in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMultiset
-  signature: [DecidableEq α] (s : Multiset α) (H : forall x : α, x in s)
-  body: ⟨s.toFinset, by simpa using H⟩
-
-中文:
-定义 ofMultiset
-  签名: [DecidableEq α] (s : Multiset α) (H : 对任意 x : α, x in s)
-  定义体: ⟨s.toFinset, by simpa using H⟩
-
-Depends on / 依赖: s.toFinset, toFinset
+--- 原说明 ---
+Construct a proof of `Fintype α` from a universal multiset
 -/
-def ofMultiset [DecidableEq α] (s : Multiset α) (H : forall x : α, x in s) : Fintype α :=
+def ofMultiset [DecidableEq α] (s : Multiset α) (H : ∀ x : α, x ∈ s) : Fintype α :=
   ⟨s.toFinset, by simpa using H⟩
 
 /-- Construct a proof of `Fintype α` from a universal list -/
 @[instance_reducible]
-/--
-Definition of `ofList` / `ofList` 的定义
+/-
+**Fintype.ofList** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofList [DecidableEq α] (l : List α) (H : forall x : α, x in l) : Fintype α
+参数：l : List α；H : forall x : α, x in l。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofList
-  signature: [DecidableEq α] (l : List α) (H : forall x : α, x in l)
-  body: ⟨l.toFinset, by simpa using H⟩
-
-中文:
-定义 ofList
-  签名: [DecidableEq α] (l : 列表 α) (H : 对任意 x : α, x in l)
-  定义体: ⟨l.toFinset, by simpa using H⟩
-
-Depends on / 依赖: l.toFinset, toFinset
+--- 原说明 ---
+Construct a proof of `Fintype α` from a universal list
 -/
-def ofList [DecidableEq α] (l : List α) (H : forall x : α, x in l) : Fintype α :=
+def ofList [DecidableEq α] (l : List α) (H : ∀ x : α, x ∈ l) : Fintype α :=
   ⟨l.toFinset, by simpa using H⟩
 
 /-- If `f : α → β` is a bijection and `α` is a fintype, then `β` is also a fintype. -/
 @[instance_reducible]
-/--
-Definition of `ofBijective` / `ofBijective` 的定义
+/-
+**Fintype.ofBijective** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofBijective [Fintype α] (f : α -> β) (H : Function.Bijective f) : Fintype 
+β
+参数：f : α -> β；H : Function.Bijective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBijective
-  signature: [Fintype α] (f : α -> β) (H : Function.Bijective f)
-  body: ⟨univ.map ⟨f, H.1⟩, fun b =>
-    let ⟨_, e⟩ := H.2 b
-    e ▸ mem_map_of_mem _ (mem_univ _)⟩
-
-中文:
-定义 ofBijective
-  签名: [有限类型 α] (f : α -> β) (H : 函数.双射 f)
-  定义体: ⟨univ.map ⟨f, H.1⟩, fun b =>
-    let ⟨_, e⟩ := H.2 b
-    e ▸ mem_map_of_mem _ (mem_univ _)⟩
-
-Depends on / 依赖: mem_map_of_mem, mem_univ, univ.map
+--- 原说明 ---
+If `f : α → β` is a bijection and `α` is a fintype, then `β` is also a fintype.
 -/
-def ofBijective [Fintype α] (f : α -> β) (H : Function.Bijective f) : Fintype β :=
+def ofBijective [Fintype α] (f : α → β) (H : Function.Bijective f) : Fintype β :=
   ⟨univ.map ⟨f, H.1⟩, fun b =>
     let ⟨_, e⟩ := H.2 b
     e ▸ mem_map_of_mem _ (mem_univ _)⟩
 
 /-- If `f : α → β` is a surjection and `α` is a fintype, then `β` is also a fintype. -/
 @[instance_reducible]
-/--
-Definition of `ofSurjective` / `ofSurjective` 的定义
+/-
+**Fintype.ofSurjective** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofSurjective [DecidableEq β] [Fintype α] (f : α -> β) (H : Function.Surjec
+tive f) : Fintype β
+参数：f : α -> β；H : Function.Surjective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSurjective
-  signature: [DecidableEq β] [Fintype α] (f : α -> β) (H : Function.Surjective f)
-  body: ⟨univ.image f, fun b =>
-    let ⟨_, e⟩ := H b
-    e ▸ mem_image_of_mem _ (mem_univ _)⟩
-
-中文:
-定义 ofSurjective
-  签名: [DecidableEq β] [有限类型 α] (f : α -> β) (H : 函数.满射 f)
-  定义体: ⟨univ.image f, fun b =>
-    let ⟨_, e⟩ := H b
-    e ▸ mem_image_of_mem _ (mem_univ _)⟩
-
-Depends on / 依赖: mem_image_of_mem, mem_univ, univ.image
+--- 原说明 ---
+If `f : α → β` is a surjection and `α` is a fintype, then `β` is also a fintype.
 -/
-def ofSurjective [DecidableEq β] [Fintype α] (f : α -> β) (H : Function.Surjective f) : Fintype β :=
+def ofSurjective [DecidableEq β] [Fintype α] (f : α → β) (H : Function.Surjective f) : Fintype β :=
   ⟨univ.image f, fun b =>
     let ⟨_, e⟩ := H b
     e ▸ mem_image_of_mem _ (mem_univ _)⟩
@@ -132,30 +107,22 @@ def ofSurjective [DecidableEq β] [Fintype α] (f : α -> β) (H : Function.Surj
 fintype. This is noncomputable because injectivity alone cannot be
 used to construct preimages. -/
 @[instance_reducible]
-/--
-Definition of `ofInjective` / `ofInjective` 的定义
+/-
+**Fintype.ofInjective** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofInjective [Fintype β] (f : α -> β) (H : Function.Injective f) : Fintype 
+α
+参数：f : α -> β；H : Function.Injective f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.invFun_surjective`：invFun_surjective (hf : Injective f) : Surje
+ctive (invFun f)
 
-English:
-definition ofInjective
-  signature: [Fintype β] (f : α -> β) (H : Function.Injective f)
-  body: letI := Classical.dec
-  if hα : Nonempty α then
-    letI := Classical.inhabited_of_nonempty hα
-    ofSurjective (invFun f) (invFun_surjective H)
-  else ⟨∅, fun x => (hα ⟨x⟩).elim⟩
-
-中文:
-定义 ofInjective
-  签名: [有限类型 β] (f : α -> β) (H : 函数.单射 f)
-  定义体: letI := Classical.dec
-  if hα : Nonempty α then
-    letI := Classical.inhabited_of_nonempty hα
-    ofSurjective (invFun f) (invFun_surjective H)
-  else ⟨∅, fun x => (hα ⟨x⟩).elim⟩
-
-Depends on / 依赖: Classical, Classical.dec, Classical.inhabited_of_nonempty, Nonempty, inhabited_of_nonempty, invFun, invFun_surjective, ofSurjective
+--- 原说明 ---
+Given an injective function to a fintype, the domain is also a
+fintype. This is noncomputable because injectivity alone cannot be
+used to construct preimages.
 -/
-noncomputable def ofInjective [Fintype β] (f : α -> β) (H : Function.Injective f) : Fintype α :=
+noncomputable def ofInjective [Fintype β] (f : α → β) (H : Function.Injective f) : Fintype α :=
   letI := Classical.dec
   if hα : Nonempty α then
     letI := Classical.inhabited_of_nonempty hα
@@ -164,60 +131,45 @@ noncomputable def ofInjective [Fintype β] (f : α -> β) (H : Function.Injectiv
 
 /-- If `f : α ≃ β` and `α` is a fintype, then `β` is also a fintype. -/
 @[instance_reducible]
-/--
-Definition of `ofEquiv` / `ofEquiv` 的定义
+/-
+**Fintype.ofEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofEquiv (α : Type*) [Fintype α] (f : α ≃ β) : Fintype β
+参数：α : Type*；f : α ≃ β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 
-English:
-definition ofEquiv
-  signature: (α : Type*) [Fintype α] (f : α ≃ β)
-  body: ofBijective _ f.bijective
-
-中文:
-定义 ofEquiv
-  签名: (α : 类型) [有限类型 α] (f : α ≃ β)
-  定义体: ofBijective _ f.bijective
-
-Depends on / 依赖: bijective, f.bijective, ofBijective
+--- 原说明 ---
+If `f : α ≃ β` and `α` is a fintype, then `β` is also a fintype.
 -/
 def ofEquiv (α : Type*) [Fintype α] (f : α ≃ β) : Fintype β :=
   ofBijective _ f.bijective
 
 /-- Any subsingleton type with a witness is a fintype (with one term). -/
 @[instance_reducible]
-/--
-Definition of `ofSubsingleton` / `ofSubsingleton` 的定义
+/-
+**Fintype.ofSubsingleton** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofSubsingleton (a : α) [Subsingleton α] : Fintype α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSubsingleton
-  signature: (a : α) [Subsingleton α]
-  body: ⟨{a}, fun _ => Finset.mem_singleton.2 (Subsingleton.elim _ _)⟩
-
-中文:
-定义 ofSubsingleton
-  签名: (a : α) [子单例 α]
-  定义体: ⟨{a}, fun _ => Finset.mem_singleton.2 (Subsingleton.elim _ _)⟩
-
-Depends on / 依赖: Finset, Finset.mem_singleton, Subsingleton, Subsingleton.elim, mem_singleton
+--- 原说明 ---
+Any subsingleton type with a witness is a fintype (with one term).
 -/
 def ofSubsingleton (a : α) [Subsingleton α] : Fintype α :=
   ⟨{a}, fun _ => Finset.mem_singleton.2 (Subsingleton.elim _ _)⟩
 
 -- In principle, this could be a `simp` theorem but it applies to any occurrence of `univ` and
 -- required unification of the (possibly very complex) `Fintype` instances.
-/--
-theorem `univ_ofSubsingleton` / 定理 `univ_ofSubsingleton`
-
-English:
-theorem univ_ofSubsingleton
-  given: (a : α) [Subsingleton α]
-  statement: @univ _ (ofSubsingleton a) = {a}
-  proof: rfl
-
-中文:
-定理 univ_ofSubsingleton
-  条件: (a : α) [子单例 α]
-  结论: @univ _ (ofSubsingleton a) = {a}
-  证明: rfl
+/-
+**Fintype.univ_ofSubsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：univ_ofSubsingleton (a : α) [Subsingleton α] : @univ _ (ofSubsingleton a) 
+= {a}
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem univ_ofSubsingleton (a : α) [Subsingleton α] : @univ _ (ofSubsingleton a) = {a} :=
   rfl
@@ -225,73 +177,46 @@ theorem univ_ofSubsingleton (a : α) [Subsingleton α] : @univ _ (ofSubsingleton
 /-- An empty type is a fintype. Not registered as an instance, to make sure that there aren't two
 conflicting `Fintype ι` instances around when casing over whether a fintype `ι` is empty or not. -/
 @[instance_reducible]
-/--
-Definition of `ofIsEmpty` / `ofIsEmpty` 的定义
+/-
+**Fintype.ofIsEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Fintype`。
+形式化陈述：ofIsEmpty [IsEmpty α] : Fintype α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsEmpty
-  signature: [IsEmpty α]
-  body: ⟨∅, isEmptyElim⟩
-
-中文:
-定义 ofIsEmpty
-  签名: [是空 α]
-  定义体: ⟨∅, isEmptyElim⟩
-
-Depends on / 依赖: isEmptyElim
+--- 原说明 ---
+An empty type is a fintype. Not registered as an instance, to make sure that the
+re aren't two
+conflicting `Fintype ι` instances around when casing over whether a fintype `ι` 
+is empty or not.
 -/
 def ofIsEmpty [IsEmpty α] : Fintype α :=
   ⟨∅, isEmptyElim⟩
 
-/--
-theorem `univ_ofIsEmpty` / 定理 `univ_ofIsEmpty`
+/-- Note: this lemma is specifically about `Fintype.ofIsEmpty`. For a statement about
+arbitrary `Fintype` instances, use `Finset.univ_eq_empty`. -/
+/-
+**Fintype.univ_ofIsEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：univ_ofIsEmpty [IsEmpty α] : @univ α Fintype.ofIsEmpty = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem univ_ofIsEmpty
-  given: [IsEmpty α]
-  statement: @univ α Fintype.ofIsEmpty = ∅
-  proof: rfl
-
-中文:
-定理 univ_ofIsEmpty
-  条件: [是空 α]
-  结论: @univ α 有限类型.ofIsEmpty = ∅
-  证明: rfl
+--- 原说明 ---
+Note: this lemma is specifically about `Fintype.ofIsEmpty`. For a statement abou
+t
+arbitrary `Fintype` instances, use `Finset.univ_eq_empty`.
 -/
 theorem univ_ofIsEmpty [IsEmpty α] : @univ α Fintype.ofIsEmpty = ∅ :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fintype Empty
-  body: Fintype.ofIsEmpty
-
-中文:
-实例 :
-  签名: 有限类型 空
-  定义体: Fintype.ofIsEmpty
-
-Depends on / 依赖: Fintype, Fintype.ofIsEmpty, ofIsEmpty
+/-
+**Fintype.** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Fintype Empty := Fintype.ofIsEmpty
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fintype PEmpty
-  body: Fintype.ofIsEmpty
-
-中文:
-实例 :
-  签名: 有限类型 命题空
-  定义体: Fintype.ofIsEmpty
-
-Depends on / 依赖: Fintype, Fintype.ofIsEmpty, ofIsEmpty
+/-
+**Fintype.** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Fintype PEmpty := Fintype.ofIsEmpty
 
 end Fintype
+

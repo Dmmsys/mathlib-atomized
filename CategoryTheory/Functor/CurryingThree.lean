@@ -27,247 +27,145 @@ variable {C₁ C₂ C₁₂ C₃ C₂₃ D₁ D₂ D₃ E : Type*}
   [Category* C₁] [Category* C₂] [Category* C₃] [Category* C₁₂] [Category* C₂₃]
   [Category* D₁] [Category* D₂] [Category* D₃] [Category* E]
 
-/--
-Definition of `currying₃` / `currying₃` 的定义
+/-- The equivalence of categories `(C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ≌ C₁ × C₂ × C₃ ⥤ E`
+given by the curryfication of functors in three variables. -/
+/-
+**CategoryTheory.Functor.currying** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：currying : C ⥤ D ⥤ E ≌ C × D ⥤ E where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition currying₃
-  signature: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ≌ C₁ × C₂ × C₃ ⥤ E
-  body: currying.trans (currying.trans (prod.associativity C₁ C₂ C₃).congrLeft)
-
-中文:
-定义 currying₃
-  签名: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ≌ C₁ × C₂ × C₃ ⥤ E
-  定义体: currying.trans (currying.trans (prod.associativity C₁ C₂ C₃).congrLeft)
-
-Depends on / 依赖: associativity, congrLeft, currying, currying.trans, prod.associativity
+--- 原说明 ---
+The equivalence of categories `(C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ≌ C₁ × C₂ × C₃ ⥤ E`
+given by the curryfication of functors in three variables.
 -/
 def currying₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ≌ C₁ × C₂ × C₃ ⥤ E :=
   currying.trans (currying.trans (prod.associativity C₁ C₂ C₃).congrLeft)
 
-/--
-Definition of `uncurry₃` / `uncurry₃` 的定义
+/-- Uncurrying a functor in three variables. -/
+/-
+**CategoryTheory.Functor.uncurry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation uncurry₃
-  signature: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E
-  body: currying₃.functor
-
-中文:
-缩写 uncurry₃
-  签名: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E
-  定义体: currying₃.functor
-
-Depends on / 依赖: functor
+--- 原说明 ---
+Uncurrying a functor in three variables.
 -/
 abbrev uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E := currying₃.functor
 
-/--
-Definition of `curry₃` / `curry₃` 的定义
+/-- Currying a functor in three variables. -/
+/-
+**CategoryTheory.Functor.curry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation curry₃
-  signature: : (C₁ × C₂ × C₃ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ E
-  body: currying₃.inverse
-
-中文:
-缩写 curry₃
-  签名: : (C₁ × C₂ × C₃ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ E
-  定义体: currying₃.inverse
-
-Depends on / 依赖: inverse
+--- 原说明 ---
+Currying a functor in three variables.
 -/
 abbrev curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ C₁ ⥤ C₂ ⥤ C₃ ⥤ E := currying₃.inverse
 
-/--
-Definition of `fullyFaithfulUncurry₃` / `fullyFaithfulUncurry₃` 的定义
+/-- Uncurrying functors in three variables gives a fully faithful functor. -/
+/-
+**CategoryTheory.Functor.fullyFaithfulUncurry** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：fullyFaithfulUncurry : (uncurry : (C ⥤ D ⥤ E) ⥤ C × D ⥤ E).FullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulUncurry₃
-  signature: :
-  body: currying₃.fullyFaithfulFunctor
-
-中文:
-定义 fullyFaithfulUncurry₃
-  签名: :
-  定义体: currying₃.fullyFaithfulFunctor
-
-Depends on / 依赖: fullyFaithfulFunctor
+--- 原说明 ---
+Uncurrying functors in three variables gives a fully faithful functor.
 -/
 def fullyFaithfulUncurry₃ :
     (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₁ × C₂ × C₃ ⥤ E)).FullyFaithful :=
   currying₃.fullyFaithfulFunctor
 
-/--
-Definition of `fullyFaithfulCurry₃` / `fullyFaithfulCurry₃` 的定义
+/-- Currying functors in three variables gives a fully faithful functor. -/
+/-
+**CategoryTheory.Functor.fullyFaithfulCurry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：fullyFaithfulCurry : (curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E).FullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulCurry₃
-  signature: :
-  body: currying₃.fullyFaithfulInverse
-
-中文:
-定义 fullyFaithfulCurry₃
-  签名: :
-  定义体: currying₃.fullyFaithfulInverse
-
-Depends on / 依赖: fullyFaithfulInverse
+--- 原说明 ---
+Currying functors in three variables gives a fully faithful functor.
 -/
 def fullyFaithfulCurry₃ :
     (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).FullyFaithful :=
   currying₃.fullyFaithfulInverse
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).Full
-  body: fullyFaithfulUncurry₃.full
-
-中文:
-实例 :
-  签名: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).满
-  定义体: fullyFaithfulUncurry₃.full
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).Full :=
   fullyFaithfulUncurry₃.full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).Faithful
-  body: fullyFaithfulUncurry₃.faithful
-
-中文:
-实例 :
-  签名: (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).忠实
-  定义体: fullyFaithfulUncurry₃.faithful
-
-Depends on / 依赖: faithful
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uncurry₃ : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ C₁ × C₂ × C₃ ⥤ E).Faithful :=
   fullyFaithfulUncurry₃.faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).Full
-  body: fullyFaithfulCurry₃.full
-
-中文:
-实例 :
-  签名: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).满
-  定义体: fullyFaithfulCurry₃.full
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).Full :=
   fullyFaithfulCurry₃.full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).Faithful
-  body: fullyFaithfulCurry₃.faithful
-
-@[simp]
-
-中文:
-实例 :
-  签名: (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).忠实
-  定义体: fullyFaithfulCurry₃.faithful
-
-@[simp]
-
-Depends on / 依赖: faithful
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (curry₃ : (C₁ × C₂ × C₃ ⥤ E) ⥤ (C₁ ⥤ C₂ ⥤ C₃ ⥤ E)).Faithful :=
   fullyFaithfulCurry₃.faithful
 
 @[simp]
-/--
-lemma `curry₃_obj_map_app_app` / 引理 `curry₃_obj_map_app_app`
-
-English:
-lemma curry₃_obj_map_app_app
-  statement: (F : C₁ × C₂ × C₃ ⥤ E)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 curry₃_obj_map_app_app
-  结论: (F : C₁ × C₂ × C₃ ⥤ E)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.curry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma curry₃_obj_map_app_app (F : C₁ × C₂ × C₃ ⥤ E)
     {X₁ Y₁ : C₁} (f : X₁ ⟶ Y₁) (X₂ : C₂) (X₃ : C₃) :
     (((curry₃.obj F).map f).app X₂).app X₃ = F.map ⟨f, 𝟙 X₂, 𝟙 X₃⟩ := rfl
 
 @[simp]
-/--
-lemma `curry₃_obj_obj_map_app` / 引理 `curry₃_obj_obj_map_app`
-
-English:
-lemma curry₃_obj_obj_map_app
-  statement: (F : C₁ × C₂ × C₃ ⥤ E)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 curry₃_obj_obj_map_app
-  结论: (F : C₁ × C₂ × C₃ ⥤ E)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.curry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma curry₃_obj_obj_map_app (F : C₁ × C₂ × C₃ ⥤ E)
     (X₁ : C₁) {X₂ Y₂ : C₂} (f : X₂ ⟶ Y₂) (X₃ : C₃) :
     (((curry₃.obj F).obj X₁).map f).app X₃ = F.map ⟨𝟙 X₁, f, 𝟙 X₃⟩ := rfl
 
 @[simp]
-/--
-lemma `curry₃_obj_obj_obj_map` / 引理 `curry₃_obj_obj_obj_map`
-
-English:
-lemma curry₃_obj_obj_obj_map
-  statement: (F : C₁ × C₂ × C₃ ⥤ E)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 curry₃_obj_obj_obj_map
-  结论: (F : C₁ × C₂ × C₃ ⥤ E)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.curry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma curry₃_obj_obj_obj_map (F : C₁ × C₂ × C₃ ⥤ E)
     (X₁ : C₁) (X₂ : C₂) {X₃ Y₃ : C₃} (f : X₃ ⟶ Y₃) :
     (((curry₃.obj F).obj X₁).obj X₂).map f = F.map ⟨𝟙 X₁, 𝟙 X₂, f⟩ := rfl
 
 @[simp]
-/--
-lemma `curry₃_map_app_app_app` / 引理 `curry₃_map_app_app_app`
-
-English:
-lemma curry₃_map_app_app_app
-  statement: {F G : C₁ × C₂ × C₃ ⥤ E} (f : F ⟶ G)
-  proof: rfl
-
-中文:
-引理 curry₃_map_app_app_app
-  结论: {F G : C₁ × C₂ × C₃ ⥤ E} (f : F ⟶ G)
-  证明: rfl
+/-
+**CategoryTheory.Functor.curry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma curry₃_map_app_app_app {F G : C₁ × C₂ × C₃ ⥤ E} (f : F ⟶ G)
     (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) :
@@ -276,22 +174,12 @@ lemma curry₃_map_app_app_app {F G : C₁ × C₂ × C₃ ⥤ E} (f : F ⟶ G)
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `currying₃_unitIso_hom_app_app_app_app` / 引理 `currying₃_unitIso_hom_app_app_app_app`
-
-English:
-lemma currying₃_unitIso_hom_app_app_app_app
-  statement: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  proof: by
-  simp [currying₃, Equivalence.unit]
-
-中文:
-引理 currying₃_unitIso_hom_app_app_app_app
-  结论: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  证明: by
-  simp [currying₃, Equivalence.unit]
-
-Depends on / 依赖: Equivalence, Equivalence.unit
+/-
+**CategoryTheory.Functor.currying** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：currying : C ⥤ D ⥤ E ≌ C × D ⥤ E where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma currying₃_unitIso_hom_app_app_app_app (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
     (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) :
@@ -301,22 +189,12 @@ lemma currying₃_unitIso_hom_app_app_app_app (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `currying₃_unitIso_inv_app_app_app_app` / 引理 `currying₃_unitIso_inv_app_app_app_app`
-
-English:
-lemma currying₃_unitIso_inv_app_app_app_app
-  statement: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  proof: by
-  simp [currying₃, Equivalence.unitInv]
-
-中文:
-引理 currying₃_unitIso_inv_app_app_app_app
-  结论: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  证明: by
-  simp [currying₃, Equivalence.unitInv]
-
-Depends on / 依赖: Equivalence, Equivalence.unitInv, unitInv
+/-
+**CategoryTheory.Functor.currying** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：currying : C ⥤ D ⥤ E ≌ C × D ⥤ E where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma currying₃_unitIso_inv_app_app_app_app (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
     (X₁ : C₁) (X₂ : C₂) (X₃ : C₃) :
@@ -330,50 +208,37 @@ and `G : D₁ × D₂ × D₃ ⥤ E`, this is the isomorphism between
 `curry₃.obj (F₁.prod (F₂.prod F₃) ⋙ G) : C₁ ⥤ C₂ ⥤ C₃ ⥤ E`
 and `F₁ ⋙ curry₃.obj G ⋙ ((whiskeringLeft₂ E).obj F₂).obj F₃`. -/
 @[simps!]
-/--
-Definition of `curry₃ObjProdComp` / `curry₃ObjProdComp` 的定义
+/-
+**CategoryTheory.Functor.curry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：curry : (C × D ⥤ E) ⥤ C ⥤ D ⥤ E where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curry₃ObjProdComp
-  signature: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) (F₃ : C₃ ⥤ D₃) (G : D₁ × D₂ × D₃ ⥤ E)
-  body: NatIso.ofComponents
-    (fun X₁ => NatIso.ofComponents
-      (fun X₂ => NatIso.ofComponents (fun X₃ => Iso.refl _)))
-
-中文:
-定义 curry₃ObjProdComp
-  签名: (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) (F₃ : C₃ ⥤ D₃) (G : D₁ × D₂ × D₃ ⥤ E)
-  定义体: NatIso.ofComponents
-    (fun X₁ => NatIso.ofComponents
-      (fun X₂ => NatIso.ofComponents (fun X₃ => Iso.refl _)))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Given functors `F₁ : C₁ ⥤ D₁`, `F₂ : C₂ ⥤ D₂`, `F₃ : C₃ ⥤ D₃`
+and `G : D₁ × D₂ × D₃ ⥤ E`, this is the isomorphism between
+`curry₃.obj (F₁.prod (F₂.prod F₃) ⋙ G) : C₁ ⥤ C₂ ⥤ C₃ ⥤ E`
+and `F₁ ⋙ curry₃.obj G ⋙ ((whiskeringLeft₂ E).obj F₂).obj F₃`.
 -/
 def curry₃ObjProdComp (F₁ : C₁ ⥤ D₁) (F₂ : C₂ ⥤ D₂) (F₃ : C₃ ⥤ D₃) (G : D₁ × D₂ × D₃ ⥤ E) :
     curry₃.obj (F₁.prod (F₂.prod F₃) ⋙ G) ≅
       F₁ ⋙ curry₃.obj G ⋙ ((whiskeringLeft₂ E).obj F₂).obj F₃ :=
   NatIso.ofComponents
-    (fun X₁ => NatIso.ofComponents
-      (fun X₂ => NatIso.ofComponents (fun X₃ => Iso.refl _)))
+    (fun X₁ ↦ NatIso.ofComponents
+      (fun X₂ ↦ NatIso.ofComponents (fun X₃ ↦ Iso.refl _)))
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- `bifunctorComp₁₂` can be described in terms of the curryfication of functors. -/
 @[simps!]
-/--
-Definition of `bifunctorComp₁₂Iso` / `bifunctorComp₁₂Iso` 的定义
+/-
+**CategoryTheory.Functor.bifunctorComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bifunctorComp₁₂Iso
-  signature: (F₁₂ : C₁ ⥤ C₂ ⥤ C₁₂) (G : C₁₂ ⥤ C₃ ⥤ E)
-  body: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Iso.refl _))
-
-中文:
-定义 bifunctorComp₁₂Iso
-  签名: (F₁₂ : C₁ ⥤ C₂ ⥤ C₁₂) (G : C₁₂ ⥤ C₃ ⥤ E)
-  定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ => Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+`bifunctorComp₁₂` can be described in terms of the curryfication of functors.
 -/
 def bifunctorComp₁₂Iso (F₁₂ : C₁ ⥤ C₂ ⥤ C₁₂) (G : C₁₂ ⥤ C₃ ⥤ E) :
     bifunctorComp₁₂ F₁₂ G ≅ curry.obj (uncurry.obj F₁₂ ⋙ G) :=
@@ -383,56 +248,38 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- `bifunctorComp₂₃` can be described in terms of the curryfication of functors. -/
 @[simps!]
-/--
-Definition of `bifunctorComp₂₃Iso` / `bifunctorComp₂₃Iso` 的定义
+/-
+**CategoryTheory.Functor.bifunctorComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bifunctorComp₂₃Iso
-  signature: (F : C₁ ⥤ C₂₃ ⥤ E) (G₂₃ : C₂ ⥤ C₃ ⥤ C₂₃)
-  body: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ =>
-    NatIso.ofComponents (fun _ => Iso.refl _)))
-
-中文:
-定义 bifunctorComp₂₃Iso
-  签名: (F : C₁ ⥤ C₂₃ ⥤ E) (G₂₃ : C₂ ⥤ C₃ ⥤ C₂₃)
-  定义体: NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ =>
-    NatIso.ofComponents (fun _ => Iso.refl _)))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+`bifunctorComp₂₃` can be described in terms of the curryfication of functors.
 -/
 def bifunctorComp₂₃Iso (F : C₁ ⥤ C₂₃ ⥤ E) (G₂₃ : C₂ ⥤ C₃ ⥤ C₂₃) :
     bifunctorComp₂₃ F G₂₃ ≅
     curry.obj (curry.obj (prod.associator _ _ _ ⋙
       uncurry.obj (uncurry.obj G₂₃ ⋙ F.flip).flip)) :=
-  NatIso.ofComponents (fun _ => NatIso.ofComponents (fun _ =>
-    NatIso.ofComponents (fun _ => Iso.refl _)))
+  NatIso.ofComponents (fun _ ↦ NatIso.ofComponents (fun _ ↦
+    NatIso.ofComponents (fun _ ↦ Iso.refl _)))
 
 /--
 Flip the first and third arguments in a trifunctor.
 -/
 @[simps!]
-/--
-Definition of `flip₁₃` / `flip₁₃` 的定义
+/-
+**CategoryTheory.Functor.flip** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`
+。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {E : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor C (CategoryTheory.Functor D E) →               CategoryTheo
+ry.Functor D (CategoryTheory.Functor C E)
+参数：CategoryTheory.Functor D E；CategoryTheory.Functor C E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flip₁₃
-  signature: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  body: {
-    obj H := {
-      obj K := ((F.obj K).obj H).obj G
-      map f := ((F.map f).app _).app _ }
-    map g := { app X := ((F.obj X).map g).app _ } }
-  map h := { app X := { app Y := ((F.obj Y).obj X).map h } }
-
-中文:
-定义 flip₁₃
-  签名: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  定义体: {
-    obj H := {
-      obj K := ((F.obj K).obj H).obj G
-      map f := ((F.map f).app _).app _ }
-    map g := { app X := ((F.obj X).map g).app _ } }
-  map h := { app X := { app Y := ((F.obj Y).obj X).map h } }
+--- 原说明 ---
+Flip the first and third arguments in a trifunctor.
 -/
 def flip₁₃ (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E) : C₃ ⥤ C₂ ⥤ C₁ ⥤ E where
   obj G := {
@@ -447,32 +294,19 @@ set_option backward.defeqAttrib.useBackward true in
 Flip the first and third arguments in a trifunctor, as a functor.
 -/
 @[simps!]
-/--
-Definition of `flip₁₃Functor` / `flip₁₃Functor` 的定义
+/-
+**CategoryTheory.Functor.flip** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`
+。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {E : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor C (CategoryTheory.Functor D E) →               CategoryTheo
+ry.Functor D (CategoryTheory.Functor C E)
+参数：CategoryTheory.Functor D E；CategoryTheory.Functor C E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flip₁₃Functor
-  signature: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₃ ⥤ C₂ ⥤ C₁ ⥤ E) where
-  body: F.flip₁₃
-  map f := {
-    app X := {
-      app Y := {
-        app Z := ((f.app _).app _).app _
-        naturality _ _ g := by
-          simp [← NatTrans.comp_app] } } }
-
-中文:
-定义 flip₁₃Functor
-  签名: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₃ ⥤ C₂ ⥤ C₁ ⥤ E) where
-  定义体: F.flip₁₃
-  map f := {
-    app X := {
-      app Y := {
-        app Z := ((f.app _).app _).app _
-        naturality _ _ g := by
-          simp [← NatTrans.comp_app] } } }
-
-Depends on / 依赖: F.flip
+--- 原说明 ---
+Flip the first and third arguments in a trifunctor, as a functor.
 -/
 def flip₁₃Functor : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₃ ⥤ C₂ ⥤ C₁ ⥤ E) where
   obj F := F.flip₁₃
@@ -487,22 +321,19 @@ def flip₁₃Functor : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₃ ⥤ C₂ ⥤ C�
 Flip the second and third arguments in a trifunctor.
 -/
 @[simps!]
-/--
-Definition of `flip₂₃` / `flip₂₃` 的定义
+/-
+**CategoryTheory.Functor.flip** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`
+。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {E : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor C (CategoryTheory.Functor D E) →               CategoryTheo
+ry.Functor D (CategoryTheory.Functor C E)
+参数：CategoryTheory.Functor D E；CategoryTheory.Functor C E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flip₂₃
-  signature: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  body: (F.obj G).flip
-  map f := (flipFunctor _ _ _).map (F.map f)
-
-中文:
-定义 flip₂₃
-  签名: (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E)
-  定义体: (F.obj G).flip
-  map f := (flipFunctor _ _ _).map (F.map f)
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+Flip the second and third arguments in a trifunctor.
 -/
 def flip₂₃ (F : C₁ ⥤ C₂ ⥤ C₃ ⥤ E) : C₁ ⥤ C₃ ⥤ C₂ ⥤ E where
   obj G := (F.obj G).flip
@@ -513,40 +344,19 @@ set_option backward.defeqAttrib.useBackward true in
 Flip the second and third arguments in a trifunctor, as a functor.
 -/
 @[simps!]
-/--
-Definition of `flip₂₃Functor` / `flip₂₃Functor` 的定义
+/-
+**CategoryTheory.Functor.flip** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`
+。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {E : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor C (CategoryTheory.Functor D E) →               CategoryTheo
+ry.Functor D (CategoryTheory.Functor C E)
+参数：CategoryTheory.Functor D E；CategoryTheory.Functor C E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flip₂₃Functor
-  signature: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₁ ⥤ C₃ ⥤ C₂ ⥤ E) where
-  body: F.flip₂₃
-  map f := {
-    app X := {
-      app Y := {
-        app Z := ((f.app _).app _).app _
-        naturality _ _ g := by
-          simp [← NatTrans.comp_app] } }
-    naturality _ _ g := by
-      ext
-      simp only [flip₂₃_obj_obj_obj, NatTrans.comp_app, flip₂₃_map_app_app]
-      simp [← NatTrans.comp_app] }
-
-中文:
-定义 flip₂₃Functor
-  签名: : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₁ ⥤ C₃ ⥤ C₂ ⥤ E) where
-  定义体: F.flip₂₃
-  map f := {
-    app X := {
-      app Y := {
-        app Z := ((f.app _).app _).app _
-        naturality _ _ g := by
-          simp [← NatTrans.comp_app] } }
-    naturality _ _ g := by
-      ext
-      simp only [flip₂₃_obj_obj_obj, NatTrans.comp_app, flip₂₃_map_app_app]
-      simp [← NatTrans.comp_app] }
-
-Depends on / 依赖: F.flip
+--- 原说明 ---
+Flip the second and third arguments in a trifunctor, as a functor.
 -/
 def flip₂₃Functor : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₁ ⥤ C₃ ⥤ C₂ ⥤ E) where
   obj F := F.flip₂₃
@@ -564,3 +374,4 @@ def flip₂₃Functor : (C₁ ⥤ C₂ ⥤ C₃ ⥤ E) ⥤ (C₁ ⥤ C₃ ⥤ C�
 end Functor
 
 end CategoryTheory
+

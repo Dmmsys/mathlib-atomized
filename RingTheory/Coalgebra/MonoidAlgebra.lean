@@ -36,86 +36,46 @@ variable {R : Type*} [CommSemiring R] {A : Type*} [Semiring A]
 
 variable (R A X) in
 @[to_additive]
-/--
-Instance `instCoalgebra` / 实例 `instCoalgebra`
-
-English:
-instance instCoalgebra
-  signature: : Coalgebra R A[X]
-  body: coeffEquiv.coalgebra _
-
-@[to_additive]
-
-中文:
-实例 instCoalgebra
-  签名: : 余algebra R A[X]
-  定义体: coeffEquiv.coalgebra _
-
-@[to_additive]
-
-Depends on / 依赖: coalgebra, coeffEquiv, coeffEquiv.coalgebra
+/-
+**MonoidAlgebra.instCoalgebra** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+形式化陈述：instCoalgebra : Coalgebra R A[X]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCoalgebra : Coalgebra R A[X] := coeffEquiv.coalgebra _
 
 @[to_additive]
-/--
-Instance `instIsCocomm` / 实例 `instIsCocomm`
-
-English:
-instance instIsCocomm
-  signature: [IsCocomm R A]
-  body: coeffEquiv.coalgebraIsCocomm _
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instIsCocomm
-  签名: [是余comm R A]
-  定义体: coeffEquiv.coalgebraIsCocomm _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: coalgebraIsCocomm, coeffEquiv, coeffEquiv.coalgebraIsCocomm
+/-
+**MonoidAlgebra.instIsCocomm** 是 Mathlib 中的一个实例，位于命名空间 `MonoidAlgebra`。
+形式化陈述：instIsCocomm [IsCocomm R A] : IsCocomm R A[X]
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.coalgebraIsCocomm`：coalgebraIsCocomm [AddCommMonoid B] [Module R B
+] [Coalgebra R B] [IsCocomm R B] (e : A ≃ B) : letI
 -/
 instance instIsCocomm [IsCocomm R A] : IsCocomm R A[X] := coeffEquiv.coalgebraIsCocomm _
 
 @[to_additive (attr := simp)]
-/--
-lemma `counit_single` / 引理 `counit_single`
-
-English:
-lemma counit_single
-  given: (x : X) (a : A)
-  proof: Finsupp.counit_single _ _ _ _ _
-
-@[to_additive]
-
-中文:
-引理 counit_single
-  条件: (x : X) (a : A)
-  证明: Finsupp.counit_single _ _ _ _ _
-
-@[to_additive]
+/-
+**MonoidAlgebra.counit_single** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：counit_single (x : X) (a : A) : Coalgebra.counit (single x a) = Coalgebra.
+counit (R
+参数：x : X；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.counit_single`：counit_single (i : ι) (a : A) : counit (Finsupp.s
+ingle i a) = counit (R
 -/
 lemma counit_single (x : X) (a : A) :
     Coalgebra.counit (single x a) = Coalgebra.counit (R := R) a :=
   Finsupp.counit_single _ _ _ _ _
 
 @[to_additive]
-/--
-lemma `comul_def` / 引理 `comul_def`
-
-English:
-lemma comul_def
-  proof: rfl
-
-@[to_additive (dont_translate := R) (attr := simp)]
-
-中文:
-引理 comul_def
-  证明: rfl
-
-@[to_additive (dont_translate := R) (attr := simp)]
+/-
+**MonoidAlgebra.comul_def** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：comul_def : Coalgebra.comul (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comul_def :
     Coalgebra.comul (R := R) (A := A[X]) =
@@ -123,22 +83,24 @@ lemma comul_def :
         ∘ₗ comul ∘ₗ (coeffLinearEquiv R).toLinearMap := rfl
 
 @[to_additive (dont_translate := R) (attr := simp)]
-/--
-lemma `comul_single` / 引理 `comul_single`
-
-English:
-lemma comul_single
-  given: (x : X) (a : A)
-  proof: by
-  simp [comul_def, TensorProduct.map_map]; rfl
-
-中文:
-引理 comul_single
-  条件: (x : X) (a : A)
-  证明: by
-  simp [comul_def, TensorProduct.map_map]; rfl
-
-Depends on / 依赖: single
+/-
+**MonoidAlgebra.comul_single** 是 Mathlib 中的一个引理，位于命名空间 `MonoidAlgebra`。
+形式化陈述：comul_single (x : X) (a : A) : Coalgebra.comul (R
+参数：x : X；a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidAlgebra.coeffLinearEquiv_apply`：∀ (R : Type u_1) {S : Type u_2} {M
+ : Type u_3} [inst : Semiring R] [inst_1 : Semiring S] [inst_2 : _root_.Module R
+ S]   (a : MonoidAlgebra S…
+· 使用定理 `Finsupp.comul_single`：comul_single (i : ι) (a : A) : comul (R
+· 使用定理 `TensorProduct.map_map`：map_map (f₂ : M₂ ->ₛₗ[σ₂₃] M₃) (g₂ : N₂ ->ₛₗ[σ₂₃]
+ N₃) (f₁ : M ->ₛₗ[σ₁₂] M₂) (g₁ : N ->ₛₗ[σ₁₂] N₂) (x : M otimes[R] N) : map f₂ g₂
+ (map f₁ g₁…
 -/
 lemma comul_single (x : X) (a : A) :
     Coalgebra.comul (R := R) (single x a) =
@@ -153,59 +115,33 @@ open AddMonoidAlgebra
 
 variable (R A : Type*) [CommSemiring R] [Semiring A] [Module R A] [Coalgebra R A]
 
-/--
-Instance `instCoalgebra` / 实例 `instCoalgebra`
-
-English:
-instance instCoalgebra
-  signature: : Coalgebra R A[T;T⁻¹]
-  body: inferInstanceAs Coalgebra R A[Int]
-
-中文:
-实例 instCoalgebra
-  签名: : 余algebra R A[T;T⁻¹]
-  定义体: inferInstanceAs Coalgebra R A[Int]
-
-Depends on / 依赖: Coalgebra
+/-
+**LaurentPolynomial.instCoalgebra** 是 Mathlib 中的一个实例，位于命名空间 `LaurentPolynomial`。
+形式化陈述：instCoalgebra : Coalgebra R A[T;T⁻¹]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCoalgebra : Coalgebra R A[T;T⁻¹] := inferInstanceAs Coalgebra R A[Int]
-
-/--
-Instance `instIsCocomm` / 实例 `instIsCocomm`
-
-English:
-instance instIsCocomm
-  signature: [IsCocomm R A]
-  body: inferInstanceAs IsCocomm R A[Int]
-
-中文:
-实例 instIsCocomm
-  签名: [是余comm R A]
-  定义体: inferInstanceAs IsCocomm R A[Int]
-
-Depends on / 依赖: IsCocomm
+instance instCoalgebra : Coalgebra R A[T;T⁻¹] := inferInstanceAs <| Coalgebra R A[ℤ]
+/-
+**LaurentPolynomial.instIsCocomm** 是 Mathlib 中的一个实例，位于命名空间 `LaurentPolynomial`。
+形式化陈述：instIsCocomm [IsCocomm R A] : IsCocomm R A[T;T⁻¹]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instIsCocomm [IsCocomm R A] : IsCocomm R A[T;T⁻¹] := inferInstanceAs IsCocomm R A[Int]
+instance instIsCocomm [IsCocomm R A] : IsCocomm R A[T;T⁻¹] := inferInstanceAs <| IsCocomm R A[ℤ]
 
 variable {R A}
 
 @[simp]
-/--
-theorem `comul_C` / 定理 `comul_C`
-
-English:
-theorem comul_C
-  given: (a : A)
-  proof: comul_single _ _
-
-@[simp]
-
-中文:
-定理 comul_C
-  条件: (a : A)
-  证明: comul_single _ _
-
-@[simp]
+/-
+**LaurentPolynomial.comul_C** 是 Mathlib 中的一个定理，位于命名空间 `LaurentPolynomial`。
+形式化陈述：comul_C (a : A) : Coalgebra.comul (R
+参数：a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.comul_single`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{A : Type u_2} [inst_1 : Semiring A] {X : Type u_3}   [inst_2 : _root_.Module R 
+A] [inst_3 : Coalge…
 -/
 theorem comul_C (a : A) :
     Coalgebra.comul (R := R) (C a) =
@@ -213,93 +149,101 @@ theorem comul_C (a : A) :
   comul_single _ _
 
 @[simp]
-/--
-theorem `comul_C_mul_T` / 定理 `comul_C_mul_T`
-
-English:
-theorem comul_C_mul_T
-  given: (a : A) (n : Int)
-  proof: by
-  simp [← single_eq_C_mul_T]
-
-中文:
-定理 comul_C_mul_T
-  条件: (a : A) (n : 整数)
-  证明: by
-  simp [← single_eq_C_mul_T]
+/-
+**LaurentPolynomial.comul_C_mul_T** 是 Mathlib 中的一个定理，位于命名空间 `LaurentPolynomial`。
+形式化陈述：comul_C_mul_T (a : A) (n : Int) : Coalgebra.comul (R
+参数：a : A；n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.comul_single`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{A : Type u_2} [inst_1 : Semiring A] {X : Type u_3}   [inst_2 : _root_.Module R 
+A] [inst_3 : Coalge…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comul_C_mul_T (a : A) (n : Int) :
+theorem comul_C_mul_T (a : A) (n : ℤ) :
     Coalgebra.comul (R := R) (C a * T n) =
       TensorProduct.map (lsingle n) (lsingle n) (Coalgebra.comul (R := R) a) := by
   simp [← single_eq_C_mul_T]
-
-/--
-theorem `comul_C_mul_T_self` / 定理 `comul_C_mul_T_self`
-
-English:
-theorem comul_C_mul_T_self
-  given: (a : R) (n : Int)
-  proof: by
-  simp
-
-@[simp]
-
-中文:
-定理 comul_C_mul_T_self
-  条件: (a : R) (n : 整数)
-  证明: by
-  simp
-
-@[simp]
+/-
+**LaurentPolynomial.comul_C_mul_T_self** 是 Mathlib 中的一个定理，位于命名空间 `LaurentPolynom
+ial`。
+形式化陈述：comul_C_mul_T_self (a : R) (n : Int) : Coalgebra.comul (C a * T n) = T n o
+timesₜ[R] (C a * T n)
+参数：a : R；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LaurentPolynomial.comul_C_mul_T`：comul_C_mul_T (a : A) (n : Int) : Coalg
+ebra.comul (R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LaurentPolynomial.single_eq_C_mul_T`：single_eq_C_mul_T (r : R) (n : Int)
+ : .single n r = C r * T n
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comul_C_mul_T_self (a : R) (n : Int) :
-    Coalgebra.comul (C a * T n) = T n otimesₜ[R] (C a * T n) := by
+theorem comul_C_mul_T_self (a : R) (n : ℤ) :
+    Coalgebra.comul (C a * T n) = T n ⊗ₜ[R] (C a * T n) := by
   simp
 
 @[simp]
-/--
-theorem `counit_C` / 定理 `counit_C`
-
-English:
-theorem counit_C
-  given: (a : A)
-  proof: counit_single _ _
-
-@[simp]
-
-中文:
-定理 counit_C
-  条件: (a : A)
-  证明: counit_single _ _
-
-@[simp]
-
-Depends on / 依赖: Coalgebra, Coalgebra.counit, counit
+/-
+**LaurentPolynomial.counit_C** 是 Mathlib 中的一个定理，位于命名空间 `LaurentPolynomial`。
+形式化陈述：counit_C (a : A) : Coalgebra.counit (R
+参数：a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.counit_single`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] {X : Type u_3}   [inst_2 : _root_.Module R
+ A] [inst_3 : Coalge…
 -/
 theorem counit_C (a : A) :
     Coalgebra.counit (R := R) (C a) = Coalgebra.counit (R := R) a :=
   counit_single _ _
 
 @[simp]
-/--
-theorem `counit_C_mul_T` / 定理 `counit_C_mul_T`
-
-English:
-theorem counit_C_mul_T
-  given: (a : A) (n : Int)
-  proof: by
-  simp [← single_eq_C_mul_T]
-
-中文:
-定理 counit_C_mul_T
-  条件: (a : A) (n : 整数)
-  证明: by
-  simp [← single_eq_C_mul_T]
-
-Depends on / 依赖: Coalgebra, Coalgebra.counit, counit, single_eq_C_mul_T
+/-
+**LaurentPolynomial.counit_C_mul_T** 是 Mathlib 中的一个定理，位于命名空间 `LaurentPolynomial`
+。
+形式化陈述：counit_C_mul_T (a : A) (n : Int) : Coalgebra.counit (R
+参数：a : A；n : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.counit_single`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] {X : Type u_3}   [inst_2 : _root_.Module R
+ A] [inst_3 : Coalge…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem counit_C_mul_T (a : A) (n : Int) :
+theorem counit_C_mul_T (a : A) (n : ℤ) :
     Coalgebra.counit (R := R) (C a * T n) = Coalgebra.counit (R := R) a := by
   simp [← single_eq_C_mul_T]
 
 end LaurentPolynomial
+

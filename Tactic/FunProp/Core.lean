@@ -25,44 +25,21 @@ open Lean Meta Qq
 namespace Meta.FunProp
 
 
-/--
-Definition of `synthesizeInstance` / `synthesizeInstance` 的定义
+/-- Synthesize instance of type `type` and
+  1. assign it to `x` if `x` is meta variable
+  2. check it is equal to `x` -/
+/-
+**Mathlib.Meta.FunProp.synthesizeInstance** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Met
+a.FunProp`。
+形式化陈述：synthesizeInstance (thmId : Origin) (x type : Expr) : MetaM Bool
+参数：thmId : Origin；x type : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition synthesizeInstance
-  signature: (thmId : Origin) (x type : Expr)
-  body: do
-  match (← trySynthInstance type) with
-  | .some val =>
-    if (← withReducibleAndInstances <| isDefEq x val) then
-      return true
-    else
-      trace[Meta.Tactic.fun_prop]
-"{← ppOrigin thmId}, failed to assign instance{indentExpr type}
-synthesized value{indentExpr val}\nis not definitionally equal to{indentExpr x}"
-      return false
-  | _ =>
-    trace[Meta.Tactic.fun_prop]
-      "{← ppOrigin thmId}, failed to synthesize instance{indentExpr type}"
-    return false
-
-中文:
-定义 synthesizeInstance
-  签名: (thmId : Origin) (x type : Expr)
-  定义体: do
-  match (← trySynthInstance type) with
-  | .some val =>
-    if (← withReducibleAndInstances <| isDefEq x val) then
-      return true
-    else
-      trace[Meta.Tactic.fun_prop]
-"{← ppOrigin thmId}, failed to assign instance{indentExpr type}
-synthesized value{indentExpr val}\nis not definitionally equal to{indentExpr x}"
-      return false
-  | _ =>
-    trace[Meta.Tactic.fun_prop]
-      "{← ppOrigin thmId}, failed to synthesize instance{indentExpr type}"
-    return false
+--- 原说明 ---
+Synthesize instance of type `type` and
+  1. assign it to `x` if `x` is meta variable
+  2. check it is equal to `x`
 -/
 def synthesizeInstance (thmId : Origin) (x type : Expr) : MetaM Bool := do
   match (← trySynthInstance type) with
@@ -81,141 +58,24 @@ synthesized value{indentExpr val}\nis not definitionally equal to{indentExpr x}"
 
 
 
-/--
-Definition of `synthesizeArgs` / `synthesizeArgs` 的定义
+/-- Synthesize arguments `xs` either with typeclass synthesis, with `fun_prop` or with
+discharger. -/
+/-
+**Mathlib.Meta.FunProp.synthesizeArgs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fu
+nProp`。
+形式化陈述：synthesizeArgs (thmId : Origin) (xs : Array Expr) (funProp : Expr -> FunPr
+opM (Option Result)) : FunPropM Bool
+参数：thmId : Origin；xs : Array Expr；funProp : Expr -> FunPropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition synthesizeArgs
-  signature: (thmId : Origin) (xs : Array Expr)
-  body: do
-  let mut postponed : Array Expr := #[]
-  for x in xs do
-    let type ← inferType x
-    if (← instantiateMVars x).isMVar then
-
-      -- try type class
-      if (← isClass? type).isSome then
-        if (← synthesizeInstance thmId x type) then
-          continue
-      else if (← isFunPropGoal type) then
-        -- try function property
-        if let some ⟨proof⟩ ← funProp type then
-          if (← isDefEq x proof) then
-            continue
-          else do
-            trace[Meta.Tactic.fun_prop]
-              "{← ppOrigin thmId}, failed to assign proof{indentExpr type}"
-            return false
-      else
-        -- try user provided discharger
-        let ctx : Context ← read
-        -- To use `fun_prop` in the manifold library
-        -- (with the predicates `MDifferentiable`, `ContMDiff` and friends),
-        -- we need provide specialize a specialized discharger for `ModelWithCorners`:
-        -- lemmas like `ContMDiff.comp` require inferring the model with corners on the
-        -- intermediate space.
-        -- In the future, we might want to allow the discharger to execute on other Type-valued
-        -- hypotheses. In this case, we could create an environment extension to register such
-        -- types. However, right now we could not think of any other use cases --- therefore,
-        -- we hard-code `ModelWithCorners`.
-        if ((← isProp type) || type.isAppOfArity' `ModelWithCorners 7) then
-          if let some proof ← ctx.disch type then
-            if (← isDefEq x proof) then
-              continue
-            else do
-              trace[Meta.Tactic.fun_prop]
-                "{← ppOrigin thmId}, failed to assign proof{indentExpr type}"
-              return false
-          else
-            logError s!"Failed to prove necessary assumption `{← ppExpr type}` \
-                        when applying theorem `{← ppOrigin' thmId}`."
-
-      if ¬(← isProp type) then
-        postponed := postponed.push x
-        continue
-      else
-        trace[Meta.Tactic.fun_prop]
-          "{← ppOrigin thmId}, failed to discharge hypotheses{indentExpr type}"
-        return false
-
-  for x in postponed do
-    if (← instantiateMVars x).isMVar then
-      logError s!"Failed to infer `({← ppExpr x} : {← ppExpr (← inferType x)})` \
-      when applying theorem `{← ppOrigin' thmId}`."
-
-      trace[Meta.Tactic.fun_prop]
-        "{← ppOrigin thmId}, failed to infer `({← ppExpr x} : {← ppExpr (← inferType x)})`"
-      return false
-
-  return true
-
-中文:
-定义 synthesizeArgs
-  签名: (thmId : Origin) (xs : 数组 Expr)
-  定义体: do
-  let mut postponed : Array Expr := #[]
-  for x in xs do
-    let type ← inferType x
-    if (← instantiateMVars x).isMVar then
-
-      -- try type class
-      if (← isClass? type).isSome then
-        if (← synthesizeInstance thmId x type) then
-          continue
-      else if (← isFunPropGoal type) then
-        -- try function property
-        if let some ⟨proof⟩ ← funProp type then
-          if (← isDefEq x proof) then
-            continue
-          else do
-            trace[Meta.Tactic.fun_prop]
-              "{← ppOrigin thmId}, failed to assign proof{indentExpr type}"
-            return false
-      else
-        -- try user provided discharger
-        let ctx : Context ← read
-        -- To use `fun_prop` in the manifold library
-        -- (with the predicates `MDifferentiable`, `ContMDiff` and friends),
-        -- we need provide specialize a specialized discharger for `ModelWithCorners`:
-        -- lemmas like `ContMDiff.comp` require inferring the model with corners on the
-        -- intermediate space.
-        -- In the future, we might want to allow the discharger to execute on other Type-valued
-        -- hypotheses. In this case, we could create an environment extension to register such
-        -- types. However, right now we could not think of any other use cases --- therefore,
-        -- we hard-code `ModelWithCorners`.
-        if ((← isProp type) || type.isAppOfArity' `ModelWithCorners 7) then
-          if let some proof ← ctx.disch type then
-            if (← isDefEq x proof) then
-              continue
-            else do
-              trace[Meta.Tactic.fun_prop]
-                "{← ppOrigin thmId}, failed to assign proof{indentExpr type}"
-              return false
-          else
-            logError s!"Failed to prove necessary assumption `{← ppExpr type}` \
-                        when applying theorem `{← ppOrigin' thmId}`."
-
-      if ¬(← isProp type) then
-        postponed := postponed.push x
-        continue
-      else
-        trace[Meta.Tactic.fun_prop]
-          "{← ppOrigin thmId}, failed to discharge hypotheses{indentExpr type}"
-        return false
-
-  for x in postponed do
-    if (← instantiateMVars x).isMVar then
-      logError s!"Failed to infer `({← ppExpr x} : {← ppExpr (← inferType x)})` \
-      when applying theorem `{← ppOrigin' thmId}`."
-
-      trace[Meta.Tactic.fun_prop]
-        "{← ppOrigin thmId}, failed to infer `({← ppExpr x} : {← ppExpr (← inferType x)})`"
-      return false
-
-  return true
+--- 原说明 ---
+Synthesize arguments `xs` either with typeclass synthesis, with `fun_prop` or wi
+th
+discharger.
 -/
 def synthesizeArgs (thmId : Origin) (xs : Array Expr)
-    (funProp : Expr -> FunPropM (Option Result)) :
+    (funProp : Expr → FunPropM (Option Result)) :
     FunPropM Bool := do
   let mut postponed : Array Expr := #[]
   for x in xs do
@@ -279,47 +139,23 @@ def synthesizeArgs (thmId : Origin) (xs : Array Expr)
   return true
 
 
-/--
-Definition of `tryTheoremCore` / `tryTheoremCore` 的定义
+/-- Try to apply theorem - core function -/
+/-
+**Mathlib.Meta.FunProp.tryTheoremCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fu
+nProp`。
+形式化陈述：tryTheoremCore (xs : Array Expr) (val : Expr) (type : Expr) (e : Expr) (th
+mId : Origin) (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Re
+sult)
+参数：xs : Array Expr；val : Expr；type : Expr；e : Expr；thmId : Origin；funProp : Expr
+ -> FunPropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tryTheoremCore
-  signature: (xs : Array Expr) (val : Expr) (type : Expr) (e : Expr)
-  body: do
-  withTraceNode `Meta.Tactic.fun_prop
-    (fun _ => return s!"applying: {← ppOrigin' thmId}") do
-
-  if (← isDefEq type e) then
-
-    if ¬(← synthesizeArgs thmId xs funProp) then
-      return none
-    let proof ← instantiateMVars (mkAppN val xs)
-
-    return some { proof := proof }
-  else
-    trace[Meta.Tactic.fun_prop] "failed to unify {← ppOrigin thmId}\n{type}\nwith\n{e}"
-    return none
-
-中文:
-定义 tryTheoremCore
-  签名: (xs : 数组 Expr) (val : Expr) (type : Expr) (e : Expr)
-  定义体: do
-  withTraceNode `Meta.Tactic.fun_prop
-    (fun _ => return s!"applying: {← ppOrigin' thmId}") do
-
-  if (← isDefEq type e) then
-
-    if ¬(← synthesizeArgs thmId xs funProp) then
-      return none
-    let proof ← instantiateMVars (mkAppN val xs)
-
-    return some { proof := proof }
-  else
-    trace[Meta.Tactic.fun_prop] "failed to unify {← ppOrigin thmId}\n{type}\nwith\n{e}"
-    return none
+--- 原说明 ---
+Try to apply theorem - core function
 -/
 def tryTheoremCore (xs : Array Expr) (val : Expr) (type : Expr) (e : Expr)
-    (thmId : Origin) (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (thmId : Origin) (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
   withTraceNode `Meta.Tactic.fun_prop
     (fun _ => return s!"applying: {← ppOrigin' thmId}") do
 
@@ -335,93 +171,27 @@ def tryTheoremCore (xs : Array Expr) (val : Expr) (type : Expr) (e : Expr)
     return none
 
 
-/--
-Definition of `tryTheoremWithHint?` / `tryTheoremWithHint?` 的定义
+/-- Try to apply a theorem provided some of the theorem arguments. -/
+/-
+**Mathlib.Meta.FunProp.tryTheoremWithHint** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Met
+a.FunProp`。
+形式化陈述：tryTheoremWithHint? (e : Expr) (thmOrigin : Origin) (hint : Array (Nat × E
+xpr)) (funProp : Expr -> FunPropM (Option Result)) (newMCtxDepth : Bool
+参数：e : Expr；thmOrigin : Origin；hint : Array (Nat × Expr)；funProp : Expr -> FunPr
+opM (Option Result)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tryTheoremWithHint?
-  signature: (e : Expr) (thmOrigin : Origin)
-  body: do
-  let go : FunPropM (Option Result) := do
-    let thmProof ← thmOrigin.getValue
-    -- for `fvar`s we need to instantiate the metavariables of its type.
-let type ← instantiateMVars ← inferType thmProof
-    let (xs, _, type) ← forallMetaTelescope type
-
-    for (i,x) in hint do
-      try
-        for (id,v) in hint do
-          xs[id]!.mvarId!.assignIfDefEq v
-      catch _ =>
-        trace[Debug.Meta.Tactic.fun_prop]
-          "failed to use hint {i} `{← ppExpr x} when applying theorem {← ppOrigin thmOrigin}"
-
-    tryTheoremCore xs thmProof type e thmOrigin funProp
-
-  -- `simp` introduces new meta variable context depth for some reason
-  -- This is probably to avoid mvar assignment when trying a theorem fails
-  --
-  -- However, in `fun_prop` case this is not completely desirable
-  -- For example, I want to be able to solve a goal with mvars like `ContDiff ℝ ?n f` using local
-  -- hypothesis `(h : ContDiff ℝ ∞ f)` and assign `∞` to the mvar `?n`.
-  --
-  -- This could be problematic if there are two local hypothesis `(hinf : ContDiff ℝ ∞ f)` and
-  -- `(h1 : ContDiff ℝ 1 f)` and apart from solving `ContDiff ℝ ?n f` there is also a subgoal
-  -- `2 ≤ ?n`. If `fun_prop` decides to try `h1` first it would assign `1` to `?n` and then there
-  -- is no hope solving `2 ≤ 1` and it won't be able to apply `hinf` after trying `h1` as `n?` is
-  -- assigned already. Ideally `fun_prop` would roll back the `MetaM.State`. This issue did not
-  -- come up yet so I didn't bother and I'm worried about the performance impact.
-  if newMCtxDepth then
-    withNewMCtxDepth go
-  else
-    go
-
-中文:
-定义 tryTheoremWithHint?
-  签名: (e : Expr) (thmOrigin : Origin)
-  定义体: do
-  let go : FunPropM (Option Result) := do
-    let thmProof ← thmOrigin.getValue
-    -- for `fvar`s we need to instantiate the metavariables of its type.
-let type ← instantiateMVars ← inferType thmProof
-    let (xs, _, type) ← forallMetaTelescope type
-
-    for (i,x) in hint do
-      try
-        for (id,v) in hint do
-          xs[id]!.mvarId!.assignIfDefEq v
-      catch _ =>
-        trace[Debug.Meta.Tactic.fun_prop]
-          "failed to use hint {i} `{← ppExpr x} when applying theorem {← ppOrigin thmOrigin}"
-
-    tryTheoremCore xs thmProof type e thmOrigin funProp
-
-  -- `simp` introduces new meta variable context depth for some reason
-  -- This is probably to avoid mvar assignment when trying a theorem fails
-  --
-  -- However, in `fun_prop` case this is not completely desirable
-  -- For example, I want to be able to solve a goal with mvars like `ContDiff ℝ ?n f` using local
-  -- hypothesis `(h : ContDiff ℝ ∞ f)` and assign `∞` to the mvar `?n`.
-  --
-  -- This could be problematic if there are two local hypothesis `(hinf : ContDiff ℝ ∞ f)` and
-  -- `(h1 : ContDiff ℝ 1 f)` and apart from solving `ContDiff ℝ ?n f` there is also a subgoal
-  -- `2 ≤ ?n`. If `fun_prop` decides to try `h1` first it would assign `1` to `?n` and then there
-  -- is no hope solving `2 ≤ 1` and it won't be able to apply `hinf` after trying `h1` as `n?` is
-  -- assigned already. Ideally `fun_prop` would roll back the `MetaM.State`. This issue did not
-  -- come up yet so I didn't bother and I'm worried about the performance impact.
-  if newMCtxDepth then
-    withNewMCtxDepth go
-  else
-    go
+--- 原说明 ---
+Try to apply a theorem provided some of the theorem arguments.
 -/
 def tryTheoremWithHint? (e : Expr) (thmOrigin : Origin)
     (hint : Array (Nat × Expr))
-    (funProp : Expr -> FunPropM (Option Result)) (newMCtxDepth : Bool := false) :
+    (funProp : Expr → FunPropM (Option Result)) (newMCtxDepth : Bool := false) :
     FunPropM (Option Result) := do
   let go : FunPropM (Option Result) := do
     let thmProof ← thmOrigin.getValue
     -- for `fvar`s we need to instantiate the metavariables of its type.
-let type ← instantiateMVars ← inferType thmProof
+    let type ← instantiateMVars <| ← inferType thmProof
     let (xs, _, type) ← forallMetaTelescope type
 
     for (i,x) in hint do
@@ -453,65 +223,46 @@ let type ← instantiateMVars ← inferType thmProof
     go
 
 
-/--
-Definition of `tryTheorem?` / `tryTheorem?` 的定义
+/-- Try to apply a theorem `thmOrigin` to the goal `e`. -/
+/-
+**Mathlib.Meta.FunProp.tryTheorem** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPro
+p`。
+形式化陈述：tryTheorem? (e : Expr) (thmOrigin : Origin) (funProp : Expr -> FunPropM (O
+ption Result)) (newMCtxDepth : Bool
+参数：e : Expr；thmOrigin : Origin；funProp : Expr -> FunPropM (Option Result)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tryTheorem?
-  signature: (e : Expr) (thmOrigin : Origin) (funProp : Expr -> FunPropM (Option Result))
-  body: tryTheoremWithHint? e thmOrigin #[] funProp newMCtxDepth
-
-中文:
-定义 tryTheorem?
-  签名: (e : Expr) (thmOrigin : Origin) (funProp : Expr -> FunPropM (选项类型 Result))
-  定义体: tryTheoremWithHint? e thmOrigin #[] funProp newMCtxDepth
-
-Depends on / 依赖: FunPropM, Result
+--- 原说明 ---
+Try to apply a theorem `thmOrigin` to the goal `e`.
 -/
-def tryTheorem? (e : Expr) (thmOrigin : Origin) (funProp : Expr -> FunPropM (Option Result))
+def tryTheorem? (e : Expr) (thmOrigin : Origin) (funProp : Expr → FunPropM (Option Result))
     (newMCtxDepth : Bool := false) : FunPropM (Option Result) :=
   tryTheoremWithHint? e thmOrigin #[] funProp newMCtxDepth
 
 
 /--
-Definition of `applyIdRule` / `applyIdRule` 的定义
+Try to prove `e` using the *identity lambda theorem*.
 
-English:
-definition applyIdRule
-  signature: (funPropDecl : FunPropDecl) (e : Expr)
-  body: do
-  let thms ← getLambdaTheorems funPropDecl.funPropName .id
-  if thms.size = 0 then
-    let msg := s!"missing identity rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
+For example, `e = q(Continuous fun x ↦ x)` and `funPropDecl` is `FunPropDecl` for `Continuous`.
+-/
+/-
+**Mathlib.Meta.FunProp.applyIdRule** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPr
+op`。
+形式化陈述：applyIdRule (funPropDecl : FunPropDecl) (e : Expr) (funProp : Expr -> FunP
+ropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；funProp : Expr -> FunPropM (Option Result)
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  for thm in thms do
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[] funProp then
-      return r
+--- 原说明 ---
+Try to prove `e` using the *identity lambda theorem*.
 
-  return none
-
-中文:
-定义 applyIdRule
-  签名: (funPropDecl : FunPropDecl) (e : Expr)
-  定义体: do
-  let thms ← getLambdaTheorems funPropDecl.funPropName .id
-  if thms.size = 0 then
-    let msg := s!"missing identity rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
-
-  for thm in thms do
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[] funProp then
-      return r
-
-  return none
+For example, `e = q(Continuous fun x ↦ x)` and `funPropDecl` is `FunPropDecl` fo
+r `Continuous`.
 -/
 def applyIdRule (funPropDecl : FunPropDecl) (e : Expr)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
   let thms ← getLambdaTheorems funPropDecl.funPropName .id
   if thms.size = 0 then
     let msg := s!"missing identity rule to prove `{← ppExpr e}`"
@@ -526,44 +277,28 @@ def applyIdRule (funPropDecl : FunPropDecl) (e : Expr)
   return none
 
 /--
-Definition of `applyConstRule` / `applyConstRule` 的定义
+Try to prove `e` using the *constant lambda theorem*.
 
-English:
-definition applyConstRule
-  signature: (funPropDecl : FunPropDecl) (e : Expr)
-  body: do
-  let thms ← getLambdaTheorems funPropDecl.funPropName .const
-  if thms.size = 0 then
-    let msg := s!"missing constant rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
-  for thm in thms do
-    let .const := thm.thmArgs | return none
-    if let some r ← tryTheorem? e (.decl thm.thmName) funProp then
-      return r
+For example, `e = q(Continuous fun x ↦ y)` and `funPropDecl` is `FunPropDecl` for `Continuous`.
+-/
+/-
+**Mathlib.Meta.FunProp.applyConstRule** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fu
+nProp`。
+形式化陈述：applyConstRule (funPropDecl : FunPropDecl) (e : Expr) (funProp : Expr -> F
+unPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；funProp : Expr -> FunPropM (Option Result)
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  return none
+--- 原说明 ---
+Try to prove `e` using the *constant lambda theorem*.
 
-中文:
-定义 applyConstRule
-  签名: (funPropDecl : FunPropDecl) (e : Expr)
-  定义体: do
-  let thms ← getLambdaTheorems funPropDecl.funPropName .const
-  if thms.size = 0 then
-    let msg := s!"missing constant rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
-  for thm in thms do
-    let .const := thm.thmArgs | return none
-    if let some r ← tryTheorem? e (.decl thm.thmName) funProp then
-      return r
-
-  return none
+For example, `e = q(Continuous fun x ↦ y)` and `funPropDecl` is `FunPropDecl` fo
+r `Continuous`.
 -/
 def applyConstRule (funPropDecl : FunPropDecl) (e : Expr)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
   let thms ← getLambdaTheorems funPropDecl.funPropName .const
   if thms.size = 0 then
     let msg := s!"missing constant rule to prove `{← ppExpr e}`"
@@ -578,32 +313,28 @@ def applyConstRule (funPropDecl : FunPropDecl) (e : Expr)
   return none
 
 /--
-Definition of `applyApplyRule` / `applyApplyRule` 的定义
+Try to prove `e` using the *apply lambda theorem*.
 
-English:
-definition applyApplyRule
-  signature: (funPropDecl : FunPropDecl) (e : Expr)
-  body: do
-  let thms := (← getLambdaTheorems funPropDecl.funPropName .apply)
-  for thm in thms do
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[] funProp then
-      return r
+For example, `e = q(Continuous fun f ↦ f x)` and `funPropDecl` is `FunPropDecl` for `Continuous`.
+-/
+/-
+**Mathlib.Meta.FunProp.applyApplyRule** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fu
+nProp`。
+形式化陈述：applyApplyRule (funPropDecl : FunPropDecl) (e : Expr) (funProp : Expr -> F
+unPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；funProp : Expr -> FunPropM (Option Result)
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  return none
+--- 原说明 ---
+Try to prove `e` using the *apply lambda theorem*.
 
-中文:
-定义 applyApplyRule
-  签名: (funPropDecl : FunPropDecl) (e : Expr)
-  定义体: do
-  let thms := (← getLambdaTheorems funPropDecl.funPropName .apply)
-  for thm in thms do
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[] funProp then
-      return r
-
-  return none
+For example, `e = q(Continuous fun f ↦ f x)` and `funPropDecl` is `FunPropDecl` 
+for `Continuous`.
 -/
 def applyApplyRule (funPropDecl : FunPropDecl) (e : Expr)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
   let thms := (← getLambdaTheorems funPropDecl.funPropName .apply)
   for thm in thms do
     if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[] funProp then
@@ -612,48 +343,33 @@ def applyApplyRule (funPropDecl : FunPropDecl) (e : Expr)
   return none
 
 /--
-Definition of `applyCompRule` / `applyCompRule` 的定义
+Try to prove `e` using *composition lambda theorem*.
 
-English:
-definition applyCompRule
-  signature: (funPropDecl : FunPropDecl) (e f g : Expr)
-  body: do
+For example, `e = q(Continuous fun x ↦ f (g x))` and `funPropDecl` is `FunPropDecl` for
+`Continuous`
 
-  let thms ← getLambdaTheorems funPropDecl.funPropName .comp
-  if thms.size = 0 then
-    let msg := s!"missing composition rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
+You also have to provide the functions `f` and `g`. -/
+/-
+**Mathlib.Meta.FunProp.applyCompRule** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fun
+Prop`。
+形式化陈述：applyCompRule (funPropDecl : FunPropDecl) (e f g : Expr) (funProp : Expr -
+> FunPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e f g : Expr；funProp : Expr -> FunPropM (Option Res
+ult)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  for thm in thms do
-    let .comp id_f id_g := thm.thmArgs | return none
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[(id_f, f), (id_g, g)] funProp then
-      return r
+--- 原说明 ---
+Try to prove `e` using *composition lambda theorem*.
 
-  return none
+For example, `e = q(Continuous fun x ↦ f (g x))` and `funPropDecl` is `FunPropDe
+cl` for
+`Continuous`
 
-中文:
-定义 applyCompRule
-  签名: (funPropDecl : FunPropDecl) (e f g : Expr)
-  定义体: do
-
-  let thms ← getLambdaTheorems funPropDecl.funPropName .comp
-  if thms.size = 0 then
-    let msg := s!"missing composition rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
-
-  for thm in thms do
-    let .comp id_f id_g := thm.thmArgs | return none
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[(id_f, f), (id_g, g)] funProp then
-      return r
-
-  return none
+You also have to provide the functions `f` and `g`.
 -/
 def applyCompRule (funPropDecl : FunPropDecl) (e f g : Expr)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
 
   let thms ← getLambdaTheorems funPropDecl.funPropName .comp
   if thms.size = 0 then
@@ -670,46 +386,30 @@ def applyCompRule (funPropDecl : FunPropDecl) (e f g : Expr)
   return none
 
 /--
-Definition of `applyPiRule` / `applyPiRule` 的定义
+Try to prove `e` using *pi lambda theorem*.
 
-English:
-definition applyPiRule
-  signature: (funPropDecl : FunPropDecl) (e : Expr)
-  body: do
+For example, `e = q(Continuous fun x y ↦ f x y)` and `funPropDecl` is `FunPropDecl` for
+`Continuous`
+-/
+/-
+**Mathlib.Meta.FunProp.applyPiRule** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPr
+op`。
+形式化陈述：applyPiRule (funPropDecl : FunPropDecl) (e : Expr) (funProp : Expr -> FunP
+ropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；funProp : Expr -> FunPropM (Option Result)
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  let thms ← getLambdaTheorems funPropDecl.funPropName .pi
-  if thms.size = 0 then
-    let msg := s!"missing pi rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
+--- 原说明 ---
+Try to prove `e` using *pi lambda theorem*.
 
-  for thm in thms do
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[] funProp then
-      return r
-
-  return none
-
-中文:
-定义 applyPiRule
-  签名: (funPropDecl : FunPropDecl) (e : Expr)
-  定义体: do
-
-  let thms ← getLambdaTheorems funPropDecl.funPropName .pi
-  if thms.size = 0 then
-    let msg := s!"missing pi rule to prove `{← ppExpr e}`"
-    logError msg
-    trace[Meta.Tactic.fun_prop] msg
-    return none
-
-  for thm in thms do
-    if let some r ← tryTheoremWithHint? e (.decl thm.thmName) #[] funProp then
-      return r
-
-  return none
+For example, `e = q(Continuous fun x y ↦ f x y)` and `funPropDecl` is `FunPropDe
+cl` for
+`Continuous`
 -/
 def applyPiRule (funPropDecl : FunPropDecl) (e : Expr)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
 
   let thms ← getLambdaTheorems funPropDecl.funPropName .pi
   if thms.size = 0 then
@@ -726,98 +426,38 @@ def applyPiRule (funPropDecl : FunPropDecl) (e : Expr)
 
 
 /--
-Definition of `letCase` / `letCase` 的定义
+Try to prove `e = q(P (fun x ↦ let y := φ x; ψ x y)`.
 
-English:
-definition letCase
-  signature: (funPropDecl : FunPropDecl) (e : Expr) (f : Expr)
-  body: do
-  match f with
-  | .lam xName xType (.letE yName yType yValue yBody _) xBi => do
-    let yType := yType.consumeMData
-    let yValue := yValue.consumeMData
-    let yBody := yBody.consumeMData
-    -- We perform reduction because the type is quite often of the form
-    -- `(fun x ↦ Y) #0` which is just `Y`
-    -- Usually this is caused by the usage of `FunLike`
-    let yType := yType.headBeta
-    if (yType.hasLooseBVar 0) then
-      throwError "dependent type encountered {← ppExpr (Expr.forallE xName xType yType default)}"
+For example,
+  - `funPropDecl` is `FunPropDecl` for `Continuous`
+  - `e = q(Continuous fun x ↦ let y := φ x; ψ x y)`
+  - `f = q(fun x ↦ let y := φ x; ψ x y)`
+-/
+/-
+**Mathlib.Meta.FunProp.letCase** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunProp`。
+形式化陈述：letCase (funPropDecl : FunPropDecl) (e : Expr) (f : Expr) (funProp : Expr 
+-> FunPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；f : Expr；funProp : Expr -> FunPropM (Optio
+n Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-    -- let binding can be pulled out of the lambda function
-    if ¬(yValue.hasLooseBVar 0) then
-      let body := yBody.swapBVars 0 1
-      let e' := mkLet yName yType yValue
-        (e.setArg (funPropDecl.funArgId) (.lam xName xType body xBi))
-      return ← funProp e'
+--- 原说明 ---
+Try to prove `e = q(P (fun x ↦ let y := φ x; ψ x y)`.
 
-    match (yBody.hasLooseBVar 0), (yBody.hasLooseBVar 1) with
-    | true, true =>
-      let f ← mkUncurryFun 2 (Expr.lam xName xType (.lam yName yType yBody default) xBi)
-      let g := Expr.lam xName xType (binderInfo := default)
-        (mkAppN (← mkConstWithFreshMVarLevels ``Prod.mk) #[xType,yType,.bvar 0, yValue])
-      applyCompRule funPropDecl e f g funProp
-
-    | true, false =>
-      let f := Expr.lam yName yType yBody default
-      let g := Expr.lam xName xType yValue default
-      applyCompRule funPropDecl e f g funProp
-
-    | false, _ =>
-      let f := Expr.lam xName xType (yBody.lowerLooseBVars 1 1) xBi
-      funProp (e.setArg (funPropDecl.funArgId) f)
-
-  | _ => throwError "expected expression of the form `fun x => lam y := ..; ..`"
-
-中文:
-定义 letCase
-  签名: (funPropDecl : FunPropDecl) (e : Expr) (f : Expr)
-  定义体: do
-  match f with
-  | .lam xName xType (.letE yName yType yValue yBody _) xBi => do
-    let yType := yType.consumeMData
-    let yValue := yValue.consumeMData
-    let yBody := yBody.consumeMData
-    -- We perform reduction because the type is quite often of the form
-    -- `(fun x ↦ Y) #0` which is just `Y`
-    -- Usually this is caused by the usage of `FunLike`
-    let yType := yType.headBeta
-    if (yType.hasLooseBVar 0) then
-      throwError "dependent type encountered {← ppExpr (Expr.forallE xName xType yType default)}"
-
-    -- let binding can be pulled out of the lambda function
-    if ¬(yValue.hasLooseBVar 0) then
-      let body := yBody.swapBVars 0 1
-      let e' := mkLet yName yType yValue
-        (e.setArg (funPropDecl.funArgId) (.lam xName xType body xBi))
-      return ← funProp e'
-
-    match (yBody.hasLooseBVar 0), (yBody.hasLooseBVar 1) with
-    | true, true =>
-      let f ← mkUncurryFun 2 (Expr.lam xName xType (.lam yName yType yBody default) xBi)
-      let g := Expr.lam xName xType (binderInfo := default)
-        (mkAppN (← mkConstWithFreshMVarLevels ``Prod.mk) #[xType,yType,.bvar 0, yValue])
-      applyCompRule funPropDecl e f g funProp
-
-    | true, false =>
-      let f := Expr.lam yName yType yBody default
-      let g := Expr.lam xName xType yValue default
-      applyCompRule funPropDecl e f g funProp
-
-    | false, _ =>
-      let f := Expr.lam xName xType (yBody.lowerLooseBVars 1 1) xBi
-      funProp (e.setArg (funPropDecl.funArgId) f)
-
-  | _ => throwError "expected expression of the form `fun x => lam y := ..; ..`"
+For example,
+  - `funPropDecl` is `FunPropDecl` for `Continuous`
+  - `e = q(Continuous fun x ↦ let y := φ x; ψ x y)`
+  - `f = q(fun x ↦ let y := φ x; ψ x y)`
 -/
 def letCase (funPropDecl : FunPropDecl) (e : Expr) (f : Expr)
-    (funProp : Expr -> FunPropM (Option Result)) :
+    (funProp : Expr → FunPropM (Option Result)) :
     FunPropM (Option Result) := do
   match f with
   | .lam xName xType (.letE yName yType yValue yBody _) xBi => do
-    let yType := yType.consumeMData
+    let yType  := yType.consumeMData
     let yValue := yValue.consumeMData
-    let yBody := yBody.consumeMData
+    let yBody  := yBody.consumeMData
     -- We perform reduction because the type is quite often of the form
     -- `(fun x ↦ Y) #0` which is just `Y`
     -- Usually this is caused by the usage of `FunLike`
@@ -848,70 +488,25 @@ def letCase (funPropDecl : FunPropDecl) (e : Expr) (f : Expr)
       let f := Expr.lam xName xType (yBody.lowerLooseBVars 1 1) xBi
       funProp (e.setArg (funPropDecl.funArgId) f)
 
-  | _ => throwError "expected expression of the form `fun x => lam y := ..; ..`"
+  | _ => throwError "expected expression of the form `fun x ↦ lam y := ..; ..`"
 
 
-/--
-Definition of `applyMorRules` / `applyMorRules` 的定义
+/-- Prove function property of using *morphism theorems*. -/
+/-
+**Mathlib.Meta.FunProp.applyMorRules** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fun
+Prop`。
+形式化陈述：applyMorRules (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData
+) (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；fData : FunctionData；funProp : Expr -> Fun
+PropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyMorRules
-  signature: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  body: do
-  trace[Debug.Meta.Tactic.fun_prop] "applying morphism theorems to {← ppExpr e}"
-
-  -- get theorems
-  let candidates ← getMorphismTheorems e
-  trace[Meta.Tactic.fun_prop]
-    "candidate morphism theorems: {← candidates.mapM fun c => ppOrigin (.decl c.thmName)}"
-
-  -- try theorems
-  for c in candidates do
-    if let some r ← tryTheorem? e (.decl c.thmName) funProp then
-      return r
-
-  -- if all failed try to add/remove arguments
-  match ← fData.isMorApplication with
-  | .none => throwError "fun_prop bug: invalid use of mor rules on {← ppExpr e}"
-  | .underApplied =>
-    applyPiRule funPropDecl e funProp
-  | .overApplied =>
-    let .comp f g ← fData.peeloffArgDecomposition | return none
-    applyCompRule funPropDecl e f g funProp
-  | .exact =>
-    trace[Debug.Meta.Tactic.fun_prop] "no theorem matched"
-    return none
-
-中文:
-定义 applyMorRules
-  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  定义体: do
-  trace[Debug.Meta.Tactic.fun_prop] "applying morphism theorems to {← ppExpr e}"
-
-  -- get theorems
-  let candidates ← getMorphismTheorems e
-  trace[Meta.Tactic.fun_prop]
-    "candidate morphism theorems: {← candidates.mapM fun c => ppOrigin (.decl c.thmName)}"
-
-  -- try theorems
-  for c in candidates do
-    if let some r ← tryTheorem? e (.decl c.thmName) funProp then
-      return r
-
-  -- if all failed try to add/remove arguments
-  match ← fData.isMorApplication with
-  | .none => throwError "fun_prop bug: invalid use of mor rules on {← ppExpr e}"
-  | .underApplied =>
-    applyPiRule funPropDecl e funProp
-  | .overApplied =>
-    let .comp f g ← fData.peeloffArgDecomposition | return none
-    applyCompRule funPropDecl e f g funProp
-  | .exact =>
-    trace[Debug.Meta.Tactic.fun_prop] "no theorem matched"
-    return none
+--- 原说明 ---
+Prove function property of using *morphism theorems*.
 -/
 def applyMorRules (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
   trace[Debug.Meta.Tactic.fun_prop] "applying morphism theorems to {← ppExpr e}"
 
   -- get theorems
@@ -936,46 +531,20 @@ def applyMorRules (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
     trace[Debug.Meta.Tactic.fun_prop] "no theorem matched"
     return none
 
-/--
-Definition of `applyTransitionRules` / `applyTransitionRules` 的定义
+/-- Prove function property of using *transition theorems*. -/
+/-
+**Mathlib.Meta.FunProp.applyTransitionRules** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.M
+eta.FunProp`。
+形式化陈述：applyTransitionRules (e : Expr) (funProp : Expr -> FunPropM (Option Result
+)) : FunPropM (Option Result)
+参数：e : Expr；funProp : Expr -> FunPropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyTransitionRules
-  signature: (e : Expr) (funProp : Expr -> FunPropM (Option Result))
-  body: do
-  withIncreasedTransitionDepth do
-
-  let candidates ← getTransitionTheorems e
-
-  trace[Meta.Tactic.fun_prop]
-    "candidate transition theorems: {← candidates.mapM fun c => ppOrigin (.decl c.thmName)}"
-
-  for c in candidates do
-    if let some r ← tryTheorem? e (.decl c.thmName) funProp then
-      return r
-
-  trace[Debug.Meta.Tactic.fun_prop] "no theorem matched"
-  return none
-
-中文:
-定义 applyTransitionRules
-  签名: (e : Expr) (funProp : Expr -> FunPropM (选项类型 Result))
-  定义体: do
-  withIncreasedTransitionDepth do
-
-  let candidates ← getTransitionTheorems e
-
-  trace[Meta.Tactic.fun_prop]
-    "candidate transition theorems: {← candidates.mapM fun c => ppOrigin (.decl c.thmName)}"
-
-  for c in candidates do
-    if let some r ← tryTheorem? e (.decl c.thmName) funProp then
-      return r
-
-  trace[Debug.Meta.Tactic.fun_prop] "no theorem matched"
-  return none
+--- 原说明 ---
+Prove function property of using *transition theorems*.
 -/
-def applyTransitionRules (e : Expr) (funProp : Expr -> FunPropM (Option Result)) :
+def applyTransitionRules (e : Expr) (funProp : Expr → FunPropM (Option Result)) :
     FunPropM (Option Result) := do
   withIncreasedTransitionDepth do
 
@@ -991,45 +560,39 @@ def applyTransitionRules (e : Expr) (funProp : Expr -> FunPropM (Option Result))
   trace[Debug.Meta.Tactic.fun_prop] "no theorem matched"
   return none
 
-/--
-Definition of `removeArgRule` / `removeArgRule` 的定义
+/-- Try to remove applied argument i.e. prove `P (fun x ↦ f x y)` from `P (fun x ↦ f x)`.
 
-English:
-definition removeArgRule
-  signature: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  body: do
+For example
+- `funPropDecl` is `FunPropDecl` for `Continuous`
+- `e = q(Continuous fun x ↦ foo (bar x) y)`
+- `fData` contains info on `fun x ↦ foo (bar x) y`
 
-  match h : fData.args.size with
-  | 0 => throwError "fun_prop bug: invalid use of remove arg case {←ppExpr e}"
-  | n + 1 =>
-    let arg := fData.args[n]
+This tries to prove `Continuous fun x ↦ foo (bar x) y` from `Continuous fun x ↦ foo (bar x)`
+-/
+/-
+**Mathlib.Meta.FunProp.removeArgRule** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fun
+Prop`。
+形式化陈述：removeArgRule (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData
+) (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；fData : FunctionData；funProp : Expr -> Fun
+PropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-    if arg.coe.isSome then
-      -- if have to apply morphisms rules if we deal with morphisms
-      return ← applyMorRules funPropDecl e fData funProp
-    else
-      let .comp f g ← fData.peeloffArgDecomposition | return none
-      applyCompRule funPropDecl e f g funProp
+--- 原说明 ---
+Try to remove applied argument i.e. prove `P (fun x ↦ f x y)` from `P (fun x ↦ f
+ x)`.
 
-中文:
-定义 removeArgRule
-  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  定义体: do
+For example
+- `funPropDecl` is `FunPropDecl` for `Continuous`
+- `e = q(Continuous fun x ↦ foo (bar x) y)`
+- `fData` contains info on `fun x ↦ foo (bar x) y`
 
-  match h : fData.args.size with
-  | 0 => throwError "fun_prop bug: invalid use of remove arg case {←ppExpr e}"
-  | n + 1 =>
-    let arg := fData.args[n]
-
-    if arg.coe.isSome then
-      -- if have to apply morphisms rules if we deal with morphisms
-      return ← applyMorRules funPropDecl e fData funProp
-    else
-      let .comp f g ← fData.peeloffArgDecomposition | return none
-      applyCompRule funPropDecl e f g funProp
+This tries to prove `Continuous fun x ↦ foo (bar x) y` from `Continuous fun x ↦ 
+foo (bar x)`
 -/
 def removeArgRule (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-    (funProp : Expr -> FunPropM (Option Result)) :
+    (funProp : Expr → FunPropM (Option Result)) :
     FunPropM (Option Result) := do
 
   match h : fData.args.size with
@@ -1045,37 +608,22 @@ def removeArgRule (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
       applyCompRule funPropDecl e f g funProp
 
 
-/--
-Definition of `bvarAppCase` / `bvarAppCase` 的定义
+/-- Prove function property of `fun f ↦ f x₁ ... xₙ`. -/
+/-
+**Mathlib.Meta.FunProp.bvarAppCase** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPr
+op`。
+形式化陈述：bvarAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData) 
+(funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；fData : FunctionData；funProp : Expr -> Fun
+PropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bvarAppCase
-  signature: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  body: do
-
-  if (← fData.isMorApplication) != .none then
-    applyMorRules funPropDecl e fData funProp
-  else
-    if let .comp f g ← fData.decomposition then
-      applyCompRule funPropDecl e f g funProp
-    else
-      applyApplyRule funPropDecl e funProp
-
-中文:
-定义 bvarAppCase
-  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  定义体: do
-
-  if (← fData.isMorApplication) != .none then
-    applyMorRules funPropDecl e fData funProp
-  else
-    if let .comp f g ← fData.decomposition then
-      applyCompRule funPropDecl e f g funProp
-    else
-      applyApplyRule funPropDecl e funProp
+--- 原说明 ---
+Prove function property of `fun f ↦ f x₁ ... xₙ`.
 -/
 def bvarAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
 
   if (← fData.isMorApplication) != .none then
     applyMorRules funPropDecl e fData funProp
@@ -1086,45 +634,22 @@ def bvarAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
       applyApplyRule funPropDecl e funProp
 
 /--
-Definition of `getDeclTheorems` / `getDeclTheorems` 的定义
+Get candidate theorems from the environment for function property `funPropDecl` and
+function `funName`. -/
+/-
+**Mathlib.Meta.FunProp.getDeclTheorems** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.F
+unProp`。
+形式化陈述：getDeclTheorems (funPropDecl : FunPropDecl) (funName : Name) (mainArgs : A
+rray Nat) (appliedArgs : Nat) : MetaM (Array FunctionTheorem)
+参数：funPropDecl : FunPropDecl；funName : Name；mainArgs : Array Nat；appliedArgs : N
+at。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getDeclTheorems
-  signature: (funPropDecl : FunPropDecl) (funName : Name)
-  body: do
-
-  let thms ← getTheoremsForFunction funName funPropDecl.funPropName
-
-  let thms := thms
-.filter (fun thm => (isOrderedSubsetOf mainArgs thm.mainArgs))
-.qsort (fun t s =>
-      let dt := (Int.ofNat t.appliedArgs - Int.ofNat appliedArgs).natAbs
-      let ds := (Int.ofNat s.appliedArgs - Int.ofNat appliedArgs).natAbs
-      match compare dt ds with
-      | .lt => true
-      | .gt => false
-      | .eq => t.mainArgs.size < s.mainArgs.size)
-  -- todo: sorting and filtering
-  return thms
-
-中文:
-定义 getDeclTheorems
-  签名: (funPropDecl : FunPropDecl) (funName : Name)
-  定义体: do
-
-  let thms ← getTheoremsForFunction funName funPropDecl.funPropName
-
-  let thms := thms
-.filter (fun thm => (isOrderedSubsetOf mainArgs thm.mainArgs))
-.qsort (fun t s =>
-      let dt := (Int.ofNat t.appliedArgs - Int.ofNat appliedArgs).natAbs
-      let ds := (Int.ofNat s.appliedArgs - Int.ofNat appliedArgs).natAbs
-      match compare dt ds with
-      | .lt => true
-      | .gt => false
-      | .eq => t.mainArgs.size < s.mainArgs.size)
-  -- todo: sorting and filtering
-  return thms
+--- 原说明 ---
+Get candidate theorems from the environment for function property `funPropDecl` 
+and
+function `funName`.
 -/
 def getDeclTheorems (funPropDecl : FunPropDecl) (funName : Name)
     (mainArgs : Array Nat) (appliedArgs : Nat) : MetaM (Array FunctionTheorem) := do
@@ -1132,8 +657,8 @@ def getDeclTheorems (funPropDecl : FunPropDecl) (funName : Name)
   let thms ← getTheoremsForFunction funName funPropDecl.funPropName
 
   let thms := thms
-.filter (fun thm => (isOrderedSubsetOf mainArgs thm.mainArgs))
-.qsort (fun t s =>
+    |>.filter (fun thm => (isOrderedSubsetOf mainArgs thm.mainArgs))
+    |>.qsort (fun t s =>
       let dt := (Int.ofNat t.appliedArgs - Int.ofNat appliedArgs).natAbs
       let ds := (Int.ofNat s.appliedArgs - Int.ofNat appliedArgs).natAbs
       match compare dt ds with
@@ -1144,107 +669,22 @@ def getDeclTheorems (funPropDecl : FunPropDecl) (funName : Name)
   return thms
 
 /--
-Definition of `getLocalTheorems` / `getLocalTheorems` 的定义
+Get candidate theorems from the local context for function property `funPropDecl` and
+function `funName`. -/
+/-
+**Mathlib.Meta.FunProp.getLocalTheorems** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.
+FunProp`。
+形式化陈述：getLocalTheorems (funPropDecl : FunPropDecl) (funOrigin : Origin) (mainArg
+s : Array Nat) (appliedArgs : Nat) : FunPropM (Array FunctionTheorem)
+参数：funPropDecl : FunPropDecl；funOrigin : Origin；mainArgs : Array Nat；appliedArgs
+ : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getLocalTheorems
-  signature: (funPropDecl : FunPropDecl) (funOrigin : Origin)
-  body: do
-
-  let mut thms : Array FunctionTheorem := #[]
-  let lctx ← getLCtx
-  for var in lctx do
-    if (var.kind = Lean.LocalDeclKind.auxDecl) then
-      continue
-    let type ← instantiateMVars var.type
-    let thm? : Option FunctionTheorem ←
-      forallTelescope type fun _ b => do
-      let b ← whnfR b
-      let some (decl, f) ← getFunProp? b | return none
-      unless decl.funPropName = funPropDecl.funPropName do return none
-
-      let .data fData ← getFunctionData? f (← unfoldNamePred)
-        | return none
-      unless (fData.getFnOrigin == funOrigin) do return none
-
-      unless isOrderedSubsetOf mainArgs fData.mainArgs do return none
-
-      let dec ← fData.decomposition
-      let thm : FunctionTheorem := {
-        funPropName := funPropDecl.funPropName
-        thmOrigin := .fvar var.fvarId
-        funOrigin := funOrigin
-        mainArgs := fData.mainArgs
-        appliedArgs := fData.args.size
-        priority := eval_prio default
-        form := dec.toTheoremForm
-      }
-
-      return some thm
-
-    if let some thm := thm? then
-      thms := thms.push thm
-
-  thms := thms
-.qsort (fun t s =>
-      let dt := (Int.ofNat t.appliedArgs - Int.ofNat appliedArgs).natAbs
-      let ds := (Int.ofNat s.appliedArgs - Int.ofNat appliedArgs).natAbs
-      match compare dt ds with
-      | .lt => true
-      | .gt => false
-      | .eq => t.mainArgs.size < s.mainArgs.size)
-
-  return thms
-
-中文:
-定义 getLocalTheorems
-  签名: (funPropDecl : FunPropDecl) (funOrigin : Origin)
-  定义体: do
-
-  let mut thms : Array FunctionTheorem := #[]
-  let lctx ← getLCtx
-  for var in lctx do
-    if (var.kind = Lean.LocalDeclKind.auxDecl) then
-      continue
-    let type ← instantiateMVars var.type
-    let thm? : Option FunctionTheorem ←
-      forallTelescope type fun _ b => do
-      let b ← whnfR b
-      let some (decl, f) ← getFunProp? b | return none
-      unless decl.funPropName = funPropDecl.funPropName do return none
-
-      let .data fData ← getFunctionData? f (← unfoldNamePred)
-        | return none
-      unless (fData.getFnOrigin == funOrigin) do return none
-
-      unless isOrderedSubsetOf mainArgs fData.mainArgs do return none
-
-      let dec ← fData.decomposition
-      let thm : FunctionTheorem := {
-        funPropName := funPropDecl.funPropName
-        thmOrigin := .fvar var.fvarId
-        funOrigin := funOrigin
-        mainArgs := fData.mainArgs
-        appliedArgs := fData.args.size
-        priority := eval_prio default
-        form := dec.toTheoremForm
-      }
-
-      return some thm
-
-    if let some thm := thm? then
-      thms := thms.push thm
-
-  thms := thms
-.qsort (fun t s =>
-      let dt := (Int.ofNat t.appliedArgs - Int.ofNat appliedArgs).natAbs
-      let ds := (Int.ofNat s.appliedArgs - Int.ofNat appliedArgs).natAbs
-      match compare dt ds with
-      | .lt => true
-      | .gt => false
-      | .eq => t.mainArgs.size < s.mainArgs.size)
-
-  return thms
+--- 原说明 ---
+Get candidate theorems from the local context for function property `funPropDecl
+` and
+function `funName`.
 -/
 def getLocalTheorems (funPropDecl : FunPropDecl) (funOrigin : Origin)
     (mainArgs : Array Nat) (appliedArgs : Nat) : FunPropM (Array FunctionTheorem) := do
@@ -1284,7 +724,7 @@ def getLocalTheorems (funPropDecl : FunPropDecl) (funOrigin : Origin)
       thms := thms.push thm
 
   thms := thms
-.qsort (fun t s =>
+    |>.qsort (fun t s =>
       let dt := (Int.ofNat t.appliedArgs - Int.ofNat appliedArgs).natAbs
       let ds := (Int.ofNat s.appliedArgs - Int.ofNat appliedArgs).natAbs
       match compare dt ds with
@@ -1295,121 +735,23 @@ def getLocalTheorems (funPropDecl : FunPropDecl) (funOrigin : Origin)
   return thms
 
 
-/--
-Definition of `tryTheorems` / `tryTheorems` 的定义
+/-- Try to apply *function theorems* `thms` to `e`. -/
+/-
+**Mathlib.Meta.FunProp.tryTheorems** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPr
+op`。
+形式化陈述：tryTheorems (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData) 
+(thms : Array FunctionTheorem) (funProp : Expr -> FunPropM (Option Result)) : Fu
+nPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；fData : FunctionData；thms : Array Function
+Theorem；funProp : Expr -> FunPropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tryTheorems
-  signature: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  body: do
-
-  -- none - decomposition not tried
-  -- some result - result of decomposition
-  let mut dec? : Option DecompositionResult := none
-
-  for thm in thms do
-
-    trace[Debug.Meta.Tactic.fun_prop] s!"trying theorem {← ppOrigin' thm.thmOrigin}"
-
-    match compare thm.appliedArgs fData.args.size with
-    | .lt =>
-      trace[Meta.Tactic.fun_prop] s!"removing argument to later use {← ppOrigin' thm.thmOrigin}"
-      if let some r ← removeArgRule funPropDecl e fData funProp then
-        return r
-      continue
-    | .gt =>
-      trace[Meta.Tactic.fun_prop] s!"adding argument to later use {← ppOrigin' thm.thmOrigin}"
-      if let some r ← applyPiRule funPropDecl e funProp then
-        return r
-      continue
-    | .eq =>
-      if thm.form == .comp then
-        if let some r ← tryTheorem? e thm.thmOrigin funProp then
-          return r
-      else
-
-        if thm.mainArgs.size == fData.mainArgs.size then
-          if dec?.isNone then
-            dec? ← fData.decomposition
-          match dec? with
-          | some (.comp f g) =>
-            trace[Meta.Tactic.fun_prop]
-              s!"decomposing to later use {←ppOrigin' thm.thmOrigin} as:
-                   ({← ppExpr f}) ∘ ({← ppExpr g})"
-            if let some r ← applyCompRule funPropDecl e f g funProp then
-              return r
-          | some _ =>
-            if let some r ← tryTheorem? e thm.thmOrigin funProp then
-              return r
-          | none => unreachable!
-        else
-          let some (f, g) ← fData.decompositionOverArgs thm.mainArgs | continue
-          trace[Meta.Tactic.fun_prop]
-            s!"decomposing to later use {←ppOrigin' thm.thmOrigin} as:
-                 ({← ppExpr f}) ∘ ({← ppExpr g})"
-          if let some r ← applyCompRule funPropDecl e f g funProp then
-            return r
-      -- todo: decompose if uncurried and arguments do not match exactly
-  return none
-
-中文:
-定义 tryTheorems
-  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  定义体: do
-
-  -- none - decomposition not tried
-  -- some result - result of decomposition
-  let mut dec? : Option DecompositionResult := none
-
-  for thm in thms do
-
-    trace[Debug.Meta.Tactic.fun_prop] s!"trying theorem {← ppOrigin' thm.thmOrigin}"
-
-    match compare thm.appliedArgs fData.args.size with
-    | .lt =>
-      trace[Meta.Tactic.fun_prop] s!"removing argument to later use {← ppOrigin' thm.thmOrigin}"
-      if let some r ← removeArgRule funPropDecl e fData funProp then
-        return r
-      continue
-    | .gt =>
-      trace[Meta.Tactic.fun_prop] s!"adding argument to later use {← ppOrigin' thm.thmOrigin}"
-      if let some r ← applyPiRule funPropDecl e funProp then
-        return r
-      continue
-    | .eq =>
-      if thm.form == .comp then
-        if let some r ← tryTheorem? e thm.thmOrigin funProp then
-          return r
-      else
-
-        if thm.mainArgs.size == fData.mainArgs.size then
-          if dec?.isNone then
-            dec? ← fData.decomposition
-          match dec? with
-          | some (.comp f g) =>
-            trace[Meta.Tactic.fun_prop]
-              s!"decomposing to later use {←ppOrigin' thm.thmOrigin} as:
-                   ({← ppExpr f}) ∘ ({← ppExpr g})"
-            if let some r ← applyCompRule funPropDecl e f g funProp then
-              return r
-          | some _ =>
-            if let some r ← tryTheorem? e thm.thmOrigin funProp then
-              return r
-          | none => unreachable!
-        else
-          let some (f, g) ← fData.decompositionOverArgs thm.mainArgs | continue
-          trace[Meta.Tactic.fun_prop]
-            s!"decomposing to later use {←ppOrigin' thm.thmOrigin} as:
-                 ({← ppExpr f}) ∘ ({← ppExpr g})"
-          if let some r ← applyCompRule funPropDecl e f g funProp then
-            return r
-      -- todo: decompose if uncurried and arguments do not match exactly
-  return none
-
-Depends on / 依赖: Continuous, OrderClosedTopology, OrderClosedTopology.mk, Subtype, continuous_subtype_val, continuous_subtype_val.prodMap, isClosed_le, p.fst, p.snd, preimage, prodMap, t.isClosed_le
+--- 原说明 ---
+Try to apply *function theorems* `thms` to `e`.
 -/
 def tryTheorems (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-    (thms : Array FunctionTheorem) (funProp : Expr -> FunPropM (Option Result)) :
+    (thms : Array FunctionTheorem) (funProp : Expr → FunPropM (Option Result)) :
     FunPropM (Option Result) := do
 
   -- none - decomposition not tried
@@ -1461,81 +803,22 @@ def tryTheorems (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
       -- todo: decompose if uncurried and arguments do not match exactly
   return none
 
-/--
-Definition of `fvarAppCase` / `fvarAppCase` 的定义
+/-- Prove function property of `fun x ↦ f x₁ ... xₙ` where `f` is free variable. -/
+/-
+**Mathlib.Meta.FunProp.fvarAppCase** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPr
+op`。
+形式化陈述：fvarAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData) 
+(funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；fData : FunctionData；funProp : Expr -> Fun
+PropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fvarAppCase
-  signature: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  body: do
-
-  -- fvar theorems are almost exclusively in uncurried form so we decompose if we can
-  if let .comp f g ← fData.decomposition then
-    applyCompRule funPropDecl e f g funProp
-  else
-    let .fvar id := fData.fn | throwError "fun_prop bug: invalid use of fvar app case"
-    let thms ← getLocalTheorems funPropDecl (.fvar id) fData.mainArgs fData.args.size
-    trace[Meta.Tactic.fun_prop]
-      s!"candidate local theorems for {←ppExpr (.fvar id)} \
-         {← thms.mapM fun thm => ppOrigin' thm.thmOrigin}"
-
-    if let some r ← tryTheorems funPropDecl e fData thms funProp then
-      return r
-
-    if let some f ← fData.unfoldHeadFVar? then
-      let e' := e.setArg funPropDecl.funArgId f
-      if let some r ← funProp e' then
-        return r
-
-    if (← fData.isMorApplication) != .none then
-      if let some r ← applyMorRules funPropDecl e fData funProp then
-        return r
-
-    if let some r ← applyTransitionRules e funProp then
-      return r
-
-    if thms.size = 0 then
-      logError s!"No theorems found for `{← ppExpr (.fvar id)}` in order to prove `{← ppExpr e}`"
-
-    return none
-
-中文:
-定义 fvarAppCase
-  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  定义体: do
-
-  -- fvar theorems are almost exclusively in uncurried form so we decompose if we can
-  if let .comp f g ← fData.decomposition then
-    applyCompRule funPropDecl e f g funProp
-  else
-    let .fvar id := fData.fn | throwError "fun_prop bug: invalid use of fvar app case"
-    let thms ← getLocalTheorems funPropDecl (.fvar id) fData.mainArgs fData.args.size
-    trace[Meta.Tactic.fun_prop]
-      s!"candidate local theorems for {←ppExpr (.fvar id)} \
-         {← thms.mapM fun thm => ppOrigin' thm.thmOrigin}"
-
-    if let some r ← tryTheorems funPropDecl e fData thms funProp then
-      return r
-
-    if let some f ← fData.unfoldHeadFVar? then
-      let e' := e.setArg funPropDecl.funArgId f
-      if let some r ← funProp e' then
-        return r
-
-    if (← fData.isMorApplication) != .none then
-      if let some r ← applyMorRules funPropDecl e fData funProp then
-        return r
-
-    if let some r ← applyTransitionRules e funProp then
-      return r
-
-    if thms.size = 0 then
-      logError s!"No theorems found for `{← ppExpr (.fvar id)}` in order to prove `{← ppExpr e}`"
-
-    return none
+--- 原说明 ---
+Prove function property of `fun x ↦ f x₁ ... xₙ` where `f` is free variable.
 -/
 def fvarAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
 
   -- fvar theorems are almost exclusively in uncurried form so we decompose if we can
   if let .comp f g ← fData.decomposition then
@@ -1568,111 +851,22 @@ def fvarAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
     return none
 
 
-/--
-Definition of `constAppCase` / `constAppCase` 的定义
+/-- Prove function property of `fun x ↦ f x₁ ... xₙ` where `f` is declared function. -/
+/-
+**Mathlib.Meta.FunProp.constAppCase** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunP
+rop`。
+形式化陈述：constAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
+ (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result)
+参数：funPropDecl : FunPropDecl；e : Expr；fData : FunctionData；funProp : Expr -> Fun
+PropM (Option Result)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constAppCase
-  signature: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  body: do
-
-  let some (funName, _) := fData.fn.const?
-    | throwError "fun_prop bug: invelid use of const app case"
-  let globalThms ← getDeclTheorems funPropDecl funName fData.mainArgs fData.args.size
-
-  trace[Meta.Tactic.fun_prop]
-    s!"candidate theorems for {funName} {← globalThms.mapM fun thm => ppOrigin' thm.thmOrigin}"
-
-  if let some r ← tryTheorems funPropDecl e fData globalThms funProp then
-    return r
-
-  -- Try local theorems - this is useful for recursive functions
-  let localThms ← getLocalTheorems funPropDecl (.decl funName) fData.mainArgs fData.args.size
-  if localThms.size != 0 then
-    trace[Meta.Tactic.fun_prop]
-      s!"candidate local theorems for {funName} \
-        {← localThms.mapM fun thm => ppOrigin' thm.thmOrigin}"
-  if let some r ← tryTheorems funPropDecl e fData localThms funProp then
-    return r
-
-  -- log error if no global or local theorems were found
-  if globalThms.size = 0 && localThms.size = 0 then
-     logError s!"No theorems found for `{funName}` in order to prove `{← ppExpr e}`"
-
-  if (← fData.isMorApplication) != .none then
-    if let some r ← applyMorRules funPropDecl e fData funProp then
-      return r
-
-  if let .comp f g ← fData.decomposition then
-    trace[Meta.Tactic.fun_prop]
-      s!"failed applying `{funPropDecl.funPropName}` theorems for `{funName}`
-         trying again after decomposing function as: `({← ppExpr f}) ∘ ({← ppExpr g})`"
-
-    if let some r ← applyCompRule funPropDecl e f g funProp then
-      return r
-  else
-    trace[Meta.Tactic.fun_prop]
-      s!"failed applying `{funPropDecl.funPropName}` theorems for `{funName}`
-         now trying to prove `{funPropDecl.funPropName}` from another function property"
-
-    if let some r ← applyTransitionRules e funProp then
-      return r
-
-
-  return none
-
-中文:
-定义 constAppCase
-  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-  定义体: do
-
-  let some (funName, _) := fData.fn.const?
-    | throwError "fun_prop bug: invelid use of const app case"
-  let globalThms ← getDeclTheorems funPropDecl funName fData.mainArgs fData.args.size
-
-  trace[Meta.Tactic.fun_prop]
-    s!"candidate theorems for {funName} {← globalThms.mapM fun thm => ppOrigin' thm.thmOrigin}"
-
-  if let some r ← tryTheorems funPropDecl e fData globalThms funProp then
-    return r
-
-  -- Try local theorems - this is useful for recursive functions
-  let localThms ← getLocalTheorems funPropDecl (.decl funName) fData.mainArgs fData.args.size
-  if localThms.size != 0 then
-    trace[Meta.Tactic.fun_prop]
-      s!"candidate local theorems for {funName} \
-        {← localThms.mapM fun thm => ppOrigin' thm.thmOrigin}"
-  if let some r ← tryTheorems funPropDecl e fData localThms funProp then
-    return r
-
-  -- log error if no global or local theorems were found
-  if globalThms.size = 0 && localThms.size = 0 then
-     logError s!"No theorems found for `{funName}` in order to prove `{← ppExpr e}`"
-
-  if (← fData.isMorApplication) != .none then
-    if let some r ← applyMorRules funPropDecl e fData funProp then
-      return r
-
-  if let .comp f g ← fData.decomposition then
-    trace[Meta.Tactic.fun_prop]
-      s!"failed applying `{funPropDecl.funPropName}` theorems for `{funName}`
-         trying again after decomposing function as: `({← ppExpr f}) ∘ ({← ppExpr g})`"
-
-    if let some r ← applyCompRule funPropDecl e f g funProp then
-      return r
-  else
-    trace[Meta.Tactic.fun_prop]
-      s!"failed applying `{funPropDecl.funPropName}` theorems for `{funName}`
-         now trying to prove `{funPropDecl.funPropName}` from another function property"
-
-    if let some r ← applyTransitionRules e funProp then
-      return r
-
-
-  return none
+--- 原说明 ---
+Prove function property of `fun x ↦ f x₁ ... xₙ` where `f` is declared function.
 -/
 def constAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
-    (funProp : Expr -> FunPropM (Option Result)) : FunPropM (Option Result) := do
+    (funProp : Expr → FunPropM (Option Result)) : FunPropM (Option Result) := do
 
   let some (funName, _) := fData.fn.const?
     | throwError "fun_prop bug: invelid use of const app case"
@@ -1686,7 +880,7 @@ def constAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
 
   -- Try local theorems - this is useful for recursive functions
   let localThms ← getLocalTheorems funPropDecl (.decl funName) fData.mainArgs fData.args.size
-  if localThms.size != 0 then
+  if localThms.size ≠ 0 then
     trace[Meta.Tactic.fun_prop]
       s!"candidate local theorems for {funName} \
         {← localThms.mapM fun thm => ppOrigin' thm.thmOrigin}"
@@ -1720,211 +914,33 @@ def constAppCase (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
   return none
 
 
-/--
-Definition of `cacheResult` / `cacheResult` 的定义
+/-- Cache result if it does not have any subgoals. -/
+/-
+**Mathlib.Meta.FunProp.cacheResult** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPr
+op`。
+形式化陈述：cacheResult (e : Expr) (r : Result) : FunPropM Result
+参数：e : Expr；r : Result。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cacheResult
-  signature: (e : Expr) (r : Result)
-  body: do -- return proof?
-  modify (fun s => { s with cache := s.cache.insert e { expr := q(True), proof? := r.proof} })
-  return r
-
-中文:
-定义 cacheResult
-  签名: (e : Expr) (r : Result)
-  定义体: do -- return proof?
-  modify (fun s => { s with cache := s.cache.insert e { expr := q(True), proof? := r.proof} })
-  return r
-
-Depends on / 依赖: return
+--- 原说明 ---
+Cache result if it does not have any subgoals.
 -/
 def cacheResult (e : Expr) (r : Result) : FunPropM Result := do -- return proof?
   modify (fun s => { s with cache := s.cache.insert e { expr := q(True), proof? := r.proof} })
   return r
 
-/--
-Definition of `cacheFailure` / `cacheFailure` 的定义
+/-- Cache for failed goals such that `fun_prop` can fail fast next time. -/
+/-
+**Mathlib.Meta.FunProp.cacheFailure** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunP
+rop`。
+形式化陈述：cacheFailure (e : Expr) : FunPropM Unit
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cacheFailure
-  signature: (e : Expr)
-  body: do -- return proof?
-  modify (fun s => { s with failureCache := s.failureCache.insert e })
-
-
-mutual
-  /-- Main `funProp` function. Returns proof of `e`. -/
-  partial def funProp (e : Expr) : FunPropM (Option Result) := do
-
-    let e ← instantiateMVars e
-
-    withTraceNode `Meta.Tactic.fun_prop
-      (fun _ => do pure s!"{← ppExpr e}") do
-
-    -- check cache for successful goals
-    if let some { expr := _, proof? := some proof, .. } := (← get).cache.find? e then
-      trace[Meta.Tactic.fun_prop] "reusing previously found proof for {e}"
-      return some { proof := proof }
-    else if (← get).failureCache.contains e then
-      trace[Meta.Tactic.fun_prop] "skipping proof search, proving {e} was tried already and failed"
-      return none
-    else
-      -- take care of forall and let binders and run main
-      match e with
-      | .letE .. =>
-        letTelescope e fun xs b => do
-          let some r ← funProp b
-            | return none
-          cacheResult e {proof := ← mkLambdaFVars (generalizeNondepLet := false) xs r.proof }
-      | .forallE .. =>
-        forallTelescope e fun xs b => do
-          let some r ← funProp b
-            | return none
-          cacheResult e {proof := ← mkLambdaFVars xs r.proof }
-      | .mdata _ e' => funProp e'
-      | _ =>
-        if let some r ← main e then
-          cacheResult e r
-        else
-          cacheFailure e
-          return none
-
-
-  /-- Main `funProp` function. Returns proof of `e`. -/
-  private partial def main (e : Expr) : FunPropM (Option Result) := do
-
-    let some (funPropDecl, f) ← getFunProp? e
-      | return none
-
-    increaseSteps
-
-    -- if function starts with let bindings move them the top of `e` and try again
-    if f.isLet then
-      return ← funProp (← mapLetTelescope f fun _ b => pure <| e.setArg funPropDecl.funArgId b)
-
-    match ← getFunctionData? f (← unfoldNamePred) with
-    | .letE f =>
-      trace[Debug.Meta.Tactic.fun_prop] "let case on {← ppExpr f}"
-      let e := e.setArg funPropDecl.funArgId f -- update e with reduced f
-      letCase funPropDecl e f funProp
-    | .lam f =>
-      trace[Debug.Meta.Tactic.fun_prop] "pi case on {← ppExpr f}"
-      let e := e.setArg funPropDecl.funArgId f -- update e with reduced f
-      applyPiRule funPropDecl e funProp
-    | .data fData =>
-      let e := e.setArg funPropDecl.funArgId (← fData.toExpr) -- update e with reduced f
-
-      if fData.isIdentityFun then
-        if let some r ← applyIdRule funPropDecl e funProp then
-          return r
-
-      if fData.isConstantFun then
-        if let some r ← applyConstRule funPropDecl e funProp then
-          return r
-
-      match fData.fn with
-      | .fvar id =>
-        if id == fData.mainVar.fvarId! then
-          bvarAppCase funPropDecl e fData funProp
-        else
-          fvarAppCase funPropDecl e fData funProp
-      | .const .. | .proj .. => do
-        constAppCase funPropDecl e fData funProp
-      | _ =>
-        trace[Debug.Meta.Tactic.fun_prop] "unknown case, ctor: {f.ctorName}\n{e}"
-        return none
-
-中文:
-定义 cacheFailure
-  签名: (e : Expr)
-  定义体: do -- return proof?
-  modify (fun s => { s with failureCache := s.failureCache.insert e })
-
-
-mutual
-  /-- Main `funProp` function. Returns proof of `e`. -/
-  partial def funProp (e : Expr) : FunPropM (Option Result) := do
-
-    let e ← instantiateMVars e
-
-    withTraceNode `Meta.Tactic.fun_prop
-      (fun _ => do pure s!"{← ppExpr e}") do
-
-    -- check cache for successful goals
-    if let some { expr := _, proof? := some proof, .. } := (← get).cache.find? e then
-      trace[Meta.Tactic.fun_prop] "reusing previously found proof for {e}"
-      return some { proof := proof }
-    else if (← get).failureCache.contains e then
-      trace[Meta.Tactic.fun_prop] "skipping proof search, proving {e} was tried already and failed"
-      return none
-    else
-      -- take care of forall and let binders and run main
-      match e with
-      | .letE .. =>
-        letTelescope e fun xs b => do
-          let some r ← funProp b
-            | return none
-          cacheResult e {proof := ← mkLambdaFVars (generalizeNondepLet := false) xs r.proof }
-      | .forallE .. =>
-        forallTelescope e fun xs b => do
-          let some r ← funProp b
-            | return none
-          cacheResult e {proof := ← mkLambdaFVars xs r.proof }
-      | .mdata _ e' => funProp e'
-      | _ =>
-        if let some r ← main e then
-          cacheResult e r
-        else
-          cacheFailure e
-          return none
-
-
-  /-- Main `funProp` function. Returns proof of `e`. -/
-  private partial def main (e : Expr) : FunPropM (Option Result) := do
-
-    let some (funPropDecl, f) ← getFunProp? e
-      | return none
-
-    increaseSteps
-
-    -- if function starts with let bindings move them the top of `e` and try again
-    if f.isLet then
-      return ← funProp (← mapLetTelescope f fun _ b => pure <| e.setArg funPropDecl.funArgId b)
-
-    match ← getFunctionData? f (← unfoldNamePred) with
-    | .letE f =>
-      trace[Debug.Meta.Tactic.fun_prop] "let case on {← ppExpr f}"
-      let e := e.setArg funPropDecl.funArgId f -- update e with reduced f
-      letCase funPropDecl e f funProp
-    | .lam f =>
-      trace[Debug.Meta.Tactic.fun_prop] "pi case on {← ppExpr f}"
-      let e := e.setArg funPropDecl.funArgId f -- update e with reduced f
-      applyPiRule funPropDecl e funProp
-    | .data fData =>
-      let e := e.setArg funPropDecl.funArgId (← fData.toExpr) -- update e with reduced f
-
-      if fData.isIdentityFun then
-        if let some r ← applyIdRule funPropDecl e funProp then
-          return r
-
-      if fData.isConstantFun then
-        if let some r ← applyConstRule funPropDecl e funProp then
-          return r
-
-      match fData.fn with
-      | .fvar id =>
-        if id == fData.mainVar.fvarId! then
-          bvarAppCase funPropDecl e fData funProp
-        else
-          fvarAppCase funPropDecl e fData funProp
-      | .const .. | .proj .. => do
-        constAppCase funPropDecl e fData funProp
-      | _ =>
-        trace[Debug.Meta.Tactic.fun_prop] "unknown case, ctor: {f.ctorName}\n{e}"
-        return none
-
-Depends on / 依赖: return
+--- 原说明 ---
+Cache for failed goals such that `fun_prop` can fail fast next time.
 -/
 def cacheFailure (e : Expr) : FunPropM Unit := do -- return proof?
   modify (fun s => { s with failureCache := s.failureCache.insert e })
@@ -2017,3 +1033,4 @@ end
 end Meta.FunProp
 
 end Mathlib
+

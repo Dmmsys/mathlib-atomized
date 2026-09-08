@@ -23,209 +23,126 @@ variable {α : Type*}
 
 namespace MulOpposite
 
+/-!
+### Additive structures on `αᵐᵒᵖ`
+-/
 
-/--
-Instance `instAddSemigroup` / 实例 `instAddSemigroup`
+/-
+**MulOpposite.instAddSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddSemigroup [AddSemigroup α] : AddSemigroup αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 
-English:
-instance instAddSemigroup
-  signature: [AddSemigroup α]
-  body: unop_injective.addSemigroup _ fun _ _ => rfl
-
-中文:
-实例 instAddSemigroup
-  签名: [加法半群 α]
-  定义体: unop_injective.addSemigroup _ fun _ _ => rfl
-
-Depends on / 依赖: addSemigroup, unop_injective, unop_injective.addSemigroup
+--- 原说明 ---
+### Additive structures on `αᵐᵒᵖ`
 -/
 instance instAddSemigroup [AddSemigroup α] : AddSemigroup αᵐᵒᵖ :=
   unop_injective.addSemigroup _ fun _ _ => rfl
-
-/--
-Instance `instAddLeftCancelSemigroup` / 实例 `instAddLeftCancelSemigroup`
-
-English:
-instance instAddLeftCancelSemigroup
-  signature: [AddLeftCancelSemigroup α]
-  body: unop_injective.addLeftCancelSemigroup _ fun _ _ => rfl
-
-中文:
-实例 instAddLeftCancelSemigroup
-  签名: [加法左消去半群 α]
-  定义体: unop_injective.addLeftCancelSemigroup _ fun _ _ => rfl
-
-Depends on / 依赖: addLeftCancelSemigroup, unop_injective, unop_injective.addLeftCancelSemigroup
+/-
+**MulOpposite.instAddLeftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`
+。
+形式化陈述：instAddLeftCancelSemigroup [AddLeftCancelSemigroup α] : AddLeftCancelSemig
+roup αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddLeftCancelSemigroup [AddLeftCancelSemigroup α] : AddLeftCancelSemigroup αᵐᵒᵖ :=
   unop_injective.addLeftCancelSemigroup _ fun _ _ => rfl
-
-/--
-Instance `instAddRightCancelSemigroup` / 实例 `instAddRightCancelSemigroup`
-
-English:
-instance instAddRightCancelSemigroup
-  signature: [AddRightCancelSemigroup α]
-  body: unop_injective.addRightCancelSemigroup _ fun _ _ => rfl
-
-中文:
-实例 instAddRightCancelSemigroup
-  签名: [加法右消去半群 α]
-  定义体: unop_injective.addRightCancelSemigroup _ fun _ _ => rfl
-
-Depends on / 依赖: addRightCancelSemigroup, unop_injective, unop_injective.addRightCancelSemigroup
+/-
+**MulOpposite.instAddRightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite
+`。
+形式化陈述：instAddRightCancelSemigroup [AddRightCancelSemigroup α] : AddRightCancelSe
+migroup αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddRightCancelSemigroup [AddRightCancelSemigroup α] : AddRightCancelSemigroup αᵐᵒᵖ :=
   unop_injective.addRightCancelSemigroup _ fun _ _ => rfl
-
-/--
-Instance `instAddCommMagma` / 实例 `instAddCommMagma`
-
-English:
-instance instAddCommMagma
-  signature: [AddCommMagma α]
-  body: unop_injective.addCommMagma _ fun _ _ => rfl
-
-中文:
-实例 instAddCommMagma
-  签名: [加法交换原群 α]
-  定义体: unop_injective.addCommMagma _ fun _ _ => rfl
-
-Depends on / 依赖: addCommMagma, unop_injective, unop_injective.addCommMagma
+/-
+**MulOpposite.instAddCommMagma** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddCommMagma [AddCommMagma α] : AddCommMagma αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddCommMagma [AddCommMagma α] : AddCommMagma αᵐᵒᵖ :=
   unop_injective.addCommMagma _ fun _ _ => rfl
-
-/--
-Instance `instAddCommSemigroup` / 实例 `instAddCommSemigroup`
-
-English:
-instance instAddCommSemigroup
-  signature: [AddCommSemigroup α]
-  body: unop_injective.addCommSemigroup _ fun _ _ => rfl
-
-中文:
-实例 instAddCommSemigroup
-  签名: [加法交换半群 α]
-  定义体: unop_injective.addCommSemigroup _ fun _ _ => rfl
-
-Depends on / 依赖: addCommSemigroup, unop_injective, unop_injective.addCommSemigroup
+/-
+**MulOpposite.instAddCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddCommSemigroup [AddCommSemigroup α] : AddCommSemigroup αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddCommSemigroup [AddCommSemigroup α] : AddCommSemigroup αᵐᵒᵖ :=
   unop_injective.addCommSemigroup _ fun _ _ => rfl
-
-/--
-Instance `instAddZeroClass` / 实例 `instAddZeroClass`
-
-English:
-instance instAddZeroClass
-  signature: [AddZeroClass α]
-  body: unop_injective.addZeroClass _ (by exact rfl) fun _ _ => rfl
-
-中文:
-实例 instAddZeroClass
-  签名: [加法零类 α]
-  定义体: unop_injective.addZeroClass _ (by exact rfl) fun _ _ => rfl
-
-Depends on / 依赖: addZeroClass, unop_injective, unop_injective.addZeroClass
+/-
+**MulOpposite.instAddZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddZeroClass [AddZeroClass α] : AddZeroClass αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddZeroClass [AddZeroClass α] : AddZeroClass αᵐᵒᵖ :=
   unop_injective.addZeroClass _ (by exact rfl) fun _ _ => rfl
-
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: [AddMonoid α]
-  body: unop_injective.addMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddMonoid
-  签名: [加法幺半群 α]
-  定义体: unop_injective.addMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: addMonoid, unop_injective, unop_injective.addMonoid
+/-
+**MulOpposite.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddMonoid [AddMonoid α] : AddMonoid αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddMonoid [AddMonoid α] : AddMonoid αᵐᵒᵖ :=
   unop_injective.addMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: [AddCommMonoid α]
-  body: unop_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddCommMonoid
-  签名: [加法交换幺半群 α]
-  定义体: unop_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: addCommMonoid, unop_injective, unop_injective.addCommMonoid
+/-
+**MulOpposite.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddCommMonoid [AddCommMonoid α] : AddCommMonoid αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddCommMonoid [AddCommMonoid α] : AddCommMonoid αᵐᵒᵖ :=
   unop_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instSubNegMonoid` / 实例 `instSubNegMonoid`
-
-English:
-instance instSubNegMonoid
-  signature: [SubNegMonoid α]
-  body: unop_injective.subNegMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instSubNegMonoid
-  签名: [SubNeg幺半群 α]
-  定义体: unop_injective.subNegMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: subNegMonoid, unop_injective, unop_injective.subNegMonoid
+/-
+**MulOpposite.instSubNegMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instSubNegMonoid [SubNegMonoid α] : SubNegMonoid αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instSubNegMonoid [SubNegMonoid α] : SubNegMonoid αᵐᵒᵖ :=
   unop_injective.subNegMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instAddGroup` / 实例 `instAddGroup`
-
-English:
-instance instAddGroup
-  signature: [AddGroup α]
-  body: unop_injective.addGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-  (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddGroup
-  签名: [加法群 α]
-  定义体: unop_injective.addGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-  (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: addGroup, unop_injective, unop_injective.addGroup
+/-
+**MulOpposite.instAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddGroup [AddGroup α] : AddGroup αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddGroup [AddGroup α] : AddGroup αᵐᵒᵖ :=
   unop_injective.addGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
   (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup α]
-  body: unop_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 α]
-  定义体: unop_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: addCommGroup, unop_injective, unop_injective.addCommGroup
+/-
+**MulOpposite.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instAddCommGroup [AddCommGroup α] : AddCommGroup αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance instAddCommGroup [AddCommGroup α] : AddCommGroup αᵐᵒᵖ :=
   unop_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
@@ -238,497 +155,243 @@ We also generate additive structures on `αᵃᵒᵖ` using `to_additive`
 -/
 
 @[to_additive]
-/--
-Instance `instIsRightCancelMul` / 实例 `instIsRightCancelMul`
+/-
+**MulOpposite.instIsRightCancelMul** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instIsRightCancelMul [Mul α] [IsLeftCancelMul α] : IsRightCancelMul αᵐᵒᵖ w
+here mul_right_cancel _ _ _ h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
+· 使用定理 `mul_left_cancel`：mul_left_cancel : a * b = a * c -> b = c
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
 
-English:
-instance instIsRightCancelMul
-  signature: [Mul α] [IsLeftCancelMul α]
-  body: unop_injective mul_left_cancel op_injective h
+--- 原说明 ---
+### Multiplicative structures on `αᵐᵒᵖ`
 
-@[to_additive]
-
-中文:
-实例 instIsRightCancelMul
-  签名: [乘法 α] [左乘消去 α]
-  定义体: unop_injective mul_left_cancel op_injective h
-
-@[to_additive]
-
-Depends on / 依赖: mul_left_cancel, op_injective, unop_injective
+We also generate additive structures on `αᵃᵒᵖ` using `to_additive`
 -/
 instance instIsRightCancelMul [Mul α] [IsLeftCancelMul α] : IsRightCancelMul αᵐᵒᵖ where
-mul_right_cancel _ _ _ h := unop_injective mul_left_cancel op_injective h
+  mul_right_cancel _ _ _ h := unop_injective <| mul_left_cancel <| op_injective h
 
 @[to_additive]
-/--
-Instance `instIsLeftCancelMul` / 实例 `instIsLeftCancelMul`
-
-English:
-instance instIsLeftCancelMul
-  signature: [Mul α] [IsRightCancelMul α]
-  body: unop_injective mul_right_cancel op_injective h
-
-中文:
-实例 instIsLeftCancelMul
-  签名: [乘法 α] [右乘消去 α]
-  定义体: unop_injective mul_right_cancel op_injective h
-
-Depends on / 依赖: mul_right_cancel, op_injective, unop_injective
+/-
+**MulOpposite.instIsLeftCancelMul** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instIsLeftCancelMul [Mul α] [IsRightCancelMul α] : IsLeftCancelMul αᵐᵒᵖ wh
+ere mul_left_cancel _ _ _ h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
+· 使用定理 `mul_right_cancel`：mul_right_cancel : a * b = c * b -> a = c
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
 -/
 instance instIsLeftCancelMul [Mul α] [IsRightCancelMul α] : IsLeftCancelMul αᵐᵒᵖ where
-mul_left_cancel _ _ _ h := unop_injective mul_right_cancel op_injective h
-
-/--
-Instance `instIsCancelMul` / 实例 `instIsCancelMul`
-
-English:
-instance instIsCancelMul
-  signature: [Mul α] [IsCancelMul α]
-
-中文:
-实例 instIsCancelMul
-  签名: [乘法 α] [是消去乘法 α]
+  mul_left_cancel _ _ _ h := unop_injective <| mul_right_cancel <| op_injective h
+/-
+**MulOpposite.instIsCancelMul** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：∀ {α : Type u_1} [inst : Mul α] [IsCancelMul α], IsCancelMul αᵐᵒᵖ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCancelMul.toIsRightCancelMul`：∀ {G : Type u} {inst : Mul G} [self : Is
+CancelMul G], IsRightCancelMul G
+· 使用定理 `IsCancelMul.toIsLeftCancelMul`：∀ {G : Type u} {inst : Mul G} [self : IsC
+ancelMul G], IsLeftCancelMul G
 -/
 @[to_additive] instance instIsCancelMul [Mul α] [IsCancelMul α] : IsCancelMul αᵐᵒᵖ where
 
 @[to_additive]
-/--
-Instance `instSemigroup` / 实例 `instSemigroup`
-
-English:
-instance instSemigroup
-  signature: [Semigroup α]
-  body: unop_injective Eq.symm mul_assoc (unop z) (unop y) (unop x)
-
-@[to_additive]
-
-中文:
-实例 instSemigroup
-  签名: [半群 α]
-  定义体: unop_injective Eq.symm mul_assoc (unop z) (unop y) (unop x)
-
-@[to_additive]
-
-Depends on / 依赖: Eq.symm, mul_assoc, unop_injective
+/-
+**MulOpposite.instSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instSemigroup [Semigroup α] : Semigroup αᵐᵒᵖ where mul_assoc x y z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroup [Semigroup α] : Semigroup αᵐᵒᵖ where
-mul_assoc x y z := unop_injective Eq.symm mul_assoc (unop z) (unop y) (unop x)
+  mul_assoc x y z := unop_injective <| Eq.symm <| mul_assoc (unop z) (unop y) (unop x)
 
 @[to_additive]
-/--
-Instance `instLeftCancelSemigroup` / 实例 `instLeftCancelSemigroup`
-
-English:
-instance instLeftCancelSemigroup
-  signature: [RightCancelSemigroup α]
-  body: mul_left_cancel
-
-@[to_additive]
-
-中文:
-实例 instLeftCancelSemigroup
-  签名: [右消去半群 α]
-  定义体: mul_left_cancel
-
-@[to_additive]
-
-Depends on / 依赖: mul_left_cancel
+/-
+**MulOpposite.instLeftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instLeftCancelSemigroup [RightCancelSemigroup α] : LeftCancelSemigroup αᵐᵒ
+ᵖ where mul_left_cancel _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instLeftCancelSemigroup [RightCancelSemigroup α] : LeftCancelSemigroup αᵐᵒᵖ where
   mul_left_cancel _ _ _ := mul_left_cancel
 
 @[to_additive]
-/--
-Instance `instRightCancelSemigroup` / 实例 `instRightCancelSemigroup`
-
-English:
-instance instRightCancelSemigroup
-  signature: [LeftCancelSemigroup α]
-  body: mul_right_cancel
-
-@[to_additive]
-
-中文:
-实例 instRightCancelSemigroup
-  签名: [左消去半群 α]
-  定义体: mul_right_cancel
-
-@[to_additive]
-
-Depends on / 依赖: mul_right_cancel
+/-
+**MulOpposite.instRightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instRightCancelSemigroup [LeftCancelSemigroup α] : RightCancelSemigroup αᵐ
+ᵒᵖ where mul_right_cancel _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRightCancelSemigroup [LeftCancelSemigroup α] : RightCancelSemigroup αᵐᵒᵖ where
   mul_right_cancel _ _ _ := mul_right_cancel
 
 @[to_additive]
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: [CommSemigroup α]
-  body: unop_injective mul_comm (unop y) (unop x)
-
-中文:
-实例 instCommSemigroup
-  签名: [交换半群 α]
-  定义体: unop_injective mul_comm (unop y) (unop x)
-
-Depends on / 依赖: mul_comm, unop_injective
+/-
+**MulOpposite.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instCommSemigroup [CommSemigroup α] : CommSemigroup αᵐᵒᵖ where mul_comm x 
+y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemigroup [CommSemigroup α] : CommSemigroup αᵐᵒᵖ where
-mul_comm x y := unop_injective mul_comm (unop y) (unop x)
-
-/--
-Instance `instMulOne` / 实例 `instMulOne`
-
-English:
-instance instMulOne
-  signature: [MulOne α]
-
-中文:
-实例 instMulOne
-  签名: [MulOne α]
+  mul_comm x y := unop_injective <| mul_comm (unop y) (unop x)
+/-
+**MulOpposite.instMulOne** 是 Mathlib 中的一个定义，位于命名空间 `MulOpposite`。
+形式化陈述：{α : Type u_1} → [MulOne α] → MulOne αᵐᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance instMulOne [MulOne α] : MulOne αᵐᵒᵖ where
 
 @[to_additive]
-/--
-Instance `instMulOneClass` / 实例 `instMulOneClass`
-
-English:
-instance instMulOneClass
-  signature: [MulOneClass α]
-  body: unop_injective mul_one _
-mul_one _ := unop_injective one_mul _
-
-@[to_additive]
-
-中文:
-实例 instMulOneClass
-  签名: [MulOne类 α]
-  定义体: unop_injective mul_one _
-mul_one _ := unop_injective one_mul _
-
-@[to_additive]
-
-Depends on / 依赖: mul_one, unop_injective
+/-
+**MulOpposite.instMulOneClass** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instMulOneClass [MulOneClass α] : MulOneClass αᵐᵒᵖ where one_mul _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulOneClass [MulOneClass α] : MulOneClass αᵐᵒᵖ where
-one_mul _ := unop_injective mul_one _
-mul_one _ := unop_injective one_mul _
+  one_mul _ := unop_injective <| mul_one _
+  mul_one _ := unop_injective <| one_mul _
 
 @[to_additive]
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: [Monoid α]
-  body: instSemigroup
-  __ := instMulOneClass
-npow n a := op a.unop ^ n
-npow_zero _ := unop_injective pow_zero _
-npow_succ _ _ := unop_injective pow_succ' _ _
-
-@[to_additive]
-
-中文:
-实例 instMonoid
-  签名: [幺半群 α]
-  定义体: instSemigroup
-  __ := instMulOneClass
-npow n a := op a.unop ^ n
-npow_zero _ := unop_injective pow_zero _
-npow_succ _ _ := unop_injective pow_succ' _ _
-
-@[to_additive]
-
-Depends on / 依赖: instSemigroup
+/-
+**MulOpposite.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instMonoid [Monoid α] : Monoid αᵐᵒᵖ where toSemigroup
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoid [Monoid α] : Monoid αᵐᵒᵖ where
   toSemigroup := instSemigroup
   __ := instMulOneClass
-npow n a := op a.unop ^ n
-npow_zero _ := unop_injective pow_zero _
-npow_succ _ _ := unop_injective pow_succ' _ _
+  npow n a := op <| a.unop ^ n
+  npow_zero _ := unop_injective <| pow_zero _
+  npow_succ _ _ := unop_injective <| pow_succ' _ _
 
 @[to_additive]
-/--
-Instance `instLeftCancelMonoid` / 实例 `instLeftCancelMonoid`
-
-English:
-instance instLeftCancelMonoid
-  signature: [RightCancelMonoid α]
-  body: instMonoid
-  __ := instLeftCancelSemigroup
-
-@[to_additive]
-
-中文:
-实例 instLeftCancelMonoid
-  签名: [右消去幺半群 α]
-  定义体: instMonoid
-  __ := instLeftCancelSemigroup
-
-@[to_additive]
-
-Depends on / 依赖: instMonoid
+/-
+**MulOpposite.instLeftCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instLeftCancelMonoid [RightCancelMonoid α] : LeftCancelMonoid αᵐᵒᵖ where t
+oMonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instLeftCancelMonoid [RightCancelMonoid α] : LeftCancelMonoid αᵐᵒᵖ where
   toMonoid := instMonoid
   __ := instLeftCancelSemigroup
 
 @[to_additive]
-/--
-Instance `instRightCancelMonoid` / 实例 `instRightCancelMonoid`
-
-English:
-instance instRightCancelMonoid
-  signature: [LeftCancelMonoid α]
-  body: instMonoid
-  __ := instRightCancelSemigroup
-
-@[to_additive]
-
-中文:
-实例 instRightCancelMonoid
-  签名: [左消去幺半群 α]
-  定义体: instMonoid
-  __ := instRightCancelSemigroup
-
-@[to_additive]
-
-Depends on / 依赖: instMonoid
+/-
+**MulOpposite.instRightCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instRightCancelMonoid [LeftCancelMonoid α] : RightCancelMonoid αᵐᵒᵖ where 
+toMonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRightCancelMonoid [LeftCancelMonoid α] : RightCancelMonoid αᵐᵒᵖ where
   toMonoid := instMonoid
   __ := instRightCancelSemigroup
 
 @[to_additive]
-/--
-Instance `instCancelMonoid` / 实例 `instCancelMonoid`
-
-English:
-instance instCancelMonoid
-  signature: [CancelMonoid α]
-  body: instLeftCancelMonoid
-  __ := instRightCancelMonoid
-
-@[to_additive]
-
-中文:
-实例 instCancelMonoid
-  签名: [消去幺半群 α]
-  定义体: instLeftCancelMonoid
-  __ := instRightCancelMonoid
-
-@[to_additive]
-
-Depends on / 依赖: instLeftCancelMonoid
+/-
+**MulOpposite.instCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instCancelMonoid [CancelMonoid α] : CancelMonoid αᵐᵒᵖ where toLeftCancelMo
+noid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCancelMonoid [CancelMonoid α] : CancelMonoid αᵐᵒᵖ where
   toLeftCancelMonoid := instLeftCancelMonoid
   __ := instRightCancelMonoid
 
 @[to_additive]
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: [CommMonoid α]
-  body: instMonoid
-  __ := instCommSemigroup
-
-@[to_additive]
-
-中文:
-实例 instCommMonoid
-  签名: [交换幺半群 α]
-  定义体: instMonoid
-  __ := instCommSemigroup
-
-@[to_additive]
-
-Depends on / 依赖: instMonoid
+/-
+**MulOpposite.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instCommMonoid [CommMonoid α] : CommMonoid αᵐᵒᵖ where toMonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoid [CommMonoid α] : CommMonoid αᵐᵒᵖ where
   toMonoid := instMonoid
   __ := instCommSemigroup
 
 @[to_additive]
-/--
-Instance `instCancelCommMonoid` / 实例 `instCancelCommMonoid`
-
-English:
-instance instCancelCommMonoid
-  signature: [CancelCommMonoid α]
-  body: instCommMonoid
-  __ := instLeftCancelMonoid
-
-@[to_additive AddOpposite.instSubNegMonoid]
-
-中文:
-实例 instCancelCommMonoid
-  签名: [消去交换幺半群 α]
-  定义体: instCommMonoid
-  __ := instLeftCancelMonoid
-
-@[to_additive AddOpposite.instSubNegMonoid]
-
-Depends on / 依赖: instCommMonoid
+/-
+**MulOpposite.instCancelCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instCancelCommMonoid [CancelCommMonoid α] : CancelCommMonoid αᵐᵒᵖ where to
+CommMonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCancelCommMonoid [CancelCommMonoid α] : CancelCommMonoid αᵐᵒᵖ where
   toCommMonoid := instCommMonoid
   __ := instLeftCancelMonoid
 
 @[to_additive AddOpposite.instSubNegMonoid]
-/--
-Instance `instDivInvMonoid` / 实例 `instDivInvMonoid`
-
-English:
-instance instDivInvMonoid
-  signature: [DivInvMonoid α]
-  body: instMonoid
-  toInv := instInv
-zpow n a := op a.unop ^ n
-zpow_zero' _ := unop_injective zpow_zero _
-zpow_succ' _ _ := unop_injective by
-    simp_rw [HPow.hPow, Pow.pow]
-    rw [unop_op]; rw [zpow_natCast]; rw [pow_succ']; rw [unop_mul]; rw [unop_op]; rw [zpow_natCast]
-zpow_neg' _ _ := unop_injective DivInvMonoid.zpow_neg' _ _
-
-@[to_additive]
-
-中文:
-实例 instDivInvMonoid
-  签名: [除逆幺半群 α]
-  定义体: instMonoid
-  toInv := instInv
-zpow n a := op a.unop ^ n
-zpow_zero' _ := unop_injective zpow_zero _
-zpow_succ' _ _ := unop_injective by
-    simp_rw [HPow.hPow, Pow.pow]
-    rw [unop_op]; rw [zpow_natCast]; rw [pow_succ']; rw [unop_mul]; rw [unop_op]; rw [zpow_natCast]
-zpow_neg' _ _ := unop_injective DivInvMonoid.zpow_neg' _ _
-
-@[to_additive]
-
-Depends on / 依赖: instMonoid
+/-
+**MulOpposite.instDivInvMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instDivInvMonoid [DivInvMonoid α] : DivInvMonoid αᵐᵒᵖ where toMonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivInvMonoid [DivInvMonoid α] : DivInvMonoid αᵐᵒᵖ where
   toMonoid := instMonoid
   toInv := instInv
-zpow n a := op a.unop ^ n
-zpow_zero' _ := unop_injective zpow_zero _
-zpow_succ' _ _ := unop_injective by
+  zpow n a := op <| a.unop ^ n
+  zpow_zero' _ := unop_injective <| zpow_zero _
+  zpow_succ' _ _ := unop_injective <| by
     simp_rw [HPow.hPow, Pow.pow]
-    rw [unop_op]; rw [zpow_natCast]; rw [pow_succ']; rw [unop_mul]; rw [unop_op]; rw [zpow_natCast]
-zpow_neg' _ _ := unop_injective DivInvMonoid.zpow_neg' _ _
+    rw [unop_op, zpow_natCast, pow_succ', unop_mul, unop_op, zpow_natCast]
+  zpow_neg' _ _ := unop_injective <| DivInvMonoid.zpow_neg' _ _
 
 @[to_additive]
-/--
-Instance `instDivisionMonoid` / 实例 `instDivisionMonoid`
-
-English:
-instance instDivisionMonoid
-  signature: [DivisionMonoid α]
-  body: instDivInvMonoid
-  __ := instInvolutiveInv
-mul_inv_rev _ _ := unop_injective mul_inv_rev _ _
-inv_eq_of_mul _ _ h := unop_injective inv_eq_of_mul_eq_one_left congr_arg unop h
-
-@[to_additive AddOpposite.instSubtractionCommMonoid]
-
-中文:
-实例 instDivisionMonoid
-  签名: [Division幺半群 α]
-  定义体: instDivInvMonoid
-  __ := instInvolutiveInv
-mul_inv_rev _ _ := unop_injective mul_inv_rev _ _
-inv_eq_of_mul _ _ h := unop_injective inv_eq_of_mul_eq_one_left congr_arg unop h
-
-@[to_additive AddOpposite.instSubtractionCommMonoid]
-
-Depends on / 依赖: instDivInvMonoid
+/-
+**MulOpposite.instDivisionMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instDivisionMonoid [DivisionMonoid α] : DivisionMonoid αᵐᵒᵖ where toDivInv
+Monoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivisionMonoid [DivisionMonoid α] : DivisionMonoid αᵐᵒᵖ where
   toDivInvMonoid := instDivInvMonoid
   __ := instInvolutiveInv
-mul_inv_rev _ _ := unop_injective mul_inv_rev _ _
-inv_eq_of_mul _ _ h := unop_injective inv_eq_of_mul_eq_one_left congr_arg unop h
+  mul_inv_rev _ _ := unop_injective <| mul_inv_rev _ _
+  inv_eq_of_mul _ _ h := unop_injective <| inv_eq_of_mul_eq_one_left <| congr_arg unop h
 
 @[to_additive AddOpposite.instSubtractionCommMonoid]
-/--
-Instance `instDivisionCommMonoid` / 实例 `instDivisionCommMonoid`
-
-English:
-instance instDivisionCommMonoid
-  signature: [DivisionCommMonoid α]
-  body: instDivisionMonoid
-  __ := instCommSemigroup
-
-@[to_additive]
-
-中文:
-实例 instDivisionCommMonoid
-  签名: [DivisionComm幺半群 α]
-  定义体: instDivisionMonoid
-  __ := instCommSemigroup
-
-@[to_additive]
-
-Depends on / 依赖: instDivisionMonoid
+/-
+**MulOpposite.instDivisionCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instDivisionCommMonoid [DivisionCommMonoid α] : DivisionCommMonoid αᵐᵒᵖ wh
+ere toDivisionMonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDivisionCommMonoid [DivisionCommMonoid α] : DivisionCommMonoid αᵐᵒᵖ where
   toDivisionMonoid := instDivisionMonoid
   __ := instCommSemigroup
 
 @[to_additive]
-/--
-Instance `instGroup` / 实例 `instGroup`
-
-English:
-instance instGroup
-  signature: [Group α]
-  body: instDivInvMonoid
-inv_mul_cancel _ := unop_injective mul_inv_cancel _
-
-@[to_additive]
-
-中文:
-实例 instGroup
-  签名: [群 α]
-  定义体: instDivInvMonoid
-inv_mul_cancel _ := unop_injective mul_inv_cancel _
-
-@[to_additive]
-
-Depends on / 依赖: instDivInvMonoid
+/-
+**MulOpposite.instGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instGroup [Group α] : Group αᵐᵒᵖ where toDivInvMonoid
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instGroup [Group α] : Group αᵐᵒᵖ where
   toDivInvMonoid := instDivInvMonoid
-inv_mul_cancel _ := unop_injective mul_inv_cancel _
+  inv_mul_cancel _ := unop_injective <| mul_inv_cancel _
 
 @[to_additive]
-/--
-Instance `instCommGroup` / 实例 `instCommGroup`
-
-English:
-instance instCommGroup
-  signature: [CommGroup α]
-  body: instGroup
-  __ := instCommSemigroup
-
-中文:
-实例 instCommGroup
-  签名: [交换群 α]
-  定义体: instGroup
-  __ := instCommSemigroup
-
-Depends on / 依赖: instGroup
+/-
+**MulOpposite.instCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instCommGroup [CommGroup α] : CommGroup αᵐᵒᵖ where toGroup
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommGroup [CommGroup α] : CommGroup αᵐᵒᵖ where
   toGroup := instGroup
@@ -737,178 +400,110 @@ instance instCommGroup [CommGroup α] : CommGroup αᵐᵒᵖ where
 section Monoid
 variable [Monoid α]
 
-/--
-lemma `op_pow` / 引理 `op_pow`
-
-English:
-lemma op_pow
-  given: (x : α) (n : Nat)
-  statement: op (x ^ n) = op x ^ n
-  proof: rfl
-
-中文:
-引理 op_pow
-  条件: (x : α) (n : 自然数)
-  结论: op (x ^ n) = op x ^ n
-  证明: rfl
+/-
+**MulOpposite.op_pow** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：∀ {α : Type u_1} [inst : Monoid α] (x : α) (n : ℕ), MulOpposite.op (x ^ n)
+ = MulOpposite.op x ^ n
+参数：x : α；n : ℕ；x ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma op_pow (x : α) (n : Nat) : op (x ^ n) = op x ^ n := rfl
-
-/--
-lemma `unop_pow` / 引理 `unop_pow`
-
-English:
-lemma unop_pow
-  given: (x : αᵐᵒᵖ) (n : Nat)
-  statement: unop (x ^ n) = unop x ^ n
-  proof: rfl
-
-中文:
-引理 unop_pow
-  条件: (x : αᵐᵒᵖ) (n : 自然数)
-  结论: unop (x ^ n) = unop x ^ n
-  证明: rfl
-
-Depends on / 依赖: Nonempty, Nonempty.image2, image2
+@[to_additive (attr := simp)] lemma op_pow (x : α) (n : ℕ) : op (x ^ n) = op x ^ n := rfl
+/-
+**MulOpposite.unop_pow** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：∀ {α : Type u_1} [inst : Monoid α] (x : αᵐᵒᵖ) (n : ℕ), MulOpposite.unop (x
+ ^ n) = MulOpposite.unop x ^ n
+参数：x : αᵐᵒᵖ；n : ℕ；x ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma unop_pow (x : αᵐᵒᵖ) (n : Nat) : unop (x ^ n) = unop x ^ n := rfl
+@[to_additive (attr := simp)] lemma unop_pow (x : αᵐᵒᵖ) (n : ℕ) : unop (x ^ n) = unop x ^ n := rfl
 
 end Monoid
 
 section DivInvMonoid
 variable [DivInvMonoid α]
 
-/--
-lemma `op_zpow` / 引理 `op_zpow`
-
-English:
-lemma op_zpow
-  given: (x : α) (z : Int)
-  statement: op (x ^ z) = op x ^ z
-  proof: rfl
-
-中文:
-引理 op_zpow
-  条件: (x : α) (z : 整数)
-  结论: op (x ^ z) = op x ^ z
-  证明: rfl
-
-Depends on / 依赖: Nonempty, Nonempty.of_image2_left, of_image2_left
+/-
+**MulOpposite.op_zpow** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：∀ {α : Type u_1} [inst : DivInvMonoid α] (x : α) (z : ℤ), MulOpposite.op (
+x ^ z) = MulOpposite.op x ^ z
+参数：x : α；z : ℤ；x ^ z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma op_zpow (x : α) (z : Int) : op (x ^ z) = op x ^ z := rfl
-
-/--
-lemma `unop_zpow` / 引理 `unop_zpow`
-
-English:
-lemma unop_zpow
-  given: (x : αᵐᵒᵖ) (z : Int)
-  statement: unop (x ^ z) = unop x ^ z
-  proof: rfl
-
-中文:
-引理 unop_zpow
-  条件: (x : αᵐᵒᵖ) (z : 整数)
-  结论: unop (x ^ z) = unop x ^ z
-  证明: rfl
-
-Depends on / 依赖: Nonempty, Nonempty.of_image2_right, of_image2_right
+@[to_additive (attr := simp)] lemma op_zpow (x : α) (z : ℤ) : op (x ^ z) = op x ^ z := rfl
+/-
+**MulOpposite.unop_zpow** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：∀ {α : Type u_1} [inst : DivInvMonoid α] (x : αᵐᵒᵖ) (z : ℤ), MulOpposite.u
+nop (x ^ z) = MulOpposite.unop x ^ z
+参数：x : αᵐᵒᵖ；z : ℤ；x ^ z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma unop_zpow (x : αᵐᵒᵖ) (z : Int) : unop (x ^ z) = unop x ^ z := rfl
+@[to_additive (attr := simp)] lemma unop_zpow (x : αᵐᵒᵖ) (z : ℤ) : unop (x ^ z) = unop x ^ z := rfl
 
 end DivInvMonoid
 
 @[to_additive (attr := simp)]
-/--
-theorem `unop_div` / 定理 `unop_div`
-
-English:
-theorem unop_div
-  given: [DivInvMonoid α] (x y : αᵐᵒᵖ)
-  statement: unop (x / y) = (unop y)⁻¹ * unop x
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 unop_div
-  条件: [除逆幺半群 α] (x y : αᵐᵒᵖ)
-  结论: unop (x / y) = (unop y)⁻¹ * unop x
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MulOpposite.unop_div** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：unop_div [DivInvMonoid α] (x y : αᵐᵒᵖ) : unop (x / y) = (unop y)⁻¹ * unop 
+x
+参数：x y : αᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_div [DivInvMonoid α] (x y : αᵐᵒᵖ) : unop (x / y) = (unop y)⁻¹ * unop x :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `op_div` / 定理 `op_div`
-
-English:
-theorem op_div
-  given: [DivInvMonoid α] (x y : α)
-  statement: op (x / y) = (op y)⁻¹ * op x
-  proof: by simp [div_eq_mul_inv]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 op_div
-  条件: [除逆幺半群 α] (x y : α)
-  结论: op (x / y) = (op y)⁻¹ * op x
-  证明: by simp [div_eq_mul_inv]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: div_eq_mul_inv
+/-
+**MulOpposite.op_div** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：op_div [DivInvMonoid α] (x y : α) : op (x / y) = (op y)⁻¹ * op x
+参数：x y : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem op_div [DivInvMonoid α] (x y : α) : op (x / y) = (op y)⁻¹ * op x := by simp [div_eq_mul_inv]
 
 @[to_additive (attr := simp)]
-/--
-theorem `semiconjBy_op` / 定理 `semiconjBy_op`
-
-English:
-theorem semiconjBy_op
-  given: [Mul α] {a x y : α}
-  statement: SemiconjBy (op a) (op y) (op x) ↔ SemiconjBy a x y
-  proof: by
-  simp only [SemiconjBy, ← op_mul, op_inj, eq_comm]
-
-@[to_additive (attr := simp, nolint simpComm)]
-
-中文:
-定理 semiconjBy_op
-  条件: [乘法 α] {a x y : α}
-  结论: SemiconjBy (op a) (op y) (op x) ↔ SemiconjBy a x y
-  证明: by
-  simp only [SemiconjBy, ← op_mul, op_inj, eq_comm]
-
-@[to_additive (attr := simp, nolint simpComm)]
-
-Depends on / 依赖: SemiconjBy, eq_comm, op_inj, op_mul
+/-
+**MulOpposite.semiconjBy_op** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：semiconjBy_op [Mul α] {a x y : α} : SemiconjBy (op a) (op y) (op x) ↔ Semi
+conjBy a x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem semiconjBy_op [Mul α] {a x y : α} : SemiconjBy (op a) (op y) (op x) ↔ SemiconjBy a x y := by
   simp only [SemiconjBy, ← op_mul, op_inj, eq_comm]
 
 @[to_additive (attr := simp, nolint simpComm)]
-/--
-theorem `semiconjBy_unop` / 定理 `semiconjBy_unop`
-
-English:
-theorem semiconjBy_unop
-  given: [Mul α] {a x y : αᵐᵒᵖ}
-  proof: by
-  conv_rhs => rw [← op_unop a, ← op_unop x, ← op_unop y, semiconjBy_op]
-
-中文:
-定理 semiconjBy_unop
-  条件: [乘法 α] {a x y : αᵐᵒᵖ}
-  证明: by
-  conv_rhs => rw [← op_unop a, ← op_unop x, ← op_unop y, semiconjBy_op]
-
-Depends on / 依赖: conv_rhs, op_unop, semiconjBy_op
+/-
+**MulOpposite.semiconjBy_unop** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：semiconjBy_unop [Mul α] {a x y : αᵐᵒᵖ} : SemiconjBy (unop a) (unop y) (uno
+p x) ↔ SemiconjBy a x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulOpposite.op_unop`：op_unop (x : αᵐᵒᵖ) : op (unop x) = x
+· 使用定理 `MulOpposite.semiconjBy_op`：semiconjBy_op [Mul α] {a x y : α} : SemiconjB
+y (op a) (op y) (op x) ↔ SemiconjBy a x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem semiconjBy_unop [Mul α] {a x y : αᵐᵒᵖ} :
     SemiconjBy (unop a) (unop y) (unop x) ↔ SemiconjBy a x y := by
@@ -917,84 +512,27 @@ theorem semiconjBy_unop [Mul α] {a x y : αᵐᵒᵖ} :
 attribute [nolint simpComm] AddOpposite.addSemiconjBy_unop
 
 @[to_additive]
-/--
-theorem `_root_.SemiconjBy.op` / 定理 `_root_.SemiconjBy.op`
-
-English:
-theorem _root_.SemiconjBy.op
-  given: [Mul α] {a x y : α} (h : SemiconjBy a x y)
-  proof: semiconjBy_op.2 h
-
-@[to_additive]
-
-中文:
-定理 _root_.SemiconjBy.op
-  条件: [乘法 α] {a x y : α} (h : SemiconjBy a x y)
-  证明: semiconjBy_op.2 h
-
-@[to_additive]
-
-Depends on / 依赖: semiconjBy_op
+/-
+**MulOpposite._root_.SemiconjBy.op** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.SemiconjBy.op [Mul α] {a x y : α} (h : SemiconjBy a x y) :
     SemiconjBy (op a) (op y) (op x) :=
   semiconjBy_op.2 h
 
 @[to_additive]
-/--
-theorem `_root_.SemiconjBy.unop` / 定理 `_root_.SemiconjBy.unop`
-
-English:
-theorem _root_.SemiconjBy.unop
-  given: [Mul α] {a x y : αᵐᵒᵖ} (h : SemiconjBy a x y)
-  proof: semiconjBy_unop.2 h
-
-@[to_additive]
-
-中文:
-定理 _root_.SemiconjBy.unop
-  条件: [乘法 α] {a x y : αᵐᵒᵖ} (h : SemiconjBy a x y)
-  证明: semiconjBy_unop.2 h
-
-@[to_additive]
-
-Depends on / 依赖: semiconjBy_unop
+/-
+**MulOpposite._root_.SemiconjBy.unop** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.SemiconjBy.unop [Mul α] {a x y : αᵐᵒᵖ} (h : SemiconjBy a x y) :
     SemiconjBy (unop a) (unop y) (unop x) :=
   semiconjBy_unop.2 h
 
 @[to_additive]
-/--
-theorem `_root_.Commute.op` / 定理 `_root_.Commute.op`
-
-English:
-theorem _root_.Commute.op
-  given: [Mul α] {x y : α} (h : Commute x y)
-  statement: Commute (op x) (op y)
-  proof: SemiconjBy.op h
-
-@[to_additive]
-nonrec theorem _root_.Commute.unop [Mul α] {x y : αᵐᵒᵖ} (h : Commute x y) :
-    Commute (unop x) (unop y) :=
-  h.unop
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 _root_.Commute.op
-  条件: [乘法 α] {x y : α} (h : Commute x y)
-  结论: Commute (op x) (op y)
-  证明: SemiconjBy.op h
-
-@[to_additive]
-nonrec theorem _root_.Commute.unop [Mul α] {x y : αᵐᵒᵖ} (h : Commute x y) :
-    Commute (unop x) (unop y) :=
-  h.unop
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.op
+/-
+**MulOpposite._root_.Commute.op** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Commute.op [Mul α] {x y : α} (h : Commute x y) : Commute (op x) (op y) :=
   SemiconjBy.op h
@@ -1005,87 +543,65 @@ nonrec theorem _root_.Commute.unop [Mul α] {x y : αᵐᵒᵖ} (h : Commute x y
   h.unop
 
 @[to_additive (attr := simp)]
-/--
-theorem `commute_op` / 定理 `commute_op`
-
-English:
-theorem commute_op
-  given: [Mul α] {x y : α}
-  statement: Commute (op x) (op y) ↔ Commute x y
-  proof: semiconjBy_op
-
-@[to_additive (attr := simp, nolint simpComm)]
-
-中文:
-定理 commute_op
-  条件: [乘法 α] {x y : α}
-  结论: Commute (op x) (op y) ↔ Commute x y
-  证明: semiconjBy_op
-
-@[to_additive (attr := simp, nolint simpComm)]
-
-Depends on / 依赖: semiconjBy_op
+/-
+**MulOpposite.commute_op** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：commute_op [Mul α] {x y : α} : Commute (op x) (op y) ↔ Commute x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.semiconjBy_op`：semiconjBy_op [Mul α] {a x y : α} : SemiconjB
+y (op a) (op y) (op x) ↔ SemiconjBy a x y
 -/
 theorem commute_op [Mul α] {x y : α} : Commute (op x) (op y) ↔ Commute x y :=
   semiconjBy_op
 
 @[to_additive (attr := simp, nolint simpComm)]
-/--
-theorem `commute_unop` / 定理 `commute_unop`
-
-English:
-theorem commute_unop
-  given: [Mul α] {x y : αᵐᵒᵖ}
-  statement: Commute (unop x) (unop y) ↔ Commute x y
-  proof: semiconjBy_unop
-
-中文:
-定理 commute_unop
-  条件: [乘法 α] {x y : αᵐᵒᵖ}
-  结论: Commute (unop x) (unop y) ↔ Commute x y
-  证明: semiconjBy_unop
-
-Depends on / 依赖: semiconjBy_unop
+/-
+**MulOpposite.commute_unop** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：commute_unop [Mul α] {x y : αᵐᵒᵖ} : Commute (unop x) (unop y) ↔ Commute x 
+y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.semiconjBy_unop`：semiconjBy_unop [Mul α] {a x y : αᵐᵒᵖ} : Se
+miconjBy (unop a) (unop y) (unop x) ↔ SemiconjBy a x y
 -/
 theorem commute_unop [Mul α] {x y : αᵐᵒᵖ} : Commute (unop x) (unop y) ↔ Commute x y :=
   semiconjBy_unop
 
 attribute [nolint simpComm] AddOpposite.addCommute_unop
-
-/--
-theorem `isDedekindFiniteMonoid_iff` / 定理 `isDedekindFiniteMonoid_iff`
-
-English:
-theorem isDedekindFiniteMonoid_iff
-  given: [MulOne α]
-  proof: by
-  simp_rw [isDedekindFiniteMonoid_iff, ← opEquiv.forall_congr_right]
-  simpa [← op_one, ← op_mul] using forall_comm
-
-中文:
-定理 isDedekindFiniteMonoid_iff
-  条件: [MulOne α]
-  证明: by
-  simp_rw [isDedekindFiniteMonoid_iff, ← opEquiv.forall_congr_right]
-  simpa [← op_one, ← op_mul] using forall_comm
+/-
+**MulOpposite.isDedekindFiniteMonoid_iff** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`
+。
+形式化陈述：∀ {α : Type u_1} [inst : MulOne α], IsDedekindFiniteMonoid αᵐᵒᵖ ↔ IsDedeki
+ndFiniteMonoid α
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.forall_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∀ (a : α), q (e a)) ↔ ∀ (b : β), q b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `MulOpposite.opEquiv_apply`：∀ {α : Type u_1}, ⇑MulOpposite.opEquiv = MulO
+pposite.op
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
 -/
 @[to_additive] protected theorem isDedekindFiniteMonoid_iff [MulOne α] :
     IsDedekindFiniteMonoid αᵐᵒᵖ ↔ IsDedekindFiniteMonoid α := by
   simp_rw [isDedekindFiniteMonoid_iff, ← opEquiv.forall_congr_right]
   simpa [← op_one, ← op_mul] using forall_comm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulOne
-  signature: α] [IsDedekindFiniteMonoid α] : IsDedekindFiniteMonoid αᵐᵒᵖ
-  body: MulOpposite.isDedekindFiniteMonoid_iff.mpr ‹_›
-
-中文:
-实例 [MulOne
-  签名: α] [是DedekindFinite幺半群 α] : 是DedekindFinite幺半群 αᵐᵒᵖ
-  定义体: MulOpposite.isDedekindFiniteMonoid_iff.mpr ‹_›
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [MulOne α] [IsDedekindFiniteMonoid α] : IsDedekindFiniteMonoid αᵐᵒᵖ :=
   MulOpposite.isDedekindFiniteMonoid_iff.mpr ‹_›
@@ -1099,276 +615,157 @@ end MulOpposite
 
 namespace AddOpposite
 
-/--
-Instance `instSemigroup` / 实例 `instSemigroup`
-
-English:
-instance instSemigroup
-  signature: [Semigroup α]
-  body: unop_injective.semigroup _ fun _ _ => rfl
-
-中文:
-实例 instSemigroup
-  签名: [半群 α]
-  定义体: unop_injective.semigroup _ fun _ _ => rfl
-
-Depends on / 依赖: semigroup, unop_injective, unop_injective.semigroup
+/-
+**AddOpposite.instSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instSemigroup [Semigroup α] : Semigroup αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
-instance instSemigroup [Semigroup α] : Semigroup αᵃᵒᵖ := unop_injective.semigroup _ fun _ _ => rfl
-
-/--
-Instance `instLeftCancelSemigroup` / 实例 `instLeftCancelSemigroup`
-
-English:
-instance instLeftCancelSemigroup
-  signature: [LeftCancelSemigroup α]
-  body: unop_injective.leftCancelSemigroup _ fun _ _ => rfl
-
-中文:
-实例 instLeftCancelSemigroup
-  签名: [左消去半群 α]
-  定义体: unop_injective.leftCancelSemigroup _ fun _ _ => rfl
-
-Depends on / 依赖: leftCancelSemigroup, unop_injective, unop_injective.leftCancelSemigroup
+instance instSemigroup [Semigroup α] : Semigroup αᵃᵒᵖ := unop_injective.semigroup _ fun _ _ ↦ rfl
+/-
+**AddOpposite.instLeftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instLeftCancelSemigroup [LeftCancelSemigroup α] : LeftCancelSemigroup αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instLeftCancelSemigroup [LeftCancelSemigroup α] : LeftCancelSemigroup αᵃᵒᵖ :=
   unop_injective.leftCancelSemigroup _ fun _ _ => rfl
-
-/--
-Instance `instRightCancelSemigroup` / 实例 `instRightCancelSemigroup`
-
-English:
-instance instRightCancelSemigroup
-  signature: [RightCancelSemigroup α]
-  body: unop_injective.rightCancelSemigroup _ fun _ _ => rfl
-
-中文:
-实例 instRightCancelSemigroup
-  签名: [右消去半群 α]
-  定义体: unop_injective.rightCancelSemigroup _ fun _ _ => rfl
-
-Depends on / 依赖: rightCancelSemigroup, unop_injective, unop_injective.rightCancelSemigroup
+/-
+**AddOpposite.instRightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instRightCancelSemigroup [RightCancelSemigroup α] : RightCancelSemigroup α
+ᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instRightCancelSemigroup [RightCancelSemigroup α] : RightCancelSemigroup αᵃᵒᵖ :=
   unop_injective.rightCancelSemigroup _ fun _ _ => rfl
-
-/--
-Instance `instCommSemigroup` / 实例 `instCommSemigroup`
-
-English:
-instance instCommSemigroup
-  signature: [CommSemigroup α]
-  body: unop_injective.commSemigroup _ fun _ _ => rfl
-
-中文:
-实例 instCommSemigroup
-  签名: [交换半群 α]
-  定义体: unop_injective.commSemigroup _ fun _ _ => rfl
-
-Depends on / 依赖: commSemigroup, unop_injective, unop_injective.commSemigroup
+/-
+**AddOpposite.instCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instCommSemigroup [CommSemigroup α] : CommSemigroup αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instCommSemigroup [CommSemigroup α] : CommSemigroup αᵃᵒᵖ :=
   unop_injective.commSemigroup _ fun _ _ => rfl
-
-/--
-Instance `instMulOneClass` / 实例 `instMulOneClass`
-
-English:
-instance instMulOneClass
-  signature: [MulOneClass α]
-  body: unop_injective.mulOneClass _ (by exact rfl) fun _ _ => rfl
-
-中文:
-实例 instMulOneClass
-  签名: [MulOne类 α]
-  定义体: unop_injective.mulOneClass _ (by exact rfl) fun _ _ => rfl
-
-Depends on / 依赖: mulOneClass, unop_injective, unop_injective.mulOneClass
+/-
+**AddOpposite.instMulOneClass** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instMulOneClass [MulOneClass α] : MulOneClass αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instMulOneClass [MulOneClass α] : MulOneClass αᵃᵒᵖ :=
   unop_injective.mulOneClass _ (by exact rfl) fun _ _ => rfl
-
-/--
-Instance `pow` / 实例 `pow`
-
-English:
-instance pow
-  signature: {β} [Pow α β]
-  body: op (unop a ^ b)
-
-@[simp]
-
-中文:
-实例 pow
-  签名: {β} [幂 α β]
-  定义体: op (unop a ^ b)
-
-@[simp]
+/-
+**AddOpposite.pow** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：pow {β} [Pow α β] : Pow αᵃᵒᵖ β where pow a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance pow {β} [Pow α β] : Pow αᵃᵒᵖ β where pow a b := op (unop a ^ b)
 
 @[simp]
-/--
-theorem `op_pow` / 定理 `op_pow`
-
-English:
-theorem op_pow
-  given: {β} [Pow α β] (a : α) (b : β)
-  statement: op (a ^ b) = op a ^ b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 op_pow
-  条件: {β} [幂 α β] (a : α) (b : β)
-  结论: op (a ^ b) = op a ^ b
-  证明: rfl
-
-@[simp]
+/-
+**AddOpposite.op_pow** 是 Mathlib 中的一个定理，位于命名空间 `AddOpposite`。
+形式化陈述：op_pow {β} [Pow α β] (a : α) (b : β) : op (a ^ b) = op a ^ b
+参数：a : α；b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_pow {β} [Pow α β] (a : α) (b : β) : op (a ^ b) = op a ^ b :=
   rfl
 
 @[simp]
-/--
-theorem `unop_pow` / 定理 `unop_pow`
-
-English:
-theorem unop_pow
-  given: {β} [Pow α β] (a : αᵃᵒᵖ) (b : β)
-  statement: unop (a ^ b) = unop a ^ b
-  proof: rfl
-
-中文:
-定理 unop_pow
-  条件: {β} [幂 α β] (a : αᵃᵒᵖ) (b : β)
-  结论: unop (a ^ b) = unop a ^ b
-  证明: rfl
+/-
+**AddOpposite.unop_pow** 是 Mathlib 中的一个定理，位于命名空间 `AddOpposite`。
+形式化陈述：unop_pow {β} [Pow α β] (a : αᵃᵒᵖ) (b : β) : unop (a ^ b) = unop a ^ b
+参数：a : αᵃᵒᵖ；b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_pow {β} [Pow α β] (a : αᵃᵒᵖ) (b : β) : unop (a ^ b) = unop a ^ b :=
   rfl
-
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: [Monoid α]
-  body: unop_injective.monoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instMonoid
-  签名: [幺半群 α]
-  定义体: unop_injective.monoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: monoid, unop_injective, unop_injective.monoid
+/-
+**AddOpposite.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instMonoid [Monoid α] : Monoid αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instMonoid [Monoid α] : Monoid αᵃᵒᵖ :=
   unop_injective.monoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: [CommMonoid α]
-  body: unop_injective.commMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instCommMonoid
-  签名: [交换幺半群 α]
-  定义体: unop_injective.commMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: commMonoid, unop_injective, unop_injective.commMonoid
+/-
+**AddOpposite.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instCommMonoid [CommMonoid α] : CommMonoid αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instCommMonoid [CommMonoid α] : CommMonoid αᵃᵒᵖ :=
   unop_injective.commMonoid _ (by exact rfl) (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instDivInvMonoid` / 实例 `instDivInvMonoid`
-
-English:
-instance instDivInvMonoid
-  signature: [DivInvMonoid α]
-  body: unop_injective.divInvMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instDivInvMonoid
-  签名: [除逆幺半群 α]
-  定义体: unop_injective.divInvMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: divInvMonoid, unop_injective, unop_injective.divInvMonoid
+/-
+**AddOpposite.instDivInvMonoid** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instDivInvMonoid [DivInvMonoid α] : DivInvMonoid αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instDivInvMonoid [DivInvMonoid α] : DivInvMonoid αᵃᵒᵖ :=
   unop_injective.divInvMonoid _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instGroup` / 实例 `instGroup`
-
-English:
-instance instGroup
-  signature: [Group α]
-  body: unop_injective.group _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instGroup
-  签名: [群 α]
-  定义体: unop_injective.group _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: unop_injective, unop_injective.group
+/-
+**AddOpposite.instGroup** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instGroup [Group α] : Group αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instGroup [Group α] : Group αᵃᵒᵖ :=
   unop_injective.group _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `instCommGroup` / 实例 `instCommGroup`
-
-English:
-instance instCommGroup
-  signature: [CommGroup α]
-  body: unop_injective.commGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 instCommGroup
-  签名: [交换群 α]
-  定义体: unop_injective.commGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: commGroup, unop_injective, unop_injective.commGroup
+/-
+**AddOpposite.instCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instCommGroup [CommGroup α] : CommGroup αᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instCommGroup [CommGroup α] : CommGroup αᵃᵒᵖ :=
   unop_injective.commGroup _ (by exact rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `instMulTorsionFree` / 实例 `instMulTorsionFree`
-
-English:
-instance instMulTorsionFree
-  signature: [Monoid α] [IsMulTorsionFree α]
-  body: ⟨fun _ h => op_injective.comp (pow_left_injective h).comp unop_injective⟩
-
-中文:
-实例 instMulTorsionFree
-  签名: [幺半群 α] [是MulTorsionFree α]
-  定义体: ⟨fun _ h => op_injective.comp (pow_left_injective h).comp unop_injective⟩
-
-Depends on / 依赖: op_injective, op_injective.comp, pow_left_injective, unop_injective
+/-
+**AddOpposite.instMulTorsionFree** 是 Mathlib 中的一个实例，位于命名空间 `AddOpposite`。
+形式化陈述：instMulTorsionFree [Monoid α] [IsMulTorsionFree α] : IsMulTorsionFree αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `AddOpposite.op_injective`：∀ {α : Type u_1}, Function.Injective AddOpposi
+te.op
+· 使用引理 `pow_left_injective`：pow_left_injective (hn : n != 0) : Injective fun a :
+ M => a ^ n
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
 -/
 instance instMulTorsionFree [Monoid α] [IsMulTorsionFree α] : IsMulTorsionFree αᵐᵒᵖ :=
-⟨fun _ h => op_injective.comp (pow_left_injective h).comp unop_injective⟩
+  ⟨fun _ h ↦ op_injective.comp <| (pow_left_injective h).comp <| unop_injective⟩
 
 end AddOpposite
+

@@ -32,119 +32,84 @@ namespace AlgebraicGeometry
 
 variable (X : Scheme)
 
-/--
-Definition of `Scheme.functionField` / `Scheme.functionField` 的定义
+/-- The function field of an irreducible scheme is the local ring at its generic point.
+Despite the name, this is a field only when the scheme is integral. -/
+/-
+**AlgebraicGeometry.Scheme.functionField** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeo
+metry.Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) → [IrreducibleSpace ↥X] → CommRingCat
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
 
-English:
-abbreviation Scheme.functionField
-  signature: [IrreducibleSpace X]
-  body: X.presheaf.stalk (genericPoint X)
-
-中文:
-缩写 概形.functionField
-  签名: [不可约空间 X]
-  定义体: X.presheaf.stalk (genericPoint X)
-
-Depends on / 依赖: X.presheaf.stalk, genericPoint, presheaf
+--- 原说明 ---
+The function field of an irreducible scheme is the local ring at its generic poi
+nt.
+Despite the name, this is a field only when the scheme is integral.
 -/
 noncomputable abbrev Scheme.functionField [IrreducibleSpace X] : CommRingCat :=
   X.presheaf.stalk (genericPoint X)
 
-/--
-Definition of `Scheme.germToFunctionField` / `Scheme.germToFunctionField` 的定义
+/-- The restriction map from a component to the function field. -/
+/-
+**AlgebraicGeometry.Scheme.germToFunctionField** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) →   [inst : IrreducibleSpace ↥X] → (U : X.O
+pens) → [h : Nonempty ↥↑U] → X.presheaf.obj (Opposite.op U) ⟶ X.functionField
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
 
-English:
-abbreviation Scheme.germToFunctionField
-  signature: [IrreducibleSpace X] (U : X.Opens)
-  body: X.presheaf.germ U
-    (genericPoint X)
-      (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using h))
-
-中文:
-缩写 概形.germToFunctionField
-  签名: [不可约空间 X] (U : X.Opens)
-  定义体: X.presheaf.germ U
-    (genericPoint X)
-      (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using h))
-
-Depends on / 依赖: U.isOpen, X.presheaf.germ, genericPoint, genericPoint_spec, isOpen, mem_open_set_iff, presheaf
+--- 原说明 ---
+The restriction map from a component to the function field.
 -/
 noncomputable abbrev Scheme.germToFunctionField [IrreducibleSpace X] (U : X.Opens)
     [h : Nonempty U] : Γ(X, U) ⟶ X.functionField :=
   X.presheaf.germ U
     (genericPoint X)
       (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using h))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IrreducibleSpace
-  signature: X] (U
-  body: (X.germToFunctionField U).hom.toAlgebra
-
-中文:
-实例 [不可约空间
-  签名: X] (U
-  定义体: (X.germToFunctionField U).hom.toAlgebra
-
-Depends on / 依赖: X.germToFunctionField, germToFunctionField, hom.toAlgebra, toAlgebra
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [IrreducibleSpace X] (U : X.Opens) [Nonempty U] :
     Algebra Γ(X, U) X.functionField :=
   (X.germToFunctionField U).hom.toAlgebra
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIntegral
-  signature: X] : Field X.functionField
-  body: (isField_stalk_of_closure_mem_irreducibleComponents X _
-    (by simp [irreducibleComponents_eq_singleton])).toField
-
-中文:
-实例 [是整
-  签名: X] : 域 X.functionField
-  定义体: (isField_stalk_of_closure_mem_irreducibleComponents X _
-    (by simp [irreducibleComponents_eq_singleton])).toField
-
-Depends on / 依赖: irreducibleComponents_eq_singleton, isField_stalk_of_closure_mem_irreducibleComponents, toField
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [IsIntegral X] : Field X.functionField :=
   (isField_stalk_of_closure_mem_irreducibleComponents X _
     (by simp [irreducibleComponents_eq_singleton])).toField
-
-/--
-theorem `germ_injective_of_isIntegral` / 定理 `germ_injective_of_isIntegral`
-
-English:
-theorem germ_injective_of_isIntegral
-  given: [IsIntegral X] {U : X.Opens} (x : X) (hx : x in U)
-  proof: by
-  rw [injective_iff_map_eq_zero]
-  intro y hy
-  rw [← (X.presheaf.germ U x hx).hom.map_zero] at hy
-  obtain ⟨W, hW, iU, iV, e⟩ := X.presheaf.germ_eq _ hx hx _ _ hy
-  cases Subsingleton.elim iU iV
-  have : Nonempty W := ⟨⟨_, hW⟩⟩
-  exact map_injective_of_isIntegral X iU e
-
-中文:
-定理 germ_injective_of_is整数egral
-  条件: [是整 X] {U : X.Opens} (x : X) (hx : x in U)
-  证明: by
-  rw [injective_iff_map_eq_zero]
-  intro y hy
-  rw [← (X.presheaf.germ U x hx).hom.map_zero] at hy
-  obtain ⟨W, hW, iU, iV, e⟩ := X.presheaf.germ_eq _ hx hx _ _ hy
-  cases Subsingleton.elim iU iV
-  have : Nonempty W := ⟨⟨_, hW⟩⟩
-  exact map_injective_of_isIntegral X iU e
-
-Depends on / 依赖: Nonempty, Subsingleton, Subsingleton.elim, X.presheaf.germ, X.presheaf.germ_eq, germ_eq, hom.map_zero, injective_iff_map_eq_zero, map_injective_of_isIntegral, map_zero, presheaf
+/-
+**AlgebraicGeometry.germ_injective_of_isIntegral** 是 Mathlib 中的一个定理，位于命名空间 `Alge
+braicGeometry`。
+形式化陈述：germ_injective_of_isIntegral [IsIntegral X] {U : X.Opens} (x : X) (hx : x 
+in U) : Function.Injective (X.presheaf.germ U x hx)
+参数：x : X；hx : x in U。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `injective_iff_map_eq_zero`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_9
+} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [AddM
+onoidHomClass F…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `TopCat.Presheaf.germ_eq`：germ_eq (F : X.Presheaf C) {U V : Opens X} (x :
+ X) (mU : x in U) (mV : x in V) (s : ToType (F.obj (op U))) (t : ToType (F.obj (
+op V))) (h : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.map_zero`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring 
+α} {x_1 : NonAssocSemiring β} (f : α →+* β), f 0 = 0
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `AlgebraicGeometry.map_injective_of_isIntegral`：map_injective_of_isIntegr
+al [IsIntegral X] {U V : X.Opens} (i : U ⟶ V) [H : Nonempty U] : Function.Inject
+ive (X.presheaf.map i.op)
 -/
-theorem germ_injective_of_isIntegral [IsIntegral X] {U : X.Opens} (x : X) (hx : x in U) :
+theorem germ_injective_of_isIntegral [IsIntegral X] {U : X.Opens} (x : X) (hx : x ∈ U) :
     Function.Injective (X.presheaf.germ U x hx) := by
   rw [injective_iff_map_eq_zero]
   intro y hy
@@ -153,56 +118,71 @@ theorem germ_injective_of_isIntegral [IsIntegral X] {U : X.Opens} (x : X) (hx : 
   cases Subsingleton.elim iU iV
   have : Nonempty W := ⟨⟨_, hW⟩⟩
   exact map_injective_of_isIntegral X iU e
-
-/--
-theorem `Scheme.germToFunctionField_injective` / 定理 `Scheme.germToFunctionField_injective`
-
-English:
-theorem Scheme.germToFunctionField_injective
-  given: [IsIntegral X] (U : X.Opens) [Nonempty U]
-  proof: germ_injective_of_isIntegral _ _ _
-
-中文:
-定理 概形.germToFunctionField_injective
-  条件: [是整 X] (U : X.Opens) [非空 U]
-  证明: germ_injective_of_isIntegral _ _ _
-
-Depends on / 依赖: germ_injective_of_isIntegral
+/-
+**AlgebraicGeometry.Scheme.germToFunctionField_injective** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme) [inst : AlgebraicGeometry.IsIntegral X] (
+U : X.Opens) [inst_1 : Nonempty ↥↑U],   Function.Injective ⇑(CategoryTheory.Conc
+reteCategory.hom (X.germToFunctionField U))
+参数：X : AlgebraicGeometry.Scheme；U : X.Opens；CategoryTheory.ConcreteCategory.hom 
+(X.germToFunctionField U)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.germ_injective_of_isIntegral`：germ_injective_of_isInte
+gral [IsIntegral X] {U : X.Opens} (x : X) (hx : x in U) : Function.Injective (X.
+presheaf.germ U x hx)
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
 -/
 theorem Scheme.germToFunctionField_injective [IsIntegral X] (U : X.Opens) [Nonempty U] :
     Function.Injective (X.germToFunctionField U) :=
   germ_injective_of_isIntegral _ _ _
-
-/--
-theorem `genericPoint_eq_of_isOpenImmersion` / 定理 `genericPoint_eq_of_isOpenImmersion`
-
-English:
-theorem genericPoint_eq_of_isOpenImmersion
-  statement: {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f]
-  proof: by
-  apply ((genericPoint_spec Y).eq _).symm
-  convert! (genericPoint_spec X).image f.continuous
-  symm
-  rw [← Set.univ_subset_iff]
-  convert! subset_closure_inter_of_isPreirreducible_of_isOpen _ f.isOpenEmbedding.isOpen_range _
-  · rw [Set.univ_inter, Set.image_univ]
-  · apply PreirreducibleSpace.isPreirreducible_univ (X := Y)
-  · exact ⟨_, trivial, Set.mem_range_self hX.2.some⟩
-
-中文:
-定理 genericPoint_eq_of_isOpenImmersion
-  结论: {X Y : 概形} (f : X ⟶ Y) [是开浸入 f]
-  证明: by
-  apply ((genericPoint_spec Y).eq _).symm
-  convert! (genericPoint_spec X).image f.continuous
-  symm
-  rw [← Set.univ_subset_iff]
-  convert! subset_closure_inter_of_isPreirreducible_of_isOpen _ f.isOpenEmbedding.isOpen_range _
-  · rw [Set.univ_inter, Set.image_univ]
-  · apply PreirreducibleSpace.isPreirreducible_univ (X := Y)
-  · exact ⟨_, trivial, Set.mem_range_self hX.2.some⟩
-
-Depends on / 依赖: PreirreducibleSpace, PreirreducibleSpace.isPreirreducible_univ, Set.image_univ, Set.mem_range_self, Set.univ_inter, Set.univ_subset_iff, continuous, convert, f.continuous, f.isOpenEmbedding.isOpen_range, genericPoint_spec, image_univ, isOpenEmbedding, isOpen_range, isPreirreducible_univ, mem_range_self, subset_closure_inter_of_isPreirreducible_of_isOpen, univ_inter, univ_subset_iff
+/-
+**AlgebraicGeometry.genericPoint_eq_of_isOpenImmersion** 是 Mathlib 中的一个定理，位于命名空间
+ `AlgebraicGeometry`。
+形式化陈述：genericPoint_eq_of_isOpenImmersion {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmer
+sion f] [hX : IrreducibleSpace X] [IrreducibleSpace Y] : f (genericPoint X) = ge
+nericPoint Y
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `IsGenericPoint.eq`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x y : α
+} {S : Set α} [T0Space α],   IsGenericPoint x S → IsGenericPoint y S → x = y
+· 使用定理 `AlgebraicGeometry.instT0SpaceCarrierCarrierCommRingCat`：∀ (X : Algebraic
+Geometry.Scheme), T0Space ↥X
+· 使用定理 `genericPoint_spec`：genericPoint_spec [QuasiSober α] [IrreducibleSpace α]
+ : IsGenericPoint (genericPoint α) univ
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.univ_subset_iff`：univ_subset_iff {s : Set α} : univ subseteq s ↔ s =
+ univ
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `subset_closure_inter_of_isPreirreducible_of_isOpen`：subset_closure_inter
+_of_isPreirreducible_of_isOpen {S U : Set X} (hS : IsPreirreducible S) (hU : IsO
+pen U) (h : (S inter U).Nonempty) : S su…
+· 使用定理 `PreirreducibleSpace.isPreirreducible_univ`：∀ {X : Type u_3} {inst : Topo
+logicalSpace X} [self : PreirreducibleSpace X], IsPreirreducible Set.univ
+· 使用定理 `IrreducibleSpace.toPreirreducibleSpace`：∀ {X : Type u_3} {inst : Topolog
+icalSpace X} [self : IrreducibleSpace X], PreirreducibleSpace X
+· 使用定理 `Topology.IsOpenEmbedding.isOpen_range`：∀ {X : Type u_1} {Y : Type u_2} [
+tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOpe
+nEmbedding f → IsOpen (Set.…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isOpenEmbedding`：isOpenEmbedding : IsOpenEm
+bedding f
+· 使用定理 `IrreducibleSpace.toNonempty`：∀ {X : Type u_3} {inst : TopologicalSpace X
+} [self : IrreducibleSpace X], Nonempty X
+· 使用定理 `trivial`：True
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `IsGenericPoint.image`：∀ {α : Type u_1} {β : Type u_2} [inst : Topologica
+lSpace α] [inst_1 : TopologicalSpace β] {x : α} {S : Set α},   IsGenericPoint x 
+S → ∀ {f :…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.continuous`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y), Continuous ⇑f
 -/
 theorem genericPoint_eq_of_isOpenImmersion {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f]
     [hX : IrreducibleSpace X] [IrreducibleSpace Y] :
@@ -215,58 +195,45 @@ theorem genericPoint_eq_of_isOpenImmersion {X Y : Scheme} (f : X ⟶ Y) [IsOpenI
   · rw [Set.univ_inter, Set.image_univ]
   · apply PreirreducibleSpace.isPreirreducible_univ (X := Y)
   · exact ⟨_, trivial, Set.mem_range_self hX.2.some⟩
-
-/--
-Instance `stalkFunctionFieldAlgebra` / 实例 `stalkFunctionFieldAlgebra`
-
-English:
-instance stalkFunctionFieldAlgebra
-  signature: [IrreducibleSpace X] (x : X)
-  body: by
-  -- TODO: can we write this normally after the refactor finishes?
-  apply RingHom.toAlgebra
-  exact (X.presheaf.stalkSpecializes ((genericPoint_spec X).specializes trivial)).hom
-
-中文:
-实例 stalkFunctionFieldAlgebra
-  签名: [不可约空间 X] (x : X)
-  定义体: by
-  -- TODO: can we write this normally after the refactor finishes?
-  apply RingHom.toAlgebra
-  exact (X.presheaf.stalkSpecializes ((genericPoint_spec X).specializes trivial)).hom
+/-
+**AlgebraicGeometry.stalkFunctionFieldAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Algebra
+icGeometry`。
+形式化陈述：stalkFunctionFieldAlgebra [IrreducibleSpace X] (x : X) : Algebra (X.preshe
+af.stalk x) X.functionField
+参数：x : X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
 -/
 noncomputable instance stalkFunctionFieldAlgebra [IrreducibleSpace X] (x : X) :
     Algebra (X.presheaf.stalk x) X.functionField := by
   -- TODO: can we write this normally after the refactor finishes?
   apply RingHom.toAlgebra
   exact (X.presheaf.stalkSpecializes ((genericPoint_spec X).specializes trivial)).hom
-
-/--
-Instance `functionField_isScalarTower` / 实例 `functionField_isScalarTower`
-
-English:
-instance functionField_isScalarTower
-  signature: [IrreducibleSpace X] (U : X.Opens) (x : U)
-  body: by
-  apply IsScalarTower.of_algebraMap_eq'
-  simp_rw [RingHom.algebraMap_toAlgebra]
-  change _ = (X.presheaf.germ U x x.2 ≫ _).hom
-  rw [X.presheaf.germ_stalkSpecializes]
-
-@[simp]
-
-中文:
-实例 functionField_isScalarTower
-  签名: [不可约空间 X] (U : X.Opens) (x : U)
-  定义体: by
-  apply IsScalarTower.of_algebraMap_eq'
-  simp_rw [RingHom.algebraMap_toAlgebra]
-  change _ = (X.presheaf.germ U x x.2 ≫ _).hom
-  rw [X.presheaf.germ_stalkSpecializes]
-
-@[simp]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraMap_toAlgebra, X.presheaf.germ, X.presheaf.germ_stalkSpecializes, algebraMap_toAlgebra, germ_stalkSpecializes, of_algebraMap_eq, presheaf, simp_rw
+/-
+**AlgebraicGeometry.functionField_isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `Algeb
+raicGeometry`。
+形式化陈述：functionField_isScalarTower [IrreducibleSpace X] (U : X.Opens) (x : U) [No
+nempty U] : IsScalarTower Γ(X, U) (X.presheaf.stalk x) X.functionField
+参数：U : X.Opens；x : U。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq'`：of_algebraMap_eq' [Algebra R A] (h : al
+gebraMap R A = (algebraMap S A).comp (algebraMap R S)) : IsScalarTower R S A
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Specializes.mem_open`：Specializes.mem_open (h : x ⤳ y) (hs : IsOpen s) (
+hy : y in s) : x in s
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopCat.Presheaf.germ_stalkSpecializes`：germ_stalkSpecializes (F : X.Pres
+heaf C) {U : Opens X} {y : X} (hy : y in U) {x : X} (h : x ⤳ y) : F.germ U y hy 
+≫ F.stalkSpecializes h = F.…
 -/
 instance functionField_isScalarTower [IrreducibleSpace X] (U : X.Opens) (x : U)
     [Nonempty U] : IsScalarTower Γ(X, U) (X.presheaf.stalk x) X.functionField := by
@@ -276,99 +243,126 @@ instance functionField_isScalarTower [IrreducibleSpace X] (U : X.Opens) (x : U)
   rw [X.presheaf.germ_stalkSpecializes]
 
 @[simp]
-/--
-lemma `Scheme.algebraMap_germ_eq_germToFunctionField` / 引理 `Scheme.algebraMap_germ_eq_germToFunctionField`
-
-English:
-lemma Scheme.algebraMap_germ_eq_germToFunctionField
-  statement: [IrreducibleSpace X]
-  proof: by
-  simp [RingHom.algebraMap_toAlgebra, ← ConcreteCategory.comp_apply]
-
-中文:
-引理 概形.algebraMap_germ_eq_germToFunctionField
-  结论: [不可约空间 X]
-  证明: by
-  simp [RingHom.algebraMap_toAlgebra, ← ConcreteCategory.comp_apply]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, RingHom, RingHom.algebraMap_toAlgebra, algebraMap_toAlgebra, comp_apply
+/-
+**AlgebraicGeometry.Scheme.algebraMap_germ_eq_germToFunctionField** 是 Mathlib 中的
+一个定理，位于命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：∀ (X : AlgebraicGeometry.Scheme) [inst : IrreducibleSpace ↥X] {U : X.Opens
+} [inst_1 : Nonempty ↥↑U] {x : ↥X}   (hx : x ∈ U) (f : ↑(X.presheaf.obj (Opposit
+e.op U))),   (algebraMap ↑(X.presheaf.stalk x) ↑X.functionField)       ((Categor
+yTheory.ConcreteCategory.hom (X.presheaf.germ U x hx)) f) =     (CategoryTheory.
+ConcreteCategory.hom (X.germToFunctionField U)) f
+参数：X : AlgebraicGeometry.Scheme；hx : x ∈ U；f : ↑(X.presheaf.obj (Opposite.op U))
+；algebraMap ↑(X.presheaf.stalk x) ↑X.functionField；(CategoryTheory.ConcreteCateg
+ory.hom (X.presheaf.germ U x hx)) f；CategoryTheory.ConcreteCategory.hom (X.germT
+oFunctionField U)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `Specializes.mem_open`：Specializes.mem_open (h : x ⤳ y) (hs : IsOpen s) (
+hy : y in s) : x in s
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopCat.Presheaf.germ_stalkSpecializes`：germ_stalkSpecializes (F : X.Pres
+heaf C) {U : Opens X} {y : X} (hy : y in U) {x : X} (h : x ⤳ y) : F.germ U y hy 
+≫ F.stalkSpecializes h = F.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Scheme.algebraMap_germ_eq_germToFunctionField [IrreducibleSpace X]
-    {U : X.Opens} [Nonempty U] {x : X} (hx : x in U) (f : Γ(X, U)) :
+    {U : X.Opens} [Nonempty U] {x : X} (hx : x ∈ U) (f : Γ(X, U)) :
     algebraMap (X.presheaf.stalk x) X.functionField (X.presheaf.germ U x hx f) =
       X.germToFunctionField U f := by
   simp [RingHom.algebraMap_toAlgebra, ← ConcreteCategory.comp_apply]
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (R : CommRingCat.{u}) [IsDomain R] :
     Algebra R (Spec R).functionField :=
   -- TODO: can we write this normally after the refactor finishes?
-RingHom.toAlgebra by apply CommRingCat.Hom.hom; apply StructureSheaf.toStalk
+  RingHom.toAlgebra <| by apply CommRingCat.Hom.hom; apply StructureSheaf.toStalk
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `genericPoint_eq_bot_of_affine` / 定理 `genericPoint_eq_bot_of_affine`
-
-English:
-theorem genericPoint_eq_bot_of_affine
-  given: (R : CommRingCat) [IsDomain R]
-  proof: by
-  apply (genericPoint_spec (Spec R)).eq
-  rw [isGenericPoint_def]
-  rw [← PrimeSpectrum.zeroLocus_vanishingIdeal_eq_closure]; rw [PrimeSpectrum.vanishingIdeal_singleton]
-  rw [← PrimeSpectrum.zeroLocus_singleton_zero]
-  rfl
-
-中文:
-定理 genericPoint_eq_bot_of_affine
-  条件: (R : 交换环范畴) [是整环 R]
-  证明: by
-  apply (genericPoint_spec (Spec R)).eq
-  rw [isGenericPoint_def]
-  rw [← PrimeSpectrum.zeroLocus_vanishingIdeal_eq_closure]; rw [PrimeSpectrum.vanishingIdeal_singleton]
-  rw [← PrimeSpectrum.zeroLocus_singleton_zero]
-  rfl
-
-Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.vanishingIdeal_singleton, PrimeSpectrum.zeroLocus_singleton_zero, PrimeSpectrum.zeroLocus_vanishingIdeal_eq_closure, genericPoint_spec, isGenericPoint_def, vanishingIdeal_singleton, zeroLocus_singleton_zero, zeroLocus_vanishingIdeal_eq_closure
+/-
+**AlgebraicGeometry.genericPoint_eq_bot_of_affine** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry`。
+形式化陈述：genericPoint_eq_bot_of_affine (R : CommRingCat) [IsDomain R] : genericPoin
+t (Spec R) = (⊥ : PrimeSpectrum R)
+参数：R : CommRingCat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsGenericPoint.eq`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x y : α
+} {S : Set α} [T0Space α],   IsGenericPoint x S → IsGenericPoint y S → x = y
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `AlgebraicGeometry.instIrreducibleSpaceCarrierCarrierCommRingCatSpecOfIsD
+omainCarrier`：∀ {R : CommRingCat} [IsDomain ↑R], IrreducibleSpace ↥(AlgebraicGeo
+metry.Spec R)
+· 使用定理 `AlgebraicGeometry.instT0SpaceCarrierCarrierCommRingCat`：∀ (X : Algebraic
+Geometry.Scheme), T0Space ↥X
+· 使用定理 `genericPoint_spec`：genericPoint_spec [QuasiSober α] [IrreducibleSpace α]
+ : IsGenericPoint (genericPoint α) univ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isGenericPoint_def`：isGenericPoint_def {x : α} {S : Set α} : IsGenericPo
+int x S ↔ closure ({x} : Set α) = S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PrimeSpectrum.zeroLocus_vanishingIdeal_eq_closure`：zeroLocus_vanishingId
+eal_eq_closure (t : Set (PrimeSpectrum R)) : zeroLocus (vanishingIdeal t : Set R
+) = closure t
+· 使用定理 `PrimeSpectrum.vanishingIdeal_singleton`：vanishingIdeal_singleton (x : Pr
+imeSpectrum R) : vanishingIdeal ({x} : Set (PrimeSpectrum R)) = x.asIdeal
+· 使用定理 `PrimeSpectrum.zeroLocus_singleton_zero`：zeroLocus_singleton_zero : zeroL
+ocus ({0} : Set R) = Set.univ
 -/
 theorem genericPoint_eq_bot_of_affine (R : CommRingCat) [IsDomain R] :
     genericPoint (Spec R) = (⊥ : PrimeSpectrum R) := by
   apply (genericPoint_spec (Spec R)).eq
   rw [isGenericPoint_def]
-  rw [← PrimeSpectrum.zeroLocus_vanishingIdeal_eq_closure]; rw [PrimeSpectrum.vanishingIdeal_singleton]
+  rw [← PrimeSpectrum.zeroLocus_vanishingIdeal_eq_closure, PrimeSpectrum.vanishingIdeal_singleton]
   rw [← PrimeSpectrum.zeroLocus_singleton_zero]
   rfl
-
-/--
-Instance `functionField_isFractionRing_of_affine` / 实例 `functionField_isFractionRing_of_affine`
-
-English:
-instance functionField_isFractionRing_of_affine
-  signature: (R : CommRingCat.{u}) [IsDomain R]
-  body: by
-  convert! StructureSheaf.IsLocalization.to_stalk R (genericPoint (Spec R))
-  delta IsFractionRing IsLocalization.AtPrime
-  -- Porting note: `congr` does not work for `Iff`
-  apply Eq.to_iff
-  congr 1
-  rw [genericPoint_eq_bot_of_affine]
-  ext
-  exact mem_nonZeroDivisors_iff_ne_zero
-
-中文:
-实例 functionField_isFractionRing_of_affine
-  签名: (R : 交换环范畴.{u}) [是整环 R]
-  定义体: by
-  convert! StructureSheaf.IsLocalization.to_stalk R (genericPoint (Spec R))
-  delta IsFractionRing IsLocalization.AtPrime
-  -- Porting note: `congr` does not work for `Iff`
-  apply Eq.to_iff
-  congr 1
-  rw [genericPoint_eq_bot_of_affine]
-  ext
-  exact mem_nonZeroDivisors_iff_ne_zero
-
-Depends on / 依赖: AtPrime, IsFractionRing, IsLocalization, IsLocalization.AtPrime, StructureSheaf, StructureSheaf.IsLocalization.to_stalk, convert, genericPoint, to_stalk
+/-
+**AlgebraicGeometry.functionField_isFractionRing_of_affine** 是 Mathlib 中的一个实例，位于
+命名空间 `AlgebraicGeometry`。
+形式化陈述：functionField_isFractionRing_of_affine (R : CommRingCat.{u}) [IsDomain R] 
+: IsFractionRing R (Spec R).functionField
+参数：R : CommRingCat.{u}。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIrreducibleSpaceCarrierCarrierCommRingCatSpecOfIsD
+omainCarrier`：∀ {R : CommRingCat} [IsDomain ↑R], IrreducibleSpace ↥(AlgebraicGeo
+metry.Spec R)
+· 使用定理 `AlgebraicGeometry.instIsIntegralSpecOfIsDomainCarrier`：∀ {R : CommRingCa
+t} [IsDomain ↑R], AlgebraicGeometry.IsIntegral (AlgebraicGeometry.Spec R)
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `Eq.to_iff`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.genericPoint_eq_bot_of_affine`：genericPoint_eq_bot_of_
+affine (R : CommRingCat) [IsDomain R] : genericPoint (Spec R) = (⊥ : PrimeSpectr
+um R)
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `mem_nonZeroDivisors_iff_ne_zero`：∀ {M₀ : Type u_2} [inst : MonoidWithZer
+o M₀] {x : M₀} [NoZeroDivisors M₀] [Nontrivial M₀],   x ∈ nonZeroDivisors M₀ ↔ x
+ ≠ 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `AlgebraicGeometry.StructureSheaf.IsLocalization.to_stalk`：∀ (R : Type u)
+ [inst : CommRing R] (p : PrimeSpectrum R),   IsLocalization.AtPrime (↑((Algebra
+icGeometry.Spec.structureSheaf R).presheaf.sta…
 -/
 instance functionField_isFractionRing_of_affine (R : CommRingCat.{u}) [IsDomain R] :
     IsFractionRing R (Spec R).functionField := by
@@ -380,44 +374,70 @@ instance functionField_isFractionRing_of_affine (R : CommRingCat.{u}) [IsDomain 
   rw [genericPoint_eq_bot_of_affine]
   ext
   exact mem_nonZeroDivisors_iff_ne_zero
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Scheme} [IsIntegral X] {U : X.Opens} [Nonempty U] :
     IsIntegral U :=
   isIntegral_of_isOpenImmersion U.ι
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `IsAffineOpen.primeIdealOf_genericPoint` / 定理 `IsAffineOpen.primeIdealOf_genericPoint`
-
-English:
-theorem IsAffineOpen.primeIdealOf_genericPoint
-  statement: {X : Scheme} [IsIntegral X] {U : X.Opens}
-  proof: by
-  delta IsAffineOpen.primeIdealOf
-  convert!
-    genericPoint_eq_of_isOpenImmersion
-      (U.toScheme.isoSpec.hom ≫ Spec.map (X.presheaf.map (eqToHom U.isOpenEmbedding_obj_top).op))
-        -- Porting note: this was `ext1`
-
-  -- Porting note: this was `ext1`
-  apply Subtype.ext
-  exact (genericPoint_eq_of_isOpenImmersion U.ι).symm
-
-中文:
-定理 是仿射开集.primeIdealOf_genericPoint
-  结论: {X : 概形} [是整 X] {U : X.Opens}
-  证明: by
-  delta IsAffineOpen.primeIdealOf
-  convert!
-    genericPoint_eq_of_isOpenImmersion
-      (U.toScheme.isoSpec.hom ≫ Spec.map (X.presheaf.map (eqToHom U.isOpenEmbedding_obj_top).op))
-        -- Porting note: this was `ext1`
-
-  -- Porting note: this was `ext1`
-  apply Subtype.ext
-  exact (genericPoint_eq_of_isOpenImmersion U.ι).symm
-
-Depends on / 依赖: IsAffineOpen, IsAffineOpen.primeIdealOf, Spec.map, U.isOpenEmbedding_obj_top, U.toScheme.isoSpec.hom, X.presheaf.map, convert, eqToHom, genericPoint_eq_of_isOpenImmersion, isOpenEmbedding_obj_top, isoSpec, presheaf, primeIdealOf, toScheme
+/-
+**AlgebraicGeometry.IsAffineOpen.primeIdealOf_genericPoint** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.IsAffineOpen`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} [inst : AlgebraicGeometry.IsIntegral X] {
+U : X.Opens}   (hU : AlgebraicGeometry.IsAffineOpen U) [h : Nonempty ↥↑U],   hU.
+primeIdealOf ⟨genericPoint ↥X, ⋯⟩ = genericPoint ↥(AlgebraicGeometry.Spec (X.pre
+sheaf.obj (Opposite.op U)))
+参数：hU : AlgebraicGeometry.IsAffineOpen U；AlgebraicGeometry.Spec (X.presheaf.obj 
+(Opposite.op U))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsGenericPoint.mem_open_set_iff`：mem_open_set_iff (h : IsGenericPoint x 
+S) (hU : IsOpen U) : x in U ↔ (S inter U).Nonempty
+· 使用定理 `genericPoint_spec`：genericPoint_spec [QuasiSober α] [IrreducibleSpace α]
+ : IsGenericPoint (genericPoint α) univ
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `AlgebraicGeometry.instIrreducibleSpaceCarrierCarrierCommRingCatSpecOfIsD
+omainCarrier`：∀ {R : CommRingCat} [IsDomain ↑R], IrreducibleSpace ↥(AlgebraicGeo
+metry.Spec R)
+· 使用定理 `AlgebraicGeometry.IsIntegral.component_integral`：∀ {X : AlgebraicGeometr
+y.Scheme} [self : AlgebraicGeometry.IsIntegral X] (U : X.Opens) [Nonempty ↥↑U], 
+  IsDomain ↑(X.presheaf.obj (Opposite…
+· 使用定理 `TopologicalSpace.Opens.isOpenEmbedding`：isOpenEmbedding {X : TopCat.{u}}
+ (U : Opens X) : IsOpenEmbedding (inclusion' U)
+· 使用定理 `TopologicalSpace.Opens.isOpenEmbedding_obj_top`：isOpenEmbedding_obj_top 
+{X : TopCat.{u}} (U : Opens X) : U.isOpenEmbedding.functor.obj ⊤ = U
+· 使用定理 `AlgebraicGeometry.instIsIntegralToSchemeOfNonemptyCarrierCarrierCommRing
+Cat`：∀ {X : AlgebraicGeometry.Scheme} [AlgebraicGeometry.IsIntegral X] {U : X.Op
+ens} [Nonempty ↥↑U],   AlgebraicGeometry.IsIntegral ↑U
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `AlgebraicGeometry.genericPoint_eq_of_isOpenImmersion`：genericPoint_eq_of
+_isOpenImmersion {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f] [hX : Irreducibl
+eSpace X] [IrreducibleSpace Y] : f (generi…
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `AlgebraicGeometry.instIsIsoSchemeMapOfCommRingCat`：∀ {R S : CommRingCat}
+ (f : R ⟶ S) [CategoryTheory.IsIso f], CategoryTheory.IsIso (AlgebraicGeometry.S
+pec.map f)
+· 使用定理 `CategoryTheory.instIsIsoEqToHom`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (h : X = Y),   CategoryTheory.IsIso (CategoryTheo
+ry.eqToHom h)
 -/
 theorem IsAffineOpen.primeIdealOf_genericPoint {X : Scheme} [IsIntegral X] {U : X.Opens}
     (hU : IsAffineOpen U) [h : Nonempty U] :
@@ -434,37 +454,56 @@ theorem IsAffineOpen.primeIdealOf_genericPoint {X : Scheme} [IsIntegral X] {U : 
   -- Porting note: this was `ext1`
   apply Subtype.ext
   exact (genericPoint_eq_of_isOpenImmersion U.ι).symm
-
-/--
-theorem `functionField_isFractionRing_of_isAffineOpen` / 定理 `functionField_isFractionRing_of_isAffineOpen`
-
-English:
-theorem functionField_isFractionRing_of_isAffineOpen
-  statement: [IsIntegral X] (U : X.Opens)
-  proof: by
-  delta IsFractionRing Scheme.functionField
-  convert!
-    hU.isLocalization_stalk
-      ⟨genericPoint X,
-        (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using ‹Nonempty U›))⟩
-    using 1
-  rw [hU.primeIdealOf_genericPoint]; rw [genericPoint_eq_bot_of_affine]
-  ext; exact mem_nonZeroDivisors_iff_ne_zero
-
-中文:
-定理 functionField_isFractionRing_of_isAffineOpen
-  结论: [是整 X] (U : X.Opens)
-  证明: by
-  delta IsFractionRing Scheme.functionField
-  convert!
-    hU.isLocalization_stalk
-      ⟨genericPoint X,
-        (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using ‹Nonempty U›))⟩
-    using 1
-  rw [hU.primeIdealOf_genericPoint]; rw [genericPoint_eq_bot_of_affine]
-  ext; exact mem_nonZeroDivisors_iff_ne_zero
-
-Depends on / 依赖: IsFractionRing, Nonempty, Scheme, Scheme.functionField, U.isOpen, convert, functionField, genericPoint, genericPoint_eq_bot_of_affine, genericPoint_spec, hU.isLocalization_stalk, hU.primeIdealOf_genericPoint, isLocalization_stalk, isOpen, mem_nonZeroDivisors_iff_ne_zero, mem_open_set_iff, primeIdealOf_genericPoint
+/-
+**AlgebraicGeometry.functionField_isFractionRing_of_isAffineOpen** 是 Mathlib 中的一
+个定理，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：functionField_isFractionRing_of_isAffineOpen [IsIntegral X] (U : X.Opens) 
+(hU : IsAffineOpen U) [Nonempty U] : IsFractionRing Γ(X, U) X.functionField
+参数：U : X.Opens；hU : IsAffineOpen U。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsGenericPoint.mem_open_set_iff`：mem_open_set_iff (h : IsGenericPoint x 
+S) (hU : IsOpen U) : x in U ↔ (S inter U).Nonempty
+· 使用定理 `genericPoint_spec`：genericPoint_spec [QuasiSober α] [IrreducibleSpace α]
+ : IsGenericPoint (genericPoint α) univ
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `AlgebraicGeometry.instIrreducibleSpaceCarrierCarrierCommRingCatSpecOfIsD
+omainCarrier`：∀ {R : CommRingCat} [IsDomain ↑R], IrreducibleSpace ↥(AlgebraicGeo
+metry.Spec R)
+· 使用定理 `AlgebraicGeometry.IsIntegral.component_integral`：∀ {X : AlgebraicGeometr
+y.Scheme} [self : AlgebraicGeometry.IsIntegral X] (U : X.Opens) [Nonempty ↥↑U], 
+  IsDomain ↑(X.presheaf.obj (Opposite…
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.primeIdealOf_genericPoint`：∀ {X : Algebra
+icGeometry.Scheme} [inst : AlgebraicGeometry.IsIntegral X] {U : X.Opens}   (hU :
+ AlgebraicGeometry.IsAffineOpen U) [h : Nonemp…
+· 使用定理 `AlgebraicGeometry.genericPoint_eq_bot_of_affine`：genericPoint_eq_bot_of_
+affine (R : CommRingCat) [IsDomain R] : genericPoint (Spec R) = (⊥ : PrimeSpectr
+um R)
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `mem_nonZeroDivisors_iff_ne_zero`：∀ {M₀ : Type u_2} [inst : MonoidWithZer
+o M₀] {x : M₀} [NoZeroDivisors M₀] [Nontrivial M₀],   x ∈ nonZeroDivisors M₀ ↔ x
+ ≠ 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `AlgebraicGeometry.Scheme.component_nontrivial`：∀ (X : AlgebraicGeometry.
+Scheme) (U : X.Opens) [Nonempty ↥↑U], Nontrivial ↑(X.presheaf.obj (Opposite.op U
+))
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.isLocalization_stalk`：isLocalization_stal
+k (x : U) : IsLocalization.AtPrime (X.presheaf.stalk x) (hU.primeIdealOf x).asId
+eal
 -/
 theorem functionField_isFractionRing_of_isAffineOpen [IsIntegral X] (U : X.Opens)
     (hU : IsAffineOpen U) [Nonempty U] :
@@ -475,48 +514,17 @@ theorem functionField_isFractionRing_of_isAffineOpen [IsIntegral X] (U : X.Opens
       ⟨genericPoint X,
         (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using ‹Nonempty U›))⟩
     using 1
-  rw [hU.primeIdealOf_genericPoint]; rw [genericPoint_eq_bot_of_affine]
+  rw [hU.primeIdealOf_genericPoint, genericPoint_eq_bot_of_affine]
   ext; exact mem_nonZeroDivisors_iff_ne_zero
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : X) : IsAffine (X.affineCover.X x) :=
   AlgebraicGeometry.isAffine_Spec _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIntegral
-  signature: X] (x
-  body: let U : X.Opens := (X.affineCover.f ((X.affineCover.idx x))).opensRange
-  have hU : IsAffineOpen U := isAffineOpen_opensRange (X.affineCover.f _)
-  let x : U := ⟨x, X.affineCover.covers x⟩
-  have : Nonempty U := ⟨x⟩
-  let M := (hU.primeIdealOf x).asIdeal.primeCompl
-  have := hU.isLocalization_stalk x
-  have := functionField_isFractionRing_of_isAffineOpen X U hU
-  -- Porting note: the following two lines were not needed.
-  let _hA := Presheaf.algebra_section_stalk X.presheaf x
-  have := functionField_isScalarTower X U x
-  .isFractionRing_of_isDomain_of_isLocalization M ↑(Presheaf.stalk X.presheaf x)
-    (Scheme.functionField X)
-
-中文:
-实例 [是整
-  签名: X] (x
-  定义体: let U : X.Opens := (X.affineCover.f ((X.affineCover.idx x))).opensRange
-  have hU : IsAffineOpen U := isAffineOpen_opensRange (X.affineCover.f _)
-  let x : U := ⟨x, X.affineCover.covers x⟩
-  have : Nonempty U := ⟨x⟩
-  let M := (hU.primeIdealOf x).asIdeal.primeCompl
-  have := hU.isLocalization_stalk x
-  have := functionField_isFractionRing_of_isAffineOpen X U hU
-  -- Porting note: the following two lines were not needed.
-  let _hA := Presheaf.algebra_section_stalk X.presheaf x
-  have := functionField_isScalarTower X U x
-  .isFractionRing_of_isDomain_of_isLocalization M ↑(Presheaf.stalk X.presheaf x)
-    (Scheme.functionField X)
-
-Depends on / 依赖: IsAffineOpen, Nonempty, X.Opens, X.affineCover.covers, X.affineCover.f, X.affineCover.idx, affineCover, asIdeal, asIdeal.primeCompl, covers, functionField_isFractionRing_of_isAffineOpen, hU.isLocalization_stalk, hU.primeIdealOf, isAffineOpen_opensRange, isLocalization_stalk, opensRange, primeCompl, primeIdealOf
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIntegral X] (x : X) :
     IsFractionRing (X.presheaf.stalk x) X.functionField :=
@@ -532,72 +540,64 @@ instance [IsIntegral X] (x : X) :
   have := functionField_isScalarTower X U x
   .isFractionRing_of_isDomain_of_isLocalization M ↑(Presheaf.stalk X.presheaf x)
     (Scheme.functionField X)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIntegral
-  signature: X] {x
-  body: Function.Injective.isDomain _ (IsFractionRing.injective (X.presheaf.stalk x) (X.functionField))
-
-中文:
-实例 [是整
-  签名: X] {x
-  定义体: Function.Injective.isDomain _ (IsFractionRing.injective (X.presheaf.stalk x) (X.functionField))
-
-Depends on / 依赖: Function, Function.Injective.isDomain, Injective, IsFractionRing, IsFractionRing.injective, X.functionField, X.presheaf.stalk, functionField, injective, isDomain, presheaf
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIntegral X] {x : X} : IsDomain (X.presheaf.stalk x) :=
   Function.Injective.isDomain _ (IsFractionRing.injective (X.presheaf.stalk x) (X.functionField))
 
 /--
-lemma `exists_isUnit_germ_eq` / 引理 `exists_isUnit_germ_eq`
-
-English:
-lemma exists_isUnit_germ_eq
-  given: [IsIntegral X] (f : X.functionField) (hf : f != 0)
-  proof: by
-  obtain ⟨U, hU, g, hg⟩ := X.presheaf.exists_germ_eq f
-  obtain ⟨_, ⟨A, hA, rfl⟩, hxA, hAU⟩ :=
-    X.isBasis_affineOpens.exists_subset_of_mem_open hU U.isOpen
-  have : Nonempty A := ⟨_, hxA⟩
-  let gA : Γ(X, A) := X.presheaf.map (homOfLE hAU).op g
-  have h_germ_gA : X.presheaf.germ A (genericPoint X) hxA gA = f := by
-    simp only [← hg, ← X.presheaf.germ_res_apply (homOfLE hAU) (genericPoint X) hxA g, gA]
-    rfl
-  have hxV : genericPoint X in X.basicOpen gA := by
-    rwa [Scheme.mem_basicOpen X gA (genericPoint X) hxA, h_germ_gA, isUnit_iff_ne_zero]
-  have : Nonempty (X.basicOpen gA) := ⟨⟨_, hxV⟩⟩
-  refine ⟨X.basicOpen gA, hA.basicOpen gA,
-    X.presheaf.map (X.basicOpen_le gA).hom.op gA, ‹_›, ?_,
-    X.toRingedSpace.isUnit_res_basicOpen gA⟩
-  simpa using h_germ_gA
-
-中文:
-引理 存在_isUnit_germ_eq
-  条件: [是整 X] (f : X.functionField) (hf : f != 0)
-  证明: by
-  obtain ⟨U, hU, g, hg⟩ := X.presheaf.exists_germ_eq f
-  obtain ⟨_, ⟨A, hA, rfl⟩, hxA, hAU⟩ :=
-    X.isBasis_affineOpens.exists_subset_of_mem_open hU U.isOpen
-  have : Nonempty A := ⟨_, hxA⟩
-  let gA : Γ(X, A) := X.presheaf.map (homOfLE hAU).op g
-  have h_germ_gA : X.presheaf.germ A (genericPoint X) hxA gA = f := by
-    simp only [← hg, ← X.presheaf.germ_res_apply (homOfLE hAU) (genericPoint X) hxA g, gA]
-    rfl
-  have hxV : genericPoint X in X.basicOpen gA := by
-    rwa [Scheme.mem_basicOpen X gA (genericPoint X) hxA, h_germ_gA, isUnit_iff_ne_zero]
-  have : Nonempty (X.basicOpen gA) := ⟨⟨_, hxV⟩⟩
-  refine ⟨X.basicOpen gA, hA.basicOpen gA,
-    X.presheaf.map (X.basicOpen_le gA).hom.op gA, ‹_›, ?_,
-    X.toRingedSpace.isUnit_res_basicOpen gA⟩
-  simpa using h_germ_gA
-
-Depends on / 依赖: Nonempty, Scheme, Scheme.mem_basicOpen, U.isOpen, X.basicOpen, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.exists_germ_eq, X.presheaf.germ, X.presheaf.germ_res_apply, X.presheaf.map, basicOpen, exists_germ_eq, exists_subset_of_mem_open, genericPoint, germ_res_apply, h_germ_gA, homOfLE, isBasis_affineOpens, isOpen, mem_basicOpen
+For `f` an element of the function field of `X`, there exists some open set `U ⊆ X` such that
+`f` is a unit in `Γ(X, U)`.
 -/
-lemma exists_isUnit_germ_eq [IsIntegral X] (f : X.functionField) (hf : f != 0) :
-    exists U in X.affineOpens, exists f' : Γ(X, U), exists _ : Nonempty U,
+/-
+**AlgebraicGeometry.exists_isUnit_germ_eq** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGe
+ometry`。
+形式化陈述：exists_isUnit_germ_eq [IsIntegral X] (f : X.functionField) (hf : f != 0) :
+ exists U in X.affineOpens, exists f' : Γ(X, U), exists _ : Nonempty U, X.germTo
+FunctionField U f' = f ∧ IsUnit f'
+参数：f : X.functionField；hf : f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instQuasiSoberCarrierCarrierCommRingCat`：∀ (X : Algebr
+aicGeometry.Scheme), QuasiSober ↥X
+· 使用定理 `TopCat.Presheaf.exists_germ_eq`：exists_germ_eq (F : X.Presheaf C) {x : X
+} (t : ToType (stalk.{v, u} F x)) : exists (U : Opens X) (m : x in U) (s : ToTyp
+e (F.obj (op U))), F…
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.exists_subset_of_mem_open`：∀ {α : Ty
+pe u} [t : TopologicalSpace α] {b : Set (Set α)},   TopologicalSpace.IsTopologic
+alBasis b → ∀ {a : α} {u : Set α}, a ∈ u → IsOpen u…
+· 使用定理 `AlgebraicGeometry.Scheme.isBasis_affineOpens`：∀ (X : AlgebraicGeometry.S
+cheme), TopologicalSpace.Opens.IsBasis X.affineOpens
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopCat.Presheaf.germ_res_apply`：germ_res_apply (F : X.Presheaf C) {U V :
+ Opens X} (i : U ⟶ V) (x : X) (hx : x in U) [ConcreteCategory C FC] (s) : F.germ
+ U x hx (F.map i.op …
+· 使用定理 `AlgebraicGeometry.Scheme.mem_basicOpen`：mem_basicOpen (x : X) (hx : x in
+ U) : x in X.basicOpen f ↔ IsUnit (X.presheaf.germ U x hx f)
+· 使用定理 `isUnit_iff_ne_zero`：isUnit_iff_ne_zero : IsUnit a ↔ a != 0
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.basicOpen`：basicOpen : IsAffineOpen (X.ba
+sicOpen f)
+· 使用定理 `AlgebraicGeometry.Scheme.basicOpen_le`：basicOpen_le : X.basicOpen f <= U
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicGeometry.RingedSpace.isUnit_res_basicOpen`：isUnit_res_basicOpen
+ {U : Opens X} (f : X.presheaf.obj (op U)) : IsUnit (X.presheaf.map (@homOfLE (O
+pens X) _ _ _ (X.basicOpen_le f)).op f)
+
+--- 原说明 ---
+For `f` an element of the function field of `X`, there exists some open set `U ⊆
+ X` such that
+`f` is a unit in `Γ(X, U)`.
+-/
+lemma exists_isUnit_germ_eq [IsIntegral X] (f : X.functionField) (hf : f ≠ 0) :
+    ∃ U ∈ X.affineOpens, ∃ f' : Γ(X, U), ∃ _ : Nonempty U,
       X.germToFunctionField U f' = f ∧ IsUnit f' := by
   obtain ⟨U, hU, g, hg⟩ := X.presheaf.exists_germ_eq f
   obtain ⟨_, ⟨A, hA, rfl⟩, hxA, hAU⟩ :=
@@ -607,7 +607,7 @@ lemma exists_isUnit_germ_eq [IsIntegral X] (f : X.functionField) (hf : f != 0) :
   have h_germ_gA : X.presheaf.germ A (genericPoint X) hxA gA = f := by
     simp only [← hg, ← X.presheaf.germ_res_apply (homOfLE hAU) (genericPoint X) hxA g, gA]
     rfl
-  have hxV : genericPoint X in X.basicOpen gA := by
+  have hxV : genericPoint X ∈ X.basicOpen gA := by
     rwa [Scheme.mem_basicOpen X gA (genericPoint X) hxA, h_germ_gA, isUnit_iff_ne_zero]
   have : Nonempty (X.basicOpen gA) := ⟨⟨_, hxV⟩⟩
   refine ⟨X.basicOpen gA, hA.basicOpen gA,
@@ -616,3 +616,4 @@ lemma exists_isUnit_germ_eq [IsIntegral X] (f : X.functionField) (hf : f != 0) :
   simpa using h_germ_gA
 
 end AlgebraicGeometry
+

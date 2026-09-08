@@ -27,68 +27,54 @@ public section
 namespace Nat
 
 namespace Prime
-variable {p a b : Nat} (hp : Prime p)
+variable {p a b : ℕ} (hp : Prime p)
 
 include hp
 
-/--
-theorem `dvd_or_dvd_of_dvd_lcm` / 定理 `dvd_or_dvd_of_dvd_lcm`
-
-English:
-theorem dvd_or_dvd_of_dvd_lcm
-  given: (h : p ∣ lcm a b)
-  statement: p ∣ a ∨ p ∣ b
-  proof: dvd_or_dvd hp (h.trans (lcm_dvd_mul a b))
-
-中文:
-定理 dvd_or_dvd_of_dvd_lcm
-  条件: (h : p ∣ 最小公倍数 a b)
-  结论: p ∣ a ∨ p ∣ b
-  证明: dvd_or_dvd hp (h.trans (lcm_dvd_mul a b))
-
-Depends on / 依赖: dvd_or_dvd, h.trans, lcm_dvd_mul
+/-
+**Nat.Prime.dvd_or_dvd_of_dvd_lcm** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：dvd_or_dvd_of_dvd_lcm (h : p ∣ lcm a b) : p ∣ a ∨ p ∣ b
+参数：h : p ∣ lcm a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Prime.dvd_or_dvd`：∀ {p m n : ℕ}, Nat.Prime p → p ∣ m * n → p ∣ m ∨ p
+ ∣ n
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `Nat.lcm_dvd_mul`：∀ (m n : ℕ), m.lcm n ∣ m * n
 -/
 theorem dvd_or_dvd_of_dvd_lcm (h : p ∣ lcm a b) : p ∣ a ∨ p ∣ b :=
   dvd_or_dvd hp (h.trans (lcm_dvd_mul a b))
-
-/--
-theorem `dvd_lcm` / 定理 `dvd_lcm`
-
-English:
-theorem dvd_lcm
-  statement: p ∣ lcm a b ↔ p ∣ a ∨ p ∣ b
-  proof: ⟨hp.dvd_or_dvd_of_dvd_lcm, (Or.elim · (dvd_lcm_of_dvd_left · _) (dvd_lcm_of_dvd_right · _))⟩
-
-中文:
-定理 dvd_lcm
-  结论: p ∣ 最小公倍数 a b ↔ p ∣ a ∨ p ∣ b
-  证明: ⟨hp.dvd_or_dvd_of_dvd_lcm, (Or.elim · (dvd_lcm_of_dvd_left · _) (dvd_lcm_of_dvd_right · _))⟩
-
-Depends on / 依赖: Or.elim, dvd_lcm_of_dvd_left, dvd_lcm_of_dvd_right, dvd_or_dvd_of_dvd_lcm, hp.dvd_or_dvd_of_dvd_lcm
+/-
+**Nat.Prime.dvd_lcm** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：dvd_lcm : p ∣ lcm a b ↔ p ∣ a ∨ p ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Prime.dvd_or_dvd_of_dvd_lcm`：dvd_or_dvd_of_dvd_lcm (h : p ∣ lcm a b)
+ : p ∣ a ∨ p ∣ b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Nat.dvd_lcm_of_dvd_left`：dvd_lcm_of_dvd_left (h : a ∣ b) (c : Nat) : a ∣
+ lcm b c
+· 使用定理 `Nat.dvd_lcm_of_dvd_right`：dvd_lcm_of_dvd_right {a b : Nat} (h : a ∣ b) (
+c : Nat) : a ∣ lcm c b
 -/
 theorem dvd_lcm : p ∣ lcm a b ↔ p ∣ a ∨ p ∣ b :=
   ⟨hp.dvd_or_dvd_of_dvd_lcm, (Or.elim · (dvd_lcm_of_dvd_left · _) (dvd_lcm_of_dvd_right · _))⟩
-
-/--
-theorem `not_dvd_lcm` / 定理 `not_dvd_lcm`
-
-English:
-theorem not_dvd_lcm
-  given: (ha : ¬ p ∣ a) (hb : ¬ p ∣ b)
-  statement: ¬ p ∣ lcm a b
-  proof: hp.dvd_lcm.not.mpr not_or.mpr ⟨ha, hb⟩
-
-中文:
-定理 not_dvd_lcm
-  条件: (ha : ¬ p ∣ a) (hb : ¬ p ∣ b)
-  结论: ¬ p ∣ 最小公倍数 a b
-  证明: hp.dvd_lcm.not.mpr not_or.mpr ⟨ha, hb⟩
-
-Depends on / 依赖: dvd_lcm, hp.dvd_lcm.not.mpr, not_or, not_or.mpr
+/-
+**Nat.Prime.not_dvd_lcm** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Prime`。
+形式化陈述：not_dvd_lcm (ha : ¬ p ∣ a) (hb : ¬ p ∣ b) : ¬ p ∣ lcm a b
+参数：ha : ¬ p ∣ a；hb : ¬ p ∣ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Nat.Prime.dvd_lcm`：dvd_lcm : p ∣ lcm a b ↔ p ∣ a ∨ p ∣ b
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
 -/
 theorem not_dvd_lcm (ha : ¬ p ∣ a) (hb : ¬ p ∣ b) : ¬ p ∣ lcm a b :=
-hp.dvd_lcm.not.mpr not_or.mpr ⟨ha, hb⟩
+  hp.dvd_lcm.not.mpr <| not_or.mpr ⟨ha, hb⟩
 
 end Prime
 
 end Nat
+

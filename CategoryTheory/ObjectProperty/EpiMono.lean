@@ -31,20 +31,18 @@ namespace ObjectProperty
 
 variable (P : ObjectProperty C)
 
-/--
-Definition of `IsClosedUnderSubobjects` / `IsClosedUnderSubobjects` 的定义
+/-- Given `P : ObjectProperty C`, we say that `P` is closed under subobjects,
+if for any monomorphism `X ⟶ Y`, `P Y` implies `P X`. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderSubobjects** 是 Mathlib 中的一个归纳类型，位于命
+名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+ObjectProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderSubobjects
-  parameters: : Prop where
-  axioms and operations (1):
-    - prop_of_mono({X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y)) : P X
-
-中文:
-类 是ClosedUnderSubobjects
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - prop_of_mono({X Y : C} (f : X ⟶ Y) [单态射 f] (hY : P Y)) : P X
+--- 原说明 ---
+Given `P : ObjectProperty C`, we say that `P` is closed under subobjects,
+if for any monomorphism `X ⟶ Y`, `P Y` implies `P X`.
 -/
 class IsClosedUnderSubobjects : Prop where
   prop_of_mono {X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y) : P X
@@ -53,68 +51,40 @@ section
 
 variable [P.IsClosedUnderSubobjects]
 
-/--
-lemma `prop_of_mono` / 引理 `prop_of_mono`
-
-English:
-lemma prop_of_mono
-  given: {X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y)
-  statement: P X
-  proof: IsClosedUnderSubobjects.prop_of_mono f hY
-
-中文:
-引理 prop_of_mono
-  条件: {X Y : C} (f : X ⟶ Y) [单态射 f] (hY : P Y)
-  结论: P X
-  证明: IsClosedUnderSubobjects.prop_of_mono f hY
-
-Depends on / 依赖: IsClosedUnderSubobjects, IsClosedUnderSubobjects.prop_of_mono, prop_of_mono
+/-
+**CategoryTheory.ObjectProperty.prop_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ObjectProperty`。
+形式化陈述：prop_of_mono {X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y) : P X
+参数：f : X ⟶ Y；hY : P Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderSubobjects.prop_of_mono`：∀ {C
+ : Type u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectP
+roperty C}   [self : P.IsClosedUnderSubobjects] {X Y : C…
 -/
 lemma prop_of_mono {X Y : C} (f : X ⟶ Y) [Mono f] (hY : P Y) : P X :=
   IsClosedUnderSubobjects.prop_of_mono f hY
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: P.IsClosedUnderIsomorphisms
-  body: P.prop_of_mono e.inv
-
-中文:
-实例 :
-  签名: P.在同构下封闭
-  定义体: P.prop_of_mono e.inv
-
-Depends on / 依赖: P.prop_of_mono, e.inv, prop_of_mono
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : P.IsClosedUnderIsomorphisms where
   of_iso e := P.prop_of_mono e.inv
-
-/--
-lemma `prop_X₁_of_shortExact` / 引理 `prop_X₁_of_shortExact`
-
-English:
-lemma prop_X₁_of_shortExact
-  statement: [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact)
-  proof: by
-  have := hS.mono_f
-  exact P.prop_of_mono S.f h₂
-
-中文:
-引理 prop_X₁_of_shortExact
-  结论: [有ZeroMorphisms C] {S : 短复形 C} (hS : S.短正合)
-  证明: by
-  have := hS.mono_f
-  exact P.prop_of_mono S.f h₂
-
-Depends on / 依赖: P.prop_of_mono, hS.mono_f, mono_f, prop_of_mono
+/-
+**CategoryTheory.ObjectProperty.prop_X** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prop_X₁_of_shortExact [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact)
     (h₂ : P S.X₂) : P S.X₁ := by
   have := hS.mono_f
   exact P.prop_of_mono S.f h₂
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : D ⥤ C) [F.PreservesMonomorphisms] :
     (P.inverseImage F).IsClosedUnderSubobjects where
   prop_of_mono f _ h := P.prop_of_mono (F.map f) h
@@ -123,158 +93,88 @@ end
 
 section
 
-/--
-Definition of `IsClosedUnderQuotients` / `IsClosedUnderQuotients` 的定义
+/-- Given `P : ObjectProperty C`, we say that `P` is closed under quotients,
+if for any epimorphism `X ⟶ Y`, `P X` implies `P Y`. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderQuotients** 是 Mathlib 中的一个归纳类型，位于命名
+空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+ObjectProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderQuotients
-  parameters: : Prop where
-  axioms and operations (1):
-    - prop_of_epi({X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X)) : P Y
-
-中文:
-类 是ClosedUnderQuotients
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - prop_of_epi({X Y : C} (f : X ⟶ Y) [满态射 f] (hX : P X)) : P Y
+--- 原说明 ---
+Given `P : ObjectProperty C`, we say that `P` is closed under quotients,
+if for any epimorphism `X ⟶ Y`, `P X` implies `P Y`.
 -/
 class IsClosedUnderQuotients : Prop where
   prop_of_epi {X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X) : P Y
 
 variable [P.IsClosedUnderQuotients]
-
-/--
-lemma `prop_of_epi` / 引理 `prop_of_epi`
-
-English:
-lemma prop_of_epi
-  given: {X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X)
-  statement: P Y
-  proof: IsClosedUnderQuotients.prop_of_epi f hX
-
-中文:
-引理 prop_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [满态射 f] (hX : P X)
-  结论: P Y
-  证明: IsClosedUnderQuotients.prop_of_epi f hX
-
-Depends on / 依赖: IsClosedUnderQuotients, IsClosedUnderQuotients.prop_of_epi, isLE_of_iso, isLE_of_le, isLE_truncLT_obj, prop_of_epi, t.isLE_iff_isIso_truncLT, t.isLE_of_iso, t.isLE_of_le, t.isLE_truncLT_obj, t.truncLT
+/-
+**CategoryTheory.ObjectProperty.prop_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ObjectProperty`。
+形式化陈述：prop_of_epi {X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X) : P Y
+参数：f : X ⟶ Y；hX : P X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderQuotients.prop_of_epi`：∀ {C :
+ Type u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.ObjectPro
+perty C}   [self : P.IsClosedUnderQuotients] {X Y : C}…
 -/
 lemma prop_of_epi {X Y : C} (f : X ⟶ Y) [Epi f] (hX : P X) : P Y :=
   IsClosedUnderQuotients.prop_of_epi f hX
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: P.IsClosedUnderIsomorphisms
-  body: P.prop_of_epi e.hom
-
-中文:
-实例 :
-  签名: P.在同构下封闭
-  定义体: P.prop_of_epi e.hom
-
-Depends on / 依赖: P.prop_of_epi, e.hom, isGE_of_ge, isGE_of_iso, isGE_truncGE_obj, prop_of_epi, t.IsGE, t.isGE_of_ge, t.isGE_of_iso, t.isGE_truncGE_obj, t.truncGE
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : P.IsClosedUnderIsomorphisms where
   of_iso e := P.prop_of_epi e.hom
-
-/--
-lemma `prop_X₃_of_shortExact` / 引理 `prop_X₃_of_shortExact`
-
-English:
-lemma prop_X₃_of_shortExact
-  statement: [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact)
-  proof: by
-  have := hS.epi_g
-  exact P.prop_of_epi S.g h₂
-
-中文:
-引理 prop_X₃_of_shortExact
-  结论: [有ZeroMorphisms C] {S : 短复形 C} (hS : S.短正合)
-  证明: by
-  have := hS.epi_g
-  exact P.prop_of_epi S.g h₂
-
-Depends on / 依赖: P.prop_of_epi, epi_g, hS.epi_g, prop_of_epi
+/-
+**CategoryTheory.ObjectProperty.prop_X** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prop_X₃_of_shortExact [HasZeroMorphisms C] {S : ShortComplex C} (hS : S.ShortExact)
     (h₂ : P S.X₂) : P S.X₃ := by
   have := hS.epi_g
   exact P.prop_of_epi S.g h₂
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : D ⥤ C) [F.PreservesEpimorphisms] :
     (P.inverseImage F).IsClosedUnderQuotients where
   prop_of_epi f _ h := P.prop_of_epi (F.map f) h
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (⊤ : ObjectProperty C).IsClosedUnderSubobjects
-  body: by simp
-
-中文:
-实例 :
-  签名: (⊤ : ObjectProperty C).是ClosedUnderSubobjects
-  定义体: by simp
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (⊤ : ObjectProperty C).IsClosedUnderSubobjects where
   prop_of_mono := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (⊤ : ObjectProperty C).IsClosedUnderQuotients
-  body: by simp
-
-中文:
-实例 :
-  签名: (⊤ : ObjectProperty C).是ClosedUnderQuotients
-  定义体: by simp
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (⊤ : ObjectProperty C).IsClosedUnderQuotients where
   prop_of_epi := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroMorphisms
-  signature: C] : IsClosedUnderSubobjects (IsZero (C := C)) where
-  body: IsZero.of_mono f hX
-
-中文:
-实例 [有ZeroMorphisms
-  签名: C] : 是ClosedUnderSubobjects (是零 (C := C)) where
-  定义体: IsZero.of_mono f hX
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasZeroMorphisms C] : IsClosedUnderSubobjects (IsZero (C := C)) where
   prop_of_mono f _ hX := IsZero.of_mono f hX
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroMorphisms
-  signature: C] : IsClosedUnderQuotients (IsZero (C := C)) where
-  body: IsZero.of_epi f hX
-
-中文:
-实例 [有ZeroMorphisms
-  签名: C] : 是ClosedUnderQuotients (是零 (C := C)) where
-  定义体: IsZero.of_epi f hX
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasZeroMorphisms C] : IsClosedUnderQuotients (IsZero (C := C)) where
   prop_of_epi f _ hX := IsZero.of_epi f hX
@@ -282,3 +182,4 @@ instance [HasZeroMorphisms C] : IsClosedUnderQuotients (IsZero (C := C)) where
 end ObjectProperty
 
 end CategoryTheory
+

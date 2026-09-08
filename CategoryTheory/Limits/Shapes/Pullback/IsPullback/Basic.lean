@@ -37,30 +37,35 @@ variable {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ 
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `of_is_product` / 定理 `of_is_product`
+/-- If `c` is a limiting binary product cone, and we have a terminal object,
+then we have `IsPullback c.fst c.snd 0 0`
+(where each `0` is the unique morphism to the terminal object). -/
+/-
+**CategoryTheory.IsPullback.of_is_product** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.IsPullback`。
+形式化陈述：of_is_product {c : BinaryFan X Y} (h : Limits.IsLimit c) (t : IsTerminal Z
+) : IsPullback c.fst c.snd (t.from _) (t.from _)
+参数：h : Limits.IsLimit c；t : IsTerminal Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_isLimit`：of_isLimit {c : PullbackCone f g} 
+(h : Limits.IsLimit c) : IsPullback c.fst c.snd f g
+· 使用定理 `CategoryTheory.Limits.IsTerminal.hom_ext`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsTerminal X)
+   (f g : Y ⟶ X), f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem of_is_product
-  given: {c : BinaryFan X Y} (h : Limits.IsLimit c) (t : IsTerminal Z)
-  proof: of_isLimit
-    (isPullbackOfIsTerminalIsProduct _ _ _ _ t
-      (IsLimit.ofIsoLimit h
-        (Limits.Cone.ext (Iso.refl c.pt)
-          (by
-            rintro ⟨⟨⟩⟩ <;> simp))))
-
-中文:
-定理 of_is_product
-  条件: {c : BinaryFan X Y} (h : Limits.是极限 c) (t : 是终止 Z)
-  证明: of_isLimit
-    (isPullbackOfIsTerminalIsProduct _ _ _ _ t
-      (IsLimit.ofIsoLimit h
-        (Limits.Cone.ext (Iso.refl c.pt)
-          (by
-            rintro ⟨⟨⟩⟩ <;> simp))))
-
-Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, Iso.refl, Limits, Limits.Cone.ext, c.pt, isPullbackOfIsTerminalIsProduct, ofIsoLimit, of_isLimit
+--- 原说明 ---
+If `c` is a limiting binary product cone, and we have a terminal object,
+then we have `IsPullback c.fst c.snd 0 0`
+(where each `0` is the unique morphism to the terminal object).
 -/
 theorem of_is_product {c : BinaryFan X Y} (h : Limits.IsLimit c) (t : IsTerminal Z) :
     IsPullback c.fst c.snd (t.from _) (t.from _) :=
@@ -71,63 +76,57 @@ theorem of_is_product {c : BinaryFan X Y} (h : Limits.IsLimit c) (t : IsTerminal
           (by
             rintro ⟨⟨⟩⟩ <;> simp))))
 
-/--
-theorem `of_is_product'` / 定理 `of_is_product'`
+/-- A variant of `of_is_product` that is more useful with `apply`. -/
+/-
+**CategoryTheory.IsPullback.of_is_product'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsPullback`。
+形式化陈述：of_is_product' (h : Limits.IsLimit (BinaryFan.mk fst snd)) (t : IsTerminal
+ Z) : IsPullback fst snd (t.from _) (t.from _)
+参数：h : Limits.IsLimit (BinaryFan.mk fst snd)；t : IsTerminal Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_is_product`：of_is_product {c : BinaryFan X 
+Y} (h : Limits.IsLimit c) (t : IsTerminal Z) : IsPullback c.fst c.snd (t.from _)
+ (t.from _)
 
-English:
-theorem of_is_product'
-  given: (h : Limits.IsLimit (BinaryFan.mk fst snd)) (t : IsTerminal Z)
-  proof: of_is_product h t
-
-中文:
-定理 of_is_product'
-  条件: (h : Limits.是极限 (BinaryFan.mk fst snd)) (t : 是终止 Z)
-  证明: of_is_product h t
-
-Depends on / 依赖: of_is_product
+--- 原说明 ---
+A variant of `of_is_product` that is more useful with `apply`.
 -/
 theorem of_is_product' (h : Limits.IsLimit (BinaryFan.mk fst snd)) (t : IsTerminal Z) :
     IsPullback fst snd (t.from _) (t.from _) :=
   of_is_product h t
 
 variable (X Y) in
-/--
-theorem `of_hasBinaryProduct'` / 定理 `of_hasBinaryProduct'`
-
-English:
-theorem of_hasBinaryProduct'
-  given: [HasBinaryProduct X Y] [HasTerminal C]
-  proof: of_is_product (limit.isLimit _) terminalIsTerminal
-
-中文:
-定理 of_hasBinaryProduct'
-  条件: [HasBinaryProduct X Y] [有终止 C]
-  证明: of_is_product (limit.isLimit _) terminalIsTerminal
-
-Depends on / 依赖: isLimit, limit.isLimit, of_is_product, terminalIsTerminal
+/-
+**CategoryTheory.IsPullback.of_hasBinaryProduct'** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.IsPullback`。
+形式化陈述：of_hasBinaryProduct' [HasBinaryProduct X Y] [HasTerminal C] : IsPullback L
+imits.prod.fst Limits.prod.snd (terminal.from X) (terminal.from Y)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_is_product`：of_is_product {c : BinaryFan X 
+Y} (h : Limits.IsLimit c) (t : IsTerminal Z) : IsPullback c.fst c.snd (t.from _)
+ (t.from _)
 -/
 theorem of_hasBinaryProduct' [HasBinaryProduct X Y] [HasTerminal C] :
     IsPullback Limits.prod.fst Limits.prod.snd (terminal.from X) (terminal.from Y) :=
   of_is_product (limit.isLimit _) terminalIsTerminal
-
-/--
-theorem `of_iso_pullback` / 定理 `of_iso_pullback`
-
-English:
-theorem of_iso_pullback
-  statement: (h : CommSq fst snd f g) [HasPullback f g] (i : P ≅ pullback f g)
-  proof: of_isLimit' h
-    (Limits.IsLimit.ofIsoLimit (limit.isLimit _)
-      (@PullbackCone.ext _ _ _ _ _ _ _ (PullbackCone.mk _ _ _) _ i w₁.symm w₂.symm).symm)
-
-中文:
-定理 of_iso_pullback
-  结论: (h : 交换Sq fst snd f g) [HasPullback f g] (i : P ≅ pullback f g)
-  证明: of_isLimit' h
-    (Limits.IsLimit.ofIsoLimit (limit.isLimit _)
-      (@PullbackCone.ext _ _ _ _ _ _ _ (PullbackCone.mk _ _ _) _ i w₁.symm w₂.symm).symm)
-
-Depends on / 依赖: IsLimit, Limits, Limits.IsLimit.ofIsoLimit, PullbackCone, PullbackCone.ext, PullbackCone.mk, isLimit, limit.isLimit, ofIsoLimit, of_isLimit
+/-
+**CategoryTheory.IsPullback.of_iso_pullback** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsPullback`。
+形式化陈述：of_iso_pullback (h : CommSq fst snd f g) [HasPullback f g] (i : P ≅ pullba
+ck f g) (w₁ : i.hom ≫ pullback.fst _ _ = fst) (w₂ : i.hom ≫ pullback.snd _ _ = s
+nd) : IsPullback fst snd f g
+参数：h : CommSq fst snd f g；i : P ≅ pullback f g；w₁ : i.hom ≫ pullback.fst _ _ = f
+st；w₂ : i.hom ≫ pullback.snd _ _ = snd。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_isLimit'`：of_isLimit' (w : CommSq fst snd f
+ g) (h : Limits.IsLimit w.cone) : IsPullback fst snd f g
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem of_iso_pullback (h : CommSq fst snd f g) [HasPullback f g] (i : P ≅ pullback f g)
     (w₁ : i.hom ≫ pullback.fst _ _ = fst) (w₂ : i.hom ≫ pullback.snd _ _ = snd) :
@@ -135,31 +134,46 @@ theorem of_iso_pullback (h : CommSq fst snd f g) [HasPullback f g] (i : P ≅ pu
   of_isLimit' h
     (Limits.IsLimit.ofIsoLimit (limit.isLimit _)
       (@PullbackCone.ext _ _ _ _ _ _ _ (PullbackCone.mk _ _ _) _ i w₁.symm w₂.symm).symm)
-
-/--
-theorem `of_horiz_isIso_mono` / 定理 `of_horiz_isIso_mono`
-
-English:
-theorem of_horiz_isIso_mono
-  given: [IsIso fst] [Mono g] (sq : CommSq fst snd f g)
-  proof: of_isLimit' sq
-    (by
-      refine
-        PullbackCone.IsLimit.mk _ (fun s => s.fst ≫ inv fst) (by simp)
-          (fun s => ?_) (by cat_disch)
-      simp only [← cancel_mono g, Category.assoc, ← sq.w, IsIso.inv_hom_id_assoc, s.condition])
-
-中文:
-定理 of_horiz_isIso_mono
-  条件: [是同构 fst] [单态射 g] (sq : 交换Sq fst snd f g)
-  证明: of_isLimit' sq
-    (by
-      refine
-        PullbackCone.IsLimit.mk _ (fun s => s.fst ≫ inv fst) (by simp)
-          (fun s => ?_) (by cat_disch)
-      simp only [← cancel_mono g, Category.assoc, ← sq.w, IsIso.inv_hom_id_assoc, s.condition])
-
-Depends on / 依赖: Category, Category.assoc, IsIso.inv_hom_id_assoc, IsLimit, PullbackCone, PullbackCone.IsLimit.mk, cancel_mono, cat_disch, condition, inv_hom_id_assoc, of_isLimit, s.condition, s.fst, sq.w
+/-
+**CategoryTheory.IsPullback.of_horiz_isIso_mono** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.IsPullback`。
+形式化陈述：of_horiz_isIso_mono [IsIso fst] [Mono g] (sq : CommSq fst snd f g) : IsPul
+lback fst snd f g
+参数：sq : CommSq fst snd f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_isLimit'`：of_isLimit' (w : CommSq fst snd f
+ g) (h : Limits.IsLimit w.cone) : IsPullback fst snd f g
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
 -/
 theorem of_horiz_isIso_mono [IsIso fst] [Mono g] (sq : CommSq fst snd f g) :
     IsPullback fst snd f g :=
@@ -169,60 +183,73 @@ theorem of_horiz_isIso_mono [IsIso fst] [Mono g] (sq : CommSq fst snd f g) :
         PullbackCone.IsLimit.mk _ (fun s => s.fst ≫ inv fst) (by simp)
           (fun s => ?_) (by cat_disch)
       simp only [← cancel_mono g, Category.assoc, ← sq.w, IsIso.inv_hom_id_assoc, s.condition])
-
-/--
-theorem `of_horiz_isIso` / 定理 `of_horiz_isIso`
-
-English:
-theorem of_horiz_isIso
-  given: [IsIso fst] [IsIso g] (sq : CommSq fst snd f g)
-  proof: of_horiz_isIso_mono sq
-
-中文:
-定理 of_horiz_isIso
-  条件: [是同构 fst] [是同构 g] (sq : 交换Sq fst snd f g)
-  证明: of_horiz_isIso_mono sq
-
-Depends on / 依赖: of_horiz_isIso_mono
+/-
+**CategoryTheory.IsPullback.of_horiz_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsPullback`。
+形式化陈述：of_horiz_isIso [IsIso fst] [IsIso g] (sq : CommSq fst snd f g) : IsPullbac
+k fst snd f g
+参数：sq : CommSq fst snd f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_horiz_isIso_mono`：of_horiz_isIso_mono [IsIs
+o fst] [Mono g] (sq : CommSq fst snd f g) : IsPullback fst snd f g
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
 -/
 theorem of_horiz_isIso [IsIso fst] [IsIso g] (sq : CommSq fst snd f g) :
     IsPullback fst snd f g :=
   of_horiz_isIso_mono sq
-
-/--
-lemma `of_iso` / 引理 `of_iso`
-
-English:
-lemma of_iso
-  statement: (h : IsPullback fst snd f g)
-  proof: by
-    rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commfst]; rw [← commf]; rw [← reassoc_of% commsnd]; rw [← commg]; rw [h.w_assoc]
-  isLimit' :=
-    ⟨(IsLimit.postcomposeInvEquiv
-        (cospanExt e₂ e₃ e₄ commf.symm commg.symm) _).1
-          (IsLimit.ofIsoLimit h.isLimit (by
-            refine PullbackCone.ext e₁ ?_ ?_
-            · change fst = e₁.hom ≫ fst' ≫ e₂.inv
-              rw [← reassoc_of% commfst]; rw [e₂.hom_inv_id]; rw [Category.comp_id]
-            · change snd = e₁.hom ≫ snd' ≫ e₃.inv
-              rw [← reassoc_of% commsnd]; rw [e₃.hom_inv_id]; rw [Category.comp_id]))⟩
-
-中文:
-引理 of_iso
-  结论: (h : 是拉回 fst snd f g)
-  证明: by
-    rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commfst]; rw [← commf]; rw [← reassoc_of% commsnd]; rw [← commg]; rw [h.w_assoc]
-  isLimit' :=
-    ⟨(IsLimit.postcomposeInvEquiv
-        (cospanExt e₂ e₃ e₄ commf.symm commg.symm) _).1
-          (IsLimit.ofIsoLimit h.isLimit (by
-            refine PullbackCone.ext e₁ ?_ ?_
-            · change fst = e₁.hom ≫ fst' ≫ e₂.inv
-              rw [← reassoc_of% commfst]; rw [e₂.hom_inv_id]; rw [Category.comp_id]
-            · change snd = e₁.hom ≫ snd' ≫ e₃.inv
-              rw [← reassoc_of% commsnd]; rw [e₃.hom_inv_id]; rw [Category.comp_id]))⟩
-
-Depends on / 依赖: Category, Category.comp_id, IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeInvEquiv, PullbackCone, PullbackCone.ext, cancel_epi, commf.symm, commfst, commg.symm, commsnd, comp_id, cospanExt, h.isLimit, h.w_assoc, hom_inv_id, isLimit, ofIsoLimit, postcomposeInvEquiv
+/-
+**CategoryTheory.IsPullback.of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.IsP
+ullback`。
+形式化陈述：of_iso (h : IsPullback fst snd f g) {P' X' Y' Z' : C} {fst' : P' ⟶ X'} {sn
+d' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'} (e₁ : P ≅ P') (e₂ : X ≅ X') (e₃ : Y 
+≅ Y') (e₄ : Z ≅ Z') (commfst : fst ≫ e₂.hom = e₁.hom ≫ fst') (commsnd : snd ≫ e₃
+.hom = e₁.hom ≫ snd') (commf : f ≫ e₄.hom = e₂.hom ≫ f') (commg : g ≫ e₄.hom = e
+₃.hom ≫ g') : IsPullback fst' snd' f' g' where w
+参数：h : IsPullback fst snd f g；e₁ : P ≅ P'；e₂ : X ≅ X'；e₃ : Y ≅ Y'；e₄ : Z ≅ Z'；co
+mmfst : fst ≫ e₂.hom = e₁.hom ≫ fst'；commsnd : snd ≫ e₃.hom = e₁.hom ≫ snd'；comm
+f : f ≫ e₄.hom = e₂.hom ≫ f'；commg : g ≫ e₄.hom = e₃.hom ≫ g'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.CommSq.w_assoc`：∀ {C : Type u_1} [inst : CategoryTheory.C
+ategory.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y
+ ⟶ Z},   CategoryTh…
+· 使用定理 `CategoryTheory.IsPullback.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}   
+{g : Y ⟶ Z}, CategoryThe…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma of_iso (h : IsPullback fst snd f g)
     {P' X' Y' Z' : C} {fst' : P' ⟶ X'} {snd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'}
@@ -233,41 +260,52 @@ lemma of_iso (h : IsPullback fst snd f g)
     (commg : g ≫ e₄.hom = e₃.hom ≫ g') :
     IsPullback fst' snd' f' g' where
   w := by
-    rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commfst]; rw [← commf]; rw [← reassoc_of% commsnd]; rw [← commg]; rw [h.w_assoc]
+    rw [← cancel_epi e₁.hom, ← reassoc_of% commfst, ← commf,
+      ← reassoc_of% commsnd, ← commg, h.w_assoc]
   isLimit' :=
     ⟨(IsLimit.postcomposeInvEquiv
         (cospanExt e₂ e₃ e₄ commf.symm commg.symm) _).1
           (IsLimit.ofIsoLimit h.isLimit (by
             refine PullbackCone.ext e₁ ?_ ?_
             · change fst = e₁.hom ≫ fst' ≫ e₂.inv
-              rw [← reassoc_of% commfst]; rw [e₂.hom_inv_id]; rw [Category.comp_id]
+              rw [← reassoc_of% commfst, e₂.hom_inv_id, Category.comp_id]
             · change snd = e₁.hom ≫ snd' ≫ e₃.inv
-              rw [← reassoc_of% commsnd]; rw [e₃.hom_inv_id]; rw [Category.comp_id]))⟩
+              rw [← reassoc_of% commsnd, e₃.hom_inv_id, Category.comp_id]))⟩
 
-/--
-lemma `of_iso'` / 引理 `of_iso'`
+/-- Same as `IsPullback.of_iso`, but using the data and compatibilities involving
+the inverse isomorphisms instead. -/
+/-
+**CategoryTheory.IsPullback.of_iso'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Is
+Pullback`。
+形式化陈述：of_iso' (h : IsPullback fst snd f g) {P' X' Y' Z' : C} {fst' : P' ⟶ X'} {s
+nd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'} (e₁ : P' ≅ P) (e₂ : X' ≅ X) (e₃ : Y
+' ≅ Y) (e₄ : Z' ≅ Z) (commfst : e₁.hom ≫ fst = fst' ≫ e₂.hom) (commsnd : e₁.hom 
+≫ snd = snd' ≫ e₃.hom) (commf : e₂.hom ≫ f = f' ≫ e₄.hom) (commg : e₃.hom ≫ g = 
+g' ≫ e₄.hom) : IsPullback fst' snd' f' g'
+参数：h : IsPullback fst snd f g；e₁ : P' ≅ P；e₂ : X' ≅ X；e₃ : Y' ≅ Y；e₄ : Z' ≅ Z；co
+mmfst : e₁.hom ≫ fst = fst' ≫ e₂.hom；commsnd : e₁.hom ≫ snd = snd' ≫ e₃.hom；comm
+f : e₂.hom ≫ f = f' ≫ e₄.hom；commg : e₃.hom ≫ g = g' ≫ e₄.hom。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.of_iso`：of_iso (h : IsPullback fst snd f g) {P
+' X' Y' Z' : C} {fst' : P' ⟶ X'} {snd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'} 
+(e₁ : P ≅ P') (e₂ : X …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma of_iso'
-  statement: (h : IsPullback fst snd f g)
-  proof: by
-  apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commfst, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commsnd, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
-
-中文:
-引理 of_iso'
-  结论: (h : 是拉回 fst snd f g)
-  证明: by
-  apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commfst, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commsnd, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, Iso.inv_hom_id_assoc, Iso.symm_hom, commfst, commsnd, comp_inv_eq, h.of_iso, inv_hom_id_assoc, of_iso, symm_hom
+--- 原说明 ---
+Same as `IsPullback.of_iso`, but using the data and compatibilities involving
+the inverse isomorphisms instead.
 -/
 lemma of_iso' (h : IsPullback fst snd f g)
     {P' X' Y' Z' : C} {fst' : P' ⟶ X'} {snd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'}
@@ -287,38 +325,27 @@ section
 
 variable {P X Y : C} {fst : P ⟶ X} {snd : P ⟶ X} {f : X ⟶ Y}
 
-/--
-lemma `isIso_fst_of_mono` / 引理 `isIso_fst_of_mono`
-
-English:
-lemma isIso_fst_of_mono
-  given: (h : IsPullback fst snd f f) (inst : Mono f := by infer_instance)
-  proof: h.cone.isIso_fst_of_mono_of_isLimit h.isLimit
-
-中文:
-引理 isIso_fst_of_mono
-  条件: (h : 是拉回 fst snd f f) (inst : 单态射 f := by infer_instance)
-  证明: h.cone.isIso_fst_of_mono_of_isLimit h.isLimit
-
-Depends on / 依赖: h.cone.isIso_fst_of_mono_of_isLimit, h.isLimit, infer_instance, isIso_fst_of_mono_of_isLimit, isLimit
+/-
+**CategoryTheory.IsPullback.isIso_fst_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.IsPullback`。
+形式化陈述：isIso_fst_of_mono (h : IsPullback fst snd f f) (inst : Mono f
+参数：h : IsPullback fst snd f f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PullbackCone.isIso_fst_of_mono_of_isLimit`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y} [Categor
+yTheory.Mono f]   {t : CategoryTheory.Limits.Pullback…
 -/
 lemma isIso_fst_of_mono (h : IsPullback fst snd f f) (inst : Mono f := by infer_instance) :
     IsIso fst := h.cone.isIso_fst_of_mono_of_isLimit h.isLimit
-
-/--
-lemma `isIso_snd_iso_of_mono` / 引理 `isIso_snd_iso_of_mono`
-
-English:
-lemma isIso_snd_iso_of_mono
-  given: (h : IsPullback fst snd f f) (inst : Mono f := by infer_instance)
-  proof: h.cone.isIso_snd_of_mono_of_isLimit h.isLimit
-
-中文:
-引理 isIso_snd_iso_of_mono
-  条件: (h : 是拉回 fst snd f f) (inst : 单态射 f := by infer_instance)
-  证明: h.cone.isIso_snd_of_mono_of_isLimit h.isLimit
-
-Depends on / 依赖: HasPullback, HasPullbacksAlong, HasPullbacksAlong.hasPullback, IsPullback, IsPullback.hasPullback, IsPullback.of_hasPullback, IsPullback.paste_horiz, P.pullback_snd, h.cone.isIso_snd_of_mono_of_isLimit, h.isLimit, hasPullback, infer_instance, isIso_snd_of_mono_of_isLimit, isLimit, of_hasPullback, paste_horiz, pullback, pullback.snd, pullback_snd
+/-
+**CategoryTheory.IsPullback.isIso_snd_iso_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.IsPullback`。
+形式化陈述：isIso_snd_iso_of_mono (h : IsPullback fst snd f f) (inst : Mono f
+参数：h : IsPullback fst snd f f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PullbackCone.isIso_snd_of_mono_of_isLimit`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y} [Categor
+yTheory.Mono f]   {t : CategoryTheory.Limits.Pullback…
 -/
 lemma isIso_snd_iso_of_mono (h : IsPullback fst snd f f) (inst : Mono f := by infer_instance) :
     IsIso snd := h.cone.isIso_snd_of_mono_of_isLimit h.isLimit
@@ -327,93 +354,90 @@ end
 
 section
 
-/--
-lemma `mono_fst_of_mono` / 引理 `mono_fst_of_mono`
-
-English:
-lemma mono_fst_of_mono
-  given: (h : IsPullback fst snd f g) (inst : Mono g := by infer_instance)
-  proof: by
-  constructor
-  intro W fst' snd' heq
-  exact h.hom_ext heq (by simp [← cancel_mono g, ← h.w, reassoc_of% heq])
-
-中文:
-引理 mono_fst_of_mono
-  条件: (h : 是拉回 fst snd f g) (inst : 单态射 g := by infer_instance)
-  证明: by
-  constructor
-  intro W fst' snd' heq
-  exact h.hom_ext heq (by simp [← cancel_mono g, ← h.w, reassoc_of% heq])
-
-Depends on / 依赖: HasPullback, HasPullbacksAlong, HasPullbacksAlong.hasPullback, IsPullback, IsPullback.of_hasPullback, IsPullback.of_right, IsStableUnderBaseChangeAlong, IsStableUnderBaseChangeAlong.of_isPullback, cancel_mono, h.hom_ext, hasPullback, hom_ext, infer_instance, of_hasPullback, of_isPullback, of_right, reassoc_of
+/-
+**CategoryTheory.IsPullback.mono_fst_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.IsPullback`。
+形式化陈述：mono_fst_of_mono (h : IsPullback fst snd f g) (inst : Mono g
+参数：h : IsPullback fst snd f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.hom_ext`：hom_ext (hP : IsPullback fst snd f g)
+ {W : C} {k l : W ⟶ P} (h₀ : k ≫ fst = l ≫ fst) (h₁ : k ≫ snd = l ≫ snd) : k = l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.IsPullback.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}   
+{g : Y ⟶ Z}, CategoryThe…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mono_fst_of_mono (h : IsPullback fst snd f g) (inst : Mono g := by infer_instance) :
     Mono fst := by
   constructor
   intro W fst' snd' heq
   exact h.hom_ext heq (by simp [← cancel_mono g, ← h.w, reassoc_of% heq])
-
-/--
-lemma `mono_snd_of_mono` / 引理 `mono_snd_of_mono`
-
-English:
-lemma mono_snd_of_mono
-  given: (h : IsPullback fst snd f g) (inst : Mono f := by infer_instance)
-  proof: h.flip.mono_fst_of_mono
-
-中文:
-引理 mono_snd_of_mono
-  条件: (h : 是拉回 fst snd f g) (inst : 单态射 f := by infer_instance)
-  证明: h.flip.mono_fst_of_mono
-
-Depends on / 依赖: HasPushout, HasPushoutsAlong, HasPushoutsAlong.hasPushout, IsPushout, IsPushout.hasPushout, IsPushout.paste_vert, P.pushout_inr, h.flip.mono_fst_of_mono, hasPushout, infer_instance, mono_fst_of_mono, of_hasPushout, paste_vert, pushout, pushout.inr, pushout_inr
+/-
+**CategoryTheory.IsPullback.mono_snd_of_mono** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.IsPullback`。
+形式化陈述：mono_snd_of_mono (h : IsPullback fst snd f g) (inst : Mono f
+参数：h : IsPullback fst snd f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.mono_fst_of_mono`：mono_fst_of_mono (h : IsPull
+back fst snd f g) (inst : Mono g
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
 -/
 lemma mono_snd_of_mono (h : IsPullback fst snd f g) (inst : Mono f := by infer_instance) :
     Mono snd :=
   h.flip.mono_fst_of_mono
-
-/--
-lemma `isIso_fst_of_isIso` / 引理 `isIso_fst_of_isIso`
-
-English:
-lemma isIso_fst_of_isIso
-  given: (h : IsPullback fst snd f g) (inst : IsIso g := by infer_instance)
-  proof: by
-  have := h.hasPullback
-  rw [← h.isoPullback_hom_fst]
-  infer_instance
-
-中文:
-引理 isIso_fst_of_isIso
-  条件: (h : 是拉回 fst snd f g) (inst : 是同构 g := by infer_instance)
-  证明: by
-  have := h.hasPullback
-  rw [← h.isoPullback_hom_fst]
-  infer_instance
-
-Depends on / 依赖: HasPushout, HasPushoutsAlong, HasPushoutsAlong.hasPushout, IsPushout, IsPushout.of_hasPushout, IsPushout.of_left, IsStableUnderCobaseChangeAlong, IsStableUnderCobaseChangeAlong.of_isPushout, h.hasPullback, h.isoPullback_hom_fst, hasPullback, hasPushout, infer_instance, isoPullback_hom_fst, of_hasPushout, of_isPushout, of_left, right.flip
+/-
+**CategoryTheory.IsPullback.isIso_fst_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.IsPullback`。
+形式化陈述：isIso_fst_of_isIso (h : IsPullback fst snd f g) (inst : IsIso g
+参数：h : IsPullback fst snd f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.hasPullback`：hasPullback (h : IsPullback fst s
+nd f g) : HasPullback f g where exists_limit
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsPullback.isoPullback_hom_fst`：isoPullback_hom_fst (h : 
+IsPullback fst snd f g) [HasPullback f g] : h.isoPullback.hom ≫ pullback.fst _ _
+ = fst
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 lemma isIso_fst_of_isIso (h : IsPullback fst snd f g) (inst : IsIso g := by infer_instance) :
     IsIso fst := by
   have := h.hasPullback
   rw [← h.isoPullback_hom_fst]
   infer_instance
-
-/--
-lemma `isIso_snd_of_isIso` / 引理 `isIso_snd_of_isIso`
-
-English:
-lemma isIso_snd_of_isIso
-  given: (h : IsPullback fst snd f g) (inst : IsIso f := by infer_instance)
-  proof: h.flip.isIso_fst_of_isIso
-
-中文:
-引理 isIso_snd_of_isIso
-  条件: (h : 是拉回 fst snd f g) (inst : 是同构 f := by infer_instance)
-  证明: h.flip.isIso_fst_of_isIso
-
-Depends on / 依赖: h.flip.isIso_fst_of_isIso, infer_instance, isIso_fst_of_isIso
+/-
+**CategoryTheory.IsPullback.isIso_snd_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.IsPullback`。
+形式化陈述：isIso_snd_of_isIso (h : IsPullback fst snd f g) (inst : IsIso f
+参数：h : IsPullback fst snd f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.isIso_fst_of_isIso`：isIso_fst_of_isIso (h : Is
+Pullback fst snd f g) (inst : IsIso g
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
 -/
 lemma isIso_snd_of_isIso (h : IsPullback fst snd f g) (inst : IsIso f := by infer_instance) :
     IsIso snd :=
@@ -425,20 +449,49 @@ section
 -- Objects here are arranged in a 3x2 grid, and indexed by their xy coordinates.
 -- Morphisms are named `hᵢⱼ` for a horizontal morphism starting at `(i,j)`,
 -- and `vᵢⱼ` for a vertical morphism starting at `(i,j)`.
-/--
-theorem `paste_vert` / 定理 `paste_vert`
+/-- Paste two pullback squares "vertically" to obtain another pullback square.
 
-English:
-theorem paste_vert
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: of_isLimit (pasteHorizIsPullback rfl t.isLimit s.isLimit)
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
+-/
+/-
+**CategoryTheory.IsPullback.paste_vert** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.IsPullback`。
+形式化陈述：paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂
+₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ 
+: X₂₂ ⟶ X₃₂} (s : IsPullback h₁₁ v₁₁ v₁₂ h₂₁) (t : IsPullback h₂₁ v₂₁ v₂₂ h₃₁) :
+ IsPullback h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁
+参数：s : IsPullback h₁₁ v₁₁ v₁₂ h₂₁；t : IsPullback h₂₁ v₂₁ v₂₂ h₃₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_isLimit`：of_isLimit {c : PullbackCone f g} 
+(h : Limits.IsLimit c) : IsPullback c.fst c.snd f g
 
-中文:
-定理 paste_vert
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: of_isLimit (pasteHorizIsPullback rfl t.isLimit s.isLimit)
+--- 原说明 ---
+Paste two pullback squares "vertically" to obtain another pullback square.
 
-Depends on / 依赖: isLimit, of_isLimit, pasteHorizIsPullback, s.isLimit, t.isLimit
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
 -/
 theorem paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂₂ ⟶ X₃₂}
@@ -446,20 +499,44 @@ theorem paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁�
     IsPullback h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁ :=
   of_isLimit (pasteHorizIsPullback rfl t.isLimit s.isLimit)
 
-/--
-theorem `paste_horiz` / 定理 `paste_horiz`
+/-- Paste two pullback squares "horizontally" to obtain another pullback square.
 
-English:
-theorem paste_horiz
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  proof: (paste_vert s.flip t.flip).flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
+-/
+/-
+**CategoryTheory.IsPullback.paste_horiz** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.IsPullback`。
+形式化陈述：paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X
+₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃
+ : X₁₃ ⟶ X₂₃} (s : IsPullback h₁₁ v₁₁ v₁₂ h₂₁) (t : IsPullback h₁₂ v₁₂ v₁₃ h₂₂) 
+: IsPullback (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)
+参数：s : IsPullback h₁₁ v₁₁ v₁₂ h₂₁；t : IsPullback h₁₂ v₁₂ v₁₃ h₂₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.IsPullback.paste_vert`：paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃
+₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {
+v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂…
 
-中文:
-定理 paste_horiz
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  证明: (paste_vert s.flip t.flip).flip
+--- 原说明 ---
+Paste two pullback squares "horizontally" to obtain another pullback square.
 
-Depends on / 依赖: paste_vert, s.flip, t.flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
 -/
 theorem paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
     {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
@@ -467,20 +544,52 @@ theorem paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁�
     IsPullback (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂) :=
   (paste_vert s.flip t.flip).flip
 
-/--
-theorem `of_bot` / 定理 `of_bot`
+/-- Given a pullback square assembled from a commuting square on the top and
+a pullback square on the bottom, the top square is a pullback square.
 
-English:
-theorem of_bot
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
-  proof: of_isLimit (leftSquareIsPullback (PullbackCone.mk h₁₁ _ p) rfl t.isLimit s.isLimit)
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
+-/
+/-
+**CategoryTheory.IsPullback.of_bot** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ullback`。
+形式化陈述：of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {
+h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂
+₂ ⟶ X₃₂} (s : IsPullback h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁) (p : h₁₁ ≫ v₁₂ = v₁₁ ≫
+ h₂₁) (t : IsPullback h₂₁ v₂₁ v₂₂ h₃₁) : IsPullback h₁₁ v₁₁ v₁₂ h₂₁
+参数：s : IsPullback h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁；p : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁；t : 
+IsPullback h₂₁ v₂₁ v₂₂ h₃₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_isLimit`：of_isLimit {c : PullbackCone f g} 
+(h : Limits.IsLimit c) : IsPullback c.fst c.snd f g
 
-中文:
-定理 of_bot
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
-  证明: of_isLimit (leftSquareIsPullback (PullbackCone.mk h₁₁ _ p) rfl t.isLimit s.isLimit)
+--- 原说明 ---
+Given a pullback square assembled from a commuting square on the top and
+a pullback square on the bottom, the top square is a pullback square.
 
-Depends on / 依赖: PullbackCone, PullbackCone.mk, isLimit, leftSquareIsPullback, of_isLimit, s.isLimit, t.isLimit
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
 -/
 theorem of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
     {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂₂ ⟶ X₃₂}
@@ -488,62 +597,92 @@ theorem of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : 
     (t : IsPullback h₂₁ v₂₁ v₂₂ h₃₁) : IsPullback h₁₁ v₁₁ v₁₂ h₂₁ :=
   of_isLimit (leftSquareIsPullback (PullbackCone.mk h₁₁ _ p) rfl t.isLimit s.isLimit)
 
-/--
-theorem `of_right` / 定理 `of_right`
+/-- Given a pullback square assembled from a commuting square on the left and
+a pullback square on the right, the left square is a pullback square.
 
-English:
-theorem of_right
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: (of_bot s.flip p.symm t.flip).flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
+-/
+/-
+**CategoryTheory.IsPullback.of_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.I
+sPullback`。
+形式化陈述：of_right {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
+ {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : 
+X₁₃ ⟶ X₂₃} (s : IsPullback (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)) (p : h₁₁ ≫ v₁₂ = v₁₁
+ ≫ h₂₁) (t : IsPullback h₁₂ v₁₂ v₁₃ h₂₂) : IsPullback h₁₁ v₁₁ v₁₂ h₂₁
+参数：s : IsPullback (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)；p : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁；t : 
+IsPullback h₁₂ v₁₂ v₁₃ h₂₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.IsPullback.of_bot`：of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {
+h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁
+₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-中文:
-定理 of_right
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: (of_bot s.flip p.symm t.flip).flip
+--- 原说明 ---
+Given a pullback square assembled from a commuting square on the left and
+a pullback square on the right, the left square is a pullback square.
 
-Depends on / 依赖: of_bot, p.symm, s.flip, t.flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
 -/
 theorem of_right {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
     (s : IsPullback (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)) (p : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁)
     (t : IsPullback h₁₂ v₁₂ v₁₃ h₂₂) : IsPullback h₁₁ v₁₁ v₁₂ h₂₁ :=
   (of_bot s.flip p.symm t.flip).flip
-
-/--
-theorem `paste_vert_iff` / 定理 `paste_vert_iff`
-
-English:
-theorem paste_vert_iff
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: ⟨fun h => h.of_bot e s, fun h => h.paste_vert s⟩
-
-中文:
-定理 paste_vert_iff
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: ⟨fun h => h.of_bot e s, fun h => h.paste_vert s⟩
-
-Depends on / 依赖: h.of_bot, h.paste_vert, of_bot, paste_vert
+/-
+**CategoryTheory.IsPullback.paste_vert_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsPullback`。
+形式化陈述：paste_vert_iff {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ 
+⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {
+v₂₂ : X₂₂ ⟶ X₃₂} (s : IsPullback h₂₁ v₂₁ v₂₂ h₃₁) (e : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁) : 
+IsPullback h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁ ↔ IsPullback h₁₁ v₁₁ v₁₂ h₂₁
+参数：s : IsPullback h₂₁ v₂₁ v₂₂ h₃₁；e : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_bot`：of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {
+h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁
+₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `CategoryTheory.IsPullback.paste_vert`：paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃
+₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {
+v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂…
 -/
 theorem paste_vert_iff {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂₂ ⟶ X₃₂}
     (s : IsPullback h₂₁ v₂₁ v₂₂ h₃₁) (e : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁) :
     IsPullback h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁ ↔ IsPullback h₁₁ v₁₁ v₁₂ h₂₁ :=
   ⟨fun h => h.of_bot e s, fun h => h.paste_vert s⟩
-
-/--
-theorem `paste_horiz_iff` / 定理 `paste_horiz_iff`
-
-English:
-theorem paste_horiz_iff
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  proof: ⟨fun h => h.of_right e s, fun h => h.paste_horiz s⟩
-
-中文:
-定理 paste_horiz_iff
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  证明: ⟨fun h => h.of_right e s, fun h => h.paste_horiz s⟩
-
-Depends on / 依赖: h.of_right, h.paste_horiz, of_right, paste_horiz
+/-
+**CategoryTheory.IsPullback.paste_horiz_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsPullback`。
+形式化陈述：paste_horiz_iff {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂
+ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} 
+{v₁₃ : X₁₃ ⟶ X₂₃} (s : IsPullback h₁₂ v₁₂ v₁₃ h₂₂) (e : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁) :
+ IsPullback (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂) ↔ IsPullback h₁₁ v₁₁ v₁₂ h₂₁
+参数：s : IsPullback h₁₂ v₁₂ v₁₃ h₂₂；e : h₁₁ ≫ v₁₂ = v₁₁ ≫ h₂₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_right`：of_right {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : 
+C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ 
+: X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ …
+· 使用定理 `CategoryTheory.IsPullback.paste_horiz`：paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ 
+X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃}
+ {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X…
 -/
 theorem paste_horiz_iff {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
     {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
@@ -551,20 +690,51 @@ theorem paste_horiz_iff {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h
     IsPullback (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂) ↔ IsPullback h₁₁ v₁₁ v₁₂ h₂₁ :=
   ⟨fun h => h.of_right e s, fun h => h.paste_horiz s⟩
 
-/--
-theorem `of_right'` / 定理 `of_right'`
+/-- Variant of `IsPullback.of_right` where `h₁₁` is induced from a morphism `h₁₃ : X₁₁ ⟶ X₁₃`, and
+the universal property of the right square.
 
-English:
-theorem of_right'
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: of_right ((t.lift_fst _ _ _) ▸ s) (t.lift_snd _ _ _) t
+The objects fit in the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
+-/
+/-
+**CategoryTheory.IsPullback.of_right'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+IsPullback`。
+形式化陈述：of_right' {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂
+} {h₂₂ : X₂₂ ⟶ X₂₃} {h₁₃ : X₁₁ ⟶ X₁₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ :
+ X₁₃ ⟶ X₂₃} (s : IsPullback h₁₃ v₁₁ v₁₃ (h₂₁ ≫ h₂₂)) (t : IsPullback h₁₂ v₁₂ v₁₃
+ h₂₂) : IsPullback (t.lift h₁₃ (v₁₁ ≫ h₂₁) (by rw [s.w, Category.assoc])) v₁₁ v₁
+₂ h₂₁
+参数：s : IsPullback h₁₃ v₁₁ v₁₃ (h₂₁ ≫ h₂₂)；t : IsPullback h₁₂ v₁₂ v₁₃ h₂₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_right`：of_right {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : 
+C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ 
+: X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.IsPullback.lift_fst`：lift_fst (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ fst = h
+· 使用引理 `CategoryTheory.IsPullback.lift_snd`：lift_snd (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ snd = k
 
-中文:
-定理 of_right'
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: of_right ((t.lift_fst _ _ _) ▸ s) (t.lift_snd _ _ _) t
+--- 原说明 ---
+Variant of `IsPullback.of_right` where `h₁₁` is induced from a morphism `h₁₃ : X
+₁₁ ⟶ X₁₃`, and
+the universal property of the right square.
 
-Depends on / 依赖: lift_fst, lift_snd, of_right, t.lift_fst, t.lift_snd
+The objects fit in the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
 -/
 theorem of_right' {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₂₂ : X₂₂ ⟶ X₂₃} {h₁₃ : X₁₁ ⟶ X₁₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
@@ -572,156 +742,248 @@ theorem of_right' {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₂
     IsPullback (t.lift h₁₃ (v₁₁ ≫ h₂₁) (by rw [s.w, Category.assoc])) v₁₁ v₁₂ h₂₁ :=
   of_right ((t.lift_fst _ _ _) ▸ s) (t.lift_snd _ _ _) t
 
-/--
-theorem `of_bot'` / 定理 `of_bot'`
+/-- Variant of `IsPullback.of_bot`, where `v₁₁` is induced from a morphism `v₃₁ : X₁₁ ⟶ X₃₁`, and
+the universal property of the bottom square.
 
-English:
-theorem of_bot'
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: of_bot ((t.lift_snd _ _ _) ▸ s) (by simp only [lift_fst]) t
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
+-/
+/-
+**CategoryTheory.IsPullback.of_bot'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pullback`。
+形式化陈述：of_bot' {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} 
+{h₃₁ : X₃₁ ⟶ X₃₂} {v₃₁ : X₁₁ ⟶ X₃₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X
+₂₂ ⟶ X₃₂} (s : IsPullback h₁₁ v₃₁ (v₁₂ ≫ v₂₂) h₃₁) (t : IsPullback h₂₁ v₂₁ v₂₂ h
+₃₁) : IsPullback h₁₁ (t.lift (h₁₁ ≫ v₁₂) v₃₁ (by rw [Category.assoc, s.w])) v₁₂ 
+h₂₁
+参数：s : IsPullback h₁₁ v₃₁ (v₁₂ ≫ v₂₂) h₃₁；t : IsPullback h₂₁ v₂₁ v₂₂ h₃₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_bot`：of_bot {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {
+h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁
+₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.IsPullback.lift_snd`：lift_snd (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ snd = k
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.IsPullback.lift_fst`：lift_fst (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ fst = h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 of_bot'
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: of_bot ((t.lift_snd _ _ _) ▸ s) (by simp only [lift_fst]) t
+--- 原说明 ---
+Variant of `IsPullback.of_bot`, where `v₁₁` is induced from a morphism `v₃₁ : X₁
+₁ ⟶ X₃₁`, and
+the universal property of the bottom square.
 
-Depends on / 依赖: lift_fst, lift_snd, of_bot, t.lift_snd
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
 -/
 theorem of_bot' {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₃₁ : X₃₁ ⟶ X₃₂} {v₃₁ : X₁₁ ⟶ X₃₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂₂ ⟶ X₃₂}
     (s : IsPullback h₁₁ v₃₁ (v₁₂ ≫ v₂₂) h₃₁) (t : IsPullback h₂₁ v₂₁ v₂₂ h₃₁) :
     IsPullback h₁₁ (t.lift (h₁₁ ≫ v₁₂) v₃₁ (by rw [Category.assoc, s.w])) v₁₂ h₂₁ :=
   of_bot ((t.lift_snd _ _ _) ▸ s) (by simp only [lift_fst]) t
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasPullbacksAlong
-  signature: f] (h
-  body: IsPullback.hasPullback (IsPullback.of_bot' (IsPullback.of_hasPullback (h ≫ g) f)
-    (IsPullback.of_hasPullback g f))
-
-中文:
-实例 [有PullbacksAlong
-  签名: f] (h
-  定义体: IsPullback.hasPullback (IsPullback.of_bot' (IsPullback.of_hasPullback (h ≫ g) f)
-    (IsPullback.of_hasPullback g f))
-
-Depends on / 依赖: IsPullback, IsPullback.hasPullback, IsPullback.of_bot, IsPullback.of_hasPullback, hasPullback, of_bot, of_hasPullback
+/-
+**CategoryTheory.IsPullback.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.IsPullbac
+k`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasPullbacksAlong f] (h : P ⟶ Y) : HasPullback h (pullback.fst g f) :=
   IsPullback.hasPullback (IsPullback.of_bot' (IsPullback.of_hasPullback (h ≫ g) f)
     (IsPullback.of_hasPullback g f))
-
-/--
-theorem `of_vert_isIso_mono` / 定理 `of_vert_isIso_mono`
-
-English:
-theorem of_vert_isIso_mono
-  given: [IsIso snd] [Mono f] (sq : CommSq fst snd f g)
-  proof: IsPullback.flip (of_horiz_isIso_mono sq.flip)
-
-中文:
-定理 of_vert_isIso_mono
-  条件: [是同构 snd] [单态射 f] (sq : 交换Sq fst snd f g)
-  证明: IsPullback.flip (of_horiz_isIso_mono sq.flip)
-
-Depends on / 依赖: IsPullback, IsPullback.flip, of_horiz_isIso_mono, sq.flip
+/-
+**CategoryTheory.IsPullback.of_vert_isIso_mono** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.IsPullback`。
+形式化陈述：of_vert_isIso_mono [IsIso snd] [Mono f] (sq : CommSq fst snd f g) : IsPull
+back fst snd f g
+参数：sq : CommSq fst snd f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.flip`：flip (h : IsPullback fst snd f g) : IsPu
+llback snd fst g f
+· 使用定理 `CategoryTheory.IsPullback.of_horiz_isIso_mono`：of_horiz_isIso_mono [IsIs
+o fst] [Mono g] (sq : CommSq fst snd f g) : IsPullback fst snd f g
+· 使用定理 `CategoryTheory.CommSq.flip`：flip (p : CommSq f g h i) : CommSq g f i h
 -/
 theorem of_vert_isIso_mono [IsIso snd] [Mono f] (sq : CommSq fst snd f g) :
     IsPullback fst snd f g :=
   IsPullback.flip (of_horiz_isIso_mono sq.flip)
-
-/--
-theorem `of_vert_isIso` / 定理 `of_vert_isIso`
-
-English:
-theorem of_vert_isIso
-  given: [IsIso snd] [IsIso f] (sq : CommSq fst snd f g)
-  proof: of_vert_isIso_mono sq
-
-中文:
-定理 of_vert_isIso
-  条件: [是同构 snd] [是同构 f] (sq : 交换Sq fst snd f g)
-  证明: of_vert_isIso_mono sq
-
-Depends on / 依赖: of_vert_isIso_mono
+/-
+**CategoryTheory.IsPullback.of_vert_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.IsPullback`。
+形式化陈述：of_vert_isIso [IsIso snd] [IsIso f] (sq : CommSq fst snd f g) : IsPullback
+ fst snd f g
+参数：sq : CommSq fst snd f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_vert_isIso_mono`：of_vert_isIso_mono [IsIso 
+snd] [Mono f] (sq : CommSq fst snd f g) : IsPullback fst snd f g
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
 -/
 theorem of_vert_isIso [IsIso snd] [IsIso f] (sq : CommSq fst snd f g) :
     IsPullback fst snd f g :=
   of_vert_isIso_mono sq
-
-/--
-lemma `of_id_fst` / 引理 `of_id_fst`
-
-English:
-lemma of_id_fst
-  statement: IsPullback (𝟙 _) f f (𝟙 _)
-  proof: IsPullback.of_horiz_isIso ⟨by simp⟩
-
-中文:
-引理 of_id_fst
-  结论: 是拉回 (𝟙 _) f f (𝟙 _)
-  证明: IsPullback.of_horiz_isIso ⟨by simp⟩
-
-Depends on / 依赖: IsPullback, IsPullback.of_horiz_isIso, of_horiz_isIso
+/-
+**CategoryTheory.IsPullback.of_id_fst** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+IsPullback`。
+形式化陈述：of_id_fst : IsPullback (𝟙 _) f f (𝟙 _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_horiz_isIso`：of_horiz_isIso [IsIso fst] [Is
+Iso g] (sq : CommSq fst snd f g) : IsPullback fst snd f g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma of_id_fst : IsPullback (𝟙 _) f f (𝟙 _) := IsPullback.of_horiz_isIso ⟨by simp⟩
-
-/--
-lemma `of_id_snd` / 引理 `of_id_snd`
-
-English:
-lemma of_id_snd
-  statement: IsPullback f (𝟙 _) (𝟙 _) f
-  proof: IsPullback.of_vert_isIso ⟨by simp⟩
-
-中文:
-引理 of_id_snd
-  结论: 是拉回 f (𝟙 _) (𝟙 _) f
-  证明: IsPullback.of_vert_isIso ⟨by simp⟩
-
-Depends on / 依赖: IsPullback, IsPullback.of_vert_isIso, of_vert_isIso
+/-
+**CategoryTheory.IsPullback.of_id_snd** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+IsPullback`。
+形式化陈述：of_id_snd : IsPullback f (𝟙 _) (𝟙 _) f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_vert_isIso`：of_vert_isIso [IsIso snd] [IsIs
+o f] (sq : CommSq fst snd f g) : IsPullback fst snd f g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma of_id_snd : IsPullback f (𝟙 _) (𝟙 _) f := IsPullback.of_vert_isIso ⟨by simp⟩
 
-/--
-lemma `id_vert` / 引理 `id_vert`
+/-- The following diagram is a pullback
+```
+X --f--> Z
+|        |
+id       id
+v        v
+X --f--> Z
+```
+-/
+/-
+**CategoryTheory.IsPullback.id_vert** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Is
+Pullback`。
+形式化陈述：id_vert (f : X ⟶ Z) : IsPullback f (𝟙 X) (𝟙 Z) f
+参数：f : X ⟶ Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_vert_isIso`：of_vert_isIso [IsIso snd] [IsIs
+o f] (sq : CommSq fst snd f g) : IsPullback fst snd f g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_vert
-  given: (f : X ⟶ Z)
-  statement: IsPullback f (𝟙 X) (𝟙 Z) f
-  proof: of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-中文:
-引理 id_vert
-  条件: (f : X ⟶ Z)
-  结论: 是拉回 f (𝟙 X) (𝟙 Z) f
-  证明: of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_vert_isIso
+--- 原说明 ---
+The following diagram is a pullback
+```
+X --f--> Z
+|        |
+id       id
+v        v
+X --f--> Z
+```
 -/
 lemma id_vert (f : X ⟶ Z) : IsPullback f (𝟙 X) (𝟙 Z) f :=
   of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
 
-/--
-lemma `id_horiz` / 引理 `id_horiz`
+/-- The following diagram is a pullback
+```
+X --id--> X
+|         |
+f         f
+v         v
+Z --id--> Z
+```
+-/
+/-
+**CategoryTheory.IsPullback.id_horiz** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.I
+sPullback`。
+形式化陈述：id_horiz (f : X ⟶ Z) : IsPullback (𝟙 X) f f (𝟙 Z)
+参数：f : X ⟶ Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_horiz_isIso`：of_horiz_isIso [IsIso fst] [Is
+Iso g] (sq : CommSq fst snd f g) : IsPullback fst snd f g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_horiz
-  given: (f : X ⟶ Z)
-  statement: IsPullback (𝟙 X) f f (𝟙 Z)
-  proof: of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-中文:
-引理 id_horiz
-  条件: (f : X ⟶ Z)
-  结论: 是拉回 (𝟙 X) f f (𝟙 Z)
-  证明: of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_horiz_isIso
+--- 原说明 ---
+The following diagram is a pullback
+```
+X --id--> X
+|         |
+f         f
+v         v
+Z --id--> Z
+```
 -/
 lemma id_horiz (f : X ⟶ Z) : IsPullback (𝟙 X) f f (𝟙 Z) :=
   of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
@@ -729,44 +991,72 @@ lemma id_horiz (f : X ⟶ Z) : IsPullback (𝟙 X) f f (𝟙 Z) :=
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /--
-lemma `of_prod_fst_with_id` / 引理 `of_prod_fst_with_id`
+In a category, given a morphism `f : A ⟶ B` and an object `X`,
+this is the obvious pullback diagram:
+```
+A ⨯ X ⟶ A
+  |     |
+  v     v
+B ⨯ X ⟶ B
+```
+-/
+/-
+**CategoryTheory.IsPullback.of_prod_fst_with_id** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.IsPullback`。
+形式化陈述：of_prod_fst_with_id {A B : C} (f : A ⟶ B) (X : C) [HasBinaryProduct A X] [
+HasBinaryProduct B X] : IsPullback prod.fst (prod.map f (𝟙 X)) f prod.fst where 
+isLimit'
+参数：f : A ⟶ B；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.prod.map_fst`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {W X Y Z : C}   [inst_1 : CategoryTheory.Limits.HasBinaryPr
+oduct W X] [inst_2 : Cat…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.prod.hom_ext`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinaryProd
+uct X Y] {f g : W ⟶ X ⨯ …
+· 使用定理 `CategoryTheory.Limits.prod.lift_map`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {V W X Y Z : C}   [inst_1 : CategoryTheory.Limits.HasBinar
+yProduct W X] [inst_2 : C…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.prod.map_snd`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {W X Y Z : C}   [inst_1 : CategoryTheory.Limits.HasBinaryPr
+oduct W X] [inst_2 : Cat…
 
-English:
-lemma of_prod_fst_with_id
-  statement: {A B : C} (f : A ⟶ B) (X : C) [HasBinaryProduct A X]
-  proof: ⟨PullbackCone.isLimitAux' _ (fun s => by
-    refine ⟨prod.lift s.fst (s.snd ≫ prod.snd), ?_, ?_, ?_⟩
-    · simp
-    · ext
-      · simp [PullbackCone.condition]
-      · simp
-    · intro m h₁ h₂
-      dsimp at m h₁ h₂ ⊢
-      ext
-      · simpa using h₁
-      · simp [← h₂])⟩
-
-中文:
-引理 of_prod_fst_with_id
-  结论: {A B : C} (f : A ⟶ B) (X : C) [HasBinaryProduct A X]
-  证明: ⟨PullbackCone.isLimitAux' _ (fun s => by
-    refine ⟨prod.lift s.fst (s.snd ≫ prod.snd), ?_, ?_, ?_⟩
-    · simp
-    · ext
-      · simp [PullbackCone.condition]
-      · simp
-    · intro m h₁ h₂
-      dsimp at m h₁ h₂ ⊢
-      ext
-      · simpa using h₁
-      · simp [← h₂])⟩
-
-Depends on / 依赖: PullbackCone, PullbackCone.condition, PullbackCone.isLimitAux, condition, isLimitAux, prod.lift, prod.snd, s.fst, s.snd
+--- 原说明 ---
+In a category, given a morphism `f : A ⟶ B` and an object `X`,
+this is the obvious pullback diagram:
+```
+A ⨯ X ⟶ A
+  |     |
+  v     v
+B ⨯ X ⟶ B
+```
 -/
 lemma of_prod_fst_with_id {A B : C} (f : A ⟶ B) (X : C) [HasBinaryProduct A X]
     [HasBinaryProduct B X] :
     IsPullback prod.fst (prod.map f (𝟙 X)) f prod.fst where
-  isLimit' := ⟨PullbackCone.isLimitAux' _ (fun s => by
+  isLimit' := ⟨PullbackCone.isLimitAux' _ (fun s ↦ by
     refine ⟨prod.lift s.fst (s.snd ≫ prod.snd), ?_, ?_, ?_⟩
     · simp
     · ext
@@ -779,101 +1069,146 @@ lemma of_prod_fst_with_id {A B : C} (f : A ⟶ B) (X : C) [HasBinaryProduct A X]
       · simp [← h₂])⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `of_isLimit_binaryFan_of_isTerminal` / 引理 `of_isLimit_binaryFan_of_isTerminal`
-
-English:
-lemma of_isLimit_binaryFan_of_isTerminal
-  proof: ⟨PullbackCone.IsLimit.mk _
-    (fun s => BinaryFan.IsLimit.lift hc s.fst s.snd) (by simp) (by simp)
-    (fun s m h₁ h₂ => by apply BinaryFan.IsLimit.hom_ext hc <;> cat_disch)⟩
-
-中文:
-引理 of_isLimit_binaryFan_of_isTerminal
-  证明: ⟨PullbackCone.IsLimit.mk _
-    (fun s => BinaryFan.IsLimit.lift hc s.fst s.snd) (by simp) (by simp)
-    (fun s m h₁ h₂ => by apply BinaryFan.IsLimit.hom_ext hc <;> cat_disch)⟩
-
-Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.mk
+/-
+**CategoryTheory.IsPullback.of_isLimit_binaryFan_of_isTerminal** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.IsPullback`。
+形式化陈述：of_isLimit_binaryFan_of_isTerminal {X Y : C} {c : BinaryFan X Y} (hc : IsL
+imit c) {T : C} (hT : IsTerminal T) : IsPullback c.fst c.snd (hT.from _) (hT.fro
+m _) where isLimit'
+参数：hc : IsLimit c；hT : IsTerminal T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsTerminal.comp_from`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {Z : C} (t : CategoryTheory.Limits.IsTerminal Z)
+ {X Y : C}   (f : X ⟶ Y), Catego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift_fst`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {X Y W : C} {s : CategoryTheory.Limits.Binary
+Fan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.lift_snd`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {X Y W : C} {s : CategoryTheory.Limits.Binary
+Fan X Y}   (h : CategoryTheory.Limits.…
+· 使用定理 `CategoryTheory.Limits.BinaryFan.IsLimit.hom_ext`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.BinaryF
+an X Y}   (h : CategoryTheory.Limits.…
 -/
 lemma of_isLimit_binaryFan_of_isTerminal
     {X Y : C} {c : BinaryFan X Y} (hc : IsLimit c)
     {T : C} (hT : IsTerminal T) :
     IsPullback c.fst c.snd (hT.from _) (hT.from _) where
   isLimit' := ⟨PullbackCone.IsLimit.mk _
-    (fun s => BinaryFan.IsLimit.lift hc s.fst s.snd) (by simp) (by simp)
-    (fun s m h₁ h₂ => by apply BinaryFan.IsLimit.hom_ext hc <;> cat_disch)⟩
+    (fun s ↦ BinaryFan.IsLimit.lift hc s.fst s.snd) (by simp) (by simp)
+    (fun s m h₁ h₂ ↦ by apply BinaryFan.IsLimit.hom_ext hc <;> cat_disch)⟩
 end
 
-/--
-lemma `mk'` / 引理 `mk'`
-
-English:
-lemma mk'
-  statement: {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
-  proof: w
-  isLimit' := by
-    let l (s : PullbackCone f g) := exists_lift _ _ s.condition
-    exact ⟨PullbackCone.IsLimit.mk _
-      (fun s => (l s).choose)
-      (fun s => (l s).choose_spec.1)
-      (fun s => (l s).choose_spec.2)
-      (fun s m h₁ h₂ => hom_ext
-        (h₁.trans (l s).choose_spec.1.symm)
-        (h₂.trans (l s).choose_spec.2.symm))⟩
-
-中文:
-引理 mk'
-  结论: {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
-  证明: w
-  isLimit' := by
-    let l (s : PullbackCone f g) := exists_lift _ _ s.condition
-    exact ⟨PullbackCone.IsLimit.mk _
-      (fun s => (l s).choose)
-      (fun s => (l s).choose_spec.1)
-      (fun s => (l s).choose_spec.2)
-      (fun s m h₁ h₂ => hom_ext
-        (h₁.trans (l s).choose_spec.1.symm)
-        (h₂.trans (l s).choose_spec.2.symm))⟩
+/-
+**CategoryTheory.IsPullback.mk'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.IsPull
+back`。
+形式化陈述：mk' {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z} (w :
+ fst ≫ f = snd ≫ g) (hom_ext : forall ⦃T : C⦄ ⦃φ φ' : T ⟶ P⦄ (_ : φ ≫ fst = φ' ≫
+ fst) (_ : φ ≫ snd = φ' ≫ snd), φ = φ') (exists_lift : forall ⦃T : C⦄ (a : T ⟶ X
+) (b : T ⟶ Y) (_ : a ≫ f = b ≫ g), exists (l : T ⟶ P), l ≫ fst = a ∧ l ≫ snd = b
+) : IsPullback fst snd f g where w
+参数：w : fst ≫ f = snd ≫ g；hom_ext : forall ⦃T : C⦄ ⦃φ φ' : T ⟶ P⦄ (_ : φ ≫ fst = 
+φ' ≫ fst) (_ : φ ≫ snd = φ' ≫ snd), φ = φ'；exists_lift : forall ⦃T : C⦄ (a : T ⟶
+ X) (b : T ⟶ Y) (_ : a ≫ f = b ≫ g), exists (l : T ⟶ P), l ≫ fst = a ∧ l ≫ snd =
+ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma mk' {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
     (w : fst ≫ f = snd ≫ g)
-    (hom_ext : forall ⦃T : C⦄ ⦃φ φ' : T ⟶ P⦄ (_ : φ ≫ fst = φ' ≫ fst)
+    (hom_ext : ∀ ⦃T : C⦄ ⦃φ φ' : T ⟶ P⦄ (_ : φ ≫ fst = φ' ≫ fst)
       (_ : φ ≫ snd = φ' ≫ snd), φ = φ')
-    (exists_lift : forall ⦃T : C⦄ (a : T ⟶ X) (b : T ⟶ Y)
-      (_ : a ≫ f = b ≫ g), exists (l : T ⟶ P), l ≫ fst = a ∧ l ≫ snd = b) :
+    (exists_lift : ∀ ⦃T : C⦄ (a : T ⟶ X) (b : T ⟶ Y)
+      (_ : a ≫ f = b ≫ g), ∃ (l : T ⟶ P), l ≫ fst = a ∧ l ≫ snd = b) :
     IsPullback fst snd f g where
   w := w
   isLimit' := by
     let l (s : PullbackCone f g) := exists_lift _ _ s.condition
     exact ⟨PullbackCone.IsLimit.mk _
-      (fun s => (l s).choose)
-      (fun s => (l s).choose_spec.1)
-      (fun s => (l s).choose_spec.2)
-      (fun s m h₁ h₂ => hom_ext
+      (fun s ↦ (l s).choose)
+      (fun s ↦ (l s).choose_spec.1)
+      (fun s ↦ (l s).choose_spec.2)
+      (fun s m h₁ h₂ ↦ hom_ext
         (h₁.trans (l s).choose_spec.1.symm)
         (h₂.trans (l s).choose_spec.2.symm))⟩
 
 /--
-lemma `paste_twist_right` / 引理 `paste_twist_right`
+The main objects in this lemma fit in the following commutative diagram:
+```
+Pfg -------> X <------- Pfi
+ |           |           |
+ |           f           |
+ ↓           ↓           ↓
+ Y --- g --> S <-- i --- Z
+  \                     /
+    --              --
+       \          /
+         --  R --
+```
+Suppose the two squares are cartesian, then `Pfg ×[Y] R` is the pullback of
+`Pfi ⟶ Z` and `R ⟶ Z`.
+-/
+/-
+**CategoryTheory.IsPullback.paste_twist_right** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.IsPullback`。
+形式化陈述：paste_twist_right {X Y Z S : C} {f : X ⟶ S} {g : Y ⟶ S} {i : Z ⟶ S} {Pfg :
+ C} {fstfg : Pfg ⟶ X} {sndfg : Pfg ⟶ Y} (hfg : IsPullback fstfg sndfg f g) {Pfi 
+: C} {fstfi : Pfi ⟶ X} {sndfi : Pfi ⟶ Z} (hfi : IsPullback fstfi sndfi f i) {R :
+ C} (rY : R ⟶ Y) (rZ : R ⟶ Z) (hrw : rY ≫ g = rZ ≫ i) {Psndfgr : C} (fstsndfgr :
+ Psndfgr ⟶ Pfg) (sndsndfgr : Psndfgr ⟶ R) (hsndfgr : IsPullback fstsndfgr sndsnd
+fgr sndfg rY) {t : Psndfgr ⟶ Pfi} (ht₁ : t ≫ fstfi = fstsndfgr ≫ fstfg) (ht₂ : t
+ ≫ sndfi = sndsndfgr ≫ rZ)
+参数：hfg : IsPullback fstfg sndfg f g；hfi : IsPullback fstfi sndfi f i；rY : R ⟶ Y；
+rZ : R ⟶ Z；hrw : rY ≫ g = rZ ≫ i；fstsndfgr : Psndfgr ⟶ Pfg；sndsndfgr : Psndfgr ⟶
+ R；hsndfgr : IsPullback fstsndfgr sndsndfgr sndfg rY；ht₁ : t ≫ fstfi = fstsndfgr
+ ≫ fstfg；ht₂ : t ≫ sndfi = sndsndfgr ≫ rZ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_right`：of_right {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : 
+C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ 
+: X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsPullback.paste_horiz`：paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ 
+X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃}
+ {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X…
 
-English:
-lemma paste_twist_right
-  statement: {X Y Z S : C} {f : X ⟶ S} {g : Y ⟶ S} {i : Z ⟶ S}
-  proof: by
-  refine .of_right ?_ ht₂ hfi
-  rw [← hrw]; rw [ht₁]
-  exact .paste_horiz hsndfgr hfg
-
-中文:
-引理 paste_twist_right
-  结论: {X Y Z S : C} {f : X ⟶ S} {g : Y ⟶ S} {i : Z ⟶ S}
-  证明: by
-  refine .of_right ?_ ht₂ hfi
-  rw [← hrw]; rw [ht₁]
-  exact .paste_horiz hsndfgr hfg
-
-Depends on / 依赖: hsndfgr, of_right, paste_horiz
+--- 原说明 ---
+The main objects in this lemma fit in the following commutative diagram:
+```
+Pfg -------> X <------- Pfi
+ |           |           |
+ |           f           |
+ ↓           ↓           ↓
+ Y --- g --> S <-- i --- Z
+  \                     /
+    --              --
+       \          /
+         --  R --
+```
+Suppose the two squares are cartesian, then `Pfg ×[Y] R` is the pullback of
+`Pfi ⟶ Z` and `R ⟶ Z`.
 -/
 lemma paste_twist_right {X Y Z S : C} {f : X ⟶ S} {g : Y ⟶ S} {i : Z ⟶ S}
     {Pfg : C} {fstfg : Pfg ⟶ X} {sndfg : Pfg ⟶ Y} (hfg : IsPullback fstfg sndfg f g)
@@ -884,28 +1219,56 @@ lemma paste_twist_right {X Y Z S : C} {f : X ⟶ S} {g : Y ⟶ S} {i : Z ⟶ S}
     {t : Psndfgr ⟶ Pfi} (ht₁ : t ≫ fstfi = fstsndfgr ≫ fstfg) (ht₂ : t ≫ sndfi = sndsndfgr ≫ rZ) :
     IsPullback t sndsndfgr sndfi rZ := by
   refine .of_right ?_ ht₂ hfi
-  rw [← hrw]; rw [ht₁]
+  rw [← hrw, ht₁]
   exact .paste_horiz hsndfgr hfg
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `map_fst_comp_fst_snd_comp_fst` / 引理 `map_fst_comp_fst_snd_comp_fst`
+/-- This is a `HasPullback` variant of `CategoryTheory.IsPullback.paste_twist_right` -/
+/-
+**CategoryTheory.IsPullback.map_fst_comp_fst_snd_comp_fst** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.IsPullback`。
+形式化陈述：map_fst_comp_fst_snd_comp_fst {X Y Z U S : C} (f : X ⟶ S) (g : Y ⟶ S) (i :
+ Z ⟶ S) [HasPullback i g] (h : U ⟶ pullback i g) [HasPullback f g] [HasPullback 
+(pullback.snd f g) (h ≫ pullback.snd i g)] [HasPullback f i] : IsPullback (pullb
+ack.map (pullback.snd f g) (h ≫ pullback.snd i g) f i (pullback.fst f g) (h ≫ pu
+llback.fst i g) g pullback.condition.symm (by simp [pullback.condition])) (pullb
+ack.snd (pullback.snd f g) (h ≫ pullback.snd i g)) (pullback.snd f i) (h ≫ pullb
+ack.fst i g)
+参数：f : X ⟶ S；g : Y ⟶ S；i : Z ⟶ S；h : U ⟶ pullback i g；pullback.snd f g；h ≫ pullb
+ack.snd i g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.paste_twist_right`：paste_twist_right {X Y Z S 
+: C} {f : X ⟶ S} {g : Y ⟶ S} {i : Z ⟶ S} {Pfg : C} {fstfg : Pfg ⟶ X} {sndfg : Pf
+g ⟶ Y} (hfg : IsPullback fstfg sn…
+· 使用定理 `CategoryTheory.IsPullback.of_hasPullback`：of_hasPullback (f : X ⟶ Z) (g 
+: Y ⟶ Z) [HasPullback f g] : IsPullback (pullback.fst f g) (pullback.snd f g) f 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
 
-English:
-lemma map_fst_comp_fst_snd_comp_fst
-  statement: {X Y Z U S : C} (f : X ⟶ S) (g : Y ⟶ S) (i : Z ⟶ S)
-  proof: paste_twist_right (.of_hasPullback f g) (.of_hasPullback f i) (h ≫ pullback.snd _ _)
-    (h ≫ pullback.fst _ _) (by simp [pullback.condition]) _ _ (.of_hasPullback _ _) (by simp)
-    (by simp)
-
-中文:
-引理 map_fst_comp_fst_snd_comp_fst
-  结论: {X Y Z U S : C} (f : X ⟶ S) (g : Y ⟶ S) (i : Z ⟶ S)
-  证明: paste_twist_right (.of_hasPullback f g) (.of_hasPullback f i) (h ≫ pullback.snd _ _)
-    (h ≫ pullback.fst _ _) (by simp [pullback.condition]) _ _ (.of_hasPullback _ _) (by simp)
-    (by simp)
-
-Depends on / 依赖: condition, of_hasPullback, paste_twist_right, pullback, pullback.condition, pullback.fst, pullback.snd
+--- 原说明 ---
+This is a `HasPullback` variant of `CategoryTheory.IsPullback.paste_twist_right`
 -/
 lemma map_fst_comp_fst_snd_comp_fst {X Y Z U S : C} (f : X ⟶ S) (g : Y ⟶ S) (i : Z ⟶ S)
     [HasPullback i g] (h : U ⟶ pullback i g) [HasPullback f g] [HasPullback (pullback.snd f g)
@@ -928,30 +1291,37 @@ variable {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ 
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `of_is_coproduct` / 定理 `of_is_coproduct`
+/-- If `c` is a colimiting binary coproduct cocone, and we have an initial object,
+then we have `IsPushout 0 0 c.inl c.inr`
+(where each `0` is the unique morphism from the initial object). -/
+/-
+**CategoryTheory.IsPushout.of_is_coproduct** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsPushout`。
+形式化陈述：of_is_coproduct {c : BinaryCofan X Y} (h : Limits.IsColimit c) (t : IsInit
+ial Z) : IsPushout (t.to _) (t.to _) c.inl c.inr
+参数：h : Limits.IsColimit c；t : IsInitial Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_isColimit`：of_isColimit {c : PushoutCocone f
+ g} (h : Limits.IsColimit c) : IsPushout f g c.inl c.inr
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem of_is_coproduct
-  given: {c : BinaryCofan X Y} (h : Limits.IsColimit c) (t : IsInitial Z)
-  proof: of_isColimit
-    (isPushoutOfIsInitialIsCoproduct _ _ _ _ t
-      (IsColimit.ofIsoColimit h
-        (Limits.Cocone.ext (Iso.refl c.pt)
-          (by
-            rintro ⟨⟨⟩⟩ <;> simp))))
-
-中文:
-定理 of_is_coproduct
-  条件: {c : BinaryCofan X Y} (h : Limits.是余极限 c) (t : IsInitial Z)
-  证明: of_isColimit
-    (isPushoutOfIsInitialIsCoproduct _ _ _ _ t
-      (IsColimit.ofIsoColimit h
-        (Limits.Cocone.ext (Iso.refl c.pt)
-          (by
-            rintro ⟨⟨⟩⟩ <;> simp))))
-
-Depends on / 依赖: Cocone, IsColimit, IsColimit.ofIsoColimit, Iso.refl, Limits, Limits.Cocone.ext, c.pt, isPushoutOfIsInitialIsCoproduct, ofIsoColimit, of_isColimit
+--- 原说明 ---
+If `c` is a colimiting binary coproduct cocone, and we have an initial object,
+then we have `IsPushout 0 0 c.inl c.inr`
+(where each `0` is the unique morphism from the initial object).
 -/
 theorem of_is_coproduct {c : BinaryCofan X Y} (h : Limits.IsColimit c) (t : IsInitial Z) :
     IsPushout (t.to _) (t.to _) c.inl c.inr :=
@@ -962,63 +1332,56 @@ theorem of_is_coproduct {c : BinaryCofan X Y} (h : Limits.IsColimit c) (t : IsIn
           (by
             rintro ⟨⟨⟩⟩ <;> simp))))
 
-/--
-theorem `of_is_coproduct'` / 定理 `of_is_coproduct'`
+/-- A variant of `of_is_coproduct` that is more useful with `apply`. -/
+/-
+**CategoryTheory.IsPushout.of_is_coproduct'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.IsPushout`。
+形式化陈述：of_is_coproduct' (h : Limits.IsColimit (BinaryCofan.mk inl inr)) (t : IsIn
+itial Z) : IsPushout (t.to _) (t.to _) inl inr
+参数：h : Limits.IsColimit (BinaryCofan.mk inl inr)；t : IsInitial Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_is_coproduct`：of_is_coproduct {c : BinaryCof
+an X Y} (h : Limits.IsColimit c) (t : IsInitial Z) : IsPushout (t.to _) (t.to _)
+ c.inl c.inr
 
-English:
-theorem of_is_coproduct'
-  given: (h : Limits.IsColimit (BinaryCofan.mk inl inr)) (t : IsInitial Z)
-  proof: of_is_coproduct h t
-
-中文:
-定理 of_is_coproduct'
-  条件: (h : Limits.是余极限 (BinaryCofan.mk inl inr)) (t : IsInitial Z)
-  证明: of_is_coproduct h t
-
-Depends on / 依赖: of_is_coproduct
+--- 原说明 ---
+A variant of `of_is_coproduct` that is more useful with `apply`.
 -/
 theorem of_is_coproduct' (h : Limits.IsColimit (BinaryCofan.mk inl inr)) (t : IsInitial Z) :
     IsPushout (t.to _) (t.to _) inl inr :=
   of_is_coproduct h t
 
 variable (X Y) in
-/--
-theorem `of_hasBinaryCoproduct'` / 定理 `of_hasBinaryCoproduct'`
-
-English:
-theorem of_hasBinaryCoproduct'
-  given: [HasBinaryCoproduct X Y] [HasInitial C]
-  proof: of_is_coproduct (colimit.isColimit _) initialIsInitial
-
-中文:
-定理 of_hasBinaryCoproduct'
-  条件: [HasBinaryCoproduct X Y] [HasInitial C]
-  证明: of_is_coproduct (colimit.isColimit _) initialIsInitial
-
-Depends on / 依赖: colimit, colimit.isColimit, initialIsInitial, isColimit, of_is_coproduct
+/-
+**CategoryTheory.IsPushout.of_hasBinaryCoproduct'** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.IsPushout`。
+形式化陈述：of_hasBinaryCoproduct' [HasBinaryCoproduct X Y] [HasInitial C] : IsPushout
+ (initial.to _) (initial.to _) (coprod.inl : X ⟶ _) (coprod.inr : Y ⟶ _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_is_coproduct`：of_is_coproduct {c : BinaryCof
+an X Y} (h : Limits.IsColimit c) (t : IsInitial Z) : IsPushout (t.to _) (t.to _)
+ c.inl c.inr
 -/
 theorem of_hasBinaryCoproduct' [HasBinaryCoproduct X Y] [HasInitial C] :
     IsPushout (initial.to _) (initial.to _) (coprod.inl : X ⟶ _) (coprod.inr : Y ⟶ _) :=
   of_is_coproduct (colimit.isColimit _) initialIsInitial
-
-/--
-theorem `of_iso_pushout` / 定理 `of_iso_pushout`
-
-English:
-theorem of_iso_pushout
-  statement: (h : CommSq f g inl inr) [HasPushout f g] (i : P ≅ pushout f g)
-  proof: of_isColimit' h
-    (Limits.IsColimit.ofIsoColimit (colimit.isColimit _)
-      (PushoutCocone.ext (s := PushoutCocone.mk ..) i w₁ w₂).symm)
-
-中文:
-定理 of_iso_pushout
-  结论: (h : 交换Sq f g inl inr) [HasPushout f g] (i : P ≅ pushout f g)
-  证明: of_isColimit' h
-    (Limits.IsColimit.ofIsoColimit (colimit.isColimit _)
-      (PushoutCocone.ext (s := PushoutCocone.mk ..) i w₁ w₂).symm)
-
-Depends on / 依赖: IsColimit, Limits, Limits.IsColimit.ofIsoColimit, PushoutCocone, PushoutCocone.ext, PushoutCocone.mk, colimit, colimit.isColimit, isColimit, ofIsoColimit, of_isColimit
+/-
+**CategoryTheory.IsPushout.of_iso_pushout** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.IsPushout`。
+形式化陈述：of_iso_pushout (h : CommSq f g inl inr) [HasPushout f g] (i : P ≅ pushout 
+f g) (w₁ : inl ≫ i.hom = pushout.inl _ _) (w₂ : inr ≫ i.hom = pushout.inr _ _) :
+ IsPushout f g inl inr
+参数：h : CommSq f g inl inr；i : P ≅ pushout f g；w₁ : inl ≫ i.hom = pushout.inl _ _
+；w₂ : inr ≫ i.hom = pushout.inr _ _。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_isColimit'`：of_isColimit' (w : CommSq f g in
+l inr) (h : Limits.IsColimit w.cocone) : IsPushout f g inl inr
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 theorem of_iso_pushout (h : CommSq f g inl inr) [HasPushout f g] (i : P ≅ pushout f g)
     (w₁ : inl ≫ i.hom = pushout.inl _ _) (w₂ : inr ≫ i.hom = pushout.inr _ _) :
@@ -1026,33 +1389,47 @@ theorem of_iso_pushout (h : CommSq f g inl inr) [HasPushout f g] (i : P ≅ push
   of_isColimit' h
     (Limits.IsColimit.ofIsoColimit (colimit.isColimit _)
       (PushoutCocone.ext (s := PushoutCocone.mk ..) i w₁ w₂).symm)
-
-/--
-lemma `of_iso` / 引理 `of_iso`
-
-English:
-lemma of_iso
-  statement: (h : IsPushout f g inl inr)
-  proof: by
-    rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commf]; rw [← comminl]; rw [← reassoc_of% commg]; rw [← comminr]; rw [h.w_assoc]
-  isColimit' :=
-    ⟨(IsColimit.precomposeHomEquiv
-        (spanExt e₁ e₂ e₃ commf.symm commg.symm) _).1
-          (IsColimit.ofIsoColimit h.isColimit
-            (PushoutCocone.ext e₄ comminl comminr))⟩
-
-中文:
-引理 of_iso
-  结论: (h : 是推出 f g inl inr)
-  证明: by
-    rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commf]; rw [← comminl]; rw [← reassoc_of% commg]; rw [← comminr]; rw [h.w_assoc]
-  isColimit' :=
-    ⟨(IsColimit.precomposeHomEquiv
-        (spanExt e₁ e₂ e₃ commf.symm commg.symm) _).1
-          (IsColimit.ofIsoColimit h.isColimit
-            (PushoutCocone.ext e₄ comminl comminr))⟩
-
-Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeHomEquiv, PushoutCocone, PushoutCocone.ext, cancel_epi, commf.symm, commg.symm, comminl, comminr, h.isColimit, h.w_assoc, isColimit, ofIsoColimit, precomposeHomEquiv, reassoc_of, spanExt, w_assoc
+/-
+**CategoryTheory.IsPushout.of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.IsPu
+shout`。
+形式化陈述：of_iso (h : IsPushout f g inl inr) {Z' X' Y' P' : C} {f' : Z' ⟶ X'} {g' : 
+Z' ⟶ Y'} {inl' : X' ⟶ P'} {inr' : Y' ⟶ P'} (e₁ : Z ≅ Z') (e₂ : X ≅ X') (e₃ : Y ≅
+ Y') (e₄ : P ≅ P') (commf : f ≫ e₂.hom = e₁.hom ≫ f') (commg : g ≫ e₃.hom = e₁.h
+om ≫ g') (comminl : inl ≫ e₄.hom = e₂.hom ≫ inl') (comminr : inr ≫ e₄.hom = e₃.h
+om ≫ inr') : IsPushout f' g' inl' inr' where w
+参数：h : IsPushout f g inl inr；e₁ : Z ≅ Z'；e₂ : X ≅ X'；e₃ : Y ≅ Y'；e₄ : P ≅ P'；com
+mf : f ≫ e₂.hom = e₁.hom ≫ f'；commg : g ≫ e₃.hom = e₁.hom ≫ g'；comminl : inl ≫ e
+₄.hom = e₂.hom ≫ inl'；comminr : inr ≫ e₄.hom = e₃.hom ≫ inr'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.CommSq.w_assoc`：∀ {C : Type u_1} [inst : CategoryTheory.C
+ategory.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y
+ ⟶ Z},   CategoryTh…
+· 使用定理 `CategoryTheory.IsPushout.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}   {in
+r : Y ⟶ P}, CategoryThe…
 -/
 lemma of_iso (h : IsPushout f g inl inr)
     {Z' X' Y' P' : C} {f' : Z' ⟶ X'} {g' : Z' ⟶ Y'} {inl' : X' ⟶ P'} {inr' : Y' ⟶ P'}
@@ -1063,37 +1440,49 @@ lemma of_iso (h : IsPushout f g inl inr)
     (comminr : inr ≫ e₄.hom = e₃.hom ≫ inr') :
     IsPushout f' g' inl' inr' where
   w := by
-    rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commf]; rw [← comminl]; rw [← reassoc_of% commg]; rw [← comminr]; rw [h.w_assoc]
+    rw [← cancel_epi e₁.hom, ← reassoc_of% commf, ← comminl,
+      ← reassoc_of% commg, ← comminr, h.w_assoc]
   isColimit' :=
     ⟨(IsColimit.precomposeHomEquiv
         (spanExt e₁ e₂ e₃ commf.symm commg.symm) _).1
           (IsColimit.ofIsoColimit h.isColimit
             (PushoutCocone.ext e₄ comminl comminr))⟩
 
-/--
-lemma `of_iso'` / 引理 `of_iso'`
+/-- Same as `IsPushout.of_iso`, but using the data and compatibilities involving
+the inverse isomorphisms instead. -/
+/-
+**CategoryTheory.IsPushout.of_iso'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：of_iso' {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P} 
+(h : IsPushout f g inl inr) {Z' X' Y' P' : C} {f' : Z' ⟶ X'} {g' : Z' ⟶ Y'} {inl
+' : X' ⟶ P'} {inr' : Y' ⟶ P'} (e₁ : Z' ≅ Z) (e₂ : X' ≅ X) (e₃ : Y' ≅ Y) (e₄ : P'
+ ≅ P) (commf : e₁.hom ≫ f = f' ≫ e₂.hom) (commg : e₁.hom ≫ g = g' ≫ e₃.hom) (com
+minl : e₂.hom ≫ inl = inl' ≫ e₄.hom) (comminr : e₃.hom ≫ inr = inr' ≫ e₄.hom) : 
+IsPushout f' g' inl' inr'
+参数：h : IsPushout f g inl inr；e₁ : Z' ≅ Z；e₂ : X' ≅ X；e₃ : Y' ≅ Y；e₄ : P' ≅ P；com
+mf : e₁.hom ≫ f = f' ≫ e₂.hom；commg : e₁.hom ≫ g = g' ≫ e₃.hom；comminl : e₂.hom 
+≫ inl = inl' ≫ e₄.hom；comminr : e₃.hom ≫ inr = inr' ≫ e₄.hom。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.of_iso`：of_iso (h : IsPushout f g inl inr) {Z' 
+X' Y' P' : C} {f' : Z' ⟶ X'} {g' : Z' ⟶ Y'} {inl' : X' ⟶ P'} {inr' : Y' ⟶ P'} (e
+₁ : Z ≅ Z') (e₂ : X ≅…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma of_iso'
-  statement: {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
-  proof: by
-  apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminl, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminr, Iso.inv_hom_id_assoc]
-
-中文:
-引理 of_iso'
-  结论: {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
-  证明: by
-  apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminl, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminr, Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, Iso.inv_hom_id_assoc, Iso.symm_hom, comminl, comminr, comp_inv_eq, h.of_iso, inv_hom_id_assoc, of_iso, symm_hom
+--- 原说明 ---
+Same as `IsPushout.of_iso`, but using the data and compatibilities involving
+the inverse isomorphisms instead.
 -/
 lemma of_iso' {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
     (h : IsPushout f g inl inr)
@@ -1114,38 +1503,27 @@ section
 
 variable {P X Y : C} {inl : X ⟶ P} {inr : X ⟶ P} {f : Y ⟶ X}
 
-/--
-lemma `isIso_inl_iso_of_epi` / 引理 `isIso_inl_iso_of_epi`
-
-English:
-lemma isIso_inl_iso_of_epi
-  given: (h : IsPushout f f inl inr) (inst : Epi f := by infer_instance)
-  proof: h.cocone.isIso_inl_of_epi_of_isColimit h.isColimit
-
-中文:
-引理 isIso_inl_iso_of_epi
-  条件: (h : 是推出 f f inl inr) (inst : 满态射 f := by infer_instance)
-  证明: h.cocone.isIso_inl_of_epi_of_isColimit h.isColimit
-
-Depends on / 依赖: cocone, h.cocone.isIso_inl_of_epi_of_isColimit, h.isColimit, infer_instance, isColimit, isIso_inl_of_epi_of_isColimit
+/-
+**CategoryTheory.IsPushout.isIso_inl_iso_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.IsPushout`。
+形式化陈述：isIso_inl_iso_of_epi (h : IsPushout f f inl inr) (inst : Epi f
+参数：h : IsPushout f f inl inr。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.isIso_inl_of_epi_of_isColimit`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y} [Categ
+oryTheory.Epi f]   {t : CategoryTheory.Limits.PushoutCo…
 -/
 lemma isIso_inl_iso_of_epi (h : IsPushout f f inl inr) (inst : Epi f := by infer_instance) :
     IsIso inl := h.cocone.isIso_inl_of_epi_of_isColimit h.isColimit
-
-/--
-lemma `isIso_inr_iso_of_epi` / 引理 `isIso_inr_iso_of_epi`
-
-English:
-lemma isIso_inr_iso_of_epi
-  given: (h : IsPushout f f inl inr) (inst : Epi f := by infer_instance)
-  proof: h.cocone.isIso_inr_of_epi_of_isColimit h.isColimit
-
-中文:
-引理 isIso_inr_iso_of_epi
-  条件: (h : 是推出 f f inl inr) (inst : 满态射 f := by infer_instance)
-  证明: h.cocone.isIso_inr_of_epi_of_isColimit h.isColimit
-
-Depends on / 依赖: cocone, h.cocone.isIso_inr_of_epi_of_isColimit, h.isColimit, infer_instance, isColimit, isIso_inr_of_epi_of_isColimit
+/-
+**CategoryTheory.IsPushout.isIso_inr_iso_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.IsPushout`。
+形式化陈述：isIso_inr_iso_of_epi (h : IsPushout f f inl inr) (inst : Epi f
+参数：h : IsPushout f f inl inr。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.isIso_inr_of_epi_of_isColimit`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} {f : X ⟶ Y} [Categ
+oryTheory.Epi f]   {t : CategoryTheory.Limits.PushoutCo…
 -/
 lemma isIso_inr_iso_of_epi (h : IsPushout f f inl inr) (inst : Epi f := by infer_instance) :
     IsIso inr := h.cocone.isIso_inr_of_epi_of_isColimit h.isColimit
@@ -1154,92 +1532,80 @@ end
 
 section
 
-/--
-lemma `epi_inl_of_epi` / 引理 `epi_inl_of_epi`
-
-English:
-lemma epi_inl_of_epi
-  given: (h : IsPushout f g inl inr) (inst : Epi g := by infer_instance)
-  proof: by
-  constructor
-  intro W fst' snd' heq
-  exact h.hom_ext heq (by simp [← cancel_epi g, ← h.w_assoc, heq])
-
-中文:
-引理 epi_inl_of_epi
-  条件: (h : 是推出 f g inl inr) (inst : 满态射 g := by infer_instance)
-  证明: by
-  constructor
-  intro W fst' snd' heq
-  exact h.hom_ext heq (by simp [← cancel_epi g, ← h.w_assoc, heq])
-
-Depends on / 依赖: cancel_epi, h.hom_ext, h.w_assoc, hom_ext, infer_instance, w_assoc
+/-
+**CategoryTheory.IsPushout.epi_inl_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.IsPushout`。
+形式化陈述：epi_inl_of_epi (h : IsPushout f g inl inr) (inst : Epi g
+参数：h : IsPushout f g inl inr。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.hom_ext`：hom_ext (hP : IsPushout f g inl inr) {
+W : C} {k l : P ⟶ W} (h₀ : inl ≫ k = inl ≫ l) (h₁ : inr ≫ k = inr ≫ l) : k = l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommSq.w_assoc`：∀ {C : Type u_1} [inst : CategoryTheory.C
+ategory.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y
+ ⟶ Z},   CategoryTh…
+· 使用定理 `CategoryTheory.IsPushout.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}   {in
+r : Y ⟶ P}, CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma epi_inl_of_epi (h : IsPushout f g inl inr) (inst : Epi g := by infer_instance) :
     Epi inl := by
   constructor
   intro W fst' snd' heq
   exact h.hom_ext heq (by simp [← cancel_epi g, ← h.w_assoc, heq])
-
-/--
-lemma `epi_inr_of_epi` / 引理 `epi_inr_of_epi`
-
-English:
-lemma epi_inr_of_epi
-  given: (h : IsPushout f g inl inr) (inst : Epi f := by infer_instance)
-  proof: h.flip.epi_inl_of_epi
-
-中文:
-引理 epi_inr_of_epi
-  条件: (h : 是推出 f g inl inr) (inst : 满态射 f := by infer_instance)
-  证明: h.flip.epi_inl_of_epi
-
-Depends on / 依赖: epi_inl_of_epi, h.flip.epi_inl_of_epi, infer_instance
+/-
+**CategoryTheory.IsPushout.epi_inr_of_epi** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.IsPushout`。
+形式化陈述：epi_inr_of_epi (h : IsPushout f g inl inr) (inst : Epi f
+参数：h : IsPushout f g inl inr。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.epi_inl_of_epi`：epi_inl_of_epi (h : IsPushout f
+ g inl inr) (inst : Epi g
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
 -/
 lemma epi_inr_of_epi (h : IsPushout f g inl inr) (inst : Epi f := by infer_instance) :
     Epi inr := h.flip.epi_inl_of_epi
-
-/--
-lemma `isIso_inl_of_isIso` / 引理 `isIso_inl_of_isIso`
-
-English:
-lemma isIso_inl_of_isIso
-  given: (h : IsPushout f g inl inr) (inst : IsIso g := by infer_instance)
-  proof: by
-  have := h.hasPushout
-  rw [← h.inl_isoPushout_inv]
-  infer_instance
-
-中文:
-引理 isIso_inl_of_isIso
-  条件: (h : 是推出 f g inl inr) (inst : 是同构 g := by infer_instance)
-  证明: by
-  have := h.hasPushout
-  rw [← h.inl_isoPushout_inv]
-  infer_instance
-
-Depends on / 依赖: h.hasPushout, h.inl_isoPushout_inv, hasPushout, infer_instance, inl_isoPushout_inv
+/-
+**CategoryTheory.IsPushout.isIso_inl_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.IsPushout`。
+形式化陈述：isIso_inl_of_isIso (h : IsPushout f g inl inr) (inst : IsIso g
+参数：h : IsPushout f g inl inr。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.hasPushout`：hasPushout (h : IsPushout f g inl i
+nr) : HasPushout f g where exists_colimit
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsPushout.inl_isoPushout_inv`：inl_isoPushout_inv (h : IsP
+ushout f g inl inr) [HasPushout f g] : pushout.inl _ _ ≫ h.isoPushout.inv = inl
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 lemma isIso_inl_of_isIso (h : IsPushout f g inl inr) (inst : IsIso g := by infer_instance) :
     IsIso inl := by
   have := h.hasPushout
   rw [← h.inl_isoPushout_inv]
   infer_instance
-
-/--
-lemma `isIso_inr_of_isIso` / 引理 `isIso_inr_of_isIso`
-
-English:
-lemma isIso_inr_of_isIso
-  given: (h : IsPushout f g inl inr) (inst : IsIso f := by infer_instance)
-  proof: h.flip.isIso_inl_of_isIso
-
-中文:
-引理 isIso_inr_of_isIso
-  条件: (h : 是推出 f g inl inr) (inst : 是同构 f := by infer_instance)
-  证明: h.flip.isIso_inl_of_isIso
-
-Depends on / 依赖: h.flip.isIso_inl_of_isIso, infer_instance, isIso_inl_of_isIso
+/-
+**CategoryTheory.IsPushout.isIso_inr_of_isIso** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.IsPushout`。
+形式化陈述：isIso_inr_of_isIso (h : IsPushout f g inl inr) (inst : IsIso f
+参数：h : IsPushout f g inl inr。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.isIso_inl_of_isIso`：isIso_inl_of_isIso (h : IsP
+ushout f g inl inr) (inst : IsIso g
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
 -/
 lemma isIso_inr_of_isIso (h : IsPushout f g inl inr) (inst : IsIso f := by infer_instance) :
     IsIso inr := h.flip.isIso_inl_of_isIso
@@ -1249,20 +1615,49 @@ end
 -- Objects here are arranged in a 3x2 grid, and indexed by their xy coordinates.
 -- Morphisms are named `hᵢⱼ` for a horizontal morphism starting at `(i,j)`,
 -- and `vᵢⱼ` for a vertical morphism starting at `(i,j)`.
-/--
-theorem `paste_vert` / 定理 `paste_vert`
+/-- Paste two pushout squares "vertically" to obtain another pushout square.
 
-English:
-theorem paste_vert
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: of_isColimit (pasteHorizIsPushout rfl s.isColimit t.isColimit)
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
+-/
+/-
+**CategoryTheory.IsPushout.paste_vert** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+IsPushout`。
+形式化陈述：paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂
+₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ 
+: X₂₂ ⟶ X₃₂} (s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) (t : IsPushout h₂₁ v₂₁ v₂₂ h₃₁) : I
+sPushout h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁
+参数：s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁；t : IsPushout h₂₁ v₂₁ v₂₂ h₃₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_isColimit`：of_isColimit {c : PushoutCocone f
+ g} (h : Limits.IsColimit c) : IsPushout f g c.inl c.inr
 
-中文:
-定理 paste_vert
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: of_isColimit (pasteHorizIsPushout rfl s.isColimit t.isColimit)
+--- 原说明 ---
+Paste two pushout squares "vertically" to obtain another pushout square.
 
-Depends on / 依赖: isColimit, of_isColimit, pasteHorizIsPushout, s.isColimit, t.isColimit
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
 -/
 theorem paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂₂ ⟶ X₃₂}
@@ -1270,20 +1665,44 @@ theorem paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁�
     IsPushout h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁ :=
   of_isColimit (pasteHorizIsPushout rfl s.isColimit t.isColimit)
 
-/--
-theorem `paste_horiz` / 定理 `paste_horiz`
+/-- Paste two pushout squares "horizontally" to obtain another pushout square.
 
-English:
-theorem paste_horiz
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  proof: (paste_vert s.flip t.flip).flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
+-/
+/-
+**CategoryTheory.IsPushout.paste_horiz** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.IsPushout`。
+形式化陈述：paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X
+₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃
+ : X₁₃ ⟶ X₂₃} (s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) (t : IsPushout h₁₂ v₁₂ v₁₃ h₂₂) : 
+IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)
+参数：s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁；t : IsPushout h₁₂ v₁₂ v₁₃ h₂₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
+· 使用定理 `CategoryTheory.IsPushout.paste_vert`：paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂
+ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v
+₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂…
 
-中文:
-定理 paste_horiz
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  证明: (paste_vert s.flip t.flip).flip
+--- 原说明 ---
+Paste two pushout squares "horizontally" to obtain another pushout square.
 
-Depends on / 依赖: paste_vert, s.flip, t.flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
 -/
 theorem paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
     {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
@@ -1291,86 +1710,148 @@ theorem paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁�
     IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂) :=
   (paste_vert s.flip t.flip).flip
 
-/--
-theorem `of_top` / 定理 `of_top`
+/-- Given a pushout square assembled from a pushout square on the top and
+a commuting square on the bottom, the bottom square is a pushout square.
 
-English:
-theorem of_top
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
-  proof: of_isColimit rightSquareIsPushout
-    (PushoutCocone.mk _ _ p) (cocone_inr _) t.isColimit s.isColimit
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
+-/
+/-
+**CategoryTheory.IsPushout.of_top** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsPu
+shout`。
+形式化陈述：of_top {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {
+h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂
+₂ ⟶ X₃₂} (s : IsPushout h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁) (p : h₂₁ ≫ v₂₂ = v₂₁ ≫ 
+h₃₁) (t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) : IsPushout h₂₁ v₂₁ v₂₂ h₃₁
+参数：s : IsPushout h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁；p : h₂₁ ≫ v₂₂ = v₂₁ ≫ h₃₁；t : I
+sPushout h₁₁ v₁₁ v₁₂ h₂₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_isColimit`：of_isColimit {c : PushoutCocone f
+ g} (h : Limits.IsColimit c) : IsPushout f g c.inl c.inr
+· 使用定理 `CategoryTheory.IsPushout.cocone_inr`：cocone_inr (h : IsPushout f g inl i
+nr) : h.cocone.inr = inr
 
-中文:
-定理 of_top
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
-  证明: of_isColimit rightSquareIsPushout
-    (PushoutCocone.mk _ _ p) (cocone_inr _) t.isColimit s.isColimit
+--- 原说明 ---
+Given a pushout square assembled from a pushout square on the top and
+a commuting square on the bottom, the bottom square is a pushout square.
 
-Depends on / 依赖: PushoutCocone, PushoutCocone.mk, cocone_inr, isColimit, of_isColimit, rightSquareIsPushout, s.isColimit, t.isColimit
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
 -/
 theorem of_top {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
     {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂₂ ⟶ X₃₂}
     (s : IsPushout h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁) (p : h₂₁ ≫ v₂₂ = v₂₁ ≫ h₃₁)
     (t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) : IsPushout h₂₁ v₂₁ v₂₂ h₃₁ :=
-of_isColimit rightSquareIsPushout
+  of_isColimit <| rightSquareIsPushout
     (PushoutCocone.mk _ _ p) (cocone_inr _) t.isColimit s.isColimit
 
-/--
-theorem `of_left` / 定理 `of_left`
+/-- Given a pushout square assembled from a pushout square on the left and
+a commuting square on the right, the right square is a pushout square.
 
-English:
-theorem of_left
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: (of_top s.flip p.symm t.flip).flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
+-/
+/-
+**CategoryTheory.IsPushout.of_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：of_left {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} 
+{h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X
+₁₃ ⟶ X₂₃} (s : IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)) (p : h₁₂ ≫ v₁₃ = v₁₂ ≫
+ h₂₂) (t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) : IsPushout h₁₂ v₁₂ v₁₃ h₂₂
+参数：s : IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)；p : h₁₂ ≫ v₁₃ = v₁₂ ≫ h₂₂；t : I
+sPushout h₁₁ v₁₁ v₁₂ h₂₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
+· 使用定理 `CategoryTheory.IsPushout.of_top`：of_top {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h
+₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂
+ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-中文:
-定理 of_left
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: (of_top s.flip p.symm t.flip).flip
+--- 原说明 ---
+Given a pushout square assembled from a pushout square on the left and
+a commuting square on the right, the right square is a pushout square.
 
-Depends on / 依赖: of_top, p.symm, s.flip, t.flip
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
 -/
 theorem of_left {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
     (s : IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂)) (p : h₁₂ ≫ v₁₃ = v₁₂ ≫ h₂₂)
     (t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) : IsPushout h₁₂ v₁₂ v₁₃ h₂₂ :=
   (of_top s.flip p.symm t.flip).flip
-
-/--
-theorem `paste_vert_iff` / 定理 `paste_vert_iff`
-
-English:
-theorem paste_vert_iff
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: ⟨fun h => h.of_top e s, s.paste_vert⟩
-
-中文:
-定理 paste_vert_iff
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: ⟨fun h => h.of_top e s, s.paste_vert⟩
-
-Depends on / 依赖: h.of_top, of_top, paste_vert, s.paste_vert
+/-
+**CategoryTheory.IsPushout.paste_vert_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.IsPushout`。
+形式化陈述：paste_vert_iff {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ 
+⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {
+v₂₂ : X₂₂ ⟶ X₃₂} (s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) (e : h₂₁ ≫ v₂₂ = v₂₁ ≫ h₃₁) : I
+sPushout h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁ ↔ IsPushout h₂₁ v₂₁ v₂₂ h₃₁
+参数：s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁；e : h₂₁ ≫ v₂₂ = v₂₁ ≫ h₃₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_top`：of_top {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h
+₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂
+ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `CategoryTheory.IsPushout.paste_vert`：paste_vert {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂
+ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v
+₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂…
 -/
 theorem paste_vert_iff {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ X₃₁} {v₂₂ : X₂₂ ⟶ X₃₂}
     (s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) (e : h₂₁ ≫ v₂₂ = v₂₁ ≫ h₃₁) :
     IsPushout h₁₁ (v₁₁ ≫ v₂₁) (v₁₂ ≫ v₂₂) h₃₁ ↔ IsPushout h₂₁ v₂₁ v₂₂ h₃₁ :=
   ⟨fun h => h.of_top e s, s.paste_vert⟩
-
-/--
-theorem `paste_horiz_iff` / 定理 `paste_horiz_iff`
-
-English:
-theorem paste_horiz_iff
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  proof: ⟨fun h => h.of_left e s, s.paste_horiz⟩
-
-中文:
-定理 paste_horiz_iff
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
-  证明: ⟨fun h => h.of_left e s, s.paste_horiz⟩
-
-Depends on / 依赖: h.of_left, of_left, paste_horiz, s.paste_horiz
+/-
+**CategoryTheory.IsPushout.paste_horiz_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.IsPushout`。
+形式化陈述：paste_horiz_iff {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂
+ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} 
+{v₁₃ : X₁₃ ⟶ X₂₃} (s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) (e : h₁₂ ≫ v₁₃ = v₁₂ ≫ h₂₂) : 
+IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂) ↔ IsPushout h₁₂ v₁₂ v₁₃ h₂₂
+参数：s : IsPushout h₁₁ v₁₁ v₁₂ h₂₁；e : h₁₂ ≫ v₁₃ = v₁₂ ≫ h₂₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_left`：of_left {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} 
+{h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X
+₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶…
+· 使用定理 `CategoryTheory.IsPushout.paste_horiz`：paste_horiz {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X
+₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} 
+{v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X…
 -/
 theorem paste_horiz_iff {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
     {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
@@ -1378,20 +1859,58 @@ theorem paste_horiz_iff {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h
     IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ (h₂₁ ≫ h₂₂) ↔ IsPushout h₁₂ v₁₂ v₁₃ h₂₂ :=
   ⟨fun h => h.of_left e s, s.paste_horiz⟩
 
-/--
-theorem `of_top'` / 定理 `of_top'`
+/-- Variant of `IsPushout.of_top` where `v₂₂` is induced from a morphism `v₁₃ : X₁₂ ⟶ X₃₂`, and
+the universal property of the top square.
 
-English:
-theorem of_top'
-  statement: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
-  proof: of_top ((t.inl_desc _ _ _).symm ▸ s) (t.inr_desc _ _ _) t
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
+-/
+/-
+**CategoryTheory.IsPushout.of_top'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：of_top' {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} 
+{h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₂ ⟶ X₃₂} {v₂₁ : X
+₂₁ ⟶ X₃₁} (s : IsPushout h₁₁ (v₁₁ ≫ v₂₁) v₁₃ h₃₁) (t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁
+) : IsPushout h₂₁ v₂₁ (t.desc v₁₃ (v₂₁ ≫ h₃₁) (by rw [s.w, Category.assoc])) h₃₁
+参数：s : IsPushout h₁₁ (v₁₁ ≫ v₂₁) v₁₃ h₃₁；t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_top`：of_top {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h
+₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂
+ ⟶ X₂₂} {v₂₁ : X₂₁ ⟶ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.IsPushout.inl_desc`：inl_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inl ≫ hP.desc h k w = h
+· 使用引理 `CategoryTheory.IsPushout.inr_desc`：inr_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inr ≫ hP.desc h k w = k
 
-中文:
-定理 of_top'
-  结论: {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
-  证明: of_top ((t.inl_desc _ _ _).symm ▸ s) (t.inr_desc _ _ _) t
+--- 原说明 ---
+Variant of `IsPushout.of_top` where `v₂₂` is induced from a morphism `v₁₃ : X₁₂ 
+⟶ X₃₂`, and
+the universal property of the top square.
 
-Depends on / 依赖: inl_desc, inr_desc, of_top, t.inl_desc, t.inr_desc
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂
+|            |
+v₁₁          v₁₂
+↓            ↓
+X₂₁ - h₂₁ -> X₂₂
+|            |
+v₂₁          v₂₂
+↓            ↓
+X₃₁ - h₃₁ -> X₃₂
+```
 -/
 theorem of_top' {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₂₁ : X₂₁ ⟶ X₂₂} {h₃₁ : X₃₁ ⟶ X₃₂}
     {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₂ ⟶ X₃₂} {v₂₁ : X₂₁ ⟶ X₃₁}
@@ -1399,53 +1918,100 @@ theorem of_top' {X₁₁ X₁₂ X₂₁ X₂₂ X₃₁ X₃₂ : C} {h₁₁ :
       IsPushout h₂₁ v₂₁ (t.desc v₁₃ (v₂₁ ≫ h₃₁) (by rw [s.w, Category.assoc])) h₃₁ :=
   of_top ((t.inl_desc _ _ _).symm ▸ s) (t.inr_desc _ _ _) t
 
-/--
-theorem `of_left'` / 定理 `of_left'`
+/-- Variant of `IsPushout.of_right` where `h₂₂` is induced from a morphism `h₂₃ : X₂₁ ⟶ X₂₃`, and
+the universal property of the left square.
 
-English:
-theorem of_left'
-  statement: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  proof: of_left ((t.inr_desc _ _ _).symm ▸ s) (by simp only [inl_desc]) t
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
+-/
+/-
+**CategoryTheory.IsPushout.of_left'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pushout`。
+形式化陈述：of_left' {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃}
+ {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₃ : X₂₁ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : 
+X₁₃ ⟶ X₂₃} (s : IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ h₂₃) (t : IsPushout h₁₁ v₁₁ v₁₂ h₂
+₁) : IsPushout h₁₂ v₁₂ v₁₃ (t.desc (h₁₂ ≫ v₁₃) h₂₃ (by rw [← Category.assoc, s.w
+]))
+参数：s : IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ h₂₃；t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_left`：of_left {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} 
+{h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂} {h₂₂ : X₂₂ ⟶ X₂₃} {v₁₁ : X
+₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.IsPushout.inr_desc`：inr_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inr ≫ hP.desc h k w = k
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.IsPushout.inl_desc`：inl_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inl ≫ hP.desc h k w = h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 of_left'
-  结论: {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
-  证明: of_left ((t.inr_desc _ _ _).symm ▸ s) (by simp only [inl_desc]) t
+--- 原说明 ---
+Variant of `IsPushout.of_right` where `h₂₂` is induced from a morphism `h₂₃ : X₂
+₁ ⟶ X₂₃`, and
+the universal property of the left square.
 
-Depends on / 依赖: inl_desc, inr_desc, of_left, t.inr_desc
+The objects in the statement fit into the following diagram:
+```
+X₁₁ - h₁₁ -> X₁₂ - h₁₂ -> X₁₃
+|            |            |
+v₁₁          v₁₂          v₁₃
+↓            ↓            ↓
+X₂₁ - h₂₁ -> X₂₂ - h₂₂ -> X₂₃
+```
 -/
 theorem of_left' {X₁₁ X₁₂ X₁₃ X₂₁ X₂₂ X₂₃ : C} {h₁₁ : X₁₁ ⟶ X₁₂} {h₁₂ : X₁₂ ⟶ X₁₃} {h₂₁ : X₂₁ ⟶ X₂₂}
     {h₂₃ : X₂₁ ⟶ X₂₃} {v₁₁ : X₁₁ ⟶ X₂₁} {v₁₂ : X₁₂ ⟶ X₂₂} {v₁₃ : X₁₃ ⟶ X₂₃}
     (s : IsPushout (h₁₁ ≫ h₁₂) v₁₁ v₁₃ h₂₃) (t : IsPushout h₁₁ v₁₁ v₁₂ h₂₁) :
     IsPushout h₁₂ v₁₂ v₁₃ (t.desc (h₁₂ ≫ v₁₃) h₂₃ (by rw [← Category.assoc, s.w])) :=
   of_left ((t.inr_desc _ _ _).symm ▸ s) (by simp only [inl_desc]) t
-
-/--
-theorem `of_horiz_isIso_epi` / 定理 `of_horiz_isIso_epi`
-
-English:
-theorem of_horiz_isIso_epi
-  given: [Epi f] [IsIso inr] (sq : CommSq f g inl inr)
-  statement: IsPushout f g inl inr
-  proof: of_isColimit' sq
-    (by
-      refine
-        PushoutCocone.IsColimit.mk _ (fun s => inv inr ≫ s.inr) (fun s => ?_)
-          (by simp) (by simp)
-      simp only [← cancel_epi f, s.condition, sq.w_assoc, IsIso.hom_inv_id_assoc])
-
-中文:
-定理 of_horiz_isIso_epi
-  条件: [满态射 f] [是同构 inr] (sq : 交换Sq f g inl inr)
-  结论: 是推出 f g inl inr
-  证明: of_isColimit' sq
-    (by
-      refine
-        PushoutCocone.IsColimit.mk _ (fun s => inv inr ≫ s.inr) (fun s => ?_)
-          (by simp) (by simp)
-      simp only [← cancel_epi f, s.condition, sq.w_assoc, IsIso.hom_inv_id_assoc])
-
-Depends on / 依赖: IsColimit, IsIso.hom_inv_id_assoc, PushoutCocone, PushoutCocone.IsColimit.mk, cancel_epi, condition, hom_inv_id_assoc, of_isColimit, s.condition, s.inr, sq.w_assoc, w_assoc
+/-
+**CategoryTheory.IsPushout.of_horiz_isIso_epi** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.IsPushout`。
+形式化陈述：of_horiz_isIso_epi [Epi f] [IsIso inr] (sq : CommSq f g inl inr) : IsPusho
+ut f g inl inr
+参数：sq : CommSq f g inl inr。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_isColimit'`：of_isColimit' (w : CommSq f g in
+l inr) (h : Limits.IsColimit w.cocone) : IsPushout f g inl inr
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommSq.w_assoc`：∀ {C : Type u_1} [inst : CategoryTheory.C
+ategory.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y
+ ⟶ Z},   CategoryTh…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : X ⟶ Z), CategoryT…
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.condition`：condition (t : PushoutCoc
+one f g) : f ≫ inl t = g ≫ inr t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 theorem of_horiz_isIso_epi [Epi f] [IsIso inr] (sq : CommSq f g inl inr) : IsPushout f g inl inr :=
   of_isColimit' sq
@@ -1454,137 +2020,193 @@ theorem of_horiz_isIso_epi [Epi f] [IsIso inr] (sq : CommSq f g inl inr) : IsPus
         PushoutCocone.IsColimit.mk _ (fun s => inv inr ≫ s.inr) (fun s => ?_)
           (by simp) (by simp)
       simp only [← cancel_epi f, s.condition, sq.w_assoc, IsIso.hom_inv_id_assoc])
-
-/--
-theorem `of_horiz_isIso` / 定理 `of_horiz_isIso`
-
-English:
-theorem of_horiz_isIso
-  given: [IsIso f] [IsIso inr] (sq : CommSq f g inl inr)
-  statement: IsPushout f g inl inr
-  proof: of_horiz_isIso_epi sq
-
-中文:
-定理 of_horiz_isIso
-  条件: [是同构 f] [是同构 inr] (sq : 交换Sq f g inl inr)
-  结论: 是推出 f g inl inr
-  证明: of_horiz_isIso_epi sq
-
-Depends on / 依赖: of_horiz_isIso_epi
+/-
+**CategoryTheory.IsPushout.of_horiz_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.IsPushout`。
+形式化陈述：of_horiz_isIso [IsIso f] [IsIso inr] (sq : CommSq f g inl inr) : IsPushout
+ f g inl inr
+参数：sq : CommSq f g inl inr。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_horiz_isIso_epi`：of_horiz_isIso_epi [Epi f] 
+[IsIso inr] (sq : CommSq f g inl inr) : IsPushout f g inl inr
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
 -/
 theorem of_horiz_isIso [IsIso f] [IsIso inr] (sq : CommSq f g inl inr) : IsPushout f g inl inr :=
   of_horiz_isIso_epi sq
-
-/--
-theorem `of_vert_isIso_epi` / 定理 `of_vert_isIso_epi`
-
-English:
-theorem of_vert_isIso_epi
-  given: [Epi g] [IsIso inl] (sq : CommSq f g inl inr)
-  statement: IsPushout f g inl inr
-  proof: (of_horiz_isIso_epi sq.flip).flip
-
-中文:
-定理 of_vert_isIso_epi
-  条件: [满态射 g] [是同构 inl] (sq : 交换Sq f g inl inr)
-  结论: 是推出 f g inl inr
-  证明: (of_horiz_isIso_epi sq.flip).flip
-
-Depends on / 依赖: of_horiz_isIso_epi, sq.flip
+/-
+**CategoryTheory.IsPushout.of_vert_isIso_epi** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.IsPushout`。
+形式化陈述：of_vert_isIso_epi [Epi g] [IsIso inl] (sq : CommSq f g inl inr) : IsPushou
+t f g inl inr
+参数：sq : CommSq f g inl inr。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.flip`：flip (h : IsPushout f g inl inr) : IsPush
+out g f inr inl
+· 使用定理 `CategoryTheory.IsPushout.of_horiz_isIso_epi`：of_horiz_isIso_epi [Epi f] 
+[IsIso inr] (sq : CommSq f g inl inr) : IsPushout f g inl inr
+· 使用定理 `CategoryTheory.CommSq.flip`：flip (p : CommSq f g h i) : CommSq g f i h
 -/
 theorem of_vert_isIso_epi [Epi g] [IsIso inl] (sq : CommSq f g inl inr) : IsPushout f g inl inr :=
   (of_horiz_isIso_epi sq.flip).flip
-
-/--
-theorem `of_vert_isIso` / 定理 `of_vert_isIso`
-
-English:
-theorem of_vert_isIso
-  given: [IsIso g] [IsIso inl] (sq : CommSq f g inl inr)
-  statement: IsPushout f g inl inr
-  proof: of_vert_isIso_epi sq
-
-中文:
-定理 of_vert_isIso
-  条件: [是同构 g] [是同构 inl] (sq : 交换Sq f g inl inr)
-  结论: 是推出 f g inl inr
-  证明: of_vert_isIso_epi sq
-
-Depends on / 依赖: of_vert_isIso_epi
+/-
+**CategoryTheory.IsPushout.of_vert_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.IsPushout`。
+形式化陈述：of_vert_isIso [IsIso g] [IsIso inl] (sq : CommSq f g inl inr) : IsPushout 
+f g inl inr
+参数：sq : CommSq f g inl inr。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_vert_isIso_epi`：of_vert_isIso_epi [Epi g] [I
+sIso inl] (sq : CommSq f g inl inr) : IsPushout f g inl inr
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
 -/
 theorem of_vert_isIso [IsIso g] [IsIso inl] (sq : CommSq f g inl inr) : IsPushout f g inl inr :=
   of_vert_isIso_epi sq
-
-/--
-lemma `of_id_fst` / 引理 `of_id_fst`
-
-English:
-lemma of_id_fst
-  statement: IsPushout (𝟙 _) f f (𝟙 _)
-  proof: IsPushout.of_horiz_isIso ⟨by simp⟩
-
-中文:
-引理 of_id_fst
-  结论: 是推出 (𝟙 _) f f (𝟙 _)
-  证明: IsPushout.of_horiz_isIso ⟨by simp⟩
-
-Depends on / 依赖: IsPushout, IsPushout.of_horiz_isIso, of_horiz_isIso
+/-
+**CategoryTheory.IsPushout.of_id_fst** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.I
+sPushout`。
+形式化陈述：of_id_fst : IsPushout (𝟙 _) f f (𝟙 _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_horiz_isIso`：of_horiz_isIso [IsIso f] [IsIso
+ inr] (sq : CommSq f g inl inr) : IsPushout f g inl inr
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma of_id_fst : IsPushout (𝟙 _) f f (𝟙 _) := IsPushout.of_horiz_isIso ⟨by simp⟩
-
-/--
-lemma `of_id_snd` / 引理 `of_id_snd`
-
-English:
-lemma of_id_snd
-  statement: IsPushout f (𝟙 _) (𝟙 _) f
-  proof: IsPushout.of_vert_isIso ⟨by simp⟩
-
-中文:
-引理 of_id_snd
-  结论: 是推出 f (𝟙 _) (𝟙 _) f
-  证明: IsPushout.of_vert_isIso ⟨by simp⟩
-
-Depends on / 依赖: IsPushout, IsPushout.of_vert_isIso, of_vert_isIso
+/-
+**CategoryTheory.IsPushout.of_id_snd** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.I
+sPushout`。
+形式化陈述：of_id_snd : IsPushout f (𝟙 _) (𝟙 _) f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_vert_isIso`：of_vert_isIso [IsIso g] [IsIso i
+nl] (sq : CommSq f g inl inr) : IsPushout f g inl inr
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma of_id_snd : IsPushout f (𝟙 _) (𝟙 _) f := IsPushout.of_vert_isIso ⟨by simp⟩
 
-/--
-lemma `id_vert` / 引理 `id_vert`
+/-- The following diagram is a pullback
+```
+X --f--> Z
+|        |
+id       id
+v        v
+X --f--> Z
+```
+-/
+/-
+**CategoryTheory.IsPushout.id_vert** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：id_vert (f : X ⟶ Z) : IsPushout f (𝟙 X) (𝟙 Z) f
+参数：f : X ⟶ Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_vert_isIso`：of_vert_isIso [IsIso g] [IsIso i
+nl] (sq : CommSq f g inl inr) : IsPushout f g inl inr
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_vert
-  given: (f : X ⟶ Z)
-  statement: IsPushout f (𝟙 X) (𝟙 Z) f
-  proof: of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-中文:
-引理 id_vert
-  条件: (f : X ⟶ Z)
-  结论: 是推出 f (𝟙 X) (𝟙 Z) f
-  证明: of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_vert_isIso
+--- 原说明 ---
+The following diagram is a pullback
+```
+X --f--> Z
+|        |
+id       id
+v        v
+X --f--> Z
+```
 -/
 lemma id_vert (f : X ⟶ Z) : IsPushout f (𝟙 X) (𝟙 Z) f :=
   of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
 
-/--
-lemma `id_horiz` / 引理 `id_horiz`
+/-- The following diagram is a pullback
+```
+X --id--> X
+|         |
+f         f
+v         v
+Z --id--> Z
+```
+-/
+/-
+**CategoryTheory.IsPushout.id_horiz** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Is
+Pushout`。
+形式化陈述：id_horiz (f : X ⟶ Z) : IsPushout (𝟙 X) f f (𝟙 Z)
+参数：f : X ⟶ Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_horiz_isIso`：of_horiz_isIso [IsIso f] [IsIso
+ inr] (sq : CommSq f g inl inr) : IsPushout f g inl inr
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_horiz
-  given: (f : X ⟶ Z)
-  statement: IsPushout (𝟙 X) f f (𝟙 Z)
-  proof: of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-中文:
-引理 id_horiz
-  条件: (f : X ⟶ Z)
-  结论: 是推出 (𝟙 X) f f (𝟙 Z)
-  证明: of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
-
-Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_horiz_isIso
+--- 原说明 ---
+The following diagram is a pullback
+```
+X --id--> X
+|         |
+f         f
+v         v
+Z --id--> Z
+```
 -/
 lemma id_horiz (f : X ⟶ Z) : IsPushout (𝟙 X) f f (𝟙 Z) :=
   of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
@@ -1592,47 +2214,70 @@ lemma id_horiz (f : X ⟶ Z) : IsPushout (𝟙 X) f f (𝟙 Z) :=
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /--
-lemma `of_coprod_inl_with_id` / 引理 `of_coprod_inl_with_id`
+In a category, given a morphism `f : A ⟶ B` and an object `X`,
+this is the obvious pushout diagram:
+```
+A ⟶ A ⨿ X
+|     |
+v     v
+B ⟶ B ⨿ X
+```
+-/
+/-
+**CategoryTheory.IsPushout.of_coprod_inl_with_id** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.IsPushout`。
+形式化陈述：of_coprod_inl_with_id {A B : C} (f : A ⟶ B) (X : C) [HasBinaryCoproduct A 
+X] [HasBinaryCoproduct B X] : IsPushout coprod.inl f (coprod.map f (𝟙 X)) coprod
+.inl where w
+参数：f : A ⟶ B；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.coprod.inl_map`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {W X Y Z : C}   [inst_1 : CategoryTheory.Limits.HasBinary
+Coproduct W X] [inst_2 : C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.coprod.hom_ext`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinaryCo
+product X Y] {f g : X ⨿ Y …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Limits.coprod.map_desc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {S T U V W : C}   [inst_1 : CategoryTheory.Limits.HasBin
+aryCoproduct U W] [inst_2 :…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.condition`：condition (t : PushoutCoc
+one f g) : f ≫ inl t = g ≫ inr t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.coprod.inr_map_assoc`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {W X Y Z : C}   [inst_1 : CategoryTheory.Limits.Has
+BinaryCoproduct W X] [inst_2 : C…
 
-English:
-lemma of_coprod_inl_with_id
-  statement: {A B : C} (f : A ⟶ B) (X : C) [HasBinaryCoproduct A X]
-  proof: by simp
-  isColimit' := ⟨PushoutCocone.isColimitAux' _ (fun s => by
-    refine ⟨coprod.desc s.inr (coprod.inr ≫ s.inl), ?_, ?_, ?_⟩
-    · ext
-      · simp [PushoutCocone.condition]
-      · simp
-    · simp
-    · intro m h₁ h₂
-      dsimp at m h₁ h₂ ⊢
-      ext
-      · simpa using h₂
-      · simp [← h₁])⟩
-
-中文:
-引理 of_coprod_inl_with_id
-  结论: {A B : C} (f : A ⟶ B) (X : C) [HasBinaryCoproduct A X]
-  证明: by simp
-  isColimit' := ⟨PushoutCocone.isColimitAux' _ (fun s => by
-    refine ⟨coprod.desc s.inr (coprod.inr ≫ s.inl), ?_, ?_, ?_⟩
-    · ext
-      · simp [PushoutCocone.condition]
-      · simp
-    · simp
-    · intro m h₁ h₂
-      dsimp at m h₁ h₂ ⊢
-      ext
-      · simpa using h₂
-      · simp [← h₁])⟩
-
-Depends on / 依赖: PushoutCocone, PushoutCocone.condition, PushoutCocone.isColimitAux, condition, coprod, coprod.desc, coprod.inr, isColimit, isColimitAux, s.inl, s.inr
+--- 原说明 ---
+In a category, given a morphism `f : A ⟶ B` and an object `X`,
+this is the obvious pushout diagram:
+```
+A ⟶ A ⨿ X
+|     |
+v     v
+B ⟶ B ⨿ X
+```
 -/
 lemma of_coprod_inl_with_id {A B : C} (f : A ⟶ B) (X : C) [HasBinaryCoproduct A X]
     [HasBinaryCoproduct B X] :
     IsPushout coprod.inl f (coprod.map f (𝟙 X)) coprod.inl where
   w := by simp
-  isColimit' := ⟨PushoutCocone.isColimitAux' _ (fun s => by
+  isColimit' := ⟨PushoutCocone.isColimitAux' _ (fun s ↦ by
     refine ⟨coprod.desc s.inr (coprod.inr ≫ s.inl), ?_, ?_, ?_⟩
     · ext
       · simp [PushoutCocone.condition]
@@ -1645,24 +2290,39 @@ lemma of_coprod_inl_with_id {A B : C} (f : A ⟶ B) (X : C) [HasBinaryCoproduct 
       · simp [← h₁])⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `of_isColimit_binaryCofan_of_isInitial` / 引理 `of_isColimit_binaryCofan_of_isInitial`
-
-English:
-lemma of_isColimit_binaryCofan_of_isInitial
-  proof: hI.hom_ext _ _
-  isColimit' := ⟨PushoutCocone.IsColimit.mk _
-    (fun s => BinaryCofan.IsColimit.desc hc s.inr s.inl) (by simp) (by simp)
-    (fun s m h₁ h₂ => by apply BinaryCofan.IsColimit.hom_ext hc <;> cat_disch)⟩
-
-中文:
-引理 of_isColimit_binaryCofan_of_isInitial
-  证明: hI.hom_ext _ _
-  isColimit' := ⟨PushoutCocone.IsColimit.mk _
-    (fun s => BinaryCofan.IsColimit.desc hc s.inr s.inl) (by simp) (by simp)
-    (fun s m h₁ h₂ => by apply BinaryCofan.IsColimit.hom_ext hc <;> cat_disch)⟩
-
-Depends on / 依赖: hI.hom_ext, hom_ext
+/-
+**CategoryTheory.IsPushout.of_isColimit_binaryCofan_of_isInitial** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.IsPushout`。
+形式化陈述：of_isColimit_binaryCofan_of_isInitial {X Y : C} {c : BinaryCofan X Y} (hc 
+: IsColimit c) {I : C} (hI : IsInitial I) : IsPushout (hI.to _) (hI.to _) c.inr 
+c.inl where w
+参数：hc : IsColimit c；hI : IsInitial I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsInitial.hom_ext`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {X Y : C} (t : CategoryTheory.Limits.IsInitial X)  
+ (f g : X ⟶ Y), f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.BinaryCofan.IsColimit.inr_desc`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {X Y W : C} {s : CategoryTheory.Limits.Bi
+naryCofan X Y}   (h : CategoryTheory.Limit…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.Limits.BinaryCofan.IsColimit.inl_desc`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {X Y W : C} {s : CategoryTheory.Limits.Bi
+naryCofan X Y}   (h : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.BinaryCofan.IsColimit.hom_ext`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Bin
+aryCofan X Y}   (h : CategoryTheory.Limit…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
 lemma of_isColimit_binaryCofan_of_isInitial
     {X Y : C} {c : BinaryCofan X Y} (hc : IsColimit c)
@@ -1670,55 +2330,46 @@ lemma of_isColimit_binaryCofan_of_isInitial
     IsPushout (hI.to _) (hI.to _) c.inr c.inl where
   w := hI.hom_ext _ _
   isColimit' := ⟨PushoutCocone.IsColimit.mk _
-    (fun s => BinaryCofan.IsColimit.desc hc s.inr s.inl) (by simp) (by simp)
-    (fun s m h₁ h₂ => by apply BinaryCofan.IsColimit.hom_ext hc <;> cat_disch)⟩
-
-/--
-lemma `mk'` / 引理 `mk'`
-
-English:
-lemma mk'
-  statement: {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
-  proof: w
-  isColimit' := by
-    let l (s : PushoutCocone f g) := exists_desc _ _ s.condition
-    exact ⟨PushoutCocone.IsColimit.mk _
-      (fun s => (l s).choose)
-      (fun s => (l s).choose_spec.1)
-      (fun s => (l s).choose_spec.2)
-      (fun s m h₁ h₂ => hom_ext
-        (h₁.trans (l s).choose_spec.1.symm)
-        (h₂.trans (l s).choose_spec.2.symm))⟩
-
-中文:
-引理 mk'
-  结论: {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
-  证明: w
-  isColimit' := by
-    let l (s : PushoutCocone f g) := exists_desc _ _ s.condition
-    exact ⟨PushoutCocone.IsColimit.mk _
-      (fun s => (l s).choose)
-      (fun s => (l s).choose_spec.1)
-      (fun s => (l s).choose_spec.2)
-      (fun s m h₁ h₂ => hom_ext
-        (h₁.trans (l s).choose_spec.1.symm)
-        (h₂.trans (l s).choose_spec.2.symm))⟩
+    (fun s ↦ BinaryCofan.IsColimit.desc hc s.inr s.inl) (by simp) (by simp)
+    (fun s m h₁ h₂ ↦ by apply BinaryCofan.IsColimit.hom_ext hc <;> cat_disch)⟩
+/-
+**CategoryTheory.IsPushout.mk'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.IsPusho
+ut`。
+形式化陈述：mk' {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P} (w :
+ f ≫ inl = g ≫ inr) (hom_ext : forall ⦃T : C⦄ ⦃φ φ' : P ⟶ T⦄ (_ : inl ≫ φ = inl 
+≫ φ') (_ : inr ≫ φ = inr ≫ φ'), φ = φ') (exists_desc : forall ⦃T : C⦄ (a : X ⟶ T
+) (b : Y ⟶ T) (_ : f ≫ a = g ≫ b), exists (l : P ⟶ T), inl ≫ l = a ∧ inr ≫ l = b
+) : IsPushout f g inl inr where w
+参数：w : f ≫ inl = g ≫ inr；hom_ext : forall ⦃T : C⦄ ⦃φ φ' : P ⟶ T⦄ (_ : inl ≫ φ = 
+inl ≫ φ') (_ : inr ≫ φ = inr ≫ φ'), φ = φ'；exists_desc : forall ⦃T : C⦄ (a : X ⟶
+ T) (b : Y ⟶ T) (_ : f ≫ a = g ≫ b), exists (l : P ⟶ T), inl ≫ l = a ∧ inr ≫ l =
+ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.condition`：condition (t : PushoutCoc
+one f g) : f ≫ inl t = g ≫ inr t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma mk' {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
     (w : f ≫ inl = g ≫ inr)
-    (hom_ext : forall ⦃T : C⦄ ⦃φ φ' : P ⟶ T⦄ (_ : inl ≫ φ = inl ≫ φ')
+    (hom_ext : ∀ ⦃T : C⦄ ⦃φ φ' : P ⟶ T⦄ (_ : inl ≫ φ = inl ≫ φ')
       (_ : inr ≫ φ = inr ≫ φ'), φ = φ')
-    (exists_desc : forall ⦃T : C⦄ (a : X ⟶ T) (b : Y ⟶ T)
-      (_ : f ≫ a = g ≫ b), exists (l : P ⟶ T), inl ≫ l = a ∧ inr ≫ l = b) :
+    (exists_desc : ∀ ⦃T : C⦄ (a : X ⟶ T) (b : Y ⟶ T)
+      (_ : f ≫ a = g ≫ b), ∃ (l : P ⟶ T), inl ≫ l = a ∧ inr ≫ l = b) :
     IsPushout f g inl inr where
   w := w
   isColimit' := by
     let l (s : PushoutCocone f g) := exists_desc _ _ s.condition
     exact ⟨PushoutCocone.IsColimit.mk _
-      (fun s => (l s).choose)
-      (fun s => (l s).choose_spec.1)
-      (fun s => (l s).choose_spec.2)
-      (fun s m h₁ h₂ => hom_ext
+      (fun s ↦ (l s).choose)
+      (fun s ↦ (l s).choose_spec.1)
+      (fun s ↦ (l s).choose_spec.2)
+      (fun s m h₁ h₂ ↦ hom_ext
         (h₁.trans (l s).choose_spec.1.symm)
         (h₂.trans (l s).choose_spec.2.symm))⟩
 
@@ -1728,32 +2379,25 @@ section Equalizer
 
 variable {X Y Z : C} {f f' : X ⟶ Y} {g g' : Y ⟶ Z}
 
-/--
-Definition of `IsPullback.isLimitFork` / `IsPullback.isLimitFork` 的定义
+/-- If `f : X ⟶ Y`, `g g' : Y ⟶ Z` forms a pullback square, then `f` is the equalizer of
+`g` and `g'`. -/
+/-
+**CategoryTheory.IsPullback.isLimitFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.IsPullback`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y Z
+ : C} →       {f : X ⟶ Y} →         {g g' : Y ⟶ Z} →           (H : CategoryTheo
+ry.IsPullback f f g g') → CategoryTheory.Limits.IsLimit (CategoryTheory.Limits.F
+ork.ofι f ⋯)
+参数：H : CategoryTheory.IsPullback f f g g'；CategoryTheory.Limits.Fork.ofι f ⋯。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Fork.condition`：∀ {C : Type u} {X Y : C} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} (t : CategoryTheory.Limits.Fork f
+ g),   CategoryTheory.Cate…
 
-English:
-definition IsPullback.isLimitFork
-  signature: (H : IsPullback f f g g')
-  body: by
-  fapply Fork.IsLimit.mk
-  · exact fun s => H.isLimit.lift (PullbackCone.mk s.ι s.ι s.condition)
-  · exact fun s => H.isLimit.fac _ WalkingCospan.left
-  · intro s m e
-    apply PullbackCone.IsLimit.hom_ext H.isLimit <;> refine e.trans ?_ <;> symm <;>
-      exact H.isLimit.fac _ _
-
-中文:
-定义 是拉回.isLimitFork
-  签名: (H : 是拉回 f f g g')
-  定义体: by
-  fapply Fork.IsLimit.mk
-  · exact fun s => H.isLimit.lift (PullbackCone.mk s.ι s.ι s.condition)
-  · exact fun s => H.isLimit.fac _ WalkingCospan.left
-  · intro s m e
-    apply PullbackCone.IsLimit.hom_ext H.isLimit <;> refine e.trans ?_ <;> symm <;>
-      exact H.isLimit.fac _ _
-
-Depends on / 依赖: Fork.IsLimit.mk, H.isLimit, H.isLimit.fac, H.isLimit.lift, IsLimit, PullbackCone, PullbackCone.IsLimit.hom_ext, PullbackCone.mk, WalkingCospan, WalkingCospan.left, condition, e.trans, fapply, hom_ext, isLimit, s.condition
+--- 原说明 ---
+If `f : X ⟶ Y`, `g g' : Y ⟶ Z` forms a pullback square, then `f` is the equalize
+r of
+`g` and `g'`.
 -/
 noncomputable def IsPullback.isLimitFork (H : IsPullback f f g g') : IsLimit (Fork.ofι f H.w) := by
   fapply Fork.IsLimit.mk
@@ -1763,32 +2407,25 @@ noncomputable def IsPullback.isLimitFork (H : IsPullback f f g g') : IsLimit (Fo
     apply PullbackCone.IsLimit.hom_ext H.isLimit <;> refine e.trans ?_ <;> symm <;>
       exact H.isLimit.fac _ _
 
-/--
-Definition of `IsPushout.isLimitFork` / `IsPushout.isLimitFork` 的定义
+/-- If `f f' : X ⟶ Y`, `g : Y ⟶ Z` forms a pushout square, then `g` is the coequalizer of
+`f` and `f'`. -/
+/-
+**CategoryTheory.IsPushout.isLimitFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.IsPushout`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y Z
+ : C} →       {f f' : X ⟶ Y} →         {g : Y ⟶ Z} →           (H : CategoryTheo
+ry.IsPushout f f' g g) →             CategoryTheory.Limits.IsColimit (CategoryTh
+eory.Limits.Cofork.ofπ g ⋯)
+参数：H : CategoryTheory.IsPushout f f' g g；CategoryTheory.Limits.Cofork.ofπ g ⋯。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cofork.condition`：∀ {C : Type u} {X Y : C} [inst :
+ CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} (t : CategoryTheory.Limits.Cofo
+rk f g),   CategoryTheory.Ca…
 
-English:
-definition IsPushout.isLimitFork
-  signature: (H : IsPushout f f' g g)
-  body: by
-  fapply Cofork.IsColimit.mk
-  · exact fun s => H.isColimit.desc (PushoutCocone.mk s.π s.π s.condition)
-  · exact fun s => H.isColimit.fac _ WalkingSpan.left
-  · intro s m e
-    apply PushoutCocone.IsColimit.hom_ext H.isColimit <;> refine e.trans ?_ <;> symm <;>
-      exact H.isColimit.fac _ _
-
-中文:
-定义 是推出.isLimitFork
-  签名: (H : 是推出 f f' g g)
-  定义体: by
-  fapply Cofork.IsColimit.mk
-  · exact fun s => H.isColimit.desc (PushoutCocone.mk s.π s.π s.condition)
-  · exact fun s => H.isColimit.fac _ WalkingSpan.left
-  · intro s m e
-    apply PushoutCocone.IsColimit.hom_ext H.isColimit <;> refine e.trans ?_ <;> symm <;>
-      exact H.isColimit.fac _ _
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.mk, H.isColimit, H.isColimit.desc, H.isColimit.fac, IsColimit, PushoutCocone, PushoutCocone.IsColimit.hom_ext, PushoutCocone.mk, WalkingSpan, WalkingSpan.left, condition, e.trans, fapply, hom_ext, isColimit, s.condition
+--- 原说明 ---
+If `f f' : X ⟶ Y`, `g : Y ⟶ Z` forms a pushout square, then `g` is the coequaliz
+er of
+`f` and `f'`.
 -/
 noncomputable def IsPushout.isLimitFork (H : IsPushout f f' g g) :
     IsColimit (Cofork.ofπ g H.w) := by
@@ -1807,34 +2444,38 @@ variable {D : Type u₂} [Category.{v₂} D]
 variable (F : C ⥤ D) {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Functor.map_isPullback` / 定理 `Functor.map_isPullback`
-
-English:
-theorem Functor.map_isPullback
-  given: [PreservesLimit (cospan h i) F] (s : IsPullback f g h i)
-  proof: by
-  refine
-    IsPullback.of_isLimit' (F.map_commSq s.toCommSq)
-      (IsLimit.equivOfNatIsoOfIso (cospanCompIso F h i) _ _ (WalkingCospan.ext ?_ ?_ ?_)
-        (isLimitOfPreserves F s.isLimit))
-  · rfl
-  · simp
-  · simp
-
-中文:
-定理 函子.map_isPullback
-  条件: [保持极限 (cospan h i) F] (s : 是拉回 f g h i)
-  证明: by
-  refine
-    IsPullback.of_isLimit' (F.map_commSq s.toCommSq)
-      (IsLimit.equivOfNatIsoOfIso (cospanCompIso F h i) _ _ (WalkingCospan.ext ?_ ?_ ?_)
-        (isLimitOfPreserves F s.isLimit))
-  · rfl
-  · simp
-  · simp
-
-Depends on / 依赖: F.map_commSq, IsLimit, IsLimit.equivOfNatIsoOfIso, IsPullback, IsPullback.of_isLimit, WalkingCospan, WalkingCospan.ext, cospanCompIso, equivOfNatIsoOfIso, isLimit, isLimitOfPreserves, map_commSq, of_isLimit, s.isLimit, s.toCommSq, toCommSq
+/-
+**CategoryTheory.Functor.map_isPullback** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}   [CategoryTheory
+.Limits.PreservesLimit (CategoryTheory.Limits.cospan h i) F],   CategoryTheory.I
+sPullback f g h i → CategoryTheory.IsPullback (F.map f) (F.map g) (F.map h) (F.m
+ap i)
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.cospan h i；F.map f；F.map
+ g；F.map h；F.map i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_isLimit'`：of_isLimit' (w : CommSq fst snd f
+ g) (h : Limits.IsLimit w.cone) : IsPullback fst snd f g
+· 使用定理 `CategoryTheory.Functor.map_commSq`：map_commSq (s : CommSq f g h i) : Com
+mSq (F.map f) (F.map g) (F.map h) (F.map i)
+· 使用定理 `CategoryTheory.IsPullback.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}   
+{g : Y ⟶ Z}, CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Functor.map_isPullback [PreservesLimit (cospan h i) F] (s : IsPullback f g h i) :
     IsPullback (F.map f) (F.map g) (F.map h) (F.map i) := by
@@ -1848,42 +2489,38 @@ theorem Functor.map_isPullback [PreservesLimit (cospan h i) F] (s : IsPullback f
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Functor.map_isPushout` / 定理 `Functor.map_isPushout`
-
-English:
-theorem Functor.map_isPushout
-  given: [PreservesColimit (span f g) F] (s : IsPushout f g h i)
-  proof: by
-  refine
-    IsPushout.of_isColimit' (F.map_commSq s.toCommSq)
-      (IsColimit.equivOfNatIsoOfIso (spanCompIso F f g) _ _ (WalkingSpan.ext ?_ ?_ ?_)
-        (isColimitOfPreserves F s.isColimit))
-  · rfl
-  · simp
-  · simp
-
-alias IsPullback.map := Functor.map_isPullback
-
-alias IsPushout.map := Functor.map_isPushout
-
-中文:
-定理 函子.map_isPushout
-  条件: [保持余极限 (span f g) F] (s : 是推出 f g h i)
-  证明: by
-  refine
-    IsPushout.of_isColimit' (F.map_commSq s.toCommSq)
-      (IsColimit.equivOfNatIsoOfIso (spanCompIso F f g) _ _ (WalkingSpan.ext ?_ ?_ ?_)
-        (isColimitOfPreserves F s.isColimit))
-  · rfl
-  · simp
-  · simp
-
-alias IsPullback.map := Functor.map_isPullback
-
-alias IsPushout.map := Functor.map_isPushout
-
-Depends on / 依赖: F.map_commSq, IsColimit, IsColimit.equivOfNatIsoOfIso, IsPushout, IsPushout.of_isColimit, WalkingSpan, WalkingSpan.ext, equivOfNatIsoOfIso, isColimit, isColimitOfPreserves, map_commSq, of_isColimit, s.isColimit, s.toCommSq, spanCompIso, toCommSq
+/-
+**CategoryTheory.Functor.map_isPushout** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}   [CategoryTheory
+.Limits.PreservesColimit (CategoryTheory.Limits.span f g) F],   CategoryTheory.I
+sPushout f g h i → CategoryTheory.IsPushout (F.map f) (F.map g) (F.map h) (F.map
+ i)
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.span f g；F.map f；F.map g
+；F.map h；F.map i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_isColimit'`：of_isColimit' (w : CommSq f g in
+l inr) (h : Limits.IsColimit w.cocone) : IsPushout f g inl inr
+· 使用定理 `CategoryTheory.Functor.map_commSq`：map_commSq (s : CommSq f g h i) : Com
+mSq (F.map f) (F.map g) (F.map h) (F.map i)
+· 使用定理 `CategoryTheory.IsPushout.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}   {in
+r : Y ⟶ P}, CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Functor.map_isPushout [PreservesColimit (span f g) F] (s : IsPushout f g h i) :
     IsPushout (F.map f) (F.map g) (F.map h) (F.map i) := by
@@ -1898,143 +2535,188 @@ theorem Functor.map_isPushout [PreservesColimit (span f g) F] (s : IsPushout f g
 alias IsPullback.map := Functor.map_isPullback
 
 alias IsPushout.map := Functor.map_isPushout
-
-/--
-theorem `IsPullback.of_map` / 定理 `IsPullback.of_map`
-
-English:
-theorem IsPullback.of_map
-  statement: [ReflectsLimit (cospan h i) F] (e : f ≫ h = g ≫ i)
-  proof: by
-refine ⟨⟨e⟩, ⟨isLimitOfReflects F ?_⟩⟩
-  refine
-    (IsLimit.equivOfNatIsoOfIso (cospanCompIso F h i) _ _ (WalkingCospan.ext ?_ ?_ ?_)).symm
-      H.isLimit
-  exacts [Iso.refl _, (Category.comp_id _).trans (Category.id_comp _).symm,
-    (Category.comp_id _).trans (Category.id_comp _).symm]
-
-中文:
-定理 是拉回.of_map
-  结论: [反映极限 (cospan h i) F] (e : f ≫ h = g ≫ i)
-  证明: by
-refine ⟨⟨e⟩, ⟨isLimitOfReflects F ?_⟩⟩
-  refine
-    (IsLimit.equivOfNatIsoOfIso (cospanCompIso F h i) _ _ (WalkingCospan.ext ?_ ?_ ?_)).symm
-      H.isLimit
-  exacts [Iso.refl _, (Category.comp_id _).trans (Category.id_comp _).symm,
-    (Category.comp_id _).trans (Category.id_comp _).symm]
+/-
+**CategoryTheory.IsPullback.of_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}   [CategoryTheory
+.Limits.ReflectsLimit (CategoryTheory.Limits.cospan h i) F],   CategoryTheory.Ca
+tegoryStruct.comp f h = CategoryTheory.CategoryStruct.comp g i →     CategoryThe
+ory.IsPullback (F.map f) (F.map g) (F.map h) (F.map i) → CategoryTheory.IsPullba
+ck f g h i
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.cospan h i；F.map f；F.map
+ g；F.map h；F.map i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem IsPullback.of_map [ReflectsLimit (cospan h i) F] (e : f ≫ h = g ≫ i)
     (H : IsPullback (F.map f) (F.map g) (F.map h) (F.map i)) : IsPullback f g h i := by
-refine ⟨⟨e⟩, ⟨isLimitOfReflects F ?_⟩⟩
+  refine ⟨⟨e⟩, ⟨isLimitOfReflects F <| ?_⟩⟩
   refine
     (IsLimit.equivOfNatIsoOfIso (cospanCompIso F h i) _ _ (WalkingCospan.ext ?_ ?_ ?_)).symm
       H.isLimit
   exacts [Iso.refl _, (Category.comp_id _).trans (Category.id_comp _).symm,
     (Category.comp_id _).trans (Category.id_comp _).symm]
-
-/--
-theorem `IsPullback.of_map_of_faithful` / 定理 `IsPullback.of_map_of_faithful`
-
-English:
-theorem IsPullback.of_map_of_faithful
-  statement: [ReflectsLimit (cospan h i) F] [F.Faithful]
-  proof: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
-
-中文:
-定理 是拉回.of_map_of_faithful
-  结论: [反映极限 (cospan h i) F] [F.忠实]
-  证明: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
-
-Depends on / 依赖: F.map_comp, F.map_injective, H.of_map, map_comp, map_injective, of_map
+/-
+**CategoryTheory.IsPullback.of_map_of_faithful** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.IsPullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}   [CategoryTheory
+.Limits.ReflectsLimit (CategoryTheory.Limits.cospan h i) F] [F.Faithful],   Cate
+goryTheory.IsPullback (F.map f) (F.map g) (F.map h) (F.map i) → CategoryTheory.I
+sPullback f g h i
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.cospan h i；F.map f；F.map
+ g；F.map h；F.map i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_map`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.IsPullback.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}   
+{g : Y ⟶ Z}, CategoryThe…
 -/
 theorem IsPullback.of_map_of_faithful [ReflectsLimit (cospan h i) F] [F.Faithful]
     (H : IsPullback (F.map f) (F.map g) (F.map h) (F.map i)) : IsPullback f g h i :=
   H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
-
-/--
-theorem `IsPullback.map_iff` / 定理 `IsPullback.map_iff`
-
-English:
-theorem IsPullback.map_iff
-  statement: {D : Type*} [Category* D] (F : C ⥤ D) [PreservesLimit (cospan h i) F]
-  proof: ⟨fun h => h.of_map F e, fun h => h.map F⟩
-
-中文:
-定理 是拉回.map_iff
-  结论: {D : 类型} [范畴* D] (F : C ⥤ D) [保持极限 (cospan h i) F]
-  证明: ⟨fun h => h.of_map F e, fun h => h.map F⟩
+/-
+**CategoryTheory.IsPullback.map_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {W X Y Z : C} 
+{f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z} {D : Type u_1} [inst_1 : Categ
+oryTheory.Category.{v_1, u_1} D] (F : CategoryTheory.Functor C D)   [CategoryThe
+ory.Limits.PreservesLimit (CategoryTheory.Limits.cospan h i) F]   [CategoryTheor
+y.Limits.ReflectsLimit (CategoryTheory.Limits.cospan h i) F],   CategoryTheory.C
+ategoryStruct.comp f h = CategoryTheory.CategoryStruct.comp g i →     (CategoryT
+heory.IsPullback (F.map f) (F.map g) (F.map h) (F.map i) ↔ CategoryTheory.IsPull
+back f g h i)
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.cospan h i；CategoryTheor
+y.Limits.cospan h i；CategoryTheory.IsPullback (F.map f) (F.map g) (F.map h) (F.m
+ap i) ↔ CategoryTheory.IsPullback f g h i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_map`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.IsPullback.map`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (F : CategoryTheor…
 -/
 theorem IsPullback.map_iff {D : Type*} [Category* D] (F : C ⥤ D) [PreservesLimit (cospan h i) F]
     [ReflectsLimit (cospan h i) F] (e : f ≫ h = g ≫ i) :
     IsPullback (F.map f) (F.map g) (F.map h) (F.map i) ↔ IsPullback f g h i :=
   ⟨fun h => h.of_map F e, fun h => h.map F⟩
-
-/--
-theorem `IsPushout.of_map` / 定理 `IsPushout.of_map`
-
-English:
-theorem IsPushout.of_map
-  statement: [ReflectsColimit (span f g) F] (e : f ≫ h = g ≫ i)
-  proof: by
-refine ⟨⟨e⟩, ⟨isColimitOfReflects F ?_⟩⟩
-  refine
-    (IsColimit.equivOfNatIsoOfIso (spanCompIso F f g) _ _ (WalkingSpan.ext ?_ ?_ ?_)).symm
-      H.isColimit
-  exacts [Iso.refl _, (Category.comp_id _).trans (Category.id_comp _),
-    (Category.comp_id _).trans (Category.id_comp _)]
-
-中文:
-定理 是推出.of_map
-  结论: [反映余极限 (span f g) F] (e : f ≫ h = g ≫ i)
-  证明: by
-refine ⟨⟨e⟩, ⟨isColimitOfReflects F ?_⟩⟩
-  refine
-    (IsColimit.equivOfNatIsoOfIso (spanCompIso F f g) _ _ (WalkingSpan.ext ?_ ?_ ?_)).symm
-      H.isColimit
-  exacts [Iso.refl _, (Category.comp_id _).trans (Category.id_comp _),
-    (Category.comp_id _).trans (Category.id_comp _)]
+/-
+**CategoryTheory.IsPushout.of_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsPu
+shout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}   [CategoryTheory
+.Limits.ReflectsColimit (CategoryTheory.Limits.span f g) F],   CategoryTheory.Ca
+tegoryStruct.comp f h = CategoryTheory.CategoryStruct.comp g i →     CategoryThe
+ory.IsPushout (F.map f) (F.map g) (F.map h) (F.map i) → CategoryTheory.IsPushout
+ f g h i
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.span f g；F.map f；F.map g
+；F.map h；F.map i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem IsPushout.of_map [ReflectsColimit (span f g) F] (e : f ≫ h = g ≫ i)
     (H : IsPushout (F.map f) (F.map g) (F.map h) (F.map i)) : IsPushout f g h i := by
-refine ⟨⟨e⟩, ⟨isColimitOfReflects F ?_⟩⟩
+  refine ⟨⟨e⟩, ⟨isColimitOfReflects F <| ?_⟩⟩
   refine
     (IsColimit.equivOfNatIsoOfIso (spanCompIso F f g) _ _ (WalkingSpan.ext ?_ ?_ ?_)).symm
       H.isColimit
   exacts [Iso.refl _, (Category.comp_id _).trans (Category.id_comp _),
     (Category.comp_id _).trans (Category.id_comp _)]
-
-/--
-theorem `IsPushout.of_map_of_faithful` / 定理 `IsPushout.of_map_of_faithful`
-
-English:
-theorem IsPushout.of_map_of_faithful
-  statement: [ReflectsColimit (span f g) F] [F.Faithful]
-  proof: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
-
-中文:
-定理 是推出.of_map_of_faithful
-  结论: [反映余极限 (span f g) F] [F.忠实]
-  证明: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
-
-Depends on / 依赖: F.map_comp, F.map_injective, H.of_map, map_comp, map_injective, of_map
+/-
+**CategoryTheory.IsPushout.of_map_of_faithful** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.IsPushout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}   [CategoryTheory
+.Limits.ReflectsColimit (CategoryTheory.Limits.span f g) F] [F.Faithful],   Cate
+goryTheory.IsPushout (F.map f) (F.map g) (F.map h) (F.map i) → CategoryTheory.Is
+Pushout f g h i
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.span f g；F.map f；F.map g
+；F.map h；F.map i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_map`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.IsPushout.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}   {in
+r : Y ⟶ P}, CategoryThe…
 -/
 theorem IsPushout.of_map_of_faithful [ReflectsColimit (span f g) F] [F.Faithful]
     (H : IsPushout (F.map f) (F.map g) (F.map h) (F.map i)) : IsPushout f g h i :=
   H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
-
-/--
-theorem `IsPushout.map_iff` / 定理 `IsPushout.map_iff`
-
-English:
-theorem IsPushout.map_iff
-  statement: {D : Type*} [Category* D] (F : C ⥤ D) [PreservesColimit (span f g) F]
-  proof: ⟨fun h => h.of_map F e, fun h => h.map F⟩
-
-中文:
-定理 是推出.map_iff
-  结论: {D : 类型} [范畴* D] (F : C ⥤ D) [保持余极限 (span f g) F]
-  证明: ⟨fun h => h.of_map F e, fun h => h.map F⟩
+/-
+**CategoryTheory.IsPushout.map_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {W X Y Z : C} 
+{f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z} {D : Type u_1} [inst_1 : Categ
+oryTheory.Category.{v_1, u_1} D] (F : CategoryTheory.Functor C D)   [CategoryThe
+ory.Limits.PreservesColimit (CategoryTheory.Limits.span f g) F]   [CategoryTheor
+y.Limits.ReflectsColimit (CategoryTheory.Limits.span f g) F],   CategoryTheory.C
+ategoryStruct.comp f h = CategoryTheory.CategoryStruct.comp g i →     (CategoryT
+heory.IsPushout (F.map f) (F.map g) (F.map h) (F.map i) ↔ CategoryTheory.IsPusho
+ut f g h i)
+参数：F : CategoryTheory.Functor C D；CategoryTheory.Limits.span f g；CategoryTheory.
+Limits.span f g；CategoryTheory.IsPushout (F.map f) (F.map g) (F.map h) (F.map i)
+ ↔ CategoryTheory.IsPushout f g h i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.of_map`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.IsPushout.map`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   
+(F : CategoryTheor…
 -/
 theorem IsPushout.map_iff {D : Type*} [Category* D] (F : C ⥤ D) [PreservesColimit (span f g) F]
     [ReflectsColimit (span f g) F] (e : f ≫ h = g ≫ i) :
@@ -2042,283 +2724,283 @@ theorem IsPushout.map_iff {D : Type*} [Category* D] (F : C ⥤ D) [PreservesColi
   ⟨fun h => h.of_map F e, fun h => h.map F⟩
 
 variable {F} in
-/--
-lemma `IsPullback.preservesLimit_cospan_iff` / 引理 `IsPullback.preservesLimit_cospan_iff`
-
-English:
-lemma IsPullback.preservesLimit_cospan_iff
-  statement: {P X Y Z : C} {fst : P ⟶ X}
-  proof: by
-  refine ⟨fun _ => h.map _, fun hF => ?_⟩
-  apply preservesLimit_of_preserves_limit_cone h.isLimit
-  exact (PullbackCone.isLimitMapConeEquiv _ _).symm hF.isLimit
-
-中文:
-引理 是拉回.preservesLimit_cospan_iff
-  结论: {P X Y Z : C} {fst : P ⟶ X}
-  证明: by
-  refine ⟨fun _ => h.map _, fun hF => ?_⟩
-  apply preservesLimit_of_preserves_limit_cone h.isLimit
-  exact (PullbackCone.isLimitMapConeEquiv _ _).symm hF.isLimit
-
-Depends on / 依赖: PullbackCone, PullbackCone.isLimitMapConeEquiv, h.isLimit, h.map, hF.isLimit, isLimit, isLimitMapConeEquiv, preservesLimit_of_preserves_limit_cone
+/-
+**CategoryTheory.IsPullback.preservesLimit_cospan_iff** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.IsPullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+ {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z},   CategoryTh
+eory.IsPullback fst snd f g →     (CategoryTheory.Limits.PreservesLimit (Categor
+yTheory.Limits.cospan f g) F ↔       CategoryTheory.IsPullback (F.map fst) (F.ma
+p snd) (F.map f) (F.map g))
+参数：CategoryTheory.Limits.PreservesLimit (CategoryTheory.Limits.cospan f g) F ↔  
+     CategoryTheory.IsPullback (F.map fst) (F.map snd) (F.map f) (F.map g)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.map`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (F : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma IsPullback.preservesLimit_cospan_iff {P X Y Z : C} {fst : P ⟶ X}
     {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z} (h : IsPullback fst snd f g) :
     PreservesLimit (cospan f g) F ↔ IsPullback (F.map fst) (F.map snd) (F.map f) (F.map g) := by
-  refine ⟨fun _ => h.map _, fun hF => ?_⟩
+  refine ⟨fun _ ↦ h.map _, fun hF ↦ ?_⟩
   apply preservesLimit_of_preserves_limit_cone h.isLimit
   exact (PullbackCone.isLimitMapConeEquiv _ _).symm hF.isLimit
 
 variable {F} in
-/--
-lemma `IsPushout.preservesColimit_span_iff` / 引理 `IsPushout.preservesColimit_span_iff`
-
-English:
-lemma IsPushout.preservesColimit_span_iff
-  statement: {P X Y Z : C} {inl : X ⟶ P}
-  proof: by
-  refine ⟨fun _ => h.map _, fun hF => ?_⟩
-  apply preservesColimit_of_preserves_colimit_cocone h.isColimit
-  exact (PushoutCocone.isColimitMapCoconeEquiv _ _).symm hF.isColimit
-
-中文:
-引理 是推出.preservesColimit_span_iff
-  结论: {P X Y Z : C} {inl : X ⟶ P}
-  证明: by
-  refine ⟨fun _ => h.map _, fun hF => ?_⟩
-  apply preservesColimit_of_preserves_colimit_cocone h.isColimit
-  exact (PushoutCocone.isColimitMapCoconeEquiv _ _).symm hF.isColimit
-
-Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitMapCoconeEquiv, h.isColimit, h.map, hF.isColimit, isColimit, isColimitMapCoconeEquiv, preservesColimit_of_preserves_colimit_cocone
+/-
+**CategoryTheory.IsPushout.preservesColimit_span_iff** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.IsPushout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+ {P X Y Z : C} {inl : X ⟶ P} {inr : Y ⟶ P} {f : Z ⟶ X} {g : Z ⟶ Y},   CategoryTh
+eory.IsPushout f g inl inr →     (CategoryTheory.Limits.PreservesColimit (Catego
+ryTheory.Limits.span f g) F ↔       CategoryTheory.IsPushout (F.map f) (F.map g)
+ (F.map inl) (F.map inr))
+参数：CategoryTheory.Limits.PreservesColimit (CategoryTheory.Limits.span f g) F ↔  
+     CategoryTheory.IsPushout (F.map f) (F.map g) (F.map inl) (F.map inr)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.map`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   
+(F : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone`：pres
+ervesColimit_of_preserves_colimit_cocone {F : C ⥤ D} {t : Cocone K} (h : IsColim
+it t) (hF : IsColimit (F.mapCocone t)) : PreservesColimi…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma IsPushout.preservesColimit_span_iff {P X Y Z : C} {inl : X ⟶ P}
     {inr : Y ⟶ P} {f : Z ⟶ X} {g : Z ⟶ Y} (h : IsPushout f g inl inr) :
     PreservesColimit (span f g) F ↔ IsPushout (F.map f) (F.map g) (F.map inl) (F.map inr) := by
-  refine ⟨fun _ => h.map _, fun hF => ?_⟩
+  refine ⟨fun _ ↦ h.map _, fun hF ↦ ?_⟩
   apply preservesColimit_of_preserves_colimit_cocone h.isColimit
   exact (PushoutCocone.isColimitMapCoconeEquiv _ _).symm hF.isColimit
 
 variable {F} in
-/--
-lemma `Limits.preservesLimitsOfShape_walkingCospan_of_forall_isPullback` / 引理 `Limits.preservesLimitsOfShape_walkingCospan_of_forall_isPullback`
-
-English:
-lemma Limits.preservesLimitsOfShape_walkingCospan_of_forall_isPullback
-  proof: by
-  suffices h : forall {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z), PreservesLimit (cospan f g) F from
-    ⟨fun {K} => preservesLimit_of_iso_diagram _ (Limits.diagramIsoCospan K).symm⟩
-  intro X Y Z f g
-  refine .mk' fun h => ?_
-  obtain ⟨P, fst, snd, h, h'⟩ := H f g
-  rwa [h.preservesLimit_cospan_iff]
-
-中文:
-引理 Limits.preservesLimitsOfShape_walkingCospan_of_对任意_isPullback
-  证明: by
-  suffices h : forall {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z), PreservesLimit (cospan f g) F from
-    ⟨fun {K} => preservesLimit_of_iso_diagram _ (Limits.diagramIsoCospan K).symm⟩
-  intro X Y Z f g
-  refine .mk' fun h => ?_
-  obtain ⟨P, fst, snd, h, h'⟩ := H f g
-  rwa [h.preservesLimit_cospan_iff]
-
-Depends on / 依赖: Limits, Limits.diagramIsoCospan, PreservesLimit, cospan, diagramIsoCospan, h.preservesLimit_cospan_iff, preservesLimit_cospan_iff, preservesLimit_of_iso_diagram
+/-
+**CategoryTheory.Limits.preservesLimitsOfShape_walkingCospan_of_forall_isPullbac
+k** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+,   (∀ ⦃X Y Z : C⦄ (f : X ⟶ Z) (g : Y ⟶ Z) [CategoryTheory.Limits.HasPullback f 
+g],       ∃ P fst snd,         CategoryTheory.IsPullback fst snd f g ∧ CategoryT
+heory.IsPullback (F.map fst) (F.map snd) (F.map f) (F.map g)) →     CategoryTheo
+ry.Limits.PreservesLimitsOfShape CategoryTheory.Limits.WalkingCospan F
+参数：∀ ⦃X Y Z : C⦄ (f : X ⟶ Z) (g : Y ⟶ Z) [CategoryTheory.Limits.HasPullback f g]
+,       ∃ P fst snd,         CategoryTheory.IsPullback fst snd f g ∧ CategoryThe
+ory.IsPullback (F.map fst) (F.map snd) (F.map f) (F.map g)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesLimit.mk'`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsPullback.preservesLimit_cospan_iff`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_iso_diagram`：preservesLimit_of_i
+so_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesLimit K₁ F] : Pre
+servesLimit K₂ F where preserves {c} t
 -/
 lemma Limits.preservesLimitsOfShape_walkingCospan_of_forall_isPullback
-    (H : forall ⦃X Y Z : C⦄ (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g],
-      exists (P : C) (fst : P ⟶ X) (snd : P ⟶ Y),
+    (H : ∀ ⦃X Y Z : C⦄ (f : X ⟶ Z) (g : Y ⟶ Z) [HasPullback f g],
+      ∃ (P : C) (fst : P ⟶ X) (snd : P ⟶ Y),
         IsPullback fst snd f g ∧ IsPullback (F.map fst) (F.map snd) (F.map f) (F.map g)) :
     PreservesLimitsOfShape WalkingCospan F := by
-  suffices h : forall {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z), PreservesLimit (cospan f g) F from
-    ⟨fun {K} => preservesLimit_of_iso_diagram _ (Limits.diagramIsoCospan K).symm⟩
+  suffices h : ∀ {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z), PreservesLimit (cospan f g) F from
+    ⟨fun {K} ↦ preservesLimit_of_iso_diagram _ (Limits.diagramIsoCospan K).symm⟩
   intro X Y Z f g
-  refine .mk' fun h => ?_
+  refine .mk' fun h ↦ ?_
   obtain ⟨P, fst, snd, h, h'⟩ := H f g
   rwa [h.preservesLimit_cospan_iff]
 
 variable {F} in
-/--
-lemma `Limits.preservesColimitsOfShape_walkingCospan_of_forall_isPushout` / 引理 `Limits.preservesColimitsOfShape_walkingCospan_of_forall_isPushout`
-
-English:
-lemma Limits.preservesColimitsOfShape_walkingCospan_of_forall_isPushout
-  proof: by
-  suffices h : forall {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y), PreservesColimit (span f g) F from
-    ⟨fun {K} => preservesColimit_of_iso_diagram _ (diagramIsoSpan K).symm⟩
-  intro X Y Z f g
-  refine .mk' fun h => ?_
-  obtain ⟨P, fst, snd, h, h'⟩ := H f g
-  rwa [h.preservesColimit_span_iff]
-
-中文:
-引理 Limits.preservesColimitsOfShape_walkingCospan_of_对任意_isPushout
-  证明: by
-  suffices h : forall {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y), PreservesColimit (span f g) F from
-    ⟨fun {K} => preservesColimit_of_iso_diagram _ (diagramIsoSpan K).symm⟩
-  intro X Y Z f g
-  refine .mk' fun h => ?_
-  obtain ⟨P, fst, snd, h, h'⟩ := H f g
-  rwa [h.preservesColimit_span_iff]
-
-Depends on / 依赖: PreservesColimit, diagramIsoSpan, h.preservesColimit_span_iff, preservesColimit_of_iso_diagram, preservesColimit_span_iff
+/-
+**CategoryTheory.Limits.preservesColimitsOfShape_walkingCospan_of_forall_isPusho
+ut** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+,   (∀ ⦃X Y Z : C⦄ (f : Z ⟶ X) (g : Z ⟶ Y) [CategoryTheory.Limits.HasPushout f g
+],       ∃ P inl inr,         CategoryTheory.IsPushout f g inl inr ∧ CategoryThe
+ory.IsPushout (F.map f) (F.map g) (F.map inl) (F.map inr)) →     CategoryTheory.
+Limits.PreservesColimitsOfShape CategoryTheory.Limits.WalkingSpan F
+参数：∀ ⦃X Y Z : C⦄ (f : Z ⟶ X) (g : Z ⟶ Y) [CategoryTheory.Limits.HasPushout f g],
+       ∃ P inl inr,         CategoryTheory.IsPushout f g inl inr ∧ CategoryTheor
+y.IsPushout (F.map f) (F.map g) (F.map inl) (F.map inr)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesColimit.mk'`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsPushout.preservesColimit_span_iff`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_iso_diagram`：preservesColimit_
+of_iso_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesColimit K₁ F]
+ : PreservesColimit K₂ F where preserves {c…
 -/
 lemma Limits.preservesColimitsOfShape_walkingCospan_of_forall_isPushout
-    (H : forall ⦃X Y Z : C⦄ (f : Z ⟶ X) (g : Z ⟶ Y) [HasPushout f g],
-      exists (P : C) (inl : X ⟶ P) (inr : Y ⟶ P),
+    (H : ∀ ⦃X Y Z : C⦄ (f : Z ⟶ X) (g : Z ⟶ Y) [HasPushout f g],
+      ∃ (P : C) (inl : X ⟶ P) (inr : Y ⟶ P),
         IsPushout f g inl inr ∧ IsPushout (F.map f) (F.map g) (F.map inl) (F.map inr)) :
     PreservesColimitsOfShape WalkingSpan F := by
-  suffices h : forall {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y), PreservesColimit (span f g) F from
-    ⟨fun {K} => preservesColimit_of_iso_diagram _ (diagramIsoSpan K).symm⟩
+  suffices h : ∀ {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y), PreservesColimit (span f g) F from
+    ⟨fun {K} ↦ preservesColimit_of_iso_diagram _ (diagramIsoSpan K).symm⟩
   intro X Y Z f g
-  refine .mk' fun h => ?_
+  refine .mk' fun h ↦ ?_
   obtain ⟨P, fst, snd, h, h'⟩ := H f g
   rwa [h.preservesColimit_span_iff]
-
-/--
-lemma `IsPullback.app` / 引理 `IsPullback.app`
-
-English:
-lemma IsPullback.app
-  statement: [HasPullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  proof: h.map ((evaluation _ _).obj X)
-
-中文:
-引理 是拉回.app
-  结论: [有Pullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  证明: h.map ((evaluation _ _).obj X)
-
-Depends on / 依赖: evaluation, h.map
+/-
+**CategoryTheory.IsPullback.app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsPull
+back`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   [CategoryTheory.Limits.HasPullba
+cks D] {F₁ F₂ F₃ F₄ : CategoryTheory.Functor C D} {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} 
+  {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄},   CategoryTheory.IsPullback f₁ f₂ f₃ f₄ →     ∀
+ (X : C), CategoryTheory.IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)
+参数：X : C；f₁.app X；f₂.app X；f₃.app X；f₄.app X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.map`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 lemma IsPullback.app [HasPullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
     {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄} (h : IsPullback f₁ f₂ f₃ f₄)
     (X : C) : IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X) :=
   h.map ((evaluation _ _).obj X)
-
-/--
-lemma `IsPullback.of_forall_isPullback_app` / 引理 `IsPullback.of_forall_isPullback_app`
-
-English:
-lemma IsPullback.of_forall_isPullback_app
-  statement: {F₁ F₂ F₃ F₄ : C ⥤ D}
-  proof: by
-    ext X
-    simpa using (h X).w
-  isLimit' := ⟨evaluationJointlyReflectsLimits _ fun X =>
-    (PullbackCone.isLimitMapConeEquiv _ _).symm (h X).isLimit⟩
-
-中文:
-引理 是拉回.of_对任意_isPullback_app
-  结论: {F₁ F₂ F₃ F₄ : C ⥤ D}
-  证明: by
-    ext X
-    simpa using (h X).w
-  isLimit' := ⟨evaluationJointlyReflectsLimits _ fun X =>
-    (PullbackCone.isLimitMapConeEquiv _ _).symm (h X).isLimit⟩
-
-Depends on / 依赖: A.hom, A.prop, HasPullbacksAlong, HasPullbacksAlong.hasPullback, PullbackCone, PullbackCone.isLimitMapConeEquiv, evaluationJointlyReflectsLimits, hasPullback, isLimit, isLimitMapConeEquiv
+/-
+**CategoryTheory.IsPullback.of_forall_isPullback_app** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.IsPullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F₁ F₂ F₃ F₄ : CategoryTheory.Fu
+nctor C D} {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄},   (∀ (X 
+: C), CategoryTheory.IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)) →  
+   CategoryTheory.IsPullback f₁ f₂ f₃ f₄
+参数：∀ (X : C), CategoryTheory.IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app
+ X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.IsPullback.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z}   
+{g : Y ⟶ Z}, CategoryThe…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma IsPullback.of_forall_isPullback_app {F₁ F₂ F₃ F₄ : C ⥤ D}
     {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄}
-    (h : forall (X : C), IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)) :
+    (h : ∀ (X : C), IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)) :
     IsPullback f₁ f₂ f₃ f₄ where
   w := by
     ext X
     simpa using (h X).w
   isLimit' := ⟨evaluationJointlyReflectsLimits _ fun X =>
     (PullbackCone.isLimitMapConeEquiv _ _).symm (h X).isLimit⟩
-
-/--
-lemma `IsPullback.iff_app` / 引理 `IsPullback.iff_app`
-
-English:
-lemma IsPullback.iff_app
-  statement: [HasPullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  proof: ⟨.app, .of_forall_isPullback_app⟩
-
-中文:
-引理 是拉回.iff_app
-  结论: [有Pullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  证明: ⟨.app, .of_forall_isPullback_app⟩
-
-Depends on / 依赖: A.hom, A.prop, HasPullbacksAlong, HasPullbacksAlong.hasPullback, IsPullback, IsPullback.of_hasPullback, IsStableUnderBaseChangeAlong, IsStableUnderBaseChangeAlong.of_isPullback, hasPullback, of_forall_isPullback_app, of_hasPullback, of_isPullback, pullback, pullback.snd
+/-
+**CategoryTheory.IsPullback.iff_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Is
+Pullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   [CategoryTheory.Limits.HasPullba
+cks D] {F₁ F₂ F₃ F₄ : CategoryTheory.Functor C D} {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} 
+  {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄},   CategoryTheory.IsPullback f₁ f₂ f₃ f₄ ↔     ∀
+ (X : C), CategoryTheory.IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)
+参数：X : C；f₁.app X；f₂.app X；f₃.app X；f₄.app X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.app`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ [CategoryTheory.Li…
+· 使用定理 `CategoryTheory.IsPullback.of_forall_isPullback_app`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F₁ F₂ F₃ F₄ : Cat…
 -/
 lemma IsPullback.iff_app [HasPullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
     {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄} :
-    IsPullback f₁ f₂ f₃ f₄ ↔ forall (X : C), IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X) :=
+    IsPullback f₁ f₂ f₃ f₄ ↔ ∀ (X : C), IsPullback (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X) :=
   ⟨.app, .of_forall_isPullback_app⟩
-
-/--
-lemma `IsPushout.app` / 引理 `IsPushout.app`
-
-English:
-lemma IsPushout.app
-  statement: [HasPushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  proof: h.map ((evaluation _ _).obj X)
-
-中文:
-引理 是推出.app
-  结论: [有Pushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  证明: h.map ((evaluation _ _).obj X)
-
-Depends on / 依赖: evaluation, h.map
+/-
+**CategoryTheory.IsPushout.app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsPusho
+ut`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   [CategoryTheory.Limits.HasPushou
+ts D] {F₁ F₂ F₃ F₄ : CategoryTheory.Functor C D} {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃}  
+ {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄},   CategoryTheory.IsPushout f₁ f₂ f₃ f₄ → ∀ (X : 
+C), CategoryTheory.IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)
+参数：X : C；f₁.app X；f₂.app X；f₃.app X；f₄.app X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.map`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   
+(F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 lemma IsPushout.app [HasPushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
     {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄} (h : IsPushout f₁ f₂ f₃ f₄)
     (X : C) : IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X) :=
   h.map ((evaluation _ _).obj X)
-
-/--
-lemma `IsPushout.of_forall_isPushout_app` / 引理 `IsPushout.of_forall_isPushout_app`
-
-English:
-lemma IsPushout.of_forall_isPushout_app
-  statement: {F₁ F₂ F₃ F₄ : C ⥤ D}
-  proof: by
-    ext X
-    simpa using (h X).w
-  isColimit' := ⟨evaluationJointlyReflectsColimits _ fun X =>
-    (PushoutCocone.isColimitMapCoconeEquiv _ _).symm (h X).isColimit⟩
-
-中文:
-引理 是推出.of_对任意_isPushout_app
-  结论: {F₁ F₂ F₃ F₄ : C ⥤ D}
-  证明: by
-    ext X
-    simpa using (h X).w
-  isColimit' := ⟨evaluationJointlyReflectsColimits _ fun X =>
-    (PushoutCocone.isColimitMapCoconeEquiv _ _).symm (h X).isColimit⟩
-
-Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitMapCoconeEquiv, evaluationJointlyReflectsColimits, isColimit, isColimitMapCoconeEquiv
+/-
+**CategoryTheory.IsPushout.of_forall_isPushout_app** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.IsPushout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F₁ F₂ F₃ F₄ : CategoryTheory.Fu
+nctor C D} {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄},   (∀ (X 
+: C), CategoryTheory.IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)) →   
+  CategoryTheory.IsPushout f₁ f₂ f₃ f₄
+参数：∀ (X : C), CategoryTheory.IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app 
+X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.IsPushout.toCommSq`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}   {in
+r : Y ⟶ P}, CategoryThe…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma IsPushout.of_forall_isPushout_app {F₁ F₂ F₃ F₄ : C ⥤ D}
     {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄}
-    (h : forall (X : C), IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)) :
+    (h : ∀ (X : C), IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)) :
     IsPushout f₁ f₂ f₃ f₄ where
   w := by
     ext X
     simpa using (h X).w
   isColimit' := ⟨evaluationJointlyReflectsColimits _ fun X =>
     (PushoutCocone.isColimitMapCoconeEquiv _ _).symm (h X).isColimit⟩
-
-/--
-lemma `IsPushout.iff_app` / 引理 `IsPushout.iff_app`
-
-English:
-lemma IsPushout.iff_app
-  statement: [HasPushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  proof: ⟨.app, .of_forall_isPushout_app⟩
-
-中文:
-引理 是推出.iff_app
-  结论: [有Pushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
-  证明: ⟨.app, .of_forall_isPushout_app⟩
-
-Depends on / 依赖: of_forall_isPushout_app
+/-
+**CategoryTheory.IsPushout.iff_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsP
+ushout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   [CategoryTheory.Limits.HasPushou
+ts D] {F₁ F₂ F₃ F₄ : CategoryTheory.Functor C D} {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃}  
+ {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄},   CategoryTheory.IsPushout f₁ f₂ f₃ f₄ ↔ ∀ (X : 
+C), CategoryTheory.IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X)
+参数：X : C；f₁.app X；f₂.app X；f₃.app X；f₄.app X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPushout.app`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   
+[CategoryTheory.Li…
+· 使用定理 `CategoryTheory.IsPushout.of_forall_isPushout_app`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   {F₁ F₂ F₃ F₄ : Cat…
 -/
 lemma IsPushout.iff_app [HasPushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
     {f₁ : F₁ ⟶ F₂} {f₂ : F₁ ⟶ F₃} {f₃ : F₂ ⟶ F₄} {f₄ : F₃ ⟶ F₄} :
-    IsPushout f₁ f₂ f₃ f₄ ↔ forall (X : C), IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X) :=
+    IsPushout f₁ f₂ f₃ f₄ ↔ ∀ (X : C), IsPushout (f₁.app X) (f₂.app X) (f₃.app X) (f₄.app X) :=
   ⟨.app, .of_forall_isPushout_app⟩
 
 end Functor
@@ -2327,95 +3009,72 @@ section Thin
 
 variable [Quiver.IsThin C]
 
-/--
-lemma `isPullback_iff_isLimit_binaryFan_of_isThin` / 引理 `isPullback_iff_isLimit_binaryFan_of_isThin`
-
-English:
-lemma isPullback_iff_isLimit_binaryFan_of_isThin
-  statement: {P X Y Z : C}
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · exact ⟨BinaryFan.IsLimit.mk _ (fun u v => h.lift u v (by subsingleton))
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩
-  · exact ⟨⟨by subsingleton⟩,
-      ⟨PullbackCone.IsLimit.mk _ (fun s => BinaryFan.IsLimit.lift h.some s.fst s.snd)
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
-
-中文:
-引理 isPullback_iff_isLimit_binaryFan_of_isThin
-  结论: {P X Y Z : C}
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · exact ⟨BinaryFan.IsLimit.mk _ (fun u v => h.lift u v (by subsingleton))
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩
-  · exact ⟨⟨by subsingleton⟩,
-      ⟨PullbackCone.IsLimit.mk _ (fun s => BinaryFan.IsLimit.lift h.some s.fst s.snd)
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.lift, BinaryFan.IsLimit.mk, IsLimit, PullbackCone, PullbackCone.IsLimit.mk, h.lift, h.some, s.fst, s.snd, subsingleton
+/-
+**CategoryTheory.isPullback_iff_isLimit_binaryFan_of_isThin** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory`。
+形式化陈述：isPullback_iff_isLimit_binaryFan_of_isThin {P X Y Z : C} {fst : P ⟶ X} {sn
+d : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z} : IsPullback fst snd f g ↔ Nonempty (IsLimit 
+(BinaryFan.mk fst snd))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 lemma isPullback_iff_isLimit_binaryFan_of_isThin {P X Y Z : C}
     {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z} :
     IsPullback fst snd f g ↔ Nonempty (IsLimit (BinaryFan.mk fst snd)) := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · exact ⟨BinaryFan.IsLimit.mk _ (fun u v => h.lift u v (by subsingleton))
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
+  · exact ⟨BinaryFan.IsLimit.mk _ (fun u v ↦ h.lift u v (by subsingleton))
       (by subsingleton) (by subsingleton) (by subsingleton)⟩
   · exact ⟨⟨by subsingleton⟩,
-      ⟨PullbackCone.IsLimit.mk _ (fun s => BinaryFan.IsLimit.lift h.some s.fst s.snd)
+      ⟨PullbackCone.IsLimit.mk _ (fun s ↦ BinaryFan.IsLimit.lift h.some s.fst s.snd)
       (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
-
-/--
-lemma `isPushout_iff_isColimit_binaryCofan_of_isThin` / 引理 `isPushout_iff_isColimit_binaryCofan_of_isThin`
-
-English:
-lemma isPushout_iff_isColimit_binaryCofan_of_isThin
-  statement: {P X Y Z : C}
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · exact ⟨BinaryCofan.IsColimit.mk _ (fun u v => h.desc u v (by subsingleton))
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩
-  · exact ⟨⟨by subsingleton⟩,
-      ⟨PushoutCocone.IsColimit.mk _ (fun s => BinaryCofan.IsColimit.desc h.some s.inl s.inr)
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
-
-中文:
-引理 isPushout_iff_isColimit_binaryCofan_of_isThin
-  结论: {P X Y Z : C}
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · exact ⟨BinaryCofan.IsColimit.mk _ (fun u v => h.desc u v (by subsingleton))
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩
-  · exact ⟨⟨by subsingleton⟩,
-      ⟨PushoutCocone.IsColimit.mk _ (fun s => BinaryCofan.IsColimit.desc h.some s.inl s.inr)
-      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.desc, BinaryCofan.IsColimit.mk, IsColimit, PushoutCocone, PushoutCocone.IsColimit.mk, h.desc, h.some, s.inl, s.inr, subsingleton
+/-
+**CategoryTheory.isPushout_iff_isColimit_binaryCofan_of_isThin** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory`。
+形式化陈述：isPushout_iff_isColimit_binaryCofan_of_isThin {P X Y Z : C} {f : Z ⟶ X} {g
+ : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P} : IsPushout f g inl inr ↔ Nonempty (IsColi
+mit (BinaryCofan.mk inl inr))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 lemma isPushout_iff_isColimit_binaryCofan_of_isThin {P X Y Z : C}
     {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P} :
     IsPushout f g inl inr ↔ Nonempty (IsColimit (BinaryCofan.mk inl inr)) := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · exact ⟨BinaryCofan.IsColimit.mk _ (fun u v => h.desc u v (by subsingleton))
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
+  · exact ⟨BinaryCofan.IsColimit.mk _ (fun u v ↦ h.desc u v (by subsingleton))
       (by subsingleton) (by subsingleton) (by subsingleton)⟩
   · exact ⟨⟨by subsingleton⟩,
-      ⟨PushoutCocone.IsColimit.mk _ (fun s => BinaryCofan.IsColimit.desc h.some s.inl s.inr)
+      ⟨PushoutCocone.IsColimit.mk _ (fun s ↦ BinaryCofan.IsColimit.desc h.some s.inl s.inr)
       (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
 
 variable {D : Type*} [Category* D] [Quiver.IsThin D] (F : C ⥤ D)
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [PreservesLimitsOfShape (Discrete WalkingPair) F] :
     PreservesLimitsOfShape WalkingCospan F := by
-  refine preservesLimitsOfShape_walkingCospan_of_forall_isPullback fun X Y Z f g hfg => ?_
+  refine preservesLimitsOfShape_walkingCospan_of_forall_isPullback fun X Y Z f g hfg ↦ ?_
   use pullback f g, pullback.fst f g, pullback.snd f g, .of_hasPullback f g
   rw [isPullback_iff_isLimit_binaryFan_of_isThin]
   refine ⟨(BinaryFan.mk (pullback.fst f g) (pullback.snd f g)).isLimitMapConeEquiv ?_⟩
   apply isLimitOfPreserves _ (Nonempty.some ?_)
   rw [← CategoryTheory.isPullback_iff_isLimit_binaryFan_of_isThin (f := f) (g := g)]
   exact .of_hasPullback f g
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [PreservesColimitsOfShape (Discrete WalkingPair) F] :
     PreservesColimitsOfShape WalkingSpan F := by
-  refine preservesColimitsOfShape_walkingCospan_of_forall_isPushout fun X Y Z f g hfg => ?_
+  refine preservesColimitsOfShape_walkingCospan_of_forall_isPushout fun X Y Z f g hfg ↦ ?_
   use pushout f g, pushout.inl f g, pushout.inr f g, .of_hasPushout f g
   rw [isPushout_iff_isColimit_binaryCofan_of_isThin]
   refine ⟨(BinaryCofan.mk (pushout.inl f g) (pushout.inr f g)).isColimitMapConeEquiv ?_⟩
@@ -2434,20 +3093,21 @@ variable {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} [HasPullbacksAlong g]
 namespace IsPullback
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `isoOverPullback` / `isoOverPullback` 的定义
+/-- An `IsPullback` square yields an isomorphism `Over.mk fst ≅ Over.mk (pullback.fst f g)`
+in `Over X`. -/
+/-
+**CategoryTheory.IsPullback.isoOverPullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.IsPullback`。
+形式化陈述：isoOverPullback {P : C} {fst : P ⟶ X} {snd : P ⟶ Y} (h : IsPullback fst sn
+d f g) : Over.mk fst ≅ Over.mk (pullback.fst f g)
+参数：h : IsPullback fst snd f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOverPullback
-  signature: {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
-  body: Over.isoMk (h.isoIsPullback _ _ (IsPullback.of_hasPullback f g)) (by simp)
-
-中文:
-定义 isoOverPullback
-  签名: {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
-  定义体: Over.isoMk (h.isoIsPullback _ _ (IsPullback.of_hasPullback f g)) (by simp)
-
-Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, Over.isoMk, h.isoIsPullback, isoIsPullback, of_hasPullback
+--- 原说明 ---
+An `IsPullback` square yields an isomorphism `Over.mk fst ≅ Over.mk (pullback.fs
+t f g)`
+in `Over X`.
 -/
 noncomputable def isoOverPullback {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
     (h : IsPullback fst snd f g) :
@@ -2456,20 +3116,21 @@ noncomputable def isoOverPullback {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `isoOverPullback_hom_left_comp_snd` / 引理 `isoOverPullback_hom_left_comp_snd`
-
-English:
-lemma isoOverPullback_hom_left_comp_snd
-  statement: {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
-  proof: h.isoIsPullback_hom_snd _ _ (IsPullback.of_hasPullback f g)
-
-中文:
-引理 isoOverPullback_hom_left_comp_snd
-  结论: {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
-  证明: h.isoIsPullback_hom_snd _ _ (IsPullback.of_hasPullback f g)
-
-Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, h.isoIsPullback_hom_snd, isoIsPullback_hom_snd, of_hasPullback
+/-
+**CategoryTheory.IsPullback.isoOverPullback_hom_left_comp_snd** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.IsPullback`。
+形式化陈述：isoOverPullback_hom_left_comp_snd {P : C} {fst : P ⟶ X} {snd : P ⟶ Y} (h :
+ IsPullback fst snd f g) : dsimp% h.isoOverPullback.hom.left ≫ pullback.snd f g 
+= snd
+参数：h : IsPullback fst snd f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.isoIsPullback_hom_snd`：isoIsPullback_hom_snd (
+h : IsPullback fst snd f g) (h' : IsPullback fst' snd' f g) : (h.isoIsPullback _
+ _ h').hom ≫ snd' = snd
+· 使用定理 `CategoryTheory.IsPullback.of_hasPullback`：of_hasPullback (f : X ⟶ Z) (g 
+: Y ⟶ Z) [HasPullback f g] : IsPullback (pullback.fst f g) (pullback.snd f g) f 
+g
 -/
 lemma isoOverPullback_hom_left_comp_snd {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
     (h : IsPullback fst snd f g) :
@@ -2477,24 +3138,40 @@ lemma isoOverPullback_hom_left_comp_snd {P : C} {fst : P ⟶ X} {snd : P ⟶ Y}
   h.isoIsPullback_hom_snd _ _ (IsPullback.of_hasPullback f g)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `of_over_iso` / 引理 `of_over_iso`
+/-- An isomorphism `Over.mk p ≅ Over.mk (pullback.fst f g)` in `Over X` yields
+an `IsPullback` square. -/
+/-
+**CategoryTheory.IsPullback.of_over_iso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.IsPullback`。
+形式化陈述：of_over_iso {P : C} {p : P ⟶ X} (e : Over.mk p ≅ Over.mk (pullback.fst f g
+)) : IsPullback p (e.hom.left ≫ pullback.snd f g) f g
+参数：e : Over.mk p ≅ Over.mk (pullback.fst f g)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.of_iso'`：of_iso' (h : IsPullback fst snd f g) 
+{P' X' Y' Z' : C} {fst' : P' ⟶ X'} {snd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'
+} (e₁ : P' ≅ P) (e₂ : X…
+· 使用定理 `CategoryTheory.IsPullback.of_hasPullback`：of_hasPullback (f : X ⟶ Z) (g 
+: Y ⟶ Z) [HasPullback f g] : IsPullback (pullback.fst f g) (pullback.snd f g) f 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 
-English:
-lemma of_over_iso
-  statement: {P : C} {p : P ⟶ X}
-  proof: (IsPullback.of_hasPullback f g).of_iso'
-    ((Over.forget X).mapIso e) (Iso.refl _) (Iso.refl _) (Iso.refl _)
-    (by simpa using Over.w e.hom) (by simp) (by simp) (by simp)
-
-中文:
-引理 of_over_iso
-  结论: {P : C} {p : P ⟶ X}
-  证明: (IsPullback.of_hasPullback f g).of_iso'
-    ((Over.forget X).mapIso e) (Iso.refl _) (Iso.refl _) (Iso.refl _)
-    (by simpa using Over.w e.hom) (by simp) (by simp) (by simp)
-
-Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, Iso.refl, Over.forget, Over.w, e.hom, forget, mapIso, of_hasPullback, of_iso
+--- 原说明 ---
+An isomorphism `Over.mk p ≅ Over.mk (pullback.fst f g)` in `Over X` yields
+an `IsPullback` square.
 -/
 lemma of_over_iso {P : C} {p : P ⟶ X}
     (e : Over.mk p ≅ Over.mk (pullback.fst f g)) :
@@ -2504,34 +3181,38 @@ lemma of_over_iso {P : C} {p : P ⟶ X}
     (by simpa using Over.w e.hom) (by simp) (by simp) (by simp)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `iff_exists_over_iso` / 引理 `iff_exists_over_iso`
+/-- An `IsPullback` square over a cospan `(f, g)` is equivalent to an isomorphism
+`Over.mk fst ≅ Over.mk (pullback.fst f g)` in `Over X`, together with the
+second projection being determined by the isomorphism. -/
+/-
+**CategoryTheory.IsPullback.iff_exists_over_iso** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.IsPullback`。
+形式化陈述：iff_exists_over_iso {P : C} {p : P ⟶ X} {q : P ⟶ Y} : IsPullback p q f g ↔
+ exists e : Over.mk p ≅ Over.mk (pullback.fst f g), q = e.hom.left ≫ pullback.sn
+d f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.IsPullback.isoOverPullback_hom_left_comp_snd`：isoOverPull
+back_hom_left_comp_snd {P : C} {fst : P ⟶ X} {snd : P ⟶ Y} (h : IsPullback fst s
+nd f g) : dsimp% h.isoOverPullback.hom.left ≫ pul…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.IsPullback.of_over_iso`：of_over_iso {P : C} {p : P ⟶ X} (
+e : Over.mk p ≅ Over.mk (pullback.fst f g)) : IsPullback p (e.hom.left ≫ pullbac
+k.snd f g) f g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma iff_exists_over_iso
-  given: {P : C} {p : P ⟶ X} {q : P ⟶ Y}
-  proof: by
-  constructor
-  · intro h
-    exact ⟨h.isoOverPullback, by simp⟩
-  · rintro ⟨e, rfl⟩
-    exact of_over_iso e
-
-中文:
-引理 iff_存在_over_iso
-  条件: {P : C} {p : P ⟶ X} {q : P ⟶ Y}
-  证明: by
-  constructor
-  · intro h
-    exact ⟨h.isoOverPullback, by simp⟩
-  · rintro ⟨e, rfl⟩
-    exact of_over_iso e
-
-Depends on / 依赖: Over.mapPullbackAdj, h.isoOverPullback, isLeftAdjoint, isoOverPullback, mapPullbackAdj, of_over_iso
+--- 原说明 ---
+An `IsPullback` square over a cospan `(f, g)` is equivalent to an isomorphism
+`Over.mk fst ≅ Over.mk (pullback.fst f g)` in `Over X`, together with the
+second projection being determined by the isomorphism.
 -/
 lemma iff_exists_over_iso {P : C} {p : P ⟶ X} {q : P ⟶ Y} :
     IsPullback p q f g ↔
-    exists e : Over.mk p ≅ Over.mk (pullback.fst f g),
+    ∃ e : Over.mk p ≅ Over.mk (pullback.fst f g),
       q = e.hom.left ≫ pullback.snd f g := by
   constructor
   · intro h
@@ -2545,6 +3226,10 @@ end IsPullbackOverPullback
 
 namespace Limits
 
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) {X' : C} (i : X' ⟶ X) [IsIso i] [HasPullback f g] :
     HasPullback (i ≫ f) g :=
   IsPullback.paste_vert
@@ -2552,54 +3237,78 @@ instance {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) {X' : C} (i : X' ⟶ X) [IsIso 
       ⟨by simp⟩) (.of_hasPullback f g) |>.hasPullback
 
 @[simp]
-/--
-lemma `HasPullback.comp_left_left_iff_of_isIso` / 引理 `HasPullback.comp_left_left_iff_of_isIso`
-
-English:
-lemma HasPullback.comp_left_left_iff_of_isIso
-  proof: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← IsIso.inv_hom_id_assoc i f]
-  infer_instance
-
-中文:
-引理 HasPullback.comp_left_left_iff_of_isIso
-  证明: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← IsIso.inv_hom_id_assoc i f]
-  infer_instance
-
-Depends on / 依赖: IsIso.inv_hom_id_assoc, infer_instance, inv_hom_id_assoc
+/-
+**CategoryTheory.Limits.HasPullback.comp_left_left_iff_of_isIso** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Limits.HasPullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f
+ : X ⟶ Z} {g : Y ⟶ Z} {X' : C} (i : X' ⟶ X)   [CategoryTheory.IsIso i],   Catego
+ryTheory.Limits.HasPullback (CategoryTheory.CategoryStruct.comp i f) g ↔ Categor
+yTheory.Limits.HasPullback f g
+参数：i : X' ⟶ X；CategoryTheory.CategoryStruct.comp i f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
+· 使用定理 `CategoryTheory.Limits.instHasPullbackCompOfIsIso`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) {X' : 
+C} (i : X' ⟶ X)   [CategoryTheory.IsIs…
 -/
 lemma HasPullback.comp_left_left_iff_of_isIso
     {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {X' : C} (i : X' ⟶ X) [IsIso i] :
     HasPullback (i ≫ f) g ↔ HasPullback f g := by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
+  refine ⟨fun h ↦ ?_, fun _ ↦ inferInstance⟩
   rw [← IsIso.inv_hom_id_assoc i f]
   infer_instance
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z Z' : C} {f : X ⟶ Z} {g : Y ⟶ Z'} (i : Z ⟶ Z') [IsIso i] [HasPullback (f ≫ i) g] :
     HasPullback f (g ≫ inv i) := by
   simpa using hasPullback_of_comp_mono (f ≫ i) g (inv i)
-
-/--
-lemma `HasPullback.comp_left_right_iff_of_isIso` / 引理 `HasPullback.comp_left_right_iff_of_isIso`
-
-English:
-lemma HasPullback.comp_left_right_iff_of_isIso
-  proof: ⟨fun h => inferInstance, fun h => by simpa using hasPullback_of_comp_mono f (g ≫ inv i) i⟩
-
-中文:
-引理 HasPullback.comp_left_right_iff_of_isIso
-  证明: ⟨fun h => inferInstance, fun h => by simpa using hasPullback_of_comp_mono f (g ≫ inv i) i⟩
-
-Depends on / 依赖: hasPullback_of_comp_mono
+/-
+**CategoryTheory.Limits.HasPullback.comp_left_right_iff_of_isIso** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Limits.HasPullback`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z Z' : C}
+ {f : X ⟶ Z} {g : Y ⟶ Z'} (i : Z ⟶ Z')   [inst_1 : CategoryTheory.IsIso i],   Ca
+tegoryTheory.Limits.HasPullback (CategoryTheory.CategoryStruct.comp f i) g ↔    
+ CategoryTheory.Limits.HasPullback f (CategoryTheory.CategoryStruct.comp g (Cate
+goryTheory.inv i))
+参数：i : Z ⟶ Z'；CategoryTheory.CategoryStruct.comp f i；CategoryTheory.CategoryStru
+ct.comp g (CategoryTheory.inv i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPullbackCompInv`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y Z Z' : C} {f : X ⟶ Z} {g : Y ⟶ Z'} (i : Z
+ ⟶ Z')   [inst_1 : CategoryTheory.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
 -/
 lemma HasPullback.comp_left_right_iff_of_isIso
     {X Y Z Z' : C} {f : X ⟶ Z} {g : Y ⟶ Z'} (i : Z ⟶ Z') [IsIso i] :
     HasPullback (f ≫ i) g ↔ HasPullback f (g ≫ inv i) :=
-  ⟨fun h => inferInstance, fun h => by simpa using hasPullback_of_comp_mono f (g ≫ inv i) i⟩
-
+  ⟨fun h ↦ inferInstance, fun h ↦ by simpa using hasPullback_of_comp_mono f (g ≫ inv i) i⟩
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y) {X' : C} (i : X ⟶ X') [IsIso i] [HasPushout f g] :
     HasPushout (f ≫ i) g :=
   IsPushout.paste_horiz (.of_hasPushout f g)
@@ -2607,54 +3316,75 @@ instance {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y) {X' : C} (i : X ⟶ X') [IsIso 
       ⟨by simp⟩) |>.hasPushout
 
 @[simp]
-/--
-lemma `HasPushout.comp_left_left_iff_of_isIso` / 引理 `HasPushout.comp_left_left_iff_of_isIso`
-
-English:
-lemma HasPushout.comp_left_left_iff_of_isIso
-  proof: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← Category.comp_id f]; rw [← IsIso.hom_inv_id i]; rw [← Category.assoc]
-  infer_instance
-
-中文:
-引理 HasPushout.comp_left_left_iff_of_isIso
-  证明: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← Category.comp_id f]; rw [← IsIso.hom_inv_id i]; rw [← Category.assoc]
-  infer_instance
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, IsIso.hom_inv_id, comp_id, hom_inv_id, infer_instance
+/-
+**CategoryTheory.Limits.HasPushout.comp_left_left_iff_of_isIso** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Limits.HasPushout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} {f
+ : Z ⟶ X} {g : Z ⟶ Y} {X' : C} (i : X ⟶ X')   [CategoryTheory.IsIso i],   Catego
+ryTheory.Limits.HasPushout (CategoryTheory.CategoryStruct.comp f i) g ↔ Category
+Theory.Limits.HasPushout f g
+参数：i : X ⟶ X'；CategoryTheory.CategoryStruct.comp f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.instHasPushoutCompOfIsIso`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y) {X' : C
+} (i : X ⟶ X')   [CategoryTheory.IsIs…
 -/
 lemma HasPushout.comp_left_left_iff_of_isIso
     {X Y Z : C} {f : Z ⟶ X} {g : Z ⟶ Y} {X' : C} (i : X ⟶ X') [IsIso i] :
     HasPushout (f ≫ i) g ↔ HasPushout f g := by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [← Category.comp_id f]; rw [← IsIso.hom_inv_id i]; rw [← Category.assoc]
+  refine ⟨fun h ↦ ?_, fun _ ↦ inferInstance⟩
+  rw [← Category.comp_id f, ← IsIso.hom_inv_id i, ← Category.assoc]
   infer_instance
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z Z' : C} {f : Z ⟶ X} {g : Z' ⟶ Y} (i : Z' ⟶ Z) [IsIso i] [HasPushout (i ≫ f) g] :
     HasPushout f (inv i ≫ g) := by
   simpa using hasPushout_of_epi_comp (i ≫ f) g (inv i)
-
-/--
-lemma `HasPushout.comp_left_right_iff_of_isIso` / 引理 `HasPushout.comp_left_right_iff_of_isIso`
-
-English:
-lemma HasPushout.comp_left_right_iff_of_isIso
-  proof: ⟨fun h => inferInstance, fun h => by simpa using hasPushout_of_epi_comp f (inv i ≫ g) i⟩
-
-中文:
-引理 HasPushout.comp_left_right_iff_of_isIso
-  证明: ⟨fun h => inferInstance, fun h => by simpa using hasPushout_of_epi_comp f (inv i ≫ g) i⟩
-
-Depends on / 依赖: hasPushout_of_epi_comp
+/-
+**CategoryTheory.Limits.HasPushout.comp_left_right_iff_of_isIso** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Limits.HasPushout`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z Z' : C}
+ {f : Z ⟶ X} {g : Z' ⟶ Y} (i : Z' ⟶ Z)   [inst_1 : CategoryTheory.IsIso i],   Ca
+tegoryTheory.Limits.HasPushout (CategoryTheory.CategoryStruct.comp i f) g ↔     
+CategoryTheory.Limits.HasPushout f (CategoryTheory.CategoryStruct.comp (Category
+Theory.inv i) g)
+参数：i : Z' ⟶ Z；CategoryTheory.CategoryStruct.comp i f；CategoryTheory.CategoryStru
+ct.comp (CategoryTheory.inv i) g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPushoutCompInv`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {X Y Z Z' : C} {f : Z ⟶ X} {g : Z' ⟶ Y} (i : Z'
+ ⟶ Z)   [inst_1 : CategoryTheory.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : X ⟶ Z), CategoryT…
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
 -/
 lemma HasPushout.comp_left_right_iff_of_isIso
     {X Y Z Z' : C} {f : Z ⟶ X} {g : Z' ⟶ Y} (i : Z' ⟶ Z) [IsIso i] :
     HasPushout (i ≫ f) g ↔ HasPushout f (inv i ≫ g) :=
-  ⟨fun h => inferInstance, fun h => by simpa using hasPushout_of_epi_comp f (inv i ≫ g) i⟩
+  ⟨fun h ↦ inferInstance, fun h ↦ by simpa using hasPushout_of_epi_comp f (inv i ≫ g) i⟩
 
 end Limits
 
 end CategoryTheory
+

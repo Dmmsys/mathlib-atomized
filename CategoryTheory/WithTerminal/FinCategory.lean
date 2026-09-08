@@ -27,22 +27,19 @@ variable (C : Type u) [CategoryTheory.Category.{v} C]
 
 namespace CategoryTheory.WithTerminal
 
-/--
-Definition of `optionEquiv` / `optionEquiv` 的定义
+/-- The equivalence between `Option C` and `WithTerminal C` (they are both the
+type `C` plus an extra object `none` or `star`). -/
+/-
+**CategoryTheory.WithTerminal.optionEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.WithTerminal`。
+形式化陈述：optionEquiv : Option C ≃ WithTerminal C where toFun | some a => of a | non
+e => star invFun | of a => some a | star => none left_inv a
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition optionEquiv
-  signature: : Option C ≃ WithTerminal C where
-  body: by cases a <;> simp
-  right_inv a := by cases a <;> simp
-
-中文:
-定义 optionEquiv
-  签名: : 选项类型 C ≃ WithTerminal C where
-  定义体: by cases a <;> simp
-  right_inv a := by cases a <;> simp
-
-Depends on / 依赖: right_inv
+--- 原说明 ---
+The equivalence between `Option C` and `WithTerminal C` (they are both the
+type `C` plus an extra object `none` or `star`).
 -/
 def optionEquiv : Option C ≃ WithTerminal C where
   toFun
@@ -53,47 +50,22 @@ def optionEquiv : Option C ≃ WithTerminal C where
   | star => none
   left_inv a := by cases a <;> simp
   right_inv a := by cases a <;> simp
-
-/--
-Instance `instFintype` / 实例 `instFintype`
-
-English:
-instance instFintype
-  signature: [Fintype C]
-  body: .ofEquiv (Option C) optionEquiv C
-
-中文:
-实例 instFintype
-  签名: [有限类型 C]
-  定义体: .ofEquiv (Option C) optionEquiv C
-
-Depends on / 依赖: ofEquiv, optionEquiv
+/-
+**CategoryTheory.WithTerminal.instFintype** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.WithTerminal`。
+形式化陈述：instFintype [Fintype C] : Fintype (WithTerminal C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFintype [Fintype C] : Fintype (WithTerminal C) :=
-.ofEquiv (Option C) optionEquiv C
-
-/--
-Instance `instFinCategory` / 实例 `instFinCategory`
-
-English:
-instance instFinCategory
-  signature: [SmallCategory C] [FinCategory C]
-  body: inferInstance
-  fintypeHom
-  | star, star
-  | of _, star => (inferInstance : Fintype PUnit)
-  | star, of _ => (inferInstance : Fintype PEmpty)
-  | of a, of b => (inferInstance : Fintype (a ⟶ b))
-
-中文:
-实例 instFinCategory
-  签名: [小范畴 C] [有限范畴 C]
-  定义体: inferInstance
-  fintypeHom
-  | star, star
-  | of _, star => (inferInstance : Fintype PUnit)
-  | star, of _ => (inferInstance : Fintype PEmpty)
-  | of a, of b => (inferInstance : Fintype (a ⟶ b))
+  .ofEquiv (Option C) <| optionEquiv C
+/-
+**CategoryTheory.WithTerminal.instFinCategory** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.WithTerminal`。
+形式化陈述：instFinCategory [SmallCategory C] [FinCategory C] : FinCategory (WithTermi
+nal C) where fintypeObj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFinCategory [SmallCategory C] [FinCategory C] :
     FinCategory (WithTerminal C) where
@@ -108,22 +80,19 @@ end CategoryTheory.WithTerminal
 
 namespace CategoryTheory.WithInitial
 
-/--
-Definition of `optionEquiv` / `optionEquiv` 的定义
+/-- The equivalence between `Option C` and `WithInitial C` (they are both the
+type `C` plus an extra object `none` or `star`). -/
+/-
+**CategoryTheory.WithInitial.optionEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.WithInitial`。
+形式化陈述：optionEquiv : Option C ≃ WithInitial C where toFun | some a => of a | none
+ => star invFun | of a => some a | star => none left_inv a
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition optionEquiv
-  signature: : Option C ≃ WithInitial C where
-  body: by cases a <;> simp
-  right_inv a := by cases a <;> simp
-
-中文:
-定义 optionEquiv
-  签名: : 选项类型 C ≃ WithInitial C where
-  定义体: by cases a <;> simp
-  right_inv a := by cases a <;> simp
-
-Depends on / 依赖: right_inv
+--- 原说明 ---
+The equivalence between `Option C` and `WithInitial C` (they are both the
+type `C` plus an extra object `none` or `star`).
 -/
 def optionEquiv : Option C ≃ WithInitial C where
   toFun
@@ -134,47 +103,22 @@ def optionEquiv : Option C ≃ WithInitial C where
   | star => none
   left_inv a := by cases a <;> simp
   right_inv a := by cases a <;> simp
-
-/--
-Instance `instFintype` / 实例 `instFintype`
-
-English:
-instance instFintype
-  signature: [Fintype C]
-  body: .ofEquiv (Option C) optionEquiv C
-
-中文:
-实例 instFintype
-  签名: [有限类型 C]
-  定义体: .ofEquiv (Option C) optionEquiv C
-
-Depends on / 依赖: ofEquiv, optionEquiv
+/-
+**CategoryTheory.WithInitial.instFintype** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.WithInitial`。
+形式化陈述：instFintype [Fintype C] : Fintype (WithInitial C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFintype [Fintype C] : Fintype (WithInitial C) :=
-.ofEquiv (Option C) optionEquiv C
-
-/--
-Instance `instFinCategory` / 实例 `instFinCategory`
-
-English:
-instance instFinCategory
-  signature: [SmallCategory C] [FinCategory C]
-  body: inferInstance
-  fintypeHom
-  | star, star
-  | star, of _ => (inferInstance : Fintype PUnit)
-  | of _, star => (inferInstance : Fintype PEmpty)
-  | of a, of b => (inferInstance : Fintype (a ⟶ b))
-
-中文:
-实例 instFinCategory
-  签名: [小范畴 C] [有限范畴 C]
-  定义体: inferInstance
-  fintypeHom
-  | star, star
-  | star, of _ => (inferInstance : Fintype PUnit)
-  | of _, star => (inferInstance : Fintype PEmpty)
-  | of a, of b => (inferInstance : Fintype (a ⟶ b))
+  .ofEquiv (Option C) <| optionEquiv C
+/-
+**CategoryTheory.WithInitial.instFinCategory** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.WithInitial`。
+形式化陈述：instFinCategory [SmallCategory C] [FinCategory C] : FinCategory (WithIniti
+al C) where fintypeObj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFinCategory [SmallCategory C] [FinCategory C] :
     FinCategory (WithInitial C) where
@@ -186,3 +130,4 @@ instance instFinCategory [SmallCategory C] [FinCategory C] :
   | of a, of b => (inferInstance : Fintype (a ⟶ b))
 
 end CategoryTheory.WithInitial
+

@@ -36,45 +36,39 @@ universe v v₂ u₁ u₂
 section Induced
 
 variable {C : Type u₁} (D : Type u₂) [Category.{v} D]
-variable (F : C -> D)
+variable (F : C → D)
 
 /-- `InducedCategory D F`, where `F : C → D`, is a typeclass synonym for `C`,
 which provides a category structure so that the morphisms `X ⟶ Y` are the morphisms
 in `D` from `F X` to `F Y`.
 -/
 @[nolint unusedArguments, implicit_reducible]
-/--
-Definition of `InducedCategory` / `InducedCategory` 的定义
+/-
+**CategoryTheory.InducedCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：InducedCategory (_F : C -> D) : Type u₁
+参数：_F : C -> D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition InducedCategory
-  signature: (_F : C -> D)
-  body: C
-
-中文:
-定义 InducedCategory
-  签名: (_F : C -> D)
-  定义体: C
+--- 原说明 ---
+`InducedCategory D F`, where `F : C → D`, is a typeclass synonym for `C`,
+which provides a category structure so that the morphisms `X ⟶ Y` are the morphi
+sms
+in `D` from `F X` to `F Y`.
 -/
-def InducedCategory (_F : C -> D) : Type u₁ :=
+def InducedCategory (_F : C → D) : Type u₁ :=
   C
 
 variable {D}
 
 namespace InducedCategory
 
-/--
-Instance `hasCoeToSort` / 实例 `hasCoeToSort`
-
-English:
-instance hasCoeToSort
-  signature: {α : Sort*} [CoeSort D α]
-  body: ⟨fun c => F c⟩
-
-中文:
-实例 hasCoeToSort
-  签名: {α : 类型层*} [CoeSort D α]
-  定义体: ⟨fun c => F c⟩
+/-
+**CategoryTheory.InducedCategory.hasCoeToSort** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.InducedCategory`。
+形式化陈述：hasCoeToSort {α : Sort*} [CoeSort D α] : CoeSort (InducedCategory D F) α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasCoeToSort {α : Sort*} [CoeSort D α] :
     CoeSort (InducedCategory D F) α :=
@@ -85,42 +79,27 @@ variable {F}
 /-- The type of morphisms in `InducedCategory D F` between `X` and `Y`
 is a 1-field structure which identifies to `F X ⟶ F Y`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.InducedCategory.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory
+.InducedCategory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [CategoryTheory.Category.{v, u₂} D] 
+→       {F : C → D} → CategoryTheory.InducedCategory D F → CategoryTheory.Induce
+dCategory D F → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : InducedCategory D F)
-  axioms and operations (1):
-    - hom : F X ⟶ F Y
-
-中文:
-结构 态射
-  参数: (X Y : InducedCategory D F)
-  公理与运算 (1 个):
-    - hom : F X ⟶ F Y
+--- 原说明 ---
+The type of morphisms in `InducedCategory D F` between `X` and `Y`
+is a 1-field structure which identifies to `F X ⟶ F Y`.
 -/
 structure Hom (X Y : InducedCategory D F) where
   /-- The underlying morphism. -/
   hom : F X ⟶ F Y
 
 @[simps id_hom comp_hom]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category.{v} (InducedCategory D F)
-  body: Hom X Y
-  id X := { hom := 𝟙 _ }
-  comp f g := { hom := f.hom ≫ g.hom }
-
-中文:
-实例 :
-  签名: 范畴.{v} (InducedCategory D F)
-  定义体: Hom X Y
-  id X := { hom := 𝟙 _ }
-  comp f g := { hom := f.hom ≫ g.hom }
+/-
+**CategoryTheory.InducedCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Indu
+cedCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category.{v} (InducedCategory D F) where
   Hom X Y := Hom X Y
@@ -130,79 +109,69 @@ instance : Category.{v} (InducedCategory D F) where
 attribute [reassoc] comp_hom
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : InducedCategory D F} {f g : X ⟶ Y} (h : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {X Y : InducedCategory D F} {f g : X ⟶ Y} (h : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.InducedCategory.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.InducedCategory`。
+形式化陈述：hom_ext {X Y : InducedCategory D F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f 
+= g
+参数：h : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InducedCategory.Hom.ext`：∀ {C : Type u₁} {D : Type u₂} {i
+nst : CategoryTheory.Category.{v, u₂} D} {F : C → D}   {X Y : CategoryTheory.Ind
+ucedCategory D F} {x y : X.H…
 -/
 lemma hom_ext {X Y : InducedCategory D F} {f g : X ⟶ Y} (h : f.hom = g.hom) : f = g :=
   Hom.ext h
 
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- Construct a morphism in the induced category
+from a morphism in the original category. -/
+/-
+**CategoryTheory.InducedCategory.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.InducedCategory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v, 
+u₂} D] →       {F : C → D} → {X Y : CategoryTheory.InducedCategory D F} → (F X ⟶
+ F Y) → (X ⟶ Y)
+参数：F X ⟶ F Y；X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: {X Y : InducedCategory D F} (f : F X ⟶ F Y)
-  body: f
-
-中文:
-定义 homMk
-  签名: {X Y : InducedCategory D F} (f : F X ⟶ F Y)
-  定义体: f
+--- 原说明 ---
+Construct a morphism in the induced category
+from a morphism in the original category.
 -/
 @[simps] def homMk {X Y : InducedCategory D F} (f : F X ⟶ F Y) : X ⟶ Y where
   hom := f
 
 /-- Morphisms in `InducedCategory D F` identify to morphisms in `D`. -/
 @[simps!]
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
+/-
+**CategoryTheory.InducedCategory.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.InducedCategory`。
+形式化陈述：homEquiv {X Y : InducedCategory D F} : (X ⟶ Y) ≃ (F X ⟶ F Y) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homEquiv
-  signature: {X Y : InducedCategory D F}
-  body: f.hom
-  invFun f := homMk f
-
-中文:
-定义 homEquiv
-  签名: {X Y : InducedCategory D F}
-  定义体: f.hom
-  invFun f := homMk f
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+Morphisms in `InducedCategory D F` identify to morphisms in `D`.
 -/
 def homEquiv {X Y : InducedCategory D F} : (X ⟶ Y) ≃ (F X ⟶ F Y) where
   toFun f := f.hom
   invFun f := homMk f
 
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-- Construct an isomorphism in the induced category
+from an isomorphism in the original category. -/
+/-
+**CategoryTheory.InducedCategory.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.InducedCategory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v, 
+u₂} D] →       {F : C → D} → {X Y : CategoryTheory.InducedCategory D F} → (F X ≅
+ F Y) → (X ≅ Y)
+参数：F X ≅ F Y；X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {X Y : InducedCategory D F} (f : F X ≅ F Y)
-  body: homMk f.hom
-  inv := homMk f.inv
-
-中文:
-定义 isoMk
-  签名: {X Y : InducedCategory D F} (f : F X ≅ F Y)
-  定义体: homMk f.hom
-  inv := homMk f.inv
+--- 原说明 ---
+Construct an isomorphism in the induced category
+from an isomorphism in the original category.
 -/
 @[simps] def isoMk {X Y : InducedCategory D F} (f : F X ≅ F Y) : X ≅ Y where
   hom := homMk f.hom
@@ -214,75 +183,56 @@ end InducedCategory
 forgetting the extra data.
 -/
 @[simps, implicit_reducible]
-/--
-Definition of `inducedFunctor` / `inducedFunctor` 的定义
+/-
+**CategoryTheory.inducedFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：inducedFunctor : InducedCategory D F ⥤ D where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inducedFunctor
-  signature: : InducedCategory D F ⥤ D where
-  body: F
-  map f := f.hom
-
-中文:
-定义 inducedFunctor
-  签名: : InducedCategory D F ⥤ D where
-  定义体: F
-  map f := f.hom
+--- 原说明 ---
+The forgetful functor from an induced category to the original category,
+forgetting the extra data.
 -/
 def inducedFunctor : InducedCategory D F ⥤ D where
   obj := F
   map f := f.hom
 
-/--
-Definition of `fullyFaithfulInducedFunctor` / `fullyFaithfulInducedFunctor` 的定义
+/-- The induced functor `inducedFunctor F : InducedCategory D F ⥤ D` is fully faithful. -/
+/-
+**CategoryTheory.fullyFaithfulInducedFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory`。
+形式化陈述：fullyFaithfulInducedFunctor : (inducedFunctor F).FullyFaithful where preim
+age f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulInducedFunctor
-  signature: : (inducedFunctor F).FullyFaithful where
-  body: InducedCategory.homMk f
-
-中文:
-定义 fullyFaithfulInducedFunctor
-  签名: : (inducedFunctor F).满忠实 where
-  定义体: InducedCategory.homMk f
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk
+--- 原说明 ---
+The induced functor `inducedFunctor F : InducedCategory D F ⥤ D` is fully faithf
+ul.
 -/
 def fullyFaithfulInducedFunctor : (inducedFunctor F).FullyFaithful where
   preimage f := InducedCategory.homMk f
-
-/--
-Instance `InducedCategory.full` / 实例 `InducedCategory.full`
-
-English:
-instance InducedCategory.full
-  signature: : (inducedFunctor F).Full
-  body: (fullyFaithfulInducedFunctor F).full
-
-中文:
-实例 InducedCategory.full
-  签名: : (inducedFunctor F).满
-  定义体: (fullyFaithfulInducedFunctor F).full
-
-Depends on / 依赖: fullyFaithfulInducedFunctor
+/-
+**CategoryTheory.InducedCategory.full** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+InducedCategory`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v, u₂} D] (
+F : C → D),   (CategoryTheory.inducedFunctor F).Full
+参数：F : C → D；CategoryTheory.inducedFunctor F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 instance InducedCategory.full : (inducedFunctor F).Full :=
   (fullyFaithfulInducedFunctor F).full
-
-/--
-Instance `InducedCategory.faithful` / 实例 `InducedCategory.faithful`
-
-English:
-instance InducedCategory.faithful
-  signature: : (inducedFunctor F).Faithful
-  body: (fullyFaithfulInducedFunctor F).faithful
-
-中文:
-实例 InducedCategory.faithful
-  签名: : (inducedFunctor F).忠实
-  定义体: (fullyFaithfulInducedFunctor F).faithful
-
-Depends on / 依赖: faithful, fullyFaithfulInducedFunctor
+/-
+**CategoryTheory.InducedCategory.faithful** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.InducedCategory`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v, u₂} D] (
+F : C → D),   (CategoryTheory.inducedFunctor F).Faithful
+参数：F : C → D；CategoryTheory.inducedFunctor F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 -/
 instance InducedCategory.faithful : (inducedFunctor F).Faithful :=
   (fullyFaithfulInducedFunctor F).faithful
@@ -290,3 +240,4 @@ instance InducedCategory.faithful : (inducedFunctor F).Faithful :=
 end Induced
 
 end CategoryTheory
+

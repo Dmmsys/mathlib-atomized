@@ -35,22 +35,16 @@ open Category MonoidalCategory
 -- (which is only unique up to isomorphism),
 -- not merely the existence of such, and
 -- so definitional properties of instances may be important.
-/--
-Definition of `Closed` / `Closed` 的定义
+/-- An object `X` is (right) closed if `(X ⊗ -)` is a left adjoint. -/
+/-
+**CategoryTheory.Closed** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.MonoidalCategory C] → C → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Closed
-  parameters: {C : Type u} [Category.{v} C] [MonoidalCategory.{v} C] (X : C)
-  axioms and operations (2):
-    - rightAdj : C ⥤ C
-    - adj : tensorLeft X ⊣ rightAdj
-
-中文:
-类 闭
-  参数: {C : 类型u} [范畴.{v} C] [幺半群范畴.{v} C] (X : C)
-  公理与运算 (2 个):
-    - rightAdj : C ⥤ C
-    - adj : tensorLeft X ⊣ rightAdj
+--- 原说明 ---
+An object `X` is (right) closed if `(X ⊗ -)` is a left adjoint.
 -/
 class Closed {C : Type u} [Category.{v} C] [MonoidalCategory.{v} C] (X : C) where
   /-- a choice of a right adjoint for `tensorLeft X` -/
@@ -58,22 +52,17 @@ class Closed {C : Type u} [Category.{v} C] [MonoidalCategory.{v} C] (X : C) wher
   /-- `tensorLeft X` is a left adjoint -/
   adj : tensorLeft X ⊣ rightAdj
 
-/--
-Definition of `MonoidalClosed` / `MonoidalClosed` 的定义
+/-- A monoidal category `C` is (right) monoidal closed if every object is (right) closed. -/
+/-
+**CategoryTheory.MonoidalClosed** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：MonoidalClosed (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] wher
+e closed (X : C) : Closed X
+参数：C : Type u；X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonoidalClosed
-  parameters: (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
-  axioms and operations (1):
-    - closed((X : C)) : Closed X  [default: by infer_instance]
-
-中文:
-类 幺半群闭
-  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
-  公理与运算 (1 个):
-    - closed((X : C)) : 闭 X  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A monoidal category `C` is (right) monoidal closed if every object is (right) cl
+osed.
 -/
 class MonoidalClosed (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] where
   closed (X : C) : Closed X := by infer_instance
@@ -87,24 +76,21 @@ This isn't an instance because it's not usually how we want to construct interna
 we'll usually prove all objects are closed uniformly.
 -/
 @[instance_reducible]
-/--
-Definition of `tensorClosed` / `tensorClosed` 的定义
+/-
+**CategoryTheory.tensorClosed** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorClosed {X Y : C} (hX : Closed X) (hY : Closed Y) : Closed (X otimes 
+Y) where rightAdj
+参数：hX : Closed X；hY : Closed Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorClosed
-  signature: {X Y : C} (hX : Closed X) (hY : Closed Y)
-  body: Closed.rightAdj X ⋙ Closed.rightAdj Y
-  adj := (hY.adj.comp hX.adj).ofNatIsoLeft (MonoidalCategory.tensorLeftTensor X Y).symm
-
-中文:
-定义 tensorClosed
-  签名: {X Y : C} (hX : 闭 X) (hY : 闭 Y)
-  定义体: Closed.rightAdj X ⋙ Closed.rightAdj Y
-  adj := (hY.adj.comp hX.adj).ofNatIsoLeft (MonoidalCategory.tensorLeftTensor X Y).symm
-
-Depends on / 依赖: Closed, Closed.rightAdj, rightAdj
+--- 原说明 ---
+If `X` and `Y` are closed then `X ⊗ Y` is.
+This isn't an instance because it's not usually how we want to construct interna
+l homs,
+we'll usually prove all objects are closed uniformly.
 -/
-def tensorClosed {X Y : C} (hX : Closed X) (hY : Closed Y) : Closed (X otimes Y) where
+def tensorClosed {X Y : C} (hX : Closed X) (hY : Closed Y) : Closed (X ⊗ Y) where
   rightAdj := Closed.rightAdj X ⋙ Closed.rightAdj Y
   adj := (hY.adj.comp hX.adj).ofNatIsoLeft (MonoidalCategory.tensorLeftTensor X Y).symm
 
@@ -113,20 +99,17 @@ This isn't an instance because most of the time we'll prove closedness for all o
 rather than just for this one.
 -/
 @[instance_reducible]
-/--
-Definition of `unitClosed` / `unitClosed` 的定义
+/-
+**CategoryTheory.unitClosed** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：unitClosed : Closed (𝟙_ C) where rightAdj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitClosed
-  signature: : Closed (𝟙_ C) where
-  body: 𝟭 C
-  adj := Adjunction.id.ofNatIsoLeft (MonoidalCategory.leftUnitorNatIso C).symm
-
-中文:
-定义 unitClosed
-  签名: : 闭 (𝟙_ C) where
-  定义体: 𝟭 C
-  adj := Adjunction.id.ofNatIsoLeft (MonoidalCategory.leftUnitorNatIso C).symm
+--- 原说明 ---
+The unit object is always closed.
+This isn't an instance because most of the time we'll prove closedness for all o
+bjects at once,
+rather than just for this one.
 -/
 def unitClosed : Closed (𝟙_ C) where
   rightAdj := 𝟭 C
@@ -135,178 +118,109 @@ def unitClosed : Closed (𝟙_ C) where
 variable (A B : C) {X X' Y Y' Z : C}
 variable [Closed A]
 
-/--
-Definition of `ihom` / `ihom` 的定义
+/-- This is the internal hom `A ⟶[C] -`.
+-/
+/-
+**CategoryTheory.ihom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ihom : C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ihom
-  signature: : C ⥤ C
-  body: Closed.rightAdj (X := A)
-
-中文:
-定义 ihom
-  签名: : C ⥤ C
-  定义体: Closed.rightAdj (X := A)
-
-Depends on / 依赖: Closed, Closed.rightAdj, rightAdj
+--- 原说明 ---
+This is the internal hom `A ⟶[C] -`.
 -/
 def ihom : C ⥤ C :=
   Closed.rightAdj (X := A)
 
 namespace ihom
 
-/--
-Definition of `adjunction` / `adjunction` 的定义
+/-- The adjunction between `A ⊗ -` and `A ⟹ -`. -/
+/-
+**CategoryTheory.ihom.adjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ihom`
+。
+形式化陈述：adjunction : tensorLeft A ⊣ ihom A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjunction
-  signature: : tensorLeft A ⊣ ihom A
-  body: Closed.adj
-
-中文:
-定义 adjunction
-  签名: : tensorLeft A ⊣ ihom A
-  定义体: Closed.adj
-
-Depends on / 依赖: Closed, Closed.adj
+--- 原说明 ---
+The adjunction between `A ⊗ -` and `A ⟹ -`.
 -/
 def adjunction : tensorLeft A ⊣ ihom A :=
   Closed.adj
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (tensorLeft A).IsLeftAdjoint
-  body: (ihom.adjunction A).isLeftAdjoint
-
-中文:
-实例 :
-  签名: (tensorLeft A).是左伴随
-  定义体: (ihom.adjunction A).isLeftAdjoint
-
-Depends on / 依赖: adjunction, ihom.adjunction, isLeftAdjoint
+/-
+**CategoryTheory.ihom.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ihom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (tensorLeft A).IsLeftAdjoint :=
   (ihom.adjunction A).isLeftAdjoint
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (ihom A).IsRightAdjoint
-  body: (ihom.adjunction A).isRightAdjoint
-
-中文:
-实例 :
-  签名: (ihom A).是右伴随
-  定义体: (ihom.adjunction A).isRightAdjoint
-
-Depends on / 依赖: adjunction, ihom.adjunction, isRightAdjoint
+/-
+**CategoryTheory.ihom.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.ihom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (ihom A).IsRightAdjoint :=
   (ihom.adjunction A).isRightAdjoint
 
-/--
-Definition of `ev` / `ev` 的定义
+/-- The evaluation natural transformation. -/
+/-
+**CategoryTheory.ihom.ev** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ihom`。
+形式化陈述：ev : ihom A ⋙ tensorLeft A ⟶ 𝟭 C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ev
-  signature: : ihom A ⋙ tensorLeft A ⟶ 𝟭 C
-  body: (ihom.adjunction A).counit
-
-中文:
-定义 ev
-  签名: : ihom A ⋙ tensorLeft A ⟶ 𝟭 C
-  定义体: (ihom.adjunction A).counit
-
-Depends on / 依赖: adjunction, counit, ihom.adjunction
+--- 原说明 ---
+The evaluation natural transformation.
 -/
 def ev : ihom A ⋙ tensorLeft A ⟶ 𝟭 C :=
   (ihom.adjunction A).counit
 
-/--
-Definition of `coev` / `coev` 的定义
+/-- The coevaluation natural transformation. -/
+/-
+**CategoryTheory.ihom.coev** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ihom`。
+形式化陈述：coev : 𝟭 C ⟶ tensorLeft A ⋙ ihom A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coev
-  signature: : 𝟭 C ⟶ tensorLeft A ⋙ ihom A
-  body: (ihom.adjunction A).unit
-
-@[simp]
-
-中文:
-定义 coev
-  签名: : 𝟭 C ⟶ tensorLeft A ⋙ ihom A
-  定义体: (ihom.adjunction A).unit
-
-@[simp]
-
-Depends on / 依赖: adjunction, ihom.adjunction
+--- 原说明 ---
+The coevaluation natural transformation.
 -/
 def coev : 𝟭 C ⟶ tensorLeft A ⋙ ihom A :=
   (ihom.adjunction A).unit
 
 @[simp]
-/--
-theorem `ihom_adjunction_counit` / 定理 `ihom_adjunction_counit`
-
-English:
-theorem ihom_adjunction_counit
-  statement: (ihom.adjunction A).counit = ev A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ihom_adjunction_counit
-  结论: (ihom.adjunction A).counit = ev A
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ihom.ihom_adjunction_counit** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.ihom`。
+形式化陈述：ihom_adjunction_counit : (ihom.adjunction A).counit = ev A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ihom_adjunction_counit : (ihom.adjunction A).counit = ev A :=
   rfl
 
 @[simp]
-/--
-theorem `ihom_adjunction_unit` / 定理 `ihom_adjunction_unit`
-
-English:
-theorem ihom_adjunction_unit
-  statement: (ihom.adjunction A).unit = coev A
-  proof: rfl
-
-中文:
-定理 ihom_adjunction_unit
-  结论: (ihom.adjunction A).unit = coev A
-  证明: rfl
+/-
+**CategoryTheory.ihom.ihom_adjunction_unit** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.ihom`。
+形式化陈述：ihom_adjunction_unit : (ihom.adjunction A).unit = coev A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ihom_adjunction_unit : (ihom.adjunction A).unit = coev A :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in -- Needed in DayConvolution/Closed.lean
 @[reassoc (attr := simp)]
-/--
-theorem `ev_naturality` / 定理 `ev_naturality`
-
-English:
-theorem ev_naturality
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: (ev A).naturality f
-
-#adaptation_note
-
-中文:
-定理 ev_naturality
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: (ev A).naturality f
-
-#adaptation_note
-
-Depends on / 依赖: naturality
+/-
+**CategoryTheory.ihom.ev_naturality** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ih
+om`。
+形式化陈述：ev_naturality {X Y : C} (f : X ⟶ Y) : A ◁ (ihom A).map f ≫ (ev A).app Y = 
+(ev A).app X ≫ f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem ev_naturality {X Y : C} (f : X ⟶ Y) :
     A ◁ (ihom A).map f ≫ (ev A).app Y = (ev A).app X ≫ f :=
@@ -316,20 +230,20 @@ theorem ev_naturality {X Y : C} (f : X ⟶ Y) :
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `coev_naturality` / 定理 `coev_naturality`
+/-
+**CategoryTheory.ihom.coev_naturality** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+ihom`。
+形式化陈述：coev_naturality {X Y : C} (f : X ⟶ Y) : f ≫ (coev A).app Y = (coev A).app 
+X ≫ (ihom A).map (A ◁ f)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 
-English:
-theorem coev_naturality
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: (coev A).naturality f
-
-中文:
-定理 coev_naturality
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: (coev A).naturality f
-
-Depends on / 依赖: naturality
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem coev_naturality {X Y : C} (f : X ⟶ Y) :
     f ≫ (coev A).app Y = (coev A).app X ≫ (ihom A).map (A ◁ f) :=
@@ -340,43 +254,28 @@ set_option quotPrecheck false in
 notation A " ⟶[" C "] " B:10 => (@ihom C _ _ A _).obj B
 
 @[reassoc (attr := simp)]
-/--
-theorem `ev_coev` / 定理 `ev_coev`
-
-English:
-theorem ev_coev
-  statement: (A ◁ (coev A).app B) ≫ (ev A).app (A otimes B) = 𝟙 (A otimes B)
-  proof: (ihom.adjunction A).left_triangle_components _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ev_coev
-  结论: (A ◁ (coev A).app B) ≫ (ev A).app (A otimes B) = 𝟙 (A otimes B)
-  证明: (ihom.adjunction A).left_triangle_components _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: adjunction, ihom.adjunction, left_triangle_components
+/-
+**CategoryTheory.ihom.ev_coev** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ihom`。
+形式化陈述：ev_coev : (A ◁ (coev A).app B) ≫ (ev A).app (A otimes B) = 𝟙 (A otimes B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.left_triangle_components`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   {F : CategoryTheor…
 -/
-theorem ev_coev : (A ◁ (coev A).app B) ≫ (ev A).app (A otimes B) = 𝟙 (A otimes B) :=
+theorem ev_coev : (A ◁ (coev A).app B) ≫ (ev A).app (A ⊗ B) = 𝟙 (A ⊗ B) :=
   (ihom.adjunction A).left_triangle_components _
 
 @[reassoc (attr := simp)]
-/--
-theorem `coev_ev` / 定理 `coev_ev`
-
-English:
-theorem coev_ev
-  statement: (coev A).app (A ⟶[C] B) ≫ (ihom A).map ((ev A).app B) = 𝟙 (A ⟶[C] B)
-  proof: Adjunction.right_triangle_components (ihom.adjunction A) _
-
-中文:
-定理 coev_ev
-  结论: (coev A).app (A ⟶[C] B) ≫ (ihom A).map ((ev A).app B) = 𝟙 (A ⟶[C] B)
-  证明: Adjunction.right_triangle_components (ihom.adjunction A) _
-
-Depends on / 依赖: Adjunction, Adjunction.right_triangle_components, adjunction, ihom.adjunction, right_triangle_components
+/-
+**CategoryTheory.ihom.coev_ev** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ihom`。
+形式化陈述：coev_ev : (coev A).app (A ⟶[C] B) ≫ (ihom A).map ((ev A).app B) = 𝟙 (A ⟶[C
+] B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
 -/
 theorem coev_ev : (coev A).app (A ⟶[C] B) ≫ (ihom A).map ((ev A).app B) = 𝟙 (A ⟶[C] B) :=
   Adjunction.right_triangle_components (ihom.adjunction A) _
@@ -385,20 +284,9 @@ end ihom
 
 open CategoryTheory.Limits
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimits (tensorLeft A)
-  body: (ihom.adjunction A).leftAdjoint_preservesColimits
-
-中文:
-实例 :
-  签名: PreservesColimits (tensorLeft A)
-  定义体: (ihom.adjunction A).leftAdjoint_preservesColimits
-
-Depends on / 依赖: adjunction, ihom.adjunction, leftAdjoint_preservesColimits
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesColimits (tensorLeft A) :=
   (ihom.adjunction A).leftAdjoint_preservesColimits
@@ -408,469 +296,372 @@ variable {A}
 -- Wrap these in a namespace so we don't clash with the core versions.
 namespace MonoidalClosed
 
-/--
-Definition of `curry` / `curry` 的定义
+/-- Currying in a monoidal closed category. -/
+/-
+**CategoryTheory.MonoidalClosed.curry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+MonoidalClosed`。
+形式化陈述：curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curry
-  signature: : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X)
-  body: (ihom.adjunction A).homEquiv _ _
-
-中文:
-定义 curry
-  签名: : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X)
-  定义体: (ihom.adjunction A).homEquiv _ _
-
-Depends on / 依赖: adjunction, homEquiv, ihom.adjunction
+--- 原说明 ---
+Currying in a monoidal closed category.
 -/
-def curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X) :=
+def curry : (A ⊗ Y ⟶ X) → (Y ⟶ A ⟶[C] X) :=
   (ihom.adjunction A).homEquiv _ _
 
-/--
-Definition of `uncurry` / `uncurry` 的定义
+/-- Uncurrying in a monoidal closed category. -/
+/-
+**CategoryTheory.MonoidalClosed.uncurry** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.MonoidalClosed`。
+形式化陈述：uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uncurry
-  signature: : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X)
-  body: ((ihom.adjunction A).homEquiv _ _).symm
-
-中文:
-定义 uncurry
-  签名: : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X)
-  定义体: ((ihom.adjunction A).homEquiv _ _).symm
-
-Depends on / 依赖: adjunction, homEquiv, ihom.adjunction
+--- 原说明 ---
+Uncurrying in a monoidal closed category.
 -/
-def uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X) :=
+def uncurry : (Y ⟶ A ⟶[C] X) → (A ⊗ Y ⟶ X) :=
   ((ihom.adjunction A).homEquiv _ _).symm
-
-/--
-theorem `homEquiv_apply_eq` / 定理 `homEquiv_apply_eq`
-
-English:
-theorem homEquiv_apply_eq
-  given: (f : A otimes Y ⟶ X)
-  statement: (ihom.adjunction A).homEquiv _ _ f = curry f
-  proof: rfl
-
-中文:
-定理 homEquiv_apply_eq
-  条件: (f : A otimes Y ⟶ X)
-  结论: (ihom.adjunction A).homEquiv _ _ f = curry f
-  证明: rfl
+/-
+**CategoryTheory.MonoidalClosed.homEquiv_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.MonoidalClosed`。
+形式化陈述：homEquiv_apply_eq (f : A otimes Y ⟶ X) : (ihom.adjunction A).homEquiv _ _ 
+f = curry f
+参数：f : A otimes Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem homEquiv_apply_eq (f : A otimes Y ⟶ X) : (ihom.adjunction A).homEquiv _ _ f = curry f :=
+theorem homEquiv_apply_eq (f : A ⊗ Y ⟶ X) : (ihom.adjunction A).homEquiv _ _ f = curry f :=
   rfl
-
-/--
-theorem `homEquiv_symm_apply_eq` / 定理 `homEquiv_symm_apply_eq`
-
-English:
-theorem homEquiv_symm_apply_eq
-  given: (f : Y ⟶ A ⟶[C] X)
-  proof: rfl
-
-@[reassoc]
-
-中文:
-定理 homEquiv_symm_apply_eq
-  条件: (f : Y ⟶ A ⟶[C] X)
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.MonoidalClosed.homEquiv_symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.MonoidalClosed`。
+形式化陈述：homEquiv_symm_apply_eq (f : Y ⟶ A ⟶[C] X) : ((ihom.adjunction A).homEquiv 
+_ _).symm f = uncurry f
+参数：f : Y ⟶ A ⟶[C] X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem homEquiv_symm_apply_eq (f : Y ⟶ A ⟶[C] X) :
     ((ihom.adjunction A).homEquiv _ _).symm f = uncurry f :=
   rfl
 
 @[reassoc]
-/--
-theorem `curry_natural_left` / 定理 `curry_natural_left`
-
-English:
-theorem curry_natural_left
-  given: (f : X ⟶ X') (g : A otimes X' ⟶ Y)
-  statement: curry (_ ◁ f ≫ g) = f ≫ curry g
-  proof: Adjunction.homEquiv_naturality_left _ _ _
-
-@[reassoc]
-
-中文:
-定理 curry_natural_left
-  条件: (f : X ⟶ X') (g : A otimes X' ⟶ Y)
-  结论: curry (_ ◁ f ≫ g) = f ≫ curry g
-  证明: Adjunction.homEquiv_naturality_left _ _ _
-
-@[reassoc]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_left, homEquiv_naturality_left
+/-
+**CategoryTheory.MonoidalClosed.curry_natural_left** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.MonoidalClosed`。
+形式化陈述：curry_natural_left (f : X ⟶ X') (g : A otimes X' ⟶ Y) : curry (_ ◁ f ≫ g) 
+= f ≫ curry g
+参数：f : X ⟶ X'；g : A otimes X' ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_naturality_left`：homEquiv_naturality_
+left (f : X' ⟶ X) (g : F.obj X ⟶ Y) : (adj.homEquiv X' Y) (F.map f ≫ g) = f ≫ (a
+dj.homEquiv X Y) g
 -/
-theorem curry_natural_left (f : X ⟶ X') (g : A otimes X' ⟶ Y) : curry (_ ◁ f ≫ g) = f ≫ curry g :=
+theorem curry_natural_left (f : X ⟶ X') (g : A ⊗ X' ⟶ Y) : curry (_ ◁ f ≫ g) = f ≫ curry g :=
   Adjunction.homEquiv_naturality_left _ _ _
 
 @[reassoc]
-/--
-theorem `curry_natural_right` / 定理 `curry_natural_right`
-
-English:
-theorem curry_natural_right
-  given: (f : A otimes X ⟶ Y) (g : Y ⟶ Y')
-  proof: Adjunction.homEquiv_naturality_right _ _ _
-
-@[reassoc]
-
-中文:
-定理 curry_natural_right
-  条件: (f : A otimes X ⟶ Y) (g : Y ⟶ Y')
-  证明: Adjunction.homEquiv_naturality_right _ _ _
-
-@[reassoc]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_right, homEquiv_naturality_right
+/-
+**CategoryTheory.MonoidalClosed.curry_natural_right** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.MonoidalClosed`。
+形式化陈述：curry_natural_right (f : A otimes X ⟶ Y) (g : Y ⟶ Y') : curry (f ≫ g) = cu
+rry f ≫ (ihom _).map g
+参数：f : A otimes X ⟶ Y；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_naturality_right`：homEquiv_naturality
+_right (f : F.obj X ⟶ Y) (g : Y ⟶ Y') : (adj.homEquiv X Y') (f ≫ g) = (adj.homEq
+uiv X Y) f ≫ G.map g
 -/
-theorem curry_natural_right (f : A otimes X ⟶ Y) (g : Y ⟶ Y') :
+theorem curry_natural_right (f : A ⊗ X ⟶ Y) (g : Y ⟶ Y') :
     curry (f ≫ g) = curry f ≫ (ihom _).map g :=
   Adjunction.homEquiv_naturality_right _ _ _
 
 @[reassoc]
-/--
-theorem `uncurry_natural_right` / 定理 `uncurry_natural_right`
-
-English:
-theorem uncurry_natural_right
-  given: (f : X ⟶ A ⟶[C] Y) (g : Y ⟶ Y')
-  proof: Adjunction.homEquiv_naturality_right_symm _ _ _
-
-@[reassoc]
-
-中文:
-定理 uncurry_natural_right
-  条件: (f : X ⟶ A ⟶[C] Y) (g : Y ⟶ Y')
-  证明: Adjunction.homEquiv_naturality_right_symm _ _ _
-
-@[reassoc]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_right_symm, homEquiv_naturality_right_symm
+/-
+**CategoryTheory.MonoidalClosed.uncurry_natural_right** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.MonoidalClosed`。
+形式化陈述：uncurry_natural_right (f : X ⟶ A ⟶[C] Y) (g : Y ⟶ Y') : uncurry (f ≫ (ihom
+ _).map g) = uncurry f ≫ g
+参数：f : X ⟶ A ⟶[C] Y；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_naturality_right_symm`：homEquiv_natur
+ality_right_symm (f : X ⟶ G.obj Y) (g : Y ⟶ Y') : (adj.homEquiv X Y').symm (f ≫ 
+G.map g) = (adj.homEquiv X Y).symm f ≫ g
 -/
 theorem uncurry_natural_right (f : X ⟶ A ⟶[C] Y) (g : Y ⟶ Y') :
     uncurry (f ≫ (ihom _).map g) = uncurry f ≫ g :=
   Adjunction.homEquiv_naturality_right_symm _ _ _
 
 @[reassoc]
-/--
-theorem `uncurry_natural_left` / 定理 `uncurry_natural_left`
-
-English:
-theorem uncurry_natural_left
-  given: (f : X ⟶ X') (g : X' ⟶ A ⟶[C] Y)
-  proof: Adjunction.homEquiv_naturality_left_symm _ _ _
-
-@[simp]
-
-中文:
-定理 uncurry_natural_left
-  条件: (f : X ⟶ X') (g : X' ⟶ A ⟶[C] Y)
-  证明: Adjunction.homEquiv_naturality_left_symm _ _ _
-
-@[simp]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_left_symm, homEquiv_naturality_left_symm
+/-
+**CategoryTheory.MonoidalClosed.uncurry_natural_left** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.MonoidalClosed`。
+形式化陈述：uncurry_natural_left (f : X ⟶ X') (g : X' ⟶ A ⟶[C] Y) : uncurry (f ≫ g) = 
+_ ◁ f ≫ uncurry g
+参数：f : X ⟶ X'；g : X' ⟶ A ⟶[C] Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_naturality_left_symm`：homEquiv_natura
+lity_left_symm (f : X' ⟶ X) (g : X ⟶ G.obj Y) : (adj.homEquiv X' Y).symm (f ≫ g)
+ = F.map f ≫ (adj.homEquiv X Y).symm g
 -/
 theorem uncurry_natural_left (f : X ⟶ X') (g : X' ⟶ A ⟶[C] Y) :
     uncurry (f ≫ g) = _ ◁ f ≫ uncurry g :=
   Adjunction.homEquiv_naturality_left_symm _ _ _
 
 @[simp]
-/--
-theorem `uncurry_curry` / 定理 `uncurry_curry`
-
-English:
-theorem uncurry_curry
-  given: (f : A otimes X ⟶ Y)
-  statement: uncurry (curry f) = f
-  proof: (Closed.adj.homEquiv _ _).left_inv f
-
-@[simp]
-
-中文:
-定理 uncurry_curry
-  条件: (f : A otimes X ⟶ Y)
-  结论: uncurry (curry f) = f
-  证明: (Closed.adj.homEquiv _ _).left_inv f
-
-@[simp]
-
-Depends on / 依赖: Closed, Closed.adj.homEquiv, homEquiv, left_inv
+/-
+**CategoryTheory.MonoidalClosed.uncurry_curry** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.MonoidalClosed`。
+形式化陈述：uncurry_curry (f : A otimes X ⟶ Y) : uncurry (curry f) = f
+参数：f : A otimes X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
-theorem uncurry_curry (f : A otimes X ⟶ Y) : uncurry (curry f) = f :=
+theorem uncurry_curry (f : A ⊗ X ⟶ Y) : uncurry (curry f) = f :=
   (Closed.adj.homEquiv _ _).left_inv f
 
 @[simp]
-/--
-theorem `curry_uncurry` / 定理 `curry_uncurry`
-
-English:
-theorem curry_uncurry
-  given: (f : X ⟶ A ⟶[C] Y)
-  statement: curry (uncurry f) = f
-  proof: (Closed.adj.homEquiv _ _).right_inv f
-
-中文:
-定理 curry_uncurry
-  条件: (f : X ⟶ A ⟶[C] Y)
-  结论: curry (uncurry f) = f
-  证明: (Closed.adj.homEquiv _ _).right_inv f
-
-Depends on / 依赖: Closed, Closed.adj.homEquiv, homEquiv, right_inv
+/-
+**CategoryTheory.MonoidalClosed.curry_uncurry** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.MonoidalClosed`。
+形式化陈述：curry_uncurry (f : X ⟶ A ⟶[C] Y) : curry (uncurry f) = f
+参数：f : X ⟶ A ⟶[C] Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 theorem curry_uncurry (f : X ⟶ A ⟶[C] Y) : curry (uncurry f) = f :=
   (Closed.adj.homEquiv _ _).right_inv f
-
-/--
-theorem `curry_eq_iff` / 定理 `curry_eq_iff`
-
-English:
-theorem curry_eq_iff
-  given: (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X)
-  statement: curry f = g ↔ f = uncurry g
-  proof: Adjunction.homEquiv_apply_eq (ihom.adjunction A) f g
-
-中文:
-定理 curry_eq_iff
-  条件: (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X)
-  结论: curry f = g ↔ f = uncurry g
-  证明: Adjunction.homEquiv_apply_eq (ihom.adjunction A) f g
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_apply_eq, adjunction, homEquiv_apply_eq, ihom.adjunction
+/-
+**CategoryTheory.MonoidalClosed.curry_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.MonoidalClosed`。
+形式化陈述：curry_eq_iff (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X) : curry f = g ↔ f = u
+ncurry g
+参数：f : A otimes Y ⟶ X；g : Y ⟶ A ⟶[C] X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_apply_eq`：homEquiv_apply_eq {A : C} {
+B : D} (f : F.obj A ⟶ B) (g : A ⟶ G.obj B) : adj.homEquiv A B f = g ↔ f = (adj.h
+omEquiv A B).symm g
 -/
-theorem curry_eq_iff (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X) : curry f = g ↔ f = uncurry g :=
+theorem curry_eq_iff (f : A ⊗ Y ⟶ X) (g : Y ⟶ A ⟶[C] X) : curry f = g ↔ f = uncurry g :=
   Adjunction.homEquiv_apply_eq (ihom.adjunction A) f g
-
-/--
-theorem `eq_curry_iff` / 定理 `eq_curry_iff`
-
-English:
-theorem eq_curry_iff
-  given: (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X)
-  statement: g = curry f ↔ uncurry g = f
-  proof: Adjunction.eq_homEquiv_apply (ihom.adjunction A) f g
-
-中文:
-定理 eq_curry_iff
-  条件: (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X)
-  结论: g = curry f ↔ uncurry g = f
-  证明: Adjunction.eq_homEquiv_apply (ihom.adjunction A) f g
-
-Depends on / 依赖: Adjunction, Adjunction.eq_homEquiv_apply, adjunction, eq_homEquiv_apply, ihom.adjunction
+/-
+**CategoryTheory.MonoidalClosed.eq_curry_iff** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.MonoidalClosed`。
+形式化陈述：eq_curry_iff (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X) : g = curry f ↔ uncur
+ry g = f
+参数：f : A otimes Y ⟶ X；g : Y ⟶ A ⟶[C] X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.eq_homEquiv_apply`：eq_homEquiv_apply {A : C} {
+B : D} (f : F.obj A ⟶ B) (g : A ⟶ G.obj B) : g = adj.homEquiv A B f ↔ (adj.homEq
+uiv A B).symm g = f
 -/
-theorem eq_curry_iff (f : A otimes Y ⟶ X) (g : Y ⟶ A ⟶[C] X) : g = curry f ↔ uncurry g = f :=
+theorem eq_curry_iff (f : A ⊗ Y ⟶ X) (g : Y ⟶ A ⟶[C] X) : g = curry f ↔ uncurry g = f :=
   Adjunction.eq_homEquiv_apply (ihom.adjunction A) f g
 
 -- I don't think these two should be simp.
-/--
-theorem `uncurry_eq` / 定理 `uncurry_eq`
-
-English:
-theorem uncurry_eq
-  given: (g : Y ⟶ A ⟶[C] X)
-  statement: uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
-  proof: by
-  rfl
-
-中文:
-定理 uncurry_eq
-  条件: (g : Y ⟶ A ⟶[C] X)
-  结论: uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
-  证明: by
-  rfl
+/-
+**CategoryTheory.MonoidalClosed.uncurry_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.MonoidalClosed`。
+形式化陈述：uncurry_eq (g : Y ⟶ A ⟶[C] X) : uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
+参数：g : Y ⟶ A ⟶[C] X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem uncurry_eq (g : Y ⟶ A ⟶[C] X) : uncurry g = (A ◁ g) ≫ (ihom.ev A).app X := by
   rfl
-
-/--
-theorem `curry_eq` / 定理 `curry_eq`
-
-English:
-theorem curry_eq
-  given: (g : A otimes Y ⟶ X)
-  statement: curry g = (ihom.coev A).app Y ≫ (ihom A).map g
-  proof: rfl
-
-中文:
-定理 curry_eq
-  条件: (g : A otimes Y ⟶ X)
-  结论: curry g = (ihom.coev A).app Y ≫ (ihom A).map g
-  证明: rfl
+/-
+**CategoryTheory.MonoidalClosed.curry_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.MonoidalClosed`。
+形式化陈述：curry_eq (g : A otimes Y ⟶ X) : curry g = (ihom.coev A).app Y ≫ (ihom A).m
+ap g
+参数：g : A otimes Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem curry_eq (g : A otimes Y ⟶ X) : curry g = (ihom.coev A).app Y ≫ (ihom A).map g :=
+theorem curry_eq (g : A ⊗ Y ⟶ X) : curry g = (ihom.coev A).app Y ≫ (ihom A).map g :=
   rfl
-
-/--
-theorem `curry_injective` / 定理 `curry_injective`
-
-English:
-theorem curry_injective
-  statement: Function.Injective (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X))
-  proof: (Closed.adj.homEquiv _ _).injective
-
-中文:
-定理 curry_injective
-  结论: 函数.单射 (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X))
-  证明: (Closed.adj.homEquiv _ _).injective
-
-Depends on / 依赖: Closed, Closed.adj.homEquiv, homEquiv, injective
+/-
+**CategoryTheory.MonoidalClosed.curry_injective** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.MonoidalClosed`。
+形式化陈述：curry_injective : Function.Injective (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶
+[C] X))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-theorem curry_injective : Function.Injective (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X)) :=
+theorem curry_injective : Function.Injective (curry : (A ⊗ Y ⟶ X) → (Y ⟶ A ⟶[C] X)) :=
   (Closed.adj.homEquiv _ _).injective
-
-/--
-theorem `uncurry_injective` / 定理 `uncurry_injective`
-
-English:
-theorem uncurry_injective
-  statement: Function.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
-  proof: (Closed.adj.homEquiv _ _).symm.injective
-
-中文:
-定理 uncurry_injective
-  结论: 函数.单射 (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
-  证明: (Closed.adj.homEquiv _ _).symm.injective
-
-Depends on / 依赖: Closed, Closed.adj.homEquiv, homEquiv, injective, symm.injective
+/-
+**CategoryTheory.MonoidalClosed.uncurry_injective** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.MonoidalClosed`。
+形式化陈述：uncurry_injective : Function.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A oti
+mes Y ⟶ X))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem uncurry_injective : Function.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X)) :=
+theorem uncurry_injective : Function.Injective (uncurry : (Y ⟶ A ⟶[C] X) → (A ⊗ Y ⟶ X)) :=
   (Closed.adj.homEquiv _ _).symm.injective
 
 variable (A X)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `uncurry_id_eq_ev` / 定理 `uncurry_id_eq_ev`
-
-English:
-theorem uncurry_id_eq_ev
-  statement: uncurry (𝟙 (A ⟶[C] X)) = (ihom.ev A).app X
-  proof: by
-  simp [uncurry_eq]
-
-中文:
-定理 uncurry_id_eq_ev
-  结论: uncurry (𝟙 (A ⟶[C] X)) = (ihom.ev A).app X
-  证明: by
-  simp [uncurry_eq]
-
-Depends on / 依赖: uncurry_eq
+/-
+**CategoryTheory.MonoidalClosed.uncurry_id_eq_ev** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.MonoidalClosed`。
+形式化陈述：uncurry_id_eq_ev : uncurry (𝟙 (A ⟶[C] X)) = (ihom.ev A).app X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_eq`：uncurry_eq (g : Y ⟶ A ⟶[C] X) 
+: uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_id`：∀ {C : Type u} {𝒞 : Cate
+goryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y : 
+C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem uncurry_id_eq_ev : uncurry (𝟙 (A ⟶[C] X)) = (ihom.ev A).app X := by
   simp [uncurry_eq]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `curry_id_eq_coev` / 定理 `curry_id_eq_coev`
-
-English:
-theorem curry_id_eq_coev
-  statement: curry (𝟙 _) = (ihom.coev A).app X
-  proof: by
-  rw [curry_eq]; rw [(ihom A).map_id (A otimes _)]
-  apply comp_id
-
-中文:
-定理 curry_id_eq_coev
-  结论: curry (𝟙 _) = (ihom.coev A).app X
-  证明: by
-  rw [curry_eq]; rw [(ihom A).map_id (A otimes _)]
-  apply comp_id
-
-Depends on / 依赖: comp_id, curry_eq, map_id, otimes
+/-
+**CategoryTheory.MonoidalClosed.curry_id_eq_coev** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.MonoidalClosed`。
+形式化陈述：curry_id_eq_coev : curry (𝟙 _) = (ihom.coev A).app X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_eq`：curry_eq (g : A otimes Y ⟶ X) : 
+curry g = (ihom.coev A).app Y ≫ (ihom A).map g
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem curry_id_eq_coev : curry (𝟙 _) = (ihom.coev A).app X := by
-  rw [curry_eq]; rw [(ihom A).map_id (A otimes _)]
+  rw [curry_eq, (ihom A).map_id (A ⊗ _)]
   apply comp_id
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `whiskerLeft_curry_ihom_ev_app` / 引理 `whiskerLeft_curry_ihom_ev_app`
-
-English:
-lemma whiskerLeft_curry_ihom_ev_app
-  given: (g : A otimes Y ⟶ X)
-  proof: by
-  simp [curry_eq]
-
-中文:
-引理 whiskerLeft_curry_ihom_ev_app
-  条件: (g : A otimes Y ⟶ X)
-  证明: by
-  simp [curry_eq]
-
-Depends on / 依赖: curry_eq
+/-
+**CategoryTheory.MonoidalClosed.whiskerLeft_curry_ihom_ev_app** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.MonoidalClosed`。
+形式化陈述：whiskerLeft_curry_ihom_ev_app (g : A otimes Y ⟶ X) : A ◁ curry g ≫ (ihom.e
+v A).app X = g
+参数：g : A otimes Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.ihom.ev_naturality`：ev_naturality {X Y : C} (f : X ⟶ Y) :
+ A ◁ (ihom A).map f ≫ (ev A).app Y = (ev A).app X ≫ f
+· 使用定理 `CategoryTheory.ihom.ev_coev_assoc`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory C] (A B : C)   [in
+st_2 : CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma whiskerLeft_curry_ihom_ev_app (g : A otimes Y ⟶ X) :
+lemma whiskerLeft_curry_ihom_ev_app (g : A ⊗ Y ⟶ X) :
     A ◁ curry g ≫ (ihom.ev A).app X = g := by
   simp [curry_eq]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `uncurry_ihom_map` / 定理 `uncurry_ihom_map`
-
-English:
-theorem uncurry_ihom_map
-  given: (g : Y ⟶ Y')
-  proof: by
-  apply curry_injective
-  rw [curry_uncurry]; rw [curry_natural_right]; rw [← uncurry_id_eq_ev]; rw [curry_uncurry]; rw [id_comp]
-
-中文:
-定理 uncurry_ihom_map
-  条件: (g : Y ⟶ Y')
-  证明: by
-  apply curry_injective
-  rw [curry_uncurry]; rw [curry_natural_right]; rw [← uncurry_id_eq_ev]; rw [curry_uncurry]; rw [id_comp]
-
-Depends on / 依赖: curry_injective, curry_natural_right, curry_uncurry, id_comp, uncurry_id_eq_ev
+/-
+**CategoryTheory.MonoidalClosed.uncurry_ihom_map** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.MonoidalClosed`。
+形式化陈述：uncurry_ihom_map (g : Y ⟶ Y') : uncurry ((ihom A).map g) = (ihom.ev A).app
+ Y ≫ g
+参数：g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_injective`：curry_injective : Functio
+n.Injective (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_uncurry`：curry_uncurry (f : X ⟶ A ⟶[
+C] Y) : curry (uncurry f) = f
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_natural_right`：curry_natural_right (
+f : A otimes X ⟶ Y) (g : Y ⟶ Y') : curry (f ≫ g) = curry f ≫ (ihom _).map g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_id_eq_ev`：uncurry_id_eq_ev : uncur
+ry (𝟙 (A ⟶[C] X)) = (ihom.ev A).app X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem uncurry_ihom_map (g : Y ⟶ Y') :
     uncurry ((ihom A).map g) = (ihom.ev A).app Y ≫ g := by
   apply curry_injective
-  rw [curry_uncurry]; rw [curry_natural_right]; rw [← uncurry_id_eq_ev]; rw [curry_uncurry]; rw [id_comp]
+  rw [curry_uncurry, curry_natural_right, ← uncurry_id_eq_ev, curry_uncurry, id_comp]
 
-/--
-Definition of `unitNatIso` / `unitNatIso` 的定义
+/-- The internal hom out of the unit is naturally isomorphic to the identity functor. -/
+/-
+**CategoryTheory.MonoidalClosed.unitNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.MonoidalClosed`。
+形式化陈述：unitNatIso [Closed (𝟙_ C)] : 𝟭 C ≅ ihom (𝟙_ C)
+参数：𝟙_ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitNatIso
-  signature: [Closed (𝟙_ C)]
-  body: conjugateIsoEquiv (Adjunction.id (C := C)) (ihom.adjunction (𝟙_ C))
-    (leftUnitorNatIso C)
-
-中文:
-定义 unit自然数Iso
-  签名: [闭 (𝟙_ C)]
-  定义体: conjugateIsoEquiv (Adjunction.id (C := C)) (ihom.adjunction (𝟙_ C))
-    (leftUnitorNatIso C)
-
-Depends on / 依赖: Adjunction, Adjunction.id, adjunction, conjugateIsoEquiv, ihom.adjunction, leftUnitorNatIso
+--- 原说明 ---
+The internal hom out of the unit is naturally isomorphic to the identity functor
+.
 -/
 def unitNatIso [Closed (𝟙_ C)] : 𝟭 C ≅ ihom (𝟙_ C) :=
   conjugateIsoEquiv (Adjunction.id (C := C)) (ihom.adjunction (𝟙_ C))
     (leftUnitorNatIso C)
 
-/--
-Definition of `unitIsoSelf` / `unitIsoSelf` 的定义
+/-- The internal hom object from the unit to any object is isomorphic to that object.
+The typeclass argument is explicit: any instance can be used. -/
+/-
+**CategoryTheory.MonoidalClosed.unitIsoSelf** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.MonoidalClosed`。
+形式化陈述：unitIsoSelf [Closed (𝟙_ C)] : ((𝟙_ C) ⟶[C] X) ≅ X
+参数：𝟙_ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIsoSelf
-  signature: [Closed (𝟙_ C)]
-  body: (unitNatIso.app X).symm
-
-中文:
-定义 unitIsoSelf
-  签名: [闭 (𝟙_ C)]
-  定义体: (unitNatIso.app X).symm
-
-Depends on / 依赖: unitNatIso, unitNatIso.app
+--- 原说明 ---
+The internal hom object from the unit to any object is isomorphic to that object
+.
+The typeclass argument is explicit: any instance can be used.
 -/
 def unitIsoSelf [Closed (𝟙_ C)] : ((𝟙_ C) ⟶[C] X) ≅ X :=
   (unitNatIso.app X).symm
@@ -880,219 +671,204 @@ section Pre
 variable {A B}
 variable [Closed B]
 
-/--
-Definition of `pre` / `pre` 的定义
+/-- Pre-compose an internal hom with an external hom. -/
+/-
+**CategoryTheory.MonoidalClosed.pre** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mo
+noidalClosed`。
+形式化陈述：pre (f : B ⟶ A) : ihom A ⟶ ihom B
+参数：f : B ⟶ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pre
-  signature: (f : B ⟶ A)
-  body: conjugateEquiv (ihom.adjunction _) (ihom.adjunction _) ((tensoringLeft C).map f)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 pre
-  签名: (f : B ⟶ A)
-  定义体: conjugateEquiv (ihom.adjunction _) (ihom.adjunction _) ((tensoringLeft C).map f)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: adjunction, conjugateEquiv, ihom.adjunction, tensoringLeft
+--- 原说明 ---
+Pre-compose an internal hom with an external hom.
 -/
 def pre (f : B ⟶ A) : ihom A ⟶ ihom B :=
   conjugateEquiv (ihom.adjunction _) (ihom.adjunction _) ((tensoringLeft C).map f)
 
 @[reassoc (attr := simp)]
-/--
-theorem `id_tensor_pre_app_comp_ev` / 定理 `id_tensor_pre_app_comp_ev`
-
-English:
-theorem id_tensor_pre_app_comp_ev
-  given: (f : B ⟶ A) (X : C)
-  proof: conjugateEquiv_counit _ _ ((tensoringLeft C).map f) X
-
-@[simp]
-
-中文:
-定理 id_tensor_pre_app_comp_ev
-  条件: (f : B ⟶ A) (X : C)
-  证明: conjugateEquiv_counit _ _ ((tensoringLeft C).map f) X
-
-@[simp]
-
-Depends on / 依赖: conjugateEquiv_counit, tensoringLeft
+/-
+**CategoryTheory.MonoidalClosed.id_tensor_pre_app_comp_ev** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.MonoidalClosed`。
+形式化陈述：id_tensor_pre_app_comp_ev (f : B ⟶ A) (X : C) : B ◁ (pre f).app X ≫ (ihom.
+ev B).app X = f ▷ (A ⟶[C] X) ≫ (ihom.ev A).app X
+参数：f : B ⟶ A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.conjugateEquiv_counit`：conjugateEquiv_counit (α : L₂ ⟶ L₁
+) (d : D) : L₂.map ((conjugateEquiv adj₁ adj₂ α).app _) ≫ adj₂.counit.app d = α.
+app _ ≫ adj₁.counit.app d
 -/
 theorem id_tensor_pre_app_comp_ev (f : B ⟶ A) (X : C) :
     B ◁ (pre f).app X ≫ (ihom.ev B).app X = f ▷ (A ⟶[C] X) ≫ (ihom.ev A).app X :=
   conjugateEquiv_counit _ _ ((tensoringLeft C).map f) X
 
 @[simp]
-/--
-theorem `uncurry_pre` / 定理 `uncurry_pre`
-
-English:
-theorem uncurry_pre
-  given: (f : B ⟶ A) (X : C)
-  proof: by
-  simp [uncurry_eq]
-
-@[reassoc]
-
-中文:
-定理 uncurry_pre
-  条件: (f : B ⟶ A) (X : C)
-  证明: by
-  simp [uncurry_eq]
-
-@[reassoc]
-
-Depends on / 依赖: uncurry_eq
+/-
+**CategoryTheory.MonoidalClosed.uncurry_pre** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.MonoidalClosed`。
+形式化陈述：uncurry_pre (f : B ⟶ A) (X : C) : MonoidalClosed.uncurry ((pre f).app X) =
+ f ▷ _ ≫ (ihom.ev A).app X
+参数：f : B ⟶ A；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_eq`：uncurry_eq (g : Y ⟶ A ⟶[C] X) 
+: uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
+· 使用定理 `CategoryTheory.MonoidalClosed.id_tensor_pre_app_comp_ev`：id_tensor_pre_a
+pp_comp_ev (f : B ⟶ A) (X : C) : B ◁ (pre f).app X ≫ (ihom.ev B).app X = f ▷ (A 
+⟶[C] X) ≫ (ihom.ev A).app X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem uncurry_pre (f : B ⟶ A) (X : C) :
     MonoidalClosed.uncurry ((pre f).app X) = f ▷ _ ≫ (ihom.ev A).app X := by
   simp [uncurry_eq]
 
 @[reassoc]
-/--
-lemma `curry_pre_app` / 引理 `curry_pre_app`
-
-English:
-lemma curry_pre_app
-  given: (f : B ⟶ A) {X Y : C} (g : A otimes Y ⟶ X)
-  proof: uncurry_injective (by
-  rw [uncurry_curry]; rw [uncurry_eq]; rw [MonoidalCategory.whiskerLeft_comp]; rw [assoc]; rw [id_tensor_pre_app_comp_ev]; rw [whisker_exchange_assoc]; rw [whiskerLeft_curry_ihom_ev_app])
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 curry_pre_app
-  条件: (f : B ⟶ A) {X Y : C} (g : A otimes Y ⟶ X)
-  证明: uncurry_injective (by
-  rw [uncurry_curry]; rw [uncurry_eq]; rw [MonoidalCategory.whiskerLeft_comp]; rw [assoc]; rw [id_tensor_pre_app_comp_ev]; rw [whisker_exchange_assoc]; rw [whiskerLeft_curry_ihom_ev_app])
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp, id_tensor_pre_app_comp_ev, uncurry_curry, uncurry_eq, uncurry_injective, whiskerLeft_comp, whiskerLeft_curry_ihom_ev_app, whisker_exchange_assoc
+/-
+**CategoryTheory.MonoidalClosed.curry_pre_app** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.MonoidalClosed`。
+形式化陈述：curry_pre_app (f : B ⟶ A) {X Y : C} (g : A otimes Y ⟶ X) : curry g ≫ (pre 
+f).app X = curry (f ▷ _ ≫ g)
+参数：f : B ⟶ A；g : A otimes Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_injective`：uncurry_injective : Fun
+ction.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_curry`：uncurry_curry (f : A otimes
+ X ⟶ Y) : uncurry (curry f) = f
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_eq`：uncurry_eq (g : Y ⟶ A ⟶[C] X) 
+: uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalClosed.id_tensor_pre_app_comp_ev`：id_tensor_pre_a
+pp_comp_ev (f : B ⟶ A) (X : C) : B ◁ (pre f).app X ≫ (ihom.ev B).app X = f ▷ (A 
+⟶[C] X) ≫ (ihom.ev A).app X
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用引理 `CategoryTheory.MonoidalClosed.whiskerLeft_curry_ihom_ev_app`：whiskerLeft
+_curry_ihom_ev_app (g : A otimes Y ⟶ X) : A ◁ curry g ≫ (ihom.ev A).app X = g
 -/
-lemma curry_pre_app (f : B ⟶ A) {X Y : C} (g : A otimes Y ⟶ X) :
+lemma curry_pre_app (f : B ⟶ A) {X Y : C} (g : A ⊗ Y ⟶ X) :
     curry g ≫ (pre f).app X = curry (f ▷ _ ≫ g) := uncurry_injective (by
-  rw [uncurry_curry]; rw [uncurry_eq]; rw [MonoidalCategory.whiskerLeft_comp]; rw [assoc]; rw [id_tensor_pre_app_comp_ev]; rw [whisker_exchange_assoc]; rw [whiskerLeft_curry_ihom_ev_app])
+  rw [uncurry_curry, uncurry_eq, MonoidalCategory.whiskerLeft_comp, assoc,
+    id_tensor_pre_app_comp_ev, whisker_exchange_assoc, whiskerLeft_curry_ihom_ev_app])
 
 @[reassoc (attr := simp)]
-/--
-theorem `coev_app_comp_pre_app` / 定理 `coev_app_comp_pre_app`
-
-English:
-theorem coev_app_comp_pre_app
-  given: (f : B ⟶ A)
-  proof: unit_conjugateEquiv _ _ ((tensoringLeft C).map f) X
-
-@[reassoc]
-
-中文:
-定理 coev_app_comp_pre_app
-  条件: (f : B ⟶ A)
-  证明: unit_conjugateEquiv _ _ ((tensoringLeft C).map f) X
-
-@[reassoc]
-
-Depends on / 依赖: tensoringLeft, unit_conjugateEquiv
+/-
+**CategoryTheory.MonoidalClosed.coev_app_comp_pre_app** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.MonoidalClosed`。
+形式化陈述：coev_app_comp_pre_app (f : B ⟶ A) : (ihom.coev A).app X ≫ (pre f).app (A o
+times X) = (ihom.coev B).app X ≫ (ihom B).map (f ▷ _)
+参数：f : B ⟶ A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.unit_conjugateEquiv`：unit_conjugateEquiv (α : L₂ ⟶ L₁) (c
+ : C) : adj₁.unit.app _ ≫ (conjugateEquiv adj₁ adj₂ α).app _ = adj₂.unit.app c ≫
+ R₂.map (α.app _)
 -/
 theorem coev_app_comp_pre_app (f : B ⟶ A) :
-    (ihom.coev A).app X ≫ (pre f).app (A otimes X) = (ihom.coev B).app X ≫ (ihom B).map (f ▷ _) :=
+    (ihom.coev A).app X ≫ (pre f).app (A ⊗ X) = (ihom.coev B).app X ≫ (ihom B).map (f ▷ _) :=
   unit_conjugateEquiv _ _ ((tensoringLeft C).map f) X
 
 @[reassoc]
-/--
-lemma `uncurry_pre_app` / 引理 `uncurry_pre_app`
-
-English:
-lemma uncurry_pre_app
-  given: (f : Y ⟶ A ⟶[C] X) (g : B ⟶ A)
-  proof: curry_injective (by
-    rw [curry_uncurry]; rw [← curry_pre_app]; rw [curry_uncurry])
-
-@[simp]
-
-中文:
-引理 uncurry_pre_app
-  条件: (f : Y ⟶ A ⟶[C] X) (g : B ⟶ A)
-  证明: curry_injective (by
-    rw [curry_uncurry]; rw [← curry_pre_app]; rw [curry_uncurry])
-
-@[simp]
-
-Depends on / 依赖: curry_injective, curry_pre_app, curry_uncurry
+/-
+**CategoryTheory.MonoidalClosed.uncurry_pre_app** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.MonoidalClosed`。
+形式化陈述：uncurry_pre_app (f : Y ⟶ A ⟶[C] X) (g : B ⟶ A) : uncurry (f ≫ (pre g).app 
+X) = g ▷ _ ≫ uncurry f
+参数：f : Y ⟶ A ⟶[C] X；g : B ⟶ A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_injective`：curry_injective : Functio
+n.Injective (curry : (A otimes Y ⟶ X) -> (Y ⟶ A ⟶[C] X))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_uncurry`：curry_uncurry (f : X ⟶ A ⟶[
+C] Y) : curry (uncurry f) = f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.MonoidalClosed.curry_pre_app`：curry_pre_app (f : B ⟶ A) {
+X Y : C} (g : A otimes Y ⟶ X) : curry g ≫ (pre f).app X = curry (f ▷ _ ≫ g)
 -/
 lemma uncurry_pre_app (f : Y ⟶ A ⟶[C] X) (g : B ⟶ A) :
     uncurry (f ≫ (pre g).app X) = g ▷ _ ≫ uncurry f :=
   curry_injective (by
-    rw [curry_uncurry]; rw [← curry_pre_app]; rw [curry_uncurry])
+    rw [curry_uncurry, ← curry_pre_app, curry_uncurry])
 
 @[simp]
-/--
-theorem `pre_id` / 定理 `pre_id`
-
-English:
-theorem pre_id
-  given: (A : C) [Closed A]
-  statement: pre (𝟙 A) = 𝟙 _
-  proof: by
-  rw [pre]; rw [Functor.map_id]
-  apply conjugateEquiv_id
-
-@[simp]
-
-中文:
-定理 pre_id
-  条件: (A : C) [闭 A]
-  结论: pre (𝟙 A) = 𝟙 _
-  证明: by
-  rw [pre]; rw [Functor.map_id]
-  apply conjugateEquiv_id
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.map_id, conjugateEquiv_id, map_id
+/-
+**CategoryTheory.MonoidalClosed.pre_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.MonoidalClosed`。
+形式化陈述：pre_id (A : C) [Closed A] : pre (𝟙 A) = 𝟙 _
+参数：A : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.pre.eq_1`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory C] {A B : C} 
+  [inst_2 : CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.conjugateEquiv_id`：conjugateEquiv_id : conjugateEquiv adj
+₁ adj₁ (𝟙 _) = 𝟙 _
 -/
 theorem pre_id (A : C) [Closed A] : pre (𝟙 A) = 𝟙 _ := by
-  rw [pre]; rw [Functor.map_id]
+  rw [pre, Functor.map_id]
   apply conjugateEquiv_id
 
 @[simp]
-/--
-theorem `pre_map` / 定理 `pre_map`
-
-English:
-theorem pre_map
-  given: {A₁ A₂ A₃ : C} [Closed A₁] [Closed A₂] [Closed A₃] (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
-  proof: by
-  rw [pre]; rw [pre]; rw [pre]; rw [conjugateEquiv_comp]; rw [(tensoringLeft C).map_comp]
-
-中文:
-定理 pre_map
-  条件: {A₁ A₂ A₃ : C} [闭 A₁] [闭 A₂] [闭 A₃] (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃)
-  证明: by
-  rw [pre]; rw [pre]; rw [pre]; rw [conjugateEquiv_comp]; rw [(tensoringLeft C).map_comp]
-
-Depends on / 依赖: conjugateEquiv_comp, map_comp, tensoringLeft
+/-
+**CategoryTheory.MonoidalClosed.pre_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.MonoidalClosed`。
+形式化陈述：pre_map {A₁ A₂ A₃ : C} [Closed A₁] [Closed A₂] [Closed A₃] (f : A₁ ⟶ A₂) (
+g : A₂ ⟶ A₃) : pre (f ≫ g) = pre g ≫ pre f
+参数：f : A₁ ⟶ A₂；g : A₂ ⟶ A₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.pre.eq_1`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory C] {A B : C} 
+  [inst_2 : CategoryTheory.C…
+· 使用定理 `CategoryTheory.conjugateEquiv_comp`：conjugateEquiv_comp (α : L₂ ⟶ L₁) (β
+ : L₃ ⟶ L₂) : conjugateEquiv adj₁ adj₂ α ≫ conjugateEquiv adj₂ adj₃ β = conjugat
+eEquiv adj₁ adj₃ (β ≫ α)
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem pre_map {A₁ A₂ A₃ : C} [Closed A₁] [Closed A₂] [Closed A₃] (f : A₁ ⟶ A₂) (g : A₂ ⟶ A₃) :
     pre (f ≫ g) = pre g ≫ pre f := by
-  rw [pre]; rw [pre]; rw [pre]; rw [conjugateEquiv_comp]; rw [(tensoringLeft C).map_comp]
-
-/--
-theorem `pre_comm_ihom_map` / 定理 `pre_comm_ihom_map`
-
-English:
-theorem pre_comm_ihom_map
-  given: {W X Y Z : C} [Closed W] [Closed X] (f : W ⟶ X) (g : Y ⟶ Z)
-  proof: by simp
-
-中文:
-定理 pre_comm_ihom_map
-  条件: {W X Y Z : C} [闭 W] [闭 X] (f : W ⟶ X) (g : Y ⟶ Z)
-  证明: by simp
+  rw [pre, pre, pre, conjugateEquiv_comp, (tensoringLeft C).map_comp]
+/-
+**CategoryTheory.MonoidalClosed.pre_comm_ihom_map** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.MonoidalClosed`。
+形式化陈述：pre_comm_ihom_map {W X Y Z : C} [Closed W] [Closed X] (f : W ⟶ X) (g : Y ⟶
+ Z) : (pre f).app Y ≫ (ihom W).map g = (ihom X).map g ≫ (pre f).app Z
+参数：f : W ⟶ X；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pre_comm_ihom_map {W X Y Z : C} [Closed W] [Closed X] (f : W ⟶ X) (g : Y ⟶ Z) :
     (pre f).app Y ≫ (ihom W).map g = (ihom X).map g ≫ (pre f).app Z := by simp
@@ -1101,45 +877,23 @@ end Pre
 
 /-- The internal hom functor given by the monoidal closed structure. -/
 @[simps]
-/--
-Definition of `internalHom` / `internalHom` 的定义
+/-
+**CategoryTheory.MonoidalClosed.internalHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.MonoidalClosed`。
+形式化陈述：internalHom [MonoidalClosed C] : Cᵒᵖ ⥤ C ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition internalHom
-  signature: [MonoidalClosed C]
-  body: ihom X.unop
-  map f := pre f.unop
-
-中文:
-定义 internalHom
-  签名: [幺半群闭 C]
-  定义体: ihom X.unop
-  map f := pre f.unop
-
-Depends on / 依赖: X.unop
+--- 原说明 ---
+The internal hom functor given by the monoidal closed structure.
 -/
 def internalHom [MonoidalClosed C] : Cᵒᵖ ⥤ C ⥤ C where
   obj X := ihom X.unop
   map f := pre f.unop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonoidalClosed
-  signature: C] (X
-  body: by
-  bdsimp
-  infer_instance
-
-中文:
-实例 [幺半群闭
-  签名: C] (X
-  定义体: by
-  bdsimp
-  infer_instance
-
-Depends on / 依赖: bdsimp, infer_instance
+/-
+**CategoryTheory.MonoidalClosed.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Monoi
+dalClosed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MonoidalClosed C] (X : Cᵒᵖ) : (internalHom.obj X).IsRightAdjoint := by
   bdsimp
@@ -1150,20 +904,14 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The parametrized adjunction between `curriedTensor C : C ⥤ C ⥤ C`
 and `internalHom : Cᵒᵖ ⥤ C ⥤ C` -/
 @[simps!]
-/--
-Definition of `internalHomAdjunction₂` / `internalHomAdjunction₂` 的定义
+/-
+**CategoryTheory.MonoidalClosed.internalHomAdjunction** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.MonoidalClosed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition internalHomAdjunction₂
-  signature: [MonoidalClosed C]
-  body: ihom.adjunction _
-
-中文:
-定义 internalHomAdjunction₂
-  签名: [幺半群闭 C]
-  定义体: ihom.adjunction _
-
-Depends on / 依赖: adjunction, ihom.adjunction
+--- 原说明 ---
+The parametrized adjunction between `curriedTensor C : C ⥤ C ⥤ C`
+and `internalHom : Cᵒᵖ ⥤ C ⥤ C`
 -/
 def internalHomAdjunction₂ [MonoidalClosed C] :
     curriedTensor C ⊣₂ internalHom where
@@ -1178,26 +926,16 @@ variable (F : C ⥤ D) {G : D ⥤ C} (adj : F ⊣ G)
 
 /-- Transport the property of being monoidal closed across a monoidal equivalence of categories -/
 @[instance_reducible]
-/--
-Definition of `ofEquiv` / `ofEquiv` 的定义
+/-
+**CategoryTheory.MonoidalClosed.ofEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.MonoidalClosed`。
+形式化陈述：ofEquiv : MonoidalClosed C where closed X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofEquiv
-  signature: : MonoidalClosed C where
-  body: { rightAdj := F ⋙ ihom (F.obj X) ⋙ G
-      adj := (adj.comp ((ihom.adjunction (F.obj X)).comp
-          adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft
-            (Iso.compInverseIso (H := adj.toEquivalence) (Functor.Monoidal.commTensorLeft F X)) }
-
-中文:
-定义 ofEquiv
-  签名: : 幺半群闭 C where
-  定义体: { rightAdj := F ⋙ ihom (F.obj X) ⋙ G
-      adj := (adj.comp ((ihom.adjunction (F.obj X)).comp
-          adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft
-            (Iso.compInverseIso (H := adj.toEquivalence) (Functor.Monoidal.commTensorLeft F X)) }
-
-Depends on / 依赖: F.obj, Functor, Functor.Monoidal.commTensorLeft, Iso.compInverseIso, Monoidal, adj.comp, adj.toEquivalence, adj.toEquivalence.symm.toAdjunction, adjunction, commTensorLeft, compInverseIso, ihom.adjunction, infer_instance, mono_of_mono_map, ofNatIsoLeft, rightAdj, sheafToPresheaf, toAdjunction, toEquivalence
+--- 原说明 ---
+Transport the property of being monoidal closed across a monoidal equivalence of
+ categories
 -/
 noncomputable def ofEquiv : MonoidalClosed C where
   closed X :=
@@ -1208,50 +946,59 @@ noncomputable def ofEquiv : MonoidalClosed C where
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `ofEquiv_curry_def` / 定理 `ofEquiv_curry_def`
+/-- Suppose we have a monoidal equivalence `F : C ≌ D`, with `D` monoidal closed. We can pull the
+monoidal closed instance back along the equivalence. For `X, Y, Z : C`, this lemma describes the
+resulting currying map `Hom(X ⊗ Y, Z) → Hom(Y, (X ⟶[C] Z))`. (`X ⟶[C] Z` is defined to be
+`F⁻¹(F(X) ⟶[D] F(Z))`, so currying in `C` is given by essentially conjugating currying in
+`D` by `F.`) -/
+/-
+**CategoryTheory.MonoidalClosed.ofEquiv_curry_def** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.MonoidalClosed`。
+形式化陈述：ofEquiv_curry_def {X Y Z : C} (f : X otimes Y ⟶ Z) : letI
+参数：f : X otimes Y ⟶ Z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppUnitOfFullOfFaithful`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoFunctorCounitOfIsEquivalence`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Adjunction.homEquiv_ofNatIsoLeft_apply`：homEquiv_ofNatIso
+Left_apply {F G : C ⥤ D} {H : D ⥤ C} (adj : F ⊣ H) (iso : F ≅ G) {X : C} {Y : D}
+ (f : G.obj X ⟶ Y) : (ofNatIsoLeft adj iso)…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用引理 `CategoryTheory.Adjunction.comp_homEquiv`：comp_homEquiv : (adj₁.comp adj₂
+).homEquiv = fun _ _ => Equiv.trans (adj₂.homEquiv _ _) (adj₁.homEquiv _ _)
 
-English:
-theorem ofEquiv_curry_def
-  given: {X Y Z : C} (f : X otimes Y ⟶ Z)
-  proof: ofEquiv F adj
-    MonoidalClosed.curry f =
-      adj.homEquiv Y ((ihom (F.obj X)).obj (F.obj Z))
-        (MonoidalClosed.curry (adj.toEquivalence.symm.toAdjunction.homEquiv (F.obj X otimes F.obj Y) Z
-        ((Iso.compInverseIso (H := adj.toEquivalence)
-          (Functor.Monoidal.commTensorLeft F X)).hom.app Y ≫ f))) := by
-  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
-  change ((adj.comp ((ihom.adjunction (F.obj X)).comp
-      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _ _ = _
-  rw [Adjunction.homEquiv_ofNatIsoLeft_apply]
-  dsimp
-  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
-  rfl
-
-中文:
-定理 ofEquiv_curry_def
-  条件: {X Y Z : C} (f : X otimes Y ⟶ Z)
-  证明: ofEquiv F adj
-    MonoidalClosed.curry f =
-      adj.homEquiv Y ((ihom (F.obj X)).obj (F.obj Z))
-        (MonoidalClosed.curry (adj.toEquivalence.symm.toAdjunction.homEquiv (F.obj X otimes F.obj Y) Z
-        ((Iso.compInverseIso (H := adj.toEquivalence)
-          (Functor.Monoidal.commTensorLeft F X)).hom.app Y ≫ f))) := by
-  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
-  change ((adj.comp ((ihom.adjunction (F.obj X)).comp
-      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _ _ = _
-  rw [Adjunction.homEquiv_ofNatIsoLeft_apply]
-  dsimp
-  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
-  rfl
-
-Depends on / 依赖: FullSubcategory, NatTrans, NatTrans.naturality, ObjectProperty, ObjectProperty.FullSubcategory.comp_hom, Sheaf.image, Sheaf.toImage, Sheaf.toImage_hom, Subtype, Subtype.ext, comp_hom, congr_arg, f.hom.app, hom.app, i.op, isSeparatedFor, isSeparatedFor.ext, isSheaf_iff_isSheaf_of_type, naturality, obj.map
+--- 原说明 ---
+Suppose we have a monoidal equivalence `F : C ≌ D`, with `D` monoidal closed. We
+ can pull the
+monoidal closed instance back along the equivalence. For `X, Y, Z : C`, this lem
+ma describes the
+resulting currying map `Hom(X ⊗ Y, Z) → Hom(Y, (X ⟶[C] Z))`. (`X ⟶[C] Z` is defi
+ned to be
+`F⁻¹(F(X) ⟶[D] F(Z))`, so currying in `C` is given by essentially conjugating cu
+rrying in
+`D` by `F.`)
 -/
-theorem ofEquiv_curry_def {X Y Z : C} (f : X otimes Y ⟶ Z) :
+theorem ofEquiv_curry_def {X Y Z : C} (f : X ⊗ Y ⟶ Z) :
     letI := ofEquiv F adj
     MonoidalClosed.curry f =
       adj.homEquiv Y ((ihom (F.obj X)).obj (F.obj Z))
-        (MonoidalClosed.curry (adj.toEquivalence.symm.toAdjunction.homEquiv (F.obj X otimes F.obj Y) Z
+        (MonoidalClosed.curry (adj.toEquivalence.symm.toAdjunction.homEquiv (F.obj X ⊗ F.obj Y) Z
         ((Iso.compInverseIso (H := adj.toEquivalence)
           (Functor.Monoidal.commTensorLeft F X)).hom.app Y ≫ f))) := by
   -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
@@ -1259,55 +1006,61 @@ theorem ofEquiv_curry_def {X Y Z : C} (f : X otimes Y ⟶ Z) :
       adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _ _ = _
   rw [Adjunction.homEquiv_ofNatIsoLeft_apply]
   dsimp
-  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
+  rw [Adjunction.comp_homEquiv, Adjunction.comp_homEquiv]
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `ofEquiv_uncurry_def` / 定理 `ofEquiv_uncurry_def`
+/-- Suppose we have a monoidal equivalence `F : C ≌ D`, with `D` monoidal closed. We can pull the
+monoidal closed instance back along the equivalence. For `X, Y, Z : C`, this lemma describes the
+resulting uncurrying map `Hom(Y, (X ⟶[C] Z)) → Hom(X ⊗ Y ⟶ Z)`. (`X ⟶[C] Z` is
+defined to be `F⁻¹(F(X) ⟶[D] F(Z))`, so uncurrying in `C` is given by essentially conjugating
+uncurrying in `D` by `F.`) -/
+/-
+**CategoryTheory.MonoidalClosed.ofEquiv_uncurry_def** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.MonoidalClosed`。
+形式化陈述：ofEquiv_uncurry_def {X Y Z : C} : letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppUnitOfFullOfFaithful`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoFunctorCounitOfIsEquivalence`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Adjunction.homEquiv_ofNatIsoLeft_symm_apply`：homEquiv_ofN
+atIsoLeft_symm_apply {F G : C ⥤ D} {H : D ⥤ C} (adj : F ⊣ H) (iso : F ≅ G) {X : 
+C} {Y : D} (f : X ⟶ H.obj Y) : ((ofNatIsoLeft ad…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用引理 `CategoryTheory.Adjunction.comp_homEquiv`：comp_homEquiv : (adj₁.comp adj₂
+).homEquiv = fun _ _ => Equiv.trans (adj₂.homEquiv _ _) (adj₁.homEquiv _ _)
 
-English:
-theorem ofEquiv_uncurry_def
-  given: {X Y Z : C}
-  proof: ofEquiv F adj
-    forall (f : Y ⟶ (ihom X).obj Z), MonoidalClosed.uncurry f =
-      ((Iso.compInverseIso (H := adj.toEquivalence)
-          (Functor.Monoidal.commTensorLeft F X)).inv.app Y) ≫
-            (adj.toEquivalence.symm.toAdjunction.homEquiv _ _).symm
-              (MonoidalClosed.uncurry ((adj.homEquiv _ _).symm f)) := by
-  intro f
-  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
-  change (((adj.comp ((ihom.adjunction (F.obj X)).comp
-      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _).symm _ = _
-  rw [Adjunction.homEquiv_ofNatIsoLeft_symm_apply]
-  dsimp
-  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
-  rfl
-
-中文:
-定理 ofEquiv_uncurry_def
-  条件: {X Y Z : C}
-  证明: ofEquiv F adj
-    forall (f : Y ⟶ (ihom X).obj Z), MonoidalClosed.uncurry f =
-      ((Iso.compInverseIso (H := adj.toEquivalence)
-          (Functor.Monoidal.commTensorLeft F X)).inv.app Y) ≫
-            (adj.toEquivalence.symm.toAdjunction.homEquiv _ _).symm
-              (MonoidalClosed.uncurry ((adj.homEquiv _ _).symm f)) := by
-  intro f
-  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
-  change (((adj.comp ((ihom.adjunction (F.obj X)).comp
-      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _).symm _ = _
-  rw [Adjunction.homEquiv_ofNatIsoLeft_symm_apply]
-  dsimp
-  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
-  rfl
-
-Depends on / 依赖: ofEquiv
+--- 原说明 ---
+Suppose we have a monoidal equivalence `F : C ≌ D`, with `D` monoidal closed. We
+ can pull the
+monoidal closed instance back along the equivalence. For `X, Y, Z : C`, this lem
+ma describes the
+resulting uncurrying map `Hom(Y, (X ⟶[C] Z)) → Hom(X ⊗ Y ⟶ Z)`. (`X ⟶[C] Z` is
+defined to be `F⁻¹(F(X) ⟶[D] F(Z))`, so uncurrying in `C` is given by essentiall
+y conjugating
+uncurrying in `D` by `F.`)
 -/
 theorem ofEquiv_uncurry_def {X Y Z : C} :
     letI := ofEquiv F adj
-    forall (f : Y ⟶ (ihom X).obj Z), MonoidalClosed.uncurry f =
+    ∀ (f : Y ⟶ (ihom X).obj Z), MonoidalClosed.uncurry f =
       ((Iso.compInverseIso (H := adj.toEquivalence)
           (Functor.Monoidal.commTensorLeft F X)).inv.app Y) ≫
             (adj.toEquivalence.symm.toAdjunction.homEquiv _ _).symm
@@ -1318,7 +1071,7 @@ theorem ofEquiv_uncurry_def {X Y Z : C} :
       adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _).symm _ = _
   rw [Adjunction.homEquiv_ofNatIsoLeft_symm_apply]
   dsimp
-  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
+  rw [Adjunction.comp_homEquiv, Adjunction.comp_homEquiv]
   rfl
 
 end OfEquiv
@@ -1330,108 +1083,117 @@ end OfEquiv
 -- C comes with an instance of `MonoidalClosed`
 section Enriched
 
-/--
-Definition of `id` / `id` 的定义
+/-- The C-identity morphism
+  `𝟙_ C ⟶ hom(x, x)`
+used to equip `C` with the structure of a `C`-category -/
+/-
+**CategoryTheory.MonoidalClosed.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mon
+oidalClosed`。
+形式化陈述：id (x : C) [Closed x] : 𝟙_ C ⟶ (ihom x).obj x
+参数：x : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (x : C) [Closed x]
-  body: curry (ρ_ x).hom
-
-中文:
-定义 id
-  签名: (x : C) [闭 x]
-  定义体: curry (ρ_ x).hom
+--- 原说明 ---
+The C-identity morphism
+  `𝟙_ C ⟶ hom(x, x)`
+used to equip `C` with the structure of a `C`-category
 -/
 def id (x : C) [Closed x] : 𝟙_ C ⟶ (ihom x).obj x := curry (ρ_ x).hom
 
-/--
-Definition of `compTranspose` / `compTranspose` 的定义
+/-- The *uncurried* composition morphism
+  `x ⊗ (hom(x, y) ⊗ hom(y, z)) ⟶ (x ⊗ hom(x, y)) ⊗ hom(y, z) ⟶ y ⊗ hom(y, z) ⟶ z`.
+The `C`-composition morphism will be defined as the adjoint transpose of this map. -/
+/-
+**CategoryTheory.MonoidalClosed.compTranspose** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MonoidalClosed`。
+形式化陈述：compTranspose (x y z : C) [Closed x] [Closed y] : x otimes (ihom x).obj y 
+otimes (ihom y).obj z ⟶ z
+参数：x y z : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compTranspose
-  signature: (x y z : C) [Closed x] [Closed y]
-  body: (α_ x ((ihom x).obj y) ((ihom y).obj z)).inv ≫
-    (ihom.ev x).app y ▷ ((ihom y).obj z) ≫ (ihom.ev y).app z
-
-中文:
-定义 compTranspose
-  签名: (x y z : C) [闭 x] [闭 y]
-  定义体: (α_ x ((ihom x).obj y) ((ihom y).obj z)).inv ≫
-    (ihom.ev x).app y ▷ ((ihom y).obj z) ≫ (ihom.ev y).app z
-
-Depends on / 依赖: ihom.ev
+--- 原说明 ---
+The *uncurried* composition morphism
+  `x ⊗ (hom(x, y) ⊗ hom(y, z)) ⟶ (x ⊗ hom(x, y)) ⊗ hom(y, z) ⟶ y ⊗ hom(y, z) ⟶ z
+`.
+The `C`-composition morphism will be defined as the adjoint transpose of this ma
+p.
 -/
-def compTranspose (x y z : C) [Closed x] [Closed y] : x otimes (ihom x).obj y otimes (ihom y).obj z ⟶ z :=
+def compTranspose (x y z : C) [Closed x] [Closed y] : x ⊗ (ihom x).obj y ⊗ (ihom y).obj z ⟶ z :=
   (α_ x ((ihom x).obj y) ((ihom y).obj z)).inv ≫
     (ihom.ev x).app y ▷ ((ihom y).obj z) ≫ (ihom.ev y).app z
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The `C`-composition morphism
+  `hom(x, y) ⊗ hom(y, z) ⟶ hom(x, z)`
+used to equip `C` with the structure of a `C`-category -/
+/-
+**CategoryTheory.MonoidalClosed.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.M
+onoidalClosed`。
+形式化陈述：comp (x y z : C) [Closed x] [Closed y] : (ihom x).obj y otimes (ihom y).ob
+j z ⟶ (ihom x).obj z
+参数：x y z : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (x y z : C) [Closed x] [Closed y]
-  body: curry (compTranspose x y z)
-
-中文:
-定义 comp
-  签名: (x y z : C) [闭 x] [闭 y]
-  定义体: curry (compTranspose x y z)
-
-Depends on / 依赖: compTranspose
+--- 原说明 ---
+The `C`-composition morphism
+  `hom(x, y) ⊗ hom(y, z) ⟶ hom(x, z)`
+used to equip `C` with the structure of a `C`-category
 -/
-def comp (x y z : C) [Closed x] [Closed y] : (ihom x).obj y otimes (ihom y).obj z ⟶ (ihom x).obj z :=
+def comp (x y z : C) [Closed x] [Closed y] : (ihom x).obj y ⊗ (ihom y).obj z ⟶ (ihom x).obj z :=
   curry (compTranspose x y z)
 
-/--
-lemma `id_eq` / 引理 `id_eq`
+/-- Unfold the definition of `id`.
+This exists to streamline the proofs of `MonoidalClosed.id_comp` and `MonoidalClosed.comp_id` -/
+/-
+**CategoryTheory.MonoidalClosed.id_eq** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+MonoidalClosed`。
+形式化陈述：id_eq (x : C) [Closed x] : id x = curry (ρ_ x).hom
+参数：x : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma id_eq
-  given: (x : C) [Closed x]
-  statement: id x = curry (ρ_ x).hom
-  proof: rfl
-
-中文:
-引理 id_eq
-  条件: (x : C) [闭 x]
-  结论: id x = curry (ρ_ x).hom
-  证明: rfl
+--- 原说明 ---
+Unfold the definition of `id`.
+This exists to streamline the proofs of `MonoidalClosed.id_comp` and `MonoidalCl
+osed.comp_id`
 -/
 lemma id_eq (x : C) [Closed x] : id x = curry (ρ_ x).hom := rfl
 
-/--
-lemma `compTranspose_eq` / 引理 `compTranspose_eq`
+/-- Unfold the definition of `compTranspose`.
+This exists to streamline the proof of `MonoidalClosed.assoc` -/
+/-
+**CategoryTheory.MonoidalClosed.compTranspose_eq** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.MonoidalClosed`。
+形式化陈述：compTranspose_eq (x y z : C) [Closed x] [Closed y] : compTranspose x y z =
+ (α_ _ _ _).inv ≫ (ihom.ev x).app y ▷ _ ≫ (ihom.ev y).app z
+参数：x y z : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma compTranspose_eq
-  given: (x y z : C) [Closed x] [Closed y]
-  proof: rfl
-
-中文:
-引理 compTranspose_eq
-  条件: (x y z : C) [闭 x] [闭 y]
-  证明: rfl
+--- 原说明 ---
+Unfold the definition of `compTranspose`.
+This exists to streamline the proof of `MonoidalClosed.assoc`
 -/
 lemma compTranspose_eq (x y z : C) [Closed x] [Closed y] :
     compTranspose x y z = (α_ _ _ _).inv ≫ (ihom.ev x).app y ▷ _ ≫ (ihom.ev y).app z :=
   rfl
 
-/--
-lemma `comp_eq` / 引理 `comp_eq`
+/-- Unfold the definition of `comp`.
+This exists to streamline the proof of `MonoidalClosed.assoc` -/
+/-
+**CategoryTheory.MonoidalClosed.comp_eq** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.MonoidalClosed`。
+形式化陈述：comp_eq (x y z : C) [Closed x] [Closed y] : comp x y z = curry (compTransp
+ose x y z)
+参数：x y z : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma comp_eq
-  given: (x y z : C) [Closed x] [Closed y]
-  statement: comp x y z = curry (compTranspose x y z)
-  proof: rfl
-
-中文:
-引理 comp_eq
-  条件: (x y z : C) [闭 x] [闭 y]
-  结论: comp x y z = curry (compTranspose x y z)
-  证明: rfl
+--- 原说明 ---
+Unfold the definition of `comp`.
+This exists to streamline the proof of `MonoidalClosed.assoc`
 -/
 lemma comp_eq (x y z : C) [Closed x] [Closed y] : comp x y z = curry (compTranspose x y z) := rfl
 
@@ -1445,62 +1207,118 @@ The proofs of associativity and unitality use the following outline:
 set_option backward.isDefEq.respectTransparency false in
 /-- Left unitality of the enriched structure -/
 @[reassoc (attr := simp)]
-/--
-lemma `id_comp` / 引理 `id_comp`
+/-
+**CategoryTheory.MonoidalClosed.id_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.MonoidalClosed`。
+形式化陈述：id_comp (x y : C) [Closed x] : (fun_ ((ihom x).obj y)).inv ≫ id x ▷ _ ≫ co
+mp x x y = 𝟙 _
+参数：x y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_injective`：uncurry_injective : Fun
+ction.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_natural_left`：uncurry_natural_left
+ (f : X ⟶ X') (g : X' ⟶ A ⟶[C] Y) : uncurry (f ≫ g) = _ ◁ f ≫ uncurry g
+· 使用引理 `CategoryTheory.MonoidalClosed.comp_eq`：comp_eq (x y z : C) [Closed x] [C
+losed y] : comp x y z = curry (compTranspose x y z)
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_curry`：uncurry_curry (f : A otimes
+ X ⟶ Y) : uncurry (curry f) = f
+· 使用引理 `CategoryTheory.MonoidalClosed.id_eq`：id_eq (x : C) [Closed x] : id x = c
+urry (ρ_ x).hom
+· 使用引理 `CategoryTheory.MonoidalClosed.compTranspose_eq`：compTranspose_eq (x y z 
+: C) [Closed x] [Closed y] : compTranspose x y z = (α_ _ _ _).inv ≫ (ihom.ev x).
+app y ▷ _ ≫ (ihom.ev y).app z
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_middle_assoc`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheor
+y.MonoidalCategory C] (X : C) {Y Y' : C}   (f : Y ⟶ Y') (Z :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCateg
+ory C] {W X Y : C}   (f : W ⟶ X) (g : X ⟶ Y) …
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_eq`：uncurry_eq (g : Y ⟶ A ⟶[C] X) 
+: uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
+· 使用定理 `CategoryTheory.MonoidalCategory.triangle_assoc_comp_right_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoi
+dalCategory C] (X Y : C) {Z : C}   (h : CategoryTheor…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_inv_hom_assoc`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCat
+egory C] (X : C) {Y Z : C}   (f : Y ≅ Z) {Z_1 :…
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_id_eq_ev`：uncurry_id_eq_ev : uncur
+ry (𝟙 (A ⟶[C] X)) = (ihom.ev A).app X
 
-English:
-lemma id_comp
-  given: (x y : C) [Closed x]
-  proof: by
-  apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]; rw [uncurry_id_eq_ev _ _]
-
-中文:
-引理 id_comp
-  条件: (x y : C) [闭 x]
-  证明: by
-  apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]; rw [uncurry_id_eq_ev _ _]
-
-Depends on / 依赖: associator_inv_naturality_middle_assoc, compTranspose_eq, comp_eq, comp_whiskerRight_assoc, id_eq, triangle_assoc_comp_right_assoc, uncurry_curry, uncurry_eq, uncurry_id_eq_ev, uncurry_injective, uncurry_natural_left, whiskerLeft_inv_hom_assoc
+--- 原说明 ---
+Left unitality of the enriched structure
 -/
 lemma id_comp (x y : C) [Closed x] :
-    (fun_ ((ihom x).obj y)).inv ≫ id x ▷ _ ≫ comp x x y = 𝟙 _ := by
+    (λ_ ((ihom x).obj y)).inv ≫ id x ▷ _ ≫ comp x x y = 𝟙 _ := by
   apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]; rw [uncurry_id_eq_ev _ _]
+  rw [uncurry_natural_left, uncurry_natural_left, comp_eq, uncurry_curry, id_eq, compTranspose_eq,
+      associator_inv_naturality_middle_assoc, ← comp_whiskerRight_assoc, ← uncurry_eq,
+      uncurry_curry, triangle_assoc_comp_right_assoc, whiskerLeft_inv_hom_assoc,
+      uncurry_id_eq_ev _ _]
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Right unitality of the enriched structure -/
 @[reassoc (attr := simp)]
-/--
-lemma `comp_id` / 引理 `comp_id`
+/-
+**CategoryTheory.MonoidalClosed.comp_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.MonoidalClosed`。
+形式化陈述：comp_id (x y : C) [Closed x] [Closed y] : (ρ_ ((ihom x).obj y)).inv ≫ _ ◁ 
+id y ≫ comp x y y = 𝟙 _
+参数：x y : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_injective`：uncurry_injective : Fun
+ction.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_natural_left`：uncurry_natural_left
+ (f : X ⟶ X') (g : X' ⟶ A ⟶[C] Y) : uncurry (f ≫ g) = _ ◁ f ≫ uncurry g
+· 使用引理 `CategoryTheory.MonoidalClosed.comp_eq`：comp_eq (x y z : C) [Closed x] [C
+losed y] : comp x y z = curry (compTranspose x y z)
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_curry`：uncurry_curry (f : A otimes
+ X ⟶ Y) : uncurry (curry f) = f
+· 使用引理 `CategoryTheory.MonoidalClosed.compTranspose_eq`：compTranspose_eq (x y z 
+: C) [Closed x] [Closed y] : compTranspose x y z = (α_ _ _ _).inv ≫ (ihom.ev x).
+app y ▷ _ ≫ (ihom.ev y).app z
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_right_assoc`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory
+.MonoidalCategory C] (X Y : C)   {Z Z' : C} (f : Z ⟶ Z') {Z…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.rightUnitor_tensor_inv_assoc`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoidal
+Category C] (X Y : C) {Z : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.rightUnitor_inv_naturality_assoc`：∀ {C :
+ Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mono
+idalCategory C] {X X' : C}   (f : X ⟶ X') {Z : C}   (h…
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_id_eq_ev`：uncurry_id_eq_ev : uncur
+ry (𝟙 (A ⟶[C] X)) = (ihom.ev A).app X
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_id
-  given: (x y : C) [Closed x] [Closed y]
-  proof: by
-  apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← uncurry_id_eq_ev y y]
-  simp only [Functor.id_obj]
-  rw [← uncurry_natural_left]
-  simp [id_eq, uncurry_id_eq_ev]
-
-中文:
-引理 comp_id
-  条件: (x y : C) [闭 x] [闭 y]
-  证明: by
-  apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← uncurry_id_eq_ev y y]
-  simp only [Functor.id_obj]
-  rw [← uncurry_natural_left]
-  simp [id_eq, uncurry_id_eq_ev]
-
-Depends on / 依赖: Functor, Functor.id_obj, associator_inv_naturality_right_assoc, compTranspose_eq, comp_eq, id_eq, id_obj, rightUnitor_inv_naturality_assoc, rightUnitor_tensor_inv_assoc, uncurry_curry, uncurry_id_eq_ev, uncurry_injective, uncurry_natural_left, whisker_exchange_assoc
+--- 原说明 ---
+Right unitality of the enriched structure
 -/
 lemma comp_id (x y : C) [Closed x] [Closed y] :
     (ρ_ ((ihom x).obj y)).inv ≫ _ ◁ id y ≫ comp x y y = 𝟙 _ := by
   apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← uncurry_id_eq_ev y y]
+  rw [uncurry_natural_left, uncurry_natural_left, comp_eq, uncurry_curry, compTranspose_eq,
+    associator_inv_naturality_right_assoc, ← rightUnitor_tensor_inv_assoc,
+    whisker_exchange_assoc, ← rightUnitor_inv_naturality_assoc, ← uncurry_id_eq_ev y y]
   simp only [Functor.id_obj]
   rw [← uncurry_natural_left]
   simp [id_eq, uncurry_id_eq_ev]
@@ -1508,96 +1326,133 @@ lemma comp_id (x y : C) [Closed x] [Closed y] :
 set_option backward.isDefEq.respectTransparency false in
 /-- Associativity of the enriched structure -/
 @[reassoc]
-/--
-lemma `assoc` / 引理 `assoc`
+/-
+**CategoryTheory.MonoidalClosed.assoc** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+MonoidalClosed`。
+形式化陈述：assoc (w x y z : C) [Closed w] [Closed x] [Closed y] : (α_ _ _ _).inv ≫ co
+mp w x y ▷ _ ≫ comp w y z = _ ◁ comp x y z ≫ comp w x z
+参数：w x y z : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_injective`：uncurry_injective : Fun
+ction.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_natural_left`：uncurry_natural_left
+ (f : X ⟶ X') (g : X' ⟶ A ⟶[C] Y) : uncurry (f ≫ g) = _ ◁ f ≫ uncurry g
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_curry`：uncurry_curry (f : A otimes
+ X ⟶ Y) : uncurry (curry f) = f
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_middle_assoc`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheor
+y.MonoidalCategory C] (X : C) {Y Y' : C}   (f : Y ⟶ Y') (Z :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCateg
+ory C] {W X Y : C}   (f : W ⟶ X) (g : X ⟶ Y) …
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_eq`：uncurry_eq (g : Y ⟶ A ⟶[C] X) 
+: uncurry g = (A ◁ g) ≫ (ihom.ev A).app X
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_right_assoc`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory
+.MonoidalCategory C] (X Y : C)   {Z Z' : C} (f : Z ⟶ Z') {Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalCategory.pentagon_inv_assoc`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory C
+] {W X Y Z Z_1 : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_tensor`：whiskerRight_tensor
+ {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) = (α_ X Y Z).inv ≫ f ▷ Y ▷
+ Z ≫ (α_ X' Y Z).hom
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma assoc
-  given: (w x y z : C) [Closed w] [Closed x] [Closed y]
-  proof: by
-  apply uncurry_injective
-  simp only [uncurry_natural_left, comp_eq]
-  rw [uncurry_curry]; rw [uncurry_curry]; simp only [compTranspose_eq]
-  rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; dsimp
-  rw [← uncurry_eq]; rw [uncurry_curry]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]
-  simp
-
-中文:
-引理 assoc
-  条件: (w x y z : C) [闭 w] [闭 x] [闭 y]
-  证明: by
-  apply uncurry_injective
-  simp only [uncurry_natural_left, comp_eq]
-  rw [uncurry_curry]; rw [uncurry_curry]; simp only [compTranspose_eq]
-  rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; dsimp
-  rw [← uncurry_eq]; rw [uncurry_curry]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]
-  simp
-
-Depends on / 依赖: associator_inv_naturality_middle_assoc, associator_inv_naturality_right_assoc, compTranspose_eq, comp_eq, comp_whiskerRight_assoc, uncurry_curry, uncurry_eq, uncurry_injective, uncurry_natural_left, whisker_exchange_assoc
+--- 原说明 ---
+Associativity of the enriched structure
 -/
 lemma assoc (w x y z : C) [Closed w] [Closed x] [Closed y] :
     (α_ _ _ _).inv ≫ comp w x y ▷ _ ≫ comp w y z = _ ◁ comp x y z ≫ comp w x z := by
   apply uncurry_injective
   simp only [uncurry_natural_left, comp_eq]
-  rw [uncurry_curry]; rw [uncurry_curry]; simp only [compTranspose_eq]
-  rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; dsimp
-  rw [← uncurry_eq]; rw [uncurry_curry]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]
+  rw [uncurry_curry, uncurry_curry]; simp only [compTranspose_eq]
+  rw [associator_inv_naturality_middle_assoc, ← comp_whiskerRight_assoc]; dsimp
+  rw [← uncurry_eq, uncurry_curry, associator_inv_naturality_right_assoc, whisker_exchange_assoc,
+    ← uncurry_eq, uncurry_curry]
   simp
 
 end Enriched
 
 section OrdinaryEnriched
 
-/--
-Definition of `curry'` / `curry'` 的定义
+/-- The morphism `𝟙_ C ⟶ (ihom X).obj Y` corresponding to a morphism `X ⟶ Y`. -/
+/-
+**CategoryTheory.MonoidalClosed.curry'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.MonoidalClosed`。
+形式化陈述：curry' {X Y : C} [Closed X] (f : X ⟶ Y) : 𝟙_ C ⟶ (ihom X).obj Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curry'
-  signature: {X Y : C} [Closed X] (f : X ⟶ Y)
-  body: curry ((ρ_ _).hom ≫ f)
-
-中文:
-定义 curry'
-  签名: {X Y : C} [闭 X] (f : X ⟶ Y)
-  定义体: curry ((ρ_ _).hom ≫ f)
+--- 原说明 ---
+The morphism `𝟙_ C ⟶ (ihom X).obj Y` corresponding to a morphism `X ⟶ Y`.
 -/
 def curry' {X Y : C} [Closed X] (f : X ⟶ Y) : 𝟙_ C ⟶ (ihom X).obj Y :=
   curry ((ρ_ _).hom ≫ f)
 
-/--
-Definition of `uncurry'` / `uncurry'` 的定义
+/-- The morphism `X ⟶ Y` corresponding to a morphism `𝟙_ C ⟶ (ihom X).obj Y`. -/
+/-
+**CategoryTheory.MonoidalClosed.uncurry'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.MonoidalClosed`。
+形式化陈述：uncurry' {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y) : X ⟶ Y
+参数：g : 𝟙_ C ⟶ (ihom X).obj Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uncurry'
-  signature: {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
-  body: (ρ_ _).inv ≫ uncurry g
-
-中文:
-定义 uncurry'
-  签名: {X Y : C} [闭 X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
-  定义体: (ρ_ _).inv ≫ uncurry g
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The morphism `X ⟶ Y` corresponding to a morphism `𝟙_ C ⟶ (ihom X).obj Y`.
 -/
 def uncurry' {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y) : X ⟶ Y :=
   (ρ_ _).inv ≫ uncurry g
 
 /-- `curry'` and `uncurry'` are inverse bijections. -/
 @[simp]
-/--
-lemma `curry'_uncurry'` / 引理 `curry'_uncurry'`
+/-
+**CategoryTheory.MonoidalClosed.curry'_uncurry'** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y : C}   [inst_2 : CategoryTheory.Closed X] (g : 
+CategoryTheory.MonoidalCategoryStruct.tensorUnit C ⟶ X ⟹ Y),   CategoryTheory.Mo
+noidalClosed.curry' (CategoryTheory.MonoidalClosed.uncurry' g) = g
+参数：g : CategoryTheory.MonoidalCategoryStruct.tensorUnit C ⟶ X ⟹ Y；CategoryTheory
+.MonoidalClosed.uncurry' g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_uncurry`：curry_uncurry (f : X ⟶ A ⟶[
+C] Y) : curry (uncurry f) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma curry'_uncurry'
-  given: {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
-  proof: by
-  simp [curry', uncurry']
-
-中文:
-引理 curry'_uncurry'
-  条件: {X Y : C} [闭 X] (g : 𝟙_ C ⟶ (ihom X).obj Y)
-  证明: by
-  simp [curry', uncurry']
+--- 原说明 ---
+`curry'` and `uncurry'` are inverse bijections.
 -/
 lemma curry'_uncurry' {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y) :
     curry' (uncurry' g) = g := by
@@ -1605,20 +1460,30 @@ lemma curry'_uncurry' {X Y : C} [Closed X] (g : 𝟙_ C ⟶ (ihom X).obj Y) :
 
 /-- `curry'` and `uncurry'` are inverse bijections. -/
 @[simp]
-/--
-lemma `uncurry'_curry'` / 引理 `uncurry'_curry'`
+/-
+**CategoryTheory.MonoidalClosed.uncurry'_curry'** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y : C}   [inst_2 : CategoryTheory.Closed X] (f : 
+X ⟶ Y),   CategoryTheory.MonoidalClosed.uncurry' (CategoryTheory.MonoidalClosed.
+curry' f) = f
+参数：f : X ⟶ Y；CategoryTheory.MonoidalClosed.curry' f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_curry`：uncurry_curry (f : A otimes
+ X ⟶ Y) : uncurry (curry f) = f
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma uncurry'_curry'
-  given: {X Y : C} [Closed X] (f : X ⟶ Y)
-  proof: by
-  simp [curry', uncurry']
-
-中文:
-引理 uncurry'_curry'
-  条件: {X Y : C} [闭 X] (f : X ⟶ Y)
-  证明: by
-  simp [curry', uncurry']
+--- 原说明 ---
+`curry'` and `uncurry'` are inverse bijections.
 -/
 lemma uncurry'_curry' {X Y : C} [Closed X] (f : X ⟶ Y) :
     uncurry' (curry' f) = f := by
@@ -1626,24 +1491,16 @@ lemma uncurry'_curry' {X Y : C} [Closed X] (f : X ⟶ Y) :
 
 /-- The bijection `(X ⟶ Y) ≃ (𝟙_ C ⟶ (ihom X).obj Y)` in a monoidal closed category. -/
 @[simps]
-/--
-Definition of `curryHomEquiv'` / `curryHomEquiv'` 的定义
+/-
+**CategoryTheory.MonoidalClosed.curryHomEquiv'** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MonoidalClosed`。
+形式化陈述：curryHomEquiv' {X Y : C} [Closed X] : (X ⟶ Y) ≃ (𝟙_ C ⟶ (ihom X).obj Y) wh
+ere toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curryHomEquiv'
-  signature: {X Y : C} [Closed X]
-  body: curry'
-  invFun := uncurry'
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-中文:
-定义 curryHomEquiv'
-  签名: {X Y : C} [闭 X]
-  定义体: curry'
-  invFun := uncurry'
-  left_inv _ := by simp
-  right_inv _ := by simp
+--- 原说明 ---
+The bijection `(X ⟶ Y) ≃ (𝟙_ C ⟶ (ihom X).obj Y)` in a monoidal closed category.
 -/
 def curryHomEquiv' {X Y : C} [Closed X] :
     (X ⟶ Y) ≃ (𝟙_ C ⟶ (ihom X).obj Y) where
@@ -1651,70 +1508,51 @@ def curryHomEquiv' {X Y : C} [Closed X] :
   invFun := uncurry'
   left_inv _ := by simp
   right_inv _ := by simp
-
-/--
-lemma `curry'_injective` / 引理 `curry'_injective`
-
-English:
-lemma curry'_injective
-  given: {X Y : C} [Closed X] {f f' : X ⟶ Y} (h : curry' f = curry' f')
-  proof: curryHomEquiv'.injective h
-
-中文:
-引理 curry'_injective
-  条件: {X Y : C} [闭 X] {f f' : X ⟶ Y} (h : curry' f = curry' f')
-  证明: curryHomEquiv'.injective h
+/-
+**CategoryTheory.MonoidalClosed.curry'_injective** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y : C}   [inst_2 : CategoryTheory.Closed X] {f f'
+ : X ⟶ Y},   CategoryTheory.MonoidalClosed.curry' f = CategoryTheory.MonoidalClo
+sed.curry' f' → f = f'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma curry'_injective {X Y : C} [Closed X] {f f' : X ⟶ Y} (h : curry' f = curry' f') :
     f = f' :=
   curryHomEquiv'.injective h
-
-/--
-lemma `uncurry'_injective` / 引理 `uncurry'_injective`
-
-English:
-lemma uncurry'_injective
-  statement: {X Y : C} [Closed X] {f f' : 𝟙_ C ⟶ (ihom X).obj Y}
-  proof: curryHomEquiv'.symm.injective h
-
-@[simp]
-
-中文:
-引理 uncurry'_injective
-  结论: {X Y : C} [闭 X] {f f' : 𝟙_ C ⟶ (ihom X).obj Y}
-  证明: curryHomEquiv'.symm.injective h
-
-@[simp]
+/-
+**CategoryTheory.MonoidalClosed.uncurry'_injective** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y : C}   [inst_2 : CategoryTheory.Closed X] {f f'
+ : CategoryTheory.MonoidalCategoryStruct.tensorUnit C ⟶ X ⟹ Y},   CategoryTheory
+.MonoidalClosed.uncurry' f = CategoryTheory.MonoidalClosed.uncurry' f' → f = f'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma uncurry'_injective {X Y : C} [Closed X] {f f' : 𝟙_ C ⟶ (ihom X).obj Y}
     (h : uncurry' f = uncurry' f') : f = f' :=
   curryHomEquiv'.symm.injective h
 
 @[simp]
-/--
-lemma `curry'_id` / 引理 `curry'_id`
-
-English:
-lemma curry'_id
-  given: (X : C) [Closed X]
-  statement: curry' (𝟙 X) = id X
-  proof: by
-  dsimp [curry']
-  rw [Category.comp_id]
-  rfl
-
-@[reassoc]
-
-中文:
-引理 curry'_id
-  条件: (X : C) [闭 X]
-  结论: curry' (𝟙 X) = id X
-  证明: by
-  dsimp [curry']
-  rw [Category.comp_id]
-  rfl
-
-@[reassoc]
+/-
+**CategoryTheory.MonoidalClosed.curry'_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] (X : C)   [inst_2 : CategoryTheory.Closed X],   Cate
+goryTheory.MonoidalClosed.curry' (CategoryTheory.CategoryStruct.id X) = Category
+Theory.MonoidalClosed.id X
+参数：X : C；CategoryTheory.CategoryStruct.id X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma curry'_id (X : C) [Closed X] : curry' (𝟙 X) = id X := by
   dsimp [curry']
@@ -1722,24 +1560,28 @@ lemma curry'_id (X : C) [Closed X] : curry' (𝟙 X) = id X := by
   rfl
 
 @[reassoc]
-/--
-lemma `whiskerLeft_curry'_ihom_ev_app` / 引理 `whiskerLeft_curry'_ihom_ev_app`
-
-English:
-lemma whiskerLeft_curry'_ihom_ev_app
-  given: {X Y : C} [Closed X] (f : X ⟶ Y)
-  proof: by
-  dsimp [curry']
-  simp only [whiskerLeft_curry_ihom_ev_app]
-
-中文:
-引理 whiskerLeft_curry'_ihom_ev_app
-  条件: {X Y : C} [闭 X] (f : X ⟶ Y)
-  证明: by
-  dsimp [curry']
-  simp only [whiskerLeft_curry_ihom_ev_app]
-
-Depends on / 依赖: whiskerLeft_curry_ihom_ev_app
+/-
+**CategoryTheory.MonoidalClosed.whiskerLeft_curry'_ihom_ev_app** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y : C}   [inst_2 : CategoryTheory.Closed X] (f : 
+X ⟶ Y),   CategoryTheory.CategoryStruct.comp       (CategoryTheory.MonoidalCateg
+oryStruct.whiskerLeft X (CategoryTheory.MonoidalClosed.curry' f))       ((Catego
+ryTheory.ihom.ev X).app Y) =     CategoryTheory.CategoryStruct.comp (CategoryThe
+ory.MonoidalCategoryStruct.rightUnitor X).hom f
+参数：f : X ⟶ Y；CategoryTheory.MonoidalCategoryStruct.whiskerLeft X (CategoryTheory
+.MonoidalClosed.curry' f)；(CategoryTheory.ihom.ev X).app Y；CategoryTheory.Monoid
+alCategoryStruct.rightUnitor X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MonoidalClosed.whiskerLeft_curry_ihom_ev_app`：whiskerLeft
+_curry_ihom_ev_app (g : A otimes Y ⟶ X) : A ◁ curry g ≫ (ihom.ev A).app X = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma whiskerLeft_curry'_ihom_ev_app {X Y : C} [Closed X] (f : X ⟶ Y) :
     X ◁ curry' f ≫ (ihom.ev X).app Y = (ρ_ _).hom ≫ f := by
@@ -1748,104 +1590,228 @@ lemma whiskerLeft_curry'_ihom_ev_app {X Y : C} [Closed X] (f : X ⟶ Y) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `curry'_whiskerRight_comp` / 引理 `curry'_whiskerRight_comp`
-
-English:
-lemma curry'_whiskerRight_comp
-  given: {X Y Z : C} [Closed X] [Closed Y] (f : X ⟶ Y)
-  proof: by
-  rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id_assoc]
-  apply uncurry_injective
-  rw [uncurry_pre]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [whiskerLeft_curry'_ihom_ev_app]; rw [comp_whiskerRight_assoc]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]
-
-中文:
-引理 curry'_whiskerRight_comp
-  条件: {X Y Z : C} [闭 X] [闭 Y] (f : X ⟶ Y)
-  证明: by
-  rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id_assoc]
-  apply uncurry_injective
-  rw [uncurry_pre]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [whiskerLeft_curry'_ihom_ev_app]; rw [comp_whiskerRight_assoc]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]
+/-
+**CategoryTheory.MonoidalClosed.curry'_whiskerRight_comp** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y Z : C}   [inst_2 : CategoryTheory.Closed X] [in
+st_3 : CategoryTheory.Closed Y] (f : X ⟶ Y),   CategoryTheory.CategoryStruct.com
+p       (CategoryTheory.MonoidalCategoryStruct.whiskerRight (CategoryTheory.Mono
+idalClosed.curry' f) (Y ⟹ Z))       (CategoryTheory.MonoidalClosed.comp X Y Z) =
+     CategoryTheory.CategoryStruct.comp (CategoryTheory.MonoidalCategoryStruct.l
+eftUnitor (Y ⟹ Z)).hom       ((CategoryTheory.MonoidalClosed.pre f).app Z)
+参数：f : X ⟶ Y；CategoryTheory.MonoidalCategoryStruct.whiskerRight (CategoryTheory.
+MonoidalClosed.curry' f) (Y ⟹ Z)；CategoryTheory.MonoidalClosed.comp X Y Z；Catego
+ryTheory.MonoidalCategoryStruct.leftUnitor (Y ⟹ Z)；(CategoryTheory.MonoidalClose
+d.pre f).app Z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_injective`：uncurry_injective : Fun
+ction.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_pre`：uncurry_pre (f : B ⟶ A) (X : 
+C) : MonoidalClosed.uncurry ((pre f).app X) = f ▷ _ ≫ (ihom.ev A).app X
+· 使用引理 `CategoryTheory.MonoidalClosed.comp_eq`：comp_eq (x y z : C) [Closed x] [C
+losed y] : comp x y z = curry (compTranspose x y z)
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_natural_left`：curry_natural_left (f 
+: X ⟶ X') (g : A otimes X' ⟶ Y) : curry (_ ◁ f ≫ g) = f ≫ curry g
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_curry`：uncurry_curry (f : A otimes
+ X ⟶ Y) : uncurry (curry f) = f
+· 使用引理 `CategoryTheory.MonoidalClosed.compTranspose_eq`：compTranspose_eq (x y z 
+: C) [Closed x] [Closed y] : compTranspose x y z = (α_ _ _ _).inv ≫ (ihom.ev x).
+app y ▷ _ ≫ (ihom.ev y).app z
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_middle_assoc`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheor
+y.MonoidalCategory C] (X : C) {Y Y' : C}   (f : Y ⟶ Y') (Z :…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight_assoc`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCateg
+ory C] {W X Y : C}   (f : W ⟶ X) (g : X ⟶ Y) …
+· 使用定理 `CategoryTheory.MonoidalClosed.whiskerLeft_curry'_ihom_ev_app`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoidal
+Category C] {X Y : C}   [inst_2 : CategoryTheory.C…
+· 使用定理 `CategoryTheory.MonoidalCategory.triangle_assoc_comp_right_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoi
+dalCategory C] (X Y : C) {Z : C}   (h : CategoryTheor…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_inv_hom_assoc`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCat
+egory C] (X : C) {Y Z : C}   (f : Y ≅ Z) {Z_1 :…
 -/
 lemma curry'_whiskerRight_comp {X Y Z : C} [Closed X] [Closed Y] (f : X ⟶ Y) :
-    curry' f ▷ _ ≫ comp X Y Z = (fun_ _).hom ≫ (pre f).app Z := by
-  rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id_assoc]
+    curry' f ▷ _ ≫ comp X Y Z = (λ_ _).hom ≫ (pre f).app Z := by
+  rw [← cancel_epi (λ_ _).inv, Iso.inv_hom_id_assoc]
   apply uncurry_injective
-  rw [uncurry_pre]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [whiskerLeft_curry'_ihom_ev_app]; rw [comp_whiskerRight_assoc]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]
+  rw [uncurry_pre, comp_eq, ← curry_natural_left, ← curry_natural_left, uncurry_curry,
+    compTranspose_eq, associator_inv_naturality_middle_assoc, ← comp_whiskerRight_assoc,
+    whiskerLeft_curry'_ihom_ev_app, comp_whiskerRight_assoc, triangle_assoc_comp_right_assoc,
+    whiskerLeft_inv_hom_assoc]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `whiskerLeft_curry'_comp` / 引理 `whiskerLeft_curry'_comp`
-
-English:
-lemma whiskerLeft_curry'_comp
-  given: {X Y Z : C} [Closed X] [Closed Y] (f : Y ⟶ Z)
-  proof: by
-  rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id_assoc]
-  apply uncurry_injective
-  rw [uncurry_ihom_map]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
-  dsimp
-  rw [whiskerLeft_curry'_ihom_ev_app]; rw [whiskerLeft_rightUnitor_inv]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]
-
-中文:
-引理 whiskerLeft_curry'_comp
-  条件: {X Y Z : C} [闭 X] [闭 Y] (f : Y ⟶ Z)
-  证明: by
-  rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id_assoc]
-  apply uncurry_injective
-  rw [uncurry_ihom_map]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
-  dsimp
-  rw [whiskerLeft_curry'_ihom_ev_app]; rw [whiskerLeft_rightUnitor_inv]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]
+/-
+**CategoryTheory.MonoidalClosed.whiskerLeft_curry'_comp** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y Z : C}   [inst_2 : CategoryTheory.Closed X] [in
+st_3 : CategoryTheory.Closed Y] (f : Y ⟶ Z),   CategoryTheory.CategoryStruct.com
+p       (CategoryTheory.MonoidalCategoryStruct.whiskerLeft (X ⟹ Y) (CategoryTheo
+ry.MonoidalClosed.curry' f))       (CategoryTheory.MonoidalClosed.comp X Y Z) = 
+    CategoryTheory.CategoryStruct.comp (CategoryTheory.MonoidalCategoryStruct.ri
+ghtUnitor (X ⟹ Y)).hom       ((CategoryTheory.ihom X).map f)
+参数：f : Y ⟶ Z；CategoryTheory.MonoidalCategoryStruct.whiskerLeft (X ⟹ Y) (Category
+Theory.MonoidalClosed.curry' f)；CategoryTheory.MonoidalClosed.comp X Y Z；Categor
+yTheory.MonoidalCategoryStruct.rightUnitor (X ⟹ Y)；(CategoryTheory.ihom X).map f
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_injective`：uncurry_injective : Fun
+ction.Injective (uncurry : (Y ⟶ A ⟶[C] X) -> (A otimes Y ⟶ X))
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_ihom_map`：uncurry_ihom_map (g : Y 
+⟶ Y') : uncurry ((ihom A).map g) = (ihom.ev A).app Y ≫ g
+· 使用引理 `CategoryTheory.MonoidalClosed.comp_eq`：comp_eq (x y z : C) [Closed x] [C
+losed y] : comp x y z = curry (compTranspose x y z)
+· 使用定理 `CategoryTheory.MonoidalClosed.curry_natural_left`：curry_natural_left (f 
+: X ⟶ X') (g : A otimes X' ⟶ Y) : curry (_ ◁ f ≫ g) = f ≫ curry g
+· 使用定理 `CategoryTheory.MonoidalClosed.uncurry_curry`：uncurry_curry (f : A otimes
+ X ⟶ Y) : uncurry (curry f) = f
+· 使用引理 `CategoryTheory.MonoidalClosed.compTranspose_eq`：compTranspose_eq (x y z 
+: C) [Closed x] [Closed y] : compTranspose x y z = (α_ _ _ _).inv ≫ (ihom.ev x).
+app y ▷ _ ≫ (ihom.ev y).app z
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_right_assoc`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory
+.MonoidalCategory C] (X Y : C)   {Z Z' : C} (f : Z ⟶ Z') {Z…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange_assoc`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCatego
+ry C] {W X Y Z : C}   (f : W ⟶ X) (g : Y ⟶ Z…
+· 使用定理 `CategoryTheory.MonoidalClosed.whiskerLeft_curry'_ihom_ev_app`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Monoidal
+Category C] {X Y : C}   [inst_2 : CategoryTheory.C…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_rightUnitor_inv`：whiskerLeft
+_rightUnitor_inv (X Y : C) : X ◁ (ρ_ Y).inv = (ρ_ (X otimes Y)).inv ≫ (α_ X Y (𝟙
+_ C)).hom
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_id_assoc`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategor
+y C] {X Y : C}   (f : X ⟶ Y) {Z : C}   (h :…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 lemma whiskerLeft_curry'_comp {X Y Z : C} [Closed X] [Closed Y] (f : Y ⟶ Z) :
     _ ◁ curry' f ≫ comp X Y Z = (ρ_ _).hom ≫ (ihom X).map f := by
-  rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id_assoc]
+  rw [← cancel_epi (ρ_ _).inv, Iso.inv_hom_id_assoc]
   apply uncurry_injective
-  rw [uncurry_ihom_map]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
+  rw [uncurry_ihom_map, comp_eq, ← curry_natural_left, ← curry_natural_left, uncurry_curry,
+    compTranspose_eq, associator_inv_naturality_right_assoc, whisker_exchange_assoc]
   dsimp
-  rw [whiskerLeft_curry'_ihom_ev_app]; rw [whiskerLeft_rightUnitor_inv]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]
-
-/--
-lemma `curry'_ihom_map` / 引理 `curry'_ihom_map`
-
-English:
-lemma curry'_ihom_map
-  given: {X Y Z : C} [Closed X] (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: by
-  simp only [curry', ← curry_natural_right, Category.assoc]
-
-中文:
-引理 curry'_ihom_map
-  条件: {X Y Z : C} [闭 X] (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: by
-  simp only [curry', ← curry_natural_right, Category.assoc]
+  rw [whiskerLeft_curry'_ihom_ev_app, whiskerLeft_rightUnitor_inv,
+    MonoidalCategory.whiskerRight_id_assoc, Category.assoc,
+    Iso.inv_hom_id_assoc, Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc]
+/-
+**CategoryTheory.MonoidalClosed.curry'_ihom_map** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y Z : C}   [inst_2 : CategoryTheory.Closed X] (f 
+: X ⟶ Y) (g : Y ⟶ Z),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Monoi
+dalClosed.curry' f) ((CategoryTheory.ihom X).map g) =     CategoryTheory.Monoida
+lClosed.curry' (CategoryTheory.CategoryStruct.comp f g)
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.MonoidalClosed.curry' f；(CategoryTheory.ih
+om X).map g；CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma curry'_ihom_map {X Y Z : C} [Closed X] (f : X ⟶ Y) (g : Y ⟶ Z) :
     curry' f ≫ (ihom X).map g = curry' (f ≫ g) := by
   simp only [curry', ← curry_natural_right, Category.assoc]
-
-/--
-lemma `curry'_comp` / 引理 `curry'_comp`
-
-English:
-lemma curry'_comp
-  given: {X Y Z : C} [Closed X] [Closed Y] (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: by
-  rw [tensorHom_def_assoc]; rw [whiskerLeft_curry'_comp]; rw [MonoidalCategory.whiskerRight_id]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [← unitors_equal]; rw [Iso.inv_hom_id_assoc]; rw [curry'_ihom_map]
-
-中文:
-引理 curry'_comp
-  条件: {X Y Z : C} [闭 X] [闭 Y] (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: by
-  rw [tensorHom_def_assoc]; rw [whiskerLeft_curry'_comp]; rw [MonoidalCategory.whiskerRight_id]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [← unitors_equal]; rw [Iso.inv_hom_id_assoc]; rw [curry'_ihom_map]
+/-
+**CategoryTheory.MonoidalClosed.curry'_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.MonoidalClosed`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.MonoidalCategory C] {X Y Z : C}   [inst_2 : CategoryTheory.Closed X] [in
+st_3 : CategoryTheory.Closed Y] (f : X ⟶ Y) (g : Y ⟶ Z),   CategoryTheory.Monoid
+alClosed.curry' (CategoryTheory.CategoryStruct.comp f g) =     CategoryTheory.Ca
+tegoryStruct.comp       (CategoryTheory.MonoidalCategoryStruct.leftUnitor (Categ
+oryTheory.MonoidalCategoryStruct.tensorUnit C)).inv       (CategoryTheory.Catego
+ryStruct.comp         (CategoryTheory.MonoidalCategoryStruct.tensorHom (Category
+Theory.MonoidalClosed.curry' f)           (CategoryTheory.MonoidalClosed.curry' 
+g))         (CategoryTheory.MonoidalClosed.comp X Y Z))
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；CategoryTheory.Mon
+oidalCategoryStruct.leftUnitor (CategoryTheory.MonoidalCategoryStruct.tensorUnit
+ C)；CategoryTheory.CategoryStruct.comp         (CategoryTheory.MonoidalCategoryS
+truct.tensorHom (CategoryTheory.MonoidalClosed.curry' f)           (CategoryTheo
+ry.MonoidalClosed.curry' g))         (CategoryTheory.MonoidalClosed.comp X Y Z)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def_assoc`：∀ {C : Type u} {𝒞 :
+ CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X
+₁ Y₁ X₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `CategoryTheory.MonoidalClosed.whiskerLeft_curry'_comp`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategor
+y C] {X Y Z : C}   [inst_2 : CategoryTheory…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_id`：whiskerRight_id {X Y : 
+C} (f : X ⟶ Y) : f ▷ 𝟙_ C = (ρ_ X).hom ≫ f ≫ (ρ_ Y).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.unitors_equal`：unitors_equal : (fun_ (𝟙_
+ C)).hom = (ρ_ (𝟙_ C)).hom
+· 使用定理 `CategoryTheory.MonoidalClosed.curry'_ihom_map`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.MonoidalCategory C] {X 
+Y Z : C}   [inst_2 : CategoryTheory…
 -/
 lemma curry'_comp {X Y Z : C} [Closed X] [Closed Y] (f : X ⟶ Y) (g : Y ⟶ Z) :
-    curry' (f ≫ g) = (fun_ (𝟙_ C)).inv ≫ (curry' f otimesₘ curry' g) ≫ comp X Y Z := by
-  rw [tensorHom_def_assoc]; rw [whiskerLeft_curry'_comp]; rw [MonoidalCategory.whiskerRight_id]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [← unitors_equal]; rw [Iso.inv_hom_id_assoc]; rw [curry'_ihom_map]
+    curry' (f ≫ g) = (λ_ (𝟙_ C)).inv ≫ (curry' f ⊗ₘ curry' g) ≫ comp X Y Z := by
+  rw [tensorHom_def_assoc, whiskerLeft_curry'_comp, MonoidalCategory.whiskerRight_id,
+    Category.assoc, Category.assoc, Iso.inv_hom_id_assoc, ← unitors_equal,
+    Iso.inv_hom_id_assoc, curry'_ihom_map]
 
 end OrdinaryEnriched
 
 end MonoidalClosed
 
 end CategoryTheory
+

@@ -99,214 +99,233 @@ section General
 variable (F E : Type*) [CommRing F] [Ring E] [Algebra F E]
 variable (K : Type*) [Ring K] [Algebra F K]
 
-/--
-Definition of `IsPurelyInseparable` / `IsPurelyInseparable` 的定义
+/-- Typeclass for purely inseparable field extensions: an algebraic extension `E / F` is purely
+inseparable if and only if the minimal polynomial of every element of `E ∖ F` is not separable.
 
-English:
-class IsPurelyInseparable
-  parameters: : Prop where
-  axioms and operations (2):
-    - isIntegral : Algebra.IsIntegral F E
-    - inseparable'((x : E)) : IsSeparable F x -> x in (algebraMap F E).range
+We define this for general (commutative) rings and only assume `F` and `E` are fields
+if this is needed for a proof. -/
+/-
+**IsPurelyInseparable** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) → (E : Type u_2) → [inst : CommRing F] → [inst_1 : Ring E] 
+→ [Algebra F E] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 是纯不可分
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - isIntegral : 代数.是整 F E
-    - inseparable'((x : E)) : 是可分 F x -> x in (algebraMap F E).range
+--- 原说明 ---
+Typeclass for purely inseparable field extensions: an algebraic extension `E / F
+` is purely
+inseparable if and only if the minimal polynomial of every element of `E ∖ F` is
+ not separable.
+
+We define this for general (commutative) rings and only assume `F` and `E` are f
+ields
+if this is needed for a proof.
 -/
 class IsPurelyInseparable : Prop where
   isIntegral : Algebra.IsIntegral F E
-  inseparable' (x : E) : IsSeparable F x -> x in (algebraMap F E).range
+  inseparable' (x : E) : IsSeparable F x → x ∈ (algebraMap F E).range
 
 attribute [instance] IsPurelyInseparable.isIntegral
 
 variable {E} in
-/--
-theorem `IsPurelyInseparable.isIntegral'` / 定理 `IsPurelyInseparable.isIntegral'`
-
-English:
-theorem IsPurelyInseparable.isIntegral'
-  given: [IsPurelyInseparable F E] (x : E)
-  statement: IsIntegral F x
-  proof: Algebra.IsIntegral.isIntegral _
-
-中文:
-定理 是纯不可分.is整数egral'
-  条件: [是纯不可分 F E] (x : E)
-  结论: 是整 F x
-  证明: Algebra.IsIntegral.isIntegral _
-
-Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, isIntegral
+/-
+**IsPurelyInseparable.isIntegral'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.isIntegral' [IsPurelyInseparable F E] (x : E) : IsInte
+gral F x
+参数：x : E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `IsPurelyInseparable.isIntegral`：∀ {F : Type u_1} {E : Type u_2} {inst : 
+CommRing F} {inst_1 : Ring E} {inst_2 : Algebra F E}   [self : IsPurelyInseparab
+le F E], Algebra.IsI…
 -/
 theorem IsPurelyInseparable.isIntegral' [IsPurelyInseparable F E] (x : E) : IsIntegral F x :=
   Algebra.IsIntegral.isIntegral _
-
-/--
-theorem `IsPurelyInseparable.isAlgebraic` / 定理 `IsPurelyInseparable.isAlgebraic`
-
-English:
-theorem IsPurelyInseparable.isAlgebraic
-  given: [Nontrivial F] [IsPurelyInseparable F E]
-  proof: inferInstance
-
-中文:
-定理 是纯不可分.isAlgebraic
-  条件: [非平凡 F] [是纯不可分 F E]
-  证明: inferInstance
+/-
+**IsPurelyInseparable.isAlgebraic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.isAlgebraic [Nontrivial F] [IsPurelyInseparable F E] :
+ Algebra.IsAlgebraic F E
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.isIntegral`：∀ {F : Type u_1} {E : Type u_2} {inst : 
+CommRing F} {inst_1 : Ring E} {inst_2 : Algebra F E}   [self : IsPurelyInseparab
+le F E], Algebra.IsI…
 -/
 theorem IsPurelyInseparable.isAlgebraic [Nontrivial F] [IsPurelyInseparable F E] :
     Algebra.IsAlgebraic F E := inferInstance
 
 variable {E}
-
-/--
-theorem `IsPurelyInseparable.inseparable` / 定理 `IsPurelyInseparable.inseparable`
-
-English:
-theorem IsPurelyInseparable.inseparable
-  given: [IsPurelyInseparable F E]
-  proof: IsPurelyInseparable.inseparable'
-
-中文:
-定理 是纯不可分.inseparable
-  条件: [是纯不可分 F E]
-  证明: IsPurelyInseparable.inseparable'
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.inseparable, inseparable
+/-
+**IsPurelyInseparable.inseparable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.inseparable [IsPurelyInseparable F E] : forall x : E, 
+IsSeparable F x -> x in (algebraMap F E).range
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.inseparable'`：∀ {F : Type u_1} {E : Type u_2} {inst 
+: CommRing F} {inst_1 : Ring E} {inst_2 : Algebra F E}   [self : IsPurelyInsepar
+able F E] (x : E), IsS…
 -/
 theorem IsPurelyInseparable.inseparable [IsPurelyInseparable F E] :
-    forall x : E, IsSeparable F x -> x in (algebraMap F E).range :=
+    ∀ x : E, IsSeparable F x → x ∈ (algebraMap F E).range :=
   IsPurelyInseparable.inseparable'
 
 variable {F}
-
-/--
-theorem `isPurelyInseparable_iff` / 定理 `isPurelyInseparable_iff`
-
-English:
-theorem isPurelyInseparable_iff
-  statement: IsPurelyInseparable F E ↔ forall x : E,
-  proof: ⟨fun h x => ⟨h.isIntegral' _ x, h.inseparable' x⟩, fun h => ⟨⟨fun x => (h x).1⟩, fun x => (h x).2⟩⟩
-
-中文:
-定理 isPurelyInseparable_iff
-  结论: 是纯不可分 F E ↔ 对任意 x : E,
-  证明: ⟨fun h x => ⟨h.isIntegral' _ x, h.inseparable' x⟩, fun h => ⟨⟨fun x => (h x).1⟩, fun x => (h x).2⟩⟩
-
-Depends on / 依赖: h.inseparable, h.isIntegral, inseparable, isIntegral
+/-
+**isPurelyInseparable_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff : IsPurelyInseparable F E ↔ forall x : E, IsIntegr
+al F x ∧ (IsSeparable F x -> x in (algebraMap F E).range)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.isIntegral'`：IsPurelyInseparable.isIntegral' [IsPure
+lyInseparable F E] (x : E) : IsIntegral F x
+· 使用定理 `IsPurelyInseparable.inseparable'`：∀ {F : Type u_1} {E : Type u_2} {inst 
+: CommRing F} {inst_1 : Ring E} {inst_2 : Algebra F E}   [self : IsPurelyInsepar
+able F E] (x : E), IsS…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem isPurelyInseparable_iff : IsPurelyInseparable F E ↔ forall x : E,
-    IsIntegral F x ∧ (IsSeparable F x -> x in (algebraMap F E).range) :=
-  ⟨fun h x => ⟨h.isIntegral' _ x, h.inseparable' x⟩, fun h => ⟨⟨fun x => (h x).1⟩, fun x => (h x).2⟩⟩
+theorem isPurelyInseparable_iff : IsPurelyInseparable F E ↔ ∀ x : E,
+    IsIntegral F x ∧ (IsSeparable F x → x ∈ (algebraMap F E).range) :=
+  ⟨fun h x ↦ ⟨h.isIntegral' _ x, h.inseparable' x⟩, fun h ↦ ⟨⟨fun x ↦ (h x).1⟩, fun x ↦ (h x).2⟩⟩
 
 variable {K}
 
-/--
-theorem `AlgEquiv.isPurelyInseparable` / 定理 `AlgEquiv.isPurelyInseparable`
+/-- Transfer `IsPurelyInseparable` across an `AlgEquiv`. -/
+/-
+**AlgEquiv.isPurelyInseparable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AlgEquiv.isPurelyInseparable (e : K ≃ₐ[F] E) [IsPurelyInseparable F K] : I
+sPurelyInseparable F E
+参数：e : K ≃ₐ[F] E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isIntegral_algEquiv`：isIntegral_algEquiv {A B : Type*} [Ring A] [Ring B]
+ [Algebra R A] [Algebra R B] (f : A ≃ₐ[R] B) {x : A} : IsIntegral R (f x) ↔ IsIn
+tegral R …
+· 使用定理 `IsPurelyInseparable.isIntegral'`：IsPurelyInseparable.isIntegral' [IsPure
+lyInseparable F E] (x : E) : IsIntegral F x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsPurelyInseparable.inseparable`：IsPurelyInseparable.inseparable [IsPure
+lyInseparable F E] : forall x : E, IsSeparable F x -> x in (algebraMap F E).rang
+e
+· 使用定理 `minpoly.algEquiv_eq`：algEquiv_eq (f : B ≃ₐ[A] B') (x : B) : minpoly A (f
+ x) = minpoly A x
+· 使用定理 `IsSeparable.eq_1`：∀ (F : Type u_1) {K : Type u_3} [inst : CommRing F] [i
+nst_1 : Ring K] [inst_2 : Algebra F K] (x : K),   IsSeparable F x = (minpoly F x
+).Sepa…
 
-English:
-theorem AlgEquiv.isPurelyInseparable
-  given: (e : K ≃ₐ[F] E) [IsPurelyInseparable F K]
-  proof: by
-  refine ⟨⟨fun _ => by rw [← isIntegral_algEquiv e.symm]; exact IsPurelyInseparable.isIntegral' F _⟩,
-    fun x h => ?_⟩
-  rw [IsSeparable]; rw [← minpoly.algEquiv_eq e.symm] at h
-  simpa only [RingHom.mem_range, algebraMap_eq_apply] using IsPurelyInseparable.inseparable F _ h
-
-中文:
-定理 代数等价.isPurelyInseparable
-  条件: (e : K ≃ₐ[F] E) [是纯不可分 F K]
-  证明: by
-  refine ⟨⟨fun _ => by rw [← isIntegral_algEquiv e.symm]; exact IsPurelyInseparable.isIntegral' F _⟩,
-    fun x h => ?_⟩
-  rw [IsSeparable]; rw [← minpoly.algEquiv_eq e.symm] at h
-  simpa only [RingHom.mem_range, algebraMap_eq_apply] using IsPurelyInseparable.inseparable F _ h
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.inseparable, IsPurelyInseparable.isIntegral, IsSeparable, RingHom, RingHom.mem_range, algEquiv_eq, algebraMap_eq_apply, e.symm, inseparable, isIntegral, isIntegral_algEquiv, mem_range, minpoly, minpoly.algEquiv_eq
+--- 原说明 ---
+Transfer `IsPurelyInseparable` across an `AlgEquiv`.
 -/
 theorem AlgEquiv.isPurelyInseparable (e : K ≃ₐ[F] E) [IsPurelyInseparable F K] :
     IsPurelyInseparable F E := by
-  refine ⟨⟨fun _ => by rw [← isIntegral_algEquiv e.symm]; exact IsPurelyInseparable.isIntegral' F _⟩,
-    fun x h => ?_⟩
-  rw [IsSeparable]; rw [← minpoly.algEquiv_eq e.symm] at h
+  refine ⟨⟨fun _ ↦ by rw [← isIntegral_algEquiv e.symm]; exact IsPurelyInseparable.isIntegral' F _⟩,
+    fun x h ↦ ?_⟩
+  rw [IsSeparable, ← minpoly.algEquiv_eq e.symm] at h
   simpa only [RingHom.mem_range, algebraMap_eq_apply] using IsPurelyInseparable.inseparable F _ h
-
-/--
-theorem `AlgEquiv.isPurelyInseparable_iff` / 定理 `AlgEquiv.isPurelyInseparable_iff`
-
-English:
-theorem AlgEquiv.isPurelyInseparable_iff
-  given: (e : K ≃ₐ[F] E)
-  proof: ⟨fun _ => e.isPurelyInseparable, fun _ => e.symm.isPurelyInseparable⟩
-
-中文:
-定理 代数等价.isPurelyInseparable_iff
-  条件: (e : K ≃ₐ[F] E)
-  证明: ⟨fun _ => e.isPurelyInseparable, fun _ => e.symm.isPurelyInseparable⟩
-
-Depends on / 依赖: e.isPurelyInseparable, e.symm.isPurelyInseparable, isPurelyInseparable
+/-
+**AlgEquiv.isPurelyInseparable_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AlgEquiv.isPurelyInseparable_iff (e : K ≃ₐ[F] E) : IsPurelyInseparable F K
+ ↔ IsPurelyInseparable F E
+参数：e : K ≃ₐ[F] E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.isPurelyInseparable`：AlgEquiv.isPurelyInseparable (e : K ≃ₐ[F] 
+E) [IsPurelyInseparable F K] : IsPurelyInseparable F E
 -/
 theorem AlgEquiv.isPurelyInseparable_iff (e : K ≃ₐ[F] E) :
     IsPurelyInseparable F K ↔ IsPurelyInseparable F E :=
-  ⟨fun _ => e.isPurelyInseparable, fun _ => e.symm.isPurelyInseparable⟩
+  ⟨fun _ ↦ e.isPurelyInseparable, fun _ ↦ e.symm.isPurelyInseparable⟩
 
-/--
-Instance `Algebra.IsAlgebraic.isPurelyInseparable_of_isSepClosed` / 实例 `Algebra.IsAlgebraic.isPurelyInseparable_of_isSepClosed`
+/-- If `E / F` is an algebraic extension, `F` is separably closed,
+then `E / F` is purely inseparable. -/
+/-
+**Algebra.IsAlgebraic.isPurelyInseparable_of_isSepClosed** 是 Mathlib 中的一个实例，位于命名
+空间 ``。
+形式化陈述：Algebra.IsAlgebraic.isPurelyInseparable_of_isSepClosed {F : Type u} {E : T
+ype v} [Field F] [Ring E] [IsDomain E] [Algebra F E] [Algebra.IsAlgebraic F E] [
+IsSepClosed F] : IsPurelyInseparable F E
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `minpoly.mem_range_of_degree_eq_one`：mem_range_of_degree_eq_one (hx : (mi
+npoly A x).degree = 1) : x in (algebraMap A B).range
+· 使用定理 `IsSepClosed.degree_eq_one_of_irreducible`：degree_eq_one_of_irreducible [
+IsSepClosed k] {p : k[X]} (hp : Irreducible p) (hsep : p.Separable) : p.degree =
+ 1
+· 使用定理 `minpoly.irreducible`：irreducible (hx : IsIntegral A x) : Irreducible (mi
+npoly A x)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
 
-English:
-instance Algebra.IsAlgebraic.isPurelyInseparable_of_isSepClosed
-  body: ⟨inferInstance, fun x h => minpoly.mem_range_of_degree_eq_one F x
-    IsSepClosed.degree_eq_one_of_irreducible F (minpoly.irreducible
-      (Algebra.IsIntegral.isIntegral _)) h⟩
-
-中文:
-实例 代数.是代数.isPurelyInseparable_of_isSepClosed
-  定义体: ⟨inferInstance, fun x h => minpoly.mem_range_of_degree_eq_one F x
-    IsSepClosed.degree_eq_one_of_irreducible F (minpoly.irreducible
-      (Algebra.IsIntegral.isIntegral _)) h⟩
-
-Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, IsSepClosed, IsSepClosed.degree_eq_one_of_irreducible, degree_eq_one_of_irreducible, irreducible, isIntegral, mem_range_of_degree_eq_one, minpoly, minpoly.irreducible, minpoly.mem_range_of_degree_eq_one
+--- 原说明 ---
+If `E / F` is an algebraic extension, `F` is separably closed,
+then `E / F` is purely inseparable.
 -/
 instance Algebra.IsAlgebraic.isPurelyInseparable_of_isSepClosed
     {F : Type u} {E : Type v} [Field F] [Ring E] [IsDomain E] [Algebra F E]
     [Algebra.IsAlgebraic F E] [IsSepClosed F] : IsPurelyInseparable F E :=
-⟨inferInstance, fun x h => minpoly.mem_range_of_degree_eq_one F x
+  ⟨inferInstance, fun x h ↦ minpoly.mem_range_of_degree_eq_one F x <|
     IsSepClosed.degree_eq_one_of_irreducible F (minpoly.irreducible
       (Algebra.IsIntegral.isIntegral _)) h⟩
 
 variable (F E K)
 
-/--
-theorem `IsPurelyInseparable.surjective_algebraMap_of_isSeparable` / 定理 `IsPurelyInseparable.surjective_algebraMap_of_isSeparable`
+/-- If `E / F` is both purely inseparable and separable, then `algebraMap F E` is surjective. -/
+/-
+**IsPurelyInseparable.surjective_algebraMap_of_isSeparable** 是 Mathlib 中的一个定理，位于
+命名空间 ``。
+形式化陈述：IsPurelyInseparable.surjective_algebraMap_of_isSeparable [IsPurelyInsepara
+ble F E] [Algebra.IsSeparable F E] : Function.Surjective (algebraMap F E)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.inseparable`：IsPurelyInseparable.inseparable [IsPure
+lyInseparable F E] : forall x : E, IsSeparable F x -> x in (algebraMap F E).rang
+e
+· 使用定理 `Algebra.IsSeparable.isSeparable`：Algebra.IsSeparable.isSeparable [Algebr
+a.IsSeparable F K] : forall x : K, IsSeparable F x
 
-English:
-theorem IsPurelyInseparable.surjective_algebraMap_of_isSeparable
-  proof: fun x => IsPurelyInseparable.inseparable F x (Algebra.IsSeparable.isSeparable F x)
-
-中文:
-定理 是纯不可分.surjective_algebraMap_of_isSeparable
-  证明: fun x => IsPurelyInseparable.inseparable F x (Algebra.IsSeparable.isSeparable F x)
-
-Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsPurelyInseparable, IsPurelyInseparable.inseparable, IsSeparable, inseparable, isSeparable
+--- 原说明 ---
+If `E / F` is both purely inseparable and separable, then `algebraMap F E` is su
+rjective.
 -/
 theorem IsPurelyInseparable.surjective_algebraMap_of_isSeparable
     [IsPurelyInseparable F E] [Algebra.IsSeparable F E] : Function.Surjective (algebraMap F E) :=
-  fun x => IsPurelyInseparable.inseparable F x (Algebra.IsSeparable.isSeparable F x)
+  fun x ↦ IsPurelyInseparable.inseparable F x (Algebra.IsSeparable.isSeparable F x)
 
-/--
-theorem `IsPurelyInseparable.bijective_algebraMap_of_isSeparable` / 定理 `IsPurelyInseparable.bijective_algebraMap_of_isSeparable`
+/-- If `E / F` is both purely inseparable and separable, then `algebraMap F E` is bijective. -/
+/-
+**IsPurelyInseparable.bijective_algebraMap_of_isSeparable** 是 Mathlib 中的一个定理，位于命
+名空间 ``。
+形式化陈述：IsPurelyInseparable.bijective_algebraMap_of_isSeparable [Nontrivial E] [Is
+Domain F] [IsTorsionFree F E] [IsPurelyInseparable F E] [Algebra.IsSeparable F E
+] : Function.Bijective (algebraMap F E)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `IsPurelyInseparable.surjective_algebraMap_of_isSeparable`：IsPurelyInsepa
+rable.surjective_algebraMap_of_isSeparable [IsPurelyInseparable F E] [Algebra.Is
+Separable F E] : Function.Surjective (algebraM…
 
-English:
-theorem IsPurelyInseparable.bijective_algebraMap_of_isSeparable
-  proof: ⟨FaithfulSMul.algebraMap_injective F E, surjective_algebraMap_of_isSeparable F E⟩
-
-中文:
-定理 是纯不可分.bijective_algebraMap_of_isSeparable
-  证明: ⟨FaithfulSMul.algebraMap_injective F E, surjective_algebraMap_of_isSeparable F E⟩
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, surjective_algebraMap_of_isSeparable
+--- 原说明 ---
+If `E / F` is both purely inseparable and separable, then `algebraMap F E` is bi
+jective.
 -/
 theorem IsPurelyInseparable.bijective_algebraMap_of_isSeparable
     [Nontrivial E] [IsDomain F] [IsTorsionFree F E]
@@ -314,180 +333,239 @@ theorem IsPurelyInseparable.bijective_algebraMap_of_isSeparable
   ⟨FaithfulSMul.algebraMap_injective F E, surjective_algebraMap_of_isSeparable F E⟩
 
 variable {F E} in
-/--
-theorem `Subalgebra.eq_bot_of_isPurelyInseparable_of_isSeparable` / 定理 `Subalgebra.eq_bot_of_isPurelyInseparable_of_isSeparable`
+/-- If a subalgebra of `E / F` is both purely inseparable and separable, then it is equal
+to `F`. -/
+/-
+**Subalgebra.eq_bot_of_isPurelyInseparable_of_isSeparable** 是 Mathlib 中的一个定理，位于命
+名空间 ``。
+形式化陈述：Subalgebra.eq_bot_of_isPurelyInseparable_of_isSeparable (L : Subalgebra F 
+E) [IsPurelyInseparable F L] [Algebra.IsSeparable F L] : L = ⊥
+参数：L : Subalgebra F E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_unique`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ → a = ⊥
+· 使用定理 `IsPurelyInseparable.surjective_algebraMap_of_isSeparable`：IsPurelyInsepa
+rable.surjective_algebraMap_of_isSeparable [IsPurelyInseparable F E] [Algebra.Is
+Separable F E] : Function.Surjective (algebraM…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-theorem Subalgebra.eq_bot_of_isPurelyInseparable_of_isSeparable
-  statement: (L : Subalgebra F E)
-  proof: bot_unique fun x hx => by
-  obtain ⟨y, hy⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable F L ⟨x, hx⟩
-  exact ⟨y, congr_arg (Subalgebra.val _) hy⟩
-
-中文:
-定理 子代数.eq_bot_of_isPurelyInseparable_of_isSeparable
-  结论: (L : 子代数 F E)
-  证明: bot_unique fun x hx => by
-  obtain ⟨y, hy⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable F L ⟨x, hx⟩
-  exact ⟨y, congr_arg (Subalgebra.val _) hy⟩
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.surjective_algebraMap_of_isSeparable, Subalgebra, Subalgebra.val, bot_unique, congr_arg, surjective_algebraMap_of_isSeparable
+--- 原说明 ---
+If a subalgebra of `E / F` is both purely inseparable and separable, then it is 
+equal
+to `F`.
 -/
 theorem Subalgebra.eq_bot_of_isPurelyInseparable_of_isSeparable (L : Subalgebra F E)
-    [IsPurelyInseparable F L] [Algebra.IsSeparable F L] : L = ⊥ := bot_unique fun x hx => by
+    [IsPurelyInseparable F L] [Algebra.IsSeparable F L] : L = ⊥ := bot_unique fun x hx ↦ by
   obtain ⟨y, hy⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable F L ⟨x, hx⟩
   exact ⟨y, congr_arg (Subalgebra.val _) hy⟩
 
-/--
-theorem `IntermediateField.eq_bot_of_isPurelyInseparable_of_isSeparable` / 定理 `IntermediateField.eq_bot_of_isPurelyInseparable_of_isSeparable`
+/-- If an intermediate field of `E / F` is both purely inseparable and separable, then it is equal
+to `F`. -/
+/-
+**IntermediateField.eq_bot_of_isPurelyInseparable_of_isSeparable** 是 Mathlib 中的一
+个定理，位于命名空间 ``。
+形式化陈述：IntermediateField.eq_bot_of_isPurelyInseparable_of_isSeparable {F : Type u
+} {E : Type v} [Field F] [Field E] [Algebra F E] (L : IntermediateField F E) [Is
+PurelyInseparable F L] [Algebra.IsSeparable F L] : L = ⊥
+参数：L : IntermediateField F E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_unique`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ → a = ⊥
+· 使用定理 `IsPurelyInseparable.surjective_algebraMap_of_isSeparable`：IsPurelyInsepa
+rable.surjective_algebraMap_of_isSeparable [IsPurelyInseparable F E] [Algebra.Is
+Separable F E] : Function.Surjective (algebraM…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
 
-English:
-theorem IntermediateField.eq_bot_of_isPurelyInseparable_of_isSeparable
-  proof: bot_unique fun x hx => by
-  obtain ⟨y, hy⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable F L ⟨x, hx⟩
-  exact ⟨y, congr_arg (algebraMap L E) hy⟩
-
-中文:
-定理 中间域.eq_bot_of_isPurelyInseparable_of_isSeparable
-  证明: bot_unique fun x hx => by
-  obtain ⟨y, hy⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable F L ⟨x, hx⟩
-  exact ⟨y, congr_arg (algebraMap L E) hy⟩
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.surjective_algebraMap_of_isSeparable, algebraMap, bot_unique, congr_arg, surjective_algebraMap_of_isSeparable
+--- 原说明 ---
+If an intermediate field of `E / F` is both purely inseparable and separable, th
+en it is equal
+to `F`.
 -/
 theorem IntermediateField.eq_bot_of_isPurelyInseparable_of_isSeparable
     {F : Type u} {E : Type v} [Field F] [Field E] [Algebra F E] (L : IntermediateField F E)
-    [IsPurelyInseparable F L] [Algebra.IsSeparable F L] : L = ⊥ := bot_unique fun x hx => by
+    [IsPurelyInseparable F L] [Algebra.IsSeparable F L] : L = ⊥ := bot_unique fun x hx ↦ by
   obtain ⟨y, hy⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable F L ⟨x, hx⟩
   exact ⟨y, congr_arg (algebraMap L E) hy⟩
 
-/--
-theorem `separableClosure.eq_bot_of_isPurelyInseparable` / 定理 `separableClosure.eq_bot_of_isPurelyInseparable`
+/-- If `E / F` is purely inseparable, then the separable closure of `F` in `E` is
+equal to `F`. -/
+/-
+**separableClosure.eq_bot_of_isPurelyInseparable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：separableClosure.eq_bot_of_isPurelyInseparable (F : Type u) (E : Type v) [
+Field F] [Field E] [Algebra F E] [IsPurelyInseparable F E] : separableClosure F 
+E = ⊥
+参数：F : Type u；E : Type v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_unique`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ → a = ⊥
+· 使用定理 `IsPurelyInseparable.inseparable`：IsPurelyInseparable.inseparable [IsPure
+lyInseparable F E] : forall x : E, IsSeparable F x -> x in (algebraMap F E).rang
+e
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_separableClosure_iff`：mem_separableClosure_iff {x : E} : x in separa
+bleClosure F E ↔ IsSeparable F x
 
-English:
-theorem separableClosure.eq_bot_of_isPurelyInseparable
-  proof: bot_unique fun x h => IsPurelyInseparable.inseparable F x (mem_separableClosure_iff.1 h)
-
-中文:
-定理 separableClosure.eq_bot_of_isPurelyInseparable
-  证明: bot_unique fun x h => IsPurelyInseparable.inseparable F x (mem_separableClosure_iff.1 h)
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.inseparable, bot_unique, inseparable, mem_separableClosure_iff
+--- 原说明 ---
+If `E / F` is purely inseparable, then the separable closure of `F` in `E` is
+equal to `F`.
 -/
 theorem separableClosure.eq_bot_of_isPurelyInseparable
     (F : Type u) (E : Type v) [Field F] [Field E] [Algebra F E] [IsPurelyInseparable F E] :
     separableClosure F E = ⊥ :=
-  bot_unique fun x h => IsPurelyInseparable.inseparable F x (mem_separableClosure_iff.1 h)
+  bot_unique fun x h ↦ IsPurelyInseparable.inseparable F x (mem_separableClosure_iff.1 h)
 
-/--
-theorem `separableClosure.eq_bot_iff` / 定理 `separableClosure.eq_bot_iff`
+/-- If `E / F` is an algebraic extension, then the separable closure of `F` in `E` is
+equal to `F` if and only if `E / F` is purely inseparable. -/
+/-
+**separableClosure.eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：separableClosure.eq_bot_iff {F : Type u} {E : Type v} [Field F] [Field E] 
+[Algebra F E] [Algebra.IsAlgebraic F E] : separableClosure F E = ⊥ ↔ IsPurelyIns
+eparable F E
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isPurelyInseparable_iff`：isPurelyInseparable_iff : IsPurelyInseparable F
+ E ↔ forall x : E, IsIntegral F x ∧ (IsSeparable F x -> x in (algebraMap F E).ra
+nge)
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_separableClosure_iff`：mem_separableClosure_iff {x : E} : x in separa
+bleClosure F E ↔ IsSeparable F x
+· 使用定理 `separableClosure.eq_bot_of_isPurelyInseparable`：separableClosure.eq_bot_
+of_isPurelyInseparable (F : Type u) (E : Type v) [Field F] [Field E] [Algebra F 
+E] [IsPurelyInseparable F E] : separ…
 
-English:
-theorem separableClosure.eq_bot_iff
-  proof: ⟨fun h => isPurelyInseparable_iff.2 fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hs => by
-    simpa only [h] using! mem_separableClosure_iff.2 hs⟩, fun _ => eq_bot_of_isPurelyInseparable F E⟩
-
-中文:
-定理 separableClosure.eq_bot_iff
-  证明: ⟨fun h => isPurelyInseparable_iff.2 fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hs => by
-    simpa only [h] using! mem_separableClosure_iff.2 hs⟩, fun _ => eq_bot_of_isPurelyInseparable F E⟩
-
-Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, eq_bot_of_isPurelyInseparable, isIntegral, isPurelyInseparable_iff, mem_separableClosure_iff
+--- 原说明 ---
+If `E / F` is an algebraic extension, then the separable closure of `F` in `E` i
+s
+equal to `F` if and only if `E / F` is purely inseparable.
 -/
 theorem separableClosure.eq_bot_iff
     {F : Type u} {E : Type v} [Field F] [Field E] [Algebra F E] [Algebra.IsAlgebraic F E] :
     separableClosure F E = ⊥ ↔ IsPurelyInseparable F E :=
-  ⟨fun h => isPurelyInseparable_iff.2 fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hs => by
-    simpa only [h] using! mem_separableClosure_iff.2 hs⟩, fun _ => eq_bot_of_isPurelyInseparable F E⟩
-
-/--
-Instance `isPurelyInseparable_self` / 实例 `isPurelyInseparable_self`
-
-English:
-instance isPurelyInseparable_self
-  signature: : IsPurelyInseparable F F
-  body: ⟨inferInstance, fun x _ => ⟨x, rfl⟩⟩
-
-中文:
-实例 isPurelyInseparable_self
-  签名: : 是纯不可分 F F
-  定义体: ⟨inferInstance, fun x _ => ⟨x, rfl⟩⟩
+  ⟨fun h ↦ isPurelyInseparable_iff.2 fun x ↦ ⟨Algebra.IsIntegral.isIntegral x, fun hs ↦ by
+    simpa only [h] using! mem_separableClosure_iff.2 hs⟩, fun _ ↦ eq_bot_of_isPurelyInseparable F E⟩
+/-
+**isPurelyInseparable_self** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_self : IsPurelyInseparable F F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isPurelyInseparable_self : IsPurelyInseparable F F :=
-  ⟨inferInstance, fun x _ => ⟨x, rfl⟩⟩
+  ⟨inferInstance, fun x _ ↦ ⟨x, rfl⟩⟩
 
 section
 
 variable (F : Type u) {E : Type v} [Field F] [Ring E] [IsDomain E] [Algebra F E]
-variable (q : Nat) [ExpChar F q] (x : E)
+variable (q : ℕ) [ExpChar F q] (x : E)
 
 /-- A field extension `E / F` of exponential characteristic `q` is purely inseparable
 if and only if for every element `x` of `E`, there exists a natural number `n` such that
 `x ^ (q ^ n)` is contained in `F`. -/
 @[stacks 09HE]
-/--
-theorem `isPurelyInseparable_iff_pow_mem` / 定理 `isPurelyInseparable_iff_pow_mem`
+/-
+**isPurelyInseparable_iff_pow_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff_pow_mem : IsPurelyInseparable F E ↔ forall x : E, 
+exists n : Nat, x ^ q ^ n in (algebraMap F E).range
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPurelyInseparable_iff`：isPurelyInseparable_iff : IsPurelyInseparable F
+ E ↔ forall x : E, IsIntegral F x ∧ (IsSeparable F x -> x in (algebraMap F E).ra
+nge)
+· 使用定理 `Irreducible.hasSeparableContraction`：∀ {F : Type u_1} [inst : Field F] (
+q : ℕ) [hF : ExpChar F q] {f : Polynomial F},   Irreducible f → Polynomial.HasSe
+parableContraction q f
+· 使用定理 `minpoly.irreducible`：irreducible (hx : IsIntegral A x) : Irreducible (mi
+npoly A x)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Polynomial.Separable.of_dvd`：∀ {R : Type u} [inst : CommSemiring R] {f g
+ : Polynomial R}, f.Separable → g ∣ f → g.Separable
+· 使用定理 `minpoly.dvd`：dvd {p : A[X]} (hp : Polynomial.aeval x p = 0) : minpoly A 
+x ∣ p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.expand_aeval`：expand_aeval {A : Type*} [Semiring A] [Algebra 
+R A] (p : Nat) (P : R[X]) (r : A) : aeval r (expand R p P) = aeval (r ^ p) P
+· 使用定理 `minpoly.aeval`：aeval : aeval x (minpoly A x) = 0
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `minpoly.natSepDegree_eq_one_iff_pow_mem`：natSepDegree_eq_one_iff_pow_mem
+ : (minpoly F x).natSepDegree = 1 ↔ exists n : Nat, x ^ q ^ n in (algebraMap F E
+).range
+· 使用定理 `by_contra`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `minpoly.eq_zero`：eq_zero (hx : ¬IsIntegral A x) : minpoly A x = 0
+· 使用定理 `Polynomial.natSepDegree_zero`：natSepDegree_zero : (0 : F[X]).natSepDegre
+e = 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `minpoly.natDegree_eq_one_iff`：natDegree_eq_one_iff : (minpoly A x).natDe
+gree = 1 ↔ x in (algebraMap A B).range
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `Polynomial.Separable.natSepDegree_eq_natDegree`：∀ {F : Type u} [inst : F
+ield F] {f : Polynomial F}, f.Separable → f.natSepDegree = f.natDegree
 
-English:
-theorem isPurelyInseparable_iff_pow_mem
-  proof: by
-  rw [isPurelyInseparable_iff]
-  refine ⟨fun h x => ?_, fun h x => ?_⟩
-  · obtain ⟨g, h1, n, h2⟩ := (minpoly.irreducible (h x).1).hasSeparableContraction q
-exact ⟨n, (h _).2 h1.of_dvd minpoly.dvd F _ by
-      simpa only [expand_aeval, minpoly.aeval] using congr_arg (aeval x) h2⟩
-  have hdeg := (minpoly.natSepDegree_eq_one_iff_pow_mem q).2 (h x)
-  have halg : IsIntegral F x := by_contra fun h' => by
-    simp only [minpoly.eq_zero h', natSepDegree_zero, zero_ne_one] at hdeg
-  refine ⟨halg, fun hsep => ?_⟩
-  rwa [hsep.natSepDegree_eq_natDegree, minpoly.natDegree_eq_one_iff] at hdeg
-
-中文:
-定理 isPurelyInseparable_iff_pow_mem
-  证明: by
-  rw [isPurelyInseparable_iff]
-  refine ⟨fun h x => ?_, fun h x => ?_⟩
-  · obtain ⟨g, h1, n, h2⟩ := (minpoly.irreducible (h x).1).hasSeparableContraction q
-exact ⟨n, (h _).2 h1.of_dvd minpoly.dvd F _ by
-      simpa only [expand_aeval, minpoly.aeval] using congr_arg (aeval x) h2⟩
-  have hdeg := (minpoly.natSepDegree_eq_one_iff_pow_mem q).2 (h x)
-  have halg : IsIntegral F x := by_contra fun h' => by
-    simp only [minpoly.eq_zero h', natSepDegree_zero, zero_ne_one] at hdeg
-  refine ⟨halg, fun hsep => ?_⟩
-  rwa [hsep.natSepDegree_eq_natDegree, minpoly.natDegree_eq_one_iff] at hdeg
-
-Depends on / 依赖: IsIntegral, congr_arg, eq_zero, expand_aeval, h1.of_dvd, hasSeparableContraction, irreducible, isPurelyInseparable_iff, minpoly, minpoly.aeval, minpoly.dvd, minpoly.eq_zero, minpoly.irreducible, minpoly.natSepDegree_eq_one_iff_pow_mem, natSepDegree_eq_one_iff_pow_mem, natSepDegree_zero, of_dvd, zero_ne_one
+--- 原说明 ---
+A field extension `E / F` of exponential characteristic `q` is purely inseparabl
+e
+if and only if for every element `x` of `E`, there exists a natural number `n` s
+uch that
+`x ^ (q ^ n)` is contained in `F`.
 -/
 theorem isPurelyInseparable_iff_pow_mem :
-    IsPurelyInseparable F E ↔ forall x : E, exists n : Nat, x ^ q ^ n in (algebraMap F E).range := by
+    IsPurelyInseparable F E ↔ ∀ x : E, ∃ n : ℕ, x ^ q ^ n ∈ (algebraMap F E).range := by
   rw [isPurelyInseparable_iff]
-  refine ⟨fun h x => ?_, fun h x => ?_⟩
+  refine ⟨fun h x ↦ ?_, fun h x ↦ ?_⟩
   · obtain ⟨g, h1, n, h2⟩ := (minpoly.irreducible (h x).1).hasSeparableContraction q
-exact ⟨n, (h _).2 h1.of_dvd minpoly.dvd F _ by
+    exact ⟨n, (h _).2 <| h1.of_dvd <| minpoly.dvd F _ <| by
       simpa only [expand_aeval, minpoly.aeval] using congr_arg (aeval x) h2⟩
   have hdeg := (minpoly.natSepDegree_eq_one_iff_pow_mem q).2 (h x)
-  have halg : IsIntegral F x := by_contra fun h' => by
+  have halg : IsIntegral F x := by_contra fun h' ↦ by
     simp only [minpoly.eq_zero h', natSepDegree_zero, zero_ne_one] at hdeg
-  refine ⟨halg, fun hsep => ?_⟩
+  refine ⟨halg, fun hsep ↦ ?_⟩
   rwa [hsep.natSepDegree_eq_natDegree, minpoly.natDegree_eq_one_iff] at hdeg
-
-/--
-theorem `IsPurelyInseparable.pow_mem` / 定理 `IsPurelyInseparable.pow_mem`
-
-English:
-theorem IsPurelyInseparable.pow_mem
-  given: [IsPurelyInseparable F E]
-  proof: (isPurelyInseparable_iff_pow_mem F q).1 ‹_› x
-
-中文:
-定理 是纯不可分.pow_mem
-  条件: [是纯不可分 F E]
-  证明: (isPurelyInseparable_iff_pow_mem F q).1 ‹_› x
-
-Depends on / 依赖: isPurelyInseparable_iff_pow_mem
+/-
+**IsPurelyInseparable.pow_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.pow_mem [IsPurelyInseparable F E] : exists n : Nat, x 
+^ q ^ n in (algebraMap F E).range
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isPurelyInseparable_iff_pow_mem`：isPurelyInseparable_iff_pow_mem : IsPur
+elyInseparable F E ↔ forall x : E, exists n : Nat, x ^ q ^ n in (algebraMap F E)
+.range
 -/
 theorem IsPurelyInseparable.pow_mem [IsPurelyInseparable F E] :
-    exists n : Nat, x ^ q ^ n in (algebraMap F E).range :=
+    ∃ n : ℕ, x ^ q ^ n ∈ (algebraMap F E).range :=
   (isPurelyInseparable_iff_pow_mem F q).1 ‹_› x
 
 end
@@ -499,62 +577,87 @@ variable (K : Type w) [Field K] [Algebra F K]
 
 section Field
 
-/--
-theorem `IsPurelyInseparable.tower_bot` / 定理 `IsPurelyInseparable.tower_bot`
+/-- If `K / E / F` is a field extension tower such that `K / F` is purely inseparable,
+then `E / F` is also purely inseparable. -/
+/-
+**IsPurelyInseparable.tower_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.tower_bot [Algebra E K] [IsScalarTower F E K] [IsPurel
+yInseparable F K] : IsPurelyInseparable F E
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIntegral.tower_bot_of_field`：IsIntegral.tower_bot_of_field {R A B : Ty
+pe*} [CommRing R] [Field A] [Ring B] [Nontrivial B] [Algebra R A] [Algebra A B] 
+[Algebra R B] [IsSc…
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `IsPurelyInseparable.isIntegral'`：IsPurelyInseparable.isIntegral' [IsPure
+lyInseparable F E] (x : E) : IsIntegral F x
+· 使用定理 `IsPurelyInseparable.inseparable`：IsPurelyInseparable.inseparable [IsPure
+lyInseparable F E] : forall x : E, IsSeparable F x -> x in (algebraMap F E).rang
+e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `minpoly.algebraMap_eq`：algebraMap_eq {B} [CommRing B] [Algebra A B] [Alg
+ebra B B'] [IsScalarTower A B B'] (h : Function.Injective (algebraMap B B')) (x 
+: B) : minp…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsSeparable.eq_1`：∀ (F : Type u_1) {K : Type u_3} [inst : CommRing F] [i
+nst_1 : Ring K] [inst_2 : Algebra F K] (x : K),   IsSeparable F x = (minpoly F x
+).Sepa…
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
 
-English:
-theorem IsPurelyInseparable.tower_bot
-  statement: [Algebra E K] [IsScalarTower F E K]
-  proof: by
-  refine ⟨⟨fun x => (isIntegral' F (algebraMap E K x)).tower_bot_of_field⟩, fun x h => ?_⟩
-  rw [IsSeparable]; rw [← minpoly.algebraMap_eq (algebraMap E K).injective] at h
-  obtain ⟨y, h⟩ := inseparable F _ h
-  exact ⟨y, (algebraMap E K).injective (h.symm ▸ (IsScalarTower.algebraMap_apply F E K y).symm)⟩
-
-中文:
-定理 是纯不可分.tower_bot
-  结论: [代数 E K] [标量塔 F E K]
-  证明: by
-  refine ⟨⟨fun x => (isIntegral' F (algebraMap E K x)).tower_bot_of_field⟩, fun x h => ?_⟩
-  rw [IsSeparable]; rw [← minpoly.algebraMap_eq (algebraMap E K).injective] at h
-  obtain ⟨y, h⟩ := inseparable F _ h
-  exact ⟨y, (algebraMap E K).injective (h.symm ▸ (IsScalarTower.algebraMap_apply F E K y).symm)⟩
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_apply, IsSeparable, algebraMap, algebraMap_apply, algebraMap_eq, h.symm, injective, inseparable, isIntegral, minpoly, minpoly.algebraMap_eq, tower_bot_of_field
+--- 原说明 ---
+If `K / E / F` is a field extension tower such that `K / F` is purely inseparabl
+e,
+then `E / F` is also purely inseparable.
 -/
 theorem IsPurelyInseparable.tower_bot [Algebra E K] [IsScalarTower F E K]
     [IsPurelyInseparable F K] : IsPurelyInseparable F E := by
-  refine ⟨⟨fun x => (isIntegral' F (algebraMap E K x)).tower_bot_of_field⟩, fun x h => ?_⟩
-  rw [IsSeparable]; rw [← minpoly.algebraMap_eq (algebraMap E K).injective] at h
+  refine ⟨⟨fun x ↦ (isIntegral' F (algebraMap E K x)).tower_bot_of_field⟩, fun x h ↦ ?_⟩
+  rw [IsSeparable, ← minpoly.algebraMap_eq (algebraMap E K).injective] at h
   obtain ⟨y, h⟩ := inseparable F _ h
   exact ⟨y, (algebraMap E K).injective (h.symm ▸ (IsScalarTower.algebraMap_apply F E K y).symm)⟩
 
-/--
-theorem `IsPurelyInseparable.tower_top` / 定理 `IsPurelyInseparable.tower_top`
+/-- If `K / E / F` is a field extension tower such that `K / F` is purely inseparable,
+then `K / E` is also purely inseparable. -/
+/-
+**IsPurelyInseparable.tower_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.tower_top [Algebra E K] [IsScalarTower F E K] [h : IsP
+urelyInseparable F K] : IsPurelyInseparable E K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ExpChar.exists`：ExpChar.exists [Ring R] [IsDomain R] : exists q, ExpChar
+ R q
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用引理 `expChar_of_injective_algebraMap`：expChar_of_injective_algebraMap [CommSe
+miring R] [Semiring A] [Algebra R A] (h : Function.Injective (algebraMap R A)) (
+q : Nat) [ExpChar R q…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPurelyInseparable_iff_pow_mem`：isPurelyInseparable_iff_pow_mem : IsPur
+elyInseparable F E ↔ forall x : E, exists n : Nat, x ^ q ^ n in (algebraMap F E)
+.range
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
 
-English:
-theorem IsPurelyInseparable.tower_top
-  statement: [Algebra E K] [IsScalarTower F E K]
-  proof: by
-  obtain ⟨q, _⟩ := ExpChar.exists F
-  have := expChar_of_injective_algebraMap (algebraMap F E).injective q
-  rw [isPurelyInseparable_iff_pow_mem _ q] at h ⊢
-  intro x
-  obtain ⟨n, y, h⟩ := h x
-  exact ⟨n, (algebraMap F E) y, h.symm ▸ (IsScalarTower.algebraMap_apply F E K y).symm⟩
-
-中文:
-定理 是纯不可分.tower_top
-  结论: [代数 E K] [标量塔 F E K]
-  证明: by
-  obtain ⟨q, _⟩ := ExpChar.exists F
-  have := expChar_of_injective_algebraMap (algebraMap F E).injective q
-  rw [isPurelyInseparable_iff_pow_mem _ q] at h ⊢
-  intro x
-  obtain ⟨n, y, h⟩ := h x
-  exact ⟨n, (algebraMap F E) y, h.symm ▸ (IsScalarTower.algebraMap_apply F E K y).symm⟩
-
-Depends on / 依赖: ExpChar, ExpChar.exists, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap, algebraMap_apply, expChar_of_injective_algebraMap, h.symm, injective, isPurelyInseparable_iff_pow_mem
+--- 原说明 ---
+If `K / E / F` is a field extension tower such that `K / F` is purely inseparabl
+e,
+then `K / E` is also purely inseparable.
 -/
 theorem IsPurelyInseparable.tower_top [Algebra E K] [IsScalarTower F E K]
     [h : IsPurelyInseparable F K] : IsPurelyInseparable E K := by
@@ -568,36 +671,50 @@ theorem IsPurelyInseparable.tower_top [Algebra E K] [IsScalarTower F E K]
 /-- If `E / F` and `K / E` are both purely inseparable extensions, then `K / F` is also
 purely inseparable. -/
 @[stacks 02JJ "See also 00GM"]
-/--
-theorem `IsPurelyInseparable.trans` / 定理 `IsPurelyInseparable.trans`
+/-
+**IsPurelyInseparable.trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.trans [Algebra E K] [IsScalarTower F E K] [h1 : IsPure
+lyInseparable F E] [h2 : IsPurelyInseparable E K] : IsPurelyInseparable F K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ExpChar.exists`：ExpChar.exists [Ring R] [IsDomain R] : exists q, ExpChar
+ R q
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用引理 `expChar_of_injective_algebraMap`：expChar_of_injective_algebraMap [CommSe
+miring R] [Semiring A] [Algebra R A] (h : Function.Injective (algebraMap R A)) (
+q : Nat) [ExpChar R q…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPurelyInseparable_iff_pow_mem`：isPurelyInseparable_iff_pow_mem : IsPur
+elyInseparable F E ↔ forall x : E, exists n : Nat, x ^ q ^ n in (algebraMap F E)
+.range
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
 
-English:
-theorem IsPurelyInseparable.trans
-  statement: [Algebra E K] [IsScalarTower F E K]
-  proof: by
-  obtain ⟨q, _⟩ := ExpChar.exists F
-  have := expChar_of_injective_algebraMap (algebraMap F E).injective q
-  rw [isPurelyInseparable_iff_pow_mem _ q] at h1 h2 ⊢
-  intro x
-  obtain ⟨n, y, h2⟩ := h2 x
-  obtain ⟨m, z, h1⟩ := h1 y
-  refine ⟨n + m, z, ?_⟩
-  rw [IsScalarTower.algebraMap_apply F E K]; rw [h1]; rw [map_pow]; rw [h2]; rw [← pow_mul]; rw [← pow_add]
-
-中文:
-定理 是纯不可分.trans
-  结论: [代数 E K] [标量塔 F E K]
-  证明: by
-  obtain ⟨q, _⟩ := ExpChar.exists F
-  have := expChar_of_injective_algebraMap (algebraMap F E).injective q
-  rw [isPurelyInseparable_iff_pow_mem _ q] at h1 h2 ⊢
-  intro x
-  obtain ⟨n, y, h2⟩ := h2 x
-  obtain ⟨m, z, h1⟩ := h1 y
-  refine ⟨n + m, z, ?_⟩
-  rw [IsScalarTower.algebraMap_apply F E K]; rw [h1]; rw [map_pow]; rw [h2]; rw [← pow_mul]; rw [← pow_add]
-
-Depends on / 依赖: ExpChar, ExpChar.exists, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap, algebraMap_apply, expChar_of_injective_algebraMap, injective, isPurelyInseparable_iff_pow_mem, map_pow, pow_add, pow_mul
+--- 原说明 ---
+If `E / F` and `K / E` are both purely inseparable extensions, then `K / F` is a
+lso
+purely inseparable.
 -/
 theorem IsPurelyInseparable.trans [Algebra E K] [IsScalarTower F E K]
     [h1 : IsPurelyInseparable F E] [h2 : IsPurelyInseparable E K] : IsPurelyInseparable F K := by
@@ -608,44 +725,33 @@ theorem IsPurelyInseparable.trans [Algebra E K] [IsScalarTower F E K]
   obtain ⟨n, y, h2⟩ := h2 x
   obtain ⟨m, z, h1⟩ := h1 y
   refine ⟨n + m, z, ?_⟩
-  rw [IsScalarTower.algebraMap_apply F E K]; rw [h1]; rw [map_pow]; rw [h2]; rw [← pow_mul]; rw [← pow_add]
+  rw [IsScalarTower.algebraMap_apply F E K, h1, map_pow, h2, ← pow_mul, ← pow_add]
 
 namespace IntermediateField
 
 variable (M : IntermediateField F K)
 
-/--
-Instance `isPurelyInseparable_tower_bot` / 实例 `isPurelyInseparable_tower_bot`
-
-English:
-instance isPurelyInseparable_tower_bot
-  signature: [IsPurelyInseparable F K]
-  body: IsPurelyInseparable.tower_bot F M K
-
-中文:
-实例 isPurelyInseparable_tower_bot
-  签名: [是纯不可分 F K]
-  定义体: IsPurelyInseparable.tower_bot F M K
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.tower_bot, tower_bot
+/-
+**IntermediateField.isPurelyInseparable_tower_bot** 是 Mathlib 中的一个实例，位于命名空间 `Int
+ermediateField`。
+形式化陈述：isPurelyInseparable_tower_bot [IsPurelyInseparable F K] : IsPurelyInsepara
+ble F M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.tower_bot`：IsPurelyInseparable.tower_bot [Algebra E 
+K] [IsScalarTower F E K] [IsPurelyInseparable F K] : IsPurelyInseparable F E
 -/
 instance isPurelyInseparable_tower_bot [IsPurelyInseparable F K] : IsPurelyInseparable F M :=
   IsPurelyInseparable.tower_bot F M K
-
-/--
-Instance `isPurelyInseparable_tower_top` / 实例 `isPurelyInseparable_tower_top`
-
-English:
-instance isPurelyInseparable_tower_top
-  signature: [IsPurelyInseparable F K]
-  body: IsPurelyInseparable.tower_top F M K
-
-中文:
-实例 isPurelyInseparable_tower_top
-  签名: [是纯不可分 F K]
-  定义体: IsPurelyInseparable.tower_top F M K
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.tower_top, tower_top
+/-
+**IntermediateField.isPurelyInseparable_tower_top** 是 Mathlib 中的一个实例，位于命名空间 `Int
+ermediateField`。
+形式化陈述：isPurelyInseparable_tower_top [IsPurelyInseparable F K] : IsPurelyInsepara
+ble M K
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.tower_top`：IsPurelyInseparable.tower_top [Algebra E 
+K] [IsScalarTower F E K] [h : IsPurelyInseparable F K] : IsPurelyInseparable E K
 -/
 instance isPurelyInseparable_tower_top [IsPurelyInseparable F K] : IsPurelyInseparable M K :=
   IsPurelyInseparable.tower_top F M K
@@ -654,193 +760,243 @@ end IntermediateField
 
 variable {E}
 
-/--
-theorem `isPurelyInseparable_iff_natSepDegree_eq_one` / 定理 `isPurelyInseparable_iff_natSepDegree_eq_one`
+/-- A field extension `E / F` is purely inseparable if and only if for every element `x` of `E`,
+its minimal polynomial has separable degree one. -/
+/-
+**isPurelyInseparable_iff_natSepDegree_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff_natSepDegree_eq_one : IsPurelyInseparable F E ↔ fo
+rall x : E, (minpoly F x).natSepDegree = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ExpChar.exists`：ExpChar.exists [Ring R] [IsDomain R] : exists q, ExpChar
+ R q
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPurelyInseparable_iff_pow_mem`：isPurelyInseparable_iff_pow_mem : IsPur
+elyInseparable F E ↔ forall x : E, exists n : Nat, x ^ q ^ n in (algebraMap F E)
+.range
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `minpoly.natSepDegree_eq_one_iff_pow_mem`：natSepDegree_eq_one_iff_pow_mem
+ : (minpoly F x).natSepDegree = 1 ↔ exists n : Nat, x ^ q ^ n in (algebraMap F E
+).range
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem isPurelyInseparable_iff_natSepDegree_eq_one
-  proof: by
-  obtain ⟨q, _⟩ := ExpChar.exists F
-  simp_rw [isPurelyInseparable_iff_pow_mem F q, minpoly.natSepDegree_eq_one_iff_pow_mem q]
-
-中文:
-定理 isPurelyInseparable_iff_natSepDegree_eq_one
-  证明: by
-  obtain ⟨q, _⟩ := ExpChar.exists F
-  simp_rw [isPurelyInseparable_iff_pow_mem F q, minpoly.natSepDegree_eq_one_iff_pow_mem q]
-
-Depends on / 依赖: ExpChar, ExpChar.exists, isPurelyInseparable_iff_pow_mem, minpoly, minpoly.natSepDegree_eq_one_iff_pow_mem, natSepDegree_eq_one_iff_pow_mem, simp_rw
+--- 原说明 ---
+A field extension `E / F` is purely inseparable if and only if for every element
+ `x` of `E`,
+its minimal polynomial has separable degree one.
 -/
 theorem isPurelyInseparable_iff_natSepDegree_eq_one :
-    IsPurelyInseparable F E ↔ forall x : E, (minpoly F x).natSepDegree = 1 := by
+    IsPurelyInseparable F E ↔ ∀ x : E, (minpoly F x).natSepDegree = 1 := by
   obtain ⟨q, _⟩ := ExpChar.exists F
   simp_rw [isPurelyInseparable_iff_pow_mem F q, minpoly.natSepDegree_eq_one_iff_pow_mem q]
-
-/--
-theorem `IsPurelyInseparable.natSepDegree_eq_one` / 定理 `IsPurelyInseparable.natSepDegree_eq_one`
-
-English:
-theorem IsPurelyInseparable.natSepDegree_eq_one
-  given: [IsPurelyInseparable F E] (x : E)
-  proof: (isPurelyInseparable_iff_natSepDegree_eq_one F).1 ‹_› x
-
-中文:
-定理 是纯不可分.natSepDegree_eq_one
-  条件: [是纯不可分 F E] (x : E)
-  证明: (isPurelyInseparable_iff_natSepDegree_eq_one F).1 ‹_› x
-
-Depends on / 依赖: isPurelyInseparable_iff_natSepDegree_eq_one
+/-
+**IsPurelyInseparable.natSepDegree_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.natSepDegree_eq_one [IsPurelyInseparable F E] (x : E) 
+: (minpoly F x).natSepDegree = 1
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isPurelyInseparable_iff_natSepDegree_eq_one`：isPurelyInseparable_iff_nat
+SepDegree_eq_one : IsPurelyInseparable F E ↔ forall x : E, (minpoly F x).natSepD
+egree = 1
 -/
 theorem IsPurelyInseparable.natSepDegree_eq_one [IsPurelyInseparable F E] (x : E) :
     (minpoly F x).natSepDegree = 1 :=
   (isPurelyInseparable_iff_natSepDegree_eq_one F).1 ‹_› x
 
-/--
-theorem `isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C` / 定理 `isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C`
+/-- A field extension `E / F` of exponential characteristic `q` is purely inseparable
+if and only if for every element `x` of `E`, the minimal polynomial of `x` over `F` is of form
+`X ^ (q ^ n) - y` for some natural number `n` and some element `y` of `F`. -/
+/-
+**isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C (q : Nat) [hF : ExpChar F q
+] : IsPurelyInseparable F E ↔ forall x : E, exists (n : Nat) (y : F), minpoly F 
+x = X ^ q ^ n - C y
+参数：q : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C`：natSepDegree_eq_one_iff_
+eq_X_pow_sub_C : (minpoly F x).natSepDegree = 1 ↔ exists (n : Nat) (y : F), minp
+oly F x = X ^ q ^ n - C y
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C
-  given: (q : Nat) [hF : ExpChar F q]
-  proof: by
-  simp_rw [isPurelyInseparable_iff_natSepDegree_eq_one,
-    minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q]
-
-中文:
-定理 isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C
-  条件: (q : 自然数) [hF : ExpChar F q]
-  证明: by
-  simp_rw [isPurelyInseparable_iff_natSepDegree_eq_one,
-    minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q]
-
-Depends on / 依赖: isPurelyInseparable_iff_natSepDegree_eq_one, minpoly, minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C, natSepDegree_eq_one_iff_eq_X_pow_sub_C, simp_rw
+--- 原说明 ---
+A field extension `E / F` of exponential characteristic `q` is purely inseparabl
+e
+if and only if for every element `x` of `E`, the minimal polynomial of `x` over 
+`F` is of form
+`X ^ (q ^ n) - y` for some natural number `n` and some element `y` of `F`.
 -/
-theorem isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C (q : Nat) [hF : ExpChar F q] :
-    IsPurelyInseparable F E ↔ forall x : E, exists (n : Nat) (y : F), minpoly F x = X ^ q ^ n - C y := by
+theorem isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C (q : ℕ) [hF : ExpChar F q] :
+    IsPurelyInseparable F E ↔ ∀ x : E, ∃ (n : ℕ) (y : F), minpoly F x = X ^ q ^ n - C y := by
   simp_rw [isPurelyInseparable_iff_natSepDegree_eq_one,
     minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q]
-
-/--
-theorem `IsPurelyInseparable.minpoly_eq_X_pow_sub_C` / 定理 `IsPurelyInseparable.minpoly_eq_X_pow_sub_C`
-
-English:
-theorem IsPurelyInseparable.minpoly_eq_X_pow_sub_C
-  statement: (q : Nat) [ExpChar F q] [IsPurelyInseparable F E]
-  proof: (isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C F q).1 ‹_› x
-
-中文:
-定理 是纯不可分.minpoly_eq_X_pow_sub_C
-  结论: (q : 自然数) [ExpChar F q] [是纯不可分 F E]
-  证明: (isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C F q).1 ‹_› x
-
-Depends on / 依赖: isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C
+/-
+**IsPurelyInseparable.minpoly_eq_X_pow_sub_C** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.minpoly_eq_X_pow_sub_C (q : Nat) [ExpChar F q] [IsPure
+lyInseparable F E] (x : E) : exists (n : Nat) (y : F), minpoly F x = X ^ q ^ n -
+ C y
+参数：q : Nat；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C`：isPurelyInseparable_iff_
+minpoly_eq_X_pow_sub_C (q : Nat) [hF : ExpChar F q] : IsPurelyInseparable F E ↔ 
+forall x : E, exists (n : Nat) (y : …
 -/
-theorem IsPurelyInseparable.minpoly_eq_X_pow_sub_C (q : Nat) [ExpChar F q] [IsPurelyInseparable F E]
-    (x : E) : exists (n : Nat) (y : F), minpoly F x = X ^ q ^ n - C y :=
+theorem IsPurelyInseparable.minpoly_eq_X_pow_sub_C (q : ℕ) [ExpChar F q] [IsPurelyInseparable F E]
+    (x : E) : ∃ (n : ℕ) (y : F), minpoly F x = X ^ q ^ n - C y :=
   (isPurelyInseparable_iff_minpoly_eq_X_pow_sub_C F q).1 ‹_› x
 
-/--
-theorem `isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow` / 定理 `isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow`
+/-- A field extension `E / F` of exponential characteristic `q` is purely inseparable
+if and only if for every element `x` of `E`, the minimal polynomial of `x` over `F` is of form
+`(X - x) ^ (q ^ n)` for some natural number `n`. -/
+/-
+**isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow (q : Nat) [hF : ExpChar F q
+] : IsPurelyInseparable F E ↔ forall x : E, exists n : Nat, (minpoly F x).map (a
+lgebraMap F E) = (X - C x) ^ q ^ n
+参数：q : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `minpoly.natSepDegree_eq_one_iff_eq_X_sub_C_pow`：natSepDegree_eq_one_iff_
+eq_X_sub_C_pow : (minpoly F x).natSepDegree = 1 ↔ exists n : Nat, (minpoly F x).
+map (algebraMap F E) = (X - C x) ^ q…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow
-  given: (q : Nat) [hF : ExpChar F q]
-  proof: by
-  simp_rw [isPurelyInseparable_iff_natSepDegree_eq_one,
-    minpoly.natSepDegree_eq_one_iff_eq_X_sub_C_pow q]
-
-中文:
-定理 isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow
-  条件: (q : 自然数) [hF : ExpChar F q]
-  证明: by
-  simp_rw [isPurelyInseparable_iff_natSepDegree_eq_one,
-    minpoly.natSepDegree_eq_one_iff_eq_X_sub_C_pow q]
-
-Depends on / 依赖: isPurelyInseparable_iff_natSepDegree_eq_one, minpoly, minpoly.natSepDegree_eq_one_iff_eq_X_sub_C_pow, natSepDegree_eq_one_iff_eq_X_sub_C_pow, simp_rw
+--- 原说明 ---
+A field extension `E / F` of exponential characteristic `q` is purely inseparabl
+e
+if and only if for every element `x` of `E`, the minimal polynomial of `x` over 
+`F` is of form
+`(X - x) ^ (q ^ n)` for some natural number `n`.
 -/
-theorem isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow (q : Nat) [hF : ExpChar F q] :
+theorem isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow (q : ℕ) [hF : ExpChar F q] :
     IsPurelyInseparable F E ↔
-    forall x : E, exists n : Nat, (minpoly F x).map (algebraMap F E) = (X - C x) ^ q ^ n := by
+    ∀ x : E, ∃ n : ℕ, (minpoly F x).map (algebraMap F E) = (X - C x) ^ q ^ n := by
   simp_rw [isPurelyInseparable_iff_natSepDegree_eq_one,
     minpoly.natSepDegree_eq_one_iff_eq_X_sub_C_pow q]
-
-/--
-theorem `IsPurelyInseparable.minpoly_eq_X_sub_C_pow` / 定理 `IsPurelyInseparable.minpoly_eq_X_sub_C_pow`
-
-English:
-theorem IsPurelyInseparable.minpoly_eq_X_sub_C_pow
-  statement: (q : Nat) [ExpChar F q] [IsPurelyInseparable F E]
-  proof: (isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow F q).1 ‹_› x
-
-中文:
-定理 是纯不可分.minpoly_eq_X_sub_C_pow
-  结论: (q : 自然数) [ExpChar F q] [是纯不可分 F E]
-  证明: (isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow F q).1 ‹_› x
-
-Depends on / 依赖: isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow
+/-
+**IsPurelyInseparable.minpoly_eq_X_sub_C_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.minpoly_eq_X_sub_C_pow (q : Nat) [ExpChar F q] [IsPure
+lyInseparable F E] (x : E) : exists n : Nat, (minpoly F x).map (algebraMap F E) 
+= (X - C x) ^ q ^ n
+参数：q : Nat；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow`：isPurelyInseparable_iff_
+minpoly_eq_X_sub_C_pow (q : Nat) [hF : ExpChar F q] : IsPurelyInseparable F E ↔ 
+forall x : E, exists n : Nat, (minpo…
 -/
-theorem IsPurelyInseparable.minpoly_eq_X_sub_C_pow (q : Nat) [ExpChar F q] [IsPurelyInseparable F E]
-    (x : E) : exists n : Nat, (minpoly F x).map (algebraMap F E) = (X - C x) ^ q ^ n :=
+theorem IsPurelyInseparable.minpoly_eq_X_sub_C_pow (q : ℕ) [ExpChar F q] [IsPurelyInseparable F E]
+    (x : E) : ∃ n : ℕ, (minpoly F x).map (algebraMap F E) = (X - C x) ^ q ^ n :=
   (isPurelyInseparable_iff_minpoly_eq_X_sub_C_pow F q).1 ‹_› x
 
 variable (E) in
-/--
-lemma `IsPurelyInseparable.finrank_eq_pow` / 引理 `IsPurelyInseparable.finrank_eq_pow`
-
-English:
-lemma IsPurelyInseparable.finrank_eq_pow
-  proof: by
-  suffices forall (F E : Type v) [Field F] [Field E] [Algebra F E] (q : Nat) [ExpChar F q]
-      [IsPurelyInseparable F E] [FiniteDimensional F E], exists n, finrank F E = q ^ n by
-    simpa using this (⊥ : IntermediateField F E) E q
-  intro F E _ _ _ q _ _ _
-  generalize hd : finrank F E = d
-  induction d using Nat.strongRecOn generalizing F with
-  | ind d IH =>
-    by_cases h : (⊥ : IntermediateField F E) = ⊤
-    · rw [← finrank_top', ← h, IntermediateField.finrank_bot] at hd
-      exact ⟨0, ((pow_zero q).trans hd).symm⟩
-    obtain ⟨x, -, hx⟩ := SetLike.exists_of_lt (lt_of_le_of_ne bot_le h :)
-    obtain ⟨m, y, e⟩ := IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x
-    have : finrank F F⟮x⟯ = q ^ m := by
-      rw [adjoin.finrank (Algebra.IsIntegral.isIntegral x)]; rw [e]; rw [natDegree_sub_C]; rw [natDegree_X_pow]
-    obtain ⟨n, hn⟩ := IH _ (by
-      rw [← hd]; rw [← finrank_mul_finrank F F⟮x⟯]; rw [Nat.lt_mul_iff_one_lt_left finrank_pos]; rw [this]
-      by_contra! H
-      refine hx (finrank_adjoin_simple_eq_one_iff.mp (le_antisymm (this ▸ H) ?_))
-      exact Nat.one_le_iff_ne_zero.mpr Module.finrank_pos.ne') (F⟮x⟯) rfl
-    exact ⟨m + n, by rw [← hd, ← finrank_mul_finrank F F⟮x⟯, hn, pow_add, this]⟩
-
-中文:
-引理 是纯不可分.finrank_eq_pow
-  证明: by
-  suffices forall (F E : Type v) [Field F] [Field E] [Algebra F E] (q : Nat) [ExpChar F q]
-      [IsPurelyInseparable F E] [FiniteDimensional F E], exists n, finrank F E = q ^ n by
-    simpa using this (⊥ : IntermediateField F E) E q
-  intro F E _ _ _ q _ _ _
-  generalize hd : finrank F E = d
-  induction d using Nat.strongRecOn generalizing F with
-  | ind d IH =>
-    by_cases h : (⊥ : IntermediateField F E) = ⊤
-    · rw [← finrank_top', ← h, IntermediateField.finrank_bot] at hd
-      exact ⟨0, ((pow_zero q).trans hd).symm⟩
-    obtain ⟨x, -, hx⟩ := SetLike.exists_of_lt (lt_of_le_of_ne bot_le h :)
-    obtain ⟨m, y, e⟩ := IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x
-    have : finrank F F⟮x⟯ = q ^ m := by
-      rw [adjoin.finrank (Algebra.IsIntegral.isIntegral x)]; rw [e]; rw [natDegree_sub_C]; rw [natDegree_X_pow]
-    obtain ⟨n, hn⟩ := IH _ (by
-      rw [← hd]; rw [← finrank_mul_finrank F F⟮x⟯]; rw [Nat.lt_mul_iff_one_lt_left finrank_pos]; rw [this]
-      by_contra! H
-      refine hx (finrank_adjoin_simple_eq_one_iff.mp (le_antisymm (this ▸ H) ?_))
-      exact Nat.one_le_iff_ne_zero.mpr Module.finrank_pos.ne') (F⟮x⟯) rfl
-    exact ⟨m + n, by rw [← hd, ← finrank_mul_finrank F F⟮x⟯, hn, pow_add, this]⟩
-
-Depends on / 依赖: Algebra, ExpChar, FiniteDimensional, IntermediateField, IntermediateField.finrank_bot, IsPurelyInseparable, Nat.strongRecOn, finrank, finrank_bot, finrank_top, generalize, generalizing, pow_zero, strongRecOn
+/-
+**IsPurelyInseparable.finrank_eq_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.finrank_eq_pow (q : Nat) [ExpChar F q] [IsPurelyInsepa
+rable F E] [FiniteDimensional F E] : exists n, finrank F E = q ^ n
+参数：q : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IntermediateField.finrank_bot`：∀ {F : Type u_1} [inst : Field F] {E : Ty
+pe u_2} [inst_1 : Field E] [inst_2 : Algebra F E], Module.finrank F ↥⊥ = 1
+· 使用定理 `IntermediateField.finrank_top'`：∀ {F : Type u_1} [inst : Field F] {E : T
+ype u_2} [inst_1 : Field E] [inst_2 : Algebra F E],   Module.finrank F ↥⊤ = Modu
+le.finrank F E
+· 使用定理 `SetLike.exists_of_lt`：exists_of_lt : p < q -> exists x in q, x ∉ p
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `IsPurelyInseparable.minpoly_eq_X_pow_sub_C`：IsPurelyInseparable.minpoly_
+eq_X_pow_sub_C (q : Nat) [ExpChar F q] [IsPurelyInseparable F E] (x : E) : exist
+s (n : Nat) (y : F), minpoly F x…
+· 使用定理 `IntermediateField.adjoin.finrank`：∀ {K : Type u} [inst : Field K] {L : T
+ype u_3} [inst_1 : Field L] [inst_2 : Algebra K L] {x : L},   IsIntegral K x → M
+odule.finrank K ↥K⟮x⟯ …
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `IsPurelyInseparable.isIntegral`：∀ {F : Type u_1} {E : Type u_2} {inst : 
+CommRing F} {inst_1 : Ring E} {inst_2 : Algebra F E}   [self : IsPurelyInseparab
+le F E], Algebra.IsI…
+· 使用定理 `Polynomial.natDegree_sub_C`：natDegree_sub_C {a : R} : natDegree (p - C a
+) = natDegree p
+· 使用定理 `Polynomial.natDegree_X_pow`：natDegree_X_pow : natDegree ((X : R[X]) ^ n)
+ = n
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Module.finrank_mul_finrank`：Module.finrank_mul_finrank : finrank F K * f
+inrank K A = finrank F A
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Nat.lt_mul_iff_one_lt_left`：∀ {b a : ℕ}, 0 < b → (b < a * b ↔ 1 < a)
+· 使用定理 `Module.finrank_pos`：Module.finrank_pos [IsDomain R] [IsTorsionFree R M] 
+[h : Nontrivial M] : 0 < finrank R M
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+（共 39 条，此处仅展示前 30 条）
 -/
 lemma IsPurelyInseparable.finrank_eq_pow
-    (q : Nat) [ExpChar F q] [IsPurelyInseparable F E] [FiniteDimensional F E] :
-    exists n, finrank F E = q ^ n := by
-  suffices forall (F E : Type v) [Field F] [Field E] [Algebra F E] (q : Nat) [ExpChar F q]
-      [IsPurelyInseparable F E] [FiniteDimensional F E], exists n, finrank F E = q ^ n by
+    (q : ℕ) [ExpChar F q] [IsPurelyInseparable F E] [FiniteDimensional F E] :
+    ∃ n, finrank F E = q ^ n := by
+  suffices ∀ (F E : Type v) [Field F] [Field E] [Algebra F E] (q : ℕ) [ExpChar F q]
+      [IsPurelyInseparable F E] [FiniteDimensional F E], ∃ n, finrank F E = q ^ n by
     simpa using this (⊥ : IntermediateField F E) E q
   intro F E _ _ _ q _ _ _
   generalize hd : finrank F E = d
@@ -852,9 +1008,9 @@ lemma IsPurelyInseparable.finrank_eq_pow
     obtain ⟨x, -, hx⟩ := SetLike.exists_of_lt (lt_of_le_of_ne bot_le h :)
     obtain ⟨m, y, e⟩ := IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x
     have : finrank F F⟮x⟯ = q ^ m := by
-      rw [adjoin.finrank (Algebra.IsIntegral.isIntegral x)]; rw [e]; rw [natDegree_sub_C]; rw [natDegree_X_pow]
+      rw [adjoin.finrank (Algebra.IsIntegral.isIntegral x), e, natDegree_sub_C, natDegree_X_pow]
     obtain ⟨n, hn⟩ := IH _ (by
-      rw [← hd]; rw [← finrank_mul_finrank F F⟮x⟯]; rw [Nat.lt_mul_iff_one_lt_left finrank_pos]; rw [this]
+      rw [← hd, ← finrank_mul_finrank F F⟮x⟯, Nat.lt_mul_iff_one_lt_left finrank_pos, this]
       by_contra! H
       refine hx (finrank_adjoin_simple_eq_one_iff.mp (le_antisymm (this ▸ H) ?_))
       exact Nat.one_le_iff_ne_zero.mpr Module.finrank_pos.ne') (F⟮x⟯) rfl
@@ -863,45 +1019,64 @@ lemma IsPurelyInseparable.finrank_eq_pow
 variable (E)
 
 variable {F E} in
-/--
-theorem `isPurelyInseparable_of_finSepDegree_eq_one` / 定理 `isPurelyInseparable_of_finSepDegree_eq_one`
+/-- If an extension has finite separable degree one, then it is purely inseparable. -/
+/-
+**isPurelyInseparable_of_finSepDegree_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_of_finSepDegree_eq_one (hdeg : finSepDegree F E = 1) :
+ IsPurelyInseparable F E
+参数：hdeg : finSepDegree F E = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPurelyInseparable_iff`：isPurelyInseparable_iff : IsPurelyInseparable F
+ E ↔ forall x : E, IsIntegral F x ∧ (IsSeparable F x -> x in (algebraMap F E).ra
+nge)
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `Field.finSepDegree_mul_finSepDegree_of_isAlgebraic`：finSepDegree_mul_fin
+SepDegree_of_isAlgebraic [Algebra E K] [IsScalarTower F E K] [Algebra.IsAlgebrai
+c E K] : finSepDegree F E * finSepDegree…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IntermediateField.finrank_eq_one_iff`：finrank_eq_one_iff : finrank F K =
+ 1 ↔ K = ⊥
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IntermediateField.finSepDegree_adjoin_simple_eq_finrank_iff`：finSepDegre
+e_adjoin_simple_eq_finrank_iff (α : E) (halg : IsAlgebraic F α) : finSepDegree F
+ F⟮α⟯ = finrank F F⟮α⟯ ↔ IsSeparable F α
+· 使用定理 `Algebra.IsAlgebraic.isAlgebraic`：∀ {R : Type u} {A : Type v} {inst : Com
+mRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsAlgebraic 
+R A] (x : A), IsAlgeb…
+· 使用定理 `mul_eq_one`：mul_eq_one : a * b = 1 ↔ a = 1 ∧ b = 1
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `IntermediateField.mem_adjoin_simple_self`：mem_adjoin_simple_self : α in 
+F⟮α⟯
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Field.finSepDegree_eq_zero_of_transcendental`：finSepDegree_eq_zero_of_tr
+anscendental [Algebra.Transcendental F E] : finSepDegree F E = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.transcendental_iff_not_isAlgebraic`：Algebra.transcendental_iff_n
+ot_isAlgebraic : Algebra.Transcendental R A ↔ ¬ Algebra.IsAlgebraic R A
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-theorem isPurelyInseparable_of_finSepDegree_eq_one
-  proof: by
-  by_cases H : Algebra.IsAlgebraic F E
-  · rw [isPurelyInseparable_iff]
-    refine fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hsep => ?_⟩
-    have := finSepDegree_mul_finSepDegree_of_isAlgebraic F F⟮x⟯ E
-    rw [hdeg]; rw [mul_eq_one]; rw [(finSepDegree_adjoin_simple_eq_finrank_iff F E x
-        (Algebra.IsAlgebraic.isAlgebraic x)).2 hsep]; rw [IntermediateField.finrank_eq_one_iff] at this
-    simpa only [this.1] using! mem_adjoin_simple_self F x
-  · rw [← Algebra.transcendental_iff_not_isAlgebraic] at H
-    simp [finSepDegree_eq_zero_of_transcendental F E] at hdeg
-
-中文:
-定理 isPurelyInseparable_of_finSepDegree_eq_one
-  证明: by
-  by_cases H : Algebra.IsAlgebraic F E
-  · rw [isPurelyInseparable_iff]
-    refine fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hsep => ?_⟩
-    have := finSepDegree_mul_finSepDegree_of_isAlgebraic F F⟮x⟯ E
-    rw [hdeg]; rw [mul_eq_one]; rw [(finSepDegree_adjoin_simple_eq_finrank_iff F E x
-        (Algebra.IsAlgebraic.isAlgebraic x)).2 hsep]; rw [IntermediateField.finrank_eq_one_iff] at this
-    simpa only [this.1] using! mem_adjoin_simple_self F x
-  · rw [← Algebra.transcendental_iff_not_isAlgebraic] at H
-    simp [finSepDegree_eq_zero_of_transcendental F E] at hdeg
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsAlgebraic.isAlgebraic, Algebra.IsIntegral.isIntegral, Algebra.transcendental_iff_not_isAlgebraic, IntermediateField, IntermediateField.finrank_eq_one_iff, IsAlgebraic, IsIntegral, finSepD, finSepDegree_adjoin_simple_eq_finrank_iff, finSepDegree_mul_finSepDegree_of_isAlgebraic, finrank_eq_one_iff, isAlgebraic, isIntegral, isPurelyInseparable_iff, mem_adjoin_simple_self, mul_eq_one, transcendental_iff_not_isAlgebraic
+--- 原说明 ---
+If an extension has finite separable degree one, then it is purely inseparable.
 -/
 theorem isPurelyInseparable_of_finSepDegree_eq_one
     (hdeg : finSepDegree F E = 1) : IsPurelyInseparable F E := by
   by_cases H : Algebra.IsAlgebraic F E
   · rw [isPurelyInseparable_iff]
-    refine fun x => ⟨Algebra.IsIntegral.isIntegral x, fun hsep => ?_⟩
+    refine fun x ↦ ⟨Algebra.IsIntegral.isIntegral x, fun hsep ↦ ?_⟩
     have := finSepDegree_mul_finSepDegree_of_isAlgebraic F F⟮x⟯ E
-    rw [hdeg]; rw [mul_eq_one]; rw [(finSepDegree_adjoin_simple_eq_finrank_iff F E x
-        (Algebra.IsAlgebraic.isAlgebraic x)).2 hsep]; rw [IntermediateField.finrank_eq_one_iff] at this
+    rw [hdeg, mul_eq_one, (finSepDegree_adjoin_simple_eq_finrank_iff F E x
+        (Algebra.IsAlgebraic.isAlgebraic x)).2 hsep,
+      IntermediateField.finrank_eq_one_iff] at this
     simpa only [this.1] using! mem_adjoin_simple_self F x
   · rw [← Algebra.transcendental_iff_not_isAlgebraic] at H
     simp [finSepDegree_eq_zero_of_transcendental F E] at hdeg
@@ -910,39 +1085,56 @@ namespace IsPurelyInseparable
 
 variable [IsPurelyInseparable F E] (R L : Type*) [CommSemiring R] [Algebra R F] [Algebra R E]
 
-/--
-theorem `injective_comp_algebraMap` / 定理 `injective_comp_algebraMap`
+/-- If `E / F` is purely inseparable, then for any reduced ring `L`, the map `(E →+* L) → (F →+* L)`
+induced by `algebraMap F E` is injective. In particular, a purely inseparable field extension
+is an epimorphism in the category of fields. -/
+/-
+**IsPurelyInseparable.injective_comp_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `IsPur
+elyInseparable`。
+形式化陈述：injective_comp_algebraMap [CommRing L] [IsReduced L] : Function.Injective 
+fun f : E ->+* L => f.comp (algebraMap F E)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `IsPurelyInseparable.pow_mem`：IsPurelyInseparable.pow_mem [IsPurelyInsepa
+rable F E] : exists n : Nat, x ^ q ^ n in (algebraMap F E).range
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `expChar_of_injective_ringHom`：expChar_of_injective_ringHom [NonAssocSemi
+ring R] [NonAssocSemiring A] {f : R ->+* A} (h : Function.Injective f) (q : Nat)
+ [hR : ExpChar R q…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `iterateFrobenius_inj`：iterateFrobenius_inj : Function.Injective (iterate
+Frobenius R p n)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 
-English:
-theorem injective_comp_algebraMap
-  given: [CommRing L] [IsReduced L]
-  proof: fun f g heq => by
-  ext x
-  let q := ringExpChar F
-  obtain ⟨n, y, h⟩ := IsPurelyInseparable.pow_mem F q x
-  replace heq := congr($heq y)
-  simp_rw [RingHom.comp_apply, h, map_pow] at heq
-  nontriviality L
-  have := expChar_of_injective_ringHom (f.comp (algebraMap F E)).injective q
-  exact iterateFrobenius_inj L q n heq
-
-中文:
-定理 injective_comp_algebraMap
-  条件: [交换环 L] [是既约 L]
-  证明: fun f g heq => by
-  ext x
-  let q := ringExpChar F
-  obtain ⟨n, y, h⟩ := IsPurelyInseparable.pow_mem F q x
-  replace heq := congr($heq y)
-  simp_rw [RingHom.comp_apply, h, map_pow] at heq
-  nontriviality L
-  have := expChar_of_injective_ringHom (f.comp (algebraMap F E)).injective q
-  exact iterateFrobenius_inj L q n heq
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.pow_mem, RingHom, RingHom.comp_apply, algebraMap, comp_apply, expChar_of_injective_ringHom, f.comp, injective, iterateFrobenius_inj, map_pow, nontriviality, pow_mem, replace, ringExpChar, simp_rw
+--- 原说明 ---
+If `E / F` is purely inseparable, then for any reduced ring `L`, the map `(E →+*
+ L) → (F →+* L)`
+induced by `algebraMap F E` is injective. In particular, a purely inseparable fi
+eld extension
+is an epimorphism in the category of fields.
 -/
 theorem injective_comp_algebraMap [CommRing L] [IsReduced L] :
-    Function.Injective fun f : E ->+* L => f.comp (algebraMap F E) := fun f g heq => by
+    Function.Injective fun f : E →+* L ↦ f.comp (algebraMap F E) := fun f g heq ↦ by
   ext x
   let q := ringExpChar F
   obtain ⟨n, y, h⟩ := IsPurelyInseparable.pow_mem F q x
@@ -951,364 +1143,414 @@ theorem injective_comp_algebraMap [CommRing L] [IsReduced L] :
   nontriviality L
   have := expChar_of_injective_ringHom (f.comp (algebraMap F E)).injective q
   exact iterateFrobenius_inj L q n heq
-
-/--
-theorem `injective_restrictDomain` / 定理 `injective_restrictDomain`
-
-English:
-theorem injective_restrictDomain
-  given: [CommRing L] [IsReduced L] [Algebra R L] [IsScalarTower R F E]
-  proof: fun _ _ eq =>
-AlgHom.coe_ringHom_injective injective_comp_algebraMap F E L congr_arg AlgHom.toRingHom eq
-
-中文:
-定理 injective_restrictDomain
-  条件: [交换环 L] [是既约 L] [代数 R L] [标量塔 R F E]
-  证明: fun _ _ eq =>
-AlgHom.coe_ringHom_injective injective_comp_algebraMap F E L congr_arg AlgHom.toRingHom eq
+/-
+**IsPurelyInseparable.injective_restrictDomain** 是 Mathlib 中的一个定理，位于命名空间 `IsPure
+lyInseparable`。
+形式化陈述：injective_restrictDomain [CommRing L] [IsReduced L] [Algebra R L] [IsScala
+rTower R F E] : Function.Injective (AlgHom.domRestrict (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.coe_ringHom_injective`：coe_ringHom_injective : Function.Injective
+ ((↑) : (A ->ₐ[R] B) -> A ->+* B)
+· 使用定理 `IsPurelyInseparable.injective_comp_algebraMap`：injective_comp_algebraMap
+ [CommRing L] [IsReduced L] : Function.Injective fun f : E ->+* L => f.comp (alg
+ebraMap F E)
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem injective_restrictDomain [CommRing L] [IsReduced L] [Algebra R L] [IsScalarTower R F E] :
-    Function.Injective (AlgHom.domRestrict (A := R) F (C := E) (D := L)) := fun _ _ eq =>
-AlgHom.coe_ringHom_injective injective_comp_algebraMap F E L congr_arg AlgHom.toRingHom eq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Field
-  signature: L] [PerfectField L] [Algebra F L] : Nonempty (E ->ₐ[F] L)
-  body: nonempty_algHom_of_splits fun x => ⟨IsPurelyInseparable.isIntegral' _ _,
-    have ⟨q, _⟩ := ExpChar.exists F
-    PerfectField.splits_of_natSepDegree_eq_one (algebraMap F L)
-      ((minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q).mpr <|
-        IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x)⟩
-
-中文:
-实例 [域
-  签名: L] [完美域 L] [代数 F L] : 非空 (E ->ₐ[F] L)
-  定义体: nonempty_algHom_of_splits fun x => ⟨IsPurelyInseparable.isIntegral' _ _,
-    have ⟨q, _⟩ := ExpChar.exists F
-    PerfectField.splits_of_natSepDegree_eq_one (algebraMap F L)
-      ((minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q).mpr <|
-        IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x)⟩
-
-Depends on / 依赖: ExpChar, ExpChar.exists, IsPurelyInseparable, IsPurelyInseparable.isIntegral, IsPurelyInseparable.minpoly_eq_X_pow_sub_C, PerfectField, PerfectField.splits_of_natSepDegree_eq_one, algebraMap, isIntegral, minpoly, minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C, minpoly_eq_X_pow_sub_C, natSepDegree_eq_one_iff_eq_X_pow_sub_C, nonempty_algHom_of_splits, splits_of_natSepDegree_eq_one
+    Function.Injective (AlgHom.domRestrict (A := R) F (C := E) (D := L)) := fun _ _ eq ↦
+  AlgHom.coe_ringHom_injective <| injective_comp_algebraMap F E L <| congr_arg AlgHom.toRingHom eq
+/-
+**IsPurelyInseparable.** 是 Mathlib 中的一个实例，位于命名空间 `IsPurelyInseparable`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Field L] [PerfectField L] [Algebra F L] : Nonempty (E ->ₐ[F] L) :=
-  nonempty_algHom_of_splits fun x => ⟨IsPurelyInseparable.isIntegral' _ _,
+instance [Field L] [PerfectField L] [Algebra F L] : Nonempty (E →ₐ[F] L) :=
+  nonempty_algHom_of_splits fun x ↦ ⟨IsPurelyInseparable.isIntegral' _ _,
     have ⟨q, _⟩ := ExpChar.exists F
     PerfectField.splits_of_natSepDegree_eq_one (algebraMap F L)
       ((minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q).mpr <|
         IsPurelyInseparable.minpoly_eq_X_pow_sub_C F q x)⟩
-
-/--
-theorem `bijective_comp_algebraMap` / 定理 `bijective_comp_algebraMap`
-
-English:
-theorem bijective_comp_algebraMap
-  given: [Field L] [PerfectField L]
-  proof: ⟨injective_comp_algebraMap F E L, fun g => let _ := g.toAlgebra
-    ⟨_, (Classical.arbitrary <| E ->ₐ[F] L).comp_algebraMap⟩⟩
-
-中文:
-定理 bijective_comp_algebraMap
-  条件: [域 L] [完美域 L]
-  证明: ⟨injective_comp_algebraMap F E L, fun g => let _ := g.toAlgebra
-    ⟨_, (Classical.arbitrary <| E ->ₐ[F] L).comp_algebraMap⟩⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, comp_algebraMap, g.toAlgebra, injective_comp_algebraMap, toAlgebra
+/-
+**IsPurelyInseparable.bijective_comp_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `IsPur
+elyInseparable`。
+形式化陈述：bijective_comp_algebraMap [Field L] [PerfectField L] : Function.Bijective 
+fun f : E ->+* L => f.comp (algebraMap F E)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.injective_comp_algebraMap`：injective_comp_algebraMap
+ [CommRing L] [IsReduced L] : Function.Injective fun f : E ->+* L => f.comp (alg
+ebraMap F E)
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `IsPurelyInseparable.instNonemptyAlgHomOfPerfectField`：∀ (F : Type u) (E 
+: Type v) [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E] [IsPurelyIn
+separable F E]   (L : Type u_2) [inst_4 : …
+· 使用定理 `AlgHom.comp_algebraMap`：comp_algebraMap : (φ : A ->+* B).comp (algebraMa
+p R A) = algebraMap R B
 -/
 theorem bijective_comp_algebraMap [Field L] [PerfectField L] :
-    Function.Bijective fun f : E ->+* L => f.comp (algebraMap F E) :=
-  ⟨injective_comp_algebraMap F E L, fun g => let _ := g.toAlgebra
-    ⟨_, (Classical.arbitrary <| E ->ₐ[F] L).comp_algebraMap⟩⟩
-
-/--
-theorem `bijective_restrictDomain` / 定理 `bijective_restrictDomain`
-
-English:
-theorem bijective_restrictDomain
-  given: [Field L] [PerfectField L] [Algebra R L] [IsScalarTower R F E]
-  proof: ⟨injective_restrictDomain F E R L, fun g => let _ := g.toAlgebra
-    let f := Classical.arbitrary (E ->ₐ[F] L)
-    ⟨f.restrictScalars R, AlgHom.coe_ringHom_injective f.comp_algebraMap⟩⟩
-
-中文:
-定理 bijective_restrictDomain
-  条件: [域 L] [完美域 L] [代数 R L] [标量塔 R F E]
-  证明: ⟨injective_restrictDomain F E R L, fun g => let _ := g.toAlgebra
-    let f := Classical.arbitrary (E ->ₐ[F] L)
-    ⟨f.restrictScalars R, AlgHom.coe_ringHom_injective f.comp_algebraMap⟩⟩
+    Function.Bijective fun f : E →+* L ↦ f.comp (algebraMap F E) :=
+  ⟨injective_comp_algebraMap F E L, fun g ↦ let _ := g.toAlgebra
+    ⟨_, (Classical.arbitrary <| E →ₐ[F] L).comp_algebraMap⟩⟩
+/-
+**IsPurelyInseparable.bijective_restrictDomain** 是 Mathlib 中的一个定理，位于命名空间 `IsPure
+lyInseparable`。
+形式化陈述：bijective_restrictDomain [Field L] [PerfectField L] [Algebra R L] [IsScala
+rTower R F E] : Function.Bijective (AlgHom.domRestrict (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.injective_restrictDomain`：injective_restrictDomain [
+CommRing L] [IsReduced L] [Algebra R L] [IsScalarTower R F E] : Function.Injecti
+ve (AlgHom.domRestrict (A
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsPurelyInseparable.instNonemptyAlgHomOfPerfectField`：∀ (F : Type u) (E 
+: Type v) [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E] [IsPurelyIn
+separable F E]   (L : Type u_2) [inst_4 : …
+· 使用定理 `IsScalarTower.of_algHom`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} 
+[inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : CommSemiring B] [i
+nst_3 : Algeb…
+· 使用定理 `AlgHom.coe_ringHom_injective`：coe_ringHom_injective : Function.Injective
+ ((↑) : (A ->ₐ[R] B) -> A ->+* B)
+· 使用定理 `AlgHom.comp_algebraMap`：comp_algebraMap : (φ : A ->+* B).comp (algebraMa
+p R A) = algebraMap R B
 -/
 theorem bijective_restrictDomain [Field L] [PerfectField L] [Algebra R L] [IsScalarTower R F E] :
     Function.Bijective (AlgHom.domRestrict (A := R) F (C := E) (D := L)) :=
-  ⟨injective_restrictDomain F E R L, fun g => let _ := g.toAlgebra
-    let f := Classical.arbitrary (E ->ₐ[F] L)
+  ⟨injective_restrictDomain F E R L, fun g ↦ let _ := g.toAlgebra
+    let f := Classical.arbitrary (E →ₐ[F] L)
     ⟨f.restrictScalars R, AlgHom.coe_ringHom_injective f.comp_algebraMap⟩⟩
 
 end IsPurelyInseparable
 
-/--
-Instance `instSubsingletonAlgHomOfIsPurelyInseparable` / 实例 `instSubsingletonAlgHomOfIsPurelyInseparable`
+/-- If `E / F` is purely inseparable, then for any reduced `F`-algebra `L`, there exists at most one
+`F`-algebra homomorphism from `E` to `L`. -/
+/-
+**instSubsingletonAlgHomOfIsPurelyInseparable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instSubsingletonAlgHomOfIsPurelyInseparable [IsPurelyInseparable F E] (L :
+ Type w) [CommRing L] [IsReduced L] [Algebra F L] : Subsingleton (E ->ₐ[F] L) wh
+ere allEq f g
+参数：L : Type w。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.coe_ringHom_injective`：coe_ringHom_injective : Function.Injective
+ ((↑) : (A ->ₐ[R] B) -> A ->+* B)
+· 使用定理 `IsPurelyInseparable.injective_comp_algebraMap`：injective_comp_algebraMap
+ [CommRing L] [IsReduced L] : Function.Injective fun f : E ->+* L => f.comp (alg
+ebraMap F E)
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.comp_algebraMap`：comp_algebraMap : (φ : A ->+* B).comp (algebraMa
+p R A) = algebraMap R B
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-instance instSubsingletonAlgHomOfIsPurelyInseparable
-  signature: [IsPurelyInseparable F E] (L : Type w)
-  body: AlgHom.coe_ringHom_injective
-    IsPurelyInseparable.injective_comp_algebraMap F E L (by simp_rw [AlgHom.comp_algebraMap])
-
-中文:
-实例 instSubsingletonAlgHomOfIsPurelyInseparable
-  签名: [是纯不可分 F E] (L : 类型 w)
-  定义体: AlgHom.coe_ringHom_injective
-    IsPurelyInseparable.injective_comp_algebraMap F E L (by simp_rw [AlgHom.comp_algebraMap])
-
-Depends on / 依赖: AlgHom, AlgHom.coe_ringHom_injective, coe_ringHom_injective
+--- 原说明 ---
+If `E / F` is purely inseparable, then for any reduced `F`-algebra `L`, there ex
+ists at most one
+`F`-algebra homomorphism from `E` to `L`.
 -/
 instance instSubsingletonAlgHomOfIsPurelyInseparable [IsPurelyInseparable F E] (L : Type w)
-    [CommRing L] [IsReduced L] [Algebra F L] : Subsingleton (E ->ₐ[F] L) where
-allEq f g := AlgHom.coe_ringHom_injective
+    [CommRing L] [IsReduced L] [Algebra F L] : Subsingleton (E →ₐ[F] L) where
+  allEq f g := AlgHom.coe_ringHom_injective <|
     IsPurelyInseparable.injective_comp_algebraMap F E L (by simp_rw [AlgHom.comp_algebraMap])
-
-/--
-Instance `instUniqueAlgHomOfIsPurelyInseparable` / 实例 `instUniqueAlgHomOfIsPurelyInseparable`
-
-English:
-instance instUniqueAlgHomOfIsPurelyInseparable
-  signature: [IsPurelyInseparable F E] (L : Type w)
-  body: uniqueOfSubsingleton (IsScalarTower.toAlgHom F E L)
-
-中文:
-实例 instUniqueAlgHomOfIsPurelyInseparable
-  签名: [是纯不可分 F E] (L : 类型 w)
-  定义体: uniqueOfSubsingleton (IsScalarTower.toAlgHom F E L)
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, toAlgHom, uniqueOfSubsingleton
+/-
+**instUniqueAlgHomOfIsPurelyInseparable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instUniqueAlgHomOfIsPurelyInseparable [IsPurelyInseparable F E] (L : Type 
+w) [CommRing L] [IsReduced L] [Algebra F L] [Algebra E L] [IsScalarTower F E L] 
+: Unique (E ->ₐ[F] L)
+参数：L : Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instUniqueAlgHomOfIsPurelyInseparable [IsPurelyInseparable F E] (L : Type w)
     [CommRing L] [IsReduced L] [Algebra F L] [Algebra E L] [IsScalarTower F E L] :
-    Unique (E ->ₐ[F] L) := uniqueOfSubsingleton (IsScalarTower.toAlgHom F E L)
+    Unique (E →ₐ[F] L) := uniqueOfSubsingleton (IsScalarTower.toAlgHom F E L)
 
-/--
-Instance `instUniqueEmbOfIsPurelyInseparable` / 实例 `instUniqueEmbOfIsPurelyInseparable`
+/-- If `E / F` is purely inseparable, then `Field.Emb F E` has exactly one element. -/
+/-
+**instUniqueEmbOfIsPurelyInseparable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instUniqueEmbOfIsPurelyInseparable [IsPurelyInseparable F E] : Unique (Emb
+ F E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instUniqueEmbOfIsPurelyInseparable
-  signature: [IsPurelyInseparable F E]
-  body: instUniqueAlgHomOfIsPurelyInseparable F E _
-
-中文:
-实例 instUniqueEmbOfIsPurelyInseparable
-  签名: [是纯不可分 F E]
-  定义体: instUniqueAlgHomOfIsPurelyInseparable F E _
-
-Depends on / 依赖: instUniqueAlgHomOfIsPurelyInseparable
+--- 原说明 ---
+If `E / F` is purely inseparable, then `Field.Emb F E` has exactly one element.
 -/
 instance instUniqueEmbOfIsPurelyInseparable [IsPurelyInseparable F E] :
     Unique (Emb F E) := instUniqueAlgHomOfIsPurelyInseparable F E _
 
-/--
-theorem `IsPurelyInseparable.finSepDegree_eq_one` / 定理 `IsPurelyInseparable.finSepDegree_eq_one`
+/-- A purely inseparable extension has finite separable degree one. -/
+/-
+**IsPurelyInseparable.finSepDegree_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.finSepDegree_eq_one [IsPurelyInseparable F E] : finSep
+Degree F E = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.card_unique`：card_unique [Nonempty α] [Subsingleton α] : Nat.card α 
+= 1
+· 使用定理 `IsPurelyInseparable.instNonemptyAlgHomOfPerfectField`：∀ (F : Type u) (E 
+: Type v) [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E] [IsPurelyIn
+separable F E]   (L : Type u_2) [inst_4 : …
+· 使用定理 `IsAlgClosed.perfectField`：∀ (k : Type u) [inst : Field k] [IsAlgClosed k
+], PerfectField k
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 
-English:
-theorem IsPurelyInseparable.finSepDegree_eq_one
-  given: [IsPurelyInseparable F E]
-  proof: Nat.card_unique
-
-中文:
-定理 是纯不可分.finSepDegree_eq_one
-  条件: [是纯不可分 F E]
-  证明: Nat.card_unique
-
-Depends on / 依赖: Nat.card_unique, card_unique
+--- 原说明 ---
+A purely inseparable extension has finite separable degree one.
 -/
 theorem IsPurelyInseparable.finSepDegree_eq_one [IsPurelyInseparable F E] :
     finSepDegree F E = 1 := Nat.card_unique
 
-/--
-theorem `IsPurelyInseparable.sepDegree_eq_one` / 定理 `IsPurelyInseparable.sepDegree_eq_one`
+/-- A purely inseparable extension has separable degree one. -/
+/-
+**IsPurelyInseparable.sepDegree_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.sepDegree_eq_one [IsPurelyInseparable F E] : sepDegree
+ F E = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Field.sepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] [inst
+_1 : Field E] [inst_2 : Algebra F E],   Field.sepDegree F E = Module.rank F ↥(se
+parableClo…
+· 使用定理 `separableClosure.eq_bot_of_isPurelyInseparable`：separableClosure.eq_bot_
+of_isPurelyInseparable (F : Type u) (E : Type v) [Field F] [Field E] [Algebra F 
+E] [IsPurelyInseparable F E] : separ…
+· 使用定理 `IntermediateField.rank_bot`：∀ {F : Type u_1} [inst : Field F] {E : Type 
+u_2} [inst_1 : Field E] [inst_2 : Algebra F E], Module.rank F ↥⊥ = 1
 
-English:
-theorem IsPurelyInseparable.sepDegree_eq_one
-  given: [IsPurelyInseparable F E]
-  proof: by
-  rw [sepDegree]; rw [separableClosure.eq_bot_of_isPurelyInseparable]; rw [IntermediateField.rank_bot]
-
-中文:
-定理 是纯不可分.sepDegree_eq_one
-  条件: [是纯不可分 F E]
-  证明: by
-  rw [sepDegree]; rw [separableClosure.eq_bot_of_isPurelyInseparable]; rw [IntermediateField.rank_bot]
-
-Depends on / 依赖: IntermediateField, IntermediateField.rank_bot, eq_bot_of_isPurelyInseparable, rank_bot, sepDegree, separableClosure, separableClosure.eq_bot_of_isPurelyInseparable
+--- 原说明 ---
+A purely inseparable extension has separable degree one.
 -/
 theorem IsPurelyInseparable.sepDegree_eq_one [IsPurelyInseparable F E] :
     sepDegree F E = 1 := by
-  rw [sepDegree]; rw [separableClosure.eq_bot_of_isPurelyInseparable]; rw [IntermediateField.rank_bot]
+  rw [sepDegree, separableClosure.eq_bot_of_isPurelyInseparable, IntermediateField.rank_bot]
 
-/--
-theorem `IsPurelyInseparable.insepDegree_eq` / 定理 `IsPurelyInseparable.insepDegree_eq`
+/-- A purely inseparable extension has inseparable degree equal to degree. -/
+/-
+**IsPurelyInseparable.insepDegree_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.insepDegree_eq [IsPurelyInseparable F E] : insepDegree
+ F E = Module.rank F E
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Field.insepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] [in
+st_1 : Field E] [inst_2 : Algebra F E],   Field.insepDegree F E = Module.rank (↥
+(separableCl…
+· 使用定理 `separableClosure.eq_bot_of_isPurelyInseparable`：separableClosure.eq_bot_
+of_isPurelyInseparable (F : Type u) (E : Type v) [Field F] [Field E] [Algebra F 
+E] [IsPurelyInseparable F E] : separ…
+· 使用定理 `IntermediateField.rank_bot'`：∀ {F : Type u_1} [inst : Field F] {E : Type
+ u_2} [inst_1 : Field E] [inst_2 : Algebra F E],   Module.rank (↥⊥) E = Module.r
+ank F E
 
-English:
-theorem IsPurelyInseparable.insepDegree_eq
-  given: [IsPurelyInseparable F E]
-  proof: by
-  rw [insepDegree]; rw [separableClosure.eq_bot_of_isPurelyInseparable]; rw [rank_bot']
-
-中文:
-定理 是纯不可分.insepDegree_eq
-  条件: [是纯不可分 F E]
-  证明: by
-  rw [insepDegree]; rw [separableClosure.eq_bot_of_isPurelyInseparable]; rw [rank_bot']
-
-Depends on / 依赖: eq_bot_of_isPurelyInseparable, insepDegree, rank_bot, separableClosure, separableClosure.eq_bot_of_isPurelyInseparable
+--- 原说明 ---
+A purely inseparable extension has inseparable degree equal to degree.
 -/
 theorem IsPurelyInseparable.insepDegree_eq [IsPurelyInseparable F E] :
     insepDegree F E = Module.rank F E := by
-  rw [insepDegree]; rw [separableClosure.eq_bot_of_isPurelyInseparable]; rw [rank_bot']
+  rw [insepDegree, separableClosure.eq_bot_of_isPurelyInseparable, rank_bot']
 
-/--
-theorem `IsPurelyInseparable.finInsepDegree_eq` / 定理 `IsPurelyInseparable.finInsepDegree_eq`
+/-- A purely inseparable extension has finite inseparable degree equal to degree. -/
+/-
+**IsPurelyInseparable.finInsepDegree_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.finInsepDegree_eq [IsPurelyInseparable F E] : finInsep
+Degree F E = finrank F E
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsPurelyInseparable.insepDegree_eq`：IsPurelyInseparable.insepDegree_eq [
+IsPurelyInseparable F E] : insepDegree F E = Module.rank F E
 
-English:
-theorem IsPurelyInseparable.finInsepDegree_eq
-  given: [IsPurelyInseparable F E]
-  proof: congr(Cardinal.toNat $(insepDegree_eq F E))
-
-中文:
-定理 是纯不可分.finInsepDegree_eq
-  条件: [是纯不可分 F E]
-  证明: congr(Cardinal.toNat $(insepDegree_eq F E))
-
-Depends on / 依赖: Cardinal, Cardinal.toNat, insepDegree_eq
+--- 原说明 ---
+A purely inseparable extension has finite inseparable degree equal to degree.
 -/
 theorem IsPurelyInseparable.finInsepDegree_eq [IsPurelyInseparable F E] :
     finInsepDegree F E = finrank F E := congr(Cardinal.toNat $(insepDegree_eq F E))
 
-/--
-theorem `isPurelyInseparable_iff_finSepDegree_eq_one` / 定理 `isPurelyInseparable_iff_finSepDegree_eq_one`
+/-- An extension is purely inseparable if and only if it has finite separable degree one. -/
+/-
+**isPurelyInseparable_iff_finSepDegree_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff_finSepDegree_eq_one : IsPurelyInseparable F E ↔ fi
+nSepDegree F E = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.finSepDegree_eq_one`：IsPurelyInseparable.finSepDegre
+e_eq_one [IsPurelyInseparable F E] : finSepDegree F E = 1
+· 使用定理 `isPurelyInseparable_of_finSepDegree_eq_one`：isPurelyInseparable_of_finSe
+pDegree_eq_one (hdeg : finSepDegree F E = 1) : IsPurelyInseparable F E
 
-English:
-theorem isPurelyInseparable_iff_finSepDegree_eq_one
-  proof: ⟨fun _ => IsPurelyInseparable.finSepDegree_eq_one F E,
-    fun h => isPurelyInseparable_of_finSepDegree_eq_one h⟩
-
-中文:
-定理 isPurelyInseparable_iff_finSepDegree_eq_one
-  证明: ⟨fun _ => IsPurelyInseparable.finSepDegree_eq_one F E,
-    fun h => isPurelyInseparable_of_finSepDegree_eq_one h⟩
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.finSepDegree_eq_one, finSepDegree_eq_one, isPurelyInseparable_of_finSepDegree_eq_one
+--- 原说明 ---
+An extension is purely inseparable if and only if it has finite separable degree
+ one.
 -/
 theorem isPurelyInseparable_iff_finSepDegree_eq_one :
     IsPurelyInseparable F E ↔ finSepDegree F E = 1 :=
-  ⟨fun _ => IsPurelyInseparable.finSepDegree_eq_one F E,
-    fun h => isPurelyInseparable_of_finSepDegree_eq_one h⟩
+  ⟨fun _ ↦ IsPurelyInseparable.finSepDegree_eq_one F E,
+    fun h ↦ isPurelyInseparable_of_finSepDegree_eq_one h⟩
 
-/--
-theorem `isPurelyInseparable_iff_subsingleton_emb` / 定理 `isPurelyInseparable_iff_subsingleton_emb`
+/-- An extension `E / F` is purely inseparable if and only there is at most one
+  embedding `E →ₐ[F] AlgebraicClosure E` -/
+/-
+**isPurelyInseparable_iff_subsingleton_emb** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff_subsingleton_emb : IsPurelyInseparable F E ↔ Subsi
+ngleton (Field.Emb F E)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPurelyInseparable_iff_finSepDegree_eq_one`：isPurelyInseparable_iff_fin
+SepDegree_eq_one : IsPurelyInseparable F E ↔ finSepDegree F E = 1
+· 使用定理 `Field.finSepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] [i
+nst_1 : Field E] [inst_2 : Algebra F E],   Field.finSepDegree F E = Nat.card (Fi
+eld.Emb F E)
+· 使用定理 `Nat.card_eq_one_iff_unique`：card_eq_one_iff_unique : Nat.card α = 1 ↔ Su
+bsingleton α ∧ Nonempty α
+· 使用定理 `and_iff_left_iff_imp`：∀ {a b : Prop}, (a ∧ b ↔ a) ↔ a → b
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 
-English:
-theorem isPurelyInseparable_iff_subsingleton_emb
-  proof: by
-  rw [isPurelyInseparable_iff_finSepDegree_eq_one]; rw [Field.finSepDegree]; rw [Nat.card_eq_one_iff_unique]; rw [and_iff_left_iff_imp]
-  infer_instance
-
-中文:
-定理 isPurelyInseparable_iff_subsingleton_emb
-  证明: by
-  rw [isPurelyInseparable_iff_finSepDegree_eq_one]; rw [Field.finSepDegree]; rw [Nat.card_eq_one_iff_unique]; rw [and_iff_left_iff_imp]
-  infer_instance
-
-Depends on / 依赖: Field.finSepDegree, Nat.card_eq_one_iff_unique, and_iff_left_iff_imp, card_eq_one_iff_unique, finSepDegree, infer_instance, isPurelyInseparable_iff_finSepDegree_eq_one
+--- 原说明 ---
+An extension `E / F` is purely inseparable if and only there is at most one
+  embedding `E →ₐ[F] AlgebraicClosure E`
 -/
 theorem isPurelyInseparable_iff_subsingleton_emb :
     IsPurelyInseparable F E ↔ Subsingleton (Field.Emb F E) := by
-  rw [isPurelyInseparable_iff_finSepDegree_eq_one]; rw [Field.finSepDegree]; rw [Nat.card_eq_one_iff_unique]; rw [and_iff_left_iff_imp]
+  rw [isPurelyInseparable_iff_finSepDegree_eq_one, Field.finSepDegree, Nat.card_eq_one_iff_unique,
+    and_iff_left_iff_imp]
   infer_instance
-
-/--
-lemma `isSeparable_iff_finInsepDegree_eq_one` / 引理 `isSeparable_iff_finInsepDegree_eq_one`
-
-English:
-lemma isSeparable_iff_finInsepDegree_eq_one
-  proof: by
-  rw [← separableClosure.eq_top_iff]; rw [← IntermediateField.finrank_eq_one_iff_eq_top]; rw [finInsepDegree]
-
-中文:
-引理 isSeparable_iff_finInsepDegree_eq_one
-  证明: by
-  rw [← separableClosure.eq_top_iff]; rw [← IntermediateField.finrank_eq_one_iff_eq_top]; rw [finInsepDegree]
-
-Depends on / 依赖: IntermediateField, IntermediateField.finrank_eq_one_iff_eq_top, eq_top_iff, finInsepDegree, finrank_eq_one_iff_eq_top, separableClosure, separableClosure.eq_top_iff
+/-
+**isSeparable_iff_finInsepDegree_eq_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isSeparable_iff_finInsepDegree_eq_one : Algebra.IsSeparable F K ↔ finInsep
+Degree F K = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `separableClosure.eq_top_iff`：separableClosure.eq_top_iff : separableClos
+ure F E = ⊤ ↔ Algebra.IsSeparable F E
+· 使用引理 `IntermediateField.finrank_eq_one_iff_eq_top`：finrank_eq_one_iff_eq_top {
+K : IntermediateField F E} : Module.finrank K E = 1 ↔ K = ⊤
+· 使用定理 `Field.finInsepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] 
+[inst_1 : Field E] [inst_2 : Algebra F E],   Field.finInsepDegree F E = Module.f
+inrank (↥(separ…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isSeparable_iff_finInsepDegree_eq_one :
     Algebra.IsSeparable F K ↔ finInsepDegree F K = 1 := by
-  rw [← separableClosure.eq_top_iff]; rw [← IntermediateField.finrank_eq_one_iff_eq_top]; rw [finInsepDegree]
+  rw [← separableClosure.eq_top_iff, ← IntermediateField.finrank_eq_one_iff_eq_top, finInsepDegree]
 
 variable {F E} in
-/--
-theorem `isPurelyInseparable_iff_fd_isPurelyInseparable` / 定理 `isPurelyInseparable_iff_fd_isPurelyInseparable`
+/-- An algebraic extension is purely inseparable if and only if all of its finite-dimensional
+subextensions are purely inseparable. -/
+/-
+**isPurelyInseparable_iff_fd_isPurelyInseparable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPurelyInseparable_iff_fd_isPurelyInseparable [Algebra.IsAlgebraic F E] :
+ IsPurelyInseparable F E ↔ forall L : IntermediateField F E, FiniteDimensional F
+ L -> IsPurelyInseparable F L
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.tower_bot`：IsPurelyInseparable.tower_bot [Algebra E 
+K] [IsScalarTower F E K] [IsPurelyInseparable F K] : IsPurelyInseparable F E
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isPurelyInseparable_iff`：isPurelyInseparable_iff : IsPurelyInseparable F
+ E ↔ forall x : E, IsIntegral F x ∧ (IsSeparable F x -> x in (algebraMap F E).ra
+nge)
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `IsPurelyInseparable.inseparable'`：∀ {F : Type u_1} {E : Type u_2} {inst 
+: CommRing F} {inst_1 : Ring E} {inst_2 : Algebra F E}   [self : IsPurelyInsepar
+able F E] (x : E), IsS…
+· 使用定理 `IntermediateField.adjoin.finiteDimensional`：∀ {K : Type u} [inst : Field
+ K] {L : Type u_3} [inst_1 : Field L] [inst_2 : Algebra K L] {x : L},   IsIntegr
+al K x → FiniteDimensional K ↥K⟮…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IntermediateField.minpoly_eq`：minpoly_eq (x : S) : minpoly K x = minpoly
+ K (x : L)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
 
-English:
-theorem isPurelyInseparable_iff_fd_isPurelyInseparable
-  given: [Algebra.IsAlgebraic F E]
-  proof: by
-  refine ⟨fun _ _ _ => IsPurelyInseparable.tower_bot F _ E,
-    fun h => isPurelyInseparable_iff.2 fun x => ?_⟩
-  have hx : IsIntegral F x := Algebra.IsIntegral.isIntegral x
-  refine ⟨hx, fun _ => ?_⟩
-obtain ⟨y, h⟩ := (h _ (adjoin.finiteDimensional hx)).inseparable' _
-    show Separable (minpoly F (AdjoinSimple.gen F x)) by rwa [minpoly_eq]
-  exact ⟨y, congr_arg (algebraMap _ E) h⟩
-
-中文:
-定理 isPurelyInseparable_iff_fd_isPurelyInseparable
-  条件: [代数.是代数 F E]
-  证明: by
-  refine ⟨fun _ _ _ => IsPurelyInseparable.tower_bot F _ E,
-    fun h => isPurelyInseparable_iff.2 fun x => ?_⟩
-  have hx : IsIntegral F x := Algebra.IsIntegral.isIntegral x
-  refine ⟨hx, fun _ => ?_⟩
-obtain ⟨y, h⟩ := (h _ (adjoin.finiteDimensional hx)).inseparable' _
-    show Separable (minpoly F (AdjoinSimple.gen F x)) by rwa [minpoly_eq]
-  exact ⟨y, congr_arg (algebraMap _ E) h⟩
-
-Depends on / 依赖: AdjoinSimple, AdjoinSimple.gen, Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, IsPurelyInseparable, IsPurelyInseparable.tower_bot, Separable, adjoin, adjoin.finiteDimensional, algebraMap, congr_arg, finiteDimensional, inseparable, isIntegral, isPurelyInseparable_iff, minpoly, minpoly_eq, tower_bot
+--- 原说明 ---
+An algebraic extension is purely inseparable if and only if all of its finite-di
+mensional
+subextensions are purely inseparable.
 -/
 theorem isPurelyInseparable_iff_fd_isPurelyInseparable [Algebra.IsAlgebraic F E] :
     IsPurelyInseparable F E ↔
-    forall L : IntermediateField F E, FiniteDimensional F L -> IsPurelyInseparable F L := by
-  refine ⟨fun _ _ _ => IsPurelyInseparable.tower_bot F _ E,
-    fun h => isPurelyInseparable_iff.2 fun x => ?_⟩
+    ∀ L : IntermediateField F E, FiniteDimensional F L → IsPurelyInseparable F L := by
+  refine ⟨fun _ _ _ ↦ IsPurelyInseparable.tower_bot F _ E,
+    fun h ↦ isPurelyInseparable_iff.2 fun x ↦ ?_⟩
   have hx : IsIntegral F x := Algebra.IsIntegral.isIntegral x
-  refine ⟨hx, fun _ => ?_⟩
-obtain ⟨y, h⟩ := (h _ (adjoin.finiteDimensional hx)).inseparable' _
+  refine ⟨hx, fun _ ↦ ?_⟩
+  obtain ⟨y, h⟩ := (h _ (adjoin.finiteDimensional hx)).inseparable' _ <|
     show Separable (minpoly F (AdjoinSimple.gen F x)) by rwa [minpoly_eq]
   exact ⟨y, congr_arg (algebraMap _ E) h⟩
 
-/--
-Instance `IsPurelyInseparable.normal` / 实例 `IsPurelyInseparable.normal`
+/-- A purely inseparable extension is normal. -/
+/-
+**IsPurelyInseparable.normal** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.normal [IsPurelyInseparable F E] : Normal F E where to
+IsAlgebraic
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.isAlgebraic`：IsPurelyInseparable.isAlgebraic [Nontri
+vial F] [IsPurelyInseparable F E] : Algebra.IsAlgebraic F E
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `IsPurelyInseparable.minpoly_eq_X_sub_C_pow`：IsPurelyInseparable.minpoly_
+eq_X_sub_C_pow (q : Nat) [ExpChar F q] [IsPurelyInseparable F E] (x : E) : exist
+s n : Nat, (minpoly F x).map (al…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.Splits.pow`：∀ {R : Type u_1} [inst : Semiring R] {f : Polynom
+ial R}, f.Splits → ∀ (n : ℕ), (f ^ n).Splits
+· 使用定理 `Polynomial.Splits.X_sub_C`：∀ {R : Type u_1} [inst : Ring R] (a : R), (Po
+lynomial.X - Polynomial.C a).Splits
 
-English:
-instance IsPurelyInseparable.normal
-  signature: [IsPurelyInseparable F E]
-  body: isAlgebraic F E
-  splits' x := by
-    obtain ⟨n, h⟩ := IsPurelyInseparable.minpoly_eq_X_sub_C_pow F (ringExpChar F) x
-    rw [h]
-    exact Splits.pow (Splits.X_sub_C _) _
-
-中文:
-实例 是纯不可分.normal
-  签名: [是纯不可分 F E]
-  定义体: isAlgebraic F E
-  splits' x := by
-    obtain ⟨n, h⟩ := IsPurelyInseparable.minpoly_eq_X_sub_C_pow F (ringExpChar F) x
-    rw [h]
-    exact Splits.pow (Splits.X_sub_C _) _
-
-Depends on / 依赖: isAlgebraic
+--- 原说明 ---
+A purely inseparable extension is normal.
 -/
 instance IsPurelyInseparable.normal [IsPurelyInseparable F E] : Normal F E where
   toIsAlgebraic := isAlgebraic F E
@@ -1320,290 +1562,401 @@ instance IsPurelyInseparable.normal [IsPurelyInseparable F E] : Normal F E where
 /-- If `E / F` is algebraic, then `E` is purely inseparable over the
 separable closure of `F` in `E`. -/
 @[stacks 030K "$E/E_{sep}$ is purely inseparable."]
-/--
-Instance `separableClosure.isPurelyInseparable` / 实例 `separableClosure.isPurelyInseparable`
+/-
+**separableClosure.isPurelyInseparable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：separableClosure.isPurelyInseparable [Algebra.IsAlgebraic F E] : IsPurelyI
+nseparable (separableClosure F E) E
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isPurelyInseparable_iff`：isPurelyInseparable_iff : IsPurelyInseparable F
+ E ↔ forall x : E, IsIntegral F x ∧ (IsSeparable F x -> x in (algebraMap F E).ra
+nge)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Field K] [in
+st_1 : Ring A] [inst_2 : Algebra K A] {x : A},   IsAlgebraic K x → IsIntegral K 
+x
+· 使用定理 `IsAlgebraic.tower_top`：IsAlgebraic.tower_top {x : A} (A_alg : IsAlgebrai
+c K x) : IsAlgebraic L x
+· 使用定理 `Algebra.IsAlgebraic.isAlgebraic`：∀ {R : Type u} {A : Type v} {inst : Com
+mRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsAlgebraic 
+R A] (x : A), IsAlgeb…
+· 使用定理 `IntermediateField.isSeparable_adjoin_simple_iff_isSeparable`：Intermediat
+eField.isSeparable_adjoin_simple_iff_isSeparable {x : E} : Algebra.IsSeparable F
+ F⟮x⟯ ↔ IsSeparable F x
+· 使用定理 `Algebra.IsSeparable.trans`：Algebra.IsSeparable.trans [Algebra E K] [IsSc
+alarTower F E K] [Algebra.IsSeparable F E] [Algebra.IsSeparable E K] : Algebra.I
+sSeparable F K
+· 使用定理 `IntermediateField.instIsScalarTowerSubtypeMem_1`：∀ {K : Type u_1} {L : T
+ype u_2} [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L] {S : Interme
+diateField K L}   {E : Type u_4} [ins…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IntermediateField.mem_adjoin_simple_self`：mem_adjoin_simple_self : α in 
+F⟮α⟯
+· 使用定理 `mem_separableClosure_iff`：mem_separableClosure_iff {x : E} : x in separa
+bleClosure F E ↔ IsSeparable F x
+· 使用引理 `IntermediateField.isSeparable_of_mem_isSeparable`：IntermediateField.isSe
+parable_of_mem_isSeparable {L : IntermediateField F E} [Algebra.IsSeparable F L]
+ {x : E} (h : x in L) : IsSeparable F …
 
-English:
-instance separableClosure.isPurelyInseparable
-  signature: [Algebra.IsAlgebraic F E]
-  body: isPurelyInseparable_iff.2 fun x => by
-  set L := separableClosure F E
-  refine ⟨(IsAlgebraic.tower_top L (Algebra.IsAlgebraic.isAlgebraic (R := F) x)).isIntegral,
-    fun h => ?_⟩
-  have := (isSeparable_adjoin_simple_iff_isSeparable L E).2 h
-  have : Algebra.IsSeparable F (restrictScalars F L⟮x⟯) := Algebra.IsSeparable.trans F L L⟮x⟯
-  have hx : x in L⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
-exact ⟨⟨x, mem_separableClosure_iff.2 isSeparable_of_mem_isSeparable F E hx⟩, rfl⟩
-
-中文:
-实例 separableClosure.isPurelyInseparable
-  签名: [代数.是代数 F E]
-  定义体: isPurelyInseparable_iff.2 fun x => by
-  set L := separableClosure F E
-  refine ⟨(IsAlgebraic.tower_top L (Algebra.IsAlgebraic.isAlgebraic (R := F) x)).isIntegral,
-    fun h => ?_⟩
-  have := (isSeparable_adjoin_simple_iff_isSeparable L E).2 h
-  have : Algebra.IsSeparable F (restrictScalars F L⟮x⟯) := Algebra.IsSeparable.trans F L L⟮x⟯
-  have hx : x in L⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
-exact ⟨⟨x, mem_separableClosure_iff.2 isSeparable_of_mem_isSeparable F E hx⟩, rfl⟩
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, Algebra.IsSeparable, Algebra.IsSeparable.trans, IsAlgebraic, IsAlgebraic.tower_top, IsSeparable, isAlgebraic, isIntegral, isPurelyInseparable_iff, isSeparable_adjoin_simple_iff_isSeparable, isSeparable_of_mem_isSeparable, mem_adjoin_simple_self, mem_separableClosure_iff, restrictScalars, separableClosure, tower_top
+--- 原说明 ---
+If `E / F` is algebraic, then `E` is purely inseparable over the
+separable closure of `F` in `E`.
 -/
 instance separableClosure.isPurelyInseparable [Algebra.IsAlgebraic F E] :
-    IsPurelyInseparable (separableClosure F E) E := isPurelyInseparable_iff.2 fun x => by
+    IsPurelyInseparable (separableClosure F E) E := isPurelyInseparable_iff.2 fun x ↦ by
   set L := separableClosure F E
   refine ⟨(IsAlgebraic.tower_top L (Algebra.IsAlgebraic.isAlgebraic (R := F) x)).isIntegral,
-    fun h => ?_⟩
+    fun h ↦ ?_⟩
   have := (isSeparable_adjoin_simple_iff_isSeparable L E).2 h
   have : Algebra.IsSeparable F (restrictScalars F L⟮x⟯) := Algebra.IsSeparable.trans F L L⟮x⟯
-  have hx : x in L⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
-exact ⟨⟨x, mem_separableClosure_iff.2 isSeparable_of_mem_isSeparable F E hx⟩, rfl⟩
+  have hx : x ∈ L⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
+  exact ⟨⟨x, mem_separableClosure_iff.2 <| isSeparable_of_mem_isSeparable F E hx⟩, rfl⟩
 
 open Cardinal in
-/--
-theorem `Field.Emb.cardinal_separableClosure` / 定理 `Field.Emb.cardinal_separableClosure`
-
-English:
-theorem Field.Emb.cardinal_separableClosure
-  given: [Algebra.IsAlgebraic F E]
-  proof: by
-  rw [← (embProdEmbOfIsAlgebraic F (separableClosure F E) E).cardinal_eq]; rw [mk_prod]; rw [mk_eq_one (Emb _ E)]; rw [lift_one]; rw [mul_one]; rw [lift_id]
-
-中文:
-定理 域.Emb.cardinal_separableClosure
-  条件: [代数.是代数 F E]
-  证明: by
-  rw [← (embProdEmbOfIsAlgebraic F (separableClosure F E) E).cardinal_eq]; rw [mk_prod]; rw [mk_eq_one (Emb _ E)]; rw [lift_one]; rw [mul_one]; rw [lift_id]
-
-Depends on / 依赖: cardinal_eq, embProdEmbOfIsAlgebraic, lift_id, lift_one, mk_eq_one, mk_prod, mul_one, separableClosure
+/-
+**Field.Emb.cardinal_separableClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Field.Emb.cardinal_separableClosure [Algebra.IsAlgebraic F E] : #(Field.Em
+b F <| separableClosure F E) = #(Field.Emb F E)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.cardinal_eq`：∀ {α β : Type u} (e : α ≃ β), Cardinal.mk α = Cardina
+l.mk β
+· 使用定理 `Cardinal.mk_prod`：mk_prod (α : Type u) (β : Type v) : #(α × β) = lift.{v
+, u} #α * lift.{u, v} #β
+· 使用定理 `Cardinal.mk_eq_one`：mk_eq_one (α : Type u) [Subsingleton α] [Nonempty α]
+ : #α = 1
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsPurelyInseparable.instNonemptyAlgHomOfPerfectField`：∀ (F : Type u) (E 
+: Type v) [inst : Field F] [inst_1 : Field E] [inst_2 : Algebra F E] [IsPurelyIn
+separable F E]   (L : Type u_2) [inst_4 : …
+· 使用定理 `IsAlgClosed.perfectField`：∀ (k : Type u) [inst : Field k] [IsAlgClosed k
+], PerfectField k
+· 使用定理 `Cardinal.lift_one`：lift_one : lift 1 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
 -/
 theorem Field.Emb.cardinal_separableClosure [Algebra.IsAlgebraic F E] :
     #(Field.Emb F <| separableClosure F E) = #(Field.Emb F E) := by
-  rw [← (embProdEmbOfIsAlgebraic F (separableClosure F E) E).cardinal_eq]; rw [mk_prod]; rw [mk_eq_one (Emb _ E)]; rw [lift_one]; rw [mul_one]; rw [lift_id]
-
-/--
-lemma `finInsepDegree_eq_pow` / 引理 `finInsepDegree_eq_pow`
-
-English:
-lemma finInsepDegree_eq_pow
-  given: (q : Nat) [ExpChar F q] [FiniteDimensional F E]
-  proof: IsPurelyInseparable.finrank_eq_pow ..
-
-中文:
-引理 finInsepDegree_eq_pow
-  条件: (q : 自然数) [ExpChar F q] [有限维 F E]
-  证明: IsPurelyInseparable.finrank_eq_pow ..
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.finrank_eq_pow, finrank_eq_pow
+  rw [← (embProdEmbOfIsAlgebraic F (separableClosure F E) E).cardinal_eq,
+    mk_prod, mk_eq_one (Emb _ E), lift_one, mul_one, lift_id]
+/-
+**finInsepDegree_eq_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finInsepDegree_eq_pow (q : Nat) [ExpChar F q] [FiniteDimensional F E] : ex
+ists n, finInsepDegree F E = q ^ n
+参数：q : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsPurelyInseparable.finrank_eq_pow`：IsPurelyInseparable.finrank_eq_pow (
+q : Nat) [ExpChar F q] [IsPurelyInseparable F E] [FiniteDimensional F E] : exist
+s n, finrank F E = q ^ n
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
 -/
-lemma finInsepDegree_eq_pow (q : Nat) [ExpChar F q] [FiniteDimensional F E] :
-    exists n, finInsepDegree F E = q ^ n :=
+lemma finInsepDegree_eq_pow (q : ℕ) [ExpChar F q] [FiniteDimensional F E] :
+    ∃ n, finInsepDegree F E = q ^ n :=
   IsPurelyInseparable.finrank_eq_pow ..
 
-/--
-theorem `separableClosure_le` / 定理 `separableClosure_le`
+/-- An intermediate field of `E / F` contains the separable closure of `F` in `E`
+if `E` is purely inseparable over it. -/
+/-
+**separableClosure_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：separableClosure_le (L : IntermediateField F E) [h : IsPurelyInseparable L
+ E] : separableClosure F E <= L
+参数：L : IntermediateField F E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPurelyInseparable.inseparable'`：∀ {F : Type u_1} {E : Type u_2} {inst 
+: CommRing F} {inst_1 : Ring E} {inst_2 : Algebra F E}   [self : IsPurelyInsepar
+able F E] (x : E), IsS…
+· 使用定理 `IsSeparable.tower_top`：IsSeparable.tower_top {x : E} (h : IsSeparable F 
+x) : IsSeparable L x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_separableClosure_iff`：mem_separableClosure_iff {x : E} : x in separa
+bleClosure F E ↔ IsSeparable F x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem separableClosure_le
-  statement: (L : IntermediateField F E)
-  proof: fun x hx => by
-obtain ⟨y, rfl⟩ := h.inseparable' _
-    IsSeparable.tower_top L (mem_separableClosure_iff.1 hx)
-  exact y.2
-
-中文:
-定理 separableClosure_le
-  结论: (L : 中间域 F E)
-  证明: fun x hx => by
-obtain ⟨y, rfl⟩ := h.inseparable' _
-    IsSeparable.tower_top L (mem_separableClosure_iff.1 hx)
-  exact y.2
-
-Depends on / 依赖: IsSeparable, IsSeparable.tower_top, h.inseparable, inseparable, mem_separableClosure_iff, tower_top
+--- 原说明 ---
+An intermediate field of `E / F` contains the separable closure of `F` in `E`
+if `E` is purely inseparable over it.
 -/
 theorem separableClosure_le (L : IntermediateField F E)
-    [h : IsPurelyInseparable L E] : separableClosure F E <= L := fun x hx => by
-obtain ⟨y, rfl⟩ := h.inseparable' _
+    [h : IsPurelyInseparable L E] : separableClosure F E ≤ L := fun x hx ↦ by
+  obtain ⟨y, rfl⟩ := h.inseparable' _ <|
     IsSeparable.tower_top L (mem_separableClosure_iff.1 hx)
   exact y.2
 
-/--
-theorem `separableClosure_le_iff` / 定理 `separableClosure_le_iff`
+/-- If `E / F` is algebraic, then an intermediate field of `E / F` contains the
+separable closure of `F` in `E` if and only if `E` is purely inseparable over it. -/
+/-
+**separableClosure_le_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：separableClosure_le_iff [Algebra.IsAlgebraic F E] (L : IntermediateField F
+ E) : separableClosure F E <= L ↔ IsPurelyInseparable L E
+参数：L : IntermediateField F E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `IsScalarTower.of_algebraMap_eq`：of_algebraMap_eq [Algebra R A] (h : fora
+ll x, algebraMap R A x = algebraMap S A (algebraMap R S x)) : IsScalarTower R S 
+A
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `IsPurelyInseparable.tower_top`：IsPurelyInseparable.tower_top [Algebra E 
+K] [IsScalarTower F E K] [h : IsPurelyInseparable F K] : IsPurelyInseparable E K
+· 使用定理 `separableClosure_le`：separableClosure_le (L : IntermediateField F E) [h 
+: IsPurelyInseparable L E] : separableClosure F E <= L
 
-English:
-theorem separableClosure_le_iff
-  given: [Algebra.IsAlgebraic F E] (L : IntermediateField F E)
-  proof: by
-  refine ⟨fun h => ?_, fun _ => separableClosure_le F E L⟩
-  let := (inclusion h).toAlgebra
-  let : SMul (separableClosure F E) L := Algebra.toSMul
-  have : IsScalarTower (separableClosure F E) L E := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  exact IsPurelyInseparable.tower_top (separableClosure F E) L E
-
-中文:
-定理 separableClosure_le_iff
-  条件: [代数.是代数 F E] (L : 中间域 F E)
-  证明: by
-  refine ⟨fun h => ?_, fun _ => separableClosure_le F E L⟩
-  let := (inclusion h).toAlgebra
-  let : SMul (separableClosure F E) L := Algebra.toSMul
-  have : IsScalarTower (separableClosure F E) L E := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  exact IsPurelyInseparable.tower_top (separableClosure F E) L E
-
-Depends on / 依赖: Algebra, Algebra.toSMul, IsPurelyInseparable, IsPurelyInseparable.tower_top, IsScalarTower, IsScalarTower.of_algebraMap_eq, inclusion, of_algebraMap_eq, separableClosure, separableClosure_le, toAlgebra, toSMul, tower_top
+--- 原说明 ---
+If `E / F` is algebraic, then an intermediate field of `E / F` contains the
+separable closure of `F` in `E` if and only if `E` is purely inseparable over it
+.
 -/
 theorem separableClosure_le_iff [Algebra.IsAlgebraic F E] (L : IntermediateField F E) :
-    separableClosure F E <= L ↔ IsPurelyInseparable L E := by
-  refine ⟨fun h => ?_, fun _ => separableClosure_le F E L⟩
+    separableClosure F E ≤ L ↔ IsPurelyInseparable L E := by
+  refine ⟨fun h ↦ ?_, fun _ ↦ separableClosure_le F E L⟩
   let := (inclusion h).toAlgebra
   let : SMul (separableClosure F E) L := Algebra.toSMul
   have : IsScalarTower (separableClosure F E) L E := IsScalarTower.of_algebraMap_eq (congrFun rfl)
   exact IsPurelyInseparable.tower_top (separableClosure F E) L E
 
-/--
-theorem `eq_separableClosure` / 定理 `eq_separableClosure`
+/-- If an intermediate field of `E / F` is separable over `F`, and `E` is purely inseparable
+over it, then it is equal to the separable closure of `F` in `E`. -/
+/-
+**eq_separableClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_separableClosure (L : IntermediateField F E) [Algebra.IsSeparable F L] 
+[IsPurelyInseparable L E] : L = separableClosure F E
+参数：L : IntermediateField F E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_separableClosure`：le_separableClosure (L : IntermediateField F E) [Al
+gebra.IsSeparable F L] : L <= separableClosure F E
+· 使用定理 `separableClosure_le`：separableClosure_le (L : IntermediateField F E) [h 
+: IsPurelyInseparable L E] : separableClosure F E <= L
 
-English:
-theorem eq_separableClosure
-  statement: (L : IntermediateField F E)
-  proof: le_antisymm (le_separableClosure F E L) (separableClosure_le F E L)
-
-中文:
-定理 eq_separableClosure
-  结论: (L : 中间域 F E)
-  证明: le_antisymm (le_separableClosure F E L) (separableClosure_le F E L)
-
-Depends on / 依赖: le_antisymm, le_separableClosure, separableClosure_le
+--- 原说明 ---
+If an intermediate field of `E / F` is separable over `F`, and `E` is purely ins
+eparable
+over it, then it is equal to the separable closure of `F` in `E`.
 -/
 theorem eq_separableClosure (L : IntermediateField F E)
     [Algebra.IsSeparable F L] [IsPurelyInseparable L E] : L = separableClosure F E :=
   le_antisymm (le_separableClosure F E L) (separableClosure_le F E L)
 
 open separableClosure in
-/--
-theorem `eq_separableClosure_iff` / 定理 `eq_separableClosure_iff`
+/-- If `E / F` is algebraic, then an intermediate field of `E / F` is equal to the separable closure
+of `F` in `E` if and only if it is separable over `F`, and `E` is purely inseparable
+over it. -/
+/-
+**eq_separableClosure_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_separableClosure_iff [Algebra.IsAlgebraic F E] (L : IntermediateField F
+ E) : L = separableClosure F E ↔ Algebra.IsSeparable F L ∧ IsPurelyInseparable L
+ E
+参数：L : IntermediateField F E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_separableClosure`：eq_separableClosure (L : IntermediateField F E) [Al
+gebra.IsSeparable F L] [IsPurelyInseparable L E] : L = separableClosure F E
 
-English:
-theorem eq_separableClosure_iff
-  given: [Algebra.IsAlgebraic F E] (L : IntermediateField F E)
-  proof: ⟨by rintro rfl; exact ⟨isSeparable F E, isPurelyInseparable F E⟩,
-   fun ⟨_, _⟩ => eq_separableClosure F E L⟩
-
-中文:
-定理 eq_separableClosure_iff
-  条件: [代数.是代数 F E] (L : 中间域 F E)
-  证明: ⟨by rintro rfl; exact ⟨isSeparable F E, isPurelyInseparable F E⟩,
-   fun ⟨_, _⟩ => eq_separableClosure F E L⟩
-
-Depends on / 依赖: eq_separableClosure, isPurelyInseparable, isSeparable
+--- 原说明 ---
+If `E / F` is algebraic, then an intermediate field of `E / F` is equal to the s
+eparable closure
+of `F` in `E` if and only if it is separable over `F`, and `E` is purely insepar
+able
+over it.
 -/
 theorem eq_separableClosure_iff [Algebra.IsAlgebraic F E] (L : IntermediateField F E) :
     L = separableClosure F E ↔ Algebra.IsSeparable F L ∧ IsPurelyInseparable L E :=
   ⟨by rintro rfl; exact ⟨isSeparable F E, isPurelyInseparable F E⟩,
-   fun ⟨_, _⟩ => eq_separableClosure F E L⟩
+   fun ⟨_, _⟩ ↦ eq_separableClosure F E L⟩
 
-/--
-theorem `IsPurelyInseparable.of_injective_comp_algebraMap` / 定理 `IsPurelyInseparable.of_injective_comp_algebraMap`
+/-- If `L` is an algebraically closed field containing `E`, such that the map
+`(E →+* L) → (F →+* L)` induced by `algebraMap F E` is injective, then `E / F` is
+purely inseparable. As a corollary, epimorphisms in the category of fields must be
+purely inseparable extensions. -/
+/-
+**IsPurelyInseparable.of_injective_comp_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.of_injective_comp_algebraMap (L : Type w) [Field L] [I
+sAlgClosed L] [Nonempty (E ->+* L)] (h : Function.Injective fun f : E ->+* L => 
+f.comp (algebraMap F E)) : IsPurelyInseparable F E
+参数：L : Type w；E ->+* L；h : Function.Injective fun f : E ->+* L => f.comp (algebr
+aMap F E)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPurelyInseparable_iff_finSepDegree_eq_one`：isPurelyInseparable_iff_fin
+SepDegree_eq_one : IsPurelyInseparable F E ↔ finSepDegree F E = 1
+· 使用定理 `Field.finSepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] [i
+nst_1 : Field E] [inst_2 : Algebra F E],   Field.finSepDegree F E = Nat.card (Fi
+eld.Emb F E)
+· 使用定理 `Nat.card_eq_one_iff_unique`：card_eq_one_iff_unique : Nat.card α = 1 ↔ Su
+bsingleton α ∧ Nonempty α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
+· 使用定理 `Function.Injective.comp_left`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort 
+u_3} {g : β → γ}, Function.Injective g → Function.Injective fun x => g ∘ x
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 
-English:
-theorem IsPurelyInseparable.of_injective_comp_algebraMap
-  statement: (L : Type w) [Field L] [IsAlgClosed L]
-  proof: by
-  rw [isPurelyInseparable_iff_finSepDegree_eq_one]; rw [finSepDegree]; rw [Nat.card_eq_one_iff_unique]
-  let := (Classical.arbitrary (E ->+* L)).toAlgebra
-  let j : AlgebraicClosure E ->ₐ[E] L := IsAlgClosed.lift
-exact ⟨⟨fun f g => DFunLike.ext' j.injective.comp_left (congr_arg (⇑) <|
-    @h (j.toRingHom.comp f) (j.toRingHom.comp g) (by ext; simp))⟩, inferInstance⟩
-
-中文:
-定理 是纯不可分.of_injective_comp_algebraMap
-  结论: (L : 类型 w) [域 L] [是代数闭 L]
-  证明: by
-  rw [isPurelyInseparable_iff_finSepDegree_eq_one]; rw [finSepDegree]; rw [Nat.card_eq_one_iff_unique]
-  let := (Classical.arbitrary (E ->+* L)).toAlgebra
-  let j : AlgebraicClosure E ->ₐ[E] L := IsAlgClosed.lift
-exact ⟨⟨fun f g => DFunLike.ext' j.injective.comp_left (congr_arg (⇑) <|
-    @h (j.toRingHom.comp f) (j.toRingHom.comp g) (by ext; simp))⟩, inferInstance⟩
-
-Depends on / 依赖: AlgebraicClosure, Classical, Classical.arbitrary, DFunLike, DFunLike.ext, IsAlgClosed, IsAlgClosed.lift, Nat.card_eq_one_iff_unique, arbitrary, card_eq_one_iff_unique, comp_left, congr_arg, finSepDegree, injective, isPurelyInseparable_iff_finSepDegree_eq_one, j.injective.comp_left, j.toRingHom.comp, toAlgebra, toRingHom
+--- 原说明 ---
+If `L` is an algebraically closed field containing `E`, such that the map
+`(E →+* L) → (F →+* L)` induced by `algebraMap F E` is injective, then `E / F` i
+s
+purely inseparable. As a corollary, epimorphisms in the category of fields must 
+be
+purely inseparable extensions.
 -/
 theorem IsPurelyInseparable.of_injective_comp_algebraMap (L : Type w) [Field L] [IsAlgClosed L]
-    [Nonempty (E ->+* L)] (h : Function.Injective fun f : E ->+* L => f.comp (algebraMap F E)) :
+    [Nonempty (E →+* L)] (h : Function.Injective fun f : E →+* L ↦ f.comp (algebraMap F E)) :
     IsPurelyInseparable F E := by
-  rw [isPurelyInseparable_iff_finSepDegree_eq_one]; rw [finSepDegree]; rw [Nat.card_eq_one_iff_unique]
-  let := (Classical.arbitrary (E ->+* L)).toAlgebra
-  let j : AlgebraicClosure E ->ₐ[E] L := IsAlgClosed.lift
-exact ⟨⟨fun f g => DFunLike.ext' j.injective.comp_left (congr_arg (⇑) <|
+  rw [isPurelyInseparable_iff_finSepDegree_eq_one, finSepDegree, Nat.card_eq_one_iff_unique]
+  let := (Classical.arbitrary (E →+* L)).toAlgebra
+  let j : AlgebraicClosure E →ₐ[E] L := IsAlgClosed.lift
+  exact ⟨⟨fun f g ↦ DFunLike.ext' <| j.injective.comp_left (congr_arg (⇑) <|
     @h (j.toRingHom.comp f) (j.toRingHom.comp g) (by ext; simp))⟩, inferInstance⟩
 
 end Field
 
 namespace IntermediateField
 
-/--
-Instance `isPurelyInseparable_bot` / 实例 `isPurelyInseparable_bot`
-
-English:
-instance isPurelyInseparable_bot
-  signature: : IsPurelyInseparable F (⊥ : IntermediateField F E)
-  body: (botEquiv F E).symm.isPurelyInseparable
-
-中文:
-实例 isPurelyInseparable_bot
-  签名: : 是纯不可分 F (⊥ : 中间域 F E)
-  定义体: (botEquiv F E).symm.isPurelyInseparable
-
-Depends on / 依赖: botEquiv, isPurelyInseparable, symm.isPurelyInseparable
+/-
+**IntermediateField.isPurelyInseparable_bot** 是 Mathlib 中的一个实例，位于命名空间 `Intermedi
+ateField`。
+形式化陈述：isPurelyInseparable_bot : IsPurelyInseparable F (⊥ : IntermediateField F E
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.isPurelyInseparable`：AlgEquiv.isPurelyInseparable (e : K ≃ₐ[F] 
+E) [IsPurelyInseparable F K] : IsPurelyInseparable F E
 -/
 instance isPurelyInseparable_bot : IsPurelyInseparable F (⊥ : IntermediateField F E) :=
   (botEquiv F E).symm.isPurelyInseparable
 
 end IntermediateField
 
-/--
-theorem `isSepClosed_iff_isPurelyInseparable_algebraicClosure` / 定理 `isSepClosed_iff_isPurelyInseparable_algebraicClosure`
+/-- If `E` is an algebraic closure of `F`, then `F` is separably closed if and only if `E / F` is
+purely inseparable. -/
+/-
+**isSepClosed_iff_isPurelyInseparable_algebraicClosure** 是 Mathlib 中的一个定理，位于命名空间
+ ``。
+形式化陈述：isSepClosed_iff_isPurelyInseparable_algebraicClosure [IsAlgClosure F E] : 
+IsSepClosed F ↔ IsPurelyInseparable F E
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `IsAlgClosure.isAlgebraic`：∀ {R : Type u} {K : Type v} {inst : CommRing R
+} {inst_1 : Field K} {inst_2 : Algebra R K}   {inst_3 : Module.IsTorsionFree R K
+} [self : IsAl…
+· 使用定理 `IsAlgClosure.isAlgClosed`：∀ (R : Type u) {K : Type v} {inst : CommRing R
+} {inst_1 : Field K} {inst_2 : Algebra R K}   {inst_3 : Module.IsTorsionFree R K
+} [self : IsAl…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsSepClosed.separableClosure_eq_bot_iff`：IsSepClosed.separableClosure_eq
+_bot_iff [IsSepClosed E] : separableClosure F E = ⊥ ↔ IsSepClosed F
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `separableClosure.eq_bot_iff`：separableClosure.eq_bot_iff {F : Type u} {E
+ : Type v} [Field F] [Field E] [Algebra F E] [Algebra.IsAlgebraic F E] : separab
+leClosure F E = ⊥…
 
-English:
-theorem isSepClosed_iff_isPurelyInseparable_algebraicClosure
-  given: [IsAlgClosure F E]
-  proof: ⟨fun _ => inferInstance, fun H => by
-    have := IsAlgClosure.isAlgClosed F (K := E)
-    rwa [← separableClosure.eq_bot_iff, IsSepClosed.separableClosure_eq_bot_iff] at H⟩
-
-中文:
-定理 isSepClosed_iff_isPurelyInseparable_algebraicClosure
-  条件: [是AlgClosure F E]
-  证明: ⟨fun _ => inferInstance, fun H => by
-    have := IsAlgClosure.isAlgClosed F (K := E)
-    rwa [← separableClosure.eq_bot_iff, IsSepClosed.separableClosure_eq_bot_iff] at H⟩
-
-Depends on / 依赖: IsAlgClosure, IsAlgClosure.isAlgClosed, IsSepClosed, IsSepClosed.separableClosure_eq_bot_iff, eq_bot_iff, isAlgClosed, separableClosure, separableClosure.eq_bot_iff, separableClosure_eq_bot_iff
+--- 原说明 ---
+If `E` is an algebraic closure of `F`, then `F` is separably closed if and only 
+if `E / F` is
+purely inseparable.
 -/
 theorem isSepClosed_iff_isPurelyInseparable_algebraicClosure [IsAlgClosure F E] :
     IsSepClosed F ↔ IsPurelyInseparable F E :=
-  ⟨fun _ => inferInstance, fun H => by
+  ⟨fun _ ↦ inferInstance, fun H ↦ by
     have := IsAlgClosure.isAlgClosed F (K := E)
     rwa [← separableClosure.eq_bot_iff, IsSepClosed.separableClosure_eq_bot_iff] at H⟩
 
 variable {F E} in
-/--
-theorem `Algebra.IsAlgebraic.isSepClosed` / 定理 `Algebra.IsAlgebraic.isSepClosed`
+/-- If `E / F` is an algebraic extension, `F` is separably closed,
+then `E` is also separably closed. -/
+/-
+**Algebra.IsAlgebraic.isSepClosed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Algebra.IsAlgebraic.isSepClosed [Algebra.IsAlgebraic F E] [IsSepClosed F] 
+: IsSepClosed E
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.IsAlgebraic.trans`：∀ (R : Type u_1) (S : Type u_2) (A : Type u_3
+) [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Ring A]   [inst_3 : Algebr
+a R S] [inst_4 …
+· 使用定理 `AlgebraicClosure.instIsScalarTower`：∀ (k : Type u) [inst : Field k] {R :
+ Type u_1} {S : Type u_2} [inst_1 : CommSemiring R] [inst_2 : CommSemiring S]   
+[inst_3 : Algebra R S] […
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isSepClosed_iff_isPurelyInseparable_algebraicClosure`：isSepClosed_iff_is
+PurelyInseparable_algebraicClosure [IsAlgClosure F E] : IsSepClosed F ↔ IsPurely
+Inseparable F E
+· 使用定理 `AlgebraicClosure.instIsAlgClosureOfIsAlgebraic`：∀ (k : Type u) [inst : F
+ield k] {L : Type u_1} [inst_1 : Field L] [inst_2 : Algebra k L] [Algebra.IsAlge
+braic k L],   IsAlgClosure k (Algebr…
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `IsPurelyInseparable.tower_top`：IsPurelyInseparable.tower_top [Algebra E 
+K] [IsScalarTower F E K] [h : IsPurelyInseparable F K] : IsPurelyInseparable E K
 
-English:
-theorem Algebra.IsAlgebraic.isSepClosed
-  statement: [Algebra.IsAlgebraic F E]
-  proof: have : Algebra.IsAlgebraic F (AlgebraicClosure E) := .trans F E _
-  (isSepClosed_iff_isPurelyInseparable_algebraicClosure E _).mpr
-    (IsPurelyInseparable.tower_top F E <| AlgebraicClosure E)
-
-中文:
-定理 代数.是代数.isSepClosed
-  结论: [代数.是代数 F E]
-  证明: have : Algebra.IsAlgebraic F (AlgebraicClosure E) := .trans F E _
-  (isSepClosed_iff_isPurelyInseparable_algebraicClosure E _).mpr
-    (IsPurelyInseparable.tower_top F E <| AlgebraicClosure E)
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic, AlgebraicClosure, IsAlgebraic, IsPurelyInseparable, IsPurelyInseparable.tower_top, isSepClosed_iff_isPurelyInseparable_algebraicClosure, tower_top
+--- 原说明 ---
+If `E / F` is an algebraic extension, `F` is separably closed,
+then `E` is also separably closed.
 -/
 theorem Algebra.IsAlgebraic.isSepClosed [Algebra.IsAlgebraic F E]
     [IsSepClosed F] : IsSepClosed E :=
@@ -1618,67 +1971,96 @@ as a natural number. This means that the cardinality of `Field.Emb F E` and the 
 `(separableClosure F E) / F` are both finite or infinite, and when they are finite, they
 coincide. -/
 @[stacks 09HJ "`sepDegree` is defined as the right-hand side of 09HJ"]
-/--
-theorem `finSepDegree_eq` / 定理 `finSepDegree_eq`
+/-
+**Field.finSepDegree_eq** 是 Mathlib 中的一个定理，位于命名空间 `Field`。
+形式化陈述：finSepDegree_eq [Algebra.IsAlgebraic F E] : finSepDegree F E = Cardinal.to
+Nat (sepDegree F E)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Field.finSepDegree_mul_finSepDegree_of_isAlgebraic`：finSepDegree_mul_fin
+SepDegree_of_isAlgebraic [Algebra E K] [IsScalarTower F E K] [Algebra.IsAlgebrai
+c E K] : finSepDegree F E * finSepDegree…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `IsPurelyInseparable.finSepDegree_eq_one`：IsPurelyInseparable.finSepDegre
+e_eq_one [IsPurelyInseparable F E] : finSepDegree F E = 1
+· 使用定理 `Field.finSepDegree_eq_finrank_of_isSeparable`：finSepDegree_eq_finrank_of
+_isSeparable [Algebra.IsSeparable F E] : finSepDegree F E = finrank F E
 
-English:
-theorem finSepDegree_eq
-  given: [Algebra.IsAlgebraic F E]
-  proof: by
-.symm have h := finSepDegree_mul_finSepDegree_of_isAlgebraic F (separableClosure F E) E
-  rwa [finSepDegree_eq_finrank_of_isSeparable F (separableClosure F E),
-    IsPurelyInseparable.finSepDegree_eq_one (separableClosure F E) E, mul_one] at h
-
-中文:
-定理 finSepDegree_eq
-  条件: [代数.是代数 F E]
-  证明: by
-.symm have h := finSepDegree_mul_finSepDegree_of_isAlgebraic F (separableClosure F E) E
-  rwa [finSepDegree_eq_finrank_of_isSeparable F (separableClosure F E),
-    IsPurelyInseparable.finSepDegree_eq_one (separableClosure F E) E, mul_one] at h
-
-Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.finSepDegree_eq_one, finSepDegree_eq_finrank_of_isSeparable, finSepDegree_eq_one, finSepDegree_mul_finSepDegree_of_isAlgebraic, mul_one, separableClosure
+--- 原说明 ---
+If `E / F` is algebraic, then the `Field.finSepDegree F E` is equal to `Field.se
+pDegree F E`
+as a natural number. This means that the cardinality of `Field.Emb F E` and the 
+degree of
+`(separableClosure F E) / F` are both finite or infinite, and when they are fini
+te, they
+coincide.
 -/
 theorem finSepDegree_eq [Algebra.IsAlgebraic F E] :
     finSepDegree F E = Cardinal.toNat (sepDegree F E) := by
-.symm have h := finSepDegree_mul_finSepDegree_of_isAlgebraic F (separableClosure F E) E
+  have h := finSepDegree_mul_finSepDegree_of_isAlgebraic F (separableClosure F E) E |>.symm
   rwa [finSepDegree_eq_finrank_of_isSeparable F (separableClosure F E),
     IsPurelyInseparable.finSepDegree_eq_one (separableClosure F E) E, mul_one] at h
 
-/--
-theorem `finSepDegree_mul_finInsepDegree` / 定理 `finSepDegree_mul_finInsepDegree`
+/-- The finite separable degree multiply by the finite inseparable degree is equal
+to the (finite) field extension degree. -/
+/-
+**Field.finSepDegree_mul_finInsepDegree** 是 Mathlib 中的一个定理，位于命名空间 `Field`。
+形式化陈述：finSepDegree_mul_finInsepDegree : finSepDegree F E * finInsepDegree F E = 
+finrank F E
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Field.sepDegree_mul_insepDegree`：sepDegree_mul_insepDegree : sepDegree F
+ E * insepDegree F E = Module.rank F E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Field.finSepDegree_eq`：finSepDegree_eq [Algebra.IsAlgebraic F E] : finSe
+pDegree F E = Cardinal.toNat (sepDegree F E)
+· 使用定理 `Cardinal.toNat_mul`：toNat_mul (x y : Cardinal) : toNat (x * y) = toNat x
+ * toNat y
+· 使用定理 `Field.finInsepDegree.eq_1`：∀ (F : Type u) (E : Type v) [inst : Field F] 
+[inst_1 : Field E] [inst_2 : Algebra F E],   Field.finInsepDegree F E = Module.f
+inrank (↥(separ…
+· 使用定理 `Module.finrank_of_infinite_dimensional`：finrank_of_infinite_dimensional 
+(h : ¬FiniteDimensional K V) : finrank K V = 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Algebra.IsAlgebraic.trans`：∀ (R : Type u_1) (S : Type u_2) (A : Type u_3
+) [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Ring A]   [inst_3 : Algebr
+a R S] [inst_4 …
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 
-English:
-theorem finSepDegree_mul_finInsepDegree
-  statement: finSepDegree F E * finInsepDegree F E = finrank F E
-  proof: by
-  by_cases halg : Algebra.IsAlgebraic F E
-  · have := congr_arg Cardinal.toNat (sepDegree_mul_insepDegree F E)
-    rwa [Cardinal.toNat_mul, ← finSepDegree_eq F E] at this
-  rw [finInsepDegree]; rw [finrank_of_infinite_dimensional (K := F) (V := E) fun _ =>
-      halg (Algebra.IsAlgebraic.of_finite F E)]; rw [finrank_of_infinite_dimensional (K := separableClosure F E) (V := E) fun _ =>
-      halg (.trans _ (separableClosure F E) _)]; rw [mul_zero]
-
-中文:
-定理 finSepDegree_mul_finInsepDegree
-  结论: finSepDegree F E * finInsepDegree F E = finrank F E
-  证明: by
-  by_cases halg : Algebra.IsAlgebraic F E
-  · have := congr_arg Cardinal.toNat (sepDegree_mul_insepDegree F E)
-    rwa [Cardinal.toNat_mul, ← finSepDegree_eq F E] at this
-  rw [finInsepDegree]; rw [finrank_of_infinite_dimensional (K := F) (V := E) fun _ =>
-      halg (Algebra.IsAlgebraic.of_finite F E)]; rw [finrank_of_infinite_dimensional (K := separableClosure F E) (V := E) fun _ =>
-      halg (.trans _ (separableClosure F E) _)]; rw [mul_zero]
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsAlgebraic.of_finite, Cardinal, Cardinal.toNat, Cardinal.toNat_mul, IsAlgebraic, congr_arg, finInsepDegree, finSepDegree_eq, finrank_of_infinite_dimensional, mul_zero, of_finite, sepDegree_mul_insepDegree, separableClosure, toNat_mul
+--- 原说明 ---
+The finite separable degree multiply by the finite inseparable degree is equal
+to the (finite) field extension degree.
 -/
 theorem finSepDegree_mul_finInsepDegree : finSepDegree F E * finInsepDegree F E = finrank F E := by
   by_cases halg : Algebra.IsAlgebraic F E
   · have := congr_arg Cardinal.toNat (sepDegree_mul_insepDegree F E)
     rwa [Cardinal.toNat_mul, ← finSepDegree_eq F E] at this
-  rw [finInsepDegree]; rw [finrank_of_infinite_dimensional (K := F) (V := E) fun _ =>
-      halg (Algebra.IsAlgebraic.of_finite F E)]; rw [finrank_of_infinite_dimensional (K := separableClosure F E) (V := E) fun _ =>
-      halg (.trans _ (separableClosure F E) _)]; rw [mul_zero]
+  rw [finInsepDegree, finrank_of_infinite_dimensional (K := F) (V := E) fun _ ↦
+      halg (Algebra.IsAlgebraic.of_finite F E),
+    finrank_of_infinite_dimensional (K := separableClosure F E) (V := E) fun _ ↦
+      halg (.trans _ (separableClosure F E) _),
+    mul_zero]
 
 end Field
 
@@ -1686,50 +2068,67 @@ namespace separableClosure
 
 variable [Algebra E K] [IsScalarTower F E K] {F E}
 
-/--
-lemma `adjoin_eq_of_isAlgebraic_of_isSeparable` / 引理 `adjoin_eq_of_isAlgebraic_of_isSeparable`
+/-- If `K / E / F` is a field extension tower, such that `E / F` is algebraic and `K / E`
+is separable, then `E` adjoin `separableClosure F K` is equal to `K`. It is a special case of
+`separableClosure.adjoin_eq_of_isAlgebraic`, and is an intermediate result used to prove it. -/
+/-
+**separableClosure.adjoin_eq_of_isAlgebraic_of_isSeparable** 是 Mathlib 中的一个引理，位于
+命名空间 `separableClosure`。
+形式化陈述：adjoin_eq_of_isAlgebraic_of_isSeparable [Algebra.IsAlgebraic F E] [Algebra
+.IsSeparable E K] : adjoin E (separableClosure F K : Set K) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.isSeparable_tower_top_of_isSeparable`：Algebra.isSeparable_tower_
+top_of_isSeparable [Algebra.IsSeparable F E] : Algebra.IsSeparable L E
+· 使用定理 `IntermediateField.subset_adjoin`：subset_adjoin : S subseteq adjoin F S
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `IsScalarTower.of_algebraMap_eq`：of_algebraMap_eq [Algebra R A] (h : fora
+ll x, algebraMap R A x = algebraMap S A (algebraMap R S x)) : IsScalarTower R S 
+A
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Algebra.IsAlgebraic.trans`：∀ (R : Type u_1) (S : Type u_2) (A : Type u_3
+) [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Ring A]   [inst_3 : Algebr
+a R S] [inst_4 …
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `IsPurelyInseparable.tower_top`：IsPurelyInseparable.tower_top [Algebra E 
+K] [IsScalarTower F E K] [h : IsPurelyInseparable F K] : IsPurelyInseparable E K
+· 使用定理 `IsPurelyInseparable.surjective_algebraMap_of_isSeparable`：IsPurelyInsepa
+rable.surjective_algebraMap_of_isSeparable [IsPurelyInseparable F E] [Algebra.Is
+Separable F E] : Function.Surjective (algebraM…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-lemma adjoin_eq_of_isAlgebraic_of_isSeparable
-  statement: [Algebra.IsAlgebraic F E]
-  proof: top_unique fun x _ => by
-    set S := separableClosure F K
-    set L := adjoin E (S : Set K)
-    have := Algebra.isSeparable_tower_top_of_isSeparable E L K
-    let i : S ->+* L := Subsemiring.inclusion fun x hx => subset_adjoin E (S : Set K) hx
-    let _ : Algebra S L := i.toAlgebra
-    have : IsScalarTower S L K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-    have := Algebra.IsAlgebraic.trans F E K
-    have : IsPurelyInseparable S K := separableClosure.isPurelyInseparable F K
-    have := IsPurelyInseparable.tower_top S L K
-    obtain ⟨y, rfl⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable L K x
-    exact y.2
-
-中文:
-引理 adjoin_eq_of_isAlgebraic_of_isSeparable
-  结论: [代数.是代数 F E]
-  证明: top_unique fun x _ => by
-    set S := separableClosure F K
-    set L := adjoin E (S : Set K)
-    have := Algebra.isSeparable_tower_top_of_isSeparable E L K
-    let i : S ->+* L := Subsemiring.inclusion fun x hx => subset_adjoin E (S : Set K) hx
-    let _ : Algebra S L := i.toAlgebra
-    have : IsScalarTower S L K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-    have := Algebra.IsAlgebraic.trans F E K
-    have : IsPurelyInseparable S K := separableClosure.isPurelyInseparable F K
-    have := IsPurelyInseparable.tower_top S L K
-    obtain ⟨y, rfl⟩ := IsPurelyInseparable.surjective_algebraMap_of_isSeparable L K x
-    exact y.2
-
-Depends on / 依赖: Algebra, Algebra.IsAlgebraic.trans, Algebra.isSeparable_tower_top_of_isSeparable, IsAlgebraic, IsPurelyInseparable, IsPurelyInseparable.tower_top, IsScalarTower, IsScalarTower.of_algebraMap_eq, Subsemiring, Subsemiring.inclusion, adjoin, i.toAlgebra, inclusion, isPurelyInseparable, isSeparable_tower_top_of_isSeparable, of_algebraMap_eq, separableClosure, separableClosure.isPurelyInseparable, subset_adjoin, toAlgebra
+--- 原说明 ---
+If `K / E / F` is a field extension tower, such that `E / F` is algebraic and `K
+ / E`
+is separable, then `E` adjoin `separableClosure F K` is equal to `K`. It is a sp
+ecial case of
+`separableClosure.adjoin_eq_of_isAlgebraic`, and is an intermediate result used 
+to prove it.
 -/
 lemma adjoin_eq_of_isAlgebraic_of_isSeparable [Algebra.IsAlgebraic F E]
     [Algebra.IsSeparable E K] : adjoin E (separableClosure F K : Set K) = ⊤ :=
-  top_unique fun x _ => by
+  top_unique fun x _ ↦ by
     set S := separableClosure F K
     set L := adjoin E (S : Set K)
     have := Algebra.isSeparable_tower_top_of_isSeparable E L K
-    let i : S ->+* L := Subsemiring.inclusion fun x hx => subset_adjoin E (S : Set K) hx
+    let i : S →+* L := Subsemiring.inclusion fun x hx ↦ subset_adjoin E (S : Set K) hx
     let _ : Algebra S L := i.toAlgebra
     have : IsScalarTower S L K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
     have := Algebra.IsAlgebraic.trans F E K
@@ -1739,40 +2138,65 @@ lemma adjoin_eq_of_isAlgebraic_of_isSeparable [Algebra.IsAlgebraic F E]
     exact y.2
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `adjoin_eq_of_isAlgebraic` / 定理 `adjoin_eq_of_isAlgebraic`
+/-- If `K / E / F` is a field extension tower, such that `E / F` is algebraic, then
+`E` adjoin `separableClosure F K` is equal to `separableClosure E K`. -/
+/-
+**separableClosure.adjoin_eq_of_isAlgebraic** 是 Mathlib 中的一个定理，位于命名空间 `separable
+Closure`。
+形式化陈述：adjoin_eq_of_isAlgebraic [Algebra.IsAlgebraic F E] : adjoin E (separableCl
+osure F K) = separableClosure E K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `separableClosure.adjoin_eq_of_isAlgebraic_of_isSeparable`：adjoin_eq_of_i
+sAlgebraic_of_isSeparable [Algebra.IsAlgebraic F E] [Algebra.IsSeparable E K] : 
+adjoin E (separableClosure F K : Set K) = ⊤
+· 使用定理 `IsScalarTower.of_algebraMap_eq`：of_algebraMap_eq [Algebra R A] (h : fora
+ll x, algebraMap R A x = algebraMap S A (algebraMap R S x)) : IsScalarTower R S 
+A
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IntermediateField.lift_adjoin`：lift_adjoin (K : IntermediateField F E) (
+S : Set K) : lift (adjoin F S) = adjoin F (Subtype.val '' S)
+· 使用定理 `IntermediateField.lift_top`：lift_top (K : IntermediateField F E) : lift 
+(F
+· 使用定理 `separableClosure.map_eq_of_separableClosure_eq_bot`：separableClosure.map
+_eq_of_separableClosure_eq_bot [Algebra E K] [IsScalarTower F E K] (h : separabl
+eClosure E K = ⊥) : (separableClosure F …
+· 使用定理 `separableClosure.separableClosure_eq_bot`：separableClosure.separableClos
+ure_eq_bot : separableClosure (separableClosure F E) E = ⊥
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem adjoin_eq_of_isAlgebraic
-  given: [Algebra.IsAlgebraic F E]
-  proof: by
-  set S := separableClosure E K
-  have h := congr_arg lift (adjoin_eq_of_isAlgebraic_of_isSeparable (F := F) S)
-  rw [lift_top]; rw [lift_adjoin] at h
-  have : IsScalarTower F S K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  rw [← h]; rw [← map_eq_of_separableClosure_eq_bot F (separableClosure_eq_bot E K)]
-  simp only [S, coe_map, IsScalarTower.coe_toAlgHom', IntermediateField.algebraMap_apply]
-
-中文:
-定理 adjoin_eq_of_isAlgebraic
-  条件: [代数.是代数 F E]
-  证明: by
-  set S := separableClosure E K
-  have h := congr_arg lift (adjoin_eq_of_isAlgebraic_of_isSeparable (F := F) S)
-  rw [lift_top]; rw [lift_adjoin] at h
-  have : IsScalarTower F S K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  rw [← h]; rw [← map_eq_of_separableClosure_eq_bot F (separableClosure_eq_bot E K)]
-  simp only [S, coe_map, IsScalarTower.coe_toAlgHom', IntermediateField.algebraMap_apply]
-
-Depends on / 依赖: IntermediateField, IntermediateField.algebraMap_apply, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.of_algebraMap_eq, adjoin_eq_of_isAlgebraic_of_isSeparable, algebraMap_apply, coe_map, coe_toAlgHom, congr_arg, lift_adjoin, lift_top, map_eq_of_separableClosure_eq_bot, of_algebraMap_eq, separableClosure, separableClosure_eq_bot
+--- 原说明 ---
+If `K / E / F` is a field extension tower, such that `E / F` is algebraic, then
+`E` adjoin `separableClosure F K` is equal to `separableClosure E K`.
 -/
 theorem adjoin_eq_of_isAlgebraic [Algebra.IsAlgebraic F E] :
     adjoin E (separableClosure F K) = separableClosure E K := by
   set S := separableClosure E K
   have h := congr_arg lift (adjoin_eq_of_isAlgebraic_of_isSeparable (F := F) S)
-  rw [lift_top]; rw [lift_adjoin] at h
+  rw [lift_top, lift_adjoin] at h
   have : IsScalarTower F S K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-  rw [← h]; rw [← map_eq_of_separableClosure_eq_bot F (separableClosure_eq_bot E K)]
+  rw [← h, ← map_eq_of_separableClosure_eq_bot F (separableClosure_eq_bot E K)]
   simp only [S, coe_map, IsScalarTower.coe_toAlgHom', IntermediateField.algebraMap_apply]
 
 end separableClosure
@@ -1783,191 +2207,176 @@ open TensorProduct
 
 section Subalgebra
 
-variable (R A : Type*) [CommSemiring R] [CommSemiring A] [Algebra R A] (p : Nat) [ExpChar A p]
+variable (R A : Type*) [CommSemiring R] [CommSemiring A] [Algebra R A] (p : ℕ) [ExpChar A p]
 
-/--
-Definition of `Subalgebra.perfectClosure` / `Subalgebra.perfectClosure` 的定义
+/-- The perfect closure of `R` in `A` are the elements `x : A` such that `x ^ p ^ n`
+is in `R` for some `n`, where `p` is the exponential characteristic of `R`. -/
+/-
+**Subalgebra.perfectClosure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Subalgebra.perfectClosure : Subalgebra R A where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Subalgebra.perfectClosure
-  signature: : Subalgebra R A where
-  body: {x : A | exists n : Nat, x ^ p ^ n in (algebraMap R A).rangeS}
-  add_mem' := by
-    rintro x y ⟨n, hx⟩ ⟨m, hy⟩
-    use n + m
-    rw [add_pow_expChar_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
-    exact add_mem (pow_mem hx _) (pow_mem hy _)
-  mul_mem' := by
-    rintro x y ⟨n, hx⟩ ⟨m, hy⟩
-    use n + m
-    rw [mul_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
-    exact mul_mem (pow_mem hx _) (pow_mem hy _)
-  algebraMap_mem' := fun x => ⟨0, by rw [pow_zero, pow_one]; exact ⟨x, rfl⟩⟩
-
-中文:
-定义 子代数.perfectClosure
-  签名: : 子代数 R A where
-  定义体: {x : A | exists n : Nat, x ^ p ^ n in (algebraMap R A).rangeS}
-  add_mem' := by
-    rintro x y ⟨n, hx⟩ ⟨m, hy⟩
-    use n + m
-    rw [add_pow_expChar_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
-    exact add_mem (pow_mem hx _) (pow_mem hy _)
-  mul_mem' := by
-    rintro x y ⟨n, hx⟩ ⟨m, hy⟩
-    use n + m
-    rw [mul_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
-    exact mul_mem (pow_mem hx _) (pow_mem hy _)
-  algebraMap_mem' := fun x => ⟨0, by rw [pow_zero, pow_one]; exact ⟨x, rfl⟩⟩
-
-Depends on / 依赖: algebraMap, rangeS
+--- 原说明 ---
+The perfect closure of `R` in `A` are the elements `x : A` such that `x ^ p ^ n`
+is in `R` for some `n`, where `p` is the exponential characteristic of `R`.
 -/
 def Subalgebra.perfectClosure : Subalgebra R A where
-  carrier := {x : A | exists n : Nat, x ^ p ^ n in (algebraMap R A).rangeS}
+  carrier := {x : A | ∃ n : ℕ, x ^ p ^ n ∈ (algebraMap R A).rangeS}
   add_mem' := by
     rintro x y ⟨n, hx⟩ ⟨m, hy⟩
     use n + m
-    rw [add_pow_expChar_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
+    rw [add_pow_expChar_pow, pow_add, pow_mul, mul_comm (_ ^ n), pow_mul]
     exact add_mem (pow_mem hx _) (pow_mem hy _)
   mul_mem' := by
     rintro x y ⟨n, hx⟩ ⟨m, hy⟩
     use n + m
-    rw [mul_pow]; rw [pow_add]; rw [pow_mul]; rw [mul_comm (_ ^ n)]; rw [pow_mul]
+    rw [mul_pow, pow_add, pow_mul, mul_comm (_ ^ n), pow_mul]
     exact mul_mem (pow_mem hx _) (pow_mem hy _)
-  algebraMap_mem' := fun x => ⟨0, by rw [pow_zero, pow_one]; exact ⟨x, rfl⟩⟩
+  algebraMap_mem' := fun x ↦ ⟨0, by rw [pow_zero, pow_one]; exact ⟨x, rfl⟩⟩
 
 variable {R A p}
-
-/--
-theorem `Subalgebra.mem_perfectClosure_iff` / 定理 `Subalgebra.mem_perfectClosure_iff`
-
-English:
-theorem Subalgebra.mem_perfectClosure_iff
-  given: {x : A}
-  proof: Iff.rfl
-
-中文:
-定理 子代数.mem_perfectClosure_iff
-  条件: {x : A}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subalgebra.mem_perfectClosure_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subalgebra.mem_perfectClosure_iff {x : A} : x in perfectClosure R A p ↔ ex
+ists n : Nat, x ^ p ^ n in (algebraMap R A).rangeS
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Subalgebra.mem_perfectClosure_iff {x : A} :
-    x in perfectClosure R A p ↔ exists n : Nat, x ^ p ^ n in (algebraMap R A).rangeS := Iff.rfl
+    x ∈ perfectClosure R A p ↔ ∃ n : ℕ, x ^ p ^ n ∈ (algebraMap R A).rangeS := Iff.rfl
 
 end Subalgebra
 
 variable {k K R : Type*} [Field k] [Field K] [Algebra k K] [CommRing R] [Algebra k R]
 
-/--
-lemma `IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar` / 引理 `IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar`
-
-English:
-lemma IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar
-  proof: by
-  nontriviality (R otimes[k] K)
-  obtain (hq | hq) := expChar_is_prime_or_one k q
-  induction x with
-  | zero => exact ⟨0, 0, by simp⟩
-  | add x y h h' =>
-    have : ExpChar (R otimes[k] K) q := expChar_of_injective_ringHom (algebraMap k _).injective q
-    simp_rw [RingHom.mem_range, ← RingHom.mem_rangeS, ← Subalgebra.mem_perfectClosure_iff] at h h' ⊢
-    exact add_mem h h'
-  | tmul x y =>
-    obtain ⟨n, a, ha⟩ := IsPurelyInseparable.pow_mem k q y
-    use n
-    have : (x ^ q ^ n) otimesₜ[k] (y ^ q ^ n) =
-        (x ^ q ^ n) otimesₜ[k] (1 : K) * (1 : R) otimesₜ[k] (y ^ q ^ n) := by
-      rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]
-    rw [Algebra.TensorProduct.tmul_pow]; rw [this]
-    refine Subring.mul_mem _ ⟨x ^ q ^ n, rfl⟩ ⟨algebraMap k R a, ?_⟩
-    rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.TensorProduct.algebraMap_apply]; rw [Algebra.TensorProduct.tmul_one_eq_one_tmul]; rw [ha]
-  · subst hq
-    have : CharZero k := charZero_of_expChar_one' k
-    exact ⟨0, (Algebra.TensorProduct.includeLeft_surjective R _ <|
-      IsPurelyInseparable.surjective_algebraMap_of_isSeparable k K) _⟩
-
-中文:
-引理 是纯不可分.存在_pow_pow_mem_range_tensorProduct_of_expChar
-  证明: by
-  nontriviality (R otimes[k] K)
-  obtain (hq | hq) := expChar_is_prime_or_one k q
-  induction x with
-  | zero => exact ⟨0, 0, by simp⟩
-  | add x y h h' =>
-    have : ExpChar (R otimes[k] K) q := expChar_of_injective_ringHom (algebraMap k _).injective q
-    simp_rw [RingHom.mem_range, ← RingHom.mem_rangeS, ← Subalgebra.mem_perfectClosure_iff] at h h' ⊢
-    exact add_mem h h'
-  | tmul x y =>
-    obtain ⟨n, a, ha⟩ := IsPurelyInseparable.pow_mem k q y
-    use n
-    have : (x ^ q ^ n) otimesₜ[k] (y ^ q ^ n) =
-        (x ^ q ^ n) otimesₜ[k] (1 : K) * (1 : R) otimesₜ[k] (y ^ q ^ n) := by
-      rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]
-    rw [Algebra.TensorProduct.tmul_pow]; rw [this]
-    refine Subring.mul_mem _ ⟨x ^ q ^ n, rfl⟩ ⟨algebraMap k R a, ?_⟩
-    rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.TensorProduct.algebraMap_apply]; rw [Algebra.TensorProduct.tmul_one_eq_one_tmul]; rw [ha]
-  · subst hq
-    have : CharZero k := charZero_of_expChar_one' k
-    exact ⟨0, (Algebra.TensorProduct.includeLeft_surjective R _ <|
-      IsPurelyInseparable.surjective_algebraMap_of_isSeparable k K) _⟩
-
-Depends on / 依赖: ExpChar, IsPurelyInseparable, IsPurelyInseparable.pow_mem, RingHom, RingHom.mem_range, RingHom.mem_rangeS, Subalgebra, Subalgebra.mem_perfectClosure_iff, add_mem, algebraMap, expChar_is_prime_or_one, expChar_of_injective_ringHom, injective, mem_perfectClosure_iff, mem_range, mem_rangeS, nontriviality, otimes, pow_mem, simp_rw
+/-
+**IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar** 是 Math
+lib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar [IsP
+urelyInseparable k K] (q : Nat) [ExpChar k q] (x : R otimes[k] K) : exists n, x 
+^ q ^ n in (algebraMap R (R otimes[k] K)).range
+参数：q : Nat；x : R otimes[k] K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `expChar_is_prime_or_one`：expChar_is_prime_or_one (q : Nat) [hq : ExpChar
+ R q] : Nat.Prime q ∨ q = 1
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `TensorProduct.zero_tmul`：zero_tmul (n : N) : (0 : M) otimesₜ[R] n = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsPurelyInseparable.pow_mem`：IsPurelyInseparable.pow_mem [IsPurelyInsepa
+rable F E] : exists n : Nat, x ^ q ^ n in (algebraMap F E).range
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Algebra.TensorProduct.tmul_mul_tmul`：tmul_mul_tmul (a₁ a₂ : A) (b₁ b₂ : 
+B) : a₁ otimesₜ[R] b₁ * a₂ otimesₜ[R] b₂ = (a₁ * a₂) otimesₜ[R] (b₁ * b₂)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Algebra.TensorProduct.tmul_pow`：tmul_pow (a : A) (b : B) (k : Nat) : a o
+timesₜ[R] b ^ k = (a ^ k) otimesₜ[R] (b ^ k)
+· 使用定理 `Subring.mul_mem`：∀ {R : Type u} [inst : NonAssocRing R] (s : Subring R) 
+{x y : R}, x ∈ s → y ∈ s → x * y ∈ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
+· 使用定理 `Algebra.TensorProduct.algebraMap_apply`：algebraMap_apply [SMulCommClass 
+R S A] (r : S) : algebraMap S (A otimes[R] B) r = (algebraMap S A) r otimesₜ 1
+· 使用引理 `Algebra.TensorProduct.tmul_one_eq_one_tmul`：tmul_one_eq_one_tmul (r : R)
+ : algebraMap R A r otimesₜ[R] 1 = 1 otimesₜ algebraMap R B r
+· 使用引理 `expChar_of_injective_ringHom`：expChar_of_injective_ringHom [NonAssocSemi
+ring R] [NonAssocSemiring A] {f : R ->+* A} (h : Function.Injective f) (q : Nat)
+ [hR : ExpChar R q…
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+（共 39 条，此处仅展示前 30 条）
 -/
 lemma IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar
-    [IsPurelyInseparable k K] (q : Nat) [ExpChar k q] (x : R otimes[k] K) :
-    exists n, x ^ q ^ n in (algebraMap R (R otimes[k] K)).range := by
-  nontriviality (R otimes[k] K)
+    [IsPurelyInseparable k K] (q : ℕ) [ExpChar k q] (x : R ⊗[k] K) :
+    ∃ n, x ^ q ^ n ∈ (algebraMap R (R ⊗[k] K)).range := by
+  nontriviality (R ⊗[k] K)
   obtain (hq | hq) := expChar_is_prime_or_one k q
   induction x with
   | zero => exact ⟨0, 0, by simp⟩
   | add x y h h' =>
-    have : ExpChar (R otimes[k] K) q := expChar_of_injective_ringHom (algebraMap k _).injective q
+    have : ExpChar (R ⊗[k] K) q := expChar_of_injective_ringHom (algebraMap k _).injective q
     simp_rw [RingHom.mem_range, ← RingHom.mem_rangeS, ← Subalgebra.mem_perfectClosure_iff] at h h' ⊢
     exact add_mem h h'
   | tmul x y =>
     obtain ⟨n, a, ha⟩ := IsPurelyInseparable.pow_mem k q y
     use n
-    have : (x ^ q ^ n) otimesₜ[k] (y ^ q ^ n) =
-        (x ^ q ^ n) otimesₜ[k] (1 : K) * (1 : R) otimesₜ[k] (y ^ q ^ n) := by
-      rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]
-    rw [Algebra.TensorProduct.tmul_pow]; rw [this]
+    have : (x ^ q ^ n) ⊗ₜ[k] (y ^ q ^ n) =
+        (x ^ q ^ n) ⊗ₜ[k] (1 : K) * (1 : R) ⊗ₜ[k] (y ^ q ^ n) := by
+      rw [Algebra.TensorProduct.tmul_mul_tmul, mul_one, one_mul]
+    rw [Algebra.TensorProduct.tmul_pow, this]
     refine Subring.mul_mem _ ⟨x ^ q ^ n, rfl⟩ ⟨algebraMap k R a, ?_⟩
-    rw [← IsScalarTower.algebraMap_apply]; rw [Algebra.TensorProduct.algebraMap_apply]; rw [Algebra.TensorProduct.tmul_one_eq_one_tmul]; rw [ha]
+    rw [← IsScalarTower.algebraMap_apply, Algebra.TensorProduct.algebraMap_apply,
+      Algebra.TensorProduct.tmul_one_eq_one_tmul, ha]
   · subst hq
     have : CharZero k := charZero_of_expChar_one' k
     exact ⟨0, (Algebra.TensorProduct.includeLeft_surjective R _ <|
       IsPurelyInseparable.surjective_algebraMap_of_isSeparable k K) _⟩
-
-/--
-lemma `IsPurelyInseparable.exists_pow_mem_range_tensorProduct` / 引理 `IsPurelyInseparable.exists_pow_mem_range_tensorProduct`
-
-English:
-lemma IsPurelyInseparable.exists_pow_mem_range_tensorProduct
-  statement: [IsPurelyInseparable k K]
-  proof: by
-  let q := ringExpChar k
-  obtain ⟨n, hr⟩ := exists_pow_pow_mem_range_tensorProduct_of_expChar q x
-  refine ⟨q ^ n, pow_pos ?_ _, hr⟩
-  obtain (hq | hq) := expChar_is_prime_or_one k q <;> simp [hq, Nat.Prime.pos]
-
-中文:
-引理 是纯不可分.存在_pow_mem_range_tensorProduct
-  结论: [是纯不可分 k K]
-  证明: by
-  let q := ringExpChar k
-  obtain ⟨n, hr⟩ := exists_pow_pow_mem_range_tensorProduct_of_expChar q x
-  refine ⟨q ^ n, pow_pos ?_ _, hr⟩
-  obtain (hq | hq) := expChar_is_prime_or_one k q <;> simp [hq, Nat.Prime.pos]
-
-Depends on / 依赖: Nat.Prime.pos, exists_pow_pow_mem_range_tensorProduct_of_expChar, expChar_is_prime_or_one, pow_pos, ringExpChar
+/-
+**IsPurelyInseparable.exists_pow_mem_range_tensorProduct** 是 Mathlib 中的一个引理，位于命名
+空间 ``。
+形式化陈述：IsPurelyInseparable.exists_pow_mem_range_tensorProduct [IsPurelyInseparabl
+e k K] (x : R otimes[k] K) : exists n > 0, x ^ n in (algebraMap R (R otimes[k] K
+)).range
+参数：x : R otimes[k] K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `IsPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar`：I
+sPurelyInseparable.exists_pow_pow_mem_range_tensorProduct_of_expChar [IsPurelyIn
+separable k K] (q : Nat) [ExpChar k q] (x : R otimes[k] K) …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `pow_pos`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : PartialO
+rder M₀] {a : M₀} [PosMulStrictMono M₀]   [ZeroLEOneClass M₀], 0 < a → ∀ (n :…
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用引理 `expChar_is_prime_or_one`：expChar_is_prime_or_one (q : Nat) [hq : ExpChar
+ R q] : Nat.Prime q ∨ q = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma IsPurelyInseparable.exists_pow_mem_range_tensorProduct [IsPurelyInseparable k K]
-    (x : R otimes[k] K) : exists n > 0, x ^ n in (algebraMap R (R otimes[k] K)).range := by
+    (x : R ⊗[k] K) : ∃ n > 0, x ^ n ∈ (algebraMap R (R ⊗[k] K)).range := by
   let q := ringExpChar k
   obtain ⟨n, hr⟩ := exists_pow_pow_mem_range_tensorProduct_of_expChar q x
   refine ⟨q ^ n, pow_pos ?_ _, hr⟩
   obtain (hq | hq) := expChar_is_prime_or_one k q <;> simp [hq, Nat.Prime.pos]
 
 end
+

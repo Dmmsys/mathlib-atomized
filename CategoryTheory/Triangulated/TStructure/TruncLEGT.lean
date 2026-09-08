@@ -24,8 +24,8 @@ namespace CategoryTheory
 
 open Limits Pretriangulated
 
-variable {C : Type*} [Category* C] [Preadditive C] [HasZeroObject C] [HasShift C Int]
-  [forall (n : Int), (shiftFunctor C n).Additive] [Pretriangulated C]
+variable {C : Type*} [Category* C] [Preadditive C] [HasZeroObject C] [HasShift C ℤ]
+  [∀ (n : ℤ), (shiftFunctor C n).Additive] [Pretriangulated C]
 
 namespace Triangulated
 
@@ -33,616 +33,425 @@ namespace TStructure
 
 variable (t : TStructure C)
 
-/--
-Definition of `truncLE` / `truncLE` 的定义
+/-- Given a t-structure `t` on a pretriangulated category `C` and `n : ℤ`, this
+is the `≤ n`-truncation functor. See also the natural transformation `truncLEι`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncLE** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Triangulated.TStructure`。
+形式化陈述：truncLE (n : Int) : C ⥤ C
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncLE
-  signature: (n : Int)
-  body: t.truncLT (n + 1)
-
-中文:
-定义 truncLE
-  签名: (n : 整数)
-  定义体: t.truncLT (n + 1)
-
-Depends on / 依赖: t.truncLT, truncLT
+--- 原说明 ---
+Given a t-structure `t` on a pretriangulated category `C` and `n : ℤ`, this
+is the `≤ n`-truncation functor. See also the natural transformation `truncLEι`.
 -/
-noncomputable def truncLE (n : Int) : C ⥤ C := t.truncLT (n + 1)
-
-instance (n : Int) : (t.truncLE n).Additive := by
+noncomputable def truncLE (n : ℤ) : C ⥤ C := t.truncLT (n + 1)
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) : (t.truncLE n).Additive := by
   dsimp only [truncLE]
   infer_instance
-
-/--
-lemma `isLE_truncLE_obj` / 引理 `isLE_truncLE_obj`
-
-English:
-lemma isLE_truncLE_obj
-  given: (X : C) (a b : Int) (hn : a <= b := by lia)
-  proof: t.isLE_truncLT_obj ..
-
-中文:
-引理 isLE_truncLE_obj
-  条件: (X : C) (a b : 整数) (hn : a <= b := by lia)
-  证明: t.isLE_truncLT_obj ..
-
-Depends on / 依赖: isLE_truncLT_obj, t.IsLE, t.isLE_truncLT_obj, t.truncLE, truncLE
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_truncLE_obj** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isLE_truncLE_obj (X : C) (a b : Int) (hn : a <= b
+参数：X : C；a b : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isLE_truncLT_obj`：isLE_truncLT_ob
+j (X : C) (a b : Int) (hn : a <= b + 1
 -/
-lemma isLE_truncLE_obj (X : C) (a b : Int) (hn : a <= b := by lia) :
+lemma isLE_truncLE_obj (X : C) (a b : ℤ) (hn : a ≤ b := by lia) :
     t.IsLE ((t.truncLE a).obj X) b :=
   t.isLE_truncLT_obj ..
-
-instance (n : Int) (X : C) : t.IsLE ((t.truncLE n).obj X) n :=
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) (X : C) : t.IsLE ((t.truncLE n).obj X) n :=
   t.isLE_truncLE_obj ..
 
-/--
-Definition of `truncGT` / `truncGT` 的定义
+/-- Given a t-structure `t` on a pretriangulated category `C` and `n : ℤ`, this
+is the `> n`-truncation functor. See also the natural transformation `truncGTπ`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGT** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Triangulated.TStructure`。
+形式化陈述：truncGT (n : Int) : C ⥤ C
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncGT
-  signature: (n : Int)
-  body: t.truncGE (n + 1)
-
-中文:
-定义 truncGT
-  签名: (n : 整数)
-  定义体: t.truncGE (n + 1)
-
-Depends on / 依赖: t.truncGE, truncGE
+--- 原说明 ---
+Given a t-structure `t` on a pretriangulated category `C` and `n : ℤ`, this
+is the `> n`-truncation functor. See also the natural transformation `truncGTπ`.
 -/
-noncomputable def truncGT (n : Int) : C ⥤ C := t.truncGE (n + 1)
-
-instance (n : Int) : (t.truncGT n).Additive := by
+noncomputable def truncGT (n : ℤ) : C ⥤ C := t.truncGE (n + 1)
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) : (t.truncGT n).Additive := by
   dsimp only [truncGT]
   infer_instance
-
-/--
-lemma `isGE_truncGT_obj` / 引理 `isGE_truncGT_obj`
-
-English:
-lemma isGE_truncGT_obj
-  given: (X : C) (a b : Int) (hn : b <= a + 1 := by lia)
-  proof: t.isGE_truncGE_obj ..
-
-中文:
-引理 isGE_truncGT_obj
-  条件: (X : C) (a b : 整数) (hn : b <= a + 1 := by lia)
-  证明: t.isGE_truncGE_obj ..
-
-Depends on / 依赖: isGE_truncGE_obj, t.IsGE, t.isGE_truncGE_obj, t.truncGT, truncGT
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_truncGT_obj** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isGE_truncGT_obj (X : C) (a b : Int) (hn : b <= a + 1
+参数：X : C；a b : Int。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_truncGE_obj`：isGE_truncGE_ob
+j (X : C) (a b : Int) (hn : b <= a
 -/
-lemma isGE_truncGT_obj (X : C) (a b : Int) (hn : b <= a + 1 := by lia) :
+lemma isGE_truncGT_obj (X : C) (a b : ℤ) (hn : b ≤ a + 1 := by lia) :
     t.IsGE ((t.truncGT a).obj X) b :=
   t.isGE_truncGE_obj ..
-
-instance (n : Int) (X : C) : t.IsGE ((t.truncGT n).obj X) (n + 1) :=
-  t.isGE_truncGT_obj ..
-
-instance (n : Int) (X : C) : t.IsGE ((t.truncGT (n - 1)).obj X) n :=
-  t.isGE_truncGT_obj ..
-
-/--
-Definition of `truncLEIsoTruncLT` / `truncLEIsoTruncLT` 的定义
-
-English:
-definition truncLEIsoTruncLT
-  signature: (a b : Int) (h : a + 1 = b)
-  body: eqToIso (by rw [← h]; rfl)
-
-中文:
-定义 truncLEIsoTruncLT
-  签名: (a b : 整数) (h : a + 1 = b)
-  定义体: eqToIso (by rw [← h]; rfl)
-
-Depends on / 依赖: eqToIso
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable def truncLEIsoTruncLT (a b : Int) (h : a + 1 = b) :
+instance (n : ℤ) (X : C) : t.IsGE ((t.truncGT n).obj X) (n + 1) :=
+  t.isGE_truncGT_obj ..
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) (X : C) : t.IsGE ((t.truncGT (n - 1)).obj X) n :=
+  t.isGE_truncGT_obj ..
+
+/-- The isomorphism `t.truncLE a ≅ t.truncLT b` when `a + 1 = b`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncLEIsoTruncLT** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：truncLEIsoTruncLT (a b : Int) (h : a + 1 = b) : t.truncLE a ≅ t.truncLT b
+参数：a b : Int；h : a + 1 = b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The isomorphism `t.truncLE a ≅ t.truncLT b` when `a + 1 = b`.
+-/
+noncomputable def truncLEIsoTruncLT (a b : ℤ) (h : a + 1 = b) :
     t.truncLE a ≅ t.truncLT b :=
   eqToIso (by rw [← h]; rfl)
 
-/--
-Definition of `truncGTIsoTruncGE` / `truncGTIsoTruncGE` 的定义
+/-- The isomorphism `t.truncGT a ≅ t.truncGE b` when `a + 1 = b`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGTIsoTruncGE** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：truncGTIsoTruncGE (a b : Int) (h : a + 1 = b) : t.truncGT a ≅ t.truncGE b
+参数：a b : Int；h : a + 1 = b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncGTIsoTruncGE
-  signature: (a b : Int) (h : a + 1 = b)
-  body: eqToIso (by rw [← h]; rfl)
-
-中文:
-定义 truncGTIsoTruncGE
-  签名: (a b : 整数) (h : a + 1 = b)
-  定义体: eqToIso (by rw [← h]; rfl)
-
-Depends on / 依赖: eqToIso
+--- 原说明 ---
+The isomorphism `t.truncGT a ≅ t.truncGE b` when `a + 1 = b`.
 -/
-noncomputable def truncGTIsoTruncGE (a b : Int) (h : a + 1 = b) :
+noncomputable def truncGTIsoTruncGE (a b : ℤ) (h : a + 1 = b) :
     t.truncGT a ≅ t.truncGE b :=
   eqToIso (by rw [← h]; rfl)
 
-/--
-Definition of `truncLEι` / `truncLEι` 的定义
+/-- The natural transformation `t.truncLE n ⟶ 𝟭 C` when `t` is a t-structure
+on a category `C` and `n : ℤ`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncLE** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Triangulated.TStructure`。
+形式化陈述：truncLE (n : Int) : C ⥤ C
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncLEι
-  signature: (n : Int)
-  body: t.truncLTι (n + 1)
-
-中文:
-定义 truncLEι
-  签名: (n : 整数)
-  定义体: t.truncLTι (n + 1)
-
-Depends on / 依赖: t.truncLT
+--- 原说明 ---
+The natural transformation `t.truncLE n ⟶ 𝟭 C` when `t` is a t-structure
+on a category `C` and `n : ℤ`.
 -/
-noncomputable def truncLEι (n : Int) : t.truncLE n ⟶ 𝟭 C := t.truncLTι (n + 1)
+noncomputable def truncLEι (n : ℤ) : t.truncLE n ⟶ 𝟭 C := t.truncLTι (n + 1)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `truncLEIsoTruncLT_hom_ι` / 引理 `truncLEIsoTruncLT_hom_ι`
-
-English:
-lemma truncLEIsoTruncLT_hom_ι
-  given: (a b : Int) (h : a + 1 = b)
-  proof: by
-  subst h
-  dsimp [truncLEIsoTruncLT, truncLEι]
-  rw [Category.id_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 truncLEIsoTruncLT_hom_ι
-  条件: (a b : 整数) (h : a + 1 = b)
-  证明: by
-  subst h
-  dsimp [truncLEIsoTruncLT, truncLEι]
-  rw [Category.id_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.id_comp, id_comp, truncLEIsoTruncLT
+/-
+**CategoryTheory.Triangulated.TStructure.truncLEIsoTruncLT_hom_** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma truncLEIsoTruncLT_hom_ι (a b : Int) (h : a + 1 = b) :
+lemma truncLEIsoTruncLT_hom_ι (a b : ℤ) (h : a + 1 = b) :
     (t.truncLEIsoTruncLT a b h).hom ≫ t.truncLTι b = t.truncLEι a := by
   subst h
   dsimp [truncLEIsoTruncLT, truncLEι]
   rw [Category.id_comp]
 
 @[reassoc (attr := simp)]
-/--
-lemma `truncLEIsoTruncLT_hom_ι_app` / 引理 `truncLEIsoTruncLT_hom_ι_app`
-
-English:
-lemma truncLEIsoTruncLT_hom_ι_app
-  given: (a b : Int) (h : a + 1 = b) (X : C)
-  proof: congr_app (t.truncLEIsoTruncLT_hom_ι a b h) X
-
-中文:
-引理 truncLEIsoTruncLT_hom_ι_app
-  条件: (a b : 整数) (h : a + 1 = b) (X : C)
-  证明: congr_app (t.truncLEIsoTruncLT_hom_ι a b h) X
-
-Depends on / 依赖: congr_app, t.truncLEIsoTruncLT_hom_
+/-
+**CategoryTheory.Triangulated.TStructure.truncLEIsoTruncLT_hom_** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma truncLEIsoTruncLT_hom_ι_app (a b : Int) (h : a + 1 = b) (X : C) :
+lemma truncLEIsoTruncLT_hom_ι_app (a b : ℤ) (h : a + 1 = b) (X : C) :
     (t.truncLEIsoTruncLT a b h).hom.app X ≫ (t.truncLTι b).app X = (t.truncLEι a).app X :=
   congr_app (t.truncLEIsoTruncLT_hom_ι a b h) X
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `truncLEIsoTruncLT_inv_ι` / 引理 `truncLEIsoTruncLT_inv_ι`
-
-English:
-lemma truncLEIsoTruncLT_inv_ι
-  given: (a b : Int) (h : a + 1 = b)
-  proof: by
-  subst h
-  dsimp [truncLEIsoTruncLT, truncLEι, truncLE]
-  rw [Category.id_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 truncLEIsoTruncLT_inv_ι
-  条件: (a b : 整数) (h : a + 1 = b)
-  证明: by
-  subst h
-  dsimp [truncLEIsoTruncLT, truncLEι, truncLE]
-  rw [Category.id_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.id_comp, id_comp, truncLE, truncLEIsoTruncLT
+/-
+**CategoryTheory.Triangulated.TStructure.truncLEIsoTruncLT_inv_** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma truncLEIsoTruncLT_inv_ι (a b : Int) (h : a + 1 = b) :
+lemma truncLEIsoTruncLT_inv_ι (a b : ℤ) (h : a + 1 = b) :
     (t.truncLEIsoTruncLT a b h).inv ≫ t.truncLEι a = t.truncLTι b := by
   subst h
   dsimp [truncLEIsoTruncLT, truncLEι, truncLE]
   rw [Category.id_comp]
 
 @[reassoc (attr := simp)]
-/--
-lemma `truncLEIsoTruncLT_inv_ι_app` / 引理 `truncLEIsoTruncLT_inv_ι_app`
-
-English:
-lemma truncLEIsoTruncLT_inv_ι_app
-  given: (a b : Int) (h : a + 1 = b) (X : C)
-  proof: congr_app (t.truncLEIsoTruncLT_inv_ι a b h) X
-
-中文:
-引理 truncLEIsoTruncLT_inv_ι_app
-  条件: (a b : 整数) (h : a + 1 = b) (X : C)
-  证明: congr_app (t.truncLEIsoTruncLT_inv_ι a b h) X
-
-Depends on / 依赖: congr_app, t.truncLEIsoTruncLT_inv_
+/-
+**CategoryTheory.Triangulated.TStructure.truncLEIsoTruncLT_inv_** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma truncLEIsoTruncLT_inv_ι_app (a b : Int) (h : a + 1 = b) (X : C) :
+lemma truncLEIsoTruncLT_inv_ι_app (a b : ℤ) (h : a + 1 = b) (X : C) :
     (t.truncLEIsoTruncLT a b h).inv.app X ≫ (t.truncLEι a).app X = (t.truncLTι b).app X :=
   congr_app (t.truncLEIsoTruncLT_inv_ι a b h) X
 
-/--
-Definition of `natTransTruncLEOfLE` / `natTransTruncLEOfLE` 的定义
+/-- The natural transformation `t.truncLE a ⟶ t.truncLE b` when `a ≤ b`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：natTransTruncLEOfLE (a b : Int) (h : a <= b) : t.truncLE a ⟶ t.truncLE b
+参数：a b : Int；h : a <= b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natTransTruncLEOfLE
-  signature: (a b : Int) (h : a <= b)
-  body: t.natTransTruncLTOfLE (a + 1) (b + 1) (by lia)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 natTransTruncLEOfLE
-  签名: (a b : 整数) (h : a <= b)
-  定义体: t.natTransTruncLTOfLE (a + 1) (b + 1) (by lia)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: natTransTruncLTOfLE, t.natTransTruncLTOfLE
+--- 原说明 ---
+The natural transformation `t.truncLE a ⟶ t.truncLE b` when `a ≤ b`.
 -/
-noncomputable def natTransTruncLEOfLE (a b : Int) (h : a <= b) :
+noncomputable def natTransTruncLEOfLE (a b : ℤ) (h : a ≤ b) :
     t.truncLE a ⟶ t.truncLE b :=
   t.natTransTruncLTOfLE (a + 1) (b + 1) (by lia)
 
 @[reassoc (attr := simp)]
-/--
-lemma `natTransTruncLEOfLE_ι_app` / 引理 `natTransTruncLEOfLE_ι_app`
-
-English:
-lemma natTransTruncLEOfLE_ι_app
-  given: (n₀ n₁ : Int) (h : n₀ <= n₁) (X : C)
-  proof: t.natTransTruncLTOfLE_ι_app _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 natTransTruncLEOfLE_ι_app
-  条件: (n₀ n₁ : 整数) (h : n₀ <= n₁) (X : C)
-  证明: t.natTransTruncLTOfLE_ι_app _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: t.natTransTruncLTOfLE_
+/-
+**CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natTransTruncLEOfLE_ι_app (n₀ n₁ : Int) (h : n₀ <= n₁) (X : C) :
+lemma natTransTruncLEOfLE_ι_app (n₀ n₁ : ℤ) (h : n₀ ≤ n₁) (X : C) :
     (t.natTransTruncLEOfLE n₀ n₁ h).app X ≫ (t.truncLEι n₁).app X =
       (t.truncLEι n₀).app X :=
   t.natTransTruncLTOfLE_ι_app _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `natTransTruncLEOfLE_ι` / 引理 `natTransTruncLEOfLE_ι`
-
-English:
-lemma natTransTruncLEOfLE_ι
-  given: (a b : Int) (h : a <= b)
-  proof: by cat_disch
-
-@[simp]
-
-中文:
-引理 natTransTruncLEOfLE_ι
-  条件: (a b : 整数) (h : a <= b)
-  证明: by cat_disch
-
-@[simp]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natTransTruncLEOfLE_ι (a b : Int) (h : a <= b) :
+lemma natTransTruncLEOfLE_ι (a b : ℤ) (h : a ≤ b) :
     t.natTransTruncLEOfLE a b h ≫ t.truncLEι b = t.truncLEι a := by cat_disch
 
 @[simp]
-/--
-lemma `natTransTruncLEOfLE_refl` / 引理 `natTransTruncLEOfLE_refl`
-
-English:
-lemma natTransTruncLEOfLE_refl
-  given: (a : Int)
-  proof: t.natTransTruncLTOfLE_refl _
-
-@[simp]
-
-中文:
-引理 natTransTruncLEOfLE_refl
-  条件: (a : 整数)
-  证明: t.natTransTruncLTOfLE_refl _
-
-@[simp]
-
-Depends on / 依赖: natTransTruncLTOfLE_refl, t.natTransTruncLTOfLE_refl
+/-
+**CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_refl** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：natTransTruncLEOfLE_refl (a : Int) : t.natTransTruncLEOfLE a a (by rfl) = 
+𝟙 _
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.natTransTruncLTOfLE_refl`：natTran
+sTruncLTOfLE_refl (a : Int) : t.natTransTruncLTOfLE a a (by rfl) = 𝟙 _
 -/
-lemma natTransTruncLEOfLE_refl (a : Int) :
+lemma natTransTruncLEOfLE_refl (a : ℤ) :
     t.natTransTruncLEOfLE a a (by rfl) = 𝟙 _ :=
   t.natTransTruncLTOfLE_refl _
 
 @[simp]
-/--
-lemma `natTransTruncLEOfLE_trans` / 引理 `natTransTruncLEOfLE_trans`
-
-English:
-lemma natTransTruncLEOfLE_trans
-  given: (a b c : Int) (hab : a <= b) (hbc : b <= c)
-  proof: t.natTransTruncLTOfLE_trans _ _ _ _ _
-
-中文:
-引理 natTransTruncLEOfLE_trans
-  条件: (a b c : 整数) (hab : a <= b) (hbc : b <= c)
-  证明: t.natTransTruncLTOfLE_trans _ _ _ _ _
-
-Depends on / 依赖: natTransTruncLTOfLE_trans, t.natTransTruncLTOfLE_trans
+/-
+**CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_trans** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：natTransTruncLEOfLE_trans (a b c : Int) (hab : a <= b) (hbc : b <= c) : t.
+natTransTruncLEOfLE a b hab ≫ t.natTransTruncLEOfLE b c hbc = t.natTransTruncLEO
+fLE a c (hab.trans hbc)
+参数：a b c : Int；hab : a <= b；hbc : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.natTransTruncLTOfLE_trans`：natTra
+nsTruncLTOfLE_trans (a b c : Int) (hab : a <= b) (hbc : b <= c) : t.natTransTrun
+cLTOfLE a b hab ≫ t.natTransTruncLTOfLE b c hbc = t.na…
 -/
-lemma natTransTruncLEOfLE_trans (a b c : Int) (hab : a <= b) (hbc : b <= c) :
+lemma natTransTruncLEOfLE_trans (a b c : ℤ) (hab : a ≤ b) (hbc : b ≤ c) :
     t.natTransTruncLEOfLE a b hab ≫ t.natTransTruncLEOfLE b c hbc =
       t.natTransTruncLEOfLE a c (hab.trans hbc) :=
   t.natTransTruncLTOfLE_trans _ _ _ _ _
-
-/--
-lemma `natTransTruncLEOfLE_refl_app` / 引理 `natTransTruncLEOfLE_refl_app`
-
-English:
-lemma natTransTruncLEOfLE_refl_app
-  given: (a : Int) (X : C)
-  proof: congr_app (t.natTransTruncLEOfLE_refl a) X
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 natTransTruncLEOfLE_refl_app
-  条件: (a : 整数) (X : C)
-  证明: congr_app (t.natTransTruncLEOfLE_refl a) X
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: congr_app, natTransTruncLEOfLE_refl, t.natTransTruncLEOfLE_refl
+/-
+**CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_refl_app** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：natTransTruncLEOfLE_refl_app (a : Int) (X : C) : (t.natTransTruncLEOfLE a 
+a (by rfl)).app X = 𝟙 _
+参数：a : Int；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用引理 `CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_refl`：natTran
+sTruncLEOfLE_refl (a : Int) : t.natTransTruncLEOfLE a a (by rfl) = 𝟙 _
 -/
-lemma natTransTruncLEOfLE_refl_app (a : Int) (X : C) :
+lemma natTransTruncLEOfLE_refl_app (a : ℤ) (X : C) :
     (t.natTransTruncLEOfLE a a (by rfl)).app X = 𝟙 _ :=
   congr_app (t.natTransTruncLEOfLE_refl a) X
 
 @[reassoc (attr := simp)]
-/--
-lemma `natTransTruncLEOfLE_trans_app` / 引理 `natTransTruncLEOfLE_trans_app`
-
-English:
-lemma natTransTruncLEOfLE_trans_app
-  given: (a b c : Int) (hab : a <= b) (hbc : b <= c) (X : C)
-  proof: congr_app (t.natTransTruncLEOfLE_trans a b c hab hbc) X
-
-中文:
-引理 natTransTruncLEOfLE_trans_app
-  条件: (a b c : 整数) (hab : a <= b) (hbc : b <= c) (X : C)
-  证明: congr_app (t.natTransTruncLEOfLE_trans a b c hab hbc) X
-
-Depends on / 依赖: congr_app, natTransTruncLEOfLE_trans, t.natTransTruncLEOfLE_trans
+/-
+**CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_trans_app** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：natTransTruncLEOfLE_trans_app (a b c : Int) (hab : a <= b) (hbc : b <= c) 
+(X : C) : (t.natTransTruncLEOfLE a b hab).app X ≫ (t.natTransTruncLEOfLE b c hbc
+).app X = (t.natTransTruncLEOfLE a c (hab.trans hbc)).app X
+参数：a b c : Int；hab : a <= b；hbc : b <= c；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.Triangulated.TStructure.natTransTruncLEOfLE_trans`：natTra
+nsTruncLEOfLE_trans (a b c : Int) (hab : a <= b) (hbc : b <= c) : t.natTransTrun
+cLEOfLE a b hab ≫ t.natTransTruncLEOfLE b c hbc = t.na…
 -/
-lemma natTransTruncLEOfLE_trans_app (a b c : Int) (hab : a <= b) (hbc : b <= c) (X : C) :
+lemma natTransTruncLEOfLE_trans_app (a b c : ℤ) (hab : a ≤ b) (hbc : b ≤ c) (X : C) :
     (t.natTransTruncLEOfLE a b hab).app X ≫ (t.natTransTruncLEOfLE b c hbc).app X =
       (t.natTransTruncLEOfLE a c (hab.trans hbc)).app X :=
   congr_app (t.natTransTruncLEOfLE_trans a b c hab hbc) X
 
-/--
-Definition of `truncGTπ` / `truncGTπ` 的定义
+/-- The natural transformation `𝟭 C ⟶ t.truncGT n` when `t` is a t-structure
+on a category `C` and `n : ℤ`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGT** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Triangulated.TStructure`。
+形式化陈述：truncGT (n : Int) : C ⥤ C
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncGTπ
-  signature: (n : Int)
-  body: t.truncGEπ (n + 1)
-
-中文:
-定义 truncGTπ
-  签名: (n : 整数)
-  定义体: t.truncGEπ (n + 1)
-
-Depends on / 依赖: t.truncGE
+--- 原说明 ---
+The natural transformation `𝟭 C ⟶ t.truncGT n` when `t` is a t-structure
+on a category `C` and `n : ℤ`.
 -/
-noncomputable def truncGTπ (n : Int) : 𝟭 C ⟶ t.truncGT n := t.truncGEπ (n + 1)
+noncomputable def truncGTπ (n : ℤ) : 𝟭 C ⟶ t.truncGT n := t.truncGEπ (n + 1)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `π_truncGTIsoTruncGE_hom` / 引理 `π_truncGTIsoTruncGE_hom`
-
-English:
-lemma π_truncGTIsoTruncGE_hom
-  given: (a b : Int) (h : a + 1 = b)
-  proof: by
-  subst h
-  dsimp [truncGTIsoTruncGE, truncGTπ]
-  rw [Category.comp_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 π_truncGTIsoTruncGE_hom
-  条件: (a b : 整数) (h : a + 1 = b)
-  证明: by
-  subst h
-  dsimp [truncGTIsoTruncGE, truncGTπ]
-  rw [Category.comp_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, truncGTIsoTruncGE
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma π_truncGTIsoTruncGE_hom (a b : Int) (h : a + 1 = b) :
+lemma π_truncGTIsoTruncGE_hom (a b : ℤ) (h : a + 1 = b) :
     t.truncGTπ a ≫ (t.truncGTIsoTruncGE a b h).hom = t.truncGEπ b := by
   subst h
   dsimp [truncGTIsoTruncGE, truncGTπ]
   rw [Category.comp_id]
 
 @[reassoc (attr := simp)]
-/--
-lemma `π_truncGTIsoTruncGE_hom_ι_app` / 引理 `π_truncGTIsoTruncGE_hom_ι_app`
-
-English:
-lemma π_truncGTIsoTruncGE_hom_ι_app
-  given: (a b : Int) (h : a + 1 = b) (X : C)
-  proof: congr_app (t.π_truncGTIsoTruncGE_hom a b h) X
-
-中文:
-引理 π_truncGTIsoTruncGE_hom_ι_app
-  条件: (a b : 整数) (h : a + 1 = b) (X : C)
-  证明: congr_app (t.π_truncGTIsoTruncGE_hom a b h) X
-
-Depends on / 依赖: congr_app
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma π_truncGTIsoTruncGE_hom_ι_app (a b : Int) (h : a + 1 = b) (X : C) :
+lemma π_truncGTIsoTruncGE_hom_ι_app (a b : ℤ) (h : a + 1 = b) (X : C) :
     (t.truncGTπ a).app X ≫ (t.truncGTIsoTruncGE a b h).hom.app X = (t.truncGEπ b).app X :=
   congr_app (t.π_truncGTIsoTruncGE_hom a b h) X
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `π_truncGTIsoTruncGE_inv` / 引理 `π_truncGTIsoTruncGE_inv`
-
-English:
-lemma π_truncGTIsoTruncGE_inv
-  given: (a b : Int) (h : a + 1 = b)
-  proof: by
-  subst h
-  dsimp [truncGTIsoTruncGE, truncGTπ, truncGT]
-  rw [Category.comp_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 π_truncGTIsoTruncGE_inv
-  条件: (a b : 整数) (h : a + 1 = b)
-  证明: by
-  subst h
-  dsimp [truncGTIsoTruncGE, truncGTπ, truncGT]
-  rw [Category.comp_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, truncGT, truncGTIsoTruncGE
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma π_truncGTIsoTruncGE_inv (a b : Int) (h : a + 1 = b) :
+lemma π_truncGTIsoTruncGE_inv (a b : ℤ) (h : a + 1 = b) :
     t.truncGEπ b ≫ (t.truncGTIsoTruncGE a b h).inv = t.truncGTπ a := by
   subst h
   dsimp [truncGTIsoTruncGE, truncGTπ, truncGT]
   rw [Category.comp_id]
 
 @[reassoc (attr := simp)]
-/--
-lemma `π_truncGTIsoTruncGE_inv_ι_app` / 引理 `π_truncGTIsoTruncGE_inv_ι_app`
-
-English:
-lemma π_truncGTIsoTruncGE_inv_ι_app
-  given: (a b : Int) (h : a + 1 = b) (X : C)
-  proof: congr_app (t.π_truncGTIsoTruncGE_inv a b h) X
-
-中文:
-引理 π_truncGTIsoTruncGE_inv_ι_app
-  条件: (a b : 整数) (h : a + 1 = b) (X : C)
-  证明: congr_app (t.π_truncGTIsoTruncGE_inv a b h) X
-
-Depends on / 依赖: congr_app
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma π_truncGTIsoTruncGE_inv_ι_app (a b : Int) (h : a + 1 = b) (X : C) :
+lemma π_truncGTIsoTruncGE_inv_ι_app (a b : ℤ) (h : a + 1 = b) (X : C) :
     (t.truncGEπ b).app X ≫ (t.truncGTIsoTruncGE a b h).inv.app X = (t.truncGTπ a).app X :=
   congr_app (t.π_truncGTIsoTruncGE_inv a b h) X
 
-/--
-Definition of `truncGEδLE` / `truncGEδLE` 的定义
+/-- The connecting homomorphism `(t.truncGE b).obj X ⟶ ((t.truncLE a).obj X)⟦1⟧`
+when `a + 1 = b`, as a natural transformation. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGE** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Triangulated.TStructure`。
+形式化陈述：truncGE (n : Int) : C ⥤ C
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncGEδLE
-  signature: (a b : Int) (h : a + 1 = b)
-  body: t.truncGEδLT b ≫ Functor.whiskerRight (t.truncLEIsoTruncLT a b h).inv (shiftFunctor C (1 : Int))
-
-中文:
-定义 truncGEδLE
-  签名: (a b : 整数) (h : a + 1 = b)
-  定义体: t.truncGEδLT b ≫ Functor.whiskerRight (t.truncLEIsoTruncLT a b h).inv (shiftFunctor C (1 : Int))
-
-Depends on / 依赖: Functor, Functor.whiskerRight, shiftFunctor, t.truncGE, t.truncLEIsoTruncLT, truncLEIsoTruncLT, whiskerRight
+--- 原说明 ---
+The connecting homomorphism `(t.truncGE b).obj X ⟶ ((t.truncLE a).obj X)⟦1⟧`
+when `a + 1 = b`, as a natural transformation.
 -/
-noncomputable def truncGEδLE (a b : Int) (h : a + 1 = b) :
-    t.truncGE b ⟶ t.truncLE a ⋙ shiftFunctor C (1 : Int) :=
-  t.truncGEδLT b ≫ Functor.whiskerRight (t.truncLEIsoTruncLT a b h).inv (shiftFunctor C (1 : Int))
+noncomputable def truncGEδLE (a b : ℤ) (h : a + 1 = b) :
+    t.truncGE b ⟶ t.truncLE a ⋙ shiftFunctor C (1 : ℤ) :=
+  t.truncGEδLT b ≫ Functor.whiskerRight (t.truncLEIsoTruncLT a b h).inv (shiftFunctor C (1 : ℤ))
 
 /-- The distinguished triangle `(t.truncLE a).obj A ⟶ A ⟶ (t.truncGE b).obj A ⟶ ...`
 as a functor `C ⥤ Triangle C` when `t` is a `t`-structure on a pretriangulated
 category `C` and `a + 1 = b`. -/
 @[simps!]
-/--
-Definition of `triangleLEGE` / `triangleLEGE` 的定义
+/-
+**CategoryTheory.Triangulated.TStructure.triangleLEGE** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Triangulated.TStructure`。
+形式化陈述：triangleLEGE (a b : Int) (h : a + 1 = b) : C ⥤ Triangle C
+参数：a b : Int；h : a + 1 = b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleLEGE
-  signature: (a b : Int) (h : a + 1 = b)
-  body: Triangle.functorMk (t.truncLEι a) (t.truncGEπ b) (t.truncGEδLE a b h)
-
-中文:
-定义 triangleLEGE
-  签名: (a b : 整数) (h : a + 1 = b)
-  定义体: Triangle.functorMk (t.truncLEι a) (t.truncGEπ b) (t.truncGEδLE a b h)
-
-Depends on / 依赖: Triangle, Triangle.functorMk, functorMk, t.truncGE, t.truncLE
+--- 原说明 ---
+The distinguished triangle `(t.truncLE a).obj A ⟶ A ⟶ (t.truncGE b).obj A ⟶ ...`
+as a functor `C ⥤ Triangle C` when `t` is a `t`-structure on a pretriangulated
+category `C` and `a + 1 = b`.
 -/
-noncomputable def triangleLEGE (a b : Int) (h : a + 1 = b) : C ⥤ Triangle C :=
+noncomputable def triangleLEGE (a b : ℤ) (h : a + 1 = b) : C ⥤ Triangle C :=
   Triangle.functorMk (t.truncLEι a) (t.truncGEπ b) (t.truncGEδLE a b h)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `triangleLEGEIsoTriangleLTGE` / `triangleLEGEIsoTriangleLTGE` 的定义
+/-- The natural isomorphism of triangles `t.triangleLEGE a b h ≅ t.triangleLTGE b`
+when `a + 1 = b`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.triangleLEGEIsoTriangleLTGE** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：triangleLEGEIsoTriangleLTGE (a b : Int) (h : a + 1 = b) : t.triangleLEGE a
+ b h ≅ t.triangleLTGE b
+参数：a b : Int；h : a + 1 = b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleLEGEIsoTriangleLTGE
-  signature: (a b : Int) (h : a + 1 = b)
-  body: by
-  refine Triangle.functorIsoMk _ _ (t.truncLEIsoTruncLT a b h) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
-  · cat_disch
-  · cat_disch
-  · ext
-    dsimp [truncGEδLE]
-    simp only [Category.assoc, Category.id_comp, ← Functor.map_comp,
-      Iso.inv_hom_id_app, Functor.map_id, Category.comp_id]
-
-中文:
-定义 triangleLEGEIsoTriangleLTGE
-  签名: (a b : 整数) (h : a + 1 = b)
-  定义体: by
-  refine Triangle.functorIsoMk _ _ (t.truncLEIsoTruncLT a b h) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
-  · cat_disch
-  · cat_disch
-  · ext
-    dsimp [truncGEδLE]
-    simp only [Category.assoc, Category.id_comp, ← Functor.map_comp,
-      Iso.inv_hom_id_app, Functor.map_id, Category.comp_id]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Functor, Functor.map_comp, Functor.map_id, Iso.inv_hom_id_app, Iso.refl, Triangle, Triangle.functorIsoMk, cat_disch, comp_id, functorIsoMk, id_comp, inv_hom_id_app, map_comp, map_id, t.truncLEIsoTruncLT, truncLEIsoTruncLT
+--- 原说明 ---
+The natural isomorphism of triangles `t.triangleLEGE a b h ≅ t.triangleLTGE b`
+when `a + 1 = b`.
 -/
-noncomputable def triangleLEGEIsoTriangleLTGE (a b : Int) (h : a + 1 = b) :
+noncomputable def triangleLEGEIsoTriangleLTGE (a b : ℤ) (h : a + 1 = b) :
     t.triangleLEGE a b h ≅ t.triangleLTGE b := by
   refine Triangle.functorIsoMk _ _ (t.truncLEIsoTruncLT a b h) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
   · cat_disch
@@ -651,98 +460,82 @@ noncomputable def triangleLEGEIsoTriangleLTGE (a b : Int) (h : a + 1 = b) :
     dsimp [truncGEδLE]
     simp only [Category.assoc, Category.id_comp, ← Functor.map_comp,
       Iso.inv_hom_id_app, Functor.map_id, Category.comp_id]
-
-/--
-lemma `triangleLEGE_distinguished` / 引理 `triangleLEGE_distinguished`
-
-English:
-lemma triangleLEGE_distinguished
-  given: (a b : Int) (h : a + 1 = b) (X : C)
-  proof: isomorphic_distinguished _ (t.triangleLTGE_distinguished b X) _
-    ((t.triangleLEGEIsoTriangleLTGE a b h).app X)
-
-中文:
-引理 triangleLEGE_distinguished
-  条件: (a b : 整数) (h : a + 1 = b) (X : C)
-  证明: isomorphic_distinguished _ (t.triangleLTGE_distinguished b X) _
-    ((t.triangleLEGEIsoTriangleLTGE a b h).app X)
-
-Depends on / 依赖: isomorphic_distinguished, t.triangleLEGEIsoTriangleLTGE, t.triangleLTGE_distinguished, triangleLEGEIsoTriangleLTGE, triangleLTGE_distinguished
+/-
+**CategoryTheory.Triangulated.TStructure.triangleLEGE_distinguished** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：triangleLEGE_distinguished (a b : Int) (h : a + 1 = b) (X : C) : (t.triang
+leLEGE a b h).obj X in distTriang C
+参数：a b : Int；h : a + 1 = b；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.triangleLTGE_distinguished`：trian
+gleLTGE_distinguished (n : Int) (X : C) : (t.triangleLTGE n).obj X in distTriang
+ C
 -/
-lemma triangleLEGE_distinguished (a b : Int) (h : a + 1 = b) (X : C) :
-    (t.triangleLEGE a b h).obj X in distTriang C :=
+lemma triangleLEGE_distinguished (a b : ℤ) (h : a + 1 = b) (X : C) :
+    (t.triangleLEGE a b h).obj X ∈ distTriang C :=
   isomorphic_distinguished _ (t.triangleLTGE_distinguished b X) _
     ((t.triangleLEGEIsoTriangleLTGE a b h).app X)
 
-/--
-Definition of `truncGTδLE` / `truncGTδLE` 的定义
+/-- The connecting homomorphism `(t.truncGT n).obj X ⟶ ((t.truncLE n).obj X)⟦1⟧`
+for `n : ℤ`, as a natural transformation. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGT** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Triangulated.TStructure`。
+形式化陈述：truncGT (n : Int) : C ⥤ C
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncGTδLE
-  signature: (n : Int)
-  body: (t.truncGTIsoTruncGE n (n + 1) rfl).hom ≫ t.truncGEδLE n (n + 1) (by lia)
-
-中文:
-定义 truncGTδLE
-  签名: (n : 整数)
-  定义体: (t.truncGTIsoTruncGE n (n + 1) rfl).hom ≫ t.truncGEδLE n (n + 1) (by lia)
-
-Depends on / 依赖: t.truncGE, t.truncGTIsoTruncGE, truncGTIsoTruncGE
+--- 原说明 ---
+The connecting homomorphism `(t.truncGT n).obj X ⟶ ((t.truncLE n).obj X)⟦1⟧`
+for `n : ℤ`, as a natural transformation.
 -/
-noncomputable def truncGTδLE (n : Int) :
-    t.truncGT n ⟶ t.truncLE n ⋙ shiftFunctor C (1 : Int) :=
+noncomputable def truncGTδLE (n : ℤ) :
+    t.truncGT n ⟶ t.truncLE n ⋙ shiftFunctor C (1 : ℤ) :=
   (t.truncGTIsoTruncGE n (n + 1) rfl).hom ≫ t.truncGEδLE n (n + 1) (by lia)
 
 /-- The distinguished triangle `(t.truncLE n).obj A ⟶ A ⟶ (t.truncGT n).obj A ⟶ ...`
 as a functor `C ⥤ Triangle C` when `t` is a t-structure on a pretriangulated
 category `C` and `n : ℤ`. -/
 @[simps!]
-/--
-Definition of `triangleLEGT` / `triangleLEGT` 的定义
+/-
+**CategoryTheory.Triangulated.TStructure.triangleLEGT** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Triangulated.TStructure`。
+形式化陈述：triangleLEGT (n : Int) : C ⥤ Triangle C
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleLEGT
-  signature: (n : Int)
-  body: Triangle.functorMk (t.truncLEι n) (t.truncGTπ n) (t.truncGTδLE n)
-
-中文:
-定义 triangleLEGT
-  签名: (n : 整数)
-  定义体: Triangle.functorMk (t.truncLEι n) (t.truncGTπ n) (t.truncGTδLE n)
-
-Depends on / 依赖: Triangle, Triangle.functorMk, functorMk, t.truncGT, t.truncLE
+--- 原说明 ---
+The distinguished triangle `(t.truncLE n).obj A ⟶ A ⟶ (t.truncGT n).obj A ⟶ ...`
+as a functor `C ⥤ Triangle C` when `t` is a t-structure on a pretriangulated
+category `C` and `n : ℤ`.
 -/
-noncomputable def triangleLEGT (n : Int) : C ⥤ Triangle C :=
+noncomputable def triangleLEGT (n : ℤ) : C ⥤ Triangle C :=
   Triangle.functorMk (t.truncLEι n) (t.truncGTπ n) (t.truncGTδLE n)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `triangleLEGTIsoTriangleLEGE` / `triangleLEGTIsoTriangleLEGE` 的定义
+/-- The natural isomorphism `t.triangleLEGT a ≅ t.triangleLEGE a b h`
+when `a + 1 = b`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.triangleLEGTIsoTriangleLEGE** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：triangleLEGTIsoTriangleLEGE (a b : Int) (h : a + 1 = b) : t.triangleLEGT a
+ ≅ t.triangleLEGE a b h
+参数：a b : Int；h : a + 1 = b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleLEGTIsoTriangleLEGE
-  signature: (a b : Int) (h : a + 1 = b)
-  body: Triangle.functorIsoMk _ _ (Iso.refl _) (Iso.refl _) (t.truncGTIsoTruncGE a b h)
-    (by cat_disch) (by cat_disch) (by
-      ext
-      dsimp [truncGTδLE]
-      subst h
-      simp only [Functor.map_id, Category.comp_id])
-
-中文:
-定义 triangleLEGTIsoTriangleLEGE
-  签名: (a b : 整数) (h : a + 1 = b)
-  定义体: Triangle.functorIsoMk _ _ (Iso.refl _) (Iso.refl _) (t.truncGTIsoTruncGE a b h)
-    (by cat_disch) (by cat_disch) (by
-      ext
-      dsimp [truncGTδLE]
-      subst h
-      simp only [Functor.map_id, Category.comp_id])
-
-Depends on / 依赖: Category, Category.comp_id, Functor, Functor.map_id, Iso.refl, Triangle, Triangle.functorIsoMk, cat_disch, comp_id, functorIsoMk, map_id, t.truncGTIsoTruncGE, truncGTIsoTruncGE
+--- 原说明 ---
+The natural isomorphism `t.triangleLEGT a ≅ t.triangleLEGE a b h`
+when `a + 1 = b`.
 -/
-noncomputable def triangleLEGTIsoTriangleLEGE (a b : Int) (h : a + 1 = b) :
+noncomputable def triangleLEGTIsoTriangleLEGE (a b : ℤ) (h : a + 1 = b) :
     t.triangleLEGT a ≅ t.triangleLEGE a b h :=
   Triangle.functorIsoMk _ _ (Iso.refl _) (Iso.refl _) (t.truncGTIsoTruncGE a b h)
     (by cat_disch) (by cat_disch) (by
@@ -750,174 +543,168 @@ noncomputable def triangleLEGTIsoTriangleLEGE (a b : Int) (h : a + 1 = b) :
       dsimp [truncGTδLE]
       subst h
       simp only [Functor.map_id, Category.comp_id])
-
-/--
-lemma `triangleLEGT_distinguished` / 引理 `triangleLEGT_distinguished`
-
-English:
-lemma triangleLEGT_distinguished
-  given: (n : Int) (X : C)
-  proof: isomorphic_distinguished _ (t.triangleLEGE_distinguished n (n + 1) rfl X) _
-    ((t.triangleLEGTIsoTriangleLEGE n (n + 1) rfl).app X)
-
-中文:
-引理 triangleLEGT_distinguished
-  条件: (n : 整数) (X : C)
-  证明: isomorphic_distinguished _ (t.triangleLEGE_distinguished n (n + 1) rfl X) _
-    ((t.triangleLEGTIsoTriangleLEGE n (n + 1) rfl).app X)
-
-Depends on / 依赖: isomorphic_distinguished, t.triangleLEGE_distinguished, t.triangleLEGTIsoTriangleLEGE, triangleLEGE_distinguished, triangleLEGTIsoTriangleLEGE
+/-
+**CategoryTheory.Triangulated.TStructure.triangleLEGT_distinguished** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：triangleLEGT_distinguished (n : Int) (X : C) : (t.triangleLEGT n).obj X in
+ distTriang C
+参数：n : Int；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.triangleLEGE_distinguished`：trian
+gleLEGE_distinguished (a b : Int) (h : a + 1 = b) (X : C) : (t.triangleLEGE a b 
+h).obj X in distTriang C
 -/
-lemma triangleLEGT_distinguished (n : Int) (X : C) :
-    (t.triangleLEGT n).obj X in distTriang C :=
+lemma triangleLEGT_distinguished (n : ℤ) (X : C) :
+    (t.triangleLEGT n).obj X ∈ distTriang C :=
   isomorphic_distinguished _ (t.triangleLEGE_distinguished n (n + 1) rfl X) _
     ((t.triangleLEGTIsoTriangleLEGE n (n + 1) rfl).app X)
-
-/--
-lemma `isLE_iff_isIso_truncLEι_app` / 引理 `isLE_iff_isIso_truncLEι_app`
-
-English:
-lemma isLE_iff_isIso_truncLEι_app
-  given: (n : Int) (X : C)
-  proof: t.isLE_iff_isIso_truncLTι_app n (n + 1) rfl X
-
-中文:
-引理 isLE_iff_isIso_truncLEι_app
-  条件: (n : 整数) (X : C)
-  证明: t.isLE_iff_isIso_truncLTι_app n (n + 1) rfl X
-
-Depends on / 依赖: t.isLE_iff_isIso_truncLT
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_iff_isIso_truncLE** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isLE_iff_isIso_truncLEι_app (n : Int) (X : C) :
+lemma isLE_iff_isIso_truncLEι_app (n : ℤ) (X : C) :
     t.IsLE X n ↔ IsIso ((t.truncLEι n).app X) :=
   t.isLE_iff_isIso_truncLTι_app n (n + 1) rfl X
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isGE_iff_isIso_truncGTπ_app` / 引理 `isGE_iff_isIso_truncGTπ_app`
-
-English:
-lemma isGE_iff_isIso_truncGTπ_app
-  given: (n₀ n₁ : Int) (hn₁ : n₀ + 1 = n₁) (X : C)
-  proof: by
-  rw [t.isGE_iff_isIso_truncGEπ_app n₁ X]
-  exact (MorphismProperty.isomorphisms _).arrow_mk_iso_iff
-    (Arrow.isoMk (Iso.refl _) ((t.truncGTIsoTruncGE _ _ hn₁).symm.app X))
-
-中文:
-引理 isGE_iff_isIso_truncGTπ_app
-  条件: (n₀ n₁ : 整数) (hn₁ : n₀ + 1 = n₁) (X : C)
-  证明: by
-  rw [t.isGE_iff_isIso_truncGEπ_app n₁ X]
-  exact (MorphismProperty.isomorphisms _).arrow_mk_iso_iff
-    (Arrow.isoMk (Iso.refl _) ((t.truncGTIsoTruncGE _ _ hn₁).symm.app X))
-
-Depends on / 依赖: Arrow.isoMk, Iso.refl, MorphismProperty, MorphismProperty.isomorphisms, arrow_mk_iso_iff, isomorphisms, symm.app, t.isGE_iff_isIso_truncGE, t.truncGTIsoTruncGE, truncGTIsoTruncGE
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_iff_isIso_truncGT** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isGE_iff_isIso_truncGTπ_app (n₀ n₁ : Int) (hn₁ : n₀ + 1 = n₁) (X : C) :
+lemma isGE_iff_isIso_truncGTπ_app (n₀ n₁ : ℤ) (hn₁ : n₀ + 1 = n₁) (X : C) :
     t.IsGE X n₁ ↔ IsIso ((t.truncGTπ n₀).app X) := by
   rw [t.isGE_iff_isIso_truncGEπ_app n₁ X]
   exact (MorphismProperty.isomorphisms _).arrow_mk_iso_iff
     (Arrow.isoMk (Iso.refl _) ((t.truncGTIsoTruncGE _ _ hn₁).symm.app X))
-
-instance (X : C) (n : Int) [t.IsLE X n] : IsIso ((t.truncLEι n).app X) := by
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (n : ℤ) [t.IsLE X n] : IsIso ((t.truncLEι n).app X) := by
   rw [← isLE_iff_isIso_truncLEι_app]
   infer_instance
-
-/--
-lemma `isLE_iff_isZero_truncGT_obj` / 引理 `isLE_iff_isZero_truncGT_obj`
-
-English:
-lemma isLE_iff_isZero_truncGT_obj
-  given: (n : Int) (X : C)
-  proof: by
-  rw [t.isLE_iff_isIso_truncLEι_app n X]
-  exact (Triangle.isZero₃_iff_isIso₁ _ (t.triangleLEGT_distinguished n X)).symm
-
-中文:
-引理 isLE_iff_isZero_truncGT_obj
-  条件: (n : 整数) (X : C)
-  证明: by
-  rw [t.isLE_iff_isIso_truncLEι_app n X]
-  exact (Triangle.isZero₃_iff_isIso₁ _ (t.triangleLEGT_distinguished n X)).symm
-
-Depends on / 依赖: Triangle, Triangle.isZero, t.isLE_iff_isIso_truncLE, t.triangleLEGT_distinguished, triangleLEGT_distinguished
+/-
+**CategoryTheory.Triangulated.TStructure.isLE_iff_isZero_truncGT_obj** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isLE_iff_isZero_truncGT_obj (n : Int) (X : C) : t.IsLE X n ↔ IsZero ((t.tr
+uncGT n).obj X)
+参数：n : Int；X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isLE_iff_isIso_truncLEι_app`：isLE
+_iff_isIso_truncLEι_app (n : Int) (X : C) : t.IsLE X n ↔ IsIso ((t.truncLEι n).a
+pp X)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.isZero₃_iff_isIso₁`：isZero₃_iff_
+isIso₁ : IsZero T.obj₃ ↔ IsIso T.mor₁
+· 使用引理 `CategoryTheory.Triangulated.TStructure.triangleLEGT_distinguished`：trian
+gleLEGT_distinguished (n : Int) (X : C) : (t.triangleLEGT n).obj X in distTriang
+ C
 -/
-lemma isLE_iff_isZero_truncGT_obj (n : Int) (X : C) :
+lemma isLE_iff_isZero_truncGT_obj (n : ℤ) (X : C) :
     t.IsLE X n ↔ IsZero ((t.truncGT n).obj X) := by
   rw [t.isLE_iff_isIso_truncLEι_app n X]
   exact (Triangle.isZero₃_iff_isIso₁ _ (t.triangleLEGT_distinguished n X)).symm
-
-/--
-lemma `isGE_iff_isZero_truncLE_obj` / 引理 `isGE_iff_isZero_truncLE_obj`
-
-English:
-lemma isGE_iff_isZero_truncLE_obj
-  given: (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (X : C)
-  proof: by
-  rw [t.isGE_iff_isIso_truncGEπ_app n₁ X]
-  exact (Triangle.isZero₁_iff_isIso₂ _ (t.triangleLEGE_distinguished n₀ n₁ h X)).symm
-
-中文:
-引理 isGE_iff_isZero_truncLE_obj
-  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (X : C)
-  证明: by
-  rw [t.isGE_iff_isIso_truncGEπ_app n₁ X]
-  exact (Triangle.isZero₁_iff_isIso₂ _ (t.triangleLEGE_distinguished n₀ n₁ h X)).symm
-
-Depends on / 依赖: Triangle, Triangle.isZero, t.isGE_iff_isIso_truncGE, t.triangleLEGE_distinguished, triangleLEGE_distinguished
+/-
+**CategoryTheory.Triangulated.TStructure.isGE_iff_isZero_truncLE_obj** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isGE_iff_isZero_truncLE_obj (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (X : C) : t.Is
+GE X n₁ ↔ IsZero ((t.truncLE n₀).obj X)
+参数：n₀ n₁ : Int；h : n₀ + 1 = n₁；X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_iff_isIso_truncGEπ_app`：isGE
+_iff_isIso_truncGEπ_app (n : Int) (X : C) : t.IsGE X n ↔ IsIso ((t.truncGEπ n).a
+pp X)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.isZero₁_iff_isIso₂`：isZero₁_iff_
+isIso₂ : IsZero T.obj₁ ↔ IsIso T.mor₂
+· 使用引理 `CategoryTheory.Triangulated.TStructure.triangleLEGE_distinguished`：trian
+gleLEGE_distinguished (a b : Int) (h : a + 1 = b) (X : C) : (t.triangleLEGE a b 
+h).obj X in distTriang C
 -/
-lemma isGE_iff_isZero_truncLE_obj (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (X : C) :
+lemma isGE_iff_isZero_truncLE_obj (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁) (X : C) :
     t.IsGE X n₁ ↔ IsZero ((t.truncLE n₀).obj X) := by
   rw [t.isGE_iff_isIso_truncGEπ_app n₁ X]
   exact (Triangle.isZero₁_iff_isIso₂ _ (t.triangleLEGE_distinguished n₀ n₁ h X)).symm
-
-/--
-lemma `isZero_truncLE_obj_of_isGE` / 引理 `isZero_truncLE_obj_of_isGE`
-
-English:
-lemma isZero_truncLE_obj_of_isGE
-  given: (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (X : C) [t.IsGE X n₁]
-  proof: by
-  rw [← t.isGE_iff_isZero_truncLE_obj _ _ h X]
-  infer_instance
-
-中文:
-引理 isZero_truncLE_obj_of_isGE
-  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (X : C) [t.是GE X n₁]
-  证明: by
-  rw [← t.isGE_iff_isZero_truncLE_obj _ _ h X]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isGE_iff_isZero_truncLE_obj, t.isGE_iff_isZero_truncLE_obj
+/-
+**CategoryTheory.Triangulated.TStructure.isZero_truncLE_obj_of_isGE** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isZero_truncLE_obj_of_isGE (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (X : C) [t.IsGE
+ X n₁] : IsZero ((t.truncLE n₀).obj X)
+参数：n₀ n₁ : Int；h : n₀ + 1 = n₁；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isGE_iff_isZero_truncLE_obj`：isGE
+_iff_isZero_truncLE_obj (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (X : C) : t.IsGE X n₁ ↔ 
+IsZero ((t.truncLE n₀).obj X)
 -/
-lemma isZero_truncLE_obj_of_isGE (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (X : C) [t.IsGE X n₁] :
+lemma isZero_truncLE_obj_of_isGE (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁) (X : C) [t.IsGE X n₁] :
     IsZero ((t.truncLE n₀).obj X) := by
   rw [← t.isGE_iff_isZero_truncLE_obj _ _ h X]
   infer_instance
-
-/--
-lemma `to_truncLE_obj_ext` / 引理 `to_truncLE_obj_ext`
-
-English:
-lemma to_truncLE_obj_ext
-  statement: {n : Int} {Y : C} {X : C}
-  proof: by
-  have : t.IsLE Y (n + 1 - 1) := by simpa
-  rw [← cancel_mono ((t.truncLEIsoTruncLT n (n + 1) rfl).hom.app _)]
-  exact t.to_truncLT_obj_ext (by simpa)
-
-中文:
-引理 to_truncLE_obj_ext
-  结论: {n : 整数} {Y : C} {X : C}
-  证明: by
-  have : t.IsLE Y (n + 1 - 1) := by simpa
-  rw [← cancel_mono ((t.truncLEIsoTruncLT n (n + 1) rfl).hom.app _)]
-  exact t.to_truncLT_obj_ext (by simpa)
-
-Depends on / 依赖: cancel_mono, hom.app, t.IsLE, t.to_truncLT_obj_ext, t.truncLEIsoTruncLT, to_truncLT_obj_ext, truncLEIsoTruncLT
+/-
+**CategoryTheory.Triangulated.TStructure.to_truncLE_obj_ext** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：to_truncLE_obj_ext {n : Int} {Y : C} {X : C} {f₁ f₂ : Y ⟶ (t.truncLE n).ob
+j X} (h : f₁ ≫ (t.truncLEι n).app X = f₂ ≫ (t.truncLEι n).app X) [t.IsLE Y n] : 
+f₁ = f₂
+参数：t.truncLE n；h : f₁ ≫ (t.truncLEι n).app X = f₂ ≫ (t.truncLEι n).app X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.Functor.instIsSplitMonoApp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用引理 `CategoryTheory.Triangulated.TStructure.to_truncLT_obj_ext`：to_truncLT_ob
+j_ext {n : Int} {Y : C} {X : C} {f₁ f₂ : Y ⟶ (t.truncLT n).obj X} (h : f₁ ≫ (t.t
+runcLTι n).app X = f₂ ≫ (t.truncLTι n).app X) […
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Triangulated.TStructure.truncLEIsoTruncLT_hom_ι_app`：trun
+cLEIsoTruncLT_hom_ι_app (a b : Int) (h : a + 1 = b) (X : C) : (t.truncLEIsoTrunc
+LT a b h).hom.app X ≫ (t.truncLTι b).app X = (t.truncLEι…
 -/
-lemma to_truncLE_obj_ext {n : Int} {Y : C} {X : C}
+lemma to_truncLE_obj_ext {n : ℤ} {Y : C} {X : C}
     {f₁ f₂ : Y ⟶ (t.truncLE n).obj X} (h : f₁ ≫ (t.truncLEι n).app X = f₂ ≫ (t.truncLEι n).app X)
     [t.IsLE Y n] :
     f₁ = f₂ := by
@@ -927,64 +714,55 @@ lemma to_truncLE_obj_ext {n : Int} {Y : C} {X : C}
 
 section
 
-variable {X Y : C} (f : X ⟶ Y) (n : Int) [t.IsLE X n]
+variable {X Y : C} (f : X ⟶ Y) (n : ℤ) [t.IsLE X n]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `liftTruncLE_aux` / 引理 `liftTruncLE_aux`
-
-English:
-lemma liftTruncLE_aux
-  proof: Triangle.coyoneda_exact₂ _ (t.triangleLEGT_distinguished n Y) f
-    (t.zero_of_isLE_of_isGE _ n (n + 1) (by lia) inferInstance (by dsimp; infer_instance))
-
-中文:
-引理 liftTruncLE_aux
-  证明: Triangle.coyoneda_exact₂ _ (t.triangleLEGT_distinguished n Y) f
-    (t.zero_of_isLE_of_isGE _ n (n + 1) (by lia) inferInstance (by dsimp; infer_instance))
-
-Depends on / 依赖: Triangle, Triangle.coyoneda_exact, infer_instance, t.triangleLEGT_distinguished, t.zero_of_isLE_of_isGE, triangleLEGT_distinguished, zero_of_isLE_of_isGE
+/-
+**CategoryTheory.Triangulated.TStructure.liftTruncLE_aux** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：liftTruncLE_aux : exists (f' : X ⟶ (t.truncLE n).obj Y), f = f' ≫ (t.trunc
+LEι n).app Y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.coyoneda_exact₂`：coyoneda_exact₂
+ {X : C} (f : X ⟶ T.obj₂) (hf : f ≫ T.mor₂ = 0) : exists (g : X ⟶ T.obj₁), f = g
+ ≫ T.mor₁
+· 使用引理 `CategoryTheory.Triangulated.TStructure.triangleLEGT_distinguished`：trian
+gleLEGT_distinguished (n : Int) (X : C) : (t.triangleLEGT n).obj X in distTriang
+ C
+· 使用引理 `CategoryTheory.Triangulated.TStructure.zero_of_isLE_of_isGE`：zero_of_isL
+E_of_isGE {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁) (_ : t.IsLE X n₀) (_
+ : t.IsGE Y n₁) : f = 0
+· 使用定理 `CategoryTheory.Triangulated.TStructure.instIsGEObjTruncGTHAddIntOfNat`：∀
+ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : Category
+Theory.Preadditive C]   [inst_2 : CategoryTheory.Limits.Has…
 -/
 lemma liftTruncLE_aux :
-    exists (f' : X ⟶ (t.truncLE n).obj Y), f = f' ≫ (t.truncLEι n).app Y :=
+    ∃ (f' : X ⟶ (t.truncLE n).obj Y), f = f' ≫ (t.truncLEι n).app Y :=
   Triangle.coyoneda_exact₂ _ (t.triangleLEGT_distinguished n Y) f
     (t.zero_of_isLE_of_isGE _ n (n + 1) (by lia) inferInstance (by dsimp; infer_instance))
 
-/--
-Definition of `liftTruncLE` / `liftTruncLE` 的定义
+/-- Constructor for morphisms to `(t.truncLE n).obj Y`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.liftTruncLE** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：liftTruncLE : X ⟶ (t.truncLE n).obj Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.liftTruncLE_aux`：liftTruncLE_aux 
+: exists (f' : X ⟶ (t.truncLE n).obj Y), f = f' ≫ (t.truncLEι n).app Y
 
-English:
-definition liftTruncLE
-  signature: :
-  body: (t.liftTruncLE_aux f n).choose
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 liftTruncLE
-  签名: :
-  定义体: (t.liftTruncLE_aux f n).choose
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: liftTruncLE_aux, t.liftTruncLE_aux
+--- 原说明 ---
+Constructor for morphisms to `(t.truncLE n).obj Y`.
 -/
 noncomputable def liftTruncLE :
     X ⟶ (t.truncLE n).obj Y := (t.liftTruncLE_aux f n).choose
 
 @[reassoc (attr := simp)]
-/--
-lemma `liftTruncLE_ι` / 引理 `liftTruncLE_ι`
-
-English:
-lemma liftTruncLE_ι
-  proof: (t.liftTruncLE_aux f n).choose_spec.symm
-
-中文:
-引理 liftTruncLE_ι
-  证明: (t.liftTruncLE_aux f n).choose_spec.symm
-
-Depends on / 依赖: Function, Function.HasLeftInverse.injective, HasLeftInverse, choose_spec, choose_spec.symm, injective, liftTruncLE_aux, t.liftTruncLE_aux
+/-
+**CategoryTheory.Triangulated.TStructure.liftTruncLE_** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma liftTruncLE_ι :
     t.liftTruncLE f n ≫ (t.truncLEι n).app Y = f :=
@@ -994,66 +772,57 @@ end
 
 section
 
-variable {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ + 1 = n₁) [t.IsGE Y n₁]
+variable {X Y : C} (f : X ⟶ Y) (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁) [t.IsGE Y n₁]
 
 set_option backward.defeqAttrib.useBackward true in
 include h in
-/--
-lemma `descTruncGT_aux` / 引理 `descTruncGT_aux`
-
-English:
-lemma descTruncGT_aux
-  proof: Triangle.yoneda_exact₂ _ (t.triangleLEGT_distinguished n₀ X) f
-    (t.zero_of_isLE_of_isGE _ n₀ n₁ (by lia) (by dsimp; infer_instance) inferInstance)
-
-中文:
-引理 descTruncGT_aux
-  证明: Triangle.yoneda_exact₂ _ (t.triangleLEGT_distinguished n₀ X) f
-    (t.zero_of_isLE_of_isGE _ n₀ n₁ (by lia) (by dsimp; infer_instance) inferInstance)
-
-Depends on / 依赖: Triangle, Triangle.yoneda_exact, infer_instance, t.triangleLEGT_distinguished, t.zero_of_isLE_of_isGE, triangleLEGT_distinguished, zero_of_isLE_of_isGE
+/-
+**CategoryTheory.Triangulated.TStructure.descTruncGT_aux** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：descTruncGT_aux : exists (f' : (t.truncGT n₀).obj X ⟶ Y), f = (t.truncGTπ 
+n₀).app X ≫ f'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Pretriangulated.Triangle.yoneda_exact₂`：yoneda_exact₂ {X 
+: C} (f : T.obj₂ ⟶ X) (hf : T.mor₁ ≫ f = 0) : exists (g : T.obj₃ ⟶ X), f = T.mor
+₂ ≫ g
+· 使用引理 `CategoryTheory.Triangulated.TStructure.triangleLEGT_distinguished`：trian
+gleLEGT_distinguished (n : Int) (X : C) : (t.triangleLEGT n).obj X in distTriang
+ C
+· 使用引理 `CategoryTheory.Triangulated.TStructure.zero_of_isLE_of_isGE`：zero_of_isL
+E_of_isGE {X Y : C} (f : X ⟶ Y) (n₀ n₁ : Int) (h : n₀ < n₁) (_ : t.IsLE X n₀) (_
+ : t.IsGE Y n₁) : f = 0
+· 使用定理 `CategoryTheory.Triangulated.TStructure.instIsLEObjTruncLE`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Pread
+ditive C]   [inst_2 : CategoryTheory.Limits.Has…
 -/
 lemma descTruncGT_aux :
-  exists (f' : (t.truncGT n₀).obj X ⟶ Y), f = (t.truncGTπ n₀).app X ≫ f' :=
+  ∃ (f' : (t.truncGT n₀).obj X ⟶ Y), f = (t.truncGTπ n₀).app X ≫ f' :=
   Triangle.yoneda_exact₂ _ (t.triangleLEGT_distinguished n₀ X) f
     (t.zero_of_isLE_of_isGE _ n₀ n₁ (by lia) (by dsimp; infer_instance) inferInstance)
 
-/--
-Definition of `descTruncGT` / `descTruncGT` 的定义
+/-- Constructor for morphisms from `(t.truncGT n₀).obj Y`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.descTruncGT** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：descTruncGT : (t.truncGT n₀).obj X ⟶ Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.descTruncGT_aux`：descTruncGT_aux 
+: exists (f' : (t.truncGT n₀).obj X ⟶ Y), f = (t.truncGTπ n₀).app X ≫ f'
 
-English:
-definition descTruncGT
-  signature: :
-  body: (t.descTruncGT_aux f n₀ n₁ h).choose
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 descTruncGT
-  签名: :
-  定义体: (t.descTruncGT_aux f n₀ n₁ h).choose
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: descTruncGT_aux, t.descTruncGT_aux
+--- 原说明 ---
+Constructor for morphisms from `(t.truncGT n₀).obj Y`.
 -/
 noncomputable def descTruncGT :
     (t.truncGT n₀).obj X ⟶ Y :=
   (t.descTruncGT_aux f n₀ n₁ h).choose
 
 @[reassoc (attr := simp)]
-/--
-lemma `π_descTruncGT` / 引理 `π_descTruncGT`
-
-English:
-lemma π_descTruncGT
-  proof: (t.descTruncGT_aux f n₀ n₁ h).choose_spec.symm
-
-中文:
-引理 π_descTruncGT
-  证明: (t.descTruncGT_aux f n₀ n₁ h).choose_spec.symm
-
-Depends on / 依赖: choose_spec, choose_spec.symm, descTruncGT_aux, t.descTruncGT_aux
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma π_descTruncGT :
     (t.truncGTπ n₀).app X ≫ t.descTruncGT f n₀ n₁ h = f :=
@@ -1061,115 +830,112 @@ lemma π_descTruncGT :
 
 end
 
-/--
-lemma `isIso_truncLE_map_iff` / 引理 `isIso_truncLE_map_iff`
-
-English:
-lemma isIso_truncLE_map_iff
-  given: {X Y : C} (f : X ⟶ Y) (a b : Int) (h : a + 1 = b)
-  proof: by
-  subst h
-  apply isIso_truncLT_map_iff
-
-中文:
-引理 isIso_truncLE_map_iff
-  条件: {X Y : C} (f : X ⟶ Y) (a b : 整数) (h : a + 1 = b)
-  证明: by
-  subst h
-  apply isIso_truncLT_map_iff
-
-Depends on / 依赖: isIso_truncLT_map_iff
+/-
+**CategoryTheory.Triangulated.TStructure.isIso_truncLE_map_iff** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isIso_truncLE_map_iff {X Y : C} (f : X ⟶ Y) (a b : Int) (h : a + 1 = b) : 
+IsIso ((t.truncLE a).map f) ↔ exists (Z : C) (g : Y ⟶ Z) (h : Z ⟶ ((t.truncLE a)
+.obj X)⟦1⟧) (_ : Triangle.mk ((t.truncLEι a).app X ≫ f) g h in distTriang _), t.
+IsGE Z b
+参数：f : X ⟶ Y；a b : Int；h : a + 1 = b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isIso_truncLT_map_iff`：isIso_trun
+cLT_map_iff {X Y : C} (f : X ⟶ Y) (n : Int) : IsIso ((t.truncLT n).map f) ↔ exis
+ts (Z : C) (g : Y ⟶ Z) (h : Z ⟶ ((t.truncLT n).obj…
 -/
-lemma isIso_truncLE_map_iff {X Y : C} (f : X ⟶ Y) (a b : Int) (h : a + 1 = b) :
+lemma isIso_truncLE_map_iff {X Y : C} (f : X ⟶ Y) (a b : ℤ) (h : a + 1 = b) :
     IsIso ((t.truncLE a).map f) ↔
-      exists (Z : C) (g : Y ⟶ Z) (h : Z ⟶ ((t.truncLE a).obj X)⟦1⟧)
-        (_ : Triangle.mk ((t.truncLEι a).app X ≫ f) g h in distTriang _), t.IsGE Z b := by
+      ∃ (Z : C) (g : Y ⟶ Z) (h : Z ⟶ ((t.truncLE a).obj X)⟦1⟧)
+        (_ : Triangle.mk ((t.truncLEι a).app X ≫ f) g h ∈ distTriang _), t.IsGE Z b := by
   subst h
   apply isIso_truncLT_map_iff
-
-/--
-lemma `isIso_truncGT_map_iff` / 引理 `isIso_truncGT_map_iff`
-
-English:
-lemma isIso_truncGT_map_iff
-  given: {Y Z : C} (g : Y ⟶ Z) (n : Int)
-  proof: t.isIso_truncGE_map_iff g n (n + 1) rfl
-
-中文:
-引理 isIso_truncGT_map_iff
-  条件: {Y Z : C} (g : Y ⟶ Z) (n : 整数)
-  证明: t.isIso_truncGE_map_iff g n (n + 1) rfl
-
-Depends on / 依赖: isIso_truncGE_map_iff, t.isIso_truncGE_map_iff
+/-
+**CategoryTheory.Triangulated.TStructure.isIso_truncGT_map_iff** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：isIso_truncGT_map_iff {Y Z : C} (g : Y ⟶ Z) (n : Int) : IsIso ((t.truncGT 
+n).map g) ↔ exists (X : C) (f : X ⟶ Y) (h : ((t.truncGT n).obj Z) ⟶ X⟦(1 : Int)⟧
+) (_ : Triangle.mk f (g ≫ (t.truncGTπ n).app Z) h in distTriang _), t.IsLE X n
+参数：g : Y ⟶ Z；n : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Triangulated.TStructure.isIso_truncGE_map_iff`：isIso_trun
+cGE_map_iff {Y Z : C} (g : Y ⟶ Z) (n₀ n₁ : Int) (hn : n₀ + 1 = n₁) : IsIso ((t.t
+runcGE n₁).map g) ↔ exists (X : C) (f : X ⟶ Y) (h …
 -/
-lemma isIso_truncGT_map_iff {Y Z : C} (g : Y ⟶ Z) (n : Int) :
+lemma isIso_truncGT_map_iff {Y Z : C} (g : Y ⟶ Z) (n : ℤ) :
     IsIso ((t.truncGT n).map g) ↔
-      exists (X : C) (f : X ⟶ Y) (h : ((t.truncGT n).obj Z) ⟶ X⟦(1 : Int)⟧)
-        (_ : Triangle.mk f (g ≫ (t.truncGTπ n).app Z) h in distTriang _), t.IsLE X n :=
+      ∃ (X : C) (f : X ⟶ Y) (h : ((t.truncGT n).obj Z) ⟶ X⟦(1 : ℤ)⟧)
+        (_ : Triangle.mk f (g ≫ (t.truncGTπ n).app Z) h ∈ distTriang _), t.IsLE X n :=
   t.isIso_truncGE_map_iff g n (n + 1) rfl
-
-instance (X : C) (a b : Int) [t.IsLE X b] : t.IsLE ((t.truncLE a).obj X) b := by
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (a b : ℤ) [t.IsLE X b] : t.IsLE ((t.truncLE a).obj X) b := by
   dsimp [truncLE]
   infer_instance
-
-instance (X : C) (a b : Int) [t.IsGE X a] : t.IsGE ((t.truncGT b).obj X) a := by
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (a b : ℤ) [t.IsGE X a] : t.IsGE ((t.truncGT b).obj X) a := by
   dsimp [truncGT]
   infer_instance
 
-/--
-Definition of `truncLEGE` / `truncLEGE` 的定义
+/-- The composition `t.truncGE a ⋙ t.truncGE b`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncLEGE** 是 Mathlib 中的一个缩写定义，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：truncLEGE (a b : Int) : C ⥤ C
+参数：a b : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation truncLEGE
-  signature: (a b : Int)
-  body: t.truncGE a ⋙ t.truncLE b
-
-中文:
-缩写 truncLEGE
-  签名: (a b : 整数)
-  定义体: t.truncGE a ⋙ t.truncLE b
-
-Depends on / 依赖: t.truncGE, t.truncLE, truncGE, truncLE
+--- 原说明 ---
+The composition `t.truncGE a ⋙ t.truncGE b`.
 -/
-noncomputable abbrev truncLEGE (a b : Int) : C ⥤ C := t.truncGE a ⋙ t.truncLE b
+noncomputable abbrev truncLEGE (a b : ℤ) : C ⥤ C := t.truncGE a ⋙ t.truncLE b
 
-/--
-Definition of `truncGELE` / `truncGELE` 的定义
+/-- The composition `t.truncLE b ⋙ t.truncGE a`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGELE** 是 Mathlib 中的一个缩写定义，位于命名空间 `
+CategoryTheory.Triangulated.TStructure`。
+形式化陈述：truncGELE (a b : Int) : C ⥤ C
+参数：a b : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation truncGELE
-  signature: (a b : Int)
-  body: t.truncLE b ⋙ t.truncGE a
-
-中文:
-缩写 truncGELE
-  签名: (a b : 整数)
-  定义体: t.truncLE b ⋙ t.truncGE a
-
-Depends on / 依赖: t.truncGE, t.truncLE, truncGE, truncLE
+--- 原说明 ---
+The composition `t.truncLE b ⋙ t.truncGE a`.
 -/
-noncomputable abbrev truncGELE (a b : Int) : C ⥤ C := t.truncLE b ⋙ t.truncGE a
+noncomputable abbrev truncGELE (a b : ℤ) : C ⥤ C := t.truncLE b ⋙ t.truncGE a
 
 set_option backward.defeqAttrib.useBackward true in
-instance (X : C) (a b : Int) : t.IsGE ((t.truncGELE a b).obj X) a := by
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (a b : ℤ) : t.IsGE ((t.truncGELE a b).obj X) a := by
   dsimp; infer_instance
 
-/--
-Definition of `truncGELEIsoTruncGELT` / `truncGELEIsoTruncGELT` 的定义
+/-- The natural isomorphism `t.truncGELE a b ≅ t.truncGELT a b'` when `b + 1 = b'`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGELEIsoTruncGELT** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：truncGELEIsoTruncGELT (a b b' : Int) (hb' : b + 1 = b') : t.truncGELE a b 
+≅ t.truncGELT a b'
+参数：a b b' : Int；hb' : b + 1 = b'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncGELEIsoTruncGELT
-  signature: (a b b' : Int) (hb' : b + 1 = b')
-  body: Functor.isoWhiskerRight (t.truncLEIsoTruncLT b b' hb') _
-
-中文:
-定义 truncGELEIsoTruncGELT
-  签名: (a b b' : 整数) (hb' : b + 1 = b')
-  定义体: Functor.isoWhiskerRight (t.truncLEIsoTruncLT b b' hb') _
-
-Depends on / 依赖: Functor, Functor.isoWhiskerRight, isoWhiskerRight, t.truncLEIsoTruncLT, truncLEIsoTruncLT
+--- 原说明 ---
+The natural isomorphism `t.truncGELE a b ≅ t.truncGELT a b'` when `b + 1 = b'`.
 -/
-noncomputable def truncGELEIsoTruncGELT (a b b' : Int) (hb' : b + 1 = b') :
+noncomputable def truncGELEIsoTruncGELT (a b b' : ℤ) (hb' : b + 1 = b') :
     t.truncGELE a b ≅ t.truncGELT a b' :=
   Functor.isoWhiskerRight (t.truncLEIsoTruncLT b b' hb') _
 
@@ -1177,123 +943,96 @@ section
 
 variable [IsTriangulated C]
 
-/--
-lemma `isIso₁_truncLE_map_of_isGE` / 引理 `isIso₁_truncLE_map_of_isGE`
-
-English:
-lemma isIso₁_truncLE_map_of_isGE
-  statement: (T : Triangle C) (hT : T in distTriang C)
-  proof: by
-  subst h
-  exact t.isIso₁_truncLT_map_of_isGE _ hT _ h₃
-
-中文:
-引理 isIso₁_truncLE_map_of_isGE
-  结论: (T : Triangle C) (hT : T in distTriang C)
-  证明: by
-  subst h
-  exact t.isIso₁_truncLT_map_of_isGE _ hT _ h₃
-
-Depends on / 依赖: t.isIso
+/-
+**CategoryTheory.Triangulated.TStructure.isIso** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso₁_truncLE_map_of_isGE (T : Triangle C) (hT : T in distTriang C)
-    (n₀ n₁ : Int) (h : n₀ + 1 = n₁) (h₃ : t.IsGE T.obj₃ n₁) :
+lemma isIso₁_truncLE_map_of_isGE (T : Triangle C) (hT : T ∈ distTriang C)
+    (n₀ n₁ : ℤ) (h : n₀ + 1 = n₁) (h₃ : t.IsGE T.obj₃ n₁) :
     IsIso ((t.truncLE n₀).map T.mor₁) := by
   subst h
   exact t.isIso₁_truncLT_map_of_isGE _ hT _ h₃
-
-/--
-lemma `isIso₂_truncGT_map_of_isLE` / 引理 `isIso₂_truncGT_map_of_isLE`
-
-English:
-lemma isIso₂_truncGT_map_of_isLE
-  statement: (T : Triangle C) (hT : T in distTriang C)
-  proof: t.isIso₂_truncGE_map_of_isLE _ hT _ _ rfl h₁
-
-中文:
-引理 isIso₂_truncGT_map_of_isLE
-  结论: (T : Triangle C) (hT : T in distTriang C)
-  证明: t.isIso₂_truncGE_map_of_isLE _ hT _ _ rfl h₁
-
-Depends on / 依赖: t.isIso
+/-
+**CategoryTheory.Triangulated.TStructure.isIso** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso₂_truncGT_map_of_isLE (T : Triangle C) (hT : T in distTriang C)
-    (n₀ : Int) (h₁ : t.IsLE T.obj₁ n₀) :
+lemma isIso₂_truncGT_map_of_isLE (T : Triangle C) (hT : T ∈ distTriang C)
+    (n₀ : ℤ) (h₁ : t.IsLE T.obj₁ n₀) :
     IsIso ((t.truncGT n₀).map T.mor₂) :=
   t.isIso₂_truncGE_map_of_isLE _ hT _ _ rfl h₁
-
-instance (X : C) (a b : Int) [t.IsGE X a] :
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (a b : ℤ) [t.IsGE X a] :
     t.IsGE ((t.truncLE b).obj X) a := by
   dsimp [truncLE]; infer_instance
-
-instance (X : C) (a b : Int) [t.IsLE X b] :
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (a b : ℤ) [t.IsLE X b] :
     t.IsLE ((t.truncGT a).obj X) b := by
   dsimp [truncGT]; infer_instance
-
-instance (X : C) (a b : Int) [t.IsGE X a] :
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (a b : ℤ) [t.IsGE X a] :
     t.IsGE ((t.truncLE b).obj X) a := by
   dsimp [truncLE]; infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
-instance (X : C) (a b : Int) :
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (a b : ℤ) :
     t.IsLE ((t.truncGELE a b).obj X) b := by
   dsimp; infer_instance
-
-/--
-lemma `isIso_truncLE_map_truncLEι_app` / 引理 `isIso_truncLE_map_truncLEι_app`
-
-English:
-lemma isIso_truncLE_map_truncLEι_app
-  given: (a b : Int) (h : a <= b) (X : C)
-  proof: t.isIso_truncLT_map_truncLTι_app _ _ (by lia) _
-
-中文:
-引理 isIso_truncLE_map_truncLEι_app
-  条件: (a b : 整数) (h : a <= b) (X : C)
-  证明: t.isIso_truncLT_map_truncLTι_app _ _ (by lia) _
-
-Depends on / 依赖: t.isIso_truncLT_map_truncLT
+/-
+**CategoryTheory.Triangulated.TStructure.isIso_truncLE_map_truncLE** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso_truncLE_map_truncLEι_app (a b : Int) (h : a <= b) (X : C) :
+lemma isIso_truncLE_map_truncLEι_app (a b : ℤ) (h : a ≤ b) (X : C) :
     IsIso ((t.truncLE a).map ((t.truncLEι b).app X)) :=
   t.isIso_truncLT_map_truncLTι_app _ _ (by lia) _
-
-/--
-lemma `isIso_truncGT_map_truncGTπ_app` / 引理 `isIso_truncGT_map_truncGTπ_app`
-
-English:
-lemma isIso_truncGT_map_truncGTπ_app
-  given: (a b : Int) (h : b <= a) (X : C)
-  proof: isIso_truncGE_map_truncGEπ_app _ _ _ (by lia) _
-
-中文:
-引理 isIso_truncGT_map_truncGTπ_app
-  条件: (a b : 整数) (h : b <= a) (X : C)
-  证明: isIso_truncGE_map_truncGEπ_app _ _ _ (by lia) _
+/-
+**CategoryTheory.Triangulated.TStructure.isIso_truncGT_map_truncGT** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isIso_truncGT_map_truncGTπ_app (a b : Int) (h : b <= a) (X : C) :
+lemma isIso_truncGT_map_truncGTπ_app (a b : ℤ) (h : b ≤ a) (X : C) :
     IsIso ((t.truncGT a).map ((t.truncGTπ b).app X)) :=
   isIso_truncGE_map_truncGEπ_app _ _ _ (by lia) _
-
-instance (X : C) (n : Int) : IsIso ((t.truncLE n).map ((t.truncLEι n).app X)) :=
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (n : ℤ) : IsIso ((t.truncLE n).map ((t.truncLEι n).app X)) :=
   t.isIso_truncLE_map_truncLEι_app _ _ (by lia) _
 
-/--
-Definition of `truncGELEIsoLEGE` / `truncGELEIsoLEGE` 的定义
+/-- The natural isomorphism `t.truncGELE a b ≅ t.truncLEGE a b`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.truncGELEIsoLEGE** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：truncGELEIsoLEGE (a b : Int) : t.truncGELE a b ≅ t.truncLEGE a b
+参数：a b : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncGELEIsoLEGE
-  signature: (a b : Int)
-  body: t.truncGELTIsoLTGE a (b + 1)
-
-中文:
-定义 truncGELEIsoLEGE
-  签名: (a b : 整数)
-  定义体: t.truncGELTIsoLTGE a (b + 1)
-
-Depends on / 依赖: t.truncGELTIsoLTGE, truncGELTIsoLTGE
+--- 原说明 ---
+The natural isomorphism `t.truncGELE a b ≅ t.truncLEGE a b`.
 -/
-noncomputable def truncGELEIsoLEGE (a b : Int) : t.truncGELE a b ≅ t.truncLEGE a b :=
+noncomputable def truncGELEIsoLEGE (a b : ℤ) : t.truncGELE a b ≅ t.truncLEGE a b :=
   t.truncGELTIsoLTGE a (b + 1)
 
 end
@@ -1303,3 +1042,4 @@ end TStructure
 end Triangulated
 
 end CategoryTheory
+

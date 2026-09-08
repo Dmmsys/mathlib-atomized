@@ -20,20 +20,18 @@ but keeping it separate results in a significant import reduction.
 
 namespace Complex
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The standard orientation on `ℂ`. -/
+/-
+**Complex.orientation** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：Orientation ℝ ℂ (Fin 2)
+参数：Fin 2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def orientation
-  body: Complex.basisOneI.orientation
-
-中文:
-定义 noncomputable
-  签名: def orientation
-  定义体: Complex.basisOneI.orientation
+--- 原说明 ---
+The standard orientation on `ℂ`.
 -/
-protected noncomputable def orientation : Orientation Real Complex (Fin 2) :=
+protected noncomputable def orientation : Orientation ℝ ℂ (Fin 2) :=
   Complex.basisOneI.orientation
 
 end Complex
+

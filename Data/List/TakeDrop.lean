@@ -33,344 +33,303 @@ universe u v w
 
 variable {ι : Type*} {α : Type u} {β : Type v} {γ : Type w} {l₁ l₂ : List α}
 
+/-! ### take, drop -/
 
-/--
-theorem `take_one_drop_eq_of_lt_length` / 定理 `take_one_drop_eq_of_lt_length`
+/-
+**List.take_one_drop_eq_of_lt_length** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：take_one_drop_eq_of_lt_length {l : List α} {n : Nat} (h : n < l.length) : 
+(l.drop n).take 1 = [l.get ⟨n, h⟩]
+参数：h : n < l.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.drop_eq_getElem_cons`：∀ {α : Type u_1} {i : ℕ} {l : List α} (h : i 
+< l.length), List.drop i l = l[i] :: List.drop (i + 1) l
+· 使用定理 `List.take.eq_3`：∀ {α : Type u} (n : ℕ) (a : α) (as : List α), List.take 
+n.succ (a :: as) = a :: List.take n as
+· 使用定理 `List.take.eq_1`：∀ {α : Type u} (x : List α), List.take 0 x = []
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem take_one_drop_eq_of_lt_length
-  given: {l : List α} {n : Nat} (h : n < l.length)
-  proof: by
-  rw [drop_eq_getElem_cons h]; rw [take]; rw [take]
-  simp
-
-中文:
-定理 take_one_drop_eq_of_lt_length
-  条件: {l : 列表 α} {n : 自然数} (h : n < l.length)
-  证明: by
-  rw [drop_eq_getElem_cons h]; rw [take]; rw [take]
-  simp
-
-Depends on / 依赖: drop_eq_getElem_cons
+--- 原说明 ---
+### take, drop
 -/
-theorem take_one_drop_eq_of_lt_length {l : List α} {n : Nat} (h : n < l.length) :
+theorem take_one_drop_eq_of_lt_length {l : List α} {n : ℕ} (h : n < l.length) :
     (l.drop n).take 1 = [l.get ⟨n, h⟩] := by
-  rw [drop_eq_getElem_cons h]; rw [take]; rw [take]
+  rw [drop_eq_getElem_cons h, take, take]
   simp
-
-/--
-lemma `take_eq_self_iff` / 引理 `take_eq_self_iff`
-
-English:
-lemma take_eq_self_iff
-  given: (x : List α) {n : Nat}
-  statement: x.take n = x ↔ x.length <= n
-  proof: ⟨by grind, take_of_length_le⟩
-
-中文:
-引理 take_eq_self_iff
-  条件: (x : 列表 α) {n : 自然数}
-  结论: x.take n = x ↔ x.length <= n
-  证明: ⟨by grind, take_of_length_le⟩
+/-
+**List.take_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} (x : List α) {n : ℕ}, List.take n x = x ↔ x.length ≤ n
+参数：x : List α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.take_of_length_le`：∀ {α : Type u_1} {i : ℕ} {l : List α}, l.length 
+≤ i → List.take i l = l
 -/
-@[simp] lemma take_eq_self_iff (x : List α) {n : Nat} : x.take n = x ↔ x.length <= n :=
+@[simp] lemma take_eq_self_iff (x : List α) {n : ℕ} : x.take n = x ↔ x.length ≤ n :=
   ⟨by grind, take_of_length_le⟩
-
-/--
-lemma `take_self_eq_iff` / 引理 `take_self_eq_iff`
-
-English:
-lemma take_self_eq_iff
-  given: (x : List α) {n : Nat}
-  statement: x = x.take n ↔ x.length <= n
-  proof: by
-  rw [Eq.comm]; rw [take_eq_self_iff]
-
-中文:
-引理 take_self_eq_iff
-  条件: (x : 列表 α) {n : 自然数}
-  结论: x = x.take n ↔ x.length <= n
-  证明: by
-  rw [Eq.comm]; rw [take_eq_self_iff]
+/-
+**List.take_self_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} (x : List α) {n : ℕ}, x = List.take n x ↔ x.length ≤ n
+参数：x : List α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `List.take_eq_self_iff`：∀ {α : Type u} (x : List α) {n : ℕ}, List.take n 
+x = x ↔ x.length ≤ n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma take_self_eq_iff (x : List α) {n : Nat} : x = x.take n ↔ x.length <= n := by
-  rw [Eq.comm]; rw [take_eq_self_iff]
-
-/--
-lemma `take_eq_left_iff` / 引理 `take_eq_left_iff`
-
-English:
-lemma take_eq_left_iff
-  given: {x y : List α} {n : Nat}
-  proof: by
+@[simp] lemma take_self_eq_iff (x : List α) {n : ℕ} : x = x.take n ↔ x.length ≤ n := by
+  rw [Eq.comm, take_eq_self_iff]
+/-
+**List.take_eq_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} {x y : List α} {n : ℕ}, List.take n (x ++ y) = List.take n 
+x ↔ y = [] ∨ n ≤ x.length
+参数：x ++ y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.take_append`：∀ {α : Type u_1} {l₁ l₂ : List α} {i : ℕ}, List.take i
+ (l₁ ++ l₂) = List.take i l₁ ++ List.take (i - l₁.length) l₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+@[simp] lemma take_eq_left_iff {x y : List α} {n : ℕ} :
+    (x ++ y).take n = x.take n ↔ y = [] ∨ n ≤ x.length := by
   simp [take_append, Nat.sub_eq_zero_iff_le, Or.comm]
-
-中文:
-引理 take_eq_left_iff
-  条件: {x y : 列表 α} {n : 自然数}
-  证明: by
-  simp [take_append, Nat.sub_eq_zero_iff_le, Or.comm]
+/-
+**List.left_eq_take_iff** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} {x y : List α} {n : ℕ}, List.take n x = List.take n (x ++ y
+) ↔ y = [] ∨ n ≤ x.length
+参数：x ++ y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `List.take_eq_left_iff`：∀ {α : Type u} {x y : List α} {n : ℕ}, List.take 
+n (x ++ y) = List.take n x ↔ y = [] ∨ n ≤ x.length
 -/
-@[simp] lemma take_eq_left_iff {x y : List α} {n : Nat} :
-    (x ++ y).take n = x.take n ↔ y = [] ∨ n <= x.length := by
-  simp [take_append, Nat.sub_eq_zero_iff_le, Or.comm]
-
-/--
-lemma `left_eq_take_iff` / 引理 `left_eq_take_iff`
-
-English:
-lemma left_eq_take_iff
-  given: {x y : List α} {n : Nat}
-  proof: by
+@[simp] lemma left_eq_take_iff {x y : List α} {n : ℕ} :
+    x.take n = (x ++ y).take n ↔ y = [] ∨ n ≤ x.length := by
   rw [Eq.comm]; apply take_eq_left_iff
-
-中文:
-引理 left_eq_take_iff
-  条件: {x y : 列表 α} {n : 自然数}
-  证明: by
-  rw [Eq.comm]; apply take_eq_left_iff
+/-
+**List.drop_take_append_drop** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} (x : List α) (m n : ℕ), List.take n (List.drop m x) ++ List
+.drop (m + n) x = List.drop m x
+参数：x : List α；m n : ℕ；List.drop m x；m + n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.drop_drop`：∀ {α : Type u_1} {i j : ℕ} {l : List α}, List.drop i (Li
+st.drop j l) = List.drop (j + i) l
+· 使用定理 `List.take_append_drop`：∀ {α : Type u_1} (i : ℕ) (l : List α), List.take 
+i l ++ List.drop i l = l
 -/
-@[simp] lemma left_eq_take_iff {x y : List α} {n : Nat} :
-    x.take n = (x ++ y).take n ↔ y = [] ∨ n <= x.length := by
-  rw [Eq.comm]; apply take_eq_left_iff
-
-/--
-lemma `drop_take_append_drop` / 引理 `drop_take_append_drop`
-
-English:
-lemma drop_take_append_drop
-  given: (x : List α) (m n : Nat)
-  proof: by rw [← drop_drop, take_append_drop]
-
-中文:
-引理 drop_take_append_drop
-  条件: (x : 列表 α) (m n : 自然数)
-  证明: by rw [← drop_drop, take_append_drop]
--/
-@[simp] lemma drop_take_append_drop (x : List α) (m n : Nat) :
+@[simp] lemma drop_take_append_drop (x : List α) (m n : ℕ) :
     (x.drop m).take n ++ x.drop (m + n) = x.drop m := by rw [← drop_drop, take_append_drop]
 
-/--
-lemma `drop_take_append_drop'` / 引理 `drop_take_append_drop'`
+/-- Compared to `drop_take_append_drop`, the order of summands is swapped. -/
+/-
+**List.drop_take_append_drop'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} (x : List α) (m n : ℕ), List.take n (List.drop m x) ++ List
+.drop (n + m) x = List.drop m x
+参数：x : List α；m n : ℕ；List.drop m x；n + m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `List.drop_take_append_drop`：∀ {α : Type u} (x : List α) (m n : ℕ), List.
+take n (List.drop m x) ++ List.drop (m + n) x = List.drop m x
 
-English:
-lemma drop_take_append_drop'
-  given: (x : List α) (m n : Nat)
-  proof: by rw [Nat.add_comm, drop_take_append_drop]
-
-中文:
-引理 drop_take_append_drop'
-  条件: (x : 列表 α) (m n : 自然数)
-  证明: by rw [Nat.add_comm, drop_take_append_drop]
+--- 原说明 ---
+Compared to `drop_take_append_drop`, the order of summands is swapped.
 -/
-@[simp] lemma drop_take_append_drop' (x : List α) (m n : Nat) :
+@[simp] lemma drop_take_append_drop' (x : List α) (m n : ℕ) :
     (x.drop m).take n ++ x.drop (n + m) = x.drop m := by rw [Nat.add_comm, drop_take_append_drop]
 
-/--
-lemma `take_concat_get'` / 引理 `take_concat_get'`
+/-- `take_concat_get` in simp normal form -/
+/-
+**List.take_concat_get'** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：take_concat_get' (l : List α) (i : Nat) (h : i < l.length) : l.take i ++ [
+l[i]] = l.take (i + 1)
+参数：l : List α；i : Nat；h : i < l.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.take_append_getElem`：∀ {α : Type u_1} {l : List α} {i : ℕ} (h : i <
+ l.length), List.take i l ++ [l[i]] = List.take (i + 1) l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma take_concat_get'
-  given: (l : List α) (i : Nat) (h : i < l.length)
-  proof: by simp
-
-中文:
-引理 take_concat_get'
-  条件: (l : 列表 α) (i : 自然数) (h : i < l.length)
-  证明: by simp
+--- 原说明 ---
+`take_concat_get` in simp normal form
 -/
-lemma take_concat_get' (l : List α) (i : Nat) (h : i < l.length) :
+lemma take_concat_get' (l : List α) (i : ℕ) (h : i < l.length) :
     l.take i ++ [l[i]] = l.take (i + 1) := by simp
-
-/--
-theorem `cons_getElem_drop_succ` / 定理 `cons_getElem_drop_succ`
-
-English:
-theorem cons_getElem_drop_succ
-  given: {l : List α} {n : Nat} {h : n < l.length}
-  proof: (drop_eq_getElem_cons h).symm
-
-中文:
-定理 cons_getElem_drop_succ
-  条件: {l : 列表 α} {n : 自然数} {h : n < l.length}
-  证明: (drop_eq_getElem_cons h).symm
-
-Depends on / 依赖: drop_eq_getElem_cons
+/-
+**List.cons_getElem_drop_succ** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：cons_getElem_drop_succ {l : List α} {n : Nat} {h : n < l.length} : l[n] ::
+ l.drop (n + 1) = l.drop n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.drop_eq_getElem_cons`：∀ {α : Type u_1} {i : ℕ} {l : List α} (h : i 
+< l.length), List.drop i l = l[i] :: List.drop (i + 1) l
 -/
 theorem cons_getElem_drop_succ {l : List α} {n : Nat} {h : n < l.length} :
     l[n] :: l.drop (n + 1) = l.drop n :=
   (drop_eq_getElem_cons h).symm
-
-/--
-theorem `cons_get_drop_succ` / 定理 `cons_get_drop_succ`
-
-English:
-theorem cons_get_drop_succ
-  given: {l : List α} {n}
-  proof: (drop_eq_getElem_cons n.2).symm
-
-中文:
-定理 cons_get_drop_succ
-  条件: {l : 列表 α} {n}
-  证明: (drop_eq_getElem_cons n.2).symm
-
-Depends on / 依赖: drop_eq_getElem_cons
+/-
+**List.cons_get_drop_succ** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：cons_get_drop_succ {l : List α} {n} : l.get n :: l.drop (n.1 + 1) = l.drop
+ n.1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `List.drop_eq_getElem_cons`：∀ {α : Type u_1} {i : ℕ} {l : List α} (h : i 
+< l.length), List.drop i l = l[i] :: List.drop (i + 1) l
 -/
 theorem cons_get_drop_succ {l : List α} {n} :
     l.get n :: l.drop (n.1 + 1) = l.drop n.1 :=
   (drop_eq_getElem_cons n.2).symm
-
-/--
-lemma `drop_length_sub_one` / 引理 `drop_length_sub_one`
-
-English:
-lemma drop_length_sub_one
-  given: {l : List α} (h : l != [])
-  statement: l.drop (l.length - 1) = [l.getLast h]
-  proof: by
-  induction l with
-  | nil => aesop
-  | cons a l ih =>
-    by_cases hl : l = []
-    · simp_all
-    rw [length_cons]; rw [Nat.add_one_sub_one]; rw [List.drop_length_cons hl a]
-    simp [getLast_cons, hl]
-
-中文:
-引理 drop_length_sub_one
-  条件: {l : 列表 α} (h : l != [])
-  结论: l.drop (l.length - 1) = [l.getLast h]
-  证明: by
-  induction l with
-  | nil => aesop
-  | cons a l ih =>
-    by_cases hl : l = []
-    · simp_all
-    rw [length_cons]; rw [Nat.add_one_sub_one]; rw [List.drop_length_cons hl a]
-    simp [getLast_cons, hl]
-
-Depends on / 依赖: List.drop_length_cons, Nat.add_one_sub_one, add_one_sub_one, drop_length_cons, getLast_cons, length_cons
+/-
+**List.drop_length_sub_one** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：drop_length_sub_one {l : List α} (h : l != []) : l.drop (l.length - 1) = [
+l.getLast h]
+参数：h : l != []。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.drop_nil`：∀ {α : Type u} {i : ℕ}, List.drop i [] = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Nat.sub_self`：∀ (n : ℕ), n - n = 0
+· 使用定理 `List.drop_zero`：∀ {α : Type u} {l : List α}, List.drop 0 l = l
+· 使用定理 `List.getLast.congr_simp`：∀ {α : Type u} (as as_1 : List α) (e_as : as = 
+as_1) (a : as ≠ []), as.getLast a = as_1.getLast ⋯
+· 使用定理 `List.length_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).length
+ = as.length + 1
+· 使用定理 `Nat.add_one_sub_one`：∀ (n : ℕ), n + 1 - 1 = n
+· 使用定理 `List.drop_length_cons`：∀ {α : Type u_1} {l : List α} (h : l ≠ []) (a : α
+), List.drop l.length (a :: l) = [l.getLast h]
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `List.getLast_cons`：∀ {α : Type u_1} {a : α} {l : List α} (h : l ≠ []), (
+a :: l).getLast ⋯ = l.getLast h
 -/
-lemma drop_length_sub_one {l : List α} (h : l != []) : l.drop (l.length - 1) = [l.getLast h] := by
+lemma drop_length_sub_one {l : List α} (h : l ≠ []) : l.drop (l.length - 1) = [l.getLast h] := by
   induction l with
   | nil => aesop
   | cons a l ih =>
     by_cases hl : l = []
     · simp_all
-    rw [length_cons]; rw [Nat.add_one_sub_one]; rw [List.drop_length_cons hl a]
+    rw [length_cons, Nat.add_one_sub_one, List.drop_length_cons hl a]
     simp [getLast_cons, hl]
 
-/--
-theorem `tail_iterate` / 定理 `tail_iterate`
+/-- Applying `tail` to a list `n` times is equivalent to dropping `n` elements. -/
+/-
+**List.tail_iterate** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：tail_iterate (l : List α) (n : Nat) : (List.tail^[n]) l = l.drop n
+参数：l : List α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.drop_nil`：∀ {α : Type u} {i : ℕ}, List.drop i [] = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.drop_succ_cons`：∀ {α : Type u} {a : α} {l : List α} {i : ℕ}, List.d
+rop (i + 1) (a :: l) = List.drop i l
 
-English:
-theorem tail_iterate
-  given: (l : List α) (n : Nat)
-  statement: (List.tail^[n]) l = l.drop n
-  proof: by
-  induction n generalizing l with
-  | zero => rfl
-  | succ n ih => cases l <;> simp [*]
-
-中文:
-定理 tail_iterate
-  条件: (l : 列表 α) (n : 自然数)
-  结论: (列表.tail^[n]) l = l.drop n
-  证明: by
-  induction n generalizing l with
-  | zero => rfl
-  | succ n ih => cases l <;> simp [*]
-
-Depends on / 依赖: generalizing
+--- 原说明 ---
+Applying `tail` to a list `n` times is equivalent to dropping `n` elements.
 -/
-theorem tail_iterate (l : List α) (n : Nat) : (List.tail^[n]) l = l.drop n := by
+theorem tail_iterate (l : List α) (n : ℕ) : (List.tail^[n]) l = l.drop n := by
   induction n generalizing l with
   | zero => rfl
   | succ n ih => cases l <;> simp [*]
 
 section TailDropLast
 
-variable (l : List α) (n : Nat)
+variable (l : List α) (n : ℕ)
 
-/--
-theorem `tail_take_eq_take_tail` / 定理 `tail_take_eq_take_tail`
-
-English:
-theorem tail_take_eq_take_tail
-  statement: (l.take n).tail = l.tail.take (n - 1)
-  proof: by
-  ext
-  grind
-
-中文:
-定理 tail_take_eq_take_tail
-  结论: (l.take n).tail = l.tail.take (n - 1)
-  证明: by
-  ext
-  grind
+/-
+**List.tail_take_eq_take_tail** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：tail_take_eq_take_tail : (l.take n).tail = l.tail.take (n - 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ext_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α}, (∀ (i : ℕ), l₁[i]?
+ = l₂[i]?) → l₁ = l₂
+· 使用定理 `Option.ext`：∀ {α : Type u_1} {o₁ o₂ : Option α}, (∀ (a : α), o₁ = some a
+ ↔ o₂ = some a) → o₁ = o₂
 -/
 theorem tail_take_eq_take_tail : (l.take n).tail = l.tail.take (n - 1) := by
   ext
   grind
-
-/--
-theorem `dropLast_take_eq_take_dropLast` / 定理 `dropLast_take_eq_take_dropLast`
-
-English:
-theorem dropLast_take_eq_take_dropLast
-  statement: (l.take n).dropLast = l.dropLast.take (n - 1)
-  proof: by
-  ext
-  grind
-
-中文:
-定理 dropLast_take_eq_take_dropLast
-  结论: (l.take n).dropLast = l.dropLast.take (n - 1)
-  证明: by
-  ext
-  grind
+/-
+**List.dropLast_take_eq_take_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：dropLast_take_eq_take_dropLast : (l.take n).dropLast = l.dropLast.take (n 
+- 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ext_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α}, (∀ (i : ℕ), l₁[i]?
+ = l₂[i]?) → l₁ = l₂
+· 使用定理 `Option.ext`：∀ {α : Type u_1} {o₁ o₂ : Option α}, (∀ (a : α), o₁ = some a
+ ↔ o₂ = some a) → o₁ = o₂
 -/
 theorem dropLast_take_eq_take_dropLast : (l.take n).dropLast = l.dropLast.take (n - 1) := by
   ext
   grind
-
-/--
-theorem `tail_drop_eq_drop_tail` / 定理 `tail_drop_eq_drop_tail`
-
-English:
-theorem tail_drop_eq_drop_tail
-  statement: (l.drop n).tail = l.tail.drop n
-  proof: by
-  ext
-  grind
-
-中文:
-定理 tail_drop_eq_drop_tail
-  结论: (l.drop n).tail = l.tail.drop n
-  证明: by
-  ext
-  grind
+/-
+**List.tail_drop_eq_drop_tail** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：tail_drop_eq_drop_tail : (l.drop n).tail = l.tail.drop n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ext_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α}, (∀ (i : ℕ), l₁[i]?
+ = l₂[i]?) → l₁ = l₂
+· 使用定理 `Option.ext`：∀ {α : Type u_1} {o₁ o₂ : Option α}, (∀ (a : α), o₁ = some a
+ ↔ o₂ = some a) → o₁ = o₂
 -/
 theorem tail_drop_eq_drop_tail : (l.drop n).tail = l.tail.drop n := by
   ext
   grind
-
-/--
-theorem `dropLast_drop_eq_drop_dropLast` / 定理 `dropLast_drop_eq_drop_dropLast`
-
-English:
-theorem dropLast_drop_eq_drop_dropLast
-  statement: (l.drop n).dropLast = l.dropLast.drop n
-  proof: by
-  ext
-  grind
-
-中文:
-定理 dropLast_drop_eq_drop_dropLast
-  结论: (l.drop n).dropLast = l.dropLast.drop n
-  证明: by
-  ext
-  grind
+/-
+**List.dropLast_drop_eq_drop_dropLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：dropLast_drop_eq_drop_dropLast : (l.drop n).dropLast = l.dropLast.drop n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ext_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α}, (∀ (i : ℕ), l₁[i]?
+ = l₂[i]?) → l₁ = l₂
+· 使用定理 `Option.ext`：∀ {α : Type u_1} {o₁ o₂ : Option α}, (∀ (a : α), o₁ = some a
+ ↔ o₂ = some a) → o₁ = o₂
 -/
 theorem dropLast_drop_eq_drop_dropLast : (l.drop n).dropLast = l.dropLast.drop n := by
   ext
@@ -383,91 +342,70 @@ section TakeI
 variable [Inhabited α]
 
 @[simp]
-/--
-theorem `takeI_length` / 定理 `takeI_length`
-
-English:
-theorem takeI_length
-  statement: forall n l, length (@takeI α _ n l) = n
-
-中文:
-定理 takeI_length
-  结论: 对任意 n l, length (@takeI α _ n l) = n
+/-
+**List.takeI_length** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} [inst : Inhabited α] (n : ℕ) (l : List α), (List.takeI n l)
+.length = n
+参数：n : ℕ；l : List α；List.takeI n l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem takeI_length : forall n l, length (@takeI α _ n l) = n
+theorem takeI_length : ∀ n l, length (@takeI α _ n l) = n
   | 0, _ => rfl
   | _ + 1, _ => congr_arg succ (takeI_length _ _)
 
 @[simp]
-/--
-theorem `takeI_nil` / 定理 `takeI_nil`
-
-English:
-theorem takeI_nil
-  statement: forall n, takeI n (@nil α) = replicate n default
-
-中文:
-定理 takeI_nil
-  结论: 对任意 n, takeI n (@nil α) = replicate n default
+/-
+**List.takeI_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} [inst : Inhabited α] (n : ℕ), List.takeI n [] = List.replic
+ate n default
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem takeI_nil : forall n, takeI n (@nil α) = replicate n default
+theorem takeI_nil : ∀ n, takeI n (@nil α) = replicate n default
   | 0 => rfl
   | _ + 1 => congr_arg (cons _) (takeI_nil _)
-
-/--
-theorem `takeI_eq_take` / 定理 `takeI_eq_take`
-
-English:
-theorem takeI_eq_take
-  statement: forall {n} {l : List α}, n <= length l -> takeI n l = take n l
-
-中文:
-定理 takeI_eq_take
-  结论: 对任意 {n} {l : 列表 α}, n <= length l -> takeI n l = take n l
+/-
+**List.takeI_eq_take** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} [inst : Inhabited α] {n : ℕ} {l : List α}, n ≤ l.length → L
+ist.takeI n l = List.take n l
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem takeI_eq_take : forall {n} {l : List α}, n <= length l -> takeI n l = take n l
+theorem takeI_eq_take : ∀ {n} {l : List α}, n ≤ length l → takeI n l = take n l
   | 0, _, _ => rfl
-| _ + 1, _ :: _, h => congr_arg (cons _) takeI_eq_take le_of_succ_le_succ h
+  | _ + 1, _ :: _, h => congr_arg (cons _) <| takeI_eq_take <| le_of_succ_le_succ h
 
 @[simp]
-/--
-theorem `takeI_left` / 定理 `takeI_left`
-
-English:
-theorem takeI_left
-  given: (l₁ l₂ : List α)
-  statement: takeI (length l₁) (l₁ ++ l₂) = l₁
-  proof: (takeI_eq_take (by simp only [length_append, Nat.le_add_right])).trans take_left
-
-中文:
-定理 takeI_left
-  条件: (l₁ l₂ : 列表 α)
-  结论: takeI (length l₁) (l₁ ++ l₂) = l₁
-  证明: (takeI_eq_take (by simp only [length_append, Nat.le_add_right])).trans take_left
-
-Depends on / 依赖: Nat.le_add_right, le_add_right, length_append, takeI_eq_take, take_left
+/-
+**List.takeI_left** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：takeI_left (l₁ l₂ : List α) : takeI (length l₁) (l₁ ++ l₂) = l₁
+参数：l₁ l₂ : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.takeI_eq_take`：∀ {α : Type u} [inst : Inhabited α] {n : ℕ} {l : Lis
+t α}, n ≤ l.length → List.takeI n l = List.take n l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `List.take_left`：∀ {α : Type u_1} {l₁ l₂ : List α}, List.take l₁.length (
+l₁ ++ l₂) = l₁
 -/
 theorem takeI_left (l₁ l₂ : List α) : takeI (length l₁) (l₁ ++ l₂) = l₁ :=
   (takeI_eq_take (by simp only [length_append, Nat.le_add_right])).trans take_left
-
-/--
-theorem `takeI_left'` / 定理 `takeI_left'`
-
-English:
-theorem takeI_left'
-  given: {l₁ l₂ : List α} {n} (h : length l₁ = n)
-  statement: takeI n (l₁ ++ l₂) = l₁
-  proof: by
-  rw [← h]; apply takeI_left
-
-中文:
-定理 takeI_left'
-  条件: {l₁ l₂ : 列表 α} {n} (h : length l₁ = n)
-  结论: takeI n (l₁ ++ l₂) = l₁
-  证明: by
-  rw [← h]; apply takeI_left
-
-Depends on / 依赖: takeI_left
+/-
+**List.takeI_left'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：takeI_left' {l₁ l₂ : List α} {n} (h : length l₁ = n) : takeI n (l₁ ++ l₂) 
+= l₁
+参数：h : length l₁ = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.takeI_left`：takeI_left (l₁ l₂ : List α) : takeI (length l₁) (l₁ ++ 
+l₂) = l₁
 -/
 theorem takeI_left' {l₁ l₂ : List α} {n} (h : length l₁ = n) : takeI n (l₁ ++ l₂) = l₁ := by
   rw [← h]; apply takeI_left
@@ -478,77 +416,60 @@ end TakeI
 section TakeD
 
 @[simp]
-/--
-theorem `takeD_length` / 定理 `takeD_length`
-
-English:
-theorem takeD_length
-  statement: forall n l a, length (@takeD α n l a) = n
-
-中文:
-定理 takeD_length
-  结论: 对任意 n l a, length (@takeD α n l a) = n
+/-
+**List.takeD_length** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} (n : ℕ) (l : List α) (a : α), (List.takeD n l a).length = n
+参数：n : ℕ；l : List α；a : α；List.takeD n l a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem takeD_length : forall n l a, length (@takeD α n l a) = n
+theorem takeD_length : ∀ n l a, length (@takeD α n l a) = n
   | 0, _, _ => rfl
   | _ + 1, _, _ => congr_arg succ (takeD_length _ _ _)
 
 -- `takeD_nil` is already in batteries
-
-/--
-theorem `takeD_eq_take` / 定理 `takeD_eq_take`
-
-English:
-theorem takeD_eq_take
-  statement: forall {n} {l : List α} a, n <= length l -> takeD n l a = take n l
-
-中文:
-定理 takeD_eq_take
-  结论: 对任意 {n} {l : 列表 α} a, n <= length l -> takeD n l a = take n l
+/-
+**List.takeD_eq_take** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u} {n : ℕ} {l : List α} (a : α), n ≤ l.length → List.takeD n l
+ a = List.take n l
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem takeD_eq_take : forall {n} {l : List α} a, n <= length l -> takeD n l a = take n l
+theorem takeD_eq_take : ∀ {n} {l : List α} a, n ≤ length l → takeD n l a = take n l
   | 0, _, _, _ => rfl
-| _ + 1, _ :: _, a, h => congr_arg (cons _) takeD_eq_take a le_of_succ_le_succ h
+  | _ + 1, _ :: _, a, h => congr_arg (cons _) <| takeD_eq_take a <| le_of_succ_le_succ h
 
 @[simp]
-/--
-theorem `takeD_left` / 定理 `takeD_left`
-
-English:
-theorem takeD_left
-  given: (l₁ l₂ : List α) (a : α)
-  statement: takeD (length l₁) (l₁ ++ l₂) a = l₁
-  proof: (takeD_eq_take a (by simp only [length_append, Nat.le_add_right])).trans take_left
-
-中文:
-定理 takeD_left
-  条件: (l₁ l₂ : 列表 α) (a : α)
-  结论: takeD (length l₁) (l₁ ++ l₂) a = l₁
-  证明: (takeD_eq_take a (by simp only [length_append, Nat.le_add_right])).trans take_left
-
-Depends on / 依赖: Nat.le_add_right, le_add_right, length_append, takeD_eq_take, take_left
+/-
+**List.takeD_left** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：takeD_left (l₁ l₂ : List α) (a : α) : takeD (length l₁) (l₁ ++ l₂) a = l₁
+参数：l₁ l₂ : List α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.takeD_eq_take`：∀ {α : Type u} {n : ℕ} {l : List α} (a : α), n ≤ l.l
+ength → List.takeD n l a = List.take n l
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `List.take_left`：∀ {α : Type u_1} {l₁ l₂ : List α}, List.take l₁.length (
+l₁ ++ l₂) = l₁
 -/
 theorem takeD_left (l₁ l₂ : List α) (a : α) : takeD (length l₁) (l₁ ++ l₂) a = l₁ :=
   (takeD_eq_take a (by simp only [length_append, Nat.le_add_right])).trans take_left
-
-/--
-theorem `takeD_left'` / 定理 `takeD_left'`
-
-English:
-theorem takeD_left'
-  given: {l₁ l₂ : List α} {n} {a} (h : length l₁ = n)
-  statement: takeD n (l₁ ++ l₂) a = l₁
-  proof: by
-  rw [← h]; apply takeD_left
-
-中文:
-定理 takeD_left'
-  条件: {l₁ l₂ : 列表 α} {n} {a} (h : length l₁ = n)
-  结论: takeD n (l₁ ++ l₂) a = l₁
-  证明: by
-  rw [← h]; apply takeD_left
-
-Depends on / 依赖: takeD_left
+/-
+**List.takeD_left'** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：takeD_left' {l₁ l₂ : List α} {n} {a} (h : length l₁ = n) : takeD n (l₁ ++ 
+l₂) a = l₁
+参数：h : length l₁ = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.takeD_left`：takeD_left (l₁ l₂ : List α) (a : α) : takeD (length l₁)
+ (l₁ ++ l₂) a = l₁
 -/
 theorem takeD_left' {l₁ l₂ : List α} {n} {a} (h : length l₁ = n) : takeD n (l₁ ++ l₂) a = l₁ := by
   rw [← h]; apply takeD_left
@@ -561,111 +482,75 @@ section Filter
 
 variable (p)
 
-variable (p : α -> Bool)
+variable (p : α → Bool)
 
-/--
-theorem `span.loop_eq_take_drop` / 定理 `span.loop_eq_take_drop`
-
-English:
-theorem span.loop_eq_take_drop
-
-中文:
-定理 span.loop_eq_take_drop
+/-
+**List.span.loop_eq_take_drop** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem span.loop_eq_take_drop :
-    forall l₁ l₂ : List α, span.loop p l₁ l₂ = (l₂.reverse ++ takeWhile p l₁, dropWhile p l₁)
+    ∀ l₁ l₂ : List α, span.loop p l₁ l₂ = (l₂.reverse ++ takeWhile p l₁, dropWhile p l₁)
   | [], l₂ => by simp [span.loop, takeWhile, dropWhile]
   | (a :: l), l₂ => by
     cases hp : p a <;> simp [hp, span.loop, span.loop_eq_take_drop, takeWhile, dropWhile]
 
 @[simp]
-/--
-theorem `span_eq_takeWhile_dropWhile` / 定理 `span_eq_takeWhile_dropWhile`
-
-English:
-theorem span_eq_takeWhile_dropWhile
-  given: (l : List α)
-  statement: span p l = (takeWhile p l, dropWhile p l)
-  proof: by
-  simpa using! span.loop_eq_take_drop p l []
-
-中文:
-定理 span_eq_takeWhile_dropWhile
-  条件: (l : 列表 α)
-  结论: span p l = (takeWhile p l, dropWhile p l)
-  证明: by
-  simpa using! span.loop_eq_take_drop p l []
-
-Depends on / 依赖: loop_eq_take_drop, span.loop_eq_take_drop
+/-
+**List.span_eq_takeWhile_dropWhile** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：span_eq_takeWhile_dropWhile (l : List α) : span p l = (takeWhile p l, drop
+While p l)
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.Data.List.TakeDrop.0.List.span.loop_eq_take_drop`：∀ {α 
+: Type u} (p : α → Bool) (l₁ l₂ : List α),   List.span.loop p l₁ l₂ = (l₂.revers
+e ++ List.takeWhile p l₁, List.dropWhile p l₁)
 -/
 theorem span_eq_takeWhile_dropWhile (l : List α) : span p l = (takeWhile p l, dropWhile p l) := by
   simpa using! span.loop_eq_take_drop p l []
 
 end Filter
 
+/-! ### Miscellaneous lemmas -/
 
-/--
-theorem `dropSlice_eq` / 定理 `dropSlice_eq`
+/-
+**List.dropSlice_eq** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：dropSlice_eq (xs : List α) (n m : Nat) : dropSlice n m xs = xs.take n ++ x
+s.drop (n + m)
+参数：xs : List α；n m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem dropSlice_eq
-  given: (xs : List α) (n m : Nat)
-  statement: dropSlice n m xs = xs.take n ++ xs.drop (n + m)
-  proof: by
-  induction n generalizing xs with cases xs with grind [dropSlice]
-
-@[simp, grind =]
-
-中文:
-定理 dropSlice_eq
-  条件: (xs : 列表 α) (n m : 自然数)
-  结论: dropSlice n m xs = xs.take n ++ xs.drop (n + m)
-  证明: by
-  induction n generalizing xs with cases xs with grind [dropSlice]
-
-@[simp, grind =]
-
-Depends on / 依赖: dropSlice, generalizing
+--- 原说明 ---
+### Miscellaneous lemmas
 -/
-theorem dropSlice_eq (xs : List α) (n m : Nat) : dropSlice n m xs = xs.take n ++ xs.drop (n + m) := by
+theorem dropSlice_eq (xs : List α) (n m : ℕ) : dropSlice n m xs = xs.take n ++ xs.drop (n + m) := by
   induction n generalizing xs with cases xs with grind [dropSlice]
 
 @[simp, grind =]
-/--
-theorem `length_dropSlice` / 定理 `length_dropSlice`
-
-English:
-theorem length_dropSlice
-  given: (i j : Nat) (xs : List α)
-  proof: by
-  induction xs generalizing i j with cases i with grind [dropSlice]
-
-中文:
-定理 length_dropSlice
-  条件: (i j : 自然数) (xs : 列表 α)
-  证明: by
-  induction xs generalizing i j with cases i with grind [dropSlice]
-
-Depends on / 依赖: dropSlice, generalizing
+/-
+**List.length_dropSlice** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：length_dropSlice (i j : Nat) (xs : List α) : (dropSlice i j xs).length = x
+s.length - min j (xs.length - i)
+参数：i j : Nat；xs : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem length_dropSlice (i j : Nat) (xs : List α) :
+theorem length_dropSlice (i j : ℕ) (xs : List α) :
     (dropSlice i j xs).length = xs.length - min j (xs.length - i) := by
   induction xs generalizing i j with cases i with grind [dropSlice]
-
-/--
-theorem `length_dropSlice_lt` / 定理 `length_dropSlice_lt`
-
-English:
-theorem length_dropSlice_lt
-  given: (i j : Nat) (hj : 0 < j) (xs : List α) (hi : i < xs.length)
-  proof: by grind
-
-中文:
-定理 length_dropSlice_lt
-  条件: (i j : 自然数) (hj : 0 < j) (xs : 列表 α) (hi : i < xs.length)
-  证明: by grind
+/-
+**List.length_dropSlice_lt** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：length_dropSlice_lt (i j : Nat) (hj : 0 < j) (xs : List α) (hi : i < xs.le
+ngth) : (dropSlice i j xs).length < xs.length
+参数：i j : Nat；hj : 0 < j；xs : List α；hi : i < xs.length。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem length_dropSlice_lt (i j : Nat) (hj : 0 < j) (xs : List α) (hi : i < xs.length) :
+theorem length_dropSlice_lt (i j : ℕ) (hj : 0 < j) (xs : List α) (hi : i < xs.length) :
     (dropSlice i j xs).length < xs.length := by grind
 
 end List
+

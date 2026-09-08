@@ -19,73 +19,34 @@ open scoped ENNReal
 
 noncomputable section
 
-variable {I : Type*} {A : I -> Type*}
+variable {I : Type*} {A : I → Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, NonUnitalCStarAlgebra (A i)] : NonUnitalCStarAlgebra (lp A ∞) where
-
-中文:
-实例 [对任意
-  签名: i, 非幺CStar代数 (A i)] : 非幺CStar代数 (lp A ∞) where
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, NonUnitalCStarAlgebra (A i)] : NonUnitalCStarAlgebra (lp A ∞) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, NonUnitalCommCStarAlgebra (A i)] : NonUnitalCommCStarAlgebra (lp A ∞) where
-
-中文:
-实例 [对任意
-  签名: i, 非幺交换CStar代数 (A i)] : 非幺交换CStar代数 (lp A ∞) where
-
-Depends on / 依赖: NormedDivisionRing, NormedDivisionRing.toNormedRing, toNormedRing
+instance [∀ i, NonUnitalCStarAlgebra (A i)] : NonUnitalCStarAlgebra (lp A ∞) where
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, NonUnitalCommCStarAlgebra (A i)] : NonUnitalCommCStarAlgebra (lp A ∞) where
+instance [∀ i, NonUnitalCommCStarAlgebra (A i)] : NonUnitalCommCStarAlgebra (lp A ∞) where
 
 -- it's slightly weird that we need the `Nontrivial` instance here
 -- it's because we have no way to say that `‖(1 : A i)‖` is uniformly bounded as a type class
 -- aside from `∀ i, NormOneClass (A i)`, this holds automatically for C⋆-algebras though.
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Nontrivial (A i)] [forall i, CStarAlgebra (A i)] : NormedRing (lp A ∞) where
-  body: dist_eq_norm_neg_add
-  norm_mul_le := norm_mul_le
-
-中文:
-实例 [对任意
-  签名: i, 非平凡 (A i)] [对任意 i, CStar代数 (A i)] : 赋范环 (lp A ∞) where
-  定义体: dist_eq_norm_neg_add
-  norm_mul_le := norm_mul_le
-
-Depends on / 依赖: NormedDivisionRing, NormedDivisionRing.toNormMulClass, dist_eq_norm_neg_add, toNormMulClass
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Nontrivial (A i)] [forall i, CStarAlgebra (A i)] : NormedRing (lp A ∞) where
+instance [∀ i, Nontrivial (A i)] [∀ i, CStarAlgebra (A i)] : NormedRing (lp A ∞) where
   dist_eq := dist_eq_norm_neg_add
   norm_mul_le := norm_mul_le
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Nontrivial (A i)] [forall i, CommCStarAlgebra (A i)] : CommCStarAlgebra (lp A ∞) where
-
-中文:
-实例 [对任意
-  签名: i, 非平凡 (A i)] [对任意 i, 交换CStar代数 (A i)] : 交换CStar代数 (lp A ∞) where
-
-Depends on / 依赖: NormOneClass, NormedDivisionRing, NormedDivisionRing.to_normOneClass, to_normOneClass
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Nontrivial (A i)] [forall i, CommCStarAlgebra (A i)] : CommCStarAlgebra (lp A ∞) where
+instance [∀ i, Nontrivial (A i)] [∀ i, CommCStarAlgebra (A i)] : CommCStarAlgebra (lp A ∞) where
 
 end
+

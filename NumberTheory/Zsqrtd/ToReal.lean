@@ -24,41 +24,37 @@ namespace Zsqrtd
 
 If the negative root is desired, use `toReal h (star a)`. -/
 @[simps!]
-/--
-Definition of `toReal` / `toReal` 的定义
+/-
+**Zsqrtd.toReal** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：toReal {d : Int} (h : 0 <= d) : Int√d ->+* Real
+参数：h : 0 <= d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toReal
-  signature: {d : Int} (h : 0 <= d)
-  body: lift ⟨√↑d, Real.mul_self_sqrt (Int.cast_nonneg h)⟩
+--- 原说明 ---
+The image of `Zsqrtd` in `ℝ`, using `Real.sqrt` which takes the positive root of
+ `d`.
 
-中文:
-定义 to实数
-  签名: {d : 整数} (h : 0 <= d)
-  定义体: lift ⟨√↑d, Real.mul_self_sqrt (Int.cast_nonneg h)⟩
-
-Depends on / 依赖: Int.cast_nonneg, Real.mul_self_sqrt, cast_nonneg, mul_self_sqrt
+If the negative root is desired, use `toReal h (star a)`.
 -/
-noncomputable def toReal {d : Int} (h : 0 <= d) : Int√d ->+* Real :=
+noncomputable def toReal {d : ℤ} (h : 0 ≤ d) : ℤ√d →+* ℝ :=
   lift ⟨√↑d, Real.mul_self_sqrt (Int.cast_nonneg h)⟩
-
-/--
-theorem `toReal_injective` / 定理 `toReal_injective`
-
-English:
-theorem toReal_injective
-  given: {d : Int} (h0d : 0 <= d) (hd : forall n : Int, d != n * n)
-  proof: lift_injective _ hd
-
-中文:
-定理 to实数_injective
-  条件: {d : 整数} (h0d : 0 <= d) (hd : 对任意 n : 整数, d != n * n)
-  证明: lift_injective _ hd
-
-Depends on / 依赖: lift_injective
+/-
+**Zsqrtd.toReal_injective** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：toReal_injective {d : Int} (h0d : 0 <= d) (hd : forall n : Int, d != n * n
+) : Function.Injective (toReal h0d)
+参数：h0d : 0 <= d；hd : forall n : Int, d != n * n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.lift_injective`：lift_injective [CharZero R] {d : Int} (r : { r : 
+R // r * r = ↑d }) (hd : forall n : Int, d != n * n) : Function.Injective (lift 
+r)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem toReal_injective {d : Int} (h0d : 0 <= d) (hd : forall n : Int, d != n * n) :
+theorem toReal_injective {d : ℤ} (h0d : 0 ≤ d) (hd : ∀ n : ℤ, d ≠ n * n) :
     Function.Injective (toReal h0d) :=
   lift_injective _ hd
 
 end Zsqrtd
+

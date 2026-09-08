@@ -24,7 +24,11 @@ universe v' v u
 variable {C : Type u} [Category.{v} C] {J : GrothendieckTopology C} [Subcanonical J]
   {K : Type*} [Category* K]
 
-instance {F : K ⥤ C} [forall X : Sheaf J (Type v), PreservesLimit F.op X.obj] :
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {F : K ⥤ C} [∀ X : Sheaf J (Type v), PreservesLimit F.op X.obj] :
     PreservesColimit F J.yoneda where
   preserves {c} hc := ⟨by
     suffices IsLimit (coyoneda.mapCone (J.yoneda.mapCocone c).op) from
@@ -34,25 +38,18 @@ instance {F : K ⥤ C} [forall X : Sheaf J (Type v), PreservesLimit F.op X.obj] 
     suffices IsLimit ((X.obj ⋙ uliftFunctor).mapCone c.op) from IsLimit.mapConeEquiv
       (isoWhiskerRight (J.yonedaOpCompCoyoneda) ((evaluation _ _ ).obj X)).symm this
     exact isLimitOfPreserves _ hc.op⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: X
-  body: inferInstance
-
-中文:
-实例 [对任意
-  签名: X
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall X : Sheaf J (Type v), PreservesLimitsOfShape Kᵒᵖ X.obj] :
+instance [∀ X : Sheaf J (Type v), PreservesLimitsOfShape Kᵒᵖ X.obj] :
     PreservesColimitsOfShape K J.yoneda where
   preservesColimit := inferInstance
-
-instance {F : K ⥤ C} [forall X : Sheaf J (Type max v v'), PreservesLimit F.op X.obj] :
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {F : K ⥤ C} [∀ X : Sheaf J (Type max v v'), PreservesLimit F.op X.obj] :
     PreservesColimit F (uliftYoneda.{v'} J) where
   preserves {c} hc := ⟨by
     suffices IsLimit (coyoneda.mapCone (J.uliftYoneda.mapCocone c).op) from
@@ -62,43 +59,15 @@ instance {F : K ⥤ C} [forall X : Sheaf J (Type max v v'), PreservesLimit F.op 
     suffices IsLimit ((X.obj ⋙ uliftFunctor).mapCone c.op) from IsLimit.mapConeEquiv
       (isoWhiskerRight (J.uliftYonedaOpCompCoyoneda) ((evaluation _ _ ).obj X)).symm this
     exact isLimitOfPreserves _ hc.op⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: X
-
-中文:
-实例 [对任意
-  签名: X
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall X : Sheaf J (Type max v v'), PreservesLimitsOfShape Kᵒᵖ X.obj] :
+instance [∀ X : Sheaf J (Type max v v'), PreservesLimitsOfShape Kᵒᵖ X.obj] :
     PreservesColimitsOfShape K (uliftYoneda.{v'} J) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesLimitsOfShape K J.yoneda
-  body: by
-    intro F
-    have : PreservesLimitsOfShape K (J.yoneda ⋙ sheafToPresheaf J (Type v)) :=
-      preservesLimitsOfShape_of_natIso (yonedaCompSheafToPresheaf J).symm
-    exact preservesLimit_of_reflects_of_preserves (F := J.yoneda) (G := sheafToPresheaf ..)
-
-中文:
-实例 :
-  签名: 保持形状极限 K J.yoneda
-  定义体: by
-    intro F
-    have : PreservesLimitsOfShape K (J.yoneda ⋙ sheafToPresheaf J (Type v)) :=
-      preservesLimitsOfShape_of_natIso (yonedaCompSheafToPresheaf J).symm
-    exact preservesLimit_of_reflects_of_preserves (F := J.yoneda) (G := sheafToPresheaf ..)
-
-Depends on / 依赖: J.yoneda, PreservesLimitsOfShape, preservesLimit_of_reflects_of_preserves, preservesLimitsOfShape_of_natIso, sheafToPresheaf, yoneda, yonedaCompSheafToPresheaf
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesLimitsOfShape K J.yoneda where
   preservesLimit := by
@@ -106,31 +75,9 @@ instance : PreservesLimitsOfShape K J.yoneda where
     have : PreservesLimitsOfShape K (J.yoneda ⋙ sheafToPresheaf J (Type v)) :=
       preservesLimitsOfShape_of_natIso (yonedaCompSheafToPresheaf J).symm
     exact preservesLimit_of_reflects_of_preserves (F := J.yoneda) (G := sheafToPresheaf ..)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesLimitsOfShape K (uliftYoneda.{v'} J)
-  body: by
-    intro F
-    have : PreservesLimitsOfShape K (uliftYoneda J ⋙ sheafToPresheaf J (Type max v v')) :=
-      preservesLimitsOfShape_of_natIso (uliftYonedaCompSheafToPresheaf J).symm
-    exact preservesLimit_of_reflects_of_preserves (uliftYoneda J)
-      (sheafToPresheaf ..)
-
-中文:
-实例 :
-  签名: 保持形状极限 K (uliftYoneda.{v'} J)
-  定义体: by
-    intro F
-    have : PreservesLimitsOfShape K (uliftYoneda J ⋙ sheafToPresheaf J (Type max v v')) :=
-      preservesLimitsOfShape_of_natIso (uliftYonedaCompSheafToPresheaf J).symm
-    exact preservesLimit_of_reflects_of_preserves (uliftYoneda J)
-      (sheafToPresheaf ..)
-
-Depends on / 依赖: PreservesLimitsOfShape, preservesLimit_of_reflects_of_preserves, preservesLimitsOfShape_of_natIso, sheafToPresheaf, uliftYoneda, uliftYonedaCompSheafToPresheaf
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesLimitsOfShape K (uliftYoneda.{v'} J) where
   preservesLimit := by
@@ -139,41 +86,24 @@ instance : PreservesLimitsOfShape K (uliftYoneda.{v'} J) where
       preservesLimitsOfShape_of_natIso (uliftYonedaCompSheafToPresheaf J).symm
     exact preservesLimit_of_reflects_of_preserves (uliftYoneda J)
       (sheafToPresheaf ..)
-
-instance {F : K ⥤ C} [forall X : Sheaf J (Type v), PreservesLimit F.op X.obj] :
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {F : K ⥤ C} [∀ X : Sheaf J (Type v), PreservesLimit F.op X.obj] :
     PreservesColimit F J.yoneda :=
   preservesColimit_of_natIso _ J.uliftYonedaIsoYoneda
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: X
-  body: inferInstance
-
-中文:
-实例 [对任意
-  签名: X
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall X : Sheaf J (Type v), PreservesFiniteProducts X.obj] :
+instance [∀ X : Sheaf J (Type v), PreservesFiniteProducts X.obj] :
     PreservesFiniteCoproducts J.yoneda where
   preserves _ := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: X
-  body: inferInstance
-
-中文:
-实例 [对任意
-  签名: X
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall X : Sheaf J (Type max v v'), PreservesFiniteProducts X.obj] :
+instance [∀ X : Sheaf J (Type max v v'), PreservesFiniteProducts X.obj] :
     PreservesFiniteCoproducts (uliftYoneda.{v'} J) where
   preserves _ := inferInstance

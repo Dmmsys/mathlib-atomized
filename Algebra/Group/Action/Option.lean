@@ -33,114 +33,55 @@ section SMul
 variable [SMul M α] [SMul N α] (a : M) (b : α) (x : Option α)
 
 @[to_additive Option.VAdd]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul M (Option α)
-  body: ⟨fun a => Option.map (a • ·)⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 标量乘法 M (选项类型 α)
-  定义体: ⟨fun a => Option.map (a • ·)⟩
-
-@[to_additive]
-
-Depends on / 依赖: Option.map
+/-
+**Option.** 是 Mathlib 中的一个实例，位于命名空间 `Option`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul M (Option α) :=
-⟨fun a => Option.map (a • ·)⟩
+  ⟨fun a => Option.map <| (a • ·)⟩
 
 @[to_additive]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  statement: a • x = x.map (a • ·)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_def
-  结论: a • x = x.map (a • ·)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Option.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：smul_def : a • x = x.map (a • ·)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_def : a • x = x.map (a • ·) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_none` / 定理 `smul_none`
-
-English:
-theorem smul_none
-  statement: a • (none : Option α) = none
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_none
-  结论: a • (none : 选项类型 α) = none
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Option.smul_none** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：smul_none : a • (none : Option α) = none
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_none : a • (none : Option α) = none :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_some` / 定理 `smul_some`
-
-English:
-theorem smul_some
-  statement: a • some b = some (a • b)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 smul_some
-  结论: a • some b = some (a • b)
-  证明: rfl
-
-@[to_additive]
+/-
+**Option.smul_some** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：smul_some : a • some b = some (a • b)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_some : a • some b = some (a • b) :=
   rfl
 
 @[to_additive]
-/--
-Instance `instIsScalarTowerOfSMul` / 实例 `instIsScalarTowerOfSMul`
-
-English:
-instance instIsScalarTowerOfSMul
-  signature: [SMul M N] [IsScalarTower M N α]
-  body: ⟨fun a b x => by
-    cases x
-    exacts [rfl, congr_arg some (smul_assoc _ _ _)]⟩
-
-@[to_additive]
-
-中文:
-实例 instIsScalarTowerOfSMul
-  签名: [标量乘法 M N] [标量塔 M N α]
-  定义体: ⟨fun a b x => by
-    cases x
-    exacts [rfl, congr_arg some (smul_assoc _ _ _)]⟩
-
-@[to_additive]
-
-Depends on / 依赖: congr_arg, exacts, smul_assoc
+/-
+**Option.instIsScalarTowerOfSMul** 是 Mathlib 中的一个实例，位于命名空间 `Option`。
+形式化陈述：instIsScalarTowerOfSMul [SMul M N] [IsScalarTower M N α] : IsScalarTower M
+ N (Option α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance instIsScalarTowerOfSMul [SMul M N] [IsScalarTower M N α] : IsScalarTower M N (Option α) :=
   ⟨fun a b x => by
@@ -148,51 +89,17 @@ instance instIsScalarTowerOfSMul [SMul M N] [IsScalarTower M N α] : IsScalarTow
     exacts [rfl, congr_arg some (smul_assoc _ _ _)]⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: M N α] : SMulCommClass M N (Option α)
-  body: ⟨fun _ _ => Function.Commute.option_map smul_comm _ _⟩
-
-@[to_additive]
-
-中文:
-实例 [标量交换类
-  签名: M N α] : 标量交换类 M N (选项类型 α)
-  定义体: ⟨fun _ _ => Function.Commute.option_map smul_comm _ _⟩
-
-@[to_additive]
-
-Depends on / 依赖: Commute, Function, Function.Commute.option_map, option_map, smul_comm
+/-
+**Option.** 是 Mathlib 中的一个实例，位于命名空间 `Option`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass M N α] : SMulCommClass M N (Option α) :=
-⟨fun _ _ => Function.Commute.option_map smul_comm _ _⟩
+  ⟨fun _ _ => Function.Commute.option_map <| smul_comm _ _⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: Mᵐᵒᵖ α] [IsCentralScalar M α] : IsCentralScalar M (Option α)
-  body: ⟨fun a x => by
-    cases x
-    exacts [rfl, congr_arg some (op_smul_eq_smul _ _)]⟩
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: Mᵐᵒᵖ α] [中心标量 M α] : 中心标量 M (选项类型 α)
-  定义体: ⟨fun a x => by
-    cases x
-    exacts [rfl, congr_arg some (op_smul_eq_smul _ _)]⟩
-
-@[to_additive]
-
-Depends on / 依赖: congr_arg, exacts, op_smul_eq_smul
+/-
+**Option.** 是 Mathlib 中的一个实例，位于命名空间 `Option`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul Mᵐᵒᵖ α] [IsCentralScalar M α] : IsCentralScalar M (Option α) :=
   ⟨fun a x => by
@@ -200,50 +107,18 @@ instance [SMul Mᵐᵒᵖ α] [IsCentralScalar M α] : IsCentralScalar M (Option
     exacts [rfl, congr_arg some (op_smul_eq_smul _ _)]⟩
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FaithfulSMul
-  signature: M α] : FaithfulSMul M (Option α)
-  body: ⟨fun h => eq_of_smul_eq_smul fun b : α => by injection h (some b)⟩
-
-中文:
-实例 [忠实标量乘法
-  签名: M α] : 忠实标量乘法 M (选项类型 α)
-  定义体: ⟨fun h => eq_of_smul_eq_smul fun b : α => by injection h (some b)⟩
-
-Depends on / 依赖: eq_of_smul_eq_smul, injection
+/-
+**Option.** 是 Mathlib 中的一个实例，位于命名空间 `Option`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [FaithfulSMul M α] : FaithfulSMul M (Option α) :=
   ⟨fun h => eq_of_smul_eq_smul fun b : α => by injection h (some b)⟩
 
 end SMul
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [MulAction M α] :
-  body: by
-    cases b
-    exacts [rfl, congr_arg some (one_smul _ _)]
-  mul_smul a₁ a₂ b := by
-    cases b
-    exacts [rfl, congr_arg some (mul_smul _ _ _)]
-
-中文:
-实例 [幺半群
-  签名: M] [乘法作用 M α] :
-  定义体: by
-    cases b
-    exacts [rfl, congr_arg some (one_smul _ _)]
-  mul_smul a₁ a₂ b := by
-    cases b
-    exacts [rfl, congr_arg some (mul_smul _ _ _)]
-
-Depends on / 依赖: congr_arg, exacts, mul_smul, one_smul
+/-
+**Option.** 是 Mathlib 中的一个实例，位于命名空间 `Option`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [MulAction M α] :
     MulAction M (Option α) where
@@ -255,3 +130,4 @@ instance [Monoid M] [MulAction M α] :
     exacts [rfl, congr_arg some (mul_smul _ _ _)]
 
 end Option
+

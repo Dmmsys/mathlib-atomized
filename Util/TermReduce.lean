@@ -38,30 +38,12 @@ and then `Lean.Expr.headBeta` is applied. -/
 syntax (name := betaStx) "beta% " term : term
 
 @[term_elab betaStx, inherit_doc betaStx]
-/--
-Definition of `elabBeta` / `elabBeta` 的定义
-
-English:
-definition elabBeta
-  signature: : TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(beta% $t) => do
-    let e ← elabTerm t expectedType?
-    return (← instantiateMVars e).headBeta
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabBeta
-  签名: : TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(beta% $t) => do
-    let e ← elabTerm t expectedType?
-    return (← instantiateMVars e).headBeta
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+/-
+**Mathlib.Util.TermReduce.elabBeta** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Util.TermR
+educe`。
+形式化陈述：elabBeta : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabBeta : TermElab := fun stx expectedType? =>
   match stx with
@@ -74,38 +56,12 @@ def elabBeta : TermElab := fun stx expectedType? =>
 syntax (name := deltaStx) "delta% " term : term
 
 @[term_elab deltaStx, inherit_doc deltaStx]
-/--
-Definition of `elabDelta` / `elabDelta` 的定义
-
-English:
-definition elabDelta
-  signature: : TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(delta% $t) => do
-    let t ← withSynthesize (postpone := .partial) do
-      elabTerm t expectedType?
-    synthesizeSyntheticMVars
-    let t ← instantiateMVars t
-    let some t ← withoutExporting do delta? t | throwError "cannot delta reduce {t}"
-    pure t
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabDelta
-  签名: : TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(delta% $t) => do
-    let t ← withSynthesize (postpone := .partial) do
-      elabTerm t expectedType?
-    synthesizeSyntheticMVars
-    let t ← instantiateMVars t
-    let some t ← withoutExporting do delta? t | throwError "cannot delta reduce {t}"
-    pure t
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+/-
+**Mathlib.Util.TermReduce.elabDelta** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Util.Term
+Reduce`。
+形式化陈述：elabDelta : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabDelta : TermElab := fun stx expectedType? =>
   match stx with
@@ -122,38 +78,12 @@ def elabDelta : TermElab := fun stx expectedType? =>
 syntax (name := zetaStx) "zeta% " term : term
 
 @[term_elab zetaStx, inherit_doc zetaStx]
-/--
-Definition of `elabZeta` / `elabZeta` 的定义
-
-English:
-definition elabZeta
-  signature: : TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(zeta% $t) => do
-    let t ← withSynthesize (postpone := .partial) do
-      elabTerm t expectedType?
-    synthesizeSyntheticMVars
-    let t ← instantiateMVars t
-    let t ← zetaReduce t
-    pure t
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabZeta
-  签名: : TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(zeta% $t) => do
-    let t ← withSynthesize (postpone := .partial) do
-      elabTerm t expectedType?
-    synthesizeSyntheticMVars
-    let t ← instantiateMVars t
-    let t ← zetaReduce t
-    pure t
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+/-
+**Mathlib.Util.TermReduce.elabZeta** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Util.TermR
+educe`。
+形式化陈述：elabZeta : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabZeta : TermElab := fun stx expectedType? =>
   match stx with
@@ -170,40 +100,12 @@ def elabZeta : TermElab := fun stx expectedType? =>
 syntax (name := reduceProjStx) "reduceProj% " term : term
 
 @[term_elab reduceProjStx, inherit_doc reduceProjStx]
-/--
-Definition of `elabReduceProj` / `elabReduceProj` 的定义
-
-English:
-definition elabReduceProj
-  signature: : TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(reduceProj% $t) => do
-    let t ← withSynthesize (postpone := .partial) do
-      elabTerm t expectedType?
-    synthesizeSyntheticMVars
-    let t ← instantiateMVars t
-    let t ← Lean.Core.transform t (post := fun e => do
-      return .continue (← Expr.reduceProjStruct? e))
-    pure t
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabReduceProj
-  签名: : TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(reduceProj% $t) => do
-    let t ← withSynthesize (postpone := .partial) do
-      elabTerm t expectedType?
-    synthesizeSyntheticMVars
-    let t ← instantiateMVars t
-    let t ← Lean.Core.transform t (post := fun e => do
-      return .continue (← Expr.reduceProjStruct? e))
-    pure t
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+/-
+**Mathlib.Util.TermReduce.elabReduceProj** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Util
+.TermReduce`。
+形式化陈述：elabReduceProj : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabReduceProj : TermElab := fun stx expectedType? =>
   match stx with
@@ -212,9 +114,10 @@ def elabReduceProj : TermElab := fun stx expectedType? =>
       elabTerm t expectedType?
     synthesizeSyntheticMVars
     let t ← instantiateMVars t
-    let t ← Lean.Core.transform t (post := fun e => do
+    let t ← Lean.Core.transform t (post := fun e ↦ do
       return .continue (← Expr.reduceProjStruct? e))
     pure t
   | _ => throwUnsupportedSyntax
 
 end Mathlib.Util.TermReduce
+

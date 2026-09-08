@@ -37,87 +37,32 @@ universe u v
 
 variable {R S M M₂ : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: M] : MulAction Nat M where
-  body: one_nsmul
-  mul_smul _ _ _ := mul_nsmul' ..
-
-中文:
-实例 [加法幺半群
-  签名: M] : 乘法作用 自然数 M where
-  定义体: one_nsmul
-  mul_smul _ _ _ := mul_nsmul' ..
-
-Depends on / 依赖: one_nsmul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddMonoid M] : MulAction Nat M where
+instance [AddMonoid M] : MulAction ℕ M where
   one_smul := one_nsmul
   mul_smul _ _ _ := mul_nsmul' ..
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: M] : SMulWithZero Nat M where
-  body: nsmul_zero
-  zero_smul := zero_nsmul
-
-中文:
-实例 [加法幺半群
-  签名: M] : 带零标量乘法 自然数 M where
-  定义体: nsmul_zero
-  zero_smul := zero_nsmul
-
-Depends on / 依赖: nsmul_zero
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddMonoid M] : SMulWithZero Nat M where
+instance [AddMonoid M] : SMulWithZero ℕ M where
   smul_zero := nsmul_zero
   zero_smul := zero_nsmul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SubtractionMonoid
-  signature: M] : MulAction Int M where
-  body: one_zsmul
-  mul_smul _ _ _ := mul_zsmul ..
-
-中文:
-实例 [Subtraction幺半群
-  签名: M] : 乘法作用 整数 M where
-  定义体: one_zsmul
-  mul_smul _ _ _ := mul_zsmul ..
-
-Depends on / 依赖: one_zsmul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SubtractionMonoid M] : MulAction Int M where
+instance [SubtractionMonoid M] : MulAction ℤ M where
   one_smul := one_zsmul
   mul_smul _ _ _ := mul_zsmul ..
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SubtractionMonoid
-  signature: M] : SMulWithZero Int M where
-  body: zsmul_zero
-  zero_smul := zero_zsmul
-
-中文:
-实例 [Subtraction幺半群
-  签名: M] : 带零标量乘法 整数 M where
-  定义体: zsmul_zero
-  zero_smul := zero_zsmul
-
-Depends on / 依赖: zsmul_zero
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SubtractionMonoid M] : SMulWithZero Int M where
+instance [SubtractionMonoid M] : SMulWithZero ℤ M where
   smul_zero := zsmul_zero
   zero_smul := zero_zsmul
 
@@ -125,43 +70,25 @@ section AddCommMonoid
 
 variable [AddCommMonoid M]
 
-/--
-Instance `AddCommMonoid.toNatModule` / 实例 `AddCommMonoid.toNatModule`
-
-English:
-instance AddCommMonoid.toNatModule
-  signature: : Module Nat M where
-  body: nsmul_add a b n
-  smul_zero := nsmul_zero
-  zero_smul := zero_nsmul
-  add_smul r s x := add_nsmul x r s
-
-中文:
-实例 加法交换幺半群.to自然数Module
-  签名: : 模 自然数 M where
-  定义体: nsmul_add a b n
-  smul_zero := nsmul_zero
-  zero_smul := zero_nsmul
-  add_smul r s x := add_nsmul x r s
-
-Depends on / 依赖: nsmul_add
+/-
+**AddCommMonoid.toNatModule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddCommMonoid.toNatModule : Module Nat M where smul_add n a b
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `nsmul_add`：∀ {M : Type u_4} [inst : AddCommMonoid M] (a b : M) (n : ℕ), 
+n • (a + b) = n • a + n • b
 -/
-instance AddCommMonoid.toNatModule : Module Nat M where
+instance AddCommMonoid.toNatModule : Module ℕ M where
   smul_add n a b := nsmul_add a b n
   smul_zero := nsmul_zero
   zero_smul := zero_nsmul
   add_smul r s x := add_nsmul x r s
-
-/--
-theorem `DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom` / 定理 `DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom`
-
-English:
-theorem DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom
-  proof: rfl
-
-中文:
-定理 分配标量乘法.toAddMonoidHom_eq_nsmulAddMonoidHom
-  证明: rfl
+/-
+**DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom : toAddMonoidHom M = nsmul
+AddMonoidHom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem DistribSMul.toAddMonoidHom_eq_nsmulAddMonoidHom :
     toAddMonoidHom M = nsmulAddMonoidHom := rfl
@@ -172,49 +99,25 @@ section AddCommGroup
 
 variable (M) [AddCommGroup M]
 
-/--
-Instance `AddCommGroup.toIntModule` / 实例 `AddCommGroup.toIntModule`
-
-English:
-instance AddCommGroup.toIntModule
-  signature: : Module Int M where
-  body: one_zsmul
-  mul_smul m n a := mul_zsmul a m n
-  smul_add n a b := zsmul_add a b n
-  smul_zero := zsmul_zero
-  zero_smul := zero_zsmul
-  add_smul r s x := add_zsmul x r s
-
-中文:
-实例 加法交换群.to整数Module
-  签名: : 模 整数 M where
-  定义体: one_zsmul
-  mul_smul m n a := mul_zsmul a m n
-  smul_add n a b := zsmul_add a b n
-  smul_zero := zsmul_zero
-  zero_smul := zero_zsmul
-  add_smul r s x := add_zsmul x r s
-
-Depends on / 依赖: one_zsmul
+/-
+**AddCommGroup.toIntModule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddCommGroup.toIntModule : Module Int M where one_smul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance AddCommGroup.toIntModule : Module Int M where
+instance AddCommGroup.toIntModule : Module ℤ M where
   one_smul := one_zsmul
   mul_smul m n a := mul_zsmul a m n
   smul_add n a b := zsmul_add a b n
   smul_zero := zsmul_zero
   zero_smul := zero_zsmul
   add_smul r s x := add_zsmul x r s
-
-/--
-theorem `DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom` / 定理 `DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom`
-
-English:
-theorem DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom
-  proof: rfl
-
-中文:
-定理 分配标量乘法.toAddMonoidHom_eq_zsmulAddGroupHom
-  证明: rfl
+/-
+**DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom : toAddMonoidHom M = zsmulA
+ddGroupHom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom :
     toAddMonoidHom M = zsmulAddGroupHom := rfl
@@ -222,36 +125,23 @@ theorem DistribSMul.toAddMonoidHom_eq_zsmulAddGroupHom :
 end AddCommGroup
 
 variable (R) in
-/--
-Definition of `Module.addCommMonoidToAddCommGroup` / `Module.addCommMonoidToAddCommGroup` 的定义
+/-- An `AddCommMonoid` that is a `Module` over a `Ring` carries a natural `AddCommGroup`
+structure.
+See note [reducible non-instances]. -/
+/-
+**Module.addCommMonoidToAddCommGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Module.addCommMonoidToAddCommGroup [Ring R] [AddCommMonoid M] [Module R M]
+ : AddCommGroup M where neg
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommMonoid.add_comm`：∀ {M : Type u} [self : AddCommMonoid M] (a b : M
+), a + b = b + a
 
-English:
-abbreviation Module.addCommMonoidToAddCommGroup
-  body: fun a => (-1 : R) • a
-  neg_add_cancel := fun a =>
-    show (-1 : R) • a + a = 0 by
-      nth_rw 2 [← one_smul R a]
-      rw [← add_smul]; rw [neg_add_cancel]; rw [zero_smul]
-  zsmul z a := (z : R) • a
-  zsmul_zero' a := by simp_rw [HSMul.hSMul, SMul.smul, Int.cast_zero]; exact zero_smul R a
-  zsmul_succ' z a := by simp_rw [HSMul.hSMul, SMul.smul]; simp [add_comm, add_smul]
-  zsmul_neg' z a := by
-    change (Int.negSucc z : R) • a = -1 • ((z.succ : Int) : R) • a
-    simp [← smul_assoc]
-
-中文:
-缩写 模.addCommMonoidToAddCommGroup
-  定义体: fun a => (-1 : R) • a
-  neg_add_cancel := fun a =>
-    show (-1 : R) • a + a = 0 by
-      nth_rw 2 [← one_smul R a]
-      rw [← add_smul]; rw [neg_add_cancel]; rw [zero_smul]
-  zsmul z a := (z : R) • a
-  zsmul_zero' a := by simp_rw [HSMul.hSMul, SMul.smul, Int.cast_zero]; exact zero_smul R a
-  zsmul_succ' z a := by simp_rw [HSMul.hSMul, SMul.smul]; simp [add_comm, add_smul]
-  zsmul_neg' z a := by
-    change (Int.negSucc z : R) • a = -1 • ((z.succ : Int) : R) • a
-    simp [← smul_assoc]
+--- 原说明 ---
+An `AddCommMonoid` that is a `Module` over a `Ring` carries a natural `AddCommGr
+oup`
+structure.
+See note [reducible non-instances].
 -/
 abbrev Module.addCommMonoidToAddCommGroup
     [Ring R] [AddCommMonoid M] [Module R M] : AddCommGroup M where
@@ -259,12 +149,12 @@ abbrev Module.addCommMonoidToAddCommGroup
   neg_add_cancel := fun a =>
     show (-1 : R) • a + a = 0 by
       nth_rw 2 [← one_smul R a]
-      rw [← add_smul]; rw [neg_add_cancel]; rw [zero_smul]
+      rw [← add_smul, neg_add_cancel, zero_smul]
   zsmul z a := (z : R) • a
   zsmul_zero' a := by simp_rw [HSMul.hSMul, SMul.smul, Int.cast_zero]; exact zero_smul R a
   zsmul_succ' z a := by simp_rw [HSMul.hSMul, SMul.smul]; simp [add_comm, add_smul]
   zsmul_neg' z a := by
-    change (Int.negSucc z : R) • a = -1 • ((z.succ : Int) : R) • a
+    change (Int.negSucc z : R) • a = -1 • ((z.succ : ℤ) : R) • a
     simp [← smul_assoc]
 
 section AddCommMonoid
@@ -277,136 +167,120 @@ variable (R)
 
 /-- `nsmul` is equal to any other module structure via a cast. -/
 @[norm_cast]
-/--
-lemma `Nat.cast_smul_eq_nsmul` / 引理 `Nat.cast_smul_eq_nsmul`
+/-
+**Nat.cast_smul_eq_nsmul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : R) • b = n • b
+参数：n : Nat；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 
-English:
-lemma Nat.cast_smul_eq_nsmul
-  given: (n : Nat) (b : M)
-  statement: (n : R) • b = n • b
-  proof: by
-  induction n with
-  | zero => rw [Nat.cast_zero, zero_smul, zero_smul]
-  | succ n ih => rw [Nat.cast_succ, add_smul, add_smul, one_smul, ih, one_smul]
-
-中文:
-引理 自然数.cast_smul_eq_nsmul
-  条件: (n : 自然数) (b : M)
-  结论: (n : R) • b = n • b
-  证明: by
-  induction n with
-  | zero => rw [Nat.cast_zero, zero_smul, zero_smul]
-  | succ n ih => rw [Nat.cast_succ, add_smul, add_smul, one_smul, ih, one_smul]
-
-Depends on / 依赖: Nat.cast_succ, Nat.cast_zero, add_smul, cast_succ, cast_zero, one_smul, zero_smul
+--- 原说明 ---
+`nsmul` is equal to any other module structure via a cast.
 -/
-lemma Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : R) • b = n • b := by
+lemma Nat.cast_smul_eq_nsmul (n : ℕ) (b : M) : (n : R) • b = n • b := by
   induction n with
   | zero => rw [Nat.cast_zero, zero_smul, zero_smul]
   | succ n ih => rw [Nat.cast_succ, add_smul, add_smul, one_smul, ih, one_smul]
 
-/--
-lemma `ofNat_smul_eq_nsmul` / 引理 `ofNat_smul_eq_nsmul`
+/-- `nsmul` is equal to any other module structure via a cast. -/
+/-
+**ofNat_smul_eq_nsmul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ofNat_smul_eq_nsmul (n : Nat) [n.AtLeastTwo] (b : M) : (ofNat(n) : R) • b 
+= ofNat(n) • b
+参数：n : Nat；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
 
-English:
-lemma ofNat_smul_eq_nsmul
-  given: (n : Nat) [n.AtLeastTwo] (b : M)
-  proof: Nat.cast_smul_eq_nsmul ..
-
-中文:
-引理 of自然数_smul_eq_nsmul
-  条件: (n : 自然数) [n.AtLeastTwo] (b : M)
-  证明: Nat.cast_smul_eq_nsmul ..
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul
+--- 原说明 ---
+`nsmul` is equal to any other module structure via a cast.
 -/
-lemma ofNat_smul_eq_nsmul (n : Nat) [n.AtLeastTwo] (b : M) :
+lemma ofNat_smul_eq_nsmul (n : ℕ) [n.AtLeastTwo] (b : M) :
     (ofNat(n) : R) • b = ofNat(n) • b := Nat.cast_smul_eq_nsmul ..
 
 end
 
-/--
-theorem `nat_smul_eq_nsmul` / 定理 `nat_smul_eq_nsmul`
-
-English:
-theorem nat_smul_eq_nsmul
-  given: (h : Module Nat M) (n : Nat) (x : M)
-  statement: h.smul n x = n • x
-  proof: Nat.cast_smul_eq_nsmul ..
-
-中文:
-定理 nat_smul_eq_nsmul
-  条件: (h : 模 自然数 M) (n : 自然数) (x : M)
-  结论: h.smul n x = n • x
-  证明: Nat.cast_smul_eq_nsmul ..
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul
+/-- Convert back any exotic `ℕ`-smul to the canonical instance. This should not be needed since in
+mathlib all `AddCommMonoid`s should normally have exactly one `ℕ`-module structure by design.
 -/
-theorem nat_smul_eq_nsmul (h : Module Nat M) (n : Nat) (x : M) : h.smul n x = n • x :=
+/-
+**nat_smul_eq_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nat_smul_eq_nsmul (h : Module Nat M) (n : Nat) (x : M) : h.smul n x = n • 
+x
+参数：h : Module Nat M；n : Nat；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+
+--- 原说明 ---
+Convert back any exotic `ℕ`-smul to the canonical instance. This should not be n
+eeded since in
+mathlib all `AddCommMonoid`s should normally have exactly one `ℕ`-module structu
+re by design.
+-/
+theorem nat_smul_eq_nsmul (h : Module ℕ M) (n : ℕ) (x : M) : h.smul n x = n • x :=
   Nat.cast_smul_eq_nsmul ..
 
 /-- All `ℕ`-module structures are equal. Not an instance since in mathlib all `AddCommMonoid`
 should normally have exactly one `ℕ`-module structure by design. -/
 @[instance_reducible]
-/--
-Definition of `AddCommMonoid.uniqueNatModule` / `AddCommMonoid.uniqueNatModule` 的定义
+/-
+**AddCommMonoid.uniqueNatModule** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddCommMonoid.uniqueNatModule : Unique (Module Nat M) where default
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AddCommMonoid.uniqueNatModule
-  signature: : Unique (Module Nat M) where
-  body: inferInstance
-  uniq P := (Module.ext' P _) fun n => by convert! nat_smul_eq_nsmul P n
-
-中文:
-定义 加法交换幺半群.unique自然数Module
-  签名: : 唯一 (模 自然数 M) where
-  定义体: inferInstance
-  uniq P := (Module.ext' P _) fun n => by convert! nat_smul_eq_nsmul P n
+--- 原说明 ---
+All `ℕ`-module structures are equal. Not an instance since in mathlib all `AddCo
+mmMonoid`
+should normally have exactly one `ℕ`-module structure by design.
 -/
-def AddCommMonoid.uniqueNatModule : Unique (Module Nat M) where
+def AddCommMonoid.uniqueNatModule : Unique (Module ℕ M) where
   default := inferInstance
   uniq P := (Module.ext' P _) fun n => by convert! nat_smul_eq_nsmul P n
 
-/--
-Instance `AddCommMonoid.subsingletonNatModule` / 实例 `AddCommMonoid.subsingletonNatModule`
+/-- All `ℕ`-module structures are equal. See also `AddCommMonoid.uniqueNatModule`. -/
+/-
+**AddCommMonoid.subsingletonNatModule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddCommMonoid.subsingletonNatModule : Subsingleton (Module Nat M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-instance AddCommMonoid.subsingletonNatModule
-  signature: : Subsingleton (Module Nat M)
-  body: AddCommMonoid.uniqueNatModule.instSubsingleton
-
-中文:
-实例 加法交换幺半群.subsingleton自然数Module
-  签名: : 子单例 (模 自然数 M)
-  定义体: AddCommMonoid.uniqueNatModule.instSubsingleton
-
-Depends on / 依赖: AddCommMonoid, AddCommMonoid.uniqueNatModule.instSubsingleton, instSubsingleton, uniqueNatModule
+--- 原说明 ---
+All `ℕ`-module structures are equal. See also `AddCommMonoid.uniqueNatModule`.
 -/
-instance AddCommMonoid.subsingletonNatModule : Subsingleton (Module Nat M) :=
+instance AddCommMonoid.subsingletonNatModule : Subsingleton (Module ℕ M) :=
   AddCommMonoid.uniqueNatModule.instSubsingleton
-
-/--
-Instance `AddCommMonoid.nat_isScalarTower` / 实例 `AddCommMonoid.nat_isScalarTower`
-
-English:
-instance AddCommMonoid.nat_isScalarTower
-  signature: : IsScalarTower Nat R M where
-  body: by
-    induction n with
-    | zero => simp only [zero_smul]
-    | succ n ih => simp only [add_smul, one_smul, ih]
-
-中文:
-实例 加法交换幺半群.nat_isScalarTower
-  签名: : 标量塔 自然数 R M where
-  定义体: by
-    induction n with
-    | zero => simp only [zero_smul]
-    | succ n ih => simp only [add_smul, one_smul, ih]
-
-Depends on / 依赖: add_smul, one_smul, zero_smul
+/-
+**AddCommMonoid.nat_isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddCommMonoid.nat_isScalarTower : IsScalarTower Nat R M where smul_assoc n
+ x y
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-instance AddCommMonoid.nat_isScalarTower : IsScalarTower Nat R M where
+instance AddCommMonoid.nat_isScalarTower : IsScalarTower ℕ R M where
   smul_assoc n x y := by
     induction n with
     | zero => simp only [zero_smul]
@@ -414,71 +288,61 @@ instance AddCommMonoid.nat_isScalarTower : IsScalarTower Nat R M where
 
 end AddCommMonoid
 
-/--
-theorem `map_natCast_smul` / 定理 `map_natCast_smul`
-
-English:
-theorem map_natCast_smul
-  statement: [AddCommMonoid M] [AddCommMonoid M₂] {F : Type*} [FunLike F M M₂]
-  proof: by
-  simp only [Nat.cast_smul_eq_nsmul, map_nsmul]
-
-中文:
-定理 map_natCast_smul
-  结论: [加法交换幺半群 M] [加法交换幺半群 M₂] {F : 类型} [函数状 F M M₂]
-  证明: by
-  simp only [Nat.cast_smul_eq_nsmul, map_nsmul]
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, map_nsmul
+/-
+**map_natCast_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_natCast_smul [AddCommMonoid M] [AddCommMonoid M₂] {F : Type*} [FunLike
+ F M M₂] [AddMonoidHomClass F M M₂] (f : F) (R S : Type*) [Semiring R] [Semiring
+ S] [Module R M] [Module S M₂] (x : Nat) (a : M) : f ((x : R) • a) = (x : S) • f
+ a
+参数：f : F；R S : Type*；x : Nat；a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `map_nsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddMonoid G] [inst_2 : AddMonoid H]   [AddMonoidHomClass F G…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_natCast_smul [AddCommMonoid M] [AddCommMonoid M₂] {F : Type*} [FunLike F M M₂]
     [AddMonoidHomClass F M M₂] (f : F) (R S : Type*) [Semiring R] [Semiring S] [Module R M]
-    [Module S M₂] (x : Nat) (a : M) : f ((x : R) • a) = (x : S) • f a := by
+    [Module S M₂] (x : ℕ) (a : M) : f ((x : R) • a) = (x : S) • f a := by
   simp only [Nat.cast_smul_eq_nsmul, map_nsmul]
-
-/--
-theorem `Nat.smul_one_eq_cast` / 定理 `Nat.smul_one_eq_cast`
-
-English:
-theorem Nat.smul_one_eq_cast
-  given: {R : Type*} [NonAssocSemiring R] (m : Nat)
-  statement: m • (1 : R) = ↑m
-  proof: by
-  rw [nsmul_eq_mul]; rw [mul_one]
-
-中文:
-定理 自然数.smul_one_eq_cast
-  条件: {R : 类型} [非结合半环 R] (m : 自然数)
-  结论: m • (1 : R) = ↑m
-  证明: by
-  rw [nsmul_eq_mul]; rw [mul_one]
-
-Depends on / 依赖: mul_one, nsmul_eq_mul
+/-
+**Nat.smul_one_eq_cast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.smul_one_eq_cast {R : Type*} [NonAssocSemiring R] (m : Nat) : m • (1 :
+ R) = ↑m
+参数：m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem Nat.smul_one_eq_cast {R : Type*} [NonAssocSemiring R] (m : Nat) : m • (1 : R) = ↑m := by
-  rw [nsmul_eq_mul]; rw [mul_one]
-
-/--
-theorem `Int.smul_one_eq_cast` / 定理 `Int.smul_one_eq_cast`
-
-English:
-theorem Int.smul_one_eq_cast
-  given: {R : Type*} [NonAssocRing R] (m : Int)
-  statement: m • (1 : R) = ↑m
-  proof: by
-  rw [zsmul_eq_mul]; rw [mul_one]
-
-中文:
-定理 整数.smul_one_eq_cast
-  条件: {R : 类型} [非结合环 R] (m : 整数)
-  结论: m • (1 : R) = ↑m
-  证明: by
-  rw [zsmul_eq_mul]; rw [mul_one]
-
-Depends on / 依赖: mul_one, zsmul_eq_mul
+theorem Nat.smul_one_eq_cast {R : Type*} [NonAssocSemiring R] (m : ℕ) : m • (1 : R) = ↑m := by
+  rw [nsmul_eq_mul, mul_one]
+/-
+**Int.smul_one_eq_cast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.smul_one_eq_cast {R : Type*} [NonAssocRing R] (m : Int) : m • (1 : R) 
+= ↑m
+参数：m : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem Int.smul_one_eq_cast {R : Type*} [NonAssocRing R] (m : Int) : m • (1 : R) = ↑m := by
-  rw [zsmul_eq_mul]; rw [mul_one]
+theorem Int.smul_one_eq_cast {R : Type*} [NonAssocRing R] (m : ℤ) : m • (1 : R) = ↑m := by
+  rw [zsmul_eq_mul, mul_one]
 
 section AddCommGroup
 
@@ -490,171 +354,197 @@ variable (R)
 
 /-- `zsmul` is equal to any other module structure via a cast. -/
 @[norm_cast]
-/--
-lemma `Int.cast_smul_eq_zsmul` / 引理 `Int.cast_smul_eq_zsmul`
+/-
+**Int.cast_smul_eq_zsmul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Int.cast_smul_eq_zsmul (n : Int) (b : M) : (n : R) • b = n • b
+参数：n : Int；b : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_negSucc`：cast_negSucc (n : Nat) : (-[n+1] : R) = -(n + 1 : Nat)
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `negSucc_zsmul`：negSucc_zsmul {G} [SubNegMonoid G] (a : G) (n : Nat) : In
+t.negSucc n • a = -((n + 1) • a)
 
-English:
-lemma Int.cast_smul_eq_zsmul
-  given: (n : Int) (b : M)
-  statement: (n : R) • b = n • b
-  proof: by
-  cases n with
-  | ofNat => simp [Nat.cast_smul_eq_nsmul]
-  | negSucc => simp [add_smul, Nat.cast_smul_eq_nsmul]
-
-中文:
-引理 整数.cast_smul_eq_zsmul
-  条件: (n : 整数) (b : M)
-  结论: (n : R) • b = n • b
-  证明: by
-  cases n with
-  | ofNat => simp [Nat.cast_smul_eq_nsmul]
-  | negSucc => simp [add_smul, Nat.cast_smul_eq_nsmul]
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, add_smul, cast_smul_eq_nsmul, negSucc
+--- 原说明 ---
+`zsmul` is equal to any other module structure via a cast.
 -/
-lemma Int.cast_smul_eq_zsmul (n : Int) (b : M) : (n : R) • b = n • b := by
+lemma Int.cast_smul_eq_zsmul (n : ℤ) (b : M) : (n : R) • b = n • b := by
   cases n with
   | ofNat => simp [Nat.cast_smul_eq_nsmul]
   | negSucc => simp [add_smul, Nat.cast_smul_eq_nsmul]
 
 end
 
-/--
-theorem `int_smul_eq_zsmul` / 定理 `int_smul_eq_zsmul`
+/-- Convert back any exotic `ℤ`-smul to the canonical instance. This should not be needed since in
+mathlib all `AddCommGroup`s should normally have exactly one `ℤ`-module structure by design. -/
+/-
+**int_smul_eq_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：int_smul_eq_zsmul (h : Module Int M) (n : Int) (x : M) : h.smul n x = n • 
+x
+参数：h : Module Int M；n : Int；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.cast_smul_eq_zsmul`：Int.cast_smul_eq_zsmul (n : Int) (b : M) : (n : 
+R) • b = n • b
 
-English:
-theorem int_smul_eq_zsmul
-  given: (h : Module Int M) (n : Int) (x : M)
-  statement: h.smul n x = n • x
-  proof: Int.cast_smul_eq_zsmul ..
-
-中文:
-定理 int_smul_eq_zsmul
-  条件: (h : 模 整数 M) (n : 整数) (x : M)
-  结论: h.smul n x = n • x
-  证明: Int.cast_smul_eq_zsmul ..
-
-Depends on / 依赖: Int.cast_smul_eq_zsmul, cast_smul_eq_zsmul
+--- 原说明 ---
+Convert back any exotic `ℤ`-smul to the canonical instance. This should not be n
+eeded since in
+mathlib all `AddCommGroup`s should normally have exactly one `ℤ`-module structur
+e by design.
 -/
-theorem int_smul_eq_zsmul (h : Module Int M) (n : Int) (x : M) : h.smul n x = n • x :=
+theorem int_smul_eq_zsmul (h : Module ℤ M) (n : ℤ) (x : M) : h.smul n x = n • x :=
   Int.cast_smul_eq_zsmul ..
 
 /-- All `ℤ`-module structures are equal. Not an instance since in mathlib all `AddCommGroup`
 should normally have exactly one `ℤ`-module structure by design. -/
 @[instance_reducible]
-/--
-Definition of `AddCommGroup.uniqueIntModule` / `AddCommGroup.uniqueIntModule` 的定义
+/-
+**AddCommGroup.uniqueIntModule** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddCommGroup.uniqueIntModule : Unique (Module Int M) where default
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AddCommGroup.uniqueIntModule
-  signature: : Unique (Module Int M) where
-  body: inferInstance
-  uniq P := (Module.ext' P _) fun n => by convert! int_smul_eq_zsmul P n
-
-中文:
-定义 加法交换群.unique整数Module
-  签名: : 唯一 (模 整数 M) where
-  定义体: inferInstance
-  uniq P := (Module.ext' P _) fun n => by convert! int_smul_eq_zsmul P n
+--- 原说明 ---
+All `ℤ`-module structures are equal. Not an instance since in mathlib all `AddCo
+mmGroup`
+should normally have exactly one `ℤ`-module structure by design.
 -/
-def AddCommGroup.uniqueIntModule : Unique (Module Int M) where
+def AddCommGroup.uniqueIntModule : Unique (Module ℤ M) where
   default := inferInstance
   uniq P := (Module.ext' P _) fun n => by convert! int_smul_eq_zsmul P n
 
 end AddCommGroup
 
-/--
-Instance `AddCommMonoid.subsingletonIntModule` / 实例 `AddCommMonoid.subsingletonIntModule`
+/-- All `ℤ`-module structures are equal. See also `AddCommGroup.uniqueIntModule`. -/
+/-
+**AddCommMonoid.subsingletonIntModule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddCommMonoid.subsingletonIntModule [AddCommMonoid M] : Subsingleton (Modu
+le Int M) where allEq a b
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.allEq`：∀ {α : Sort u} [self : Subsingleton α] (a b : α), a 
+= b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-instance AddCommMonoid.subsingletonIntModule
-  signature: [AddCommMonoid M]
-  body: let : AddCommGroup M := Module.addCommMonoidToAddCommGroup Int
-    AddCommGroup.uniqueIntModule.instSubsingleton.allEq a b
-
-中文:
-实例 加法交换幺半群.subsingleton整数Module
-  签名: [加法交换幺半群 M]
-  定义体: let : AddCommGroup M := Module.addCommMonoidToAddCommGroup Int
-    AddCommGroup.uniqueIntModule.instSubsingleton.allEq a b
-
-Depends on / 依赖: AddCommGroup, AddCommGroup.uniqueIntModule.instSubsingleton.allEq, Module, Module.addCommMonoidToAddCommGroup, addCommMonoidToAddCommGroup, instSubsingleton, uniqueIntModule
+--- 原说明 ---
+All `ℤ`-module structures are equal. See also `AddCommGroup.uniqueIntModule`.
 -/
-instance AddCommMonoid.subsingletonIntModule [AddCommMonoid M] : Subsingleton (Module Int M) where
+instance AddCommMonoid.subsingletonIntModule [AddCommMonoid M] : Subsingleton (Module ℤ M) where
   allEq a b :=
-    let : AddCommGroup M := Module.addCommMonoidToAddCommGroup Int
+    let : AddCommGroup M := Module.addCommMonoidToAddCommGroup ℤ
     AddCommGroup.uniqueIntModule.instSubsingleton.allEq a b
-
-/--
-theorem `map_intCast_smul` / 定理 `map_intCast_smul`
-
-English:
-theorem map_intCast_smul
-  statement: [AddCommGroup M] [AddCommGroup M₂] {F : Type*} [FunLike F M M₂]
-  proof: by simp only [Int.cast_smul_eq_zsmul, map_zsmul]
-
-中文:
-定理 map_intCast_smul
-  结论: [加法交换群 M] [加法交换群 M₂] {F : 类型} [函数状 F M M₂]
-  证明: by simp only [Int.cast_smul_eq_zsmul, map_zsmul]
-
-Depends on / 依赖: Int.cast_smul_eq_zsmul, cast_smul_eq_zsmul, map_zsmul
+/-
+**map_intCast_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_intCast_smul [AddCommGroup M] [AddCommGroup M₂] {F : Type*} [FunLike F
+ M M₂] [AddMonoidHomClass F M M₂] (f : F) (R S : Type*) [Ring R] [Ring S] [Modul
+e R M] [Module S M₂] (x : Int) (a : M) : f ((x : R) • a) = (x : S) • f a
+参数：f : F；R S : Type*；x : Int；a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.cast_smul_eq_zsmul`：Int.cast_smul_eq_zsmul (n : Int) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `map_zsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_intCast_smul [AddCommGroup M] [AddCommGroup M₂] {F : Type*} [FunLike F M M₂]
     [AddMonoidHomClass F M M₂] (f : F) (R S : Type*) [Ring R] [Ring S] [Module R M] [Module S M₂]
-    (x : Int) (a : M) :
+    (x : ℤ) (a : M) :
     f ((x : R) • a) = (x : S) • f a := by simp only [Int.cast_smul_eq_zsmul, map_zsmul]
-
-/--
-Instance `AddCommGroup.intIsScalarTower` / 实例 `AddCommGroup.intIsScalarTower`
-
-English:
-instance AddCommGroup.intIsScalarTower
-  signature: {R : Type u} {M : Type v} [Ring R] [AddCommGroup M]
-  body: by
-    cases n with
-    | ofNat => simp [mul_smul, Nat.cast_smul_eq_nsmul]
-    | negSucc => simp [mul_smul, add_smul, Nat.cast_smul_eq_nsmul]
-
-中文:
-实例 加法交换群.intIsScalarTower
-  签名: {R : 类型u} {M : 类型v} [环 R] [加法交换群 M]
-  定义体: by
-    cases n with
-    | ofNat => simp [mul_smul, Nat.cast_smul_eq_nsmul]
-    | negSucc => simp [mul_smul, add_smul, Nat.cast_smul_eq_nsmul]
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, add_smul, cast_smul_eq_nsmul, mul_smul, negSucc
+/-
+**AddCommGroup.intIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddCommGroup.intIsScalarTower {R : Type u} {M : Type v} [Ring R] [AddCommG
+roup M] [Module R M] : IsScalarTower Int R M where smul_assoc n x y
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `Int.cast_negSucc`：cast_negSucc (n : Nat) : (-[n+1] : R) = -(n + 1 : Nat)
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `negSucc_zsmul`：negSucc_zsmul {G} [SubNegMonoid G] (a : G) (n : Nat) : In
+t.negSucc n • a = -((n + 1) • a)
 -/
 instance AddCommGroup.intIsScalarTower {R : Type u} {M : Type v} [Ring R] [AddCommGroup M]
-    [Module R M] : IsScalarTower Int R M where
+    [Module R M] : IsScalarTower ℤ R M where
   smul_assoc n x y := by
     cases n with
     | ofNat => simp [mul_smul, Nat.cast_smul_eq_nsmul]
     | negSucc => simp [mul_smul, add_smul, Nat.cast_smul_eq_nsmul]
 
 variable (M) in
-/--
-lemma `CharZero.of_module` / 引理 `CharZero.of_module`
+/-- If `M` is an `R`-module with one and `M` has characteristic zero, then `R` has characteristic
+zero as well. Usually `M` is an `R`-algebra. -/
+/-
+**CharZero.of_module** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：CharZero.of_module [Semiring R] [AddCommMonoidWithOne M] [CharZero M] [Mod
+ule R M] : CharZero R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_injective`：cast_injective : Function.Injective (Nat.cast : Nat 
+-> R)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nsmul_one`：∀ {A : Type u_2} [inst : AddMonoidWithOne A] (n : ℕ), n • 1 =
+ ↑n
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
 
-English:
-lemma CharZero.of_module
-  given: [Semiring R] [AddCommMonoidWithOne M] [CharZero M] [Module R M]
-  proof: by
-  refine ⟨fun m n h => @Nat.cast_injective M _ _ _ _ ?_⟩
-  rw [← nsmul_one]; rw [← nsmul_one]; rw [← Nat.cast_smul_eq_nsmul R]; rw [← Nat.cast_smul_eq_nsmul R]; rw [h]
-
-中文:
-引理 特征零.of_module
-  条件: [半环 R] [加法交换带幺幺半群 M] [特征零 M] [模 R M]
-  证明: by
-  refine ⟨fun m n h => @Nat.cast_injective M _ _ _ _ ?_⟩
-  rw [← nsmul_one]; rw [← nsmul_one]; rw [← Nat.cast_smul_eq_nsmul R]; rw [← Nat.cast_smul_eq_nsmul R]; rw [h]
-
-Depends on / 依赖: Nat.cast_injective, Nat.cast_smul_eq_nsmul, cast_injective, cast_smul_eq_nsmul, nsmul_one
+--- 原说明 ---
+If `M` is an `R`-module with one and `M` has characteristic zero, then `R` has c
+haracteristic
+zero as well. Usually `M` is an `R`-algebra.
 -/
 lemma CharZero.of_module [Semiring R] [AddCommMonoidWithOne M] [CharZero M] [Module R M] :
     CharZero R := by
   refine ⟨fun m n h => @Nat.cast_injective M _ _ _ _ ?_⟩
-  rw [← nsmul_one]; rw [← nsmul_one]; rw [← Nat.cast_smul_eq_nsmul R]; rw [← Nat.cast_smul_eq_nsmul R]; rw [h]
+  rw [← nsmul_one, ← nsmul_one, ← Nat.cast_smul_eq_nsmul R, ← Nat.cast_smul_eq_nsmul R, h]

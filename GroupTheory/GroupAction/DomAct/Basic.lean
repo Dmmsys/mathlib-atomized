@@ -94,26 +94,11 @@ action of `M`. -/
 @[to_additive /-- If `M` additively acts on `α`, then `DomAddAct M` acts on `α → β` as
 well as some bundled maps from `α`. This is a type synonym for `AddOpposite M`, so this corresponds
 to a right action of `M`. -/]
-/--
-Definition of `DomMulAct` / `DomMulAct` 的定义
-
-English:
-definition DomMulAct
-  signature: (M : Type*)
-  body: MulOpposite M
-
-@[inherit_doc] postfix:max "ᵈᵐᵃ" => DomMulAct
-@[inherit_doc] postfix:max "ᵈᵃᵃ" => DomAddAct
-
-中文:
-定义 DomMulAct
-  签名: (M : 类型)
-  定义体: MulOpposite M
-
-@[inherit_doc] postfix:max "ᵈᵐᵃ" => DomMulAct
-@[inherit_doc] postfix:max "ᵈᵃᵃ" => DomAddAct
-
-Depends on / 依赖: MulOpposite
+/-
+**DomMulAct** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DomMulAct (M : Type*)
+参数：M : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def DomMulAct (M : Type*) := MulOpposite M
 
@@ -126,20 +111,14 @@ variable {M : Type*}
 
 /-- Equivalence between `M` and `Mᵈᵐᵃ`. -/
 @[to_additive /-- Equivalence between `M` and `Mᵈᵐᵃ`. -/]
-/--
-Definition of `mk` / `mk` 的定义
+/-
+**DomMulAct.mk** 是 Mathlib 中的一个定义，位于命名空间 `DomMulAct`。
+形式化陈述：mk : M ≃ Mᵈᵐᵃ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: : M ≃ Mᵈᵐᵃ
-  body: MulOpposite.opEquiv
-
-中文:
-定义 mk
-  签名: : M ≃ Mᵈᵐᵃ
-  定义体: MulOpposite.opEquiv
-
-Depends on / 依赖: MulOpposite, MulOpposite.opEquiv, opEquiv
+--- 原说明 ---
+Equivalence between `M` and `Mᵈᵐᵃ`.
 -/
 def mk : M ≃ Mᵈᵐᵃ := MulOpposite.opEquiv
 
@@ -156,479 +135,223 @@ run_cmd
     `CommGroup, `NonAssocSemiring, `NonUnitalSemiring, `Semiring,
     `Ring, `CommRing].map Lean.mkIdent do
   Lean.Elab.Command.elabCommand (← `(
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [$n
-  signature: Mᵐᵒᵖ] : n Mᵈᵐᵃ
-  body: ‹_›
-  ))
-
-中文:
-实例 [$n
-  签名: Mᵐᵒᵖ] : n Mᵈᵐᵃ
-  定义体: ‹_›
-  ))
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [$n Mᵐᵒᵖ] : n Mᵈᵐᵃ := ‹_›
+    @[to_additive] instance [$n Mᵐᵒᵖ] : $n Mᵈᵐᵃ := ‹_›
   ))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: Mᵐᵒᵖ] [IsLeftCancelMul Mᵐᵒᵖ] : IsLeftCancelMul Mᵈᵐᵃ
-  body: ‹_›
-
-中文:
-实例 [乘法
-  签名: Mᵐᵒᵖ] [左乘消去 Mᵐᵒᵖ] : 左乘消去 Mᵈᵐᵃ
-  定义体: ‹_›
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Mul Mᵐᵒᵖ] [IsLeftCancelMul Mᵐᵒᵖ] : IsLeftCancelMul Mᵈᵐᵃ := ‹_›
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: Mᵐᵒᵖ] [IsRightCancelMul Mᵐᵒᵖ] : IsRightCancelMul Mᵈᵐᵃ
-  body: ‹_›
-
-中文:
-实例 [乘法
-  签名: Mᵐᵒᵖ] [右乘消去 Mᵐᵒᵖ] : 右乘消去 Mᵈᵐᵃ
-  定义体: ‹_›
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Mul Mᵐᵒᵖ] [IsRightCancelMul Mᵐᵒᵖ] : IsRightCancelMul Mᵈᵐᵃ := ‹_›
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: Mᵐᵒᵖ] [IsCancelMul Mᵐᵒᵖ] : IsCancelMul Mᵈᵐᵃ
-  body: ‹_›
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [乘法
-  签名: Mᵐᵒᵖ] [是消去乘法 Mᵐᵒᵖ] : 是消去乘法 Mᵈᵐᵃ
-  定义体: ‹_›
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] instance [Mul Mᵐᵒᵖ] [IsCancelMul Mᵐᵒᵖ] : IsCancelMul Mᵈᵐᵃ := ‹_›
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_one` / 引理 `mk_one`
-
-English:
-lemma mk_one
-  given: [One M]
-  statement: mk (1 : M) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mk_one
-  条件: [幺 M]
-  结论: mk (1 : M) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.mk_one** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：mk_one [One M] : mk (1 : M) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_one [One M] : mk (1 : M) = 1 := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_mk_one` / 引理 `symm_mk_one`
-
-English:
-lemma symm_mk_one
-  given: [One M]
-  statement: mk.symm (1 : Mᵈᵐᵃ) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_mk_one
-  条件: [幺 M]
-  结论: mk.symm (1 : Mᵈᵐᵃ) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.symm_mk_one** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：symm_mk_one [One M] : mk.symm (1 : Mᵈᵐᵃ) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma symm_mk_one [One M] : mk.symm (1 : Mᵈᵐᵃ) = 1 := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_mul` / 引理 `mk_mul`
-
-English:
-lemma mk_mul
-  given: [Mul M] (a b : M)
-  statement: mk (a * b) = mk b * mk a
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mk_mul
-  条件: [乘法 M] (a b : M)
-  结论: mk (a * b) = mk b * mk a
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.mk_mul** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：mk_mul [Mul M] (a b : M) : mk (a * b) = mk b * mk a
+参数：a b : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_mul [Mul M] (a b : M) : mk (a * b) = mk b * mk a := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_mk_mul` / 引理 `symm_mk_mul`
-
-English:
-lemma symm_mk_mul
-  given: [Mul M] (a b : Mᵈᵐᵃ)
-  statement: mk.symm (a * b) = mk.symm b * mk.symm a
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_mk_mul
-  条件: [乘法 M] (a b : Mᵈᵐᵃ)
-  结论: mk.symm (a * b) = mk.symm b * mk.symm a
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.symm_mk_mul** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：symm_mk_mul [Mul M] (a b : Mᵈᵐᵃ) : mk.symm (a * b) = mk.symm b * mk.symm a
+参数：a b : Mᵈᵐᵃ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma symm_mk_mul [Mul M] (a b : Mᵈᵐᵃ) : mk.symm (a * b) = mk.symm b * mk.symm a := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_inv` / 引理 `mk_inv`
-
-English:
-lemma mk_inv
-  given: [Inv M] (a : M)
-  statement: mk (a⁻¹) = (mk a)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mk_inv
-  条件: [取逆 M] (a : M)
-  结论: mk (a⁻¹) = (mk a)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.mk_inv** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：mk_inv [Inv M] (a : M) : mk (a⁻¹) = (mk a)⁻¹
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_inv [Inv M] (a : M) : mk (a⁻¹) = (mk a)⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_mk_inv` / 引理 `symm_mk_inv`
-
-English:
-lemma symm_mk_inv
-  given: [Inv M] (a : Mᵈᵐᵃ)
-  statement: mk.symm (a⁻¹) = (mk.symm a)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_mk_inv
-  条件: [取逆 M] (a : Mᵈᵐᵃ)
-  结论: mk.symm (a⁻¹) = (mk.symm a)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.symm_mk_inv** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：symm_mk_inv [Inv M] (a : Mᵈᵐᵃ) : mk.symm (a⁻¹) = (mk.symm a)⁻¹
+参数：a : Mᵈᵐᵃ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma symm_mk_inv [Inv M] (a : Mᵈᵐᵃ) : mk.symm (a⁻¹) = (mk.symm a)⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_pow` / 引理 `mk_pow`
-
-English:
-lemma mk_pow
-  given: [Monoid M] (a : M) (n : Nat)
-  statement: mk (a ^ n) = mk a ^ n
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mk_pow
-  条件: [幺半群 M] (a : M) (n : 自然数)
-  结论: mk (a ^ n) = mk a ^ n
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.mk_pow** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：mk_pow [Monoid M] (a : M) (n : Nat) : mk (a ^ n) = mk a ^ n
+参数：a : M；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_pow [Monoid M] (a : M) (n : Nat) : mk (a ^ n) = mk a ^ n := rfl
+lemma mk_pow [Monoid M] (a : M) (n : ℕ) : mk (a ^ n) = mk a ^ n := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_mk_pow` / 引理 `symm_mk_pow`
-
-English:
-lemma symm_mk_pow
-  given: [Monoid M] (a : Mᵈᵐᵃ) (n : Nat)
-  statement: mk.symm (a ^ n) = mk.symm a ^ n
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 symm_mk_pow
-  条件: [幺半群 M] (a : Mᵈᵐᵃ) (n : 自然数)
-  结论: mk.symm (a ^ n) = mk.symm a ^ n
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.symm_mk_pow** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：symm_mk_pow [Monoid M] (a : Mᵈᵐᵃ) (n : Nat) : mk.symm (a ^ n) = mk.symm a 
+^ n
+参数：a : Mᵈᵐᵃ；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-lemma symm_mk_pow [Monoid M] (a : Mᵈᵐᵃ) (n : Nat) : mk.symm (a ^ n) = mk.symm a ^ n := rfl
+lemma symm_mk_pow [Monoid M] (a : Mᵈᵐᵃ) (n : ℕ) : mk.symm (a ^ n) = mk.symm a ^ n := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_zpow` / 引理 `mk_zpow`
-
-English:
-lemma mk_zpow
-  given: [DivInvMonoid M] (a : M) (n : Int)
-  statement: mk (a ^ n) = mk a ^ n
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 mk_zpow
-  条件: [除逆幺半群 M] (a : M) (n : 整数)
-  结论: mk (a ^ n) = mk a ^ n
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.mk_zpow** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：mk_zpow [DivInvMonoid M] (a : M) (n : Int) : mk (a ^ n) = mk a ^ n
+参数：a : M；n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_zpow [DivInvMonoid M] (a : M) (n : Int) : mk (a ^ n) = mk a ^ n := rfl
+lemma mk_zpow [DivInvMonoid M] (a : M) (n : ℤ) : mk (a ^ n) = mk a ^ n := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `symm_mk_zpow` / 引理 `symm_mk_zpow`
-
-English:
-lemma symm_mk_zpow
-  given: [DivInvMonoid M] (a : Mᵈᵐᵃ) (n : Int)
-  statement: mk.symm (a ^ n) = mk.symm a ^ n
-  proof: rfl
-
-中文:
-引理 symm_mk_zpow
-  条件: [除逆幺半群 M] (a : Mᵈᵐᵃ) (n : 整数)
-  结论: mk.symm (a ^ n) = mk.symm a ^ n
-  证明: rfl
+/-
+**DomMulAct.symm_mk_zpow** 是 Mathlib 中的一个引理，位于命名空间 `DomMulAct`。
+形式化陈述：symm_mk_zpow [DivInvMonoid M] (a : Mᵈᵐᵃ) (n : Int) : mk.symm (a ^ n) = mk.
+symm a ^ n
+参数：a : Mᵈᵐᵃ；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-lemma symm_mk_zpow [DivInvMonoid M] (a : Mᵈᵐᵃ) (n : Int) : mk.symm (a ^ n) = mk.symm a ^ n := rfl
+lemma symm_mk_zpow [DivInvMonoid M] (a : Mᵈᵐᵃ) (n : ℤ) : mk.symm (a ^ n) = mk.symm a ^ n := rfl
 
 variable {β α N : Type*}
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M α] : SMul Mᵈᵐᵃ (α -> β) where
-  body: f (mk.symm c • a)
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: M α] : 标量乘法 Mᵈᵐᵃ (α -> β) where
-  定义体: f (mk.symm c • a)
-
-@[to_additive]
-
-Depends on / 依赖: mk.symm
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M α] : SMul Mᵈᵐᵃ (α -> β) where
+instance [SMul M α] : SMul Mᵈᵐᵃ (α → β) where
   smul c f a := f (mk.symm c • a)
 
 @[to_additive]
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: [SMul M α] (c : Mᵈᵐᵃ) (f : α -> β) (a : α)
-  statement: (c • f) a = f (mk.symm c • a)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 smul_apply
-  条件: [标量乘法 M α] (c : Mᵈᵐᵃ) (f : α -> β) (a : α)
-  结论: (c • f) a = f (mk.symm c • a)
-  证明: rfl
-
-@[to_additive]
+/-
+**DomMulAct.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：smul_apply [SMul M α] (c : Mᵈᵐᵃ) (f : α -> β) (a : α) : (c • f) a = f (mk.
+symm c • a)
+参数：c : Mᵈᵐᵃ；f : α -> β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_apply [SMul M α] (c : Mᵈᵐᵃ) (f : α -> β) (a : α) : (c • f) a = f (mk.symm c • a) := rfl
+theorem smul_apply [SMul M α] (c : Mᵈᵐᵃ) (f : α → β) (a : α) : (c • f) a = f (mk.symm c • a) := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M α] [SMul N β] : SMulCommClass Mᵈᵐᵃ N (α -> β) where
-  body: rfl
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: M α] [标量乘法 N β] : 标量交换类 Mᵈᵐᵃ N (α -> β) where
-  定义体: rfl
-
-@[to_additive]
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M α] [SMul N β] : SMulCommClass Mᵈᵐᵃ N (α -> β) where
+instance [SMul M α] [SMul N β] : SMulCommClass Mᵈᵐᵃ N (α → β) where
   smul_comm _ _ _ := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M α] [SMul N β] : SMulCommClass N Mᵈᵐᵃ (α -> β) where
-  body: rfl
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: M α] [标量乘法 N β] : 标量交换类 N Mᵈᵐᵃ (α -> β) where
-  定义体: rfl
-
-@[to_additive]
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M α] [SMul N β] : SMulCommClass N Mᵈᵐᵃ (α -> β) where
+instance [SMul M α] [SMul N β] : SMulCommClass N Mᵈᵐᵃ (α → β) where
   smul_comm _ _ _ := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M α] [SMul N α] [SMulCommClass M N α] : SMulCommClass Mᵈᵐᵃ Nᵈᵐᵃ (α -> β) where
-  body: funext fun _ => congr_arg f (smul_comm _ _ _).symm
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: M α] [标量乘法 N α] [标量交换类 M N α] : 标量交换类 Mᵈᵐᵃ Nᵈᵐᵃ (α -> β) where
-  定义体: funext fun _ => congr_arg f (smul_comm _ _ _).symm
-
-@[to_additive]
-
-Depends on / 依赖: congr_arg, smul_comm
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M α] [SMul N α] [SMulCommClass M N α] : SMulCommClass Mᵈᵐᵃ Nᵈᵐᵃ (α -> β) where
-  smul_comm _ _ f := funext fun _ => congr_arg f (smul_comm _ _ _).symm
+instance [SMul M α] [SMul N α] [SMulCommClass M N α] : SMulCommClass Mᵈᵐᵃ Nᵈᵐᵃ (α → β) where
+  smul_comm _ _ f := funext fun _ ↦ congr_arg f (smul_comm _ _ _).symm
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M α] [FaithfulSMul M α] [Nontrivial β] : FaithfulSMul Mᵈᵐᵃ (α -> β) where
-  body: mk.symm.injective eq_of_smul_eq_smul fun a : α => by
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance [SMul M α] [FaithfulSMul M α] [Nontrivial β] : FaithfulSMul Mᵈᵐᵃ (α → β) where
+  eq_of_smul_eq_smul {c₁ c₂} h := mk.symm.injective <| eq_of_smul_eq_smul fun a : α ↦ by
     rcases exists_pair_ne β with ⟨x, y, hne⟩
     contrapose! hne
     have := Classical.decEq α
     replace h := congr_fun (h (update (const α x) (mk.symm c₂ • a) y)) a
     simpa [smul_apply, hne] using h
-
-中文:
-实例 [标量乘法
-  签名: M α] [忠实标量乘法 M α] [非平凡 β] : 忠实标量乘法 Mᵈᵐᵃ (α -> β) where
-  定义体: mk.symm.injective eq_of_smul_eq_smul fun a : α => by
-    rcases exists_pair_ne β with ⟨x, y, hne⟩
-    contrapose! hne
-    have := Classical.decEq α
-    replace h := congr_fun (h (update (const α x) (mk.symm c₂ • a) y)) a
-    simpa [smul_apply, hne] using h
-
-Depends on / 依赖: Classical, Classical.decEq, congr_fun, contrapose, eq_of_smul_eq_smul, exists_pair_ne, injective, mk.symm, mk.symm.injective, replace, smul_apply, update
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SMul M α] [FaithfulSMul M α] [Nontrivial β] : FaithfulSMul Mᵈᵐᵃ (α -> β) where
-eq_of_smul_eq_smul {c₁ c₂} h := mk.symm.injective eq_of_smul_eq_smul fun a : α => by
-    rcases exists_pair_ne β with ⟨x, y, hne⟩
-    contrapose! hne
-    have := Classical.decEq α
-    replace h := congr_fun (h (update (const α x) (mk.symm c₂ • a) y)) a
-    simpa [smul_apply, hne] using h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M α] [Zero β] : SMulZeroClass Mᵈᵐᵃ (α -> β) where
-  body: rfl
-
-中文:
-实例 [标量乘法
-  签名: M α] [零 β] : SMulZero类 Mᵈᵐᵃ (α -> β) where
-  定义体: rfl
--/
-instance [SMul M α] [Zero β] : SMulZeroClass Mᵈᵐᵃ (α -> β) where
+instance [SMul M α] [Zero β] : SMulZeroClass Mᵈᵐᵃ (α → β) where
   smul_zero _ := rfl
-
-instance {A : Type*} [SMul M α] [AddZeroClass A] : DistribSMul Mᵈᵐᵃ (α -> A) where
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {A : Type*} [SMul M α] [AddZeroClass A] : DistribSMul Mᵈᵐᵃ (α → A) where
   smul_add _ _ _ := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [MulAction M α] : MulAction Mᵈᵐᵃ (α -> β) where
-  body: funext fun _ => congr_arg f (one_smul _ _)
-  mul_smul _ _ f := funext fun _ => congr_arg f (mul_smul _ _ _)
-
-中文:
-实例 [幺半群
-  签名: M] [乘法作用 M α] : 乘法作用 Mᵈᵐᵃ (α -> β) where
-  定义体: funext fun _ => congr_arg f (one_smul _ _)
-  mul_smul _ _ f := funext fun _ => congr_arg f (mul_smul _ _ _)
-
-Depends on / 依赖: congr_arg, one_smul
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Monoid M] [MulAction M α] : MulAction Mᵈᵐᵃ (α -> β) where
-  one_smul f := funext fun _ => congr_arg f (one_smul _ _)
-  mul_smul _ _ f := funext fun _ => congr_arg f (mul_smul _ _ _)
-
-instance {A : Type*} [Monoid M] [MulAction M α] [AddMonoid A] : DistribMulAction Mᵈᵐᵃ (α -> A) where
+instance [Monoid M] [MulAction M α] : MulAction Mᵈᵐᵃ (α → β) where
+  one_smul f := funext fun _ ↦ congr_arg f (one_smul _ _)
+  mul_smul _ _ f := funext fun _ ↦ congr_arg f (mul_smul _ _ _)
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {A : Type*} [Monoid M] [MulAction M α] [AddMonoid A] : DistribMulAction Mᵈᵐᵃ (α → A) where
   smul_zero _ := rfl
   smul_add _ _ _ := rfl
-
-instance {A : Type*} [Monoid M] [MulAction M α] [Monoid A] : MulDistribMulAction Mᵈᵐᵃ (α -> A) where
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {A : Type*} [Monoid M] [MulAction M α] [Monoid A] : MulDistribMulAction Mᵈᵐᵃ (α → A) where
   smul_mul _ _ _ := rfl
   smul_one _ := rfl
 
@@ -636,99 +359,45 @@ section MonoidHom
 
 variable {M M' A B : Type*} [Monoid M] [Monoid A] [MulDistribMulAction M A] [MulOneClass B]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Mᵈᵐᵃ (A ->* B)
-  body: f.comp (MulDistribMulAction.toMonoidHom _ (mk.symm c))
-
-中文:
-实例 :
-  签名: 标量乘法 Mᵈᵐᵃ (A ->* B)
-  定义体: f.comp (MulDistribMulAction.toMonoidHom _ (mk.symm c))
-
-Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.toMonoidHom, f.comp, mk.symm, toMonoidHom
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Mᵈᵐᵃ (A ->* B) where
+instance : SMul Mᵈᵐᵃ (A →* B) where
   smul c f := f.comp (MulDistribMulAction.toMonoidHom _ (mk.symm c))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M'] [MulDistribMulAction M' A] [SMulCommClass M M' A] :
-  body: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [幺半群
-  签名: M'] [MulDistribMul作用 M' A] [标量交换类 M M' A] :
-  定义体: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.smulCommClass, coe_injective, smulCommClass
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M'] [MulDistribMulAction M' A] [SMulCommClass M M' A] :
-    SMulCommClass Mᵈᵐᵃ M'ᵈᵐᵃ (A ->* B) :=
-  DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-theorem `smul_monoidHom_apply` / 定理 `smul_monoidHom_apply`
-
-English:
-theorem smul_monoidHom_apply
-  given: (c : Mᵈᵐᵃ) (f : A ->* B) (a : A)
-  statement: (c • f) a = f (mk.symm c • a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_monoidHom_apply
-  条件: (c : Mᵈᵐᵃ) (f : A ->* B) (a : A)
-  结论: (c • f) a = f (mk.symm c • a)
-  证明: rfl
-
-@[simp]
+    SMulCommClass Mᵈᵐᵃ M'ᵈᵐᵃ (A →* B) :=
+  DFunLike.coe_injective.smulCommClass (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+/-
+**DomMulAct.smul_monoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：smul_monoidHom_apply (c : Mᵈᵐᵃ) (f : A ->* B) (a : A) : (c • f) a = f (mk.
+symm c • a)
+参数：c : Mᵈᵐᵃ；f : A ->* B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_monoidHom_apply (c : Mᵈᵐᵃ) (f : A ->* B) (a : A) : (c • f) a = f (mk.symm c • a) :=
+theorem smul_monoidHom_apply (c : Mᵈᵐᵃ) (f : A →* B) (a : A) : (c • f) a = f (mk.symm c • a) :=
   rfl
 
 @[simp]
-/--
-theorem `mk_smul_monoidHom_apply` / 定理 `mk_smul_monoidHom_apply`
-
-English:
-theorem mk_smul_monoidHom_apply
-  given: (c : M) (f : A ->* B) (a : A)
-  statement: (mk c • f) a = f (c • a)
-  proof: rfl
-
-中文:
-定理 mk_smul_monoidHom_apply
-  条件: (c : M) (f : A ->* B) (a : A)
-  结论: (mk c • f) a = f (c • a)
-  证明: rfl
+/-
+**DomMulAct.mk_smul_monoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：mk_smul_monoidHom_apply (c : M) (f : A ->* B) (a : A) : (mk c • f) a = f (
+c • a)
+参数：c : M；f : A ->* B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_smul_monoidHom_apply (c : M) (f : A ->* B) (a : A) : (mk c • f) a = f (c • a) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction Mᵈᵐᵃ (A ->* B)
-  body: DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 乘法作用 Mᵈᵐᵃ (A ->* B)
-  定义体: DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, mulAction
+theorem mk_smul_monoidHom_apply (c : M) (f : A →* B) (a : A) : (mk c • f) a = f (c • a) := rfl
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MulAction Mᵈᵐᵃ (A ->* B) := DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
+instance : MulAction Mᵈᵐᵃ (A →* B) := DFunLike.coe_injective.mulAction (⇑) fun _ _ ↦ rfl
 
 end MonoidHom
 
@@ -738,178 +407,81 @@ section DistribSMul
 
 variable {A B M M' : Type*} [AddMonoid A] [DistribSMul M A] [AddZeroClass B]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul Mᵈᵐᵃ (A ->+ B)
-  body: f.comp (DistribSMul.toAddMonoidHom _ (mk.symm c))
-
-中文:
-实例 :
-  签名: 标量乘法 Mᵈᵐᵃ (A ->+ B)
-  定义体: f.comp (DistribSMul.toAddMonoidHom _ (mk.symm c))
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, f.comp, mk.symm, toAddMonoidHom
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul Mᵈᵐᵃ (A ->+ B) where
+instance : SMul Mᵈᵐᵃ (A →+ B) where
   smul c f := f.comp (DistribSMul.toAddMonoidHom _ (mk.symm c))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: M' A] [SMulCommClass M M' A] : SMulCommClass Mᵈᵐᵃ M'ᵈᵐᵃ (A ->+ B)
-  body: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [分配标量乘法
-  签名: M' A] [标量交换类 M M' A] : 标量交换类 Mᵈᵐᵃ M'ᵈᵐᵃ (A ->+ B)
-  定义体: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.smulCommClass, coe_injective, smulCommClass
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul M' A] [SMulCommClass M M' A] : SMulCommClass Mᵈᵐᵃ M'ᵈᵐᵃ (A ->+ B) :=
-  DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: M' B] : SMulCommClass Mᵈᵐᵃ M' (A ->+ B)
-  body: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [分配标量乘法
-  签名: M' B] : 标量交换类 Mᵈᵐᵃ M' (A ->+ B)
-  定义体: DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.smulCommClass, coe_injective, smulCommClass
+instance [DistribSMul M' A] [SMulCommClass M M' A] : SMulCommClass Mᵈᵐᵃ M'ᵈᵐᵃ (A →+ B) :=
+  DFunLike.coe_injective.smulCommClass (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul M' B] : SMulCommClass Mᵈᵐᵃ M' (A ->+ B) :=
-  DFunLike.coe_injective.smulCommClass (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-theorem `smul_addMonoidHom_apply` / 定理 `smul_addMonoidHom_apply`
-
-English:
-theorem smul_addMonoidHom_apply
-  given: (c : Mᵈᵐᵃ) (f : A ->+ B) (a : A)
-  statement: (c • f) a = f (mk.symm c • a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_addMonoidHom_apply
-  条件: (c : Mᵈᵐᵃ) (f : A ->+ B) (a : A)
-  结论: (c • f) a = f (mk.symm c • a)
-  证明: rfl
-
-@[simp]
+instance [DistribSMul M' B] : SMulCommClass Mᵈᵐᵃ M' (A →+ B) :=
+  DFunLike.coe_injective.smulCommClass (fun _ _ ↦ rfl) (fun _ _ ↦ rfl)
+/-
+**DomMulAct.smul_addMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：smul_addMonoidHom_apply (c : Mᵈᵐᵃ) (f : A ->+ B) (a : A) : (c • f) a = f (
+mk.symm c • a)
+参数：c : Mᵈᵐᵃ；f : A ->+ B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_addMonoidHom_apply (c : Mᵈᵐᵃ) (f : A ->+ B) (a : A) : (c • f) a = f (mk.symm c • a) :=
+theorem smul_addMonoidHom_apply (c : Mᵈᵐᵃ) (f : A →+ B) (a : A) : (c • f) a = f (mk.symm c • a) :=
   rfl
 
 @[simp]
-/--
-theorem `mk_smul_addMonoidHom_apply` / 定理 `mk_smul_addMonoidHom_apply`
-
-English:
-theorem mk_smul_addMonoidHom_apply
-  given: (c : M) (f : A ->+ B) (a : A)
-  statement: (mk c • f) a = f (c • a)
-  proof: rfl
-
-中文:
-定理 mk_smul_addMonoidHom_apply
-  条件: (c : M) (f : A ->+ B) (a : A)
-  结论: (mk c • f) a = f (c • a)
-  证明: rfl
+/-
+**DomMulAct.mk_smul_addMonoidHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：mk_smul_addMonoidHom_apply (c : M) (f : A ->+ B) (a : A) : (mk c • f) a = 
+f (c • a)
+参数：c : M；f : A ->+ B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_smul_addMonoidHom_apply (c : M) (f : A ->+ B) (a : A) : (mk c • f) a = f (c • a) := rfl
-
-/--
-theorem `coe_smul_addMonoidHom` / 定理 `coe_smul_addMonoidHom`
-
-English:
-theorem coe_smul_addMonoidHom
-  given: (c : Mᵈᵐᵃ) (f : A ->+ B)
-  statement: ⇑(c • f) = c • ⇑f
-  proof: rfl
-
-中文:
-定理 coe_smul_addMonoidHom
-  条件: (c : Mᵈᵐᵃ) (f : A ->+ B)
-  结论: ⇑(c • f) = c • ⇑f
-  证明: rfl
+theorem mk_smul_addMonoidHom_apply (c : M) (f : A →+ B) (a : A) : (mk c • f) a = f (c • a) := rfl
+/-
+**DomMulAct.coe_smul_addMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：coe_smul_addMonoidHom (c : Mᵈᵐᵃ) (f : A ->+ B) : ⇑(c • f) = c • ⇑f
+参数：c : Mᵈᵐᵃ；f : A ->+ B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smul_addMonoidHom (c : Mᵈᵐᵃ) (f : A ->+ B) : ⇑(c • f) = c • ⇑f :=
+theorem coe_smul_addMonoidHom (c : Mᵈᵐᵃ) (f : A →+ B) : ⇑(c • f) = c • ⇑f :=
   rfl
 
 end DistribSMul
 
 variable {A M B : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [AddMonoid A] [DistribMulAction M A] [AddZeroClass B] :
-  body: DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: M] [加法幺半群 A] [分配乘法作用 M A] [加法零类 B] :
-  定义体: DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, mulAction
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [AddMonoid A] [DistribMulAction M A] [AddZeroClass B] :
-    MulAction Mᵈᵐᵃ (A ->+ B) := DFunLike.coe_injective.mulAction (⇑) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [AddMonoid A] [DistribMulAction M A] [AddCommMonoid B] :
-  body: DFunLike.coe_injective.distribMulAction (AddMonoidHom.coeFn A B) fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: M] [加法幺半群 A] [分配乘法作用 M A] [加法交换幺半群 B] :
-  定义体: DFunLike.coe_injective.distribMulAction (AddMonoidHom.coeFn A B) fun _ _ => rfl
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.coeFn, DFunLike, DFunLike.coe_injective.distribMulAction, coe_injective, distribMulAction
+    MulAction Mᵈᵐᵃ (A →+ B) := DFunLike.coe_injective.mulAction (⇑) fun _ _ ↦ rfl
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [AddMonoid A] [DistribMulAction M A] [AddCommMonoid B] :
-    DistribMulAction Mᵈᵐᵃ (A ->+ B) :=
-  DFunLike.coe_injective.distribMulAction (AddMonoidHom.coeFn A B) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: M] [Monoid A] [MulDistribMulAction M A] [CommMonoid B] :
-  body: DFunLike.coe_injective.mulDistribMulAction (MonoidHom.coeFn A B) fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: M] [幺半群 A] [MulDistribMul作用 M A] [交换幺半群 B] :
-  定义体: DFunLike.coe_injective.mulDistribMulAction (MonoidHom.coeFn A B) fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulDistribMulAction, MonoidHom, MonoidHom.coeFn, coe_injective, mulDistribMulAction
+    DistribMulAction Mᵈᵐᵃ (A →+ B) :=
+  DFunLike.coe_injective.distribMulAction (AddMonoidHom.coeFn A B) fun _ _ ↦ rfl
+/-
+**DomMulAct.** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid M] [Monoid A] [MulDistribMulAction M A] [CommMonoid B] :
-    MulDistribMulAction Mᵈᵐᵃ (A ->* B) :=
-  DFunLike.coe_injective.mulDistribMulAction (MonoidHom.coeFn A B) fun _ _ => rfl
+    MulDistribMulAction Mᵈᵐᵃ (A →* B) :=
+  DFunLike.coe_injective.mulDistribMulAction (MonoidHom.coeFn A B) fun _ _ ↦ rfl
 
 end AddMonoidHom
 
 end DomMulAct
+

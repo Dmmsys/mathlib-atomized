@@ -23,109 +23,68 @@ universe u
 
 variable {G H : AddCommGrpCat.{u}} (f : G ⟶ H)
 
-/--
-Definition of `kernelCone` / `kernelCone` 的定义
+/-- The kernel cone induced by the concrete kernel. -/
+/-
+**AddCommGrpCat.kernelCone** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：kernelCone : KernelFork f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kernelCone
-  signature: : KernelFork f
-  body: KernelFork.ofι (Z := of f.hom.ker) (ofHom f.hom.ker.subtype) ext fun x =>
-    x.casesOn fun _ hx => hx
-
-中文:
-定义 kernelCone
-  签名: : 核叉 f
-  定义体: KernelFork.ofι (Z := of f.hom.ker) (ofHom f.hom.ker.subtype) ext fun x =>
-    x.casesOn fun _ hx => hx
-
-Depends on / 依赖: KernelFork, KernelFork.of, casesOn, f.hom.ker, f.hom.ker.subtype, subtype, x.casesOn
+--- 原说明 ---
+The kernel cone induced by the concrete kernel.
 -/
 def kernelCone : KernelFork f :=
-KernelFork.ofι (Z := of f.hom.ker) (ofHom f.hom.ker.subtype) ext fun x =>
+  KernelFork.ofι (Z := of f.hom.ker) (ofHom f.hom.ker.subtype) <| ext fun x =>
     x.casesOn fun _ hx => hx
 
-/--
-Definition of `kernelIsLimit` / `kernelIsLimit` 的定义
+/-- The kernel of a group homomorphism is a kernel in the categorical sense. -/
+/-
+**AddCommGrpCat.kernelIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：kernelIsLimit : IsLimit kernelCone f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kernelIsLimit
-  signature: : IsLimit kernelCone f
-  body: Fork.IsLimit.mk _
-    (fun s => ofHom <| s.ι.hom.codRestrict _ fun c => mem_ker.mpr <|
-      ConcreteCategory.congr_hom s.condition c)
-    (fun _ => by rfl)
-    (fun _ _ h => ext fun x => Subtype.ext_iff.mpr <| ConcreteCategory.congr_hom h x)
-
-中文:
-定义 kernelIsLimit
-  签名: : 是极限 kernelCone f
-  定义体: Fork.IsLimit.mk _
-    (fun s => ofHom <| s.ι.hom.codRestrict _ fun c => mem_ker.mpr <|
-      ConcreteCategory.congr_hom s.condition c)
-    (fun _ => by rfl)
-    (fun _ _ h => ext fun x => Subtype.ext_iff.mpr <| ConcreteCategory.congr_hom h x)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Fork.IsLimit.mk, IsLimit, Subtype, Subtype.ext_iff.mpr, codRestrict, condition, congr_hom, ext_iff, hom.codRestrict, mem_ker, mem_ker.mpr, s.condition
+--- 原说明 ---
+The kernel of a group homomorphism is a kernel in the categorical sense.
 -/
-def kernelIsLimit : IsLimit kernelCone f :=
+def kernelIsLimit : IsLimit <| kernelCone f :=
   Fork.IsLimit.mk _
     (fun s => ofHom <| s.ι.hom.codRestrict _ fun c => mem_ker.mpr <|
       ConcreteCategory.congr_hom s.condition c)
     (fun _ => by rfl)
     (fun _ _ h => ext fun x => Subtype.ext_iff.mpr <| ConcreteCategory.congr_hom h x)
 
-/--
-Definition of `cokernelCocone` / `cokernelCocone` 的定义
+/-- The cokernel cocone induced by the projection onto the quotient. -/
+/-
+**AddCommGrpCat.cokernelCocone** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：cokernelCocone : CokernelCofork f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelCocone
-  signature: : CokernelCofork f
-  body: CokernelCofork.ofπ (Z := of <| H ⧸ f.hom.range) (ofHom (mk' f.hom.range)) ext fun x =>
-    (eq_zero_iff _).mpr ⟨x, rfl⟩
-
-中文:
-定义 cokernelCocone
-  签名: : 余核余叉 f
-  定义体: CokernelCofork.ofπ (Z := of <| H ⧸ f.hom.range) (ofHom (mk' f.hom.range)) ext fun x =>
-    (eq_zero_iff _).mpr ⟨x, rfl⟩
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.of, eq_zero_iff, f.hom.range
+--- 原说明 ---
+The cokernel cocone induced by the projection onto the quotient.
 -/
 def cokernelCocone : CokernelCofork f :=
-CokernelCofork.ofπ (Z := of <| H ⧸ f.hom.range) (ofHom (mk' f.hom.range)) ext fun x =>
+  CokernelCofork.ofπ (Z := of <| H ⧸ f.hom.range) (ofHom (mk' f.hom.range)) <| ext fun x =>
     (eq_zero_iff _).mpr ⟨x, rfl⟩
 
-/--
-Definition of `cokernelIsColimit` / `cokernelIsColimit` 的定义
+/-- The projection onto the quotient is a cokernel in the categorical sense. -/
+/-
+**AddCommGrpCat.cokernelIsColimit** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：cokernelIsColimit : IsColimit cokernelCocone f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelIsColimit
-  signature: : IsColimit cokernelCocone f
-  body: Cofork.IsColimit.mk _
-    (fun s => ofHom <| lift _ _ <| (range_le_ker_iff _ _).mpr <|
-      congr_arg Hom.hom (CokernelCofork.condition s))
-    (fun _ => rfl)
-    (fun _ _ h => have : Epi (cokernelCocone f).π := (epi_iff_surjective _).mpr <| mk'_surjective _
-(cancel_epi (cokernelCocone f).π).mp by simpa only [parallelPair_obj_one] using! h)
-
-中文:
-定义 cokernelIsColimit
-  签名: : 是余极限 cokernelCocone f
-  定义体: Cofork.IsColimit.mk _
-    (fun s => ofHom <| lift _ _ <| (range_le_ker_iff _ _).mpr <|
-      congr_arg Hom.hom (CokernelCofork.condition s))
-    (fun _ => rfl)
-    (fun _ _ h => have : Epi (cokernelCocone f).π := (epi_iff_surjective _).mpr <| mk'_surjective _
-(cancel_epi (cokernelCocone f).π).mp by simpa only [parallelPair_obj_one] using! h)
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.mk, CokernelCofork, CokernelCofork.condition, Hom.hom, IsColimit, _surjective, cancel_epi, cokernelCocone, condition, congr_arg, epi_iff_surjective, parallelPair_obj_one, range_le_ker_iff
+--- 原说明 ---
+The projection onto the quotient is a cokernel in the categorical sense.
 -/
-def cokernelIsColimit : IsColimit cokernelCocone f :=
+def cokernelIsColimit : IsColimit <| cokernelCocone f :=
   Cofork.IsColimit.mk _
     (fun s => ofHom <| lift _ _ <| (range_le_ker_iff _ _).mpr <|
       congr_arg Hom.hom (CokernelCofork.condition s))
     (fun _ => rfl)
     (fun _ _ h => have : Epi (cokernelCocone f).π := (epi_iff_surjective _).mpr <| mk'_surjective _
-(cancel_epi (cokernelCocone f).π).mp by simpa only [parallelPair_obj_one] using! h)
+      (cancel_epi (cokernelCocone f).π).mp <| by simpa only [parallelPair_obj_one] using! h)
 
 end AddCommGrpCat
+

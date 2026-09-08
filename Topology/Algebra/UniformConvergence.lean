@@ -49,809 +49,404 @@ section AlgebraicInstances
 
 variable {α β ι R : Type*} {𝔖 : Set <| Set α} {x : α}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: β] : One (α ->ᵤ β)
-  body: inferInstanceAs One (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [幺
-  签名: β] : 幺 (α ->ᵤ β)
-  定义体: inferInstanceAs One (α -> β)
-
-@[to_additive (attr := simp)]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [One β] : One (α ->ᵤ β) := inferInstanceAs One (α -> β)
+@[to_additive] instance [One β] : One (α →ᵤ β) := inferInstanceAs <| One (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.toFun_one` / 引理 `UniformFun.toFun_one`
-
-English:
-lemma UniformFun.toFun_one
-  given: [One β]
-  statement: toFun (1 : α ->ᵤ β) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformFun.toFun_one
-  条件: [幺 β]
-  结论: toFun (1 : α ->ᵤ β) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformFun.toFun_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.toFun_one [One β] : toFun (1 : α ->ᵤ β) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.toFun_one [One β] : toFun (1 : α ->ᵤ β) = 1 := rfl
+lemma UniformFun.toFun_one [One β] : toFun (1 : α →ᵤ β) = 1 := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.ofFun_one` / 引理 `UniformFun.ofFun_one`
-
-English:
-lemma UniformFun.ofFun_one
-  given: [One β]
-  statement: ofFun (1 : α -> β) = 1
-  proof: rfl
-
-中文:
-引理 UniformFun.ofFun_one
-  条件: [幺 β]
-  结论: ofFun (1 : α -> β) = 1
-  证明: rfl
+/-
+**UniformFun.ofFun_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.ofFun_one [One β] : ofFun (1 : α -> β) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.ofFun_one [One β] : ofFun (1 : α -> β) = 1 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: β] : One (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs One (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [幺
-  签名: β] : 幺 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs One (α -> β)
-
-@[to_additive (attr := simp)]
+lemma UniformFun.ofFun_one [One β] : ofFun (1 : α → β) = 1 := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [One β] : One (α ->ᵤ[𝔖] β) := inferInstanceAs One (α -> β)
+@[to_additive] instance [One β] : One (α →ᵤ[𝔖] β) := inferInstanceAs <| One (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.toFun_one` / 引理 `UniformOnFun.toFun_one`
-
-English:
-lemma UniformOnFun.toFun_one
-  given: [One β]
-  statement: toFun 𝔖 (1 : α ->ᵤ[𝔖] β) = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformOnFun.toFun_one
-  条件: [幺 β]
-  结论: toFun 𝔖 (1 : α ->ᵤ[𝔖] β) = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformOnFun.toFun_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.toFun_one [One β] : toFun 𝔖 (1 : α ->ᵤ[𝔖] β) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.toFun_one [One β] : toFun 𝔖 (1 : α ->ᵤ[𝔖] β) = 1 := rfl
+lemma UniformOnFun.toFun_one [One β] : toFun 𝔖 (1 : α →ᵤ[𝔖] β) = 1 := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.one_apply` / 引理 `UniformOnFun.one_apply`
-
-English:
-lemma UniformOnFun.one_apply
-  given: [One β]
-  statement: ofFun 𝔖 (1 : α -> β) = 1
-  proof: rfl
-
-中文:
-引理 UniformOnFun.one_apply
-  条件: [幺 β]
-  结论: ofFun 𝔖 (1 : α -> β) = 1
-  证明: rfl
+/-
+**UniformOnFun.one_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.one_apply [One β] : ofFun 𝔖 (1 : α -> β) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.one_apply [One β] : ofFun 𝔖 (1 : α -> β) = 1 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: β] : Mul (α ->ᵤ β)
-  body: inferInstanceAs Mul (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [乘法
-  签名: β] : 乘法 (α ->ᵤ β)
-  定义体: inferInstanceAs Mul (α -> β)
-
-@[to_additive (attr := simp)]
+lemma UniformOnFun.one_apply [One β] : ofFun 𝔖 (1 : α → β) = 1 := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [Mul β] : Mul (α ->ᵤ β) := inferInstanceAs Mul (α -> β)
+@[to_additive] instance [Mul β] : Mul (α →ᵤ β) := inferInstanceAs <| Mul (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.toFun_mul` / 引理 `UniformFun.toFun_mul`
-
-English:
-lemma UniformFun.toFun_mul
-  given: [Mul β] (f g : α ->ᵤ β)
-  statement: toFun (f * g) = toFun f * toFun g
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformFun.toFun_mul
-  条件: [乘法 β] (f g : α ->ᵤ β)
-  结论: toFun (f * g) = toFun f * toFun g
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformFun.toFun_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.toFun_mul [Mul β] (f g : α ->ᵤ β) : toFun (f * g) = toFun f * t
+oFun g
+参数：f g : α ->ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.toFun_mul [Mul β] (f g : α ->ᵤ β) : toFun (f * g) = toFun f * toFun g := rfl
+lemma UniformFun.toFun_mul [Mul β] (f g : α →ᵤ β) : toFun (f * g) = toFun f * toFun g := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.ofFun_mul` / 引理 `UniformFun.ofFun_mul`
-
-English:
-lemma UniformFun.ofFun_mul
-  given: [Mul β] (f g : α -> β)
-  statement: ofFun (f * g) = ofFun f * ofFun g
-  proof: rfl
-
-中文:
-引理 UniformFun.ofFun_mul
-  条件: [乘法 β] (f g : α -> β)
-  结论: ofFun (f * g) = ofFun f * ofFun g
-  证明: rfl
+/-
+**UniformFun.ofFun_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.ofFun_mul [Mul β] (f g : α -> β) : ofFun (f * g) = ofFun f * of
+Fun g
+参数：f g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.ofFun_mul [Mul β] (f g : α -> β) : ofFun (f * g) = ofFun f * ofFun g := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: β] : Mul (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs Mul (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [乘法
-  签名: β] : 乘法 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs Mul (α -> β)
-
-@[to_additive (attr := simp)]
+lemma UniformFun.ofFun_mul [Mul β] (f g : α → β) : ofFun (f * g) = ofFun f * ofFun g := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [Mul β] : Mul (α ->ᵤ[𝔖] β) := inferInstanceAs Mul (α -> β)
+@[to_additive] instance [Mul β] : Mul (α →ᵤ[𝔖] β) := inferInstanceAs <| Mul (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.toFun_mul` / 引理 `UniformOnFun.toFun_mul`
-
-English:
-lemma UniformOnFun.toFun_mul
-  given: [Mul β] (f g : α ->ᵤ[𝔖] β)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformOnFun.toFun_mul
-  条件: [乘法 β] (f g : α ->ᵤ[𝔖] β)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformOnFun.toFun_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.toFun_mul [Mul β] (f g : α ->ᵤ[𝔖] β) : toFun 𝔖 (f * g) = toFu
+n 𝔖 f * toFun 𝔖 g
+参数：f g : α ->ᵤ[𝔖] β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.toFun_mul [Mul β] (f g : α ->ᵤ[𝔖] β) :
+lemma UniformOnFun.toFun_mul [Mul β] (f g : α →ᵤ[𝔖] β) :
     toFun 𝔖 (f * g) = toFun 𝔖 f * toFun 𝔖 g :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.ofFun_mul` / 引理 `UniformOnFun.ofFun_mul`
-
-English:
-lemma UniformOnFun.ofFun_mul
-  given: [Mul β] (f g : α -> β)
-  statement: ofFun 𝔖 (f * g) = ofFun 𝔖 f * ofFun 𝔖 g
-  proof: rfl
-
-中文:
-引理 UniformOnFun.ofFun_mul
-  条件: [乘法 β] (f g : α -> β)
-  结论: ofFun 𝔖 (f * g) = ofFun 𝔖 f * ofFun 𝔖 g
-  证明: rfl
+/-
+**UniformOnFun.ofFun_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.ofFun_mul [Mul β] (f g : α -> β) : ofFun 𝔖 (f * g) = ofFun 𝔖 
+f * ofFun 𝔖 g
+参数：f g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.ofFun_mul [Mul β] (f g : α -> β) : ofFun 𝔖 (f * g) = ofFun 𝔖 f * ofFun 𝔖 g := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inv
-  signature: β] : Inv (α ->ᵤ β)
-  body: inferInstanceAs Inv (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [取逆
-  签名: β] : 取逆 (α ->ᵤ β)
-  定义体: inferInstanceAs Inv (α -> β)
-
-@[to_additive (attr := simp)]
+lemma UniformOnFun.ofFun_mul [Mul β] (f g : α → β) : ofFun 𝔖 (f * g) = ofFun 𝔖 f * ofFun 𝔖 g := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [Inv β] : Inv (α ->ᵤ β) := inferInstanceAs Inv (α -> β)
+@[to_additive] instance [Inv β] : Inv (α →ᵤ β) := inferInstanceAs <| Inv (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.toFun_inv` / 引理 `UniformFun.toFun_inv`
-
-English:
-lemma UniformFun.toFun_inv
-  given: [Inv β] (f : α ->ᵤ β)
-  statement: toFun (f⁻¹) = (toFun f)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformFun.toFun_inv
-  条件: [取逆 β] (f : α ->ᵤ β)
-  结论: toFun (f⁻¹) = (toFun f)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformFun.toFun_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.toFun_inv [Inv β] (f : α ->ᵤ β) : toFun (f⁻¹) = (toFun f)⁻¹
+参数：f : α ->ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.toFun_inv [Inv β] (f : α ->ᵤ β) : toFun (f⁻¹) = (toFun f)⁻¹ := rfl
+lemma UniformFun.toFun_inv [Inv β] (f : α →ᵤ β) : toFun (f⁻¹) = (toFun f)⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.ofFun_inv` / 引理 `UniformFun.ofFun_inv`
-
-English:
-lemma UniformFun.ofFun_inv
-  given: [Inv β] (f : α -> β)
-  statement: ofFun (f⁻¹) = (ofFun f)⁻¹
-  proof: rfl
-
-中文:
-引理 UniformFun.ofFun_inv
-  条件: [取逆 β] (f : α -> β)
-  结论: ofFun (f⁻¹) = (ofFun f)⁻¹
-  证明: rfl
+/-
+**UniformFun.ofFun_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.ofFun_inv [Inv β] (f : α -> β) : ofFun (f⁻¹) = (ofFun f)⁻¹
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.ofFun_inv [Inv β] (f : α -> β) : ofFun (f⁻¹) = (ofFun f)⁻¹ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inv
-  signature: β] : Inv (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs Inv (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [取逆
-  签名: β] : 取逆 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs Inv (α -> β)
-
-@[to_additive (attr := simp)]
+lemma UniformFun.ofFun_inv [Inv β] (f : α → β) : ofFun (f⁻¹) = (ofFun f)⁻¹ := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [Inv β] : Inv (α ->ᵤ[𝔖] β) := inferInstanceAs Inv (α -> β)
+@[to_additive] instance [Inv β] : Inv (α →ᵤ[𝔖] β) := inferInstanceAs <| Inv (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.toFun_inv` / 引理 `UniformOnFun.toFun_inv`
-
-English:
-lemma UniformOnFun.toFun_inv
-  given: [Inv β] (f : α ->ᵤ[𝔖] β)
-  statement: toFun 𝔖 (f⁻¹) = (toFun 𝔖 f)⁻¹
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformOnFun.toFun_inv
-  条件: [取逆 β] (f : α ->ᵤ[𝔖] β)
-  结论: toFun 𝔖 (f⁻¹) = (toFun 𝔖 f)⁻¹
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformOnFun.toFun_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.toFun_inv [Inv β] (f : α ->ᵤ[𝔖] β) : toFun 𝔖 (f⁻¹) = (toFun 𝔖
+ f)⁻¹
+参数：f : α ->ᵤ[𝔖] β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.toFun_inv [Inv β] (f : α ->ᵤ[𝔖] β) : toFun 𝔖 (f⁻¹) = (toFun 𝔖 f)⁻¹ := rfl
+lemma UniformOnFun.toFun_inv [Inv β] (f : α →ᵤ[𝔖] β) : toFun 𝔖 (f⁻¹) = (toFun 𝔖 f)⁻¹ := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.ofFun_inv` / 引理 `UniformOnFun.ofFun_inv`
-
-English:
-lemma UniformOnFun.ofFun_inv
-  given: [Inv β] (f : α -> β)
-  statement: ofFun 𝔖 (f⁻¹) = (ofFun 𝔖 f)⁻¹
-  proof: rfl
-
-中文:
-引理 UniformOnFun.ofFun_inv
-  条件: [取逆 β] (f : α -> β)
-  结论: ofFun 𝔖 (f⁻¹) = (ofFun 𝔖 f)⁻¹
-  证明: rfl
+/-
+**UniformOnFun.ofFun_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.ofFun_inv [Inv β] (f : α -> β) : ofFun 𝔖 (f⁻¹) = (ofFun 𝔖 f)⁻
+¹
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.ofFun_inv [Inv β] (f : α -> β) : ofFun 𝔖 (f⁻¹) = (ofFun 𝔖 f)⁻¹ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Div
-  signature: β] : Div (α ->ᵤ β)
-  body: inferInstanceAs Div (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [除法
-  签名: β] : 除法 (α ->ᵤ β)
-  定义体: inferInstanceAs Div (α -> β)
-
-@[to_additive (attr := simp)]
+lemma UniformOnFun.ofFun_inv [Inv β] (f : α → β) : ofFun 𝔖 (f⁻¹) = (ofFun 𝔖 f)⁻¹ := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [Div β] : Div (α ->ᵤ β) := inferInstanceAs Div (α -> β)
+@[to_additive] instance [Div β] : Div (α →ᵤ β) := inferInstanceAs <| Div (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.toFun_div` / 引理 `UniformFun.toFun_div`
-
-English:
-lemma UniformFun.toFun_div
-  given: [Div β] (f g : α ->ᵤ β)
-  statement: toFun (f / g) = toFun f / toFun g
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformFun.toFun_div
-  条件: [除法 β] (f g : α ->ᵤ β)
-  结论: toFun (f / g) = toFun f / toFun g
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformFun.toFun_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.toFun_div [Div β] (f g : α ->ᵤ β) : toFun (f / g) = toFun f / t
+oFun g
+参数：f g : α ->ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.toFun_div [Div β] (f g : α ->ᵤ β) : toFun (f / g) = toFun f / toFun g := rfl
+lemma UniformFun.toFun_div [Div β] (f g : α →ᵤ β) : toFun (f / g) = toFun f / toFun g := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.ofFun_div` / 引理 `UniformFun.ofFun_div`
-
-English:
-lemma UniformFun.ofFun_div
-  given: [Div β] (f g : α -> β)
-  statement: ofFun (f / g) = ofFun f / ofFun g
-  proof: rfl
-
-中文:
-引理 UniformFun.ofFun_div
-  条件: [除法 β] (f g : α -> β)
-  结论: ofFun (f / g) = ofFun f / ofFun g
-  证明: rfl
+/-
+**UniformFun.ofFun_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.ofFun_div [Div β] (f g : α -> β) : ofFun (f / g) = ofFun f / of
+Fun g
+参数：f g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.ofFun_div [Div β] (f g : α -> β) : ofFun (f / g) = ofFun f / ofFun g := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Div
-  signature: β] : Div (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs Div (α -> β)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [除法
-  签名: β] : 除法 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs Div (α -> β)
-
-@[to_additive (attr := simp)]
+lemma UniformFun.ofFun_div [Div β] (f g : α → β) : ofFun (f / g) = ofFun f / ofFun g := rfl
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive] instance [Div β] : Div (α ->ᵤ[𝔖] β) := inferInstanceAs Div (α -> β)
+@[to_additive] instance [Div β] : Div (α →ᵤ[𝔖] β) := inferInstanceAs <| Div (α → β)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.toFun_div` / 引理 `UniformOnFun.toFun_div`
-
-English:
-lemma UniformOnFun.toFun_div
-  given: [Div β] (f g : α ->ᵤ[𝔖] β)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformOnFun.toFun_div
-  条件: [除法 β] (f g : α ->ᵤ[𝔖] β)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformOnFun.toFun_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.toFun_div [Div β] (f g : α ->ᵤ[𝔖] β) : toFun 𝔖 (f / g) = toFu
+n 𝔖 f / toFun 𝔖 g
+参数：f g : α ->ᵤ[𝔖] β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.toFun_div [Div β] (f g : α ->ᵤ[𝔖] β) :
+lemma UniformOnFun.toFun_div [Div β] (f g : α →ᵤ[𝔖] β) :
     toFun 𝔖 (f / g) = toFun 𝔖 f / toFun 𝔖 g :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.ofFun_div` / 引理 `UniformOnFun.ofFun_div`
-
-English:
-lemma UniformOnFun.ofFun_div
-  given: [Div β] (f g : α -> β)
-  statement: ofFun 𝔖 (f / g) = ofFun 𝔖 f / ofFun 𝔖 g
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 UniformOnFun.ofFun_div
-  条件: [除法 β] (f g : α -> β)
-  结论: ofFun 𝔖 (f / g) = ofFun 𝔖 f / ofFun 𝔖 g
-  证明: rfl
-
-@[to_additive]
+/-
+**UniformOnFun.ofFun_div** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.ofFun_div [Div β] (f g : α -> β) : ofFun 𝔖 (f / g) = ofFun 𝔖 
+f / ofFun 𝔖 g
+参数：f g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.ofFun_div [Div β] (f g : α -> β) : ofFun 𝔖 (f / g) = ofFun 𝔖 f / ofFun 𝔖 g := rfl
+lemma UniformOnFun.ofFun_div [Div β] (f g : α → β) : ofFun 𝔖 (f / g) = ofFun 𝔖 f / ofFun 𝔖 g := rfl
 
 @[to_additive]
-instance {M : Type*} [Pow β M] : Pow (α ->ᵤ β) M := inferInstanceAs Pow (α -> β) M
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {M : Type*} [Pow β M] : Pow (α →ᵤ β) M := inferInstanceAs <| Pow (α → β) M
 
 @[to_additive (attr := simp) toFun_smul]
-/--
-lemma `UniformFun.toFun_pow` / 引理 `UniformFun.toFun_pow`
-
-English:
-lemma UniformFun.toFun_pow
-  given: {M : Type*} [Pow β M] (c : M) (f : α ->ᵤ β)
-  proof: rfl
-
-@[to_additive (attr := simp) ofFun_smul]
-
-中文:
-引理 UniformFun.toFun_pow
-  条件: {M : 类型} [幂 β M] (c : M) (f : α ->ᵤ β)
-  证明: rfl
-
-@[to_additive (attr := simp) ofFun_smul]
+/-
+**UniformFun.toFun_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.toFun_pow {M : Type*} [Pow β M] (c : M) (f : α ->ᵤ β) : toFun (
+f ^ c) = toFun f ^ c
+参数：c : M；f : α ->ᵤ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.toFun_pow {M : Type*} [Pow β M] (c : M) (f : α ->ᵤ β) :
+lemma UniformFun.toFun_pow {M : Type*} [Pow β M] (c : M) (f : α →ᵤ β) :
     toFun (f ^ c) = toFun f ^ c :=
   rfl
 
 @[to_additive (attr := simp) ofFun_smul]
-/--
-lemma `UniformFun.ofFun_pow` / 引理 `UniformFun.ofFun_pow`
-
-English:
-lemma UniformFun.ofFun_pow
-  given: {M : Type*} [Pow β M] (c : M) (f : α -> β)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 UniformFun.ofFun_pow
-  条件: {M : 类型} [幂 β M] (c : M) (f : α -> β)
-  证明: rfl
-
-@[to_additive]
+/-
+**UniformFun.ofFun_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.ofFun_pow {M : Type*} [Pow β M] (c : M) (f : α -> β) : ofFun (f
+ ^ c) = ofFun f ^ c
+参数：c : M；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.ofFun_pow {M : Type*} [Pow β M] (c : M) (f : α -> β) :
+lemma UniformFun.ofFun_pow {M : Type*} [Pow β M] (c : M) (f : α → β) :
     ofFun (f ^ c) = ofFun f ^ c :=
   rfl
 
 @[to_additive]
-instance {M : Type*} [Pow β M] : Pow (α ->ᵤ[𝔖] β) M := inferInstanceAs Pow (α -> β) M
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {M : Type*} [Pow β M] : Pow (α →ᵤ[𝔖] β) M := inferInstanceAs <| Pow (α → β) M
 
 @[to_additive (attr := simp) toFun_smul]
-/--
-lemma `UniformOnFun.toFun_pow` / 引理 `UniformOnFun.toFun_pow`
-
-English:
-lemma UniformOnFun.toFun_pow
-  given: {M : Type*} [Pow β M] (c : M) (f : α ->ᵤ[𝔖] β)
-  proof: rfl
-
-@[to_additive (attr := simp) ofFun_smul]
-
-中文:
-引理 UniformOnFun.toFun_pow
-  条件: {M : 类型} [幂 β M] (c : M) (f : α ->ᵤ[𝔖] β)
-  证明: rfl
-
-@[to_additive (attr := simp) ofFun_smul]
+/-
+**UniformOnFun.toFun_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.toFun_pow {M : Type*} [Pow β M] (c : M) (f : α ->ᵤ[𝔖] β) : to
+Fun 𝔖 (f ^ c) = toFun 𝔖 f ^ c
+参数：c : M；f : α ->ᵤ[𝔖] β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.toFun_pow {M : Type*} [Pow β M] (c : M) (f : α ->ᵤ[𝔖] β) :
+lemma UniformOnFun.toFun_pow {M : Type*} [Pow β M] (c : M) (f : α →ᵤ[𝔖] β) :
     toFun 𝔖 (f ^ c) = toFun 𝔖 f ^ c :=
   rfl
 
 @[to_additive (attr := simp) ofFun_smul]
-/--
-lemma `UniformOnFun.ofFun_pow` / 引理 `UniformOnFun.ofFun_pow`
-
-English:
-lemma UniformOnFun.ofFun_pow
-  given: {M : Type*} [Pow β M] (c : M) (f : α -> β)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 UniformOnFun.ofFun_pow
-  条件: {M : 类型} [幂 β M] (c : M) (f : α -> β)
-  证明: rfl
-
-@[to_additive]
+/-
+**UniformOnFun.ofFun_pow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.ofFun_pow {M : Type*} [Pow β M] (c : M) (f : α -> β) : ofFun 
+𝔖 (f ^ c) = ofFun 𝔖 f ^ c
+参数：c : M；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.ofFun_pow {M : Type*} [Pow β M] (c : M) (f : α -> β) :
+lemma UniformOnFun.ofFun_pow {M : Type*} [Pow β M] (c : M) (f : α → β) :
     ofFun 𝔖 (f ^ c) = ofFun 𝔖 f ^ c :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: β] : Monoid (α ->ᵤ β)
-  body: inferInstanceAs Monoid (α -> β)
-
-@[to_additive]
-
-中文:
-实例 [幺半群
-  签名: β] : 幺半群 (α ->ᵤ β)
-  定义体: inferInstanceAs Monoid (α -> β)
-
-@[to_additive]
-
-Depends on / 依赖: Monoid
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Monoid β] : Monoid (α ->ᵤ β) := inferInstanceAs Monoid (α -> β)
+instance [Monoid β] : Monoid (α →ᵤ β) := inferInstanceAs <| Monoid (α → β)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: β] : Monoid (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs Monoid (α -> β)
-
-@[to_additive]
-
-中文:
-实例 [幺半群
-  签名: β] : 幺半群 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs Monoid (α -> β)
-
-@[to_additive]
-
-Depends on / 依赖: Monoid
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Monoid β] : Monoid (α ->ᵤ[𝔖] β) := inferInstanceAs Monoid (α -> β)
+instance [Monoid β] : Monoid (α →ᵤ[𝔖] β) := inferInstanceAs <| Monoid (α → β)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommMonoid
-  signature: β] : CommMonoid (α ->ᵤ β)
-  body: inferInstanceAs CommMonoid (α -> β)
-
-@[to_additive]
-
-中文:
-实例 [交换幺半群
-  签名: β] : 交换幺半群 (α ->ᵤ β)
-  定义体: inferInstanceAs CommMonoid (α -> β)
-
-@[to_additive]
-
-Depends on / 依赖: CommMonoid
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommMonoid β] : CommMonoid (α ->ᵤ β) := inferInstanceAs CommMonoid (α -> β)
+instance [CommMonoid β] : CommMonoid (α →ᵤ β) := inferInstanceAs <| CommMonoid (α → β)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommMonoid
-  signature: β] : CommMonoid (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs CommMonoid (α -> β)
-
-@[to_additive]
-
-中文:
-实例 [交换幺半群
-  签名: β] : 交换幺半群 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs CommMonoid (α -> β)
-
-@[to_additive]
-
-Depends on / 依赖: CommMonoid
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommMonoid β] : CommMonoid (α ->ᵤ[𝔖] β) := inferInstanceAs CommMonoid (α -> β)
+instance [CommMonoid β] : CommMonoid (α →ᵤ[𝔖] β) := inferInstanceAs <| CommMonoid (α → β)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: β] : Group (α ->ᵤ β)
-  body: inferInstanceAs Group (α -> β)
-
-@[to_additive]
-
-中文:
-实例 [群
-  签名: β] : 群 (α ->ᵤ β)
-  定义体: inferInstanceAs Group (α -> β)
-
-@[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Group β] : Group (α ->ᵤ β) := inferInstanceAs Group (α -> β)
+instance [Group β] : Group (α →ᵤ β) := inferInstanceAs <| Group (α → β)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: β] : Group (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs Group (α -> β)
-
-@[to_additive]
-
-中文:
-实例 [群
-  签名: β] : 群 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs Group (α -> β)
-
-@[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Group β] : Group (α ->ᵤ[𝔖] β) := inferInstanceAs Group (α -> β)
+instance [Group β] : Group (α →ᵤ[𝔖] β) := inferInstanceAs <| Group (α → β)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommGroup
-  signature: β] : CommGroup (α ->ᵤ β)
-  body: inferInstanceAs CommGroup (α -> β)
-
-@[to_additive]
-
-中文:
-实例 [交换群
-  签名: β] : 交换群 (α ->ᵤ β)
-  定义体: inferInstanceAs CommGroup (α -> β)
-
-@[to_additive]
-
-Depends on / 依赖: CommGroup
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommGroup β] : CommGroup (α ->ᵤ β) := inferInstanceAs CommGroup (α -> β)
+instance [CommGroup β] : CommGroup (α →ᵤ β) := inferInstanceAs <| CommGroup (α → β)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommGroup
-  signature: β] : CommGroup (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs CommGroup (α -> β)
-
-中文:
-实例 [交换群
-  签名: β] : 交换群 (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs CommGroup (α -> β)
-
-Depends on / 依赖: CommGroup
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommGroup β] : CommGroup (α ->ᵤ[𝔖] β) := inferInstanceAs CommGroup (α -> β)
-
+instance [CommGroup β] : CommGroup (α →ᵤ[𝔖] β) := inferInstanceAs <| CommGroup (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {M N : Type*} [SMul M N] [SMul M β] [SMul N β] [IsScalarTower M N β] :
-    IsScalarTower M N (α ->ᵤ β) :=
-inferInstanceAs IsScalarTower M N (α -> β)
-
+    IsScalarTower M N (α →ᵤ β) :=
+  inferInstanceAs <| IsScalarTower M N (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {M N : Type*} [SMul M N] [SMul M β] [SMul N β] [IsScalarTower M N β] :
-    IsScalarTower M N (α ->ᵤ[𝔖] β) :=
-inferInstanceAs IsScalarTower M N (α -> β)
-
-instance {M N : Type*} [SMul M β] [SMul N β] [SMulCommClass M N β] :
-    SMulCommClass M N (α ->ᵤ β) :=
-inferInstanceAs SMulCommClass M N (α -> β)
-
-instance {M N : Type*} [SMul M β] [SMul N β] [SMulCommClass M N β] :
-    SMulCommClass M N (α ->ᵤ[𝔖] β) :=
-inferInstanceAs SMulCommClass M N (α -> β)
-
-instance {M : Type*} [Monoid M] [MulAction M β] : MulAction M (α ->ᵤ β) :=
-inferInstanceAs MulAction M (α -> β)
-
-instance {M : Type*} [Monoid M] [MulAction M β] : MulAction M (α ->ᵤ[𝔖] β) :=
-inferInstanceAs MulAction M (α -> β)
-
-instance {M : Type*} [Monoid M] [AddMonoid β] [DistribMulAction M β] :
-    DistribMulAction M (α ->ᵤ β) :=
-inferInstanceAs DistribMulAction M (α -> β)
-
-instance {M : Type*} [Monoid M] [AddMonoid β] [DistribMulAction M β] :
-    DistribMulAction M (α ->ᵤ[𝔖] β) :=
-inferInstanceAs DistribMulAction M (α -> β)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [AddCommMonoid β] [Module R β] : Module R (α ->ᵤ β)
-  body: inferInstanceAs Module R (α -> β)
-
-中文:
-实例 [半环
-  签名: R] [加法交换幺半群 β] [模 R β] : 模 R (α ->ᵤ β)
-  定义体: inferInstanceAs Module R (α -> β)
-
-Depends on / 依赖: Module
+    IsScalarTower M N (α →ᵤ[𝔖] β) :=
+  inferInstanceAs <| IsScalarTower M N (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Semiring R] [AddCommMonoid β] [Module R β] : Module R (α ->ᵤ β) :=
-inferInstanceAs Module R (α -> β)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [AddCommMonoid β] [Module R β] : Module R (α ->ᵤ[𝔖] β)
-  body: inferInstanceAs Module R (α -> β)
-
-中文:
-实例 [半环
-  签名: R] [加法交换幺半群 β] [模 R β] : 模 R (α ->ᵤ[𝔖] β)
-  定义体: inferInstanceAs Module R (α -> β)
-
-Depends on / 依赖: Module
+instance {M N : Type*} [SMul M β] [SMul N β] [SMulCommClass M N β] :
+    SMulCommClass M N (α →ᵤ β) :=
+  inferInstanceAs <| SMulCommClass M N (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Semiring R] [AddCommMonoid β] [Module R β] : Module R (α ->ᵤ[𝔖] β) :=
-inferInstanceAs Module R (α -> β)
+instance {M N : Type*} [SMul M β] [SMul N β] [SMulCommClass M N β] :
+    SMulCommClass M N (α →ᵤ[𝔖] β) :=
+  inferInstanceAs <| SMulCommClass M N (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {M : Type*} [Monoid M] [MulAction M β] : MulAction M (α →ᵤ β) :=
+  inferInstanceAs <| MulAction M (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {M : Type*} [Monoid M] [MulAction M β] : MulAction M (α →ᵤ[𝔖] β) :=
+  inferInstanceAs <| MulAction M (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {M : Type*} [Monoid M] [AddMonoid β] [DistribMulAction M β] :
+    DistribMulAction M (α →ᵤ β) :=
+  inferInstanceAs <| DistribMulAction M (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {M : Type*} [Monoid M] [AddMonoid β] [DistribMulAction M β] :
+    DistribMulAction M (α →ᵤ[𝔖] β) :=
+  inferInstanceAs <| DistribMulAction M (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance [Semiring R] [AddCommMonoid β] [Module R β] : Module R (α →ᵤ β) :=
+  inferInstanceAs <| Module R (α → β)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance [Semiring R] [AddCommMonoid β] [Module R β] : Module R (α →ᵤ[𝔖] β) :=
+  inferInstanceAs <| Module R (α → β)
 
 end AlgebraicInstances
 
@@ -862,38 +457,11 @@ variable {α G ι : Type*} [Group G] {𝔖 : Set <| Set α} [UniformSpace G] [Is
 /-- If `G` is a uniform group, then `α →ᵤ G` is a uniform group as well. -/
 @[to_additive /-- If `G` is a uniform additive group,
 then `α →ᵤ G` is a uniform additive group as well. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsUniformGroup (α ->ᵤ G)
-  body: ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
-    -- `UniformFun.postcomp_uniformContinuous` tells us that
-    -- `((/) ∘ —) : (α →ᵤ G × G) → (α →ᵤ G)` is uniformly continuous too. By precomposing with
-    -- `UniformFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ G) × (α →ᵤ G) → (α →ᵤ G)` is also uniformly continuous
-    UniformFun.postcomp_uniformContinuous uniformContinuous_div).comp
-    UniformFun.uniformEquivProdArrow.symm.uniformContinuous⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 是一致群 (α ->ᵤ G)
-  定义体: ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
-    -- `UniformFun.postcomp_uniformContinuous` tells us that
-    -- `((/) ∘ —) : (α →ᵤ G × G) → (α →ᵤ G)` is uniformly continuous too. By precomposing with
-    -- `UniformFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ G) × (α →ᵤ G) → (α →ᵤ G)` is also uniformly continuous
-    UniformFun.postcomp_uniformContinuous uniformContinuous_div).comp
-    UniformFun.uniformEquivProdArrow.symm.uniformContinuous⟩
-
-@[to_additive]
-
-Depends on / 依赖: continuous, uniformly
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsUniformGroup (α ->ᵤ G) :=
+instance : IsUniformGroup (α →ᵤ G) :=
   ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
     -- `UniformFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ G × G) → (α →ᵤ G)` is uniformly continuous too. By precomposing with
@@ -903,86 +471,67 @@ instance : IsUniformGroup (α ->ᵤ G) :=
     UniformFun.uniformEquivProdArrow.symm.uniformContinuous⟩
 
 @[to_additive]
-/--
-theorem `UniformFun.hasBasis_nhds_one_of_basis` / 定理 `UniformFun.hasBasis_nhds_one_of_basis`
-
-English:
-theorem UniformFun.hasBasis_nhds_one_of_basis
-  statement: {p : ι -> Prop} {b : ι -> Set G}
-  proof: by
-  convert! UniformFun.hasBasis_nhds_of_basis α _ (1 : α ->ᵤ G) h.uniformity_of_nhds_one
-  simp
-
-@[to_additive]
-
-中文:
-定理 UniformFun.hasBasis_nhds_one_of_basis
-  结论: {p : ι -> 命题} {b : ι -> 集合 G}
-  证明: by
-  convert! UniformFun.hasBasis_nhds_of_basis α _ (1 : α ->ᵤ G) h.uniformity_of_nhds_one
-  simp
-
-@[to_additive]
+/-
+**UniformFun.hasBasis_nhds_one_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_2} {ι : Type u_3} [inst : Group G] [inst_1 : 
+UniformSpace G] [IsUniformGroup G]   {p : ι → Prop} {b : ι → Set G},   (nhds 1).
+HasBasis p b → (nhds 1).HasBasis p fun i => {f | ∀ (x : α), UniformFun.toFun f x
+ ∈ b i}
+参数：nhds 1；nhds 1；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `UniformFun.hasBasis_nhds_of_basis`：∀ (α : Type u_1) (β : Type u_2) {ι : 
+Type u_4} [inst : UniformSpace β] (f : UniformFun α β) {p : ι → Prop}   {s : ι →
+ Set (β × β)},   (unifo…
+· 使用定理 `Filter.HasBasis.uniformity_of_nhds_one`：Filter.HasBasis.uniformity_of_nh
+ds_one {ι} {p : ι -> Prop} {U : ι -> Set α} (h : (𝓝 (1 : α)).HasBasis p U) : (𝓤 
+α).HasBasis p fun i => { x :…
 -/
-protected theorem UniformFun.hasBasis_nhds_one_of_basis {p : ι -> Prop} {b : ι -> Set G}
+protected theorem UniformFun.hasBasis_nhds_one_of_basis {p : ι → Prop} {b : ι → Set G}
     (h : (𝓝 1 : Filter G).HasBasis p b) :
-    (𝓝 1 : Filter (α ->ᵤ G)).HasBasis p fun i => { f : α ->ᵤ G | forall x, toFun f x in b i } := by
-  convert! UniformFun.hasBasis_nhds_of_basis α _ (1 : α ->ᵤ G) h.uniformity_of_nhds_one
+    (𝓝 1 : Filter (α →ᵤ G)).HasBasis p fun i => { f : α →ᵤ G | ∀ x, toFun f x ∈ b i } := by
+  convert! UniformFun.hasBasis_nhds_of_basis α _ (1 : α →ᵤ G) h.uniformity_of_nhds_one
   simp
 
 @[to_additive]
-/--
-theorem `UniformFun.hasBasis_nhds_one` / 定理 `UniformFun.hasBasis_nhds_one`
-
-English:
-theorem UniformFun.hasBasis_nhds_one
-  proof: UniformFun.hasBasis_nhds_one_of_basis (basis_sets _)
-
-中文:
-定理 UniformFun.hasBasis_nhds_one
-  证明: UniformFun.hasBasis_nhds_one_of_basis (basis_sets _)
+/-
+**UniformFun.hasBasis_nhds_one** 是 Mathlib 中的一个定理，位于命名空间 `UniformFun`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_2} [inst : Group G] [inst_1 : UniformSpace G]
+ [IsUniformGroup G],   (nhds 1).HasBasis (fun V => V ∈ nhds 1) fun V => {f | ∀ (
+x : α), f x ∈ V}
+参数：nhds 1；fun V => V ∈ nhds 1；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformFun.hasBasis_nhds_one_of_basis`：∀ {α : Type u_1} {G : Type u_2} {
+ι : Type u_3} [inst : Group G] [inst_1 : UniformSpace G] [IsUniformGroup G]   {p
+ : ι → Prop} {b : ι → Set G…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
 protected theorem UniformFun.hasBasis_nhds_one :
-    (𝓝 1 : Filter (α ->ᵤ G)).HasBasis (fun V : Set G => V in (𝓝 1 : Filter G)) fun V =>
-      { f : α -> G | forall x, f x in V } :=
+    (𝓝 1 : Filter (α →ᵤ G)).HasBasis (fun V : Set G => V ∈ (𝓝 1 : Filter G)) fun V =>
+      { f : α → G | ∀ x, f x ∈ V } :=
   UniformFun.hasBasis_nhds_one_of_basis (basis_sets _)
 
 /-- Let `𝔖 : Set (Set α)`. If `G` is a uniform group, then `α →ᵤ[𝔖] G` is a uniform group as
 well. -/
 @[to_additive /-- Let `𝔖 : Set (Set α)`. If `G` is a uniform additive group,
 then `α →ᵤ[𝔖] G` is a uniform additive group as well. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsUniformGroup (α ->ᵤ[𝔖] G)
-  body: ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
-    -- `UniformOnFun.postcomp_uniformContinuous` tells us that
-    -- `((/) ∘ —) : (α →ᵤ[𝔖] G × G) → (α →ᵤ[𝔖] G)` is uniformly continuous too. By precomposing with
-    -- `UniformOnFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ[𝔖] G) × (α →ᵤ[𝔖] G) → (α →ᵤ[𝔖] G)` is also uniformly continuous
-    UniformOnFun.postcomp_uniformContinuous uniformContinuous_div).comp
-    UniformOnFun.uniformEquivProdArrow.symm.uniformContinuous⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 是一致群 (α ->ᵤ[𝔖] G)
-  定义体: ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
-    -- `UniformOnFun.postcomp_uniformContinuous` tells us that
-    -- `((/) ∘ —) : (α →ᵤ[𝔖] G × G) → (α →ᵤ[𝔖] G)` is uniformly continuous too. By precomposing with
-    -- `UniformOnFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ[𝔖] G) × (α →ᵤ[𝔖] G) → (α →ᵤ[𝔖] G)` is also uniformly continuous
-    UniformOnFun.postcomp_uniformContinuous uniformContinuous_div).comp
-    UniformOnFun.uniformEquivProdArrow.symm.uniformContinuous⟩
-
-@[to_additive]
-
-Depends on / 依赖: continuous, uniformly
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsUniformGroup (α ->ᵤ[𝔖] G) :=
+instance : IsUniformGroup (α →ᵤ[𝔖] G) :=
   ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
     -- `UniformOnFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ[𝔖] G × G) → (α →ᵤ[𝔖] G)` is uniformly continuous too. By precomposing with
@@ -992,148 +541,121 @@ instance : IsUniformGroup (α ->ᵤ[𝔖] G) :=
     UniformOnFun.uniformEquivProdArrow.symm.uniformContinuous⟩
 
 @[to_additive]
-/--
-theorem `UniformOnFun.hasBasis_nhds_one_of_basis` / 定理 `UniformOnFun.hasBasis_nhds_one_of_basis`
-
-English:
-theorem UniformOnFun.hasBasis_nhds_one_of_basis
-  statement: (𝔖 : Set <| Set α) (h𝔖₁ : 𝔖.Nonempty)
-  proof: by
-  convert!
-UniformOnFun.hasBasis_nhds_of_basis α _ 𝔖 (1 : α ->ᵤ[𝔖] G) h𝔖₁ h𝔖₂
-      h.uniformity_of_nhds_one_swapped
-  simp [UniformOnFun.gen]
-
-@[to_additive]
-
-中文:
-定理 UniformOnFun.hasBasis_nhds_one_of_basis
-  结论: (𝔖 : 集合 <| 集合 α) (h𝔖₁ : 𝔖.非空)
-  证明: by
-  convert!
-UniformOnFun.hasBasis_nhds_of_basis α _ 𝔖 (1 : α ->ᵤ[𝔖] G) h𝔖₁ h𝔖₂
-      h.uniformity_of_nhds_one_swapped
-  simp [UniformOnFun.gen]
-
-@[to_additive]
+/-
+**UniformOnFun.hasBasis_nhds_one_of_basis** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFu
+n`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_2} {ι : Type u_3} [inst : Group G] [inst_1 : 
+UniformSpace G] [IsUniformGroup G]   (𝔖 : Set (Set α)),   𝔖.Nonempty →     Direc
+tedOn (fun x1 x2 => x1 ⊆ x2) 𝔖 →       ∀ {p : ι → Prop} {b : ι → Set G},        
+ (nhds 1).HasBasis p b →           (nhds 1).HasBasis (fun Si => Si.1 ∈ 𝔖 ∧ p Si.
+2) fun Si =>             {f | ∀ x ∈ Si.1, (UniformOnFun.toFun 𝔖) f x ∈ b Si.2}
+参数：𝔖 : Set (Set α)；fun x1 x2 => x1 ⊆ x2；nhds 1；nhds 1；fun Si => Si.1 ∈ 𝔖 ∧ p Si.
+2；UniformOnFun.toFun 𝔖。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `UniformOnFun.hasBasis_nhds_of_basis`：∀ (α : Type u_1) (β : Type u_2) {ι 
+: Type u_4} [inst : UniformSpace β] (𝔖 : Set (Set α)) (f : UniformOnFun α β 𝔖), 
+  𝔖.Nonempty →     Direct…
+· 使用定理 `Filter.HasBasis.uniformity_of_nhds_one_swapped`：Filter.HasBasis.uniformi
+ty_of_nhds_one_swapped {ι} {p : ι -> Prop} {U : ι -> Set α} (h : (𝓝 (1 : α)).Has
+Basis p U) : (𝓤 α).HasBasis p fun i …
 -/
 protected theorem UniformOnFun.hasBasis_nhds_one_of_basis (𝔖 : Set <| Set α) (h𝔖₁ : 𝔖.Nonempty)
-    (h𝔖₂ : DirectedOn (· subseteq ·) 𝔖) {p : ι -> Prop} {b : ι -> Set G}
+    (h𝔖₂ : DirectedOn (· ⊆ ·) 𝔖) {p : ι → Prop} {b : ι → Set G}
     (h : (𝓝 1 : Filter G).HasBasis p b) :
-    (𝓝 1 : Filter (α ->ᵤ[𝔖] G)).HasBasis (fun Si : Set α × ι => Si.1 in 𝔖 ∧ p Si.2) fun Si =>
-      { f : α ->ᵤ[𝔖] G | forall x in Si.1, toFun 𝔖 f x in b Si.2 } := by
+    (𝓝 1 : Filter (α →ᵤ[𝔖] G)).HasBasis (fun Si : Set α × ι => Si.1 ∈ 𝔖 ∧ p Si.2) fun Si =>
+      { f : α →ᵤ[𝔖] G | ∀ x ∈ Si.1, toFun 𝔖 f x ∈ b Si.2 } := by
   convert!
-UniformOnFun.hasBasis_nhds_of_basis α _ 𝔖 (1 : α ->ᵤ[𝔖] G) h𝔖₁ h𝔖₂
+    UniformOnFun.hasBasis_nhds_of_basis α _ 𝔖 (1 : α →ᵤ[𝔖] G) h𝔖₁ h𝔖₂ <|
       h.uniformity_of_nhds_one_swapped
   simp [UniformOnFun.gen]
 
 @[to_additive]
-/--
-theorem `UniformOnFun.hasBasis_nhds_one` / 定理 `UniformOnFun.hasBasis_nhds_one`
-
-English:
-theorem UniformOnFun.hasBasis_nhds_one
-  statement: (𝔖 : Set <| Set α) (h𝔖₁ : 𝔖.Nonempty)
-  proof: UniformOnFun.hasBasis_nhds_one_of_basis 𝔖 h𝔖₁ h𝔖₂ (basis_sets _)
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 UniformOnFun.hasBasis_nhds_one
-  结论: (𝔖 : 集合 <| 集合 α) (h𝔖₁ : 𝔖.非空)
-  证明: UniformOnFun.hasBasis_nhds_one_of_basis 𝔖 h𝔖₁ h𝔖₂ (basis_sets _)
-
-@[to_additive (attr := simp)]
+/-
+**UniformOnFun.hasBasis_nhds_one** 是 Mathlib 中的一个定理，位于命名空间 `UniformOnFun`。
+形式化陈述：∀ {α : Type u_1} {G : Type u_2} [inst : Group G] [inst_1 : UniformSpace G]
+ [IsUniformGroup G] (𝔖 : Set (Set α)),   𝔖.Nonempty →     DirectedOn (fun x1 x2 
+=> x1 ⊆ x2) 𝔖 →       (nhds 1).HasBasis (fun SV => SV.1 ∈ 𝔖 ∧ SV.2 ∈ nhds 1) fun
+ SV => {f | ∀ x ∈ SV.1, f x ∈ SV.2}
+参数：𝔖 : Set (Set α)；fun x1 x2 => x1 ⊆ x2；nhds 1；fun SV => SV.1 ∈ 𝔖 ∧ SV.2 ∈ nhds 
+1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.hasBasis_nhds_one_of_basis`：∀ {α : Type u_1} {G : Type u_2}
+ {ι : Type u_3} [inst : Group G] [inst_1 : UniformSpace G] [IsUniformGroup G]   
+(𝔖 : Set (Set α)),   𝔖.Nonemp…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
 protected theorem UniformOnFun.hasBasis_nhds_one (𝔖 : Set <| Set α) (h𝔖₁ : 𝔖.Nonempty)
-    (h𝔖₂ : DirectedOn (· subseteq ·) 𝔖) :
-    (𝓝 1 : Filter (α ->ᵤ[𝔖] G)).HasBasis
-      (fun SV : Set α × Set G => SV.1 in 𝔖 ∧ SV.2 in (𝓝 1 : Filter G)) fun SV =>
-      { f : α ->ᵤ[𝔖] G | forall x in SV.1, f x in SV.2 } :=
+    (h𝔖₂ : DirectedOn (· ⊆ ·) 𝔖) :
+    (𝓝 1 : Filter (α →ᵤ[𝔖] G)).HasBasis
+      (fun SV : Set α × Set G => SV.1 ∈ 𝔖 ∧ SV.2 ∈ (𝓝 1 : Filter G)) fun SV =>
+      { f : α →ᵤ[𝔖] G | ∀ x ∈ SV.1, f x ∈ SV.2 } :=
   UniformOnFun.hasBasis_nhds_one_of_basis 𝔖 h𝔖₁ h𝔖₂ (basis_sets _)
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.ofFun_prod` / 引理 `UniformOnFun.ofFun_prod`
-
-English:
-lemma UniformOnFun.ofFun_prod
-  given: {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformOnFun.ofFun_prod
-  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformOnFun.ofFun_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.ofFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : 
+Finset ι) : ofFun 𝔖 (∏ i in I, f i) = ∏ i in I, ofFun 𝔖 (f i)
+参数：I : Finset ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.ofFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι) :
-    ofFun 𝔖 (∏ i in I, f i) = ∏ i in I, ofFun 𝔖 (f i) :=
+lemma UniformOnFun.ofFun_prod {β : Type*} [CommMonoid β] {f : ι → α → β} (I : Finset ι) :
+    ofFun 𝔖 (∏ i ∈ I, f i) = ∏ i ∈ I, ofFun 𝔖 (f i) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformOnFun.toFun_prod` / 引理 `UniformOnFun.toFun_prod`
-
-English:
-lemma UniformOnFun.toFun_prod
-  given: {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformOnFun.toFun_prod
-  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformOnFun.toFun_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformOnFun.toFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : 
+Finset ι) : toFun 𝔖 (∏ i in I, f i) = ∏ i in I, toFun 𝔖 (f i)
+参数：I : Finset ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformOnFun.toFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι) :
-    toFun 𝔖 (∏ i in I, f i) = ∏ i in I, toFun 𝔖 (f i) :=
+lemma UniformOnFun.toFun_prod {β : Type*} [CommMonoid β] {f : ι → α → β} (I : Finset ι) :
+    toFun 𝔖 (∏ i ∈ I, f i) = ∏ i ∈ I, toFun 𝔖 (f i) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.ofFun_prod` / 引理 `UniformFun.ofFun_prod`
-
-English:
-lemma UniformFun.ofFun_prod
-  given: {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 UniformFun.ofFun_prod
-  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**UniformFun.ofFun_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.ofFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Fi
+nset ι) : ofFun (∏ i in I, f i) = ∏ i in I, ofFun (f i)
+参数：I : Finset ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.ofFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι) :
-    ofFun (∏ i in I, f i) = ∏ i in I, ofFun (f i) :=
+lemma UniformFun.ofFun_prod {β : Type*} [CommMonoid β] {f : ι → α → β} (I : Finset ι) :
+    ofFun (∏ i ∈ I, f i) = ∏ i ∈ I, ofFun (f i) :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `UniformFun.toFun_prod` / 引理 `UniformFun.toFun_prod`
-
-English:
-lemma UniformFun.toFun_prod
-  given: {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
-  proof: rfl
-
-中文:
-引理 UniformFun.toFun_prod
-  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
-  证明: rfl
+/-
+**UniformFun.toFun_prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformFun.toFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Fi
+nset ι) : toFun (∏ i in I, f i) = ∏ i in I, toFun (f i)
+参数：I : Finset ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma UniformFun.toFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι) :
-    toFun (∏ i in I, f i) = ∏ i in I, toFun (f i) :=
+lemma UniformFun.toFun_prod {β : Type*} [CommMonoid β] {f : ι → α → β} (I : Finset ι) :
+    toFun (∏ i ∈ I, f i) = ∏ i ∈ I, toFun (f i) :=
   rfl
 
 end Group
@@ -1142,48 +664,41 @@ section ConstSMul
 
 variable (M α X : Type*) [SMul M X] [UniformSpace X] [UniformContinuousConstSMul M X]
 
-/--
-Instance `UniformFun.uniformContinuousConstSMul` / 实例 `UniformFun.uniformContinuousConstSMul`
-
-English:
-instance UniformFun.uniformContinuousConstSMul
-  signature: :
-  body: UniformFun.postcomp_uniformContinuous
-    uniformContinuous_const_smul c
-
-中文:
-实例 UniformFun.uniformContinuousConstSMul
-  签名: :
-  定义体: UniformFun.postcomp_uniformContinuous
-    uniformContinuous_const_smul c
-
-Depends on / 依赖: UniformFun, UniformFun.postcomp_uniformContinuous, postcomp_uniformContinuous
+/-
+**UniformFun.uniformContinuousConstSMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：UniformFun.uniformContinuousConstSMul : UniformContinuousConstSMul M (α ->
+ᵤ X) where uniformContinuous_const_smul c
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformFun.postcomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : UniformSpace β] [inst_1 : UniformSpace γ] {f : γ → β},   U
+niformContinuous f → Unifor…
+· 使用定理 `UniformContinuousConstSMul.uniformContinuous_const_smul`：∀ {M : Type v} 
+{X : Type x} {inst : UniformSpace X} {inst_1 : SMul M X} [self : UniformContinuo
+usConstSMul M X] (c : M),   UniformContinuous…
 -/
 instance UniformFun.uniformContinuousConstSMul :
-    UniformContinuousConstSMul M (α ->ᵤ X) where
-uniformContinuous_const_smul c := UniformFun.postcomp_uniformContinuous
+    UniformContinuousConstSMul M (α →ᵤ X) where
+  uniformContinuous_const_smul c := UniformFun.postcomp_uniformContinuous <|
     uniformContinuous_const_smul c
-
-/--
-Instance `UniformFunOn.uniformContinuousConstSMul` / 实例 `UniformFunOn.uniformContinuousConstSMul`
-
-English:
-instance UniformFunOn.uniformContinuousConstSMul
-  signature: {𝔖 : Set (Set α)}
-  body: UniformOnFun.postcomp_uniformContinuous
-    uniformContinuous_const_smul c
-
-中文:
-实例 UniformFunOn.uniformContinuousConstSMul
-  签名: {𝔖 : 集合 (集合 α)}
-  定义体: UniformOnFun.postcomp_uniformContinuous
-    uniformContinuous_const_smul c
-
-Depends on / 依赖: UniformOnFun, UniformOnFun.postcomp_uniformContinuous, postcomp_uniformContinuous
+/-
+**UniformFunOn.uniformContinuousConstSMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：UniformFunOn.uniformContinuousConstSMul {𝔖 : Set (Set α)} : UniformContinu
+ousConstSMul M (α ->ᵤ[𝔖] X) where uniformContinuous_const_smul c
+参数：Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformOnFun.postcomp_uniformContinuous`：∀ {α : Type u_1} {β : Type u_2}
+ {γ : Type u_3} [inst : UniformSpace β] {𝔖 : Set (Set α)} [inst_1 : UniformSpace
+ γ]   {f : γ → β},   UniformC…
+· 使用定理 `UniformContinuousConstSMul.uniformContinuous_const_smul`：∀ {M : Type v} 
+{X : Type x} {inst : UniformSpace X} {inst_1 : SMul M X} [self : UniformContinuo
+usConstSMul M X] (c : M),   UniformContinuous…
 -/
 instance UniformFunOn.uniformContinuousConstSMul {𝔖 : Set (Set α)} :
-    UniformContinuousConstSMul M (α ->ᵤ[𝔖] X) where
-uniformContinuous_const_smul c := UniformOnFun.postcomp_uniformContinuous
+    UniformContinuousConstSMul M (α →ᵤ[𝔖] X) where
+  uniformContinuous_const_smul c := UniformOnFun.postcomp_uniformContinuous <|
     uniformContinuous_const_smul c
 
 end ConstSMul
+

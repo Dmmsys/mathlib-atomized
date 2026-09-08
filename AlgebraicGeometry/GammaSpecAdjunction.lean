@@ -67,71 +67,53 @@ namespace LocallyRingedSpace
 
 variable (X : LocallyRingedSpace.{u})
 
-/--
-Definition of `toΓSpecFun` / `toΓSpecFun` 的定义
+/-- The canonical map from the underlying set to the prime spectrum of `Γ(X)`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toΓSpecFun
-  signature: : X -> PrimeSpectrum (Γ.obj (op X))
-  body: fun x =>
-  comap (X.presheaf.Γgerm x).hom (IsLocalRing.closedPoint (X.presheaf.stalk x))
-
-中文:
-定义 toΓSpecFun
-  签名: : X -> 素谱 (Γ.obj (op X))
-  定义体: fun x =>
-  comap (X.presheaf.Γgerm x).hom (IsLocalRing.closedPoint (X.presheaf.stalk x))
+--- 原说明 ---
+The canonical map from the underlying set to the prime spectrum of `Γ(X)`.
 -/
-def toΓSpecFun : X -> PrimeSpectrum (Γ.obj (op X)) := fun x =>
+def toΓSpecFun : X → PrimeSpectrum (Γ.obj (op X)) := fun x =>
   comap (X.presheaf.Γgerm x).hom (IsLocalRing.closedPoint (X.presheaf.stalk x))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `notMem_prime_iff_unit_in_stalk` / 定理 `notMem_prime_iff_unit_in_stalk`
-
-English:
-theorem notMem_prime_iff_unit_in_stalk
-  given: (r : Γ.obj (op X)) (x : X)
-  proof: by
-  simp [toΓSpecFun, IsLocalRing.closedPoint]
-
-中文:
-定理 notMem_prime_iff_unit_in_stalk
-  条件: (r : Γ.obj (op X)) (x : X)
-  证明: by
-  simp [toΓSpecFun, IsLocalRing.closedPoint]
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.closedPoint, closedPoint
+/-
+**AlgebraicGeometry.LocallyRingedSpace.notMem_prime_iff_unit_in_stalk** 是 Mathli
+b 中的一个定理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：notMem_prime_iff_unit_in_stalk (r : Γ.obj (op X)) (x : X) : r ∉ (X.toΓSpec
+Fun x).asIdeal ↔ IsUnit (X.presheaf.Γgerm x r)
+参数：r : Γ.obj (op X)；x : X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem notMem_prime_iff_unit_in_stalk (r : Γ.obj (op X)) (x : X) :
     r ∉ (X.toΓSpecFun x).asIdeal ↔ IsUnit (X.presheaf.Γgerm x r) := by
   simp [toΓSpecFun, IsLocalRing.closedPoint]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toΓSpec_preimage_basicOpen_eq` / 定理 `toΓSpec_preimage_basicOpen_eq`
+/-- The preimage of a basic open in `Spec Γ(X)` under the unit is the basic
+open in `X` defined by the same element (they are equal as sets). -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toΓSpec_preimage_basicOpen_eq
-  given: (r : Γ.obj (op X))
-  proof: by
-      ext
-      dsimp
-      simp only [Set.mem_preimage, SetLike.mem_coe]
-      rw [X.toRingedSpace.mem_top_basicOpen]
-      exact notMem_prime_iff_unit_in_stalk ..
-
-中文:
-定理 toΓSpec_preimage_basicOpen_eq
-  条件: (r : Γ.obj (op X))
-  证明: by
-      ext
-      dsimp
-      simp only [Set.mem_preimage, SetLike.mem_coe]
-      rw [X.toRingedSpace.mem_top_basicOpen]
-      exact notMem_prime_iff_unit_in_stalk ..
-
-Depends on / 依赖: Set.mem_preimage, SetLike, SetLike.mem_coe, X.toRingedSpace.mem_top_basicOpen, mem_coe, mem_preimage, mem_top_basicOpen, notMem_prime_iff_unit_in_stalk, toRingedSpace
+--- 原说明 ---
+The preimage of a basic open in `Spec Γ(X)` under the unit is the basic
+open in `X` defined by the same element (they are equal as sets).
 -/
 theorem toΓSpec_preimage_basicOpen_eq (r : Γ.obj (op X)) :
     X.toΓSpecFun ⁻¹' basicOpen r = SetLike.coe (X.toRingedSpace.basicOpen r) := by
@@ -141,28 +123,14 @@ theorem toΓSpec_preimage_basicOpen_eq (r : Γ.obj (op X)) :
       rw [X.toRingedSpace.mem_top_basicOpen]
       exact notMem_prime_iff_unit_in_stalk ..
 
-/--
-theorem `toΓSpec_continuous` / 定理 `toΓSpec_continuous`
+/-- `toΓSpecFun` is continuous. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toΓSpec_continuous
-  statement: Continuous X.toΓSpecFun
-  proof: by
-  rw [isTopologicalBasis_basic_opens.continuous_iff]
-  rintro _ ⟨r, rfl⟩
-  rw [X.toΓSpec_preimage_basicOpen_eq r]
-  exact (X.toRingedSpace.basicOpen r).2
-
-中文:
-定理 toΓSpec_continuous
-  结论: 连续 X.toΓSpecFun
-  证明: by
-  rw [isTopologicalBasis_basic_opens.continuous_iff]
-  rintro _ ⟨r, rfl⟩
-  rw [X.toΓSpec_preimage_basicOpen_eq r]
-  exact (X.toRingedSpace.basicOpen r).2
-
-Depends on / 依赖: X.to, X.toRingedSpace.basicOpen, basicOpen, continuous_iff, isTopologicalBasis_basic_opens, isTopologicalBasis_basic_opens.continuous_iff, toRingedSpace
+--- 原说明 ---
+`toΓSpecFun` is continuous.
 -/
 theorem toΓSpec_continuous : Continuous X.toΓSpecFun := by
   rw [isTopologicalBasis_basic_opens.continuous_iff]
@@ -170,24 +138,16 @@ theorem toΓSpec_continuous : Continuous X.toΓSpecFun := by
   rw [X.toΓSpec_preimage_basicOpen_eq r]
   exact (X.toRingedSpace.basicOpen r).2
 
-/--
-Definition of `toΓSpecBase` / `toΓSpecBase` 的定义
+/-- The canonical (bundled) continuous map from the underlying topological
+space of `X` to the prime spectrum of its global sections. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toΓSpecBase
-  signature: : X.toTopCat ⟶ Spec.topObj (Γ.obj (op X))
-  body: TopCat.ofHom
-  { toFun := X.toΓSpecFun
-    continuous_toFun := X.toΓSpec_continuous }
-
-中文:
-定义 toΓSpecBase
-  签名: : X.toTopCat ⟶ Spec.topObj (Γ.obj (op X))
-  定义体: TopCat.ofHom
-  { toFun := X.toΓSpecFun
-    continuous_toFun := X.toΓSpec_continuous }
-
-Depends on / 依赖: TopCat, TopCat.ofHom, X.to, continuous_toFun
+--- 原说明 ---
+The canonical (bundled) continuous map from the underlying topological
+space of `X` to the prime spectrum of its global sections.
 -/
 def toΓSpecBase : X.toTopCat ⟶ Spec.topObj (Γ.obj (op X)) :=
   TopCat.ofHom
@@ -196,128 +156,77 @@ def toΓSpecBase : X.toTopCat ⟶ Spec.topObj (Γ.obj (op X)) :=
 
 variable (r : Γ.obj (op X))
 
-/--
-Definition of `toΓSpecMapBasicOpen` / `toΓSpecMapBasicOpen` 的定义
+/-- The preimage in `X` of a basic open in `Spec Γ(X)` (as an open set). -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebraic
+Geometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toΓSpecMapBasicOpen
-  signature: : Opens X
-  body: (Opens.map X.toΓSpecBase).obj (basicOpen r)
-
-中文:
-缩写 toΓSpecMapBasicOpen
-  签名: : Opens X
-  定义体: (Opens.map X.toΓSpecBase).obj (basicOpen r)
-
-Depends on / 依赖: Opens.map, X.to, basicOpen
+--- 原说明 ---
+The preimage in `X` of a basic open in `Spec Γ(X)` (as an open set).
 -/
 abbrev toΓSpecMapBasicOpen : Opens X :=
   (Opens.map X.toΓSpecBase).obj (basicOpen r)
 
-/--
-theorem `toΓSpecMapBasicOpen_eq` / 定理 `toΓSpecMapBasicOpen_eq`
+/-- The preimage is the basic open in `X` defined by the same element `r`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toΓSpecMapBasicOpen_eq
-  statement: X.toΓSpecMapBasicOpen r = X.toRingedSpace.basicOpen r
-  proof: Opens.ext (X.toΓSpec_preimage_basicOpen_eq r)
-
-中文:
-定理 toΓSpecMapBasicOpen_eq
-  结论: X.toΓSpecMapBasicOpen r = X.toRingedSpace.basicOpen r
-  证明: Opens.ext (X.toΓSpec_preimage_basicOpen_eq r)
-
-Depends on / 依赖: Opens.ext, X.to
+--- 原说明 ---
+The preimage is the basic open in `X` defined by the same element `r`.
 -/
 theorem toΓSpecMapBasicOpen_eq : X.toΓSpecMapBasicOpen r = X.toRingedSpace.basicOpen r :=
   Opens.ext (X.toΓSpec_preimage_basicOpen_eq r)
 
-/--
-Definition of `toToΓSpecMapBasicOpen` / `toToΓSpecMapBasicOpen` 的定义
+/-- The map from the global sections `Γ(X)` to the sections on the (preimage of) a basic open. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.toTo** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra
+icGeometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toToΓSpecMapBasicOpen
-  signature: :
-  body: X.presheaf.map (X.toΓSpecMapBasicOpen r).leTop.op
-
-中文:
-缩写 toToΓSpecMapBasicOpen
-  签名: :
-  定义体: X.presheaf.map (X.toΓSpecMapBasicOpen r).leTop.op
-
-Depends on / 依赖: X.presheaf.map, X.to, leTop.op, presheaf
+--- 原说明 ---
+The map from the global sections `Γ(X)` to the sections on the (preimage of) a b
+asic open.
 -/
 abbrev toToΓSpecMapBasicOpen :
     X.presheaf.obj (op ⊤) ⟶ X.presheaf.obj (op <| X.toΓSpecMapBasicOpen r) :=
   X.presheaf.map (X.toΓSpecMapBasicOpen r).leTop.op
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isUnit_res_toΓSpecMapBasicOpen` / 定理 `isUnit_res_toΓSpecMapBasicOpen`
+/-- `r` is a unit as a section on the basic open defined by `r`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.isUnit_res_to** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem isUnit_res_toΓSpecMapBasicOpen
-  statement: IsUnit (X.toToΓSpecMapBasicOpen r r)
-  proof: by
-  convert!
-    (X.presheaf.map <| (eqToHom <| X.toΓSpecMapBasicOpen_eq r).op).hom.isUnit_map
-      (X.toRingedSpace.isUnit_res_basicOpen r)
-  rw [← CommRingCat.comp_apply]; rw [← Functor.map_comp]
-  congr
-
-中文:
-定理 isUnit_res_toΓSpecMapBasicOpen
-  结论: 是单位 (X.toToΓSpecMapBasicOpen r r)
-  证明: by
-  convert!
-    (X.presheaf.map <| (eqToHom <| X.toΓSpecMapBasicOpen_eq r).op).hom.isUnit_map
-      (X.toRingedSpace.isUnit_res_basicOpen r)
-  rw [← CommRingCat.comp_apply]; rw [← Functor.map_comp]
-  congr
-
-Depends on / 依赖: CommRingCat, CommRingCat.comp_apply, Fin.predAbove_surjective, Functor, Functor.map_comp, X.presheaf.map, X.to, X.toRingedSpace.isUnit_res_basicOpen, comp_apply, convert, epi_iff_surjective, eqToHom, hom.isUnit_map, isUnit_map, isUnit_res_basicOpen, map_comp, predAbove_surjective, presheaf, toRingedSpace
+--- 原说明 ---
+`r` is a unit as a section on the basic open defined by `r`.
 -/
 theorem isUnit_res_toΓSpecMapBasicOpen : IsUnit (X.toToΓSpecMapBasicOpen r r) := by
   convert!
     (X.presheaf.map <| (eqToHom <| X.toΓSpecMapBasicOpen_eq r).op).hom.isUnit_map
       (X.toRingedSpace.isUnit_res_basicOpen r)
-  rw [← CommRingCat.comp_apply]; rw [← Functor.map_comp]
+  rw [← CommRingCat.comp_apply, ← Functor.map_comp]
   congr
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `toΓSpecCApp` / `toΓSpecCApp` 的定义
+/-- Define the sheaf hom on individual basic opens for the unit. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toΓSpecCApp
-  signature: :
-  body: -- note: the explicit type annotations were not needed before
-  -- https://github.com/leanprover-community/mathlib4/pull/19757
-CommRingCat.ofHom
-    IsLocalization.Away.lift
-      (R := Γ.obj (op X))
-      (S := (structureSheaf ↑(Γ.obj (op X))).obj.obj (op (basicOpen r)))
-      r
-      (isUnit_res_toΓSpecMapBasicOpen _ r)
-
-中文:
-定义 toΓSpecCApp
-  签名: :
-  定义体: -- note: the explicit type annotations were not needed before
-  -- https://github.com/leanprover-community/mathlib4/pull/19757
-CommRingCat.ofHom
-    IsLocalization.Away.lift
-      (R := Γ.obj (op X))
-      (S := (structureSheaf ↑(Γ.obj (op X))).obj.obj (op (basicOpen r)))
-      r
-      (isUnit_res_toΓSpecMapBasicOpen _ r)
+--- 原说明 ---
+Define the sheaf hom on individual basic opens for the unit.
 -/
 def toΓSpecCApp :
     (structureSheaf <| Γ.obj <| op X).obj.obj (op <| basicOpen r) ⟶
       X.presheaf.obj (op <| X.toΓSpecMapBasicOpen r) :=
   -- note: the explicit type annotations were not needed before
   -- https://github.com/leanprover-community/mathlib4/pull/19757
-CommRingCat.ofHom
+  CommRingCat.ofHom <|
     IsLocalization.Away.lift
       (R := Γ.obj (op X))
       (S := (structureSheaf ↑(Γ.obj (op X))).obj.obj (op (basicOpen r)))
@@ -325,36 +234,17 @@ CommRingCat.ofHom
       (isUnit_res_toΓSpecMapBasicOpen _ r)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toΓSpecCApp_iff` / 定理 `toΓSpecCApp_iff`
+/-- Characterization of the sheaf hom on basic opens,
+direction ← (next lemma) is used at various places, but → is not used in this file. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toΓSpecCApp_iff
-  proof: by
-  have loc_inst := IsLocalization.to_basicOpen (Γ.obj (op X)) r
-  refine ConcreteCategory.ext_iff.trans ?_
-  rw [← @IsLocalization.Away.lift_comp _ _ _ _ _ _ _ r loc_inst _
-      (X.isUnit_res_toΓSpecMapBasicOpen r)]
-  constructor
-  · intro h
-    ext : 1
-    exact IsLocalization.ringHom_ext (Submonoid.powers r) h
-  apply congr_arg
-
-中文:
-定理 toΓSpecCApp_iff
-  证明: by
-  have loc_inst := IsLocalization.to_basicOpen (Γ.obj (op X)) r
-  refine ConcreteCategory.ext_iff.trans ?_
-  rw [← @IsLocalization.Away.lift_comp _ _ _ _ _ _ _ r loc_inst _
-      (X.isUnit_res_toΓSpecMapBasicOpen r)]
-  constructor
-  · intro h
-    ext : 1
-    exact IsLocalization.ringHom_ext (Submonoid.powers r) h
-  apply congr_arg
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ext_iff.trans, IsLocalization, IsLocalization.Away.lift_comp, IsLocalization.ringHom_ext, IsLocalization.to_basicOpen, Submonoid, Submonoid.powers, X.isUnit_res_to, congr_arg, ext_iff, lift_comp, loc_inst, powers, ringHom_ext, to_basicOpen
+--- 原说明 ---
+Characterization of the sheaf hom on basic opens,
+direction ← (next lemma) is used at various places, but → is not used in this fi
+le.
 -/
 theorem toΓSpecCApp_iff
     (f :
@@ -371,19 +261,10 @@ theorem toΓSpecCApp_iff
     ext : 1
     exact IsLocalization.ringHom_ext (Submonoid.powers r) h
   apply congr_arg
-
-/--
-theorem `toΓSpecCApp_spec` / 定理 `toΓSpecCApp_spec`
-
-English:
-theorem toΓSpecCApp_spec
-  proof: (X.toΓSpecCApp_iff r _).2 rfl
-
-中文:
-定理 toΓSpecCApp_spec
-  证明: (X.toΓSpecCApp_iff r _).2 rfl
-
-Depends on / 依赖: X.to
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toΓSpecCApp_spec :
     CommRingCat.ofHom (algebraMap (Γ.obj (op X)) _) ≫ X.toΓSpecCApp r = X.toToΓSpecMapBasicOpen r :=
@@ -392,36 +273,13 @@ theorem toΓSpecCApp_spec :
 set_option backward.isDefEq.respectTransparency false in
 /-- The sheaf hom on all basic opens, commuting with restrictions. -/
 @[simps app]
-/--
-Definition of `toΓSpecCBasicOpens` / `toΓSpecCBasicOpens` 的定义
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toΓSpecCBasicOpens
-  signature: :
-  body: X.toΓSpecCApp r.unop
-  naturality r s f := by
-    apply (StructureSheaf.to_basicOpen_epi (Γ.obj (op X)) r.unop).1
-    simp only [← Category.assoc]
-    rw [show algebraMap (Γ.obj (op X)) ((structureSheaf (Γ.obj (op X))).obj.obj _) = algebraMap _
-      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op X))).obj.obj _) from rfl]; rw [X.toΓSpecCApp_spec r.unop]
-    convert! X.toΓSpecCApp_spec s.unop
-    symm
-    apply X.presheaf.map_comp
-
-中文:
-定义 toΓSpecCBasicOpens
-  签名: :
-  定义体: X.toΓSpecCApp r.unop
-  naturality r s f := by
-    apply (StructureSheaf.to_basicOpen_epi (Γ.obj (op X)) r.unop).1
-    simp only [← Category.assoc]
-    rw [show algebraMap (Γ.obj (op X)) ((structureSheaf (Γ.obj (op X))).obj.obj _) = algebraMap _
-      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op X))).obj.obj _) from rfl]; rw [X.toΓSpecCApp_spec r.unop]
-    convert! X.toΓSpecCApp_spec s.unop
-    symm
-    apply X.presheaf.map_comp
-
-Depends on / 依赖: Fin.succAbove_right_injective, X.to, mono_iff_injective, r.unop, succAbove_right_injective
+--- 原说明 ---
+The sheaf hom on all basic opens, commuting with restrictions.
 -/
 def toΓSpecCBasicOpens :
     (inducedFunctor basicOpen).op ⋙ (structureSheaf (Γ.obj (op X))).1 ⟶
@@ -431,35 +289,22 @@ def toΓSpecCBasicOpens :
     apply (StructureSheaf.to_basicOpen_epi (Γ.obj (op X)) r.unop).1
     simp only [← Category.assoc]
     rw [show algebraMap (Γ.obj (op X)) ((structureSheaf (Γ.obj (op X))).obj.obj _) = algebraMap _
-      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op X))).obj.obj _) from rfl]; rw [X.toΓSpecCApp_spec r.unop]
+      ((structureSheafInType (Γ.obj (op X)) (Γ.obj (op X))).obj.obj _) from rfl,
+      X.toΓSpecCApp_spec r.unop]
     convert! X.toΓSpecCApp_spec s.unop
     symm
     apply X.presheaf.map_comp
 
 /-- The canonical morphism of sheafed spaces from `X` to the spectrum of its global sections. -/
 @[simps! -isSimp]
-/--
-Definition of `toΓSpecSheafedSpace` / `toΓSpecSheafedSpace` 的定义
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toΓSpecSheafedSpace
-  signature: : X.toSheafedSpace ⟶ Spec.toSheafedSpace.obj (op (Γ.obj (op X)))
-  body: InducedCategory.homMk
-    { base := X.toΓSpecBase
-      c :=
-        TopCat.Sheaf.restrictHomEquivHom (structureSheaf (Γ.obj (op X))).1 _ isBasis_basic_opens
-          X.toΓSpecCBasicOpens }
-
-中文:
-定义 toΓSpecSheafedSpace
-  签名: : X.toSheafedSpace ⟶ Spec.toSheafedSpace.obj (op (Γ.obj (op X)))
-  定义体: InducedCategory.homMk
-    { base := X.toΓSpecBase
-      c :=
-        TopCat.Sheaf.restrictHomEquivHom (structureSheaf (Γ.obj (op X))).1 _ isBasis_basic_opens
-          X.toΓSpecCBasicOpens }
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk, TopCat, TopCat.Sheaf.restrictHomEquivHom, X.to, isBasis_basic_opens, restrictHomEquivHom, structureSheaf
+--- 原说明 ---
+The canonical morphism of sheafed spaces from `X` to the spectrum of its global 
+sections.
 -/
 def toΓSpecSheafedSpace : X.toSheafedSpace ⟶ Spec.toSheafedSpace.obj (op (Γ.obj (op X))) :=
   InducedCategory.homMk
@@ -467,39 +312,20 @@ def toΓSpecSheafedSpace : X.toSheafedSpace ⟶ Spec.toSheafedSpace.obj (op (Γ.
       c :=
         TopCat.Sheaf.restrictHomEquivHom (structureSheaf (Γ.obj (op X))).1 _ isBasis_basic_opens
           X.toΓSpecCBasicOpens }
-
-/--
-theorem `toΓSpecSheafedSpace_app_eq` / 定理 `toΓSpecSheafedSpace_app_eq`
-
-English:
-theorem toΓSpecSheafedSpace_app_eq
-  proof: by
-  apply TopCat.Sheaf.extend_hom_app _ _ _
-
-中文:
-定理 toΓSpecSheafedSpace_app_eq
-  证明: by
-  apply TopCat.Sheaf.extend_hom_app _ _ _
-
-Depends on / 依赖: TopCat, TopCat.Sheaf.extend_hom_app, extend_hom_app
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toΓSpecSheafedSpace_app_eq :
     X.toΓSpecSheafedSpace.hom.c.app (op (basicOpen r)) = X.toΓSpecCApp r := by
   apply TopCat.Sheaf.extend_hom_app _ _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `toΓSpecSheafedSpace_app_spec` / 定理 `toΓSpecSheafedSpace_app_spec`
-
-English:
-theorem toΓSpecSheafedSpace_app_spec
-  given: (r : Γ.obj (op X))
-  proof: (X.toΓSpecSheafedSpace_app_eq r).symm ▸ X.toΓSpecCApp_spec r
-
-中文:
-定理 toΓSpecSheafedSpace_app_spec
-  条件: (r : Γ.obj (op X))
-  证明: (X.toΓSpecSheafedSpace_app_eq r).symm ▸ X.toΓSpecCApp_spec r
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[reassoc] theorem toΓSpecSheafedSpace_app_spec (r : Γ.obj (op X)) :
     CommRingCat.ofHom (algebraMap (Γ.obj (op X)) _) ≫
@@ -508,36 +334,21 @@ theorem toΓSpecSheafedSpace_app_spec
   (X.toΓSpecSheafedSpace_app_eq r).symm ▸ X.toΓSpecCApp_spec r
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toStalk_stalkMap_toΓSpec` / 定理 `toStalk_stalkMap_toΓSpec`
+/-- The map on stalks induced by the unit commutes with maps from `Γ(X)` to
+stalks (in `Spec Γ(X)` and in `X`). -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.toStalk_stalkMap_to** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toStalk_stalkMap_toΓSpec
-  given: (x : X)
-  proof: by
-  rw [PresheafedSpace.Hom.stalkMap]; rw [← algebraMap_germ (basicOpen (1 : Γ.obj (op X))) _ (by rw [basicOpen_one]; trivial),
-    ← Category.assoc, Category.assoc (CommRingCat.ofHom _), stalkFunctor_map_germ, ← Category.assoc,
-    X.toΓSpecSheafedSpace_app_eq, X.toΓSpecCApp_spec, Γgerm,
-    ← dsimp% stalkPushforward_germ _ _ X.presheaf ⊤]
-  congr 1
-  exact (X.toΓSpecBase _* X.presheaf).germ_res le_top.hom _ _
-
-中文:
-定理 toStalk_stalkMap_toΓSpec
-  条件: (x : X)
-  证明: by
-  rw [PresheafedSpace.Hom.stalkMap]; rw [← algebraMap_germ (basicOpen (1 : Γ.obj (op X))) _ (by rw [basicOpen_one]; trivial),
-    ← Category.assoc, Category.assoc (CommRingCat.ofHom _), stalkFunctor_map_germ, ← Category.assoc,
-    X.toΓSpecSheafedSpace_app_eq, X.toΓSpecCApp_spec, Γgerm,
-    ← dsimp% stalkPushforward_germ _ _ X.presheaf ⊤]
-  congr 1
-  exact (X.toΓSpecBase _* X.presheaf).germ_res le_top.hom _ _
-
-Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.ofHom, PresheafedSpace, PresheafedSpace.Hom.stalkMap, X.presheaf, X.to, algebraMap_germ, basicOpen, basicOpen_one, germ_res, le_top, le_top.hom, presheaf, stalkFunctor_map_germ, stalkMap, stalkPushforward_germ
+--- 原说明 ---
+The map on stalks induced by the unit commutes with maps from `Γ(X)` to
+stalks (in `Spec Γ(X)` and in `X`).
 -/
 theorem toStalk_stalkMap_toΓSpec (x : X) :
     toStalk _ _ ≫ X.toΓSpecSheafedSpace.hom.stalkMap x = X.presheaf.Γgerm x := by
-  rw [PresheafedSpace.Hom.stalkMap]; rw [← algebraMap_germ (basicOpen (1 : Γ.obj (op X))) _ (by rw [basicOpen_one]; trivial),
+  rw [PresheafedSpace.Hom.stalkMap,
+    ← algebraMap_germ (basicOpen (1 : Γ.obj (op X))) _ (by rw [basicOpen_one]; trivial),
     ← Category.assoc, Category.assoc (CommRingCat.ofHom _), stalkFunctor_map_germ, ← Category.assoc,
     X.toΓSpecSheafedSpace_app_eq, X.toΓSpecCApp_spec, Γgerm,
     ← dsimp% stalkPushforward_germ _ _ X.presheaf ⊤]
@@ -547,57 +358,16 @@ theorem toStalk_stalkMap_toΓSpec (x : X) :
 set_option backward.isDefEq.respectTransparency false in
 /-- The canonical morphism from `X` to the spectrum of its global sections. -/
 @[simps! base]
-/--
-Definition of `toΓSpec` / `toΓSpec` 的定义
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toΓSpec
-  signature: : X ⟶ Spec.locallyRingedSpaceObj (Γ.obj (op X))
-  body: LocallyRingedSpace.homMk (X.toΓSpecSheafedSpace) (fun x => by
-    let p : PrimeSpectrum (Γ.obj (op X)) := X.toΓSpecFun x
-    constructor
-    -- show stalk map is local hom ↓
-    let S := (structureSheaf _).presheaf.stalk p
-    rintro (t : S) ht
-    obtain ⟨⟨r, s⟩, he⟩ := IsLocalization.surj p.asIdeal.primeCompl t
-    dsimp at he
-    set t' := _
-    change t * t' = _ at he
-    apply isUnit_of_mul_isUnit_left (y := t')
-    rw [he]
-    refine IsLocalization.map_units S (⟨r, ?_⟩ : p.asIdeal.primeCompl)
-    apply (notMem_prime_iff_unit_in_stalk _ _ _).mpr
-    rw [← toStalk_stalkMap_toΓSpec]; rw [CommRingCat.comp_apply]
-    erw [← he]
-    rw [map_mul]
-exact ht.mul (IsLocalization.map_units (R := Γ.obj (op X)) S s).map _)
-
-中文:
-定义 toΓSpec
-  签名: : X ⟶ Spec.locallyRingedSpaceObj (Γ.obj (op X))
-  定义体: LocallyRingedSpace.homMk (X.toΓSpecSheafedSpace) (fun x => by
-    let p : PrimeSpectrum (Γ.obj (op X)) := X.toΓSpecFun x
-    constructor
-    -- show stalk map is local hom ↓
-    let S := (structureSheaf _).presheaf.stalk p
-    rintro (t : S) ht
-    obtain ⟨⟨r, s⟩, he⟩ := IsLocalization.surj p.asIdeal.primeCompl t
-    dsimp at he
-    set t' := _
-    change t * t' = _ at he
-    apply isUnit_of_mul_isUnit_left (y := t')
-    rw [he]
-    refine IsLocalization.map_units S (⟨r, ?_⟩ : p.asIdeal.primeCompl)
-    apply (notMem_prime_iff_unit_in_stalk _ _ _).mpr
-    rw [← toStalk_stalkMap_toΓSpec]; rw [CommRingCat.comp_apply]
-    erw [← he]
-    rw [map_mul]
-exact ht.mul (IsLocalization.map_units (R := Γ.obj (op X)) S s).map _)
-
-Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.homMk, PrimeSpectrum, X.to
+--- 原说明 ---
+The canonical morphism from `X` to the spectrum of its global sections.
 -/
 def toΓSpec : X ⟶ Spec.locallyRingedSpaceObj (Γ.obj (op X)) :=
-  LocallyRingedSpace.homMk (X.toΓSpecSheafedSpace) (fun x => by
+  LocallyRingedSpace.homMk (X.toΓSpecSheafedSpace) (fun x ↦ by
     let p : PrimeSpectrum (Γ.obj (op X)) := X.toΓSpecFun x
     constructor
     -- show stalk map is local hom ↓
@@ -611,60 +381,33 @@ def toΓSpec : X ⟶ Spec.locallyRingedSpaceObj (Γ.obj (op X)) :=
     rw [he]
     refine IsLocalization.map_units S (⟨r, ?_⟩ : p.asIdeal.primeCompl)
     apply (notMem_prime_iff_unit_in_stalk _ _ _).mpr
-    rw [← toStalk_stalkMap_toΓSpec]; rw [CommRingCat.comp_apply]
+    rw [← toStalk_stalkMap_toΓSpec, CommRingCat.comp_apply]
     erw [← he]
     rw [map_mul]
-exact ht.mul (IsLocalization.map_units (R := Γ.obj (op X)) S s).map _)
+    exact ht.mul <| (IsLocalization.map_units (R := Γ.obj (op X)) S s).map _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `toΓSpec_preimage_zeroLocus_eq` / 引理 `toΓSpec_preimage_zeroLocus_eq`
+/-- On a locally ringed space `X`, the preimage of the zero locus of the prime spectrum
+of `Γ(X, ⊤)` under `toΓSpec` agrees with the associated zero locus on `X`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.to** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGe
+ometry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma toΓSpec_preimage_zeroLocus_eq
-  statement: {X : LocallyRingedSpace.{u}}
-  proof: by
-  simp only [RingedSpace.zeroLocus]
-  have (i : LocallyRingedSpace.Γ.obj (op X)) (_ : i in s) :
-      (SetLike.coe (X.toRingedSpace.basicOpen i))ᶜ =
-        X.toΓSpec.base ⁻¹' ((PrimeSpectrum.basicOpen i).carrier)ᶜ := by
-    symm
-    rw [Set.preimage_compl]; rw [Opens.carrier_eq_coe]
-    erw [X.toΓSpec_preimage_basicOpen_eq i]
-  erw [Set.iInter₂_congr this]
-  simp_rw [← Set.preimage_iInter₂, Opens.carrier_eq_coe, PrimeSpectrum.basicOpen_eq_zeroLocus_compl,
-    compl_compl]
-  rw [← PrimeSpectrum.zeroLocus_iUnion₂]
-  simp
-
-中文:
-引理 toΓSpec_preimage_zeroLocus_eq
-  结论: {X : LocallyRinged空间.{u}}
-  证明: by
-  simp only [RingedSpace.zeroLocus]
-  have (i : LocallyRingedSpace.Γ.obj (op X)) (_ : i in s) :
-      (SetLike.coe (X.toRingedSpace.basicOpen i))ᶜ =
-        X.toΓSpec.base ⁻¹' ((PrimeSpectrum.basicOpen i).carrier)ᶜ := by
-    symm
-    rw [Set.preimage_compl]; rw [Opens.carrier_eq_coe]
-    erw [X.toΓSpec_preimage_basicOpen_eq i]
-  erw [Set.iInter₂_congr this]
-  simp_rw [← Set.preimage_iInter₂, Opens.carrier_eq_coe, PrimeSpectrum.basicOpen_eq_zeroLocus_compl,
-    compl_compl]
-  rw [← PrimeSpectrum.zeroLocus_iUnion₂]
-  simp
-
-Depends on / 依赖: LocallyRingedSpace, Opens.carrier_eq_coe, PrimeSpectrum, PrimeSpectrum.basicOpen, PrimeSpectrum.basicOpen_eq_zeroLocus_compl, PrimeSpectrum.zeroLocus_iUnion, RingedSpace, RingedSpace.zeroLocus, Set.iInter, Set.preimage_compl, Set.preimage_iInter, SetLike, SetLike.coe, Spec.base, X.to, X.toRingedSpace.basicOpen, basicOpen, basicOpen_eq_zeroLocus_compl, carrier, carrier_eq_coe
+--- 原说明 ---
+On a locally ringed space `X`, the preimage of the zero locus of the prime spect
+rum
+of `Γ(X, ⊤)` under `toΓSpec` agrees with the associated zero locus on `X`.
 -/
 lemma toΓSpec_preimage_zeroLocus_eq {X : LocallyRingedSpace.{u}}
     (s : Set (X.presheaf.obj (op ⊤))) :
     X.toΓSpec.base ⁻¹' PrimeSpectrum.zeroLocus s = X.toRingedSpace.zeroLocus s := by
   simp only [RingedSpace.zeroLocus]
-  have (i : LocallyRingedSpace.Γ.obj (op X)) (_ : i in s) :
+  have (i : LocallyRingedSpace.Γ.obj (op X)) (_ : i ∈ s) :
       (SetLike.coe (X.toRingedSpace.basicOpen i))ᶜ =
         X.toΓSpec.base ⁻¹' ((PrimeSpectrum.basicOpen i).carrier)ᶜ := by
     symm
-    rw [Set.preimage_compl]; rw [Opens.carrier_eq_coe]
+    rw [Set.preimage_compl, Opens.carrier_eq_coe]
     erw [X.toΓSpec_preimage_basicOpen_eq i]
   erw [Set.iInter₂_congr this]
   simp_rw [← Set.preimage_iInter₂, Opens.carrier_eq_coe, PrimeSpectrum.basicOpen_eq_zeroLocus_compl,
@@ -673,42 +416,55 @@ lemma toΓSpec_preimage_zeroLocus_eq {X : LocallyRingedSpace.{u}}
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `comp_ring_hom_ext` / 定理 `comp_ring_hom_ext`
-
-English:
-theorem comp_ring_hom_ext
-  statement: {X : LocallyRingedSpace.{u}} {R : CommRingCat.{u}} {f : R ⟶ Γ.obj (op X)}
-  proof: by
-  refine LocallyRingedSpace.forgetToSheafedSpace.map_injective
-    (Spec.basicOpen_hom_ext w ?_)
-  intro r U
-  erw [SheafedSpace.comp_hom_c_app, toOpen_comp_comap_assoc]
-  dsimp
-  rw [Category.assoc]
-  erw [toΓSpecSheafedSpace_app_spec, ← X.presheaf.map_comp]
-  exact h r
-
-中文:
-定理 comp_ring_hom_ext
-  结论: {X : LocallyRinged空间.{u}} {R : 交换环范畴.{u}} {f : R ⟶ Γ.obj (op X)}
-  证明: by
-  refine LocallyRingedSpace.forgetToSheafedSpace.map_injective
-    (Spec.basicOpen_hom_ext w ?_)
-  intro r U
-  erw [SheafedSpace.comp_hom_c_app, toOpen_comp_comap_assoc]
-  dsimp
-  rw [Category.assoc]
-  erw [toΓSpecSheafedSpace_app_spec, ← X.presheaf.map_comp]
-  exact h r
-
-Depends on / 依赖: Category, Category.assoc, LocallyRingedSpace, LocallyRingedSpace.forgetToSheafedSpace.map_injective, SheafedSpace, SheafedSpace.comp_hom_c_app, Spec.basicOpen_hom_ext, X.presheaf.map_comp, basicOpen_hom_ext, comp_hom_c_app, forgetToSheafedSpace, map_comp, map_injective, presheaf, toOpen_comp_comap_assoc
+/-
+**AlgebraicGeometry.LocallyRingedSpace.comp_ring_hom_ext** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：comp_ring_hom_ext {X : LocallyRingedSpace.{u}} {R : CommRingCat.{u}} {f : 
+R ⟶ Γ.obj (op X)} {β : X ⟶ Spec.locallyRingedSpaceObj R} (w : X.toΓSpec.base ≫ (
+Spec.locallyRingedSpaceMap f).base = β.base) (h : forall r : R, f ≫ X.presheaf.m
+ap (homOfLE le_top : (Opens.map β.base).obj (basicOpen r) ⟶ _).op = CommRingCat.
+ofHom (algebraMap _ _) ≫ β.c.app (op (basicOpen r))) : X.toΓSpec ≫ Spec.locallyR
+ingedSpaceMap f = β
+参数：op X；w : X.toΓSpec.base ≫ (Spec.locallyRingedSpaceMap f).base = β.base；h : fo
+rall r : R, f ≫ X.presheaf.map (homOfLE le_top : (Opens.map β.base).obj (basicOp
+en r) ⟶ _).op = CommRingCat.ofHom (algebraMap _ _) ≫ β.c.app (op (basicOpen r))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instFaithfulSheafedSpaceCommRingCat
+ForgetToSheafedSpace`：AlgebraicGeometry.LocallyRingedSpace.forgetToSheafedSpace.
+Faithful
+· 使用定理 `AlgebraicGeometry.Spec.basicOpen_hom_ext`：∀ {X : AlgebraicGeometry.Ringe
+dSpace} {R : CommRingCat} {α β : X ⟶ AlgebraicGeometry.Spec.sheafedSpaceObj R}  
+ (w : α.hom.base = β.hom.base)…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.SheafedSpace.comp_hom_c_app`：comp_hom_c_app {X Y Z : S
+heafedSpace C} (α : X ⟶ Y) (β : Y ⟶ Z) (U) : (α ≫ β).hom.c.app U = β.hom.c.app U
+ ≫ α.hom.c.app (op ((Opens.map β.ho…
+· 使用引理 `PrimeSpectrum.continuous_comap`：continuous_comap (f : R ->+* S) : Contin
+uous (comap f)
+· 使用定理 `AlgebraicGeometry.StructureSheaf.toOpen_comp_comap_assoc`：∀ {R : Type u}
+ [inst : CommRing R] {S : Type u} [inst_1 : CommRing S] (f : R →+* S)   (U : Top
+ologicalSpace.Opens ↑(AlgebraicGeometry.PrimeS…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.toΓSpecSheafedSpace_app_spec`：∀ (X 
+: AlgebraicGeometry.LocallyRingedSpace) (r : ↑(AlgebraicGeometry.LocallyRingedSp
+ace.Γ.obj (Opposite.op X))),   CategoryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem comp_ring_hom_ext {X : LocallyRingedSpace.{u}} {R : CommRingCat.{u}} {f : R ⟶ Γ.obj (op X)}
     {β : X ⟶ Spec.locallyRingedSpaceObj R}
     (w : X.toΓSpec.base ≫ (Spec.locallyRingedSpaceMap f).base = β.base)
     (h :
-      forall r : R,
+      ∀ r : R,
         f ≫ X.presheaf.map (homOfLE le_top : (Opens.map β.base).obj (basicOpen r) ⟶ _).op =
           CommRingCat.ofHom (algebraMap _ _) ≫ β.c.app (op (basicOpen r))) :
     X.toΓSpec ≫ Spec.locallyRingedSpaceMap f = β := by
@@ -722,32 +478,14 @@ theorem comp_ring_hom_ext {X : LocallyRingedSpace.{u}} {R : CommRingCat.{u}} {f 
   exact h r
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `Γ_Spec_left_triangle` / 定理 `Γ_Spec_left_triangle`
+/-- `toSpecΓ _` is an isomorphism so these are mutually two-sided inverses. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Γ_Spec_left_triangle
-  statement: toSpecΓ (Γ.obj (op X)) ≫ X.toΓSpec.c.app (op ⊤) = 𝟙 _
-  proof: by
-  unfold toSpecΓ
-  have := X.toΓSpecSheafedSpace_app_spec 1
-  unfold toToΓSpecMapBasicOpen toΓSpecMapBasicOpen at this
-  rw! [basicOpen_one] at this
-  convert! this
-  exact (X.presheaf.map_id ..).symm
-
-中文:
-定理 Γ_Spec_left_triangle
-  结论: toSpecΓ (Γ.obj (op X)) ≫ X.toΓSpec.c.app (op ⊤) = 𝟙 _
-  证明: by
-  unfold toSpecΓ
-  have := X.toΓSpecSheafedSpace_app_spec 1
-  unfold toToΓSpecMapBasicOpen toΓSpecMapBasicOpen at this
-  rw! [basicOpen_one] at this
-  convert! this
-  exact (X.presheaf.map_id ..).symm
-
-Depends on / 依赖: X.presheaf.map_id, X.to, basicOpen_one, convert, map_id, presheaf
+--- 原说明 ---
+`toSpecΓ _` is an isomorphism so these are mutually two-sided inverses.
 -/
 theorem Γ_Spec_left_triangle : toSpecΓ (Γ.obj (op X)) ≫ X.toΓSpec.c.app (op ⊤) = 𝟙 _ := by
   unfold toSpecΓ
@@ -760,50 +498,13 @@ theorem Γ_Spec_left_triangle : toSpecΓ (Γ.obj (op X)) ≫ X.toΓSpec.c.app (o
 end LocallyRingedSpace
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `identityToΓSpec` / `identityToΓSpec` 的定义
+/-- The unit as a natural transformation. -/
+/-
+**AlgebraicGeometry.identityTo** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition identityToΓSpec
-  signature: : 𝟭 LocallyRingedSpace.{u} ⟶ Γ.rightOp ⋙ Spec.toLocallyRingedSpace where
-  body: LocallyRingedSpace.toΓSpec
-  naturality X Y f := by
-    symm
-    apply LocallyRingedSpace.comp_ring_hom_ext
-    · ext1 x
-      dsimp
-      change PrimeSpectrum.comap (f.c.app (op ⊤)).hom (X.toΓSpecFun x) = Y.toΓSpecFun (f.base x)
-      dsimp [toΓSpecFun]
-      rw [← IsLocalRing.comap_closedPoint (f.stalkMap x).hom]; rw [←
-        PrimeSpectrum.comap_comp_apply]; rw [← PrimeSpectrum.comap_comp_apply]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]
-      congr 2
-      exact (PresheafedSpace.stalkMap_germ f.1 ⊤ x trivial).symm
-    · intro r
-      rw [LocallyRingedSpace.comp_c_app]; rw [← Category.assoc]
-      erw [Y.toΓSpecSheafedSpace_app_spec, f.c.naturality]
-      rfl
-
-中文:
-定义 identityToΓSpec
-  签名: : 𝟭 LocallyRinged空间.{u} ⟶ Γ.rightOp ⋙ Spec.toLocallyRingedSpace where
-  定义体: LocallyRingedSpace.toΓSpec
-  naturality X Y f := by
-    symm
-    apply LocallyRingedSpace.comp_ring_hom_ext
-    · ext1 x
-      dsimp
-      change PrimeSpectrum.comap (f.c.app (op ⊤)).hom (X.toΓSpecFun x) = Y.toΓSpecFun (f.base x)
-      dsimp [toΓSpecFun]
-      rw [← IsLocalRing.comap_closedPoint (f.stalkMap x).hom]; rw [←
-        PrimeSpectrum.comap_comp_apply]; rw [← PrimeSpectrum.comap_comp_apply]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]
-      congr 2
-      exact (PresheafedSpace.stalkMap_germ f.1 ⊤ x trivial).symm
-    · intro r
-      rw [LocallyRingedSpace.comp_c_app]; rw [← Category.assoc]
-      erw [Y.toΓSpecSheafedSpace_app_spec, f.c.naturality]
-      rfl
-
-Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.to
+--- 原说明 ---
+The unit as a natural transformation.
 -/
 def identityToΓSpec : 𝟭 LocallyRingedSpace.{u} ⟶ Γ.rightOp ⋙ Spec.toLocallyRingedSpace where
   app := LocallyRingedSpace.toΓSpec
@@ -814,30 +515,29 @@ def identityToΓSpec : 𝟭 LocallyRingedSpace.{u} ⟶ Γ.rightOp ⋙ Spec.toLoc
       dsimp
       change PrimeSpectrum.comap (f.c.app (op ⊤)).hom (X.toΓSpecFun x) = Y.toΓSpecFun (f.base x)
       dsimp [toΓSpecFun]
-      rw [← IsLocalRing.comap_closedPoint (f.stalkMap x).hom]; rw [←
-        PrimeSpectrum.comap_comp_apply]; rw [← PrimeSpectrum.comap_comp_apply]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]
+      rw [← IsLocalRing.comap_closedPoint (f.stalkMap x).hom, ←
+        PrimeSpectrum.comap_comp_apply, ← PrimeSpectrum.comap_comp_apply,
+        ← CommRingCat.hom_comp, ← CommRingCat.hom_comp]
       congr 2
       exact (PresheafedSpace.stalkMap_germ f.1 ⊤ x trivial).symm
     · intro r
-      rw [LocallyRingedSpace.comp_c_app]; rw [← Category.assoc]
+      rw [LocallyRingedSpace.comp_c_app, ← Category.assoc]
       erw [Y.toΓSpecSheafedSpace_app_spec, f.c.naturality]
       rfl
 
 namespace ΓSpec
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `left_triangle` / 定理 `left_triangle`
-
-English:
-theorem left_triangle
-  given: (X : LocallyRingedSpace)
-  proof: X.Γ_Spec_left_triangle
-
-中文:
-定理 left_triangle
-  条件: (X : LocallyRinged空间)
-  证明: X.Γ_Spec_left_triangle
+/-
+**AlgebraicGeometry.ΓSpec.left_triangle** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.ΓSpec`。
+形式化陈述：left_triangle (X : LocallyRingedSpace) : SpecΓIdentity.inv.app (Γ.obj (op 
+X)) ≫ (identityToΓSpec.app X).c.app (op ⊤) = 𝟙 _
+参数：X : LocallyRingedSpace。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.Γ_Spec_left_triangle`：Γ_Spec_left_t
+riangle : toSpecΓ (Γ.obj (op X)) ≫ X.toΓSpec.c.app (op ⊤) = 𝟙 _
 -/
 theorem left_triangle (X : LocallyRingedSpace) :
     SpecΓIdentity.inv.app (Γ.obj (op X)) ≫ (identityToΓSpec.app X).c.app (op ⊤) = 𝟙 _ :=
@@ -845,36 +545,42 @@ theorem left_triangle (X : LocallyRingedSpace) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `right_triangle` / 定理 `right_triangle`
+/-- `SpecΓIdentity` is iso so these are mutually two-sided inverses. -/
+/-
+**AlgebraicGeometry.ΓSpec.right_triangle** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry.ΓSpec`。
+形式化陈述：right_triangle (R : CommRingCat) : identityToΓSpec.app (Spec.toLocallyRing
+edSpace.obj <| op R) ≫ Spec.toLocallyRingedSpace.map (SpecΓIdentity.inv.app R).o
+p = 𝟙 _
+参数：R : CommRingCat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.comp_ring_hom_ext`：comp_ring_hom_ex
+t {X : LocallyRingedSpace.{u}} {R : CommRingCat.{u}} {f : R ⟶ Γ.obj (op X)} {β :
+ X ⟶ Spec.locallyRingedSpaceObj R} (w : X.to…
+· 使用引理 `TopCat.ext`：ext {X Y : TopCat.{u}} {f g : X ⟶ Y} (w : forall x : X, f x 
+= g x) : f = g
+· 使用定理 `PrimeSpectrum.ext`：∀ {R : Type u_1} {inst : CommSemiring R} {x y : Prime
+Spectrum R}, x.asIdeal = y.asIdeal → x = y
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `IsLocalization.AtPrime.isLocalRing`：∀ {R : Type u_1} [inst : CommSemirin
+g R] (S : Type u_2) [inst_1 : CommSemiring S] [inst_2 : Algebra R S] (P : Ideal 
+R)   [hp : P.IsPrime] [I…
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `AlgebraicGeometry.StructureSheaf.IsLocalization.to_stalk`：∀ (R : Type u)
+ [inst : CommRing R] (p : PrimeSpectrum R),   IsLocalization.AtPrime (↑((Algebra
+icGeometry.Spec.structureSheaf R).presheaf.sta…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.AtPrime.to_map_mem_maximal_iff`：to_map_mem_maximal_iff (x
+ : R) (h : IsLocalRing S
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `le_top`：le_top : a <= ⊤
 
-English:
-theorem right_triangle
-  given: (R : CommRingCat)
-  proof: by
-  apply LocallyRingedSpace.comp_ring_hom_ext
-  · ext (p : PrimeSpectrum R)
-    dsimp
-    refine PrimeSpectrum.ext (Ideal.ext fun x => ?_)
-    rw [← IsLocalization.AtPrime.to_map_mem_maximal_iff ((structureSheaf R).presheaf.stalk p)
-        p.asIdeal x]
-    rfl
-  · intro r; rfl
-
-中文:
-定理 right_triangle
-  条件: (R : 交换环范畴)
-  证明: by
-  apply LocallyRingedSpace.comp_ring_hom_ext
-  · ext (p : PrimeSpectrum R)
-    dsimp
-    refine PrimeSpectrum.ext (Ideal.ext fun x => ?_)
-    rw [← IsLocalization.AtPrime.to_map_mem_maximal_iff ((structureSheaf R).presheaf.stalk p)
-        p.asIdeal x]
-    rfl
-  · intro r; rfl
-
-Depends on / 依赖: AtPrime, Ideal.ext, IsLocalization, IsLocalization.AtPrime.to_map_mem_maximal_iff, LocallyRingedSpace, LocallyRingedSpace.comp_ring_hom_ext, PrimeSpectrum, PrimeSpectrum.ext, asIdeal, comp_ring_hom_ext, p.asIdeal, presheaf, presheaf.stalk, structureSheaf, to_map_mem_maximal_iff
+--- 原说明 ---
+`SpecΓIdentity` is iso so these are mutually two-sided inverses.
 -/
 theorem right_triangle (R : CommRingCat) :
     identityToΓSpec.app (Spec.toLocallyRingedSpace.obj <| op R) ≫
@@ -891,34 +597,16 @@ theorem right_triangle (R : CommRingCat) :
 
 /-- The adjunction `Γ ⊣ Spec` from `CommRingᵒᵖ` to `LocallyRingedSpace`. -/
 @[simps]
-/--
-Definition of `locallyRingedSpaceAdjunction` / `locallyRingedSpaceAdjunction` 的定义
+/-
+**AlgebraicGeometry.ΓSpec.locallyRingedSpaceAdjunction** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.ΓSpec`。
+形式化陈述：locallyRingedSpaceAdjunction : Γ.rightOp ⊣ Spec.toLocallyRingedSpace.{u} w
+here unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition locallyRingedSpaceAdjunction
-  signature: : Γ.rightOp ⊣ Spec.toLocallyRingedSpace.{u} where
-  body: identityToΓSpec
-  counit := (NatIso.op SpecΓIdentity).inv
-  left_triangle_components X := by
-    simp only [Functor.id_obj, Γ_obj, Functor.rightOp_map, Γ_map,
-      Quiver.Hom.unop_op, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
-    exact congr_arg Quiver.Hom.op (left_triangle X)
-  right_triangle_components R := by
-    simp only [Functor.id_obj, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
-    exact right_triangle R.unop
-
-中文:
-定义 locallyRingedSpaceAdjunction
-  签名: : Γ.rightOp ⊣ Spec.toLocallyRingedSpace.{u} where
-  定义体: identityToΓSpec
-  counit := (NatIso.op SpecΓIdentity).inv
-  left_triangle_components X := by
-    simp only [Functor.id_obj, Γ_obj, Functor.rightOp_map, Γ_map,
-      Quiver.Hom.unop_op, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
-    exact congr_arg Quiver.Hom.op (left_triangle X)
-  right_triangle_components R := by
-    simp only [Functor.id_obj, NatIso.op_inv, NatTrans.op_app, SpecΓIdentity_inv_app]
-    exact right_triangle R.unop
+--- 原说明 ---
+The adjunction `Γ ⊣ Spec` from `CommRingᵒᵖ` to `LocallyRingedSpace`.
 -/
 def locallyRingedSpaceAdjunction : Γ.rightOp ⊣ Spec.toLocallyRingedSpace.{u} where
   unit := identityToΓSpec
@@ -933,18 +621,10 @@ def locallyRingedSpaceAdjunction : Γ.rightOp ⊣ Spec.toLocallyRingedSpace.{u} 
 
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `toSpecΓ_unop` / 引理 `toSpecΓ_unop`
-
-English:
-lemma toSpecΓ_unop
-  given: (R : CommRingCatᵒᵖ)
-  proof: rfl
-
-中文:
-引理 toSpecΓ_unop
-  条件: (R : CommRingCatᵒᵖ)
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.toSpec** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.ΓS
+pec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toSpecΓ_unop (R : CommRingCatᵒᵖ) :
     AlgebraicGeometry.toSpecΓ (Opposite.unop R) = CommRingCat.ofHom (algebraMap _ _) := rfl
@@ -952,105 +632,85 @@ lemma toSpecΓ_unop (R : CommRingCatᵒᵖ) :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- `@[simp]`-normal form of `locallyRingedSpaceAdjunction_counit_app'`. -/
 @[simp]
-/--
-lemma `toSpecΓ_of` / 引理 `toSpecΓ_of`
+/-
+**AlgebraicGeometry.ΓSpec.toSpec** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.ΓS
+pec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma toSpecΓ_of
-  given: (R : Type u) [CommRing R]
-  proof: rfl
-
-中文:
-引理 toSpecΓ_of
-  条件: (R : 类型u) [交换环 R]
-  证明: rfl
+--- 原说明 ---
+`@[simp]`-normal form of `locallyRingedSpaceAdjunction_counit_app'`.
 -/
 lemma toSpecΓ_of (R : Type u) [CommRing R] :
     AlgebraicGeometry.toSpecΓ (CommRingCat.of R) = CommRingCat.ofHom (algebraMap _ _) := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `locallyRingedSpaceAdjunction_counit_app` / 引理 `locallyRingedSpaceAdjunction_counit_app`
-
-English:
-lemma locallyRingedSpaceAdjunction_counit_app
-  given: (R : CommRingCatᵒᵖ)
-  proof: rfl
-
-中文:
-引理 locallyRingedSpaceAdjunction_counit_app
-  条件: (R : CommRingCatᵒᵖ)
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.locallyRingedSpaceAdjunction_counit_app** 是 Mathlib 中的
+一个引理，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：locallyRingedSpaceAdjunction_counit_app (R : CommRingCatᵒᵖ) : locallyRinge
+dSpaceAdjunction.counit.app R = (CommRingCat.ofHom (algebraMap _ _)).op
+参数：R : CommRingCatᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma locallyRingedSpaceAdjunction_counit_app (R : CommRingCatᵒᵖ) :
     locallyRingedSpaceAdjunction.counit.app R =
       (CommRingCat.ofHom (algebraMap _ _)).op := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `locallyRingedSpaceAdjunction_counit_app'` / 引理 `locallyRingedSpaceAdjunction_counit_app'`
-
-English:
-lemma locallyRingedSpaceAdjunction_counit_app'
-  given: (R : Type u) [CommRing R]
-  proof: rfl
-
-中文:
-引理 locallyRingedSpaceAdjunction_counit_app'
-  条件: (R : 类型u) [交换环 R]
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.locallyRingedSpaceAdjunction_counit_app'** 是 Mathlib 中
+的一个引理，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：locallyRingedSpaceAdjunction_counit_app' (R : Type u) [CommRing R] : local
+lyRingedSpaceAdjunction.counit.app (op <| CommRingCat.of R) = (CommRingCat.ofHom
+ (algebraMap _ _)).op
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma locallyRingedSpaceAdjunction_counit_app' (R : Type u) [CommRing R] :
     locallyRingedSpaceAdjunction.counit.app (op <| CommRingCat.of R) =
       (CommRingCat.ofHom (algebraMap _ _)).op := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `unop_locallyRingedSpaceAdjunction_counit_app'` / 引理 `unop_locallyRingedSpaceAdjunction_counit_app'`
-
-English:
-lemma unop_locallyRingedSpaceAdjunction_counit_app'
-  given: (R : Type u) [CommRing R]
-  proof: rfl
-
-中文:
-引理 unop_locallyRingedSpaceAdjunction_counit_app'
-  条件: (R : 类型u) [交换环 R]
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.unop_locallyRingedSpaceAdjunction_counit_app'** 是 Math
+lib 中的一个引理，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：unop_locallyRingedSpaceAdjunction_counit_app' (R : Type u) [CommRing R] : 
+(locallyRingedSpaceAdjunction.counit.app (op <| CommRingCat.of R)).unop = (CommR
+ingCat.ofHom (algebraMap _ _))
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma unop_locallyRingedSpaceAdjunction_counit_app' (R : Type u) [CommRing R] :
     (locallyRingedSpaceAdjunction.counit.app (op <| CommRingCat.of R)).unop =
       (CommRingCat.ofHom (algebraMap _ _)) := rfl
-
-/--
-lemma `locallyRingedSpaceAdjunction_homEquiv_apply` / 引理 `locallyRingedSpaceAdjunction_homEquiv_apply`
-
-English:
-lemma locallyRingedSpaceAdjunction_homEquiv_apply
-  proof: rfl
-
-中文:
-引理 locallyRingedSpaceAdjunction_homEquiv_apply
-  证明: rfl
-
-Depends on / 依赖: StrongEpi, StrongEpi.epi
+/-
+**AlgebraicGeometry.ΓSpec.locallyRingedSpaceAdjunction_homEquiv_apply** 是 Mathli
+b 中的一个引理，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：locallyRingedSpaceAdjunction_homEquiv_apply {X : LocallyRingedSpace} {R : 
+CommRingCatᵒᵖ} (f : Γ.rightOp.obj X ⟶ R) : locallyRingedSpaceAdjunction.homEquiv
+ X R f = identityToΓSpec.app X ≫ Spec.locallyRingedSpaceMap f.unop
+参数：f : Γ.rightOp.obj X ⟶ R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma locallyRingedSpaceAdjunction_homEquiv_apply
     {X : LocallyRingedSpace} {R : CommRingCatᵒᵖ}
     (f : Γ.rightOp.obj X ⟶ R) :
     locallyRingedSpaceAdjunction.homEquiv X R f =
       identityToΓSpec.app X ≫ Spec.locallyRingedSpaceMap f.unop := rfl
-
-/--
-lemma `locallyRingedSpaceAdjunction_homEquiv_apply'` / 引理 `locallyRingedSpaceAdjunction_homEquiv_apply'`
-
-English:
-lemma locallyRingedSpaceAdjunction_homEquiv_apply'
-  proof: rfl
-
-中文:
-引理 locallyRingedSpaceAdjunction_homEquiv_apply'
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.locallyRingedSpaceAdjunction_homEquiv_apply'** 是 Mathl
+ib 中的一个引理，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：locallyRingedSpaceAdjunction_homEquiv_apply' {X : LocallyRingedSpace} {R :
+ Type u} [CommRing R] (f : CommRingCat.of R ⟶ Γ.obj <| op X) : locallyRingedSpac
+eAdjunction.homEquiv X (op <| CommRingCat.of R) (op f) = identityToΓSpec.app X ≫
+ Spec.locallyRingedSpaceMap f
+参数：f : CommRingCat.of R ⟶ Γ.obj <| op X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma locallyRingedSpaceAdjunction_homEquiv_apply'
     {X : LocallyRingedSpace} {R : Type u} [CommRing R]
@@ -1059,30 +719,43 @@ lemma locallyRingedSpaceAdjunction_homEquiv_apply'
       identityToΓSpec.app X ≫ Spec.locallyRingedSpaceMap f := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app` / 引理 `toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app`
-
-English:
-lemma toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app
-  proof: by
-  dsimp
-  rw [← StructureSheaf.algebraMap_self_map _ U _ (homOfLE le_top).op]; rw [Category.assoc]; rw [NatTrans.naturality _ (homOfLE (le_top (a := U.unop))).op]; rw [← unop_locallyRingedSpaceAdjunction_counit_app']
-  simp_rw [← Γ_map_op]
-  rw [← Γ.rightOp_map_unop]; rw [← Category.assoc]; rw [← unop_comp]
-  erw [← Adjunction.homEquiv_counit, Equiv.symm_apply_apply]
-  rfl
-
-中文:
-引理 toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app
-  证明: by
-  dsimp
-  rw [← StructureSheaf.algebraMap_self_map _ U _ (homOfLE le_top).op]; rw [Category.assoc]; rw [NatTrans.naturality _ (homOfLE (le_top (a := U.unop))).op]; rw [← unop_locallyRingedSpaceAdjunction_counit_app']
-  simp_rw [← Γ_map_op]
-  rw [← Γ.rightOp_map_unop]; rw [← Category.assoc]; rw [← unop_comp]
-  erw [← Adjunction.homEquiv_counit, Equiv.symm_apply_apply]
-  rfl
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_counit, Category, Category.assoc, Equiv.symm_apply_apply, NatTrans, NatTrans.naturality, StructureSheaf, StructureSheaf.algebraMap_self_map, U.unop, algebraMap_self_map, homEquiv_counit, homOfLE, le_top, naturality, rightOp_map_unop, simp_rw, symm_apply_apply, unop_comp, unop_locallyRingedSpaceAdjunction_counit_app
+/-
+**AlgebraicGeometry.ΓSpec.toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app*
+* 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app {X : LocallyRingedSp
+ace} {R : Type u} [CommRing R] (f : Γ.rightOp.obj X ⟶ op (CommRingCat.of R)) (U)
+ : CommRingCat.ofHom (algebraMap R _) ≫ (locallyRingedSpaceAdjunction.homEquiv X
+ (op <| CommRingCat.of R) f).c.app U = f.unop ≫ X.presheaf.map (homOfLE le_top).
+op
+参数：f : Γ.rightOp.obj X ⟶ op (CommRingCat.of R)；U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.StructureSheaf.algebraMap_self_map`：algebraMap_self_ma
+p (U V : (Opens (PrimeSpectrum.Top R))ᵒᵖ) (i : V ⟶ U) : CommRingCat.ofHom (algeb
+raMap R _) ≫ (Spec.structureSheaf R).1.map…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用引理 `AlgebraicGeometry.ΓSpec.unop_locallyRingedSpaceAdjunction_counit_app'`：u
+nop_locallyRingedSpaceAdjunction_counit_app' (R : Type u) [CommRing R] : (locall
+yRingedSpaceAdjunction.counit.app (op <| CommRingCat.of R))…
+· 使用引理 `CategoryTheory.Functor.rightOp_map_unop`：rightOp_map_unop {F : Cᵒᵖ ⥤ D} 
+{X Y} (f : X ⟶ Y) : (F.rightOp.map f).unop = F.map f.op
+· 使用定理 `CategoryTheory.unop_comp`：unop_comp {X Y Z : Cᵒᵖ} {f : X ⟶ Y} {g : Y ⟶ Z
+} : (f ≫ g).unop = g.unop ≫ f.unop
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_counit`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 lemma toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app
     {X : LocallyRingedSpace} {R : Type u} [CommRing R]
@@ -1091,227 +764,157 @@ lemma toOpen_comp_locallyRingedSpaceAdjunction_homEquiv_app
       (locallyRingedSpaceAdjunction.homEquiv X (op <| CommRingCat.of R) f).c.app U =
     f.unop ≫ X.presheaf.map (homOfLE le_top).op := by
   dsimp
-  rw [← StructureSheaf.algebraMap_self_map _ U _ (homOfLE le_top).op]; rw [Category.assoc]; rw [NatTrans.naturality _ (homOfLE (le_top (a := U.unop))).op]; rw [← unop_locallyRingedSpaceAdjunction_counit_app']
+  rw [← StructureSheaf.algebraMap_self_map _ U _ (homOfLE le_top).op, Category.assoc,
+    NatTrans.naturality _ (homOfLE (le_top (a := U.unop))).op,
+    ← unop_locallyRingedSpaceAdjunction_counit_app']
   simp_rw [← Γ_map_op]
-  rw [← Γ.rightOp_map_unop]; rw [← Category.assoc]; rw [← unop_comp]
+  rw [← Γ.rightOp_map_unop, ← Category.assoc, ← unop_comp]
   erw [← Adjunction.homEquiv_counit, Equiv.symm_apply_apply]
   rfl
 
-/--
-Definition of `adjunction` / `adjunction` 的定义
+/-- The adjunction `Γ ⊣ Spec` from `CommRingᵒᵖ` to `Scheme`. -/
+/-
+**AlgebraicGeometry.ΓSpec.adjunction** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y.ΓSpec`。
+形式化陈述：adjunction : Scheme.Γ.rightOp ⊣ Scheme.Spec.{u} where unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjunction
-  signature: : Scheme.Γ.rightOp ⊣ Scheme.Spec.{u} where
-  body: { app := fun X => ⟨locallyRingedSpaceAdjunction.{u}.unit.app X.toLocallyRingedSpace⟩
-    naturality := fun _ _ f =>
-      Scheme.Hom.ext' (locallyRingedSpaceAdjunction.{u}.unit.naturality f.toLRSHom) }
-  counit := (NatIso.op Scheme.SpecΓIdentity.{u}).inv
-  left_triangle_components Y :=
-    locallyRingedSpaceAdjunction.left_triangle_components Y.toLocallyRingedSpace
-  right_triangle_components R :=
-Scheme.Hom.ext' locallyRingedSpaceAdjunction.right_triangle_components R
-
-中文:
-定义 adjunction
-  签名: : 概形.Γ.rightOp ⊣ 概形.Spec.{u} where
-  定义体: { app := fun X => ⟨locallyRingedSpaceAdjunction.{u}.unit.app X.toLocallyRingedSpace⟩
-    naturality := fun _ _ f =>
-      Scheme.Hom.ext' (locallyRingedSpaceAdjunction.{u}.unit.naturality f.toLRSHom) }
-  counit := (NatIso.op Scheme.SpecΓIdentity.{u}).inv
-  left_triangle_components Y :=
-    locallyRingedSpaceAdjunction.left_triangle_components Y.toLocallyRingedSpace
-  right_triangle_components R :=
-Scheme.Hom.ext' locallyRingedSpaceAdjunction.right_triangle_components R
-
-Depends on / 依赖: NatIso, NatIso.op, Scheme, Scheme.Hom.ext, Scheme.Spec, X.toLocallyRingedSpace, Y.toLocallyRingedSpace, counit, f.toLRSHom, left_triangle_components, locallyRingedSpaceAdjunction, locallyRingedSpaceAdjunction.left_triangle_components, locallyRingedSpaceAdjunction.right_triangle_components, naturality, right_triangle_components, toLRSHom, toLocallyRingedSpace, unit.app, unit.naturality
+--- 原说明 ---
+The adjunction `Γ ⊣ Spec` from `CommRingᵒᵖ` to `Scheme`.
 -/
 def adjunction : Scheme.Γ.rightOp ⊣ Scheme.Spec.{u} where
   unit :=
-  { app := fun X => ⟨locallyRingedSpaceAdjunction.{u}.unit.app X.toLocallyRingedSpace⟩
-    naturality := fun _ _ f =>
+  { app := fun X ↦ ⟨locallyRingedSpaceAdjunction.{u}.unit.app X.toLocallyRingedSpace⟩
+    naturality := fun _ _ f ↦
       Scheme.Hom.ext' (locallyRingedSpaceAdjunction.{u}.unit.naturality f.toLRSHom) }
   counit := (NatIso.op Scheme.SpecΓIdentity.{u}).inv
   left_triangle_components Y :=
     locallyRingedSpaceAdjunction.left_triangle_components Y.toLocallyRingedSpace
   right_triangle_components R :=
-Scheme.Hom.ext' locallyRingedSpaceAdjunction.right_triangle_components R
+    Scheme.Hom.ext' <| locallyRingedSpaceAdjunction.right_triangle_components R
 
-/--
-lemma `_root_.AlgebraicGeometry.ext_to_Spec` / 引理 `_root_.AlgebraicGeometry.ext_to_Spec`
+/-- Given `f, g : X ⟶ Spec(R)`, if the two induced maps `R ⟶ Γ(X)` are equal, then `f = g`. -/
+/-
+**AlgebraicGeometry.ΓSpec._root_.AlgebraicGeometry.ext_to_Spec** 是 Mathlib 中的一个引
+理，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.AlgebraicGeometry.ext_to_Spec
-  statement: {X : Scheme} {R : Type*} [CommRing R]
-  proof: (ΓSpec.adjunction.homEquiv X (.op <| .of R)).symm.injective Opposite.unop_injective h
-
-中文:
-引理 _root_.AlgebraicGeometry.ext_to_Spec
-  结论: {X : 概形} {R : 类型} [交换环 R]
-  证明: (ΓSpec.adjunction.homEquiv X (.op <| .of R)).symm.injective Opposite.unop_injective h
-
-Depends on / 依赖: Opposite, Opposite.unop_injective, Spec.adjunction.homEquiv, adjunction, homEquiv, injective, symm.injective, unop_injective
+--- 原说明 ---
+Given `f, g : X ⟶ Spec(R)`, if the two induced maps `R ⟶ Γ(X)` are equal, then `
+f = g`.
 -/
 lemma _root_.AlgebraicGeometry.ext_to_Spec {X : Scheme} {R : Type*} [CommRing R]
     {f g : X ⟶ Spec (.of R)}
     (h : (Scheme.ΓSpecIso (.of R)).inv ≫ Scheme.Γ.map f.op =
       (Scheme.ΓSpecIso (.of R)).inv ≫ Scheme.Γ.map g.op) :
     f = g :=
-(ΓSpec.adjunction.homEquiv X (.op <| .of R)).symm.injective Opposite.unop_injective h
-
-/--
-theorem `adjunction_homEquiv_apply` / 定理 `adjunction_homEquiv_apply`
-
-English:
-theorem adjunction_homEquiv_apply
-  statement: {X : Scheme} {R : CommRingCatᵒᵖ}
-  proof: rfl
-
-中文:
-定理 adjunction_homEquiv_apply
-  结论: {X : 概形} {R : CommRingCatᵒᵖ}
-  证明: rfl
+  (ΓSpec.adjunction.homEquiv X (.op <| .of R)).symm.injective <| Opposite.unop_injective h
+/-
+**AlgebraicGeometry.ΓSpec.adjunction_homEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicGeometry.ΓSpec`。
+形式化陈述：adjunction_homEquiv_apply {X : Scheme} {R : CommRingCatᵒᵖ} (f : (op <| Sch
+eme.Γ.obj <| op X) ⟶ R) : ΓSpec.adjunction.homEquiv X R f = ⟨locallyRingedSpaceA
+djunction.homEquiv X.1 R f⟩
+参数：f : (op <| Scheme.Γ.obj <| op X) ⟶ R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjunction_homEquiv_apply {X : Scheme} {R : CommRingCatᵒᵖ}
     (f : (op <| Scheme.Γ.obj <| op X) ⟶ R) :
     ΓSpec.adjunction.homEquiv X R f = ⟨locallyRingedSpaceAdjunction.homEquiv X.1 R f⟩ := rfl
-
-/--
-theorem `adjunction_homEquiv_symm_apply` / 定理 `adjunction_homEquiv_symm_apply`
-
-English:
-theorem adjunction_homEquiv_symm_apply
-  statement: {X : Scheme} {R : CommRingCatᵒᵖ}
-  proof: rfl
-
-中文:
-定理 adjunction_homEquiv_symm_apply
-  结论: {X : 概形} {R : CommRingCatᵒᵖ}
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.adjunction_homEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：adjunction_homEquiv_symm_apply {X : Scheme} {R : CommRingCatᵒᵖ} (f : X ⟶ S
+cheme.Spec.obj R) : (ΓSpec.adjunction.homEquiv X R).symm f = (locallyRingedSpace
+Adjunction.homEquiv X.1 R).symm f.toLRSHom
+参数：f : X ⟶ Scheme.Spec.obj R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem adjunction_homEquiv_symm_apply {X : Scheme} {R : CommRingCatᵒᵖ}
     (f : X ⟶ Scheme.Spec.obj R) :
     (ΓSpec.adjunction.homEquiv X R).symm f =
       (locallyRingedSpaceAdjunction.homEquiv X.1 R).symm f.toLRSHom := rfl
-
-/--
-theorem `adjunction_counit_app'` / 定理 `adjunction_counit_app'`
-
-English:
-theorem adjunction_counit_app'
-  given: {R : CommRingCatᵒᵖ}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 adjunction_counit_app'
-  条件: {R : CommRingCatᵒᵖ}
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.ΓSpec.adjunction_counit_app'** 是 Mathlib 中的一个定理，位于命名空间 `Alge
+braicGeometry.ΓSpec`。
+形式化陈述：adjunction_counit_app' {R : CommRingCatᵒᵖ} : ΓSpec.adjunction.counit.app R
+ = locallyRingedSpaceAdjunction.counit.app R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjunction_counit_app' {R : CommRingCatᵒᵖ} :
     ΓSpec.adjunction.counit.app R = locallyRingedSpaceAdjunction.counit.app R := rfl
 
 @[simp]
-/--
-theorem `adjunction_counit_app` / 定理 `adjunction_counit_app`
-
-English:
-theorem adjunction_counit_app
-  given: {R : CommRingCatᵒᵖ}
-  proof: rfl
-
-中文:
-定理 adjunction_counit_app
-  条件: {R : CommRingCatᵒᵖ}
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.adjunction_counit_app** 是 Mathlib 中的一个定理，位于命名空间 `Algeb
+raicGeometry.ΓSpec`。
+形式化陈述：adjunction_counit_app {R : CommRingCatᵒᵖ} : ΓSpec.adjunction.counit.app R 
+= (Scheme.ΓSpecIso (unop R)).inv.op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjunction_counit_app {R : CommRingCatᵒᵖ} :
     ΓSpec.adjunction.counit.app R = (Scheme.ΓSpecIso (unop R)).inv.op := rfl
 
-/--
-Definition of `_root_.AlgebraicGeometry.Scheme.toSpecΓ` / `_root_.AlgebraicGeometry.Scheme.toSpecΓ` 的定义
+/-- The canonical map `X ⟶ Spec Γ(X, ⊤)`. This is the unit of the `Γ-Spec` adjunction. -/
+/-
+**AlgebraicGeometry.ΓSpec._root_.AlgebraicGeometry.Scheme.toSpec** 是 Mathlib 中的一
+个定义，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.AlgebraicGeometry.Scheme.toSpecΓ
-  signature: (X : Scheme.{u})
-  body: ΓSpec.adjunction.unit.app X
-
-@[simp]
-
-中文:
-定义 _root_.AlgebraicGeometry.概形.toSpecΓ
-  签名: (X : 概形.{u})
-  定义体: ΓSpec.adjunction.unit.app X
-
-@[simp]
-
-Depends on / 依赖: Spec.adjunction.unit.app, adjunction
+--- 原说明 ---
+The canonical map `X ⟶ Spec Γ(X, ⊤)`. This is the unit of the `Γ-Spec` adjunctio
+n.
 -/
 def _root_.AlgebraicGeometry.Scheme.toSpecΓ (X : Scheme.{u}) : X ⟶ Spec Γ(X, ⊤) :=
   ΓSpec.adjunction.unit.app X
 
 @[simp]
-/--
-theorem `adjunction_unit_app` / 定理 `adjunction_unit_app`
-
-English:
-theorem adjunction_unit_app
-  given: {X : Scheme}
-  proof: rfl
-
-中文:
-定理 adjunction_unit_app
-  条件: {X : 概形}
-  证明: rfl
+/-
+**AlgebraicGeometry.ΓSpec.adjunction_unit_app** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry.ΓSpec`。
+形式化陈述：adjunction_unit_app {X : Scheme} : ΓSpec.adjunction.unit.app X = X.toSpecΓ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjunction_unit_app {X : Scheme} :
     ΓSpec.adjunction.unit.app X = X.toSpecΓ := rfl
-
-/--
-Instance `isIso_locallyRingedSpaceAdjunction_counit` / 实例 `isIso_locallyRingedSpaceAdjunction_counit`
-
-English:
-instance isIso_locallyRingedSpaceAdjunction_counit
-  signature: :
-  body: (NatIso.op SpecΓIdentity).isIso_inv
-
-中文:
-实例 isIso_locallyRingedSpaceAdjunction_counit
-  签名: :
-  定义体: (NatIso.op SpecΓIdentity).isIso_inv
-
-Depends on / 依赖: NatIso, NatIso.op, isIso_inv
+/-
+**AlgebraicGeometry.ΓSpec.isIso_locallyRingedSpaceAdjunction_counit** 是 Mathlib 
+中的一个实例，位于命名空间 `AlgebraicGeometry.ΓSpec`。
+形式化陈述：isIso_locallyRingedSpaceAdjunction_counit : IsIso.{u + 1, u + 1} locallyRi
+ngedSpaceAdjunction.counit
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 instance isIso_locallyRingedSpaceAdjunction_counit :
     IsIso.{u + 1, u + 1} locallyRingedSpaceAdjunction.counit :=
   (NatIso.op SpecΓIdentity).isIso_inv
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isIso_adjunction_counit` / 实例 `isIso_adjunction_counit`
-
-English:
-instance isIso_adjunction_counit
-  signature: : IsIso ΓSpec.adjunction.counit
-  body: by
-  apply +allowSynthFailures NatIso.isIso_of_isIso_app
-  intro R
-  rw [adjunction_counit_app]
-  infer_instance
-
-中文:
-实例 isIso_adjunction_counit
-  签名: : 是同构 ΓSpec.adjunction.counit
-  定义体: by
-  apply +allowSynthFailures NatIso.isIso_of_isIso_app
-  intro R
-  rw [adjunction_counit_app]
-  infer_instance
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, adjunction_counit_app, allowSynthFailures, infer_instance, isIso_of_isIso_app
+/-
+**AlgebraicGeometry.ΓSpec.isIso_adjunction_counit** 是 Mathlib 中的一个实例，位于命名空间 `Alg
+ebraicGeometry.ΓSpec`。
+形式化陈述：isIso_adjunction_counit : IsIso ΓSpec.adjunction.counit
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatIso.isIso_of_isIso_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.ΓSpec.adjunction_counit_app`：adjunction_counit_app {R 
+: CommRingCatᵒᵖ} : ΓSpec.adjunction.counit.app R = (Scheme.ΓSpecIso (unop R)).in
+v.op
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 instance isIso_adjunction_counit : IsIso ΓSpec.adjunction.counit := by
   apply +allowSynthFailures NatIso.isIso_of_isIso_app
@@ -1322,41 +925,17 @@ instance isIso_adjunction_counit : IsIso ΓSpec.adjunction.counit := by
 end ΓSpec
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `Scheme.toSpecΓ_apply` / 定理 `Scheme.toSpecΓ_apply`
-
-English:
-theorem Scheme.toSpecΓ_apply
-  given: (X : Scheme.{u}) (x)
-  proof: rfl
-
-@[reassoc]
-
-中文:
-定理 概形.toSpecΓ_apply
-  条件: (X : 概形.{u}) (x)
-  证明: rfl
-
-@[reassoc]
+/-
+**AlgebraicGeometry.Scheme.toSpec** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Scheme.toSpecΓ_apply (X : Scheme.{u}) (x) :
     Scheme.toSpecΓ X x = Spec.map (X.presheaf.Γgerm x) (IsLocalRing.closedPoint _) := rfl
 
 @[reassoc]
-/--
-theorem `Scheme.toSpecΓ_naturality` / 定理 `Scheme.toSpecΓ_naturality`
-
-English:
-theorem Scheme.toSpecΓ_naturality
-  given: {X Y : Scheme.{u}} (f : X ⟶ Y)
-  proof: ΓSpec.adjunction.unit.naturality f
-
-中文:
-定理 概形.toSpecΓ_naturality
-  条件: {X Y : 概形.{u}} (f : X ⟶ Y)
-  证明: ΓSpec.adjunction.unit.naturality f
-
-Depends on / 依赖: Spec.adjunction.unit.naturality, adjunction, naturality
+/-
+**AlgebraicGeometry.Scheme.toSpec** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Scheme.toSpecΓ_naturality {X Y : Scheme.{u}} (f : X ⟶ Y) :
     f ≫ Y.toSpecΓ = X.toSpecΓ ≫ Spec.map f.appTop :=
@@ -1364,30 +943,9 @@ theorem Scheme.toSpecΓ_naturality {X Y : Scheme.{u}} (f : X ⟶ Y) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `Scheme.toSpecΓ_appTop` / 定理 `Scheme.toSpecΓ_appTop`
-
-English:
-theorem Scheme.toSpecΓ_appTop
-  given: (X : Scheme.{u})
-  proof: by
-  have := ΓSpec.adjunction.left_triangle_components X
-  dsimp at this
-  rw [← IsIso.eq_comp_inv] at this
-  simp only [Category.id_comp] at this
-  rw [← Quiver.Hom.op_inj.eq_iff]; rw [this]; rw [← op_inv]; rw [IsIso.Iso.inv_inv]
-
-中文:
-定理 概形.toSpecΓ_appTop
-  条件: (X : 概形.{u})
-  证明: by
-  have := ΓSpec.adjunction.left_triangle_components X
-  dsimp at this
-  rw [← IsIso.eq_comp_inv] at this
-  simp only [Category.id_comp] at this
-  rw [← Quiver.Hom.op_inj.eq_iff]; rw [this]; rw [← op_inv]; rw [IsIso.Iso.inv_inv]
-
-Depends on / 依赖: Category, Category.id_comp, IsIso.Iso.inv_inv, IsIso.eq_comp_inv, Quiver, Quiver.Hom.op_inj.eq_iff, Spec.adjunction.left_triangle_components, adjunction, eq_comp_inv, eq_iff, id_comp, inv_inv, left_triangle_components, op_inj, op_inv
+/-
+**AlgebraicGeometry.Scheme.toSpec** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Scheme.toSpecΓ_appTop (X : Scheme.{u}) :
     X.toSpecΓ.appTop = (Scheme.ΓSpecIso Γ(X, ⊤)).hom := by
@@ -1395,34 +953,13 @@ theorem Scheme.toSpecΓ_appTop (X : Scheme.{u}) :
   dsimp at this
   rw [← IsIso.eq_comp_inv] at this
   simp only [Category.id_comp] at this
-  rw [← Quiver.Hom.op_inj.eq_iff]; rw [this]; rw [← op_inv]; rw [IsIso.Iso.inv_inv]
+  rw [← Quiver.Hom.op_inj.eq_iff, this, ← op_inv, IsIso.Iso.inv_inv]
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-theorem `SpecMap_ΓSpecIso_hom` / 定理 `SpecMap_ΓSpecIso_hom`
-
-English:
-theorem SpecMap_ΓSpecIso_hom
-  given: (R : CommRingCat.{u})
-  proof: by
-  have := ΓSpec.adjunction.right_triangle_components (op R)
-  dsimp at this
-  rwa [← IsIso.eq_comp_inv, Category.id_comp, ← Spec.map_inv, IsIso.Iso.inv_inv, eq_comm] at this
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 SpecMap_ΓSpecIso_hom
-  条件: (R : 交换环范畴.{u})
-  证明: by
-  have := ΓSpec.adjunction.right_triangle_components (op R)
-  dsimp at this
-  rwa [← IsIso.eq_comp_inv, Category.id_comp, ← Spec.map_inv, IsIso.Iso.inv_inv, eq_comm] at this
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.id_comp, IsIso.Iso.inv_inv, IsIso.eq_comp_inv, Spec.adjunction.right_triangle_components, Spec.map_inv, adjunction, eq_comm, eq_comp_inv, id_comp, inv_inv, map_inv, right_triangle_components
+/-
+**AlgebraicGeometry.SpecMap_** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem SpecMap_ΓSpecIso_hom (R : CommRingCat.{u}) :
     Spec.map ((Scheme.ΓSpecIso R).hom) = (Spec R).toSpecΓ := by
@@ -1431,103 +968,38 @@ theorem SpecMap_ΓSpecIso_hom (R : CommRingCat.{u}) :
   rwa [← IsIso.eq_comp_inv, Category.id_comp, ← Spec.map_inv, IsIso.Iso.inv_inv, eq_comm] at this
 
 @[reassoc (attr := simp)]
-/--
-theorem `SpecMap_ΓSpecIso_inv_toSpecΓ` / 定理 `SpecMap_ΓSpecIso_inv_toSpecΓ`
-
-English:
-theorem SpecMap_ΓSpecIso_inv_toSpecΓ
-  given: (R : CommRingCat.{u})
-  proof: by
-  rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.hom_inv_id]; rw [Spec.map_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 SpecMap_ΓSpecIso_inv_toSpecΓ
-  条件: (R : 交换环范畴.{u})
-  证明: by
-  rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.hom_inv_id]; rw [Spec.map_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id, Spec.map_comp, Spec.map_id, hom_inv_id, map_comp, map_id
+/-
+**AlgebraicGeometry.SpecMap_** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem SpecMap_ΓSpecIso_inv_toSpecΓ (R : CommRingCat.{u}) :
     Spec.map (Scheme.ΓSpecIso R).inv ≫ (Spec R).toSpecΓ = 𝟙 _ := by
-  rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.hom_inv_id]; rw [Spec.map_id]
+  rw [← SpecMap_ΓSpecIso_hom, ← Spec.map_comp, Iso.hom_inv_id, Spec.map_id]
 
 @[reassoc (attr := simp)]
-/--
-theorem `toSpecΓ_SpecMap_ΓSpecIso_inv` / 定理 `toSpecΓ_SpecMap_ΓSpecIso_inv`
-
-English:
-theorem toSpecΓ_SpecMap_ΓSpecIso_inv
-  given: (R : CommRingCat.{u})
-  proof: by
-  rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.inv_hom_id]; rw [Spec.map_id]
-
-中文:
-定理 toSpecΓ_SpecMap_ΓSpecIso_inv
-  条件: (R : 交换环范畴.{u})
-  证明: by
-  rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.inv_hom_id]; rw [Spec.map_id]
-
-Depends on / 依赖: Iso.inv_hom_id, Spec.map_comp, Spec.map_id, inv_hom_id, map_comp, map_id
+/-
+**AlgebraicGeometry.toSpec** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSpecΓ_SpecMap_ΓSpecIso_inv (R : CommRingCat.{u}) :
     (Spec R).toSpecΓ ≫ Spec.map (Scheme.ΓSpecIso R).inv = 𝟙 _ := by
-  rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.inv_hom_id]; rw [Spec.map_id]
-
-/--
-lemma `Scheme.toSpecΓ_preimage_basicOpen` / 引理 `Scheme.toSpecΓ_preimage_basicOpen`
-
-English:
-lemma Scheme.toSpecΓ_preimage_basicOpen
-  given: (X : Scheme.{u}) (r : Γ(X, ⊤))
-  proof: by
-  rw [← basicOpen_eq_of_affine]; rw [Scheme.preimage_basicOpen]; rw [← Scheme.Hom.appTop]
-  congr
-  rw [Scheme.toSpecΓ_appTop]
-  exact Iso.inv_hom_id_apply (C := CommRingCat) _ _
-
-中文:
-引理 概形.toSpecΓ_preimage_basicOpen
-  条件: (X : 概形.{u}) (r : Γ(X, ⊤))
-  证明: by
-  rw [← basicOpen_eq_of_affine]; rw [Scheme.preimage_basicOpen]; rw [← Scheme.Hom.appTop]
-  congr
-  rw [Scheme.toSpecΓ_appTop]
-  exact Iso.inv_hom_id_apply (C := CommRingCat) _ _
-
-Depends on / 依赖: CommRingCat, Iso.inv_hom_id_apply, Scheme, Scheme.Hom.appTop, Scheme.preimage_basicOpen, Scheme.toSpec, appTop, basicOpen_eq_of_affine, inv_hom_id_apply, preimage_basicOpen
+  rw [← SpecMap_ΓSpecIso_hom, ← Spec.map_comp, Iso.inv_hom_id, Spec.map_id]
+/-
+**AlgebraicGeometry.Scheme.toSpec** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.toSpecΓ_preimage_basicOpen (X : Scheme.{u}) (r : Γ(X, ⊤)) :
     X.toSpecΓ ⁻¹ᵁ PrimeSpectrum.basicOpen r = X.basicOpen r := by
-  rw [← basicOpen_eq_of_affine]; rw [Scheme.preimage_basicOpen]; rw [← Scheme.Hom.appTop]
+  rw [← basicOpen_eq_of_affine, Scheme.preimage_basicOpen, ← Scheme.Hom.appTop]
   congr
   rw [Scheme.toSpecΓ_appTop]
   exact Iso.inv_hom_id_apply (C := CommRingCat) _ _
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ΓSpecIso_inv_ΓSpec_adjunction_homEquiv` / 引理 `ΓSpecIso_inv_ΓSpec_adjunction_homEquiv`
-
-English:
-lemma ΓSpecIso_inv_ΓSpec_adjunction_homEquiv
-  given: {X : Scheme.{u}} {B : CommRingCat} (φ : B ⟶ Γ(X, ⊤))
-  proof: by
-  simp only [Adjunction.homEquiv_apply, Scheme.Spec_map, Opens.map_top, Scheme.Hom.comp_app]
-  simp
-
-中文:
-引理 ΓSpecIso_inv_ΓSpec_adjunction_homEquiv
-  条件: {X : 概形.{u}} {B : 交换环范畴} (φ : B ⟶ Γ(X, ⊤))
-  证明: by
-  simp only [Adjunction.homEquiv_apply, Scheme.Spec_map, Opens.map_top, Scheme.Hom.comp_app]
-  simp
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_apply, Opens.map_top, Scheme, Scheme.Hom.comp_app, Scheme.Spec_map, Spec_map, comp_app, homEquiv_apply, map_top
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ΓSpecIso_inv_ΓSpec_adjunction_homEquiv {X : Scheme.{u}} {B : CommRingCat} (φ : B ⟶ Γ(X, ⊤)) :
     (Scheme.ΓSpecIso B).inv ≫ ((ΓSpec.adjunction.homEquiv X (op B)) φ.op).appTop = φ := by
@@ -1535,40 +1007,18 @@ lemma ΓSpecIso_inv_ΓSpec_adjunction_homEquiv {X : Scheme.{u}} {B : CommRingCat
   simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ΓSpec_adjunction_homEquiv_eq` / 引理 `ΓSpec_adjunction_homEquiv_eq`
-
-English:
-lemma ΓSpec_adjunction_homEquiv_eq
-  given: {X : Scheme.{u}} {B : CommRingCat} (φ : B ⟶ Γ(X, ⊤))
-  proof: by
-  rw [← Iso.inv_comp_eq]; rw [ΓSpecIso_inv_ΓSpec_adjunction_homEquiv]
-
-中文:
-引理 ΓSpec_adjunction_homEquiv_eq
-  条件: {X : 概形.{u}} {B : 交换环范畴} (φ : B ⟶ Γ(X, ⊤))
-  证明: by
-  rw [← Iso.inv_comp_eq]; rw [ΓSpecIso_inv_ΓSpec_adjunction_homEquiv]
-
-Depends on / 依赖: Iso.inv_comp_eq, inv_comp_eq
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ΓSpec_adjunction_homEquiv_eq {X : Scheme.{u}} {B : CommRingCat} (φ : B ⟶ Γ(X, ⊤)) :
     ((ΓSpec.adjunction.homEquiv X (op B)) φ.op).appTop = (Scheme.ΓSpecIso B).hom ≫ φ := by
-  rw [← Iso.inv_comp_eq]; rw [ΓSpecIso_inv_ΓSpec_adjunction_homEquiv]
+  rw [← Iso.inv_comp_eq, ΓSpecIso_inv_ΓSpec_adjunction_homEquiv]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `ΓSpecIso_obj_hom` / 定理 `ΓSpecIso_obj_hom`
-
-English:
-theorem ΓSpecIso_obj_hom
-  given: {X : Scheme.{u}} (U : X.Opens)
-  proof: by simp
-
-中文:
-定理 ΓSpecIso_obj_hom
-  条件: {X : 概形.{u}} (U : X.Opens)
-  证明: by simp
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ΓSpecIso_obj_hom {X : Scheme.{u}} (U : X.Opens) :
     (Scheme.ΓSpecIso Γ(X, U)).hom = (Spec.map U.topIso.inv).appTop ≫
@@ -1576,110 +1026,82 @@ theorem ΓSpecIso_obj_hom {X : Scheme.{u}} (U : X.Opens) :
 
 /-! Immediate consequences of the adjunction. -/
 
-/--
-Definition of `Spec.fullyFaithfulToLocallyRingedSpace` / `Spec.fullyFaithfulToLocallyRingedSpace` 的定义
+/-- The functor `Spec.toLocallyRingedSpace : CommRingCatᵒᵖ ⥤ LocallyRingedSpace`
+is fully faithful. -/
+/-
+**AlgebraicGeometry.Spec.fullyFaithfulToLocallyRingedSpace** 是 Mathlib 中的一个定义，位于
+命名空间 `AlgebraicGeometry.Spec`。
+形式化陈述：AlgebraicGeometry.Spec.toLocallyRingedSpace.FullyFaithful
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Spec.fullyFaithfulToLocallyRingedSpace
-  signature: : Spec.toLocallyRingedSpace.FullyFaithful
-  body: ΓSpec.locallyRingedSpaceAdjunction.fullyFaithfulROfIsIsoCounit
-
-中文:
-定义 Spec.fullyFaithfulToLocallyRingedSpace
-  签名: : Spec.toLocallyRingedSpace.满忠实
-  定义体: ΓSpec.locallyRingedSpaceAdjunction.fullyFaithfulROfIsIsoCounit
-
-Depends on / 依赖: Spec.locallyRingedSpaceAdjunction.fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit, locallyRingedSpaceAdjunction
+--- 原说明 ---
+The functor `Spec.toLocallyRingedSpace : CommRingCatᵒᵖ ⥤ LocallyRingedSpace`
+is fully faithful.
 -/
 def Spec.fullyFaithfulToLocallyRingedSpace : Spec.toLocallyRingedSpace.FullyFaithful :=
   ΓSpec.locallyRingedSpaceAdjunction.fullyFaithfulROfIsIsoCounit
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Spec is a full functor. -/
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Spec.toLocallyRingedSpace.Full
-  body: Spec.fullyFaithfulToLocallyRingedSpace.full
-
-中文:
-实例 :
-  签名: Spec.toLocallyRingedSpace.满
-  定义体: Spec.fullyFaithfulToLocallyRingedSpace.full
-
-Depends on / 依赖: Spec.fullyFaithfulToLocallyRingedSpace.full, fullyFaithfulToLocallyRingedSpace
+--- 原说明 ---
+Spec is a full functor.
 -/
 instance : Spec.toLocallyRingedSpace.Full :=
   Spec.fullyFaithfulToLocallyRingedSpace.full
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Spec is a faithful functor. -/
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Spec.toLocallyRingedSpace.Faithful
-  body: Spec.fullyFaithfulToLocallyRingedSpace.faithful
-
-中文:
-实例 :
-  签名: Spec.toLocallyRingedSpace.忠实
-  定义体: Spec.fullyFaithfulToLocallyRingedSpace.faithful
-
-Depends on / 依赖: Spec.fullyFaithfulToLocallyRingedSpace.faithful, faithful, fullyFaithfulToLocallyRingedSpace
+--- 原说明 ---
+Spec is a faithful functor.
 -/
 instance : Spec.toLocallyRingedSpace.Faithful :=
   Spec.fullyFaithfulToLocallyRingedSpace.faithful
 
-/--
-Definition of `Spec.fullyFaithful` / `Spec.fullyFaithful` 的定义
+/-- The functor `Spec : CommRingCatᵒᵖ ⥤ Scheme` is fully faithful. -/
+/-
+**AlgebraicGeometry.Spec.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeome
+try.Spec`。
+形式化陈述：AlgebraicGeometry.Scheme.Spec.FullyFaithful
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Spec.fullyFaithful
-  signature: : Scheme.Spec.FullyFaithful
-  body: ΓSpec.adjunction.fullyFaithfulROfIsIsoCounit
-
-中文:
-定义 Spec.fullyFaithful
-  签名: : 概形.Spec.满忠实
-  定义体: ΓSpec.adjunction.fullyFaithfulROfIsIsoCounit
-
-Depends on / 依赖: Spec.adjunction.fullyFaithfulROfIsIsoCounit, adjunction, fullyFaithfulROfIsIsoCounit
+--- 原说明 ---
+The functor `Spec : CommRingCatᵒᵖ ⥤ Scheme` is fully faithful.
 -/
 def Spec.fullyFaithful : Scheme.Spec.FullyFaithful :=
   ΓSpec.adjunction.fullyFaithfulROfIsIsoCounit
 
-/--
-Instance `Spec.full` / 实例 `Spec.full`
+/-- Spec is a full functor. -/
+/-
+**AlgebraicGeometry.Spec.full** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.Spec`
+。
+形式化陈述：AlgebraicGeometry.Scheme.Spec.Full
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 
-English:
-instance Spec.full
-  signature: : Scheme.Spec.Full
-  body: Spec.fullyFaithful.full
-
-中文:
-实例 Spec.full
-  签名: : 概形.Spec.满
-  定义体: Spec.fullyFaithful.full
-
-Depends on / 依赖: Spec.fullyFaithful.full, fullyFaithful
+--- 原说明 ---
+Spec is a full functor.
 -/
 instance Spec.full : Scheme.Spec.Full :=
   Spec.fullyFaithful.full
 
-/--
-Instance `Spec.faithful` / 实例 `Spec.faithful`
+/-- Spec is a faithful functor. -/
+/-
+**AlgebraicGeometry.Spec.faithful** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.S
+pec`。
+形式化陈述：AlgebraicGeometry.Scheme.Spec.Faithful
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 
-English:
-instance Spec.faithful
-  signature: : Scheme.Spec.Faithful
-  body: Spec.fullyFaithful.faithful
-
-中文:
-实例 Spec.faithful
-  签名: : 概形.Spec.忠实
-  定义体: Spec.fullyFaithful.faithful
-
-Depends on / 依赖: Spec.fullyFaithful.faithful, faithful, fullyFaithful
+--- 原说明 ---
+Spec is a faithful functor.
 -/
 instance Spec.faithful : Scheme.Spec.Faithful :=
   Spec.fullyFaithful.faithful
@@ -1688,196 +1110,164 @@ section
 
 variable {R S : CommRingCat.{u}} {φ ψ : R ⟶ S} (f : Spec S ⟶ Spec R)
 
-/--
-lemma `Spec.map_inj` / 引理 `Spec.map_inj`
-
-English:
-lemma Spec.map_inj
-  statement: Spec.map φ = Spec.map ψ ↔ φ = ψ
-  proof: by
-  rw [iff_comm]; rw [← Quiver.Hom.op_inj.eq_iff]; rw [← Scheme.Spec.map_injective.eq_iff]
-  rfl
-
-中文:
-引理 Spec.map_inj
-  结论: Spec.map φ = Spec.map ψ ↔ φ = ψ
-  证明: by
-  rw [iff_comm]; rw [← Quiver.Hom.op_inj.eq_iff]; rw [← Scheme.Spec.map_injective.eq_iff]
-  rfl
-
-Depends on / 依赖: Quiver, Quiver.Hom.op_inj.eq_iff, Scheme, Scheme.Spec.map_injective.eq_iff, eq_iff, iff_comm, map_injective, op_inj
+/-
+**AlgebraicGeometry.Spec.map_inj** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.Sp
+ec`。
+形式化陈述：∀ {R S : CommRingCat} {φ ψ : R ⟶ S}, AlgebraicGeometry.Spec.map φ = Algebr
+aicGeometry.Spec.map ψ ↔ φ = ψ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_comm`：∀ {a b : Prop}, (a ↔ b) ↔ (b ↔ a)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Quiver.Hom.op_inj`：Quiver.Hom.op_inj {X Y : C} : Function.Injective (Qui
+ver.Hom.op : (X ⟶ Y) -> (Opposite.op Y ⟶ Opposite.op X))
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `AlgebraicGeometry.Spec.faithful`：AlgebraicGeometry.Scheme.Spec.Faithful
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma Spec.map_inj : Spec.map φ = Spec.map ψ ↔ φ = ψ := by
-  rw [iff_comm]; rw [← Quiver.Hom.op_inj.eq_iff]; rw [← Scheme.Spec.map_injective.eq_iff]
+  rw [iff_comm, ← Quiver.Hom.op_inj.eq_iff, ← Scheme.Spec.map_injective.eq_iff]
   rfl
-
-/--
-lemma `Spec.map_injective` / 引理 `Spec.map_injective`
-
-English:
-lemma Spec.map_injective
-  given: {R S : CommRingCat}
-  statement: Function.Injective (Spec.map : (R ⟶ S) -> _)
-  proof: fun _ _ => Spec.map_inj.mp
-
-@[simp]
-
-中文:
-引理 Spec.map_injective
-  条件: {R S : 交换环范畴}
-  结论: 函数.单射 (Spec.map : (R ⟶ S) -> _)
-  证明: fun _ _ => Spec.map_inj.mp
-
-@[simp]
-
-Depends on / 依赖: Spec.map_inj.mp, map_inj
+/-
+**AlgebraicGeometry.Spec.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.Spec`。
+形式化陈述：∀ {R S : CommRingCat}, Function.Injective AlgebraicGeometry.Spec.map
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AlgebraicGeometry.Spec.map_inj`：∀ {R S : CommRingCat} {φ ψ : R ⟶ S}, Alg
+ebraicGeometry.Spec.map φ = AlgebraicGeometry.Spec.map ψ ↔ φ = ψ
 -/
-lemma Spec.map_injective {R S : CommRingCat} : Function.Injective (Spec.map : (R ⟶ S) -> _) :=
-  fun _ _ => Spec.map_inj.mp
+lemma Spec.map_injective {R S : CommRingCat} : Function.Injective (Spec.map : (R ⟶ S) → _) :=
+  fun _ _ ↦ Spec.map_inj.mp
 
 @[simp]
-/--
-lemma `Spec.map_eq_id` / 引理 `Spec.map_eq_id`
-
-English:
-lemma Spec.map_eq_id
-  given: {R : CommRingCat} {ϕ : R ⟶ R}
-  statement: Spec.map ϕ = 𝟙 (Spec R) ↔ ϕ = 𝟙 R
-  proof: by
-  simp [← map_inj]
-
-中文:
-引理 Spec.map_eq_id
-  条件: {R : 交换环范畴} {ϕ : R ⟶ R}
-  结论: Spec.map ϕ = 𝟙 (Spec R) ↔ ϕ = 𝟙 R
-  证明: by
-  simp [← map_inj]
-
-Depends on / 依赖: map_inj
+/-
+**AlgebraicGeometry.Spec.map_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.
+Spec`。
+形式化陈述：∀ {R : CommRingCat} {ϕ : R ⟶ R},   AlgebraicGeometry.Spec.map ϕ = Category
+Theory.CategoryStruct.id (AlgebraicGeometry.Spec R) ↔     ϕ = CategoryTheory.Cat
+egoryStruct.id R
+参数：AlgebraicGeometry.Spec R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Spec.map_id`：∀ (R : CommRingCat),   AlgebraicGeometry.
+Spec.map (CategoryTheory.CategoryStruct.id R) =     CategoryTheory.CategoryStruc
+t.id (AlgebraicGeom…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma Spec.map_eq_id {R : CommRingCat} {ϕ : R ⟶ R} : Spec.map ϕ = 𝟙 (Spec R) ↔ ϕ = 𝟙 R := by
   simp [← map_inj]
 
-/--
-Definition of `Spec.preimage` / `Spec.preimage` 的定义
+/-- The preimage under Spec. -/
+/-
+**AlgebraicGeometry.Spec.preimage** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.S
+pec`。
+形式化陈述：{R S : CommRingCat} → (AlgebraicGeometry.Spec S ⟶ AlgebraicGeometry.Spec R
+) → (R ⟶ S)
+参数：AlgebraicGeometry.Spec S ⟶ AlgebraicGeometry.Spec R；R ⟶ S。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Spec.full`：AlgebraicGeometry.Scheme.Spec.Full
 
-English:
-definition Spec.preimage
-  signature: : R ⟶ S
-  body: (Scheme.Spec.preimage f).unop
-
-中文:
-定义 Spec.原像
-  签名: : R ⟶ S
-  定义体: (Scheme.Spec.preimage f).unop
-
-Depends on / 依赖: Scheme, Scheme.Spec.preimage, preimage
+--- 原说明 ---
+The preimage under Spec.
 -/
 def Spec.preimage : R ⟶ S := (Scheme.Spec.preimage f).unop
-
-/--
-lemma `Spec.map_preimage` / 引理 `Spec.map_preimage`
-
-English:
-lemma Spec.map_preimage
-  statement: Spec.map (Spec.preimage f) = f
-  proof: Scheme.Spec.map_preimage f
-
-中文:
-引理 Spec.map_preimage
-  结论: Spec.map (Spec.原像 f) = f
-  证明: Scheme.Spec.map_preimage f
+/-
+**AlgebraicGeometry.Spec.map_preimage** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeomet
+ry.Spec`。
+形式化陈述：∀ {R S : CommRingCat} (f : AlgebraicGeometry.Spec S ⟶ AlgebraicGeometry.Sp
+ec R),   AlgebraicGeometry.Spec.map (AlgebraicGeometry.Spec.preimage f) = f
+参数：f : AlgebraicGeometry.Spec S ⟶ AlgebraicGeometry.Spec R；AlgebraicGeometry.Spe
+c.preimage f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `AlgebraicGeometry.Spec.full`：AlgebraicGeometry.Scheme.Spec.Full
 -/
 @[simp] lemma Spec.map_preimage : Spec.map (Spec.preimage f) = f := Scheme.Spec.map_preimage f
-
-/--
-lemma `Spec.map_preimage_unop` / 引理 `Spec.map_preimage_unop`
-
-English:
-lemma Spec.map_preimage_unop
-  given: (f : Spec R ⟶ Spec S)
-  proof: Spec.fullyFaithful.map_preimage _
-
-中文:
-引理 Spec.map_preimage_unop
-  条件: (f : Spec R ⟶ Spec S)
-  证明: Spec.fullyFaithful.map_preimage _
+/-
+**AlgebraicGeometry.Spec.map_preimage_unop** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry.Spec`。
+形式化陈述：∀ {R S : CommRingCat} (f : AlgebraicGeometry.Spec R ⟶ AlgebraicGeometry.Sp
+ec S),   AlgebraicGeometry.Spec.map (AlgebraicGeometry.Spec.fullyFaithful.preima
+ge f).unop = f
+参数：f : AlgebraicGeometry.Spec R ⟶ AlgebraicGeometry.Spec S；AlgebraicGeometry.Spe
+c.fullyFaithful.preimage f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.map_preimage`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
 -/
 @[simp] lemma Spec.map_preimage_unop (f : Spec R ⟶ Spec S) :
     Spec.map (Spec.fullyFaithful.preimage f).unop = f := Spec.fullyFaithful.map_preimage _
 
 variable (φ) in
-/--
-lemma `Spec.preimage_map` / 引理 `Spec.preimage_map`
-
-English:
-lemma Spec.preimage_map
-  statement: Spec.preimage (Spec.map φ) = φ
-  proof: Spec.map_injective (Spec.map_preimage (Spec.map φ))
-
-中文:
-引理 Spec.preimage_map
-  结论: Spec.原像 (Spec.map φ) = φ
-  证明: Spec.map_injective (Spec.map_preimage (Spec.map φ))
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.hom_ext, SimplexCategory, SimplexCategory.Hom.ext, hom_ext
+/-
+**AlgebraicGeometry.Spec.preimage_map** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeomet
+ry.Spec`。
+形式化陈述：∀ {R S : CommRingCat} (φ : R ⟶ S), AlgebraicGeometry.Spec.preimage (Algebr
+aicGeometry.Spec.map φ) = φ
+参数：φ : R ⟶ S；AlgebraicGeometry.Spec.map φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Spec.map_injective`：∀ {R S : CommRingCat}, Function.In
+jective AlgebraicGeometry.Spec.map
+· 使用定理 `AlgebraicGeometry.Spec.map_preimage`：∀ {R S : CommRingCat} (f : Algebrai
+cGeometry.Spec S ⟶ AlgebraicGeometry.Spec R),   AlgebraicGeometry.Spec.map (Alge
+braicGeometry.Spec.preima…
 -/
 @[simp] lemma Spec.preimage_map : Spec.preimage (Spec.map φ) = φ :=
   Spec.map_injective (Spec.map_preimage (Spec.map φ))
 
-/--
-lemma `Spec.map_surjective` / 引理 `Spec.map_surjective`
+/-- Useful for replacing `f` by `Spec.map φ` everywhere in proofs. -/
+/-
+**AlgebraicGeometry.Spec.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry.Spec`。
+形式化陈述：∀ {R S : CommRingCat}, Function.Surjective AlgebraicGeometry.Spec.map
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Spec.map_preimage`：∀ {R S : CommRingCat} (f : Algebrai
+cGeometry.Spec S ⟶ AlgebraicGeometry.Spec R),   AlgebraicGeometry.Spec.map (Alge
+braicGeometry.Spec.preima…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Spec.map_surjective
-  given: {R S : CommRingCat}
-  proof: by
-  intro f
-  use Spec.preimage f
-  simp
-
-中文:
-引理 Spec.map_surjective
-  条件: {R S : 交换环范畴}
-  证明: by
-  intro f
-  use Spec.preimage f
-  simp
-
-Depends on / 依赖: Spec.preimage, preimage
+--- 原说明 ---
+Useful for replacing `f` by `Spec.map φ` everywhere in proofs.
 -/
 lemma Spec.map_surjective {R S : CommRingCat} :
-    Function.Surjective (Spec.map : (R ⟶ S) -> _) := by
+    Function.Surjective (Spec.map : (R ⟶ S) → _) := by
   intro f
   use Spec.preimage f
   simp
 
 /-- Spec is fully faithful -/
 @[simps]
-/--
-Definition of `Spec.homEquiv` / `Spec.homEquiv` 的定义
+/-
+**AlgebraicGeometry.Spec.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.S
+pec`。
+形式化陈述：{R S : CommRingCat} → (AlgebraicGeometry.Spec S ⟶ AlgebraicGeometry.Spec R
+) ≃ (R ⟶ S)
+参数：AlgebraicGeometry.Spec S ⟶ AlgebraicGeometry.Spec R；R ⟶ S。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Spec.map_preimage`：∀ {R S : CommRingCat} (f : Algebrai
+cGeometry.Spec S ⟶ AlgebraicGeometry.Spec R),   AlgebraicGeometry.Spec.map (Alge
+braicGeometry.Spec.preima…
+· 使用定理 `AlgebraicGeometry.Spec.preimage_map`：∀ {R S : CommRingCat} (φ : R ⟶ S), 
+AlgebraicGeometry.Spec.preimage (AlgebraicGeometry.Spec.map φ) = φ
 
-English:
-definition Spec.homEquiv
-  signature: {R S : CommRingCat}
-  body: Spec.preimage
-  invFun := Spec.map
-  left_inv := Spec.map_preimage
-  right_inv := Spec.preimage_map
-
-@[simp]
-
-中文:
-定义 Spec.homEquiv
-  签名: {R S : 交换环范畴}
-  定义体: Spec.preimage
-  invFun := Spec.map
-  left_inv := Spec.map_preimage
-  right_inv := Spec.preimage_map
-
-@[simp]
-
-Depends on / 依赖: Spec.preimage, preimage
+--- 原说明 ---
+Spec is fully faithful
 -/
 def Spec.homEquiv {R S : CommRingCat} : (Spec S ⟶ Spec R) ≃ (R ⟶ S) where
   toFun := Spec.preimage
@@ -1886,45 +1276,61 @@ def Spec.homEquiv {R S : CommRingCat} : (Spec S ⟶ Spec R) ≃ (R ⟶ S) where
   right_inv := Spec.preimage_map
 
 @[simp]
-/--
-lemma `Spec.preimage_id` / 引理 `Spec.preimage_id`
-
-English:
-lemma Spec.preimage_id
-  given: {R : CommRingCat}
-  statement: Spec.preimage (𝟙 (Spec R)) = 𝟙 R
-  proof: Spec.map_injective (by simp)
-
-@[simp, reassoc]
-
-中文:
-引理 Spec.preimage_id
-  条件: {R : 交换环范畴}
-  结论: Spec.原像 (𝟙 (Spec R)) = 𝟙 R
-  证明: Spec.map_injective (by simp)
-
-@[simp, reassoc]
-
-Depends on / 依赖: Spec.map_injective, map_injective
+/-
+**AlgebraicGeometry.Spec.preimage_id** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.Spec`。
+形式化陈述：∀ {R : CommRingCat},   AlgebraicGeometry.Spec.preimage (CategoryTheory.Cat
+egoryStruct.id (AlgebraicGeometry.Spec R)) =     CategoryTheory.CategoryStruct.i
+d R
+参数：CategoryTheory.CategoryStruct.id (AlgebraicGeometry.Spec R)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Spec.map_injective`：∀ {R S : CommRingCat}, Function.In
+jective AlgebraicGeometry.Spec.map
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Spec.map_preimage`：∀ {R S : CommRingCat} (f : Algebrai
+cGeometry.Spec S ⟶ AlgebraicGeometry.Spec R),   AlgebraicGeometry.Spec.map (Alge
+braicGeometry.Spec.preima…
+· 使用定理 `AlgebraicGeometry.Spec.map_id`：∀ (R : CommRingCat),   AlgebraicGeometry.
+Spec.map (CategoryTheory.CategoryStruct.id R) =     CategoryTheory.CategoryStruc
+t.id (AlgebraicGeom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Spec.preimage_id {R : CommRingCat} : Spec.preimage (𝟙 (Spec R)) = 𝟙 R :=
   Spec.map_injective (by simp)
 
 @[simp, reassoc]
-/--
-lemma `Spec.preimage_comp` / 引理 `Spec.preimage_comp`
-
-English:
-lemma Spec.preimage_comp
-  given: {R S T : CommRingCat} (f : Spec R ⟶ Spec S) (g : Spec S ⟶ Spec T)
-  proof: Spec.map_injective (by simp)
-
-中文:
-引理 Spec.preimage_comp
-  条件: {R S T : 交换环范畴} (f : Spec R ⟶ Spec S) (g : Spec S ⟶ Spec T)
-  证明: Spec.map_injective (by simp)
-
-Depends on / 依赖: Spec.map_injective, map_injective
+/-
+**AlgebraicGeometry.Spec.preimage_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.Spec`。
+形式化陈述：∀ {R S T : CommRingCat} (f : AlgebraicGeometry.Spec R ⟶ AlgebraicGeometry.
+Spec S)   (g : AlgebraicGeometry.Spec S ⟶ AlgebraicGeometry.Spec T),   Algebraic
+Geometry.Spec.preimage (CategoryTheory.CategoryStruct.comp f g) =     CategoryTh
+eory.CategoryStruct.comp (AlgebraicGeometry.Spec.preimage g) (AlgebraicGeometry.
+Spec.preimage f)
+参数：f : AlgebraicGeometry.Spec R ⟶ AlgebraicGeometry.Spec S；g : AlgebraicGeometry
+.Spec S ⟶ AlgebraicGeometry.Spec T；CategoryTheory.CategoryStruct.comp f g；Algebr
+aicGeometry.Spec.preimage g；AlgebraicGeometry.Spec.preimage f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Spec.map_injective`：∀ {R S : CommRingCat}, Function.In
+jective AlgebraicGeometry.Spec.map
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Spec.map_preimage`：∀ {R S : CommRingCat} (f : Algebrai
+cGeometry.Spec S ⟶ AlgebraicGeometry.Spec R),   AlgebraicGeometry.Spec.map (Alge
+braicGeometry.Spec.preima…
+· 使用定理 `AlgebraicGeometry.Spec.map_comp`：∀ {R S T : CommRingCat} (f : R ⟶ S) (g 
+: S ⟶ T),   AlgebraicGeometry.Spec.map (CategoryTheory.CategoryStruct.comp f g) 
+=     CategoryTheory.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Spec.preimage_comp {R S T : CommRingCat} (f : Spec R ⟶ Spec S) (g : Spec S ⟶ Spec T) :
     Spec.preimage (f ≫ g) = Spec.preimage g ≫ Spec.preimage f :=
@@ -1932,81 +1338,35 @@ lemma Spec.preimage_comp {R S T : CommRingCat} (f : Spec R ⟶ Spec S) (g : Spec
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Reflective Spec.toLocallyRingedSpace
-  body: Γ.rightOp
-  adj := ΓSpec.locallyRingedSpaceAdjunction
-
-中文:
-实例 :
-  签名: 反射 Spec.toLocallyRingedSpace
-  定义体: Γ.rightOp
-  adj := ΓSpec.locallyRingedSpaceAdjunction
-
-Depends on / 依赖: rightOp
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Reflective Spec.toLocallyRingedSpace where
   L := Γ.rightOp
   adj := ΓSpec.locallyRingedSpaceAdjunction
-
-/--
-Instance `Spec.reflective` / 实例 `Spec.reflective`
-
-English:
-instance Spec.reflective
-  signature: : Reflective Scheme.Spec where
-  body: Scheme.Γ.rightOp
-  adj := ΓSpec.adjunction
-
-中文:
-实例 Spec.reflective
-  签名: : 反射 概形.Spec where
-  定义体: Scheme.Γ.rightOp
-  adj := ΓSpec.adjunction
-
-Depends on / 依赖: Scheme, rightOp
+/-
+**AlgebraicGeometry.Spec.reflective** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry
+.Spec`。
+形式化陈述：CategoryTheory.Reflective AlgebraicGeometry.Scheme.Spec
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Spec.full`：AlgebraicGeometry.Scheme.Spec.Full
+· 使用定理 `AlgebraicGeometry.Spec.faithful`：AlgebraicGeometry.Scheme.Spec.Faithful
 -/
 instance Spec.reflective : Reflective Scheme.Spec where
   L := Scheme.Γ.rightOp
   adj := ΓSpec.adjunction
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LocallyRingedSpace.Γ.IsRightAdjoint
-  body: ΓSpec.locallyRingedSpaceAdjunction.rightOp.isRightAdjoint
-
-中文:
-实例 :
-  签名: LocallyRinged空间.Γ.是右伴随
-  定义体: ΓSpec.locallyRingedSpaceAdjunction.rightOp.isRightAdjoint
-
-Depends on / 依赖: Spec.locallyRingedSpaceAdjunction.rightOp.isRightAdjoint, isRightAdjoint, locallyRingedSpaceAdjunction, rightOp
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LocallyRingedSpace.Γ.IsRightAdjoint :=
   ΓSpec.locallyRingedSpaceAdjunction.rightOp.isRightAdjoint
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Scheme.Γ.IsRightAdjoint
-  body: ΓSpec.adjunction.rightOp.isRightAdjoint
-
-中文:
-实例 :
-  签名: 概形.Γ.是右伴随
-  定义体: ΓSpec.adjunction.rightOp.isRightAdjoint
-
-Depends on / 依赖: Spec.adjunction.rightOp.isRightAdjoint, adjunction, isRightAdjoint, rightOp
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Scheme.Γ.IsRightAdjoint := ΓSpec.adjunction.rightOp.isRightAdjoint
 
 end AlgebraicGeometry
+

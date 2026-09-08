@@ -36,148 +36,84 @@ variable [Group G] [Group G']
 variable [DistribMulAction G M] [DistribMulAction G' M]
 variable [SMulCommClass G R M] [SMulCommClass G' R M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action on a `Basis` by acting on each element.
 
-English:
-instance :
-  signature: SMul G (Basis ι R M)
-  body: b.map DistribMulAction.toLinearEquiv _ _ g
+See also `Basis.unitsSMul` and `Basis.groupSMul`, for the cases when a different action is applied
+to each basis element. -/
+/-
+**Module.Basis.** 是 Mathlib 中的一个实例，位于命名空间 `Module.Basis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+The action on a `Basis` by acting on each element.
 
-中文:
-实例 :
-  签名: 标量乘法 G (基 ι R M)
-  定义体: b.map DistribMulAction.toLinearEquiv _ _ g
-
-@[simp]
-
-Depends on / 依赖: DistribMulAction, DistribMulAction.toLinearEquiv, b.map, toLinearEquiv
+See also `Basis.unitsSMul` and `Basis.groupSMul`, for the cases when a different
+ action is applied
+to each basis element.
 -/
 instance : SMul G (Basis ι R M) where
-smul g b := b.map DistribMulAction.toLinearEquiv _ _ g
+  smul g b := b.map <| DistribMulAction.toLinearEquiv _ _ g
 
 @[simp]
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: (g : G) (b : Basis ι R M) (i : ι)
-  statement: (g • b) i = g • b i
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: (g : G) (b : 基 ι R M) (i : ι)
-  结论: (g • b) i = g • b i
-  证明: rfl
+/-
+**Module.Basis.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：smul_apply (g : G) (b : Basis ι R M) (i : ι) : (g • b) i = g • b i
+参数：g : G；b : Basis ι R M；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply (g : G) (b : Basis ι R M) (i : ι) : (g • b) i = g • b i := rfl
-
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: (g : G) (b : Basis ι R M)
-  statement: ⇑(g • b) = g • ⇑b
-  proof: rfl
-
-中文:
-定理 coe_smul
-  条件: (g : G) (b : 基 ι R M)
-  结论: ⇑(g • b) = g • ⇑b
-  证明: rfl
+/-
+**Module.Basis.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_4} [inst : Semiring R] [inst_1
+ : AddCommMonoid M]   [inst_2 : _root_.Module R M] {G : Type u_5} [inst_3 : Grou
+p G] [inst_4 : DistribMulAction G M]   [inst_5 : SMulCommClass G R M] (g : G) (b
+ : Module.Basis ι R M), ⇑(g • b) = g • ⇑b
+参数：g : G；b : Module.Basis ι R M；g • b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[norm_cast] theorem coe_smul (g : G) (b : Basis ι R M) : ⇑(g • b) = g • ⇑b := rfl
 
 /-- When the group in question is the automorphisms, `•` coincides with `Basis.map`. -/
 @[simp]
-/--
-theorem `smul_eq_map` / 定理 `smul_eq_map`
+/-
+**Module.Basis.smul_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：smul_eq_map (g : M ≃ₗ[R] M) (b : Basis ι R M) : g • b = b.map g
+参数：g : M ≃ₗ[R] M；b : Basis ι R M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem smul_eq_map
-  given: (g : M ≃ₗ[R] M) (b : Basis ι R M)
-  statement: g • b = b.map g
-  proof: rfl
-
-中文:
-定理 smul_eq_map
-  条件: (g : M ≃ₗ[R] M) (b : 基 ι R M)
-  结论: g • b = b.map g
-  证明: rfl
+--- 原说明 ---
+When the group in question is the automorphisms, `•` coincides with `Basis.map`.
 -/
 theorem smul_eq_map (g : M ≃ₗ[R] M) (b : Basis ι R M) : g • b = b.map g := rfl
-
-/--
-theorem `repr_smul` / 定理 `repr_smul`
-
-English:
-theorem repr_smul
-  given: (g : G) (b : Basis ι R M)
-  proof: rfl
-
-中文:
-定理 repr_smul
-  条件: (g : G) (b : 基 ι R M)
-  证明: rfl
+/-
+**Module.Basis.repr_smul** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：∀ {ι : Type u_1} {R : Type u_2} {M : Type u_4} [inst : Semiring R] [inst_1
+ : AddCommMonoid M]   [inst_2 : _root_.Module R M] {G : Type u_5} [inst_3 : Grou
+p G] [inst_4 : DistribMulAction G M]   [inst_5 : SMulCommClass G R M] (g : G) (b
+ : Module.Basis ι R M),   (g • b).repr = (DistribMulAction.toLinearEquiv R M g).
+symm ≪≫ₗ b.repr
+参数：g : G；b : Module.Basis ι R M；g • b；DistribMulAction.toLinearEquiv R M g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem repr_smul (g : G) (b : Basis ι R M) :
     (g • b).repr = (DistribMulAction.toLinearEquiv _ _ g).symm.trans b.repr := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction G (Basis ι R M)
-  body: Function.Injective.mulAction _ DFunLike.coe_injective coe_smul
-
-中文:
-实例 :
-  签名: 乘法作用 G (基 ι R M)
-  定义体: Function.Injective.mulAction _ DFunLike.coe_injective coe_smul
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, Function, Function.Injective.mulAction, Injective, coe_injective, coe_smul, mulAction
+/-
+**Module.Basis.** 是 Mathlib 中的一个实例，位于命名空间 `Module.Basis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction G (Basis ι R M) :=
   Function.Injective.mulAction _ DFunLike.coe_injective coe_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: G G' M] : SMulCommClass G G' (Basis ι R M) where
-  body: DFunLike.ext _ _ fun _ => smul_comm _ _ _
-
-中文:
-实例 [标量交换类
-  签名: G G' M] : 标量交换类 G G' (基 ι R M) where
-  定义体: DFunLike.ext _ _ fun _ => smul_comm _ _ _
-
-Depends on / 依赖: DFunLike, DFunLike.ext, smul_comm
+/-
+**Module.Basis.** 是 Mathlib 中的一个实例，位于命名空间 `Module.Basis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass G G' M] : SMulCommClass G G' (Basis ι R M) where
   smul_comm _g _g' _b := DFunLike.ext _ _ fun _ => smul_comm _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: G G'] [IsScalarTower G G' M] : IsScalarTower G G' (Basis ι R M) where
-  body: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
-
-中文:
-实例 [标量乘法
-  签名: G G'] [标量塔 G G' M] : 标量塔 G G' (基 ι R M) where
-  定义体: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
-
-Depends on / 依赖: DFunLike, DFunLike.ext, smul_assoc
+/-
+**Module.Basis.** 是 Mathlib 中的一个实例，位于命名空间 `Module.Basis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul G G'] [IsScalarTower G G' M] : IsScalarTower G G' (Basis ι R M) where
   smul_assoc _g _g' _b := DFunLike.ext _ _ fun _ => smul_assoc _ _ _
@@ -186,41 +122,29 @@ end SMul
 
 section CommSemiring
 
-variable {v : ι -> M} {x y : M}
+variable {v : ι → M} {x y : M}
 
-/--
-theorem `groupSMul_span_eq_top` / 定理 `groupSMul_span_eq_top`
-
-English:
-theorem groupSMul_span_eq_top
-  statement: {G : Type*} [Group G] [SMul G R] [MulAction G M]
-  proof: by
-  rw [eq_top_iff]
-  intro j hj
-  rw [← hv] at hj
-  rw [Submodule.mem_span] at hj ⊢
-  refine fun p hp => hj p fun u hu => ?_
-  obtain ⟨i, rfl⟩ := hu
-  have : ((w i)⁻¹ • (1 : R)) • w i • v i in p := p.smul_mem ((w i)⁻¹ • (1 : R)) (hp ⟨i, rfl⟩)
-  rwa [smul_one_smul, inv_smul_smul] at this
-
-中文:
-定理 groupSMul_span_eq_top
-  结论: {G : 类型} [群 G] [标量乘法 G R] [乘法作用 G M]
-  证明: by
-  rw [eq_top_iff]
-  intro j hj
-  rw [← hv] at hj
-  rw [Submodule.mem_span] at hj ⊢
-  refine fun p hp => hj p fun u hu => ?_
-  obtain ⟨i, rfl⟩ := hu
-  have : ((w i)⁻¹ • (1 : R)) • w i • v i in p := p.smul_mem ((w i)⁻¹ • (1 : R)) (hp ⟨i, rfl⟩)
-  rwa [smul_one_smul, inv_smul_smul] at this
-
-Depends on / 依赖: Submodule, Submodule.mem_span, eq_top_iff, inv_smul_smul, mem_span, p.smul_mem, smul_mem, smul_one_smul
+/-
+**Module.Basis.groupSMul_span_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：groupSMul_span_eq_top {G : Type*} [Group G] [SMul G R] [MulAction G M] [Is
+ScalarTower G R M] {v : ι -> M} (hv : Submodule.span R (Set.range v) = ⊤) {w : ι
+ -> G} : Submodule.span R (Set.range (w • v)) = ⊤
+参数：hv : Submodule.span R (Set.range v) = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Submodule.mem_span`：mem_span : x in span R s ↔ forall p : Submodule R M,
+ s subseteq p -> x in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用引理 `smul_one_smul`：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N 
+α] [SMul M α] [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
 -/
 theorem groupSMul_span_eq_top {G : Type*} [Group G] [SMul G R] [MulAction G M]
-    [IsScalarTower G R M] {v : ι -> M} (hv : Submodule.span R (Set.range v) = ⊤) {w : ι -> G} :
+    [IsScalarTower G R M] {v : ι → M} (hv : Submodule.span R (Set.range v) = ⊤) {w : ι → G} :
     Submodule.span R (Set.range (w • v)) = ⊤ := by
   rw [eq_top_iff]
   intro j hj
@@ -228,111 +152,113 @@ theorem groupSMul_span_eq_top {G : Type*} [Group G] [SMul G R] [MulAction G M]
   rw [Submodule.mem_span] at hj ⊢
   refine fun p hp => hj p fun u hu => ?_
   obtain ⟨i, rfl⟩ := hu
-  have : ((w i)⁻¹ • (1 : R)) • w i • v i in p := p.smul_mem ((w i)⁻¹ • (1 : R)) (hp ⟨i, rfl⟩)
+  have : ((w i)⁻¹ • (1 : R)) • w i • v i ∈ p := p.smul_mem ((w i)⁻¹ • (1 : R)) (hp ⟨i, rfl⟩)
   rwa [smul_one_smul, inv_smul_smul] at this
 
-/--
-Definition of `groupSMul` / `groupSMul` 的定义
+/-- Given a basis `v` and a map `w` such that for all `i`, `w i` are elements of a group,
+`groupSMul` provides the basis corresponding to `w • v`. -/
+/-
+**Module.Basis.groupSMul** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：groupSMul {G : Type*} [Group G] [DistribMulAction G R] [DistribMulAction G
+ M] [IsScalarTower G R M] [SMulCommClass G R M] (v : Basis ι R M) (w : ι -> G) :
+ Basis ι R M
+参数：v : Basis ι R M；w : ι -> G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition groupSMul
-  signature: {G : Type*} [Group G] [DistribMulAction G R] [DistribMulAction G M]
-  body: Basis.mk (LinearIndependent.group_smul v.linearIndependent w) (groupSMul_span_eq_top v.span_eq).ge
-
-中文:
-定义 groupSMul
-  签名: {G : 类型} [群 G] [分配乘法作用 G R] [分配乘法作用 G M]
-  定义体: Basis.mk (LinearIndependent.group_smul v.linearIndependent w) (groupSMul_span_eq_top v.span_eq).ge
-
-Depends on / 依赖: Basis.mk, LinearIndependent, LinearIndependent.group_smul, groupSMul_span_eq_top, group_smul, linearIndependent, span_eq, v.linearIndependent, v.span_eq
+--- 原说明 ---
+Given a basis `v` and a map `w` such that for all `i`, `w i` are elements of a g
+roup,
+`groupSMul` provides the basis corresponding to `w • v`.
 -/
 def groupSMul {G : Type*} [Group G] [DistribMulAction G R] [DistribMulAction G M]
-    [IsScalarTower G R M] [SMulCommClass G R M] (v : Basis ι R M) (w : ι -> G) : Basis ι R M :=
+    [IsScalarTower G R M] [SMulCommClass G R M] (v : Basis ι R M) (w : ι → G) : Basis ι R M :=
   Basis.mk (LinearIndependent.group_smul v.linearIndependent w) (groupSMul_span_eq_top v.span_eq).ge
-
-/--
-theorem `groupSMul_apply` / 定理 `groupSMul_apply`
-
-English:
-theorem groupSMul_apply
-  statement: {G : Type*} [Group G] [DistribMulAction G R] [DistribMulAction G M]
-  proof: mk_apply (LinearIndependent.group_smul v.linearIndependent w)
-    (groupSMul_span_eq_top v.span_eq).ge i
-
-中文:
-定理 groupSMul_apply
-  结论: {G : 类型} [群 G] [分配乘法作用 G R] [分配乘法作用 G M]
-  证明: mk_apply (LinearIndependent.group_smul v.linearIndependent w)
-    (groupSMul_span_eq_top v.span_eq).ge i
-
-Depends on / 依赖: LinearIndependent, LinearIndependent.group_smul, groupSMul_span_eq_top, group_smul, linearIndependent, mk_apply, span_eq, v.linearIndependent, v.span_eq
+/-
+**Module.Basis.groupSMul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：groupSMul_apply {G : Type*} [Group G] [DistribMulAction G R] [DistribMulAc
+tion G M] [IsScalarTower G R M] [SMulCommClass G R M] {v : Basis ι R M} {w : ι -
+> G} (i : ι) : v.groupSMul w i = (w • (v : ι -> M)) i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.mk_apply`：mk_apply (i : ι) : Basis.mk hli hsp i = v i
+· 使用定理 `LinearIndependent.group_smul`：LinearIndependent.group_smul {G : Type*} [
+hG : Group G] [MulAction G R] [SMul G M] [IsScalarTower G R M] [SMulCommClass G 
+R M] {v : ι -> M} …
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Module.Basis.groupSMul_span_eq_top`：groupSMul_span_eq_top {G : Type*} [G
+roup G] [SMul G R] [MulAction G M] [IsScalarTower G R M] {v : ι -> M} (hv : Subm
+odule.span R (Set.range …
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
 -/
 theorem groupSMul_apply {G : Type*} [Group G] [DistribMulAction G R] [DistribMulAction G M]
-    [IsScalarTower G R M] [SMulCommClass G R M] {v : Basis ι R M} {w : ι -> G} (i : ι) :
-    v.groupSMul w i = (w • (v : ι -> M)) i :=
+    [IsScalarTower G R M] [SMulCommClass G R M] {v : Basis ι R M} {w : ι → G} (i : ι) :
+    v.groupSMul w i = (w • (v : ι → M)) i :=
   mk_apply (LinearIndependent.group_smul v.linearIndependent w)
     (groupSMul_span_eq_top v.span_eq).ge i
-
-/--
-theorem `units_smul_span_eq_top` / 定理 `units_smul_span_eq_top`
-
-English:
-theorem units_smul_span_eq_top
-  given: {v : ι -> M} (hv : Submodule.span R (Set.range v) = ⊤) {w : ι -> Rˣ}
-  proof: groupSMul_span_eq_top hv
-
-中文:
-定理 units_smul_span_eq_top
-  条件: {v : ι -> M} (hv : 子模.span R (集合.range v) = ⊤) {w : ι -> Rˣ}
-  证明: groupSMul_span_eq_top hv
-
-Depends on / 依赖: groupSMul_span_eq_top
+/-
+**Module.Basis.units_smul_span_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：units_smul_span_eq_top {v : ι -> M} (hv : Submodule.span R (Set.range v) =
+ ⊤) {w : ι -> Rˣ} : Submodule.span R (Set.range (w • v)) = ⊤
+参数：hv : Submodule.span R (Set.range v) = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.groupSMul_span_eq_top`：groupSMul_span_eq_top {G : Type*} [G
+roup G] [SMul G R] [MulAction G M] [IsScalarTower G R M] {v : ι -> M} (hv : Subm
+odule.span R (Set.range …
+· 使用定理 `Units.instIsScalarTower`：∀ {M : Type u_3} {N : Type u_4} {α : Type u_5} 
+[inst : Monoid M] [inst_1 : SMul M N] [inst_2 : SMul M α]   [inst_3 : SMul N α] 
+[IsScalarTowe…
 -/
-theorem units_smul_span_eq_top {v : ι -> M} (hv : Submodule.span R (Set.range v) = ⊤) {w : ι -> Rˣ} :
+theorem units_smul_span_eq_top {v : ι → M} (hv : Submodule.span R (Set.range v) = ⊤) {w : ι → Rˣ} :
     Submodule.span R (Set.range (w • v)) = ⊤ :=
   groupSMul_span_eq_top hv
 
-/--
-Definition of `unitsSMul` / `unitsSMul` 的定义
+/-- Given a basis `v` and a map `w` such that for all `i`, `w i` is a unit, `unitsSMul`
+provides the basis corresponding to `w • v`. -/
+/-
+**Module.Basis.unitsSMul** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：unitsSMul (v : Basis ι R M) (w : ι -> Rˣ) : Basis ι R M
+参数：v : Basis ι R M；w : ι -> Rˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitsSMul
-  signature: (v : Basis ι R M) (w : ι -> Rˣ)
-  body: Basis.mk (LinearIndependent.units_smul v.linearIndependent w)
-    (units_smul_span_eq_top v.span_eq).ge
-
-中文:
-定义 unitsSMul
-  签名: (v : 基 ι R M) (w : ι -> Rˣ)
-  定义体: Basis.mk (LinearIndependent.units_smul v.linearIndependent w)
-    (units_smul_span_eq_top v.span_eq).ge
-
-Depends on / 依赖: Basis.mk, LinearIndependent, LinearIndependent.units_smul, linearIndependent, span_eq, units_smul, units_smul_span_eq_top, v.linearIndependent, v.span_eq
+--- 原说明 ---
+Given a basis `v` and a map `w` such that for all `i`, `w i` is a unit, `unitsSM
+ul`
+provides the basis corresponding to `w • v`.
 -/
-def unitsSMul (v : Basis ι R M) (w : ι -> Rˣ) : Basis ι R M :=
+def unitsSMul (v : Basis ι R M) (w : ι → Rˣ) : Basis ι R M :=
   Basis.mk (LinearIndependent.units_smul v.linearIndependent w)
     (units_smul_span_eq_top v.span_eq).ge
-
-/--
-theorem `unitsSMul_apply` / 定理 `unitsSMul_apply`
-
-English:
-theorem unitsSMul_apply
-  given: {v : Basis ι R M} {w : ι -> Rˣ} (i : ι)
-  statement: unitsSMul v w i = w i • v i
-  proof: mk_apply (LinearIndependent.units_smul v.linearIndependent w)
-    (units_smul_span_eq_top v.span_eq).ge i
-
-中文:
-定理 unitsSMul_apply
-  条件: {v : 基 ι R M} {w : ι -> Rˣ} (i : ι)
-  结论: unitsSMul v w i = w i • v i
-  证明: mk_apply (LinearIndependent.units_smul v.linearIndependent w)
-    (units_smul_span_eq_top v.span_eq).ge i
-
-Depends on / 依赖: LinearIndependent, LinearIndependent.units_smul, linearIndependent, mk_apply, span_eq, units_smul, units_smul_span_eq_top, v.linearIndependent, v.span_eq
+/-
+**Module.Basis.unitsSMul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：unitsSMul_apply {v : Basis ι R M} {w : ι -> Rˣ} (i : ι) : unitsSMul v w i 
+= w i • v i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.mk_apply`：mk_apply (i : ι) : Basis.mk hli hsp i = v i
+· 使用定理 `LinearIndependent.units_smul`：LinearIndependent.units_smul {v : ι -> M} 
+(hv : LinearIndependent R v) (w : ι -> Rˣ) : LinearIndependent R (w • v)
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Module.Basis.units_smul_span_eq_top`：units_smul_span_eq_top {v : ι -> M}
+ (hv : Submodule.span R (Set.range v) = ⊤) {w : ι -> Rˣ} : Submodule.span R (Set
+.range (w • v)) = ⊤
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
 -/
-theorem unitsSMul_apply {v : Basis ι R M} {w : ι -> Rˣ} (i : ι) : unitsSMul v w i = w i • v i :=
+theorem unitsSMul_apply {v : Basis ι R M} {w : ι → Rˣ} (i : ι) : unitsSMul v w i = w i • v i :=
   mk_apply (LinearIndependent.units_smul v.linearIndependent w)
     (units_smul_span_eq_top v.span_eq).ge i
 
@@ -340,42 +266,55 @@ variable [CommSemiring R₂] [Module R₂ M]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `coord_unitsSMul` / 定理 `coord_unitsSMul`
-
-English:
-theorem coord_unitsSMul
-  given: (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (i : ι)
-  proof: by
-  classical
-    apply e.ext
-    intro j
-    trans ((unitsSMul e w).coord i) ((w j)⁻¹ • (unitsSMul e w) j)
-    · simp [Basis.unitsSMul, ← mul_smul]
-    simp only [Basis.coord_apply, LinearMap.smul_apply, Basis.repr_self, Units.smul_def,
-      map_smul, Finsupp.single_apply]
-    split_ifs with h <;> simp [h]
-
-@[simp]
-
-中文:
-定理 coord_unitsSMul
-  条件: (e : 基 ι R₂ M) (w : ι -> R₂ˣ) (i : ι)
-  证明: by
-  classical
-    apply e.ext
-    intro j
-    trans ((unitsSMul e w).coord i) ((w j)⁻¹ • (unitsSMul e w) j)
-    · simp [Basis.unitsSMul, ← mul_smul]
-    simp only [Basis.coord_apply, LinearMap.smul_apply, Basis.repr_self, Units.smul_def,
-      map_smul, Finsupp.single_apply]
-    split_ifs with h <;> simp [h]
-
-@[simp]
-
-Depends on / 依赖: Basis.coord_apply, Basis.repr_self, Basis.unitsSMul, Finsupp, Finsupp.single_apply, LinearMap, LinearMap.smul_apply, Units.smul_def, classical, coord_apply, e.ext, map_smul, mul_smul, repr_self, single_apply, smul_apply, smul_def, split_ifs, unitsSMul
+/-
+**Module.Basis.coord_unitsSMul** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coord_unitsSMul (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (i : ι) : (unitsSMul e w
+).coord i = (w i)⁻¹ • e.coord i
+参数：e : Basis ι R₂ M；w : ι -> R₂ˣ；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.ext`：ext {f₁ f₂ : M ->ₛₗ[σ] M₁} (h : forall i, f₁ (b i) = f
+₂ (b i)) : f₁ = f₂
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.mem_top`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [
+inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {x : M},   x ∈ ⊤
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_mk`：coe_mk : ⇑(Basis.mk hli hsp) = v
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Module.Basis.repr_self`：repr_self : b.repr (b i) = Finsupp.single i 1
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem coord_unitsSMul (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (i : ι) :
+theorem coord_unitsSMul (e : Basis ι R₂ M) (w : ι → R₂ˣ) (i : ι) :
     (unitsSMul e w).coord i = (w i)⁻¹ • e.coord i := by
   classical
     apply e.ext
@@ -387,80 +326,67 @@ theorem coord_unitsSMul (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (i : ι) :
     split_ifs with h <;> simp [h]
 
 @[simp]
-/--
-theorem `repr_unitsSMul` / 定理 `repr_unitsSMul`
-
-English:
-theorem repr_unitsSMul
-  given: (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (v : M) (i : ι)
-  proof: congr_arg (fun f : M ->ₗ[R₂] R₂ => f v) (e.coord_unitsSMul w i)
-
-中文:
-定理 repr_unitsSMul
-  条件: (e : 基 ι R₂ M) (w : ι -> R₂ˣ) (v : M) (i : ι)
-  证明: congr_arg (fun f : M ->ₗ[R₂] R₂ => f v) (e.coord_unitsSMul w i)
-
-Depends on / 依赖: congr_arg, coord_unitsSMul, e.coord_unitsSMul
+/-
+**Module.Basis.repr_unitsSMul** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：repr_unitsSMul (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (v : M) (i : ι) : (e.unit
+sSMul w).repr v i = (w i)⁻¹ • e.repr v i
+参数：e : Basis ι R₂ M；w : ι -> R₂ˣ；v : M；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Module.Basis.coord_unitsSMul`：coord_unitsSMul (e : Basis ι R₂ M) (w : ι 
+-> R₂ˣ) (i : ι) : (unitsSMul e w).coord i = (w i)⁻¹ • e.coord i
 -/
-theorem repr_unitsSMul (e : Basis ι R₂ M) (w : ι -> R₂ˣ) (v : M) (i : ι) :
+theorem repr_unitsSMul (e : Basis ι R₂ M) (w : ι → R₂ˣ) (v : M) (i : ι) :
     (e.unitsSMul w).repr v i = (w i)⁻¹ • e.repr v i :=
-  congr_arg (fun f : M ->ₗ[R₂] R₂ => f v) (e.coord_unitsSMul w i)
+  congr_arg (fun f : M →ₗ[R₂] R₂ => f v) (e.coord_unitsSMul w i)
 
-/--
-Definition of `isUnitSMul` / `isUnitSMul` 的定义
+/-- A version of `unitsSMul` that uses `IsUnit`. -/
+/-
+**Module.Basis.isUnitSMul** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：isUnitSMul (v : Basis ι R M) {w : ι -> R} (hw : forall i, IsUnit (w i)) : 
+Basis ι R M
+参数：v : Basis ι R M；hw : forall i, IsUnit (w i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isUnitSMul
-  signature: (v : Basis ι R M) {w : ι -> R} (hw : forall i, IsUnit (w i))
-  body: unitsSMul v fun i => (hw i).unit
-
-中文:
-定义 isUnitSMul
-  签名: (v : 基 ι R M) {w : ι -> R} (hw : 对任意 i, 是单位 (w i))
-  定义体: unitsSMul v fun i => (hw i).unit
-
-Depends on / 依赖: unitsSMul
+--- 原说明 ---
+A version of `unitsSMul` that uses `IsUnit`.
 -/
-def isUnitSMul (v : Basis ι R M) {w : ι -> R} (hw : forall i, IsUnit (w i)) : Basis ι R M :=
+def isUnitSMul (v : Basis ι R M) {w : ι → R} (hw : ∀ i, IsUnit (w i)) : Basis ι R M :=
   unitsSMul v fun i => (hw i).unit
-
-/--
-theorem `isUnitSMul_apply` / 定理 `isUnitSMul_apply`
-
-English:
-theorem isUnitSMul_apply
-  given: {v : Basis ι R M} {w : ι -> R} (hw : forall i, IsUnit (w i)) (i : ι)
-  proof: unitsSMul_apply i
-
-中文:
-定理 isUnitSMul_apply
-  条件: {v : 基 ι R M} {w : ι -> R} (hw : 对任意 i, 是单位 (w i)) (i : ι)
-  证明: unitsSMul_apply i
-
-Depends on / 依赖: unitsSMul_apply
+/-
+**Module.Basis.isUnitSMul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：isUnitSMul_apply {v : Basis ι R M} {w : ι -> R} (hw : forall i, IsUnit (w 
+i)) (i : ι) : v.isUnitSMul hw i = w i • v i
+参数：hw : forall i, IsUnit (w i)；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.unitsSMul_apply`：unitsSMul_apply {v : Basis ι R M} {w : ι -
+> Rˣ} (i : ι) : unitsSMul v w i = w i • v i
 -/
-theorem isUnitSMul_apply {v : Basis ι R M} {w : ι -> R} (hw : forall i, IsUnit (w i)) (i : ι) :
+theorem isUnitSMul_apply {v : Basis ι R M} {w : ι → R} (hw : ∀ i, IsUnit (w i)) (i : ι) :
     v.isUnitSMul hw i = w i • v i :=
   unitsSMul_apply i
-
-/--
-theorem `repr_isUnitSMul` / 定理 `repr_isUnitSMul`
-
-English:
-theorem repr_isUnitSMul
-  given: {v : Basis ι R₂ M} {w : ι -> R₂} (hw : forall i, IsUnit (w i)) (x : M) (i : ι)
-  proof: repr_unitsSMul _ _ _ _
-
-中文:
-定理 repr_isUnitSMul
-  条件: {v : 基 ι R₂ M} {w : ι -> R₂} (hw : 对任意 i, 是单位 (w i)) (x : M) (i : ι)
-  证明: repr_unitsSMul _ _ _ _
-
-Depends on / 依赖: repr_unitsSMul
+/-
+**Module.Basis.repr_isUnitSMul** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：repr_isUnitSMul {v : Basis ι R₂ M} {w : ι -> R₂} (hw : forall i, IsUnit (w
+ i)) (x : M) (i : ι) : (v.isUnitSMul hw).repr x i = (hw i).unit⁻¹ • v.repr x i
+参数：hw : forall i, IsUnit (w i)；x : M；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.repr_unitsSMul`：repr_unitsSMul (e : Basis ι R₂ M) (w : ι ->
+ R₂ˣ) (v : M) (i : ι) : (e.unitsSMul w).repr v i = (w i)⁻¹ • e.repr v i
 -/
-theorem repr_isUnitSMul {v : Basis ι R₂ M} {w : ι -> R₂} (hw : forall i, IsUnit (w i)) (x : M) (i : ι) :
+theorem repr_isUnitSMul {v : Basis ι R₂ M} {w : ι → R₂} (hw : ∀ i, IsUnit (w i)) (x : M) (i : ι) :
     (v.isUnitSMul hw).repr x i = (hw i).unit⁻¹ • v.repr x i :=
   repr_unitsSMul _ _ _ _
 
 end CommSemiring
 end Module.Basis
+

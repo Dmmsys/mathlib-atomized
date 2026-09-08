@@ -29,94 +29,71 @@ be used for spectral sequences associated to a *finite* filtration.)
 
 namespace ComplexShape
 
-/--
-Definition of `spectralSequenceNat` / `spectralSequenceNat` 的定义
+/-- For `u : ℤ × ℤ`, this is the complex shape on `ℕ × ℕ`, which
+connects `a` to `b` when the equality `a + u = b` holds in `ℤ × ℤ`. -/
+/-
+**ComplexShape.spectralSequenceNat** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：spectralSequenceNat (u : Int × Int) : ComplexShape (Nat × Nat) where Rel a
+ b
+参数：u : Int × Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spectralSequenceNat
-  signature: (u : Int × Int)
-  body: a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2
-  next_eq _ _ := by ext <;> lia
-  prev_eq _ _ := by ext <;> lia
-
-@[simp]
-
-中文:
-定义 spectralSequence自然数
-  签名: (u : 整数 × 整数)
-  定义体: a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2
-  next_eq _ _ := by ext <;> lia
-  prev_eq _ _ := by ext <;> lia
-
-@[simp]
+--- 原说明 ---
+For `u : ℤ × ℤ`, this is the complex shape on `ℕ × ℕ`, which
+connects `a` to `b` when the equality `a + u = b` holds in `ℤ × ℤ`.
 -/
-def spectralSequenceNat (u : Int × Int) : ComplexShape (Nat × Nat) where
+def spectralSequenceNat (u : ℤ × ℤ) : ComplexShape (ℕ × ℕ) where
   Rel a b := a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2
   next_eq _ _ := by ext <;> lia
   prev_eq _ _ := by ext <;> lia
 
 @[simp]
-/--
-lemma `spectralSequenceNat_rel_iff` / 引理 `spectralSequenceNat_rel_iff`
-
-English:
-lemma spectralSequenceNat_rel_iff
-  given: (u : Int × Int) (a b : Nat × Nat)
-  proof: Iff.rfl
-
-中文:
-引理 spectralSequence自然数_rel_iff
-  条件: (u : 整数 × 整数) (a b : 自然数 × 自然数)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**ComplexShape.spectralSequenceNat_rel_iff** 是 Mathlib 中的一个引理，位于命名空间 `ComplexSha
+pe`。
+形式化陈述：spectralSequenceNat_rel_iff (u : Int × Int) (a b : Nat × Nat) : (spectralS
+equenceNat u).Rel a b ↔ a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2
+参数：u : Int × Int；a b : Nat × Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma spectralSequenceNat_rel_iff (u : Int × Int) (a b : Nat × Nat) :
+lemma spectralSequenceNat_rel_iff (u : ℤ × ℤ) (a b : ℕ × ℕ) :
     (spectralSequenceNat u).Rel a b ↔ a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2 := Iff.rfl
 
-/--
-Definition of `spectralSequenceFin` / `spectralSequenceFin` 的定义
+/-- For `l : ℕ` and `u : ℤ × ℤ`, this is the complex shape on `ℤ × Fin l`, which
+connects `a` to `b` when the equality `a + u = b` holds in `ℤ × ℤ`. -/
+/-
+**ComplexShape.spectralSequenceFin** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape`。
+形式化陈述：spectralSequenceFin (l : Nat) (u : Int × Int) : ComplexShape (Int × Fin l)
+ where Rel a b
+参数：l : Nat；u : Int × Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spectralSequenceFin
-  signature: (l : Nat) (u : Int × Int)
-  body: a.1 + u.1 = b.1 ∧ a.2.1 + u.2 = b.2.1
-  next_eq _ _ := by ext <;> lia
-  prev_eq _ _ := by ext <;> lia
-
-@[simp]
-
-中文:
-定义 spectralSequenceFin
-  签名: (l : 自然数) (u : 整数 × 整数)
-  定义体: a.1 + u.1 = b.1 ∧ a.2.1 + u.2 = b.2.1
-  next_eq _ _ := by ext <;> lia
-  prev_eq _ _ := by ext <;> lia
-
-@[simp]
+--- 原说明 ---
+For `l : ℕ` and `u : ℤ × ℤ`, this is the complex shape on `ℤ × Fin l`, which
+connects `a` to `b` when the equality `a + u = b` holds in `ℤ × ℤ`.
 -/
-def spectralSequenceFin (l : Nat) (u : Int × Int) : ComplexShape (Int × Fin l) where
+def spectralSequenceFin (l : ℕ) (u : ℤ × ℤ) : ComplexShape (ℤ × Fin l) where
   Rel a b := a.1 + u.1 = b.1 ∧ a.2.1 + u.2 = b.2.1
   next_eq _ _ := by ext <;> lia
   prev_eq _ _ := by ext <;> lia
 
 @[simp]
-/--
-lemma `spectralSequenceFin_rel_iff` / 引理 `spectralSequenceFin_rel_iff`
-
-English:
-lemma spectralSequenceFin_rel_iff
-  given: {l : Nat} (u : Int × Int) (a b : Int × Fin l)
-  proof: Iff.rfl
-
-中文:
-引理 spectralSequenceFin_rel_iff
-  条件: {l : 自然数} (u : 整数 × 整数) (a b : 整数 × 有限集 l)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**ComplexShape.spectralSequenceFin_rel_iff** 是 Mathlib 中的一个引理，位于命名空间 `ComplexSha
+pe`。
+形式化陈述：spectralSequenceFin_rel_iff {l : Nat} (u : Int × Int) (a b : Int × Fin l) 
+: (spectralSequenceFin l u).Rel a b ↔ a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2
+参数：u : Int × Int；a b : Int × Fin l。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma spectralSequenceFin_rel_iff {l : Nat} (u : Int × Int) (a b : Int × Fin l) :
+lemma spectralSequenceFin_rel_iff {l : ℕ} (u : ℤ × ℤ) (a b : ℤ × Fin l) :
     (spectralSequenceFin l u).Rel a b ↔ a.1 + u.1 = b.1 ∧ a.2 + u.2 = b.2 := Iff.rfl
 
 end ComplexShape
+

@@ -79,161 +79,135 @@ individually, rather than jointly via their tensor product.
 Note that `R` plays no role but it is convenient to make this generalisation to support the cases
 `R = ℕ` and `R = ℤ` which both show up naturally. See also `Subbimodule.baseChange`. -/
 @[simps]
-/--
-Definition of `mk` / `mk` 的定义
+/-
+**Subbimodule.mk** 是 Mathlib 中的一个定义，位于命名空间 `Subbimodule`。
+形式化陈述：mk (p : AddSubmonoid M) (hA : forall (a : A) {m : M}, m in p -> a • m in p
+) (hB : forall (b : B) {m : M}, m in p -> b • m in p) : Submodule (A otimes[R] B
+) M
+参数：p : AddSubmonoid M；hA : forall (a : A) {m : M}, m in p -> a • m in p；hB : for
+all (b : B) {m : M}, m in p -> b • m in p。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (p : AddSubmonoid M) (hA : forall (a : A) {m : M}, m in p -> a • m in p)
-  body: { p with
-    carrier := p
-    smul_mem' := fun ab m =>
-      TensorProduct.induction_on ab (fun _ => by simp only [zero_smul, SetLike.mem_coe, zero_mem])
-        (fun a b hm => by simpa only [TensorProduct.Algebra.smul_def] using! hA a (hB b hm))
-        fun z w hz hw hm => by simpa only [add_smul] using! p.add_mem (hz hm) (hw hm) }
+--- 原说明 ---
+A constructor for a subbimodule which demands closure under the two sets of scal
+ars
+individually, rather than jointly via their tensor product.
 
-中文:
-定义 mk
-  签名: (p : 加法子幺半群 M) (hA : 对任意 (a : A) {m : M}, m in p -> a • m in p)
-  定义体: { p with
-    carrier := p
-    smul_mem' := fun ab m =>
-      TensorProduct.induction_on ab (fun _ => by simp only [zero_smul, SetLike.mem_coe, zero_mem])
-        (fun a b hm => by simpa only [TensorProduct.Algebra.smul_def] using! hA a (hB b hm))
-        fun z w hz hw hm => by simpa only [add_smul] using! p.add_mem (hz hm) (hw hm) }
-
-Depends on / 依赖: Algebra, SetLike, SetLike.mem_coe, TensorProduct, TensorProduct.Algebra.smul_def, TensorProduct.induction_on, add_mem, add_smul, carrier, induction_on, mem_coe, p.add_mem, smul_def, smul_mem, zero_mem, zero_smul
+Note that `R` plays no role but it is convenient to make this generalisation to 
+support the cases
+`R = ℕ` and `R = ℤ` which both show up naturally. See also `Subbimodule.baseChan
+ge`.
 -/
-def mk (p : AddSubmonoid M) (hA : forall (a : A) {m : M}, m in p -> a • m in p)
-    (hB : forall (b : B) {m : M}, m in p -> b • m in p) : Submodule (A otimes[R] B) M :=
+def mk (p : AddSubmonoid M) (hA : ∀ (a : A) {m : M}, m ∈ p → a • m ∈ p)
+    (hB : ∀ (b : B) {m : M}, m ∈ p → b • m ∈ p) : Submodule (A ⊗[R] B) M :=
   { p with
     carrier := p
     smul_mem' := fun ab m =>
       TensorProduct.induction_on ab (fun _ => by simp only [zero_smul, SetLike.mem_coe, zero_mem])
         (fun a b hm => by simpa only [TensorProduct.Algebra.smul_def] using! hA a (hB b hm))
         fun z w hz hw hm => by simpa only [add_smul] using! p.add_mem (hz hm) (hw hm) }
-
-/--
-theorem `smul_mem` / 定理 `smul_mem`
-
-English:
-theorem smul_mem
-  given: (p : Submodule (A otimes[R] B) M) (a : A) {m : M} (hm : m in p)
-  statement: a • m in p
-  proof: by
-  suffices a • m = a otimesₜ[R] (1 : B) • m by exact this.symm ▸ p.smul_mem _ hm
-  simp [TensorProduct.Algebra.smul_def]
-
-中文:
-定理 smul_mem
-  条件: (p : 子模 (A otimes[R] B) M) (a : A) {m : M} (hm : m in p)
-  结论: a • m in p
-  证明: by
-  suffices a • m = a otimesₜ[R] (1 : B) • m by exact this.symm ▸ p.smul_mem _ hm
-  simp [TensorProduct.Algebra.smul_def]
-
-Depends on / 依赖: Algebra, TensorProduct, TensorProduct.Algebra.smul_def, p.smul_mem, smul_def, smul_mem, this.symm
+/-
+**Subbimodule.smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subbimodule`。
+形式化陈述：smul_mem (p : Submodule (A otimes[R] B) M) (a : A) {m : M} (hm : m in p) :
+ a • m in p
+参数：p : Submodule (A otimes[R] B) M；a : A；hm : m in p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem smul_mem (p : Submodule (A otimes[R] B) M) (a : A) {m : M} (hm : m in p) : a • m in p := by
-  suffices a • m = a otimesₜ[R] (1 : B) • m by exact this.symm ▸ p.smul_mem _ hm
+theorem smul_mem (p : Submodule (A ⊗[R] B) M) (a : A) {m : M} (hm : m ∈ p) : a • m ∈ p := by
+  suffices a • m = a ⊗ₜ[R] (1 : B) • m by exact this.symm ▸ p.smul_mem _ hm
   simp [TensorProduct.Algebra.smul_def]
-
-/--
-theorem `smul_mem'` / 定理 `smul_mem'`
-
-English:
-theorem smul_mem'
-  given: (p : Submodule (A otimes[R] B) M) (b : B) {m : M} (hm : m in p)
-  statement: b • m in p
-  proof: by
-  suffices b • m = (1 : A) otimesₜ[R] b • m by exact this.symm ▸ p.smul_mem _ hm
-  simp [TensorProduct.Algebra.smul_def]
-
-中文:
-定理 smul_mem'
-  条件: (p : 子模 (A otimes[R] B) M) (b : B) {m : M} (hm : m in p)
-  结论: b • m in p
-  证明: by
-  suffices b • m = (1 : A) otimesₜ[R] b • m by exact this.symm ▸ p.smul_mem _ hm
-  simp [TensorProduct.Algebra.smul_def]
-
-Depends on / 依赖: Algebra, TensorProduct, TensorProduct.Algebra.smul_def, p.smul_mem, smul_def, smul_mem, this.symm
+/-
+**Subbimodule.smul_mem'** 是 Mathlib 中的一个定理，位于命名空间 `Subbimodule`。
+形式化陈述：smul_mem' (p : Submodule (A otimes[R] B) M) (b : B) {m : M} (hm : m in p) 
+: b • m in p
+参数：p : Submodule (A otimes[R] B) M；b : B；hm : m in p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem smul_mem' (p : Submodule (A otimes[R] B) M) (b : B) {m : M} (hm : m in p) : b • m in p := by
-  suffices b • m = (1 : A) otimesₜ[R] b • m by exact this.symm ▸ p.smul_mem _ hm
+theorem smul_mem' (p : Submodule (A ⊗[R] B) M) (b : B) {m : M} (hm : m ∈ p) : b • m ∈ p := by
+  suffices b • m = (1 : A) ⊗ₜ[R] b • m by exact this.symm ▸ p.smul_mem _ hm
   simp [TensorProduct.Algebra.smul_def]
 
 /-- If `A` and `B` are also `Algebra`s over yet another set of scalars `S` then we may "base change"
 from `R` to `S`. -/
 @[simps!]
-/--
-Definition of `baseChange` / `baseChange` 的定义
+/-
+**Subbimodule.baseChange** 是 Mathlib 中的一个定义，位于命名空间 `Subbimodule`。
+形式化陈述：baseChange (S : Type*) [CommSemiring S] [Module S M] [Algebra S A] [Algebr
+a S B] [IsScalarTower S A M] [IsScalarTower S B M] (p : Submodule (A otimes[R] B
+) M) : Submodule (A otimes[S] B) M
+参数：S : Type*；p : Submodule (A otimes[R] B) M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subbimodule.smul_mem`：smul_mem (p : Submodule (A otimes[R] B) M) (a : A)
+ {m : M} (hm : m in p) : a • m in p
+· 使用定理 `Subbimodule.smul_mem'`：smul_mem' (p : Submodule (A otimes[R] B) M) (b : 
+B) {m : M} (hm : m in p) : b • m in p
 
-English:
-definition baseChange
-  signature: (S : Type*) [CommSemiring S] [Module S M] [Algebra S A] [Algebra S B]
-  body: mk p.toAddSubmonoid (smul_mem p) (smul_mem' p)
-
-中文:
-定义 baseChange
-  签名: (S : 类型) [交换半环 S] [模 S M] [代数 S A] [代数 S B]
-  定义体: mk p.toAddSubmonoid (smul_mem p) (smul_mem' p)
-
-Depends on / 依赖: p.toAddSubmonoid, smul_mem, toAddSubmonoid
+--- 原说明 ---
+If `A` and `B` are also `Algebra`s over yet another set of scalars `S` then we m
+ay "base change"
+from `R` to `S`.
 -/
 def baseChange (S : Type*) [CommSemiring S] [Module S M] [Algebra S A] [Algebra S B]
-    [IsScalarTower S A M] [IsScalarTower S B M] (p : Submodule (A otimes[R] B) M) :
-    Submodule (A otimes[S] B) M :=
+    [IsScalarTower S A M] [IsScalarTower S B M] (p : Submodule (A ⊗[R] B) M) :
+    Submodule (A ⊗[S] B) M :=
   mk p.toAddSubmonoid (smul_mem p) (smul_mem' p)
 
 /-- Forgetting the `B` action, a `Submodule` over `A ⊗[R] B` is just a `Submodule` over `A`. -/
 @[simps]
-/--
-Definition of `toSubmodule` / `toSubmodule` 的定义
+/-
+**Subbimodule.toSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `Subbimodule`。
+形式化陈述：toSubmodule (p : Submodule (A otimes[R] B) M) : Submodule A M
+参数：p : Submodule (A otimes[R] B) M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subbimodule.smul_mem`：smul_mem (p : Submodule (A otimes[R] B) M) (a : A)
+ {m : M} (hm : m in p) : a • m in p
 
-English:
-definition toSubmodule
-  signature: (p : Submodule (A otimes[R] B) M)
-  body: { p with
-    carrier := p
-    smul_mem' := smul_mem p }
-
-中文:
-定义 toSubmodule
-  签名: (p : 子模 (A otimes[R] B) M)
-  定义体: { p with
-    carrier := p
-    smul_mem' := smul_mem p }
-
-Depends on / 依赖: carrier, smul_mem
+--- 原说明 ---
+Forgetting the `B` action, a `Submodule` over `A ⊗[R] B` is just a `Submodule` o
+ver `A`.
 -/
-def toSubmodule (p : Submodule (A otimes[R] B) M) : Submodule A M :=
+def toSubmodule (p : Submodule (A ⊗[R] B) M) : Submodule A M :=
   { p with
     carrier := p
     smul_mem' := smul_mem p }
 
 /-- Forgetting the `A` action, a `Submodule` over `A ⊗[R] B` is just a `Submodule` over `B`. -/
 @[simps]
-/--
-Definition of `toSubmodule'` / `toSubmodule'` 的定义
+/-
+**Subbimodule.toSubmodule'** 是 Mathlib 中的一个定义，位于命名空间 `Subbimodule`。
+形式化陈述：toSubmodule' (p : Submodule (A otimes[R] B) M) : Submodule B M
+参数：p : Submodule (A otimes[R] B) M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subbimodule.smul_mem'`：smul_mem' (p : Submodule (A otimes[R] B) M) (b : 
+B) {m : M} (hm : m in p) : b • m in p
 
-English:
-definition toSubmodule'
-  signature: (p : Submodule (A otimes[R] B) M)
-  body: { p with
-    carrier := p
-    smul_mem' := smul_mem' p }
-
-中文:
-定义 toSubmodule'
-  签名: (p : 子模 (A otimes[R] B) M)
-  定义体: { p with
-    carrier := p
-    smul_mem' := smul_mem' p }
-
-Depends on / 依赖: carrier, smul_mem
+--- 原说明 ---
+Forgetting the `A` action, a `Submodule` over `A ⊗[R] B` is just a `Submodule` o
+ver `B`.
 -/
-def toSubmodule' (p : Submodule (A otimes[R] B) M) : Submodule B M :=
+def toSubmodule' (p : Submodule (A ⊗[R] B) M) : Submodule B M :=
   { p with
     carrier := p
     smul_mem' := smul_mem' p }
@@ -248,45 +222,42 @@ variable [AddCommGroup M] [Module R M] [Module S M] [SMulCommClass R S M]
 /-- A `Submodule` over `R ⊗[ℕ] S` is naturally also a `Submodule` over the canonically-isomorphic
 ring `R ⊗[ℤ] S`. -/
 @[simps!]
-/--
-Definition of `toSubbimoduleInt` / `toSubbimoduleInt` 的定义
+/-
+**Subbimodule.toSubbimoduleInt** 是 Mathlib 中的一个定义，位于命名空间 `Subbimodule`。
+形式化陈述：toSubbimoduleInt (p : Submodule (R otimes[Nat] S) M) : Submodule (R otimes
+[Int] S) M
+参数：p : Submodule (R otimes[Nat] S) M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSubbimoduleInt
-  signature: (p : Submodule (R otimes[Nat] S) M)
-  body: baseChange Int p
-
-中文:
-定义 toSubbimodule整数
-  签名: (p : 子模 (R otimes[自然数] S) M)
-  定义体: baseChange Int p
-
-Depends on / 依赖: baseChange
+--- 原说明 ---
+A `Submodule` over `R ⊗[ℕ] S` is naturally also a `Submodule` over the canonical
+ly-isomorphic
+ring `R ⊗[ℤ] S`.
 -/
-def toSubbimoduleInt (p : Submodule (R otimes[Nat] S) M) : Submodule (R otimes[Int] S) M :=
-  baseChange Int p
+def toSubbimoduleInt (p : Submodule (R ⊗[ℕ] S) M) : Submodule (R ⊗[ℤ] S) M :=
+  baseChange ℤ p
 
 /-- A `Submodule` over `R ⊗[ℤ] S` is naturally also a `Submodule` over the canonically-isomorphic
 ring `R ⊗[ℕ] S`. -/
 @[simps!]
-/--
-Definition of `toSubbimoduleNat` / `toSubbimoduleNat` 的定义
+/-
+**Subbimodule.toSubbimoduleNat** 是 Mathlib 中的一个定义，位于命名空间 `Subbimodule`。
+形式化陈述：toSubbimoduleNat (p : Submodule (R otimes[Int] S) M) : Submodule (R otimes
+[Nat] S) M
+参数：p : Submodule (R otimes[Int] S) M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSubbimoduleNat
-  signature: (p : Submodule (R otimes[Int] S) M)
-  body: baseChange Nat p
-
-中文:
-定义 toSubbimodule自然数
-  签名: (p : 子模 (R otimes[整数] S) M)
-  定义体: baseChange Nat p
-
-Depends on / 依赖: baseChange
+--- 原说明 ---
+A `Submodule` over `R ⊗[ℤ] S` is naturally also a `Submodule` over the canonical
+ly-isomorphic
+ring `R ⊗[ℕ] S`.
 -/
-def toSubbimoduleNat (p : Submodule (R otimes[Int] S) M) : Submodule (R otimes[Nat] S) M :=
-  baseChange Nat p
+def toSubbimoduleNat (p : Submodule (R ⊗[ℤ] S) M) : Submodule (R ⊗[ℕ] S) M :=
+  baseChange ℕ p
 
 end Ring
 
 end Subbimodule
+

@@ -24,45 +24,35 @@ variable (R : Type u) [Semiring R]
 
 namespace Polynomial
 
-/--
-Definition of `basisMonomials` / `basisMonomials` 的定义
+/-- The monomials form a basis on `R[X]`. To get the rank of a polynomial ring,
+use this and `Basis.mk_eq_rank`. -/
+/-
+**Polynomial.basisMonomials** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：basisMonomials : Basis Nat R R[X]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basisMonomials
-  signature: : Basis Nat R R[X]
-  body: .ofRepr (toFinsuppIsoLinear R).trans AddMonoidAlgebra.coeffLinearEquiv _
-
-@[simp]
-
-中文:
-定义 basisMonomials
-  签名: : 基 自然数 R R[X]
-  定义体: .ofRepr (toFinsuppIsoLinear R).trans AddMonoidAlgebra.coeffLinearEquiv _
-
-@[simp]
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeffLinearEquiv, coeffLinearEquiv, ofRepr, toFinsuppIsoLinear
+--- 原说明 ---
+The monomials form a basis on `R[X]`. To get the rank of a polynomial ring,
+use this and `Basis.mk_eq_rank`.
 -/
-def basisMonomials : Basis Nat R R[X] :=
-.ofRepr (toFinsuppIsoLinear R).trans AddMonoidAlgebra.coeffLinearEquiv _
+def basisMonomials : Basis ℕ R R[X] :=
+  .ofRepr <| (toFinsuppIsoLinear R).trans <| AddMonoidAlgebra.coeffLinearEquiv _
 
 @[simp]
-/--
-theorem `coe_basisMonomials` / 定理 `coe_basisMonomials`
-
-English:
-theorem coe_basisMonomials
-  statement: (basisMonomials R : Nat -> R[X]) = fun s => monomial s 1
-  proof: funext fun _ => ofFinsupp_single _ _
-
-中文:
-定理 coe_basisMonomials
-  结论: (basisMonomials R : 自然数 -> R[X]) = fun s => monomial s 1
-  证明: funext fun _ => ofFinsupp_single _ _
-
-Depends on / 依赖: ofFinsupp_single
+/-
+**Polynomial.coe_basisMonomials** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_basisMonomials : (basisMonomials R : Nat -> R[X]) = fun s => monomial 
+s 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Polynomial.ofFinsupp_single`：ofFinsupp_single (n : Nat) (r : R) : (⟨.sin
+gle n r⟩ : R[X]) = monomial n r
 -/
-theorem coe_basisMonomials : (basisMonomials R : Nat -> R[X]) = fun s => monomial s 1 :=
+theorem coe_basisMonomials : (basisMonomials R : ℕ → R[X]) = fun s => monomial s 1 :=
   funext fun _ => ofFinsupp_single _ _
 
 end Polynomial
+

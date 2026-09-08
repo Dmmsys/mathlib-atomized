@@ -34,140 +34,82 @@ variable (G : Type u) [Group G]
 
 open Subgroup (centralizer)
 
-/--
-Definition of `Abelianization` / `Abelianization` 的定义
+/-- The abelianization of G is the quotient of G by its commutator subgroup. -/
+/-
+**Abelianization** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Abelianization : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Abelianization
-  signature: : Type u
-  body: G ⧸ commutator G
-
-中文:
-定义 交换化
-  签名: : 类型u
-  定义体: G ⧸ commutator G
-
-Depends on / 依赖: commutator
+--- 原说明 ---
+The abelianization of G is the quotient of G by its commutator subgroup.
 -/
 def Abelianization : Type u :=
   G ⧸ commutator G
 
 namespace Abelianization
 
-/--
-Instance `commGroup` / 实例 `commGroup`
-
-English:
-instance commGroup
-  signature: : CommGroup (Abelianization G) where
-  body: QuotientGroup.Quotient.group _
-mul_comm x y := Quotient.inductionOn₂ x y fun a b => Quotient.sound'
-QuotientGroup.leftRel_apply.mpr Subgroup.subset_closure
-      -- We avoid `group` here to minimize imports while low in the hierarchy;
-      -- typically it would be better to invoke the tactic.
-      ⟨b⁻¹, Subgroup.mem_top _, a⁻¹, Subgroup.mem_top _, by simp [commutatorElement_def, mul_assoc]⟩
-
-中文:
-实例 commGroup
-  签名: : 交换群 (交换化 G) where
-  定义体: QuotientGroup.Quotient.group _
-mul_comm x y := Quotient.inductionOn₂ x y fun a b => Quotient.sound'
-QuotientGroup.leftRel_apply.mpr Subgroup.subset_closure
-      -- We avoid `group` here to minimize imports while low in the hierarchy;
-      -- typically it would be better to invoke the tactic.
-      ⟨b⁻¹, Subgroup.mem_top _, a⁻¹, Subgroup.mem_top _, by simp [commutatorElement_def, mul_assoc]⟩
-
-Depends on / 依赖: Quotient, QuotientGroup, QuotientGroup.Quotient.group
+/-
+**Abelianization.commGroup** 是 Mathlib 中的一个实例，位于命名空间 `Abelianization`。
+形式化陈述：commGroup : CommGroup (Abelianization G) where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNormalCommutator`：∀ (G : Type u_1) [inst : Group G], (commutator G).
+Normal
 -/
 instance commGroup : CommGroup (Abelianization G) where
   __ := QuotientGroup.Quotient.group _
-mul_comm x y := Quotient.inductionOn₂ x y fun a b => Quotient.sound'
-QuotientGroup.leftRel_apply.mpr Subgroup.subset_closure
+  mul_comm x y := Quotient.inductionOn₂ x y fun a b ↦ Quotient.sound' <|
+    QuotientGroup.leftRel_apply.mpr <| Subgroup.subset_closure
       -- We avoid `group` here to minimize imports while low in the hierarchy;
       -- typically it would be better to invoke the tactic.
       ⟨b⁻¹, Subgroup.mem_top _, a⁻¹, Subgroup.mem_top _, by simp [commutatorElement_def, mul_assoc]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Abelianization G)
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 (交换化 G)
-  定义体: ⟨1⟩
+/-
+**Abelianization.** 是 Mathlib 中的一个实例，位于命名空间 `Abelianization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Abelianization G) :=
   ⟨1⟩
 
 variable {G}
 
-/--
-Definition of `of` / `of` 的定义
+/-- `of` is the canonical projection from G to its abelianization. -/
+/-
+**Abelianization.of** 是 Mathlib 中的一个定义，位于命名空间 `Abelianization`。
+形式化陈述：of : G ->* Abelianization G where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: : G ->* Abelianization G where
-  body: QuotientGroup.mk
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 of
-  签名: : G ->* 交换化 G where
-  定义体: QuotientGroup.mk
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-@[simp]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.mk
+--- 原说明 ---
+`of` is the canonical projection from G to its abelianization.
 -/
-def of : G ->* Abelianization G where
+def of : G →* Abelianization G where
   toFun := QuotientGroup.mk
   map_one' := rfl
   map_mul' _ _ := rfl
 
 @[simp]
-/--
-theorem `mk_eq_of` / 定理 `mk_eq_of`
-
-English:
-theorem mk_eq_of
-  given: (a : G)
-  statement: Quot.mk _ a = of a
-  proof: rfl
-
-中文:
-定理 mk_eq_of
-  条件: (a : G)
-  结论: 商.mk _ a = of a
-  证明: rfl
+/-
+**Abelianization.mk_eq_of** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：mk_eq_of (a : G) : Quot.mk _ a = of a
+参数：a : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_eq_of (a : G) : Quot.mk _ a = of a :=
   rfl
 
 variable (G) in
 @[simp]
-/--
-theorem `ker_of` / 定理 `ker_of`
-
-English:
-theorem ker_of
-  statement: of.ker = commutator G
-  proof: QuotientGroup.ker_mk' (commutator G)
-
-中文:
-定理 ker_of
-  结论: of.ker = commutator G
-  证明: QuotientGroup.ker_mk' (commutator G)
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.ker_mk, commutator, ker_mk
+/-
+**Abelianization.ker_of** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：ker_of : of.ker = commutator G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.ker_mk'`：ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G 
+->* G ⧸ N) = N
+· 使用定理 `instNormalCommutator`：∀ (G : Type u_1) [inst : Group G], (commutator G).
+Normal
 -/
 theorem ker_of : of.ker = commutator G :=
   QuotientGroup.ker_mk' (commutator G)
@@ -177,161 +119,120 @@ section lift
 -- So far we have built Gᵃᵇ and proved it's an abelian group.
 -- Furthermore we defined the canonical projection `of : G → Gᵃᵇ`
 -- Let `A` be an abelian group and let `f` be a group homomorphism from `G` to `A`.
-variable {A : Type v} [CommGroup A] (f : G ->* A)
+variable {A : Type v} [CommGroup A] (f : G →* A)
 
-/--
-theorem `commutator_subset_ker` / 定理 `commutator_subset_ker`
-
-English:
-theorem commutator_subset_ker
-  statement: commutator G <= f.ker
-  proof: by
-  rw [commutator_eq_closure]; rw [Subgroup.closure_le]
-  rintro x ⟨p, q, rfl⟩
-  simp [MonoidHom.mem_ker, mul_right_comm (f p) (f q), commutatorElement_def]
-
-中文:
-定理 commutator_subset_ker
-  结论: commutator G <= f.ker
-  证明: by
-  rw [commutator_eq_closure]; rw [Subgroup.closure_le]
-  rintro x ⟨p, q, rfl⟩
-  simp [MonoidHom.mem_ker, mul_right_comm (f p) (f q), commutatorElement_def]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, Subgroup, Subgroup.closure_le, closure_le, commutatorElement_def, commutator_eq_closure, mem_ker, mul_right_comm
+/-
+**Abelianization.commutator_subset_ker** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization
+`。
+形式化陈述：commutator_subset_ker : commutator G <= f.ker
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `commutator_eq_closure`：commutator_eq_closure : commutator G = Subgroup.c
+losure (commutatorSet G)
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem commutator_subset_ker : commutator G <= f.ker := by
-  rw [commutator_eq_closure]; rw [Subgroup.closure_le]
+theorem commutator_subset_ker : commutator G ≤ f.ker := by
+  rw [commutator_eq_closure, Subgroup.closure_le]
   rintro x ⟨p, q, rfl⟩
   simp [MonoidHom.mem_ker, mul_right_comm (f p) (f q), commutatorElement_def]
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- If `f : G → A` is a group homomorphism to an abelian group, then `lift f` is the unique map
+  from the abelianization of a `G` to `A` that factors through `f`. -/
+/-
+**Abelianization.lift** 是 Mathlib 中的一个定义，位于命名空间 `Abelianization`。
+形式化陈述：lift : (G ->* A) ≃ (Abelianization G ->* A) where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instNormalCommutator`：∀ (G : Type u_1) [inst : Group G], (commutator G).
+Normal
 
-English:
-definition lift
-  signature: : (G ->* A) ≃ (Abelianization G ->* A) where
-  body: QuotientGroup.lift _ f fun _ h => MonoidHom.mem_ker.2 commutator_subset_ker _ h
-  invFun F := F.comp of
-  right_inv _ := MonoidHom.ext fun x => QuotientGroup.induction_on x fun _ => rfl
-
-@[simp]
-
-中文:
-定义 lift
-  签名: : (G ->* A) ≃ (交换化 G ->* A) where
-  定义体: QuotientGroup.lift _ f fun _ h => MonoidHom.mem_ker.2 commutator_subset_ker _ h
-  invFun F := F.comp of
-  right_inv _ := MonoidHom.ext fun x => QuotientGroup.induction_on x fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, QuotientGroup, QuotientGroup.lift, commutator_subset_ker, mem_ker
+--- 原说明 ---
+If `f : G → A` is a group homomorphism to an abelian group, then `lift f` is the
+ unique map
+  from the abelianization of a `G` to `A` that factors through `f`.
 -/
-def lift : (G ->* A) ≃ (Abelianization G ->* A) where
-toFun f := QuotientGroup.lift _ f fun _ h => MonoidHom.mem_ker.2 commutator_subset_ker _ h
+def lift : (G →* A) ≃ (Abelianization G →* A) where
+  toFun f := QuotientGroup.lift _ f fun _ h => MonoidHom.mem_ker.2 <| commutator_subset_ker _ h
   invFun F := F.comp of
   right_inv _ := MonoidHom.ext fun x => QuotientGroup.induction_on x fun _ => rfl
 
 @[simp]
-/--
-theorem `lift_apply_of` / 定理 `lift_apply_of`
-
-English:
-theorem lift_apply_of
-  given: (x : G)
-  statement: lift f (of x) = f x
-  proof: rfl
-
-中文:
-定理 lift_apply_of
-  条件: (x : G)
-  结论: lift f (of x) = f x
-  证明: rfl
+/-
+**Abelianization.lift_apply_of** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：lift_apply_of (x : G) : lift f (of x) = f x
+参数：x : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift_apply_of (x : G) : lift f (of x) = f x :=
   rfl
-
-/--
-theorem `coe_lift_symm` / 定理 `coe_lift_symm`
-
-English:
-theorem coe_lift_symm
-  statement: (lift.symm : (Abelianization G ->* A) -> (G ->* A)) = (·.comp of)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_lift_symm
-  结论: (lift.symm : (交换化 G ->* A) -> (G ->* A)) = (·.comp of)
-  证明: rfl
-
-@[simp]
+/-
+**Abelianization.coe_lift_symm** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：coe_lift_symm : (lift.symm : (Abelianization G ->* A) -> (G ->* A)) = (·.c
+omp of)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem coe_lift_symm : (lift.symm : (Abelianization G ->* A) -> (G ->* A)) = (·.comp of) := rfl
+theorem coe_lift_symm : (lift.symm : (Abelianization G →* A) → (G →* A)) = (·.comp of) := rfl
 
 @[simp]
-/--
-theorem `lift_symm_apply` / 定理 `lift_symm_apply`
-
-English:
-theorem lift_symm_apply
-  given: (f : Abelianization G ->* A)
-  statement: lift.symm f = f.comp of
-  proof: rfl
-
-中文:
-定理 lift_symm_apply
-  条件: (f : 交换化 G ->* A)
-  结论: lift.symm f = f.comp of
-  证明: rfl
+/-
+**Abelianization.lift_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：lift_symm_apply (f : Abelianization G ->* A) : lift.symm f = f.comp of
+参数：f : Abelianization G ->* A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem lift_symm_apply (f : Abelianization G ->* A) : lift.symm f = f.comp of := rfl
-
-/--
-theorem `lift_unique` / 定理 `lift_unique`
-
-English:
-theorem lift_unique
-  statement: (φ : Abelianization G ->* A)
-  proof: QuotientGroup.induction_on x hφ
-
-@[simp]
-
-中文:
-定理 lift_unique
-  结论: (φ : 交换化 G ->* A)
-  证明: QuotientGroup.induction_on x hφ
-
-@[simp]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.induction_on, induction_on
+theorem lift_symm_apply (f : Abelianization G →* A) : lift.symm f = f.comp of := rfl
+/-
+**Abelianization.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：lift_unique (φ : Abelianization G ->* A) -- hφ : φ agrees with f on the im
+age of G in Gᵃᵇ (hφ : forall x : G, φ (Abelianization.of x) = f x) {x : Abeliani
+zation G} : φ x = lift f x
+参数：φ : Abelianization G ->* A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientGroup.induction_on`：induction_on {C : α ⧸ s -> Prop} (x : α ⧸ s)
+ (H : forall z, C (QuotientGroup.mk z)) : C x
 -/
-theorem lift_unique (φ : Abelianization G ->* A)
+theorem lift_unique (φ : Abelianization G →* A)
     -- hφ : φ agrees with f on the image of G in Gᵃᵇ
-    (hφ : forall x : G, φ (Abelianization.of x) = f x)
+    (hφ : ∀ x : G, φ (Abelianization.of x) = f x)
     {x : Abelianization G} : φ x = lift f x :=
   QuotientGroup.induction_on x hφ
 
 @[simp]
-/--
-theorem `lift_of` / 定理 `lift_of`
-
-English:
-theorem lift_of
-  statement: lift of = MonoidHom.id (Abelianization G)
-  proof: lift.apply_symm_apply MonoidHom.id _
-
-中文:
-定理 lift_of
-  结论: lift of = 幺半群态射.id (交换化 G)
-  证明: lift.apply_symm_apply MonoidHom.id _
-
-Depends on / 依赖: MonoidHom, MonoidHom.id, apply_symm_apply, lift.apply_symm_apply
+/-
+**Abelianization.lift_of** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：lift_of : lift of = MonoidHom.id (Abelianization G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 theorem lift_of : lift of = MonoidHom.id (Abelianization G) :=
-lift.apply_symm_apply MonoidHom.id _
+  lift.apply_symm_apply <| MonoidHom.id _
 
 end lift
 
@@ -339,154 +240,106 @@ variable {A : Type v} [Monoid A]
 
 /-- See note [partially-applied ext lemmas]. -/
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
+/-
+**Abelianization.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：hom_ext (φ ψ : Abelianization G ->* A) (h : φ.comp of = ψ.comp of) : φ = ψ
+参数：φ ψ : Abelianization G ->* A；h : φ.comp of = ψ.comp of。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `QuotientGroup.induction_on`：induction_on {C : α ⧸ s -> Prop} (x : α ⧸ s)
+ (H : forall z, C (QuotientGroup.mk z)) : C x
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-English:
-theorem hom_ext
-  given: (φ ψ : Abelianization G ->* A) (h : φ.comp of = ψ.comp of)
-  statement: φ = ψ
-  proof: MonoidHom.ext fun x => QuotientGroup.induction_on x DFunLike.congr_fun h
-
-中文:
-定理 hom_ext
-  条件: (φ ψ : 交换化 G ->* A) (h : φ.comp of = ψ.comp of)
-  结论: φ = ψ
-  证明: MonoidHom.ext fun x => QuotientGroup.induction_on x DFunLike.congr_fun h
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, MonoidHom, MonoidHom.ext, QuotientGroup, QuotientGroup.induction_on, congr_fun, induction_on
+--- 原说明 ---
+See note [partially-applied ext lemmas].
 -/
-theorem hom_ext (φ ψ : Abelianization G ->* A) (h : φ.comp of = ψ.comp of) : φ = ψ :=
-MonoidHom.ext fun x => QuotientGroup.induction_on x DFunLike.congr_fun h
+theorem hom_ext (φ ψ : Abelianization G →* A) (h : φ.comp of = ψ.comp of) : φ = ψ :=
+  MonoidHom.ext fun x => QuotientGroup.induction_on x <| DFunLike.congr_fun h
 
 section Map
 
-variable {H : Type v} [Group H] (f : G ->* H)
+variable {H : Type v} [Group H] (f : G →* H)
 
-/--
-Definition of `map` / `map` 的定义
+/-- The map operation of the `Abelianization` functor -/
+/-
+**Abelianization.map** 是 Mathlib 中的一个定义，位于命名空间 `Abelianization`。
+形式化陈述：map : Abelianization G ->* Abelianization H
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : Abelianization G ->* Abelianization H
-  body: lift (of.comp f)
-
-中文:
-定义 map
-  签名: : 交换化 G ->* 交换化 H
-  定义体: lift (of.comp f)
-
-Depends on / 依赖: of.comp
+--- 原说明 ---
+The map operation of the `Abelianization` functor
 -/
-def map : Abelianization G ->* Abelianization H :=
+def map : Abelianization G →* Abelianization H :=
   lift (of.comp f)
 
-/--
-theorem `lift_of_comp` / 定理 `lift_of_comp`
+/-- Use `map` as the preferred simp normal form. -/
+/-
+**Abelianization.lift_of_comp** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：∀ {G : Type u} [inst : Group G] {H : Type v} [inst_1 : Group H] (f : G →* 
+H),   Abelianization.lift (Abelianization.of.comp f) = Abelianization.map f
+参数：f : G →* H；Abelianization.of.comp f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem lift_of_comp
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lift_of_comp
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+Use `map` as the preferred simp normal form.
 -/
 @[simp] theorem lift_of_comp :
     Abelianization.lift (Abelianization.of.comp f) = Abelianization.map f := rfl
 
 @[simp]
-/--
-theorem `map_of` / 定理 `map_of`
-
-English:
-theorem map_of
-  given: (x : G)
-  statement: map f (of x) = of (f x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_of
-  条件: (x : G)
-  结论: map f (of x) = of (f x)
-  证明: rfl
-
-@[simp]
+/-
+**Abelianization.map_of** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：map_of (x : G) : map f (of x) = of (f x)
+参数：x : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_of (x : G) : map f (of x) = of (f x) :=
   rfl
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: map (MonoidHom.id G) = MonoidHom.id (Abelianization G)
-  proof: hom_ext _ _ rfl
-
-@[simp]
-
-中文:
-定理 map_id
-  结论: map (幺半群态射.id G) = 幺半群态射.id (交换化 G)
-  证明: hom_ext _ _ rfl
-
-@[simp]
-
-Depends on / 依赖: hom_ext
+/-
+**Abelianization.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：map_id : map (MonoidHom.id G) = MonoidHom.id (Abelianization G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Abelianization.hom_ext`：hom_ext (φ ψ : Abelianization G ->* A) (h : φ.co
+mp of = ψ.comp of) : φ = ψ
 -/
 theorem map_id : map (MonoidHom.id G) = MonoidHom.id (Abelianization G) :=
   hom_ext _ _ rfl
 
 @[simp]
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: {I : Type w} [Group I] (g : H ->* I)
-  statement: (map g).comp (map f) = map (g.comp f)
-  proof: hom_ext _ _ rfl
-
-@[simp]
-
-中文:
-定理 map_comp
-  条件: {I : 类型 w} [群 I] (g : H ->* I)
-  结论: (map g).comp (map f) = map (g.comp f)
-  证明: hom_ext _ _ rfl
-
-@[simp]
-
-Depends on / 依赖: hom_ext
+/-
+**Abelianization.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：map_comp {I : Type w} [Group I] (g : H ->* I) : (map g).comp (map f) = map
+ (g.comp f)
+参数：g : H ->* I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Abelianization.hom_ext`：hom_ext (φ ψ : Abelianization G ->* A) (h : φ.co
+mp of = ψ.comp of) : φ = ψ
 -/
-theorem map_comp {I : Type w} [Group I] (g : H ->* I) : (map g).comp (map f) = map (g.comp f) :=
+theorem map_comp {I : Type w} [Group I] (g : H →* I) : (map g).comp (map f) = map (g.comp f) :=
   hom_ext _ _ rfl
 
 @[simp]
-/--
-theorem `map_map_apply` / 定理 `map_map_apply`
-
-English:
-theorem map_map_apply
-  given: {I : Type w} [Group I] {g : H ->* I} {x : Abelianization G}
-  proof: DFunLike.congr_fun (map_comp _ _) x
-
-中文:
-定理 map_map_apply
-  条件: {I : 类型 w} [群 I] {g : H ->* I} {x : 交换化 G}
-  证明: DFunLike.congr_fun (map_comp _ _) x
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_comp
+/-
+**Abelianization.map_map_apply** 是 Mathlib 中的一个定理，位于命名空间 `Abelianization`。
+形式化陈述：map_map_apply {I : Type w} [Group I] {g : H ->* I} {x : Abelianization G} 
+: map g (map f x) = map (g.comp f) x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Abelianization.map_comp`：map_comp {I : Type w} [Group I] (g : H ->* I) :
+ (map g).comp (map f) = map (g.comp f)
 -/
-theorem map_map_apply {I : Type w} [Group I] {g : H ->* I} {x : Abelianization G} :
+theorem map_map_apply {I : Type w} [Group I] {g : H →* I} {x : Abelianization G} :
     map g (map f x) = map (g.comp f) x :=
   DFunLike.congr_fun (map_comp _ _) x
 
@@ -498,40 +351,17 @@ section AbelianizationCongr
 
 variable {G} {H : Type v} [Group H]
 
-/--
-Definition of `MulEquiv.abelianizationCongr` / `MulEquiv.abelianizationCongr` 的定义
+/-- Equivalent groups have equivalent abelianizations -/
+/-
+**MulEquiv.abelianizationCongr** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulEquiv.abelianizationCongr (e : G ≃* H) : Abelianization G ≃* Abelianiza
+tion H where toFun
+参数：e : G ≃* H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulEquiv.abelianizationCongr
-  signature: (e : G ≃* H)
-  body: Abelianization.map e.toMonoidHom
-  invFun := Abelianization.map e.symm.toMonoidHom
-  left_inv := by
-    rintro ⟨a⟩
-    simp
-  right_inv := by
-    rintro ⟨a⟩
-    simp
-  map_mul' := map_mul _
-
-@[simp]
-
-中文:
-定义 乘法等价.abelianizationCongr
-  签名: (e : G ≃* H)
-  定义体: Abelianization.map e.toMonoidHom
-  invFun := Abelianization.map e.symm.toMonoidHom
-  left_inv := by
-    rintro ⟨a⟩
-    simp
-  right_inv := by
-    rintro ⟨a⟩
-    simp
-  map_mul' := map_mul _
-
-@[simp]
-
-Depends on / 依赖: Abelianization, Abelianization.map, e.toMonoidHom, toMonoidHom
+--- 原说明 ---
+Equivalent groups have equivalent abelianizations
 -/
 def MulEquiv.abelianizationCongr (e : G ≃* H) : Abelianization G ≃* Abelianization H where
   toFun := Abelianization.map e.toMonoidHom
@@ -545,86 +375,60 @@ def MulEquiv.abelianizationCongr (e : G ≃* H) : Abelianization G ≃* Abeliani
   map_mul' := map_mul _
 
 @[simp]
-/--
-theorem `abelianizationCongr_of` / 定理 `abelianizationCongr_of`
-
-English:
-theorem abelianizationCongr_of
-  given: (e : G ≃* H) (x : G)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 abelianizationCongr_of
-  条件: (e : G ≃* H) (x : G)
-  证明: rfl
-
-@[simp]
+/-
+**abelianizationCongr_of** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：abelianizationCongr_of (e : G ≃* H) (x : G) : e.abelianizationCongr (Abeli
+anization.of x) = Abelianization.of (e x)
+参数：e : G ≃* H；x : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem abelianizationCongr_of (e : G ≃* H) (x : G) :
     e.abelianizationCongr (Abelianization.of x) = Abelianization.of (e x) :=
   rfl
 
 @[simp]
-/--
-theorem `abelianizationCongr_refl` / 定理 `abelianizationCongr_refl`
-
-English:
-theorem abelianizationCongr_refl
-  proof: MulEquiv.toMonoidHom_injective Abelianization.lift_of
-
-@[simp]
-
-中文:
-定理 abelianizationCongr_refl
-  证明: MulEquiv.toMonoidHom_injective Abelianization.lift_of
-
-@[simp]
-
-Depends on / 依赖: Abelianization, Abelianization.lift_of, MulEquiv, MulEquiv.toMonoidHom_injective, lift_of, toMonoidHom_injective
+/-
+**abelianizationCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：abelianizationCongr_refl : (MulEquiv.refl G).abelianizationCongr = MulEqui
+v.refl (Abelianization G)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquiv.toMonoidHom_injective`：toMonoidHom_injective : Injective (toMon
+oidHom : M ≃* N -> M ->* N)
+· 使用定理 `Abelianization.lift_of`：lift_of : lift of = MonoidHom.id (Abelianization
+ G)
 -/
 theorem abelianizationCongr_refl :
     (MulEquiv.refl G).abelianizationCongr = MulEquiv.refl (Abelianization G) :=
   MulEquiv.toMonoidHom_injective Abelianization.lift_of
 
 @[simp]
-/--
-theorem `abelianizationCongr_symm` / 定理 `abelianizationCongr_symm`
-
-English:
-theorem abelianizationCongr_symm
-  given: (e : G ≃* H)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 abelianizationCongr_symm
-  条件: (e : G ≃* H)
-  证明: rfl
-
-@[simp]
+/-
+**abelianizationCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：abelianizationCongr_symm (e : G ≃* H) : e.abelianizationCongr.symm = e.sym
+m.abelianizationCongr
+参数：e : G ≃* H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem abelianizationCongr_symm (e : G ≃* H) :
     e.abelianizationCongr.symm = e.symm.abelianizationCongr :=
   rfl
 
 @[simp]
-/--
-theorem `abelianizationCongr_trans` / 定理 `abelianizationCongr_trans`
-
-English:
-theorem abelianizationCongr_trans
-  given: {I : Type v} [Group I] (e : G ≃* H) (e₂ : H ≃* I)
-  proof: MulEquiv.toMonoidHom_injective (Abelianization.hom_ext _ _ rfl)
-
-中文:
-定理 abelianizationCongr_trans
-  条件: {I : 类型v} [群 I] (e : G ≃* H) (e₂ : H ≃* I)
-  证明: MulEquiv.toMonoidHom_injective (Abelianization.hom_ext _ _ rfl)
-
-Depends on / 依赖: Abelianization, Abelianization.hom_ext, MulEquiv, MulEquiv.toMonoidHom_injective, hom_ext, toMonoidHom_injective
+/-
+**abelianizationCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：abelianizationCongr_trans {I : Type v} [Group I] (e : G ≃* H) (e₂ : H ≃* I
+) : e.abelianizationCongr.trans e₂.abelianizationCongr = (e.trans e₂).abelianiza
+tionCongr
+参数：e : G ≃* H；e₂ : H ≃* I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquiv.toMonoidHom_injective`：toMonoidHom_injective : Injective (toMon
+oidHom : M ≃* N -> M ->* N)
+· 使用定理 `Abelianization.hom_ext`：hom_ext (φ ψ : Abelianization G ->* A) (h : φ.co
+mp of = ψ.comp of) : φ = ψ
 -/
 theorem abelianizationCongr_trans {I : Type v} [Group I] (e : G ≃* H) (e₂ : H ≃* I) :
     e.abelianizationCongr.trans e₂.abelianizationCongr = (e.trans e₂).abelianizationCongr :=
@@ -634,30 +438,15 @@ end AbelianizationCongr
 
 /-- An Abelian group is equivalent to its own abelianization. -/
 @[simps]
-/--
-Definition of `Abelianization.equivOfComm` / `Abelianization.equivOfComm` 的定义
+/-
+**Abelianization.equivOfComm** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Abelianization.equivOfComm {H : Type*} [CommGroup H] : H ≃* Abelianization
+ H
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Abelianization.equivOfComm
-  signature: {H : Type*} [CommGroup H]
-  body: { Abelianization.of with
-    toFun := Abelianization.of
-    invFun := Abelianization.lift (MonoidHom.id H)
-    right_inv := by
-      rintro ⟨a⟩
-      rfl }
-
-中文:
-定义 交换化.equivOfComm
-  签名: {H : 类型} [交换群 H]
-  定义体: { Abelianization.of with
-    toFun := Abelianization.of
-    invFun := Abelianization.lift (MonoidHom.id H)
-    right_inv := by
-      rintro ⟨a⟩
-      rfl }
-
-Depends on / 依赖: Abelianization, Abelianization.lift, Abelianization.of, MonoidHom, MonoidHom.id, invFun, right_inv
+--- 原说明 ---
+An Abelian group is equivalent to its own abelianization.
 -/
 def Abelianization.equivOfComm {H : Type*} [CommGroup H] : H ≃* Abelianization H :=
   { Abelianization.of with
@@ -666,18 +455,8 @@ def Abelianization.equivOfComm {H : Type*} [CommGroup H] : H ≃* Abelianization
     right_inv := by
       rintro ⟨a⟩
       rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: G] : Unique (Abelianization G)
-  body: Quotient.instUniqueQuotient _
-
-中文:
-实例 [唯一
-  签名: G] : 唯一 (交换化 G)
-  定义体: Quotient.instUniqueQuotient _
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique G] : Unique (Abelianization G) := Quotient.instUniqueQuotient _

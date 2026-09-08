@@ -31,24 +31,18 @@ variable {α β : Type*}
 
 /-- `Finset α` has distributive negation if `α` has. -/
 @[instance_reducible]
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-
+**Finset.distribNeg** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：{α : Type u_1} → [inst : DecidableEq α] → [inst_1 : Mul α] → [HasDistribNe
+g α] → HasDistribNeg (Finset α)
+参数：Finset α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.coe_injective`：coe_injective {α} : Injective ((↑) : Finset α -> S
+et α)
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
 
-English:
-definition noncomputable
-  signature: def distribNeg [DecidableEq α] [Mul α] [HasDistribNeg α]
-  body: coe_injective.hasDistribNeg _ coe_neg coe_mul
-
-scoped[Pointwise] attribute [instance] Finset.distribNeg
-
-中文:
-定义 noncomputable
-  签名: def distribNeg [DecidableEq α] [乘法 α] [有DistribNeg α]
-  定义体: coe_injective.hasDistribNeg _ coe_neg coe_mul
-
-scoped[Pointwise] attribute [instance] Finset.distribNeg
-
-Depends on / 依赖: Unique
+--- 原说明 ---
+`Finset α` has distributive negation if `α` has.
 -/
 protected noncomputable def distribNeg [DecidableEq α] [Mul α] [HasDistribNeg α] :
     HasDistribNeg (Finset α) :=
@@ -59,42 +53,63 @@ scoped[Pointwise] attribute [instance] Finset.distribNeg
 section Distrib
 variable [DecidableEq α] [Distrib α] (s t u : Finset α)
 
+/-!
+Note that `Finset α` is not a `Distrib` because `s * t + s * u` has cross terms that `s * (t + u)`
+lacks.
 
-/--
-lemma `mul_add_subset` / 引理 `mul_add_subset`
+```lean
+-- {10, 16, 18, 20, 8, 9}
+#eval {1, 2} * ({3, 4} + {5, 6} : Finset ℕ)
 
-English:
-lemma mul_add_subset
-  statement: s * (t + u) subseteq s * t + s * u
-  proof: image₂_distrib_subset_left mul_add
-
-中文:
-引理 mul_add_subset
-  结论: s * (t + u) subseteq s * t + s * u
-  证明: image₂_distrib_subset_left mul_add
-
-Depends on / 依赖: mul_add
+-- {10, 11, 12, 13, 14, 15, 16, 18, 20, 8, 9}
+#eval ({1, 2} : Finset ℕ) * {3, 4} + {1, 2} * {5, 6}
+```
 -/
-lemma mul_add_subset : s * (t + u) subseteq s * t + s * u :=
+
+/-
+**Finset.mul_add_subset** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：mul_add_subset : s * (t + u) subseteq s * t + s * u
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.image₂_distrib_subset_left`：image₂_distrib_subset_left {γ : Type*
+} {u : Finset γ} {f : α -> δ -> ε} {g : β -> γ -> δ} {f₁ : α -> β -> β'} {f₂ : α
+ -> γ -> γ'} {g' : β' -…
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+
+--- 原说明 ---
+Note that `Finset α` is not a `Distrib` because `s * t + s * u` has cross terms 
+that `s * (t + u)`
+lacks.
+
+```lean
+-- {10, 16, 18, 20, 8, 9}
+#eval {1, 2} * ({3, 4} + {5, 6} : Finset ℕ)
+
+-- {10, 11, 12, 13, 14, 15, 16, 18, 20, 8, 9}
+#eval ({1, 2} : Finset ℕ) * {3, 4} + {1, 2} * {5, 6}
+```
+-/
+lemma mul_add_subset : s * (t + u) ⊆ s * t + s * u :=
   image₂_distrib_subset_left mul_add
-
-/--
-lemma `add_mul_subset` / 引理 `add_mul_subset`
-
-English:
-lemma add_mul_subset
-  statement: (s + t) * u subseteq s * u + t * u
-  proof: image₂_distrib_subset_right add_mul
-
-中文:
-引理 add_mul_subset
-  结论: (s + t) * u subseteq s * u + t * u
-  证明: image₂_distrib_subset_right add_mul
-
-Depends on / 依赖: Ideal.Quotient.mk_surjective, IsPreimmersion, IsPreimmersion.mk_SpecMap, PrimeSpectrum, PrimeSpectrum.isClosedEmbedding_comap_of_surjective, Quotient, RingHom, RingHom.surjectiveOnStalks_of_surjective, add_mul, isClosedEmbedding_comap_of_surjective, isEmbedding, mk_SpecMap, mk_surjective, surjectiveOnStalks_of_surjective
+/-
+**Finset.add_mul_subset** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：add_mul_subset : (s + t) * u subseteq s * u + t * u
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.image₂_distrib_subset_right`：image₂_distrib_subset_right {γ : Typ
+e*} {u : Finset γ} {f : δ -> γ -> ε} {g : α -> β -> δ} {f₁ : α -> γ -> α'} {f₂ :
+ β -> γ -> β'} {g' : α' …
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
 -/
-lemma add_mul_subset : (s + t) * u subseteq s * u + t * u :=
+lemma add_mul_subset : (s + t) * u ⊆ s * u + t * u :=
   image₂_distrib_subset_right add_mul
 
 end Distrib
 end Finset
+

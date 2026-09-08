@@ -8,7 +8,7 @@ module
 public import Lean.Environment
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-import Mathlib.Tactic.Linter.Header -- shake: keep
+import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # Additional utilities for `Lean.Environment`
@@ -22,21 +22,23 @@ public section constKind
 accessible when getting its `ConstantVal`, but is not recorded in said `ConstantVal`. -/
 
 /--
-Definition of `findConstValWithKind?` / `findConstValWithKind?` 的定义
+Like `findConstVal?`, but also returns the declarations `ConstantKind`, which is known immediately.
 
-English:
-definition findConstValWithKind?
-  signature: (env : Environment) (decl : Name) (skipRealize := false)
-  body: do
-  let info ← env.findAsync? decl skipRealize
-  return (info.toConstantVal, info.kind)
+Blocks on everything but the constant's body (if any), which is not accessible through the result.
+-/
+/-
+**Lean.Environment.findConstValWithKind** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Environm
+ent`。
+形式化陈述：findConstValWithKind? (env : Environment) (decl : Name) (skipRealize
+参数：env : Environment；decl : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findConstValWithKind?
-  签名: (env : Environment) (decl : Name) (skip实数ize := false)
-  定义体: do
-  let info ← env.findAsync? decl skipRealize
-  return (info.toConstantVal, info.kind)
+--- 原说明 ---
+Like `findConstVal?`, but also returns the declarations `ConstantKind`, which is
+ known immediately.
+
+Blocks on everything but the constant's body (if any), which is not accessible t
+hrough the result.
 -/
 def findConstValWithKind? (env : Environment) (decl : Name) (skipRealize := false) :
     Option (ConstantVal × ConstantKind) := do
@@ -44,45 +46,50 @@ def findConstValWithKind? (env : Environment) (decl : Name) (skipRealize := fals
   return (info.toConstantVal, info.kind)
 
 /--
-Definition of `findConstValOfKind?` / `findConstValOfKind?` 的定义
+Like `findConstVal?`, but only finds the `ConstantVal` for `decl` in `env` if its kind satisfies
+`p`. Otherwise, returns `none`.
 
-English:
-definition findConstValOfKind?
-  signature: (env : Environment) (p : ConstantKind -> Bool) (decl : Name)
-  body: do
-  let info ← env.findAsync? decl skipRealize
-  if p info.kind then info.toConstantVal else none
-
-中文:
-定义 findConstValOfKind?
-  签名: (env : Environment) (p : ConstantKind -> 布尔值) (decl : Name)
-  定义体: do
-  let info ← env.findAsync? decl skipRealize
-  if p info.kind then info.toConstantVal else none
-
-Depends on / 依赖: ConstantVal
+Blocks on everything but the constant's body (if any), which is not accessible through the result.
 -/
-def findConstValOfKind? (env : Environment) (p : ConstantKind -> Bool) (decl : Name)
+/-
+**Lean.Environment.findConstValOfKind** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Environmen
+t`。
+形式化陈述：findConstValOfKind? (env : Environment) (p : ConstantKind -> Bool) (decl :
+ Name) (skipRealize
+参数：env : Environment；p : ConstantKind -> Bool；decl : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Like `findConstVal?`, but only finds the `ConstantVal` for `decl` in `env` if it
+s kind satisfies
+`p`. Otherwise, returns `none`.
+
+Blocks on everything but the constant's body (if any), which is not accessible t
+hrough the result.
+-/
+def findConstValOfKind? (env : Environment) (p : ConstantKind → Bool) (decl : Name)
     (skipRealize := false) : Option ConstantVal := do
   let info ← env.findAsync? decl skipRealize
   if p info.kind then info.toConstantVal else none
 
 /--
-Definition of `findTheoremConstVal?` / `findTheoremConstVal?` 的定义
+Like `findConstVal?`, but only finds the `ConstantVal` for `decl` in `env` if it is a theorem.
 
-English:
-definition findTheoremConstVal?
-  signature: (env : Environment) (decl : Name)
-  body: do
-  env.findConstValOfKind? (· matches .thm) decl skipRealize
+Blocks on everything but the constant's body (if any), which is not accessible through the result.
+-/
+/-
+**Lean.Environment.findTheoremConstVal** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Environme
+nt`。
+形式化陈述：findTheoremConstVal? (env : Environment) (decl : Name) (skipRealize
+参数：env : Environment；decl : Name。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 findTheoremConstVal?
-  签名: (env : Environment) (decl : Name)
-  定义体: do
-  env.findConstValOfKind? (· matches .thm) decl skipRealize
+--- 原说明 ---
+Like `findConstVal?`, but only finds the `ConstantVal` for `decl` in `env` if it
+ is a theorem.
 
-Depends on / 依赖: ConstantVal
+Blocks on everything but the constant's body (if any), which is not accessible t
+hrough the result.
 -/
 def findTheoremConstVal? (env : Environment) (decl : Name)
     (skipRealize := false) : Option ConstantVal := do
@@ -91,3 +98,4 @@ def findTheoremConstVal? (env : Environment) (decl : Name)
 end constKind
 
 end Lean.Environment
+

@@ -29,55 +29,51 @@ variable {C : Type*} [Category* C]
   [Preadditive C] [MonoidalCategory C] [MonoidalPreadditive C]
   {X₁ Y₁ : C} {f₁ : X₁ ⟶ Y₁} {c₁ : CokernelCofork f₁} (hc₁ : IsColimit c₁)
   {X₂ Y₂ : C} {f₂ : X₂ ⟶ Y₂} {c₂ : CokernelCofork f₂} (hc₂ : IsColimit c₂)
-  [HasBinaryCoproduct (X₁ otimes Y₂) (Y₁ otimes X₂)]
+  [HasBinaryCoproduct (X₁ ⊗ Y₂) (Y₁ ⊗ X₂)]
 
 variable (c₁ c₂) in
-/--
-Definition of `tensor` / `tensor` 的定义
+/-- Given two cokernel coforks `c₁` and `c₂` for `f₁ : X₁ ⟶ Y₁` and `f₂ : X₂ ⟶ Y₂`,
+this is the cokernel cofork for `(X₁ ⊗ Y₂) ⨿ (Y₁ ⊗ X₂) ⟶ Y₁ ⊗ Y₂` with
+point `c₁.pt ⊗ c₂.pt`. -/
+/-
+**CategoryTheory.Limits.CokernelCofork.tensor** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categ
+oryTheory.Limits.CokernelCofork`。
+形式化陈述：tensor : CokernelCofork (coprod.desc (f₁ ▷ Y₂) (Y₁ ◁ f₂))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation tensor
-  signature: : CokernelCofork (coprod.desc (f₁ ▷ Y₂) (Y₁ ◁ f₂))
-  body: CokernelCofork.ofπ (c₁.π otimesₘ c₂.π) (by
-    ext
-    · simp [tensorHom_def, ← comp_whiskerRight_assoc, coprod.inl_desc]
-    · simp [tensorHom_def', ← whiskerLeft_comp_assoc, coprod.inr_desc])
-
-中文:
-缩写 tensor
-  签名: : 余核余叉 (coprod.desc (f₁ ▷ Y₂) (Y₁ ◁ f₂))
-  定义体: CokernelCofork.ofπ (c₁.π otimesₘ c₂.π) (by
-    ext
-    · simp [tensorHom_def, ← comp_whiskerRight_assoc, coprod.inl_desc]
-    · simp [tensorHom_def', ← whiskerLeft_comp_assoc, coprod.inr_desc])
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.of, comp_whiskerRight_assoc, coprod, coprod.inl_desc, coprod.inr_desc, inl_desc, inr_desc, tensorHom_def, whiskerLeft_comp_assoc
+--- 原说明 ---
+Given two cokernel coforks `c₁` and `c₂` for `f₁ : X₁ ⟶ Y₁` and `f₂ : X₂ ⟶ Y₂`,
+this is the cokernel cofork for `(X₁ ⊗ Y₂) ⨿ (Y₁ ⊗ X₂) ⟶ Y₁ ⊗ Y₂` with
+point `c₁.pt ⊗ c₂.pt`.
 -/
 noncomputable abbrev tensor : CokernelCofork (coprod.desc (f₁ ▷ Y₂) (Y₁ ◁ f₂)) :=
-  CokernelCofork.ofπ (c₁.π otimesₘ c₂.π) (by
+  CokernelCofork.ofπ (c₁.π ⊗ₘ c₂.π) (by
     ext
     · simp [tensorHom_def, ← comp_whiskerRight_assoc, coprod.inl_desc]
     · simp [tensorHom_def', ← whiskerLeft_comp_assoc, coprod.inr_desc])
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `isColimitTensor` / `isColimitTensor` 的定义
+/-- Given two colimit cokernel coforks `c₁` and `c₂` for `f₁ : X₁ ⟶ Y₁` and
+`f₂ : X₂ ⟶ Y₂`, if the cokernels of `f₁` and `f₂` are preserves by suitable
+tensor products, then `c₁.pt ⊗ c₂.pt` is the cokernel of the
+morphism `(X₁ ⊗ Y₂) ⨿ (Y₁ ⊗ X₂) ⟶ Y₁ ⊗ Y₂`. -/
+/-
+**CategoryTheory.Limits.CokernelCofork.isColimitTensor** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.CokernelCofork`。
+形式化陈述：isColimitTensor [PreservesColimit (parallelPair f₂ 0) (tensorLeft c₁.pt)] 
+[PreservesColimit (parallelPair f₁ 0) (tensorRight Y₂)] [PreservesColimit (paral
+lelPair f₁ 0) (tensorRight X₂)] : IsColimit (c₁.tensor c₂)
+参数：parallelPair f₂ 0；tensorLeft c₁.pt；parallelPair f₁ 0；tensorRight Y₂；parallelP
+air f₁ 0；tensorRight X₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitTensor
-  body: haveI : HasBinaryCoproduct (((curriedTensor C).obj X₁).obj Y₂)
-    (((curriedTensor C).obj Y₁).obj X₂) := by assumption
-  IsColimit.ofIsoColimit (isColimitMapBifunctor hc₁ hc₂ (curriedTensor C))
-    (Cofork.ext (Iso.refl _) (by dsimp only [Cofork.π]; simp [tensorHom_def]))
-
-中文:
-定义 isColimitTensor
-  定义体: haveI : HasBinaryCoproduct (((curriedTensor C).obj X₁).obj Y₂)
-    (((curriedTensor C).obj Y₁).obj X₂) := by assumption
-  IsColimit.ofIsoColimit (isColimitMapBifunctor hc₁ hc₂ (curriedTensor C))
-    (Cofork.ext (Iso.refl _) (by dsimp only [Cofork.π]; simp [tensorHom_def]))
-
-Depends on / 依赖: Cofork, Cofork.ext, Ext.eq_zero_of_injective, HasBinaryCoproduct, IsColimit, IsColimit.ofIsoColimit, Iso.refl, curriedTensor, eq_zero_of_injective, isColimitMapBifunctor, ofIsoColimit, subsingleton_of_forall_eq, tensorHom_def
+--- 原说明 ---
+Given two colimit cokernel coforks `c₁` and `c₂` for `f₁ : X₁ ⟶ Y₁` and
+`f₂ : X₂ ⟶ Y₂`, if the cokernels of `f₁` and `f₂` are preserves by suitable
+tensor products, then `c₁.pt ⊗ c₂.pt` is the cokernel of the
+morphism `(X₁ ⊗ Y₂) ⨿ (Y₁ ⊗ X₂) ⟶ Y₁ ⊗ Y₂`.
 -/
 noncomputable def isColimitTensor
     [PreservesColimit (parallelPair f₂ 0) (tensorLeft c₁.pt)]
@@ -90,3 +86,4 @@ noncomputable def isColimitTensor
     (Cofork.ext (Iso.refl _) (by dsimp only [Cofork.π]; simp [tensorHom_def]))
 
 end CategoryTheory.Limits.CokernelCofork
+

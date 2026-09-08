@@ -19,43 +19,21 @@ variable {α : Type*}
 
 /-- Attach `⊥` to a type. -/
 @[to_dual /-- Attach `⊤` to a type. -/]
-/--
-Definition of `WithBot` / `WithBot` 的定义
+/-
+**WithBot** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WithBot (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithBot
-  signature: (α : Type*)
-  body: Option α
-
-中文:
-定义 WithBot
-  签名: (α : 类型)
-  定义体: Option α
+--- 原说明 ---
+Attach `⊥` to a type.
 -/
 def WithBot (α : Type*) := Option α
-
-/--
-Instance `WithBot.instRepr` / 实例 `WithBot.instRepr`
-
-English:
-instance WithBot.instRepr
-  signature: [Repr α]
-  body: ⟨fun o _ =>
-    match o with
-    | none => "⊥"
-    | some a => "↑" ++ repr a⟩
-
-@[to_dual existing]
-
-中文:
-实例 WithBot.instRepr
-  签名: [Repr α]
-  定义体: ⟨fun o _ =>
-    match o with
-    | none => "⊥"
-    | some a => "↑" ++ repr a⟩
-
-@[to_dual existing]
+/-
+**WithBot.instRepr** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：WithBot.instRepr [Repr α] : Repr (WithBot α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance WithBot.instRepr [Repr α] : Repr (WithBot α) :=
   ⟨fun o _ =>
@@ -64,24 +42,11 @@ instance WithBot.instRepr [Repr α] : Repr (WithBot α) :=
     | some a => "↑" ++ repr a⟩
 
 @[to_dual existing]
-/--
-Instance `WithTop.instRepr` / 实例 `WithTop.instRepr`
-
-English:
-instance WithTop.instRepr
-  signature: [Repr α]
-  body: ⟨fun o _ =>
-    match o with
-    | none => "⊤"
-    | some a => "↑" ++ repr a⟩
-
-中文:
-实例 WithTop.instRepr
-  签名: [Repr α]
-  定义体: ⟨fun o _ =>
-    match o with
-    | none => "⊤"
-    | some a => "↑" ++ repr a⟩
+/-
+**WithTop.instRepr** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：WithTop.instRepr [Repr α] : Repr (WithTop α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance WithTop.instRepr [Repr α] : Repr (WithTop α) :=
   ⟨fun o _ =>
@@ -93,83 +58,44 @@ namespace WithBot
 
 /-- The canonical map from `α` into `WithBot α` -/
 @[to_dual (attr := coe, match_pattern) /-- The canonical map from `α` into `WithTop α` -/]
-/--
-Definition of `some` / `some` 的定义
+/-
+**WithBot.some** 是 Mathlib 中的一个定义，位于命名空间 `WithBot`。
+形式化陈述：some : α -> WithBot α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition some
-  signature: : α -> WithBot α
-  body: Option.some
-
-@[to_dual]
-
-中文:
-定义 some
-  签名: : α -> WithBot α
-  定义体: Option.some
-
-@[to_dual]
-
-Depends on / 依赖: Option.some
+--- 原说明 ---
+The canonical map from `α` into `WithBot α`
 -/
-def some : α -> WithBot α :=
+def some : α → WithBot α :=
   Option.some
 
 @[to_dual]
-/--
-Instance `coe` / 实例 `coe`
-
-English:
-instance coe
-  signature: : Coe α (WithBot α)
-  body: ⟨some⟩
-
-@[to_dual]
-
-中文:
-实例 coe
-  签名: : Coe α (WithBot α)
-  定义体: ⟨some⟩
-
-@[to_dual]
+/-
+**WithBot.coe** 是 Mathlib 中的一个实例，位于命名空间 `WithBot`。
+形式化陈述：coe : Coe α (WithBot α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance coe : Coe α (WithBot α) :=
   ⟨some⟩
 
 @[to_dual]
-/--
-Instance `bot` / 实例 `bot`
-
-English:
-instance bot
-  signature: : Bot (WithBot α)
-  body: ⟨none⟩
-
-@[to_dual]
-
-中文:
-实例 bot
-  签名: : 底元素 (WithBot α)
-  定义体: ⟨none⟩
-
-@[to_dual]
+/-
+**WithBot.bot** 是 Mathlib 中的一个实例，位于命名空间 `WithBot`。
+形式化陈述：bot : Bot (WithBot α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance bot : Bot (WithBot α) :=
   ⟨none⟩
 
 @[to_dual]
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: : Inhabited (WithBot α)
-  body: ⟨⊥⟩
-
-中文:
-实例 inhabited
-  签名: : 可居 (WithBot α)
-  定义体: ⟨⊥⟩
+/-
+**WithBot.inhabited** 是 Mathlib 中的一个实例，位于命名空间 `WithBot`。
+形式化陈述：inhabited : Inhabited (WithBot α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabited : Inhabited (WithBot α) :=
   ⟨⊥⟩
@@ -177,59 +103,42 @@ instance inhabited : Inhabited (WithBot α) :=
 /-- Recursor for `WithBot` using the preferred forms `⊥` and `↑a`. -/
 @[to_dual (attr := elab_as_elim, induction_eliminator, cases_eliminator)
 /-- Recursor for `WithTop` using the preferred forms `⊤` and `↑a`. -/]
-/--
-Definition of `recBotCoe` / `recBotCoe` 的定义
-
-English:
-definition recBotCoe
-  signature: {C : WithBot α -> Sort*} (bot : C ⊥) (coe : forall a : α, C a)
-
-中文:
-定义 recBotCoe
-  签名: {C : WithBot α -> 类型层*} (bot : C ⊥) (coe : 对任意 a : α, C a)
+/-
+**WithBot.recBotCoe** 是 Mathlib 中的一个定义，位于命名空间 `WithBot`。
+形式化陈述：{α : Type u_1} → {C : WithBot α → Sort u_2} → C ⊥ → ((a : α) → C ↑a) → (n 
+: WithBot α) → C n
+参数：(a : α) → C ↑a；n : WithBot α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def recBotCoe {C : WithBot α -> Sort*} (bot : C ⊥) (coe : forall a : α, C a) : forall n : WithBot α, C n
+def recBotCoe {C : WithBot α → Sort*} (bot : C ⊥) (coe : ∀ a : α, C a) : ∀ n : WithBot α, C n
   | ⊥ => bot
   | (a : α) => coe a
 
 @[to_dual (attr := simp)]
-/--
-theorem `recBotCoe_bot` / 定理 `recBotCoe_bot`
-
-English:
-theorem recBotCoe_bot
-  given: {C : WithBot α -> Sort*} (d : C ⊥) (f : forall a : α, C a)
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 recBotCoe_bot
-  条件: {C : WithBot α -> 类型层*} (d : C ⊥) (f : 对任意 a : α, C a)
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**WithBot.recBotCoe_bot** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：recBotCoe_bot {C : WithBot α -> Sort*} (d : C ⊥) (f : forall a : α, C a) :
+ @recBotCoe _ C d f ⊥ = d
+参数：d : C ⊥；f : forall a : α, C a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem recBotCoe_bot {C : WithBot α -> Sort*} (d : C ⊥) (f : forall a : α, C a) :
+theorem recBotCoe_bot {C : WithBot α → Sort*} (d : C ⊥) (f : ∀ a : α, C a) :
     @recBotCoe _ C d f ⊥ = d :=
   rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `recBotCoe_coe` / 定理 `recBotCoe_coe`
-
-English:
-theorem recBotCoe_coe
-  given: {C : WithBot α -> Sort*} (d : C ⊥) (f : forall a : α, C a) (x : α)
-  proof: rfl
-
-中文:
-定理 recBotCoe_coe
-  条件: {C : WithBot α -> 类型层*} (d : C ⊥) (f : 对任意 a : α, C a) (x : α)
-  证明: rfl
+/-
+**WithBot.recBotCoe_coe** 是 Mathlib 中的一个定理，位于命名空间 `WithBot`。
+形式化陈述：recBotCoe_coe {C : WithBot α -> Sort*} (d : C ⊥) (f : forall a : α, C a) (
+x : α) : @recBotCoe _ C d f ↑x = f x
+参数：d : C ⊥；f : forall a : α, C a；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem recBotCoe_coe {C : WithBot α -> Sort*} (d : C ⊥) (f : forall a : α, C a) (x : α) :
+theorem recBotCoe_coe {C : WithBot α → Sort*} (d : C ⊥) (f : ∀ a : α, C a) (x : α) :
     @recBotCoe _ C d f ↑x = f x :=
   rfl
 
 end WithBot
+

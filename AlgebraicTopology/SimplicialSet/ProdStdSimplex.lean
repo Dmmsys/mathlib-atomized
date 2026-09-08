@@ -33,46 +33,25 @@ namespace SSet
 
 namespace prodStdSimplex
 
-variable {p q : Nat}
+variable {p q : ℕ}
 
-/--
-Definition of `objEquiv` / `objEquiv` 的定义
+/-- `n`-simplices in `Δ[p] ⊗ Δ[q]` identify to order preserving maps
+`Fin (n + 1) →o Fin (p + 1) × Fin (q + 1)`. -/
+/-
+**SSet.prodStdSimplex.objEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SSet.prodStdSimplex`。
+形式化陈述：objEquiv {n : Nat} : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌ ≃ (Fin (n + 1) ->o
+ Fin (p + 1) × Fin (q + 1)) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition objEquiv
-  signature: {n : Nat}
-  body: fun ⟨x, y⟩ => OrderHom.prod
-      (stdSimplex.objEquiv x).toOrderHom
-      (stdSimplex.objEquiv y).toOrderHom
-  invFun f :=
-    ⟨stdSimplex.objEquiv.symm
-      (SimplexCategory.Hom.mk (OrderHom.fst.comp f)),
-      stdSimplex.objEquiv.symm
-      (SimplexCategory.Hom.mk (OrderHom.snd.comp f))⟩
-  left_inv := fun ⟨x, y⟩ => by simp
-
-@[simp]
-
-中文:
-定义 objEquiv
-  签名: {n : 自然数}
-  定义体: fun ⟨x, y⟩ => OrderHom.prod
-      (stdSimplex.objEquiv x).toOrderHom
-      (stdSimplex.objEquiv y).toOrderHom
-  invFun f :=
-    ⟨stdSimplex.objEquiv.symm
-      (SimplexCategory.Hom.mk (OrderHom.fst.comp f)),
-      stdSimplex.objEquiv.symm
-      (SimplexCategory.Hom.mk (OrderHom.snd.comp f))⟩
-  left_inv := fun ⟨x, y⟩ => by simp
-
-@[simp]
-
-Depends on / 依赖: OrderHom, OrderHom.prod
+--- 原说明 ---
+`n`-simplices in `Δ[p] ⊗ Δ[q]` identify to order preserving maps
+`Fin (n + 1) →o Fin (p + 1) × Fin (q + 1)`.
 -/
-def objEquiv {n : Nat} :
-    (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌ ≃ (Fin (n + 1) ->o Fin (p + 1) × Fin (q + 1)) where
-  toFun := fun ⟨x, y⟩ => OrderHom.prod
+def objEquiv {n : ℕ} :
+    (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌ ≃ (Fin (n + 1) →o Fin (p + 1) × Fin (q + 1)) where
+  toFun := fun ⟨x, y⟩ ↦ OrderHom.prod
       (stdSimplex.objEquiv x).toOrderHom
       (stdSimplex.objEquiv y).toOrderHom
   invFun f :=
@@ -80,440 +59,361 @@ def objEquiv {n : Nat} :
       (SimplexCategory.Hom.mk (OrderHom.fst.comp f)),
       stdSimplex.objEquiv.symm
       (SimplexCategory.Hom.mk (OrderHom.snd.comp f))⟩
-  left_inv := fun ⟨x, y⟩ => by simp
+  left_inv := fun ⟨x, y⟩ ↦ by simp
 
 @[simp]
-/--
-lemma `objEquiv_apply_fst` / 引理 `objEquiv_apply_fst`
-
-English:
-lemma objEquiv_apply_fst
-  given: {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 objEquiv_apply_fst
-  条件: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : 有限集 (n + 1))
-  证明: rfl
-
-@[simp]
+/-
+**SSet.prodStdSimplex.objEquiv_apply_fst** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStd
+Simplex`。
+形式化陈述：objEquiv_apply_fst {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i :
+ Fin (n + 1)) : dsimp% (objEquiv x i).1 = x.1 i
+参数：x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌；i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma objEquiv_apply_fst {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1)) :
+lemma objEquiv_apply_fst {n : ℕ} (x : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1)) :
     dsimp% (objEquiv x i).1 = x.1 i := rfl
 
 @[simp]
-/--
-lemma `objEquiv_apply_snd` / 引理 `objEquiv_apply_snd`
-
-English:
-lemma objEquiv_apply_snd
-  given: {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1))
-  proof: rfl
-
-中文:
-引理 objEquiv_apply_snd
-  条件: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : 有限集 (n + 1))
-  证明: rfl
+/-
+**SSet.prodStdSimplex.objEquiv_apply_snd** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStd
+Simplex`。
+形式化陈述：objEquiv_apply_snd {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i :
+ Fin (n + 1)) : dsimp% (objEquiv x i).2 = x.2 i
+参数：x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌；i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma objEquiv_apply_snd {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1)) :
+lemma objEquiv_apply_snd {n : ℕ} (x : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1)) :
     dsimp% (objEquiv x i).2 = x.2 i := rfl
-
-/--
-lemma `objEquiv_naturality` / 引理 `objEquiv_naturality`
-
-English:
-lemma objEquiv_naturality
-  statement: {m n : Nat} (f : ⦋m⦌ ⟶ ⦋n⦌)
-  proof: rfl
-
-中文:
-引理 objEquiv_naturality
-  结论: {m n : 自然数} (f : ⦋m⦌ ⟶ ⦋n⦌)
-  证明: rfl
+/-
+**SSet.prodStdSimplex.objEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodSt
+dSimplex`。
+形式化陈述：objEquiv_naturality {m n : Nat} (f : ⦋m⦌ ⟶ ⦋n⦌) (z : (Δ[p] otimes Δ[q] : S
+Set.{u}) _⦋n⦌) : (objEquiv z).comp f.toOrderHom = objEquiv ((Δ[p] otimes Δ[q]).m
+ap f.op z)
+参数：f : ⦋m⦌ ⟶ ⦋n⦌；z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma objEquiv_naturality {m n : Nat} (f : ⦋m⦌ ⟶ ⦋n⦌)
-    (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) :
-    (objEquiv z).comp f.toOrderHom = objEquiv ((Δ[p] otimes Δ[q]).map f.op z) :=
+lemma objEquiv_naturality {m n : ℕ} (f : ⦋m⦌ ⟶ ⦋n⦌)
+    (z : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) :
+    (objEquiv z).comp f.toOrderHom = objEquiv ((Δ[p] ⊗ Δ[q]).map f.op z) :=
   rfl
-
-/--
-lemma `objEquiv_map_apply` / 引理 `objEquiv_map_apply`
-
-English:
-lemma objEquiv_map_apply
-  statement: {n m : Nat}
-  proof: rfl
-
-中文:
-引理 objEquiv_map_apply
-  结论: {n m : 自然数}
-  证明: rfl
+/-
+**SSet.prodStdSimplex.objEquiv_map_apply** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStd
+Simplex`。
+形式化陈述：objEquiv_map_apply {n m : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (f
+ : ⦋m⦌ ⟶ ⦋n⦌) (i : Fin (m + 1)) : objEquiv ((Δ[p] otimes Δ[q]).map f.op x) i = o
+bjEquiv x (f.toOrderHom i)
+参数：x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌；f : ⦋m⦌ ⟶ ⦋n⦌；i : Fin (m + 1)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma objEquiv_map_apply {n m : Nat}
-    (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌) (i : Fin (m + 1)) :
-      objEquiv ((Δ[p] otimes Δ[q]).map f.op x) i = objEquiv x (f.toOrderHom i) :=
+lemma objEquiv_map_apply {n m : ℕ}
+    (x : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) (f : ⦋m⦌ ⟶ ⦋n⦌) (i : Fin (m + 1)) :
+      objEquiv ((Δ[p] ⊗ Δ[q]).map f.op x) i = objEquiv x (f.toOrderHom i) :=
   rfl
-
-/--
-lemma `objEquiv_δ_apply` / 引理 `objEquiv_δ_apply`
-
-English:
-lemma objEquiv_δ_apply
-  statement: {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n + 1⦌) (i : Fin (n + 2))
-  proof: rfl
-
-中文:
-引理 objEquiv_δ_apply
-  结论: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n + 1⦌) (i : 有限集 (n + 2))
-  证明: rfl
+/-
+**SSet.prodStdSimplex.objEquiv_** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma objEquiv_δ_apply {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n + 1⦌) (i : Fin (n + 2))
+lemma objEquiv_δ_apply {n : ℕ} (x : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n + 1⦌) (i : Fin (n + 2))
     (j : Fin (n + 1)) :
-    objEquiv ((Δ[p] otimes Δ[q]).δ i x) j = objEquiv x (i.succAbove j) := rfl
+    objEquiv ((Δ[p] ⊗ Δ[q]).δ i x) j = objEquiv x (i.succAbove j) := rfl
 
 variable (p q) in
-/--
-Definition of `isoNerve` / `isoNerve` 的定义
+/-- The binary product `Δ[p] ⊗ Δ[q]` identifies to the nerve
+of `ULift (Fin (p + 1) × Fin (q + 1))`. -/
+/-
+**SSet.prodStdSimplex.isoNerve** 是 Mathlib 中的一个定义，位于命名空间 `SSet.prodStdSimplex`。
+形式化陈述：isoNerve : Δ[p] otimes Δ[q] ≅ nerve (ULift.{u} (Fin (p + 1) × Fin (q + 1))
+)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition isoNerve
-  signature: : Δ[p] otimes Δ[q] ≅ nerve (ULift.{u} (Fin (p + 1) × Fin (q + 1)))
-  body: NatIso.ofComponents (fun ⟨⟨d⟩⟩ => Equiv.toIso (objEquiv.trans
+--- 原说明 ---
+The binary product `Δ[p] ⊗ Δ[q]` identifies to the nerve
+of `ULift (Fin (p + 1) × Fin (q + 1))`.
+-/
+def isoNerve : Δ[p] ⊗ Δ[q] ≅ nerve (ULift.{u} (Fin (p + 1) × Fin (q + 1))) :=
+  NatIso.ofComponents (fun ⟨⟨d⟩⟩ ↦ Equiv.toIso (objEquiv.trans
       { toFun f := (ULift.orderIso.symm.monotone.comp f.monotone).functor
         invFun s := ULift.orderIso.toOrderEmbedding.toOrderHom.comp ⟨_, s.monotone⟩ }))
-
-中文:
-定义 isoNerve
-  签名: : Δ[p] otimes Δ[q] ≅ nerve (类型层提升.{u} (有限集 (p + 1) × 有限集 (q + 1)))
-  定义体: NatIso.ofComponents (fun ⟨⟨d⟩⟩ => Equiv.toIso (objEquiv.trans
-      { toFun f := (ULift.orderIso.symm.monotone.comp f.monotone).functor
-        invFun s := ULift.orderIso.toOrderEmbedding.toOrderHom.comp ⟨_, s.monotone⟩ }))
-
-Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, ULift.orderIso.symm.monotone.comp, ULift.orderIso.toOrderEmbedding.toOrderHom.comp, f.monotone, functor, invFun, monotone, objEquiv, objEquiv.trans, ofComponents, orderIso, s.monotone, toOrderEmbedding, toOrderHom
+/-
+**SSet.prodStdSimplex.nonDegenerate_iff_injective_objEquiv** 是 Mathlib 中的一个引理，位于
+命名空间 `SSet.prodStdSimplex`。
+形式化陈述：nonDegenerate_iff_injective_objEquiv {n : Nat} (z : (Δ[p] otimes Δ[q] : SS
+et.{u}) _⦋n⦌) : z in (Δ[p] otimes Δ[q]).nonDegenerate n ↔ Function.Injective (ob
+jEquiv z)
+参数：z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.nonDegenerate_iff_of_mono`：nonDegenerate_iff_of_mono {Y : SSet.{u}}
+ (f : X ⟶ Y) [Mono f] (x : X _⦋n⦌) : f.app _ x in Y.nonDegenerate n ↔ x in X.non
+Degenerate n
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用引理 `PartialOrder.mem_nerve_nonDegenerate_iff_injective`：mem_nerve_nonDegener
+ate_iff_injective (s : (nerve X) _⦋n⦌) : s in (nerve X).nonDegenerate n ↔ Functi
+on.Injective s.obj
+· 使用定理 `Function.Injective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} {f : α → β},   Function.Injective f → ∀ (g : γ → α), Function.Injective (
+f ∘ g) ↔ Function.In…
+· 使用定理 `ULift.down_injective`：∀ {α : Type u_1}, Function.Injective ULift.down
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-def isoNerve : Δ[p] otimes Δ[q] ≅ nerve (ULift.{u} (Fin (p + 1) × Fin (q + 1))) :=
-  NatIso.ofComponents (fun ⟨⟨d⟩⟩ => Equiv.toIso (objEquiv.trans
-      { toFun f := (ULift.orderIso.symm.monotone.comp f.monotone).functor
-        invFun s := ULift.orderIso.toOrderEmbedding.toOrderHom.comp ⟨_, s.monotone⟩ }))
-
-/--
-lemma `nonDegenerate_iff_injective_objEquiv` / 引理 `nonDegenerate_iff_injective_objEquiv`
-
-English:
-lemma nonDegenerate_iff_injective_objEquiv
-  given: {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌)
-  proof: by
-  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom]; rw [PartialOrder.mem_nerve_nonDegenerate_iff_injective]; rw [← Function.Injective.of_comp_iff ULift.down_injective]
+lemma nonDegenerate_iff_injective_objEquiv {n : ℕ} (z : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) :
+    z ∈ (Δ[p] ⊗ Δ[q]).nonDegenerate n ↔ Function.Injective (objEquiv z) := by
+  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom,
+    PartialOrder.mem_nerve_nonDegenerate_iff_injective,
+    ← Function.Injective.of_comp_iff ULift.down_injective]
   rfl
-
-中文:
-引理 nonDegenerate_iff_injective_objEquiv
-  条件: {n : 自然数} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌)
-  证明: by
-  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom]; rw [PartialOrder.mem_nerve_nonDegenerate_iff_injective]; rw [← Function.Injective.of_comp_iff ULift.down_injective]
-  rfl
-
-Depends on / 依赖: Function, Function.Injective.of_comp_iff, Injective, PartialOrder, PartialOrder.mem_nerve_nonDegenerate_iff_injective, ULift.down_injective, down_injective, isoNerve, mem_nerve_nonDegenerate_iff_injective, nonDegenerate_iff_of_mono, of_comp_iff
+/-
+**SSet.prodStdSimplex.nonDegenerate_iff_strictMono_objEquiv** 是 Mathlib 中的一个引理，位
+于命名空间 `SSet.prodStdSimplex`。
+形式化陈述：nonDegenerate_iff_strictMono_objEquiv {n : Nat} (z : (Δ[p] otimes Δ[q] : S
+Set.{u}) _⦋n⦌) : z in (Δ[p] otimes Δ[q]).nonDegenerate n ↔ StrictMono (objEquiv 
+z)
+参数：z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.nonDegenerate_iff_of_mono`：nonDegenerate_iff_of_mono {Y : SSet.{u}}
+ (f : X ⟶ Y) [Mono f] (x : X _⦋n⦌) : f.app _ x in Y.nonDegenerate n ↔ x in X.non
+Degenerate n
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用引理 `PartialOrder.mem_nerve_nonDegenerate_iff_strictMono`：mem_nerve_nonDegene
+rate_iff_strictMono (s : (nerve X) _⦋n⦌) : s in (nerve X).nonDegenerate n ↔ Stri
+ctMono s.obj
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma nonDegenerate_iff_injective_objEquiv {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) :
-    z in (Δ[p] otimes Δ[q]).nonDegenerate n ↔ Function.Injective (objEquiv z) := by
-  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom]; rw [PartialOrder.mem_nerve_nonDegenerate_iff_injective]; rw [← Function.Injective.of_comp_iff ULift.down_injective]
-  rfl
-
-/--
-lemma `nonDegenerate_iff_strictMono_objEquiv` / 引理 `nonDegenerate_iff_strictMono_objEquiv`
-
-English:
-lemma nonDegenerate_iff_strictMono_objEquiv
-  given: {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌)
-  proof: by
-  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom]; rw [PartialOrder.mem_nerve_nonDegenerate_iff_strictMono]
-  rfl
-
-中文:
-引理 nonDegenerate_iff_strictMono_objEquiv
-  条件: {n : 自然数} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌)
-  证明: by
-  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom]; rw [PartialOrder.mem_nerve_nonDegenerate_iff_strictMono]
-  rfl
-
-Depends on / 依赖: PartialOrder, PartialOrder.mem_nerve_nonDegenerate_iff_strictMono, isoNerve, mem_nerve_nonDegenerate_iff_strictMono, nonDegenerate_iff_of_mono
--/
-lemma nonDegenerate_iff_strictMono_objEquiv {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) :
-    z in (Δ[p] otimes Δ[q]).nonDegenerate n ↔ StrictMono (objEquiv z) := by
-  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom]; rw [PartialOrder.mem_nerve_nonDegenerate_iff_strictMono]
+lemma nonDegenerate_iff_strictMono_objEquiv {n : ℕ} (z : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) :
+    z ∈ (Δ[p] ⊗ Δ[q]).nonDegenerate n ↔ StrictMono (objEquiv z) := by
+  rw [← nonDegenerate_iff_of_mono (isoNerve p q).hom,
+    PartialOrder.mem_nerve_nonDegenerate_iff_strictMono]
   rfl
 
 /-- Given a `n`-simplex `x` in `Δ[p] ⊗ Δ[q]`, this is the order preserving
 map `Fin (n + 1) →o Fin (m + 1)` (with `p + q = m`) which corresponds to the
 sum of the two components of `objEquiv x : Fin (n + 1) →o Fin (p + 1) × Fin (q + 1)`. -/
 @[simps coe]
-/--
-Definition of `orderHomOfSimplex` / `orderHomOfSimplex` 的定义
+/-
+**SSet.prodStdSimplex.orderHomOfSimplex** 是 Mathlib 中的一个定义，位于命名空间 `SSet.prodStdS
+implex`。
+形式化陈述：orderHomOfSimplex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) {m : 
+Nat} (hm : p + q = m) : Fin (n + 1) ->o Fin (m + 1) where toFun i
+参数：x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌；hm : p + q = m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderHomOfSimplex
-  signature: {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) {m : Nat} (hm : p + q = m)
-  body: ⟨(x.1 i : Nat) + x.2 i, by lia⟩
-  monotone' i j h := by
-    dsimp
-    simp only [Fin.mk_le_mk]
-    have := (objEquiv x).monotone h
-    have h₁ : x.1 i <= x.1 j := this.1
-    have h₂ : x.2 i <= x.2 j := this.2
-    lia
-
-中文:
-定义 orderHomOfSimplex
-  签名: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) {m : 自然数} (hm : p + q = m)
-  定义体: ⟨(x.1 i : Nat) + x.2 i, by lia⟩
-  monotone' i j h := by
-    dsimp
-    simp only [Fin.mk_le_mk]
-    have := (objEquiv x).monotone h
-    have h₁ : x.1 i <= x.1 j := this.1
-    have h₂ : x.2 i <= x.2 j := this.2
-    lia
+--- 原说明 ---
+Given a `n`-simplex `x` in `Δ[p] ⊗ Δ[q]`, this is the order preserving
+map `Fin (n + 1) →o Fin (m + 1)` (with `p + q = m`) which corresponds to the
+sum of the two components of `objEquiv x : Fin (n + 1) →o Fin (p + 1) × Fin (q +
+ 1)`.
 -/
-def orderHomOfSimplex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) {m : Nat} (hm : p + q = m) :
-    Fin (n + 1) ->o Fin (m + 1) where
-  toFun i := ⟨(x.1 i : Nat) + x.2 i, by lia⟩
+def orderHomOfSimplex {n : ℕ} (x : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) {m : ℕ} (hm : p + q = m) :
+    Fin (n + 1) →o Fin (m + 1) where
+  toFun i := ⟨(x.1 i : ℕ) + x.2 i, by lia⟩
   monotone' i j h := by
     dsimp
     simp only [Fin.mk_le_mk]
     have := (objEquiv x).monotone h
-    have h₁ : x.1 i <= x.1 j := this.1
-    have h₂ : x.2 i <= x.2 j := this.2
+    have h₁ : x.1 i ≤ x.1 j := this.1
+    have h₂ : x.2 i ≤ x.2 j := this.2
     lia
-
-/--
-lemma `strictMono_orderHomOfSimplex_iff` / 引理 `strictMono_orderHomOfSimplex_iff`
-
-English:
-lemma strictMono_orderHomOfSimplex_iff
-  statement: {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) {m : Nat}
-  proof: by
-  have (a b : Fin (p + 1) × Fin (q + 1)) (hab : a <= b) :
-      a < b ↔ ((a.1 : Nat) + a.2 < (b.1 : Nat) + b.2) := by
-    obtain ⟨h₁, h₂⟩ := hab
-    rw [Prod.lt_iff]
-    lia
-  simp only [Fin.strictMono_iff_lt_succ]
-  exact forall_congr' (fun i => (this _ _ ((objEquiv x).monotone i.castSucc_le_succ)).symm)
-
-中文:
-引理 strictMono_orderHomOfSimplex_iff
-  结论: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) {m : 自然数}
-  证明: by
-  have (a b : Fin (p + 1) × Fin (q + 1)) (hab : a <= b) :
-      a < b ↔ ((a.1 : Nat) + a.2 < (b.1 : Nat) + b.2) := by
-    obtain ⟨h₁, h₂⟩ := hab
-    rw [Prod.lt_iff]
-    lia
-  simp only [Fin.strictMono_iff_lt_succ]
-  exact forall_congr' (fun i => (this _ _ ((objEquiv x).monotone i.castSucc_le_succ)).symm)
-
-Depends on / 依赖: Fin.strictMono_iff_lt_succ, Prod.lt_iff, castSucc_le_succ, forall_congr, i.castSucc_le_succ, lt_iff, monotone, objEquiv, strictMono_iff_lt_succ
+/-
+**SSet.prodStdSimplex.strictMono_orderHomOfSimplex_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `SSet.prodStdSimplex`。
+形式化陈述：strictMono_orderHomOfSimplex_iff {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{
+u}) _⦋n⦌) {m : Nat} (hm : p + q = m) : StrictMono (orderHomOfSimplex x hm) ↔ Str
+ictMono (objEquiv x)
+参数：x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌；hm : p + q = m。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.lt_iff`：lt_iff : x < y ↔ x.1 < y.1 ∧ x.2 <= y.2 ∨ x.1 <= y.1 ∧ x.2 
+< y.2
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
+· 使用定理 `Fin.castSucc_le_succ`：castSucc_le_succ {n} (i : Fin n) : i.castSucc <= i
+.succ
 -/
-lemma strictMono_orderHomOfSimplex_iff {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) {m : Nat}
+lemma strictMono_orderHomOfSimplex_iff {n : ℕ} (x : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌) {m : ℕ}
     (hm : p + q = m) :
     StrictMono (orderHomOfSimplex x hm) ↔ StrictMono (objEquiv x) := by
-  have (a b : Fin (p + 1) × Fin (q + 1)) (hab : a <= b) :
-      a < b ↔ ((a.1 : Nat) + a.2 < (b.1 : Nat) + b.2) := by
+  have (a b : Fin (p + 1) × Fin (q + 1)) (hab : a ≤ b) :
+      a < b ↔ ((a.1 : ℕ) + a.2 < (b.1 : ℕ) + b.2) := by
     obtain ⟨h₁, h₂⟩ := hab
     rw [Prod.lt_iff]
     lia
   simp only [Fin.strictMono_iff_lt_succ]
-  exact forall_congr' (fun i => (this _ _ ((objEquiv x).monotone i.castSucc_le_succ)).symm)
-
-/--
-lemma `strictMono_orderHomOfSimplex` / 引理 `strictMono_orderHomOfSimplex`
-
-English:
-lemma strictMono_orderHomOfSimplex
-  statement: {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : Nat}
-  proof: by
-  simpa only [strictMono_orderHomOfSimplex_iff, ← nonDegenerate_iff_strictMono_objEquiv] using x.2
-
-中文:
-引理 strictMono_orderHomOfSimplex
-  结论: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : 自然数}
-  证明: by
-  simpa only [strictMono_orderHomOfSimplex_iff, ← nonDegenerate_iff_strictMono_objEquiv] using x.2
-
-Depends on / 依赖: nonDegenerate_iff_strictMono_objEquiv, strictMono_orderHomOfSimplex_iff
+  exact forall_congr' (fun i ↦ (this _ _ ((objEquiv x).monotone i.castSucc_le_succ)).symm)
+/-
+**SSet.prodStdSimplex.strictMono_orderHomOfSimplex** 是 Mathlib 中的一个引理，位于命名空间 `SS
+et.prodStdSimplex`。
+形式化陈述：strictMono_orderHomOfSimplex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).
+nonDegenerate n) {m : Nat} (hm : p + q = m) : StrictMono (orderHomOfSimplex x.1 
+hm)
+参数：x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n；hm : p + q = m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-lemma strictMono_orderHomOfSimplex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : Nat}
+lemma strictMono_orderHomOfSimplex {n : ℕ} (x : (Δ[p] ⊗ Δ[q] : SSet.{u}).nonDegenerate n) {m : ℕ}
     (hm : p + q = m) :
     StrictMono (orderHomOfSimplex x.1 hm) := by
   simpa only [strictMono_orderHomOfSimplex_iff, ← nonDegenerate_iff_strictMono_objEquiv] using x.2
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Δ[p] otimes Δ[q] : SSet.{u}).HasDimensionLE (p + q)
-  body: by
-    ext x
-    simp only [Set.top_eq_univ, Set.mem_univ, iff_true]
-    by_contra hx
-    rw [← mem_nonDegenerate_iff_notMem_degenerate]; rw [nonDegenerate_iff_strictMono_objEquiv]; rw [← strictMono_orderHomOfSimplex_iff _ rfl] at hx
-    replace hx := Fintype.card_le_of_injective _ hx.injective
-    simp only [Fintype.card_fin, add_le_add_iff_right] at hx
-    lia
-
-中文:
-实例 :
-  签名: (Δ[p] otimes Δ[q] : SSet.{u}).HasDimensionLE (p + q)
-  定义体: by
-    ext x
-    simp only [Set.top_eq_univ, Set.mem_univ, iff_true]
-    by_contra hx
-    rw [← mem_nonDegenerate_iff_notMem_degenerate]; rw [nonDegenerate_iff_strictMono_objEquiv]; rw [← strictMono_orderHomOfSimplex_iff _ rfl] at hx
-    replace hx := Fintype.card_le_of_injective _ hx.injective
-    simp only [Fintype.card_fin, add_le_add_iff_right] at hx
-    lia
-
-Depends on / 依赖: Fintype, Fintype.card_fin, Fintype.card_le_of_injective, Set.mem_univ, Set.top_eq_univ, add_le_add_iff_right, card_fin, card_le_of_injective, hx.injective, iff_true, injective, mem_nonDegenerate_iff_notMem_degenerate, mem_univ, nonDegenerate_iff_strictMono_objEquiv, replace, strictMono_orderHomOfSimplex_iff, top_eq_univ
+/-
+**SSet.prodStdSimplex.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.prodStdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Δ[p] otimes Δ[q] : SSet.{u}).HasDimensionLE (p + q) where
+instance : (Δ[p] ⊗ Δ[q] : SSet.{u}).HasDimensionLE (p + q) where
   degenerate_eq_top n hn := by
     ext x
     simp only [Set.top_eq_univ, Set.mem_univ, iff_true]
     by_contra hx
-    rw [← mem_nonDegenerate_iff_notMem_degenerate]; rw [nonDegenerate_iff_strictMono_objEquiv]; rw [← strictMono_orderHomOfSimplex_iff _ rfl] at hx
+    rw [← mem_nonDegenerate_iff_notMem_degenerate,
+      nonDegenerate_iff_strictMono_objEquiv,
+      ← strictMono_orderHomOfSimplex_iff _ rfl] at hx
     replace hx := Fintype.card_le_of_injective _ hx.injective
     simp only [Fintype.card_fin, add_le_add_iff_right] at hx
     lia
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Δ[p] otimes Δ[q] : SSet.{u}).Finite
-  body: finite_of_hasDimensionLT _ (p + q + 1) inferInstance
-
-中文:
-实例 :
-  签名: (Δ[p] otimes Δ[q] : SSet.{u}).有限
-  定义体: finite_of_hasDimensionLT _ (p + q + 1) inferInstance
-
-Depends on / 依赖: finite_of_hasDimensionLT
+/-
+**SSet.prodStdSimplex.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.prodStdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Δ[p] otimes Δ[q] : SSet.{u}).Finite :=
+instance : (Δ[p] ⊗ Δ[q] : SSet.{u}).Finite :=
   finite_of_hasDimensionLT _ (p + q + 1) inferInstance
-
-/--
-lemma `le_orderHomOfSimplex` / 引理 `le_orderHomOfSimplex`
-
-English:
-lemma le_orderHomOfSimplex
-  statement: {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : Nat}
-  proof: by
-  induction i using Fin.induction with
-  | zero => simp
-  | succ i hi =>
-    simpa using! lt_of_le_of_lt hi (strictMono_orderHomOfSimplex x hm Fin.castSucc_lt_succ)
-
-中文:
-引理 le_orderHomOfSimplex
-  结论: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : 自然数}
-  证明: by
-  induction i using Fin.induction with
-  | zero => simp
-  | succ i hi =>
-    simpa using! lt_of_le_of_lt hi (strictMono_orderHomOfSimplex x hm Fin.castSucc_lt_succ)
-
-Depends on / 依赖: Fin.castSucc_lt_succ, Fin.induction, castSucc_lt_succ, lt_of_le_of_lt, strictMono_orderHomOfSimplex
+/-
+**SSet.prodStdSimplex.le_orderHomOfSimplex** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodS
+tdSimplex`。
+形式化陈述：le_orderHomOfSimplex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegen
+erate n) {m : Nat} (hm : p + q = m) (i : Fin (n + 1)) : i.1 <= orderHomOfSimplex
+ x.1 hm i
+参数：x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n；hm : p + q = m；i : Fin (n +
+ 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SSet.prodStdSimplex.orderHomOfSimplex_coe`：∀ {p q n : ℕ}   (x :     (Cat
+egoryTheory.MonoidalCategoryStruct.tensorObj (SSet.stdSimplex.obj { len := p }) 
+          (SSet.stdSimplex.obj …
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用引理 `SSet.prodStdSimplex.strictMono_orderHomOfSimplex`：strictMono_orderHomOfS
+implex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : Nat} (
+hm : p + q = m) : StrictMono (orderHom…
+· 使用定理 `Fin.castSucc_lt_succ`：∀ {n : ℕ} {i : Fin n}, i.castSucc < i.succ
 -/
-lemma le_orderHomOfSimplex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : Nat}
-    (hm : p + q = m) (i : Fin (n + 1)) : i.1 <= orderHomOfSimplex x.1 hm i := by
+lemma le_orderHomOfSimplex {n : ℕ} (x : (Δ[p] ⊗ Δ[q] : SSet.{u}).nonDegenerate n) {m : ℕ}
+    (hm : p + q = m) (i : Fin (n + 1)) : i.1 ≤ orderHomOfSimplex x.1 hm i := by
   induction i using Fin.induction with
   | zero => simp
   | succ i hi =>
     simpa using! lt_of_le_of_lt hi (strictMono_orderHomOfSimplex x hm Fin.castSucc_lt_succ)
-
-/--
-lemma `nonDegenerate_max_dim_iff` / 引理 `nonDegenerate_max_dim_iff`
-
-English:
-lemma nonDegenerate_max_dim_iff
-  statement: {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌)
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · exact OrderHom.eq_id_of_injective _ (strictMono_orderHomOfSimplex ⟨z, h⟩ hn).injective
-  · rw [nonDegenerate_iff_injective_objEquiv]
-    intro h a b hab
-    simp only [DFunLike.ext_iff, orderHomOfSimplex_coe, OrderHom.id_coe, id_eq] at h
-    rw [← h a]; rw [← h b]; rw [Fin.ext_iff]
-    change ((objEquiv z a).1 : Nat) + (objEquiv z a).2 = (objEquiv z b).1 + (objEquiv z b).2
-    simp only [hab]
-
-中文:
-引理 nonDegenerate_max_dim_iff
-  结论: {n : 自然数} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌)
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · exact OrderHom.eq_id_of_injective _ (strictMono_orderHomOfSimplex ⟨z, h⟩ hn).injective
-  · rw [nonDegenerate_iff_injective_objEquiv]
-    intro h a b hab
-    simp only [DFunLike.ext_iff, orderHomOfSimplex_coe, OrderHom.id_coe, id_eq] at h
-    rw [← h a]; rw [← h b]; rw [Fin.ext_iff]
-    change ((objEquiv z a).1 : Nat) + (objEquiv z a).2 = (objEquiv z b).1 + (objEquiv z b).2
-    simp only [hab]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, Fin.ext_iff, OrderHom, OrderHom.eq_id_of_injective, OrderHom.id_coe, eq_id_of_injective, ext_iff, id_coe, id_eq, injective, nonDegenerate, nonDegenerate_iff_injective_objEquiv, objEquiv, orderHomOfSimplex, orderHomOfSimplex_coe, otimes, strictMono_orderHomOfSimplex
+/-
+**SSet.prodStdSimplex.nonDegenerate_max_dim_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.
+prodStdSimplex`。
+形式化陈述：nonDegenerate_max_dim_iff {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n
+⦌) (hn : p + q = n
+参数：z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `OrderHom.eq_id_of_injective`：OrderHom.eq_id_of_injective {α : Type*} [Li
+nearOrder α] [Finite α] (f : α ->o α) (hf : Function.Injective f) : f = .id
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `StrictMono.injective`：StrictMono.injective (hf : StrictMono f) : Injecti
+ve f
+· 使用引理 `SSet.prodStdSimplex.strictMono_orderHomOfSimplex`：strictMono_orderHomOfS
+implex {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n) {m : Nat} (
+hm : p + q = m) : StrictMono (orderHom…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.prodStdSimplex.nonDegenerate_iff_injective_objEquiv`：nonDegenerate_
+iff_injective_objEquiv {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) : z in
+ (Δ[p] otimes Δ[q]).nonDegenerate n ↔ Function…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SSet.prodStdSimplex.orderHomOfSimplex_coe`：∀ {p q n : ℕ}   (x :     (Cat
+egoryTheory.MonoidalCategoryStruct.tensorObj (SSet.stdSimplex.obj { len := p }) 
+          (SSet.stdSimplex.obj …
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `OrderHom.id_coe`：∀ {α : Type u_2} [inst : Preorder α], ⇑OrderHom.id = id
+· 使用定理 `Fin.ext_iff`：∀ {n : ℕ} {a b : Fin n}, a = b ↔ ↑a = ↑b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma nonDegenerate_max_dim_iff {n : Nat} (z : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌)
+lemma nonDegenerate_max_dim_iff {n : ℕ} (z : (Δ[p] ⊗ Δ[q] : SSet.{u}) _⦋n⦌)
     (hn : p + q = n := by lia) :
-    z in (Δ[p] otimes Δ[q]).nonDegenerate n ↔ orderHomOfSimplex z hn = .id := by
-  refine ⟨fun h => ?_, ?_⟩
+    z ∈ (Δ[p] ⊗ Δ[q]).nonDegenerate n ↔ orderHomOfSimplex z hn = .id := by
+  refine ⟨fun h ↦ ?_, ?_⟩
   · exact OrderHom.eq_id_of_injective _ (strictMono_orderHomOfSimplex ⟨z, h⟩ hn).injective
   · rw [nonDegenerate_iff_injective_objEquiv]
     intro h a b hab
     simp only [DFunLike.ext_iff, orderHomOfSimplex_coe, OrderHom.id_coe, id_eq] at h
-    rw [← h a]; rw [← h b]; rw [Fin.ext_iff]
-    change ((objEquiv z a).1 : Nat) + (objEquiv z a).2 = (objEquiv z b).1 + (objEquiv z b).2
+    rw [← h a, ← h b, Fin.ext_iff]
+    change ((objEquiv z a).1 : ℕ) + (objEquiv z a).2 = (objEquiv z b).1 + (objEquiv z b).2
     simp only [hab]
-
-/--
-lemma `nonDegenerate_ext₁` / 引理 `nonDegenerate_ext₁`
-
-English:
-lemma nonDegenerate_ext₁
-  statement: {n : Nat} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n}
-  proof: by
-  ext
-  apply objEquiv.injective
-  ext i : 3
-  · exact DFunLike.congr_fun h i
-  · have h₁ := z₁.2
-    have h₂ := z₂.2
-    rw [nonDegenerate_max_dim_iff] at h₁ h₂
-    simpa only [orderHomOfSimplex_coe, h, Fin.ext_iff, add_right_inj]
-      using! DFunLike.congr_fun (h₁.trans h₂.symm) i
-
-中文:
-引理 nonDegenerate_ext₁
-  结论: {n : 自然数} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n}
-  证明: by
-  ext
-  apply objEquiv.injective
-  ext i : 3
-  · exact DFunLike.congr_fun h i
-  · have h₁ := z₁.2
-    have h₂ := z₂.2
-    rw [nonDegenerate_max_dim_iff] at h₁ h₂
-    simpa only [orderHomOfSimplex_coe, h, Fin.ext_iff, add_right_inj]
-      using! DFunLike.congr_fun (h₁.trans h₂.symm) i
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Fin.ext_iff, add_right_inj, congr_fun, ext_iff, injective, nonDegenerate_max_dim_iff, objEquiv, objEquiv.injective, orderHomOfSimplex_coe
+/-
+**SSet.prodStdSimplex.nonDegenerate_ext** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStdS
+implex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma nonDegenerate_ext₁ {n : Nat} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n}
+lemma nonDegenerate_ext₁ {n : ℕ} {z₁ z₂ : (Δ[p] ⊗ Δ[q] : SSet.{u}).nonDegenerate n}
     (h : z₁.1.1 = z₂.1.1) (hn : p + q = n := by lia) :
     z₁ = z₂ := by
   ext
@@ -525,23 +425,12 @@ lemma nonDegenerate_ext₁ {n : Nat} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}
     rw [nonDegenerate_max_dim_iff] at h₁ h₂
     simpa only [orderHomOfSimplex_coe, h, Fin.ext_iff, add_right_inj]
       using! DFunLike.congr_fun (h₁.trans h₂.symm) i
-
-/--
-lemma `nonDegenerate_ext₂` / 引理 `nonDegenerate_ext₂`
-
-English:
-lemma nonDegenerate_ext₂
-  statement: {n : Nat} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n}
-  proof: (nonDegenerateEquivOfIso (β_ _ _)).injective (nonDegenerate_ext₁ h)
-
-中文:
-引理 nonDegenerate_ext₂
-  结论: {n : 自然数} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n}
-  证明: (nonDegenerateEquivOfIso (β_ _ _)).injective (nonDegenerate_ext₁ h)
-
-Depends on / 依赖: injective, nonDegenerateEquivOfIso
+/-
+**SSet.prodStdSimplex.nonDegenerate_ext** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStdS
+implex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma nonDegenerate_ext₂ {n : Nat} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}).nonDegenerate n}
+lemma nonDegenerate_ext₂ {n : ℕ} {z₁ z₂ : (Δ[p] ⊗ Δ[q] : SSet.{u}).nonDegenerate n}
     (h : z₁.1.2 = z₂.1.2) (hn : p + q = n := by lia) :
     z₁ = z₂ :=
   (nonDegenerateEquivOfIso (β_ _ _)).injective (nonDegenerate_ext₁ h)
@@ -549,3 +438,4 @@ lemma nonDegenerate_ext₂ {n : Nat} {z₁ z₂ : (Δ[p] otimes Δ[q] : SSet.{u}
 end prodStdSimplex
 
 end SSet
+

@@ -8,7 +8,7 @@ module
 public import Lean.Elab.SyntheticMVars
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public import Mathlib.Tactic.Linter.Header -- shake: keep
+public import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # Additions to `Lean.Elab.Tactic.Meta`
@@ -19,26 +19,20 @@ public import Mathlib.Tactic.Linter.Header -- shake: keep
 namespace Lean.Elab
 open Term
 
-/--
-Definition of `runTactic'` / `runTactic'` 的定义
+/-- Apply the given tactic code to `mvarId` in `MetaM`.
 
-English:
-definition runTactic'
-  signature: (mvarId : MVarId) (tacticCode : Syntax) (ctx : Context := {}) (s : State := {})
-  body: do
-  instantiateMVarDeclMVars mvarId
-  let go : TermElabM (List MVarId) :=
-    withSynthesize do Tactic.run mvarId (Tactic.evalTactic tacticCode *> Tactic.pruneSolvedGoals)
-  go.run' ctx s
+This is a variant of `Lean.Elab.runTactic` that forgets the final `Term.State`.
+-/
+/-
+**Lean.Elab.runTactic'** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab`。
+形式化陈述：runTactic' (mvarId : MVarId) (tacticCode : Syntax) (ctx : Context
+参数：mvarId : MVarId；tacticCode : Syntax。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 runTactic'
-  签名: (mvarId : MVarId) (tacticCode : Syntax) (ctx : 余ntext := {}) (s : State := {})
-  定义体: do
-  instantiateMVarDeclMVars mvarId
-  let go : TermElabM (List MVarId) :=
-    withSynthesize do Tactic.run mvarId (Tactic.evalTactic tacticCode *> Tactic.pruneSolvedGoals)
-  go.run' ctx s
+--- 原说明 ---
+Apply the given tactic code to `mvarId` in `MetaM`.
+
+This is a variant of `Lean.Elab.runTactic` that forgets the final `Term.State`.
 -/
 def runTactic' (mvarId : MVarId) (tacticCode : Syntax) (ctx : Context := {}) (s : State := {}) :
     MetaM (List MVarId) := do
@@ -48,3 +42,4 @@ def runTactic' (mvarId : MVarId) (tacticCode : Syntax) (ctx : Context := {}) (s 
   go.run' ctx s
 
 end Lean.Elab
+

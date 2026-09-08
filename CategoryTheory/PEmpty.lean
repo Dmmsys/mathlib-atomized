@@ -21,79 +21,58 @@ namespace CategoryTheory
 
 variable (C : Type u) [Category.{v} C] (D : Type u') [Category.{v'} D]
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [IsEmpty α] : IsEmpty (Discrete α) := Function.isEmpty Discrete.as
 
-/--
-Definition of `functorOfIsEmpty` / `functorOfIsEmpty` 的定义
+/-- The (unique) functor from an empty category. -/
+/-
+**CategoryTheory.functorOfIsEmpty** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：functorOfIsEmpty [IsEmpty C] : C ⥤ D where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorOfIsEmpty
-  signature: [IsEmpty C]
-  body: isEmptyElim
-  map := fun {X} => isEmptyElim X
-  map_id := fun {X} => isEmptyElim X
-  map_comp := fun {X} => isEmptyElim X
-
-中文:
-定义 functorOfIsEmpty
-  签名: [是空 C]
-  定义体: isEmptyElim
-  map := fun {X} => isEmptyElim X
-  map_id := fun {X} => isEmptyElim X
-  map_comp := fun {X} => isEmptyElim X
-
-Depends on / 依赖: isEmptyElim
+--- 原说明 ---
+The (unique) functor from an empty category.
 -/
 def functorOfIsEmpty [IsEmpty C] : C ⥤ D where
   obj := isEmptyElim
-  map := fun {X} => isEmptyElim X
-  map_id := fun {X} => isEmptyElim X
-  map_comp := fun {X} => isEmptyElim X
+  map := fun {X} ↦ isEmptyElim X
+  map_id := fun {X} ↦ isEmptyElim X
+  map_comp := fun {X} ↦ isEmptyElim X
 
 variable {C D}
 
-/--
-Definition of `Functor.isEmptyExt` / `Functor.isEmptyExt` 的定义
+/-- Any two functors out of an empty category are isomorphic. -/
+/-
+**CategoryTheory.Functor.isEmptyExt** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u'} →       [inst_1 : CategoryTheory.Category.{v', u'} D] → [IsEmpty C] → (F G 
+: CategoryTheory.Functor C D) → F ≅ G
+参数：F G : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.isEmptyExt
-  signature: [IsEmpty C] (F G : C ⥤ D)
-  body: NatIso.ofComponents isEmptyElim (fun {X} => isEmptyElim X)
-
-中文:
-定义 函子.isEmptyExt
-  签名: [是空 C] (F G : C ⥤ D)
-  定义体: NatIso.ofComponents isEmptyElim (fun {X} => isEmptyElim X)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, isEmptyElim, ofComponents
+--- 原说明 ---
+Any two functors out of an empty category are isomorphic.
 -/
 def Functor.isEmptyExt [IsEmpty C] (F G : C ⥤ D) : F ≅ G :=
-  NatIso.ofComponents isEmptyElim (fun {X} => isEmptyElim X)
+  NatIso.ofComponents isEmptyElim (fun {X} ↦ isEmptyElim X)
 
 variable (C D)
 
-/--
-Definition of `equivalenceOfIsEmpty` / `equivalenceOfIsEmpty` 的定义
+/-- The equivalence between two empty categories. -/
+/-
+**CategoryTheory.equivalenceOfIsEmpty** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：equivalenceOfIsEmpty [IsEmpty C] [IsEmpty D] : C ≌ D where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalenceOfIsEmpty
-  signature: [IsEmpty C] [IsEmpty D]
-  body: functorOfIsEmpty C D
-  inverse := functorOfIsEmpty D C
-  unitIso := Functor.isEmptyExt _ _
-  counitIso := Functor.isEmptyExt _ _
-  functor_unitIso_comp := isEmptyElim
-
-中文:
-定义 equivalenceOfIsEmpty
-  签名: [是空 C] [是空 D]
-  定义体: functorOfIsEmpty C D
-  inverse := functorOfIsEmpty D C
-  unitIso := Functor.isEmptyExt _ _
-  counitIso := Functor.isEmptyExt _ _
-  functor_unitIso_comp := isEmptyElim
-
-Depends on / 依赖: functorOfIsEmpty
+--- 原说明 ---
+The equivalence between two empty categories.
 -/
 def equivalenceOfIsEmpty [IsEmpty C] [IsEmpty D] : C ≌ D where
   functor := functorOfIsEmpty C D
@@ -102,97 +81,90 @@ def equivalenceOfIsEmpty [IsEmpty C] [IsEmpty D] : C ≌ D where
   counitIso := Functor.isEmptyExt _ _
   functor_unitIso_comp := isEmptyElim
 
-/--
-Definition of `emptyEquivalence` / `emptyEquivalence` 的定义
+/-- Equivalence between two empty categories. -/
+/-
+**CategoryTheory.emptyEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：emptyEquivalence : Discrete.{w} PEmpty ≌ Discrete.{v} PEmpty
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instIsEmptyDiscrete`：∀ (α : Type u_1) [IsEmpty α], IsEmpt
+y (CategoryTheory.Discrete α)
 
-English:
-definition emptyEquivalence
-  signature: : Discrete.{w} PEmpty ≌ Discrete.{v} PEmpty
-  body: equivalenceOfIsEmpty _ _
-
-中文:
-定义 emptyEquivalence
-  签名: : 离散.{w} 命题空 ≌ 离散.{v} 命题空
-  定义体: equivalenceOfIsEmpty _ _
-
-Depends on / 依赖: equivalenceOfIsEmpty
+--- 原说明 ---
+Equivalence between two empty categories.
 -/
 def emptyEquivalence : Discrete.{w} PEmpty ≌ Discrete.{v} PEmpty := equivalenceOfIsEmpty _ _
 
 namespace Functor
 
-/--
-Definition of `empty` / `empty` 的定义
+/-- The canonical functor out of the empty category. -/
+/-
+**CategoryTheory.Functor.empty** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：empty : Discrete.{w} PEmpty ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition empty
-  signature: : Discrete.{w} PEmpty ⥤ C
-  body: Discrete.functor PEmpty.elim
-
-中文:
-定义 empty
-  签名: : 离散.{w} 命题空 ⥤ C
-  定义体: Discrete.functor PEmpty.elim
-
-Depends on / 依赖: Discrete, Discrete.functor, PEmpty, PEmpty.elim, functor
+--- 原说明 ---
+The canonical functor out of the empty category.
 -/
 def empty : Discrete.{w} PEmpty ⥤ C :=
   Discrete.functor PEmpty.elim
 
 variable {C}
 
-/--
-Definition of `emptyExt` / `emptyExt` 的定义
+/-- Any two functors out of the empty category are isomorphic. -/
+/-
+**CategoryTheory.Functor.emptyExt** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：emptyExt (F G : Discrete.{w} PEmpty ⥤ C) : F ≅ G
+参数：F G : Discrete.{w} PEmpty ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition emptyExt
-  signature: (F G : Discrete.{w} PEmpty ⥤ C)
-  body: Discrete.natIso fun x => x.as.elim
-
-中文:
-定义 emptyExt
-  签名: (F G : 离散.{w} 命题空 ⥤ C)
-  定义体: Discrete.natIso fun x => x.as.elim
-
-Depends on / 依赖: Discrete, Discrete.natIso, natIso, x.as.elim
+--- 原说明 ---
+Any two functors out of the empty category are isomorphic.
 -/
 def emptyExt (F G : Discrete.{w} PEmpty ⥤ C) : F ≅ G :=
   Discrete.natIso fun x => x.as.elim
 
-/--
-Definition of `uniqueFromEmpty` / `uniqueFromEmpty` 的定义
+/-- Any functor out of the empty category is isomorphic to the canonical functor from the empty
+category.
+-/
+/-
+**CategoryTheory.Functor.uniqueFromEmpty** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：uniqueFromEmpty (F : Discrete.{w} PEmpty ⥤ C) : F ≅ empty C
+参数：F : Discrete.{w} PEmpty ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueFromEmpty
-  signature: (F : Discrete.{w} PEmpty ⥤ C)
-  body: emptyExt _ _
-
-中文:
-定义 uniqueFromEmpty
-  签名: (F : 离散.{w} 命题空 ⥤ C)
-  定义体: emptyExt _ _
-
-Depends on / 依赖: emptyExt
+--- 原说明 ---
+Any functor out of the empty category is isomorphic to the canonical functor fro
+m the empty
+category.
 -/
 def uniqueFromEmpty (F : Discrete.{w} PEmpty ⥤ C) : F ≅ empty C :=
   emptyExt _ _
 
-/--
-theorem `empty_ext'` / 定理 `empty_ext'`
+/-- Any two functors out of the empty category are *equal*. You probably want to use
+`emptyExt` instead of this.
+-/
+/-
+**CategoryTheory.Functor.empty_ext'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：empty_ext' (F G : Discrete.{w} PEmpty ⥤ C) : F = G
+参数：F G : Discrete.{w} PEmpty ⥤ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ext`：ext {F G : C ⥤ D} (h_obj : forall X, F.obj X
+ = G.obj X) (h_map : forall X Y f, F.map f = eqToHom (h_obj X) ≫ G.map f ≫ eqToH
+om (h_obj Y).sym…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem empty_ext'
-  given: (F G : Discrete.{w} PEmpty ⥤ C)
-  statement: F = G
-  proof: Functor.ext (fun x => x.as.elim) fun x _ _ => x.as.elim
-
-中文:
-定理 empty_ext'
-  条件: (F G : 离散.{w} 命题空 ⥤ C)
-  结论: F = G
-  证明: Functor.ext (fun x => x.as.elim) fun x _ _ => x.as.elim
-
-Depends on / 依赖: Functor, Functor.ext, x.as.elim
+--- 原说明 ---
+Any two functors out of the empty category are *equal*. You probably want to use
+`emptyExt` instead of this.
 -/
 theorem empty_ext' (F G : Discrete.{w} PEmpty ⥤ C) : F = G :=
   Functor.ext (fun x => x.as.elim) fun x _ _ => x.as.elim
@@ -200,3 +172,4 @@ theorem empty_ext' (F G : Discrete.{w} PEmpty ⥤ C) : F = G :=
 end Functor
 
 end CategoryTheory
+

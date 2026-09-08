@@ -42,54 +42,12 @@ syntax (name := dsimpPercent) "dsimp%" optConfig (discharger)? (&" only")?
   (" [" withoutPosition((simpErase <|> simpLemma),*,?) "]")? ppSpace term : term
 
 @[term_elab dsimpPercent, inherit_doc dsimpPercent]
-/--
-Definition of `dsimpPercentElaborator` / `dsimpPercentElaborator` 的定义
-
-English:
-definition dsimpPercentElaborator
-  signature: : TermElab
-  body: fun stx expectedType => do
-  let fresh ← mkFreshExprMVar default
-  let go : TacticM Expr := do
-    let e ← Term.elabTerm stx[5] expectedType
-    -- `stx` has the same shape as a normal `dsimp` call, so we can pass it to `mkSimpContext`.
-    let { ctx, simprocs, .. } ← mkSimpContext stx (eraseLocal := false) (kind := .dsimp)
-    let dsimp (e : Expr) : MetaM Expr := do
-      -- Ensure that only instantiating metavariables isn't counted as progress.
-      let e ← instantiateMVars e
-      let (dsimpResult, _) ← Meta.dsimp e ctx simprocs
-      if dsimpResult == e then
-        throwError "`dsimp%` made no progress"
-      return dsimpResult
-    if ← isProof e then
-      mkExpectedTypeHint e (← dsimp (← inferType e))
-    else
-      dsimp e
-.run' { goals := [fresh.mvarId!] } go { elaborator := .anonymous }
-
-中文:
-定义 dsimpPercentElaborator
-  签名: : TermElab
-  定义体: fun stx expectedType => do
-  let fresh ← mkFreshExprMVar default
-  let go : TacticM Expr := do
-    let e ← Term.elabTerm stx[5] expectedType
-    -- `stx` has the same shape as a normal `dsimp` call, so we can pass it to `mkSimpContext`.
-    let { ctx, simprocs, .. } ← mkSimpContext stx (eraseLocal := false) (kind := .dsimp)
-    let dsimp (e : Expr) : MetaM Expr := do
-      -- Ensure that only instantiating metavariables isn't counted as progress.
-      let e ← instantiateMVars e
-      let (dsimpResult, _) ← Meta.dsimp e ctx simprocs
-      if dsimpResult == e then
-        throwError "`dsimp%` made no progress"
-      return dsimpResult
-    if ← isProof e then
-      mkExpectedTypeHint e (← dsimp (← inferType e))
-    else
-      dsimp e
-.run' { goals := [fresh.mvarId!] } go { elaborator := .anonymous }
-
-Depends on / 依赖: expectedType
+/-
+**Mathlib.Tactic.dsimpPercentElaborator** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c`。
+形式化陈述：dsimpPercentElaborator : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def dsimpPercentElaborator : TermElab := fun stx expectedType => do
   let fresh ← mkFreshExprMVar default
@@ -108,6 +66,7 @@ def dsimpPercentElaborator : TermElab := fun stx expectedType => do
       mkExpectedTypeHint e (← dsimp (← inferType e))
     else
       dsimp e
-.run' { goals := [fresh.mvarId!] } go { elaborator := .anonymous }
+  go { elaborator := .anonymous } |>.run' { goals := [fresh.mvarId!] }
 
 end Mathlib.Tactic
+

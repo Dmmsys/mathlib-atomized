@@ -61,20 +61,15 @@ universe v
 
 variable {α β γ : Type*}
 
-/--
-Definition of `Language` / `Language` 的定义
+/-- A language is a set of strings over an alphabet. -/
+/-
+**Language** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Language (α)
+参数：α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Language
-  signature: (α)
-  body: Set (List α)
-deriving CompleteAtomicBooleanAlgebra
-
-中文:
-定义 Language
-  签名: (α)
-  定义体: Set (List α)
-deriving CompleteAtomicBooleanAlgebra
+--- 原说明 ---
+A language is a set of strings over an alphabet.
 -/
 def Language (α) :=
   Set (List α)
@@ -82,560 +77,280 @@ deriving CompleteAtomicBooleanAlgebra
 
 namespace Language
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership (List α) (Language α)
-  body: ⟨Set.Mem⟩
-
-中文:
-实例 :
-  签名: Membership (列表 α) (Language α)
-  定义体: ⟨Set.Mem⟩
-
-Depends on / 依赖: Set.Mem
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership (List α) (Language α) := ⟨Set.Mem⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Singleton (List α) (Language α)
-  body: ⟨Set.singleton⟩
-
-中文:
-实例 :
-  签名: 单例 (列表 α) (Language α)
-  定义体: ⟨Set.singleton⟩
-
-Depends on / 依赖: Set.singleton, singleton
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Singleton (List α) (Language α) := ⟨Set.singleton⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Insert (List α) (Language α)
-  body: ⟨Set.insert⟩
-
-中文:
-实例 :
-  签名: Insert (列表 α) (Language α)
-  定义体: ⟨Set.insert⟩
-
-Depends on / 依赖: Set.insert, insert
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Insert (List α) (Language α) := ⟨Set.insert⟩
 
 variable {l m : Language α} {a b x : List α}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Zero language has no elements. -/
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Zero (Language α)
-  body: ⟨(∅ : Set _)⟩
-
-中文:
-实例 :
-  签名: 零 (Language α)
-  定义体: ⟨(∅ : Set _)⟩
+--- 原说明 ---
+Zero language has no elements.
 -/
 instance : Zero (Language α) :=
   ⟨(∅ : Set _)⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `1 : Language α` contains only one element `[]`. -/
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: One (Language α)
-  body: ⟨{[]}⟩
-
-中文:
-实例 :
-  签名: 幺 (Language α)
-  定义体: ⟨{[]}⟩
+--- 原说明 ---
+`1 : Language α` contains only one element `[]`.
 -/
 instance : One (Language α) :=
   ⟨{[]}⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Language α)
-  body: ⟨(∅ : Set _)⟩
-
-中文:
-实例 :
-  签名: 可居 (Language α)
-  定义体: ⟨(∅ : Set _)⟩
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Language α) := ⟨(∅ : Set _)⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The sum of two languages is their union. -/
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Add (Language α)
-  body: ⟨((· union ·) : Set (List α) -> Set (List α) -> Set (List α))⟩
-
-中文:
-实例 :
-  签名: 加法 (Language α)
-  定义体: ⟨((· union ·) : Set (List α) -> Set (List α) -> Set (List α))⟩
+--- 原说明 ---
+The sum of two languages is their union.
 -/
 instance : Add (Language α) :=
-  ⟨((· union ·) : Set (List α) -> Set (List α) -> Set (List α))⟩
+  ⟨((· ∪ ·) : Set (List α) → Set (List α) → Set (List α))⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The subtraction of two languages is their difference. -/
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Sub (Language α)
-  body: SDiff.sdiff
-
-中文:
-实例 :
-  签名: 减法 (Language α)
-  定义体: SDiff.sdiff
-
-Depends on / 依赖: SDiff.sdiff
+--- 原说明 ---
+The subtraction of two languages is their difference.
 -/
 instance : Sub (Language α) where
   sub := SDiff.sdiff
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The product of two languages `l` and `m` is the language made of the strings `x ++ y` where
+`x ∈ l` and `y ∈ m`. -/
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Mul (Language α)
-  body: ⟨image2 (· ++ ·)⟩
-
-中文:
-实例 :
-  签名: 乘法 (Language α)
-  定义体: ⟨image2 (· ++ ·)⟩
-
-Depends on / 依赖: image2
+--- 原说明 ---
+The product of two languages `l` and `m` is the language made of the strings `x 
+++ y` where
+`x ∈ l` and `y ∈ m`.
 -/
 instance : Mul (Language α) :=
   ⟨image2 (· ++ ·)⟩
-
-/--
-theorem `zero_def` / 定理 `zero_def`
-
-English:
-theorem zero_def
-  statement: (0 : Language α) = (∅ : Set _)
-  proof: rfl
-
-中文:
-定理 zero_def
-  结论: (0 : Language α) = (∅ : 集合 _)
-  证明: rfl
+/-
+**Language.zero_def** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：zero_def : (0 : Language α) = (∅ : Set _)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_def : (0 : Language α) = (∅ : Set _) :=
   rfl
-
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : Language α) = ({[]} : Set (List α))
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : Language α) = ({[]} : 集合 (列表 α))
-  证明: rfl
+/-
+**Language.one_def** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：one_def : (1 : Language α) = ({[]} : Set (List α))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_def : (1 : Language α) = ({[]} : Set (List α)) :=
   rfl
-
-/--
-theorem `add_def` / 定理 `add_def`
-
-English:
-theorem add_def
-  given: (l m : Language α)
-  statement: l + m = (l union m : Set (List α))
-  proof: rfl
-
-中文:
-定理 add_def
-  条件: (l m : Language α)
-  结论: l + m = (l union m : 集合 (列表 α))
-  证明: rfl
+/-
+**Language.add_def** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：add_def (l m : Language α) : l + m = (l union m : Set (List α))
+参数：l m : Language α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem add_def (l m : Language α) : l + m = (l union m : Set (List α)) :=
+theorem add_def (l m : Language α) : l + m = (l ∪ m : Set (List α)) :=
   rfl
-
-/--
-theorem `sub_def` / 定理 `sub_def`
-
-English:
-theorem sub_def
-  given: (l m : Language α)
-  statement: l - m = (l \ m : Set (List α))
-  proof: rfl
-
-中文:
-定理 sub_def
-  条件: (l m : Language α)
-  结论: l - m = (l \ m : 集合 (列表 α))
-  证明: rfl
+/-
+**Language.sub_def** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：sub_def (l m : Language α) : l - m = (l \ m : Set (List α))
+参数：l m : Language α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_def (l m : Language α) : l - m = (l \ m : Set (List α)) :=
   rfl
-
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (l m : Language α)
-  statement: l * m = image2 (· ++ ·) l m
-  proof: rfl
-
-中文:
-定理 mul_def
-  条件: (l m : Language α)
-  结论: l * m = image2 (· ++ ·) l m
-  证明: rfl
+/-
+**Language.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mul_def (l m : Language α) : l * m = image2 (· ++ ·) l m
+参数：l m : Language α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def (l m : Language α) : l * m = image2 (· ++ ·) l m :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The Kleene star of a language `L` is the set of all strings which can be written by
+concatenating strings from `L`. -/
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: KStar (Language α)
-  body: ⟨fun l => {x | exists L : List (List α), x = L.flatten ∧ forall y in L, y in l}⟩
-
-中文:
-实例 :
-  签名: KStar (Language α)
-  定义体: ⟨fun l => {x | exists L : List (List α), x = L.flatten ∧ forall y in L, y in l}⟩
-
-Depends on / 依赖: L.flatten, flatten
+--- 原说明 ---
+The Kleene star of a language `L` is the set of all strings which can be written
+ by
+concatenating strings from `L`.
 -/
-instance : KStar (Language α) := ⟨fun l => {x | exists L : List (List α), x = L.flatten ∧ forall y in L, y in l}⟩
-
-/--
-lemma `kstar_def` / 引理 `kstar_def`
-
-English:
-lemma kstar_def
-  given: (l : Language α)
-  statement: l∗ = {x | exists L : List (List α), x = L.flatten ∧ forall y in L, y in l}
-  proof: rfl
-
-@[ext]
-
-中文:
-引理 kstar_def
-  条件: (l : Language α)
-  结论: l∗ = {x | 存在 L : 列表 (列表 α), x = L.flatten ∧ 对任意 y in L, y in l}
-  证明: rfl
-
-@[ext]
+instance : KStar (Language α) := ⟨fun l ↦ {x | ∃ L : List (List α), x = L.flatten ∧ ∀ y ∈ L, y ∈ l}⟩
+/-
+**Language.kstar_def** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：kstar_def (l : Language α) : l∗ = {x | exists L : List (List α), x = L.fla
+tten ∧ forall y in L, y in l}
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma kstar_def (l : Language α) : l∗ = {x | exists L : List (List α), x = L.flatten ∧ forall y in L, y in l} :=
+lemma kstar_def (l : Language α) : l∗ = {x | ∃ L : List (List α), x = L.flatten ∧ ∀ y ∈ L, y ∈ l} :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {l m : Language α} (h : forall (x : List α), x in l ↔ x in m)
-  statement: l = m
-  proof: Set.ext h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {l m : Language α} (h : 对任意 (x : 列表 α), x in l ↔ x in m)
-  结论: l = m
-  证明: Set.ext h
-
-@[simp]
-
-Depends on / 依赖: Set.ext
+/-
+**Language.ext** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：ext {l m : Language α} (h : forall (x : List α), x in l ↔ x in m) : l = m
+参数：h : forall (x : List α), x in l ↔ x in m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
-theorem ext {l m : Language α} (h : forall (x : List α), x in l ↔ x in m) : l = m :=
+theorem ext {l m : Language α} (h : ∀ (x : List α), x ∈ l ↔ x ∈ m) : l = m :=
   Set.ext h
 
 @[simp]
-/--
-theorem `notMem_zero` / 定理 `notMem_zero`
-
-English:
-theorem notMem_zero
-  given: (x : List α)
-  statement: x ∉ (0 : Language α)
-  proof: id
-
-@[simp]
-
-中文:
-定理 notMem_zero
-  条件: (x : 列表 α)
-  结论: x ∉ (0 : Language α)
-  证明: id
-
-@[simp]
+/-
+**Language.notMem_zero** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：notMem_zero (x : List α) : x ∉ (0 : Language α)
+参数：x : List α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem notMem_zero (x : List α) : x ∉ (0 : Language α) :=
   id
 
 @[simp]
-/--
-theorem `mem_one` / 定理 `mem_one`
-
-English:
-theorem mem_one
-  given: (x : List α)
-  statement: x in (1 : Language α) ↔ x = []
-  proof: by rfl
-
-中文:
-定理 mem_one
-  条件: (x : 列表 α)
-  结论: x in (1 : Language α) ↔ x = []
-  证明: by rfl
+/-
+**Language.mem_one** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mem_one (x : List α) : x in (1 : Language α) ↔ x = []
+参数：x : List α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_one (x : List α) : x in (1 : Language α) ↔ x = [] := by rfl
-
-/--
-theorem `nil_mem_one` / 定理 `nil_mem_one`
-
-English:
-theorem nil_mem_one
-  statement: [] in (1 : Language α)
-  proof: Set.mem_singleton _
-
-中文:
-定理 nil_mem_one
-  结论: [] in (1 : Language α)
-  证明: Set.mem_singleton _
-
-Depends on / 依赖: Set.mem_singleton, mem_singleton
+theorem mem_one (x : List α) : x ∈ (1 : Language α) ↔ x = [] := by rfl
+/-
+**Language.nil_mem_one** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：nil_mem_one : [] in (1 : Language α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
-theorem nil_mem_one : [] in (1 : Language α) :=
+theorem nil_mem_one : [] ∈ (1 : Language α) :=
   Set.mem_singleton _
-
-/--
-theorem `mem_add` / 定理 `mem_add`
-
-English:
-theorem mem_add
-  given: (l m : Language α) (x : List α)
-  statement: x in l + m ↔ x in l ∨ x in m
-  proof: Iff.rfl
-
-中文:
-定理 mem_add
-  条件: (l m : Language α) (x : 列表 α)
-  结论: x in l + m ↔ x in l ∨ x in m
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Language.mem_add** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mem_add (l m : Language α) (x : List α) : x in l + m ↔ x in l ∨ x in m
+参数：l m : Language α；x : List α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_add (l m : Language α) (x : List α) : x in l + m ↔ x in l ∨ x in m :=
+theorem mem_add (l m : Language α) (x : List α) : x ∈ l + m ↔ x ∈ l ∨ x ∈ m :=
   Iff.rfl
-
-/--
-theorem `mem_sub` / 定理 `mem_sub`
-
-English:
-theorem mem_sub
-  given: (l m : Language α) (x : List α)
-  statement: x in l - m ↔ x in l ∧ x ∉ m
-  proof: Iff.rfl
-
-中文:
-定理 mem_sub
-  条件: (l m : Language α) (x : 列表 α)
-  结论: x in l - m ↔ x in l ∧ x ∉ m
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Language.mem_sub** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mem_sub (l m : Language α) (x : List α) : x in l - m ↔ x in l ∧ x ∉ m
+参数：l m : Language α；x : List α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sub (l m : Language α) (x : List α) : x in l - m ↔ x in l ∧ x ∉ m :=
+theorem mem_sub (l m : Language α) (x : List α) : x ∈ l - m ↔ x ∈ l ∧ x ∉ m :=
   Iff.rfl
-
-/--
-theorem `mem_mul` / 定理 `mem_mul`
-
-English:
-theorem mem_mul
-  statement: x in l * m ↔ exists a in l, exists b in m, a ++ b = x
-  proof: mem_image2
-
-中文:
-定理 mem_mul
-  结论: x in l * m ↔ 存在 a in l, 存在 b in m, a ++ b = x
-  证明: mem_image2
-
-Depends on / 依赖: mem_image2
+/-
+**Language.mem_mul** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mem_mul : x in l * m ↔ exists a in l, exists b in m, a ++ b = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image2`：∀ {α : Type u} {β : Type v} {γ : Type w} {f : α → β → γ}
+ {s : Set α} {t : Set β} {c : γ},   c ∈ Set.image2 f s t ↔ ∃ a ∈ s, ∃ b ∈ t, f a
+ b =…
 -/
-theorem mem_mul : x in l * m ↔ exists a in l, exists b in m, a ++ b = x :=
+theorem mem_mul : x ∈ l * m ↔ ∃ a ∈ l, ∃ b ∈ m, a ++ b = x :=
   mem_image2
-
-/--
-theorem `append_mem_mul` / 定理 `append_mem_mul`
-
-English:
-theorem append_mem_mul
-  statement: a in l -> b in m -> a ++ b in l * m
-  proof: mem_image2_of_mem
-
-中文:
-定理 append_mem_mul
-  结论: a in l -> b in m -> a ++ b in l * m
-  证明: mem_image2_of_mem
-
-Depends on / 依赖: mem_image2_of_mem
+/-
+**Language.append_mem_mul** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：append_mem_mul : a in l -> b in m -> a ++ b in l * m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image2_of_mem`：mem_image2_of_mem (ha : a in s) (hb : b in t) : f
+ a b in image2 f s t
 -/
-theorem append_mem_mul : a in l -> b in m -> a ++ b in l * m :=
+theorem append_mem_mul : a ∈ l → b ∈ m → a ++ b ∈ l * m :=
   mem_image2_of_mem
-
-/--
-theorem `mem_kstar` / 定理 `mem_kstar`
-
-English:
-theorem mem_kstar
-  statement: x in l∗ ↔ exists L : List (List α), x = L.flatten ∧ forall y in L, y in l
-  proof: Iff.rfl
-
-中文:
-定理 mem_kstar
-  结论: x in l∗ ↔ 存在 L : 列表 (列表 α), x = L.flatten ∧ 对任意 y in L, y in l
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Language.mem_kstar** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mem_kstar : x in l∗ ↔ exists L : List (List α), x = L.flatten ∧ forall y i
+n L, y in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_kstar : x in l∗ ↔ exists L : List (List α), x = L.flatten ∧ forall y in L, y in l :=
+theorem mem_kstar : x ∈ l∗ ↔ ∃ L : List (List α), x = L.flatten ∧ ∀ y ∈ L, y ∈ l :=
   Iff.rfl
-
-/--
-theorem `join_mem_kstar` / 定理 `join_mem_kstar`
-
-English:
-theorem join_mem_kstar
-  given: {L : List (List α)} (h : forall y in L, y in l)
-  statement: L.flatten in l∗
-  proof: ⟨L, rfl, h⟩
-
-中文:
-定理 join_mem_kstar
-  条件: {L : 列表 (列表 α)} (h : 对任意 y in L, y in l)
-  结论: L.flatten in l∗
-  证明: ⟨L, rfl, h⟩
+/-
+**Language.join_mem_kstar** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：join_mem_kstar {L : List (List α)} (h : forall y in L, y in l) : L.flatten
+ in l∗
+参数：List α；h : forall y in L, y in l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem join_mem_kstar {L : List (List α)} (h : forall y in L, y in l) : L.flatten in l∗ :=
+theorem join_mem_kstar {L : List (List α)} (h : ∀ y ∈ L, y ∈ l) : L.flatten ∈ l∗ :=
   ⟨L, rfl, h⟩
-
-/--
-theorem `nil_mem_kstar` / 定理 `nil_mem_kstar`
-
-English:
-theorem nil_mem_kstar
-  given: (l : Language α)
-  statement: [] in l∗
-  proof: ⟨[], rfl, fun _ h => by contradiction⟩
-
-中文:
-定理 nil_mem_kstar
-  条件: (l : Language α)
-  结论: [] in l∗
-  证明: ⟨[], rfl, fun _ h => by contradiction⟩
+/-
+**Language.nil_mem_kstar** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：nil_mem_kstar (l : Language α) : [] in l∗
+参数：l : Language α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
-theorem nil_mem_kstar (l : Language α) : [] in l∗ :=
-  ⟨[], rfl, fun _ h => by contradiction⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderedSub (Language α)
-  body: sdiff_le_iff'
-
-中文:
-实例 :
-  签名: OrderedSub (Language α)
-  定义体: sdiff_le_iff'
-
-Depends on / 依赖: sdiff_le_iff
+theorem nil_mem_kstar (l : Language α) : [] ∈ l∗ :=
+  ⟨[], rfl, fun _ h ↦ by contradiction⟩
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderedSub (Language α) where
   tsub_le_iff_right _ _ _ := sdiff_le_iff'
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: : Semiring (Language α) where
-  body: union_assoc
-  zero_add := empty_union
-  add_zero := union_empty
-  add_comm := union_comm
-  mul_assoc _ _ _ := image2_assoc append_assoc
-  zero_mul _ := image2_empty_left
-  mul_zero _ := image2_empty_right
-  one_mul l := by simp [mul_def, one_def]
-  mul_one l := by simp [mul_def, one_def]
-  natCast n := if n = 0 then 0 else 1
-  natCast_zero := rfl
-  natCast_succ n := by cases n <;> simp [add_def, zero_def]
-  left_distrib _ _ _ := image2_union_right
-  right_distrib _ _ _ := image2_union_left
-  nsmul := nsmulRec
-
-@[simp]
-
-中文:
-实例 instSemiring
-  签名: : 半环 (Language α) where
-  定义体: union_assoc
-  zero_add := empty_union
-  add_zero := union_empty
-  add_comm := union_comm
-  mul_assoc _ _ _ := image2_assoc append_assoc
-  zero_mul _ := image2_empty_left
-  mul_zero _ := image2_empty_right
-  one_mul l := by simp [mul_def, one_def]
-  mul_one l := by simp [mul_def, one_def]
-  natCast n := if n = 0 then 0 else 1
-  natCast_zero := rfl
-  natCast_succ n := by cases n <;> simp [add_def, zero_def]
-  left_distrib _ _ _ := image2_union_right
-  right_distrib _ _ _ := image2_union_left
-  nsmul := nsmulRec
-
-@[simp]
-
-Depends on / 依赖: union_assoc
+/-
+**Language.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+形式化陈述：instSemiring : Semiring (Language α) where add_assoc
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemiring : Semiring (Language α) where
   add_assoc := union_assoc
@@ -655,359 +370,287 @@ instance instSemiring : Semiring (Language α) where
   nsmul := nsmulRec
 
 @[simp]
-/--
-theorem `add_self` / 定理 `add_self`
-
-English:
-theorem add_self
-  given: (l : Language α)
-  statement: l + l = l
-  proof: sup_idem _
-
-中文:
-定理 add_self
-  条件: (l : Language α)
-  结论: l + l = l
-  证明: sup_idem _
-
-Depends on / 依赖: sup_idem
+/-
+**Language.add_self** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：add_self (l : Language α) : l + l = l
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_idem`：sup_idem (a : α) : a ⊔ a = a
 -/
 theorem add_self (l : Language α) : l + l = l :=
   sup_idem _
 
-/--
-Definition of `map` / `map` 的定义
+/-- Maps the alphabet of a language. -/
+/-
+**Language.map** 是 Mathlib 中的一个定义，位于命名空间 `Language`。
+形式化陈述：map (f : α -> β) : Language α ->+* Language β where toFun
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β)
-  body: image (List.map f)
-  map_zero' := image_empty _
-  map_one' := image_singleton
-  map_add' := image_union _
-map_mul' _ _ := image_image2_distrib fun _ _ => map_append
-
-中文:
-定义 map
-  签名: (f : α -> β)
-  定义体: image (List.map f)
-  map_zero' := image_empty _
-  map_one' := image_singleton
-  map_add' := image_union _
-map_mul' _ _ := image_image2_distrib fun _ _ => map_append
-
-Depends on / 依赖: List.map
+--- 原说明 ---
+Maps the alphabet of a language.
 -/
-def map (f : α -> β) : Language α ->+* Language β where
+def map (f : α → β) : Language α →+* Language β where
   toFun := image (List.map f)
   map_zero' := image_empty _
   map_one' := image_singleton
   map_add' := image_union _
-map_mul' _ _ := image_image2_distrib fun _ _ => map_append
+  map_mul' _ _ := image_image2_distrib <| fun _ _ => map_append
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: (l : Language α)
-  statement: map id l = l
-  proof: by simp [map]
-
-中文:
-定理 map_id
-  条件: (l : Language α)
-  结论: map id l = l
-  证明: by simp [map]
+/-
+**Language.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：map_id (l : Language α) : map id l = l
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_id_fun`：∀ {α : Type u_1}, List.map id = id
+· 使用定理 `Set.image_id_eq`：image_id_eq : image (id : α -> α) = id
+· 使用定理 `OneHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : One M] [
+inst_1 : One N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_one' 
+: toFun 1 …
+· 使用定理 `MonoidHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOn
+e M] [inst_1 : MulOne N] (toOneHom toOneHom_1 : OneHom M N)   (e_toOneHom : toOn
+eHom = toOneH…
+· 使用定理 `RingHom.mk.congr_simp`：∀ {α : Type u_5} {β : Type u_6} [inst : NonAssocS
+emiring α] [inst_1 : NonAssocSemiring β]   (toMonoidHom toMonoidHom_1 : α →* β) 
+(e_toMonoid…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_id (l : Language α) : map id l = l := by simp [map]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  given: (g : β -> γ) (f : α -> β) (l : Language α)
-  statement: map g (map f l) = map (g ∘ f) l
-  proof: by
-  simp [map, image_image]
-
-中文:
-定理 map_map
-  条件: (g : β -> γ) (f : α -> β) (l : Language α)
-  结论: map g (map f l) = map (g ∘ f) l
-  证明: by
-  simp [map, image_image]
-
-Depends on / 依赖: image_image
+/-
+**Language.map_map** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：map_map (g : β -> γ) (f : α -> β) (l : Language α) : map g (map f l) = map
+ (g ∘ f) l
+参数：g : β -> γ；f : α -> β；l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_map (g : β -> γ) (f : α -> β) (l : Language α) : map g (map f l) = map (g ∘ f) l := by
+theorem map_map (g : β → γ) (f : α → β) (l : Language α) : map g (map f l) = map (g ∘ f) l := by
   simp [map, image_image]
-
-/--
-lemma `mem_kstar_iff_exists_nonempty` / 引理 `mem_kstar_iff_exists_nonempty`
-
-English:
-lemma mem_kstar_iff_exists_nonempty
-  given: {x : List α}
-  proof: by
-  constructor
-  · rintro ⟨S, rfl, h⟩
-    refine ⟨S.filter fun l => !List.isEmpty l,
-      by simp [List.flatten_filter_not_isEmpty], fun y hy => ?_⟩
-    simp only [mem_filter, Bool.not_eq_eq_eq_not, Bool.not_true, isEmpty_eq_false_iff, ne_eq] at hy
-    exact ⟨h y hy.1, hy.2⟩
-  · rintro ⟨S, hx, h⟩
-    exact ⟨S, hx, fun y hy => (h y hy).1⟩
-
-中文:
-引理 mem_kstar_iff_存在_nonempty
-  条件: {x : 列表 α}
-  证明: by
-  constructor
-  · rintro ⟨S, rfl, h⟩
-    refine ⟨S.filter fun l => !List.isEmpty l,
-      by simp [List.flatten_filter_not_isEmpty], fun y hy => ?_⟩
-    simp only [mem_filter, Bool.not_eq_eq_eq_not, Bool.not_true, isEmpty_eq_false_iff, ne_eq] at hy
-    exact ⟨h y hy.1, hy.2⟩
-  · rintro ⟨S, hx, h⟩
-    exact ⟨S, hx, fun y hy => (h y hy).1⟩
-
-Depends on / 依赖: Bool.not_eq_eq_eq_not, Bool.not_true, List.flatten_filter_not_isEmpty, List.isEmpty, S.filter, filter, flatten_filter_not_isEmpty, isEmpty, isEmpty_eq_false_iff, mem_filter, ne_eq, not_eq_eq_eq_not, not_true
+/-
+**Language.mem_kstar_iff_exists_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：mem_kstar_iff_exists_nonempty {x : List α} : x in l∗ ↔ exists S : List (Li
+st α), x = S.flatten ∧ forall y in S, y in l ∧ y != []
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.flatten_filter_not_isEmpty`：∀ {α : Type u_1} {L : List (List α)}, (
+List.filter (fun l => !l.isEmpty) L).flatten = L.flatten
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Bool.not_true`：(!true) = false
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma mem_kstar_iff_exists_nonempty {x : List α} :
-    x in l∗ ↔ exists S : List (List α), x = S.flatten ∧ forall y in S, y in l ∧ y != [] := by
+    x ∈ l∗ ↔ ∃ S : List (List α), x = S.flatten ∧ ∀ y ∈ S, y ∈ l ∧ y ≠ [] := by
   constructor
   · rintro ⟨S, rfl, h⟩
-    refine ⟨S.filter fun l => !List.isEmpty l,
-      by simp [List.flatten_filter_not_isEmpty], fun y hy => ?_⟩
+    refine ⟨S.filter fun l ↦ !List.isEmpty l,
+      by simp [List.flatten_filter_not_isEmpty], fun y hy ↦ ?_⟩
     simp only [mem_filter, Bool.not_eq_eq_eq_not, Bool.not_true, isEmpty_eq_false_iff, ne_eq] at hy
     exact ⟨h y hy.1, hy.2⟩
   · rintro ⟨S, hx, h⟩
-    exact ⟨S, hx, fun y hy => (h y hy).1⟩
-
-/--
-theorem `kstar_def_nonempty` / 定理 `kstar_def_nonempty`
-
-English:
-theorem kstar_def_nonempty
-  given: (l : Language α)
-  proof: by
-  ext x; apply mem_kstar_iff_exists_nonempty
-
-中文:
-定理 kstar_def_nonempty
-  条件: (l : Language α)
-  证明: by
-  ext x; apply mem_kstar_iff_exists_nonempty
-
-Depends on / 依赖: mem_kstar_iff_exists_nonempty
+    exact ⟨S, hx, fun y hy ↦ (h y hy).1⟩
+/-
+**Language.kstar_def_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：kstar_def_nonempty (l : Language α) : l∗ = { x | exists S : List (List α),
+ x = S.flatten ∧ forall y in S, y in l ∧ y != [] }
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用引理 `Language.mem_kstar_iff_exists_nonempty`：mem_kstar_iff_exists_nonempty {x
+ : List α} : x in l∗ ↔ exists S : List (List α), x = S.flatten ∧ forall y in S, 
+y in l ∧ y != []
 -/
 theorem kstar_def_nonempty (l : Language α) :
-    l∗ = { x | exists S : List (List α), x = S.flatten ∧ forall y in S, y in l ∧ y != [] } := by
+    l∗ = { x | ∃ S : List (List α), x = S.flatten ∧ ∀ y ∈ S, y ∈ l ∧ y ≠ [] } := by
   ext x; apply mem_kstar_iff_exists_nonempty
-
-/--
-theorem `le_iff` / 定理 `le_iff`
-
-English:
-theorem le_iff
-  given: (l m : Language α)
-  statement: l <= m ↔ l + m = m
-  proof: sup_eq_right.symm
-
-中文:
-定理 le_iff
-  条件: (l m : Language α)
-  结论: l <= m ↔ l + m = m
-  证明: sup_eq_right.symm
-
-Depends on / 依赖: sup_eq_right, sup_eq_right.symm
+/-
+**Language.le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：le_iff (l m : Language α) : l <= m ↔ l + m = m
+参数：l m : Language α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
 -/
-theorem le_iff (l m : Language α) : l <= m ↔ l + m = m :=
+theorem le_iff (l m : Language α) : l ≤ m ↔ l + m = m :=
   sup_eq_right.symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulLeftMono (Language α)
-  body: image2_subset_left
-
-中文:
-实例 :
-  签名: MulLeftMono (Language α)
-  定义体: image2_subset_left
-
-Depends on / 依赖: image2_subset_left
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulLeftMono (Language α) where
   elim _ _ _ := image2_subset_left
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulRightMono (Language α)
-  body: image2_subset_right
-
-中文:
-实例 :
-  签名: MulRightMono (Language α)
-  定义体: image2_subset_right
-
-Depends on / 依赖: image2_subset_right
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulRightMono (Language α) where
   elim _ _ _ := image2_subset_right
-
-/--
-theorem `mem_iSup` / 定理 `mem_iSup`
-
-English:
-theorem mem_iSup
-  given: {ι : Sort v} {l : ι -> Language α} {x : List α}
-  statement: (x in ⨆ i, l i) ↔ exists i, x in l i
-  proof: mem_iUnion
-
-中文:
-定理 mem_iSup
-  条件: {ι : 类型层 v} {l : ι -> Language α} {x : 列表 α}
-  结论: (x in ⨆ i, l i) ↔ 存在 i, x in l i
-  证明: mem_iUnion
-
-Depends on / 依赖: mem_iUnion
+/-
+**Language.mem_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mem_iSup {ι : Sort v} {l : ι -> Language α} {x : List α} : (x in ⨆ i, l i)
+ ↔ exists i, x in l i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
 -/
-theorem mem_iSup {ι : Sort v} {l : ι -> Language α} {x : List α} : (x in ⨆ i, l i) ↔ exists i, x in l i :=
+theorem mem_iSup {ι : Sort v} {l : ι → Language α} {x : List α} : (x ∈ ⨆ i, l i) ↔ ∃ i, x ∈ l i :=
   mem_iUnion
-
-/--
-theorem `iSup_mul` / 定理 `iSup_mul`
-
-English:
-theorem iSup_mul
-  given: {ι : Sort v} (l : ι -> Language α) (m : Language α)
-  proof: image2_iUnion_left _ _ _
-
-中文:
-定理 iSup_mul
-  条件: {ι : 类型层 v} (l : ι -> Language α) (m : Language α)
-  证明: image2_iUnion_left _ _ _
-
-Depends on / 依赖: image2_iUnion_left
+/-
+**Language.iSup_mul** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：iSup_mul {ι : Sort v} (l : ι -> Language α) (m : Language α) : (⨆ i, l i) 
+* m = ⨆ i, l i * m
+参数：l : ι -> Language α；m : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_iUnion_left`：image2_iUnion_left (s : ι -> Set α) (t : Set β) 
+: image2 f (⋃ i, s i) t = ⋃ i, image2 f (s i) t
 -/
-theorem iSup_mul {ι : Sort v} (l : ι -> Language α) (m : Language α) :
+theorem iSup_mul {ι : Sort v} (l : ι → Language α) (m : Language α) :
     (⨆ i, l i) * m = ⨆ i, l i * m :=
   image2_iUnion_left _ _ _
-
-/--
-theorem `mul_iSup` / 定理 `mul_iSup`
-
-English:
-theorem mul_iSup
-  given: {ι : Sort v} (l : ι -> Language α) (m : Language α)
-  proof: image2_iUnion_right _ _ _
-
-中文:
-定理 mul_iSup
-  条件: {ι : 类型层 v} (l : ι -> Language α) (m : Language α)
-  证明: image2_iUnion_right _ _ _
-
-Depends on / 依赖: image2_iUnion_right
+/-
+**Language.mul_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mul_iSup {ι : Sort v} (l : ι -> Language α) (m : Language α) : (m * ⨆ i, l
+ i) = ⨆ i, m * l i
+参数：l : ι -> Language α；m : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image2_iUnion_right`：image2_iUnion_right (s : Set α) (t : ι -> Set β
+) : image2 f s (⋃ i, t i) = ⋃ i, image2 f s (t i)
 -/
-theorem mul_iSup {ι : Sort v} (l : ι -> Language α) (m : Language α) :
+theorem mul_iSup {ι : Sort v} (l : ι → Language α) (m : Language α) :
     (m * ⨆ i, l i) = ⨆ i, m * l i :=
   image2_iUnion_right _ _ _
-
-/--
-theorem `iSup_add` / 定理 `iSup_add`
-
-English:
-theorem iSup_add
-  given: {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α)
-  proof: iSup_sup
-
-中文:
-定理 iSup_add
-  条件: {ι : 类型层 v} [非空 ι] (l : ι -> Language α) (m : Language α)
-  证明: iSup_sup
-
-Depends on / 依赖: iSup_sup
+/-
+**Language.iSup_add** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：iSup_add {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α) 
+: (⨆ i, l i) + m = ⨆ i, l i + m
+参数：l : ι -> Language α；m : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iSup_sup`：iSup_sup [Nonempty ι] {f : ι -> α} {a : α} : (⨆ x, f x) ⊔ a = 
+⨆ x, f x ⊔ a
 -/
-theorem iSup_add {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α) :
+theorem iSup_add {ι : Sort v} [Nonempty ι] (l : ι → Language α) (m : Language α) :
     (⨆ i, l i) + m = ⨆ i, l i + m :=
   iSup_sup
-
-/--
-theorem `add_iSup` / 定理 `add_iSup`
-
-English:
-theorem add_iSup
-  given: {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α)
-  proof: sup_iSup
-
-中文:
-定理 add_iSup
-  条件: {ι : 类型层 v} [非空 ι] (l : ι -> Language α) (m : Language α)
-  证明: sup_iSup
-
-Depends on / 依赖: sup_iSup
+/-
+**Language.add_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：add_iSup {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α) 
+: (m + ⨆ i, l i) = ⨆ i, m + l i
+参数：l : ι -> Language α；m : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_iSup`：sup_iSup [Nonempty ι] {f : ι -> α} {a : α} : (a ⊔ ⨆ x, f x) = 
+⨆ x, a ⊔ f x
 -/
-theorem add_iSup {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α) :
+theorem add_iSup {ι : Sort v} [Nonempty ι] (l : ι → Language α) (m : Language α) :
     (m + ⨆ i, l i) = ⨆ i, m + l i :=
   sup_iSup
-
-/--
-theorem `iSup_sub` / 定理 `iSup_sub`
-
-English:
-theorem iSup_sub
-  given: {ι : Sort v} (l : ι -> Language α) (m : Language α)
-  proof: iUnion_sdiff _ _
-
-中文:
-定理 iSup_sub
-  条件: {ι : 类型层 v} (l : ι -> Language α) (m : Language α)
-  证明: iUnion_sdiff _ _
-
-Depends on / 依赖: iUnion_sdiff
+/-
+**Language.iSup_sub** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：iSup_sub {ι : Sort v} (l : ι -> Language α) (m : Language α) : (⨆ i, l i) 
+- m = ⨆ i, l i - m
+参数：l : ι -> Language α；m : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.iUnion_sdiff`：iUnion_sdiff (s : Set β) (t : ι -> Set β) : (⋃ i, t i)
+ \ s = ⋃ i, t i \ s
 -/
-theorem iSup_sub {ι : Sort v} (l : ι -> Language α) (m : Language α) :
+theorem iSup_sub {ι : Sort v} (l : ι → Language α) (m : Language α) :
     (⨆ i, l i) - m = ⨆ i, l i - m :=
   iUnion_sdiff _ _
-
-/--
-theorem `sub_iSup` / 定理 `sub_iSup`
-
-English:
-theorem sub_iSup
-  given: {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α)
-  proof: sdiff_iUnion _ _
-
-中文:
-定理 sub_iSup
-  条件: {ι : 类型层 v} [非空 ι] (l : ι -> Language α) (m : Language α)
-  证明: sdiff_iUnion _ _
-
-Depends on / 依赖: sdiff_iUnion
+/-
+**Language.sub_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：sub_iSup {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α) 
+: (m - ⨆ i, l i) = ⨅ i, m - l i
+参数：l : ι -> Language α；m : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.sdiff_iUnion`：sdiff_iUnion [Nonempty ι] (s : Set β) (t : ι -> Set β)
+ : (s \ ⋃ i, t i) = ⋂ i, s \ t i
 -/
-theorem sub_iSup {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α) :
+theorem sub_iSup {ι : Sort v} [Nonempty ι] (l : ι → Language α) (m : Language α) :
     (m - ⨆ i, l i) = ⨅ i, m - l i :=
   sdiff_iUnion _ _
-
-/--
-theorem `mem_pow` / 定理 `mem_pow`
-
-English:
-theorem mem_pow
-  given: {l : Language α} {x : List α} {n : Nat}
-  proof: by
+/-
+**Language.mem_pow** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mem_pow {l : Language α} {x : List α} {n : Nat} : x in l ^ n ↔ exists S : 
+List (List α), x = S.flatten ∧ S.length = n ∧ forall y in S, y in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.forall_mem_cons`：∀ {α : Type u_1} {p : α → Prop} {a : α} {l : List 
+α}, (∀ x ∈ a :: l, p x) ↔ p a ∧ ∀ x ∈ l, p x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+-/
+theorem mem_pow {l : Language α} {x : List α} {n : ℕ} :
+    x ∈ l ^ n ↔ ∃ S : List (List α), x = S.flatten ∧ S.length = n ∧ ∀ y ∈ S, y ∈ l := by
   induction n generalizing x with
   | zero => simp
   | succ n ihn =>
@@ -1018,219 +661,126 @@ theorem mem_pow
     · rintro ⟨_ | ⟨a, S⟩, rfl, hn, hS⟩ <;> cases hn
       rw [forall_mem_cons] at hS
       exact ⟨a, hS.1, _, ⟨S, rfl, rfl, hS.2⟩, rfl⟩
-
-中文:
-定理 mem_pow
-  条件: {l : Language α} {x : 列表 α} {n : 自然数}
-  证明: by
-  induction n generalizing x with
-  | zero => simp
-  | succ n ihn =>
-    simp only [pow_succ', mem_mul, ihn]
-    constructor
-    · rintro ⟨a, ha, b, ⟨S, rfl, rfl, hS⟩, rfl⟩
-      exact ⟨a :: S, rfl, rfl, forall_mem_cons.2 ⟨ha, hS⟩⟩
-    · rintro ⟨_ | ⟨a, S⟩, rfl, hn, hS⟩ <;> cases hn
-      rw [forall_mem_cons] at hS
-      exact ⟨a, hS.1, _, ⟨S, rfl, rfl, hS.2⟩, rfl⟩
-
-Depends on / 依赖: forall_mem_cons, generalizing, mem_mul, pow_succ
+/-
+**Language.kstar_eq_iSup_pow** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ i : Nat, l ^ i
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Language.ext`：ext {l m : Language α} (h : forall (x : List α), x in l ↔ 
+x in m) : l = m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem mem_pow {l : Language α} {x : List α} {n : Nat} :
-    x in l ^ n ↔ exists S : List (List α), x = S.flatten ∧ S.length = n ∧ forall y in S, y in l := by
-  induction n generalizing x with
-  | zero => simp
-  | succ n ihn =>
-    simp only [pow_succ', mem_mul, ihn]
-    constructor
-    · rintro ⟨a, ha, b, ⟨S, rfl, rfl, hS⟩, rfl⟩
-      exact ⟨a :: S, rfl, rfl, forall_mem_cons.2 ⟨ha, hS⟩⟩
-    · rintro ⟨_ | ⟨a, S⟩, rfl, hn, hS⟩ <;> cases hn
-      rw [forall_mem_cons] at hS
-      exact ⟨a, hS.1, _, ⟨S, rfl, rfl, hS.2⟩, rfl⟩
-
-/--
-theorem `kstar_eq_iSup_pow` / 定理 `kstar_eq_iSup_pow`
-
-English:
-theorem kstar_eq_iSup_pow
-  given: (l : Language α)
-  statement: l∗ = ⨆ i : Nat, l ^ i
-  proof: by
+theorem kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ i : ℕ, l ^ i := by
   ext x
   simp only [mem_kstar, mem_iSup, mem_pow]
   grind
 
 @[simp]
-
-中文:
-定理 kstar_eq_iSup_pow
-  条件: (l : Language α)
-  结论: l∗ = ⨆ i : 自然数, l ^ i
-  证明: by
-  ext x
-  simp only [mem_kstar, mem_iSup, mem_pow]
-  grind
-
-@[simp]
-
-Depends on / 依赖: mem_iSup, mem_kstar, mem_pow
+/-
+**Language.map_kstar** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：map_kstar (f : α -> β) (l : Language α) : map f l∗ = (map f l)∗
+参数：f : α -> β；l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Language.kstar_eq_iSup_pow`：kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ 
+i : Nat, l ^ i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Set.image_iUnion`：image_iUnion {f : α -> β} {s : ι -> Set α} : (f '' ⋃ i
+, s i) = ⋃ i, f '' s i
 -/
-theorem kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ i : Nat, l ^ i := by
-  ext x
-  simp only [mem_kstar, mem_iSup, mem_pow]
-  grind
-
-@[simp]
-/--
-theorem `map_kstar` / 定理 `map_kstar`
-
-English:
-theorem map_kstar
-  given: (f : α -> β) (l : Language α)
-  statement: map f l∗ = (map f l)∗
-  proof: by
-  rw [kstar_eq_iSup_pow]; rw [kstar_eq_iSup_pow]
+theorem map_kstar (f : α → β) (l : Language α) : map f l∗ = (map f l)∗ := by
+  rw [kstar_eq_iSup_pow, kstar_eq_iSup_pow]
   simp_rw [← map_pow]
   exact image_iUnion
-
-中文:
-定理 map_kstar
-  条件: (f : α -> β) (l : Language α)
-  结论: map f l∗ = (map f l)∗
-  证明: by
-  rw [kstar_eq_iSup_pow]; rw [kstar_eq_iSup_pow]
-  simp_rw [← map_pow]
-  exact image_iUnion
-
-Depends on / 依赖: image_iUnion, kstar_eq_iSup_pow, map_pow, simp_rw
--/
-theorem map_kstar (f : α -> β) (l : Language α) : map f l∗ = (map f l)∗ := by
-  rw [kstar_eq_iSup_pow]; rw [kstar_eq_iSup_pow]
-  simp_rw [← map_pow]
-  exact image_iUnion
-
-/--
-theorem `mul_self_kstar_comm` / 定理 `mul_self_kstar_comm`
-
-English:
-theorem mul_self_kstar_comm
-  given: (l : Language α)
-  statement: l∗ * l = l * l∗
-  proof: by
-  simp only [kstar_eq_iSup_pow, mul_iSup, iSup_mul, ← pow_succ, ← pow_succ']
-
-@[simp]
-
-中文:
-定理 mul_self_kstar_comm
-  条件: (l : Language α)
-  结论: l∗ * l = l * l∗
-  证明: by
-  simp only [kstar_eq_iSup_pow, mul_iSup, iSup_mul, ← pow_succ, ← pow_succ']
-
-@[simp]
-
-Depends on / 依赖: iSup_mul, kstar_eq_iSup_pow, mul_iSup, pow_succ
+/-
+**Language.mul_self_kstar_comm** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：mul_self_kstar_comm (l : Language α) : l∗ * l = l * l∗
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Language.kstar_eq_iSup_pow`：kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ 
+i : Nat, l ^ i
+· 使用定理 `Language.iSup_mul`：iSup_mul {ι : Sort v} (l : ι -> Language α) (m : Lang
+uage α) : (⨆ i, l i) * m = ⨆ i, l i * m
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Language.mul_iSup`：mul_iSup {ι : Sort v} (l : ι -> Language α) (m : Lang
+uage α) : (m * ⨆ i, l i) = ⨆ i, m * l i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_self_kstar_comm (l : Language α) : l∗ * l = l * l∗ := by
   simp only [kstar_eq_iSup_pow, mul_iSup, iSup_mul, ← pow_succ, ← pow_succ']
 
 @[simp]
-/--
-theorem `one_add_self_mul_kstar_eq_kstar` / 定理 `one_add_self_mul_kstar_eq_kstar`
-
-English:
-theorem one_add_self_mul_kstar_eq_kstar
-  given: (l : Language α)
-  statement: 1 + l * l∗ = l∗
-  proof: by
-  simp only [kstar_eq_iSup_pow, mul_iSup, ← pow_succ', ← pow_zero l]
-  exact sup_iSup_nat_succ _
-
-@[simp]
-
-中文:
-定理 one_add_self_mul_kstar_eq_kstar
-  条件: (l : Language α)
-  结论: 1 + l * l∗ = l∗
-  证明: by
-  simp only [kstar_eq_iSup_pow, mul_iSup, ← pow_succ', ← pow_zero l]
-  exact sup_iSup_nat_succ _
-
-@[simp]
-
-Depends on / 依赖: kstar_eq_iSup_pow, mul_iSup, pow_succ, pow_zero, sup_iSup_nat_succ
+/-
+**Language.one_add_self_mul_kstar_eq_kstar** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：one_add_self_mul_kstar_eq_kstar (l : Language α) : 1 + l * l∗ = l∗
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Language.kstar_eq_iSup_pow`：kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ 
+i : Nat, l ^ i
+· 使用定理 `Language.mul_iSup`：mul_iSup {ι : Sort v} (l : ι -> Language α) (m : Lang
+uage α) : (m * ⨆ i, l i) = ⨆ i, m * l i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sup_iSup_nat_succ`：sup_iSup_nat_succ (u : Nat -> α) : (u 0 ⊔ ⨆ i, u (i +
+ 1)) = ⨆ i, u i
 -/
 theorem one_add_self_mul_kstar_eq_kstar (l : Language α) : 1 + l * l∗ = l∗ := by
   simp only [kstar_eq_iSup_pow, mul_iSup, ← pow_succ', ← pow_zero l]
   exact sup_iSup_nat_succ _
 
 @[simp]
-/--
-theorem `one_add_kstar_mul_self_eq_kstar` / 定理 `one_add_kstar_mul_self_eq_kstar`
-
-English:
-theorem one_add_kstar_mul_self_eq_kstar
-  given: (l : Language α)
-  statement: 1 + l∗ * l = l∗
-  proof: by
-  rw [mul_self_kstar_comm]; rw [one_add_self_mul_kstar_eq_kstar]
-
-中文:
-定理 one_add_kstar_mul_self_eq_kstar
-  条件: (l : Language α)
-  结论: 1 + l∗ * l = l∗
-  证明: by
-  rw [mul_self_kstar_comm]; rw [one_add_self_mul_kstar_eq_kstar]
-
-Depends on / 依赖: mul_self_kstar_comm, one_add_self_mul_kstar_eq_kstar
+/-
+**Language.one_add_kstar_mul_self_eq_kstar** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：one_add_kstar_mul_self_eq_kstar (l : Language α) : 1 + l∗ * l = l∗
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Language.mul_self_kstar_comm`：mul_self_kstar_comm (l : Language α) : l∗ 
+* l = l * l∗
+· 使用定理 `Language.one_add_self_mul_kstar_eq_kstar`：one_add_self_mul_kstar_eq_ksta
+r (l : Language α) : 1 + l * l∗ = l∗
 -/
 theorem one_add_kstar_mul_self_eq_kstar (l : Language α) : 1 + l∗ * l = l∗ := by
-  rw [mul_self_kstar_comm]; rw [one_add_self_mul_kstar_eq_kstar]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: KleeneAlgebra (Language α)
-  body: inferInstance
-  one_le_kstar a _ hl := ⟨[], hl, by simp⟩
-  mul_kstar_le_kstar a := (one_add_self_mul_kstar_eq_kstar a).le.trans' le_sup_right
-  kstar_mul_le_kstar a := (one_add_kstar_mul_self_eq_kstar a).le.trans' le_sup_right
-  kstar_mul_le_self l m h := by
-    rw [kstar_eq_iSup_pow]; rw [iSup_mul]
-    refine iSup_le fun n => ?_
-    induction n with
-    | zero => simp
-    | succ n ih => grw [pow_succ, mul_assoc, h, ih]
-  mul_kstar_le_self l m h := by
-    rw [kstar_eq_iSup_pow]; rw [mul_iSup]
-    refine iSup_le fun n => ?_
-    induction n with
-    | zero => simp
-    | succ n ih => grw [pow_succ, ← mul_assoc m (l ^ n) l, ih, h]
-
-中文:
-实例 :
-  签名: Kleene代数 (Language α)
-  定义体: inferInstance
-  one_le_kstar a _ hl := ⟨[], hl, by simp⟩
-  mul_kstar_le_kstar a := (one_add_self_mul_kstar_eq_kstar a).le.trans' le_sup_right
-  kstar_mul_le_kstar a := (one_add_kstar_mul_self_eq_kstar a).le.trans' le_sup_right
-  kstar_mul_le_self l m h := by
-    rw [kstar_eq_iSup_pow]; rw [iSup_mul]
-    refine iSup_le fun n => ?_
-    induction n with
-    | zero => simp
-    | succ n ih => grw [pow_succ, mul_assoc, h, ih]
-  mul_kstar_le_self l m h := by
-    rw [kstar_eq_iSup_pow]; rw [mul_iSup]
-    refine iSup_le fun n => ?_
-    induction n with
-    | zero => simp
-    | succ n ih => grw [pow_succ, ← mul_assoc m (l ^ n) l, ih, h]
+  rw [mul_self_kstar_comm, one_add_self_mul_kstar_eq_kstar]
+/-
+**Language.** 是 Mathlib 中的一个实例，位于命名空间 `Language`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : KleeneAlgebra (Language α) where
   __ : OrderBot (Language α) := inferInstance
@@ -1238,82 +788,77 @@ instance : KleeneAlgebra (Language α) where
   mul_kstar_le_kstar a := (one_add_self_mul_kstar_eq_kstar a).le.trans' le_sup_right
   kstar_mul_le_kstar a := (one_add_kstar_mul_self_eq_kstar a).le.trans' le_sup_right
   kstar_mul_le_self l m h := by
-    rw [kstar_eq_iSup_pow]; rw [iSup_mul]
-    refine iSup_le fun n => ?_
+    rw [kstar_eq_iSup_pow, iSup_mul]
+    refine iSup_le fun n ↦ ?_
     induction n with
     | zero => simp
     | succ n ih => grw [pow_succ, mul_assoc, h, ih]
   mul_kstar_le_self l m h := by
-    rw [kstar_eq_iSup_pow]; rw [mul_iSup]
-    refine iSup_le fun n => ?_
+    rw [kstar_eq_iSup_pow, mul_iSup]
+    refine iSup_le fun n ↦ ?_
     induction n with
     | zero => simp
     | succ n ih => grw [pow_succ, ← mul_assoc m (l ^ n) l, ih, h]
 
-/--
-theorem `self_eq_mul_add_iff` / 定理 `self_eq_mul_add_iff`
+/-- **Arden's lemma** -/
+/-
+**Language.self_eq_mul_add_iff** 是 Mathlib 中的一个定理，位于命名空间 `Language`。
+形式化陈述：self_eq_mul_add_iff {l m n : Language α} (hm : [] ∉ m) : l = m * l + n ↔ l
+ = m∗ * n where mp h
+参数：hm : [] ∉ m。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Nat.strong_induction_on`：∀ {p : ℕ → Prop} (n : ℕ), (∀ (n : ℕ), (∀ m < n,
+ p m) → p n) → p n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Language.mem_mul`：mem_mul : x in l * m ↔ exists a in l, exists b in m, a
+ ++ b = x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.length_pos_iff`：∀ {α : Type u_1} {l : List α}, 0 < l.length ↔ l ≠ [
+]
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Language.one_add_self_mul_kstar_eq_kstar`：one_add_self_mul_kstar_eq_ksta
+r (l : Language α) : 1 + l * l∗ = l∗
+· 使用定理 `one_add_mul`：one_add_mul [RightDistribClass α] (a b : α) : (1 + a) * b =
+ b + a * b
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `Nat.lt_add_left_iff_pos`：∀ {n k : ℕ}, n < k + n ↔ 0 < k
+· 使用定理 `Language.nil_mem_kstar`：nil_mem_kstar (l : Language α) : [] in l∗
+· 使用定理 `List.nil_append`：∀ {α : Type u} (as : List α), [] ++ as = as
+· 使用定理 `Language.kstar_eq_iSup_pow`：kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ 
+i : Nat, l ^ i
+· 使用定理 `Language.iSup_mul`：iSup_mul {ι : Sort v} (l : ι -> Language α) (m : Lang
+uage α) : (⨆ i, l i) * m = ⨆ i, l i * m
+· 使用定理 `iSup_le_iff`：iSup_le_iff : iSup f <= a ↔ forall i, f i <= a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `le_self_add`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [CanonicallyO
+rderedAdd α] {a b : α}, a ≤ a + b
+· 使用定理 `IdemSemiring.toCanonicallyOrderedAdd`：∀ {α : Type u_1} [inst : IdemSemir
+ing α], CanonicallyOrderedAdd α
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `Language.instMulLeftMono`：∀ {α : Type u_1}, MulLeftMono (Language α)
+（共 32 条，此处仅展示前 30 条）
 
-English:
-theorem self_eq_mul_add_iff
-  given: {l m n : Language α} (hm : [] ∉ m)
-  statement: l = m * l + n ↔ l = m∗ * n where
-  proof: by
-    apply le_antisymm
-    · intro x hx
-      induction hlen : x.length using Nat.strong_induction_on generalizing x with | _ _ ih
-      subst hlen
-      rw [h] at hx
-      obtain hx | hx := hx
-      · obtain ⟨a, ha, b, hb, rfl⟩ := mem_mul.mp hx
-        rw [length_append] at ih
-have hal : 0 < a.length := length_pos_iff.mpr ne_of_mem_of_not_mem ha hm
-        specialize ih b.length (Nat.lt_add_left_iff_pos.mpr hal) hb rfl
-        rw [← one_add_self_mul_kstar_eq_kstar]; rw [one_add_mul]; rw [mul_assoc]
-        right
-        exact ⟨_, ha, _, ih, rfl⟩
-      · exact ⟨[], nil_mem_kstar _, _, ⟨hx, nil_append _⟩⟩
-    · rw [kstar_eq_iSup_pow, iSup_mul, iSup_le_iff]
-      intro i
-      induction i with rw [h]
-      | zero =>
-        rw [pow_zero]; rw [one_mul]; rw [add_comm]
-        exact le_self_add
-      | succ _ ih =>
-        grw [add_comm, pow_add, pow_one, mul_assoc, ih]
-        exact le_self_add
-  mpr h := by rw [h, add_comm, ← mul_assoc, ← one_add_mul, one_add_self_mul_kstar_eq_kstar]
-
-中文:
-定理 self_eq_mul_add_iff
-  条件: {l m n : Language α} (hm : [] ∉ m)
-  结论: l = m * l + n ↔ l = m∗ * n where
-  证明: by
-    apply le_antisymm
-    · intro x hx
-      induction hlen : x.length using Nat.strong_induction_on generalizing x with | _ _ ih
-      subst hlen
-      rw [h] at hx
-      obtain hx | hx := hx
-      · obtain ⟨a, ha, b, hb, rfl⟩ := mem_mul.mp hx
-        rw [length_append] at ih
-have hal : 0 < a.length := length_pos_iff.mpr ne_of_mem_of_not_mem ha hm
-        specialize ih b.length (Nat.lt_add_left_iff_pos.mpr hal) hb rfl
-        rw [← one_add_self_mul_kstar_eq_kstar]; rw [one_add_mul]; rw [mul_assoc]
-        right
-        exact ⟨_, ha, _, ih, rfl⟩
-      · exact ⟨[], nil_mem_kstar _, _, ⟨hx, nil_append _⟩⟩
-    · rw [kstar_eq_iSup_pow, iSup_mul, iSup_le_iff]
-      intro i
-      induction i with rw [h]
-      | zero =>
-        rw [pow_zero]; rw [one_mul]; rw [add_comm]
-        exact le_self_add
-      | succ _ ih =>
-        grw [add_comm, pow_add, pow_one, mul_assoc, ih]
-        exact le_self_add
-  mpr h := by rw [h, add_comm, ← mul_assoc, ← one_add_mul, one_add_self_mul_kstar_eq_kstar]
-
-Depends on / 依赖: Nat.lt_add_left_iff_pos.mpr, Nat.strong_induction_on, a.length, b.length, generalizing, le_antisymm, length, length_append, length_pos_iff, length_pos_iff.mpr, lt_add_left_iff_pos, mem_mul, mem_mul.mp, mul_assoc, ne_of_mem_of_not_mem, nil_mem_ks, one_add_mul, one_add_self_mul_kstar_eq_kstar, specialize, strong_induction_on
+--- 原说明 ---
+**Arden's lemma**
 -/
 theorem self_eq_mul_add_iff {l m n : Language α} (hm : [] ∉ m) : l = m * l + n ↔ l = m∗ * n where
   mp h := by
@@ -1325,9 +870,9 @@ theorem self_eq_mul_add_iff {l m n : Language α} (hm : [] ∉ m) : l = m * l + 
       obtain hx | hx := hx
       · obtain ⟨a, ha, b, hb, rfl⟩ := mem_mul.mp hx
         rw [length_append] at ih
-have hal : 0 < a.length := length_pos_iff.mpr ne_of_mem_of_not_mem ha hm
+        have hal : 0 < a.length := length_pos_iff.mpr <| ne_of_mem_of_not_mem ha hm
         specialize ih b.length (Nat.lt_add_left_iff_pos.mpr hal) hb rfl
-        rw [← one_add_self_mul_kstar_eq_kstar]; rw [one_add_mul]; rw [mul_assoc]
+        rw [← one_add_self_mul_kstar_eq_kstar, one_add_mul, mul_assoc]
         right
         exact ⟨_, ha, _, ih, rfl⟩
       · exact ⟨[], nil_mem_kstar _, _, ⟨hx, nil_append _⟩⟩
@@ -1335,283 +880,188 @@ have hal : 0 < a.length := length_pos_iff.mpr ne_of_mem_of_not_mem ha hm
       intro i
       induction i with rw [h]
       | zero =>
-        rw [pow_zero]; rw [one_mul]; rw [add_comm]
+        rw [pow_zero, one_mul, add_comm]
         exact le_self_add
       | succ _ ih =>
         grw [add_comm, pow_add, pow_one, mul_assoc, ih]
         exact le_self_add
   mpr h := by rw [h, add_comm, ← mul_assoc, ← one_add_mul, one_add_self_mul_kstar_eq_kstar]
 
-/--
-Definition of `reverse` / `reverse` 的定义
+/-- Language `l.reverse` is defined as the set of words from `l` backwards. -/
+/-
+**Language.reverse** 是 Mathlib 中的一个定义，位于命名空间 `Language`。
+形式化陈述：reverse (l : Language α) : Language α
+参数：l : Language α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: (l : Language α)
-  body: { w : List α | w.reverse in l }
-
-@[simp]
-
-中文:
-定义 reverse
-  签名: (l : Language α)
-  定义体: { w : List α | w.reverse in l }
-
-@[simp]
-
-Depends on / 依赖: reverse, w.reverse
+--- 原说明 ---
+Language `l.reverse` is defined as the set of words from `l` backwards.
 -/
-def reverse (l : Language α) : Language α := { w : List α | w.reverse in l }
+def reverse (l : Language α) : Language α := { w : List α | w.reverse ∈ l }
 
 @[simp]
-/--
-lemma `mem_reverse` / 引理 `mem_reverse`
-
-English:
-lemma mem_reverse
-  statement: a in l.reverse ↔ a.reverse in l
-  proof: Iff.rfl
-
-中文:
-引理 mem_reverse
-  结论: a in l.reverse ↔ a.reverse in l
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Language.mem_reverse** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：mem_reverse : a in l.reverse ↔ a.reverse in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_reverse : a in l.reverse ↔ a.reverse in l := Iff.rfl
-
-/--
-lemma `reverse_mem_reverse` / 引理 `reverse_mem_reverse`
-
-English:
-lemma reverse_mem_reverse
-  statement: a.reverse in l.reverse ↔ a in l
-  proof: by
-  rw [mem_reverse]; rw [List.reverse_reverse]
-
-中文:
-引理 reverse_mem_reverse
-  结论: a.reverse in l.reverse ↔ a in l
-  证明: by
-  rw [mem_reverse]; rw [List.reverse_reverse]
-
-Depends on / 依赖: List.reverse_reverse, mem_reverse, reverse_reverse
+lemma mem_reverse : a ∈ l.reverse ↔ a.reverse ∈ l := Iff.rfl
+/-
+**Language.reverse_mem_reverse** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_mem_reverse : a.reverse in l.reverse ↔ a in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Language.mem_reverse`：mem_reverse : a in l.reverse ↔ a.reverse in l
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma reverse_mem_reverse : a.reverse in l.reverse ↔ a in l := by
-  rw [mem_reverse]; rw [List.reverse_reverse]
-
-/--
-lemma `reverse_eq_image` / 引理 `reverse_eq_image`
-
-English:
-lemma reverse_eq_image
-  given: (l : Language α)
-  statement: l.reverse = List.reverse '' l
-  proof: ((List.reverse_involutive.toPerm _).image_eq_preimage_symm _).symm
-
-@[simp]
-
-中文:
-引理 reverse_eq_image
-  条件: (l : Language α)
-  结论: l.reverse = 列表.reverse '' l
-  证明: ((List.reverse_involutive.toPerm _).image_eq_preimage_symm _).symm
-
-@[simp]
-
-Depends on / 依赖: List.reverse_involutive.toPerm, image_eq_preimage_symm, reverse_involutive, toPerm
+lemma reverse_mem_reverse : a.reverse ∈ l.reverse ↔ a ∈ l := by
+  rw [mem_reverse, List.reverse_reverse]
+/-
+**Language.reverse_eq_image** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_eq_image (l : Language α) : l.reverse = List.reverse '' l
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.reverse_involutive`：reverse_involutive : Involutive (@reverse α)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 lemma reverse_eq_image (l : Language α) : l.reverse = List.reverse '' l :=
   ((List.reverse_involutive.toPerm _).image_eq_preimage_symm _).symm
 
 @[simp]
-/--
-lemma `reverse_zero` / 引理 `reverse_zero`
-
-English:
-lemma reverse_zero
-  statement: (0 : Language α).reverse = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 reverse_zero
-  结论: (0 : Language α).reverse = 0
-  证明: rfl
-
-@[simp]
+/-
+**Language.reverse_zero** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_zero : (0 : Language α).reverse = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma reverse_zero : (0 : Language α).reverse = 0 := rfl
 
 @[simp]
-/--
-lemma `reverse_one` / 引理 `reverse_one`
-
-English:
-lemma reverse_one
-  statement: (1 : Language α).reverse = 1
-  proof: by
-  simp [reverse, ← one_def]
-
-中文:
-引理 reverse_one
-  结论: (1 : Language α).reverse = 1
-  证明: by
-  simp [reverse, ← one_def]
-
-Depends on / 依赖: one_def, reverse
+/-
+**Language.reverse_one** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_one : (1 : Language α).reverse = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma reverse_one : (1 : Language α).reverse = 1 := by
   simp [reverse, ← one_def]
-
-/--
-lemma `reverse_involutive` / 引理 `reverse_involutive`
-
-English:
-lemma reverse_involutive
-  statement: Function.Involutive (reverse : Language α -> _)
-  proof: List.reverse_involutive.preimage
-
-中文:
-引理 reverse_involutive
-  结论: 函数.对合 (reverse : Language α -> _)
-  证明: List.reverse_involutive.preimage
-
-Depends on / 依赖: List.reverse_involutive.preimage, preimage, reverse_involutive
+/-
+**Language.reverse_involutive** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_involutive : Function.Involutive (reverse : Language α -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.preimage`：∀ {α : Type u_1} {f : α → α}, Function.Inv
+olutive f → Function.Involutive (Set.preimage f)
+· 使用定理 `List.reverse_involutive`：reverse_involutive : Involutive (@reverse α)
 -/
-lemma reverse_involutive : Function.Involutive (reverse : Language α -> _) :=
+lemma reverse_involutive : Function.Involutive (reverse : Language α → _) :=
   List.reverse_involutive.preimage
-
-/--
-lemma `reverse_bijective` / 引理 `reverse_bijective`
-
-English:
-lemma reverse_bijective
-  statement: Function.Bijective (reverse : Language α -> _)
-  proof: reverse_involutive.bijective
-
-中文:
-引理 reverse_bijective
-  结论: 函数.双射 (reverse : Language α -> _)
-  证明: reverse_involutive.bijective
-
-Depends on / 依赖: bijective, reverse_involutive, reverse_involutive.bijective
+/-
+**Language.reverse_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_bijective : Function.Bijective (reverse : Language α -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.bijective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Bijective f
+· 使用引理 `Language.reverse_involutive`：reverse_involutive : Function.Involutive (r
+everse : Language α -> _)
 -/
-lemma reverse_bijective : Function.Bijective (reverse : Language α -> _) :=
+lemma reverse_bijective : Function.Bijective (reverse : Language α → _) :=
   reverse_involutive.bijective
-
-/--
-lemma `reverse_injective` / 引理 `reverse_injective`
-
-English:
-lemma reverse_injective
-  statement: Function.Injective (reverse : Language α -> _)
-  proof: reverse_involutive.injective
-
-中文:
-引理 reverse_injective
-  结论: 函数.单射 (reverse : Language α -> _)
-  证明: reverse_involutive.injective
-
-Depends on / 依赖: injective, reverse_involutive, reverse_involutive.injective
+/-
+**Language.reverse_injective** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_injective : Function.Injective (reverse : Language α -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.injective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Injective f
+· 使用引理 `Language.reverse_involutive`：reverse_involutive : Function.Involutive (r
+everse : Language α -> _)
 -/
-lemma reverse_injective : Function.Injective (reverse : Language α -> _) :=
+lemma reverse_injective : Function.Injective (reverse : Language α → _) :=
   reverse_involutive.injective
-
-/--
-lemma `reverse_surjective` / 引理 `reverse_surjective`
-
-English:
-lemma reverse_surjective
-  statement: Function.Surjective (reverse : Language α -> _)
-  proof: reverse_involutive.surjective
-
-@[simp]
-
-中文:
-引理 reverse_surjective
-  结论: 函数.满射 (reverse : Language α -> _)
-  证明: reverse_involutive.surjective
-
-@[simp]
-
-Depends on / 依赖: reverse_involutive, reverse_involutive.surjective, surjective
+/-
+**Language.reverse_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_surjective : Function.Surjective (reverse : Language α -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.surjective`：∀ {α : Sort u} {f : α → α}, Function.Inv
+olutive f → Function.Surjective f
+· 使用引理 `Language.reverse_involutive`：reverse_involutive : Function.Involutive (r
+everse : Language α -> _)
 -/
-lemma reverse_surjective : Function.Surjective (reverse : Language α -> _) :=
+lemma reverse_surjective : Function.Surjective (reverse : Language α → _) :=
   reverse_involutive.surjective
 
 @[simp]
-/--
-lemma `reverse_reverse` / 引理 `reverse_reverse`
-
-English:
-lemma reverse_reverse
-  given: (l : Language α)
-  statement: l.reverse.reverse = l
-  proof: reverse_involutive l
-
-@[simp]
-
-中文:
-引理 reverse_reverse
-  条件: (l : Language α)
-  结论: l.reverse.reverse = l
-  证明: reverse_involutive l
-
-@[simp]
-
-Depends on / 依赖: reverse_involutive
+/-
+**Language.reverse_reverse** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_reverse (l : Language α) : l.reverse.reverse = l
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Language.reverse_involutive`：reverse_involutive : Function.Involutive (r
+everse : Language α -> _)
 -/
 lemma reverse_reverse (l : Language α) : l.reverse.reverse = l := reverse_involutive l
 
 @[simp]
-/--
-lemma `reverse_add` / 引理 `reverse_add`
-
-English:
-lemma reverse_add
-  given: (l m : Language α)
-  statement: (l + m).reverse = l.reverse + m.reverse
-  proof: rfl
-
-中文:
-引理 reverse_add
-  条件: (l m : Language α)
-  结论: (l + m).reverse = l.reverse + m.reverse
-  证明: rfl
+/-
+**Language.reverse_add** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_add (l m : Language α) : (l + m).reverse = l.reverse + m.reverse
+参数：l m : Language α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma reverse_add (l m : Language α) : (l + m).reverse = l.reverse + m.reverse := rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `reverse_mul` / 引理 `reverse_mul`
-
-English:
-lemma reverse_mul
-  given: (l m : Language α)
-  statement: (l * m).reverse = m.reverse * l.reverse
-  proof: by
-  simp only [mul_def, reverse_eq_image, image2_image_left, image2_image_right, image_image2,
-    List.reverse_append]
-  apply image2_swap
-
-@[simp]
-
-中文:
-引理 reverse_mul
-  条件: (l m : Language α)
-  结论: (l * m).reverse = m.reverse * l.reverse
-  证明: by
-  simp only [mul_def, reverse_eq_image, image2_image_left, image2_image_right, image_image2,
-    List.reverse_append]
-  apply image2_swap
-
-@[simp]
-
-Depends on / 依赖: List.reverse_append, image2_image_left, image2_image_right, image2_swap, image_image2, mul_def, reverse_append, reverse_eq_image
+/-
+**Language.reverse_mul** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_mul (l m : Language α) : (l * m).reverse = m.reverse * l.reverse
+参数：l m : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Language.reverse_eq_image`：reverse_eq_image (l : Language α) : l.reverse
+ = List.reverse '' l
+· 使用定理 `Set.image_image2`：image_image2 (f : α -> β -> γ) (g : γ -> δ) : g '' ima
+ge2 f s t = image2 (fun a b => g (f a b)) s t
+· 使用定理 `Set.image2_congr`：image2_congr (h : forall a in s, forall b in t, f a b 
+= f' a b) : image2 f s t = image2 f' s t
+· 使用定理 `List.reverse_append`：∀ {α : Type u_1} {as bs : List α}, (as ++ bs).rever
+se = bs.reverse ++ as.reverse
+· 使用定理 `Set.image2_image_right`：image2_image_right (f : α -> γ -> δ) (g : β -> γ
+) : image2 f s (g '' t) = image2 (fun a b => f a (g b)) s t
+· 使用定理 `Set.image2_image_left`：image2_image_left (f : γ -> β -> δ) (g : α -> γ) 
+: image2 f (g '' s) t = image2 (fun a b => f (g a) b) s t
+· 使用定理 `Set.image2_swap`：image2_swap (s : Set α) (t : Set β) : image2 f s t = im
+age2 (fun a b => f b a) t s
 -/
 lemma reverse_mul (l m : Language α) : (l * m).reverse = m.reverse * l.reverse := by
   simp only [mul_def, reverse_eq_image, image2_image_left, image2_image_right, image_image2,
@@ -1619,204 +1069,137 @@ lemma reverse_mul (l m : Language α) : (l * m).reverse = m.reverse * l.reverse 
   apply image2_swap
 
 @[simp]
-/--
-lemma `reverse_iSup` / 引理 `reverse_iSup`
-
-English:
-lemma reverse_iSup
-  given: {ι : Sort*} (l : ι -> Language α)
-  statement: (⨆ i, l i).reverse = ⨆ i, (l i).reverse
-  proof: preimage_iUnion
-
-@[simp]
-
-中文:
-引理 reverse_iSup
-  条件: {ι : 类型层*} (l : ι -> Language α)
-  结论: (⨆ i, l i).reverse = ⨆ i, (l i).reverse
-  证明: preimage_iUnion
-
-@[simp]
-
-Depends on / 依赖: preimage_iUnion
+/-
+**Language.reverse_iSup** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_iSup {ι : Sort*} (l : ι -> Language α) : (⨆ i, l i).reverse = ⨆ i,
+ (l i).reverse
+参数：l : ι -> Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_iUnion`：preimage_iUnion {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
 -/
-lemma reverse_iSup {ι : Sort*} (l : ι -> Language α) : (⨆ i, l i).reverse = ⨆ i, (l i).reverse :=
+lemma reverse_iSup {ι : Sort*} (l : ι → Language α) : (⨆ i, l i).reverse = ⨆ i, (l i).reverse :=
   preimage_iUnion
 
 @[simp]
-/--
-lemma `reverse_iInf` / 引理 `reverse_iInf`
-
-English:
-lemma reverse_iInf
-  given: {ι : Sort*} (l : ι -> Language α)
-  statement: (⨅ i, l i).reverse = ⨅ i, (l i).reverse
-  proof: preimage_iInter
-
-中文:
-引理 reverse_iInf
-  条件: {ι : 类型层*} (l : ι -> Language α)
-  结论: (⨅ i, l i).reverse = ⨅ i, (l i).reverse
-  证明: preimage_iInter
-
-Depends on / 依赖: preimage_iInter
+/-
+**Language.reverse_iInf** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_iInf {ι : Sort*} (l : ι -> Language α) : (⨅ i, l i).reverse = ⨅ i,
+ (l i).reverse
+参数：l : ι -> Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_iInter`：preimage_iInter {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋂ i, s i) = ⋂ i, f ⁻¹' s i
 -/
-lemma reverse_iInf {ι : Sort*} (l : ι -> Language α) : (⨅ i, l i).reverse = ⨅ i, (l i).reverse :=
+lemma reverse_iInf {ι : Sort*} (l : ι → Language α) : (⨅ i, l i).reverse = ⨅ i, (l i).reverse :=
   preimage_iInter
 
 variable (α) in
 /-- `Language.reverse` as a ring isomorphism to the opposite ring. -/
 @[simps]
-/--
-Definition of `reverseIso` / `reverseIso` 的定义
+/-
+**Language.reverseIso** 是 Mathlib 中的一个定义，位于命名空间 `Language`。
+形式化陈述：reverseIso : Language α ≃+* (Language α)ᵐᵒᵖ where toFun l
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Language.reverse_reverse`：reverse_reverse (l : Language α) : l.reverse.r
+everse = l
 
-English:
-definition reverseIso
-  signature: : Language α ≃+* (Language α)ᵐᵒᵖ where
-  body: .op l.reverse
-  invFun l' := l'.unop.reverse
-  left_inv := reverse_reverse
-right_inv l' := MulOpposite.unop_injective reverse_reverse l'.unop
-map_mul' l₁ l₂ := MulOpposite.unop_injective reverse_mul l₁ l₂
-map_add' l₁ l₂ := MulOpposite.unop_injective reverse_add l₁ l₂
-
-@[simp]
-
-中文:
-定义 reverseIso
-  签名: : Language α ≃+* (Language α)ᵐᵒᵖ where
-  定义体: .op l.reverse
-  invFun l' := l'.unop.reverse
-  left_inv := reverse_reverse
-right_inv l' := MulOpposite.unop_injective reverse_reverse l'.unop
-map_mul' l₁ l₂ := MulOpposite.unop_injective reverse_mul l₁ l₂
-map_add' l₁ l₂ := MulOpposite.unop_injective reverse_add l₁ l₂
-
-@[simp]
-
-Depends on / 依赖: l.reverse, reverse
+--- 原说明 ---
+`Language.reverse` as a ring isomorphism to the opposite ring.
 -/
 def reverseIso : Language α ≃+* (Language α)ᵐᵒᵖ where
   toFun l := .op l.reverse
   invFun l' := l'.unop.reverse
   left_inv := reverse_reverse
-right_inv l' := MulOpposite.unop_injective reverse_reverse l'.unop
-map_mul' l₁ l₂ := MulOpposite.unop_injective reverse_mul l₁ l₂
-map_add' l₁ l₂ := MulOpposite.unop_injective reverse_add l₁ l₂
+  right_inv l' := MulOpposite.unop_injective <| reverse_reverse l'.unop
+  map_mul' l₁ l₂ := MulOpposite.unop_injective <| reverse_mul l₁ l₂
+  map_add' l₁ l₂ := MulOpposite.unop_injective <| reverse_add l₁ l₂
 
 @[simp]
-/--
-lemma `reverse_pow` / 引理 `reverse_pow`
-
-English:
-lemma reverse_pow
-  given: (l : Language α) (n : Nat)
-  statement: (l ^ n).reverse = l.reverse ^ n
-  proof: MulOpposite.op_injective (map_pow (reverseIso α) l n)
-
-@[simp]
-
-中文:
-引理 reverse_pow
-  条件: (l : Language α) (n : 自然数)
-  结论: (l ^ n).reverse = l.reverse ^ n
-  证明: MulOpposite.op_injective (map_pow (reverseIso α) l n)
-
-@[simp]
-
-Depends on / 依赖: MulOpposite, MulOpposite.op_injective, map_pow, op_injective, reverseIso
+/-
+**Language.reverse_pow** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_pow (l : Language α) (n : Nat) : (l ^ n).reverse = l.reverse ^ n
+参数：l : Language α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `RingEquivClass.toMulEquivClass`：∀ {F : Type u_7} {R : Type u_8} {S : Typ
+e u_9} {inst : Mul R} {inst_1 : Add R} {inst_2 : Mul S} {inst_3 : Add S}   {inst
+_4 : EquivLike F R S…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
-lemma reverse_pow (l : Language α) (n : Nat) : (l ^ n).reverse = l.reverse ^ n :=
+lemma reverse_pow (l : Language α) (n : ℕ) : (l ^ n).reverse = l.reverse ^ n :=
   MulOpposite.op_injective (map_pow (reverseIso α) l n)
 
 @[simp]
-/--
-lemma `reverse_kstar` / 引理 `reverse_kstar`
-
-English:
-lemma reverse_kstar
-  given: (l : Language α)
-  statement: l∗.reverse = l.reverse∗
-  proof: by
-  simp only [kstar_eq_iSup_pow, reverse_iSup, reverse_pow]
-
-@[simp]
-
-中文:
-引理 reverse_kstar
-  条件: (l : Language α)
-  结论: l∗.reverse = l.reverse∗
-  证明: by
-  simp only [kstar_eq_iSup_pow, reverse_iSup, reverse_pow]
-
-@[simp]
-
-Depends on / 依赖: kstar_eq_iSup_pow, reverse_iSup, reverse_pow
+/-
+**Language.reverse_kstar** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：reverse_kstar (l : Language α) : l∗.reverse = l.reverse∗
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Language.kstar_eq_iSup_pow`：kstar_eq_iSup_pow (l : Language α) : l∗ = ⨆ 
+i : Nat, l ^ i
+· 使用引理 `Language.reverse_iSup`：reverse_iSup {ι : Sort*} (l : ι -> Language α) : 
+(⨆ i, l i).reverse = ⨆ i, (l i).reverse
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Language.reverse_pow`：reverse_pow (l : Language α) (n : Nat) : (l ^ n).r
+everse = l.reverse ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma reverse_kstar (l : Language α) : l∗.reverse = l.reverse∗ := by
   simp only [kstar_eq_iSup_pow, reverse_iSup, reverse_pow]
 
 @[simp]
-/--
-lemma `mem_inf` / 引理 `mem_inf`
-
-English:
-lemma mem_inf
-  given: {x : List α} {l m : Language α}
-  statement: x in l ⊓ m ↔ x in l ∧ x in m
-  proof: by
-  apply Set.mem_inter_iff
-
-中文:
-引理 mem_inf
-  条件: {x : 列表 α} {l m : Language α}
-  结论: x in l ⊓ m ↔ x in l ∧ x in m
-  证明: by
-  apply Set.mem_inter_iff
-
-Depends on / 依赖: Set.mem_inter_iff, mem_inter_iff
+/-
+**Language.mem_inf** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：mem_inf {x : List α} {l m : Language α} : x in l ⊓ m ↔ x in l ∧ x in m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_inter_iff`：mem_inter_iff (x : α) (a b : Set α) : x in a inter b 
+↔ x in a ∧ x in b
 -/
-lemma mem_inf {x : List α} {l m : Language α} : x in l ⊓ m ↔ x in l ∧ x in m := by
+lemma mem_inf {x : List α} {l m : Language α} : x ∈ l ⊓ m ↔ x ∈ l ∧ x ∈ m := by
   apply Set.mem_inter_iff
-
-/--
-lemma `compl_compl` / 引理 `compl_compl`
-
-English:
-lemma compl_compl
-  given: (l : Language α)
-  statement: lᶜᶜ = l
-  proof: _root_.compl_compl l
-
-中文:
-引理 compl_compl
-  条件: (l : Language α)
-  结论: lᶜᶜ = l
-  证明: _root_.compl_compl l
-
-Depends on / 依赖: _root_, _root_.compl_compl, compl_compl
+/-
+**Language.compl_compl** 是 Mathlib 中的一个引理，位于命名空间 `Language`。
+形式化陈述：compl_compl (l : Language α) : lᶜᶜ = l
+参数：l : Language α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
 -/
 lemma compl_compl (l : Language α) : lᶜᶜ = l :=
   _root_.compl_compl l
 
 end Language
 
-/--
-Inductive type `Symbol` / 归纳类型 `Symbol`
+/-- Symbols for use by all kinds of grammars. -/
+/-
+**Symbol** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_4 → Type u_5 → Type (max u_4 u_5)
+参数：max u_4 u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Symbol
-  parameters: (T N : Type*)
-  constructors (2):
-    - terminal: (t : T) : Symbol T N
-    - nonterminal: (n : N) : Symbol T N
-
-中文:
-归纳类型 Symbol
-  参数: (T N : 类型)
-  构造子 (2 个):
-    - terminal: (t : T) : Symbol T N
-    - nonterminal: (n : N) : Symbol T N
+--- 原说明 ---
+Symbols for use by all kinds of grammars.
 -/
 inductive Symbol (T N : Type*)
   /-- Terminal symbols (of the same type as the language) -/

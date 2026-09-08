@@ -32,744 +32,467 @@ variable {M : Type*} [TopologicalSpace M]
 
 /-- Put the same topological space structure on `Mᵈᵐᵃ` as on the original space. -/
 @[to_additive /-- Put the same topological space structure on `Mᵈᵃᵃ` as on the original space. -/]
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
+/-
+**DomMulAct.instTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instTopologicalSpace : TopologicalSpace Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance instTopologicalSpace
-  signature: : TopologicalSpace Mᵈᵐᵃ
-  body: .induced mk.symm ‹_›
-
-@[to_additive (attr := continuity, fun_prop)]
-
-中文:
-实例 instTopologicalSpace
-  签名: : 拓扑空间 Mᵈᵐᵃ
-  定义体: .induced mk.symm ‹_›
-
-@[to_additive (attr := continuity, fun_prop)]
-
-Depends on / 依赖: induced, mk.symm
+--- 原说明 ---
+Put the same topological space structure on `Mᵈᵐᵃ` as on the original space.
 -/
 instance instTopologicalSpace : TopologicalSpace Mᵈᵐᵃ := .induced mk.symm ‹_›
 
 @[to_additive (attr := continuity, fun_prop)]
-/--
-theorem `continuous_mk` / 定理 `continuous_mk`
-
-English:
-theorem continuous_mk
-  statement: Continuous (@mk M)
-  proof: continuous_induced_rng.2 continuous_id
-
-@[to_additive (attr := continuity, fun_prop)]
-
-中文:
-定理 continuous_mk
-  结论: 连续 (@mk M)
-  证明: continuous_induced_rng.2 continuous_id
-
-@[to_additive (attr := continuity, fun_prop)]
-
-Depends on / 依赖: continuous_id, continuous_induced_rng
+/-
+**DomMulAct.continuous_mk** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：continuous_mk : Continuous (@mk M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
 theorem continuous_mk : Continuous (@mk M) := continuous_induced_rng.2 continuous_id
 
 @[to_additive (attr := continuity, fun_prop)]
-/--
-theorem `continuous_mk_symm` / 定理 `continuous_mk_symm`
-
-English:
-theorem continuous_mk_symm
-  statement: Continuous (@mk M).symm
-  proof: continuous_induced_dom
-
-中文:
-定理 continuous_mk_symm
-  结论: 连续 (@mk M).symm
-  证明: continuous_induced_dom
-
-Depends on / 依赖: continuous_induced_dom
+/-
+**DomMulAct.continuous_mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：continuous_mk_symm : Continuous (@mk M).symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem continuous_mk_symm : Continuous (@mk M).symm := continuous_induced_dom
 
 /-- `DomMulAct.mk` as a homeomorphism. -/
 @[to_additive (attr := simps toEquiv) /-- `DomAddAct.mk` as a homeomorphism. -/]
-/--
-Definition of `mkHomeomorph` / `mkHomeomorph` 的定义
+/-
+**DomMulAct.mkHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `DomMulAct`。
+形式化陈述：mkHomeomorph : M ≃ₜ Mᵈᵐᵃ where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkHomeomorph
-  signature: : M ≃ₜ Mᵈᵐᵃ where
-  body: mk
-
-中文:
-定义 mkHomeomorph
-  签名: : M ≃ₜ Mᵈᵐᵃ where
-  定义体: mk
+--- 原说明 ---
+`DomMulAct.mk` as a homeomorphism.
 -/
 def mkHomeomorph : M ≃ₜ Mᵈᵐᵃ where
   toEquiv := mk
-
-/--
-theorem `coe_mkHomeomorph` / 定理 `coe_mkHomeomorph`
-
-English:
-theorem coe_mkHomeomorph
-  statement: ⇑(mkHomeomorph : M ≃ₜ Mᵈᵐᵃ) = mk
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_mkHomeomorph
-  结论: ⇑(mkHomeomorph : M ≃ₜ Mᵈᵐᵃ) = mk
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**DomMulAct.coe_mkHomeomorph** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], ⇑DomMulAct.mkHomeomorph = ⇑D
+omMulAct.mk
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive (attr := simp)] theorem coe_mkHomeomorph : ⇑(mkHomeomorph : M ≃ₜ Mᵈᵐᵃ) = mk := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_mkHomeomorph_symm` / 定理 `coe_mkHomeomorph_symm`
-
-English:
-theorem coe_mkHomeomorph_symm
-  statement: ⇑(mkHomeomorph : M ≃ₜ Mᵈᵐᵃ).symm = mk.symm
-  proof: rfl
-
-中文:
-定理 coe_mkHomeomorph_symm
-  结论: ⇑(mkHomeomorph : M ≃ₜ Mᵈᵐᵃ).symm = mk.symm
-  证明: rfl
+/-
+**DomMulAct.coe_mkHomeomorph_symm** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：coe_mkHomeomorph_symm : ⇑(mkHomeomorph : M ≃ₜ Mᵈᵐᵃ).symm = mk.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mkHomeomorph_symm : ⇑(mkHomeomorph : M ≃ₜ Mᵈᵐᵃ).symm = mk.symm := rfl
-
-/--
-theorem `isInducing_mk` / 定理 `isInducing_mk`
-
-English:
-theorem isInducing_mk
-  statement: IsInducing (@mk M)
-  proof: mkHomeomorph.isInducing
-
-中文:
-定理 isInducing_mk
-  结论: 是Inducing (@mk M)
-  证明: mkHomeomorph.isInducing
+/-
+**DomMulAct.isInducing_mk** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], Topology.IsInducing ⇑DomMulA
+ct.mk
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Homeomorph.isInducing`：isInducing (h : X ≃ₜ Y) : IsInducing h
 -/
 @[to_additive] theorem isInducing_mk : IsInducing (@mk M) := mkHomeomorph.isInducing
-/--
-theorem `isEmbedding_mk` / 定理 `isEmbedding_mk`
-
-English:
-theorem isEmbedding_mk
-  statement: IsEmbedding (@mk M)
-  proof: mkHomeomorph.isEmbedding
-
-中文:
-定理 isEmbedding_mk
-  结论: 是嵌入 (@mk M)
-  证明: mkHomeomorph.isEmbedding
+/-
+**DomMulAct.isEmbedding_mk** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], Topology.IsEmbedding ⇑DomMul
+Act.mk
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 -/
 @[to_additive] theorem isEmbedding_mk : IsEmbedding (@mk M) := mkHomeomorph.isEmbedding
-/--
-theorem `isOpenEmbedding_mk` / 定理 `isOpenEmbedding_mk`
-
-English:
-theorem isOpenEmbedding_mk
-  statement: IsOpenEmbedding (@mk M)
-  proof: mkHomeomorph.isOpenEmbedding
-
-中文:
-定理 isOpenEmbedding_mk
-  结论: 是开嵌入 (@mk M)
-  证明: mkHomeomorph.isOpenEmbedding
+/-
+**DomMulAct.isOpenEmbedding_mk** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], Topology.IsOpenEmbedding ⇑Do
+mMulAct.mk
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isOpenEmbedding`：isOpenEmbedding (h : X ≃ₜ Y) : IsOpenEmbeddi
+ng h
 -/
 @[to_additive] theorem isOpenEmbedding_mk : IsOpenEmbedding (@mk M) := mkHomeomorph.isOpenEmbedding
-/--
-theorem `isClosedEmbedding_mk` / 定理 `isClosedEmbedding_mk`
-
-English:
-theorem isClosedEmbedding_mk
-  statement: IsClosedEmbedding (@mk M)
-  proof: mkHomeomorph.isClosedEmbedding
-
-中文:
-定理 isClosedEmbedding_mk
-  结论: 是闭嵌入 (@mk M)
-  证明: mkHomeomorph.isClosedEmbedding
+/-
+**DomMulAct.isClosedEmbedding_mk** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], Topology.IsClosedEmbedding ⇑
+DomMulAct.mk
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isClosedEmbedding`：isClosedEmbedding (h : X ≃ₜ Y) : IsClosedE
+mbedding h
 -/
 @[to_additive] theorem isClosedEmbedding_mk : IsClosedEmbedding (@mk M) :=
   mkHomeomorph.isClosedEmbedding
-/--
-theorem `isQuotientMap_mk` / 定理 `isQuotientMap_mk`
-
-English:
-theorem isQuotientMap_mk
-  statement: IsQuotientMap (@mk M)
-  proof: mkHomeomorph.isQuotientMap
-
-中文:
-定理 isQuotientMap_mk
-  结论: 是商映射 (@mk M)
-  证明: mkHomeomorph.isQuotientMap
+/-
+**DomMulAct.isQuotientMap_mk** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], Topology.IsQuotientMap ⇑DomM
+ulAct.mk
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
 -/
 @[to_additive] theorem isQuotientMap_mk : IsQuotientMap (@mk M) := mkHomeomorph.isQuotientMap
-
-/--
-theorem `isInducing_mk_symm` / 定理 `isInducing_mk_symm`
-
-English:
-theorem isInducing_mk_symm
-  statement: IsInducing (@mk M).symm
-  proof: mkHomeomorph.symm.isInducing
-
-中文:
-定理 isInducing_mk_symm
-  结论: 是Inducing (@mk M).symm
-  证明: mkHomeomorph.symm.isInducing
+/-
+**DomMulAct.isInducing_mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], Topology.IsInducing ⇑DomMulA
+ct.mk.symm
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Homeomorph.isInducing`：isInducing (h : X ≃ₜ Y) : IsInducing h
 -/
 @[to_additive] theorem isInducing_mk_symm : IsInducing (@mk M).symm := mkHomeomorph.symm.isInducing
-/--
-theorem `isEmbedding_mk_symm` / 定理 `isEmbedding_mk_symm`
-
-English:
-theorem isEmbedding_mk_symm
-  statement: IsEmbedding (@mk M).symm
-  proof: mkHomeomorph.symm.isEmbedding
-
-@[to_additive]
-
-中文:
-定理 isEmbedding_mk_symm
-  结论: 是嵌入 (@mk M).symm
-  证明: mkHomeomorph.symm.isEmbedding
-
-@[to_additive]
+/-
+**DomMulAct.isEmbedding_mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M], Topology.IsEmbedding ⇑DomMul
+Act.mk.symm
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 -/
 @[to_additive] theorem isEmbedding_mk_symm : IsEmbedding (@mk M).symm :=
   mkHomeomorph.symm.isEmbedding
 
 @[to_additive]
-/--
-theorem `isOpenEmbedding_mk_symm` / 定理 `isOpenEmbedding_mk_symm`
-
-English:
-theorem isOpenEmbedding_mk_symm
-  statement: IsOpenEmbedding (@mk M).symm
-  proof: mkHomeomorph.symm.isOpenEmbedding
-
-@[to_additive]
-
-中文:
-定理 isOpenEmbedding_mk_symm
-  结论: 是开嵌入 (@mk M).symm
-  证明: mkHomeomorph.symm.isOpenEmbedding
-
-@[to_additive]
-
-Depends on / 依赖: isOpenEmbedding, mkHomeomorph, mkHomeomorph.symm.isOpenEmbedding
+/-
+**DomMulAct.isOpenEmbedding_mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：isOpenEmbedding_mk_symm : IsOpenEmbedding (@mk M).symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isOpenEmbedding`：isOpenEmbedding (h : X ≃ₜ Y) : IsOpenEmbeddi
+ng h
 -/
 theorem isOpenEmbedding_mk_symm : IsOpenEmbedding (@mk M).symm := mkHomeomorph.symm.isOpenEmbedding
 
 @[to_additive]
-/--
-theorem `isClosedEmbedding_mk_symm` / 定理 `isClosedEmbedding_mk_symm`
-
-English:
-theorem isClosedEmbedding_mk_symm
-  statement: IsClosedEmbedding (@mk M).symm
-  proof: mkHomeomorph.symm.isClosedEmbedding
-
-@[to_additive]
-
-中文:
-定理 isClosedEmbedding_mk_symm
-  结论: 是闭嵌入 (@mk M).symm
-  证明: mkHomeomorph.symm.isClosedEmbedding
-
-@[to_additive]
-
-Depends on / 依赖: isClosedEmbedding, mkHomeomorph, mkHomeomorph.symm.isClosedEmbedding
+/-
+**DomMulAct.isClosedEmbedding_mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：isClosedEmbedding_mk_symm : IsClosedEmbedding (@mk M).symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isClosedEmbedding`：isClosedEmbedding (h : X ≃ₜ Y) : IsClosedE
+mbedding h
 -/
 theorem isClosedEmbedding_mk_symm : IsClosedEmbedding (@mk M).symm :=
   mkHomeomorph.symm.isClosedEmbedding
 
 @[to_additive]
-/--
-theorem `isQuotientMap_mk_symm` / 定理 `isQuotientMap_mk_symm`
-
-English:
-theorem isQuotientMap_mk_symm
-  statement: IsQuotientMap (@mk M).symm
-  proof: mkHomeomorph.symm.isQuotientMap
-
-中文:
-定理 isQuotientMap_mk_symm
-  结论: 是商映射 (@mk M).symm
-  证明: mkHomeomorph.symm.isQuotientMap
-
-Depends on / 依赖: isQuotientMap, mkHomeomorph, mkHomeomorph.symm.isQuotientMap
+/-
+**DomMulAct.isQuotientMap_mk_symm** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：isQuotientMap_mk_symm : IsQuotientMap (@mk M).symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
 -/
 theorem isQuotientMap_mk_symm : IsQuotientMap (@mk M).symm := mkHomeomorph.symm.isQuotientMap
-
-/--
-Instance `instT0Space` / 实例 `instT0Space`
-
-English:
-instance instT0Space
-  signature: [T0Space M]
-  body: mkHomeomorph.t0Space
-
-中文:
-实例 instT0Space
-  签名: [T0空间 M]
-  定义体: mkHomeomorph.t0Space
+/-
+**DomMulAct.instT0Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [T0Space M], T0Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.t0Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T0Space X] (h : X ≃ₜ Y),   T0Space Y
 -/
 @[to_additive] instance instT0Space [T0Space M] : T0Space Mᵈᵐᵃ := mkHomeomorph.t0Space
-/--
-Instance `instT1Space` / 实例 `instT1Space`
-
-English:
-instance instT1Space
-  signature: [T1Space M]
-  body: mkHomeomorph.t1Space
-
-中文:
-实例 instT1Space
-  签名: [T1空间 M]
-  定义体: mkHomeomorph.t1Space
+/-
+**DomMulAct.instT1Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [T1Space M], T1Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.t1Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T1Space X] (h : X ≃ₜ Y),   T1Space Y
 -/
 @[to_additive] instance instT1Space [T1Space M] : T1Space Mᵈᵐᵃ := mkHomeomorph.t1Space
-/--
-Instance `instT2Space` / 实例 `instT2Space`
-
-English:
-instance instT2Space
-  signature: [T2Space M]
-  body: mkHomeomorph.t2Space
-
-中文:
-实例 instT2Space
-  签名: [T2空间 M]
-  定义体: mkHomeomorph.t2Space
+/-
+**DomMulAct.instT2Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [T2Space M], T2Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.t2Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T2Space X] (h : X ≃ₜ Y),   T2Space Y
 -/
 @[to_additive] instance instT2Space [T2Space M] : T2Space Mᵈᵐᵃ := mkHomeomorph.t2Space
-/--
-Instance `instT25Space` / 实例 `instT25Space`
-
-English:
-instance instT25Space
-  signature: [T25Space M]
-  body: mkHomeomorph.t25Space
-
-中文:
-实例 instT25Space
-  签名: [T25空间 M]
-  定义体: mkHomeomorph.t25Space
+/-
+**DomMulAct.instT25Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [T25Space M], T25Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.t25Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topological
+Space X] [inst_1 : TopologicalSpace Y] [T25Space X] (h : X ≃ₜ Y),   T25Space Y
 -/
 @[to_additive] instance instT25Space [T25Space M] : T25Space Mᵈᵐᵃ := mkHomeomorph.t25Space
-/--
-Instance `instT3Space` / 实例 `instT3Space`
-
-English:
-instance instT3Space
-  signature: [T3Space M]
-  body: mkHomeomorph.t3Space
-
-中文:
-实例 instT3Space
-  签名: [T3空间 M]
-  定义体: mkHomeomorph.t3Space
+/-
+**DomMulAct.instT3Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [T3Space M], T3Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.t3Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T3Space X] (h : X ≃ₜ Y),   T3Space Y
 -/
 @[to_additive] instance instT3Space [T3Space M] : T3Space Mᵈᵐᵃ := mkHomeomorph.t3Space
-/--
-Instance `instT4Space` / 实例 `instT4Space`
-
-English:
-instance instT4Space
-  signature: [T4Space M]
-  body: mkHomeomorph.t4Space
-
-中文:
-实例 instT4Space
-  签名: [T4空间 M]
-  定义体: mkHomeomorph.t4Space
+/-
+**DomMulAct.instT4Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [T4Space M], T4Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.t4Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T4Space X] (h : X ≃ₜ Y),   T4Space Y
 -/
 @[to_additive] instance instT4Space [T4Space M] : T4Space Mᵈᵐᵃ := mkHomeomorph.t4Space
-/--
-Instance `instT5Space` / 实例 `instT5Space`
-
-English:
-instance instT5Space
-  signature: [T5Space M]
-  body: mkHomeomorph.t5Space
-
-中文:
-实例 instT5Space
-  签名: [T5空间 M]
-  定义体: mkHomeomorph.t5Space
+/-
+**DomMulAct.instT5Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [T5Space M], T5Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.t5Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T5Space X] (h : X ≃ₜ Y),   T5Space Y
 -/
 @[to_additive] instance instT5Space [T5Space M] : T5Space Mᵈᵐᵃ := mkHomeomorph.t5Space
-
-/--
-Instance `instR0Space` / 实例 `instR0Space`
-
-English:
-instance instR0Space
-  signature: [R0Space M]
-  body: isEmbedding_mk_symm.r0Space
-
-中文:
-实例 instR0Space
-  签名: [R0空间 M]
-  定义体: isEmbedding_mk_symm.r0Space
+/-
+**DomMulAct.instR0Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [R0Space M], R0Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.r0Space`：Topology.IsInducing.r0Space [TopologicalSpa
+ce Y] {f : Y -> X} (hf : IsInducing f) : R0Space Y where specializes_symm.symm a
+ b
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Topology.IsEmbedding.toIsInducing`：∀ {X : Type u_1} {Y : Type u_2} [tX :
+ TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbeddi
+ng f → Topology.IsInduc…
+· 使用定理 `DomMulAct.isEmbedding_mk_symm`：∀ {M : Type u_1} [inst : TopologicalSpace
+ M], Topology.IsEmbedding ⇑DomMulAct.mk.symm
 -/
 @[to_additive] instance instR0Space [R0Space M] : R0Space Mᵈᵐᵃ := isEmbedding_mk_symm.r0Space
-/--
-Instance `instR1Space` / 实例 `instR1Space`
-
-English:
-instance instR1Space
-  signature: [R1Space M]
-  body: isEmbedding_mk_symm.r1Space
-
-@[to_additive]
-
-中文:
-实例 instR1Space
-  签名: [R1空间 M]
-  定义体: isEmbedding_mk_symm.r1Space
-
-@[to_additive]
+/-
+**DomMulAct.instR1Space** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] [R1Space M], R1Space Mᵈᵐᵃ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.r1Space`：Topology.IsInducing.r1Space [TopologicalSpa
+ce Y] {f : Y -> X} (hf : IsInducing f) : R1Space Y
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Topology.IsEmbedding.toIsInducing`：∀ {X : Type u_1} {Y : Type u_2} [tX :
+ TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbeddi
+ng f → Topology.IsInduc…
+· 使用定理 `DomMulAct.isEmbedding_mk_symm`：∀ {M : Type u_1} [inst : TopologicalSpace
+ M], Topology.IsEmbedding ⇑DomMulAct.mk.symm
 -/
 @[to_additive] instance instR1Space [R1Space M] : R1Space Mᵈᵐᵃ := isEmbedding_mk_symm.r1Space
 
 @[to_additive]
-/--
-Instance `instRegularSpace` / 实例 `instRegularSpace`
-
-English:
-instance instRegularSpace
-  signature: [RegularSpace M]
-  body: isEmbedding_mk_symm.regularSpace
-
-@[to_additive]
-
-中文:
-实例 instRegularSpace
-  签名: [正则空间 M]
-  定义体: isEmbedding_mk_symm.regularSpace
-
-@[to_additive]
-
-Depends on / 依赖: isEmbedding_mk_symm, isEmbedding_mk_symm.regularSpace, regularSpace
+/-
+**DomMulAct.instRegularSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instRegularSpace [RegularSpace M] : RegularSpace Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.regularSpace`：∀ {X : Type u_1} {Y : Type u_2} [inst 
+: TopologicalSpace X] [RegularSpace X] [inst_2 : TopologicalSpace Y] {f : Y → X}
+,   Topology.IsInducin…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Topology.IsEmbedding.toIsInducing`：∀ {X : Type u_1} {Y : Type u_2} [tX :
+ TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbeddi
+ng f → Topology.IsInduc…
+· 使用定理 `DomMulAct.isEmbedding_mk_symm`：∀ {M : Type u_1} [inst : TopologicalSpace
+ M], Topology.IsEmbedding ⇑DomMulAct.mk.symm
 -/
 instance instRegularSpace [RegularSpace M] : RegularSpace Mᵈᵐᵃ := isEmbedding_mk_symm.regularSpace
 
 @[to_additive]
-/--
-Instance `instNormalSpace` / 实例 `instNormalSpace`
-
-English:
-instance instNormalSpace
-  signature: [NormalSpace M]
-  body: mkHomeomorph.normalSpace
-
-@[to_additive]
-
-中文:
-实例 instNormalSpace
-  签名: [正规空间 M]
-  定义体: mkHomeomorph.normalSpace
-
-@[to_additive]
-
-Depends on / 依赖: mkHomeomorph, mkHomeomorph.normalSpace, normalSpace
+/-
+**DomMulAct.instNormalSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instNormalSpace [NormalSpace M] : NormalSpace Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.normalSpace`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] [NormalSpace X] (h : X ≃ₜ Y),   Normal
+Space Y
 -/
 instance instNormalSpace [NormalSpace M] : NormalSpace Mᵈᵐᵃ := mkHomeomorph.normalSpace
 
 @[to_additive]
-/--
-Instance `instCompletelyNormalSpace` / 实例 `instCompletelyNormalSpace`
-
-English:
-instance instCompletelyNormalSpace
-  signature: [CompletelyNormalSpace M]
-  body: isEmbedding_mk_symm.completelyNormalSpace
-
-@[to_additive]
-
-中文:
-实例 instCompletelyNormalSpace
-  签名: [余mpletelyNormal空间 M]
-  定义体: isEmbedding_mk_symm.completelyNormalSpace
-
-@[to_additive]
-
-Depends on / 依赖: completelyNormalSpace, isEmbedding_mk_symm, isEmbedding_mk_symm.completelyNormalSpace
+/-
+**DomMulAct.instCompletelyNormalSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instCompletelyNormalSpace [CompletelyNormalSpace M] : CompletelyNormalSpac
+e Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.completelyNormalSpace`：Topology.IsInducing.completel
+yNormalSpace [TopologicalSpace Y] [CompletelyNormalSpace Y] {e : X -> Y} (he : I
+sInducing e) : CompletelyNormal…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Topology.IsEmbedding.toIsInducing`：∀ {X : Type u_1} {Y : Type u_2} [tX :
+ TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbeddi
+ng f → Topology.IsInduc…
+· 使用定理 `DomMulAct.isEmbedding_mk_symm`：∀ {M : Type u_1} [inst : TopologicalSpace
+ M], Topology.IsEmbedding ⇑DomMulAct.mk.symm
 -/
 instance instCompletelyNormalSpace [CompletelyNormalSpace M] : CompletelyNormalSpace Mᵈᵐᵃ :=
   isEmbedding_mk_symm.completelyNormalSpace
 
 @[to_additive]
-/--
-Instance `instDiscreteTopology` / 实例 `instDiscreteTopology`
-
-English:
-instance instDiscreteTopology
-  signature: [DiscreteTopology M]
-  body: isEmbedding_mk_symm.discreteTopology
-
-@[to_additive]
-
-中文:
-实例 instDiscreteTopology
-  签名: [离散拓扑 M]
-  定义体: isEmbedding_mk_symm.discreteTopology
-
-@[to_additive]
-
-Depends on / 依赖: discreteTopology, isEmbedding_mk_symm, isEmbedding_mk_symm.discreteTopology
+/-
+**DomMulAct.instDiscreteTopology** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instDiscreteTopology [DiscreteTopology M] : DiscreteTopology Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.discreteTopology`：∀ {X : Type u_1} {Y : Type u_2} {
+f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [Discrete
+Topology Y], Topology.IsEmb…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `DomMulAct.isEmbedding_mk_symm`：∀ {M : Type u_1} [inst : TopologicalSpace
+ M], Topology.IsEmbedding ⇑DomMulAct.mk.symm
 -/
 instance instDiscreteTopology [DiscreteTopology M] : DiscreteTopology Mᵈᵐᵃ :=
   isEmbedding_mk_symm.discreteTopology
 
 @[to_additive]
-/--
-Instance `instSeparableSpace` / 实例 `instSeparableSpace`
-
-English:
-instance instSeparableSpace
-  signature: [SeparableSpace M]
-  body: isQuotientMap_mk.separableSpace
-
-@[to_additive]
-
-中文:
-实例 instSeparableSpace
-  签名: [可分空间 M]
-  定义体: isQuotientMap_mk.separableSpace
-
-@[to_additive]
-
-Depends on / 依赖: isQuotientMap_mk, isQuotientMap_mk.separableSpace, separableSpace
+/-
+**DomMulAct.instSeparableSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instSeparableSpace [SeparableSpace M] : SeparableSpace Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsQuotientMap.separableSpace`：∀ {α : Type u} {β : Type u_1} [t 
+: TopologicalSpace α] [TopologicalSpace.SeparableSpace α] [inst : TopologicalSpa
+ce β]   {f : α → β}, Topolo…
+· 使用定理 `DomMulAct.isQuotientMap_mk`：∀ {M : Type u_1} [inst : TopologicalSpace M]
+, Topology.IsQuotientMap ⇑DomMulAct.mk
 -/
 instance instSeparableSpace [SeparableSpace M] : SeparableSpace Mᵈᵐᵃ :=
   isQuotientMap_mk.separableSpace
 
 @[to_additive]
-/--
-Instance `instFirstCountableTopology` / 实例 `instFirstCountableTopology`
-
-English:
-instance instFirstCountableTopology
-  signature: [FirstCountableTopology M]
-  body: isInducing_mk_symm.firstCountableTopology
-
-@[to_additive]
-
-中文:
-实例 instFirstCountableTopology
-  签名: [第一可数拓扑 M]
-  定义体: isInducing_mk_symm.firstCountableTopology
-
-@[to_additive]
-
-Depends on / 依赖: firstCountableTopology, isInducing_mk_symm, isInducing_mk_symm.firstCountableTopology
+/-
+**DomMulAct.instFirstCountableTopology** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instFirstCountableTopology [FirstCountableTopology M] : FirstCountableTopo
+logy Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.firstCountableTopology`：∀ {α : Type u} [t : Topologi
+calSpace α] {β : Type u_1} [inst : TopologicalSpace β] [FirstCountableTopology β
+]   {f : α → β}, Topology.IsIndu…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `DomMulAct.isInducing_mk_symm`：∀ {M : Type u_1} [inst : TopologicalSpace 
+M], Topology.IsInducing ⇑DomMulAct.mk.symm
 -/
 instance instFirstCountableTopology [FirstCountableTopology M] : FirstCountableTopology Mᵈᵐᵃ :=
   isInducing_mk_symm.firstCountableTopology
 
 @[to_additive]
-/--
-Instance `instSecondCountableTopology` / 实例 `instSecondCountableTopology`
-
-English:
-instance instSecondCountableTopology
-  signature: [SecondCountableTopology M]
-  body: isInducing_mk_symm.secondCountableTopology
-
-@[to_additive]
-
-中文:
-实例 instSecondCountableTopology
-  签名: [第二可数拓扑 M]
-  定义体: isInducing_mk_symm.secondCountableTopology
-
-@[to_additive]
-
-Depends on / 依赖: isInducing_mk_symm, isInducing_mk_symm.secondCountableTopology, secondCountableTopology
+/-
+**DomMulAct.instSecondCountableTopology** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instSecondCountableTopology [SecondCountableTopology M] : SecondCountableT
+opology Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.secondCountableTopology`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : TopologicalSpace α] {f : α → β} [inst_1 : TopologicalSpace β]   [Se
+condCountableTopology β], Topolog…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `DomMulAct.isInducing_mk_symm`：∀ {M : Type u_1} [inst : TopologicalSpace 
+M], Topology.IsInducing ⇑DomMulAct.mk.symm
 -/
 instance instSecondCountableTopology [SecondCountableTopology M] : SecondCountableTopology Mᵈᵐᵃ :=
   isInducing_mk_symm.secondCountableTopology
 
 @[to_additive]
-/--
-Instance `instCompactSpace` / 实例 `instCompactSpace`
-
-English:
-instance instCompactSpace
-  signature: [CompactSpace M]
-  body: mkHomeomorph.compactSpace
-
-@[to_additive]
-
-中文:
-实例 instCompactSpace
-  签名: [紧空间 M]
-  定义体: mkHomeomorph.compactSpace
-
-@[to_additive]
-
-Depends on / 依赖: compactSpace, mkHomeomorph, mkHomeomorph.compactSpace
+/-
+**DomMulAct.instCompactSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instCompactSpace [CompactSpace M] : CompactSpace Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.compactSpace`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] [CompactSpace X] (h : X ≃ₜ Y),   Comp
+actSpace Y
 -/
 instance instCompactSpace [CompactSpace M] : CompactSpace Mᵈᵐᵃ :=
   mkHomeomorph.compactSpace
 
 @[to_additive]
-/--
-Instance `instLocallyCompactSpace` / 实例 `instLocallyCompactSpace`
-
-English:
-instance instLocallyCompactSpace
-  signature: [LocallyCompactSpace M]
-  body: isOpenEmbedding_mk_symm.locallyCompactSpace
-
-@[to_additive]
-
-中文:
-实例 instLocallyCompactSpace
-  签名: [局部紧空间 M]
-  定义体: isOpenEmbedding_mk_symm.locallyCompactSpace
-
-@[to_additive]
-
-Depends on / 依赖: isOpenEmbedding_mk_symm, isOpenEmbedding_mk_symm.locallyCompactSpace, locallyCompactSpace
+/-
+**DomMulAct.instLocallyCompactSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instLocallyCompactSpace [LocallyCompactSpace M] : LocallyCompactSpace Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.locallyCompactSpace`：∀ {X : Type u_1} {Y : Type
+ u_2} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] [LocallyCompactS
+pace Y]   {f : X → Y}, Topology.Is…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `DomMulAct.isOpenEmbedding_mk_symm`：isOpenEmbedding_mk_symm : IsOpenEmbed
+ding (@mk M).symm
 -/
 instance instLocallyCompactSpace [LocallyCompactSpace M] : LocallyCompactSpace Mᵈᵐᵃ :=
   isOpenEmbedding_mk_symm.locallyCompactSpace
 
 @[to_additive]
-/--
-Instance `instWeaklyLocallyCompactSpace` / 实例 `instWeaklyLocallyCompactSpace`
-
-English:
-instance instWeaklyLocallyCompactSpace
-  signature: [WeaklyLocallyCompactSpace M]
-  body: isClosedEmbedding_mk_symm.weaklyLocallyCompactSpace
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instWeaklyLocallyCompactSpace
-  签名: [WeaklyLocallyCompact空间 M]
-  定义体: isClosedEmbedding_mk_symm.weaklyLocallyCompactSpace
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: isClosedEmbedding_mk_symm, isClosedEmbedding_mk_symm.weaklyLocallyCompactSpace, weaklyLocallyCompactSpace
+/-
+**DomMulAct.instWeaklyLocallyCompactSpace** 是 Mathlib 中的一个实例，位于命名空间 `DomMulAct`。
+形式化陈述：instWeaklyLocallyCompactSpace [WeaklyLocallyCompactSpace M] : WeaklyLocall
+yCompactSpace Mᵈᵐᵃ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsClosedEmbedding.weaklyLocallyCompactSpace`：∀ {X : Type u_1} {
+Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] [WeaklyL
+ocallyCompactSpace Y]   {f : X → Y}, Topol…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `DomMulAct.isClosedEmbedding_mk_symm`：isClosedEmbedding_mk_symm : IsClose
+dEmbedding (@mk M).symm
 -/
 instance instWeaklyLocallyCompactSpace [WeaklyLocallyCompactSpace M] :
     WeaklyLocallyCompactSpace Mᵈᵐᵃ :=
   isClosedEmbedding_mk_symm.weaklyLocallyCompactSpace
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_mk_nhds` / 定理 `map_mk_nhds`
-
-English:
-theorem map_mk_nhds
-  given: (x : M)
-  statement: map (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk x)
-  proof: mkHomeomorph.map_nhds_eq x
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_mk_nhds
-  条件: (x : M)
-  结论: map (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk x)
-  证明: mkHomeomorph.map_nhds_eq x
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_nhds_eq, mkHomeomorph, mkHomeomorph.map_nhds_eq
+/-
+**DomMulAct.map_mk_nhds** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：map_mk_nhds (x : M) : map (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk x)
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.map_nhds_eq`：map_nhds_eq (h : X ≃ₜ Y) (x : X) : map h (𝓝 x) =
+ 𝓝 (h x)
 -/
-theorem map_mk_nhds (x : M) : map (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk x) :=
+theorem map_mk_nhds (x : M) : map (mk : M → Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk x) :=
   mkHomeomorph.map_nhds_eq x
 
 @[to_additive (attr := simp)]
-/--
-theorem `map_mk_symm_nhds` / 定理 `map_mk_symm_nhds`
-
-English:
-theorem map_mk_symm_nhds
-  given: (x : Mᵈᵐᵃ)
-  statement: map (mk.symm : Mᵈᵐᵃ -> M) (𝓝 x) = 𝓝 (mk.symm x)
-  proof: mkHomeomorph.symm.map_nhds_eq x
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 map_mk_symm_nhds
-  条件: (x : Mᵈᵐᵃ)
-  结论: map (mk.symm : Mᵈᵐᵃ -> M) (𝓝 x) = 𝓝 (mk.symm x)
-  证明: mkHomeomorph.symm.map_nhds_eq x
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_nhds_eq, mkHomeomorph, mkHomeomorph.symm.map_nhds_eq
+/-
+**DomMulAct.map_mk_symm_nhds** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：map_mk_symm_nhds (x : Mᵈᵐᵃ) : map (mk.symm : Mᵈᵐᵃ -> M) (𝓝 x) = 𝓝 (mk.symm
+ x)
+参数：x : Mᵈᵐᵃ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.map_nhds_eq`：map_nhds_eq (h : X ≃ₜ Y) (x : X) : map h (𝓝 x) =
+ 𝓝 (h x)
 -/
-theorem map_mk_symm_nhds (x : Mᵈᵐᵃ) : map (mk.symm : Mᵈᵐᵃ -> M) (𝓝 x) = 𝓝 (mk.symm x) :=
+theorem map_mk_symm_nhds (x : Mᵈᵐᵃ) : map (mk.symm : Mᵈᵐᵃ → M) (𝓝 x) = 𝓝 (mk.symm x) :=
   mkHomeomorph.symm.map_nhds_eq x
 
 @[to_additive (attr := simp)]
-/--
-theorem `comap_mk_nhds` / 定理 `comap_mk_nhds`
-
-English:
-theorem comap_mk_nhds
-  given: (x : Mᵈᵐᵃ)
-  statement: comap (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk.symm x)
-  proof: mkHomeomorph.comap_nhds_eq x
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 comap_mk_nhds
-  条件: (x : Mᵈᵐᵃ)
-  结论: comap (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk.symm x)
-  证明: mkHomeomorph.comap_nhds_eq x
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: comap_nhds_eq, mkHomeomorph, mkHomeomorph.comap_nhds_eq
+/-
+**DomMulAct.comap_mk_nhds** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct`。
+形式化陈述：comap_mk_nhds (x : Mᵈᵐᵃ) : comap (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk.symm x)
+参数：x : Mᵈᵐᵃ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.comap_nhds_eq`：comap_nhds_eq (h : X ≃ₜ Y) (y : Y) : comap h (
+𝓝 y) = 𝓝 (h.symm y)
 -/
-theorem comap_mk_nhds (x : Mᵈᵐᵃ) : comap (mk : M -> Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk.symm x) :=
+theorem comap_mk_nhds (x : Mᵈᵐᵃ) : comap (mk : M → Mᵈᵐᵃ) (𝓝 x) = 𝓝 (mk.symm x) :=
   mkHomeomorph.comap_nhds_eq x
 
 @[to_additive (attr := simp)]
-/--
-theorem `comap_mk.symm_nhds` / 定理 `comap_mk.symm_nhds`
-
-English:
-theorem comap_mk.symm_nhds
-  given: (x : M)
-  statement: comap (mk.symm : Mᵈᵐᵃ -> M) (𝓝 x) = 𝓝 (mk x)
-  proof: mkHomeomorph.symm.comap_nhds_eq x
-
-中文:
-定理 comap_mk.symm_nhds
-  条件: (x : M)
-  结论: comap (mk.symm : Mᵈᵐᵃ -> M) (𝓝 x) = 𝓝 (mk x)
-  证明: mkHomeomorph.symm.comap_nhds_eq x
-
-Depends on / 依赖: comap_nhds_eq, mkHomeomorph, mkHomeomorph.symm.comap_nhds_eq
+/-
+**DomMulAct.comap_mk.symm_nhds** 是 Mathlib 中的一个定理，位于命名空间 `DomMulAct.comap_mk`。
+形式化陈述：∀ {M : Type u_1} [inst : TopologicalSpace M] (x : M), Filter.comap (⇑DomMu
+lAct.mk.symm) (nhds x) = nhds (DomMulAct.mk x)
+参数：x : M；⇑DomMulAct.mk.symm；nhds x；DomMulAct.mk x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.comap_nhds_eq`：comap_nhds_eq (h : X ≃ₜ Y) (y : Y) : comap h (
+𝓝 y) = 𝓝 (h.symm y)
 -/
-theorem comap_mk.symm_nhds (x : M) : comap (mk.symm : Mᵈᵐᵃ -> M) (𝓝 x) = 𝓝 (mk x) :=
+theorem comap_mk.symm_nhds (x : M) : comap (mk.symm : Mᵈᵐᵃ → M) (𝓝 x) = 𝓝 (mk x) :=
   mkHomeomorph.symm.comap_nhds_eq x
 
 end DomMulAct
+

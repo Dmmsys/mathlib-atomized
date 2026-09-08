@@ -52,8 +52,8 @@ open scoped NNReal ENNReal MeasureTheory ProbabilityTheory Topology
 
 namespace MeasureTheory
 
-variable {Ω : Type*} {m0 : MeasurableSpace Ω} {μ : Measure Ω} {ℱ : Filtration Nat m0}
-variable {a b : Real} {f : Nat -> Ω -> Real} {ω : Ω} {R : Real>=0}
+variable {Ω : Type*} {m0 : MeasurableSpace Ω} {μ : Measure Ω} {ℱ : Filtration ℕ m0}
+variable {a b : ℝ} {f : ℕ → Ω → ℝ} {ω : Ω} {R : ℝ≥0}
 
 section AeConvergence
 
@@ -107,59 +107,56 @@ submartingale converges to its `limitProcess` almost everywhere.
 -/
 
 
-/--
-theorem `not_frequently_of_upcrossings_lt_top` / 定理 `not_frequently_of_upcrossings_lt_top`
+/-- If a stochastic process has a finite number of upcrossings from below `a` to above `b`,
+then it does not frequently visit both below `a` and above `b`. -/
+/-
+**MeasureTheory.not_frequently_of_upcrossings_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory`。
+形式化陈述：not_frequently_of_upcrossings_lt_top (hab : a < b) (hω : upcrossings a b f
+ ω != ∞) : ¬((existsᶠ n in atTop, f n ω < a) ∧ existsᶠ n in atTop, b < f n ω)
+参数：hab : a < b；hω : upcrossings a b f ω != ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.upcrossings_lt_top_iff`：upcrossings_lt_top_iff : upcrossin
+gs a b f ω < ∞ ↔ exists k, forall N, upcrossingsBefore a b f N ω <= k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.frequently_atTop`：frequently_atTop : (existsᶠ x in atTop, p x) ↔ 
+forall a, exists b, a <= b ∧ p b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `MeasureTheory.upcrossingsBefore_lt_of_exists_upcrossing`：upcrossingsBefo
+re_lt_of_exists_upcrossing (hab : a < b) {N₁ N₂ : Nat} (hN₁ : N <= N₁) (hN₁' : f
+ N₁ ω < a) (hN₂ : N₁ <= N₂) (hN₂' : b < f N₂ …
 
-English:
-theorem not_frequently_of_upcrossings_lt_top
-  given: (hab : a < b) (hω : upcrossings a b f ω != ∞)
-  proof: by
-  rw [← lt_top_iff_ne_top]; rw [upcrossings_lt_top_iff] at hω
-  replace hω : exists k, forall N, upcrossingsBefore a b f N ω < k := by
-    obtain ⟨k, hk⟩ := hω
-    exact ⟨k + 1, fun N => lt_of_le_of_lt (hk N) k.lt_succ_self⟩
-  rintro ⟨h₁, h₂⟩
-  rw [frequently_atTop] at h₁ h₂
-  refine Classical.not_not.2 hω ?_
-  push Not
-  intro k
-  induction k with
-  | zero => simp only [zero_le, exists_const]
-  | succ k ih =>
-    obtain ⟨N, hN⟩ := ih
-    obtain ⟨N₁, hN₁, hN₁'⟩ := h₁ N
-    obtain ⟨N₂, hN₂, hN₂'⟩ := h₂ N₁
-exact ⟨N₂ + 1, Nat.succ_le_of_lt
-      lt_of_le_of_lt hN (upcrossingsBefore_lt_of_exists_upcrossing hab hN₁ hN₁' hN₂ hN₂')⟩
-
-中文:
-定理 not_frequently_of_upcrossings_lt_top
-  条件: (hab : a < b) (hω : upcrossings a b f ω != ∞)
-  证明: by
-  rw [← lt_top_iff_ne_top]; rw [upcrossings_lt_top_iff] at hω
-  replace hω : exists k, forall N, upcrossingsBefore a b f N ω < k := by
-    obtain ⟨k, hk⟩ := hω
-    exact ⟨k + 1, fun N => lt_of_le_of_lt (hk N) k.lt_succ_self⟩
-  rintro ⟨h₁, h₂⟩
-  rw [frequently_atTop] at h₁ h₂
-  refine Classical.not_not.2 hω ?_
-  push Not
-  intro k
-  induction k with
-  | zero => simp only [zero_le, exists_const]
-  | succ k ih =>
-    obtain ⟨N, hN⟩ := ih
-    obtain ⟨N₁, hN₁, hN₁'⟩ := h₁ N
-    obtain ⟨N₂, hN₂, hN₂'⟩ := h₂ N₁
-exact ⟨N₂ + 1, Nat.succ_le_of_lt
-      lt_of_le_of_lt hN (upcrossingsBefore_lt_of_exists_upcrossing hab hN₁ hN₁' hN₂ hN₂')⟩
-
-Depends on / 依赖: Classical, Classical.not_not, Nat.succ_le_, exists_const, frequently_atTop, k.lt_succ_self, lt_of_le_of_lt, lt_succ_self, lt_top_iff_ne_top, not_not, replace, succ_le_, upcrossingsBefore, upcrossings_lt_top_iff, zero_le
+--- 原说明 ---
+If a stochastic process has a finite number of upcrossings from below `a` to abo
+ve `b`,
+then it does not frequently visit both below `a` and above `b`.
 -/
-theorem not_frequently_of_upcrossings_lt_top (hab : a < b) (hω : upcrossings a b f ω != ∞) :
-    ¬((existsᶠ n in atTop, f n ω < a) ∧ existsᶠ n in atTop, b < f n ω) := by
-  rw [← lt_top_iff_ne_top]; rw [upcrossings_lt_top_iff] at hω
-  replace hω : exists k, forall N, upcrossingsBefore a b f N ω < k := by
+theorem not_frequently_of_upcrossings_lt_top (hab : a < b) (hω : upcrossings a b f ω ≠ ∞) :
+    ¬((∃ᶠ n in atTop, f n ω < a) ∧ ∃ᶠ n in atTop, b < f n ω) := by
+  rw [← lt_top_iff_ne_top, upcrossings_lt_top_iff] at hω
+  replace hω : ∃ k, ∀ N, upcrossingsBefore a b f N ω < k := by
     obtain ⟨k, hk⟩ := hω
     exact ⟨k + 1, fun N => lt_of_le_of_lt (hk N) k.lt_succ_self⟩
   rintro ⟨h₁, h₂⟩
@@ -173,63 +170,99 @@ theorem not_frequently_of_upcrossings_lt_top (hab : a < b) (hω : upcrossings a 
     obtain ⟨N, hN⟩ := ih
     obtain ⟨N₁, hN₁, hN₁'⟩ := h₁ N
     obtain ⟨N₂, hN₂, hN₂'⟩ := h₂ N₁
-exact ⟨N₂ + 1, Nat.succ_le_of_lt
+    exact ⟨N₂ + 1, Nat.succ_le_of_lt <|
       lt_of_le_of_lt hN (upcrossingsBefore_lt_of_exists_upcrossing hab hN₁ hN₁' hN₂ hN₂')⟩
 
-/--
-theorem `upcrossings_eq_top_of_frequently_lt` / 定理 `upcrossings_eq_top_of_frequently_lt`
+/-- A stochastic process that frequently visits below `a` and above `b` has infinite upcrossings. -/
+/-
+**MeasureTheory.upcrossings_eq_top_of_frequently_lt** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory`。
+形式化陈述：upcrossings_eq_top_of_frequently_lt (hab : a < b) (h₁ : existsᶠ n in atTop
+, f n ω < a) (h₂ : existsᶠ n in atTop, b < f n ω) : upcrossings a b f ω = ∞
+参数：hab : a < b；h₁ : existsᶠ n in atTop, f n ω < a；h₂ : existsᶠ n in atTop, b < f
+ n ω。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_contradiction`：by_contradiction {p : Prop} : (¬p -> False) -> p
+· 使用定理 `MeasureTheory.not_frequently_of_upcrossings_lt_top`：not_frequently_of_up
+crossings_lt_top (hab : a < b) (hω : upcrossings a b f ω != ∞) : ¬((existsᶠ n in
+ atTop, f n ω < a) ∧ existsᶠ n in atTop,…
 
-English:
-theorem upcrossings_eq_top_of_frequently_lt
-  statement: (hab : a < b) (h₁ : existsᶠ n in atTop, f n ω < a)
-  proof: by_contradiction fun h => not_frequently_of_upcrossings_lt_top hab h ⟨h₁, h₂⟩
-
-中文:
-定理 upcrossings_eq_top_of_frequently_lt
-  结论: (hab : a < b) (h₁ : 存在ᶠ n in atTop, f n ω < a)
-  证明: by_contradiction fun h => not_frequently_of_upcrossings_lt_top hab h ⟨h₁, h₂⟩
-
-Depends on / 依赖: by_contradiction, not_frequently_of_upcrossings_lt_top
+--- 原说明 ---
+A stochastic process that frequently visits below `a` and above `b` has infinite
+ upcrossings.
 -/
-theorem upcrossings_eq_top_of_frequently_lt (hab : a < b) (h₁ : existsᶠ n in atTop, f n ω < a)
-    (h₂ : existsᶠ n in atTop, b < f n ω) : upcrossings a b f ω = ∞ :=
+theorem upcrossings_eq_top_of_frequently_lt (hab : a < b) (h₁ : ∃ᶠ n in atTop, f n ω < a)
+    (h₂ : ∃ᶠ n in atTop, b < f n ω) : upcrossings a b f ω = ∞ :=
   by_contradiction fun h => not_frequently_of_upcrossings_lt_top hab h ⟨h₁, h₂⟩
 
-/--
-theorem `tendsto_of_uncrossing_lt_top` / 定理 `tendsto_of_uncrossing_lt_top`
+/-- A realization of a stochastic process with bounded upcrossings and bounded limit inferiors is
+convergent.
 
-English:
-theorem tendsto_of_uncrossing_lt_top
-  statement: (hf₁ : liminf (fun n => (‖f n ω‖₊ : Real>=0∞)) atTop < ∞)
-  proof: by
-  by_cases h : IsBoundedUnder (· <= ·) atTop fun n => |f n ω|
-  · rw [isBoundedUnder_le_abs] at h
-    refine tendsto_of_no_upcrossings Rat.denseRange_cast ?_ h.1 h.2
-    rintro _ ⟨a, rfl⟩ _ ⟨b, rfl⟩ hab
-    exact not_frequently_of_upcrossings_lt_top hab (hf₂ a b (Rat.cast_lt.1 hab)).ne
-  · obtain ⟨a, b, hab, h₁, h₂⟩ := ENNReal.exists_upcrossings_of_not_bounded_under hf₁.ne h
-    exact
-      False.elim ((hf₂ a b hab).ne (upcrossings_eq_top_of_frequently_lt (Rat.cast_lt.2 hab) h₁ h₂))
+We use the spelling `< ∞` instead of the standard `≠ ∞` in the assumptions since it is not as easy
+to change `<` to `≠` under binders. -/
+/-
+**MeasureTheory.tendsto_of_uncrossing_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：tendsto_of_uncrossing_lt_top (hf₁ : liminf (fun n => (‖f n ω‖₊ : Real>=0∞)
+) atTop < ∞) (hf₂ : forall a b : Rat, a < b -> upcrossings a b f ω < ∞) : exists
+ c, Tendsto (fun n => f n ω) atTop (𝓝 c)
+参数：hf₁ : liminf (fun n => (‖f n ω‖₊ : Real>=0∞)) atTop < ∞；hf₂ : forall a b : Ra
+t, a < b -> upcrossings a b f ω < ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_of_no_upcrossings`：tendsto_of_no_upcrossings [DenselyOrdered α] 
+{f : Filter β} {u : β -> α} {s : Set α} (hs : Dense s) (H : forall a in s, foral
+l b in s, a < b…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `LinearOrderedSemiField.toDenselyOrdered`：∀ {α : Type u_2} [inst : Semifi
+eld α] [inst_1 : PartialOrder α] [PosMulReflectLT α] [IsStrictOrderedRing α],   
+DenselyOrdered α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Rat.denseRange_cast`：Rat.denseRange_cast {𝕜} [Field 𝕜] [LinearOrder 𝕜] [
+IsStrictOrderedRing 𝕜] [TopologicalSpace 𝕜] [OrderTopology 𝕜] [Archimedean 𝕜] : 
+DenseRang…
+· 使用定理 `MeasureTheory.not_frequently_of_upcrossings_lt_top`：not_frequently_of_up
+crossings_lt_top (hab : a < b) (hω : upcrossings a b f ω != ∞) : ¬((existsᶠ n in
+ atTop, f n ω < a) ∧ existsᶠ n in atTop,…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Rat.cast_lt`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p < ↑q ↔ p < q
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.isBoundedUnder_le_abs`：isBoundedUnder_le_abs [AddCommGroup α] [Li
+nearOrder α] [IsOrderedAddMonoid α] {f : Filter β} {u : β -> α} : (f.IsBoundedUn
+der (· <= ·) fun a…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `ENNReal.exists_upcrossings_of_not_bounded_under`：exists_upcrossings_of_n
+ot_bounded_under {ι : Type*} {l : Filter ι} {x : ι -> Real} (hf : liminf (fun i 
+=> (Real.nnabs (x i) : Real>=0∞)) l !…
+· 使用定理 `MeasureTheory.upcrossings_eq_top_of_frequently_lt`：upcrossings_eq_top_of
+_frequently_lt (hab : a < b) (h₁ : existsᶠ n in atTop, f n ω < a) (h₂ : existsᶠ 
+n in atTop, b < f n ω) : upcrossings a …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-中文:
-定理 tendsto_of_uncrossing_lt_top
-  结论: (hf₁ : liminf (fun n => (‖f n ω‖₊ : 实数>=0∞)) atTop < ∞)
-  证明: by
-  by_cases h : IsBoundedUnder (· <= ·) atTop fun n => |f n ω|
-  · rw [isBoundedUnder_le_abs] at h
-    refine tendsto_of_no_upcrossings Rat.denseRange_cast ?_ h.1 h.2
-    rintro _ ⟨a, rfl⟩ _ ⟨b, rfl⟩ hab
-    exact not_frequently_of_upcrossings_lt_top hab (hf₂ a b (Rat.cast_lt.1 hab)).ne
-  · obtain ⟨a, b, hab, h₁, h₂⟩ := ENNReal.exists_upcrossings_of_not_bounded_under hf₁.ne h
-    exact
-      False.elim ((hf₂ a b hab).ne (upcrossings_eq_top_of_frequently_lt (Rat.cast_lt.2 hab) h₁ h₂))
+--- 原说明 ---
+A realization of a stochastic process with bounded upcrossings and bounded limit
+ inferiors is
+convergent.
 
-Depends on / 依赖: ENNReal, ENNReal.exists_upcrossings_of_not_bounded_under, False.elim, IsBoundedUnder, Rat.cast_lt, Rat.denseRange_cast, cast_lt, denseRange_cast, exists_upcrossings_of_not_bounded_under, isBoundedUnder_le_abs, not_frequently_of_upcrossings_lt_top, tendsto_of_no_upcrossings, upcrossings_eq_top_of_frequently_lt
+We use the spelling `< ∞` instead of the standard `≠ ∞` in the assumptions since
+ it is not as easy
+to change `<` to `≠` under binders.
 -/
-theorem tendsto_of_uncrossing_lt_top (hf₁ : liminf (fun n => (‖f n ω‖₊ : Real>=0∞)) atTop < ∞)
-    (hf₂ : forall a b : Rat, a < b -> upcrossings a b f ω < ∞) :
-    exists c, Tendsto (fun n => f n ω) atTop (𝓝 c) := by
-  by_cases h : IsBoundedUnder (· <= ·) atTop fun n => |f n ω|
+theorem tendsto_of_uncrossing_lt_top (hf₁ : liminf (fun n => (‖f n ω‖₊ : ℝ≥0∞)) atTop < ∞)
+    (hf₂ : ∀ a b : ℚ, a < b → upcrossings a b f ω < ∞) :
+    ∃ c, Tendsto (fun n => f n ω) atTop (𝓝 c) := by
+  by_cases h : IsBoundedUnder (· ≤ ·) atTop fun n => |f n ω|
   · rw [isBoundedUnder_le_abs] at h
     refine tendsto_of_no_upcrossings Rat.denseRange_cast ?_ h.1 h.2
     rintro _ ⟨a, rfl⟩ _ ⟨b, rfl⟩ hab
@@ -238,83 +271,88 @@ theorem tendsto_of_uncrossing_lt_top (hf₁ : liminf (fun n => (‖f n ω‖₊ 
     exact
       False.elim ((hf₂ a b hab).ne (upcrossings_eq_top_of_frequently_lt (Rat.cast_lt.2 hab) h₁ h₂))
 
-/--
-theorem `Submartingale.upcrossings_ae_lt_top'` / 定理 `Submartingale.upcrossings_ae_lt_top'`
+/-- An L¹-bounded submartingale has bounded upcrossings almost everywhere. -/
+/-
+**MeasureTheory.Submartingale.upcrossings_ae_lt_top'** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0} {a b : ℝ}   {f : ℕ → Ω → ℝ} {R : NNReal} [Meas
+ureTheory.IsFiniteMeasure μ],   MeasureTheory.Submartingale f ℱ μ →     (∀ (n : 
+ℕ), MeasureTheory.eLpNorm (f n) 1 μ ≤ ↑R) → a < b → ∀ᵐ (ω : Ω) ∂μ, MeasureTheory
+.upcrossings a b f ω < ⊤
+参数：∀ (n : ℕ), MeasureTheory.eLpNorm (f n) 1 μ ≤ ↑R；ω : Ω。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.ae_lt_top`：ae_lt_top {f : α -> Real>=0∞} (hf : Measurable 
+f) (h2f : ∫⁻ x, f x ∂μ != ∞) : forallᵐ x ∂μ, f x < ∞
+· 使用定理 `MeasureTheory.StronglyAdapted.measurable_upcrossings`：∀ {Ω : Type u_1} {
+m0 : MeasurableSpace Ω} {a b : ℝ} {f : ℕ → Ω → ℝ} {ℱ : MeasureTheory.Filtration 
+ℕ m0},   MeasureTheory.StronglyAdapted ℱ f…
+· 使用定理 `MeasureTheory.Submartingale.stronglyAdapted`：∀ {Ω : Type u_1} {E : Type 
+u_2} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : MeasureT
+heory.Measure Ω} [inst_1 : Normed…
+· 使用定理 `MeasureTheory.Submartingale.mul_lintegral_upcrossings_le_lintegral_pos_p
+art`：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {f 
+: ℕ → Ω → ℝ}   {ℱ : MeasureTheory.Filtration ℕ m0} [MeasureTheory…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.le_div_iff_mul_le`：∀ {a b c : ENNReal}, b ≠ 0 ∨ c ≠ 0 → b ≠ ⊤ ∨ 
+c ≠ ⊤ → (a ≤ c / b ↔ a * b ≤ c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `ENNReal.ofReal_ne_top`：ofReal_ne_top {r : Real} : ENNReal.ofReal r != ∞
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `ENNReal.div_lt_top`：div_lt_top {x y : Real>=0∞} (h1 : x != ∞) (h2 : y !=
+ 0) : x / y < ∞
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.lintegral_mono`：lintegral_mono ⦃f g : α -> Real>=0∞⦄ (hfg 
+: f <= g) : ∫⁻ a, f a ∂μ <= ∫⁻ a, g a ∂μ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `nnnorm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖
+₊ = ‖a‖₊
+· 使用定理 `nnnorm_add_le`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a b : E),
+ ‖a + b‖₊ ≤ ‖a‖₊ + ‖b‖₊
+· 使用定理 `MeasureTheory.lintegral_add_right`：lintegral_add_right (f : α -> Real>=0
+∞) {g : α -> Real>=0∞} (hg : Measurable g) : ∫⁻ a, f a + g a ∂μ = ∫⁻ a, f a ∂μ +
+ ∫⁻ a, g a ∂μ
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `MeasureTheory.lintegral_const`：lintegral_const (c : Real>=0∞) : ∫⁻ _, c 
+∂μ = c * μ univ
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `MeasureTheory.eLpNorm_one_eq_lintegral_enorm`：eLpNorm_one_eq_lintegral_e
+norm {f : α -> ε} : eLpNorm f 1 μ = ∫⁻ x, ‖f x‖ₑ ∂μ
+（共 51 条，此处仅展示前 30 条）
 
-English:
-theorem Submartingale.upcrossings_ae_lt_top'
-  statement: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-  proof: by
-  refine ae_lt_top (hf.stronglyAdapted.measurable_upcrossings hab) ?_
-  have := hf.mul_lintegral_upcrossings_le_lintegral_pos_part a b
-  rw [mul_comm]; rw [← ENNReal.le_div_iff_mul_le] at this
-  · refine (lt_of_le_of_lt this (ENNReal.div_lt_top ?_ ?_)).ne
-    · have hR' : forall n, ∫⁻ ω, ‖f n ω - a‖₊ ∂μ <= R + ‖a‖₊ * μ Set.univ := by
-        simp_rw [eLpNorm_one_eq_lintegral_enorm] at hbdd
-        intro n
-        refine (lintegral_mono ?_ : ∫⁻ ω, ‖f n ω - a‖₊ ∂μ <= ∫⁻ ω, ‖f n ω‖₊ + ‖a‖₊ ∂μ).trans ?_
-        · intro ω
-          simp_rw [sub_eq_add_neg, ← nnnorm_neg a, ← ENNReal.coe_add, ENNReal.coe_le_coe]
-          exact nnnorm_add_le _ _
-        · simp_rw [lintegral_add_right _ measurable_const, lintegral_const]
-          exact add_le_add (hbdd _) le_rfl
-      refine ne_of_lt (iSup_lt_iff.2 ⟨R + ‖a‖₊ * μ Set.univ, ENNReal.add_lt_top.2
-        ⟨ENNReal.coe_lt_top, by finiteness⟩,
-        fun n => le_trans ?_ (hR' n)⟩)
-      refine lintegral_mono fun ω => ?_
-      rw [ENNReal.ofReal_le_iff_le_toReal]; rw [ENNReal.coe_toReal]; rw [coe_nnnorm]
-      · by_cases! hnonneg : 0 <= f n ω - a
-        · rw [posPart_eq_self.2 hnonneg, Real.norm_eq_abs, abs_of_nonneg hnonneg]
-        · rw [posPart_eq_zero.2 hnonneg.le]
-          exact norm_nonneg _
-      · finiteness
-    · simp only [hab, Ne, ENNReal.ofReal_eq_zero, sub_nonpos, not_le]
-  · left; simp only [hab, Ne, ENNReal.ofReal_eq_zero, sub_nonpos, not_le]
-  · left; finiteness
-
-中文:
-定理 Submartingale.upcrossings_ae_lt_top'
-  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
-  证明: by
-  refine ae_lt_top (hf.stronglyAdapted.measurable_upcrossings hab) ?_
-  have := hf.mul_lintegral_upcrossings_le_lintegral_pos_part a b
-  rw [mul_comm]; rw [← ENNReal.le_div_iff_mul_le] at this
-  · refine (lt_of_le_of_lt this (ENNReal.div_lt_top ?_ ?_)).ne
-    · have hR' : forall n, ∫⁻ ω, ‖f n ω - a‖₊ ∂μ <= R + ‖a‖₊ * μ Set.univ := by
-        simp_rw [eLpNorm_one_eq_lintegral_enorm] at hbdd
-        intro n
-        refine (lintegral_mono ?_ : ∫⁻ ω, ‖f n ω - a‖₊ ∂μ <= ∫⁻ ω, ‖f n ω‖₊ + ‖a‖₊ ∂μ).trans ?_
-        · intro ω
-          simp_rw [sub_eq_add_neg, ← nnnorm_neg a, ← ENNReal.coe_add, ENNReal.coe_le_coe]
-          exact nnnorm_add_le _ _
-        · simp_rw [lintegral_add_right _ measurable_const, lintegral_const]
-          exact add_le_add (hbdd _) le_rfl
-      refine ne_of_lt (iSup_lt_iff.2 ⟨R + ‖a‖₊ * μ Set.univ, ENNReal.add_lt_top.2
-        ⟨ENNReal.coe_lt_top, by finiteness⟩,
-        fun n => le_trans ?_ (hR' n)⟩)
-      refine lintegral_mono fun ω => ?_
-      rw [ENNReal.ofReal_le_iff_le_toReal]; rw [ENNReal.coe_toReal]; rw [coe_nnnorm]
-      · by_cases! hnonneg : 0 <= f n ω - a
-        · rw [posPart_eq_self.2 hnonneg, Real.norm_eq_abs, abs_of_nonneg hnonneg]
-        · rw [posPart_eq_zero.2 hnonneg.le]
-          exact norm_nonneg _
-      · finiteness
-    · simp only [hab, Ne, ENNReal.ofReal_eq_zero, sub_nonpos, not_le]
-  · left; simp only [hab, Ne, ENNReal.ofReal_eq_zero, sub_nonpos, not_le]
-  · left; finiteness
-
-Depends on / 依赖: ENNReal, ENNReal.div_lt_top, ENNReal.le_div_iff_mul_le, Set.univ, ae_lt_top, div_lt_top, eLpNorm_one_eq_lintegral_enorm, hf.mul_lintegral_upcrossings_le_lintegral_pos_part, hf.stronglyAdapted.measurable_upcrossings, le_div_iff_mul_le, lintegral_mono, lt_of_le_of_lt, measurable_upcrossings, mul_comm, mul_lintegral_upcrossings_le_lintegral_pos_part, simp_rw, stronglyAdapted, sub_eq_ad
+--- 原说明 ---
+An L¹-bounded submartingale has bounded upcrossings almost everywhere.
 -/
 theorem Submartingale.upcrossings_ae_lt_top' [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-    (hbdd : forall n, eLpNorm (f n) 1 μ <= R) (hab : a < b) : forallᵐ ω ∂μ, upcrossings a b f ω < ∞ := by
+    (hbdd : ∀ n, eLpNorm (f n) 1 μ ≤ R) (hab : a < b) : ∀ᵐ ω ∂μ, upcrossings a b f ω < ∞ := by
   refine ae_lt_top (hf.stronglyAdapted.measurable_upcrossings hab) ?_
   have := hf.mul_lintegral_upcrossings_le_lintegral_pos_part a b
-  rw [mul_comm]; rw [← ENNReal.le_div_iff_mul_le] at this
+  rw [mul_comm, ← ENNReal.le_div_iff_mul_le] at this
   · refine (lt_of_le_of_lt this (ENNReal.div_lt_top ?_ ?_)).ne
-    · have hR' : forall n, ∫⁻ ω, ‖f n ω - a‖₊ ∂μ <= R + ‖a‖₊ * μ Set.univ := by
+    · have hR' : ∀ n, ∫⁻ ω, ‖f n ω - a‖₊ ∂μ ≤ R + ‖a‖₊ * μ Set.univ := by
         simp_rw [eLpNorm_one_eq_lintegral_enorm] at hbdd
         intro n
-        refine (lintegral_mono ?_ : ∫⁻ ω, ‖f n ω - a‖₊ ∂μ <= ∫⁻ ω, ‖f n ω‖₊ + ‖a‖₊ ∂μ).trans ?_
+        refine (lintegral_mono ?_ : ∫⁻ ω, ‖f n ω - a‖₊ ∂μ ≤ ∫⁻ ω, ‖f n ω‖₊ + ‖a‖₊ ∂μ).trans ?_
         · intro ω
           simp_rw [sub_eq_add_neg, ← nnnorm_neg a, ← ENNReal.coe_add, ENNReal.coe_le_coe]
           exact nnnorm_add_le _ _
@@ -324,8 +362,8 @@ theorem Submartingale.upcrossings_ae_lt_top' [IsFiniteMeasure μ] (hf : Submarti
         ⟨ENNReal.coe_lt_top, by finiteness⟩,
         fun n => le_trans ?_ (hR' n)⟩)
       refine lintegral_mono fun ω => ?_
-      rw [ENNReal.ofReal_le_iff_le_toReal]; rw [ENNReal.coe_toReal]; rw [coe_nnnorm]
-      · by_cases! hnonneg : 0 <= f n ω - a
+      rw [ENNReal.ofReal_le_iff_le_toReal, ENNReal.coe_toReal, coe_nnnorm]
+      · by_cases! hnonneg : 0 ≤ f n ω - a
         · rw [posPart_eq_self.2 hnonneg, Real.norm_eq_abs, abs_of_nonneg hnonneg]
         · rw [posPart_eq_zero.2 hnonneg.le]
           exact norm_nonneg _
@@ -333,194 +371,296 @@ theorem Submartingale.upcrossings_ae_lt_top' [IsFiniteMeasure μ] (hf : Submarti
     · simp only [hab, Ne, ENNReal.ofReal_eq_zero, sub_nonpos, not_le]
   · left; simp only [hab, Ne, ENNReal.ofReal_eq_zero, sub_nonpos, not_le]
   · left; finiteness
-
-/--
-theorem `Submartingale.upcrossings_ae_lt_top` / 定理 `Submartingale.upcrossings_ae_lt_top`
-
-English:
-theorem Submartingale.upcrossings_ae_lt_top
-  statement: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-  proof: by
-  simp only [ae_all_iff, eventually_imp_distrib_left]
-  rintro a b hab
-  exact hf.upcrossings_ae_lt_top' hbdd (Rat.cast_lt.2 hab)
-
-中文:
-定理 Submartingale.upcrossings_ae_lt_top
-  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
-  证明: by
-  simp only [ae_all_iff, eventually_imp_distrib_left]
-  rintro a b hab
-  exact hf.upcrossings_ae_lt_top' hbdd (Rat.cast_lt.2 hab)
-
-Depends on / 依赖: Rat.cast_lt, ae_all_iff, cast_lt, eventually_imp_distrib_left, hf.upcrossings_ae_lt_top, upcrossings_ae_lt_top
+/-
+**MeasureTheory.Submartingale.upcrossings_ae_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} [MeasureTheory.
+IsFiniteMeasure μ],   MeasureTheory.Submartingale f ℱ μ →     (∀ (n : ℕ), Measur
+eTheory.eLpNorm (f n) 1 μ ≤ ↑R) →       ∀ᵐ (ω : Ω) ∂μ, ∀ (a b : ℚ), a < b → Meas
+ureTheory.upcrossings (↑a) (↑b) f ω < ⊤
+参数：∀ (n : ℕ), MeasureTheory.eLpNorm (f n) 1 μ ≤ ↑R；ω : Ω；a b : ℚ；↑a；↑b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `MeasureTheory.Submartingale.upcrossings_ae_lt_top'`：∀ {Ω : Type u_1} {m0
+ : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtratio
+n ℕ m0} {a b : ℝ}   {f : ℕ → Ω → ℝ} {R :…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.cast_lt`：∀ {p q : ℚ} {K : Type u_5} [inst : Field K] [inst_1 : Linea
+rOrder K] [IsStrictOrderedRing K], ↑p < ↑q ↔ p < q
 -/
 theorem Submartingale.upcrossings_ae_lt_top [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-    (hbdd : forall n, eLpNorm (f n) 1 μ <= R) : forallᵐ ω ∂μ, forall a b : Rat, a < b -> upcrossings a b f ω < ∞ := by
+    (hbdd : ∀ n, eLpNorm (f n) 1 μ ≤ R) : ∀ᵐ ω ∂μ, ∀ a b : ℚ, a < b → upcrossings a b f ω < ∞ := by
   simp only [ae_all_iff, eventually_imp_distrib_left]
   rintro a b hab
   exact hf.upcrossings_ae_lt_top' hbdd (Rat.cast_lt.2 hab)
 
-/--
-theorem `Submartingale.exists_ae_tendsto_of_bdd` / 定理 `Submartingale.exists_ae_tendsto_of_bdd`
+/-- An L¹-bounded submartingale converges almost everywhere. -/
+/-
+**MeasureTheory.Submartingale.exists_ae_tendsto_of_bdd** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} [MeasureTheory.
+IsFiniteMeasure μ],   MeasureTheory.Submartingale f ℱ μ →     (∀ (n : ℕ), Measur
+eTheory.eLpNorm (f n) 1 μ ≤ ↑R) →       ∀ᵐ (ω : Ω) ∂μ, ∃ c, Filter.Tendsto (fun 
+n => f n ω) Filter.atTop (nhds c)
+参数：∀ (n : ℕ), MeasureTheory.eLpNorm (f n) 1 μ ≤ ↑R；ω : Ω；fun n => f n ω；nhds c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_bdd_liminf_atTop_of_eLpNorm_bdd`：ae_bdd_liminf_atTop_of
+_eLpNorm_bdd {p : Real>=0∞} (hp : p != 0) {f : Nat -> α -> E} (hfmeas : forall n
+, Measurable (f n)) (hbdd : forall n, …
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `Measurable.mono`：Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : 
+MeasurableSpace β} {f : α -> β} (hf : @Measurable α β ma mb f) (ha : ma <= ma') 
+(hb :…
+· 使用定理 `MeasureTheory.StronglyMeasurable.measurable`：∀ {α : Type u_1} {β : Type 
+u_2} {f : α → β} {x : MeasurableSpace α} [inst : TopologicalSpace β]   [Topologi
+calSpace.PseudoMetrizableSpace β]…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `MeasureTheory.Submartingale.stronglyMeasurable`：∀ {Ω : Type u_1} {E : Ty
+pe u_2} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : Measu
+reTheory.Measure Ω} [inst_1 : Normed…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.Submartingale.upcrossings_ae_lt_top`：∀ {Ω : Type u_1} {m0 
+: MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtration
+ ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} […
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `MeasureTheory.tendsto_of_uncrossing_lt_top`：tendsto_of_uncrossing_lt_top
+ (hf₁ : liminf (fun n => (‖f n ω‖₊ : Real>=0∞)) atTop < ∞) (hf₂ : forall a b : R
+at, a < b -> upcrossings a b f ω…
 
-English:
-theorem Submartingale.exists_ae_tendsto_of_bdd
-  statement: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-  proof: by
-  filter_upwards [hf.upcrossings_ae_lt_top hbdd, ae_bdd_liminf_atTop_of_eLpNorm_bdd one_ne_zero
-    (fun n => (hf.stronglyMeasurable n).measurable.mono (ℱ.le n) le_rfl) hbdd] with ω h₁ h₂
-  exact tendsto_of_uncrossing_lt_top h₂ h₁
-
-中文:
-定理 Submartingale.存在_ae_tendsto_of_bdd
-  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
-  证明: by
-  filter_upwards [hf.upcrossings_ae_lt_top hbdd, ae_bdd_liminf_atTop_of_eLpNorm_bdd one_ne_zero
-    (fun n => (hf.stronglyMeasurable n).measurable.mono (ℱ.le n) le_rfl) hbdd] with ω h₁ h₂
-  exact tendsto_of_uncrossing_lt_top h₂ h₁
-
-Depends on / 依赖: ae_bdd_liminf_atTop_of_eLpNorm_bdd, filter_upwards, hf.stronglyMeasurable, hf.upcrossings_ae_lt_top, le_rfl, measurable, measurable.mono, one_ne_zero, stronglyMeasurable, tendsto_of_uncrossing_lt_top, upcrossings_ae_lt_top
+--- 原说明 ---
+An L¹-bounded submartingale converges almost everywhere.
 -/
 theorem Submartingale.exists_ae_tendsto_of_bdd [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-    (hbdd : forall n, eLpNorm (f n) 1 μ <= R) : forallᵐ ω ∂μ, exists c, Tendsto (fun n => f n ω) atTop (𝓝 c) := by
+    (hbdd : ∀ n, eLpNorm (f n) 1 μ ≤ R) : ∀ᵐ ω ∂μ, ∃ c, Tendsto (fun n => f n ω) atTop (𝓝 c) := by
   filter_upwards [hf.upcrossings_ae_lt_top hbdd, ae_bdd_liminf_atTop_of_eLpNorm_bdd one_ne_zero
     (fun n => (hf.stronglyMeasurable n).measurable.mono (ℱ.le n) le_rfl) hbdd] with ω h₁ h₂
   exact tendsto_of_uncrossing_lt_top h₂ h₁
-
-/--
-theorem `Submartingale.exists_ae_trim_tendsto_of_bdd` / 定理 `Submartingale.exists_ae_trim_tendsto_of_bdd`
-
-English:
-theorem Submartingale.exists_ae_trim_tendsto_of_bdd
-  statement: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-  proof: by
-  let := (⨆ n, ℱ n)
-  rw [ae_iff]; rw [trim_measurableSet_eq]
-  · exact hf.exists_ae_tendsto_of_bdd hbdd
-· exact MeasurableSet.compl measurableSet_exists_tendsto
-      fun n => (hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩) le_rfl
-
-中文:
-定理 Submartingale.存在_ae_trim_tendsto_of_bdd
-  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
-  证明: by
-  let := (⨆ n, ℱ n)
-  rw [ae_iff]; rw [trim_measurableSet_eq]
-  · exact hf.exists_ae_tendsto_of_bdd hbdd
-· exact MeasurableSet.compl measurableSet_exists_tendsto
-      fun n => (hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩) le_rfl
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.compl, ae_iff, exists_ae_tendsto_of_bdd, hf.exists_ae_tendsto_of_bdd, hf.stronglyMeasurable, le_rfl, le_sSup, measurable, measurable.mono, measurableSet_exists_tendsto, stronglyMeasurable, trim_measurableSet_eq
+/-
+**MeasureTheory.Submartingale.exists_ae_trim_tendsto_of_bdd** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} [MeasureTheory.
+IsFiniteMeasure μ],   MeasureTheory.Submartingale f ℱ μ →     (∀ (n : ℕ), Measur
+eTheory.eLpNorm (f n) 1 μ ≤ ↑R) →       ∀ᵐ (ω : Ω) ∂μ.trim ⋯, ∃ c, Filter.Tendst
+o (fun n => f n ω) Filter.atTop (nhds c)
+参数：∀ (n : ℕ), MeasureTheory.eLpNorm (f n) 1 μ ≤ ↑R；ω : Ω；fun n => f n ω；nhds c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `sSup_le`：sSup_le (h : forall b in s, b <= a) : sSup s <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.ae_iff`：ae_iff {p : α -> Prop} : (forallᵐ a ∂μ, p a) ↔ μ {
+ a | ¬p a } = 0
+· 使用定理 `MeasureTheory.trim_measurableSet_eq`：trim_measurableSet_eq (hm : m <= m0
+) (hs : @MeasurableSet α m s) : μ.trim hm s = μ s
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `MeasureTheory.measurableSet_exists_tendsto`：MeasureTheory.measurableSet_
+exists_tendsto [TopologicalSpace γ] [IsCompletelyPseudoMetrizableSpace γ] [Secon
+dCountableTopology γ] [Measurabl…
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.toIsCompletelyPseudoMetriza
+bleSpace`：∀ {X : Type u_1} [inst : TopologicalSpace X] [TopologicalSpace.IsCompl
+etelyMetrizableSpace X],   TopologicalSpace.IsCompletelyPseudoMetrizab…
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.of_completeSpace_metrizable
+`：∀ {X : Type u_1} [inst : UniformSpace X] [CompleteSpace X] [(uniformity X).IsC
+ountablyGenerated] [T0Space X],   TopologicalSpace.IsCompletel…
+· 使用定理 `EMetric.instIsCountablyGeneratedUniformity`：∀ {α : Type u} [inst : Pseud
+oEMetricSpace α], (uniformity α).IsCountablyGenerated
+· 使用定理 `T6Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T6
+Space X], T0Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `Measurable.mono`：Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : 
+MeasurableSpace β} {f : α -> β} (hf : @Measurable α β ma mb f) (ha : ma <= ma') 
+(hb :…
+· 使用定理 `MeasureTheory.StronglyMeasurable.measurable`：∀ {α : Type u_1} {β : Type 
+u_2} {f : α → β} {x : MeasurableSpace α} [inst : TopologicalSpace β]   [Topologi
+calSpace.PseudoMetrizableSpace β]…
+· 使用定理 `MeasureTheory.Submartingale.stronglyMeasurable`：∀ {Ω : Type u_1} {E : Ty
+pe u_2} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : Measu
+reTheory.Measure Ω} [inst_1 : Normed…
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.Submartingale.exists_ae_tendsto_of_bdd`：∀ {Ω : Type u_1} {
+m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtrat
+ion ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} […
 -/
 theorem Submartingale.exists_ae_trim_tendsto_of_bdd [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-    (hbdd : forall n, eLpNorm (f n) 1 μ <= R) :
-    forallᵐ ω ∂μ.trim (sSup_le fun _ ⟨_, hn⟩ => hn ▸ ℱ.le _ : ⨆ n, ℱ n <= m0),
-      exists c, Tendsto (fun n => f n ω) atTop (𝓝 c) := by
+    (hbdd : ∀ n, eLpNorm (f n) 1 μ ≤ R) :
+    ∀ᵐ ω ∂μ.trim (sSup_le fun _ ⟨_, hn⟩ => hn ▸ ℱ.le _ : ⨆ n, ℱ n ≤ m0),
+      ∃ c, Tendsto (fun n => f n ω) atTop (𝓝 c) := by
   let := (⨆ n, ℱ n)
-  rw [ae_iff]; rw [trim_measurableSet_eq]
+  rw [ae_iff, trim_measurableSet_eq]
   · exact hf.exists_ae_tendsto_of_bdd hbdd
-· exact MeasurableSet.compl measurableSet_exists_tendsto
+  · exact MeasurableSet.compl <| measurableSet_exists_tendsto
       fun n => (hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩) le_rfl
 
-/--
-theorem `Submartingale.ae_tendsto_limitProcess` / 定理 `Submartingale.ae_tendsto_limitProcess`
+/-- **Almost everywhere martingale convergence theorem**: An L¹-bounded submartingale converges
+almost everywhere to a `⨆ n, ℱ n`-measurable function. -/
+/-
+**MeasureTheory.Submartingale.ae_tendsto_limitProcess** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} [MeasureTheory.
+IsFiniteMeasure μ],   MeasureTheory.Submartingale f ℱ μ →     (∀ (n : ℕ), Measur
+eTheory.eLpNorm (f n) 1 μ ≤ ↑R) →       ∀ᵐ (ω : Ω) ∂μ, Filter.Tendsto (fun n => 
+f n ω) Filter.atTop (nhds (MeasureTheory.Filtration.limitProcess f ℱ μ ω))
+参数：∀ (n : ℕ), MeasureTheory.eLpNorm (f n) 1 μ ≤ ↑R；ω : Ω；fun n => f n ω；nhds (Me
+asureTheory.Filtration.limitProcess f ℱ μ ω)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `sSup_le`：sSup_le (h : forall b in s, b <= a) : sSup s <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Submartingale.exists_ae_trim_tendsto_of_bdd`：∀ {Ω : Type u
+_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Fi
+ltration ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} […
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `AEMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst
+ : TopologicalSpace β] {m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 : M…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `aemeasurable_of_tendsto_metrizable_ae'`：aemeasurable_of_tendsto_metrizab
+le_ae' {μ : Measure α} {f : Nat -> α -> β} {g : α -> β} (hf : forall n, AEMeasur
+able (f n) μ) (h_ae_tendsto …
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Measurable.mono`：Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : 
+MeasurableSpace β} {f : α -> β} (hf : @Measurable α β ma mb f) (ha : ma <= ma') 
+(hb :…
+· 使用定理 `MeasureTheory.StronglyMeasurable.measurable`：∀ {α : Type u_1} {β : Type 
+u_2} {f : α → β} {x : MeasurableSpace α} [inst : TopologicalSpace β]   [Topologi
+calSpace.PseudoMetrizableSpace β]…
+· 使用定理 `MeasureTheory.Submartingale.stronglyMeasurable`：∀ {Ω : Type u_1} {E : Ty
+pe u_2} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : Measu
+reTheory.Measure Ω} [inst_1 : Normed…
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.measure_eq_zero_of_trim_eq_zero`：measure_eq_zero_of_trim_e
+q_zero (hm : m <= m0) (h : μ.trim hm s = 0) : μ s = 0
+· 使用定理 `MeasureTheory.Filtration.limitProcess.eq_1`：∀ {Ω : Type u_1} {ι : Type u
+_2} {m : MeasurableSpace Ω} [inst : Preorder ι] {E : Type u_4} [inst_1 : Zero E]
+   [inst_2 : TopologicalSpace E]…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-theorem Submartingale.ae_tendsto_limitProcess
-  statement: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-  proof: by
-  classical
-  suffices
-      exists g, StronglyMeasurable[⨆ n, ℱ n] g ∧ forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) by
-    rw [limitProcess]; rw [dif_pos this]
-    exact (Classical.choose_spec this).2
-  set g' : Ω -> Real := fun ω => if h : exists c, Tendsto (fun n => f n ω) atTop (𝓝 c) then h.choose else 0
-  have hle : ⨆ n, ℱ n <= m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
-  have hg' : forallᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g' ω)) := by
-    filter_upwards [hf.exists_ae_trim_tendsto_of_bdd hbdd] with ω hω
-    simp_rw [g', dif_pos hω]
-    exact hω.choose_spec
-  have hg'm : AEStronglyMeasurable[⨆ n, ℱ n] g' (μ.trim hle) :=
-    (@aemeasurable_of_tendsto_metrizable_ae' _ _ (⨆ n, ℱ n) _ _ _ _ _ _ _
-      (fun n => ((hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩ : ℱ n <= ⨆ n, ℱ n)
-        le_rfl).aemeasurable) hg').aestronglyMeasurable
-  obtain ⟨g, hgm, hae⟩ := hg'm
-  have hg : forallᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) := by
-    filter_upwards [hae, hg'] with ω hω hg'ω
-    exact hω ▸ hg'ω
-  exact ⟨g, hgm, measure_eq_zero_of_trim_eq_zero hle hg⟩
-
-中文:
-定理 Submartingale.ae_tendsto_limitProcess
-  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
-  证明: by
-  classical
-  suffices
-      exists g, StronglyMeasurable[⨆ n, ℱ n] g ∧ forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) by
-    rw [limitProcess]; rw [dif_pos this]
-    exact (Classical.choose_spec this).2
-  set g' : Ω -> Real := fun ω => if h : exists c, Tendsto (fun n => f n ω) atTop (𝓝 c) then h.choose else 0
-  have hle : ⨆ n, ℱ n <= m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
-  have hg' : forallᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g' ω)) := by
-    filter_upwards [hf.exists_ae_trim_tendsto_of_bdd hbdd] with ω hω
-    simp_rw [g', dif_pos hω]
-    exact hω.choose_spec
-  have hg'm : AEStronglyMeasurable[⨆ n, ℱ n] g' (μ.trim hle) :=
-    (@aemeasurable_of_tendsto_metrizable_ae' _ _ (⨆ n, ℱ n) _ _ _ _ _ _ _
-      (fun n => ((hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩ : ℱ n <= ⨆ n, ℱ n)
-        le_rfl).aemeasurable) hg').aestronglyMeasurable
-  obtain ⟨g, hgm, hae⟩ := hg'm
-  have hg : forallᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) := by
-    filter_upwards [hae, hg'] with ω hω hg'ω
-    exact hω ▸ hg'ω
-  exact ⟨g, hgm, measure_eq_zero_of_trim_eq_zero hle hg⟩
-
-Depends on / 依赖: Classical, Classical.choose_spec, StronglyMeasurable, Tendsto, choose_spec, classical, dif_pos, exists_ae_trim_tendsto_of_bdd, filter_upwards, h.choose, hf.exists_ae_trim_tendsto_of_bdd, limitProcess, sSup_le
+--- 原说明 ---
+**Almost everywhere martingale convergence theorem**: An L¹-bounded submartingal
+e converges
+almost everywhere to a `⨆ n, ℱ n`-measurable function.
 -/
 theorem Submartingale.ae_tendsto_limitProcess [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
-    (hbdd : forall n, eLpNorm (f n) 1 μ <= R) :
-    forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (ℱ.limitProcess f μ ω)) := by
+    (hbdd : ∀ n, eLpNorm (f n) 1 μ ≤ R) :
+    ∀ᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (ℱ.limitProcess f μ ω)) := by
   classical
   suffices
-      exists g, StronglyMeasurable[⨆ n, ℱ n] g ∧ forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) by
-    rw [limitProcess]; rw [dif_pos this]
+      ∃ g, StronglyMeasurable[⨆ n, ℱ n] g ∧ ∀ᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) by
+    rw [limitProcess, dif_pos this]
     exact (Classical.choose_spec this).2
-  set g' : Ω -> Real := fun ω => if h : exists c, Tendsto (fun n => f n ω) atTop (𝓝 c) then h.choose else 0
-  have hle : ⨆ n, ℱ n <= m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
-  have hg' : forallᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g' ω)) := by
+  set g' : Ω → ℝ := fun ω => if h : ∃ c, Tendsto (fun n => f n ω) atTop (𝓝 c) then h.choose else 0
+  have hle : ⨆ n, ℱ n ≤ m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
+  have hg' : ∀ᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g' ω)) := by
     filter_upwards [hf.exists_ae_trim_tendsto_of_bdd hbdd] with ω hω
     simp_rw [g', dif_pos hω]
     exact hω.choose_spec
   have hg'm : AEStronglyMeasurable[⨆ n, ℱ n] g' (μ.trim hle) :=
     (@aemeasurable_of_tendsto_metrizable_ae' _ _ (⨆ n, ℱ n) _ _ _ _ _ _ _
-      (fun n => ((hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩ : ℱ n <= ⨆ n, ℱ n)
+      (fun n => ((hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩ : ℱ n ≤ ⨆ n, ℱ n)
         le_rfl).aemeasurable) hg').aestronglyMeasurable
   obtain ⟨g, hgm, hae⟩ := hg'm
-  have hg : forallᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) := by
+  have hg : ∀ᵐ ω ∂μ.trim hle, Tendsto (fun n => f n ω) atTop (𝓝 (g ω)) := by
     filter_upwards [hae, hg'] with ω hω hg'ω
     exact hω ▸ hg'ω
   exact ⟨g, hgm, measure_eq_zero_of_trim_eq_zero hle hg⟩
 
-/--
-theorem `Submartingale.memLp_limitProcess` / 定理 `Submartingale.memLp_limitProcess`
+/-- The limiting process of an Lᵖ-bounded submartingale is Lᵖ. -/
+/-
+**MeasureTheory.Submartingale.memLp_limitProcess** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} {p : ENNReal}, 
+  MeasureTheory.Submartingale f ℱ μ →     (∀ (n : ℕ), MeasureTheory.eLpNorm (f n
+) p μ ≤ ↑R) →       MeasureTheory.MemLp (MeasureTheory.Filtration.limitProcess f
+ ℱ μ) p μ
+参数：∀ (n : ℕ), MeasureTheory.eLpNorm (f n) p μ ≤ ↑R；MeasureTheory.Filtration.limi
+tProcess f ℱ μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Filtration.memLp_limitProcess_of_eLpNorm_bdd`：memLp_limitP
+rocess_of_eLpNorm_bdd {R : Real>=0} {p : Real>=0∞} {F : Type*} [NormedAddCommGro
+up F] {ℱ : Filtration Nat m} {f : Nat -> Ω -> F}…
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.StronglyMeasurable.mono`：∀ {α : Type u_1} {β : Type u_2} {
+f : α → β} {m m' : MeasurableSpace α} [inst : TopologicalSpace β],   MeasureTheo
+ry.StronglyMeasurable f → m…
+· 使用定理 `MeasureTheory.Submartingale.stronglyMeasurable`：∀ {Ω : Type u_1} {E : Ty
+pe u_2} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : Measu
+reTheory.Measure Ω} [inst_1 : Normed…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
 
-English:
-theorem Submartingale.memLp_limitProcess
-  statement: {p : Real>=0∞} (hf : Submartingale f ℱ μ)
-  proof: memLp_limitProcess_of_eLpNorm_bdd
-    (fun n => ((hf.stronglyMeasurable n).mono (ℱ.le n)).aestronglyMeasurable) hbdd
-
-中文:
-定理 Submartingale.memLp_limitProcess
-  结论: {p : 实数>=0∞} (hf : Submartingale f ℱ μ)
-  证明: memLp_limitProcess_of_eLpNorm_bdd
-    (fun n => ((hf.stronglyMeasurable n).mono (ℱ.le n)).aestronglyMeasurable) hbdd
-
-Depends on / 依赖: IsSimpleModule, IsSimpleModule.nontrivial, Submodule, Submodule.span_zero.symm, aestronglyMeasurable, eq_bot_or_eq_top, exists_ne, hf.stronglyMeasurable, memLp_limitProcess_of_eLpNorm_bdd, nontrivial, span_singleton_eq_top, span_zero, stronglyMeasurable
+--- 原说明 ---
+The limiting process of an Lᵖ-bounded submartingale is Lᵖ.
 -/
-theorem Submartingale.memLp_limitProcess {p : Real>=0∞} (hf : Submartingale f ℱ μ)
-    (hbdd : forall n, eLpNorm (f n) p μ <= R) : MemLp (ℱ.limitProcess f μ) p μ :=
+theorem Submartingale.memLp_limitProcess {p : ℝ≥0∞} (hf : Submartingale f ℱ μ)
+    (hbdd : ∀ n, eLpNorm (f n) p μ ≤ R) : MemLp (ℱ.limitProcess f μ) p μ :=
   memLp_limitProcess_of_eLpNorm_bdd
     (fun n => ((hf.stronglyMeasurable n).mono (ℱ.le n)).aestronglyMeasurable) hbdd
 
@@ -528,7 +668,7 @@ end AeConvergence
 
 section L1Convergence
 
-variable [IsFiniteMeasure μ] {g : Ω -> Real}
+variable [IsFiniteMeasure μ] {g : Ω → ℝ}
 
 /-!
 
@@ -594,244 +734,327 @@ and the a.e. limit of a submartingale coincide.
 -/
 
 
-/--
-theorem `Submartingale.tendsto_eLpNorm_one_limitProcess` / 定理 `Submartingale.tendsto_eLpNorm_one_limitProcess`
+/-- Part a of the **L¹ martingale convergence theorem**: a uniformly integrable submartingale
+strongly adapted to the filtration `ℱ` converges a.e. and in L¹ to an integrable function which is
+measurable with respect to the σ-algebra `⨆ n, ℱ n`. -/
+/-
+**MeasureTheory.Submartingale.tendsto_eLpNorm_one_limitProcess** 是 Mathlib 中的一个定
+理，位于命名空间 `MeasureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} [MeasureTheory.IsFiniteMeasu
+re μ],   MeasureTheory.Submartingale f ℱ μ →     MeasureTheory.UniformIntegrable
+ f 1 μ →       Filter.Tendsto (fun n => MeasureTheory.eLpNorm (f n - MeasureTheo
+ry.Filtration.limitProcess f ℱ μ) 1 μ)         Filter.atTop (nhds 0)
+参数：fun n => MeasureTheory.eLpNorm (f n - MeasureTheory.Filtration.limitProcess f
+ ℱ μ) 1 μ；nhds 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.StronglyMeasurable.mono`：∀ {α : Type u_1} {β : Type u_2} {
+f : α → β} {m m' : MeasurableSpace α} [inst : TopologicalSpace β],   MeasureTheo
+ry.StronglyMeasurable f → m…
+· 使用定理 `MeasureTheory.Submartingale.stronglyMeasurable`：∀ {Ω : Type u_1} {E : Ty
+pe u_2} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : Measu
+reTheory.Measure Ω} [inst_1 : Normed…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.tendsto_Lp_finite_of_tendstoInMeasure`：tendsto_Lp_finite_o
+f_tendstoInMeasure [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞) (hf : forall
+ n, AEStronglyMeasurable (f n) μ) (hg : M…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `ENNReal.one_ne_top`：1 ≠ ⊤
+· 使用定理 `MeasureTheory.Filtration.memLp_limitProcess_of_eLpNorm_bdd`：memLp_limitP
+rocess_of_eLpNorm_bdd {R : Real>=0} {p : Real>=0∞} {F : Type*} [NormedAddCommGro
+up F] {ℱ : Filtration Nat m} {f : Nat -> Ω -> F}…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `MeasureTheory.tendstoInMeasure_of_tendsto_ae`：tendstoInMeasure_of_tendst
+o_ae [IsFiniteMeasure μ] (hf : forall n, AEStronglyMeasurable (f n) μ) (hfg : fo
+rallᵐ x ∂μ, Tendsto (fun n => f n …
+· 使用定理 `MeasureTheory.Submartingale.ae_tendsto_limitProcess`：∀ {Ω : Type u_1} {m
+0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtrati
+on ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} […
 
-English:
-theorem Submartingale.tendsto_eLpNorm_one_limitProcess
-  statement: (hf : Submartingale f ℱ μ)
-  proof: by
-  obtain ⟨R, hR⟩ := hunif.2.2
-  have hmeas : forall n, AEStronglyMeasurable (f n) μ := fun n =>
-    ((hf.stronglyMeasurable n).mono (ℱ.le _)).aestronglyMeasurable
-  exact tendsto_Lp_finite_of_tendstoInMeasure le_rfl ENNReal.one_ne_top hmeas
-    (memLp_limitProcess_of_eLpNorm_bdd hmeas hR) hunif.2.1
-    (tendstoInMeasure_of_tendsto_ae hmeas <| hf.ae_tendsto_limitProcess hR)
-
-中文:
-定理 Submartingale.tendsto_eLpNorm_one_limitProcess
-  结论: (hf : Submartingale f ℱ μ)
-  证明: by
-  obtain ⟨R, hR⟩ := hunif.2.2
-  have hmeas : forall n, AEStronglyMeasurable (f n) μ := fun n =>
-    ((hf.stronglyMeasurable n).mono (ℱ.le _)).aestronglyMeasurable
-  exact tendsto_Lp_finite_of_tendstoInMeasure le_rfl ENNReal.one_ne_top hmeas
-    (memLp_limitProcess_of_eLpNorm_bdd hmeas hR) hunif.2.1
-    (tendstoInMeasure_of_tendsto_ae hmeas <| hf.ae_tendsto_limitProcess hR)
-
-Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.one_ne_top, ae_tendsto_limitProcess, aestronglyMeasurable, hf.ae_tendsto_limitProcess, hf.stronglyMeasurable, le_rfl, memLp_limitProcess_of_eLpNorm_bdd, one_ne_top, stronglyMeasurable, tendstoInMeasure_of_tendsto_ae, tendsto_Lp_finite_of_tendstoInMeasure
+--- 原说明 ---
+Part a of the **L¹ martingale convergence theorem**: a uniformly integrable subm
+artingale
+strongly adapted to the filtration `ℱ` converges a.e. and in L¹ to an integrable
+ function which is
+measurable with respect to the σ-algebra `⨆ n, ℱ n`.
 -/
 theorem Submartingale.tendsto_eLpNorm_one_limitProcess (hf : Submartingale f ℱ μ)
     (hunif : UniformIntegrable f 1 μ) :
     Tendsto (fun n => eLpNorm (f n - ℱ.limitProcess f μ) 1 μ) atTop (𝓝 0) := by
   obtain ⟨R, hR⟩ := hunif.2.2
-  have hmeas : forall n, AEStronglyMeasurable (f n) μ := fun n =>
+  have hmeas : ∀ n, AEStronglyMeasurable (f n) μ := fun n =>
     ((hf.stronglyMeasurable n).mono (ℱ.le _)).aestronglyMeasurable
   exact tendsto_Lp_finite_of_tendstoInMeasure le_rfl ENNReal.one_ne_top hmeas
     (memLp_limitProcess_of_eLpNorm_bdd hmeas hR) hunif.2.1
     (tendstoInMeasure_of_tendsto_ae hmeas <| hf.ae_tendsto_limitProcess hR)
-
-/--
-theorem `Submartingale.ae_tendsto_limitProcess_of_uniformIntegrable` / 定理 `Submartingale.ae_tendsto_limitProcess_of_uniformIntegrable`
-
-English:
-theorem Submartingale.ae_tendsto_limitProcess_of_uniformIntegrable
-  statement: (hf : Submartingale f ℱ μ)
-  proof: let ⟨_, hR⟩ := hunif.2.2
-  hf.ae_tendsto_limitProcess hR
-
-中文:
-定理 Submartingale.ae_tendsto_limitProcess_of_uniform整数egrable
-  结论: (hf : Submartingale f ℱ μ)
-  证明: let ⟨_, hR⟩ := hunif.2.2
-  hf.ae_tendsto_limitProcess hR
-
-Depends on / 依赖: ae_tendsto_limitProcess, hf.ae_tendsto_limitProcess
+/-
+**MeasureTheory.Submartingale.ae_tendsto_limitProcess_of_uniformIntegrable** 是 M
+athlib 中的一个定理，位于命名空间 `MeasureTheory.Submartingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} [MeasureTheory.IsFiniteMeasu
+re μ],   MeasureTheory.Submartingale f ℱ μ →     MeasureTheory.UniformIntegrable
+ f 1 μ →       ∀ᵐ (ω : Ω) ∂μ, Filter.Tendsto (fun n => f n ω) Filter.atTop (nhds
+ (MeasureTheory.Filtration.limitProcess f ℱ μ ω))
+参数：ω : Ω；fun n => f n ω；nhds (MeasureTheory.Filtration.limitProcess f ℱ μ ω)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.Submartingale.ae_tendsto_limitProcess`：∀ {Ω : Type u_1} {m
+0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtrati
+on ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} […
 -/
 theorem Submartingale.ae_tendsto_limitProcess_of_uniformIntegrable (hf : Submartingale f ℱ μ)
     (hunif : UniformIntegrable f 1 μ) :
-    forallᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (ℱ.limitProcess f μ ω)) :=
+    ∀ᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 (ℱ.limitProcess f μ ω)) :=
   let ⟨_, hR⟩ := hunif.2.2
   hf.ae_tendsto_limitProcess hR
 
-/--
-theorem `Martingale.eq_condExp_of_tendsto_eLpNorm` / 定理 `Martingale.eq_condExp_of_tendsto_eLpNorm`
+/-- If a martingale `f` strongly adapted to `ℱ` converges in L¹ to `g`, then for all `n`, `f n` is
+almost everywhere equal to `𝔼[g | ℱ n]`. -/
+/-
+**MeasureTheory.Martingale.eq_condExp_of_tendsto_eLpNorm** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.Martingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {ℱ : MeasureTheory.Filtration ℕ 
+m0} {f : ℕ → Ω → ℝ} {g : Ω → ℝ}   {μ : MeasureTheory.Measure Ω},   MeasureTheory
+.Martingale f ℱ μ →     MeasureTheory.Integrable g μ →       Filter.Tendsto (fun
+ n => MeasureTheory.eLpNorm (f n - g) 1 μ) Filter.atTop (nhds 0) →         ∀ (n 
+: ℕ), f n =ᵐ[μ] μ[g | ↑ℱ n]
+参数：fun n => MeasureTheory.eLpNorm (f n - g) 1 μ；nhds 0；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.sub_ae_eq_zero`：∀ {α : Type u_2} {m0 : MeasurableSpace α} 
+{μ : MeasureTheory.Measure α} {β : Type u_7} [inst : AddGroup β]   (f g : α → β)
+, f - g =ᵐ[μ] 0 ↔ …
+· 使用定理 `MeasureTheory.eLpNorm_eq_zero_iff`：eLpNorm_eq_zero_iff {f : α -> ε} (hf 
+: AEStronglyMeasurable f μ) (h0 : p != 0) : eLpNorm f p μ = 0 ↔ f =ᵐ[μ] 0
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.StronglyMeasurable.sub`：∀ {α : Type u_1} {β : Type u_2} {f
+ g : α → β} {mα : MeasurableSpace α} [inst : TopologicalSpace β] [inst_1 : Sub β
+]   [ContinuousSub β],   M…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `MeasureTheory.StronglyMeasurable.mono`：∀ {α : Type u_1} {β : Type u_2} {
+f : α → β} {m m' : MeasurableSpace α} [inst : TopologicalSpace β],   MeasureTheo
+ry.StronglyMeasurable f → m…
+· 使用定理 `MeasureTheory.Martingale.stronglyMeasurable`：∀ {Ω : Type u_1} {E : Type 
+u_2} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : MeasureT
+heory.Measure Ω} [inst_1 : Normed…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.stronglyMeasurable_condExp`：stronglyMeasurable_condExp : S
+tronglyMeasurable[m] (μ[f | m])
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `tendsto_of_tendsto_of_tendsto_of_le_of_le`：tendsto_of_tendsto_of_tendsto
+_of_le_of_le [OrderTopology α] {f g h : β -> α} {b : Filter β} {a : α} (hg : Ten
+dsto g b (𝓝 a)) (hh : Tendsto h…
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `MeasureTheory.eLpNorm_condExp_le_eLpNorm`：eLpNorm_condExp_le_eLpNorm (f 
+: α -> E) {p : Real>=0∞} (hp : 1 <= p) : eLpNorm (μ[f | m]) p μ <= eLpNorm f p μ
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.eLpNorm_congr_ae`：eLpNorm_congr_ae {f g : α -> ε} (hfg : f
+ =ᵐ[μ] g) : eLpNorm f p μ = eLpNorm g p μ
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `MeasureTheory.condExp_sub`：condExp_sub (hf : Integrable f μ) (hg : Integ
+rable g μ) (m : MeasurableSpace α) : μ[f - g | m] =ᵐ[μ] μ[f | m] - μ[g | m]
+· 使用定理 `MeasureTheory.Martingale.integrable`：∀ {Ω : Type u_1} {E : Type u_2} {ι 
+: Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : MeasureTheory.Me
+asure Ω} [inst_1 : Normed…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+（共 40 条，此处仅展示前 30 条）
 
-English:
-theorem Martingale.eq_condExp_of_tendsto_eLpNorm
-  statement: {μ : Measure Ω} (hf : Martingale f ℱ μ)
-  proof: by
-  rw [← sub_ae_eq_zero]; rw [← eLpNorm_eq_zero_iff (((hf.stronglyMeasurable n).mono (ℱ.le _)).sub
-    (stronglyMeasurable_condExp.mono (ℱ.le _))).aestronglyMeasurable one_ne_zero]
-  have ht : Tendsto (fun m => eLpNorm (μ[f m - g | ℱ n]) 1 μ) atTop (𝓝 0) :=
-    haveI hint : forall m, Integrable (f m - g) μ := fun m => (hf.integrable m).sub hg
-    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hgtends (fun m => zero_le)
-      fun m => eLpNorm_condExp_le_eLpNorm _ le_rfl
-  have hev : forall m >= n, eLpNorm (μ[f m - g | ℱ n]) 1 μ = eLpNorm (f n - μ[g | ℱ n]) 1 μ := by
-    refine fun m hm => eLpNorm_congr_ae ((condExp_sub (hf.integrable m) hg _).trans ?_)
-    filter_upwards [hf.2 n m hm] with x hx
-    simp only [hx, Pi.sub_apply]
-  exact tendsto_nhds_unique (tendsto_atTop_of_eventually_const hev) ht
-
-中文:
-定理 鞅.eq_condExp_of_tendsto_eLpNorm
-  结论: {μ : 测度 Ω} (hf : 鞅 f ℱ μ)
-  证明: by
-  rw [← sub_ae_eq_zero]; rw [← eLpNorm_eq_zero_iff (((hf.stronglyMeasurable n).mono (ℱ.le _)).sub
-    (stronglyMeasurable_condExp.mono (ℱ.le _))).aestronglyMeasurable one_ne_zero]
-  have ht : Tendsto (fun m => eLpNorm (μ[f m - g | ℱ n]) 1 μ) atTop (𝓝 0) :=
-    haveI hint : forall m, Integrable (f m - g) μ := fun m => (hf.integrable m).sub hg
-    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hgtends (fun m => zero_le)
-      fun m => eLpNorm_condExp_le_eLpNorm _ le_rfl
-  have hev : forall m >= n, eLpNorm (μ[f m - g | ℱ n]) 1 μ = eLpNorm (f n - μ[g | ℱ n]) 1 μ := by
-    refine fun m hm => eLpNorm_congr_ae ((condExp_sub (hf.integrable m) hg _).trans ?_)
-    filter_upwards [hf.2 n m hm] with x hx
-    simp only [hx, Pi.sub_apply]
-  exact tendsto_nhds_unique (tendsto_atTop_of_eventually_const hev) ht
-
-Depends on / 依赖: Integrable, Tendsto, aestronglyMeasurable, eLpNor, eLpNorm, eLpNorm_condExp_le_eLpNorm, eLpNorm_eq_zero_iff, hf.integrable, hf.stronglyMeasurable, hgtends, integrable, le_rfl, one_ne_zero, stronglyMeasurable, stronglyMeasurable_condExp, stronglyMeasurable_condExp.mono, sub_ae_eq_zero, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, zero_le
+--- 原说明 ---
+If a martingale `f` strongly adapted to `ℱ` converges in L¹ to `g`, then for all
+ `n`, `f n` is
+almost everywhere equal to `𝔼[g | ℱ n]`.
 -/
 theorem Martingale.eq_condExp_of_tendsto_eLpNorm {μ : Measure Ω} (hf : Martingale f ℱ μ)
-    (hg : Integrable g μ) (hgtends : Tendsto (fun n => eLpNorm (f n - g) 1 μ) atTop (𝓝 0)) (n : Nat) :
+    (hg : Integrable g μ) (hgtends : Tendsto (fun n => eLpNorm (f n - g) 1 μ) atTop (𝓝 0)) (n : ℕ) :
     f n =ᵐ[μ] μ[g | ℱ n] := by
-  rw [← sub_ae_eq_zero]; rw [← eLpNorm_eq_zero_iff (((hf.stronglyMeasurable n).mono (ℱ.le _)).sub
+  rw [← sub_ae_eq_zero, ← eLpNorm_eq_zero_iff (((hf.stronglyMeasurable n).mono (ℱ.le _)).sub
     (stronglyMeasurable_condExp.mono (ℱ.le _))).aestronglyMeasurable one_ne_zero]
   have ht : Tendsto (fun m => eLpNorm (μ[f m - g | ℱ n]) 1 μ) atTop (𝓝 0) :=
-    haveI hint : forall m, Integrable (f m - g) μ := fun m => (hf.integrable m).sub hg
+    haveI hint : ∀ m, Integrable (f m - g) μ := fun m => (hf.integrable m).sub hg
     tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hgtends (fun m => zero_le)
       fun m => eLpNorm_condExp_le_eLpNorm _ le_rfl
-  have hev : forall m >= n, eLpNorm (μ[f m - g | ℱ n]) 1 μ = eLpNorm (f n - μ[g | ℱ n]) 1 μ := by
+  have hev : ∀ m ≥ n, eLpNorm (μ[f m - g | ℱ n]) 1 μ = eLpNorm (f n - μ[g | ℱ n]) 1 μ := by
     refine fun m hm => eLpNorm_congr_ae ((condExp_sub (hf.integrable m) hg _).trans ?_)
     filter_upwards [hf.2 n m hm] with x hx
     simp only [hx, Pi.sub_apply]
   exact tendsto_nhds_unique (tendsto_atTop_of_eventually_const hev) ht
 
-/--
-theorem `Martingale.ae_eq_condExp_limitProcess` / 定理 `Martingale.ae_eq_condExp_limitProcess`
+/-- Part b of the **L¹ martingale convergence theorem**: if `f` is a uniformly integrable martingale
+strongly adapted to the filtration `ℱ`, then for all `n`, `f n` is almost everywhere equal to the
+conditional expectation of its limiting process w.r.t. `ℱ n`. -/
+/-
+**MeasureTheory.Martingale.ae_eq_condExp_limitProcess** 是 Mathlib 中的一个定理，位于命名空间 
+`MeasureTheory.Martingale`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} [MeasureTheory.IsFiniteMeasu
+re μ],   MeasureTheory.Martingale f ℱ μ →     MeasureTheory.UniformIntegrable f 
+1 μ → ∀ (n : ℕ), f n =ᵐ[μ] μ[MeasureTheory.Filtration.limitProcess f ℱ μ | ↑ℱ n]
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.Martingale.eq_condExp_of_tendsto_eLpNorm`：∀ {Ω : Type u_1}
+ {m0 : MeasurableSpace Ω} {ℱ : MeasureTheory.Filtration ℕ m0} {f : ℕ → Ω → ℝ} {g
+ : Ω → ℝ}   {μ : MeasureTheory.Measure Ω},  …
+· 使用定理 `MeasureTheory.MemLp.integrable`：∀ {α : Type u_1} {ε : Type u_5} {m : Mea
+surableSpace α} {μ : MeasureTheory.Measure α} [inst : TopologicalSpace ε]   [ins
+t_1 : ContinuousENor…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.Filtration.memLp_limitProcess_of_eLpNorm_bdd`：memLp_limitP
+rocess_of_eLpNorm_bdd {R : Real>=0} {p : Real>=0∞} {F : Type*} [NormedAddCommGro
+up F] {ℱ : Filtration Nat m} {f : Nat -> Ω -> F}…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `MeasureTheory.Submartingale.tendsto_eLpNorm_one_limitProcess`：∀ {Ω : Typ
+e u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory
+.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} [MeasureTheory…
+· 使用定理 `MeasureTheory.Martingale.submartingale`：submartingale [Preorder E] (hf :
+ Martingale f ℱ μ) : Submartingale f ℱ μ
 
-English:
-theorem Martingale.ae_eq_condExp_limitProcess
-  statement: (hf : Martingale f ℱ μ)
-  proof: let ⟨_, hR⟩ := hbdd.2.2
-  hf.eq_condExp_of_tendsto_eLpNorm ((memLp_limitProcess_of_eLpNorm_bdd hbdd.1 hR).integrable le_rfl)
-    (hf.submartingale.tendsto_eLpNorm_one_limitProcess hbdd) n
-
-中文:
-定理 鞅.ae_eq_condExp_limitProcess
-  结论: (hf : 鞅 f ℱ μ)
-  证明: let ⟨_, hR⟩ := hbdd.2.2
-  hf.eq_condExp_of_tendsto_eLpNorm ((memLp_limitProcess_of_eLpNorm_bdd hbdd.1 hR).integrable le_rfl)
-    (hf.submartingale.tendsto_eLpNorm_one_limitProcess hbdd) n
-
-Depends on / 依赖: eq_condExp_of_tendsto_eLpNorm, hf.eq_condExp_of_tendsto_eLpNorm, hf.submartingale.tendsto_eLpNorm_one_limitProcess, integrable, le_rfl, memLp_limitProcess_of_eLpNorm_bdd, submartingale, tendsto_eLpNorm_one_limitProcess
+--- 原说明 ---
+Part b of the **L¹ martingale convergence theorem**: if `f` is a uniformly integ
+rable martingale
+strongly adapted to the filtration `ℱ`, then for all `n`, `f n` is almost everyw
+here equal to the
+conditional expectation of its limiting process w.r.t. `ℱ n`.
 -/
 theorem Martingale.ae_eq_condExp_limitProcess (hf : Martingale f ℱ μ)
-    (hbdd : UniformIntegrable f 1 μ) (n : Nat) : f n =ᵐ[μ] μ[ℱ.limitProcess f μ | ℱ n] :=
+    (hbdd : UniformIntegrable f 1 μ) (n : ℕ) : f n =ᵐ[μ] μ[ℱ.limitProcess f μ | ℱ n] :=
   let ⟨_, hR⟩ := hbdd.2.2
   hf.eq_condExp_of_tendsto_eLpNorm ((memLp_limitProcess_of_eLpNorm_bdd hbdd.1 hR).integrable le_rfl)
     (hf.submartingale.tendsto_eLpNorm_one_limitProcess hbdd) n
 
-/--
-theorem `Integrable.tendsto_ae_condExp` / 定理 `Integrable.tendsto_ae_condExp`
+/-- Part c of the **L¹ martingale convergence theorem**: Given an integrable function `g` which
+is measurable with respect to `⨆ n, ℱ n` where `ℱ` is a filtration, the martingale defined by
+`𝔼[g | ℱ n]` converges almost everywhere to `g`.
 
-English:
-theorem Integrable.tendsto_ae_condExp
-  statement: (hg : Integrable g μ)
-  proof: by
-  have hle : ⨆ n, ℱ n <= m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
-  have hunif : UniformIntegrable (fun n => μ[g | ℱ n]) 1 μ :=
-    hg.uniformIntegrable_condExp_filtration
-  obtain ⟨R, hR⟩ := hunif.2.2
-  have hlimint : Integrable (ℱ.limitProcess (fun n => μ[g | ℱ n]) μ) μ :=
-    (memLp_limitProcess_of_eLpNorm_bdd hunif.1 hR).integrable le_rfl
-  suffices g =ᵐ[μ] ℱ.limitProcess (fun n x => (μ[g | ℱ n]) x) μ by
-    filter_upwards [this, (martingale_condExp g ℱ μ).submartingale.ae_tendsto_limitProcess hR] with
-      x heq ht
-    rwa [heq]
-  have : forall n s, MeasurableSet[ℱ n] s ->
-      ∫ x in s, g x ∂μ = ∫ x in s, ℱ.limitProcess (fun n x => (μ[g | ℱ n]) x) μ x ∂μ := by
-    intro n s hs
-    rw [← setIntegral_condExp (ℱ.le n) hg hs]; rw [← setIntegral_condExp (ℱ.le n) hlimint hs]
-    refine setIntegral_congr_ae (ℱ.le _ _ hs) ?_
-    filter_upwards [(martingale_condExp g ℱ μ).ae_eq_condExp_limitProcess hunif n] with x hx _
-    rw [hx]
-  refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' hle (fun s _ _ => hg.integrableOn)
-    (fun s _ _ => hlimint.integrableOn) (fun s hs _ => ?_) hgmeas.aestronglyMeasurable
-    stronglyMeasurable_limitProcess.aestronglyMeasurable
-  have hpi : IsPiSystem {s | exists n, MeasurableSet[ℱ n] s} := by
-    rw [Set.ofPred_exists]
-    exact isPiSystem_iUnion_of_monotone _ (fun n => (ℱ n).isPiSystem_measurableSet) fun _ _ => ℱ.mono
-  induction s, hs
-    using MeasurableSpace.induction_on_inter (MeasurableSpace.measurableSpace_iSup_eq ℱ) hpi with
-  | empty =>
-    simp only [Measure.restrict_empty, integral_zero_measure]
-  | basic s hs =>
-    rcases hs with ⟨n, hn⟩
-    exact this n _ hn
-  | compl t htmeas ht =>
-    have hgeq := @setIntegral_compl _ _ (⨆ n, ℱ n) _ _ _ _ _ htmeas (hg.trim hle hgmeas)
-    have hheq := @setIntegral_compl _ _ (⨆ n, ℱ n) _ _ _ _ _ htmeas
-      (hlimint.trim hle stronglyMeasurable_limitProcess)
-    rw [setIntegral_trim hle hgmeas htmeas.compl]; rw [setIntegral_trim hle stronglyMeasurable_limitProcess htmeas.compl]; rw [hgeq]; rw [hheq]; rw [←
-      setIntegral_trim hle hgmeas htmeas]; rw [←
-      setIntegral_trim hle stronglyMeasurable_limitProcess htmeas]; rw [← integral_trim hle hgmeas]; rw [←
-      integral_trim hle stronglyMeasurable_limitProcess]; rw [← setIntegral_univ]; rw [this 0 _ MeasurableSet.univ]; rw [setIntegral_univ]; rw [ht (measure_lt_top _ _)]
-  | iUnion f hf hfmeas heq =>
-    rw [integral_iUnion (fun n => hle _ (hfmeas n)) hf hg.integrableOn]; rw [integral_iUnion (fun n => hle _ (hfmeas n)) hf hlimint.integrableOn]
-    exact tsum_congr fun n => heq _ (measure_lt_top _ _)
+This martingale also converges to `g` in L¹ and this result is provided by
+`MeasureTheory.Integrable.tendsto_eLpNorm_condExp` -/
+/-
+**MeasureTheory.Integrable.tendsto_ae_condExp** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.Integrable`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   [MeasureTheory.IsFiniteMeasure μ] {g : Ω → ℝ
+},   MeasureTheory.Integrable g μ →     MeasureTheory.StronglyMeasurable g →    
+   ∀ᵐ (x : Ω) ∂μ, Filter.Tendsto (fun n => μ[g | ↑ℱ n] x) Filter.atTop (nhds (g 
+x))
+参数：x : Ω；fun n => μ[g | ↑ℱ n] x；nhds (g x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_le`：sSup_le (h : forall b in s, b <= a) : sSup s <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.Integrable.uniformIntegrable_condExp_filtration`：∀ {Ω : Ty
+pe u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι] {μ : MeasureT
+heory.Measure Ω}   [MeasureTheory.IsFiniteMeasure μ…
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.MemLp.integrable`：∀ {α : Type u_1} {ε : Type u_5} {m : Mea
+surableSpace α} {μ : MeasureTheory.Measure α} [inst : TopologicalSpace ε]   [ins
+t_1 : ContinuousENor…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasureTheory.Filtration.memLp_limitProcess_of_eLpNorm_bdd`：memLp_limitP
+rocess_of_eLpNorm_bdd {R : Real>=0} {p : Real>=0∞} {F : Type*} [NormedAddCommGro
+up F] {ℱ : Filtration Nat m} {f : Nat -> Ω -> F}…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.setIntegral_condExp`：setIntegral_condExp (hm : m <= m₀) [S
+igmaFinite (μ.trim hm)] (hf : Integrable f μ) (hs : MeasurableSet[m] s) : ∫ x in
+ s, (μ[f | m]) x ∂μ = ∫…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.sigmaFiniteFiltration`：∀ {Ω : Type u_1} {ι
+ : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι] (μ : MeasureTheory.Meas
+ure Ω)   (f : MeasureTheory.Filtration ι …
+· 使用定理 `MeasureTheory.setIntegral_congr_ae`：setIntegral_congr_ae (hs : Measurabl
+eSet s) (h : forallᵐ x ∂μ, x in s -> f x = g x) : ∫ x in s, f x ∂μ = ∫ x in s, g
+ x ∂μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Martingale.ae_eq_condExp_limitProcess`：∀ {Ω : Type u_1} {m
+0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtrati
+on ℕ m0}   {f : ℕ → Ω → ℝ} [MeasureTheory…
+· 使用定理 `MeasureTheory.martingale_condExp`：martingale_condExp [CompleteSpace E] (
+f : Ω -> E) (ℱ : Filtration ι m0) (μ : Measure Ω) [SigmaFiniteFiltration μ ℱ] : 
+Martingale (fun i => μ…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `MeasureTheory.ae_eq_of_forall_setIntegral_eq_of_sigmaFinite'`：ae_eq_of_f
+orall_setIntegral_eq_of_sigmaFinite' (hm : m <= m0) [SigmaFinite (μ.trim hm)] {f
+ g : α -> F'} (hf_int_finite : forall s, Measurabl…
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用定理 `Set.ofPred_exists`：ofPred_exists (p : ι -> β -> Prop) : { x | exists i, 
+p i x } = ⋃ i, { x | p i x }
+· 使用定理 `isPiSystem_iUnion_of_monotone`：isPiSystem_iUnion_of_monotone {α ι} [Semi
+latticeSup ι] (p : ι -> Set (Set α)) (hp_pi : forall n, IsPiSystem (p n)) (hp_mo
+no : Monotone p) : …
+· 使用定理 `MeasurableSpace.isPiSystem_measurableSet`：isPiSystem_measurableSet {α : 
+Type*} [MeasurableSpace α] : IsPiSystem { s : Set α | MeasurableSet s }
+· 使用定理 `MeasureTheory.Filtration.mono`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Meas
+urableSpace Ω} [inst : Preorder ι] {i j : ι}   (f : MeasureTheory.Filtration ι m
+), i ≤ j → ↑f i ≤ ↑…
+· 使用定理 `MeasurableSpace.induction_on_inter`：induction_on_inter {m : MeasurableSp
+ace α} {C : forall s : Set α, MeasurableSet s -> Prop} {s : Set (Set α)} (h_eq :
+ m = generateFrom s) (h_…
+· 使用定理 `MeasurableSpace.measurableSpace_iSup_eq`：measurableSpace_iSup_eq (m : ι 
+-> MeasurableSpace α) : ⨆ n, m n = generateFrom { s | exists n, MeasurableSet[m 
+n] s }
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+（共 49 条，此处仅展示前 30 条）
 
-中文:
-定理 可积.tendsto_ae_condExp
-  结论: (hg : 可积 g μ)
-  证明: by
-  have hle : ⨆ n, ℱ n <= m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
-  have hunif : UniformIntegrable (fun n => μ[g | ℱ n]) 1 μ :=
-    hg.uniformIntegrable_condExp_filtration
-  obtain ⟨R, hR⟩ := hunif.2.2
-  have hlimint : Integrable (ℱ.limitProcess (fun n => μ[g | ℱ n]) μ) μ :=
-    (memLp_limitProcess_of_eLpNorm_bdd hunif.1 hR).integrable le_rfl
-  suffices g =ᵐ[μ] ℱ.limitProcess (fun n x => (μ[g | ℱ n]) x) μ by
-    filter_upwards [this, (martingale_condExp g ℱ μ).submartingale.ae_tendsto_limitProcess hR] with
-      x heq ht
-    rwa [heq]
-  have : forall n s, MeasurableSet[ℱ n] s ->
-      ∫ x in s, g x ∂μ = ∫ x in s, ℱ.limitProcess (fun n x => (μ[g | ℱ n]) x) μ x ∂μ := by
-    intro n s hs
-    rw [← setIntegral_condExp (ℱ.le n) hg hs]; rw [← setIntegral_condExp (ℱ.le n) hlimint hs]
-    refine setIntegral_congr_ae (ℱ.le _ _ hs) ?_
-    filter_upwards [(martingale_condExp g ℱ μ).ae_eq_condExp_limitProcess hunif n] with x hx _
-    rw [hx]
-  refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' hle (fun s _ _ => hg.integrableOn)
-    (fun s _ _ => hlimint.integrableOn) (fun s hs _ => ?_) hgmeas.aestronglyMeasurable
-    stronglyMeasurable_limitProcess.aestronglyMeasurable
-  have hpi : IsPiSystem {s | exists n, MeasurableSet[ℱ n] s} := by
-    rw [Set.ofPred_exists]
-    exact isPiSystem_iUnion_of_monotone _ (fun n => (ℱ n).isPiSystem_measurableSet) fun _ _ => ℱ.mono
-  induction s, hs
-    using MeasurableSpace.induction_on_inter (MeasurableSpace.measurableSpace_iSup_eq ℱ) hpi with
-  | empty =>
-    simp only [Measure.restrict_empty, integral_zero_measure]
-  | basic s hs =>
-    rcases hs with ⟨n, hn⟩
-    exact this n _ hn
-  | compl t htmeas ht =>
-    have hgeq := @setIntegral_compl _ _ (⨆ n, ℱ n) _ _ _ _ _ htmeas (hg.trim hle hgmeas)
-    have hheq := @setIntegral_compl _ _ (⨆ n, ℱ n) _ _ _ _ _ htmeas
-      (hlimint.trim hle stronglyMeasurable_limitProcess)
-    rw [setIntegral_trim hle hgmeas htmeas.compl]; rw [setIntegral_trim hle stronglyMeasurable_limitProcess htmeas.compl]; rw [hgeq]; rw [hheq]; rw [←
-      setIntegral_trim hle hgmeas htmeas]; rw [←
-      setIntegral_trim hle stronglyMeasurable_limitProcess htmeas]; rw [← integral_trim hle hgmeas]; rw [←
-      integral_trim hle stronglyMeasurable_limitProcess]; rw [← setIntegral_univ]; rw [this 0 _ MeasurableSet.univ]; rw [setIntegral_univ]; rw [ht (measure_lt_top _ _)]
-  | iUnion f hf hfmeas heq =>
-    rw [integral_iUnion (fun n => hle _ (hfmeas n)) hf hg.integrableOn]; rw [integral_iUnion (fun n => hle _ (hfmeas n)) hf hlimint.integrableOn]
-    exact tsum_congr fun n => heq _ (measure_lt_top _ _)
+--- 原说明 ---
+Part c of the **L¹ martingale convergence theorem**: Given an integrable functio
+n `g` which
+is measurable with respect to `⨆ n, ℱ n` where `ℱ` is a filtration, the martinga
+le defined by
+`𝔼[g | ℱ n]` converges almost everywhere to `g`.
 
-Depends on / 依赖: Integrable, UniformIntegrable, ae_tendsto_limitProcess, filter_upwards, hg.uniformIntegrable_condExp_filtration, hlimint, integrable, le_rfl, limitProcess, martingale_condExp, memLp_limitProcess_of_eLpNorm_bdd, sSup_le, submartingale, submartingale.ae_tendsto_limitProcess, uniformIntegrable_condExp_filtration
+This martingale also converges to `g` in L¹ and this result is provided by
+`MeasureTheory.Integrable.tendsto_eLpNorm_condExp`
 -/
 theorem Integrable.tendsto_ae_condExp (hg : Integrable g μ)
     (hgmeas : StronglyMeasurable[⨆ n, ℱ n] g) :
-    forallᵐ x ∂μ, Tendsto (fun n => (μ[g | ℱ n]) x) atTop (𝓝 (g x)) := by
-  have hle : ⨆ n, ℱ n <= m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
+    ∀ᵐ x ∂μ, Tendsto (fun n => (μ[g | ℱ n]) x) atTop (𝓝 (g x)) := by
+  have hle : ⨆ n, ℱ n ≤ m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
   have hunif : UniformIntegrable (fun n => μ[g | ℱ n]) 1 μ :=
     hg.uniformIntegrable_condExp_filtration
   obtain ⟨R, hR⟩ := hunif.2.2
@@ -841,19 +1064,19 @@ theorem Integrable.tendsto_ae_condExp (hg : Integrable g μ)
     filter_upwards [this, (martingale_condExp g ℱ μ).submartingale.ae_tendsto_limitProcess hR] with
       x heq ht
     rwa [heq]
-  have : forall n s, MeasurableSet[ℱ n] s ->
+  have : ∀ n s, MeasurableSet[ℱ n] s →
       ∫ x in s, g x ∂μ = ∫ x in s, ℱ.limitProcess (fun n x => (μ[g | ℱ n]) x) μ x ∂μ := by
     intro n s hs
-    rw [← setIntegral_condExp (ℱ.le n) hg hs]; rw [← setIntegral_condExp (ℱ.le n) hlimint hs]
+    rw [← setIntegral_condExp (ℱ.le n) hg hs, ← setIntegral_condExp (ℱ.le n) hlimint hs]
     refine setIntegral_congr_ae (ℱ.le _ _ hs) ?_
     filter_upwards [(martingale_condExp g ℱ μ).ae_eq_condExp_limitProcess hunif n] with x hx _
     rw [hx]
   refine ae_eq_of_forall_setIntegral_eq_of_sigmaFinite' hle (fun s _ _ => hg.integrableOn)
     (fun s _ _ => hlimint.integrableOn) (fun s hs _ => ?_) hgmeas.aestronglyMeasurable
     stronglyMeasurable_limitProcess.aestronglyMeasurable
-  have hpi : IsPiSystem {s | exists n, MeasurableSet[ℱ n] s} := by
+  have hpi : IsPiSystem {s | ∃ n, MeasurableSet[ℱ n] s} := by
     rw [Set.ofPred_exists]
-    exact isPiSystem_iUnion_of_monotone _ (fun n => (ℱ n).isPiSystem_measurableSet) fun _ _ => ℱ.mono
+    exact isPiSystem_iUnion_of_monotone _ (fun n ↦ (ℱ n).isPiSystem_measurableSet) fun _ _ ↦ ℱ.mono
   induction s, hs
     using MeasurableSpace.induction_on_inter (MeasurableSpace.measurableSpace_iSup_eq ℱ) hpi with
   | empty =>
@@ -865,38 +1088,74 @@ theorem Integrable.tendsto_ae_condExp (hg : Integrable g μ)
     have hgeq := @setIntegral_compl _ _ (⨆ n, ℱ n) _ _ _ _ _ htmeas (hg.trim hle hgmeas)
     have hheq := @setIntegral_compl _ _ (⨆ n, ℱ n) _ _ _ _ _ htmeas
       (hlimint.trim hle stronglyMeasurable_limitProcess)
-    rw [setIntegral_trim hle hgmeas htmeas.compl]; rw [setIntegral_trim hle stronglyMeasurable_limitProcess htmeas.compl]; rw [hgeq]; rw [hheq]; rw [←
-      setIntegral_trim hle hgmeas htmeas]; rw [←
-      setIntegral_trim hle stronglyMeasurable_limitProcess htmeas]; rw [← integral_trim hle hgmeas]; rw [←
-      integral_trim hle stronglyMeasurable_limitProcess]; rw [← setIntegral_univ]; rw [this 0 _ MeasurableSet.univ]; rw [setIntegral_univ]; rw [ht (measure_lt_top _ _)]
+    rw [setIntegral_trim hle hgmeas htmeas.compl,
+      setIntegral_trim hle stronglyMeasurable_limitProcess htmeas.compl, hgeq, hheq, ←
+      setIntegral_trim hle hgmeas htmeas, ←
+      setIntegral_trim hle stronglyMeasurable_limitProcess htmeas, ← integral_trim hle hgmeas, ←
+      integral_trim hle stronglyMeasurable_limitProcess, ← setIntegral_univ,
+      this 0 _ MeasurableSet.univ, setIntegral_univ, ht (measure_lt_top _ _)]
   | iUnion f hf hfmeas heq =>
-    rw [integral_iUnion (fun n => hle _ (hfmeas n)) hf hg.integrableOn]; rw [integral_iUnion (fun n => hle _ (hfmeas n)) hf hlimint.integrableOn]
+    rw [integral_iUnion (fun n => hle _ (hfmeas n)) hf hg.integrableOn,
+      integral_iUnion (fun n => hle _ (hfmeas n)) hf hlimint.integrableOn]
     exact tsum_congr fun n => heq _ (measure_lt_top _ _)
 
-/--
-theorem `Integrable.tendsto_eLpNorm_condExp` / 定理 `Integrable.tendsto_eLpNorm_condExp`
+/-- Part c of the **L¹ martingale convergence theorem**: Given an integrable function `g` which
+is measurable with respect to `⨆ n, ℱ n` where `ℱ` is a filtration, the martingale defined by
+`𝔼[g | ℱ n]` converges in L¹ to `g`.
 
-English:
-theorem Integrable.tendsto_eLpNorm_condExp
-  statement: (hg : Integrable g μ)
-  proof: tendsto_Lp_finite_of_tendstoInMeasure le_rfl ENNReal.one_ne_top
-    (fun n => (stronglyMeasurable_condExp.mono (ℱ.le n)).aestronglyMeasurable)
-    (memLp_one_iff_integrable.2 hg) hg.uniformIntegrable_condExp_filtration.2.1
-    (tendstoInMeasure_of_tendsto_ae
-      (fun n => (stronglyMeasurable_condExp.mono (ℱ.le n)).aestronglyMeasurable)
-      (hg.tendsto_ae_condExp hgmeas))
+This martingale also converges to `g` almost everywhere and this result is provided by
+`MeasureTheory.Integrable.tendsto_ae_condExp` -/
+/-
+**MeasureTheory.Integrable.tendsto_eLpNorm_condExp** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.Integrable`。
+形式化陈述：∀ {Ω : Type u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ
+ : MeasureTheory.Filtration ℕ m0}   [MeasureTheory.IsFiniteMeasure μ] {g : Ω → ℝ
+},   MeasureTheory.Integrable g μ →     MeasureTheory.StronglyMeasurable g →    
+   Filter.Tendsto (fun n => MeasureTheory.eLpNorm (μ[g | ↑ℱ n] - g) 1 μ) Filter.
+atTop (nhds 0)
+参数：fun n => MeasureTheory.eLpNorm (μ[g | ↑ℱ n] - g) 1 μ；nhds 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.tendsto_Lp_finite_of_tendstoInMeasure`：tendsto_Lp_finite_o
+f_tendstoInMeasure [IsFiniteMeasure μ] (hp : 1 <= p) (hp' : p != ∞) (hf : forall
+ n, AEStronglyMeasurable (f n) μ) (hg : M…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `ENNReal.one_ne_top`：1 ≠ ⊤
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.StronglyMeasurable.mono`：∀ {α : Type u_1} {β : Type u_2} {
+f : α → β} {m m' : MeasurableSpace α} [inst : TopologicalSpace β],   MeasureTheo
+ry.StronglyMeasurable f → m…
+· 使用定理 `MeasureTheory.stronglyMeasurable_condExp`：stronglyMeasurable_condExp : S
+tronglyMeasurable[m] (μ[f | m])
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.memLp_one_iff_integrable`：memLp_one_iff_integrable {f : α 
+-> ε} : MemLp f 1 μ ↔ Integrable f μ
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.Integrable.uniformIntegrable_condExp_filtration`：∀ {Ω : Ty
+pe u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι] {μ : MeasureT
+heory.Measure Ω}   [MeasureTheory.IsFiniteMeasure μ…
+· 使用定理 `MeasureTheory.tendstoInMeasure_of_tendsto_ae`：tendstoInMeasure_of_tendst
+o_ae [IsFiniteMeasure μ] (hf : forall n, AEStronglyMeasurable (f n) μ) (hfg : fo
+rallᵐ x ∂μ, Tendsto (fun n => f n …
+· 使用定理 `MeasureTheory.Integrable.tendsto_ae_condExp`：∀ {Ω : Type u_1} {m0 : Meas
+urableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtration ℕ m0}
+   [MeasureTheory.IsFiniteMeasure…
 
-中文:
-定理 可积.tendsto_eLpNorm_condExp
-  结论: (hg : 可积 g μ)
-  证明: tendsto_Lp_finite_of_tendstoInMeasure le_rfl ENNReal.one_ne_top
-    (fun n => (stronglyMeasurable_condExp.mono (ℱ.le n)).aestronglyMeasurable)
-    (memLp_one_iff_integrable.2 hg) hg.uniformIntegrable_condExp_filtration.2.1
-    (tendstoInMeasure_of_tendsto_ae
-      (fun n => (stronglyMeasurable_condExp.mono (ℱ.le n)).aestronglyMeasurable)
-      (hg.tendsto_ae_condExp hgmeas))
+--- 原说明 ---
+Part c of the **L¹ martingale convergence theorem**: Given an integrable functio
+n `g` which
+is measurable with respect to `⨆ n, ℱ n` where `ℱ` is a filtration, the martinga
+le defined by
+`𝔼[g | ℱ n]` converges in L¹ to `g`.
 
-Depends on / 依赖: ENNReal, ENNReal.one_ne_top, aestronglyMeasurable, hg.tendsto_ae_condExp, hg.uniformIntegrable_condExp_filtration, hgmeas, le_rfl, memLp_one_iff_integrable, one_ne_top, stronglyMeasurable_condExp, stronglyMeasurable_condExp.mono, tendstoInMeasure_of_tendsto_ae, tendsto_Lp_finite_of_tendstoInMeasure, tendsto_ae_condExp, uniformIntegrable_condExp_filtration
+This martingale also converges to `g` almost everywhere and this result is provi
+ded by
+`MeasureTheory.Integrable.tendsto_ae_condExp`
 -/
 theorem Integrable.tendsto_eLpNorm_condExp (hg : Integrable g μ)
     (hgmeas : StronglyMeasurable[⨆ n, ℱ n] g) :
@@ -908,85 +1167,122 @@ theorem Integrable.tendsto_eLpNorm_condExp (hg : Integrable g μ)
       (fun n => (stronglyMeasurable_condExp.mono (ℱ.le n)).aestronglyMeasurable)
       (hg.tendsto_ae_condExp hgmeas))
 
-/--
-theorem `tendsto_ae_condExp` / 定理 `tendsto_ae_condExp`
+/-- **Lévy's upward theorem**, almost everywhere version: given a function `g` and a filtration
+`ℱ`, the sequence defined by `𝔼[g | ℱ n]` converges almost everywhere to `𝔼[g | ⨆ n, ℱ n]`. -/
+/-
+**MeasureTheory.tendsto_ae_condExp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：tendsto_ae_condExp (g : Ω -> Real) : forallᵐ x ∂μ, Tendsto (fun n => (μ[g 
+| ℱ n]) x) atTop (𝓝 ((μ[g | ⨆ n, ℱ n]) x))
+参数：g : Ω -> Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Integrable.tendsto_ae_condExp`：∀ {Ω : Type u_1} {m0 : Meas
+urableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtration ℕ m0}
+   [MeasureTheory.IsFiniteMeasure…
+· 使用定理 `MeasureTheory.integrable_condExp`：integrable_condExp : Integrable (μ[f |
+ m]) μ
+· 使用定理 `MeasureTheory.stronglyMeasurable_condExp`：stronglyMeasurable_condExp : S
+tronglyMeasurable[m] (μ[f | m])
+· 使用定理 `MeasureTheory.condExp_condExp_of_le`：condExp_condExp_of_le {m₁ m₂ m₀ : M
+easurableSpace α} {μ : Measure α} (hm₁₂ : m₁ <= m₂) (hm₂ : m₂ <= m₀) [SigmaFinit
+e (μ.trim hm₂)] : μ[μ[f |…
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.ae_all_iff`：ae_all_iff {ι : Sort*} [Countable ι] {p : α ->
+ ι -> Prop} : (forallᵐ a ∂μ, forall i, p a i) ↔ forall i, forallᵐ a ∂μ, p a i
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Filter.Tendsto.congr`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {l
+₁ : Filter α} {l₂ : Filter β},   (∀ (x : α), f₁ x = f₂ x) → Filter.Tendsto f₁ l₁
+ l₂ → Filt…
 
-English:
-theorem tendsto_ae_condExp
-  given: (g : Ω -> Real)
-  proof: by
-  have ht : forallᵐ x ∂μ, Tendsto (fun n => (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x)
-      atTop (𝓝 ((μ[g | ⨆ n, ℱ n]) x)) :=
-    integrable_condExp.tendsto_ae_condExp stronglyMeasurable_condExp
-  have heq : forall n, forallᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
-    condExp_condExp_of_le (le_iSup _ n) (iSup_le fun n => ℱ.le n)
-  rw [← ae_all_iff] at heq
-  filter_upwards [heq, ht] with x hxeq hxt
-  exact hxt.congr hxeq
-
-中文:
-定理 tendsto_ae_condExp
-  条件: (g : Ω -> 实数)
-  证明: by
-  have ht : forallᵐ x ∂μ, Tendsto (fun n => (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x)
-      atTop (𝓝 ((μ[g | ⨆ n, ℱ n]) x)) :=
-    integrable_condExp.tendsto_ae_condExp stronglyMeasurable_condExp
-  have heq : forall n, forallᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
-    condExp_condExp_of_le (le_iSup _ n) (iSup_le fun n => ℱ.le n)
-  rw [← ae_all_iff] at heq
-  filter_upwards [heq, ht] with x hxeq hxt
-  exact hxt.congr hxeq
-
-Depends on / 依赖: Tendsto, ae_all_iff, condExp_condExp_of_le, filter_upwards, hxt.congr, iSup_le, integrable_condExp, integrable_condExp.tendsto_ae_condExp, le_iSup, stronglyMeasurable_condExp, tendsto_ae_condExp
+--- 原说明 ---
+**Lévy's upward theorem**, almost everywhere version: given a function `g` and a
+ filtration
+`ℱ`, the sequence defined by `𝔼[g | ℱ n]` converges almost everywhere to `𝔼[g | 
+⨆ n, ℱ n]`.
 -/
-theorem tendsto_ae_condExp (g : Ω -> Real) :
-    forallᵐ x ∂μ, Tendsto (fun n => (μ[g | ℱ n]) x) atTop (𝓝 ((μ[g | ⨆ n, ℱ n]) x)) := by
-  have ht : forallᵐ x ∂μ, Tendsto (fun n => (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x)
+theorem tendsto_ae_condExp (g : Ω → ℝ) :
+    ∀ᵐ x ∂μ, Tendsto (fun n => (μ[g | ℱ n]) x) atTop (𝓝 ((μ[g | ⨆ n, ℱ n]) x)) := by
+  have ht : ∀ᵐ x ∂μ, Tendsto (fun n => (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x)
       atTop (𝓝 ((μ[g | ⨆ n, ℱ n]) x)) :=
     integrable_condExp.tendsto_ae_condExp stronglyMeasurable_condExp
-  have heq : forall n, forallᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
+  have heq : ∀ n, ∀ᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
     condExp_condExp_of_le (le_iSup _ n) (iSup_le fun n => ℱ.le n)
   rw [← ae_all_iff] at heq
   filter_upwards [heq, ht] with x hxeq hxt
   exact hxt.congr hxeq
 
-/--
-theorem `tendsto_eLpNorm_condExp` / 定理 `tendsto_eLpNorm_condExp`
+/-- **Lévy's upward theorem**, L¹ version: given a function `g` and a filtration `ℱ`, the
+sequence defined by `𝔼[g | ℱ n]` converges in L¹ to `𝔼[g | ⨆ n, ℱ n]`. -/
+/-
+**MeasureTheory.tendsto_eLpNorm_condExp** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+`。
+形式化陈述：tendsto_eLpNorm_condExp (g : Ω -> Real) : Tendsto (fun n => eLpNorm (μ[g |
+ ℱ n] - μ[g | ⨆ n, ℱ n]) 1 μ) atTop (𝓝 0)
+参数：g : Ω -> Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Integrable.tendsto_eLpNorm_condExp`：∀ {Ω : Type u_1} {m0 :
+ MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtration 
+ℕ m0}   [MeasureTheory.IsFiniteMeasure…
+· 使用定理 `MeasureTheory.integrable_condExp`：integrable_condExp : Integrable (μ[f |
+ m]) μ
+· 使用定理 `MeasureTheory.stronglyMeasurable_condExp`：stronglyMeasurable_condExp : S
+tronglyMeasurable[m] (μ[f | m])
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.condExp_condExp_of_le`：condExp_condExp_of_le {m₁ m₂ m₀ : M
+easurableSpace α} {μ : Measure α} (hm₁₂ : m₁ <= m₂) (hm₂ : m₂ <= m₀) [SigmaFinit
+e (μ.trim hm₂)] : μ[μ[f |…
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.IsFiniteMeasure.toSigmaFinite`：∀ {α : Type u_1} {_m0 : Mea
+surableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsFiniteMeasure μ],
+   MeasureTheory.SigmaFinite μ
+· 使用定理 `Filter.Tendsto.congr`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {l
+₁ : Filter α} {l₂ : Filter β},   (∀ (x : α), f₁ x = f₂ x) → Filter.Tendsto f₁ l₁
+ l₂ → Filt…
+· 使用定理 `MeasureTheory.eLpNorm_congr_ae`：eLpNorm_congr_ae {f g : α -> ε} (hfg : f
+ =ᵐ[μ] g) : eLpNorm f p μ = eLpNorm g p μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem tendsto_eLpNorm_condExp
-  given: (g : Ω -> Real)
-  proof: by
-  have ht : Tendsto (fun n => eLpNorm (μ[μ[g | ⨆ n, ℱ n] | ℱ n] - μ[g | ⨆ n, ℱ n]) 1 μ)
-      atTop (𝓝 0) :=
-    integrable_condExp.tendsto_eLpNorm_condExp stronglyMeasurable_condExp
-  have heq : forall n, forallᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
-    condExp_condExp_of_le (le_iSup _ n) (iSup_le fun n => ℱ.le n)
-  refine ht.congr fun n => eLpNorm_congr_ae ?_
-  filter_upwards [heq n] with x hxeq
-  simp only [hxeq, Pi.sub_apply]
-
-中文:
-定理 tendsto_eLpNorm_condExp
-  条件: (g : Ω -> 实数)
-  证明: by
-  have ht : Tendsto (fun n => eLpNorm (μ[μ[g | ⨆ n, ℱ n] | ℱ n] - μ[g | ⨆ n, ℱ n]) 1 μ)
-      atTop (𝓝 0) :=
-    integrable_condExp.tendsto_eLpNorm_condExp stronglyMeasurable_condExp
-  have heq : forall n, forallᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
-    condExp_condExp_of_le (le_iSup _ n) (iSup_le fun n => ℱ.le n)
-  refine ht.congr fun n => eLpNorm_congr_ae ?_
-  filter_upwards [heq n] with x hxeq
-  simp only [hxeq, Pi.sub_apply]
-
-Depends on / 依赖: Pi.sub_apply, Tendsto, condExp_condExp_of_le, eLpNorm, eLpNorm_congr_ae, filter_upwards, ht.congr, iSup_le, integrable_condExp, integrable_condExp.tendsto_eLpNorm_condExp, le_iSup, stronglyMeasurable_condExp, sub_apply, tendsto_eLpNorm_condExp
+--- 原说明 ---
+**Lévy's upward theorem**, L¹ version: given a function `g` and a filtration `ℱ`
+, the
+sequence defined by `𝔼[g | ℱ n]` converges in L¹ to `𝔼[g | ⨆ n, ℱ n]`.
 -/
-theorem tendsto_eLpNorm_condExp (g : Ω -> Real) :
+theorem tendsto_eLpNorm_condExp (g : Ω → ℝ) :
     Tendsto (fun n => eLpNorm (μ[g | ℱ n] - μ[g | ⨆ n, ℱ n]) 1 μ) atTop (𝓝 0) := by
   have ht : Tendsto (fun n => eLpNorm (μ[μ[g | ⨆ n, ℱ n] | ℱ n] - μ[g | ⨆ n, ℱ n]) 1 μ)
       atTop (𝓝 0) :=
     integrable_condExp.tendsto_eLpNorm_condExp stronglyMeasurable_condExp
-  have heq : forall n, forallᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
+  have heq : ∀ n, ∀ᵐ x ∂μ, (μ[μ[g | ⨆ n, ℱ n] | ℱ n]) x = (μ[g | ℱ n]) x := fun n =>
     condExp_condExp_of_le (le_iSup _ n) (iSup_le fun n => ℱ.le n)
   refine ht.congr fun n => eLpNorm_congr_ae ?_
   filter_upwards [heq n] with x hxeq
@@ -995,3 +1291,4 @@ theorem tendsto_eLpNorm_condExp (g : Ω -> Real) :
 end L1Convergence
 
 end MeasureTheory
+

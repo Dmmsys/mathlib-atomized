@@ -37,539 +37,455 @@ open Set Filter
 
 variable {ι : Sort*} {α β : Type*}
 
-/--
-Definition of `CountableInterFilter` / `CountableInterFilter` 的定义
+/-- A filter `l` has the countable intersection property if for any countable collection
+of sets `s ∈ l` their intersection belongs to `l` as well. -/
+/-
+**CountableInterFilter** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{α : Type u_2} → Filter α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CountableInterFilter
-  parameters: (l : Filter α)
-  axioms and operations (1):
-    - countable_sInter_mem : forall S : Set (Set α), S.Countable -> (forall s in S, s in l) -> ⋂₀ S in l
-
-中文:
-类 余untable整数erFilter
-  参数: (l : 滤子 α)
-  公理与运算 (1 个):
-    - countable_sInter_mem : 对任意 S : 集合 (集合 α), S.可数 -> (对任意 s in S, s in l) -> ⋂₀ S in l
+--- 原说明 ---
+A filter `l` has the countable intersection property if for any countable collec
+tion
+of sets `s ∈ l` their intersection belongs to `l` as well.
 -/
 class CountableInterFilter (l : Filter α) : Prop where
   /-- For a countable collection of sets `s ∈ l`, their intersection belongs to `l` as well. -/
-  countable_sInter_mem : forall S : Set (Set α), S.Countable -> (forall s in S, s in l) -> ⋂₀ S in l
+  countable_sInter_mem : ∀ S : Set (Set α), S.Countable → (∀ s ∈ S, s ∈ l) → ⋂₀ S ∈ l
 
 variable {l : Filter α} [CountableInterFilter l]
-
-/--
-theorem `countable_sInter_mem` / 定理 `countable_sInter_mem`
-
-English:
-theorem countable_sInter_mem
-  given: {S : Set (Set α)} (hSc : S.Countable)
-  statement: ⋂₀ S in l ↔ forall s in S, s in l
-  proof: ⟨fun hS _s hs => mem_of_superset hS (sInter_subset_of_mem hs),
-    CountableInterFilter.countable_sInter_mem _ hSc⟩
-
-中文:
-定理 countable_s整数er_mem
-  条件: {S : 集合 (集合 α)} (hSc : S.可数)
-  结论: ⋂₀ S in l ↔ 对任意 s in S, s in l
-  证明: ⟨fun hS _s hs => mem_of_superset hS (sInter_subset_of_mem hs),
-    CountableInterFilter.countable_sInter_mem _ hSc⟩
-
-Depends on / 依赖: CountableInterFilter, CountableInterFilter.countable_sInter_mem, countable_sInter_mem, mem_of_superset, sInter_subset_of_mem
+/-
+**countable_sInter_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：countable_sInter_mem {S : Set (Set α)} (hSc : S.Countable) : ⋂₀ S in l ↔ f
+orall s in S, s in l
+参数：Set α；hSc : S.Countable。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Set.sInter_subset_of_mem`：sInter_subset_of_mem {S : Set (Set α)} {t : Se
+t α} (tS : t in S) : ⋂₀ S subseteq t
+· 使用定理 `CountableInterFilter.countable_sInter_mem`：∀ {α : Type u_2} {l : Filter 
+α} [self : CountableInterFilter l] (S : Set (Set α)),   S.Countable → (∀ s ∈ S, 
+s ∈ l) → ⋂₀ S ∈ l
 -/
-theorem countable_sInter_mem {S : Set (Set α)} (hSc : S.Countable) : ⋂₀ S in l ↔ forall s in S, s in l :=
+theorem countable_sInter_mem {S : Set (Set α)} (hSc : S.Countable) : ⋂₀ S ∈ l ↔ ∀ s ∈ S, s ∈ l :=
   ⟨fun hS _s hs => mem_of_superset hS (sInter_subset_of_mem hs),
     CountableInterFilter.countable_sInter_mem _ hSc⟩
-
-/--
-theorem `countable_iInter_mem` / 定理 `countable_iInter_mem`
-
-English:
-theorem countable_iInter_mem
-  given: [Countable ι] {s : ι -> Set α}
-  statement: (⋂ i, s i) in l ↔ forall i, s i in l
-  proof: sInter_range s ▸ (countable_sInter_mem (countable_range _)).trans forall_mem_range
-
-中文:
-定理 countable_i整数er_mem
-  条件: [可数 ι] {s : ι -> 集合 α}
-  结论: (⋂ i, s i) in l ↔ 对任意 i, s i in l
-  证明: sInter_range s ▸ (countable_sInter_mem (countable_range _)).trans forall_mem_range
-
-Depends on / 依赖: countable_range, countable_sInter_mem, forall_mem_range, sInter_range
+/-
+**countable_iInter_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：countable_iInter_mem [Countable ι] {s : ι -> Set α} : (⋂ i, s i) in l ↔ fo
+rall i, s i in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `countable_sInter_mem`：countable_sInter_mem {S : Set (Set α)} (hSc : S.Co
+untable) : ⋂₀ S in l ↔ forall s in S, s in l
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
+· 使用定理 `Set.sInter_range`：sInter_range (f : ι -> Set β) : ⋂₀ range f = ⋂ x, f x
 -/
-theorem countable_iInter_mem [Countable ι] {s : ι -> Set α} : (⋂ i, s i) in l ↔ forall i, s i in l :=
+theorem countable_iInter_mem [Countable ι] {s : ι → Set α} : (⋂ i, s i) ∈ l ↔ ∀ i, s i ∈ l :=
   sInter_range s ▸ (countable_sInter_mem (countable_range _)).trans forall_mem_range
-
-/--
-theorem `countable_bInter_mem` / 定理 `countable_bInter_mem`
-
-English:
-theorem countable_bInter_mem
-  given: {ι : Type*} {S : Set ι} (hS : S.Countable) {s : forall i in S, Set α}
-  proof: by
-  rw [biInter_eq_iInter]
-  have := hS.toEncodable
-  exact countable_iInter_mem.trans Subtype.forall
-
-中文:
-定理 countable_b整数er_mem
-  条件: {ι : 类型} {S : 集合 ι} (hS : S.可数) {s : 对任意 i in S, 集合 α}
-  证明: by
-  rw [biInter_eq_iInter]
-  have := hS.toEncodable
-  exact countable_iInter_mem.trans Subtype.forall
-
-Depends on / 依赖: Subtype, Subtype.forall, biInter_eq_iInter, countable_iInter_mem, countable_iInter_mem.trans, hS.toEncodable, toEncodable
+/-
+**countable_bInter_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：countable_bInter_mem {ι : Type*} {S : Set ι} (hS : S.Countable) {s : foral
+l i in S, Set α} : (⋂ i, ⋂ hi : i in S, s i ‹_›) in l ↔ forall i, forall hi : i 
+in S, s i ‹_› in l
+参数：hS : S.Countable。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biInter_eq_iInter`：biInter_eq_iInter (s : Set α) (t : forall x in s,
+ Set β) : ⋂ x in s, t x ‹_› = ⋂ x : s, t x x.2
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `countable_iInter_mem`：countable_iInter_mem [Countable ι] {s : ι -> Set α
+} : (⋂ i, s i) in l ↔ forall i, s i in l
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
 -/
-theorem countable_bInter_mem {ι : Type*} {S : Set ι} (hS : S.Countable) {s : forall i in S, Set α} :
-    (⋂ i, ⋂ hi : i in S, s i ‹_›) in l ↔ forall i, forall hi : i in S, s i ‹_› in l := by
+theorem countable_bInter_mem {ι : Type*} {S : Set ι} (hS : S.Countable) {s : ∀ i ∈ S, Set α} :
+    (⋂ i, ⋂ hi : i ∈ S, s i ‹_›) ∈ l ↔ ∀ i, ∀ hi : i ∈ S, s i ‹_› ∈ l := by
   rw [biInter_eq_iInter]
   have := hS.toEncodable
   exact countable_iInter_mem.trans Subtype.forall
-
-/--
-theorem `eventually_countable_forall` / 定理 `eventually_countable_forall`
-
-English:
-theorem eventually_countable_forall
-  given: [Countable ι] {p : α -> ι -> Prop}
-  proof: by
-  simpa only [Filter.Eventually, ofPred_forall] using
-    @countable_iInter_mem _ _ l _ _ fun i => { x | p x i }
-
-中文:
-定理 eventually_countable_对任意
-  条件: [可数 ι] {p : α -> ι -> 命题}
-  证明: by
-  simpa only [Filter.Eventually, ofPred_forall] using
-    @countable_iInter_mem _ _ l _ _ fun i => { x | p x i }
-
-Depends on / 依赖: Eventually, Filter, Filter.Eventually, countable_iInter_mem, ofPred_forall
+/-
+**eventually_countable_forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eventually_countable_forall [Countable ι] {p : α -> ι -> Prop} : (forallᶠ 
+x in l, forall i, p x i) ↔ forall i, forallᶠ x in l, p x i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.ofPred_forall`：ofPred_forall (p : ι -> β -> Prop) : { x | forall i, 
+p i x } = ⋂ i, { x | p i x }
+· 使用定理 `countable_iInter_mem`：countable_iInter_mem [Countable ι] {s : ι -> Set α
+} : (⋂ i, s i) in l ↔ forall i, s i in l
 -/
-theorem eventually_countable_forall [Countable ι] {p : α -> ι -> Prop} :
-    (forallᶠ x in l, forall i, p x i) ↔ forall i, forallᶠ x in l, p x i := by
+theorem eventually_countable_forall [Countable ι] {p : α → ι → Prop} :
+    (∀ᶠ x in l, ∀ i, p x i) ↔ ∀ i, ∀ᶠ x in l, p x i := by
   simpa only [Filter.Eventually, ofPred_forall] using
     @countable_iInter_mem _ _ l _ _ fun i => { x | p x i }
-
-/--
-theorem `eventually_countable_ball` / 定理 `eventually_countable_ball`
-
-English:
-theorem eventually_countable_ball
-  statement: {ι : Type*} {S : Set ι} (hS : S.Countable)
-  proof: by
-  simpa only [Filter.Eventually, ofPred_forall] using
-    @countable_bInter_mem _ l _ _ _ hS fun i hi => { x | p x i hi }
-
-中文:
-定理 eventually_countable_ball
-  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
-  证明: by
-  simpa only [Filter.Eventually, ofPred_forall] using
-    @countable_bInter_mem _ l _ _ _ hS fun i hi => { x | p x i hi }
-
-Depends on / 依赖: Eventually, Filter, Filter.Eventually, countable_bInter_mem, ofPred_forall
+/-
+**eventually_countable_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eventually_countable_ball {ι : Type*} {S : Set ι} (hS : S.Countable) {p : 
+α -> forall i in S, Prop} : (forallᶠ x in l, forall i hi, p x i hi) ↔ forall i h
+i, forallᶠ x in l, p x i hi
+参数：hS : S.Countable。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.ofPred_forall`：ofPred_forall (p : ι -> β -> Prop) : { x | forall i, 
+p i x } = ⋂ i, { x | p i x }
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `countable_bInter_mem`：countable_bInter_mem {ι : Type*} {S : Set ι} (hS :
+ S.Countable) {s : forall i in S, Set α} : (⋂ i, ⋂ hi : i in S, s i ‹_›) in l ↔ 
+forall i, …
 -/
 theorem eventually_countable_ball {ι : Type*} {S : Set ι} (hS : S.Countable)
-    {p : α -> forall i in S, Prop} :
-    (forallᶠ x in l, forall i hi, p x i hi) ↔ forall i hi, forallᶠ x in l, p x i hi := by
+    {p : α → ∀ i ∈ S, Prop} :
+    (∀ᶠ x in l, ∀ i hi, p x i hi) ↔ ∀ i hi, ∀ᶠ x in l, p x i hi := by
   simpa only [Filter.Eventually, ofPred_forall] using
     @countable_bInter_mem _ l _ _ _ hS fun i hi => { x | p x i hi }
-
-/--
-theorem `eventually_finset_ball` / 定理 `eventually_finset_ball`
-
-English:
-theorem eventually_finset_ball
-  given: {ι : Type*} {S : Finset ι} {p : α -> forall i in S, Prop}
-  proof: eventually_countable_ball S.countable_toSet
-
-中文:
-定理 eventually_finset_ball
-  条件: {ι : 类型} {S : 有限集 ι} {p : α -> 对任意 i in S, 命题}
-  证明: eventually_countable_ball S.countable_toSet
-
-Depends on / 依赖: S.countable_toSet, countable_toSet, eventually_countable_ball
+/-
+**eventually_finset_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eventually_finset_ball {ι : Type*} {S : Finset ι} {p : α -> forall i in S,
+ Prop} : (forallᶠ x in l, forall i hi, p x i hi) ↔ forall i hi, forallᶠ x in l, 
+p x i hi
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eventually_countable_ball`：eventually_countable_ball {ι : Type*} {S : Se
+t ι} (hS : S.Countable) {p : α -> forall i in S, Prop} : (forallᶠ x in l, forall
+ i hi, p x i hi…
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
 -/
-theorem eventually_finset_ball {ι : Type*} {S : Finset ι} {p : α -> forall i in S, Prop} :
-    (forallᶠ x in l, forall i hi, p x i hi) ↔ forall i hi, forallᶠ x in l, p x i hi :=
+theorem eventually_finset_ball {ι : Type*} {S : Finset ι} {p : α → ∀ i ∈ S, Prop} :
+    (∀ᶠ x in l, ∀ i hi, p x i hi) ↔ ∀ i hi, ∀ᶠ x in l, p x i hi :=
   eventually_countable_ball S.countable_toSet
 
 namespace Filter
 
-/--
-theorem `EventuallyLE.countable_iUnion` / 定理 `EventuallyLE.countable_iUnion`
-
-English:
-theorem EventuallyLE.countable_iUnion
-  given: [Countable ι] {s t : ι -> Set α} (h : forall i, s i <=ᶠ[l] t i)
-  proof: (eventually_countable_forall.2 h).mono fun _ hst hs => mem_iUnion.2 (mem_iUnion.1 hs).imp hst
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_iUnion :=
-  EventuallyLE.countable_iUnion
-
-中文:
-定理 EventuallyLE.countable_iUnion
-  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i <=ᶠ[l] t i)
-  证明: (eventually_countable_forall.2 h).mono fun _ hst hs => mem_iUnion.2 (mem_iUnion.1 hs).imp hst
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_iUnion :=
-  EventuallyLE.countable_iUnion
-
-Depends on / 依赖: eventually_countable_forall, mem_iUnion
+/-
+**Filter.EventuallyLE.countable_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyLE`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {l : Filter α} [CountableInterFilter l] [C
+ountable ι] {s t : ι → Set α},   (∀ (i : ι), s i ≤ᶠ[l] t i) → ⋃ i, s i ≤ᶠ[l] ⋃ i
+, t i
+参数：∀ (i : ι), s i ≤ᶠ[l] t i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eventually_countable_forall`：eventually_countable_forall [Countable ι] {
+p : α -> ι -> Prop} : (forallᶠ x in l, forall i, p x i) ↔ forall i, forallᶠ x in
+ l, p x i
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem EventuallyLE.countable_iUnion [Countable ι] {s t : ι -> Set α} (h : forall i, s i <=ᶠ[l] t i) :
-    ⋃ i, s i <=ᶠ[l] ⋃ i, t i :=
-(eventually_countable_forall.2 h).mono fun _ hst hs => mem_iUnion.2 (mem_iUnion.1 hs).imp hst
+theorem EventuallyLE.countable_iUnion [Countable ι] {s t : ι → Set α} (h : ∀ i, s i ≤ᶠ[l] t i) :
+    ⋃ i, s i ≤ᶠ[l] ⋃ i, t i :=
+  (eventually_countable_forall.2 h).mono fun _ hst hs => mem_iUnion.2 <| (mem_iUnion.1 hs).imp hst
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_iUnion :=
   EventuallyLE.countable_iUnion
-
-/--
-theorem `EventuallyEq.countable_iUnion` / 定理 `EventuallyEq.countable_iUnion`
-
-English:
-theorem EventuallyEq.countable_iUnion
-  given: [Countable ι] {s t : ι -> Set α} (h : forall i, s i =ᶠ[l] t i)
-  proof: (EventuallyLE.countable_iUnion fun i => (h i).le).antisymm
-    (EventuallyLE.countable_iUnion fun i => (h i).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_iUnion :=
-  EventuallyEq.countable_iUnion
-
-中文:
-定理 EventuallyEq.countable_iUnion
-  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i =ᶠ[l] t i)
-  证明: (EventuallyLE.countable_iUnion fun i => (h i).le).antisymm
-    (EventuallyLE.countable_iUnion fun i => (h i).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_iUnion :=
-  EventuallyEq.countable_iUnion
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.countable_iUnion, antisymm, countable_iUnion, symm.le
+/-
+**Filter.EventuallyEq.countable_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyEq`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {l : Filter α} [CountableInterFilter l] [C
+ountable ι] {s t : ι → Set α},   (∀ (i : ι), s i =ᶠ[l] t i) → ⋃ i, s i =ᶠ[l] ⋃ i
+, t i
+参数：∀ (i : ι), s i =ᶠ[l] t i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.antisymm`：∀ {α : Type u} {β : Type v} [inst : Partia
+lOrder β] {l : Filter α} {f g : α → β}, f ≤ᶠ[l] g → g ≤ᶠ[l] f → f =ᶠ[l] g
+· 使用定理 `Filter.EventuallyLE.countable_iUnion`：∀ {ι : Sort u_1} {α : Type u_2} {l
+ : Filter α} [CountableInterFilter l] [Countable ι] {s t : ι → Set α},   (∀ (i :
+ ι), s i ≤ᶠ[l] t i) → ⋃ i,…
+· 使用定理 `Filter.EventuallyEq.le`：∀ {α : Type u} {β : Type v} [inst : Preorder β] 
+{l : Filter α} {f g : α → β}, f =ᶠ[l] g → f ≤ᶠ[l] g
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
 -/
-theorem EventuallyEq.countable_iUnion [Countable ι] {s t : ι -> Set α} (h : forall i, s i =ᶠ[l] t i) :
+theorem EventuallyEq.countable_iUnion [Countable ι] {s t : ι → Set α} (h : ∀ i, s i =ᶠ[l] t i) :
     ⋃ i, s i =ᶠ[l] ⋃ i, t i :=
   (EventuallyLE.countable_iUnion fun i => (h i).le).antisymm
     (EventuallyLE.countable_iUnion fun i => (h i).symm.le)
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_iUnion :=
   EventuallyEq.countable_iUnion
-
-/--
-theorem `EventuallyLE.countable_bUnion` / 定理 `EventuallyLE.countable_bUnion`
-
-English:
-theorem EventuallyLE.countable_bUnion
-  statement: {ι : Type*} {S : Set ι} (hS : S.Countable)
-  proof: by
-  simp only [biUnion_eq_iUnion]
-  have := hS.toEncodable
-  exact EventuallyLE.countable_iUnion fun i => h i i.2
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_bUnion :=
-  EventuallyLE.countable_bUnion
-
-中文:
-定理 EventuallyLE.countable_bUnion
-  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
-  证明: by
-  simp only [biUnion_eq_iUnion]
-  have := hS.toEncodable
-  exact EventuallyLE.countable_iUnion fun i => h i i.2
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_bUnion :=
-  EventuallyLE.countable_bUnion
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.countable_iUnion, biUnion_eq_iUnion, countable_iUnion, hS.toEncodable, toEncodable
+/-
+**Filter.EventuallyLE.countable_bUnion** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyLE`。
+形式化陈述：∀ {α : Type u_2} {l : Filter α} [CountableInterFilter l] {ι : Type u_4} {S
+ : Set ι},   S.Countable →     ∀ {s t : (i : ι) → i ∈ S → Set α},       (∀ (i : 
+ι) (hi : i ∈ S), s i hi ≤ᶠ[l] t i hi) → ⋃ i, ⋃ (h : i ∈ S), s i h ≤ᶠ[l] ⋃ i, ⋃ (
+h : i ∈ S), t i h
+参数：i : ι；∀ (i : ι) (hi : i ∈ S), s i hi ≤ᶠ[l] t i hi；h : i ∈ S；h : i ∈ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biUnion_eq_iUnion`：biUnion_eq_iUnion (s : Set α) (t : forall x in s,
+ Set β) : ⋃ x in s, t x ‹_› = ⋃ x : s, t x x.2
+· 使用定理 `Filter.EventuallyLE.countable_iUnion`：∀ {ι : Sort u_1} {α : Type u_2} {l
+ : Filter α} [CountableInterFilter l] [Countable ι] {s t : ι → Set α},   (∀ (i :
+ ι), s i ≤ᶠ[l] t i) → ⋃ i,…
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
 -/
 theorem EventuallyLE.countable_bUnion {ι : Type*} {S : Set ι} (hS : S.Countable)
-    {s t : forall i in S, Set α} (h : forall i hi, s i hi <=ᶠ[l] t i hi) :
-    ⋃ i in S, s i ‹_› <=ᶠ[l] ⋃ i in S, t i ‹_› := by
+    {s t : ∀ i ∈ S, Set α} (h : ∀ i hi, s i hi ≤ᶠ[l] t i hi) :
+    ⋃ i ∈ S, s i ‹_› ≤ᶠ[l] ⋃ i ∈ S, t i ‹_› := by
   simp only [biUnion_eq_iUnion]
   have := hS.toEncodable
   exact EventuallyLE.countable_iUnion fun i => h i i.2
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_bUnion :=
   EventuallyLE.countable_bUnion
-
-/--
-theorem `EventuallyEq.countable_bUnion` / 定理 `EventuallyEq.countable_bUnion`
-
-English:
-theorem EventuallyEq.countable_bUnion
-  statement: {ι : Type*} {S : Set ι} (hS : S.Countable)
-  proof: (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).le).antisymm
-    (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_bUnion :=
-  EventuallyEq.countable_bUnion
-
-中文:
-定理 EventuallyEq.countable_bUnion
-  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
-  证明: (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).le).antisymm
-    (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_bUnion :=
-  EventuallyEq.countable_bUnion
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.countable_bUnion, antisymm, countable_bUnion, symm.le
+/-
+**Filter.EventuallyEq.countable_bUnion** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyEq`。
+形式化陈述：∀ {α : Type u_2} {l : Filter α} [CountableInterFilter l] {ι : Type u_4} {S
+ : Set ι},   S.Countable →     ∀ {s t : (i : ι) → i ∈ S → Set α},       (∀ (i : 
+ι) (hi : i ∈ S), s i hi =ᶠ[l] t i hi) → ⋃ i, ⋃ (h : i ∈ S), s i h =ᶠ[l] ⋃ i, ⋃ (
+h : i ∈ S), t i h
+参数：i : ι；∀ (i : ι) (hi : i ∈ S), s i hi =ᶠ[l] t i hi；h : i ∈ S；h : i ∈ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.antisymm`：∀ {α : Type u} {β : Type v} [inst : Partia
+lOrder β] {l : Filter α} {f g : α → β}, f ≤ᶠ[l] g → g ≤ᶠ[l] f → f =ᶠ[l] g
+· 使用定理 `Filter.EventuallyLE.countable_bUnion`：∀ {α : Type u_2} {l : Filter α} [C
+ountableInterFilter l] {ι : Type u_4} {S : Set ι},   S.Countable →     ∀ {s t : 
+(i : ι) → i ∈ S → Set α}, …
+· 使用定理 `Filter.EventuallyEq.le`：∀ {α : Type u} {β : Type v} [inst : Preorder β] 
+{l : Filter α} {f g : α → β}, f =ᶠ[l] g → f ≤ᶠ[l] g
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
 -/
 theorem EventuallyEq.countable_bUnion {ι : Type*} {S : Set ι} (hS : S.Countable)
-    {s t : forall i in S, Set α} (h : forall i hi, s i hi =ᶠ[l] t i hi) :
-    ⋃ i in S, s i ‹_› =ᶠ[l] ⋃ i in S, t i ‹_› :=
+    {s t : ∀ i ∈ S, Set α} (h : ∀ i hi, s i hi =ᶠ[l] t i hi) :
+    ⋃ i ∈ S, s i ‹_› =ᶠ[l] ⋃ i ∈ S, t i ‹_› :=
   (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).le).antisymm
     (EventuallyLE.countable_bUnion hS fun i hi => (h i hi).symm.le)
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_bUnion :=
   EventuallyEq.countable_bUnion
-
-/--
-theorem `EventuallyLE.countable_iInter` / 定理 `EventuallyLE.countable_iInter`
-
-English:
-theorem EventuallyLE.countable_iInter
-  given: [Countable ι] {s t : ι -> Set α} (h : forall i, s i <=ᶠ[l] t i)
-  proof: (eventually_countable_forall.2 h).mono fun _ hst hs =>
-    mem_iInter.2 fun i => hst _ (mem_iInter.1 hs i)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_iInter :=
-  EventuallyLE.countable_iInter
-
-中文:
-定理 EventuallyLE.countable_i整数er
-  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i <=ᶠ[l] t i)
-  证明: (eventually_countable_forall.2 h).mono fun _ hst hs =>
-    mem_iInter.2 fun i => hst _ (mem_iInter.1 hs i)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_iInter :=
-  EventuallyLE.countable_iInter
-
-Depends on / 依赖: eventually_countable_forall, mem_iInter
+/-
+**Filter.EventuallyLE.countable_iInter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyLE`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {l : Filter α} [CountableInterFilter l] [C
+ountable ι] {s t : ι → Set α},   (∀ (i : ι), s i ≤ᶠ[l] t i) → ⋂ i, s i ≤ᶠ[l] ⋂ i
+, t i
+参数：∀ (i : ι), s i ≤ᶠ[l] t i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eventually_countable_forall`：eventually_countable_forall [Countable ι] {
+p : α -> ι -> Prop} : (forallᶠ x in l, forall i, p x i) ↔ forall i, forallᶠ x in
+ l, p x i
+· 使用定理 `Set.mem_iInter`：mem_iInter {x : α} {s : ι -> Set α} : (x in ⋂ i, s i) ↔ 
+forall i, x in s i
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem EventuallyLE.countable_iInter [Countable ι] {s t : ι -> Set α} (h : forall i, s i <=ᶠ[l] t i) :
-    ⋂ i, s i <=ᶠ[l] ⋂ i, t i :=
+theorem EventuallyLE.countable_iInter [Countable ι] {s t : ι → Set α} (h : ∀ i, s i ≤ᶠ[l] t i) :
+    ⋂ i, s i ≤ᶠ[l] ⋂ i, t i :=
   (eventually_countable_forall.2 h).mono fun _ hst hs =>
     mem_iInter.2 fun i => hst _ (mem_iInter.1 hs i)
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_iInter :=
   EventuallyLE.countable_iInter
-
-/--
-theorem `EventuallyEq.countable_iInter` / 定理 `EventuallyEq.countable_iInter`
-
-English:
-theorem EventuallyEq.countable_iInter
-  given: [Countable ι] {s t : ι -> Set α} (h : forall i, s i =ᶠ[l] t i)
-  proof: (EventuallyLE.countable_iInter fun i => (h i).le).antisymm
-    (EventuallyLE.countable_iInter fun i => (h i).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_iInter :=
-  EventuallyEq.countable_iInter
-
-中文:
-定理 EventuallyEq.countable_i整数er
-  条件: [可数 ι] {s t : ι -> 集合 α} (h : 对任意 i, s i =ᶠ[l] t i)
-  证明: (EventuallyLE.countable_iInter fun i => (h i).le).antisymm
-    (EventuallyLE.countable_iInter fun i => (h i).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_iInter :=
-  EventuallyEq.countable_iInter
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.countable_iInter, antisymm, countable_iInter, symm.le
+/-
+**Filter.EventuallyEq.countable_iInter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyEq`。
+形式化陈述：∀ {ι : Sort u_1} {α : Type u_2} {l : Filter α} [CountableInterFilter l] [C
+ountable ι] {s t : ι → Set α},   (∀ (i : ι), s i =ᶠ[l] t i) → ⋂ i, s i =ᶠ[l] ⋂ i
+, t i
+参数：∀ (i : ι), s i =ᶠ[l] t i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.antisymm`：∀ {α : Type u} {β : Type v} [inst : Partia
+lOrder β] {l : Filter α} {f g : α → β}, f ≤ᶠ[l] g → g ≤ᶠ[l] f → f =ᶠ[l] g
+· 使用定理 `Filter.EventuallyLE.countable_iInter`：∀ {ι : Sort u_1} {α : Type u_2} {l
+ : Filter α} [CountableInterFilter l] [Countable ι] {s t : ι → Set α},   (∀ (i :
+ ι), s i ≤ᶠ[l] t i) → ⋂ i,…
+· 使用定理 `Filter.EventuallyEq.le`：∀ {α : Type u} {β : Type v} [inst : Preorder β] 
+{l : Filter α} {f g : α → β}, f =ᶠ[l] g → f ≤ᶠ[l] g
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
 -/
-theorem EventuallyEq.countable_iInter [Countable ι] {s t : ι -> Set α} (h : forall i, s i =ᶠ[l] t i) :
+theorem EventuallyEq.countable_iInter [Countable ι] {s t : ι → Set α} (h : ∀ i, s i =ᶠ[l] t i) :
     ⋂ i, s i =ᶠ[l] ⋂ i, t i :=
   (EventuallyLE.countable_iInter fun i => (h i).le).antisymm
     (EventuallyLE.countable_iInter fun i => (h i).symm.le)
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_iInter :=
   EventuallyEq.countable_iInter
-
-/--
-theorem `EventuallyLE.countable_bInter` / 定理 `EventuallyLE.countable_bInter`
-
-English:
-theorem EventuallyLE.countable_bInter
-  statement: {ι : Type*} {S : Set ι} (hS : S.Countable)
-  proof: by
-  simp only [biInter_eq_iInter]
-  have := hS.toEncodable
-  exact EventuallyLE.countable_iInter fun i => h i i.2
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_bInter :=
-  EventuallyLE.countable_bInter
-
-中文:
-定理 EventuallyLE.countable_b整数er
-  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
-  证明: by
-  simp only [biInter_eq_iInter]
-  have := hS.toEncodable
-  exact EventuallyLE.countable_iInter fun i => h i i.2
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_bInter :=
-  EventuallyLE.countable_bInter
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.countable_iInter, biInter_eq_iInter, countable_iInter, hS.toEncodable, toEncodable
+/-
+**Filter.EventuallyLE.countable_bInter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyLE`。
+形式化陈述：∀ {α : Type u_2} {l : Filter α} [CountableInterFilter l] {ι : Type u_4} {S
+ : Set ι},   S.Countable →     ∀ {s t : (i : ι) → i ∈ S → Set α},       (∀ (i : 
+ι) (hi : i ∈ S), s i hi ≤ᶠ[l] t i hi) → ⋂ i, ⋂ (h : i ∈ S), s i h ≤ᶠ[l] ⋂ i, ⋂ (
+h : i ∈ S), t i h
+参数：i : ι；∀ (i : ι) (hi : i ∈ S), s i hi ≤ᶠ[l] t i hi；h : i ∈ S；h : i ∈ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biInter_eq_iInter`：biInter_eq_iInter (s : Set α) (t : forall x in s,
+ Set β) : ⋂ x in s, t x ‹_› = ⋂ x : s, t x x.2
+· 使用定理 `Filter.EventuallyLE.countable_iInter`：∀ {ι : Sort u_1} {α : Type u_2} {l
+ : Filter α} [CountableInterFilter l] [Countable ι] {s t : ι → Set α},   (∀ (i :
+ ι), s i ≤ᶠ[l] t i) → ⋂ i,…
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
 -/
 theorem EventuallyLE.countable_bInter {ι : Type*} {S : Set ι} (hS : S.Countable)
-    {s t : forall i in S, Set α} (h : forall i hi, s i hi <=ᶠ[l] t i hi) :
-    ⋂ i in S, s i ‹_› <=ᶠ[l] ⋂ i in S, t i ‹_› := by
+    {s t : ∀ i ∈ S, Set α} (h : ∀ i hi, s i hi ≤ᶠ[l] t i hi) :
+    ⋂ i ∈ S, s i ‹_› ≤ᶠ[l] ⋂ i ∈ S, t i ‹_› := by
   simp only [biInter_eq_iInter]
   have := hS.toEncodable
   exact EventuallyLE.countable_iInter fun i => h i i.2
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyLE.countable_bInter :=
   EventuallyLE.countable_bInter
-
-/--
-theorem `EventuallyEq.countable_bInter` / 定理 `EventuallyEq.countable_bInter`
-
-English:
-theorem EventuallyEq.countable_bInter
-  statement: {ι : Type*} {S : Set ι} (hS : S.Countable)
-  proof: (EventuallyLE.countable_bInter hS fun i hi => (h i hi).le).antisymm
-    (EventuallyLE.countable_bInter hS fun i hi => (h i hi).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_bInter :=
-  EventuallyEq.countable_bInter
-
-中文:
-定理 EventuallyEq.countable_b整数er
-  结论: {ι : 类型} {S : 集合 ι} (hS : S.可数)
-  证明: (EventuallyLE.countable_bInter hS fun i hi => (h i hi).le).antisymm
-    (EventuallyLE.countable_bInter hS fun i hi => (h i hi).symm.le)
-
-@[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_bInter :=
-  EventuallyEq.countable_bInter
-
-Depends on / 依赖: EventuallyLE, EventuallyLE.countable_bInter, antisymm, countable_bInter, symm.le
+/-
+**Filter.EventuallyEq.countable_bInter** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventua
+llyEq`。
+形式化陈述：∀ {α : Type u_2} {l : Filter α} [CountableInterFilter l] {ι : Type u_4} {S
+ : Set ι},   S.Countable →     ∀ {s t : (i : ι) → i ∈ S → Set α},       (∀ (i : 
+ι) (hi : i ∈ S), s i hi =ᶠ[l] t i hi) → ⋂ i, ⋂ (h : i ∈ S), s i h =ᶠ[l] ⋂ i, ⋂ (
+h : i ∈ S), t i h
+参数：i : ι；∀ (i : ι) (hi : i ∈ S), s i hi =ᶠ[l] t i hi；h : i ∈ S；h : i ∈ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyLE.antisymm`：∀ {α : Type u} {β : Type v} [inst : Partia
+lOrder β] {l : Filter α} {f g : α → β}, f ≤ᶠ[l] g → g ≤ᶠ[l] f → f =ᶠ[l] g
+· 使用定理 `Filter.EventuallyLE.countable_bInter`：∀ {α : Type u_2} {l : Filter α} [C
+ountableInterFilter l] {ι : Type u_4} {S : Set ι},   S.Countable →     ∀ {s t : 
+(i : ι) → i ∈ S → Set α}, …
+· 使用定理 `Filter.EventuallyEq.le`：∀ {α : Type u} {β : Type v} [inst : Preorder β] 
+{l : Filter α} {f g : α → β}, f =ᶠ[l] g → f ≤ᶠ[l] g
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
 -/
 theorem EventuallyEq.countable_bInter {ι : Type*} {S : Set ι} (hS : S.Countable)
-    {s t : forall i in S, Set α} (h : forall i hi, s i hi =ᶠ[l] t i hi) :
-    ⋂ i in S, s i ‹_› =ᶠ[l] ⋂ i in S, t i ‹_› :=
+    {s t : ∀ i ∈ S, Set α} (h : ∀ i hi, s i hi =ᶠ[l] t i hi) :
+    ⋂ i ∈ S, s i ‹_› =ᶠ[l] ⋂ i ∈ S, t i ‹_› :=
   (EventuallyLE.countable_bInter hS fun i hi => (h i hi).le).antisymm
     (EventuallyLE.countable_bInter hS fun i hi => (h i hi).symm.le)
 
 @[deprecated (since := "2026-03-03")] alias _root_.EventuallyEq.countable_bInter :=
   EventuallyEq.countable_bInter
 
-/--
-Definition of `ofCountableInter` / `ofCountableInter` 的定义
+/-- Construct a filter with countable intersection property. This constructor deduces
+`Filter.univ_sets` and `Filter.inter_sets` from the countable intersection property. -/
+/-
+**Filter.ofCountableInter** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：ofCountableInter (l : Set (Set α)) (hl : forall S : Set (Set α), S.Countab
+le -> S subseteq l -> ⋂₀ S in l) (h_mono : forall s t, s in l -> s subseteq t ->
+ t in l) : Filter α where sets
+参数：l : Set (Set α)；hl : forall S : Set (Set α), S.Countable -> S subseteq l -> ⋂
+₀ S in l；h_mono : forall s t, s in l -> s subseteq t -> t in l。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCountableInter
-  signature: (l : Set (Set α))
-  body: l
-  univ_sets := @sInter_empty α ▸ hl _ countable_empty (empty_subset _)
-  sets_of_superset := h_mono _ _
-  inter_sets {s t} hs ht := sInter_pair s t ▸
-    hl _ ((countable_singleton _).insert _) (insert_subset_iff.2 ⟨hs, singleton_subset_iff.2 ht⟩)
-
-中文:
-定义 ofCountable整数er
-  签名: (l : 集合 (集合 α))
-  定义体: l
-  univ_sets := @sInter_empty α ▸ hl _ countable_empty (empty_subset _)
-  sets_of_superset := h_mono _ _
-  inter_sets {s t} hs ht := sInter_pair s t ▸
-    hl _ ((countable_singleton _).insert _) (insert_subset_iff.2 ⟨hs, singleton_subset_iff.2 ht⟩)
+--- 原说明 ---
+Construct a filter with countable intersection property. This constructor deduce
+s
+`Filter.univ_sets` and `Filter.inter_sets` from the countable intersection prope
+rty.
 -/
 def ofCountableInter (l : Set (Set α))
-    (hl : forall S : Set (Set α), S.Countable -> S subseteq l -> ⋂₀ S in l)
-    (h_mono : forall s t, s in l -> s subseteq t -> t in l) : Filter α where
+    (hl : ∀ S : Set (Set α), S.Countable → S ⊆ l → ⋂₀ S ∈ l)
+    (h_mono : ∀ s t, s ∈ l → s ⊆ t → t ∈ l) : Filter α where
   sets := l
   univ_sets := @sInter_empty α ▸ hl _ countable_empty (empty_subset _)
   sets_of_superset := h_mono _ _
   inter_sets {s t} hs ht := sInter_pair s t ▸
     hl _ ((countable_singleton _).insert _) (insert_subset_iff.2 ⟨hs, singleton_subset_iff.2 ht⟩)
-
-/--
-Instance `countableInter_ofCountableInter` / 实例 `countableInter_ofCountableInter`
-
-English:
-instance countableInter_ofCountableInter
-  signature: (l : Set (Set α))
-  body: ⟨hl⟩
-
-@[simp]
-
-中文:
-实例 countable整数er_ofCountable整数er
-  签名: (l : 集合 (集合 α))
-  定义体: ⟨hl⟩
-
-@[simp]
+/-
+**Filter.countableInter_ofCountableInter** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：countableInter_ofCountableInter (l : Set (Set α)) (hl : forall S : Set (Se
+t α), S.Countable -> S subseteq l -> ⋂₀ S in l) (h_mono : forall s t, s in l -> 
+s subseteq t -> t in l) : CountableInterFilter (Filter.ofCountableInter l hl h_m
+ono)
+参数：l : Set (Set α)；hl : forall S : Set (Set α), S.Countable -> S subseteq l -> ⋂
+₀ S in l；h_mono : forall s t, s in l -> s subseteq t -> t in l。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance countableInter_ofCountableInter (l : Set (Set α))
-    (hl : forall S : Set (Set α), S.Countable -> S subseteq l -> ⋂₀ S in l)
-    (h_mono : forall s t, s in l -> s subseteq t -> t in l) :
+    (hl : ∀ S : Set (Set α), S.Countable → S ⊆ l → ⋂₀ S ∈ l)
+    (h_mono : ∀ s t, s ∈ l → s ⊆ t → t ∈ l) :
     CountableInterFilter (Filter.ofCountableInter l hl h_mono) :=
   ⟨hl⟩
 
 @[simp]
-/--
-theorem `mem_ofCountableInter` / 定理 `mem_ofCountableInter`
-
-English:
-theorem mem_ofCountableInter
-  statement: {l : Set (Set α)}
-  proof: Iff.rfl
-
-中文:
-定理 mem_ofCountable整数er
-  结论: {l : 集合 (集合 α)}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_ofCountableInter** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_ofCountableInter {l : Set (Set α)} (hl : forall S : Set (Set α), S.Cou
+ntable -> S subseteq l -> ⋂₀ S in l) (h_mono : forall s t, s in l -> s subseteq 
+t -> t in l) {s : Set α} : s in Filter.ofCountableInter l hl h_mono ↔ s in l
+参数：Set α；hl : forall S : Set (Set α), S.Countable -> S subseteq l -> ⋂₀ S in l；h
+_mono : forall s t, s in l -> s subseteq t -> t in l。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_ofCountableInter {l : Set (Set α)}
-    (hl : forall S : Set (Set α), S.Countable -> S subseteq l -> ⋂₀ S in l) (h_mono : forall s t, s in l -> s subseteq t -> t in l)
-    {s : Set α} : s in Filter.ofCountableInter l hl h_mono ↔ s in l :=
+    (hl : ∀ S : Set (Set α), S.Countable → S ⊆ l → ⋂₀ S ∈ l) (h_mono : ∀ s t, s ∈ l → s ⊆ t → t ∈ l)
+    {s : Set α} : s ∈ Filter.ofCountableInter l hl h_mono ↔ s ∈ l :=
   Iff.rfl
 
-/--
-Definition of `ofCountableUnion` / `ofCountableUnion` 的定义
+/-- Construct a filter with countable intersection property.
+Similarly to `Filter.comk`, a set belongs to this filter if its complement satisfies the property.
+Similarly to `Filter.ofCountableInter`,
+this constructor deduces some properties from the countable intersection property
+which becomes the countable union property because we take complements of all sets. -/
+/-
+**Filter.ofCountableUnion** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：ofCountableUnion (l : Set (Set α)) (hUnion : forall S : Set (Set α), S.Cou
+ntable -> (forall s in S, s in l) -> ⋃₀ S in l) (hmono : forall t in l, forall s
+ subseteq t, s in l) : Filter α
+参数：l : Set (Set α)；hUnion : forall S : Set (Set α), S.Countable -> (forall s in 
+S, s in l) -> ⋃₀ S in l；hmono : forall t in l, forall s subseteq t, s in l。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCountableUnion
-  signature: (l : Set (Set α))
-  body: by
-  refine .ofCountableInter {s | sᶜ in l} (fun S hSc hSp => ?_) fun s t ht hsub => ?_
-  · rw [mem_ofPred_eq, compl_sInter]
-    apply hUnion (compl '' S) (hSc.image _)
-    intro s hs
-    rw [mem_image] at hs
-    rcases hs with ⟨t, ht, rfl⟩
-    apply hSp ht
-  · rw [mem_ofPred_eq]
-    rw [← compl_subset_compl] at hsub
-    exact hmono sᶜ ht tᶜ hsub
-
-中文:
-定义 ofCountableUnion
-  签名: (l : 集合 (集合 α))
-  定义体: by
-  refine .ofCountableInter {s | sᶜ in l} (fun S hSc hSp => ?_) fun s t ht hsub => ?_
-  · rw [mem_ofPred_eq, compl_sInter]
-    apply hUnion (compl '' S) (hSc.image _)
-    intro s hs
-    rw [mem_image] at hs
-    rcases hs with ⟨t, ht, rfl⟩
-    apply hSp ht
-  · rw [mem_ofPred_eq]
-    rw [← compl_subset_compl] at hsub
-    exact hmono sᶜ ht tᶜ hsub
-
-Depends on / 依赖: compl_sInter, compl_subset_compl, hSc.image, hUnion, mem_image, mem_ofPred_eq, ofCountableInter
+--- 原说明 ---
+Construct a filter with countable intersection property.
+Similarly to `Filter.comk`, a set belongs to this filter if its complement satis
+fies the property.
+Similarly to `Filter.ofCountableInter`,
+this constructor deduces some properties from the countable intersection propert
+y
+which becomes the countable union property because we take complements of all se
+ts.
 -/
 def ofCountableUnion (l : Set (Set α))
-    (hUnion : forall S : Set (Set α), S.Countable -> (forall s in S, s in l) -> ⋃₀ S in l)
-    (hmono : forall t in l, forall s subseteq t, s in l) : Filter α := by
-  refine .ofCountableInter {s | sᶜ in l} (fun S hSc hSp => ?_) fun s t ht hsub => ?_
+    (hUnion : ∀ S : Set (Set α), S.Countable → (∀ s ∈ S, s ∈ l) → ⋃₀ S ∈ l)
+    (hmono : ∀ t ∈ l, ∀ s ⊆ t, s ∈ l) : Filter α := by
+  refine .ofCountableInter {s | sᶜ ∈ l} (fun S hSc hSp ↦ ?_) fun s t ht hsub ↦ ?_
   · rw [mem_ofPred_eq, compl_sInter]
     apply hUnion (compl '' S) (hSc.image _)
     intro s hs
@@ -579,325 +495,281 @@ def ofCountableUnion (l : Set (Set α))
   · rw [mem_ofPred_eq]
     rw [← compl_subset_compl] at hsub
     exact hmono sᶜ ht tᶜ hsub
-
-/--
-Instance `countableInter_ofCountableUnion` / 实例 `countableInter_ofCountableUnion`
-
-English:
-instance countableInter_ofCountableUnion
-  signature: (l : Set (Set α)) (h₁ h₂)
-  body: countableInter_ofCountableInter ..
-
-@[simp]
-
-中文:
-实例 countable整数er_ofCountableUnion
-  签名: (l : 集合 (集合 α)) (h₁ h₂)
-  定义体: countableInter_ofCountableInter ..
-
-@[simp]
-
-Depends on / 依赖: countableInter_ofCountableInter
+/-
+**Filter.countableInter_ofCountableUnion** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：countableInter_ofCountableUnion (l : Set (Set α)) (h₁ h₂) : CountableInter
+Filter (Filter.ofCountableUnion l h₁ h₂)
+参数：l : Set (Set α)；h₁ h₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance countableInter_ofCountableUnion (l : Set (Set α)) (h₁ h₂) :
     CountableInterFilter (Filter.ofCountableUnion l h₁ h₂) :=
   countableInter_ofCountableInter ..
 
 @[simp]
-/--
-theorem `mem_ofCountableUnion` / 定理 `mem_ofCountableUnion`
-
-English:
-theorem mem_ofCountableUnion
-  given: {l : Set (Set α)} {hunion hmono s}
-  proof: Iff.rfl
-
-中文:
-定理 mem_ofCountableUnion
-  条件: {l : 集合 (集合 α)} {hunion hmono s}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_ofCountableUnion** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_ofCountableUnion {l : Set (Set α)} {hunion hmono s} : s in ofCountable
+Union l hunion hmono ↔ sᶜ in l
+参数：Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_ofCountableUnion {l : Set (Set α)} {hunion hmono s} :
-    s in ofCountableUnion l hunion hmono ↔ sᶜ in l :=
+    s ∈ ofCountableUnion l hunion hmono ↔ sᶜ ∈ l :=
   Iff.rfl
 
 end Filter
 
-/--
-Instance `countableInterFilter_principal` / 实例 `countableInterFilter_principal`
-
-English:
-instance countableInterFilter_principal
-  signature: (s : Set α)
-  body: ⟨fun _ _ hS => subset_sInter hS⟩
-
-中文:
-实例 countable整数erFilter_principal
-  签名: (s : 集合 α)
-  定义体: ⟨fun _ _ hS => subset_sInter hS⟩
-
-Depends on / 依赖: subset_sInter
+/-
+**countableInterFilter_principal** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：countableInterFilter_principal (s : Set α) : CountableInterFilter (𝓟 s)
+参数：s : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subset_sInter`：subset_sInter {S : Set (Set α)} {t : Set α} (h : fora
+ll t' in S, t subseteq t') : t subseteq ⋂₀ S
 -/
 instance countableInterFilter_principal (s : Set α) : CountableInterFilter (𝓟 s) :=
   ⟨fun _ _ hS => subset_sInter hS⟩
-
-/--
-Instance `countableInterFilter_bot` / 实例 `countableInterFilter_bot`
-
-English:
-instance countableInterFilter_bot
-  signature: : CountableInterFilter (⊥ : Filter α)
-  body: by
-  rw [← principal_empty]
-  apply countableInterFilter_principal
-
-中文:
-实例 countable整数erFilter_bot
-  签名: : 余untable整数erFilter (⊥ : 滤子 α)
-  定义体: by
-  rw [← principal_empty]
-  apply countableInterFilter_principal
-
-Depends on / 依赖: countableInterFilter_principal, principal_empty
+/-
+**countableInterFilter_bot** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：countableInterFilter_bot : CountableInterFilter (⊥ : Filter α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.principal_empty`：principal_empty : 𝓟 (∅ : Set α) = ⊥
 -/
 instance countableInterFilter_bot : CountableInterFilter (⊥ : Filter α) := by
   rw [← principal_empty]
   apply countableInterFilter_principal
-
-/--
-Instance `countableInterFilter_top` / 实例 `countableInterFilter_top`
-
-English:
-instance countableInterFilter_top
-  signature: : CountableInterFilter (⊤ : Filter α)
-  body: by
-  rw [← principal_univ]
-  apply countableInterFilter_principal
-
-中文:
-实例 countable整数erFilter_top
-  签名: : 余untable整数erFilter (⊤ : 滤子 α)
-  定义体: by
-  rw [← principal_univ]
-  apply countableInterFilter_principal
-
-Depends on / 依赖: countableInterFilter_principal, principal_univ
+/-
+**countableInterFilter_top** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：countableInterFilter_top : CountableInterFilter (⊤ : Filter α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.principal_univ`：∀ {α : Type u}, Filter.principal Set.univ = ⊤
 -/
 instance countableInterFilter_top : CountableInterFilter (⊤ : Filter α) := by
   rw [← principal_univ]
   apply countableInterFilter_principal
-
-instance (l : Filter β) [CountableInterFilter l] (f : α -> β) :
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (l : Filter β) [CountableInterFilter l] (f : α → β) :
     CountableInterFilter (comap f l) := by
   refine ⟨fun S hSc hS => ?_⟩
   choose! t htl ht using hS
-  have : (⋂ s in S, t s) in l := (countable_bInter_mem hSc).2 htl
+  have : (⋂ s ∈ S, t s) ∈ l := (countable_bInter_mem hSc).2 htl
   refine ⟨_, this, ?_⟩
   simpa [preimage_iInter] using iInter₂_mono ht
-
-instance (l : Filter α) [CountableInterFilter l] (f : α -> β) : CountableInterFilter (map f l) := by
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (l : Filter α) [CountableInterFilter l] (f : α → β) : CountableInterFilter (map f l) := by
   refine ⟨fun S hSc hS => ?_⟩
   simp only [mem_map, sInter_eq_biInter, preimage_iInter₂] at hS ⊢
   exact (countable_bInter_mem hSc).2 hS
 
-/--
-Instance `countableInterFilter_inf` / 实例 `countableInterFilter_inf`
+/-- Infimum of two `CountableInterFilter`s is a `CountableInterFilter`. This is useful, e.g.,
+to automatically get an instance for `residual α ⊓ 𝓟 s`. -/
+/-
+**countableInterFilter_inf** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：countableInterFilter_inf (l₁ l₂ : Filter α) [CountableInterFilter l₁] [Cou
+ntableInterFilter l₂] : CountableInterFilter (l₁ ⊓ l₂)
+参数：l₁ l₂ : Filter α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `countable_bInter_mem`：countable_bInter_mem {ι : Type*} {S : Set ι} (hS :
+ S.Countable) {s : forall i in S, Set α} : (⋂ i, ⋂ hi : i in S, s i ‹_›) in l ↔ 
+forall i, …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Filter.inter_mem_inf`：inter_mem_inf {α : Type u} {f g : Filter α} {s t :
+ Set α} (hs : s in f) (ht : t in g) : s inter t in f ⊓ g
+· 使用定理 `Set.subset_sInter`：subset_sInter {S : Set (Set α)} {t : Set α} (h : fora
+ll t' in S, t subseteq t') : t subseteq ⋂₀ S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.inter_subset_inter`：inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s
+₁ subseteq t₁) (h₂ : s₂ subseteq t₂) : s₁ inter s₂ subseteq t₁ inter t₂
+· 使用定理 `Set.iInter_subset_of_subset`：iInter_subset_of_subset {s : ι -> Set α} {t
+ : Set α} (i : ι) (h : s i subseteq t) : ⋂ i, s i subseteq t
+· 使用定理 `Set.iInter_subset`：iInter_subset : forall (s : ι -> Set β) (i : ι), ⋂ i,
+ s i subseteq s i
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-instance countableInterFilter_inf
-  signature: (l₁ l₂ : Filter α) [CountableInterFilter l₁]
-  body: by
-  refine ⟨fun S hSc hS => ?_⟩
-  choose s hs t ht hst using hS
-  replace hs : (⋂ i in S, s i ‹_›) in l₁ := (countable_bInter_mem hSc).2 hs
-  replace ht : (⋂ i in S, t i ‹_›) in l₂ := (countable_bInter_mem hSc).2 ht
-  refine mem_of_superset (inter_mem_inf hs ht) (subset_sInter fun i hi => ?_)
-  rw [hst i hi]
-  apply inter_subset_inter <;> exact iInter_subset_of_subset i (iInter_subset _ _)
-
-中文:
-实例 countable整数erFilter_inf
-  签名: (l₁ l₂ : 滤子 α) [余untable整数erFilter l₁]
-  定义体: by
-  refine ⟨fun S hSc hS => ?_⟩
-  choose s hs t ht hst using hS
-  replace hs : (⋂ i in S, s i ‹_›) in l₁ := (countable_bInter_mem hSc).2 hs
-  replace ht : (⋂ i in S, t i ‹_›) in l₂ := (countable_bInter_mem hSc).2 ht
-  refine mem_of_superset (inter_mem_inf hs ht) (subset_sInter fun i hi => ?_)
-  rw [hst i hi]
-  apply inter_subset_inter <;> exact iInter_subset_of_subset i (iInter_subset _ _)
-
-Depends on / 依赖: countable_bInter_mem, iInter_subset, iInter_subset_of_subset, inter_mem_inf, inter_subset_inter, mem_of_superset, replace, subset_sInter
+--- 原说明 ---
+Infimum of two `CountableInterFilter`s is a `CountableInterFilter`. This is usef
+ul, e.g.,
+to automatically get an instance for `residual α ⊓ 𝓟 s`.
 -/
 instance countableInterFilter_inf (l₁ l₂ : Filter α) [CountableInterFilter l₁]
     [CountableInterFilter l₂] : CountableInterFilter (l₁ ⊓ l₂) := by
   refine ⟨fun S hSc hS => ?_⟩
   choose s hs t ht hst using hS
-  replace hs : (⋂ i in S, s i ‹_›) in l₁ := (countable_bInter_mem hSc).2 hs
-  replace ht : (⋂ i in S, t i ‹_›) in l₂ := (countable_bInter_mem hSc).2 ht
+  replace hs : (⋂ i ∈ S, s i ‹_›) ∈ l₁ := (countable_bInter_mem hSc).2 hs
+  replace ht : (⋂ i ∈ S, t i ‹_›) ∈ l₂ := (countable_bInter_mem hSc).2 ht
   refine mem_of_superset (inter_mem_inf hs ht) (subset_sInter fun i hi => ?_)
   rw [hst i hi]
   apply inter_subset_inter <;> exact iInter_subset_of_subset i (iInter_subset _ _)
 
-/--
-Instance `countableInterFilter_sup` / 实例 `countableInterFilter_sup`
+/-- Supremum of two `CountableInterFilter`s is a `CountableInterFilter`. -/
+/-
+**countableInterFilter_sup** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：countableInterFilter_sup (l₁ l₂ : Filter α) [CountableInterFilter l₁] [Cou
+ntableInterFilter l₂] : CountableInterFilter (l₁ ⊔ l₂)
+参数：l₁ l₂ : Filter α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `countable_sInter_mem`：countable_sInter_mem {S : Set (Set α)} (hSc : S.Co
+untable) : ⋂₀ S in l ↔ forall s in S, s in l
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-instance countableInterFilter_sup
-  signature: (l₁ l₂ : Filter α) [CountableInterFilter l₁]
-  body: by
-  refine ⟨fun S hSc hS => ⟨?_, ?_⟩⟩ <;> refine (countable_sInter_mem hSc).2 fun s hs => ?_
-  exacts [(hS s hs).1, (hS s hs).2]
-
-中文:
-实例 countable整数erFilter_sup
-  签名: (l₁ l₂ : 滤子 α) [余untable整数erFilter l₁]
-  定义体: by
-  refine ⟨fun S hSc hS => ⟨?_, ?_⟩⟩ <;> refine (countable_sInter_mem hSc).2 fun s hs => ?_
-  exacts [(hS s hs).1, (hS s hs).2]
-
-Depends on / 依赖: countable_sInter_mem, exacts
+--- 原说明 ---
+Supremum of two `CountableInterFilter`s is a `CountableInterFilter`.
 -/
 instance countableInterFilter_sup (l₁ l₂ : Filter α) [CountableInterFilter l₁]
     [CountableInterFilter l₂] : CountableInterFilter (l₁ ⊔ l₂) := by
   refine ⟨fun S hSc hS => ⟨?_, ?_⟩⟩ <;> refine (countable_sInter_mem hSc).2 fun s hs => ?_
   exacts [(hS s hs).1, (hS s hs).2]
-
-/--
-Instance `CountableInterFilter.curry` / 实例 `CountableInterFilter.curry`
-
-English:
-instance CountableInterFilter.curry
-  signature: {α β : Type*} {l : Filter α} {m : Filter β}
-  body: ⟨by
-  intro S Sct hS
-  simp_rw [mem_curry_iff, mem_sInter, eventually_countable_ball (p := fun _ _ _ => (_, _) in _) Sct,
-    eventually_countable_ball (p := fun _ _ _ => forallᶠ (_ : β) in m, _) Sct, ← mem_curry_iff]
-  exact hS⟩
-
-中文:
-实例 余untable整数erFilter.curry
-  签名: {α β : 类型} {l : 滤子 α} {m : 滤子 β}
-  定义体: ⟨by
-  intro S Sct hS
-  simp_rw [mem_curry_iff, mem_sInter, eventually_countable_ball (p := fun _ _ _ => (_, _) in _) Sct,
-    eventually_countable_ball (p := fun _ _ _ => forallᶠ (_ : β) in m, _) Sct, ← mem_curry_iff]
-  exact hS⟩
-
-Depends on / 依赖: eventually_countable_ball, mem_curry_iff, mem_sInter, simp_rw
+/-
+**CountableInterFilter.curry** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CountableInterFilter.curry {α β : Type*} {l : Filter α} {m : Filter β} [Co
+untableInterFilter l] [CountableInterFilter m] : CountableInterFilter (l.curry m
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eventually_countable_ball`：eventually_countable_ball {ι : Type*} {S : Se
+t ι} (hS : S.Countable) {p : α -> forall i in S, Prop} : (forallᶠ x in l, forall
+ i hi, p x i hi…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 instance CountableInterFilter.curry {α β : Type*} {l : Filter α} {m : Filter β}
     [CountableInterFilter l] [CountableInterFilter m] : CountableInterFilter (l.curry m) := ⟨by
   intro S Sct hS
-  simp_rw [mem_curry_iff, mem_sInter, eventually_countable_ball (p := fun _ _ _ => (_, _) in _) Sct,
-    eventually_countable_ball (p := fun _ _ _ => forallᶠ (_ : β) in m, _) Sct, ← mem_curry_iff]
+  simp_rw [mem_curry_iff, mem_sInter, eventually_countable_ball (p := fun _ _ _ => (_, _) ∈ _) Sct,
+    eventually_countable_ball (p := fun _ _ _ => ∀ᶠ (_ : β) in m, _)  Sct, ← mem_curry_iff]
   exact hS⟩
 
 namespace Filter
 
 variable (g : Set (Set α))
 
-/--
-Inductive type `CountableGenerateSets` / 归纳类型 `CountableGenerateSets`
+/-- `Filter.CountableGenerateSets g` is the (sets of the)
+greatest `countableInterFilter` containing `g`. -/
+/-
+**Filter.CountableGenerateSets** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_2} → Set (Set α) → Set α → Prop
+参数：Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive CountableGenerateSets
-  parameters: : Set α -> Prop
-  constructors (4):
-    - basic: {s : Set α} : s in g -> CountableGenerateSets s
-    - univ: CountableGenerateSets univ
-    - superset: {s t : Set α} : CountableGenerateSets s -> s subseteq t -> CountableGenerateSets t
-    - sInter: {S : Set (Set α)} : S.Countable -> (forall s in S, CountableGenerateSets s) -> CountableGenerateSets (⋂₀ S)
-
-中文:
-归纳类型 余untableGenerateSets
-  参数: : 集合 α -> 命题
-  构造子 (4 个):
-    - basic: {s : 集合 α} : s in g -> 余untableGenerateSets s
-    - univ: 余untableGenerateSets univ
-    - superset: {s t : 集合 α} : 余untableGenerateSets s -> s subseteq t -> 余untableGenerateSets t
-    - sInter: {S : 集合 (集合 α)} : S.可数 -> (对任意 s in S, 余untableGenerateSets s) -> 余untableGenerateSets (⋂₀ S)
+--- 原说明 ---
+`Filter.CountableGenerateSets g` is the (sets of the)
+greatest `countableInterFilter` containing `g`.
 -/
-inductive CountableGenerateSets : Set α -> Prop
-  | basic {s : Set α} : s in g -> CountableGenerateSets s
+inductive CountableGenerateSets : Set α → Prop
+  | basic {s : Set α} : s ∈ g → CountableGenerateSets s
   | univ : CountableGenerateSets univ
-  | superset {s t : Set α} : CountableGenerateSets s -> s subseteq t -> CountableGenerateSets t
+  | superset {s t : Set α} : CountableGenerateSets s → s ⊆ t → CountableGenerateSets t
   | sInter {S : Set (Set α)} :
-    S.Countable -> (forall s in S, CountableGenerateSets s) -> CountableGenerateSets (⋂₀ S)
+    S.Countable → (∀ s ∈ S, CountableGenerateSets s) → CountableGenerateSets (⋂₀ S)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `countableGenerate` / `countableGenerate` 的定义
+/-- `Filter.countableGenerate g` is the greatest `countableInterFilter` containing `g`. -/
+/-
+**Filter.countableGenerate** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：countableGenerate : Filter α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition countableGenerate
-  signature: : Filter α
-  body: ofCountableInter {s | CountableGenerateSets g s} (fun _ => .sInter) fun _ _ => .superset
-deriving CountableInterFilter
-
-中文:
-定义 countableGenerate
-  签名: : 滤子 α
-  定义体: ofCountableInter {s | CountableGenerateSets g s} (fun _ => .sInter) fun _ _ => .superset
-deriving CountableInterFilter
-
-Depends on / 依赖: CountableGenerateSets, ofCountableInter, sInter, superset
+--- 原说明 ---
+`Filter.countableGenerate g` is the greatest `countableInterFilter` containing `
+g`.
 -/
 def countableGenerate : Filter α :=
-  ofCountableInter {s | CountableGenerateSets g s} (fun _ => .sInter) fun _ _ => .superset
+  ofCountableInter {s | CountableGenerateSets g s} (fun _ ↦ .sInter) fun _ _ ↦ .superset
 deriving CountableInterFilter
 
 variable {g}
 
-/--
-theorem `mem_countableGenerate_iff` / 定理 `mem_countableGenerate_iff`
+/-- A set is in the `countableInterFilter` generated by `g` if and only if
+it contains a countable intersection of elements of `g`. -/
+/-
+**Filter.mem_countableGenerate_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_countableGenerate_iff {s : Set α} : s in countableGenerate g ↔ exists 
+S : Set (Set α), S subseteq g ∧ S.Countable ∧ ⋂₀ S subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.sInter_singleton`：sInter_singleton (s : Set α) : ⋂₀ {s} = s
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Set.sInter_empty`：sInter_empty : ⋂₀ ∅ = (univ : Set α)
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.Countable.biUnion`：∀ {α : Type u} {β : Type v} {s : Set α} {t : (a :
+ α) → a ∈ s → Set β},   s.Countable → (∀ (a : α) (ha : a ∈ s), (t a ha).Countabl
+e) → (⋃ a, …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.subset_sInter`：subset_sInter {S : Set (Set α)} {t : Set α} (h : fora
+ll t' in S, t subseteq t') : t subseteq ⋂₀ S
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.sInter_subset_sInter`：sInter_subset_sInter {S T : Set (Set α)} (h : 
+S subseteq T) : ⋂₀ T subseteq ⋂₀ S
+· 使用定理 `Set.subset_iUnion₂`：subset_iUnion₂ {s : forall i, κ i -> Set α} (i : ι) 
+(j : κ i) : s i j subseteq ⋃ (i') (j'), s i' j'
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `countable_sInter_mem`：countable_sInter_mem {S : Set (Set α)} (hSc : S.Co
+untable) : ⋂₀ S in l ↔ forall s in S, s in l
+· 使用定理 `Filter.instCountableInterFilterCountableGenerate`：∀ {α : Type u_1} (g : 
+Set (Set α)), CountableInterFilter (Filter.countableGenerate g)
 
-English:
-theorem mem_countableGenerate_iff
-  given: {s : Set α}
-  proof: by
-  constructor <;> intro h
-  · induction h with
-    | @basic s hs => exact ⟨{s}, by simp [hs]⟩
-    | univ => exact ⟨∅, by simp⟩
-    | superset _ _ ih => refine Exists.imp (fun S => ?_) ih; tauto
-    | @sInter S Sct _ ih =>
-      choose T Tg Tct hT using ih
-      refine ⟨⋃ (s) (H : s in S), T s H, by simpa, Sct.biUnion Tct, ?_⟩
-      apply subset_sInter
-      intro s H
-      exact subset_trans (sInter_subset_sInter (subset_iUnion₂ s H)) (hT s H)
-  rcases h with ⟨S, Sg, Sct, hS⟩
-  refine mem_of_superset ((countable_sInter_mem Sct).mpr ?_) hS
-  intro s H
-  exact CountableGenerateSets.basic (Sg H)
-
-中文:
-定理 mem_countableGenerate_iff
-  条件: {s : 集合 α}
-  证明: by
-  constructor <;> intro h
-  · induction h with
-    | @basic s hs => exact ⟨{s}, by simp [hs]⟩
-    | univ => exact ⟨∅, by simp⟩
-    | superset _ _ ih => refine Exists.imp (fun S => ?_) ih; tauto
-    | @sInter S Sct _ ih =>
-      choose T Tg Tct hT using ih
-      refine ⟨⋃ (s) (H : s in S), T s H, by simpa, Sct.biUnion Tct, ?_⟩
-      apply subset_sInter
-      intro s H
-      exact subset_trans (sInter_subset_sInter (subset_iUnion₂ s H)) (hT s H)
-  rcases h with ⟨S, Sg, Sct, hS⟩
-  refine mem_of_superset ((countable_sInter_mem Sct).mpr ?_) hS
-  intro s H
-  exact CountableGenerateSets.basic (Sg H)
-
-Depends on / 依赖: Exists, Exists.imp, Sct.biUnion, biUnion, countable_sInter_mem, mem_of_superset, sInter, sInter_subset_sInter, subset_sInter, subset_trans, superset
+--- 原说明 ---
+A set is in the `countableInterFilter` generated by `g` if and only if
+it contains a countable intersection of elements of `g`.
 -/
 theorem mem_countableGenerate_iff {s : Set α} :
-    s in countableGenerate g ↔ exists S : Set (Set α), S subseteq g ∧ S.Countable ∧ ⋂₀ S subseteq s := by
+    s ∈ countableGenerate g ↔ ∃ S : Set (Set α), S ⊆ g ∧ S.Countable ∧ ⋂₀ S ⊆ s := by
   constructor <;> intro h
   · induction h with
     | @basic s hs => exact ⟨{s}, by simp [hs]⟩
@@ -905,7 +777,7 @@ theorem mem_countableGenerate_iff {s : Set α} :
     | superset _ _ ih => refine Exists.imp (fun S => ?_) ih; tauto
     | @sInter S Sct _ ih =>
       choose T Tg Tct hT using ih
-      refine ⟨⋃ (s) (H : s in S), T s H, by simpa, Sct.biUnion Tct, ?_⟩
+      refine ⟨⋃ (s) (H : s ∈ S), T s H, by simpa, Sct.biUnion Tct, ?_⟩
       apply subset_sInter
       intro s H
       exact subset_trans (sInter_subset_sInter (subset_iUnion₂ s H)) (hT s H)
@@ -913,40 +785,24 @@ theorem mem_countableGenerate_iff {s : Set α} :
   refine mem_of_superset ((countable_sInter_mem Sct).mpr ?_) hS
   intro s H
   exact CountableGenerateSets.basic (Sg H)
-
-/--
-theorem `le_countableGenerate_iff_of_countableInterFilter` / 定理 `le_countableGenerate_iff_of_countableInterFilter`
-
-English:
-theorem le_countableGenerate_iff_of_countableInterFilter
-  given: {f : Filter α} [CountableInterFilter f]
-  proof: by
-  constructor <;> intro h
-  · exact subset_trans (fun s => CountableGenerateSets.basic) h
-  intro s hs
-  induction hs with
-  | basic hs => exact h hs
-  | univ => exact univ_mem
-  | superset _ st ih => exact mem_of_superset ih st
-  | sInter Sct _ ih => exact (countable_sInter_mem Sct).mpr ih
-
-中文:
-定理 le_countableGenerate_iff_of_countable整数erFilter
-  条件: {f : 滤子 α} [余untable整数erFilter f]
-  证明: by
-  constructor <;> intro h
-  · exact subset_trans (fun s => CountableGenerateSets.basic) h
-  intro s hs
-  induction hs with
-  | basic hs => exact h hs
-  | univ => exact univ_mem
-  | superset _ st ih => exact mem_of_superset ih st
-  | sInter Sct _ ih => exact (countable_sInter_mem Sct).mpr ih
-
-Depends on / 依赖: CountableGenerateSets, CountableGenerateSets.basic, countable_sInter_mem, mem_of_superset, sInter, subset_trans, superset, univ_mem
+/-
+**Filter.le_countableGenerate_iff_of_countableInterFilter** 是 Mathlib 中的一个定理，位于命
+名空间 `Filter`。
+形式化陈述：le_countableGenerate_iff_of_countableInterFilter {f : Filter α} [Countable
+InterFilter f] : f <= countableGenerate g ↔ g subseteq f.sets
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `countable_sInter_mem`：countable_sInter_mem {S : Set (Set α)} (hSc : S.Co
+untable) : ⋂₀ S in l ↔ forall s in S, s in l
 -/
 theorem le_countableGenerate_iff_of_countableInterFilter {f : Filter α} [CountableInterFilter f] :
-    f <= countableGenerate g ↔ g subseteq f.sets := by
+    f ≤ countableGenerate g ↔ g ⊆ f.sets := by
   constructor <;> intro h
   · exact subset_trans (fun s => CountableGenerateSets.basic) h
   intro s hs
@@ -958,29 +814,29 @@ theorem le_countableGenerate_iff_of_countableInterFilter {f : Filter α} [Counta
 
 variable (g)
 
-/--
-theorem `countableGenerate_isGreatest` / 定理 `countableGenerate_isGreatest`
+/-- `countableGenerate g` is the greatest `countableInterFilter` containing `g`. -/
+/-
+**Filter.countableGenerate_isGreatest** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：countableGenerate_isGreatest : IsGreatest { f : Filter α | CountableInterF
+ilter f ∧ g subseteq f.sets } (countableGenerate g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.instCountableInterFilterCountableGenerate`：∀ {α : Type u_1} (g : 
+Set (Set α)), CountableInterFilter (Filter.countableGenerate g)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.le_countableGenerate_iff_of_countableInterFilter`：le_countableGen
+erate_iff_of_countableInterFilter {f : Filter α} [CountableInterFilter f] : f <=
+ countableGenerate g ↔ g subseteq f.sets
 
-English:
-theorem countableGenerate_isGreatest
-  proof: by
-  refine ⟨⟨inferInstance, fun s => CountableGenerateSets.basic⟩, ?_⟩
-  rintro f ⟨fct, hf⟩
-  rwa [@le_countableGenerate_iff_of_countableInterFilter _ _ _ fct]
-
-中文:
-定理 countableGenerate_isGreatest
-  证明: by
-  refine ⟨⟨inferInstance, fun s => CountableGenerateSets.basic⟩, ?_⟩
-  rintro f ⟨fct, hf⟩
-  rwa [@le_countableGenerate_iff_of_countableInterFilter _ _ _ fct]
-
-Depends on / 依赖: CountableGenerateSets, CountableGenerateSets.basic, le_countableGenerate_iff_of_countableInterFilter
+--- 原说明 ---
+`countableGenerate g` is the greatest `countableInterFilter` containing `g`.
 -/
 theorem countableGenerate_isGreatest :
-    IsGreatest { f : Filter α | CountableInterFilter f ∧ g subseteq f.sets } (countableGenerate g) := by
+    IsGreatest { f : Filter α | CountableInterFilter f ∧ g ⊆ f.sets } (countableGenerate g) := by
   refine ⟨⟨inferInstance, fun s => CountableGenerateSets.basic⟩, ?_⟩
   rintro f ⟨fct, hf⟩
   rwa [@le_countableGenerate_iff_of_countableInterFilter _ _ _ fct]
 
 end Filter
+

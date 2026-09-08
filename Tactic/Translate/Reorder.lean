@@ -56,125 +56,106 @@ public meta section
 namespace Mathlib.Tactic.Translate
 open Lean Meta Elab
 
-/--
-Definition of `Permutation` / `Permutation` 的定义
+/-- A permutation, represented using cycle notation. -/
+/-
+**Mathlib.Tactic.Translate.Permutation** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tact
+ic.Translate`。
+形式化陈述：Permutation
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Permutation
-  body: List {l : List Nat // 2 <= l.length}
-
-中文:
-缩写 置换
-  定义体: List {l : List Nat // 2 <= l.length}
-
-Depends on / 依赖: l.length, length
+--- 原说明 ---
+A permutation, represented using cycle notation.
 -/
-abbrev Permutation := List {l : List Nat // 2 <= l.length}
+abbrev Permutation := List {l : List Nat // 2 ≤ l.length}
 
 namespace Permutation
 
-/--
-Definition of `permute!` / `permute!` 的定义
+/-- Permute an array of arguments using the given reorder. -/
+/-
+**Mathlib.Tactic.Translate.Permutation.permute** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Translate.Permutation`。
+形式化陈述：permute! {α} [Inhabited α] (c : Permutation) : Array α -> Array α
+参数：c : Permutation。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition permute!
-  signature: {α} [Inhabited α] (c : Permutation)
-  body: c.foldl (cyclicPermute! · ·.1)
-
-中文:
-定义 permute!
-  签名: {α} [可居 α] (c : 置换)
-  定义体: c.foldl (cyclicPermute! · ·.1)
-
-Depends on / 依赖: c.foldl, cyclicPermute
+--- 原说明 ---
+Permute an array of arguments using the given reorder.
 -/
-def permute! {α} [Inhabited α] (c : Permutation) : Array α -> Array α :=
+def permute! {α} [Inhabited α] (c : Permutation) : Array α → Array α :=
   c.foldl (cyclicPermute! · ·.1)
 where
   /-- Permute the array using a sequence of indices defining a cyclic permutation.
   If the list of indices `l = [i₁, i₂, ..., iₙ]` are all distinct then
   `(cyclicPermute! a l)[iₖ₊₁] = a[iₖ]` and `(cyclicPermute! a l)[i₀] = a[iₙ]` -/
-  cyclicPermute! : Array α -> List Nat -> Array α
+  cyclicPermute! : Array α → List Nat → Array α
     | a, [] => a
     | a, i :: is => cyclicPermuteAux a is a[i]! i
-  cyclicPermuteAux : Array α -> List Nat -> α -> Nat -> Array α
+  cyclicPermuteAux : Array α → List Nat → α → Nat → Array α
     | a, [], x, i0 => a.set! i0 x
     | a, i :: is, x, i0 =>
       let (y, a) := a.swapAt! i x
       cyclicPermuteAux a is y i0
 
-/--
-Definition of `permuteList!` / `permuteList!` 的定义
+/-- Permute a list of either universe levels or universe parameters. -/
+/-
+**Mathlib.Tactic.Translate.Permutation.permuteList** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Translate.Permutation`。
+形式化陈述：permuteList! {α} [Inhabited α] (p : Permutation) (us : List α) : List α
+参数：p : Permutation；us : List α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition permuteList!
-  signature: {α} [Inhabited α] (p : Permutation) (us : List α)
-  body: if p.isEmpty then us else (p.permute! us.toArray).toList
-
-中文:
-定义 permuteList!
-  签名: {α} [可居 α] (p : 置换) (us : 列表 α)
-  定义体: if p.isEmpty then us else (p.permute! us.toArray).toList
-
-Depends on / 依赖: isEmpty, p.isEmpty, p.permute, permute, toArray, toList, us.toArray
+--- 原说明 ---
+Permute a list of either universe levels or universe parameters.
 -/
 def permuteList! {α} [Inhabited α] (p : Permutation) (us : List α) : List α :=
   if p.isEmpty then us else (p.permute! us.toArray).toList
 
-/--
-Definition of `reverse` / `reverse` 的定义
+/-- Return the inverse permutation. -/
+/-
+**Mathlib.Tactic.Translate.Permutation.reverse** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Translate.Permutation`。
+形式化陈述：reverse (c : Permutation) : Permutation
+参数：c : Permutation。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: (c : Permutation)
-  body: c.map (⟨·.1.reverse, by grind⟩)
-
-中文:
-定义 reverse
-  签名: (c : 置换)
-  定义体: c.map (⟨·.1.reverse, by grind⟩)
-
-Depends on / 依赖: c.map, reverse
+--- 原说明 ---
+Return the inverse permutation.
 -/
 def reverse (c : Permutation) : Permutation :=
   c.map (⟨·.1.reverse, by grind⟩)
 
-/--
-Definition of `range` / `range` 的定义
+/-- Return the minimum size of an array on which the permutation is valid. -/
+/-
+**Mathlib.Tactic.Translate.Permutation.range** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Translate.Permutation`。
+形式化陈述：range (p : Permutation) : Nat
+参数：p : Permutation。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition range
-  signature: (p : Permutation)
-  body: .fold max 0 .map (· + 1) p.iter.flatMap (·.1.iter)
-
-中文:
-定义 range
-  签名: (p : 置换)
-  定义体: .fold max 0 .map (· + 1) p.iter.flatMap (·.1.iter)
-
-Depends on / 依赖: flatMap, p.iter.flatMap
+--- 原说明 ---
+Return the minimum size of an array on which the permutation is valid.
 -/
 def range (p : Permutation) : Nat :=
-.fold max 0 .map (· + 1) p.iter.flatMap (·.1.iter)
+  p.iter.flatMap (·.1.iter) |>.map (· + 1) |>.fold max 0
 
-/--
-Definition of `beq` / `beq` 的定义
+/-- Two permutations are considered equal if they permute in the same way. -/
+/-
+**Mathlib.Tactic.Translate.Permutation.beq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Translate.Permutation`。
+形式化陈述：beq (p₁ p₂ : Permutation) : Bool
+参数：p₁ p₂ : Permutation。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.PRange.instLawfulUpwardEnumerableNat`：Std.PRange.LawfulUpwardEnumera
+ble ℕ
+· 使用定理 `Std.PRange.instIsAlwaysFiniteNat_1`：Std.Rxo.IsAlwaysFinite ℕ
 
-English:
-definition beq
-  signature: (p₁ p₂ : Permutation)
-  body: p₁.range == p₂.range &&
-    let rangeArr := (0...p₁.range).toArray;
-    p₁.permute! rangeArr == p₂.permute! rangeArr
-
-中文:
-定义 beq
-  签名: (p₁ p₂ : 置换)
-  定义体: p₁.range == p₂.range &&
-    let rangeArr := (0...p₁.range).toArray;
-    p₁.permute! rangeArr == p₂.permute! rangeArr
-
-Depends on / 依赖: permute, rangeArr, toArray
+--- 原说明 ---
+Two permutations are considered equal if they permute in the same way.
 -/
 def beq (p₁ p₂ : Permutation) : Bool :=
   p₁.range == p₂.range &&
@@ -183,22 +164,16 @@ def beq (p₁ p₂ : Permutation) : Bool :=
 
 end Permutation
 
-/--
-Definition of `ArgReorder` / `ArgReorder` 的定义
+/-- `ArgReorder` represents a permutation of arguments in a translation. -/
+/-
+**Mathlib.Tactic.Translate.ArgReorder** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.
+Translate`。
+形式化陈述：ArgReorder where /-- The list of disjoint cycles that represents the permu
+tation. -/ perm : Permutation
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ArgReorder
-  parameters: where
-  axioms and operations (2):
-    - perm : Permutation  [default: []]
-    - argReorders : Array (Nat × ArgReorder)  [default: #[]]
-
-中文:
-结构 ArgReorder
-  参数: where
-  公理与运算 (2 个):
-    - perm : 置换  [默认: []]
-    - argReorders : 数组 (自然数 × ArgReorder)  [默认: #[]]
+--- 原说明 ---
+`ArgReorder` represents a permutation of arguments in a translation.
 -/
 structure ArgReorder where
   /-- The list of disjoint cycles that represents the permutation. -/
@@ -210,218 +185,146 @@ structure ArgReorder where
 
 namespace ArgReorder
 
-/--
-Definition of `isEmpty` / `isEmpty` 的定义
+/-- Return `true` if the reorder doesn't do anything. -/
+/-
+**Mathlib.Tactic.Translate.ArgReorder.isEmpty** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Translate.ArgReorder`。
+形式化陈述：isEmpty (r : ArgReorder) : Bool
+参数：r : ArgReorder。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isEmpty
-  signature: (r : ArgReorder)
-  body: r matches ⟨[], #[]⟩
-
-中文:
-定义 isEmpty
-  签名: (r : ArgReorder)
-  定义体: r matches ⟨[], #[]⟩
-
-Depends on / 依赖: matches
+--- 原说明 ---
+Return `true` if the reorder doesn't do anything.
 -/
 def isEmpty (r : ArgReorder) : Bool := r matches ⟨[], #[]⟩
 
-/--
-Definition of `permute!` / `permute!` 的定义
+/-- Permute an array of arguments using the given reorder. -/
+/-
+**Mathlib.Tactic.Translate.ArgReorder.permute** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Translate.ArgReorder`。
+形式化陈述：permute! {α} [Inhabited α] (r : ArgReorder) : Array α -> Array α
+参数：r : ArgReorder。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition permute!
-  signature: {α} [Inhabited α] (r : ArgReorder)
-  body: r.perm.permute!
-
-中文:
-定义 permute!
-  签名: {α} [可居 α] (r : ArgReorder)
-  定义体: r.perm.permute!
-
-Depends on / 依赖: permute, r.perm.permute
+--- 原说明 ---
+Permute an array of arguments using the given reorder.
 -/
-def permute! {α} [Inhabited α] (r : ArgReorder) : Array α -> Array α :=
+def permute! {α} [Inhabited α] (r : ArgReorder) : Array α → Array α :=
   r.perm.permute!
 
-/--
-Definition of `reverse` / `reverse` 的定义
+/-- Return the reorder that reverses the action of the given reorder. -/
+/-
+**Mathlib.Tactic.Translate.ArgReorder.reverse** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Translate.ArgReorder`。
+形式化陈述：reverse (r : ArgReorder) : ArgReorder
+参数：r : ArgReorder。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: (r : ArgReorder)
-  body: {
-  perm := r.perm.reverse
-  argReorders := r.argReorders.map fun x => (permuteSingle r x.1, x.2.reverse)
-}
-decreasing_by
-  cases r; grind [-> Array.sizeOf_lt_of_mem]
-
-中文:
-定义 reverse
-  签名: (r : ArgReorder)
-  定义体: {
-  perm := r.perm.reverse
-  argReorders := r.argReorders.map fun x => (permuteSingle r x.1, x.2.reverse)
-}
-decreasing_by
-  cases r; grind [-> Array.sizeOf_lt_of_mem]
+--- 原说明 ---
+Return the reorder that reverses the action of the given reorder.
 -/
 def reverse (r : ArgReorder) : ArgReorder := {
   perm := r.perm.reverse
-  argReorders := r.argReorders.map fun x => (permuteSingle r x.1, x.2.reverse)
+  argReorders := r.argReorders.map fun x ↦ (permuteSingle r x.1, x.2.reverse)
 }
 decreasing_by
-  cases r; grind [-> Array.sizeOf_lt_of_mem]
+  cases r; grind [→ Array.sizeOf_lt_of_mem]
 where
   /-- Compute where `ArgReorder.permute!` sends the `n`-th element in an array. -/
   permuteSingle (r : ArgReorder) (n : Nat) : Nat :=
-.getD n r.perm.findSome? (fun cycle => getCycleSuccessor n (cycle.1.head (by grind)) cycle.1)
+    r.perm.findSome? (fun cycle ↦ getCycleSuccessor n (cycle.1.head (by grind)) cycle.1) |>.getD n
   /-- Return the successor of `n` in a cycle, where `head` is the head of the cycle list. -/
-  getCycleSuccessor (n head : Nat) : List Nat -> Option Nat
+  getCycleSuccessor (n head : Nat) : List Nat → Option Nat
     | [] => none
     | b :: bs => if b = n then bs.head?.getD head else getCycleSuccessor n head bs
 
-/--
-Definition of `range` / `range` 的定义
+/-- Return the minimum size of an array on which the given reorder is valid. -/
+/-
+**Mathlib.Tactic.Translate.ArgReorder.range** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Translate.ArgReorder`。
+形式化陈述：range (r : ArgReorder) : Nat
+参数：r : ArgReorder。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition range
-  signature: (r : ArgReorder)
-  body: r.argReorders.foldl (max · <| ·.1 + 1)
-.fold max 0 .map (· + 1) r.perm.iter.flatMap (·.1.iter)
-
-中文:
-定义 range
-  签名: (r : ArgReorder)
-  定义体: r.argReorders.foldl (max · <| ·.1 + 1)
-.fold max 0 .map (· + 1) r.perm.iter.flatMap (·.1.iter)
-
-Depends on / 依赖: argReorders, flatMap, r.argReorders.foldl, r.perm.iter.flatMap
+--- 原说明 ---
+Return the minimum size of an array on which the given reorder is valid.
 -/
 def range (r : ArgReorder) : Nat :=
-r.argReorders.foldl (max · <| ·.1 + 1)
-.fold max 0 .map (· + 1) r.perm.iter.flatMap (·.1.iter)
+  r.argReorders.foldl (max · <| ·.1 + 1) <|
+    r.perm.iter.flatMap (·.1.iter) |>.map (· + 1) |>.fold max 0
 
-/--
-Definition of `beq` / `beq` 的定义
+/-- Two reorders are considered equal if all permutations are the same. -/
+/-
+**Mathlib.Tactic.Translate.ArgReorder.beq** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.
+Tactic.Translate.ArgReorder`。
+形式化陈述：Mathlib.Tactic.Translate.ArgReorder → Mathlib.Tactic.Translate.ArgReorder 
+→ Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition beq
-  signature: (r₁ r₂ : ArgReorder)
-  body: r₁.perm.beq r₂.perm &&
-    have : BEq ArgReorder := ⟨beq⟩
-    r₁.argReorders == r₂.argReorders
-
-中文:
-定义 beq
-  签名: (r₁ r₂ : ArgReorder)
-  定义体: r₁.perm.beq r₂.perm &&
-    have : BEq ArgReorder := ⟨beq⟩
-    r₁.argReorders == r₂.argReorders
+--- 原说明 ---
+Two reorders are considered equal if all permutations are the same.
 -/
 partial def beq (r₁ r₂ : ArgReorder) : Bool :=
   r₁.perm.beq r₂.perm &&
     have : BEq ArgReorder := ⟨beq⟩
     r₁.argReorders == r₂.argReorders
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BEq ArgReorder
-  body: ⟨beq⟩
-
-中文:
-实例 :
-  签名: BEq ArgReorder
-  定义体: ⟨beq⟩
+/-
+**Mathlib.Tactic.Translate.ArgReorder.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic
+.Translate.ArgReorder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BEq ArgReorder := ⟨beq⟩
 
-/--
-Definition of `toString` / `toString` 的定义
+/-- Print an `ArgReorder`, representing the arguments by their index. -/
+/-
+**Mathlib.Tactic.Translate.ArgReorder.toString** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Translate.ArgReorder`。
+形式化陈述：toString (r : ArgReorder) : String
+参数：r : ArgReorder。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toString
-  signature: (r : ArgReorder)
-  body: let perm := r.perm.map (" ".intercalate <| ·.1.map (s!"{· + 1}"))
-  let argReorders := r.argReorders.map (fun x => s!"{x.1 + 1} ({x.2.toString})")
-  s!"{", ".intercalate (perm ++ argReorders.toList)}"
-decreasing_by
-  cases r; grind [-> Array.sizeOf_lt_of_mem]
-
-中文:
-定义 toString
-  签名: (r : ArgReorder)
-  定义体: let perm := r.perm.map (" ".intercalate <| ·.1.map (s!"{· + 1}"))
-  let argReorders := r.argReorders.map (fun x => s!"{x.1 + 1} ({x.2.toString})")
-  s!"{", ".intercalate (perm ++ argReorders.toList)}"
-decreasing_by
-  cases r; grind [-> Array.sizeOf_lt_of_mem]
-
-Depends on / 依赖: Array.sizeOf_lt_of_mem, argReorders, argReorders.toList, decreasing_by, intercalate, r.argReorders.map, r.perm.map, sizeOf_lt_of_mem, toList, toString
+--- 原说明 ---
+Print an `ArgReorder`, representing the arguments by their index.
 -/
 def toString (r : ArgReorder) : String :=
   let perm := r.perm.map (" ".intercalate <| ·.1.map (s!"{· + 1}"))
-  let argReorders := r.argReorders.map (fun x => s!"{x.1 + 1} ({x.2.toString})")
+  let argReorders := r.argReorders.map (fun x ↦ s!"{x.1 + 1} ({x.2.toString})")
   s!"{", ".intercalate (perm ++ argReorders.toList)}"
 decreasing_by
-  cases r; grind [-> Array.sizeOf_lt_of_mem]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToString ArgReorder
-  body: ⟨fun x => x.toString⟩
-
-中文:
-实例 :
-  签名: ToString ArgReorder
-  定义体: ⟨fun x => x.toString⟩
-
-Depends on / 依赖: toString, x.toString
+  cases r; grind [→ Array.sizeOf_lt_of_mem]
+/-
+**Mathlib.Tactic.Translate.ArgReorder.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic
+.Translate.ArgReorder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ToString ArgReorder := ⟨fun x => x.toString⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToMessageData ArgReorder
-  body: ⟨fun x => x.toString⟩
-
-中文:
-实例 :
-  签名: ToMessageData ArgReorder
-  定义体: ⟨fun x => x.toString⟩
-
-Depends on / 依赖: toString, x.toString
+instance : ToString ArgReorder := ⟨fun x ↦ x.toString⟩
+/-
+**Mathlib.Tactic.Translate.ArgReorder.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic
+.Translate.ArgReorder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ToMessageData ArgReorder := ⟨fun x => x.toString⟩
+instance : ToMessageData ArgReorder := ⟨fun x ↦ x.toString⟩
 
 end ArgReorder
 
-/--
-Definition of `Reorder` / `Reorder` 的定义
+/-- `Reorder` represents a permutation of arguments and universe levels for translating
+a given constant. -/
+/-
+**Mathlib.Tactic.Translate.Reorder** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.Tra
+nslate`。
+形式化陈述：Reorder where /-- The reordering of universe levels. -/ univReorder : Perm
+utation
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Reorder
-  parameters: where
-  axioms and operations (2):
-    - univReorder : Permutation  [default: []]
-    - reorder : ArgReorder  [default: {}]
-
-中文:
-结构 Reorder
-  参数: where
-  公理与运算 (2 个):
-    - univReorder : 置换  [默认: []]
-    - reorder : ArgReorder  [默认: {}]
+--- 原说明 ---
+`Reorder` represents a permutation of arguments and universe levels for translat
+ing
+a given constant.
 -/
 structure Reorder where
   /-- The reordering of universe levels. -/
@@ -429,22 +332,15 @@ structure Reorder where
   /-- The reordering of arguments. -/
   reorder : ArgReorder := {}
 
-/--
-Definition of `Reorder.reverse` / `Reorder.reverse` 的定义
+/-- Return the reorder that reverses the action of the given reorder. -/
+/-
+**Mathlib.Tactic.Translate.Reorder.reverse** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Translate.Reorder`。
+形式化陈述：Mathlib.Tactic.Translate.Reorder → Mathlib.Tactic.Translate.Reorder
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Reorder.reverse
-  signature: (r : Reorder)
-  body: r.univReorder.reverse
-  reorder := r.reorder.reverse
-
-中文:
-定义 Reorder.reverse
-  签名: (r : Reorder)
-  定义体: r.univReorder.reverse
-  reorder := r.reorder.reverse
-
-Depends on / 依赖: r.univReorder.reverse, reverse, univReorder
+--- 原说明 ---
+Return the reorder that reverses the action of the given reorder.
 -/
 def Reorder.reverse (r : Reorder) : Reorder where
   univReorder := r.univReorder.reverse
@@ -452,24 +348,14 @@ def Reorder.reverse (r : Reorder) : Reorder where
 
 /-! ### Reordering an expression -/
 
-/--
-Definition of `fixBinderInfos` / `fixBinderInfos` 的定义
+/-- Apply the given binder infos to the binders in expression `e`. -/
+/-
+**Mathlib.Tactic.Translate.fixBinderInfos** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fixBinderInfos
-  signature: (bis : List BinderInfo) (e : Expr)
-  body: match bis, e with
-  | bi :: bis, .forallE n d b _ => .forallE n d (fixBinderInfos bis b) bi
-  | bi :: bis, .lam n d b _ => .lam n d (fixBinderInfos bis b) bi
-  | _, _ => e
-
-中文:
-定义 fixBinderInfos
-  签名: (bis : 列表 BinderInfo) (e : Expr)
-  定义体: match bis, e with
-  | bi :: bis, .forallE n d b _ => .forallE n d (fixBinderInfos bis b) bi
-  | bi :: bis, .lam n d b _ => .lam n d (fixBinderInfos bis b) bi
-  | _, _ => e
+--- 原说明 ---
+Apply the given binder infos to the binders in expression `e`.
 -/
 private def fixBinderInfos (bis : List BinderInfo) (e : Expr) : Expr :=
   match bis, e with
@@ -485,38 +371,14 @@ Instead, we implicitly rely on `instantiateMVars`.
 -/
 mutual
 
-/--
-Definition of `reorderMVars` / `reorderMVars` 的定义
+/-- Reorder the given metavariables using the given `ArgReorder`. -/
+/-
+**Mathlib.Tactic.Translate.reorderMVars** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reorderMVars
-  signature: (mvars : Array Expr) (reorder : ArgReorder)
-  body: do
-  let mut mvars := mvars
-  for (arg, argReorder) in reorder.argReorders do
-    let mvarId := mvars[arg]!.mvarId!
-    let decl ← mvarId.getDecl
-    let mvarId' ← mkFreshExprMVar (← reorderForall argReorder decl.type) (userName := decl.userName)
-    -- Note: we assign `mvarId` in terms of `mvarId'`, and to do this we need to reorder `mvarId'`
-    -- with the reverse reorder of `argReorder`.
-    mvarId.assign (← reorderLambda argReorder.reverse mvarId')
-    mvars := mvars.set! arg mvarId'
-  return reorder.permute! mvars
-
-中文:
-定义 reorderMVars
-  签名: (mvars : 数组 Expr) (reorder : ArgReorder)
-  定义体: do
-  let mut mvars := mvars
-  for (arg, argReorder) in reorder.argReorders do
-    let mvarId := mvars[arg]!.mvarId!
-    let decl ← mvarId.getDecl
-    let mvarId' ← mkFreshExprMVar (← reorderForall argReorder decl.type) (userName := decl.userName)
-    -- Note: we assign `mvarId` in terms of `mvarId'`, and to do this we need to reorder `mvarId'`
-    -- with the reverse reorder of `argReorder`.
-    mvarId.assign (← reorderLambda argReorder.reverse mvarId')
-    mvars := mvars.set! arg mvarId'
-  return reorder.permute! mvars
+--- 原说明 ---
+Reorder the given metavariables using the given `ArgReorder`.
 -/
 private partial def reorderMVars (mvars : Array Expr) (reorder : ArgReorder) :
     MetaM (Array Expr) := do
@@ -531,126 +393,56 @@ private partial def reorderMVars (mvars : Array Expr) (reorder : ArgReorder) :
     mvars := mvars.set! arg mvarId'
   return reorder.permute! mvars
 
-/--
-Definition of `reorderForall` / `reorderForall` 的定义
+/-- Reorder the arguments of a function type using the given `ArgReorder`. -/
+/-
+**Mathlib.Tactic.Translate.reorderForall** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.T
+actic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.ArgReorder → Expr → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reorderForall
-  signature: (reorder : ArgReorder) (e : Expr)
-  body: do
-  let (mvars, bis, e) ← forallMetaBoundedTelescope e reorder.range
-  unless mvars.size = reorder.range do
-    throwError "the permutation (reorder := {reorder}) is out of bounds, \
-      the type{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute! bis
-  -- Note that `mkForallFVars` also works with mvars.
-fixBinderInfos bis < > mkForallFVars (← reorderMVars mvars reorder) e
-
-中文:
-定义 reorderForall
-  签名: (reorder : ArgReorder) (e : Expr)
-  定义体: do
-  let (mvars, bis, e) ← forallMetaBoundedTelescope e reorder.range
-  unless mvars.size = reorder.range do
-    throwError "the permutation (reorder := {reorder}) is out of bounds, \
-      the type{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute! bis
-  -- Note that `mkForallFVars` also works with mvars.
-fixBinderInfos bis < > mkForallFVars (← reorderMVars mvars reorder) e
+--- 原说明 ---
+Reorder the arguments of a function type using the given `ArgReorder`.
 -/
 partial def reorderForall (reorder : ArgReorder) (e : Expr) : MetaM Expr := do
   let (mvars, bis, e) ← forallMetaBoundedTelescope e reorder.range
   unless mvars.size = reorder.range do
     throwError "the permutation (reorder := {reorder}) is out of bounds, \
       the type{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute! bis
+  let bis := reorder.permute! bis |>.toList
   -- Note that `mkForallFVars` also works with mvars.
-fixBinderInfos bis < > mkForallFVars (← reorderMVars mvars reorder) e
+  fixBinderInfos bis <$> mkForallFVars (← reorderMVars mvars reorder) e
 
-/--
-Definition of `reorderLambda` / `reorderLambda` 的定义
+/-- Reorder the arguments of a function using the given `ArgReorder`. -/
+/-
+**Mathlib.Tactic.Translate.reorderLambda** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.T
+actic.Translate`。
+形式化陈述：Mathlib.Tactic.Translate.ArgReorder → Expr → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reorderLambda
-  signature: (reorder : ArgReorder) (e : Expr)
-  body: do
-  let (mvars, bis, _) ← forallMetaBoundedTelescope (← inferType e) reorder.range
-  unless mvars.size = reorder.range do
-    throwError "the permutation (reorder := {reorder}) is out of bounds, \
-      the function{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute! bis
-  -- Note that `mkLambdaFVars` also works with mvars.
-fixBinderInfos bis < > mkLambdaFVars (← reorderMVars mvars reorder) (e.beta mvars)
-
-中文:
-定义 reorderLambda
-  签名: (reorder : ArgReorder) (e : Expr)
-  定义体: do
-  let (mvars, bis, _) ← forallMetaBoundedTelescope (← inferType e) reorder.range
-  unless mvars.size = reorder.range do
-    throwError "the permutation (reorder := {reorder}) is out of bounds, \
-      the function{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute! bis
-  -- Note that `mkLambdaFVars` also works with mvars.
-fixBinderInfos bis < > mkLambdaFVars (← reorderMVars mvars reorder) (e.beta mvars)
+--- 原说明 ---
+Reorder the arguments of a function using the given `ArgReorder`.
 -/
 partial def reorderLambda (reorder : ArgReorder) (e : Expr) : MetaM Expr := do
   let (mvars, bis, _) ← forallMetaBoundedTelescope (← inferType e) reorder.range
   unless mvars.size = reorder.range do
     throwError "the permutation (reorder := {reorder}) is out of bounds, \
       the function{indentExpr e}\nhas only {mvars.size} arguments"
-.toList let bis := reorder.permute! bis
+  let bis := reorder.permute! bis |>.toList
   -- Note that `mkLambdaFVars` also works with mvars.
-fixBinderInfos bis < > mkLambdaFVars (← reorderMVars mvars reorder) (e.beta mvars)
+  fixBinderInfos bis <$> mkLambdaFVars (← reorderMVars mvars reorder) (e.beta mvars)
 
 end
 
 /-! ### Guessing the reorder given the reordered expression -/
 
-/--
-Definition of `decomposePerm` / `decomposePerm` 的定义
+/-- Decompose the permutation `map` into its disjoint cycle representation. -/
+/-
+**Mathlib.Tactic.Translate.decomposePerm** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decomposePerm
-  signature: {n} (map : Vector (Option (Fin n)) n)
-  body: Id.run do
-  let mut map := map
-  let mut perm := []
-  for h : i in *...n do
-    let mut some j := map[i] | continue
-    if i = j then continue
-    let mut cycle := ⟨[i, j], by grind⟩
-    repeat do
-      let some j' := map[j] | return [] -- If the permutation is malformed, return `[]`.
-      -- To avoid computing the same cycle multiple times, and to avoid infinite loops,
-      -- we erase visited elements from `map`.
-      map := map.set! j none
-      if j' = i then break
-      j := j'
-      cycle := ⟨cycle.1 ++ [j.val], by grind⟩
-    perm := cycle :: perm
-  return perm
-
-中文:
-定义 decomposePerm
-  签名: {n} (map : Vector (选项类型 (有限集 n)) n)
-  定义体: Id.run do
-  let mut map := map
-  let mut perm := []
-  for h : i in *...n do
-    let mut some j := map[i] | continue
-    if i = j then continue
-    let mut cycle := ⟨[i, j], by grind⟩
-    repeat do
-      let some j' := map[j] | return [] -- If the permutation is malformed, return `[]`.
-      -- To avoid computing the same cycle multiple times, and to avoid infinite loops,
-      -- we erase visited elements from `map`.
-      map := map.set! j none
-      if j' = i then break
-      j := j'
-      cycle := ⟨cycle.1 ++ [j.val], by grind⟩
-    perm := cycle :: perm
-  return perm
+--- 原说明 ---
+Decompose the permutation `map` into its disjoint cycle representation.
 -/
 private def decomposePerm {n} (map : Vector (Option (Fin n)) n) : Permutation := Id.run do
   let mut map := map
@@ -670,32 +462,16 @@ private def decomposePerm {n} (map : Vector (Option (Fin n)) n) : Permutation :=
     perm := cycle :: perm
   return perm
 
-/--
-Definition of `getPermutation` / `getPermutation` 的定义
+/-- Return the permutation that sends `src` to `tgt`, if it exists. -/
+/-
+**Mathlib.Tactic.Translate.getPermutation** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+形式化陈述：{α : Type u_1} → [BEq α] → Array α → Array α → Option Mathlib.Tactic.Trans
+late.Permutation
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getPermutation
-  signature: {α : Type*} [BEq α] (src : Array α) (tgt : Array α)
-  body: do
-  let n := src.size
-  if h : n = tgt.size then
-    have src : Vector α n := src.toVector
-    have tgt : Vector α n := h ▸ tgt.toVector
-    return decomposePerm (← src.mapM (some <$> tgt.finIdxOf? ·))
-  else
-    none
-
-中文:
-定义 getPermutation
-  签名: {α : 类型} [BEq α] (src : 数组 α) (tgt : 数组 α)
-  定义体: do
-  let n := src.size
-  if h : n = tgt.size then
-    have src : Vector α n := src.toVector
-    have tgt : Vector α n := h ▸ tgt.toVector
-    return decomposePerm (← src.mapM (some <$> tgt.finIdxOf? ·))
-  else
-    none
+--- 原说明 ---
+Return the permutation that sends `src` to `tgt`, if it exists.
 -/
 def getPermutation {α : Type*} [BEq α] (src : Array α) (tgt : Array α) : Option Permutation := do
   let n := src.size
@@ -706,104 +482,51 @@ def getPermutation {α : Type*} [BEq α] (src : Array α) (tgt : Array α) : Opt
   else
     none
 
-/--
-Definition of `depForallDepth` / `depForallDepth` 的定义
+/-- Determine how many forall binders should be introduced to get a non-dependent conclusion. -/
+/-
+**Mathlib.Tactic.Translate.depForallDepth** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition depForallDepth
-  signature: : Expr -> Nat
-  body: depForallDepth b
-    if d == 0 && !b.hasLooseBVar 0 then 0 else d + 1
-  | _ => 0
-
-中文:
-定义 depForallDepth
-  签名: : Expr -> 自然数
-  定义体: depForallDepth b
-    if d == 0 && !b.hasLooseBVar 0 then 0 else d + 1
-  | _ => 0
+--- 原说明 ---
+Determine how many forall binders should be introduced to get a non-dependent co
+nclusion.
 -/
-private def depForallDepth : Expr -> Nat
+private def depForallDepth : Expr → Nat
   | .forallE _ _ b _ =>
     let d := depForallDepth b
     if d == 0 && !b.hasLooseBVar 0 then 0 else d + 1
   | _ => 0
 
-/--
-Definition of `guessReorder` / `guessReorder` 的定义
+/-- Try to determine the value of the `(reorder := ...)` option that would be needed to translate
+type `e₁` to type `e₂`. If there is no good guess, default to `[]`.
+The heuristic that we use is to compare the conclusions of `e₁` and `e₂`,
+and to observe which variables are swapped.
+We also apply this heuristic recursively in hypotheses. -/
+/-
+**Mathlib.Tactic.Translate.guessReorder** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Ta
+ctic.Translate`。
+形式化陈述：Expr → Expr → MetaM Mathlib.Tactic.Translate.ArgReorder
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition guessReorder
-  signature: (src tgt : Expr)
-  body: withReducible do
-  let src ← whnf src; let tgt ← whnf tgt
-  let depth := depForallDepth src
-  unless depth == depForallDepth tgt do return {}
-  forallBoundedTelescope src depth fun srcVars src => do
-  forallBoundedTelescope tgt depth fun tgtVars tgt => do
-let srcMap : Std.HashMap FVarId Nat := .ofArray srcVars.mapIdx fun i x => (x.fvarId!, i)
-let tgtMap : Std.HashMap FVarId Nat := .ofArray tgtVars.mapIdx fun i x => (x.fvarId!, i)
-  let perm := (← visit src tgt (.replicate depth none) |>.run (srcMap, tgtMap) |>.run' {} |>.run)
-.elim [] decomposePerm
-  -- Recursively guess the reorder in the hypotheses
-  let mut argReorders := #[]
-  for i in *...depth do
-    let r ← guessReorder (← inferType srcVars[i]!) (← inferType tgtVars[i]!)
-    unless r.isEmpty do
-      argReorders := argReorders.push (i, r)
-  let mut src := src; let mut tgt := tgt
-  let mut n := depth
-  while src.isForall && tgt.isForall do
-    let r ← guessReorder src.bindingDomain! tgt.bindingDomain!
-    unless r.isEmpty do
-      argReorders := argReorders.push (n, r)
-    -- This won't create loose bound variables, because we already introduced all dependent foralls.
-    src := src.bindingBody!
-    tgt := tgt.bindingBody!
-    n := n + 1
-  return { perm, argReorders }
-
-中文:
-定义 guessReorder
-  签名: (src tgt : Expr)
-  定义体: withReducible do
-  let src ← whnf src; let tgt ← whnf tgt
-  let depth := depForallDepth src
-  unless depth == depForallDepth tgt do return {}
-  forallBoundedTelescope src depth fun srcVars src => do
-  forallBoundedTelescope tgt depth fun tgtVars tgt => do
-let srcMap : Std.HashMap FVarId Nat := .ofArray srcVars.mapIdx fun i x => (x.fvarId!, i)
-let tgtMap : Std.HashMap FVarId Nat := .ofArray tgtVars.mapIdx fun i x => (x.fvarId!, i)
-  let perm := (← visit src tgt (.replicate depth none) |>.run (srcMap, tgtMap) |>.run' {} |>.run)
-.elim [] decomposePerm
-  -- Recursively guess the reorder in the hypotheses
-  let mut argReorders := #[]
-  for i in *...depth do
-    let r ← guessReorder (← inferType srcVars[i]!) (← inferType tgtVars[i]!)
-    unless r.isEmpty do
-      argReorders := argReorders.push (i, r)
-  let mut src := src; let mut tgt := tgt
-  let mut n := depth
-  while src.isForall && tgt.isForall do
-    let r ← guessReorder src.bindingDomain! tgt.bindingDomain!
-    unless r.isEmpty do
-      argReorders := argReorders.push (n, r)
-    -- This won't create loose bound variables, because we already introduced all dependent foralls.
-    src := src.bindingBody!
-    tgt := tgt.bindingBody!
-    n := n + 1
-  return { perm, argReorders }
+--- 原说明 ---
+Try to determine the value of the `(reorder := ...)` option that would be needed
+ to translate
+type `e₁` to type `e₂`. If there is no good guess, default to `[]`.
+The heuristic that we use is to compare the conclusions of `e₁` and `e₂`,
+and to observe which variables are swapped.
+We also apply this heuristic recursively in hypotheses.
 -/
 partial def guessReorder (src tgt : Expr) : MetaM ArgReorder := withReducible do
   let src ← whnf src; let tgt ← whnf tgt
   let depth := depForallDepth src
   unless depth == depForallDepth tgt do return {}
-  forallBoundedTelescope src depth fun srcVars src => do
-  forallBoundedTelescope tgt depth fun tgtVars tgt => do
-let srcMap : Std.HashMap FVarId Nat := .ofArray srcVars.mapIdx fun i x => (x.fvarId!, i)
-let tgtMap : Std.HashMap FVarId Nat := .ofArray tgtVars.mapIdx fun i x => (x.fvarId!, i)
+  forallBoundedTelescope src depth fun srcVars src ↦ do
+  forallBoundedTelescope tgt depth fun tgtVars tgt ↦ do
+  let srcMap : Std.HashMap FVarId Nat := .ofArray <| srcVars.mapIdx fun i x => (x.fvarId!, i)
+  let tgtMap : Std.HashMap FVarId Nat := .ofArray <| tgtVars.mapIdx fun i x => (x.fvarId!, i)
   let perm := (← visit src tgt (.replicate depth none) |>.run (srcMap, tgtMap) |>.run' {} |>.run)
-.elim [] decomposePerm
+    |>.elim [] decomposePerm
   -- Recursively guess the reorder in the hypotheses
   let mut argReorders := #[]
   for i in *...depth do
@@ -829,12 +552,12 @@ where
     if (← get).contains (src, tgt) then return map
     let map ← match src, tgt with
       | .forallE _ d₁ b₁ _, .forallE _ d₂ b₂ _ => visit d₁ d₂ map >>= visit b₁ b₂
-      | .lam _ d₁ b₁ _ , .lam _ d₂ b₂ _ => visit d₁ d₂ map >>= visit b₁ b₂
-      | .mdata _ e₁ , .mdata _ e₂ => visit e₁ e₂ map
+      | .lam _ d₁ b₁ _    , .lam _ d₂ b₂ _     => visit d₁ d₂ map >>= visit b₁ b₂
+      | .mdata _ e₁       , .mdata _ e₂        => visit e₁ e₂ map
       | .letE _ t₁ v₁ b₁ _, .letE _ t₂ v₂ b₂ _ => visit t₁ t₂ map >>= visit v₁ v₂ >>= visit b₁ b₂
-      | .app f₁ a₁ , .app f₂ a₂ => visit f₁ f₂ map >>= visit a₁ a₂
-      | .proj _ _ e₁ , .proj _ _ e₂ => visit e₁ e₂ map
-      | .fvar fvarId₁ , .fvar fvarId₂ =>
+      | .app f₁ a₁        , .app f₂ a₂         => visit f₁ f₂ map >>= visit a₁ a₂
+      | .proj _ _ e₁      , .proj _ _ e₂       => visit e₁ e₂ map
+      | .fvar fvarId₁  , .fvar fvarId₂  =>
         let some i₁ := (← read).1[fvarId₁]? | pure map
         let some i₂ := (← read).2[fvarId₂]? | pure map
         if h : i₂ < n then
@@ -842,7 +565,7 @@ where
             guard (i₂ == i₂') -- If `i₂ ≠ i₂'`, it's not clear what `i₁` should be translated to.
             pure map
           else
-pure map.set! i₁ (some ⟨i₂, h⟩)
+            pure <| map.set! i₁ (some ⟨i₂, h⟩)
         else
           panic! s!"index {i₂} is out of bounds ({n})"
       /- To avoid false positives, we do a sanity check to make sure that the two expressions are
@@ -879,46 +602,21 @@ If the translated declaration already exists (i.e. when using `existing` or `sel
 argument is automatically inferred using the function `guessReorder`. -/
 syntax (name := reorder) reorderPart,* : translateReorder
 
-/--
-Definition of `elabArgStx` / `elabArgStx` 的定义
+/-- Elaborate syntax that refers to an argument of a declaration or hypothesis.
+This is either a 1-indexed number, or a name from `argNames`.
+- `fvars` is only used to add hover information to `stx`
+- `head` is only used for the error message. -/
+/-
+**Mathlib.Tactic.Translate.elabArgStx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Translate`。
+形式化陈述：TSyntax [`ident, `num] → Array Name → Array Expr → MessageData → MetaM ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabArgStx
-  signature: (stx : TSyntax [`ident, `num]) (argNames : Array Name) (fvars : Array Expr)
-  body: do
-  let n ← match stx with
-    | `($name:ident) => match argNames.idxOf? name.getId with
-      | some n => pure n
-      | none => throwErrorAt stx
-        "invalid argument `{stx}`, it is not an argument of `{head}`."
-    | `($n:num) =>
-      if n.getNat = 0 then
-        throwErrorAt stx "invalid index `{stx}`, arguments are counted starting from 1."
-      if n.getNat > fvars.size then
-        throwErrorAt stx "index `{stx}` is out of bounds, there are only `{fvars.size}` arguments"
-      pure (n.getNat - 1)
-    | _ => throwUnsupportedSyntax
-.run' Elab.Term.addTermInfo' stx fvars[n]!
-  return n
-
-中文:
-定义 elabArgStx
-  签名: (stx : TSyntax [`ident, `num]) (argNames : 数组 Name) (fvars : 数组 Expr)
-  定义体: do
-  let n ← match stx with
-    | `($name:ident) => match argNames.idxOf? name.getId with
-      | some n => pure n
-      | none => throwErrorAt stx
-        "invalid argument `{stx}`, it is not an argument of `{head}`."
-    | `($n:num) =>
-      if n.getNat = 0 then
-        throwErrorAt stx "invalid index `{stx}`, arguments are counted starting from 1."
-      if n.getNat > fvars.size then
-        throwErrorAt stx "index `{stx}` is out of bounds, there are only `{fvars.size}` arguments"
-      pure (n.getNat - 1)
-    | _ => throwUnsupportedSyntax
-.run' Elab.Term.addTermInfo' stx fvars[n]!
-  return n
+--- 原说明 ---
+Elaborate syntax that refers to an argument of a declaration or hypothesis.
+This is either a 1-indexed number, or a name from `argNames`.
+- `fvars` is only used to add hover information to `stx`
+- `head` is only used for the error message.
 -/
 def elabArgStx (stx : TSyntax [`ident, `num]) (argNames : Array Name) (fvars : Array Expr)
     (head : MessageData) : MetaM Nat := do
@@ -934,95 +632,19 @@ def elabArgStx (stx : TSyntax [`ident, `num]) (argNames : Array Name) (fvars : A
         throwErrorAt stx "index `{stx}` is out of bounds, there are only `{fvars.size}` arguments"
       pure (n.getNat - 1)
     | _ => throwUnsupportedSyntax
-.run' Elab.Term.addTermInfo' stx fvars[n]!
+  Elab.Term.addTermInfo' stx fvars[n]! |>.run'
   return n
 
-/--
-Definition of `elabReorder` / `elabReorder` 的定义
+/-- Elaborate the argument of a `(reorder := ...)` option. -/
+/-
+**Mathlib.Tactic.Translate.elabReorder** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tac
+tic.Translate`。
+形式化陈述：TSyntax `translateReorder → Array Name → Array Expr → MessageData → MetaM 
+Mathlib.Tactic.Translate.ArgReorder
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabReorder
-  signature: (stx : TSyntax `translateReorder) (argNames : Array Name)
-  body: match stx with
-  | `(reorder| $[$parts],*) => withRef stx do
-    let mut perm := []
-    let mut argReorders := #[]
-    for part in parts do
-      let `(reorderPart| $[$cycleStx]* $[($argReorder?)]?) := part | throwUnsupportedSyntax
-      let cycle ← cycleStx.toList.mapM (elabArgStx · argNames args head)
-      if h : 2 <= cycle.length then
-        perm := ⟨cycle, h⟩ :: perm
-      else if argReorder?.isNone then
-        throwErrorAt part "\
-          Invalid cycle `{part}`, a cycle must have at least 2 elements.\n\
-            See the docstring of `reorder` for how to specify reorders."
-      if let some argReorder := argReorder? then
-        for arg in cycle do
-        let reorder ←
-          -- Use a reducing telescope to see through `autoParam`.
-withReducible forallTelescopeReducing (← inferType args[arg]!) fun xs _ => do
-            let argNames ← xs.mapM (·.fvarId!.getUserName)
-            -- Recursively elaborate the nested reorder syntax.
-            elabReorder argReorder argNames xs m!"{args[arg]!}"
-        argReorders := argReorders.push (arg, reorder)
-    -- Check that the cycles are disjoint
-.foldM (init := ({} : Std.HashSet Nat)) fun s n => do _ ← perm.iter.flatMap (·.1.iter)
-      let (contains, s) := s.containsThenInsert n
-      if contains then throwError
-        "Please remove the duplicate entries from the disjoint cycle representation.\n\
-        See the docstring of `reorder` for how to specify reorders."
-      return s
-    argReorders := argReorders.qsort (·.1 < ·.1)
-    -- check that the `argReorders` aren't duplicated.
-    for h : i in *...(argReorders.size - 1) do
-      let arg₀ := argReorders[i]; let arg₁ := argReorders[i + 1]
-      if arg₀.1 == arg₁.1 then
-        throwError "The reorder within argument {arg₀.1 + 1} has been set to both \
-          `{arg₀.2.toString}` and `{arg₁.2.toString}`. Please specify it only once."
-    return { perm, argReorders }
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabReorder
-  签名: (stx : TSyntax `translateReorder) (argNames : 数组 Name)
-  定义体: match stx with
-  | `(reorder| $[$parts],*) => withRef stx do
-    let mut perm := []
-    let mut argReorders := #[]
-    for part in parts do
-      let `(reorderPart| $[$cycleStx]* $[($argReorder?)]?) := part | throwUnsupportedSyntax
-      let cycle ← cycleStx.toList.mapM (elabArgStx · argNames args head)
-      if h : 2 <= cycle.length then
-        perm := ⟨cycle, h⟩ :: perm
-      else if argReorder?.isNone then
-        throwErrorAt part "\
-          Invalid cycle `{part}`, a cycle must have at least 2 elements.\n\
-            See the docstring of `reorder` for how to specify reorders."
-      if let some argReorder := argReorder? then
-        for arg in cycle do
-        let reorder ←
-          -- Use a reducing telescope to see through `autoParam`.
-withReducible forallTelescopeReducing (← inferType args[arg]!) fun xs _ => do
-            let argNames ← xs.mapM (·.fvarId!.getUserName)
-            -- Recursively elaborate the nested reorder syntax.
-            elabReorder argReorder argNames xs m!"{args[arg]!}"
-        argReorders := argReorders.push (arg, reorder)
-    -- Check that the cycles are disjoint
-.foldM (init := ({} : Std.HashSet Nat)) fun s n => do _ ← perm.iter.flatMap (·.1.iter)
-      let (contains, s) := s.containsThenInsert n
-      if contains then throwError
-        "Please remove the duplicate entries from the disjoint cycle representation.\n\
-        See the docstring of `reorder` for how to specify reorders."
-      return s
-    argReorders := argReorders.qsort (·.1 < ·.1)
-    -- check that the `argReorders` aren't duplicated.
-    for h : i in *...(argReorders.size - 1) do
-      let arg₀ := argReorders[i]; let arg₁ := argReorders[i + 1]
-      if arg₀.1 == arg₁.1 then
-        throwError "The reorder within argument {arg₀.1 + 1} has been set to both \
-          `{arg₀.2.toString}` and `{arg₁.2.toString}`. Please specify it only once."
-    return { perm, argReorders }
-  | _ => throwUnsupportedSyntax
+--- 原说明 ---
+Elaborate the argument of a `(reorder := ...)` option.
 -/
 partial def elabReorder (stx : TSyntax `translateReorder) (argNames : Array Name)
     (args : Array Expr) (head : MessageData) : MetaM ArgReorder :=
@@ -1033,7 +655,7 @@ partial def elabReorder (stx : TSyntax `translateReorder) (argNames : Array Name
     for part in parts do
       let `(reorderPart| $[$cycleStx]* $[($argReorder?)]?) := part | throwUnsupportedSyntax
       let cycle ← cycleStx.toList.mapM (elabArgStx · argNames args head)
-      if h : 2 <= cycle.length then
+      if h : 2 ≤ cycle.length then
         perm := ⟨cycle, h⟩ :: perm
       else if argReorder?.isNone then
         throwErrorAt part "\
@@ -1043,13 +665,13 @@ partial def elabReorder (stx : TSyntax `translateReorder) (argNames : Array Name
         for arg in cycle do
         let reorder ←
           -- Use a reducing telescope to see through `autoParam`.
-withReducible forallTelescopeReducing (← inferType args[arg]!) fun xs _ => do
+          withReducible <| forallTelescopeReducing (← inferType args[arg]!) fun xs _ ↦ do
             let argNames ← xs.mapM (·.fvarId!.getUserName)
             -- Recursively elaborate the nested reorder syntax.
             elabReorder argReorder argNames xs m!"{args[arg]!}"
         argReorders := argReorders.push (arg, reorder)
     -- Check that the cycles are disjoint
-.foldM (init := ({} : Std.HashSet Nat)) fun s n => do _ ← perm.iter.flatMap (·.1.iter)
+    _ ← perm.iter.flatMap (·.1.iter) |>.foldM (init := ({} : Std.HashSet Nat)) fun s n ↦ do
       let (contains, s) := s.containsThenInsert n
       if contains then throwError
         "Please remove the duplicate entries from the disjoint cycle representation.\n\
@@ -1066,3 +688,4 @@ withReducible forallTelescopeReducing (← inferType args[arg]!) fun xs _ => do
   | _ => throwUnsupportedSyntax
 
 end Mathlib.Tactic.Translate
+

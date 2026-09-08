@@ -58,97 +58,71 @@ namespace GradedMonoid
 
 section Defs
 
-variable (A : ιA -> Type*) (M : ιM -> Type*)
+variable (A : ιA → Type*) (M : ιM → Type*)
 
-/--
-Definition of `GSMul` / `GSMul` 的定义
+/-- A graded version of `SMul`. Scalar multiplication combines grades additively, i.e.
+if `a ∈ A i` and `m ∈ M j`, then `a • b` must be in `M (i + j)`. -/
+/-
+**GradedMonoid.GSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 `GradedMonoid`。
+形式化陈述：{ιA : Type u_1} →   {ιM : Type u_3} → (ιA → Type u_4) → (ιM → Type u_5) → 
+[VAdd ιA ιM] → Type (max (max (max u_1 u_3) u_4) u_5)
+参数：ιA → Type u_4；ιM → Type u_5；max (max (max u_1 u_3) u_4) u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class GSMul
-  parameters: [VAdd ιA ιM]
-  axioms and operations (1):
-    - smul({i j}) : A i -> M j -> M (i +ᵥ j)
-
-中文:
-类 GSMul
-  参数: [向量加法 ιA ιM]
-  公理与运算 (1 个):
-    - smul({i j}) : A i -> M j -> M (i +ᵥ j)
+--- 原说明 ---
+A graded version of `SMul`. Scalar multiplication combines grades additively, i.
+e.
+if `a ∈ A i` and `m ∈ M j`, then `a • b` must be in `M (i + j)`.
 -/
 class GSMul [VAdd ιA ιM] where
   /-- The homogeneous multiplication map `smul` -/
-  smul {i j} : A i -> M j -> M (i +ᵥ j)
+  smul {i j} : A i → M j → M (i +ᵥ j)
 
-/--
-Instance `GMul.toGSMul` / 实例 `GMul.toGSMul`
+/-- A graded version of `Mul.toSMul` -/
+/-
+**GradedMonoid.GMul.toGSMul** 是 Mathlib 中的一个定义，位于命名空间 `GradedMonoid.GMul`。
+形式化陈述：{ιA : Type u_1} → (A : ιA → Type u_4) → [inst : Add ιA] → [GradedMonoid.GM
+ul A] → GradedMonoid.GSMul A A
+参数：A : ιA → Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance GMul.toGSMul
-  signature: [Add ιA] [GMul A]
-  body: GMul.mul
-
-中文:
-实例 GMul.toGSMul
-  签名: [加法 ιA] [GMul A]
-  定义体: GMul.mul
-
-Depends on / 依赖: GMul.mul
+--- 原说明 ---
+A graded version of `Mul.toSMul`
 -/
 instance GMul.toGSMul [Add ιA] [GMul A] : GSMul A A where smul := GMul.mul
-
-/--
-Instance `GSMul.toSMul` / 实例 `GSMul.toSMul`
-
-English:
-instance GSMul.toSMul
-  signature: [VAdd ιA ιM] [GSMul A M]
-  body: ⟨fun x y => ⟨_, GSMul.smul x.snd y.snd⟩⟩
-
-中文:
-实例 GSMul.toSMul
-  签名: [向量加法 ιA ιM] [GSMul A M]
-  定义体: ⟨fun x y => ⟨_, GSMul.smul x.snd y.snd⟩⟩
-
-Depends on / 依赖: GSMul.smul, x.snd, y.snd
+/-
+**GradedMonoid.GSMul.toSMul** 是 Mathlib 中的一个定义，位于命名空间 `GradedMonoid.GSMul`。
+形式化陈述：{ιA : Type u_1} →   {ιM : Type u_3} →     (A : ιA → Type u_4) →       (M :
+ ιM → Type u_5) → [inst : VAdd ιA ιM] → [GradedMonoid.GSMul A M] → SMul (GradedM
+onoid A) (GradedMonoid M)
+参数：A : ιA → Type u_4；M : ιM → Type u_5；GradedMonoid A；GradedMonoid M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance GSMul.toSMul [VAdd ιA ιM] [GSMul A M] : SMul (GradedMonoid A) (GradedMonoid M) :=
-  ⟨fun x y => ⟨_, GSMul.smul x.snd y.snd⟩⟩
-
-/--
-theorem `mk_smul_mk` / 定理 `mk_smul_mk`
-
-English:
-theorem mk_smul_mk
-  given: [VAdd ιA ιM] [GSMul A M] {i j} (a : A i) (b : M j)
-  proof: rfl
-
-中文:
-定理 mk_smul_mk
-  条件: [向量加法 ιA ιM] [GSMul A M] {i j} (a : A i) (b : M j)
-  证明: rfl
+  ⟨fun x y ↦ ⟨_, GSMul.smul x.snd y.snd⟩⟩
+/-
+**GradedMonoid.mk_smul_mk** 是 Mathlib 中的一个定理，位于命名空间 `GradedMonoid`。
+形式化陈述：mk_smul_mk [VAdd ιA ιM] [GSMul A M] {i j} (a : A i) (b : M j) : mk i a • m
+k j b = mk (i +ᵥ j) (GSMul.smul a b)
+参数：a : A i；b : M j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_smul_mk [VAdd ιA ιM] [GSMul A M] {i j} (a : A i) (b : M j) :
     mk i a • mk j b = mk (i +ᵥ j) (GSMul.smul a b) :=
   rfl
 
-/--
-Definition of `GMulAction` / `GMulAction` 的定义
+/-- A graded version of `MulAction`. -/
+/-
+**GradedMonoid.GMulAction** 是 Mathlib 中的一个归纳类型，位于命名空间 `GradedMonoid`。
+形式化陈述：{ιA : Type u_1} →   {ιM : Type u_3} →     (A : ιA → Type u_4) →       (ιM 
+→ Type u_5) →         [inst : AddMonoid ιA] → [VAdd ιA ιM] → [GradedMonoid.GMono
+id A] → Type (max (max (max u_1 u_3) u_4) u_5)
+参数：A : ιA → Type u_4；ιM → Type u_5；max (max (max u_1 u_3) u_4) u_5。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class GMulAction
-  parameters: [AddMonoid ιA] [VAdd ιA ιM] [GMonoid A]
-  extends: GSMul A M
-  axioms and operations (2):
-    - one_smul((b : GradedMonoid M)) : (1 : GradedMonoid A) • b = b
-    - mul_smul((a a' : GradedMonoid A) (b : GradedMonoid M)) : (a * a') • b = a • a' • b
-
-中文:
-类 GMul作用
-  参数: [加法幺半群 ιA] [向量加法 ιA ιM] [G幺半群 A]
-  继承: GSMul A M
-  公理与运算 (2 个):
-    - one_smul((b : 分次幺半群 M)) : (1 : 分次幺半群 A) • b = b
-    - mul_smul((a a' : 分次幺半群 A) (b : 分次幺半群 M)) : (a * a') • b = a • a' • b
+--- 原说明 ---
+A graded version of `MulAction`.
 -/
 class GMulAction [AddMonoid ιA] [VAdd ιA ιM] [GMonoid A] extends GSMul A M where
   /-- One is the neutral element for `•` -/
@@ -156,46 +130,42 @@ class GMulAction [AddMonoid ιA] [VAdd ιA ιM] [GMonoid A] extends GSMul A M wh
   /-- Associativity of `•` and `*` -/
   mul_smul (a a' : GradedMonoid A) (b : GradedMonoid M) : (a * a') • b = a • a' • b
 
-/--
-Instance `GMonoid.toGMulAction` / 实例 `GMonoid.toGMulAction`
+/-- The graded version of `Monoid.toMulAction`. -/
+/-
+**GradedMonoid.GMonoid.toGMulAction** 是 Mathlib 中的一个定义，位于命名空间 `GradedMonoid.GMon
+oid`。
+形式化陈述：{ιA : Type u_1} →   (A : ιA → Type u_4) → [inst : AddMonoid ιA] → [inst_1 
+: GradedMonoid.GMonoid A] → GradedMonoid.GMulAction A A
+参数：A : ιA → Type u_4。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedMonoid.GMonoid.one_mul`：∀ {ι : Type u_1} {A : ι → Type u_2} {inst 
+: AddMonoid ι} [self : GradedMonoid.GMonoid A] (a : GradedMonoid A), 1 * a = a
+· 使用定理 `GradedMonoid.GMonoid.mul_assoc`：∀ {ι : Type u_1} {A : ι → Type u_2} {ins
+t : AddMonoid ι} [self : GradedMonoid.GMonoid A] (a b c : GradedMonoid A),   a *
+ b * c = a * (b * c)
 
-English:
-instance GMonoid.toGMulAction
-  signature: [AddMonoid ιA] [GMonoid A]
-  body: { GMul.toGSMul _ with
-    one_smul := GMonoid.one_mul
-    mul_smul := GMonoid.mul_assoc }
-
-中文:
-实例 G幺半群.toGMulAction
-  签名: [加法幺半群 ιA] [G幺半群 A]
-  定义体: { GMul.toGSMul _ with
-    one_smul := GMonoid.one_mul
-    mul_smul := GMonoid.mul_assoc }
-
-Depends on / 依赖: GMonoid, GMonoid.mul_assoc, GMonoid.one_mul, GMul.toGSMul, mul_assoc, mul_smul, one_mul, one_smul, toGSMul
+--- 原说明 ---
+The graded version of `Monoid.toMulAction`.
 -/
 instance GMonoid.toGMulAction [AddMonoid ιA] [GMonoid A] : GMulAction A A :=
   { GMul.toGSMul _ with
     one_smul := GMonoid.one_mul
     mul_smul := GMonoid.mul_assoc }
-
-/--
-Instance `GMulAction.toMulAction` / 实例 `GMulAction.toMulAction`
-
-English:
-instance GMulAction.toMulAction
-  signature: [AddMonoid ιA] [GMonoid A] [VAdd ιA ιM] [GMulAction A M]
-  body: GMulAction.one_smul
-  mul_smul := GMulAction.mul_smul
-
-中文:
-实例 GMul作用.toMulAction
-  签名: [加法幺半群 ιA] [G幺半群 A] [向量加法 ιA ιM] [GMul作用 A M]
-  定义体: GMulAction.one_smul
-  mul_smul := GMulAction.mul_smul
-
-Depends on / 依赖: GMulAction, GMulAction.one_smul, one_smul
+/-
+**GradedMonoid.GMulAction.toMulAction** 是 Mathlib 中的一个定义，位于命名空间 `GradedMonoid.GM
+ulAction`。
+形式化陈述：{ιA : Type u_1} →   {ιM : Type u_3} →     (A : ιA → Type u_4) →       (M :
+ ιM → Type u_5) →         [inst : AddMonoid ιA] →           [inst_1 : GradedMono
+id.GMonoid A] →             [inst_2 : VAdd ιA ιM] → [GradedMonoid.GMulAction A M
+] → MulAction (GradedMonoid A) (GradedMonoid M)
+参数：A : ιA → Type u_4；M : ιM → Type u_5；GradedMonoid A；GradedMonoid M。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedMonoid.GMulAction.mul_smul`：∀ {ιA : Type u_1} {ιM : Type u_3} {A :
+ ιA → Type u_4} {M : ιM → Type u_5} {inst : AddMonoid ιA} {inst_1 : VAdd ιA ιM} 
+  {inst_2 : GradedMono…
+· 使用定理 `GradedMonoid.GMulAction.one_smul`：∀ {ιA : Type u_1} {ιM : Type u_3} {A :
+ ιA → Type u_4} {M : ιM → Type u_5} {inst : AddMonoid ιA} {inst_1 : VAdd ιA ιM} 
+  {inst_2 : GradedMono…
 -/
 instance GMulAction.toMulAction [AddMonoid ιA] [GMonoid A] [VAdd ιA ιM] [GMulAction A M] :
     MulAction (GradedMonoid A) (GradedMonoid M) where
@@ -213,86 +183,73 @@ section Subobjects
 
 variable {R : Type*}
 
-/--
-Definition of `SetLike.GradedSMul` / `SetLike.GradedSMul` 的定义
+/-- A version of `GradedMonoid.GSMul` for internally graded objects. -/
+/-
+**SetLike.GradedSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 `SetLike`。
+形式化陈述：{ιA : Type u_1} →   {ιB : Type u_2} →     {S : Type u_5} →       {R : Type
+ u_6} →         {N : Type u_7} →           {M : Type u_8} → [SetLike S R] → [Set
+Like N M] → [SMul R M] → [VAdd ιA ιB] → (ιA → S) → (ιB → N) → Prop
+参数：ιA → S；ιB → N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SetLike.GradedSMul
-  parameters: {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
-  axioms and operations (1):
-    - smul_mem : forall ⦃i : ιA⦄ ⦃j : ιB⦄ {ai bj}, ai in A i -> bj in B j -> ai • bj in B (i +ᵥ j)
-
-中文:
-类 集合状.分次标量乘法
-  参数: {S R N M : 类型} [集合状 S R] [集合状 N M] [标量乘法 R M] [向量加法 ιA ιB]
-  公理与运算 (1 个):
-    - smul_mem : 对任意 ⦃i : ιA⦄ ⦃j : ιB⦄ {ai bj}, ai in A i -> bj in B j -> ai • bj in B (i +ᵥ j)
+--- 原说明 ---
+A version of `GradedMonoid.GSMul` for internally graded objects.
 -/
 class SetLike.GradedSMul {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
-  (A : ιA -> S) (B : ιB -> N) : Prop where
+  (A : ιA → S) (B : ιB → N) : Prop where
   /-- Multiplication is homogeneous -/
-  smul_mem : forall ⦃i : ιA⦄ ⦃j : ιB⦄ {ai bj}, ai in A i -> bj in B j -> ai • bj in B (i +ᵥ j)
-
-/--
-Instance `SetLike.toGSMul` / 实例 `SetLike.toGSMul`
-
-English:
-instance SetLike.toGSMul
-  signature: {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
-  body: ⟨a.1 • b.1, SetLike.GradedSMul.smul_mem a.2 b.2⟩
-
-@[simp]
-
-中文:
-实例 集合状.toGSMul
-  签名: {S R N M : 类型} [集合状 S R] [集合状 N M] [标量乘法 R M] [向量加法 ιA ιB]
-  定义体: ⟨a.1 • b.1, SetLike.GradedSMul.smul_mem a.2 b.2⟩
-
-@[simp]
-
-Depends on / 依赖: GradedSMul, SetLike, SetLike.GradedSMul.smul_mem, smul_mem
+  smul_mem : ∀ ⦃i : ιA⦄ ⦃j : ιB⦄ {ai bj}, ai ∈ A i → bj ∈ B j → ai • bj ∈ B (i +ᵥ j)
+/-
+**SetLike.toGSMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：SetLike.toGSMul {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [
+VAdd ιA ιB] (A : ιA -> S) (B : ιB -> N) [SetLike.GradedSMul A B] : GradedMonoid.
+GSMul (fun i => A i) fun i => B i where smul a b
+参数：A : ιA -> S；B : ιB -> N。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance SetLike.toGSMul {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
-    (A : ιA -> S) (B : ιB -> N) [SetLike.GradedSMul A B] :
-    GradedMonoid.GSMul (fun i => A i) fun i => B i where
+    (A : ιA → S) (B : ιB → N) [SetLike.GradedSMul A B] :
+    GradedMonoid.GSMul (fun i ↦ A i) fun i ↦ B i where
   smul a b := ⟨a.1 • b.1, SetLike.GradedSMul.smul_mem a.2 b.2⟩
 
 @[simp]
-/--
-theorem `SetLike.coe_GSMul` / 定理 `SetLike.coe_GSMul`
-
-English:
-theorem SetLike.coe_GSMul
-  statement: {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
-  proof: rfl
-
-中文:
-定理 集合状.coe_GSMul
-  结论: {S R N M : 类型} [集合状 S R] [集合状 N M] [标量乘法 R M] [向量加法 ιA ιB]
-  证明: rfl
+/-
+**SetLike.coe_GSMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetLike.coe_GSMul {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M]
+ [VAdd ιA ιB] (A : ιA -> S) (B : ιB -> N) [SetLike.GradedSMul A B] {i : ιA} {j :
+ ιB} (x : A i) (y : B j) : (@GradedMonoid.GSMul.smul ιA ιB (fun i => A i) (fun i
+ => B i) _ _ i j x y : M) = x.1 • y.1
+参数：A : ιA -> S；B : ιB -> N；x : A i；y : B j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem SetLike.coe_GSMul {S R N M : Type*} [SetLike S R] [SetLike N M] [SMul R M] [VAdd ιA ιB]
-    (A : ιA -> S) (B : ιB -> N) [SetLike.GradedSMul A B] {i : ιA} {j : ιB} (x : A i) (y : B j) :
-    (@GradedMonoid.GSMul.smul ιA ιB (fun i => A i) (fun i => B i) _ _ i j x y : M) = x.1 • y.1 :=
+    (A : ιA → S) (B : ιB → N) [SetLike.GradedSMul A B] {i : ιA} {j : ιB} (x : A i) (y : B j) :
+    (@GradedMonoid.GSMul.smul ιA ιB (fun i ↦ A i) (fun i ↦ B i) _ _ i j x y : M) = x.1 • y.1 :=
   rfl
 
-/--
-Instance `SetLike.GradedMul.toGradedSMul` / 实例 `SetLike.GradedMul.toGradedSMul`
+/-- Internally graded version of `Mul.toSMul`. -/
+/-
+**SetLike.GradedMul.toGradedSMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：SetLike.GradedMul.toGradedSMul [AddMonoid ιA] [Monoid R] {S : Type*} [SetL
+ike S R] (A : ιA -> S) [SetLike.GradedMonoid A] : SetLike.GradedSMul A A where s
+mul_mem _ _ _ _ hi hj
+参数：A : ιA -> S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMul.mul_mem`：∀ {ι : Type u_1} {R : Type u_2} {S : Type u_3
+} {inst : SetLike S R} {inst_1 : Mul R} {inst_2 : Add ι} {A : ι → S}   [self : S
+etLike.GradedMu…
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
 
-English:
-instance SetLike.GradedMul.toGradedSMul
-  signature: [AddMonoid ιA] [Monoid R] {S : Type*} [SetLike S R]
-  body: SetLike.GradedMonoid.toGradedMul.mul_mem hi hj
-
-中文:
-实例 集合状.分次乘法.toGradedSMul
-  签名: [加法幺半群 ιA] [幺半群 R] {S : 类型} [集合状 S R]
-  定义体: SetLike.GradedMonoid.toGradedMul.mul_mem hi hj
-
-Depends on / 依赖: GradedMonoid, SetLike, SetLike.GradedMonoid.toGradedMul.mul_mem, mul_mem, toGradedMul
+--- 原说明 ---
+Internally graded version of `Mul.toSMul`.
 -/
 instance SetLike.GradedMul.toGradedSMul [AddMonoid ιA] [Monoid R] {S : Type*} [SetLike S R]
-    (A : ιA -> S) [SetLike.GradedMonoid A] : SetLike.GradedSMul A A where
+    (A : ιA → S) [SetLike.GradedMonoid A] : SetLike.GradedSMul A A where
   smul_mem _ _ _ _ hi hj := SetLike.GradedMonoid.toGradedMul.mul_mem hi hj
 
 end Subobjects
@@ -301,21 +258,25 @@ section HomogeneousElements
 
 variable {S R N M : Type*} [SetLike S R] [SetLike N M]
 
-/--
-theorem `SetLike.IsHomogeneousElem.graded_smul` / 定理 `SetLike.IsHomogeneousElem.graded_smul`
-
-English:
-theorem SetLike.IsHomogeneousElem.graded_smul
-  statement: [VAdd ιA ιB] [SMul R M] {A : ιA -> S} {B : ιB -> N}
-
-中文:
-定理 集合状.IsHomogeneousElem.graded_smul
-  结论: [向量加法 ιA ιB] [标量乘法 R M] {A : ιA -> S} {B : ιB -> N}
+/-
+**SetLike.IsHomogeneousElem.graded_smul** 是 Mathlib 中的一个定理，位于命名空间 `SetLike.IsHom
+ogeneousElem`。
+形式化陈述：∀ {ιA : Type u_1} {ιB : Type u_2} {S : Type u_4} {R : Type u_5} {N : Type 
+u_6} {M : Type u_7} [inst : SetLike S R]   [inst_1 : SetLike N M] [inst_2 : VAdd
+ ιA ιB] [inst_3 : SMul R M] {A : ιA → S} {B : ιB → N} [SetLike.GradedSMul A B]  
+ {a : R} {b : M}, SetLike.IsHomogeneousElem A a → SetLike.IsHomogeneousElem B b 
+→ SetLike.IsHomogeneousElem B (a • b)
+参数：a • b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedSMul.smul_mem`：∀ {ιA : Type u_1} {ιB : Type u_2} {S : Type
+ u_5} {R : Type u_6} {N : Type u_7} {M : Type u_8} {inst : SetLike S R}   {inst_
+1 : SetLike N M} …
 -/
-theorem SetLike.IsHomogeneousElem.graded_smul [VAdd ιA ιB] [SMul R M] {A : ιA -> S} {B : ιB -> N}
+theorem SetLike.IsHomogeneousElem.graded_smul [VAdd ιA ιB] [SMul R M] {A : ιA → S} {B : ιB → N}
     [SetLike.GradedSMul A B] {a : R} {b : M} :
-    SetLike.IsHomogeneousElem A a -> SetLike.IsHomogeneousElem B b ->
+    SetLike.IsHomogeneousElem A a → SetLike.IsHomogeneousElem B b →
     SetLike.IsHomogeneousElem B (a • b)
   | ⟨i, hi⟩, ⟨j, hj⟩ => ⟨i +ᵥ j, SetLike.GradedSMul.smul_mem hi hj⟩
 
 end HomogeneousElements
+

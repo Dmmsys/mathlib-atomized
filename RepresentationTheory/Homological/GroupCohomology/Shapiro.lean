@@ -43,56 +43,56 @@ variable {k G : Type u} [CommRing k] [Group G] {S : Subgroup G} (A : Rep k S)
 set_option backward.defeqAttrib.useBackward true in
 -- Note: this proof breaks if `resCoindHomEquiv.{u}` is replaced with `resCoindHomEquiv`.
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `linearYonedaObjResProjectiveResolutionIso` / `linearYonedaObjResProjectiveResolutionIso` 的定义
+/-- Given a projective resolution `P` of `k` as a `k`-linear `G`-representation, a subgroup
+`S ≤ G`, and a `k`-linear `S`-representation `A`, this is an isomorphism of complexes
+`Hom(Res(S)(P), A) ≅ Hom(P, Coind_S^G(A)).` -/
+/-
+**groupCohomology.linearYonedaObjResProjectiveResolutionIso** 是 Mathlib 中的一个定义，位
+于命名空间 `groupCohomology`。
+形式化陈述：linearYonedaObjResProjectiveResolutionIso (P : ProjectiveResolution (trivi
+al k G k)) (A : Rep.{u} k S) : ((resFunctor S.subtype).mapProjectiveResolution P
+).complex.linearYonedaObj k A ≅ P.complex.linearYonedaObj k (coind S.subtype A)
+参数：P : ProjectiveResolution (trivial k G k)；A : Rep.{u} k S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Rep.instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype`：∀
+ {k : Type u} [inst : CommRing k] {G : Type w} [inst_1 : Group G] (S : Subgroup 
+G),   (Rep.resFunctor S.subtype).PreservesProjectiveObjects
 
-English:
-definition linearYonedaObjResProjectiveResolutionIso
-  body: HomologicalComplex.Hom.isoOfComponents
-    (fun _ => (resCoindHomEquiv.{u} _ _ _).toModuleIso) fun _ _ _ =>
-      ModuleCat.hom_ext (LinearMap.ext fun f => Rep.hom_ext <| by
-        ext; simp [← ModuleCat.ofHom_comp, resCoindHomEquiv, hom_comm_apply])
-
-中文:
-定义 linearYonedaObjResProjectiveResolutionIso
-  定义体: HomologicalComplex.Hom.isoOfComponents
-    (fun _ => (resCoindHomEquiv.{u} _ _ _).toModuleIso) fun _ _ _ =>
-      ModuleCat.hom_ext (LinearMap.ext fun f => Rep.hom_ext <| by
-        ext; simp [← ModuleCat.ofHom_comp, resCoindHomEquiv, hom_comm_apply])
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, LinearMap, LinearMap.ext, ModuleCat, ModuleCat.hom_ext, ModuleCat.ofHom_comp, Rep.hom_ext, hom_comm_apply, hom_ext, isoOfComponents, ofHom_comp, resCoindHomEquiv, toModuleIso
+--- 原说明 ---
+Given a projective resolution `P` of `k` as a `k`-linear `G`-representation, a s
+ubgroup
+`S ≤ G`, and a `k`-linear `S`-representation `A`, this is an isomorphism of comp
+lexes
+`Hom(Res(S)(P), A) ≅ Hom(P, Coind_S^G(A)).`
 -/
 noncomputable def linearYonedaObjResProjectiveResolutionIso
     (P : ProjectiveResolution (trivial k G k)) (A : Rep.{u} k S) :
     ((resFunctor S.subtype).mapProjectiveResolution P).complex.linearYonedaObj k A ≅
       P.complex.linearYonedaObj k (coind S.subtype A) :=
   HomologicalComplex.Hom.isoOfComponents
-    (fun _ => (resCoindHomEquiv.{u} _ _ _).toModuleIso) fun _ _ _ =>
+    (fun _ ↦ (resCoindHomEquiv.{u} _ _ _).toModuleIso) fun _ _ _ ↦
       ModuleCat.hom_ext (LinearMap.ext fun f => Rep.hom_ext <| by
         ext; simp [← ModuleCat.ofHom_comp, resCoindHomEquiv, hom_comm_apply])
 
-/--
-Definition of `coindIso` / `coindIso` 的定义
+/-- Shapiro's lemma: given a subgroup `S ≤ G` and an `S`-representation `A`, we have
+`Hⁿ(G, Coind_S^G(A)) ≅ Hⁿ(S, A).` -/
+/-
+**groupCohomology.coindIso** 是 Mathlib 中的一个定义，位于命名空间 `groupCohomology`。
+形式化陈述：coindIso (A : Rep k S) (n : Nat) : groupCohomology (coind S.subtype A) n ≅
+ groupCohomology A n
+参数：A : Rep k S；n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Rep.instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype`：∀
+ {k : Type u} [inst : CommRing k] {G : Type w} [inst_1 : Group G] (S : Subgroup 
+G),   (Rep.resFunctor S.subtype).PreservesProjectiveObjects
 
-English:
-definition coindIso
-  signature: (A : Rep k S) (n : Nat)
-  body: (HomologicalComplex.homologyFunctor _ _ _).mapIso
-    (inhomogeneousCochainsIso (coind S.subtype A) ≪≫
-    (linearYonedaObjResProjectiveResolutionIso (barResolution k G) A).symm) ≪≫
-  (groupCohomologyIso A n ((resFunctor _).mapProjectiveResolution <| barResolution k G)).symm
-
-中文:
-定义 coindIso
-  签名: (A : Rep k S) (n : 自然数)
-  定义体: (HomologicalComplex.homologyFunctor _ _ _).mapIso
-    (inhomogeneousCochainsIso (coind S.subtype A) ≪≫
-    (linearYonedaObjResProjectiveResolutionIso (barResolution k G) A).symm) ≪≫
-  (groupCohomologyIso A n ((resFunctor _).mapProjectiveResolution <| barResolution k G)).symm
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.homologyFunctor, S.subtype, barResolution, groupCohomologyIso, homologyFunctor, inhomogeneousCochainsIso, linearYonedaObjResProjectiveResolutionIso, mapIso, mapProjectiveResolution, resFunctor, subtype
+--- 原说明 ---
+Shapiro's lemma: given a subgroup `S ≤ G` and an `S`-representation `A`, we have
+`Hⁿ(G, Coind_S^G(A)) ≅ Hⁿ(S, A).`
 -/
-noncomputable def coindIso (A : Rep k S) (n : Nat) :
+noncomputable def coindIso (A : Rep k S) (n : ℕ) :
     groupCohomology (coind S.subtype A) n ≅ groupCohomology A n :=
   (HomologicalComplex.homologyFunctor _ _ _).mapIso
     (inhomogeneousCochainsIso (coind S.subtype A) ≪≫
@@ -100,3 +100,4 @@ noncomputable def coindIso (A : Rep k S) (n : Nat) :
   (groupCohomologyIso A n ((resFunctor _).mapProjectiveResolution <| barResolution k G)).symm
 
 end groupCohomology
+

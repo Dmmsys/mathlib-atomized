@@ -34,25 +34,18 @@ namespace Fintype
 section BundledHoms
 
 @[to_additive]
-/--
-Instance `decidableEqMulEquivFintype` / 实例 `decidableEqMulEquivFintype`
-
-English:
-instance decidableEqMulEquivFintype
-  signature: {α β : Type*} [DecidableEq β] [Fintype α] [Mul α] [Mul β]
-  body: fun a b => decidable_of_iff ((a : α -> β) = b) (Injective.eq_iff DFunLike.coe_injective)
-
-中文:
-实例 decidableEqMulEquivFintype
-  签名: {α β : 类型} [DecidableEq β] [有限类型 α] [乘法 α] [乘法 β]
-  定义体: fun a b => decidable_of_iff ((a : α -> β) = b) (Injective.eq_iff DFunLike.coe_injective)
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, Injective, Injective.eq_iff, coe_injective, decidable_of_iff, eq_iff
+/-
+**Fintype.decidableEqMulEquivFintype** 是 Mathlib 中的一个实例，位于命名空间 `Fintype`。
+形式化陈述：decidableEqMulEquivFintype {α β : Type*} [DecidableEq β] [Fintype α] [Mul 
+α] [Mul β] : DecidableEq (α ≃* β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableEqMulEquivFintype {α β : Type*} [DecidableEq β] [Fintype α] [Mul α] [Mul β] :
     DecidableEq (α ≃* β) :=
-  fun a b => decidable_of_iff ((a : α -> β) = b) (Injective.eq_iff DFunLike.coe_injective)
+  fun a b => decidable_of_iff ((a : α → β) = b) (Injective.eq_iff DFunLike.coe_injective)
 
 end BundledHoms
 
 end Fintype
+

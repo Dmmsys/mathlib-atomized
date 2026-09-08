@@ -36,130 +36,74 @@ namespace Lean.Meta.RefinedDiscrTree
 
 variable {α β : Type}
 
-/--
-Definition of `TreeM` / `TreeM` 的定义
+/-- Monad for working with a `RefinedDiscrTree`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.TreeM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Lean.Meta.Refine
+dDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation TreeM
-  signature: α
-  body: StateRefT (Array (Trie α)) MetaM
-
-中文:
-缩写 TreeM
-  签名: α
-  定义体: StateRefT (Array (Trie α)) MetaM
+--- 原说明 ---
+Monad for working with a `RefinedDiscrTree`.
 -/
 private abbrev TreeM α := StateRefT (Array (Trie α)) MetaM
 
-/--
-Definition of `runTreeM` / `runTreeM` 的定义
+/-- Run a `TreeM` computation using `d : RefinedDiscrTree`, without losing the reference to `d`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.runTreeM** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refin
+edDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runTreeM
-  signature: (d : RefinedDiscrTree α) (m : TreeM α β)
-  body: do
-  let { tries, root } := d
-  let (result, tries) ← m.run tries
-  pure (result, { tries, root })
-
-中文:
-定义 runTreeM
-  签名: (d : RefinedDiscrTree α) (m : TreeM α β)
-  定义体: do
-  let { tries, root } := d
-  let (result, tries) ← m.run tries
-  pure (result, { tries, root })
+--- 原说明 ---
+Run a `TreeM` computation using `d : RefinedDiscrTree`, without losing the refer
+ence to `d`.
 -/
 @[inline] private def runTreeM (d : RefinedDiscrTree α) (m : TreeM α β) :
     MetaM (β × RefinedDiscrTree α) := do
   let { tries, root } := d
   let (result, tries) ← m.run tries
   pure (result, { tries, root })
-
-/--
-Definition of `setTrie` / `setTrie` 的定义
-
-English:
-definition setTrie
-  signature: (i : TrieIndex) (v : Trie α)
-  body: modify (·.set! i v)
-
-中文:
-定义 setTrie
-  签名: (i : TrieIndex) (v : Trie α)
-  定义体: modify (·.set! i v)
+/-
+**Lean.Meta.RefinedDiscrTree.setTrie** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refine
+dDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def setTrie (i : TrieIndex) (v : Trie α) : TreeM α Unit :=
   modify (·.set! i v)
 
-/--
-Definition of `newTrie` / `newTrie` 的定义
+/-- Create a new trie with the given lazy entry. -/
+/-
+**Lean.Meta.RefinedDiscrTree.newTrie** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refine
+dDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition newTrie
-  signature: (e : LazyEntry × α)
-  body: do
-  modifyGet fun a => (a.size, a.push (.node #[] none {} {} #[e]))
-
-中文:
-定义 newTrie
-  签名: (e : LazyEntry × α)
-  定义体: do
-  modifyGet fun a => (a.size, a.push (.node #[] none {} {} #[e]))
+--- 原说明 ---
+Create a new trie with the given lazy entry.
 -/
 private def newTrie (e : LazyEntry × α) : TreeM α TrieIndex := do
   modifyGet fun a => (a.size, a.push (.node #[] none {} {} #[e]))
 
-/--
-Definition of `addLazyEntryToTrie` / `addLazyEntryToTrie` 的定义
+/-- Add a lazy entry to an existing trie. -/
+/-
+**Lean.Meta.RefinedDiscrTree.addLazyEntryToTrie** 是 Mathlib 中的一个定义，位于命名空间 `Lean.
+Meta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addLazyEntryToTrie
-  signature: (i : TrieIndex) (e : LazyEntry × α)
-  body: modify (·.modify i fun node => { node with pending := node.pending.push e })
-
-中文:
-定义 addLazyEntryToTrie
-  签名: (i : TrieIndex) (e : LazyEntry × α)
-  定义体: modify (·.modify i fun node => { node with pending := node.pending.push e })
+--- 原说明 ---
+Add a lazy entry to an existing trie.
 -/
 private def addLazyEntryToTrie (i : TrieIndex) (e : LazyEntry × α) : TreeM α Unit :=
   modify (·.modify i fun node => { node with pending := node.pending.push e })
 
-/--
-Definition of `processPending` / `processPending` 的定义
+/-- Process a specified range of pending entries.
+returns the computed values and pending nodes. -/
+/-
+**Lean.Meta.RefinedDiscrTree.processPending** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta
+.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition processPending
-  signature: (pending : Array (LazyEntry × α)) (start stop : Nat)
-  body: do
-  Core.checkInterrupted
-  let mut values := #[]
-  let mut newEntries := #[]
-  for (entry, value) in pending[start...stop] do
-    match ← evalLazyEntry entry true with
-    | some entries =>
-      for (key, entry) in entries do
-        newEntries := newEntries.push (key, entry, value)
-    | none =>
-      values := values.push value
-  return (values, newEntries)
-
-中文:
-定义 processPending
-  签名: (pending : 数组 (LazyEntry × α)) (start stop : 自然数)
-  定义体: do
-  Core.checkInterrupted
-  let mut values := #[]
-  let mut newEntries := #[]
-  for (entry, value) in pending[start...stop] do
-    match ← evalLazyEntry entry true with
-    | some entries =>
-      for (key, entry) in entries do
-        newEntries := newEntries.push (key, entry, value)
-    | none =>
-      values := values.push value
-  return (values, newEntries)
+--- 原说明 ---
+Process a specified range of pending entries.
+returns the computed values and pending nodes.
 -/
 private def processPending (pending : Array (LazyEntry × α)) (start stop : Nat) :
     MetaM (Array α × Array (Key × LazyEntry × α)) := do
@@ -176,87 +120,29 @@ private def processPending (pending : Array (LazyEntry × α)) (start stop : Nat
   return (values, newEntries)
 
 /--
-Definition of `evalNode` / `evalNode` 的定义
+Evaluate the `Trie α` at index `trie`,
+replacing it with the evaluated value,
+and returning the `Trie α`.
 
-English:
-definition evalNode
-  signature: (trie : TrieIndex)
-  body: do
-  let node := (← get)[trie]!
-  if node.pending.isEmpty then
-    return node
-  let numTasks := node.pending.size / 5000 + 1
-  Core.checkInterrupted
-  let tasks ← numTasks.foldM (init := #[]) fun i _ tasks => do
-return tasks.push ← EIO.asTask
-      Core.withCurrHeartbeats (processPending node.pending (i * 5000) ((i + 1) * 5000))
-.run' (← readThe _) (← getThe _)
-.run' (← readThe _) (← getThe _)
-  setTrie trie default -- reduce the reference count to `node` to be 1
-  let mut { values, star, labelledStars, children, .. } := node
-  for task in tasks do
-    let (values', newEntries) ← MonadExcept.ofExcept task.get
-    values := values ++ values'
-    for (key, entry) in newEntries do
-      match key with
-      | .labelledStar label =>
-        if let some trie := labelledStars[label]? then
-          addLazyEntryToTrie trie entry
-        else
-          labelledStars := labelledStars.insert label (← newTrie entry)
-      | .star =>
-        if let some trie := star then
-          addLazyEntryToTrie trie entry
-        else
-          star := some (← newTrie entry)
-      | _ =>
-        if let some trie := children[key]? then
-          addLazyEntryToTrie trie entry
-        else
-          children := children.insert key (← newTrie entry)
-  let node := { values, star, labelledStars, children, pending := #[] }
-  setTrie trie node
-  return node
+Performance note: In the `apply` search discrimination tree, after root node `⟨Eq, 3⟩`,
+there are about `150,000` entries in the `pending` array.
+To deal with this smoothly, we parallelize the computation into chunks of `5000` entries.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.evalNode** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refin
+edDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 evalNode
-  签名: (trie : TrieIndex)
-  定义体: do
-  let node := (← get)[trie]!
-  if node.pending.isEmpty then
-    return node
-  let numTasks := node.pending.size / 5000 + 1
-  Core.checkInterrupted
-  let tasks ← numTasks.foldM (init := #[]) fun i _ tasks => do
-return tasks.push ← EIO.asTask
-      Core.withCurrHeartbeats (processPending node.pending (i * 5000) ((i + 1) * 5000))
-.run' (← readThe _) (← getThe _)
-.run' (← readThe _) (← getThe _)
-  setTrie trie default -- reduce the reference count to `node` to be 1
-  let mut { values, star, labelledStars, children, .. } := node
-  for task in tasks do
-    let (values', newEntries) ← MonadExcept.ofExcept task.get
-    values := values ++ values'
-    for (key, entry) in newEntries do
-      match key with
-      | .labelledStar label =>
-        if let some trie := labelledStars[label]? then
-          addLazyEntryToTrie trie entry
-        else
-          labelledStars := labelledStars.insert label (← newTrie entry)
-      | .star =>
-        if let some trie := star then
-          addLazyEntryToTrie trie entry
-        else
-          star := some (← newTrie entry)
-      | _ =>
-        if let some trie := children[key]? then
-          addLazyEntryToTrie trie entry
-        else
-          children := children.insert key (← newTrie entry)
-  let node := { values, star, labelledStars, children, pending := #[] }
-  setTrie trie node
-  return node
+--- 原说明 ---
+Evaluate the `Trie α` at index `trie`,
+replacing it with the evaluated value,
+and returning the `Trie α`.
+
+Performance note: In the `apply` search discrimination tree, after root node `⟨E
+q, 3⟩`,
+there are about `150,000` entries in the `pending` array.
+To deal with this smoothly, we parallelize the computation into chunks of `5000`
+ entries.
 -/
 private def evalNode (trie : TrieIndex) : TreeM α (Trie α) := do
   let node := (← get)[trie]!
@@ -264,11 +150,11 @@ private def evalNode (trie : TrieIndex) : TreeM α (Trie α) := do
     return node
   let numTasks := node.pending.size / 5000 + 1
   Core.checkInterrupted
-  let tasks ← numTasks.foldM (init := #[]) fun i _ tasks => do
-return tasks.push ← EIO.asTask
+  let tasks ← numTasks.foldM (init := #[]) fun i _ tasks ↦ do
+    return tasks.push <| ← EIO.asTask <|
       Core.withCurrHeartbeats (processPending node.pending (i * 5000) ((i + 1) * 5000))
-.run' (← readThe _) (← getThe _)
-.run' (← readThe _) (← getThe _)
+        |>.run' (← readThe _) (← getThe _)
+        |>.run' (← readThe _) (← getThe _)
   setTrie trie default -- reduce the reference count to `node` to be 1
   let mut { values, star, labelledStars, children, .. } := node
   for task in tasks do
@@ -297,19 +183,22 @@ return tasks.push ← EIO.asTask
 
 
 /--
-Definition of `MatchResult` / `MatchResult` 的定义
+A match result contains the results from matching a term against
+patterns in the discrimination tree.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.MatchResult** 是 Mathlib 中的一个结构，位于命名空间 `Lean.Meta.Re
+finedDiscrTree`。
+形式化陈述：MatchResult (α : Type) where /-- The elements in the match result.  The `N
+at` in the tree map represents the `score` of the results. The elements are arra
+ys of arrays, where each sub-array corresponds to one discr tree pattern. -/ elt
+s : Std.TreeMap Nat (Array (Array α))
+参数：α : Type。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MatchResult
-  parameters: (α : Type)
-  axioms and operations (1):
-    - elts : Std.TreeMap Nat (Array (Array α))  [default: {}]
-
-中文:
-结构 MatchResult
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - elts : Std.TreeMap 自然数 (数组 (数组 α))  [默认: {}]
+--- 原说明 ---
+A match result contains the results from matching a term against
+patterns in the discrimination tree.
 -/
 structure MatchResult (α : Type) where
   /--
@@ -320,79 +209,67 @@ structure MatchResult (α : Type) where
   -/
   elts : Std.TreeMap Nat (Array (Array α)) := {}
   deriving Inhabited
-
-/--
-Definition of `MatchResult.push` / `MatchResult.push` 的定义
-
-English:
-definition MatchResult.push
-  signature: (mr : MatchResult α) (score : Nat) (e : Array α)
-  body: { elts := mr.elts.alter score fun | some arr => arr.push e | none => #[e] }
-
-中文:
-定义 MatchResult.push
-  签名: (mr : MatchResult α) (score : 自然数) (e : 数组 α)
-  定义体: { elts := mr.elts.alter score fun | some arr => arr.push e | none => #[e] }
+/-
+**Lean.Meta.RefinedDiscrTree.MatchResult.push** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Me
+ta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def MatchResult.push (mr : MatchResult α) (score : Nat) (e : Array α) : MatchResult α :=
   { elts := mr.elts.alter score fun | some arr => arr.push e | none => #[e] }
 
 /--
-Definition of `MatchResult.toArray` / `MatchResult.toArray` 的定义
+Convert a `MatchResult` into a `Array`, with better matches at the start of the array.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.MatchResult.toArray** 是 Mathlib 中的一个定义，位于命名空间 `Lean
+.Meta.RefinedDiscrTree.MatchResult`。
+形式化陈述：{α : Type} → Meta.RefinedDiscrTree.MatchResult α → Array α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchResult.toArray
-  signature: (mr : MatchResult α)
-  body: mr.elts.foldr (init := #[]) fun _ a r => a.foldl (init := r) (· ++ ·)
-
-中文:
-定义 MatchResult.toArray
-  签名: (mr : MatchResult α)
-  定义体: mr.elts.foldr (init := #[]) fun _ a r => a.foldl (init := r) (· ++ ·)
-
-Depends on / 依赖: a.foldl, mr.elts.foldr
+--- 原说明 ---
+Convert a `MatchResult` into a `Array`, with better matches at the start of the 
+array.
 -/
 def MatchResult.toArray (mr : MatchResult α) : Array α :=
   mr.elts.foldr (init := #[]) fun _ a r => a.foldl (init := r) (· ++ ·)
 
 /--
-Definition of `MatchResult.flatten` / `MatchResult.flatten` 的定义
+Convert a `MatchResult` into an `Array` of `Array`s. Each `Array` corresponds to one pattern.
+The better matching patterns are at the start of the outer array.
+For each inner array, the entries are ordered in the order they were inserted.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.MatchResult.flatten** 是 Mathlib 中的一个定义，位于命名空间 `Lean
+.Meta.RefinedDiscrTree.MatchResult`。
+形式化陈述：{α : Type} → Meta.RefinedDiscrTree.MatchResult α → Array (Array α)
+参数：Array α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MatchResult.flatten
-  signature: (mr : MatchResult α)
-  body: mr.elts.foldr (init := #[]) (fun _ arr cand => cand ++ arr)
-
-中文:
-定义 MatchResult.flatten
-  签名: (mr : MatchResult α)
-  定义体: mr.elts.foldr (init := #[]) (fun _ arr cand => cand ++ arr)
-
-Depends on / 依赖: mr.elts.foldr
+--- 原说明 ---
+Convert a `MatchResult` into an `Array` of `Array`s. Each `Array` corresponds to
+ one pattern.
+The better matching patterns are at the start of the outer array.
+For each inner array, the entries are ordered in the order they were inserted.
 -/
 def MatchResult.flatten (mr : MatchResult α) : Array (Array α) :=
   mr.elts.foldr (init := #[]) (fun _ arr cand => cand ++ arr)
 
-/--
-Definition of `PartialMatch` / `PartialMatch` 的定义
+/-
+A partial match captures the intermediate state of a match execution.
 
-English:
-structure PartialMatch
-  parameters: where
-  axioms and operations (4):
-    - keys : List Key
-    - score : Nat
-    - trie : TrieIndex
-    - treeStars : Std.HashMap Nat (List Key)  [default: {}]
+N.B. Discrimination tree matching has non-determinism due to stars,
+so the matching loop maintains a stack of partial match results.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.PartialMatch** 是 Mathlib 中的一个结构，位于命名空间 `Lean.Meta.R
+efinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 PartialMatch
-  参数: where
-  公理与运算 (4 个):
-    - keys : 列表 Key
-    - score : 自然数
-    - trie : TrieIndex
-    - treeStars : Std.HashMap 自然数 (列表 Key)  [默认: {}]
+--- 原说明 ---
+A partial match captures the intermediate state of a match execution.
+
+N.B. Discrimination tree matching has non-determinism due to stars,
+so the matching loop maintains a stack of partial match results.
 -/
 private structure PartialMatch where
   /-- Remaining terms to match -/
@@ -408,43 +285,16 @@ private structure PartialMatch where
 
 
 /--
-Definition of `matchQueryStar` / `matchQueryStar` 的定义
+Add to the `todo` stack all matches that result from a `.star` in the query expression.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.matchQueryStar** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta
+.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchQueryStar
-  signature: (trie : TrieIndex) (pMatch : PartialMatch)
-  body: do
-  match skip with
-  | skip+1 =>
-    let { star, labelledStars, children, .. } ← evalNode trie
-    let mut todo := todo
-    if let some trie := star then
-      todo ← matchQueryStar trie pMatch todo skip
-    todo ← labelledStars.foldM (init := todo) fun todo _ trie =>
-      matchQueryStar trie pMatch todo skip
-    todo ← children.foldM (init := todo) fun todo key trie =>
-      matchQueryStar trie pMatch todo (skip + key.arity)
-    return todo
-  | 0 =>
-    return todo.push { pMatch with trie }
-
-中文:
-定义 matchQueryStar
-  签名: (trie : TrieIndex) (pMatch : PartialMatch)
-  定义体: do
-  match skip with
-  | skip+1 =>
-    let { star, labelledStars, children, .. } ← evalNode trie
-    let mut todo := todo
-    if let some trie := star then
-      todo ← matchQueryStar trie pMatch todo skip
-    todo ← labelledStars.foldM (init := todo) fun todo _ trie =>
-      matchQueryStar trie pMatch todo skip
-    todo ← children.foldM (init := todo) fun todo key trie =>
-      matchQueryStar trie pMatch todo (skip + key.arity)
-    return todo
-  | 0 =>
-    return todo.push { pMatch with trie }
+--- 原说明 ---
+Add to the `todo` stack all matches that result from a `.star` in the query expr
+ession.
 -/
 private partial def matchQueryStar (trie : TrieIndex) (pMatch : PartialMatch)
     (todo : Array PartialMatch) (skip : Nat := 1) : TreeM α (Array PartialMatch) := do
@@ -462,28 +312,14 @@ private partial def matchQueryStar (trie : TrieIndex) (pMatch : PartialMatch)
   | 0 =>
     return todo.push { pMatch with trie }
 
-/--
-Definition of `matchEverything` / `matchEverything` 的定义
+/-- Return every value that is indexed in the tree. -/
+/-
+**Lean.Meta.RefinedDiscrTree.matchEverything** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Met
+a.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchEverything
-  signature: (root : Std.HashMap Key TrieIndex)
-  body: do
-  let pMatches ← root.foldM (init := #[]) fun todo key trie =>
-    matchQueryStar trie { keys := [], score := 0, trie := 0 } todo key.arity
-  pMatches.foldlM (init := {}) fun result pMatch => do
-    let { values, .. } ← evalNode pMatch.trie
-    return result.push (score := 0) values
-
-中文:
-定义 matchEverything
-  签名: (root : Std.HashMap Key TrieIndex)
-  定义体: do
-  let pMatches ← root.foldM (init := #[]) fun todo key trie =>
-    matchQueryStar trie { keys := [], score := 0, trie := 0 } todo key.arity
-  pMatches.foldlM (init := {}) fun result pMatch => do
-    let { values, .. } ← evalNode pMatch.trie
-    return result.push (score := 0) values
+--- 原说明 ---
+Return every value that is indexed in the tree.
 -/
 private def matchEverything (root : Std.HashMap Key TrieIndex) : TreeM α (MatchResult α) := do
   let pMatches ← root.foldM (init := #[]) fun todo key trie =>
@@ -493,41 +329,56 @@ private def matchEverything (root : Std.HashMap Key TrieIndex) : TreeM α (Match
     return result.push (score := 0) values
 
 /--
-Definition of `Key.score` / `Key.score` 的定义
+Types are counted less towards the total matching score.
+The reason is that types are usually implicit arguments. For example
 
-English:
-definition Key.score
-  signature: (key : Key)
-  body: do
-  match key with
-  | .const n _ =>
-    if (← getConstInfo n).type.getForallBody.isSort then
-      return 1
-    else
-      return 10
-  | .fvar fvarId _ =>
-    if (← fvarId.getType).getForallBody.isSort then
-      return 1
-    else
-      return 10
-  | _ => return 10
+- If the goal is `(1 : ℕ) = 1`, we could find
+  - `rfl (a : α) : a = a`.
+    This gets extra points for matching `1`
+  - `Nat.succ.inj (n m : ℕ) (h : n.succ = m.succ) : n = m`.
+    This gets extra points for matching `ℕ`
 
-中文:
-定义 Key.score
-  签名: (key : Key)
-  定义体: do
-  match key with
-  | .const n _ =>
-    if (← getConstInfo n).type.getForallBody.isSort then
-      return 1
-    else
-      return 10
-  | .fvar fvarId _ =>
-    if (← fvarId.getType).getForallBody.isSort then
-      return 1
-    else
-      return 10
-  | _ => return 10
+  Clearly, `rfl` is better.
+
+- If we rewrite `|(0 : ℝ)|`, we could find
+  - `abs_zero : |(0 : α)| = 0`
+    This gets extra points for matching `0`
+  - `Real.norm_eq_abs : ∀ (r : ℝ), ‖r‖ = |r|`
+    This gets extra points for matching `ℝ`
+
+  Clearly, `abs_zero` is better
+
+In both examples, matching the type (`ℕ` or `ℝ`) was not very important for how good
+the match actually was.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.Key.score** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refi
+nedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Types are counted less towards the total matching score.
+The reason is that types are usually implicit arguments. For example
+
+- If the goal is `(1 : ℕ) = 1`, we could find
+  - `rfl (a : α) : a = a`.
+    This gets extra points for matching `1`
+  - `Nat.succ.inj (n m : ℕ) (h : n.succ = m.succ) : n = m`.
+    This gets extra points for matching `ℕ`
+
+  Clearly, `rfl` is better.
+
+- If we rewrite `|(0 : ℝ)|`, we could find
+  - `abs_zero : |(0 : α)| = 0`
+    This gets extra points for matching `0`
+  - `Real.norm_eq_abs : ∀ (r : ℝ), ‖r‖ = |r|`
+    This gets extra points for matching `ℝ`
+
+  Clearly, `abs_zero` is better
+
+In both examples, matching the type (`ℕ` or `ℝ`) was not very important for how 
+good
+the match actually was.
 -/
 private def Key.score (key : Key) : MetaM Nat := do
   match key with
@@ -543,60 +394,15 @@ private def Key.score (key : Key) : MetaM Nat := do
       return 10
   | _ => return 10
 
-/--
-Definition of `matchTreeStars` / `matchTreeStars` 的定义
+/-- Add to the `todo` stack all matches that result from a `.star _` in the discrimination tree. -/
+/-
+**Lean.Meta.RefinedDiscrTree.matchTreeStars** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta
+.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchTreeStars
-  signature: (key : Key) (node : Trie α) (pMatch : PartialMatch)
-  body: do
-  let { star, labelledStars, .. } := node
-  if labelledStars.isEmpty && star.isNone then
-    return todo
-  else
-    let (dropped, keys) := drop [key] pMatch.keys key.arity
-    let mut todo := todo
-    if let some trie := star then
-      todo := todo.push { pMatch with keys, trie }
-    todo ← node.labelledStars.foldM (init := todo) fun todo id trie => do
-      if let some assignment := pMatch.treeStars[id]? then
-        let eq lhs rhs := if unify then (isEq lhs.reverse rhs.reverse).isSome else lhs == rhs
-        if eq dropped assignment then
-          return todo.push { pMatch with
-            keys, trie
-            score := (← dropped.mapM (·.score)).foldl (· + ·) pMatch.score }
-        else
-          return todo
-      else
-        let treeStars := pMatch.treeStars.insert id dropped
-        return todo.push { pMatch with keys, trie, treeStars }
-    return todo
-
-中文:
-定义 matchTreeStars
-  签名: (key : Key) (node : Trie α) (pMatch : PartialMatch)
-  定义体: do
-  let { star, labelledStars, .. } := node
-  if labelledStars.isEmpty && star.isNone then
-    return todo
-  else
-    let (dropped, keys) := drop [key] pMatch.keys key.arity
-    let mut todo := todo
-    if let some trie := star then
-      todo := todo.push { pMatch with keys, trie }
-    todo ← node.labelledStars.foldM (init := todo) fun todo id trie => do
-      if let some assignment := pMatch.treeStars[id]? then
-        let eq lhs rhs := if unify then (isEq lhs.reverse rhs.reverse).isSome else lhs == rhs
-        if eq dropped assignment then
-          return todo.push { pMatch with
-            keys, trie
-            score := (← dropped.mapM (·.score)).foldl (· + ·) pMatch.score }
-        else
-          return todo
-      else
-        let treeStars := pMatch.treeStars.insert id dropped
-        return todo.push { pMatch with keys, trie, treeStars }
-    return todo
+--- 原说明 ---
+Add to the `todo` stack all matches that result from a `.star _` in the discrimi
+nation tree.
 -/
 private partial def matchTreeStars (key : Key) (node : Trie α) (pMatch : PartialMatch)
     (todo : Array PartialMatch) (unify : Bool) : MetaM (Array PartialMatch) := do
@@ -646,92 +452,30 @@ where
       guard (lHead == rHead)
       lHead.arity.foldM (init := (lhs, rhs)) fun _ _ (lhs, rhs) => isEq lhs rhs
 
-/--
-Definition of `matchKey` / `matchKey` 的定义
+/-- Add to the `todo` stack the match with `key`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.matchKey** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refin
+edDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchKey
-  signature: (key : Key) (children : Std.HashMap Key TrieIndex) (pMatch : PartialMatch)
-  body: if key == .opaque then todo else
-  match children[key]? with
-  | none => todo
-  | some trie => todo.push { pMatch with trie, score := pMatch.score + 1 }
-
-中文:
-定义 matchKey
-  签名: (key : Key) (children : Std.HashMap Key TrieIndex) (pMatch : PartialMatch)
-  定义体: if key == .opaque then todo else
-  match children[key]? with
-  | none => todo
-  | some trie => todo.push { pMatch with trie, score := pMatch.score + 1 }
+--- 原说明 ---
+Add to the `todo` stack the match with `key`.
 -/
 private def matchKey (key : Key) (children : Std.HashMap Key TrieIndex) (pMatch : PartialMatch)
     (todo : Array PartialMatch) : Array PartialMatch :=
   if key == .opaque then todo else
   match children[key]? with
-  | none => todo
+  | none      => todo
   | some trie => todo.push { pMatch with trie, score := pMatch.score + 1 }
 
-/--
-Definition of `getMatchLoop` / `getMatchLoop` 的定义
+/-- Return the possible `Trie α` that match with `keys`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.getMatchLoop** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.R
+efinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getMatchLoop
-  signature: (todo : Array PartialMatch) (result : MatchResult α)
-  body: do
-  if h : todo.size = 0 then
-    return result
-  else
-    let pMatch := todo.back
-    let todo := todo.pop
-    let node ← evalNode pMatch.trie
-    match pMatch.keys with
-    | [] =>
-      getMatchLoop todo (result.push (score := pMatch.score) node.values) unify
-    | key :: keys =>
-      let pMatch := { pMatch with keys }
-      match key with
-      -- `key` is not a `.labelledStar`
-      | .star =>
-        if unify then
-          let todo ← matchQueryStar pMatch.trie pMatch todo
-          getMatchLoop todo result unify
-        else
-          let todo ← matchTreeStars key node pMatch todo unify
-          getMatchLoop todo result unify
-      | _ =>
-        let todo ← matchTreeStars key node pMatch todo unify
-        let todo := matchKey key node.children pMatch todo
-        getMatchLoop todo result unify
-
-中文:
-定义 getMatchLoop
-  签名: (todo : 数组 PartialMatch) (result : MatchResult α)
-  定义体: do
-  if h : todo.size = 0 then
-    return result
-  else
-    let pMatch := todo.back
-    let todo := todo.pop
-    let node ← evalNode pMatch.trie
-    match pMatch.keys with
-    | [] =>
-      getMatchLoop todo (result.push (score := pMatch.score) node.values) unify
-    | key :: keys =>
-      let pMatch := { pMatch with keys }
-      match key with
-      -- `key` is not a `.labelledStar`
-      | .star =>
-        if unify then
-          let todo ← matchQueryStar pMatch.trie pMatch todo
-          getMatchLoop todo result unify
-        else
-          let todo ← matchTreeStars key node pMatch todo unify
-          getMatchLoop todo result unify
-      | _ =>
-        let todo ← matchTreeStars key node pMatch todo unify
-        let todo := matchKey key node.children pMatch todo
-        getMatchLoop todo result unify
+--- 原说明 ---
+Return the possible `Trie α` that match with `keys`.
 -/
 private partial def getMatchLoop (todo : Array PartialMatch) (result : MatchResult α)
     (unify : Bool) : TreeM α (MatchResult α) := do
@@ -760,34 +504,14 @@ private partial def getMatchLoop (todo : Array PartialMatch) (result : MatchResu
         let todo := matchKey key node.children pMatch todo
         getMatchLoop todo result unify
 
-/--
-Definition of `matchTreeRootStar` / `matchTreeRootStar` 的定义
+/-- Return the results from matching the pattern `[.star]` or `[.labelledStar 0]`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.matchTreeRootStar** 是 Mathlib 中的一个定义，位于命名空间 `Lean.M
+eta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matchTreeRootStar
-  signature: (root : Std.HashMap Key TrieIndex)
-  body: do
-  let mut result := {}
-  if let some trie := root[Key.labelledStar 0]? then
-    let { values, .. } ← evalNode trie
-    result := result.push (score := 0) values
-  if let some trie := root[Key.star]? then
-    let { values, .. } ← evalNode trie
-    result := result.push (score := 0) values
-  return result
-
-中文:
-定义 matchTreeRootStar
-  签名: (root : Std.HashMap Key TrieIndex)
-  定义体: do
-  let mut result := {}
-  if let some trie := root[Key.labelledStar 0]? then
-    let { values, .. } ← evalNode trie
-    result := result.push (score := 0) values
-  if let some trie := root[Key.star]? then
-    let { values, .. } ← evalNode trie
-    result := result.push (score := 0) values
-  return result
+--- 原说明 ---
+Return the results from matching the pattern `[.star]` or `[.labelledStar 0]`.
 -/
 private def matchTreeRootStar (root : Std.HashMap Key TrieIndex) : TreeM α (MatchResult α) := do
   let mut result := {}
@@ -800,51 +524,25 @@ private def matchTreeRootStar (root : Std.HashMap Key TrieIndex) : TreeM α (Mat
   return result
 
 /--
-Definition of `getMatch` / `getMatch` 的定义
+Find values that match `e` in `d`.
+* If `unify == true` then metavariables in `e` can be assigned.
+* If `matchRootStar == true` then we allow metavariables at the root to unify.
+  Set this to `false` to avoid getting excessively many results.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.getMatch** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refin
+edDiscrTree`。
+形式化陈述：getMatch (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : Bool) 
+: MetaM (MatchResult α × RefinedDiscrTree α)
+参数：d : RefinedDiscrTree α；e : Expr；unify matchRootStar : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getMatch
-  signature: (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : Bool)
-  body: do
-  withReducible do runTreeM d do
-    let (key, keys) ← encodeExpr e (labelledStars := false)
-    let pMatch : PartialMatch := { keys, score := 0, trie := default }
-    if key == .star then
-      if matchRootStar then
-        if unify then
-          matchEverything d.root
-        else
-          matchTreeRootStar d.root
-      else
-        return {}
-    else
-      let todo := matchKey key d.root pMatch #[]
-      if matchRootStar then
-        getMatchLoop todo (← matchTreeRootStar d.root) unify
-      else
-        getMatchLoop todo {} unify
-
-中文:
-定义 getMatch
-  签名: (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : 布尔值)
-  定义体: do
-  withReducible do runTreeM d do
-    let (key, keys) ← encodeExpr e (labelledStars := false)
-    let pMatch : PartialMatch := { keys, score := 0, trie := default }
-    if key == .star then
-      if matchRootStar then
-        if unify then
-          matchEverything d.root
-        else
-          matchTreeRootStar d.root
-      else
-        return {}
-    else
-      let todo := matchKey key d.root pMatch #[]
-      if matchRootStar then
-        getMatchLoop todo (← matchTreeRootStar d.root) unify
-      else
-        getMatchLoop todo {} unify
+--- 原说明 ---
+Find values that match `e` in `d`.
+* If `unify == true` then metavariables in `e` can be assigned.
+* If `matchRootStar == true` then we allow metavariables at the root to unify.
+  Set this to `false` to avoid getting excessively many results.
 -/
 def getMatch (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : Bool) :
     MetaM (MatchResult α × RefinedDiscrTree α) := do
@@ -867,3 +565,4 @@ def getMatch (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : Bool) :
         getMatchLoop todo {} unify
 
 end Lean.Meta.RefinedDiscrTree
+

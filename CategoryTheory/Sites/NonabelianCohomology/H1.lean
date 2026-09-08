@@ -52,101 +52,58 @@ variable {C : Type u} [Category.{v} C]
 
 namespace PresheafOfGroups
 
-variable (G : Cᵒᵖ ⥤ GrpCat.{w}) {I : Type w'} (U : I -> C)
+variable (G : Cᵒᵖ ⥤ GrpCat.{w}) {I : Type w'} (U : I → C)
 
-/--
-Definition of `ZeroCochain` / `ZeroCochain` 的定义
+/-- A zero cochain consists of a family of sections. -/
+/-
+**CategoryTheory.PresheafOfGroups.ZeroCochain** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.PresheafOfGroups`。
+形式化陈述：ZeroCochain
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ZeroCochain
-  body: forall (i : I), G.obj (Opposite.op (U i))
-
-中文:
-定义 ZeroCochain
-  定义体: forall (i : I), G.obj (Opposite.op (U i))
-
-Depends on / 依赖: G.obj, Opposite, Opposite.op
+--- 原说明 ---
+A zero cochain consists of a family of sections.
 -/
-def ZeroCochain := forall (i : I), G.obj (Opposite.op (U i))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Group (ZeroCochain G U)
-  body: Pi.group
-
-中文:
-实例 :
-  签名: 群 (ZeroCochain G U)
-  定义体: Pi.group
-
-Depends on / 依赖: Pi.group
+def ZeroCochain := ∀ (i : I), G.obj (Opposite.op (U i))
+/-
+**CategoryTheory.PresheafOfGroups.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+sheafOfGroups`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Group (ZeroCochain G U) := Pi.group
 
 namespace Cochain₀
 
 @[simp]
-/--
-lemma `one_apply` / 引理 `one_apply`
-
-English:
-lemma one_apply
-  given: (i : I)
-  statement: (1 : ZeroCochain G U) i = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 one_apply
-  条件: (i : I)
-  结论: (1 : ZeroCochain G U) i = 1
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.PresheafOfGroups.Cochain₀.one_apply** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.PresheafOfGroups.Cochain₀`。
+形式化陈述：one_apply (i : I) : (1 : ZeroCochain G U) i = 1
+参数：i : I。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_apply (i : I) : (1 : ZeroCochain G U) i = 1 := rfl
 
 @[simp]
-/--
-lemma `inv_apply` / 引理 `inv_apply`
-
-English:
-lemma inv_apply
-  given: (γ : ZeroCochain G U) (i : I)
-  statement: γ⁻¹ i = (γ i)⁻¹
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inv_apply
-  条件: (γ : ZeroCochain G U) (i : I)
-  结论: γ⁻¹ i = (γ i)⁻¹
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.PresheafOfGroups.Cochain₀.inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.PresheafOfGroups.Cochain₀`。
+形式化陈述：inv_apply (γ : ZeroCochain G U) (i : I) : γ⁻¹ i = (γ i)⁻¹
+参数：γ : ZeroCochain G U；i : I。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_apply (γ : ZeroCochain G U) (i : I) : γ⁻¹ i = (γ i)⁻¹ := rfl
 
 @[simp]
-/--
-lemma `mul_apply` / 引理 `mul_apply`
-
-English:
-lemma mul_apply
-  given: (γ₁ γ₂ : ZeroCochain G U) (i : I)
-  statement: (γ₁ * γ₂) i = γ₁ i * γ₂ i
-  proof: rfl
-
-中文:
-引理 mul_apply
-  条件: (γ₁ γ₂ : ZeroCochain G U) (i : I)
-  结论: (γ₁ * γ₂) i = γ₁ i * γ₂ i
-  证明: rfl
+/-
+**CategoryTheory.PresheafOfGroups.Cochain₀.mul_apply** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.PresheafOfGroups.Cochain₀`。
+形式化陈述：mul_apply (γ₁ γ₂ : ZeroCochain G U) (i : I) : (γ₁ * γ₂) i = γ₁ i * γ₂ i
+参数：γ₁ γ₂ : ZeroCochain G U；i : I。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mul_apply (γ₁ γ₂ : ZeroCochain G U) (i : I) : (γ₁ * γ₂) i = γ₁ i * γ₂ i := rfl
 
@@ -158,22 +115,27 @@ consists of the data of an element in `G.obj (Opposite.op T)` whenever we have e
 with respect to precomposition. (When the binary product of `U i` and `U j` exists, this
 data for all `T`, `a` and `b` corresponds to the data of a section of `G` on this product.) -/
 @[ext]
-/--
-Definition of `OneCochain` / `OneCochain` 的定义
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain** 是 Mathlib 中的一个结构，位于命名空间 `Category
+Theory.PresheafOfGroups`。
+形式化陈述：OneCochain where /-- the data involved in a 1-cochain -/ ev (i j : I) ⦃T :
+ C⦄ (a : T ⟶ U i) (b : T ⟶ U j) : G.obj (Opposite.op T) ev_precomp (i j : I) ⦃T 
+T' : C⦄ (φ : T ⟶ T') (a : T' ⟶ U i) (b : T' ⟶ U j) : G.map φ.op (ev i j a b) = e
+v i j (φ ≫ a) (φ ≫ b)
+参数：i j : I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OneCochain
-  parameters: where
-  axioms and operations (2):
-    - ev((i j : I) ⦃T) : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) : G.obj (Opposite.op T)
-    - ev_precomp((i j : I) ⦃T T') : C⦄ (φ : T ⟶ T') (a : T' ⟶ U i) (b : T' ⟶ U j) : G.map φ.op (ev i j a b) = ev i j (φ ≫ a) (φ ≫ b)  [default: by aesop]
-
-中文:
-结构 OneCochain
-  参数: where
-  公理与运算 (2 个):
-    - ev((i j : I) ⦃T) : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) : G.obj (对偶.op T)
-    - ev_precomp((i j : I) ⦃T T') : C⦄ (φ : T ⟶ T') (a : T' ⟶ U i) (b : T' ⟶ U j) : G.map φ.op (ev i j a b) = ev i j (φ ≫ a) (φ ≫ b)  [默认: by aesop]
+--- 原说明 ---
+A 1-cochain of a presheaf of groups `G : Cᵒᵖ ⥤ GrpCat` on a family `U : I → C` o
+f objects
+consists of the data of an element in `G.obj (Opposite.op T)` whenever we have e
+lements
+`i` and `j` in `I` and maps `a : T ⟶ U i` and `b : T ⟶ U j`, and it must satisfy
+ a compatibility
+with respect to precomposition. (When the binary product of `U i` and `U j` exis
+ts, this
+data for all `T`, `a` and `b` corresponds to the data of a section of `G` on thi
+s product.)
 -/
 structure OneCochain where
   /-- the data involved in a 1-cochain -/
@@ -185,139 +147,72 @@ namespace OneCochain
 
 attribute [simp] OneCochain.ev_precomp
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (OneCochain G U)
-  body: { ev := fun _ _ _ _ _ => 1 }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺 (OneCochain G U)
-  定义体: { ev := fun _ _ _ _ _ => 1 }
-
-@[simp]
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.PresheafOfGroups.OneCochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (OneCochain G U) where
-  one := { ev := fun _ _ _ _ _ => 1 }
+  one := { ev := fun _ _ _ _ _ ↦ 1 }
 
 @[simp]
-/--
-lemma `one_ev` / 引理 `one_ev`
-
-English:
-lemma one_ev
-  given: (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j)
-  proof: rfl
-
-中文:
-引理 one_ev
-  条件: (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j)
-  证明: rfl
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain.one_ev** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.PresheafOfGroups.OneCochain`。
+形式化陈述：one_ev (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j) : (1 : OneCochain G U
+).ev i j a b = 1
+参数：i j : I；a : T ⟶ U i；b : T ⟶ U j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_ev (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j) :
     (1 : OneCochain G U).ev i j a b = 1 := rfl
 
 variable {G U}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (OneCochain G U)
-  body: { ev := fun i j _ a b => γ₁.ev i j a b * γ₂.ev i j a b }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 乘法 (OneCochain G U)
-  定义体: { ev := fun i j _ a b => γ₁.ev i j a b * γ₂.ev i j a b }
-
-@[simp]
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.PresheafOfGroups.OneCochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (OneCochain G U) where
-  mul γ₁ γ₂ := { ev := fun i j _ a b => γ₁.ev i j a b * γ₂.ev i j a b }
+  mul γ₁ γ₂ := { ev := fun i j _ a b ↦ γ₁.ev i j a b * γ₂.ev i j a b }
 
 @[simp]
-/--
-lemma `mul_ev` / 引理 `mul_ev`
-
-English:
-lemma mul_ev
-  given: (γ₁ γ₂ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j)
-  proof: rfl
-
-中文:
-引理 mul_ev
-  条件: (γ₁ γ₂ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j)
-  证明: rfl
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain.mul_ev** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.PresheafOfGroups.OneCochain`。
+形式化陈述：mul_ev (γ₁ γ₂ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U
+ j) : (γ₁ * γ₂).ev i j a b = γ₁.ev i j a b * γ₂.ev i j a b
+参数：γ₁ γ₂ : OneCochain G U；i j : I；a : T ⟶ U i；b : T ⟶ U j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mul_ev (γ₁ γ₂ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j) :
     (γ₁ * γ₂).ev i j a b = γ₁.ev i j a b * γ₂.ev i j a b := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inv (OneCochain G U)
-  body: { ev := fun i j _ a b => (γ.ev i j a b)⁻¹ }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 取逆 (OneCochain G U)
-  定义体: { ev := fun i j _ a b => (γ.ev i j a b)⁻¹ }
-
-@[simp]
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.PresheafOfGroups.OneCochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inv (OneCochain G U) where
-  inv γ := { ev := fun i j _ a b => (γ.ev i j a b)⁻¹ }
+  inv γ := { ev := fun i j _ a b ↦ (γ.ev i j a b)⁻¹ }
 
 @[simp]
-/--
-lemma `inv_ev` / 引理 `inv_ev`
-
-English:
-lemma inv_ev
-  given: (γ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j)
-  proof: rfl
-
-中文:
-引理 inv_ev
-  条件: (γ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j)
-  证明: rfl
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain.inv_ev** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.PresheafOfGroups.OneCochain`。
+形式化陈述：inv_ev (γ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j) 
+: (γ⁻¹).ev i j a b = (γ.ev i j a b)⁻¹
+参数：γ : OneCochain G U；i j : I；a : T ⟶ U i；b : T ⟶ U j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_ev (γ : OneCochain G U) (i j : I) {T : C} (a : T ⟶ U i) (b : T ⟶ U j) :
     (γ⁻¹).ev i j a b = (γ.ev i j a b)⁻¹ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Group (OneCochain G U)
-  body: by ext; apply mul_assoc
-  one_mul _ := by ext; apply one_mul
-  mul_one _ := by ext; apply mul_one
-  inv_mul_cancel _ := by ext; apply inv_mul_cancel
-
-中文:
-实例 :
-  签名: 群 (OneCochain G U)
-  定义体: by ext; apply mul_assoc
-  one_mul _ := by ext; apply one_mul
-  mul_one _ := by ext; apply mul_one
-  inv_mul_cancel _ := by ext; apply inv_mul_cancel
-
-Depends on / 依赖: inv_mul_cancel, mul_assoc, mul_one, one_mul
+/-
+**CategoryTheory.PresheafOfGroups.OneCochain.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.PresheafOfGroups.OneCochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Group (OneCochain G U) where
   mul_assoc _ _ _ := by ext; apply mul_assoc
@@ -327,22 +222,18 @@ instance : Group (OneCochain G U) where
 
 end OneCochain
 
-/--
-Definition of `OneCocycle` / `OneCocycle` 的定义
+/-- A 1-cocycle is a 1-cochain which satisfies the cocycle condition. -/
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle** 是 Mathlib 中的一个结构，位于命名空间 `Category
+Theory.PresheafOfGroups`。
+形式化陈述：OneCocycle extends OneCochain G U where ev_trans (i j k : I) ⦃T : C⦄ (a : 
+T ⟶ U i) (b : T ⟶ U j) (c : T ⟶ U k) : ev i j a b * ev j k b c = ev i k a c
+参数：i j k : I。
+继承自：OneCochain G U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OneCocycle
-  parameters: extends OneCochain G U
-  extends: OneCochain G U
-  axioms and operations (1):
-    - ev_trans((i j k : I) ⦃T) : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) (c : T ⟶ U k) : ev i j a b * ev j k b c = ev i k a c  [default: by aesop]
-
-中文:
-结构 OneCocycle
-  参数: extends OneCochain G U
-  继承: OneCochain G U
-  公理与运算 (1 个):
-    - ev_trans((i j k : I) ⦃T) : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) (c : T ⟶ U k) : ev i j a b * ev j k b c = ev i k a c  [默认: by aesop]
+--- 原说明 ---
+A 1-cocycle is a 1-cochain which satisfies the cocycle condition.
 -/
 structure OneCocycle extends OneCochain G U where
   ev_trans (i j k : I) ⦃T : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) (c : T ⟶ U k) :
@@ -350,231 +241,205 @@ structure OneCocycle extends OneCochain G U where
 
 namespace OneCocycle
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (OneCocycle G U)
-  body: OneCocycle.mk 1
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺 (OneCocycle G U)
-  定义体: OneCocycle.mk 1
-
-@[simp]
-
-Depends on / 依赖: OneCocycle, OneCocycle.mk
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.PresheafOfGroups.OneCocycle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (OneCocycle G U) where
   one := OneCocycle.mk 1
 
 @[simp]
-/--
-lemma `one_toOneCochain` / 引理 `one_toOneCochain`
-
-English:
-lemma one_toOneCochain
-  statement: (1 : OneCocycle G U).toOneCochain = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 one_toOneCochain
-  结论: (1 : OneCocycle G U).toOneCochain = 1
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.one_toOneCochain** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.PresheafOfGroups.OneCocycle`。
+形式化陈述：one_toOneCochain : (1 : OneCocycle G U).toOneCochain = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_toOneCochain : (1 : OneCocycle G U).toOneCochain = 1 := rfl
 
 @[simp]
-/--
-lemma `ev_refl` / 引理 `ev_refl`
-
-English:
-lemma ev_refl
-  given: (γ : OneCocycle G U) (i : I) ⦃T
-  statement: C⦄ (a : T ⟶ U i) :
-  proof: by
-  simpa using γ.ev_trans i i i a a a
-
-中文:
-引理 ev_refl
-  条件: (γ : OneCocycle G U) (i : I) ⦃T
-  结论: C⦄ (a : T ⟶ U i) :
-  证明: by
-  simpa using γ.ev_trans i i i a a a
-
-Depends on / 依赖: ev_trans
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.ev_refl** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.PresheafOfGroups.OneCocycle`。
+形式化陈述：ev_refl (γ : OneCocycle G U) (i : I) ⦃T : C⦄ (a : T ⟶ U i) : γ.ev i i a a 
+= 1
+参数：γ : OneCocycle G U；i : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
+· 使用定理 `CategoryTheory.PresheafOfGroups.OneCocycle.ev_trans`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {G : CategoryTheory.Functor Cᵒᵖ GrpCat} {I
+ : Type w'}   {U : I → C} (self : Categor…
 -/
 lemma ev_refl (γ : OneCocycle G U) (i : I) ⦃T : C⦄ (a : T ⟶ U i) :
     γ.ev i i a a = 1 := by
   simpa using γ.ev_trans i i i a a a
-
-/--
-lemma `ev_symm` / 引理 `ev_symm`
-
-English:
-lemma ev_symm
-  given: (γ : OneCocycle G U) (i j : I) ⦃T
-  statement: C⦄ (a : T ⟶ U i) (b : T ⟶ U j) :
-  proof: by
-  rw [← mul_left_inj (γ.ev j i b a)]; rw [γ.ev_trans i j i a b a]; rw [ev_refl]; rw [inv_mul_cancel]
-
-中文:
-引理 ev_symm
-  条件: (γ : OneCocycle G U) (i j : I) ⦃T
-  结论: C⦄ (a : T ⟶ U i) (b : T ⟶ U j) :
-  证明: by
-  rw [← mul_left_inj (γ.ev j i b a)]; rw [γ.ev_trans i j i a b a]; rw [ev_refl]; rw [inv_mul_cancel]
-
-Depends on / 依赖: ev_refl, ev_trans, inv_mul_cancel, mul_left_inj
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.ev_symm** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.PresheafOfGroups.OneCocycle`。
+形式化陈述：ev_symm (γ : OneCocycle G U) (i j : I) ⦃T : C⦄ (a : T ⟶ U i) (b : T ⟶ U j)
+ : γ.ev i j a b = (γ.ev j i b a)⁻¹
+参数：γ : OneCocycle G U；i j : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_left_inj`：mul_left_inj (a : G) {b c : G} : b * a = c * a ↔ b = c
+· 使用定理 `RightCancelSemigroup.toIsRightCancelMul`：∀ {G : Type u} [self : RightCan
+celSemigroup G], IsRightCancelMul G
+· 使用定理 `CategoryTheory.PresheafOfGroups.OneCocycle.ev_trans`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {G : CategoryTheory.Functor Cᵒᵖ GrpCat} {I
+ : Type w'}   {U : I → C} (self : Categor…
+· 使用引理 `CategoryTheory.PresheafOfGroups.OneCocycle.ev_refl`：ev_refl (γ : OneCocy
+cle G U) (i : I) ⦃T : C⦄ (a : T ⟶ U i) : γ.ev i i a a = 1
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
 -/
 lemma ev_symm (γ : OneCocycle G U) (i j : I) ⦃T : C⦄ (a : T ⟶ U i) (b : T ⟶ U j) :
     γ.ev i j a b = (γ.ev j i b a)⁻¹ := by
-  rw [← mul_left_inj (γ.ev j i b a)]; rw [γ.ev_trans i j i a b a]; rw [ev_refl]; rw [inv_mul_cancel]
+  rw [← mul_left_inj (γ.ev j i b a), γ.ev_trans i j i a b a,
+    ev_refl, inv_mul_cancel]
 
 end OneCocycle
 
 variable {G U}
 
-/--
-Definition of `OneCohomologyRelation` / `OneCohomologyRelation` 的定义
+/-- The assertion that two cochains in `OneCochain G U` are cohomologous via
+an explicit zero-cochain. -/
+/-
+**CategoryTheory.PresheafOfGroups.OneCohomologyRelation** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.PresheafOfGroups`。
+形式化陈述：OneCohomologyRelation (γ₁ γ₂ : OneCochain G U) (α : ZeroCochain G U) : Pro
+p
+参数：γ₁ γ₂ : OneCochain G U；α : ZeroCochain G U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OneCohomologyRelation
-  signature: (γ₁ γ₂ : OneCochain G U) (α : ZeroCochain G U)
-  body: forall (i j : I) ⦃T : C⦄ (a : T ⟶ U i) (b : T ⟶ U j),
-    G.map a.op (α i) * γ₁.ev i j a b = γ₂.ev i j a b * G.map b.op (α j)
-
-中文:
-定义 OneCohomologyRelation
-  签名: (γ₁ γ₂ : OneCochain G U) (α : ZeroCochain G U)
-  定义体: forall (i j : I) ⦃T : C⦄ (a : T ⟶ U i) (b : T ⟶ U j),
-    G.map a.op (α i) * γ₁.ev i j a b = γ₂.ev i j a b * G.map b.op (α j)
-
-Depends on / 依赖: G.map, a.op, b.op
+--- 原说明 ---
+The assertion that two cochains in `OneCochain G U` are cohomologous via
+an explicit zero-cochain.
 -/
 def OneCohomologyRelation (γ₁ γ₂ : OneCochain G U) (α : ZeroCochain G U) : Prop :=
-  forall (i j : I) ⦃T : C⦄ (a : T ⟶ U i) (b : T ⟶ U j),
+  ∀ (i j : I) ⦃T : C⦄ (a : T ⟶ U i) (b : T ⟶ U j),
     G.map a.op (α i) * γ₁.ev i j a b = γ₂.ev i j a b * G.map b.op (α j)
 
 namespace OneCohomologyRelation
 
-/--
-lemma `refl` / 引理 `refl`
-
-English:
-lemma refl
-  given: (γ : OneCochain G U)
-  statement: OneCohomologyRelation γ γ 1
-  proof: fun _ _ _ _ _ => by simp
-
-中文:
-引理 refl
-  条件: (γ : OneCochain G U)
-  结论: OneCohomologyRelation γ γ 1
-  证明: fun _ _ _ _ _ => by simp
+/-
+**CategoryTheory.PresheafOfGroups.OneCohomologyRelation.refl** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.PresheafOfGroups.OneCohomologyRelation`。
+形式化陈述：refl (γ : OneCochain G U) : OneCohomologyRelation γ γ 1
+参数：γ : OneCochain G U。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma refl (γ : OneCochain G U) : OneCohomologyRelation γ γ 1 := fun _ _ _ _ _ => by simp
-
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  given: {γ₁ γ₂ : OneCochain G U} {α : ZeroCochain G U} (h : OneCohomologyRelation γ₁ γ₂ α)
-  proof: fun i j T a b => by
-  rw [← mul_left_inj (G.map b.op (α j))]; rw [mul_assoc]; rw [← h i j a b]; rw [mul_assoc]; rw [Cochain₀.inv_apply]; rw [map_inv]; rw [inv_mul_cancel_left]; rw [Cochain₀.inv_apply]; rw [map_inv]; rw [inv_mul_cancel]; rw [mul_one]
-
-中文:
-引理 symm
-  条件: {γ₁ γ₂ : OneCochain G U} {α : ZeroCochain G U} (h : OneCohomologyRelation γ₁ γ₂ α)
-  证明: fun i j T a b => by
-  rw [← mul_left_inj (G.map b.op (α j))]; rw [mul_assoc]; rw [← h i j a b]; rw [mul_assoc]; rw [Cochain₀.inv_apply]; rw [map_inv]; rw [inv_mul_cancel_left]; rw [Cochain₀.inv_apply]; rw [map_inv]; rw [inv_mul_cancel]; rw [mul_one]
-
-Depends on / 依赖: G.map, b.op, inv_apply, inv_mul_cancel, inv_mul_cancel_left, map_inv, mul_assoc, mul_left_inj, mul_one
+lemma refl (γ : OneCochain G U) : OneCohomologyRelation γ γ 1 := fun _ _ _ _ _ ↦ by simp
+/-
+**CategoryTheory.PresheafOfGroups.OneCohomologyRelation.symm** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.PresheafOfGroups.OneCohomologyRelation`。
+形式化陈述：symm {γ₁ γ₂ : OneCochain G U} {α : ZeroCochain G U} (h : OneCohomologyRela
+tion γ₁ γ₂ α) : OneCohomologyRelation γ₂ γ₁ α⁻¹
+参数：h : OneCohomologyRelation γ₁ γ₂ α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_left_inj`：mul_left_inj (a : G) {b c : G} : b * a = c * a ↔ b = c
+· 使用定理 `RightCancelSemigroup.toIsRightCancelMul`：∀ {G : Type u} [self : RightCan
+celSemigroup G], IsRightCancelMul G
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用引理 `CategoryTheory.PresheafOfGroups.Cochain₀.inv_apply`：inv_apply (γ : ZeroC
+ochain G U) (i : I) : γ⁻¹ i = (γ i)⁻¹
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 lemma symm {γ₁ γ₂ : OneCochain G U} {α : ZeroCochain G U} (h : OneCohomologyRelation γ₁ γ₂ α) :
-    OneCohomologyRelation γ₂ γ₁ α⁻¹ := fun i j T a b => by
-  rw [← mul_left_inj (G.map b.op (α j))]; rw [mul_assoc]; rw [← h i j a b]; rw [mul_assoc]; rw [Cochain₀.inv_apply]; rw [map_inv]; rw [inv_mul_cancel_left]; rw [Cochain₀.inv_apply]; rw [map_inv]; rw [inv_mul_cancel]; rw [mul_one]
-
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  statement: {γ₁ γ₂ γ₃ : OneCochain G U} {α β : ZeroCochain G U}
-  proof: fun i j T a b => by
-  dsimp
-  rw [map_mul]; rw [map_mul]; rw [mul_assoc]; rw [h₁₂ i j a b]; rw [← mul_assoc]; rw [h₂₃ i j a b]; rw [mul_assoc]
-
-中文:
-引理 trans
-  结论: {γ₁ γ₂ γ₃ : OneCochain G U} {α β : ZeroCochain G U}
-  证明: fun i j T a b => by
-  dsimp
-  rw [map_mul]; rw [map_mul]; rw [mul_assoc]; rw [h₁₂ i j a b]; rw [← mul_assoc]; rw [h₂₃ i j a b]; rw [mul_assoc]
-
-Depends on / 依赖: map_mul, mul_assoc
+    OneCohomologyRelation γ₂ γ₁ α⁻¹ := fun i j T a b ↦ by
+  rw [← mul_left_inj (G.map b.op (α j)), mul_assoc, ← h i j a b,
+    mul_assoc, Cochain₀.inv_apply, map_inv, inv_mul_cancel_left,
+    Cochain₀.inv_apply, map_inv, inv_mul_cancel, mul_one]
+/-
+**CategoryTheory.PresheafOfGroups.OneCohomologyRelation.trans** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.PresheafOfGroups.OneCohomologyRelation`。
+形式化陈述：trans {γ₁ γ₂ γ₃ : OneCochain G U} {α β : ZeroCochain G U} (h₁₂ : OneCohomo
+logyRelation γ₁ γ₂ α) (h₂₃ : OneCohomologyRelation γ₂ γ₃ β) : OneCohomologyRelat
+ion γ₁ γ₃ (β * α)
+参数：h₁₂ : OneCohomologyRelation γ₁ γ₂ α；h₂₃ : OneCohomologyRelation γ₂ γ₃ β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma trans {γ₁ γ₂ γ₃ : OneCochain G U} {α β : ZeroCochain G U}
     (h₁₂ : OneCohomologyRelation γ₁ γ₂ α) (h₂₃ : OneCohomologyRelation γ₂ γ₃ β) :
-    OneCohomologyRelation γ₁ γ₃ (β * α) := fun i j T a b => by
+    OneCohomologyRelation γ₁ γ₃ (β * α) := fun i j T a b ↦ by
   dsimp
-  rw [map_mul]; rw [map_mul]; rw [mul_assoc]; rw [h₁₂ i j a b]; rw [← mul_assoc]; rw [h₂₃ i j a b]; rw [mul_assoc]
+  rw [map_mul, map_mul, mul_assoc, h₁₂ i j a b, ← mul_assoc,
+    h₂₃ i j a b, mul_assoc]
 
 end OneCohomologyRelation
 
 namespace OneCocycle
 
-/--
-Definition of `IsCohomologous` / `IsCohomologous` 的定义
+/-- The cohomology (equivalence) relation on 1-cocycles. -/
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.IsCohomologous** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.PresheafOfGroups.OneCocycle`。
+形式化陈述：IsCohomologous (γ₁ γ₂ : OneCocycle G U) : Prop
+参数：γ₁ γ₂ : OneCocycle G U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsCohomologous
-  signature: (γ₁ γ₂ : OneCocycle G U)
-  body: exists (α : ZeroCochain G U), OneCohomologyRelation γ₁.toOneCochain γ₂.toOneCochain α
-
-中文:
-定义 IsCohomologous
-  签名: (γ₁ γ₂ : OneCocycle G U)
-  定义体: exists (α : ZeroCochain G U), OneCohomologyRelation γ₁.toOneCochain γ₂.toOneCochain α
-
-Depends on / 依赖: OneCohomologyRelation, ZeroCochain, toOneCochain
+--- 原说明 ---
+The cohomology (equivalence) relation on 1-cocycles.
 -/
 def IsCohomologous (γ₁ γ₂ : OneCocycle G U) : Prop :=
-  exists (α : ZeroCochain G U), OneCohomologyRelation γ₁.toOneCochain γ₂.toOneCochain α
+  ∃ (α : ZeroCochain G U), OneCohomologyRelation γ₁.toOneCochain γ₂.toOneCochain α
 
 variable (G U)
-
-/--
-lemma `equivalence_isCohomologous` / 引理 `equivalence_isCohomologous`
-
-English:
-lemma equivalence_isCohomologous
-  proof: ⟨_, OneCohomologyRelation.refl γ.toOneCochain⟩
-  symm := by
-    rintro γ₁ γ₂ ⟨α, h⟩
-    exact ⟨_, h.symm⟩
-  trans := by
-    rintro γ₁ γ₂ γ₂ ⟨α, h⟩ ⟨β, h'⟩
-    exact ⟨_, h.trans h'⟩
-
-中文:
-引理 equivalence_isCohomologous
-  证明: ⟨_, OneCohomologyRelation.refl γ.toOneCochain⟩
-  symm := by
-    rintro γ₁ γ₂ ⟨α, h⟩
-    exact ⟨_, h.symm⟩
-  trans := by
-    rintro γ₁ γ₂ γ₂ ⟨α, h⟩ ⟨β, h'⟩
-    exact ⟨_, h.trans h'⟩
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.equivalence_isCohomologous** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.PresheafOfGroups.OneCocycle`。
+形式化陈述：equivalence_isCohomologous : _root_.Equivalence (IsCohomologous (G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.PresheafOfGroups.OneCohomologyRelation.refl`：refl (γ : On
+eCochain G U) : OneCohomologyRelation γ γ 1
+· 使用引理 `CategoryTheory.PresheafOfGroups.OneCohomologyRelation.symm`：symm {γ₁ γ₂ 
+: OneCochain G U} {α : ZeroCochain G U} (h : OneCohomologyRelation γ₁ γ₂ α) : On
+eCohomologyRelation γ₂ γ₁ α⁻¹
+· 使用引理 `CategoryTheory.PresheafOfGroups.OneCohomologyRelation.trans`：trans {γ₁ γ
+₂ γ₃ : OneCochain G U} {α β : ZeroCochain G U} (h₁₂ : OneCohomologyRelation γ₁ γ
+₂ α) (h₂₃ : OneCohomologyRelation γ₂ γ₃ β) : OneC…
 -/
 lemma equivalence_isCohomologous :
     _root_.Equivalence (IsCohomologous (G := G) (U := U)) where
@@ -589,89 +454,65 @@ lemma equivalence_isCohomologous :
 end OneCocycle
 
 variable (G U) in
-/--
-Definition of `H1` / `H1` 的定义
+/-- The cohomology in degree 1 of a presheaf of groups
+`G : Cᵒᵖ ⥤ GrpCat` on a family of objects `U : I → C`. -/
+/-
+**CategoryTheory.PresheafOfGroups.H1** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.P
+resheafOfGroups`。
+形式化陈述：H1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition H1
-  body: Quot (OneCocycle.IsCohomologous (G := G) (U := U))
-
-中文:
-定义 H1
-  定义体: Quot (OneCocycle.IsCohomologous (G := G) (U := U))
-
-Depends on / 依赖: IsCohomologous, OneCocycle, OneCocycle.IsCohomologous
+--- 原说明 ---
+The cohomology in degree 1 of a presheaf of groups
+`G : Cᵒᵖ ⥤ GrpCat` on a family of objects `U : I → C`.
 -/
 def H1 := Quot (OneCocycle.IsCohomologous (G := G) (U := U))
 
-/--
-Definition of `OneCocycle.class` / `OneCocycle.class` 的定义
+/-- The cohomology class of a 1-cocycle. -/
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.class** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.PresheafOfGroups.OneCocycle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {G : Cate
+goryTheory.Functor Cᵒᵖ GrpCat} →       {I : Type w'} →         {U : I → C} → Cat
+egoryTheory.PresheafOfGroups.OneCocycle G U → CategoryTheory.PresheafOfGroups.H1
+ G U
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OneCocycle.class
-  signature: (γ : OneCocycle G U)
-  body: Quot.mk _ γ
-
-中文:
-定义 OneCocycle.class
-  签名: (γ : OneCocycle G U)
-  定义体: Quot.mk _ γ
-
-Depends on / 依赖: Quot.mk
+--- 原说明 ---
+The cohomology class of a 1-cocycle.
 -/
 def OneCocycle.class (γ : OneCocycle G U) : H1 G U := Quot.mk _ γ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (H1 G U)
-  body: OneCocycle.class 1
-
-中文:
-实例 :
-  签名: 幺 (H1 G U)
-  定义体: OneCocycle.class 1
-
-Depends on / 依赖: OneCocycle, OneCocycle.class
+/-
+**CategoryTheory.PresheafOfGroups.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+sheafOfGroups`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (H1 G U) where
   one := OneCocycle.class 1
-
-/--
-lemma `OneCocycle.class_eq_iff` / 引理 `OneCocycle.class_eq_iff`
-
-English:
-lemma OneCocycle.class_eq_iff
-  given: (γ₁ γ₂ : OneCocycle G U)
-  proof: (equivalence_isCohomologous _ _).quot_mk_eq_iff _ _
-
-中文:
-引理 OneCocycle.class_eq_iff
-  条件: (γ₁ γ₂ : OneCocycle G U)
-  证明: (equivalence_isCohomologous _ _).quot_mk_eq_iff _ _
-
-Depends on / 依赖: equivalence_isCohomologous, quot_mk_eq_iff
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.class_eq_iff** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.PresheafOfGroups.OneCocycle`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {G : CategoryTheo
+ry.Functor Cᵒᵖ GrpCat} {I : Type w'}   {U : I → C} (γ₁ γ₂ : CategoryTheory.Presh
+eafOfGroups.OneCocycle G U), γ₁.class = γ₂.class ↔ γ₁.IsCohomologous γ₂
+参数：γ₁ γ₂ : CategoryTheory.PresheafOfGroups.OneCocycle G U。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equivalence.quot_mk_eq_iff`：Equivalence.quot_mk_eq_iff {α : Type*} {r : 
+α -> α -> Prop} (h : Equivalence r) (x y : α) : Quot.mk r x = Quot.mk r y ↔ r x 
+y
+· 使用引理 `CategoryTheory.PresheafOfGroups.OneCocycle.equivalence_isCohomologous`：e
+quivalence_isCohomologous : _root_.Equivalence (IsCohomologous (G
 -/
 lemma OneCocycle.class_eq_iff (γ₁ γ₂ : OneCocycle G U) :
     γ₁.class = γ₂.class ↔ γ₁.IsCohomologous γ₂ :=
   (equivalence_isCohomologous _ _).quot_mk_eq_iff _ _
-
-/--
-lemma `OneCocycle.IsCohomologous.class_eq` / 引理 `OneCocycle.IsCohomologous.class_eq`
-
-English:
-lemma OneCocycle.IsCohomologous.class_eq
-  given: {γ₁ γ₂ : OneCocycle G U} (h : γ₁.IsCohomologous γ₂)
-  proof: Quot.sound h
-
-中文:
-引理 OneCocycle.IsCohomologous.class_eq
-  条件: {γ₁ γ₂ : OneCocycle G U} (h : γ₁.IsCohomologous γ₂)
-  证明: Quot.sound h
-
-Depends on / 依赖: Quot.sound
+/-
+**CategoryTheory.PresheafOfGroups.OneCocycle.IsCohomologous.class_eq** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.PresheafOfGroups.OneCocycle.IsCohomologous`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {G : CategoryTheo
+ry.Functor Cᵒᵖ GrpCat} {I : Type w'}   {U : I → C} {γ₁ γ₂ : CategoryTheory.Presh
+eafOfGroups.OneCocycle G U}, γ₁.IsCohomologous γ₂ → γ₁.class = γ₂.class
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma OneCocycle.IsCohomologous.class_eq {γ₁ γ₂ : OneCocycle G U} (h : γ₁.IsCohomologous γ₂) :
     γ₁.class = γ₂.class :=
@@ -680,3 +521,4 @@ lemma OneCocycle.IsCohomologous.class_eq {γ₁ γ₂ : OneCocycle G U} (h : γ�
 end PresheafOfGroups
 
 end CategoryTheory
+

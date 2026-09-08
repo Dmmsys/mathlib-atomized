@@ -28,22 +28,15 @@ initialize registerTraceClass `Meta.Tactic.fun_prop.attr
 initialize registerTraceClass `Debug.Meta.Tactic.fun_prop
 
 
-/--
-Inductive type `Origin` / 归纳类型 `Origin`
+/-- Indicated origin of a function or a statement. -/
+/-
+**Mathlib.Meta.FunProp.Origin** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Meta.FunProp`
+。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Origin
-  parameters: where
-  constructors (2):
-    - decl: (name : Name)
-    - fvar: (fvarId : FVarId)
-
-中文:
-归纳类型 Origin
-  参数: where
-  构造子 (2 个):
-    - decl: (name : Name)
-    - fvar: (fvarId : FVarId)
+--- 原说明 ---
+Indicated origin of a function or a statement.
 -/
 inductive Origin where
   /-- It is a constant defined in the environment. -/
@@ -52,113 +45,77 @@ inductive Origin where
   | fvar (fvarId : FVarId)
   deriving Inhabited, BEq
 
-/--
-Definition of `Origin.name` / `Origin.name` 的定义
+/-- Name of the origin. -/
+/-
+**Mathlib.Meta.FunProp.Origin.name** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunPr
+op.Origin`。
+形式化陈述：Mathlib.Meta.FunProp.Origin → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Origin.name
-  signature: (origin : Origin)
-  body: match origin with
-  | .decl name => name
-  | .fvar id => id.name
-
-中文:
-定义 Origin.name
-  签名: (origin : Origin)
-  定义体: match origin with
-  | .decl name => name
-  | .fvar id => id.name
-
-Depends on / 依赖: id.name, origin
+--- 原说明 ---
+Name of the origin.
 -/
 def Origin.name (origin : Origin) : Name :=
   match origin with
   | .decl name => name
   | .fvar id => id.name
 
-/--
-Definition of `Origin.getValue` / `Origin.getValue` 的定义
+/-- Get the expression specified by `origin`. -/
+/-
+**Mathlib.Meta.FunProp.Origin.getValue** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.F
+unProp.Origin`。
+形式化陈述：Mathlib.Meta.FunProp.Origin → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Origin.getValue
-  signature: (origin : Origin)
-  body: do
-  match origin with
-  | .decl name => mkConstWithFreshMVarLevels name
-  | .fvar id => pure (.fvar id)
-
-中文:
-定义 Origin.getValue
-  签名: (origin : Origin)
-  定义体: do
-  match origin with
-  | .decl name => mkConstWithFreshMVarLevels name
-  | .fvar id => pure (.fvar id)
+--- 原说明 ---
+Get the expression specified by `origin`.
 -/
 def Origin.getValue (origin : Origin) : MetaM Expr := do
   match origin with
   | .decl name => mkConstWithFreshMVarLevels name
   | .fvar id => pure (.fvar id)
 
-/--
-Definition of `ppOrigin` / `ppOrigin` 的定义
+/-- Pretty print `FunProp.Origin`. -/
+/-
+**Mathlib.Meta.FunProp.ppOrigin** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunProp`
+。
+形式化陈述：{m : Type → Type} → [Monad m] → [MonadEnv m] → [MonadError m] → Mathlib.Me
+ta.FunProp.Origin → m MessageData
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ppOrigin
-  signature: {m} [Monad m] [MonadEnv m] [MonadError m]
-
-中文:
-定义 ppOrigin
-  签名: {m} [单子 m] [MonadEnv m] [MonadError m]
+--- 原说明 ---
+Pretty print `FunProp.Origin`.
 -/
-def ppOrigin {m} [Monad m] [MonadEnv m] [MonadError m] : Origin -> m MessageData
+def ppOrigin {m} [Monad m] [MonadEnv m] [MonadError m] : Origin → m MessageData
   | .decl n => return m!"{← mkConstWithLevelParams n}"
   | .fvar n => return mkFVar n
 
-/--
-Definition of `ppOrigin'` / `ppOrigin'` 的定义
+/-- Pretty print `FunProp.Origin`. Returns string unlike `ppOrigin`. -/
+/-
+**Mathlib.Meta.FunProp.ppOrigin'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunProp
+`。
+形式化陈述：ppOrigin' (origin : Origin) : MetaM String
+参数：origin : Origin。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ppOrigin'
-  signature: (origin : Origin)
-  body: do
-  match origin with
-  | .fvar id => return s!"{← ppExpr (.fvar id)} : {← ppExpr (← inferType (.fvar id))}"
-  | _ => pure (toString origin.name)
-
-中文:
-定义 ppOrigin'
-  签名: (origin : Origin)
-  定义体: do
-  match origin with
-  | .fvar id => return s!"{← ppExpr (.fvar id)} : {← ppExpr (← inferType (.fvar id))}"
-  | _ => pure (toString origin.name)
+--- 原说明 ---
+Pretty print `FunProp.Origin`. Returns string unlike `ppOrigin`.
 -/
 def ppOrigin' (origin : Origin) : MetaM String := do
   match origin with
   | .fvar id => return s!"{← ppExpr (.fvar id)} : {← ppExpr (← inferType (.fvar id))}"
   | _ => pure (toString origin.name)
 
-/--
-Definition of `FunctionData.getFnOrigin` / `FunctionData.getFnOrigin` 的定义
+/-- Get origin of the head function. -/
+/-
+**Mathlib.Meta.FunProp.FunctionData.getFnOrigin** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Meta.FunProp.FunctionData`。
+形式化陈述：Mathlib.Meta.FunProp.FunctionData → Mathlib.Meta.FunProp.Origin
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FunctionData.getFnOrigin
-  signature: (fData : FunctionData)
-  body: match fData.fn with
-  | .fvar id => .fvar id
-  | .const name _ => .decl name
-  | _ => .decl Name.anonymous
-
-中文:
-定义 FunctionData.getFnOrigin
-  签名: (fData : FunctionData)
-  定义体: match fData.fn with
-  | .fvar id => .fvar id
-  | .const name _ => .decl name
-  | _ => .decl Name.anonymous
-
-Depends on / 依赖: Name.anonymous, anonymous, fData.fn
+--- 原说明 ---
+Get origin of the head function.
 -/
 def FunctionData.getFnOrigin (fData : FunctionData) : Origin :=
   match fData.fn with
@@ -166,40 +123,35 @@ def FunctionData.getFnOrigin (fData : FunctionData) : Origin :=
   | .const name _ => .decl name
   | _ => .decl Name.anonymous
 
-/--
-Definition of `defaultNamesToUnfold` / `defaultNamesToUnfold` 的定义
+/-- Default names to be considered reducible by `fun_prop` -/
+/-
+**Mathlib.Meta.FunProp.defaultNamesToUnfold** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.M
+eta.FunProp`。
+形式化陈述：defaultNamesToUnfold : Array Name
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition defaultNamesToUnfold
-  signature: : Array Name
-  body: #[`id, `Function.comp, `Function.const, `Function.HasUncurry.uncurry, `Function.uncurry]
-
-中文:
-定义 defaultNamesToUnfold
-  签名: : 数组 Name
-  定义体: #[`id, `Function.comp, `Function.const, `Function.HasUncurry.uncurry, `Function.uncurry]
-
-Depends on / 依赖: Function, Function.HasUncurry.uncurry, Function.comp, Function.const, Function.uncurry, HasUncurry, uncurry
+--- 原说明 ---
+Default names to be considered reducible by `fun_prop`
 -/
 def defaultNamesToUnfold : Array Name :=
   #[`id, `Function.comp, `Function.const, `Function.HasUncurry.uncurry, `Function.uncurry]
 
-/--
-Definition of `Config` / `Config` 的定义
+/-- `fun_prop` configuration -/
+/-
+**Mathlib.Meta.FunProp.Config** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.FunProp`。
+形式化陈述：Config where /-- Maximum number of transitions between function properties
+. For example inferring continuity from differentiability and then differentiabi
+lity from smoothness (`ContDiff ℝ ∞`) requires `maxTransitionDepth = 2`. The def
+ault value of one expects that transition theorems are transitively closed e.g. 
+there is a transition theorem that infers continuity directly from smoothness.  
+Setting `maxTransitionDepth` to zero will disable all transition theorems. This 
+can be very useful when `f
+参数：`ContDiff ℝ ∞`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Config
-  parameters: where
-  axioms and operations (2):
-    - maxTransitionDepth : = 1
-    - maxSteps : = 100000
-
-中文:
-结构 余nfig
-  参数: where
-  公理与运算 (2 个):
-    - maxTransitionDepth : = 1
-    - maxSteps : = 100000
+--- 原说明 ---
+`fun_prop` configuration -/
 -/
 structure Config where
   /-- Maximum number of transitions between function properties. For example inferring continuity
@@ -217,26 +169,14 @@ structure Config where
   maxSteps := 100000
 deriving Inhabited, BEq
 
-/--
-Definition of `Context` / `Context` 的定义
+/-- `fun_prop` context -/
+/-
+**Mathlib.Meta.FunProp.Context** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.FunProp`。
+形式化陈述：Context where /-- `fun_prop` config -/ config : Config
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Context
-  parameters: where
-  axioms and operations (4):
-    - config : Config  [default: {}]
-    - constToUnfold : TreeSet Name Name.quickCmp  [default: .ofArray defaultNamesToUnfold _]
-    - disch : Expr -> MetaM (Option Expr)  [default: fun _ => pure none]
-    - transitionDepth : = 0
-
-中文:
-结构 余ntext
-  参数: where
-  公理与运算 (4 个):
-    - config : 余nfig  [默认: {}]
-    - constToUnfold : TreeSet Name Name.quickCmp  [默认: .ofArray defaultNamesToUnfold _]
-    - disch : Expr -> MetaM (选项类型 Expr)  [默认: fun _ => pure none]
-    - transitionDepth : = 0
+--- 原说明 ---
+`fun_prop` context
 -/
 structure Context where
   /-- `fun_prop` config -/
@@ -245,32 +185,23 @@ structure Context where
   constToUnfold : TreeSet Name Name.quickCmp :=
     .ofArray defaultNamesToUnfold _
   /-- Custom discharger to satisfy theorem hypotheses. -/
-  disch : Expr -> MetaM (Option Expr) := fun _ => pure none
+  disch : Expr → MetaM (Option Expr) := fun _ => pure none
   /-- current transition depth -/
   transitionDepth := 0
 
-/--
-Definition of `GeneralTheorem` / `GeneralTheorem` 的定义
+/-- General theorem about a function property used for transition and morphism theorems -/
+/-
+**Mathlib.Meta.FunProp.GeneralTheorem** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.Fu
+nProp`。
+形式化陈述：GeneralTheorem where /-- function property name -/ funPropName : Name /-- 
+theorem name -/ thmName : Name /-- discrimination tree keys used to index this t
+heorem -/ keys : List (RefinedDiscrTree.Key × RefinedDiscrTree.LazyEntry) /-- pr
+iority -/ priority : Nat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GeneralTheorem
-  parameters: where
-  axioms and operations (4):
-    - funPropName : Name
-    - thmName : Name
-    - keys : List (RefinedDiscrTree.Key × RefinedDiscrTree.LazyEntry)
-    - priority : Nat  [default: eval_prio default]
-
-中文:
-结构 GeneralTheorem
-  参数: where
-  公理与运算 (4 个):
-    - funPropName : Name
-    - thmName : Name
-    - keys : 列表 (RefinedDiscrTree.Key × RefinedDiscrTree.LazyEntry)
-    - priority : 自然数  [默认: eval_prio default]
-
-Depends on / 依赖: eval_prio
+--- 原说明 ---
+General theorem about a function property used for transition and morphism theor
+ems
 -/
 structure GeneralTheorem where
   /-- function property name -/
@@ -280,53 +211,35 @@ structure GeneralTheorem where
   /-- discrimination tree keys used to index this theorem -/
   keys : List (RefinedDiscrTree.Key × RefinedDiscrTree.LazyEntry)
   /-- priority -/
-  priority : Nat := eval_prio default
+  priority : Nat  := eval_prio default
   deriving Inhabited
 
-/--
-Definition of `GeneralTheorems` / `GeneralTheorems` 的定义
+/-- Structure holding transition or morphism theorems for `fun_prop` tactic. -/
+/-
+**Mathlib.Meta.FunProp.GeneralTheorems** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.F
+unProp`。
+形式化陈述：GeneralTheorems where /-- Discrimination tree indexing theorems. -/ theore
+ms : RefinedDiscrTree GeneralTheorem
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GeneralTheorems
-  parameters: where
-  axioms and operations (1):
-    - theorems : RefinedDiscrTree GeneralTheorem  [default: {}]
-
-中文:
-结构 GeneralTheorems
-  参数: where
-  公理与运算 (1 个):
-    - theorems : RefinedDiscrTree GeneralTheorem  [默认: {}]
+--- 原说明 ---
+Structure holding transition or morphism theorems for `fun_prop` tactic.
 -/
 structure GeneralTheorems where
   /-- Discrimination tree indexing theorems. -/
   theorems : RefinedDiscrTree GeneralTheorem := {}
   deriving Inhabited
 
-/--
-Definition of `State` / `State` 的定义
+/-- `fun_prop` state -/
+/-
+**Mathlib.Meta.FunProp.State** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Meta.FunProp`。
+形式化陈述：State where /-- Simp's cache is used as the `fun_prop` tactic is designed 
+to be used inside of simp and utilize its cache. It holds successful goals. -/ c
+ache : Simp.Cache
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure State
-  parameters: where
-  axioms and operations (6):
-    - cache : Simp.Cache  [default: {}]
-    - failureCache : ExprSet  [default: {}]
-    - numSteps : = 0
-    - msgLog : List String  [default: []]
-    - morTheorems : GeneralTheorems
-    - transitionTheorems : GeneralTheorems
-
-中文:
-结构 State
-  参数: where
-  公理与运算 (6 个):
-    - cache : Simp.Cache  [默认: {}]
-    - failureCache : ExprSet  [默认: {}]
-    - numSteps : = 0
-    - msgLog : 列表 String  [默认: []]
-    - morTheorems : GeneralTheorems
-    - transitionTheorems : GeneralTheorems
+--- 原说明 ---
+`fun_prop` state
 -/
 structure State where
   /-- Simp's cache is used as the `fun_prop` tactic is designed to be used inside of simp and
@@ -343,120 +256,85 @@ structure State where
   /-- `RefinedDiscrTree` is lazy, so we store the partially evaluated tree. -/
   transitionTheorems : GeneralTheorems
 
-/--
-Definition of `Context.increaseTransitionDepth` / `Context.increaseTransitionDepth` 的定义
+/-- Increase depth -/
+/-
+**Mathlib.Meta.FunProp.Context.increaseTransitionDepth** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Meta.FunProp.Context`。
+形式化陈述：Mathlib.Meta.FunProp.Context → Mathlib.Meta.FunProp.Context
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Context.increaseTransitionDepth
-  signature: (ctx : Context)
-  body: {ctx with transitionDepth := ctx.transitionDepth + 1}
-
-中文:
-定义 余ntext.increaseTransitionDepth
-  签名: (ctx : 余ntext)
-  定义体: {ctx with transitionDepth := ctx.transitionDepth + 1}
-
-Depends on / 依赖: ctx.transitionDepth, transitionDepth
+--- 原说明 ---
+Increase depth
 -/
 def Context.increaseTransitionDepth (ctx : Context) : Context :=
   {ctx with transitionDepth := ctx.transitionDepth + 1}
 
-/--
-Definition of `FunPropM` / `FunPropM` 的定义
+/-- Monad to run `fun_prop` tactic in. -/
+/-
+**Mathlib.Meta.FunProp.FunPropM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Meta.FunPro
+p`。
+形式化陈述：FunPropM
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation FunPropM
-  body: ReaderT FunProp.Context StateT FunProp.State MetaM
-
-中文:
-缩写 FunPropM
-  定义体: ReaderT FunProp.Context StateT FunProp.State MetaM
-
-Depends on / 依赖: Context, FunProp, FunProp.Context, FunProp.State, ReaderT, StateT
+--- 原说明 ---
+Monad to run `fun_prop` tactic in.
 -/
-abbrev FunPropM := ReaderT FunProp.Context StateT FunProp.State MetaM
+abbrev FunPropM := ReaderT FunProp.Context <| StateT FunProp.State MetaM
 
 set_option linter.style.docString.empty false in
-/--
-Definition of `Result` / `Result` 的定义
+/-- Result of `funProp`, it is a proof of function property `P f` -/
+/-
+**Mathlib.Meta.FunProp.Result** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Meta.FunProp`
+。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Result
-  parameters: where
-  axioms and operations (1):
-    - proof : Expr
-
-中文:
-结构 Result
-  参数: where
-  公理与运算 (1 个):
-    - proof : Expr
+--- 原说明 ---
+Result of `funProp`, it is a proof of function property `P f`
 -/
 structure Result where
   /-- -/
   proof : Expr
 
-/--
-Definition of `defaultUnfoldPred` / `defaultUnfoldPred` 的定义
+/-- Default names to unfold -/
+/-
+**Mathlib.Meta.FunProp.defaultUnfoldPred** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta
+.FunProp`。
+形式化陈述：defaultUnfoldPred : Name -> Bool
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition defaultUnfoldPred
-  signature: : Name -> Bool
-  body: defaultNamesToUnfold.contains
-
-中文:
-定义 defaultUnfoldPred
-  签名: : Name -> 布尔值
-  定义体: defaultNamesToUnfold.contains
-
-Depends on / 依赖: contains, defaultNamesToUnfold, defaultNamesToUnfold.contains
+--- 原说明 ---
+Default names to unfold
 -/
-def defaultUnfoldPred : Name -> Bool :=
+def defaultUnfoldPred : Name → Bool :=
   defaultNamesToUnfold.contains
 
-/--
-Definition of `unfoldNamePred` / `unfoldNamePred` 的定义
+/-- Get predicate on names indicating whether they should be unfolded. -/
+/-
+**Mathlib.Meta.FunProp.unfoldNamePred** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fu
+nProp`。
+形式化陈述：unfoldNamePred : FunPropM (Name -> Bool)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unfoldNamePred
-  signature: : FunPropM (Name -> Bool)
-  body: do
-  let toUnfold := (← read).constToUnfold
-  return fun n => toUnfold.contains n
-
-中文:
-定义 unfoldNamePred
-  签名: : FunPropM (Name -> 布尔值)
-  定义体: do
-  let toUnfold := (← read).constToUnfold
-  return fun n => toUnfold.contains n
+--- 原说明 ---
+Get predicate on names indicating whether they should be unfolded.
 -/
-def unfoldNamePred : FunPropM (Name -> Bool) := do
+def unfoldNamePred : FunPropM (Name → Bool) := do
   let toUnfold := (← read).constToUnfold
   return fun n => toUnfold.contains n
 
-/--
-Definition of `increaseSteps` / `increaseSteps` 的定义
+/-- Increase heartbeat, throws error when `maxSteps` was reached -/
+/-
+**Mathlib.Meta.FunProp.increaseSteps** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Fun
+Prop`。
+形式化陈述：increaseSteps : FunPropM Unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition increaseSteps
-  signature: : FunPropM Unit
-  body: do
-  let numSteps := (← get).numSteps
-  let maxSteps := (← read).config.maxSteps
-  if numSteps > maxSteps then
-     throwError s!"fun_prop failed, maximum number({maxSteps}) of steps exceeded"
-  modify (fun s => {s with numSteps := s.numSteps + 1})
-
-中文:
-定义 increaseSteps
-  签名: : FunPropM 单元
-  定义体: do
-  let numSteps := (← get).numSteps
-  let maxSteps := (← read).config.maxSteps
-  if numSteps > maxSteps then
-     throwError s!"fun_prop failed, maximum number({maxSteps}) of steps exceeded"
-  modify (fun s => {s with numSteps := s.numSteps + 1})
+--- 原说明 ---
+Increase heartbeat, throws error when `maxSteps` was reached
 -/
 def increaseSteps : FunPropM Unit := do
   let numSteps := (← get).numSteps
@@ -465,38 +343,19 @@ def increaseSteps : FunPropM Unit := do
      throwError s!"fun_prop failed, maximum number({maxSteps}) of steps exceeded"
   modify (fun s => {s with numSteps := s.numSteps + 1})
 
-/--
-Definition of `withIncreasedTransitionDepth` / `withIncreasedTransitionDepth` 的定义
+/-- Increase transition depth. Return `none` if maximum transition depth has been reached. -/
+/-
+**Mathlib.Meta.FunProp.withIncreasedTransitionDepth** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Meta.FunProp`。
+形式化陈述：withIncreasedTransitionDepth {α} (go : FunPropM (Option α)) : FunPropM (Op
+tion α)
+参数：go : FunPropM (Option α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withIncreasedTransitionDepth
-  signature: {α} (go : FunPropM (Option α))
-  body: do
-  let maxDepth := (← read).config.maxTransitionDepth
-  let newDepth := (← read).transitionDepth + 1
-  if newDepth > maxDepth then
-    trace[Meta.Tactic.fun_prop]
-    "maximum transition depth ({maxDepth}) reached
-    if you want `fun_prop` to continue then increase the maximum depth with \
-    `fun_prop (maxTransitionDepth := {newDepth})`"
-    return none
-  else
-    withReader (fun s => {s with transitionDepth := newDepth}) go
-
-中文:
-定义 withIncreasedTransitionDepth
-  签名: {α} (go : FunPropM (选项类型 α))
-  定义体: do
-  let maxDepth := (← read).config.maxTransitionDepth
-  let newDepth := (← read).transitionDepth + 1
-  if newDepth > maxDepth then
-    trace[Meta.Tactic.fun_prop]
-    "maximum transition depth ({maxDepth}) reached
-    if you want `fun_prop` to continue then increase the maximum depth with \
-    `fun_prop (maxTransitionDepth := {newDepth})`"
-    return none
-  else
-    withReader (fun s => {s with transitionDepth := newDepth}) go
+--- 原说明 ---
+Increase transition depth. Return `none` if maximum transition depth has been re
+ached.
 -/
 def withIncreasedTransitionDepth {α} (go : FunPropM (Option α)) : FunPropM (Option α) := do
   let maxDepth := (← read).config.maxTransitionDepth
@@ -510,32 +369,35 @@ def withIncreasedTransitionDepth {α} (go : FunPropM (Option α)) : FunPropM (Op
   else
     withReader (fun s => {s with transitionDepth := newDepth}) go
 
-/--
-Definition of `logError` / `logError` 的定义
+/-- Log error message that will displayed to the user at the end.
 
-English:
-definition logError
-  signature: (msg : String)
-  body: do
-  if (← read).transitionDepth = 0 then
-    modify fun s =>
-      {s with msgLog :=
-        if s.msgLog.contains msg then
-          s.msgLog
-        else
-          msg::s.msgLog}
+Messages are logged only when `transitionDepth = 0` i.e. when `fun_prop` is **not** trying to infer
+function property like continuity from another property like differentiability.
+The main reason is that if the user forgets to add a continuity theorem for function `foo` then
+`fun_prop` should report that there is a continuity theorem for `foo` missing. If we would log
+messages `transitionDepth > 0` then user will see messages saying that there is a missing theorem
+for differentiability, smoothness, ... for `foo`. -/
+/-
+**Mathlib.Meta.FunProp.logError** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.FunProp`
+。
+形式化陈述：logError (msg : String) : FunPropM Unit
+参数：msg : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 logError
-  签名: (msg : String)
-  定义体: do
-  if (← read).transitionDepth = 0 then
-    modify fun s =>
-      {s with msgLog :=
-        if s.msgLog.contains msg then
-          s.msgLog
-        else
-          msg::s.msgLog}
+--- 原说明 ---
+Log error message that will displayed to the user at the end.
+
+Messages are logged only when `transitionDepth = 0` i.e. when `fun_prop` is **no
+t** trying to infer
+function property like continuity from another property like differentiability.
+The main reason is that if the user forgets to add a continuity theorem for func
+tion `foo` then
+`fun_prop` should report that there is a continuity theorem for `foo` missing. I
+f we would log
+messages `transitionDepth > 0` then user will see messages saying that there is 
+a missing theorem
+for differentiability, smoothness, ... for `foo`.
 -/
 def logError (msg : String) : FunPropM Unit := do
   if (← read).transitionDepth = 0 then
@@ -549,3 +411,4 @@ def logError (msg : String) : FunPropM Unit := do
 end Meta.FunProp
 
 end Mathlib
+

@@ -38,175 +38,134 @@ section AddCommMonoid
 
 variable [AddCommMonoid R]
 
-/--
-Definition of `trace` / `trace` 的定义
+/-- The trace of a square matrix. For more bundled versions, see:
+* `Matrix.traceAddMonoidHom`
+* `Matrix.traceLinearMap`
+-/
+/-
+**Matrix.trace** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：trace (A : Matrix n n R) : R
+参数：A : Matrix n n R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trace
-  signature: (A : Matrix n n R)
-  body: ∑ i, diag A i
-
-中文:
-定义 trace
-  签名: (A : 矩阵 n n R)
-  定义体: ∑ i, diag A i
+--- 原说明 ---
+The trace of a square matrix. For more bundled versions, see:
+* `Matrix.traceAddMonoidHom`
+* `Matrix.traceLinearMap`
 -/
 def trace (A : Matrix n n R) : R :=
   ∑ i, diag A i
-
-/--
-lemma `trace_diagonal` / 引理 `trace_diagonal`
-
-English:
-lemma trace_diagonal
-  given: {o} [Fintype o] [DecidableEq o] (d : o -> R)
-  proof: by
-  simp only [trace, diag_apply, diagonal_apply_eq]
-
-中文:
-引理 trace_diagonal
-  条件: {o} [有限类型 o] [DecidableEq o] (d : o -> R)
-  证明: by
-  simp only [trace, diag_apply, diagonal_apply_eq]
+/-
+**Matrix.trace_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {R : Type u_6} [inst : AddCommMonoid R] {o : Type u_8} [inst_1 : Fintype
+ o] [inst_2 : DecidableEq o] (d : o → R),   (Matrix.diagonal d).trace = ∑ i, d i
+参数：d : o → R；Matrix.diagonal d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.diagonal_apply_eq`：diagonal_apply_eq [Zero α] (d : n -> α) (i : n
+) : (diagonal d) i i = d i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma trace_diagonal {o} [Fintype o] [DecidableEq o] (d : o -> R) :
+@[simp] lemma trace_diagonal {o} [Fintype o] [DecidableEq o] (d : o → R) :
     trace (diagonal d) = ∑ i, d i := by
   simp only [trace, diag_apply, diagonal_apply_eq]
 
 variable (n R)
 
 @[simp]
-/--
-theorem `trace_zero` / 定理 `trace_zero`
-
-English:
-theorem trace_zero
-  statement: trace (0 : Matrix n n R) = 0
-  proof: (Finset.sum_const (0 : R)).trans smul_zero _
-
-中文:
-定理 trace_zero
-  结论: trace (0 : 矩阵 n n R) = 0
-  证明: (Finset.sum_const (0 : R)).trans smul_zero _
-
-Depends on / 依赖: Finset, Finset.sum_const, mkMetric, smul_zero, sum_const
+/-
+**Matrix.trace_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_zero : trace (0 : Matrix n n R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem trace_zero : trace (0 : Matrix n n R) = 0 :=
-(Finset.sum_const (0 : R)).trans smul_zero _
+  (Finset.sum_const (0 : R)).trans <| smul_zero _
 
 variable {n R}
 
 @[simp]
-/--
-lemma `trace_eq_zero_of_isEmpty` / 引理 `trace_eq_zero_of_isEmpty`
-
-English:
-lemma trace_eq_zero_of_isEmpty
-  given: [IsEmpty n] (A : Matrix n n R)
-  statement: trace A = 0
-  proof: by simp [trace]
-
-@[simp]
-
-中文:
-引理 trace_eq_zero_of_isEmpty
-  条件: [是空 n] (A : 矩阵 n n R)
-  结论: trace A = 0
-  证明: by simp [trace]
-
-@[simp]
+/-
+**Matrix.trace_eq_zero_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：trace_eq_zero_of_isEmpty [IsEmpty n] (A : Matrix n n R) : trace A = 0
+参数：A : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.univ_eq_empty`：univ_eq_empty [IsEmpty α] : (univ : Finset α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma trace_eq_zero_of_isEmpty [IsEmpty n] (A : Matrix n n R) : trace A = 0 := by simp [trace]
 
 @[simp]
-/--
-theorem `trace_add` / 定理 `trace_add`
-
-English:
-theorem trace_add
-  given: (A B : Matrix n n R)
-  statement: trace (A + B) = trace A + trace B
-  proof: Finset.sum_add_distrib
-
-@[simp]
-
-中文:
-定理 trace_add
-  条件: (A B : 矩阵 n n R)
-  结论: trace (A + B) = trace A + trace B
-  证明: Finset.sum_add_distrib
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_add_distrib, sum_add_distrib
+/-
+**Matrix.trace_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_add (A B : Matrix n n R) : trace (A + B) = trace A + trace B
+参数：A B : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
 -/
 theorem trace_add (A B : Matrix n n R) : trace (A + B) = trace A + trace B :=
   Finset.sum_add_distrib
 
 @[simp]
-/--
-theorem `trace_smul` / 定理 `trace_smul`
-
-English:
-theorem trace_smul
-  given: [DistribSMul α R] (r : α) (A : Matrix n n R)
-  proof: Finset.smul_sum.symm
-
-@[simp]
-
-中文:
-定理 trace_smul
-  条件: [分配标量乘法 α R] (r : α) (A : 矩阵 n n R)
-  证明: Finset.smul_sum.symm
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.smul_sum.symm, smul_sum
+/-
+**Matrix.trace_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_smul [DistribSMul α R] (r : α) (A : Matrix n n R) : trace (r • A) = 
+r • trace A
+参数：r : α；A : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
 -/
 theorem trace_smul [DistribSMul α R] (r : α) (A : Matrix n n R) :
     trace (r • A) = r • trace A :=
   Finset.smul_sum.symm
 
 @[simp]
-/--
-theorem `trace_transpose` / 定理 `trace_transpose`
-
-English:
-theorem trace_transpose
-  given: (A : Matrix n n R)
-  statement: trace Aᵀ = trace A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trace_transpose
-  条件: (A : 矩阵 n n R)
-  结论: trace Aᵀ = trace A
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.trace_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_transpose (A : Matrix n n R) : trace Aᵀ = trace A
+参数：A : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trace_transpose (A : Matrix n n R) : trace Aᵀ = trace A :=
   rfl
 
 @[simp]
-/--
-theorem `trace_conjTranspose` / 定理 `trace_conjTranspose`
-
-English:
-theorem trace_conjTranspose
-  given: [StarAddMonoid R] (A : Matrix n n R)
-  statement: trace Aᴴ = star (trace A)
-  proof: (star_sum _ _).symm
-
-中文:
-定理 trace_conjTranspose
-  条件: [StarAdd幺半群 R] (A : 矩阵 n n R)
-  结论: trace Aᴴ = star (trace A)
-  证明: (star_sum _ _).symm
-
-Depends on / 依赖: star_sum
+/-
+**Matrix.trace_conjTranspose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_conjTranspose [StarAddMonoid R] (A : Matrix n n R) : trace Aᴴ = star
+ (trace A)
+参数：A : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `star_sum`：star_sum [AddCommMonoid R] [StarAddMonoid R] {α : Type*} (s : 
+Finset α) (f : α -> R) : star (∑ x in s, f x) = ∑ x in s, star (f x)
 -/
 theorem trace_conjTranspose [StarAddMonoid R] (A : Matrix n n R) : trace Aᴴ = star (trace A) :=
   (star_sum _ _).symm
@@ -215,48 +174,38 @@ variable (n α R)
 
 /-- `Matrix.trace` as an `AddMonoidHom` -/
 @[simps]
-/--
-Definition of `traceAddMonoidHom` / `traceAddMonoidHom` 的定义
+/-
+**Matrix.traceAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：traceAddMonoidHom : Matrix n n R ->+ R where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.trace_zero`：trace_zero : trace (0 : Matrix n n R) = 0
+· 使用定理 `Matrix.trace_add`：trace_add (A B : Matrix n n R) : trace (A + B) = trace
+ A + trace B
 
-English:
-definition traceAddMonoidHom
-  signature: : Matrix n n R ->+ R where
-  body: trace
-  map_zero' := trace_zero n R
-  map_add' := trace_add
-
-中文:
-定义 traceAddMonoidHom
-  签名: : 矩阵 n n R ->+ R where
-  定义体: trace
-  map_zero' := trace_zero n R
-  map_add' := trace_add
+--- 原说明 ---
+`Matrix.trace` as an `AddMonoidHom`
 -/
-def traceAddMonoidHom : Matrix n n R ->+ R where
+def traceAddMonoidHom : Matrix n n R →+ R where
   toFun := trace
   map_zero' := trace_zero n R
   map_add' := trace_add
 
 /-- `Matrix.trace` as a `LinearMap` -/
 @[simps]
-/--
-Definition of `traceLinearMap` / `traceLinearMap` 的定义
+/-
+**Matrix.traceLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：traceLinearMap [Semiring α] [Module α R] : Matrix n n R ->ₗ[α] R where toF
+un
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.trace_add`：trace_add (A B : Matrix n n R) : trace (A + B) = trace
+ A + trace B
 
-English:
-definition traceLinearMap
-  signature: [Semiring α] [Module α R]
-  body: trace
-  map_add' := trace_add
-  map_smul' := trace_smul
-
-中文:
-定义 traceLinearMap
-  签名: [半环 α] [模 α R]
-  定义体: trace
-  map_add' := trace_add
-  map_smul' := trace_smul
+--- 原说明 ---
+`Matrix.trace` as a `LinearMap`
 -/
-def traceLinearMap [Semiring α] [Module α R] : Matrix n n R ->ₗ[α] R where
+def traceLinearMap [Semiring α] [Module α R] : Matrix n n R →ₗ[α] R where
   toFun := trace
   map_add' := trace_add
   map_smul' := trace_smul
@@ -264,135 +213,118 @@ def traceLinearMap [Semiring α] [Module α R] : Matrix n n R ->ₗ[α] R where
 variable {n α R}
 
 @[simp]
-/--
-theorem `trace_list_sum` / 定理 `trace_list_sum`
-
-English:
-theorem trace_list_sum
-  given: (l : List (Matrix n n R))
-  statement: trace l.sum = (l.map trace).sum
-  proof: map_list_sum (traceAddMonoidHom n R) l
-
-@[simp]
-
-中文:
-定理 trace_list_sum
-  条件: (l : 列表 (矩阵 n n R))
-  结论: trace l.求和 = (l.map trace).求和
-  证明: map_list_sum (traceAddMonoidHom n R) l
-
-@[simp]
-
-Depends on / 依赖: map_list_sum, traceAddMonoidHom
+/-
+**Matrix.trace_list_sum** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_list_sum (l : List (Matrix n n R)) : trace l.sum = (l.map trace).sum
+参数：l : List (Matrix n n R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem trace_list_sum (l : List (Matrix n n R)) : trace l.sum = (l.map trace).sum :=
   map_list_sum (traceAddMonoidHom n R) l
 
 @[simp]
-/--
-theorem `trace_multiset_sum` / 定理 `trace_multiset_sum`
-
-English:
-theorem trace_multiset_sum
-  given: (s : Multiset (Matrix n n R))
-  statement: trace s.sum = (s.map trace).sum
-  proof: map_multiset_sum (traceAddMonoidHom n R) s
-
-@[simp]
-
-中文:
-定理 trace_multiset_sum
-  条件: (s : Multiset (矩阵 n n R))
-  结论: trace s.求和 = (s.map trace).求和
-  证明: map_multiset_sum (traceAddMonoidHom n R) s
-
-@[simp]
-
-Depends on / 依赖: map_multiset_sum, traceAddMonoidHom
+/-
+**Matrix.trace_multiset_sum** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_multiset_sum (s : Multiset (Matrix n n R)) : trace s.sum = (s.map tr
+ace).sum
+参数：s : Multiset (Matrix n n R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem trace_multiset_sum (s : Multiset (Matrix n n R)) : trace s.sum = (s.map trace).sum :=
   map_multiset_sum (traceAddMonoidHom n R) s
 
 @[simp]
-/--
-theorem `trace_sum` / 定理 `trace_sum`
-
-English:
-theorem trace_sum
-  given: (s : Finset ι) (f : ι -> Matrix n n R)
-  proof: map_sum (traceAddMonoidHom n R) f s
-
-中文:
-定理 trace_sum
-  条件: (s : 有限集 ι) (f : ι -> 矩阵 n n R)
-  证明: map_sum (traceAddMonoidHom n R) f s
-
-Depends on / 依赖: Ioo_mem_nhdsGT, boundedBy_union_of_top_of_nonempty_inter, edist_le_ediam_of_mem, filter_upwards, iInf_eq_top, map_sum, mkMetric, not_ge, pos_iff_ne_zero, r.trans_le, tendsto_nhds_unique_of_eventuallyEq, tendsto_pre, this.not_ge, traceAddMonoidHom, trans_le
+/-
+**Matrix.trace_sum** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_sum (s : Finset ι) (f : ι -> Matrix n n R) : trace (∑ i in s, f i) =
+ ∑ i in s, trace (f i)
+参数：s : Finset ι；f : ι -> Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem trace_sum (s : Finset ι) (f : ι -> Matrix n n R) :
-    trace (∑ i in s, f i) = ∑ i in s, trace (f i) :=
+theorem trace_sum (s : Finset ι) (f : ι → Matrix n n R) :
+    trace (∑ i ∈ s, f i) = ∑ i ∈ s, trace (f i) :=
   map_sum (traceAddMonoidHom n R) f s
-
-/--
-theorem `_root_.AddMonoidHom.map_trace` / 定理 `_root_.AddMonoidHom.map_trace`
-
-English:
-theorem _root_.AddMonoidHom.map_trace
-  statement: [AddCommMonoid S] {F : Type*} [FunLike F R S]
-  proof: map_sum f (fun i => diag A i) Finset.univ
-
-中文:
-定理 _root_.加法幺半群态射.map_trace
-  结论: [加法交换幺半群 S] {F : 类型} [函数状 F R S]
-  证明: map_sum f (fun i => diag A i) Finset.univ
-
-Depends on / 依赖: Finset, Finset.univ, map_sum
+/-
+**Matrix._root_.AddMonoidHom.map_trace** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.AddMonoidHom.map_trace [AddCommMonoid S] {F : Type*} [FunLike F R S]
     [AddMonoidHomClass F R S] (f : F) (A : Matrix n n R) :
     f (trace A) = trace (A.map f) :=
   map_sum f (fun i => diag A i) Finset.univ
-
-/--
-lemma `trace_blockDiagonal` / 引理 `trace_blockDiagonal`
-
-English:
-lemma trace_blockDiagonal
-  given: [DecidableEq p] (M : p -> Matrix n n R)
-  proof: by
-  simp [blockDiagonal, trace, Finset.sum_comm (γ := n), Fintype.sum_prod_type]
-
-中文:
-引理 trace_blockDiagonal
-  条件: [DecidableEq p] (M : p -> 矩阵 n n R)
-  证明: by
-  simp [blockDiagonal, trace, Finset.sum_comm (γ := n), Fintype.sum_prod_type]
-
-Depends on / 依赖: Finset, Finset.sum_comm, Fintype, Fintype.sum_prod_type, blockDiagonal, sum_comm, sum_prod_type
+/-
+**Matrix.trace_blockDiagonal** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：trace_blockDiagonal [DecidableEq p] (M : p -> Matrix n n R) : trace (block
+Diagonal M) = ∑ i, trace (M i)
+参数：M : p -> Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Fintype.sum_prod_type`：∀ {γ : Type u_3} {α₁ : Type u_4} {α₂ : Type u_5} 
+[inst : Fintype α₁] [inst_1 : Fintype α₂] [inst_2 : AddCommMonoid γ]   (f : α₁ ×
+ α₂ → γ), ∑…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
 -/
-lemma trace_blockDiagonal [DecidableEq p] (M : p -> Matrix n n R) :
+lemma trace_blockDiagonal [DecidableEq p] (M : p → Matrix n n R) :
     trace (blockDiagonal M) = ∑ i, trace (M i) := by
   simp [blockDiagonal, trace, Finset.sum_comm (γ := n), Fintype.sum_prod_type]
-
-/--
-lemma `trace_blockDiagonal'` / 引理 `trace_blockDiagonal'`
-
-English:
-lemma trace_blockDiagonal'
-  statement: [DecidableEq p] {m : p -> Type*} [forall i, Fintype (m i)]
-  proof: by
-  simp [blockDiagonal', trace, Finset.sum_sigma']
-
-中文:
-引理 trace_blockDiagonal'
-  结论: [DecidableEq p] {m : p -> 类型} [对任意 i, 有限类型 (m i)]
-  证明: by
-  simp [blockDiagonal', trace, Finset.sum_sigma']
-
-Depends on / 依赖: Finset, Finset.sum_sigma, blockDiagonal, sum_sigma
+/-
+**Matrix.trace_blockDiagonal'** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：trace_blockDiagonal' [DecidableEq p] {m : p -> Type*} [forall i, Fintype (
+m i)] (M : forall i, Matrix (m i) (m i) R) : trace (blockDiagonal' M) = ∑ i, tra
+ce (M i)
+参数：m i；M : forall i, Matrix (m i) (m i) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Finset.sum_sigma'`：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommMonoid
+ β] {σ : α → Type u_6} (s : Finset α) (t : (a : α) → Finset (σ a))   (f : (a : α
+) → σ a…
 -/
-lemma trace_blockDiagonal' [DecidableEq p] {m : p -> Type*} [forall i, Fintype (m i)]
-    (M : forall i, Matrix (m i) (m i) R) :
+lemma trace_blockDiagonal' [DecidableEq p] {m : p → Type*} [∀ i, Fintype (m i)]
+    (M : ∀ i, Matrix (m i) (m i) R) :
     trace (blockDiagonal' M) = ∑ i, trace (M i) := by
   simp [blockDiagonal', trace, Finset.sum_sigma']
 
@@ -403,47 +335,28 @@ section AddCommGroup
 variable [AddCommGroup R]
 
 @[simp]
-/--
-theorem `trace_sub` / 定理 `trace_sub`
-
-English:
-theorem trace_sub
-  given: (A B : Matrix n n R)
-  statement: trace (A - B) = trace A - trace B
-  proof: Finset.sum_sub_distrib ..
-
-@[simp]
-
-中文:
-定理 trace_sub
-  条件: (A B : 矩阵 n n R)
-  结论: trace (A - B) = trace A - trace B
-  证明: Finset.sum_sub_distrib ..
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_sub_distrib, sum_sub_distrib
+/-
+**Matrix.trace_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_sub (A B : Matrix n n R) : trace (A - B) = trace A - trace B
+参数：A B : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_sub_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f g : ι → G),   ∑ x ∈ s, (f x - g x) = ∑ x ∈ s,
+ f x - ∑ x ∈…
 -/
 theorem trace_sub (A B : Matrix n n R) : trace (A - B) = trace A - trace B :=
   Finset.sum_sub_distrib ..
 
 @[simp]
-/--
-theorem `trace_neg` / 定理 `trace_neg`
-
-English:
-theorem trace_neg
-  given: (A : Matrix n n R)
-  statement: trace (-A) = -trace A
-  proof: Finset.sum_neg_distrib ..
-
-中文:
-定理 trace_neg
-  条件: (A : 矩阵 n n R)
-  结论: trace (-A) = -trace A
-  证明: Finset.sum_neg_distrib ..
-
-Depends on / 依赖: Finset, Finset.sum_neg_distrib, sum_neg_distrib
+/-
+**Matrix.trace_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_neg (A : Matrix n n R) : trace (-A) = -trace A
+参数：A : Matrix n n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_neg_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f : ι → G),   ∑ x ∈ s, -f x = -∑ x ∈ s, f x
 -/
 theorem trace_neg (A : Matrix n n R) : trace (-A) = -trace A :=
   Finset.sum_neg_distrib ..
@@ -455,22 +368,28 @@ section One
 variable [DecidableEq n] [AddCommMonoidWithOne R]
 
 @[simp]
-/--
-theorem `trace_one` / 定理 `trace_one`
-
-English:
-theorem trace_one
-  statement: trace (1 : Matrix n n R) = Fintype.card n
-  proof: by
-  simp_rw [trace, diag_one, Pi.one_def, Finset.sum_const, nsmul_one, Finset.card_univ]
-
-中文:
-定理 trace_one
-  结论: trace (1 : 矩阵 n n R) = 有限类型.card n
-  证明: by
-  simp_rw [trace, diag_one, Pi.one_def, Finset.sum_const, nsmul_one, Finset.card_univ]
-
-Depends on / 依赖: Finset, Finset.card_univ, Finset.sum_const, Pi.one_def, card_univ, diag_one, nsmul_one, one_def, simp_rw, sum_const
+/-
+**Matrix.trace_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_one : trace (1 : Matrix n n R) = Fintype.card n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.diag_one`：diag_one [DecidableEq n] [Zero α] [One α] : diag (1 : M
+atrix n n α) = 1
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `nsmul_one`：∀ {A : Type u_2} [inst : AddMonoidWithOne A] (n : ℕ), n • 1 =
+ ↑n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trace_one : trace (1 : Matrix n n R) = Fintype.card n := by
   simp_rw [trace, diag_one, Pi.one_def, Finset.sum_const, nsmul_one, Finset.card_univ]
@@ -480,164 +399,168 @@ end One
 section Mul
 
 @[simp]
-/--
-theorem `trace_transpose_mul` / 定理 `trace_transpose_mul`
-
-English:
-theorem trace_transpose_mul
-  given: [AddCommMonoid R] [Mul R] (A : Matrix m n R) (B : Matrix n m R)
-  proof: Finset.sum_comm
-
-中文:
-定理 trace_transpose_mul
-  条件: [加法交换幺半群 R] [乘法 R] (A : 矩阵 m n R) (B : 矩阵 n m R)
-  证明: Finset.sum_comm
-
-Depends on / 依赖: Finset, Finset.sum_comm, sum_comm
+/-
+**Matrix.trace_transpose_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_transpose_mul [AddCommMonoid R] [Mul R] (A : Matrix m n R) (B : Matr
+ix n m R) : trace (Aᵀ * Bᵀ) = trace (A * B)
+参数：A : Matrix m n R；B : Matrix n m R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
 -/
 theorem trace_transpose_mul [AddCommMonoid R] [Mul R] (A : Matrix m n R) (B : Matrix n m R) :
     trace (Aᵀ * Bᵀ) = trace (A * B) :=
   Finset.sum_comm
-
-/--
-theorem `trace_mul_comm` / 定理 `trace_mul_comm`
-
-English:
-theorem trace_mul_comm
-  given: [AddCommMonoid R] [CommMagma R] (A : Matrix m n R) (B : Matrix n m R)
-  proof: by rw [← trace_transpose, ← trace_transpose_mul, transpose_mul]
-
-中文:
-定理 trace_mul_comm
-  条件: [加法交换幺半群 R] [交换原群 R] (A : 矩阵 m n R) (B : 矩阵 n m R)
-  证明: by rw [← trace_transpose, ← trace_transpose_mul, transpose_mul]
-
-Depends on / 依赖: trace_transpose, trace_transpose_mul, transpose_mul
+/-
+**Matrix.trace_mul_comm** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_mul_comm [AddCommMonoid R] [CommMagma R] (A : Matrix m n R) (B : Mat
+rix n m R) : trace (A * B) = trace (B * A)
+参数：A : Matrix m n R；B : Matrix n m R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.trace_transpose`：trace_transpose (A : Matrix n n R) : trace Aᵀ = 
+trace A
+· 使用定理 `Matrix.trace_transpose_mul`：trace_transpose_mul [AddCommMonoid R] [Mul R
+] (A : Matrix m n R) (B : Matrix n m R) : trace (Aᵀ * Bᵀ) = trace (A * B)
+· 使用定理 `Matrix.transpose_mul`：transpose_mul [AddCommMonoid α] [CommMagma α] [Fin
+type n] (M : Matrix m n α) (N : Matrix n l α) : (M * N)ᵀ = Nᵀ * Mᵀ
 -/
 theorem trace_mul_comm [AddCommMonoid R] [CommMagma R] (A : Matrix m n R) (B : Matrix n m R) :
     trace (A * B) = trace (B * A) := by rw [← trace_transpose, ← trace_transpose_mul, transpose_mul]
-
-/--
-theorem `trace_mul_cycle` / 定理 `trace_mul_cycle`
-
-English:
-theorem trace_mul_cycle
-  statement: [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix n p R)
-  proof: by
-  rw [trace_mul_comm]; rw [Matrix.mul_assoc]
-
-中文:
-定理 trace_mul_cycle
-  结论: [非幺交换半环 R] (A : 矩阵 m n R) (B : 矩阵 n p R)
-  证明: by
-  rw [trace_mul_comm]; rw [Matrix.mul_assoc]
-
-Depends on / 依赖: Matrix, Matrix.mul_assoc, mul_assoc, trace_mul_comm
+/-
+**Matrix.trace_mul_cycle** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_mul_cycle [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix n
+ p R) (C : Matrix p m R) : trace (A * B * C) = trace (C * A * B)
+参数：A : Matrix m n R；B : Matrix n p R；C : Matrix p m R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.trace_mul_comm`：trace_mul_comm [AddCommMonoid R] [CommMagma R] (A
+ : Matrix m n R) (B : Matrix n m R) : trace (A * B) = trace (B * A)
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
 -/
 theorem trace_mul_cycle [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix n p R)
     (C : Matrix p m R) : trace (A * B * C) = trace (C * A * B) := by
-  rw [trace_mul_comm]; rw [Matrix.mul_assoc]
-
-/--
-theorem `trace_mul_cycle'` / 定理 `trace_mul_cycle'`
-
-English:
-theorem trace_mul_cycle'
-  statement: [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix n p R)
-  proof: by
-  rw [← Matrix.mul_assoc]; rw [trace_mul_comm]
-
-@[simp]
-
-中文:
-定理 trace_mul_cycle'
-  结论: [非幺交换半环 R] (A : 矩阵 m n R) (B : 矩阵 n p R)
-  证明: by
-  rw [← Matrix.mul_assoc]; rw [trace_mul_comm]
-
-@[simp]
-
-Depends on / 依赖: Matrix, Matrix.mul_assoc, mul_assoc, trace_mul_comm
+  rw [trace_mul_comm, Matrix.mul_assoc]
+/-
+**Matrix.trace_mul_cycle'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_mul_cycle' [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix 
+n p R) (C : Matrix p m R) : trace (A * (B * C)) = trace (C * (A * B))
+参数：A : Matrix m n R；B : Matrix n p R；C : Matrix p m R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `Matrix.trace_mul_comm`：trace_mul_comm [AddCommMonoid R] [CommMagma R] (A
+ : Matrix m n R) (B : Matrix n m R) : trace (A * B) = trace (B * A)
 -/
 theorem trace_mul_cycle' [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix n p R)
     (C : Matrix p m R) : trace (A * (B * C)) = trace (C * (A * B)) := by
-  rw [← Matrix.mul_assoc]; rw [trace_mul_comm]
+  rw [← Matrix.mul_assoc, trace_mul_comm]
 
 @[simp]
-/--
-theorem `trace_replicateCol_mul_replicateRow` / 定理 `trace_replicateCol_mul_replicateRow`
-
-English:
-theorem trace_replicateCol_mul_replicateRow
-  statement: {ι : Type*} [Unique ι] [NonUnitalNonAssocSemiring R]
-  proof: by
-  apply Finset.sum_congr rfl
-  simp [mul_apply]
-
-@[simp]
-
-中文:
-定理 trace_replicateCol_mul_replicateRow
-  结论: {ι : 类型} [唯一 ι] [非幺非结合半环 R]
-  证明: by
-  apply Finset.sum_congr rfl
-  simp [mul_apply]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_congr, mul_apply, sum_congr
+/-
+**Matrix.trace_replicateCol_mul_replicateRow** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_replicateCol_mul_replicateRow {ι : Type*} [Unique ι] [NonUnitalNonAs
+socSemiring R] (a b : n -> R) : trace (replicateCol ι a * replicateRow ι b) = a 
+⬝ᵥ b
+参数：a b : n -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem trace_replicateCol_mul_replicateRow {ι : Type*} [Unique ι] [NonUnitalNonAssocSemiring R]
-    (a b : n -> R) : trace (replicateCol ι a * replicateRow ι b) = a ⬝ᵥ b := by
+    (a b : n → R) : trace (replicateCol ι a * replicateRow ι b) = a ⬝ᵥ b := by
   apply Finset.sum_congr rfl
   simp [mul_apply]
 
 @[simp]
-/--
-theorem `trace_vecMulVec` / 定理 `trace_vecMulVec`
-
-English:
-theorem trace_vecMulVec
-  given: [NonUnitalNonAssocSemiring R] (a b : n -> R)
-  proof: by
-  rw [vecMulVec_eq Unit]; rw [trace_replicateCol_mul_replicateRow]
-
-中文:
-定理 trace_vecMulVec
-  条件: [非幺非结合半环 R] (a b : n -> R)
-  证明: by
-  rw [vecMulVec_eq Unit]; rw [trace_replicateCol_mul_replicateRow]
-
-Depends on / 依赖: trace_replicateCol_mul_replicateRow, vecMulVec_eq
+/-
+**Matrix.trace_vecMulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_vecMulVec [NonUnitalNonAssocSemiring R] (a b : n -> R) : trace (vecM
+ulVec a b) = a ⬝ᵥ b
+参数：a b : n -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.vecMulVec_eq`：vecMulVec_eq [Mul α] [AddCommMonoid α] [Unique ι] (
+w : m -> α) (v : n -> α) : vecMulVec w v = replicateCol ι w * replicateRow ι v
+· 使用定理 `Matrix.trace_replicateCol_mul_replicateRow`：trace_replicateCol_mul_repli
+cateRow {ι : Type*} [Unique ι] [NonUnitalNonAssocSemiring R] (a b : n -> R) : tr
+ace (replicateCol ι a * replicat…
 -/
-theorem trace_vecMulVec [NonUnitalNonAssocSemiring R] (a b : n -> R) :
+theorem trace_vecMulVec [NonUnitalNonAssocSemiring R] (a b : n → R) :
     trace (vecMulVec a b) = a ⬝ᵥ b := by
-  rw [vecMulVec_eq Unit]; rw [trace_replicateCol_mul_replicateRow]
+  rw [vecMulVec_eq Unit, trace_replicateCol_mul_replicateRow]
 
 end Mul
 
-/--
-lemma `trace_submatrix_succ` / 引理 `trace_submatrix_succ`
-
-English:
-lemma trace_submatrix_succ
-  statement: {n : Nat} [AddCommMonoid R]
-  proof: by
-  delta trace
-  rw [← (finSuccEquiv n).symm.sum_comp]
-  simp
-
-中文:
-引理 trace_submatrix_succ
-  结论: {n : 自然数} [加法交换幺半群 R]
-  证明: by
-  delta trace
-  rw [← (finSuccEquiv n).symm.sum_comp]
-  simp
-
-Depends on / 依赖: finSuccEquiv, sum_comp, symm.sum_comp
+/-
+**Matrix.trace_submatrix_succ** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：trace_submatrix_succ {n : Nat} [AddCommMonoid R] (M : Matrix (Fin n.succ) 
+(Fin n.succ) R) : M 0 0 + trace (submatrix M Fin.succ Fin.succ) = trace M
+参数：M : Matrix (Fin n.succ) (Fin n.succ) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : F
+intype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (g : κ →
+ M),…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Fintype.sum_option`：∀ {α : Type u_1} {M : Type u_4} [inst : Fintype α] [
+inst_1 : AddCommMonoid M] (f : Option α → M),   ∑ i, f i = f none + ∑ i, f (some
+ i)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `finSuccEquiv_symm_none`：finSuccEquiv_symm_none : (finSuccEquiv n).symm n
+one = 0
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `finSuccEquiv_symm_some`：finSuccEquiv_symm_some (m : Fin n) : (finSuccEqu
+iv n).symm (some m) = m.succ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma trace_submatrix_succ {n : Nat} [AddCommMonoid R]
+lemma trace_submatrix_succ {n : ℕ} [AddCommMonoid R]
     (M : Matrix (Fin n.succ) (Fin n.succ) R) :
     M 0 0 + trace (submatrix M Fin.succ Fin.succ) = trace M := by
   delta trace
@@ -649,43 +572,36 @@ section CommSemiring
 variable [DecidableEq m] [CommSemiring R]
 
 -- TODO(https://github.com/leanprover-community/mathlib4/issues/6607): fix elaboration so that the ascription isn't needed
-/--
-theorem `trace_units_conj` / 定理 `trace_units_conj`
-
-English:
-theorem trace_units_conj
-  given: (M : (Matrix m m R)ˣ) (N : Matrix m m R)
-  proof: by
-  rw [trace_mul_cycle]; rw [Units.inv_mul]; rw [one_mul]
-
-中文:
-定理 trace_units_conj
-  条件: (M : (矩阵 m m R)ˣ) (N : 矩阵 m m R)
-  证明: by
-  rw [trace_mul_cycle]; rw [Units.inv_mul]; rw [one_mul]
-
-Depends on / 依赖: Units.inv_mul, inv_mul, one_mul, trace_mul_cycle
+/-
+**Matrix.trace_units_conj** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_units_conj (M : (Matrix m m R)ˣ) (N : Matrix m m R) : trace ((M : Ma
+trix _ _ _) * N * (↑M⁻¹ : Matrix _ _ _)) = trace N
+参数：M : (Matrix m m R)ˣ；N : Matrix m m R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.trace_mul_cycle`：trace_mul_cycle [NonUnitalCommSemiring R] (A : M
+atrix m n R) (B : Matrix n p R) (C : Matrix p m R) : trace (A * B * C) = trace (
+C * A * B)
+· 使用定理 `Units.inv_mul`：inv_mul : (↑a⁻¹ * a : α) = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem trace_units_conj (M : (Matrix m m R)ˣ) (N : Matrix m m R) :
     trace ((M : Matrix _ _ _) * N * (↑M⁻¹ : Matrix _ _ _)) = trace N := by
-  rw [trace_mul_cycle]; rw [Units.inv_mul]; rw [one_mul]
+  rw [trace_mul_cycle, Units.inv_mul, one_mul]
 
 set_option linter.docPrime false in
 -- TODO(https://github.com/leanprover-community/mathlib4/issues/6607): fix elaboration so that the ascription isn't needed
-/--
-theorem `trace_units_conj'` / 定理 `trace_units_conj'`
-
-English:
-theorem trace_units_conj'
-  given: (M : (Matrix m m R)ˣ) (N : Matrix m m R)
-  proof: trace_units_conj M⁻¹ N
-
-中文:
-定理 trace_units_conj'
-  条件: (M : (矩阵 m m R)ˣ) (N : 矩阵 m m R)
-  证明: trace_units_conj M⁻¹ N
-
-Depends on / 依赖: trace_units_conj
+/-
+**Matrix.trace_units_conj'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_units_conj' (M : (Matrix m m R)ˣ) (N : Matrix m m R) : trace ((↑M⁻¹ 
+: Matrix _ _ _) * N * (↑M : Matrix _ _ _)) = trace N
+参数：M : (Matrix m m R)ˣ；N : Matrix m m R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.trace_units_conj`：trace_units_conj (M : (Matrix m m R)ˣ) (N : Mat
+rix m m R) : trace ((M : Matrix _ _ _) * N * (↑M⁻¹ : Matrix _ _ _)) = trace N
 -/
 theorem trace_units_conj' (M : (Matrix m m R)ˣ) (N : Matrix m m R) :
     trace ((↑M⁻¹ : Matrix _ _ _) * N * (↑M : Matrix _ _ _)) = trace N :=
@@ -701,158 +617,99 @@ variable [AddCommMonoid R]
 -/
 
 @[simp]
-/--
-theorem `trace_fin_zero` / 定理 `trace_fin_zero`
+/-
+**Matrix.trace_fin_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_fin_zero (A : Matrix (Fin 0) (Fin 0) R) : trace A = 0
+参数：A : Matrix (Fin 0) (Fin 0) R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem trace_fin_zero
-  given: (A : Matrix (Fin 0) (Fin 0) R)
-  statement: trace A = 0
-  proof: rfl
-
-中文:
-定理 trace_fin_zero
-  条件: (A : 矩阵 (有限集 0) (有限集 0) R)
-  结论: trace A = 0
-  证明: rfl
+--- 原说明 ---
+### Special cases for `Fin n` for low values of `n`
 -/
 theorem trace_fin_zero (A : Matrix (Fin 0) (Fin 0) R) : trace A = 0 :=
   rfl
-
-/--
-theorem `trace_fin_one` / 定理 `trace_fin_one`
-
-English:
-theorem trace_fin_one
-  given: (A : Matrix (Fin 1) (Fin 1) R)
-  statement: trace A = A 0 0
-  proof: add_zero _
-
-中文:
-定理 trace_fin_one
-  条件: (A : 矩阵 (有限集 1) (有限集 1) R)
-  结论: trace A = A 0 0
-  证明: add_zero _
-
-Depends on / 依赖: add_zero
+/-
+**Matrix.trace_fin_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_fin_one (A : Matrix (Fin 1) (Fin 1) R) : trace A = A 0 0
+参数：A : Matrix (Fin 1) (Fin 1) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
 -/
 theorem trace_fin_one (A : Matrix (Fin 1) (Fin 1) R) : trace A = A 0 0 :=
   add_zero _
-
-/--
-theorem `trace_fin_two` / 定理 `trace_fin_two`
-
-English:
-theorem trace_fin_two
-  given: (A : Matrix (Fin 2) (Fin 2) R)
-  statement: trace A = A 0 0 + A 1 1
-  proof: congr_arg (_ + ·) (add_zero (A 1 1))
-
-中文:
-定理 trace_fin_two
-  条件: (A : 矩阵 (有限集 2) (有限集 2) R)
-  结论: trace A = A 0 0 + A 1 1
-  证明: congr_arg (_ + ·) (add_zero (A 1 1))
-
-Depends on / 依赖: add_zero, congr_arg
+/-
+**Matrix.trace_fin_two** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_fin_two (A : Matrix (Fin 2) (Fin 2) R) : trace A = A 0 0 + A 1 1
+参数：A : Matrix (Fin 2) (Fin 2) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem trace_fin_two (A : Matrix (Fin 2) (Fin 2) R) : trace A = A 0 0 + A 1 1 :=
   congr_arg (_ + ·) (add_zero (A 1 1))
-
-/--
-theorem `trace_fin_three` / 定理 `trace_fin_three`
-
-English:
-theorem trace_fin_three
-  given: (A : Matrix (Fin 3) (Fin 3) R)
-  statement: trace A = A 0 0 + A 1 1 + A 2 2
-  proof: by
-  rw [← add_zero (A 2 2)]; rw [add_assoc]
-  rfl
-
-@[simp]
-
-中文:
-定理 trace_fin_three
-  条件: (A : 矩阵 (有限集 3) (有限集 3) R)
-  结论: trace A = A 0 0 + A 1 1 + A 2 2
-  证明: by
-  rw [← add_zero (A 2 2)]; rw [add_assoc]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: add_assoc, add_zero
+/-
+**Matrix.trace_fin_three** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_fin_three (A : Matrix (Fin 3) (Fin 3) R) : trace A = A 0 0 + A 1 1 +
+ A 2 2
+参数：A : Matrix (Fin 3) (Fin 3) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
 -/
 theorem trace_fin_three (A : Matrix (Fin 3) (Fin 3) R) : trace A = A 0 0 + A 1 1 + A 2 2 := by
-  rw [← add_zero (A 2 2)]; rw [add_assoc]
+  rw [← add_zero (A 2 2), add_assoc]
   rfl
 
 @[simp]
-/--
-theorem `trace_fin_one_of` / 定理 `trace_fin_one_of`
-
-English:
-theorem trace_fin_one_of
-  given: (a : R)
-  statement: trace !![a] = a
-  proof: trace_fin_one _
-
-@[simp]
-
-中文:
-定理 trace_fin_one_of
-  条件: (a : R)
-  结论: trace !![a] = a
-  证明: trace_fin_one _
-
-@[simp]
-
-Depends on / 依赖: trace_fin_one
+/-
+**Matrix.trace_fin_one_of** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_fin_one_of (a : R) : trace !![a] = a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.trace_fin_one`：trace_fin_one (A : Matrix (Fin 1) (Fin 1) R) : tra
+ce A = A 0 0
 -/
 theorem trace_fin_one_of (a : R) : trace !![a] = a :=
   trace_fin_one _
 
 @[simp]
-/--
-theorem `trace_fin_two_of` / 定理 `trace_fin_two_of`
-
-English:
-theorem trace_fin_two_of
-  given: (a b c d : R)
-  statement: trace !![a, b; c, d] = a + d
-  proof: trace_fin_two _
-
-@[simp]
-
-中文:
-定理 trace_fin_two_of
-  条件: (a b c d : R)
-  结论: trace !![a, b; c, d] = a + d
-  证明: trace_fin_two _
-
-@[simp]
-
-Depends on / 依赖: trace_fin_two
+/-
+**Matrix.trace_fin_two_of** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_fin_two_of (a b c d : R) : trace !![a, b; c, d] = a + d
+参数：a b c d : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.trace_fin_two`：trace_fin_two (A : Matrix (Fin 2) (Fin 2) R) : tra
+ce A = A 0 0 + A 1 1
 -/
 theorem trace_fin_two_of (a b c d : R) : trace !![a, b; c, d] = a + d :=
   trace_fin_two _
 
 @[simp]
-/--
-theorem `trace_fin_three_of` / 定理 `trace_fin_three_of`
-
-English:
-theorem trace_fin_three_of
-  given: (a b c d e f g h i : R)
-  proof: trace_fin_three _
-
-中文:
-定理 trace_fin_three_of
-  条件: (a b c d e f g h i : R)
-  证明: trace_fin_three _
-
-Depends on / 依赖: trace_fin_three
+/-
+**Matrix.trace_fin_three_of** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_fin_three_of (a b c d e f g h i : R) : trace !![a, b, c; d, e, f; g,
+ h, i] = a + e + i
+参数：a b c d e f g h i : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.trace_fin_three`：trace_fin_three (A : Matrix (Fin 3) (Fin 3) R) :
+ trace A = A 0 0 + A 1 1 + A 2 2
 -/
 theorem trace_fin_three_of (a b c d e f g h i : R) :
     trace !![a, b, c; d, e, f; g, h, i] = a + e + i :=
@@ -866,87 +723,135 @@ variable {l m n : Type*} {R α : Type*} [DecidableEq l] [DecidableEq m] [Decidab
 variable [Fintype n] [AddCommMonoid α] (i j : n) (c : α)
 
 @[simp]
-/--
-theorem `trace_single_eq_of_ne` / 定理 `trace_single_eq_of_ne`
-
-English:
-theorem trace_single_eq_of_ne
-  given: (h : i != j)
-  statement: trace (single i j c) = 0
-  proof: by
-  simp [trace, h]
-
-@[simp]
-
-中文:
-定理 trace_single_eq_of_ne
-  条件: (h : i != j)
-  结论: trace (single i j c) = 0
-  证明: by
-  simp [trace, h]
-
-@[simp]
+/-
+**Matrix.trace_single_eq_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_single_eq_of_ne (h : i != j) : trace (single i j c) = 0
+参数：h : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.diag_single_of_ne`：diag_single_of_ne (h : i != j) : diag (single 
+i j c) = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem trace_single_eq_of_ne (h : i != j) : trace (single i j c) = 0 := by
+theorem trace_single_eq_of_ne (h : i ≠ j) : trace (single i j c) = 0 := by
   simp [trace, h]
 
 @[simp]
-/--
-theorem `trace_single_eq_same` / 定理 `trace_single_eq_same`
-
-English:
-theorem trace_single_eq_same
-  statement: trace (single i i c) = c
-  proof: by
-  simp [trace]
-
-中文:
-定理 trace_single_eq_same
-  结论: trace (single i i c) = c
-  证明: by
-  simp [trace]
+/-
+**Matrix.trace_single_eq_same** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_single_eq_same : trace (single i i c) = c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Matrix.diag_single_same`：diag_single_same : diag (single i i c) = Pi.sin
+gle i c
+· 使用定理 `Finset.sum_pi_single'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMo
+noid M] [inst_1 : DecidableEq ι] (a : ι) (x : M) (s : Finset ι),   ∑ a' ∈ s, Pi.
+single a x …
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trace_single_eq_same : trace (single i i c) = c := by
   simp [trace]
-
-/--
-theorem `trace_single_mul` / 定理 `trace_single_mul`
-
-English:
-theorem trace_single_mul
-  statement: [NonUnitalNonAssocSemiring R] [Fintype m]
-  proof: by
-  simp [trace, mul_apply, single, ite_and]
-
-中文:
-定理 trace_single_mul
-  结论: [非幺非结合半环 R] [有限类型 m]
-  证明: by
-  simp [trace, mul_apply, single, ite_and]
-
-Depends on / 依赖: ite_and, mul_apply, single
+/-
+**Matrix.trace_single_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_single_mul [NonUnitalNonAssocSemiring R] [Fintype m] (i : n) (j : m)
+ (a : R) (x : Matrix m n R) : (single i j a * x).trace = a • x j i
+参数：i : n；j : m；a : R；x : Matrix m n R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_and`：ite_and : ite (P ∧ Q) a b = ite P (ite Q a b) b
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Finset.sum_ite_irrel`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMon
+oid M] (p : Prop) [inst_1 : Decidable p] (s : Finset ι) (f g : ι → M),   (∑ x ∈ 
+s, if p th…
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trace_single_mul [NonUnitalNonAssocSemiring R] [Fintype m]
     (i : n) (j : m) (a : R) (x : Matrix m n R) :
     (single i j a * x).trace = a • x j i := by
   simp [trace, mul_apply, single, ite_and]
-
-/--
-theorem `trace_mul_single` / 定理 `trace_mul_single`
-
-English:
-theorem trace_mul_single
-  statement: [NonUnitalNonAssocSemiring R] [Fintype m]
-  proof: by
-  simp [trace, mul_apply, single, ite_and]
-
-中文:
-定理 trace_mul_single
-  结论: [非幺非结合半环 R] [有限类型 m]
-  证明: by
-  simp [trace, mul_apply, single, ite_and]
-
-Depends on / 依赖: ite_and, mul_apply, single
+/-
+**Matrix.trace_mul_single** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_mul_single [NonUnitalNonAssocSemiring R] [Fintype m] (x : Matrix m n
+ R) (i : n) (j : m) (a : R) : (x * single i j a).trace = MulOpposite.op a • x j 
+i
+参数：x : Matrix m n R；i : n；j : m；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_and`：ite_and : ite (P ∧ Q) a b = ite P (ite Q a b) b
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trace_mul_single [NonUnitalNonAssocSemiring R] [Fintype m]
     (x : Matrix m n R) (i : n) (j : m) (a : R) :
@@ -955,91 +860,76 @@ theorem trace_mul_single [NonUnitalNonAssocSemiring R] [Fintype m]
 
 end single
 
-/--
-theorem `trace_surjective` / 定理 `trace_surjective`
-
-English:
-theorem trace_surjective
-  given: [AddCommMonoid R] [Nonempty n]
-  proof: fun r => by
-  classical
-  inhabit n
-  exact ⟨single default default r, trace_single_eq_same default r⟩
-
-中文:
-定理 trace_surjective
-  条件: [加法交换幺半群 R] [非空 n]
-  证明: fun r => by
-  classical
-  inhabit n
-  exact ⟨single default default r, trace_single_eq_same default r⟩
-
-Depends on / 依赖: classical, inhabit, single, trace_single_eq_same
+/-
+**Matrix.trace_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：trace_surjective [AddCommMonoid R] [Nonempty n] : Function.Surjective (tra
+ce : Matrix n n R -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.trace_single_eq_same`：trace_single_eq_same : trace (single i i c)
+ = c
 -/
 theorem trace_surjective [AddCommMonoid R] [Nonempty n] :
-    Function.Surjective (trace : Matrix n n R -> R) := fun r => by
+    Function.Surjective (trace : Matrix n n R → R) := fun r ↦ by
   classical
   inhabit n
   exact ⟨single default default r, trace_single_eq_same default r⟩
 
-/--
-theorem `ext_iff_trace_mul_left` / 定理 `ext_iff_trace_mul_left`
+/-- Matrices `A` and `B` are equal iff `(x * A).trace = (x * B).trace` for all `x`. -/
+/-
+**Matrix.ext_iff_trace_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ext_iff_trace_mul_left [NonAssocSemiring R] {A B : Matrix m n R} : A = B ↔
+ forall x, (x * A).trace = (x * B).trace
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.trace_single_mul`：trace_single_mul [NonUnitalNonAssocSemiring R] 
+[Fintype m] (i : n) (j : m) (a : R) (x : Matrix m n R) : (single i j a * x).trac
+e = a • x j i
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 
-English:
-theorem ext_iff_trace_mul_left
-  given: [NonAssocSemiring R] {A B : Matrix m n R}
-  proof: by
-  refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
-  ext i j
-  classical
-  simpa [trace_single_mul] using h (single j i (1 : R))
-
-中文:
-定理 ext_iff_trace_mul_left
-  条件: [非结合半环 R] {A B : 矩阵 m n R}
-  证明: by
-  refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
-  ext i j
-  classical
-  simpa [trace_single_mul] using h (single j i (1 : R))
-
-Depends on / 依赖: classical, single, trace_single_mul
+--- 原说明 ---
+Matrices `A` and `B` are equal iff `(x * A).trace = (x * B).trace` for all `x`.
 -/
 theorem ext_iff_trace_mul_left [NonAssocSemiring R] {A B : Matrix m n R} :
-    A = B ↔ forall x, (x * A).trace = (x * B).trace := by
+    A = B ↔ ∀ x, (x * A).trace = (x * B).trace := by
   refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
   ext i j
   classical
   simpa [trace_single_mul] using h (single j i (1 : R))
 
-/--
-theorem `ext_iff_trace_mul_right` / 定理 `ext_iff_trace_mul_right`
+/-- Matrices `A` and `B` are equal iff `(A * x).trace = (B * x).trace` for all `x`. -/
+/-
+**Matrix.ext_iff_trace_mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ext_iff_trace_mul_right [NonAssocSemiring R] {A B : Matrix m n R} : A = B 
+↔ forall x, (A * x).trace = (B * x).trace
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.trace_mul_single`：trace_mul_single [NonUnitalNonAssocSemiring R] 
+[Fintype m] (x : Matrix m n R) (i : n) (j : m) (a : R) : (x * single i j a).trac
+e = MulOpposi…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 
-English:
-theorem ext_iff_trace_mul_right
-  given: [NonAssocSemiring R] {A B : Matrix m n R}
-  proof: by
-  refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
-  ext i j
-  classical
-  simpa [trace_mul_single] using h (single j i (1 : R))
-
-中文:
-定理 ext_iff_trace_mul_right
-  条件: [非结合半环 R] {A B : 矩阵 m n R}
-  证明: by
-  refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
-  ext i j
-  classical
-  simpa [trace_mul_single] using h (single j i (1 : R))
-
-Depends on / 依赖: classical, single, trace_mul_single
+--- 原说明 ---
+Matrices `A` and `B` are equal iff `(A * x).trace = (B * x).trace` for all `x`.
 -/
 theorem ext_iff_trace_mul_right [NonAssocSemiring R] {A B : Matrix m n R} :
-    A = B ↔ forall x, (A * x).trace = (B * x).trace := by
+    A = B ↔ ∀ x, (A * x).trace = (B * x).trace := by
   refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
   ext i j
   classical
   simpa [trace_mul_single] using h (single j i (1 : R))
 
 end Matrix
+

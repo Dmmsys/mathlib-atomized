@@ -48,253 +48,192 @@ open Function Set MeasurableSpace
 
 namespace MeasureTheory
 
-variable {ι : Type _} {α : ι -> Type _}
+variable {ι : Type _} {α : ι → Type _}
 
 section squareCylinders
 
-/--
-Definition of `squareCylinders` / `squareCylinders` 的定义
+/-- Given a finite set `s` of indices, a square cylinder is the product of a set `S` of
+`∀ i : s, α i` and of `univ` on the other indices. The set `S` is a product of sets `t i` such that
+for all `i : s`, `t i ∈ C i`.
+`squareCylinders` is the set of all such square cylinders. -/
+/-
+**MeasureTheory.squareCylinders** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：squareCylinders (C : forall i, Set (Set (α i))) : Set (Set (forall i, α i)
+)
+参数：C : forall i, Set (Set (α i))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition squareCylinders
-  signature: (C : forall i, Set (Set (α i)))
-  body: {S | exists s : Finset ι, exists t in univ.pi C, S = (s : Set ι).pi t}
-
-中文:
-定义 squareCylinders
-  签名: (C : 对任意 i, 集合 (集合 (α i)))
-  定义体: {S | exists s : Finset ι, exists t in univ.pi C, S = (s : Set ι).pi t}
-
-Depends on / 依赖: Finset, univ.pi
+--- 原说明 ---
+Given a finite set `s` of indices, a square cylinder is the product of a set `S`
+ of
+`∀ i : s, α i` and of `univ` on the other indices. The set `S` is a product of s
+ets `t i` such that
+for all `i : s`, `t i ∈ C i`.
+`squareCylinders` is the set of all such square cylinders.
 -/
-def squareCylinders (C : forall i, Set (Set (α i))) : Set (Set (forall i, α i)) :=
-  {S | exists s : Finset ι, exists t in univ.pi C, S = (s : Set ι).pi t}
-
-/--
-theorem `squareCylinders_eq_iUnion_image` / 定理 `squareCylinders_eq_iUnion_image`
-
-English:
-theorem squareCylinders_eq_iUnion_image
-  given: (C : forall i, Set (Set (α i)))
-  proof: by
+def squareCylinders (C : ∀ i, Set (Set (α i))) : Set (Set (∀ i, α i)) :=
+  {S | ∃ s : Finset ι, ∃ t ∈ univ.pi C, S = (s : Set ι).pi t}
+/-
+**MeasureTheory.squareCylinders_eq_iUnion_image** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory`。
+形式化陈述：squareCylinders_eq_iUnion_image (C : forall i, Set (Set (α i))) : squareCy
+linders C = ⋃ s : Finset ι, (fun t => (s : Set ι).pi t) '' univ.pi C
+参数：C : forall i, Set (Set (α i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem squareCylinders_eq_iUnion_image (C : ∀ i, Set (Set (α i))) :
+    squareCylinders C = ⋃ s : Finset ι, (fun t ↦ (s : Set ι).pi t) '' univ.pi C := by
   ext1 f
   simp only [squareCylinders, mem_iUnion, mem_image, mem_univ_pi, mem_ofPred_eq,
     eq_comm (a := f)]
-
-中文:
-定理 squareCylinders_eq_iUnion_image
-  条件: (C : 对任意 i, 集合 (集合 (α i)))
-  证明: by
-  ext1 f
-  simp only [squareCylinders, mem_iUnion, mem_image, mem_univ_pi, mem_ofPred_eq,
-    eq_comm (a := f)]
-
-Depends on / 依赖: eq_comm, mem_iUnion, mem_image, mem_ofPred_eq, mem_univ_pi, squareCylinders
+/-
+**MeasureTheory.isPiSystem_squareCylinders** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory`。
+形式化陈述：isPiSystem_squareCylinders {C : forall i, Set (Set (α i))} (hC : forall i,
+ IsPiSystem (C i)) (hC_univ : forall i, univ in C i) : IsPiSystem (squareCylinde
+rs C)
+参数：Set (α i)；hC : forall i, IsPiSystem (C i)；hC_univ : forall i, univ in C i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.piecewise_eq_of_mem`：piecewise_eq_of_mem {i : ι} (hi : i in s) : 
+s.piecewise f g i = f i
+· 使用引理 `Finset.piecewise_eq_of_notMem`：piecewise_eq_of_notMem {i : ι} (hi : i ∉ 
+s) : s.piecewise f g i = g i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.pi_congr`：pi_congr (h : s₁ = s₂) (h' : forall i in s₁, t₁ i = t₂ i) 
+: s₁.pi t₁ = s₂.pi t₂
+· 使用定理 `Set.union_pi_inter`：union_pi_inter (ht₁ : forall i ∉ s₁, t₁ i = univ) (h
+t₂ : forall i ∉ s₂, t₂ i = univ) : (s₁ union s₂).pi (fun i => t₁ i inter t₂ i) =
+ s₁.pi t…
+· 使用定理 `Set.mem_univ_pi`：mem_univ_pi : f in pi univ t ↔ forall i, f i in t i
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.mem_pi`：∀ {ι : Type u_1} {α : ι → Type u_2} {s : Set ι} {t : (i : ι)
+ → Set (α i)} {f : (i : ι) → α i},   f ∈ s.pi t ↔ ∀ i ∈ s, f i ∈ t i
+· 使用定理 `Set.mem_inter_iff`：mem_inter_iff (x : α) (a b : Set α) : x in a inter b 
+↔ x in a ∧ x in b
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
 -/
-theorem squareCylinders_eq_iUnion_image (C : forall i, Set (Set (α i))) :
-    squareCylinders C = ⋃ s : Finset ι, (fun t => (s : Set ι).pi t) '' univ.pi C := by
-  ext1 f
-  simp only [squareCylinders, mem_iUnion, mem_image, mem_univ_pi, mem_ofPred_eq,
-    eq_comm (a := f)]
-
-/--
-theorem `isPiSystem_squareCylinders` / 定理 `isPiSystem_squareCylinders`
-
-English:
-theorem isPiSystem_squareCylinders
-  statement: {C : forall i, Set (Set (α i))} (hC : forall i, IsPiSystem (C i))
-  proof: by
-  rintro S₁ ⟨s₁, t₁, h₁, rfl⟩ S₂ ⟨s₂, t₂, h₂, rfl⟩ hst_nonempty
-  classical
-  let t₁' := s₁.piecewise t₁ (fun i => univ)
-  let t₂' := s₂.piecewise t₂ (fun i => univ)
-  have h1 : forall i in (s₁ : Set ι), t₁ i = t₁' i :=
-    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h1' : forall i ∉ (s₁ : Set ι), t₁' i = univ :=
-    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
-  have h2 : forall i in (s₂ : Set ι), t₂ i = t₂' i :=
-    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h2' : forall i ∉ (s₂ : Set ι), t₂' i = univ :=
-    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
-  rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [← union_pi_inter h1' h2']
-  refine ⟨s₁ union s₂, fun i => t₁' i inter t₂' i, ?_, ?_⟩
-  · rw [mem_univ_pi]
-    intro i
-    have : (t₁' i inter t₂' i).Nonempty := by
-      obtain ⟨f, hf⟩ := hst_nonempty
-      rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [mem_inter_iff]; rw [mem_pi]; rw [mem_pi] at hf
-      refine ⟨f i, ⟨?_, ?_⟩⟩
-      · by_cases hi₁ : i in s₁
-        · exact hf.1 i hi₁
-        · rw [h1' i hi₁]
-          exact mem_univ _
-      · by_cases hi₂ : i in s₂
-        · exact hf.2 i hi₂
-        · rw [h2' i hi₂]
-          exact mem_univ _
-    refine hC i _ ?_ _ ?_ this
-    · by_cases hi₁ : i in s₁
-      · rw [← h1 i hi₁]
-        exact h₁ i (mem_univ _)
-      · rw [h1' i hi₁]
-        exact hC_univ i
-    · by_cases hi₂ : i in s₂
-      · rw [← h2 i hi₂]
-        exact h₂ i (mem_univ _)
-      · rw [h2' i hi₂]
-        exact hC_univ i
-  · rw [Finset.coe_union]
-
-中文:
-定理 isPiSystem_squareCylinders
-  结论: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsPiSystem (C i))
-  证明: by
-  rintro S₁ ⟨s₁, t₁, h₁, rfl⟩ S₂ ⟨s₂, t₂, h₂, rfl⟩ hst_nonempty
-  classical
-  let t₁' := s₁.piecewise t₁ (fun i => univ)
-  let t₂' := s₂.piecewise t₂ (fun i => univ)
-  have h1 : forall i in (s₁ : Set ι), t₁ i = t₁' i :=
-    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h1' : forall i ∉ (s₁ : Set ι), t₁' i = univ :=
-    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
-  have h2 : forall i in (s₂ : Set ι), t₂ i = t₂' i :=
-    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h2' : forall i ∉ (s₂ : Set ι), t₂' i = univ :=
-    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
-  rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [← union_pi_inter h1' h2']
-  refine ⟨s₁ union s₂, fun i => t₁' i inter t₂' i, ?_, ?_⟩
-  · rw [mem_univ_pi]
-    intro i
-    have : (t₁' i inter t₂' i).Nonempty := by
-      obtain ⟨f, hf⟩ := hst_nonempty
-      rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [mem_inter_iff]; rw [mem_pi]; rw [mem_pi] at hf
-      refine ⟨f i, ⟨?_, ?_⟩⟩
-      · by_cases hi₁ : i in s₁
-        · exact hf.1 i hi₁
-        · rw [h1' i hi₁]
-          exact mem_univ _
-      · by_cases hi₂ : i in s₂
-        · exact hf.2 i hi₂
-        · rw [h2' i hi₂]
-          exact mem_univ _
-    refine hC i _ ?_ _ ?_ this
-    · by_cases hi₁ : i in s₁
-      · rw [← h1 i hi₁]
-        exact h₁ i (mem_univ _)
-      · rw [h1' i hi₁]
-        exact hC_univ i
-    · by_cases hi₂ : i in s₂
-      · rw [← h2 i hi₂]
-        exact h₂ i (mem_univ _)
-      · rw [h2' i hi₂]
-        exact hC_univ i
-  · rw [Finset.coe_union]
-
-Depends on / 依赖: Finset, Finset.piecewise_eq_of_mem, Finset.piecewise_eq_of_notMem, classical, hst_nonempty, piecewise, piecewise_eq_of_mem, piecewise_eq_of_notMem
--/
-theorem isPiSystem_squareCylinders {C : forall i, Set (Set (α i))} (hC : forall i, IsPiSystem (C i))
-    (hC_univ : forall i, univ in C i) :
+theorem isPiSystem_squareCylinders {C : ∀ i, Set (Set (α i))} (hC : ∀ i, IsPiSystem (C i))
+    (hC_univ : ∀ i, univ ∈ C i) :
     IsPiSystem (squareCylinders C) := by
   rintro S₁ ⟨s₁, t₁, h₁, rfl⟩ S₂ ⟨s₂, t₂, h₂, rfl⟩ hst_nonempty
   classical
-  let t₁' := s₁.piecewise t₁ (fun i => univ)
-  let t₂' := s₂.piecewise t₂ (fun i => univ)
-  have h1 : forall i in (s₁ : Set ι), t₁ i = t₁' i :=
-    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h1' : forall i ∉ (s₁ : Set ι), t₁' i = univ :=
-    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
-  have h2 : forall i in (s₂ : Set ι), t₂ i = t₂' i :=
-    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h2' : forall i ∉ (s₂ : Set ι), t₂' i = univ :=
-    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
-  rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [← union_pi_inter h1' h2']
-  refine ⟨s₁ union s₂, fun i => t₁' i inter t₂' i, ?_, ?_⟩
+  let t₁' := s₁.piecewise t₁ (fun i ↦ univ)
+  let t₂' := s₂.piecewise t₂ (fun i ↦ univ)
+  have h1 : ∀ i ∈ (s₁ : Set ι), t₁ i = t₁' i :=
+    fun i hi ↦ (Finset.piecewise_eq_of_mem _ _ _ hi).symm
+  have h1' : ∀ i ∉ (s₁ : Set ι), t₁' i = univ :=
+    fun i hi ↦ Finset.piecewise_eq_of_notMem _ _ _ hi
+  have h2 : ∀ i ∈ (s₂ : Set ι), t₂ i = t₂' i :=
+    fun i hi ↦ (Finset.piecewise_eq_of_mem _ _ _ hi).symm
+  have h2' : ∀ i ∉ (s₂ : Set ι), t₂' i = univ :=
+    fun i hi ↦ Finset.piecewise_eq_of_notMem _ _ _ hi
+  rw [Set.pi_congr rfl h1, Set.pi_congr rfl h2, ← union_pi_inter h1' h2']
+  refine ⟨s₁ ∪ s₂, fun i ↦ t₁' i ∩ t₂' i, ?_, ?_⟩
   · rw [mem_univ_pi]
     intro i
-    have : (t₁' i inter t₂' i).Nonempty := by
+    have : (t₁' i ∩ t₂' i).Nonempty := by
       obtain ⟨f, hf⟩ := hst_nonempty
-      rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [mem_inter_iff]; rw [mem_pi]; rw [mem_pi] at hf
+      rw [Set.pi_congr rfl h1, Set.pi_congr rfl h2, mem_inter_iff, mem_pi, mem_pi] at hf
       refine ⟨f i, ⟨?_, ?_⟩⟩
-      · by_cases hi₁ : i in s₁
+      · by_cases hi₁ : i ∈ s₁
         · exact hf.1 i hi₁
         · rw [h1' i hi₁]
           exact mem_univ _
-      · by_cases hi₂ : i in s₂
+      · by_cases hi₂ : i ∈ s₂
         · exact hf.2 i hi₂
         · rw [h2' i hi₂]
           exact mem_univ _
     refine hC i _ ?_ _ ?_ this
-    · by_cases hi₁ : i in s₁
+    · by_cases hi₁ : i ∈ s₁
       · rw [← h1 i hi₁]
         exact h₁ i (mem_univ _)
       · rw [h1' i hi₁]
         exact hC_univ i
-    · by_cases hi₂ : i in s₂
+    · by_cases hi₂ : i ∈ s₂
       · rw [← h2 i hi₂]
         exact h₂ i (mem_univ _)
       · rw [h2' i hi₂]
         exact hC_univ i
   · rw [Finset.coe_union]
-
-/--
-theorem `comap_eval_le_generateFrom_squareCylinders_singleton` / 定理 `comap_eval_le_generateFrom_squareCylinders_singleton`
-
-English:
-theorem comap_eval_le_generateFrom_squareCylinders_singleton
-  proof: by
-  simp only [singleton_pi]
-  rw [MeasurableSpace.comap_eq_generateFrom]
-  refine MeasurableSpace.generateFrom_mono fun S => ?_
-  simp only [mem_ofPred_eq, mem_image, mem_univ_pi, forall_exists_index, and_imp]
-  intro t ht h
-  classical
-  refine ⟨fun j => if hji : j = i then by convert! t else univ, fun j => ?_, ?_⟩
-  · by_cases hji : j = i
-    · simp only [hji, eq_mpr_eq_cast, dif_pos]
-      convert! ht
-      simp only [cast_heq]
-    · simp only [hji, not_false_iff, dif_neg, MeasurableSet.univ]
-  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-    canonicalizer; a minimization would help. The original proof was: `grind` -/
-    simp [h]
-
-中文:
-定理 comap_eval_le_generateFrom_squareCylinders_singleton
-  证明: by
-  simp only [singleton_pi]
-  rw [MeasurableSpace.comap_eq_generateFrom]
-  refine MeasurableSpace.generateFrom_mono fun S => ?_
-  simp only [mem_ofPred_eq, mem_image, mem_univ_pi, forall_exists_index, and_imp]
-  intro t ht h
-  classical
-  refine ⟨fun j => if hji : j = i then by convert! t else univ, fun j => ?_, ?_⟩
-  · by_cases hji : j = i
-    · simp only [hji, eq_mpr_eq_cast, dif_pos]
-      convert! ht
-      simp only [cast_heq]
-    · simp only [hji, not_false_iff, dif_neg, MeasurableSet.univ]
-  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-    canonicalizer; a minimization would help. The original proof was: `grind` -/
-    simp [h]
-
-Depends on / 依赖: Before, MeasurableSet, MeasurableSet.univ, MeasurableSpace, MeasurableSpace.comap_eq_generateFrom, MeasurableSpace.generateFrom_mono, adaptation_note, and_imp, cast_heq, classical, comap_eq_generateFrom, convert, dif_neg, dif_pos, eq_mpr_eq_cast, forall_exists_index, generateFrom_mono, mem_image, mem_ofPred_eq, mem_univ_pi
+/-
+**MeasureTheory.comap_eval_le_generateFrom_squareCylinders_singleton** 是 Mathlib
+ 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：comap_eval_le_generateFrom_squareCylinders_singleton (α : ι -> Type*) [m :
+ forall i, MeasurableSpace (α i)] (i : ι) : MeasurableSpace.comap (Function.eval
+ i) (m i) <= MeasurableSpace.generateFrom ((fun t => ({i} : Set ι).pi t) '' univ
+.pi fun i => {s : Set (α i) | MeasurableSet s})
+参数：α : ι -> Type*；α i；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.singleton_pi`：singleton_pi (i : ι) (t : forall i, Set (α i)) : pi {i
+} t = eval i ⁻¹' t i
+· 使用定理 `MeasurableSpace.comap_eq_generateFrom`：comap_eq_generateFrom (m : Measur
+ableSpace β) (f : α -> β) : m.comap f = generateFrom { t | exists s, MeasurableS
+et s ∧ f ⁻¹' s = t }
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
 -/
 theorem comap_eval_le_generateFrom_squareCylinders_singleton
-    (α : ι -> Type*) [m : forall i, MeasurableSpace (α i)] (i : ι) :
-    MeasurableSpace.comap (Function.eval i) (m i) <=
+    (α : ι → Type*) [m : ∀ i, MeasurableSpace (α i)] (i : ι) :
+    MeasurableSpace.comap (Function.eval i) (m i) ≤
       MeasurableSpace.generateFrom
-        ((fun t => ({i} : Set ι).pi t) '' univ.pi fun i => {s : Set (α i) | MeasurableSet s}) := by
+        ((fun t ↦ ({i} : Set ι).pi t) '' univ.pi fun i ↦ {s : Set (α i) | MeasurableSet s}) := by
   simp only [singleton_pi]
   rw [MeasurableSpace.comap_eq_generateFrom]
-  refine MeasurableSpace.generateFrom_mono fun S => ?_
+  refine MeasurableSpace.generateFrom_mono fun S ↦ ?_
   simp only [mem_ofPred_eq, mem_image, mem_univ_pi, forall_exists_index, and_imp]
   intro t ht h
   classical
-  refine ⟨fun j => if hji : j = i then by convert! t else univ, fun j => ?_, ?_⟩
+  refine ⟨fun j ↦ if hji : j = i then by convert! t else univ, fun j ↦ ?_, ?_⟩
   · by_cases hji : j = i
     · simp only [hji, eq_mpr_eq_cast, dif_pos]
       convert! ht
@@ -306,974 +245,883 @@ theorem comap_eval_le_generateFrom_squareCylinders_singleton
     canonicalizer; a minimization would help. The original proof was: `grind` -/
     simp [h]
 
-/--
-theorem `generateFrom_squareCylinders` / 定理 `generateFrom_squareCylinders`
+/-- The square cylinders formed from measurable sets generate the product σ-algebra. -/
+/-
+**MeasureTheory.generateFrom_squareCylinders** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：generateFrom_squareCylinders [forall i, MeasurableSpace (α i)] : Measurabl
+eSpace.generateFrom (squareCylinders fun i => {s : Set (α i) | MeasurableSet s})
+ = MeasurableSpace.pi
+参数：α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableSpace.generateFrom_le_iff`：generateFrom_le_iff {s : Set (Set α
+)} (m : MeasurableSpace α) : generateFrom s <= m ↔ s subseteq { t | MeasurableSe
+t[m] t }
+· 使用定理 `MeasurableSet.pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : δ) → 
+MeasurableSpace (X a)] {s : Set δ} {t : (i : δ) → Set (X i)},   s.Countable → (∀
+ i ∈ s…
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.comap_eval_le_generateFrom_squareCylinders_singleton`：coma
+p_eval_le_generateFrom_squareCylinders_singleton (α : ι -> Type*) [m : forall i,
+ MeasurableSpace (α i)] (i : ι) : MeasurableSpace.comap …
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `MeasureTheory.squareCylinders_eq_iUnion_image`：squareCylinders_eq_iUnion
+_image (C : forall i, Set (Set (α i))) : squareCylinders C = ⋃ s : Finset ι, (fu
+n t => (s : Set ι).pi t) '' univ.pi…
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
 
-English:
-theorem generateFrom_squareCylinders
-  given: [forall i, MeasurableSpace (α i)]
-  proof: by
-  apply le_antisymm
-  · rw [MeasurableSpace.generateFrom_le_iff]
-    rintro S ⟨s, t, h, rfl⟩
-    simp only [mem_univ_pi, mem_ofPred_eq] at h
-    exact MeasurableSet.pi (Finset.countable_toSet _) (fun i _ => h i)
-  · refine iSup_le fun i => ?_
-    refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
-    refine MeasurableSpace.generateFrom_mono ?_
-    rw [← Finset.coe_singleton]; rw [squareCylinders_eq_iUnion_image]
-    exact subset_iUnion
-      (fun (s : Finset ι) =>
-        (fun t : forall i, Set (α i) => (s : Set ι).pi t) '' univ.pi (fun i => Set.ofPred MeasurableSet))
-      ({i} : Finset ι)
-
-中文:
-定理 generateFrom_squareCylinders
-  条件: [对任意 i, 可测空间 (α i)]
-  证明: by
-  apply le_antisymm
-  · rw [MeasurableSpace.generateFrom_le_iff]
-    rintro S ⟨s, t, h, rfl⟩
-    simp only [mem_univ_pi, mem_ofPred_eq] at h
-    exact MeasurableSet.pi (Finset.countable_toSet _) (fun i _ => h i)
-  · refine iSup_le fun i => ?_
-    refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
-    refine MeasurableSpace.generateFrom_mono ?_
-    rw [← Finset.coe_singleton]; rw [squareCylinders_eq_iUnion_image]
-    exact subset_iUnion
-      (fun (s : Finset ι) =>
-        (fun t : forall i, Set (α i) => (s : Set ι).pi t) '' univ.pi (fun i => Set.ofPred MeasurableSet))
-      ({i} : Finset ι)
-
-Depends on / 依赖: Finset, Finset.coe_singleton, Finset.countable_toSet, MeasurableSet, MeasurableSet.pi, MeasurableSpace, MeasurableSpace.generateFrom_le_iff, MeasurableSpace.generateFrom_mono, coe_singleton, comap_eval_le_generateFrom_squareCylinders_singleton, countable_toSet, generateFrom_le_iff, generateFrom_mono, iSup_le, le_antisymm, mem_ofPred_eq, mem_univ_pi, squareCylinders_eq_iUnion_image, subset_iUnion
+--- 原说明 ---
+The square cylinders formed from measurable sets generate the product σ-algebra.
 -/
-theorem generateFrom_squareCylinders [forall i, MeasurableSpace (α i)] :
-    MeasurableSpace.generateFrom (squareCylinders fun i => {s : Set (α i) | MeasurableSet s}) =
+theorem generateFrom_squareCylinders [∀ i, MeasurableSpace (α i)] :
+    MeasurableSpace.generateFrom (squareCylinders fun i ↦ {s : Set (α i) | MeasurableSet s}) =
       MeasurableSpace.pi := by
   apply le_antisymm
   · rw [MeasurableSpace.generateFrom_le_iff]
     rintro S ⟨s, t, h, rfl⟩
     simp only [mem_univ_pi, mem_ofPred_eq] at h
-    exact MeasurableSet.pi (Finset.countable_toSet _) (fun i _ => h i)
-  · refine iSup_le fun i => ?_
+    exact MeasurableSet.pi (Finset.countable_toSet _) (fun i _ ↦ h i)
+  · refine iSup_le fun i ↦ ?_
     refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
     refine MeasurableSpace.generateFrom_mono ?_
-    rw [← Finset.coe_singleton]; rw [squareCylinders_eq_iUnion_image]
+    rw [← Finset.coe_singleton, squareCylinders_eq_iUnion_image]
     exact subset_iUnion
-      (fun (s : Finset ι) =>
-        (fun t : forall i, Set (α i) => (s : Set ι).pi t) '' univ.pi (fun i => Set.ofPred MeasurableSet))
+      (fun (s : Finset ι) ↦
+        (fun t : ∀ i, Set (α i) ↦ (s : Set ι).pi t) '' univ.pi (fun i ↦ Set.ofPred MeasurableSet))
       ({i} : Finset ι)
 
 end squareCylinders
 
 section cylinder
 
-/--
-Definition of `cylinder` / `cylinder` 的定义
+/-- Given a finite set `s` of indices, a cylinder is the preimage of a set `S` of `∀ i : s, α i` by
+the projection from `∀ i, α i` to `∀ i : s, α i`. -/
+/-
+**MeasureTheory.cylinder** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：cylinder (s : Finset ι) (S : Set (forall i : s, α i)) : Set (forall i, α i
+)
+参数：s : Finset ι；S : Set (forall i : s, α i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cylinder
-  signature: (s : Finset ι) (S : Set (forall i : s, α i))
-  body: s.restrict ⁻¹' S
-
-@[simp]
-
-中文:
-定义 cylinder
-  签名: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i))
-  定义体: s.restrict ⁻¹' S
-
-@[simp]
-
-Depends on / 依赖: restrict, s.restrict
+--- 原说明 ---
+Given a finite set `s` of indices, a cylinder is the preimage of a set `S` of `∀
+ i : s, α i` by
+the projection from `∀ i, α i` to `∀ i : s, α i`.
 -/
-def cylinder (s : Finset ι) (S : Set (forall i : s, α i)) : Set (forall i, α i) :=
+def cylinder (s : Finset ι) (S : Set (∀ i : s, α i)) : Set (∀ i, α i) :=
   s.restrict ⁻¹' S
 
 @[simp]
-/--
-theorem `mem_cylinder` / 定理 `mem_cylinder`
-
-English:
-theorem mem_cylinder
-  given: (s : Finset ι) (S : Set (forall i : s, α i)) (f : forall i, α i)
-  proof: mem_preimage
-
-@[simp]
-
-中文:
-定理 mem_cylinder
-  条件: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i)) (f : 对任意 i, α i)
-  证明: mem_preimage
-
-@[simp]
-
-Depends on / 依赖: mem_preimage
+/-
+**MeasureTheory.mem_cylinder** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：mem_cylinder (s : Finset ι) (S : Set (forall i : s, α i)) (f : forall i, α
+ i) : f in cylinder s S ↔ s.restrict f in S
+参数：s : Finset ι；S : Set (forall i : s, α i)；f : forall i, α i。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
 -/
-theorem mem_cylinder (s : Finset ι) (S : Set (forall i : s, α i)) (f : forall i, α i) :
-    f in cylinder s S ↔ s.restrict f in S :=
+theorem mem_cylinder (s : Finset ι) (S : Set (∀ i : s, α i)) (f : ∀ i, α i) :
+    f ∈ cylinder s S ↔ s.restrict f ∈ S :=
   mem_preimage
 
 @[simp]
-/--
-theorem `cylinder_empty` / 定理 `cylinder_empty`
-
-English:
-theorem cylinder_empty
-  given: (s : Finset ι)
-  statement: cylinder s (∅ : Set (forall i : s, α i)) = ∅
-  proof: by
-  rw [cylinder]; rw [preimage_empty]
-
-@[simp]
-
-中文:
-定理 cylinder_empty
-  条件: (s : 有限集 ι)
-  结论: cylinder s (∅ : 集合 (对任意 i : s, α i)) = ∅
-  证明: by
-  rw [cylinder]; rw [preimage_empty]
-
-@[simp]
-
-Depends on / 依赖: cylinder, preimage_empty
+/-
+**MeasureTheory.cylinder_empty** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：cylinder_empty (s : Finset ι) : cylinder s (∅ : Set (forall i : s, α i)) =
+ ∅
+参数：s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.cylinder.eq_1`：∀ {ι : Type u_1} {α : ι → Type u_2} (s : Fi
+nset ι) (S : Set ((i : ↥s) → α ↑i)),   MeasureTheory.cylinder s S = s.restrict ⁻
+¹' S
+· 使用定理 `Set.preimage_empty`：preimage_empty : f ⁻¹' ∅ = ∅
 -/
-theorem cylinder_empty (s : Finset ι) : cylinder s (∅ : Set (forall i : s, α i)) = ∅ := by
-  rw [cylinder]; rw [preimage_empty]
+theorem cylinder_empty (s : Finset ι) : cylinder s (∅ : Set (∀ i : s, α i)) = ∅ := by
+  rw [cylinder, preimage_empty]
 
 @[simp]
-/--
-theorem `cylinder_univ` / 定理 `cylinder_univ`
-
-English:
-theorem cylinder_univ
-  given: (s : Finset ι)
-  statement: cylinder s (univ : Set (forall i : s, α i)) = univ
-  proof: by
-  rw [cylinder]; rw [preimage_univ]
-
-@[simp]
-
-中文:
-定理 cylinder_univ
-  条件: (s : 有限集 ι)
-  结论: cylinder s (univ : 集合 (对任意 i : s, α i)) = univ
-  证明: by
-  rw [cylinder]; rw [preimage_univ]
-
-@[simp]
-
-Depends on / 依赖: cylinder, preimage_univ
+/-
+**MeasureTheory.cylinder_univ** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：cylinder_univ (s : Finset ι) : cylinder s (univ : Set (forall i : s, α i))
+ = univ
+参数：s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.cylinder.eq_1`：∀ {ι : Type u_1} {α : ι → Type u_2} (s : Fi
+nset ι) (S : Set ((i : ↥s) → α ↑i)),   MeasureTheory.cylinder s S = s.restrict ⁻
+¹' S
+· 使用定理 `Set.preimage_univ`：preimage_univ : f ⁻¹' univ = univ
 -/
-theorem cylinder_univ (s : Finset ι) : cylinder s (univ : Set (forall i : s, α i)) = univ := by
-  rw [cylinder]; rw [preimage_univ]
+theorem cylinder_univ (s : Finset ι) : cylinder s (univ : Set (∀ i : s, α i)) = univ := by
+  rw [cylinder, preimage_univ]
 
 @[simp]
-/--
-theorem `cylinder_eq_empty_iff` / 定理 `cylinder_eq_empty_iff`
-
-English:
-theorem cylinder_eq_empty_iff
-  statement: [h_nonempty : Nonempty (forall i, α i)] (s : Finset ι)
-  proof: by
-  refine ⟨fun h => ?_, fun h => by (rw [h]; exact cylinder_empty _)⟩
-  by_contra hS
-  rw [← Ne]; rw [← nonempty_iff_ne_empty] at hS
-  let f := hS.some
-  have hf : f in S := hS.choose_spec
-  classical
-  let f' : forall i, α i := fun i => if hi : i in s then f ⟨i, hi⟩ else h_nonempty.some i
-  have hf' : f' in cylinder s S := by
-    rw [mem_cylinder]
-    simpa only [Finset.restrict_def, Finset.coe_mem, dif_pos, f']
-  rw [h] at hf'
-  exact notMem_empty _ hf'
-
-中文:
-定理 cylinder_eq_empty_iff
-  结论: [h_nonempty : 非空 (对任意 i, α i)] (s : 有限集 ι)
-  证明: by
-  refine ⟨fun h => ?_, fun h => by (rw [h]; exact cylinder_empty _)⟩
-  by_contra hS
-  rw [← Ne]; rw [← nonempty_iff_ne_empty] at hS
-  let f := hS.some
-  have hf : f in S := hS.choose_spec
-  classical
-  let f' : forall i, α i := fun i => if hi : i in s then f ⟨i, hi⟩ else h_nonempty.some i
-  have hf' : f' in cylinder s S := by
-    rw [mem_cylinder]
-    simpa only [Finset.restrict_def, Finset.coe_mem, dif_pos, f']
-  rw [h] at hf'
-  exact notMem_empty _ hf'
-
-Depends on / 依赖: Finset, Finset.coe_mem, Finset.restrict_def, choose_spec, classical, coe_mem, cylinder, cylinder_empty, dif_pos, hS.choose_spec, hS.some, h_nonempty, h_nonempty.some, mem_cylinder, nonempty_iff_ne_empty, notMem_empty, restrict_def
+/-
+**MeasureTheory.cylinder_eq_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：cylinder_eq_empty_iff [h_nonempty : Nonempty (forall i, α i)] (s : Finset 
+ι) (S : Set (forall i : s, α i)) : cylinder s S = ∅ ↔ S = ∅
+参数：forall i, α i；s : Finset ι；S : Set (forall i : s, α i)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `MeasureTheory.mem_cylinder`：mem_cylinder (s : Finset ι) (S : Set (forall
+ i : s, α i)) (f : forall i, α i) : f in cylinder s S ↔ s.restrict f in S
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Set.notMem_empty`：notMem_empty (x : α) : x ∉ (∅ : Set α)
+· 使用定理 `MeasureTheory.cylinder_empty`：cylinder_empty (s : Finset ι) : cylinder s
+ (∅ : Set (forall i : s, α i)) = ∅
 -/
-theorem cylinder_eq_empty_iff [h_nonempty : Nonempty (forall i, α i)] (s : Finset ι)
-    (S : Set (forall i : s, α i)) :
+theorem cylinder_eq_empty_iff [h_nonempty : Nonempty (∀ i, α i)] (s : Finset ι)
+    (S : Set (∀ i : s, α i)) :
     cylinder s S = ∅ ↔ S = ∅ := by
-  refine ⟨fun h => ?_, fun h => by (rw [h]; exact cylinder_empty _)⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ by (rw [h]; exact cylinder_empty _)⟩
   by_contra hS
-  rw [← Ne]; rw [← nonempty_iff_ne_empty] at hS
+  rw [← Ne, ← nonempty_iff_ne_empty] at hS
   let f := hS.some
-  have hf : f in S := hS.choose_spec
+  have hf : f ∈ S := hS.choose_spec
   classical
-  let f' : forall i, α i := fun i => if hi : i in s then f ⟨i, hi⟩ else h_nonempty.some i
-  have hf' : f' in cylinder s S := by
+  let f' : ∀ i, α i := fun i ↦ if hi : i ∈ s then f ⟨i, hi⟩ else h_nonempty.some i
+  have hf' : f' ∈ cylinder s S := by
     rw [mem_cylinder]
     simpa only [Finset.restrict_def, Finset.coe_mem, dif_pos, f']
   rw [h] at hf'
   exact notMem_empty _ hf'
-
-/--
-theorem `inter_cylinder` / 定理 `inter_cylinder`
-
-English:
-theorem inter_cylinder
-  statement: (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Set (forall i : s₂, α i))
-  proof: rfl
-
-中文:
-定理 inter_cylinder
-  结论: (s₁ s₂ : 有限集 ι) (S₁ : 集合 (对任意 i : s₁, α i)) (S₂ : 集合 (对任意 i : s₂, α i))
-  证明: rfl
+/-
+**MeasureTheory.inter_cylinder** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：inter_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Se
+t (forall i : s₂, α i)) [DecidableEq ι] : cylinder s₁ S₁ inter cylinder s₂ S₂ = 
+cylinder (s₁ union s₂) (Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ inter F
+inset.restrict₂ Finset.subset_union_right ⁻¹' S₂)
+参数：s₁ s₂ : Finset ι；S₁ : Set (forall i : s₁, α i)；S₂ : Set (forall i : s₂, α i)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inter_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Set (forall i : s₂, α i))
+theorem inter_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (∀ i : s₁, α i)) (S₂ : Set (∀ i : s₂, α i))
     [DecidableEq ι] :
-    cylinder s₁ S₁ inter cylinder s₂ S₂ =
-      cylinder (s₁ union s₂)
-        (Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ inter
+    cylinder s₁ S₁ ∩ cylinder s₂ S₂ =
+      cylinder (s₁ ∪ s₂)
+        (Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ ∩
           Finset.restrict₂ Finset.subset_union_right ⁻¹' S₂) := rfl
-
-/--
-theorem `inter_cylinder_same` / 定理 `inter_cylinder_same`
-
-English:
-theorem inter_cylinder_same
-  given: (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Set (forall i : s, α i))
-  proof: rfl
-
-中文:
-定理 inter_cylinder_same
-  条件: (s : 有限集 ι) (S₁ : 集合 (对任意 i : s, α i)) (S₂ : 集合 (对任意 i : s, α i))
-  证明: rfl
+/-
+**MeasureTheory.inter_cylinder_same** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：inter_cylinder_same (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Se
+t (forall i : s, α i)) : cylinder s S₁ inter cylinder s S₂ = cylinder s (S₁ inte
+r S₂)
+参数：s : Finset ι；S₁ : Set (forall i : s, α i)；S₂ : Set (forall i : s, α i)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem inter_cylinder_same (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Set (forall i : s, α i)) :
-    cylinder s S₁ inter cylinder s S₂ = cylinder s (S₁ inter S₂) := rfl
-
-/--
-theorem `union_cylinder` / 定理 `union_cylinder`
-
-English:
-theorem union_cylinder
-  statement: (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Set (forall i : s₂, α i))
-  proof: rfl
-
-中文:
-定理 union_cylinder
-  结论: (s₁ s₂ : 有限集 ι) (S₁ : 集合 (对任意 i : s₁, α i)) (S₂ : 集合 (对任意 i : s₂, α i))
-  证明: rfl
+theorem inter_cylinder_same (s : Finset ι) (S₁ : Set (∀ i : s, α i)) (S₂ : Set (∀ i : s, α i)) :
+    cylinder s S₁ ∩ cylinder s S₂ = cylinder s (S₁ ∩ S₂) := rfl
+/-
+**MeasureTheory.union_cylinder** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：union_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Se
+t (forall i : s₂, α i)) [DecidableEq ι] : cylinder s₁ S₁ union cylinder s₂ S₂ = 
+cylinder (s₁ union s₂) (Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ union F
+inset.restrict₂ Finset.subset_union_right ⁻¹' S₂)
+参数：s₁ s₂ : Finset ι；S₁ : Set (forall i : s₁, α i)；S₂ : Set (forall i : s₂, α i)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem union_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (forall i : s₁, α i)) (S₂ : Set (forall i : s₂, α i))
+theorem union_cylinder (s₁ s₂ : Finset ι) (S₁ : Set (∀ i : s₁, α i)) (S₂ : Set (∀ i : s₂, α i))
     [DecidableEq ι] :
-    cylinder s₁ S₁ union cylinder s₂ S₂ =
-      cylinder (s₁ union s₂)
-        (Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ union
+    cylinder s₁ S₁ ∪ cylinder s₂ S₂ =
+      cylinder (s₁ ∪ s₂)
+        (Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ ∪
           Finset.restrict₂ Finset.subset_union_right ⁻¹' S₂) := rfl
-
-/--
-theorem `union_cylinder_same` / 定理 `union_cylinder_same`
-
-English:
-theorem union_cylinder_same
-  given: (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Set (forall i : s, α i))
-  proof: rfl
-
-中文:
-定理 union_cylinder_same
-  条件: (s : 有限集 ι) (S₁ : 集合 (对任意 i : s, α i)) (S₂ : 集合 (对任意 i : s, α i))
-  证明: rfl
+/-
+**MeasureTheory.union_cylinder_same** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：union_cylinder_same (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Se
+t (forall i : s, α i)) : cylinder s S₁ union cylinder s S₂ = cylinder s (S₁ unio
+n S₂)
+参数：s : Finset ι；S₁ : Set (forall i : s, α i)；S₂ : Set (forall i : s, α i)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem union_cylinder_same (s : Finset ι) (S₁ : Set (forall i : s, α i)) (S₂ : Set (forall i : s, α i)) :
-    cylinder s S₁ union cylinder s S₂ = cylinder s (S₁ union S₂) := rfl
-
-/--
-theorem `compl_cylinder` / 定理 `compl_cylinder`
-
-English:
-theorem compl_cylinder
-  given: (s : Finset ι) (S : Set (forall i : s, α i))
-  proof: by
-  ext1 f; simp only [mem_compl_iff, mem_cylinder]
-
-中文:
-定理 compl_cylinder
-  条件: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i))
-  证明: by
-  ext1 f; simp only [mem_compl_iff, mem_cylinder]
-
-Depends on / 依赖: mem_compl_iff, mem_cylinder
+theorem union_cylinder_same (s : Finset ι) (S₁ : Set (∀ i : s, α i)) (S₂ : Set (∀ i : s, α i)) :
+    cylinder s S₁ ∪ cylinder s S₂ = cylinder s (S₁ ∪ S₂) := rfl
+/-
+**MeasureTheory.compl_cylinder** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：compl_cylinder (s : Finset ι) (S : Set (forall i : s, α i)) : (cylinder s 
+S)ᶜ = cylinder s (Sᶜ)
+参数：s : Finset ι；S : Set (forall i : s, α i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem compl_cylinder (s : Finset ι) (S : Set (forall i : s, α i)) :
+theorem compl_cylinder (s : Finset ι) (S : Set (∀ i : s, α i)) :
     (cylinder s S)ᶜ = cylinder s (Sᶜ) := by
   ext1 f; simp only [mem_compl_iff, mem_cylinder]
-
-/--
-theorem `sdiff_cylinder_same` / 定理 `sdiff_cylinder_same`
-
-English:
-theorem sdiff_cylinder_same
-  given: (s : Finset ι) (S T : Set (forall i : s, α i))
-  proof: by
-  ext1 f; simp only [mem_sdiff, mem_cylinder]
-
-@[deprecated (since := "2026-06-03")] alias diff_cylinder_same := sdiff_cylinder_same
-
-中文:
-定理 sdiff_cylinder_same
-  条件: (s : 有限集 ι) (S T : 集合 (对任意 i : s, α i))
-  证明: by
-  ext1 f; simp only [mem_sdiff, mem_cylinder]
-
-@[deprecated (since := "2026-06-03")] alias diff_cylinder_same := sdiff_cylinder_same
-
-Depends on / 依赖: mem_cylinder, mem_sdiff
+/-
+**MeasureTheory.sdiff_cylinder_same** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：sdiff_cylinder_same (s : Finset ι) (S T : Set (forall i : s, α i)) : cylin
+der s S \ cylinder s T = cylinder s (S \ T)
+参数：s : Finset ι；S T : Set (forall i : s, α i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem sdiff_cylinder_same (s : Finset ι) (S T : Set (forall i : s, α i)) :
+theorem sdiff_cylinder_same (s : Finset ι) (S T : Set (∀ i : s, α i)) :
     cylinder s S \ cylinder s T = cylinder s (S \ T) := by
   ext1 f; simp only [mem_sdiff, mem_cylinder]
 
 @[deprecated (since := "2026-06-03")] alias diff_cylinder_same := sdiff_cylinder_same
-
-/--
-theorem `eq_of_cylinder_eq_of_subset` / 定理 `eq_of_cylinder_eq_of_subset`
-
-English:
-theorem eq_of_cylinder_eq_of_subset
-  statement: [h_nonempty : Nonempty (forall i, α i)] {I J : Finset ι}
-  proof: by
-  rw [Set.ext_iff] at h_eq
-  simp only [mem_cylinder] at h_eq
-  ext1 f
-  simp only [mem_preimage]
-  classical
-  specialize h_eq fun i => if hi : i in I then f ⟨i, hi⟩ else h_nonempty.some i
-  have h_mem : forall j : J, ↑j in I := fun j => hJI j.prop
-  simpa only [Finset.restrict_def, Finset.coe_mem, dite_true, h_mem] using! h_eq
-
-中文:
-定理 eq_of_cylinder_eq_of_subset
-  结论: [h_nonempty : 非空 (对任意 i, α i)] {I J : 有限集 ι}
-  证明: by
-  rw [Set.ext_iff] at h_eq
-  simp only [mem_cylinder] at h_eq
-  ext1 f
-  simp only [mem_preimage]
-  classical
-  specialize h_eq fun i => if hi : i in I then f ⟨i, hi⟩ else h_nonempty.some i
-  have h_mem : forall j : J, ↑j in I := fun j => hJI j.prop
-  simpa only [Finset.restrict_def, Finset.coe_mem, dite_true, h_mem] using! h_eq
-
-Depends on / 依赖: Finset, Finset.coe_mem, Finset.restrict_def, Set.ext_iff, classical, coe_mem, dite_true, ext_iff, h_eq, h_mem, h_nonempty, h_nonempty.some, j.prop, mem_cylinder, mem_preimage, restrict_def, specialize
+/-
+**MeasureTheory.eq_of_cylinder_eq_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：eq_of_cylinder_eq_of_subset [h_nonempty : Nonempty (forall i, α i)] {I J :
+ Finset ι} {S : Set (forall i : I, α i)} {T : Set (forall i : J, α i)} (h_eq : c
+ylinder I S = cylinder J T) (hJI : J subseteq I) : S = Finset.restrict₂ hJI ⁻¹' 
+T
+参数：forall i, α i；forall i : I, α i；forall i : J, α i；h_eq : cylinder I S = cylin
+der J T；hJI : J subseteq I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
 -/
-theorem eq_of_cylinder_eq_of_subset [h_nonempty : Nonempty (forall i, α i)] {I J : Finset ι}
-    {S : Set (forall i : I, α i)} {T : Set (forall i : J, α i)} (h_eq : cylinder I S = cylinder J T)
-    (hJI : J subseteq I) :
+theorem eq_of_cylinder_eq_of_subset [h_nonempty : Nonempty (∀ i, α i)] {I J : Finset ι}
+    {S : Set (∀ i : I, α i)} {T : Set (∀ i : J, α i)} (h_eq : cylinder I S = cylinder J T)
+    (hJI : J ⊆ I) :
     S = Finset.restrict₂ hJI ⁻¹' T := by
   rw [Set.ext_iff] at h_eq
   simp only [mem_cylinder] at h_eq
   ext1 f
   simp only [mem_preimage]
   classical
-  specialize h_eq fun i => if hi : i in I then f ⟨i, hi⟩ else h_nonempty.some i
-  have h_mem : forall j : J, ↑j in I := fun j => hJI j.prop
+  specialize h_eq fun i ↦ if hi : i ∈ I then f ⟨i, hi⟩ else h_nonempty.some i
+  have h_mem : ∀ j : J, ↑j ∈ I := fun j ↦ hJI j.prop
   simpa only [Finset.restrict_def, Finset.coe_mem, dite_true, h_mem] using! h_eq
-
-/--
-theorem `cylinder_eq_cylinder_union` / 定理 `cylinder_eq_cylinder_union`
-
-English:
-theorem cylinder_eq_cylinder_union
-  statement: [DecidableEq ι] (I : Finset ι) (S : Set (forall i : I, α i))
-  proof: by
-  ext1 f; simp only [mem_cylinder, Finset.restrict_def, Finset.restrict₂_def, mem_preimage]
-
-中文:
-定理 cylinder_eq_cylinder_union
-  结论: [DecidableEq ι] (I : 有限集 ι) (S : 集合 (对任意 i : I, α i))
-  证明: by
-  ext1 f; simp only [mem_cylinder, Finset.restrict_def, Finset.restrict₂_def, mem_preimage]
-
-Depends on / 依赖: Finset, Finset.restrict, Finset.restrict_def, mem_cylinder, mem_preimage, restrict_def
+/-
+**MeasureTheory.cylinder_eq_cylinder_union** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory`。
+形式化陈述：cylinder_eq_cylinder_union [DecidableEq ι] (I : Finset ι) (S : Set (forall
+ i : I, α i)) (J : Finset ι) : cylinder I S = cylinder (I union J) (Finset.restr
+ict₂ Finset.subset_union_left ⁻¹' S)
+参数：I : Finset ι；S : Set (forall i : I, α i)；J : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Finset.subset_union_left`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s₂
+ : Finset α}, s₁ ⊆ s₁ ∪ s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem cylinder_eq_cylinder_union [DecidableEq ι] (I : Finset ι) (S : Set (forall i : I, α i))
+theorem cylinder_eq_cylinder_union [DecidableEq ι] (I : Finset ι) (S : Set (∀ i : I, α i))
     (J : Finset ι) :
     cylinder I S =
-      cylinder (I union J) (Finset.restrict₂ Finset.subset_union_left ⁻¹' S) := by
+      cylinder (I ∪ J) (Finset.restrict₂ Finset.subset_union_left ⁻¹' S) := by
   ext1 f; simp only [mem_cylinder, Finset.restrict_def, Finset.restrict₂_def, mem_preimage]
-
-/--
-theorem `disjoint_cylinder_iff` / 定理 `disjoint_cylinder_iff`
-
-English:
-theorem disjoint_cylinder_iff
-  statement: [Nonempty (forall i, α i)] {s t : Finset ι} {S : Set (forall i : s, α i)}
-  proof: by
-  simp_rw [Set.disjoint_iff, subset_empty_iff, inter_cylinder, cylinder_eq_empty_iff]
-
-中文:
-定理 disjoint_cylinder_iff
-  结论: [非空 (对任意 i, α i)] {s t : 有限集 ι} {S : 集合 (对任意 i : s, α i)}
-  证明: by
-  simp_rw [Set.disjoint_iff, subset_empty_iff, inter_cylinder, cylinder_eq_empty_iff]
-
-Depends on / 依赖: Set.disjoint_iff, cylinder_eq_empty_iff, disjoint_iff, inter_cylinder, simp_rw, subset_empty_iff
+/-
+**MeasureTheory.disjoint_cylinder_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：disjoint_cylinder_iff [Nonempty (forall i, α i)] {s t : Finset ι} {S : Set
+ (forall i : s, α i)} {T : Set (forall i : t, α i)} [DecidableEq ι] : Disjoint (
+cylinder s S) (cylinder t T) ↔ Disjoint (Finset.restrict₂ Finset.subset_union_le
+ft ⁻¹' S) (Finset.restrict₂ Finset.subset_union_right ⁻¹' T)
+参数：forall i, α i；forall i : s, α i；forall i : t, α i。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.subset_union_left`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s₂
+ : Finset α}, s₁ ⊆ s₁ ∪ s₂
+· 使用定理 `Finset.subset_union_right`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s
+₂ : Finset α}, s₂ ⊆ s₁ ∪ s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem disjoint_cylinder_iff [Nonempty (forall i, α i)] {s t : Finset ι} {S : Set (forall i : s, α i)}
-    {T : Set (forall i : t, α i)} [DecidableEq ι] :
+theorem disjoint_cylinder_iff [Nonempty (∀ i, α i)] {s t : Finset ι} {S : Set (∀ i : s, α i)}
+    {T : Set (∀ i : t, α i)} [DecidableEq ι] :
     Disjoint (cylinder s S) (cylinder t T) ↔
       Disjoint
         (Finset.restrict₂ Finset.subset_union_left ⁻¹' S)
         (Finset.restrict₂ Finset.subset_union_right ⁻¹' T) := by
   simp_rw [Set.disjoint_iff, subset_empty_iff, inter_cylinder, cylinder_eq_empty_iff]
-
-/--
-theorem `IsClosed.cylinder` / 定理 `IsClosed.cylinder`
-
-English:
-theorem IsClosed.cylinder
-  statement: [forall i, TopologicalSpace (α i)] (s : Finset ι) {S : Set (forall i : s, α i)}
-  proof: hs.preimage (continuous_pi fun _ => continuous_apply _)
-
-中文:
-定理 是闭集.cylinder
-  结论: [对任意 i, 拓扑空间 (α i)] (s : 有限集 ι) {S : 集合 (对任意 i : s, α i)}
-  证明: hs.preimage (continuous_pi fun _ => continuous_apply _)
-
-Depends on / 依赖: continuous_apply, continuous_pi, hs.preimage, preimage
+/-
+**MeasureTheory.IsClosed.cylinder** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.IsClo
+sed`。
+形式化陈述：∀ {ι : Type u_2} {α : ι → Type u_1} [inst : (i : ι) → TopologicalSpace (α 
+i)] (s : Finset ι)   {S : Set ((i : ↥s) → α ↑i)}, IsClosed S → IsClosed (Measure
+Theory.cylinder s S)
+参数：i : ι；α i；s : Finset ι；(i : ↥s) → α ↑i；MeasureTheory.cylinder s S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.preimage`：IsClosed.preimage (hf : Continuous f) {t : Set Y} (h 
+: IsClosed t) : IsClosed (f ⁻¹' t)
+· 使用定理 `continuous_pi`：continuous_pi (f : X → α → Y) (hf : ∀ a, Continuous (f x 
+a)) : Continuous (fun x a ↦ f x a)
+· 使用定理 `continuous_apply`：continuous_apply (a : α) : Continuous (fun f : (α → X)
+ ↦ f a)
 -/
-theorem IsClosed.cylinder [forall i, TopologicalSpace (α i)] (s : Finset ι) {S : Set (forall i : s, α i)}
+theorem IsClosed.cylinder [∀ i, TopologicalSpace (α i)] (s : Finset ι) {S : Set (∀ i : s, α i)}
     (hs : IsClosed S) : IsClosed (cylinder s S) :=
-  hs.preimage (continuous_pi fun _ => continuous_apply _)
-
-/--
-theorem `_root_.MeasurableSet.cylinder` / 定理 `_root_.MeasurableSet.cylinder`
-
-English:
-theorem _root_.MeasurableSet.cylinder
-  statement: [forall i, MeasurableSpace (α i)] (s : Finset ι)
-  proof: measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS
-
-中文:
-定理 _root_.可测集.cylinder
-  结论: [对任意 i, 可测空间 (α i)] (s : 有限集 ι)
-  证明: measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS
-
-Depends on / 依赖: measurable_pi_apply, measurable_pi_lambda
+  hs.preimage (continuous_pi fun _ ↦ continuous_apply _)
+/-
+**MeasureTheory._root_.MeasurableSet.cylinder** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.MeasurableSet.cylinder [forall i, MeasurableSpace (α i)] (s : Finset ι)
-    {S : Set (forall i : s, α i)} (hS : MeasurableSet S) :
+theorem _root_.MeasurableSet.cylinder [∀ i, MeasurableSpace (α i)] (s : Finset ι)
+    {S : Set (∀ i : s, α i)} (hS : MeasurableSet S) :
     MeasurableSet (cylinder s S) :=
-  measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS
+  measurable_pi_lambda _ (fun _ ↦ measurable_pi_apply _) hS
 
-/--
-theorem `dependsOn_cylinder_indicator_const` / 定理 `dependsOn_cylinder_indicator_const`
+/-- The indicator of a cylinder only depends on the variables whose the cylinder depends on. -/
+/-
+**MeasureTheory.dependsOn_cylinder_indicator_const** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory`。
+形式化陈述：dependsOn_cylinder_indicator_const {M : Type*} [Zero M] {I : Finset ι} (S 
+: Set (Π i : I, α i)) (c : M) : DependsOn ((cylinder I S).indicator (fun _ => c)
+) I
+参数：S : Set (Π i : I, α i)；c : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.indicator_const_eq_indicator_const`：∀ {α : Type u_1} {β : Type u_2} 
+{M : Type u_3} [inst : Zero M] {s : Set α} {a : α} {t : Set β} {b : β} {c : M}, 
+  (a ∈ s ↔ b ∈ t) → s.indica…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem dependsOn_cylinder_indicator_const
-  statement: {M : Type*} [Zero M] {I : Finset ι}
-  proof: fun x y hxy => Set.indicator_const_eq_indicator_const (by simp [Finset.restrict_def, hxy])
-
-中文:
-定理 dependsOn_cylinder_indicator_const
-  结论: {M : 类型} [零 M] {I : 有限集 ι}
-  证明: fun x y hxy => Set.indicator_const_eq_indicator_const (by simp [Finset.restrict_def, hxy])
-
-Depends on / 依赖: Finset, Finset.restrict_def, Set.indicator_const_eq_indicator_const, indicator_const_eq_indicator_const, restrict_def
+--- 原说明 ---
+The indicator of a cylinder only depends on the variables whose the cylinder dep
+ends on.
 -/
 theorem dependsOn_cylinder_indicator_const {M : Type*} [Zero M] {I : Finset ι}
     (S : Set (Π i : I, α i)) (c : M) :
-    DependsOn ((cylinder I S).indicator (fun _ => c)) I :=
-  fun x y hxy => Set.indicator_const_eq_indicator_const (by simp [Finset.restrict_def, hxy])
+    DependsOn ((cylinder I S).indicator (fun _ ↦ c)) I :=
+  fun x y hxy ↦ Set.indicator_const_eq_indicator_const (by simp [Finset.restrict_def, hxy])
 
 end cylinder
 
 section cylinders
 
-/--
-Definition of `measurableCylinders` / `measurableCylinders` 的定义
+/-- Given a finite set `s` of indices, a cylinder is the preimage of a set `S` of `∀ i : s, α i` by
+the projection from `∀ i, α i` to `∀ i : s, α i`.
+`measurableCylinders` is the set of all cylinders with measurable base `S`. -/
+/-
+**MeasureTheory.measurableCylinders** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：measurableCylinders (α : ι -> Type*) [forall i, MeasurableSpace (α i)] : S
+et (Set (forall i, α i))
+参数：α : ι -> Type*；α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition measurableCylinders
-  signature: (α : ι -> Type*) [forall i, MeasurableSpace (α i)]
-  body: ⋃ (s) (S) (_ : MeasurableSet S), {cylinder s S}
-
-中文:
-定义 measurableCylinders
-  签名: (α : ι -> 类型) [对任意 i, 可测空间 (α i)]
-  定义体: ⋃ (s) (S) (_ : MeasurableSet S), {cylinder s S}
-
-Depends on / 依赖: MeasurableSet, cylinder
+--- 原说明 ---
+Given a finite set `s` of indices, a cylinder is the preimage of a set `S` of `∀
+ i : s, α i` by
+the projection from `∀ i, α i` to `∀ i : s, α i`.
+`measurableCylinders` is the set of all cylinders with measurable base `S`.
 -/
-def measurableCylinders (α : ι -> Type*) [forall i, MeasurableSpace (α i)] : Set (Set (forall i, α i)) :=
+def measurableCylinders (α : ι → Type*) [∀ i, MeasurableSpace (α i)] : Set (Set (∀ i, α i)) :=
   ⋃ (s) (S) (_ : MeasurableSet S), {cylinder s S}
-
-/--
-theorem `empty_mem_measurableCylinders` / 定理 `empty_mem_measurableCylinders`
-
-English:
-theorem empty_mem_measurableCylinders
-  given: (α : ι -> Type*) [forall i, MeasurableSpace (α i)]
-  proof: by
-  simp_rw [measurableCylinders, mem_iUnion, mem_singleton_iff]
-  exact ⟨∅, ∅, MeasurableSet.empty, (cylinder_empty _).symm⟩
-
-中文:
-定理 empty_mem_measurableCylinders
-  条件: (α : ι -> 类型) [对任意 i, 可测空间 (α i)]
-  证明: by
-  simp_rw [measurableCylinders, mem_iUnion, mem_singleton_iff]
-  exact ⟨∅, ∅, MeasurableSet.empty, (cylinder_empty _).symm⟩
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.empty, cylinder_empty, measurableCylinders, mem_iUnion, mem_singleton_iff, simp_rw
+/-
+**MeasureTheory.empty_mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：empty_mem_measurableCylinders (α : ι -> Type*) [forall i, MeasurableSpace 
+(α i)] : ∅ in measurableCylinders α
+参数：α : ι -> Type*；α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `MeasurableSet.empty`：MeasurableSet.empty [MeasurableSpace α] : Measurabl
+eSet (∅ : Set α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.cylinder_empty`：cylinder_empty (s : Finset ι) : cylinder s
+ (∅ : Set (forall i : s, α i)) = ∅
 -/
-theorem empty_mem_measurableCylinders (α : ι -> Type*) [forall i, MeasurableSpace (α i)] :
-    ∅ in measurableCylinders α := by
+theorem empty_mem_measurableCylinders (α : ι → Type*) [∀ i, MeasurableSpace (α i)] :
+    ∅ ∈ measurableCylinders α := by
   simp_rw [measurableCylinders, mem_iUnion, mem_singleton_iff]
   exact ⟨∅, ∅, MeasurableSet.empty, (cylinder_empty _).symm⟩
 
-variable [forall i, MeasurableSpace (α i)] {s t : Set (forall i, α i)}
+variable [∀ i, MeasurableSpace (α i)] {s t : Set (∀ i, α i)}
 
 @[simp]
-/--
-theorem `mem_measurableCylinders` / 定理 `mem_measurableCylinders`
-
-English:
-theorem mem_measurableCylinders
-  given: (t : Set (forall i, α i))
-  proof: by
-  simp_rw [measurableCylinders, mem_iUnion, exists_prop, mem_singleton_iff]
-
-@[measurability]
-
-中文:
-定理 mem_measurableCylinders
-  条件: (t : 集合 (对任意 i, α i))
-  证明: by
-  simp_rw [measurableCylinders, mem_iUnion, exists_prop, mem_singleton_iff]
-
-@[measurability]
-
-Depends on / 依赖: exists_prop, measurableCylinders, mem_iUnion, mem_singleton_iff, simp_rw
+/-
+**MeasureTheory.mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+`。
+形式化陈述：mem_measurableCylinders (t : Set (forall i, α i)) : t in measurableCylinde
+rs α ↔ exists s S, MeasurableSet S ∧ t = cylinder s S
+参数：t : Set (forall i, α i)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_measurableCylinders (t : Set (forall i, α i)) :
-    t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t = cylinder s S := by
+theorem mem_measurableCylinders (t : Set (∀ i, α i)) :
+    t ∈ measurableCylinders α ↔ ∃ s S, MeasurableSet S ∧ t = cylinder s S := by
   simp_rw [measurableCylinders, mem_iUnion, exists_prop, mem_singleton_iff]
 
 @[measurability]
-/--
-theorem `_root_.MeasurableSet.of_mem_measurableCylinders` / 定理 `_root_.MeasurableSet.of_mem_measurableCylinders`
-
-English:
-theorem _root_.MeasurableSet.of_mem_measurableCylinders
-  statement: {s : Set (Π i, α i)}
-  proof: by
-  obtain ⟨I, t, mt, rfl⟩ := (mem_measurableCylinders s).1 hs
-  exact mt.cylinder
-
-中文:
-定理 _root_.可测集.of_mem_measurableCylinders
-  结论: {s : 集合 (Π i, α i)}
-  证明: by
-  obtain ⟨I, t, mt, rfl⟩ := (mem_measurableCylinders s).1 hs
-  exact mt.cylinder
-
-Depends on / 依赖: cylinder, mem_measurableCylinders, mt.cylinder
+/-
+**MeasureTheory._root_.MeasurableSet.of_mem_measurableCylinders** 是 Mathlib 中的一个
+定理，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MeasurableSet.of_mem_measurableCylinders {s : Set (Π i, α i)}
-    (hs : s in measurableCylinders α) : MeasurableSet s := by
+    (hs : s ∈ measurableCylinders α) : MeasurableSet s := by
   obtain ⟨I, t, mt, rfl⟩ := (mem_measurableCylinders s).1 hs
   exact mt.cylinder
 
-/--
-Definition of `measurableCylinders.finset` / `measurableCylinders.finset` 的定义
+/-- A finset `s` such that `t = cylinder s S`. `S` is given by `measurableCylinders.set`. -/
+/-
+**MeasureTheory.measurableCylinders.finset** 是 Mathlib 中的一个定义，位于命名空间 `MeasureThe
+ory.measurableCylinders`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → MeasurableSp
+ace (α i)] →       {t : Set ((i : ι) → α i)} → t ∈ MeasureTheory.measurableCylin
+ders α → Finset ι
+参数：i : ι；α i；(i : ι) → α i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition measurableCylinders.finset
-  signature: (ht : t in measurableCylinders α)
-  body: ((mem_measurableCylinders t).mp ht).choose
-
-中文:
-定义 measurableCylinders.finset
-  签名: (ht : t in measurableCylinders α)
-  定义体: ((mem_measurableCylinders t).mp ht).choose
-
-Depends on / 依赖: mem_measurableCylinders
+--- 原说明 ---
+A finset `s` such that `t = cylinder s S`. `S` is given by `measurableCylinders.
+set`.
 -/
-noncomputable def measurableCylinders.finset (ht : t in measurableCylinders α) : Finset ι :=
+noncomputable def measurableCylinders.finset (ht : t ∈ measurableCylinders α) : Finset ι :=
   ((mem_measurableCylinders t).mp ht).choose
 
+/-- A set `S` such that `t = cylinder s S`. `s` is given by `measurableCylinders.finset`. -/
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `measurableCylinders.set` / `measurableCylinders.set` 的定义
-
-English:
-definition measurableCylinders.set
-  signature: (ht : t in measurableCylinders α)
-  body: ((mem_measurableCylinders t).mp ht).choose_spec.choose
-
-中文:
-定义 measurableCylinders.set
-  签名: (ht : t in measurableCylinders α)
-  定义体: ((mem_measurableCylinders t).mp ht).choose_spec.choose
-
-Depends on / 依赖: choose_spec, choose_spec.choose, mem_measurableCylinders
+/-
+**MeasureTheory.measurableCylinders.set** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory
+.measurableCylinders`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     [inst : (i : ι) → MeasurableSp
+ace (α i)] →       {t : Set ((i : ι) → α i)} →         (ht : t ∈ MeasureTheory.m
+easurableCylinders α) →           Set ((i : ↥(MeasureTheory.measurableCylinders.
+finset ht)) → α ↑i)
+参数：i : ι；α i；(i : ι) → α i；ht : t ∈ MeasureTheory.measurableCylinders α；(i : ↥(M
+easureTheory.measurableCylinders.finset ht)) → α ↑i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable def measurableCylinders.set (ht : t in measurableCylinders α) :
-    Set (forall i : measurableCylinders.finset ht, α i) :=
+noncomputable def measurableCylinders.set (ht : t ∈ measurableCylinders α) :
+    Set (∀ i : measurableCylinders.finset ht, α i) :=
   ((mem_measurableCylinders t).mp ht).choose_spec.choose
-
-/--
-theorem `measurableCylinders.measurableSet` / 定理 `measurableCylinders.measurableSet`
-
-English:
-theorem measurableCylinders.measurableSet
-  given: (ht : t in measurableCylinders α)
-  proof: ((mem_measurableCylinders t).mp ht).choose_spec.choose_spec.left
-
-中文:
-定理 measurableCylinders.measurableSet
-  条件: (ht : t in measurableCylinders α)
-  证明: ((mem_measurableCylinders t).mp ht).choose_spec.choose_spec.left
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec.left, mem_measurableCylinders
+/-
+**MeasureTheory.measurableCylinders.measurableSet** 是 Mathlib 中的一个定理，位于命名空间 `Mea
+sureTheory.measurableCylinders`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → MeasurableSpace (α i
+)] {t : Set ((i : ι) → α i)}   (ht : t ∈ MeasureTheory.measurableCylinders α), M
+easurableSet (MeasureTheory.measurableCylinders.set ht)
+参数：i : ι；α i；(i : ι) → α i；ht : t ∈ MeasureTheory.measurableCylinders α；MeasureT
+heory.measurableCylinders.set ht。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem measurableCylinders.measurableSet (ht : t in measurableCylinders α) :
+theorem measurableCylinders.measurableSet (ht : t ∈ measurableCylinders α) :
     MeasurableSet (measurableCylinders.set ht) :=
   ((mem_measurableCylinders t).mp ht).choose_spec.choose_spec.left
-
-/--
-theorem `measurableCylinders.eq_cylinder` / 定理 `measurableCylinders.eq_cylinder`
-
-English:
-theorem measurableCylinders.eq_cylinder
-  given: (ht : t in measurableCylinders α)
-  proof: ((mem_measurableCylinders t).mp ht).choose_spec.choose_spec.right
-
-中文:
-定理 measurableCylinders.eq_cylinder
-  条件: (ht : t in measurableCylinders α)
-  证明: ((mem_measurableCylinders t).mp ht).choose_spec.choose_spec.right
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec.right, mem_measurableCylinders
+/-
+**MeasureTheory.measurableCylinders.eq_cylinder** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.measurableCylinders`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → MeasurableSpace (α i
+)] {t : Set ((i : ι) → α i)}   (ht : t ∈ MeasureTheory.measurableCylinders α),  
+ t = MeasureTheory.cylinder (MeasureTheory.measurableCylinders.finset ht) (Measu
+reTheory.measurableCylinders.set ht)
+参数：i : ι；α i；(i : ι) → α i；ht : t ∈ MeasureTheory.measurableCylinders α；MeasureT
+heory.measurableCylinders.finset ht；MeasureTheory.measurableCylinders.set ht。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem measurableCylinders.eq_cylinder (ht : t in measurableCylinders α) :
+theorem measurableCylinders.eq_cylinder (ht : t ∈ measurableCylinders α) :
     t = cylinder (measurableCylinders.finset ht) (measurableCylinders.set ht) :=
   ((mem_measurableCylinders t).mp ht).choose_spec.choose_spec.right
-
-/--
-theorem `cylinder_mem_measurableCylinders` / 定理 `cylinder_mem_measurableCylinders`
-
-English:
-theorem cylinder_mem_measurableCylinders
-  statement: (s : Finset ι) (S : Set (forall i : s, α i))
-  proof: by
-  rw [mem_measurableCylinders]; exact ⟨s, S, hS, rfl⟩
-
-中文:
-定理 cylinder_mem_measurableCylinders
-  结论: (s : 有限集 ι) (S : 集合 (对任意 i : s, α i))
-  证明: by
-  rw [mem_measurableCylinders]; exact ⟨s, S, hS, rfl⟩
-
-Depends on / 依赖: mem_measurableCylinders
+/-
+**MeasureTheory.cylinder_mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：cylinder_mem_measurableCylinders (s : Finset ι) (S : Set (forall i : s, α 
+i)) (hS : MeasurableSet S) : cylinder s S in measurableCylinders α
+参数：s : Finset ι；S : Set (forall i : s, α i)；hS : MeasurableSet S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
 -/
-theorem cylinder_mem_measurableCylinders (s : Finset ι) (S : Set (forall i : s, α i))
+theorem cylinder_mem_measurableCylinders (s : Finset ι) (S : Set (∀ i : s, α i))
     (hS : MeasurableSet S) :
-    cylinder s S in measurableCylinders α := by
+    cylinder s S ∈ measurableCylinders α := by
   rw [mem_measurableCylinders]; exact ⟨s, S, hS, rfl⟩
-
-/--
-theorem `inter_mem_measurableCylinders` / 定理 `inter_mem_measurableCylinders`
-
-English:
-theorem inter_mem_measurableCylinders
-  statement: (hs : s in measurableCylinders α)
-  proof: by
-  rw [mem_measurableCylinders] at *
-  obtain ⟨s₁, S₁, hS₁, rfl⟩ := hs
-  obtain ⟨s₂, S₂, hS₂, rfl⟩ := ht
-  classical
-  refine ⟨s₁ union s₂,
-    Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ inter
-      {f | Finset.restrict₂ Finset.subset_union_right f in S₂}, ?_, ?_⟩
-  · refine MeasurableSet.inter ?_ ?_
-    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₁
-    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₂
-  · exact inter_cylinder _ _ _ _
-
-中文:
-定理 inter_mem_measurableCylinders
-  结论: (hs : s in measurableCylinders α)
-  证明: by
-  rw [mem_measurableCylinders] at *
-  obtain ⟨s₁, S₁, hS₁, rfl⟩ := hs
-  obtain ⟨s₂, S₂, hS₂, rfl⟩ := ht
-  classical
-  refine ⟨s₁ union s₂,
-    Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ inter
-      {f | Finset.restrict₂ Finset.subset_union_right f in S₂}, ?_, ?_⟩
-  · refine MeasurableSet.inter ?_ ?_
-    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₁
-    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₂
-  · exact inter_cylinder _ _ _ _
-
-Depends on / 依赖: Finset, Finset.restrict, Finset.subset_union_left, Finset.subset_union_right, MeasurableSet, MeasurableSet.inter, classical, inter_cylinder, measurable_pi_apply, measurable_pi_lambda, mem_measurableCylinders, subset_union_left, subset_union_right
+/-
+**MeasureTheory.inter_mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：inter_mem_measurableCylinders (hs : s in measurableCylinders α) (ht : t in
+ measurableCylinders α) : s inter t in measurableCylinders α
+参数：hs : s in measurableCylinders α；ht : t in measurableCylinders α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
+· 使用定理 `Finset.subset_union_left`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s₂
+ : Finset α}, s₁ ⊆ s₁ ∪ s₂
+· 使用定理 `Finset.subset_union_right`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s
+₂ : Finset α}, s₂ ⊆ s₁ ∪ s₂
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `measurable_pi_lambda`：measurable_pi_lambda (f : α -> forall a, X a) (hf 
+: forall a, Measurable fun c => f c a) : Measurable f
+· 使用定理 `measurable_pi_apply`：measurable_pi_apply (a : δ) : Measurable fun f : fo
+rall a, X a => f a
+· 使用定理 `MeasureTheory.inter_cylinder`：inter_cylinder (s₁ s₂ : Finset ι) (S₁ : Se
+t (forall i : s₁, α i)) (S₂ : Set (forall i : s₂, α i)) [DecidableEq ι] : cylind
+er s₁ S₁ inter cyl…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem inter_mem_measurableCylinders (hs : s in measurableCylinders α)
-    (ht : t in measurableCylinders α) :
-    s inter t in measurableCylinders α := by
+theorem inter_mem_measurableCylinders (hs : s ∈ measurableCylinders α)
+    (ht : t ∈ measurableCylinders α) :
+    s ∩ t ∈ measurableCylinders α := by
   rw [mem_measurableCylinders] at *
   obtain ⟨s₁, S₁, hS₁, rfl⟩ := hs
   obtain ⟨s₂, S₂, hS₂, rfl⟩ := ht
   classical
-  refine ⟨s₁ union s₂,
-    Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ inter
-      {f | Finset.restrict₂ Finset.subset_union_right f in S₂}, ?_, ?_⟩
+  refine ⟨s₁ ∪ s₂,
+    Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ ∩
+      {f | Finset.restrict₂ Finset.subset_union_right f ∈ S₂}, ?_, ?_⟩
   · refine MeasurableSet.inter ?_ ?_
-    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₁
-    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₂
+    · exact measurable_pi_lambda _ (fun _ ↦ measurable_pi_apply _) hS₁
+    · exact measurable_pi_lambda _ (fun _ ↦ measurable_pi_apply _) hS₂
   · exact inter_cylinder _ _ _ _
-
-/--
-theorem `isPiSystem_measurableCylinders` / 定理 `isPiSystem_measurableCylinders`
-
-English:
-theorem isPiSystem_measurableCylinders
-  statement: IsPiSystem (measurableCylinders α)
-  proof: fun _ hS _ hT _ => inter_mem_measurableCylinders hS hT
-
-中文:
-定理 isPiSystem_measurableCylinders
-  结论: IsPiSystem (measurableCylinders α)
-  证明: fun _ hS _ hT _ => inter_mem_measurableCylinders hS hT
-
-Depends on / 依赖: inter_mem_measurableCylinders
+/-
+**MeasureTheory.isPiSystem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory`。
+形式化陈述：isPiSystem_measurableCylinders : IsPiSystem (measurableCylinders α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.inter_mem_measurableCylinders`：inter_mem_measurableCylinde
+rs (hs : s in measurableCylinders α) (ht : t in measurableCylinders α) : s inter
+ t in measurableCylinders α
 -/
 theorem isPiSystem_measurableCylinders : IsPiSystem (measurableCylinders α) :=
-  fun _ hS _ hT _ => inter_mem_measurableCylinders hS hT
-
-/--
-theorem `compl_mem_measurableCylinders` / 定理 `compl_mem_measurableCylinders`
-
-English:
-theorem compl_mem_measurableCylinders
-  given: (hs : s in measurableCylinders α)
-  proof: by
+  fun _ hS _ hT _ ↦ inter_mem_measurableCylinders hS hT
+/-
+**MeasureTheory.compl_mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：compl_mem_measurableCylinders (hs : s in measurableCylinders α) : sᶜ in me
+asurableCylinders α
+参数：hs : s in measurableCylinders α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `MeasureTheory.compl_cylinder`：compl_cylinder (s : Finset ι) (S : Set (fo
+rall i : s, α i)) : (cylinder s S)ᶜ = cylinder s (Sᶜ)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem compl_mem_measurableCylinders (hs : s ∈ measurableCylinders α) :
+    sᶜ ∈ measurableCylinders α := by
   rw [mem_measurableCylinders] at hs ⊢
   obtain ⟨s, S, hS, rfl⟩ := hs
   refine ⟨s, Sᶜ, hS.compl, ?_⟩
   rw [compl_cylinder]
-
-中文:
-定理 compl_mem_measurableCylinders
-  条件: (hs : s in measurableCylinders α)
-  证明: by
-  rw [mem_measurableCylinders] at hs ⊢
-  obtain ⟨s, S, hS, rfl⟩ := hs
-  refine ⟨s, Sᶜ, hS.compl, ?_⟩
-  rw [compl_cylinder]
-
-Depends on / 依赖: compl_cylinder, hS.compl, mem_measurableCylinders
+/-
+**MeasureTheory.univ_mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory`。
+形式化陈述：univ_mem_measurableCylinders (α : ι -> Type*) [forall i, MeasurableSpace (
+α i)] : Set.univ in measurableCylinders α
+参数：α : ι -> Type*；α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
+· 使用定理 `MeasureTheory.compl_mem_measurableCylinders`：compl_mem_measurableCylinde
+rs (hs : s in measurableCylinders α) : sᶜ in measurableCylinders α
+· 使用定理 `MeasureTheory.empty_mem_measurableCylinders`：empty_mem_measurableCylinde
+rs (α : ι -> Type*) [forall i, MeasurableSpace (α i)] : ∅ in measurableCylinders
+ α
 -/
-theorem compl_mem_measurableCylinders (hs : s in measurableCylinders α) :
-    sᶜ in measurableCylinders α := by
-  rw [mem_measurableCylinders] at hs ⊢
-  obtain ⟨s, S, hS, rfl⟩ := hs
-  refine ⟨s, Sᶜ, hS.compl, ?_⟩
-  rw [compl_cylinder]
-
-/--
-theorem `univ_mem_measurableCylinders` / 定理 `univ_mem_measurableCylinders`
-
-English:
-theorem univ_mem_measurableCylinders
-  given: (α : ι -> Type*) [forall i, MeasurableSpace (α i)]
-  proof: by
+theorem univ_mem_measurableCylinders (α : ι → Type*) [∀ i, MeasurableSpace (α i)] :
+    Set.univ ∈ measurableCylinders α := by
   rw [← compl_empty]; exact compl_mem_measurableCylinders (empty_mem_measurableCylinders α)
-
-中文:
-定理 univ_mem_measurableCylinders
-  条件: (α : ι -> 类型) [对任意 i, 可测空间 (α i)]
-  证明: by
-  rw [← compl_empty]; exact compl_mem_measurableCylinders (empty_mem_measurableCylinders α)
-
-Depends on / 依赖: compl_empty, compl_mem_measurableCylinders, empty_mem_measurableCylinders
+/-
+**MeasureTheory.union_mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：union_mem_measurableCylinders (hs : s in measurableCylinders α) (ht : t in
+ measurableCylinders α) : s union t in measurableCylinders α
+参数：hs : s in measurableCylinders α；ht : t in measurableCylinders α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_eq_compl_compl_inter_compl`：union_eq_compl_compl_inter_compl (
+s t : Set α) : s union t = (sᶜ inter tᶜ)ᶜ
+· 使用定理 `MeasureTheory.compl_mem_measurableCylinders`：compl_mem_measurableCylinde
+rs (hs : s in measurableCylinders α) : sᶜ in measurableCylinders α
+· 使用定理 `MeasureTheory.inter_mem_measurableCylinders`：inter_mem_measurableCylinde
+rs (hs : s in measurableCylinders α) (ht : t in measurableCylinders α) : s inter
+ t in measurableCylinders α
 -/
-theorem univ_mem_measurableCylinders (α : ι -> Type*) [forall i, MeasurableSpace (α i)] :
-    Set.univ in measurableCylinders α := by
-  rw [← compl_empty]; exact compl_mem_measurableCylinders (empty_mem_measurableCylinders α)
-
-/--
-theorem `union_mem_measurableCylinders` / 定理 `union_mem_measurableCylinders`
-
-English:
-theorem union_mem_measurableCylinders
-  statement: (hs : s in measurableCylinders α)
-  proof: by
+theorem union_mem_measurableCylinders (hs : s ∈ measurableCylinders α)
+    (ht : t ∈ measurableCylinders α) :
+    s ∪ t ∈ measurableCylinders α := by
   rw [union_eq_compl_compl_inter_compl]
   exact compl_mem_measurableCylinders (inter_mem_measurableCylinders
     (compl_mem_measurableCylinders hs) (compl_mem_measurableCylinders ht))
-
-中文:
-定理 union_mem_measurableCylinders
-  结论: (hs : s in measurableCylinders α)
-  证明: by
-  rw [union_eq_compl_compl_inter_compl]
-  exact compl_mem_measurableCylinders (inter_mem_measurableCylinders
-    (compl_mem_measurableCylinders hs) (compl_mem_measurableCylinders ht))
-
-Depends on / 依赖: compl_mem_measurableCylinders, inter_mem_measurableCylinders, union_eq_compl_compl_inter_compl
+/-
+**MeasureTheory.sdiff_mem_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory`。
+形式化陈述：sdiff_mem_measurableCylinders (hs : s in measurableCylinders α) (ht : t in
+ measurableCylinders α) : s \ t in measurableCylinders α
+参数：hs : s in measurableCylinders α；ht : t in measurableCylinders α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_eq_compl_inter`：sdiff_eq_compl_inter {s t : Set α} : s \ t = t
+ᶜ inter s
+· 使用定理 `MeasureTheory.inter_mem_measurableCylinders`：inter_mem_measurableCylinde
+rs (hs : s in measurableCylinders α) (ht : t in measurableCylinders α) : s inter
+ t in measurableCylinders α
+· 使用定理 `MeasureTheory.compl_mem_measurableCylinders`：compl_mem_measurableCylinde
+rs (hs : s in measurableCylinders α) : sᶜ in measurableCylinders α
 -/
-theorem union_mem_measurableCylinders (hs : s in measurableCylinders α)
-    (ht : t in measurableCylinders α) :
-    s union t in measurableCylinders α := by
-  rw [union_eq_compl_compl_inter_compl]
-  exact compl_mem_measurableCylinders (inter_mem_measurableCylinders
-    (compl_mem_measurableCylinders hs) (compl_mem_measurableCylinders ht))
-
-/--
-theorem `sdiff_mem_measurableCylinders` / 定理 `sdiff_mem_measurableCylinders`
-
-English:
-theorem sdiff_mem_measurableCylinders
-  statement: (hs : s in measurableCylinders α)
-  proof: by
+theorem sdiff_mem_measurableCylinders (hs : s ∈ measurableCylinders α)
+    (ht : t ∈ measurableCylinders α) :
+    s \ t ∈ measurableCylinders α := by
   rw [sdiff_eq_compl_inter]
   exact inter_mem_measurableCylinders (compl_mem_measurableCylinders ht) hs
 
 @[deprecated (since := "2026-06-03")]
 alias diff_mem_measurableCylinders := sdiff_mem_measurableCylinders
 
-中文:
-定理 sdiff_mem_measurableCylinders
-  结论: (hs : s in measurableCylinders α)
-  证明: by
-  rw [sdiff_eq_compl_inter]
-  exact inter_mem_measurableCylinders (compl_mem_measurableCylinders ht) hs
+/-- The measurable cylinders generate the product σ-algebra. -/
+/-
+**MeasureTheory.generateFrom_measurableCylinders** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：generateFrom_measurableCylinders : MeasurableSpace.generateFrom (measurabl
+eCylinders α) = MeasurableSpace.pi
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.mem_measurableCylinders`：mem_measurableCylinders (t : Set 
+(forall i, α i)) : t in measurableCylinders α ↔ exists s S, MeasurableSet S ∧ t 
+= cylinder s S
+· 使用定理 `MeasurableSet.cylinder`：∀ {ι : Type u_2} {α : ι → Type u_1} [inst : (i :
+ ι) → MeasurableSpace (α i)] (s : Finset ι) {S : Set ((i : ↥s) → α ↑i)},   Measu
+rableSet S →…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.comap_eval_le_generateFrom_squareCylinders_singleton`：coma
+p_eval_le_generateFrom_squareCylinders_singleton (α : ι -> Type*) [m : forall i,
+ MeasurableSpace (α i)] (i : ι) : MeasurableSpace.comap …
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.singleton_pi`：singleton_pi (i : ι) (t : forall i, Set (α i)) : pi {i
+} t = eval i ⁻¹' t i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Finset.mem_singleton_self`：mem_singleton_self (a : α) : a in ({a} : Fins
+et α)
+· 使用定理 `measurable_pi_apply`：measurable_pi_apply (a : δ) : Measurable fun f : fo
+rall a, X a => f a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-@[deprecated (since := "2026-06-03")]
-alias diff_mem_measurableCylinders := sdiff_mem_measurableCylinders
-
-Depends on / 依赖: compl_mem_measurableCylinders, inter_mem_measurableCylinders, sdiff_eq_compl_inter
--/
-theorem sdiff_mem_measurableCylinders (hs : s in measurableCylinders α)
-    (ht : t in measurableCylinders α) :
-    s \ t in measurableCylinders α := by
-  rw [sdiff_eq_compl_inter]
-  exact inter_mem_measurableCylinders (compl_mem_measurableCylinders ht) hs
-
-@[deprecated (since := "2026-06-03")]
-alias diff_mem_measurableCylinders := sdiff_mem_measurableCylinders
-
-/--
-theorem `generateFrom_measurableCylinders` / 定理 `generateFrom_measurableCylinders`
-
-English:
-theorem generateFrom_measurableCylinders
-  proof: by
-  apply le_antisymm
-  · refine MeasurableSpace.generateFrom_le (fun S hS => ?_)
-    obtain ⟨s, S, hSm, rfl⟩ := (mem_measurableCylinders _).mp hS
-    exact hSm.cylinder
-  · refine iSup_le fun i => ?_
-    refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
-    refine MeasurableSpace.generateFrom_mono (fun x => ?_)
-    simp only [singleton_pi, mem_image, mem_pi, mem_univ, mem_ofPred_eq,
-      forall_true_left, mem_measurableCylinders, forall_exists_index, and_imp]
-    rintro t ht rfl
-    refine ⟨{i}, {f | f ⟨i, Finset.mem_singleton_self i⟩ in t i}, measurable_pi_apply _ (ht i), ?_⟩
-    ext1 x
-    simp only [mem_preimage, Function.eval, mem_cylinder, mem_ofPred_eq, Finset.restrict]
-
-中文:
-定理 generateFrom_measurableCylinders
-  证明: by
-  apply le_antisymm
-  · refine MeasurableSpace.generateFrom_le (fun S hS => ?_)
-    obtain ⟨s, S, hSm, rfl⟩ := (mem_measurableCylinders _).mp hS
-    exact hSm.cylinder
-  · refine iSup_le fun i => ?_
-    refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
-    refine MeasurableSpace.generateFrom_mono (fun x => ?_)
-    simp only [singleton_pi, mem_image, mem_pi, mem_univ, mem_ofPred_eq,
-      forall_true_left, mem_measurableCylinders, forall_exists_index, and_imp]
-    rintro t ht rfl
-    refine ⟨{i}, {f | f ⟨i, Finset.mem_singleton_self i⟩ in t i}, measurable_pi_apply _ (ht i), ?_⟩
-    ext1 x
-    simp only [mem_preimage, Function.eval, mem_cylinder, mem_ofPred_eq, Finset.restrict]
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.generateFrom_le, MeasurableSpace.generateFrom_mono, and_imp, comap_eval_le_generateFrom_squareCylinders_singleton, cylinder, forall_exists_index, forall_true_left, generateFrom_le, generateFrom_mono, hSm.cylinder, iSup_le, le_antisymm, mem_image, mem_measurableCylinders, mem_ofPred_eq, mem_pi, mem_univ, singleton_pi
+--- 原说明 ---
+The measurable cylinders generate the product σ-algebra.
 -/
 theorem generateFrom_measurableCylinders :
     MeasurableSpace.generateFrom (measurableCylinders α) = MeasurableSpace.pi := by
   apply le_antisymm
-  · refine MeasurableSpace.generateFrom_le (fun S hS => ?_)
+  · refine MeasurableSpace.generateFrom_le (fun S hS ↦ ?_)
     obtain ⟨s, S, hSm, rfl⟩ := (mem_measurableCylinders _).mp hS
     exact hSm.cylinder
-  · refine iSup_le fun i => ?_
+  · refine iSup_le fun i ↦ ?_
     refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
-    refine MeasurableSpace.generateFrom_mono (fun x => ?_)
+    refine MeasurableSpace.generateFrom_mono (fun x ↦ ?_)
     simp only [singleton_pi, mem_image, mem_pi, mem_univ, mem_ofPred_eq,
       forall_true_left, mem_measurableCylinders, forall_exists_index, and_imp]
     rintro t ht rfl
-    refine ⟨{i}, {f | f ⟨i, Finset.mem_singleton_self i⟩ in t i}, measurable_pi_apply _ (ht i), ?_⟩
+    refine ⟨{i}, {f | f ⟨i, Finset.mem_singleton_self i⟩ ∈ t i}, measurable_pi_apply _ (ht i), ?_⟩
     ext1 x
     simp only [mem_preimage, Function.eval, mem_cylinder, mem_ofPred_eq, Finset.restrict]
 
-/--
-theorem `measurableCylinders_nat` / 定理 `measurableCylinders_nat`
+/-- The cylinders of a product space indexed by `ℕ` can be seen as depending on the first
+coordinates. -/
+/-
+**MeasureTheory.measurableCylinders_nat** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+`。
+形式化陈述：measurableCylinders_nat {X : Nat -> Type*} [forall n, MeasurableSpace (X n
+)] : measurableCylinders X = ⋃ (a) (S) (_ : MeasurableSet S), {cylinder (Finset.
+Iic a) S}
+参数：X n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Finset.subset_Iic_sup_id`：subset_Iic_sup_id [OrderBot α] (s : Finset α) 
+: s subseteq Iic (s.sup id)
+· 使用定理 `Finset.measurable_restrict₂`：Finset.measurable_restrict₂ {s t : Finset δ
+} (hst : s subseteq t) : Measurable (Finset.restrict₂ (π
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.preimage_comp`：preimage_comp {s : Set γ} : g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹'
+ s
+· 使用定理 `Finset.restrict₂_comp_restrict`：restrict₂_comp_restrict (hst : s subsete
+q t) : (restrict₂ (π
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 
-English:
-theorem measurableCylinders_nat
-  given: {X : Nat -> Type*} [forall n, MeasurableSpace (X n)]
-  proof: by
-  ext s
-  simp only [mem_measurableCylinders, exists_prop, mem_iUnion]
-  refine ⟨?_, fun ⟨N, S, mS, s_eq⟩ => ⟨Finset.Iic N, S, mS, s_eq⟩⟩
-  rintro ⟨t, S, mS, rfl⟩
-  refine ⟨t.sup id, Finset.restrict₂ t.subset_Iic_sup_id ⁻¹' S,
-    Finset.measurable_restrict₂ _ mS, ?_⟩
-  unfold cylinder
-  rw [← preimage_comp]; rw [Finset.restrict₂_comp_restrict]
-  exact mem_singleton _
-
-中文:
-定理 measurableCylinders_nat
-  条件: {X : 自然数 -> 类型} [对任意 n, 可测空间 (X n)]
-  证明: by
-  ext s
-  simp only [mem_measurableCylinders, exists_prop, mem_iUnion]
-  refine ⟨?_, fun ⟨N, S, mS, s_eq⟩ => ⟨Finset.Iic N, S, mS, s_eq⟩⟩
-  rintro ⟨t, S, mS, rfl⟩
-  refine ⟨t.sup id, Finset.restrict₂ t.subset_Iic_sup_id ⁻¹' S,
-    Finset.measurable_restrict₂ _ mS, ?_⟩
-  unfold cylinder
-  rw [← preimage_comp]; rw [Finset.restrict₂_comp_restrict]
-  exact mem_singleton _
-
-Depends on / 依赖: Finset, Finset.Iic, Finset.measurable_restrict, Finset.restrict, cylinder, exists_prop, mem_iUnion, mem_measurableCylinders, mem_singleton, preimage_comp, s_eq, subset_Iic_sup_id, t.subset_Iic_sup_id, t.sup
+--- 原说明 ---
+The cylinders of a product space indexed by `ℕ` can be seen as depending on the 
+first
+coordinates.
 -/
-theorem measurableCylinders_nat {X : Nat -> Type*} [forall n, MeasurableSpace (X n)] :
+theorem measurableCylinders_nat {X : ℕ → Type*} [∀ n, MeasurableSpace (X n)] :
     measurableCylinders X = ⋃ (a) (S) (_ : MeasurableSet S), {cylinder (Finset.Iic a) S} := by
   ext s
   simp only [mem_measurableCylinders, exists_prop, mem_iUnion]
-  refine ⟨?_, fun ⟨N, S, mS, s_eq⟩ => ⟨Finset.Iic N, S, mS, s_eq⟩⟩
+  refine ⟨?_, fun ⟨N, S, mS, s_eq⟩ ↦ ⟨Finset.Iic N, S, mS, s_eq⟩⟩
   rintro ⟨t, S, mS, rfl⟩
   refine ⟨t.sup id, Finset.restrict₂ t.subset_Iic_sup_id ⁻¹' S,
     Finset.measurable_restrict₂ _ mS, ?_⟩
   unfold cylinder
-  rw [← preimage_comp]; rw [Finset.restrict₂_comp_restrict]
+  rw [← preimage_comp, Finset.restrict₂_comp_restrict]
   exact mem_singleton _
 
 end cylinders
@@ -1282,215 +1130,201 @@ end cylinders
 
 section cylinderEvents
 
-variable {α ι : Type*} {X : ι -> Type*} {mα : MeasurableSpace α} [m : forall i, MeasurableSpace (X i)]
+variable {α ι : Type*} {X : ι → Type*} {mα : MeasurableSpace α} [m : ∀ i, MeasurableSpace (X i)]
   {Δ Δ₁ Δ₂ : Set ι} {i : ι}
 
 /-- The σ-algebra of cylinder events on `Δ`. It is the smallest σ-algebra making the projections
 on the `i`-th coordinate measurable for all `i ∈ Δ`. -/
 @[instance_reducible]
-/--
-Definition of `cylinderEvents` / `cylinderEvents` 的定义
+/-
+**MeasureTheory.cylinderEvents** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory`。
+形式化陈述：cylinderEvents (Δ : Set ι) : MeasurableSpace (forall i, X i)
+参数：Δ : Set ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cylinderEvents
-  signature: (Δ : Set ι)
-  body: ⨆ i in Δ, (m i).comap fun σ => σ i
-
-中文:
-定义 cylinderEvents
-  签名: (Δ : 集合 ι)
-  定义体: ⨆ i in Δ, (m i).comap fun σ => σ i
+--- 原说明 ---
+The σ-algebra of cylinder events on `Δ`. It is the smallest σ-algebra making the
+ projections
+on the `i`-th coordinate measurable for all `i ∈ Δ`.
 -/
-def cylinderEvents (Δ : Set ι) : MeasurableSpace (forall i, X i) := ⨆ i in Δ, (m i).comap fun σ => σ i
-
-/--
-lemma `cylinderEvents_univ` / 引理 `cylinderEvents_univ`
-
-English:
-lemma cylinderEvents_univ
-  statement: cylinderEvents (X := X) univ = MeasurableSpace.pi
-  proof: by
-  simp [cylinderEvents, MeasurableSpace.pi]
-
-@[gcongr]
-
-中文:
-引理 cylinderEvents_univ
-  结论: cylinderEvents (X := X) univ = 可测空间.pi
-  证明: by
-  simp [cylinderEvents, MeasurableSpace.pi]
-
-@[gcongr]
+def cylinderEvents (Δ : Set ι) : MeasurableSpace (∀ i, X i) := ⨆ i ∈ Δ, (m i).comap fun σ ↦ σ i
+/-
+**MeasureTheory.cylinderEvents_univ** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：∀ {ι : Type u_2} {X : ι → Type u_3} [m : (i : ι) → MeasurableSpace (X i)],
+   MeasureTheory.cylinderEvents Set.univ = MeasurableSpace.pi
+参数：i : ι；X i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma cylinderEvents_univ : cylinderEvents (X := X) univ = MeasurableSpace.pi := by
   simp [cylinderEvents, MeasurableSpace.pi]
 
 @[gcongr]
-/--
-lemma `cylinderEvents_mono` / 引理 `cylinderEvents_mono`
-
-English:
-lemma cylinderEvents_mono
-  given: (h : Δ₁ subseteq Δ₂)
-  statement: cylinderEvents (X := X) Δ₁ <= cylinderEvents Δ₂
-  proof: biSup_mono h
-
-中文:
-引理 cylinderEvents_mono
-  条件: (h : Δ₁ subseteq Δ₂)
-  结论: cylinderEvents (X := X) Δ₁ <= cylinderEvents Δ₂
-  证明: biSup_mono h
-
-Depends on / 依赖: cylinderEvents
+/-
+**MeasureTheory.cylinderEvents_mono** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：cylinderEvents_mono (h : Δ₁ subseteq Δ₂) : cylinderEvents (X
+参数：h : Δ₁ subseteq Δ₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `biSup_mono`：biSup_mono {p q : ι -> Prop} (hpq : forall i, p i -> q i) : 
+⨆ (i) (_ : p i), f i <= ⨆ (i) (_ : q i), f i
 -/
-lemma cylinderEvents_mono (h : Δ₁ subseteq Δ₂) : cylinderEvents (X := X) Δ₁ <= cylinderEvents Δ₂ :=
+lemma cylinderEvents_mono (h : Δ₁ ⊆ Δ₂) : cylinderEvents (X := X) Δ₁ ≤ cylinderEvents Δ₂ :=
   biSup_mono h
-
-/--
-lemma `cylinderEvents_le_pi` / 引理 `cylinderEvents_le_pi`
-
-English:
-lemma cylinderEvents_le_pi
-  statement: cylinderEvents (X := X) Δ <= MeasurableSpace.pi
-  proof: by
-  simpa using cylinderEvents_mono (subset_univ _)
-
-中文:
-引理 cylinderEvents_le_pi
-  结论: cylinderEvents (X := X) Δ <= 可测空间.pi
-  证明: by
-  simpa using cylinderEvents_mono (subset_univ _)
-
-Depends on / 依赖: MeasurableSpace, MeasurableSpace.pi, cylinderEvents_mono, subset_univ
+/-
+**MeasureTheory.cylinderEvents_le_pi** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：cylinderEvents_le_pi : cylinderEvents (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.cylinderEvents_univ`：∀ {ι : Type u_2} {X : ι → Type u_3} [
+m : (i : ι) → MeasurableSpace (X i)],   MeasureTheory.cylinderEvents Set.univ = 
+MeasurableSpace.pi
+· 使用引理 `MeasureTheory.cylinderEvents_mono`：cylinderEvents_mono (h : Δ₁ subseteq 
+Δ₂) : cylinderEvents (X
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 -/
-lemma cylinderEvents_le_pi : cylinderEvents (X := X) Δ <= MeasurableSpace.pi := by
+lemma cylinderEvents_le_pi : cylinderEvents (X := X) Δ ≤ MeasurableSpace.pi := by
   simpa using cylinderEvents_mono (subset_univ _)
-
-/--
-lemma `measurable_cylinderEvents_iff` / 引理 `measurable_cylinderEvents_iff`
-
-English:
-lemma measurable_cylinderEvents_iff
-  given: {g : α -> forall i, X i}
-  proof: by
+/-
+**MeasureTheory.measurable_cylinderEvents_iff** 是 Mathlib 中的一个引理，位于命名空间 `Measure
+Theory`。
+形式化陈述：measurable_cylinderEvents_iff {g : α -> forall i, X i} : @Measurable _ _ _
+ (cylinderEvents Δ) g ↔ forall ⦃i⦄, i in Δ -> Measurable fun a => g a i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasurableSpace.comap_iSup`：comap_iSup {m : ι -> MeasurableSpace α} : (⨆
+ i, m i).comap g = ⨆ i, (m i).comap g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `MeasurableSpace.comap_comp`：comap_comp {f : β -> α} {g : γ -> β} : (m.co
+map f).comap g = m.comap (f ∘ g)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma measurable_cylinderEvents_iff {g : α → ∀ i, X i} :
+    @Measurable _ _ _ (cylinderEvents Δ) g ↔ ∀ ⦃i⦄, i ∈ Δ → Measurable fun a ↦ g a i := by
   simp_rw [measurable_iff_comap_le, cylinderEvents, MeasurableSpace.comap_iSup,
     MeasurableSpace.comap_comp, Function.comp_def, iSup_le_iff]
 
 @[fun_prop]
-
-中文:
-引理 measurable_cylinderEvents_iff
-  条件: {g : α -> 对任意 i, X i}
-  证明: by
-  simp_rw [measurable_iff_comap_le, cylinderEvents, MeasurableSpace.comap_iSup,
-    MeasurableSpace.comap_comp, Function.comp_def, iSup_le_iff]
-
-@[fun_prop]
-
-Depends on / 依赖: Function, Function.comp_def, MeasurableSpace, MeasurableSpace.comap_comp, MeasurableSpace.comap_iSup, comap_comp, comap_iSup, comp_def, cylinderEvents, iSup_le_iff, measurable_iff_comap_le, simp_rw
+/-
+**MeasureTheory.measurable_cylinderEvent_apply** 是 Mathlib 中的一个引理，位于命名空间 `Measur
+eTheory`。
+形式化陈述：measurable_cylinderEvent_apply (hi : i in Δ) : Measurable[cylinderEvents Δ
+] fun f : forall i, X i => f i
+参数：hi : i in Δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `MeasureTheory.measurable_cylinderEvents_iff`：measurable_cylinderEvents_i
+ff {g : α -> forall i, X i} : @Measurable _ _ _ (cylinderEvents Δ) g ↔ forall ⦃i
+⦄, i in Δ -> Measurable fun a => …
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
-lemma measurable_cylinderEvents_iff {g : α -> forall i, X i} :
-    @Measurable _ _ _ (cylinderEvents Δ) g ↔ forall ⦃i⦄, i in Δ -> Measurable fun a => g a i := by
-  simp_rw [measurable_iff_comap_le, cylinderEvents, MeasurableSpace.comap_iSup,
-    MeasurableSpace.comap_comp, Function.comp_def, iSup_le_iff]
-
-@[fun_prop]
-/--
-lemma `measurable_cylinderEvent_apply` / 引理 `measurable_cylinderEvent_apply`
-
-English:
-lemma measurable_cylinderEvent_apply
-  given: (hi : i in Δ)
-  proof: measurable_cylinderEvents_iff.1 measurable_id hi
-
-中文:
-引理 measurable_cylinderEvent_apply
-  条件: (hi : i in Δ)
-  证明: measurable_cylinderEvents_iff.1 measurable_id hi
-
-Depends on / 依赖: measurable_cylinderEvents_iff, measurable_id
--/
-lemma measurable_cylinderEvent_apply (hi : i in Δ) :
-    Measurable[cylinderEvents Δ] fun f : forall i, X i => f i :=
+lemma measurable_cylinderEvent_apply (hi : i ∈ Δ) :
+    Measurable[cylinderEvents Δ] fun f : ∀ i, X i => f i :=
   measurable_cylinderEvents_iff.1 measurable_id hi
-
-/--
-lemma `Measurable.eval_cylinderEvents` / 引理 `Measurable.eval_cylinderEvents`
-
-English:
-lemma Measurable.eval_cylinderEvents
-  statement: {g : α -> forall i, X i} (hi : i in Δ)
-  proof: (measurable_cylinderEvent_apply hi).comp hg
-
-@[fun_prop]
-
-中文:
-引理 可测.eval_cylinderEvents
-  结论: {g : α -> 对任意 i, X i} (hi : i in Δ)
-  证明: (measurable_cylinderEvent_apply hi).comp hg
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_cylinderEvent_apply
+/-
+**MeasureTheory.Measurable.eval_cylinderEvents** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.Measurable`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_2} {X : ι → Type u_3} {mα : MeasurableSpace α
+} [m : (i : ι) → MeasurableSpace (X i)]   {Δ : Set ι} {i : ι} {g : α → (i : ι) →
+ X i}, i ∈ Δ → Measurable g → Measurable fun a => g a i
+参数：i : ι；X i；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `MeasureTheory.measurable_cylinderEvent_apply`：measurable_cylinderEvent_a
+pply (hi : i in Δ) : Measurable[cylinderEvents Δ] fun f : forall i, X i => f i
 -/
-lemma Measurable.eval_cylinderEvents {g : α -> forall i, X i} (hi : i in Δ)
-    (hg : @Measurable _ _ _ (cylinderEvents Δ) g) : Measurable fun a => g a i :=
+lemma Measurable.eval_cylinderEvents {g : α → ∀ i, X i} (hi : i ∈ Δ)
+    (hg : @Measurable _ _ _ (cylinderEvents Δ) g) : Measurable fun a ↦ g a i :=
   (measurable_cylinderEvent_apply hi).comp hg
 
 @[fun_prop]
-/--
-lemma `measurable_cylinderEvents_lambda` / 引理 `measurable_cylinderEvents_lambda`
-
-English:
-lemma measurable_cylinderEvents_lambda
-  given: (f : α -> forall i, X i) (hf : forall i, Measurable fun a => f a i)
-  proof: measurable_pi_iff.mpr hf
-
-中文:
-引理 measurable_cylinderEvents_lambda
-  条件: (f : α -> 对任意 i, X i) (hf : 对任意 i, 可测 fun a => f a i)
-  证明: measurable_pi_iff.mpr hf
-
-Depends on / 依赖: measurable_pi_iff, measurable_pi_iff.mpr
+/-
+**MeasureTheory.measurable_cylinderEvents_lambda** 是 Mathlib 中的一个引理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：measurable_cylinderEvents_lambda (f : α -> forall i, X i) (hf : forall i, 
+Measurable fun a => f a i) : Measurable f
+参数：f : α -> forall i, X i；hf : forall i, Measurable fun a => f a i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `measurable_pi_iff`：measurable_pi_iff {g : α -> forall a, X a} : Measurab
+le g ↔ forall a, Measurable fun x => g x a
 -/
-lemma measurable_cylinderEvents_lambda (f : α -> forall i, X i) (hf : forall i, Measurable fun a => f a i) :
+lemma measurable_cylinderEvents_lambda (f : α → ∀ i, X i) (hf : ∀ i, Measurable fun a ↦ f a i) :
     Measurable f :=
   measurable_pi_iff.mpr hf
 
-/--
-lemma `measurable_update_cylinderEvents'` / 引理 `measurable_update_cylinderEvents'`
+/-- The function `(f, x) ↦ update f a x : (Π a, X a) × X a → Π a, X a` is measurable. -/
+/-
+**MeasureTheory.measurable_update_cylinderEvents'** 是 Mathlib 中的一个引理，位于命名空间 `Mea
+sureTheory`。
+形式化陈述：measurable_update_cylinderEvents' [DecidableEq ι] : @Measurable _ _ (.prod
+ (cylinderEvents Δ) (m i)) (cylinderEvents Δ) (fun p : (forall i, X i) × X i => 
+update p.1 i p.2)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MeasureTheory.measurable_cylinderEvents_iff`：measurable_cylinderEvents_i
+ff {g : α -> forall i, X i} : @Measurable _ _ _ (cylinderEvents Δ) g ↔ forall ⦃i
+⦄, i in Δ -> Measurable fun a => …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
 
-English:
-lemma measurable_update_cylinderEvents'
-  given: [DecidableEq ι]
-  proof: by
-  rw [measurable_cylinderEvents_iff]
-  intro j hj
-  dsimp [update]
-  split_ifs with h
-  · subst h
-    dsimp
-    exact measurable_snd
-  · exact measurable_cylinderEvents_iff.1 measurable_fst hj
-
-中文:
-引理 measurable_update_cylinderEvents'
-  条件: [DecidableEq ι]
-  证明: by
-  rw [measurable_cylinderEvents_iff]
-  intro j hj
-  dsimp [update]
-  split_ifs with h
-  · subst h
-    dsimp
-    exact measurable_snd
-  · exact measurable_cylinderEvents_iff.1 measurable_fst hj
-
-Depends on / 依赖: measurable_cylinderEvents_iff, measurable_fst, measurable_snd, split_ifs, update
+--- 原说明 ---
+The function `(f, x) ↦ update f a x : (Π a, X a) × X a → Π a, X a` is measurable
+.
 -/
 lemma measurable_update_cylinderEvents' [DecidableEq ι] :
     @Measurable _ _ (.prod (cylinderEvents Δ) (m i)) (cylinderEvents Δ)
-      (fun p : (forall i, X i) × X i => update p.1 i p.2) := by
+      (fun p : (∀ i, X i) × X i ↦ update p.1 i p.2) := by
   rw [measurable_cylinderEvents_iff]
   intro j hj
   dsimp [update]
@@ -1499,148 +1333,161 @@ lemma measurable_update_cylinderEvents' [DecidableEq ι] :
     dsimp
     exact measurable_snd
   · exact measurable_cylinderEvents_iff.1 measurable_fst hj
-
-/--
-lemma `measurable_uniqueElim_cylinderEvents` / 引理 `measurable_uniqueElim_cylinderEvents`
-
-English:
-lemma measurable_uniqueElim_cylinderEvents
-  given: [Unique ι]
-  proof: by
-  simp_rw [measurable_pi_iff, Unique.forall_iff, uniqueElim_default]; exact measurable_id
-
-中文:
-引理 measurable_uniqueElim_cylinderEvents
-  条件: [唯一 ι]
-  证明: by
-  simp_rw [measurable_pi_iff, Unique.forall_iff, uniqueElim_default]; exact measurable_id
-
-Depends on / 依赖: Unique, Unique.forall_iff, forall_iff, measurable_id, measurable_pi_iff, simp_rw, uniqueElim_default
+/-
+**MeasureTheory.measurable_uniqueElim_cylinderEvents** 是 Mathlib 中的一个引理，位于命名空间 `
+MeasureTheory`。
+形式化陈述：measurable_uniqueElim_cylinderEvents [Unique ι] : Measurable (uniqueElim :
+ X (default : ι) -> forall i, X i)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
 lemma measurable_uniqueElim_cylinderEvents [Unique ι] :
-    Measurable (uniqueElim : X (default : ι) -> forall i, X i) := by
+    Measurable (uniqueElim : X (default : ι) → ∀ i, X i) := by
   simp_rw [measurable_pi_iff, Unique.forall_iff, uniqueElim_default]; exact measurable_id
 
 /-- The function `update f a : X a → Π a, X a` is always measurable.
 This doesn't require `f` to be measurable.
 This should not be confused with the statement that `update f a x` is measurable. -/
 @[fun_prop]
-/--
-lemma `measurable_update_cylinderEvents` / 引理 `measurable_update_cylinderEvents`
+/-
+**MeasureTheory.measurable_update_cylinderEvents** 是 Mathlib 中的一个引理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：measurable_update_cylinderEvents (f : forall a : ι, X a) {a : ι} [Decidabl
+eEq ι] : @Measurable _ _ _ (cylinderEvents Δ) (update f a)
+参数：f : forall a : ι, X a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `MeasureTheory.measurable_update_cylinderEvents'`：measurable_update_cylin
+derEvents' [DecidableEq ι] : @Measurable _ _ (.prod (cylinderEvents Δ) (m i)) (c
+ylinderEvents Δ) (fun p : (forall i, …
+· 使用定理 `measurable_prodMk_left`：measurable_prodMk_left {x : α} : Measurable (@Pr
+od.mk _ β x)
 
-English:
-lemma measurable_update_cylinderEvents
-  given: (f : forall a : ι, X a) {a : ι} [DecidableEq ι]
-  proof: measurable_update_cylinderEvents'.comp measurable_prodMk_left
-
-中文:
-引理 measurable_update_cylinderEvents
-  条件: (f : 对任意 a : ι, X a) {a : ι} [DecidableEq ι]
-  证明: measurable_update_cylinderEvents'.comp measurable_prodMk_left
-
-Depends on / 依赖: measurable_prodMk_left, measurable_update_cylinderEvents
+--- 原说明 ---
+The function `update f a : X a → Π a, X a` is always measurable.
+This doesn't require `f` to be measurable.
+This should not be confused with the statement that `update f a x` is measurable
+.
 -/
-lemma measurable_update_cylinderEvents (f : forall a : ι, X a) {a : ι} [DecidableEq ι] :
+lemma measurable_update_cylinderEvents (f : ∀ a : ι, X a) {a : ι} [DecidableEq ι] :
     @Measurable _ _ _ (cylinderEvents Δ) (update f a) :=
   measurable_update_cylinderEvents'.comp measurable_prodMk_left
-
-/--
-lemma `measurable_update_cylinderEvents_left` / 引理 `measurable_update_cylinderEvents_left`
-
-English:
-lemma measurable_update_cylinderEvents_left
-  given: {a : ι} [DecidableEq ι] {x : X a}
-  proof: measurable_update_cylinderEvents'.comp measurable_prodMk_right
-
-中文:
-引理 measurable_update_cylinderEvents_left
-  条件: {a : ι} [DecidableEq ι] {x : X a}
-  证明: measurable_update_cylinderEvents'.comp measurable_prodMk_right
-
-Depends on / 依赖: measurable_prodMk_right, measurable_update_cylinderEvents
+/-
+**MeasureTheory.measurable_update_cylinderEvents_left** 是 Mathlib 中的一个引理，位于命名空间 
+`MeasureTheory`。
+形式化陈述：measurable_update_cylinderEvents_left {a : ι} [DecidableEq ι] {x : X a} : 
+@Measurable _ _ (cylinderEvents Δ) (cylinderEvents Δ) (update · a x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `MeasureTheory.measurable_update_cylinderEvents'`：measurable_update_cylin
+derEvents' [DecidableEq ι] : @Measurable _ _ (.prod (cylinderEvents Δ) (m i)) (c
+ylinderEvents Δ) (fun p : (forall i, …
+· 使用定理 `measurable_prodMk_right`：measurable_prodMk_right {y : β} : Measurable fu
+n x : α => (x, y)
 -/
 lemma measurable_update_cylinderEvents_left {a : ι} [DecidableEq ι] {x : X a} :
     @Measurable _ _ (cylinderEvents Δ) (cylinderEvents Δ) (update · a x) :=
   measurable_update_cylinderEvents'.comp measurable_prodMk_right
-
-/--
-lemma `measurable_restrict_cylinderEvents` / 引理 `measurable_restrict_cylinderEvents`
-
-English:
-lemma measurable_restrict_cylinderEvents
-  given: (Δ : Set ι)
-  proof: by
-  rw [@measurable_pi_iff]; exact fun i => measurable_cylinderEvent_apply i.2
-
-中文:
-引理 measurable_restrict_cylinderEvents
-  条件: (Δ : 集合 ι)
-  证明: by
-  rw [@measurable_pi_iff]; exact fun i => measurable_cylinderEvent_apply i.2
-
-Depends on / 依赖: domRestrict, measurable_cylinderEvent_apply, measurable_pi_iff
+/-
+**MeasureTheory.measurable_restrict_cylinderEvents** 是 Mathlib 中的一个引理，位于命名空间 `Me
+asureTheory`。
+形式化陈述：measurable_restrict_cylinderEvents (Δ : Set ι) : Measurable[cylinderEvents
+ (X
+参数：Δ : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `measurable_pi_iff`：measurable_pi_iff {g : α -> forall a, X a} : Measurab
+le g ↔ forall a, Measurable fun x => g x a
+· 使用引理 `MeasureTheory.measurable_cylinderEvent_apply`：measurable_cylinderEvent_a
+pply (hi : i in Δ) : Measurable[cylinderEvents Δ] fun f : forall i, X i => f i
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma measurable_restrict_cylinderEvents (Δ : Set ι) :
     Measurable[cylinderEvents (X := X) Δ] (domRestrict Δ) := by
-  rw [@measurable_pi_iff]; exact fun i => measurable_cylinderEvent_apply i.2
+  rw [@measurable_pi_iff]; exact fun i ↦ measurable_cylinderEvent_apply i.2
 
 end cylinderEvents
 
-/--
-lemma `MeasurableSet.eq_preimage_restrict_countable` / 引理 `MeasurableSet.eq_preimage_restrict_countable`
+/-- A measurable set from the product sigma-algebra only depends on countably many coordinates. -/
+/-
+**MeasureTheory.MeasurableSet.eq_preimage_restrict_countable** 是 Mathlib 中的一个定理，
+位于命名空间 `MeasureTheory.MeasurableSet`。
+形式化陈述：∀ {ι : Type u_2} {α : ι → Type u_1} [inst : (i : ι) → MeasurableSpace (α i
+)] {s : Set ((i : ι) → α i)},   MeasurableSet s → ∃ I t, I.Countable ∧ s = I.dom
+Restrict ⁻¹' t
+参数：i : ι；α i；(i : ι) → α i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.induction_on_inter`：induction_on_inter {m : MeasurableSp
+ace α} {C : forall s : Set α, MeasurableSet s -> Prop} {s : Set (Set α)} (h_eq :
+ m = generateFrom s) (h_…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.generateFrom_squareCylinders`：generateFrom_squareCylinders
+ [forall i, MeasurableSpace (α i)] : MeasurableSpace.generateFrom (squareCylinde
+rs fun i => {s : Set (α i) | Mea…
+· 使用定理 `MeasureTheory.isPiSystem_squareCylinders`：isPiSystem_squareCylinders {C 
+: forall i, Set (Set (α i))} (hC : forall i, IsPiSystem (C i)) (hC_univ : forall
+ i, univ in C i) : IsPiSystem …
+· 使用定理 `MeasurableSpace.isPiSystem_measurableSet`：isPiSystem_measurableSet {α : 
+Type*} [MeasurableSpace α] : IsPiSystem { s : Set α | MeasurableSet s }
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Finset.countable_toSet`：Finset.countable_toSet (s : Finset α) : Set.Coun
+table (↑s : Set α)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Set.countable_iUnion`：countable_iUnion {t : ι -> Set α} [Countable ι] (h
+t : forall i, (t i).Countable) : (⋃ i, t i).Countable
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.preimage_iUnion`：preimage_iUnion {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-lemma MeasurableSet.eq_preimage_restrict_countable
-  proof: by
-  refine induction_on_inter generateFrom_squareCylinders.symm
-    (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp))
-    ⟨∅, ∅, by simp⟩ ?_ ?_ ?_ s hs
-  · rintro - ⟨I, t, -, rfl⟩
-    exact ⟨I, univ.pi (fun i => t i), I.countable_toSet, by ext; simp⟩
-  · rintro - - ⟨I, t, hI, rfl⟩
-    exact ⟨I, tᶜ, hI, by simp⟩
-  intro f df mf hf
-  choose! I t hI hf using hf
-  refine ⟨⋃ n, I n, ⋃ n, (⋃ k, I k).domRestrict '' (f n), countable_iUnion hI, ?_⟩
-  ext x
-  simp only [hf, mem_iUnion, mem_preimage, preimage_iUnion, mem_image]
-  refine ⟨fun ⟨i, hi⟩ => ⟨i, x, hi, rfl⟩, fun ⟨n, x', hn, hx⟩ => ⟨n, ?_⟩⟩
-  have (x : Π i, α i) : (I n).domRestrict x =
-      (fun (x : Π (i : ⋃ k, I k), α i) (i : I n) => x ⟨i.1, subset_iUnion I n i.2⟩)
-      ((⋃ k, I k).domRestrict x) := rfl
-  rwa [this, ← hx, ← this]
-
-中文:
-引理 可测集.eq_preimage_restrict_countable
-  证明: by
-  refine induction_on_inter generateFrom_squareCylinders.symm
-    (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp))
-    ⟨∅, ∅, by simp⟩ ?_ ?_ ?_ s hs
-  · rintro - ⟨I, t, -, rfl⟩
-    exact ⟨I, univ.pi (fun i => t i), I.countable_toSet, by ext; simp⟩
-  · rintro - - ⟨I, t, hI, rfl⟩
-    exact ⟨I, tᶜ, hI, by simp⟩
-  intro f df mf hf
-  choose! I t hI hf using hf
-  refine ⟨⋃ n, I n, ⋃ n, (⋃ k, I k).domRestrict '' (f n), countable_iUnion hI, ?_⟩
-  ext x
-  simp only [hf, mem_iUnion, mem_preimage, preimage_iUnion, mem_image]
-  refine ⟨fun ⟨i, hi⟩ => ⟨i, x, hi, rfl⟩, fun ⟨n, x', hn, hx⟩ => ⟨n, ?_⟩⟩
-  have (x : Π i, α i) : (I n).domRestrict x =
-      (fun (x : Π (i : ⋃ k, I k), α i) (i : I n) => x ⟨i.1, subset_iUnion I n i.2⟩)
-      ((⋃ k, I k).domRestrict x) := rfl
-  rwa [this, ← hx, ← this]
-
-Depends on / 依赖: I.countable_toSet, countable_iUnion, countable_toSet, domRestrict, generateFrom_squareCylinders, generateFrom_squareCylinders.symm, induction_on_inter, isPiSystem_measurableSet, isPiSystem_squareCylinders, mem_iUnion, mem_preimage, preimage_iU, univ.pi
+--- 原说明 ---
+A measurable set from the product sigma-algebra only depends on countably many c
+oordinates.
 -/
 lemma MeasurableSet.eq_preimage_restrict_countable
-    [forall i, MeasurableSpace (α i)] {s : Set (Π i, α i)} (hs : MeasurableSet s) :
-    exists I : Set ι, exists t, I.Countable ∧ s = I.domRestrict ⁻¹' t := by
+    [∀ i, MeasurableSpace (α i)] {s : Set (Π i, α i)} (hs : MeasurableSet s) :
+    ∃ I : Set ι, ∃ t, I.Countable ∧ s = I.domRestrict ⁻¹' t := by
   refine induction_on_inter generateFrom_squareCylinders.symm
-    (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp))
+    (isPiSystem_squareCylinders (fun _ ↦ isPiSystem_measurableSet) (by simp))
     ⟨∅, ∅, by simp⟩ ?_ ?_ ?_ s hs
   · rintro - ⟨I, t, -, rfl⟩
-    exact ⟨I, univ.pi (fun i => t i), I.countable_toSet, by ext; simp⟩
+    exact ⟨I, univ.pi (fun i ↦ t i), I.countable_toSet, by ext; simp⟩
   · rintro - - ⟨I, t, hI, rfl⟩
     exact ⟨I, tᶜ, hI, by simp⟩
   intro f df mf hf
@@ -1648,10 +1495,11 @@ lemma MeasurableSet.eq_preimage_restrict_countable
   refine ⟨⋃ n, I n, ⋃ n, (⋃ k, I k).domRestrict '' (f n), countable_iUnion hI, ?_⟩
   ext x
   simp only [hf, mem_iUnion, mem_preimage, preimage_iUnion, mem_image]
-  refine ⟨fun ⟨i, hi⟩ => ⟨i, x, hi, rfl⟩, fun ⟨n, x', hn, hx⟩ => ⟨n, ?_⟩⟩
+  refine ⟨fun ⟨i, hi⟩ ↦ ⟨i, x, hi, rfl⟩, fun ⟨n, x', hn, hx⟩ ↦ ⟨n, ?_⟩⟩
   have (x : Π i, α i) : (I n).domRestrict x =
-      (fun (x : Π (i : ⋃ k, I k), α i) (i : I n) => x ⟨i.1, subset_iUnion I n i.2⟩)
+      (fun (x : Π (i : ⋃ k, I k), α i) (i : I n) ↦ x ⟨i.1, subset_iUnion I n i.2⟩)
       ((⋃ k, I k).domRestrict x) := rfl
   rwa [this, ← hx, ← this]
 
 end MeasureTheory
+

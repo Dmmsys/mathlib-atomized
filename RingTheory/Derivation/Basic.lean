@@ -37,28 +37,31 @@ and `Mathlib/RingTheory/Derivation/ToSquareZero.lean` for
 
 open Algebra
 
-/--
-Definition of `Derivation` / `Derivation` 的定义
+/-- `D : Derivation R A M` is an `R`-linear map from `A` to `M` that satisfies the `leibniz`
+equality. We also require that `D 1 = 0`. See `Derivation.mk'` for a constructor that deduces this
+assumption from the Leibniz rule when `M` is cancellative.
 
-English:
-structure Derivation
-  parameters: (R : Type*) (A : Type*) (M : Type*)
-  extends: A ->ₗ[R] M
-  axioms and operations (2):
-    - map_one_eq_zero' : toLinearMap 1 = 0
-    - leibniz'((a b : A)) : toLinearMap (a * b) = a • toLinearMap b + b • toLinearMap a
+TODO: update this when bimodules are defined. -/
+/-
+**Derivation** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) →   (A : Type u_2) →     (M : Type u_3) →       [inst : Com
+mSemiring R] →         [inst_1 : CommSemiring A] →           [inst_2 : AddCommMo
+noid M] → [Algebra R A] → [_root_.Module A M] → [_root_.Module R M] → Type (max 
+u_2 u_3)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 导子
-  参数: (R : 类型) (A : 类型) (M : 类型)
-  继承: A ->ₗ[R] M
-  公理与运算 (2 个):
-    - map_one_eq_zero' : toLinearMap 1 = 0
-    - leibniz'((a b : A)) : toLinearMap (a * b) = a • toLinearMap b + b • toLinearMap a
+--- 原说明 ---
+`D : Derivation R A M` is an `R`-linear map from `A` to `M` that satisfies the `
+leibniz`
+equality. We also require that `D 1 = 0`. See `Derivation.mk'` for a constructor
+ that deduces this
+assumption from the Leibniz rule when `M` is cancellative.
+
+TODO: update this when bimodules are defined.
 -/
 structure Derivation (R : Type*) (A : Type*) (M : Type*)
     [CommSemiring R] [CommSemiring A] [AddCommMonoid M] [Algebra R A] [Module A M] [Module R M]
-    extends A ->ₗ[R] M where
+    extends A →ₗ[R] M where
   protected map_one_eq_zero' : toLinearMap 1 = 0
   protected leibniz' (a b : A) : toLinearMap (a * b) = a • toLinearMap b + b • toLinearMap a
 
@@ -77,431 +80,309 @@ variable [Module A M] [Module B M] [Module R M]
 
 variable (D : Derivation R A M) {D1 D2 : Derivation R A M} (r : R) (a b : A)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (Derivation R A M) A M
-  body: D.toFun
-  coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
-
-中文:
-实例 :
-  签名: 函数状 (导子 R A M) A M
-  定义体: D.toFun
-  coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
-
-Depends on / 依赖: D.toFun
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (Derivation R A M) A M where
   coe D := D.toFun
   coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddMonoidHomClass (Derivation R A M) A M
-  body: D.toLinearMap.map_add'
-  map_zero D := D.toLinearMap.map_zero
-
-中文:
-实例 :
-  签名: 加法幺半群态射类 (导子 R A M) A M
-  定义体: D.toLinearMap.map_add'
-  map_zero D := D.toLinearMap.map_zero
-
-Depends on / 依赖: D.toLinearMap.map_add, map_add, toLinearMap
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddMonoidHomClass (Derivation R A M) A M where
   map_add D := D.toLinearMap.map_add'
   map_zero D := D.toLinearMap.map_zero
 
 -- Not a simp lemma because it can be proved via `coeFn_coe` + `toLinearMap_eq_coe`
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  statement: D.toFun = ⇑D
-  proof: rfl
-
-中文:
-定理 toFun_eq_coe
-  结论: D.toFun = ⇑D
-  证明: rfl
+/-
+**Derivation.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：toFun_eq_coe : D.toFun = ⇑D
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe : D.toFun = ⇑D :=
   rfl
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**Derivation.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `Derivation.Simps`。
+形式化陈述：{R : Type u_1} →   {A : Type u_2} →     {M : Type u_4} →       [inst : Com
+mSemiring R] →         [inst_1 : CommSemiring A] →           [inst_2 : AddCommMo
+noid M] →             [inst_3 : Algebra R A] →               [inst_4 : _root_.Mo
+dule A M] → [inst_5 : _root_.Module R M] → Derivation R A M → A → M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (D : Derivation R A M)
-  body: D
-
-initialize_simps_projections Derivation (toFun -> apply)
-
-中文:
-定义 Simps.apply
-  签名: (D : 导子 R A M)
-  定义体: D
-
-initialize_simps_projections Derivation (toFun -> apply)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.apply (D : Derivation R A M) : A -> M := D
+def Simps.apply (D : Derivation R A M) : A → M := D
 
-initialize_simps_projections Derivation (toFun -> apply)
+initialize_simps_projections Derivation (toFun → apply)
 
 attribute [coe] toLinearMap
-
-/--
-Instance `hasCoeToLinearMap` / 实例 `hasCoeToLinearMap`
-
-English:
-instance hasCoeToLinearMap
-  signature: : Coe (Derivation R A M) (A ->ₗ[R] M)
-  body: ⟨fun D => D.toLinearMap⟩
-
-@[simp]
-
-中文:
-实例 hasCoeToLinearMap
-  签名: : Coe (导子 R A M) (A ->ₗ[R] M)
-  定义体: ⟨fun D => D.toLinearMap⟩
-
-@[simp]
-
-Depends on / 依赖: D.toLinearMap, toLinearMap
+/-
+**Derivation.hasCoeToLinearMap** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+形式化陈述：hasCoeToLinearMap : Coe (Derivation R A M) (A ->ₗ[R] M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance hasCoeToLinearMap : Coe (Derivation R A M) (A ->ₗ[R] M) :=
+instance hasCoeToLinearMap : Coe (Derivation R A M) (A →ₗ[R] M) :=
   ⟨fun D => D.toLinearMap⟩
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (f : A ->ₗ[R] M) (h₁ h₂)
-  statement: ((⟨f, h₁, h₂⟩ : Derivation R A M) : A -> M) = f
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_coe
-  条件: (f : A ->ₗ[R] M) (h₁ h₂)
-  结论: ((⟨f, h₁, h₂⟩ : 导子 R A M) : A -> M) = f
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Derivation.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：mk_coe (f : A ->ₗ[R] M) (h₁ h₂) : ((⟨f, h₁, h₂⟩ : Derivation R A M) : A ->
+ M) = f
+参数：f : A ->ₗ[R] M；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_coe (f : A ->ₗ[R] M) (h₁ h₂) : ((⟨f, h₁, h₂⟩ : Derivation R A M) : A -> M) = f :=
+theorem mk_coe (f : A →ₗ[R] M) (h₁ h₂) : ((⟨f, h₁, h₂⟩ : Derivation R A M) : A → M) = f :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coeFn_coe` / 定理 `coeFn_coe`
-
-English:
-theorem coeFn_coe
-  given: (f : Derivation R A M)
-  statement: ⇑(f : A ->ₗ[R] M) = f
-  proof: rfl
-
-中文:
-定理 coeFn_coe
-  条件: (f : 导子 R A M)
-  结论: ⇑(f : A ->ₗ[R] M) = f
-  证明: rfl
+/-
+**Derivation.coeFn_coe** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coeFn_coe (f : Derivation R A M) : ⇑(f : A ->ₗ[R] M) = f
+参数：f : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coeFn_coe (f : Derivation R A M) : ⇑(f : A ->ₗ[R] M) = f :=
+theorem coeFn_coe (f : Derivation R A M) : ⇑(f : A →ₗ[R] M) = f :=
   rfl
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: @Function.Injective (Derivation R A M) (A -> M) DFunLike.coe
-  proof: DFunLike.coe_injective
-
-@[ext]
-
-中文:
-定理 coe_injective
-  结论: @函数.单射 (导子 R A M) (A -> M) 依赖函数状.coe
-  证明: DFunLike.coe_injective
-
-@[ext]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Derivation.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_injective : @Function.Injective (Derivation R A M) (A -> M) DFunLike.c
+oe
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coe_injective : @Function.Injective (Derivation R A M) (A -> M) DFunLike.coe :=
+theorem coe_injective : @Function.Injective (Derivation R A M) (A → M) DFunLike.coe :=
   DFunLike.coe_injective
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (H : forall a, D1 a = D2 a)
-  statement: D1 = D2
-  proof: DFunLike.ext _ _ H
-
-中文:
-定理 ext
-  条件: (H : 对任意 a, D1 a = D2 a)
-  结论: D1 = D2
-  证明: DFunLike.ext _ _ H
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**Derivation.ext** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：ext (H : forall a, D1 a = D2 a) : D1 = D2
+参数：H : forall a, D1 a = D2 a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (H : forall a, D1 a = D2 a) : D1 = D2 :=
+theorem ext (H : ∀ a, D1 a = D2 a) : D1 = D2 :=
   DFunLike.ext _ _ H
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: (h : D1 = D2) (a : A)
-  statement: D1 a = D2 a
-  proof: DFunLike.congr_fun h a
-
-中文:
-定理 congr_fun
-  条件: (h : D1 = D2) (a : A)
-  结论: D1 a = D2 a
-  证明: DFunLike.congr_fun h a
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
+/-
+**Derivation.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：congr_fun (h : D1 = D2) (a : A) : D1 a = D2 a
+参数：h : D1 = D2；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 theorem congr_fun (h : D1 = D2) (a : A) : D1 a = D2 a :=
   DFunLike.congr_fun h a
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  statement: D (a + b) = D a + D b
-  proof: map_add D a b
-
-中文:
-定理 map_add
-  结论: D (a + b) = D a + D b
-  证明: map_add D a b
+/-
+**Derivation.map_add** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {M : Type u_4} [inst : CommSemiring R] [in
+st_1 : CommSemiring A]   [inst_2 : AddCommMonoid M] [inst_3 : Algebra R A] [inst
+_4 : _root_.Module A M] [inst_5 : _root_.Module R M]   (D : Derivation R A M) (a
+ b : A), D (a + b) = D a + D b
+参数：D : Derivation R A M；a b : A；a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
 -/
 protected theorem map_add : D (a + b) = D a + D b :=
   map_add D a b
-
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  statement: D 0 = 0
-  proof: map_zero D
-
-@[simp]
-
-中文:
-定理 map_zero
-  结论: D 0 = 0
-  证明: map_zero D
-
-@[simp]
+/-
+**Derivation.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {M : Type u_4} [inst : CommSemiring R] [in
+st_1 : CommSemiring A]   [inst_2 : AddCommMonoid M] [inst_3 : Algebra R A] [inst
+_4 : _root_.Module A M] [inst_5 : _root_.Module R M]   (D : Derivation R A M), D
+ 0 = 0
+参数：D : Derivation R A M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
 -/
 protected theorem map_zero : D 0 = 0 :=
   map_zero D
 
 @[simp]
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  statement: D (r • a) = r • D a
-  proof: D.toLinearMap.map_smul r a
-
-@[simp]
-
-中文:
-定理 map_smul
-  结论: D (r • a) = r • D a
-  证明: D.toLinearMap.map_smul r a
-
-@[simp]
-
-Depends on / 依赖: D.toLinearMap.map_smul, map_smul, toLinearMap
+/-
+**Derivation.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：map_smul : D (r • a) = r • D a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
 -/
 theorem map_smul : D (r • a) = r • D a :=
   D.toLinearMap.map_smul r a
 
 @[simp]
-/--
-theorem `leibniz` / 定理 `leibniz`
-
-English:
-theorem leibniz
-  statement: D (a * b) = a • D b + b • D a
-  proof: D.leibniz' _ _
-
-@[simp]
-
-中文:
-定理 leibniz
-  结论: D (a * b) = a • D b + b • D a
-  证明: D.leibniz' _ _
-
-@[simp]
-
-Depends on / 依赖: D.leibniz, leibniz
+/-
+**Derivation.leibniz** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：leibniz : D (a * b) = a • D b + b • D a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.leibniz'`：∀ {R : Type u_1} {A : Type u_2} {M : Type u_3} [ins
+t : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMonoid M] [inst
+_3 : Alge…
 -/
 theorem leibniz : D (a * b) = a • D b + b • D a :=
   D.leibniz' _ _
 
 @[simp]
-/--
-theorem `map_smul_of_tower` / 定理 `map_smul_of_tower`
-
-English:
-theorem map_smul_of_tower
-  statement: {S : Type*} [SMul S A] [SMul S M] [LinearMap.CompatibleSMul A M S R]
-  proof: D.toLinearMap.map_smul_of_tower r a
-
-@[simp]
-
-中文:
-定理 map_smul_of_tower
-  结论: {S : 类型} [标量乘法 S A] [标量乘法 S M] [线性映射.余mpatibleSMul A M S R]
-  证明: D.toLinearMap.map_smul_of_tower r a
-
-@[simp]
-
-Depends on / 依赖: D.toLinearMap.map_smul_of_tower, map_smul_of_tower, toLinearMap
+/-
+**Derivation.map_smul_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：map_smul_of_tower {S : Type*} [SMul S A] [SMul S M] [LinearMap.CompatibleS
+Mul A M S R] (D : Derivation R A M) (r : S) (a : A) : D (r • a) = r • D a
+参数：D : Derivation R A M；r : S；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_smul_of_tower`：map_smul_of_tower [CompatibleSMul M M₂ R S]
+ (fₗ : M ->ₗ[S] M₂) (c : R) (x : M) : fₗ (c • x) = c • fₗ x
 -/
 theorem map_smul_of_tower {S : Type*} [SMul S A] [SMul S M] [LinearMap.CompatibleSMul A M S R]
     (D : Derivation R A M) (r : S) (a : A) : D (r • a) = r • D a :=
   D.toLinearMap.map_smul_of_tower r a
 
 @[simp]
-/--
-theorem `map_one_eq_zero` / 定理 `map_one_eq_zero`
-
-English:
-theorem map_one_eq_zero
-  statement: D 1 = 0
-  proof: D.map_one_eq_zero'
-
-@[simp]
-
-中文:
-定理 map_one_eq_zero
-  结论: D 1 = 0
-  证明: D.map_one_eq_zero'
-
-@[simp]
-
-Depends on / 依赖: D.map_one_eq_zero, map_one_eq_zero
+/-
+**Derivation.map_one_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：map_one_eq_zero : D 1 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.map_one_eq_zero'`：∀ {R : Type u_1} {A : Type u_2} {M : Type u
+_3} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMonoid 
+M] [inst_3 : Alge…
 -/
 theorem map_one_eq_zero : D 1 = 0 :=
   D.map_one_eq_zero'
 
 @[simp]
-/--
-theorem `map_algebraMap` / 定理 `map_algebraMap`
-
-English:
-theorem map_algebraMap
-  statement: D (algebraMap R A r) = 0
-  proof: by
-  rw [← mul_one r]; rw [map_mul]; rw [map_one]; rw [← smul_def]; rw [map_smul]; rw [map_one_eq_zero]; rw [smul_zero]
-
-@[simp]
-
-中文:
-定理 map_algebraMap
-  结论: D (algebraMap R A r) = 0
-  证明: by
-  rw [← mul_one r]; rw [map_mul]; rw [map_one]; rw [← smul_def]; rw [map_smul]; rw [map_one_eq_zero]; rw [smul_zero]
-
-@[simp]
-
-Depends on / 依赖: map_mul, map_one, map_one_eq_zero, map_smul, mul_one, smul_def, smul_zero
+/-
+**Derivation.map_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：map_algebraMap : D (algebraMap R A r) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `Derivation.map_smul`：map_smul : D (r • a) = r • D a
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem map_algebraMap : D (algebraMap R A r) = 0 := by
-  rw [← mul_one r]; rw [map_mul]; rw [map_one]; rw [← smul_def]; rw [map_smul]; rw [map_one_eq_zero]; rw [smul_zero]
+  rw [← mul_one r, map_mul, map_one, ← smul_def, map_smul, map_one_eq_zero, smul_zero]
 
 @[simp]
-/--
-theorem `map_natCast` / 定理 `map_natCast`
-
-English:
-theorem map_natCast
-  given: (n : Nat)
-  statement: D (n : A) = 0
-  proof: by
-  rw [← nsmul_one]; rw [D.map_smul_of_tower n]; rw [map_one_eq_zero]; rw [smul_zero]
-
-@[simp]
-
-中文:
-定理 map_natCast
-  条件: (n : 自然数)
-  结论: D (n : A) = 0
-  证明: by
-  rw [← nsmul_one]; rw [D.map_smul_of_tower n]; rw [map_one_eq_zero]; rw [smul_zero]
-
-@[simp]
-
-Depends on / 依赖: D.map_smul_of_tower, map_one_eq_zero, map_smul_of_tower, nsmul_one, smul_zero
+/-
+**Derivation.map_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：map_natCast (n : Nat) : D (n : A) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nsmul_one`：∀ {A : Type u_2} [inst : AddMonoidWithOne A] (n : ℕ), n • 1 =
+ ↑n
+· 使用定理 `Derivation.map_smul_of_tower`：map_smul_of_tower {S : Type*} [SMul S A] [
+SMul S M] [LinearMap.CompatibleSMul A M S R] (D : Derivation R A M) (r : S) (a :
+ A) : D (r • a) = …
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
-theorem map_natCast (n : Nat) : D (n : A) = 0 := by
-  rw [← nsmul_one]; rw [D.map_smul_of_tower n]; rw [map_one_eq_zero]; rw [smul_zero]
+theorem map_natCast (n : ℕ) : D (n : A) = 0 := by
+  rw [← nsmul_one, D.map_smul_of_tower n, map_one_eq_zero, smul_zero]
 
 @[simp]
-/--
-theorem `leibniz_pow` / 定理 `leibniz_pow`
-
-English:
-theorem leibniz_pow
-  given: (n : Nat)
-  statement: D (a ^ n) = n • a ^ (n - 1) • D a
-  proof: by
-  induction n with
-  | zero => rw [pow_zero, map_one_eq_zero, zero_smul]
-  | succ n ihn =>
-    rcases eq_zero_or_pos n with (rfl | hpos)
-    · simp
-    · have : a * a ^ (n - 1) = a ^ n := by rw [← pow_succ', Nat.sub_add_cancel hpos]
-      simp only [pow_succ', leibniz, ihn, smul_comm a n (_ : M), smul_smul a, add_smul, this,
-        Nat.add_succ_sub_one, add_zero, one_nsmul]
-
-中文:
-定理 leibniz_pow
-  条件: (n : 自然数)
-  结论: D (a ^ n) = n • a ^ (n - 1) • D a
-  证明: by
-  induction n with
-  | zero => rw [pow_zero, map_one_eq_zero, zero_smul]
-  | succ n ihn =>
-    rcases eq_zero_or_pos n with (rfl | hpos)
-    · simp
-    · have : a * a ^ (n - 1) = a ^ n := by rw [← pow_succ', Nat.sub_add_cancel hpos]
-      simp only [pow_succ', leibniz, ihn, smul_comm a n (_ : M), smul_smul a, add_smul, this,
-        Nat.add_succ_sub_one, add_zero, one_nsmul]
-
-Depends on / 依赖: Nat.add_succ_sub_one, Nat.sub_add_cancel, add_smul, add_succ_sub_one, add_zero, eq_zero_or_pos, leibniz, map_one_eq_zero, one_nsmul, pow_succ, pow_zero, smul_comm, smul_smul, sub_add_cancel, zero_smul
+/-
+**Derivation.leibniz_pow** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：leibniz_pow (n : Nat) : D (a ^ n) = n • a ^ (n - 1) • D a
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_zero_or_pos`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero 
+α] [IsBotZeroClass α] (a : α), a = 0 ∨ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `one_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 1 • a = a
 -/
-theorem leibniz_pow (n : Nat) : D (a ^ n) = n • a ^ (n - 1) • D a := by
+theorem leibniz_pow (n : ℕ) : D (a ^ n) = n • a ^ (n - 1) • D a := by
   induction n with
   | zero => rw [pow_zero, map_one_eq_zero, zero_smul]
   | succ n ihn =>
@@ -513,28 +394,75 @@ theorem leibniz_pow (n : Nat) : D (a ^ n) = n • a ^ (n - 1) • D a := by
 
 open Polynomial in
 @[simp]
-/--
-theorem `map_aeval` / 定理 `map_aeval`
-
-English:
-theorem map_aeval
-  given: (P : R[X]) (x : A)
-  proof: by
-  induction P using Polynomial.induction_on
-  · simp
-  · simp [add_smul, *]
-  · simp [mul_smul, ← Nat.cast_smul_eq_nsmul A]
-
-中文:
-定理 map_aeval
-  条件: (P : R[X]) (x : A)
-  证明: by
-  induction P using Polynomial.induction_on
-  · simp
-  · simp [add_smul, *]
-  · simp [mul_smul, ← Nat.cast_smul_eq_nsmul A]
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, Polynomial, Polynomial.induction_on, add_smul, cast_smul_eq_nsmul, induction_on, mul_smul
+/-
+**Derivation.map_aeval** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：map_aeval (P : R[X]) (x : A) : D (aeval x P) = aeval x (derivative P) • D 
+x
+参数：P : R[X]；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on`：∀ {R : Type u} [inst : Semiring R] {motive : Po
+lynomial R → Prop} (p : Polynomial R),   (∀ (a : R), motive (Polynomial.C a)) → 
+    (∀ (p q :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.aeval_C`：aeval_C (r : R) : aeval x (C r) = algebraMap R A r
+· 使用定理 `Derivation.map_algebraMap`：map_algebraMap : D (algebraMap R A r) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.derivative_C`：derivative_C {a : R} : derivative (C a) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
+· 使用定理 `Polynomial.derivative_add`：derivative_add {f g : R[X]} : derivative (f +
+ g) = derivative f + derivative g
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `Derivation.leibniz_pow`：leibniz_pow (n : Nat) : D (a ^ n) = n • a ^ (n -
+ 1) • D a
+（共 49 条，此处仅展示前 30 条）
 -/
 theorem map_aeval (P : R[X]) (x : A) :
     D (aeval x P) = aeval x (derivative P) • D x := by
@@ -542,164 +470,104 @@ theorem map_aeval (P : R[X]) (x : A) :
   · simp
   · simp [add_smul, *]
   · simp [mul_smul, ← Nat.cast_smul_eq_nsmul A]
-
-/--
-theorem `eqOn_adjoin` / 定理 `eqOn_adjoin`
-
-English:
-theorem eqOn_adjoin
-  given: {s : Set A} (h : Set.EqOn D1 D2 s)
-  statement: Set.EqOn D1 D2 (adjoin R s)
-  proof: fun _ hx =>
-  Algebra.adjoin_induction (hx := hx) h
-    (fun r => (D1.map_algebraMap r).trans (D2.map_algebraMap r).symm)
-    (fun x y _ _ hx hy => by simp only [map_add, *]) fun x y _ _ hx hy => by simp only [leibniz, *]
-
-中文:
-定理 eqOn_adjoin
-  条件: {s : 集合 A} (h : 集合.EqOn D1 D2 s)
-  结论: 集合.EqOn D1 D2 (adjoin R s)
-  证明: fun _ hx =>
-  Algebra.adjoin_induction (hx := hx) h
-    (fun r => (D1.map_algebraMap r).trans (D2.map_algebraMap r).symm)
-    (fun x y _ _ hx hy => by simp only [map_add, *]) fun x y _ _ hx hy => by simp only [leibniz, *]
+/-
+**Derivation.eqOn_adjoin** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：eqOn_adjoin {s : Set A} (h : Set.EqOn D1 D2 s) : Set.EqOn D1 D2 (adjoin R 
+s)
+参数：h : Set.EqOn D1 D2 s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.adjoin_induction`：adjoin_induction {p : (x : A) -> x in adjoin R
+ s -> Prop} (mem : forall (x) (hx : x in s), p x (subset_adjoin hx)) (algebraMap
+ : forall r, p…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Derivation.map_algebraMap`：map_algebraMap : D (algebraMap R A r) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
 -/
 theorem eqOn_adjoin {s : Set A} (h : Set.EqOn D1 D2 s) : Set.EqOn D1 D2 (adjoin R s) := fun _ hx =>
   Algebra.adjoin_induction (hx := hx) h
     (fun r => (D1.map_algebraMap r).trans (D2.map_algebraMap r).symm)
     (fun x y _ _ hx hy => by simp only [map_add, *]) fun x y _ _ hx hy => by simp only [leibniz, *]
 
-/--
-theorem `ext_of_adjoin_eq_top` / 定理 `ext_of_adjoin_eq_top`
+/-- If adjoin of a set is the whole algebra, then any two derivations equal on this set are equal
+on the whole algebra. -/
+/-
+**Derivation.ext_of_adjoin_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：ext_of_adjoin_eq_top (s : Set A) (hs : adjoin R s = ⊤) (h : Set.EqOn D1 D2
+ s) : D1 = D2
+参数：s : Set A；hs : adjoin R s = ⊤；h : Set.EqOn D1 D2 s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `Derivation.eqOn_adjoin`：eqOn_adjoin {s : Set A} (h : Set.EqOn D1 D2 s) :
+ Set.EqOn D1 D2 (adjoin R s)
+· 使用定理 `trivial`：True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem ext_of_adjoin_eq_top
-  given: (s : Set A) (hs : adjoin R s = ⊤) (h : Set.EqOn D1 D2 s)
-  statement: D1 = D2
-  proof: ext fun _ => eqOn_adjoin h hs.symm ▸ trivial
-
-中文:
-定理 ext_of_adjoin_eq_top
-  条件: (s : 集合 A) (hs : adjoin R s = ⊤) (h : 集合.EqOn D1 D2 s)
-  结论: D1 = D2
-  证明: ext fun _ => eqOn_adjoin h hs.symm ▸ trivial
-
-Depends on / 依赖: eqOn_adjoin, hs.symm
+--- 原说明 ---
+If adjoin of a set is the whole algebra, then any two derivations equal on this 
+set are equal
+on the whole algebra.
 -/
 theorem ext_of_adjoin_eq_top (s : Set A) (hs : adjoin R s = ⊤) (h : Set.EqOn D1 D2 s) : D1 = D2 :=
-ext fun _ => eqOn_adjoin h hs.symm ▸ trivial
+  ext fun _ => eqOn_adjoin h <| hs.symm ▸ trivial
 
 -- Data typeclasses
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (Derivation R A M)
-  body: ⟨{ toLinearMap := 0
-      map_one_eq_zero' := rfl
-      leibniz' := fun a b => by simp only [add_zero, LinearMap.zero_apply, smul_zero] }⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 零 (导子 R A M)
-  定义体: ⟨{ toLinearMap := 0
-      map_one_eq_zero' := rfl
-      leibniz' := fun a b => by simp only [add_zero, LinearMap.zero_apply, smul_zero] }⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.zero_apply, add_zero, leibniz, map_one_eq_zero, smul_zero, toLinearMap, zero_apply
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (Derivation R A M) :=
-  ⟨{ toLinearMap := 0
+  ⟨{  toLinearMap := 0
       map_one_eq_zero' := rfl
       leibniz' := fun a b => by simp only [add_zero, LinearMap.zero_apply, smul_zero] }⟩
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ⇑(0 : Derivation R A M) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  结论: ⇑(0 : 导子 R A M) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_zero : ⇑(0 : Derivation R A M) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero : ⇑(0 : Derivation R A M) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_zero_linearMap` / 定理 `coe_zero_linearMap`
-
-English:
-theorem coe_zero_linearMap
-  statement: ↑(0 : Derivation R A M) = (0 : A ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_zero_linearMap
-  结论: ↑(0 : 导子 R A M) = (0 : A ->ₗ[R] M)
-  证明: rfl
+/-
+**Derivation.coe_zero_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_zero_linearMap : ↑(0 : Derivation R A M) = (0 : A ->ₗ[R] M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero_linearMap : ↑(0 : Derivation R A M) = (0 : A ->ₗ[R] M) :=
+theorem coe_zero_linearMap : ↑(0 : Derivation R A M) = (0 : A →ₗ[R] M) :=
   rfl
-
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: (a : A)
-  statement: (0 : Derivation R A M) a = 0
-  proof: rfl
-
-中文:
-定理 zero_apply
-  条件: (a : A)
-  结论: (0 : 导子 R A M) a = 0
-  证明: rfl
+/-
+**Derivation.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：zero_apply (a : A) : (0 : Derivation R A M) a = 0
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply (a : A) : (0 : Derivation R A M) a = 0 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (Derivation R A M)
-  body: ⟨fun D1 D2 =>
-    { toLinearMap := D1 + D2
-      map_one_eq_zero' := by simp
-      leibniz' := fun a b => by
-        simp only [leibniz, LinearMap.add_apply, coeFn_coe, smul_add, add_add_add_comm] }⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 加法 (导子 R A M)
-  定义体: ⟨fun D1 D2 =>
-    { toLinearMap := D1 + D2
-      map_one_eq_zero' := by simp
-      leibniz' := fun a b => by
-        simp only [leibniz, LinearMap.add_apply, coeFn_coe, smul_add, add_add_add_comm] }⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.add_apply, add_add_add_comm, add_apply, coeFn_coe, leibniz, map_one_eq_zero, smul_add, toLinearMap
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (Derivation R A M) :=
   ⟨fun D1 D2 =>
@@ -709,75 +577,38 @@ instance : Add (Derivation R A M) :=
         simp only [leibniz, LinearMap.add_apply, coeFn_coe, smul_add, add_add_add_comm] }⟩
 
 @[simp]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (D1 D2 : Derivation R A M)
-  statement: ⇑(D1 + D2) = D1 + D2
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_add
-  条件: (D1 D2 : 导子 R A M)
-  结论: ⇑(D1 + D2) = D1 + D2
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_add (D1 D2 : Derivation R A M) : ⇑(D1 + D2) = D1 + D2
+参数：D1 D2 : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_add (D1 D2 : Derivation R A M) : ⇑(D1 + D2) = D1 + D2 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_add_linearMap` / 定理 `coe_add_linearMap`
-
-English:
-theorem coe_add_linearMap
-  given: (D1 D2 : Derivation R A M)
-  statement: ↑(D1 + D2) = (D1 + D2 : A ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_add_linearMap
-  条件: (D1 D2 : 导子 R A M)
-  结论: ↑(D1 + D2) = (D1 + D2 : A ->ₗ[R] M)
-  证明: rfl
+/-
+**Derivation.coe_add_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_add_linearMap (D1 D2 : Derivation R A M) : ↑(D1 + D2) = (D1 + D2 : A -
+>ₗ[R] M)
+参数：D1 D2 : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_add_linearMap (D1 D2 : Derivation R A M) : ↑(D1 + D2) = (D1 + D2 : A ->ₗ[R] M) :=
+theorem coe_add_linearMap (D1 D2 : Derivation R A M) : ↑(D1 + D2) = (D1 + D2 : A →ₗ[R] M) :=
   rfl
-
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  statement: (D1 + D2) a = D1 a + D2 a
-  proof: rfl
-
-中文:
-定理 add_apply
-  结论: (D1 + D2) a = D1 a + D2 a
-  证明: rfl
+/-
+**Derivation.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：add_apply : (D1 + D2) a = D1 a + D2 a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply : (D1 + D2) a = D1 a + D2 a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Derivation R A M)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (导子 R A M)
-  定义体: ⟨0⟩
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Derivation R A M) :=
   ⟨0⟩
@@ -788,32 +619,9 @@ variable {S T : Type*}
 variable [Monoid S] [DistribMulAction S M] [SMulCommClass R S M] [SMulCommClass S A M]
 variable [Monoid T] [DistribMulAction T M] [SMulCommClass R T M] [SMulCommClass T A M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul S (Derivation R A M)
-  body: ⟨fun r D =>
-    { toLinearMap := r • D.1
-      map_one_eq_zero' := by rw [LinearMap.smul_apply, coeFn_coe, D.map_one_eq_zero, smul_zero]
-      leibniz' := fun a b => by simp only [LinearMap.smul_apply, coeFn_coe, leibniz, smul_add,
-        smul_comm r (_ : A) (_ : M)] }⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 标量乘法 S (导子 R A M)
-  定义体: ⟨fun r D =>
-    { toLinearMap := r • D.1
-      map_one_eq_zero' := by rw [LinearMap.smul_apply, coeFn_coe, D.map_one_eq_zero, smul_zero]
-      leibniz' := fun a b => by simp only [LinearMap.smul_apply, coeFn_coe, leibniz, smul_add,
-        smul_comm r (_ : A) (_ : M)] }⟩
-
-@[simp]
-
-Depends on / 依赖: D.map_one_eq_zero, LinearMap, LinearMap.smul_apply, coeFn_coe, leibniz, map_one_eq_zero, smul_add, smul_apply, smul_comm, smul_zero, toLinearMap
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul S (Derivation R A M) :=
   ⟨fun r D =>
@@ -823,216 +631,106 @@ instance : SMul S (Derivation R A M) :=
         smul_comm r (_ : A) (_ : M)] }⟩
 
 @[simp]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: (r : S) (D : Derivation R A M)
-  statement: ⇑(r • D) = r • ⇑D
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_smul
-  条件: (r : S) (D : 导子 R A M)
-  结论: ⇑(r • D) = r • ⇑D
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_smul (r : S) (D : Derivation R A M) : ⇑(r • D) = r • ⇑D
+参数：r : S；D : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smul (r : S) (D : Derivation R A M) : ⇑(r • D) = r • ⇑D :=
   rfl
 
 @[simp]
-/--
-theorem `coe_smul_linearMap` / 定理 `coe_smul_linearMap`
-
-English:
-theorem coe_smul_linearMap
-  given: (r : S) (D : Derivation R A M)
-  statement: ↑(r • D) = r • (D : A ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_smul_linearMap
-  条件: (r : S) (D : 导子 R A M)
-  结论: ↑(r • D) = r • (D : A ->ₗ[R] M)
-  证明: rfl
+/-
+**Derivation.coe_smul_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_smul_linearMap (r : S) (D : Derivation R A M) : ↑(r • D) = r • (D : A 
+->ₗ[R] M)
+参数：r : S；D : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smul_linearMap (r : S) (D : Derivation R A M) : ↑(r • D) = r • (D : A ->ₗ[R] M) :=
+theorem coe_smul_linearMap (r : S) (D : Derivation R A M) : ↑(r • D) = r • (D : A →ₗ[R] M) :=
   rfl
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: (r : S) (D : Derivation R A M)
-  statement: (r • D) a = r • D a
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: (r : S) (D : 导子 R A M)
-  结论: (r • D) a = r • D a
-  证明: rfl
+/-
+**Derivation.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：smul_apply (r : S) (D : Derivation R A M) : (r • D) a = r • D a
+参数：r : S；D : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply (r : S) (D : Derivation R A M) : (r • D) a = r • D a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommMonoid (Derivation R A M)
-  body: coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 加法交换幺半群 (导子 R A M)
-  定义体: coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
-
-Depends on / 依赖: addCommMonoid, coe_add, coe_injective, coe_injective.addCommMonoid, coe_zero
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommMonoid (Derivation R A M) :=
   coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
 
-/--
-Definition of `coeFnAddMonoidHom` / `coeFnAddMonoidHom` 的定义
+/-- `coeFn` as an `AddMonoidHom`. -/
+/-
+**Derivation.coeFnAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：coeFnAddMonoidHom : Derivation R A M ->+ A -> M where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.coe_zero`：coe_zero : ⇑(0 : Derivation R A M) = 0
+· 使用定理 `Derivation.coe_add`：coe_add (D1 D2 : Derivation R A M) : ⇑(D1 + D2) = D1
+ + D2
 
-English:
-definition coeFnAddMonoidHom
-  signature: : Derivation R A M ->+ A -> M where
-  body: (⇑)
-  map_zero' := coe_zero
-  map_add' := coe_add
-
-@[simp]
-
-中文:
-定义 coeFnAddMonoidHom
-  签名: : 导子 R A M ->+ A -> M where
-  定义体: (⇑)
-  map_zero' := coe_zero
-  map_add' := coe_add
-
-@[simp]
+--- 原说明 ---
+`coeFn` as an `AddMonoidHom`.
 -/
-def coeFnAddMonoidHom : Derivation R A M ->+ A -> M where
+def coeFnAddMonoidHom : Derivation R A M →+ A → M where
   toFun := (⇑)
   map_zero' := coe_zero
   map_add' := coe_add
 
 @[simp]
-/--
-lemma `coeFnAddMonoidHom_apply` / 引理 `coeFnAddMonoidHom_apply`
-
-English:
-lemma coeFnAddMonoidHom_apply
-  given: (D : Derivation R A M)
-  statement: coeFnAddMonoidHom D = D
-  proof: rfl
-
-中文:
-引理 coeFnAddMonoidHom_apply
-  条件: (D : 导子 R A M)
-  结论: coeFnAddMonoidHom D = D
-  证明: rfl
+/-
+**Derivation.coeFnAddMonoidHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `Derivation`。
+形式化陈述：coeFnAddMonoidHom_apply (D : Derivation R A M) : coeFnAddMonoidHom D = D
+参数：D : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coeFnAddMonoidHom_apply (D : Derivation R A M) : coeFnAddMonoidHom D = D := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DistribMulAction S (Derivation R A M)
-  body: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
-
-中文:
-实例 :
-  签名: 分配乘法作用 S (导子 R A M)
-  定义体: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
-
-Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, distribMulAction
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DistribMulAction S (Derivation R A M) :=
   Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribMulAction
-  signature: Sᵐᵒᵖ M] [IsCentralScalar S M] :
-  body: ext fun _ => op_smul_eq_smul _ _
-
-中文:
-实例 [分配乘法作用
-  签名: Sᵐᵒᵖ M] [中心标量 S M] :
-  定义体: ext fun _ => op_smul_eq_smul _ _
-
-Depends on / 依赖: op_smul_eq_smul
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DistribMulAction Sᵐᵒᵖ M] [IsCentralScalar S M] :
     IsCentralScalar S (Derivation R A M) where
   op_smul_eq_smul _ _ := ext fun _ => op_smul_eq_smul _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S T] [IsScalarTower S T M] : IsScalarTower S T (Derivation R A M)
-  body: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
-
-中文:
-实例 [标量乘法
-  签名: S T] [标量塔 S T M] : 标量塔 S T (导子 R A M)
-  定义体: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
-
-Depends on / 依赖: smul_assoc
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S T] [IsScalarTower S T M] : IsScalarTower S T (Derivation R A M) :=
   ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: S T M] : SMulCommClass S T (Derivation R A M)
-  body: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
-
-中文:
-实例 [标量交换类
-  签名: S T M] : 标量交换类 S T (导子 R A M)
-  定义体: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
-
-Depends on / 依赖: smul_comm
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass S T M] : SMulCommClass S T (Derivation R A M) :=
   ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 end Scalar
 
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: {S : Type*} [Semiring S] [Module S M] [SMulCommClass R S M]
-  body: Function.Injective.module S coeFnAddMonoidHom coe_injective coe_smul
-
-中文:
-实例 instModule
-  签名: {S : 类型} [半环 S] [模 S M] [标量交换类 R S M]
-  定义体: Function.Injective.module S coeFnAddMonoidHom coe_injective coe_smul
-
-Depends on / 依赖: Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, module
+/-
+**Derivation.instModule** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+形式化陈述：instModule {S : Type*} [Semiring S] [Module S M] [SMulCommClass R S M] [SM
+ulCommClass S A M] : Module S (Derivation R A M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.coe_injective`：coe_injective : @Function.Injective (Derivatio
+n R A M) (A -> M) DFunLike.coe
 -/
 instance instModule {S : Type*} [Semiring S] [Module S M] [SMulCommClass R S M]
     [SMulCommClass S A M] : Module S (Derivation R A M) :=
@@ -1043,43 +741,24 @@ section PushForward
 variable {N : Type*} [AddCommMonoid N] [Module A N] [Module R N] [IsScalarTower R A M]
   [IsScalarTower R A N]
 
-variable (f : M ->ₗ[A] N) (e : M ≃ₗ[A] N)
+variable (f : M →ₗ[A] N) (e : M ≃ₗ[A] N)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `_root_.LinearMap.compDer` / `_root_.LinearMap.compDer` 的定义
+/-- We can push forward derivations using linear maps, i.e., the composition of a derivation with a
+linear map is a derivation. Furthermore, this operation is linear on the spaces of derivations. -/
+/-
+**Derivation._root_.LinearMap.compDer** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearMap.compDer
-  signature: : Derivation R A M ->ₗ[A] Derivation R A N where
-  body: { toLinearMap := (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
-      map_one_eq_zero' := by simp only [LinearMap.comp_apply, coeFn_coe, map_one_eq_zero, map_zero]
-      leibniz' := fun a b => by
-        simp only [coeFn_coe, LinearMap.comp_apply, map_add, leibniz,
-          LinearMap.coe_restrictScalars, LinearMap.map_smul] }
-  map_add' D₁ D₂ := by ext; exact LinearMap.map_add _ _ _
-  map_smul' r D := by ext; dsimp; simp only [_root_.map_smul]
-
-@[simp]
-
-中文:
-定义 _root_.线性映射.compDer
-  签名: : 导子 R A M ->ₗ[A] 导子 R A N where
-  定义体: { toLinearMap := (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
-      map_one_eq_zero' := by simp only [LinearMap.comp_apply, coeFn_coe, map_one_eq_zero, map_zero]
-      leibniz' := fun a b => by
-        simp only [coeFn_coe, LinearMap.comp_apply, map_add, leibniz,
-          LinearMap.coe_restrictScalars, LinearMap.map_smul] }
-  map_add' D₁ D₂ := by ext; exact LinearMap.map_add _ _ _
-  map_smul' r D := by ext; dsimp; simp only [_root_.map_smul]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.coe_restrictScalars, LinearMap.comp_apply, LinearMap.map_add, LinearMap.map_smul, _root_, _root_.map_smul, coeFn_coe, coe_restrictScalars, comp_apply, leibniz, map_add, map_one_eq_zero, map_smul, map_zero, toLinearMap
+--- 原说明 ---
+We can push forward derivations using linear maps, i.e., the composition of a de
+rivation with a
+linear map is a derivation. Furthermore, this operation is linear on the spaces 
+of derivations.
 -/
-def _root_.LinearMap.compDer : Derivation R A M ->ₗ[A] Derivation R A N where
+def _root_.LinearMap.compDer : Derivation R A M →ₗ[A] Derivation R A N where
   toFun D :=
-    { toLinearMap := (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
+    { toLinearMap := (f : M →ₗ[R] N).comp (D : A →ₗ[R] M)
       map_one_eq_zero' := by simp only [LinearMap.comp_apply, coeFn_coe, map_one_eq_zero, map_zero]
       leibniz' := fun a b => by
         simp only [coeFn_coe, LinearMap.comp_apply, map_add, leibniz,
@@ -1088,93 +767,56 @@ def _root_.LinearMap.compDer : Derivation R A M ->ₗ[A] Derivation R A N where
   map_smul' r D := by ext; dsimp; simp only [_root_.map_smul]
 
 @[simp]
-/--
-theorem `coe_to_linearMap_comp` / 定理 `coe_to_linearMap_comp`
-
-English:
-theorem coe_to_linearMap_comp
-  statement: (f.compDer D : A ->ₗ[R] N) = (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_to_linearMap_comp
-  结论: (f.compDer D : A ->ₗ[R] N) = (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_to_linearMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_to_linearMap_comp : (f.compDer D : A ->ₗ[R] N) = (f : M ->ₗ[R] N).comp
+ (D : A ->ₗ[R] M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem coe_to_linearMap_comp : (f.compDer D : A ->ₗ[R] N) = (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M) :=
+theorem coe_to_linearMap_comp : (f.compDer D : A →ₗ[R] N) = (f : M →ₗ[R] N).comp (D : A →ₗ[R] M) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  statement: (f.compDer D : A -> N) = (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_comp
-  结论: (f.compDer D : A -> N) = (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
-  证明: rfl
+/-
+**Derivation.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_comp : (f.compDer D : A -> N) = (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem coe_comp : (f.compDer D : A -> N) = (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M) :=
+theorem coe_comp : (f.compDer D : A → N) = (f : M →ₗ[R] N).comp (D : A →ₗ[R] M) :=
   rfl
 
 /-- The composition of a derivation with a linear map as a bilinear map -/
 @[simps]
-/--
-Definition of `llcomp` / `llcomp` 的定义
+/-
+**Derivation.llcomp** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：llcomp : (M ->ₗ[A] N) ->ₗ[A] Derivation R A M ->ₗ[A] Derivation R A N wher
+e toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition llcomp
-  signature: : (M ->ₗ[A] N) ->ₗ[A] Derivation R A M ->ₗ[A] Derivation R A N where
-  body: f.compDer
-  map_add' f₁ f₂ := by ext; rfl
-  map_smul' r D := by ext; rfl
-
-中文:
-定义 llcomp
-  签名: : (M ->ₗ[A] N) ->ₗ[A] 导子 R A M ->ₗ[A] 导子 R A N where
-  定义体: f.compDer
-  map_add' f₁ f₂ := by ext; rfl
-  map_smul' r D := by ext; rfl
-
-Depends on / 依赖: compDer, f.compDer
+--- 原说明 ---
+The composition of a derivation with a linear map as a bilinear map
 -/
-def llcomp : (M ->ₗ[A] N) ->ₗ[A] Derivation R A M ->ₗ[A] Derivation R A N where
+def llcomp : (M →ₗ[A] N) →ₗ[A] Derivation R A M →ₗ[A] Derivation R A N where
   toFun f := f.compDer
   map_add' f₁ f₂ := by ext; rfl
   map_smul' r D := by ext; rfl
 
-/--
-Definition of `_root_.LinearEquiv.compDer` / `_root_.LinearEquiv.compDer` 的定义
+/-- Pushing a derivation forward through a linear equivalence is an equivalence. -/
+/-
+**Derivation._root_.LinearEquiv.compDer** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearEquiv.compDer
-  signature: : Derivation R A M ≃ₗ[A] Derivation R A N
-  body: { e.toLinearMap.compDer with
-    invFun := e.symm.toLinearMap.compDer
-    left_inv := fun D => by ext a; exact e.symm_apply_apply (D a)
-    right_inv := fun D => by ext a; exact e.apply_symm_apply (D a) }
-
-@[simp]
-
-中文:
-定义 _root_.线性等价.compDer
-  签名: : 导子 R A M ≃ₗ[A] 导子 R A N
-  定义体: { e.toLinearMap.compDer with
-    invFun := e.symm.toLinearMap.compDer
-    left_inv := fun D => by ext a; exact e.symm_apply_apply (D a)
-    right_inv := fun D => by ext a; exact e.apply_symm_apply (D a) }
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, compDer, e.apply_symm_apply, e.symm.toLinearMap.compDer, e.symm_apply_apply, e.toLinearMap.compDer, invFun, left_inv, right_inv, symm_apply_apply, toLinearMap
+--- 原说明 ---
+Pushing a derivation forward through a linear equivalence is an equivalence.
 -/
 def _root_.LinearEquiv.compDer : Derivation R A M ≃ₗ[A] Derivation R A N :=
   { e.toLinearMap.compDer with
@@ -1183,39 +825,34 @@ def _root_.LinearEquiv.compDer : Derivation R A M ≃ₗ[A] Derivation R A N :=
     right_inv := fun D => by ext a; exact e.apply_symm_apply (D a) }
 
 @[simp]
-/--
-theorem `linearEquiv_coe_to_linearMap_comp` / 定理 `linearEquiv_coe_to_linearMap_comp`
-
-English:
-theorem linearEquiv_coe_to_linearMap_comp
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 linearEquiv_coe_to_linearMap_comp
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.linearEquiv_coe_to_linearMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `Deriva
+tion`。
+形式化陈述：linearEquiv_coe_to_linearMap_comp : (e.compDer D : A ->ₗ[R] N) = (e.toLine
+arMap : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem linearEquiv_coe_to_linearMap_comp :
-    (e.compDer D : A ->ₗ[R] N) = (e.toLinearMap : M ->ₗ[R] N).comp (D : A ->ₗ[R] M) :=
+    (e.compDer D : A →ₗ[R] N) = (e.toLinearMap : M →ₗ[R] N).comp (D : A →ₗ[R] M) :=
   rfl
 
 @[simp]
-/--
-theorem `linearEquiv_coe_comp` / 定理 `linearEquiv_coe_comp`
-
-English:
-theorem linearEquiv_coe_comp
-  proof: rfl
-
-中文:
-定理 linearEquiv_coe_comp
-  证明: rfl
+/-
+**Derivation.linearEquiv_coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：linearEquiv_coe_comp : (e.compDer D : A -> N) = (e.toLinearMap : M ->ₗ[R] 
+N).comp (D : A ->ₗ[R] M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem linearEquiv_coe_comp :
-    (e.compDer D : A -> N) = (e.toLinearMap : M ->ₗ[R] N).comp (D : A ->ₗ[R] M) :=
+    (e.compDer D : A → N) = (e.toLinearMap : M →ₗ[R] N).comp (D : A →ₗ[R] M) :=
   rfl
 
 end PushForward
@@ -1224,24 +861,18 @@ variable (A) in
 /-- For a tower `R → A → B` and an `R`-derivation `B → M`, we may compose with `A → B` to obtain an
 `R`-derivation `A → M`. -/
 @[simps!]
-/--
-Definition of `compAlgebraMap` / `compAlgebraMap` 的定义
+/-
+**Derivation.compAlgebraMap** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：compAlgebraMap [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M] (
+d : Derivation R B M) : Derivation R A M where map_one_eq_zero'
+参数：d : Derivation R B M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compAlgebraMap
-  signature: [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M]
-  body: by simp
-  leibniz' a b := by simp
-  toLinearMap := d.toLinearMap.comp (IsScalarTower.toAlgHom R A B).toLinearMap
-
-中文:
-定义 compAlgebraMap
-  签名: [代数 A B] [标量塔 R A B] [标量塔 A B M]
-  定义体: by simp
-  leibniz' a b := by simp
-  toLinearMap := d.toLinearMap.comp (IsScalarTower.toAlgHom R A B).toLinearMap
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, d.toLinearMap.comp, leibniz, toAlgHom, toLinearMap
+--- 原说明 ---
+For a tower `R → A → B` and an `R`-derivation `B → M`, we may compose with `A → 
+B` to obtain an
+`R`-derivation `A → M`.
 -/
 def compAlgebraMap [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M]
     (d : Derivation R B M) : Derivation R A M where
@@ -1253,28 +884,20 @@ variable (R A B M) in
 /-- For a tower `R → A → B → M`, the precomposition defined in `compAlgebraMap`
 is a `B`-linear map. -/
 @[simps!]
-/--
-Definition of `compAlgebraMapL` / `compAlgebraMapL` 的定义
+/-
+**Derivation.compAlgebraMapL** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：compAlgebraMapL [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M] 
+[IsScalarTower R B M] : Derivation R B M ->ₗ[B] Derivation R A M where toFun d
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compAlgebraMapL
-  signature: [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M]
-  body: d.compAlgebraMap A
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 compAlgebraMapL
-  签名: [代数 A B] [标量塔 R A B] [标量塔 A B M]
-  定义体: d.compAlgebraMap A
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: compAlgebraMap, d.compAlgebraMap
+--- 原说明 ---
+For a tower `R → A → B → M`, the precomposition defined in `compAlgebraMap`
+is a `B`-linear map.
 -/
 def compAlgebraMapL [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M]
     [IsScalarTower R B M] :
-    Derivation R B M ->ₗ[B] Derivation R A M where
+    Derivation R B M →ₗ[B] Derivation R A M where
   toFun d := d.compAlgebraMap A
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1285,64 +908,49 @@ variable {S : Type*} [CommSemiring S]
 variable [Algebra S A] [Module S M] [LinearMap.CompatibleSMul A M R S]
 variable (R)
 
-/--
-Definition of `restrictScalars` / `restrictScalars` 的定义
+/-- If `A` is both an `R`-algebra and an `S`-algebra; `M` is both an `R`-module and an `S`-module,
+then an `S`-derivation `A → M` is also an `R`-derivation if it is also `R`-linear. -/
+/-
+**Derivation.restrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：(R : Type u_1) →   {A : Type u_2} →     {M : Type u_4} →       [inst : Com
+mSemiring R] →         [inst_1 : CommSemiring A] →           [inst_2 : AddCommMo
+noid M] →             [inst_3 : Algebra R A] →               [inst_4 : _root_.Mo
+dule A M] →                 [inst_5 : _root_.Module R M] →                   {S 
+: Type u_5} →                     [inst_6 : CommSemiring S] →                   
+    [inst_7 : Algebra S A] →                         [inst_8 : _root_.Module S M
+] →                           [LinearMap.CompatibleSMul A M R S] → Derivation S 
+A M → Derivation R A M
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
 
-English:
-definition restrictScalars
-  signature: (d : Derivation S A M)
-  body: d.map_one_eq_zero
-  leibniz' := d.leibniz
-  toLinearMap := d.toLinearMap.restrictScalars R
-
-中文:
-定义 restrictScalars
-  签名: (d : 导子 S A M)
-  定义体: d.map_one_eq_zero
-  leibniz' := d.leibniz
-  toLinearMap := d.toLinearMap.restrictScalars R
+--- 原说明 ---
+If `A` is both an `R`-algebra and an `S`-algebra; `M` is both an `R`-module and 
+an `S`-module,
+then an `S`-derivation `A → M` is also an `R`-derivation if it is also `R`-linea
+r.
 -/
 protected def restrictScalars (d : Derivation S A M) : Derivation R A M where
   map_one_eq_zero' := d.map_one_eq_zero
   leibniz' := d.leibniz
   toLinearMap := d.toLinearMap.restrictScalars R
-
-/--
-lemma `coe_restrictScalars` / 引理 `coe_restrictScalars`
-
-English:
-lemma coe_restrictScalars
-  given: (d : Derivation S A M)
-  statement: ⇑(d.restrictScalars R) = ⇑d
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_restrictScalars
-  条件: (d : 导子 S A M)
-  结论: ⇑(d.restrictScalars R) = ⇑d
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_restrictScalars** 是 Mathlib 中的一个引理，位于命名空间 `Derivation`。
+形式化陈述：coe_restrictScalars (d : Derivation S A M) : ⇑(d.restrictScalars R) = ⇑d
+参数：d : Derivation S A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_restrictScalars (d : Derivation S A M) : ⇑(d.restrictScalars R) = ⇑d := rfl
 
 @[simp]
-/--
-lemma `restrictScalars_apply` / 引理 `restrictScalars_apply`
-
-English:
-lemma restrictScalars_apply
-  given: (d : Derivation S A M) (x : A)
-  statement: d.restrictScalars R x = d x
-  proof: rfl
-
-中文:
-引理 restrictScalars_apply
-  条件: (d : 导子 S A M) (x : A)
-  结论: d.restrictScalars R x = d x
-  证明: rfl
+/-
+**Derivation.restrictScalars_apply** 是 Mathlib 中的一个引理，位于命名空间 `Derivation`。
+形式化陈述：restrictScalars_apply (d : Derivation S A M) (x : A) : d.restrictScalars R
+ x = d x
+参数：d : Derivation S A M；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma restrictScalars_apply (d : Derivation S A M) (x : A) : d.restrictScalars R x = d x := rfl
 
@@ -1359,58 +967,27 @@ variable {F : Type*} [FunLike F A M] [AlgHomClass F R A M]
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-Definition of `liftOfRightInverse` / `liftOfRightInverse` 的定义
-
-English:
-definition liftOfRightInverse
-  signature: {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_inv f)
-  body: f (d (f_inv x))
-  map_add' x y := by
-    suffices f (d (f_inv (x + y) - (f_inv x + f_inv y))) = 0 by simpa [sub_eq_zero]
-    apply hd
-    simp [hf _]
-  map_smul' x y := by
-    suffices f (d (f_inv (x • y) - x • f_inv y)) = 0 by simpa [sub_eq_zero]
-    apply hd
-    simp [hf _]
-  map_one_eq_zero' := by
-    suffices f (d (f_inv 1 - 1)) = 0 by simpa [sub_eq_zero]
-    apply hd
-    simp [hf _]
-  leibniz' x y := by
-    suffices f (d (f_inv (x * y) - f_inv x * f_inv y)) = 0 by simpa [sub_eq_zero, hf _]
-    apply hd
-    simp [hf _]
-
-@[simp]
-
-中文:
-定义 liftOfRightInverse
-  签名: {f : F} {f_inv : M -> A} (hf : 函数.右逆 f_inv f)
-  定义体: f (d (f_inv x))
-  map_add' x y := by
-    suffices f (d (f_inv (x + y) - (f_inv x + f_inv y))) = 0 by simpa [sub_eq_zero]
-    apply hd
-    simp [hf _]
-  map_smul' x y := by
-    suffices f (d (f_inv (x • y) - x • f_inv y)) = 0 by simpa [sub_eq_zero]
-    apply hd
-    simp [hf _]
-  map_one_eq_zero' := by
-    suffices f (d (f_inv 1 - 1)) = 0 by simpa [sub_eq_zero]
-    apply hd
-    simp [hf _]
-  leibniz' x y := by
-    suffices f (d (f_inv (x * y) - f_inv x * f_inv y)) = 0 by simpa [sub_eq_zero, hf _]
-    apply hd
-    simp [hf _]
-
-@[simp]
-
-Depends on / 依赖: f_inv
+Lift a derivation via an algebra homomorphism `f` with a right inverse such that
+`f(x) = 0 → f(d(x)) = 0`. This gives the derivation `f ∘ d ∘ f⁻¹`.
+This is needed for an argument in [Rosenlicht, M. Integration in finite terms][Rosenlicht_1972].
 -/
-def liftOfRightInverse {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_inv f)
-    ⦃d : Derivation R A A⦄ (hd : forall x, f x = 0 -> f (d x) = 0) : Derivation R M M where
+/-
+**Derivation.liftOfRightInverse** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：liftOfRightInverse {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_
+inv f) ⦃d : Derivation R A A⦄ (hd : forall x, f x = 0 -> f (d x) = 0) : Derivati
+on R M M where toFun x
+参数：hf : Function.RightInverse f_inv f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Lift a derivation via an algebra homomorphism `f` with a right inverse such that
+`f(x) = 0 → f(d(x)) = 0`. This gives the derivation `f ∘ d ∘ f⁻¹`.
+This is needed for an argument in [Rosenlicht, M. Integration in finite terms][R
+osenlicht_1972].
+-/
+def liftOfRightInverse {f : F} {f_inv : M → A} (hf : Function.RightInverse f_inv f)
+    ⦃d : Derivation R A A⦄ (hd : ∀ x, f x = 0 → f (d x) = 0) : Derivation R M M where
   toFun x := f (d (f_inv x))
   map_add' x y := by
     suffices f (d (f_inv (x + y) - (f_inv x + f_inv y))) = 0 by simpa [sub_eq_zero]
@@ -1430,56 +1007,69 @@ def liftOfRightInverse {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_in
     simp [hf _]
 
 @[simp]
-/--
-lemma `liftOfRightInverse_apply` / 引理 `liftOfRightInverse_apply`
-
-English:
-lemma liftOfRightInverse_apply
-  statement: {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_inv f)
-  proof: by
-  suffices f (d (f_inv (f x) - x)) = 0 by simpa [sub_eq_zero]
-  apply hd
-  simp [hf _]
-
-中文:
-引理 liftOfRightInverse_apply
-  结论: {f : F} {f_inv : M -> A} (hf : 函数.右逆 f_inv f)
-  证明: by
-  suffices f (d (f_inv (f x) - x)) = 0 by simpa [sub_eq_zero]
-  apply hd
-  simp [hf _]
-
-Depends on / 依赖: f_inv, sub_eq_zero
+/-
+**Derivation.liftOfRightInverse_apply** 是 Mathlib 中的一个引理，位于命名空间 `Derivation`。
+形式化陈述：liftOfRightInverse_apply {f : F} {f_inv : M -> A} (hf : Function.RightInve
+rse f_inv f) {d : Derivation R A A} (hd : forall x, f x = 0 -> f (d x) = 0) (x :
+ A) : Derivation.liftOfRightInverse hf hd (f x) = f (d x)
+参数：hf : Function.RightInverse f_inv f；hd : forall x, f x = 0 -> f (d x) = 0；x : 
+A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
 -/
-lemma liftOfRightInverse_apply {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_inv f)
-    {d : Derivation R A A} (hd : forall x, f x = 0 -> f (d x) = 0) (x : A) :
+lemma liftOfRightInverse_apply {f : F} {f_inv : M → A} (hf : Function.RightInverse f_inv f)
+    {d : Derivation R A A} (hd : ∀ x, f x = 0 → f (d x) = 0) (x : A) :
     Derivation.liftOfRightInverse hf hd (f x) = f (d x) := by
   suffices f (d (f_inv (f x) - x)) = 0 by simpa [sub_eq_zero]
   apply hd
   simp [hf _]
-
-/--
-lemma `liftOfRightInverse_eq` / 引理 `liftOfRightInverse_eq`
-
-English:
-lemma liftOfRightInverse_eq
-  statement: {f : F} {f_inv₁ f_inv₂ : M -> A} (hf₁ : Function.RightInverse f_inv₁ f)
-  proof: by
-  ext _ _ x
-  obtain ⟨x, rfl⟩ := hf₁.surjective x
-  simp
-
-中文:
-引理 liftOfRightInverse_eq
-  结论: {f : F} {f_inv₁ f_inv₂ : M -> A} (hf₁ : 函数.右逆 f_inv₁ f)
-  证明: by
-  ext _ _ x
-  obtain ⟨x, rfl⟩ := hf₁.surjective x
-  simp
-
-Depends on / 依赖: surjective
+/-
+**Derivation.liftOfRightInverse_eq** 是 Mathlib 中的一个引理，位于命名空间 `Derivation`。
+形式化陈述：liftOfRightInverse_eq {f : F} {f_inv₁ f_inv₂ : M -> A} (hf₁ : Function.Rig
+htInverse f_inv₁ f) (hf₂ : Function.RightInverse f_inv₂ f) : liftOfRightInverse 
+hf₁ = liftOfRightInverse hf₂
+参数：hf₁ : Function.RightInverse f_inv₁ f；hf₂ : Function.RightInverse f_inv₂ f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Derivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Derivation.liftOfRightInverse_apply`：liftOfRightInverse_apply {f : F} {f
+_inv : M -> A} (hf : Function.RightInverse f_inv f) {d : Derivation R A A} (hd :
+ forall x, f x = 0 -> f (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma liftOfRightInverse_eq {f : F} {f_inv₁ f_inv₂ : M -> A} (hf₁ : Function.RightInverse f_inv₁ f)
+lemma liftOfRightInverse_eq {f : F} {f_inv₁ f_inv₂ : M → A} (hf₁ : Function.RightInverse f_inv₁ f)
     (hf₂ : Function.RightInverse f_inv₂ f) :
     liftOfRightInverse hf₁ = liftOfRightInverse hf₂ := by
   ext _ _ x
@@ -1487,39 +1077,43 @@ lemma liftOfRightInverse_eq {f : F} {f_inv₁ f_inv₂ : M -> A} (hf₁ : Functi
   simp
 
 /--
-Definition of `liftOfSurjective` / `liftOfSurjective` 的定义
+A noncomputable version of `liftOfRightInverse` for surjective homomorphisms.
+-/
+/-
+**Derivation.liftOfSurjective** 是 Mathlib 中的一个缩写定义，位于命名空间 `Derivation`。
+形式化陈述：liftOfSurjective {f : F} (hf : Function.Surjective f) ⦃d : Derivation R A 
+A⦄ (hd : forall x, f x = 0 -> f (d x) = 0) : Derivation R M M
+参数：hf : Function.Surjective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation liftOfSurjective
-  signature: {f : F} (hf : Function.Surjective f)
-  body: d.liftOfRightInverse (Function.rightInverse_surjInv hf) hd
-
-中文:
-缩写 liftOfSurjective
-  签名: {f : F} (hf : 函数.满射 f)
-  定义体: d.liftOfRightInverse (Function.rightInverse_surjInv hf) hd
-
-Depends on / 依赖: Function, Function.rightInverse_surjInv, d.liftOfRightInverse, liftOfRightInverse, rightInverse_surjInv
+--- 原说明 ---
+A noncomputable version of `liftOfRightInverse` for surjective homomorphisms.
 -/
 noncomputable abbrev liftOfSurjective {f : F} (hf : Function.Surjective f)
-    ⦃d : Derivation R A A⦄ (hd : forall x, f x = 0 -> f (d x) = 0) : Derivation R M M :=
+    ⦃d : Derivation R A A⦄ (hd : ∀ x, f x = 0 → f (d x) = 0) : Derivation R M M :=
   d.liftOfRightInverse (Function.rightInverse_surjInv hf) hd
-
-/--
-lemma `liftOfSurjective_apply` / 引理 `liftOfSurjective_apply`
-
-English:
-lemma liftOfSurjective_apply
-  statement: {f : F} (hf : Function.Surjective f)
-  proof: by simp
-
-中文:
-引理 liftOfSurjective_apply
-  结论: {f : F} (hf : 函数.满射 f)
-  证明: by simp
+/-
+**Derivation.liftOfSurjective_apply** 是 Mathlib 中的一个引理，位于命名空间 `Derivation`。
+形式化陈述：liftOfSurjective_apply {f : F} (hf : Function.Surjective f) {d : Derivatio
+n R A A} (hd : forall x, f x = 0 -> f (d x) = 0) (x : A) : Derivation.liftOfSurj
+ective hf hd (f x) = f (d x)
+参数：hf : Function.Surjective f；hd : forall x, f x = 0 -> f (d x) = 0；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Derivation.liftOfRightInverse_apply`：liftOfRightInverse_apply {f : F} {f
+_inv : M -> A} (hf : Function.RightInverse f_inv f) {d : Derivation R A A} (hd :
+ forall x, f x = 0 -> f (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma liftOfSurjective_apply {f : F} (hf : Function.Surjective f)
-    {d : Derivation R A A} (hd : forall x, f x = 0 -> f (d x) = 0) (x : A) :
+    {d : Derivation R A A} (hd : ∀ x, f x = 0 → f (d x) = 0) (x : A) :
     Derivation.liftOfSurjective hf hd (f x) = f (d x) := by simp
 
 end Lift
@@ -1529,75 +1123,50 @@ section Cancel
 variable {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*}
   [AddCancelCommMonoid M] [Module R M] [Module A M]
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- Define `Derivation R A M` from a linear map when `M` is cancellative by verifying the Leibniz
+rule. -/
+/-
+**Derivation.mk'** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：mk' (D : A ->ₗ[R] M) (h : forall a b, D (a * b) = a • D b + b • D a) : Der
+ivation R A M where toLinearMap
+参数：D : A ->ₗ[R] M；h : forall a b, D (a * b) = a • D b + b • D a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: (D : A ->ₗ[R] M) (h : forall a b, D (a * b) = a • D b + b • D a)
-  body: D
-map_one_eq_zero' := (add_eq_left (a := D 1)).1 by
-    simpa only [one_smul, one_mul] using (h 1 1).symm
-  leibniz' := h
-
-@[simp]
-
-中文:
-定义 mk'
-  签名: (D : A ->ₗ[R] M) (h : 对任意 a b, D (a * b) = a • D b + b • D a)
-  定义体: D
-map_one_eq_zero' := (add_eq_left (a := D 1)).1 by
-    simpa only [one_smul, one_mul] using (h 1 1).symm
-  leibniz' := h
-
-@[simp]
+--- 原说明 ---
+Define `Derivation R A M` from a linear map when `M` is cancellative by verifyin
+g the Leibniz
+rule.
 -/
-def mk' (D : A ->ₗ[R] M) (h : forall a b, D (a * b) = a • D b + b • D a) : Derivation R A M where
+def mk' (D : A →ₗ[R] M) (h : ∀ a b, D (a * b) = a • D b + b • D a) : Derivation R A M where
   toLinearMap := D
-map_one_eq_zero' := (add_eq_left (a := D 1)).1 by
+  map_one_eq_zero' := (add_eq_left (a := D 1)).1 <| by
     simpa only [one_smul, one_mul] using (h 1 1).symm
   leibniz' := h
 
 @[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
-
-English:
-theorem coe_mk'
-  given: (D : A ->ₗ[R] M) (h)
-  statement: ⇑(mk' D h) = D
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk'
-  条件: (D : A ->ₗ[R] M) (h)
-  结论: ⇑(mk' D h) = D
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_mk' (D : A ->ₗ[R] M) (h) : ⇑(mk' D h) = D
+参数：D : A ->ₗ[R] M；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk' (D : A ->ₗ[R] M) (h) : ⇑(mk' D h) = D :=
+theorem coe_mk' (D : A →ₗ[R] M) (h) : ⇑(mk' D h) = D :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk'_linearMap` / 定理 `coe_mk'_linearMap`
-
-English:
-theorem coe_mk'_linearMap
-  given: (D : A ->ₗ[R] M) (h)
-  statement: (mk' D h : A ->ₗ[R] M) = D
-  proof: rfl
-
-中文:
-定理 coe_mk'_linearMap
-  条件: (D : A ->ₗ[R] M) (h)
-  结论: (mk' D h : A ->ₗ[R] M) = D
-  证明: rfl
+/-
+**Derivation.coe_mk'_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {A : Type u_2} [inst_1 : CommSemi
+ring A] [inst_2 : Algebra R A] {M : Type u_3}   [inst_3 : AddCancelCommMonoid M]
+ [inst_4 : _root_.Module R M] [inst_5 : _root_.Module A M] (D : A →ₗ[R] M)   (h 
+: ∀ (a b : A), D (a * b) = a • D b + b • D a), ↑(Derivation.mk' D h) = D
+参数：D : A →ₗ[R] M；h : ∀ (a b : A), D (a * b) = a • D b + b • D a；Derivation.mk' D
+ h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk'_linearMap (D : A ->ₗ[R] M) (h) : (mk' D h : A ->ₗ[R] M) = D :=
+theorem coe_mk'_linearMap (D : A →ₗ[R] M) (h) : (mk' D h : A →ₗ[R] M) = D :=
   rfl
 
 end Cancel
@@ -1612,93 +1181,89 @@ section
 variable {M : Type*} [AddCommGroup M] [Module A M] [Module R M]
 variable (D : Derivation R A M) {D1 D2 : Derivation R A M} (r : R) (a b : A)
 
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  statement: D (-a) = -D a
-  proof: map_neg D a
-
-中文:
-定理 map_neg
-  结论: D (-a) = -D a
-  证明: map_neg D a
+/-
+**Derivation.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {A : Type u_2} [inst_1 : CommRing A] 
+[inst_2 : Algebra R A] {M : Type u_3}   [inst_3 : AddCommGroup M] [inst_4 : _roo
+t_.Module A M] [inst_5 : _root_.Module R M] (D : Derivation R A M) (a : A),   D 
+(-a) = -D a
+参数：D : Derivation R A M；a : A；-a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
 -/
 protected theorem map_neg : D (-a) = -D a :=
   map_neg D a
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  statement: D (a - b) = D a - D b
-  proof: map_sub D a b
-
-@[simp]
-
-中文:
-定理 map_sub
-  结论: D (a - b) = D a - D b
-  证明: map_sub D a b
-
-@[simp]
+/-
+**Derivation.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {A : Type u_2} [inst_1 : CommRing A] 
+[inst_2 : Algebra R A] {M : Type u_3}   [inst_3 : AddCommGroup M] [inst_4 : _roo
+t_.Module A M] [inst_5 : _root_.Module R M] (D : Derivation R A M) (a b : A),   
+D (a - b) = D a - D b
+参数：D : Derivation R A M；a b : A；a - b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
 -/
 protected theorem map_sub : D (a - b) = D a - D b :=
   map_sub D a b
 
 @[simp]
-/--
-theorem `map_intCast` / 定理 `map_intCast`
-
-English:
-theorem map_intCast
-  given: (n : Int)
-  statement: D (n : A) = 0
-  proof: by
-  rw [← zsmul_one]; rw [D.map_smul_of_tower n]; rw [map_one_eq_zero]; rw [smul_zero]
-
-中文:
-定理 map_intCast
-  条件: (n : 整数)
-  结论: D (n : A) = 0
-  证明: by
-  rw [← zsmul_one]; rw [D.map_smul_of_tower n]; rw [map_one_eq_zero]; rw [smul_zero]
-
-Depends on / 依赖: D.map_smul_of_tower, map_one_eq_zero, map_smul_of_tower, smul_zero, zsmul_one
+/-
+**Derivation.map_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：map_intCast (n : Int) : D (n : A) = 0
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zsmul_one`：∀ {R : Type u_1} [inst : AddGroupWithOne R] (n : ℤ), n • 1 = 
+↑n
+· 使用定理 `Derivation.map_smul_of_tower`：map_smul_of_tower {S : Type*} [SMul S A] [
+SMul S M] [LinearMap.CompatibleSMul A M S R] (D : Derivation R A M) (r : S) (a :
+ A) : D (r • a) = …
+· 使用定理 `LinearMap.CompatibleSMul.intModule`：∀ {M : Type u_8} {M₂ : Type u_10} [i
+nst : AddCommGroup M] [inst_1 : AddCommGroup M₂] {S : Type u_14}   [inst_2 : Sem
+iring S] [inst_3 : _root…
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
-theorem map_intCast (n : Int) : D (n : A) = 0 := by
-  rw [← zsmul_one]; rw [D.map_smul_of_tower n]; rw [map_one_eq_zero]; rw [smul_zero]
-
-/--
-theorem `leibniz_of_mul_eq_one` / 定理 `leibniz_of_mul_eq_one`
-
-English:
-theorem leibniz_of_mul_eq_one
-  given: {a b : A} (h : a * b = 1)
-  statement: D a = -a ^ 2 • D b
-  proof: by
-  rw [neg_smul]
-  refine eq_neg_of_add_eq_zero_left ?_
-  calc
-    D a + a ^ 2 • D b = a • b • D a + a • a • D b := by simp only [smul_smul, h, one_smul, sq]
-    _ = a • D (a * b) := by rw [leibniz, smul_add, add_comm]
-    _ = 0 := by rw [h, map_one_eq_zero, smul_zero]
-
-中文:
-定理 leibniz_of_mul_eq_one
-  条件: {a b : A} (h : a * b = 1)
-  结论: D a = -a ^ 2 • D b
-  证明: by
-  rw [neg_smul]
-  refine eq_neg_of_add_eq_zero_left ?_
-  calc
-    D a + a ^ 2 • D b = a • b • D a + a • a • D b := by simp only [smul_smul, h, one_smul, sq]
-    _ = a • D (a * b) := by rw [leibniz, smul_add, add_comm]
-    _ = 0 := by rw [h, map_one_eq_zero, smul_zero]
-
-Depends on / 依赖: add_comm, eq_neg_of_add_eq_zero_left, leibniz, map_one_eq_zero, neg_smul, one_smul, smul_add, smul_smul, smul_zero
+theorem map_intCast (n : ℤ) : D (n : A) = 0 := by
+  rw [← zsmul_one, D.map_smul_of_tower n, map_one_eq_zero, smul_zero]
+/-
+**Derivation.leibniz_of_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：leibniz_of_mul_eq_one {a b : A} (h : a * b = 1) : D a = -a ^ 2 • D b
+参数：h : a * b = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `eq_neg_of_add_eq_zero_left`：∀ {G : Type u_1} [inst : SubtractionMonoid G
+] {a b : G}, a + b = 0 → a = -b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem leibniz_of_mul_eq_one {a b : A} (h : a * b = 1) : D a = -a ^ 2 • D b := by
   rw [neg_smul]
@@ -1707,174 +1272,253 @@ theorem leibniz_of_mul_eq_one {a b : A} (h : a * b = 1) : D a = -a ^ 2 • D b :
     D a + a ^ 2 • D b = a • b • D a + a • a • D b := by simp only [smul_smul, h, one_smul, sq]
     _ = a • D (a * b) := by rw [leibniz, smul_add, add_comm]
     _ = 0 := by rw [h, map_one_eq_zero, smul_zero]
-
-/--
-theorem `leibniz_invOf` / 定理 `leibniz_invOf`
-
-English:
-theorem leibniz_invOf
-  given: [Invertible a]
-  statement: D (⅟a) = -⅟a ^ 2 • D a
-  proof: D.leibniz_of_mul_eq_one invOf_mul_self a
-
-中文:
-定理 leibniz_invOf
-  条件: [可逆 a]
-  结论: D (⅟a) = -⅟a ^ 2 • D a
-  证明: D.leibniz_of_mul_eq_one invOf_mul_self a
-
-Depends on / 依赖: D.leibniz_of_mul_eq_one, invOf_mul_self, leibniz_of_mul_eq_one
+/-
+**Derivation.leibniz_invOf** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：leibniz_invOf [Invertible a] : D (⅟a) = -⅟a ^ 2 • D a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.leibniz_of_mul_eq_one`：leibniz_of_mul_eq_one {a b : A} (h : a
+ * b = 1) : D a = -a ^ 2 • D b
+· 使用定理 `invOf_mul_self`：invOf_mul_self [Mul α] [One α] (a : α) [Invertible a] : 
+⅟a * a = 1
 -/
 theorem leibniz_invOf [Invertible a] : D (⅟a) = -⅟a ^ 2 • D a :=
-D.leibniz_of_mul_eq_one invOf_mul_self a
+  D.leibniz_of_mul_eq_one <| invOf_mul_self a
 
 section Field
 
 variable {K : Type*} [Field K] [Module K M] [Algebra R K] (D : Derivation R K M)
 
-/--
-theorem `leibniz_inv` / 定理 `leibniz_inv`
-
-English:
-theorem leibniz_inv
-  given: (a : K)
-  statement: D a⁻¹ = -a⁻¹ ^ 2 • D a
-  proof: by
-  rcases eq_or_ne a 0 with (rfl | ha)
-  · simp
-  · exact D.leibniz_of_mul_eq_one (inv_mul_cancel₀ ha)
-
-中文:
-定理 leibniz_inv
-  条件: (a : K)
-  结论: D a⁻¹ = -a⁻¹ ^ 2 • D a
-  证明: by
-  rcases eq_or_ne a 0 with (rfl | ha)
-  · simp
-  · exact D.leibniz_of_mul_eq_one (inv_mul_cancel₀ ha)
-
-Depends on / 依赖: D.leibniz_of_mul_eq_one, eq_or_ne, leibniz_of_mul_eq_one
+/-
+**Derivation.leibniz_inv** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：leibniz_inv (a : K) : D a⁻¹ = -a⁻¹ ^ 2 • D a
+参数：a : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Derivation.leibniz_of_mul_eq_one`：leibniz_of_mul_eq_one {a b : A} (h : a
+ * b = 1) : D a = -a ^ 2 • D b
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
 -/
 theorem leibniz_inv (a : K) : D a⁻¹ = -a⁻¹ ^ 2 • D a := by
   rcases eq_or_ne a 0 with (rfl | ha)
   · simp
   · exact D.leibniz_of_mul_eq_one (inv_mul_cancel₀ ha)
-
-/--
-theorem `leibniz_div` / 定理 `leibniz_div`
-
-English:
-theorem leibniz_div
-  given: (a b : K)
-  statement: D (a / b) = b⁻¹ ^ 2 • (b • D a - a • D b)
-  proof: by
-  simp only [div_eq_mul_inv, leibniz, leibniz_inv, inv_pow, neg_smul, smul_neg, smul_smul, add_comm,
-    sub_eq_add_neg, smul_add]
-  rw [← inv_mul_mul_self b⁻¹]; rw [inv_inv]
-  ring_nf
-
-中文:
-定理 leibniz_div
-  条件: (a b : K)
-  结论: D (a / b) = b⁻¹ ^ 2 • (b • D a - a • D b)
-  证明: by
-  simp only [div_eq_mul_inv, leibniz, leibniz_inv, inv_pow, neg_smul, smul_neg, smul_smul, add_comm,
-    sub_eq_add_neg, smul_add]
-  rw [← inv_mul_mul_self b⁻¹]; rw [inv_inv]
-  ring_nf
-
-Depends on / 依赖: add_comm, div_eq_mul_inv, inv_inv, inv_mul_mul_self, inv_pow, leibniz, leibniz_inv, neg_smul, ring_nf, smul_add, smul_neg, smul_smul, sub_eq_add_neg
+/-
+**Derivation.leibniz_div** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：leibniz_div (a b : K) : D (a / b) = b⁻¹ ^ 2 • (b • D a - a • D b)
+参数：a b : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Derivation.leibniz_inv`：leibniz_inv (a : K) : D a⁻¹ = -a⁻¹ ^ 2 • D a
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_mul_mul_self`：inv_mul_mul_self (a : G₀) : a⁻¹ * a * a = a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_congr`：∀ {R : Type u_2} [inst : Semifield
+ R] {a a' b : R}, a = a' → a'⁻¹ = b → a⁻¹ = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_single`：∀ {R : Type u_2} [inst : Semifiel
+d R] {a b : R}, a⁻¹ = b → (a + 0)⁻¹ = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_mul`：∀ {R : Type u_2} [inst : Semifield R
+] {a₁ : R} {a₂ : ℕ} {a₃ b₁ b₃ c : R},   a₁⁻¹ = b₁ → a₃⁻¹ = b₃ → b₃ * (b₁ ^ a₂ * 
+Nat.rawCast 1) = c → (a₁…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_inv_one`：∀ {α : Type u_1} [inst : DivisionSem
+iring α] {a : α}, Mathlib.Meta.NormNum.IsNat a 1 → Mathlib.Meta.NormNum.IsNat a⁻
+¹ 1
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+（共 52 条，此处仅展示前 30 条）
 -/
 theorem leibniz_div (a b : K) : D (a / b) = b⁻¹ ^ 2 • (b • D a - a • D b) := by
   simp only [div_eq_mul_inv, leibniz, leibniz_inv, inv_pow, neg_smul, smul_neg, smul_smul, add_comm,
     sub_eq_add_neg, smul_add]
-  rw [← inv_mul_mul_self b⁻¹]; rw [inv_inv]
+  rw [← inv_mul_mul_self b⁻¹, inv_inv]
   ring_nf
-
-/--
-theorem `leibniz_div_const` / 定理 `leibniz_div_const`
-
-English:
-theorem leibniz_div_const
-  given: (a b : K) (h : D b = 0)
-  statement: D (a / b) = b⁻¹ • D a
-  proof: by
-  simp only [leibniz_div, inv_pow, h, smul_zero, sub_zero, smul_smul]
-  rw [← mul_self_mul_inv b⁻¹]; rw [inv_inv]
-  ring_nf
-
-中文:
-定理 leibniz_div_const
-  条件: (a b : K) (h : D b = 0)
-  结论: D (a / b) = b⁻¹ • D a
-  证明: by
-  simp only [leibniz_div, inv_pow, h, smul_zero, sub_zero, smul_smul]
-  rw [← mul_self_mul_inv b⁻¹]; rw [inv_inv]
-  ring_nf
-
-Depends on / 依赖: inv_inv, inv_pow, leibniz_div, mul_self_mul_inv, ring_nf, smul_smul, smul_zero, sub_zero
+/-
+**Derivation.leibniz_div_const** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：leibniz_div_const (a b : K) (h : D b = 0) : D (a / b) = b⁻¹ • D a
+参数：a b : K；h : D b = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Derivation.leibniz_div`：leibniz_div (a b : K) : D (a / b) = b⁻¹ ^ 2 • (b
+ • D a - a • D b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_self_mul_inv`：mul_self_mul_inv (a : G₀) : a * a * a⁻¹ = a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_congr`：∀ {R : Type u_2} [inst : Semifield
+ R] {a a' b : R}, a = a' → a'⁻¹ = b → a⁻¹ = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' c : R} {b b' : ℕ}, a = a' → b = b' → a' ^ b' = c → a ^ b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a c₁ c₂ : R} {b₁ b₂ : ℕ} {d : R},   a ^ b₁ = c₁ → a ^ b₂ = c₂ → c₁ * c₂ = 
+d → a ^ (b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.single_pow`：∀ {R : Type u_1} [inst : CommSemi
+ring R] {a c : R} {b : ℕ}, a ^ b = c → (a + 0) ^ b = c + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pow_mul`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₂ c₂ : R} {ea₁ b c₁ : ℕ} {xa₁ c₃ d : R},   ea₁ * b = c₁ → a₂ ^ b = c₂
+ → xa₁ ^ c₁ * Nat.rawCast 1 …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.one_pow`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a : R} (b : ℕ), Mathlib.Meta.NormNum.IsNat a 1 → a ^ b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R) {e : R}, Nat.rawCast 1 = e → a ^ 0 = e + 0
+（共 47 条，此处仅展示前 30 条）
 -/
 theorem leibniz_div_const (a b : K) (h : D b = 0) : D (a / b) = b⁻¹ • D a := by
   simp only [leibniz_div, inv_pow, h, smul_zero, sub_zero, smul_smul]
-  rw [← mul_self_mul_inv b⁻¹]; rw [inv_inv]
+  rw [← mul_self_mul_inv b⁻¹, inv_inv]
   ring_nf
-
-/--
-lemma `leibniz_zpow` / 引理 `leibniz_zpow`
-
-English:
-lemma leibniz_zpow
-  given: (a : K) (n : Int)
-  statement: D (a ^ n) = n • a ^ (n - 1) • D a
-  proof: by
-  by_cases hn : n = 0
-  · simp [hn]
-  by_cases ha : a = 0
-  · simp [ha, zero_zpow n hn]
-  rcases Int.natAbs_eq n with h | h
-  · rw [h]
-    simp only [zpow_natCast, leibniz_pow, natCast_zsmul]
-    rw [← zpow_natCast]
-    congr
-    lia
-  · rw [h, zpow_neg, zpow_natCast, leibniz_inv, leibniz_pow, inv_pow, ← pow_mul, ← zpow_natCast,
-      ← zpow_natCast, ← Nat.cast_smul_eq_nsmul K, ← Int.cast_smul_eq_zsmul K, smul_smul, smul_smul,
-      smul_smul]
-    trans (-n.natAbs * (a ^ ((n.natAbs - 1 : Nat) : Int) / (a ^ ((n.natAbs * 2 : Nat) : Int)))) • D a
-    · ring_nf
-    rw [← zpow_sub₀ ha]
-    congr 3
-    · norm_cast
-    lia
-
-中文:
-引理 leibniz_zpow
-  条件: (a : K) (n : 整数)
-  结论: D (a ^ n) = n • a ^ (n - 1) • D a
-  证明: by
-  by_cases hn : n = 0
-  · simp [hn]
-  by_cases ha : a = 0
-  · simp [ha, zero_zpow n hn]
-  rcases Int.natAbs_eq n with h | h
-  · rw [h]
-    simp only [zpow_natCast, leibniz_pow, natCast_zsmul]
-    rw [← zpow_natCast]
-    congr
-    lia
-  · rw [h, zpow_neg, zpow_natCast, leibniz_inv, leibniz_pow, inv_pow, ← pow_mul, ← zpow_natCast,
-      ← zpow_natCast, ← Nat.cast_smul_eq_nsmul K, ← Int.cast_smul_eq_zsmul K, smul_smul, smul_smul,
-      smul_smul]
-    trans (-n.natAbs * (a ^ ((n.natAbs - 1 : Nat) : Int) / (a ^ ((n.natAbs * 2 : Nat) : Int)))) • D a
-    · ring_nf
-    rw [← zpow_sub₀ ha]
-    congr 3
-    · norm_cast
-    lia
-
-Depends on / 依赖: Int.cast_smul_eq_zsmul, Int.natAbs_eq, Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, cast_smul_eq_zsmul, inv_pow, leibniz_inv, leibniz_pow, n.natAbs, natAbs, natAbs_eq, natCast_zsmul, pow_mul, smul_smul, zero_zpow, zpow_natCast, zpow_neg
+/-
+**Derivation.leibniz_zpow** 是 Mathlib 中的一个引理，位于命名空间 `Derivation`。
+形式化陈述：leibniz_zpow (a : K) (n : Int) : D (a ^ n) = n • a ^ (n - 1) • D a
+参数：a : K；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `zpow_ofNat`：zpow_ofNat (a : G) (n : Nat) : a ^ (ofNat(n) : Int) = a ^ Of
+Nat.ofNat n
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Derivation.map_one_eq_zero`：map_one_eq_zero : D 1 = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zero_zpow`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀] (n : ℤ), n ≠ 0 → 
+0 ^ n = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `Derivation.instAddMonoidHomClass`：∀ {R : Type u_1} {A : Type u_2} {M : T
+ype u_4} [inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : AddCommMo
+noid M] [inst_3 : Alge…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Int.natAbs_eq`：∀ (a : ℤ), a = ↑a.natAbs ∨ a = -↑a.natAbs
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `Derivation.leibniz_pow`：leibniz_pow (n : Nat) : D (a ^ n) = n • a ^ (n -
+ 1) • D a
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Derivation.leibniz_inv`：leibniz_inv (a : K) : D a⁻¹ = -a⁻¹ ^ 2 • D a
+· 使用定理 `inv_pow`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℕ), a⁻¹
+ ^ n = (a ^ n)⁻¹
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用引理 `Int.cast_smul_eq_zsmul`：Int.cast_smul_eq_zsmul (n : Int) (b : M) : (n : 
+R) • b = n • b
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+（共 66 条，此处仅展示前 30 条）
 -/
-lemma leibniz_zpow (a : K) (n : Int) : D (a ^ n) = n • a ^ (n - 1) • D a := by
+lemma leibniz_zpow (a : K) (n : ℤ) : D (a ^ n) = n • a ^ (n - 1) • D a := by
   by_cases hn : n = 0
   · simp [hn]
   by_cases ha : a = 0
@@ -1888,7 +1532,7 @@ lemma leibniz_zpow (a : K) (n : Int) : D (a ^ n) = n • a ^ (n - 1) • D a := 
   · rw [h, zpow_neg, zpow_natCast, leibniz_inv, leibniz_pow, inv_pow, ← pow_mul, ← zpow_natCast,
       ← zpow_natCast, ← Nat.cast_smul_eq_nsmul K, ← Int.cast_smul_eq_zsmul K, smul_smul, smul_smul,
       smul_smul]
-    trans (-n.natAbs * (a ^ ((n.natAbs - 1 : Nat) : Int) / (a ^ ((n.natAbs * 2 : Nat) : Int)))) • D a
+    trans (-n.natAbs * (a ^ ((n.natAbs - 1 : ℕ) : ℤ) / (a ^ ((n.natAbs * 2 : ℕ) : ℤ)))) • D a
     · ring_nf
     rw [← zpow_sub₀ ha]
     congr 3
@@ -1897,28 +1541,9 @@ lemma leibniz_zpow (a : K) (n : Int) : D (a ^ n) = n • a ^ (n - 1) • D a := 
 
 end Field
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (Derivation R A M)
-  body: ⟨fun D =>
-    mk' (-D) fun a b => by
-      simp only [LinearMap.neg_apply, smul_neg, neg_add_rev, leibniz, coeFn_coe, add_comm]⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 取负 (导子 R A M)
-  定义体: ⟨fun D =>
-    mk' (-D) fun a b => by
-      simp only [LinearMap.neg_apply, smul_neg, neg_add_rev, leibniz, coeFn_coe, add_comm]⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.neg_apply, add_comm, coeFn_coe, leibniz, neg_add_rev, neg_apply, smul_neg
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (Derivation R A M) :=
   ⟨fun D =>
@@ -1926,163 +1551,76 @@ instance : Neg (Derivation R A M) :=
       simp only [LinearMap.neg_apply, smul_neg, neg_add_rev, leibniz, coeFn_coe, add_comm]⟩
 
 @[simp]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (D : Derivation R A M)
-  statement: ⇑(-D) = -D
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_neg
-  条件: (D : 导子 R A M)
-  结论: ⇑(-D) = -D
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_neg (D : Derivation R A M) : ⇑(-D) = -D
+参数：D : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg (D : Derivation R A M) : ⇑(-D) = -D :=
   rfl
 
 @[simp]
-/--
-theorem `coe_neg_linearMap` / 定理 `coe_neg_linearMap`
-
-English:
-theorem coe_neg_linearMap
-  given: (D : Derivation R A M)
-  statement: ↑(-D) = (-D : A ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_neg_linearMap
-  条件: (D : 导子 R A M)
-  结论: ↑(-D) = (-D : A ->ₗ[R] M)
-  证明: rfl
+/-
+**Derivation.coe_neg_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_neg_linearMap (D : Derivation R A M) : ↑(-D) = (-D : A ->ₗ[R] M)
+参数：D : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_neg_linearMap (D : Derivation R A M) : ↑(-D) = (-D : A ->ₗ[R] M) :=
+theorem coe_neg_linearMap (D : Derivation R A M) : ↑(-D) = (-D : A →ₗ[R] M) :=
   rfl
-
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  statement: (-D) a = -D a
-  proof: rfl
-
-中文:
-定理 neg_apply
-  结论: (-D) a = -D a
-  证明: rfl
+/-
+**Derivation.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：neg_apply : (-D) a = -D a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply : (-D) a = -D a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (Derivation R A M)
-  body: ⟨fun D1 D2 =>
-    mk' (D1 - D2 : A ->ₗ[R] M) fun a b => by
-      simp only [LinearMap.sub_apply, leibniz, coeFn_coe, smul_sub, add_sub_add_comm]⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 减法 (导子 R A M)
-  定义体: ⟨fun D1 D2 =>
-    mk' (D1 - D2 : A ->ₗ[R] M) fun a b => by
-      simp only [LinearMap.sub_apply, leibniz, coeFn_coe, smul_sub, add_sub_add_comm]⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.sub_apply, add_sub_add_comm, coeFn_coe, leibniz, smul_sub, sub_apply
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (Derivation R A M) :=
   ⟨fun D1 D2 =>
-    mk' (D1 - D2 : A ->ₗ[R] M) fun a b => by
+    mk' (D1 - D2 : A →ₗ[R] M) fun a b => by
       simp only [LinearMap.sub_apply, leibniz, coeFn_coe, smul_sub, add_sub_add_comm]⟩
 
 @[simp]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (D1 D2 : Derivation R A M)
-  statement: ⇑(D1 - D2) = D1 - D2
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sub
-  条件: (D1 D2 : 导子 R A M)
-  结论: ⇑(D1 - D2) = D1 - D2
-  证明: rfl
-
-@[simp]
+/-
+**Derivation.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_sub (D1 D2 : Derivation R A M) : ⇑(D1 - D2) = D1 - D2
+参数：D1 D2 : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sub (D1 D2 : Derivation R A M) : ⇑(D1 - D2) = D1 - D2 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_sub_linearMap` / 定理 `coe_sub_linearMap`
-
-English:
-theorem coe_sub_linearMap
-  given: (D1 D2 : Derivation R A M)
-  statement: ↑(D1 - D2) = (D1 - D2 : A ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_sub_linearMap
-  条件: (D1 D2 : 导子 R A M)
-  结论: ↑(D1 - D2) = (D1 - D2 : A ->ₗ[R] M)
-  证明: rfl
+/-
+**Derivation.coe_sub_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：coe_sub_linearMap (D1 D2 : Derivation R A M) : ↑(D1 - D2) = (D1 - D2 : A -
+>ₗ[R] M)
+参数：D1 D2 : Derivation R A M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sub_linearMap (D1 D2 : Derivation R A M) : ↑(D1 - D2) = (D1 - D2 : A ->ₗ[R] M) :=
+theorem coe_sub_linearMap (D1 D2 : Derivation R A M) : ↑(D1 - D2) = (D1 - D2 : A →ₗ[R] M) :=
   rfl
-
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  statement: (D1 - D2) a = D1 a - D2 a
-  proof: rfl
-
-中文:
-定理 sub_apply
-  结论: (D1 - D2) a = D1 a - D2 a
-  证明: rfl
+/-
+**Derivation.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：sub_apply : (D1 - D2) a = D1 a - D2 a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_apply : (D1 - D2) a = D1 a - D2 a :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (Derivation R A M)
-  body: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 :
-  签名: 加法交换群 (导子 R A M)
-  定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: addCommGroup, coe_add, coe_injective, coe_injective.addCommGroup, coe_neg, coe_sub, coe_zero
+/-
+**Derivation.** 是 Mathlib 中的一个实例，位于命名空间 `Derivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (Derivation R A M) :=
   coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
@@ -2092,3 +1630,4 @@ end
 end
 
 end Derivation
+

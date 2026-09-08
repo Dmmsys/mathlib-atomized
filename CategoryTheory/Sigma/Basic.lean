@@ -24,81 +24,75 @@ namespace Sigma
 
 universe w₁ w₂ w₃ v₁ v₂ u₁ u₂
 
-variable {I : Type w₁} {C : I -> Type u₁} [forall i, Category.{v₁} (C i)]
+variable {I : Type w₁} {C : I → Type u₁} [∀ i, Category.{v₁} (C i)]
 
-/--
-Inductive type `SigmaHom` / 归纳类型 `SigmaHom`
-
-English:
-inductive SigmaHom
-  parameters: : (Σ i, C i) -> (Σ i, C i) -> Type max w₁ v₁ u₁
-  constructors (1):
-    - mk: forall {i : I} {X Y : C i}, (X ⟶ Y) -> SigmaHom ⟨i, X⟩ ⟨i, Y⟩
-
-中文:
-归纳类型 依赖和类型态射
-  参数: : (Σ i, C i) -> (Σ i, C i) -> 类型 最大值 w₁ v₁ u₁
-  构造子 (1 个):
-    - mk: 对任意 {i : I} {X Y : C i}, (X ⟶ Y) -> 依赖和类型态射 ⟨i, X⟩ ⟨i, Y⟩
+/-- The type of morphisms of a disjoint union of categories: for `X : C i` and `Y : C j`, a morphism
+`(i, X) ⟶ (j, Y)` when `i = j` is just a morphism `X ⟶ Y`, and if `i ≠ j` then there are no such
+morphisms.
 -/
-inductive SigmaHom : (Σ i, C i) -> (Σ i, C i) -> Type max w₁ v₁ u₁
-  | mk : forall {i : I} {X Y : C i}, (X ⟶ Y) -> SigmaHom ⟨i, X⟩ ⟨i, Y⟩
+/-
+**CategoryTheory.Sigma.SigmaHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Sigm
+a`。
+形式化陈述：{I : Type w₁} →   {C : I → Type u₁} →     [(i : I) → CategoryTheory.Catego
+ry.{v₁, u₁} (C i)] → (i : I) × C i → (i : I) × C i → Type (max w₁ v₁ u₁)
+参数：i : I；C i；i : I；i : I；max w₁ v₁ u₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The type of morphisms of a disjoint union of categories: for `X : C i` and `Y : 
+C j`, a morphism
+`(i, X) ⟶ (j, Y)` when `i = j` is just a morphism `X ⟶ Y`, and if `i ≠ j` then t
+here are no such
+morphisms.
+-/
+inductive SigmaHom : (Σ i, C i) → (Σ i, C i) → Type max w₁ v₁ u₁
+  | mk : ∀ {i : I} {X Y : C i}, (X ⟶ Y) → SigmaHom ⟨i, X⟩ ⟨i, Y⟩
 
 namespace SigmaHom
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity morphism on an object. -/
+/-
+**CategoryTheory.Sigma.SigmaHom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sig
+ma.SigmaHom`。
+形式化陈述：{I : Type w₁} →   {C : I → Type u₁} →     [inst : (i : I) → CategoryTheory
+.Category.{v₁, u₁} (C i)] → (X : (i : I) × C i) → CategoryTheory.Sigma.SigmaHom 
+X X
+参数：i : I；C i；X : (i : I) × C i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : forall X : Σ i, C i, SigmaHom X X
-
-中文:
-定义 id
-  签名: : 对任意 X : Σ i, C i, 依赖和类型态射 X X
+--- 原说明 ---
+The identity morphism on an object.
 -/
-def id : forall X : Σ i, C i, SigmaHom X X
+def id : ∀ X : Σ i, C i, SigmaHom X X
   | ⟨_, _⟩ => mk (𝟙 _)
-
+/-
+**CategoryTheory.Sigma.SigmaHom.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sigma
+.SigmaHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Σ i, C i) : Inhabited (SigmaHom X X) :=
   ⟨id X⟩
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of sigma homomorphisms. -/
+/-
+**CategoryTheory.Sigma.SigmaHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.S
+igma.SigmaHom`。
+形式化陈述：{I : Type w₁} →   {C : I → Type u₁} →     [inst : (i : I) → CategoryTheory
+.Category.{v₁, u₁} (C i)] →       {X Y Z : (i : I) × C i} →         CategoryTheo
+ry.Sigma.SigmaHom X Y → CategoryTheory.Sigma.SigmaHom Y Z → CategoryTheory.Sigma
+.SigmaHom X Z
+参数：i : I；C i；i : I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: : forall {X Y Z : Σ i, C i}, SigmaHom X Y -> SigmaHom Y Z -> SigmaHom X Z
-
-中文:
-定义 comp
-  签名: : 对任意 {X Y Z : Σ i, C i}, 依赖和类型态射 X Y -> 依赖和类型态射 Y Z -> 依赖和类型态射 X Z
+--- 原说明 ---
+Composition of sigma homomorphisms.
 -/
-def comp : forall {X Y Z : Σ i, C i}, SigmaHom X Y -> SigmaHom Y Z -> SigmaHom X Z
+def comp : ∀ {X Y Z : Σ i, C i}, SigmaHom X Y → SigmaHom Y Z → SigmaHom X Z
   | _, _, _, mk f, mk g => mk (f ≫ g)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryStruct (Σ i, C i)
-  body: SigmaHom
-  id := id
-  comp f g := comp f g
-
-@[simp]
-
-中文:
-实例 :
-  签名: CategoryStruct (Σ i, C i)
-  定义体: SigmaHom
-  id := id
-  comp f g := comp f g
-
-@[simp]
-
-Depends on / 依赖: SigmaHom
+/-
+**CategoryTheory.Sigma.SigmaHom.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sigma
+.SigmaHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryStruct (Σ i, C i) where
   Hom := SigmaHom
@@ -106,86 +100,85 @@ instance : CategoryStruct (Σ i, C i) where
   comp f g := comp f g
 
 @[simp]
-/--
-lemma `comp_def` / 引理 `comp_def`
-
-English:
-lemma comp_def
-  given: (i : I) (X Y Z : C i) (f : X ⟶ Y) (g : Y ⟶ Z)
-  statement: comp (mk f) (mk g) = mk (f ≫ g)
-  proof: rfl
-
-中文:
-引理 comp_def
-  条件: (i : I) (X Y Z : C i) (f : X ⟶ Y) (g : Y ⟶ Z)
-  结论: comp (mk f) (mk g) = mk (f ≫ g)
-  证明: rfl
+/-
+**CategoryTheory.Sigma.SigmaHom.comp_def** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Sigma.SigmaHom`。
+形式化陈述：comp_def (i : I) (X Y Z : C i) (f : X ⟶ Y) (g : Y ⟶ Z) : comp (mk f) (mk g
+) = mk (f ≫ g)
+参数：i : I；X Y Z : C i；f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_def (i : I) (X Y Z : C i) (f : X ⟶ Y) (g : Y ⟶ Z) : comp (mk f) (mk g) = mk (f ≫ g) :=
   rfl
-
-/--
-lemma `assoc` / 引理 `assoc`
-
-English:
-lemma assoc
-  statement: forall {X Y Z W : Σ i, C i} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ W), (f ≫ g) ≫ h = f ≫ g ≫ h
-
-中文:
-引理 assoc
-  结论: 对任意 {X Y Z W : Σ i, C i} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ W), (f ≫ g) ≫ h = f ≫ g ≫ h
+/-
+**CategoryTheory.Sigma.SigmaHom.assoc** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Sigma.SigmaHom`。
+形式化陈述：∀ {I : Type w₁} {C : I → Type u₁} [inst : (i : I) → CategoryTheory.Categor
+y.{v₁, u₁} (C i)] {X Y Z W : (i : I) × C i}   (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ W
+),   CategoryTheory.CategoryStruct.comp (CategoryTheory.CategoryStruct.comp f g)
+ h =     CategoryTheory.CategoryStruct.comp f (CategoryTheory.CategoryStruct.com
+p g h)
+参数：i : I；C i；i : I；f : X ⟶ Y；g : Y ⟶ Z；h : Z ⟶ W；CategoryTheory.CategoryStruct.c
+omp f g；CategoryTheory.CategoryStruct.comp g h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 -/
-lemma assoc : forall {X Y Z W : Σ i, C i} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ W), (f ≫ g) ≫ h = f ≫ g ≫ h
+lemma assoc : ∀ {X Y Z W : Σ i, C i} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ W), (f ≫ g) ≫ h = f ≫ g ≫ h
   | _, _, _, _, mk _, mk _, mk _ => congr_arg mk (Category.assoc _ _ _)
-
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  statement: forall {X Y : Σ i, C i} (f : X ⟶ Y), 𝟙 X ≫ f = f
-
-中文:
-引理 id_comp
-  结论: 对任意 {X Y : Σ i, C i} (f : X ⟶ Y), 𝟙 X ≫ f = f
+/-
+**CategoryTheory.Sigma.SigmaHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Sigma.SigmaHom`。
+形式化陈述：∀ {I : Type w₁} {C : I → Type u₁} [inst : (i : I) → CategoryTheory.Categor
+y.{v₁, u₁} (C i)] {X Y : (i : I) × C i}   (f : X ⟶ Y), CategoryTheory.CategorySt
+ruct.comp (CategoryTheory.CategoryStruct.id X) f = f
+参数：i : I；C i；i : I；f : X ⟶ Y；CategoryTheory.CategoryStruct.id X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
-lemma id_comp : forall {X Y : Σ i, C i} (f : X ⟶ Y), 𝟙 X ≫ f = f
+lemma id_comp : ∀ {X Y : Σ i, C i} (f : X ⟶ Y), 𝟙 X ≫ f = f
   | _, _, mk _ => congr_arg mk (Category.id_comp _)
-
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  statement: forall {X Y : Σ i, C i} (f : X ⟶ Y), f ≫ 𝟙 Y = f
-
-中文:
-引理 comp_id
-  结论: 对任意 {X Y : Σ i, C i} (f : X ⟶ Y), f ≫ 𝟙 Y = f
+/-
+**CategoryTheory.Sigma.SigmaHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Sigma.SigmaHom`。
+形式化陈述：∀ {I : Type w₁} {C : I → Type u₁} [inst : (i : I) → CategoryTheory.Categor
+y.{v₁, u₁} (C i)] {X Y : (i : I) × C i}   (f : X ⟶ Y), CategoryTheory.CategorySt
+ruct.comp f (CategoryTheory.CategoryStruct.id Y) = f
+参数：i : I；C i；i : I；f : X ⟶ Y；CategoryTheory.CategoryStruct.id Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma comp_id : forall {X Y : Σ i, C i} (f : X ⟶ Y), f ≫ 𝟙 Y = f
+lemma comp_id : ∀ {X Y : Σ i, C i} (f : X ⟶ Y), f ≫ 𝟙 Y = f
   | _, _, mk _ => congr_arg mk (Category.comp_id _)
 
 end SigmaHom
 
-/--
-Instance `sigma` / 实例 `sigma`
-
-English:
-instance sigma
-  signature: : Category (Σ i, C i) where
-  body: SigmaHom.id_comp
-  comp_id := SigmaHom.comp_id
-  assoc := SigmaHom.assoc
-
-中文:
-实例 sigma
-  签名: : 范畴 (Σ i, C i) where
-  定义体: SigmaHom.id_comp
-  comp_id := SigmaHom.comp_id
-  assoc := SigmaHom.assoc
-
-Depends on / 依赖: SigmaHom, SigmaHom.id_comp, id_comp
+/-
+**CategoryTheory.Sigma.sigma** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：sigma : Category (Σ i, C i) where id_comp
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sigma.SigmaHom.id_comp`：∀ {I : Type w₁} {C : I → Type u₁}
+ [inst : (i : I) → CategoryTheory.Category.{v₁, u₁} (C i)] {X Y : (i : I) × C i}
+   (f : X ⟶ Y), CategoryThe…
+· 使用定理 `CategoryTheory.Sigma.SigmaHom.comp_id`：∀ {I : Type w₁} {C : I → Type u₁}
+ [inst : (i : I) → CategoryTheory.Category.{v₁, u₁} (C i)] {X Y : (i : I) × C i}
+   (f : X ⟶ Y), CategoryThe…
+· 使用定理 `CategoryTheory.Sigma.SigmaHom.assoc`：∀ {I : Type w₁} {C : I → Type u₁} [
+inst : (i : I) → CategoryTheory.Category.{v₁, u₁} (C i)] {X Y Z W : (i : I) × C 
+i}   (f : X ⟶ Y) (g : Y ⟶…
 -/
 instance sigma : Category (Σ i, C i) where
   id_comp := SigmaHom.id_comp
@@ -194,117 +187,102 @@ instance sigma : Category (Σ i, C i) where
 
 /-- The inclusion functor into the disjoint union of categories. -/
 @[simps map]
-/--
-Definition of `incl` / `incl` 的定义
+/-
+**CategoryTheory.Sigma.incl** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：incl (i : I) : C i ⥤ Σ i, C i where obj X
+参数：i : I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incl
-  signature: (i : I)
-  body: ⟨i, X⟩
-  map := SigmaHom.mk
-
-@[simp]
-
-中文:
-定义 incl
-  签名: (i : I)
-  定义体: ⟨i, X⟩
-  map := SigmaHom.mk
-
-@[simp]
+--- 原说明 ---
+The inclusion functor into the disjoint union of categories.
 -/
 def incl (i : I) : C i ⥤ Σ i, C i where
   obj X := ⟨i, X⟩
   map := SigmaHom.mk
 
 @[simp]
-/--
-lemma `incl_obj` / 引理 `incl_obj`
-
-English:
-lemma incl_obj
-  given: {i : I} (X : C i)
-  statement: (incl i).obj X = ⟨i, X⟩
-  proof: rfl
-
-中文:
-引理 incl_obj
-  条件: {i : I} (X : C i)
-  结论: (incl i).obj X = ⟨i, X⟩
-  证明: rfl
+/-
+**CategoryTheory.Sigma.incl_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Sigma`
+。
+形式化陈述：incl_obj {i : I} (X : C i) : (incl i).obj X = ⟨i, X⟩
+参数：X : C i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma incl_obj {i : I} (X : C i) : (incl i).obj X = ⟨i, X⟩ :=
   rfl
-
+/-
+**CategoryTheory.Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : I) : Functor.Full (incl i : C i ⥤ Σ i, C i) where
   map_surjective := fun ⟨f⟩ => ⟨f, rfl⟩
-
+/-
+**CategoryTheory.Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : I) : Functor.Faithful (incl i : C i ⥤ Σ i, C i) where
   map_injective {_ _ _ _} h := by injection h
 
 section
 
-variable {D : Type u₂} [Category.{v₂} D] (F : forall i, C i ⥤ D)
+variable {D : Type u₂} [Category.{v₂} D] (F : ∀ i, C i ⥤ D)
 
 /--
-Definition of `natTrans` / `natTrans` 的定义
-
-English:
-definition natTrans
-  signature: {F G : (Σ i, C i) ⥤ D} (h : forall i : I, incl i ⋙ F ⟶ incl i ⋙ G)
-  body: fun ⟨j, X⟩ => (h j).app X
-  naturality := by
-    rintro ⟨j, X⟩ ⟨_, _⟩ ⟨f⟩
-    apply (h j).naturality
-
-@[simp]
-
-中文:
-定义 natTrans
-  签名: {F G : (Σ i, C i) ⥤ D} (h : 对任意 i : I, incl i ⋙ F ⟶ incl i ⋙ G)
-  定义体: fun ⟨j, X⟩ => (h j).app X
-  naturality := by
-    rintro ⟨j, X⟩ ⟨_, _⟩ ⟨f⟩
-    apply (h j).naturality
-
-@[simp]
+To build a natural transformation over the sigma category, it suffices to specify it restricted to
+each subcategory.
 -/
-def natTrans {F G : (Σ i, C i) ⥤ D} (h : forall i : I, incl i ⋙ F ⟶ incl i ⋙ G) : F ⟶ G where
+/-
+**CategoryTheory.Sigma.natTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`
+。
+形式化陈述：natTrans {F G : (Σ i, C i) ⥤ D} (h : forall i : I, incl i ⋙ F ⟶ incl i ⋙ G
+) : F ⟶ G where app
+参数：Σ i, C i；h : forall i : I, incl i ⋙ F ⟶ incl i ⋙ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+To build a natural transformation over the sigma category, it suffices to specif
+y it restricted to
+each subcategory.
+-/
+def natTrans {F G : (Σ i, C i) ⥤ D} (h : ∀ i : I, incl i ⋙ F ⟶ incl i ⋙ G) : F ⟶ G where
   app := fun ⟨j, X⟩ => (h j).app X
   naturality := by
     rintro ⟨j, X⟩ ⟨_, _⟩ ⟨f⟩
     apply (h j).naturality
 
 @[simp]
-/--
-lemma `natTrans_app` / 引理 `natTrans_app`
-
-English:
-lemma natTrans_app
-  statement: {F G : (Σ i, C i) ⥤ D} (h : forall i : I, incl i ⋙ F ⟶ incl i ⋙ G) (i : I)
-  proof: rfl
-
-中文:
-引理 natTrans_app
-  结论: {F G : (Σ i, C i) ⥤ D} (h : 对任意 i : I, incl i ⋙ F ⟶ incl i ⋙ G) (i : I)
-  证明: rfl
+/-
+**CategoryTheory.Sigma.natTrans_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Si
+gma`。
+形式化陈述：natTrans_app {F G : (Σ i, C i) ⥤ D} (h : forall i : I, incl i ⋙ F ⟶ incl i
+ ⋙ G) (i : I) (X : C i) : (natTrans h).app ⟨i, X⟩ = (h i).app X
+参数：Σ i, C i；h : forall i : I, incl i ⋙ F ⟶ incl i ⋙ G；i : I；X : C i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma natTrans_app {F G : (Σ i, C i) ⥤ D} (h : forall i : I, incl i ⋙ F ⟶ incl i ⋙ G) (i : I)
+lemma natTrans_app {F G : (Σ i, C i) ⥤ D} (h : ∀ i : I, incl i ⋙ F ⟶ incl i ⋙ G) (i : I)
     (X : C i) : (natTrans h).app ⟨i, X⟩ = (h i).app X :=
   rfl
 
-/--
-Definition of `descMap` / `descMap` 的定义
+/-- (Implementation). An auxiliary definition to build the functor `desc`. -/
+/-
+**CategoryTheory.Sigma.descMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：{I : Type w₁} →   {C : I → Type u₁} →     [inst : (i : I) → CategoryTheory
+.Category.{v₁, u₁} (C i)] →       {D : Type u₂} →         [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D] →           (F : (i : I) → CategoryTheory.Functor (C i) 
+D) →             (X Y : (i : I) × C i) → (X ⟶ Y) → ((F X.fst).obj X.snd ⟶ (F Y.f
+st).obj Y.snd)
+参数：i : I；C i；F : (i : I) → CategoryTheory.Functor (C i) D；X Y : (i : I) × C i；X 
+⟶ Y；(F X.fst).obj X.snd ⟶ (F Y.fst).obj Y.snd。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition descMap
-  signature: : forall X Y : Σ i, C i, (X ⟶ Y) -> ((F X.1).obj X.2 ⟶ (F Y.1).obj Y.2)
-
-中文:
-定义 descMap
-  签名: : 对任意 X Y : Σ i, C i, (X ⟶ Y) -> ((F X.1).obj X.2 ⟶ (F Y.1).obj Y.2)
+--- 原说明 ---
+(Implementation). An auxiliary definition to build the functor `desc`.
 -/
-def descMap : forall X Y : Σ i, C i, (X ⟶ Y) -> ((F X.1).obj X.2 ⟶ (F Y.1).obj Y.2)
+def descMap : ∀ X Y : Σ i, C i, (X ⟶ Y) → ((F X.1).obj X.2 ⟶ (F Y.1).obj Y.2)
   | _, _, SigmaHom.mk g => (F _).map g
 
 /-- Given a collection of functors `F i : C i ⥤ D`, we can produce a functor `(Σ i, C i) ⥤ D`.
@@ -316,36 +294,23 @@ this property.
 This witnesses that the sigma-type is the coproduct in Cat.
 -/
 @[simps obj]
-/--
-Definition of `desc` / `desc` 的定义
+/-
+**CategoryTheory.Sigma.desc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：desc : (Σ i, C i) ⥤ D where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition desc
-  signature: : (Σ i, C i) ⥤ D where
-  body: (F X.1).obj X.2
-  map g := descMap F _ _ g
-  map_id := by
-    rintro ⟨i, X⟩
-    apply (F i).map_id
-  map_comp := by
-    rintro ⟨i, X⟩ ⟨_, Y⟩ ⟨_, Z⟩ ⟨f⟩ ⟨g⟩
-    apply (F i).map_comp
+--- 原说明 ---
+Given a collection of functors `F i : C i ⥤ D`, we can produce a functor `(Σ i, 
+C i) ⥤ D`.
 
-@[simp]
+The produced functor `desc F` satisfies: `incl i ⋙ desc F ≅ F i`, i.e. restricte
+d to just the
+subcategory `C i`, `desc F` agrees with `F i`, and it is unique (up to natural i
+somorphism) with
+this property.
 
-中文:
-定义 desc
-  签名: : (Σ i, C i) ⥤ D where
-  定义体: (F X.1).obj X.2
-  map g := descMap F _ _ g
-  map_id := by
-    rintro ⟨i, X⟩
-    apply (F i).map_id
-  map_comp := by
-    rintro ⟨i, X⟩ ⟨_, Y⟩ ⟨_, Z⟩ ⟨f⟩ ⟨g⟩
-    apply (F i).map_comp
-
-@[simp]
+This witnesses that the sigma-type is the coproduct in Cat.
 -/
 def desc : (Σ i, C i) ⥤ D where
   obj X := (F X.1).obj X.2
@@ -358,155 +323,112 @@ def desc : (Σ i, C i) ⥤ D where
     apply (F i).map_comp
 
 @[simp]
-/--
-lemma `desc_map_mk` / 引理 `desc_map_mk`
-
-English:
-lemma desc_map_mk
-  given: {i : I} (X Y : C i) (f : X ⟶ Y)
-  statement: (desc F).map (SigmaHom.mk f) = (F i).map f
-  proof: rfl
-
-中文:
-引理 desc_map_mk
-  条件: {i : I} (X Y : C i) (f : X ⟶ Y)
-  结论: (desc F).map (依赖和类型态射.mk f) = (F i).map f
-  证明: rfl
+/-
+**CategoryTheory.Sigma.desc_map_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Sig
+ma`。
+形式化陈述：desc_map_mk {i : I} (X Y : C i) (f : X ⟶ Y) : (desc F).map (SigmaHom.mk f)
+ = (F i).map f
+参数：X Y : C i；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma desc_map_mk {i : I} (X Y : C i) (f : X ⟶ Y) : (desc F).map (SigmaHom.mk f) = (F i).map f :=
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
 -- We hand-generate the simp lemmas about this since they come out cleaner.
-/--
-Definition of `inclDesc` / `inclDesc` 的定义
+/-- This shows that when `desc F` is restricted to just the subcategory `C i`, `desc F` agrees with
+`F i`.
+-/
+/-
+**CategoryTheory.Sigma.inclDesc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`
+。
+形式化陈述：inclDesc (i : I) : incl i ⋙ desc F ≅ F i
+参数：i : I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclDesc
-  signature: (i : I)
-  body: NatIso.ofComponents fun _ => Iso.refl _
-
-@[simp]
-
-中文:
-定义 inclDesc
-  签名: (i : I)
-  定义体: NatIso.ofComponents fun _ => Iso.refl _
-
-@[simp]
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+This shows that when `desc F` is restricted to just the subcategory `C i`, `desc
+ F` agrees with
+`F i`.
 -/
 def inclDesc (i : I) : incl i ⋙ desc F ≅ F i :=
   NatIso.ofComponents fun _ => Iso.refl _
 
 @[simp]
-/--
-lemma `inclDesc_hom_app` / 引理 `inclDesc_hom_app`
-
-English:
-lemma inclDesc_hom_app
-  given: (i : I) (X : C i)
-  statement: (inclDesc F i).hom.app X = 𝟙 ((F i).obj X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inclDesc_hom_app
-  条件: (i : I) (X : C i)
-  结论: (inclDesc F i).hom.app X = 𝟙 ((F i).obj X)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Sigma.inclDesc_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Sigma`。
+形式化陈述：inclDesc_hom_app (i : I) (X : C i) : (inclDesc F i).hom.app X = 𝟙 ((F i).o
+bj X)
+参数：i : I；X : C i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inclDesc_hom_app (i : I) (X : C i) : (inclDesc F i).hom.app X = 𝟙 ((F i).obj X) :=
   rfl
 
 @[simp]
-/--
-lemma `inclDesc_inv_app` / 引理 `inclDesc_inv_app`
-
-English:
-lemma inclDesc_inv_app
-  given: (i : I) (X : C i)
-  statement: (inclDesc F i).inv.app X = 𝟙 ((F i).obj X)
-  proof: rfl
-
-中文:
-引理 inclDesc_inv_app
-  条件: (i : I) (X : C i)
-  结论: (inclDesc F i).inv.app X = 𝟙 ((F i).obj X)
-  证明: rfl
+/-
+**CategoryTheory.Sigma.inclDesc_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Sigma`。
+形式化陈述：inclDesc_inv_app (i : I) (X : C i) : (inclDesc F i).inv.app X = 𝟙 ((F i).o
+bj X)
+参数：i : I；X : C i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inclDesc_inv_app (i : I) (X : C i) : (inclDesc F i).inv.app X = 𝟙 ((F i).obj X) :=
   rfl
 
-/--
-Definition of `descUniq` / `descUniq` 的定义
-
-English:
-definition descUniq
-  signature: (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i)
-  body: NatIso.ofComponents (fun ⟨i, X⟩ => (h i).app X) by
-    rintro ⟨i, X⟩ ⟨_, _⟩ ⟨f⟩
-    apply (h i).hom.naturality f
-
-@[simp]
-
-中文:
-定义 descUniq
-  签名: (q : (Σ i, C i) ⥤ D) (h : 对任意 i, incl i ⋙ q ≅ F i)
-  定义体: NatIso.ofComponents (fun ⟨i, X⟩ => (h i).app X) by
-    rintro ⟨i, X⟩ ⟨_, _⟩ ⟨f⟩
-    apply (h i).hom.naturality f
-
-@[simp]
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, hom.naturality, naturality, ofComponents
+/-- If `q` when restricted to each subcategory `C i` agrees with `F i`, then `q` is isomorphic to
+`desc F`.
 -/
-def descUniq (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) : q ≅ desc F :=
-NatIso.ofComponents (fun ⟨i, X⟩ => (h i).app X) by
+/-
+**CategoryTheory.Sigma.descUniq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`
+。
+形式化陈述：descUniq (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) : q ≅ desc 
+F
+参数：q : (Σ i, C i) ⥤ D；h : forall i, incl i ⋙ q ≅ F i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `q` when restricted to each subcategory `C i` agrees with `F i`, then `q` is 
+isomorphic to
+`desc F`.
+-/
+def descUniq (q : (Σ i, C i) ⥤ D) (h : ∀ i, incl i ⋙ q ≅ F i) : q ≅ desc F :=
+  NatIso.ofComponents (fun ⟨i, X⟩ => (h i).app X) <| by
     rintro ⟨i, X⟩ ⟨_, _⟩ ⟨f⟩
     apply (h i).hom.naturality f
 
 @[simp]
-/--
-lemma `descUniq_hom_app` / 引理 `descUniq_hom_app`
-
-English:
-lemma descUniq_hom_app
-  given: (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) (i : I) (X : C i)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 descUniq_hom_app
-  条件: (q : (Σ i, C i) ⥤ D) (h : 对任意 i, incl i ⋙ q ≅ F i) (i : I) (X : C i)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Sigma.descUniq_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Sigma`。
+形式化陈述：descUniq_hom_app (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) (i 
+: I) (X : C i) : (descUniq F q h).hom.app ⟨i, X⟩ = (h i).hom.app X
+参数：q : (Σ i, C i) ⥤ D；h : forall i, incl i ⋙ q ≅ F i；i : I；X : C i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma descUniq_hom_app (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) (i : I) (X : C i) :
+lemma descUniq_hom_app (q : (Σ i, C i) ⥤ D) (h : ∀ i, incl i ⋙ q ≅ F i) (i : I) (X : C i) :
     (descUniq F q h).hom.app ⟨i, X⟩ = (h i).hom.app X :=
   rfl
 
 @[simp]
-/--
-lemma `descUniq_inv_app` / 引理 `descUniq_inv_app`
-
-English:
-lemma descUniq_inv_app
-  given: (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) (i : I) (X : C i)
-  proof: rfl
-
-中文:
-引理 descUniq_inv_app
-  条件: (q : (Σ i, C i) ⥤ D) (h : 对任意 i, incl i ⋙ q ≅ F i) (i : I) (X : C i)
-  证明: rfl
+/-
+**CategoryTheory.Sigma.descUniq_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Sigma`。
+形式化陈述：descUniq_inv_app (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) (i 
+: I) (X : C i) : (descUniq F q h).inv.app ⟨i, X⟩ = (h i).inv.app X
+参数：q : (Σ i, C i) ⥤ D；h : forall i, incl i ⋙ q ≅ F i；i : I；X : C i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma descUniq_inv_app (q : (Σ i, C i) ⥤ D) (h : forall i, incl i ⋙ q ≅ F i) (i : I) (X : C i) :
+lemma descUniq_inv_app (q : (Σ i, C i) ⥤ D) (h : ∀ i, incl i ⋙ q ≅ F i) (i : I) (X : C i) :
     (descUniq F q h).inv.app ⟨i, X⟩ = (h i).inv.app X :=
   rfl
 
@@ -515,24 +437,19 @@ set_option backward.isDefEq.respectTransparency false in
 If `q₁` and `q₂` when restricted to each subcategory `C i` agree, then `q₁` and `q₂` are isomorphic.
 -/
 @[simps]
-/--
-Definition of `natIso` / `natIso` 的定义
+/-
+**CategoryTheory.Sigma.natIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：natIso {q₁ q₂ : (Σ i, C i) ⥤ D} (h : forall i, incl i ⋙ q₁ ≅ incl i ⋙ q₂) 
+: q₁ ≅ q₂ where hom
+参数：Σ i, C i；h : forall i, incl i ⋙ q₁ ≅ incl i ⋙ q₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natIso
-  signature: {q₁ q₂ : (Σ i, C i) ⥤ D} (h : forall i, incl i ⋙ q₁ ≅ incl i ⋙ q₂)
-  body: natTrans fun i => (h i).hom
-  inv := natTrans fun i => (h i).inv
-
-中文:
-定义 natIso
-  签名: {q₁ q₂ : (Σ i, C i) ⥤ D} (h : 对任意 i, incl i ⋙ q₁ ≅ incl i ⋙ q₂)
-  定义体: natTrans fun i => (h i).hom
-  inv := natTrans fun i => (h i).inv
-
-Depends on / 依赖: natTrans
+--- 原说明 ---
+If `q₁` and `q₂` when restricted to each subcategory `C i` agree, then `q₁` and 
+`q₂` are isomorphic.
 -/
-def natIso {q₁ q₂ : (Σ i, C i) ⥤ D} (h : forall i, incl i ⋙ q₁ ≅ incl i ⋙ q₂) : q₁ ≅ q₂ where
+def natIso {q₁ q₂ : (Σ i, C i) ⥤ D} (h : ∀ i, incl i ⋙ q₁ ≅ incl i ⋙ q₂) : q₁ ≅ q₂ where
   hom := natTrans fun i => (h i).hom
   inv := natTrans fun i => (h i).inv
 
@@ -540,64 +457,40 @@ end
 
 section
 
-variable (C) {J : Type w₂} (g : J -> I)
+variable (C) {J : Type w₂} (g : J → I)
 
-/--
-Definition of `map` / `map` 的定义
+/-- A function `J → I` induces a functor `Σ j, C (g j) ⥤ Σ i, C i`. -/
+/-
+**CategoryTheory.Sigma.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：map : (Σ j : J, C (g j)) ⥤ Σ i : I, C i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : (Σ j : J, C (g j)) ⥤ Σ i : I, C i
-  body: desc fun j => incl (g j)
-
-@[simp]
-
-中文:
-定义 map
-  签名: : (Σ j : J, C (g j)) ⥤ Σ i : I, C i
-  定义体: desc fun j => incl (g j)
-
-@[simp]
+--- 原说明 ---
+A function `J → I` induces a functor `Σ j, C (g j) ⥤ Σ i, C i`.
 -/
 def map : (Σ j : J, C (g j)) ⥤ Σ i : I, C i :=
   desc fun j => incl (g j)
 
 @[simp]
-/--
-lemma `map_obj` / 引理 `map_obj`
-
-English:
-lemma map_obj
-  given: (j : J) (X : C (g j))
-  statement: (Sigma.map C g).obj ⟨j, X⟩ = ⟨g j, X⟩
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_obj
-  条件: (j : J) (X : C (g j))
-  结论: (依赖和类型.map C g).obj ⟨j, X⟩ = ⟨g j, X⟩
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Sigma.map_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：map_obj (j : J) (X : C (g j)) : (Sigma.map C g).obj ⟨j, X⟩ = ⟨g j, X⟩
+参数：j : J；X : C (g j)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_obj (j : J) (X : C (g j)) : (Sigma.map C g).obj ⟨j, X⟩ = ⟨g j, X⟩ :=
   rfl
 
 @[simp]
-/--
-lemma `map_map` / 引理 `map_map`
-
-English:
-lemma map_map
-  given: {j : J} {X Y : C (g j)} (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-引理 map_map
-  条件: {j : J} {X Y : C (g j)} (f : X ⟶ Y)
-  证明: rfl
+/-
+**CategoryTheory.Sigma.map_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：map_map {j : J} {X Y : C (g j)} (f : X ⟶ Y) : (Sigma.map C g).map (SigmaHo
+m.mk f) = SigmaHom.mk f
+参数：g j；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_map {j : J} {X Y : C (g j)} (f : X ⟶ Y) :
     (Sigma.map C g).map (SigmaHom.mk f) = SigmaHom.mk f :=
@@ -606,20 +499,17 @@ lemma map_map {j : J} {X Y : C (g j)} (f : X ⟶ Y) :
 /-- The functor `Sigma.map C g` restricted to the subcategory `C j` acts as the inclusion of `g j`.
 -/
 @[simps!]
-/--
-Definition of `inclCompMap` / `inclCompMap` 的定义
+/-
+**CategoryTheory.Sigma.inclCompMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sig
+ma`。
+形式化陈述：inclCompMap (j : J) : incl j ⋙ map C g ≅ incl (g j)
+参数：j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclCompMap
-  signature: (j : J)
-  body: Iso.refl _
-
-中文:
-定义 inclCompMap
-  签名: (j : J)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The functor `Sigma.map C g` restricted to the subcategory `C j` acts as the incl
+usion of `g j`.
 -/
 def inclCompMap (j : J) : incl j ⋙ map C g ≅ incl (g j) :=
   Iso.refl _
@@ -629,22 +519,17 @@ variable (I)
 set_option backward.isDefEq.respectTransparency false in
 /-- The functor `Sigma.map` applied to the identity function is just the identity functor. -/
 @[simps!]
-/--
-Definition of `mapId` / `mapId` 的定义
+/-
+**CategoryTheory.Sigma.mapId** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：mapId : map C (id : I -> I) ≅ 𝟭 (Σ i, C i)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapId
-  signature: : map C (id : I -> I) ≅ 𝟭 (Σ i, C i)
-  body: natIso fun i => NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 mapId
-  签名: : map C (id : I -> I) ≅ 𝟭 (Σ i, C i)
-  定义体: natIso fun i => NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, natIso, ofComponents
+--- 原说明 ---
+The functor `Sigma.map` applied to the identity function is just the identity fu
+nctor.
 -/
-def mapId : map C (id : I -> I) ≅ 𝟭 (Σ i, C i) :=
+def mapId : map C (id : I → I) ≅ 𝟭 (Σ i, C i) :=
   natIso fun i => NatIso.ofComponents fun _ => Iso.refl _
 
 variable {I} {K : Type w₃}
@@ -654,24 +539,18 @@ variable {I} {K : Type w₃}
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The functor `Sigma.map` applied to a composition is a composition of functors. -/
 @[simps!]
-/--
-Definition of `mapComp` / `mapComp` 的定义
+/-
+**CategoryTheory.Sigma.mapComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sigma`。
+形式化陈述：mapComp (f : K -> J) (g : J -> I) : map (fun x => C (g x)) f ⋙ (map C g :)
+ ≅ map C (g ∘ f)
+参数：f : K -> J；g : J -> I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapComp
-  signature: (f : K -> J) (g : J -> I)
-  body: (descUniq _ _) fun k =>
-    (Functor.isoWhiskerRight (inclCompMap _ f k) (map C g :) :) ≪≫ inclCompMap _ g (f k)
-
-中文:
-定义 mapComp
-  签名: (f : K -> J) (g : J -> I)
-  定义体: (descUniq _ _) fun k =>
-    (Functor.isoWhiskerRight (inclCompMap _ f k) (map C g :) :) ≪≫ inclCompMap _ g (f k)
-
-Depends on / 依赖: Functor, Functor.isoWhiskerRight, descUniq, inclCompMap, isoWhiskerRight
+--- 原说明 ---
+The functor `Sigma.map` applied to a composition is a composition of functors.
 -/
-def mapComp (f : K -> J) (g : J -> I) : map (fun x => C (g x)) f ⋙ (map C g :) ≅ map C (g ∘ f) :=
+def mapComp (f : K → J) (g : J → I) : map (fun x ↦ C (g x)) f ⋙ (map C g :) ≅ map C (g ∘ f) :=
   (descUniq _ _) fun k =>
     (Functor.isoWhiskerRight (inclCompMap _ f k) (map C g :) :) ≪≫ inclCompMap _ g (f k)
 
@@ -680,55 +559,48 @@ end
 namespace Functor
 
 -- variable {C}
-variable {D : I -> Type u₁} [forall i, Category.{v₁} (D i)]
+variable {D : I → Type u₁} [∀ i, Category.{v₁} (D i)]
 
-/--
-Definition of `sigma` / `sigma` 的定义
-
-English:
-definition sigma
-  signature: (F : forall i, C i ⥤ D i)
-  body: desc fun i => F i ⋙ incl i
-
-中文:
-定义 sigma
-  签名: (F : 对任意 i, C i ⥤ D i)
-  定义体: desc fun i => F i ⋙ incl i
+/-- Assemble an `I`-indexed family of functors into a functor between the sigma types.
 -/
-def sigma (F : forall i, C i ⥤ D i) : (Σ i, C i) ⥤ Σ i, D i :=
+/-
+**CategoryTheory.Sigma.Functor.sigma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.S
+igma.Functor`。
+形式化陈述：sigma (F : forall i, C i ⥤ D i) : (Σ i, C i) ⥤ Σ i, D i
+参数：F : forall i, C i ⥤ D i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Assemble an `I`-indexed family of functors into a functor between the sigma type
+s.
+-/
+def sigma (F : ∀ i, C i ⥤ D i) : (Σ i, C i) ⥤ Σ i, D i :=
   desc fun i => F i ⋙ incl i
 
 end Functor
 
 namespace natTrans
 
-variable {D : I -> Type u₁} [forall i, Category.{v₁} (D i)]
-variable {F G : forall i, C i ⥤ D i}
+variable {D : I → Type u₁} [∀ i, Category.{v₁} (D i)]
+variable {F G : ∀ i, C i ⥤ D i}
 
-/--
-Definition of `sigma` / `sigma` 的定义
-
-English:
-definition sigma
-  signature: (α : forall i, F i ⟶ G i)
-  body: SigmaHom.mk ((α f.1).app _)
-  naturality := by
-    rintro ⟨i, X⟩ ⟨_, _⟩ ⟨f⟩
-    change SigmaHom.mk _ = SigmaHom.mk _
-    rw [(α i).naturality]
-
-中文:
-定义 sigma
-  签名: (α : 对任意 i, F i ⟶ G i)
-  定义体: SigmaHom.mk ((α f.1).app _)
-  naturality := by
-    rintro ⟨i, X⟩ ⟨_, _⟩ ⟨f⟩
-    change SigmaHom.mk _ = SigmaHom.mk _
-    rw [(α i).naturality]
-
-Depends on / 依赖: SigmaHom, SigmaHom.mk
+/-- Assemble an `I`-indexed family of natural transformations into a single natural transformation.
 -/
-def sigma (α : forall i, F i ⟶ G i) : Functor.sigma F ⟶ Functor.sigma G where
+/-
+**CategoryTheory.Sigma.natTrans.sigma** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Sigma.natTrans`。
+形式化陈述：sigma (α : forall i, F i ⟶ G i) : Functor.sigma F ⟶ Functor.sigma G where 
+app f
+参数：α : forall i, F i ⟶ G i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Assemble an `I`-indexed family of natural transformations into a single natural 
+transformation.
+-/
+def sigma (α : ∀ i, F i ⟶ G i) : Functor.sigma F ⟶ Functor.sigma G where
   app f := SigmaHom.mk ((α f.1).app _)
   naturality := by
     rintro ⟨i, X⟩ ⟨_, _⟩ ⟨f⟩
@@ -740,3 +612,4 @@ end natTrans
 end Sigma
 
 end CategoryTheory
+

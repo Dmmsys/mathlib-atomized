@@ -22,96 +22,79 @@ variable {α β G H : Type*}
 
 open IsFreeGroup Module
 
-/--
-Definition of `FreeAbelianGroup.basis` / `FreeAbelianGroup.basis` 的定义
+/-- `A` is a basis of the ℤ-module `FreeAbelianGroup A`. -/
+/-
+**FreeAbelianGroup.basis** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FreeAbelianGroup.basis (α : Type*) : Basis α Int (FreeAbelianGroup α)
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FreeAbelianGroup.basis
-  signature: (α : Type*)
-  body: ⟨(FreeAbelianGroup.equivFinsupp α).toIntLinearEquiv⟩
-
-中文:
-定义 自由交换群.basis
-  签名: (α : 类型)
-  定义体: ⟨(FreeAbelianGroup.equivFinsupp α).toIntLinearEquiv⟩
-
-Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.equivFinsupp, equivFinsupp, toIntLinearEquiv
+--- 原说明 ---
+`A` is a basis of the ℤ-module `FreeAbelianGroup A`.
 -/
-noncomputable def FreeAbelianGroup.basis (α : Type*) : Basis α Int (FreeAbelianGroup α) :=
+noncomputable def FreeAbelianGroup.basis (α : Type*) : Basis α ℤ (FreeAbelianGroup α) :=
   ⟨(FreeAbelianGroup.equivFinsupp α).toIntLinearEquiv⟩
 
-/--
-Definition of `Equiv.ofFreeAbelianGroupLinearEquiv` / `Equiv.ofFreeAbelianGroupLinearEquiv` 的定义
+/-- Isomorphic free abelian groups (as modules) have equivalent bases. -/
+/-
+**Equiv.ofFreeAbelianGroupLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.ofFreeAbelianGroupLinearEquiv (e : FreeAbelianGroup α ≃ₗ[Int] FreeAb
+elianGroup β) : α ≃ β
+参数：e : FreeAbelianGroup α ≃ₗ[Int] FreeAbelianGroup β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `invariantBasisNumber_of_nontrivial_of_commRing`：∀ {R : Type u} [inst : C
+ommRing R] [Nontrivial R], InvariantBasisNumber R
 
-English:
-definition Equiv.ofFreeAbelianGroupLinearEquiv
-  signature: (e : FreeAbelianGroup α ≃ₗ[Int] FreeAbelianGroup β)
-  body: let t : Basis α Int (FreeAbelianGroup β) := (FreeAbelianGroup.basis α).map e
-t.indexEquiv FreeAbelianGroup.basis _
-
-中文:
-定义 等价.ofFreeAbelianGroupLinearEquiv
-  签名: (e : 自由交换群 α ≃ₗ[整数] 自由交换群 β)
-  定义体: let t : Basis α Int (FreeAbelianGroup β) := (FreeAbelianGroup.basis α).map e
-t.indexEquiv FreeAbelianGroup.basis _
-
-Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.basis, indexEquiv, t.indexEquiv
+--- 原说明 ---
+Isomorphic free abelian groups (as modules) have equivalent bases.
 -/
-def Equiv.ofFreeAbelianGroupLinearEquiv (e : FreeAbelianGroup α ≃ₗ[Int] FreeAbelianGroup β) : α ≃ β :=
-  let t : Basis α Int (FreeAbelianGroup β) := (FreeAbelianGroup.basis α).map e
-t.indexEquiv FreeAbelianGroup.basis _
+def Equiv.ofFreeAbelianGroupLinearEquiv (e : FreeAbelianGroup α ≃ₗ[ℤ] FreeAbelianGroup β) : α ≃ β :=
+  let t : Basis α ℤ (FreeAbelianGroup β) := (FreeAbelianGroup.basis α).map e
+  t.indexEquiv <| FreeAbelianGroup.basis _
 
-/--
-Definition of `Equiv.ofFreeAbelianGroupEquiv` / `Equiv.ofFreeAbelianGroupEquiv` 的定义
+/-- Isomorphic free abelian groups (as additive groups) have equivalent bases. -/
+/-
+**Equiv.ofFreeAbelianGroupEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.ofFreeAbelianGroupEquiv (e : FreeAbelianGroup α ≃+ FreeAbelianGroup 
+β) : α ≃ β
+参数：e : FreeAbelianGroup α ≃+ FreeAbelianGroup β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equiv.ofFreeAbelianGroupEquiv
-  signature: (e : FreeAbelianGroup α ≃+ FreeAbelianGroup β)
-  body: .ofFreeAbelianGroupLinearEquiv e.toIntLinearEquiv
-
-中文:
-定义 等价.ofFreeAbelianGroupEquiv
-  签名: (e : 自由交换群 α ≃+ 自由交换群 β)
-  定义体: .ofFreeAbelianGroupLinearEquiv e.toIntLinearEquiv
-
-Depends on / 依赖: e.toIntLinearEquiv, ofFreeAbelianGroupLinearEquiv, toIntLinearEquiv
+--- 原说明 ---
+Isomorphic free abelian groups (as additive groups) have equivalent bases.
 -/
 def Equiv.ofFreeAbelianGroupEquiv (e : FreeAbelianGroup α ≃+ FreeAbelianGroup β) : α ≃ β :=
   .ofFreeAbelianGroupLinearEquiv e.toIntLinearEquiv
 
-/--
-Definition of `Equiv.ofFreeGroupEquiv` / `Equiv.ofFreeGroupEquiv` 的定义
+/-- Isomorphic free groups have equivalent bases. -/
+/-
+**Equiv.ofFreeGroupEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.ofFreeGroupEquiv (e : FreeGroup α ≃* FreeGroup β) : α ≃ β
+参数：e : FreeGroup α ≃* FreeGroup β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equiv.ofFreeGroupEquiv
-  signature: (e : FreeGroup α ≃* FreeGroup β)
-  body: .ofFreeAbelianGroupEquiv (MulEquiv.toAdditive e.abelianizationCongr)
-
-中文:
-定义 等价.ofFreeGroupEquiv
-  签名: (e : 自由群 α ≃* 自由群 β)
-  定义体: .ofFreeAbelianGroupEquiv (MulEquiv.toAdditive e.abelianizationCongr)
-
-Depends on / 依赖: MulEquiv, MulEquiv.toAdditive, abelianizationCongr, e.abelianizationCongr, ofFreeAbelianGroupEquiv, toAdditive
+--- 原说明 ---
+Isomorphic free groups have equivalent bases.
 -/
 def Equiv.ofFreeGroupEquiv (e : FreeGroup α ≃* FreeGroup β) : α ≃ β :=
   .ofFreeAbelianGroupEquiv (MulEquiv.toAdditive e.abelianizationCongr)
 
-/--
-Definition of `Equiv.ofIsFreeGroupEquiv` / `Equiv.ofIsFreeGroupEquiv` 的定义
+/-- Isomorphic free groups have equivalent bases (`IsFreeGroup` variant). -/
+/-
+**Equiv.ofIsFreeGroupEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Equiv.ofIsFreeGroupEquiv [Group G] [Group H] [IsFreeGroup G] [IsFreeGroup 
+H] (e : G ≃* H) : Generators G ≃ Generators H
+参数：e : G ≃* H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equiv.ofIsFreeGroupEquiv
-  signature: [Group G] [Group H] [IsFreeGroup G] [IsFreeGroup H] (e : G ≃* H)
-  body: .ofFreeGroupEquiv (toFreeGroup G).symm.trans e.trans toFreeGroup H
-
-中文:
-定义 等价.ofIsFreeGroupEquiv
-  签名: [群 G] [群 H] [是自由群 G] [是自由群 H] (e : G ≃* H)
-  定义体: .ofFreeGroupEquiv (toFreeGroup G).symm.trans e.trans toFreeGroup H
-
-Depends on / 依赖: e.trans, ofFreeGroupEquiv, symm.trans, toFreeGroup
+--- 原说明 ---
+Isomorphic free groups have equivalent bases (`IsFreeGroup` variant).
 -/
 def Equiv.ofIsFreeGroupEquiv [Group G] [Group H] [IsFreeGroup G] [IsFreeGroup H] (e : G ≃* H) :
     Generators G ≃ Generators H :=
-.ofFreeGroupEquiv (toFreeGroup G).symm.trans e.trans toFreeGroup H
+  .ofFreeGroupEquiv <| (toFreeGroup G).symm.trans <| e.trans <| toFreeGroup H

@@ -82,20 +82,41 @@ The triangle equation `functor_unitIso_comp` is written as a family of equalitie
 morphisms. It is more complicated if we write it as an equality of natural transformations, because
 then we would either have to insert natural transformations like `F ⟶ F𝟭` or abuse defeq. -/
 @[ext, stacks 001J]
-/--
-Definition of `Equivalence` / `Equivalence` 的定义
+/-
+**CategoryTheory.Equivalence** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：Equivalence (C : Type u₁) (D : Type u₂) [Category.{v₁} C] [Category.{v₂} D
+] where mk' :: /-- The forwards direction of an equivalence. -/ functor : C ⥤ D 
+/-- The backwards direction of an equivalence. -/ inverse : D ⥤ C /-- The compos
+ition `functor ⋙ inverse` is isomorphic to the identity. -/ unitIso : 𝟭 C ≅ func
+tor ⋙ inverse /-- The composition `inverse ⋙ functor` is isomorphic to the ident
+ity. -/ counitIso : inverse ⋙ functor ≅ 𝟭 D /-- The triangle law for the forward
+s direction of an equivale
+参数：C : Type u₁；D : Type u₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Equivalence
-  parameters: (C : Type u₁) (D : Type u₂) [Category.{v₁} C] [Category.{v₂} D]
-  (no additional axioms)
+--- 原说明 ---
+An equivalence of categories.
 
-中文:
-结构 等价
-  参数: (C : 类型u₁) (D : 类型u₂) [范畴.{v₁} C] [范畴.{v₂} D]
-  (无附加公理)
+We define an equivalence between `C` and `D`, with notation `C ≌ D`, as a half-a
+djoint equivalence:
+a pair of functors `F : C ⥤ D` and `G : D ⥤ C` with a unit `η : 𝟭 C ≅ F ⋙ G` and
+ counit
+`ε : G ⋙ F ≅ 𝟭 D`, such that the natural isomorphisms `η` and `ε` satisfy the tr
+iangle law for
+`F`: namely, `Fη ≫ εF = 𝟙 F`. Or, in other words, the composite `F` ⟶ `F ⋙ G ⋙ F
+` ⟶ `F` is the
+identity.
 
-Depends on / 依赖: cat_disch
+In `unit_inverse_comp`, we show that this is sufficient to establish a full adjo
+int
+equivalence. I.e., the composite `G` ⟶ `G ⋙ F ⋙ G` ⟶ `G` is also the identity.
+
+The triangle equation `functor_unitIso_comp` is written as a family of equalitie
+s between
+morphisms. It is more complicated if we write it as an equality of natural trans
+formations, because
+then we would either have to insert natural transformations like `F ⟶ F𝟭` or abu
+se defeq. -/
 -/
 structure Equivalence (C : Type u₁) (D : Type u₂) [Category.{v₁} C] [Category.{v₂} D] where mk' ::
   /-- The forwards direction of an equivalence. -/
@@ -123,24 +144,26 @@ variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 namespace Equivalence
 
 @[to_dual existing functor_unitIso_comp]
-/--
-theorem `counitIso_functor_comp` / 定理 `counitIso_functor_comp`
-
-English:
-theorem counitIso_functor_comp
-  given: (e : C ≌ D) (X : C)
-  proof: by
-  simpa [functor_unitIso_comp] using Iso.inv_eq_inv
-    (e.functor.mapIso (e.unitIso.app X) ≪≫ e.counitIso.app (e.functor.obj X)) (Iso.refl _)
-
-中文:
-定理 counitIso_functor_comp
-  条件: (e : C ≌ D) (X : C)
-  证明: by
-  simpa [functor_unitIso_comp] using Iso.inv_eq_inv
-    (e.functor.mapIso (e.unitIso.app X) ≪≫ e.counitIso.app (e.functor.obj X)) (Iso.refl _)
-
-Depends on / 依赖: Iso.inv_eq_inv, Iso.refl, counitIso, e.counitIso.app, e.functor.mapIso, e.functor.obj, e.unitIso.app, functor, functor_unitIso_comp, inv_eq_inv, mapIso, unitIso
+/-
+**CategoryTheory.Equivalence.counitIso_functor_comp** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Equivalence`。
+形式化陈述：counitIso_functor_comp (e : C ≌ D) (X : C) : dsimp% e.counitIso.inv.app (e
+.functor.obj X) ≫ e.functor.map (e.unitIso.inv.app X) = 𝟙 (e.functor.obj X)
+参数：e : C ≌ D；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Equivalence.functor_unitIso_comp`：∀ {C : Type u₁} {D : Ty
+pe u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   (self : C ≌ D) (X …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `CategoryTheory.Iso.inv_eq_inv`：inv_eq_inv (f g : X ≅ Y) : f.inv = g.inv 
+↔ f.hom = g.hom
 -/
 theorem counitIso_functor_comp (e : C ≌ D) (X : C) :
     dsimp% e.counitIso.inv.app (e.functor.obj X) ≫ e.functor.map (e.unitIso.inv.app X) =
@@ -151,28 +174,30 @@ theorem counitIso_functor_comp (e : C ≌ D) (X : C) :
 /-- `Equivalence.mk'` is the dual of `Equivalence.mk`, which we need for `to_dual`.
 Please avoid using this directly. -/
 @[to_dual existing mk']
-/--
-Definition of `mk''` / `mk''` 的定义
+/-
+**CategoryTheory.Equivalence.mk''** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Eq
+uivalence`。
+形式化陈述：mk'' {C : Type u₁} {D : Type u₂} [Category.{v₁} C] [Category.{v₂} D] (func
+tor : C ⥤ D) (inverse : D ⥤ C) (unitIso : 𝟭 C ≅ functor ⋙ inverse) (counitIso : 
+inverse ⋙ functor ≅ 𝟭 D) (functor_unitIso_comp : dsimp% forall (X : C), counitIs
+o.inv.app (functor.obj X) ≫ functor.map (unitIso.inv.app X) = 𝟙 (functor.obj X))
+ : Equivalence C D where functor; inverse; unitIso; counitIso functor_unitIso_co
+mp X
+参数：functor : C ⥤ D；inverse : D ⥤ C；unitIso : 𝟭 C ≅ functor ⋙ inverse；counitIso :
+ inverse ⋙ functor ≅ 𝟭 D；functor_unitIso_comp : dsimp% forall (X : C), counitIso
+.inv.app (functor.obj X) ≫ functor.map (unitIso.inv.app X) = 𝟙 (functor.obj X)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk''
-  body: by
-    simpa [functor_unitIso_comp] using Iso.inv_eq_inv
-      (functor.mapIso (unitIso.app X) ≪≫ counitIso.app (functor.obj X)) (Iso.refl _)
-
-中文:
-缩写 mk''
-  定义体: by
-    simpa [functor_unitIso_comp] using Iso.inv_eq_inv
-      (functor.mapIso (unitIso.app X) ≪≫ counitIso.app (functor.obj X)) (Iso.refl _)
-
-Depends on / 依赖: Iso.inv_eq_inv, Iso.refl, counitIso, counitIso.app, functor, functor.mapIso, functor.obj, functor_unitIso_comp, inv_eq_inv, mapIso, unitIso, unitIso.app
+--- 原说明 ---
+`Equivalence.mk'` is the dual of `Equivalence.mk`, which we need for `to_dual`.
+Please avoid using this directly.
 -/
 abbrev mk''
     {C : Type u₁} {D : Type u₂} [Category.{v₁} C] [Category.{v₂} D]
     (functor : C ⥤ D) (inverse : D ⥤ C)
     (unitIso : 𝟭 C ≅ functor ⋙ inverse) (counitIso : inverse ⋙ functor ≅ 𝟭 D)
-    (functor_unitIso_comp : dsimp% forall (X : C),
+    (functor_unitIso_comp : dsimp% ∀ (X : C),
       counitIso.inv.app (functor.obj X) ≫ functor.map (unitIso.inv.app X) = 𝟙 (functor.obj X)) :
     Equivalence C D where
   functor; inverse; unitIso; counitIso
@@ -183,135 +208,127 @@ abbrev mk''
 
 /-- The unit of an equivalence of categories. -/
 @[to_dual unitInv /-- The inverse of the unit of an equivalence of categories. -/]
-/--
-Definition of `unit` / `unit` 的定义
+/-
+**CategoryTheory.Equivalence.unit** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Eq
+uivalence`。
+形式化陈述：unit (e : C ≌ D) : 𝟭 C ⟶ e.functor ⋙ e.inverse
+参数：e : C ≌ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation unit
-  signature: (e : C ≌ D)
-  body: e.unitIso.hom
-
-中文:
-缩写 unit
-  签名: (e : C ≌ D)
-  定义体: e.unitIso.hom
-
-Depends on / 依赖: HasBinaryBiproducts, e.unitIso.hom, hasBinaryProducts_of_hasBinaryBiproducts, unitIso
+--- 原说明 ---
+The unit of an equivalence of categories.
 -/
 abbrev unit (e : C ≌ D) : 𝟭 C ⟶ e.functor ⋙ e.inverse :=
   e.unitIso.hom
 
 /-- The counit of an equivalence of categories. -/
 @[to_dual counitInv /-- The inverse of the counit of an equivalence of categories. -/]
-/--
-Definition of `counit` / `counit` 的定义
+/-
+**CategoryTheory.Equivalence.counit** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.
+Equivalence`。
+形式化陈述：counit (e : C ≌ D) : e.inverse ⋙ e.functor ⟶ 𝟭 D
+参数：e : C ≌ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation counit
-  signature: (e : C ≌ D)
-  body: e.counitIso.hom
-
-@[reassoc +to_dual]
-
-中文:
-缩写 counit
-  签名: (e : C ≌ D)
-  定义体: e.counitIso.hom
-
-@[reassoc +to_dual]
-
-Depends on / 依赖: HasBinaryBiproducts, counitIso, e.counitIso.hom, hasBinaryCoproducts_of_hasBinaryBiproducts
+--- 原说明 ---
+The counit of an equivalence of categories.
 -/
 abbrev counit (e : C ≌ D) : e.inverse ⋙ e.functor ⟶ 𝟭 D :=
   e.counitIso.hom
 
 @[reassoc +to_dual]
-/--
-lemma `unitIso_hom_inv_id_app` / 引理 `unitIso_hom_inv_id_app`
-
-English:
-lemma unitIso_hom_inv_id_app
-  given: (e : C ≌ D) (X : C)
-  proof: by
-  simp
-
-@[reassoc +to_dual]
-
-中文:
-引理 unitIso_hom_inv_id_app
-  条件: (e : C ≌ D) (X : C)
-  证明: by
-  simp
-
-@[reassoc +to_dual]
+/-
+**CategoryTheory.Equivalence.unitIso_hom_inv_id_app** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Equivalence`。
+形式化陈述：unitIso_hom_inv_id_app (e : C ≌ D) (X : C) : dsimp% e.unit.app X ≫ e.unitI
+nv.app X = 𝟙 X
+参数：e : C ≌ D；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma unitIso_hom_inv_id_app (e : C ≌ D) (X : C) :
     dsimp% e.unit.app X ≫ e.unitInv.app X = 𝟙 X := by
   simp
 
 @[reassoc +to_dual]
-/--
-lemma `unitIso_inv_hom_id_app` / 引理 `unitIso_inv_hom_id_app`
-
-English:
-lemma unitIso_inv_hom_id_app
-  given: (e : C ≌ D) (X : C)
-  proof: by
-  simp
-
-@[reassoc +to_dual]
-
-中文:
-引理 unitIso_inv_hom_id_app
-  条件: (e : C ≌ D) (X : C)
-  证明: by
-  simp
-
-@[reassoc +to_dual]
+/-
+**CategoryTheory.Equivalence.unitIso_inv_hom_id_app** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Equivalence`。
+形式化陈述：unitIso_inv_hom_id_app (e : C ≌ D) (X : C) : dsimp% e.unitInv.app X ≫ e.un
+it.app X = 𝟙 _
+参数：e : C ≌ D；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma unitIso_inv_hom_id_app (e : C ≌ D) (X : C) :
     dsimp% e.unitInv.app X ≫ e.unit.app X = 𝟙 _ := by
   simp
 
 @[reassoc +to_dual]
-/--
-lemma `counitIso_hom_inv_id_app` / 引理 `counitIso_hom_inv_id_app`
-
-English:
-lemma counitIso_hom_inv_id_app
-  given: (e : C ≌ D) (Y : D)
-  proof: by
-  simp
-
-@[reassoc +to_dual]
-
-中文:
-引理 counitIso_hom_inv_id_app
-  条件: (e : C ≌ D) (Y : D)
-  证明: by
-  simp
-
-@[reassoc +to_dual]
+/-
+**CategoryTheory.Equivalence.counitIso_hom_inv_id_app** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Equivalence`。
+形式化陈述：counitIso_hom_inv_id_app (e : C ≌ D) (Y : D) : dsimp% e.counit.app Y ≫ e.c
+ounitInv.app Y = 𝟙 _
+参数：e : C ≌ D；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma counitIso_hom_inv_id_app (e : C ≌ D) (Y : D) :
     dsimp% e.counit.app Y ≫ e.counitInv.app Y = 𝟙 _ := by
   simp
 
 @[reassoc +to_dual]
-/--
-lemma `counitIso_inv_hom_id_app` / 引理 `counitIso_inv_hom_id_app`
-
-English:
-lemma counitIso_inv_hom_id_app
-  given: (e : C ≌ D) (Y : D)
-  proof: by
-  simp
-
-中文:
-引理 counitIso_inv_hom_id_app
-  条件: (e : C ≌ D) (Y : D)
-  证明: by
-  simp
+/-
+**CategoryTheory.Equivalence.counitIso_inv_hom_id_app** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Equivalence`。
+形式化陈述：counitIso_inv_hom_id_app (e : C ≌ D) (Y : D) : dsimp% e.counitInv.app Y ≫ 
+e.counit.app Y = 𝟙 Y
+参数：e : C ≌ D；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma counitIso_inv_hom_id_app (e : C ≌ D) (Y : D) :
     dsimp% e.counitInv.app Y ≫ e.counit.app Y = 𝟙 Y := by
@@ -319,24 +336,10 @@ lemma counitIso_inv_hom_id_app (e : C ≌ D) (Y : D) :
 
 section CategoryStructure
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (C ≌ D)
-  body: e.functor ⟶ f.functor
-  id e := 𝟙 e.functor
-  comp {a b c} f g := (f ≫ g : a.functor ⟶ _)
-
-中文:
-实例 :
-  签名: 范畴 (C ≌ D)
-  定义体: e.functor ⟶ f.functor
-  id e := 𝟙 e.functor
-  comp {a b c} f g := (f ≫ g : a.functor ⟶ _)
-
-Depends on / 依赖: e.functor, f.functor, functor
+/-
+**CategoryTheory.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Equivale
+nce`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (C ≌ D) where
   Hom e f := e.functor ⟶ f.functor
@@ -345,188 +348,120 @@ instance : Category (C ≌ D) where
 
 /-- Promote a natural transformation `e.functor ⟶ f.functor` to a morphism in `C ≌ D`. -/
 @[to_dual self]
-/--
-Definition of `mkHom` / `mkHom` 的定义
+/-
+**CategoryTheory.Equivalence.mkHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equ
+ivalence`。
+形式化陈述：mkHom {e f : C ≌ D} (η : e.functor ⟶ f.functor) : e ⟶ f
+参数：η : e.functor ⟶ f.functor。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkHom
-  signature: {e f : C ≌ D} (η : e.functor ⟶ f.functor)
-  body: η
-
-中文:
-定义 mkHom
-  签名: {e f : C ≌ D} (η : e.functor ⟶ f.functor)
-  定义体: η
+--- 原说明 ---
+Promote a natural transformation `e.functor ⟶ f.functor` to a morphism in `C ≌ D
+`.
 -/
 def mkHom {e f : C ≌ D} (η : e.functor ⟶ f.functor) : e ⟶ f := η
 
 /-- Recover a natural transformation between `e.functor` and `f.functor` from the data of
 a morphism `e ⟶ f`. -/
 @[to_dual self]
-/--
-Definition of `asNatTrans` / `asNatTrans` 的定义
+/-
+**CategoryTheory.Equivalence.asNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Equivalence`。
+形式化陈述：asNatTrans {e f : C ≌ D} (η : e ⟶ f) : e.functor ⟶ f.functor
+参数：η : e ⟶ f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asNatTrans
-  signature: {e f : C ≌ D} (η : e ⟶ f)
-  body: η
-
-@[ext, to_dual self]
-
-中文:
-定义 as自然数Trans
-  签名: {e f : C ≌ D} (η : e ⟶ f)
-  定义体: η
-
-@[ext, to_dual self]
+--- 原说明 ---
+Recover a natural transformation between `e.functor` and `f.functor` from the da
+ta of
+a morphism `e ⟶ f`.
 -/
 def asNatTrans {e f : C ≌ D} (η : e ⟶ f) : e.functor ⟶ f.functor := η
 
 @[ext, to_dual self]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {e f : C ≌ D} {α β : e ⟶ f} (h : asNatTrans α = asNatTrans β)
-  statement: α = β
-  proof: h
-
-@[simp, to_dual self]
-
-中文:
-引理 hom_ext
-  条件: {e f : C ≌ D} {α β : e ⟶ f} (h : as自然数Trans α = as自然数Trans β)
-  结论: α = β
-  证明: h
-
-@[simp, to_dual self]
+/-
+**CategoryTheory.Equivalence.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.E
+quivalence`。
+形式化陈述：hom_ext {e f : C ≌ D} {α β : e ⟶ f} (h : asNatTrans α = asNatTrans β) : α 
+= β
+参数：h : asNatTrans α = asNatTrans β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_ext {e f : C ≌ D} {α β : e ⟶ f} (h : asNatTrans α = asNatTrans β) : α = β := h
 
 @[simp, to_dual self]
-/--
-lemma `mkHom_asNatTrans` / 引理 `mkHom_asNatTrans`
-
-English:
-lemma mkHom_asNatTrans
-  given: {e f : C ≌ D} (η : e.functor ⟶ f.functor)
-  proof: rfl
-
-@[simp, to_dual self]
-
-中文:
-引理 mkHom_as自然数Trans
-  条件: {e f : C ≌ D} (η : e.functor ⟶ f.functor)
-  证明: rfl
-
-@[simp, to_dual self]
+/-
+**CategoryTheory.Equivalence.mkHom_asNatTrans** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：mkHom_asNatTrans {e f : C ≌ D} (η : e.functor ⟶ f.functor) : mkHom (asNatT
+rans η) = η
+参数：η : e.functor ⟶ f.functor。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkHom_asNatTrans {e f : C ≌ D} (η : e.functor ⟶ f.functor) :
     mkHom (asNatTrans η) = η :=
   rfl
 
 @[simp, to_dual self]
-/--
-lemma `asNatTrans_mkHom` / 引理 `asNatTrans_mkHom`
-
-English:
-lemma asNatTrans_mkHom
-  given: {e f : C ≌ D} (η : e ⟶ f)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 as自然数Trans_mkHom
-  条件: {e f : C ≌ D} (η : e ⟶ f)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Equivalence.asNatTrans_mkHom** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：asNatTrans_mkHom {e f : C ≌ D} (η : e ⟶ f) : asNatTrans (mkHom η) = η
+参数：η : e ⟶ f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma asNatTrans_mkHom {e f : C ≌ D} (η : e ⟶ f) :
     asNatTrans (mkHom η) = η :=
   rfl
 
 @[simp]
-/--
-lemma `id_asNatTrans` / 引理 `id_asNatTrans`
-
-English:
-lemma id_asNatTrans
-  given: {e : C ≌ D}
-  statement: asNatTrans (𝟙 e) = 𝟙 _
-  proof: rfl
-
-@[simp, to_dual self, reassoc]
-
-中文:
-引理 id_as自然数Trans
-  条件: {e : C ≌ D}
-  结论: as自然数Trans (𝟙 e) = 𝟙 _
-  证明: rfl
-
-@[simp, to_dual self, reassoc]
+/-
+**CategoryTheory.Equivalence.id_asNatTrans** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Equivalence`。
+形式化陈述：id_asNatTrans {e : C ≌ D} : asNatTrans (𝟙 e) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_asNatTrans {e : C ≌ D} : asNatTrans (𝟙 e) = 𝟙 _ := rfl
 
 @[simp, to_dual self, reassoc]
-/--
-lemma `comp_asNatTrans` / 引理 `comp_asNatTrans`
-
-English:
-lemma comp_asNatTrans
-  given: {e f g : C ≌ D} (α : e ⟶ f) (β : f ⟶ g)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 comp_as自然数Trans
-  条件: {e f g : C ≌ D} (α : e ⟶ f) (β : f ⟶ g)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Equivalence.comp_asNatTrans** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Equivalence`。
+形式化陈述：comp_asNatTrans {e f g : C ≌ D} (α : e ⟶ f) (β : f ⟶ g) : asNatTrans (α ≫ 
+β) = asNatTrans α ≫ asNatTrans β
+参数：α : e ⟶ f；β : f ⟶ g。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_asNatTrans {e f g : C ≌ D} (α : e ⟶ f) (β : f ⟶ g) :
     asNatTrans (α ≫ β) = asNatTrans α ≫ asNatTrans β :=
   rfl
 
 @[simp]
-/--
-lemma `mkHom_id_functor` / 引理 `mkHom_id_functor`
-
-English:
-lemma mkHom_id_functor
-  given: {e : C ≌ D}
-  statement: mkHom (𝟙 e.functor) = 𝟙 e
-  proof: rfl
-
-@[simp, to_dual self, reassoc]
-
-中文:
-引理 mkHom_id_functor
-  条件: {e : C ≌ D}
-  结论: mkHom (𝟙 e.functor) = 𝟙 e
-  证明: rfl
-
-@[simp, to_dual self, reassoc]
+/-
+**CategoryTheory.Equivalence.mkHom_id_functor** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：mkHom_id_functor {e : C ≌ D} : mkHom (𝟙 e.functor) = 𝟙 e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkHom_id_functor {e : C ≌ D} : mkHom (𝟙 e.functor) = 𝟙 e := rfl
 
 @[simp, to_dual self, reassoc]
-/--
-lemma `mkHom_comp` / 引理 `mkHom_comp`
-
-English:
-lemma mkHom_comp
-  given: {e f g : C ≌ D} (α : e.functor ⟶ f.functor) (β : f.functor ⟶ g.functor)
-  proof: rfl
-
-中文:
-引理 mkHom_comp
-  条件: {e f g : C ≌ D} (α : e.functor ⟶ f.functor) (β : f.functor ⟶ g.functor)
-  证明: rfl
+/-
+**CategoryTheory.Equivalence.mkHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Equivalence`。
+形式化陈述：mkHom_comp {e f g : C ≌ D} (α : e.functor ⟶ f.functor) (β : f.functor ⟶ g.
+functor) : mkHom (α ≫ β) = mkHom α ≫ mkHom β
+参数：α : e.functor ⟶ f.functor；β : f.functor ⟶ g.functor。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkHom_comp {e f g : C ≌ D} (α : e.functor ⟶ f.functor) (β : f.functor ⟶ g.functor) :
     mkHom (α ≫ β) = mkHom α ≫ mkHom β :=
@@ -535,20 +470,18 @@ lemma mkHom_comp {e f g : C ≌ D} (α : e.functor ⟶ f.functor) (β : f.functo
 /-- Construct an isomorphism in `C ≌ D` from a natural isomorphism between the functors
 of the equivalences. -/
 @[simps]
-/--
-Definition of `mkIso` / `mkIso` 的定义
+/-
+**CategoryTheory.Equivalence.mkIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equ
+ivalence`。
+形式化陈述：mkIso {e f : C ≌ D} (η : e.functor ≅ f.functor) : e ≅ f where hom
+参数：η : e.functor ≅ f.functor。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIso
-  signature: {e f : C ≌ D} (η : e.functor ≅ f.functor)
-  body: mkHom η.hom
-  inv := mkHom η.inv
-
-中文:
-定义 mkIso
-  签名: {e f : C ≌ D} (η : e.functor ≅ f.functor)
-  定义体: mkHom η.hom
-  inv := mkHom η.inv
+--- 原说明 ---
+Construct an isomorphism in `C ≌ D` from a natural isomorphism between the funct
+ors
+of the equivalences.
 -/
 def mkIso {e f : C ≌ D} (η : e.functor ≅ f.functor) : e ≅ f where
   hom := mkHom η.hom
@@ -559,22 +492,15 @@ attribute [to_dual existing mkIso_inv] mkIso_hom
 variable (C D) in
 /-- The `functor` functor that sends an equivalence of categories to its functor. -/
 @[simps!]
-/--
-Definition of `functorFunctor` / `functorFunctor` 的定义
+/-
+**CategoryTheory.Equivalence.functorFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Equivalence`。
+形式化陈述：functorFunctor : (C ≌ D) ⥤ C ⥤ D where obj f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorFunctor
-  signature: : (C ≌ D) ⥤ C ⥤ D where
-  body: f.functor
-  map α := asNatTrans α
-
-中文:
-定义 functorFunctor
-  签名: : (C ≌ D) ⥤ C ⥤ D where
-  定义体: f.functor
-  map α := asNatTrans α
-
-Depends on / 依赖: f.functor, functor
+--- 原说明 ---
+The `functor` functor that sends an equivalence of categories to its functor.
 -/
 def functorFunctor : (C ≌ D) ⥤ C ⥤ D where
   obj f := f.functor
@@ -586,182 +512,178 @@ end CategoryStructure
 preventing structure projections from unfolding. -/
 
 @[simp, to_dual none]
-/--
-theorem `Equivalence_mk'_unit` / 定理 `Equivalence_mk'_unit`
+/-
+**CategoryTheory.Equivalence.Equivalence_mk'_unit** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (functor : CategoryTheory.Functo
+r C D) (inverse : CategoryTheory.Functor D C)   (unit_iso : CategoryTheory.Funct
+or.id C ≅ functor.comp inverse)   (counit_iso : inverse.comp functor ≅ CategoryT
+heory.Functor.id D)   (f :     ∀ (X : C),       CategoryTheory.CategoryStruct.co
+mp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (functor.obj X)) =    
+     CategoryTheory.CategoryStruct.id (functor.obj X)),   { functor := functor, 
+inverse := inverse, unitIso := unit_iso, counitIso := counit_iso,         functo
+r_unitIso_comp := f }.unit =     unit_iso.hom
+参数：functor : CategoryTheory.Functor C D；inverse : CategoryTheory.Functor D C；uni
+t_iso : CategoryTheory.Functor.id C ≅ functor.comp inverse；counit_iso : inverse.
+comp functor ≅ CategoryTheory.Functor.id D；f :     ∀ (X : C),       CategoryTheo
+ry.CategoryStruct.comp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (f
+unctor.obj X)) =         CategoryTheory.CategoryStruct.id (functor.obj X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Equivalence_mk'_unit
-  given: (functor inverse unit_iso counit_iso f)
-  proof: rfl
-
-@[simp, to_dual none]
-
-中文:
-定理 Equivalence_mk'_unit
-  条件: (functor inverse unit_iso counit_iso f)
-  证明: rfl
-
-@[simp, to_dual none]
+--- 原说明 ---
+While these abbreviations are convenient, they also cause some trouble,
+preventing structure projections from unfolding.
 -/
 theorem Equivalence_mk'_unit (functor inverse unit_iso counit_iso f) :
     (⟨functor, inverse, unit_iso, counit_iso, f⟩ : C ≌ D).unit = unit_iso.hom :=
   rfl
 
 @[simp, to_dual none]
-/--
-theorem `Equivalence_mk'_counit` / 定理 `Equivalence_mk'_counit`
-
-English:
-theorem Equivalence_mk'_counit
-  given: (functor inverse unit_iso counit_iso f)
-  proof: rfl
-
-@[simp, to_dual none]
-
-中文:
-定理 Equivalence_mk'_counit
-  条件: (functor inverse unit_iso counit_iso f)
-  证明: rfl
-
-@[simp, to_dual none]
+/-
+**CategoryTheory.Equivalence.Equivalence_mk'_counit** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Equivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (functor : CategoryTheory.Functo
+r C D) (inverse : CategoryTheory.Functor D C)   (unit_iso : CategoryTheory.Funct
+or.id C ≅ functor.comp inverse)   (counit_iso : inverse.comp functor ≅ CategoryT
+heory.Functor.id D)   (f :     ∀ (X : C),       CategoryTheory.CategoryStruct.co
+mp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (functor.obj X)) =    
+     CategoryTheory.CategoryStruct.id (functor.obj X)),   { functor := functor, 
+inverse := inverse, unitIso := unit_iso, counitIso := counit_iso,         functo
+r_unitIso_comp := f }.counit =     counit_iso.hom
+参数：functor : CategoryTheory.Functor C D；inverse : CategoryTheory.Functor D C；uni
+t_iso : CategoryTheory.Functor.id C ≅ functor.comp inverse；counit_iso : inverse.
+comp functor ≅ CategoryTheory.Functor.id D；f :     ∀ (X : C),       CategoryTheo
+ry.CategoryStruct.comp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (f
+unctor.obj X)) =         CategoryTheory.CategoryStruct.id (functor.obj X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Equivalence_mk'_counit (functor inverse unit_iso counit_iso f) :
     (⟨functor, inverse, unit_iso, counit_iso, f⟩ : C ≌ D).counit = counit_iso.hom :=
   rfl
 
 @[simp, to_dual none]
-/--
-theorem `Equivalence_mk'_unitInv` / 定理 `Equivalence_mk'_unitInv`
-
-English:
-theorem Equivalence_mk'_unitInv
-  given: (functor inverse unit_iso counit_iso f)
-  proof: rfl
-
-@[simp, to_dual none]
-
-中文:
-定理 Equivalence_mk'_unitInv
-  条件: (functor inverse unit_iso counit_iso f)
-  证明: rfl
-
-@[simp, to_dual none]
+/-
+**CategoryTheory.Equivalence.Equivalence_mk'_unitInv** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Equivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (functor : CategoryTheory.Functo
+r C D) (inverse : CategoryTheory.Functor D C)   (unit_iso : CategoryTheory.Funct
+or.id C ≅ functor.comp inverse)   (counit_iso : inverse.comp functor ≅ CategoryT
+heory.Functor.id D)   (f :     ∀ (X : C),       CategoryTheory.CategoryStruct.co
+mp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (functor.obj X)) =    
+     CategoryTheory.CategoryStruct.id (functor.obj X)),   { functor := functor, 
+inverse := inverse, unitIso := unit_iso, counitIso := counit_iso,         functo
+r_unitIso_comp := f }.unitInv =     unit_iso.inv
+参数：functor : CategoryTheory.Functor C D；inverse : CategoryTheory.Functor D C；uni
+t_iso : CategoryTheory.Functor.id C ≅ functor.comp inverse；counit_iso : inverse.
+comp functor ≅ CategoryTheory.Functor.id D；f :     ∀ (X : C),       CategoryTheo
+ry.CategoryStruct.comp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (f
+unctor.obj X)) =         CategoryTheory.CategoryStruct.id (functor.obj X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Equivalence_mk'_unitInv (functor inverse unit_iso counit_iso f) :
     (⟨functor, inverse, unit_iso, counit_iso, f⟩ : C ≌ D).unitInv = unit_iso.inv :=
   rfl
 
 @[simp, to_dual none]
-/--
-theorem `Equivalence_mk'_counitInv` / 定理 `Equivalence_mk'_counitInv`
-
-English:
-theorem Equivalence_mk'_counitInv
-  given: (functor inverse unit_iso counit_iso f)
-  proof: rfl
-
-@[to_dual (attr := reassoc) counitInv_naturality]
-
-中文:
-定理 Equivalence_mk'_counitInv
-  条件: (functor inverse unit_iso counit_iso f)
-  证明: rfl
-
-@[to_dual (attr := reassoc) counitInv_naturality]
+/-
+**CategoryTheory.Equivalence.Equivalence_mk'_counitInv** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Equivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (functor : CategoryTheory.Functo
+r C D) (inverse : CategoryTheory.Functor D C)   (unit_iso : CategoryTheory.Funct
+or.id C ≅ functor.comp inverse)   (counit_iso : inverse.comp functor ≅ CategoryT
+heory.Functor.id D)   (f :     ∀ (X : C),       CategoryTheory.CategoryStruct.co
+mp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (functor.obj X)) =    
+     CategoryTheory.CategoryStruct.id (functor.obj X)),   { functor := functor, 
+inverse := inverse, unitIso := unit_iso, counitIso := counit_iso,         functo
+r_unitIso_comp := f }.counitInv =     counit_iso.inv
+参数：functor : CategoryTheory.Functor C D；inverse : CategoryTheory.Functor D C；uni
+t_iso : CategoryTheory.Functor.id C ≅ functor.comp inverse；counit_iso : inverse.
+comp functor ≅ CategoryTheory.Functor.id D；f :     ∀ (X : C),       CategoryTheo
+ry.CategoryStruct.comp (functor.map (unit_iso.hom.app X)) (counit_iso.hom.app (f
+unctor.obj X)) =         CategoryTheory.CategoryStruct.id (functor.obj X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Equivalence_mk'_counitInv (functor inverse unit_iso counit_iso f) :
     (⟨functor, inverse, unit_iso, counit_iso, f⟩ : C ≌ D).counitInv = counit_iso.inv :=
   rfl
 
 @[to_dual (attr := reassoc) counitInv_naturality]
-/--
-theorem `counit_naturality` / 定理 `counit_naturality`
-
-English:
-theorem counit_naturality
-  given: (e : C ≌ D) {X Y : D} (f : X ⟶ Y)
-  proof: e.counit.naturality f
-
-@[to_dual (attr := reassoc) unitInv_naturality]
-
-中文:
-定理 counit_naturality
-  条件: (e : C ≌ D) {X Y : D} (f : X ⟶ Y)
-  证明: e.counit.naturality f
-
-@[to_dual (attr := reassoc) unitInv_naturality]
-
-Depends on / 依赖: counit, e.counit.naturality, naturality
+/-
+**CategoryTheory.Equivalence.counit_naturality** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Equivalence`。
+形式化陈述：counit_naturality (e : C ≌ D) {X Y : D} (f : X ⟶ Y) : dsimp% e.functor.map
+ (e.inverse.map f) ≫ e.counit.app Y = e.counit.app X ≫ f
+参数：e : C ≌ D；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem counit_naturality (e : C ≌ D) {X Y : D} (f : X ⟶ Y) :
     dsimp% e.functor.map (e.inverse.map f) ≫ e.counit.app Y = e.counit.app X ≫ f :=
   e.counit.naturality f
 
 @[to_dual (attr := reassoc) unitInv_naturality]
-/--
-theorem `unit_naturality` / 定理 `unit_naturality`
-
-English:
-theorem unit_naturality
-  given: (e : C ≌ D) {X Y : C} (f : X ⟶ Y)
-  proof: (e.unit.naturality f).symm
-
-@[to_dual (attr := reassoc (attr := simp)) counitInv_functor_comp]
-
-中文:
-定理 unit_naturality
-  条件: (e : C ≌ D) {X Y : C} (f : X ⟶ Y)
-  证明: (e.unit.naturality f).symm
-
-@[to_dual (attr := reassoc (attr := simp)) counitInv_functor_comp]
-
-Depends on / 依赖: e.unit.naturality, naturality
+/-
+**CategoryTheory.Equivalence.unit_naturality** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Equivalence`。
+形式化陈述：unit_naturality (e : C ≌ D) {X Y : C} (f : X ⟶ Y) : dsimp% e.unit.app X ≫ 
+e.inverse.map (e.functor.map f) = f ≫ e.unit.app Y
+参数：e : C ≌ D；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem unit_naturality (e : C ≌ D) {X Y : C} (f : X ⟶ Y) :
     dsimp% e.unit.app X ≫ e.inverse.map (e.functor.map f) = f ≫ e.unit.app Y :=
   (e.unit.naturality f).symm
 
 @[to_dual (attr := reassoc (attr := simp)) counitInv_functor_comp]
-/--
-theorem `functor_unit_comp` / 定理 `functor_unit_comp`
-
-English:
-theorem functor_unit_comp
-  given: (e : C ≌ D) (X : C)
-  proof: e.functor_unitIso_comp X
-
-@[to_dual counitInv_app_functor]
-
-中文:
-定理 functor_unit_comp
-  条件: (e : C ≌ D) (X : C)
-  证明: e.functor_unitIso_comp X
-
-@[to_dual counitInv_app_functor]
-
-Depends on / 依赖: e.functor_unitIso_comp, functor_unitIso_comp
+/-
+**CategoryTheory.Equivalence.functor_unit_comp** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Equivalence`。
+形式化陈述：functor_unit_comp (e : C ≌ D) (X : C) : dsimp% e.functor.map (e.unit.app X
+) ≫ e.counit.app (e.functor.obj X) = 𝟙 (e.functor.obj X)
+参数：e : C ≌ D；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.functor_unitIso_comp`：∀ {C : Type u₁} {D : Ty
+pe u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   (self : C ≌ D) (X …
 -/
 theorem functor_unit_comp (e : C ≌ D) (X : C) :
     dsimp% e.functor.map (e.unit.app X) ≫ e.counit.app (e.functor.obj X) = 𝟙 (e.functor.obj X) :=
   e.functor_unitIso_comp X
 
 @[to_dual counitInv_app_functor]
-/--
-theorem `counit_app_functor` / 定理 `counit_app_functor`
-
-English:
-theorem counit_app_functor
-  given: (e : C ≌ D) (X : C)
-  proof: by
-  simpa using Iso.hom_comp_eq_id (e.functor.mapIso (e.unitIso.app X)) (f := e.counit.app _)
-
-中文:
-定理 counit_app_functor
-  条件: (e : C ≌ D) (X : C)
-  证明: by
-  simpa using Iso.hom_comp_eq_id (e.functor.mapIso (e.unitIso.app X)) (f := e.counit.app _)
-
-Depends on / 依赖: Iso.hom_comp_eq_id, counit, e.counit.app, e.functor.mapIso, e.unitIso.app, functor, hom_comp_eq_id, mapIso, unitIso
+/-
+**CategoryTheory.Equivalence.counit_app_functor** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Equivalence`。
+形式化陈述：counit_app_functor (e : C ≌ D) (X : C) : e.counit.app (e.functor.obj X) = 
+e.functor.map (e.unitInv.app X)
+参数：e : C ≌ D；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Equivalence.functor_unit_comp`：functor_unit_comp (e : C ≌
+ D) (X : C) : dsimp% e.functor.map (e.unit.app X) ≫ e.counit.app (e.functor.obj 
+X) = 𝟙 (e.functor.obj X)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
+· 使用定理 `CategoryTheory.Iso.hom_comp_eq_id`：hom_comp_eq_id (α : X ≅ Y) {f : Y ⟶ X
+} : α.hom ≫ f = 𝟙 X ↔ f = α.inv
 -/
 theorem counit_app_functor (e : C ≌ D) (X : C) :
     e.counit.app (e.functor.obj X) = e.functor.map (e.unitInv.app X) := by
@@ -770,85 +692,71 @@ theorem counit_app_functor (e : C ≌ D) (X : C) :
 /-- The other triangle equality. The proof follows the following proof in Globular:
   http://globular.science/1905.001 -/
 @[to_dual (attr := reassoc (attr := simp)) inverse_counitInv_comp]
-/--
-theorem `unit_inverse_comp` / 定理 `unit_inverse_comp`
+/-
+**CategoryTheory.Equivalence.unit_inverse_comp** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Equivalence`。
+形式化陈述：unit_inverse_comp (e : C ≌ D) (Y : D) : dsimp% e.unit.app (e.inverse.obj Y
+) ≫ e.inverse.map (e.counit.app Y) = 𝟙 (e.inverse.obj Y)
+参数：e : C ≌ D；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Equivalence.counitInv_functor_comp`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   (e : C ≌ D) (X : C…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.app_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Categ
+ory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F
+ G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.app_inv`：∀ {C : Type u₁} [inst : CategoryTheory.Categ
+ory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F
+ G : CategoryThe…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Equivalence.unit_naturality`：unit_naturality (e : C ≌ D) 
+{X Y : C} (f : X ⟶ Y) : dsimp% e.unit.app X ≫ e.inverse.map (e.functor.map f) = 
+f ≫ e.unit.app Y
+· 使用定理 `CategoryTheory.Equivalence.counit_naturality`：counit_naturality (e : C ≌
+ D) {X Y : D} (f : X ⟶ Y) : dsimp% e.functor.map (e.inverse.map f) ≫ e.counit.ap
+p Y = e.counit.app X ≫ f
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Equivalence.counitInv_naturality`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   (e : C ≌ D) {X Y :…
+· 使用定理 `CategoryTheory.Equivalence.unitInv_naturality`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   (e : C ≌ D) {X Y :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem unit_inverse_comp
-  given: (e : C ≌ D) (Y : D)
-  proof: by
-  rw [← id_comp (e.inverse.map _)]; rw [← map_id e.inverse]; rw [← counitInv_functor_comp]; rw [map_comp]
-  rw [← Iso.hom_inv_id_assoc (e.unitIso.app _) (e.inverse.map (e.functor.map _))]; rw [Iso.app_hom]; rw [Iso.app_inv]
-  slice_lhs 2 3 => rw [← e.unit_naturality]
-  slice_lhs 1 2 => rw [← e.unit_naturality]
-  slice_lhs 4 4 =>
-    rw [← Iso.hom_inv_id_assoc (e.inverse.mapIso (e.counitIso.app _)) (e.unitInv.app _)]
-  slice_lhs 3 4 =>
-    dsimp only [Functor.mapIso_hom, Iso.app_hom]
-    rw [← map_comp e.inverse]
-    dsimp
-    rw [e.counit_naturality]; rw [e.counitIso.hom_inv_id_app]
-    dsimp only [Functor.comp_obj]
-    rw [map_id]
-  dsimp only [comp_obj, id_obj]
-  rw [id_comp]
-  slice_lhs 2 3 =>
-    dsimp only [Functor.mapIso_inv, Iso.app_inv]
-    rw [← map_comp e.inverse]; rw [← e.counitInv_naturality]; rw [map_comp]
-  slice_lhs 3 4 => rw [e.unitInv_naturality]
-  slice_lhs 4 5 =>
-    rw [← map_comp e.inverse]; rw [← map_comp e.functor]; rw [e.unitIso.hom_inv_id_app]
-    dsimp only [Functor.id_obj]
-    rw [map_id]; rw [map_id]
-  rw [id_comp]
-  slice_lhs 3 4 => rw [← e.unitInv_naturality]
-  slice_lhs 2 3 =>
-    rw [← map_comp e.inverse]; rw [e.counitInv_naturality]; rw [e.counitIso.hom_inv_id_app]
-  simp
-
-@[to_dual unitInv_app_inverse]
-
-中文:
-定理 unit_inverse_comp
-  条件: (e : C ≌ D) (Y : D)
-  证明: by
-  rw [← id_comp (e.inverse.map _)]; rw [← map_id e.inverse]; rw [← counitInv_functor_comp]; rw [map_comp]
-  rw [← Iso.hom_inv_id_assoc (e.unitIso.app _) (e.inverse.map (e.functor.map _))]; rw [Iso.app_hom]; rw [Iso.app_inv]
-  slice_lhs 2 3 => rw [← e.unit_naturality]
-  slice_lhs 1 2 => rw [← e.unit_naturality]
-  slice_lhs 4 4 =>
-    rw [← Iso.hom_inv_id_assoc (e.inverse.mapIso (e.counitIso.app _)) (e.unitInv.app _)]
-  slice_lhs 3 4 =>
-    dsimp only [Functor.mapIso_hom, Iso.app_hom]
-    rw [← map_comp e.inverse]
-    dsimp
-    rw [e.counit_naturality]; rw [e.counitIso.hom_inv_id_app]
-    dsimp only [Functor.comp_obj]
-    rw [map_id]
-  dsimp only [comp_obj, id_obj]
-  rw [id_comp]
-  slice_lhs 2 3 =>
-    dsimp only [Functor.mapIso_inv, Iso.app_inv]
-    rw [← map_comp e.inverse]; rw [← e.counitInv_naturality]; rw [map_comp]
-  slice_lhs 3 4 => rw [e.unitInv_naturality]
-  slice_lhs 4 5 =>
-    rw [← map_comp e.inverse]; rw [← map_comp e.functor]; rw [e.unitIso.hom_inv_id_app]
-    dsimp only [Functor.id_obj]
-    rw [map_id]; rw [map_id]
-  rw [id_comp]
-  slice_lhs 3 4 => rw [← e.unitInv_naturality]
-  slice_lhs 2 3 =>
-    rw [← map_comp e.inverse]; rw [e.counitInv_naturality]; rw [e.counitIso.hom_inv_id_app]
-  simp
-
-@[to_dual unitInv_app_inverse]
-
-Depends on / 依赖: Functor, Functor.mapIso_hom, Iso.app_hom, Iso.app_inv, Iso.hom_inv_id_assoc, app_hom, app_inv, counitInv_functor_comp, counitIso, e.counitIso.app, e.functor.map, e.inverse, e.inverse.map, e.inverse.mapIso, e.unitInv.app, e.unitIso.app, e.unit_naturality, functor, hom_inv_id_assoc, id_comp
+--- 原说明 ---
+The other triangle equality. The proof follows the following proof in Globular:
+  http://globular.science/1905.001
 -/
 theorem unit_inverse_comp (e : C ≌ D) (Y : D) :
     dsimp% e.unit.app (e.inverse.obj Y) ≫ e.inverse.map (e.counit.app Y) = 𝟙 (e.inverse.obj Y) := by
-  rw [← id_comp (e.inverse.map _)]; rw [← map_id e.inverse]; rw [← counitInv_functor_comp]; rw [map_comp]
-  rw [← Iso.hom_inv_id_assoc (e.unitIso.app _) (e.inverse.map (e.functor.map _))]; rw [Iso.app_hom]; rw [Iso.app_inv]
+  rw [← id_comp (e.inverse.map _), ← map_id e.inverse, ← counitInv_functor_comp, map_comp]
+  rw [← Iso.hom_inv_id_assoc (e.unitIso.app _) (e.inverse.map (e.functor.map _)), Iso.app_hom,
+    Iso.app_inv]
   slice_lhs 2 3 => rw [← e.unit_naturality]
   slice_lhs 1 2 => rw [← e.unit_naturality]
   slice_lhs 4 4 =>
@@ -857,90 +765,82 @@ theorem unit_inverse_comp (e : C ≌ D) (Y : D) :
     dsimp only [Functor.mapIso_hom, Iso.app_hom]
     rw [← map_comp e.inverse]
     dsimp
-    rw [e.counit_naturality]; rw [e.counitIso.hom_inv_id_app]
+    rw [e.counit_naturality, e.counitIso.hom_inv_id_app]
     dsimp only [Functor.comp_obj]
     rw [map_id]
   dsimp only [comp_obj, id_obj]
   rw [id_comp]
   slice_lhs 2 3 =>
     dsimp only [Functor.mapIso_inv, Iso.app_inv]
-    rw [← map_comp e.inverse]; rw [← e.counitInv_naturality]; rw [map_comp]
+    rw [← map_comp e.inverse, ← e.counitInv_naturality, map_comp]
   slice_lhs 3 4 => rw [e.unitInv_naturality]
   slice_lhs 4 5 =>
-    rw [← map_comp e.inverse]; rw [← map_comp e.functor]; rw [e.unitIso.hom_inv_id_app]
+    rw [← map_comp e.inverse, ← map_comp e.functor, e.unitIso.hom_inv_id_app]
     dsimp only [Functor.id_obj]
-    rw [map_id]; rw [map_id]
+    rw [map_id, map_id]
   rw [id_comp]
   slice_lhs 3 4 => rw [← e.unitInv_naturality]
   slice_lhs 2 3 =>
-    rw [← map_comp e.inverse]; rw [e.counitInv_naturality]; rw [e.counitIso.hom_inv_id_app]
+    rw [← map_comp e.inverse, e.counitInv_naturality, e.counitIso.hom_inv_id_app]
   simp
 
 @[to_dual unitInv_app_inverse]
-/--
-theorem `unit_app_inverse` / 定理 `unit_app_inverse`
-
-English:
-theorem unit_app_inverse
-  given: (e : C ≌ D) (Y : D)
-  proof: by
-  simpa using Iso.comp_hom_eq_id (e.inverse.mapIso (e.counitIso.app Y)) (f := e.unit.app _)
-
-@[to_dual none, reassoc, simp]
-
-中文:
-定理 unit_app_inverse
-  条件: (e : C ≌ D) (Y : D)
-  证明: by
-  simpa using Iso.comp_hom_eq_id (e.inverse.mapIso (e.counitIso.app Y)) (f := e.unit.app _)
-
-@[to_dual none, reassoc, simp]
-
-Depends on / 依赖: Iso.comp_hom_eq_id, comp_hom_eq_id, counitIso, e.counitIso.app, e.inverse.mapIso, e.unit.app, inverse, mapIso
+/-
+**CategoryTheory.Equivalence.unit_app_inverse** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：unit_app_inverse (e : C ≌ D) (Y : D) : e.unit.app (e.inverse.obj Y) = e.in
+verse.map (e.counitInv.app Y)
+参数：e : C ≌ D；Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Equivalence.unit_inverse_comp`：unit_inverse_comp (e : C ≌
+ D) (Y : D) : dsimp% e.unit.app (e.inverse.obj Y) ≫ e.inverse.map (e.counit.app 
+Y) = 𝟙 (e.inverse.obj Y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
+· 使用定理 `CategoryTheory.Iso.comp_hom_eq_id`：comp_hom_eq_id (α : X ≅ Y) {f : Y ⟶ X
+} : f ≫ α.hom = 𝟙 Y ↔ f = α.inv
 -/
 theorem unit_app_inverse (e : C ≌ D) (Y : D) :
     e.unit.app (e.inverse.obj Y) = e.inverse.map (e.counitInv.app Y) := by
   simpa using Iso.comp_hom_eq_id (e.inverse.mapIso (e.counitIso.app Y)) (f := e.unit.app _)
 
 @[to_dual none, reassoc, simp]
-/--
-theorem `fun_inv_map` / 定理 `fun_inv_map`
-
-English:
-theorem fun_inv_map
-  given: (e : C ≌ D) (X Y : D) (f : X ⟶ Y)
-  proof: (NatIso.naturality_2 e.counitIso f).symm
-
-@[to_dual none, reassoc, simp]
-
-中文:
-定理 fun_inv_map
-  条件: (e : C ≌ D) (X Y : D) (f : X ⟶ Y)
-  证明: (NatIso.naturality_2 e.counitIso f).symm
-
-@[to_dual none, reassoc, simp]
-
-Depends on / 依赖: NatIso, NatIso.naturality_2, counitIso, e.counitIso, naturality_2
+/-
+**CategoryTheory.Equivalence.fun_inv_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Equivalence`。
+形式化陈述：fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) : e.functor.map (e.inverse.m
+ap f) = e.counit.app X ≫ f ≫ e.counitInv.app Y
+参数：e : C ≌ D；X Y : D；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatIso.naturality_2`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) :
     e.functor.map (e.inverse.map f) = e.counit.app X ≫ f ≫ e.counitInv.app Y :=
   (NatIso.naturality_2 e.counitIso f).symm
 
 @[to_dual none, reassoc, simp]
-/--
-theorem `inv_fun_map` / 定理 `inv_fun_map`
-
-English:
-theorem inv_fun_map
-  given: (e : C ≌ D) (X Y : C) (f : X ⟶ Y)
-  proof: (NatIso.naturality_1 e.unitIso f).symm
-
-中文:
-定理 inv_fun_map
-  条件: (e : C ≌ D) (X Y : C) (f : X ⟶ Y)
-  证明: (NatIso.naturality_1 e.unitIso f).symm
-
-Depends on / 依赖: NatIso, NatIso.naturality_1, e.unitIso, naturality_1, unitIso
+/-
+**CategoryTheory.Equivalence.inv_fun_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Equivalence`。
+形式化陈述：inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) : e.inverse.map (e.functor.m
+ap f) = e.unitInv.app X ≫ f ≫ e.unit.app Y
+参数：e : C ≌ D；X Y : C；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatIso.naturality_1`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) :
     e.inverse.map (e.functor.map f) = e.unitInv.app X ≫ f ≫ e.unit.app Y :=
@@ -951,40 +851,20 @@ section
 -- In this section we convert an arbitrary equivalence to a half-adjoint equivalence.
 variable {F : C ⥤ D} {G : D ⥤ C} (η : 𝟭 C ≅ F ⋙ G) (ε : G ⋙ F ≅ 𝟭 D)
 
-/--
-Definition of `adjointifyη` / `adjointifyη` 的定义
+/-- If `η : 𝟭 C ≅ F ⋙ G` is part of a (not necessarily half-adjoint) equivalence, we can upgrade it
+to a refined natural isomorphism `adjointifyη η : 𝟭 C ≅ F ⋙ G` which exhibits the properties
+required for a half-adjoint equivalence. See `Equivalence.mk`. -/
+/-
+**CategoryTheory.Equivalence.adjointify** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Equivalence`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjointifyη
-  signature: : 𝟭 C ≅ F ⋙ G
-  body: by
-  calc
-    𝟭 C ≅ F ⋙ G := η
-    _ ≅ F ⋙ 𝟭 D ⋙ G := isoWhiskerLeft F (leftUnitor G).symm
-    _ ≅ F ⋙ (G ⋙ F) ⋙ G := isoWhiskerLeft F (isoWhiskerRight ε.symm G)
-    _ ≅ F ⋙ G ⋙ F ⋙ G := isoWhiskerLeft F (associator G F G)
-    _ ≅ (F ⋙ G) ⋙ F ⋙ G := (associator F G (F ⋙ G)).symm
-    _ ≅ 𝟭 C ⋙ F ⋙ G := isoWhiskerRight η.symm (F ⋙ G)
-    _ ≅ F ⋙ G := leftUnitor (F ⋙ G)
-
-@[reassoc]
-
-中文:
-定义 adjointifyη
-  签名: : 𝟭 C ≅ F ⋙ G
-  定义体: by
-  calc
-    𝟭 C ≅ F ⋙ G := η
-    _ ≅ F ⋙ 𝟭 D ⋙ G := isoWhiskerLeft F (leftUnitor G).symm
-    _ ≅ F ⋙ (G ⋙ F) ⋙ G := isoWhiskerLeft F (isoWhiskerRight ε.symm G)
-    _ ≅ F ⋙ G ⋙ F ⋙ G := isoWhiskerLeft F (associator G F G)
-    _ ≅ (F ⋙ G) ⋙ F ⋙ G := (associator F G (F ⋙ G)).symm
-    _ ≅ 𝟭 C ⋙ F ⋙ G := isoWhiskerRight η.symm (F ⋙ G)
-    _ ≅ F ⋙ G := leftUnitor (F ⋙ G)
-
-@[reassoc]
-
-Depends on / 依赖: associator, isoWhiskerLeft, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+If `η : 𝟭 C ≅ F ⋙ G` is part of a (not necessarily half-adjoint) equivalence, we
+ can upgrade it
+to a refined natural isomorphism `adjointifyη η : 𝟭 C ≅ F ⋙ G` which exhibits th
+e properties
+required for a half-adjoint equivalence. See `Equivalence.mk`.
 -/
 def adjointifyη : 𝟭 C ≅ F ⋙ G := by
   calc
@@ -997,34 +877,10 @@ def adjointifyη : 𝟭 C ≅ F ⋙ G := by
     _ ≅ F ⋙ G := leftUnitor (F ⋙ G)
 
 @[reassoc]
-/--
-theorem `adjointify_η_ε` / 定理 `adjointify_η_ε`
-
-English:
-theorem adjointify_η_ε
-  given: (X : C)
-  proof: by
-  dsimp [adjointifyη, Trans.trans]
-  simp only [comp_id, assoc, map_comp]
-  have := ε.hom.naturality (F.map (η.inv.app X)); dsimp at this; rw [this]; clear this
-  rw [← assoc _ _ (F.map _)]
-  have := ε.hom.naturality (ε.inv.app <| F.obj X); dsimp at this; rw [this]; clear this
-  have := (ε.app <| F.obj X).hom_inv_id; dsimp at this; rw [this]; clear this
-  rw [id_comp]; have := (F.mapIso <| η.app X).hom_inv_id; dsimp at this; rw [this]
-
-中文:
-定理 adjointify_η_ε
-  条件: (X : C)
-  证明: by
-  dsimp [adjointifyη, Trans.trans]
-  simp only [comp_id, assoc, map_comp]
-  have := ε.hom.naturality (F.map (η.inv.app X)); dsimp at this; rw [this]; clear this
-  rw [← assoc _ _ (F.map _)]
-  have := ε.hom.naturality (ε.inv.app <| F.obj X); dsimp at this; rw [this]; clear this
-  have := (ε.app <| F.obj X).hom_inv_id; dsimp at this; rw [this]; clear this
-  rw [id_comp]; have := (F.mapIso <| η.app X).hom_inv_id; dsimp at this; rw [this]
-
-Depends on / 依赖: F.map, F.mapIso, F.obj, Trans.trans, comp_id, hom.naturality, hom_inv_id, id_comp, inv.app, mapIso, map_comp, naturality
+/-
+**CategoryTheory.Equivalence.adjointify_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Equivalence`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjointify_η_ε (X : C) :
     F.map ((adjointifyη η ε).hom.app X) ≫ ε.hom.app (F.obj X) = 𝟙 (F.obj X) := by
@@ -1038,141 +894,103 @@ theorem adjointify_η_ε (X : C) :
 
 end
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Every equivalence of categories consisting of functors `F` and `G` such that `F ⋙ G` and
+    `G ⋙ F` are naturally isomorphic to identity functors can be transformed into a half-adjoint
+    equivalence without changing `F` or `G`. -/
+/-
+**CategoryTheory.Equivalence.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equiva
+lence`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Cat
+egoryTheory.Functor C D) →           (G : CategoryTheory.Functor D C) →         
+    (CategoryTheory.Functor.id C ≅ F.comp G) → (G.comp F ≅ CategoryTheory.Functo
+r.id D) → (C ≌ D)
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D C；CategoryTheory.
+Functor.id C ≅ F.comp G；G.comp F ≅ CategoryTheory.Functor.id D；C ≌ D。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.adjointify_η_ε`：adjointify_η_ε (X : C) : F.ma
+p ((adjointifyη η ε).hom.app X) ≫ ε.hom.app (F.obj X) = 𝟙 (F.obj X)
 
-English:
-definition mk
-  signature: (F : C ⥤ D) (G : D ⥤ C) (η : 𝟭 C ≅ F ⋙ G) (ε : G ⋙ F ≅ 𝟭 D)
-  body: ⟨F, G, adjointifyη η ε, ε, adjointify_η_ε η ε⟩
-
-中文:
-定义 mk
-  签名: (F : C ⥤ D) (G : D ⥤ C) (η : 𝟭 C ≅ F ⋙ G) (ε : G ⋙ F ≅ 𝟭 D)
-  定义体: ⟨F, G, adjointifyη η ε, ε, adjointify_η_ε η ε⟩
+--- 原说明 ---
+Every equivalence of categories consisting of functors `F` and `G` such that `F 
+⋙ G` and
+    `G ⋙ F` are naturally isomorphic to identity functors can be transformed int
+o a half-adjoint
+    equivalence without changing `F` or `G`.
 -/
 protected def mk (F : C ⥤ D) (G : D ⥤ C) (η : 𝟭 C ≅ F ⋙ G) (ε : G ⋙ F ≅ 𝟭 D) : C ≌ D :=
   ⟨F, G, adjointifyη η ε, ε, adjointify_η_ε η ε⟩
 
 /-- Equivalence of categories is reflexive. -/
 @[refl, simps]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**CategoryTheory.Equivalence.refl** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equi
+valence`。
+形式化陈述：refl : C ≌ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: : C ≌ C
-  body: ⟨𝟭 C, 𝟭 C, Iso.refl _, Iso.refl _, fun _ => Category.id_comp _⟩
-
-中文:
-定义 refl
-  签名: : C ≌ C
-  定义体: ⟨𝟭 C, 𝟭 C, Iso.refl _, Iso.refl _, fun _ => Category.id_comp _⟩
-
-Depends on / 依赖: Category, Category.id_comp, Iso.refl, id_comp
+--- 原说明 ---
+Equivalence of categories is reflexive.
 -/
 def refl : C ≌ C :=
   ⟨𝟭 C, 𝟭 C, Iso.refl _, Iso.refl _, fun _ => Category.id_comp _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (C ≌ C)
-  body: ⟨refl⟩
-
-中文:
-实例 :
-  签名: 可居 (C ≌ C)
-  定义体: ⟨refl⟩
+/-
+**CategoryTheory.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Equivale
+nce`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (C ≌ C) :=
   ⟨refl⟩
 
 /-- Equivalence of categories is symmetric. -/
 @[implicit_reducible, symm, simps]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**CategoryTheory.Equivalence.symm** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equi
+valence`。
+形式化陈述：symm (e : C ≌ D) : D ≌ C
+参数：e : C ≌ D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.inverse_counitInv_comp`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   (e : C ≌ D) (Y : D…
 
-English:
-definition symm
-  signature: (e : C ≌ D)
-  body: ⟨e.inverse, e.functor, e.counitIso.symm, e.unitIso.symm, e.inverse_counitInv_comp⟩
-
-@[simp]
-
-中文:
-定义 symm
-  签名: (e : C ≌ D)
-  定义体: ⟨e.inverse, e.functor, e.counitIso.symm, e.unitIso.symm, e.inverse_counitInv_comp⟩
-
-@[simp]
-
-Depends on / 依赖: counitIso, e.counitIso.symm, e.functor, e.inverse, e.inverse_counitInv_comp, e.unitIso.symm, functor, inverse, inverse_counitInv_comp, unitIso
+--- 原说明 ---
+Equivalence of categories is symmetric.
 -/
 def symm (e : C ≌ D) : D ≌ C :=
   ⟨e.inverse, e.functor, e.counitIso.symm, e.unitIso.symm, e.inverse_counitInv_comp⟩
 
 @[simp]
-/--
-lemma `mkHom_id_inverse` / 引理 `mkHom_id_inverse`
-
-English:
-lemma mkHom_id_inverse
-  given: {e : C ≌ D}
-  statement: mkHom (𝟙 e.inverse) = 𝟙 e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mkHom_id_inverse
-  条件: {e : C ≌ D}
-  结论: mkHom (𝟙 e.inverse) = 𝟙 e.symm
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Equivalence.mkHom_id_inverse** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：mkHom_id_inverse {e : C ≌ D} : mkHom (𝟙 e.inverse) = 𝟙 e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mkHom_id_inverse {e : C ≌ D} : mkHom (𝟙 e.inverse) = 𝟙 e.symm := rfl
 
 @[simp]
-/--
-lemma `symm_counit` / 引理 `symm_counit`
-
-English:
-lemma symm_counit
-  given: (e : C ≌ D)
-  statement: e.symm.counit = e.unitInv
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 symm_counit
-  条件: (e : C ≌ D)
-  结论: e.symm.counit = e.unitInv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Equivalence.symm_counit** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Equivalence`。
+形式化陈述：symm_counit (e : C ≌ D) : e.symm.counit = e.unitInv
+参数：e : C ≌ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma symm_counit (e : C ≌ D) : e.symm.counit = e.unitInv := rfl
 
 @[simp]
-/--
-lemma `symm_unit` / 引理 `symm_unit`
-
-English:
-lemma symm_unit
-  given: (e : C ≌ D)
-  statement: e.symm.unit = e.counitInv
-  proof: rfl
-
-中文:
-引理 symm_unit
-  条件: (e : C ≌ D)
-  结论: e.symm.unit = e.counitInv
-  证明: rfl
+/-
+**CategoryTheory.Equivalence.symm_unit** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Equivalence`。
+形式化陈述：symm_unit (e : C ≌ D) : e.symm.unit = e.counitInv
+参数：e : C ≌ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma symm_unit (e : C ≌ D) : e.symm.unit = e.counitInv := rfl
 
@@ -1180,48 +998,16 @@ variable {E : Type u₃} [Category.{v₃} E]
 
 /-- Equivalence of categories is transitive. -/
 @[trans, simps]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**CategoryTheory.Equivalence.trans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equ
+ivalence`。
+形式化陈述：trans (e : C ≌ D) (f : D ≌ E) : C ≌ E where functor
+参数：e : C ≌ D；f : D ≌ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (e : C ≌ D) (f : D ≌ E)
-  body: e.functor ⋙ f.functor
-  inverse := f.inverse ⋙ e.inverse
-  unitIso := e.unitIso ≪≫ isoWhiskerRight (e.functor.rightUnitor.symm ≪≫
-    isoWhiskerLeft _ f.unitIso ≪≫ (Functor.associator _ _ _).symm) _ ≪≫ Functor.associator _ _ _
-  counitIso := (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight ((Functor.associator _ _ _) ≪≫
-      isoWhiskerLeft _ e.counitIso ≪≫ f.inverse.rightUnitor) _ ≪≫ f.counitIso
-  -- We wouldn't have needed to give this proof if we'd used `Equivalence.mk`,
-  -- but we choose to avoid using that here, for the sake of good structure projection `simp`
-  -- lemmas.
-  functor_unitIso_comp X := by
-    dsimp
-    simp only [comp_id, id_comp, map_comp, fun_inv_map, comp_obj, id_obj, counitInv,
-      functor_unit_comp_assoc, assoc]
-    slice_lhs 2 3 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
-    simp
-
-中文:
-定义 trans
-  签名: (e : C ≌ D) (f : D ≌ E)
-  定义体: e.functor ⋙ f.functor
-  inverse := f.inverse ⋙ e.inverse
-  unitIso := e.unitIso ≪≫ isoWhiskerRight (e.functor.rightUnitor.symm ≪≫
-    isoWhiskerLeft _ f.unitIso ≪≫ (Functor.associator _ _ _).symm) _ ≪≫ Functor.associator _ _ _
-  counitIso := (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight ((Functor.associator _ _ _) ≪≫
-      isoWhiskerLeft _ e.counitIso ≪≫ f.inverse.rightUnitor) _ ≪≫ f.counitIso
-  -- We wouldn't have needed to give this proof if we'd used `Equivalence.mk`,
-  -- but we choose to avoid using that here, for the sake of good structure projection `simp`
-  -- lemmas.
-  functor_unitIso_comp X := by
-    dsimp
-    simp only [comp_id, id_comp, map_comp, fun_inv_map, comp_obj, id_obj, counitInv,
-      functor_unit_comp_assoc, assoc]
-    slice_lhs 2 3 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
-    simp
-
-Depends on / 依赖: e.functor, f.functor, functor
+--- 原说明 ---
+Equivalence of categories is transitive.
 -/
 def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E where
   functor := e.functor ⋙ f.functor
@@ -1240,94 +1026,92 @@ def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E where
     slice_lhs 2 3 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
     simp
 
-/--
-Definition of `funInvIdAssoc` / `funInvIdAssoc` 的定义
+/-- Composing a functor with both functors of an equivalence yields a naturally isomorphic
+functor. -/
+/-
+**CategoryTheory.Equivalence.funInvIdAssoc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Equivalence`。
+形式化陈述：funInvIdAssoc (e : C ≌ D) (F : C ⥤ E) : e.functor ⋙ e.inverse ⋙ F ≅ F
+参数：e : C ≌ D；F : C ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funInvIdAssoc
-  signature: (e : C ≌ D) (F : C ⥤ E)
-  body: (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight e.unitIso.symm F ≪≫ F.leftUnitor
-
-@[to_dual (attr := simp) funInvIdAssoc_inv_app]
-
-中文:
-定义 funInvIdAssoc
-  签名: (e : C ≌ D) (F : C ⥤ E)
-  定义体: (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight e.unitIso.symm F ≪≫ F.leftUnitor
-
-@[to_dual (attr := simp) funInvIdAssoc_inv_app]
-
-Depends on / 依赖: F.leftUnitor, Functor, Functor.associator, associator, e.unitIso.symm, isoWhiskerRight, leftUnitor, unitIso
+--- 原说明 ---
+Composing a functor with both functors of an equivalence yields a naturally isom
+orphic
+functor.
 -/
 def funInvIdAssoc (e : C ≌ D) (F : C ⥤ E) : e.functor ⋙ e.inverse ⋙ F ≅ F :=
   (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight e.unitIso.symm F ≪≫ F.leftUnitor
 
 @[to_dual (attr := simp) funInvIdAssoc_inv_app]
-/--
-theorem `funInvIdAssoc_hom_app` / 定理 `funInvIdAssoc_hom_app`
-
-English:
-theorem funInvIdAssoc_hom_app
-  given: (e : C ≌ D) (F : C ⥤ E) (X : C)
-  proof: by
-  dsimp [funInvIdAssoc]
-  simp
-
-中文:
-定理 funInvIdAssoc_hom_app
-  条件: (e : C ≌ D) (F : C ⥤ E) (X : C)
-  证明: by
-  dsimp [funInvIdAssoc]
-  simp
-
-Depends on / 依赖: funInvIdAssoc
+/-
+**CategoryTheory.Equivalence.funInvIdAssoc_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：funInvIdAssoc_hom_app (e : C ≌ D) (F : C ⥤ E) (X : C) : (funInvIdAssoc e F
+).hom.app X = F.map (e.unitInv.app X)
+参数：e : C ≌ D；F : C ⥤ E；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem funInvIdAssoc_hom_app (e : C ≌ D) (F : C ⥤ E) (X : C) :
     (funInvIdAssoc e F).hom.app X = F.map (e.unitInv.app X) := by
   dsimp [funInvIdAssoc]
   simp
 
-/--
-Definition of `invFunIdAssoc` / `invFunIdAssoc` 的定义
+/-- Composing a functor with both functors of an equivalence yields a naturally isomorphic
+functor. -/
+/-
+**CategoryTheory.Equivalence.invFunIdAssoc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Equivalence`。
+形式化陈述：invFunIdAssoc (e : C ≌ D) (F : D ⥤ E) : e.inverse ⋙ e.functor ⋙ F ≅ F
+参数：e : C ≌ D；F : D ⥤ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invFunIdAssoc
-  signature: (e : C ≌ D) (F : D ⥤ E)
-  body: (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight e.counitIso F ≪≫ F.leftUnitor
-
-@[to_dual (attr := simp) invFunIdAssoc_inv_app]
-
-中文:
-定义 invFunIdAssoc
-  签名: (e : C ≌ D) (F : D ⥤ E)
-  定义体: (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight e.counitIso F ≪≫ F.leftUnitor
-
-@[to_dual (attr := simp) invFunIdAssoc_inv_app]
-
-Depends on / 依赖: F.leftUnitor, Functor, Functor.associator, associator, counitIso, e.counitIso, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+Composing a functor with both functors of an equivalence yields a naturally isom
+orphic
+functor.
 -/
 def invFunIdAssoc (e : C ≌ D) (F : D ⥤ E) : e.inverse ⋙ e.functor ⋙ F ≅ F :=
   (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight e.counitIso F ≪≫ F.leftUnitor
 
 @[to_dual (attr := simp) invFunIdAssoc_inv_app]
-/--
-theorem `invFunIdAssoc_hom_app` / 定理 `invFunIdAssoc_hom_app`
-
-English:
-theorem invFunIdAssoc_hom_app
-  given: (e : C ≌ D) (F : D ⥤ E) (X : D)
-  proof: by
-  dsimp [invFunIdAssoc]
-  simp
-
-中文:
-定理 invFunIdAssoc_hom_app
-  条件: (e : C ≌ D) (F : D ⥤ E) (X : D)
-  证明: by
-  dsimp [invFunIdAssoc]
-  simp
-
-Depends on / 依赖: invFunIdAssoc
+/-
+**CategoryTheory.Equivalence.invFunIdAssoc_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：invFunIdAssoc_hom_app (e : C ≌ D) (F : D ⥤ E) (X : D) : (invFunIdAssoc e F
+).hom.app X = F.map (e.counit.app X)
+参数：e : C ≌ D；F : D ⥤ E；X : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem invFunIdAssoc_hom_app (e : C ≌ D) (F : D ⥤ E) (X : D) :
     (invFunIdAssoc e F).hom.app X = F.map (e.counit.app X) := by
@@ -1336,36 +1120,16 @@ theorem invFunIdAssoc_hom_app (e : C ≌ D) (F : D ⥤ E) (X : D) :
 
 /-- If `C` is equivalent to `D`, then `C ⥤ E` is equivalent to `D ⥤ E`. -/
 @[simps! functor inverse unitIso_hom_app unitIso_inv_app counitIso_hom_app counitIso_inv_app]
-/--
-Definition of `congrLeft` / `congrLeft` 的定义
+/-
+**CategoryTheory.Equivalence.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Equivalence`。
+形式化陈述：congrLeft (e : C ≌ D) : C ⥤ E ≌ D ⥤ E where functor
+参数：e : C ≌ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrLeft
-  signature: (e : C ≌ D)
-  body: (whiskeringLeft _ _ _).obj e.inverse
-  inverse := (whiskeringLeft _ _ _).obj e.functor
-  unitIso := (NatIso.ofComponents fun F => (e.funInvIdAssoc F).symm)
-  counitIso := (NatIso.ofComponents fun F => e.invFunIdAssoc F)
-  functor_unitIso_comp F := by
-    ext X
-    dsimp
-    simp only [funInvIdAssoc_inv_app, id_obj, comp_obj, invFunIdAssoc_hom_app,
-      Functor.comp_map, ← F.map_comp, unit_inverse_comp, map_id]
-
-中文:
-定义 congrLeft
-  签名: (e : C ≌ D)
-  定义体: (whiskeringLeft _ _ _).obj e.inverse
-  inverse := (whiskeringLeft _ _ _).obj e.functor
-  unitIso := (NatIso.ofComponents fun F => (e.funInvIdAssoc F).symm)
-  counitIso := (NatIso.ofComponents fun F => e.invFunIdAssoc F)
-  functor_unitIso_comp F := by
-    ext X
-    dsimp
-    simp only [funInvIdAssoc_inv_app, id_obj, comp_obj, invFunIdAssoc_hom_app,
-      Functor.comp_map, ← F.map_comp, unit_inverse_comp, map_id]
-
-Depends on / 依赖: e.inverse, inverse, whiskeringLeft
+--- 原说明 ---
+If `C` is equivalent to `D`, then `C ⥤ E` is equivalent to `D ⥤ E`.
 -/
 def congrLeft (e : C ≌ D) : C ⥤ E ≌ D ⥤ E where
   functor := (whiskeringLeft _ _ _).obj e.inverse
@@ -1380,30 +1144,16 @@ def congrLeft (e : C ≌ D) : C ⥤ E ≌ D ⥤ E where
 
 /-- If `C` is equivalent to `D`, then `E ⥤ C` is equivalent to `E ⥤ D`. -/
 @[simps! functor inverse unitIso_hom_app unitIso_inv_app counitIso_hom_app counitIso_inv_app]
-/--
-Definition of `congrRight` / `congrRight` 的定义
+/-
+**CategoryTheory.Equivalence.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Equivalence`。
+形式化陈述：congrRight (e : C ≌ D) : E ⥤ C ≌ E ⥤ D where functor
+参数：e : C ≌ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRight
-  signature: (e : C ≌ D)
-  body: (whiskeringRight _ _ _).obj e.functor
-  inverse := (whiskeringRight _ _ _).obj e.inverse
-  unitIso := NatIso.ofComponents
-      fun F => F.rightUnitor.symm ≪≫ isoWhiskerLeft F e.unitIso ≪≫ Functor.associator _ _ _
-  counitIso := NatIso.ofComponents
-      fun F => Functor.associator _ _ _ ≪≫ isoWhiskerLeft F e.counitIso ≪≫ F.rightUnitor
-
-中文:
-定义 congrRight
-  签名: (e : C ≌ D)
-  定义体: (whiskeringRight _ _ _).obj e.functor
-  inverse := (whiskeringRight _ _ _).obj e.inverse
-  unitIso := NatIso.ofComponents
-      fun F => F.rightUnitor.symm ≪≫ isoWhiskerLeft F e.unitIso ≪≫ Functor.associator _ _ _
-  counitIso := NatIso.ofComponents
-      fun F => Functor.associator _ _ _ ≪≫ isoWhiskerLeft F e.counitIso ≪≫ F.rightUnitor
-
-Depends on / 依赖: e.functor, functor, whiskeringRight
+--- 原说明 ---
+If `C` is equivalent to `D`, then `E ⥤ C` is equivalent to `E ⥤ D`.
 -/
 def congrRight (e : C ≌ D) : E ⥤ C ≌ E ⥤ D where
   functor := (whiskeringRight _ _ _).obj e.functor
@@ -1416,26 +1166,19 @@ def congrRight (e : C ≌ D) : E ⥤ C ≌ E ⥤ D where
 variable (E) in
 /-- Promoting `Equivalence.congrRight` to a functor. -/
 @[simps]
-/--
-Definition of `congrRightFunctor` / `congrRightFunctor` 的定义
+/-
+**CategoryTheory.Equivalence.congrRightFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Equivalence`。
+形式化陈述：congrRightFunctor : (C ≌ D) ⥤ ((E ⥤ C) ≌ (E ⥤ D)) where obj e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRightFunctor
-  signature: : (C ≌ D) ⥤ ((E ⥤ C) ≌ (E ⥤ D)) where
-  body: e.congrRight
-map {e f} α := mkHom (whiskeringRight _ _ _).map asNatTrans α
-
-中文:
-定义 congrRightFunctor
-  签名: : (C ≌ D) ⥤ ((E ⥤ C) ≌ (E ⥤ D)) where
-  定义体: e.congrRight
-map {e f} α := mkHom (whiskeringRight _ _ _).map asNatTrans α
-
-Depends on / 依赖: congrRight, e.congrRight
+--- 原说明 ---
+Promoting `Equivalence.congrRight` to a functor.
 -/
 def congrRightFunctor : (C ≌ D) ⥤ ((E ⥤ C) ≌ (E ⥤ D)) where
   obj e := e.congrRight
-map {e f} α := mkHom (whiskeringRight _ _ _).map asNatTrans α
+  map {e f} α := mkHom <| (whiskeringRight _ _ _).map <| asNatTrans α
 
 section CancellationLemmas
 
@@ -1450,66 +1193,91 @@ We also provide the lemmas for length four compositions, since they're occasiona
 `cancel_unitInv_left` is not a `simp` lemma because it would be redundant.
 -/
 @[to_dual cancel_unitInv_left, simp]
-/--
-theorem `cancel_unit_right` / 定理 `cancel_unit_right`
+/-
+**CategoryTheory.Equivalence.cancel_unit_right** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Equivalence`。
+形式化陈述：cancel_unit_right {X Y : C} (f f' : X ⟶ Y) : f ≫ e.unit.app Y = f' ≫ e.uni
+t.app Y ↔ f = f'
+参数：f f' : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem cancel_unit_right
-  given: {X Y : C} (f f' : X ⟶ Y)
-  proof: by simp only [cancel_mono]
+--- 原说明 ---
+We need special forms of `cancel_natIso_hom_right(_assoc)` and
+`cancel_natIso_inv_right(_assoc)` for units and counits, because neither `simp` 
+or `rw` will apply
+those lemmas in this setting without providing `e.unitIso` (or similar) as an ex
+plicit argument.
+We also provide the lemmas for length four compositions, since they're occasiona
+lly useful.
+(e.g. in proving that equivalences take monos to monos)
 
-@[to_dual (attr := simp) cancel_unit_left]
-
-中文:
-定理 cancel_unit_right
-  条件: {X Y : C} (f f' : X ⟶ Y)
-  证明: by simp only [cancel_mono]
-
-@[to_dual (attr := simp) cancel_unit_left]
-
-Depends on / 依赖: cancel_mono
+`cancel_unitInv_left` is not a `simp` lemma because it would be redundant.
 -/
 theorem cancel_unit_right {X Y : C} (f f' : X ⟶ Y) :
     f ≫ e.unit.app Y = f' ≫ e.unit.app Y ↔ f = f' := by simp only [cancel_mono]
 
 @[to_dual (attr := simp) cancel_unit_left]
-/--
-theorem `cancel_unitInv_right` / 定理 `cancel_unitInv_right`
-
-English:
-theorem cancel_unitInv_right
-  given: {X Y : C} (f f' : X ⟶ e.inverse.obj (e.functor.obj Y))
-  proof: by simp only [cancel_mono]
-
-@[to_dual (attr := simp) cancel_counitInv_left]
-
-中文:
-定理 cancel_unitInv_right
-  条件: {X Y : C} (f f' : X ⟶ e.inverse.obj (e.functor.obj Y))
-  证明: by simp only [cancel_mono]
-
-@[to_dual (attr := simp) cancel_counitInv_left]
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.Equivalence.cancel_unitInv_right** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：cancel_unitInv_right {X Y : C} (f f' : X ⟶ e.inverse.obj (e.functor.obj Y)
+) : f ≫ e.unitInv.app Y = f' ≫ e.unitInv.app Y ↔ f = f'
+参数：f f' : X ⟶ e.inverse.obj (e.functor.obj Y)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cancel_unitInv_right {X Y : C} (f f' : X ⟶ e.inverse.obj (e.functor.obj Y)) :
     f ≫ e.unitInv.app Y = f' ≫ e.unitInv.app Y ↔ f = f' := by simp only [cancel_mono]
 
 @[to_dual (attr := simp) cancel_counitInv_left]
-/--
-theorem `cancel_counit_right` / 定理 `cancel_counit_right`
-
-English:
-theorem cancel_counit_right
-  given: {X Y : D} (f f' : X ⟶ e.functor.obj (e.inverse.obj Y))
-  proof: by simp only [cancel_mono]
-
-中文:
-定理 cancel_counit_right
-  条件: {X Y : D} (f f' : X ⟶ e.functor.obj (e.inverse.obj Y))
-  证明: by simp only [cancel_mono]
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.Equivalence.cancel_counit_right** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Equivalence`。
+形式化陈述：cancel_counit_right {X Y : D} (f f' : X ⟶ e.functor.obj (e.inverse.obj Y))
+ : f ≫ e.counit.app Y = f' ≫ e.counit.app Y ↔ f = f'
+参数：f f' : X ⟶ e.functor.obj (e.inverse.obj Y)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cancel_counit_right {X Y : D} (f f' : X ⟶ e.functor.obj (e.inverse.obj Y)) :
     f ≫ e.counit.app Y = f' ≫ e.counit.app Y ↔ f = f' := by simp only [cancel_mono]
@@ -1518,101 +1286,119 @@ theorem cancel_counit_right {X Y : D} (f f' : X ⟶ e.functor.obj (e.inverse.obj
 `cancel_counit_left` is not a `simp` lemma because it would be redundant.
 -/
 @[to_dual cancel_counit_left, simp]
-/--
-theorem `cancel_counitInv_right` / 定理 `cancel_counitInv_right`
+/-
+**CategoryTheory.Equivalence.cancel_counitInv_right** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Equivalence`。
+形式化陈述：cancel_counitInv_right {X Y : D} (f f' : X ⟶ Y) : f ≫ e.counitInv.app Y = 
+f' ≫ e.counitInv.app Y ↔ f = f'
+参数：f f' : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem cancel_counitInv_right
-  given: {X Y : D} (f f' : X ⟶ Y)
-  proof: by simp only [cancel_mono]
-
-@[simp, to_dual none]
-
-中文:
-定理 cancel_counitInv_right
-  条件: {X Y : D} (f f' : X ⟶ Y)
-  证明: by simp only [cancel_mono]
-
-@[simp, to_dual none]
-
-Depends on / 依赖: cancel_mono
+--- 原说明 ---
+`cancel_counit_left` is not a `simp` lemma because it would be redundant.
 -/
 theorem cancel_counitInv_right {X Y : D} (f f' : X ⟶ Y) :
     f ≫ e.counitInv.app Y = f' ≫ e.counitInv.app Y ↔ f = f' := by simp only [cancel_mono]
 
 @[simp, to_dual none]
-/--
-theorem `cancel_unit_right_assoc` / 定理 `cancel_unit_right_assoc`
-
-English:
-theorem cancel_unit_right_assoc
-  given: {W X X' Y : C} (f : W ⟶ X) (g : X ⟶ Y) (f' : W ⟶ X') (g' : X' ⟶ Y)
-  proof: by
-  simp only [← Category.assoc, cancel_mono]
-
-@[simp, to_dual none]
-
-中文:
-定理 cancel_unit_right_assoc
-  条件: {W X X' Y : C} (f : W ⟶ X) (g : X ⟶ Y) (f' : W ⟶ X') (g' : X' ⟶ Y)
-  证明: by
-  simp only [← Category.assoc, cancel_mono]
-
-@[simp, to_dual none]
-
-Depends on / 依赖: Category, Category.assoc, cancel_mono
+/-
+**CategoryTheory.Equivalence.cancel_unit_right_assoc** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Equivalence`。
+形式化陈述：cancel_unit_right_assoc {W X X' Y : C} (f : W ⟶ X) (g : X ⟶ Y) (f' : W ⟶ X
+') (g' : X' ⟶ Y) : f ≫ g ≫ e.unit.app Y = f' ≫ g' ≫ e.unit.app Y ↔ f ≫ g = f' ≫ 
+g'
+参数：f : W ⟶ X；g : X ⟶ Y；f' : W ⟶ X'；g' : X' ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cancel_unit_right_assoc {W X X' Y : C} (f : W ⟶ X) (g : X ⟶ Y) (f' : W ⟶ X') (g' : X' ⟶ Y) :
     f ≫ g ≫ e.unit.app Y = f' ≫ g' ≫ e.unit.app Y ↔ f ≫ g = f' ≫ g' := by
   simp only [← Category.assoc, cancel_mono]
 
 @[simp, to_dual none]
-/--
-theorem `cancel_counitInv_right_assoc` / 定理 `cancel_counitInv_right_assoc`
-
-English:
-theorem cancel_counitInv_right_assoc
-  statement: {W X X' Y : D} (f : W ⟶ X) (g : X ⟶ Y) (f' : W ⟶ X')
-  proof: by
-  simp only [← Category.assoc, cancel_mono]
-
-@[simp, to_dual none]
-
-中文:
-定理 cancel_counitInv_right_assoc
-  结论: {W X X' Y : D} (f : W ⟶ X) (g : X ⟶ Y) (f' : W ⟶ X')
-  证明: by
-  simp only [← Category.assoc, cancel_mono]
-
-@[simp, to_dual none]
-
-Depends on / 依赖: Category, Category.assoc, cancel_mono
+/-
+**CategoryTheory.Equivalence.cancel_counitInv_right_assoc** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Equivalence`。
+形式化陈述：cancel_counitInv_right_assoc {W X X' Y : D} (f : W ⟶ X) (g : X ⟶ Y) (f' : 
+W ⟶ X') (g' : X' ⟶ Y) : f ≫ g ≫ e.counitInv.app Y = f' ≫ g' ≫ e.counitInv.app Y 
+↔ f ≫ g = f' ≫ g'
+参数：f : W ⟶ X；g : X ⟶ Y；f' : W ⟶ X'；g' : X' ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cancel_counitInv_right_assoc {W X X' Y : D} (f : W ⟶ X) (g : X ⟶ Y) (f' : W ⟶ X')
     (g' : X' ⟶ Y) : f ≫ g ≫ e.counitInv.app Y = f' ≫ g' ≫ e.counitInv.app Y ↔ f ≫ g = f' ≫ g' := by
   simp only [← Category.assoc, cancel_mono]
 
 @[simp, to_dual none]
-/--
-theorem `cancel_unit_right_assoc'` / 定理 `cancel_unit_right_assoc'`
-
-English:
-theorem cancel_unit_right_assoc'
-  statement: {W X X' Y Y' Z : C} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z)
-  proof: by
-  simp only [← Category.assoc, cancel_mono]
-
-@[simp, to_dual none]
-
-中文:
-定理 cancel_unit_right_assoc'
-  结论: {W X X' Y Y' Z : C} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z)
-  证明: by
-  simp only [← Category.assoc, cancel_mono]
-
-@[simp, to_dual none]
-
-Depends on / 依赖: Category, Category.assoc, cancel_mono
+/-
+**CategoryTheory.Equivalence.cancel_unit_right_assoc'** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Equivalence`。
+形式化陈述：cancel_unit_right_assoc' {W X X' Y Y' Z : C} (f : W ⟶ X) (g : X ⟶ Y) (h : 
+Y ⟶ Z) (f' : W ⟶ X') (g' : X' ⟶ Y') (h' : Y' ⟶ Z) : f ≫ g ≫ h ≫ e.unit.app Z = f
+' ≫ g' ≫ h' ≫ e.unit.app Z ↔ f ≫ g ≫ h = f' ≫ g' ≫ h'
+参数：f : W ⟶ X；g : X ⟶ Y；h : Y ⟶ Z；f' : W ⟶ X'；g' : X' ⟶ Y'；h' : Y' ⟶ Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cancel_unit_right_assoc' {W X X' Y Y' Z : C} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z)
     (f' : W ⟶ X') (g' : X' ⟶ Y') (h' : Y' ⟶ Z) :
@@ -1620,20 +1406,30 @@ theorem cancel_unit_right_assoc' {W X X' Y Y' Z : C} (f : W ⟶ X) (g : X ⟶ Y)
   simp only [← Category.assoc, cancel_mono]
 
 @[simp, to_dual none]
-/--
-theorem `cancel_counitInv_right_assoc'` / 定理 `cancel_counitInv_right_assoc'`
-
-English:
-theorem cancel_counitInv_right_assoc'
-  statement: {W X X' Y Y' Z : D} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z)
-  proof: by simp only [← Category.assoc, cancel_mono]
-
-中文:
-定理 cancel_counitInv_right_assoc'
-  结论: {W X X' Y Y' Z : D} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z)
-  证明: by simp only [← Category.assoc, cancel_mono]
-
-Depends on / 依赖: Category, Category.assoc, cancel_mono
+/-
+**CategoryTheory.Equivalence.cancel_counitInv_right_assoc'** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Equivalence`。
+形式化陈述：cancel_counitInv_right_assoc' {W X X' Y Y' Z : D} (f : W ⟶ X) (g : X ⟶ Y) 
+(h : Y ⟶ Z) (f' : W ⟶ X') (g' : X' ⟶ Y') (h' : Y' ⟶ Z) : f ≫ g ≫ h ≫ e.counitInv
+.app Z = f' ≫ g' ≫ h' ≫ e.counitInv.app Z ↔ f ≫ g ≫ h = f' ≫ g' ≫ h'
+参数：f : W ⟶ X；g : X ⟶ Y；h : Y ⟶ Z；f' : W ⟶ X'；g' : X' ⟶ Y'；h' : Y' ⟶ Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.NatIso.inv_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem cancel_counitInv_right_assoc' {W X X' Y Y' Z : D} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z)
     (f' : W ⟶ X') (g' : X' ⟶ Y') (h' : Y' ⟶ Z) :
@@ -1647,120 +1443,80 @@ section
 -- There's of course a monoid structure on `C ≌ C`,
 -- but let's not encourage using it.
 -- The power structure is nevertheless useful.
-/--
-Definition of `powNat` / `powNat` 的定义
+/-- Natural number powers of an auto-equivalence.  Use `(^)` instead. -/
+/-
+**CategoryTheory.Equivalence.powNat** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Eq
+uivalence`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → (C ≌ C) → ℕ 
+→ (C ≌ C)
+参数：C ≌ C；C ≌ C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powNat
-  signature: (e : C ≌ C)
-
-中文:
-定义 pow自然数
-  签名: (e : C ≌ C)
+--- 原说明 ---
+Natural number powers of an auto-equivalence.  Use `(^)` instead.
 -/
-def powNat (e : C ≌ C) : Nat -> (C ≌ C)
+def powNat (e : C ≌ C) : ℕ → (C ≌ C)
   | 0 => Equivalence.refl
   | 1 => e
   | n + 2 => e.trans (powNat e (n + 1))
 
-/--
-Definition of `pow` / `pow` 的定义
+/-- Powers of an auto-equivalence.  Use `(^)` instead. -/
+/-
+**CategoryTheory.Equivalence.pow** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Equiv
+alence`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → (C ≌ C) → ℤ 
+→ (C ≌ C)
+参数：C ≌ C；C ≌ C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pow
-  signature: (e : C ≌ C)
-
-中文:
-定义 pow
-  签名: (e : C ≌ C)
+--- 原说明 ---
+Powers of an auto-equivalence.  Use `(^)` instead.
 -/
-def pow (e : C ≌ C) : Int -> (C ≌ C)
+def pow (e : C ≌ C) : ℤ → (C ≌ C)
   | Int.ofNat n => e.powNat n
   | Int.negSucc n => e.symm.powNat (n + 1)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow (C ≌ C) Int
-  body: ⟨pow⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幂 (C ≌ C) 整数
-  定义体: ⟨pow⟩
-
-@[simp]
+/-
+**CategoryTheory.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Equivale
+nce`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow (C ≌ C) Int :=
+instance : Pow (C ≌ C) ℤ :=
   ⟨pow⟩
 
 @[simp]
-/--
-theorem `pow_zero` / 定理 `pow_zero`
-
-English:
-theorem pow_zero
-  given: (e : C ≌ C)
-  statement: e ^ (0 : Int) = Equivalence.refl
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 pow_zero
-  条件: (e : C ≌ C)
-  结论: e ^ (0 : 整数) = 等价.refl
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Equivalence.pow_zero** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Equivalence`。
+形式化陈述：pow_zero (e : C ≌ C) : e ^ (0 : Int) = Equivalence.refl
+参数：e : C ≌ C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pow_zero (e : C ≌ C) : e ^ (0 : Int) = Equivalence.refl :=
+theorem pow_zero (e : C ≌ C) : e ^ (0 : ℤ) = Equivalence.refl :=
   rfl
 
 @[simp]
-/--
-theorem `pow_one` / 定理 `pow_one`
-
-English:
-theorem pow_one
-  given: (e : C ≌ C)
-  statement: e ^ (1 : Int) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 pow_one
-  条件: (e : C ≌ C)
-  结论: e ^ (1 : 整数) = e
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Equivalence.pow_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.E
+quivalence`。
+形式化陈述：pow_one (e : C ≌ C) : e ^ (1 : Int) = e
+参数：e : C ≌ C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pow_one (e : C ≌ C) : e ^ (1 : Int) = e :=
+theorem pow_one (e : C ≌ C) : e ^ (1 : ℤ) = e :=
   rfl
 
 @[simp]
-/--
-theorem `pow_neg_one` / 定理 `pow_neg_one`
-
-English:
-theorem pow_neg_one
-  given: (e : C ≌ C)
-  statement: e ^ (-1 : Int) = e.symm
-  proof: rfl
-
-中文:
-定理 pow_neg_one
-  条件: (e : C ≌ C)
-  结论: e ^ (-1 : 整数) = e.symm
-  证明: rfl
+/-
+**CategoryTheory.Equivalence.pow_neg_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Equivalence`。
+形式化陈述：pow_neg_one (e : C ≌ C) : e ^ (-1 : Int) = e.symm
+参数：e : C ≌ C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pow_neg_one (e : C ≌ C) : e ^ (-1 : Int) = e.symm :=
+theorem pow_neg_one (e : C ≌ C) : e ^ (-1 : ℤ) = e.symm :=
   rfl
 
 -- TODO as necessary, add the natural isomorphisms `(e^a).trans e^b ≅ e^(a+b)`.
@@ -1770,150 +1526,118 @@ end
 
 /-- The functor of an equivalence of categories is essentially surjective. -/
 @[stacks 02C3]
-/--
-Instance `essSurj_functor` / 实例 `essSurj_functor`
+/-
+**CategoryTheory.Equivalence.essSurj_functor** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Equivalence`。
+形式化陈述：essSurj_functor (e : C ≌ E) : e.functor.EssSurj
+参数：e : C ≌ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance essSurj_functor
-  signature: (e : C ≌ E)
-  body: ⟨fun Y => ⟨e.inverse.obj Y, ⟨e.counitIso.app Y⟩⟩⟩
-
-中文:
-实例 essSurj_functor
-  签名: (e : C ≌ E)
-  定义体: ⟨fun Y => ⟨e.inverse.obj Y, ⟨e.counitIso.app Y⟩⟩⟩
-
-Depends on / 依赖: counitIso, e.counitIso.app, e.inverse.obj, inverse
+--- 原说明 ---
+The functor of an equivalence of categories is essentially surjective.
 -/
 instance essSurj_functor (e : C ≌ E) : e.functor.EssSurj :=
   ⟨fun Y => ⟨e.inverse.obj Y, ⟨e.counitIso.app Y⟩⟩⟩
-
-/--
-Instance `essSurj_inverse` / 实例 `essSurj_inverse`
-
-English:
-instance essSurj_inverse
-  signature: (e : C ≌ E)
-  body: e.symm.essSurj_functor
-
-中文:
-实例 essSurj_inverse
-  签名: (e : C ≌ E)
-  定义体: e.symm.essSurj_functor
-
-Depends on / 依赖: e.symm.essSurj_functor, essSurj_functor
+/-
+**CategoryTheory.Equivalence.essSurj_inverse** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Equivalence`。
+形式化陈述：essSurj_inverse (e : C ≌ E) : e.inverse.EssSurj
+参数：e : C ≌ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance essSurj_inverse (e : C ≌ E) : e.inverse.EssSurj :=
   e.symm.essSurj_functor
 
-/--
-Definition of `fullyFaithfulFunctor` / `fullyFaithfulFunctor` 的定义
+/-- The functor of an equivalence of categories is fully faithful. -/
+/-
+**CategoryTheory.Equivalence.fullyFaithfulFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：fullyFaithfulFunctor (e : C ≌ E) : e.functor.FullyFaithful where preimage 
+{X Y} f
+参数：e : C ≌ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulFunctor
-  signature: (e : C ≌ E)
-  body: e.unitIso.hom.app X ≫ e.inverse.map f ≫ e.unitIso.inv.app Y
-
-中文:
-定义 fullyFaithfulFunctor
-  签名: (e : C ≌ E)
-  定义体: e.unitIso.hom.app X ≫ e.inverse.map f ≫ e.unitIso.inv.app Y
-
-Depends on / 依赖: e.inverse.map, e.unitIso.hom.app, e.unitIso.inv.app, inverse, unitIso
+--- 原说明 ---
+The functor of an equivalence of categories is fully faithful.
 -/
 def fullyFaithfulFunctor (e : C ≌ E) : e.functor.FullyFaithful where
   preimage {X Y} f := e.unitIso.hom.app X ≫ e.inverse.map f ≫ e.unitIso.inv.app Y
 
-/--
-Definition of `fullyFaithfulInverse` / `fullyFaithfulInverse` 的定义
+/-- The inverse of an equivalence of categories is fully faithful. -/
+/-
+**CategoryTheory.Equivalence.fullyFaithfulInverse** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：fullyFaithfulInverse (e : C ≌ E) : e.inverse.FullyFaithful where preimage 
+{X Y} f
+参数：e : C ≌ E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulInverse
-  signature: (e : C ≌ E)
-  body: e.counitIso.inv.app X ≫ e.functor.map f ≫ e.counitIso.hom.app Y
-
-中文:
-定义 fullyFaithfulInverse
-  签名: (e : C ≌ E)
-  定义体: e.counitIso.inv.app X ≫ e.functor.map f ≫ e.counitIso.hom.app Y
-
-Depends on / 依赖: counitIso, e.counitIso.hom.app, e.counitIso.inv.app, e.functor.map, functor
+--- 原说明 ---
+The inverse of an equivalence of categories is fully faithful.
 -/
 def fullyFaithfulInverse (e : C ≌ E) : e.inverse.FullyFaithful where
   preimage {X Y} f := e.counitIso.inv.app X ≫ e.functor.map f ≫ e.counitIso.hom.app Y
 
 /-- The functor of an equivalence of categories is faithful. -/
 @[stacks 02C3]
-/--
-Instance `faithful_functor` / 实例 `faithful_functor`
+/-
+**CategoryTheory.Equivalence.faithful_functor** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：faithful_functor (e : C ≌ E) : e.functor.Faithful
+参数：e : C ≌ E。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 
-English:
-instance faithful_functor
-  signature: (e : C ≌ E)
-  body: e.fullyFaithfulFunctor.faithful
-
-中文:
-实例 faithful_functor
-  签名: (e : C ≌ E)
-  定义体: e.fullyFaithfulFunctor.faithful
-
-Depends on / 依赖: e.fullyFaithfulFunctor.faithful, faithful, fullyFaithfulFunctor
+--- 原说明 ---
+The functor of an equivalence of categories is faithful.
 -/
 instance faithful_functor (e : C ≌ E) : e.functor.Faithful :=
   e.fullyFaithfulFunctor.faithful
-
-/--
-Instance `faithful_inverse` / 实例 `faithful_inverse`
-
-English:
-instance faithful_inverse
-  signature: (e : C ≌ E)
-  body: e.fullyFaithfulInverse.faithful
-
-中文:
-实例 faithful_inverse
-  签名: (e : C ≌ E)
-  定义体: e.fullyFaithfulInverse.faithful
-
-Depends on / 依赖: e.fullyFaithfulInverse.faithful, faithful, fullyFaithfulInverse
+/-
+**CategoryTheory.Equivalence.faithful_inverse** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Equivalence`。
+形式化陈述：faithful_inverse (e : C ≌ E) : e.inverse.Faithful
+参数：e : C ≌ E。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 -/
 instance faithful_inverse (e : C ≌ E) : e.inverse.Faithful :=
   e.fullyFaithfulInverse.faithful
 
 /-- The functor of an equivalence of categories is full. -/
 @[stacks 02C3]
-/--
-Instance `full_functor` / 实例 `full_functor`
+/-
+**CategoryTheory.Equivalence.full_functor** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Equivalence`。
+形式化陈述：full_functor (e : C ≌ E) : e.functor.Full
+参数：e : C ≌ E。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 
-English:
-instance full_functor
-  signature: (e : C ≌ E)
-  body: e.fullyFaithfulFunctor.full
-
-中文:
-实例 full_functor
-  签名: (e : C ≌ E)
-  定义体: e.fullyFaithfulFunctor.full
-
-Depends on / 依赖: e.fullyFaithfulFunctor.full, fullyFaithfulFunctor
+--- 原说明 ---
+The functor of an equivalence of categories is full.
 -/
 instance full_functor (e : C ≌ E) : e.functor.Full :=
   e.fullyFaithfulFunctor.full
-
-/--
-Instance `full_inverse` / 实例 `full_inverse`
-
-English:
-instance full_inverse
-  signature: (e : C ≌ E)
-  body: e.fullyFaithfulInverse.full
-
-中文:
-实例 full_inverse
-  签名: (e : C ≌ E)
-  定义体: e.fullyFaithfulInverse.full
-
-Depends on / 依赖: e.fullyFaithfulInverse.full, fullyFaithfulInverse
+/-
+**CategoryTheory.Equivalence.full_inverse** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Equivalence`。
+形式化陈述：full_inverse (e : C ≌ E) : e.inverse.Full
+参数：e : C ≌ E。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 instance full_inverse (e : C ≌ E) : e.inverse.Full :=
   e.fullyFaithfulInverse.full
@@ -1921,24 +1645,18 @@ instance full_inverse (e : C ≌ E) : e.inverse.Full :=
 /-- If `e : C ≌ D` is an equivalence of categories, and `iso : e.functor ≅ G` is
 an isomorphism, then there is an equivalence of categories whose functor is `G`. -/
 @[implicit_reducible, simps!]
-/--
-Definition of `changeFunctor` / `changeFunctor` 的定义
+/-
+**CategoryTheory.Equivalence.changeFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Equivalence`。
+形式化陈述：changeFunctor (e : C ≌ D) {G : C ⥤ D} (iso : e.functor ≅ G) : C ≌ D where 
+functor
+参数：e : C ≌ D；iso : e.functor ≅ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition changeFunctor
-  signature: (e : C ≌ D) {G : C ⥤ D} (iso : e.functor ≅ G)
-  body: G
-  inverse := e.inverse
-  unitIso := e.unitIso ≪≫ isoWhiskerRight iso _
-  counitIso := isoWhiskerLeft _ iso.symm ≪≫ e.counitIso
-
-中文:
-定义 changeFunctor
-  签名: (e : C ≌ D) {G : C ⥤ D} (iso : e.functor ≅ G)
-  定义体: G
-  inverse := e.inverse
-  unitIso := e.unitIso ≪≫ isoWhiskerRight iso _
-  counitIso := isoWhiskerLeft _ iso.symm ≪≫ e.counitIso
+--- 原说明 ---
+If `e : C ≌ D` is an equivalence of categories, and `iso : e.functor ≅ G` is
+an isomorphism, then there is an equivalence of categories whose functor is `G`.
 -/
 def changeFunctor (e : C ≌ D) {G : C ⥤ D} (iso : e.functor ≅ G) : C ≌ D where
   functor := G
@@ -1946,39 +1664,95 @@ def changeFunctor (e : C ≌ D) {G : C ⥤ D} (iso : e.functor ≅ G) : C ≌ D 
   unitIso := e.unitIso ≪≫ isoWhiskerRight iso _
   counitIso := isoWhiskerLeft _ iso.symm ≪≫ e.counitIso
 
-/--
-theorem `changeFunctor_refl` / 定理 `changeFunctor_refl`
+/-- Compatibility of `changeFunctor` with identity isomorphisms of functors -/
+/-
+**CategoryTheory.Equivalence.changeFunctor_refl** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Equivalence`。
+形式化陈述：changeFunctor_refl (e : C ≌ D) : e.changeFunctor (Iso.refl _) = e
+参数：e : C ≌ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.ext`：∀ {C : Type u₁} {D : Type u₂} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂} D} 
+  {x y : C ≌ D},   x…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Equivalence.changeFunctor_unitIso_hom_app`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (e : C ≌ D) {G : C…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Equivalence.changeFunctor_counitIso_hom_app`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   (e : C ≌ D) {G : C…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 
-English:
-theorem changeFunctor_refl
-  given: (e : C ≌ D)
-  statement: e.changeFunctor (Iso.refl _) = e
-  proof: by cat_disch
-
-中文:
-定理 changeFunctor_refl
-  条件: (e : C ≌ D)
-  结论: e.changeFunctor (同构.refl _) = e
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Compatibility of `changeFunctor` with identity isomorphisms of functors
 -/
 theorem changeFunctor_refl (e : C ≌ D) : e.changeFunctor (Iso.refl _) = e := by cat_disch
 
-/--
-theorem `changeFunctor_trans` / 定理 `changeFunctor_trans`
+/-- Compatibility of `changeFunctor` with the composition of isomorphisms of functors -/
+/-
+**CategoryTheory.Equivalence.changeFunctor_trans** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Equivalence`。
+形式化陈述：changeFunctor_trans (e : C ≌ D) {G G' : C ⥤ D} (iso₁ : e.functor ≅ G) (iso
+₂ : G ≅ G') : (e.changeFunctor iso₁).changeFunctor iso₂ = e.changeFunctor (iso₁ 
+≪≫ iso₂)
+参数：e : C ≌ D；iso₁ : e.functor ≅ G；iso₂ : G ≅ G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.ext`：∀ {C : Type u₁} {D : Type u₂} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v₂, u₂} D} 
+  {x y : C ≌ D},   x…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Equivalence.changeFunctor_unitIso_hom_app`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (e : C ≌ D) {G : C…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Equivalence.changeFunctor_counitIso_hom_app`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   (e : C ≌ D) {G : C…
 
-English:
-theorem changeFunctor_trans
-  given: (e : C ≌ D) {G G' : C ⥤ D} (iso₁ : e.functor ≅ G) (iso₂ : G ≅ G')
-  proof: by cat_disch
-
-中文:
-定理 changeFunctor_trans
-  条件: (e : C ≌ D) {G G' : C ⥤ D} (iso₁ : e.functor ≅ G) (iso₂ : G ≅ G')
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Compatibility of `changeFunctor` with the composition of isomorphisms of functor
+s
 -/
 theorem changeFunctor_trans (e : C ≌ D) {G G' : C ⥤ D} (iso₁ : e.functor ≅ G) (iso₂ : G ≅ G') :
     (e.changeFunctor iso₁).changeFunctor iso₂ = e.changeFunctor (iso₁ ≪≫ iso₂) := by cat_disch
@@ -1986,32 +1760,18 @@ theorem changeFunctor_trans (e : C ≌ D) {G G' : C ⥤ D} (iso₁ : e.functor �
 /-- If `e : C ≌ D` is an equivalence of categories, and `iso : e.functor ≅ G` is
 an isomorphism, then there is an equivalence of categories whose inverse is `G`. -/
 @[implicit_reducible, simps!]
-/--
-Definition of `changeInverse` / `changeInverse` 的定义
+/-
+**CategoryTheory.Equivalence.changeInverse** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Equivalence`。
+形式化陈述：changeInverse (e : C ≌ D) {G : D ⥤ C} (iso : e.inverse ≅ G) : C ≌ D where 
+functor
+参数：e : C ≌ D；iso : e.inverse ≅ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition changeInverse
-  signature: (e : C ≌ D) {G : D ⥤ C} (iso : e.inverse ≅ G)
-  body: e.functor
-  inverse := G
-  unitIso := e.unitIso ≪≫ isoWhiskerLeft _ iso
-  counitIso := isoWhiskerRight iso.symm _ ≪≫ e.counitIso
-  functor_unitIso_comp X := by
-    dsimp
-    rw [← map_comp_assoc]; rw [assoc]; rw [iso.hom_inv_id_app]; rw [comp_id]; rw [functor_unit_comp]
-
-中文:
-定义 changeInverse
-  签名: (e : C ≌ D) {G : D ⥤ C} (iso : e.inverse ≅ G)
-  定义体: e.functor
-  inverse := G
-  unitIso := e.unitIso ≪≫ isoWhiskerLeft _ iso
-  counitIso := isoWhiskerRight iso.symm _ ≪≫ e.counitIso
-  functor_unitIso_comp X := by
-    dsimp
-    rw [← map_comp_assoc]; rw [assoc]; rw [iso.hom_inv_id_app]; rw [comp_id]; rw [functor_unit_comp]
-
-Depends on / 依赖: e.functor, functor
+--- 原说明 ---
+If `e : C ≌ D` is an equivalence of categories, and `iso : e.functor ≅ G` is
+an isomorphism, then there is an equivalence of categories whose inverse is `G`.
 -/
 def changeInverse (e : C ≌ D) {G : D ⥤ C} (iso : e.inverse ≅ G) : C ≌ D where
   functor := e.functor
@@ -2020,63 +1780,49 @@ def changeInverse (e : C ≌ D) {G : D ⥤ C} (iso : e.inverse ≅ G) : C ≌ D 
   counitIso := isoWhiskerRight iso.symm _ ≪≫ e.counitIso
   functor_unitIso_comp X := by
     dsimp
-    rw [← map_comp_assoc]; rw [assoc]; rw [iso.hom_inv_id_app]; rw [comp_id]; rw [functor_unit_comp]
+    rw [← map_comp_assoc, assoc, iso.hom_inv_id_app, comp_id, functor_unit_comp]
 
 end Equivalence
 
-/--
-Definition of `Functor.IsEquivalence` / `Functor.IsEquivalence` 的定义
+/-- A functor is an equivalence of categories if it is faithful, full and
+essentially surjective. -/
+/-
+**CategoryTheory.Functor.IsEquivalence** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Functor
+ C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Functor.IsEquivalence
-  parameters: (F : C ⥤ D)
-  axioms and operations (3):
-    - faithful : F.Faithful  [default: by infer_instance]
-    - full : F.Full  [default: by infer_instance]
-    - essSurj : F.EssSurj  [default: by infer_instance]
-
-中文:
-类 函子.是等价
-  参数: (F : C ⥤ D)
-  公理与运算 (3 个):
-    - faithful : F.忠实  [默认: by infer_instance]
-    - full : F.满  [默认: by infer_instance]
-    - essSurj : F.本质满射  [默认: by infer_instance]
-
-Depends on / 依赖: EssSurj, F.EssSurj, F.Full, essSurj, infer_instance
+--- 原说明 ---
+A functor is an equivalence of categories if it is faithful, full and
+essentially surjective.
 -/
 class Functor.IsEquivalence (F : C ⥤ D) : Prop where
   faithful : F.Faithful := by infer_instance
   full : F.Full := by infer_instance
   essSurj : F.EssSurj := by infer_instance
-
-/--
-Instance `Equivalence.isEquivalence_functor` / 实例 `Equivalence.isEquivalence_functor`
-
-English:
-instance Equivalence.isEquivalence_functor
-  signature: (F : C ≌ D)
-
-中文:
-实例 等价.isEquivalence_functor
-  签名: (F : C ≌ D)
+/-
+**CategoryTheory.Equivalence.isEquivalence_functor** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : C ≌ D), F.functor.IsEquival
+ence
+参数：F : C ≌ D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Equivalence.isEquivalence_functor (F : C ≌ D) : IsEquivalence F.functor where
-
-/--
-Instance `Equivalence.isEquivalence_inverse` / 实例 `Equivalence.isEquivalence_inverse`
-
-English:
-instance Equivalence.isEquivalence_inverse
-  signature: (F : C ≌ D)
-  body: F.symm.isEquivalence_functor
-
-中文:
-实例 等价.isEquivalence_inverse
-  签名: (F : C ≌ D)
-  定义体: F.symm.isEquivalence_functor
-
-Depends on / 依赖: F.symm.isEquivalence_functor, isEquivalence_functor
+/-
+**CategoryTheory.Equivalence.isEquivalence_inverse** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : C ≌ D), F.inverse.IsEquival
+ence
+参数：F : C ≌ D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 instance Equivalence.isEquivalence_inverse (F : C ≌ D) : IsEquivalence F.inverse :=
   F.symm.isEquivalence_functor
@@ -2087,18 +1833,23 @@ namespace IsEquivalence
 
 attribute [instance] faithful full essSurj
 
-/--
-lemma `mk'` / 引理 `mk'`
+/-- To see that a functor is an equivalence, it suffices to provide an inverse functor `G` such that
+    `F ⋙ G` and `G ⋙ F` are naturally isomorphic to identity functors. -/
+/-
+**CategoryTheory.Functor.IsEquivalence.mk'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor.IsEquivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+ (G : CategoryTheory.Functor D C) (η : CategoryTheory.Functor.id C ≅ F.comp G)  
+ (ε : G.comp F ≅ CategoryTheory.Functor.id D), F.IsEquivalence
+参数：G : CategoryTheory.Functor D C；η : CategoryTheory.Functor.id C ≅ F.comp G；ε :
+ G.comp F ≅ CategoryTheory.Functor.id D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mk'
-  given: {F : C ⥤ D} (G : D ⥤ C) (η : 𝟭 C ≅ F ⋙ G) (ε : G ⋙ F ≅ 𝟭 D)
-  proof: inferInstanceAs (IsEquivalence (Equivalence.mk F G η ε).functor)
-
-中文:
-引理 mk'
-  条件: {F : C ⥤ D} (G : D ⥤ C) (η : 𝟭 C ≅ F ⋙ G) (ε : G ⋙ F ≅ 𝟭 D)
-  证明: inferInstanceAs (IsEquivalence (Equivalence.mk F G η ε).functor)
+--- 原说明 ---
+To see that a functor is an equivalence, it suffices to provide an inverse funct
+or `G` such that
+    `F ⋙ G` and `G ⋙ F` are naturally isomorphic to identity functors.
 -/
 protected lemma mk' {F : C ⥤ D} (G : D ⥤ C) (η : 𝟭 C ≅ F ⋙ G) (ε : G ⋙ F ≅ 𝟭 D) :
     IsEquivalence F :=
@@ -2109,26 +1860,22 @@ end IsEquivalence
 /-- A quasi-inverse `D ⥤ C` to a functor that `F : C ⥤ D` that is an equivalence,
 i.e. faithful, full, and essentially surjective. -/
 @[implicit_reducible]
-/--
-Definition of `inv` / `inv` 的定义
+/-
+**CategoryTheory.Functor.inv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：inv (F : C ⥤ D) [F.IsEquivalence] : D ⥤ C where obj X
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-definition inv
-  signature: (F : C ⥤ D) [F.IsEquivalence]
-  body: F.objPreimage X
-  map {X Y} f := F.preimage ((F.objObjPreimageIso X).hom ≫ f ≫ (F.objObjPreimageIso Y).inv)
-  map_id X := by apply F.map_injective; simp
-  map_comp {X Y Z} f g := by apply F.map_injective; simp
-
-中文:
-定义 inv
-  签名: (F : C ⥤ D) [F.是等价]
-  定义体: F.objPreimage X
-  map {X Y} f := F.preimage ((F.objObjPreimageIso X).hom ≫ f ≫ (F.objObjPreimageIso Y).inv)
-  map_id X := by apply F.map_injective; simp
-  map_comp {X Y Z} f g := by apply F.map_injective; simp
-
-Depends on / 依赖: F.objPreimage, objPreimage
+--- 原说明 ---
+A quasi-inverse `D ⥤ C` to a functor that `F : C ⥤ D` that is an equivalence,
+i.e. faithful, full, and essentially surjective.
 -/
 noncomputable def inv (F : C ⥤ D) [F.IsEquivalence] : D ⥤ C where
   obj X := F.objPreimage X
@@ -2139,28 +1886,22 @@ noncomputable def inv (F : C ⥤ D) [F.IsEquivalence] : D ⥤ C where
 /-- Interpret a functor that is an equivalence as an equivalence. -/
 @[simps functor, simps -isSimp inverse, simps! -isSimp unitIso_hom_app unitIso_inv_app
   counitIso_hom_app counitIso_inv_app, stacks 02C3]
-/--
-Definition of `asEquivalence` / `asEquivalence` 的定义
-
-English:
-definition asEquivalence
-  signature: (F : C ⥤ D) [F.IsEquivalence]
-  body: F
-  inverse := F.inv
-  unitIso := NatIso.ofComponents
-    (fun X => (F.preimageIso <| F.objObjPreimageIso <| F.obj X).symm)
-      (fun f => F.map_injective (by simp [inv]))
-  counitIso := NatIso.ofComponents F.objObjPreimageIso (by simp [inv])
-
-中文:
-定义 asEquivalence
-  签名: (F : C ⥤ D) [F.是等价]
-  定义体: F
-  inverse := F.inv
-  unitIso := NatIso.ofComponents
-    (fun X => (F.preimageIso <| F.objObjPreimageIso <| F.obj X).symm)
-      (fun f => F.map_injective (by simp [inv]))
-  counitIso := NatIso.ofComponents F.objObjPreimageIso (by simp [inv])
+/-
+**CategoryTheory.Functor.asEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：asEquivalence (F : C ⥤ D) [F.IsEquivalence] : C ≌ D where functor
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 noncomputable def asEquivalence (F : C ⥤ D) [F.IsEquivalence] : C ≌ D where
   functor := F
@@ -2169,196 +1910,187 @@ noncomputable def asEquivalence (F : C ⥤ D) [F.IsEquivalence] : C ≌ D where
     (fun X => (F.preimageIso <| F.objObjPreimageIso <| F.obj X).symm)
       (fun f => F.map_injective (by simp [inv]))
   counitIso := NatIso.ofComponents F.objObjPreimageIso (by simp [inv])
-
-/--
-Instance `isEquivalence_refl` / 实例 `isEquivalence_refl`
-
-English:
-instance isEquivalence_refl
-  signature: : IsEquivalence (𝟭 C)
-  body: Equivalence.refl.isEquivalence_functor
-
-中文:
-实例 isEquivalence_refl
-  签名: : 是等价 (𝟭 C)
-  定义体: Equivalence.refl.isEquivalence_functor
-
-Depends on / 依赖: Equivalence, Equivalence.refl.isEquivalence_functor, isEquivalence_functor
+/-
+**CategoryTheory.Functor.isEquivalence_refl** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：isEquivalence_refl : IsEquivalence (𝟭 C)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 instance isEquivalence_refl : IsEquivalence (𝟭 C) :=
   Equivalence.refl.isEquivalence_functor
-
-/--
-Instance `isEquivalence_inv` / 实例 `isEquivalence_inv`
-
-English:
-instance isEquivalence_inv
-  signature: (F : C ⥤ D) [IsEquivalence F]
-  body: F.asEquivalence.symm.isEquivalence_functor
-
-中文:
-实例 isEquivalence_inv
-  签名: (F : C ⥤ D) [是等价 F]
-  定义体: F.asEquivalence.symm.isEquivalence_functor
-
-Depends on / 依赖: F.asEquivalence.symm.isEquivalence_functor, asEquivalence, isEquivalence_functor
+/-
+**CategoryTheory.Functor.isEquivalence_inv** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：isEquivalence_inv (F : C ⥤ D) [IsEquivalence F] : IsEquivalence F.inv
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 instance isEquivalence_inv (F : C ⥤ D) [IsEquivalence F] : IsEquivalence F.inv :=
   F.asEquivalence.symm.isEquivalence_functor
 
 variable {E : Type u₃} [Category.{v₃} E]
-
-/--
-Instance `isEquivalence_trans` / 实例 `isEquivalence_trans`
-
-English:
-instance isEquivalence_trans
-  signature: (F : C ⥤ D) (G : D ⥤ E) [IsEquivalence F] [IsEquivalence G]
-
-中文:
-实例 isEquivalence_trans
-  签名: (F : C ⥤ D) (G : D ⥤ E) [是等价 F] [是等价 G]
+/-
+**CategoryTheory.Functor.isEquivalence_trans** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C D)   (G : CategoryTheo
+ry.Functor D E) [F.IsEquivalence] [G.IsEquivalence], (F.comp G).IsEquivalence
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.comp`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.Full.comp`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.essSurj`：∀ {C : Type u₁} {inst : Ca
+tegoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 instance isEquivalence_trans (F : C ⥤ D) (G : D ⥤ E) [IsEquivalence F] [IsEquivalence G] :
     IsEquivalence (F ⋙ G) where
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) [IsEquivalence F] : IsEquivalence ((whiskeringLeft C D E).obj F) :=
-inferInstanceAs IsEquivalence (Equivalence.congrLeft F.asEquivalence).inverse
-
+  inferInstanceAs <| IsEquivalence (Equivalence.congrLeft F.asEquivalence).inverse
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) [IsEquivalence F] : IsEquivalence ((whiskeringRight E C D).obj F) :=
-inferInstanceAs IsEquivalence (Equivalence.congrRight F.asEquivalence).functor
+  inferInstanceAs <| IsEquivalence (Equivalence.congrRight F.asEquivalence).functor
 
 end Functor
 
 namespace Functor
 
 @[simp]
-/--
-theorem `fun_inv_map` / 定理 `fun_inv_map`
-
-English:
-theorem fun_inv_map
-  given: (F : C ⥤ D) [IsEquivalence F] (X Y : D) (f : X ⟶ Y)
-  proof: (NatIso.naturality_2 (α := F.asEquivalence.counitIso) (f := f)).symm
-
-@[simp]
-
-中文:
-定理 fun_inv_map
-  条件: (F : C ⥤ D) [是等价 F] (X Y : D) (f : X ⟶ Y)
-  证明: (NatIso.naturality_2 (α := F.asEquivalence.counitIso) (f := f)).symm
-
-@[simp]
-
-Depends on / 依赖: F.asEquivalence.counitIso, NatIso, NatIso.naturality_2, asEquivalence, counitIso, naturality_2
+/-
+**CategoryTheory.Functor.fun_inv_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：fun_inv_map (F : C ⥤ D) [IsEquivalence F] (X Y : D) (f : X ⟶ Y) : F.map (F
+.inv.map f) = F.asEquivalence.counit.app X ≫ f ≫ F.asEquivalence.counitInv.app Y
+参数：F : C ⥤ D；X Y : D；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatIso.naturality_2`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem fun_inv_map (F : C ⥤ D) [IsEquivalence F] (X Y : D) (f : X ⟶ Y) :
     F.map (F.inv.map f) = F.asEquivalence.counit.app X ≫ f ≫ F.asEquivalence.counitInv.app Y :=
   (NatIso.naturality_2 (α := F.asEquivalence.counitIso) (f := f)).symm
 
 @[simp]
-/--
-theorem `inv_fun_map` / 定理 `inv_fun_map`
-
-English:
-theorem inv_fun_map
-  given: (F : C ⥤ D) [IsEquivalence F] (X Y : C) (f : X ⟶ Y)
-  proof: (NatIso.naturality_1 (α := F.asEquivalence.unitIso) (f := f)).symm
-
-中文:
-定理 inv_fun_map
-  条件: (F : C ⥤ D) [是等价 F] (X Y : C) (f : X ⟶ Y)
-  证明: (NatIso.naturality_1 (α := F.asEquivalence.unitIso) (f := f)).symm
-
-Depends on / 依赖: F.asEquivalence.unitIso, NatIso, NatIso.naturality_1, asEquivalence, naturality_1, unitIso
+/-
+**CategoryTheory.Functor.inv_fun_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：inv_fun_map (F : C ⥤ D) [IsEquivalence F] (X Y : C) (f : X ⟶ Y) : F.inv.ma
+p (F.map f) = F.asEquivalence.unitInv.app X ≫ f ≫ F.asEquivalence.unit.app Y
+参数：F : C ⥤ D；X Y : C；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatIso.naturality_1`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem inv_fun_map (F : C ⥤ D) [IsEquivalence F] (X Y : C) (f : X ⟶ Y) :
     F.inv.map (F.map f) = F.asEquivalence.unitInv.app X ≫ f ≫ F.asEquivalence.unit.app Y :=
   (NatIso.naturality_1 (α := F.asEquivalence.unitIso) (f := f)).symm
-
-/--
-lemma `isEquivalence_of_iso` / 引理 `isEquivalence_of_iso`
-
-English:
-lemma isEquivalence_of_iso
-  given: {F G : C ⥤ D} (e : F ≅ G) [F.IsEquivalence]
-  statement: G.IsEquivalence
-  proof: ((asEquivalence F).changeFunctor e).isEquivalence_functor
-
-中文:
-引理 isEquivalence_of_iso
-  条件: {F G : C ⥤ D} (e : F ≅ G) [F.是等价]
-  结论: G.是等价
-  证明: ((asEquivalence F).changeFunctor e).isEquivalence_functor
-
-Depends on / 依赖: asEquivalence, changeFunctor, isEquivalence_functor
+/-
+**CategoryTheory.Functor.isEquivalence_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：isEquivalence_of_iso {F G : C ⥤ D} (e : F ≅ G) [F.IsEquivalence] : G.IsEqu
+ivalence
+参数：e : F ≅ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 lemma isEquivalence_of_iso {F G : C ⥤ D} (e : F ≅ G) [F.IsEquivalence] : G.IsEquivalence :=
   ((asEquivalence F).changeFunctor e).isEquivalence_functor
-
-/--
-lemma `isEquivalence_iff_of_iso` / 引理 `isEquivalence_iff_of_iso`
-
-English:
-lemma isEquivalence_iff_of_iso
-  given: {F G : C ⥤ D} (e : F ≅ G)
-  proof: ⟨fun _ => isEquivalence_of_iso e, fun _ => isEquivalence_of_iso e.symm⟩
-
-中文:
-引理 isEquivalence_iff_of_iso
-  条件: {F G : C ⥤ D} (e : F ≅ G)
-  证明: ⟨fun _ => isEquivalence_of_iso e, fun _ => isEquivalence_of_iso e.symm⟩
-
-Depends on / 依赖: e.symm, isEquivalence_of_iso
+/-
+**CategoryTheory.Functor.isEquivalence_iff_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：isEquivalence_iff_of_iso {F G : C ⥤ D} (e : F ≅ G) : F.IsEquivalence ↔ G.I
+sEquivalence
+参数：e : F ≅ G。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.isEquivalence_of_iso`：isEquivalence_of_iso {F G :
+ C ⥤ D} (e : F ≅ G) [F.IsEquivalence] : G.IsEquivalence
 -/
 lemma isEquivalence_iff_of_iso {F G : C ⥤ D} (e : F ≅ G) :
     F.IsEquivalence ↔ G.IsEquivalence :=
   ⟨fun _ => isEquivalence_of_iso e, fun _ => isEquivalence_of_iso e.symm⟩
 
-/--
-lemma `isEquivalence_of_comp_right` / 引理 `isEquivalence_of_comp_right`
+/-- If `G` and `F ⋙ G` are equivalence of categories, then `F` is also an equivalence. -/
+/-
+**CategoryTheory.Functor.isEquivalence_of_comp_right** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：isEquivalence_of_comp_right {E : Type*} [Category* E] (F : C ⥤ D) (G : D ⥤
+ E) [IsEquivalence G] [IsEquivalence (F ⋙ G)] : IsEquivalence F
+参数：F : C ⥤ D；G : D ⥤ E；F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.isEquivalence_iff_of_iso`：isEquivalence_iff_of_is
+o {F G : C ⥤ D} (e : F ≅ G) : F.IsEquivalence ↔ G.IsEquivalence
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 
-English:
-lemma isEquivalence_of_comp_right
-  statement: {E : Type*} [Category* E] (F : C ⥤ D) (G : D ⥤ E)
-  proof: by
-  rw [isEquivalence_iff_of_iso (F.rightUnitor.symm ≪≫ isoWhiskerLeft F (G.asEquivalence.unitIso))]
-  exact ((F ⋙ G).asEquivalence.trans G.asEquivalence.symm).isEquivalence_functor
-
-中文:
-引理 isEquivalence_of_comp_right
-  结论: {E : 类型} [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
-  证明: by
-  rw [isEquivalence_iff_of_iso (F.rightUnitor.symm ≪≫ isoWhiskerLeft F (G.asEquivalence.unitIso))]
-  exact ((F ⋙ G).asEquivalence.trans G.asEquivalence.symm).isEquivalence_functor
-
-Depends on / 依赖: F.rightUnitor.symm, G.asEquivalence.symm, G.asEquivalence.unitIso, asEquivalence, asEquivalence.trans, isEquivalence_functor, isEquivalence_iff_of_iso, isoWhiskerLeft, rightUnitor, unitIso
+--- 原说明 ---
+If `G` and `F ⋙ G` are equivalence of categories, then `F` is also an equivalenc
+e.
 -/
 lemma isEquivalence_of_comp_right {E : Type*} [Category* E] (F : C ⥤ D) (G : D ⥤ E)
     [IsEquivalence G] [IsEquivalence (F ⋙ G)] : IsEquivalence F := by
   rw [isEquivalence_iff_of_iso (F.rightUnitor.symm ≪≫ isoWhiskerLeft F (G.asEquivalence.unitIso))]
   exact ((F ⋙ G).asEquivalence.trans G.asEquivalence.symm).isEquivalence_functor
 
-/--
-lemma `isEquivalence_of_comp_left` / 引理 `isEquivalence_of_comp_left`
+/-- If `F` and `F ⋙ G` are equivalence of categories, then `G` is also an equivalence. -/
+/-
+**CategoryTheory.Functor.isEquivalence_of_comp_left** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：isEquivalence_of_comp_left {E : Type*} [Category* E] (F : C ⥤ D) (G : D ⥤ 
+E) [IsEquivalence F] [IsEquivalence (F ⋙ G)] : IsEquivalence G
+参数：F : C ⥤ D；G : D ⥤ E；F ⋙ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.isEquivalence_iff_of_iso`：isEquivalence_iff_of_is
+o {F G : C ⥤ D} (e : F ≅ G) : F.IsEquivalence ↔ G.IsEquivalence
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 
-English:
-lemma isEquivalence_of_comp_left
-  statement: {E : Type*} [Category* E] (F : C ⥤ D) (G : D ⥤ E)
-  proof: by
-  rw [isEquivalence_iff_of_iso (G.leftUnitor.symm ≪≫
-    isoWhiskerRight F.asEquivalence.counitIso.symm G)]
-  exact (F.asEquivalence.symm.trans (F ⋙ G).asEquivalence).isEquivalence_functor
-
-中文:
-引理 isEquivalence_of_comp_left
-  结论: {E : 类型} [范畴* E] (F : C ⥤ D) (G : D ⥤ E)
-  证明: by
-  rw [isEquivalence_iff_of_iso (G.leftUnitor.symm ≪≫
-    isoWhiskerRight F.asEquivalence.counitIso.symm G)]
-  exact (F.asEquivalence.symm.trans (F ⋙ G).asEquivalence).isEquivalence_functor
-
-Depends on / 依赖: F.asEquivalence.counitIso.symm, F.asEquivalence.symm.trans, G.leftUnitor.symm, asEquivalence, counitIso, isEquivalence_functor, isEquivalence_iff_of_iso, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+If `F` and `F ⋙ G` are equivalence of categories, then `G` is also an equivalenc
+e.
 -/
 lemma isEquivalence_of_comp_left {E : Type*} [Category* E] (F : C ⥤ D) (G : D ⥤ E)
     [IsEquivalence F] [IsEquivalence (F ⋙ G)] : IsEquivalence G := by
@@ -2370,48 +2102,57 @@ end Functor
 
 namespace Equivalence
 
-/--
-Instance `essSurjInducedFunctor` / 实例 `essSurjInducedFunctor`
-
-English:
-instance essSurjInducedFunctor
-  signature: {C' : Type*} (e : C' ≃ D)
-  body: ⟨e.symm Y, by simpa using ⟨default⟩⟩
-
-中文:
-实例 essSurjInducedFunctor
-  签名: {C' : 类型} (e : C' ≃ D)
-  定义体: ⟨e.symm Y, by simpa using ⟨default⟩⟩
-
-Depends on / 依赖: e.symm
+/-
+**CategoryTheory.Equivalence.essSurjInducedFunctor** 是 Mathlib 中的一个实例，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：essSurjInducedFunctor {C' : Type*} (e : C' ≃ D) : (inducedFunctor e).EssSu
+rj where mem_essImage Y
+参数：e : C' ≃ D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 instance essSurjInducedFunctor {C' : Type*} (e : C' ≃ D) : (inducedFunctor e).EssSurj where
   mem_essImage Y := ⟨e.symm Y, by simpa using ⟨default⟩⟩
-
-/--
-Instance `inducedFunctorOfEquiv` / 实例 `inducedFunctorOfEquiv`
-
-English:
-instance inducedFunctorOfEquiv
-  signature: {C' : Type*} (e : C' ≃ D)
-
-中文:
-实例 inducedFunctorOfEquiv
-  签名: {C' : 类型} (e : C' ≃ D)
+/-
+**CategoryTheory.Equivalence.inducedFunctorOfEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：∀ {D : Type u₂} [inst : CategoryTheory.Category.{v₂, u₂} D] {C' : Type u_1
+} (e : C' ≃ D),   (CategoryTheory.inducedFunctor ⇑e).IsEquivalence
+参数：e : C' ≃ D；CategoryTheory.inducedFunctor ⇑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InducedCategory.faithful`：∀ {C : Type u₁} {D : Type u₂} [
+inst : CategoryTheory.Category.{v, u₂} D] (F : C → D),   (CategoryTheory.induced
+Functor F).Faithful
+· 使用定理 `CategoryTheory.InducedCategory.full`：∀ {C : Type u₁} {D : Type u₂} [inst
+ : CategoryTheory.Category.{v, u₂} D] (F : C → D),   (CategoryTheory.inducedFunc
+tor F).Full
 -/
 noncomputable instance inducedFunctorOfEquiv {C' : Type*} (e : C' ≃ D) :
     IsEquivalence (inducedFunctor e) where
-
-/--
-Instance `fullyFaithfulToEssImage` / 实例 `fullyFaithfulToEssImage`
-
-English:
-instance fullyFaithfulToEssImage
-  signature: (F : C ⥤ D) [F.Full] [F.Faithful]
-
-中文:
-实例 fullyFaithfulToEssImage
-  签名: (F : C ⥤ D) [F.满] [F.忠实]
+/-
+**CategoryTheory.Equivalence.fullyFaithfulToEssImage** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Equivalence`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [F.Full] [F.Faithful], F.toEssImage.IsEquivalence
+参数：F : CategoryTheory.Functor C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.toEssImage`：∀ {C : Type u₁} {D : Type u₂
+} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.Full.toEssImage`：∀ {C : Type u₁} {D : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.EssSurj.toEssImage`：∀ {C : Type u₁} {D : Type u₂}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
 -/
 noncomputable instance fullyFaithfulToEssImage (F : C ⥤ D) [F.Full] [F.Faithful] :
     IsEquivalence F.toEssImage where
@@ -2421,26 +2162,19 @@ end Equivalence
 /-- An equality of properties of objects of a category `C` induces an equivalence of the
 respective induced full subcategories of `C`. -/
 @[simps]
-/--
-Definition of `ObjectProperty.fullSubcategoryCongr` / `ObjectProperty.fullSubcategoryCongr` 的定义
+/-
+**CategoryTheory.ObjectProperty.fullSubcategoryCongr** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {P P' 
+: CategoryTheory.ObjectProperty C} → P = P' → (P.FullSubcategory ≌ P'.FullSubcat
+egory)
+参数：P.FullSubcategory ≌ P'.FullSubcategory。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ObjectProperty.fullSubcategoryCongr
-  signature: {P P' : ObjectProperty C} (h : P = P')
-  body: ObjectProperty.ιOfLE h.le
-  inverse := ObjectProperty.ιOfLE h.symm.le
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 ObjectProperty.fullSubcategoryCongr
-  签名: {P P' : ObjectProperty C} (h : P = P')
-  定义体: ObjectProperty.ιOfLE h.le
-  inverse := ObjectProperty.ιOfLE h.symm.le
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: ObjectProperty, h.le
+--- 原说明 ---
+An equality of properties of objects of a category `C` induces an equivalence of
+ the
+respective induced full subcategories of `C`.
 -/
 def ObjectProperty.fullSubcategoryCongr {P P' : ObjectProperty C} (h : P = P') :
     P.FullSubcategory ≌ P'.FullSubcategory where
@@ -2455,22 +2189,17 @@ variable {E : Type u₃} [Category.{v₃} E] {F : C ⥤ E} {G : C ⥤ D} {H : D 
 
 /-- Construct an isomorphism `F ⋙ H.inverse ≅ G` from an isomorphism `F ≅ G ⋙ H.functor`. -/
 @[simps!]
-/--
-Definition of `compInverseIso` / `compInverseIso` 的定义
+/-
+**CategoryTheory.Iso.compInverseIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+o`。
+形式化陈述：compInverseIso {H : D ≌ E} (i : F ≅ G ⋙ H.functor) : F ⋙ H.inverse ≅ G
+参数：i : F ≅ G ⋙ H.functor。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compInverseIso
-  signature: {H : D ≌ E} (i : F ≅ G ⋙ H.functor)
-  body: isoWhiskerRight i H.inverse ≪≫
-    associator G _ H.inverse ≪≫ isoWhiskerLeft G H.unitIso.symm ≪≫ G.rightUnitor
-
-中文:
-定义 compInverseIso
-  签名: {H : D ≌ E} (i : F ≅ G ⋙ H.functor)
-  定义体: isoWhiskerRight i H.inverse ≪≫
-    associator G _ H.inverse ≪≫ isoWhiskerLeft G H.unitIso.symm ≪≫ G.rightUnitor
-
-Depends on / 依赖: G.rightUnitor, H.inverse, H.unitIso.symm, associator, inverse, isoWhiskerLeft, isoWhiskerRight, rightUnitor, unitIso
+--- 原说明 ---
+Construct an isomorphism `F ⋙ H.inverse ≅ G` from an isomorphism `F ≅ G ⋙ H.func
+tor`.
 -/
 def compInverseIso {H : D ≌ E} (i : F ≅ G ⋙ H.functor) : F ⋙ H.inverse ≅ G :=
   isoWhiskerRight i H.inverse ≪≫
@@ -2478,22 +2207,17 @@ def compInverseIso {H : D ≌ E} (i : F ≅ G ⋙ H.functor) : F ⋙ H.inverse �
 
 /-- Construct an isomorphism `G ≅ F ⋙ H.inverse` from an isomorphism `G ⋙ H.functor ≅ F`. -/
 @[simps!]
-/--
-Definition of `isoCompInverse` / `isoCompInverse` 的定义
+/-
+**CategoryTheory.Iso.isoCompInverse** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+o`。
+形式化陈述：isoCompInverse {H : D ≌ E} (i : G ⋙ H.functor ≅ F) : G ≅ F ⋙ H.inverse
+参数：i : G ⋙ H.functor ≅ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoCompInverse
-  signature: {H : D ≌ E} (i : G ⋙ H.functor ≅ F)
-  body: G.rightUnitor.symm ≪≫ isoWhiskerLeft G H.unitIso ≪≫ (associator _ _ _).symm ≪≫
-    isoWhiskerRight i H.inverse
-
-中文:
-定义 isoCompInverse
-  签名: {H : D ≌ E} (i : G ⋙ H.functor ≅ F)
-  定义体: G.rightUnitor.symm ≪≫ isoWhiskerLeft G H.unitIso ≪≫ (associator _ _ _).symm ≪≫
-    isoWhiskerRight i H.inverse
-
-Depends on / 依赖: G.rightUnitor.symm, H.inverse, H.unitIso, associator, inverse, isoWhiskerLeft, isoWhiskerRight, rightUnitor, unitIso
+--- 原说明 ---
+Construct an isomorphism `G ≅ F ⋙ H.inverse` from an isomorphism `G ⋙ H.functor 
+≅ F`.
 -/
 def isoCompInverse {H : D ≌ E} (i : G ⋙ H.functor ≅ F) : G ≅ F ⋙ H.inverse :=
   G.rightUnitor.symm ≪≫ isoWhiskerLeft G H.unitIso ≪≫ (associator _ _ _).symm ≪≫
@@ -2501,22 +2225,17 @@ def isoCompInverse {H : D ≌ E} (i : G ⋙ H.functor ≅ F) : G ≅ F ⋙ H.inv
 
 /-- Construct an isomorphism `G.inverse ⋙ F ≅ H` from an isomorphism `F ≅ G.functor ⋙ H`. -/
 @[simps!]
-/--
-Definition of `inverseCompIso` / `inverseCompIso` 的定义
+/-
+**CategoryTheory.Iso.inverseCompIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+o`。
+形式化陈述：inverseCompIso {G : C ≌ D} (i : F ≅ G.functor ⋙ H) : G.inverse ⋙ F ≅ H
+参数：i : F ≅ G.functor ⋙ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverseCompIso
-  signature: {G : C ≌ D} (i : F ≅ G.functor ⋙ H)
-  body: isoWhiskerLeft G.inverse i ≪≫ (associator _ _ _).symm ≪≫
-    isoWhiskerRight G.counitIso H ≪≫ H.leftUnitor
-
-中文:
-定义 inverseCompIso
-  签名: {G : C ≌ D} (i : F ≅ G.functor ⋙ H)
-  定义体: isoWhiskerLeft G.inverse i ≪≫ (associator _ _ _).symm ≪≫
-    isoWhiskerRight G.counitIso H ≪≫ H.leftUnitor
-
-Depends on / 依赖: G.counitIso, G.inverse, H.leftUnitor, associator, counitIso, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+Construct an isomorphism `G.inverse ⋙ F ≅ H` from an isomorphism `F ≅ G.functor 
+⋙ H`.
 -/
 def inverseCompIso {G : C ≌ D} (i : F ≅ G.functor ⋙ H) : G.inverse ⋙ F ≅ H :=
   isoWhiskerLeft G.inverse i ≪≫ (associator _ _ _).symm ≪≫
@@ -2524,22 +2243,17 @@ def inverseCompIso {G : C ≌ D} (i : F ≅ G.functor ⋙ H) : G.inverse ⋙ F �
 
 /-- Construct an isomorphism `H ≅ G.inverse ⋙ F` from an isomorphism `G.functor ⋙ H ≅ F`. -/
 @[simps!]
-/--
-Definition of `isoInverseComp` / `isoInverseComp` 的定义
+/-
+**CategoryTheory.Iso.isoInverseComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+o`。
+形式化陈述：isoInverseComp {G : C ≌ D} (i : G.functor ⋙ H ≅ F) : H ≅ G.inverse ⋙ F
+参数：i : G.functor ⋙ H ≅ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoInverseComp
-  signature: {G : C ≌ D} (i : G.functor ⋙ H ≅ F)
-  body: H.leftUnitor.symm ≪≫ isoWhiskerRight G.counitIso.symm H ≪≫ associator _ _ _
-    ≪≫ isoWhiskerLeft G.inverse i
-
-中文:
-定义 isoInverseComp
-  签名: {G : C ≌ D} (i : G.functor ⋙ H ≅ F)
-  定义体: H.leftUnitor.symm ≪≫ isoWhiskerRight G.counitIso.symm H ≪≫ associator _ _ _
-    ≪≫ isoWhiskerLeft G.inverse i
-
-Depends on / 依赖: G.counitIso.symm, G.inverse, H.leftUnitor.symm, associator, counitIso, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+Construct an isomorphism `H ≅ G.inverse ⋙ F` from an isomorphism `G.functor ⋙ H 
+≅ F`.
 -/
 def isoInverseComp {G : C ≌ D} (i : G.functor ⋙ H ≅ F) : H ≅ G.inverse ⋙ F :=
   H.leftUnitor.symm ≪≫ isoWhiskerRight G.counitIso.symm H ≪≫ associator _ _ _
@@ -2548,20 +2262,20 @@ def isoInverseComp {G : C ≌ D} (i : G.functor ⋙ H ≅ F) : H ≅ G.inverse �
 /-- As a special case, given two equivalences `G` and `G'` between the same categories,
 construct an isomorphism `G.inverse ≅ G.inverse` from an isomorphism `G.functor ≅ G.functor`. -/
 @[simps!]
-/--
-Definition of `isoInverseOfIsoFunctor` / `isoInverseOfIsoFunctor` 的定义
+/-
+**CategoryTheory.Iso.isoInverseOfIsoFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Iso`。
+形式化陈述：isoInverseOfIsoFunctor {G G' : C ≌ D} (i : G.functor ≅ G'.functor) : G.inv
+erse ≅ G'.inverse
+参数：i : G.functor ≅ G'.functor。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoInverseOfIsoFunctor
-  signature: {G G' : C ≌ D} (i : G.functor ≅ G'.functor)
-  body: isoCompInverse ((isoWhiskerLeft G.inverse i).symm ≪≫ G.counitIso) ≪≫ leftUnitor G'.inverse
-
-中文:
-定义 isoInverseOfIsoFunctor
-  签名: {G G' : C ≌ D} (i : G.functor ≅ G'.functor)
-  定义体: isoCompInverse ((isoWhiskerLeft G.inverse i).symm ≪≫ G.counitIso) ≪≫ leftUnitor G'.inverse
-
-Depends on / 依赖: G.counitIso, G.inverse, cat_disch, counitIso, inverse, isoCompInverse, isoWhiskerLeft, leftUnitor
+--- 原说明 ---
+As a special case, given two equivalences `G` and `G'` between the same categori
+es,
+construct an isomorphism `G.inverse ≅ G.inverse` from an isomorphism `G.functor 
+≅ G.functor`.
 -/
 def isoInverseOfIsoFunctor {G G' : C ≌ D} (i : G.functor ≅ G'.functor) : G.inverse ≅ G'.inverse :=
   isoCompInverse ((isoWhiskerLeft G.inverse i).symm ≪≫ G.counitIso) ≪≫ leftUnitor G'.inverse
@@ -2569,48 +2283,78 @@ def isoInverseOfIsoFunctor {G G' : C ≌ D} (i : G.functor ≅ G'.functor) : G.i
 /-- As a special case, given two equivalences `G` and `G'` between the same categories,
 construct an isomorphism `G.functor ≅ G.functor` from an isomorphism `G.inverse ≅ G.inverse`. -/
 @[simps!]
-/--
-Definition of `isoFunctorOfIsoInverse` / `isoFunctorOfIsoInverse` 的定义
+/-
+**CategoryTheory.Iso.isoFunctorOfIsoInverse** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Iso`。
+形式化陈述：isoFunctorOfIsoInverse {G G' : C ≌ D} (i : G.inverse ≅ G'.inverse) : G.fun
+ctor ≅ G'.functor
+参数：i : G.inverse ≅ G'.inverse。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoFunctorOfIsoInverse
-  signature: {G G' : C ≌ D} (i : G.inverse ≅ G'.inverse)
-  body: isoInverseOfIsoFunctor (G := G.symm) (G' := G'.symm) i
-
-中文:
-定义 isoFunctorOfIsoInverse
-  签名: {G G' : C ≌ D} (i : G.inverse ≅ G'.inverse)
-  定义体: isoInverseOfIsoFunctor (G := G.symm) (G' := G'.symm) i
-
-Depends on / 依赖: G.symm, isoInverseOfIsoFunctor
+--- 原说明 ---
+As a special case, given two equivalences `G` and `G'` between the same categori
+es,
+construct an isomorphism `G.functor ≅ G.functor` from an isomorphism `G.inverse 
+≅ G.inverse`.
 -/
 def isoFunctorOfIsoInverse {G G' : C ≌ D} (i : G.inverse ≅ G'.inverse) : G.functor ≅ G'.functor :=
   isoInverseOfIsoFunctor (G := G.symm) (G' := G'.symm) i
 
 /-- Sanity check: `isoFunctorOfIsoInverse (isoInverseOfIsoFunctor i)` is just `i`. -/
 @[simp]
-/--
-lemma `isoFunctorOfIsoInverse_isoInverseOfIsoFunctor` / 引理 `isoFunctorOfIsoInverse_isoInverseOfIsoFunctor`
+/-
+**CategoryTheory.Iso.isoFunctorOfIsoInverse_isoInverseOfIsoFunctor** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：isoFunctorOfIsoInverse_isoInverseOfIsoFunctor {G G' : C ≌ D} (i : G.functo
+r ≅ G'.functor) : isoFunctorOfIsoInverse (isoInverseOfIsoFunctor i) = i
+参数：i : G.functor ≅ G'.functor。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.isoFunctorOfIsoInverse_hom_app`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {G G' : C ≌ D} (i …
+· 使用定理 `CategoryTheory.Iso.isoInverseOfIsoFunctor_inv_app`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {G G' : C ≌ D} (i …
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Equivalence.fun_inv_map`：fun_inv_map (e : C ≌ D) (X Y : D
+) (f : X ⟶ Y) : e.functor.map (e.inverse.map f) = e.counit.app X ≫ f ≫ e.counitI
+nv.app Y
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Equivalence.counitInv_functor_comp`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   (e : C ≌ D) (X : C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Equivalence.counitInv_functor_comp_assoc`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   (e : C ≌ D) (X : C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma isoFunctorOfIsoInverse_isoInverseOfIsoFunctor
-  given: {G G' : C ≌ D} (i : G.functor ≅ G'.functor)
-  proof: by
-  ext X
-  simp [← NatTrans.naturality]
-
-@[simp]
-
-中文:
-引理 isoFunctorOfIsoInverse_isoInverseOfIsoFunctor
-  条件: {G G' : C ≌ D} (i : G.functor ≅ G'.functor)
-  证明: by
-  ext X
-  simp [← NatTrans.naturality]
-
-@[simp]
-
-Depends on / 依赖: NatTrans, NatTrans.naturality, naturality
+--- 原说明 ---
+Sanity check: `isoFunctorOfIsoInverse (isoInverseOfIsoFunctor i)` is just `i`.
 -/
 lemma isoFunctorOfIsoInverse_isoInverseOfIsoFunctor {G G' : C ≌ D} (i : G.functor ≅ G'.functor) :
     isoFunctorOfIsoInverse (isoInverseOfIsoFunctor i) = i := by
@@ -2618,20 +2362,17 @@ lemma isoFunctorOfIsoInverse_isoInverseOfIsoFunctor {G G' : C ≌ D} (i : G.func
   simp [← NatTrans.naturality]
 
 @[simp]
-/--
-lemma `isoInverseOfIsoFunctor_isoFunctorOfIsoInverse` / 引理 `isoInverseOfIsoFunctor_isoFunctorOfIsoInverse`
-
-English:
-lemma isoInverseOfIsoFunctor_isoFunctorOfIsoInverse
-  given: {G G' : C ≌ D} (i : G.inverse ≅ G'.inverse)
-  proof: isoFunctorOfIsoInverse_isoInverseOfIsoFunctor (G := G.symm) (G' := G'.symm) i
-
-中文:
-引理 isoInverseOfIsoFunctor_isoFunctorOfIsoInverse
-  条件: {G G' : C ≌ D} (i : G.inverse ≅ G'.inverse)
-  证明: isoFunctorOfIsoInverse_isoInverseOfIsoFunctor (G := G.symm) (G' := G'.symm) i
-
-Depends on / 依赖: G.symm, isoFunctorOfIsoInverse_isoInverseOfIsoFunctor
+/-
+**CategoryTheory.Iso.isoInverseOfIsoFunctor_isoFunctorOfIsoInverse** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：isoInverseOfIsoFunctor_isoFunctorOfIsoInverse {G G' : C ≌ D} (i : G.invers
+e ≅ G'.inverse) : isoInverseOfIsoFunctor (isoFunctorOfIsoInverse i) = i
+参数：i : G.inverse ≅ G'.inverse。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Iso.isoFunctorOfIsoInverse_isoInverseOfIsoFunctor`：isoFun
+ctorOfIsoInverse_isoInverseOfIsoFunctor {G G' : C ≌ D} (i : G.functor ≅ G'.funct
+or) : isoFunctorOfIsoInverse (isoInverseOfIsoFunctor i…
 -/
 lemma isoInverseOfIsoFunctor_isoFunctorOfIsoInverse {G G' : C ≌ D} (i : G.inverse ≅ G'.inverse) :
     isoInverseOfIsoFunctor (isoFunctorOfIsoInverse i) = i :=
@@ -2640,3 +2381,4 @@ lemma isoInverseOfIsoFunctor_isoFunctorOfIsoInverse {G G' : C ≌ D} (i : G.inve
 end Iso
 
 end CategoryTheory
+

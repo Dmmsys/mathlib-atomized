@@ -18,20 +18,16 @@ public section
 
 namespace Real
 
-/--
-theorem `measurable_arctan` / 定理 `measurable_arctan`
-
-English:
-theorem measurable_arctan
-  statement: Measurable arctan
-  proof: continuous_arctan.measurable
-
-中文:
-定理 measurable_arctan
-  结论: 可测 arctan
-  证明: continuous_arctan.measurable
-
-Depends on / 依赖: continuous_arctan, continuous_arctan.measurable, measurable
+/-
+**Real.measurable_arctan** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：measurable_arctan : Measurable arctan
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `Real.continuous_arctan`：continuous_arctan : Continuous arctan
 -/
 theorem measurable_arctan : Measurable arctan :=
   continuous_arctan.measurable
@@ -42,27 +38,22 @@ section RealComposition
 
 open Real
 
-variable {α : Type*} {m : MeasurableSpace α} {f : α -> Real}
+variable {α : Type*} {m : MeasurableSpace α} {f : α → ℝ}
 
 @[fun_prop]
-/--
-theorem `Measurable.arctan` / 定理 `Measurable.arctan`
-
-English:
-theorem Measurable.arctan
-  given: (hf : Measurable f)
-  statement: Measurable fun x => arctan (f x)
-  proof: measurable_arctan.comp hf
-
-中文:
-定理 可测.arctan
-  条件: (hf : 可测 f)
-  结论: 可测 fun x => arctan (f x)
-  证明: measurable_arctan.comp hf
-
-Depends on / 依赖: measurable_arctan, measurable_arctan.comp
+/-
+**Measurable.arctan** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.arctan (hf : Measurable f) : Measurable fun x => arctan (f x)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `Real.measurable_arctan`：measurable_arctan : Measurable arctan
 -/
 theorem Measurable.arctan (hf : Measurable f) : Measurable fun x => arctan (f x) :=
   measurable_arctan.comp hf
 
 end RealComposition
+

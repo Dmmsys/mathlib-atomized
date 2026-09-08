@@ -17,86 +17,50 @@ variable {R} [Mul R]
 open MulOpposite
 
 @[to_additive (attr := simp)]
-/--
-theorem `isLeftRegular_op` / 定理 `isLeftRegular_op`
-
-English:
-theorem isLeftRegular_op
-  given: {a : R}
-  statement: IsLeftRegular (op a) ↔ IsRightRegular a
-  proof: .trans .symm opEquiv.injective_comp _ opEquiv.comp_injective _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isLeftRegular_op
-  条件: {a : R}
-  结论: IsLeftRegular (op a) ↔ IsRightRegular a
-  证明: .trans .symm opEquiv.injective_comp _ opEquiv.comp_injective _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: comp_injective, injective_comp, opEquiv, opEquiv.comp_injective, opEquiv.injective_comp
+/-
+**isLeftRegular_op** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLeftRegular_op {a : R} : IsLeftRegular (op a) ↔ IsRightRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.comp_injective`：comp_injective (f : α -> β) (e : β ≃ γ) : Injectiv
+e (e ∘ f) ↔ Injective f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.injective_comp`：injective_comp (e : α ≃ β) (f : β -> γ) : Injectiv
+e (f ∘ e) ↔ Injective f
 -/
 theorem isLeftRegular_op {a : R} : IsLeftRegular (op a) ↔ IsRightRegular a :=
-.trans .symm opEquiv.injective_comp _ opEquiv.comp_injective _
+  opEquiv.comp_injective _ |>.trans <| opEquiv.injective_comp _ |>.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRightRegular_op` / 定理 `isRightRegular_op`
-
-English:
-theorem isRightRegular_op
-  given: {a : R}
-  statement: IsRightRegular (op a) ↔ IsLeftRegular a
-  proof: .trans .symm opEquiv.injective_comp _ opEquiv.comp_injective _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isRightRegular_op
-  条件: {a : R}
-  结论: IsRightRegular (op a) ↔ IsLeftRegular a
-  证明: .trans .symm opEquiv.injective_comp _ opEquiv.comp_injective _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: comp_injective, injective_comp, opEquiv, opEquiv.comp_injective, opEquiv.injective_comp
+/-
+**isRightRegular_op** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRightRegular_op {a : R} : IsRightRegular (op a) ↔ IsLeftRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.comp_injective`：comp_injective (f : α -> β) (e : β ≃ γ) : Injectiv
+e (e ∘ f) ↔ Injective f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Equiv.injective_comp`：injective_comp (e : α ≃ β) (f : β -> γ) : Injectiv
+e (f ∘ e) ↔ Injective f
 -/
 theorem isRightRegular_op {a : R} : IsRightRegular (op a) ↔ IsLeftRegular a :=
-.trans .symm opEquiv.injective_comp _ opEquiv.comp_injective _
+  opEquiv.comp_injective _ |>.trans <| opEquiv.injective_comp _ |>.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRegular_op` / 定理 `isRegular_op`
-
-English:
-theorem isRegular_op
-  given: {a : R}
-  statement: IsRegular (op a) ↔ IsRegular a
-  proof: by
-  simp [isRegular_iff, and_comm]
-
-@[to_additive] protected alias ⟨_, IsLeftRegular.op⟩ := isLeftRegular_op
-@[to_additive] protected alias ⟨_, IsRightRegular.op⟩ := isRightRegular_op
-@[to_additive] protected alias ⟨_, IsRegular.op⟩ := isRegular_op
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isRegular_op
-  条件: {a : R}
-  结论: 是正则 (op a) ↔ 是正则 a
-  证明: by
-  simp [isRegular_iff, and_comm]
-
-@[to_additive] protected alias ⟨_, IsLeftRegular.op⟩ := isLeftRegular_op
-@[to_additive] protected alias ⟨_, IsRightRegular.op⟩ := isRightRegular_op
-@[to_additive] protected alias ⟨_, IsRegular.op⟩ := isRegular_op
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: and_comm, isRegular_iff
+/-
+**isRegular_op** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRegular_op {a : R} : IsRegular (op a) ↔ IsRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isRegular_op {a : R} : IsRegular (op a) ↔ IsRegular a := by
   simp [isRegular_iff, and_comm]
@@ -106,80 +70,39 @@ theorem isRegular_op {a : R} : IsRegular (op a) ↔ IsRegular a := by
 @[to_additive] protected alias ⟨_, IsRegular.op⟩ := isRegular_op
 
 @[to_additive (attr := simp)]
-/--
-theorem `isLeftRegular_unop` / 定理 `isLeftRegular_unop`
-
-English:
-theorem isLeftRegular_unop
-  given: {a : Rᵐᵒᵖ}
-  statement: IsLeftRegular a.unop ↔ IsRightRegular a
-  proof: isRightRegular_op.symm
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isLeftRegular_unop
-  条件: {a : Rᵐᵒᵖ}
-  结论: IsLeftRegular a.unop ↔ IsRightRegular a
-  证明: isRightRegular_op.symm
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: isRightRegular_op, isRightRegular_op.symm
+/-
+**isLeftRegular_unop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLeftRegular_unop {a : Rᵐᵒᵖ} : IsLeftRegular a.unop ↔ IsRightRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `isRightRegular_op`：isRightRegular_op {a : R} : IsRightRegular (op a) ↔ I
+sLeftRegular a
 -/
 theorem isLeftRegular_unop {a : Rᵐᵒᵖ} : IsLeftRegular a.unop ↔ IsRightRegular a :=
   isRightRegular_op.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRightRegular_unop` / 定理 `isRightRegular_unop`
-
-English:
-theorem isRightRegular_unop
-  given: {a : Rᵐᵒᵖ}
-  statement: IsRightRegular a.unop ↔ IsLeftRegular a
-  proof: isLeftRegular_op.symm
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isRightRegular_unop
-  条件: {a : Rᵐᵒᵖ}
-  结论: IsRightRegular a.unop ↔ IsLeftRegular a
-  证明: isLeftRegular_op.symm
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: isLeftRegular_op, isLeftRegular_op.symm
+/-
+**isRightRegular_unop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRightRegular_unop {a : Rᵐᵒᵖ} : IsRightRegular a.unop ↔ IsLeftRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `isLeftRegular_op`：isLeftRegular_op {a : R} : IsLeftRegular (op a) ↔ IsRi
+ghtRegular a
 -/
 theorem isRightRegular_unop {a : Rᵐᵒᵖ} : IsRightRegular a.unop ↔ IsLeftRegular a :=
   isLeftRegular_op.symm
 
 @[to_additive (attr := simp)]
-/--
-theorem `isRegular_unop` / 定理 `isRegular_unop`
-
-English:
-theorem isRegular_unop
-  given: {a : Rᵐᵒᵖ}
-  statement: IsRegular a.unop ↔ IsRegular a
-  proof: isRegular_op.symm
-
-@[to_additive] protected alias ⟨_, IsLeftRegular.unop⟩ := isLeftRegular_unop
-@[to_additive] protected alias ⟨_, IsRightRegular.unop⟩ := isRightRegular_unop
-@[to_additive] protected alias ⟨_, IsRegular.unop⟩ := isRegular_unop
-
-中文:
-定理 isRegular_unop
-  条件: {a : Rᵐᵒᵖ}
-  结论: 是正则 a.unop ↔ 是正则 a
-  证明: isRegular_op.symm
-
-@[to_additive] protected alias ⟨_, IsLeftRegular.unop⟩ := isLeftRegular_unop
-@[to_additive] protected alias ⟨_, IsRightRegular.unop⟩ := isRightRegular_unop
-@[to_additive] protected alias ⟨_, IsRegular.unop⟩ := isRegular_unop
-
-Depends on / 依赖: isRegular_op, isRegular_op.symm
+/-
+**isRegular_unop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRegular_unop {a : Rᵐᵒᵖ} : IsRegular a.unop ↔ IsRegular a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `isRegular_op`：isRegular_op {a : R} : IsRegular (op a) ↔ IsRegular a
 -/
 theorem isRegular_unop {a : Rᵐᵒᵖ} : IsRegular a.unop ↔ IsRegular a :=
   isRegular_op.symm

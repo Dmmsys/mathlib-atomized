@@ -26,6 +26,10 @@ open CategoryTheory Limits
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J C : Type*} [Category* J] [Category* C] [HasColimitsOfShape J C] [Preadditive C] :
     (colim (J := J) (C := C)).Additive where
 
@@ -33,213 +37,68 @@ variable {J : Type u} [SmallCategory J] [IsFiltered J]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: Functor.preservesHomology_of_map_exact _ (fun S hS => by
-    replace hS := fun j => hS.map ((evaluation _ _).obj j)
-    simp only [ShortComplex.ab_exact_iff_ker_le_range] at hS ⊢
-    intro x (hx : _ = _)
-    dsimp at hx
-    rcases Concrete.colimit_exists_rep S.X₂ x with ⟨j, y, rfl⟩
-    rw [← ConcreteCategory.comp_apply]; rw [colimMap_eq]; rw [colimit.ι_map]; rw [ConcreteCategory.comp_apply]; rw [← map_zero (colimit.ι S.X₃ j).hom] at hx
-    rcases Concrete.colimit_exists_of_rep_eq.{u, u, u} S.X₃ _ _ hx with ⟨k, e₁, e₂, hk⟩
-    rw [map_zero]; rw [← ConcreteCategory.comp_apply]; rw [← NatTrans.naturality]; rw [ConcreteCategory.comp_apply]
-      at hk
-    rcases hS k hk with ⟨t, ht⟩
-    use colimit.ι S.X₁ k t
-    erw [← ConcreteCategory.comp_apply, colimit.ι_map, ConcreteCategory.comp_apply, ht]
-    exact colimit.w_apply S.X₂ e₁ y)
-
-中文:
-实例 :
-  定义体: Functor.preservesHomology_of_map_exact _ (fun S hS => by
-    replace hS := fun j => hS.map ((evaluation _ _).obj j)
-    simp only [ShortComplex.ab_exact_iff_ker_le_range] at hS ⊢
-    intro x (hx : _ = _)
-    dsimp at hx
-    rcases Concrete.colimit_exists_rep S.X₂ x with ⟨j, y, rfl⟩
-    rw [← ConcreteCategory.comp_apply]; rw [colimMap_eq]; rw [colimit.ι_map]; rw [ConcreteCategory.comp_apply]; rw [← map_zero (colimit.ι S.X₃ j).hom] at hx
-    rcases Concrete.colimit_exists_of_rep_eq.{u, u, u} S.X₃ _ _ hx with ⟨k, e₁, e₂, hk⟩
-    rw [map_zero]; rw [← ConcreteCategory.comp_apply]; rw [← NatTrans.naturality]; rw [ConcreteCategory.comp_apply]
-      at hk
-    rcases hS k hk with ⟨t, ht⟩
-    use colimit.ι S.X₁ k t
-    erw [← ConcreteCategory.comp_apply, colimit.ι_map, ConcreteCategory.comp_apply, ht]
-    exact colimit.w_apply S.X₂ e₁ y)
-
-Depends on / 依赖: AddCommGrpCat, PreservesHomology
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance :
     (colim (J := J) (C := AddCommGrpCat.{u})).PreservesHomology :=
-  Functor.preservesHomology_of_map_exact _ (fun S hS => by
+  Functor.preservesHomology_of_map_exact _ (fun S hS ↦ by
     replace hS := fun j => hS.map ((evaluation _ _).obj j)
     simp only [ShortComplex.ab_exact_iff_ker_le_range] at hS ⊢
     intro x (hx : _ = _)
     dsimp at hx
     rcases Concrete.colimit_exists_rep S.X₂ x with ⟨j, y, rfl⟩
-    rw [← ConcreteCategory.comp_apply]; rw [colimMap_eq]; rw [colimit.ι_map]; rw [ConcreteCategory.comp_apply]; rw [← map_zero (colimit.ι S.X₃ j).hom] at hx
+    rw [← ConcreteCategory.comp_apply, colimMap_eq, colimit.ι_map, ConcreteCategory.comp_apply,
+      ← map_zero (colimit.ι S.X₃ j).hom] at hx
     rcases Concrete.colimit_exists_of_rep_eq.{u, u, u} S.X₃ _ _ hx with ⟨k, e₁, e₂, hk⟩
-    rw [map_zero]; rw [← ConcreteCategory.comp_apply]; rw [← NatTrans.naturality]; rw [ConcreteCategory.comp_apply]
+    rw [map_zero, ← ConcreteCategory.comp_apply, ← NatTrans.naturality, ConcreteCategory.comp_apply]
       at hk
     rcases hS k hk with ⟨t, ht⟩
     use colimit.ι S.X₁ k t
     erw [← ConcreteCategory.comp_apply, colimit.ι_map, ConcreteCategory.comp_apply, ht]
     exact colimit.w_apply S.X₂ e₁ y)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: by
-  apply Functor.preservesFiniteLimits_of_preservesHomology
-
-中文:
-实例 :
-  定义体: by
-  apply Functor.preservesFiniteLimits_of_preservesHomology
-
-Depends on / 依赖: AddCommGrpCat, Functor, Functor.preservesFiniteLimits_of_preservesHomology, preservesFiniteLimits_of_preservesHomology
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance :
-PreservesFiniteLimits colim (J := J) (C := AddCommGrpCat.{u}) := by
+    PreservesFiniteLimits <| colim (J := J) (C := AddCommGrpCat.{u}) := by
   apply Functor.preservesFiniteLimits_of_preservesHomology
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFilteredColimits (AddCommGrpCat.{u})
-  body: inferInstance
-
-中文:
-实例 :
-  签名: HasFilteredColimits (加法交换群范畴.{u})
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFilteredColimits (AddCommGrpCat.{u}) where
   HasColimitsOfShape := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AB5 (AddCommGrpCat.{u})
-  body: { preservesFiniteLimits := inferInstance }
-
-中文:
-实例 :
-  签名: AB5 (加法交换群范畴.{u})
-  定义体: { preservesFiniteLimits := inferInstance }
-
-Depends on / 依赖: preservesFiniteLimits
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : AB5 (AddCommGrpCat.{u}) where
   ofShape _ := { preservesFiniteLimits := inferInstance }
 
 attribute [local instance] Abelian.hasFiniteBiproducts
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AB4 AddCommGrpCat.{u}
-  body: AB4.of_AB5 _
-
-中文:
-实例 :
-  签名: AB4 加法交换群范畴.{u}
-  定义体: AB4.of_AB5 _
-
-Depends on / 依赖: AB4.of_AB5, of_AB5
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AB4 AddCommGrpCat.{u} := AB4.of_AB5 _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasExactLimitsOfShape (Discrete J) (AddCommGrpCat.{u})
-  body: by
-  apply +allowSynthFailures hasExactLimitsOfShape_of_preservesEpi
-  exact {
-    preserves {X Y} f hf := by
-      let iX : limit X ≅ AddCommGrpCat.of ((i : J) -> X.obj ⟨i⟩) := (Pi.isoLimit X).symm ≪≫
-        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
-      let iY : limit Y ≅ AddCommGrpCat.of ((i : J) -> Y.obj ⟨i⟩) := (Pi.isoLimit Y).symm ≪≫
-        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
-      have : Pi.map (fun i => f.app ⟨i⟩) = iX.inv ≫ lim.map f ≫ iY.hom := by
-        simp only [Discrete.functor_obj_eq_as, Discrete.mk_as, Pi.isoLimit,
-          IsLimit.conePointUniqueUpToIso, limit.cone, AddCommGrpCat.HasLimit.productLimitCone,
-          Iso.trans_inv, Functor.mapIso_inv, IsLimit.uniqueUpToIso_inv, Cone.forget_map,
-          IsLimit.liftConeMorphism_hom, limit.isLimit_lift, Iso.symm_inv, Functor.mapIso_hom,
-          IsLimit.uniqueUpToIso_hom, lim_map, Iso.trans_hom, Iso.symm_hom,
-          AddCommGrpCat.HasLimit.lift, Category.assoc, limit.lift_map_assoc, iX, iY]
-        ext g j
-        change _ = (_ ≫ limit.π (Discrete.functor fun j => Y.obj { as := j }) ⟨j⟩) _
-        simp only [Discrete.functor_obj_eq_as, productIsProduct', limit.lift_π,
-          Fan.mk_π_app, Pi.map_apply]
-        change _ = (_ ≫ _ ≫ limit.π Y ⟨j⟩) _
-        simp
-      suffices Epi (iX.hom ≫ (iX.inv ≫ lim.map f ≫ iY.hom) ≫ iY.inv) by simpa using this
-      suffices Epi (iX.inv ≫ lim.map f ≫ iY.hom) from inferInstance
-      rw [AddCommGrpCat.epi_iff_surjective]; rw [← this]
-      simp_rw [CategoryTheory.NatTrans.epi_iff_epi_app, AddCommGrpCat.epi_iff_surjective] at hf
-      refine fun b => ⟨fun i => (hf ⟨i⟩ (b i)).choose, ?_⟩
-      funext i
-      exact (hf ⟨i⟩ (b i)).choose_spec }
-
-中文:
-实例 :
-  签名: 有ExactLimitsOfShape (离散 J) (加法交换群范畴.{u})
-  定义体: by
-  apply +allowSynthFailures hasExactLimitsOfShape_of_preservesEpi
-  exact {
-    preserves {X Y} f hf := by
-      let iX : limit X ≅ AddCommGrpCat.of ((i : J) -> X.obj ⟨i⟩) := (Pi.isoLimit X).symm ≪≫
-        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
-      let iY : limit Y ≅ AddCommGrpCat.of ((i : J) -> Y.obj ⟨i⟩) := (Pi.isoLimit Y).symm ≪≫
-        (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
-      have : Pi.map (fun i => f.app ⟨i⟩) = iX.inv ≫ lim.map f ≫ iY.hom := by
-        simp only [Discrete.functor_obj_eq_as, Discrete.mk_as, Pi.isoLimit,
-          IsLimit.conePointUniqueUpToIso, limit.cone, AddCommGrpCat.HasLimit.productLimitCone,
-          Iso.trans_inv, Functor.mapIso_inv, IsLimit.uniqueUpToIso_inv, Cone.forget_map,
-          IsLimit.liftConeMorphism_hom, limit.isLimit_lift, Iso.symm_inv, Functor.mapIso_hom,
-          IsLimit.uniqueUpToIso_hom, lim_map, Iso.trans_hom, Iso.symm_hom,
-          AddCommGrpCat.HasLimit.lift, Category.assoc, limit.lift_map_assoc, iX, iY]
-        ext g j
-        change _ = (_ ≫ limit.π (Discrete.functor fun j => Y.obj { as := j }) ⟨j⟩) _
-        simp only [Discrete.functor_obj_eq_as, productIsProduct', limit.lift_π,
-          Fan.mk_π_app, Pi.map_apply]
-        change _ = (_ ≫ _ ≫ limit.π Y ⟨j⟩) _
-        simp
-      suffices Epi (iX.hom ≫ (iX.inv ≫ lim.map f ≫ iY.hom) ≫ iY.inv) by simpa using this
-      suffices Epi (iX.inv ≫ lim.map f ≫ iY.hom) from inferInstance
-      rw [AddCommGrpCat.epi_iff_surjective]; rw [← this]
-      simp_rw [CategoryTheory.NatTrans.epi_iff_epi_app, AddCommGrpCat.epi_iff_surjective] at hf
-      refine fun b => ⟨fun i => (hf ⟨i⟩ (b i)).choose, ?_⟩
-      funext i
-      exact (hf ⟨i⟩ (b i)).choose_spec }
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.HasLimit.productLimitCone, AddCommGrpCat.of, HasLimit, Pi.isoLimit, Pi.map, X.obj, Y.obj, allowSynthFailures, conePointUniqueUpToIso, f.app, hasExactLimitsOfShape_of_preservesEpi, isLimit, isoLimit, limit.isLimit, preserves, productLimitCone
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasExactLimitsOfShape (Discrete J) (AddCommGrpCat.{u}) := by
   apply +allowSynthFailures hasExactLimitsOfShape_of_preservesEpi
   exact {
     preserves {X Y} f hf := by
-      let iX : limit X ≅ AddCommGrpCat.of ((i : J) -> X.obj ⟨i⟩) := (Pi.isoLimit X).symm ≪≫
+      let iX : limit X ≅ AddCommGrpCat.of ((i : J) → X.obj ⟨i⟩) := (Pi.isoLimit X).symm ≪≫
         (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
-      let iY : limit Y ≅ AddCommGrpCat.of ((i : J) -> Y.obj ⟨i⟩) := (Pi.isoLimit Y).symm ≪≫
+      let iY : limit Y ≅ AddCommGrpCat.of ((i : J) → Y.obj ⟨i⟩) := (Pi.isoLimit Y).symm ≪≫
         (limit.isLimit _).conePointUniqueUpToIso (AddCommGrpCat.HasLimit.productLimitCone _).isLimit
-      have : Pi.map (fun i => f.app ⟨i⟩) = iX.inv ≫ lim.map f ≫ iY.hom := by
+      have : Pi.map (fun i ↦ f.app ⟨i⟩) = iX.inv ≫ lim.map f ≫ iY.hom := by
         simp only [Discrete.functor_obj_eq_as, Discrete.mk_as, Pi.isoLimit,
           IsLimit.conePointUniqueUpToIso, limit.cone, AddCommGrpCat.HasLimit.productLimitCone,
           Iso.trans_inv, Functor.mapIso_inv, IsLimit.uniqueUpToIso_inv, Cone.forget_map,
@@ -247,77 +106,37 @@ instance : HasExactLimitsOfShape (Discrete J) (AddCommGrpCat.{u}) := by
           IsLimit.uniqueUpToIso_hom, lim_map, Iso.trans_hom, Iso.symm_hom,
           AddCommGrpCat.HasLimit.lift, Category.assoc, limit.lift_map_assoc, iX, iY]
         ext g j
-        change _ = (_ ≫ limit.π (Discrete.functor fun j => Y.obj { as := j }) ⟨j⟩) _
+        change _ = (_ ≫ limit.π (Discrete.functor fun j ↦ Y.obj { as := j }) ⟨j⟩) _
         simp only [Discrete.functor_obj_eq_as, productIsProduct', limit.lift_π,
           Fan.mk_π_app, Pi.map_apply]
         change _ = (_ ≫ _ ≫ limit.π Y ⟨j⟩) _
         simp
       suffices Epi (iX.hom ≫ (iX.inv ≫ lim.map f ≫ iY.hom) ≫ iY.inv) by simpa using this
       suffices Epi (iX.inv ≫ lim.map f ≫ iY.hom) from inferInstance
-      rw [AddCommGrpCat.epi_iff_surjective]; rw [← this]
+      rw [AddCommGrpCat.epi_iff_surjective, ← this]
       simp_rw [CategoryTheory.NatTrans.epi_iff_epi_app, AddCommGrpCat.epi_iff_surjective] at hf
-      refine fun b => ⟨fun i => (hf ⟨i⟩ (b i)).choose, ?_⟩
+      refine fun b ↦ ⟨fun i ↦ (hf ⟨i⟩ (b i)).choose, ?_⟩
       funext i
       exact (hf ⟨i⟩ (b i)).choose_spec }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AB4Star AddCommGrpCat.{u}
-  body: inferInstance
-
-中文:
-实例 :
-  签名: AB4Star 加法交换群范畴.{u}
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AB4Star AddCommGrpCat.{u} where
   ofShape _ := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasSeparator AddCommGrpCat.{u}
-  body: by
-    use AddCommGrpCat.of (ULift Int)
-    intro A B f g h; simp_all only [ObjectProperty.singleton_iff, AddCommGrpCat.ext_iff,
-      AddCommGrpCat.hom_comp, AddMonoidHom.coe_comp, Function.comp_apply, forall_eq', ULift.forall]
-    (intro x; specialize h (AddCommGrpCat.ofHom
-    (AddMonoidHom.mk' (fun y => y • x) fun y z => by simp only [add_smul])) 1; aesop)
-
-中文:
-实例 :
-  签名: 有Separator 加法交换群范畴.{u}
-  定义体: by
-    use AddCommGrpCat.of (ULift Int)
-    intro A B f g h; simp_all only [ObjectProperty.singleton_iff, AddCommGrpCat.ext_iff,
-      AddCommGrpCat.hom_comp, AddMonoidHom.coe_comp, Function.comp_apply, forall_eq', ULift.forall]
-    (intro x; specialize h (AddCommGrpCat.ofHom
-    (AddMonoidHom.mk' (fun y => y • x) fun y z => by simp only [add_smul])) 1; aesop)
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ext_iff, AddCommGrpCat.hom_comp, AddCommGrpCat.of, AddCommGrpCat.ofHom, AddMonoidHom, AddMonoidHom.coe_comp, AddMonoidHom.mk, Function, Function.comp_apply, ObjectProperty, ObjectProperty.singleton_iff, ULift.forall, add_smul, coe_comp, comp_apply, ext_iff, forall_eq, hom_comp, singleton_iff
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasSeparator AddCommGrpCat.{u} where
   hasSeparator := by
-    use AddCommGrpCat.of (ULift Int)
+    use AddCommGrpCat.of (ULift ℤ)
     intro A B f g h; simp_all only [ObjectProperty.singleton_iff, AddCommGrpCat.ext_iff,
       AddCommGrpCat.hom_comp, AddMonoidHom.coe_comp, Function.comp_apply, forall_eq', ULift.forall]
     (intro x; specialize h (AddCommGrpCat.ofHom
     (AddMonoidHom.mk' (fun y => y • x) fun y z => by simp only [add_smul])) 1; aesop)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsGrothendieckAbelian.{u} AddCommGrpCat.{u}
-
-中文:
-实例 :
-  签名: 是GrothendieckAbelian.{u} 加法交换群范畴.{u}
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsGrothendieckAbelian.{u} AddCommGrpCat.{u} where

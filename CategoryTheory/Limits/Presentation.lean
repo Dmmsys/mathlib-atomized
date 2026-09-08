@@ -37,24 +37,20 @@ namespace CategoryTheory.Limits
 
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `ColimitPresentation` / `ColimitPresentation` 的定义
+/-- A colimit presentation of `X` over `J` is a diagram `{Dᵢ}` in `C` and natural maps
+`sᵢ : Dᵢ ⟶ X` making `X` into the colimit of the `Dᵢ`. -/
+/-
+**CategoryTheory.Limits.ColimitPresentation** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：{C : Type u} →   [CategoryTheory.Category.{v, u} C] →     (J : Type w) → [
+CategoryTheory.Category.{t, w} J] → C → Type (max (max (max t u) v) w)
+参数：J : Type w；max (max (max t u) v) w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ColimitPresentation
-  parameters: (J : Type w) [Category.{t} J] (X : C)
-  axioms and operations (3):
-    - diag : J ⥤ C
-    - ι : diag ⟶ (Functor.const J).obj X
-    - isColimit : IsColimit (Cocone.mk _ ι)
-
-中文:
-结构 余limitPresentation
-  参数: (J : 类型 w) [范畴.{t} J] (X : C)
-  公理与运算 (3 个):
-    - diag : J ⥤ C
-    - ι : diag ⟶ (函子.const J).obj X
-    - isColimit : 是余极限 (余锥.mk _ ι)
+--- 原说明 ---
+A colimit presentation of `X` over `J` is a diagram `{Dᵢ}` in `C` and natural ma
+ps
+`sᵢ : Dᵢ ⟶ X` making `X` into the colimit of the `Dᵢ`.
 -/
 structure ColimitPresentation (J : Type w) [Category.{t} J] (X : C) where
   /-- The diagram `{Dᵢ}`. -/
@@ -73,59 +69,53 @@ initialize_simps_projections ColimitPresentation (-isColimit)
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `w` / 引理 `w`
-
-English:
-lemma w
-  given: (pres : ColimitPresentation J X) {i j : J} (f : i ⟶ j)
-  proof: by
-  simp
-
-中文:
-引理 w
-  条件: (pres : 余limitPresentation J X) {i j : J} (f : i ⟶ j)
-  证明: by
-  simp
+/-
+**CategoryTheory.Limits.ColimitPresentation.w** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Limits.ColimitPresentation`。
+形式化陈述：w (pres : ColimitPresentation J X) {i j : J} (f : i ⟶ j) : pres.diag.map f
+ ≫ pres.ι.app j = pres.ι.app i
+参数：pres : ColimitPresentation J X；f : i ⟶ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma w (pres : ColimitPresentation J X) {i j : J} (f : i ⟶ j) :
     pres.diag.map f ≫ pres.ι.app j = pres.ι.app i := by
   simp
 
-/--
-Definition of `cocone` / `cocone` 的定义
+/-- The cocone associated to a colimit presentation. -/
+/-
+**CategoryTheory.Limits.ColimitPresentation.cocone** 是 Mathlib 中的一个缩写定义，位于命名空间 `
+CategoryTheory.Limits.ColimitPresentation`。
+形式化陈述：cocone (pres : ColimitPresentation J X) : Cocone pres.diag
+参数：pres : ColimitPresentation J X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation cocone
-  signature: (pres : ColimitPresentation J X)
-  body: Cocone.mk _ pres.ι
-
-中文:
-缩写 cocone
-  签名: (pres : 余limitPresentation J X)
-  定义体: Cocone.mk _ pres.ι
-
-Depends on / 依赖: Cocone, Cocone.mk
+--- 原说明 ---
+The cocone associated to a colimit presentation.
 -/
 abbrev cocone (pres : ColimitPresentation J X) : Cocone pres.diag :=
   Cocone.mk _ pres.ι
-
-/--
-lemma `hasColimit` / 引理 `hasColimit`
-
-English:
-lemma hasColimit
-  given: (pres : ColimitPresentation J X)
-  statement: HasColimit pres.diag
-  proof: ⟨_, pres.isColimit⟩
-
-中文:
-引理 hasColimit
-  条件: (pres : 余limitPresentation J X)
-  结论: 有余极限 pres.diag
-  证明: ⟨_, pres.isColimit⟩
-
-Depends on / 依赖: isColimit, pres.isColimit
+/-
+**CategoryTheory.Limits.ColimitPresentation.hasColimit** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Limits.ColimitPresentation`。
+形式化陈述：hasColimit (pres : ColimitPresentation J X) : HasColimit pres.diag
+参数：pres : ColimitPresentation J X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasColimit (pres : ColimitPresentation J X) : HasColimit pres.diag :=
   ⟨_, pres.isColimit⟩
@@ -133,46 +123,33 @@ lemma hasColimit (pres : ColimitPresentation J X) : HasColimit pres.diag :=
 /-- The canonical colimit presentation of any object over a point. -/
 @[simps]
 noncomputable
-/--
-Definition of `self` / `self` 的定义
-
-English:
-definition self
-  signature: (X : C)
-  body: (Functor.const _).obj X
-  ι := 𝟙 _
-  isColimit := isColimitConstCocone _ _
-
-中文:
-定义 self
-  签名: (X : C)
-  定义体: (Functor.const _).obj X
-  ι := 𝟙 _
-  isColimit := isColimitConstCocone _ _
-
-Depends on / 依赖: Functor, Functor.const
+/-
+**CategoryTheory.Limits.ColimitPresentation.self** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.ColimitPresentation`。
+形式化陈述：self (X : C) : ColimitPresentation PUnit.{s + 1} X where diag
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def self (X : C) : ColimitPresentation PUnit.{s + 1} X where
   diag := (Functor.const _).obj X
   ι := 𝟙 _
   isColimit := isColimitConstCocone _ _
 
-/--
-Definition of `colimit` / `colimit` 的定义
+/-- If `F : J ⥤ C` is a functor that has a colimit, then this is the obvious
+colimit presentation of `colimit F`. -/
+/-
+**CategoryTheory.Limits.ColimitPresentation.colimit** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.ColimitPresentation`。
+形式化陈述：colimit (F : J ⥤ C) [HasColimit F] : ColimitPresentation J (colimit F) whe
+re diag
+参数：F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit
-  signature: (F : J ⥤ C) [HasColimit F]
-  body: F
-  ι := _
-  isColimit := colimit.isColimit _
-
-中文:
-定义 colimit
-  签名: (F : J ⥤ C) [有余极限 F]
-  定义体: F
-  ι := _
-  isColimit := colimit.isColimit _
+--- 原说明 ---
+If `F : J ⥤ C` is a functor that has a colimit, then this is the obvious
+colimit presentation of `colimit F`.
 -/
 noncomputable def colimit (F : J ⥤ C) [HasColimit F] :
     ColimitPresentation J (colimit F) where
@@ -185,24 +162,14 @@ set_option backward.defeqAttrib.useBackward true in
 colimit presentations of `F(X)`. -/
 @[simps]
 noncomputable
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (P : ColimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D)
-  body: P.diag ⋙ F
-  ι := Functor.whiskerRight P.ι F ≫ (F.constComp _ _).hom
-  isColimit := (isColimitOfPreserves F P.isColimit).ofIsoColimit (Cocone.ext (.refl _) (by simp))
-
-中文:
-定义 map
-  签名: (P : 余limitPresentation J X) {D : 类型} [范畴* D] (F : C ⥤ D)
-  定义体: P.diag ⋙ F
-  ι := Functor.whiskerRight P.ι F ≫ (F.constComp _ _).hom
-  isColimit := (isColimitOfPreserves F P.isColimit).ofIsoColimit (Cocone.ext (.refl _) (by simp))
-
-Depends on / 依赖: P.diag
+/-
+**CategoryTheory.Limits.ColimitPresentation.map** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.ColimitPresentation`。
+形式化陈述：map (P : ColimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D) [P
+reservesColimitsOfShape J F] : ColimitPresentation J (F.obj X) where diag
+参数：P : ColimitPresentation J X；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def map (P : ColimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D)
     [PreservesColimitsOfShape J F] : ColimitPresentation J (F.obj X) where
@@ -213,22 +180,18 @@ def map (P : ColimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D)
 /-- If `P` is a colimit presentation of `X`, it is possible to define another
 colimit presentation of `X` where `P.diag` is replaced by an isomorphic functor. -/
 @[simps]
-/--
-Definition of `changeDiag` / `changeDiag` 的定义
+/-
+**CategoryTheory.Limits.ColimitPresentation.changeDiag** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.ColimitPresentation`。
+形式化陈述：changeDiag (P : ColimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag) : Co
+limitPresentation J X where diag
+参数：P : ColimitPresentation J X；e : F ≅ P.diag。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition changeDiag
-  signature: (P : ColimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag)
-  body: F
-  ι := e.hom ≫ P.ι
-  isColimit := (IsColimit.precomposeHomEquiv e _).2 P.isColimit
-
-中文:
-定义 changeDiag
-  签名: (P : 余limitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag)
-  定义体: F
-  ι := e.hom ≫ P.ι
-  isColimit := (IsColimit.precomposeHomEquiv e _).2 P.isColimit
+--- 原说明 ---
+If `P` is a colimit presentation of `X`, it is possible to define another
+colimit presentation of `X` where `P.diag` is replaced by an isomorphic functor.
 -/
 def changeDiag (P : ColimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag) :
     ColimitPresentation J X where
@@ -238,51 +201,35 @@ def changeDiag (P : ColimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag) :
 
 /-- Map a colimit presentation under an isomorphism. -/
 @[simps]
-/--
-Definition of `ofIso` / `ofIso` 的定义
+/-
+**CategoryTheory.Limits.ColimitPresentation.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.ColimitPresentation`。
+形式化陈述：ofIso (P : ColimitPresentation J X) {Y : C} (e : X ≅ Y) : ColimitPresentat
+ion J Y where diag
+参数：P : ColimitPresentation J X；e : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIso
-  signature: (P : ColimitPresentation J X) {Y : C} (e : X ≅ Y)
-  body: P.diag
-  ι := P.ι ≫ (Functor.const J).map e.hom
-  isColimit := P.isColimit.ofIsoColimit (Cocone.ext e fun _ => rfl)
-
-中文:
-定义 ofIso
-  签名: (P : 余limitPresentation J X) {Y : C} (e : X ≅ Y)
-  定义体: P.diag
-  ι := P.ι ≫ (Functor.const J).map e.hom
-  isColimit := P.isColimit.ofIsoColimit (Cocone.ext e fun _ => rfl)
-
-Depends on / 依赖: P.diag
+--- 原说明 ---
+Map a colimit presentation under an isomorphism.
 -/
 def ofIso (P : ColimitPresentation J X) {Y : C} (e : X ≅ Y) : ColimitPresentation J Y where
   diag := P.diag
   ι := P.ι ≫ (Functor.const J).map e.hom
-  isColimit := P.isColimit.ofIsoColimit (Cocone.ext e fun _ => rfl)
+  isColimit := P.isColimit.ofIsoColimit (Cocone.ext e fun _ ↦ rfl)
 
 /-- Change the index category of a colimit presentation. -/
 @[simps]
 noncomputable
-/--
-Definition of `reindex` / `reindex` 的定义
-
-English:
-definition reindex
-  signature: (P : ColimitPresentation J X) {J' : Type*} [Category* J'] (F : J' ⥤ J) [F.Final]
-  body: F ⋙ P.diag
-  ι := F.whiskerLeft P.ι
-  isColimit := (Functor.Final.isColimitWhiskerEquiv F _).symm P.isColimit
-
-中文:
-定义 reindex
-  签名: (P : 余limitPresentation J X) {J' : 类型} [范畴* J'] (F : J' ⥤ J) [F.终]
-  定义体: F ⋙ P.diag
-  ι := F.whiskerLeft P.ι
-  isColimit := (Functor.Final.isColimitWhiskerEquiv F _).symm P.isColimit
-
-Depends on / 依赖: P.diag
+/-
+**CategoryTheory.Limits.ColimitPresentation.reindex** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.ColimitPresentation`。
+形式化陈述：reindex (P : ColimitPresentation J X) {J' : Type*} [Category* J'] (F : J' 
+⥤ J) [F.Final] : ColimitPresentation J' X where diag
+参数：P : ColimitPresentation J X；F : J' ⥤ J。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def reindex (P : ColimitPresentation J X) {J' : Type*} [Category* J'] (F : J' ⥤ J) [F.Final] :
     ColimitPresentation J' X where
@@ -292,24 +239,19 @@ def reindex (P : ColimitPresentation J X) {J' : Type*} [Category* J'] (F : J' �
 
 end ColimitPresentation
 
-/--
-Definition of `LimitPresentation` / `LimitPresentation` 的定义
+/-- A limit presentation of `X` over `J` is a diagram `{Dᵢ}` in `C` and natural maps
+`sᵢ : X ⟶ Dᵢ` making `X` into the limit of the `Dᵢ`. -/
+/-
+**CategoryTheory.Limits.LimitPresentation** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：{C : Type u} →   [CategoryTheory.Category.{v, u} C] →     (J : Type w) → [
+CategoryTheory.Category.{t, w} J] → C → Type (max (max (max t u) v) w)
+参数：J : Type w；max (max (max t u) v) w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LimitPresentation
-  parameters: (J : Type w) [Category.{t} J] (X : C)
-  axioms and operations (3):
-    - diag : J ⥤ C
-    - π : (Functor.const J).obj X ⟶ diag
-    - isLimit : IsLimit (Cone.mk _ π)
-
-中文:
-结构 LimitPresentation
-  参数: (J : 类型 w) [范畴.{t} J] (X : C)
-  公理与运算 (3 个):
-    - diag : J ⥤ C
-    - π : (函子.const J).obj X ⟶ diag
-    - isLimit : 是极限 (锥.mk _ π)
+--- 原说明 ---
+A limit presentation of `X` over `J` is a diagram `{Dᵢ}` in `C` and natural maps
+`sᵢ : X ⟶ Dᵢ` making `X` into the limit of the `Dᵢ`.
 -/
 structure LimitPresentation (J : Type w) [Category.{t} J] (X : C) where
   /-- The diagram `{Dᵢ}`. -/
@@ -327,61 +269,49 @@ initialize_simps_projections LimitPresentation (-isLimit)
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `w` / 引理 `w`
-
-English:
-lemma w
-  given: (pres : LimitPresentation J X) {i j : J} (f : i ⟶ j)
-  proof: by
-  simpa using (pres.π.naturality f).symm
-
-中文:
-引理 w
-  条件: (pres : LimitPresentation J X) {i j : J} (f : i ⟶ j)
-  证明: by
-  simpa using (pres.π.naturality f).symm
-
-Depends on / 依赖: naturality
+/-
+**CategoryTheory.Limits.LimitPresentation.w** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Limits.LimitPresentation`。
+形式化陈述：w (pres : LimitPresentation J X) {i j : J} (f : i ⟶ j) : pres.π.app i ≫ pr
+es.diag.map f = pres.π.app j
+参数：pres : LimitPresentation J X；f : i ⟶ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 lemma w (pres : LimitPresentation J X) {i j : J} (f : i ⟶ j) :
     pres.π.app i ≫ pres.diag.map f = pres.π.app j := by
   simpa using (pres.π.naturality f).symm
 
-/--
-Definition of `cone` / `cone` 的定义
+/-- The cone associated to a limit presentation. -/
+/-
+**CategoryTheory.Limits.LimitPresentation.cone** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.Limits.LimitPresentation`。
+形式化陈述：cone (pres : LimitPresentation J X) : Cone pres.diag
+参数：pres : LimitPresentation J X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation cone
-  signature: (pres : LimitPresentation J X)
-  body: Cone.mk _ pres.π
-
-中文:
-缩写 cone
-  签名: (pres : LimitPresentation J X)
-  定义体: Cone.mk _ pres.π
-
-Depends on / 依赖: Cone.mk
+--- 原说明 ---
+The cone associated to a limit presentation.
 -/
 abbrev cone (pres : LimitPresentation J X) : Cone pres.diag :=
   Cone.mk _ pres.π
-
-/--
-lemma `hasLimit` / 引理 `hasLimit`
-
-English:
-lemma hasLimit
-  given: (pres : LimitPresentation J X)
-  statement: HasLimit pres.diag
-  proof: ⟨_, pres.isLimit⟩
-
-中文:
-引理 hasLimit
-  条件: (pres : LimitPresentation J X)
-  结论: 有极限 pres.diag
-  证明: ⟨_, pres.isLimit⟩
-
-Depends on / 依赖: isLimit, pres.isLimit
+/-
+**CategoryTheory.Limits.LimitPresentation.hasLimit** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Limits.LimitPresentation`。
+形式化陈述：hasLimit (pres : LimitPresentation J X) : HasLimit pres.diag
+参数：pres : LimitPresentation J X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasLimit (pres : LimitPresentation J X) : HasLimit pres.diag :=
   ⟨_, pres.isLimit⟩
@@ -389,46 +319,32 @@ lemma hasLimit (pres : LimitPresentation J X) : HasLimit pres.diag :=
 /-- The canonical limit presentation of any object over a point. -/
 @[simps]
 noncomputable
-/--
-Definition of `self` / `self` 的定义
-
-English:
-definition self
-  signature: (X : C)
-  body: (Functor.const _).obj X
-  π := 𝟙 _
-  isLimit := isLimitConstCone _ _
-
-中文:
-定义 self
-  签名: (X : C)
-  定义体: (Functor.const _).obj X
-  π := 𝟙 _
-  isLimit := isLimitConstCone _ _
-
-Depends on / 依赖: Functor, Functor.const
+/-
+**CategoryTheory.Limits.LimitPresentation.self** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.LimitPresentation`。
+形式化陈述：self (X : C) : LimitPresentation PUnit.{s + 1} X where diag
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def self (X : C) : LimitPresentation PUnit.{s + 1} X where
   diag := (Functor.const _).obj X
   π := 𝟙 _
   isLimit := isLimitConstCone _ _
 
-/--
-Definition of `limit` / `limit` 的定义
+/-- If `F : J ⥤ C` is a functor that has a limit, then this is the obvious
+limit presentation of `limit F`. -/
+/-
+**CategoryTheory.Limits.LimitPresentation.limit** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.LimitPresentation`。
+形式化陈述：limit (F : J ⥤ C) [HasLimit F] : LimitPresentation J (limit F) where diag
+参数：F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit
-  signature: (F : J ⥤ C) [HasLimit F]
-  body: F
-  π := _
-  isLimit := limit.isLimit _
-
-中文:
-定义 limit
-  签名: (F : J ⥤ C) [有极限 F]
-  定义体: F
-  π := _
-  isLimit := limit.isLimit _
+--- 原说明 ---
+If `F : J ⥤ C` is a functor that has a limit, then this is the obvious
+limit presentation of `limit F`.
 -/
 noncomputable def limit (F : J ⥤ C) [HasLimit F] :
     LimitPresentation J (limit F) where
@@ -441,24 +357,14 @@ set_option backward.defeqAttrib.useBackward true in
 limit presentations of `F(X)`. -/
 @[simps]
 noncomputable
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (P : LimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D)
-  body: P.diag ⋙ F
-  π := (F.constComp _ _).inv ≫ Functor.whiskerRight P.π F
-  isLimit := (isLimitOfPreserves F P.isLimit).ofIsoLimit (Cone.ext (.refl _) (by simp))
-
-中文:
-定义 map
-  签名: (P : LimitPresentation J X) {D : 类型} [范畴* D] (F : C ⥤ D)
-  定义体: P.diag ⋙ F
-  π := (F.constComp _ _).inv ≫ Functor.whiskerRight P.π F
-  isLimit := (isLimitOfPreserves F P.isLimit).ofIsoLimit (Cone.ext (.refl _) (by simp))
-
-Depends on / 依赖: P.diag
+/-
+**CategoryTheory.Limits.LimitPresentation.map** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.LimitPresentation`。
+形式化陈述：map (P : LimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D) [Pre
+servesLimitsOfShape J F] : LimitPresentation J (F.obj X) where diag
+参数：P : LimitPresentation J X；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def map (P : LimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D)
     [PreservesLimitsOfShape J F] : LimitPresentation J (F.obj X) where
@@ -469,22 +375,18 @@ def map (P : LimitPresentation J X) {D : Type*} [Category* D] (F : C ⥤ D)
 /-- If `P` is a limit presentation of `X`, it is possible to define another
 limit presentation of `X` where `P.diag` is replaced by an isomorphic functor. -/
 @[simps]
-/--
-Definition of `changeDiag` / `changeDiag` 的定义
+/-
+**CategoryTheory.Limits.LimitPresentation.changeDiag** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.LimitPresentation`。
+形式化陈述：changeDiag (P : LimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag) : Limi
+tPresentation J X where diag
+参数：P : LimitPresentation J X；e : F ≅ P.diag。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition changeDiag
-  signature: (P : LimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag)
-  body: F
-  π := P.π ≫ e.inv
-  isLimit := (IsLimit.postcomposeHomEquiv e.symm _).2 P.isLimit
-
-中文:
-定义 changeDiag
-  签名: (P : LimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag)
-  定义体: F
-  π := P.π ≫ e.inv
-  isLimit := (IsLimit.postcomposeHomEquiv e.symm _).2 P.isLimit
+--- 原说明 ---
+If `P` is a limit presentation of `X`, it is possible to define another
+limit presentation of `X` where `P.diag` is replaced by an isomorphic functor.
 -/
 def changeDiag (P : LimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag) :
     LimitPresentation J X where
@@ -495,24 +397,17 @@ def changeDiag (P : LimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag) :
 set_option backward.defeqAttrib.useBackward true in
 /-- Map a limit presentation under an isomorphism. -/
 @[simps]
-/--
-Definition of `ofIso` / `ofIso` 的定义
+/-
+**CategoryTheory.Limits.LimitPresentation.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.LimitPresentation`。
+形式化陈述：ofIso (P : LimitPresentation J X) {Y : C} (e : X ≅ Y) : LimitPresentation 
+J Y where diag
+参数：P : LimitPresentation J X；e : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIso
-  signature: (P : LimitPresentation J X) {Y : C} (e : X ≅ Y)
-  body: P.diag
-  π := (Functor.const J).map e.inv ≫ P.π
-  isLimit := P.isLimit.ofIsoLimit (Cone.ext e)
-
-中文:
-定义 ofIso
-  签名: (P : LimitPresentation J X) {Y : C} (e : X ≅ Y)
-  定义体: P.diag
-  π := (Functor.const J).map e.inv ≫ P.π
-  isLimit := P.isLimit.ofIsoLimit (Cone.ext e)
-
-Depends on / 依赖: P.diag
+--- 原说明 ---
+Map a limit presentation under an isomorphism.
 -/
 def ofIso (P : LimitPresentation J X) {Y : C} (e : X ≅ Y) : LimitPresentation J Y where
   diag := P.diag
@@ -522,24 +417,15 @@ def ofIso (P : LimitPresentation J X) {Y : C} (e : X ≅ Y) : LimitPresentation 
 /-- Change the index category of a limit presentation. -/
 @[simps]
 noncomputable
-/--
-Definition of `reindex` / `reindex` 的定义
-
-English:
-definition reindex
-  signature: (P : LimitPresentation J X) {J' : Type*} [Category* J'] (F : J' ⥤ J) [F.Initial]
-  body: F ⋙ P.diag
-  π := F.whiskerLeft P.π
-  isLimit := (Functor.Initial.isLimitWhiskerEquiv F _).symm P.isLimit
-
-中文:
-定义 reindex
-  签名: (P : LimitPresentation J X) {J' : 类型} [范畴* J'] (F : J' ⥤ J) [F.初始]
-  定义体: F ⋙ P.diag
-  π := F.whiskerLeft P.π
-  isLimit := (Functor.Initial.isLimitWhiskerEquiv F _).symm P.isLimit
-
-Depends on / 依赖: P.diag
+/-
+**CategoryTheory.Limits.LimitPresentation.reindex** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.LimitPresentation`。
+形式化陈述：reindex (P : LimitPresentation J X) {J' : Type*} [Category* J'] (F : J' ⥤ 
+J) [F.Initial] : LimitPresentation J' X where diag
+参数：P : LimitPresentation J X；F : J' ⥤ J。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def reindex (P : LimitPresentation J X) {J' : Type*} [Category* J'] (F : J' ⥤ J) [F.Initial] :
     LimitPresentation J' X where
@@ -550,3 +436,4 @@ def reindex (P : LimitPresentation J X) {J' : Type*} [Category* J'] (F : J' ⥤ 
 end LimitPresentation
 
 end CategoryTheory.Limits
+

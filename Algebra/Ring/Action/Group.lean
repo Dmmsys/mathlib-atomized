@@ -26,38 +26,17 @@ variable (R : Type*) [Semiring R]
 
 /-- Each element of the group defines a semiring isomorphism. -/
 @[simps!]
-/--
-Definition of `MulSemiringAction.toRingEquiv` / `MulSemiringAction.toRingEquiv` 的定义
+/-
+**MulSemiringAction.toRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulSemiringAction.toRingEquiv [MulSemiringAction G R] : G ->* (R ≃+* R) wh
+ere toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulSemiringAction.toRingEquiv
-  signature: [MulSemiringAction G R]
-  body: { DistribMulAction.toAddEquiv R x, MulSemiringAction.toRingHom G R x with }
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp [mul_smul]
-
-@[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_apply :=
-MulSemiringAction.toRingEquiv_apply_apply
-
-@[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_symm_apply :=
-MulSemiringAction.toRingEquiv_apply_symm_apply
-
-中文:
-定义 MulSemiring作用.toRingEquiv
-  签名: [MulSemiring作用 G R]
-  定义体: { DistribMulAction.toAddEquiv R x, MulSemiringAction.toRingHom G R x with }
-  map_one' := by ext; simp
-  map_mul' x y := by ext; simp [mul_smul]
-
-@[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_apply :=
-MulSemiringAction.toRingEquiv_apply_apply
-
-@[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_symm_apply :=
-MulSemiringAction.toRingEquiv_apply_symm_apply
-
-Depends on / 依赖: DistribMulAction, DistribMulAction.toAddEquiv, MulSemiringAction, MulSemiringAction.toRingHom, toAddEquiv, toRingHom
+--- 原说明 ---
+Each element of the group defines a semiring isomorphism.
 -/
-def MulSemiringAction.toRingEquiv [MulSemiringAction G R] : G ->* (R ≃+* R) where
+def MulSemiringAction.toRingEquiv [MulSemiringAction G R] : G →* (R ≃+* R) where
   toFun x := { DistribMulAction.toAddEquiv R x, MulSemiringAction.toRingHom G R x with }
   map_one' := by ext; simp
   map_mul' x y := by ext; simp [mul_smul]
@@ -67,31 +46,9 @@ MulSemiringAction.toRingEquiv_apply_apply
 
 @[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_symm_apply :=
 MulSemiringAction.toRingEquiv_apply_symm_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulSemiringAction (R ≃+* R) R
-  body: (· ·)
-  mul_smul _ _ _ := rfl
-  one_smul _ := rfl
-  smul_zero := map_zero
-  smul_one := map_one
-  smul_add := map_add
-  smul_mul := map_mul
-
-中文:
-实例 :
-  签名: MulSemiring作用 (R ≃+* R) R
-  定义体: (· ·)
-  mul_smul _ _ _ := rfl
-  one_smul _ := rfl
-  smul_zero := map_zero
-  smul_one := map_one
-  smul_add := map_add
-  smul_mul := map_mul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulSemiringAction (R ≃+* R) R where
   smul := (· ·)
@@ -103,3 +60,4 @@ instance : MulSemiringAction (R ≃+* R) R where
   smul_mul := map_mul
 
 end Semiring
+

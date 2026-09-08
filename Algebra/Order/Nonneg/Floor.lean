@@ -29,33 +29,19 @@ namespace Nonneg
 
 variable {α : Type*}
 
-/--
-Instance `floorSemiring` / 实例 `floorSemiring`
-
-English:
-instance floorSemiring
-  signature: [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
-  body: ⌊(a : α)⌋₊
-  ceil a := ⌈(a : α)⌉₊
-  floor_of_neg ha := FloorSemiring.floor_of_neg ha
-  gc_floor ha := FloorSemiring.gc_floor (Subtype.coe_le_coe.2 ha)
-  gc_ceil a n := FloorSemiring.gc_ceil (a : α) n
-
-@[norm_cast]
-
-中文:
-实例 floorSemiring
-  签名: [半环 α] [偏序 α] [是Ordered环 α] [FloorSemiring α]
-  定义体: ⌊(a : α)⌋₊
-  ceil a := ⌈(a : α)⌉₊
-  floor_of_neg ha := FloorSemiring.floor_of_neg ha
-  gc_floor ha := FloorSemiring.gc_floor (Subtype.coe_le_coe.2 ha)
-  gc_ceil a n := FloorSemiring.gc_ceil (a : α) n
-
-@[norm_cast]
+/-
+**Nonneg.floorSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Nonneg`。
+形式化陈述：floorSemiring [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiri
+ng α] : FloorSemiring { r : α // 0 <= r } where floor a
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
 -/
 instance floorSemiring [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α] :
-    FloorSemiring { r : α // 0 <= r } where
+    FloorSemiring { r : α // 0 ≤ r } where
   floor a := ⌊(a : α)⌋₊
   ceil a := ⌈(a : α)⌉₊
   floor_of_neg ha := FloorSemiring.floor_of_neg ha
@@ -63,45 +49,32 @@ instance floorSemiring [Semiring α] [PartialOrder α] [IsOrderedRing α] [Floor
   gc_ceil a n := FloorSemiring.gc_ceil (a : α) n
 
 @[norm_cast]
-/--
-theorem `nat_floor_coe` / 定理 `nat_floor_coe`
-
-English:
-theorem nat_floor_coe
-  statement: [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 nat_floor_coe
-  结论: [半环 α] [偏序 α] [是Ordered环 α] [FloorSemiring α]
-  证明: rfl
-
-@[norm_cast]
+/-
+**Nonneg.nat_floor_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：nat_floor_coe [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiri
+ng α] (a : { r : α // 0 <= r }) : ⌊(a : α)⌋₊ = ⌊a⌋₊
+参数：a : { r : α // 0 <= r }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nat_floor_coe [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
-    (a : { r : α // 0 <= r }) :
+    (a : { r : α // 0 ≤ r }) :
     ⌊(a : α)⌋₊ = ⌊a⌋₊ :=
   rfl
 
 @[norm_cast]
-/--
-theorem `nat_ceil_coe` / 定理 `nat_ceil_coe`
-
-English:
-theorem nat_ceil_coe
-  statement: [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
-  proof: rfl
-
-中文:
-定理 nat_ceil_coe
-  结论: [半环 α] [偏序 α] [是Ordered环 α] [FloorSemiring α]
-  证明: rfl
+/-
+**Nonneg.nat_ceil_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nonneg`。
+形式化陈述：nat_ceil_coe [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemirin
+g α] (a : { r : α // 0 <= r }) : ⌈(a : α)⌉₊ = ⌈a⌉₊
+参数：a : { r : α // 0 <= r }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nat_ceil_coe [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
-    (a : { r : α // 0 <= r }) :
+    (a : { r : α // 0 ≤ r }) :
     ⌈(a : α)⌉₊ = ⌈a⌉₊ :=
   rfl
 
 end Nonneg
+

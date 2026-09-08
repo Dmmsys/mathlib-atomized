@@ -28,79 +28,72 @@ suppress_compilation
 
 section Group
 
-variable (k G H : Type u) [Group G] [Monoid H] [MulAction G H] [CommRing k] (n : Nat)
+variable (k G H : Type u) [Group G] [Monoid H] [MulAction G H] [CommRing k] (n : ℕ)
 
 open MonoidalCategory Finsupp Representation.IntertwiningMap
 
-/--
-Definition of `diagonalSuccIsoTensorTrivial` / `diagonalSuccIsoTensorTrivial` 的定义
+/-- An isomorphism of `k`-linear representations of `G` from `k[Gⁿ⁺¹]` to `k[G] ⊗ₖ k[Gⁿ]` (on
+which `G` acts by `ρ(g₁)(g₂ ⊗ x) = (g₁ * g₂) ⊗ x`) sending `(g₀, ..., gₙ)` to
+`g₀ ⊗ (g₀⁻¹g₁, g₁⁻¹g₂, ..., gₙ₋₁⁻¹gₙ)`. The inverse sends `g₀ ⊗ (g₁, ..., gₙ)` to
+`(g₀, g₀g₁, ..., g₀g₁...gₙ)`. -/
+/-
+**Rep.diagonalSuccIsoTensorTrivial** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep`。
+形式化陈述：diagonalSuccIsoTensorTrivial : diagonal k G (n + 1) ≅ leftRegular k G otim
+es trivial k G k[Fin n -> G]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation diagonalSuccIsoTensorTrivial
-  signature: :
-  body: linearizationOfMulActionIso k G (Fin (n + 1) -> G) ≪≫ (linearization k G).mapIso
-    (Action.diagonalSuccIsoTensorTrivial G n) ≪≫
-    (Functor.Monoidal.μIso (linearization k G) _ _).symm ≪≫
-    tensorIso (linearizationOfMulActionIso k G G) (linearizationTrivialIso k G (Fin n -> G))
-
-中文:
-缩写 diagonalSuccIsoTensorTrivial
-  签名: :
-  定义体: linearizationOfMulActionIso k G (Fin (n + 1) -> G) ≪≫ (linearization k G).mapIso
-    (Action.diagonalSuccIsoTensorTrivial G n) ≪≫
-    (Functor.Monoidal.μIso (linearization k G) _ _).symm ≪≫
-    tensorIso (linearizationOfMulActionIso k G G) (linearizationTrivialIso k G (Fin n -> G))
-
-Depends on / 依赖: Action, Action.diagonalSuccIsoTensorTrivial, Functor, Functor.Monoidal, Monoidal, diagonalSuccIsoTensorTrivial, linearization, linearizationOfMulActionIso, linearizationTrivialIso, mapIso, tensorIso
+--- 原说明 ---
+An isomorphism of `k`-linear representations of `G` from `k[Gⁿ⁺¹]` to `k[G] ⊗ₖ k
+[Gⁿ]` (on
+which `G` acts by `ρ(g₁)(g₂ ⊗ x) = (g₁ * g₂) ⊗ x`) sending `(g₀, ..., gₙ)` to
+`g₀ ⊗ (g₀⁻¹g₁, g₁⁻¹g₂, ..., gₙ₋₁⁻¹gₙ)`. The inverse sends `g₀ ⊗ (g₁, ..., gₙ)` t
+o
+`(g₀, g₀g₁, ..., g₀g₁...gₙ)`.
 -/
 abbrev diagonalSuccIsoTensorTrivial :
-    diagonal k G (n + 1) ≅ leftRegular k G otimes trivial k G k[Fin n -> G] :=
-  linearizationOfMulActionIso k G (Fin (n + 1) -> G) ≪≫ (linearization k G).mapIso
+    diagonal k G (n + 1) ≅ leftRegular k G ⊗ trivial k G k[Fin n → G] :=
+  linearizationOfMulActionIso k G (Fin (n + 1) → G) ≪≫ (linearization k G).mapIso
     (Action.diagonalSuccIsoTensorTrivial G n) ≪≫
     (Functor.Monoidal.μIso (linearization k G) _ _).symm ≪≫
-    tensorIso (linearizationOfMulActionIso k G G) (linearizationTrivialIso k G (Fin n -> G))
+    tensorIso (linearizationOfMulActionIso k G G) (linearizationTrivialIso k G (Fin n → G))
 
-/--
-Definition of `diagonalSuccIsoFree` / `diagonalSuccIsoFree` 的定义
+/-- Representation isomorphism `k[Gⁿ⁺¹] ≅ (Gⁿ →₀ k[G])`, where the right-hand representation is
+defined pointwise by the left regular representation on `k[G]`. The map sends
+`single (g₀, ..., gₙ) a ↦ single (g₀⁻¹g₁, ..., gₙ₋₁⁻¹gₙ) (single g₀ a)`. -/
+/-
+**Rep.diagonalSuccIsoFree** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep`。
+形式化陈述：diagonalSuccIsoFree : diagonal k G (n + 1) ≅ free k G (Fin n -> G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation diagonalSuccIsoFree
-  signature: : diagonal k G (n + 1) ≅ free k G (Fin n -> G)
-  body: diagonalSuccIsoTensorTrivial k G n ≪≫ leftRegularTensorTrivialIsoFree k G (Fin n -> G)
-
-中文:
-缩写 diagonalSuccIsoFree
-  签名: : diagonal k G (n + 1) ≅ free k G (有限集 n -> G)
-  定义体: diagonalSuccIsoTensorTrivial k G n ≪≫ leftRegularTensorTrivialIsoFree k G (Fin n -> G)
-
-Depends on / 依赖: diagonalSuccIsoTensorTrivial, leftRegularTensorTrivialIsoFree
+--- 原说明 ---
+Representation isomorphism `k[Gⁿ⁺¹] ≅ (Gⁿ →₀ k[G])`, where the right-hand repres
+entation is
+defined pointwise by the left regular representation on `k[G]`. The map sends
+`single (g₀, ..., gₙ) a ↦ single (g₀⁻¹g₁, ..., gₙ₋₁⁻¹gₙ) (single g₀ a)`.
 -/
-abbrev diagonalSuccIsoFree : diagonal k G (n + 1) ≅ free k G (Fin n -> G) :=
-  diagonalSuccIsoTensorTrivial k G n ≪≫ leftRegularTensorTrivialIsoFree k G (Fin n -> G)
+abbrev diagonalSuccIsoFree : diagonal k G (n + 1) ≅ free k G (Fin n → G) :=
+  diagonalSuccIsoTensorTrivial k G n ≪≫ leftRegularTensorTrivialIsoFree k G (Fin n → G)
 
 variable (A : Rep k G)
 
-/--
-Definition of `diagonalHomEquiv` / `diagonalHomEquiv` 的定义
+/-- Given a `k`-linear `G`-representation `A`, the set of representation morphisms
+`Hom(k[Gⁿ⁺¹], A)` is `k`-linearly isomorphic to the set of functions `Gⁿ → A`. -/
+/-
+**Rep.diagonalHomEquiv** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep`。
+形式化陈述：diagonalHomEquiv : (Rep.diagonal k G (n + 1) ⟶ A) ≃ₗ[k] (Fin n -> G) -> A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation diagonalHomEquiv
-  signature: :
-  body: Linear.homCongr k (diagonalSuccIsoFree k G n) (Iso.refl _) ≪≫ₗ
-    freeLiftLEquiv k G (Fin n -> G) A
-
-中文:
-缩写 diagonalHomEquiv
-  签名: :
-  定义体: Linear.homCongr k (diagonalSuccIsoFree k G n) (Iso.refl _) ≪≫ₗ
-    freeLiftLEquiv k G (Fin n -> G) A
-
-Depends on / 依赖: Iso.refl, Linear, Linear.homCongr, diagonalSuccIsoFree, freeLiftLEquiv, homCongr
+--- 原说明 ---
+Given a `k`-linear `G`-representation `A`, the set of representation morphisms
+`Hom(k[Gⁿ⁺¹], A)` is `k`-linearly isomorphic to the set of functions `Gⁿ → A`.
 -/
 abbrev diagonalHomEquiv :
-    (Rep.diagonal k G (n + 1) ⟶ A) ≃ₗ[k] (Fin n -> G) -> A :=
+    (Rep.diagonal k G (n + 1) ⟶ A) ≃ₗ[k] (Fin n → G) → A :=
   Linear.homCongr k (diagonalSuccIsoFree k G n) (Iso.refl _) ≪≫ₗ
-    freeLiftLEquiv k G (Fin n -> G) A
+    freeLiftLEquiv k G (Fin n → G) A
 
 end Group
 
@@ -113,41 +106,65 @@ variable {k : Type u} {G : Type v} [CommRing k] [Monoid G]
 
 open MonoidAlgebra
 
-/--
-theorem `to_Module_monoidAlgebra_map_aux` / 定理 `to_Module_monoidAlgebra_map_aux`
+/-- Auxiliary lemma for `toModuleMonoidAlgebra`. -/
+/-
+**Rep.to_Module_monoidAlgebra_map_aux** 是 Mathlib 中的一个定理，位于命名空间 `Rep`。
+形式化陈述：to_Module_monoidAlgebra_map_aux {k G : Type*} [CommRing k] [Monoid G] (V W
+ : Type*) [AddCommGroup V] [AddCommGroup W] [Module k V] [Module k W] (ρ : G ->*
+ V ->ₗ[k] V) (σ : G ->* W ->ₗ[k] W) (f : V ->ₗ[k] W) (w : forall g : G, f.comp (
+ρ g) = (σ g).comp f) (r : k[G]) (x : V) : f (MonoidAlgebra.lift k (V ->ₗ[k] V) G
+ ρ r x) = MonoidAlgebra.lift k (W ->ₗ[k] W) G σ r (f x)
+参数：V W : Type*；ρ : G ->* V ->ₗ[k] V；σ : G ->* W ->ₗ[k] W；f : V ->ₗ[k] W；w : fora
+ll g : G, f.comp (ρ g) = (σ g).comp f；r : k[G]；x : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.induction_on`：induction_on {motive : R[M] -> Prop} (x : R[
+M]) (of : forall m, motive (.of R M m)) (add : forall x y : R[M], motive x -> mo
+tive y -> motive…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidAlgebra.of_apply`：∀ (R : Type u_8) (M : Type u_9) [inst : Semiring
+ R] [inst_1 : MulOneClass M] (a : M),   (MonoidAlgebra.of R M) a = MonoidAlgebra
+.single a 1
+· 使用定理 `MonoidAlgebra.lift_single`：lift_single (F : M ->* A) (a b) : lift R A M 
+F (single a b) = b • F a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
 
-English:
-theorem to_Module_monoidAlgebra_map_aux
-  statement: {k G : Type*} [CommRing k] [Monoid G] (V W : Type*)
-  proof: by
-  apply MonoidAlgebra.induction_on r
-  · intro g
-    simp only [one_smul, MonoidAlgebra.lift_single, MonoidAlgebra.of_apply]
-    exact LinearMap.congr_fun (w g) x
-  · intro g h gw hw; simp only [map_add, LinearMap.add_apply, hw, gw]
-  · intro r g w
-    simp only [map_smul, w, LinearMap.smul_apply]
-
-中文:
-定理 to_Module_monoidAlgebra_map_aux
-  结论: {k G : 类型} [交换环 k] [幺半群 G] (V W : 类型)
-  证明: by
-  apply MonoidAlgebra.induction_on r
-  · intro g
-    simp only [one_smul, MonoidAlgebra.lift_single, MonoidAlgebra.of_apply]
-    exact LinearMap.congr_fun (w g) x
-  · intro g h gw hw; simp only [map_add, LinearMap.add_apply, hw, gw]
-  · intro r g w
-    simp only [map_smul, w, LinearMap.smul_apply]
-
-Depends on / 依赖: LinearMap, LinearMap.add_apply, LinearMap.congr_fun, LinearMap.smul_apply, MonoidAlgebra, MonoidAlgebra.induction_on, MonoidAlgebra.lift_single, MonoidAlgebra.of_apply, add_apply, congr_fun, induction_on, lift_single, map_add, map_smul, of_apply, one_smul, smul_apply
+--- 原说明 ---
+Auxiliary lemma for `toModuleMonoidAlgebra`.
 -/
 theorem to_Module_monoidAlgebra_map_aux {k G : Type*} [CommRing k] [Monoid G] (V W : Type*)
-    [AddCommGroup V] [AddCommGroup W] [Module k V] [Module k W] (ρ : G ->* V ->ₗ[k] V)
-    (σ : G ->* W ->ₗ[k] W) (f : V ->ₗ[k] W) (w : forall g : G, f.comp (ρ g) = (σ g).comp f)
+    [AddCommGroup V] [AddCommGroup W] [Module k V] [Module k W] (ρ : G →* V →ₗ[k] V)
+    (σ : G →* W →ₗ[k] W) (f : V →ₗ[k] W) (w : ∀ g : G, f.comp (ρ g) = (σ g).comp f)
     (r : k[G]) (x : V) :
-    f (MonoidAlgebra.lift k (V ->ₗ[k] V) G ρ r x) =
-      MonoidAlgebra.lift k (W ->ₗ[k] W) G σ r (f x) := by
+    f (MonoidAlgebra.lift k (V →ₗ[k] V) G ρ r x) =
+      MonoidAlgebra.lift k (W →ₗ[k] W) G σ r (f x) := by
   apply MonoidAlgebra.induction_on r
   · intro g
     simp only [one_smul, MonoidAlgebra.lift_single, MonoidAlgebra.of_apply]
@@ -156,26 +173,17 @@ theorem to_Module_monoidAlgebra_map_aux {k G : Type*} [CommRing k] [Monoid G] (V
   · intro r g w
     simp only [map_smul, w, LinearMap.smul_apply]
 
-/--
-Definition of `toModuleMonoidAlgebraMap` / `toModuleMonoidAlgebraMap` 的定义
+/-- Auxiliary definition for `toModuleMonoidAlgebra`. -/
+/-
+**Rep.toModuleMonoidAlgebraMap** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：toModuleMonoidAlgebraMap {V W : Rep.{w} k G} (f : V ⟶ W) : ModuleCat.of k[
+G] V.ρ.asModule ⟶ ModuleCat.of k[G] W.ρ.asModule
+参数：f : V ⟶ W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toModuleMonoidAlgebraMap
-  signature: {V W : Rep.{w} k G} (f : V ⟶ W)
-  body: ModuleCat.ofHom
-    { f.hom.toLinearMap with
-      map_smul' := fun r x => to_Module_monoidAlgebra_map_aux V.V W.V V.ρ W.ρ
-        f.hom.toLinearMap f.hom.2 r x }
-
-中文:
-定义 toModuleMonoidAlgebraMap
-  签名: {V W : Rep.{w} k G} (f : V ⟶ W)
-  定义体: ModuleCat.ofHom
-    { f.hom.toLinearMap with
-      map_smul' := fun r x => to_Module_monoidAlgebra_map_aux V.V W.V V.ρ W.ρ
-        f.hom.toLinearMap f.hom.2 r x }
-
-Depends on / 依赖: ModuleCat, ModuleCat.ofHom, f.hom, f.hom.toLinearMap, map_smul, toLinearMap, to_Module_monoidAlgebra_map_aux
+--- 原说明 ---
+Auxiliary definition for `toModuleMonoidAlgebra`.
 -/
 def toModuleMonoidAlgebraMap {V W : Rep.{w} k G} (f : V ⟶ W) :
     ModuleCat.of k[G] V.ρ.asModule ⟶ ModuleCat.of k[G] W.ρ.asModule :=
@@ -184,52 +192,30 @@ def toModuleMonoidAlgebraMap {V W : Rep.{w} k G} (f : V ⟶ W) :
       map_smul' := fun r x => to_Module_monoidAlgebra_map_aux V.V W.V V.ρ W.ρ
         f.hom.toLinearMap f.hom.2 r x }
 
-/--
-Definition of `toModuleMonoidAlgebra` / `toModuleMonoidAlgebra` 的定义
+/-- Functorially convert a representation of `G` into a module over `k[G]`. -/
+/-
+**Rep.toModuleMonoidAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：toModuleMonoidAlgebra : Rep.{w} k G ⥤ ModuleCat k[G] where obj V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toModuleMonoidAlgebra
-  signature: : Rep.{w} k G ⥤ ModuleCat k[G] where
-  body: ModuleCat.of _ V.ρ.asModule
-  map f := toModuleMonoidAlgebraMap f
-
-中文:
-定义 toModuleMonoidAlgebra
-  签名: : Rep.{w} k G ⥤ 模范畴 k[G] where
-  定义体: ModuleCat.of _ V.ρ.asModule
-  map f := toModuleMonoidAlgebraMap f
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, asModule
+--- 原说明 ---
+Functorially convert a representation of `G` into a module over `k[G]`.
 -/
 def toModuleMonoidAlgebra : Rep.{w} k G ⥤ ModuleCat k[G] where
   obj V := ModuleCat.of _ V.ρ.asModule
   map f := toModuleMonoidAlgebraMap f
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `ofModuleMonoidAlgebra` / `ofModuleMonoidAlgebra` 的定义
+/-- Functorially convert a module over `k[G]` into a representation of `G`. -/
+/-
+**Rep.ofModuleMonoidAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：ofModuleMonoidAlgebra : ModuleCat k[G] ⥤ Rep.{w} k G where obj M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofModuleMonoidAlgebra
-  signature: : ModuleCat k[G] ⥤ Rep.{w} k G where
-  body: Rep.of (Representation.ofModule M)
-  map f := ofHom {
-    __ := f.hom
-    map_smul' r x := f.hom.map_smul (algebraMap k _ r) x
-    isIntertwining' g := by ext; apply f.hom.map_smul
-  }
-
-中文:
-定义 ofModuleMonoidAlgebra
-  签名: : 模范畴 k[G] ⥤ Rep.{w} k G where
-  定义体: Rep.of (Representation.ofModule M)
-  map f := ofHom {
-    __ := f.hom
-    map_smul' r x := f.hom.map_smul (algebraMap k _ r) x
-    isIntertwining' g := by ext; apply f.hom.map_smul
-  }
-
-Depends on / 依赖: Rep.of, Representation, Representation.ofModule, ofModule
+--- 原说明 ---
+Functorially convert a module over `k[G]` into a representation of `G`.
 -/
 def ofModuleMonoidAlgebra : ModuleCat k[G] ⥤ Rep.{w} k G where
   obj M := Rep.of (Representation.ofModule M)
@@ -238,61 +224,35 @@ def ofModuleMonoidAlgebra : ModuleCat k[G] ⥤ Rep.{w} k G where
     map_smul' r x := f.hom.map_smul (algebraMap k _ r) x
     isIntertwining' g := by ext; apply f.hom.map_smul
   }
-
-/--
-theorem `ofModuleMonoidAlgebra_obj_coe` / 定理 `ofModuleMonoidAlgebra_obj_coe`
-
-English:
-theorem ofModuleMonoidAlgebra_obj_coe
-  given: (M : ModuleCat.{w} k[G])
-  proof: rfl
-
-中文:
-定理 ofModuleMonoidAlgebra_obj_coe
-  条件: (M : 模范畴.{w} k[G])
-  证明: rfl
+/-
+**Rep.ofModuleMonoidAlgebra_obj_coe** 是 Mathlib 中的一个定理，位于命名空间 `Rep`。
+形式化陈述：ofModuleMonoidAlgebra_obj_coe (M : ModuleCat.{w} k[G]) : ofModuleMonoidAlg
+ebra.obj M = RestrictScalars k k[G] M
+参数：M : ModuleCat.{w} k[G]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofModuleMonoidAlgebra_obj_coe (M : ModuleCat.{w} k[G]) :
     ofModuleMonoidAlgebra.obj M = RestrictScalars k k[G] M :=
   rfl
-
-/--
-theorem `ofModuleMonoidAlgebra_obj_ρ` / 定理 `ofModuleMonoidAlgebra_obj_ρ`
-
-English:
-theorem ofModuleMonoidAlgebra_obj_ρ
-  given: (M : ModuleCat.{w} k[G])
-  proof: rfl
-
-中文:
-定理 ofModuleMonoidAlgebra_obj_ρ
-  条件: (M : 模范畴.{w} k[G])
-  证明: rfl
+/-
+**Rep.ofModuleMonoidAlgebra_obj_** 是 Mathlib 中的一个定理，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofModuleMonoidAlgebra_obj_ρ (M : ModuleCat.{w} k[G]) :
     (ofModuleMonoidAlgebra.obj M).ρ = Representation.ofModule M :=
   rfl
 
-/--
-Definition of `counitIsoAddEquiv` / `counitIsoAddEquiv` 的定义
+/-- Auxiliary definition for `equivalenceModuleMonoidAlgebra`. -/
+/-
+**Rep.counitIsoAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：counitIsoAddEquiv {M : ModuleCat.{w} k[G]} : (ofModuleMonoidAlgebra ⋙ toMo
+duleMonoidAlgebra).obj M ≃+ M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIsoAddEquiv
-  signature: {M : ModuleCat.{w} k[G]}
-  body: by
-  dsimp [ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
-  exact (Representation.ofModule M).asModuleEquiv.toAddEquiv.trans
-    (RestrictScalars.addEquiv k k[G] _)
-
-中文:
-定义 counitIsoAddEquiv
-  签名: {M : 模范畴.{w} k[G]}
-  定义体: by
-  dsimp [ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
-  exact (Representation.ofModule M).asModuleEquiv.toAddEquiv.trans
-    (RestrictScalars.addEquiv k k[G] _)
-
-Depends on / 依赖: Representation, Representation.ofModule, RestrictScalars, RestrictScalars.addEquiv, addEquiv, asModuleEquiv, asModuleEquiv.toAddEquiv.trans, ofModule, ofModuleMonoidAlgebra, toAddEquiv, toModuleMonoidAlgebra
+--- 原说明 ---
+Auxiliary definition for `equivalenceModuleMonoidAlgebra`.
 -/
 def counitIsoAddEquiv {M : ModuleCat.{w} k[G]} :
     (ofModuleMonoidAlgebra ⋙ toModuleMonoidAlgebra).obj M ≃+ M := by
@@ -301,24 +261,16 @@ def counitIsoAddEquiv {M : ModuleCat.{w} k[G]} :
     (RestrictScalars.addEquiv k k[G] _)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `unitIsoAddEquiv` / `unitIsoAddEquiv` 的定义
+/-- Auxiliary definition for `equivalenceModuleMonoidAlgebra`. -/
+/-
+**Rep.unitIsoAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：unitIsoAddEquiv {V : Rep.{w} k G} : V ≃+ (toModuleMonoidAlgebra ⋙ ofModule
+MonoidAlgebra).obj V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIsoAddEquiv
-  signature: {V : Rep.{w} k G}
-  body: by
-  dsimp [ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
-  exact V.ρ.asModuleEquiv.symm.toAddEquiv.trans (RestrictScalars.addEquiv _ _ _).symm
-
-中文:
-定义 unitIsoAddEquiv
-  签名: {V : Rep.{w} k G}
-  定义体: by
-  dsimp [ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
-  exact V.ρ.asModuleEquiv.symm.toAddEquiv.trans (RestrictScalars.addEquiv _ _ _).symm
-
-Depends on / 依赖: RestrictScalars, RestrictScalars.addEquiv, addEquiv, asModuleEquiv, asModuleEquiv.symm.toAddEquiv.trans, ofModuleMonoidAlgebra, toAddEquiv, toModuleMonoidAlgebra
+--- 原说明 ---
+Auxiliary definition for `equivalenceModuleMonoidAlgebra`.
 -/
 def unitIsoAddEquiv {V : Rep.{w} k G} : V ≃+ (toModuleMonoidAlgebra ⋙
     ofModuleMonoidAlgebra).obj V := by
@@ -326,26 +278,17 @@ def unitIsoAddEquiv {V : Rep.{w} k G} : V ≃+ (toModuleMonoidAlgebra ⋙
   exact V.ρ.asModuleEquiv.symm.toAddEquiv.trans (RestrictScalars.addEquiv _ _ _).symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `counitIso` / `counitIso` 的定义
+/-- Auxiliary definition for `equivalenceModuleMonoidAlgebra`. -/
+/-
+**Rep.counitIso** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：counitIso (M : ModuleCat.{w} k[G]) : (ofModuleMonoidAlgebra ⋙ toModuleMono
+idAlgebra).obj M ≅ M
+参数：M : ModuleCat.{w} k[G]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIso
-  signature: (M : ModuleCat.{w} k[G])
-  body: LinearEquiv.toModuleIso
-    { counitIsoAddEquiv with
-      map_smul' := fun r x => by
-        simp [counitIsoAddEquiv] }
-
-中文:
-定义 counitIso
-  签名: (M : 模范畴.{w} k[G])
-  定义体: LinearEquiv.toModuleIso
-    { counitIsoAddEquiv with
-      map_smul' := fun r x => by
-        simp [counitIsoAddEquiv] }
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.toModuleIso, counitIsoAddEquiv, map_smul, toModuleIso
+--- 原说明 ---
+Auxiliary definition for `equivalenceModuleMonoidAlgebra`.
 -/
 def counitIso (M : ModuleCat.{w} k[G]) :
     (ofModuleMonoidAlgebra ⋙ toModuleMonoidAlgebra).obj M ≅ M :=
@@ -356,22 +299,34 @@ def counitIso (M : ModuleCat.{w} k[G]) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `unit_iso_comm` / 定理 `unit_iso_comm`
-
-English:
-theorem unit_iso_comm
-  given: (V : Rep.{w} k G) (g : G) (x : V)
-  proof: by
-  simp [unitIsoAddEquiv, ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
-
-中文:
-定理 unit_iso_comm
-  条件: (V : Rep.{w} k G) (g : G) (x : V)
-  证明: by
-  simp [unitIsoAddEquiv, ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
-
-Depends on / 依赖: ofModuleMonoidAlgebra, toModuleMonoidAlgebra, unitIsoAddEquiv
+/-
+**Rep.unit_iso_comm** 是 Mathlib 中的一个定理，位于命名空间 `Rep`。
+形式化陈述：unit_iso_comm (V : Rep.{w} k G) (g : G) (x : V) : unitIsoAddEquiv ((V.ρ g)
+.toFun x) = ((ofModuleMonoidAlgebra.obj (toModuleMonoidAlgebra.obj V)).ρ g).toFu
+n (unitIsoAddEquiv x)
+参数：V : Rep.{w} k G；g : G；x : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Representation.asModuleEquiv_symm_map_rho`：asModuleEquiv_symm_map_rho (g
+ : G) (x : V) : ρ.asModuleEquiv.symm (ρ g x) = MonoidAlgebra.of k G g • ρ.asModu
+leEquiv.symm x
+· 使用引理 `Representation.single_smul`：single_smul (t : k) (g : G) (v : ρ.asModule)
+ : MonoidAlgebra.single (g : G) t • v = t • ρ g (ρ.asModuleEquiv v)
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Representation.ofModule_asModule_act`：ofModule_asModule_act (g : G) (x :
+ RestrictScalars k k[G] ρ.asModule) : ofModule ρ.asModule g x = (RestrictScalars
+.addEquiv _ _ _).symm (ρ.a…
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unit_iso_comm (V : Rep.{w} k G) (g : G) (x : V) :
     unitIsoAddEquiv ((V.ρ g).toFun x) = ((ofModuleMonoidAlgebra.obj
@@ -379,98 +334,51 @@ theorem unit_iso_comm (V : Rep.{w} k G) (g : G) (x : V) :
   simp [unitIsoAddEquiv, ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-- Auxiliary definition for `equivalenceModuleMonoidAlgebra`. -/
+/-
+**Rep.unitIso** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：unitIso (V : Rep.{w} k G) : V ≅ (toModuleMonoidAlgebra ⋙ ofModuleMonoidAlg
+ebra).obj V
+参数：V : Rep.{w} k G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIso
-  signature: (V : Rep.{w} k G)
-  body: mkIso .mk
-  { unitIsoAddEquiv (k := k) (G := G) with
-    map_smul' r x := show (RestrictScalars.addEquiv _ _ _).symm
-      (V.ρ.asModuleEquiv.symm (r • x)) = _ by
-      simp only [Representation.asModuleEquiv_symm_map_smul]
-      rfl } fun g => by ext; exact unit_iso_comm ..
-
-中文:
-定义 unitIso
-  签名: (V : Rep.{w} k G)
-  定义体: mkIso .mk
-  { unitIsoAddEquiv (k := k) (G := G) with
-    map_smul' r x := show (RestrictScalars.addEquiv _ _ _).symm
-      (V.ρ.asModuleEquiv.symm (r • x)) = _ by
-      simp only [Representation.asModuleEquiv_symm_map_smul]
-      rfl } fun g => by ext; exact unit_iso_comm ..
-
-Depends on / 依赖: Representation, Representation.asModuleEquiv_symm_map_smul, RestrictScalars, RestrictScalars.addEquiv, addEquiv, asModuleEquiv, asModuleEquiv.symm, asModuleEquiv_symm_map_smul, map_smul, unitIsoAddEquiv, unit_iso_comm
+--- 原说明 ---
+Auxiliary definition for `equivalenceModuleMonoidAlgebra`.
 -/
 def unitIso (V : Rep.{w} k G) : V ≅ (toModuleMonoidAlgebra ⋙ ofModuleMonoidAlgebra).obj V :=
-mkIso .mk
+  mkIso <| .mk
   { unitIsoAddEquiv (k := k) (G := G) with
     map_smul' r x := show (RestrictScalars.addEquiv _ _ _).symm
       (V.ρ.asModuleEquiv.symm (r • x)) = _ by
       simp only [Representation.asModuleEquiv_symm_map_smul]
-      rfl } fun g => by ext; exact unit_iso_comm ..
+      rfl } fun g ↦ by ext; exact unit_iso_comm ..
 
-/--
-Definition of `equivalenceModuleMonoidAlgebra` / `equivalenceModuleMonoidAlgebra` 的定义
+/-- The categorical equivalence `Rep k G ≌ ModuleCat k[G]`. -/
+/-
+**Rep.equivalenceModuleMonoidAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：equivalenceModuleMonoidAlgebra : Rep.{w} k G ≌ ModuleCat k[G] where functo
+r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalenceModuleMonoidAlgebra
-  signature: : Rep.{w} k G ≌ ModuleCat k[G] where
-  body: toModuleMonoidAlgebra
-  inverse := ofModuleMonoidAlgebra
-  unitIso := NatIso.ofComponents (fun V => unitIso V) (by cat_disch)
-  counitIso := NatIso.ofComponents (fun M => counitIso M) (by cat_disch)
-
-中文:
-定义 equivalenceModuleMonoidAlgebra
-  签名: : Rep.{w} k G ≌ 模范畴 k[G] where
-  定义体: toModuleMonoidAlgebra
-  inverse := ofModuleMonoidAlgebra
-  unitIso := NatIso.ofComponents (fun V => unitIso V) (by cat_disch)
-  counitIso := NatIso.ofComponents (fun M => counitIso M) (by cat_disch)
-
-Depends on / 依赖: toModuleMonoidAlgebra
+--- 原说明 ---
+The categorical equivalence `Rep k G ≌ ModuleCat k[G]`.
 -/
 def equivalenceModuleMonoidAlgebra : Rep.{w} k G ≌ ModuleCat k[G] where
   functor := toModuleMonoidAlgebra
   inverse := ofModuleMonoidAlgebra
   unitIso := NatIso.ofComponents (fun V => unitIso V) (by cat_disch)
   counitIso := NatIso.ofComponents (fun M => counitIso M) (by cat_disch)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toModuleMonoidAlgebra.{w} (k := k) (G := G)).IsEquivalence
-  body: (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_functor
-
-中文:
-实例 :
-  签名: (toModuleMonoidAlgebra.{w} (k := k) (G := G)).是等价
-  定义体: (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_functor
-
-Depends on / 依赖: IsEquivalence
+/-
+**Rep.** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toModuleMonoidAlgebra.{w} (k := k) (G := G)).IsEquivalence :=
   (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_functor
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (ofModuleMonoidAlgebra (k := k) (G := G)).IsEquivalence
-  body: (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_inverse
-
-中文:
-实例 :
-  签名: (ofModuleMonoidAlgebra (k := k) (G := G)).是等价
-  定义体: (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_inverse
-
-Depends on / 依赖: IsEquivalence
+/-
+**Rep.** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (ofModuleMonoidAlgebra (k := k) (G := G)).IsEquivalence :=
   (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_inverse
@@ -478,115 +386,73 @@ instance : (ofModuleMonoidAlgebra (k := k) (G := G)).IsEquivalence :=
 -- TODO Verify that the equivalence with `ModuleCat k[G]` is a monoidal functor.
 
 variable {k G : Type u} [CommRing k] [Monoid G] in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryTheory.EnoughProjectives (Rep.{max w u} k G)
-  body: equivalenceModuleMonoidAlgebra.enoughProjectives_iff.2 ModuleCat.enoughProjectives.{max w u}
-
-中文:
-实例 :
-  签名: 范畴论.有足够投射 (Rep.{最大值 w u} k G)
-  定义体: equivalenceModuleMonoidAlgebra.enoughProjectives_iff.2 ModuleCat.enoughProjectives.{max w u}
-
-Depends on / 依赖: ModuleCat, ModuleCat.enoughProjectives, enoughProjectives, enoughProjectives_iff, equivalenceModuleMonoidAlgebra, equivalenceModuleMonoidAlgebra.enoughProjectives_iff
+/-
+**Rep.** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryTheory.EnoughProjectives (Rep.{max w u} k G) :=
   equivalenceModuleMonoidAlgebra.enoughProjectives_iff.2 ModuleCat.enoughProjectives.{max w u}
-
-/--
-Instance `free_projective` / 实例 `free_projective`
-
-English:
-instance free_projective
-  signature: {α : Type (max w u)}
-  body: equivalenceModuleMonoidAlgebra.toAdjunction.projective_of_map_projective _
-    @ModuleCat.projective_of_free _ _
-      (ModuleCat.of k[G] (Representation.free k G α).asModule)
-      _ (Representation.freeAsModuleBasis k G α)
-
-中文:
-实例 free_projective
-  签名: {α : 类型 (最大值 w u)}
-  定义体: equivalenceModuleMonoidAlgebra.toAdjunction.projective_of_map_projective _
-    @ModuleCat.projective_of_free _ _
-      (ModuleCat.of k[G] (Representation.free k G α).asModule)
-      _ (Representation.freeAsModuleBasis k G α)
-
-Depends on / 依赖: ModuleCat, ModuleCat.of, ModuleCat.projective_of_free, Representation, Representation.free, Representation.freeAsModuleBasis, asModule, equivalenceModuleMonoidAlgebra, equivalenceModuleMonoidAlgebra.toAdjunction.projective_of_map_projective, freeAsModuleBasis, projective_of_free, projective_of_map_projective, toAdjunction
+/-
+**Rep.free_projective** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+形式化陈述：free_projective {α : Type (max w u)} : Projective (free k G α)
+参数：max w u。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.projective_of_map_projective`：projective_of_ma
+p_projective (adj : F ⊣ G) [F.Full] [F.Faithful] (P : C) (hP : Projective (F.obj
+ P)) : Projective P where factors f g _
+· 使用定理 `ModuleCat.projective_of_free`：projective_of_free {ι : Type w} (b : Basis
+ ι R M) : Projective M
 -/
 instance free_projective {α : Type (max w u)} :
     Projective (free k G α) :=
-equivalenceModuleMonoidAlgebra.toAdjunction.projective_of_map_projective _
+  equivalenceModuleMonoidAlgebra.toAdjunction.projective_of_map_projective _ <|
     @ModuleCat.projective_of_free _ _
       (ModuleCat.of k[G] (Representation.free k G α).asModule)
       _ (Representation.freeAsModuleBasis k G α)
 
 section
 
-variable {G : Type u} [Group G] {n : Nat}
+variable {G : Type u} [Group G] {n : ℕ}
 
-/--
-Instance `diagonal_succ_projective` / 实例 `diagonal_succ_projective`
-
-English:
-instance diagonal_succ_projective
-  signature: :
-  body: by
-  exact Projective.of_iso (diagonalSuccIsoFree k G n).symm inferInstance
-
-中文:
-实例 diagonal_succ_projective
-  签名: :
-  定义体: by
-  exact Projective.of_iso (diagonalSuccIsoFree k G n).symm inferInstance
-
-Depends on / 依赖: Projective, Projective.of_iso, diagonalSuccIsoFree, of_iso
+/-
+**Rep.diagonal_succ_projective** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+形式化陈述：diagonal_succ_projective : Projective (diagonal k G (n + 1))
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.of_iso`：of_iso {P Q : C} (i : P ≅ Q) (_ : Proj
+ective P) : Projective Q where factors f e _
 -/
 instance diagonal_succ_projective :
     Projective (diagonal k G (n + 1)) := by
   exact Projective.of_iso (diagonalSuccIsoFree k G n).symm inferInstance
-
-/--
-Instance `leftRegular_projective` / 实例 `leftRegular_projective`
-
-English:
-instance leftRegular_projective
-  signature: :
-  body: Projective.of_iso (diagonalOneIsoLeftRegular k G) inferInstance
-
-中文:
-实例 leftRegular_projective
-  签名: :
-  定义体: Projective.of_iso (diagonalOneIsoLeftRegular k G) inferInstance
-
-Depends on / 依赖: Projective, Projective.of_iso, diagonalOneIsoLeftRegular, of_iso
+/-
+**Rep.leftRegular_projective** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+形式化陈述：leftRegular_projective : Projective (leftRegular k G)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.of_iso`：of_iso {P Q : C} (i : P ≅ Q) (_ : Proj
+ective P) : Projective Q where factors f e _
 -/
 instance leftRegular_projective :
     Projective (leftRegular k G) :=
   Projective.of_iso (diagonalOneIsoLeftRegular k G) inferInstance
-
-/--
-Instance `trivial_projective_of_subsingleton` / 实例 `trivial_projective_of_subsingleton`
-
-English:
-instance trivial_projective_of_subsingleton
-  signature: [Subsingleton G]
-  body: Projective.of_iso (ofMulActionSubsingletonIsoTrivial _ _ (Fin 1 -> G)) diagonal_succ_projective
-
-中文:
-实例 trivial_projective_of_subsingleton
-  签名: [子单例 G]
-  定义体: Projective.of_iso (ofMulActionSubsingletonIsoTrivial _ _ (Fin 1 -> G)) diagonal_succ_projective
-
-Depends on / 依赖: Projective, Projective.of_iso, diagonal_succ_projective, ofMulActionSubsingletonIsoTrivial, of_iso
+/-
+**Rep.trivial_projective_of_subsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+形式化陈述：trivial_projective_of_subsingleton [Subsingleton G] : Projective (trivial 
+k G k)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Projective.of_iso`：of_iso {P Q : C} (i : P ≅ Q) (_ : Proj
+ective P) : Projective Q where factors f e _
+· 使用定理 `Pi.instSubsingleton`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Subsing
+leton (β a)], Subsingleton ((a : α) → β a)
 -/
 instance trivial_projective_of_subsingleton [Subsingleton G] :
     Projective (trivial k G k) :=
-  Projective.of_iso (ofMulActionSubsingletonIsoTrivial _ _ (Fin 1 -> G)) diagonal_succ_projective
+  Projective.of_iso (ofMulActionSubsingletonIsoTrivial _ _ (Fin 1 → G)) diagonal_succ_projective
 
 end
 
 end Rep
+

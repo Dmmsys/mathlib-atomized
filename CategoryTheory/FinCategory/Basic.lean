@@ -31,131 +31,92 @@ noncomputable section
 
 namespace CategoryTheory
 
-/--
-Instance `discreteFintype` / 实例 `discreteFintype`
-
-English:
-instance discreteFintype
-  signature: {α : Type*} [Fintype α]
-  body: Fintype.ofEquiv α discreteEquiv.symm
-
-中文:
-实例 discreteFintype
-  签名: {α : 类型} [有限类型 α]
-  定义体: Fintype.ofEquiv α discreteEquiv.symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, discreteEquiv, discreteEquiv.symm, ofEquiv
+/-
+**CategoryTheory.discreteFintype** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：discreteFintype {α : Type*} [Fintype α] : Fintype (Discrete α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance discreteFintype {α : Type*} [Fintype α] : Fintype (Discrete α) :=
   Fintype.ofEquiv α discreteEquiv.symm
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type*} [Finite α] : Finite (Discrete α) :=
   Finite.of_equiv α discreteEquiv.symm
-
-/--
-Instance `discreteHomFintype` / 实例 `discreteHomFintype`
-
-English:
-instance discreteHomFintype
-  signature: {α : Type*} (X Y : Discrete α)
-  body: by
-  classical
-  apply ULift.fintype
-
-中文:
-实例 discreteHomFintype
-  签名: {α : 类型} (X Y : 离散 α)
-  定义体: by
-  classical
-  apply ULift.fintype
-
-Depends on / 依赖: ULift.fintype, classical, fintype
+/-
+**CategoryTheory.discreteHomFintype** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：discreteHomFintype {α : Type*} (X Y : Discrete α) : Fintype (X ⟶ Y)
+参数：X Y : Discrete α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance discreteHomFintype {α : Type*} (X Y : Discrete α) : Fintype (X ⟶ Y) := by
   classical
   apply ULift.fintype
 
-/--
-Definition of `FinCategory` / `FinCategory` 的定义
+/-- A category with a `Fintype` of objects, and a `Fintype` for each morphism space. -/
+/-
+**CategoryTheory.FinCategory** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：FinCategory (J : Type v) [SmallCategory J] where fintypeObj : Fintype J
+参数：J : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FinCategory
-  parameters: (J : Type v) [SmallCategory J]
-  axioms and operations (2):
-    - fintypeObj : Fintype J  [default: by infer_instance]
-    - fintypeHom : forall j j' : J, Fintype (j ⟶ j')  [default: by infer_instance]
-
-中文:
-类 有限范畴
-  参数: (J : 类型v) [小范畴 J]
-  公理与运算 (2 个):
-    - fintypeObj : 有限类型 J  [默认: by infer_instance]
-    - fintypeHom : 对任意 j j' : J, 有限类型 (j ⟶ j')  [默认: by infer_instance]
-
-Depends on / 依赖: Fintype, fintypeHom, infer_instance
+--- 原说明 ---
+A category with a `Fintype` of objects, and a `Fintype` for each morphism space.
 -/
 class FinCategory (J : Type v) [SmallCategory J] where
   fintypeObj : Fintype J := by infer_instance
-  fintypeHom : forall j j' : J, Fintype (j ⟶ j') := by infer_instance
+  fintypeHom : ∀ j j' : J, Fintype (j ⟶ j') := by infer_instance
 
 attribute [instance_reducible, instance] FinCategory.fintypeObj FinCategory.fintypeHom
-
-/--
-Instance `finCategoryDiscreteOfFintype` / 实例 `finCategoryDiscreteOfFintype`
-
-English:
-instance finCategoryDiscreteOfFintype
-  signature: (J : Type v) [Fintype J]
-
-中文:
-实例 finCategoryDiscreteOfFintype
-  签名: (J : 类型v) [有限类型 J]
+/-
+**CategoryTheory.finCategoryDiscreteOfFintype** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory`。
+形式化陈述：(J : Type v) → [Fintype J] → CategoryTheory.FinCategory (CategoryTheory.Di
+screte J)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance finCategoryDiscreteOfFintype (J : Type v) [Fintype J] : FinCategory (Discrete J) where
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J : Type u} [Fintype J] [SmallCategory J] [Quiver.IsThin J] : FinCategory J :=
-  FinCategory.mk ‹Fintype J› fun j j' => Fintype.ofFinite (j ⟶ j')
+  FinCategory.mk ‹Fintype J› fun j j' ↦ Fintype.ofFinite (j ⟶ j')
 
 open Opposite
 
-/--
-Instance `finCategoryOpposite` / 实例 `finCategoryOpposite`
+/-- The opposite of a finite category is finite.
+-/
+/-
+**CategoryTheory.finCategoryOpposite** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：finCategoryOpposite {J : Type v} [SmallCategory J] [FinCategory J] : FinCa
+tegory Jᵒᵖ where fintypeObj
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance finCategoryOpposite
-  signature: {J : Type v} [SmallCategory J] [FinCategory J]
-  body: Fintype.ofEquiv _ equivToOpposite
-  fintypeHom j j' := Fintype.ofEquiv _ (opEquiv j j').symm
-
-中文:
-实例 finCategoryOpposite
-  签名: {J : 类型v} [小范畴 J] [有限范畴 J]
-  定义体: Fintype.ofEquiv _ equivToOpposite
-  fintypeHom j j' := Fintype.ofEquiv _ (opEquiv j j').symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, equivToOpposite, ofEquiv
+--- 原说明 ---
+The opposite of a finite category is finite.
 -/
 instance finCategoryOpposite {J : Type v} [SmallCategory J] [FinCategory J] : FinCategory Jᵒᵖ where
   fintypeObj := Fintype.ofEquiv _ equivToOpposite
   fintypeHom j j' := Fintype.ofEquiv _ (opEquiv j j').symm
 
 attribute [local instance] uliftCategory in
-/--
-Instance `finCategoryUlift` / 实例 `finCategoryUlift`
+/-- Applying `ULift` to morphisms and objects of a category preserves finiteness. -/
+/-
+**CategoryTheory.finCategoryUlift** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：finCategoryUlift {J : Type v} [SmallCategory J] [FinCategory J] : FinCateg
+ory.{max w v} (ULiftHom.{w, max w v} (ULift.{w, v} J)) where fintypeObj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance finCategoryUlift
-  signature: {J : Type v} [SmallCategory J] [FinCategory J]
-  body: ULift.fintype J
-  fintypeHom := fun _ _ => ULift.fintype _
-
-中文:
-实例 finCategoryUlift
-  签名: {J : 类型v} [小范畴 J] [有限范畴 J]
-  定义体: ULift.fintype J
-  fintypeHom := fun _ _ => ULift.fintype _
-
-Depends on / 依赖: ULift.fintype, fintype
+--- 原说明 ---
+Applying `ULift` to morphisms and objects of a category preserves finiteness.
 -/
 instance finCategoryUlift {J : Type v} [SmallCategory J] [FinCategory J] :
     FinCategory.{max w v} (ULiftHom.{w, max w v} (ULift.{w, v} J)) where
@@ -163,3 +124,4 @@ instance finCategoryUlift {J : Type v} [SmallCategory J] [FinCategory J] :
   fintypeHom := fun _ _ => ULift.fintype _
 
 end CategoryTheory
+

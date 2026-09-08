@@ -22,38 +22,28 @@ section Field
 
 variable (F : Type*) [Field F] [Finite F]
 
-/--
-lemma `ringChar_ne` / 引理 `ringChar_ne`
-
-English:
-lemma ringChar_ne
-  statement: ringChar Complex != ringChar F
-  proof: by
-  simpa only [ringChar.eq_zero] using (CharP.ringChar_ne_zero_of_finite F).symm
-
-中文:
-引理 ringChar_ne
-  结论: ringChar 复形 != ringChar F
-  证明: by
-  simpa only [ringChar.eq_zero] using (CharP.ringChar_ne_zero_of_finite F).symm
-
-Depends on / 依赖: CharP.ringChar_ne_zero_of_finite, eq_zero, ringChar, ringChar.eq_zero, ringChar_ne_zero_of_finite
+/-
+**AddChar.ringChar_ne** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：ringChar_ne : ringChar Complex != ringChar F
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ringChar_ne : ringChar Complex != ringChar F := by
+lemma ringChar_ne : ringChar ℂ ≠ ringChar F := by
   simpa only [ringChar.eq_zero] using (CharP.ringChar_ne_zero_of_finite F).symm
 
 /-- A primitive additive character on the finite field `F` with values in `ℂ`. -/
-public noncomputable def FiniteField.primitiveChar_to_Complex : AddChar F Complex := by
-letI ch := primitiveChar F Complex by exact ringChar_ne F
+public noncomputable def FiniteField.primitiveChar_to_Complex : AddChar F ℂ := by
+  letI ch := primitiveChar F ℂ <| by exact ringChar_ne F
   refine MonoidHom.compAddChar ?_ ch.char
-  exact (IsCyclotomicExtension.algEquiv {(ch.n : Nat)} Complex (CyclotomicField ch.n Complex) Complex).toMonoidHom
+  exact (IsCyclotomicExtension.algEquiv {(ch.n : ℕ)} ℂ (CyclotomicField ch.n ℂ) ℂ).toMonoidHom
 
 public lemma FiniteField.primitiveChar_to_Complex_isPrimitive :
     (primitiveChar_to_Complex F).IsPrimitive := by
   refine IsPrimitive.compMulHom_of_isPrimitive (PrimitiveAddChar.prim _) ?_
-  let nn := (primitiveChar F Complex <| ringChar_ne F).n
-  exact (IsCyclotomicExtension.algEquiv {(nn : Nat)} Complex (CyclotomicField nn Complex) Complex).injective
+  let nn := (primitiveChar F ℂ <| ringChar_ne F).n
+  exact (IsCyclotomicExtension.algEquiv {(nn : ℕ)} ℂ (CyclotomicField nn ℂ) ℂ).injective
 
 end Field
 
 end AddChar
+

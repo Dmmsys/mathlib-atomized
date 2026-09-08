@@ -52,98 +52,35 @@ section OfFunction
 
 variable {α : Type*}
 
-/--
-Definition of `ofFunction` / `ofFunction` 的定义
+/-- Given any function `m` assigning measures to sets satisfying `m ∅ = 0`, there is
+  a unique maximal outer measure `μ` satisfying `μ s ≤ m s` for all `s : Set α`. -/
+/-
+**MeasureTheory.OuterMeasure.ofFunction** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory
+.OuterMeasure`。
+形式化陈述：{α : Type u_1} → (m : Set α → ENNReal) → m ∅ = 0 → MeasureTheory.OuterMeas
+ure α
+参数：m : Set α → ENNReal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFunction
-  signature: (m : Set α -> Real>=0∞) (m_empty : m ∅ = 0)
-  body: let μ s := ⨅ (f : Nat -> Set α) (_ : s subseteq ⋃ i, f i), ∑' i, m (f i)
-  { measureOf := μ
-    empty := by
-      rw [← nonpos_iff_eq_zero]
-exact (iInf_le_of_le fun _ => ∅) iInf_le_of_le (empty_subset _) by simpa
-    mono := fun {_ _} hs => iInf_mono fun _ => iInf_mono' fun hb => ⟨hs.trans hb, le_rfl⟩
-    iUnion_nat := fun s _ =>
-ENNReal.le_of_forall_pos_le_add by
-        intro ε hε (hb : (∑' i, μ (s i)) < ∞)
-        rcases ENNReal.exists_pos_sum_of_countable (ENNReal.coe_pos.2 hε).ne' Nat with ⟨ε', hε', hl⟩
-        grw [← hl]
-        rw [← ENNReal.tsum_add]
-        choose f hf using
-          show forall i, exists f : Nat -> Set α, (s i subseteq ⋃ i, f i) ∧ (∑' i, m (f i)) < μ (s i) + ε' i by
-            intro i
-            have : μ (s i) < μ (s i) + ε' i :=
-              ENNReal.lt_add_right (ne_top_of_le_ne_top hb.ne <| ENNReal.le_tsum _)
-                (by simpa using (hε' i).ne')
-            rcases iInf_lt_iff.mp this with ⟨t, ht⟩
-            exists t
-            contrapose! ht
-            exact le_iInf ht
-        refine le_trans ?_ (ENNReal.tsum_le_tsum fun i => le_of_lt (hf i).2)
-        rw [← ENNReal.tsum_prod]; rw [← Nat.pairEquiv.symm.tsum_eq]
-        refine iInf_le_of_le _ (iInf_le _ ?_)
-        apply iUnion_subset
-        intro i
-        apply Subset.trans (hf i).1
-        apply iUnion_subset
-        simp only [Nat.pairEquiv_symm_apply]
-        rw [iUnion_unpair]
-        intro j
-        apply subset_iUnion₂ i }
-
-中文:
-定义 ofFunction
-  签名: (m : 集合 α -> 实数>=0∞) (m_empty : m ∅ = 0)
-  定义体: let μ s := ⨅ (f : Nat -> Set α) (_ : s subseteq ⋃ i, f i), ∑' i, m (f i)
-  { measureOf := μ
-    empty := by
-      rw [← nonpos_iff_eq_zero]
-exact (iInf_le_of_le fun _ => ∅) iInf_le_of_le (empty_subset _) by simpa
-    mono := fun {_ _} hs => iInf_mono fun _ => iInf_mono' fun hb => ⟨hs.trans hb, le_rfl⟩
-    iUnion_nat := fun s _ =>
-ENNReal.le_of_forall_pos_le_add by
-        intro ε hε (hb : (∑' i, μ (s i)) < ∞)
-        rcases ENNReal.exists_pos_sum_of_countable (ENNReal.coe_pos.2 hε).ne' Nat with ⟨ε', hε', hl⟩
-        grw [← hl]
-        rw [← ENNReal.tsum_add]
-        choose f hf using
-          show forall i, exists f : Nat -> Set α, (s i subseteq ⋃ i, f i) ∧ (∑' i, m (f i)) < μ (s i) + ε' i by
-            intro i
-            have : μ (s i) < μ (s i) + ε' i :=
-              ENNReal.lt_add_right (ne_top_of_le_ne_top hb.ne <| ENNReal.le_tsum _)
-                (by simpa using (hε' i).ne')
-            rcases iInf_lt_iff.mp this with ⟨t, ht⟩
-            exists t
-            contrapose! ht
-            exact le_iInf ht
-        refine le_trans ?_ (ENNReal.tsum_le_tsum fun i => le_of_lt (hf i).2)
-        rw [← ENNReal.tsum_prod]; rw [← Nat.pairEquiv.symm.tsum_eq]
-        refine iInf_le_of_le _ (iInf_le _ ?_)
-        apply iUnion_subset
-        intro i
-        apply Subset.trans (hf i).1
-        apply iUnion_subset
-        simp only [Nat.pairEquiv_symm_apply]
-        rw [iUnion_unpair]
-        intro j
-        apply subset_iUnion₂ i }
+--- 原说明 ---
+Given any function `m` assigning measures to sets satisfying `m ∅ = 0`, there is
+  a unique maximal outer measure `μ` satisfying `μ s ≤ m s` for all `s : Set α`.
 -/
-protected def ofFunction (m : Set α -> Real>=0∞) (m_empty : m ∅ = 0) : OuterMeasure α :=
-  let μ s := ⨅ (f : Nat -> Set α) (_ : s subseteq ⋃ i, f i), ∑' i, m (f i)
+protected def ofFunction (m : Set α → ℝ≥0∞) (m_empty : m ∅ = 0) : OuterMeasure α :=
+  let μ s := ⨅ (f : ℕ → Set α) (_ : s ⊆ ⋃ i, f i), ∑' i, m (f i)
   { measureOf := μ
     empty := by
       rw [← nonpos_iff_eq_zero]
-exact (iInf_le_of_le fun _ => ∅) iInf_le_of_le (empty_subset _) by simpa
+      exact (iInf_le_of_le fun _ => ∅) <| iInf_le_of_le (empty_subset _) <| by simpa
     mono := fun {_ _} hs => iInf_mono fun _ => iInf_mono' fun hb => ⟨hs.trans hb, le_rfl⟩
     iUnion_nat := fun s _ =>
-ENNReal.le_of_forall_pos_le_add by
+      ENNReal.le_of_forall_pos_le_add <| by
         intro ε hε (hb : (∑' i, μ (s i)) < ∞)
-        rcases ENNReal.exists_pos_sum_of_countable (ENNReal.coe_pos.2 hε).ne' Nat with ⟨ε', hε', hl⟩
+        rcases ENNReal.exists_pos_sum_of_countable (ENNReal.coe_pos.2 hε).ne' ℕ with ⟨ε', hε', hl⟩
         grw [← hl]
         rw [← ENNReal.tsum_add]
         choose f hf using
-          show forall i, exists f : Nat -> Set α, (s i subseteq ⋃ i, f i) ∧ (∑' i, m (f i)) < μ (s i) + ε' i by
+          show ∀ i, ∃ f : ℕ → Set α, (s i ⊆ ⋃ i, f i) ∧ (∑' i, m (f i)) < μ (s i) + ε' i by
             intro i
             have : μ (s i) < μ (s i) + ε' i :=
               ENNReal.lt_add_right (ne_top_of_le_ne_top hb.ne <| ENNReal.le_tsum _)
@@ -153,7 +90,7 @@ ENNReal.le_of_forall_pos_le_add by
             contrapose! ht
             exact le_iInf ht
         refine le_trans ?_ (ENNReal.tsum_le_tsum fun i => le_of_lt (hf i).2)
-        rw [← ENNReal.tsum_prod]; rw [← Nat.pairEquiv.symm.tsum_eq]
+        rw [← ENNReal.tsum_prod, ← Nat.pairEquiv.symm.tsum_eq]
         refine iInf_le_of_le _ (iInf_le _ ?_)
         apply iUnion_subset
         intro i
@@ -164,73 +101,92 @@ ENNReal.le_of_forall_pos_le_add by
         intro j
         apply subset_iUnion₂ i }
 
-variable (m : Set α -> Real>=0∞) (m_empty : m ∅ = 0)
+variable (m : Set α → ℝ≥0∞) (m_empty : m ∅ = 0)
 
-/--
-theorem `ofFunction_apply` / 定理 `ofFunction_apply`
+/-- `ofFunction` of a set `s` is the infimum of `∑ᵢ, m (tᵢ)` for all collections of sets
+`tᵢ` that cover `s`. -/
+/-
+**MeasureTheory.OuterMeasure.ofFunction_apply** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.OuterMeasure`。
+形式化陈述：ofFunction_apply (s : Set α) : OuterMeasure.ofFunction m m_empty s = ⨅ (t 
+: Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, m (t n)
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ofFunction_apply
-  given: (s : Set α)
-  proof: rfl
-
-中文:
-定理 ofFunction_apply
-  条件: (s : 集合 α)
-  证明: rfl
+--- 原说明 ---
+`ofFunction` of a set `s` is the infimum of `∑ᵢ, m (tᵢ)` for all collections of 
+sets
+`tᵢ` that cover `s`.
 -/
 theorem ofFunction_apply (s : Set α) :
-    OuterMeasure.ofFunction m m_empty s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, m (t n) :=
+    OuterMeasure.ofFunction m m_empty s = ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t), ∑' n, m (t n) :=
   rfl
 
-/--
-theorem `ofFunction_eq_iInf_mem` / 定理 `ofFunction_eq_iInf_mem`
+/-- `ofFunction` of a set `s` is the infimum of `∑ᵢ, m (tᵢ)` for all collections of sets
+`tᵢ` that cover `s`, with all `tᵢ` satisfying a predicate `P` such that `m` is infinite for sets
+that don't satisfy `P`.
+This is similar to `ofFunction_apply`, except that the sets `tᵢ` satisfy `P`.
+The hypothesis `m_top` applies in particular to a function of the form `extend m'`. -/
+/-
+**MeasureTheory.OuterMeasure.ofFunction_eq_iInf_mem** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.OuterMeasure`。
+形式化陈述：ofFunction_eq_iInf_mem {P : Set α -> Prop} (m_top : forall s, ¬ P s -> m s
+ = ∞) (s : Set α) : OuterMeasure.ofFunction m m_empty s = ⨅ (t : Nat -> Set α) (
+_ : forall i, P (t i)) (_ : s subseteq ⋃ i, t i), ∑' i, m (t i)
+参数：m_top : forall s, ¬ P s -> m s = ∞；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_apply`：ofFunction_apply (s : Set α
+) : OuterMeasure.ofFunction m m_empty s = ⨅ (t : Nat -> Set α) (_ : s subseteq i
+Union t), ∑' n, m (t n)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `iInf₂_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {f : (i : ι) → κ i → α} (i : ι) (j : κ i),   ⨅ i, ⨅ j, f i j ≤…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `iInf_neg`：∀ {α : Type u_1} [inst : CompleteLattice α] {p : Prop} {f : p 
+→ α}, ¬p → ⨅ (h : p), f h = ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `ENNReal.tsum_eq_top_of_eq_top`：∀ {α : Type u_1} {f : α → ENNReal}, (∃ a,
+ f a = ⊤) → ∑' (a : α), f a = ⊤
 
-English:
-theorem ofFunction_eq_iInf_mem
-  given: {P : Set α -> Prop} (m_top : forall s, ¬ P s -> m s = ∞) (s : Set α)
-  proof: by
-  rw [OuterMeasure.ofFunction_apply]
-  apply le_antisymm
-  · exact le_iInf fun t => le_iInf fun _ => le_iInf fun h => iInf₂_le _ (by exact h)
-  · simp_rw [le_iInf_iff]
-    refine fun t ht_subset => iInf_le_of_le t ?_
-    by_cases ht : forall i, P (t i)
-    · exact iInf_le_of_le ht (iInf_le_of_le ht_subset le_rfl)
-    · simp only [ht, not_false_eq_true, iInf_neg, top_le_iff]
-      push Not at ht
-      obtain ⟨i, hti_notMem⟩ := ht
-      have hfi_top : m (t i) = ∞ := m_top _ hti_notMem
-      exact ENNReal.tsum_eq_top_of_eq_top ⟨i, hfi_top⟩
-
-中文:
-定理 ofFunction_eq_iInf_mem
-  条件: {P : 集合 α -> 命题} (m_top : 对任意 s, ¬ P s -> m s = ∞) (s : 集合 α)
-  证明: by
-  rw [OuterMeasure.ofFunction_apply]
-  apply le_antisymm
-  · exact le_iInf fun t => le_iInf fun _ => le_iInf fun h => iInf₂_le _ (by exact h)
-  · simp_rw [le_iInf_iff]
-    refine fun t ht_subset => iInf_le_of_le t ?_
-    by_cases ht : forall i, P (t i)
-    · exact iInf_le_of_le ht (iInf_le_of_le ht_subset le_rfl)
-    · simp only [ht, not_false_eq_true, iInf_neg, top_le_iff]
-      push Not at ht
-      obtain ⟨i, hti_notMem⟩ := ht
-      have hfi_top : m (t i) = ∞ := m_top _ hti_notMem
-      exact ENNReal.tsum_eq_top_of_eq_top ⟨i, hfi_top⟩
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_eq_top_of_eq_top, OuterMeasure, OuterMeasure.ofFunction_apply, hfi_top, ht_subset, hti_notMem, iInf_le_of_le, iInf_neg, le_antisymm, le_iInf, le_iInf_iff, le_rfl, m_top, not_false_eq_true, ofFunction_apply, simp_rw, top_le_iff, tsum_eq_top_of_eq_top
+--- 原说明 ---
+`ofFunction` of a set `s` is the infimum of `∑ᵢ, m (tᵢ)` for all collections of 
+sets
+`tᵢ` that cover `s`, with all `tᵢ` satisfying a predicate `P` such that `m` is i
+nfinite for sets
+that don't satisfy `P`.
+This is similar to `ofFunction_apply`, except that the sets `tᵢ` satisfy `P`.
+The hypothesis `m_top` applies in particular to a function of the form `extend m
+'`.
 -/
-theorem ofFunction_eq_iInf_mem {P : Set α -> Prop} (m_top : forall s, ¬ P s -> m s = ∞) (s : Set α) :
+theorem ofFunction_eq_iInf_mem {P : Set α → Prop} (m_top : ∀ s, ¬ P s → m s = ∞) (s : Set α) :
     OuterMeasure.ofFunction m m_empty s =
-      ⨅ (t : Nat -> Set α) (_ : forall i, P (t i)) (_ : s subseteq ⋃ i, t i), ∑' i, m (t i) := by
+      ⨅ (t : ℕ → Set α) (_ : ∀ i, P (t i)) (_ : s ⊆ ⋃ i, t i), ∑' i, m (t i) := by
   rw [OuterMeasure.ofFunction_apply]
   apply le_antisymm
-  · exact le_iInf fun t => le_iInf fun _ => le_iInf fun h => iInf₂_le _ (by exact h)
+  · exact le_iInf fun t ↦ le_iInf fun _ ↦ le_iInf fun h ↦ iInf₂_le _ (by exact h)
   · simp_rw [le_iInf_iff]
-    refine fun t ht_subset => iInf_le_of_le t ?_
-    by_cases ht : forall i, P (t i)
+    refine fun t ht_subset ↦ iInf_le_of_le t ?_
+    by_cases ht : ∀ i, P (t i)
     · exact iInf_le_of_le ht (iInf_le_of_le ht_subset le_rfl)
     · simp only [ht, not_false_eq_true, iInf_neg, top_le_iff]
       push Not at ht
@@ -239,262 +195,281 @@ theorem ofFunction_eq_iInf_mem {P : Set α -> Prop} (m_top : forall s, ¬ P s ->
       exact ENNReal.tsum_eq_top_of_eq_top ⟨i, hfi_top⟩
 
 variable {m m_empty}
-
-/--
-theorem `ofFunction_le` / 定理 `ofFunction_le`
-
-English:
-theorem ofFunction_le
-  given: (s : Set α)
-  statement: OuterMeasure.ofFunction m m_empty s <= m s
-  proof: let f : Nat -> Set α := fun i => Nat.casesOn i s fun _ => ∅
-iInf_le_of_le f
-iInf_le_of_le (subset_iUnion f 0)
-le_of_eq tsum_eq_single 0 by
-        rintro (_ | i)
-        · simp
-        · simp [f, m_empty]
-
-中文:
-定理 ofFunction_le
-  条件: (s : 集合 α)
-  结论: 外测度.ofFunction m m_empty s <= m s
-  证明: let f : Nat -> Set α := fun i => Nat.casesOn i s fun _ => ∅
-iInf_le_of_le f
-iInf_le_of_le (subset_iUnion f 0)
-le_of_eq tsum_eq_single 0 by
-        rintro (_ | i)
-        · simp
-        · simp [f, m_empty]
-
-Depends on / 依赖: Nat.casesOn, casesOn, iInf_le_of_le, le_of_eq, m_empty, subset_iUnion, tsum_eq_single
+/-
+**MeasureTheory.OuterMeasure.ofFunction_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.OuterMeasure`。
+形式化陈述：ofFunction_le (s : Set α) : OuterMeasure.ofFunction m m_empty s <= m s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `tsum_eq_single`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] {f : β → α}
+ (b …
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem ofFunction_le (s : Set α) : OuterMeasure.ofFunction m m_empty s <= m s :=
-  let f : Nat -> Set α := fun i => Nat.casesOn i s fun _ => ∅
-iInf_le_of_le f
-iInf_le_of_le (subset_iUnion f 0)
-le_of_eq tsum_eq_single 0 by
+theorem ofFunction_le (s : Set α) : OuterMeasure.ofFunction m m_empty s ≤ m s :=
+  let f : ℕ → Set α := fun i => Nat.casesOn i s fun _ => ∅
+  iInf_le_of_le f <|
+    iInf_le_of_le (subset_iUnion f 0) <|
+      le_of_eq <| tsum_eq_single 0 <| by
         rintro (_ | i)
         · simp
         · simp [f, m_empty]
-
-/--
-theorem `ofFunction_eq` / 定理 `ofFunction_eq`
-
-English:
-theorem ofFunction_eq
-  statement: (s : Set α) (m_mono : forall ⦃t : Set α⦄, s subseteq t -> m s <= m t)
-  proof: le_antisymm (ofFunction_le s)
-    le_iInf fun f => le_iInf fun hf => le_trans (m_mono hf) (m_subadd f)
-
-中文:
-定理 ofFunction_eq
-  结论: (s : 集合 α) (m_mono : 对任意 ⦃t : 集合 α⦄, s subseteq t -> m s <= m t)
-  证明: le_antisymm (ofFunction_le s)
-    le_iInf fun f => le_iInf fun hf => le_trans (m_mono hf) (m_subadd f)
-
-Depends on / 依赖: le_antisymm, le_iInf, le_trans, m_mono, m_subadd, ofFunction_le
+/-
+**MeasureTheory.OuterMeasure.ofFunction_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.OuterMeasure`。
+形式化陈述：ofFunction_eq (s : Set α) (m_mono : forall ⦃t : Set α⦄, s subseteq t -> m 
+s <= m t) (m_subadd : forall s : Nat -> Set α, m (⋃ i, s i) <= ∑' i, m (s i)) : 
+OuterMeasure.ofFunction m m_empty s = m s
+参数：s : Set α；m_mono : forall ⦃t : Set α⦄, s subseteq t -> m s <= m t；m_subadd : 
+forall s : Nat -> Set α, m (⋃ i, s i) <= ∑' i, m (s i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_le`：ofFunction_le (s : Set α) : Ou
+terMeasure.ofFunction m m_empty s <= m s
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
 -/
-theorem ofFunction_eq (s : Set α) (m_mono : forall ⦃t : Set α⦄, s subseteq t -> m s <= m t)
-    (m_subadd : forall s : Nat -> Set α, m (⋃ i, s i) <= ∑' i, m (s i)) :
+theorem ofFunction_eq (s : Set α) (m_mono : ∀ ⦃t : Set α⦄, s ⊆ t → m s ≤ m t)
+    (m_subadd : ∀ s : ℕ → Set α, m (⋃ i, s i) ≤ ∑' i, m (s i)) :
     OuterMeasure.ofFunction m m_empty s = m s :=
-le_antisymm (ofFunction_le s)
+  le_antisymm (ofFunction_le s) <|
     le_iInf fun f => le_iInf fun hf => le_trans (m_mono hf) (m_subadd f)
-
-/--
-theorem `le_ofFunction` / 定理 `le_ofFunction`
-
-English:
-theorem le_ofFunction
-  given: {μ : OuterMeasure α}
-  proof: ⟨fun H s => le_trans (H s) (ofFunction_le s), fun H _ =>
-    le_iInf fun f =>
-      le_iInf fun hs =>
-le_trans (μ.mono hs) le_trans (measure_iUnion_le f) ENNReal.tsum_le_tsum fun _ => H _⟩
-
-中文:
-定理 le_ofFunction
-  条件: {μ : 外测度 α}
-  证明: ⟨fun H s => le_trans (H s) (ofFunction_le s), fun H _ =>
-    le_iInf fun f =>
-      le_iInf fun hs =>
-le_trans (μ.mono hs) le_trans (measure_iUnion_le f) ENNReal.tsum_le_tsum fun _ => H _⟩
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, le_iInf, le_trans, measure_iUnion_le, ofFunction_le, tsum_le_tsum
+/-
+**MeasureTheory.OuterMeasure.le_ofFunction** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.OuterMeasure`。
+形式化陈述：le_ofFunction {μ : OuterMeasure α} : μ <= OuterMeasure.ofFunction m m_empt
+y ↔ forall s, μ s <= m s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_le`：ofFunction_le (s : Set α) : Ou
+terMeasure.ofFunction m m_empty s <= m s
+· 使用定理 `le_iInf`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f :
+ ι → α} {a : α}, (∀ (i : ι), a ≤ f i) → a ≤ iInf f
+· 使用定理 `MeasureTheory.OuterMeasure.mono`：∀ {α : Type u_2} (self : MeasureTheory.
+OuterMeasure α) {s₁ s₂ : Set α}, s₁ ⊆ s₂ → self.measureOf s₁ ≤ self.measureOf s₂
+· 使用定理 `MeasureTheory.measure_iUnion_le`：measure_iUnion_le [Countable ι] (s : ι 
+-> Set α) : μ (⋃ i, s i) <= ∑' i, μ (s i)
+· 使用定理 `MeasureTheory.OuterMeasure.instOuterMeasureClass`：∀ {α : Type u_1}, Meas
+ureTheory.OuterMeasureClass (MeasureTheory.OuterMeasure α) α
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ENNReal.tsum_le_tsum`：∀ {α : Type u_1} {f g : α → ENNReal}, (∀ (a : α), 
+f a ≤ g a) → ∑' (a : α), f a ≤ ∑' (a : α), g a
 -/
 theorem le_ofFunction {μ : OuterMeasure α} :
-    μ <= OuterMeasure.ofFunction m m_empty ↔ forall s, μ s <= m s :=
+    μ ≤ OuterMeasure.ofFunction m m_empty ↔ ∀ s, μ s ≤ m s :=
   ⟨fun H s => le_trans (H s) (ofFunction_le s), fun H _ =>
     le_iInf fun f =>
       le_iInf fun hs =>
-le_trans (μ.mono hs) le_trans (measure_iUnion_le f) ENNReal.tsum_le_tsum fun _ => H _⟩
-
-/--
-theorem `isGreatest_ofFunction` / 定理 `isGreatest_ofFunction`
-
-English:
-theorem isGreatest_ofFunction
-  proof: ⟨fun _ => ofFunction_le _, fun _ => le_ofFunction.2⟩
-
-中文:
-定理 isGreatest_ofFunction
-  证明: ⟨fun _ => ofFunction_le _, fun _ => le_ofFunction.2⟩
-
-Depends on / 依赖: le_ofFunction, ofFunction_le
+        le_trans (μ.mono hs) <| le_trans (measure_iUnion_le f) <| ENNReal.tsum_le_tsum fun _ => H _⟩
+/-
+**MeasureTheory.OuterMeasure.isGreatest_ofFunction** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.OuterMeasure`。
+形式化陈述：isGreatest_ofFunction : IsGreatest { μ : OuterMeasure α | forall s, μ s <=
+ m s } (OuterMeasure.ofFunction m m_empty)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_le`：ofFunction_le (s : Set α) : Ou
+terMeasure.ofFunction m m_empty s <= m s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.OuterMeasure.le_ofFunction`：le_ofFunction {μ : OuterMeasur
+e α} : μ <= OuterMeasure.ofFunction m m_empty ↔ forall s, μ s <= m s
 -/
 theorem isGreatest_ofFunction :
-    IsGreatest { μ : OuterMeasure α | forall s, μ s <= m s } (OuterMeasure.ofFunction m m_empty) :=
+    IsGreatest { μ : OuterMeasure α | ∀ s, μ s ≤ m s } (OuterMeasure.ofFunction m m_empty) :=
   ⟨fun _ => ofFunction_le _, fun _ => le_ofFunction.2⟩
-
-/--
-theorem `ofFunction_eq_sSup` / 定理 `ofFunction_eq_sSup`
-
-English:
-theorem ofFunction_eq_sSup
-  statement: OuterMeasure.ofFunction m m_empty = sSup { μ | forall s, μ s <= m s }
-  proof: (@isGreatest_ofFunction α m m_empty).isLUB.sSup_eq.symm
-
-中文:
-定理 ofFunction_eq_sSup
-  结论: 外测度.ofFunction m m_empty = sSup { μ | 对任意 s, μ s <= m s }
-  证明: (@isGreatest_ofFunction α m m_empty).isLUB.sSup_eq.symm
-
-Depends on / 依赖: isGreatest_ofFunction, isLUB.sSup_eq.symm, m_empty, sSup_eq
+/-
+**MeasureTheory.OuterMeasure.ofFunction_eq_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Measu
+reTheory.OuterMeasure`。
+形式化陈述：ofFunction_eq_sSup : OuterMeasure.ofFunction m m_empty = sSup { μ | forall
+ s, μ s <= m s }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLUB.sSup_eq`：∀ {α : Type u_1} [inst : CompleteSemilatticeSup α] {s : S
+et α} {a : α}, IsLUB s a → sSup s = a
+· 使用定理 `IsGreatest.isLUB`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α} {a : 
+α}, IsGreatest s a → IsLUB s a
+· 使用定理 `MeasureTheory.OuterMeasure.isGreatest_ofFunction`：isGreatest_ofFunction 
+: IsGreatest { μ : OuterMeasure α | forall s, μ s <= m s } (OuterMeasure.ofFunct
+ion m m_empty)
 -/
-theorem ofFunction_eq_sSup : OuterMeasure.ofFunction m m_empty = sSup { μ | forall s, μ s <= m s } :=
+theorem ofFunction_eq_sSup : OuterMeasure.ofFunction m m_empty = sSup { μ | ∀ s, μ s ≤ m s } :=
   (@isGreatest_ofFunction α m m_empty).isLUB.sSup_eq.symm
 
-/--
-theorem `ofFunction_union_of_top_of_nonempty_inter` / 定理 `ofFunction_union_of_top_of_nonempty_inter`
+/-- If `m u = ∞` for any set `u` that has nonempty intersection both with `s` and `t`, then
+`μ (s ∪ t) = μ s + μ t`, where `μ = MeasureTheory.OuterMeasure.ofFunction m m_empty`.
 
-English:
-theorem ofFunction_union_of_top_of_nonempty_inter
-  statement: {s t : Set α}
-  proof: by
-  refine le_antisymm (measure_union_le _ _) (le_iInf₂ fun f hf => ?_)
-  set μ := OuterMeasure.ofFunction m m_empty
-  rcases Classical.em (exists i, (s inter f i).Nonempty ∧ (t inter f i).Nonempty) with (⟨i, hs, ht⟩ | he)
-  · calc
-      μ s + μ t <= ∞ := le_top
-      _ = m (f i) := (h (f i) hs ht).symm
-      _ <= ∑' i, m (f i) := ENNReal.le_tsum i
-  set I := fun s => { i : Nat | (s inter f i).Nonempty }
-  have hd : Disjoint (I s) (I t) := disjoint_iff_inf_le.mpr fun i hi => he ⟨i, hi⟩
-  have hI : forall u subseteq s union t, μ u <= ∑' i : I u, μ (f i) := fun u hu =>
-    calc
-      μ u <= μ (⋃ i : I u, f i) :=
-        μ.mono fun x hx =>
-          let ⟨i, hi⟩ := mem_iUnion.1 (hf (hu hx))
-          mem_iUnion.2 ⟨⟨i, ⟨x, hx, hi⟩⟩, hi⟩
-      _ <= ∑' i : I u, μ (f i) := measure_iUnion_le _
-  calc
-    μ s + μ t <= (∑' i : I s, μ (f i)) + ∑' i : I t, μ (f i) :=
-      add_le_add (hI _ subset_union_left) (hI _ subset_union_right)
-    _ = ∑' i : ↑(I s union I t), μ (f i) :=
-      (ENNReal.summable.tsum_union_disjoint (f := fun i => μ (f i)) hd ENNReal.summable).symm
-    _ <= ∑' i, μ (f i) :=
-      (ENNReal.summable.tsum_le_tsum_of_inj (↑) Subtype.coe_injective (fun _ _ => zero_le)
-        (fun _ => le_rfl) ENNReal.summable)
-    _ <= ∑' i, m (f i) := ENNReal.tsum_le_tsum fun i => ofFunction_le _
+E.g., if `α` is an (e)metric space and `m u = ∞` on any set of diameter `≥ r`, then this lemma
+implies that `μ (s ∪ t) = μ s + μ t` on any two sets such that `r ≤ edist x y` for all `x ∈ s`
+and `y ∈ t`. -/
+/-
+**MeasureTheory.OuterMeasure.ofFunction_union_of_top_of_nonempty_inter** 是 Mathl
+ib 中的一个定理，位于命名空间 `MeasureTheory.OuterMeasure`。
+形式化陈述：ofFunction_union_of_top_of_nonempty_inter {s t : Set α} (h : forall u, (s 
+inter u).Nonempty -> (t inter u).Nonempty -> m u = ∞) : OuterMeasure.ofFunction 
+m m_empty (s union t) = OuterMeasure.ofFunction m m_empty s + OuterMeasure.ofFun
+ction m m_empty t
+参数：h : forall u, (s inter u).Nonempty -> (t inter u).Nonempty -> m u = ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasureTheory.measure_union_le`：measure_union_le (s t : Set α) : μ (s un
+ion t) <= μ s + μ t
+· 使用定理 `MeasureTheory.OuterMeasure.instOuterMeasureClass`：∀ {α : Type u_1}, Meas
+ureTheory.OuterMeasureClass (MeasureTheory.OuterMeasure α) α
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.le_tsum`：∀ {α : Type u_1} {f : α → ENNReal} (a : α), f a ≤ ∑' (a
+ : α), f a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `disjoint_iff_inf_le`：disjoint_iff_inf_le : Disjoint a b ↔ a ⊓ b <= ⊥
+· 使用定理 `MeasureTheory.OuterMeasure.mono`：∀ {α : Type u_2} (self : MeasureTheory.
+OuterMeasure α) {s₁ s₂ : Set α}, s₁ ⊆ s₂ → self.measureOf s₁ ≤ self.measureOf s₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `MeasureTheory.measure_iUnion_le`：measure_iUnion_le [Countable ι] (s : ι 
+-> Set α) : μ (⋃ i, s i) <= ∑' i, μ (s i)
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
+· 使用定理 `Summable.tsum_union_disjoint`：∀ {α : Type u_1} {β : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : TopologicalSpace α] {f : β → α} [T2Space α]   [Continuo
+usAdd α] {s t : Se…
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
+· 使用定理 `ENNReal.summable`：∀ {α : Type u_1} {f : α → ENNReal}, Summable f
+· 使用定理 `Summable.tsum_le_tsum_of_inj`：∀ {ι : Type u_1} {κ : Type u_2} {α : Type 
+u_3} [inst : AddCommMonoid α] [inst_1 : Preorder α] [IsOrderedAddMonoid α]   [in
+st_3 : Topological…
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+（共 37 条，此处仅展示前 30 条）
 
-中文:
-定理 ofFunction_union_of_top_of_nonempty_inter
-  结论: {s t : 集合 α}
-  证明: by
-  refine le_antisymm (measure_union_le _ _) (le_iInf₂ fun f hf => ?_)
-  set μ := OuterMeasure.ofFunction m m_empty
-  rcases Classical.em (exists i, (s inter f i).Nonempty ∧ (t inter f i).Nonempty) with (⟨i, hs, ht⟩ | he)
-  · calc
-      μ s + μ t <= ∞ := le_top
-      _ = m (f i) := (h (f i) hs ht).symm
-      _ <= ∑' i, m (f i) := ENNReal.le_tsum i
-  set I := fun s => { i : Nat | (s inter f i).Nonempty }
-  have hd : Disjoint (I s) (I t) := disjoint_iff_inf_le.mpr fun i hi => he ⟨i, hi⟩
-  have hI : forall u subseteq s union t, μ u <= ∑' i : I u, μ (f i) := fun u hu =>
-    calc
-      μ u <= μ (⋃ i : I u, f i) :=
-        μ.mono fun x hx =>
-          let ⟨i, hi⟩ := mem_iUnion.1 (hf (hu hx))
-          mem_iUnion.2 ⟨⟨i, ⟨x, hx, hi⟩⟩, hi⟩
-      _ <= ∑' i : I u, μ (f i) := measure_iUnion_le _
-  calc
-    μ s + μ t <= (∑' i : I s, μ (f i)) + ∑' i : I t, μ (f i) :=
-      add_le_add (hI _ subset_union_left) (hI _ subset_union_right)
-    _ = ∑' i : ↑(I s union I t), μ (f i) :=
-      (ENNReal.summable.tsum_union_disjoint (f := fun i => μ (f i)) hd ENNReal.summable).symm
-    _ <= ∑' i, μ (f i) :=
-      (ENNReal.summable.tsum_le_tsum_of_inj (↑) Subtype.coe_injective (fun _ _ => zero_le)
-        (fun _ => le_rfl) ENNReal.summable)
-    _ <= ∑' i, m (f i) := ENNReal.tsum_le_tsum fun i => ofFunction_le _
+--- 原说明 ---
+If `m u = ∞` for any set `u` that has nonempty intersection both with `s` and `t
+`, then
+`μ (s ∪ t) = μ s + μ t`, where `μ = MeasureTheory.OuterMeasure.ofFunction m m_em
+pty`.
 
-Depends on / 依赖: Classical, Classical.em, Disjoint, ENNReal, ENNReal.le_tsum, Nonempty, OuterMeasure, OuterMeasure.ofFunction, disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, le_antisymm, le_top, le_tsum, m_empty, measure_union_le, ofFunction, subseteq
+E.g., if `α` is an (e)metric space and `m u = ∞` on any set of diameter `≥ r`, t
+hen this lemma
+implies that `μ (s ∪ t) = μ s + μ t` on any two sets such that `r ≤ edist x y` f
+or all `x ∈ s`
+and `y ∈ t`.
 -/
 theorem ofFunction_union_of_top_of_nonempty_inter {s t : Set α}
-    (h : forall u, (s inter u).Nonempty -> (t inter u).Nonempty -> m u = ∞) :
-    OuterMeasure.ofFunction m m_empty (s union t) =
+    (h : ∀ u, (s ∩ u).Nonempty → (t ∩ u).Nonempty → m u = ∞) :
+    OuterMeasure.ofFunction m m_empty (s ∪ t) =
       OuterMeasure.ofFunction m m_empty s + OuterMeasure.ofFunction m m_empty t := by
-  refine le_antisymm (measure_union_le _ _) (le_iInf₂ fun f hf => ?_)
+  refine le_antisymm (measure_union_le _ _) (le_iInf₂ fun f hf ↦ ?_)
   set μ := OuterMeasure.ofFunction m m_empty
-  rcases Classical.em (exists i, (s inter f i).Nonempty ∧ (t inter f i).Nonempty) with (⟨i, hs, ht⟩ | he)
+  rcases Classical.em (∃ i, (s ∩ f i).Nonempty ∧ (t ∩ f i).Nonempty) with (⟨i, hs, ht⟩ | he)
   · calc
-      μ s + μ t <= ∞ := le_top
+      μ s + μ t ≤ ∞ := le_top
       _ = m (f i) := (h (f i) hs ht).symm
-      _ <= ∑' i, m (f i) := ENNReal.le_tsum i
-  set I := fun s => { i : Nat | (s inter f i).Nonempty }
+      _ ≤ ∑' i, m (f i) := ENNReal.le_tsum i
+  set I := fun s => { i : ℕ | (s ∩ f i).Nonempty }
   have hd : Disjoint (I s) (I t) := disjoint_iff_inf_le.mpr fun i hi => he ⟨i, hi⟩
-  have hI : forall u subseteq s union t, μ u <= ∑' i : I u, μ (f i) := fun u hu =>
+  have hI : ∀ u ⊆ s ∪ t, μ u ≤ ∑' i : I u, μ (f i) := fun u hu =>
     calc
-      μ u <= μ (⋃ i : I u, f i) :=
+      μ u ≤ μ (⋃ i : I u, f i) :=
         μ.mono fun x hx =>
           let ⟨i, hi⟩ := mem_iUnion.1 (hf (hu hx))
           mem_iUnion.2 ⟨⟨i, ⟨x, hx, hi⟩⟩, hi⟩
-      _ <= ∑' i : I u, μ (f i) := measure_iUnion_le _
+      _ ≤ ∑' i : I u, μ (f i) := measure_iUnion_le _
   calc
-    μ s + μ t <= (∑' i : I s, μ (f i)) + ∑' i : I t, μ (f i) :=
+    μ s + μ t ≤ (∑' i : I s, μ (f i)) + ∑' i : I t, μ (f i) :=
       add_le_add (hI _ subset_union_left) (hI _ subset_union_right)
-    _ = ∑' i : ↑(I s union I t), μ (f i) :=
+    _ = ∑' i : ↑(I s ∪ I t), μ (f i) :=
       (ENNReal.summable.tsum_union_disjoint (f := fun i => μ (f i)) hd ENNReal.summable).symm
-    _ <= ∑' i, μ (f i) :=
+    _ ≤ ∑' i, μ (f i) :=
       (ENNReal.summable.tsum_le_tsum_of_inj (↑) Subtype.coe_injective (fun _ _ => zero_le)
         (fun _ => le_rfl) ENNReal.summable)
-    _ <= ∑' i, m (f i) := ENNReal.tsum_le_tsum fun i => ofFunction_le _
-
-/--
-theorem `comap_ofFunction` / 定理 `comap_ofFunction`
-
-English:
-theorem comap_ofFunction
-  given: {β} (f : β -> α) (h : Monotone m ∨ Surjective f)
-  proof: by
-  refine le_antisymm (le_ofFunction.2 fun s => ?_) fun s => ?_
-  · rw [comap_apply]
-    apply ofFunction_le
-  · rw [comap_apply, ofFunction_apply, ofFunction_apply]
-    refine iInf_mono' fun t => ⟨fun k => f ⁻¹' t k, ?_⟩
-    refine iInf_mono' fun ht => ?_
-    rw [Set.image_subset_iff]; rw [preimage_iUnion] at ht
-    refine ⟨ht, ENNReal.tsum_le_tsum fun n => ?_⟩
-    rcases h with hl | hr
-    exacts [hl (image_preimage_subset _ _), (congr_arg m (hr.image_preimage (t n))).le]
-
-中文:
-定理 comap_ofFunction
-  条件: {β} (f : β -> α) (h : 递增 m ∨ 满射 f)
-  证明: by
-  refine le_antisymm (le_ofFunction.2 fun s => ?_) fun s => ?_
-  · rw [comap_apply]
-    apply ofFunction_le
-  · rw [comap_apply, ofFunction_apply, ofFunction_apply]
-    refine iInf_mono' fun t => ⟨fun k => f ⁻¹' t k, ?_⟩
-    refine iInf_mono' fun ht => ?_
-    rw [Set.image_subset_iff]; rw [preimage_iUnion] at ht
-    refine ⟨ht, ENNReal.tsum_le_tsum fun n => ?_⟩
-    rcases h with hl | hr
-    exacts [hl (image_preimage_subset _ _), (congr_arg m (hr.image_preimage (t n))).le]
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, Set.image_subset_iff, comap_apply, congr_arg, exacts, hr.image_preimage, iInf_mono, image_preimage, image_preimage_subset, image_subset_iff, le_antisymm, le_ofFunction, ofFunction_apply, ofFunction_le, preimage_iUnion, tsum_le_tsum
+    _ ≤ ∑' i, m (f i) := ENNReal.tsum_le_tsum fun i => ofFunction_le _
+/-
+**MeasureTheory.OuterMeasure.comap_ofFunction** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.OuterMeasure`。
+形式化陈述：comap_ofFunction {β} (f : β -> α) (h : Monotone m ∨ Surjective f) : comap 
+f (OuterMeasure.ofFunction m m_empty) = OuterMeasure.ofFunction (fun s => m (f '
+' s)) (by simp; simp [m_empty])
+参数：f : β -> α；h : Monotone m ∨ Surjective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.OuterMeasure.le_ofFunction`：le_ofFunction {μ : OuterMeasur
+e α} : μ <= OuterMeasure.ofFunction m m_empty ↔ forall s, μ s <= m s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.comap_apply`：comap_apply {β} (f : α -> β) (m 
+: OuterMeasure β) (s : Set α) : comap f m s = m (f '' s)
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_le`：ofFunction_le (s : Set α) : Ou
+terMeasure.ofFunction m m_empty s <= m s
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_apply`：ofFunction_apply (s : Set α
+) : OuterMeasure.ofFunction m m_empty s = ⨅ (t : Nat -> Set α) (_ : s subseteq i
+Union t), ∑' n, m (t n)
+· 使用定理 `iInf_mono'`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort u_5} [inst : Comp
+leteLattice α] {f : ι → α} {g : ι' → α},   (∀ (i : ι), ∃ i', g i' ≤ f i) → iInf 
+…
+· 使用定理 `Set.preimage_iUnion`：preimage_iUnion {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `ENNReal.tsum_le_tsum`：∀ {α : Type u_1} {f g : α → ENNReal}, (∀ (a : α), 
+f a ≤ g a) → ∑' (a : α), f a ≤ ∑' (a : α), g a
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Function.Surjective.image_preimage`：∀ {α : Type u_1} {β : Type u_2} {f :
+ α → β}, Function.Surjective f → ∀ (s : Set β), f '' f ⁻¹' s = s
 -/
-theorem comap_ofFunction {β} (f : β -> α) (h : Monotone m ∨ Surjective f) :
+theorem comap_ofFunction {β} (f : β → α) (h : Monotone m ∨ Surjective f) :
     comap f (OuterMeasure.ofFunction m m_empty) =
       OuterMeasure.ofFunction (fun s => m (f '' s)) (by simp; simp [m_empty]) := by
   refine le_antisymm (le_ofFunction.2 fun s => ?_) fun s => ?_
@@ -503,143 +478,184 @@ theorem comap_ofFunction {β} (f : β -> α) (h : Monotone m ∨ Surjective f) :
   · rw [comap_apply, ofFunction_apply, ofFunction_apply]
     refine iInf_mono' fun t => ⟨fun k => f ⁻¹' t k, ?_⟩
     refine iInf_mono' fun ht => ?_
-    rw [Set.image_subset_iff]; rw [preimage_iUnion] at ht
+    rw [Set.image_subset_iff, preimage_iUnion] at ht
     refine ⟨ht, ENNReal.tsum_le_tsum fun n => ?_⟩
     rcases h with hl | hr
     exacts [hl (image_preimage_subset _ _), (congr_arg m (hr.image_preimage (t n))).le]
-
-/--
-theorem `map_ofFunction_le` / 定理 `map_ofFunction_le`
-
-English:
-theorem map_ofFunction_le
-  given: {β} (f : α -> β)
-  proof: le_ofFunction.2 fun s => by
-    rw [map_apply]
-    apply ofFunction_le
-
-中文:
-定理 map_ofFunction_le
-  条件: {β} (f : α -> β)
-  证明: le_ofFunction.2 fun s => by
-    rw [map_apply]
-    apply ofFunction_le
-
-Depends on / 依赖: le_ofFunction, map_apply, ofFunction_le
+/-
+**MeasureTheory.OuterMeasure.map_ofFunction_le** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.OuterMeasure`。
+形式化陈述：map_ofFunction_le {β} (f : α -> β) : map f (OuterMeasure.ofFunction m m_em
+pty) <= OuterMeasure.ofFunction (fun s => m (f ⁻¹' s)) m_empty
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.OuterMeasure.le_ofFunction`：le_ofFunction {μ : OuterMeasur
+e α} : μ <= OuterMeasure.ofFunction m m_empty ↔ forall s, μ s <= m s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.map_apply`：map_apply {β} (f : α -> β) (m : Ou
+terMeasure α) (s : Set β) : map f m s = m (f ⁻¹' s)
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_le`：ofFunction_le (s : Set α) : Ou
+terMeasure.ofFunction m m_empty s <= m s
 -/
-theorem map_ofFunction_le {β} (f : α -> β) :
-    map f (OuterMeasure.ofFunction m m_empty) <=
+theorem map_ofFunction_le {β} (f : α → β) :
+    map f (OuterMeasure.ofFunction m m_empty) ≤
       OuterMeasure.ofFunction (fun s => m (f ⁻¹' s)) m_empty :=
   le_ofFunction.2 fun s => by
     rw [map_apply]
     apply ofFunction_le
-
-/--
-theorem `map_ofFunction` / 定理 `map_ofFunction`
-
-English:
-theorem map_ofFunction
-  given: {β} {f : α -> β} (hf : Injective f)
-  proof: by
-  refine (map_ofFunction_le _).antisymm fun s => ?_
-  simp only [ofFunction_apply, map_apply, le_iInf_iff]
-  intro t ht
-  refine iInf_le_of_le (fun n => (range f)ᶜ union f '' t n) (iInf_le_of_le ?_ ?_)
-  · rw [← union_iUnion, ← inter_subset, ← image_preimage_eq_inter_range, ← image_iUnion]
-    exact image_mono ht
-  · refine ENNReal.tsum_le_tsum fun n => le_of_eq ?_
-    simp [hf.preimage_image]
-
-中文:
-定理 map_ofFunction
-  条件: {β} {f : α -> β} (hf : 单射 f)
-  证明: by
-  refine (map_ofFunction_le _).antisymm fun s => ?_
-  simp only [ofFunction_apply, map_apply, le_iInf_iff]
-  intro t ht
-  refine iInf_le_of_le (fun n => (range f)ᶜ union f '' t n) (iInf_le_of_le ?_ ?_)
-  · rw [← union_iUnion, ← inter_subset, ← image_preimage_eq_inter_range, ← image_iUnion]
-    exact image_mono ht
-  · refine ENNReal.tsum_le_tsum fun n => le_of_eq ?_
-    simp [hf.preimage_image]
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, antisymm, hf.preimage_image, iInf_le_of_le, image_iUnion, image_mono, image_preimage_eq_inter_range, inter_subset, le_iInf_iff, le_of_eq, map_apply, map_ofFunction_le, ofFunction_apply, preimage_image, tsum_le_tsum, union_iUnion
+/-
+**MeasureTheory.OuterMeasure.map_ofFunction** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.OuterMeasure`。
+形式化陈述：map_ofFunction {β} {f : α -> β} (hf : Injective f) : map f (OuterMeasure.o
+fFunction m m_empty) = OuterMeasure.ofFunction (fun s => m (f ⁻¹' s)) m_empty
+参数：hf : Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.OuterMeasure.map_ofFunction_le`：map_ofFunction_le {β} (f :
+ α -> β) : map f (OuterMeasure.ofFunction m m_empty) <= OuterMeasure.ofFunction 
+(fun s => m (f ⁻¹' s)) m_empty
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_iUnion`：union_iUnion [Nonempty ι] (s : Set β) (t : ι -> Set β)
+ : (s union ⋃ i, t i) = ⋃ i, s union t i
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Set.inter_subset`：inter_subset (a b c : Set α) : a inter b subseteq c ↔ 
+a subseteq bᶜ union c
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `Set.image_iUnion`：image_iUnion {f : α -> β} {s : ι -> Set α} : (f '' ⋃ i
+, s i) = ⋃ i, f '' s i
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `ENNReal.tsum_le_tsum`：∀ {α : Type u_1} {f g : α → ENNReal}, (∀ (a : α), 
+f a ≤ g a) → ∑' (a : α), f a ≤ ∑' (a : α), g a
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.preimage_range`：preimage_range (f : α -> β) : f ⁻¹' range f = univ
+· 使用定理 `Set.compl_univ`：compl_univ : (univ : Set α)ᶜ = ∅
+· 使用定理 `Function.Injective.preimage_image`：∀ {α : Type u_1} {β : Type u_2} {f : 
+α → β}, Function.Injective f → ∀ (s : Set α), f ⁻¹' f '' s = s
+· 使用定理 `Set.empty_union`：empty_union (a : Set α) : ∅ union a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_ofFunction {β} {f : α -> β} (hf : Injective f) :
+theorem map_ofFunction {β} {f : α → β} (hf : Injective f) :
     map f (OuterMeasure.ofFunction m m_empty) =
       OuterMeasure.ofFunction (fun s => m (f ⁻¹' s)) m_empty := by
   refine (map_ofFunction_le _).antisymm fun s => ?_
   simp only [ofFunction_apply, map_apply, le_iInf_iff]
   intro t ht
-  refine iInf_le_of_le (fun n => (range f)ᶜ union f '' t n) (iInf_le_of_le ?_ ?_)
+  refine iInf_le_of_le (fun n => (range f)ᶜ ∪ f '' t n) (iInf_le_of_le ?_ ?_)
   · rw [← union_iUnion, ← inter_subset, ← image_preimage_eq_inter_range, ← image_iUnion]
     exact image_mono ht
   · refine ENNReal.tsum_le_tsum fun n => le_of_eq ?_
     simp [hf.preimage_image]
 
 -- TODO (kmill): change `m (t ∩ s)` to `m (s ∩ t)`
-/--
-theorem `restrict_ofFunction` / 定理 `restrict_ofFunction`
-
-English:
-theorem restrict_ofFunction
-  given: (s : Set α) (hm : Monotone m)
-  proof: by
-      rw [restrict]
-      simp only [inter_comm _ s, LinearMap.comp_apply]
-      rw [comap_ofFunction _ (Or.inl hm)]
-      simp only [map_ofFunction Subtype.coe_injective, Subtype.image_preimage_coe]
-
-中文:
-定理 restrict_ofFunction
-  条件: (s : 集合 α) (hm : 递增 m)
-  证明: by
-      rw [restrict]
-      simp only [inter_comm _ s, LinearMap.comp_apply]
-      rw [comap_ofFunction _ (Or.inl hm)]
-      simp only [map_ofFunction Subtype.coe_injective, Subtype.image_preimage_coe]
-
-Depends on / 依赖: LinearMap, LinearMap.comp_apply, Or.inl, Subtype, Subtype.coe_injective, Subtype.image_preimage_coe, coe_injective, comap_ofFunction, comp_apply, image_preimage_coe, inter_comm, map_ofFunction, restrict
+/-
+**MeasureTheory.OuterMeasure.restrict_ofFunction** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.OuterMeasure`。
+形式化陈述：restrict_ofFunction (s : Set α) (hm : Monotone m) : restrict s (OuterMeasu
+re.ofFunction m m_empty) = OuterMeasure.ofFunction (fun t => m (t inter s)) (by 
+simp; simp [m_empty])
+参数：s : Set α；hm : Monotone m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.restrict.eq_1`：∀ {α : Type u_1} (s : Set α), 
+  MeasureTheory.OuterMeasure.restrict s =     MeasureTheory.OuterMeasure.map Sub
+type.val ∘ₗ MeasureTheory.Oute…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction.congr_simp`：∀ {α : Type u_1} (m m_
+1 : Set α → ENNReal) (e_m : m = m_1) (m_empty : m ∅ = 0),   MeasureTheory.OuterM
+easure.ofFunction m m_empty = MeasureT…
+· 使用定理 `MeasureTheory.OuterMeasure.comap_ofFunction`：comap_ofFunction {β} (f : β
+ -> α) (h : Monotone m ∨ Surjective f) : comap f (OuterMeasure.ofFunction m m_em
+pty) = OuterMeasure.ofFunction (f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.image_preimage_coe`：image_preimage_coe (s t : Set α) : ((↑) : s 
+-> α) '' ((↑) : s -> α) ⁻¹' t = s inter t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.OuterMeasure.map_ofFunction`：map_ofFunction {β} {f : α -> 
+β} (hf : Injective f) : map f (OuterMeasure.ofFunction m m_empty) = OuterMeasure
+.ofFunction (fun s => m (f ⁻¹' …
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem restrict_ofFunction (s : Set α) (hm : Monotone m) :
     restrict s (OuterMeasure.ofFunction m m_empty) =
-      OuterMeasure.ofFunction (fun t => m (t inter s)) (by simp; simp [m_empty]) := by
+      OuterMeasure.ofFunction (fun t => m (t ∩ s)) (by simp; simp [m_empty]) := by
       rw [restrict]
       simp only [inter_comm _ s, LinearMap.comp_apply]
       rw [comap_ofFunction _ (Or.inl hm)]
       simp only [map_ofFunction Subtype.coe_injective, Subtype.image_preimage_coe]
-
-/--
-theorem `smul_ofFunction` / 定理 `smul_ofFunction`
-
-English:
-theorem smul_ofFunction
-  given: {c : Real>=0∞} (hc : c != ∞)
-  statement: c • OuterMeasure.ofFunction m m_empty =
-  proof: by
-  ext1 s
-  have : Nonempty { t : Nat -> Set α // s subseteq ⋃ i, t i } := ⟨⟨fun _ => s, subset_iUnion (fun _ => s) 0⟩⟩
-  simp only [smul_apply, ofFunction_apply, ENNReal.tsum_mul_left, Pi.smul_apply, smul_eq_mul,
-  iInf_subtype']
-  rw [ENNReal.mul_iInf fun h => (hc h).elim]
-
-中文:
-定理 smul_ofFunction
-  条件: {c : 实数>=0∞} (hc : c != ∞)
-  结论: c • 外测度.ofFunction m m_empty =
-  证明: by
-  ext1 s
-  have : Nonempty { t : Nat -> Set α // s subseteq ⋃ i, t i } := ⟨⟨fun _ => s, subset_iUnion (fun _ => s) 0⟩⟩
-  simp only [smul_apply, ofFunction_apply, ENNReal.tsum_mul_left, Pi.smul_apply, smul_eq_mul,
-  iInf_subtype']
-  rw [ENNReal.mul_iInf fun h => (hc h).elim]
-
-Depends on / 依赖: ENNReal, ENNReal.mul_iInf, ENNReal.tsum_mul_left, Nonempty, Pi.smul_apply, iInf_subtype, mul_iInf, ofFunction_apply, smul_apply, smul_eq_mul, subset_iUnion, subseteq, tsum_mul_left
+/-
+**MeasureTheory.OuterMeasure.smul_ofFunction** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.OuterMeasure`。
+形式化陈述：smul_ofFunction {c : Real>=0∞} (hc : c != ∞) : c • OuterMeasure.ofFunction
+ m m_empty = OuterMeasure.ofFunction (c • m) (by simp [m_empty])
+参数：hc : c != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.OuterMeasure.ext`：ext {μ₁ μ₂ : OuterMeasure α} (h : forall
+ s, μ₁ s = μ₂ s) : μ₁ = μ₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `MeasureTheory.OuterMeasure.instIsSMulApplySetENNReal`：∀ {α : Type u_1} {
+R : Type u_3} [inst : SMul R ENNReal] [inst_1 : IsScalarTower R ENNReal ENNReal]
+,   IsSMulApply R (MeasureTheory.OuterMeas…
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `ENNReal.tsum_mul_left`：∀ {α : Type u_1} {a : ENNReal} {f : α → ENNReal},
+ ∑' (i : α), a * f i = a * ∑' (i : α), f i
+· 使用引理 `ENNReal.mul_iInf`：mul_iInf [Nonempty ι] (hinfty : a = ∞ -> ⨅ i, f i = 0 
+-> exists i, f i = 0) : a * ⨅ i, f i = ⨅ i, a * f i
 -/
-theorem smul_ofFunction {c : Real>=0∞} (hc : c != ∞) : c • OuterMeasure.ofFunction m m_empty =
+theorem smul_ofFunction {c : ℝ≥0∞} (hc : c ≠ ∞) : c • OuterMeasure.ofFunction m m_empty =
     OuterMeasure.ofFunction (c • m) (by simp [m_empty]) := by
   ext1 s
-  have : Nonempty { t : Nat -> Set α // s subseteq ⋃ i, t i } := ⟨⟨fun _ => s, subset_iUnion (fun _ => s) 0⟩⟩
+  have : Nonempty { t : ℕ → Set α // s ⊆ ⋃ i, t i } := ⟨⟨fun _ => s, subset_iUnion (fun _ => s) 0⟩⟩
   simp only [smul_apply, ofFunction_apply, ENNReal.tsum_mul_left, Pi.smul_apply, smul_eq_mul,
   iInf_subtype']
   rw [ENNReal.mul_iInf fun h => (hc h).elim]
@@ -648,70 +664,79 @@ end OfFunction
 
 section BoundedBy
 
-variable {α : Type*} (m : Set α -> Real>=0∞)
+variable {α : Type*} (m : Set α → ℝ≥0∞)
 
-/--
-Definition of `boundedBy` / `boundedBy` 的定义
+/-- Given any function `m` assigning measures to sets, there is a unique maximal outer measure `μ`
+  satisfying `μ s ≤ m s` for all `s : Set α`. This is the same as `OuterMeasure.ofFunction`,
+  except that it doesn't require `m ∅ = 0`. -/
+/-
+**MeasureTheory.OuterMeasure.boundedBy** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.
+OuterMeasure`。
+形式化陈述：boundedBy : OuterMeasure α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition boundedBy
-  signature: : OuterMeasure α
-  body: OuterMeasure.ofFunction (fun s => ⨆ _ : s.Nonempty, m s) (by simp [Set.not_nonempty_empty])
-
-中文:
-定义 boundedBy
-  签名: : 外测度 α
-  定义体: OuterMeasure.ofFunction (fun s => ⨆ _ : s.Nonempty, m s) (by simp [Set.not_nonempty_empty])
-
-Depends on / 依赖: Nonempty, OuterMeasure, OuterMeasure.ofFunction, Set.not_nonempty_empty, not_nonempty_empty, ofFunction, s.Nonempty
+--- 原说明 ---
+Given any function `m` assigning measures to sets, there is a unique maximal out
+er measure `μ`
+  satisfying `μ s ≤ m s` for all `s : Set α`. This is the same as `OuterMeasure.
+ofFunction`,
+  except that it doesn't require `m ∅ = 0`.
 -/
 def boundedBy : OuterMeasure α :=
   OuterMeasure.ofFunction (fun s => ⨆ _ : s.Nonempty, m s) (by simp [Set.not_nonempty_empty])
 
 variable {m}
-
-/--
-theorem `boundedBy_le` / 定理 `boundedBy_le`
-
-English:
-theorem boundedBy_le
-  given: (s : Set α)
-  statement: boundedBy m s <= m s
-  proof: (ofFunction_le _).trans iSup_const_le
-
-中文:
-定理 boundedBy_le
-  条件: (s : 集合 α)
-  结论: boundedBy m s <= m s
-  证明: (ofFunction_le _).trans iSup_const_le
-
-Depends on / 依赖: iSup_const_le, ofFunction_le
+/-
+**MeasureTheory.OuterMeasure.boundedBy_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.OuterMeasure`。
+形式化陈述：boundedBy_le (s : Set α) : boundedBy m s <= m s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_le`：ofFunction_le (s : Set α) : Ou
+terMeasure.ofFunction m m_empty s <= m s
+· 使用定理 `iSup_const_le`：iSup_const_le : ⨆ _ : ι, a <= a
 -/
-theorem boundedBy_le (s : Set α) : boundedBy m s <= m s :=
+theorem boundedBy_le (s : Set α) : boundedBy m s ≤ m s :=
   (ofFunction_le _).trans iSup_const_le
-
-/--
-theorem `boundedBy_eq_ofFunction` / 定理 `boundedBy_eq_ofFunction`
-
-English:
-theorem boundedBy_eq_ofFunction
-  given: (m_empty : m ∅ = 0) (s : Set α)
-  proof: by
-  have : (fun s : Set α => ⨆ _ : s.Nonempty, m s) = m := by
-    ext1 t
-    rcases t.eq_empty_or_nonempty with h | h <;> simp [h, Set.not_nonempty_empty, m_empty]
-  simp [boundedBy, this]
-
-中文:
-定理 boundedBy_eq_ofFunction
-  条件: (m_empty : m ∅ = 0) (s : 集合 α)
-  证明: by
-  have : (fun s : Set α => ⨆ _ : s.Nonempty, m s) = m := by
-    ext1 t
-    rcases t.eq_empty_or_nonempty with h | h <;> simp [h, Set.not_nonempty_empty, m_empty]
-  simp [boundedBy, this]
-
-Depends on / 依赖: Nonempty, Set.not_nonempty_empty, boundedBy, eq_empty_or_nonempty, m_empty, not_nonempty_empty, s.Nonempty, t.eq_empty_or_nonempty
+/-
+**MeasureTheory.OuterMeasure.boundedBy_eq_ofFunction** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.OuterMeasure`。
+形式化陈述：boundedBy_eq_ofFunction (m_empty : m ∅ = 0) (s : Set α) : boundedBy m s = 
+OuterMeasure.ofFunction m m_empty s
+参数：m_empty : m ∅ = 0；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction.congr_simp`：∀ {α : Type u_1} (m m_
+1 : Set α → ENNReal) (e_m : m = m_1) (m_empty : m ∅ = 0),   MeasureTheory.OuterM
+easure.ofFunction m m_empty = MeasureT…
 -/
 theorem boundedBy_eq_ofFunction (m_empty : m ∅ = 0) (s : Set α) :
     boundedBy m s = OuterMeasure.ofFunction m m_empty s := by
@@ -719,247 +744,269 @@ theorem boundedBy_eq_ofFunction (m_empty : m ∅ = 0) (s : Set α) :
     ext1 t
     rcases t.eq_empty_or_nonempty with h | h <;> simp [h, Set.not_nonempty_empty, m_empty]
   simp [boundedBy, this]
-
-/--
-theorem `boundedBy_apply` / 定理 `boundedBy_apply`
-
-English:
-theorem boundedBy_apply
-  given: (s : Set α)
-  proof: by
-  simp [boundedBy, ofFunction_apply]
-
-中文:
-定理 boundedBy_apply
-  条件: (s : 集合 α)
-  证明: by
-  simp [boundedBy, ofFunction_apply]
-
-Depends on / 依赖: boundedBy, ofFunction_apply
+/-
+**MeasureTheory.OuterMeasure.boundedBy_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.OuterMeasure`。
+形式化陈述：boundedBy_apply (s : Set α) : boundedBy m s = ⨅ (t : Nat -> Set α) (_ : s 
+subseteq iUnion t), ∑' n, ⨆ _ : (t n).Nonempty, m (t n)
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem boundedBy_apply (s : Set α) :
-    boundedBy m s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t),
+    boundedBy m s = ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t),
                       ∑' n, ⨆ _ : (t n).Nonempty, m (t n) := by
   simp [boundedBy, ofFunction_apply]
-
-/--
-theorem `boundedBy_eq` / 定理 `boundedBy_eq`
-
-English:
-theorem boundedBy_eq
-  statement: (s : Set α) (m_empty : m ∅ = 0) (m_mono : forall ⦃t : Set α⦄, s subseteq t -> m s <= m t)
-  proof: by
-  rw [boundedBy_eq_ofFunction m_empty]; rw [ofFunction_eq s m_mono m_subadd]
-
-@[simp]
-
-中文:
-定理 boundedBy_eq
-  结论: (s : 集合 α) (m_empty : m ∅ = 0) (m_mono : 对任意 ⦃t : 集合 α⦄, s subseteq t -> m s <= m t)
-  证明: by
-  rw [boundedBy_eq_ofFunction m_empty]; rw [ofFunction_eq s m_mono m_subadd]
-
-@[simp]
-
-Depends on / 依赖: boundedBy_eq_ofFunction, m_empty, m_mono, m_subadd, ofFunction_eq
+/-
+**MeasureTheory.OuterMeasure.boundedBy_eq** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.OuterMeasure`。
+形式化陈述：boundedBy_eq (s : Set α) (m_empty : m ∅ = 0) (m_mono : forall ⦃t : Set α⦄,
+ s subseteq t -> m s <= m t) (m_subadd : forall s : Nat -> Set α, m (⋃ i, s i) <
+= ∑' i, m (s i)) : boundedBy m s = m s
+参数：s : Set α；m_empty : m ∅ = 0；m_mono : forall ⦃t : Set α⦄, s subseteq t -> m s 
+<= m t；m_subadd : forall s : Nat -> Set α, m (⋃ i, s i) <= ∑' i, m (s i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.boundedBy_eq_ofFunction`：boundedBy_eq_ofFunct
+ion (m_empty : m ∅ = 0) (s : Set α) : boundedBy m s = OuterMeasure.ofFunction m 
+m_empty s
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_eq`：ofFunction_eq (s : Set α) (m_m
+ono : forall ⦃t : Set α⦄, s subseteq t -> m s <= m t) (m_subadd : forall s : Nat
+ -> Set α, m (⋃ i, s i) <= ∑' …
 -/
-theorem boundedBy_eq (s : Set α) (m_empty : m ∅ = 0) (m_mono : forall ⦃t : Set α⦄, s subseteq t -> m s <= m t)
-    (m_subadd : forall s : Nat -> Set α, m (⋃ i, s i) <= ∑' i, m (s i)) : boundedBy m s = m s := by
-  rw [boundedBy_eq_ofFunction m_empty]; rw [ofFunction_eq s m_mono m_subadd]
+theorem boundedBy_eq (s : Set α) (m_empty : m ∅ = 0) (m_mono : ∀ ⦃t : Set α⦄, s ⊆ t → m s ≤ m t)
+    (m_subadd : ∀ s : ℕ → Set α, m (⋃ i, s i) ≤ ∑' i, m (s i)) : boundedBy m s = m s := by
+  rw [boundedBy_eq_ofFunction m_empty, ofFunction_eq s m_mono m_subadd]
 
 @[simp]
-/--
-theorem `boundedBy_eq_self` / 定理 `boundedBy_eq_self`
-
-English:
-theorem boundedBy_eq_self
-  given: (m : OuterMeasure α)
-  statement: boundedBy m = m
-  proof: ext fun _ => boundedBy_eq _ measure_empty (fun _ ht => measure_mono ht) measure_iUnion_le
-
-中文:
-定理 boundedBy_eq_self
-  条件: (m : 外测度 α)
-  结论: boundedBy m = m
-  证明: ext fun _ => boundedBy_eq _ measure_empty (fun _ ht => measure_mono ht) measure_iUnion_le
-
-Depends on / 依赖: boundedBy_eq, measure_empty, measure_iUnion_le, measure_mono
+/-
+**MeasureTheory.OuterMeasure.boundedBy_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+eTheory.OuterMeasure`。
+形式化陈述：boundedBy_eq_self (m : OuterMeasure α) : boundedBy m = m
+参数：m : OuterMeasure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.OuterMeasure.ext`：ext {μ₁ μ₂ : OuterMeasure α} (h : forall
+ s, μ₁ s = μ₂ s) : μ₁ = μ₂
+· 使用定理 `MeasureTheory.OuterMeasure.boundedBy_eq`：boundedBy_eq (s : Set α) (m_emp
+ty : m ∅ = 0) (m_mono : forall ⦃t : Set α⦄, s subseteq t -> m s <= m t) (m_subad
+d : forall s : Nat -> Set α, …
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.OuterMeasure.instOuterMeasureClass`：∀ {α : Type u_1}, Meas
+ureTheory.OuterMeasureClass (MeasureTheory.OuterMeasure α) α
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.measure_iUnion_le`：measure_iUnion_le [Countable ι] (s : ι 
+-> Set α) : μ (⋃ i, s i) <= ∑' i, μ (s i)
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
 theorem boundedBy_eq_self (m : OuterMeasure α) : boundedBy m = m :=
   ext fun _ => boundedBy_eq _ measure_empty (fun _ ht => measure_mono ht) measure_iUnion_le
-
-/--
-theorem `le_boundedBy` / 定理 `le_boundedBy`
-
-English:
-theorem le_boundedBy
-  given: {μ : OuterMeasure α}
-  statement: μ <= boundedBy m ↔ forall s, μ s <= m s
-  proof: by
-  rw [boundedBy]; rw [le_ofFunction]; rw [forall_congr']; intro s
-  rcases s.eq_empty_or_nonempty with h | h <;> simp [h, Set.not_nonempty_empty]
-
-中文:
-定理 le_boundedBy
-  条件: {μ : 外测度 α}
-  结论: μ <= boundedBy m ↔ 对任意 s, μ s <= m s
-  证明: by
-  rw [boundedBy]; rw [le_ofFunction]; rw [forall_congr']; intro s
-  rcases s.eq_empty_or_nonempty with h | h <;> simp [h, Set.not_nonempty_empty]
-
-Depends on / 依赖: Set.not_nonempty_empty, boundedBy, eq_empty_or_nonempty, forall_congr, le_ofFunction, not_nonempty_empty, s.eq_empty_or_nonempty
+/-
+**MeasureTheory.OuterMeasure.le_boundedBy** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.OuterMeasure`。
+形式化陈述：le_boundedBy {μ : OuterMeasure α} : μ <= boundedBy m ↔ forall s, μ s <= m 
+s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.boundedBy.eq_1`：∀ {α : Type u_1} (m : Set α →
+ ENNReal),   MeasureTheory.OuterMeasure.boundedBy m = MeasureTheory.OuterMeasure
+.ofFunction (fun s => ⨆ (_ : s.…
+· 使用定理 `MeasureTheory.OuterMeasure.le_ofFunction`：le_ofFunction {μ : OuterMeasur
+e α} : μ <= OuterMeasure.ofFunction m m_empty ↔ forall s, μ s <= m s
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.OuterMeasure.instOuterMeasureClass`：∀ {α : Type u_1}, Meas
+ureTheory.OuterMeasureClass (MeasureTheory.OuterMeasure α) α
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_boundedBy {μ : OuterMeasure α} : μ <= boundedBy m ↔ forall s, μ s <= m s := by
-  rw [boundedBy]; rw [le_ofFunction]; rw [forall_congr']; intro s
+theorem le_boundedBy {μ : OuterMeasure α} : μ ≤ boundedBy m ↔ ∀ s, μ s ≤ m s := by
+  rw [boundedBy, le_ofFunction, forall_congr']; intro s
   rcases s.eq_empty_or_nonempty with h | h <;> simp [h, Set.not_nonempty_empty]
-
-/--
-theorem `le_boundedBy'` / 定理 `le_boundedBy'`
-
-English:
-theorem le_boundedBy'
-  given: {μ : OuterMeasure α}
-  proof: by
-  rw [le_boundedBy]; rw [forall_congr']
-  intro s
-  rcases s.eq_empty_or_nonempty with h | h <;> simp [h]
-
-@[simp]
-
-中文:
-定理 le_boundedBy'
-  条件: {μ : 外测度 α}
-  证明: by
-  rw [le_boundedBy]; rw [forall_congr']
-  intro s
-  rcases s.eq_empty_or_nonempty with h | h <;> simp [h]
-
-@[simp]
-
-Depends on / 依赖: eq_empty_or_nonempty, forall_congr, le_boundedBy, s.eq_empty_or_nonempty
+/-
+**MeasureTheory.OuterMeasure.le_boundedBy'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.OuterMeasure`。
+形式化陈述：le_boundedBy' {μ : OuterMeasure α} : μ <= boundedBy m ↔ forall s : Set α, 
+s.Nonempty -> μ s <= m s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.le_boundedBy`：le_boundedBy {μ : OuterMeasure 
+α} : μ <= boundedBy m ↔ forall s, μ s <= m s
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.OuterMeasure.instOuterMeasureClass`：∀ {α : Type u_1}, Meas
+ureTheory.OuterMeasureClass (MeasureTheory.OuterMeasure α) α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem le_boundedBy' {μ : OuterMeasure α} :
-    μ <= boundedBy m ↔ forall s : Set α, s.Nonempty -> μ s <= m s := by
-  rw [le_boundedBy]; rw [forall_congr']
+    μ ≤ boundedBy m ↔ ∀ s : Set α, s.Nonempty → μ s ≤ m s := by
+  rw [le_boundedBy, forall_congr']
   intro s
   rcases s.eq_empty_or_nonempty with h | h <;> simp [h]
 
 @[simp]
-/--
-theorem `boundedBy_top` / 定理 `boundedBy_top`
-
-English:
-theorem boundedBy_top
-  statement: boundedBy (⊤ : Set α -> Real>=0∞) = ⊤
-  proof: by
-  rw [eq_top_iff]; rw [le_boundedBy']
+/-
+**MeasureTheory.OuterMeasure.boundedBy_top** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.OuterMeasure`。
+形式化陈述：boundedBy_top : boundedBy (⊤ : Set α -> Real>=0∞) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `MeasureTheory.OuterMeasure.le_boundedBy'`：le_boundedBy' {μ : OuterMeasur
+e α} : μ <= boundedBy m ↔ forall s : Set α, s.Nonempty -> μ s <= m s
+· 使用定理 `MeasureTheory.OuterMeasure.top_apply`：top_apply {s : Set α} (h : s.Nonem
+pty) : (⊤ : OuterMeasure α) s = ∞
+· 使用引理 `le_rfl`：le_rfl : a <= a
+-/
+theorem boundedBy_top : boundedBy (⊤ : Set α → ℝ≥0∞) = ⊤ := by
+  rw [eq_top_iff, le_boundedBy']
   intro s hs
   rw [top_apply hs]
   exact le_rfl
 
 @[simp]
-
-中文:
-定理 boundedBy_top
-  结论: boundedBy (⊤ : 集合 α -> 实数>=0∞) = ⊤
-  证明: by
-  rw [eq_top_iff]; rw [le_boundedBy']
-  intro s hs
-  rw [top_apply hs]
-  exact le_rfl
-
-@[simp]
-
-Depends on / 依赖: eq_top_iff, le_boundedBy, le_rfl, top_apply
+/-
+**MeasureTheory.OuterMeasure.boundedBy_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.OuterMeasure`。
+形式化陈述：boundedBy_zero : boundedBy (0 : Set α -> Real>=0∞) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.OuterMeasure.coe_bot`：coe_bot : (⊥ : OuterMeasure α) = 0
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `MeasureTheory.OuterMeasure.boundedBy_le`：boundedBy_le (s : Set α) : boun
+dedBy m s <= m s
 -/
-theorem boundedBy_top : boundedBy (⊤ : Set α -> Real>=0∞) = ⊤ := by
-  rw [eq_top_iff]; rw [le_boundedBy']
-  intro s hs
-  rw [top_apply hs]
-  exact le_rfl
-
-@[simp]
-/--
-theorem `boundedBy_zero` / 定理 `boundedBy_zero`
-
-English:
-theorem boundedBy_zero
-  statement: boundedBy (0 : Set α -> Real>=0∞) = 0
-  proof: by
-  rw [← coe_bot]; rw [eq_bot_iff]
+theorem boundedBy_zero : boundedBy (0 : Set α → ℝ≥0∞) = 0 := by
+  rw [← coe_bot, eq_bot_iff]
   apply boundedBy_le
-
-中文:
-定理 boundedBy_zero
-  结论: boundedBy (0 : 集合 α -> 实数>=0∞) = 0
-  证明: by
-  rw [← coe_bot]; rw [eq_bot_iff]
-  apply boundedBy_le
-
-Depends on / 依赖: boundedBy_le, coe_bot, eq_bot_iff
+/-
+**MeasureTheory.OuterMeasure.smul_boundedBy** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.OuterMeasure`。
+形式化陈述：smul_boundedBy {c : Real>=0∞} (hc : c != ∞) : c • boundedBy m = boundedBy 
+(c • m)
+参数：hc : c != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.smul_ofFunction`：smul_ofFunction {c : Real>=0
+∞} (hc : c != ∞) : c • OuterMeasure.ofFunction m m_empty = OuterMeasure.ofFuncti
+on (c • m) (by simp [m_empty])
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
 -/
-theorem boundedBy_zero : boundedBy (0 : Set α -> Real>=0∞) = 0 := by
-  rw [← coe_bot]; rw [eq_bot_iff]
-  apply boundedBy_le
-
-/--
-theorem `smul_boundedBy` / 定理 `smul_boundedBy`
-
-English:
-theorem smul_boundedBy
-  given: {c : Real>=0∞} (hc : c != ∞)
-  statement: c • boundedBy m = boundedBy (c • m)
-  proof: by
+theorem smul_boundedBy {c : ℝ≥0∞} (hc : c ≠ ∞) : c • boundedBy m = boundedBy (c • m) := by
   simp only [boundedBy, smul_ofFunction hc]
   congr 1 with s : 1
   rcases s.eq_empty_or_nonempty with (rfl | hs) <;> simp [*]
-
-中文:
-定理 smul_boundedBy
-  条件: {c : 实数>=0∞} (hc : c != ∞)
-  结论: c • boundedBy m = boundedBy (c • m)
-  证明: by
-  simp only [boundedBy, smul_ofFunction hc]
-  congr 1 with s : 1
-  rcases s.eq_empty_or_nonempty with (rfl | hs) <;> simp [*]
-
-Depends on / 依赖: boundedBy, eq_empty_or_nonempty, s.eq_empty_or_nonempty, smul_ofFunction
+/-
+**MeasureTheory.OuterMeasure.comap_boundedBy** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.OuterMeasure`。
+形式化陈述：comap_boundedBy {β} (f : β -> α) (h : (Monotone fun s : { s : Set α // s.N
+onempty } => m s) ∨ Surjective f) : comap f (boundedBy m) = boundedBy fun s => m
+ (f '' s)
+参数：f : β -> α；h : (Monotone fun s : { s : Set α // s.Nonempty } => m s) ∨ Surjec
+tive f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.OuterMeasure.comap_ofFunction`：comap_ofFunction {β} (f : β
+ -> α) (h : Monotone m ∨ Surjective f) : comap f (OuterMeasure.ofFunction m m_em
+pty) = OuterMeasure.ofFunction (f…
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_nonempty`：image_nonempty {f : α -> β} {s : Set α} : (f '' s).N
+onempty ↔ s.Nonempty
 -/
-theorem smul_boundedBy {c : Real>=0∞} (hc : c != ∞) : c • boundedBy m = boundedBy (c • m) := by
-  simp only [boundedBy, smul_ofFunction hc]
-  congr 1 with s : 1
-  rcases s.eq_empty_or_nonempty with (rfl | hs) <;> simp [*]
-
-/--
-theorem `comap_boundedBy` / 定理 `comap_boundedBy`
-
-English:
-theorem comap_boundedBy
-  statement: {β} (f : β -> α)
-  proof: by
-  refine (comap_ofFunction _ ?_).trans ?_
-  · refine h.imp (fun H s t hst => iSup_le fun hs => ?_) id
-    have ht : t.Nonempty := hs.mono hst
-    exact (@H ⟨s, hs⟩ ⟨t, ht⟩ hst).trans (le_iSup (fun _ : t.Nonempty => m t) ht)
-  · dsimp only [boundedBy]
-    congr with s : 1
-    rw [image_nonempty]
-
-中文:
-定理 comap_boundedBy
-  结论: {β} (f : β -> α)
-  证明: by
-  refine (comap_ofFunction _ ?_).trans ?_
-  · refine h.imp (fun H s t hst => iSup_le fun hs => ?_) id
-    have ht : t.Nonempty := hs.mono hst
-    exact (@H ⟨s, hs⟩ ⟨t, ht⟩ hst).trans (le_iSup (fun _ : t.Nonempty => m t) ht)
-  · dsimp only [boundedBy]
-    congr with s : 1
-    rw [image_nonempty]
-
-Depends on / 依赖: Nonempty, boundedBy, comap_ofFunction, h.imp, hs.mono, iSup_le, image_nonempty, le_iSup, t.Nonempty
--/
-theorem comap_boundedBy {β} (f : β -> α)
+theorem comap_boundedBy {β} (f : β → α)
     (h : (Monotone fun s : { s : Set α // s.Nonempty } => m s) ∨ Surjective f) :
     comap f (boundedBy m) = boundedBy fun s => m (f '' s) := by
   refine (comap_ofFunction _ ?_).trans ?_
@@ -970,28 +1017,50 @@ theorem comap_boundedBy {β} (f : β -> α)
     congr with s : 1
     rw [image_nonempty]
 
-/--
-theorem `boundedBy_union_of_top_of_nonempty_inter` / 定理 `boundedBy_union_of_top_of_nonempty_inter`
+/-- If `m u = ∞` for any set `u` that has nonempty intersection both with `s` and `t`, then
+`μ (s ∪ t) = μ s + μ t`, where `μ = MeasureTheory.OuterMeasure.boundedBy m`.
 
-English:
-theorem boundedBy_union_of_top_of_nonempty_inter
-  statement: {s t : Set α}
-  proof: ofFunction_union_of_top_of_nonempty_inter fun u hs ht =>
-top_unique (h u hs ht).ge.trans le_iSup (fun _ => m u) (hs.mono inter_subset_right)
+E.g., if `α` is an (e)metric space and `m u = ∞` on any set of diameter `≥ r`, then this lemma
+implies that `μ (s ∪ t) = μ s + μ t` on any two sets such that `r ≤ edist x y` for all `x ∈ s`
+and `y ∈ t`. -/
+/-
+**MeasureTheory.OuterMeasure.boundedBy_union_of_top_of_nonempty_inter** 是 Mathli
+b 中的一个定理，位于命名空间 `MeasureTheory.OuterMeasure`。
+形式化陈述：boundedBy_union_of_top_of_nonempty_inter {s t : Set α} (h : forall u, (s i
+nter u).Nonempty -> (t inter u).Nonempty -> m u = ∞) : boundedBy m (s union t) =
+ boundedBy m s + boundedBy m t
+参数：h : forall u, (s inter u).Nonempty -> (t inter u).Nonempty -> m u = ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.OuterMeasure.ofFunction_union_of_top_of_nonempty_inter`：of
+Function_union_of_top_of_nonempty_inter {s t : Set α} (h : forall u, (s inter u)
+.Nonempty -> (t inter u).Nonempty -> m u = ∞) : OuterMeasu…
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 
-中文:
-定理 boundedBy_union_of_top_of_nonempty_inter
-  结论: {s t : 集合 α}
-  证明: ofFunction_union_of_top_of_nonempty_inter fun u hs ht =>
-top_unique (h u hs ht).ge.trans le_iSup (fun _ => m u) (hs.mono inter_subset_right)
+--- 原说明 ---
+If `m u = ∞` for any set `u` that has nonempty intersection both with `s` and `t
+`, then
+`μ (s ∪ t) = μ s + μ t`, where `μ = MeasureTheory.OuterMeasure.boundedBy m`.
 
-Depends on / 依赖: ge.trans, hs.mono, inter_subset_right, le_iSup, ofFunction_union_of_top_of_nonempty_inter, top_unique
+E.g., if `α` is an (e)metric space and `m u = ∞` on any set of diameter `≥ r`, t
+hen this lemma
+implies that `μ (s ∪ t) = μ s + μ t` on any two sets such that `r ≤ edist x y` f
+or all `x ∈ s`
+and `y ∈ t`.
 -/
 theorem boundedBy_union_of_top_of_nonempty_inter {s t : Set α}
-    (h : forall u, (s inter u).Nonempty -> (t inter u).Nonempty -> m u = ∞) :
-    boundedBy m (s union t) = boundedBy m s + boundedBy m t :=
+    (h : ∀ u, (s ∩ u).Nonempty → (t ∩ u).Nonempty → m u = ∞) :
+    boundedBy m (s ∪ t) = boundedBy m s + boundedBy m t :=
   ofFunction_union_of_top_of_nonempty_inter fun u hs ht =>
-top_unique (h u hs ht).ge.trans le_iSup (fun _ => m u) (hs.mono inter_subset_right)
+    top_unique <| (h u hs ht).ge.trans <| le_iSup (fun _ => m u) (hs.mono inter_subset_right)
 
 end BoundedBy
 
@@ -999,67 +1068,65 @@ section sInfGen
 
 variable {α : Type*}
 
-/--
-Definition of `sInfGen` / `sInfGen` 的定义
+/-- Given a set of outer measures, we define a new function that on a set `s` is defined to be the
+  infimum of `μ(s)` for the outer measures `μ` in the collection. We ensure that this
+  function is defined to be `0` on `∅`, even if the collection of outer measures is empty.
+  The outer measure generated by this function is the infimum of the given outer measures. -/
+/-
+**MeasureTheory.OuterMeasure.sInfGen** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.Ou
+terMeasure`。
+形式化陈述：sInfGen (m : Set (OuterMeasure α)) (s : Set α) : Real>=0∞
+参数：m : Set (OuterMeasure α)；s : Set α。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sInfGen
-  signature: (m : Set (OuterMeasure α)) (s : Set α)
-  body: ⨅ (μ : OuterMeasure α) (_ : μ in m), μ s
-
-中文:
-定义 sInfGen
-  签名: (m : 集合 (外测度 α)) (s : 集合 α)
-  定义体: ⨅ (μ : OuterMeasure α) (_ : μ in m), μ s
-
-Depends on / 依赖: OuterMeasure
+--- 原说明 ---
+Given a set of outer measures, we define a new function that on a set `s` is def
+ined to be the
+  infimum of `μ(s)` for the outer measures `μ` in the collection. We ensure that
+ this
+  function is defined to be `0` on `∅`, even if the collection of outer measures
+ is empty.
+  The outer measure generated by this function is the infimum of the given outer
+ measures.
 -/
-def sInfGen (m : Set (OuterMeasure α)) (s : Set α) : Real>=0∞ :=
-  ⨅ (μ : OuterMeasure α) (_ : μ in m), μ s
-
-/--
-theorem `sInfGen_def` / 定理 `sInfGen_def`
-
-English:
-theorem sInfGen_def
-  given: (m : Set (OuterMeasure α)) (t : Set α)
-  proof: rfl
-
-中文:
-定理 sInfGen_def
-  条件: (m : 集合 (外测度 α)) (t : 集合 α)
-  证明: rfl
+def sInfGen (m : Set (OuterMeasure α)) (s : Set α) : ℝ≥0∞ :=
+  ⨅ (μ : OuterMeasure α) (_ : μ ∈ m), μ s
+/-
+**MeasureTheory.OuterMeasure.sInfGen_def** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.OuterMeasure`。
+形式化陈述：sInfGen_def (m : Set (OuterMeasure α)) (t : Set α) : sInfGen m t = ⨅ (μ : 
+OuterMeasure α) (_ : μ in m), μ t
+参数：m : Set (OuterMeasure α)；t : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sInfGen_def (m : Set (OuterMeasure α)) (t : Set α) :
-    sInfGen m t = ⨅ (μ : OuterMeasure α) (_ : μ in m), μ t :=
+    sInfGen m t = ⨅ (μ : OuterMeasure α) (_ : μ ∈ m), μ t :=
   rfl
-
-/--
-theorem `sInf_eq_boundedBy_sInfGen` / 定理 `sInf_eq_boundedBy_sInfGen`
-
-English:
-theorem sInf_eq_boundedBy_sInfGen
-  given: (m : Set (OuterMeasure α))
-  proof: by
-  refine le_antisymm ?_ ?_
-  · refine le_boundedBy.2 fun s => le_iInf₂ fun μ hμ => ?_
-    apply sInf_le hμ
-  · refine le_sInf ?_
-    intro μ hμ t
-    exact le_trans (boundedBy_le t) (iInf₂_le μ hμ)
-
-中文:
-定理 sInf_eq_boundedBy_sInfGen
-  条件: (m : 集合 (外测度 α))
-  证明: by
-  refine le_antisymm ?_ ?_
-  · refine le_boundedBy.2 fun s => le_iInf₂ fun μ hμ => ?_
-    apply sInf_le hμ
-  · refine le_sInf ?_
-    intro μ hμ t
-    exact le_trans (boundedBy_le t) (iInf₂_le μ hμ)
-
-Depends on / 依赖: boundedBy_le, le_antisymm, le_boundedBy, le_sInf, le_trans, sInf_le
+/-
+**MeasureTheory.OuterMeasure.sInf_eq_boundedBy_sInfGen** 是 Mathlib 中的一个定理，位于命名空间
+ `MeasureTheory.OuterMeasure`。
+形式化陈述：sInf_eq_boundedBy_sInfGen (m : Set (OuterMeasure α)) : sInf m = OuterMeasu
+re.boundedBy (sInfGen m)
+参数：m : Set (OuterMeasure α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.OuterMeasure.le_boundedBy`：le_boundedBy {μ : OuterMeasure 
+α} : μ <= boundedBy m ↔ forall s, μ s <= m s
+· 使用定理 `le_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {a : α} {f : (i : ι) → κ i → α},   (∀ (i : ι) (j : κ i), a ≤ f…
+· 使用定理 `sInf_le`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set α} 
+{a : α}, a ∈ s → sInf s ≤ a
+· 使用定理 `le_sInf`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set α} 
+{a : α}, (∀ b ∈ s, a ≤ b) → a ≤ sInf s
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MeasureTheory.OuterMeasure.boundedBy_le`：boundedBy_le (s : Set α) : boun
+dedBy m s <= m s
+· 使用定理 `iInf₂_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {f : (i : ι) → κ i → α} (i : ι) (j : κ i),   ⨅ i, ⨅ j, f i j ≤…
 -/
 theorem sInf_eq_boundedBy_sInfGen (m : Set (OuterMeasure α)) :
     sInf m = OuterMeasure.boundedBy (sInfGen m) := by
@@ -1069,216 +1136,400 @@ theorem sInf_eq_boundedBy_sInfGen (m : Set (OuterMeasure α)) :
   · refine le_sInf ?_
     intro μ hμ t
     exact le_trans (boundedBy_le t) (iInf₂_le μ hμ)
-
-/--
-theorem `iSup_sInfGen_nonempty` / 定理 `iSup_sInfGen_nonempty`
-
-English:
-theorem iSup_sInfGen_nonempty
-  given: {m : Set (OuterMeasure α)} (h : m.Nonempty) (t : Set α)
-  proof: by
-  rcases t.eq_empty_or_nonempty with (rfl | ht)
-  · simp [biInf_const h]
-  · simp [ht, sInfGen_def]
-
-中文:
-定理 iSup_sInfGen_nonempty
-  条件: {m : 集合 (外测度 α)} (h : m.非空) (t : 集合 α)
-  证明: by
-  rcases t.eq_empty_or_nonempty with (rfl | ht)
-  · simp [biInf_const h]
-  · simp [ht, sInfGen_def]
-
-Depends on / 依赖: biInf_const, eq_empty_or_nonempty, sInfGen_def, t.eq_empty_or_nonempty
+/-
+**MeasureTheory.OuterMeasure.iSup_sInfGen_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Me
+asureTheory.OuterMeasure`。
+形式化陈述：iSup_sInfGen_nonempty {m : Set (OuterMeasure α)} (h : m.Nonempty) (t : Set
+ α) : ⨆ _ : t.Nonempty, sInfGen m t = ⨅ (μ : OuterMeasure α) (_ : μ in m), μ t
+参数：OuterMeasure α；h : m.Nonempty；t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.OuterMeasure.instOuterMeasureClass`：∀ {α : Type u_1}, Meas
+ureTheory.OuterMeasureClass (MeasureTheory.OuterMeasure α) α
+· 使用定理 `biInf_const`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] 
+{a : α} {s : Set β}, s.Nonempty → ⨅ i ∈ s, a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
 -/
 theorem iSup_sInfGen_nonempty {m : Set (OuterMeasure α)} (h : m.Nonempty) (t : Set α) :
-    ⨆ _ : t.Nonempty, sInfGen m t = ⨅ (μ : OuterMeasure α) (_ : μ in m), μ t := by
+    ⨆ _ : t.Nonempty, sInfGen m t = ⨅ (μ : OuterMeasure α) (_ : μ ∈ m), μ t := by
   rcases t.eq_empty_or_nonempty with (rfl | ht)
   · simp [biInf_const h]
   · simp [ht, sInfGen_def]
 
-/--
-theorem `sInf_apply` / 定理 `sInf_apply`
+/-- The value of the Infimum of a nonempty set of outer measures on a set is not simply
+the minimum value of a measure on that set: it is the infimum sum of measures of countable set of
+sets that covers that set, where a different measure can be used for each set in the cover. -/
+/-
+**MeasureTheory.OuterMeasure.sInf_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.OuterMeasure`。
+形式化陈述：sInf_apply {m : Set (OuterMeasure α)} {s : Set α} (h : m.Nonempty) : sInf 
+m s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ (μ : OuterMeasure 
+α) (_ : μ in m), μ (t n)
+参数：OuterMeasure α；h : m.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.sInf_eq_boundedBy_sInfGen`：sInf_eq_boundedBy_
+sInfGen (m : Set (OuterMeasure α)) : sInf m = OuterMeasure.boundedBy (sInfGen m)
+· 使用定理 `MeasureTheory.OuterMeasure.boundedBy_apply`：boundedBy_apply (s : Set α) 
+: boundedBy m s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨆ _ : (t
+ n).Nonempty, m (t n)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `MeasureTheory.OuterMeasure.iSup_sInfGen_nonempty`：iSup_sInfGen_nonempty 
+{m : Set (OuterMeasure α)} (h : m.Nonempty) (t : Set α) : ⨆ _ : t.Nonempty, sInf
+Gen m t = ⨅ (μ : OuterMeasure α) (_ : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem sInf_apply
-  given: {m : Set (OuterMeasure α)} {s : Set α} (h : m.Nonempty)
-  proof: by
-  simp_rw [sInf_eq_boundedBy_sInfGen, boundedBy_apply, iSup_sInfGen_nonempty h]
-
-中文:
-定理 sInf_apply
-  条件: {m : 集合 (外测度 α)} {s : 集合 α} (h : m.非空)
-  证明: by
-  simp_rw [sInf_eq_boundedBy_sInfGen, boundedBy_apply, iSup_sInfGen_nonempty h]
-
-Depends on / 依赖: boundedBy_apply, iSup_sInfGen_nonempty, sInf_eq_boundedBy_sInfGen, simp_rw
+--- 原说明 ---
+The value of the Infimum of a nonempty set of outer measures on a set is not sim
+ply
+the minimum value of a measure on that set: it is the infimum sum of measures of
+ countable set of
+sets that covers that set, where a different measure can be used for each set in
+ the cover.
 -/
 theorem sInf_apply {m : Set (OuterMeasure α)} {s : Set α} (h : m.Nonempty) :
     sInf m s =
-      ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ (μ : OuterMeasure α) (_ : μ in m), μ (t n) := by
+      ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t), ∑' n, ⨅ (μ : OuterMeasure α) (_ : μ ∈ m), μ (t n) := by
   simp_rw [sInf_eq_boundedBy_sInfGen, boundedBy_apply, iSup_sInfGen_nonempty h]
 
-/--
-theorem `sInf_apply'` / 定理 `sInf_apply'`
+/-- The value of the Infimum of a set of outer measures on a nonempty set is not simply
+the minimum value of a measure on that set: it is the infimum sum of measures of countable set of
+sets that covers that set, where a different measure can be used for each set in the cover. -/
+/-
+**MeasureTheory.OuterMeasure.sInf_apply'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.OuterMeasure`。
+形式化陈述：sInf_apply' {m : Set (OuterMeasure α)} {s : Set α} (h : s.Nonempty) : sInf
+ m s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ (μ : OuterMeasure
+ α) (_ : μ in m), μ (t n)
+参数：OuterMeasure α；h : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sInf_empty`：∀ {α : Type u_1} [inst : CompleteLattice α], sInf ∅ = ⊤
+· 使用定理 `MeasureTheory.OuterMeasure.top_apply`：top_apply {s : Set α} (h : s.Nonem
+pty) : (⊤ : OuterMeasure α) s = ∞
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iInf_neg`：∀ {α : Type u_1} [inst : CompleteLattice α] {p : Prop} {f : p 
+→ α}, ¬p → ⨅ (h : p), f h = ⊤
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iInf_top`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α], ⨅ 
+x, ⊤ = ⊤
+· 使用定理 `ENNReal.tsum_top`：∀ {α : Type u_1} [Nonempty α], ∑' (x : α), ⊤ = ⊤
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.OuterMeasure.sInf_apply`：sInf_apply {m : Set (OuterMeasure
+ α)} {s : Set α} (h : m.Nonempty) : sInf m s = ⨅ (t : Nat -> Set α) (_ : s subse
+teq iUnion t), ∑' n, ⨅ (μ :…
 
-English:
-theorem sInf_apply'
-  given: {m : Set (OuterMeasure α)} {s : Set α} (h : s.Nonempty)
-  proof: m.eq_empty_or_nonempty.elim (fun hm => by simp [hm, h]) sInf_apply
-
-中文:
-定理 sInf_apply'
-  条件: {m : 集合 (外测度 α)} {s : 集合 α} (h : s.非空)
-  证明: m.eq_empty_or_nonempty.elim (fun hm => by simp [hm, h]) sInf_apply
-
-Depends on / 依赖: eq_empty_or_nonempty, m.eq_empty_or_nonempty.elim, sInf_apply
+--- 原说明 ---
+The value of the Infimum of a set of outer measures on a nonempty set is not sim
+ply
+the minimum value of a measure on that set: it is the infimum sum of measures of
+ countable set of
+sets that covers that set, where a different measure can be used for each set in
+ the cover.
 -/
 theorem sInf_apply' {m : Set (OuterMeasure α)} {s : Set α} (h : s.Nonempty) :
     sInf m s =
-      ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ (μ : OuterMeasure α) (_ : μ in m), μ (t n) :=
+      ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t), ∑' n, ⨅ (μ : OuterMeasure α) (_ : μ ∈ m), μ (t n) :=
   m.eq_empty_or_nonempty.elim (fun hm => by simp [hm, h]) sInf_apply
 
-/--
-theorem `iInf_apply` / 定理 `iInf_apply`
+/-- The value of the Infimum of a nonempty family of outer measures on a set is not simply
+the minimum value of a measure on that set: it is the infimum sum of measures of countable set of
+sets that covers that set, where a different measure can be used for each set in the cover. -/
+/-
+**MeasureTheory.OuterMeasure.iInf_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.OuterMeasure`。
+形式化陈述：iInf_apply {ι} [Nonempty ι] (m : ι -> OuterMeasure α) (s : Set α) : (⨅ i, 
+m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ i, m i (t n)
+参数：m : ι -> OuterMeasure α；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `MeasureTheory.OuterMeasure.sInf_apply`：sInf_apply {m : Set (OuterMeasure
+ α)} {s : Set α} (h : m.Nonempty) : sInf m s = ⨅ (t : Nat -> Set α) (_ : s subse
+teq iUnion t), ∑' n, ⨅ (μ :…
+· 使用定理 `Set.range_nonempty`：range_nonempty [h : Nonempty ι] (f : ι -> α) : (rang
+e f).Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem iInf_apply
-  given: {ι} [Nonempty ι] (m : ι -> OuterMeasure α) (s : Set α)
-  proof: by
-  rw [iInf]; rw [sInf_apply (range_nonempty m)]
-  simp only [iInf_range]
-
-中文:
-定理 iInf_apply
-  条件: {ι} [非空 ι] (m : ι -> 外测度 α) (s : 集合 α)
-  证明: by
-  rw [iInf]; rw [sInf_apply (range_nonempty m)]
-  simp only [iInf_range]
-
-Depends on / 依赖: iInf_range, range_nonempty, sInf_apply
+--- 原说明 ---
+The value of the Infimum of a nonempty family of outer measures on a set is not 
+simply
+the minimum value of a measure on that set: it is the infimum sum of measures of
+ countable set of
+sets that covers that set, where a different measure can be used for each set in
+ the cover.
 -/
-theorem iInf_apply {ι} [Nonempty ι] (m : ι -> OuterMeasure α) (s : Set α) :
-    (⨅ i, m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ i, m i (t n) := by
-  rw [iInf]; rw [sInf_apply (range_nonempty m)]
+theorem iInf_apply {ι} [Nonempty ι] (m : ι → OuterMeasure α) (s : Set α) :
+    (⨅ i, m i) s = ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t), ∑' n, ⨅ i, m i (t n) := by
+  rw [iInf, sInf_apply (range_nonempty m)]
   simp only [iInf_range]
 
-/--
-theorem `iInf_apply'` / 定理 `iInf_apply'`
+/-- The value of the Infimum of a family of outer measures on a nonempty set is not simply
+the minimum value of a measure on that set: it is the infimum sum of measures of countable set of
+sets that covers that set, where a different measure can be used for each set in the cover. -/
+/-
+**MeasureTheory.OuterMeasure.iInf_apply'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.OuterMeasure`。
+形式化陈述：iInf_apply' {ι} (m : ι -> OuterMeasure α) {s : Set α} (hs : s.Nonempty) : 
+(⨅ i, m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ i, m i (t
+ n)
+参数：m : ι -> OuterMeasure α；hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `MeasureTheory.OuterMeasure.sInf_apply'`：sInf_apply' {m : Set (OuterMeasu
+re α)} {s : Set α} (h : s.Nonempty) : sInf m s = ⨅ (t : Nat -> Set α) (_ : s sub
+seteq iUnion t), ∑' n, ⨅ (μ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iInf_range`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst : Compl
+eteLattice α] {g : β → α} {f : ι → β},   ⨅ b ∈ Set.range f, g b = ⨅ i, g (f i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem iInf_apply'
-  given: {ι} (m : ι -> OuterMeasure α) {s : Set α} (hs : s.Nonempty)
-  proof: by
-  rw [iInf]; rw [sInf_apply' hs]
-  simp only [iInf_range]
-
-中文:
-定理 iInf_apply'
-  条件: {ι} (m : ι -> 外测度 α) {s : 集合 α} (hs : s.非空)
-  证明: by
-  rw [iInf]; rw [sInf_apply' hs]
-  simp only [iInf_range]
-
-Depends on / 依赖: iInf_range, sInf_apply
+--- 原说明 ---
+The value of the Infimum of a family of outer measures on a nonempty set is not 
+simply
+the minimum value of a measure on that set: it is the infimum sum of measures of
+ countable set of
+sets that covers that set, where a different measure can be used for each set in
+ the cover.
 -/
-theorem iInf_apply' {ι} (m : ι -> OuterMeasure α) {s : Set α} (hs : s.Nonempty) :
-    (⨅ i, m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ i, m i (t n) := by
-  rw [iInf]; rw [sInf_apply' hs]
+theorem iInf_apply' {ι} (m : ι → OuterMeasure α) {s : Set α} (hs : s.Nonempty) :
+    (⨅ i, m i) s = ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t), ∑' n, ⨅ i, m i (t n) := by
+  rw [iInf, sInf_apply' hs]
   simp only [iInf_range]
 
-/--
-theorem `biInf_apply` / 定理 `biInf_apply`
+/-- The value of the Infimum of a nonempty family of outer measures on a set is not simply
+the minimum value of a measure on that set: it is the infimum sum of measures of countable set of
+sets that covers that set, where a different measure can be used for each set in the cover. -/
+/-
+**MeasureTheory.OuterMeasure.biInf_apply** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.OuterMeasure`。
+形式化陈述：biInf_apply {ι} {I : Set ι} (hI : I.Nonempty) (m : ι -> OuterMeasure α) (s
+ : Set α) : (⨅ i in I, m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), 
+∑' n, ⨅ i in I, m i (t n)
+参数：hI : I.Nonempty；m : ι -> OuterMeasure α；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.OuterMeasure.iInf_apply`：iInf_apply {ι} [Nonempty ι] (m : 
+ι -> OuterMeasure α) (s : Set α) : (⨅ i, m i) s = ⨅ (t : Nat -> Set α) (_ : s su
+bseteq iUnion t), ∑' n, ⨅ i…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem biInf_apply
-  given: {ι} {I : Set ι} (hI : I.Nonempty) (m : ι -> OuterMeasure α) (s : Set α)
-  proof: by
+--- 原说明 ---
+The value of the Infimum of a nonempty family of outer measures on a set is not 
+simply
+the minimum value of a measure on that set: it is the infimum sum of measures of
+ countable set of
+sets that covers that set, where a different measure can be used for each set in
+ the cover.
+-/
+theorem biInf_apply {ι} {I : Set ι} (hI : I.Nonempty) (m : ι → OuterMeasure α) (s : Set α) :
+    (⨅ i ∈ I, m i) s = ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t), ∑' n, ⨅ i ∈ I, m i (t n) := by
   have := hI.to_subtype
   simp only [← iInf_subtype'', iInf_apply]
 
-中文:
-定理 biInf_apply
-  条件: {ι} {I : 集合 ι} (hI : I.非空) (m : ι -> 外测度 α) (s : 集合 α)
-  证明: by
-  have := hI.to_subtype
-  simp only [← iInf_subtype'', iInf_apply]
+/-- The value of the Infimum of a nonempty family of outer measures on a set is not simply
+the minimum value of a measure on that set: it is the infimum sum of measures of countable set of
+sets that covers that set, where a different measure can be used for each set in the cover. -/
+/-
+**MeasureTheory.OuterMeasure.biInf_apply'** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheo
+ry.OuterMeasure`。
+形式化陈述：biInf_apply' {ι} (I : Set ι) (m : ι -> OuterMeasure α) {s : Set α} (hs : s
+.Nonempty) : (⨅ i in I, m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t),
+ ∑' n, ⨅ i in I, m i (t n)
+参数：I : Set ι；m : ι -> OuterMeasure α；hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.OuterMeasure.iInf_apply'`：iInf_apply' {ι} (m : ι -> OuterM
+easure α) {s : Set α} (hs : s.Nonempty) : (⨅ i, m i) s = ⨅ (t : Nat -> Set α) (_
+ : s subseteq iUnion t), ∑' …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: hI.to_subtype, iInf_apply, iInf_subtype, to_subtype
+--- 原说明 ---
+The value of the Infimum of a nonempty family of outer measures on a set is not 
+simply
+the minimum value of a measure on that set: it is the infimum sum of measures of
+ countable set of
+sets that covers that set, where a different measure can be used for each set in
+ the cover.
 -/
-theorem biInf_apply {ι} {I : Set ι} (hI : I.Nonempty) (m : ι -> OuterMeasure α) (s : Set α) :
-    (⨅ i in I, m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ i in I, m i (t n) := by
-  have := hI.to_subtype
-  simp only [← iInf_subtype'', iInf_apply]
-
-/--
-theorem `biInf_apply'` / 定理 `biInf_apply'`
-
-English:
-theorem biInf_apply'
-  given: {ι} (I : Set ι) (m : ι -> OuterMeasure α) {s : Set α} (hs : s.Nonempty)
-  proof: by
+theorem biInf_apply' {ι} (I : Set ι) (m : ι → OuterMeasure α) {s : Set α} (hs : s.Nonempty) :
+    (⨅ i ∈ I, m i) s = ⨅ (t : ℕ → Set α) (_ : s ⊆ iUnion t), ∑' n, ⨅ i ∈ I, m i (t n) := by
   simp only [← iInf_subtype'', iInf_apply' _ hs]
-
-中文:
-定理 biInf_apply'
-  条件: {ι} (I : 集合 ι) (m : ι -> 外测度 α) {s : 集合 α} (hs : s.非空)
-  证明: by
-  simp only [← iInf_subtype'', iInf_apply' _ hs]
-
-Depends on / 依赖: iInf_apply, iInf_subtype
+/-
+**MeasureTheory.OuterMeasure.map_iInf_le** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheor
+y.OuterMeasure`。
+形式化陈述：map_iInf_le {ι β} (f : α -> β) (m : ι -> OuterMeasure α) : map f (⨅ i, m i
+) <= ⨅ i, map f (m i)
+参数：f : α -> β；m : ι -> OuterMeasure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_iInf_le`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [in
+st : CompleteLattice α] {s : ι → α} [inst_1 : CompleteLattice β]   {f : α → β}, 
+Monotone f…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.OuterMeasure.map_mono`：map_mono {β} (f : α -> β) : Monoton
+e (map f)
 -/
-theorem biInf_apply' {ι} (I : Set ι) (m : ι -> OuterMeasure α) {s : Set α} (hs : s.Nonempty) :
-    (⨅ i in I, m i) s = ⨅ (t : Nat -> Set α) (_ : s subseteq iUnion t), ∑' n, ⨅ i in I, m i (t n) := by
-  simp only [← iInf_subtype'', iInf_apply' _ hs]
-
-/--
-theorem `map_iInf_le` / 定理 `map_iInf_le`
-
-English:
-theorem map_iInf_le
-  given: {ι β} (f : α -> β) (m : ι -> OuterMeasure α)
-  proof: (map_mono f).map_iInf_le
-
-中文:
-定理 map_iInf_le
-  条件: {ι β} (f : α -> β) (m : ι -> 外测度 α)
-  证明: (map_mono f).map_iInf_le
-
-Depends on / 依赖: map_iInf_le, map_mono
--/
-theorem map_iInf_le {ι β} (f : α -> β) (m : ι -> OuterMeasure α) :
-    map f (⨅ i, m i) <= ⨅ i, map f (m i) :=
+theorem map_iInf_le {ι β} (f : α → β) (m : ι → OuterMeasure α) :
+    map f (⨅ i, m i) ≤ ⨅ i, map f (m i) :=
   (map_mono f).map_iInf_le
-
-/--
-theorem `comap_iInf` / 定理 `comap_iInf`
-
-English:
-theorem comap_iInf
-  given: {ι β} (f : α -> β) (m : ι -> OuterMeasure β)
-  proof: by
-  refine ext_nonempty fun s hs => ?_
-  refine ((comap_mono f).map_iInf_le s).antisymm ?_
-  simp only [comap_apply, iInf_apply' _ hs, iInf_apply' _ (hs.image _), le_iInf_iff,
-    Set.image_subset_iff, preimage_iUnion]
-  refine fun t ht => iInf_le_of_le _ (iInf_le_of_le ht <| ENNReal.tsum_le_tsum fun k => ?_)
-  exact iInf_mono fun i => (m i).mono (image_preimage_subset _ _)
-
-中文:
-定理 comap_iInf
-  条件: {ι β} (f : α -> β) (m : ι -> 外测度 β)
-  证明: by
-  refine ext_nonempty fun s hs => ?_
-  refine ((comap_mono f).map_iInf_le s).antisymm ?_
-  simp only [comap_apply, iInf_apply' _ hs, iInf_apply' _ (hs.image _), le_iInf_iff,
-    Set.image_subset_iff, preimage_iUnion]
-  refine fun t ht => iInf_le_of_le _ (iInf_le_of_le ht <| ENNReal.tsum_le_tsum fun k => ?_)
-  exact iInf_mono fun i => (m i).mono (image_preimage_subset _ _)
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, Set.image_subset_iff, antisymm, comap_apply, comap_mono, ext_nonempty, hs.image, iInf_apply, iInf_le_of_le, iInf_mono, image_preimage_subset, image_subset_iff, le_iInf_iff, map_iInf_le, preimage_iUnion, tsum_le_tsum
+/-
+**MeasureTheory.OuterMeasure.comap_iInf** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory
+.OuterMeasure`。
+形式化陈述：comap_iInf {ι β} (f : α -> β) (m : ι -> OuterMeasure β) : comap f (⨅ i, m 
+i) = ⨅ i, comap f (m i)
+参数：f : α -> β；m : ι -> OuterMeasure β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.OuterMeasure.ext_nonempty`：ext_nonempty {μ₁ μ₂ : OuterMeas
+ure α} (h : forall s : Set α, s.Nonempty -> μ₁ s = μ₂ s) : μ₁ = μ₂
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Monotone.map_iInf_le`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [in
+st : CompleteLattice α] {s : ι → α} [inst_1 : CompleteLattice β]   {f : α → β}, 
+Monotone f…
+· 使用定理 `MeasureTheory.OuterMeasure.comap_mono`：comap_mono {β} (f : α -> β) : Mon
+otone (comap f)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.iInf_apply'`：iInf_apply' {ι} (m : ι -> OuterM
+easure α) {s : Set α} (hs : s.Nonempty) : (⨅ i, m i) s = ⨅ (t : Nat -> Set α) (_
+ : s subseteq iUnion t), ∑' …
+· 使用定理 `Set.Nonempty.image`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) {s : Set
+ α}, s.Nonempty → (f '' s).Nonempty
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.preimage_iUnion`：preimage_iUnion {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用定理 `ENNReal.tsum_le_tsum`：∀ {α : Type u_1} {f g : α → ENNReal}, (∀ (a : α), 
+f a ≤ g a) → ∑' (a : α), f a ≤ ∑' (a : α), g a
+· 使用定理 `iInf_mono`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f
+ g : ι → α}, (∀ (i : ι), g i ≤ f i) → iInf g ≤ iInf f
+· 使用定理 `MeasureTheory.OuterMeasure.mono`：∀ {α : Type u_2} (self : MeasureTheory.
+OuterMeasure α) {s₁ s₂ : Set α}, s₁ ⊆ s₂ → self.measureOf s₁ ≤ self.measureOf s₂
+· 使用定理 `Set.image_preimage_subset`：image_preimage_subset (f : α -> β) (s : Set β
+) : f '' f ⁻¹' s subseteq s
 -/
-theorem comap_iInf {ι β} (f : α -> β) (m : ι -> OuterMeasure β) :
+theorem comap_iInf {ι β} (f : α → β) (m : ι → OuterMeasure β) :
     comap f (⨅ i, m i) = ⨅ i, comap f (m i) := by
   refine ext_nonempty fun s hs => ?_
   refine ((comap_mono f).map_iInf_le s).antisymm ?_
@@ -1286,193 +1537,235 @@ theorem comap_iInf {ι β} (f : α -> β) (m : ι -> OuterMeasure β) :
     Set.image_subset_iff, preimage_iUnion]
   refine fun t ht => iInf_le_of_le _ (iInf_le_of_le ht <| ENNReal.tsum_le_tsum fun k => ?_)
   exact iInf_mono fun i => (m i).mono (image_preimage_subset _ _)
-
-/--
-theorem `map_iInf` / 定理 `map_iInf`
-
-English:
-theorem map_iInf
-  given: {ι β} {f : α -> β} (hf : Injective f) (m : ι -> OuterMeasure α)
-  proof: by
-  refine Eq.trans ?_ (map_comap _ _)
-  simp only [comap_iInf, comap_map hf]
-
-中文:
-定理 map_iInf
-  条件: {ι β} {f : α -> β} (hf : 单射 f) (m : ι -> 外测度 α)
-  证明: by
-  refine Eq.trans ?_ (map_comap _ _)
-  simp only [comap_iInf, comap_map hf]
-
-Depends on / 依赖: Eq.trans, comap_iInf, comap_map, map_comap
+/-
+**MeasureTheory.OuterMeasure.map_iInf** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.O
+uterMeasure`。
+形式化陈述：map_iInf {ι β} {f : α -> β} (hf : Injective f) (m : ι -> OuterMeasure α) :
+ map f (⨅ i, m i) = restrict (range f) (⨅ i, map f (m i))
+参数：hf : Injective f；m : ι -> OuterMeasure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.comap_iInf`：comap_iInf {ι β} (f : α -> β) (m 
+: ι -> OuterMeasure β) : comap f (⨅ i, m i) = ⨅ i, comap f (m i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.OuterMeasure.comap_map`：comap_map {β} {f : α -> β} (hf : I
+njective f) (m : OuterMeasure α) : comap f (map f m) = m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.OuterMeasure.map_comap`：map_comap {β} (f : α -> β) (m : Ou
+terMeasure β) : map f (comap f m) = restrict (range f) m
 -/
-theorem map_iInf {ι β} {f : α -> β} (hf : Injective f) (m : ι -> OuterMeasure α) :
+theorem map_iInf {ι β} {f : α → β} (hf : Injective f) (m : ι → OuterMeasure α) :
     map f (⨅ i, m i) = restrict (range f) (⨅ i, map f (m i)) := by
   refine Eq.trans ?_ (map_comap _ _)
   simp only [comap_iInf, comap_map hf]
-
-/--
-theorem `map_iInf_comap` / 定理 `map_iInf_comap`
-
-English:
-theorem map_iInf_comap
-  given: {ι β} [Nonempty ι] {f : α -> β} (m : ι -> OuterMeasure β)
-  proof: by
-  refine (map_iInf_le _ _).antisymm fun s => ?_
-  simp only [map_apply, comap_apply, iInf_apply, le_iInf_iff]
-  refine fun t ht => iInf_le_of_le (fun n => f '' t n union (range f)ᶜ) (iInf_le_of_le ?_ ?_)
-  · rw [← iUnion_union, Set.union_comm, ← inter_subset, ← image_iUnion, ←
-      image_preimage_eq_inter_range]
-    exact image_mono ht
-  · refine ENNReal.tsum_le_tsum fun n => iInf_mono fun i => (m i).mono ?_
-    simpa only [preimage_union, preimage_compl, preimage_range, compl_univ, union_empty,
-      image_subset_iff] using subset_rfl
-
-中文:
-定理 map_iInf_comap
-  条件: {ι β} [非空 ι] {f : α -> β} (m : ι -> 外测度 β)
-  证明: by
-  refine (map_iInf_le _ _).antisymm fun s => ?_
-  simp only [map_apply, comap_apply, iInf_apply, le_iInf_iff]
-  refine fun t ht => iInf_le_of_le (fun n => f '' t n union (range f)ᶜ) (iInf_le_of_le ?_ ?_)
-  · rw [← iUnion_union, Set.union_comm, ← inter_subset, ← image_iUnion, ←
-      image_preimage_eq_inter_range]
-    exact image_mono ht
-  · refine ENNReal.tsum_le_tsum fun n => iInf_mono fun i => (m i).mono ?_
-    simpa only [preimage_union, preimage_compl, preimage_range, compl_univ, union_empty,
-      image_subset_iff] using subset_rfl
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, Set.union_comm, antisymm, comap_apply, compl_univ, iInf_apply, iInf_le_of_le, iInf_mono, iUnion_union, image_iUnion, image_mono, image_preimage_eq_inter_range, image_subset_iff, inter_subset, le_iInf_iff, map_apply, map_iInf_le, preimage_compl, preimage_range
+/-
+**MeasureTheory.OuterMeasure.map_iInf_comap** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.OuterMeasure`。
+形式化陈述：map_iInf_comap {ι β} [Nonempty ι] {f : α -> β} (m : ι -> OuterMeasure β) :
+ map f (⨅ i, comap f (m i)) = ⨅ i, map f (comap f (m i))
+参数：m : ι -> OuterMeasure β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `MeasureTheory.OuterMeasure.map_iInf_le`：map_iInf_le {ι β} (f : α -> β) (
+m : ι -> OuterMeasure α) : map f (⨅ i, m i) <= ⨅ i, map f (m i)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.iInf_apply`：iInf_apply {ι} [Nonempty ι] (m : 
+ι -> OuterMeasure α) (s : Set α) : (⨅ i, m i) s = ⨅ (t : Nat -> Set α) (_ : s su
+bseteq iUnion t), ∑' n, ⨅ i…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iInf_le_of_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {f : ι → α} {a : α} (i : ι), f i ≤ a → iInf f ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.iUnion_union`：iUnion_union [Nonempty ι] (s : Set β) (t : ι -> Set β)
+ : (⋃ i, t i) union s = ⋃ i, t i union s
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
+· 使用定理 `Set.inter_subset`：inter_subset (a b c : Set α) : a inter b subseteq c ↔ 
+a subseteq bᶜ union c
+· 使用定理 `Set.image_iUnion`：image_iUnion {f : α -> β} {s : ι -> Set α} : (f '' ⋃ i
+, s i) = ⋃ i, f '' s i
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `ENNReal.tsum_le_tsum`：∀ {α : Type u_1} {f g : α → ENNReal}, (∀ (a : α), 
+f a ≤ g a) → ∑' (a : α), f a ≤ ∑' (a : α), g a
+· 使用定理 `iInf_mono`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] {f
+ g : ι → α}, (∀ (i : ι), g i ≤ f i) → iInf g ≤ iInf f
+· 使用定理 `MeasureTheory.OuterMeasure.mono`：∀ {α : Type u_2} (self : MeasureTheory.
+OuterMeasure α) {s₁ s₂ : Set α}, s₁ ⊆ s₂ → self.measureOf s₁ ≤ self.measureOf s₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.preimage_range`：preimage_range (f : α -> β) : f ⁻¹' range f = univ
+· 使用定理 `Set.compl_univ`：compl_univ : (univ : Set α)ᶜ = ∅
+· 使用定理 `Set.union_empty`：union_empty (a : Set α) : a union ∅ = a
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 -/
-theorem map_iInf_comap {ι β} [Nonempty ι] {f : α -> β} (m : ι -> OuterMeasure β) :
+theorem map_iInf_comap {ι β} [Nonempty ι] {f : α → β} (m : ι → OuterMeasure β) :
     map f (⨅ i, comap f (m i)) = ⨅ i, map f (comap f (m i)) := by
   refine (map_iInf_le _ _).antisymm fun s => ?_
   simp only [map_apply, comap_apply, iInf_apply, le_iInf_iff]
-  refine fun t ht => iInf_le_of_le (fun n => f '' t n union (range f)ᶜ) (iInf_le_of_le ?_ ?_)
+  refine fun t ht => iInf_le_of_le (fun n => f '' t n ∪ (range f)ᶜ) (iInf_le_of_le ?_ ?_)
   · rw [← iUnion_union, Set.union_comm, ← inter_subset, ← image_iUnion, ←
       image_preimage_eq_inter_range]
     exact image_mono ht
   · refine ENNReal.tsum_le_tsum fun n => iInf_mono fun i => (m i).mono ?_
     simpa only [preimage_union, preimage_compl, preimage_range, compl_univ, union_empty,
       image_subset_iff] using subset_rfl
-
-/--
-theorem `map_biInf_comap` / 定理 `map_biInf_comap`
-
-English:
-theorem map_biInf_comap
-  given: {ι β} {I : Set ι} (hI : I.Nonempty) {f : α -> β} (m : ι -> OuterMeasure β)
-  proof: by
-  have := hI.to_subtype
-  rw [← iInf_subtype'']; rw [← iInf_subtype'']
-  exact map_iInf_comap _
-
-中文:
-定理 map_biInf_comap
-  条件: {ι β} {I : 集合 ι} (hI : I.非空) {f : α -> β} (m : ι -> 外测度 β)
-  证明: by
-  have := hI.to_subtype
-  rw [← iInf_subtype'']; rw [← iInf_subtype'']
-  exact map_iInf_comap _
-
-Depends on / 依赖: hI.to_subtype, iInf_subtype, map_iInf_comap, to_subtype
+/-
+**MeasureTheory.OuterMeasure.map_biInf_comap** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.OuterMeasure`。
+形式化陈述：map_biInf_comap {ι β} {I : Set ι} (hI : I.Nonempty) {f : α -> β} (m : ι ->
+ OuterMeasure β) : map f (⨅ i in I, comap f (m i)) = ⨅ i in I, map f (comap f (m
+ i))
+参数：hI : I.Nonempty；m : ι -> OuterMeasure β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iInf_subtype''`：∀ {α : Type u_1} [inst : CompleteLattice α] {ι : Type u_
+8} (s : Set ι) (f : ι → α), ⨅ i, f ↑i = ⨅ t ∈ s, f t
+· 使用定理 `MeasureTheory.OuterMeasure.map_iInf_comap`：map_iInf_comap {ι β} [Nonempt
+y ι] {f : α -> β} (m : ι -> OuterMeasure β) : map f (⨅ i, comap f (m i)) = ⨅ i, 
+map f (comap f (m i))
 -/
-theorem map_biInf_comap {ι β} {I : Set ι} (hI : I.Nonempty) {f : α -> β} (m : ι -> OuterMeasure β) :
-    map f (⨅ i in I, comap f (m i)) = ⨅ i in I, map f (comap f (m i)) := by
+theorem map_biInf_comap {ι β} {I : Set ι} (hI : I.Nonempty) {f : α → β} (m : ι → OuterMeasure β) :
+    map f (⨅ i ∈ I, comap f (m i)) = ⨅ i ∈ I, map f (comap f (m i)) := by
   have := hI.to_subtype
-  rw [← iInf_subtype'']; rw [← iInf_subtype'']
+  rw [← iInf_subtype'', ← iInf_subtype'']
   exact map_iInf_comap _
-
-/--
-theorem `restrict_iInf_restrict` / 定理 `restrict_iInf_restrict`
-
-English:
-theorem restrict_iInf_restrict
-  given: {ι} (s : Set α) (m : ι -> OuterMeasure α)
-  proof: calc restrict s (⨅ i, restrict s (m i))
-    _ = restrict (range ((↑) : s -> α)) (⨅ i, restrict s (m i)) := by rw [Subtype.range_coe]
-    _ = map ((↑) : s -> α) (⨅ i, comap (↑) (m i)) := (map_iInf Subtype.coe_injective _).symm
-    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s -> α)) (comap_iInf _ _).symm
-
-中文:
-定理 restrict_iInf_restrict
-  条件: {ι} (s : 集合 α) (m : ι -> 外测度 α)
-  证明: calc restrict s (⨅ i, restrict s (m i))
-    _ = restrict (range ((↑) : s -> α)) (⨅ i, restrict s (m i)) := by rw [Subtype.range_coe]
-    _ = map ((↑) : s -> α) (⨅ i, comap (↑) (m i)) := (map_iInf Subtype.coe_injective _).symm
-    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s -> α)) (comap_iInf _ _).symm
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, Subtype.range_coe, coe_injective, comap_iInf, congr_arg, map_iInf, range_coe, restrict
+/-
+**MeasureTheory.OuterMeasure.restrict_iInf_restrict** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.OuterMeasure`。
+形式化陈述：restrict_iInf_restrict {ι} (s : Set α) (m : ι -> OuterMeasure α) : restric
+t s (⨅ i, restrict s (m i)) = restrict s (⨅ i, m i)
+参数：s : Set α；m : ι -> OuterMeasure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe`：range_coe {s : Set α} : range ((↑) : s -> α) = s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.OuterMeasure.map_iInf`：map_iInf {ι β} {f : α -> β} (hf : I
+njective f) (m : ι -> OuterMeasure α) : map f (⨅ i, m i) = restrict (range f) (⨅
+ i, map f (m i))
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.comap_iInf`：comap_iInf {ι β} (f : α -> β) (m 
+: ι -> OuterMeasure β) : comap f (⨅ i, m i) = ⨅ i, comap f (m i)
 -/
-theorem restrict_iInf_restrict {ι} (s : Set α) (m : ι -> OuterMeasure α) :
+theorem restrict_iInf_restrict {ι} (s : Set α) (m : ι → OuterMeasure α) :
     restrict s (⨅ i, restrict s (m i)) = restrict s (⨅ i, m i) :=
   calc restrict s (⨅ i, restrict s (m i))
-    _ = restrict (range ((↑) : s -> α)) (⨅ i, restrict s (m i)) := by rw [Subtype.range_coe]
-    _ = map ((↑) : s -> α) (⨅ i, comap (↑) (m i)) := (map_iInf Subtype.coe_injective _).symm
-    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s -> α)) (comap_iInf _ _).symm
-
-/--
-theorem `restrict_iInf` / 定理 `restrict_iInf`
-
-English:
-theorem restrict_iInf
-  given: {ι} [Nonempty ι] (s : Set α) (m : ι -> OuterMeasure α)
-  proof: (congr_arg (map ((↑) : s -> α)) (comap_iInf _ _)).trans (map_iInf_comap _)
-
-中文:
-定理 restrict_iInf
-  条件: {ι} [非空 ι] (s : 集合 α) (m : ι -> 外测度 α)
-  证明: (congr_arg (map ((↑) : s -> α)) (comap_iInf _ _)).trans (map_iInf_comap _)
-
-Depends on / 依赖: comap_iInf, congr_arg, map_iInf_comap
+    _ = restrict (range ((↑) : s → α)) (⨅ i, restrict s (m i)) := by rw [Subtype.range_coe]
+    _ = map ((↑) : s → α) (⨅ i, comap (↑) (m i)) := (map_iInf Subtype.coe_injective _).symm
+    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s → α)) (comap_iInf _ _).symm
+/-
+**MeasureTheory.OuterMeasure.restrict_iInf** 是 Mathlib 中的一个定理，位于命名空间 `MeasureThe
+ory.OuterMeasure`。
+形式化陈述：restrict_iInf {ι} [Nonempty ι] (s : Set α) (m : ι -> OuterMeasure α) : res
+trict s (⨅ i, m i) = ⨅ i, restrict s (m i)
+参数：s : Set α；m : ι -> OuterMeasure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `MeasureTheory.OuterMeasure.comap_iInf`：comap_iInf {ι β} (f : α -> β) (m 
+: ι -> OuterMeasure β) : comap f (⨅ i, m i) = ⨅ i, comap f (m i)
+· 使用定理 `MeasureTheory.OuterMeasure.map_iInf_comap`：map_iInf_comap {ι β} [Nonempt
+y ι] {f : α -> β} (m : ι -> OuterMeasure β) : map f (⨅ i, comap f (m i)) = ⨅ i, 
+map f (comap f (m i))
 -/
-theorem restrict_iInf {ι} [Nonempty ι] (s : Set α) (m : ι -> OuterMeasure α) :
+theorem restrict_iInf {ι} [Nonempty ι] (s : Set α) (m : ι → OuterMeasure α) :
     restrict s (⨅ i, m i) = ⨅ i, restrict s (m i) :=
-  (congr_arg (map ((↑) : s -> α)) (comap_iInf _ _)).trans (map_iInf_comap _)
-
-/--
-theorem `restrict_biInf` / 定理 `restrict_biInf`
-
-English:
-theorem restrict_biInf
-  given: {ι} {I : Set ι} (hI : I.Nonempty) (s : Set α) (m : ι -> OuterMeasure α)
-  proof: by
-  have := hI.to_subtype
-  rw [← iInf_subtype'']; rw [← iInf_subtype'']
-  exact restrict_iInf _ _
-
-中文:
-定理 restrict_biInf
-  条件: {ι} {I : 集合 ι} (hI : I.非空) (s : 集合 α) (m : ι -> 外测度 α)
-  证明: by
-  have := hI.to_subtype
-  rw [← iInf_subtype'']; rw [← iInf_subtype'']
-  exact restrict_iInf _ _
-
-Depends on / 依赖: hI.to_subtype, iInf_subtype, restrict_iInf, to_subtype
+  (congr_arg (map ((↑) : s → α)) (comap_iInf _ _)).trans (map_iInf_comap _)
+/-
+**MeasureTheory.OuterMeasure.restrict_biInf** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTh
+eory.OuterMeasure`。
+形式化陈述：restrict_biInf {ι} {I : Set ι} (hI : I.Nonempty) (s : Set α) (m : ι -> Out
+erMeasure α) : restrict s (⨅ i in I, m i) = ⨅ i in I, restrict s (m i)
+参数：hI : I.Nonempty；s : Set α；m : ι -> OuterMeasure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iInf_subtype''`：∀ {α : Type u_1} [inst : CompleteLattice α] {ι : Type u_
+8} (s : Set ι) (f : ι → α), ⨅ i, f ↑i = ⨅ t ∈ s, f t
+· 使用定理 `MeasureTheory.OuterMeasure.restrict_iInf`：restrict_iInf {ι} [Nonempty ι]
+ (s : Set α) (m : ι -> OuterMeasure α) : restrict s (⨅ i, m i) = ⨅ i, restrict s
+ (m i)
 -/
-theorem restrict_biInf {ι} {I : Set ι} (hI : I.Nonempty) (s : Set α) (m : ι -> OuterMeasure α) :
-    restrict s (⨅ i in I, m i) = ⨅ i in I, restrict s (m i) := by
+theorem restrict_biInf {ι} {I : Set ι} (hI : I.Nonempty) (s : Set α) (m : ι → OuterMeasure α) :
+    restrict s (⨅ i ∈ I, m i) = ⨅ i ∈ I, restrict s (m i) := by
   have := hI.to_subtype
-  rw [← iInf_subtype'']; rw [← iInf_subtype'']
+  rw [← iInf_subtype'', ← iInf_subtype'']
   exact restrict_iInf _ _
 
-/--
-theorem `restrict_sInf_eq_sInf_restrict` / 定理 `restrict_sInf_eq_sInf_restrict`
+/-- This proves that Inf and restrict commute for outer measures, so long as the set of
+outer measures is nonempty. -/
+/-
+**MeasureTheory.OuterMeasure.restrict_sInf_eq_sInf_restrict** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.OuterMeasure`。
+形式化陈述：restrict_sInf_eq_sInf_restrict (m : Set (OuterMeasure α)) {s : Set α} (hm 
+: m.Nonempty) : restrict s (sInf m) = sInf (restrict s '' m)
+参数：m : Set (OuterMeasure α)；hm : m.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sInf_eq_iInf`：∀ {α : Type u_1} [inst : CompleteLattice α] {s : Set α}, s
+Inf s = ⨅ a ∈ s, a
+· 使用定理 `MeasureTheory.OuterMeasure.restrict_biInf`：restrict_biInf {ι} {I : Set ι
+} (hI : I.Nonempty) (s : Set α) (m : ι -> OuterMeasure α) : restrict s (⨅ i in I
+, m i) = ⨅ i in I, restrict s (…
+· 使用定理 `iInf_image`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] {
+γ : Type u_8} {f : β → γ} {g : γ → α} {t : Set β},   ⨅ c ∈ f '' t, g c = ⨅ b ∈ t
+…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem restrict_sInf_eq_sInf_restrict
-  given: (m : Set (OuterMeasure α)) {s : Set α} (hm : m.Nonempty)
-  proof: by
-  simp only [sInf_eq_iInf, restrict_biInf, hm, iInf_image]
-
-中文:
-定理 restrict_sInf_eq_sInf_restrict
-  条件: (m : 集合 (外测度 α)) {s : 集合 α} (hm : m.非空)
-  证明: by
-  simp only [sInf_eq_iInf, restrict_biInf, hm, iInf_image]
-
-Depends on / 依赖: iInf_image, restrict_biInf, sInf_eq_iInf
+--- 原说明 ---
+This proves that Inf and restrict commute for outer measures, so long as the set
+ of
+outer measures is nonempty.
 -/
 theorem restrict_sInf_eq_sInf_restrict (m : Set (OuterMeasure α)) {s : Set α} (hm : m.Nonempty) :
     restrict s (sInf m) = sInf (restrict s '' m) := by
@@ -1483,3 +1776,4 @@ end sInfGen
 end OuterMeasure
 
 end MeasureTheory
+

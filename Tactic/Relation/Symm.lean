@@ -20,42 +20,18 @@ namespace Mathlib.Tactic
 
 open Lean.Elab.Tactic
 
-/--
-Definition of `_root_.Lean.Expr.relSidesIfSymm?` / `_root_.Lean.Expr.relSidesIfSymm?` 的定义
+/-- If `e` is the form `@R .. x y`, where `R` is a symmetric
+relation, return `some (R, x, y)`.
+As a special case, if `e` is `@HEq α a β b`, return ``some (`HEq, a, b)``. -/
+/-
+**Mathlib.Tactic._root_.Lean.Expr.relSidesIfSymm** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Lean.Expr.relSidesIfSymm?
-  signature: (e : Expr)
-  body: do
-  if let some (_, lhs, rhs) := e.eq? then
-    return (``Eq, lhs, rhs)
-  if let some (lhs, rhs) := e.iff? then
-    return (``Iff, lhs, rhs)
-  if let some (_, lhs, _, rhs) := e.heq? then
-    return (``HEq, lhs, rhs)
-  if let .app (.app rel lhs) rhs := e then
-    unless (← (symmExt.getState (← getEnv)).getMatch rel).isEmpty do
-      match rel.getAppFn.constName? with
-      | some n => return some (n, lhs, rhs)
-      | none => return none
-  return none
-
-中文:
-定义 _root_.Lean.Expr.relSidesIfSymm?
-  签名: (e : Expr)
-  定义体: do
-  if let some (_, lhs, rhs) := e.eq? then
-    return (``Eq, lhs, rhs)
-  if let some (lhs, rhs) := e.iff? then
-    return (``Iff, lhs, rhs)
-  if let some (_, lhs, _, rhs) := e.heq? then
-    return (``HEq, lhs, rhs)
-  if let .app (.app rel lhs) rhs := e then
-    unless (← (symmExt.getState (← getEnv)).getMatch rel).isEmpty do
-      match rel.getAppFn.constName? with
-      | some n => return some (n, lhs, rhs)
-      | none => return none
-  return none
+--- 原说明 ---
+If `e` is the form `@R .. x y`, where `R` is a symmetric
+relation, return `some (R, x, y)`.
+As a special case, if `e` is `@HEq α a β b`, return ``some (`HEq, a, b)``.
 -/
 def _root_.Lean.Expr.relSidesIfSymm? (e : Expr) : MetaM (Option (Name × Expr × Expr)) := do
   if let some (_, lhs, rhs) := e.eq? then
@@ -72,3 +48,4 @@ def _root_.Lean.Expr.relSidesIfSymm? (e : Expr) : MetaM (Option (Name × Expr ×
   return none
 
 end Mathlib.Tactic
+

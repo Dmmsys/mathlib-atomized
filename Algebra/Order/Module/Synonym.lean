@@ -28,43 +28,24 @@ variable {α β : Type*}
 
 namespace OrderDual
 
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [Semiring α] [AddCommMonoid β] [Module α β]
-  body: add_smul (R := α)
-  zero_smul := zero_smul _
-
-中文:
-实例 instModule
-  签名: [半环 α] [加法交换幺半群 β] [模 α β]
-  定义体: add_smul (R := α)
-  zero_smul := zero_smul _
-
-Depends on / 依赖: add_smul
+/-
+**OrderDual.instModule** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+形式化陈述：instModule [Semiring α] [AddCommMonoid β] [Module α β] : Module αᵒᵈ β wher
+e add_smul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
 -/
 instance instModule [Semiring α] [AddCommMonoid β] [Module α β] : Module αᵒᵈ β where
   add_smul := add_smul (R := α)
   zero_smul := zero_smul _
-
-/--
-Instance `instModule'` / 实例 `instModule'`
-
-English:
-instance instModule'
-  signature: [Semiring α] [AddCommMonoid β] [Module α β]
-  body: add_smul (M := β)
-  zero_smul := zero_smul _
-
-中文:
-实例 instModule'
-  签名: [半环 α] [加法交换幺半群 β] [模 α β]
-  定义体: add_smul (M := β)
-  zero_smul := zero_smul _
-
-Depends on / 依赖: add_smul
+/-
+**OrderDual.instModule'** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+形式化陈述：instModule' [Semiring α] [AddCommMonoid β] [Module α β] : Module α βᵒᵈ whe
+re add_smul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
 -/
 instance instModule' [Semiring α] [AddCommMonoid β] [Module α β] : Module α βᵒᵈ where
   add_smul := add_smul (M := β)
@@ -74,40 +55,22 @@ end OrderDual
 
 namespace Lex
 
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [Semiring α] [AddCommMonoid β] [Module α β]
-  body: ‹Module α β›
-
-中文:
-实例 instModule
-  签名: [半环 α] [加法交换幺半群 β] [模 α β]
-  定义体: ‹Module α β›
-
-Depends on / 依赖: Module
+/-
+**Lex.instModule** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instModule [Semiring α] [AddCommMonoid β] [Module α β] : Module (Lex α) β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule [Semiring α] [AddCommMonoid β] [Module α β] : Module (Lex α) β :=
   ‹Module α β›
-
-/--
-Instance `instModule'` / 实例 `instModule'`
-
-English:
-instance instModule'
-  signature: [Semiring α] [AddCommMonoid β] [Module α β]
-  body: ‹Module α β›
-
-中文:
-实例 instModule'
-  签名: [半环 α] [加法交换幺半群 β] [模 α β]
-  定义体: ‹Module α β›
-
-Depends on / 依赖: Module
+/-
+**Lex.instModule'** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+形式化陈述：instModule' [Semiring α] [AddCommMonoid β] [Module α β] : Module α (Lex β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule' [Semiring α] [AddCommMonoid β] [Module α β] : Module α (Lex β) :=
   ‹Module α β›
 
 end Lex
+

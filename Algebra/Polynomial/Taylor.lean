@@ -34,242 +34,192 @@ section Semiring
 
 variable {R : Type*} [Semiring R] (r : R) (f : R[X])
 
-/--
-Definition of `taylor` / `taylor` 的定义
+/-- The Taylor expansion of a polynomial `f` at `r`. -/
+/-
+**Polynomial.taylor** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：taylor (r : R) : R[X] ->ₗ[R] R[X] where toFun f
+参数：r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition taylor
-  signature: (r : R)
-  body: f.comp (X + C r)
-  map_add' _ _ := add_comp
-  map_smul' c f := by simp only [smul_eq_C_mul, C_mul_comp, RingHom.id_apply]
-
-中文:
-定义 taylor
-  签名: (r : R)
-  定义体: f.comp (X + C r)
-  map_add' _ _ := add_comp
-  map_smul' c f := by simp only [smul_eq_C_mul, C_mul_comp, RingHom.id_apply]
-
-Depends on / 依赖: f.comp
+--- 原说明 ---
+The Taylor expansion of a polynomial `f` at `r`.
 -/
-def taylor (r : R) : R[X] ->ₗ[R] R[X] where
+def taylor (r : R) : R[X] →ₗ[R] R[X] where
   toFun f := f.comp (X + C r)
   map_add' _ _ := add_comp
   map_smul' c f := by simp only [smul_eq_C_mul, C_mul_comp, RingHom.id_apply]
-
-/--
-theorem `taylor_apply` / 定理 `taylor_apply`
-
-English:
-theorem taylor_apply
-  statement: taylor r f = f.comp (X + C r)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 taylor_apply
-  结论: taylor r f = f.comp (X + C r)
-  证明: rfl
-
-@[simp]
+/-
+**Polynomial.taylor_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_apply : taylor r f = f.comp (X + C r)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem taylor_apply : taylor r f = f.comp (X + C r) :=
   rfl
 
 @[simp]
-/--
-theorem `taylor_X` / 定理 `taylor_X`
-
-English:
-theorem taylor_X
-  statement: taylor r X = X + C r
-  proof: X_comp
-
-@[simp]
-
-中文:
-定理 taylor_X
-  结论: taylor r X = X + C r
-  证明: X_comp
-
-@[simp]
-
-Depends on / 依赖: X_comp
+/-
+**Polynomial.taylor_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_X : taylor r X = X + C r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.X_comp`：X_comp : X.comp p = p
 -/
 theorem taylor_X : taylor r X = X + C r := X_comp
 
 @[simp]
-/--
-theorem `taylor_X_pow` / 定理 `taylor_X_pow`
-
-English:
-theorem taylor_X_pow
-  given: (n : Nat)
-  statement: taylor r (X ^ n) = (X + C r) ^ n
-  proof: X_pow_comp
-
-@[simp]
-
-中文:
-定理 taylor_X_pow
-  条件: (n : 自然数)
-  结论: taylor r (X ^ n) = (X + C r) ^ n
-  证明: X_pow_comp
-
-@[simp]
-
-Depends on / 依赖: X_pow_comp
+/-
+**Polynomial.taylor_X_pow** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_X_pow (n : Nat) : taylor r (X ^ n) = (X + C r) ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.X_pow_comp`：X_pow_comp {k : Nat} : (X ^ k).comp p = p ^ k
 -/
-theorem taylor_X_pow (n : Nat) : taylor r (X ^ n) = (X + C r) ^ n := X_pow_comp
+theorem taylor_X_pow (n : ℕ) : taylor r (X ^ n) = (X + C r) ^ n := X_pow_comp
 
 @[simp]
-/--
-theorem `taylor_C` / 定理 `taylor_C`
-
-English:
-theorem taylor_C
-  given: (x : R)
-  statement: taylor r (C x) = C x
-  proof: C_comp
-
-中文:
-定理 taylor_C
-  条件: (x : R)
-  结论: taylor r (C x) = C x
-  证明: C_comp
-
-Depends on / 依赖: C_comp
+/-
+**Polynomial.taylor_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_C (x : R) : taylor r (C x) = C x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.C_comp`：C_comp : (C a).comp p = C a
 -/
 theorem taylor_C (x : R) : taylor r (C x) = C x := C_comp
-
-/--
-theorem `taylor_zero` / 定理 `taylor_zero`
-
-English:
-theorem taylor_zero
-  given: (f : R[X])
-  statement: taylor 0 f = f
-  proof: by rw [taylor_apply, C_0, add_zero, comp_X]
-
-@[simp]
-
-中文:
-定理 taylor_zero
-  条件: (f : R[X])
-  结论: taylor 0 f = f
-  证明: by rw [taylor_apply, C_0, add_zero, comp_X]
-
-@[simp]
-
-Depends on / 依赖: add_zero, comp_X, taylor_apply
+/-
+**Polynomial.taylor_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_zero (f : R[X]) : taylor 0 f = f
+参数：f : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.taylor_apply`：taylor_apply : taylor r f = f.comp (X + C r)
+· 使用定理 `Polynomial.C_0`：C_0 : C (0 : R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Polynomial.comp_X`：comp_X : p.comp X = p
 -/
 theorem taylor_zero (f : R[X]) : taylor 0 f = f := by rw [taylor_apply, C_0, add_zero, comp_X]
 
 @[simp]
-/--
-theorem `taylor_zero'` / 定理 `taylor_zero'`
-
-English:
-theorem taylor_zero'
-  statement: taylor (0 : R) = LinearMap.id
-  proof: LinearMap.ext taylor_zero
-
-@[simp]
-
-中文:
-定理 taylor_zero'
-  结论: taylor (0 : R) = 线性映射.id
-  证明: LinearMap.ext taylor_zero
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.ext, taylor_zero
+/-
+**Polynomial.taylor_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_zero' : taylor (0 : R) = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Polynomial.taylor_zero`：taylor_zero (f : R[X]) : taylor 0 f = f
 -/
 theorem taylor_zero' : taylor (0 : R) = LinearMap.id := LinearMap.ext taylor_zero
 
 @[simp]
-/--
-theorem `taylor_one` / 定理 `taylor_one`
-
-English:
-theorem taylor_one
-  statement: taylor r (1 : R[X]) = C 1
-  proof: taylor_C r 1
-
-@[simp]
-
-中文:
-定理 taylor_one
-  结论: taylor r (1 : R[X]) = C 1
-  证明: taylor_C r 1
-
-@[simp]
-
-Depends on / 依赖: taylor_C
+/-
+**Polynomial.taylor_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_one : taylor r (1 : R[X]) = C 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.taylor_C`：taylor_C (x : R) : taylor r (C x) = C x
 -/
 theorem taylor_one : taylor r (1 : R[X]) = C 1 := taylor_C r 1
 
 @[simp]
-/--
-theorem `taylor_monomial` / 定理 `taylor_monomial`
-
-English:
-theorem taylor_monomial
-  given: (i : Nat) (k : R)
-  statement: taylor r (monomial i k) = C k * (X + C r) ^ i
-  proof: by
-  simp [taylor_apply]
-
-中文:
-定理 taylor_monomial
-  条件: (i : 自然数) (k : R)
-  结论: taylor r (monomial i k) = C k * (X + C r) ^ i
-  证明: by
-  simp [taylor_apply]
-
-Depends on / 依赖: taylor_apply
+/-
+**Polynomial.taylor_monomial** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_monomial (i : Nat) (k : R) : taylor r (monomial i k) = C k * (X + C
+ r) ^ i
+参数：i : Nat；k : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.monomial_comp`：monomial_comp (n : Nat) : (monomial n a).comp 
+p = C a * p ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem taylor_monomial (i : Nat) (k : R) : taylor r (monomial i k) = C k * (X + C r) ^ i := by
+theorem taylor_monomial (i : ℕ) (k : R) : taylor r (monomial i k) = C k * (X + C r) ^ i := by
   simp [taylor_apply]
 
-/--
-theorem `taylor_coeff` / 定理 `taylor_coeff`
+/-- The `k`th coefficient of `Polynomial.taylor r f` is `(Polynomial.hasseDeriv k f).eval r`. -/
+/-
+**Polynomial.taylor_coeff** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_coeff (n : Nat) : (taylor r f).coeff n = (hasseDeriv n f).eval r
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.lhom_ext'`：lhom_ext' {M : Type*} [AddCommMonoid M] [Module R 
+M] {f g : R[X] ->ₗ[R] M} (h : forall n, f.comp (monomial n) = g.comp (monomial n
+)) : f = g
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.monomial_comp`：monomial_comp (n : Nat) : (monomial n a).comp 
+p = C a * p ^ n
+· 使用定理 `Commute.add_pow`：add_pow (h : Commute x y) (n : Nat) : (x + y) ^ n = ∑ m
+ in range (n + 1), x ^ m * y ^ (n - m) * n.choose m
+· 使用定理 `Polynomial.commute_X`：commute_X (p : R[X]) : Commute X p
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Polynomial.hasseDeriv_monomial`：hasseDeriv_monomial (n : Nat) (r : R) : 
+hasseDeriv k (monomial n r) = monomial (n - k) (↑(n.choose k) * r)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Polynomial.leval_apply`：∀ {R : Type u_1} [inst : Semiring R] (r : R) (f 
+: Polynomial R), (Polynomial.leval r) f = Polynomial.eval r f
+· 使用定理 `Polynomial.eval_monomial`：eval_monomial {n a} : (monomial n a).eval x = 
+a * x ^ n
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Polynomial.coeff_mul_C`：coeff_mul_C (p : R[X]) (n : Nat) (a : R) : coeff
+ (p * C a) n = coeff p n * a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.coeff_X_pow`：coeff_X_pow (k n : Nat) : coeff (X ^ k : R[X]) n
+ = if n = k then 1 else 0
+· 使用定理 `boole_mul`：boole_mul {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (if P then 1 else 0) * a = if P then a else 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `Nat.cast_commute`：cast_commute (n : Nat) (x : α) : Commute (n : α) x
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Nat.choose_eq_zero_of_lt`：choose_eq_zero_of_lt : forall {n k}, n < k -> 
+choose n k = 0 | _, 0, hk => absurd hk (Nat.not_lt_zero _) | 0, _ + 1, _ => choo
+se_zero_succ _…
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+（共 31 条，此处仅展示前 30 条）
 
-English:
-theorem taylor_coeff
-  given: (n : Nat)
-  statement: (taylor r f).coeff n = (hasseDeriv n f).eval r
-  proof: show (lcoeff R n).comp (taylor r) f = (leval r).comp (hasseDeriv n) f by
-    congr 1; clear! f; ext i
-    simp only [leval_apply, mul_one, one_mul, eval_monomial, LinearMap.comp_apply, map_sum,
-      hasseDeriv_monomial, taylor_apply, monomial_comp, C_1, (commute_X (C r)).add_pow i]
-    simp only [lcoeff_apply, ← C_eq_natCast, mul_assoc, ← C_pow, ← C_mul, coeff_mul_C,
-      (Nat.cast_commute _ _).eq, coeff_X_pow, boole_mul, Finset.sum_ite_eq, Finset.mem_range]
-    split_ifs with h; · rfl
-    push Not at h; rw [Nat.choose_eq_zero_of_lt h, Nat.cast_zero, mul_zero]
-
-@[simp]
-
-中文:
-定理 taylor_coeff
-  条件: (n : 自然数)
-  结论: (taylor r f).coeff n = (hasseDeriv n f).eval r
-  证明: show (lcoeff R n).comp (taylor r) f = (leval r).comp (hasseDeriv n) f by
-    congr 1; clear! f; ext i
-    simp only [leval_apply, mul_one, one_mul, eval_monomial, LinearMap.comp_apply, map_sum,
-      hasseDeriv_monomial, taylor_apply, monomial_comp, C_1, (commute_X (C r)).add_pow i]
-    simp only [lcoeff_apply, ← C_eq_natCast, mul_assoc, ← C_pow, ← C_mul, coeff_mul_C,
-      (Nat.cast_commute _ _).eq, coeff_X_pow, boole_mul, Finset.sum_ite_eq, Finset.mem_range]
-    split_ifs with h; · rfl
-    push Not at h; rw [Nat.choose_eq_zero_of_lt h, Nat.cast_zero, mul_zero]
-
-@[simp]
-
-Depends on / 依赖: C_eq_natCast, C_mul, C_pow, Finset, Finset.mem_range, Finset.sum_ite_eq, LinearMap, LinearMap.comp_apply, Nat.cast_commute, Nat.choose_eq_ze, add_pow, boole_mul, cast_commute, choose_eq_ze, coeff_X_pow, coeff_mul_C, commute_X, comp_apply, eval_monomial, hasseDeriv
+--- 原说明 ---
+The `k`th coefficient of `Polynomial.taylor r f` is `(Polynomial.hasseDeriv k f)
+.eval r`.
 -/
-theorem taylor_coeff (n : Nat) : (taylor r f).coeff n = (hasseDeriv n f).eval r :=
+theorem taylor_coeff (n : ℕ) : (taylor r f).coeff n = (hasseDeriv n f).eval r :=
   show (lcoeff R n).comp (taylor r) f = (leval r).comp (hasseDeriv n) f by
     congr 1; clear! f; ext i
     simp only [leval_apply, mul_one, one_mul, eval_monomial, LinearMap.comp_apply, map_sum,
@@ -280,80 +230,64 @@ theorem taylor_coeff (n : Nat) : (taylor r f).coeff n = (hasseDeriv n f).eval r 
     push Not at h; rw [Nat.choose_eq_zero_of_lt h, Nat.cast_zero, mul_zero]
 
 @[simp]
-/--
-theorem `taylor_coeff_zero` / 定理 `taylor_coeff_zero`
-
-English:
-theorem taylor_coeff_zero
-  statement: (taylor r f).coeff 0 = f.eval r
-  proof: by
-  rw [taylor_coeff]; rw [hasseDeriv_zero]; rw [LinearMap.id_apply]
-
-@[simp]
-
-中文:
-定理 taylor_coeff_zero
-  结论: (taylor r f).coeff 0 = f.eval r
-  证明: by
-  rw [taylor_coeff]; rw [hasseDeriv_zero]; rw [LinearMap.id_apply]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.id_apply, hasseDeriv_zero, id_apply, taylor_coeff
+/-
+**Polynomial.taylor_coeff_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_coeff_zero : (taylor r f).coeff 0 = f.eval r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.taylor_coeff`：taylor_coeff (n : Nat) : (taylor r f).coeff n =
+ (hasseDeriv n f).eval r
+· 使用定理 `Polynomial.hasseDeriv_zero`：hasseDeriv_zero : @hasseDeriv R _ 0 = Linear
+Map.id
+· 使用定理 `LinearMap.id_apply`：id_apply (x : M) : @id R M _ _ _ x = x
 -/
 theorem taylor_coeff_zero : (taylor r f).coeff 0 = f.eval r := by
-  rw [taylor_coeff]; rw [hasseDeriv_zero]; rw [LinearMap.id_apply]
+  rw [taylor_coeff, hasseDeriv_zero, LinearMap.id_apply]
 
 @[simp]
-/--
-theorem `taylor_coeff_one` / 定理 `taylor_coeff_one`
-
-English:
-theorem taylor_coeff_one
-  statement: (taylor r f).coeff 1 = f.derivative.eval r
-  proof: by
-  rw [taylor_coeff]; rw [hasseDeriv_one]
-
-@[simp]
-
-中文:
-定理 taylor_coeff_one
-  结论: (taylor r f).coeff 1 = f.derivative.eval r
-  证明: by
-  rw [taylor_coeff]; rw [hasseDeriv_one]
-
-@[simp]
-
-Depends on / 依赖: hasseDeriv_one, taylor_coeff
+/-
+**Polynomial.taylor_coeff_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_coeff_one : (taylor r f).coeff 1 = f.derivative.eval r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.taylor_coeff`：taylor_coeff (n : Nat) : (taylor r f).coeff n =
+ (hasseDeriv n f).eval r
+· 使用定理 `Polynomial.hasseDeriv_one`：hasseDeriv_one : @hasseDeriv R _ 1 = derivati
+ve
 -/
 theorem taylor_coeff_one : (taylor r f).coeff 1 = f.derivative.eval r := by
-  rw [taylor_coeff]; rw [hasseDeriv_one]
+  rw [taylor_coeff, hasseDeriv_one]
 
 @[simp]
-/--
-theorem `coeff_taylor_natDegree` / 定理 `coeff_taylor_natDegree`
-
-English:
-theorem coeff_taylor_natDegree
-  statement: (taylor r f).coeff f.natDegree = f.leadingCoeff
-  proof: by
-  by_cases hf : f = 0
-  · rw [hf, map_zero, coeff_natDegree]
-  · rw [taylor_coeff, hasseDeriv_natDegree_eq_C, eval_C]
-
-@[simp]
-
-中文:
-定理 coeff_taylor_natDegree
-  结论: (taylor r f).coeff f.natDegree = f.leadingCoeff
-  证明: by
-  by_cases hf : f = 0
-  · rw [hf, map_zero, coeff_natDegree]
-  · rw [taylor_coeff, hasseDeriv_natDegree_eq_C, eval_C]
-
-@[simp]
-
-Depends on / 依赖: coeff_natDegree, eval_C, hasseDeriv_natDegree_eq_C, map_zero, taylor_coeff
+/-
+**Polynomial.coeff_taylor_natDegree** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coeff_taylor_natDegree : (taylor r f).coeff f.natDegree = f.leadingCoeff
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Polynomial.coeff_natDegree`：coeff_natDegree : coeff p (natDegree p) = le
+adingCoeff p
+· 使用定理 `Polynomial.taylor_coeff`：taylor_coeff (n : Nat) : (taylor r f).coeff n =
+ (hasseDeriv n f).eval r
+· 使用定理 `Polynomial.hasseDeriv_natDegree_eq_C`：hasseDeriv_natDegree_eq_C : f.hass
+eDeriv f.natDegree = C f.leadingCoeff
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
 -/
 theorem coeff_taylor_natDegree : (taylor r f).coeff f.natDegree = f.leadingCoeff := by
   by_cases hf : f = 0
@@ -361,34 +295,51 @@ theorem coeff_taylor_natDegree : (taylor r f).coeff f.natDegree = f.leadingCoeff
   · rw [taylor_coeff, hasseDeriv_natDegree_eq_C, eval_C]
 
 @[simp]
-/--
-theorem `natDegree_taylor` / 定理 `natDegree_taylor`
-
-English:
-theorem natDegree_taylor
-  given: (p : R[X]) (r : R)
-  statement: natDegree (taylor r p) = natDegree p
-  proof: by
-  refine map_natDegree_eq_natDegree _ ?_
-  nontriviality R
-  intro n c c0
-  simp [taylor_monomial, natDegree_C_mul_of_mul_ne_zero, natDegree_pow_X_add_C, c0]
-
-@[simp]
-
-中文:
-定理 natDegree_taylor
-  条件: (p : R[X]) (r : R)
-  结论: natDegree (taylor r p) = natDegree p
-  证明: by
-  refine map_natDegree_eq_natDegree _ ?_
-  nontriviality R
-  intro n c c0
-  simp [taylor_monomial, natDegree_C_mul_of_mul_ne_zero, natDegree_pow_X_add_C, c0]
-
-@[simp]
-
-Depends on / 依赖: map_natDegree_eq_natDegree, natDegree_C_mul_of_mul_ne_zero, natDegree_pow_X_add_C, nontriviality, taylor_monomial
+/-
+**Polynomial.natDegree_taylor** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natDegree_taylor (p : R[X]) (r : R) : natDegree (taylor r p) = natDegree p
+参数：p : R[X]；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.map_natDegree_eq_natDegree`：map_natDegree_eq_natDegree {S F :
+ Type*} [Semiring S] [FunLike F R[X] S[X]] [AddMonoidHomClass F R[X] S[X]] {φ : 
+F} (p) (φ_mon_nat : forall …
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.taylor_monomial`：taylor_monomial (i : Nat) (k : R) : taylor r
+ (monomial i k) = C k * (X + C r) ^ i
+· 使用定理 `Polynomial.natDegree_of_subsingleton`：natDegree_of_subsingleton [Subsing
+leton R] : natDegree p = 0
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Polynomial.natDegree_C_mul_of_mul_ne_zero`：natDegree_C_mul_of_mul_ne_zer
+o (h : a * p.leadingCoeff != 0) : (C a * p).natDegree = p.natDegree
+· 使用定理 `Polynomial.leadingCoeff_pow_X_add_C`：leadingCoeff_pow_X_add_C (r : R) (i
+ : Nat) : leadingCoeff ((X + C r) ^ i) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Polynomial.natDegree_pow_X_add_C`：natDegree_pow_X_add_C [Nontrivial R] (
+n : Nat) (r : R) : ((X + C r) ^ n).natDegree = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem natDegree_taylor (p : R[X]) (r : R) : natDegree (taylor r p) = natDegree p := by
   refine map_natDegree_eq_natDegree _ ?_
@@ -397,130 +348,125 @@ theorem natDegree_taylor (p : R[X]) (r : R) : natDegree (taylor r p) = natDegree
   simp [taylor_monomial, natDegree_C_mul_of_mul_ne_zero, natDegree_pow_X_add_C, c0]
 
 @[simp]
-/--
-theorem `leadingCoeff_taylor` / 定理 `leadingCoeff_taylor`
-
-English:
-theorem leadingCoeff_taylor
-  statement: (taylor r f).leadingCoeff = f.leadingCoeff
-  proof: by
-  rw [leadingCoeff]; rw [leadingCoeff]; rw [natDegree_taylor]; rw [coeff_taylor_natDegree]; rw [leadingCoeff]
-
-@[simp]
-
-中文:
-定理 leadingCoeff_taylor
-  结论: (taylor r f).leadingCoeff = f.leadingCoeff
-  证明: by
-  rw [leadingCoeff]; rw [leadingCoeff]; rw [natDegree_taylor]; rw [coeff_taylor_natDegree]; rw [leadingCoeff]
-
-@[simp]
-
-Depends on / 依赖: coeff_taylor_natDegree, leadingCoeff, natDegree_taylor
+/-
+**Polynomial.leadingCoeff_taylor** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：leadingCoeff_taylor : (taylor r f).leadingCoeff = f.leadingCoeff
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.leadingCoeff.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Po
+lynomial R), p.leadingCoeff = p.coeff p.natDegree
+· 使用定理 `Polynomial.natDegree_taylor`：natDegree_taylor (p : R[X]) (r : R) : natDe
+gree (taylor r p) = natDegree p
+· 使用定理 `Polynomial.coeff_taylor_natDegree`：coeff_taylor_natDegree : (taylor r f)
+.coeff f.natDegree = f.leadingCoeff
 -/
 theorem leadingCoeff_taylor : (taylor r f).leadingCoeff = f.leadingCoeff := by
-  rw [leadingCoeff]; rw [leadingCoeff]; rw [natDegree_taylor]; rw [coeff_taylor_natDegree]; rw [leadingCoeff]
+  rw [leadingCoeff, leadingCoeff, natDegree_taylor, coeff_taylor_natDegree, leadingCoeff]
 
 @[simp]
-/--
-theorem `taylor_eq_zero` / 定理 `taylor_eq_zero`
-
-English:
-theorem taylor_eq_zero
-  statement: taylor r f = 0 ↔ f = 0
-  proof: by
-  rw [← leadingCoeff_eq_zero]; rw [← leadingCoeff_eq_zero]; rw [leadingCoeff_taylor]
-
-@[simp]
-
-中文:
-定理 taylor_eq_zero
-  结论: taylor r f = 0 ↔ f = 0
-  证明: by
-  rw [← leadingCoeff_eq_zero]; rw [← leadingCoeff_eq_zero]; rw [leadingCoeff_taylor]
-
-@[simp]
-
-Depends on / 依赖: leadingCoeff_eq_zero, leadingCoeff_taylor
+/-
+**Polynomial.taylor_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_eq_zero : taylor r f = 0 ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.leadingCoeff_eq_zero`：leadingCoeff_eq_zero : leadingCoeff p =
+ 0 ↔ p = 0
+· 使用定理 `Polynomial.leadingCoeff_taylor`：leadingCoeff_taylor : (taylor r f).leadi
+ngCoeff = f.leadingCoeff
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem taylor_eq_zero : taylor r f = 0 ↔ f = 0 := by
-  rw [← leadingCoeff_eq_zero]; rw [← leadingCoeff_eq_zero]; rw [leadingCoeff_taylor]
+  rw [← leadingCoeff_eq_zero, ← leadingCoeff_eq_zero, leadingCoeff_taylor]
 
 @[simp]
-/--
-theorem `degree_taylor` / 定理 `degree_taylor`
-
-English:
-theorem degree_taylor
-  given: (p : R[X]) (r : R)
-  statement: degree (taylor r p) = degree p
-  proof: by
-  by_cases hp : p = 0
-  · rw [hp, map_zero]
-  · rw [degree_eq_natDegree hp, degree_eq_iff_natDegree_eq ((taylor_eq_zero r p).not.2 hp),
-      natDegree_taylor]
-
-中文:
-定理 degree_taylor
-  条件: (p : R[X]) (r : R)
-  结论: degree (taylor r p) = degree p
-  证明: by
-  by_cases hp : p = 0
-  · rw [hp, map_zero]
-  · rw [degree_eq_natDegree hp, degree_eq_iff_natDegree_eq ((taylor_eq_zero r p).not.2 hp),
-      natDegree_taylor]
-
-Depends on / 依赖: degree_eq_iff_natDegree_eq, degree_eq_natDegree, map_zero, natDegree_taylor, taylor_eq_zero
+/-
+**Polynomial.degree_taylor** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：degree_taylor (p : R[X]) (r : R) : degree (taylor r p) = degree p
+参数：p : R[X]；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Polynomial.degree_eq_natDegree`：degree_eq_natDegree (hp : p != 0) : degr
+ee p = (natDegree p : WithBot Nat)
+· 使用定理 `Polynomial.degree_eq_iff_natDegree_eq`：degree_eq_iff_natDegree_eq {p : R
+[X]} {n : Nat} (hp : p != 0) : p.degree = n ↔ p.natDegree = n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Polynomial.taylor_eq_zero`：taylor_eq_zero : taylor r f = 0 ↔ f = 0
+· 使用定理 `Polynomial.natDegree_taylor`：natDegree_taylor (p : R[X]) (r : R) : natDe
+gree (taylor r p) = natDegree p
 -/
 theorem degree_taylor (p : R[X]) (r : R) : degree (taylor r p) = degree p := by
   by_cases hp : p = 0
   · rw [hp, map_zero]
   · rw [degree_eq_natDegree hp, degree_eq_iff_natDegree_eq ((taylor_eq_zero r p).not.2 hp),
       natDegree_taylor]
-
-/--
-theorem `eq_zero_of_hasseDeriv_eq_zero` / 定理 `eq_zero_of_hasseDeriv_eq_zero`
-
-English:
-theorem eq_zero_of_hasseDeriv_eq_zero
-  statement: (f : R[X]) (r : R)
-  proof: by
-  rw [← taylor_eq_zero r]
-  ext k
-  rw [taylor_coeff]; rw [h]; rw [coeff_zero]
-
-中文:
-定理 eq_zero_of_hasseDeriv_eq_zero
-  结论: (f : R[X]) (r : R)
-  证明: by
-  rw [← taylor_eq_zero r]
-  ext k
-  rw [taylor_coeff]; rw [h]; rw [coeff_zero]
-
-Depends on / 依赖: coeff_zero, taylor_coeff, taylor_eq_zero
+/-
+**Polynomial.eq_zero_of_hasseDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial
+`。
+形式化陈述：eq_zero_of_hasseDeriv_eq_zero (f : R[X]) (r : R) (h : forall k, (hasseDeri
+v k f).eval r = 0) : f = 0
+参数：f : R[X]；r : R；h : forall k, (hasseDeriv k f).eval r = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.taylor_eq_zero`：taylor_eq_zero : taylor r f = 0 ↔ f = 0
+· 使用定理 `Polynomial.ext`：ext {p q : R[X]} : (forall n, coeff p n = coeff q n) -> 
+p = q
+· 使用定理 `Polynomial.taylor_coeff`：taylor_coeff (n : Nat) : (taylor r f).coeff n =
+ (hasseDeriv n f).eval r
+· 使用定理 `Polynomial.coeff_zero`：coeff_zero (n : Nat) : coeff (0 : R[X]) n = 0
 -/
 theorem eq_zero_of_hasseDeriv_eq_zero (f : R[X]) (r : R)
-    (h : forall k, (hasseDeriv k f).eval r = 0) : f = 0 := by
+    (h : ∀ k, (hasseDeriv k f).eval r = 0) : f = 0 := by
   rw [← taylor_eq_zero r]
   ext k
-  rw [taylor_coeff]; rw [h]; rw [coeff_zero]
-
-/--
-lemma `map_taylor` / 引理 `map_taylor`
-
-English:
-lemma map_taylor
-  given: {R S : Type*} [Semiring R] [Semiring S] (p : R[X]) (r : R) (f : R ->+* S)
-  proof: by
-  simp [taylor_apply, Polynomial.map_comp]
-
-中文:
-引理 map_taylor
-  条件: {R S : 类型} [半环 R] [半环 S] (p : R[X]) (r : R) (f : R ->+* S)
-  证明: by
-  simp [taylor_apply, Polynomial.map_comp]
+  rw [taylor_coeff, h, coeff_zero]
+/-
+**Polynomial.map_taylor** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u_2} {S : Type u_3} [inst : Semiring R] [inst_1 : Semiring S] 
+(p : Polynomial R) (r : R) (f : R →+* S),   Polynomial.map f ((Polynomial.taylor
+ r) p) = (Polynomial.taylor (f r)) (Polynomial.map f p)
+参数：p : Polynomial R；r : R；f : R →+* S；(Polynomial.taylor r) p；Polynomial.taylor 
+(f r)；Polynomial.map f p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_comp`：map_comp (p q : R[X]) : map f (p.comp q) = (map f p
+).comp (map f q)
+· 使用定理 `Polynomial.map_add`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p + q)
+ = Polyn…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma map_taylor {R S : Type*} [Semiring R] [Semiring S] (p : R[X]) (r : R) (f : R ->+* S) :
+@[simp] lemma map_taylor {R S : Type*} [Semiring R] [Semiring S] (p : R[X]) (r : R) (f : R →+* S) :
     (p.taylor r).map f = (p.map f).taylor (f r) := by
   simp [taylor_apply, Polynomial.map_comp]
 
@@ -530,38 +476,36 @@ section Ring
 
 variable {R : Type*} [Ring R]
 
-/--
-theorem `taylor_injective` / 定理 `taylor_injective`
-
-English:
-theorem taylor_injective
-  given: (r : R)
-  statement: Function.Injective (taylor r)
-  proof: (injective_iff_map_eq_zero' _).2 (taylor_eq_zero r)
-
-中文:
-定理 taylor_injective
-  条件: (r : R)
-  结论: 函数.单射 (taylor r)
-  证明: (injective_iff_map_eq_zero' _).2 (taylor_eq_zero r)
-
-Depends on / 依赖: injective_iff_map_eq_zero, taylor_eq_zero
+/-
+**Polynomial.taylor_injective** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_injective (r : R) : Function.Injective (taylor r)
+参数：r : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `injective_iff_map_eq_zero'`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_
+9} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [Add
+MonoidHomClass F…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Polynomial.taylor_eq_zero`：taylor_eq_zero : taylor r f = 0 ↔ f = 0
 -/
 theorem taylor_injective (r : R) : Function.Injective (taylor r) :=
   (injective_iff_map_eq_zero' _).2 (taylor_eq_zero r)
-
-/--
-lemma `taylor_inj` / 引理 `taylor_inj`
-
-English:
-lemma taylor_inj
-  given: {r : R} {p q : R[X]}
-  proof: (taylor_injective r).eq_iff
-
-中文:
-引理 taylor_inj
-  条件: {r : R} {p q : R[X]}
-  证明: (taylor_injective r).eq_iff
+/-
+**Polynomial.taylor_inj** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {r : R} {p q : Polynomial R}, (Polynomial
+.taylor r) p = (Polynomial.taylor r) q ↔ p = q
+参数：Polynomial.taylor r；Polynomial.taylor r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Polynomial.taylor_injective`：taylor_injective (r : R) : Function.Injecti
+ve (taylor r)
 -/
 @[simp] lemma taylor_inj {r : R} {p q : R[X]} :
     taylor r p = taylor r q ↔ p = q := (taylor_injective r).eq_iff
@@ -573,209 +517,255 @@ section CommSemiring
 variable {R : Type*} [CommSemiring R] (r : R) (f : R[X])
 
 @[simp]
-/--
-theorem `taylor_mul` / 定理 `taylor_mul`
-
-English:
-theorem taylor_mul
-  given: (p q : R[X])
-  statement: taylor r (p * q) = taylor r p * taylor r q
-  proof: mul_comp ..
-
-中文:
-定理 taylor_mul
-  条件: (p q : R[X])
-  结论: taylor r (p * q) = taylor r p * taylor r q
-  证明: mul_comp ..
-
-Depends on / 依赖: mul_comp
+/-
+**Polynomial.taylor_mul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_mul (p q : R[X]) : taylor r (p * q) = taylor r p * taylor r q
+参数：p q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.mul_comp`：mul_comp {R : Type*} [CommSemiring R] (p q r : R[X]
+) : (p * q).comp r = p.comp r * q.comp r
 -/
 theorem taylor_mul (p q : R[X]) : taylor r (p * q) = taylor r p * taylor r q := mul_comp ..
 
 /-- `Polynomial.taylor` as an `AlgHom` for commutative semirings -/
 @[simps!]
-/--
-Definition of `taylorAlgHom` / `taylorAlgHom` 的定义
+/-
+**Polynomial.taylorAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：taylorAlgHom (r : R) : R[X] ->ₐ[R] R[X]
+参数：r : R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.taylor_mul`：taylor_mul (p q : R[X]) : taylor r (p * q) = tayl
+or r p * taylor r q
 
-English:
-definition taylorAlgHom
-  signature: (r : R)
-  body: AlgHom.ofLinearMap (taylor r) (taylor_one r) (taylor_mul r)
-
-@[simp]
-
-中文:
-定义 taylorAlgHom
-  签名: (r : R)
-  定义体: AlgHom.ofLinearMap (taylor r) (taylor_one r) (taylor_mul r)
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, ofLinearMap, taylor, taylor_mul, taylor_one
+--- 原说明 ---
+`Polynomial.taylor` as an `AlgHom` for commutative semirings
 -/
-def taylorAlgHom (r : R) : R[X] ->ₐ[R] R[X] :=
+def taylorAlgHom (r : R) : R[X] →ₐ[R] R[X] :=
   AlgHom.ofLinearMap (taylor r) (taylor_one r) (taylor_mul r)
 
 @[simp]
-/--
-theorem `taylor_pow` / 定理 `taylor_pow`
-
-English:
-theorem taylor_pow
-  given: (n : Nat)
-  statement: taylor r (f ^ n) = taylor r f ^ n
-  proof: (taylorAlgHom r).map_pow ..
-
-中文:
-定理 taylor_pow
-  条件: (n : 自然数)
-  结论: taylor r (f ^ n) = taylor r f ^ n
-  证明: (taylorAlgHom r).map_pow ..
-
-Depends on / 依赖: map_pow, taylorAlgHom
+/-
+**Polynomial.taylor_pow** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_pow (n : Nat) : taylor r (f ^ n) = taylor r f ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_pow`：∀ {α : Type u_2} {β : Type u_3} [inst : Semiring α] [in
+st_1 : Semiring β] (f : α →+* β) (a : α) (n : ℕ),   f (a ^ n) = f a ^ n
 -/
-theorem taylor_pow (n : Nat) : taylor r (f ^ n) = taylor r f ^ n :=
+theorem taylor_pow (n : ℕ) : taylor r (f ^ n) = taylor r f ^ n :=
   (taylorAlgHom r).map_pow ..
-
-/--
-lemma `coe_taylorAlgHom` / 引理 `coe_taylorAlgHom`
-
-English:
-lemma coe_taylorAlgHom
-  statement: taylorAlgHom r = taylor r
-  proof: rfl
-
-中文:
-引理 coe_taylorAlgHom
-  结论: taylorAlgHom r = taylor r
-  证明: rfl
+/-
+**Polynomial.coe_taylorAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] (r : R), ↑(Polynomial.taylorAlgHo
+m r) = Polynomial.taylor r
+参数：r : R；Polynomial.taylorAlgHom r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
 -/
 @[simp, norm_cast] lemma coe_taylorAlgHom : taylorAlgHom r = taylor r :=
   rfl
-
-/--
-theorem `taylor_taylor` / 定理 `taylor_taylor`
-
-English:
-theorem taylor_taylor
-  given: (f : R[X]) (r s : R)
-  statement: taylor r (taylor s f) = taylor (r + s) f
-  proof: by
-  simp only [taylor_apply, comp_assoc, map_add, add_comp, X_comp, C_comp, add_assoc]
-
-中文:
-定理 taylor_taylor
-  条件: (f : R[X]) (r s : R)
-  结论: taylor r (taylor s f) = taylor (r + s) f
-  证明: by
-  simp only [taylor_apply, comp_assoc, map_add, add_comp, X_comp, C_comp, add_assoc]
-
-Depends on / 依赖: C_comp, X_comp, add_assoc, add_comp, comp_assoc, map_add, taylor_apply
+/-
+**Polynomial.taylor_taylor** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_taylor (f : R[X]) (r s : R) : taylor r (taylor s f) = taylor (r + s
+) f
+参数：f : R[X]；r s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.comp_assoc`：comp_assoc {R : Type*} [CommSemiring R] (φ ψ χ : 
+R[X]) : (φ.comp ψ).comp χ = φ.comp (ψ.comp χ)
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `Polynomial.X_comp`：X_comp : X.comp p = p
+· 使用定理 `Polynomial.C_comp`：C_comp : (C a).comp p = C a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem taylor_taylor (f : R[X]) (r s : R) : taylor r (taylor s f) = taylor (r + s) f := by
   simp only [taylor_apply, comp_assoc, map_add, add_comp, X_comp, C_comp, add_assoc]
-
-/--
-theorem `taylor_eval` / 定理 `taylor_eval`
-
-English:
-theorem taylor_eval
-  given: (r : R) (f : R[X]) (s : R)
-  statement: (taylor r f).eval s = f.eval (s + r)
-  proof: by
-  simp only [taylor_apply, eval_comp, eval_C, eval_X, eval_add]
-
-中文:
-定理 taylor_eval
-  条件: (r : R) (f : R[X]) (s : R)
-  结论: (taylor r f).eval s = f.eval (s + r)
-  证明: by
-  simp only [taylor_apply, eval_comp, eval_C, eval_X, eval_add]
-
-Depends on / 依赖: eval_C, eval_X, eval_add, eval_comp, taylor_apply
+/-
+**Polynomial.taylor_eval** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_eval (r : R) (f : R[X]) (s : R) : (taylor r f).eval s = f.eval (s +
+ r)
+参数：r : R；f : R[X]；s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_comp`：eval_comp : (p.comp q).eval x = p.eval (q.eval x)
+· 使用定理 `Polynomial.eval_add`：eval_add : (p + q).eval x = p.eval x + q.eval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem taylor_eval (r : R) (f : R[X]) (s : R) : (taylor r f).eval s = f.eval (s + r) := by
   simp only [taylor_apply, eval_comp, eval_C, eval_X, eval_add]
-
-/--
-theorem `exists_mul_sq_add_linear_part_eq_eval_add` / 定理 `exists_mul_sq_add_linear_part_eq_eval_add`
-
-English:
-theorem exists_mul_sq_add_linear_part_eq_eval_add
-  given: (p : R[X]) (x y : R)
-  proof: by
-  have this t :
-      (taylor x p).eval t =
-      ∑ i in Finset.range ((taylor x p).natDegree + 2), (taylor x p).coeff i * t ^ i :=
-    (taylor x p).eval_eq_sum_range' (n := (taylor x p).natDegree + 2) (by lia) t
-  rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; rw [Finset.sum_range_succ']
-  use ∑ i in Finset.range p.natDegree, (taylor x p).coeff (i + 2) * y ^ i
-  simp [pow_succ, mul_assoc, Finset.sum_mul]
-
-中文:
-定理 存在_mul_sq_add_linear_part_eq_eval_add
-  条件: (p : R[X]) (x y : R)
-  证明: by
-  have this t :
-      (taylor x p).eval t =
-      ∑ i in Finset.range ((taylor x p).natDegree + 2), (taylor x p).coeff i * t ^ i :=
-    (taylor x p).eval_eq_sum_range' (n := (taylor x p).natDegree + 2) (by lia) t
-  rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; rw [Finset.sum_range_succ']
-  use ∑ i in Finset.range p.natDegree, (taylor x p).coeff (i + 2) * y ^ i
-  simp [pow_succ, mul_assoc, Finset.sum_mul]
-
-Depends on / 依赖: Finset, Finset.range, Finset.sum_mul, Finset.sum_range_succ, add_comm, eval_eq_sum_range, mul_assoc, natDegree, p.natDegree, p.taylor_eval, pow_succ, sum_mul, sum_range_succ, taylor, taylor_eval
+/-
+**Polynomial.exists_mul_sq_add_linear_part_eq_eval_add** 是 Mathlib 中的一个定理，位于命名空间
+ `Polynomial`。
+形式化陈述：exists_mul_sq_add_linear_part_eq_eval_add (p : R[X]) (x y : R) : exists c 
+: R, c * y ^ 2 + p.derivative.eval x * y + p.eval x = p.eval (x + y)
+参数：p : R[X]；x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval_eq_sum_range'`：eval_eq_sum_range' {p : R[X]} {n : Nat} (
+hn : p.natDegree < n) (x : R) : p.eval x = ∑ i in Finset.range n, p.coeff i * x 
+^ i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.taylor_eval`：taylor_eval (r : R) (f : R[X]) (s : R) : (taylor
+ r f).eval s = f.eval (s + r)
+· 使用定理 `Finset.sum_range_succ'`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ
+ → M) (n : ℕ),   ∑ k ∈ Finset.range (n + 1), f k = ∑ k ∈ Finset.range n, f (k + 
+1) + f 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Polynomial.natDegree_taylor`：natDegree_taylor (p : R[X]) (r : R) : natDe
+gree (taylor r p) = natDegree p
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Polynomial.taylor_coeff_one`：taylor_coeff_one : (taylor r f).coeff 1 = f
+.derivative.eval r
+· 使用定理 `Polynomial.taylor_coeff_zero`：taylor_coeff_zero : (taylor r f).coeff 0 =
+ f.eval r
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem exists_mul_sq_add_linear_part_eq_eval_add (p : R[X]) (x y : R) :
-    exists c : R, c * y ^ 2 + p.derivative.eval x * y + p.eval x = p.eval (x + y) := by
+    ∃ c : R, c * y ^ 2 + p.derivative.eval x * y + p.eval x = p.eval (x + y) := by
   have this t :
       (taylor x p).eval t =
-      ∑ i in Finset.range ((taylor x p).natDegree + 2), (taylor x p).coeff i * t ^ i :=
+      ∑ i ∈ Finset.range ((taylor x p).natDegree + 2), (taylor x p).coeff i * t ^ i :=
     (taylor x p).eval_eq_sum_range' (n := (taylor x p).natDegree + 2) (by lia) t
-  rw [add_comm]; rw [← p.taylor_eval x y]; rw [this]; rw [Finset.sum_range_succ']; rw [Finset.sum_range_succ']
-  use ∑ i in Finset.range p.natDegree, (taylor x p).coeff (i + 2) * y ^ i
+  rw [add_comm, ← p.taylor_eval x y, this, Finset.sum_range_succ', Finset.sum_range_succ']
+  use ∑ i ∈ Finset.range p.natDegree, (taylor x p).coeff (i + 2) * y ^ i
   simp [pow_succ, mul_assoc, Finset.sum_mul]
-
-/--
-theorem `eval_add_of_sq_eq_zero` / 定理 `eval_add_of_sq_eq_zero`
-
-English:
-theorem eval_add_of_sq_eq_zero
-  given: (p : R[X]) (x y : R) (hy : y ^ 2 = 0)
-  proof: by
-  rcases exists_mul_sq_add_linear_part_eq_eval_add p x y with ⟨c, h⟩
-  rw [← h]; rw [hy]; ring
-
-中文:
-定理 eval_add_of_sq_eq_zero
-  条件: (p : R[X]) (x y : R) (hy : y ^ 2 = 0)
-  证明: by
-  rcases exists_mul_sq_add_linear_part_eq_eval_add p x y with ⟨c, h⟩
-  rw [← h]; rw [hy]; ring
-
-Depends on / 依赖: exists_mul_sq_add_linear_part_eq_eval_add
+/-
+**Polynomial.eval_add_of_sq_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_add_of_sq_eq_zero (p : R[X]) (x y : R) (hy : y ^ 2 = 0) : p.eval (x +
+ y) = p.eval x + p.derivative.eval x * y
+参数：p : R[X]；x y : R；hy : y ^ 2 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.exists_mul_sq_add_linear_part_eq_eval_add`：exists_mul_sq_add_
+linear_part_eq_eval_add (p : R[X]) (x y : R) : exists c : R, c * y ^ 2 + p.deriv
+ative.eval x * y + p.eval x = p.eval (x + …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
 -/
 theorem eval_add_of_sq_eq_zero (p : R[X]) (x y : R) (hy : y ^ 2 = 0) :
     p.eval (x + y) = p.eval x + p.derivative.eval x * y := by
   rcases exists_mul_sq_add_linear_part_eq_eval_add p x y with ⟨c, h⟩
-  rw [← h]; rw [hy]; ring
-
-/--
-theorem `aeval_add_of_sq_eq_zero` / 定理 `aeval_add_of_sq_eq_zero`
-
-English:
-theorem aeval_add_of_sq_eq_zero
-  statement: {S : Type*} [CommRing S] [Algebra R S]
-  proof: by
-  simp only [← eval_map_algebraMap, Polynomial.eval_add_of_sq_eq_zero _ _ _ hy, derivative_map]
-
-中文:
-定理 aeval_add_of_sq_eq_zero
-  结论: {S : 类型} [交换环 S] [代数 R S]
-  证明: by
-  simp only [← eval_map_algebraMap, Polynomial.eval_add_of_sq_eq_zero _ _ _ hy, derivative_map]
-
-Depends on / 依赖: Polynomial, Polynomial.eval_add_of_sq_eq_zero, derivative_map, eval_add_of_sq_eq_zero, eval_map_algebraMap
+  rw [← h, hy]; ring
+/-
+**Polynomial.aeval_add_of_sq_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：aeval_add_of_sq_eq_zero {S : Type*} [CommRing S] [Algebra R S] (p : R[X]) 
+(x y : S) (hy : y ^ 2 = 0) : p.aeval (x + y) = p.aeval x + p.derivative.aeval x 
+* y
+参数：p : R[X]；x y : S；hy : y ^ 2 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_add_of_sq_eq_zero`：eval_add_of_sq_eq_zero (p : R[X]) (x 
+y : R) (hy : y ^ 2 = 0) : p.eval (x + y) = p.eval x + p.derivative.eval x * y
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.derivative_map`：derivative_map [Semiring S] (p : R[X]) (f : R
+ ->+* S) : derivative (p.map f) = p.derivative.map f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem aeval_add_of_sq_eq_zero {S : Type*} [CommRing S] [Algebra R S]
     (p : R[X]) (x y : S) (hy : y ^ 2 = 0) :
@@ -789,118 +779,95 @@ section CommRing
 variable {R : Type*} [CommRing R] (r : R) (f : R[X])
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `taylorEquiv` / `taylorEquiv` 的定义
+/-- `Polynomial.taylor` as an `AlgEquiv` for commutative rings. -/
+/-
+**Polynomial.taylorEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：taylorEquiv (r : R) : R[X] ≃ₐ[R] R[X] where invFun
+参数：r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition taylorEquiv
-  signature: (r : R)
-  body: taylorAlgHom (-r)
-  left_inv P := by simp [taylor, comp_assoc]
-  right_inv P := by simp [taylor, comp_assoc]
-  __ := taylorAlgHom r
-
-中文:
-定义 taylorEquiv
-  签名: (r : R)
-  定义体: taylorAlgHom (-r)
-  left_inv P := by simp [taylor, comp_assoc]
-  right_inv P := by simp [taylor, comp_assoc]
-  __ := taylorAlgHom r
-
-Depends on / 依赖: taylorAlgHom
+--- 原说明 ---
+`Polynomial.taylor` as an `AlgEquiv` for commutative rings.
 -/
 noncomputable def taylorEquiv (r : R) : R[X] ≃ₐ[R] R[X] where
-  invFun := taylorAlgHom (-r)
-  left_inv P := by simp [taylor, comp_assoc]
+  invFun      := taylorAlgHom (-r)
+  left_inv P  := by simp [taylor, comp_assoc]
   right_inv P := by simp [taylor, comp_assoc]
   __ := taylorAlgHom r
-
-/--
-lemma `toAlgHom_taylorEquiv` / 引理 `toAlgHom_taylorEquiv`
-
-English:
-lemma toAlgHom_taylorEquiv
-  statement: taylorEquiv r = taylorAlgHom r
-  proof: rfl
-
-中文:
-引理 toAlgHom_taylorEquiv
-  结论: taylorEquiv r = taylorAlgHom r
-  证明: rfl
+/-
+**Polynomial.toAlgHom_taylorEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (r : R), ↑(Polynomial.taylorEquiv r) 
+= Polynomial.taylorAlgHom r
+参数：r : R；Polynomial.taylorEquiv r。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma toAlgHom_taylorEquiv : taylorEquiv r = taylorAlgHom r := rfl
-
-/--
-lemma `coe_taylorEquiv` / 引理 `coe_taylorEquiv`
-
-English:
-lemma coe_taylorEquiv
-  statement: taylorEquiv r = taylor r
-  proof: rfl
-
-中文:
-引理 coe_taylorEquiv
-  结论: taylorEquiv r = taylor r
-  证明: rfl
+/-
+**Polynomial.coe_taylorEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (r : R), ↑↑(Polynomial.taylorEquiv r)
+ = Polynomial.taylor r
+参数：r : R；Polynomial.taylorEquiv r。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_taylorEquiv : taylorEquiv r = taylor r := rfl
-
-/--
-lemma `taylorEquiv_symm` / 引理 `taylorEquiv_symm`
-
-English:
-lemma taylorEquiv_symm
-  statement: (taylorEquiv r).symm = taylorEquiv (-r)
-  proof: AlgEquiv.ext fun _ => rfl
-
-中文:
-引理 taylorEquiv_symm
-  结论: (taylorEquiv r).symm = taylorEquiv (-r)
-  证明: AlgEquiv.ext fun _ => rfl
+/-
+**Polynomial.taylorEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (r : R), (Polynomial.taylorEquiv r).s
+ymm = Polynomial.taylorEquiv (-r)
+参数：r : R；Polynomial.taylorEquiv r；-r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
 -/
 @[simp] lemma taylorEquiv_symm : (taylorEquiv r).symm = taylorEquiv (-r) :=
-  AlgEquiv.ext fun _ => rfl
-
-/--
-theorem `taylor_eval_sub` / 定理 `taylor_eval_sub`
-
-English:
-theorem taylor_eval_sub
-  given: (s : R)
-  proof: by rw [taylor_eval, sub_add_cancel]
-
-中文:
-定理 taylor_eval_sub
-  条件: (s : R)
-  证明: by rw [taylor_eval, sub_add_cancel]
-
-Depends on / 依赖: sub_add_cancel, taylor_eval
+  AlgEquiv.ext fun _ ↦ rfl
+/-
+**Polynomial.taylor_eval_sub** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：taylor_eval_sub (s : R) : (taylor r f).eval (s - r) = f.eval s
+参数：s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.taylor_eval`：taylor_eval (r : R) (f : R[X]) (s : R) : (taylor
+ r f).eval s = f.eval (s + r)
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem taylor_eval_sub (s : R) :
     (taylor r f).eval (s - r) = f.eval s := by rw [taylor_eval, sub_add_cancel]
 
-/--
-theorem `sum_taylor_eq` / 定理 `sum_taylor_eq`
+/-- Taylor's formula. -/
+/-
+**Polynomial.sum_taylor_eq** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：sum_taylor_eq (f : R[X]) (r : R) : ((taylor r f).sum fun i a => C a * (X -
+ C r) ^ i) = f
+参数：f : R[X]；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.comp_eq_sum_left`：comp_eq_sum_left : p.comp q = p.sum fun e a
+ => C a * q ^ e
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Polynomial.C_neg`：C_neg : C (-a) = -C a
+· 使用定理 `Polynomial.taylor_apply`：taylor_apply : taylor r f = f.comp (X + C r)
+· 使用定理 `Polynomial.taylor_taylor`：taylor_taylor (f : R[X]) (r s : R) : taylor r 
+(taylor s f) = taylor (r + s) f
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `Polynomial.taylor_zero`：taylor_zero (f : R[X]) : taylor 0 f = f
 
-English:
-theorem sum_taylor_eq
-  given: (f : R[X]) (r : R)
-  proof: by
-  rw [← comp_eq_sum_left]; rw [sub_eq_add_neg]; rw [← C_neg]; rw [← taylor_apply]; rw [taylor_taylor]; rw [neg_add_cancel]; rw [taylor_zero]
-
-中文:
-定理 sum_taylor_eq
-  条件: (f : R[X]) (r : R)
-  证明: by
-  rw [← comp_eq_sum_left]; rw [sub_eq_add_neg]; rw [← C_neg]; rw [← taylor_apply]; rw [taylor_taylor]; rw [neg_add_cancel]; rw [taylor_zero]
-
-Depends on / 依赖: C_neg, comp_eq_sum_left, neg_add_cancel, sub_eq_add_neg, taylor_apply, taylor_taylor, taylor_zero
+--- 原说明 ---
+Taylor's formula.
 -/
 theorem sum_taylor_eq (f : R[X]) (r : R) :
     ((taylor r f).sum fun i a => C a * (X - C r) ^ i) = f := by
-  rw [← comp_eq_sum_left]; rw [sub_eq_add_neg]; rw [← C_neg]; rw [← taylor_apply]; rw [taylor_taylor]; rw [neg_add_cancel]; rw [taylor_zero]
+  rw [← comp_eq_sum_left, sub_eq_add_neg, ← C_neg, ← taylor_apply, taylor_taylor, neg_add_cancel,
+    taylor_zero]
 
 end CommRing
 
 end Polynomial
+

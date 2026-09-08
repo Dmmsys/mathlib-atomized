@@ -22,34 +22,22 @@ public section
 
 variable {M : Type*} [CommMonoidWithZero M]
 
-/--
-theorem `IsMulTorsionFree.mk'` / 定理 `IsMulTorsionFree.mk'`
-
-English:
-theorem IsMulTorsionFree.mk'
-  statement: [IsReduced M]
-  proof: by
-  refine ⟨fun n hn x y hxy => ?_⟩
-  by_cases h : x != 0 ∧ y != 0
-  · exact ih x h.1 y h.2 n hn hxy
-  grind [eq_zero_of_pow_eq_zero, zero_pow]
-
-中文:
-定理 是MulTorsionFree.mk'
-  结论: [是既约 M]
-  证明: by
-  refine ⟨fun n hn x y hxy => ?_⟩
-  by_cases h : x != 0 ∧ y != 0
-  · exact ih x h.1 y h.2 n hn hxy
-  grind [eq_zero_of_pow_eq_zero, zero_pow]
-
-Depends on / 依赖: eq_zero_of_pow_eq_zero, imageToKernel, zero_pow
+/-
+**IsMulTorsionFree.mk'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMulTorsionFree.mk' [IsReduced M] (ih : forall x != 0, forall y != 0, for
+all n != 0, (x ^ n : M) = y ^ n -> x = y) : IsMulTorsionFree M
+参数：ih : forall x != 0, forall y != 0, forall n != 0, (x ^ n : M) = y ^ n -> x = 
+y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsMulTorsionFree.mk' [IsReduced M]
-    (ih : forall x != 0, forall y != 0, forall n != 0, (x ^ n : M) = y ^ n -> x = y) :
+    (ih : ∀ x ≠ 0, ∀ y ≠ 0, ∀ n ≠ 0, (x ^ n : M) = y ^ n → x = y) :
     IsMulTorsionFree M := by
-  refine ⟨fun n hn x y hxy => ?_⟩
-  by_cases h : x != 0 ∧ y != 0
+  refine ⟨fun n hn x y hxy ↦ ?_⟩
+  by_cases h : x ≠ 0 ∧ y ≠ 0
   · exact ih x h.1 y h.2 n hn hxy
   grind [eq_zero_of_pow_eq_zero, zero_pow]
 
@@ -57,45 +45,21 @@ variable [UniqueFactorizationMonoid M] [NormalizationMonoid M] [IsMulTorsionFree
 
 namespace UniqueFactorizationMonoid
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsMulTorsionFree M
-  body: by
-  refine .mk' fun x hx y hy n hn hxy => ?_
-  obtain ⟨u, hu⟩ : Associated x y := by
-    have := (Associated.of_eq hxy).normalizedFactors_eq
-    rwa [normalizedFactors_pow, normalizedFactors_pow, nsmul_right_inj hn,
-      ← associated_iff_normalizedFactors_eq_normalizedFactors hx hy] at this
-  replace hx : IsLeftRegular (x ^ n) := (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hx).pow n
-  rw [← hu]; rw [mul_pow]; rw [eq_comm]; rw [IsLeftRegular.mul_left_eq_self_iff hx]; rw [← Units.val_pow_eq_pow_val]; rw [Units.val_eq_one]; rw [pow_eq_one_iff_left hn] at hxy
-  rwa [hxy, Units.val_one, mul_one] at hu
-
-中文:
-实例 :
-  签名: 是MulTorsionFree M
-  定义体: by
-  refine .mk' fun x hx y hy n hn hxy => ?_
-  obtain ⟨u, hu⟩ : Associated x y := by
-    have := (Associated.of_eq hxy).normalizedFactors_eq
-    rwa [normalizedFactors_pow, normalizedFactors_pow, nsmul_right_inj hn,
-      ← associated_iff_normalizedFactors_eq_normalizedFactors hx hy] at this
-  replace hx : IsLeftRegular (x ^ n) := (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hx).pow n
-  rw [← hu]; rw [mul_pow]; rw [eq_comm]; rw [IsLeftRegular.mul_left_eq_self_iff hx]; rw [← Units.val_pow_eq_pow_val]; rw [Units.val_eq_one]; rw [pow_eq_one_iff_left hn] at hxy
-  rwa [hxy, Units.val_one, mul_one] at hu
-
-Depends on / 依赖: Associated, Associated.of_eq, IsLeftCancelMulZero, IsLeftCancelMulZero.mul_left_cancel_of_ne_zero, IsLeftRegular, IsLeftRegular.mul_left_eq_self_iff, Units.va, Units.val_pow_eq_pow_val, associated_iff_normalizedFactors_eq_normalizedFactors, eq_comm, mul_left_cancel_of_ne_zero, mul_left_eq_self_iff, mul_pow, normalizedFactors_eq, normalizedFactors_pow, nsmul_right_inj, of_eq, replace, val_pow_eq_pow_val
+/-
+**UniqueFactorizationMonoid.** 是 Mathlib 中的一个实例，位于命名空间 `UniqueFactorizationMonoi
+d`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsMulTorsionFree M := by
-  refine .mk' fun x hx y hy n hn hxy => ?_
+  refine .mk' fun x hx y hy n hn hxy ↦ ?_
   obtain ⟨u, hu⟩ : Associated x y := by
     have := (Associated.of_eq hxy).normalizedFactors_eq
     rwa [normalizedFactors_pow, normalizedFactors_pow, nsmul_right_inj hn,
       ← associated_iff_normalizedFactors_eq_normalizedFactors hx hy] at this
   replace hx : IsLeftRegular (x ^ n) := (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hx).pow n
-  rw [← hu]; rw [mul_pow]; rw [eq_comm]; rw [IsLeftRegular.mul_left_eq_self_iff hx]; rw [← Units.val_pow_eq_pow_val]; rw [Units.val_eq_one]; rw [pow_eq_one_iff_left hn] at hxy
+  rw [← hu, mul_pow, eq_comm, IsLeftRegular.mul_left_eq_self_iff hx, ← Units.val_pow_eq_pow_val,
+    Units.val_eq_one, pow_eq_one_iff_left hn] at hxy
   rwa [hxy, Units.val_one, mul_one] at hu
 
 end UniqueFactorizationMonoid
+

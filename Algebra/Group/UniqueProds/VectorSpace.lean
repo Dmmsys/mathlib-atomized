@@ -16,20 +16,17 @@ public section
 
 variable {G : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Any `ℚ`-vector space has `TwoUniqueSums`, because it is isomorphic to some
+  `(Basis.ofVectorSpaceIndex ℚ G) →₀ ℚ` by choosing a basis, and `ℚ` already has
+  `TwoUniqueSums` because it's ordered. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [AddCommGroup
-  signature: G] [Module Rat G] : TwoUniqueSums G
-  body: TwoUniqueSums.of_injective_addHom _ (Module.Basis.ofVectorSpace Rat G).repr.injective inferInstance
-
-中文:
-实例 [加法交换群
-  签名: G] [模 有理数 G] : TwoUniqueSums G
-  定义体: TwoUniqueSums.of_injective_addHom _ (Module.Basis.ofVectorSpace Rat G).repr.injective inferInstance
-
-Depends on / 依赖: Module, Module.Basis.ofVectorSpace, TwoUniqueSums, TwoUniqueSums.of_injective_addHom, injective, ofVectorSpace, of_injective_addHom, repr.injective
+--- 原说明 ---
+Any `ℚ`-vector space has `TwoUniqueSums`, because it is isomorphic to some
+  `(Basis.ofVectorSpaceIndex ℚ G) →₀ ℚ` by choosing a basis, and `ℚ` already has
+  `TwoUniqueSums` because it's ordered.
 -/
-instance [AddCommGroup G] [Module Rat G] : TwoUniqueSums G :=
-  TwoUniqueSums.of_injective_addHom _ (Module.Basis.ofVectorSpace Rat G).repr.injective inferInstance
+instance [AddCommGroup G] [Module ℚ G] : TwoUniqueSums G :=
+  TwoUniqueSums.of_injective_addHom _ (Module.Basis.ofVectorSpace ℚ G).repr.injective inferInstance

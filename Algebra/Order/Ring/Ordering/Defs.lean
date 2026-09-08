@@ -44,99 +44,43 @@ variable (R : Type*) [CommRing R]
 /-- A preordering on a ring `R` is a subsemiring of `R` containing all squares,
 but not containing `-1`. -/
 @[ext]
-/--
-Definition of `RingPreordering` / `RingPreordering` 的定义
+/-
+**RingPreordering** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：RingPreordering extends Subsemiring R where mem_of_isSquare' {x : R} (hx :
+ IsSquare x) : x in carrier
+参数：hx : IsSquare x。
+继承自：Subsemiring R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingPreordering
-  parameters: extends Subsemiring R
-  extends: Subsemiring R
-  axioms and operations (2):
-    - mem_of_isSquare'({x : R} (hx : IsSquare x)) : x in carrier  [default: by aesop]
-    - neg_one_notMem' : -1 ∉ carrier  [default: by aesop]
-
-中文:
-结构 RingPreordering
-  参数: extends 子半环 R
-  继承: 子半环 R
-  公理与运算 (2 个):
-    - mem_of_isSquare'({x : R} (hx : IsSquare x)) : x in carrier  [默认: by aesop]
-    - neg_one_notMem' : -1 ∉ carrier  [默认: by aesop]
-
-Depends on / 依赖: carrier, neg_one_notMem
+--- 原说明 ---
+A preordering on a ring `R` is a subsemiring of `R` containing all squares,
+but not containing `-1`.
 -/
 structure RingPreordering extends Subsemiring R where
-  mem_of_isSquare' {x : R} (hx : IsSquare x) : x in carrier := by aesop
+  mem_of_isSquare' {x : R} (hx : IsSquare x) : x ∈ carrier := by aesop
   neg_one_notMem' : -1 ∉ carrier := by aesop
 
 namespace RingPreordering
 
 attribute [coe] toSubsemiring
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (RingPreordering R) R
-  body: P.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
-
-中文:
-实例 :
-  签名: 集合状 (RingPreordering R) R
-  定义体: P.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
-
-Depends on / 依赖: P.carrier, carrier
+/-
+**RingPreordering.** 是 Mathlib 中的一个实例，位于命名空间 `RingPreordering`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (RingPreordering R) R where
   coe P := P.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (RingPreordering R)
-  body: .ofSetLike (RingPreordering R) R
-
-initialize_simps_projections RingPreordering (carrier -> coe, as_prefix coe)
-
-中文:
-实例 :
-  签名: 偏序 (RingPreordering R)
-  定义体: .ofSetLike (RingPreordering R) R
-
-initialize_simps_projections RingPreordering (carrier -> coe, as_prefix coe)
-
-Depends on / 依赖: RingPreordering, ofSetLike
+/-
+**RingPreordering.** 是 Mathlib 中的一个实例，位于命名空间 `RingPreordering`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (RingPreordering R) := .ofSetLike (RingPreordering R) R
 
-initialize_simps_projections RingPreordering (carrier -> coe, as_prefix coe)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SubsemiringClass (RingPreordering R) R
-  body: Subsemiring.zero_mem _
-  one_mem _ := Subsemiring.one_mem _
-  add_mem := Subsemiring.add_mem _
-  mul_mem := Subsemiring.mul_mem _
-
-中文:
-实例 :
-  签名: 子半环类 (RingPreordering R) R
-  定义体: Subsemiring.zero_mem _
-  one_mem _ := Subsemiring.one_mem _
-  add_mem := Subsemiring.add_mem _
-  mul_mem := Subsemiring.mul_mem _
-
-Depends on / 依赖: Subsemiring, Subsemiring.zero_mem, zero_mem
+initialize_simps_projections RingPreordering (carrier → coe, as_prefix coe)
+/-
+**RingPreordering.** 是 Mathlib 中的一个实例，位于命名空间 `RingPreordering`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SubsemiringClass (RingPreordering R) R where
   zero_mem _ := Subsemiring.zero_mem _
@@ -147,210 +91,130 @@ instance : SubsemiringClass (RingPreordering R) R where
 variable {R}
 
 @[aesop unsafe 80% (rule_sets := [SetLike])]
-/--
-theorem `mem_of_isSquare` / 定理 `mem_of_isSquare`
-
-English:
-theorem mem_of_isSquare
-  given: (P : RingPreordering R) {x : R} (hx : IsSquare x)
-  statement: x in P
-  proof: RingPreordering.mem_of_isSquare' _ hx
-
-@[simp]
-
-中文:
-定理 mem_of_isSquare
-  条件: (P : RingPreordering R) {x : R} (hx : IsSquare x)
-  结论: x in P
-  证明: RingPreordering.mem_of_isSquare' _ hx
-
-@[simp]
+/-
+**RingPreordering.mem_of_isSquare** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (P : RingPreordering R) {x : R}, IsSq
+uare x → x ∈ P
+参数：P : RingPreordering R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingPreordering.mem_of_isSquare'`：∀ {R : Type u_1} [inst : CommRing R] (
+self : RingPreordering R) {x : R}, IsSquare x → x ∈ (↑self).carrier
 -/
-protected theorem mem_of_isSquare (P : RingPreordering R) {x : R} (hx : IsSquare x) : x in P :=
+protected theorem mem_of_isSquare (P : RingPreordering R) {x : R} (hx : IsSquare x) : x ∈ P :=
   RingPreordering.mem_of_isSquare' _ hx
 
 @[simp]
-/--
-theorem `mul_self_mem` / 定理 `mul_self_mem`
-
-English:
-theorem mul_self_mem
-  given: (P : RingPreordering R) (x : R)
-  statement: x * x in P
-  proof: by aesop
-
-@[simp]
-
-中文:
-定理 mul_self_mem
-  条件: (P : RingPreordering R) (x : R)
-  结论: x * x in P
-  证明: by aesop
-
-@[simp]
+/-
+**RingPreordering.mul_self_mem** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (P : RingPreordering R) (x : R), x * 
+x ∈ P
+参数：P : RingPreordering R；x : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingPreordering.mem_of_isSquare`：∀ {R : Type u_1} [inst : CommRing R] (P
+ : RingPreordering R) {x : R}, IsSquare x → x ∈ P
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-protected theorem mul_self_mem (P : RingPreordering R) (x : R) : x * x in P := by aesop
+protected theorem mul_self_mem (P : RingPreordering R) (x : R) : x * x ∈ P := by aesop
 
 @[simp]
-/--
-theorem `pow_two_mem` / 定理 `pow_two_mem`
-
-English:
-theorem pow_two_mem
-  given: (P : RingPreordering R) (x : R)
-  statement: x ^ 2 in P
-  proof: by aesop
-
-@[aesop unsafe 20% forward (rule_sets := [SetLike])]
-
-中文:
-定理 pow_two_mem
-  条件: (P : RingPreordering R) (x : R)
-  结论: x ^ 2 in P
-  证明: by aesop
-
-@[aesop unsafe 20% forward (rule_sets := [SetLike])]
+/-
+**RingPreordering.pow_two_mem** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (P : RingPreordering R) (x : R), x ^ 
+2 ∈ P
+参数：P : RingPreordering R；x : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingPreordering.mem_of_isSquare`：∀ {R : Type u_1} [inst : CommRing R] (P
+ : RingPreordering R) {x : R}, IsSquare x → x ∈ P
+· 使用引理 `IsSquare.sq`：IsSquare.sq (r : α) : IsSquare (r ^ 2)
 -/
-protected theorem pow_two_mem (P : RingPreordering R) (x : R) : x ^ 2 in P := by aesop
+protected theorem pow_two_mem (P : RingPreordering R) (x : R) : x ^ 2 ∈ P := by aesop
 
 @[aesop unsafe 20% forward (rule_sets := [SetLike])]
-/--
-theorem `neg_one_notMem` / 定理 `neg_one_notMem`
-
-English:
-theorem neg_one_notMem
-  given: (P : RingPreordering R)
-  statement: -1 ∉ P
-  proof: RingPreordering.neg_one_notMem' _
-
-中文:
-定理 neg_one_notMem
-  条件: (P : RingPreordering R)
-  结论: -1 ∉ P
-  证明: RingPreordering.neg_one_notMem' _
+/-
+**RingPreordering.neg_one_notMem** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (P : RingPreordering R), -1 ∉ P
+参数：P : RingPreordering R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingPreordering.neg_one_notMem'`：∀ {R : Type u_1} [inst : CommRing R] (s
+elf : RingPreordering R), -1 ∉ (↑self).carrier
 -/
 protected theorem neg_one_notMem (P : RingPreordering R) : -1 ∉ P :=
   RingPreordering.neg_one_notMem' _
-
-/--
-theorem `toSubsemiring_injective` / 定理 `toSubsemiring_injective`
-
-English:
-theorem toSubsemiring_injective
-  proof: fun A B h => by ext; rw [h]
-
-@[simp]
-
-中文:
-定理 toSubsemiring_injective
-  证明: fun A B h => by ext; rw [h]
-
-@[simp]
+/-
+**RingPreordering.toSubsemiring_injective** 是 Mathlib 中的一个定理，位于命名空间 `RingPreorde
+ring`。
+形式化陈述：toSubsemiring_injective : Function.Injective (toSubsemiring : RingPreorder
+ing R -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingPreordering.ext`：∀ {R : Type u_1} {inst : CommRing R} {x y : RingPre
+ordering R}, (↑x).carrier = (↑y).carrier → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toSubsemiring_injective :
-    Function.Injective (toSubsemiring : RingPreordering R -> _) := fun A B h => by ext; rw [h]
+    Function.Injective (toSubsemiring : RingPreordering R → _) := fun A B h => by ext; rw [h]
 
 @[simp]
-/--
-theorem `toSubsemiring_inj` / 定理 `toSubsemiring_inj`
-
-English:
-theorem toSubsemiring_inj
-  given: {P₁ P₂ : RingPreordering R}
-  proof: toSubsemiring_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 toSubsemiring_inj
-  条件: {P₁ P₂ : RingPreordering R}
-  证明: toSubsemiring_injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: eq_iff, toSubsemiring_injective, toSubsemiring_injective.eq_iff
+/-
+**RingPreordering.toSubsemiring_inj** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：toSubsemiring_inj {P₁ P₂ : RingPreordering R} : P₁.toSubsemiring = P₂.toSu
+bsemiring ↔ P₁ = P₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `RingPreordering.toSubsemiring_injective`：toSubsemiring_injective : Funct
+ion.Injective (toSubsemiring : RingPreordering R -> _)
 -/
 theorem toSubsemiring_inj {P₁ P₂ : RingPreordering R} :
     P₁.toSubsemiring = P₂.toSubsemiring ↔ P₁ = P₂ := toSubsemiring_injective.eq_iff
 
 @[simp]
-/--
-theorem `mem_toSubsemiring` / 定理 `mem_toSubsemiring`
-
-English:
-theorem mem_toSubsemiring
-  given: {P : RingPreordering R} {x : R}
-  statement: x in P.toSubsemiring ↔ x in P
-  proof: .rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mem_toSubsemiring
-  条件: {P : RingPreordering R} {x : R}
-  结论: x in P.toSubsemiring ↔ x in P
-  证明: .rfl
-
-@[simp, norm_cast]
+/-
+**RingPreordering.mem_toSubsemiring** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：mem_toSubsemiring {P : RingPreordering R} {x : R} : x in P.toSubsemiring ↔
+ x in P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toSubsemiring {P : RingPreordering R} {x : R} : x in P.toSubsemiring ↔ x in P := .rfl
+theorem mem_toSubsemiring {P : RingPreordering R} {x : R} : x ∈ P.toSubsemiring ↔ x ∈ P := .rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_toSubsemiring` / 定理 `coe_toSubsemiring`
-
-English:
-theorem coe_toSubsemiring
-  given: (P : RingPreordering R)
-  statement: (P.toSubsemiring : Set R) = P
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toSubsemiring
-  条件: (P : RingPreordering R)
-  结论: (P.toSubsemiring : 集合 R) = P
-  证明: rfl
-
-@[simp]
+/-
+**RingPreordering.coe_toSubsemiring** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：coe_toSubsemiring (P : RingPreordering R) : (P.toSubsemiring : Set R) = P
+参数：P : RingPreordering R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toSubsemiring (P : RingPreordering R) : (P.toSubsemiring : Set R) = P := rfl
 
 @[simp]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: {toSubsemiring : Subsemiring R} (mem_of_isSquare neg_one_notMem) {x : R}
-  proof: .rfl
-
-@[simp]
-
-中文:
-定理 mem_mk
-  条件: {toSubsemiring : 子半环 R} (mem_of_isSquare neg_one_notMem) {x : R}
-  证明: .rfl
-
-@[simp]
+/-
+**RingPreordering.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：mem_mk {toSubsemiring : Subsemiring R} (mem_of_isSquare neg_one_notMem) {x
+ : R} : x in mk toSubsemiring mem_of_isSquare neg_one_notMem ↔ x in toSubsemirin
+g
+参数：mem_of_isSquare neg_one_notMem。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_mk {toSubsemiring : Subsemiring R} (mem_of_isSquare neg_one_notMem) {x : R} :
-    x in mk toSubsemiring mem_of_isSquare neg_one_notMem ↔ x in toSubsemiring := .rfl
+    x ∈ mk toSubsemiring mem_of_isSquare neg_one_notMem ↔ x ∈ toSubsemiring := .rfl
 
 @[simp]
-/--
-theorem `coe_set_mk` / 定理 `coe_set_mk`
-
-English:
-theorem coe_set_mk
-  given: (toSubsemiring : Subsemiring R) (mem_of_isSquare neg_one_notMem)
-  proof: rfl
-
-中文:
-定理 coe_set_mk
-  条件: (toSubsemiring : 子半环 R) (mem_of_isSquare neg_one_notMem)
-  证明: rfl
+/-
+**RingPreordering.coe_set_mk** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：coe_set_mk (toSubsemiring : Subsemiring R) (mem_of_isSquare neg_one_notMem
+) : (mk toSubsemiring mem_of_isSquare neg_one_notMem : Set R) = toSubsemiring
+参数：toSubsemiring : Subsemiring R；mem_of_isSquare neg_one_notMem。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_set_mk (toSubsemiring : Subsemiring R) (mem_of_isSquare neg_one_notMem) :
     (mk toSubsemiring mem_of_isSquare neg_one_notMem : Set R) = toSubsemiring := rfl
@@ -362,26 +226,17 @@ variable (P : RingPreordering R) (S : Set R) (hS : S = P)
 /-- Copy of a preordering with a new `carrier` equal to the old one. Useful to fix definitional
 equalities. -/
 @[simps]
-/--
-Definition of `copy` / `copy` 的定义
+/-
+**RingPreordering.copy** 是 Mathlib 中的一个定义，位于命名空间 `RingPreordering`。
+形式化陈述：{R : Type u_1} → [inst : CommRing R] → (P : RingPreordering R) → (S : Set 
+R) → S = ↑P → RingPreordering R
+参数：P : RingPreordering R；S : Set R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: : RingPreordering R where
-  body: S
-  zero_mem' := by aesop
-  add_mem' ha hb := by aesop
-  one_mem' := by aesop
-  mul_mem' ha hb := by aesop
-
-中文:
-定义 copy
-  签名: : RingPreordering R where
-  定义体: S
-  zero_mem' := by aesop
-  add_mem' ha hb := by aesop
-  one_mem' := by aesop
-  mul_mem' ha hb := by aesop
+--- 原说明 ---
+Copy of a preordering with a new `carrier` equal to the old one. Useful to fix d
+efinitional
+equalities.
 -/
 protected def copy : RingPreordering R where
   carrier := S
@@ -391,34 +246,20 @@ protected def copy : RingPreordering R where
   mul_mem' ha hb := by aesop
 
 attribute [norm_cast] coe_copy
-/--
-theorem `mem_copy` / 定理 `mem_copy`
-
-English:
-theorem mem_copy
-  given: {x}
-  statement: x in P.copy S hS ↔ x in S
-  proof: .rfl
-
-中文:
-定理 mem_copy
-  条件: {x}
-  结论: x in P.copy S hS ↔ x in S
-  证明: .rfl
+/-
+**RingPreordering.mem_copy** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] (P : RingPreordering R) (S : Set R) (
+hS : S = ↑P) {x : R}, x ∈ P.copy S hS ↔ x ∈ S
+参数：P : RingPreordering R；S : Set R；hS : S = ↑P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] theorem mem_copy {x} : x in P.copy S hS ↔ x in S := .rfl
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  statement: P.copy S hS = S
-  proof: rfl
-
-中文:
-定理 copy_eq
-  结论: P.copy S hS = S
-  证明: rfl
+@[simp] theorem mem_copy {x} : x ∈ P.copy S hS ↔ x ∈ S := .rfl
+/-
+**RingPreordering.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：copy_eq : P.copy S hS = S
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem copy_eq : P.copy S hS = S := rfl
 
@@ -434,122 +275,82 @@ section supportAddSubgroup
 
 variable (P) in
 /--
-Definition of `supportAddSubgroup` / `supportAddSubgroup` 的定义
+The support of a ring preordering `P` in a commutative ring `R` is
+the set of elements `x` in `R` such that both `x` and `-x` lie in `P`.
+-/
+/-
+**RingPreordering.supportAddSubgroup** 是 Mathlib 中的一个定义，位于命名空间 `RingPreordering`
+。
+形式化陈述：supportAddSubgroup : AddSubgroup R where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition supportAddSubgroup
-  signature: : AddSubgroup R where
-  body: P inter -P
-  zero_mem' := by aesop
-  add_mem' := by aesop
-  neg_mem' := by aesop
-
-中文:
-定义 supportAddSubgroup
-  签名: : 加法子群 R where
-  定义体: P inter -P
-  zero_mem' := by aesop
-  add_mem' := by aesop
-  neg_mem' := by aesop
+--- 原说明 ---
+The support of a ring preordering `P` in a commutative ring `R` is
+the set of elements `x` in `R` such that both `x` and `-x` lie in `P`.
 -/
 def supportAddSubgroup : AddSubgroup R where
-  carrier := P inter -P
+  carrier := P ∩ -P
   zero_mem' := by aesop
   add_mem' := by aesop
   neg_mem' := by aesop
-
-/--
-theorem `mem_supportAddSubgroup` / 定理 `mem_supportAddSubgroup`
-
-English:
-theorem mem_supportAddSubgroup
-  given: {x}
-  statement: x in P.supportAddSubgroup ↔ x in P ∧ -x in P
-  proof: .rfl
-
-中文:
-定理 mem_supportAddSubgroup
-  条件: {x}
-  结论: x in P.supportAddSubgroup ↔ x in P ∧ -x in P
-  证明: .rfl
+/-
+**RingPreordering.mem_supportAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `RingPreorder
+ing`。
+形式化陈述：mem_supportAddSubgroup {x} : x in P.supportAddSubgroup ↔ x in P ∧ -x in P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_supportAddSubgroup {x} : x in P.supportAddSubgroup ↔ x in P ∧ -x in P := .rfl
-/--
-theorem `coe_supportAddSubgroup` / 定理 `coe_supportAddSubgroup`
-
-English:
-theorem coe_supportAddSubgroup
-  statement: P.supportAddSubgroup = (P inter -P : Set R)
-  proof: rfl
-
-中文:
-定理 coe_supportAddSubgroup
-  结论: P.supportAddSubgroup = (P inter -P : 集合 R)
-  证明: rfl
+theorem mem_supportAddSubgroup {x} : x ∈ P.supportAddSubgroup ↔ x ∈ P ∧ -x ∈ P := .rfl
+/-
+**RingPreordering.coe_supportAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `RingPreorder
+ing`。
+形式化陈述：coe_supportAddSubgroup : P.supportAddSubgroup = (P inter -P : Set R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_supportAddSubgroup : P.supportAddSubgroup = (P inter -P : Set R) := rfl
+theorem coe_supportAddSubgroup : P.supportAddSubgroup = (P ∩ -P : Set R) := rfl
 
 end supportAddSubgroup
 
-/--
-Definition of `HasIdealSupport` / `HasIdealSupport` 的定义
+/-- Typeclass to track whether the support of a preordering forms an ideal. -/
+/-
+**RingPreordering.HasIdealSupport** 是 Mathlib 中的一个归纳类型，位于命名空间 `RingPreordering`。
+形式化陈述：{R : Type u_1} → [inst : CommRing R] → RingPreordering R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasIdealSupport
-  parameters: (P : RingPreordering R)
-  axioms and operations (1):
-    - smul_mem_support((P) (x : R) {a : R} (ha : a in P.supportAddSubgroup)) : x * a in P.supportAddSubgroup
-
-中文:
-类 有IdealSupport
-  参数: (P : RingPreordering R)
-  公理与运算 (1 个):
-    - smul_mem_support((P) (x : R) {a : R} (ha : a in P.supportAddSubgroup)) : x * a in P.supportAddSubgroup
+--- 原说明 ---
+Typeclass to track whether the support of a preordering forms an ideal.
 -/
 class HasIdealSupport (P : RingPreordering R) : Prop where
-  smul_mem_support (P) (x : R) {a : R} (ha : a in P.supportAddSubgroup) :
-    x * a in P.supportAddSubgroup
+  smul_mem_support (P) (x : R) {a : R} (ha : a ∈ P.supportAddSubgroup) :
+    x * a ∈ P.supportAddSubgroup
 
 export HasIdealSupport (smul_mem_support)
-
-/--
-theorem `hasIdealSupport_iff` / 定理 `hasIdealSupport_iff`
-
-English:
-theorem hasIdealSupport_iff
-  proof: by simpa [mem_supportAddSubgroup] using P.smul_mem_support
-  mpr _ := ⟨by simpa [mem_supportAddSubgroup]⟩
-
-中文:
-定理 hasIdealSupport_iff
-  证明: by simpa [mem_supportAddSubgroup] using P.smul_mem_support
-  mpr _ := ⟨by simpa [mem_supportAddSubgroup]⟩
-
-Depends on / 依赖: P.smul_mem_support, mem_supportAddSubgroup, smul_mem_support
+/-
+**RingPreordering.hasIdealSupport_iff** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering
+`。
+形式化陈述：hasIdealSupport_iff : P.HasIdealSupport ↔ forall x a : R, a in P -> -a in 
+P -> x * a in P ∧ -(x * a) in P where mp _
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `RingPreordering.HasIdealSupport.smul_mem_support`：∀ {R : Type u_1} {inst
+ : CommRing R} (P : RingPreordering R) [self : P.HasIdealSupport] (x : R) {a : R
+},   a ∈ P.supportAddSubgroup → x * a …
 -/
 theorem hasIdealSupport_iff :
-    P.HasIdealSupport ↔ forall x a : R, a in P -> -a in P -> x * a in P ∧ -(x * a) in P where
+    P.HasIdealSupport ↔ ∀ x a : R, a ∈ P → -a ∈ P → x * a ∈ P ∧ -(x * a) ∈ P where
   mp _ := by simpa [mem_supportAddSubgroup] using P.smul_mem_support
   mpr _ := ⟨by simpa [mem_supportAddSubgroup]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasMemOrNegMem
-  signature: P] : P.HasIdealSupport where
-  body: match mem_or_neg_mem P x with
-    | .inl hx => ⟨by simpa using mul_mem hx ha.1, by simpa using mul_mem hx ha.2⟩
-    | .inr hx => ⟨by simpa using mul_mem hx ha.2, by simpa using mul_mem hx ha.1⟩
-
-中文:
-实例 [有MemOrNegMem
-  签名: P] : P.有IdealSupport where
-  定义体: match mem_or_neg_mem P x with
-    | .inl hx => ⟨by simpa using mul_mem hx ha.1, by simpa using mul_mem hx ha.2⟩
-    | .inr hx => ⟨by simpa using mul_mem hx ha.2, by simpa using mul_mem hx ha.1⟩
-
-Depends on / 依赖: mem_or_neg_mem, mul_mem
+/-
+**RingPreordering.** 是 Mathlib 中的一个实例，位于命名空间 `RingPreordering`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasMemOrNegMem P] : P.HasIdealSupport where
   smul_mem_support x a ha :=
@@ -563,89 +364,64 @@ variable [P.HasIdealSupport]
 
 variable (P) in
 /--
-Definition of `support` / `support` 的定义
+The support of a ring preordering `P` in a commutative ring `R` is
+the set of elements `x` in `R` such that both `x` and `-x` lie in `P`.
+-/
+/-
+**RingPreordering.support** 是 Mathlib 中的一个定义，位于命名空间 `RingPreordering`。
+形式化陈述：support : Ideal R where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition support
-  signature: : Ideal R where
-  body: P.supportAddSubgroup
-  smul_mem' := by simpa using smul_mem_support P
-
-中文:
-定义 support
-  签名: : 理想 R where
-  定义体: P.supportAddSubgroup
-  smul_mem' := by simpa using smul_mem_support P
-
-Depends on / 依赖: P.supportAddSubgroup, supportAddSubgroup
+--- 原说明 ---
+The support of a ring preordering `P` in a commutative ring `R` is
+the set of elements `x` in `R` such that both `x` and `-x` lie in `P`.
 -/
 def support : Ideal R where
   __ := P.supportAddSubgroup
   smul_mem' := by simpa using smul_mem_support P
-
-/--
-theorem `mem_support` / 定理 `mem_support`
-
-English:
-theorem mem_support
-  given: {x}
-  statement: x in P.support ↔ x in P ∧ -x in P
-  proof: .rfl
-
-中文:
-定理 mem_support
-  条件: {x}
-  结论: x in P.support ↔ x in P ∧ -x in P
-  证明: .rfl
+/-
+**RingPreordering.mem_support** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：mem_support {x} : x in P.support ↔ x in P ∧ -x in P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_support {x} : x in P.support ↔ x in P ∧ -x in P := .rfl
-/--
-theorem `coe_support` / 定理 `coe_support`
-
-English:
-theorem coe_support
-  statement: P.support = (P : Set R) inter -(P : Set R)
-  proof: rfl
-
-中文:
-定理 coe_support
-  结论: P.support = (P : 集合 R) inter -(P : 集合 R)
-  证明: rfl
+theorem mem_support {x} : x ∈ P.support ↔ x ∈ P ∧ -x ∈ P := .rfl
+/-
+**RingPreordering.coe_support** 是 Mathlib 中的一个定理，位于命名空间 `RingPreordering`。
+形式化陈述：coe_support : P.support = (P : Set R) inter -(P : Set R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_support : P.support = (P : Set R) inter -(P : Set R) := rfl
-
-/--
-theorem `supportAddSubgroup_eq` / 定理 `supportAddSubgroup_eq`
-
-English:
-theorem supportAddSubgroup_eq
-  statement: P.supportAddSubgroup = P.support.toAddSubgroup
-  proof: rfl
-
-中文:
-定理 supportAddSubgroup_eq
-  结论: P.supportAddSubgroup = P.support.toAddSubgroup
-  证明: rfl
+theorem coe_support : P.support = (P : Set R) ∩ -(P : Set R) := rfl
+/-
+**RingPreordering.supportAddSubgroup_eq** 是 Mathlib 中的一个定理，位于命名空间 `RingPreorderi
+ng`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {P : RingPreordering R} [inst_1 : P.H
+asIdealSupport],   P.supportAddSubgroup = Submodule.toAddSubgroup P.support
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem supportAddSubgroup_eq : P.supportAddSubgroup = P.support.toAddSubgroup := rfl
 
 end support
 
 /--
-Definition of `IsOrdering` / `IsOrdering` 的定义
+An ordering `O` on a ring `R` is a preordering such that
+1. `O` contains either `x` or `-x` for each `x` in `R` and
+2. the support of `O` is a prime ideal.
+-/
+/-
+**RingPreordering.IsOrdering** 是 Mathlib 中的一个归纳类型，位于命名空间 `RingPreordering`。
+形式化陈述：{R : Type u_1} → [inst : CommRing R] → RingPreordering R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsOrdering
-  parameters: (P : RingPreordering R)
-  extends: HasMemOrNegMem P, P.support.IsPrime
-  (no additional axioms)
-
-中文:
-类 是Ordering
-  参数: (P : RingPreordering R)
-  继承: 有MemOrNegMem P, P.support.是素
-  (无附加公理)
+--- 原说明 ---
+An ordering `O` on a ring `R` is a preordering such that
+1. `O` contains either `x` or `-x` for each `x` in `R` and
+2. the support of `O` is a prime ideal.
 -/
 class IsOrdering (P : RingPreordering R) extends HasMemOrNegMem P, P.support.IsPrime
 
 end RingPreordering
+

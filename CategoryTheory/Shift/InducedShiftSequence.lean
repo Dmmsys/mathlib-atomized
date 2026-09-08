@@ -37,7 +37,7 @@ namespace CategoryTheory
 variable {C D A : Type*} [Category* C] [Category* D] [Category* A]
   {L : C ⥤ D} {F : D ⥤ A} {G : C ⥤ A} (e : L ⋙ F ≅ G) (M : Type*)
   [AddMonoid M] [HasShift C M]
-  [G.ShiftSequence M] (F' : M -> D ⥤ A) (e' : forall m, L ⋙ F' m ≅ G.shift m)
+  [G.ShiftSequence M] (F' : M → D ⥤ A) (e' : ∀ m, L ⋙ F' m ≅ G.shift m)
   [((whiskeringLeft C D A).obj L).Full] [((whiskeringLeft C D A).obj L).Faithful]
 
 namespace Functor
@@ -46,38 +46,31 @@ namespace ShiftSequence
 
 namespace induced
 
-/--
-Definition of `isoZero` / `isoZero` 的定义
+/-- The `isoZero` field of the induced shift sequence. -/
+/-
+**CategoryTheory.Functor.ShiftSequence.induced.isoZero** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor.ShiftSequence.induced`。
+形式化陈述：isoZero : F' 0 ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoZero
-  signature: : F' 0 ≅ F
-  body: ((whiskeringLeft C D A).obj L).preimageIso (e' 0 ≪≫ G.isoShiftZero M ≪≫ e.symm)
-
-中文:
-定义 isoZero
-  签名: : F' 0 ≅ F
-  定义体: ((whiskeringLeft C D A).obj L).preimageIso (e' 0 ≪≫ G.isoShiftZero M ≪≫ e.symm)
-
-Depends on / 依赖: G.isoShiftZero, e.symm, isoShiftZero, preimageIso, whiskeringLeft
+--- 原说明 ---
+The `isoZero` field of the induced shift sequence.
 -/
 noncomputable def isoZero : F' 0 ≅ F :=
   ((whiskeringLeft C D A).obj L).preimageIso (e' 0 ≪≫ G.isoShiftZero M ≪≫ e.symm)
-
-/--
-lemma `isoZero_hom_app_obj` / 引理 `isoZero_hom_app_obj`
-
-English:
-lemma isoZero_hom_app_obj
-  given: (X : C)
-  proof: NatTrans.congr_app (((whiskeringLeft C D A).obj L).map_preimage _) X
-
-中文:
-引理 isoZero_hom_app_obj
-  条件: (X : C)
-  证明: NatTrans.congr_app (((whiskeringLeft C D A).obj L).map_preimage _) X
-
-Depends on / 依赖: NatTrans, NatTrans.congr_app, congr_app, map_preimage, whiskeringLeft
+/-
+**CategoryTheory.Functor.ShiftSequence.induced.isoZero_hom_app_obj** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Functor.ShiftSequence.induced`。
+形式化陈述：isoZero_hom_app_obj (X : C) : (isoZero e M F' e').hom.app (L.obj X) = (e' 
+0).hom.app X ≫ (isoShiftZero G M).hom.app X ≫ e.inv.app X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.congr_app`：congr_app {α β : F ⟶ G} (h : α = β) (
+X : C) : α.app X = β.app X
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
 -/
 lemma isoZero_hom_app_obj (X : C) :
     (isoZero e M F' e').hom.app (L.obj X) =
@@ -87,28 +80,17 @@ lemma isoZero_hom_app_obj (X : C) :
 variable (L G)
 variable [HasShift D M] [L.CommShift M]
 
-/--
-Definition of `shiftIso` / `shiftIso` 的定义
+/-- The `shiftIso` field of the induced shift sequence. -/
+/-
+**CategoryTheory.Functor.ShiftSequence.induced.shiftIso** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Functor.ShiftSequence.induced`。
+形式化陈述：shiftIso (n a a' : M) (ha' : n + a = a') : shiftFunctor D n ⋙ F' a ≅ F' a'
+参数：n a a' : M；ha' : n + a = a'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftIso
-  signature: (n a a' : M) (ha' : n + a = a')
-  body: by
-  exact ((whiskeringLeft C D A).obj L).preimageIso ((Functor.associator _ _ _).symm ≪≫
-    isoWhiskerRight (L.commShiftIso n).symm _ ≪≫
-    Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (e' a) ≪≫
-    G.shiftIso n a a' ha' ≪≫ (e' a').symm)
-
-中文:
-定义 shiftIso
-  签名: (n a a' : M) (ha' : n + a = a')
-  定义体: by
-  exact ((whiskeringLeft C D A).obj L).preimageIso ((Functor.associator _ _ _).symm ≪≫
-    isoWhiskerRight (L.commShiftIso n).symm _ ≪≫
-    Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (e' a) ≪≫
-    G.shiftIso n a a' ha' ≪≫ (e' a').symm)
-
-Depends on / 依赖: Functor, Functor.associator, G.shiftIso, L.commShiftIso, associator, commShiftIso, isoWhiskerLeft, isoWhiskerRight, preimageIso, shiftIso, whiskeringLeft
+--- 原说明 ---
+The `shiftIso` field of the induced shift sequence.
 -/
 noncomputable def shiftIso (n a a' : M) (ha' : n + a = a') :
     shiftFunctor D n ⋙ F' a ≅ F' a' := by
@@ -118,20 +100,30 @@ noncomputable def shiftIso (n a a' : M) (ha' : n + a = a') :
     G.shiftIso n a a' ha' ≪≫ (e' a').symm)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_hom_app_obj` / 引理 `shiftIso_hom_app_obj`
-
-English:
-lemma shiftIso_hom_app_obj
-  given: (n a a' : M) (ha' : n + a = a') (X : C)
-  proof: (NatTrans.congr_app (((whiskeringLeft C D A).obj L).map_preimage _) X).trans (by simp)
-
-中文:
-引理 shiftIso_hom_app_obj
-  条件: (n a a' : M) (ha' : n + a = a') (X : C)
-  证明: (NatTrans.congr_app (((whiskeringLeft C D A).obj L).map_preimage _) X).trans (by simp)
-
-Depends on / 依赖: NatTrans, NatTrans.congr_app, congr_app, map_preimage, whiskeringLeft
+/-
+**CategoryTheory.Functor.ShiftSequence.induced.shiftIso_hom_app_obj** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.Functor.ShiftSequence.induced`。
+形式化陈述：shiftIso_hom_app_obj (n a a' : M) (ha' : n + a = a') (X : C) : (shiftIso L
+ G M F' e' n a a' ha').hom.app (L.obj X) = (F' a).map ((L.commShiftIso n).inv.ap
+p X) ≫ (e' a).hom.app (X⟦n⟧) ≫ (G.shiftIso n a a' ha').hom.app X ≫ (e' a').inv.a
+pp X
+参数：n a a' : M；ha' : n + a = a'；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.NatTrans.congr_app`：congr_app {α β : F ⟶ G} (h : α = β) (
+X : C) : α.app X = β.app X
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_hom_app_obj (n a a' : M) (ha' : n + a = a') (X : C) :
     (shiftIso L G M F' e' n a a' ha').hom.app (L.obj X) =
@@ -152,72 +144,22 @@ equipped with isomorphisms `e' : ∀ m, L ⋙ F' m ≅ G.shift m`, this is the s
 induced on `F` induced by a shift sequence for the functor `G`, provided that
 the functor `(whiskeringLeft C D A).obj L` of precomposition by `L` is fully faithful. -/
 @[instance_reducible]
-/--
-Definition of `induced` / `induced` 的定义
+/-
+**CategoryTheory.Functor.ShiftSequence.induced** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor.ShiftSequence`。
+形式化陈述：induced : F.ShiftSequence M where sequence
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition induced
-  signature: : F.ShiftSequence M where
-  body: F'
-  isoZero := induced.isoZero e M F' e'
-  shiftIso := induced.shiftIso L G M F' e'
-  shiftIso_zero a := by
-    ext1
-    apply ((whiskeringLeft C D A).obj L).map_injective
-    ext K
-    dsimp
-    simp only [induced.shiftIso_hom_app_obj, shiftIso_zero_hom_app, id_obj,
-      NatTrans.naturality, comp_map, Iso.hom_inv_id_app_assoc,
-      comp_id, ← Functor.map_comp, L.commShiftIso_zero, CommShift.isoZero_inv_app, assoc,
-      Iso.inv_hom_id_app, Functor.map_id]
-  shiftIso_add n m a a' a'' ha' ha'' := by
-    ext1
-    apply ((whiskeringLeft C D A).obj L).map_injective
-    ext K
-    dsimp
-    simp only [id_comp, induced.shiftIso_hom_app_obj,
-      G.shiftIso_add_hom_app n m a a' a'' ha' ha'', L.commShiftIso_add,
-      comp_obj, CommShift.isoAdd_inv_app, (F' a).map_comp, assoc,
-      ← (e' a).hom.naturality_assoc, comp_map]
-    simp only [← NatTrans.naturality_assoc, induced.shiftIso_hom_app_obj,
-      ← Functor.map_comp_assoc, ← Functor.map_comp, Iso.inv_hom_id_app, comp_obj,
-      Functor.map_id, id_comp]
-    dsimp
-    simp only [Functor.map_comp, assoc, Iso.inv_hom_id_app_assoc]
-
-@[simp, reassoc]
-
-中文:
-定义 induced
-  签名: : F.ShiftSequence M where
-  定义体: F'
-  isoZero := induced.isoZero e M F' e'
-  shiftIso := induced.shiftIso L G M F' e'
-  shiftIso_zero a := by
-    ext1
-    apply ((whiskeringLeft C D A).obj L).map_injective
-    ext K
-    dsimp
-    simp only [induced.shiftIso_hom_app_obj, shiftIso_zero_hom_app, id_obj,
-      NatTrans.naturality, comp_map, Iso.hom_inv_id_app_assoc,
-      comp_id, ← Functor.map_comp, L.commShiftIso_zero, CommShift.isoZero_inv_app, assoc,
-      Iso.inv_hom_id_app, Functor.map_id]
-  shiftIso_add n m a a' a'' ha' ha'' := by
-    ext1
-    apply ((whiskeringLeft C D A).obj L).map_injective
-    ext K
-    dsimp
-    simp only [id_comp, induced.shiftIso_hom_app_obj,
-      G.shiftIso_add_hom_app n m a a' a'' ha' ha'', L.commShiftIso_add,
-      comp_obj, CommShift.isoAdd_inv_app, (F' a).map_comp, assoc,
-      ← (e' a).hom.naturality_assoc, comp_map]
-    simp only [← NatTrans.naturality_assoc, induced.shiftIso_hom_app_obj,
-      ← Functor.map_comp_assoc, ← Functor.map_comp, Iso.inv_hom_id_app, comp_obj,
-      Functor.map_id, id_comp]
-    dsimp
-    simp only [Functor.map_comp, assoc, Iso.inv_hom_id_app_assoc]
-
-@[simp, reassoc]
+--- 原说明 ---
+Given an isomorphism of functors `e : L ⋙ F ≅ G` relating functors `L : C ⥤ D`,
+`F : D ⥤ A` and `G : C ⥤ A`, an additive monoid `M`, a family of functors `F' : 
+M → D ⥤ A`
+equipped with isomorphisms `e' : ∀ m, L ⋙ F' m ≅ G.shift m`, this is the shift s
+equence
+induced on `F` induced by a shift sequence for the functor `G`, provided that
+the functor `(whiskeringLeft C D A).obj L` of precomposition by `L` is fully fai
+thful.
 -/
 noncomputable def induced : F.ShiftSequence M where
   sequence := F'
@@ -248,30 +190,16 @@ noncomputable def induced : F.ShiftSequence M where
     simp only [Functor.map_comp, assoc, Iso.inv_hom_id_app_assoc]
 
 @[simp, reassoc]
-/--
-lemma `induced_isoShiftZero_hom_app_obj` / 引理 `induced_isoShiftZero_hom_app_obj`
-
-English:
-lemma induced_isoShiftZero_hom_app_obj
-  given: (X : C)
-  proof: (induced e M F' e')
-    (F.isoShiftZero M).hom.app (L.obj X) =
-      (e' 0).hom.app X ≫ (isoShiftZero G M).hom.app X ≫ e.inv.app X := by
-  apply induced.isoZero_hom_app_obj
-
-@[simp, reassoc]
-
-中文:
-引理 induced_isoShiftZero_hom_app_obj
-  条件: (X : C)
-  证明: (induced e M F' e')
-    (F.isoShiftZero M).hom.app (L.obj X) =
-      (e' 0).hom.app X ≫ (isoShiftZero G M).hom.app X ≫ e.inv.app X := by
-  apply induced.isoZero_hom_app_obj
-
-@[simp, reassoc]
-
-Depends on / 依赖: induced
+/-
+**CategoryTheory.Functor.ShiftSequence.induced_isoShiftZero_hom_app_obj** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.Functor.ShiftSequence`。
+形式化陈述：induced_isoShiftZero_hom_app_obj (X : C) : letI
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ShiftSequence.induced.isoZero_hom_app_obj`：isoZer
+o_hom_app_obj (X : C) : (isoZero e M F' e').hom.app (L.obj X) = (e' 0).hom.app X
+ ≫ (isoShiftZero G M).hom.app X ≫ e.inv.app X
 -/
 lemma induced_isoShiftZero_hom_app_obj (X : C) :
     letI := (induced e M F' e')
@@ -280,28 +208,17 @@ lemma induced_isoShiftZero_hom_app_obj (X : C) :
   apply induced.isoZero_hom_app_obj
 
 @[simp, reassoc]
-/--
-lemma `induced_shiftIso_hom_app_obj` / 引理 `induced_shiftIso_hom_app_obj`
-
-English:
-lemma induced_shiftIso_hom_app_obj
-  given: (n a a' : M) (ha' : n + a = a') (X : C)
-  proof: (induced e M F' e')
-    (F.shiftIso n a a' ha').hom.app (L.obj X) =
-      (F.shift a).map ((L.commShiftIso n).inv.app X) ≫ (e' a).hom.app (X⟦n⟧) ≫
-        (G.shiftIso n a a' ha').hom.app X ≫ (e' a').inv.app X := by
-  apply induced.shiftIso_hom_app_obj
-
-中文:
-引理 induced_shiftIso_hom_app_obj
-  条件: (n a a' : M) (ha' : n + a = a') (X : C)
-  证明: (induced e M F' e')
-    (F.shiftIso n a a' ha').hom.app (L.obj X) =
-      (F.shift a).map ((L.commShiftIso n).inv.app X) ≫ (e' a).hom.app (X⟦n⟧) ≫
-        (G.shiftIso n a a' ha').hom.app X ≫ (e' a').inv.app X := by
-  apply induced.shiftIso_hom_app_obj
-
-Depends on / 依赖: induced
+/-
+**CategoryTheory.Functor.ShiftSequence.induced_shiftIso_hom_app_obj** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.Functor.ShiftSequence`。
+形式化陈述：induced_shiftIso_hom_app_obj (n a a' : M) (ha' : n + a = a') (X : C) : let
+I
+参数：n a a' : M；ha' : n + a = a'；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ShiftSequence.induced.shiftIso_hom_app_obj`：shift
+Iso_hom_app_obj (n a a' : M) (ha' : n + a = a') (X : C) : (shiftIso L G M F' e' 
+n a a' ha').hom.app (L.obj X) = (F' a).map ((L.commShif…
 -/
 lemma induced_shiftIso_hom_app_obj (n a a' : M) (ha' : n + a = a') (X : C) :
     letI := (induced e M F' e')
@@ -313,43 +230,50 @@ lemma induced_shiftIso_hom_app_obj (n a a' : M) (ha' : n + a = a') (X : C) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `induced_shiftMap` / 引理 `induced_shiftMap`
-
-English:
-lemma induced_shiftMap
-  given: {n : M} {X Y : C} (f : X ⟶ Y⟦n⟧) (a a' : M) (h : n + a = a')
-  proof: induced e M F' e'
-    F.shiftMap (L.map f ≫ (L.commShiftIso n).hom.app _) a a' h =
-      (e' a).hom.app X ≫ G.shiftMap f a a' h ≫ (e' a').inv.app Y := by
-  dsimp [shiftMap]
-  rw [Functor.map_comp]; rw [induced_shiftIso_hom_app_obj]; rw [assoc]; rw [assoc]
-  nth_rw 2 [← Functor.map_comp_assoc]
-  simp only [comp_obj, Iso.hom_inv_id_app, map_id, id_comp]
-  rw [← NatTrans.naturality_assoc]
-  rfl
-
-中文:
-引理 induced_shiftMap
-  条件: {n : M} {X Y : C} (f : X ⟶ Y⟦n⟧) (a a' : M) (h : n + a = a')
-  证明: induced e M F' e'
-    F.shiftMap (L.map f ≫ (L.commShiftIso n).hom.app _) a a' h =
-      (e' a).hom.app X ≫ G.shiftMap f a a' h ≫ (e' a').inv.app Y := by
-  dsimp [shiftMap]
-  rw [Functor.map_comp]; rw [induced_shiftIso_hom_app_obj]; rw [assoc]; rw [assoc]
-  nth_rw 2 [← Functor.map_comp_assoc]
-  simp only [comp_obj, Iso.hom_inv_id_app, map_id, id_comp]
-  rw [← NatTrans.naturality_assoc]
-  rfl
-
-Depends on / 依赖: induced
+/-
+**CategoryTheory.Functor.ShiftSequence.induced_shiftMap** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Functor.ShiftSequence`。
+形式化陈述：induced_shiftMap {n : M} {X Y : C} (f : X ⟶ Y⟦n⟧) (a a' : M) (h : n + a = 
+a') : letI
+参数：f : X ⟶ Y⟦n⟧；a a' : M；h : n + a = a'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `CategoryTheory.Functor.ShiftSequence.induced_shiftIso_hom_app_obj`：induc
+ed_shiftIso_hom_app_obj (n a a' : M) (ha' : n + a = a') (X : C) : letI
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.NatTrans.naturality_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
 -/
 lemma induced_shiftMap {n : M} {X Y : C} (f : X ⟶ Y⟦n⟧) (a a' : M) (h : n + a = a') :
     letI := induced e M F' e'
     F.shiftMap (L.map f ≫ (L.commShiftIso n).hom.app _) a a' h =
       (e' a).hom.app X ≫ G.shiftMap f a a' h ≫ (e' a').inv.app Y := by
   dsimp [shiftMap]
-  rw [Functor.map_comp]; rw [induced_shiftIso_hom_app_obj]; rw [assoc]; rw [assoc]
+  rw [Functor.map_comp, induced_shiftIso_hom_app_obj, assoc, assoc]
   nth_rw 2 [← Functor.map_comp_assoc]
   simp only [comp_obj, Iso.hom_inv_id_app, map_id, id_comp]
   rw [← NatTrans.naturality_assoc]
@@ -360,3 +284,4 @@ end ShiftSequence
 end Functor
 
 end CategoryTheory
+

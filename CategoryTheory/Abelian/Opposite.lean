@@ -24,22 +24,9 @@ open CategoryTheory.Limits
 
 variable (C : Type*) [Category* C] [Abelian C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Abelian Cᵒᵖ
-  body: { normalMonoOfMono f := ⟨normalMonoOfNormalEpiUnop _ (normalEpiOfEpi f.unop)⟩
-    normalEpiOfEpi f := ⟨normalEpiOfNormalMonoUnop _ (normalMonoOfMono f.unop)⟩ }
-
-中文:
-实例 :
-  签名: 交换 Cᵒᵖ
-  定义体: { normalMonoOfMono f := ⟨normalMonoOfNormalEpiUnop _ (normalEpiOfEpi f.unop)⟩
-    normalEpiOfEpi f := ⟨normalEpiOfNormalMonoUnop _ (normalMonoOfMono f.unop)⟩ }
-
-Depends on / 依赖: f.unop, normalEpiOfEpi, normalEpiOfNormalMonoUnop, normalMonoOfMono, normalMonoOfNormalEpiUnop
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Abelian Cᵒᵖ :=
   { normalMonoOfMono f := ⟨normalMonoOfNormalEpiUnop _ (normalEpiOfEpi f.unop)⟩
@@ -54,53 +41,23 @@ variable {X Y : C} (f : X ⟶ Y) {A B : Cᵒᵖ} (g : A ⟶ B)
 -- (The abelian case is probably sufficient for most applications.)
 /-- The kernel of `f.op` is the opposite of `cokernel f`. -/
 @[simps]
-/--
-Definition of `kernelOpUnop` / `kernelOpUnop` 的定义
+/-
+**CategoryTheory.kernelOpUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：kernelOpUnop : (kernel f.op).unop ≅ cokernel f where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kernelOpUnop
-  signature: : (kernel f.op).unop ≅ cokernel f where
-  body: (kernel.lift f.op (cokernel.π f).op <| by simp [← op_comp]).unop
-  inv :=
-cokernel.desc f (kernel.ι f.op).unop by
-      rw [← f.unop_op]; rw [← unop_comp]; rw [f.unop_op]
-      simp
-  hom_inv_id := by
-    rw [← unop_id]; rw [← (cokernel.desc f _ _).unop_op]; rw [← unop_comp]
-    congr 1
-    ext
-    simp [← op_comp]
-  inv_hom_id := by
-    ext
-    simp [← unop_comp]
-
-中文:
-定义 kernelOpUnop
-  签名: : (kernel f.op).unop ≅ cokernel f where
-  定义体: (kernel.lift f.op (cokernel.π f).op <| by simp [← op_comp]).unop
-  inv :=
-cokernel.desc f (kernel.ι f.op).unop by
-      rw [← f.unop_op]; rw [← unop_comp]; rw [f.unop_op]
-      simp
-  hom_inv_id := by
-    rw [← unop_id]; rw [← (cokernel.desc f _ _).unop_op]; rw [← unop_comp]
-    congr 1
-    ext
-    simp [← op_comp]
-  inv_hom_id := by
-    ext
-    simp [← unop_comp]
-
-Depends on / 依赖: cokernel, f.op, kernel, kernel.lift, op_comp
+--- 原说明 ---
+The kernel of `f.op` is the opposite of `cokernel f`.
 -/
 def kernelOpUnop : (kernel f.op).unop ≅ cokernel f where
   hom := (kernel.lift f.op (cokernel.π f).op <| by simp [← op_comp]).unop
   inv :=
-cokernel.desc f (kernel.ι f.op).unop by
-      rw [← f.unop_op]; rw [← unop_comp]; rw [f.unop_op]
+    cokernel.desc f (kernel.ι f.op).unop <| by
+      rw [← f.unop_op, ← unop_comp, f.unop_op]
       simp
   hom_inv_id := by
-    rw [← unop_id]; rw [← (cokernel.desc f _ _).unop_op]; rw [← unop_comp]
+    rw [← unop_id, ← (cokernel.desc f _ _).unop_op, ← unop_comp]
     congr 1
     ext
     simp [← op_comp]
@@ -112,51 +69,23 @@ cokernel.desc f (kernel.ι f.op).unop by
 -- (The abelian case is probably sufficient for most applications.)
 /-- The cokernel of `f.op` is the opposite of `kernel f`. -/
 @[simps]
-/--
-Definition of `cokernelOpUnop` / `cokernelOpUnop` 的定义
+/-
+**CategoryTheory.cokernelOpUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：cokernelOpUnop : (cokernel f.op).unop ≅ kernel f where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelOpUnop
-  signature: : (cokernel f.op).unop ≅ kernel f where
-  body: kernel.lift f (cokernel.π f.op).unop by
-      rw [← f.unop_op]; rw [← unop_comp]; rw [f.unop_op]
-      simp
-  inv := (cokernel.desc f.op (kernel.ι f).op <| by simp [← op_comp]).unop
-  hom_inv_id := by
-    rw [← unop_id]; rw [← (kernel.lift f _ _).unop_op]; rw [← unop_comp]
-    congr 1
-    ext
-    simp [← op_comp]
-  inv_hom_id := by
-    ext
-    simp [← unop_comp]
-
-中文:
-定义 cokernelOpUnop
-  签名: : (cokernel f.op).unop ≅ kernel f where
-  定义体: kernel.lift f (cokernel.π f.op).unop by
-      rw [← f.unop_op]; rw [← unop_comp]; rw [f.unop_op]
-      simp
-  inv := (cokernel.desc f.op (kernel.ι f).op <| by simp [← op_comp]).unop
-  hom_inv_id := by
-    rw [← unop_id]; rw [← (kernel.lift f _ _).unop_op]; rw [← unop_comp]
-    congr 1
-    ext
-    simp [← op_comp]
-  inv_hom_id := by
-    ext
-    simp [← unop_comp]
-
-Depends on / 依赖: cokernel, cokernel.desc, f.op, f.unop_op, hom_inv_id, inv_hom_id, kernel, kernel.lift, op_comp, unop_comp, unop_id, unop_op
+--- 原说明 ---
+The cokernel of `f.op` is the opposite of `kernel f`.
 -/
 def cokernelOpUnop : (cokernel f.op).unop ≅ kernel f where
   hom :=
-kernel.lift f (cokernel.π f.op).unop by
-      rw [← f.unop_op]; rw [← unop_comp]; rw [f.unop_op]
+    kernel.lift f (cokernel.π f.op).unop <| by
+      rw [← f.unop_op, ← unop_comp, f.unop_op]
       simp
   inv := (cokernel.desc f.op (kernel.ι f).op <| by simp [← op_comp]).unop
   hom_inv_id := by
-    rw [← unop_id]; rw [← (kernel.lift f _ _).unop_op]; rw [← unop_comp]
+    rw [← unop_id, ← (kernel.lift f _ _).unop_op, ← unop_comp]
     congr 1
     ext
     simp [← op_comp]
@@ -166,78 +95,42 @@ kernel.lift f (cokernel.π f.op).unop by
 
 /-- The kernel of `g.unop` is the opposite of `cokernel g`. -/
 @[simps!]
-/--
-Definition of `kernelUnopOp` / `kernelUnopOp` 的定义
+/-
+**CategoryTheory.kernelUnopOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：kernelUnopOp : Opposite.op (kernel g.unop) ≅ cokernel g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kernelUnopOp
-  signature: : Opposite.op (kernel g.unop) ≅ cokernel g
-  body: (cokernelOpUnop g.unop).op
-
-中文:
-定义 kernelUnopOp
-  签名: : 对偶.op (kernel g.unop) ≅ cokernel g
-  定义体: (cokernelOpUnop g.unop).op
-
-Depends on / 依赖: cokernelOpUnop, g.unop
+--- 原说明 ---
+The kernel of `g.unop` is the opposite of `cokernel g`.
 -/
 def kernelUnopOp : Opposite.op (kernel g.unop) ≅ cokernel g :=
   (cokernelOpUnop g.unop).op
 
 /-- The cokernel of `g.unop` is the opposite of `kernel g`. -/
 @[simps!]
-/--
-Definition of `cokernelUnopOp` / `cokernelUnopOp` 的定义
+/-
+**CategoryTheory.cokernelUnopOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：cokernelUnopOp : Opposite.op (cokernel g.unop) ≅ kernel g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelUnopOp
-  signature: : Opposite.op (cokernel g.unop) ≅ kernel g
-  body: (kernelOpUnop g.unop).op
-
-中文:
-定义 cokernelUnopOp
-  签名: : 对偶.op (cokernel g.unop) ≅ kernel g
-  定义体: (kernelOpUnop g.unop).op
-
-Depends on / 依赖: g.unop, kernelOpUnop
+--- 原说明 ---
+The cokernel of `g.unop` is the opposite of `kernel g`.
 -/
 def cokernelUnopOp : Opposite.op (cokernel g.unop) ≅ kernel g :=
   (kernelOpUnop g.unop).op
-
-/--
-theorem `cokernel.π_op` / 定理 `cokernel.π_op`
-
-English:
-theorem cokernel.π_op
-  proof: by
-  simp [cokernelOpUnop]
-
-中文:
-定理 cokernel.π_op
-  证明: by
-  simp [cokernelOpUnop]
-
-Depends on / 依赖: cokernelOpUnop
+/-
+**CategoryTheory.cokernel.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cokernel.π_op :
     (cokernel.π f.op).unop =
       (cokernelOpUnop f).hom ≫ kernel.ι f ≫ eqToHom (Opposite.unop_op _).symm := by
   simp [cokernelOpUnop]
-
-/--
-theorem `kernel.ι_op` / 定理 `kernel.ι_op`
-
-English:
-theorem kernel.ι_op
-  proof: by
-  simp [kernelOpUnop]
-
-中文:
-定理 kernel.ι_op
-  证明: by
-  simp [kernelOpUnop]
-
-Depends on / 依赖: kernelOpUnop
+/-
+**CategoryTheory.kernel.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem kernel.ι_op :
     (kernel.ι f.op).unop = eqToHom (Opposite.unop_op _) ≫ cokernel.π f ≫ (kernelOpUnop f).inv := by
@@ -245,95 +138,59 @@ theorem kernel.ι_op :
 
 /-- The kernel of `f.op` is the opposite of `cokernel f`. -/
 @[simps!]
-/--
-Definition of `kernelOpOp` / `kernelOpOp` 的定义
+/-
+**CategoryTheory.kernelOpOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：kernelOpOp : kernel f.op ≅ Opposite.op (cokernel f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kernelOpOp
-  signature: : kernel f.op ≅ Opposite.op (cokernel f)
-  body: (kernelOpUnop f).op.symm
-
-中文:
-定义 kernelOpOp
-  签名: : kernel f.op ≅ 对偶.op (cokernel f)
-  定义体: (kernelOpUnop f).op.symm
-
-Depends on / 依赖: kernelOpUnop, op.symm
+--- 原说明 ---
+The kernel of `f.op` is the opposite of `cokernel f`.
 -/
 def kernelOpOp : kernel f.op ≅ Opposite.op (cokernel f) :=
   (kernelOpUnop f).op.symm
 
 /-- The cokernel of `f.op` is the opposite of `kernel f`. -/
 @[simps!]
-/--
-Definition of `cokernelOpOp` / `cokernelOpOp` 的定义
+/-
+**CategoryTheory.cokernelOpOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：cokernelOpOp : cokernel f.op ≅ Opposite.op (kernel f)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelOpOp
-  signature: : cokernel f.op ≅ Opposite.op (kernel f)
-  body: (cokernelOpUnop f).op.symm
-
-中文:
-定义 cokernelOpOp
-  签名: : cokernel f.op ≅ 对偶.op (kernel f)
-  定义体: (cokernelOpUnop f).op.symm
-
-Depends on / 依赖: cokernelOpUnop, op.symm
+--- 原说明 ---
+The cokernel of `f.op` is the opposite of `kernel f`.
 -/
 def cokernelOpOp : cokernel f.op ≅ Opposite.op (kernel f) :=
   (cokernelOpUnop f).op.symm
 
 /-- The kernel of `g.unop` is the opposite of `cokernel g`. -/
 @[simps!]
-/--
-Definition of `kernelUnopUnop` / `kernelUnopUnop` 的定义
+/-
+**CategoryTheory.kernelUnopUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：kernelUnopUnop : kernel g.unop ≅ (cokernel g).unop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kernelUnopUnop
-  signature: : kernel g.unop ≅ (cokernel g).unop
-  body: (kernelUnopOp g).unop.symm
-
-中文:
-定义 kernelUnopUnop
-  签名: : kernel g.unop ≅ (cokernel g).unop
-  定义体: (kernelUnopOp g).unop.symm
-
-Depends on / 依赖: kernelUnopOp, unop.symm
+--- 原说明 ---
+The kernel of `g.unop` is the opposite of `cokernel g`.
 -/
 def kernelUnopUnop : kernel g.unop ≅ (cokernel g).unop :=
   (kernelUnopOp g).unop.symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `kernel.ι_unop` / 定理 `kernel.ι_unop`
-
-English:
-theorem kernel.ι_unop
-  proof: by
-  simp
-
-中文:
-定理 kernel.ι_unop
-  证明: by
-  simp
+/-
+**CategoryTheory.kernel.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem kernel.ι_unop :
     (kernel.ι g.unop).op = eqToHom (Opposite.op_unop _) ≫ cokernel.π g ≫ (kernelUnopOp g).inv := by
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `cokernel.π_unop` / 定理 `cokernel.π_unop`
-
-English:
-theorem cokernel.π_unop
-  proof: by
-  simp
-
-中文:
-定理 cokernel.π_unop
-  证明: by
-  simp
+/-
+**CategoryTheory.cokernel.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cokernel.π_unop :
     (cokernel.π g.unop).op =
@@ -342,44 +199,30 @@ theorem cokernel.π_unop :
 
 /-- The cokernel of `g.unop` is the opposite of `kernel g`. -/
 @[simps!]
-/--
-Definition of `cokernelUnopUnop` / `cokernelUnopUnop` 的定义
+/-
+**CategoryTheory.cokernelUnopUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：cokernelUnopUnop : cokernel g.unop ≅ (kernel g).unop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelUnopUnop
-  signature: : cokernel g.unop ≅ (kernel g).unop
-  body: (cokernelUnopOp g).unop.symm
-
-中文:
-定义 cokernelUnopUnop
-  签名: : cokernel g.unop ≅ (kernel g).unop
-  定义体: (cokernelUnopOp g).unop.symm
-
-Depends on / 依赖: cokernelUnopOp, unop.symm
+--- 原说明 ---
+The cokernel of `g.unop` is the opposite of `kernel g`.
 -/
 def cokernelUnopUnop : cokernel g.unop ≅ (kernel g).unop :=
   (cokernelUnopOp g).unop.symm
 
-/--
-Definition of `imageUnopOp` / `imageUnopOp` 的定义
+/-- The opposite of the image of `g.unop` is the image of `g`. -/
+/-
+**CategoryTheory.imageUnopOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：imageUnopOp : Opposite.op (image g.unop) ≅ image g
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.cokernel.π_unop`：∀ {C : Type u_1} [inst : CategoryTheory.
+Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Abelian C] {A B : Cᵒᵖ}   (g : A 
+⟶ B),   (CategoryThe…
 
-English:
-definition imageUnopOp
-  signature: : Opposite.op (image g.unop) ≅ image g
-  body: (Abelian.imageIsoImage _).op ≪≫
-    (cokernelOpOp _).symm ≪≫
-      cokernelIsoOfEq (cokernel.π_unop _) ≪≫
-        cokernelEpiComp _ _ ≪≫ cokernelCompIsIso _ _ ≪≫ Abelian.coimageIsoImage' _
-
-中文:
-定义 imageUnopOp
-  签名: : 对偶.op (像 g.unop) ≅ 像 g
-  定义体: (Abelian.imageIsoImage _).op ≪≫
-    (cokernelOpOp _).symm ≪≫
-      cokernelIsoOfEq (cokernel.π_unop _) ≪≫
-        cokernelEpiComp _ _ ≪≫ cokernelCompIsIso _ _ ≪≫ Abelian.coimageIsoImage' _
-
-Depends on / 依赖: Abelian, Abelian.coimageIsoImage, Abelian.imageIsoImage, L.obj, coimageIsoImage, cokernel, cokernelCompIsIso, cokernelEpiComp, cokernelIsoOfEq, cokernelOpOp, imageIsoImage, isIso_hom_app, isPointwiseLeftKanExtensionLeftKanExtensionUnit
+--- 原说明 ---
+The opposite of the image of `g.unop` is the image of `g`.
 -/
 def imageUnopOp : Opposite.op (image g.unop) ≅ image g :=
   (Abelian.imageIsoImage _).op ≪≫
@@ -387,86 +230,47 @@ def imageUnopOp : Opposite.op (image g.unop) ≅ image g :=
       cokernelIsoOfEq (cokernel.π_unop _) ≪≫
         cokernelEpiComp _ _ ≪≫ cokernelCompIsIso _ _ ≪≫ Abelian.coimageIsoImage' _
 
-/--
-Definition of `imageOpOp` / `imageOpOp` 的定义
+/-- The opposite of the image of `f` is the image of `f.op`. -/
+/-
+**CategoryTheory.imageOpOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：imageOpOp : Opposite.op (image f) ≅ image f.op
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageOpOp
-  signature: : Opposite.op (image f) ≅ image f.op
-  body: imageUnopOp f.op
-
-中文:
-定义 imageOpOp
-  签名: : 对偶.op (像 f) ≅ 像 f.op
-  定义体: imageUnopOp f.op
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, f.op, imageUnopOp, isIso_of_isIso_app
+--- 原说明 ---
+The opposite of the image of `f` is the image of `f.op`.
 -/
 def imageOpOp : Opposite.op (image f) ≅ image f.op :=
   imageUnopOp f.op
 
-/--
-Definition of `imageOpUnop` / `imageOpUnop` 的定义
+/-- The image of `f.op` is the opposite of the image of `f`. -/
+/-
+**CategoryTheory.imageOpUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：imageOpUnop : (image f.op).unop ≅ image f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageOpUnop
-  signature: : (image f.op).unop ≅ image f
-  body: (imageUnopOp f.op).unop
-
-中文:
-定义 imageOpUnop
-  签名: : (像 f.op).unop ≅ 像 f
-  定义体: (imageUnopOp f.op).unop
-
-Depends on / 依赖: f.op, imageUnopOp
+--- 原说明 ---
+The image of `f.op` is the opposite of the image of `f`.
 -/
 def imageOpUnop : (image f.op).unop ≅ image f :=
   (imageUnopOp f.op).unop
 
-/--
-Definition of `imageUnopUnop` / `imageUnopUnop` 的定义
+/-- The image of `g` is the opposite of the image of `g.unop.` -/
+/-
+**CategoryTheory.imageUnopUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：imageUnopUnop : (image g).unop ≅ image g.unop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageUnopUnop
-  signature: : (image g).unop ≅ image g.unop
-  body: (imageUnopOp g).unop
-
-中文:
-定义 imageUnopUnop
-  签名: : (像 g).unop ≅ 像 g.unop
-  定义体: (imageUnopOp g).unop
-
-Depends on / 依赖: imageUnopOp, infer_instance, lanAdjunction_unit
+--- 原说明 ---
+The image of `g` is the opposite of the image of `g.unop.`
 -/
 def imageUnopUnop : (image g).unop ≅ image g.unop :=
   (imageUnopOp g).unop
-
-/--
-theorem `image_ι_op_comp_imageUnopOp_hom` / 定理 `image_ι_op_comp_imageUnopOp_hom`
-
-English:
-theorem image_ι_op_comp_imageUnopOp_hom
-  proof: by
-  simp only [imageUnopOp, Iso.trans, Iso.symm, Iso.op, cokernelOpOp_inv, cokernelEpiComp_hom,
-    cokernelCompIsIso_hom, Abelian.coimageIsoImage'_hom, ← Category.assoc, ← op_comp]
-  simp only [Category.assoc, Abelian.imageIsoImage_hom_comp_image_ι, kernel.lift_ι,
-    Quiver.Hom.op_unop, cokernelIsoOfEq_hom_comp_desc_assoc, cokernel.π_desc_assoc,
-    cokernel.π_desc]
-  simp only [eqToHom_refl]
-  rw [IsIso.inv_id]; rw [Category.id_comp]
-
-中文:
-定理 image_ι_op_comp_imageUnopOp_hom
-  证明: by
-  simp only [imageUnopOp, Iso.trans, Iso.symm, Iso.op, cokernelOpOp_inv, cokernelEpiComp_hom,
-    cokernelCompIsIso_hom, Abelian.coimageIsoImage'_hom, ← Category.assoc, ← op_comp]
-  simp only [Category.assoc, Abelian.imageIsoImage_hom_comp_image_ι, kernel.lift_ι,
-    Quiver.Hom.op_unop, cokernelIsoOfEq_hom_comp_desc_assoc, cokernel.π_desc_assoc,
-    cokernel.π_desc]
-  simp only [eqToHom_refl]
-  rw [IsIso.inv_id]; rw [Category.id_comp]
-
-Depends on / 依赖: Abelian, Abelian.coimageIsoImage, Abelian.imageIsoImage_hom_comp_image_, Category, Category.assoc, Category.id_comp, IsIso.inv_id, Iso.op, Iso.symm, Iso.trans, Quiver, Quiver.Hom.op_unop, _hom, coimageIsoImage, cokernel, cokernelCompIsIso_hom, cokernelEpiComp_hom, cokernelIsoOfEq_hom_comp_desc_assoc, cokernelOpOp_inv, eqToHom_refl
+/-
+**CategoryTheory.image_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem image_ι_op_comp_imageUnopOp_hom :
     (image.ι g.unop).op ≫ (imageUnopOp g).hom = factorThruImage g := by
@@ -476,70 +280,72 @@ theorem image_ι_op_comp_imageUnopOp_hom :
     Quiver.Hom.op_unop, cokernelIsoOfEq_hom_comp_desc_assoc, cokernel.π_desc_assoc,
     cokernel.π_desc]
   simp only [eqToHom_refl]
-  rw [IsIso.inv_id]; rw [Category.id_comp]
-
-/--
-theorem `imageUnopOp_hom_comp_image_ι` / 定理 `imageUnopOp_hom_comp_image_ι`
-
-English:
-theorem imageUnopOp_hom_comp_image_ι
-  proof: by
-  simp only [← cancel_epi (image.ι g.unop).op, ← Category.assoc, image_ι_op_comp_imageUnopOp_hom,
-    ← op_comp, image.fac, Quiver.Hom.op_unop]
-
-中文:
-定理 imageUnopOp_hom_comp_image_ι
-  证明: by
-  simp only [← cancel_epi (image.ι g.unop).op, ← Category.assoc, image_ι_op_comp_imageUnopOp_hom,
-    ← op_comp, image.fac, Quiver.Hom.op_unop]
-
-Depends on / 依赖: Category, Category.assoc, Quiver, Quiver.Hom.op_unop, cancel_epi, g.unop, image.fac, op_comp, op_unop
+  rw [IsIso.inv_id, Category.id_comp]
+/-
+**CategoryTheory.imageUnopOp_hom_comp_image_** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem imageUnopOp_hom_comp_image_ι :
     (imageUnopOp g).hom ≫ image.ι g = (factorThruImage g.unop).op := by
   simp only [← cancel_epi (image.ι g.unop).op, ← Category.assoc, image_ι_op_comp_imageUnopOp_hom,
     ← op_comp, image.fac, Quiver.Hom.op_unop]
-
-/--
-theorem `factorThruImage_comp_imageUnopOp_inv` / 定理 `factorThruImage_comp_imageUnopOp_inv`
-
-English:
-theorem factorThruImage_comp_imageUnopOp_inv
-  proof: by
-  rw [Iso.comp_inv_eq]; rw [image_ι_op_comp_imageUnopOp_hom]
-
-中文:
-定理 factorThruImage_comp_imageUnopOp_inv
-  证明: by
-  rw [Iso.comp_inv_eq]; rw [image_ι_op_comp_imageUnopOp_hom]
-
-Depends on / 依赖: Iso.comp_inv_eq, comp_inv_eq
+/-
+**CategoryTheory.factorThruImage_comp_imageUnopOp_inv** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory`。
+形式化陈述：factorThruImage_comp_imageUnopOp_inv : factorThruImage g ≫ (imageUnopOp g)
+.inv = (image.ι g.unop).op
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImages.has_image`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasImages C] {X Y : C}
+   (f : X ⟶ Y), CategoryTheory.…
+· 使用定理 `CategoryTheory.Limits.hasImages_of_hasStrongEpiMonoFactorisations`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasSt
+rongEpiMonoFactorisations C],   CategoryTheory.Limits.H…
+· 使用定理 `CategoryTheory.Abelian.instHasStrongEpiMonoFactorisations`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Abelian C],   Catego
+ryTheory.Limits.HasStrongEpiMonoFactorisations …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.comp_inv_eq`：comp_inv_eq (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : f ≫ α.inv = g ↔ f = g ≫ α.hom
+· 使用定理 `CategoryTheory.image_ι_op_comp_imageUnopOp_hom`：image_ι_op_comp_imageUno
+pOp_hom : (image.ι g.unop).op ≫ (imageUnopOp g).hom = factorThruImage g
 -/
 theorem factorThruImage_comp_imageUnopOp_inv :
     factorThruImage g ≫ (imageUnopOp g).inv = (image.ι g.unop).op := by
-  rw [Iso.comp_inv_eq]; rw [image_ι_op_comp_imageUnopOp_hom]
-
-/--
-theorem `imageUnopOp_inv_comp_op_factorThruImage` / 定理 `imageUnopOp_inv_comp_op_factorThruImage`
-
-English:
-theorem imageUnopOp_inv_comp_op_factorThruImage
-  proof: by
-  rw [Iso.inv_comp_eq]; rw [imageUnopOp_hom_comp_image_ι]
-
-中文:
-定理 imageUnopOp_inv_comp_op_factorThruImage
-  证明: by
-  rw [Iso.inv_comp_eq]; rw [imageUnopOp_hom_comp_image_ι]
-
-Depends on / 依赖: Iso.inv_comp_eq, infer_instance, inv_comp_eq, ranCounit
+  rw [Iso.comp_inv_eq, image_ι_op_comp_imageUnopOp_hom]
+/-
+**CategoryTheory.imageUnopOp_inv_comp_op_factorThruImage** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory`。
+形式化陈述：imageUnopOp_inv_comp_op_factorThruImage : (imageUnopOp g).inv ≫ (factorThr
+uImage g.unop).op = image.ι g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImages.has_image`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasImages C] {X Y : C}
+   (f : X ⟶ Y), CategoryTheory.…
+· 使用定理 `CategoryTheory.Limits.hasImages_of_hasStrongEpiMonoFactorisations`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasSt
+rongEpiMonoFactorisations C],   CategoryTheory.Limits.H…
+· 使用定理 `CategoryTheory.Abelian.instHasStrongEpiMonoFactorisations`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Abelian C],   Catego
+ryTheory.Limits.HasStrongEpiMonoFactorisations …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `CategoryTheory.imageUnopOp_hom_comp_image_ι`：imageUnopOp_hom_comp_image_
+ι : (imageUnopOp g).hom ≫ image.ι g = (factorThruImage g.unop).op
 -/
 theorem imageUnopOp_inv_comp_op_factorThruImage :
     (imageUnopOp g).inv ≫ (factorThruImage g.unop).op = image.ι g := by
-  rw [Iso.inv_comp_eq]; rw [imageUnopOp_hom_comp_image_ι]
+  rw [Iso.inv_comp_eq, imageUnopOp_hom_comp_image_ι]
 
 end
 
 end CategoryTheory
 
 end
+

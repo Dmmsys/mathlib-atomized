@@ -41,7 +41,7 @@ namespace Polynomial
 
 universe u v w y
 
-variable {R : Type u} {S : Type v} {T : Type w} {ι : Type y} {a b : R} {m n : Nat}
+variable {R : Type u} {S : Type v} {T : Type w} {ι : Type y} {a b : R} {m n : ℕ}
 
 section Semiring
 
@@ -50,461 +50,220 @@ variable [Semiring R] {p q r : R[X]}
 section
 
 variable [Semiring S]
-variable (f : R ->+* S) (x : S)
+variable (f : R →+* S) (x : S)
 
 /-- Evaluate a polynomial `p` given a ring hom `f` from the scalar ring
   to the target and a value `x` for the variable in the target -/
 irreducible_def eval₂ (p : R[X]) : S :=
   p.sum fun e a => f a * x ^ e
 
-/--
-theorem `eval₂_eq_sum` / 定理 `eval₂_eq_sum`
-
-English:
-theorem eval₂_eq_sum
-  given: {f : R ->+* S} {x : S}
-  statement: p.eval₂ f x = p.sum fun e a => f a * x ^ e
-  proof: by
-  rw [eval₂_def]
-
-中文:
-定理 eval₂_eq_sum
-  条件: {f : R ->+* S} {x : S}
-  结论: p.eval₂ f x = p.求和 fun e a => f a * x ^ e
-  证明: by
-  rw [eval₂_def]
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_eq_sum {f : R ->+* S} {x : S} : p.eval₂ f x = p.sum fun e a => f a * x ^ e := by
+theorem eval₂_eq_sum {f : R →+* S} {x : S} : p.eval₂ f x = p.sum fun e a => f a * x ^ e := by
   rw [eval₂_def]
-
-/--
-theorem `eval₂_congr` / 定理 `eval₂_congr`
-
-English:
-theorem eval₂_congr
-  statement: {R S : Type*} [Semiring R] [Semiring S] {f g : R ->+* S} {s t : S}
-  proof: by
-  rintro rfl rfl rfl; rfl
-
-@[simp]
-
-中文:
-定理 eval₂_congr
-  结论: {R S : 类型} [半环 R] [半环 S] {f g : R ->+* S} {s t : S}
-  证明: by
-  rintro rfl rfl rfl; rfl
-
-@[simp]
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_congr {R S : Type*} [Semiring R] [Semiring S] {f g : R ->+* S} {s t : S}
-    {φ ψ : R[X]} : f = g -> s = t -> φ = ψ -> eval₂ f s φ = eval₂ g t ψ := by
+theorem eval₂_congr {R S : Type*} [Semiring R] [Semiring S] {f g : R →+* S} {s t : S}
+    {φ ψ : R[X]} : f = g → s = t → φ = ψ → eval₂ f s φ = eval₂ g t ψ := by
   rintro rfl rfl rfl; rfl
 
 @[simp]
-/--
-theorem `eval₂_zero` / 定理 `eval₂_zero`
-
-English:
-theorem eval₂_zero
-  statement: (0 : R[X]).eval₂ f x = 0
-  proof: by simp [eval₂_eq_sum]
-
-@[simp]
-
-中文:
-定理 eval₂_zero
-  结论: (0 : R[X]).eval₂ f x = 0
-  证明: by simp [eval₂_eq_sum]
-
-@[simp]
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_zero : (0 : R[X]).eval₂ f x = 0 := by simp [eval₂_eq_sum]
 
 @[simp]
-/--
-theorem `eval₂_C` / 定理 `eval₂_C`
-
-English:
-theorem eval₂_C
-  statement: (C a).eval₂ f x = f a
-  proof: by simp [eval₂_eq_sum]
-
-@[simp]
-
-中文:
-定理 eval₂_C
-  结论: (C a).eval₂ f x = f a
-  证明: by simp [eval₂_eq_sum]
-
-@[simp]
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_C : (C a).eval₂ f x = f a := by simp [eval₂_eq_sum]
 
 @[simp]
-/--
-theorem `eval₂_X` / 定理 `eval₂_X`
-
-English:
-theorem eval₂_X
-  statement: X.eval₂ f x = x
-  proof: by simp [eval₂_eq_sum]
-
-@[simp]
-
-中文:
-定理 eval₂_X
-  结论: X.eval₂ f x = x
-  证明: by simp [eval₂_eq_sum]
-
-@[simp]
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_X : X.eval₂ f x = x := by simp [eval₂_eq_sum]
 
 @[simp]
-/--
-theorem `eval₂_monomial` / 定理 `eval₂_monomial`
-
-English:
-theorem eval₂_monomial
-  given: {n : Nat} {r : R}
-  statement: (monomial n r).eval₂ f x = f r * x ^ n
-  proof: by
-  simp [eval₂_eq_sum]
-
-@[simp]
-
-中文:
-定理 eval₂_monomial
-  条件: {n : 自然数} {r : R}
-  结论: (monomial n r).eval₂ f x = f r * x ^ n
-  证明: by
-  simp [eval₂_eq_sum]
-
-@[simp]
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_monomial {n : Nat} {r : R} : (monomial n r).eval₂ f x = f r * x ^ n := by
+theorem eval₂_monomial {n : ℕ} {r : R} : (monomial n r).eval₂ f x = f r * x ^ n := by
   simp [eval₂_eq_sum]
 
 @[simp]
-/--
-theorem `eval₂_X_pow` / 定理 `eval₂_X_pow`
-
-English:
-theorem eval₂_X_pow
-  given: {n : Nat}
-  statement: (X ^ n).eval₂ f x = x ^ n
-  proof: by
-  rw [X_pow_eq_monomial]
-  convert! eval₂_monomial f x (n := n) (r := 1)
-  simp
-
-@[simp]
-
-中文:
-定理 eval₂_X_pow
-  条件: {n : 自然数}
-  结论: (X ^ n).eval₂ f x = x ^ n
-  证明: by
-  rw [X_pow_eq_monomial]
-  convert! eval₂_monomial f x (n := n) (r := 1)
-  simp
-
-@[simp]
-
-Depends on / 依赖: X_pow_eq_monomial, convert
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_X_pow {n : Nat} : (X ^ n).eval₂ f x = x ^ n := by
+theorem eval₂_X_pow {n : ℕ} : (X ^ n).eval₂ f x = x ^ n := by
   rw [X_pow_eq_monomial]
   convert! eval₂_monomial f x (n := n) (r := 1)
   simp
 
 @[simp]
-/--
-theorem `eval₂_add` / 定理 `eval₂_add`
-
-English:
-theorem eval₂_add
-  statement: (p + q).eval₂ f x = p.eval₂ f x + q.eval₂ f x
-  proof: by
-  simp only [eval₂_eq_sum]
-  apply sum_add_index <;> simp [add_mul]
-
-@[simp]
-
-中文:
-定理 eval₂_add
-  结论: (p + q).eval₂ f x = p.eval₂ f x + q.eval₂ f x
-  证明: by
-  simp only [eval₂_eq_sum]
-  apply sum_add_index <;> simp [add_mul]
-
-@[simp]
-
-Depends on / 依赖: add_mul, sum_add_index
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_add : (p + q).eval₂ f x = p.eval₂ f x + q.eval₂ f x := by
   simp only [eval₂_eq_sum]
   apply sum_add_index <;> simp [add_mul]
 
 @[simp]
-/--
-theorem `eval₂_one` / 定理 `eval₂_one`
-
-English:
-theorem eval₂_one
-  statement: (1 : R[X]).eval₂ f x = 1
-  proof: by rw [← C_1, eval₂_C, f.map_one]
-
-中文:
-定理 eval₂_one
-  结论: (1 : R[X]).eval₂ f x = 1
-  证明: by rw [← C_1, eval₂_C, f.map_one]
-
-Depends on / 依赖: f.map_one, map_one
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_one : (1 : R[X]).eval₂ f x = 1 := by rw [← C_1, eval₂_C, f.map_one]
 
 /-- `eval₂AddMonoidHom (f : R →+* S) (x : S)` is the `AddMonoidHom` from
 `R[X]` to `S` obtained by evaluating the pushforward of `p` along `f` at `x`. -/
 @[simps]
-/--
-Definition of `eval₂AddMonoidHom` / `eval₂AddMonoidHom` 的定义
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval₂AddMonoidHom
-  signature: : R[X] ->+ S where
-  body: eval₂ f x
-  map_zero' := eval₂_zero _ _
-  map_add' _ _ := eval₂_add _ _
-
-@[simp]
-
-中文:
-定义 eval₂AddMonoidHom
-  签名: : R[X] ->+ S where
-  定义体: eval₂ f x
-  map_zero' := eval₂_zero _ _
-  map_add' _ _ := eval₂_add _ _
-
-@[simp]
+--- 原说明 ---
+`eval₂AddMonoidHom (f : R →+* S) (x : S)` is the `AddMonoidHom` from
+`R[X]` to `S` obtained by evaluating the pushforward of `p` along `f` at `x`.
 -/
-def eval₂AddMonoidHom : R[X] ->+ S where
+def eval₂AddMonoidHom : R[X] →+ S where
   toFun := eval₂ f x
   map_zero' := eval₂_zero _ _
   map_add' _ _ := eval₂_add _ _
 
 @[simp]
-/--
-theorem `eval₂_natCast` / 定理 `eval₂_natCast`
-
-English:
-theorem eval₂_natCast
-  given: (n : Nat)
-  statement: (n : R[X]).eval₂ f x = n
-  proof: by
-  induction n with
-  | zero => simp only [eval₂_zero, Nat.cast_zero]
-  | succ n ih => rw [n.cast_succ, eval₂_add, ih, eval₂_one, n.cast_succ]
-
-@[simp]
-
-中文:
-定理 eval₂_natCast
-  条件: (n : 自然数)
-  结论: (n : R[X]).eval₂ f x = n
-  证明: by
-  induction n with
-  | zero => simp only [eval₂_zero, Nat.cast_zero]
-  | succ n ih => rw [n.cast_succ, eval₂_add, ih, eval₂_one, n.cast_succ]
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_zero, cast_succ, cast_zero, n.cast_succ
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_natCast (n : Nat) : (n : R[X]).eval₂ f x = n := by
+theorem eval₂_natCast (n : ℕ) : (n : R[X]).eval₂ f x = n := by
   induction n with
   | zero => simp only [eval₂_zero, Nat.cast_zero]
   | succ n ih => rw [n.cast_succ, eval₂_add, ih, eval₂_one, n.cast_succ]
 
 @[simp]
-/--
-lemma `eval₂_ofNat` / 引理 `eval₂_ofNat`
-
-English:
-lemma eval₂_ofNat
-  given: {S : Type*} [Semiring S] (n : Nat) [n.AtLeastTwo] (f : R ->+* S) (a : S)
-  proof: by
-  simp [OfNat.ofNat]
-
-中文:
-引理 eval₂_of自然数
-  条件: {S : 类型} [半环 S] (n : 自然数) [n.AtLeastTwo] (f : R ->+* S) (a : S)
-  证明: by
-  simp [OfNat.ofNat]
-
-Depends on / 依赖: OfNat.ofNat
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma eval₂_ofNat {S : Type*} [Semiring S] (n : Nat) [n.AtLeastTwo] (f : R ->+* S) (a : S) :
+lemma eval₂_ofNat {S : Type*} [Semiring S] (n : ℕ) [n.AtLeastTwo] (f : R →+* S) (a : S) :
     (ofNat(n) : R[X]).eval₂ f a = ofNat(n) := by
   simp [OfNat.ofNat]
 
 variable [Semiring T]
-
-/--
-theorem `eval₂_sum` / 定理 `eval₂_sum`
-
-English:
-theorem eval₂_sum
-  given: (p : T[X]) (g : Nat -> T -> R[X]) (x : S)
-  proof: by
-  let T : R[X] ->+ S :=
-    { toFun := eval₂ f x
-      map_zero' := eval₂_zero _ _
-      map_add' := fun p q => eval₂_add _ _ }
-  have A : forall y, eval₂ f x y = T y := fun y => rfl
-  simp only [A]
-  rw [sum]; rw [map_sum]; rw [sum]
-
-中文:
-定理 eval₂_sum
-  条件: (p : T[X]) (g : 自然数 -> T -> R[X]) (x : S)
-  证明: by
-  let T : R[X] ->+ S :=
-    { toFun := eval₂ f x
-      map_zero' := eval₂_zero _ _
-      map_add' := fun p q => eval₂_add _ _ }
-  have A : forall y, eval₂ f x y = T y := fun y => rfl
-  simp only [A]
-  rw [sum]; rw [map_sum]; rw [sum]
-
-Depends on / 依赖: map_add, map_sum, map_zero
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_sum (p : T[X]) (g : Nat -> T -> R[X]) (x : S) :
+theorem eval₂_sum (p : T[X]) (g : ℕ → T → R[X]) (x : S) :
     (p.sum g).eval₂ f x = p.sum fun n a => (g n a).eval₂ f x := by
-  let T : R[X] ->+ S :=
+  let T : R[X] →+ S :=
     { toFun := eval₂ f x
       map_zero' := eval₂_zero _ _
       map_add' := fun p q => eval₂_add _ _ }
-  have A : forall y, eval₂ f x y = T y := fun y => rfl
+  have A : ∀ y, eval₂ f x y = T y := fun y => rfl
   simp only [A]
-  rw [sum]; rw [map_sum]; rw [sum]
-
-/--
-theorem `eval₂_list_sum` / 定理 `eval₂_list_sum`
-
-English:
-theorem eval₂_list_sum
-  given: (l : List R[X]) (x : S)
-  statement: eval₂ f x l.sum = (l.map (eval₂ f x)).sum
-  proof: map_list_sum (eval₂AddMonoidHom f x) l
-
-中文:
-定理 eval₂_list_sum
-  条件: (l : 列表 R[X]) (x : S)
-  结论: eval₂ f x l.求和 = (l.map (eval₂ f x)).求和
-  证明: map_list_sum (eval₂AddMonoidHom f x) l
-
-Depends on / 依赖: map_list_sum
+  rw [sum, map_sum, sum]
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_list_sum (l : List R[X]) (x : S) : eval₂ f x l.sum = (l.map (eval₂ f x)).sum :=
   map_list_sum (eval₂AddMonoidHom f x) l
-
-/--
-theorem `eval₂_multiset_sum` / 定理 `eval₂_multiset_sum`
-
-English:
-theorem eval₂_multiset_sum
-  given: (s : Multiset R[X]) (x : S)
-  proof: map_multiset_sum (eval₂AddMonoidHom f x) s
-
-中文:
-定理 eval₂_multiset_sum
-  条件: (s : Multiset R[X]) (x : S)
-  证明: map_multiset_sum (eval₂AddMonoidHom f x) s
-
-Depends on / 依赖: map_multiset_sum
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_multiset_sum (s : Multiset R[X]) (x : S) :
     eval₂ f x s.sum = (s.map (eval₂ f x)).sum :=
   map_multiset_sum (eval₂AddMonoidHom f x) s
-
-/--
-theorem `eval₂_finsetSum` / 定理 `eval₂_finsetSum`
-
-English:
-theorem eval₂_finsetSum
-  given: (s : Finset ι) (g : ι -> R[X]) (x : S)
-  proof: map_sum (eval₂AddMonoidHom f x) _ _
-
-@[deprecated (since := "2026-04-08")] alias eval₂_finset_sum := eval₂_finsetSum
-
-中文:
-定理 eval₂_finsetSum
-  条件: (s : 有限集 ι) (g : ι -> R[X]) (x : S)
-  证明: map_sum (eval₂AddMonoidHom f x) _ _
-
-@[deprecated (since := "2026-04-08")] alias eval₂_finset_sum := eval₂_finsetSum
-
-Depends on / 依赖: map_sum
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_finsetSum (s : Finset ι) (g : ι -> R[X]) (x : S) :
-    (∑ i in s, g i).eval₂ f x = ∑ i in s, (g i).eval₂ f x :=
+theorem eval₂_finsetSum (s : Finset ι) (g : ι → R[X]) (x : S) :
+    (∑ i ∈ s, g i).eval₂ f x = ∑ i ∈ s, (g i).eval₂ f x :=
   map_sum (eval₂AddMonoidHom f x) _ _
 
 @[deprecated (since := "2026-04-08")] alias eval₂_finset_sum := eval₂_finsetSum
-
-/--
-theorem `eval₂_ofFinsupp` / 定理 `eval₂_ofFinsupp`
-
-English:
-theorem eval₂_ofFinsupp
-  given: {f : R ->+* S} {x : S} {p : R[Nat]}
-  proof: by
-  simp only [eval₂_eq_sum, sum, support, coeff]
-  rfl
-
-中文:
-定理 eval₂_ofFinsupp
-  条件: {f : R ->+* S} {x : S} {p : R[自然数]}
-  证明: by
-  simp only [eval₂_eq_sum, sum, support, coeff]
-  rfl
-
-Depends on / 依赖: support
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_ofFinsupp {f : R ->+* S} {x : S} {p : R[Nat]} :
+theorem eval₂_ofFinsupp {f : R →+* S} {x : S} {p : R[ℕ]} :
     eval₂ f x (⟨p⟩ : R[X]) = liftNC (↑f) (powersHom S x) p := by
   simp only [eval₂_eq_sum, sum, support, coeff]
   rfl
-
-/--
-theorem `eval₂_mul_noncomm` / 定理 `eval₂_mul_noncomm`
-
-English:
-theorem eval₂_mul_noncomm
-  given: (hf : forall k, Commute (f <| q.coeff k) x)
-  proof: by
-  rcases p with ⟨p⟩; rcases q with ⟨q⟩
-  simp only [coeff] at hf
-  simp only [← ofFinsupp_mul, eval₂_ofFinsupp]
-  exact liftNC_mul _ _ p q fun {k n} _hn => (hf k).pow_right n
-
-@[simp]
-
-中文:
-定理 eval₂_mul_noncomm
-  条件: (hf : 对任意 k, Commute (f <| q.coeff k) x)
-  证明: by
-  rcases p with ⟨p⟩; rcases q with ⟨q⟩
-  simp only [coeff] at hf
-  simp only [← ofFinsupp_mul, eval₂_ofFinsupp]
-  exact liftNC_mul _ _ p q fun {k n} _hn => (hf k).pow_right n
-
-@[simp]
-
-Depends on / 依赖: liftNC_mul, ofFinsupp_mul, pow_right
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_mul_noncomm (hf : forall k, Commute (f <| q.coeff k) x) :
+theorem eval₂_mul_noncomm (hf : ∀ k, Commute (f <| q.coeff k) x) :
     eval₂ f x (p * q) = eval₂ f x p * eval₂ f x q := by
   rcases p with ⟨p⟩; rcases q with ⟨q⟩
   simp only [coeff] at hf
@@ -512,32 +271,12 @@ theorem eval₂_mul_noncomm (hf : forall k, Commute (f <| q.coeff k) x) :
   exact liftNC_mul _ _ p q fun {k n} _hn => (hf k).pow_right n
 
 @[simp]
-/--
-theorem `eval₂_mul_X` / 定理 `eval₂_mul_X`
-
-English:
-theorem eval₂_mul_X
-  statement: eval₂ f x (p * X) = eval₂ f x p * x
-  proof: by
-  refine _root_.trans (eval₂_mul_noncomm _ _ fun k => ?_) (by rw [eval₂_X])
-  rcases em (k = 1) with (rfl | hk)
-  · simp
-  · simp [coeff_X_of_ne_one hk]
-
-@[simp]
-
-中文:
-定理 eval₂_mul_X
-  结论: eval₂ f x (p * X) = eval₂ f x p * x
-  证明: by
-  refine _root_.trans (eval₂_mul_noncomm _ _ fun k => ?_) (by rw [eval₂_X])
-  rcases em (k = 1) with (rfl | hk)
-  · simp
-  · simp [coeff_X_of_ne_one hk]
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.trans, coeff_X_of_ne_one
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_mul_X : eval₂ f x (p * X) = eval₂ f x p * x := by
   refine _root_.trans (eval₂_mul_noncomm _ _ fun k => ?_) (by rw [eval₂_X])
@@ -546,84 +285,36 @@ theorem eval₂_mul_X : eval₂ f x (p * X) = eval₂ f x p * x := by
   · simp [coeff_X_of_ne_one hk]
 
 @[simp]
-/--
-theorem `eval₂_X_mul` / 定理 `eval₂_X_mul`
-
-English:
-theorem eval₂_X_mul
-  statement: eval₂ f x (X * p) = eval₂ f x p * x
-  proof: by rw [X_mul, eval₂_mul_X]
-
-中文:
-定理 eval₂_X_mul
-  结论: eval₂ f x (X * p) = eval₂ f x p * x
-  证明: by rw [X_mul, eval₂_mul_X]
-
-Depends on / 依赖: X_mul
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_X_mul : eval₂ f x (X * p) = eval₂ f x p * x := by rw [X_mul, eval₂_mul_X]
-
-/--
-theorem `eval₂_mul_C'` / 定理 `eval₂_mul_C'`
-
-English:
-theorem eval₂_mul_C'
-  given: (h : Commute (f a) x)
-  statement: eval₂ f x (p * C a) = eval₂ f x p * f a
-  proof: by
-  rw [eval₂_mul_noncomm]; rw [eval₂_C]
-  intro k
-  by_cases hk : k = 0
-  · simp only [hk, h, coeff_C_zero]
-  · simp only [coeff_C_of_ne_zero hk, map_zero, Commute.zero_left]
-
-中文:
-定理 eval₂_mul_C'
-  条件: (h : Commute (f a) x)
-  结论: eval₂ f x (p * C a) = eval₂ f x p * f a
-  证明: by
-  rw [eval₂_mul_noncomm]; rw [eval₂_C]
-  intro k
-  by_cases hk : k = 0
-  · simp only [hk, h, coeff_C_zero]
-  · simp only [coeff_C_of_ne_zero hk, map_zero, Commute.zero_left]
-
-Depends on / 依赖: Commute, Commute.zero_left, coeff_C_of_ne_zero, coeff_C_zero, map_zero, zero_left
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_mul_C' (h : Commute (f a) x) : eval₂ f x (p * C a) = eval₂ f x p * f a := by
-  rw [eval₂_mul_noncomm]; rw [eval₂_C]
+  rw [eval₂_mul_noncomm, eval₂_C]
   intro k
   by_cases hk : k = 0
   · simp only [hk, h, coeff_C_zero]
   · simp only [coeff_C_of_ne_zero hk, map_zero, Commute.zero_left]
-
-/--
-theorem `eval₂_list_prod_noncomm` / 定理 `eval₂_list_prod_noncomm`
-
-English:
-theorem eval₂_list_prod_noncomm
-  statement: (ps : List R[X])
-  proof: by
-  induction ps using List.reverseRecOn with
-  | nil => simp
-  | append_singleton ps p ihp =>
-    simp only [List.forall_mem_append, List.forall_mem_singleton] at hf
-    simp [eval₂_mul_noncomm _ _ hf.2, ihp hf.1]
-
-中文:
-定理 eval₂_list_prod_noncomm
-  结论: (ps : 列表 R[X])
-  证明: by
-  induction ps using List.reverseRecOn with
-  | nil => simp
-  | append_singleton ps p ihp =>
-    simp only [List.forall_mem_append, List.forall_mem_singleton] at hf
-    simp [eval₂_mul_noncomm _ _ hf.2, ihp hf.1]
-
-Depends on / 依赖: List.forall_mem_append, List.forall_mem_singleton, List.reverseRecOn, append_singleton, forall_mem_append, forall_mem_singleton, reverseRecOn
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_list_prod_noncomm (ps : List R[X])
-    (hf : forall p in ps, forall (k), Commute (f <| coeff p k) x) :
+    (hf : ∀ p ∈ ps, ∀ (k), Commute (f <| coeff p k) x) :
     eval₂ f x ps.prod = (ps.map (Polynomial.eval₂ f x)).prod := by
   induction ps using List.reverseRecOn with
   | nil => simp
@@ -633,32 +324,21 @@ theorem eval₂_list_prod_noncomm (ps : List R[X])
 
 /-- `eval₂` as a `RingHom` for noncommutative rings -/
 @[simps]
-/--
-Definition of `eval₂RingHom'` / `eval₂RingHom'` 的定义
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval₂RingHom'
-  signature: (f : R ->+* S) (x : S) (hf : forall a, Commute (f a) x)
-  body: eval₂ f x
-  map_add' _ _ := eval₂_add _ _
-  map_zero' := eval₂_zero _ _
-map_mul' _p q := eval₂_mul_noncomm f x fun k => hf coeff q k
-  map_one' := eval₂_one _ _
-
-中文:
-定义 eval₂RingHom'
-  签名: (f : R ->+* S) (x : S) (hf : 对任意 a, Commute (f a) x)
-  定义体: eval₂ f x
-  map_add' _ _ := eval₂_add _ _
-  map_zero' := eval₂_zero _ _
-map_mul' _p q := eval₂_mul_noncomm f x fun k => hf coeff q k
-  map_one' := eval₂_one _ _
+--- 原说明 ---
+`eval₂` as a `RingHom` for noncommutative rings
 -/
-def eval₂RingHom' (f : R ->+* S) (x : S) (hf : forall a, Commute (f a) x) : R[X] ->+* S where
+def eval₂RingHom' (f : R →+* S) (x : S) (hf : ∀ a, Commute (f a) x) : R[X] →+* S where
   toFun := eval₂ f x
   map_add' _ _ := eval₂_add _ _
   map_zero' := eval₂_zero _ _
-map_mul' _p q := eval₂_mul_noncomm f x fun k => hf coeff q k
+  map_mul' _p q := eval₂_mul_noncomm f x fun k => hf <| coeff q k
   map_one' := eval₂_one _ _
 
 end
@@ -674,230 +354,110 @@ section Eval₂
 
 section
 
-variable [CommSemiring S] (f : R ->+* S) (x : S)
+variable [CommSemiring S] (f : R →+* S) (x : S)
 
 @[simp]
-/--
-theorem `eval₂_mul` / 定理 `eval₂_mul`
-
-English:
-theorem eval₂_mul
-  statement: (p * q).eval₂ f x = p.eval₂ f x * q.eval₂ f x
-  proof: eval₂_mul_noncomm _ _ fun _k => Commute.all _ _
-
-中文:
-定理 eval₂_mul
-  结论: (p * q).eval₂ f x = p.eval₂ f x * q.eval₂ f x
-  证明: eval₂_mul_noncomm _ _ fun _k => Commute.all _ _
-
-Depends on / 依赖: Commute, Commute.all
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_mul : (p * q).eval₂ f x = p.eval₂ f x * q.eval₂ f x :=
   eval₂_mul_noncomm _ _ fun _k => Commute.all _ _
-
-/--
-theorem `eval₂_mul_eq_zero_of_left` / 定理 `eval₂_mul_eq_zero_of_left`
-
-English:
-theorem eval₂_mul_eq_zero_of_left
-  given: (q : R[X]) (hp : p.eval₂ f x = 0)
-  statement: (p * q).eval₂ f x = 0
-  proof: by
-  rw [eval₂_mul f x]
-  exact mul_eq_zero_of_left hp (q.eval₂ f x)
-
-中文:
-定理 eval₂_mul_eq_zero_of_left
-  条件: (q : R[X]) (hp : p.eval₂ f x = 0)
-  结论: (p * q).eval₂ f x = 0
-  证明: by
-  rw [eval₂_mul f x]
-  exact mul_eq_zero_of_left hp (q.eval₂ f x)
-
-Depends on / 依赖: mul_eq_zero_of_left, q.eval
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_mul_eq_zero_of_left (q : R[X]) (hp : p.eval₂ f x = 0) : (p * q).eval₂ f x = 0 := by
   rw [eval₂_mul f x]
   exact mul_eq_zero_of_left hp (q.eval₂ f x)
-
-/--
-theorem `eval₂_mul_eq_zero_of_right` / 定理 `eval₂_mul_eq_zero_of_right`
-
-English:
-theorem eval₂_mul_eq_zero_of_right
-  given: (p : R[X]) (hq : q.eval₂ f x = 0)
-  statement: (p * q).eval₂ f x = 0
-  proof: by
-  rw [eval₂_mul f x]
-  exact mul_eq_zero_of_right (p.eval₂ f x) hq
-
-中文:
-定理 eval₂_mul_eq_zero_of_right
-  条件: (p : R[X]) (hq : q.eval₂ f x = 0)
-  结论: (p * q).eval₂ f x = 0
-  证明: by
-  rw [eval₂_mul f x]
-  exact mul_eq_zero_of_right (p.eval₂ f x) hq
-
-Depends on / 依赖: mul_eq_zero_of_right, p.eval
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_mul_eq_zero_of_right (p : R[X]) (hq : q.eval₂ f x = 0) : (p * q).eval₂ f x = 0 := by
   rw [eval₂_mul f x]
   exact mul_eq_zero_of_right (p.eval₂ f x) hq
 
-/--
-Definition of `eval₂RingHom` / `eval₂RingHom` 的定义
+/-- `eval₂` as a `RingHom` -/
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval₂RingHom
-  signature: (f : R ->+* S) (x : S)
-  body: { eval₂AddMonoidHom f x with
-    map_one' := eval₂_one _ _
-    map_mul' := fun _ _ => eval₂_mul _ _ }
-
-@[simp]
-
-中文:
-定义 eval₂RingHom
-  签名: (f : R ->+* S) (x : S)
-  定义体: { eval₂AddMonoidHom f x with
-    map_one' := eval₂_one _ _
-    map_mul' := fun _ _ => eval₂_mul _ _ }
-
-@[simp]
-
-Depends on / 依赖: map_mul, map_one
+--- 原说明 ---
+`eval₂` as a `RingHom`
 -/
-def eval₂RingHom (f : R ->+* S) (x : S) : R[X] ->+* S :=
+def eval₂RingHom (f : R →+* S) (x : S) : R[X] →+* S :=
   { eval₂AddMonoidHom f x with
     map_one' := eval₂_one _ _
     map_mul' := fun _ _ => eval₂_mul _ _ }
 
 @[simp]
-/--
-theorem `coe_eval₂RingHom` / 定理 `coe_eval₂RingHom`
-
-English:
-theorem coe_eval₂RingHom
-  given: (f : R ->+* S) (x)
-  statement: ⇑(eval₂RingHom f x) = eval₂ f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_eval₂RingHom
-  条件: (f : R ->+* S) (x)
-  结论: ⇑(eval₂RingHom f x) = eval₂ f x
-  证明: rfl
-
-@[simp]
+/-
+**Polynomial.coe_eval** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_eval₂RingHom (f : R ->+* S) (x) : ⇑(eval₂RingHom f x) = eval₂ f x :=
+theorem coe_eval₂RingHom (f : R →+* S) (x) : ⇑(eval₂RingHom f x) = eval₂ f x :=
   rfl
 
 @[simp]
-/--
-theorem `eval₂RingHom_comp_C` / 定理 `eval₂RingHom_comp_C`
-
-English:
-theorem eval₂RingHom_comp_C
-  given: (f : R ->+* S) (x : S)
-  statement: (eval₂RingHom f x).comp C = f
-  proof: by
-  ext
-  simp
-
-中文:
-定理 eval₂RingHom_comp_C
-  条件: (f : R ->+* S) (x : S)
-  结论: (eval₂RingHom f x).comp C = f
-  证明: by
-  ext
-  simp
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂RingHom_comp_C (f : R ->+* S) (x : S) : (eval₂RingHom f x).comp C = f := by
+theorem eval₂RingHom_comp_C (f : R →+* S) (x : S) : (eval₂RingHom f x).comp C = f := by
   ext
   simp
-
-/--
-theorem `eval₂_pow` / 定理 `eval₂_pow`
-
-English:
-theorem eval₂_pow
-  given: (n : Nat)
-  statement: (p ^ n).eval₂ f x = p.eval₂ f x ^ n
-  proof: (eval₂RingHom _ _).map_pow _ _
-
-@[gcongr]
-
-中文:
-定理 eval₂_pow
-  条件: (n : 自然数)
-  结论: (p ^ n).eval₂ f x = p.eval₂ f x ^ n
-  证明: (eval₂RingHom _ _).map_pow _ _
-
-@[gcongr]
-
-Depends on / 依赖: map_pow
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_pow (n : Nat) : (p ^ n).eval₂ f x = p.eval₂ f x ^ n :=
+theorem eval₂_pow (n : ℕ) : (p ^ n).eval₂ f x = p.eval₂ f x ^ n :=
   (eval₂RingHom _ _).map_pow _ _
 
 @[gcongr]
-/--
-theorem `eval₂_dvd` / 定理 `eval₂_dvd`
-
-English:
-theorem eval₂_dvd
-  statement: p ∣ q -> eval₂ f x p ∣ eval₂ f x q
-  proof: map_dvd (eval₂RingHom f x)
-
-中文:
-定理 eval₂_dvd
-  结论: p ∣ q -> eval₂ f x p ∣ eval₂ f x q
-  证明: map_dvd (eval₂RingHom f x)
-
-Depends on / 依赖: map_dvd
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_dvd : p ∣ q -> eval₂ f x p ∣ eval₂ f x q :=
+theorem eval₂_dvd : p ∣ q → eval₂ f x p ∣ eval₂ f x q :=
   map_dvd (eval₂RingHom f x)
-
-/--
-theorem `eval₂_eq_zero_of_dvd_of_eval₂_eq_zero` / 定理 `eval₂_eq_zero_of_dvd_of_eval₂_eq_zero`
-
-English:
-theorem eval₂_eq_zero_of_dvd_of_eval₂_eq_zero
-  given: (h : p ∣ q) (h0 : eval₂ f x p = 0)
-  proof: zero_dvd_iff.mp (h0 ▸ eval₂_dvd f x h)
-
-中文:
-定理 eval₂_eq_zero_of_dvd_of_eval₂_eq_zero
-  条件: (h : p ∣ q) (h0 : eval₂ f x p = 0)
-  证明: zero_dvd_iff.mp (h0 ▸ eval₂_dvd f x h)
-
-Depends on / 依赖: zero_dvd_iff, zero_dvd_iff.mp
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_eq_zero_of_dvd_of_eval₂_eq_zero (h : p ∣ q) (h0 : eval₂ f x p = 0) :
     eval₂ f x q = 0 :=
   zero_dvd_iff.mp (h0 ▸ eval₂_dvd f x h)
-
-/--
-theorem `eval₂_list_prod` / 定理 `eval₂_list_prod`
-
-English:
-theorem eval₂_list_prod
-  given: (l : List R[X]) (x : S)
-  statement: eval₂ f x l.prod = (l.map (eval₂ f x)).prod
-  proof: map_list_prod (eval₂RingHom f x) l
-
-中文:
-定理 eval₂_list_prod
-  条件: (l : 列表 R[X]) (x : S)
-  结论: eval₂ f x l.乘积 = (l.map (eval₂ f x)).乘积
-  证明: map_list_prod (eval₂RingHom f x) l
-
-Depends on / 依赖: map_list_prod
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_list_prod (l : List R[X]) (x : S) : eval₂ f x l.prod = (l.map (eval₂ f x)).prod :=
   map_list_prod (eval₂RingHom f x) l
@@ -910,386 +470,227 @@ section Eval
 
 variable {x : R}
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- `eval x p` is the evaluation of the polynomial `p` at `x` -/
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (x : R) (p : R[X])
-  body: eval₂ (RingHom.id _) x p
-
-@[simp]
-
-中文:
-定义 eval
-  签名: (x : R) (p : R[X])
-  定义体: eval₂ (RingHom.id _) x p
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.id
+--- 原说明 ---
+`eval x p` is the evaluation of the polynomial `p` at `x`
 -/
 def eval (x : R) (p : R[X]) : R :=
   eval₂ (RingHom.id _) x p
 
 @[simp]
-/--
-theorem `eval₂_id` / 定理 `eval₂_id`
-
-English:
-theorem eval₂_id
-  statement: eval₂ (RingHom.id _) x p = p.eval x
-  proof: rfl
-
-中文:
-定理 eval₂_id
-  结论: eval₂ (环态射.id _) x p = p.eval x
-  证明: rfl
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_id : eval₂ (RingHom.id _) x p = p.eval x := rfl
-
-/--
-theorem `eval_eq_sum` / 定理 `eval_eq_sum`
-
-English:
-theorem eval_eq_sum
-  statement: p.eval x = p.sum fun e a => a * x ^ e
-  proof: by
-  rw [eval]; rw [eval₂_eq_sum]
-  rfl
-
-@[simp]
-
-中文:
-定理 eval_eq_sum
-  结论: p.eval x = p.求和 fun e a => a * x ^ e
-  证明: by
-  rw [eval]; rw [eval₂_eq_sum]
-  rfl
-
-@[simp]
+/-
+**Polynomial.eval_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_eq_sum : p.eval x = p.sum fun e a => a * x ^ e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval.eq_1`：∀ {R : Type u} [inst : Semiring R] (x : R) (p : Po
+lynomial R), Polynomial.eval x p = Polynomial.eval₂ (RingHom.id R) x p
+· 使用定理 `Polynomial.eval₂_eq_sum`：eval₂_eq_sum {f : R ->+* S} {x : S} : p.eval₂ f
+ x = p.sum fun e a => f a * x ^ e
 -/
 theorem eval_eq_sum : p.eval x = p.sum fun e a => a * x ^ e := by
-  rw [eval]; rw [eval₂_eq_sum]
+  rw [eval, eval₂_eq_sum]
   rfl
 
 @[simp]
-/--
-theorem `eval₂_at_apply` / 定理 `eval₂_at_apply`
-
-English:
-theorem eval₂_at_apply
-  given: {S : Type*} [Semiring S] (f : R ->+* S) (r : R)
-  proof: by
-  rw [eval₂_eq_sum]; rw [eval_eq_sum]; rw [sum]; rw [sum]; rw [map_sum f]
-  simp only [f.map_mul, f.map_pow]
-
-@[simp]
-
-中文:
-定理 eval₂_at_apply
-  条件: {S : 类型} [半环 S] (f : R ->+* S) (r : R)
-  证明: by
-  rw [eval₂_eq_sum]; rw [eval_eq_sum]; rw [sum]; rw [sum]; rw [map_sum f]
-  simp only [f.map_mul, f.map_pow]
-
-@[simp]
-
-Depends on / 依赖: eval_eq_sum, f.map_mul, f.map_pow, map_mul, map_pow, map_sum
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_at_apply {S : Type*} [Semiring S] (f : R ->+* S) (r : R) :
+theorem eval₂_at_apply {S : Type*} [Semiring S] (f : R →+* S) (r : R) :
     p.eval₂ f (f r) = f (p.eval r) := by
-  rw [eval₂_eq_sum]; rw [eval_eq_sum]; rw [sum]; rw [sum]; rw [map_sum f]
+  rw [eval₂_eq_sum, eval_eq_sum, sum, sum, map_sum f]
   simp only [f.map_mul, f.map_pow]
 
 @[simp]
-/--
-theorem `eval₂_at_one` / 定理 `eval₂_at_one`
-
-English:
-theorem eval₂_at_one
-  given: {S : Type*} [Semiring S] (f : R ->+* S)
-  statement: p.eval₂ f 1 = f (p.eval 1)
-  proof: by
-  convert! eval₂_at_apply (p := p) f 1
-  simp
-
-@[simp]
-
-中文:
-定理 eval₂_at_one
-  条件: {S : 类型} [半环 S] (f : R ->+* S)
-  结论: p.eval₂ f 1 = f (p.eval 1)
-  证明: by
-  convert! eval₂_at_apply (p := p) f 1
-  simp
-
-@[simp]
-
-Depends on / 依赖: convert
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_at_one {S : Type*} [Semiring S] (f : R ->+* S) : p.eval₂ f 1 = f (p.eval 1) := by
+theorem eval₂_at_one {S : Type*} [Semiring S] (f : R →+* S) : p.eval₂ f 1 = f (p.eval 1) := by
   convert! eval₂_at_apply (p := p) f 1
   simp
 
 @[simp]
-/--
-theorem `eval₂_at_natCast` / 定理 `eval₂_at_natCast`
-
-English:
-theorem eval₂_at_natCast
-  given: {S : Type*} [Semiring S] (f : R ->+* S) (n : Nat)
-  proof: by
-  convert! eval₂_at_apply (p := p) f n
-  simp
-
-@[simp]
-
-中文:
-定理 eval₂_at_natCast
-  条件: {S : 类型} [半环 S] (f : R ->+* S) (n : 自然数)
-  证明: by
-  convert! eval₂_at_apply (p := p) f n
-  simp
-
-@[simp]
-
-Depends on / 依赖: convert
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_at_natCast {S : Type*} [Semiring S] (f : R ->+* S) (n : Nat) :
+theorem eval₂_at_natCast {S : Type*} [Semiring S] (f : R →+* S) (n : ℕ) :
     p.eval₂ f n = f (p.eval n) := by
   convert! eval₂_at_apply (p := p) f n
   simp
 
 @[simp]
-/--
-theorem `eval₂_at_ofNat` / 定理 `eval₂_at_ofNat`
-
-English:
-theorem eval₂_at_ofNat
-  given: {S : Type*} [Semiring S] (f : R ->+* S) (n : Nat) [n.AtLeastTwo]
-  proof: by
-  simp [OfNat.ofNat]
-
-@[simp]
-
-中文:
-定理 eval₂_at_of自然数
-  条件: {S : 类型} [半环 S] (f : R ->+* S) (n : 自然数) [n.AtLeastTwo]
-  证明: by
-  simp [OfNat.ofNat]
-
-@[simp]
-
-Depends on / 依赖: OfNat.ofNat
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_at_ofNat {S : Type*} [Semiring S] (f : R ->+* S) (n : Nat) [n.AtLeastTwo] :
+theorem eval₂_at_ofNat {S : Type*} [Semiring S] (f : R →+* S) (n : ℕ) [n.AtLeastTwo] :
     p.eval₂ f ofNat(n) = f (p.eval (ofNat(n))) := by
   simp [OfNat.ofNat]
 
 @[simp]
-/--
-theorem `eval_C` / 定理 `eval_C`
-
-English:
-theorem eval_C
-  statement: (C a).eval x = a
-  proof: eval₂_C _ _
-
-@[simp]
-
-中文:
-定理 eval_C
-  结论: (C a).eval x = a
-  证明: eval₂_C _ _
-
-@[simp]
+/-
+**Polynomial.eval_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_C : (C a).eval x = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_C`：eval₂_C : (C a).eval₂ f x = f a
 -/
 theorem eval_C : (C a).eval x = a :=
   eval₂_C _ _
 
 @[simp]
-/--
-theorem `eval_natCast` / 定理 `eval_natCast`
-
-English:
-theorem eval_natCast
-  given: {n : Nat}
-  statement: (n : R[X]).eval x = n
-  proof: by simp only [← C_eq_natCast, eval_C]
-
-@[simp]
-
-中文:
-定理 eval_natCast
-  条件: {n : 自然数}
-  结论: (n : R[X]).eval x = n
-  证明: by simp only [← C_eq_natCast, eval_C]
-
-@[simp]
-
-Depends on / 依赖: C_eq_natCast, eval_C
+/-
+**Polynomial.eval_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_natCast {n : Nat} : (n : R[X]).eval x = n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem eval_natCast {n : Nat} : (n : R[X]).eval x = n := by simp only [← C_eq_natCast, eval_C]
+theorem eval_natCast {n : ℕ} : (n : R[X]).eval x = n := by simp only [← C_eq_natCast, eval_C]
 
 @[simp]
-/--
-lemma `eval_ofNat` / 引理 `eval_ofNat`
-
-English:
-lemma eval_ofNat
-  given: (n : Nat) [n.AtLeastTwo] (a : R)
-  proof: by
-  simp only [OfNat.ofNat, eval_natCast]
-
-@[simp]
-
-中文:
-引理 eval_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo] (a : R)
-  证明: by
-  simp only [OfNat.ofNat, eval_natCast]
-
-@[simp]
-
-Depends on / 依赖: OfNat.ofNat, eval_natCast
+/-
+**Polynomial.eval_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：eval_ofNat (n : Nat) [n.AtLeastTwo] (a : R) : (ofNat(n) : R[X]).eval a = o
+fNat(n)
+参数：n : Nat；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_natCast`：eval_natCast {n : Nat} : (n : R[X]).eval x = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma eval_ofNat (n : Nat) [n.AtLeastTwo] (a : R) :
+lemma eval_ofNat (n : ℕ) [n.AtLeastTwo] (a : R) :
     (ofNat(n) : R[X]).eval a = ofNat(n) := by
   simp only [OfNat.ofNat, eval_natCast]
 
 @[simp]
-/--
-theorem `eval_X` / 定理 `eval_X`
-
-English:
-theorem eval_X
-  statement: X.eval x = x
-  proof: eval₂_X _ _
-
-@[simp]
-
-中文:
-定理 eval_X
-  结论: X.eval x = x
-  证明: eval₂_X _ _
-
-@[simp]
+/-
+**Polynomial.eval_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_X : X.eval x = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_X`：eval₂_X : X.eval₂ f x = x
 -/
 theorem eval_X : X.eval x = x :=
   eval₂_X _ _
 
 @[simp]
-/--
-theorem `eval_monomial` / 定理 `eval_monomial`
-
-English:
-theorem eval_monomial
-  given: {n a}
-  statement: (monomial n a).eval x = a * x ^ n
-  proof: eval₂_monomial _ _
-
-@[simp]
-
-中文:
-定理 eval_monomial
-  条件: {n a}
-  结论: (monomial n a).eval x = a * x ^ n
-  证明: eval₂_monomial _ _
-
-@[simp]
+/-
+**Polynomial.eval_monomial** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_monomial {n a} : (monomial n a).eval x = a * x ^ n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_monomial`：eval₂_monomial {n : Nat} {r : R} : (monomial 
+n r).eval₂ f x = f r * x ^ n
 -/
 theorem eval_monomial {n a} : (monomial n a).eval x = a * x ^ n :=
   eval₂_monomial _ _
 
 @[simp]
-/--
-theorem `eval_zero` / 定理 `eval_zero`
-
-English:
-theorem eval_zero
-  statement: (0 : R[X]).eval x = 0
-  proof: eval₂_zero _ _
-
-@[simp]
-
-中文:
-定理 eval_zero
-  结论: (0 : R[X]).eval x = 0
-  证明: eval₂_zero _ _
-
-@[simp]
+/-
+**Polynomial.eval_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_zero : (0 : R[X]).eval x = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_zero`：eval₂_zero : (0 : R[X]).eval₂ f x = 0
 -/
 theorem eval_zero : (0 : R[X]).eval x = 0 :=
   eval₂_zero _ _
 
 @[simp]
-/--
-theorem `eval_add` / 定理 `eval_add`
-
-English:
-theorem eval_add
-  statement: (p + q).eval x = p.eval x + q.eval x
-  proof: eval₂_add _ _
-
-@[simp]
-
-中文:
-定理 eval_add
-  结论: (p + q).eval x = p.eval x + q.eval x
-  证明: eval₂_add _ _
-
-@[simp]
+/-
+**Polynomial.eval_add** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_add : (p + q).eval x = p.eval x + q.eval x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_add`：eval₂_add : (p + q).eval₂ f x = p.eval₂ f x + q.ev
+al₂ f x
 -/
 theorem eval_add : (p + q).eval x = p.eval x + q.eval x :=
   eval₂_add _ _
 
 @[simp]
-/--
-theorem `eval_one` / 定理 `eval_one`
-
-English:
-theorem eval_one
-  statement: (1 : R[X]).eval x = 1
-  proof: eval₂_one _ _
-
-@[simp]
-
-中文:
-定理 eval_one
-  结论: (1 : R[X]).eval x = 1
-  证明: eval₂_one _ _
-
-@[simp]
+/-
+**Polynomial.eval_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_one : (1 : R[X]).eval x = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
 -/
 theorem eval_one : (1 : R[X]).eval x = 1 :=
   eval₂_one _ _
 
 @[simp]
-/--
-theorem `eval_C_mul` / 定理 `eval_C_mul`
-
-English:
-theorem eval_C_mul
-  statement: (C a * p).eval x = a * p.eval x
-  proof: by
-  induction p using Polynomial.induction_on' with
-  | add p q ph qh => simp only [mul_add, eval_add, ph, qh]
-  | monomial n b => simp only [mul_assoc, C_mul_monomial, eval_monomial]
-
-@[simp]
-
-中文:
-定理 eval_C_mul
-  结论: (C a * p).eval x = a * p.eval x
-  证明: by
-  induction p using Polynomial.induction_on' with
-  | add p q ph qh => simp only [mul_add, eval_add, ph, qh]
-  | monomial n b => simp only [mul_assoc, C_mul_monomial, eval_monomial]
-
-@[simp]
-
-Depends on / 依赖: C_mul_monomial, Polynomial, Polynomial.induction_on, eval_add, eval_monomial, induction_on, monomial, mul_add, mul_assoc
+/-
+**Polynomial.eval_C_mul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_C_mul : (C a * p).eval x = a * p.eval x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on'`：∀ {R : Type u} [inst : Semiring R] {motive : P
+olynomial R → Prop} (p : Polynomial R),   (∀ (p q : Polynomial R), motive p → mo
+tive q → motiv…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Polynomial.eval_add`：eval_add : (p + q).eval x = p.eval x + q.eval x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.C_mul_monomial`：C_mul_monomial : C a * monomial n b = monomia
+l n (a * b)
+· 使用定理 `Polynomial.eval_monomial`：eval_monomial {n a} : (monomial n a).eval x = 
+a * x ^ n
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem eval_C_mul : (C a * p).eval x = a * p.eval x := by
   induction p using Polynomial.induction_on' with
@@ -1297,650 +698,448 @@ theorem eval_C_mul : (C a * p).eval x = a * p.eval x := by
   | monomial n b => simp only [mul_assoc, C_mul_monomial, eval_monomial]
 
 @[simp]
-/--
-theorem `eval_natCast_mul` / 定理 `eval_natCast_mul`
-
-English:
-theorem eval_natCast_mul
-  given: {n : Nat}
-  statement: ((n : R[X]) * p).eval x = n * p.eval x
-  proof: by
-  rw [← C_eq_natCast]; rw [eval_C_mul]
-
-@[simp]
-
-中文:
-定理 eval_natCast_mul
-  条件: {n : 自然数}
-  结论: ((n : R[X]) * p).eval x = n * p.eval x
-  证明: by
-  rw [← C_eq_natCast]; rw [eval_C_mul]
-
-@[simp]
-
-Depends on / 依赖: C_eq_natCast, eval_C_mul
+/-
+**Polynomial.eval_natCast_mul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_natCast_mul {n : Nat} : ((n : R[X]) * p).eval x = n * p.eval x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_eq_natCast`：C_eq_natCast (n : Nat) : C (n : R) = (n : R[X])
+· 使用定理 `Polynomial.eval_C_mul`：eval_C_mul : (C a * p).eval x = a * p.eval x
 -/
-theorem eval_natCast_mul {n : Nat} : ((n : R[X]) * p).eval x = n * p.eval x := by
-  rw [← C_eq_natCast]; rw [eval_C_mul]
+theorem eval_natCast_mul {n : ℕ} : ((n : R[X]) * p).eval x = n * p.eval x := by
+  rw [← C_eq_natCast, eval_C_mul]
 
 @[simp]
-/--
-theorem `eval_mul_X` / 定理 `eval_mul_X`
-
-English:
-theorem eval_mul_X
-  statement: (p * X).eval x = p.eval x * x
-  proof: eval₂_mul_X ..
-
-@[simp]
-
-中文:
-定理 eval_mul_X
-  结论: (p * X).eval x = p.eval x * x
-  证明: eval₂_mul_X ..
-
-@[simp]
+/-
+**Polynomial.eval_mul_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_mul_X : (p * X).eval x = p.eval x * x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_mul_X`：eval₂_mul_X : eval₂ f x (p * X) = eval₂ f x p * 
+x
 -/
 theorem eval_mul_X : (p * X).eval x = p.eval x * x := eval₂_mul_X ..
 
 @[simp]
-/--
-theorem `eval_mul_X_pow` / 定理 `eval_mul_X_pow`
-
-English:
-theorem eval_mul_X_pow
-  given: {k : Nat}
-  statement: (p * X ^ k).eval x = p.eval x * x ^ k
-  proof: by
-  induction k with
-  | zero => simp
-  | succ k ih => simp [pow_succ, ← mul_assoc, ih]
-
-中文:
-定理 eval_mul_X_pow
-  条件: {k : 自然数}
-  结论: (p * X ^ k).eval x = p.eval x * x ^ k
-  证明: by
-  induction k with
-  | zero => simp
-  | succ k ih => simp [pow_succ, ← mul_assoc, ih]
-
-Depends on / 依赖: mul_assoc, pow_succ
+/-
+**Polynomial.eval_mul_X_pow** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_mul_X_pow {k : Nat} : (p * X ^ k).eval x = p.eval x * x ^ k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Polynomial.eval_mul_X`：eval_mul_X : (p * X).eval x = p.eval x * x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem eval_mul_X_pow {k : Nat} : (p * X ^ k).eval x = p.eval x * x ^ k := by
+theorem eval_mul_X_pow {k : ℕ} : (p * X ^ k).eval x = p.eval x * x ^ k := by
   induction k with
   | zero => simp
   | succ k ih => simp [pow_succ, ← mul_assoc, ih]
-
-/--
-theorem `eval_mul_C_of_commute` / 定理 `eval_mul_C_of_commute`
-
-English:
-theorem eval_mul_C_of_commute
-  given: (h : Commute a x)
-  statement: (p * C a).eval x = p.eval x * a
-  proof: by
-  rw [eval]; rw [eval₂_mul_C'] <;> simp [h]
-
-中文:
-定理 eval_mul_C_of_commute
-  条件: (h : Commute a x)
-  结论: (p * C a).eval x = p.eval x * a
-  证明: by
-  rw [eval]; rw [eval₂_mul_C'] <;> simp [h]
+/-
+**Polynomial.eval_mul_C_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_mul_C_of_commute (h : Commute a x) : (p * C a).eval x = p.eval x * a
+参数：h : Commute a x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval.eq_1`：∀ {R : Type u} [inst : Semiring R] (x : R) (p : Po
+lynomial R), Polynomial.eval x p = Polynomial.eval₂ (RingHom.id R) x p
+· 使用定理 `Polynomial.eval₂_mul_C'`：eval₂_mul_C' (h : Commute (f a) x) : eval₂ f x 
+(p * C a) = eval₂ f x p * f a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_mul_C_of_commute (h : Commute a x) : (p * C a).eval x = p.eval x * a := by
-  rw [eval]; rw [eval₂_mul_C'] <;> simp [h]
+  rw [eval, eval₂_mul_C'] <;> simp [h]
 
-/--
-theorem `eval_listSum` / 定理 `eval_listSum`
+/-- Polynomial evaluation commutes with `List.sum`. -/
+/-
+**Polynomial.eval_listSum** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_listSum (l : List R[X]) (x : R) : eval x l.sum = (l.map (eval x)).sum
+参数：l : List R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_list_sum`：eval₂_list_sum (l : List R[X]) (x : S) : eval
+₂ f x l.sum = (l.map (eval₂ f x)).sum
 
-English:
-theorem eval_listSum
-  given: (l : List R[X]) (x : R)
-  statement: eval x l.sum = (l.map (eval x)).sum
-  proof: eval₂_list_sum ..
-
-中文:
-定理 eval_listSum
-  条件: (l : 列表 R[X]) (x : R)
-  结论: eval x l.求和 = (l.map (eval x)).求和
-  证明: eval₂_list_sum ..
+--- 原说明 ---
+Polynomial evaluation commutes with `List.sum`.
 -/
 theorem eval_listSum (l : List R[X]) (x : R) : eval x l.sum = (l.map (eval x)).sum :=
   eval₂_list_sum ..
 
-/--
-theorem `eval_multisetSum` / 定理 `eval_multisetSum`
+/-- Polynomial evaluation commutes with `Multiset.sum`. -/
+/-
+**Polynomial.eval_multisetSum** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_multisetSum (s : Multiset R[X]) (x : R) : eval x s.sum = (s.map (eval
+ x)).sum
+参数：s : Multiset R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_multiset_sum`：eval₂_multiset_sum (s : Multiset R[X]) (x
+ : S) : eval₂ f x s.sum = (s.map (eval₂ f x)).sum
 
-English:
-theorem eval_multisetSum
-  given: (s : Multiset R[X]) (x : R)
-  statement: eval x s.sum = (s.map (eval x)).sum
-  proof: eval₂_multiset_sum ..
-
-中文:
-定理 eval_multisetSum
-  条件: (s : Multiset R[X]) (x : R)
-  结论: eval x s.求和 = (s.map (eval x)).求和
-  证明: eval₂_multiset_sum ..
+--- 原说明 ---
+Polynomial evaluation commutes with `Multiset.sum`.
 -/
 theorem eval_multisetSum (s : Multiset R[X]) (x : R) : eval x s.sum = (s.map (eval x)).sum :=
   eval₂_multiset_sum ..
-
-/--
-theorem `eval_sum` / 定理 `eval_sum`
-
-English:
-theorem eval_sum
-  given: (p : R[X]) (f : Nat -> R -> R[X]) (x : R)
-  proof: eval₂_sum _ _ _ _
-
-中文:
-定理 eval_sum
-  条件: (p : R[X]) (f : 自然数 -> R -> R[X]) (x : R)
-  证明: eval₂_sum _ _ _ _
+/-
+**Polynomial.eval_sum** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_sum (p : R[X]) (f : Nat -> R -> R[X]) (x : R) : (p.sum f).eval x = p.
+sum fun n a => (f n a).eval x
+参数：p : R[X]；f : Nat -> R -> R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_sum`：eval₂_sum (p : T[X]) (g : Nat -> T -> R[X]) (x : S
+) : (p.sum g).eval₂ f x = p.sum fun n a => (g n a).eval₂ f x
 -/
-theorem eval_sum (p : R[X]) (f : Nat -> R -> R[X]) (x : R) :
+theorem eval_sum (p : R[X]) (f : ℕ → R → R[X]) (x : R) :
     (p.sum f).eval x = p.sum fun n a => (f n a).eval x :=
   eval₂_sum _ _ _ _
-
-/--
-theorem `eval_finsetSum` / 定理 `eval_finsetSum`
-
-English:
-theorem eval_finsetSum
-  given: (s : Finset ι) (g : ι -> R[X]) (x : R)
-  proof: eval₂_finsetSum _ _ _ _
-
-@[deprecated (since := "2026-04-08")] alias eval_finset_sum := eval_finsetSum
-
-中文:
-定理 eval_finsetSum
-  条件: (s : 有限集 ι) (g : ι -> R[X]) (x : R)
-  证明: eval₂_finsetSum _ _ _ _
-
-@[deprecated (since := "2026-04-08")] alias eval_finset_sum := eval_finsetSum
+/-
+**Polynomial.eval_finsetSum** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_finsetSum (s : Finset ι) (g : ι -> R[X]) (x : R) : (∑ i in s, g i).ev
+al x = ∑ i in s, (g i).eval x
+参数：s : Finset ι；g : ι -> R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_finsetSum`：eval₂_finsetSum (s : Finset ι) (g : ι -> R[X
+]) (x : S) : (∑ i in s, g i).eval₂ f x = ∑ i in s, (g i).eval₂ f x
 -/
-theorem eval_finsetSum (s : Finset ι) (g : ι -> R[X]) (x : R) :
-    (∑ i in s, g i).eval x = ∑ i in s, (g i).eval x :=
+theorem eval_finsetSum (s : Finset ι) (g : ι → R[X]) (x : R) :
+    (∑ i ∈ s, g i).eval x = ∑ i ∈ s, (g i).eval x :=
   eval₂_finsetSum _ _ _ _
 
 @[deprecated (since := "2026-04-08")] alias eval_finset_sum := eval_finsetSum
 
-/--
-Definition of `IsRoot` / `IsRoot` 的定义
+/-- `IsRoot p x` implies `x` is a root of `p`. The evaluation of `p` at `x` is zero -/
+/-
+**Polynomial.IsRoot** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：IsRoot (p : R[X]) (a : R) : Prop
+参数：p : R[X]；a : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRoot
-  signature: (p : R[X]) (a : R)
-  body: p.eval a = 0
-
-中文:
-定义 IsRoot
-  签名: (p : R[X]) (a : R)
-  定义体: p.eval a = 0
-
-Depends on / 依赖: p.eval
+--- 原说明 ---
+`IsRoot p x` implies `x` is a root of `p`. The evaluation of `p` at `x` is zero
 -/
 def IsRoot (p : R[X]) (a : R) : Prop :=
   p.eval a = 0
-
-/--
-Instance `IsRoot.decidable` / 实例 `IsRoot.decidable`
-
-English:
-instance IsRoot.decidable
-  signature: [DecidableEq R]
-  body: inferInstanceAs Decidable (eval a p = 0)
-
-@[simp]
-
-中文:
-实例 IsRoot.decidable
-  签名: [DecidableEq R]
-  定义体: inferInstanceAs Decidable (eval a p = 0)
-
-@[simp]
-
-Depends on / 依赖: Decidable
+/-
+**Polynomial.IsRoot.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial.IsRoot`。
+形式化陈述：{R : Type u} → {a : R} → [inst : Semiring R] → {p : Polynomial R} → [Decid
+ableEq R] → Decidable (p.IsRoot a)
+参数：p.IsRoot a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance IsRoot.decidable [DecidableEq R] : Decidable (IsRoot p a) :=
-inferInstanceAs Decidable (eval a p = 0)
+  inferInstanceAs <| Decidable (eval a p = 0)
 
 @[simp]
-/--
-theorem `IsRoot.def` / 定理 `IsRoot.def`
-
-English:
-theorem IsRoot.def
-  statement: IsRoot p a ↔ p.eval a = 0
-  proof: Iff.rfl
-
-中文:
-定理 IsRoot.def
-  结论: IsRoot p a ↔ p.eval a = 0
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Polynomial.IsRoot.def** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial.IsRoot`。
+形式化陈述：∀ {R : Type u} {a : R} [inst : Semiring R] {p : Polynomial R}, p.IsRoot a 
+↔ Polynomial.eval a p = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem IsRoot.def : IsRoot p a ↔ p.eval a = 0 :=
   Iff.rfl
-
-/--
-theorem `IsRoot.eq_zero` / 定理 `IsRoot.eq_zero`
-
-English:
-theorem IsRoot.eq_zero
-  given: (h : IsRoot p x)
-  statement: eval x p = 0
-  proof: h
-
-中文:
-定理 IsRoot.eq_zero
-  条件: (h : IsRoot p x)
-  结论: eval x p = 0
-  证明: h
+/-
+**Polynomial.IsRoot.eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial.IsRoot`。
+形式化陈述：∀ {R : Type u} [inst : Semiring R] {p : Polynomial R} {x : R}, p.IsRoot x 
+→ Polynomial.eval x p = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsRoot.eq_zero (h : IsRoot p x) : eval x p = 0 :=
   h
-
-/--
-theorem `IsRoot.dvd` / 定理 `IsRoot.dvd`
-
-English:
-theorem IsRoot.dvd
-  statement: {R : Type*} [CommSemiring R] {p q : R[X]} {x : R} (h : p.IsRoot x)
-  proof: by
-  rwa [IsRoot, eval, eval₂_eq_zero_of_dvd_of_eval₂_eq_zero _ _ hpq]
-
-中文:
-定理 IsRoot.dvd
-  结论: {R : 类型} [交换半环 R] {p q : R[X]} {x : R} (h : p.IsRoot x)
-  证明: by
-  rwa [IsRoot, eval, eval₂_eq_zero_of_dvd_of_eval₂_eq_zero _ _ hpq]
-
-Depends on / 依赖: IsRoot
+/-
+**Polynomial.IsRoot.dvd** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial.IsRoot`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] {p q : Polynomial R} {x : R}, p.I
+sRoot x → p ∣ q → q.IsRoot x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.IsRoot.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomi
+al R) (a : R), p.IsRoot a = (Polynomial.eval a p = 0)
+· 使用定理 `Polynomial.eval.eq_1`：∀ {R : Type u} [inst : Semiring R] (x : R) (p : Po
+lynomial R), Polynomial.eval x p = Polynomial.eval₂ (RingHom.id R) x p
+· 使用定理 `Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero`：eval₂_eq_zero_of_dvd_o
+f_eval₂_eq_zero (h : p ∣ q) (h0 : eval₂ f x p = 0) : eval₂ f x q = 0
 -/
 theorem IsRoot.dvd {R : Type*} [CommSemiring R] {p q : R[X]} {x : R} (h : p.IsRoot x)
     (hpq : p ∣ q) : q.IsRoot x := by
   rwa [IsRoot, eval, eval₂_eq_zero_of_dvd_of_eval₂_eq_zero _ _ hpq]
-
-/--
-theorem `not_isRoot_C` / 定理 `not_isRoot_C`
-
-English:
-theorem not_isRoot_C
-  given: (r a : R) (hr : r != 0)
-  statement: ¬IsRoot (C r) a
-  proof: by simpa using hr
-
-中文:
-定理 not_isRoot_C
-  条件: (r a : R) (hr : r != 0)
-  结论: ¬IsRoot (C r) a
-  证明: by simpa using hr
+/-
+**Polynomial.not_isRoot_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：not_isRoot_C (r a : R) (hr : r != 0) : ¬IsRoot (C r) a
+参数：r a : R；hr : r != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
 -/
-theorem not_isRoot_C (r a : R) (hr : r != 0) : ¬IsRoot (C r) a := by simpa using hr
-
-/--
-theorem `eval_surjective` / 定理 `eval_surjective`
-
-English:
-theorem eval_surjective
-  given: (x : R)
-  statement: Function.Surjective eval x
-  proof: fun y => ⟨C y, eval_C⟩
-
-中文:
-定理 eval_surjective
-  条件: (x : R)
-  结论: 函数.满射 eval x
-  证明: fun y => ⟨C y, eval_C⟩
-
-Depends on / 依赖: eval_C
+theorem not_isRoot_C (r a : R) (hr : r ≠ 0) : ¬IsRoot (C r) a := by simpa using hr
+/-
+**Polynomial.eval_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_surjective (x : R) : Function.Surjective eval x
+参数：x : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
 -/
-theorem eval_surjective (x : R) : Function.Surjective eval x := fun y => ⟨C y, eval_C⟩
+theorem eval_surjective (x : R) : Function.Surjective <| eval x := fun y => ⟨C y, eval_C⟩
 
 end Eval
 
 section Comp
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of polynomials as a polynomial. -/
+/-
+**Polynomial.comp** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：comp (p q : R[X]) : R[X]
+参数：p q : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (p q : R[X])
-  body: p.eval₂ C q
-
-中文:
-定义 comp
-  签名: (p q : R[X])
-  定义体: p.eval₂ C q
-
-Depends on / 依赖: p.eval
+--- 原说明 ---
+The composition of polynomials as a polynomial.
 -/
 def comp (p q : R[X]) : R[X] :=
   p.eval₂ C q
-
-/--
-theorem `comp_eq_sum_left` / 定理 `comp_eq_sum_left`
-
-English:
-theorem comp_eq_sum_left
-  statement: p.comp q = p.sum fun e a => C a * q ^ e
-  proof: by rw [comp, eval₂_eq_sum]
-
-@[simp]
-
-中文:
-定理 comp_eq_sum_left
-  结论: p.comp q = p.求和 fun e a => C a * q ^ e
-  证明: by rw [comp, eval₂_eq_sum]
-
-@[simp]
+/-
+**Polynomial.comp_eq_sum_left** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：comp_eq_sum_left : p.comp q = p.sum fun e a => C a * q ^ e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.comp.eq_1`：∀ {R : Type u} [inst : Semiring R] (p q : Polynomi
+al R), p.comp q = Polynomial.eval₂ Polynomial.C q p
+· 使用定理 `Polynomial.eval₂_eq_sum`：eval₂_eq_sum {f : R ->+* S} {x : S} : p.eval₂ f
+ x = p.sum fun e a => f a * x ^ e
 -/
 theorem comp_eq_sum_left : p.comp q = p.sum fun e a => C a * q ^ e := by rw [comp, eval₂_eq_sum]
 
 @[simp]
-/--
-theorem `comp_X` / 定理 `comp_X`
-
-English:
-theorem comp_X
-  statement: p.comp X = p
-  proof: by
-  simp only [comp, eval₂_def, C_mul_X_pow_eq_monomial]
-  exact sum_monomial_eq _
-
-@[simp]
-
-中文:
-定理 comp_X
-  结论: p.comp X = p
-  证明: by
-  simp only [comp, eval₂_def, C_mul_X_pow_eq_monomial]
-  exact sum_monomial_eq _
-
-@[simp]
-
-Depends on / 依赖: C_mul_X_pow_eq_monomial, sum_monomial_eq
+/-
+**Polynomial.comp_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：comp_X : p.comp X = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.eval₂_def`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiring R
+] [inst_1 : Semiring S] (f : R →+* S) (x : S) (p : Polynomial R),   Polynomial.e
+val₂ f x p…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Polynomial.C_mul_X_pow_eq_monomial`：∀ {R : Type u} {a : R} [inst : Semir
+ing R] {n : ℕ}, Polynomial.C a * Polynomial.X ^ n = (Polynomial.monomial n) a
+· 使用定理 `Polynomial.sum_monomial_eq`：∀ {R : Type u} [inst : Semiring R] (p : Poly
+nomial R), (p.sum fun n a => (Polynomial.monomial n) a) = p
 -/
 theorem comp_X : p.comp X = p := by
   simp only [comp, eval₂_def, C_mul_X_pow_eq_monomial]
   exact sum_monomial_eq _
 
 @[simp]
-/--
-theorem `X_comp` / 定理 `X_comp`
-
-English:
-theorem X_comp
-  statement: X.comp p = p
-  proof: eval₂_X _ _
-
-@[simp]
-
-中文:
-定理 X_comp
-  结论: X.comp p = p
-  证明: eval₂_X _ _
-
-@[simp]
+/-
+**Polynomial.X_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：X_comp : X.comp p = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_X`：eval₂_X : X.eval₂ f x = x
 -/
 theorem X_comp : X.comp p = p :=
   eval₂_X _ _
 
 @[simp]
-/--
-theorem `comp_C` / 定理 `comp_C`
-
-English:
-theorem comp_C
-  statement: p.comp (C a) = C (p.eval a)
-  proof: by simp [comp]
-
-@[simp]
-
-中文:
-定理 comp_C
-  结论: p.comp (C a) = C (p.eval a)
-  证明: by simp [comp]
-
-@[simp]
+/-
+**Polynomial.comp_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：comp_C : p.comp (C a) = C (p.eval a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval₂_at_apply`：eval₂_at_apply {S : Type*} [Semiring S] (f : 
+R ->+* S) (r : R) : p.eval₂ f (f r) = f (p.eval r)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_C : p.comp (C a) = C (p.eval a) := by simp [comp]
 
 @[simp]
-/--
-theorem `C_comp` / 定理 `C_comp`
-
-English:
-theorem C_comp
-  statement: (C a).comp p = C a
-  proof: eval₂_C _ _
-
-@[simp]
-
-中文:
-定理 C_comp
-  结论: (C a).comp p = C a
-  证明: eval₂_C _ _
-
-@[simp]
+/-
+**Polynomial.C_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：C_comp : (C a).comp p = C a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_C`：eval₂_C : (C a).eval₂ f x = f a
 -/
 theorem C_comp : (C a).comp p = C a :=
   eval₂_C _ _
 
 @[simp]
-/--
-theorem `natCast_comp` / 定理 `natCast_comp`
-
-English:
-theorem natCast_comp
-  given: {n : Nat}
-  statement: (n : R[X]).comp p = n
-  proof: by rw [← C_eq_natCast, C_comp]
-
-@[simp]
-
-中文:
-定理 natCast_comp
-  条件: {n : 自然数}
-  结论: (n : R[X]).comp p = n
-  证明: by rw [← C_eq_natCast, C_comp]
-
-@[simp]
-
-Depends on / 依赖: C_comp, C_eq_natCast
+/-
+**Polynomial.natCast_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natCast_comp {n : Nat} : (n : R[X]).comp p = n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_eq_natCast`：C_eq_natCast (n : Nat) : C (n : R) = (n : R[X])
+· 使用定理 `Polynomial.C_comp`：C_comp : (C a).comp p = C a
 -/
-theorem natCast_comp {n : Nat} : (n : R[X]).comp p = n := by rw [← C_eq_natCast, C_comp]
+theorem natCast_comp {n : ℕ} : (n : R[X]).comp p = n := by rw [← C_eq_natCast, C_comp]
 
 @[simp]
-/--
-theorem `ofNat_comp` / 定理 `ofNat_comp`
-
-English:
-theorem ofNat_comp
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (ofNat(n) : R[X]).comp p = n
-  proof: natCast_comp
-
-@[simp]
-
-中文:
-定理 of自然数_comp
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : R[X]).comp p = n
-  证明: natCast_comp
-
-@[simp]
-
-Depends on / 依赖: natCast_comp
+/-
+**Polynomial.ofNat_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：ofNat_comp (n : Nat) [n.AtLeastTwo] : (ofNat(n) : R[X]).comp p = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natCast_comp`：natCast_comp {n : Nat} : (n : R[X]).comp p = n
 -/
-theorem ofNat_comp (n : Nat) [n.AtLeastTwo] : (ofNat(n) : R[X]).comp p = n :=
+theorem ofNat_comp (n : ℕ) [n.AtLeastTwo] : (ofNat(n) : R[X]).comp p = n :=
   natCast_comp
 
 @[simp]
-/--
-theorem `comp_zero` / 定理 `comp_zero`
-
-English:
-theorem comp_zero
-  statement: p.comp (0 : R[X]) = C (p.eval 0)
-  proof: by rw [← C_0, comp_C]
-
-@[simp]
-
-中文:
-定理 comp_zero
-  结论: p.comp (0 : R[X]) = C (p.eval 0)
-  证明: by rw [← C_0, comp_C]
-
-@[simp]
-
-Depends on / 依赖: comp_C
+/-
+**Polynomial.comp_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：comp_zero : p.comp (0 : R[X]) = C (p.eval 0)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_0`：C_0 : C (0 : R) = 0
+· 使用定理 `Polynomial.comp_C`：comp_C : p.comp (C a) = C (p.eval a)
 -/
 theorem comp_zero : p.comp (0 : R[X]) = C (p.eval 0) := by rw [← C_0, comp_C]
 
 @[simp]
-/--
-theorem `zero_comp` / 定理 `zero_comp`
-
-English:
-theorem zero_comp
-  statement: comp (0 : R[X]) p = 0
-  proof: by rw [← C_0, C_comp]
-
-@[simp]
-
-中文:
-定理 zero_comp
-  结论: comp (0 : R[X]) p = 0
-  证明: by rw [← C_0, C_comp]
-
-@[simp]
-
-Depends on / 依赖: C_comp
+/-
+**Polynomial.zero_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：zero_comp : comp (0 : R[X]) p = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_0`：C_0 : C (0 : R) = 0
+· 使用定理 `Polynomial.C_comp`：C_comp : (C a).comp p = C a
 -/
 theorem zero_comp : comp (0 : R[X]) p = 0 := by rw [← C_0, C_comp]
 
 @[simp]
-/--
-theorem `comp_one` / 定理 `comp_one`
-
-English:
-theorem comp_one
-  statement: p.comp 1 = C (p.eval 1)
-  proof: by rw [← C_1, comp_C]
-
-@[simp]
-
-中文:
-定理 comp_one
-  结论: p.comp 1 = C (p.eval 1)
-  证明: by rw [← C_1, comp_C]
-
-@[simp]
-
-Depends on / 依赖: comp_C
+/-
+**Polynomial.comp_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：comp_one : p.comp 1 = C (p.eval 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_1`：C_1 : C (1 : R) = 1
+· 使用定理 `Polynomial.comp_C`：comp_C : p.comp (C a) = C (p.eval a)
 -/
 theorem comp_one : p.comp 1 = C (p.eval 1) := by rw [← C_1, comp_C]
 
 @[simp]
-/--
-theorem `one_comp` / 定理 `one_comp`
-
-English:
-theorem one_comp
-  statement: comp (1 : R[X]) p = 1
-  proof: by rw [← C_1, C_comp]
-
-@[simp]
-
-中文:
-定理 one_comp
-  结论: comp (1 : R[X]) p = 1
-  证明: by rw [← C_1, C_comp]
-
-@[simp]
-
-Depends on / 依赖: C_comp
+/-
+**Polynomial.one_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：one_comp : comp (1 : R[X]) p = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_1`：C_1 : C (1 : R) = 1
+· 使用定理 `Polynomial.C_comp`：C_comp : (C a).comp p = C a
 -/
 theorem one_comp : comp (1 : R[X]) p = 1 := by rw [← C_1, C_comp]
 
 @[simp]
-/--
-theorem `add_comp` / 定理 `add_comp`
-
-English:
-theorem add_comp
-  statement: (p + q).comp r = p.comp r + q.comp r
-  proof: eval₂_add _ _
-
-@[simp]
-
-中文:
-定理 add_comp
-  结论: (p + q).comp r = p.comp r + q.comp r
-  证明: eval₂_add _ _
-
-@[simp]
+/-
+**Polynomial.add_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：add_comp : (p + q).comp r = p.comp r + q.comp r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_add`：eval₂_add : (p + q).eval₂ f x = p.eval₂ f x + q.ev
+al₂ f x
 -/
 theorem add_comp : (p + q).comp r = p.comp r + q.comp r :=
   eval₂_add _ _
 
 @[simp]
-/--
-theorem `monomial_comp` / 定理 `monomial_comp`
-
-English:
-theorem monomial_comp
-  given: (n : Nat)
-  statement: (monomial n a).comp p = C a * p ^ n
-  proof: eval₂_monomial _ _
-
-@[simp]
-
-中文:
-定理 monomial_comp
-  条件: (n : 自然数)
-  结论: (monomial n a).comp p = C a * p ^ n
-  证明: eval₂_monomial _ _
-
-@[simp]
-
-Depends on / 依赖: Subsemiring, Subsemiring.center.smulCommClass_left, center, smulCommClass_left
+/-
+**Polynomial.monomial_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：monomial_comp (n : Nat) : (monomial n a).comp p = C a * p ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_monomial`：eval₂_monomial {n : Nat} {r : R} : (monomial 
+n r).eval₂ f x = f r * x ^ n
 -/
-theorem monomial_comp (n : Nat) : (monomial n a).comp p = C a * p ^ n :=
+theorem monomial_comp (n : ℕ) : (monomial n a).comp p = C a * p ^ n :=
   eval₂_monomial _ _
 
 @[simp]
-/--
-theorem `mul_X_comp` / 定理 `mul_X_comp`
-
-English:
-theorem mul_X_comp
-  statement: (p * X).comp r = p.comp r * r
-  proof: by
-  induction p using Polynomial.induction_on' with
-  | add p q hp hq => simp only [hp, hq, add_mul, add_comp]
-  | monomial n b => simp only [pow_succ, mul_assoc, monomial_mul_X, monomial_comp]
-
-@[simp]
-
-中文:
-定理 mul_X_comp
-  结论: (p * X).comp r = p.comp r * r
-  证明: by
-  induction p using Polynomial.induction_on' with
-  | add p q hp hq => simp only [hp, hq, add_mul, add_comp]
-  | monomial n b => simp only [pow_succ, mul_assoc, monomial_mul_X, monomial_comp]
-
-@[simp]
-
-Depends on / 依赖: Polynomial, Polynomial.induction_on, Subsemiring, Subsemiring.center.smulCommClass_right, add_comp, add_mul, center, induction_on, monomial, monomial_comp, monomial_mul_X, mul_assoc, pow_succ, smulCommClass_right
+/-
+**Polynomial.mul_X_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：mul_X_comp : (p * X).comp r = p.comp r * r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on'`：∀ {R : Type u} [inst : Semiring R] {motive : P
+olynomial R → Prop} (p : Polynomial R),   (∀ (p q : Polynomial R), motive p → mo
+tive q → motiv…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.monomial_mul_X`：monomial_mul_X (n : Nat) (r : R) : monomial n
+ r * X = monomial (n + 1) r
+· 使用定理 `Polynomial.monomial_comp`：monomial_comp (n : Nat) : (monomial n a).comp 
+p = C a * p ^ n
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem mul_X_comp : (p * X).comp r = p.comp r * r := by
   induction p using Polynomial.induction_on' with
@@ -1948,96 +1147,91 @@ theorem mul_X_comp : (p * X).comp r = p.comp r * r := by
   | monomial n b => simp only [pow_succ, mul_assoc, monomial_mul_X, monomial_comp]
 
 @[simp]
-/--
-theorem `X_pow_comp` / 定理 `X_pow_comp`
-
-English:
-theorem X_pow_comp
-  given: {k : Nat}
-  statement: (X ^ k).comp p = p ^ k
-  proof: by
-  induction k with
-  | zero => simp
-  | succ k ih => simp [pow_succ, mul_X_comp, ih]
-
-@[simp]
-
-中文:
-定理 X_pow_comp
-  条件: {k : 自然数}
-  结论: (X ^ k).comp p = p ^ k
-  证明: by
-  induction k with
-  | zero => simp
-  | succ k ih => simp [pow_succ, mul_X_comp, ih]
-
-@[simp]
-
-Depends on / 依赖: SMulCommClass, Submonoid, Submonoid.center, center, mul_X_comp, pow_succ
+/-
+**Polynomial.X_pow_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：X_pow_comp {k : Nat} : (X ^ k).comp p = p ^ k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Polynomial.one_comp`：one_comp : comp (1 : R[X]) p = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Polynomial.mul_X_comp`：mul_X_comp : (p * X).comp r = p.comp r * r
 -/
-theorem X_pow_comp {k : Nat} : (X ^ k).comp p = p ^ k := by
+theorem X_pow_comp {k : ℕ} : (X ^ k).comp p = p ^ k := by
   induction k with
   | zero => simp
   | succ k ih => simp [pow_succ, mul_X_comp, ih]
 
 @[simp]
-/--
-theorem `mul_X_pow_comp` / 定理 `mul_X_pow_comp`
-
-English:
-theorem mul_X_pow_comp
-  given: {k : Nat}
-  statement: (p * X ^ k).comp r = p.comp r * r ^ k
-  proof: by
-  induction k with
-  | zero => simp
-  | succ k ih => simp [ih, pow_succ, ← mul_assoc, mul_X_comp]
-
-@[simp]
-
-中文:
-定理 mul_X_pow_comp
-  条件: {k : 自然数}
-  结论: (p * X ^ k).comp r = p.comp r * r ^ k
-  证明: by
-  induction k with
-  | zero => simp
-  | succ k ih => simp [ih, pow_succ, ← mul_assoc, mul_X_comp]
-
-@[simp]
-
-Depends on / 依赖: SMulCommClass, Submonoid, Submonoid.center, center, mul_X_comp, mul_assoc, pow_succ
+/-
+**Polynomial.mul_X_pow_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：mul_X_pow_comp {k : Nat} : (p * X ^ k).comp r = p.comp r * r ^ k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Polynomial.mul_X_comp`：mul_X_comp : (p * X).comp r = p.comp r * r
 -/
-theorem mul_X_pow_comp {k : Nat} : (p * X ^ k).comp r = p.comp r * r ^ k := by
+theorem mul_X_pow_comp {k : ℕ} : (p * X ^ k).comp r = p.comp r * r ^ k := by
   induction k with
   | zero => simp
   | succ k ih => simp [ih, pow_succ, ← mul_assoc, mul_X_comp]
 
 @[simp]
-/--
-theorem `C_mul_comp` / 定理 `C_mul_comp`
-
-English:
-theorem C_mul_comp
-  statement: (C a * p).comp r = C a * p.comp r
-  proof: by
-  induction p using Polynomial.induction_on' with
-  | add p q hp hq => simp [hp, hq, mul_add]
-  | monomial n b => simp [mul_assoc]
-
-@[simp]
-
-中文:
-定理 C_mul_comp
-  结论: (C a * p).comp r = C a * p.comp r
-  证明: by
-  induction p using Polynomial.induction_on' with
-  | add p q hp hq => simp [hp, hq, mul_add]
-  | monomial n b => simp [mul_assoc]
-
-@[simp]
-
-Depends on / 依赖: Polynomial, Polynomial.induction_on, induction_on, monomial, mul_add, mul_assoc
+/-
+**Polynomial.C_mul_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：C_mul_comp : (C a * p).comp r = C a * p.comp r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on'`：∀ {R : Type u} [inst : Semiring R] {motive : P
+olynomial R → Prop} (p : Polynomial R),   (∀ (p q : Polynomial R), motive p → mo
+tive q → motiv…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.C_mul_monomial`：C_mul_monomial : C a * monomial n b = monomia
+l n (a * b)
+· 使用定理 `Polynomial.monomial_comp`：monomial_comp (n : Nat) : (monomial n a).comp 
+p = C a * p ^ n
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem C_mul_comp : (C a * p).comp r = C a * p.comp r := by
   induction p using Polynomial.induction_on' with
@@ -2045,361 +1239,256 @@ theorem C_mul_comp : (C a * p).comp r = C a * p.comp r := by
   | monomial n b => simp [mul_assoc]
 
 @[simp]
-/--
-theorem `natCast_mul_comp` / 定理 `natCast_mul_comp`
-
-English:
-theorem natCast_mul_comp
-  given: {n : Nat}
-  statement: ((n : R[X]) * p).comp r = n * p.comp r
-  proof: by
-  rw [← C_eq_natCast]; rw [C_mul_comp]
-
-中文:
-定理 natCast_mul_comp
-  条件: {n : 自然数}
-  结论: ((n : R[X]) * p).comp r = n * p.comp r
-  证明: by
-  rw [← C_eq_natCast]; rw [C_mul_comp]
-
-Depends on / 依赖: C_eq_natCast, C_mul_comp
+/-
+**Polynomial.natCast_mul_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：natCast_mul_comp {n : Nat} : ((n : R[X]) * p).comp r = n * p.comp r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_eq_natCast`：C_eq_natCast (n : Nat) : C (n : R) = (n : R[X])
+· 使用定理 `Polynomial.C_mul_comp`：C_mul_comp : (C a * p).comp r = C a * p.comp r
 -/
-theorem natCast_mul_comp {n : Nat} : ((n : R[X]) * p).comp r = n * p.comp r := by
-  rw [← C_eq_natCast]; rw [C_mul_comp]
-
-/--
-theorem `mul_X_add_natCast_comp` / 定理 `mul_X_add_natCast_comp`
-
-English:
-theorem mul_X_add_natCast_comp
-  given: {n : Nat}
-  proof: by
-  rw [mul_add]; rw [add_comp]; rw [mul_X_comp]; rw [← Nat.cast_comm]; rw [natCast_mul_comp]; rw [Nat.cast_comm]; rw [mul_add]
-
-@[simp]
-
-中文:
-定理 mul_X_add_natCast_comp
-  条件: {n : 自然数}
-  证明: by
-  rw [mul_add]; rw [add_comp]; rw [mul_X_comp]; rw [← Nat.cast_comm]; rw [natCast_mul_comp]; rw [Nat.cast_comm]; rw [mul_add]
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_comm, add_comp, cast_comm, mul_X_comp, mul_add, natCast_mul_comp
+theorem natCast_mul_comp {n : ℕ} : ((n : R[X]) * p).comp r = n * p.comp r := by
+  rw [← C_eq_natCast, C_mul_comp]
+/-
+**Polynomial.mul_X_add_natCast_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：mul_X_add_natCast_comp {n : Nat} : (p * (X + (n : R[X]))).comp q = p.comp 
+q * (q + n)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `Polynomial.mul_X_comp`：mul_X_comp : (p * X).comp r = p.comp r * r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_comm`：cast_comm (n : Nat) (x : α) : (n : α) * x = x * n
+· 使用定理 `Polynomial.natCast_mul_comp`：natCast_mul_comp {n : Nat} : ((n : R[X]) * 
+p).comp r = n * p.comp r
 -/
-theorem mul_X_add_natCast_comp {n : Nat} :
+theorem mul_X_add_natCast_comp {n : ℕ} :
     (p * (X + (n : R[X]))).comp q = p.comp q * (q + n) := by
-  rw [mul_add]; rw [add_comp]; rw [mul_X_comp]; rw [← Nat.cast_comm]; rw [natCast_mul_comp]; rw [Nat.cast_comm]; rw [mul_add]
+  rw [mul_add, add_comp, mul_X_comp, ← Nat.cast_comm, natCast_mul_comp, Nat.cast_comm, mul_add]
 
 @[simp]
-/--
-theorem `mul_comp` / 定理 `mul_comp`
-
-English:
-theorem mul_comp
-  given: {R : Type*} [CommSemiring R] (p q r : R[X])
-  proof: eval₂_mul _ _
-
-@[simp]
-
-中文:
-定理 mul_comp
-  条件: {R : 类型} [交换半环 R] (p q r : R[X])
-  证明: eval₂_mul _ _
-
-@[simp]
+/-
+**Polynomial.mul_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：mul_comp {R : Type*} [CommSemiring R] (p q r : R[X]) : (p * q).comp r = p.
+comp r * q.comp r
+参数：p q r : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_mul`：eval₂_mul : (p * q).eval₂ f x = p.eval₂ f x * q.ev
+al₂ f x
 -/
 theorem mul_comp {R : Type*} [CommSemiring R] (p q r : R[X]) :
     (p * q).comp r = p.comp r * q.comp r :=
   eval₂_mul _ _
 
 @[simp]
-/--
-theorem `mul_comp_neg_X` / 定理 `mul_comp_neg_X`
-
-English:
-theorem mul_comp_neg_X
-  given: {R : Type*} [Ring R] (p q : R[X])
-  proof: eval₂_mul_noncomm C (-X) fun _ => Commute.symm (commute_X _).neg_left
-
-@[simp]
-
-中文:
-定理 mul_comp_neg_X
-  条件: {R : 类型} [环 R] (p q : R[X])
-  证明: eval₂_mul_noncomm C (-X) fun _ => Commute.symm (commute_X _).neg_left
-
-@[simp]
-
-Depends on / 依赖: Commute, Commute.symm, commute_X, neg_left
+/-
+**Polynomial.mul_comp_neg_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：mul_comp_neg_X {R : Type*} [Ring R] (p q : R[X]) : (p * q).comp (-X) = p.c
+omp (-X) * q.comp (-X)
+参数：p q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_mul_noncomm`：eval₂_mul_noncomm (hf : forall k, Commute 
+(f <| q.coeff k) x) : eval₂ f x (p * q) = eval₂ f x p * eval₂ f x q
+· 使用定理 `Commute.symm`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → C
+ommute b a
+· 使用定理 `Commute.neg_left`：neg_left : Commute a b -> Commute (-a) b
+· 使用定理 `Polynomial.commute_X`：commute_X (p : R[X]) : Commute X p
 -/
 theorem mul_comp_neg_X {R : Type*} [Ring R] (p q : R[X]) :
     (p * q).comp (-X) = p.comp (-X) * q.comp (-X) :=
-  eval₂_mul_noncomm C (-X) fun _ => Commute.symm (commute_X _).neg_left
+  eval₂_mul_noncomm C (-X) fun _ ↦ Commute.symm (commute_X _).neg_left
 
 @[simp]
-/--
-theorem `pow_comp` / 定理 `pow_comp`
-
-English:
-theorem pow_comp
-  given: {R : Type*} [CommSemiring R] (p q : R[X]) (n : Nat)
-  proof: (MonoidHom.mk (OneHom.mk (fun r : R[X] => r.comp q) one_comp) fun r s => mul_comp r s q).map_pow
-    p n
-
-中文:
-定理 pow_comp
-  条件: {R : 类型} [交换半环 R] (p q : R[X]) (n : 自然数)
-  证明: (MonoidHom.mk (OneHom.mk (fun r : R[X] => r.comp q) one_comp) fun r s => mul_comp r s q).map_pow
-    p n
-
-Depends on / 依赖: MonoidHom, MonoidHom.mk, OneHom, OneHom.mk, map_pow, mul_comp, one_comp, r.comp
+/-
+**Polynomial.pow_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：pow_comp {R : Type*} [CommSemiring R] (p q : R[X]) (n : Nat) : (p ^ n).com
+p q = p.comp q ^ n
+参数：p q : R[X]；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
+· 使用定理 `Polynomial.one_comp`：one_comp : comp (1 : R[X]) p = 1
+· 使用定理 `Polynomial.mul_comp`：mul_comp {R : Type*} [CommSemiring R] (p q r : R[X]
+) : (p * q).comp r = p.comp r * q.comp r
 -/
-theorem pow_comp {R : Type*} [CommSemiring R] (p q : R[X]) (n : Nat) :
+theorem pow_comp {R : Type*} [CommSemiring R] (p q : R[X]) (n : ℕ) :
     (p ^ n).comp q = p.comp q ^ n :=
   (MonoidHom.mk (OneHom.mk (fun r : R[X] => r.comp q) one_comp) fun r s => mul_comp r s q).map_pow
     p n
-
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: {R : Type*} [CommSemiring R] (φ ψ χ : R[X])
-  proof: by
-  refine Polynomial.induction_on φ ?_ ?_ ?_ <;>
-    · intros
-      simp_all only [add_comp, mul_comp, C_comp, X_comp, pow_succ, ← mul_assoc]
-
-中文:
-定理 comp_assoc
-  条件: {R : 类型} [交换半环 R] (φ ψ χ : R[X])
-  证明: by
-  refine Polynomial.induction_on φ ?_ ?_ ?_ <;>
-    · intros
-      simp_all only [add_comp, mul_comp, C_comp, X_comp, pow_succ, ← mul_assoc]
-
-Depends on / 依赖: C_comp, Polynomial, Polynomial.induction_on, X_comp, add_comp, induction_on, intros, mul_assoc, mul_comp, pow_succ
+/-
+**Polynomial.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：comp_assoc {R : Type*} [CommSemiring R] (φ ψ χ : R[X]) : (φ.comp ψ).comp χ
+ = φ.comp (ψ.comp χ)
+参数：φ ψ χ : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on`：∀ {R : Type u} [inst : Semiring R] {motive : Po
+lynomial R → Prop} (p : Polynomial R),   (∀ (a : R), motive (Polynomial.C a)) → 
+    (∀ (p q :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.C_comp`：C_comp : (C a).comp p = C a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Polynomial.mul_comp`：mul_comp {R : Type*} [CommSemiring R] (p q r : R[X]
+) : (p * q).comp r = p.comp r * q.comp r
+· 使用定理 `Polynomial.X_comp`：X_comp : X.comp p = p
 -/
 theorem comp_assoc {R : Type*} [CommSemiring R] (φ ψ χ : R[X]) :
     (φ.comp ψ).comp χ = φ.comp (ψ.comp χ) := by
   refine Polynomial.induction_on φ ?_ ?_ ?_ <;>
     · intros
       simp_all only [add_comp, mul_comp, C_comp, X_comp, pow_succ, ← mul_assoc]
-
-/--
-lemma `sum_comp` / 引理 `sum_comp`
-
-English:
-lemma sum_comp
-  given: (s : Finset ι) (p : ι -> R[X]) (q : R[X])
-  proof: Polynomial.eval₂_finsetSum _ _ _ _
-
-中文:
-引理 sum_comp
-  条件: (s : 有限集 ι) (p : ι -> R[X]) (q : R[X])
-  证明: Polynomial.eval₂_finsetSum _ _ _ _
-
-Depends on / 依赖: SubringClass, SubringClass.addSubgroupClass, addSubgroupClass
+/-
+**Polynomial.sum_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {ι : Type y} [inst : Semiring R] (s : Finset ι) (p : ι → Po
+lynomial R) (q : Polynomial R),   (∑ i ∈ s, p i).comp q = ∑ i ∈ s, (p i).comp q
+参数：s : Finset ι；p : ι → Polynomial R；q : Polynomial R；∑ i ∈ s, p i；p i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_finsetSum`：eval₂_finsetSum (s : Finset ι) (g : ι -> R[X
+]) (x : S) : (∑ i in s, g i).eval₂ f x = ∑ i in s, (g i).eval₂ f x
 -/
-@[simp] lemma sum_comp (s : Finset ι) (p : ι -> R[X]) (q : R[X]) :
-    (∑ i in s, p i).comp q = ∑ i in s, (p i).comp q := Polynomial.eval₂_finsetSum _ _ _ _
+@[simp] lemma sum_comp (s : Finset ι) (p : ι → R[X]) (q : R[X]) :
+    (∑ i ∈ s, p i).comp q = ∑ i ∈ s, (p i).comp q := Polynomial.eval₂_finsetSum _ _ _ _
 
 end Comp
 
 section Map
 
 variable [Semiring S]
-variable (f : R ->+* S)
+variable (f : R →+* S)
 
-/--
-Definition of `map` / `map` 的定义
+/-- `map f p` maps a polynomial `p` across a ring hom `f` -/
+/-
+**Polynomial.map** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：map : R[X] -> S[X]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : R[X] -> S[X]
-  body: eval₂ (C.comp f) X
-
-@[simp]
-
-中文:
-定义 map
-  签名: : R[X] -> S[X]
-  定义体: eval₂ (C.comp f) X
-
-@[simp]
-
-Depends on / 依赖: C.comp, SubringClass, SubringClass.nonUnitalSubringClass, nonUnitalSubringClass
+--- 原说明 ---
+`map f p` maps a polynomial `p` across a ring hom `f`
 -/
-def map : R[X] -> S[X] :=
+def map : R[X] → S[X] :=
   eval₂ (C.comp f) X
 
 @[simp]
-/--
-theorem `map_C` / 定理 `map_C`
-
-English:
-theorem map_C
-  statement: (C a).map f = C (f a)
-  proof: eval₂_C _ _
-
-@[simp]
-
-中文:
-定理 map_C
-  结论: (C a).map f = C (f a)
-  证明: eval₂_C _ _
-
-@[simp]
+/-
+**Polynomial.map_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：map_C : (C a).map f = C (f a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_C`：eval₂_C : (C a).eval₂ f x = f a
 -/
 theorem map_C : (C a).map f = C (f a) :=
   eval₂_C _ _
 
 @[simp]
-/--
-theorem `map_X` / 定理 `map_X`
-
-English:
-theorem map_X
-  statement: X.map f = X
-  proof: eval₂_X _ _
-
-@[simp]
-
-中文:
-定理 map_X
-  结论: X.map f = X
-  证明: eval₂_X _ _
-
-@[simp]
-
-Depends on / 依赖: IntCast, toHasIntCast
+/-
+**Polynomial.map_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：map_X : X.map f = X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_X`：eval₂_X : X.eval₂ f x = x
 -/
 theorem map_X : X.map f = X :=
   eval₂_X _ _
 
 @[simp]
-/--
-theorem `map_monomial` / 定理 `map_monomial`
-
-English:
-theorem map_monomial
-  given: {n a}
-  statement: (monomial n a).map f = monomial n (f a)
-  proof: by
-  dsimp only [map]
-  rw [eval₂_monomial]; rw [← C_mul_X_pow_eq_monomial]; rfl
-
-@[simp]
-
-中文:
-定理 map_monomial
-  条件: {n a}
-  结论: (monomial n a).map f = monomial n (f a)
-  证明: by
-  dsimp only [map]
-  rw [eval₂_monomial]; rw [← C_mul_X_pow_eq_monomial]; rfl
-
-@[simp]
-
-Depends on / 依赖: C_mul_X_pow_eq_monomial, NonAssocRing, fast_instance, toNonAssocRing
+/-
+**Polynomial.map_monomial** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：map_monomial {n a} : (monomial n a).map f = monomial n (f a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval₂_monomial`：eval₂_monomial {n : Nat} {r : R} : (monomial 
+n r).eval₂ f x = f r * x ^ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.C_mul_X_pow_eq_monomial`：∀ {R : Type u} {a : R} [inst : Semir
+ing R] {n : ℕ}, Polynomial.C a * Polynomial.X ^ n = (Polynomial.monomial n) a
 -/
 theorem map_monomial {n a} : (monomial n a).map f = monomial n (f a) := by
   dsimp only [map]
-  rw [eval₂_monomial]; rw [← C_mul_X_pow_eq_monomial]; rfl
+  rw [eval₂_monomial, ← C_mul_X_pow_eq_monomial]; rfl
 
 @[simp]
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  statement: (0 : R[X]).map f = 0
-  proof: eval₂_zero _ _
-
-@[simp]
-
-中文:
-定理 map_zero
-  结论: (0 : R[X]).map f = 0
-  证明: eval₂_zero _ _
-
-@[simp]
-
-Depends on / 依赖: SetLike, SubringClass, toRing
+/-
+**Polynomial.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] [inst_1 : Semiring S] (f :
+ R →+* S), Polynomial.map f 0 = 0
+参数：f : R →+* S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_zero`：eval₂_zero : (0 : R[X]).eval₂ f x = 0
 -/
 protected theorem map_zero : (0 : R[X]).map f = 0 :=
   eval₂_zero _ _
 
 @[simp]
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  statement: (p + q).map f = p.map f + q.map f
-  proof: eval₂_add _ _
-
-@[simp]
-
-中文:
-定理 map_add
-  结论: (p + q).map f = p.map f + q.map f
-  证明: eval₂_add _ _
-
-@[simp]
-
-Depends on / 依赖: NonAssocCommRing, SetLike, toNonAssocCommRing
+/-
+**Polynomial.map_add** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q : Polynomial R} [inst
+_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p + q) = Polynomial.map f p 
++ Polynomial.map f q
+参数：f : R →+* S；p + q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_add`：eval₂_add : (p + q).eval₂ f x = p.eval₂ f x + q.ev
+al₂ f x
 -/
 protected theorem map_add : (p + q).map f = p.map f + q.map f :=
   eval₂_add _ _
 
 @[simp]
-/--
-theorem `map_one` / 定理 `map_one`
-
-English:
-theorem map_one
-  statement: (1 : R[X]).map f = 1
-  proof: eval₂_one _ _
-
-@[simp]
-
-中文:
-定理 map_one
-  结论: (1 : R[X]).map f = 1
-  证明: eval₂_one _ _
-
-@[simp]
-
-Depends on / 依赖: CommRing, SetLike, SubringClass, toCommRing
+/-
+**Polynomial.map_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] [inst_1 : Semiring S] (f :
+ R →+* S), Polynomial.map f 1 = 1
+参数：f : R →+* S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
 -/
 protected theorem map_one : (1 : R[X]).map f = 1 :=
   eval₂_one _ _
 
 @[simp]
-/--
-theorem `map_mul` / 定理 `map_mul`
-
-English:
-theorem map_mul
-  statement: (p * q).map f = p.map f * q.map f
-  proof: by
-  rw [map]; rw [eval₂_mul_noncomm]
-  exact fun k => (commute_X _).symm
-
-中文:
-定理 map_mul
-  结论: (p * q).map f = p.map f * q.map f
-  证明: by
-  rw [map]; rw [eval₂_mul_noncomm]
-  exact fun k => (commute_X _).symm
-
-Depends on / 依赖: IsDomain, SetLike, SubringClass
+/-
+**Polynomial.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q : Polynomial R} [inst
+_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p * q) = Polynomial.map f p 
+* Polynomial.map f q
+参数：f : R →+* S；p * q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map.eq_1`：∀ {R : Type u} {S : Type v} [inst : Semiring R] [in
+st_1 : Semiring S] (f : R →+* S),   Polynomial.map f = Polynomial.eval₂ (Polynom
+ial.C.com…
+· 使用定理 `Polynomial.eval₂_mul_noncomm`：eval₂_mul_noncomm (hf : forall k, Commute 
+(f <| q.coeff k) x) : eval₂ f x (p * q) = eval₂ f x p * eval₂ f x q
+· 使用定理 `Commute.symm`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → C
+ommute b a
+· 使用定理 `Polynomial.commute_X`：commute_X (p : R[X]) : Commute X p
 -/
 protected theorem map_mul : (p * q).map f = p.map f * q.map f := by
-  rw [map]; rw [eval₂_mul_noncomm]
+  rw [map, eval₂_mul_noncomm]
   exact fun k => (commute_X _).symm
 
 -- `map` is a ring-hom unconditionally, and theoretically the definition could be replaced,
@@ -2408,34 +1497,28 @@ protected theorem map_mul : (p * q).map f = p.map f * q.map f := by
 -- to a function before trying field (dot) notation (this may be technically infeasible);
 -- the relevant code is (both lines): https://github.com/leanprover-community/
 -- lean/blob/487ac5d7e9b34800502e1ddf3c7c806c01cf9d51/src/frontends/lean/elaborator.cpp#L1876-L1913
-/--
-Definition of `mapRingHom` / `mapRingHom` 的定义
+/-- `Polynomial.map` as a `RingHom`. -/
+/-
+**Polynomial.mapRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：mapRingHom (f : R ->+* S) : R[X] ->+* S[X] where toFun
+参数：f : R ->+* S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.map_one`：∀ {R : Type u} {S : Type v} [inst : Semiring R] [ins
+t_1 : Semiring S] (f : R →+* S), Polynomial.map f 1 = 1
+· 使用定理 `Polynomial.map_mul`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p * q)
+ = Polyn…
+· 使用定理 `Polynomial.map_zero`：∀ {R : Type u} {S : Type v} [inst : Semiring R] [in
+st_1 : Semiring S] (f : R →+* S), Polynomial.map f 0 = 0
+· 使用定理 `Polynomial.map_add`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p + q)
+ = Polyn…
 
-English:
-definition mapRingHom
-  signature: (f : R ->+* S)
-  body: Polynomial.map f
-  map_add' _ _ := Polynomial.map_add f
-  map_zero' := Polynomial.map_zero f
-  map_mul' _ _ := Polynomial.map_mul f
-  map_one' := Polynomial.map_one f
-
-@[simp]
-
-中文:
-定义 mapRingHom
-  签名: (f : R ->+* S)
-  定义体: Polynomial.map f
-  map_add' _ _ := Polynomial.map_add f
-  map_zero' := Polynomial.map_zero f
-  map_mul' _ _ := Polynomial.map_mul f
-  map_one' := Polynomial.map_one f
-
-@[simp]
-
-Depends on / 依赖: Polynomial, Polynomial.map
+--- 原说明 ---
+`Polynomial.map` as a `RingHom`.
 -/
-def mapRingHom (f : R ->+* S) : R[X] ->+* S[X] where
+def mapRingHom (f : R →+* S) : R[X] →+* S[X] where
   toFun := Polynomial.map f
   map_add' _ _ := Polynomial.map_add f
   map_zero' := Polynomial.map_zero f
@@ -2443,273 +1526,223 @@ def mapRingHom (f : R ->+* S) : R[X] ->+* S[X] where
   map_one' := Polynomial.map_one f
 
 @[simp]
-/--
-theorem `coe_mapRingHom` / 定理 `coe_mapRingHom`
-
-English:
-theorem coe_mapRingHom
-  given: (f : R ->+* S)
-  statement: ⇑(mapRingHom f) = map f
-  proof: rfl
-
-中文:
-定理 coe_mapRingHom
-  条件: (f : R ->+* S)
-  结论: ⇑(mapRingHom f) = map f
-  证明: rfl
+/-
+**Polynomial.coe_mapRingHom** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_mapRingHom (f : R ->+* S) : ⇑(mapRingHom f) = map f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mapRingHom (f : R ->+* S) : ⇑(mapRingHom f) = map f :=
+theorem coe_mapRingHom (f : R →+* S) : ⇑(mapRingHom f) = map f :=
   rfl
 
 -- This is protected to not clash with the global `map_natCast`.
 @[simp]
-/--
-theorem `map_natCast` / 定理 `map_natCast`
-
-English:
-theorem map_natCast
-  given: (n : Nat)
-  statement: (n : R[X]).map f = n
-  proof: map_natCast (mapRingHom f) n
-
-@[simp]
-
-中文:
-定理 map_natCast
-  条件: (n : 自然数)
-  结论: (n : R[X]).map f = n
-  证明: map_natCast (mapRingHom f) n
-
-@[simp]
+/-
+**Polynomial.map_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] [inst_1 : Semiring S] (f :
+ R →+* S) (n : ℕ), Polynomial.map f ↑n = ↑n
+参数：f : R →+* S；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
 -/
-protected theorem map_natCast (n : Nat) : (n : R[X]).map f = n :=
+protected theorem map_natCast (n : ℕ) : (n : R[X]).map f = n :=
   map_natCast (mapRingHom f) n
 
 @[simp]
-/--
-theorem `map_ofNat` / 定理 `map_ofNat`
-
-English:
-theorem map_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: show (n : R[X]).map f = n by rw [Polynomial.map_natCast]
-
-中文:
-定理 map_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: show (n : R[X]).map f = n by rw [Polynomial.map_natCast]
+/-
+**Polynomial.map_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] [inst_1 : Semiring S] (f :
+ R →+* S) (n : ℕ) [inst_2 : n.AtLeastTwo],   Polynomial.map f (OfNat.ofNat n) = 
+OfNat.ofNat n
+参数：f : R →+* S；n : ℕ；OfNat.ofNat n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_natCast`：∀ {R : Type u} {S : Type v} [inst : Semiring R] 
+[inst_1 : Semiring S] (f : R →+* S) (n : ℕ), Polynomial.map f ↑n = ↑n
 -/
-protected theorem map_ofNat (n : Nat) [n.AtLeastTwo] :
+protected theorem map_ofNat (n : ℕ) [n.AtLeastTwo] :
     (ofNat(n) : R[X]).map f = ofNat(n) :=
   show (n : R[X]).map f = n by rw [Polynomial.map_natCast]
 
 --TODO rename to `map_dvd_map`
-/--
-theorem `map_dvd` / 定理 `map_dvd`
-
-English:
-theorem map_dvd
-  given: (f : R ->+* S) {x y : R[X]}
-  statement: x ∣ y -> x.map f ∣ y.map f
-  proof: _root_.map_dvd (mapRingHom f)
-
-中文:
-定理 map_dvd
-  条件: (f : R ->+* S) {x y : R[X]}
-  结论: x ∣ y -> x.map f ∣ y.map f
-  证明: _root_.map_dvd (mapRingHom f)
-
-Depends on / 依赖: _root_, _root_.map_dvd, mapRingHom, map_dvd
+/-
+**Polynomial.map_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：map_dvd (f : R ->+* S) {x y : R[X]} : x ∣ y -> x.map f ∣ y.map f
+参数：f : R ->+* S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_dvd`：∀ {M : Type u_1} {N : Type u_2} [inst : Semigroup M] [inst_1 : 
+Semigroup N] {F : Type u_3} [inst_2 : FunLike F M N]   [MulHomClass F M N] (f…
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
 -/
-theorem map_dvd (f : R ->+* S) {x y : R[X]} : x ∣ y -> x.map f ∣ y.map f :=
+theorem map_dvd (f : R →+* S) {x y : R[X]} : x ∣ y → x.map f ∣ y.map f :=
   _root_.map_dvd (mapRingHom f)
-
-/--
-lemma `associated_map_map` / 引理 `associated_map_map`
-
-English:
-lemma associated_map_map
-  given: (f : R ->+* S) {x y : R[X]}
-  proof: .map (mapRingHom f)
-
-中文:
-引理 associated_map_map
-  条件: (f : R ->+* S) {x y : R[X]}
-  证明: .map (mapRingHom f)
-
-Depends on / 依赖: mapRingHom
+/-
+**Polynomial.associated_map_map** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：associated_map_map (f : R ->+* S) {x y : R[X]} : Associated x y -> Associa
+ted (x.map f) (y.map f)
+参数：f : R ->+* S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Associated.map`：map {M N : Type*} [Monoid M] [Monoid N] {F : Type*} [Fun
+Like F M N] [MonoidHomClass F M N] (f : F) {x y : M} (ha : Associated x y) : Ass
+ocia…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-lemma associated_map_map (f : R ->+* S) {x y : R[X]} :
-    Associated x y -> Associated (x.map f) (y.map f) := .map (mapRingHom f)
-
-/--
-lemma `mapRingHom_comp_C` / 引理 `mapRingHom_comp_C`
-
-English:
-lemma mapRingHom_comp_C
-  given: {R S : Type*} [Semiring R] [Semiring S] (f : R ->+* S)
-  proof: by ext; simp
-
-中文:
-引理 mapRingHom_comp_C
-  条件: {R S : 类型} [半环 R] [半环 S] (f : R ->+* S)
-  证明: by ext; simp
+lemma associated_map_map (f : R →+* S) {x y : R[X]} :
+    Associated x y → Associated (x.map f) (y.map f) := .map (mapRingHom f)
+/-
+**Polynomial.mapRingHom_comp_C** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：mapRingHom_comp_C {R S : Type*} [Semiring R] [Semiring S] (f : R ->+* S) :
+ (mapRingHom f).comp C = C.comp f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `Polynomial.ext`：ext {p q : R[X]} : (forall n, coeff p n = coeff q n) -> 
+p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mapRingHom_comp_C {R S : Type*} [Semiring R] [Semiring S] (f : R ->+* S) :
+lemma mapRingHom_comp_C {R S : Type*} [Semiring R] [Semiring S] (f : R →+* S) :
     (mapRingHom f).comp C = C.comp f := by ext; simp
-
-/--
-theorem `eval₂_eq_eval_map` / 定理 `eval₂_eq_eval_map`
-
-English:
-theorem eval₂_eq_eval_map
-  given: {x : S}
-  statement: p.eval₂ f x = (p.map f).eval x
-  proof: by
-  induction p using Polynomial.induction_on' with
-  | add p q hp hq => simp [hp, hq]
-  | monomial n r => simp
-
-中文:
-定理 eval₂_eq_eval_map
-  条件: {x : S}
-  结论: p.eval₂ f x = (p.map f).eval x
-  证明: by
-  induction p using Polynomial.induction_on' with
-  | add p q hp hq => simp [hp, hq]
-  | monomial n r => simp
-
-Depends on / 依赖: Polynomial, Polynomial.induction_on, induction_on, monomial
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_eq_eval_map {x : S} : p.eval₂ f x = (p.map f).eval x := by
   induction p using Polynomial.induction_on' with
   | add p q hp hq => simp [hp, hq]
   | monomial n r => simp
-
-/--
-theorem `map_list_prod` / 定理 `map_list_prod`
-
-English:
-theorem map_list_prod
-  given: (L : List R[X])
-  statement: L.prod.map f = (L.map <| map f).prod
-  proof: Eq.symm List.prod_hom _ (mapRingHom f).toMonoidHom
-
-@[simp]
-
-中文:
-定理 map_list_prod
-  条件: (L : 列表 R[X])
-  结论: L.乘积.map f = (L.map <| map f).乘积
-  证明: Eq.symm List.prod_hom _ (mapRingHom f).toMonoidHom
-
-@[simp]
+/-
+**Polynomial.map_list_prod** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] [inst_1 : Semiring S] (f :
+ R →+* S) (L : List (Polynomial R)),   Polynomial.map f L.prod = (List.map (Poly
+nomial.map f) L).prod
+参数：f : R →+* S；L : List (Polynomial R)；List.map (Polynomial.map f) L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.prod_hom`：prod_hom (l : List M) {F : Type*} [FunLike F M N] [Monoid
+HomClass F M N] (f : F) : (l.map f).prod = f l.prod
 -/
 protected theorem map_list_prod (L : List R[X]) : L.prod.map f = (L.map <| map f).prod :=
-Eq.symm List.prod_hom _ (mapRingHom f).toMonoidHom
+  Eq.symm <| List.prod_hom _ (mapRingHom f).toMonoidHom
 
 @[simp]
-/--
-theorem `map_pow` / 定理 `map_pow`
-
-English:
-theorem map_pow
-  given: (n : Nat)
-  statement: (p ^ n).map f = p.map f ^ n
-  proof: (mapRingHom f).map_pow _ _
-
-中文:
-定理 map_pow
-  条件: (n : 自然数)
-  结论: (p ^ n).map f = p.map f ^ n
-  证明: (mapRingHom f).map_pow _ _
+/-
+**Polynomial.map_pow** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p : Polynomial R} [inst_1
+ : Semiring S] (f : R →+* S) (n : ℕ),   Polynomial.map f (p ^ n) = Polynomial.ma
+p f p ^ n
+参数：f : R →+* S；n : ℕ；p ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_pow`：∀ {α : Type u_2} {β : Type u_3} [inst : Semiring α] [in
+st_1 : Semiring β] (f : α →+* β) (a : α) (n : ℕ),   f (a ^ n) = f a ^ n
 -/
-protected theorem map_pow (n : Nat) : (p ^ n).map f = p.map f ^ n :=
+protected theorem map_pow (n : ℕ) : (p ^ n).map f = p.map f ^ n :=
   (mapRingHom f).map_pow _ _
-
-/--
-theorem `eval_map` / 定理 `eval_map`
-
-English:
-theorem eval_map
-  given: (x : S)
-  statement: (p.map f).eval x = p.eval₂ f x
-  proof: (eval₂_eq_eval_map f).symm
-
-中文:
-定理 eval_map
-  条件: (x : S)
-  结论: (p.map f).eval x = p.eval₂ f x
-  证明: (eval₂_eq_eval_map f).symm
+/-
+**Polynomial.eval_map** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_map (x : S) : (p.map f).eval x = p.eval₂ f x
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.eval₂_eq_eval_map`：eval₂_eq_eval_map {x : S} : p.eval₂ f x = 
+(p.map f).eval x
 -/
 theorem eval_map (x : S) : (p.map f).eval x = p.eval₂ f x :=
   (eval₂_eq_eval_map f).symm
-
-/--
-lemma `eval_map_apply` / 引理 `eval_map_apply`
-
-English:
-lemma eval_map_apply
-  given: (x : R)
-  statement: (p.map f).eval (f x) = f (p.eval x)
-  proof: eval_map f _ ▸ eval₂_at_apply ..
-
-中文:
-引理 eval_map_apply
-  条件: (x : R)
-  结论: (p.map f).eval (f x) = f (p.eval x)
-  证明: eval_map f _ ▸ eval₂_at_apply ..
+/-
+**Polynomial.eval_map_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p : Polynomial R} [inst_1
+ : Semiring S] (f : R →+* S) (x : R),   Polynomial.eval (f x) (Polynomial.map f 
+p) = f (Polynomial.eval x p)
+参数：f : R →+* S；x : R；f x；Polynomial.map f p；Polynomial.eval x p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_at_apply`：eval₂_at_apply {S : Type*} [Semiring S] (f : 
+R ->+* S) (r : R) : p.eval₂ f (f r) = f (p.eval r)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.eval_map`：eval_map (x : S) : (p.map f).eval x = p.eval₂ f x
 -/
 @[simp] lemma eval_map_apply (x : R) : (p.map f).eval (f x) = f (p.eval x) :=
   eval_map f _ ▸ eval₂_at_apply ..
-
-/--
-theorem `map_sum` / 定理 `map_sum`
-
-English:
-theorem map_sum
-  given: {ι : Type*} (g : ι -> R[X]) (s : Finset ι)
-  proof: map_sum (mapRingHom f) _ _
-
-中文:
-定理 map_sum
-  条件: {ι : 类型} (g : ι -> R[X]) (s : 有限集 ι)
-  证明: map_sum (mapRingHom f) _ _
-
-Depends on / 依赖: CanLift, Subring
+/-
+**Polynomial.map_sum** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] [inst_1 : Semiring S] (f :
+ R →+* S) {ι : Type u_1}   (g : ι → Polynomial R) (s : Finset ι), Polynomial.map
+ f (∑ i ∈ s, g i) = ∑ i ∈ s, Polynomial.map f (g i)
+参数：f : R →+* S；g : ι → Polynomial R；s : Finset ι；∑ i ∈ s, g i；g i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
-protected theorem map_sum {ι : Type*} (g : ι -> R[X]) (s : Finset ι) :
-    (∑ i in s, g i).map f = ∑ i in s, (g i).map f :=
+protected theorem map_sum {ι : Type*} (g : ι → R[X]) (s : Finset ι) :
+    (∑ i ∈ s, g i).map f = ∑ i ∈ s, (g i).map f :=
   map_sum (mapRingHom f) _ _
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (p q : R[X])
-  statement: map f (p.comp q) = (map f p).comp (map f q)
-  proof: Polynomial.induction_on p (by simp)
-    (by
-      simp +contextual only [Polynomial.map_add, add_comp, forall_const,
-        imp_true_iff])
-    (by
-      simp +contextual only [pow_succ, ← mul_assoc, comp, forall_const,
-        eval₂_mul_X, imp_true_iff, map_X, Polynomial.map_mul])
-
-中文:
-定理 map_comp
-  条件: (p q : R[X])
-  结论: map f (p.comp q) = (map f p).comp (map f q)
-  证明: Polynomial.induction_on p (by simp)
-    (by
-      simp +contextual only [Polynomial.map_add, add_comp, forall_const,
-        imp_true_iff])
-    (by
-      simp +contextual only [pow_succ, ← mul_assoc, comp, forall_const,
-        eval₂_mul_X, imp_true_iff, map_X, Polynomial.map_mul])
-
-Depends on / 依赖: Polynomial, Polynomial.induction_on, Polynomial.map_add, Polynomial.map_mul, add_comp, contextual, forall_const, imp_true_iff, induction_on, map_X, map_add, map_mul, mul_assoc, pow_succ
+/-
+**Polynomial.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：map_comp (p q : R[X]) : map f (p.comp q) = (map f p).comp (map f q)
+参数：p q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on`：∀ {R : Type u} [inst : Semiring R] {motive : Po
+lynomial R → Prop} (p : Polynomial R),   (∀ (a : R), motive (Polynomial.C a)) → 
+    (∀ (p q :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.C_comp`：C_comp : (C a).comp p = C a
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `Polynomial.map_add`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p + q)
+ = Polyn…
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Polynomial.map_mul`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p * q)
+ = Polyn…
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `Polynomial.eval₂_mul_X`：eval₂_mul_X : eval₂ f x (p * X) = eval₂ f x p * 
+x
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
 -/
 theorem map_comp (p q : R[X]) : map f (p.comp q) = (map f p).comp (map f q) :=
   Polynomial.induction_on p (by simp)
@@ -2719,25 +1752,23 @@ theorem map_comp (p q : R[X]) : map f (p.comp q) = (map f p).comp (map f q) :=
     (by
       simp +contextual only [pow_succ, ← mul_assoc, comp, forall_const,
         eval₂_mul_X, imp_true_iff, map_X, Polynomial.map_mul])
-
-/--
-theorem `eval_X_pow` / 定理 `eval_X_pow`
-
-English:
-theorem eval_X_pow
-  given: {x : R} (n : Nat)
-  statement: (X ^ n : R[X]).eval x = x ^ n
-  proof: by
-  simp [eval]
-
-中文:
-定理 eval_X_pow
-  条件: {x : R} (n : 自然数)
-  结论: (X ^ n : R[X]).eval x = x ^ n
-  证明: by
-  simp [eval]
+/-
+**Polynomial.eval_X_pow** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_X_pow {x : R} (n : Nat) : (X ^ n : R[X]).eval x = x ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval₂_X_pow`：eval₂_X_pow {n : Nat} : (X ^ n).eval₂ f x = x ^ 
+n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem eval_X_pow {x : R} (n : Nat) : (X ^ n : R[X]).eval x = x ^ n := by
+theorem eval_X_pow {x : R} (n : ℕ) : (X ^ n : R[X]).eval x = x ^ n := by
   simp [eval]
 
 end Map
@@ -2750,520 +1781,427 @@ section Eval
 
 section
 
-variable [CommSemiring R] {p q : R[X]} {x : R} [CommSemiring S] (f : R ->+* S)
+variable [CommSemiring R] {p q : R[X]} {x : R} [CommSemiring S] (f : R →+* S)
 
 @[simp]
-/--
-theorem `eval_mul` / 定理 `eval_mul`
-
-English:
-theorem eval_mul
-  statement: (p * q).eval x = p.eval x * q.eval x
-  proof: eval₂_mul _ _
-
-中文:
-定理 eval_mul
-  结论: (p * q).eval x = p.eval x * q.eval x
-  证明: eval₂_mul _ _
+/-
+**Polynomial.eval_mul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_mul : (p * q).eval x = p.eval x * q.eval x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_mul`：eval₂_mul : (p * q).eval₂ f x = p.eval₂ f x * q.ev
+al₂ f x
 -/
 theorem eval_mul : (p * q).eval x = p.eval x * q.eval x :=
   eval₂_mul _ _
 
-/--
-Definition of `evalRingHom` / `evalRingHom` 的定义
+/-- `eval r`, regarded as a ring homomorphism from `R[X]` to `R`. -/
+/-
+**Polynomial.evalRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：evalRingHom : R -> R[X] ->+* R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalRingHom
-  signature: : R -> R[X] ->+* R
-  body: eval₂RingHom (RingHom.id _)
-
-@[simp]
-
-中文:
-定义 evalRingHom
-  签名: : R -> R[X] ->+* R
-  定义体: eval₂RingHom (RingHom.id _)
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.id
+--- 原说明 ---
+`eval r`, regarded as a ring homomorphism from `R[X]` to `R`.
 -/
-def evalRingHom : R -> R[X] ->+* R :=
+def evalRingHom : R → R[X] →+* R :=
   eval₂RingHom (RingHom.id _)
 
 @[simp]
-/--
-theorem `coe_evalRingHom` / 定理 `coe_evalRingHom`
-
-English:
-theorem coe_evalRingHom
-  given: (r : R)
-  statement: (evalRingHom r : R[X] -> R) = eval r
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_evalRingHom
-  条件: (r : R)
-  结论: (evalRingHom r : R[X] -> R) = eval r
-  证明: rfl
-
-@[simp]
+/-
+**Polynomial.coe_evalRingHom** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_evalRingHom (r : R) : (evalRingHom r : R[X] -> R) = eval r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_evalRingHom (r : R) : (evalRingHom r : R[X] -> R) = eval r :=
+theorem coe_evalRingHom (r : R) : (evalRingHom r : R[X] → R) = eval r :=
   rfl
 
 @[simp]
-/--
-theorem `eval_pow` / 定理 `eval_pow`
-
-English:
-theorem eval_pow
-  given: (n : Nat)
-  statement: (p ^ n).eval x = p.eval x ^ n
-  proof: eval₂_pow _ _ _
-
-@[simp]
-
-中文:
-定理 eval_pow
-  条件: (n : 自然数)
-  结论: (p ^ n).eval x = p.eval x ^ n
-  证明: eval₂_pow _ _ _
-
-@[simp]
+/-
+**Polynomial.eval_pow** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_pow`：eval₂_pow (n : Nat) : (p ^ n).eval₂ f x = p.eval₂ 
+f x ^ n
 -/
-theorem eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n :=
+theorem eval_pow (n : ℕ) : (p ^ n).eval x = p.eval x ^ n :=
   eval₂_pow _ _ _
 
 @[simp]
-/--
-theorem `eval_comp` / 定理 `eval_comp`
-
-English:
-theorem eval_comp
-  statement: (p.comp q).eval x = p.eval (q.eval x)
-  proof: by
-  induction p using Polynomial.induction_on' with
-  | add r s hr hs => simp [add_comp, hr, hs]
-  | monomial n a => simp
-
-中文:
-定理 eval_comp
-  结论: (p.comp q).eval x = p.eval (q.eval x)
-  证明: by
-  induction p using Polynomial.induction_on' with
-  | add r s hr hs => simp [add_comp, hr, hs]
-  | monomial n a => simp
-
-Depends on / 依赖: Polynomial, Polynomial.induction_on, add_comp, induction_on, monomial
+/-
+**Polynomial.eval_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_comp : (p.comp q).eval x = p.eval (q.eval x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on'`：∀ {R : Type u} [inst : Semiring R] {motive : P
+olynomial R → Prop} (p : Polynomial R),   (∀ (p q : Polynomial R), motive p → mo
+tive q → motiv…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `Polynomial.eval_add`：eval_add : (p + q).eval x = p.eval x + q.eval x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.monomial_comp`：monomial_comp (n : Nat) : (monomial n a).comp 
+p = C a * p ^ n
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Polynomial.eval_pow`：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+· 使用定理 `Polynomial.eval_monomial`：eval_monomial {n a} : (monomial n a).eval x = 
+a * x ^ n
 -/
 theorem eval_comp : (p.comp q).eval x = p.eval (q.eval x) := by
   induction p using Polynomial.induction_on' with
   | add r s hr hs => simp [add_comp, hr, hs]
   | monomial n a => simp
-
-/--
-lemma `isRoot_comp` / 引理 `isRoot_comp`
-
-English:
-lemma isRoot_comp
-  given: {R} [CommSemiring R] {p q : R[X]} {r : R}
-  proof: by simp_rw [IsRoot, eval_comp]
-
-中文:
-引理 isRoot_comp
-  条件: {R} [交换半环 R] {p q : R[X]} {r : R}
-  证明: by simp_rw [IsRoot, eval_comp]
-
-Depends on / 依赖: IsRoot, eval_comp, simp_rw
+/-
+**Polynomial.isRoot_comp** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：isRoot_comp {R} [CommSemiring R] {p q : R[X]} {r : R} : (p.comp q).IsRoot 
+r ↔ p.IsRoot (q.eval r)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_comp`：eval_comp : (p.comp q).eval x = p.eval (q.eval x)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isRoot_comp {R} [CommSemiring R] {p q : R[X]} {r : R} :
     (p.comp q).IsRoot r ↔ p.IsRoot (q.eval r) := by simp_rw [IsRoot, eval_comp]
 
-/--
-Definition of `compRingHom` / `compRingHom` 的定义
+/-- `comp p`, regarded as a ring homomorphism from `R[X]` to itself. -/
+/-
+**Polynomial.compRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：compRingHom : R[X] -> R[X] ->+* R[X]
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compRingHom
-  signature: : R[X] -> R[X] ->+* R[X]
-  body: eval₂RingHom C
-
-@[simp]
-
-中文:
-定义 compRingHom
-  签名: : R[X] -> R[X] ->+* R[X]
-  定义体: eval₂RingHom C
-
-@[simp]
+--- 原说明 ---
+`comp p`, regarded as a ring homomorphism from `R[X]` to itself.
 -/
-def compRingHom : R[X] -> R[X] ->+* R[X] :=
+def compRingHom : R[X] → R[X] →+* R[X] :=
   eval₂RingHom C
 
 @[simp]
-/--
-theorem `coe_compRingHom` / 定理 `coe_compRingHom`
-
-English:
-theorem coe_compRingHom
-  given: (q : R[X])
-  statement: (compRingHom q : R[X] -> R[X]) = fun p => comp p q
-  proof: rfl
-
-中文:
-定理 coe_compRingHom
-  条件: (q : R[X])
-  结论: (compRingHom q : R[X] -> R[X]) = fun p => comp p q
-  证明: rfl
+/-
+**Polynomial.coe_compRingHom** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_compRingHom (q : R[X]) : (compRingHom q : R[X] -> R[X]) = fun p => com
+p p q
+参数：q : R[X]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_compRingHom (q : R[X]) : (compRingHom q : R[X] -> R[X]) = fun p => comp p q :=
+theorem coe_compRingHom (q : R[X]) : (compRingHom q : R[X] → R[X]) = fun p => comp p q :=
   rfl
-
-/--
-theorem `coe_compRingHom_apply` / 定理 `coe_compRingHom_apply`
-
-English:
-theorem coe_compRingHom_apply
-  given: (p q : R[X])
-  statement: (compRingHom q : R[X] -> R[X]) p = comp p q
-  proof: rfl
-
-中文:
-定理 coe_compRingHom_apply
-  条件: (p q : R[X])
-  结论: (compRingHom q : R[X] -> R[X]) p = comp p q
-  证明: rfl
+/-
+**Polynomial.coe_compRingHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_compRingHom_apply (p q : R[X]) : (compRingHom q : R[X] -> R[X]) p = co
+mp p q
+参数：p q : R[X]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_compRingHom_apply (p q : R[X]) : (compRingHom q : R[X] -> R[X]) p = comp p q :=
+theorem coe_compRingHom_apply (p q : R[X]) : (compRingHom q : R[X] → R[X]) p = comp p q :=
   rfl
-
-/--
-theorem `root_mul_left_of_isRoot` / 定理 `root_mul_left_of_isRoot`
-
-English:
-theorem root_mul_left_of_isRoot
-  given: (p : R[X]) {q : R[X]}
-  statement: IsRoot q a -> IsRoot (p * q) a
-  proof: fun H => by
-  rw [IsRoot]; rw [eval_mul]; rw [IsRoot.def.1 H]; rw [mul_zero]
-
-中文:
-定理 root_mul_left_of_isRoot
-  条件: (p : R[X]) {q : R[X]}
-  结论: IsRoot q a -> IsRoot (p * q) a
-  证明: fun H => by
-  rw [IsRoot]; rw [eval_mul]; rw [IsRoot.def.1 H]; rw [mul_zero]
-
-Depends on / 依赖: IsRoot, IsRoot.def, SetLike, SetLike.coe_injective, coe_injective, eval_mul, ha.symm, mul_zero
+/-
+**Polynomial.root_mul_left_of_isRoot** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：root_mul_left_of_isRoot (p : R[X]) {q : R[X]} : IsRoot q a -> IsRoot (p * 
+q) a
+参数：p : R[X]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.IsRoot.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomi
+al R) (a : R), p.IsRoot a = (Polynomial.eval a p = 0)
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Polynomial.IsRoot.def`：∀ {R : Type u} {a : R} [inst : Semiring R] {p : P
+olynomial R}, p.IsRoot a ↔ Polynomial.eval a p = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem root_mul_left_of_isRoot (p : R[X]) {q : R[X]} : IsRoot q a -> IsRoot (p * q) a := fun H => by
-  rw [IsRoot]; rw [eval_mul]; rw [IsRoot.def.1 H]; rw [mul_zero]
-
-/--
-theorem `root_mul_right_of_isRoot` / 定理 `root_mul_right_of_isRoot`
-
-English:
-theorem root_mul_right_of_isRoot
-  given: {p : R[X]} (q : R[X])
-  statement: IsRoot p a -> IsRoot (p * q) a
-  proof: fun H =>
-  by rw [IsRoot, eval_mul, IsRoot.def.1 H, zero_mul]
-
-中文:
-定理 root_mul_right_of_isRoot
-  条件: {p : R[X]} (q : R[X])
-  结论: IsRoot p a -> IsRoot (p * q) a
-  证明: fun H =>
-  by rw [IsRoot, eval_mul, IsRoot.def.1 H, zero_mul]
+theorem root_mul_left_of_isRoot (p : R[X]) {q : R[X]} : IsRoot q a → IsRoot (p * q) a := fun H => by
+  rw [IsRoot, eval_mul, IsRoot.def.1 H, mul_zero]
+/-
+**Polynomial.root_mul_right_of_isRoot** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：root_mul_right_of_isRoot {p : R[X]} (q : R[X]) : IsRoot p a -> IsRoot (p *
+ q) a
+参数：q : R[X]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.IsRoot.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomi
+al R) (a : R), p.IsRoot a = (Polynomial.eval a p = 0)
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Polynomial.IsRoot.def`：∀ {R : Type u} {a : R} [inst : Semiring R] {p : P
+olynomial R}, p.IsRoot a ↔ Polynomial.eval a p = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem root_mul_right_of_isRoot {p : R[X]} (q : R[X]) : IsRoot p a -> IsRoot (p * q) a := fun H =>
+theorem root_mul_right_of_isRoot {p : R[X]} (q : R[X]) : IsRoot p a → IsRoot (p * q) a := fun H =>
   by rw [IsRoot, eval_mul, IsRoot.def.1 H, zero_mul]
-
-/--
-theorem `eval₂_multiset_prod` / 定理 `eval₂_multiset_prod`
-
-English:
-theorem eval₂_multiset_prod
-  given: (s : Multiset R[X]) (x : S)
-  proof: map_multiset_prod (eval₂RingHom f x) s
-
-中文:
-定理 eval₂_multiset_prod
-  条件: (s : Multiset R[X]) (x : S)
-  证明: map_multiset_prod (eval₂RingHom f x) s
-
-Depends on / 依赖: map_multiset_prod
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_multiset_prod (s : Multiset R[X]) (x : S) :
     eval₂ f x s.prod = (s.map (eval₂ f x)).prod :=
   map_multiset_prod (eval₂RingHom f x) s
-
-/--
-theorem `eval₂_finsetProd` / 定理 `eval₂_finsetProd`
-
-English:
-theorem eval₂_finsetProd
-  given: (s : Finset ι) (g : ι -> R[X]) (x : S)
-  proof: map_prod (eval₂RingHom f x) _ _
-
-@[deprecated (since := "2026-04-08")] alias eval₂_finset_prod := eval₂_finsetProd
-
-中文:
-定理 eval₂_finsetProd
-  条件: (s : 有限集 ι) (g : ι -> R[X]) (x : S)
-  证明: map_prod (eval₂RingHom f x) _ _
-
-@[deprecated (since := "2026-04-08")] alias eval₂_finset_prod := eval₂_finsetProd
-
-Depends on / 依赖: map_prod
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_finsetProd (s : Finset ι) (g : ι -> R[X]) (x : S) :
-    (∏ i in s, g i).eval₂ f x = ∏ i in s, (g i).eval₂ f x :=
+theorem eval₂_finsetProd (s : Finset ι) (g : ι → R[X]) (x : S) :
+    (∏ i ∈ s, g i).eval₂ f x = ∏ i ∈ s, (g i).eval₂ f x :=
   map_prod (eval₂RingHom f x) _ _
 
 @[deprecated (since := "2026-04-08")] alias eval₂_finset_prod := eval₂_finsetProd
 
-/--
-theorem `eval_list_prod` / 定理 `eval_list_prod`
+/-- Polynomial evaluation commutes with `List.prod`
+-/
+/-
+**Polynomial.eval_list_prod** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_list_prod (l : List R[X]) (x : R) : eval x l.prod = (l.map (eval x)).
+prod
+参数：l : List R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_prod`：map_list_prod {F : Type*} [FunLike F M N] [MonoidHomClass
+ F M N] (f : F) (l : List M) : f l.prod = (l.map f).prod
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 
-English:
-theorem eval_list_prod
-  given: (l : List R[X]) (x : R)
-  statement: eval x l.prod = (l.map (eval x)).prod
-  proof: map_list_prod (evalRingHom x) l
-
-中文:
-定理 eval_list_prod
-  条件: (l : 列表 R[X]) (x : R)
-  结论: eval x l.乘积 = (l.map (eval x)).乘积
-  证明: map_list_prod (evalRingHom x) l
-
-Depends on / 依赖: evalRingHom, map_list_prod
+--- 原说明 ---
+Polynomial evaluation commutes with `List.prod`
 -/
 theorem eval_list_prod (l : List R[X]) (x : R) : eval x l.prod = (l.map (eval x)).prod :=
   map_list_prod (evalRingHom x) l
 
-/--
-theorem `eval_multiset_prod` / 定理 `eval_multiset_prod`
+/-- Polynomial evaluation commutes with `Multiset.prod`
+-/
+/-
+**Polynomial.eval_multiset_prod** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_multiset_prod (s : Multiset R[X]) (x : R) : eval x s.prod = (s.map (e
+val x)).prod
+参数：s : Multiset R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_multiset_prod`：∀ {M : Type u_5} {N : Type u_6} [inst : Com
+mMonoid M] [inst_1 : CommMonoid N] (f : M →* N) (s : Multiset M),   f s.prod = (
+Multiset.map (⇑f)…
 
-English:
-theorem eval_multiset_prod
-  given: (s : Multiset R[X]) (x : R)
-  statement: eval x s.prod = (s.map (eval x)).prod
-  proof: (evalRingHom x).map_multiset_prod s
-
-中文:
-定理 eval_multiset_prod
-  条件: (s : Multiset R[X]) (x : R)
-  结论: eval x s.乘积 = (s.map (eval x)).乘积
-  证明: (evalRingHom x).map_multiset_prod s
-
-Depends on / 依赖: evalRingHom, map_multiset_prod
+--- 原说明 ---
+Polynomial evaluation commutes with `Multiset.prod`
 -/
 theorem eval_multiset_prod (s : Multiset R[X]) (x : R) : eval x s.prod = (s.map (eval x)).prod :=
   (evalRingHom x).map_multiset_prod s
 
-/--
-theorem `eval_prod` / 定理 `eval_prod`
-
-English:
-theorem eval_prod
-  given: {ι : Type*} (s : Finset ι) (p : ι -> R[X]) (x : R)
-  proof: map_prod (evalRingHom x) _ _
-
-中文:
-定理 eval_prod
-  条件: {ι : 类型} (s : 有限集 ι) (p : ι -> R[X]) (x : R)
-  证明: map_prod (evalRingHom x) _ _
-
-Depends on / 依赖: evalRingHom, map_prod
+/-- Polynomial evaluation commutes with `Finset.prod`
 -/
-theorem eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X]) (x : R) :
-    eval x (∏ j in s, p j) = ∏ j in s, eval x (p j) :=
+/-
+**Polynomial.eval_prod** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X]) (x : R) : eval x (∏ j
+ in s, p j) = ∏ j in s, eval x (p j)
+参数：s : Finset ι；p : ι -> R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+
+--- 原说明 ---
+Polynomial evaluation commutes with `Finset.prod`
+-/
+theorem eval_prod {ι : Type*} (s : Finset ι) (p : ι → R[X]) (x : R) :
+    eval x (∏ j ∈ s, p j) = ∏ j ∈ s, eval x (p j) :=
   map_prod (evalRingHom x) _ _
-
-/--
-theorem `list_prod_comp` / 定理 `list_prod_comp`
-
-English:
-theorem list_prod_comp
-  given: (l : List R[X]) (q : R[X])
-  proof: map_list_prod (compRingHom q) _
-
-中文:
-定理 list_prod_comp
-  条件: (l : 列表 R[X]) (q : R[X])
-  证明: map_list_prod (compRingHom q) _
-
-Depends on / 依赖: compRingHom, map_list_prod
+/-
+**Polynomial.list_prod_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：list_prod_comp (l : List R[X]) (q : R[X]) : l.prod.comp q = (l.map fun p :
+ R[X] => p.comp q).prod
+参数：l : List R[X]；q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_prod`：map_list_prod {F : Type*} [FunLike F M N] [MonoidHomClass
+ F M N] (f : F) (l : List M) : f l.prod = (l.map f).prod
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 theorem list_prod_comp (l : List R[X]) (q : R[X]) :
     l.prod.comp q = (l.map fun p : R[X] => p.comp q).prod :=
   map_list_prod (compRingHom q) _
-
-/--
-theorem `multiset_prod_comp` / 定理 `multiset_prod_comp`
-
-English:
-theorem multiset_prod_comp
-  given: (s : Multiset R[X]) (q : R[X])
-  proof: map_multiset_prod (compRingHom q) _
-
-中文:
-定理 multiset_prod_comp
-  条件: (s : Multiset R[X]) (q : R[X])
-  证明: map_multiset_prod (compRingHom q) _
-
-Depends on / 依赖: compRingHom, map_multiset_prod
+/-
+**Polynomial.multiset_prod_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：multiset_prod_comp (s : Multiset R[X]) (q : R[X]) : s.prod.comp q = (s.map
+ fun p : R[X] => p.comp q).prod
+参数：s : Multiset R[X]；q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_prod`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst 
+: CommMonoid M] [inst_1 : CommMonoid N] [inst_2 : FunLike F M N]   [MonoidHomCla
+ss F M …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 theorem multiset_prod_comp (s : Multiset R[X]) (q : R[X]) :
     s.prod.comp q = (s.map fun p : R[X] => p.comp q).prod :=
   map_multiset_prod (compRingHom q) _
-
-/--
-theorem `prod_comp` / 定理 `prod_comp`
-
-English:
-theorem prod_comp
-  given: {ι : Type*} (s : Finset ι) (p : ι -> R[X]) (q : R[X])
-  proof: map_prod (compRingHom q) _ _
-
-中文:
-定理 prod_comp
-  条件: {ι : 类型} (s : 有限集 ι) (p : ι -> R[X]) (q : R[X])
-  证明: map_prod (compRingHom q) _ _
-
-Depends on / 依赖: compRingHom, map_prod
+/-
+**Polynomial.prod_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：prod_comp {ι : Type*} (s : Finset ι) (p : ι -> R[X]) (q : R[X]) : (∏ j in 
+s, p j).comp q = ∏ j in s, (p j).comp q
+参数：s : Finset ι；p : ι -> R[X]；q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem prod_comp {ι : Type*} (s : Finset ι) (p : ι -> R[X]) (q : R[X]) :
-    (∏ j in s, p j).comp q = ∏ j in s, (p j).comp q :=
+theorem prod_comp {ι : Type*} (s : Finset ι) (p : ι → R[X]) (q : R[X]) :
+    (∏ j ∈ s, p j).comp q = ∏ j ∈ s, (p j).comp q :=
   map_prod (compRingHom q) _ _
-
-/--
-theorem `isRoot_prod` / 定理 `isRoot_prod`
-
-English:
-theorem isRoot_prod
-  statement: {R} [CommSemiring R] [IsDomain R] {ι : Type*} (s : Finset ι) (p : ι -> R[X])
-  proof: by
-  simp only [IsRoot, eval_prod, Finset.prod_eq_zero_iff]
-
-@[gcongr]
-
-中文:
-定理 isRoot_prod
-  结论: {R} [交换半环 R] [是整环 R] {ι : 类型} (s : 有限集 ι) (p : ι -> R[X])
-  证明: by
-  simp only [IsRoot, eval_prod, Finset.prod_eq_zero_iff]
-
-@[gcongr]
-
-Depends on / 依赖: Finset, Finset.prod_eq_zero_iff, IsRoot, eval_prod, prod_eq_zero_iff
+/-
+**Polynomial.isRoot_prod** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：isRoot_prod {R} [CommSemiring R] [IsDomain R] {ι : Type*} (s : Finset ι) (
+p : ι -> R[X]) (x : R) : IsRoot (∏ j in s, p j) x ↔ exists i in s, IsRoot (p i) 
+x
+参数：s : Finset ι；p : ι -> R[X]；x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_prod`：eval_prod {ι : Type*} (s : Finset ι) (p : ι -> R[X
+]) (x : R) : eval x (∏ j in s, p j) = ∏ j in s, eval x (p j)
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isRoot_prod {R} [CommSemiring R] [IsDomain R] {ι : Type*} (s : Finset ι) (p : ι -> R[X])
-    (x : R) : IsRoot (∏ j in s, p j) x ↔ exists i in s, IsRoot (p i) x := by
+theorem isRoot_prod {R} [CommSemiring R] [IsDomain R] {ι : Type*} (s : Finset ι) (p : ι → R[X])
+    (x : R) : IsRoot (∏ j ∈ s, p j) x ↔ ∃ i ∈ s, IsRoot (p i) x := by
   simp only [IsRoot, eval_prod, Finset.prod_eq_zero_iff]
 
 @[gcongr]
-/--
-theorem `eval_dvd` / 定理 `eval_dvd`
-
-English:
-theorem eval_dvd
-  statement: p ∣ q -> eval x p ∣ eval x q
-  proof: eval₂_dvd _ _
-
-中文:
-定理 eval_dvd
-  结论: p ∣ q -> eval x p ∣ eval x q
-  证明: eval₂_dvd _ _
-
-Depends on / 依赖: nontrivial, s.toSubsemiring.nontrivial, toSubsemiring
+/-
+**Polynomial.eval_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_dvd : p ∣ q -> eval x p ∣ eval x q
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_dvd`：eval₂_dvd : p ∣ q -> eval₂ f x p ∣ eval₂ f x q
 -/
-theorem eval_dvd : p ∣ q -> eval x p ∣ eval x q :=
+theorem eval_dvd : p ∣ q → eval x p ∣ eval x q :=
   eval₂_dvd _ _
-
-/--
-theorem `eval_eq_zero_of_dvd_of_eval_eq_zero` / 定理 `eval_eq_zero_of_dvd_of_eval_eq_zero`
-
-English:
-theorem eval_eq_zero_of_dvd_of_eval_eq_zero
-  statement: p ∣ q -> eval x p = 0 -> eval x q = 0
-  proof: eval₂_eq_zero_of_dvd_of_eval₂_eq_zero _ _
-
-@[simp]
-
-中文:
-定理 eval_eq_zero_of_dvd_of_eval_eq_zero
-  结论: p ∣ q -> eval x p = 0 -> eval x q = 0
-  证明: eval₂_eq_zero_of_dvd_of_eval₂_eq_zero _ _
-
-@[simp]
-
-Depends on / 依赖: noZeroDivisors, s.toSubsemiring.noZeroDivisors, toSubsemiring
+/-
+**Polynomial.eval_eq_zero_of_dvd_of_eval_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Poly
+nomial`。
+形式化陈述：eval_eq_zero_of_dvd_of_eval_eq_zero : p ∣ q -> eval x p = 0 -> eval x q = 
+0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero`：eval₂_eq_zero_of_dvd_o
+f_eval₂_eq_zero (h : p ∣ q) (h0 : eval₂ f x p = 0) : eval₂ f x q = 0
 -/
-theorem eval_eq_zero_of_dvd_of_eval_eq_zero : p ∣ q -> eval x p = 0 -> eval x q = 0 :=
+theorem eval_eq_zero_of_dvd_of_eval_eq_zero : p ∣ q → eval x p = 0 → eval x q = 0 :=
   eval₂_eq_zero_of_dvd_of_eval₂_eq_zero _ _
 
 @[simp]
-/--
-theorem `eval_geom_sum` / 定理 `eval_geom_sum`
-
-English:
-theorem eval_geom_sum
-  given: {R} [CommSemiring R] {n : Nat} {x : R}
-  proof: by simp [eval_finsetSum]
-
-中文:
-定理 eval_geom_sum
-  条件: {R} [交换半环 R] {n : 自然数} {x : R}
-  证明: by simp [eval_finsetSum]
-
-Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, eval_finsetSum, to_isDomain
+/-
+**Polynomial.eval_geom_sum** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_geom_sum {R} [CommSemiring R] {n : Nat} {x : R} : eval x (∑ i in rang
+e n, X ^ i) = ∑ i in range n, x ^ i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_finsetSum`：eval_finsetSum (s : Finset ι) (g : ι -> R[X])
+ (x : R) : (∑ i in s, g i).eval x = ∑ i in s, (g i).eval x
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Polynomial.eval_pow`：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem eval_geom_sum {R} [CommSemiring R] {n : Nat} {x : R} :
-    eval x (∑ i in range n, X ^ i) = ∑ i in range n, x ^ i := by simp [eval_finsetSum]
+theorem eval_geom_sum {R} [CommSemiring R] {n : ℕ} {x : R} :
+    eval x (∑ i ∈ range n, X ^ i) = ∑ i ∈ range n, x ^ i := by simp [eval_finsetSum]
 
 variable [NoZeroDivisors R]
-
-/--
-lemma `root_mul` / 引理 `root_mul`
-
-English:
-lemma root_mul
-  statement: IsRoot (p * q) a ↔ IsRoot p a ∨ IsRoot q a
-  proof: by
-  simp_rw [IsRoot, eval_mul, mul_eq_zero]
-
-中文:
-引理 root_mul
-  结论: IsRoot (p * q) a ↔ IsRoot p a ∨ IsRoot q a
-  证明: by
-  simp_rw [IsRoot, eval_mul, mul_eq_zero]
-
-Depends on / 依赖: IsRoot, eval_mul, mul_eq_zero, simp_rw
+/-
+**Polynomial.root_mul** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：root_mul : IsRoot (p * q) a ↔ IsRoot p a ∨ IsRoot q a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma root_mul : IsRoot (p * q) a ↔ IsRoot p a ∨ IsRoot q a := by
   simp_rw [IsRoot, eval_mul, mul_eq_zero]
-
-/--
-lemma `root_or_root_of_root_mul` / 引理 `root_or_root_of_root_mul`
-
-English:
-lemma root_or_root_of_root_mul
-  given: (h : IsRoot (p * q) a)
-  statement: IsRoot p a ∨ IsRoot q a
-  proof: root_mul.1 h
-
-中文:
-引理 root_or_root_of_root_mul
-  条件: (h : IsRoot (p * q) a)
-  结论: IsRoot p a ∨ IsRoot q a
-  证明: root_mul.1 h
-
-Depends on / 依赖: root_mul
+/-
+**Polynomial.root_or_root_of_root_mul** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：root_or_root_of_root_mul (h : IsRoot (p * q) a) : IsRoot p a ∨ IsRoot q a
+参数：h : IsRoot (p * q) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Polynomial.root_mul`：root_mul : IsRoot (p * q) a ↔ IsRoot p a ∨ IsRoot q
+ a
 -/
 lemma root_or_root_of_root_mul (h : IsRoot (p * q) a) : IsRoot p a ∨ IsRoot q a :=
   root_mul.1 h
@@ -3274,41 +2212,39 @@ end Eval
 
 section Map
 
-variable [CommSemiring R] [CommSemiring S] (f : R ->+* S)
+variable [CommSemiring R] [CommSemiring S] (f : R →+* S)
 
-/--
-theorem `map_multiset_prod` / 定理 `map_multiset_prod`
-
-English:
-theorem map_multiset_prod
-  given: (m : Multiset R[X])
-  statement: m.prod.map f = (m.map <| map f).prod
-  proof: Eq.symm Multiset.prod_hom _ (mapRingHom f).toMonoidHom
-
-中文:
-定理 map_multiset_prod
-  条件: (m : Multiset R[X])
-  结论: m.乘积.map f = (m.map <| map f).乘积
-  证明: Eq.symm Multiset.prod_hom _ (mapRingHom f).toMonoidHom
+/-
+**Polynomial.map_multiset_prod** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : CommSemiring
+ S] (f : R →+* S)   (m : Multiset (Polynomial R)), Polynomial.map f m.prod = (Mu
+ltiset.map (Polynomial.map f) m).prod
+参数：f : R →+* S；m : Multiset (Polynomial R)；Multiset.map (Polynomial.map f) m。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.prod_hom`：prod_hom (s : Multiset M) {F : Type*} [FunLike F M N]
+ [MonoidHomClass F M N] (f : F) : (s.map f).prod = f s.prod
 -/
 protected theorem map_multiset_prod (m : Multiset R[X]) : m.prod.map f = (m.map <| map f).prod :=
-Eq.symm Multiset.prod_hom _ (mapRingHom f).toMonoidHom
-
-/--
-theorem `map_prod` / 定理 `map_prod`
-
-English:
-theorem map_prod
-  given: {ι : Type*} (g : ι -> R[X]) (s : Finset ι)
-  proof: map_prod (mapRingHom f) _ _
-
-中文:
-定理 map_prod
-  条件: {ι : 类型} (g : ι -> R[X]) (s : 有限集 ι)
-  证明: map_prod (mapRingHom f) _ _
+  Eq.symm <| Multiset.prod_hom _ (mapRingHom f).toMonoidHom
+/-
+**Polynomial.map_prod** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommSemiring R] [inst_1 : CommSemiring
+ S] (f : R →+* S) {ι : Type u_1}   (g : ι → Polynomial R) (s : Finset ι), Polyno
+mial.map f (∏ i ∈ s, g i) = ∏ i ∈ s, Polynomial.map f (g i)
+参数：f : R →+* S；g : ι → Polynomial R；s : Finset ι；∏ i ∈ s, g i；g i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-protected theorem map_prod {ι : Type*} (g : ι -> R[X]) (s : Finset ι) :
-    (∏ i in s, g i).map f = ∏ i in s, (g i).map f :=
+protected theorem map_prod {ι : Type*} (g : ι → R[X]) (s : Finset ι) :
+    (∏ i ∈ s, g i).map f = ∏ i ∈ s, (g i).map f :=
   map_prod (mapRingHom f) _ _
 
 end Map
@@ -3320,325 +2256,218 @@ section Ring
 variable [Ring R] {p q r : R[X]}
 
 @[simp]
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  given: {S} [Ring S] (f : R ->+* S)
-  statement: (p - q).map f = p.map f - q.map f
-  proof: (mapRingHom f).map_sub p q
-
-@[simp]
-
-中文:
-定理 map_sub
-  条件: {S} [环 S] (f : R ->+* S)
-  结论: (p - q).map f = p.map f - q.map f
-  证明: (mapRingHom f).map_sub p q
-
-@[simp]
+/-
+**Polynomial.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {p q : Polynomial R} {S : Type u_1} [inst_1
+ : Ring S] (f : R →+* S),   Polynomial.map f (p - q) = Polynomial.map f p - Poly
+nomial.map f q
+参数：f : R →+* S；p - q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_sub`：∀ {α : Type u_2} {β : Type u_3} [inst : NonAssocRing α]
+ [inst_1 : NonAssocRing β] (f : α →+* β) (x y : α),   f (x - y) = f x - f y
 -/
-protected theorem map_sub {S} [Ring S] (f : R ->+* S) : (p - q).map f = p.map f - q.map f :=
+protected theorem map_sub {S} [Ring S] (f : R →+* S) : (p - q).map f = p.map f - q.map f :=
   (mapRingHom f).map_sub p q
 
 @[simp]
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  given: {S} [Ring S] (f : R ->+* S)
-  statement: (-p).map f = -p.map f
-  proof: (mapRingHom f).map_neg p
-
-中文:
-定理 map_neg
-  条件: {S} [环 S] (f : R ->+* S)
-  结论: (-p).map f = -p.map f
-  证明: (mapRingHom f).map_neg p
+/-
+**Polynomial.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {p : Polynomial R} {S : Type u_1} [inst_1 :
+ Ring S] (f : R →+* S),   Polynomial.map f (-p) = -Polynomial.map f p
+参数：f : R →+* S；-p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_neg`：∀ {α : Type u_2} {β : Type u_3} [inst : NonAssocRing α]
+ [inst_1 : NonAssocRing β] (f : α →+* β) (x : α), f (-x) = -f x
 -/
-protected theorem map_neg {S} [Ring S] (f : R ->+* S) : (-p).map f = -p.map f :=
+protected theorem map_neg {S} [Ring S] (f : R →+* S) : (-p).map f = -p.map f :=
   (mapRingHom f).map_neg p
-
-/--
-lemma `map_intCast` / 引理 `map_intCast`
-
-English:
-lemma map_intCast
-  given: {S} [Ring S] (f : R ->+* S) (n : Int)
-  statement: map f ↑n = ↑n
-  proof: map_intCast (mapRingHom f) n
-
-@[simp]
-
-中文:
-引理 map_intCast
-  条件: {S} [环 S] (f : R ->+* S) (n : 整数)
-  结论: map f ↑n = ↑n
-  证明: map_intCast (mapRingHom f) n
-
-@[simp]
+/-
+**Polynomial.map_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} [inst : Ring R] {S : Type u_1} [inst_1 : Ring S] (f : R →+*
+ S) (n : ℤ), Polynomial.map f ↑n = ↑n
+参数：f : R →+* S；n : ℤ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
 -/
-@[simp] protected lemma map_intCast {S} [Ring S] (f : R ->+* S) (n : Int) : map f ↑n = ↑n :=
+@[simp] protected lemma map_intCast {S} [Ring S] (f : R →+* S) (n : ℤ) : map f ↑n = ↑n :=
   map_intCast (mapRingHom f) n
 
 @[simp]
-/--
-theorem `eval_intCast` / 定理 `eval_intCast`
-
-English:
-theorem eval_intCast
-  given: {n : Int} {x : R}
-  statement: (n : R[X]).eval x = n
-  proof: by
+/-
+**Polynomial.eval_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_intCast {n : Int} {x : R} : (n : R[X]).eval x = n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem eval_intCast {n : ℤ} {x : R} : (n : R[X]).eval x = n := by
   simp only [← C_eq_intCast, eval_C]
 
 @[simp]
-
-中文:
-定理 eval_intCast
-  条件: {n : 整数} {x : R}
-  结论: (n : R[X]).eval x = n
-  证明: by
-  simp only [← C_eq_intCast, eval_C]
-
-@[simp]
-
-Depends on / 依赖: C_eq_intCast, eval_C
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval_intCast {n : Int} {x : R} : (n : R[X]).eval x = n := by
-  simp only [← C_eq_intCast, eval_C]
+theorem eval₂_neg {S} [Ring S] (f : R →+* S) {x : S} : (-p).eval₂ f x = -p.eval₂ f x := by
+  rw [eq_neg_iff_add_eq_zero, ← eval₂_add, neg_add_cancel, eval₂_zero]
 
 @[simp]
-/--
-theorem `eval₂_neg` / 定理 `eval₂_neg`
-
-English:
-theorem eval₂_neg
-  given: {S} [Ring S] (f : R ->+* S) {x : S}
-  statement: (-p).eval₂ f x = -p.eval₂ f x
-  proof: by
-  rw [eq_neg_iff_add_eq_zero]; rw [← eval₂_add]; rw [neg_add_cancel]; rw [eval₂_zero]
-
-@[simp]
-
-中文:
-定理 eval₂_neg
-  条件: {S} [环 S] (f : R ->+* S) {x : S}
-  结论: (-p).eval₂ f x = -p.eval₂ f x
-  证明: by
-  rw [eq_neg_iff_add_eq_zero]; rw [← eval₂_add]; rw [neg_add_cancel]; rw [eval₂_zero]
-
-@[simp]
-
-Depends on / 依赖: eq_neg_iff_add_eq_zero, neg_add_cancel
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_neg {S} [Ring S] (f : R ->+* S) {x : S} : (-p).eval₂ f x = -p.eval₂ f x := by
-  rw [eq_neg_iff_add_eq_zero]; rw [← eval₂_add]; rw [neg_add_cancel]; rw [eval₂_zero]
-
-@[simp]
-/--
-theorem `eval₂_sub` / 定理 `eval₂_sub`
-
-English:
-theorem eval₂_sub
-  given: {S} [Ring S] (f : R ->+* S) {x : S}
-  proof: by
-  rw [sub_eq_add_neg]; rw [eval₂_add]; rw [eval₂_neg]; rw [sub_eq_add_neg]
-
-@[simp]
-
-中文:
-定理 eval₂_sub
-  条件: {S} [环 S] (f : R ->+* S) {x : S}
-  证明: by
-  rw [sub_eq_add_neg]; rw [eval₂_add]; rw [eval₂_neg]; rw [sub_eq_add_neg]
-
-@[simp]
-
-Depends on / 依赖: sub_eq_add_neg
--/
-theorem eval₂_sub {S} [Ring S] (f : R ->+* S) {x : S} :
+theorem eval₂_sub {S} [Ring S] (f : R →+* S) {x : S} :
     (p - q).eval₂ f x = p.eval₂ f x - q.eval₂ f x := by
-  rw [sub_eq_add_neg]; rw [eval₂_add]; rw [eval₂_neg]; rw [sub_eq_add_neg]
+  rw [sub_eq_add_neg, eval₂_add, eval₂_neg, sub_eq_add_neg]
 
 @[simp]
-/--
-theorem `eval_neg` / 定理 `eval_neg`
-
-English:
-theorem eval_neg
-  given: (p : R[X]) (x : R)
-  statement: (-p).eval x = -p.eval x
-  proof: eval₂_neg _
-
-@[simp]
-
-中文:
-定理 eval_neg
-  条件: (p : R[X]) (x : R)
-  结论: (-p).eval x = -p.eval x
-  证明: eval₂_neg _
-
-@[simp]
+/-
+**Polynomial.eval_neg** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_neg (p : R[X]) (x : R) : (-p).eval x = -p.eval x
+参数：p : R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_neg`：eval₂_neg {S} [Ring S] (f : R ->+* S) {x : S} : (-
+p).eval₂ f x = -p.eval₂ f x
 -/
 theorem eval_neg (p : R[X]) (x : R) : (-p).eval x = -p.eval x :=
   eval₂_neg _
 
 @[simp]
-/--
-theorem `eval_sub` / 定理 `eval_sub`
-
-English:
-theorem eval_sub
-  given: (p q : R[X]) (x : R)
-  statement: (p - q).eval x = p.eval x - q.eval x
-  proof: eval₂_sub _
-
-中文:
-定理 eval_sub
-  条件: (p q : R[X]) (x : R)
-  结论: (p - q).eval x = p.eval x - q.eval x
-  证明: eval₂_sub _
+/-
+**Polynomial.eval_sub** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.eval x - q.eval x
+参数：p q : R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_sub`：eval₂_sub {S} [Ring S] (f : R ->+* S) {x : S} : (p
+ - q).eval₂ f x = p.eval₂ f x - q.eval₂ f x
 -/
 theorem eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.eval x - q.eval x :=
   eval₂_sub _
-
-/--
-theorem `root_X_sub_C` / 定理 `root_X_sub_C`
-
-English:
-theorem root_X_sub_C
-  statement: IsRoot (X - C a) b ↔ a = b
-  proof: by
-  rw [IsRoot.def]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_eq_zero]; rw [eq_comm]
-
-@[simp]
-
-中文:
-定理 root_X_sub_C
-  结论: IsRoot (X - C a) b ↔ a = b
-  证明: by
-  rw [IsRoot.def]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_eq_zero]; rw [eq_comm]
-
-@[simp]
-
-Depends on / 依赖: IsRoot, IsRoot.def, eq_comm, eval_C, eval_X, eval_sub, sub_eq_zero
+/-
+**Polynomial.root_X_sub_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：root_X_sub_C : IsRoot (X - C a) b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.IsRoot.def`：∀ {R : Type u} {a : R} [inst : Semiring R] {p : P
+olynomial R}, p.IsRoot a ↔ Polynomial.eval a p = 0
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem root_X_sub_C : IsRoot (X - C a) b ↔ a = b := by
-  rw [IsRoot.def]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_eq_zero]; rw [eq_comm]
+  rw [IsRoot.def, eval_sub, eval_X, eval_C, sub_eq_zero, eq_comm]
 
 @[simp]
-/--
-theorem `neg_comp` / 定理 `neg_comp`
-
-English:
-theorem neg_comp
-  statement: (-p).comp q = -p.comp q
-  proof: eval₂_neg _
-
-@[simp]
-
-中文:
-定理 neg_comp
-  结论: (-p).comp q = -p.comp q
-  证明: eval₂_neg _
-
-@[simp]
+/-
+**Polynomial.neg_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：neg_comp : (-p).comp q = -p.comp q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_neg`：eval₂_neg {S} [Ring S] (f : R ->+* S) {x : S} : (-
+p).eval₂ f x = -p.eval₂ f x
 -/
 theorem neg_comp : (-p).comp q = -p.comp q :=
   eval₂_neg _
 
 @[simp]
-/--
-theorem `sub_comp` / 定理 `sub_comp`
-
-English:
-theorem sub_comp
-  statement: (p - q).comp r = p.comp r - q.comp r
-  proof: eval₂_sub _
-
-@[simp]
-
-中文:
-定理 sub_comp
-  结论: (p - q).comp r = p.comp r - q.comp r
-  证明: eval₂_sub _
-
-@[simp]
+/-
+**Polynomial.sub_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：sub_comp : (p - q).comp r = p.comp r - q.comp r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_sub`：eval₂_sub {S} [Ring S] (f : R ->+* S) {x : S} : (p
+ - q).eval₂ f x = p.eval₂ f x - q.eval₂ f x
 -/
 theorem sub_comp : (p - q).comp r = p.comp r - q.comp r :=
   eval₂_sub _
 
 @[simp]
-/--
-theorem `intCast_comp` / 定理 `intCast_comp`
-
-English:
-theorem intCast_comp
-  given: (i : Int)
-  statement: comp (i : R[X]) p = i
-  proof: by cases i <;> simp
-
-@[simp]
-
-中文:
-定理 intCast_comp
-  条件: (i : 整数)
-  结论: comp (i : R[X]) p = i
-  证明: by cases i <;> simp
-
-@[simp]
+/-
+**Polynomial.intCast_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：intCast_comp (i : Int) : comp (i : R[X]) p = i
+参数：i : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Polynomial.natCast_comp`：natCast_comp {n : Nat} : (n : R[X]).comp p = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_negSucc`：cast_negSucc (n : Nat) : (-[n+1] : R) = -(n + 1 : Nat)
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `Polynomial.add_comp`：add_comp : (p + q).comp r = p.comp r + q.comp r
+· 使用定理 `Polynomial.neg_comp`：neg_comp : (-p).comp q = -p.comp q
+· 使用定理 `Polynomial.one_comp`：one_comp : comp (1 : R[X]) p = 1
 -/
-theorem intCast_comp (i : Int) : comp (i : R[X]) p = i := by cases i <;> simp
+theorem intCast_comp (i : ℤ) : comp (i : R[X]) p = i := by cases i <;> simp
 
 @[simp]
-/--
-theorem `eval₂_at_intCast` / 定理 `eval₂_at_intCast`
-
-English:
-theorem eval₂_at_intCast
-  given: {S : Type*} [Ring S] (f : R ->+* S) (n : Int)
-  proof: by
-  convert! eval₂_at_apply (p := p) f n
-  simp
-
-中文:
-定理 eval₂_at_intCast
-  条件: {S : 类型} [环 S] (f : R ->+* S) (n : 整数)
-  证明: by
-  convert! eval₂_at_apply (p := p) f n
-  simp
-
-Depends on / 依赖: convert
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_at_intCast {S : Type*} [Ring S] (f : R ->+* S) (n : Int) :
+theorem eval₂_at_intCast {S : Type*} [Ring S] (f : R →+* S) (n : ℤ) :
     p.eval₂ f n = f (p.eval n) := by
   convert! eval₂_at_apply (p := p) f n
   simp
-
-/--
-theorem `mul_X_sub_intCast_comp` / 定理 `mul_X_sub_intCast_comp`
-
-English:
-theorem mul_X_sub_intCast_comp
-  given: {n : Nat}
-  proof: by
-  rw [mul_sub]; rw [sub_comp]; rw [mul_X_comp]; rw [← Nat.cast_comm]; rw [natCast_mul_comp]; rw [Nat.cast_comm]; rw [mul_sub]
-
-中文:
-定理 mul_X_sub_intCast_comp
-  条件: {n : 自然数}
-  证明: by
-  rw [mul_sub]; rw [sub_comp]; rw [mul_X_comp]; rw [← Nat.cast_comm]; rw [natCast_mul_comp]; rw [Nat.cast_comm]; rw [mul_sub]
-
-Depends on / 依赖: Nat.cast_comm, cast_comm, mul_X_comp, mul_sub, natCast_mul_comp, sub_comp
+/-
+**Polynomial.mul_X_sub_intCast_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：mul_X_sub_intCast_comp {n : Nat} : (p * (X - (n : R[X]))).comp q = p.comp 
+q * (q - n)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `Polynomial.sub_comp`：sub_comp : (p - q).comp r = p.comp r - q.comp r
+· 使用定理 `Polynomial.mul_X_comp`：mul_X_comp : (p * X).comp r = p.comp r * r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_comm`：cast_comm (n : Nat) (x : α) : (n : α) * x = x * n
+· 使用定理 `Polynomial.natCast_mul_comp`：natCast_mul_comp {n : Nat} : ((n : R[X]) * 
+p).comp r = n * p.comp r
 -/
-theorem mul_X_sub_intCast_comp {n : Nat} :
+theorem mul_X_sub_intCast_comp {n : ℕ} :
     (p * (X - (n : R[X]))).comp q = p.comp q * (q - n) := by
-  rw [mul_sub]; rw [sub_comp]; rw [mul_X_comp]; rw [← Nat.cast_comm]; rw [natCast_mul_comp]; rw [Nat.cast_comm]; rw [mul_sub]
+  rw [mul_sub, sub_comp, mul_X_comp, ← Nat.cast_comm, natCast_mul_comp, Nat.cast_comm, mul_sub]
 
 end Ring
 
 end Polynomial
+

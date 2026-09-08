@@ -37,30 +37,29 @@ open Category Limits
 
 variable {C : Type u} [Category.{v} C] {A : Type*} [Category* A]
 
-/--
-Definition of `PreOneHypercover` / `PreOneHypercover` 的定义
+/-- The categorical data that is involved in a `1`-hypercover of an object `S`. This
+consists of a family of morphisms `f i : X i ⟶ S` for `i : I₀`, and for each
+tuple `(i₁, i₂)` of elements in `I₀`, a family of objects `Y j` indexed by
+a type `I₁ i₁ i₂`, which are equipped with a map to the fibre product of `X i₁`
+and `X i₂`, which is phrased here as the data of the two projections
+`p₁ : Y j ⟶ X i₁`, `p₂ : Y j ⟶ X i₂` and the relation `p₁ j ≫ f i₁ = p₂ j ≫ f i₂`.
+(See `GrothendieckTopology.OneHypercover` for the topological conditions.) -/
+/-
+**CategoryTheory.PreOneHypercover** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} → [CategoryTheory.Category.{v, u} C] → C → Type (max (max u v
+) (w + 1))
+参数：max (max u v) (w + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PreOneHypercover
-  parameters: (S : C)
-  extends: PreZeroHypercover.{w} S
-  axioms and operations (5):
-    - I₁((i₁ i₂ : I₀)) : Type w
-    - Y(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : C
-    - p₁(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₁
-    - p₂(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₂
-    - w(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : p₁ j ≫ f i₁ = p₂ j ≫ f i₂
-
-中文:
-结构 PreOneHypercover
-  参数: (S : C)
-  继承: PreZeroHypercover.{w} S
-  公理与运算 (5 个):
-    - I₁((i₁ i₂ : I₀)) : 类型 w
-    - Y(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : C
-    - p₁(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₁
-    - p₂(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₂
-    - w(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : p₁ j ≫ f i₁ = p₂ j ≫ f i₂
+--- 原说明 ---
+The categorical data that is involved in a `1`-hypercover of an object `S`. This
+consists of a family of morphisms `f i : X i ⟶ S` for `i : I₀`, and for each
+tuple `(i₁, i₂)` of elements in `I₀`, a family of objects `Y j` indexed by
+a type `I₁ i₁ i₂`, which are equipped with a map to the fibre product of `X i₁`
+and `X i₂`, which is phrased here as the data of the two projections
+`p₁ : Y j ⟶ X i₁`, `p₂ : Y j ⟶ X i₂` and the relation `p₁ j ≫ f i₁ = p₂ j ≫ f i₂
+`.
+(See `GrothendieckTopology.OneHypercover` for the topological conditions.)
 -/
 structure PreOneHypercover (S : C) extends PreZeroHypercover.{w} S where
   /-- the index type of the coverings of the fibre products -/
@@ -83,51 +82,30 @@ and `h : Z ⟶ E.Y j` such that `g ≫ p₁ = h ≫ E.p₁ j` and `g ≫ p₂ = 
 See lemmas `sieve₁_eq_pullback_sieve₁'` and `sieve₁'_eq_sieve₁` for equational lemmas
 regarding this sieve. -/
 @[simps]
-/--
-Definition of `sieve₁` / `sieve₁` 的定义
+/-
+**CategoryTheory.PreOneHypercover.sieve** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sieve₁
-  signature: {i₁ i₂ : E.I₀} {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
-  body: exists (j : E.I₁ i₁ i₂) (h : Z ⟶ E.Y j), g ≫ p₁ = h ≫ E.p₁ j ∧ g ≫ p₂ = h ≫ E.p₂ j
-  downward_closed := by
-    rintro Z Z' g ⟨j, h, fac₁, fac₂⟩ φ
-    exact ⟨j, φ ≫ h, by simpa using φ ≫= fac₁, by simpa using φ ≫= fac₂⟩
-
-中文:
-定义 sieve₁
-  签名: {i₁ i₂ : E.I₀} {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
-  定义体: exists (j : E.I₁ i₁ i₂) (h : Z ⟶ E.Y j), g ≫ p₁ = h ≫ E.p₁ j ∧ g ≫ p₂ = h ≫ E.p₂ j
-  downward_closed := by
-    rintro Z Z' g ⟨j, h, fac₁, fac₂⟩ φ
-    exact ⟨j, φ ≫ h, by simpa using φ ≫= fac₁, by simpa using φ ≫= fac₂⟩
+--- 原说明 ---
+Given an object `W` equipped with morphisms `p₁ : W ⟶ E.X i₁`, `p₂ : W ⟶ E.X i₂`
+,
+this is the sieve of `W` which consists of morphisms `g : Z ⟶ W` such that there
+ exists `j`
+and `h : Z ⟶ E.Y j` such that `g ≫ p₁ = h ≫ E.p₁ j` and `g ≫ p₂ = h ≫ E.p₂ j`.
+See lemmas `sieve₁_eq_pullback_sieve₁'` and `sieve₁'_eq_sieve₁` for equational l
+emmas
+regarding this sieve.
 -/
 def sieve₁ {i₁ i₂ : E.I₀} {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂) : Sieve W where
-  arrows Z g := exists (j : E.I₁ i₁ i₂) (h : Z ⟶ E.Y j), g ≫ p₁ = h ≫ E.p₁ j ∧ g ≫ p₂ = h ≫ E.p₂ j
+  arrows Z g := ∃ (j : E.I₁ i₁ i₂) (h : Z ⟶ E.Y j), g ≫ p₁ = h ≫ E.p₁ j ∧ g ≫ p₂ = h ≫ E.p₂ j
   downward_closed := by
     rintro Z Z' g ⟨j, h, fac₁, fac₂⟩ φ
     exact ⟨j, φ ≫ h, by simpa using φ ≫= fac₁, by simpa using φ ≫= fac₂⟩
-
-/--
-lemma `pullback_sieve₁` / 引理 `pullback_sieve₁`
-
-English:
-lemma pullback_sieve₁
-  statement: {i₁ i₂ : E.I₀} {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
-  proof: by
-  refine le_antisymm ?_ ?_ <;>
-  · intro Z g ⟨k, u, hu₁, hu₂⟩
-    cat_disch
-
-中文:
-引理 pullback_sieve₁
-  结论: {i₁ i₂ : E.I₀} {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
-  证明: by
-  refine le_antisymm ?_ ?_ <;>
-  · intro Z g ⟨k, u, hu₁, hu₂⟩
-    cat_disch
-
-Depends on / 依赖: cat_disch, le_antisymm
+/-
+**CategoryTheory.PreOneHypercover.pullback_sieve** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pullback_sieve₁ {i₁ i₂ : E.I₀} {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
     {T : C} (f : T ⟶ W) :
@@ -140,124 +118,85 @@ section
 
 variable {i₁ i₂ : E.I₀} [HasPullback (E.f i₁) (E.f i₂)]
 
-/--
-Definition of `toPullback` / `toPullback` 的定义
+/-- The obvious morphism `E.Y j ⟶ pullback (E.f i₁) (E.f i₂)` given by `E : PreOneHypercover S`. -/
+/-
+**CategoryTheory.PreOneHypercover.toPullback** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.PreOneHypercover`。
+形式化陈述：toPullback (j : E.I₁ i₁ i₂) : E.Y j ⟶ pullback (E.f i₁) (E.f i₂)
+参数：j : E.I₁ i₁ i₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.PreOneHypercover.w`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {S : C} (self : CategoryTheory.PreOneHypercover S)   ⦃i₁ i₂ 
+: self.I₀⦄ (j : self.I₁…
 
-English:
-abbreviation toPullback
-  signature: (j : E.I₁ i₁ i₂)
-  body: pullback.lift (E.p₁ j) (E.p₂ j) (E.w j)
-
-@[reassoc (attr := simp)]
-
-中文:
-缩写 toPullback
-  签名: (j : E.I₁ i₁ i₂)
-  定义体: pullback.lift (E.p₁ j) (E.p₂ j) (E.w j)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: pullback, pullback.lift
+--- 原说明 ---
+The obvious morphism `E.Y j ⟶ pullback (E.f i₁) (E.f i₂)` given by `E : PreOneHy
+percover S`.
 -/
 noncomputable abbrev toPullback (j : E.I₁ i₁ i₂) : E.Y j ⟶ pullback (E.f i₁) (E.f i₂) :=
   pullback.lift (E.p₁ j) (E.p₂ j) (E.w j)
 
 @[reassoc (attr := simp)]
-/--
-lemma `toPullback_fst` / 引理 `toPullback_fst`
-
-English:
-lemma toPullback_fst
-  given: (k : E.I₁ i₁ i₂)
-  statement: E.toPullback k ≫ pullback.fst _ _ = E.p₁ k
-  proof: by
-  rw [pullback.lift_fst]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 toPullback_fst
-  条件: (k : E.I₁ i₁ i₂)
-  结论: E.toPullback k ≫ pullback.fst _ _ = E.p₁ k
-  证明: by
-  rw [pullback.lift_fst]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: lift_fst, pullback, pullback.lift_fst
+/-
+**CategoryTheory.PreOneHypercover.toPullback_fst** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.PreOneHypercover`。
+形式化陈述：toPullback_fst (k : E.I₁ i₁ i₂) : E.toPullback k ≫ pullback.fst _ _ = E.p₁
+ k
+参数：k : E.I₁ i₁ i₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.PreOneHypercover.w`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {S : C} (self : CategoryTheory.PreOneHypercover S)   ⦃i₁ i₂ 
+: self.I₀⦄ (j : self.I₁…
+· 使用定理 `CategoryTheory.Limits.pullback.lift_fst`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {W X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Cate
+goryTheory.Limits.HasPullback…
 -/
 lemma toPullback_fst (k : E.I₁ i₁ i₂) : E.toPullback k ≫ pullback.fst _ _ = E.p₁ k := by
   rw [pullback.lift_fst]
 
 @[reassoc (attr := simp)]
-/--
-lemma `toPullback_snd` / 引理 `toPullback_snd`
-
-English:
-lemma toPullback_snd
-  given: (k : E.I₁ i₁ i₂)
-  statement: E.toPullback k ≫ pullback.snd _ _ = E.p₂ k
-  proof: by
-  rw [pullback.lift_snd]
-
-中文:
-引理 toPullback_snd
-  条件: (k : E.I₁ i₁ i₂)
-  结论: E.toPullback k ≫ pullback.snd _ _ = E.p₂ k
-  证明: by
-  rw [pullback.lift_snd]
-
-Depends on / 依赖: lift_snd, pullback, pullback.lift_snd
+/-
+**CategoryTheory.PreOneHypercover.toPullback_snd** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.PreOneHypercover`。
+形式化陈述：toPullback_snd (k : E.I₁ i₁ i₂) : E.toPullback k ≫ pullback.snd _ _ = E.p₂
+ k
+参数：k : E.I₁ i₁ i₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.PreOneHypercover.w`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {S : C} (self : CategoryTheory.PreOneHypercover S)   ⦃i₁ i₂ 
+: self.I₀⦄ (j : self.I₁…
+· 使用定理 `CategoryTheory.Limits.pullback.lift_snd`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {W X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Cate
+goryTheory.Limits.HasPullback…
 -/
 lemma toPullback_snd (k : E.I₁ i₁ i₂) : E.toPullback k ≫ pullback.snd _ _ = E.p₂ k := by
   rw [pullback.lift_snd]
 
 variable (i₁ i₂) in
-/--
-Definition of `sieve₁'` / `sieve₁'` 的定义
+/-- The sieve of `pullback (E.f i₁) (E.f i₂)` given by `E : PreOneHypercover S`. -/
+/-
+**CategoryTheory.PreOneHypercover.sieve** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sieve₁'
-  signature: : Sieve (pullback (E.f i₁) (E.f i₂))
-  body: Sieve.ofArrows _ (fun (j : E.I₁ i₁ i₂) => E.toPullback j)
-
-中文:
-定义 sieve₁'
-  签名: : 筛 (pullback (E.f i₁) (E.f i₂))
-  定义体: Sieve.ofArrows _ (fun (j : E.I₁ i₁ i₂) => E.toPullback j)
+--- 原说明 ---
+The sieve of `pullback (E.f i₁) (E.f i₂)` given by `E : PreOneHypercover S`.
 -/
 noncomputable def sieve₁' : Sieve (pullback (E.f i₁) (E.f i₂)) :=
   Sieve.ofArrows _ (fun (j : E.I₁ i₁ i₂) => E.toPullback j)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `sieve₁_eq_pullback_sieve₁'` / 引理 `sieve₁_eq_pullback_sieve₁'`
-
-English:
-lemma sieve₁_eq_pullback_sieve₁'
-  statement: {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
-  proof: by
-  ext Z g
-  constructor
-  · rintro ⟨j, h, fac₁, fac₂⟩
-    exact ⟨_, h, _, ⟨j⟩, by cat_disch⟩
-  · rintro ⟨_, h, w, ⟨j⟩, fac⟩
-    exact ⟨j, h, by simpa using fac.symm =≫ pullback.fst _ _,
-      by simpa using fac.symm =≫ pullback.snd _ _⟩
-
-中文:
-引理 sieve₁_eq_pullback_sieve₁'
-  结论: {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
-  证明: by
-  ext Z g
-  constructor
-  · rintro ⟨j, h, fac₁, fac₂⟩
-    exact ⟨_, h, _, ⟨j⟩, by cat_disch⟩
-  · rintro ⟨_, h, w, ⟨j⟩, fac⟩
-    exact ⟨j, h, by simpa using fac.symm =≫ pullback.fst _ _,
-      by simpa using fac.symm =≫ pullback.snd _ _⟩
-
-Depends on / 依赖: cat_disch, fac.symm, pullback, pullback.fst, pullback.snd
+/-
+**CategoryTheory.PreOneHypercover.sieve** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sieve₁_eq_pullback_sieve₁' {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W ⟶ E.X i₂)
     (w : p₁ ≫ E.f i₁ = p₂ ≫ E.f i₂) :
@@ -271,104 +210,66 @@ lemma sieve₁_eq_pullback_sieve₁' {W : C} (p₁ : W ⟶ E.X i₁) (p₂ : W �
       by simpa using fac.symm =≫ pullback.snd _ _⟩
 
 variable (i₁ i₂) in
-/--
-lemma `sieve₁'_eq_sieve₁` / 引理 `sieve₁'_eq_sieve₁`
-
-English:
-lemma sieve₁'_eq_sieve₁
-  statement: E.sieve₁' i₁ i₂ = E.sieve₁ (pullback.fst _ _) (pullback.snd _ _)
-  proof: by
-  rw [← Sieve.pullback_id (S := E.sieve₁' i₁ i₂)]; rw [sieve₁_eq_pullback_sieve₁' _ _ _ pullback.condition]
-  congr
-  cat_disch
-
-中文:
-引理 sieve₁'_eq_sieve₁
-  结论: E.sieve₁' i₁ i₂ = E.sieve₁ (pullback.fst _ _) (pullback.snd _ _)
-  证明: by
-  rw [← Sieve.pullback_id (S := E.sieve₁' i₁ i₂)]; rw [sieve₁_eq_pullback_sieve₁' _ _ _ pullback.condition]
-  congr
-  cat_disch
+/-
+**CategoryTheory.PreOneHypercover.sieve** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sieve₁'_eq_sieve₁ : E.sieve₁' i₁ i₂ = E.sieve₁ (pullback.fst _ _) (pullback.snd _ _) := by
-  rw [← Sieve.pullback_id (S := E.sieve₁' i₁ i₂)]; rw [sieve₁_eq_pullback_sieve₁' _ _ _ pullback.condition]
+  rw [← Sieve.pullback_id (S := E.sieve₁' i₁ i₂),
+    sieve₁_eq_pullback_sieve₁' _ _ _ pullback.condition]
   congr
   cat_disch
 
 end
 
-/--
-Definition of `I₁'` / `I₁'` 的定义
+/-- The sigma type of all `E.I₁ i₁ i₂` for `⟨i₁, i₂⟩ : E.I₀ × E.I₀`. -/
+/-
+**CategoryTheory.PreOneHypercover.I** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.
+PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation I₁'
-  signature: : Type w
-  body: Sigma (fun (i : E.I₀ × E.I₀) => E.I₁ i.1 i.2)
-
-中文:
-缩写 I₁'
-  签名: : 类型 w
-  定义体: Sigma (fun (i : E.I₀ × E.I₀) => E.I₁ i.1 i.2)
+--- 原说明 ---
+The sigma type of all `E.I₁ i₁ i₂` for `⟨i₁, i₂⟩ : E.I₀ × E.I₀`.
 -/
 abbrev I₁' : Type w := Sigma (fun (i : E.I₀ × E.I₀) => E.I₁ i.1 i.2)
 
-/--
-Definition of `Y'` / `Y'` 的定义
+/-- The `1`-components as a function from the sigma type over `E.I₁ i₁ i₂`. -/
+/-
+**CategoryTheory.PreOneHypercover.Y'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.P
+reOneHypercover`。
+形式化陈述：Y' (i : E.I₁') : C
+参数：i : E.I₁'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Y'
-  signature: (i : E.I₁')
-  body: E.Y i.2
-
-@[simp]
-
-中文:
-定义 Y'
-  签名: (i : E.I₁')
-  定义体: E.Y i.2
-
-@[simp]
+--- 原说明 ---
+The `1`-components as a function from the sigma type over `E.I₁ i₁ i₂`.
 -/
 def Y' (i : E.I₁') : C := E.Y i.2
 
 @[simp]
-/--
-lemma `Y'_apply` / 引理 `Y'_apply`
-
-English:
-lemma Y'_apply
-  given: (i : E.I₁')
-  statement: E.Y' i = E.Y i.2
-  proof: rfl
-
-中文:
-引理 Y'_apply
-  条件: (i : E.I₁')
-  结论: E.Y' i = E.Y i.2
-  证明: rfl
+/-
+**CategoryTheory.PreOneHypercover.Y'_apply** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.PreOneHypercover`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {S : C} (E : Cate
+goryTheory.PreOneHypercover S) (i : E.I₁'),   E.Y' i = E.Y i.snd
+参数：E : CategoryTheory.PreOneHypercover S；i : E.I₁'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Y'_apply (i : E.I₁') : E.Y' i = E.Y i.2 := rfl
 
 /-- The shape of the multiforks attached to `E : PreOneHypercover S`. -/
 @[simps]
-/--
-Definition of `multicospanShape` / `multicospanShape` 的定义
+/-
+**CategoryTheory.PreOneHypercover.multicospanShape** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.PreOneHypercover`。
+形式化陈述：multicospanShape : MulticospanShape where L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition multicospanShape
-  signature: : MulticospanShape where
-  body: E.I₀
-  R := E.I₁'
-  fst j := j.1.1
-  snd j := j.1.2
-
-中文:
-定义 multicospanShape
-  签名: : MulticospanShape where
-  定义体: E.I₀
-  R := E.I₁'
-  fst j := j.1.1
-  snd j := j.1.2
+--- 原说明 ---
+The shape of the multiforks attached to `E : PreOneHypercover S`.
 -/
 def multicospanShape : MulticospanShape where
   L := E.I₀
@@ -379,26 +280,18 @@ def multicospanShape : MulticospanShape where
 /-- The diagram of the multifork attached to a presheaf
 `F : Cᵒᵖ ⥤ A`, `S : C` and `E : PreOneHypercover S`. -/
 @[simps]
-/--
-Definition of `multicospanIndex` / `multicospanIndex` 的定义
+/-
+**CategoryTheory.PreOneHypercover.multicospanIndex** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.PreOneHypercover`。
+形式化陈述：multicospanIndex (F : Cᵒᵖ ⥤ A) : MulticospanIndex E.multicospanShape A whe
+re left i
+参数：F : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition multicospanIndex
-  signature: (F : Cᵒᵖ ⥤ A)
-  body: F.obj (Opposite.op (E.X i))
-  right j := F.obj (Opposite.op (E.Y j.2))
-  fst j := F.map ((E.p₁ j.2).op)
-  snd j := F.map ((E.p₂ j.2).op)
-
-中文:
-定义 multicospanIndex
-  签名: (F : Cᵒᵖ ⥤ A)
-  定义体: F.obj (Opposite.op (E.X i))
-  right j := F.obj (Opposite.op (E.Y j.2))
-  fst j := F.map ((E.p₁ j.2).op)
-  snd j := F.map ((E.p₂ j.2).op)
-
-Depends on / 依赖: F.obj, Opposite, Opposite.op
+--- 原说明 ---
+The diagram of the multifork attached to a presheaf
+`F : Cᵒᵖ ⥤ A`, `S : C` and `E : PreOneHypercover S`.
 -/
 def multicospanIndex (F : Cᵒᵖ ⥤ A) : MulticospanIndex E.multicospanShape A where
   left i := F.obj (Opposite.op (E.X i))
@@ -408,30 +301,18 @@ def multicospanIndex (F : Cᵒᵖ ⥤ A) : MulticospanIndex E.multicospanShape A
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `multifork` / `multifork` 的定义
+/-- The multifork attached to a presheaf `F : Cᵒᵖ ⥤ A`, `S : C` and `E : PreOneHypercover S`. -/
+/-
+**CategoryTheory.PreOneHypercover.multifork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+形式化陈述：multifork (F : Cᵒᵖ ⥤ A) : Multifork (E.multicospanIndex F)
+参数：F : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition multifork
-  signature: (F : Cᵒᵖ ⥤ A)
-  body: Multifork.ofι _ (F.obj (Opposite.op S)) (fun i₀ => F.map (E.f i₀).op) (by
-    rintro ⟨⟨i₁, i₂⟩, (j : E.I₁ i₁ i₂)⟩
-    dsimp
-    simp only [← F.map_comp, ← op_comp, E.w])
-
-@[simp]
-
-中文:
-定义 multifork
-  签名: (F : Cᵒᵖ ⥤ A)
-  定义体: Multifork.ofι _ (F.obj (Opposite.op S)) (fun i₀ => F.map (E.f i₀).op) (by
-    rintro ⟨⟨i₁, i₂⟩, (j : E.I₁ i₁ i₂)⟩
-    dsimp
-    simp only [← F.map_comp, ← op_comp, E.w])
-
-@[simp]
-
-Depends on / 依赖: F.map, F.map_comp, F.obj, Multifork, Multifork.of, Opposite, Opposite.op, map_comp, op_comp
+--- 原说明 ---
+The multifork attached to a presheaf `F : Cᵒᵖ ⥤ A`, `S : C` and `E : PreOneHyper
+cover S`.
 -/
 def multifork (F : Cᵒᵖ ⥤ A) :
     Multifork (E.multicospanIndex F) :=
@@ -441,20 +322,10 @@ def multifork (F : Cᵒᵖ ⥤ A) :
     simp only [← F.map_comp, ← op_comp, E.w])
 
 @[simp]
-/--
-lemma `multifork_ι` / 引理 `multifork_ι`
-
-English:
-lemma multifork_ι
-  given: (F : Cᵒᵖ ⥤ A) (i : E.I₀)
-  statement: (E.multifork F).ι i = F.map (E.f i).op
-  proof: rfl
-
-中文:
-引理 multifork_ι
-  条件: (F : Cᵒᵖ ⥤ A) (i : E.I₀)
-  结论: (E.multifork F).ι i = F.map (E.f i).op
-  证明: rfl
+/-
+**CategoryTheory.PreOneHypercover.multifork_** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma multifork_ι (F : Cᵒᵖ ⥤ A) (i : E.I₀) : (E.multifork F).ι i = F.map (E.f i).op := rfl
 
@@ -462,32 +333,26 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The fork associated to a pre-`0`-hypercover induced by taking the coproduct of the
 components. -/
 @[simps! pt]
-/--
-Definition of `forkOfIsColimit` / `forkOfIsColimit` 的定义
+/-
+**CategoryTheory.PreOneHypercover.forkOfIsColimit** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.PreOneHypercover`。
+形式化陈述：forkOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : 
+IsColimit d) (F : Cᵒᵖ ⥤ A) : Fork (F.map (Cofan.IsColimit.desc hd fun _ => E.p₁ 
+_ ≫ c.inj _).op) (F.map (Cofan.IsColimit.desc hd fun _ => E.p₂ _ ≫ c.inj _).op)
+参数：hc : IsColimit c；hd : IsColimit d；F : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forkOfIsColimit
-  signature: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
-  body: .ofι (F.map (Cofan.IsColimit.desc hc E.f).op) by
-    simp_rw [← Functor.map_comp, ← op_comp]
-    congr 2
-    exact Cofan.IsColimit.hom_ext hd _ _ (by simp [E.w])
-
-中文:
-定义 forkOfIsColimit
-  签名: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
-  定义体: .ofι (F.map (Cofan.IsColimit.desc hc E.f).op) by
-    simp_rw [← Functor.map_comp, ← op_comp]
-    congr 2
-    exact Cofan.IsColimit.hom_ext hd _ _ (by simp [E.w])
-
-Depends on / 依赖: Cofan.IsColimit.desc, Cofan.IsColimit.hom_ext, F.map, Functor, Functor.map_comp, IsColimit, hom_ext, map_comp, op_comp, simp_rw
+--- 原说明 ---
+The fork associated to a pre-`0`-hypercover induced by taking the coproduct of t
+he
+components.
 -/
 def forkOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
     (F : Cᵒᵖ ⥤ A) :
-    Fork (F.map (Cofan.IsColimit.desc hd fun _ => E.p₁ _ ≫ c.inj _).op)
-      (F.map (Cofan.IsColimit.desc hd fun _ => E.p₂ _ ≫ c.inj _).op) :=
-.ofι (F.map (Cofan.IsColimit.desc hc E.f).op) by
+    Fork (F.map (Cofan.IsColimit.desc hd fun _ ↦ E.p₁ _ ≫ c.inj _).op)
+      (F.map (Cofan.IsColimit.desc hd fun _ ↦ E.p₂ _ ≫ c.inj _).op) :=
+  .ofι (F.map (Cofan.IsColimit.desc hc E.f).op) <| by
     simp_rw [← Functor.map_comp, ← op_comp]
     congr 2
     exact Cofan.IsColimit.hom_ext hd _ _ (by simp [E.w])
@@ -495,22 +360,10 @@ def forkOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : Is
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `forkOfIsColimit_ι_map_inj` / 引理 `forkOfIsColimit_ι_map_inj`
-
-English:
-lemma forkOfIsColimit_ι_map_inj
-  statement: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'}
-  proof: by
-  simp [forkOfIsColimit, ← Functor.map_comp, ← op_comp]
-
-中文:
-引理 forkOfIsColimit_ι_map_inj
-  结论: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'}
-  证明: by
-  simp [forkOfIsColimit, ← Functor.map_comp, ← op_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp, forkOfIsColimit, map_comp, op_comp
+/-
+**CategoryTheory.PreOneHypercover.forkOfIsColimit_** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forkOfIsColimit_ι_map_inj {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'}
     (hd : IsColimit d) (F : Cᵒᵖ ⥤ A) (i : E.I₀) :
@@ -521,140 +374,85 @@ open Opposite
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isLimitMultiforkEquivIsLimitFork` / `isLimitMultiforkEquivIsLimitFork` 的定义
+/-- The multifork associated to a pre-`1`-hypercover is limiting if and only if
+the fork induced by taking the coproduct of the components is limiting. -/
+/-
+**CategoryTheory.PreOneHypercover.isLimitMultiforkEquivIsLimitFork** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：isLimitMultiforkEquivIsLimitFork {c : Cofan E.X} (hc : IsColimit c) {d : C
+ofan E.Y'} (hd : IsColimit d) (F : Cᵒᵖ ⥤ A) [PreservesLimit (Discrete.functor fu
+n i => Opposite.op (E.X i)) F] [PreservesLimit (Discrete.functor fun i => Opposi
+te.op (E.Y' i)) F] : IsLimit (E.multifork F) ≃ IsLimit (E.forkOfIsColimit hc hd 
+F)
+参数：hc : IsColimit c；hd : IsColimit d；F : Cᵒᵖ ⥤ A；Discrete.functor fun i => Oppos
+ite.op (E.X i)；Discrete.functor fun i => Opposite.op (E.Y' i)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isLimitMultiforkEquivIsLimitFork
-  body: by
-  letI c' : Fan (E.multicospanIndex F).left := Fan.mk _ fun i => F.map (c.inj i).op
-  letI hc' : IsLimit c' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₀ => _) (Cofan.IsColimit.op hc)
-  letI d' : Fan (E.multicospanIndex F).right := Fan.mk _ fun i => F.map (d.inj i).op
-  letI hd' : IsLimit d' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₁' => _) (Cofan.IsColimit.op hd)
-  refine (IsLimit.ofConeEquiv <|
-    (E.multicospanIndex F).multiforkEquivPiForkOfIsLimit hc' hd').symm.trans ?_
-  refine Fork.isLimitEquivOfIsos _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
-  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
-    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
-      Y'_apply, id_comp, comp_id]
-    rw [MulticospanIndex.fstPiMapOfIsLimit_proj]
-    simp [c', d', ← F.map_comp, ← op_comp]
-  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
-    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
-      Y'_apply, id_comp, comp_id]
-    rw [MulticospanIndex.sndPiMapOfIsLimit_proj]
-    simp [c', d', ← F.map_comp, ← op_comp]
-  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
-    simp
-    simp [c']
-
-中文:
-定义 isLimitMultiforkEquivIsLimitFork
-  定义体: by
-  letI c' : Fan (E.multicospanIndex F).left := Fan.mk _ fun i => F.map (c.inj i).op
-  letI hc' : IsLimit c' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₀ => _) (Cofan.IsColimit.op hc)
-  letI d' : Fan (E.multicospanIndex F).right := Fan.mk _ fun i => F.map (d.inj i).op
-  letI hd' : IsLimit d' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₁' => _) (Cofan.IsColimit.op hd)
-  refine (IsLimit.ofConeEquiv <|
-    (E.multicospanIndex F).multiforkEquivPiForkOfIsLimit hc' hd').symm.trans ?_
-  refine Fork.isLimitEquivOfIsos _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
-  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
-    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
-      Y'_apply, id_comp, comp_id]
-    rw [MulticospanIndex.fstPiMapOfIsLimit_proj]
-    simp [c', d', ← F.map_comp, ← op_comp]
-  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
-    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
-      Y'_apply, id_comp, comp_id]
-    rw [MulticospanIndex.sndPiMapOfIsLimit_proj]
-    simp [c', d', ← F.map_comp, ← op_comp]
-  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
-    simp
-    simp [c']
-
-Depends on / 依赖: Cofan.IsColimit.op, E.multicospanIndex, F.map, Fan.mk, Fork.isLimitEquivOfIs, IsColimit, IsLimit, IsLimit.ofConeEquiv, c.inj, d.inj, isLimitEquivOfIs, isLimitFanMkObjOfIsLimit, multicospanIndex, multiforkEquivPiForkOfIsLimit, ofConeEquiv, symm.trans
+--- 原说明 ---
+The multifork associated to a pre-`1`-hypercover is limiting if and only if
+the fork induced by taking the coproduct of the components is limiting.
 -/
 noncomputable def isLimitMultiforkEquivIsLimitFork
     {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d) (F : Cᵒᵖ ⥤ A)
-    [PreservesLimit (Discrete.functor fun i => Opposite.op (E.X i)) F]
-    [PreservesLimit (Discrete.functor fun i => Opposite.op (E.Y' i)) F] :
+    [PreservesLimit (Discrete.functor fun i ↦ Opposite.op (E.X i)) F]
+    [PreservesLimit (Discrete.functor fun i ↦ Opposite.op (E.Y' i)) F] :
     IsLimit (E.multifork F) ≃ IsLimit (E.forkOfIsColimit hc hd F) := by
-  letI c' : Fan (E.multicospanIndex F).left := Fan.mk _ fun i => F.map (c.inj i).op
-  letI hc' : IsLimit c' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₀ => _) (Cofan.IsColimit.op hc)
-  letI d' : Fan (E.multicospanIndex F).right := Fan.mk _ fun i => F.map (d.inj i).op
-  letI hd' : IsLimit d' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₁' => _) (Cofan.IsColimit.op hd)
+  letI c' : Fan (E.multicospanIndex F).left := Fan.mk _ fun i ↦ F.map (c.inj i).op
+  letI hc' : IsLimit c' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₀ ↦ _) (Cofan.IsColimit.op hc)
+  letI d' : Fan (E.multicospanIndex F).right := Fan.mk _ fun i ↦ F.map (d.inj i).op
+  letI hd' : IsLimit d' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₁' ↦ _) (Cofan.IsColimit.op hd)
   refine (IsLimit.ofConeEquiv <|
     (E.multicospanIndex F).multiforkEquivPiForkOfIsLimit hc' hd').symm.trans ?_
   refine Fork.isLimitEquivOfIsos _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
-  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
+  · refine Fan.IsLimit.hom_ext hd' _ _ fun i ↦ ?_
     simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
       Y'_apply, id_comp, comp_id]
     rw [MulticospanIndex.fstPiMapOfIsLimit_proj]
     simp [c', d', ← F.map_comp, ← op_comp]
-  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
+  · refine Fan.IsLimit.hom_ext hd' _ _ fun i ↦ ?_
     simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
       Y'_apply, id_comp, comp_id]
     rw [MulticospanIndex.sndPiMapOfIsLimit_proj]
     simp [c', d', ← F.map_comp, ← op_comp]
-  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
+  · refine Fan.IsLimit.hom_ext hc' _ _ fun i ↦ ?_
     simp
     simp [c']
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The single object pre-`1`-hypercover obtained from taking coproducts of the components. -/
 @[simps toPreZeroHypercover Y]
-/--
-Definition of `sigmaOfIsColimit` / `sigmaOfIsColimit` 的定义
+/-
+**CategoryTheory.PreOneHypercover.sigmaOfIsColimit** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.PreOneHypercover`。
+形式化陈述：sigmaOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd :
+ IsColimit d) : PreOneHypercover.{w} S where __
+参数：hc : IsColimit c；hd : IsColimit d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaOfIsColimit
-  signature: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
-  body: E.toPreZeroHypercover.sigmaOfIsColimit hc
-  I₁ _ _ := PUnit
-  Y _ _ _ := d.pt
-  p₁ _ _ _ := Cofan.IsColimit.desc hd fun i => E.p₁ _ ≫ c.inj _
-  p₂ _ _ _ := Cofan.IsColimit.desc hd fun i => E.p₂ _ ≫ c.inj _
-  w _ _ _ := Cofan.IsColimit.hom_ext hd _ _ (by simp [E.w])
-
-中文:
-定义 sigmaOfIsColimit
-  签名: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
-  定义体: E.toPreZeroHypercover.sigmaOfIsColimit hc
-  I₁ _ _ := PUnit
-  Y _ _ _ := d.pt
-  p₁ _ _ _ := Cofan.IsColimit.desc hd fun i => E.p₁ _ ≫ c.inj _
-  p₂ _ _ _ := Cofan.IsColimit.desc hd fun i => E.p₂ _ ≫ c.inj _
-  w _ _ _ := Cofan.IsColimit.hom_ext hd _ _ (by simp [E.w])
-
-Depends on / 依赖: E.toPreZeroHypercover.sigmaOfIsColimit, sigmaOfIsColimit, toPreZeroHypercover
+--- 原说明 ---
+The single object pre-`1`-hypercover obtained from taking coproducts of the comp
+onents.
 -/
 def sigmaOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d) :
     PreOneHypercover.{w} S where
   __ := E.toPreZeroHypercover.sigmaOfIsColimit hc
   I₁ _ _ := PUnit
   Y _ _ _ := d.pt
-  p₁ _ _ _ := Cofan.IsColimit.desc hd fun i => E.p₁ _ ≫ c.inj _
-  p₂ _ _ _ := Cofan.IsColimit.desc hd fun i => E.p₂ _ ≫ c.inj _
+  p₁ _ _ _ := Cofan.IsColimit.desc hd fun i ↦ E.p₁ _ ≫ c.inj _
+  p₂ _ _ _ := Cofan.IsColimit.desc hd fun i ↦ E.p₂ _ ≫ c.inj _
   w _ _ _ := Cofan.IsColimit.hom_ext hd _ _ (by simp [E.w])
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `p₁_sigmaOfIsColimit` / 引理 `p₁_sigmaOfIsColimit`
-
-English:
-lemma p₁_sigmaOfIsColimit
-  statement: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
-  proof: by
-  simp [sigmaOfIsColimit]
-
-中文:
-引理 p₁_sigmaOfIsColimit
-  结论: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
-  证明: by
-  simp [sigmaOfIsColimit]
-
-Depends on / 依赖: sigmaOfIsColimit
+/-
+**CategoryTheory.PreOneHypercover.p** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pr
+eOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma p₁_sigmaOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
     (i : E.I₁') {a b : PUnit} (r : (E.sigmaOfIsColimit hc hd).I₁ a b) :
@@ -663,32 +461,28 @@ lemma p₁_sigmaOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} 
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `p₂_sigmaOfIsColimit` / 引理 `p₂_sigmaOfIsColimit`
-
-English:
-lemma p₂_sigmaOfIsColimit
-  statement: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
-  proof: by
-  simp [sigmaOfIsColimit]
-
-中文:
-引理 p₂_sigmaOfIsColimit
-  结论: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
-  证明: by
-  simp [sigmaOfIsColimit]
-
-Depends on / 依赖: sigmaOfIsColimit
+/-
+**CategoryTheory.PreOneHypercover.p** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pr
+eOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma p₂_sigmaOfIsColimit {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
     (i : E.I₁') {a b : PUnit} (r : (E.sigmaOfIsColimit hc hd).I₁ a b) :
     d.inj i ≫ (E.sigmaOfIsColimit hc hd).p₂ r = E.p₂ _ ≫ c.inj _ := by
   simp [sigmaOfIsColimit]
-
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d) :
     Unique (E.sigmaOfIsColimit hc hd).multicospanShape.L :=
-inferInstanceAs Unique PUnit
-
+  inferInstanceAs <| Unique PUnit
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d) :
     Unique (E.sigmaOfIsColimit hc hd).multicospanShape.R where
   default := ⟨(⟨⟩, ⟨⟩), ⟨⟩⟩
@@ -700,79 +494,50 @@ set_option backward.isDefEq.respectTransparency false in
 the single object covering obtained from `E` by taking coproducts is limiting
 if and only if the induced multiequalizer of `E` is limiting. -/
 noncomputable
-/--
-Definition of `isLimitSigmaOfIsColimitEquiv` / `isLimitSigmaOfIsColimitEquiv` 的定义
-
-English:
-definition isLimitSigmaOfIsColimitEquiv
-  signature: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'}
-  body: by
-  refine (Multifork.isLimitEquivOfIsos _ _ ?_ ?_ ?_ ?_ ?_ ?_).trans
-    (IsLimit.ofConeEquiv <| (MulticospanIndex.multiforkOfParallelHomsEquivFork
-      (E.sigmaOfIsColimit hc hd).multicospanShape _ _).symm) |>.trans
-      (E.isLimitMultiforkEquivIsLimitFork hc hd F).symm
-  · exact .refl _
-  · exact fun _ => .refl _
-  · exact fun _ => .refl _
-  all_goals cat_disch
-
-中文:
-定义 isLimitSigmaOfIsColimitEquiv
-  签名: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'}
-  定义体: by
-  refine (Multifork.isLimitEquivOfIsos _ _ ?_ ?_ ?_ ?_ ?_ ?_).trans
-    (IsLimit.ofConeEquiv <| (MulticospanIndex.multiforkOfParallelHomsEquivFork
-      (E.sigmaOfIsColimit hc hd).multicospanShape _ _).symm) |>.trans
-      (E.isLimitMultiforkEquivIsLimitFork hc hd F).symm
-  · exact .refl _
-  · exact fun _ => .refl _
-  · exact fun _ => .refl _
-  all_goals cat_disch
-
-Depends on / 依赖: E.isLimitMultiforkEquivIsLimitFork, E.sigmaOfIsColimit, IsLimit, IsLimit.ofConeEquiv, MulticospanIndex, MulticospanIndex.multiforkOfParallelHomsEquivFork, Multifork, Multifork.isLimitEquivOfIsos, all_goals, cat_disch, isLimitEquivOfIsos, isLimitMultiforkEquivIsLimitFork, multicospanShape, multiforkOfParallelHomsEquivFork, ofConeEquiv, sigmaOfIsColimit
+/-
+**CategoryTheory.PreOneHypercover.isLimitSigmaOfIsColimitEquiv** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：isLimitSigmaOfIsColimitEquiv {c : Cofan E.X} (hc : IsColimit c) {d : Cofan
+ E.Y'} (hd : IsColimit d) (F : Cᵒᵖ ⥤ A) [PreservesLimit (Discrete.functor fun i 
+=> Opposite.op (E.X i)) F] [PreservesLimit (Discrete.functor fun i => Opposite.o
+p (E.Y' i)) F] : IsLimit ((E.sigmaOfIsColimit hc hd).multifork F) ≃ IsLimit (E.m
+ultifork F)
+参数：hc : IsColimit c；hd : IsColimit d；F : Cᵒᵖ ⥤ A；Discrete.functor fun i => Oppos
+ite.op (E.X i)；Discrete.functor fun i => Opposite.op (E.Y' i)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def isLimitSigmaOfIsColimitEquiv {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'}
     (hd : IsColimit d) (F : Cᵒᵖ ⥤ A)
-    [PreservesLimit (Discrete.functor fun i => Opposite.op (E.X i)) F]
-    [PreservesLimit (Discrete.functor fun i => Opposite.op (E.Y' i)) F] :
+    [PreservesLimit (Discrete.functor fun i ↦ Opposite.op (E.X i)) F]
+    [PreservesLimit (Discrete.functor fun i ↦ Opposite.op (E.Y' i)) F] :
     IsLimit ((E.sigmaOfIsColimit hc hd).multifork F) ≃ IsLimit (E.multifork F) := by
   refine (Multifork.isLimitEquivOfIsos _ _ ?_ ?_ ?_ ?_ ?_ ?_).trans
     (IsLimit.ofConeEquiv <| (MulticospanIndex.multiforkOfParallelHomsEquivFork
       (E.sigmaOfIsColimit hc hd).multicospanShape _ _).symm) |>.trans
       (E.isLimitMultiforkEquivIsLimitFork hc hd F).symm
   · exact .refl _
-  · exact fun _ => .refl _
-  · exact fun _ => .refl _
+  · exact fun _ ↦ .refl _
+  · exact fun _ ↦ .refl _
   all_goals cat_disch
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The trivial pre-`1`-hypercover of `S` with a single component `S`. -/
 @[simps toPreZeroHypercover I₁ Y p₁ p₂]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.PreOneHypercover.trivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.PreOneHypercover`。
+形式化陈述：trivial (S : C) : PreOneHypercover.{w} S where __
+参数：S : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: (S : C)
-  body: PreZeroHypercover.singleton (𝟙 S)
-  I₁ _ _ := PUnit
-  Y _ _ _ := S
-  p₁ _ _ _ := 𝟙 _
-  p₂ _ _ _ := 𝟙 _
-  w _ _ _ := by simp
-
-中文:
-定义 trivial
-  签名: (S : C)
-  定义体: PreZeroHypercover.singleton (𝟙 S)
-  I₁ _ _ := PUnit
-  Y _ _ _ := S
-  p₁ _ _ _ := 𝟙 _
-  p₂ _ _ _ := 𝟙 _
-  w _ _ _ := by simp
-
-Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.singleton, singleton
+--- 原说明 ---
+The trivial pre-`1`-hypercover of `S` with a single component `S`.
 -/
 def trivial (S : C) : PreOneHypercover.{w} S where
   __ := PreZeroHypercover.singleton (𝟙 S)
@@ -783,63 +548,31 @@ def trivial (S : C) : PreOneHypercover.{w} S where
   w _ _ _ := by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `sieve₀_trivial` / 引理 `sieve₀_trivial`
-
-English:
-lemma sieve₀_trivial
-  given: (S : C)
-  statement: (trivial S).sieve₀ = ⊤
-  proof: by
-  rw [PreZeroHypercover.sieve₀]; rw [Sieve.ofArrows]; rw [← PreZeroHypercover.presieve₀]
-  simp
-
-中文:
-引理 sieve₀_trivial
-  条件: (S : C)
-  结论: (trivial S).sieve₀ = ⊤
-  证明: by
-  rw [PreZeroHypercover.sieve₀]; rw [Sieve.ofArrows]; rw [← PreZeroHypercover.presieve₀]
-  simp
-
-Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.presieve, PreZeroHypercover.sieve, Sieve.ofArrows, ofArrows
+/-
+**CategoryTheory.PreOneHypercover.sieve** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sieve₀_trivial (S : C) : (trivial S).sieve₀ = ⊤ := by
-  rw [PreZeroHypercover.sieve₀]; rw [Sieve.ofArrows]; rw [← PreZeroHypercover.presieve₀]
+  rw [PreZeroHypercover.sieve₀, Sieve.ofArrows, ← PreZeroHypercover.presieve₀]
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `sieve₁_trivial` / 引理 `sieve₁_trivial`
-
-English:
-lemma sieve₁_trivial
-  given: {S : C} {W : C} {p : W ⟶ S}
-  proof: by ext; simp
-
-中文:
-引理 sieve₁_trivial
-  条件: {S : C} {W : C} {p : W ⟶ S}
-  证明: by ext; simp
+/-
+**CategoryTheory.PreOneHypercover.sieve** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sieve₁_trivial {S : C} {W : C} {p : W ⟶ S} :
     (trivial S).sieve₁ (i₁ := ⟨⟩) (i₂ := ⟨⟩) p p = ⊤ := by ext; simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nonempty (PreOneHypercover.{w} S)
-  body: ⟨trivial S⟩
-
-中文:
-实例 :
-  签名: 非空 (PreOneHypercover.{w} S)
-  定义体: ⟨trivial S⟩
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nonempty (PreOneHypercover.{w} S) := ⟨trivial S⟩
 
@@ -850,33 +583,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Intersection of two pre-`1`-hypercovers. -/
 @[simps toPreZeroHypercover I₁ Y p₁ p₂]
 noncomputable
-/--
-Definition of `inter` / `inter` 的定义
-
-English:
-definition inter
-  signature: (E F : PreOneHypercover S) [forall i j, HasPullback (E.f i) (F.f j)]
-  body: E.toPreZeroHypercover.inter F.toPreZeroHypercover
-  I₁ i j := E.I₁ i.1 j.1 × F.I₁ i.2 j.2
-  Y i j k := pullback (E.p₁ k.1 ≫ E.f _) (F.p₁ k.2 ≫ F.f _)
-  p₁ i j k := pullback.map _ _ _ _ (E.p₁ _) (F.p₁ _) (𝟙 S) (by simp) (by simp)
-  p₂ i j k := pullback.map _ _ _ _ (E.p₂ _) (F.p₂ _) (𝟙 S) (by simp [E.w]) (by simp [F.w])
-  w := by simp [E.w]
-
-中文:
-定义 inter
-  签名: (E F : PreOneHypercover S) [对任意 i j, HasPullback (E.f i) (F.f j)]
-  定义体: E.toPreZeroHypercover.inter F.toPreZeroHypercover
-  I₁ i j := E.I₁ i.1 j.1 × F.I₁ i.2 j.2
-  Y i j k := pullback (E.p₁ k.1 ≫ E.f _) (F.p₁ k.2 ≫ F.f _)
-  p₁ i j k := pullback.map _ _ _ _ (E.p₁ _) (F.p₁ _) (𝟙 S) (by simp) (by simp)
-  p₂ i j k := pullback.map _ _ _ _ (E.p₂ _) (F.p₂ _) (𝟙 S) (by simp [E.w]) (by simp [F.w])
-  w := by simp [E.w]
-
-Depends on / 依赖: E.toPreZeroHypercover.inter, F.toPreZeroHypercover, toPreZeroHypercover
+/-
+**CategoryTheory.PreOneHypercover.inter** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+形式化陈述：inter (E F : PreOneHypercover S) [forall i j, HasPullback (E.f i) (F.f j)]
+ [forall (i j : E.I₀) (k : E.I₁ i j) (a b : F.I₀) (l : F.I₁ a b), HasPullback (E
+.p₁ k ≫ E.f i) (F.p₁ l ≫ F.f a)] : PreOneHypercover S where __
+参数：E F : PreOneHypercover S；E.f i；F.f j；i j : E.I₀；k : E.I₁ i j；a b : F.I₀；l : F
+.I₁ a b；E.p₁ k ≫ E.f i；F.p₁ l ≫ F.f a。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-def inter (E F : PreOneHypercover S) [forall i j, HasPullback (E.f i) (F.f j)]
-    [forall (i j : E.I₀) (k : E.I₁ i j) (a b : F.I₀) (l : F.I₁ a b),
+def inter (E F : PreOneHypercover S) [∀ i j, HasPullback (E.f i) (F.f j)]
+    [∀ (i j : E.I₀) (k : E.I₁ i j) (a b : F.I₀) (l : F.I₁ a b),
       HasPullback (E.p₁ k ≫ E.f i) (F.p₁ l ≫ F.f a)] :
     PreOneHypercover S where
   __ := E.toPreZeroHypercover.inter F.toPreZeroHypercover
@@ -890,76 +610,10 @@ variable {E} {F : PreOneHypercover S}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `sieve₁_inter` / 引理 `sieve₁_inter`
-
-English:
-lemma sieve₁_inter
-  statement: [HasPullbacks C] {i j : E.I₀ × F.I₀} {W : C}
-  proof: by
-  ext Y f
-  let p : W ⟶ pullback ((inter E F).f i) ((inter E F).f j) :=
-    pullback.lift p₁ p₂ w
-  refine ⟨fun ⟨k, a, h₁, h₂⟩ => ?_, fun ⟨Z, a, b, ⟨k, e, h₁, h₂⟩, ⟨l, u, u₁, u₂⟩, hab⟩ => ?_⟩
-  · refine ⟨pullback p ((E.inter F).toPullback k), pullback.lift f a ?_,
-        pullback.fst _ _, ?_, ?_, ?_⟩
-    · apply pullback.hom_ext
-      · apply pullback.hom_ext <;> simp [p, h₁, toPullback]
-      · apply pullback.hom_ext <;> simp [p, h₂, toPullback]
-    · refine ⟨k.1, pullback.snd _ _ ≫ pullback.fst _ _, ?_, ?_⟩
-      · have : p₁ ≫ pullback.fst (E.f i.1) (F.f i.2) = p ≫ pullback.fst _ _ ≫ pullback.fst _ _ := by
-          simp [p]
-        simp [this, pullback.condition_assoc, toPullback]
-      · have : p₂ ≫ pullback.fst (E.f j.1) (F.f j.2) = p ≫ pullback.snd _ _ ≫ pullback.fst _ _ := by
-          simp [p]
-        simp [this, pullback.condition_assoc, toPullback]
-    · exact ⟨k.2, a ≫ pullback.snd _ _, by simp [reassoc_of% h₁], by simp [reassoc_of% h₂]⟩
-    · simp
-  · subst hab
-    refine ⟨(k, l), pullback.lift (a ≫ e) u ?_, ?_, ?_⟩
-    · simp only [Category.assoc] at u₁
-      simp [← reassoc_of% h₁, w, ← reassoc_of% u₁, ← pullback.condition]
-    · apply pullback.hom_ext
-      · simp [h₁]
-      · simpa using u₁
-    · apply pullback.hom_ext
-      · simp [h₂]
-      · simpa using u₂
-
-中文:
-引理 sieve₁_inter
-  结论: [有Pullbacks C] {i j : E.I₀ × F.I₀} {W : C}
-  证明: by
-  ext Y f
-  let p : W ⟶ pullback ((inter E F).f i) ((inter E F).f j) :=
-    pullback.lift p₁ p₂ w
-  refine ⟨fun ⟨k, a, h₁, h₂⟩ => ?_, fun ⟨Z, a, b, ⟨k, e, h₁, h₂⟩, ⟨l, u, u₁, u₂⟩, hab⟩ => ?_⟩
-  · refine ⟨pullback p ((E.inter F).toPullback k), pullback.lift f a ?_,
-        pullback.fst _ _, ?_, ?_, ?_⟩
-    · apply pullback.hom_ext
-      · apply pullback.hom_ext <;> simp [p, h₁, toPullback]
-      · apply pullback.hom_ext <;> simp [p, h₂, toPullback]
-    · refine ⟨k.1, pullback.snd _ _ ≫ pullback.fst _ _, ?_, ?_⟩
-      · have : p₁ ≫ pullback.fst (E.f i.1) (F.f i.2) = p ≫ pullback.fst _ _ ≫ pullback.fst _ _ := by
-          simp [p]
-        simp [this, pullback.condition_assoc, toPullback]
-      · have : p₂ ≫ pullback.fst (E.f j.1) (F.f j.2) = p ≫ pullback.snd _ _ ≫ pullback.fst _ _ := by
-          simp [p]
-        simp [this, pullback.condition_assoc, toPullback]
-    · exact ⟨k.2, a ≫ pullback.snd _ _, by simp [reassoc_of% h₁], by simp [reassoc_of% h₂]⟩
-    · simp
-  · subst hab
-    refine ⟨(k, l), pullback.lift (a ≫ e) u ?_, ?_, ?_⟩
-    · simp only [Category.assoc] at u₁
-      simp [← reassoc_of% h₁, w, ← reassoc_of% u₁, ← pullback.condition]
-    · apply pullback.hom_ext
-      · simp [h₁]
-      · simpa using u₁
-    · apply pullback.hom_ext
-      · simp [h₂]
-      · simpa using u₂
-
-Depends on / 依赖: E.inter, hom_ext, pullbac, pullback, pullback.fst, pullback.hom_ext, pullback.lift, pullback.snd, toPullback
+/-
+**CategoryTheory.PreOneHypercover.sieve** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sieve₁_inter [HasPullbacks C] {i j : E.I₀ × F.I₀} {W : C}
     {p₁ : W ⟶ pullback (E.f i.1) (F.f i.2)}
@@ -967,11 +621,11 @@ lemma sieve₁_inter [HasPullbacks C] {i j : E.I₀ × F.I₀} {W : C}
     (w : p₁ ≫ pullback.fst _ _ ≫ E.f _ = p₂ ≫ pullback.fst _ _ ≫ E.f _) :
     (inter E F).sieve₁ p₁ p₂ = Sieve.bind
       (E.sieve₁ (p₁ ≫ pullback.fst _ _) (p₂ ≫ pullback.fst _ _))
-      (fun _ f _ => (F.sieve₁ (p₁ ≫ pullback.snd _ _) (p₂ ≫ pullback.snd _ _)).pullback f) := by
+      (fun _ f _ ↦ (F.sieve₁ (p₁ ≫ pullback.snd _ _) (p₂ ≫ pullback.snd _ _)).pullback f) := by
   ext Y f
   let p : W ⟶ pullback ((inter E F).f i) ((inter E F).f j) :=
     pullback.lift p₁ p₂ w
-  refine ⟨fun ⟨k, a, h₁, h₂⟩ => ?_, fun ⟨Z, a, b, ⟨k, e, h₁, h₂⟩, ⟨l, u, u₁, u₂⟩, hab⟩ => ?_⟩
+  refine ⟨fun ⟨k, a, h₁, h₂⟩ ↦ ?_, fun ⟨Z, a, b, ⟨k, e, h₁, h₂⟩, ⟨l, u, u₁, u₂⟩, hab⟩ ↦ ?_⟩
   · refine ⟨pullback p ((E.inter F).toPullback k), pullback.lift f a ?_,
         pullback.fst _ _, ?_, ?_, ?_⟩
     · apply pullback.hom_ext
@@ -1004,28 +658,23 @@ section Category
 /-- A morphism of pre-`1`-hypercovers of `S` is a family of refinement morphisms commuting
 with the structure morphisms of `E` and `F`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.PreOneHypercover.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.
+PreOneHypercover`。
+形式化陈述：Hom (E F : PreOneHypercover S) extends E.toPreZeroHypercover.Hom F.toPreZe
+roHypercover where /-- The map between indexing types of the coverings of the fi
+bre products over `S`. -/ s₁ {i j : E.I₀} (k : E.I₁ i j) : F.I₁ (s₀ i) (s₀ j) /-
+- The refinement morphisms between objects in the coverings of the fibre product
+s over `S`. -/ h₁ {i j : E.I₀} (k : E.I₁ i j) : E.Y k ⟶ F.Y (s₁ k) w₁₁ {i j : E.
+I₀} (k : E.I₁ i j) : h₁ k ≫ F.p₁ (s₁ k) = E.p₁ k ≫ h₀ i
+参数：E F : PreOneHypercover S；k : E.I₁ i j。
+继承自：E.toPreZeroHypercover.Hom F.toPreZeroHypercover。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (E F : PreOneHypercover S)
-  axioms and operations (4):
-    - s₁({i j : E.I₀} (k : E.I₁ i j)) : F.I₁ (s₀ i) (s₀ j)
-    - h₁({i j : E.I₀} (k : E.I₁ i j)) : E.Y k ⟶ F.Y (s₁ k)
-    - w₁₁({i j : E.I₀} (k : E.I₁ i j)) : h₁ k ≫ F.p₁ (s₁ k) = E.p₁ k ≫ h₀ i  [default: by cat_disch]
-    - w₁₂({i j : E.I₀} (k : E.I₁ i j)) : h₁ k ≫ F.p₂ (s₁ k) = E.p₂ k ≫ h₀ j  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (E F : PreOneHypercover S)
-  公理与运算 (4 个):
-    - s₁({i j : E.I₀} (k : E.I₁ i j)) : F.I₁ (s₀ i) (s₀ j)
-    - h₁({i j : E.I₀} (k : E.I₁ i j)) : E.Y k ⟶ F.Y (s₁ k)
-    - w₁₁({i j : E.I₀} (k : E.I₁ i j)) : h₁ k ≫ F.p₁ (s₁ k) = E.p₁ k ≫ h₀ i  [默认: by cat_disch]
-    - w₁₂({i j : E.I₀} (k : E.I₁ i j)) : h₁ k ≫ F.p₂ (s₁ k) = E.p₂ k ≫ h₀ j  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism of pre-`1`-hypercovers of `S` is a family of refinement morphisms com
+muting
+with the structure morphisms of `E` and `F`.
 -/
 structure Hom (E F : PreOneHypercover S) extends
     E.toPreZeroHypercover.Hom F.toPreZeroHypercover where
@@ -1041,22 +690,16 @@ attribute [reassoc] Hom.w₁₁ Hom.w₁₂
 set_option backward.defeqAttrib.useBackward true in
 /-- The identity refinement of a pre-`1`-hypercover. -/
 @[simps!]
-/--
-Definition of `Hom.id` / `Hom.id` 的定义
+/-
+**CategoryTheory.PreOneHypercover.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.PreOneHypercover.Hom`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → {S : C} → (E : 
+CategoryTheory.PreOneHypercover S) → E.Hom E
+参数：E : CategoryTheory.PreOneHypercover S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.id
-  signature: (E : PreOneHypercover S)
-  body: PreZeroHypercover.Hom.id _
-  s₁ := _root_.id
-  h₁ _ := 𝟙 _
-
-中文:
-定义 态射.id
-  签名: (E : PreOneHypercover S)
-  定义体: PreZeroHypercover.Hom.id _
-  s₁ := _root_.id
-  h₁ _ := 𝟙 _
+--- 原说明 ---
+The identity refinement of a pre-`1`-hypercover.
 -/
 def Hom.id (E : PreOneHypercover S) : Hom E E where
   __ := PreZeroHypercover.Hom.id _
@@ -1069,26 +712,17 @@ variable {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S}
 set_option backward.defeqAttrib.useBackward true in
 /-- Composition of refinement morphisms of pre-`1`-hypercovers. -/
 @[simps!]
-/--
-Definition of `Hom.comp` / `Hom.comp` 的定义
+/-
+**CategoryTheory.PreOneHypercover.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.PreOneHypercover.Hom`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {S : C} →
+       {E : CategoryTheory.PreOneHypercover S} →         {F : CategoryTheory.Pre
+OneHypercover S} → {G : CategoryTheory.PreOneHypercover S} → E.Hom F → F.Hom G →
+ E.Hom G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.comp
-  signature: (f : E.Hom F) (g : F.Hom G)
-  body: PreZeroHypercover.Hom.comp _ _
-  s₁ := g.s₁ ∘ f.s₁
-  h₁ i := f.h₁ i ≫ g.h₁ _
-  w₁₁ := by simp [w₁₁, w₁₁_assoc]
-  w₁₂ := by simp [w₁₂, w₁₂_assoc]
-
-中文:
-定义 态射.comp
-  签名: (f : E.态射 F) (g : F.态射 G)
-  定义体: PreZeroHypercover.Hom.comp _ _
-  s₁ := g.s₁ ∘ f.s₁
-  h₁ i := f.h₁ i ≫ g.h₁ _
-  w₁₁ := by simp [w₁₁, w₁₁_assoc]
-  w₁₂ := by simp [w₁₂, w₁₂_assoc]
+--- 原说明 ---
+Composition of refinement morphisms of pre-`1`-hypercovers.
 -/
 def Hom.comp (f : E.Hom F) (g : F.Hom G) : E.Hom G where
   __ := PreZeroHypercover.Hom.comp _ _
@@ -1099,18 +733,13 @@ def Hom.comp (f : E.Hom F) (g : F.Hom G) : E.Hom G where
 
 /-- The induced index map `E.I₁' → F.I₁'` from a refinement morphism `E ⟶ F`. -/
 @[simp]
-/--
-Definition of `Hom.s₁'` / `Hom.s₁'` 的定义
+/-
+**CategoryTheory.PreOneHypercover.Hom.s** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.s₁'
-  signature: (f : E.Hom F) (k : E.I₁')
-  body: ⟨⟨f.s₀ k.1.1, f.s₀ k.1.2⟩, f.s₁ k.2⟩
-
-中文:
-定义 态射.s₁'
-  签名: (f : E.态射 F) (k : E.I₁')
-  定义体: ⟨⟨f.s₀ k.1.1, f.s₀ k.1.2⟩, f.s₁ k.2⟩
+--- 原说明 ---
+The induced index map `E.I₁' → F.I₁'` from a refinement morphism `E ⟶ F`.
 -/
 def Hom.s₁' (f : E.Hom F) (k : E.I₁') : F.I₁' :=
   ⟨⟨f.s₀ k.1.1, f.s₀ k.1.2⟩, f.s₁ k.2⟩
@@ -1118,22 +747,10 @@ def Hom.s₁' (f : E.Hom F) (k : E.I₁') : F.I₁' :=
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simps! id_s₀ id_s₁ id_h₀ id_h₁ comp_s₀ comp_s₁ comp_h₀ comp_h₁]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (PreOneHypercover S)
-  body: Hom
-  id E := Hom.id E
-  comp f g := f.comp g
-
-中文:
-实例 :
-  签名: 范畴 (PreOneHypercover S)
-  定义体: Hom
-  id E := Hom.id E
-  comp f g := f.comp g
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (PreOneHypercover S) where
   Hom := Hom
@@ -1143,20 +760,15 @@ instance : Category (PreOneHypercover S) where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The forgetful functor from pre-`1`-hypercovers to pre-`0`-hypercovers. -/
 @[simps]
-/--
-Definition of `oneToZero` / `oneToZero` 的定义
+/-
+**CategoryTheory.PreOneHypercover.oneToZero** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+形式化陈述：oneToZero : PreOneHypercover.{w} S ⥤ PreZeroHypercover.{w} S where obj f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition oneToZero
-  signature: : PreOneHypercover.{w} S ⥤ PreZeroHypercover.{w} S where
-  body: f.1
-  map f := f.1
-
-中文:
-定义 oneToZero
-  签名: : PreOneHypercover.{w} S ⥤ PreZeroHypercover.{w} S where
-  定义体: f.1
-  map f := f.1
+--- 原说明 ---
+The forgetful functor from pre-`1`-hypercovers to pre-`0`-hypercovers.
 -/
 def oneToZero : PreOneHypercover.{w} S ⥤ PreZeroHypercover.{w} S where
   obj f := f.1
@@ -1164,66 +776,44 @@ def oneToZero : PreOneHypercover.{w} S ⥤ PreZeroHypercover.{w} S where
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Hom.mapMultiforkOfIsLimit` / `Hom.mapMultiforkOfIsLimit` 的定义
+/-- A refinement morphism `E ⟶ F` induces a morphism on associated multiequalizers. -/
+/-
+**CategoryTheory.PreOneHypercover.Hom.mapMultiforkOfIsLimit** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.PreOneHypercover.Hom`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {A : Type
+ u_1} →       [inst_1 : CategoryTheory.Category.{v_1, u_1} A] →         {S : C} 
+→           {E : CategoryTheory.PreOneHypercover S} →             {F : CategoryT
+heory.PreOneHypercover S} →               E.Hom F →                 (P : Categor
+yTheory.Functor Cᵒᵖ A) →                   {c : CategoryTheory.Limits.Multifork 
+(E.multicospanIndex P)} →                     CategoryTheory.Limits.IsLimit c → 
+                      (d : CategoryTheory.Limits.Multifork (F.multicospanIndex P
+)) → d.pt ⟶ c.pt
+参数：P : CategoryTheory.Functor Cᵒᵖ A；E.multicospanIndex P；d : CategoryTheory.Limi
+ts.Multifork (F.multicospanIndex P)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.mapMultiforkOfIsLimit
-  signature: (f : E.Hom F) (P : Cᵒᵖ ⥤ A) {c : Multifork (E.multicospanIndex P)}
-  body: Multifork.IsLimit.lift hc (fun a => d.ι (f.s₀ a) ≫ P.map (f.h₀ a).op) by
-    intro (k : E.I₁')
-    simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
-      multicospanIndex_fst, assoc, multicospanShape_snd, multicospanIndex_snd]
-    have heq := d.condition (f.s₁' k)
-    simp only [Hom.s₁', multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
-      multicospanIndex_fst, multicospanShape_snd, multicospanIndex_snd] at heq
-    rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₁]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₂]
-    rw [op_comp]; rw [Functor.map_comp]; rw [reassoc_of% heq]; rw [op_comp]; rw [Functor.map_comp]
-
-中文:
-定义 态射.mapMultiforkOfIsLimit
-  签名: (f : E.态射 F) (P : Cᵒᵖ ⥤ A) {c : Multifork (E.multicospanIndex P)}
-  定义体: Multifork.IsLimit.lift hc (fun a => d.ι (f.s₀ a) ≫ P.map (f.h₀ a).op) by
-    intro (k : E.I₁')
-    simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
-      multicospanIndex_fst, assoc, multicospanShape_snd, multicospanIndex_snd]
-    have heq := d.condition (f.s₁' k)
-    simp only [Hom.s₁', multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
-      multicospanIndex_fst, multicospanShape_snd, multicospanIndex_snd] at heq
-    rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₁]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₂]
-    rw [op_comp]; rw [Functor.map_comp]; rw [reassoc_of% heq]; rw [op_comp]; rw [Functor.map_comp]
-
-Depends on / 依赖: Functor, Functor.map_comp, Hom.s, Hom.w, IsLimit, Multifork, Multifork.IsLimit.lift, P.map, condition, d.condition, map_comp, multicospanIndex_fst, multicospanIndex_left, multicospanIndex_right, multicospanIndex_snd, multicospanShape_fst, multicospanShape_snd, op_comp
+--- 原说明 ---
+A refinement morphism `E ⟶ F` induces a morphism on associated multiequalizers.
 -/
 def Hom.mapMultiforkOfIsLimit (f : E.Hom F) (P : Cᵒᵖ ⥤ A) {c : Multifork (E.multicospanIndex P)}
     (hc : IsLimit c) (d : Multifork (F.multicospanIndex P)) :
     d.pt ⟶ c.pt :=
-Multifork.IsLimit.lift hc (fun a => d.ι (f.s₀ a) ≫ P.map (f.h₀ a).op) by
+  Multifork.IsLimit.lift hc (fun a ↦ d.ι (f.s₀ a) ≫ P.map (f.h₀ a).op) <| by
     intro (k : E.I₁')
     simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
       multicospanIndex_fst, assoc, multicospanShape_snd, multicospanIndex_snd]
     have heq := d.condition (f.s₁' k)
     simp only [Hom.s₁', multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
       multicospanIndex_fst, multicospanShape_snd, multicospanIndex_snd] at heq
-    rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₁]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₂]
-    rw [op_comp]; rw [Functor.map_comp]; rw [reassoc_of% heq]; rw [op_comp]; rw [Functor.map_comp]
+    rw [← Functor.map_comp, ← op_comp, ← Hom.w₁₁, ← Functor.map_comp, ← op_comp, ← Hom.w₁₂]
+    rw [op_comp, Functor.map_comp, reassoc_of% heq, op_comp, Functor.map_comp]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `Hom.mapMultiforkOfIsLimit_ι` / 引理 `Hom.mapMultiforkOfIsLimit_ι`
-
-English:
-lemma Hom.mapMultiforkOfIsLimit_ι
-  proof: by
-  simp [mapMultiforkOfIsLimit]
-
-中文:
-引理 态射.mapMultiforkOfIsLimit_ι
-  证明: by
-  simp [mapMultiforkOfIsLimit]
-
-Depends on / 依赖: mapMultiforkOfIsLimit
+/-
+**CategoryTheory.PreOneHypercover.Hom.mapMultiforkOfIsLimit_** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.mapMultiforkOfIsLimit_ι
     (f : E.Hom F) (P : Cᵒᵖ ⥤ A) {c : Multifork (E.multicospanIndex P)} (hc : IsLimit c)
@@ -1239,24 +829,47 @@ variable (f : E.Hom F) (P : Cᵒᵖ ⥤ A)
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `Hom.mapMultiforkOfIsLimit_id` / 引理 `Hom.mapMultiforkOfIsLimit_id`
-
-English:
-lemma Hom.mapMultiforkOfIsLimit_id
-  given: (d : Multifork (E.multicospanIndex P))
-  proof: by
-  apply Multifork.IsLimit.hom_ext hc
-  simp
-
-中文:
-引理 态射.mapMultiforkOfIsLimit_id
-  条件: (d : Multifork (E.multicospanIndex P))
-  证明: by
-  apply Multifork.IsLimit.hom_ext hc
-  simp
-
-Depends on / 依赖: IsLimit, Multifork, Multifork.IsLimit.hom_ext, hom_ext
+/-
+**CategoryTheory.PreOneHypercover.Hom.mapMultiforkOfIsLimit_id** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.PreOneHypercover.Hom`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {A : Type u_1} [i
+nst_1 : CategoryTheory.Category.{v_1, u_1} A]   {S : C} {E : CategoryTheory.PreO
+neHypercover S} (P : CategoryTheory.Functor Cᵒᵖ A)   {c : CategoryTheory.Limits.
+Multifork (E.multicospanIndex P)} (hc : CategoryTheory.Limits.IsLimit c)   (d : 
+CategoryTheory.Limits.Multifork (E.multicospanIndex P)),   (CategoryTheory.PreOn
+eHypercover.Hom.id E).mapMultiforkOfIsLimit P hc d =     CategoryTheory.Limits.M
+ultifork.IsLimit.lift hc d.ι ⋯
+参数：P : CategoryTheory.Functor Cᵒᵖ A；E.multicospanIndex P；hc : CategoryTheory.Lim
+its.IsLimit c；d : CategoryTheory.Limits.Multifork (E.multicospanIndex P)；Categor
+yTheory.PreOneHypercover.Hom.id E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Multifork.IsLimit.hom_ext`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {J : CategoryTheory.Limits.MulticospanShape}  
+ {I : CategoryTheory.Limits.Multicosp…
+· 使用定理 `CategoryTheory.Limits.Multifork.condition`：condition (b) : K.ι (J.fst b)
+ ≫ I.fst b = K.ι (J.snd b) ≫ I.snd b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.PreOneHypercover.Hom.mapMultiforkOfIsLimit_ι`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {A : Type u_1} [inst_1 : CategoryT
+heory.Category.{v_1, u_1} A]   {S : C} {E : Categ…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.Multifork.IsLimit.fac`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {J : CategoryTheory.Limits.MulticospanShape}   {I 
+: CategoryTheory.Limits.Multicosp…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma Hom.mapMultiforkOfIsLimit_id (d : Multifork (E.multicospanIndex P)) :
     (Hom.id E).mapMultiforkOfIsLimit P hc d = Multifork.IsLimit.lift hc d.ι d.condition := by
@@ -1266,24 +879,49 @@ lemma Hom.mapMultiforkOfIsLimit_id (d : Multifork (E.multicospanIndex P)) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `Hom.mapMultiforkOfIsLimit_comp` / 引理 `Hom.mapMultiforkOfIsLimit_comp`
-
-English:
-lemma Hom.mapMultiforkOfIsLimit_comp
-  statement: (g : F.Hom G) (t : Multifork (G.multicospanIndex P))
-  proof: by
-  apply Multifork.IsLimit.hom_ext hc
-  simp
-
-中文:
-引理 态射.mapMultiforkOfIsLimit_comp
-  结论: (g : F.态射 G) (t : Multifork (G.multicospanIndex P))
-  证明: by
-  apply Multifork.IsLimit.hom_ext hc
-  simp
-
-Depends on / 依赖: IsLimit, Multifork, Multifork.IsLimit.hom_ext, hom_ext
+/-
+**CategoryTheory.PreOneHypercover.Hom.mapMultiforkOfIsLimit_comp** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.PreOneHypercover.Hom`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {A : Type u_1} [i
+nst_1 : CategoryTheory.Category.{v_1, u_1} A]   {S : C} {E : CategoryTheory.PreO
+neHypercover S} {F : CategoryTheory.PreOneHypercover S}   {G : CategoryTheory.Pr
+eOneHypercover S} (f : E.Hom F) (P : CategoryTheory.Functor Cᵒᵖ A)   {c : Catego
+ryTheory.Limits.Multifork (E.multicospanIndex P)} (hc : CategoryTheory.Limits.Is
+Limit c)   {d : CategoryTheory.Limits.Multifork (F.multicospanIndex P)} (g : F.H
+om G)   (t : CategoryTheory.Limits.Multifork (G.multicospanIndex P)) (hd : Categ
+oryTheory.Limits.IsLimit d),   (f.comp g).mapMultiforkOfIsLimit P hc t =     Cat
+egoryTheory.CategoryStruct.comp (g.mapMultiforkOfIsLimit P hd t) (f.mapMultifork
+OfIsLimit P hc d)
+参数：f : E.Hom F；P : CategoryTheory.Functor Cᵒᵖ A；E.multicospanIndex P；hc : Catego
+ryTheory.Limits.IsLimit c；F.multicospanIndex P；g : F.Hom G；t : CategoryTheory.Li
+mits.Multifork (G.multicospanIndex P)；hd : CategoryTheory.Limits.IsLimit d；f.com
+p g；g.mapMultiforkOfIsLimit P hd t；f.mapMultiforkOfIsLimit P hc d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Multifork.IsLimit.hom_ext`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {J : CategoryTheory.Limits.MulticospanShape}  
+ {I : CategoryTheory.Limits.Multicosp…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.PreOneHypercover.Hom.mapMultiforkOfIsLimit_ι`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {A : Type u_1} [inst_1 : CategoryT
+heory.Category.{v_1, u_1} A]   {S : C} {E : Categ…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.PreOneHypercover.Hom.mapMultiforkOfIsLimit_ι_assoc`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {A : Type u_1} [inst_1 : Cat
+egoryTheory.Category.{v_1, u_1} A]   {S : C} {E : Categ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma Hom.mapMultiforkOfIsLimit_comp (g : F.Hom G) (t : Multifork (G.multicospanIndex P))
     (hd : IsLimit d) :
@@ -1299,24 +937,22 @@ section
 variable {S : C} {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S}
   {i i' j j' : E.I₀} (hii' : i = i') (hjj' : j = j')
 
-/--
-Definition of `congrIndexOneOfEq` / `congrIndexOneOfEq` 的定义
+/-- If `i = i'` and `j = j'` this is an equivalence between the `1`-index type at `i`, `j` and
+the one at `i'`, `j'`. -/
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEq** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEq {E : PreOneHypercover.{w} S} {i i' j j' : E.I₀} (hii' : 
+i = i') (hjj' : j = j') : E.I₁ i j ≃ E.I₁ i' j'
+参数：hii' : i = i'；hjj' : j = j'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition congrIndexOneOfEq
-  signature: {E : PreOneHypercover.{w} S} {i i' j j' : E.I₀}
-  body: hii' ▸ hjj' ▸ Equiv.refl _
-
-@[simp]
-
-中文:
-定义 congrIndexOneOfEq
-  签名: {E : PreOneHypercover.{w} S} {i i' j j' : E.I₀}
-  定义体: hii' ▸ hjj' ▸ Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+If `i = i'` and `j = j'` this is an equivalence between the `1`-index type at `i
+`, `j` and
+the one at `i'`, `j'`.
 -/
 def congrIndexOneOfEq {E : PreOneHypercover.{w} S} {i i' j j' : E.I₀}
     (hii' : i = i') (hjj' : j = j') :
@@ -1324,48 +960,42 @@ def congrIndexOneOfEq {E : PreOneHypercover.{w} S} {i i' j j' : E.I₀}
   hii' ▸ hjj' ▸ Equiv.refl _
 
 @[simp]
-/--
-lemma `congrIndexOneOfEq_refl` / 引理 `congrIndexOneOfEq_refl`
-
-English:
-lemma congrIndexOneOfEq_refl
-  given: (i j : E.I₀)
-  proof: by
-  simp [congrIndexOneOfEq]
-
-@[simp]
-
-中文:
-引理 congrIndexOneOfEq_refl
-  条件: (i j : E.I₀)
-  证明: by
-  simp [congrIndexOneOfEq]
-
-@[simp]
-
-Depends on / 依赖: congrIndexOneOfEq
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEq_refl** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEq_refl (i j : E.I₀) : E.congrIndexOneOfEq rfl rfl = Equiv.
+refl (E.I₁ i j)
+参数：i j : E.I₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma congrIndexOneOfEq_refl (i j : E.I₀) :
     E.congrIndexOneOfEq rfl rfl = Equiv.refl (E.I₁ i j) := by
   simp [congrIndexOneOfEq]
 
 @[simp]
-/--
-lemma `congrIndexOneOfEq_trans` / 引理 `congrIndexOneOfEq_trans`
-
-English:
-lemma congrIndexOneOfEq_trans
-  statement: {i'' j'' : E.I₀} (hii'' : i' = i'') (hjj'' : j' = j'')
-  proof: by
-  subst hii' hjj'
-  simp
-
-中文:
-引理 congrIndexOneOfEq_trans
-  结论: {i'' j'' : E.I₀} (hii'' : i' = i'') (hjj'' : j' = j'')
-  证明: by
-  subst hii' hjj'
-  simp
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEq_trans** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEq_trans {i'' j'' : E.I₀} (hii'' : i' = i'') (hjj'' : j' = 
+j'') (k : E.I₁ i j) : E.congrIndexOneOfEq hii'' hjj'' (E.congrIndexOneOfEq hii' 
+hjj' k) = E.congrIndexOneOfEq (hii'.trans hii'') (hjj'.trans hjj'') k
+参数：hii'' : i' = i''；hjj'' : j' = j''；k : E.I₁ i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEq_refl`：congrIndexOneOfE
+q_refl (i j : E.I₀) : E.congrIndexOneOfEq rfl rfl = Equiv.refl (E.I₁ i j)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma congrIndexOneOfEq_trans {i'' j'' : E.I₀} (hii'' : i' = i'') (hjj'' : j' = j'')
     (k : E.I₁ i j) :
@@ -1373,56 +1003,69 @@ lemma congrIndexOneOfEq_trans {i'' j'' : E.I₀} (hii'' : i' = i'') (hjj'' : j' 
       E.congrIndexOneOfEq (hii'.trans hii'') (hjj'.trans hjj'') k := by
   subst hii' hjj'
   simp
-
-/--
-lemma `congrIndexOneOfEq_naturality` / 引理 `congrIndexOneOfEq_naturality`
-
-English:
-lemma congrIndexOneOfEq_naturality
-  statement: (u₀ : E.I₀ -> F.I₀) (u₁ : forall ⦃i j⦄, E.I₁ i j -> F.I₁ (u₀ i) (u₀ j))
-  proof: by
-  subst hii' hjj'
-  simp
-
-中文:
-引理 congrIndexOneOfEq_naturality
-  结论: (u₀ : E.I₀ -> F.I₀) (u₁ : 对任意 ⦃i j⦄, E.I₁ i j -> F.I₁ (u₀ i) (u₀ j))
-  证明: by
-  subst hii' hjj'
-  simp
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEq_naturality** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEq_naturality (u₀ : E.I₀ -> F.I₀) (u₁ : forall ⦃i j⦄, E.I₁ 
+i j -> F.I₁ (u₀ i) (u₀ j)) (k : E.I₁ i j) : u₁ (E.congrIndexOneOfEq hii' hjj' k)
+ = F.congrIndexOneOfEq (congrArg u₀ hii') (congrArg u₀ hjj') (u₁ k)
+参数：u₀ : E.I₀ -> F.I₀；u₁ : forall ⦃i j⦄, E.I₁ i j -> F.I₁ (u₀ i) (u₀ j)；k : E.I₁ 
+i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEq_refl`：congrIndexOneOfE
+q_refl (i j : E.I₀) : E.congrIndexOneOfEq rfl rfl = Equiv.refl (E.I₁ i j)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma congrIndexOneOfEq_naturality (u₀ : E.I₀ -> F.I₀) (u₁ : forall ⦃i j⦄, E.I₁ i j -> F.I₁ (u₀ i) (u₀ j))
+lemma congrIndexOneOfEq_naturality (u₀ : E.I₀ → F.I₀) (u₁ : ∀ ⦃i j⦄, E.I₁ i j → F.I₁ (u₀ i) (u₀ j))
     (k : E.I₁ i j) :
     u₁ (E.congrIndexOneOfEq hii' hjj' k) =
       F.congrIndexOneOfEq (congrArg u₀ hii') (congrArg u₀ hjj') (u₁ k) := by
   subst hii' hjj'
   simp
-
-/--
-lemma `congrIndexOneOfEq_congrFun` / 引理 `congrIndexOneOfEq_congrFun`
-
-English:
-lemma congrIndexOneOfEq_congrFun
-  proof: by
-  subst h₀
-  simp [h₁]
-
-@[ext (iff := false)]
-
-中文:
-引理 congrIndexOneOfEq_congrFun
-  证明: by
-  subst h₀
-  simp [h₁]
-
-@[ext (iff := false)]
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEq_congrFun** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEq_congrFun {u₀ v₀ : E.I₀ -> F.I₀} {u₁ : forall ⦃i j⦄, E.I₁
+ i j -> F.I₁ (u₀ i) (u₀ j)} {v₁ : forall ⦃i j⦄, E.I₁ i j -> F.I₁ (v₀ i) (v₀ j)} 
+(h₀ : u₀ = v₀) (h₁ : forall (i j : E.I₀) (k : E.I₁ i j), u₁ k = F.congrIndexOneO
+fEq (by simp [h₀]) (by simp [h₀]) (v₁ k)) {i j : E.I₀} (k : E.I₁ i j) : F.congrI
+ndexOneOfEq (congrFun h₀.symm _) (congrFun h₀.symm _) (v₁ k) = u₁ k
+参数：u₀ i；u₀ j；v₀ i；v₀ j；h₀ : u₀ = v₀；h₁ : forall (i j : E.I₀) (k : E.I₁ i j), u₁ 
+k = F.congrIndexOneOfEq (by simp [h₀]) (by simp [h₀]) (v₁ k)；k : E.I₁ i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEq_refl`：congrIndexOneOfE
+q_refl (i j : E.I₀) : E.congrIndexOneOfEq rfl rfl = Equiv.refl (E.I₁ i j)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma congrIndexOneOfEq_congrFun
-    {u₀ v₀ : E.I₀ -> F.I₀}
-    {u₁ : forall ⦃i j⦄, E.I₁ i j -> F.I₁ (u₀ i) (u₀ j)}
-    {v₁ : forall ⦃i j⦄, E.I₁ i j -> F.I₁ (v₀ i) (v₀ j)}
+    {u₀ v₀ : E.I₀ → F.I₀}
+    {u₁ : ∀ ⦃i j⦄, E.I₁ i j → F.I₁ (u₀ i) (u₀ j)}
+    {v₁ : ∀ ⦃i j⦄, E.I₁ i j → F.I₁ (v₀ i) (v₀ j)}
     (h₀ : u₀ = v₀)
-    (h₁ : forall (i j : E.I₀) (k : E.I₁ i j),
+    (h₁ : ∀ (i j : E.I₀) (k : E.I₁ i j),
       u₁ k = F.congrIndexOneOfEq (by simp [h₀]) (by simp [h₀]) (v₁ k))
     {i j : E.I₀} (k : E.I₁ i j) :
     F.congrIndexOneOfEq (congrFun h₀.symm _) (congrFun h₀.symm _) (v₁ k) = u₁ k := by
@@ -1430,28 +1073,10 @@ lemma congrIndexOneOfEq_congrFun
   simp [h₁]
 
 @[ext (iff := false)]
-/--
-lemma `I₁'.ext` / 引理 `I₁'.ext`
-
-English:
-lemma I₁'.ext
-  statement: {a b : E.I₁'} (left : a.1.1 = b.1.1) (right : a.1.2 = b.1.2)
-  proof: by
-  obtain ⟨⟨i, j⟩, k⟩ := a
-  obtain ⟨⟨i', j'⟩, k'⟩ := b
-  dsimp at left right
-  subst left right
-  simpa using h
-
-中文:
-引理 I₁'.ext
-  结论: {a b : E.I₁'} (left : a.1.1 = b.1.1) (right : a.1.2 = b.1.2)
-  证明: by
-  obtain ⟨⟨i, j⟩, k⟩ := a
-  obtain ⟨⟨i', j'⟩, k'⟩ := b
-  dsimp at left right
-  subst left right
-  simpa using h
+/-
+**CategoryTheory.PreOneHypercover.I** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pr
+eOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma I₁'.ext {a b : E.I₁'} (left : a.1.1 = b.1.1) (right : a.1.2 = b.1.2)
     (h : E.congrIndexOneOfEq left right a.2 = b.2) :
@@ -1463,19 +1088,39 @@ lemma I₁'.ext {a b : E.I₁'} (left : a.1.1 = b.1.1) (right : a.1.2 = b.1.2)
   simpa using h
 
 /--
-Definition of `congrIndexOneOfEqIso` / `congrIndexOneOfEqIso` 的定义
+If `i = i'` and `j = j'` this is the isomorphism between the `1`-component at
+`congrIndexOneOfEq k : E.I₁ i' j'` and the `1`-component at `k : E.I₁ i j`.
 
-English:
-definition congrIndexOneOfEqIso
-  signature: {E : PreOneHypercover S} {i i' j j' : E.I₀}
-  body: eqToIso (by subst hii' hjj'; simp)
+Note: This isomorphism could also be constructed inline from `eqToIso`. We only
+use `eqToIso` directly to construct isomorphisms `E.Y k ≅ E.Y k'` where `k k' : E.I₁ i j`
+and whenever `k : E.I₁ i j` and `k' : E.I₁ i' j'` have to be related we use `congrIndexOneOfEqIso`,
+possibly combined with an additional `eqToIso` instead. The reason for this is
+that the lemmas around `eqToHom_naturality` are hard to apply in the case where there is a
+mismatch in the type of the index.
+-/
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEqIso {E : PreOneHypercover S} {i i' j j' : E.I₀} (hii' : i
+ = i') (hjj' : j = j') (k : E.I₁ i j) : E.Y (E.congrIndexOneOfEq hii' hjj' k) ≅ 
+E.Y k
+参数：hii' : i = i'；hjj' : j = j'；k : E.I₁ i j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 congrIndexOneOfEqIso
-  签名: {E : PreOneHypercover S} {i i' j j' : E.I₀}
-  定义体: eqToIso (by subst hii' hjj'; simp)
+--- 原说明 ---
+If `i = i'` and `j = j'` this is the isomorphism between the `1`-component at
+`congrIndexOneOfEq k : E.I₁ i' j'` and the `1`-component at `k : E.I₁ i j`.
 
-Depends on / 依赖: eqToIso
+Note: This isomorphism could also be constructed inline from `eqToIso`. We only
+use `eqToIso` directly to construct isomorphisms `E.Y k ≅ E.Y k'` where `k k' : 
+E.I₁ i j`
+and whenever `k : E.I₁ i j` and `k' : E.I₁ i' j'` have to be related we use `con
+grIndexOneOfEqIso`,
+possibly combined with an additional `eqToIso` instead. The reason for this is
+that the lemmas around `eqToHom_naturality` are hard to apply in the case where 
+there is a
+mismatch in the type of the index.
 -/
 def congrIndexOneOfEqIso {E : PreOneHypercover S} {i i' j j' : E.I₀}
     (hii' : i = i') (hjj' : j = j') (k : E.I₁ i j) :
@@ -1484,22 +1129,16 @@ def congrIndexOneOfEqIso {E : PreOneHypercover S} {i i' j j' : E.I₀}
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `congrIndexOneOfEqIso_refl` / 引理 `congrIndexOneOfEqIso_refl`
-
-English:
-lemma congrIndexOneOfEqIso_refl
-  given: {i j : E.I₀} (k : E.I₁ i j)
-  proof: by
-  simp [congrIndexOneOfEqIso]
-
-中文:
-引理 congrIndexOneOfEqIso_refl
-  条件: {i j : E.I₀} (k : E.I₁ i j)
-  证明: by
-  simp [congrIndexOneOfEqIso]
-
-Depends on / 依赖: congrIndexOneOfEqIso
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_refl** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEqIso_refl {i j : E.I₀} (k : E.I₁ i j) : E.congrIndexOneOfE
+qIso rfl rfl k = Iso.refl _
+参数：k : E.I₁ i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma congrIndexOneOfEqIso_refl {i j : E.I₀} (k : E.I₁ i j) :
     E.congrIndexOneOfEqIso rfl rfl k = Iso.refl _ := by
@@ -1507,24 +1146,10 @@ lemma congrIndexOneOfEqIso_refl {i j : E.I₀} (k : E.I₁ i j) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `congrIndexOneOfEqIso_hom_p₁` / 引理 `congrIndexOneOfEqIso_hom_p₁`
-
-English:
-lemma congrIndexOneOfEqIso_hom_p₁
-  given: (k : E.I₁ i j)
-  proof: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-中文:
-引理 congrIndexOneOfEqIso_hom_p₁
-  条件: (k : E.I₁ i j)
-  证明: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-Depends on / 依赖: congrIndexOneOfEq, congrIndexOneOfEqIso
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_hom_p** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma congrIndexOneOfEqIso_hom_p₁ (k : E.I₁ i j) :
     (E.congrIndexOneOfEqIso hii' hjj' k).hom ≫ E.p₁ _ = E.p₁ _ ≫ eqToHom (by rw [hii']) := by
@@ -1533,24 +1158,10 @@ lemma congrIndexOneOfEqIso_hom_p₁ (k : E.I₁ i j) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `congrIndexOneOfEqIso_inv_p₁` / 引理 `congrIndexOneOfEqIso_inv_p₁`
-
-English:
-lemma congrIndexOneOfEqIso_inv_p₁
-  given: (k : E.I₁ i j)
-  proof: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-中文:
-引理 congrIndexOneOfEqIso_inv_p₁
-  条件: (k : E.I₁ i j)
-  证明: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-Depends on / 依赖: congrIndexOneOfEq, congrIndexOneOfEqIso
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_inv_p** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma congrIndexOneOfEqIso_inv_p₁ (k : E.I₁ i j) :
     (E.congrIndexOneOfEqIso hii' hjj' k).inv ≫ E.p₁ _ = E.p₁ k ≫ eqToHom (by rw [hii']) := by
@@ -1559,53 +1170,44 @@ lemma congrIndexOneOfEqIso_inv_p₁ (k : E.I₁ i j) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `congrIndexOneOfEqIso_inv_p₂` / 引理 `congrIndexOneOfEqIso_inv_p₂`
-
-English:
-lemma congrIndexOneOfEqIso_inv_p₂
-  given: (k : E.I₁ i j)
-  proof: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-中文:
-引理 congrIndexOneOfEqIso_inv_p₂
-  条件: (k : E.I₁ i j)
-  证明: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-Depends on / 依赖: congrIndexOneOfEq, congrIndexOneOfEqIso
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_inv_p** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma congrIndexOneOfEqIso_inv_p₂ (k : E.I₁ i j) :
     (E.congrIndexOneOfEqIso hii' hjj' k).inv ≫ E.p₂ _ = E.p₂ k ≫ eqToHom (by rw [hjj']) := by
   subst hii' hjj'
   simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
 
-variable {i i' j j' : E.I₀} (u₀ : E.I₀ -> F.I₀)
-  (u₁ : forall i j : E.I₀, forall _ : E.I₁ i j, F.I₁ (u₀ i) (u₀ j))
-  (z : forall i j (k : E.I₁ i j), E.Y k ⟶ F.Y (u₁ i j k))
+variable {i i' j j' : E.I₀} (u₀ : E.I₀ → F.I₀)
+  (u₁ : ∀ i j : E.I₀, ∀ _ : E.I₁ i j, F.I₁ (u₀ i) (u₀ j))
+  (z : ∀ i j (k : E.I₁ i j), E.Y k ⟶ F.Y (u₁ i j k))
   (hii' : i = i') (hjj' : j = j') (k : E.I₁ i j)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `congrIndexOneOfEqIso_hom_naturality` / 引理 `congrIndexOneOfEqIso_hom_naturality`
-
-English:
-lemma congrIndexOneOfEqIso_hom_naturality
-  proof: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-中文:
-引理 congrIndexOneOfEqIso_hom_naturality
-  证明: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-Depends on / 依赖: congrIndexOneOfEq, congrIndexOneOfEqIso
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_hom_naturality** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEqIso_hom_naturality : (E.congrIndexOneOfEqIso hii' hjj' k)
+.hom ≫ z i j k = z i' j' _ ≫ eqToHom (by subst hii' hjj'; simp [congrIndexOneOfE
+q]) ≫ (F.congrIndexOneOfEqIso (congrArg u₀ hii') (congrArg u₀ hjj') _).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma congrIndexOneOfEqIso_hom_naturality :
     (E.congrIndexOneOfEqIso hii' hjj' k).hom ≫
@@ -1617,22 +1219,28 @@ lemma congrIndexOneOfEqIso_hom_naturality :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `congrIndexOneOfEqIso_inv_naturality` / 引理 `congrIndexOneOfEqIso_inv_naturality`
-
-English:
-lemma congrIndexOneOfEqIso_inv_naturality
-  proof: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-中文:
-引理 congrIndexOneOfEqIso_inv_naturality
-  证明: by
-  subst hii' hjj'
-  simp [congrIndexOneOfEqIso, congrIndexOneOfEq]
-
-Depends on / 依赖: congrIndexOneOfEq, congrIndexOneOfEqIso
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_inv_naturality** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEqIso_inv_naturality : (E.congrIndexOneOfEqIso hii' hjj' k)
+.inv ≫ z i' j' _ ≫ eqToHom (by subst hii' hjj'; simp [congrIndexOneOfEq]) = z i 
+j k ≫ (F.congrIndexOneOfEqIso (congrArg u₀ hii') (congrArg u₀ hjj') (u₁ _ _ k)).
+inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma congrIndexOneOfEqIso_inv_naturality :
     (E.congrIndexOneOfEqIso hii' hjj' k).inv ≫
@@ -1646,46 +1254,64 @@ lemma congrIndexOneOfEqIso_inv_naturality :
 end
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Hom.ext'` / 引理 `Hom.ext'`
-
-English:
-lemma Hom.ext'
-  statement: {E F : PreOneHypercover S} {f g : E.Hom F}
-  proof: by
-  obtain ⟨toHomf, fs₁, fh₁⟩ := f
-  obtain ⟨toHomg, gs₁, gh₁⟩ := g
-  obtain rfl : toHomf = toHomg := PreZeroHypercover.Hom.ext' hs₀ hh₀
-  obtain rfl : @fs₁ = @gs₁ := by
-    ext i j k
-    simpa using hs₁ i j k
-  simp_all only [eqToHom_refl, Category.comp_id, implies_true, congrIndexOneOfEqIso_refl,
-    Iso.refl_inv, mk.injEq, heq_eq_eq, true_and]
-  ext i j k
-  rw [hh₁ i j k]
-  exact Category.comp_id _
-
-中文:
-引理 态射.ext'
-  结论: {E F : PreOneHypercover S} {f g : E.态射 F}
-  证明: by
-  obtain ⟨toHomf, fs₁, fh₁⟩ := f
-  obtain ⟨toHomg, gs₁, gh₁⟩ := g
-  obtain rfl : toHomf = toHomg := PreZeroHypercover.Hom.ext' hs₀ hh₀
-  obtain rfl : @fs₁ = @gs₁ := by
-    ext i j k
-    simpa using hs₁ i j k
-  simp_all only [eqToHom_refl, Category.comp_id, implies_true, congrIndexOneOfEqIso_refl,
-    Iso.refl_inv, mk.injEq, heq_eq_eq, true_and]
-  ext i j k
-  rw [hh₁ i j k]
-  exact Category.comp_id _
+/-
+**CategoryTheory.PreOneHypercover.Hom.ext'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.PreOneHypercover.Hom`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {S : C} {E : Cate
+goryTheory.PreOneHypercover S}   {F : CategoryTheory.PreOneHypercover S} {f g : 
+E.Hom F} (hs₀ : f.s₀ = g.s₀),   (∀ (i : E.I₀), f.h₀ i = CategoryTheory.CategoryS
+truct.comp (g.h₀ i) (CategoryTheory.eqToHom ⋯)) →     ∀ (hs₁ : ∀ (i j : E.I₀) (k
+ : E.I₁ i j), f.s₁ k = (CategoryTheory.PreOneHypercover.congrIndexOneOfEq ⋯ ⋯) (
+g.s₁ k)),       (∀ (i j : E.I₀) (k : E.I₁ i j),           f.h₁ k =             C
+ategoryTheory.CategoryStruct.comp (g.h₁ k)               (CategoryTheory.Categor
+yStruct.comp                 (CategoryTheory.PreOneHypercover.congrIndexOneOfEqI
+so ⋯ ⋯ (g.s₁ k)).inv (CategoryTheory.eqToHom ⋯))) →         f = g
+参数：hs₀ : f.s₀ = g.s₀；∀ (i : E.I₀), f.h₀ i = CategoryTheory.CategoryStruct.comp (
+g.h₀ i) (CategoryTheory.eqToHom ⋯)；hs₁ : ∀ (i j : E.I₀) (k : E.I₁ i j), f.s₁ k =
+ (CategoryTheory.PreOneHypercover.congrIndexOneOfEq ⋯ ⋯) (g.s₁ k)；∀ (i j : E.I₀)
+ (k : E.I₁ i j),           f.h₁ k =             CategoryTheory.CategoryStruct.co
+mp (g.h₁ k)               (CategoryTheory.CategoryStruct.comp                 (C
+ategoryTheory.PreOneHypercover.congrIndexOneOfEqIso ⋯ ⋯ (g.s₁ k)).inv (CategoryT
+heory.eqToHom ⋯))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.PreOneHypercover.Hom.mk.injEq`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C] {S : C} {E : CategoryTheory.PreOneHypercover S}  
+ {F : CategoryTheory.PreOneHyperco…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_refl`：congrIndexOne
+OfEqIso_refl {i j : E.I₀} (k : E.I₁ i j) : E.congrIndexOneOfEqIso rfl rfl k = Is
+o.refl _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEq_refl`：congrIndexOneOfE
+q_refl (i j : E.I₀) : E.congrIndexOneOfEq rfl rfl = Equiv.refl (E.I₁ i j)
+· 使用定理 `CategoryTheory.PreZeroHypercover.Hom.ext'`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {S : C} {E : CategoryTheory.PreZeroHypercover S}   {
+F : CategoryTheory.PreZeroHyper…
 -/
 lemma Hom.ext' {E F : PreOneHypercover S} {f g : E.Hom F}
-    (hs₀ : f.s₀ = g.s₀) (hh₀ : forall i, f.h₀ i = g.h₀ i ≫ eqToHom (by simp [hs₀]))
-    (hs₁ : forall (i j : E.I₀) (k : E.I₁ i j),
+    (hs₀ : f.s₀ = g.s₀) (hh₀ : ∀ i, f.h₀ i = g.h₀ i ≫ eqToHom (by simp [hs₀]))
+    (hs₁ : ∀ (i j : E.I₀) (k : E.I₁ i j),
       f.s₁ k = F.congrIndexOneOfEq (by simp [hs₀]) (by simp [hs₀]) (g.s₁ k))
-    (hh₁ : forall (i j : E.I₀) (k : E.I₁ i j),
+    (hh₁ : ∀ (i j : E.I₀) (k : E.I₁ i j),
       f.h₁ k = g.h₁ k ≫
         (F.congrIndexOneOfEqIso (congrFun hs₀.symm i) (congrFun hs₀.symm j) (g.s₁ k)).inv ≫
         eqToHom (by rw [PreOneHypercover.congrIndexOneOfEq_congrFun hs₀ hs₁])) :
@@ -1701,92 +1327,152 @@ lemma Hom.ext' {E F : PreOneHypercover S} {f g : E.Hom F}
   ext i j k
   rw [hh₁ i j k]
   exact Category.comp_id _
-
-/--
-lemma `Hom.ext'_iff` / 引理 `Hom.ext'_iff`
-
-English:
-lemma Hom.ext'_iff
-  given: {E F : PreOneHypercover S} {f g : E.Hom F}
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨hs₀, hh₀, hs₁, hh₁⟩ => Hom.ext' hs₀ hh₀ hs₁ hh₁⟩
-  subst h
-  simp [congrIndexOneOfEq]
-
-中文:
-引理 态射.ext'_iff
-  条件: {E F : PreOneHypercover S} {f g : E.态射 F}
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨hs₀, hh₀, hs₁, hh₁⟩ => Hom.ext' hs₀ hh₀ hs₁ hh₁⟩
-  subst h
-  simp [congrIndexOneOfEq]
+/-
+**CategoryTheory.PreOneHypercover.Hom.ext'_iff** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.PreOneHypercover.Hom`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {S : C} {E : Cate
+goryTheory.PreOneHypercover S}   {F : CategoryTheory.PreOneHypercover S} {f g : 
+E.Hom F},   f = g ↔     ∃ (hs₀ : f.s₀ = g.s₀) (_ :       ∀ (i : E.I₀), f.h₀ i = 
+CategoryTheory.CategoryStruct.comp (g.h₀ i) (CategoryTheory.eqToHom ⋯)) (hs₁ :  
+     ∀ (i j : E.I₀) (k : E.I₁ i j), f.s₁ k = (CategoryTheory.PreOneHypercover.co
+ngrIndexOneOfEq ⋯ ⋯) (g.s₁ k)),       ∀ (i j : E.I₀) (k : E.I₁ i j),         f.h
+₁ k =           CategoryTheory.CategoryStruct.comp (g.h₁ k)             (Categor
+yTheory.CategoryStruct.comp (CategoryTheory.PreOneHypercover.congrIndexOneOfEqIs
+o ⋯ ⋯ (g.s₁ k)).inv               (CategoryTheory.eqToHom ⋯))
+参数：hs₀ : f.s₀ = g.s₀；_ :       ∀ (i : E.I₀), f.h₀ i = CategoryTheory.CategoryStr
+uct.comp (g.h₀ i) (CategoryTheory.eqToHom ⋯)；hs₁ :       ∀ (i j : E.I₀) (k : E.I
+₁ i j), f.s₁ k = (CategoryTheory.PreOneHypercover.congrIndexOneOfEq ⋯ ⋯) (g.s₁ k
+)；i j : E.I₀；k : E.I₁ i j；g.h₁ k；CategoryTheory.CategoryStruct.comp (CategoryThe
+ory.PreOneHypercover.congrIndexOneOfEqIso ⋯ ⋯ (g.s₁ k)).inv               (Categ
+oryTheory.eqToHom ⋯)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_refl`：congrIndexOne
+OfEqIso_refl {i j : E.I₀} (k : E.I₁ i j) : E.congrIndexOneOfEqIso rfl rfl k = Is
+o.refl _
+· 使用定理 `CategoryTheory.eqToHom_naturality`：eqToHom_naturality {f g : β -> C} (z 
+: forall b, f b ⟶ g b) {j j' : β} (w : j = j') : z j ≫ eqToHom (by simp [w]) = e
+qToHom (by simp [w]) ≫ …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.PreOneHypercover.Hom.ext'`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {S : C} {E : CategoryTheory.PreOneHypercover S}   {F 
+: CategoryTheory.PreOneHyperco…
 -/
 lemma Hom.ext'_iff {E F : PreOneHypercover S} {f g : E.Hom F} :
-    f = g ↔ exists (hs₀ : f.s₀ = g.s₀) (_ : forall i, f.h₀ i = g.h₀ i ≫ eqToHom (by simp [hs₀]))
-      (hs₁ : forall (i j : E.I₀) (k : E.I₁ i j),
+    f = g ↔ ∃ (hs₀ : f.s₀ = g.s₀) (_ : ∀ i, f.h₀ i = g.h₀ i ≫ eqToHom (by simp [hs₀]))
+      (hs₁ : ∀ (i j : E.I₀) (k : E.I₁ i j),
         f.s₁ k = F.congrIndexOneOfEq (by simp [hs₀]) (by simp [hs₀]) (g.s₁ k)),
-      forall (i j : E.I₀) (k : E.I₁ i j),
+      ∀ (i j : E.I₀) (k : E.I₁ i j),
         f.h₁ k = g.h₁ k ≫
           (F.congrIndexOneOfEqIso (congrFun hs₀.symm i) (congrFun hs₀.symm j) (g.s₁ k)).inv ≫
           eqToHom (by rw [PreOneHypercover.congrIndexOneOfEq_congrFun hs₀ hs₁]) := by
-  refine ⟨fun h => ?_, fun ⟨hs₀, hh₀, hs₁, hh₁⟩ => Hom.ext' hs₀ hh₀ hs₁ hh₁⟩
+  refine ⟨fun h ↦ ?_, fun ⟨hs₀, hh₀, hs₁, hh₁⟩ ↦ Hom.ext' hs₀ hh₀ hs₁ hh₁⟩
   subst h
   simp [congrIndexOneOfEq]
 
 section
 
-variable (s₀ : E.I₀ ≃ F.I₀) (s₁ : forall ⦃i j : E.I₀⦄, E.I₁ i j ≃ F.I₁ (s₀ i) (s₀ j))
+variable (s₀ : E.I₀ ≃ F.I₀) (s₁ : ∀ ⦃i j : E.I₀⦄, E.I₁ i j ≃ F.I₁ (s₀ i) (s₀ j))
   {i j : E.I₀} (k : E.I₁ i j)
 
-/--
-lemma `congrIndexOneOfEq_equiv` / 引理 `congrIndexOneOfEq_equiv`
-
-English:
-lemma congrIndexOneOfEq_equiv
-  proof: by
-  apply Equiv.injective (s₁ (i := s₀.symm (s₀ i)) (j := s₀.symm (s₀ j)))
-  simp [PreOneHypercover.congrIndexOneOfEq_naturality (u₁ := fun i j k => s₁ k)]
-
-中文:
-引理 congrIndexOneOfEq_equiv
-  证明: by
-  apply Equiv.injective (s₁ (i := s₀.symm (s₀ i)) (j := s₀.symm (s₀ j)))
-  simp [PreOneHypercover.congrIndexOneOfEq_naturality (u₁ := fun i j k => s₁ k)]
-
-Depends on / 依赖: Equiv.injective, PreOneHypercover, PreOneHypercover.congrIndexOneOfEq_naturality, congrIndexOneOfEq_naturality, injective
+/-
+**CategoryTheory.PreOneHypercover.congrIndexOneOfEq_equiv** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：congrIndexOneOfEq_equiv : (congrIndexOneOfEq (s₀.symm_apply_apply i).symm 
+(s₀.symm_apply_apply j).symm) k = s₁.symm ((congrIndexOneOfEq (by simp) (by simp
+)) (s₁ k))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEq_naturality`：congrIndex
+OneOfEq_naturality (u₀ : E.I₀ -> F.I₀) (u₁ : forall ⦃i j⦄, E.I₁ i j -> F.I₁ (u₀ 
+i) (u₀ j)) (k : E.I₁ i j) : u₁ (E.congrIndexOneOfE…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma congrIndexOneOfEq_equiv :
     (congrIndexOneOfEq (s₀.symm_apply_apply i).symm (s₀.symm_apply_apply j).symm) k =
       s₁.symm ((congrIndexOneOfEq (by simp) (by simp)) (s₁ k)) := by
   apply Equiv.injective (s₁ (i := s₀.symm (s₀ i)) (j := s₀.symm (s₀ j)))
-  simp [PreOneHypercover.congrIndexOneOfEq_naturality (u₁ := fun i j k => s₁ k)]
+  simp [PreOneHypercover.congrIndexOneOfEq_naturality (u₁ := fun i j k ↦ s₁ k)]
 
 /-- (Implementation): Auxiliary lemma for `CategoryTheory.PreOneHypercover.isoMk`. -/
 @[reassoc]
-/--
-lemma `isoMk_aux` / 引理 `isoMk_aux`
+/-
+**CategoryTheory.PreOneHypercover.isoMk_aux** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+形式化陈述：isoMk_aux (h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k)) (k
+ : E.I₁ i j) : (h₁ k).hom ≫ (congrIndexOneOfEqIso (congrArg s₀ (s₀.symm_apply_ap
+ply i).symm) (congrArg s₀ (s₀.symm_apply_apply j).symm) (s₁ k)).inv ≫ eqToHom (b
+y simp) ≫ (h₁ (s₁.symm ((congrIndexOneOfEq (congrArg s₀ (s₀.symm_apply_apply i).
+symm) (congrArg s₀ (s₀.symm_apply_apply j).symm)) (s₁ k)))).inv = (congrIndexOne
+OfEqIso (s₀.symm_apply_apply i).symm (s₀.symm_apply_apply j).symm k).inv ≫ eqToH
+om (by congr 1; apply E.co
+参数：h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k)；k : E.I₁ i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEqIso_inv_naturality_asso
+c`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {S : C} {E : Categor
+yTheory.PreOneHypercover S}   {F : CategoryTheory.PreOneHyperco…
+· 使用定理 `CategoryTheory.eqToHom_trans_assoc`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {X Y Z : C} (p : X = Y) (q : Y = Z) {Z_1 : C} (h : Z ⟶ Z
+_1),   CategoryTheory.Ca…
+· 使用引理 `CategoryTheory.PreOneHypercover.congrIndexOneOfEq_equiv`：congrIndexOneOf
+Eq_equiv : (congrIndexOneOfEq (s₀.symm_apply_apply i).symm (s₀.symm_apply_apply 
+j).symm) k = s₁.symm ((congrIndexOneOfEq (by …
+· 使用定理 `CategoryTheory.eqToHom_iso_hom_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {β : Sort u_1} {f g : β → C} (z : (b : β) →
+ f b ≅ g b)   {j j' : β} (w : j = j')…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 
-English:
-lemma isoMk_aux
-  given: (h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k)) (k : E.I₁ i j)
-  proof: by
-  rw [← PreOneHypercover.congrIndexOneOfEqIso_inv_naturality_assoc
-      (z := fun i j k => (h₁ k).hom) (hii' := by simp) (hjj' := by simp)]; rw [eqToHom_trans_assoc]; rw [eqToHom_iso_hom_naturality_assoc]
-  · simp
-  · apply PreOneHypercover.congrIndexOneOfEq_equiv
-
-中文:
-引理 isoMk_aux
-  条件: (h₁ : 对任意 ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k)) (k : E.I₁ i j)
-  证明: by
-  rw [← PreOneHypercover.congrIndexOneOfEqIso_inv_naturality_assoc
-      (z := fun i j k => (h₁ k).hom) (hii' := by simp) (hjj' := by simp)]; rw [eqToHom_trans_assoc]; rw [eqToHom_iso_hom_naturality_assoc]
-  · simp
-  · apply PreOneHypercover.congrIndexOneOfEq_equiv
-
-Depends on / 依赖: PreOneHypercover, PreOneHypercover.congrIndexOneOfEqIso_inv_naturality_assoc, PreOneHypercover.congrIndexOneOfEq_equiv, congrIndexOneOfEqIso_inv_naturality_assoc, congrIndexOneOfEq_equiv, eqToHom_iso_hom_naturality_assoc, eqToHom_trans_assoc
+--- 原说明 ---
+(Implementation): Auxiliary lemma for `CategoryTheory.PreOneHypercover.isoMk`.
 -/
-lemma isoMk_aux (h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k)) (k : E.I₁ i j) :
+lemma isoMk_aux (h₁ : ∀ ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k)) (k : E.I₁ i j) :
     (h₁ k).hom ≫ (congrIndexOneOfEqIso
         (congrArg s₀ (s₀.symm_apply_apply i).symm)
         (congrArg s₀ (s₀.symm_apply_apply j).symm) (s₁ k)).inv ≫
@@ -1797,7 +1483,8 @@ lemma isoMk_aux (h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.
       (congrIndexOneOfEqIso (s₀.symm_apply_apply i).symm (s₀.symm_apply_apply j).symm k).inv ≫
       eqToHom (by congr 1; apply E.congrIndexOneOfEq_equiv s₀ s₁ _) := by
   rw [← PreOneHypercover.congrIndexOneOfEqIso_inv_naturality_assoc
-      (z := fun i j k => (h₁ k).hom) (hii' := by simp) (hjj' := by simp)]; rw [eqToHom_trans_assoc]; rw [eqToHom_iso_hom_naturality_assoc]
+      (z := fun i j k ↦ (h₁ k).hom) (hii' := by simp) (hjj' := by simp),
+      eqToHom_trans_assoc, eqToHom_iso_hom_naturality_assoc]
   · simp
   · apply PreOneHypercover.congrIndexOneOfEq_equiv
 
@@ -1808,107 +1495,32 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Construct an isomorphism of `1`-hypercovers by giving the compatibility conditions only
 in the forward direction. -/
 @[simps!]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.PreOneHypercover.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.PreOneHypercover`。
+形式化陈述：isoMk {S : C} {E F : PreOneHypercover S} (s₀ : E.I₀ ≃ F.I₀) (h₀ : (i : E.I
+₀) -> E.X i ≅ F.X (s₀ i)) (s₁ : forall ⦃i j : E.I₀⦄, E.I₁ i j ≃ F.I₁ (s₀ i) (s₀ 
+j)) (h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k)) (w₀ : forall (
+i : E.I₀), (h₀ i).hom ≫ F.f (s₀ i) = E.f i
+参数：s₀ : E.I₀ ≃ F.I₀；h₀ : (i : E.I₀) -> E.X i ≅ F.X (s₀ i)；s₁ : forall ⦃i j : E.I
+₀⦄, E.I₁ i j ≃ F.I₁ (s₀ i) (s₀ j)；h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k
+ ≅ F.Y (s₁ k)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isoMk
-  signature: {S : C} {E F : PreOneHypercover S}
-  body: (PreZeroHypercover.isoMk s₀ h₀ w₀).hom
-  hom.s₁ k := s₁ k
-  hom.h₁ k := (h₁ k).hom
-  inv.toHom := (PreZeroHypercover.isoMk s₀ h₀ w₀).inv
-  inv.s₁ {i j} k := s₁.symm (F.congrIndexOneOfEq (by simp) (by simp) k)
-  inv.h₁ {i j} k :=
-    (F.congrIndexOneOfEqIso (s₀.apply_symm_apply i).symm (s₀.apply_symm_apply j).symm k).inv ≫
-      eqToHom (by simp) ≫ (h₁ _).inv
-  inv.w₁₁ {i j} k := by
-    obtain ⟨i, rfl⟩ := s₀.surjective i
-    obtain ⟨j, rfl⟩ := s₀.surjective j
-    obtain ⟨k, rfl⟩ := s₁.surjective k
-    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₁ k]
-    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
-      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
-      Category.comp_id]
-    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₁]
-    apply PreOneHypercover.congrIndexOneOfEq_equiv
-  inv.w₁₂ {i j} k := by
-    obtain ⟨i, rfl⟩ := s₀.surjective i
-    obtain ⟨j, rfl⟩ := s₀.surjective j
-    obtain ⟨k, rfl⟩ := s₁.surjective k
-    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₂ k]
-    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
-      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
-      Category.comp_id]
-    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₂]
-    apply PreOneHypercover.congrIndexOneOfEq_equiv
-  inv_hom_id := by
-    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
-      (by simp) fun i j k => ?_
-    dsimp
-    simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
-    -- If this step is replaced by `simp only [Category.id_comp]` it takes 5 seconds
-    exact (Category.id_comp _).symm
-  hom_inv_id := by
-    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
-      (fun i j k => (E.congrIndexOneOfEq_equiv s₀ s₁ _).symm) ?_
-    intro i j k
-    simpa using E.isoMk_aux s₀ s₁ h₁ k
-
-中文:
-定义 isoMk
-  签名: {S : C} {E F : PreOneHypercover S}
-  定义体: (PreZeroHypercover.isoMk s₀ h₀ w₀).hom
-  hom.s₁ k := s₁ k
-  hom.h₁ k := (h₁ k).hom
-  inv.toHom := (PreZeroHypercover.isoMk s₀ h₀ w₀).inv
-  inv.s₁ {i j} k := s₁.symm (F.congrIndexOneOfEq (by simp) (by simp) k)
-  inv.h₁ {i j} k :=
-    (F.congrIndexOneOfEqIso (s₀.apply_symm_apply i).symm (s₀.apply_symm_apply j).symm k).inv ≫
-      eqToHom (by simp) ≫ (h₁ _).inv
-  inv.w₁₁ {i j} k := by
-    obtain ⟨i, rfl⟩ := s₀.surjective i
-    obtain ⟨j, rfl⟩ := s₀.surjective j
-    obtain ⟨k, rfl⟩ := s₁.surjective k
-    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₁ k]
-    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
-      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
-      Category.comp_id]
-    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₁]
-    apply PreOneHypercover.congrIndexOneOfEq_equiv
-  inv.w₁₂ {i j} k := by
-    obtain ⟨i, rfl⟩ := s₀.surjective i
-    obtain ⟨j, rfl⟩ := s₀.surjective j
-    obtain ⟨k, rfl⟩ := s₁.surjective k
-    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₂ k]
-    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
-      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
-      Category.comp_id]
-    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₂]
-    apply PreOneHypercover.congrIndexOneOfEq_equiv
-  inv_hom_id := by
-    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
-      (by simp) fun i j k => ?_
-    dsimp
-    simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
-    -- If this step is replaced by `simp only [Category.id_comp]` it takes 5 seconds
-    exact (Category.id_comp _).symm
-  hom_inv_id := by
-    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
-      (fun i j k => (E.congrIndexOneOfEq_equiv s₀ s₁ _).symm) ?_
-    intro i j k
-    simpa using E.isoMk_aux s₀ s₁ h₁ k
-
-Depends on / 依赖: F.congrIndexOneOfEq, F.congrIndexOneOfEqIso, PreZeroHypercover, PreZeroHypercover.isoMk, apply_sy, cat_disch, congrIndexOneOfEq, congrIndexOneOfEqIso, hom.h, hom.s, hom.toHom, inv.h, inv.s, inv.toHom
+--- 原说明 ---
+Construct an isomorphism of `1`-hypercovers by giving the compatibility conditio
+ns only
+in the forward direction.
 -/
 def isoMk {S : C} {E F : PreOneHypercover S}
-    (s₀ : E.I₀ ≃ F.I₀) (h₀ : (i : E.I₀) -> E.X i ≅ F.X (s₀ i))
-    (s₁ : forall ⦃i j : E.I₀⦄, E.I₁ i j ≃ F.I₁ (s₀ i) (s₀ j))
-    (h₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k))
-    (w₀ : forall (i : E.I₀), (h₀ i).hom ≫ F.f (s₀ i) = E.f i := by cat_disch)
-    (w₁₁ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j),
+    (s₀ : E.I₀ ≃ F.I₀) (h₀ : (i : E.I₀) → E.X i ≅ F.X (s₀ i))
+    (s₁ : ∀ ⦃i j : E.I₀⦄, E.I₁ i j ≃ F.I₁ (s₀ i) (s₀ j))
+    (h₁ : ∀ ⦃i j : E.I₀⦄ (k : E.I₁ i j), E.Y k ≅ F.Y (s₁ k))
+    (w₀ : ∀ (i : E.I₀), (h₀ i).hom ≫ F.f (s₀ i) = E.f i := by cat_disch)
+    (w₁₁ : ∀ ⦃i j : E.I₀⦄ (k : E.I₁ i j),
       (h₁ k).hom ≫ F.p₁ _ = E.p₁ _ ≫ (h₀ i).hom := by cat_disch)
-    (w₁₂ : forall ⦃i j : E.I₀⦄ (k : E.I₁ i j),
+    (w₁₂ : ∀ ⦃i j : E.I₀⦄ (k : E.I₁ i j),
       (h₁ k).hom ≫ F.p₂ _ = E.p₂ _ ≫ (h₀ j).hom := by cat_disch) :
     E ≅ F where
   hom.toHom := (PreZeroHypercover.isoMk s₀ h₀ w₀).hom
@@ -1923,32 +1535,34 @@ def isoMk {S : C} {E F : PreOneHypercover S}
     obtain ⟨i, rfl⟩ := s₀.surjective i
     obtain ⟨j, rfl⟩ := s₀.surjective j
     obtain ⟨k, rfl⟩ := s₁.surjective k
-    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₁ k]
+    rw [← cancel_epi (h₁ k).hom, reassoc_of% w₁₁ k]
     simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
       Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
       Category.comp_id]
-    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₁]
+    rw [PreOneHypercover.isoMk_aux_assoc, ← eqToHom_naturality, eqToHom_refl, Category.comp_id,
+      congrIndexOneOfEqIso_inv_p₁]
     apply PreOneHypercover.congrIndexOneOfEq_equiv
   inv.w₁₂ {i j} k := by
     obtain ⟨i, rfl⟩ := s₀.surjective i
     obtain ⟨j, rfl⟩ := s₀.surjective j
     obtain ⟨k, rfl⟩ := s₁.surjective k
-    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₂ k]
+    rw [← cancel_epi (h₁ k).hom, reassoc_of% w₁₂ k]
     simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
       Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
       Category.comp_id]
-    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₂]
+    rw [PreOneHypercover.isoMk_aux_assoc, ← eqToHom_naturality, eqToHom_refl, Category.comp_id,
+      congrIndexOneOfEqIso_inv_p₂]
     apply PreOneHypercover.congrIndexOneOfEq_equiv
   inv_hom_id := by
     refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
-      (by simp) fun i j k => ?_
+      (by simp) fun i j k ↦ ?_
     dsimp
     simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
     -- If this step is replaced by `simp only [Category.id_comp]` it takes 5 seconds
     exact (Category.id_comp _).symm
   hom_inv_id := by
     refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
-      (fun i j k => (E.congrIndexOneOfEq_equiv s₀ s₁ _).symm) ?_
+      (fun i j k ↦ (E.congrIndexOneOfEq_equiv s₀ s₁ _).symm) ?_
     intro i j k
     simpa using E.isoMk_aux s₀ s₁ h₁ k
 
@@ -1958,68 +1572,30 @@ variable {S : C} {E F : PreOneHypercover.{w} S} (e : E ≅ F)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `hom_inv_s₀_apply` / 引理 `hom_inv_s₀_apply`
-
-English:
-lemma hom_inv_s₀_apply
-  given: (i : E.I₀)
-  statement: e.inv.s₀ (e.hom.s₀ i) = i
-  proof: congr($(e.hom_inv_id).s₀ i)
-
-中文:
-引理 hom_inv_s₀_apply
-  条件: (i : E.I₀)
-  结论: e.inv.s₀ (e.hom.s₀ i) = i
-  证明: congr($(e.hom_inv_id).s₀ i)
-
-Depends on / 依赖: e.hom_inv_id, hom_inv_id
+/-
+**CategoryTheory.PreOneHypercover.hom_inv_s** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_inv_s₀_apply (i : E.I₀) : e.inv.s₀ (e.hom.s₀ i) = i :=
   congr($(e.hom_inv_id).s₀ i)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `inv_hom_s₀_apply` / 引理 `inv_hom_s₀_apply`
-
-English:
-lemma inv_hom_s₀_apply
-  given: (i : F.I₀)
-  statement: e.hom.s₀ (e.inv.s₀ i) = i
-  proof: congr($(e.inv_hom_id).s₀ i)
-
-中文:
-引理 inv_hom_s₀_apply
-  条件: (i : F.I₀)
-  结论: e.hom.s₀ (e.inv.s₀ i) = i
-  证明: congr($(e.inv_hom_id).s₀ i)
-
-Depends on / 依赖: e.inv_hom_id, inv_hom_id
+/-
+**CategoryTheory.PreOneHypercover.inv_hom_s** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_hom_s₀_apply (i : F.I₀) : e.hom.s₀ (e.inv.s₀ i) = i :=
   congr($(e.inv_hom_id).s₀ i)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `hom_inv_s₁_apply` / 引理 `hom_inv_s₁_apply`
-
-English:
-lemma hom_inv_s₁_apply
-  given: {i j : E.I₀} (k : E.I₁ i j)
-  proof: by
-  obtain ⟨hs₀, hh₀, hs₁, hh₁⟩ := PreOneHypercover.Hom.ext'_iff.mp e.hom_inv_id
-  simpa using! hs₁ i j k
-
-中文:
-引理 hom_inv_s₁_apply
-  条件: {i j : E.I₀} (k : E.I₁ i j)
-  证明: by
-  obtain ⟨hs₀, hh₀, hs₁, hh₁⟩ := PreOneHypercover.Hom.ext'_iff.mp e.hom_inv_id
-  simpa using! hs₁ i j k
-
-Depends on / 依赖: PreOneHypercover, PreOneHypercover.Hom.ext, _iff, _iff.mp, e.hom_inv_id, hom_inv_id
+/-
+**CategoryTheory.PreOneHypercover.hom_inv_s** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_inv_s₁_apply {i j : E.I₀} (k : E.I₁ i j) :
     e.inv.s₁ (e.hom.s₁ k) = E.congrIndexOneOfEq (by simp) (by simp) k := by
@@ -2028,24 +1604,10 @@ lemma hom_inv_s₁_apply {i j : E.I₀} (k : E.I₁ i j) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `inv_hom_s₁_apply` / 引理 `inv_hom_s₁_apply`
-
-English:
-lemma inv_hom_s₁_apply
-  given: {i j : F.I₀} (k : F.I₁ i j)
-  proof: by
-  obtain ⟨hs₀, hh₀, hs₁, hh₁⟩ := PreOneHypercover.Hom.ext'_iff.mp e.inv_hom_id
-  simpa using! hs₁ i j k
-
-中文:
-引理 inv_hom_s₁_apply
-  条件: {i j : F.I₀} (k : F.I₁ i j)
-  证明: by
-  obtain ⟨hs₀, hh₀, hs₁, hh₁⟩ := PreOneHypercover.Hom.ext'_iff.mp e.inv_hom_id
-  simpa using! hs₁ i j k
-
-Depends on / 依赖: PreOneHypercover, PreOneHypercover.Hom.ext, _iff, _iff.mp, e.inv_hom_id, inv_hom_id
+/-
+**CategoryTheory.PreOneHypercover.inv_hom_s** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_hom_s₁_apply {i j : F.I₀} (k : F.I₁ i j) :
     e.hom.s₁ (e.inv.s₁ k) = F.congrIndexOneOfEq (by simp) (by simp) k := by
@@ -2055,26 +1617,10 @@ lemma inv_hom_s₁_apply {i j : F.I₀} (k : F.I₁ i j) :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `hom_inv_h₀` / 引理 `hom_inv_h₀`
-
-English:
-lemma hom_inv_h₀
-  given: (i : E.I₀)
-  statement: e.hom.h₀ i ≫ e.inv.h₀ (e.hom.s₀ i) = eqToHom (by simp)
-  proof: by
-  obtain ⟨hs, hh, _⟩ := Hom.ext'_iff.mp e.hom_inv_id
-  simpa using hh i
-
-中文:
-引理 hom_inv_h₀
-  条件: (i : E.I₀)
-  结论: e.hom.h₀ i ≫ e.inv.h₀ (e.hom.s₀ i) = eqToHom (by simp)
-  证明: by
-  obtain ⟨hs, hh, _⟩ := Hom.ext'_iff.mp e.hom_inv_id
-  simpa using hh i
-
-Depends on / 依赖: Hom.ext, _iff, _iff.mp, e.hom_inv_id, hom_inv_id
+/-
+**CategoryTheory.PreOneHypercover.hom_inv_h** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_inv_h₀ (i : E.I₀) : e.hom.h₀ i ≫ e.inv.h₀ (e.hom.s₀ i) = eqToHom (by simp) := by
   obtain ⟨hs, hh, _⟩ := Hom.ext'_iff.mp e.hom_inv_id
@@ -2083,26 +1629,10 @@ lemma hom_inv_h₀ (i : E.I₀) : e.hom.h₀ i ≫ e.inv.h₀ (e.hom.s₀ i) = e
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `inv_hom_h₀` / 引理 `inv_hom_h₀`
-
-English:
-lemma inv_hom_h₀
-  given: (i : F.I₀)
-  statement: e.inv.h₀ i ≫ e.hom.h₀ (e.inv.s₀ i) = eqToHom (by simp)
-  proof: by
-  obtain ⟨hs, hh, _⟩ := Hom.ext'_iff.mp e.inv_hom_id
-  simpa using hh i
-
-中文:
-引理 inv_hom_h₀
-  条件: (i : F.I₀)
-  结论: e.inv.h₀ i ≫ e.hom.h₀ (e.inv.s₀ i) = eqToHom (by simp)
-  证明: by
-  obtain ⟨hs, hh, _⟩ := Hom.ext'_iff.mp e.inv_hom_id
-  simpa using hh i
-
-Depends on / 依赖: Hom.ext, _iff, _iff.mp, e.inv_hom_id, inv_hom_id
+/-
+**CategoryTheory.PreOneHypercover.inv_hom_h** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_hom_h₀ (i : F.I₀) : e.inv.h₀ i ≫ e.hom.h₀ (e.inv.s₀ i) = eqToHom (by simp) := by
   obtain ⟨hs, hh, _⟩ := Hom.ext'_iff.mp e.inv_hom_id
@@ -2111,24 +1641,10 @@ lemma inv_hom_h₀ (i : F.I₀) : e.inv.h₀ i ≫ e.hom.h₀ (e.inv.s₀ i) = e
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `hom_inv_h₁` / 引理 `hom_inv_h₁`
-
-English:
-lemma hom_inv_h₁
-  given: {i j : E.I₀} (k : E.I₁ i j)
-  proof: by
-  obtain ⟨hs, _, _, hh⟩ := Hom.ext'_iff.mp e.hom_inv_id
-  simpa using hh i j k
-
-中文:
-引理 hom_inv_h₁
-  条件: {i j : E.I₀} (k : E.I₁ i j)
-  证明: by
-  obtain ⟨hs, _, _, hh⟩ := Hom.ext'_iff.mp e.hom_inv_id
-  simpa using hh i j k
-
-Depends on / 依赖: Hom.ext, _iff, _iff.mp, e.hom_inv_id, hom_inv_id
+/-
+**CategoryTheory.PreOneHypercover.hom_inv_h** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_inv_h₁ {i j : E.I₀} (k : E.I₁ i j) :
     e.hom.h₁ k ≫ e.inv.h₁ (e.hom.s₁ k) =
@@ -2140,24 +1656,10 @@ lemma hom_inv_h₁ {i j : E.I₀} (k : E.I₁ i j) :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `inv_hom_h₁` / 引理 `inv_hom_h₁`
-
-English:
-lemma inv_hom_h₁
-  given: {i j : F.I₀} (k : F.I₁ i j)
-  proof: by
-  obtain ⟨hs, _, _, hh⟩ := Hom.ext'_iff.mp e.inv_hom_id
-  simpa using hh i j k
-
-中文:
-引理 inv_hom_h₁
-  条件: {i j : F.I₀} (k : F.I₁ i j)
-  证明: by
-  obtain ⟨hs, _, _, hh⟩ := Hom.ext'_iff.mp e.inv_hom_id
-  simpa using hh i j k
-
-Depends on / 依赖: Hom.ext, _iff, _iff.mp, e.inv_hom_id, inv_hom_id
+/-
+**CategoryTheory.PreOneHypercover.inv_hom_h** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_hom_h₁ {i j : F.I₀} (k : F.I₁ i j) :
     e.inv.h₁ k ≫ e.hom.h₁ (e.inv.s₁ k) =
@@ -2167,16 +1669,32 @@ lemma inv_hom_h₁ {i j : F.I₀} (k : F.I₁ i j) :
   simpa using hh i j k
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : E.I₀) : IsIso (e.hom.h₀ i) := by
   use e.inv.h₀ (e.hom.s₀ i) ≫ eqToHom (by simp)
-  rw [PreOneHypercover.hom_inv_h₀_assoc]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [Category.assoc]; rw [← eqToHom_naturality _ (by simp)]; rw [PreOneHypercover.inv_hom_h₀_assoc]
+  rw [PreOneHypercover.hom_inv_h₀_assoc, eqToHom_trans, eqToHom_refl, Category.assoc,
+    ← eqToHom_naturality _ (by simp), PreOneHypercover.inv_hom_h₀_assoc]
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : F.I₀) : IsIso (e.inv.h₀ i) :=
   .of_isIso_fac_right (PreOneHypercover.inv_hom_h₀ e i)
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {i j : E.I₀} (k : E.I₁ i j) : IsIso (e.hom.h₁ k) := by
   use e.inv.h₁ _ ≫ eqToHom (by congr 1; simp) ≫ (E.congrIndexOneOfEqIso (by simp) (by simp) k).hom
   simp only [PreOneHypercover.hom_inv_h₁_assoc, eqToHom_trans_assoc, eqToHom_refl, Category.id_comp,
@@ -2185,6 +1703,11 @@ instance {i j : E.I₀} (k : E.I₁ i j) : IsIso (e.hom.h₁ k) := by
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.PreOneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pre
+OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {i j : F.I₀} (k : F.I₁ i j) : IsIso (e.inv.h₁ k) :=
   .of_isIso_fac_right (PreOneHypercover.inv_hom_h₁ e k)
 
@@ -2195,18 +1718,21 @@ section
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A refinement morphism `E ⟶ F` induces a functor between the multifork indexing categories. -/
 @[simps]
-/--
-Definition of `Hom.mapMulticospan` / `Hom.mapMulticospan` 的定义
+/-
+**CategoryTheory.PreOneHypercover.Hom.mapMulticospan** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.PreOneHypercover.Hom`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {S : C} →
+       {E : CategoryTheory.PreOneHypercover S} →         {F : CategoryTheory.Pre
+OneHypercover S} →           E.Hom F →             CategoryTheory.Functor (Categ
+oryTheory.Limits.WalkingMulticospan E.multicospanShape)               (CategoryT
+heory.Limits.WalkingMulticospan F.multicospanShape)
+参数：CategoryTheory.Limits.WalkingMulticospan E.multicospanShape；CategoryTheory.Li
+mits.WalkingMulticospan F.multicospanShape。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.mapMulticospan
-  signature: {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S} (f : E.Hom F)
-
-中文:
-定义 态射.mapMulticospan
-  签名: {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S} (f : E.态射 F)
-
-Depends on / 依赖: F.multicospanShape, multicospanShape
+--- 原说明 ---
+A refinement morphism `E ⟶ F` induces a functor between the multifork indexing c
+ategories.
 -/
 def Hom.mapMulticospan {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S} (f : E.Hom F) :
     WalkingMulticospan E.multicospanShape ⥤ WalkingMulticospan F.multicospanShape where
@@ -2229,46 +1755,18 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Isomorphic pre-`1`-hypercovers have equivalent multifork index categories. -/
 @[simps! functor inverse]
-/--
-Definition of `equivalenceMulticospanOfIso` / `equivalenceMulticospanOfIso` 的定义
+/-
+**CategoryTheory.PreOneHypercover.equivalenceMulticospanOfIso** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.PreOneHypercover`。
+形式化陈述：equivalenceMulticospanOfIso {E F : PreOneHypercover.{w} S} (f : E ≅ F) : W
+alkingMulticospan E.multicospanShape ≌ WalkingMulticospan F.multicospanShape whe
+re functor
+参数：f : E ≅ F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalenceMulticospanOfIso
-  signature: {E F : PreOneHypercover.{w} S} (f : E ≅ F)
-  body: f.hom.mapMulticospan
-  inverse := f.inv.mapMulticospan
-  unitIso :=
-    eqToIso (WalkingMulticospan.functor_ext (by simp)
-      (fun _ => by dsimp; congr; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
-  counitIso :=
-    eqToIso (WalkingMulticospan.functor_ext (by simp)
-      (fun _ => by dsimp; congr 1; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
-  functor_unitIso_comp c := by
-    cases c <;> rw [eqToIso.hom, eqToHom_app, eqToHom_map] <;> simp
-
-中文:
-定义 equivalenceMulticospanOfIso
-  签名: {E F : PreOneHypercover.{w} S} (f : E ≅ F)
-  定义体: f.hom.mapMulticospan
-  inverse := f.inv.mapMulticospan
-  unitIso :=
-    eqToIso (WalkingMulticospan.functor_ext (by simp)
-      (fun _ => by dsimp; congr; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
-  counitIso :=
-    eqToIso (WalkingMulticospan.functor_ext (by simp)
-      (fun _ => by dsimp; congr 1; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
-  functor_unitIso_comp c := by
-    cases c <;> rw [eqToIso.hom, eqToHom_app, eqToHom_map] <;> simp
-
-Depends on / 依赖: f.hom.mapMulticospan, mapMulticospan
+--- 原说明 ---
+Isomorphic pre-`1`-hypercovers have equivalent multifork index categories.
 -/
 def equivalenceMulticospanOfIso {E F : PreOneHypercover.{w} S} (f : E ≅ F) :
     WalkingMulticospan E.multicospanShape ≌ WalkingMulticospan F.multicospanShape where
@@ -2276,14 +1774,14 @@ def equivalenceMulticospanOfIso {E F : PreOneHypercover.{w} S} (f : E ≅ F) :
   inverse := f.inv.mapMulticospan
   unitIso :=
     eqToIso (WalkingMulticospan.functor_ext (by simp)
-      (fun _ => by dsimp; congr; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
+      (fun _ ↦ by dsimp; congr; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ ↦ by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ ↦ by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
   counitIso :=
     eqToIso (WalkingMulticospan.functor_ext (by simp)
-      (fun _ => by dsimp; congr 1; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
+      (fun _ ↦ by dsimp; congr 1; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ ↦ by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ ↦ by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
   functor_unitIso_comp c := by
     cases c <;> rw [eqToIso.hom, eqToHom_app, eqToHom_map] <;> simp
 
@@ -2292,48 +1790,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `E` and `F` are isomorphic pre-`1`-hypercovers and `G` is a presheaf,
 the multifork for `E` is exact if and only if the multifork for `F` is exact. -/
 noncomputable
-/--
-Definition of `isLimitEquivOfIso` / `isLimitEquivOfIso` 的定义
-
-English:
-definition isLimitEquivOfIso
-  signature: {E F : PreOneHypercover.{w} S} (f : E ≅ F) (G : Cᵒᵖ ⥤ A)
-  body: by
-  refine Equiv.trans ?_
-    (IsLimit.whiskerEquivalenceEquiv <| PreOneHypercover.equivalenceMulticospanOfIso f).symm
-  refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_
-  · refine WalkingMulticospan.functorExt ?_ ?_ ?_ ?_
-    · intro i
-      exact G.mapIso (asIso (f.hom.h₀ i)).symm.op
-    · intro i
-      exact G.mapIso (asIso (f.hom.h₁ i.2)).symm.op
-    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₁]
-    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₂]
-  · refine Cone.ext (Iso.refl _) fun i => ?_
-    induction i with
-    | left _ => simp [← Functor.map_comp, ← op_comp]
-    | right _ => simp [← Functor.map_comp, ← op_comp, f.hom.w₁₁_assoc]
-
-中文:
-定义 isLimitEquivOfIso
-  签名: {E F : PreOneHypercover.{w} S} (f : E ≅ F) (G : Cᵒᵖ ⥤ A)
-  定义体: by
-  refine Equiv.trans ?_
-    (IsLimit.whiskerEquivalenceEquiv <| PreOneHypercover.equivalenceMulticospanOfIso f).symm
-  refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_
-  · refine WalkingMulticospan.functorExt ?_ ?_ ?_ ?_
-    · intro i
-      exact G.mapIso (asIso (f.hom.h₀ i)).symm.op
-    · intro i
-      exact G.mapIso (asIso (f.hom.h₁ i.2)).symm.op
-    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₁]
-    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₂]
-  · refine Cone.ext (Iso.refl _) fun i => ?_
-    induction i with
-    | left _ => simp [← Functor.map_comp, ← op_comp]
-    | right _ => simp [← Functor.map_comp, ← op_comp, f.hom.w₁₁_assoc]
-
-Depends on / 依赖: Cone.ext, Equiv.trans, Functor, Functor.map_comp, Functor.map_comp_assoc, G.mapIso, IsLimit, IsLimit.equivOfNatIsoOfIso, IsLimit.whiskerEquivalenceEquiv, Iso.refl, PreOneHypercover, PreOneHypercover.equivalenceMulticospanOfIso, WalkingMulticospan, WalkingMulticospan.functorExt, equivOfNatIsoOfIso, equivalenceMulticospanOfIso, f.hom.h, f.hom.w, functorExt, mapIso
+/-
+**CategoryTheory.PreOneHypercover.isLimitEquivOfIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.PreOneHypercover`。
+形式化陈述：isLimitEquivOfIso {E F : PreOneHypercover.{w} S} (f : E ≅ F) (G : Cᵒᵖ ⥤ A)
+ : IsLimit (E.multifork G) ≃ IsLimit (F.multifork G)
+参数：f : E ≅ F；G : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.PreOneHypercover.instIsIsoH₀Hom`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {S : C} {E F : CategoryTheory.PreOneHypercover 
+S} (e : E ≅ F)   (i : E.I₀), Categor…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def isLimitEquivOfIso {E F : PreOneHypercover.{w} S} (f : E ≅ F) (G : Cᵒᵖ ⥤ A) :
     IsLimit (E.multifork G) ≃ IsLimit (F.multifork G) := by
@@ -2347,7 +1817,7 @@ def isLimitEquivOfIso {E F : PreOneHypercover.{w} S} (f : E ≅ F) (G : Cᵒᵖ 
       exact G.mapIso (asIso (f.hom.h₁ i.2)).symm.op
     · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₁]
     · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₂]
-  · refine Cone.ext (Iso.refl _) fun i => ?_
+  · refine Cone.ext (Iso.refl _) fun i ↦ ?_
     induction i with
     | left _ => simp [← Functor.map_comp, ← op_comp]
     | right _ => simp [← Functor.map_comp, ← op_comp, f.hom.w₁₁_assoc]
@@ -2359,32 +1829,20 @@ end Category
 section
 
 variable (F : PreOneHypercover.{w'} S) {G : PreOneHypercover.{w''} S}
-  [forall (i : E.I₀) (j : F.I₀), HasPullback (E.f i) (F.f j)]
-  [forall (i j : E.I₀) (k : E.I₁ i j) (a b : F.I₀) (l : F.I₁ a b),
+  [∀ (i : E.I₀) (j : F.I₀), HasPullback (E.f i) (F.f j)]
+  [∀ (i j : E.I₀) (k : E.I₁ i j) (a b : F.I₀) (l : F.I₁ a b),
     HasPullback (E.p₁ k ≫ E.f i) (F.p₁ l ≫ F.f a)]
 
 set_option backward.isDefEq.respectTransparency false in
 /-- First projection from the intersection of two pre-`1`-hypercovers. -/
 @[simps toHom s₁]
 noncomputable
-/--
-Definition of `interFst` / `interFst` 的定义
-
-English:
-definition interFst
-  signature: : (E.inter F).Hom E where
-  body: E.toPreZeroHypercover.interFst F.toPreZeroHypercover
-  s₁ {i j} k := k.1
-  h₁ _ := pullback.fst _ _
-
-中文:
-定义 interFst
-  签名: : (E.inter F).态射 E where
-  定义体: E.toPreZeroHypercover.interFst F.toPreZeroHypercover
-  s₁ {i j} k := k.1
-  h₁ _ := pullback.fst _ _
-
-Depends on / 依赖: E.toPreZeroHypercover.interFst, F.toPreZeroHypercover, interFst, toPreZeroHypercover
+/-
+**CategoryTheory.PreOneHypercover.interFst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.PreOneHypercover`。
+形式化陈述：interFst : (E.inter F).Hom E where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def interFst : (E.inter F).Hom E where
   __ := E.toPreZeroHypercover.interFst F.toPreZeroHypercover
@@ -2395,24 +1853,12 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Second projection from the intersection of two pre-`1`-hypercovers. -/
 @[simps toHom s₁]
 noncomputable
-/--
-Definition of `interSnd` / `interSnd` 的定义
-
-English:
-definition interSnd
-  signature: : (E.inter F).Hom F where
-  body: E.toPreZeroHypercover.interSnd F.toPreZeroHypercover
-  s₁ {i j} k := k.2
-  h₁ _ := pullback.snd _ _
-
-中文:
-定义 interSnd
-  签名: : (E.inter F).态射 F where
-  定义体: E.toPreZeroHypercover.interSnd F.toPreZeroHypercover
-  s₁ {i j} k := k.2
-  h₁ _ := pullback.snd _ _
-
-Depends on / 依赖: E.toPreZeroHypercover.interSnd, F.toPreZeroHypercover, interSnd, toPreZeroHypercover
+/-
+**CategoryTheory.PreOneHypercover.interSnd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.PreOneHypercover`。
+形式化陈述：interSnd : (E.inter F).Hom F where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def interSnd : (E.inter F).Hom F where
   __ := E.toPreZeroHypercover.interSnd F.toPreZeroHypercover
@@ -2424,53 +1870,21 @@ set_option backward.isDefEq.respectTransparency false in
 variable {E F} in
 /-- Universal property of the intersection of two pre-`1`-hypercovers. -/
 noncomputable
-/--
-Definition of `interLift` / `interLift` 的定义
-
-English:
-definition interLift
-  signature: {G : PreOneHypercover.{w''} S} (f : G.Hom E) (g : G.Hom F)
-  body: PreZeroHypercover.interLift f.toHom g.toHom
-  s₁ {i j} k := ⟨f.s₁ k, g.s₁ k⟩
-h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) by
-    rw [f.w₁₁_assoc k]; rw [g.w₁₁_assoc k]
-    simp
-  w₀ := by simp
-  w₁₁ k := by
-    apply pullback.hom_ext
-    · simpa using f.w₁₁ k
-    · simpa using g.w₁₁ k
-  w₁₂ k := by
-    apply pullback.hom_ext
-    · simpa using f.w₁₂ k
-    · simpa using g.w₁₂ k
-
-中文:
-定义 interLift
-  签名: {G : PreOneHypercover.{w''} S} (f : G.态射 E) (g : G.态射 F)
-  定义体: PreZeroHypercover.interLift f.toHom g.toHom
-  s₁ {i j} k := ⟨f.s₁ k, g.s₁ k⟩
-h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) by
-    rw [f.w₁₁_assoc k]; rw [g.w₁₁_assoc k]
-    simp
-  w₀ := by simp
-  w₁₁ k := by
-    apply pullback.hom_ext
-    · simpa using f.w₁₁ k
-    · simpa using g.w₁₁ k
-  w₁₂ k := by
-    apply pullback.hom_ext
-    · simpa using f.w₁₂ k
-    · simpa using g.w₁₂ k
-
-Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.interLift, f.toHom, g.toHom, interLift
+/-
+**CategoryTheory.PreOneHypercover.interLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.PreOneHypercover`。
+形式化陈述：interLift {G : PreOneHypercover.{w''} S} (f : G.Hom E) (g : G.Hom F) : G.H
+om (E.inter F) where __
+参数：f : G.Hom E；g : G.Hom F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def interLift {G : PreOneHypercover.{w''} S} (f : G.Hom E) (g : G.Hom F) :
     G.Hom (E.inter F) where
   __ := PreZeroHypercover.interLift f.toHom g.toHom
   s₁ {i j} k := ⟨f.s₁ k, g.s₁ k⟩
-h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) by
-    rw [f.w₁₁_assoc k]; rw [g.w₁₁_assoc k]
+  h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) <| by
+    rw [f.w₁₁_assoc k, g.w₁₁_assoc k]
     simp
   w₀ := by simp
   w₁₁ k := by
@@ -2490,54 +1904,37 @@ namespace GrothendieckTopology
 
 variable (J : GrothendieckTopology C)
 
-/--
-Definition of `OneHypercover` / `OneHypercover` 的定义
+/-- The type of `1`-hypercovers of an object `S : C` in a category equipped with a
+Grothendieck topology `J`. This can be constructed from a covering of `S` and
+a covering of the fibre products of the objects in this covering (see `OneHypercover.mk'`). -/
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover** 是 Mathlib 中的一个归纳类型，位于命名空间 
+`CategoryTheory.GrothendieckTopology`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → CategoryTheor
+y.GrothendieckTopology C → C → Type (max (max u v) (w + 1))
+参数：max (max u v) (w + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure OneHypercover
-  parameters: (S : C)
-  extends: PreOneHypercover.{w} S
-  axioms and operations (2):
-    - mem₀ : toPreOneHypercover.sieve₀ in J S
-    - mem₁((i₁ i₂ : I₀) ⦃W) : C⦄ (p₁ : W ⟶ X i₁) (p₂ : W ⟶ X i₂) (w : p₁ ≫ f i₁ = p₂ ≫ f i₂) : toPreOneHypercover.sieve₁ p₁ p₂ in J W
-
-中文:
-结构 OneHypercover
-  参数: (S : C)
-  继承: PreOneHypercover.{w} S
-  公理与运算 (2 个):
-    - mem₀ : toPreOneHypercover.sieve₀ in J S
-    - mem₁((i₁ i₂ : I₀) ⦃W) : C⦄ (p₁ : W ⟶ X i₁) (p₂ : W ⟶ X i₂) (w : p₁ ≫ f i₁ = p₂ ≫ f i₂) : toPreOneHypercover.sieve₁ p₁ p₂ in J W
+--- 原说明 ---
+The type of `1`-hypercovers of an object `S : C` in a category equipped with a
+Grothendieck topology `J`. This can be constructed from a covering of `S` and
+a covering of the fibre products of the objects in this covering (see `OneHyperc
+over.mk'`).
 -/
 structure OneHypercover (S : C) extends PreOneHypercover.{w} S where
-  mem₀ : toPreOneHypercover.sieve₀ in J S
+  mem₀ : toPreOneHypercover.sieve₀ ∈ J S
   mem₁ (i₁ i₂ : I₀) ⦃W : C⦄ (p₁ : W ⟶ X i₁) (p₂ : W ⟶ X i₂) (w : p₁ ≫ f i₁ = p₂ ≫ f i₂) :
-    toPreOneHypercover.sieve₁ p₁ p₂ in J W
+    toPreOneHypercover.sieve₁ p₁ p₂ ∈ J W
 
 variable {J}
-
-/--
-lemma `OneHypercover.mem_sieve₁'` / 引理 `OneHypercover.mem_sieve₁'`
-
-English:
-lemma OneHypercover.mem_sieve₁'
-  statement: {S : C} (E : J.OneHypercover S)
-  proof: by
-  rw [E.sieve₁'_eq_sieve₁]
-  exact mem₁ _ _ _ _ _ pullback.condition
-
-中文:
-引理 OneHypercover.mem_sieve₁'
-  结论: {S : C} (E : J.OneHypercover S)
-  证明: by
-  rw [E.sieve₁'_eq_sieve₁]
-  exact mem₁ _ _ _ _ _ pullback.condition
-
-Depends on / 依赖: E.sieve, condition, pullback, pullback.condition
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.mem_sieve** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.GrothendieckTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma OneHypercover.mem_sieve₁' {S : C} (E : J.OneHypercover S)
     (i₁ i₂ : E.I₀) [HasPullback (E.f i₁) (E.f i₂)] :
-    E.sieve₁' i₁ i₂ in J _ := by
+    E.sieve₁' i₁ i₂ ∈ J _ := by
   rw [E.sieve₁'_eq_sieve₁]
   exact mem₁ _ _ _ _ _ pullback.condition
 
@@ -2546,29 +1943,26 @@ namespace OneHypercover
 /-- In order to check that a certain data is a `1`-hypercover of `S`, it suffices to
 check that the data provides a covering of `S` and of the fibre products. -/
 @[simps toPreOneHypercover]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.mk'** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：mk' {S : C} (E : PreOneHypercover S) [E.HasPullbacks] (mem₀ : E.sieve₀ in 
+J S) (mem₁' : forall (i₁ i₂ : E.I₀), E.sieve₁' i₁ i₂ in J _) : J.OneHypercover S
+ where toPreOneHypercover
+参数：E : PreOneHypercover S；mem₀ : E.sieve₀ in J S；mem₁' : forall (i₁ i₂ : E.I₀), 
+E.sieve₁' i₁ i₂ in J _。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.PreOneHypercover.sieve₁'`：sieve₁'_cylinder (i j : Σ (i : 
+E.I₀), F.I₁ (f.s₀ i) (g.s₀ i)) : (cylinder f g).sieve₁' i j = Sieve.pullback (pu
+llback.map _ _ _ _ (pullback.…
 
-English:
-definition mk'
-  signature: {S : C} (E : PreOneHypercover S) [E.HasPullbacks]
-  body: E
-  mem₀ := mem₀
-  mem₁ i₁ i₂ W p₁ p₂ w := by
-    rw [E.sieve₁_eq_pullback_sieve₁' _ _ w]
-    exact J.pullback_stable' _ (mem₁' i₁ i₂)
-
-中文:
-定义 mk'
-  签名: {S : C} (E : PreOneHypercover S) [E.有Pullbacks]
-  定义体: E
-  mem₀ := mem₀
-  mem₁ i₁ i₂ W p₁ p₂ w := by
-    rw [E.sieve₁_eq_pullback_sieve₁' _ _ w]
-    exact J.pullback_stable' _ (mem₁' i₁ i₂)
+--- 原说明 ---
+In order to check that a certain data is a `1`-hypercover of `S`, it suffices to
+check that the data provides a covering of `S` and of the fibre products.
 -/
 def mk' {S : C} (E : PreOneHypercover S) [E.HasPullbacks]
-    (mem₀ : E.sieve₀ in J S) (mem₁' : forall (i₁ i₂ : E.I₀), E.sieve₁' i₁ i₂ in J _) :
+    (mem₀ : E.sieve₀ ∈ J S) (mem₁' : ∀ (i₁ i₂ : E.I₀), E.sieve₁' i₁ i₂ ∈ J _) :
     J.OneHypercover S where
   toPreOneHypercover := E
   mem₀ := mem₀
@@ -2586,32 +1980,19 @@ variable {E F}
 variable (c : Multifork (E.multicospanIndex F.obj))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `multiforkLift` / `multiforkLift` 的定义
+/-- Auxiliary definition of `isLimitMultifork`. -/
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.multiforkLift** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：multiforkLift : c.pt ⟶ F.obj.obj (Opposite.op S)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.OneHypercover.mem₀`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.GrothendieckTopolog
+y C} {S : C}   (self : J.OneHypercover S), s…
 
-English:
-definition multiforkLift
-  signature: : c.pt ⟶ F.obj.obj (Opposite.op S)
-  body: F.property.amalgamateOfArrows _ E.mem₀ c.ι (fun W i₁ i₂ p₁ p₂ w => by
-    apply F.property.hom_ext ⟨_, E.mem₁ _ _ _ _ w⟩
-    rintro ⟨T, g, j, h, fac₁, fac₂⟩
-    dsimp
-    simp only [assoc, ← Functor.map_comp, ← op_comp, fac₁, fac₂]
-    simp only [op_comp, Functor.map_comp]
-    simpa using! c.condition ⟨⟨i₁, i₂⟩, j⟩ =≫ F.obj.map h.op)
-
-中文:
-定义 multiforkLift
-  签名: : c.pt ⟶ F.obj.obj (对偶.op S)
-  定义体: F.property.amalgamateOfArrows _ E.mem₀ c.ι (fun W i₁ i₂ p₁ p₂ w => by
-    apply F.property.hom_ext ⟨_, E.mem₁ _ _ _ _ w⟩
-    rintro ⟨T, g, j, h, fac₁, fac₂⟩
-    dsimp
-    simp only [assoc, ← Functor.map_comp, ← op_comp, fac₁, fac₂]
-    simp only [op_comp, Functor.map_comp]
-    simpa using! c.condition ⟨⟨i₁, i₂⟩, j⟩ =≫ F.obj.map h.op)
-
-Depends on / 依赖: E.mem, F.obj.map, F.property.amalgamateOfArrows, F.property.hom_ext, Functor, Functor.map_comp, amalgamateOfArrows, c.condition, condition, h.op, hom_ext, map_comp, op_comp, property
+--- 原说明 ---
+Auxiliary definition of `isLimitMultifork`.
 -/
 noncomputable def multiforkLift : c.pt ⟶ F.obj.obj (Opposite.op S) :=
   F.property.amalgamateOfArrows _ E.mem₀ c.ι (fun W i₁ i₂ p₁ p₂ w => by
@@ -2624,24 +2005,27 @@ noncomputable def multiforkLift : c.pt ⟶ F.obj.obj (Opposite.op S) :=
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `multiforkLift_map` / 引理 `multiforkLift_map`
-
-English:
-lemma multiforkLift_map
-  given: (i₀ : E.I₀)
-  statement: multiforkLift c ≫ F.obj.map (E.f i₀).op = c.ι i₀
-  proof: by
-  simp [multiforkLift]
-
-中文:
-引理 multiforkLift_map
-  条件: (i₀ : E.I₀)
-  结论: multiforkLift c ≫ F.obj.map (E.f i₀).op = c.ι i₀
-  证明: by
-  simp [multiforkLift]
-
-Depends on / 依赖: multiforkLift
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.multiforkLift_map** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：multiforkLift_map (i₀ : E.I₀) : multiforkLift c ≫ F.obj.map (E.f i₀).op = 
+c.ι i₀
+参数：i₀ : E.I₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presheaf.IsSheaf.amalgamateOfArrows_map`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {J : CategoryTheor…
+· 使用定理 `CategoryTheory.GrothendieckTopology.OneHypercover.mem₀`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.GrothendieckTopolog
+y C} {S : C}   (self : J.OneHypercover S), s…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma multiforkLift_map (i₀ : E.I₀) : multiforkLift c ≫ F.obj.map (E.f i₀).op = c.ι i₀ := by
   simp [multiforkLift]
@@ -2649,30 +2033,22 @@ lemma multiforkLift_map (i₀ : E.I₀) : multiforkLift c ≫ F.obj.map (E.f i�
 end
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `isLimitMultifork` / `isLimitMultifork` 的定义
+/-- If `E : J.OneHypercover S` and `F : Sheaf J A`, then `F.obj (op S)` is
+a multiequalizer of suitable maps `F.obj (op (E.X i)) ⟶ F.obj (op (E.Y j))`
+induced by `E.p₁ j` and `E.p₂ j`. -/
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.isLimitMultifork** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：isLimitMultifork : IsLimit (E.multifork F.1)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GrothendieckTopology.OneHypercover.multiforkLift_map`：mul
+tiforkLift_map (i₀ : E.I₀) : multiforkLift c ≫ F.obj.map (E.f i₀).op = c.ι i₀
 
-English:
-definition isLimitMultifork
-  signature: : IsLimit (E.multifork F.1)
-  body: Multifork.IsLimit.mk _ (fun c => multiforkLift c) (fun c => multiforkLift_map c) (by
-    intro c m hm
-    apply F.property.hom_ext_ofArrows _ E.mem₀
-    intro i₀
-    rw [multiforkLift_map]
-    exact hm i₀)
-
-中文:
-定义 isLimitMultifork
-  签名: : 是极限 (E.multifork F.1)
-  定义体: Multifork.IsLimit.mk _ (fun c => multiforkLift c) (fun c => multiforkLift_map c) (by
-    intro c m hm
-    apply F.property.hom_ext_ofArrows _ E.mem₀
-    intro i₀
-    rw [multiforkLift_map]
-    exact hm i₀)
-
-Depends on / 依赖: E.mem, F.property.hom_ext_ofArrows, IsLimit, Multifork, Multifork.IsLimit.mk, hom_ext_ofArrows, multiforkLift, multiforkLift_map, property
+--- 原说明 ---
+If `E : J.OneHypercover S` and `F : Sheaf J A`, then `F.obj (op S)` is
+a multiequalizer of suitable maps `F.obj (op (E.X i)) ⟶ F.obj (op (E.Y j))`
+induced by `E.p₁ j` and `E.p₂ j`.
 -/
 noncomputable def isLimitMultifork : IsLimit (E.multifork F.1) :=
   Multifork.IsLimit.mk _ (fun c => multiforkLift c) (fun c => multiforkLift_map c) (by
@@ -2690,22 +2066,20 @@ variable {S : C}
 
 /-- Forget the `1`-components of a `OneHypercover`. -/
 @[simps toPreZeroHypercover]
-/--
-Definition of `toZeroHypercover` / `toZeroHypercover` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.toZeroHypercover** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：toZeroHypercover (E : OneHypercover.{w} J S) : J.toPrecoverage.ZeroHyperco
+ver S where __
+参数：E : OneHypercover.{w} J S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.OneHypercover.mem₀`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.GrothendieckTopolog
+y C} {S : C}   (self : J.OneHypercover S), s…
 
-English:
-definition toZeroHypercover
-  signature: (E : OneHypercover.{w} J S)
-  body: E.toPreZeroHypercover
-  mem₀ := E.mem₀
-
-中文:
-定义 toZeroHypercover
-  签名: (E : OneHypercover.{w} J S)
-  定义体: E.toPreZeroHypercover
-  mem₀ := E.mem₀
-
-Depends on / 依赖: E.toPreZeroHypercover, toPreZeroHypercover
+--- 原说明 ---
+Forget the `1`-components of a `OneHypercover`.
 -/
 def toZeroHypercover (E : OneHypercover.{w} J S) : J.toPrecoverage.ZeroHypercover S where
   __ := E.toPreZeroHypercover
@@ -2716,32 +2090,16 @@ set_option backward.isDefEq.respectTransparency false in
 variable (J) in
 /-- The trivial `1`-hypercover of `S` where a single component `S`. -/
 @[simps toPreOneHypercover]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.trivial** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：trivial (S : C) : OneHypercover.{w} J S where __
+参数：S : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: (S : C)
-  body: PreOneHypercover.trivial S
-  mem₀ := by simp only [PreOneHypercover.sieve₀_trivial, J.top_mem]
-  mem₁ _ _ _ _ _ h := by
-    simp only [PreOneHypercover.trivial_toPreZeroHypercover, PreZeroHypercover.singleton_X,
-      PreZeroHypercover.singleton_f, Category.comp_id] at h
-    subst h
-    simp
-
-中文:
-定义 trivial
-  签名: (S : C)
-  定义体: PreOneHypercover.trivial S
-  mem₀ := by simp only [PreOneHypercover.sieve₀_trivial, J.top_mem]
-  mem₁ _ _ _ _ _ h := by
-    simp only [PreOneHypercover.trivial_toPreZeroHypercover, PreZeroHypercover.singleton_X,
-      PreZeroHypercover.singleton_f, Category.comp_id] at h
-    subst h
-    simp
-
-Depends on / 依赖: PreOneHypercover, PreOneHypercover.trivial
+--- 原说明 ---
+The trivial `1`-hypercover of `S` where a single component `S`.
 -/
 def trivial (S : C) : OneHypercover.{w} J S where
   __ := PreOneHypercover.trivial S
@@ -2751,49 +2109,38 @@ def trivial (S : C) : OneHypercover.{w} J S where
       PreZeroHypercover.singleton_f, Category.comp_id] at h
     subst h
     simp
-
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.GrothendieckTopology.OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : C) : Nonempty (J.OneHypercover S) := ⟨trivial J S⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Intersection of two `1`-hypercovers. -/
 @[simps toPreOneHypercover]
 noncomputable
-/--
-Definition of `inter` / `inter` 的定义
-
-English:
-definition inter
-  signature: [HasPullbacks C] (E F : J.OneHypercover S)
-  body: E.toPreOneHypercover.inter F.toPreOneHypercover
-  mem₀ := (E.toZeroHypercover.inter F.toZeroHypercover).mem₀
-  mem₁ i₁ i₂ W p₁ p₂ h := by
-    rw [PreOneHypercover.sieve₁_inter h]
-    refine J.bind_covering (E.mem₁ _ _ _ _ (by simpa using! h)) fun _ _ _ => ?_
-    exact J.pullback_stable _
-      (F.mem₁ _ _ _ _ (by simpa [Category.assoc, ← pullback.condition]))
-
-中文:
-定义 inter
-  签名: [有Pullbacks C] (E F : J.OneHypercover S)
-  定义体: E.toPreOneHypercover.inter F.toPreOneHypercover
-  mem₀ := (E.toZeroHypercover.inter F.toZeroHypercover).mem₀
-  mem₁ i₁ i₂ W p₁ p₂ h := by
-    rw [PreOneHypercover.sieve₁_inter h]
-    refine J.bind_covering (E.mem₁ _ _ _ _ (by simpa using! h)) fun _ _ _ => ?_
-    exact J.pullback_stable _
-      (F.mem₁ _ _ _ _ (by simpa [Category.assoc, ← pullback.condition]))
-
-Depends on / 依赖: E.toPreOneHypercover.inter, F.toPreOneHypercover, toPreOneHypercover
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.inter** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：inter [HasPullbacks C] (E F : J.OneHypercover S) [forall (i : E.I₀) (j : F
+.I₀), HasPullback (E.f i) (F.f j)] [forall (i j : E.I₀) (k : E.I₁ i j) (a b : F.
+I₀) (l : F.I₁ a b), HasPullback (E.p₁ k ≫ E.f i) (F.p₁ l ≫ F.f a)] : J.OneHyperc
+over S where __
+参数：E F : J.OneHypercover S；i : E.I₀；j : F.I₀；E.f i；F.f j；i j : E.I₀；k : E.I₁ i j
+；a b : F.I₀；l : F.I₁ a b；E.p₁ k ≫ E.f i；F.p₁ l ≫ F.f a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def inter [HasPullbacks C] (E F : J.OneHypercover S)
-    [forall (i : E.I₀) (j : F.I₀), HasPullback (E.f i) (F.f j)]
-    [forall (i j : E.I₀) (k : E.I₁ i j) (a b : F.I₀) (l : F.I₁ a b),
+    [∀ (i : E.I₀) (j : F.I₀), HasPullback (E.f i) (F.f j)]
+    [∀ (i j : E.I₀) (k : E.I₁ i j) (a b : F.I₀) (l : F.I₁ a b),
       HasPullback (E.p₁ k ≫ E.f i) (F.p₁ l ≫ F.f a)] : J.OneHypercover S where
   __ := E.toPreOneHypercover.inter F.toPreOneHypercover
   mem₀ := (E.toZeroHypercover.inter F.toZeroHypercover).mem₀
   mem₁ i₁ i₂ W p₁ p₂ h := by
     rw [PreOneHypercover.sieve₁_inter h]
-    refine J.bind_covering (E.mem₁ _ _ _ _ (by simpa using! h)) fun _ _ _ => ?_
+    refine J.bind_covering (E.mem₁ _ _ _ _ (by simpa using! h)) fun _ _ _ ↦ ?_
     exact J.pullback_stable _
       (F.mem₁ _ _ _ _ (by simpa [Category.assoc, ← pullback.condition]))
 
@@ -2803,20 +2150,17 @@ section Category
 
 variable {S : C} {E : OneHypercover.{w} J S} {F : OneHypercover.{w'} J S}
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- A morphism of `1`-hypercovers is a morphism of the underlying pre-`1`-hypercovers. -/
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.Hom** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：Hom (E : OneHypercover.{w} J S) (F : OneHypercover.{w'} J S)
+参数：E : OneHypercover.{w} J S；F : OneHypercover.{w'} J S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom
-  signature: (E : OneHypercover.{w} J S) (F : OneHypercover.{w'} J S)
-  body: E.toPreOneHypercover.Hom F.toPreOneHypercover
-
-中文:
-缩写 态射
-  签名: (E : OneHypercover.{w} J S) (F : OneHypercover.{w'} J S)
-  定义体: E.toPreOneHypercover.Hom F.toPreOneHypercover
-
-Depends on / 依赖: E.toPreOneHypercover.Hom, F.toPreOneHypercover, toPreOneHypercover
+--- 原说明 ---
+A morphism of `1`-hypercovers is a morphism of the underlying pre-`1`-hypercover
+s.
 -/
 abbrev Hom (E : OneHypercover.{w} J S) (F : OneHypercover.{w'} J S) :=
   E.toPreOneHypercover.Hom F.toPreOneHypercover
@@ -2824,22 +2168,10 @@ abbrev Hom (E : OneHypercover.{w} J S) (F : OneHypercover.{w'} J S) :=
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simps! id_s₀ id_s₁ id_h₀ id_h₁ comp_s₀ comp_s₁ comp_h₀ comp_h₁]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (J.OneHypercover S)
-  body: Hom
-  id E := PreOneHypercover.Hom.id E.toPreOneHypercover
-  comp f g := f.comp g
-
-中文:
-实例 :
-  签名: 范畴 (J.OneHypercover S)
-  定义体: Hom
-  id E := PreOneHypercover.Hom.id E.toPreOneHypercover
-  comp f g := f.comp g
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.GrothendieckTopology.OneHypercover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (J.OneHypercover S) where
   Hom := Hom
@@ -2849,18 +2181,17 @@ instance : Category (J.OneHypercover S) where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- An isomorphism of `1`-hypercovers is an isomorphism of pre-`1`-hypercovers. -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.OneHypercover.isoMk** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.GrothendieckTopology.OneHypercover`。
+形式化陈述：isoMk {E F : J.OneHypercover S} (f : E.toPreOneHypercover ≅ F.toPreOneHype
+rcover) : E ≅ F where __
+参数：f : E.toPreOneHypercover ≅ F.toPreOneHypercover。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {E F : J.OneHypercover S} (f : E.toPreOneHypercover ≅ F.toPreOneHypercover)
-  body: f
-
-中文:
-定义 isoMk
-  签名: {E F : J.OneHypercover S} (f : E.toPreOneHypercover ≅ F.toPreOneHypercover)
-  定义体: f
+--- 原说明 ---
+An isomorphism of `1`-hypercovers is an isomorphism of pre-`1`-hypercovers.
 -/
 def isoMk {E F : J.OneHypercover S} (f : E.toPreOneHypercover ≅ F.toPreOneHypercover) :
     E ≅ F where
@@ -2878,38 +2209,22 @@ variable {X : C} (S : J.Cover X)
 is given by `S.Arrow` (i.e. all the morphisms in the sieve `S`), while `I₁` is given
 by all possible pullback cones. -/
 @[simps]
-/--
-Definition of `preOneHypercover` / `preOneHypercover` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.Cover.preOneHypercover** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.GrothendieckTopology.Cover`。
+形式化陈述：preOneHypercover : PreOneHypercover.{max u v} X where I₀
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.Cover.Arrow.Relation.w`：∀ {C : Type 
+u} [inst : CategoryTheory.Category.{v, u} C] {X : C} {J : CategoryTheory.Grothen
+dieckTopology C}   {S : J.Cover X} {I₁ I₂ : S.Ar…
 
-English:
-definition preOneHypercover
-  signature: : PreOneHypercover.{max u v} X where
-  body: S.Arrow
-  X f := f.Y
-  f f := f.f
-  I₁ f₁ f₂ := f₁.Relation f₂
-  Y _ _ r := r.Z
-  p₁ _ _ r := r.g₁
-  p₂ _ _ r := r.g₂
-  w _ _ r := r.w
-
-@[simp]
-
-中文:
-定义 preOneHypercover
-  签名: : PreOneHypercover.{最大值 u v} X where
-  定义体: S.Arrow
-  X f := f.Y
-  f f := f.f
-  I₁ f₁ f₂ := f₁.Relation f₂
-  Y _ _ r := r.Z
-  p₁ _ _ r := r.g₁
-  p₂ _ _ r := r.g₂
-  w _ _ r := r.w
-
-@[simp]
-
-Depends on / 依赖: S.Arrow
+--- 原说明 ---
+The tautological 1-pre-hypercover induced by `S : J.Cover X`. Its index type `I₀
+`
+is given by `S.Arrow` (i.e. all the morphisms in the sieve `S`), while `I₁` is g
+iven
+by all possible pullback cones.
 -/
 def preOneHypercover : PreOneHypercover.{max u v} X where
   I₀ := S.Arrow
@@ -2922,32 +2237,10 @@ def preOneHypercover : PreOneHypercover.{max u v} X where
   w _ _ r := r.w
 
 @[simp]
-/--
-lemma `preOneHypercover_sieve₀` / 引理 `preOneHypercover_sieve₀`
-
-English:
-lemma preOneHypercover_sieve₀
-  statement: S.preOneHypercover.sieve₀ = S.1
-  proof: by
-  ext Y f
-  constructor
-  · rintro ⟨_, _, _, ⟨g⟩, rfl⟩
-    exact S.1.downward_closed g.hf _
-  · intro hf
-    exact Sieve.ofArrows_mk _ _ ({ hf := hf, .. } : S.Arrow)
-
-中文:
-引理 preOneHypercover_sieve₀
-  结论: S.preOneHypercover.sieve₀ = S.1
-  证明: by
-  ext Y f
-  constructor
-  · rintro ⟨_, _, _, ⟨g⟩, rfl⟩
-    exact S.1.downward_closed g.hf _
-  · intro hf
-    exact Sieve.ofArrows_mk _ _ ({ hf := hf, .. } : S.Arrow)
-
-Depends on / 依赖: S.Arrow, Sieve.ofArrows_mk, downward_closed, g.hf, ofArrows_mk
+/-
+**CategoryTheory.GrothendieckTopology.Cover.preOneHypercover_sieve** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preOneHypercover_sieve₀ : S.preOneHypercover.sieve₀ = S.1 := by
   ext Y f
@@ -2956,27 +2249,10 @@ lemma preOneHypercover_sieve₀ : S.preOneHypercover.sieve₀ = S.1 := by
     exact S.1.downward_closed g.hf _
   · intro hf
     exact Sieve.ofArrows_mk _ _ ({ hf := hf, .. } : S.Arrow)
-
-/--
-lemma `preOneHypercover_sieve₁` / 引理 `preOneHypercover_sieve₁`
-
-English:
-lemma preOneHypercover_sieve₁
-  statement: (f₁ f₂ : S.Arrow) {W : C} (p₁ : W ⟶ f₁.Y) (p₂ : W ⟶ f₂.Y)
-  proof: by
-  ext Y f
-  simp only [Sieve.top_apply, iff_true]
-  exact ⟨{ w := w, .. }, f, rfl, rfl⟩
-
-中文:
-引理 preOneHypercover_sieve₁
-  结论: (f₁ f₂ : S.箭头) {W : C} (p₁ : W ⟶ f₁.Y) (p₂ : W ⟶ f₂.Y)
-  证明: by
-  ext Y f
-  simp only [Sieve.top_apply, iff_true]
-  exact ⟨{ w := w, .. }, f, rfl, rfl⟩
-
-Depends on / 依赖: Sieve.top_apply, iff_true, top_apply
+/-
+**CategoryTheory.GrothendieckTopology.Cover.preOneHypercover_sieve** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Cover`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preOneHypercover_sieve₁ (f₁ f₂ : S.Arrow) {W : C} (p₁ : W ⟶ f₁.Y) (p₂ : W ⟶ f₂.Y)
     (w : p₁ ≫ f₁.f = p₂ ≫ f₂.f) :
@@ -2990,24 +2266,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 is given by `S.Arrow` (i.e. all the morphisms in the sieve `S`), while `I₁` is given
 by all possible pullback cones. -/
 @[simps toPreOneHypercover]
-/--
-Definition of `oneHypercover` / `oneHypercover` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.Cover.oneHypercover** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.GrothendieckTopology.Cover`。
+形式化陈述：oneHypercover : J.OneHypercover X where toPreOneHypercover
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition oneHypercover
-  signature: : J.OneHypercover X where
-  body: S.preOneHypercover
-  mem₀ := by simp
-  mem₁ f₁ f₂ _ p₁ p₂ w := by simp [S.preOneHypercover_sieve₁ f₁ f₂ p₁ p₂ w]
-
-中文:
-定义 oneHypercover
-  签名: : J.OneHypercover X where
-  定义体: S.preOneHypercover
-  mem₀ := by simp
-  mem₁ f₁ f₂ _ p₁ p₂ w := by simp [S.preOneHypercover_sieve₁ f₁ f₂ p₁ p₂ w]
-
-Depends on / 依赖: S.preOneHypercover, preOneHypercover
+--- 原说明 ---
+The tautological 1-hypercover induced by `S : J.Cover X`. Its index type `I₀`
+is given by `S.Arrow` (i.e. all the morphisms in the sieve `S`), while `I₁` is g
+iven
+by all possible pullback cones.
 -/
 def oneHypercover : J.OneHypercover X where
   toPreOneHypercover := S.preOneHypercover
@@ -3018,52 +2288,44 @@ end Cover
 
 end GrothendieckTopology
 
-/--
-lemma `PreZeroHypercover.ext_of_isSeparatedFor` / 引理 `PreZeroHypercover.ext_of_isSeparatedFor`
-
-English:
-lemma PreZeroHypercover.ext_of_isSeparatedFor
-  statement: {P : Cᵒᵖ ⥤ Type*} {S : C} (E : PreZeroHypercover S)
-  proof: h.ext fun _ _ ⟨i⟩ => hi i
-
-中文:
-引理 PreZeroHypercover.ext_of_isSeparatedFor
-  结论: {P : Cᵒᵖ ⥤ 类型} {S : C} (E : PreZeroHypercover S)
-  证明: h.ext fun _ _ ⟨i⟩ => hi i
-
-Depends on / 依赖: h.ext
+/-
+**CategoryTheory.PreZeroHypercover.ext_of_isSeparatedFor** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.PreZeroHypercover`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheo
+ry.Functor Cᵒᵖ (Type u_2)} {S : C}   (E : CategoryTheory.PreZeroHypercover S),  
+ CategoryTheory.Presieve.IsSeparatedFor P E.presieve₀ →     ∀ {x y : P.obj (Oppo
+site.op S)},       (∀ (i : E.I₀),           (CategoryTheory.ConcreteCategory.hom
+ (P.map (E.f i).op)) x =             (CategoryTheory.ConcreteCategory.hom (P.map
+ (E.f i).op)) y) →         x = y
+参数：Type u_2；E : CategoryTheory.PreZeroHypercover S；Opposite.op S；∀ (i : E.I₀),  
+         (CategoryTheory.ConcreteCategory.hom (P.map (E.f i).op)) x =           
+  (CategoryTheory.ConcreteCategory.hom (P.map (E.f i).op)) y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.IsSeparatedFor.ext`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.Functor Cᵒᵖ (Type w)} {X : C
+}   {R : CategoryTheory.Presieve…
 -/
 lemma PreZeroHypercover.ext_of_isSeparatedFor {P : Cᵒᵖ ⥤ Type*} {S : C} (E : PreZeroHypercover S)
     (h : E.presieve₀.IsSeparatedFor P) {x y : P.obj (.op S)}
-    (hi : forall i, P.map (E.f i).op x = P.map (E.f i).op y) :
+    (hi : ∀ i, P.map (E.f i).op x = P.map (E.f i).op y) :
     x = y :=
-  h.ext fun _ _ ⟨i⟩ => hi i
+  h.ext fun _ _ ⟨i⟩ ↦ hi i
 
 /-- If the pairwise pullbacks exist, this is the pre-`1`-hypercover where the covers
 by the pullbacks are given by the pullbacks themselves. -/
 @[simps toPreZeroHypercover I₁ Y p₁ p₂]
-/--
-Definition of `PreZeroHypercover.toPreOneHypercover` / `PreZeroHypercover.toPreOneHypercover` 的定义
+/-
+**CategoryTheory.PreZeroHypercover.toPreOneHypercover** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.PreZeroHypercover`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {S : C} →
+ (E : CategoryTheory.PreZeroHypercover S) → [E.HasPullbacks] → CategoryTheory.Pr
+eOneHypercover S
+参数：E : CategoryTheory.PreZeroHypercover S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PreZeroHypercover.toPreOneHypercover
-  signature: {S : C} (E : PreZeroHypercover S)
-  body: E
-  I₁ _ _ := PUnit
-  Y i j _ := pullback (E.f i) (E.f j)
-  p₁ _ _ _ := pullback.fst _ _
-  p₂ _ _ _ := pullback.snd _ _
-  w _ _ _ := pullback.condition
-
-中文:
-定义 PreZeroHypercover.toPreOneHypercover
-  签名: {S : C} (E : PreZeroHypercover S)
-  定义体: E
-  I₁ _ _ := PUnit
-  Y i j _ := pullback (E.f i) (E.f j)
-  p₁ _ _ _ := pullback.fst _ _
-  p₂ _ _ _ := pullback.snd _ _
-  w _ _ _ := pullback.condition
+--- 原说明 ---
+If the pairwise pullbacks exist, this is the pre-`1`-hypercover where the covers
+by the pullbacks are given by the pullbacks themselves.
 -/
 noncomputable def PreZeroHypercover.toPreOneHypercover {S : C} (E : PreZeroHypercover S)
     [E.HasPullbacks] :
@@ -3076,6 +2338,10 @@ noncomputable def PreZeroHypercover.toPreOneHypercover {S : C} (E : PreZeroHyper
   w _ _ _ := pullback.condition
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : C} (E : PreZeroHypercover S) [E.HasPullbacks] :
     E.toPreOneHypercover.HasPullbacks := by
   dsimp
@@ -3084,30 +2350,9 @@ instance {S : C} (E : PreZeroHypercover S) [E.HasPullbacks] :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `sieve₁'_toPreOneHypercover_eq_top` / 引理 `sieve₁'_toPreOneHypercover_eq_top`
-
-English:
-lemma sieve₁'_toPreOneHypercover_eq_top
-  statement: {S : C} (E : PreZeroHypercover S) [E.HasPullbacks]
-  proof: by
-  rw [eq_top_iff]
-  intro Y f _
-  refine ⟨pullback (E.f i) (E.f j), f, 𝟙 _, ?_, by simp⟩
-  refine Presieve.ofArrows.mk' ⟨⟩ rfl ?_
-  apply pullback.hom_ext <;> simp [PreOneHypercover.toPullback]
-
-中文:
-引理 sieve₁'_toPreOneHypercover_eq_top
-  结论: {S : C} (E : PreZeroHypercover S) [E.有Pullbacks]
-  证明: by
-  rw [eq_top_iff]
-  intro Y f _
-  refine ⟨pullback (E.f i) (E.f j), f, 𝟙 _, ?_, by simp⟩
-  refine Presieve.ofArrows.mk' ⟨⟩ rfl ?_
-  apply pullback.hom_ext <;> simp [PreOneHypercover.toPullback]
-
-Depends on / 依赖: PreOneHypercover, PreOneHypercover.toPullback, Presieve, Presieve.ofArrows.mk, eq_top_iff, hom_ext, ofArrows, pullback, pullback.hom_ext, toPullback
+/-
+**CategoryTheory.sieve** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sieve₁'_toPreOneHypercover_eq_top {S : C} (E : PreZeroHypercover S) [E.HasPullbacks]
     (i j : E.I₀) :
@@ -3122,20 +2367,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- If the pairwise pullbacks exist, this is the pre-`1`-hypercover where the covers
 by the pullbacks are given by the pullbacks themselves. -/
 @[simps! toPreOneHypercover]
-/--
-Definition of `Precoverage.ZeroHypercover.toOneHypercover` / `Precoverage.ZeroHypercover.toOneHypercover` 的定义
+/-
+**CategoryTheory.Precoverage.ZeroHypercover.toOneHypercover** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Precoverage.ZeroHypercover`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {J : Cate
+goryTheory.Precoverage C} →       {S : C} → (E : J.ZeroHypercover S) → [E.HasPul
+lbacks] → J.toGrothendieck.OneHypercover S
+参数：E : J.ZeroHypercover S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Precoverage.ZeroHypercover.toOneHypercover
-  signature: {J : Precoverage C}
-  body: .mk' E.toPreZeroHypercover.toPreOneHypercover (J.generate_mem_toGrothendieck E.mem₀) (by simp)
-
-中文:
-定义 Precoverage.ZeroHypercover.toOneHypercover
-  签名: {J : Precoverage C}
-  定义体: .mk' E.toPreZeroHypercover.toPreOneHypercover (J.generate_mem_toGrothendieck E.mem₀) (by simp)
-
-Depends on / 依赖: E.mem, E.toPreZeroHypercover.toPreOneHypercover, J.generate_mem_toGrothendieck, generate_mem_toGrothendieck, toPreOneHypercover, toPreZeroHypercover
+--- 原说明 ---
+If the pairwise pullbacks exist, this is the pre-`1`-hypercover where the covers
+by the pullbacks are given by the pullbacks themselves.
 -/
 noncomputable def Precoverage.ZeroHypercover.toOneHypercover {J : Precoverage C}
     {S : C} (E : J.ZeroHypercover S) [E.HasPullbacks] :
@@ -3147,31 +2390,20 @@ section
 /-- Refine a pre-`0`-hypercover by `0`-hypercovers of the pairwise pullbacks. -/
 @[simps toPreZeroHypercover I₁ Y p₁ p₂]
 noncomputable
-/--
-Definition of `PreZeroHypercover.refineOneHypercover` / `PreZeroHypercover.refineOneHypercover` 的定义
-
-English:
-definition PreZeroHypercover.refineOneHypercover
-  signature: {X : C} (E : PreZeroHypercover.{w} X) [E.HasPullbacks]
-  body: E
-  I₁ i j := (F i j).I₀
-  Y i j k := (F i j).X k
-  p₁ i j k := (F i j).f k ≫ pullback.fst _ _
-  p₂ i j k := (F i j).f k ≫ pullback.snd _ _
-  w i j k := by simp [pullback.condition]
-
-中文:
-定义 PreZeroHypercover.refineOneHypercover
-  签名: {X : C} (E : PreZeroHypercover.{w} X) [E.有Pullbacks]
-  定义体: E
-  I₁ i j := (F i j).I₀
-  Y i j k := (F i j).X k
-  p₁ i j k := (F i j).f k ≫ pullback.fst _ _
-  p₂ i j k := (F i j).f k ≫ pullback.snd _ _
-  w i j k := by simp [pullback.condition]
+/-
+**CategoryTheory.PreZeroHypercover.refineOneHypercover** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.PreZeroHypercover`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X : C} →
+       (E : CategoryTheory.PreZeroHypercover X) →         [inst_1 : E.HasPullbac
+ks] →           ((i j : E.I₀) → CategoryTheory.PreZeroHypercover (CategoryTheory
+.Limits.pullback (E.f i) (E.f j))) →             CategoryTheory.PreOneHypercover
+ X
+参数：E : CategoryTheory.PreZeroHypercover X；(i j : E.I₀) → CategoryTheory.PreZeroH
+ypercover (CategoryTheory.Limits.pullback (E.f i) (E.f j))。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def PreZeroHypercover.refineOneHypercover {X : C} (E : PreZeroHypercover.{w} X) [E.HasPullbacks]
-    (F : forall i j, PreZeroHypercover.{w} (pullback (E.f i) (E.f j))) :
+    (F : ∀ i j, PreZeroHypercover.{w} (pullback (E.f i) (E.f j))) :
     PreOneHypercover.{w} X where
   __ := E
   I₁ i j := (F i j).I₀
@@ -3181,48 +2413,20 @@ def PreZeroHypercover.refineOneHypercover {X : C} (E : PreZeroHypercover.{w} X) 
   w i j k := by simp [pullback.condition]
 
 variable {X : C} (E : PreZeroHypercover.{w} X) [E.HasPullbacks]
-  (F : forall i j, PreZeroHypercover.{w} (pullback (E.f i) (E.f j)))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (E.refineOneHypercover F).HasPullbacks
-  body: ‹_›
-
-中文:
-实例 :
-  签名: (E.refineOneHypercover F).有Pullbacks
-  定义体: ‹_›
-
-Depends on / 依赖: Finset, Finset.univ.map, SimpleGraph, SimpleGraph.mk
+  (F : ∀ i j, PreZeroHypercover.{w} (pullback (E.f i) (E.f j)))
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (E.refineOneHypercover F).HasPullbacks := ‹_›
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `PreZeroHypercover.sieve₁'_refineOneHypercover` / 引理 `PreZeroHypercover.sieve₁'_refineOneHypercover`
-
-English:
-lemma PreZeroHypercover.sieve₁'_refineOneHypercover
-  given: (i j : E.I₀)
-  proof: by
-  rw [PreOneHypercover.sieve₁']
-  congr
-  ext <;> simp [PreOneHypercover.toPullback]
-
-中文:
-引理 PreZeroHypercover.sieve₁'_refineOneHypercover
-  条件: (i j : E.I₀)
-  证明: by
-  rw [PreOneHypercover.sieve₁']
-  congr
-  ext <;> simp [PreOneHypercover.toPullback]
-
-Depends on / 依赖: PreOneHypercover, PreOneHypercover.sieve, PreOneHypercover.toPullback, toPullback
+/-
+**CategoryTheory.PreZeroHypercover.sieve** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma PreZeroHypercover.sieve₁'_refineOneHypercover (i j : E.I₀) :
     (E.refineOneHypercover F).sieve₁' i j = (F i j).sieve₀ := by
@@ -3233,3 +2437,4 @@ lemma PreZeroHypercover.sieve₁'_refineOneHypercover (i j : E.I₀) :
 end
 
 end CategoryTheory
+

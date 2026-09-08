@@ -32,28 +32,14 @@ variable {R A : Type*} [CommSemiring R]
 set_option backward.isDefEq.respectTransparency false in
 /-- `Polynomial.derivative` as a derivation. -/
 @[simps]
-/--
-Definition of `derivative'` / `derivative'` 的定义
+/-
+**Polynomial.derivative'** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：derivative' : Derivation R R[X] R[X] where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition derivative'
-  signature: : Derivation R R[X] R[X] where
-  body: derivative
-  map_add' _ _ := derivative_add
-  map_smul' := derivative_smul
-  map_one_eq_zero' := derivative_one
-  leibniz' f g := by simp [mul_comm, add_comm, derivative_mul]
-
-中文:
-定义 derivative'
-  签名: : 导子 R R[X] R[X] where
-  定义体: derivative
-  map_add' _ _ := derivative_add
-  map_smul' := derivative_smul
-  map_one_eq_zero' := derivative_one
-  leibniz' f g := by simp [mul_comm, add_comm, derivative_mul]
-
-Depends on / 依赖: derivative
+--- 原说明 ---
+`Polynomial.derivative` as a derivation.
 -/
 def derivative' : Derivation R R[X] R[X] where
   toFun := derivative
@@ -65,269 +51,223 @@ def derivative' : Derivation R R[X] R[X] where
 variable [AddCommMonoid A] [Module R A] [Module (Polynomial R) A]
 
 @[simp]
-/--
-theorem `derivation_C` / 定理 `derivation_C`
-
-English:
-theorem derivation_C
-  given: (D : Derivation R R[X] A) (a : R)
-  statement: D (C a) = 0
-  proof: D.map_algebraMap a
-
-@[simp]
-
-中文:
-定理 derivation_C
-  条件: (D : 导子 R R[X] A) (a : R)
-  结论: D (C a) = 0
-  证明: D.map_algebraMap a
-
-@[simp]
-
-Depends on / 依赖: D.map_algebraMap, map_algebraMap
+/-
+**Polynomial.derivation_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：derivation_C (D : Derivation R R[X] A) (a : R) : D (C a) = 0
+参数：D : Derivation R R[X] A；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.map_algebraMap`：map_algebraMap : D (algebraMap R A r) = 0
 -/
 theorem derivation_C (D : Derivation R R[X] A) (a : R) : D (C a) = 0 :=
   D.map_algebraMap a
 
 @[simp]
-/--
-theorem `C_smul_derivation_apply` / 定理 `C_smul_derivation_apply`
-
-English:
-theorem C_smul_derivation_apply
-  given: (D : Derivation R R[X] A) (a : R) (f : R[X])
-  proof: by
-  have : C a • D f = D (C a * f) := by simp
-  rw [this]; rw [C_mul']; rw [D.map_smul]
-
-@[ext]
-
-中文:
-定理 C_smul_derivation_apply
-  条件: (D : 导子 R R[X] A) (a : R) (f : R[X])
-  证明: by
-  have : C a • D f = D (C a * f) := by simp
-  rw [this]; rw [C_mul']; rw [D.map_smul]
-
-@[ext]
-
-Depends on / 依赖: C_mul, D.map_smul, map_smul
+/-
+**Polynomial.C_smul_derivation_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：C_smul_derivation_apply (D : Derivation R R[X] A) (a : R) (f : R[X]) : C a
+ • D f = a • D f
+参数：D : Derivation R R[X] A；a : R；f : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Derivation.leibniz`：leibniz : D (a * b) = a • D b + b • D a
+· 使用定理 `Polynomial.derivation_C`：derivation_C (D : Derivation R R[X] A) (a : R) 
+: D (C a) = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.C_mul'`：C_mul' (a : R) (f : R[X]) : C a * f = a • f
+· 使用定理 `Derivation.map_smul`：map_smul : D (r • a) = r • D a
 -/
 theorem C_smul_derivation_apply (D : Derivation R R[X] A) (a : R) (f : R[X]) :
     C a • D f = a • D f := by
   have : C a • D f = D (C a * f) := by simp
-  rw [this]; rw [C_mul']; rw [D.map_smul]
+  rw [this, C_mul', D.map_smul]
 
 @[ext]
-/--
-theorem `derivation_ext` / 定理 `derivation_ext`
-
-English:
-theorem derivation_ext
-  given: {D₁ D₂ : Derivation R R[X] A} (h : D₁ X = D₂ X)
-  statement: D₁ = D₂
-  proof: Derivation.ext fun f => Derivation.eqOn_adjoin (Set.eqOn_singleton.2 h) by
-    simp only [adjoin_X, Algebra.coe_top, Set.mem_univ]
-
-中文:
-定理 derivation_ext
-  条件: {D₁ D₂ : 导子 R R[X] A} (h : D₁ X = D₂ X)
-  结论: D₁ = D₂
-  证明: Derivation.ext fun f => Derivation.eqOn_adjoin (Set.eqOn_singleton.2 h) by
-    simp only [adjoin_X, Algebra.coe_top, Set.mem_univ]
-
-Depends on / 依赖: Algebra, Algebra.coe_top, Derivation, Derivation.eqOn_adjoin, Derivation.ext, Set.eqOn_singleton, Set.mem_univ, adjoin_X, coe_top, eqOn_adjoin, eqOn_singleton, mem_univ
+/-
+**Polynomial.derivation_ext** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：derivation_ext {D₁ D₂ : Derivation R R[X] A} (h : D₁ X = D₂ X) : D₁ = D₂
+参数：h : D₁ X = D₂ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Derivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `Derivation.eqOn_adjoin`：eqOn_adjoin {s : Set A} (h : Set.EqOn D1 D2 s) :
+ Set.EqOn D1 D2 (adjoin R s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eqOn_singleton`：eqOn_singleton : Set.EqOn f₁ f₂ {a} ↔ f₁ a = f₂ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.adjoin_X`：∀ {R : Type u} [inst : CommSemiring R], R[Polynomia
+l.X] = ⊤
 -/
 theorem derivation_ext {D₁ D₂ : Derivation R R[X] A} (h : D₁ X = D₂ X) : D₁ = D₂ :=
-Derivation.ext fun f => Derivation.eqOn_adjoin (Set.eqOn_singleton.2 h) by
+  Derivation.ext fun f => Derivation.eqOn_adjoin (Set.eqOn_singleton.2 h) <| by
     simp only [adjoin_X, Algebra.coe_top, Set.mem_univ]
 
 variable [IsScalarTower R (Polynomial R) A]
 variable (R)
 
-/--
-Definition of `mkDerivation` / `mkDerivation` 的定义
+/-- The derivation on `R[X]` that takes the value `a` on `X`. -/
+/-
+**Polynomial.mkDerivation** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：mkDerivation : A ->ₗ[R] Derivation R R[X] A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkDerivation
-  signature: : A ->ₗ[R] Derivation R R[X] A where
-  body: fun a => (LinearMap.toSpanSingleton R[X] A a).compDer derivative'
-  map_add' := fun a b => by ext; simp
-  map_smul' := fun t a => by ext; simp
-
-中文:
-定义 mkDerivation
-  签名: : A ->ₗ[R] 导子 R R[X] A where
-  定义体: fun a => (LinearMap.toSpanSingleton R[X] A a).compDer derivative'
-  map_add' := fun a b => by ext; simp
-  map_smul' := fun t a => by ext; simp
-
-Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton, compDer, derivative, toSpanSingleton
+--- 原说明 ---
+The derivation on `R[X]` that takes the value `a` on `X`.
 -/
-def mkDerivation : A ->ₗ[R] Derivation R R[X] A where
-  toFun := fun a => (LinearMap.toSpanSingleton R[X] A a).compDer derivative'
-  map_add' := fun a b => by ext; simp
-  map_smul' := fun t a => by ext; simp
-
-/--
-lemma `mkDerivation_apply` / 引理 `mkDerivation_apply`
-
-English:
-lemma mkDerivation_apply
-  given: (a : A) (f : R[X])
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 mkDerivation_apply
-  条件: (a : A) (f : R[X])
-  证明: by
-  rfl
-
-@[simp]
+def mkDerivation : A →ₗ[R] Derivation R R[X] A where
+  toFun := fun a ↦ (LinearMap.toSpanSingleton R[X] A a).compDer derivative'
+  map_add' := fun a b ↦ by ext; simp
+  map_smul' := fun t a ↦ by ext; simp
+/-
+**Polynomial.mkDerivation_apply** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：mkDerivation_apply (a : A) (f : R[X]) : mkDerivation R a f = derivative f 
+• a
+参数：a : A；f : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 lemma mkDerivation_apply (a : A) (f : R[X]) :
     mkDerivation R a f = derivative f • a := by
   rfl
 
 @[simp]
-/--
-theorem `mkDerivation_X` / 定理 `mkDerivation_X`
-
-English:
-theorem mkDerivation_X
-  given: (a : A)
-  statement: mkDerivation R a X = a
-  proof: by simp [mkDerivation_apply]
-
-中文:
-定理 mkDerivation_X
-  条件: (a : A)
-  结论: mkDerivation R a X = a
-  证明: by simp [mkDerivation_apply]
-
-Depends on / 依赖: mkDerivation_apply
+/-
+**Polynomial.mkDerivation_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：mkDerivation_X (a : A) : mkDerivation R a X = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Polynomial.mkDerivation_apply`：mkDerivation_apply (a : A) (f : R[X]) : m
+kDerivation R a f = derivative f • a
+· 使用定理 `Polynomial.derivative_X`：derivative_X : derivative (X : R[X]) = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mkDerivation_X (a : A) : mkDerivation R a X = a := by simp [mkDerivation_apply]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mkDerivation_one_eq_derivative'` / 引理 `mkDerivation_one_eq_derivative'`
-
-English:
-lemma mkDerivation_one_eq_derivative'
-  statement: mkDerivation R (1 : R[X]) = derivative'
-  proof: by
-  ext : 1
-  simp [derivative']
-
-中文:
-引理 mkDerivation_one_eq_derivative'
-  结论: mkDerivation R (1 : R[X]) = derivative'
-  证明: by
-  ext : 1
-  simp [derivative']
-
-Depends on / 依赖: derivative
+/-
+**Polynomial.mkDerivation_one_eq_derivative'** 是 Mathlib 中的一个引理，位于命名空间 `Polynomi
+al`。
+形式化陈述：mkDerivation_one_eq_derivative' : mkDerivation R (1 : R[X]) = derivative'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.derivation_ext`：derivation_ext {D₁ D₂ : Derivation R R[X] A} 
+(h : D₁ X = D₂ X) : D₁ = D₂
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.mkDerivation_X`：mkDerivation_X (a : A) : mkDerivation R a X =
+ a
+· 使用定理 `Polynomial.derivative_X`：derivative_X : derivative (X : R[X]) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mkDerivation_one_eq_derivative' : mkDerivation R (1 : R[X]) = derivative' := by
   ext : 1
   simp [derivative']
-
-/--
-lemma `mkDerivation_one_eq_derivative` / 引理 `mkDerivation_one_eq_derivative`
-
-English:
-lemma mkDerivation_one_eq_derivative
-  given: (f : R[X])
-  statement: mkDerivation R (1 : R[X]) f = derivative f
-  proof: by
-  rw [mkDerivation_one_eq_derivative']
-  rfl
-
-中文:
-引理 mkDerivation_one_eq_derivative
-  条件: (f : R[X])
-  结论: mkDerivation R (1 : R[X]) f = derivative f
-  证明: by
-  rw [mkDerivation_one_eq_derivative']
-  rfl
-
-Depends on / 依赖: mkDerivation_one_eq_derivative
+/-
+**Polynomial.mkDerivation_one_eq_derivative** 是 Mathlib 中的一个引理，位于命名空间 `Polynomia
+l`。
+形式化陈述：mkDerivation_one_eq_derivative (f : R[X]) : mkDerivation R (1 : R[X]) f = 
+derivative f
+参数：f : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Polynomial.mkDerivation_one_eq_derivative'`：mkDerivation_one_eq_derivati
+ve' : mkDerivation R (1 : R[X]) = derivative'
 -/
 lemma mkDerivation_one_eq_derivative (f : R[X]) : mkDerivation R (1 : R[X]) f = derivative f := by
   rw [mkDerivation_one_eq_derivative']
   rfl
 
-/--
-Definition of `mkDerivationEquiv` / `mkDerivationEquiv` 的定义
+/-- `Polynomial.mkDerivation` as a linear equivalence. -/
+/-
+**Polynomial.mkDerivationEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：mkDerivationEquiv : A ≃ₗ[R] Derivation R R[X] A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.mkDerivation_X`：mkDerivation_X (a : A) : mkDerivation R a X =
+ a
 
-English:
-definition mkDerivationEquiv
-  signature: : A ≃ₗ[R] Derivation R R[X] A
-  body: LinearEquiv.symm
-    { invFun := mkDerivation R
-      toFun := fun D => D X
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl
-left_inv := fun _ => derivation_ext mkDerivation_X _ _
-      right_inv := fun _ => mkDerivation_X _ _ }
-
-中文:
-定义 mkDerivationEquiv
-  签名: : A ≃ₗ[R] 导子 R R[X] A
-  定义体: LinearEquiv.symm
-    { invFun := mkDerivation R
-      toFun := fun D => D X
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl
-left_inv := fun _ => derivation_ext mkDerivation_X _ _
-      right_inv := fun _ => mkDerivation_X _ _ }
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm, derivation_ext, invFun, left_inv, map_add, map_smul, mkDerivation, mkDerivation_X, right_inv
+--- 原说明 ---
+`Polynomial.mkDerivation` as a linear equivalence.
 -/
 def mkDerivationEquiv : A ≃ₗ[R] Derivation R R[X] A :=
-LinearEquiv.symm
+  LinearEquiv.symm <|
     { invFun := mkDerivation R
       toFun := fun D => D X
       map_add' := fun _ _ => rfl
       map_smul' := fun _ _ => rfl
-left_inv := fun _ => derivation_ext mkDerivation_X _ _
+      left_inv := fun _ => derivation_ext <| mkDerivation_X _ _
       right_inv := fun _ => mkDerivation_X _ _ }
-
-/--
-lemma `mkDerivationEquiv_apply` / 引理 `mkDerivationEquiv_apply`
-
-English:
-lemma mkDerivationEquiv_apply
-  given: (a : A)
-  proof: by
-  rfl
-
-中文:
-引理 mkDerivationEquiv_apply
-  条件: (a : A)
-  证明: by
-  rfl
+/-
+**Polynomial.mkDerivationEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ (R : Type u_1) {A : Type u_2} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid A] [inst_2 : _root_.Module R A]   [inst_3 : _root_.Module (Polynomial R) A
+] [inst_4 : IsScalarTower R (Polynomial R) A] (a : A),   (Polynomial.mkDerivatio
+nEquiv R) a = (Polynomial.mkDerivation R) a
+参数：R : Type u_1；Polynomial R；Polynomial R；a : A；Polynomial.mkDerivationEquiv R；P
+olynomial.mkDerivation R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 @[simp] lemma mkDerivationEquiv_apply (a : A) :
     mkDerivationEquiv R a = mkDerivation R a := by
   rfl
-
-/--
-lemma `mkDerivationEquiv_symm_apply` / 引理 `mkDerivationEquiv_symm_apply`
-
-English:
-lemma mkDerivationEquiv_symm_apply
-  given: (D : Derivation R R[X] A)
-  proof: rfl
-
-中文:
-引理 mkDerivationEquiv_symm_apply
-  条件: (D : 导子 R R[X] A)
-  证明: rfl
+/-
+**Polynomial.mkDerivationEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`
+。
+形式化陈述：∀ (R : Type u_1) {A : Type u_2} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid A] [inst_2 : _root_.Module R A]   [inst_3 : _root_.Module (Polynomial R) A
+] [inst_4 : IsScalarTower R (Polynomial R) A]   (D : Derivation R (Polynomial R)
+ A), (Polynomial.mkDerivationEquiv R).symm D = D Polynomial.X
+参数：R : Type u_1；Polynomial R；Polynomial R；D : Derivation R (Polynomial R) A；Poly
+nomial.mkDerivationEquiv R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 @[simp] lemma mkDerivationEquiv_symm_apply (D : Derivation R R[X] A) :
     (mkDerivationEquiv R).symm D = D X := rfl
@@ -357,75 +297,95 @@ This because `A` is not an `R[X]` algebra and it would be messy to create an alg
 within the definition.
 -/
 @[simps]
-/--
-Definition of `compAEval` / `compAEval` 的定义
+/-
+**Derivation.compAEval** 是 Mathlib 中的一个定义，位于命名空间 `Derivation`。
+形式化陈述：compAEval : Derivation R R[X] AEval R M a where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compAEval
-  signature: : Derivation R R[X] AEval R M a where
-  body: AEval.of R M a (d (aeval a f))
-  map_add' := by simp
-  map_smul' := by simp
-  leibniz' := by simp [AEval.of_aeval_smul, -Derivation.map_aeval]
-  map_one_eq_zero' := by simp
-
-中文:
-定义 compAEval
-  签名: : 导子 R R[X] AEval R M a where
-  定义体: AEval.of R M a (d (aeval a f))
-  map_add' := by simp
-  map_smul' := by simp
-  leibniz' := by simp [AEval.of_aeval_smul, -Derivation.map_aeval]
-  map_one_eq_zero' := by simp
-
-Depends on / 依赖: AEval.of
+--- 原说明 ---
+Note: `compAEval` is not defined using `Derivation.compAlgebraMap`.
+This because `A` is not an `R[X]` algebra and it would be messy to create an alg
+ebra instance
+within the definition.
 -/
-def compAEval : Derivation R R[X] AEval R M a where
-  toFun f := AEval.of R M a (d (aeval a f))
-  map_add' := by simp
-  map_smul' := by simp
-  leibniz' := by simp [AEval.of_aeval_smul, -Derivation.map_aeval]
+def compAEval : Derivation R R[X] <| AEval R M a where
+  toFun f          := AEval.of R M a (d (aeval a f))
+  map_add'         := by simp
+  map_smul'        := by simp
+  leibniz'         := by simp [AEval.of_aeval_smul, -Derivation.map_aeval]
   map_one_eq_zero' := by simp
 
 /--
-theorem `compAEval_eq` / 定理 `compAEval_eq`
+A form of the chain rule: if `f` is a polynomial over `R`
+and `d : A → M` is an `R`-derivation then for all `a : A` we have
+$$ d(f(a)) = f' (a) d a. $$
+The equation is in the `R[X]`-module `Module.AEval R M a`.
+For the same equation in `M`, see `Derivation.compAEval_eq`.
+-/
+/-
+**Derivation.compAEval_eq** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：compAEval_eq (d : Derivation R A M) (f : R[X]) : d.compAEval a f = derivat
+ive f • (AEval.of R M a (d a))
+参数：d : Derivation R A M；f : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Derivation.compAEval_apply`：∀ {R : Type u_1} {A : Type u_2} {M : Type u_
+3} [inst : CommSemiring R] [inst_1 : CommSemiring A] [inst_2 : Algebra R A]   [i
+nst_3 : AddCommM…
+· 使用定理 `Derivation.map_aeval`：map_aeval (P : R[X]) (x : A) : D (aeval x P) = aev
+al x (derivative P) • D x
+· 使用引理 `Module.AEval.of_aeval_smul`：of_aeval_smul (f : R[X]) (m : M) : of R M a 
+(aeval a f • m) = f • of R M a m
 
-English:
-theorem compAEval_eq
-  given: (d : Derivation R A M) (f : R[X])
-  proof: by
-  simpa using AEval.of_aeval_smul _ _ _
-
-中文:
-定理 compAEval_eq
-  条件: (d : 导子 R A M) (f : R[X])
-  证明: by
-  simpa using AEval.of_aeval_smul _ _ _
-
-Depends on / 依赖: AEval.of_aeval_smul, of_aeval_smul
+--- 原说明 ---
+A form of the chain rule: if `f` is a polynomial over `R`
+and `d : A → M` is an `R`-derivation then for all `a : A` we have
+$$ d(f(a)) = f' (a) d a. $$
+The equation is in the `R[X]`-module `Module.AEval R M a`.
+For the same equation in `M`, see `Derivation.compAEval_eq`.
 -/
 theorem compAEval_eq (d : Derivation R A M) (f : R[X]) :
     d.compAEval a f = derivative f • (AEval.of R M a (d a)) := by
   simpa using AEval.of_aeval_smul _ _ _
 
 /--
-theorem `comp_aeval_eq` / 定理 `comp_aeval_eq`
+A form of the chain rule: if `f` is a polynomial over `R`
+and `d : A → M` is an `R`-derivation then for all `a : A` we have
+$$ d(f(a)) = f' (a) d a. $$
+The equation is in `M`. For the same equation in `Module.AEval R M a`,
+see `Derivation.compAEval_eq`.
+-/
+/-
+**Derivation.comp_aeval_eq** 是 Mathlib 中的一个定理，位于命名空间 `Derivation`。
+形式化陈述：comp_aeval_eq (d : Derivation R A M) (f : R[X]) : d (aeval a f) = aeval a 
+(derivative f) • d a
+参数：d : Derivation R A M；f : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Derivation.compAEval_eq`：compAEval_eq (d : Derivation R A M) (f : R[X]) 
+: d.compAEval a f = derivative f • (AEval.of R M a (d a))
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem comp_aeval_eq
-  given: (d : Derivation R A M) (f : R[X])
-  proof: calc
-    _ = (AEval.of R M a).symm (d.compAEval a f) := rfl
-    _ = _ := by simp [-compAEval_apply, compAEval_eq]
-
-中文:
-定理 comp_aeval_eq
-  条件: (d : 导子 R A M) (f : R[X])
-  证明: calc
-    _ = (AEval.of R M a).symm (d.compAEval a f) := rfl
-    _ = _ := by simp [-compAEval_apply, compAEval_eq]
-
-Depends on / 依赖: AEval.of, compAEval, compAEval_apply, compAEval_eq, d.compAEval
+--- 原说明 ---
+A form of the chain rule: if `f` is a polynomial over `R`
+and `d : A → M` is an `R`-derivation then for all `a : A` we have
+$$ d(f(a)) = f' (a) d a. $$
+The equation is in `M`. For the same equation in `Module.AEval R M a`,
+see `Derivation.compAEval_eq`.
 -/
 theorem comp_aeval_eq (d : Derivation R A M) (f : R[X]) :
     d (aeval a f) = aeval a (derivative f) • d a :=
@@ -434,3 +394,4 @@ theorem comp_aeval_eq (d : Derivation R A M) (f : R[X]) :
     _ = _ := by simp [-compAEval_apply, compAEval_eq]
 
 end Derivation
+

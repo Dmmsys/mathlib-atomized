@@ -33,190 +33,182 @@ section Embeddings
 variable (F : Type*) [Field F]
 
 open AdjoinRoot in
-/--
-Definition of `AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly` / `AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly` 的定义
+/-- If `p` is the minimal polynomial of `a` over `F` then `F[a] ≃ₐ[F] F[x]/(p)` -/
+/-
+**AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly {R : Type*} [CommRing R] [A
+lgebra F R] (x : R) : Algebra.adjoin F ({x} : Set R) ≃ₐ[F] AdjoinRoot (minpoly F
+ x)
+参数：x : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly
-  signature: {R : Type*} [CommRing R] [Algebra F R] (x : R)
-  body: AlgEquiv.symm AlgEquiv.ofBijective (Minpoly.toAdjoin F x) by
-    refine ⟨(injective_iff_map_eq_zero _).2 fun P₁ hP₁ => ?_, Minpoly.toAdjoin.surjective F x⟩
-    obtain ⟨P, rfl⟩ := mk_surjective P₁
-    refine AdjoinRoot.mk_eq_zero.mpr (minpoly.dvd F x ?_)
-    simpa [← Subalgebra.coe_eq_zero, ← aeval_def] using hP₁
-
-@[simp]
-
-中文:
-定义 代数等价.adjoinSingletonEquivAdjoinRootMinpoly
-  签名: {R : 类型} [交换环 R] [代数 F R] (x : R)
-  定义体: AlgEquiv.symm AlgEquiv.ofBijective (Minpoly.toAdjoin F x) by
-    refine ⟨(injective_iff_map_eq_zero _).2 fun P₁ hP₁ => ?_, Minpoly.toAdjoin.surjective F x⟩
-    obtain ⟨P, rfl⟩ := mk_surjective P₁
-    refine AdjoinRoot.mk_eq_zero.mpr (minpoly.dvd F x ?_)
-    simpa [← Subalgebra.coe_eq_zero, ← aeval_def] using hP₁
-
-@[simp]
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk_eq_zero.mpr, AlgEquiv, AlgEquiv.ofBijective, AlgEquiv.symm, Minpoly, Minpoly.toAdjoin, Minpoly.toAdjoin.surjective, Subalgebra, Subalgebra.coe_eq_zero, aeval_def, coe_eq_zero, injective_iff_map_eq_zero, minpoly, minpoly.dvd, mk_eq_zero, mk_surjective, ofBijective, surjective, toAdjoin
+--- 原说明 ---
+If `p` is the minimal polynomial of `a` over `F` then `F[a] ≃ₐ[F] F[x]/(p)`
 -/
 def AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly {R : Type*} [CommRing R] [Algebra F R] (x : R) :
     Algebra.adjoin F ({x} : Set R) ≃ₐ[F] AdjoinRoot (minpoly F x) :=
-AlgEquiv.symm AlgEquiv.ofBijective (Minpoly.toAdjoin F x) by
-    refine ⟨(injective_iff_map_eq_zero _).2 fun P₁ hP₁ => ?_, Minpoly.toAdjoin.surjective F x⟩
+  AlgEquiv.symm <| AlgEquiv.ofBijective (Minpoly.toAdjoin F x) <| by
+    refine ⟨(injective_iff_map_eq_zero _).2 fun P₁ hP₁ ↦ ?_, Minpoly.toAdjoin.surjective F x⟩
     obtain ⟨P, rfl⟩ := mk_surjective P₁
     refine AdjoinRoot.mk_eq_zero.mpr (minpoly.dvd F x ?_)
     simpa [← Subalgebra.coe_eq_zero, ← aeval_def] using hP₁
 
 @[simp]
-/--
-theorem `AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom` / 定理 `AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom`
-
-English:
-theorem AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom
-  statement: {R : Type*} [CommRing R]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 代数等价.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom
-  结论: {R : 类型} [交换环 R]
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom** 是 Mathlib 中的一个定
+理，位于命名空间 ``。
+形式化陈述：AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom {R : Type*} [
+CommRing R] [Algebra F R] (x : R) : (adjoinSingletonEquivAdjoinRootMinpoly F x).
+symm = AdjoinRoot.Minpoly.toAdjoin F x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom {R : Type*} [CommRing R]
     [Algebra F R] (x : R) :
     (adjoinSingletonEquivAdjoinRootMinpoly F x).symm = AdjoinRoot.Minpoly.toAdjoin F x := rfl
 
 @[simp]
-/--
-theorem `AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm` / 定理 `AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm`
-
-English:
-theorem AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm
-  statement: {R : Type*} [CommRing R]
-  proof: rfl
-
-中文:
-定理 代数等价.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm
-  结论: {R : 类型} [交换环 R]
-  证明: rfl
+/-
+**AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm** 是 Mathlib 中的一个定理，位于命
+名空间 ``。
+形式化陈述：AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm {R : Type*} [CommR
+ing R] [Algebra F R] (x : R) : ⇑(adjoinSingletonEquivAdjoinRootMinpoly F x).symm
+ = AdjoinRoot.Minpoly.toAdjoin F x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm {R : Type*} [CommRing R]
     [Algebra F R] (x : R) :
     ⇑(adjoinSingletonEquivAdjoinRootMinpoly F x).symm = AdjoinRoot.Minpoly.toAdjoin F x := rfl
 
-/--
-Definition of `Algebra.adjoin.liftSingleton` / `Algebra.adjoin.liftSingleton` 的定义
+/-- Produce an algebra homomorphism `Adjoin R {x} →ₐ[R] T` sending `x` to
+a root of `x`'s minimal polynomial in `T`. -/
+/-
+**Algebra.adjoin.liftSingleton** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Algebra.adjoin.liftSingleton {S T : Type*} [CommRing S] [CommRing T] [Alge
+bra F S] [Algebra F T] (x : S) (y : T) (h : aeval y (minpoly F x) = 0) : Algebra
+.adjoin F {x} ->ₐ[F] T
+参数：x : S；y : T；h : aeval y (minpoly F x) = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Algebra.adjoin.liftSingleton
-  signature: {S T : Type*}
-  body: (AdjoinRoot.liftAlgHom _ _ y h).comp (AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly F x).toAlgHom
-
-中文:
-定义 代数.adjoin.liftSingleton
-  签名: {S T : 类型}
-  定义体: (AdjoinRoot.liftAlgHom _ _ y h).comp (AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly F x).toAlgHom
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.liftAlgHom, AlgEquiv, AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly, adjoinSingletonEquivAdjoinRootMinpoly, liftAlgHom, toAlgHom
+--- 原说明 ---
+Produce an algebra homomorphism `Adjoin R {x} →ₐ[R] T` sending `x` to
+a root of `x`'s minimal polynomial in `T`.
 -/
 noncomputable def Algebra.adjoin.liftSingleton {S T : Type*}
     [CommRing S] [CommRing T] [Algebra F S] [Algebra F T]
     (x : S) (y : T) (h : aeval y (minpoly F x) = 0) :
-    Algebra.adjoin F {x} ->ₐ[F] T :=
+    Algebra.adjoin F {x} →ₐ[F] T :=
   (AdjoinRoot.liftAlgHom _ _ y h).comp (AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly F x).toAlgHom
 
 open Finset
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Polynomial.lift_of_splits` / 定理 `Polynomial.lift_of_splits`
+/-- If `K` and `L` are field extensions of `F` and we have `s : Finset K` such that
+the minimal polynomial of each `x ∈ s` splits in `L` then `Algebra.adjoin F s` embeds in `L`. -/
+/-
+**Polynomial.lift_of_splits** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Polynomial.lift_of_splits {F K L : Type*} [Field F] [Field K] [Field L] [A
+lgebra F K] [Algebra F L] (s : Finset K) : (forall x in s, IsIntegral F x ∧ Spli
+ts ((minpoly F x).map (algebraMap F L))) -> Nonempty (Algebra.adjoin F (s : Set 
+K) ->ₐ[F] L)
+参数：s : Finset K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Algebra.adjoin_empty`：adjoin_empty : adjoin R (∅ : Set A) = ⊥
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Finset.forall_mem_insert`：forall_mem_insert (a : α) (s : Finset α) (p : 
+α -> Prop) : (forall x, x in insert a s -> p x) ↔ p a ∧ forall x, x in s -> p x
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Set.insert_eq`：insert_eq (x : α) (s : Set α) : insert x s = ({x} : Set α
+) union s
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.adjoin_union_eq_adjoin_adjoin`：adjoin_union_eq_adjoin_adjoin : a
+djoin R (s union t) = (adjoin (adjoin R s) t).restrictScalars R
+· 使用定理 `FiniteDimensional.of_subalgebra_toSubmodule`：∀ {F : Type u_1} {E : Type 
+u_2} [inst : Field F] [inst_1 : Ring E] [inst_2 : Algebra F E] {S : Subalgebra F
+ E},   FiniteDimensional F ↥(Suba…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.fg_iff_finiteDimensional`：fg_iff_finiteDimensional (s : Submod
+ule K V) : s.FG ↔ FiniteDimensional K s
+· 使用定理 `fg_adjoin_of_finite`：fg_adjoin_of_finite {s : Set A} (hfs : s.Finite) (h
+is : forall x in s, IsIntegral R x) : (Algebra.adjoin R s).toSubmodule.FG
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `IsIntegral.tower_top`：IsIntegral.tower_top [Algebra A B] [IsScalarTower 
+R A B] {x : B} (hx : IsIntegral R x) : IsIntegral A x
+· 使用定理 `Polynomial.Splits.of_dvd`：∀ {R : Type u_1} [inst : CommRing R] {f g : Po
+lynomial R} [IsDomain R], g.Splits → g ≠ 0 → f ∣ g → f.Splits
+· 使用定理 `Polynomial.map_ne_zero`：map_ne_zero {f : R ->+* S} (hp : p != 0) : p.map
+ f != 0
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `minpoly.ne_zero`：ne_zero [Nontrivial A] (hx : IsIntegral A x) : minpoly 
+A x != 0
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
+· 使用定理 `IsScalarTower.of_algHom`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} 
+[inst : CommSemiring R] [inst_1 : CommSemiring A]   [inst_2 : CommSemiring B] [i
+nst_3 : Algeb…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.map_map`：map_map [Semiring T] (g : S ->+* T) (p : R[X]) : (p.
+map f).map g = p.map (g.comp f)
+· 使用定理 `Polynomial.map_dvd_map'`：map_dvd_map' [Field k] (f : R ->+* k) {x y : R[
+X]} : x.map f ∣ y.map f ↔ x ∣ y
+· 使用定理 `minpoly.dvd_map_of_isScalarTower`：dvd_map_of_isScalarTower (A K : Type*)
+ {R : Type*} [CommRing A] [Field K] [Ring R] [Algebra A K] [Algebra A R] [Algebr
+a K R] [IsScalarTower …
+（共 40 条，此处仅展示前 30 条）
 
-English:
-theorem Polynomial.lift_of_splits
-  statement: {F K L : Type*} [Field F] [Field K] [Field L] [Algebra F K]
-  proof: by
-  classical
-    refine Finset.induction_on s (fun _ => ?_) fun a s _ ih H => ?_
-    · rw [coe_empty, Algebra.adjoin_empty]
-      exact ⟨(Algebra.ofId F L).comp (Algebra.botEquiv F K)⟩
-    rw [forall_mem_insert] at H
-    rcases H with ⟨⟨H1, H2⟩, H3⟩
-    obtain ⟨f⟩ := ih H3
-    choose H3 _ using H3
-    rw [coe_insert]; rw [Set.insert_eq]; rw [Set.union_comm]; rw [Algebra.adjoin_union_eq_adjoin_adjoin]
-    set Ks := Algebra.adjoin F (s : Set K)
-    have : FiniteDimensional F Ks := ((Submodule.fg_iff_finiteDimensional _).1
-      (fg_adjoin_of_finite s.finite_toSet H3)).of_subalgebra_toSubmodule
-    let := fieldOfFiniteDimensional F Ks
-    let := (f : Ks ->+* L).toAlgebra
-    have H5 : IsIntegral Ks a := H1.tower_top
-    have H6 : ((minpoly Ks a).map (algebraMap Ks L)).Splits := by
-      refine Splits.of_dvd H2 (map_ne_zero (minpoly.ne_zero H1)) ?_
-      rw [IsScalarTower.algebraMap_eq F Ks L]; rw [← map_map]; rw [map_dvd_map']
-      exact minpoly.dvd_map_of_isScalarTower F Ks a
-    obtain ⟨y, hy⟩ := H6.exists_eval_eq_zero (by simp [(minpoly.degree_pos H5).ne'])
-    rw [eval_map] at hy
-exact ⟨Subalgebra.ofRestrictScalars F _ Algebra.adjoin.liftSingleton Ks a y hy⟩
-
-中文:
-定理 多项式.lift_of_splits
-  结论: {F K L : 类型} [域 F] [域 K] [域 L] [代数 F K]
-  证明: by
-  classical
-    refine Finset.induction_on s (fun _ => ?_) fun a s _ ih H => ?_
-    · rw [coe_empty, Algebra.adjoin_empty]
-      exact ⟨(Algebra.ofId F L).comp (Algebra.botEquiv F K)⟩
-    rw [forall_mem_insert] at H
-    rcases H with ⟨⟨H1, H2⟩, H3⟩
-    obtain ⟨f⟩ := ih H3
-    choose H3 _ using H3
-    rw [coe_insert]; rw [Set.insert_eq]; rw [Set.union_comm]; rw [Algebra.adjoin_union_eq_adjoin_adjoin]
-    set Ks := Algebra.adjoin F (s : Set K)
-    have : FiniteDimensional F Ks := ((Submodule.fg_iff_finiteDimensional _).1
-      (fg_adjoin_of_finite s.finite_toSet H3)).of_subalgebra_toSubmodule
-    let := fieldOfFiniteDimensional F Ks
-    let := (f : Ks ->+* L).toAlgebra
-    have H5 : IsIntegral Ks a := H1.tower_top
-    have H6 : ((minpoly Ks a).map (algebraMap Ks L)).Splits := by
-      refine Splits.of_dvd H2 (map_ne_zero (minpoly.ne_zero H1)) ?_
-      rw [IsScalarTower.algebraMap_eq F Ks L]; rw [← map_map]; rw [map_dvd_map']
-      exact minpoly.dvd_map_of_isScalarTower F Ks a
-    obtain ⟨y, hy⟩ := H6.exists_eval_eq_zero (by simp [(minpoly.degree_pos H5).ne'])
-    rw [eval_map] at hy
-exact ⟨Subalgebra.ofRestrictScalars F _ Algebra.adjoin.liftSingleton Ks a y hy⟩
-
-Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_empty, Algebra.adjoin_union_eq_adjoin_adjoin, Algebra.botEquiv, Algebra.ofId, FiniteDimensional, Finset, Finset.induction_on, Set.insert_eq, Set.union_comm, Submodule, Submodule.fg_iff_finiteDimensional, adjoin, adjoin_empty, adjoin_union_eq_adjoin_adjoin, botEquiv, classical, coe_empty, coe_insert
+--- 原说明 ---
+If `K` and `L` are field extensions of `F` and we have `s : Finset K` such that
+the minimal polynomial of each `x ∈ s` splits in `L` then `Algebra.adjoin F s` e
+mbeds in `L`.
 -/
 theorem Polynomial.lift_of_splits {F K L : Type*} [Field F] [Field K] [Field L] [Algebra F K]
     [Algebra F L] (s : Finset K) :
-      (forall x in s, IsIntegral F x ∧ Splits ((minpoly F x).map (algebraMap F L))) ->
-        Nonempty (Algebra.adjoin F (s : Set K) ->ₐ[F] L) := by
+      (∀ x ∈ s, IsIntegral F x ∧ Splits ((minpoly F x).map (algebraMap F L))) →
+        Nonempty (Algebra.adjoin F (s : Set K) →ₐ[F] L) := by
   classical
-    refine Finset.induction_on s (fun _ => ?_) fun a s _ ih H => ?_
+    refine Finset.induction_on s (fun _ ↦ ?_) fun a s _ ih H ↦ ?_
     · rw [coe_empty, Algebra.adjoin_empty]
       exact ⟨(Algebra.ofId F L).comp (Algebra.botEquiv F K)⟩
     rw [forall_mem_insert] at H
     rcases H with ⟨⟨H1, H2⟩, H3⟩
     obtain ⟨f⟩ := ih H3
     choose H3 _ using H3
-    rw [coe_insert]; rw [Set.insert_eq]; rw [Set.union_comm]; rw [Algebra.adjoin_union_eq_adjoin_adjoin]
+    rw [coe_insert, Set.insert_eq, Set.union_comm, Algebra.adjoin_union_eq_adjoin_adjoin]
     set Ks := Algebra.adjoin F (s : Set K)
     have : FiniteDimensional F Ks := ((Submodule.fg_iff_finiteDimensional _).1
       (fg_adjoin_of_finite s.finite_toSet H3)).of_subalgebra_toSubmodule
     let := fieldOfFiniteDimensional F Ks
-    let := (f : Ks ->+* L).toAlgebra
+    let := (f : Ks →+* L).toAlgebra
     have H5 : IsIntegral Ks a := H1.tower_top
     have H6 : ((minpoly Ks a).map (algebraMap Ks L)).Splits := by
       refine Splits.of_dvd H2 (map_ne_zero (minpoly.ne_zero H1)) ?_
-      rw [IsScalarTower.algebraMap_eq F Ks L]; rw [← map_map]; rw [map_dvd_map']
+      rw [IsScalarTower.algebraMap_eq F Ks L, ← map_map, map_dvd_map']
       exact minpoly.dvd_map_of_isScalarTower F Ks a
     obtain ⟨y, hy⟩ := H6.exists_eval_eq_zero (by simp [(minpoly.degree_pos H5).ne'])
     rw [eval_map] at hy
-exact ⟨Subalgebra.ofRestrictScalars F _ Algebra.adjoin.liftSingleton Ks a y hy⟩
+    exact ⟨Subalgebra.ofRestrictScalars F _ <| Algebra.adjoin.liftSingleton Ks a y hy⟩
 
 end Embeddings
 
@@ -226,162 +218,207 @@ variable {R K L M : Type*} [CommRing R] [Field K] [Field L] [CommRing M] [Algebr
 section
 variable [Algebra R L]
 
-/--
-theorem `IsIntegral.mem_range_algHom_of_minpoly_splits` / 定理 `IsIntegral.mem_range_algHom_of_minpoly_splits`
-
-English:
-theorem IsIntegral.mem_range_algHom_of_minpoly_splits
-  proof: show x in Set.range f from Set.image_subset_range _ ((minpoly R x).rootSet K) by
-    rw [h.image_rootSet]; rw [mem_rootSet']
-    exact ⟨((minpoly.monic int).map _).ne_zero, minpoly.aeval R x⟩
-
-中文:
-定理 是整.mem_range_algHom_of_minpoly_splits
-  证明: show x in Set.range f from Set.image_subset_range _ ((minpoly R x).rootSet K) by
-    rw [h.image_rootSet]; rw [mem_rootSet']
-    exact ⟨((minpoly.monic int).map _).ne_zero, minpoly.aeval R x⟩
-
-Depends on / 依赖: Set.image_subset_range, Set.range, h.image_rootSet, image_rootSet, image_subset_range, mem_rootSet, minpoly, minpoly.aeval, minpoly.monic, ne_zero, rootSet
+/-
+**IsIntegral.mem_range_algHom_of_minpoly_splits** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsIntegral.mem_range_algHom_of_minpoly_splits (int : IsIntegral R x) (h : 
+Splits ((minpoly R x).map (algebraMap R K))) (f : K ->ₐ[R] L) : x in f.range
+参数：int : IsIntegral R x；h : Splits ((minpoly R x).map (algebraMap R K))；f : K ->
+ₐ[R] L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.Splits.image_rootSet`：∀ {R : Type u_1} {A : Type u_2} {B : Ty
+pe u_3} [inst : CommRing R] [inst_1 : Field A] [inst_2 : Algebra R A]   [inst_3 
+: CommRing B] [inst_4…
+· 使用定理 `Polynomial.mem_rootSet'`：mem_rootSet' {p : T[X]} {S : Type*} [CommRing S
+] [IsDomain S] [Algebra T S] {a : S} : a in p.rootSet S ↔ p.map (algebraMap T S)
+ != 0 ∧ aeval…
+· 使用定理 `Polynomial.Monic.ne_zero`：∀ {R : Type u} [inst : Semiring R] [Nontrivial
+ R] {p : Polynomial R}, p.Monic → p ≠ 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Polynomial.Monic.map`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   p.Monic → (Polynomial.ma
+p f p).Mon…
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `minpoly.aeval`：aeval : aeval x (minpoly A x) = 0
 -/
 theorem IsIntegral.mem_range_algHom_of_minpoly_splits
-    (int : IsIntegral R x) (h : Splits ((minpoly R x).map (algebraMap R K))) (f : K ->ₐ[R] L) :
-    x in f.range :=
-show x in Set.range f from Set.image_subset_range _ ((minpoly R x).rootSet K) by
-    rw [h.image_rootSet]; rw [mem_rootSet']
+    (int : IsIntegral R x) (h : Splits ((minpoly R x).map (algebraMap R K))) (f : K →ₐ[R] L) :
+    x ∈ f.range :=
+  show x ∈ Set.range f from Set.image_subset_range _ ((minpoly R x).rootSet K) <| by
+    rw [h.image_rootSet, mem_rootSet']
     exact ⟨((minpoly.monic int).map _).ne_zero, minpoly.aeval R x⟩
-
-/--
-theorem `IsIntegral.mem_range_algebraMap_of_minpoly_splits` / 定理 `IsIntegral.mem_range_algebraMap_of_minpoly_splits`
-
-English:
-theorem IsIntegral.mem_range_algebraMap_of_minpoly_splits
-  statement: [Algebra K L] [IsScalarTower R K L]
-  proof: int.mem_range_algHom_of_minpoly_splits h (IsScalarTower.toAlgHom R K L)
-
-中文:
-定理 是整.mem_range_algebraMap_of_minpoly_splits
-  结论: [代数 K L] [标量塔 R K L]
-  证明: int.mem_range_algHom_of_minpoly_splits h (IsScalarTower.toAlgHom R K L)
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, int.mem_range_algHom_of_minpoly_splits, mem_range_algHom_of_minpoly_splits, toAlgHom
+/-
+**IsIntegral.mem_range_algebraMap_of_minpoly_splits** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：IsIntegral.mem_range_algebraMap_of_minpoly_splits [Algebra K L] [IsScalarT
+ower R K L] (int : IsIntegral R x) (h : Splits ((minpoly R x).map (algebraMap R 
+K))) : x in (algebraMap K L).range
+参数：int : IsIntegral R x；h : Splits ((minpoly R x).map (algebraMap R K))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIntegral.mem_range_algHom_of_minpoly_splits`：IsIntegral.mem_range_algH
+om_of_minpoly_splits (int : IsIntegral R x) (h : Splits ((minpoly R x).map (alge
+braMap R K))) (f : K ->ₐ[R] L) : x …
 -/
 theorem IsIntegral.mem_range_algebraMap_of_minpoly_splits [Algebra K L] [IsScalarTower R K L]
     (int : IsIntegral R x) (h : Splits ((minpoly R x).map (algebraMap R K))) :
-    x in (algebraMap K L).range :=
+    x ∈ (algebraMap K L).range :=
   int.mem_range_algHom_of_minpoly_splits h (IsScalarTower.toAlgHom R K L)
-
-/--
-theorem `minpoly_neg_splits` / 定理 `minpoly_neg_splits`
-
-English:
-theorem minpoly_neg_splits
-  given: [Algebra K L] {x : L} (g : ((minpoly K x).map (algebraMap K L)).Splits)
-  proof: by
-  rw [minpoly.neg]; rw [Polynomial.map_mul]
-  apply Splits.mul _ (by simpa [map_comp] using g.comp_neg_X)
-  simpa only [map_pow, map_neg, map_one] using
-    (map_C (algebraMap K L) ▸ Splits.C (algebraMap K L <| (-1) ^ _) :)
-
-中文:
-定理 minpoly_neg_splits
-  条件: [代数 K L] {x : L} (g : ((minpoly K x).map (algebraMap K L)).Splits)
-  证明: by
-  rw [minpoly.neg]; rw [Polynomial.map_mul]
-  apply Splits.mul _ (by simpa [map_comp] using g.comp_neg_X)
-  simpa only [map_pow, map_neg, map_one] using
-    (map_C (algebraMap K L) ▸ Splits.C (algebraMap K L <| (-1) ^ _) :)
-
-Depends on / 依赖: Polynomial, Polynomial.map_mul, Splits, Splits.C, Splits.mul, algebraMap, comp_neg_X, g.comp_neg_X, map_C, map_comp, map_mul, map_neg, map_one, map_pow, minpoly, minpoly.neg
+/-
+**minpoly_neg_splits** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：minpoly_neg_splits [Algebra K L] {x : L} (g : ((minpoly K x).map (algebraM
+ap K L)).Splits) : ((minpoly K (-x)).map (algebraMap K L)).Splits
+参数：g : ((minpoly K x).map (algebraMap K L)).Splits。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `minpoly.neg`：neg {B : Type*} [Ring B] [Algebra A B] (x : B) : minpoly A 
+(-x) = (-1) ^ (natDegree (minpoly A x)) * (minpoly A x).comp (-X)
+· 使用定理 `Polynomial.map_mul`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p * q)
+ = Polyn…
+· 使用定理 `Polynomial.Splits.mul`：∀ {R : Type u_1} [inst : Semiring R] {f g : Polyn
+omial R}, f.Splits → g.Splits → (f * g).Splits
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Polynomial.Splits.C`：∀ {R : Type u_1} [inst : Semiring R] (a : R), (Poly
+nomial.C a).Splits
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `Polynomial.map_comp`：map_comp (p q : R[X]) : map f (p.comp q) = (map f p
+).comp (map f q)
+· 使用定理 `Polynomial.map_neg`：∀ {R : Type u} [inst : Ring R] {p : Polynomial R} {S
+ : Type u_1} [inst_1 : Ring S] (f : R →+* S),   Polynomial.map f (-p) = -Polynom
+ial.map …
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `Polynomial.Splits.comp_neg_X`：∀ {R : Type u_1} [inst : Ring R] {f : Poly
+nomial R}, f.Splits → (f.comp (-Polynomial.X)).Splits
 -/
 theorem minpoly_neg_splits [Algebra K L] {x : L} (g : ((minpoly K x).map (algebraMap K L)).Splits) :
     ((minpoly K (-x)).map (algebraMap K L)).Splits := by
-  rw [minpoly.neg]; rw [Polynomial.map_mul]
+  rw [minpoly.neg, Polynomial.map_mul]
   apply Splits.mul _ (by simpa [map_comp] using g.comp_neg_X)
   simpa only [map_pow, map_neg, map_one] using
     (map_C (algebraMap K L) ▸ Splits.C (algebraMap K L <| (-1) ^ _) :)
-
-/--
-theorem `minpoly_add_algebraMap_splits` / 定理 `minpoly_add_algebraMap_splits`
-
-English:
-theorem minpoly_add_algebraMap_splits
-  statement: [Algebra K L] {x : L} (r : K)
-  proof: by
-  simpa [minpoly.add_algebraMap, map_comp] using g.comp_X_sub_C (algebraMap K L r)
-
-中文:
-定理 minpoly_add_algebraMap_splits
-  结论: [代数 K L] {x : L} (r : K)
-  证明: by
-  simpa [minpoly.add_algebraMap, map_comp] using g.comp_X_sub_C (algebraMap K L r)
-
-Depends on / 依赖: add_algebraMap, algebraMap, comp_X_sub_C, g.comp_X_sub_C, map_comp, minpoly, minpoly.add_algebraMap
+/-
+**minpoly_add_algebraMap_splits** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：minpoly_add_algebraMap_splits [Algebra K L] {x : L} (r : K) (g : ((minpoly
+ K x).map (algebraMap K L)).Splits) : ((minpoly K (x + algebraMap K L r)).map (a
+lgebraMap K L)).Splits
+参数：r : K；g : ((minpoly K x).map (algebraMap K L)).Splits。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `minpoly.add_algebraMap`：add_algebraMap {B : Type*} [CommRing B] [Algebra
+ A B] (x : B) (a : A) : minpoly A (x + algebraMap A B a) = (minpoly A x).comp (X
+ - C a)
+· 使用定理 `Polynomial.map_comp`：map_comp (p q : R[X]) : map f (p.comp q) = (map f p
+).comp (map f q)
+· 使用定理 `Polynomial.map_sub`：∀ {R : Type u} [inst : Ring R] {p q : Polynomial R} 
+{S : Type u_1} [inst_1 : Ring S] (f : R →+* S),   Polynomial.map f (p - q) = Pol
+ynomial.…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `Polynomial.Splits.comp_X_sub_C`：∀ {R : Type u_1} [inst : CommRing R] {f 
+: Polynomial R},   f.Splits → ∀ (a : R), (f.comp (Polynomial.X - Polynomial.C a)
+).Splits
 -/
 theorem minpoly_add_algebraMap_splits [Algebra K L] {x : L} (r : K)
     (g : ((minpoly K x).map (algebraMap K L)).Splits) :
     ((minpoly K (x + algebraMap K L r)).map (algebraMap K L)).Splits := by
   simpa [minpoly.add_algebraMap, map_comp] using g.comp_X_sub_C (algebraMap K L r)
-
-/--
-theorem `minpoly_sub_algebraMap_splits` / 定理 `minpoly_sub_algebraMap_splits`
-
-English:
-theorem minpoly_sub_algebraMap_splits
-  statement: [Algebra K L] {x : L} (r : K)
-  proof: by
-  simpa only [sub_eq_add_neg, map_neg] using minpoly_add_algebraMap_splits (-r) g
-
-中文:
-定理 minpoly_sub_algebraMap_splits
-  结论: [代数 K L] {x : L} (r : K)
-  证明: by
-  simpa only [sub_eq_add_neg, map_neg] using minpoly_add_algebraMap_splits (-r) g
-
-Depends on / 依赖: map_neg, minpoly_add_algebraMap_splits, sub_eq_add_neg
+/-
+**minpoly_sub_algebraMap_splits** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：minpoly_sub_algebraMap_splits [Algebra K L] {x : L} (r : K) (g : ((minpoly
+ K x).map (algebraMap K L)).Splits) : ((minpoly K (x - algebraMap K L r)).map (a
+lgebraMap K L)).Splits
+参数：r : K；g : ((minpoly K x).map (algebraMap K L)).Splits。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `minpoly_add_algebraMap_splits`：minpoly_add_algebraMap_splits [Algebra K 
+L] {x : L} (r : K) (g : ((minpoly K x).map (algebraMap K L)).Splits) : ((minpoly
+ K (x + algebraMap …
 -/
 theorem minpoly_sub_algebraMap_splits [Algebra K L] {x : L} (r : K)
     (g : ((minpoly K x).map (algebraMap K L)).Splits) :
     ((minpoly K (x - algebraMap K L r)).map (algebraMap K L)).Splits := by
   simpa only [sub_eq_add_neg, map_neg] using minpoly_add_algebraMap_splits (-r) g
-
-/--
-theorem `minpoly_algebraMap_add_splits` / 定理 `minpoly_algebraMap_add_splits`
-
-English:
-theorem minpoly_algebraMap_add_splits
-  statement: [Algebra K L] {x : L} (r : K)
-  proof: by
-  simpa only [add_comm] using minpoly_add_algebraMap_splits r g
-
-中文:
-定理 minpoly_algebraMap_add_splits
-  结论: [代数 K L] {x : L} (r : K)
-  证明: by
-  simpa only [add_comm] using minpoly_add_algebraMap_splits r g
-
-Depends on / 依赖: add_comm, minpoly_add_algebraMap_splits
+/-
+**minpoly_algebraMap_add_splits** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：minpoly_algebraMap_add_splits [Algebra K L] {x : L} (r : K) (g : ((minpoly
+ K x).map (algebraMap K L)).Splits) : ((minpoly K (algebraMap K L r + x)).map (a
+lgebraMap K L)).Splits
+参数：r : K；g : ((minpoly K x).map (algebraMap K L)).Splits。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `minpoly_add_algebraMap_splits`：minpoly_add_algebraMap_splits [Algebra K 
+L] {x : L} (r : K) (g : ((minpoly K x).map (algebraMap K L)).Splits) : ((minpoly
+ K (x + algebraMap …
 -/
 theorem minpoly_algebraMap_add_splits [Algebra K L] {x : L} (r : K)
     (g : ((minpoly K x).map (algebraMap K L)).Splits) :
     ((minpoly K (algebraMap K L r + x)).map (algebraMap K L)).Splits := by
   simpa only [add_comm] using minpoly_add_algebraMap_splits r g
-
-/--
-theorem `minpoly_algebraMap_sub_splits` / 定理 `minpoly_algebraMap_sub_splits`
-
-English:
-theorem minpoly_algebraMap_sub_splits
-  statement: [Algebra K L] {x : L} (r : K)
-  proof: by
-  simpa only [neg_sub] using minpoly_neg_splits (minpoly_sub_algebraMap_splits r g)
-
-中文:
-定理 minpoly_algebraMap_sub_splits
-  结论: [代数 K L] {x : L} (r : K)
-  证明: by
-  simpa only [neg_sub] using minpoly_neg_splits (minpoly_sub_algebraMap_splits r g)
-
-Depends on / 依赖: minpoly_neg_splits, minpoly_sub_algebraMap_splits, neg_sub
+/-
+**minpoly_algebraMap_sub_splits** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：minpoly_algebraMap_sub_splits [Algebra K L] {x : L} (r : K) (g : ((minpoly
+ K x).map (algebraMap K L)).Splits) : ((minpoly K (algebraMap K L r - x)).map (a
+lgebraMap K L)).Splits
+参数：r : K；g : ((minpoly K x).map (algebraMap K L)).Splits。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `minpoly_neg_splits`：minpoly_neg_splits [Algebra K L] {x : L} (g : ((minp
+oly K x).map (algebraMap K L)).Splits) : ((minpoly K (-x)).map (algebraMap K L))
+.Splits
+· 使用定理 `minpoly_sub_algebraMap_splits`：minpoly_sub_algebraMap_splits [Algebra K 
+L] {x : L} (r : K) (g : ((minpoly K x).map (algebraMap K L)).Splits) : ((minpoly
+ K (x - algebraMap …
 -/
 theorem minpoly_algebraMap_sub_splits [Algebra K L] {x : L} (r : K)
     (g : ((minpoly K x).map (algebraMap K L)).Splits) :
@@ -392,47 +429,58 @@ end
 
 variable [Algebra K M] [IsScalarTower R K M] {x : M}
 
-/--
-theorem `IsIntegral.minpoly_splits_tower_top'` / 定理 `IsIntegral.minpoly_splits_tower_top'`
+/-- The `RingHom` version of `IsIntegral.minpoly_splits_tower_top`. -/
+/-
+**IsIntegral.minpoly_splits_tower_top'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsIntegral.minpoly_splits_tower_top' (int : IsIntegral R x) {f : K ->+* L}
+ (h : Splits ((minpoly R x).map (f.comp <| algebraMap R K))) : Splits ((minpoly 
+K x).map f)
+参数：int : IsIntegral R x；h : Splits ((minpoly R x).map (f.comp <| algebraMap R K)
+)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.Splits.of_dvd`：∀ {R : Type u_1} [inst : CommRing R] {f g : Po
+lynomial R} [IsDomain R], g.Splits → g ≠ 0 → f ∣ g → f.Splits
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.map_monic_ne_zero`：map_monic_ne_zero (hp : p.Monic) [Nontrivi
+al S] : p.map f != 0
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.map_map`：map_map [Semiring T] (g : S ->+* T) (p : R[X]) : (p.
+map f).map g = p.map (g.comp f)
+· 使用定理 `Polynomial.map_dvd_map'`：map_dvd_map' [Field k] (f : R ->+* k) {x y : R[
+X]} : x.map f ∣ y.map f ↔ x ∣ y
+· 使用定理 `minpoly.dvd_map_of_isScalarTower`：dvd_map_of_isScalarTower (A K : Type*)
+ {R : Type*} [CommRing A] [Field K] [Ring R] [Algebra A K] [Algebra A R] [Algebr
+a K R] [IsScalarTower …
 
-English:
-theorem IsIntegral.minpoly_splits_tower_top'
-  statement: (int : IsIntegral R x) {f : K ->+* L}
-  proof: Splits.of_dvd h (map_monic_ne_zero (minpoly.monic int))
-    (by rw [← map_map, map_dvd_map']; exact minpoly.dvd_map_of_isScalarTower R K x)
-
-中文:
-定理 是整.minpoly_splits_tower_top'
-  结论: (int : 是整 R x) {f : K ->+* L}
-  证明: Splits.of_dvd h (map_monic_ne_zero (minpoly.monic int))
-    (by rw [← map_map, map_dvd_map']; exact minpoly.dvd_map_of_isScalarTower R K x)
-
-Depends on / 依赖: Splits, Splits.of_dvd, dvd_map_of_isScalarTower, map_dvd_map, map_map, map_monic_ne_zero, minpoly, minpoly.dvd_map_of_isScalarTower, minpoly.monic, of_dvd
+--- 原说明 ---
+The `RingHom` version of `IsIntegral.minpoly_splits_tower_top`.
 -/
-theorem IsIntegral.minpoly_splits_tower_top' (int : IsIntegral R x) {f : K ->+* L}
+theorem IsIntegral.minpoly_splits_tower_top' (int : IsIntegral R x) {f : K →+* L}
     (h : Splits ((minpoly R x).map (f.comp <| algebraMap R K))) :
     Splits ((minpoly K x).map f) :=
   Splits.of_dvd h (map_monic_ne_zero (minpoly.monic int))
     (by rw [← map_map, map_dvd_map']; exact minpoly.dvd_map_of_isScalarTower R K x)
-
-/--
-theorem `IsIntegral.minpoly_splits_tower_top` / 定理 `IsIntegral.minpoly_splits_tower_top`
-
-English:
-theorem IsIntegral.minpoly_splits_tower_top
-  statement: [Algebra K L] [Algebra R L] [IsScalarTower R K L]
-  proof: by
-  rw [IsScalarTower.algebraMap_eq R K L] at h
-  exact int.minpoly_splits_tower_top' h
-
-中文:
-定理 是整.minpoly_splits_tower_top
-  结论: [代数 K L] [代数 R L] [标量塔 R K L]
-  证明: by
-  rw [IsScalarTower.algebraMap_eq R K L] at h
-  exact int.minpoly_splits_tower_top' h
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, algebraMap_eq, int.minpoly_splits_tower_top, minpoly_splits_tower_top
+/-
+**IsIntegral.minpoly_splits_tower_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsIntegral.minpoly_splits_tower_top [Algebra K L] [Algebra R L] [IsScalarT
+ower R K L] (int : IsIntegral R x) (h : Splits ((minpoly R x).map (algebraMap R 
+L))) : Splits ((minpoly K x).map (algebraMap K L))
+参数：int : IsIntegral R x；h : Splits ((minpoly R x).map (algebraMap R L))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIntegral.minpoly_splits_tower_top'`：IsIntegral.minpoly_splits_tower_to
+p' (int : IsIntegral R x) {f : K ->+* L} (h : Splits ((minpoly R x).map (f.comp 
+<| algebraMap R K))) : Spl…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
 -/
 theorem IsIntegral.minpoly_splits_tower_top [Algebra K L] [Algebra R L] [IsScalarTower R K L]
     (int : IsIntegral R x) (h : Splits ((minpoly R x).map (algebraMap R L))) :
@@ -440,29 +488,43 @@ theorem IsIntegral.minpoly_splits_tower_top [Algebra K L] [Algebra R L] [IsScala
   rw [IsScalarTower.algebraMap_eq R K L] at h
   exact int.minpoly_splits_tower_top' h
 
-/--
-lemma `Subalgebra.adjoin_rank_le` / 引理 `Subalgebra.adjoin_rank_le`
+/-- If `K / E / F` is a ring extension tower, `L` is a subalgebra of `K / F`,
+then `[E[L] : E] ≤ [L : F]`. -/
+/-
+**Subalgebra.adjoin_rank_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Subalgebra.adjoin_rank_le {F : Type*} (E : Type*) {K : Type*} [CommSemirin
+g F] [StrongRankCondition F] [CommSemiring E] [StrongRankCondition E] [Semiring 
+K] [SMul F E] [Algebra E K] [Algebra F K] [IsScalarTower F E K] (L : Subalgebra 
+F K) [Module.Free F L] : Module.rank E (Algebra.adjoin E (L : Set K)) <= Module.
+rank F L
+参数：E : Type*；L : Subalgebra F K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subalgebra.rank_toSubmodule`：Subalgebra.rank_toSubmodule (S : Subalgebra
+ F E) : Module.rank F (Subalgebra.toSubmodule S) = Module.rank F S
+· 使用定理 `Module.Free.rank_eq_card_chooseBasisIndex`：rank_eq_card_chooseBasisIndex
+ : Module.rank R M = #(ChooseBasisIndex R M)
+· 使用定理 `Subalgebra.adjoin_eq_span_basis`：Subalgebra.adjoin_eq_span_basis {ι : Ty
+pe*} (bL : Basis ι F L) : toSubmodule (adjoin E (L : Set K)) = span E (Set.range
+ fun i : ι => (bL i).…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `rank_span_le`：rank_span_le (s : Set M) : Module.rank R (span R s) <= #s
+· 使用定理 `Cardinal.mk_range_le`：mk_range_le {α β : Type u} {f : α -> β} : #(range 
+f) <= #α
 
-English:
-lemma Subalgebra.adjoin_rank_le
-  statement: {F : Type*} (E : Type*) {K : Type*}
-  proof: by
-  rw [← rank_toSubmodule]; rw [Module.Free.rank_eq_card_chooseBasisIndex F L]; rw [L.adjoin_eq_span_basis E (Module.Free.chooseBasis F L)]
-.trans Cardinal.mk_range_le exact rank_span_le _
-
-中文:
-引理 子代数.adjoin_rank_le
-  结论: {F : 类型} (E : 类型) {K : 类型}
-  证明: by
-  rw [← rank_toSubmodule]; rw [Module.Free.rank_eq_card_chooseBasisIndex F L]; rw [L.adjoin_eq_span_basis E (Module.Free.chooseBasis F L)]
-.trans Cardinal.mk_range_le exact rank_span_le _
-
-Depends on / 依赖: Cardinal, Cardinal.mk_range_le, L.adjoin_eq_span_basis, Module, Module.Free.chooseBasis, Module.Free.rank_eq_card_chooseBasisIndex, adjoin_eq_span_basis, chooseBasis, mk_range_le, rank_eq_card_chooseBasisIndex, rank_span_le, rank_toSubmodule
+--- 原说明 ---
+If `K / E / F` is a ring extension tower, `L` is a subalgebra of `K / F`,
+then `[E[L] : E] ≤ [L : F]`.
 -/
 lemma Subalgebra.adjoin_rank_le {F : Type*} (E : Type*) {K : Type*}
     [CommSemiring F] [StrongRankCondition F] [CommSemiring E] [StrongRankCondition E] [Semiring K]
     [SMul F E] [Algebra E K] [Algebra F K] [IsScalarTower F E K]
     (L : Subalgebra F K) [Module.Free F L] :
-    Module.rank E (Algebra.adjoin E (L : Set K)) <= Module.rank F L := by
-  rw [← rank_toSubmodule]; rw [Module.Free.rank_eq_card_chooseBasisIndex F L]; rw [L.adjoin_eq_span_basis E (Module.Free.chooseBasis F L)]
-.trans Cardinal.mk_range_le exact rank_span_le _
+    Module.rank E (Algebra.adjoin E (L : Set K)) ≤ Module.rank F L := by
+  rw [← rank_toSubmodule, Module.Free.rank_eq_card_chooseBasisIndex F L,
+    L.adjoin_eq_span_basis E (Module.Free.chooseBasis F L)]
+  exact rank_span_le _ |>.trans Cardinal.mk_range_le

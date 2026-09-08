@@ -34,18 +34,26 @@ end Lean.Parser.Attr
 
 namespace Mathlib.Tactic
 
-/--
-Definition of `mkComp` / `mkComp` 的定义
+/-- `mkComp v e` checks whether `e` is a sequence of nested applications `f (g (h v))`, and if so,
+returns the expression `f ∘ g ∘ h`. If `e = v` it returns `id`. -/
+/-
+**Mathlib.Tactic.mkComp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：mkComp (v : Expr) : Expr -> MetaM Expr | .app f e => if e.equal v then ret
+urn f else do if v.occurs f then throwError "mkComp failed occurs check" let e' 
+← mkComp v e mkAppM ``Function.comp #[f, e'] | e => do guard (e.equal v) let t ←
+ inferType e mkAppOptM ``id #[t]  /-- From a lemma of the shape `∀ x, f (g x) = 
+h x` derive an auxiliary lemma of the form `f ∘ g = h` for reasoning about highe
+r-order functions. -/ partial def mkHigherOrderType (e : Expr) : MetaM Expr
+参数：v : Expr。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkComp
-  signature: (v : Expr)
-
-中文:
-定义 mkComp
-  签名: (v : Expr)
+--- 原说明 ---
+`mkComp v e` checks whether `e` is a sequence of nested applications `f (g (h v)
+)`, and if so,
+returns the expression `f ∘ g ∘ h`. If `e = v` it returns `id`.
 -/
-def mkComp (v : Expr) : Expr -> MetaM Expr
+def mkComp (v : Expr) : Expr → MetaM Expr
   | .app f e =>
     if e.equal v then
       return f
@@ -60,37 +68,20 @@ def mkComp (v : Expr) : Expr -> MetaM Expr
     mkAppOptM ``id #[t]
 
 /--
-Definition of `mkHigherOrderType` / `mkHigherOrderType` 的定义
+From a lemma of the shape `∀ x, f (g x) = h x`
+derive an auxiliary lemma of the form `f ∘ g = h`
+for reasoning about higher-order functions.
+-/
+/-
+**Mathlib.Tactic.mkHigherOrderType** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic`
+。
+形式化陈述：Expr → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkHigherOrderType
-  signature: (e : Expr)
-  body: do
-  if not e.isForall then
-    throwError "not a forall"
-  withLocalDecl e.bindingName! e.binderInfo e.bindingDomain! fun fvar => do
-    let body := instantiate1 e.bindingBody! fvar
-    if body.isForall then
-      let exp ← mkHigherOrderType body
-      mkForallFVars #[fvar] exp (binderInfoForMVars := e.binderInfo)
-    else
-      let some (_, lhs, rhs) ← matchEq? body | throwError "not an equality {← ppExpr body}"
-      mkEq (← mkComp fvar lhs) (← mkComp fvar rhs)
-
-中文:
-定义 mkHigherOrderType
-  签名: (e : Expr)
-  定义体: do
-  if not e.isForall then
-    throwError "not a forall"
-  withLocalDecl e.bindingName! e.binderInfo e.bindingDomain! fun fvar => do
-    let body := instantiate1 e.bindingBody! fvar
-    if body.isForall then
-      let exp ← mkHigherOrderType body
-      mkForallFVars #[fvar] exp (binderInfoForMVars := e.binderInfo)
-    else
-      let some (_, lhs, rhs) ← matchEq? body | throwError "not an equality {← ppExpr body}"
-      mkEq (← mkComp fvar lhs) (← mkComp fvar rhs)
+--- 原说明 ---
+From a lemma of the shape `∀ x, f (g x) = h x`
+derive an auxiliary lemma of the form `f ∘ g = h`
+for reasoning about higher-order functions.
 -/
 partial def mkHigherOrderType (e : Expr) : MetaM Expr := do
   if not e.isForall then
@@ -104,90 +95,20 @@ partial def mkHigherOrderType (e : Expr) : MetaM Expr := do
       let some (_, lhs, rhs) ← matchEq? body | throwError "not an equality {← ppExpr body}"
       mkEq (← mkComp fvar lhs) (← mkComp fvar rhs)
 
-/--
-Definition of `higherOrderGetParam` / `higherOrderGetParam` 的定义
+/-- A user attribute that applies to lemmas of the shape `∀ x, f (g x) = h x`.
+It derives an auxiliary lemma of the form `f ∘ g = h` for reasoning about higher-order functions.
+-/
+/-
+**Mathlib.Tactic.higherOrderGetParam** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：higherOrderGetParam (thm : Name) (stx : Syntax) : AttrM Name
+参数：thm : Name；stx : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition higherOrderGetParam
-  signature: (thm : Name) (stx : Syntax)
-  body: do
-  match stx with
-  | `(attr| higher_order $[$name]?) =>
-    let ref := (name : Option Syntax).getD stx[0]
-    let hothmName :=
-      if let some sname := name then
-        updatePrefix sname.getId thm.getPrefix
-      else
-        thm.appendAfter "\'"
-MetaM.run' TermElabM.run' do
-      let lvl := (← getConstInfo thm).levelParams
-      let typ ← instantiateMVars (← inferType <| .const thm (lvl.map mkLevelParam))
-      let hot ← mkHigherOrderType typ
-      let prf ← do
-        let mvar ← mkFreshExprMVar hot
-        let (_, mvarId) ← mvar.mvarId!.intros
-        let [mvarId] ← mvarId.apply (← mkConst ``funext) | throwError "failed"
-        let (_, mvarId) ← mvarId.intro1
-        let lmvr ← mvarId.apply (← mkConst thm)
-        lmvr.forM fun mv => mv.assumption
-        instantiateMVars mvar
-addDecl .thmDecl
-        { name := hothmName
-          levelParams := lvl
-          type := hot
-          value := prf }
-      addDeclarationRangesFromSyntax hothmName (← getRef) ref
-      addTermInfo' ref (← mkConstWithLevelParams hothmName) (isBinder := true)
-.lemmaNames.contains (.decl thm) let hsm := simpExtension.getState (← getEnv)
-      if hsm then
-        addSimpTheorem simpExtension hothmName true false .global 1000
-      let some fcn ← getSimpExtension? `functor_norm | failure
-.lemmaNames.contains .decl thm let hfm := fcn.getState (← getEnv)
-      if hfm then
-        addSimpTheorem fcn hothmName true false .global 1000
-      return hothmName
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 higherOrderGetParam
-  签名: (thm : Name) (stx : Syntax)
-  定义体: do
-  match stx with
-  | `(attr| higher_order $[$name]?) =>
-    let ref := (name : Option Syntax).getD stx[0]
-    let hothmName :=
-      if let some sname := name then
-        updatePrefix sname.getId thm.getPrefix
-      else
-        thm.appendAfter "\'"
-MetaM.run' TermElabM.run' do
-      let lvl := (← getConstInfo thm).levelParams
-      let typ ← instantiateMVars (← inferType <| .const thm (lvl.map mkLevelParam))
-      let hot ← mkHigherOrderType typ
-      let prf ← do
-        let mvar ← mkFreshExprMVar hot
-        let (_, mvarId) ← mvar.mvarId!.intros
-        let [mvarId] ← mvarId.apply (← mkConst ``funext) | throwError "failed"
-        let (_, mvarId) ← mvarId.intro1
-        let lmvr ← mvarId.apply (← mkConst thm)
-        lmvr.forM fun mv => mv.assumption
-        instantiateMVars mvar
-addDecl .thmDecl
-        { name := hothmName
-          levelParams := lvl
-          type := hot
-          value := prf }
-      addDeclarationRangesFromSyntax hothmName (← getRef) ref
-      addTermInfo' ref (← mkConstWithLevelParams hothmName) (isBinder := true)
-.lemmaNames.contains (.decl thm) let hsm := simpExtension.getState (← getEnv)
-      if hsm then
-        addSimpTheorem simpExtension hothmName true false .global 1000
-      let some fcn ← getSimpExtension? `functor_norm | failure
-.lemmaNames.contains .decl thm let hfm := fcn.getState (← getEnv)
-      if hfm then
-        addSimpTheorem fcn hothmName true false .global 1000
-      return hothmName
-  | _ => throwUnsupportedSyntax
+--- 原说明 ---
+A user attribute that applies to lemmas of the shape `∀ x, f (g x) = h x`.
+It derives an auxiliary lemma of the form `f ∘ g = h` for reasoning about higher
+-order functions.
 -/
 def higherOrderGetParam (thm : Name) (stx : Syntax) : AttrM Name := do
   match stx with
@@ -198,7 +119,7 @@ def higherOrderGetParam (thm : Name) (stx : Syntax) : AttrM Name := do
         updatePrefix sname.getId thm.getPrefix
       else
         thm.appendAfter "\'"
-MetaM.run' TermElabM.run' do
+    MetaM.run' <| TermElabM.run' do
       let lvl := (← getConstInfo thm).levelParams
       let typ ← instantiateMVars (← inferType <| .const thm (lvl.map mkLevelParam))
       let hot ← mkHigherOrderType typ
@@ -208,20 +129,20 @@ MetaM.run' TermElabM.run' do
         let [mvarId] ← mvarId.apply (← mkConst ``funext) | throwError "failed"
         let (_, mvarId) ← mvarId.intro1
         let lmvr ← mvarId.apply (← mkConst thm)
-        lmvr.forM fun mv => mv.assumption
+        lmvr.forM fun mv ↦ mv.assumption
         instantiateMVars mvar
-addDecl .thmDecl
+      addDecl <| .thmDecl
         { name := hothmName
           levelParams := lvl
           type := hot
           value := prf }
       addDeclarationRangesFromSyntax hothmName (← getRef) ref
       addTermInfo' ref (← mkConstWithLevelParams hothmName) (isBinder := true)
-.lemmaNames.contains (.decl thm) let hsm := simpExtension.getState (← getEnv)
+      let hsm := simpExtension.getState (← getEnv) |>.lemmaNames.contains (.decl thm)
       if hsm then
         addSimpTheorem simpExtension hothmName true false .global 1000
       let some fcn ← getSimpExtension? `functor_norm | failure
-.lemmaNames.contains .decl thm let hfm := fcn.getState (← getEnv)
+      let hfm := fcn.getState (← getEnv) |>.lemmaNames.contains <| .decl thm
       if hfm then
         addSimpTheorem fcn hothmName true false .global 1000
       return hothmName
@@ -236,7 +157,7 @@ initialize higherOrderAttr : ParametricAttribute Name ←
   registerParametricAttribute {
     name := `higherOrder,
     descr :=
-"From a lemma of the shape `forall x, f (g x) = h x` derive an auxiliary lemma of the
+"From a lemma of the shape `∀ x, f (g x) = h x` derive an auxiliary lemma of the
 form `f ∘ g = h` for reasoning about higher-order functions.
 
 Syntax: `[higher_order]` or `[higher_order name]`, where the given name is used for the
@@ -244,3 +165,4 @@ generated theorem.",
     getParam := higherOrderGetParam }
 
 end Mathlib.Tactic
+

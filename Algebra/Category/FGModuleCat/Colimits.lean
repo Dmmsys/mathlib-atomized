@@ -31,43 +31,43 @@ namespace FGModuleCat
 
 variable {J : Type} [SmallCategory J] [FinCategory J] {k : Type u} [Ring k]
 
-instance {J : Type} [Finite J] (Z : J -> ModuleCat.{v} k) [forall j, Module.Finite k (Z j)] :
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {J : Type} [Finite J] (Z : J → ModuleCat.{v} k) [∀ j, Module.Finite k (Z j)] :
     Module.Finite k (∐ fun j => Z j : ModuleCat.{v} k) := by
   classical
 exact (Module.Finite.equiv_iff (ModuleCat.coprodIsoDirectSum Z).toLinearEquiv).mpr inferInstance
 
 /-- Finite colimits of finite modules are finite, because we can realise them as quotients
 of a finite coproduct. -/
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Finite colimits of finite modules are finite, because we can realise them as quo
+tients
+of a finite coproduct.
+-/
 instance (F : J ⥤ FGModuleCat k) :
     Module.Finite k (colimit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k) :=
   have (j : J) : Module.Finite k ((F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)).obj j) :=
-inferInstanceAs Module.Finite k (F.obj j)
+    inferInstanceAs <| Module.Finite k (F.obj j)
   Module.Finite.of_surjective
     (colimitQuotientCoproduct (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k))).hom
     ((ModuleCat.epi_iff_surjective _).1 inferInstance)
 
 /-- The forgetful functor from `FGModuleCat k` to `ModuleCat k` creates all finite colimits. -/
 @[instance_reducible]
-/--
-Definition of `forget₂CreatesColimit` / `forget₂CreatesColimit` 的定义
+/-
+**FGModuleCat.forget** 是 Mathlib 中的一个定义，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂CreatesColimit
-  signature: (F : J ⥤ FGModuleCat k)
-  body: createsColimitOfFullyFaithfulOfIso
-    ⟨(colimit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k),
-      by rw [ModuleCat.isFG_iff]; infer_instance⟩
-    (Iso.refl _)
-
-中文:
-定义 forget₂CreatesColimit
-  签名: (F : J ⥤ FGModuleCat k)
-  定义体: createsColimitOfFullyFaithfulOfIso
-    ⟨(colimit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k),
-      by rw [ModuleCat.isFG_iff]; infer_instance⟩
-    (Iso.refl _)
-
-Depends on / 依赖: FGModuleCat, Iso.refl, ModuleCat, ModuleCat.isFG_iff, colimit, createsColimitOfFullyFaithfulOfIso, infer_instance, isFG_iff
+--- 原说明 ---
+The forgetful functor from `FGModuleCat k` to `ModuleCat k` creates all finite c
+olimits.
 -/
 def forget₂CreatesColimit (F : J ⥤ FGModuleCat k) :
     CreatesColimit F (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) :=
@@ -75,58 +75,32 @@ def forget₂CreatesColimit (F : J ⥤ FGModuleCat k) :
     ⟨(colimit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k),
       by rw [ModuleCat.isFG_iff]; infer_instance⟩
     (Iso.refl _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesColimitsOfShape J (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
-  body: forget₂CreatesColimit F
-
-中文:
-实例 :
-  签名: 创造形状余极限 J (forget₂ (FGModuleCat k) (模范畴.{v} k))
-  定义体: forget₂CreatesColimit F
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CreatesColimitsOfShape J (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) where
   CreatesColimit {F} := forget₂CreatesColimit F
-
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (J : Type) [SmallCategory J] [FinCategory J] :
     HasColimitsOfShape J (FGModuleCat.{v} k) :=
   hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
     (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteColimits (FGModuleCat.{v} k)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 有有限余极限 (FGModuleCat.{v} k)
-  定义体: inferInstance
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteColimits (FGModuleCat.{v} k) where
   out _ _ _ := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteColimits (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 保持FiniteColimits (forget₂ (FGModuleCat k) (模范畴.{v} k))
-  定义体: inferInstance
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteColimits (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) where
   preservesFiniteColimits _ _ _ := inferInstance
 
 end FGModuleCat
+

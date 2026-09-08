@@ -18,162 +18,125 @@ public section
 
 variable {X : Type*} [TopologicalSpace X] {a b : X}
 
-/--
-theorem `isLocallyClosed_Icc` / 定理 `isLocallyClosed_Icc`
-
-English:
-theorem isLocallyClosed_Icc
-  given: [Preorder X] [OrderClosedTopology X]
-  proof: isClosed_Icc.isLocallyClosed
-
-中文:
-定理 isLocallyClosed_Icc
-  条件: [预序 X] [OrderClosed拓扑 X]
-  证明: isClosed_Icc.isLocallyClosed
-
-Depends on / 依赖: isClosed_Icc, isClosed_Icc.isLocallyClosed, isLocallyClosed
+/-
+**isLocallyClosed_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Icc [Preorder X] [OrderClosedTopology X] : IsLocallyClosed
+ (Set.Icc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsClosed.isLocallyClosed`：IsClosed.isLocallyClosed (hs : IsClosed s) : I
+sLocallyClosed s
+· 使用定理 `isClosed_Icc`：isClosed_Icc {a b : α} : IsClosed (Icc a b)
 -/
 theorem isLocallyClosed_Icc [Preorder X] [OrderClosedTopology X] :
     IsLocallyClosed (Set.Icc a b) :=
   isClosed_Icc.isLocallyClosed
-
-/--
-theorem `isLocallyClosed_Ioo` / 定理 `isLocallyClosed_Ioo`
-
-English:
-theorem isLocallyClosed_Ioo
-  given: [LinearOrder X] [OrderClosedTopology X]
-  proof: isOpen_Ioo.isLocallyClosed
-
-中文:
-定理 isLocallyClosed_Ioo
-  条件: [线性序 X] [OrderClosed拓扑 X]
-  证明: isOpen_Ioo.isLocallyClosed
-
-Depends on / 依赖: isLocallyClosed, isOpen_Ioo, isOpen_Ioo.isLocallyClosed
+/-
+**isLocallyClosed_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Ioo [LinearOrder X] [OrderClosedTopology X] : IsLocallyClo
+sed (Set.Ioo a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOpen.isLocallyClosed`：IsOpen.isLocallyClosed (hs : IsOpen s) : IsLocal
+lyClosed s
+· 使用定理 `isOpen_Ioo`：isOpen_Ioo : IsOpen (Ioo a b)
 -/
 theorem isLocallyClosed_Ioo [LinearOrder X] [OrderClosedTopology X] :
     IsLocallyClosed (Set.Ioo a b) :=
   isOpen_Ioo.isLocallyClosed
-
-/--
-theorem `isLocallyClosed_Ici` / 定理 `isLocallyClosed_Ici`
-
-English:
-theorem isLocallyClosed_Ici
-  given: [Preorder X] [ClosedIciTopology X]
-  proof: isClosed_Ici.isLocallyClosed
-
-中文:
-定理 isLocallyClosed_Ici
-  条件: [预序 X] [ClosedIci拓扑 X]
-  证明: isClosed_Ici.isLocallyClosed
-
-Depends on / 依赖: isClosed_Ici, isClosed_Ici.isLocallyClosed, isLocallyClosed
+/-
+**isLocallyClosed_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Ici [Preorder X] [ClosedIciTopology X] : IsLocallyClosed (
+Set.Ici a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsClosed.isLocallyClosed`：IsClosed.isLocallyClosed (hs : IsClosed s) : I
+sLocallyClosed s
+· 使用定理 `isClosed_Ici`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Preor
+der α] [ClosedIciTopology α] {a : α}, IsClosed (Set.Ici a)
 -/
 theorem isLocallyClosed_Ici [Preorder X] [ClosedIciTopology X] :
     IsLocallyClosed (Set.Ici a) :=
   isClosed_Ici.isLocallyClosed
-
-/--
-theorem `isLocallyClosed_Iic` / 定理 `isLocallyClosed_Iic`
-
-English:
-theorem isLocallyClosed_Iic
-  given: [Preorder X] [ClosedIicTopology X]
-  proof: isClosed_Iic.isLocallyClosed
-
-中文:
-定理 isLocallyClosed_Iic
-  条件: [预序 X] [ClosedIic拓扑 X]
-  证明: isClosed_Iic.isLocallyClosed
-
-Depends on / 依赖: isClosed_Iic, isClosed_Iic.isLocallyClosed, isLocallyClosed
+/-
+**isLocallyClosed_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Iic [Preorder X] [ClosedIicTopology X] : IsLocallyClosed (
+Set.Iic a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsClosed.isLocallyClosed`：IsClosed.isLocallyClosed (hs : IsClosed s) : I
+sLocallyClosed s
+· 使用定理 `isClosed_Iic`：isClosed_Iic : IsClosed (Iic a)
 -/
 theorem isLocallyClosed_Iic [Preorder X] [ClosedIicTopology X] :
     IsLocallyClosed (Set.Iic a) :=
   isClosed_Iic.isLocallyClosed
-
-/--
-theorem `isLocallyClosed_Ioi` / 定理 `isLocallyClosed_Ioi`
-
-English:
-theorem isLocallyClosed_Ioi
-  given: [LinearOrder X] [ClosedIicTopology X]
-  proof: isOpen_Ioi.isLocallyClosed
-
-中文:
-定理 isLocallyClosed_Ioi
-  条件: [线性序 X] [ClosedIic拓扑 X]
-  证明: isOpen_Ioi.isLocallyClosed
-
-Depends on / 依赖: isLocallyClosed, isOpen_Ioi, isOpen_Ioi.isLocallyClosed
+/-
+**isLocallyClosed_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Ioi [LinearOrder X] [ClosedIicTopology X] : IsLocallyClose
+d (Set.Ioi a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOpen.isLocallyClosed`：IsOpen.isLocallyClosed (hs : IsOpen s) : IsLocal
+lyClosed s
+· 使用定理 `isOpen_Ioi`：isOpen_Ioi : IsOpen (Ioi a)
 -/
 theorem isLocallyClosed_Ioi [LinearOrder X] [ClosedIicTopology X] :
     IsLocallyClosed (Set.Ioi a) :=
   isOpen_Ioi.isLocallyClosed
-
-/--
-theorem `isLocallyClosed_Iio` / 定理 `isLocallyClosed_Iio`
-
-English:
-theorem isLocallyClosed_Iio
-  given: [LinearOrder X] [ClosedIciTopology X]
-  proof: isOpen_Iio.isLocallyClosed
-
-中文:
-定理 isLocallyClosed_Iio
-  条件: [线性序 X] [ClosedIci拓扑 X]
-  证明: isOpen_Iio.isLocallyClosed
-
-Depends on / 依赖: isLocallyClosed, isOpen_Iio, isOpen_Iio.isLocallyClosed
+/-
+**isLocallyClosed_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Iio [LinearOrder X] [ClosedIciTopology X] : IsLocallyClose
+d (Set.Iio a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOpen.isLocallyClosed`：IsOpen.isLocallyClosed (hs : IsOpen s) : IsLocal
+lyClosed s
+· 使用定理 `isOpen_Iio`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : LinearO
+rder α] [ClosedIciTopology α] {a : α}, IsOpen (Set.Iio a)
 -/
 theorem isLocallyClosed_Iio [LinearOrder X] [ClosedIciTopology X] :
     IsLocallyClosed (Set.Iio a) :=
   isOpen_Iio.isLocallyClosed
-
-/--
-theorem `isLocallyClosed_Ioc` / 定理 `isLocallyClosed_Ioc`
-
-English:
-theorem isLocallyClosed_Ioc
-  given: [LinearOrder X] [ClosedIicTopology X]
-  proof: by
-  rw [← Set.Iic_inter_Ioi]
-  exact isLocallyClosed_Iic.inter isLocallyClosed_Ioi
-
-中文:
-定理 isLocallyClosed_Ioc
-  条件: [线性序 X] [ClosedIic拓扑 X]
-  证明: by
-  rw [← Set.Iic_inter_Ioi]
-  exact isLocallyClosed_Iic.inter isLocallyClosed_Ioi
-
-Depends on / 依赖: Iic_inter_Ioi, Set.Iic_inter_Ioi, isLocallyClosed_Iic, isLocallyClosed_Iic.inter, isLocallyClosed_Ioi
+/-
+**isLocallyClosed_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Ioc [LinearOrder X] [ClosedIicTopology X] : IsLocallyClose
+d (Set.Ioc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Iic_inter_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.I
+ic a ∩ Set.Ioi b = Set.Ioc b a
+· 使用引理 `IsLocallyClosed.inter`：IsLocallyClosed.inter (hs : IsLocallyClosed s) (h
+t : IsLocallyClosed t) : IsLocallyClosed (s inter t)
+· 使用定理 `isLocallyClosed_Iic`：isLocallyClosed_Iic [Preorder X] [ClosedIicTopology
+ X] : IsLocallyClosed (Set.Iic a)
+· 使用定理 `isLocallyClosed_Ioi`：isLocallyClosed_Ioi [LinearOrder X] [ClosedIicTopol
+ogy X] : IsLocallyClosed (Set.Ioi a)
 -/
 theorem isLocallyClosed_Ioc [LinearOrder X] [ClosedIicTopology X] :
     IsLocallyClosed (Set.Ioc a b) := by
   rw [← Set.Iic_inter_Ioi]
   exact isLocallyClosed_Iic.inter isLocallyClosed_Ioi
-
-/--
-theorem `isLocallyClosed_Ico` / 定理 `isLocallyClosed_Ico`
-
-English:
-theorem isLocallyClosed_Ico
-  given: [LinearOrder X] [ClosedIciTopology X]
-  proof: by
-  rw [← Set.Iio_inter_Ici]
-  exact isLocallyClosed_Iio.inter isLocallyClosed_Ici
-
-中文:
-定理 isLocallyClosed_Ico
-  条件: [线性序 X] [ClosedIci拓扑 X]
-  证明: by
-  rw [← Set.Iio_inter_Ici]
-  exact isLocallyClosed_Iio.inter isLocallyClosed_Ici
-
-Depends on / 依赖: Iio_inter_Ici, Set.Iio_inter_Ici, isLocallyClosed_Ici, isLocallyClosed_Iio, isLocallyClosed_Iio.inter
+/-
+**isLocallyClosed_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLocallyClosed_Ico [LinearOrder X] [ClosedIciTopology X] : IsLocallyClose
+d (Set.Ico a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Iio_inter_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.I
+io a ∩ Set.Ici b = Set.Ico b a
+· 使用引理 `IsLocallyClosed.inter`：IsLocallyClosed.inter (hs : IsLocallyClosed s) (h
+t : IsLocallyClosed t) : IsLocallyClosed (s inter t)
+· 使用定理 `isLocallyClosed_Iio`：isLocallyClosed_Iio [LinearOrder X] [ClosedIciTopol
+ogy X] : IsLocallyClosed (Set.Iio a)
+· 使用定理 `isLocallyClosed_Ici`：isLocallyClosed_Ici [Preorder X] [ClosedIciTopology
+ X] : IsLocallyClosed (Set.Ici a)
 -/
 theorem isLocallyClosed_Ico [LinearOrder X] [ClosedIciTopology X] :
     IsLocallyClosed (Set.Ico a b) := by

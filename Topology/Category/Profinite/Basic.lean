@@ -47,104 +47,100 @@ open CategoryTheory Topology CompHausLike
 
 /-- The type of profinite topological spaces. -/
 @[to_additive_do_translate] -- This is required
-/--
-Definition of `Profinite` / `Profinite` 的定义
+/-
+**Profinite** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Profinite where toCompHaus : CompHaus [isTotallyDisconnected : TotallyDisc
+onnectedSpace toCompHaus] ```  The categories `Stonean` consisting of extremally
+ disconnected compact Hausdorff spaces and `LightProfinite` consisting of totall
+y disconnected, second countable compact Hausdorff spaces were defined in a simi
+lar way. This resulted in code duplication, and reducing this duplication was pa
+rt of the motivation for introducing `CompHausLike`.  Using `CompHausLike`, we c
+an now define `CompHaus
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Profinite
-  body: CompHausLike (fun X => TotallyDisconnectedSpace X)
-
-中文:
-缩写 Profinite
-  定义体: CompHausLike (fun X => TotallyDisconnectedSpace X)
+--- 原说明 ---
+The type of profinite topological spaces.
 -/
-abbrev Profinite := CompHausLike (fun X => TotallyDisconnectedSpace X)
+abbrev Profinite := CompHausLike (fun X ↦ TotallyDisconnectedSpace X)
 
 namespace Profinite
 
+/-
+**Profinite.** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Type*) [TopologicalSpace X]
-    [TotallyDisconnectedSpace X] : HasProp (fun Y => TotallyDisconnectedSpace Y) X :=
+    [TotallyDisconnectedSpace X] : HasProp (fun Y ↦ TotallyDisconnectedSpace Y) X :=
   ⟨(inferInstance : TotallyDisconnectedSpace X)⟩
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a term of `Profinite` from a type endowed with the structure of a
+compact, Hausdorff and totally disconnected topological space.
+-/
+/-
+**Profinite.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `Profinite`。
+形式化陈述：of (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X] [TotallyD
+isconnectedSpace X] : Profinite
+参数：X : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Profinite.instHasPropTotallyDisconnectedSpaceCarrier`：∀ (X : Type u_1) [
+inst : TopologicalSpace X] [TotallyDisconnectedSpace X],   CompHausLike.HasProp 
+(fun Y => TotallyDisconnectedSpace ↑Y) X
 
-English:
-abbreviation of
-  signature: (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
-  body: CompHausLike.of _ X
-
-中文:
-缩写 of
-  签名: (X : 类型) [拓扑空间 X] [紧空间 X] [T2空间 X]
-  定义体: CompHausLike.of _ X
-
-Depends on / 依赖: CompHausLike, CompHausLike.of
+--- 原说明 ---
+Construct a term of `Profinite` from a type endowed with the structure of a
+compact, Hausdorff and totally disconnected topological space.
 -/
 abbrev of (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Space X]
     [TotallyDisconnectedSpace X] : Profinite :=
   CompHausLike.of _ X
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Profinite
-  body: ⟨Profinite.of PEmpty⟩
-
-中文:
-实例 :
-  签名: 可居 Profinite
-  定义体: ⟨Profinite.of PEmpty⟩
-
-Depends on / 依赖: PEmpty, Profinite, Profinite.of
+/-
+**Profinite.** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Profinite :=
   ⟨Profinite.of PEmpty⟩
-
+/-
+**Profinite.** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Profinite} : TotallyDisconnectedSpace X :=
   X.prop
 
 end Profinite
 
-/--
-Definition of `profiniteToCompHaus` / `profiniteToCompHaus` 的定义
+/-- The fully faithful embedding of `Profinite` in `CompHaus`. -/
+/-
+**profiniteToCompHaus** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：profiniteToCompHaus : Profinite ⥤ CompHaus
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation profiniteToCompHaus
-  signature: : Profinite ⥤ CompHaus
-  body: compHausLikeToCompHaus _
-
-中文:
-缩写 profiniteToCompHaus
-  签名: : Profinite ⥤ CompHaus
-  定义体: compHausLikeToCompHaus _
-
-Depends on / 依赖: compHausLikeToCompHaus
+--- 原说明 ---
+The fully faithful embedding of `Profinite` in `CompHaus`.
 -/
 abbrev profiniteToCompHaus : Profinite ⥤ CompHaus :=
   compHausLikeToCompHaus _
 -- The `Full, Faithful` instances should be constructed by a deriving handler.
 -- https://github.com/leanprover-community/mathlib4/issues/380
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Profinite} : TotallyDisconnectedSpace (profiniteToCompHaus.obj X) :=
   X.prop
 
-/--
-Definition of `Profinite.toTopCat` / `Profinite.toTopCat` 的定义
+/-- The fully faithful embedding of `Profinite` in `TopCat`.
+This is definitionally the same as the obvious composite. -/
+/-
+**Profinite.toTopCat** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Profinite.toTopCat : Profinite ⥤ TopCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Profinite.toTopCat
-  signature: : Profinite ⥤ TopCat
-  body: CompHausLike.compHausLikeToTop _
-
-中文:
-缩写 Profinite.toTopCat
-  签名: : Profinite ⥤ 顶元素范畴
-  定义体: CompHausLike.compHausLikeToTop _
-
-Depends on / 依赖: CompHausLike, CompHausLike.compHausLikeToTop, compHausLikeToTop
+--- 原说明 ---
+The fully faithful embedding of `Profinite` in `TopCat`.
+This is definitionally the same as the obvious composite.
 -/
 abbrev Profinite.toTopCat : Profinite ⥤ TopCat :=
   CompHausLike.compHausLikeToTop _
@@ -159,26 +155,17 @@ section Profinite
 (Implementation) The object part of the `connectedComponents` functor from compact Hausdorff spaces
 to Profinite spaces, given by quotienting a space by its connected components. -/
 @[stacks 0900]
-/--
-Definition of `CompHaus.toProfiniteObj` / `CompHaus.toProfiniteObj` 的定义
+/-
+**CompHaus.toProfiniteObj** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CompHaus.toProfiniteObj (X : CompHaus.{u}) : Profinite.{u} where toTop
+参数：X : CompHaus.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CompHaus.toProfiniteObj
-  signature: (X : CompHaus.{u})
-  body: TopCat.of (ConnectedComponents X)
-  is_compact := Quotient.compactSpace
-  is_hausdorff := ConnectedComponents.t2
-  prop := ConnectedComponents.totallyDisconnectedSpace
-
-中文:
-定义 CompHaus.toProfiniteObj
-  签名: (X : CompHaus.{u})
-  定义体: TopCat.of (ConnectedComponents X)
-  is_compact := Quotient.compactSpace
-  is_hausdorff := ConnectedComponents.t2
-  prop := ConnectedComponents.totallyDisconnectedSpace
-
-Depends on / 依赖: ConnectedComponents, TopCat, TopCat.of
+--- 原说明 ---
+(Implementation) The object part of the `connectedComponents` functor from compa
+ct Hausdorff spaces
+to Profinite spaces, given by quotienting a space by its connected components.
 -/
 def CompHaus.toProfiniteObj (X : CompHaus.{u}) : Profinite.{u} where
   toTop := TopCat.of (ConnectedComponents X)
@@ -187,34 +174,25 @@ def CompHaus.toProfiniteObj (X : CompHaus.{u}) : Profinite.{u} where
   prop := ConnectedComponents.totallyDisconnectedSpace
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Profinite.toCompHausEquivalence` / `Profinite.toCompHausEquivalence` 的定义
+/-- (Implementation) The bijection of homsets to establish the reflective adjunction of Profinite
+spaces in compact Hausdorff spaces.
+-/
+/-
+**Profinite.toCompHausEquivalence** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Profinite.toCompHausEquivalence (X : CompHaus.{u}) (Y : Profinite.{u}) : (
+CompHaus.toProfiniteObj X ⟶ Y) ≃ (X ⟶ profiniteToCompHaus.obj Y) where toFun f
+参数：X : CompHaus.{u}；Y : Profinite.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Profinite.instTotallyDisconnectedSpaceCarrierToTop`：∀ {X : Profinite}, T
+otallyDisconnectedSpace ↑X.toTop
 
-English:
-definition Profinite.toCompHausEquivalence
-  signature: (X : CompHaus.{u}) (Y : Profinite.{u})
-  body: ofHom _ (f.hom.hom.comp ⟨Quotient.mk'', continuous_quotient_mk'⟩)
-  invFun g := ConcreteCategory.ofHom
-    { toFun := Continuous.connectedComponentsLift g.hom.hom.2
-      continuous_toFun := Continuous.connectedComponentsLift_continuous g.hom.hom.2 }
-  left_inv f :=
-    InducedCategory.hom_ext (TopCat.ext (fun y => by
-      obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
-      rfl))
-
-中文:
-定义 Profinite.toCompHausEquivalence
-  签名: (X : CompHaus.{u}) (Y : Profinite.{u})
-  定义体: ofHom _ (f.hom.hom.comp ⟨Quotient.mk'', continuous_quotient_mk'⟩)
-  invFun g := ConcreteCategory.ofHom
-    { toFun := Continuous.connectedComponentsLift g.hom.hom.2
-      continuous_toFun := Continuous.connectedComponentsLift_continuous g.hom.hom.2 }
-  left_inv f :=
-    InducedCategory.hom_ext (TopCat.ext (fun y => by
-      obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
-      rfl))
-
-Depends on / 依赖: Quotient, Quotient.mk, continuous_quotient_mk, f.hom.hom.comp
+--- 原说明 ---
+(Implementation) The bijection of homsets to establish the reflective adjunction
+ of Profinite
+spaces in compact Hausdorff spaces.
 -/
 def Profinite.toCompHausEquivalence (X : CompHaus.{u}) (Y : Profinite.{u}) :
     (CompHaus.toProfiniteObj X ⟶ Y) ≃ (X ⟶ profiniteToCompHaus.obj Y) where
@@ -223,40 +201,33 @@ def Profinite.toCompHausEquivalence (X : CompHaus.{u}) (Y : Profinite.{u}) :
     { toFun := Continuous.connectedComponentsLift g.hom.hom.2
       continuous_toFun := Continuous.connectedComponentsLift_continuous g.hom.hom.2 }
   left_inv f :=
-    InducedCategory.hom_ext (TopCat.ext (fun y => by
+    InducedCategory.hom_ext (TopCat.ext (fun y ↦ by
       obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
       rfl))
 
-/--
-Definition of `CompHaus.toProfinite` / `CompHaus.toProfinite` 的定义
+/-- The `connectedComponents` functor from compact Hausdorff spaces to profinite spaces,
+left adjoint to the inclusion functor.
+-/
+/-
+**CompHaus.toProfinite** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CompHaus.toProfinite : CompHaus ⥤ Profinite
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CompHaus.toProfinite
-  signature: : CompHaus ⥤ Profinite
-  body: Adjunction.leftAdjointOfEquiv Profinite.toCompHausEquivalence fun _ _ _ _ _ => rfl
-
-中文:
-定义 CompHaus.toProfinite
-  签名: : CompHaus ⥤ Profinite
-  定义体: Adjunction.leftAdjointOfEquiv Profinite.toCompHausEquivalence fun _ _ _ _ _ => rfl
-
-Depends on / 依赖: Adjunction, Adjunction.leftAdjointOfEquiv, Profinite, Profinite.toCompHausEquivalence, leftAdjointOfEquiv, toCompHausEquivalence
+--- 原说明 ---
+The `connectedComponents` functor from compact Hausdorff spaces to profinite spa
+ces,
+left adjoint to the inclusion functor.
 -/
 def CompHaus.toProfinite : CompHaus ⥤ Profinite :=
   Adjunction.leftAdjointOfEquiv Profinite.toCompHausEquivalence fun _ _ _ _ _ => rfl
-
-/--
-theorem `CompHaus.toProfinite_obj'` / 定理 `CompHaus.toProfinite_obj'`
-
-English:
-theorem CompHaus.toProfinite_obj'
-  given: (X : CompHaus)
-  proof: rfl
-
-中文:
-定理 CompHaus.toProfinite_obj'
-  条件: (X : CompHaus)
-  证明: rfl
+/-
+**CompHaus.toProfinite_obj'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CompHaus.toProfinite_obj' (X : CompHaus) : ↥(CompHaus.toProfinite.obj X) =
+ ConnectedComponents X
+参数：X : CompHaus。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem CompHaus.toProfinite_obj' (X : CompHaus) :
     ↥(CompHaus.toProfinite.obj X) = ConnectedComponents X :=
@@ -264,18 +235,15 @@ theorem CompHaus.toProfinite_obj' (X : CompHaus) :
 
 /-- Finite types are given the discrete topology. -/
 @[instance_reducible]
-/--
-Definition of `FintypeCat.botTopology` / `FintypeCat.botTopology` 的定义
+/-
+**FintypeCat.botTopology** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FintypeCat.botTopology (A : FintypeCat) : TopologicalSpace A
+参数：A : FintypeCat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FintypeCat.botTopology
-  signature: (A : FintypeCat)
-  body: ⊥
-
-中文:
-定义 FintypeCat.botTopology
-  签名: (A : FintypeCat)
-  定义体: ⊥
+--- 原说明 ---
+Finite types are given the discrete topology.
 -/
 def FintypeCat.botTopology (A : FintypeCat) : TopologicalSpace A := ⊥
 
@@ -283,20 +251,12 @@ section DiscreteTopology
 
 attribute [local instance] FintypeCat.botTopology
 
-/--
-theorem `FintypeCat.discreteTopology` / 定理 `FintypeCat.discreteTopology`
-
-English:
-theorem FintypeCat.discreteTopology
-  given: (A : FintypeCat)
-  statement: DiscreteTopology A
-  proof: ⟨rfl⟩
-
-中文:
-定理 FintypeCat.discreteTopology
-  条件: (A : FintypeCat)
-  结论: 离散拓扑 A
-  证明: ⟨rfl⟩
+/-
+**FintypeCat.discreteTopology** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FintypeCat.discreteTopology (A : FintypeCat) : DiscreteTopology A
+参数：A : FintypeCat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem FintypeCat.discreteTopology (A : FintypeCat) : DiscreteTopology A :=
   ⟨rfl⟩
@@ -306,85 +266,55 @@ attribute [local instance] FintypeCat.discreteTopology
 /-- The natural functor from `Fintype` to `Profinite`, endowing a finite type with the
 discrete topology. -/
 @[simps! -isSimp map_hom_hom_apply obj]
-/--
-Definition of `FintypeCat.toProfinite` / `FintypeCat.toProfinite` 的定义
+/-
+**FintypeCat.toProfinite** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FintypeCat.toProfinite : FintypeCat ⥤ Profinite where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FintypeCat.toProfinite
-  signature: : FintypeCat ⥤ Profinite where
-  body: Profinite.of A
-  map f := ofHom _ ⟨f, by fun_prop⟩
-
-中文:
-定义 FintypeCat.toProfinite
-  签名: : FintypeCat ⥤ Profinite where
-  定义体: Profinite.of A
-  map f := ofHom _ ⟨f, by fun_prop⟩
-
-Depends on / 依赖: Profinite, Profinite.of
+--- 原说明 ---
+The natural functor from `Fintype` to `Profinite`, endowing a finite type with t
+he
+discrete topology.
 -/
 def FintypeCat.toProfinite : FintypeCat ⥤ Profinite where
   obj A := Profinite.of A
   map f := ofHom _ ⟨f, by fun_prop⟩
 
-/--
-Definition of `FintypeCat.toProfiniteFullyFaithful` / `FintypeCat.toProfiniteFullyFaithful` 的定义
+/-- `FintypeCat.toLightProfinite` is fully faithful. -/
+/-
+**FintypeCat.toProfiniteFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FintypeCat.toProfiniteFullyFaithful : toProfinite.FullyFaithful where prei
+mage f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FintypeCat.toProfiniteFullyFaithful
-  signature: : toProfinite.FullyFaithful where
-  body: InducedCategory.homMk ↾(f : _ -> _)
-  map_preimage _ := rfl
-  preimage_map _ := rfl
-
-中文:
-定义 FintypeCat.toProfiniteFullyFaithful
-  签名: : toProfinite.满忠实 where
-  定义体: InducedCategory.homMk ↾(f : _ -> _)
-  map_preimage _ := rfl
-  preimage_map _ := rfl
-
-Depends on / 依赖: InducedCategory, InducedCategory.homMk
+--- 原说明 ---
+`FintypeCat.toLightProfinite` is fully faithful.
 -/
 def FintypeCat.toProfiniteFullyFaithful : toProfinite.FullyFaithful where
-preimage f := InducedCategory.homMk ↾(f : _ -> _)
+  preimage f := InducedCategory.homMk <| ↾(f : _ → _)
   map_preimage _ := rfl
   preimage_map _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FintypeCat.toProfinite.Faithful
-  body: FintypeCat.toProfiniteFullyFaithful.faithful
-
-中文:
-实例 :
-  签名: FintypeCat.toProfinite.忠实
-  定义体: FintypeCat.toProfiniteFullyFaithful.faithful
-
-Depends on / 依赖: FintypeCat, FintypeCat.toProfiniteFullyFaithful.faithful, faithful, toProfiniteFullyFaithful
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FintypeCat.toProfinite.Faithful := FintypeCat.toProfiniteFullyFaithful.faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FintypeCat.toProfinite.Full
-  body: FintypeCat.toProfiniteFullyFaithful.full
-
-中文:
-实例 :
-  签名: FintypeCat.toProfinite.满
-  定义体: FintypeCat.toProfiniteFullyFaithful.full
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FintypeCat.toProfinite.Full := FintypeCat.toProfiniteFullyFaithful.full
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : FintypeCat) : Finite (FintypeCat.toProfinite.obj X) := inferInstanceAs (Finite X)
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : FintypeCat) : Finite (Profinite.of X) := inferInstanceAs (Finite X)
 
 end DiscreteTopology
@@ -393,48 +323,25 @@ end Profinite
 
 namespace Profinite
 
-/--
-Definition of `limitCone` / `limitCone` 的定义
+/-- An explicit limit cone for a functor `F : J ⥤ Profinite`, defined in terms of
+`CompHaus.limitCone`, which is defined in terms of `TopCat.limitCone`. -/
+/-
+**Profinite.limitCone** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：limitCone {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u v}) : L
+imits.Cone F where pt
+参数：F : J ⥤ Profinite.{max u v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitCone
-  signature: {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u v})
-  body: { toTop := (CompHaus.limitCone.{v, u} (F ⋙ profiniteToCompHaus)).pt.toTop
-      prop := by
-        change TotallyDisconnectedSpace ({ u : forall j : J, F.obj j | _ } : Type _)
-        exact Subtype.totallyDisconnectedSpace }
-  π :=
-  { app j := InducedCategory.homMk
-        (((CompHaus.limitCone.{v, u} (F ⋙ profiniteToCompHaus)).π.app j).hom)
-    -- Porting note: was `by tidy`:
-    naturality := by
-      intro j k f
-      ext ⟨g, p⟩
-      exact (p f).symm }
-
-中文:
-定义 limitCone
-  签名: {J : 类型v} [小范畴 J] (F : J ⥤ Profinite.{最大值 u v})
-  定义体: { toTop := (CompHaus.limitCone.{v, u} (F ⋙ profiniteToCompHaus)).pt.toTop
-      prop := by
-        change TotallyDisconnectedSpace ({ u : forall j : J, F.obj j | _ } : Type _)
-        exact Subtype.totallyDisconnectedSpace }
-  π :=
-  { app j := InducedCategory.homMk
-        (((CompHaus.limitCone.{v, u} (F ⋙ profiniteToCompHaus)).π.app j).hom)
-    -- Porting note: was `by tidy`:
-    naturality := by
-      intro j k f
-      ext ⟨g, p⟩
-      exact (p f).symm }
-
-Depends on / 依赖: CompHaus, CompHaus.limitCone, F.obj, InducedCategory, InducedCategory.homMk, Subtype, Subtype.totallyDisconnectedSpace, TotallyDisconnectedSpace, limitCone, profiniteToCompHaus, pt.toTop, totallyDisconnectedSpace
+--- 原说明 ---
+An explicit limit cone for a functor `F : J ⥤ Profinite`, defined in terms of
+`CompHaus.limitCone`, which is defined in terms of `TopCat.limitCone`.
 -/
 def limitCone {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u v}) : Limits.Cone F where
   pt :=
     { toTop := (CompHaus.limitCone.{v, u} (F ⋙ profiniteToCompHaus)).pt.toTop
       prop := by
-        change TotallyDisconnectedSpace ({ u : forall j : J, F.obj j | _ } : Type _)
+        change TotallyDisconnectedSpace ({ u : ∀ j : J, F.obj j | _ } : Type _)
         exact Subtype.totallyDisconnectedSpace }
   π :=
   { app j := InducedCategory.homMk
@@ -445,36 +352,17 @@ def limitCone {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u v}) : L
       ext ⟨g, p⟩
       exact (p f).symm }
 
-/--
-Definition of `limitConeIsLimit` / `limitConeIsLimit` 的定义
+/-- The limit cone `Profinite.limitCone F` is indeed a limit cone. -/
+/-
+**Profinite.limitConeIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：limitConeIsLimit {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u 
+v}) : Limits.IsLimit (limitCone F) where lift S
+参数：F : J ⥤ Profinite.{max u v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeIsLimit
-  signature: {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u v})
-  body: InducedCategory.homMk
-      ((CompHaus.limitConeIsLimit.{v, u} (F ⋙ profiniteToCompHaus)).lift
-        (profiniteToCompHaus.mapCone S)).hom
-  uniq S _ h :=
-    profiniteToCompHaus.map_injective
-      ((CompHaus.limitConeIsLimit.{v, u} _).uniq (profiniteToCompHaus.mapCone S) _
-        (fun j => by
-          simp [← h]
-          rfl))
-
-中文:
-定义 limitConeIsLimit
-  签名: {J : 类型v} [小范畴 J] (F : J ⥤ Profinite.{最大值 u v})
-  定义体: InducedCategory.homMk
-      ((CompHaus.limitConeIsLimit.{v, u} (F ⋙ profiniteToCompHaus)).lift
-        (profiniteToCompHaus.mapCone S)).hom
-  uniq S _ h :=
-    profiniteToCompHaus.map_injective
-      ((CompHaus.limitConeIsLimit.{v, u} _).uniq (profiniteToCompHaus.mapCone S) _
-        (fun j => by
-          simp [← h]
-          rfl))
-
-Depends on / 依赖: CompHaus, CompHaus.limitConeIsLimit, InducedCategory, InducedCategory.homMk, limitConeIsLimit, mapCone, map_injective, profiniteToCompHaus, profiniteToCompHaus.mapCone, profiniteToCompHaus.map_injective
+--- 原说明 ---
+The limit cone `Profinite.limitCone F` is indeed a limit cone.
 -/
 def limitConeIsLimit {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u v}) :
     Limits.IsLimit (limitCone F) where
@@ -485,238 +373,165 @@ def limitConeIsLimit {J : Type v} [SmallCategory J] (F : J ⥤ Profinite.{max u 
   uniq S _ h :=
     profiniteToCompHaus.map_injective
       ((CompHaus.limitConeIsLimit.{v, u} _).uniq (profiniteToCompHaus.mapCone S) _
-        (fun j => by
+        (fun j ↦ by
           simp [← h]
           rfl))
 
-/--
-Definition of `toProfiniteAdjToCompHaus` / `toProfiniteAdjToCompHaus` 的定义
+/-- The adjunction between CompHaus.to_Profinite and Profinite.to_CompHaus -/
+/-
+**Profinite.toProfiniteAdjToCompHaus** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：toProfiniteAdjToCompHaus : CompHaus.toProfinite ⊣ profiniteToCompHaus
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toProfiniteAdjToCompHaus
-  signature: : CompHaus.toProfinite ⊣ profiniteToCompHaus
-  body: Adjunction.adjunctionOfEquivLeft _ _
-
-中文:
-定义 toProfiniteAdjToCompHaus
-  签名: : CompHaus.toProfinite ⊣ profiniteToCompHaus
-  定义体: Adjunction.adjunctionOfEquivLeft _ _
-
-Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivLeft, adjunctionOfEquivLeft
+--- 原说明 ---
+The adjunction between CompHaus.to_Profinite and Profinite.to_CompHaus
 -/
 def toProfiniteAdjToCompHaus : CompHaus.toProfinite ⊣ profiniteToCompHaus :=
   Adjunction.adjunctionOfEquivLeft _ _
 
-/--
-Instance `toCompHaus.reflective` / 实例 `toCompHaus.reflective`
+/-- The category of profinite sets is reflective in the category of compact Hausdorff spaces -/
+/-
+**Profinite.toCompHaus.reflective** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.toCompHau
+s`。
+形式化陈述：CategoryTheory.Reflective profiniteToCompHaus
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance toCompHaus.reflective
-  signature: : Reflective profiniteToCompHaus where
-  body: CompHaus.toProfinite
-  adj := Profinite.toProfiniteAdjToCompHaus
-
-中文:
-实例 toCompHaus.reflective
-  签名: : 反射 profiniteToCompHaus where
-  定义体: CompHaus.toProfinite
-  adj := Profinite.toProfiniteAdjToCompHaus
-
-Depends on / 依赖: CompHaus, CompHaus.toProfinite, toProfinite
+--- 原说明 ---
+The category of profinite sets is reflective in the category of compact Hausdorf
+f spaces
 -/
 instance toCompHaus.reflective : Reflective profiniteToCompHaus where
   L := CompHaus.toProfinite
   adj := Profinite.toProfiniteAdjToCompHaus
-
-/--
-Instance `toCompHaus.createsLimits` / 实例 `toCompHaus.createsLimits`
-
-English:
-instance toCompHaus.createsLimits
-  signature: : CreatesLimits profiniteToCompHaus
-  body: monadicCreatesLimits _
-
-中文:
-实例 toCompHaus.createsLimits
-  签名: : CreatesLimits profiniteToCompHaus
-  定义体: monadicCreatesLimits _
-
-Depends on / 依赖: monadicCreatesLimits
+/-
+**Profinite.toCompHaus.createsLimits** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.toComp
+Haus`。
+形式化陈述：CategoryTheory.CreatesLimits profiniteToCompHaus
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance toCompHaus.createsLimits : CreatesLimits profiniteToCompHaus :=
   monadicCreatesLimits _
-
-/--
-Instance `toTopCat.reflective` / 实例 `toTopCat.reflective`
-
-English:
-instance toTopCat.reflective
-  signature: : Reflective Profinite.toTopCat
-  body: Reflective.comp profiniteToCompHaus compHausToTop
-
-中文:
-实例 toTopCat.reflective
-  签名: : 反射 Profinite.toTopCat
-  定义体: Reflective.comp profiniteToCompHaus compHausToTop
-
-Depends on / 依赖: Reflective, Reflective.comp, compHausToTop, profiniteToCompHaus
+/-
+**Profinite.toTopCat.reflective** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.toTopCat`。
+形式化陈述：CategoryTheory.Reflective Profinite.toTopCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance toTopCat.reflective : Reflective Profinite.toTopCat :=
   Reflective.comp profiniteToCompHaus compHausToTop
-
-/--
-Instance `toTopCat.createsLimits` / 实例 `toTopCat.createsLimits`
-
-English:
-instance toTopCat.createsLimits
-  signature: : CreatesLimits Profinite.toTopCat
-  body: monadicCreatesLimits _
-
-中文:
-实例 toTopCat.createsLimits
-  签名: : CreatesLimits Profinite.toTopCat
-  定义体: monadicCreatesLimits _
-
-Depends on / 依赖: monadicCreatesLimits
+/-
+**Profinite.toTopCat.createsLimits** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.toTopCat
+`。
+形式化陈述：CategoryTheory.CreatesLimits Profinite.toTopCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance toTopCat.createsLimits : CreatesLimits Profinite.toTopCat :=
   monadicCreatesLimits _
-
-/--
-Instance `hasLimits` / 实例 `hasLimits`
-
-English:
-instance hasLimits
-  signature: : Limits.HasLimits Profinite
-  body: hasLimits_of_hasLimits_createsLimits Profinite.toTopCat
-
-中文:
-实例 hasLimits
-  签名: : Limits.有极限 Profinite
-  定义体: hasLimits_of_hasLimits_createsLimits Profinite.toTopCat
-
-Depends on / 依赖: Profinite, Profinite.toTopCat, hasLimits_of_hasLimits_createsLimits, toTopCat
+/-
+**Profinite.hasLimits** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+形式化陈述：hasLimits : Limits.HasLimits Profinite
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasLimits_of_hasLimits_createsLimits`：hasLimits_of_hasLim
+its_createsLimits (F : C ⥤ D) [HasLimitsOfSize.{w, w'} D] [CreatesLimitsOfSize.{
+w, w'} F] : HasLimitsOfSize.{w, w'} C
 -/
 instance hasLimits : Limits.HasLimits Profinite :=
   hasLimits_of_hasLimits_createsLimits Profinite.toTopCat
-
-/--
-Instance `hasColimits` / 实例 `hasColimits`
-
-English:
-instance hasColimits
-  signature: : Limits.HasColimits Profinite
-  body: hasColimits_of_reflective profiniteToCompHaus
-
-中文:
-实例 hasColimits
-  签名: : Limits.有余极限 Profinite
-  定义体: hasColimits_of_reflective profiniteToCompHaus
-
-Depends on / 依赖: hasColimits_of_reflective, profiniteToCompHaus
+/-
+**Profinite.hasColimits** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+形式化陈述：hasColimits : Limits.HasColimits Profinite
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.hasColimits_of_reflective`：hasColimits_of_reflective (R :
+ D ⥤ C) [Reflective R] [HasColimitsOfSize.{v, u} C] : HasColimitsOfSize.{v, u} D
 -/
 instance hasColimits : Limits.HasColimits Profinite :=
   hasColimits_of_reflective profiniteToCompHaus
-
-/--
-Instance `forget_preservesLimits` / 实例 `forget_preservesLimits`
-
-English:
-instance forget_preservesLimits
-  signature: : Limits.PreservesLimits (forget Profinite)
-  body: by
-  apply Limits.comp_preservesLimits Profinite.toTopCat (forget TopCat)
-
-中文:
-实例 forget_preservesLimits
-  签名: : Limits.PreservesLimits (forget Profinite)
-  定义体: by
-  apply Limits.comp_preservesLimits Profinite.toTopCat (forget TopCat)
-
-Depends on / 依赖: Limits, Limits.comp_preservesLimits, Profinite, Profinite.toTopCat, TopCat, comp_preservesLimits, forget, toTopCat
+/-
+**Profinite.forget_preservesLimits** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+形式化陈述：forget_preservesLimits : Limits.PreservesLimits (forget Profinite)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.comp_preservesLimits`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {E : Type u₃} [ℰ :…
+· 使用定理 `CategoryTheory.Functor.instPreservesLimitsOfSizeOfIsRightAdjoint`：∀ {C :
+ Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst_
+1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.instIsRightAdjointOfMonadicRightAdjoint`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   (R : CategoryTheor…
+· 使用定理 `TopCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLimits (Ca
+tegoryTheory.forget TopCat)
 -/
 instance forget_preservesLimits : Limits.PreservesLimits (forget Profinite) := by
   apply Limits.comp_preservesLimits Profinite.toTopCat (forget TopCat)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `epi_iff_surjective` / 定理 `epi_iff_surjective`
-
-English:
-theorem epi_iff_surjective
-  given: {X Y : Profinite.{u}} (f : X ⟶ Y)
-  statement: Epi f ↔ Function.Surjective f
-  proof: by
-  constructor
-  · dsimp [Function.Surjective]
-    contrapose!
-    rintro ⟨y, hy⟩ hf
-    let C := Set.range f
-    have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
-    let U := Cᶜ
-    have hyU : y in U := by
-      refine Set.mem_compl ?_
-      rintro ⟨y', hy'⟩
-      exact hy y' hy'
-    have hUy : U in 𝓝 y := hC.compl_mem_nhds hyU
-    obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
-    classical
-      let Z := of (ULift.{u} <| Fin 2)
-      let g : Y ⟶ Z := ofHom _
-        ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
-      let h : Y ⟶ Z := ofHom _ ⟨fun _ => ⟨1⟩, continuous_const⟩
-      have H : h = g := by
-        rw [← cancel_epi f]
-        ext x
-        dsimp [g, LocallyConstant.ofIsClopen]
-        rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [ConcreteCategory.hom_ofHom]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_neg]
-        refine mt (fun α => hVU α) ?_
-        simp [U, C]
-      apply_fun fun e => (e y).down at H
-      dsimp [g, LocallyConstant.ofIsClopen] at H
-      rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_pos hyV] at H
-      exact top_ne_bot H
-  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
-    apply (forget Profinite).epi_of_epi_map
-
-中文:
-定理 epi_iff_surjective
-  条件: {X Y : Profinite.{u}} (f : X ⟶ Y)
-  结论: 满态射 f ↔ 函数.满射 f
-  证明: by
-  constructor
-  · dsimp [Function.Surjective]
-    contrapose!
-    rintro ⟨y, hy⟩ hf
-    let C := Set.range f
-    have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
-    let U := Cᶜ
-    have hyU : y in U := by
-      refine Set.mem_compl ?_
-      rintro ⟨y', hy'⟩
-      exact hy y' hy'
-    have hUy : U in 𝓝 y := hC.compl_mem_nhds hyU
-    obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
-    classical
-      let Z := of (ULift.{u} <| Fin 2)
-      let g : Y ⟶ Z := ofHom _
-        ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
-      let h : Y ⟶ Z := ofHom _ ⟨fun _ => ⟨1⟩, continuous_const⟩
-      have H : h = g := by
-        rw [← cancel_epi f]
-        ext x
-        dsimp [g, LocallyConstant.ofIsClopen]
-        rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [ConcreteCategory.hom_ofHom]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_neg]
-        refine mt (fun α => hVU α) ?_
-        simp [U, C]
-      apply_fun fun e => (e y).down at H
-      dsimp [g, LocallyConstant.ofIsClopen] at H
-      rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_pos hyV] at H
-      exact top_ne_bot H
-  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
-    apply (forget Profinite).epi_of_epi_map
-
-Depends on / 依赖: Function, Function.Surjective, IsClosed, LocallyConstant, LocallyConstant.ofIsClopen, Set.mem_compl, Set.range, Surjective, ULift.up, classical, compl_mem_nhds, continuous, contrapose, f.hom.hom.continuous, hC.compl_mem_nhds, isClosed, isCompact_range, isTopologicalBasis_isClopen, isTopologicalBasis_isClopen.mem_nhds_iff.mp, mem_compl
+/-
+**Profinite.epi_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Profinite`。
+形式化陈述：epi_iff_surjective {X Y : Profinite.{u}} (f : X ⟶ Y) : Epi f ↔ Function.Su
+rjective f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `isCompact_range`：isCompact_range [CompactSpace X] {f : X -> Y} (hf : Con
+tinuous f) : IsCompact (range f)
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `Set.mem_compl`：mem_compl {s : Set α} {x : α} (h : x ∉ s) : x in sᶜ
+· 使用定理 `IsClosed.compl_mem_nhds`：IsClosed.compl_mem_nhds (hs : IsClosed s) (hx :
+ x ∉ s) : sᶜ in 𝓝 x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.mem_nhds_iff`：∀ {α : Type u} [t : To
+pologicalSpace α] {a : α} {s : Set α} {b : Set (Set α)},   TopologicalSpace.IsTo
+pologicalBasis b → (s ∈ nhds a ↔ ∃ t ∈…
+· 使用定理 `isTopologicalBasis_isClopen`：isTopologicalBasis_isClopen : IsTopological
+Basis { s : Set X | IsClopen s }
+· 使用定理 `Profinite.instTotallyDisconnectedSpaceCarrierToTop`：∀ {X : Profinite}, T
+otallyDisconnectedSpace ↑X.toTop
+· 使用定理 `Finite.compactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Finite 
+X], CompactSpace X
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `TopologicalSpace.DiscreteTopology.metrizableSpace`：∀ {X : Type u_2} [ins
+t : TopologicalSpace X] [DiscreteTopology X], TopologicalSpace.MetrizableSpace X
+· 使用定理 `instDiscreteTopologyFin`：∀ {n : ℕ}, DiscreteTopology (Fin n)
+· 使用定理 `TotallySeparatedSpace.totallyDisconnectedSpace`：∀ (α : Type u) [inst : T
+opologicalSpace α] [TotallySeparatedSpace α], TotallyDisconnectedSpace α
+· 使用定理 `TotallySeparatedSpace.of_discrete`：∀ (α : Type u_3) [inst : TopologicalS
+pace α] [DiscreteTopology α], TotallySeparatedSpace α
+· 使用定理 `instDiscreteTopologyULift`：∀ {X : Type u} [inst : TopologicalSpace X] [D
+iscreteTopology X], DiscreteTopology (ULift.{u_5, u} X)
+· 使用定理 `Profinite.instHasPropTotallyDisconnectedSpaceCarrier`：∀ (X : Type u_1) [
+inst : TopologicalSpace X] [TotallyDisconnectedSpace X],   CompHausLike.HasProp 
+(fun Y => TotallyDisconnectedSpace ↑Y) X
+· 使用定理 `LocallyConstant.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topo
+logicalSpace X] [inst_1 : TopologicalSpace Y] (f : LocallyConstant X Y),   Conti
+nuous ⇑f
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 52 条，此处仅展示前 30 条）
 -/
 theorem epi_iff_surjective {X Y : Profinite.{u}} (f : X ⟶ Y) : Epi f ↔ Function.Surjective f := by
   constructor
@@ -726,11 +541,11 @@ theorem epi_iff_surjective {X Y : Profinite.{u}} (f : X ⟶ Y) : Epi f ↔ Funct
     let C := Set.range f
     have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
     let U := Cᶜ
-    have hyU : y in U := by
+    have hyU : y ∈ U := by
       refine Set.mem_compl ?_
       rintro ⟨y', hy'⟩
       exact hy y' hy'
-    have hUy : U in 𝓝 y := hC.compl_mem_nhds hyU
+    have hUy : U ∈ 𝓝 y := hC.compl_mem_nhds hyU
     obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
     classical
       let Z := of (ULift.{u} <| Fin 2)
@@ -741,29 +556,29 @@ theorem epi_iff_surjective {X Y : Profinite.{u}} (f : X ⟶ Y) : Epi f ↔ Funct
         rw [← cancel_epi f]
         ext x
         dsimp [g, LocallyConstant.ofIsClopen]
-        rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [ConcreteCategory.hom_ofHom]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_neg]
+        rw [ContinuousMap.coe_mk, ContinuousMap.coe_mk, ConcreteCategory.hom_ofHom,
+          ContinuousMap.coe_mk, Function.comp_apply, if_neg]
         refine mt (fun α => hVU α) ?_
         simp [U, C]
       apply_fun fun e => (e y).down at H
       dsimp [g, LocallyConstant.ofIsClopen] at H
-      rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_pos hyV] at H
+      rw [ContinuousMap.coe_mk, ContinuousMap.coe_mk, Function.comp_apply, if_pos hyV] at H
       exact top_ne_bot H
   · rw [← CategoryTheory.ofHom_epi_iff_surjective]
     apply (forget Profinite).epi_of_epi_map
 
-/--
-Definition of `pi` / `pi` 的定义
+/-- The pi-type of profinite spaces is profinite. -/
+/-
+**Profinite.pi** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：pi {α : Type u} (β : α -> Profinite) : Profinite
+参数：β : α -> Profinite。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: {α : Type u} (β : α -> Profinite)
-  body: .of (Π (a : α), β a)
-
-中文:
-定义 pi
-  签名: {α : 类型u} (β : α -> Profinite)
-  定义体: .of (Π (a : α), β a)
+--- 原说明 ---
+The pi-type of profinite spaces is profinite.
 -/
-def pi {α : Type u} (β : α -> Profinite) : Profinite := .of (Π (a : α), β a)
+def pi {α : Type u} (β : α → Profinite) : Profinite := .of (Π (a : α), β a)
 
 end Profinite
+

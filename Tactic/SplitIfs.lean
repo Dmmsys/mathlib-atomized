@@ -20,107 +20,52 @@ namespace Mathlib.Tactic
 
 open Lean Elab.Tactic Parser.Tactic Lean.Meta
 
-/--
-Inductive type `SplitPosition` / 归纳类型 `SplitPosition`
+/-- A position where a split may apply.
+-/
+/-
+**Mathlib.Tactic.SplitPosition** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive SplitPosition
-  constructors (2):
-    - target: 
-    - hyp: (fvarId: FVarId)
-
-中文:
-归纳类型 SplitPosition
-  构造子 (2 个):
-    - target: 
-    - hyp: (fvarId: FVarId)
+--- 原说明 ---
+A position where a split may apply.
 -/
 private inductive SplitPosition
 | target
 | hyp (fvarId: FVarId)
 
-/--
-Definition of `getSplitCandidates` / `getSplitCandidates` 的定义
+/-- Collects a list of positions pointed to by `loc` and their types.
+-/
+/-
+**Mathlib.Tactic.getSplitCandidates** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getSplitCandidates
-  signature: (loc : Location)
-  body: match loc with
-| Location.wildcard => do
-  let candidates ← (← getLCtx).getFVarIds.mapM
-    (fun fvarId => do
-      let typ ← instantiateMVars (← inferType (mkFVar fvarId))
-      return (SplitPosition.hyp fvarId, typ))
-  pure ((SplitPosition.target, ← getMainTarget) :: candidates.toList)
-| Location.targets hyps tgt => do
-  let candidates ← (← hyps.mapM getFVarId).mapM
-    (fun fvarId => do
-      let typ ← instantiateMVars (← inferType (mkFVar fvarId))
-      return (SplitPosition.hyp fvarId, typ))
-  if tgt
-  then return (SplitPosition.target, ← getMainTarget) :: candidates.toList
-  else return candidates.toList
-
-中文:
-定义 getSplitCandidates
-  签名: (loc : Location)
-  定义体: match loc with
-| Location.wildcard => do
-  let candidates ← (← getLCtx).getFVarIds.mapM
-    (fun fvarId => do
-      let typ ← instantiateMVars (← inferType (mkFVar fvarId))
-      return (SplitPosition.hyp fvarId, typ))
-  pure ((SplitPosition.target, ← getMainTarget) :: candidates.toList)
-| Location.targets hyps tgt => do
-  let candidates ← (← hyps.mapM getFVarId).mapM
-    (fun fvarId => do
-      let typ ← instantiateMVars (← inferType (mkFVar fvarId))
-      return (SplitPosition.hyp fvarId, typ))
-  if tgt
-  then return (SplitPosition.target, ← getMainTarget) :: candidates.toList
-  else return candidates.toList
+--- 原说明 ---
+Collects a list of positions pointed to by `loc` and their types.
 -/
 private def getSplitCandidates (loc : Location) : TacticM (List (SplitPosition × Expr)) :=
 match loc with
 | Location.wildcard => do
   let candidates ← (← getLCtx).getFVarIds.mapM
-    (fun fvarId => do
+    (fun fvarId ↦ do
       let typ ← instantiateMVars (← inferType (mkFVar fvarId))
       return (SplitPosition.hyp fvarId, typ))
   pure ((SplitPosition.target, ← getMainTarget) :: candidates.toList)
 | Location.targets hyps tgt => do
   let candidates ← (← hyps.mapM getFVarId).mapM
-    (fun fvarId => do
+    (fun fvarId ↦ do
       let typ ← instantiateMVars (← inferType (mkFVar fvarId))
       return (SplitPosition.hyp fvarId, typ))
   if tgt
   then return (SplitPosition.target, ← getMainTarget) :: candidates.toList
   else return candidates.toList
 
-/--
-Definition of `findIfToSplit?` / `findIfToSplit?` 的定义
+/-- Return the condition and decidable instance of an `if` expression to case split. -/
+/-
+**Mathlib.Tactic.findIfToSplit** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findIfToSplit?
-  signature: (e : Expr)
-  body: match e.find? fun e => (e.isIte || e.isDIte) && !(e.getArg! 1 5).hasLooseBVars with
-  | some iteApp =>
-    let cond := iteApp.getArg! 1 5
-    let dec := iteApp.getArg! 2 5
-    -- Try to find a nested `if` in `cond`
-.getD (cond, dec) findIfToSplit? cond
-  | none => none
-
-中文:
-定义 findIfToSplit?
-  签名: (e : Expr)
-  定义体: match e.find? fun e => (e.isIte || e.isDIte) && !(e.getArg! 1 5).hasLooseBVars with
-  | some iteApp =>
-    let cond := iteApp.getArg! 1 5
-    let dec := iteApp.getArg! 2 5
-    -- Try to find a nested `if` in `cond`
-.getD (cond, dec) findIfToSplit? cond
-  | none => none
+--- 原说明 ---
+Return the condition and decidable instance of an `if` expression to case split.
 -/
 private partial def findIfToSplit? (e : Expr) : Option (Expr × Expr) :=
   match e.find? fun e => (e.isIte || e.isDIte) && !(e.getArg! 1 5).hasLooseBVars with
@@ -128,29 +73,18 @@ private partial def findIfToSplit? (e : Expr) : Option (Expr × Expr) :=
     let cond := iteApp.getArg! 1 5
     let dec := iteApp.getArg! 2 5
     -- Try to find a nested `if` in `cond`
-.getD (cond, dec) findIfToSplit? cond
+    findIfToSplit? cond |>.getD (cond, dec)
   | none => none
 
-/--
-Definition of `findIfCondAt` / `findIfCondAt` 的定义
+/-- Finds an if condition to split. If successful, returns the position and the condition.
+-/
+/-
+**Mathlib.Tactic.findIfCondAt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findIfCondAt
-  signature: (loc : Location)
-  body: do
-  for (pos, e) in (← getSplitCandidates loc) do
-    if let some (cond, _) := findIfToSplit? e
-    then return some (pos, cond)
-  return none
-
-中文:
-定义 findIfCondAt
-  签名: (loc : Location)
-  定义体: do
-  for (pos, e) in (← getSplitCandidates loc) do
-    if let some (cond, _) := findIfToSplit? e
-    then return some (pos, cond)
-  return none
+--- 原说明 ---
+Finds an if condition to split. If successful, returns the position and the cond
+ition.
 -/
 private def findIfCondAt (loc : Location) : TacticM (Option (SplitPosition × Expr)) := do
   for (pos, e) in (← getSplitCandidates loc) do
@@ -158,30 +92,18 @@ private def findIfCondAt (loc : Location) : TacticM (Option (SplitPosition × Ex
     then return some (pos, cond)
   return none
 
-/--
-Definition of `discharge?` / `discharge?` 的定义
+/-- `Simp.Discharge` strategy to use in `reduceIfsAt`. Delegates to
+`SplitIf.discharge?`, and additionally supports discharging `True`, to
+better match the behavior of mathlib3's `split_ifs`.
+-/
+/-
+**Mathlib.Tactic.discharge** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition discharge?
-  signature: (e : Expr)
-  body: do
-  let e ← instantiateMVars e
-  if let some e1 ← (← SplitIf.mkDischarge? false) e
-    then return some e1
-  if e.isConstOf `True
-    then return some (mkConst `True.intro)
-  return none
-
-中文:
-定义 discharge?
-  签名: (e : Expr)
-  定义体: do
-  let e ← instantiateMVars e
-  if let some e1 ← (← SplitIf.mkDischarge? false) e
-    then return some e1
-  if e.isConstOf `True
-    then return some (mkConst `True.intro)
-  return none
+--- 原说明 ---
+`Simp.Discharge` strategy to use in `reduceIfsAt`. Delegates to
+`SplitIf.discharge?`, and additionally supports discharging `True`, to
+better match the behavior of mathlib3's `split_ifs`.
 -/
 private def discharge? (e : Expr) : SimpM (Option Expr) := do
   let e ← instantiateMVars e
@@ -191,26 +113,14 @@ private def discharge? (e : Expr) : SimpM (Option Expr) := do
     then return some (mkConst `True.intro)
   return none
 
-/--
-Definition of `reduceIfsAt` / `reduceIfsAt` 的定义
+/-- Simplifies if-then-else expressions after cases have been split out.
+-/
+/-
+**Mathlib.Tactic.reduceIfsAt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reduceIfsAt
-  signature: (loc : Location)
-  body: do
-  let ctx ← SplitIf.getSimpContext
-  let ctx := ctx.setFailIfUnchanged false
-  let _ ← simpLocation ctx (← ({} : Simp.SimprocsArray).add `reduceCtorEq false) discharge? loc
-  pure ()
-
-中文:
-定义 reduceIfsAt
-  签名: (loc : Location)
-  定义体: do
-  let ctx ← SplitIf.getSimpContext
-  let ctx := ctx.setFailIfUnchanged false
-  let _ ← simpLocation ctx (← ({} : Simp.SimprocsArray).add `reduceCtorEq false) discharge? loc
-  pure ()
+--- 原说明 ---
+Simplifies if-then-else expressions after cases have been split out.
 -/
 private def reduceIfsAt (loc : Location) : TacticM Unit := do
   let ctx ← SplitIf.getSimpContext
@@ -218,54 +128,38 @@ private def reduceIfsAt (loc : Location) : TacticM Unit := do
   let _ ← simpLocation ctx (← ({} : Simp.SimprocsArray).add `reduceCtorEq false) discharge? loc
   pure ()
 
-/--
-Definition of `splitIf1` / `splitIf1` 的定义
+/-- Splits a single if-then-else expression and then reduces the resulting goals.
+Has a similar effect as `SplitIf.splitIfTarget?` or `SplitIf.splitIfLocalDecl?` from
+core Lean 4. We opt not to use those library functions so that we can better mimic
+the behavior of mathlib3's `split_ifs`.
+-/
+/-
+**Mathlib.Tactic.splitIf1** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition splitIf1
-  signature: (cond : Expr) (hName : Name) (loc : Location)
-  body: do
-  let splitCases :=
-    evalTactic (← `(tactic| by_cases $(mkIdent hName) : $(← Elab.Term.exprToSyntax cond)))
-  andThenOnSubgoals splitCases (reduceIfsAt loc)
-
-中文:
-定义 splitIf1
-  签名: (cond : Expr) (hName : Name) (loc : Location)
-  定义体: do
-  let splitCases :=
-    evalTactic (← `(tactic| by_cases $(mkIdent hName) : $(← Elab.Term.exprToSyntax cond)))
-  andThenOnSubgoals splitCases (reduceIfsAt loc)
+--- 原说明 ---
+Splits a single if-then-else expression and then reduces the resulting goals.
+Has a similar effect as `SplitIf.splitIfTarget?` or `SplitIf.splitIfLocalDecl?` 
+from
+core Lean 4. We opt not to use those library functions so that we can better mim
+ic
+the behavior of mathlib3's `split_ifs`.
 -/
 private def splitIf1 (cond : Expr) (hName : Name) (loc : Location) : TacticM Unit := do
   let splitCases :=
     evalTactic (← `(tactic| by_cases $(mkIdent hName) : $(← Elab.Term.exprToSyntax cond)))
   andThenOnSubgoals splitCases (reduceIfsAt loc)
 
-/--
-Definition of `getNextName` / `getNextName` 的定义
+/-- Pops off the front of the list of names, or generates a fresh name if the
+list is empty.
+-/
+/-
+**Mathlib.Tactic.getNextName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getNextName
-  signature: (hNames: IO.Ref (List (TSyntax `Lean.binderIdent)))
-  body: do
-  match ← hNames.get with
-  | [] => mkFreshUserName `h
-  | n::ns => do hNames.set ns
-                if let `(binderIdent| $x:ident) := n
-                then pure x.getId
-                else pure `_
-
-中文:
-定义 getNextName
-  签名: (hNames: IO.Ref (列表 (TSyntax `Lean.binderIdent)))
-  定义体: do
-  match ← hNames.get with
-  | [] => mkFreshUserName `h
-  | n::ns => do hNames.set ns
-                if let `(binderIdent| $x:ident) := n
-                then pure x.getId
-                else pure `_
+--- 原说明 ---
+Pops off the front of the list of names, or generates a fresh name if the
+list is empty.
 -/
 private def getNextName (hNames: IO.Ref (List (TSyntax `Lean.binderIdent))) : MetaM Name := do
   match ← hNames.get with
@@ -275,30 +169,14 @@ private def getNextName (hNames: IO.Ref (List (TSyntax `Lean.binderIdent))) : Me
                 then pure x.getId
                 else pure `_
 
-/--
-Definition of `valueKnown` / `valueKnown` 的定义
+/-- Returns `true` if the condition or its negation already appears as a hypothesis.
+-/
+/-
+**Mathlib.Tactic.valueKnown** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valueKnown
-  signature: (cond : Expr)
-  body: do
-  let not_cond := mkApp (mkConst `Not) cond
-  for h in ← getLocalHyps do
-    let ty ← instantiateMVars (← inferType h)
-    if cond == ty then return true
-    if not_cond == ty then return true
-  return false
-
-中文:
-定义 valueKnown
-  签名: (cond : Expr)
-  定义体: do
-  let not_cond := mkApp (mkConst `Not) cond
-  for h in ← getLocalHyps do
-    let ty ← instantiateMVars (← inferType h)
-    if cond == ty then return true
-    if not_cond == ty then return true
-  return false
+--- 原说明 ---
+Returns `true` if the condition or its negation already appears as a hypothesis.
 -/
 private def valueKnown (cond : Expr) : TacticM Bool := do
   let not_cond := mkApp (mkConst `Not) cond
@@ -308,49 +186,21 @@ private def valueKnown (cond : Expr) : TacticM Bool := do
     if not_cond == ty then return true
   return false
 
-/--
-Definition of `splitIfsCore` / `splitIfsCore` 的定义
+/-- Main loop of `split_ifs`. Pulls names for new hypotheses from `hNames`.
+Stops if it encounters a condition in the passed-in `List Expr`.
+-/
+/-
+**Mathlib.Tactic.splitIfsCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition splitIfsCore
-  body: fun done => withMainContext do
-  let some (_,cond) ← findIfCondAt loc
-      | Meta.throwTacticEx `split_ifs (← getMainGoal) "no if-then-else conditions to split"
-
-  -- If `cond` is `¬p` then use `p` instead.
-  let cond := if cond.isAppOf `Not then cond.getAppArgs[0]! else cond
-
-  if done.contains cond then return ()
-  let no_split ← valueKnown cond
-  if no_split then
-    andThenOnSubgoals (reduceIfsAt loc) (splitIfsCore loc hNames (cond::done) <|> pure ())
-  else do
-    let hName ← getNextName hNames
-    andThenOnSubgoals (splitIf1 cond hName loc) ((splitIfsCore loc hNames (cond::done)) <|>
-      pure ())
-
-中文:
-定义 splitIfsCore
-  定义体: fun done => withMainContext do
-  let some (_,cond) ← findIfCondAt loc
-      | Meta.throwTacticEx `split_ifs (← getMainGoal) "no if-then-else conditions to split"
-
-  -- If `cond` is `¬p` then use `p` instead.
-  let cond := if cond.isAppOf `Not then cond.getAppArgs[0]! else cond
-
-  if done.contains cond then return ()
-  let no_split ← valueKnown cond
-  if no_split then
-    andThenOnSubgoals (reduceIfsAt loc) (splitIfsCore loc hNames (cond::done) <|> pure ())
-  else do
-    let hName ← getNextName hNames
-    andThenOnSubgoals (splitIf1 cond hName loc) ((splitIfsCore loc hNames (cond::done)) <|>
-      pure ())
+--- 原说明 ---
+Main loop of `split_ifs`. Pulls names for new hypotheses from `hNames`.
+Stops if it encounters a condition in the passed-in `List Expr`.
 -/
 private partial def splitIfsCore
     (loc : Location)
     (hNames : IO.Ref (List (TSyntax `Lean.binderIdent))) :
-    List Expr -> TacticM Unit := fun done => withMainContext do
+    List Expr → TacticM Unit := fun done ↦ withMainContext do
   let some (_,cond) ← findIfCondAt loc
       | Meta.throwTacticEx `split_ifs (← getMainGoal) "no if-then-else conditions to split"
 
@@ -395,3 +245,4 @@ elab_rules : tactic
       logWarningAt name m!"unused name: {name}"
 
 end Mathlib.Tactic
+

@@ -49,25 +49,21 @@ open scoped zeta
 
 section ProdPrimeFactors
 
-/--
-Definition of `prodPrimeFactors` / `prodPrimeFactors` 的定义
+/-- The map $n \mapsto \prod_{p \mid n} f(p)$ as an arithmetic function -/
+/-
+**ArithmeticFunction.prodPrimeFactors** 是 Mathlib 中的一个定义，位于命名空间 `ArithmeticFunct
+ion`。
+形式化陈述：prodPrimeFactors [CommMonoidWithZero R] (f : Nat -> R) : ArithmeticFunctio
+n R where toFun d
+参数：f : Nat -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodPrimeFactors
-  signature: [CommMonoidWithZero R] (f : Nat -> R)
-  body: if d = 0 then 0 else ∏ p in d.primeFactors, f p
-  map_zero' := if_pos rfl
-
-中文:
-定义 prodPrimeFactors
-  签名: [带零交换幺半群 R] (f : 自然数 -> R)
-  定义体: if d = 0 then 0 else ∏ p in d.primeFactors, f p
-  map_zero' := if_pos rfl
-
-Depends on / 依赖: d.primeFactors, primeFactors
+--- 原说明 ---
+The map $n \mapsto \prod_{p \mid n} f(p)$ as an arithmetic function
 -/
-def prodPrimeFactors [CommMonoidWithZero R] (f : Nat -> R) : ArithmeticFunction R where
-  toFun d := if d = 0 then 0 else ∏ p in d.primeFactors, f p
+def prodPrimeFactors [CommMonoidWithZero R] (f : ℕ → R) : ArithmeticFunction R where
+  toFun d := if d = 0 then 0 else ∏ p ∈ d.primeFactors, f p
   map_zero' := if_pos rfl
 
 open Batteries.ExtendedBinder
@@ -75,103 +71,148 @@ open Batteries.ExtendedBinder
 /-- `∏ᵖ p ∣ n, f p` is custom notation for `prodPrimeFactors f n` -/
 scoped syntax (name := bigproddvd) "∏ᵖ " extBinder " ∣ " term ", " term:67 : term
 scoped macro_rules (kind := bigproddvd)
-  | `(∏ᵖ $x:ident ∣ $n, $r) => `(prodPrimeFactors (fun $x => $r) $n)
+  | `(∏ᵖ $x:ident ∣ $n, $r) => `(prodPrimeFactors (fun $x ↦ $r) $n)
 
 @[simp]
-/--
-theorem `prodPrimeFactors_apply` / 定理 `prodPrimeFactors_apply`
-
-English:
-theorem prodPrimeFactors_apply
-  given: [CommMonoidWithZero R] {f : Nat -> R} {n : Nat} (hn : n != 0)
-  proof: if_neg hn
-
-中文:
-定理 prodPrimeFactors_apply
-  条件: [带零交换幺半群 R] {f : 自然数 -> R} {n : 自然数} (hn : n != 0)
-  证明: if_neg hn
-
-Depends on / 依赖: if_neg
+/-
+**ArithmeticFunction.prodPrimeFactors_apply** 是 Mathlib 中的一个定理，位于命名空间 `Arithmeti
+cFunction`。
+形式化陈述：prodPrimeFactors_apply [CommMonoidWithZero R] {f : Nat -> R} {n : Nat} (hn
+ : n != 0) : ∏ᵖ p ∣ n, f p = ∏ p in n.primeFactors, f p
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem prodPrimeFactors_apply [CommMonoidWithZero R] {f : Nat -> R} {n : Nat} (hn : n != 0) :
-    ∏ᵖ p ∣ n, f p = ∏ p in n.primeFactors, f p :=
+theorem prodPrimeFactors_apply [CommMonoidWithZero R] {f : ℕ → R} {n : ℕ} (hn : n ≠ 0) :
+    ∏ᵖ p ∣ n, f p = ∏ p ∈ n.primeFactors, f p :=
   if_neg hn
 
 namespace IsMultiplicative
 
 @[arith_mult]
-/--
-theorem `prodPrimeFactors` / 定理 `prodPrimeFactors`
-
-English:
-theorem prodPrimeFactors
-  given: [CommMonoidWithZero R] (f : Nat -> R)
-  proof: by
-  rw [iff_ne_zero]
-  simp only [ne_eq, one_ne_zero, not_false_eq_true, prodPrimeFactors_apply, primeFactors_one,
-    prod_empty, true_and]
-  intro x y hx hy hxy
-  have hxy₀ : x * y != 0 := mul_ne_zero hx hy
-  rw [prodPrimeFactors_apply hxy₀]; rw [prodPrimeFactors_apply hx]; rw [prodPrimeFactors_apply hy]; rw [primeFactors_mul hx hy]; rw [← prod_union hxy.disjoint_primeFactors]
-
-中文:
-定理 prodPrimeFactors
-  条件: [带零交换幺半群 R] (f : 自然数 -> R)
-  证明: by
-  rw [iff_ne_zero]
-  simp only [ne_eq, one_ne_zero, not_false_eq_true, prodPrimeFactors_apply, primeFactors_one,
-    prod_empty, true_and]
-  intro x y hx hy hxy
-  have hxy₀ : x * y != 0 := mul_ne_zero hx hy
-  rw [prodPrimeFactors_apply hxy₀]; rw [prodPrimeFactors_apply hx]; rw [prodPrimeFactors_apply hy]; rw [primeFactors_mul hx hy]; rw [← prod_union hxy.disjoint_primeFactors]
-
-Depends on / 依赖: disjoint_primeFactors, hxy.disjoint_primeFactors, iff_ne_zero, mul_ne_zero, ne_eq, not_false_eq_true, one_ne_zero, primeFactors_mul, primeFactors_one, prodPrimeFactors_apply, prod_empty, prod_union, true_and
+/-
+**ArithmeticFunction.IsMultiplicative.prodPrimeFactors** 是 Mathlib 中的一个定理，位于命名空间
+ `ArithmeticFunction.IsMultiplicative`。
+形式化陈述：prodPrimeFactors [CommMonoidWithZero R] (f : Nat -> R) : IsMultiplicative 
+(prodPrimeFactors f)
+参数：f : Nat -> R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.IsMultiplicative.iff_ne_zero`：iff_ne_zero [MonoidWith
+Zero R] {f : ArithmeticFunction R} : IsMultiplicative f ↔ f 1 = 1 ∧ forall {m n 
+: Nat}, m != 0 -> n != 0 -> m.Coprime…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ArithmeticFunction.prodPrimeFactors_apply`：prodPrimeFactors_apply [CommM
+onoidWithZero R] {f : Nat -> R} {n : Nat} (hn : n != 0) : ∏ᵖ p ∣ n, f p = ∏ p in
+ n.primeFactors, f p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Nat.primeFactors_one`：Nat.primeFactors 1 = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用引理 `Nat.primeFactors_mul`：primeFactors_mul (ha : a != 0) (hb : b != 0) : (a 
+* b).primeFactors = a.primeFactors union b.primeFactors
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_union`：prod_union [DecidableEq ι] (h : Disjoint s₁ s₂) : ∏ x
+ in s₁ union s₂, f x = (∏ x in s₁, f x) * ∏ x in s₂, f x
+· 使用定理 `Nat.Coprime.disjoint_primeFactors`：∀ {a b : ℕ}, a.Coprime b → Disjoint a
+.primeFactors b.primeFactors
 -/
-theorem prodPrimeFactors [CommMonoidWithZero R] (f : Nat -> R) :
+theorem prodPrimeFactors [CommMonoidWithZero R] (f : ℕ → R) :
     IsMultiplicative (prodPrimeFactors f) := by
   rw [iff_ne_zero]
   simp only [ne_eq, one_ne_zero, not_false_eq_true, prodPrimeFactors_apply, primeFactors_one,
     prod_empty, true_and]
   intro x y hx hy hxy
-  have hxy₀ : x * y != 0 := mul_ne_zero hx hy
-  rw [prodPrimeFactors_apply hxy₀]; rw [prodPrimeFactors_apply hx]; rw [prodPrimeFactors_apply hy]; rw [primeFactors_mul hx hy]; rw [← prod_union hxy.disjoint_primeFactors]
-
-/--
-theorem `prodPrimeFactors_add_of_squarefree` / 定理 `prodPrimeFactors_add_of_squarefree`
-
-English:
-theorem prodPrimeFactors_add_of_squarefree
-  statement: [CommSemiring R] {f g : ArithmeticFunction R}
-  proof: by
-  rw [prodPrimeFactors_apply hn.ne_zero]
-  simp_rw [add_apply (f := f) (g := g)]
-  rw [prod_add]; rw [mul_apply]; rw [sum_divisorsAntidiagonal (f · * g ·)]; rw [← divisors_filter_squarefree_of_squarefree hn]; rw [sum_divisors_filter_squarefree hn.ne_zero]; rw [factors_eq]
-  apply sum_congr rfl
-  intro t ht
-  rw [t.prod_val]; rw [Function.id_def]; rw [← prod_primeFactors_sdiff_of_squarefree hn (mem_powerset.mp ht)]; rw [hf.map_prod_of_subset_primeFactors n t (mem_powerset.mp ht)]; rw [← hg.map_prod_of_subset_primeFactors n (_ \ t) sdiff_subset]
-
-中文:
-定理 prodPrimeFactors_add_of_squarefree
-  结论: [交换半环 R] {f g : ArithmeticFunction R}
-  证明: by
-  rw [prodPrimeFactors_apply hn.ne_zero]
-  simp_rw [add_apply (f := f) (g := g)]
-  rw [prod_add]; rw [mul_apply]; rw [sum_divisorsAntidiagonal (f · * g ·)]; rw [← divisors_filter_squarefree_of_squarefree hn]; rw [sum_divisors_filter_squarefree hn.ne_zero]; rw [factors_eq]
-  apply sum_congr rfl
-  intro t ht
-  rw [t.prod_val]; rw [Function.id_def]; rw [← prod_primeFactors_sdiff_of_squarefree hn (mem_powerset.mp ht)]; rw [hf.map_prod_of_subset_primeFactors n t (mem_powerset.mp ht)]; rw [← hg.map_prod_of_subset_primeFactors n (_ \ t) sdiff_subset]
-
-Depends on / 依赖: Function, Function.id_def, add_apply, divisors_filter_squarefree_of_squarefree, factors_eq, hf.map_prod_of_subset_primeFactors, hg.map_prod_of_sub, hn.ne_zero, id_def, map_prod_of_sub, map_prod_of_subset_primeFactors, mem_powerset, mem_powerset.mp, mul_apply, ne_zero, prodPrimeFactors_apply, prod_add, prod_primeFactors_sdiff_of_squarefree, prod_val, simp_rw
+  have hxy₀ : x * y ≠ 0 := mul_ne_zero hx hy
+  rw [prodPrimeFactors_apply hxy₀, prodPrimeFactors_apply hx, prodPrimeFactors_apply hy,
+    primeFactors_mul hx hy, ← prod_union hxy.disjoint_primeFactors]
+/-
+**ArithmeticFunction.IsMultiplicative.prodPrimeFactors_add_of_squarefree** 是 Mat
+hlib 中的一个定理，位于命名空间 `ArithmeticFunction.IsMultiplicative`。
+形式化陈述：prodPrimeFactors_add_of_squarefree [CommSemiring R] {f g : ArithmeticFunct
+ion R} (hf : IsMultiplicative f) (hg : IsMultiplicative g) {n : Nat} (hn : Squar
+efree n) : ∏ᵖ p ∣ n, (f + g) p = (f * g) n
+参数：hf : IsMultiplicative f；hg : IsMultiplicative g；hn : Squarefree n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.prodPrimeFactors_apply`：prodPrimeFactors_apply [CommM
+onoidWithZero R] {f : Nat -> R} {n : Nat} (hn : n != 0) : ∏ᵖ p ∣ n, f p = ∏ p in
+ n.primeFactors, f p
+· 使用定理 `Squarefree.ne_zero`：Squarefree.ne_zero [MonoidWithZero R] [Nontrivial R]
+ {m : R} (hm : Squarefree (m : R)) : m != 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `ArithmeticFunction.add_apply`：add_apply {f g : ArithmeticFunction R} {n 
+: Nat} : (f + g) n = f n + g n
+· 使用定理 `Finset.prod_add`：prod_add (f g : ι -> R) (s : Finset ι) : ∏ i in s, (f i
+ + g i) = ∑ t in s.powerset, (∏ i in t, f i) * ∏ i in s \ t, g i
+· 使用定理 `ArithmeticFunction.mul_apply`：mul_apply [Semiring R] {f g : ArithmeticFu
+nction R} {n : Nat} : (f * g) n = ∑ x in divisorsAntidiagonal n, f x.fst * g x.s
+nd
+· 使用定理 `Nat.sum_divisorsAntidiagonal`：∀ {M : Type u_1} [inst : AddCommMonoid M] 
+(f : ℕ → ℕ → M) {n : ℕ},   ∑ i ∈ n.divisorsAntidiagonal, f i.1 i.2 = ∑ i ∈ n.div
+isors, f i (n / i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.divisors_filter_squarefree_of_squarefree`：divisors_filter_squarefree
+_of_squarefree {n : Nat} (hn : Squarefree n) : {d in n.divisors | Squarefree d} 
+= n.divisors
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Nat.sum_divisors_filter_squarefree`：sum_divisors_filter_squarefree {n : 
+Nat} (h0 : n != 0) {α : Type*} [AddCommMonoid α] {f : Nat -> α} : ∑ d in n.divis
+ors with Squarefree d, f…
+· 使用定理 `Nat.factors_eq`：∀ (n : ℕ), UniqueFactorizationMonoid.normalizedFactors n
+ = ↑n.primeFactorsList
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.prod_val`：prod_val [CommMonoid M] (s : Finset M) : s.1.prod = s.p
+rod id
+· 使用定理 `Function.id_def`：∀ {α : Sort u_1}, id = fun x => x
+· 使用定理 `Nat.prod_primeFactors_sdiff_of_squarefree`：prod_primeFactors_sdiff_of_sq
+uarefree {n : Nat} (hn : Squarefree n) {t : Finset Nat} (ht : t subseteq n.prime
+Factors) : ∏ a in (n.primeFacto…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_powerset`：mem_powerset {s t : Finset α} : s in powerset t ↔ s
+ subseteq t
+· 使用定理 `ArithmeticFunction.IsMultiplicative.map_prod_of_subset_primeFactors`：map
+_prod_of_subset_primeFactors [CommMonoidWithZero R] {f : ArithmeticFunction R} (
+h_mult : ArithmeticFunction.IsMultiplicative f) (l : Nat)…
+· 使用定理 `Finset.sdiff_subset`：sdiff_subset {s t : Finset α} : s \ t subseteq s
 -/
 theorem prodPrimeFactors_add_of_squarefree [CommSemiring R] {f g : ArithmeticFunction R}
-    (hf : IsMultiplicative f) (hg : IsMultiplicative g) {n : Nat} (hn : Squarefree n) :
+    (hf : IsMultiplicative f) (hg : IsMultiplicative g) {n : ℕ} (hn : Squarefree n) :
     ∏ᵖ p ∣ n, (f + g) p = (f * g) n := by
   rw [prodPrimeFactors_apply hn.ne_zero]
   simp_rw [add_apply (f := f) (g := g)]
-  rw [prod_add]; rw [mul_apply]; rw [sum_divisorsAntidiagonal (f · * g ·)]; rw [← divisors_filter_squarefree_of_squarefree hn]; rw [sum_divisors_filter_squarefree hn.ne_zero]; rw [factors_eq]
+  rw [prod_add, mul_apply, sum_divisorsAntidiagonal (f · * g ·),
+    ← divisors_filter_squarefree_of_squarefree hn, sum_divisors_filter_squarefree hn.ne_zero,
+    factors_eq]
   apply sum_congr rfl
   intro t ht
-  rw [t.prod_val]; rw [Function.id_def]; rw [← prod_primeFactors_sdiff_of_squarefree hn (mem_powerset.mp ht)]; rw [hf.map_prod_of_subset_primeFactors n t (mem_powerset.mp ht)]; rw [← hg.map_prod_of_subset_primeFactors n (_ \ t) sdiff_subset]
+  rw [t.prod_val, Function.id_def,
+    ← prod_primeFactors_sdiff_of_squarefree hn (mem_powerset.mp ht),
+    hf.map_prod_of_subset_primeFactors n t (mem_powerset.mp ht),
+    ← hg.map_prod_of_subset_primeFactors n (_ \ t) sdiff_subset]
 
 end IsMultiplicative
 
@@ -179,62 +220,35 @@ end ProdPrimeFactors
 
 section Id
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity on `ℕ` as an `ArithmeticFunction`. -/
+/-
+**ArithmeticFunction.id** 是 Mathlib 中的一个定义，位于命名空间 `ArithmeticFunction`。
+形式化陈述：ArithmeticFunction ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : ArithmeticFunction Nat
-  body: ⟨id, rfl⟩
-
-@[simp]
-
-中文:
-定义 id
-  签名: : ArithmeticFunction 自然数
-  定义体: ⟨id, rfl⟩
-
-@[simp]
+--- 原说明 ---
+The identity on `ℕ` as an `ArithmeticFunction`.
 -/
-protected def id : ArithmeticFunction Nat :=
+protected def id : ArithmeticFunction ℕ :=
   ⟨id, rfl⟩
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: {x : Nat}
-  statement: ArithmeticFunction.id x = x
-  proof: rfl
-
-@[arith_mult]
-
-中文:
-定理 id_apply
-  条件: {x : 自然数}
-  结论: ArithmeticFunction.id x = x
-  证明: rfl
-
-@[arith_mult]
+/-
+**ArithmeticFunction.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：id_apply {x : Nat} : ArithmeticFunction.id x = x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem id_apply {x : Nat} : ArithmeticFunction.id x = x :=
+theorem id_apply {x : ℕ} : ArithmeticFunction.id x = x :=
   rfl
 
 @[arith_mult]
-/--
-theorem `isMultiplicative_id` / 定理 `isMultiplicative_id`
-
-English:
-theorem isMultiplicative_id
-  statement: IsMultiplicative .id
-  proof: ⟨rfl, fun _ => rfl⟩
-
-中文:
-定理 isMultiplicative_id
-  结论: 是Multiplicative .id
-  证明: ⟨rfl, fun _ => rfl⟩
+/-
+**ArithmeticFunction.isMultiplicative_id** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFu
+nction`。
+形式化陈述：isMultiplicative_id : IsMultiplicative .id
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isMultiplicative_id : IsMultiplicative .id :=
   ⟨rfl, fun _ => rfl⟩
@@ -243,646 +257,650 @@ end Id
 
 section Pow
 
-/--
-Definition of `pow` / `pow` 的定义
+/-- `pow k n = n ^ k`, except `pow 0 0 = 0`. -/
+/-
+**ArithmeticFunction.pow** 是 Mathlib 中的一个定义，位于命名空间 `ArithmeticFunction`。
+形式化陈述：pow (k : Nat) : ArithmeticFunction Nat
+参数：k : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pow
-  signature: (k : Nat)
-  body: ArithmeticFunction.id.ppow k
-
-@[simp]
-
-中文:
-定义 pow
-  签名: (k : 自然数)
-  定义体: ArithmeticFunction.id.ppow k
-
-@[simp]
-
-Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.id.ppow
+--- 原说明 ---
+`pow k n = n ^ k`, except `pow 0 0 = 0`.
 -/
-def pow (k : Nat) : ArithmeticFunction Nat :=
+def pow (k : ℕ) : ArithmeticFunction ℕ :=
   ArithmeticFunction.id.ppow k
 
 @[simp]
-/--
-theorem `pow_apply` / 定理 `pow_apply`
-
-English:
-theorem pow_apply
-  given: {k n : Nat}
-  statement: pow k n = if k = 0 ∧ n = 0 then 0 else n ^ k
-  proof: by
-  cases k <;> simp [pow]
-
-中文:
-定理 pow_apply
-  条件: {k n : 自然数}
-  结论: pow k n = if k = 0 ∧ n = 0 then 0 else n ^ k
-  证明: by
-  cases k <;> simp [pow]
+/-
+**ArithmeticFunction.pow_apply** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：pow_apply {k n : Nat} : pow k n = if k = 0 ∧ n = 0 then 0 else n ^ k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ArithmeticFunction.ppow_zero`：ppow_zero {f : ArithmeticFunction R} : f.p
+pow 0 = ζ
+· 使用定理 `ArithmeticFunction.natCoe_nat`：natCoe_nat (f : ArithmeticFunction Nat) :
+ natToArithmeticFunction f = f
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ArithmeticFunction.ppow_apply`：ppow_apply {f : ArithmeticFunction R} {k 
+x : Nat} (kpos : 0 < k) : f.ppow k x = f x ^ k
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
 -/
-theorem pow_apply {k n : Nat} : pow k n = if k = 0 ∧ n = 0 then 0 else n ^ k := by
+theorem pow_apply {k n : ℕ} : pow k n = if k = 0 ∧ n = 0 then 0 else n ^ k := by
   cases k <;> simp [pow]
-
-/--
-theorem `pow_zero_eq_zeta` / 定理 `pow_zero_eq_zeta`
-
-English:
-theorem pow_zero_eq_zeta
-  statement: pow 0 = ζ
-  proof: by
-  ext n
-  simp
-
-中文:
-定理 pow_zero_eq_zeta
-  结论: pow 0 = ζ
-  证明: by
-  ext n
-  simp
+/-
+**ArithmeticFunction.pow_zero_eq_zeta** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunct
+ion`。
+形式化陈述：pow_zero_eq_zeta : pow 0 = ζ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ArithmeticFunction.ext`：ext ⦃f g : ArithmeticFunction R⦄ (h : forall x, 
+f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.pow_apply`：pow_apply {k n : Nat} : pow k n = if k = 0
+ ∧ n = 0 then 0 else n ^ k
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
 -/
 theorem pow_zero_eq_zeta : pow 0 = ζ := by
   ext n
   simp
-
-/--
-theorem `pow_one_eq_id` / 定理 `pow_one_eq_id`
-
-English:
-theorem pow_one_eq_id
-  statement: pow 1 = .id
-  proof: by
-  ext n
-  simp
-
-@[arith_mult]
-
-中文:
-定理 pow_one_eq_id
-  结论: pow 1 = .id
-  证明: by
-  ext n
-  simp
-
-@[arith_mult]
+/-
+**ArithmeticFunction.pow_one_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction
+`。
+形式化陈述：pow_one_eq_id : pow 1 = .id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ArithmeticFunction.ext`：ext ⦃f g : ArithmeticFunction R⦄ (h : forall x, 
+f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.pow_apply`：pow_apply {k n : Nat} : pow k n = if k = 0
+ ∧ n = 0 then 0 else n ^ k
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pow_one_eq_id : pow 1 = .id := by
   ext n
   simp
 
 @[arith_mult]
-/--
-theorem `isMultiplicative_pow` / 定理 `isMultiplicative_pow`
-
-English:
-theorem isMultiplicative_pow
-  given: {k : Nat}
-  statement: IsMultiplicative (pow k)
-  proof: isMultiplicative_id.ppow
-
-中文:
-定理 isMultiplicative_pow
-  条件: {k : 自然数}
-  结论: 是Multiplicative (pow k)
-  证明: isMultiplicative_id.ppow
-
-Depends on / 依赖: isMultiplicative_id, isMultiplicative_id.ppow
+/-
+**ArithmeticFunction.isMultiplicative_pow** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticF
+unction`。
+形式化陈述：isMultiplicative_pow {k : Nat} : IsMultiplicative (pow k)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ArithmeticFunction.IsMultiplicative.ppow`：ppow [CommSemiring R] {f : Ari
+thmeticFunction R} (hf : f.IsMultiplicative) {k : Nat} : IsMultiplicative (f.ppo
+w k)
+· 使用定理 `ArithmeticFunction.isMultiplicative_id`：isMultiplicative_id : IsMultipli
+cative .id
 -/
-theorem isMultiplicative_pow {k : Nat} : IsMultiplicative (pow k) :=
+theorem isMultiplicative_pow {k : ℕ} : IsMultiplicative (pow k) :=
   isMultiplicative_id.ppow
 end Pow
 
 section Sigma
 
-/--
-Definition of `sigma` / `sigma` 的定义
+/-- `σ k n` is the sum of the `k`th powers of the divisors of `n` -/
+/-
+**ArithmeticFunction.sigma** 是 Mathlib 中的一个定义，位于命名空间 `ArithmeticFunction`。
+形式化陈述：sigma (k : Nat) : ArithmeticFunction Nat
+参数：k : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigma
-  signature: (k : Nat)
-  body: ⟨fun n => ∑ d in divisors n, d ^ k, by simp⟩
-
-@[inherit_doc]
-scoped[ArithmeticFunction.sigma] notation "σ" => ArithmeticFunction.sigma
-
-中文:
-定义 sigma
-  签名: (k : 自然数)
-  定义体: ⟨fun n => ∑ d in divisors n, d ^ k, by simp⟩
-
-@[inherit_doc]
-scoped[ArithmeticFunction.sigma] notation "σ" => ArithmeticFunction.sigma
-
-Depends on / 依赖: divisors
+--- 原说明 ---
+`σ k n` is the sum of the `k`th powers of the divisors of `n`
 -/
-def sigma (k : Nat) : ArithmeticFunction Nat :=
-  ⟨fun n => ∑ d in divisors n, d ^ k, by simp⟩
+def sigma (k : ℕ) : ArithmeticFunction ℕ :=
+  ⟨fun n => ∑ d ∈ divisors n, d ^ k, by simp⟩
 
 @[inherit_doc]
 scoped[ArithmeticFunction.sigma] notation "σ" => ArithmeticFunction.sigma
 
 open scoped sigma
-
-/--
-theorem `sigma_apply` / 定理 `sigma_apply`
-
-English:
-theorem sigma_apply
-  given: {k n : Nat}
-  statement: σ k n = ∑ d in divisors n, d ^ k
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sigma_apply
-  条件: {k n : 自然数}
-  结论: σ k n = ∑ d in divisors n, d ^ k
-  证明: rfl
-
-@[simp]
+/-
+**ArithmeticFunction.sigma_apply** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：sigma_apply {k n : Nat} : σ k n = ∑ d in divisors n, d ^ k
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sigma_apply {k n : Nat} : σ k n = ∑ d in divisors n, d ^ k :=
+theorem sigma_apply {k n : ℕ} : σ k n = ∑ d ∈ divisors n, d ^ k :=
   rfl
 
 @[simp]
-/--
-theorem `sigma_eq_zero` / 定理 `sigma_eq_zero`
-
-English:
-theorem sigma_eq_zero
-  given: {k n : Nat}
-  statement: σ k n = 0 ↔ n = 0
-  proof: by
-  rcases eq_or_ne n 0 with rfl | hn
-  · simp
-  · simp only [ArithmeticFunction.sigma_apply]
-    aesop
-
-@[simp]
-
-中文:
-定理 sigma_eq_zero
-  条件: {k n : 自然数}
-  结论: σ k n = 0 ↔ n = 0
-  证明: by
-  rcases eq_or_ne n 0 with rfl | hn
-  · simp
-  · simp only [ArithmeticFunction.sigma_apply]
-    aesop
-
-@[simp]
-
-Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.sigma_apply, eq_or_ne, sigma_apply
+/-
+**ArithmeticFunction.sigma_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction
+`。
+形式化陈述：sigma_eq_zero {k n : Nat} : σ k n = 0 ↔ n = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ArithmeticFunction.map_zero`：map_zero {f : ArithmeticFunction R} : f 0 =
+ 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
-theorem sigma_eq_zero {k n : Nat} : σ k n = 0 ↔ n = 0 := by
+theorem sigma_eq_zero {k n : ℕ} : σ k n = 0 ↔ n = 0 := by
   rcases eq_or_ne n 0 with rfl | hn
   · simp
   · simp only [ArithmeticFunction.sigma_apply]
     aesop
 
 @[simp]
-/--
-theorem `sigma_pos_iff` / 定理 `sigma_pos_iff`
-
-English:
-theorem sigma_pos_iff
-  given: {k n}
-  statement: 0 < σ k n ↔ 0 < n
-  proof: by
-  simp [pos_iff_ne_zero]
-
-中文:
-定理 sigma_pos_iff
-  条件: {k n}
-  结论: 0 < σ k n ↔ 0 < n
-  证明: by
-  simp [pos_iff_ne_zero]
-
-Depends on / 依赖: pos_iff_ne_zero
+/-
+**ArithmeticFunction.sigma_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction
+`。
+形式化陈述：sigma_pos_iff {k n} : 0 < σ k n ↔ 0 < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sigma_pos_iff {k n} : 0 < σ k n ↔ 0 < n := by
   simp [pos_iff_ne_zero]
-
-/--
-theorem `sigma_apply_prime_pow` / 定理 `sigma_apply_prime_pow`
-
-English:
-theorem sigma_apply_prime_pow
-  given: {k p i : Nat} (hp : p.Prime)
-  proof: by
+/-
+**ArithmeticFunction.sigma_apply_prime_pow** 是 Mathlib 中的一个定理，位于命名空间 `Arithmetic
+Function`。
+形式化陈述：sigma_apply_prime_pow {k p i : Nat} (hp : p.Prime) : σ k (p ^ i) = ∑ j in 
+.range (i + 1), p ^ (j * k)
+参数：hp : p.Prime。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.pow_right_injective`：∀ {a : ℕ}, 2 ≤ a → Function.Injective fun x => 
+a ^ x
+· 使用定理 `Nat.Prime.two_le`：∀ {p : ℕ}, Nat.Prime p → 2 ≤ p
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Nat.divisors_prime_pow`：divisors_prime_pow {p : Nat} (pp : p.Prime) (k :
+ Nat) : divisors (p ^ k) = (Finset.range (k + 1)).map ⟨(p ^ ·), Nat.pow_right_in
+jective pp.t…
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem sigma_apply_prime_pow {k p i : ℕ} (hp : p.Prime) :
+    σ k (p ^ i) = ∑ j ∈ .range (i + 1), p ^ (j * k) := by
   simp [sigma_apply, divisors_prime_pow hp, pow_mul]
-
-中文:
-定理 sigma_apply_prime_pow
-  条件: {k p i : 自然数} (hp : p.素)
-  证明: by
-  simp [sigma_apply, divisors_prime_pow hp, pow_mul]
-
-Depends on / 依赖: divisors_prime_pow, pow_mul, sigma_apply
+/-
+**ArithmeticFunction.sigma_one_apply** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFuncti
+on`。
+形式化陈述：sigma_one_apply (n : Nat) : σ 1 n = ∑ d in divisors n, d
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sigma_apply_prime_pow {k p i : Nat} (hp : p.Prime) :
-    σ k (p ^ i) = ∑ j in .range (i + 1), p ^ (j * k) := by
-  simp [sigma_apply, divisors_prime_pow hp, pow_mul]
-
-/--
-theorem `sigma_one_apply` / 定理 `sigma_one_apply`
-
-English:
-theorem sigma_one_apply
-  given: (n : Nat)
-  statement: σ 1 n = ∑ d in divisors n, d
-  proof: by simp [sigma_apply]
-
-中文:
-定理 sigma_one_apply
-  条件: (n : 自然数)
-  结论: σ 1 n = ∑ d in divisors n, d
-  证明: by simp [sigma_apply]
-
-Depends on / 依赖: sigma_apply
+theorem sigma_one_apply (n : ℕ) : σ 1 n = ∑ d ∈ divisors n, d := by simp [sigma_apply]
+/-
+**ArithmeticFunction.sigma_one_apply_prime_pow** 是 Mathlib 中的一个定理，位于命名空间 `Arithm
+eticFunction`。
+形式化陈述：sigma_one_apply_prime_pow {p i : Nat} (hp : p.Prime) : σ 1 (p ^ i) = ∑ k i
+n .range (i + 1), p ^ k
+参数：hp : p.Prime。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.sigma_apply_prime_pow`：sigma_apply_prime_pow {k p i :
+ Nat} (hp : p.Prime) : σ k (p ^ i) = ∑ j in .range (i + 1), p ^ (j * k)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sigma_one_apply (n : Nat) : σ 1 n = ∑ d in divisors n, d := by simp [sigma_apply]
-
-/--
-theorem `sigma_one_apply_prime_pow` / 定理 `sigma_one_apply_prime_pow`
-
-English:
-theorem sigma_one_apply_prime_pow
-  given: {p i : Nat} (hp : p.Prime)
-  proof: by
+theorem sigma_one_apply_prime_pow {p i : ℕ} (hp : p.Prime) :
+    σ 1 (p ^ i) = ∑ k ∈ .range (i + 1), p ^ k := by
   simp [sigma_apply_prime_pow hp]
-
-中文:
-定理 sigma_one_apply_prime_pow
-  条件: {p i : 自然数} (hp : p.素)
-  证明: by
-  simp [sigma_apply_prime_pow hp]
-
-Depends on / 依赖: sigma_apply_prime_pow
+/-
+**ArithmeticFunction.sigma_eq_sum_div** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunct
+ion`。
+形式化陈述：sigma_eq_sum_div (k n : Nat) : sigma k n = ∑ d in divisors n, (n / d) ^ k
+参数：k n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.sigma_apply`：sigma_apply {k n : Nat} : σ k n = ∑ d in
+ divisors n, d ^ k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.sum_div_divisors`：∀ {α : Type u_1} [inst : AddCommMonoid α] (n : ℕ) 
+(f : ℕ → α), ∑ d ∈ n.divisors, f (n / d) = n.divisors.sum f
 -/
-theorem sigma_one_apply_prime_pow {p i : Nat} (hp : p.Prime) :
-    σ 1 (p ^ i) = ∑ k in .range (i + 1), p ^ k := by
-  simp [sigma_apply_prime_pow hp]
-
-/--
-theorem `sigma_eq_sum_div` / 定理 `sigma_eq_sum_div`
-
-English:
-theorem sigma_eq_sum_div
-  given: (k n : Nat)
-  statement: sigma k n = ∑ d in divisors n, (n / d) ^ k
-  proof: by
-  rw [sigma_apply]; rw [← sum_div_divisors]
-
-中文:
-定理 sigma_eq_sum_div
-  条件: (k n : 自然数)
-  结论: sigma k n = ∑ d in divisors n, (n / d) ^ k
-  证明: by
-  rw [sigma_apply]; rw [← sum_div_divisors]
-
-Depends on / 依赖: sigma_apply, sum_div_divisors
+theorem sigma_eq_sum_div (k n : ℕ) : sigma k n = ∑ d ∈ divisors n, (n / d) ^ k := by
+  rw [sigma_apply, ← sum_div_divisors]
+/-
+**ArithmeticFunction.sigma_zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunct
+ion`。
+形式化陈述：sigma_zero_apply (n : Nat) : σ 0 n = #n.divisors
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sigma_eq_sum_div (k n : Nat) : sigma k n = ∑ d in divisors n, (n / d) ^ k := by
-  rw [sigma_apply]; rw [← sum_div_divisors]
-
-/--
-theorem `sigma_zero_apply` / 定理 `sigma_zero_apply`
-
-English:
-theorem sigma_zero_apply
-  given: (n : Nat)
-  statement: σ 0 n = #n.divisors
-  proof: by simp [sigma_apply]
-
-中文:
-定理 sigma_zero_apply
-  条件: (n : 自然数)
-  结论: σ 0 n = #n.divisors
-  证明: by simp [sigma_apply]
-
-Depends on / 依赖: sigma_apply
+theorem sigma_zero_apply (n : ℕ) : σ 0 n = #n.divisors := by simp [sigma_apply]
+/-
+**ArithmeticFunction.sigma_zero_apply_prime_pow** 是 Mathlib 中的一个定理，位于命名空间 `Arith
+meticFunction`。
+形式化陈述：sigma_zero_apply_prime_pow {p i : Nat} (hp : p.Prime) : σ 0 (p ^ i) = i + 
+1
+参数：hp : p.Prime。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.sigma_apply_prime_pow`：sigma_apply_prime_pow {k p i :
+ Nat} (hp : p.Prime) : σ k (p ^ i) = ∑ j in .range (i + 1), p ^ (j * k)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_range`：card_range (n : Nat) : #(range n) = n
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sigma_zero_apply (n : Nat) : σ 0 n = #n.divisors := by simp [sigma_apply]
-
-/--
-theorem `sigma_zero_apply_prime_pow` / 定理 `sigma_zero_apply_prime_pow`
-
-English:
-theorem sigma_zero_apply_prime_pow
-  given: {p i : Nat} (hp : p.Prime)
-  statement: σ 0 (p ^ i) = i + 1
-  proof: by
+theorem sigma_zero_apply_prime_pow {p i : ℕ} (hp : p.Prime) : σ 0 (p ^ i) = i + 1 := by
   simp [sigma_apply_prime_pow hp]
 
 @[simp]
-
-中文:
-定理 sigma_zero_apply_prime_pow
-  条件: {p i : 自然数} (hp : p.素)
-  结论: σ 0 (p ^ i) = i + 1
-  证明: by
-  simp [sigma_apply_prime_pow hp]
-
-@[simp]
-
-Depends on / 依赖: sigma_apply_prime_pow
+/-
+**ArithmeticFunction.sigma_one** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：sigma_one (k : Nat) : σ k 1 = 1
+参数：k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Nat.divisors_one`：divisors_one : divisors 1 = {1}
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sigma_zero_apply_prime_pow {p i : Nat} (hp : p.Prime) : σ 0 (p ^ i) = i + 1 := by
-  simp [sigma_apply_prime_pow hp]
-
-@[simp]
-/--
-theorem `sigma_one` / 定理 `sigma_one`
-
-English:
-theorem sigma_one
-  given: (k : Nat)
-  statement: σ k 1 = 1
-  proof: by
+theorem sigma_one (k : ℕ) : σ k 1 = 1 := by
   simp only [sigma_apply, divisors_one, sum_singleton, one_pow]
-
-中文:
-定理 sigma_one
-  条件: (k : 自然数)
-  结论: σ k 1 = 1
-  证明: by
-  simp only [sigma_apply, divisors_one, sum_singleton, one_pow]
-
-Depends on / 依赖: divisors_one, one_pow, sigma_apply, sum_singleton
+/-
+**ArithmeticFunction.sigma_pos** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：sigma_pos (k n : Nat) (hn0 : n != 0) : 0 < σ k n
+参数：k n : Nat；hn0 : n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.sigma_pos_iff`：sigma_pos_iff {k n} : 0 < σ k n ↔ 0 < 
+n
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 -/
-theorem sigma_one (k : Nat) : σ k 1 = 1 := by
-  simp only [sigma_apply, divisors_one, sum_singleton, one_pow]
-
-/--
-theorem `sigma_pos` / 定理 `sigma_pos`
-
-English:
-theorem sigma_pos
-  given: (k n : Nat) (hn0 : n != 0)
-  statement: 0 < σ k n
-  proof: by
+theorem sigma_pos (k n : ℕ) (hn0 : n ≠ 0) : 0 < σ k n := by
   rwa [sigma_pos_iff, pos_iff_ne_zero]
-
-中文:
-定理 sigma_pos
-  条件: (k n : 自然数) (hn0 : n != 0)
-  结论: 0 < σ k n
-  证明: by
-  rwa [sigma_pos_iff, pos_iff_ne_zero]
-
-Depends on / 依赖: pos_iff_ne_zero, sigma_pos_iff
+/-
+**ArithmeticFunction.sigma_mono** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：sigma_mono (k k' n : Nat) (hk : k <= k') : σ k n <= σ k' n
+参数：k k' n : Nat；hk : k <= k'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_le_sum`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f g : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈
+ s, f i…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `pow_le_pow_right₀`：pow_le_pow_right₀ [ZeroLEOneClass M₀] [PosMulMono M₀]
+ (ha : 1 <= a) (hmn : m <= n) : a ^ m <= a ^ n
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.pos_of_mem_divisors`：pos_of_mem_divisors {m : Nat} (h : m in n.divis
+ors) : 0 < m
 -/
-theorem sigma_pos (k n : Nat) (hn0 : n != 0) : 0 < σ k n := by
-  rwa [sigma_pos_iff, pos_iff_ne_zero]
-
-/--
-theorem `sigma_mono` / 定理 `sigma_mono`
-
-English:
-theorem sigma_mono
-  given: (k k' n : Nat) (hk : k <= k')
-  statement: σ k n <= σ k' n
-  proof: by
+theorem sigma_mono (k k' n : ℕ) (hk : k ≤ k') : σ k n ≤ σ k' n := by
   simp_rw [sigma_apply]
   gcongr with d hd
   exact pos_of_mem_divisors hd
-
-中文:
-定理 sigma_mono
-  条件: (k k' n : 自然数) (hk : k <= k')
-  结论: σ k n <= σ k' n
-  证明: by
-  simp_rw [sigma_apply]
-  gcongr with d hd
-  exact pos_of_mem_divisors hd
-
-Depends on / 依赖: pos_of_mem_divisors, sigma_apply, simp_rw
+/-
+**ArithmeticFunction.zeta_mul_pow_eq_sigma** 是 Mathlib 中的一个定理，位于命名空间 `Arithmetic
+Function`。
+形式化陈述：zeta_mul_pow_eq_sigma {k : Nat} : ζ * pow k = σ k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ArithmeticFunction.ext`：ext ⦃f g : ArithmeticFunction R⦄ (h : forall x, 
+f x = g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.sigma.eq_1`：∀ (k : ℕ), ArithmeticFunction.sigma k = {
+ toFun := fun n => ∑ d ∈ n.divisors, d ^ k, map_zero' := ⋯ }
+· 使用定理 `ArithmeticFunction.zeta_mul_apply`：zeta_mul_apply {f : ArithmeticFunctio
+n Nat} {x : Nat} : (ζ * f) x = ∑ i in divisors x, f i
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ArithmeticFunction.pow_apply`：pow_apply {k n : Nat} : pow k n = if k = 0
+ ∧ n = 0 then 0 else n ^ k
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem sigma_mono (k k' n : Nat) (hk : k <= k') : σ k n <= σ k' n := by
-  simp_rw [sigma_apply]
-  gcongr with d hd
-  exact pos_of_mem_divisors hd
-
-/--
-theorem `zeta_mul_pow_eq_sigma` / 定理 `zeta_mul_pow_eq_sigma`
-
-English:
-theorem zeta_mul_pow_eq_sigma
-  given: {k : Nat}
-  statement: ζ * pow k = σ k
-  proof: by
+theorem zeta_mul_pow_eq_sigma {k : ℕ} : ζ * pow k = σ k := by
   ext
-  rw [sigma]; rw [zeta_mul_apply]
+  rw [sigma, zeta_mul_apply]
   apply sum_congr rfl
   aesop
 
 @[arith_mult]
-
-中文:
-定理 zeta_mul_pow_eq_sigma
-  条件: {k : 自然数}
-  结论: ζ * pow k = σ k
-  证明: by
-  ext
-  rw [sigma]; rw [zeta_mul_apply]
-  apply sum_congr rfl
-  aesop
-
-@[arith_mult]
-
-Depends on / 依赖: sum_congr, zeta_mul_apply
+/-
+**ArithmeticFunction.isMultiplicative_sigma** 是 Mathlib 中的一个定理，位于命名空间 `Arithmeti
+cFunction`。
+形式化陈述：isMultiplicative_sigma {k : Nat} : IsMultiplicative (σ k)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ArithmeticFunction.zeta_mul_pow_eq_sigma`：zeta_mul_pow_eq_sigma {k : Nat
+} : ζ * pow k = σ k
+· 使用定理 `ArithmeticFunction.IsMultiplicative.mul`：mul [CommSemiring R] {f g : Ari
+thmeticFunction R} (hf : f.IsMultiplicative) (hg : g.IsMultiplicative) : IsMulti
+plicative (f * g)
+· 使用定理 `ArithmeticFunction.isMultiplicative_zeta`：isMultiplicative_zeta : IsMult
+iplicative ζ
+· 使用定理 `ArithmeticFunction.isMultiplicative_pow`：isMultiplicative_pow {k : Nat} 
+: IsMultiplicative (pow k)
 -/
-theorem zeta_mul_pow_eq_sigma {k : Nat} : ζ * pow k = σ k := by
-  ext
-  rw [sigma]; rw [zeta_mul_apply]
-  apply sum_congr rfl
-  aesop
-
-@[arith_mult]
-/--
-theorem `isMultiplicative_sigma` / 定理 `isMultiplicative_sigma`
-
-English:
-theorem isMultiplicative_sigma
-  given: {k : Nat}
-  statement: IsMultiplicative (σ k)
-  proof: by
+theorem isMultiplicative_sigma {k : ℕ} : IsMultiplicative (σ k) := by
   rw [← zeta_mul_pow_eq_sigma]
   apply isMultiplicative_zeta.mul isMultiplicative_pow
-
-中文:
-定理 isMultiplicative_sigma
-  条件: {k : 自然数}
-  结论: 是Multiplicative (σ k)
-  证明: by
-  rw [← zeta_mul_pow_eq_sigma]
-  apply isMultiplicative_zeta.mul isMultiplicative_pow
-
-Depends on / 依赖: isMultiplicative_pow, isMultiplicative_zeta, isMultiplicative_zeta.mul, zeta_mul_pow_eq_sigma
+/-
+**ArithmeticFunction.sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul*
+* 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul {k n : Nat} (hn
+ : n != 0) : σ k n = ∏ p in n.primeFactors, ∑ i in .range (n.factorization p + 1
+), p ^ (i * k)
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.IsMultiplicative.multiplicative_factorization`：multip
+licative_factorization [CommMonoidWithZero R] (f : ArithmeticFunction R) (hf : f
+.IsMultiplicative) {n : Nat} (hn : n != 0) : f n = n.f…
+· 使用定理 `ArithmeticFunction.isMultiplicative_sigma`：isMultiplicative_sigma {k : N
+at} : IsMultiplicative (σ k)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Nat.support_factorization`：∀ (n : ℕ), n.factorization.support = n.primeF
+actors
+· 使用定理 `ArithmeticFunction.sigma_apply_prime_pow`：sigma_apply_prime_pow {k p i :
+ Nat} (hp : p.Prime) : σ k (p ^ i) = ∑ j in .range (i + 1), p ^ (j * k)
+· 使用引理 `Nat.prime_of_mem_primeFactors`：prime_of_mem_primeFactors (hp : p in n.pr
+imeFactors) : p.Prime
 -/
-theorem isMultiplicative_sigma {k : Nat} : IsMultiplicative (σ k) := by
-  rw [← zeta_mul_pow_eq_sigma]
-  apply isMultiplicative_zeta.mul isMultiplicative_pow
-
-/--
-theorem `sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul` / 定理 `sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul`
-
-English:
-theorem sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul
-  given: {k n : Nat} (hn : n != 0)
-  proof: by
+theorem sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul {k n : ℕ} (hn : n ≠ 0) :
+    σ k n = ∏ p ∈ n.primeFactors, ∑ i ∈ .range (n.factorization p + 1), p ^ (i * k) := by
   rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
-  exact prod_congr n.support_factorization fun _ h =>
-sigma_apply_prime_pow prime_of_mem_primeFactors h
+  exact prod_congr n.support_factorization fun _ h ↦
+    sigma_apply_prime_pow <| prime_of_mem_primeFactors h
 
-中文:
-定理 sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul
-  条件: {k n : 自然数} (hn : n != 0)
-  证明: by
-  rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
-  exact prod_congr n.support_factorization fun _ h =>
-sigma_apply_prime_pow prime_of_mem_primeFactors h
+/-- A crude upper bound: `σ_k(n) ≤ n ^ (k + 1)`. -/
+/-
+**ArithmeticFunction.sigma_le_pow_succ** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunc
+tion`。
+形式化陈述：sigma_le_pow_succ (k n : Nat) : σ k n <= n ^ (k + 1)
+参数：k n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.pow_succ'`：∀ {m n : ℕ}, m ^ n.succ = m * m ^ n
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Finset.sum_le_sum`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f g : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈
+ s, f i…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Nat.pow_le_pow_left`：∀ {n m : ℕ}, n ≤ m → ∀ (i : ℕ), n ^ i ≤ m ^ i
+· 使用定理 `Nat.divisor_le`：divisor_le {m : Nat} : n in divisors m -> n <= m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Nat.mul_le_mul_right`：∀ {n m : ℕ} (k : ℕ), n ≤ m → n * k ≤ m * k
+· 使用定理 `Nat.card_divisors_le_self`：card_divisors_le_self (n : Nat) : #n.divisors
+ <= n
 
-Depends on / 依赖: isMultiplicative_sigma, isMultiplicative_sigma.multiplicative_factorization, multiplicative_factorization, n.support_factorization, prime_of_mem_primeFactors, prod_congr, sigma_apply_prime_pow, support_factorization
+--- 原说明 ---
+A crude upper bound: `σ_k(n) ≤ n ^ (k + 1)`.
 -/
-theorem sigma_eq_prod_primeFactors_sum_range_factorization_pow_mul {k n : Nat} (hn : n != 0) :
-    σ k n = ∏ p in n.primeFactors, ∑ i in .range (n.factorization p + 1), p ^ (i * k) := by
-  rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
-  exact prod_congr n.support_factorization fun _ h =>
-sigma_apply_prime_pow prime_of_mem_primeFactors h
-
-/--
-theorem `sigma_le_pow_succ` / 定理 `sigma_le_pow_succ`
-
-English:
-theorem sigma_le_pow_succ
-  given: (k n : Nat)
-  statement: σ k n <= n ^ (k + 1)
-  proof: by
+theorem sigma_le_pow_succ (k n : ℕ) : σ k n ≤ n ^ (k + 1) := by
   simp only [sigma_apply, pow_succ']
-  refine (Finset.sum_le_sum fun d hd => Nat.pow_le_pow_left (Nat.divisor_le hd) k).trans ?_
-  simpa [Finset.sum_const] using Nat.mul_le_mul_right (n ^ k) (Nat.card_divisors_le_self n)
-
-中文:
-定理 sigma_le_pow_succ
-  条件: (k n : 自然数)
-  结论: σ k n <= n ^ (k + 1)
-  证明: by
-  simp only [sigma_apply, pow_succ']
-  refine (Finset.sum_le_sum fun d hd => Nat.pow_le_pow_left (Nat.divisor_le hd) k).trans ?_
-  simpa [Finset.sum_const] using Nat.mul_le_mul_right (n ^ k) (Nat.card_divisors_le_self n)
-
-Depends on / 依赖: Finset, Finset.sum_const, Finset.sum_le_sum, Nat.card_divisors_le_self, Nat.divisor_le, Nat.mul_le_mul_right, Nat.pow_le_pow_left, card_divisors_le_self, divisor_le, mul_le_mul_right, pow_le_pow_left, pow_succ, sigma_apply, sum_const, sum_le_sum
--/
-theorem sigma_le_pow_succ (k n : Nat) : σ k n <= n ^ (k + 1) := by
-  simp only [sigma_apply, pow_succ']
-  refine (Finset.sum_le_sum fun d hd => Nat.pow_le_pow_left (Nat.divisor_le hd) k).trans ?_
+  refine (Finset.sum_le_sum fun d hd ↦ Nat.pow_le_pow_left (Nat.divisor_le hd) k).trans ?_
   simpa [Finset.sum_const] using Nat.mul_le_mul_right (n ^ k) (Nat.card_divisors_le_self n)
 
 end Sigma
 
 open scoped sigma
 
-/--
-theorem `_root_.Nat.card_divisors` / 定理 `_root_.Nat.card_divisors`
-
-English:
-theorem _root_.Nat.card_divisors
-  given: {n : Nat} (hn : n != 0)
-  proof: by
-  rw [← sigma_zero_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
-  exact prod_congr n.support_factorization fun _ h =>
-sigma_zero_apply_prime_pow prime_of_mem_primeFactors h
-
-@[simp]
-
-中文:
-定理 _root_.自然数.card_divisors
-  条件: {n : 自然数} (hn : n != 0)
-  证明: by
-  rw [← sigma_zero_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
-  exact prod_congr n.support_factorization fun _ h =>
-sigma_zero_apply_prime_pow prime_of_mem_primeFactors h
-
-@[simp]
-
-Depends on / 依赖: isMultiplicative_sigma, isMultiplicative_sigma.multiplicative_factorization, multiplicative_factorization, n.support_factorization, prime_of_mem_primeFactors, prod_congr, sigma_zero_apply, sigma_zero_apply_prime_pow, support_factorization
+/-
+**ArithmeticFunction._root_.Nat.card_divisors** 是 Mathlib 中的一个定理，位于命名空间 `Arithme
+ticFunction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Nat.card_divisors {n : Nat} (hn : n != 0) :
+theorem _root_.Nat.card_divisors {n : ℕ} (hn : n ≠ 0) :
     #n.divisors = n.primeFactors.prod (n.factorization · + 1) := by
-  rw [← sigma_zero_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
+  rw [← sigma_zero_apply, isMultiplicative_sigma.multiplicative_factorization _ hn]
   exact prod_congr n.support_factorization fun _ h =>
-sigma_zero_apply_prime_pow prime_of_mem_primeFactors h
+    sigma_zero_apply_prime_pow <| prime_of_mem_primeFactors h
 
 @[simp]
-/--
-theorem `_root_.Nat.divisors_card_eq_one_iff` / 定理 `_root_.Nat.divisors_card_eq_one_iff`
-
-English:
-theorem _root_.Nat.divisors_card_eq_one_iff
-  given: (n : Nat)
-  statement: #n.divisors = 1 ↔ n = 1
-  proof: by
-  rcases eq_or_ne n 0 with rfl | hn
-  · simp
-  · refine ⟨fun h => ?_, fun h => by simp [h]⟩
-    exact (card_le_one.mp h.le 1 (one_mem_divisors.mpr hn) n (n.mem_divisors_self hn)).symm
-
-中文:
-定理 _root_.自然数.divisors_card_eq_one_iff
-  条件: (n : 自然数)
-  结论: #n.divisors = 1 ↔ n = 1
-  证明: by
-  rcases eq_or_ne n 0 with rfl | hn
-  · simp
-  · refine ⟨fun h => ?_, fun h => by simp [h]⟩
-    exact (card_le_one.mp h.le 1 (one_mem_divisors.mpr hn) n (n.mem_divisors_self hn)).symm
-
-Depends on / 依赖: card_le_one, card_le_one.mp, eq_or_ne, h.le, mem_divisors_self, n.mem_divisors_self, one_mem_divisors, one_mem_divisors.mpr
+/-
+**ArithmeticFunction._root_.Nat.divisors_card_eq_one_iff** 是 Mathlib 中的一个定理，位于命名
+空间 `ArithmeticFunction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Nat.divisors_card_eq_one_iff (n : Nat) : #n.divisors = 1 ↔ n = 1 := by
+theorem _root_.Nat.divisors_card_eq_one_iff (n : ℕ) : #n.divisors = 1 ↔ n = 1 := by
   rcases eq_or_ne n 0 with rfl | hn
   · simp
-  · refine ⟨fun h => ?_, fun h => by simp [h]⟩
+  · refine ⟨fun h ↦ ?_, fun h ↦ by simp [h]⟩
     exact (card_le_one.mp h.le 1 (one_mem_divisors.mpr hn) n (n.mem_divisors_self hn)).symm
 
-/--
-theorem `sigma_zero_eq_one_iff` / 定理 `sigma_zero_eq_one_iff`
+/-- `sigma_eq_one_iff` is to be preferred. -/
+/-
+**ArithmeticFunction.sigma_zero_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Arithmetic
+Function`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem sigma_zero_eq_one_iff
-  given: (n : Nat)
-  statement: σ 0 n = 1 ↔ n = 1
-  proof: by
-  simp [sigma_zero_apply]
-
-@[simp]
-
-中文:
-定理 sigma_zero_eq_one_iff
-  条件: (n : 自然数)
-  结论: σ 0 n = 1 ↔ n = 1
-  证明: by
-  simp [sigma_zero_apply]
-
-@[simp]
+--- 原说明 ---
+`sigma_eq_one_iff` is to be preferred.
 -/
-private theorem sigma_zero_eq_one_iff (n : Nat) : σ 0 n = 1 ↔ n = 1 := by
+private theorem sigma_zero_eq_one_iff (n : ℕ) : σ 0 n = 1 ↔ n = 1 := by
   simp [sigma_zero_apply]
 
 @[simp]
-/--
-theorem `sigma_eq_one_iff` / 定理 `sigma_eq_one_iff`
-
-English:
-theorem sigma_eq_one_iff
-  given: (k n : Nat)
-  statement: σ k n = 1 ↔ n = 1
-  proof: by
+/-
+**ArithmeticFunction.sigma_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunct
+ion`。
+形式化陈述：sigma_eq_one_iff (k n : Nat) : σ k n = 1 ↔ n = 1
+参数：k n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ArithmeticFunction.map_zero`：map_zero {f : ArithmeticFunction R} : f 0 =
+ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.NumberTheory.ArithmeticFunction.Misc.0.ArithmeticFuncti
+on.sigma_zero_eq_one_iff`：∀ (n : ℕ), (ArithmeticFunction.sigma 0) n = 1 ↔ n = 1
+· 使用定理 `ArithmeticFunction.sigma_pos`：sigma_pos (k n : Nat) (hn0 : n != 0) : 0 <
+ σ k n
+· 使用定理 `ArithmeticFunction.sigma_mono`：sigma_mono (k k' n : Nat) (hk : k <= k') 
+: σ k n <= σ k' n
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ArithmeticFunction.sigma_one`：sigma_one (k : Nat) : σ k 1 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+-/
+theorem sigma_eq_one_iff (k n : ℕ) : σ k n = 1 ↔ n = 1 := by
   by_cases hn0 : n = 0
   · aesop
   constructor
@@ -892,699 +910,640 @@ theorem sigma_eq_one_iff
     have sigma_zero_le_sigma := sigma_mono 0 k n k.zero_le
     lia
   · simp +contextual
-
-中文:
-定理 sigma_eq_one_iff
-  条件: (k n : 自然数)
-  结论: σ k n = 1 ↔ n = 1
-  证明: by
-  by_cases hn0 : n = 0
-  · aesop
-  constructor
-  · intro h
-    rw [← sigma_zero_eq_one_iff]
-    have zero_lt_sigma := sigma_pos 0 n hn0
-    have sigma_zero_le_sigma := sigma_mono 0 k n k.zero_le
-    lia
-  · simp +contextual
-
-Depends on / 依赖: contextual, k.zero_le, sigma_mono, sigma_pos, sigma_zero_eq_one_iff, sigma_zero_le_sigma, zero_le, zero_lt_sigma
+/-
+**ArithmeticFunction._root_.Nat.sum_divisors** 是 Mathlib 中的一个定理，位于命名空间 `Arithmet
+icFunction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sigma_eq_one_iff (k n : Nat) : σ k n = 1 ↔ n = 1 := by
-  by_cases hn0 : n = 0
-  · aesop
-  constructor
-  · intro h
-    rw [← sigma_zero_eq_one_iff]
-    have zero_lt_sigma := sigma_pos 0 n hn0
-    have sigma_zero_le_sigma := sigma_mono 0 k n k.zero_le
-    lia
-  · simp +contextual
-
-/--
-theorem `_root_.Nat.sum_divisors` / 定理 `_root_.Nat.sum_divisors`
-
-English:
-theorem _root_.Nat.sum_divisors
-  given: {n : Nat} (hn : n != 0)
-  proof: by
-  rw [← sigma_one_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
+theorem _root_.Nat.sum_divisors {n : ℕ} (hn : n ≠ 0) :
+    ∑ d ∈ n.divisors, d = ∏ p ∈ n.primeFactors, ∑ k ∈ .range (n.factorization p + 1), p ^ k := by
+  rw [← sigma_one_apply, isMultiplicative_sigma.multiplicative_factorization _ hn]
   exact prod_congr n.support_factorization fun _ h =>
-sigma_one_apply_prime_pow prime_of_mem_primeFactors h
+    sigma_one_apply_prime_pow <| prime_of_mem_primeFactors h
 
-中文:
-定理 _root_.自然数.sum_divisors
-  条件: {n : 自然数} (hn : n != 0)
-  证明: by
-  rw [← sigma_one_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
-  exact prod_congr n.support_factorization fun _ h =>
-sigma_one_apply_prime_pow prime_of_mem_primeFactors h
+/-- `Ω n` is the number of prime factors of `n`. -/
+/-
+**ArithmeticFunction.cardFactors** 是 Mathlib 中的一个定义，位于命名空间 `ArithmeticFunction`。
+形式化陈述：cardFactors : ArithmeticFunction Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: isMultiplicative_sigma, isMultiplicative_sigma.multiplicative_factorization, multiplicative_factorization, n.support_factorization, prime_of_mem_primeFactors, prod_congr, sigma_one_apply, sigma_one_apply_prime_pow, support_factorization
+--- 原说明 ---
+`Ω n` is the number of prime factors of `n`.
 -/
-theorem _root_.Nat.sum_divisors {n : Nat} (hn : n != 0) :
-    ∑ d in n.divisors, d = ∏ p in n.primeFactors, ∑ k in .range (n.factorization p + 1), p ^ k := by
-  rw [← sigma_one_apply]; rw [isMultiplicative_sigma.multiplicative_factorization _ hn]
-  exact prod_congr n.support_factorization fun _ h =>
-sigma_one_apply_prime_pow prime_of_mem_primeFactors h
-
-/--
-Definition of `cardFactors` / `cardFactors` 的定义
-
-English:
-definition cardFactors
-  signature: : ArithmeticFunction Nat
-  body: ⟨fun n => n.primeFactorsList.length, by simp⟩
-
-@[inherit_doc]
-scoped[ArithmeticFunction.Omega] notation "Ω" => ArithmeticFunction.cardFactors
-
-中文:
-定义 cardFactors
-  签名: : ArithmeticFunction 自然数
-  定义体: ⟨fun n => n.primeFactorsList.length, by simp⟩
-
-@[inherit_doc]
-scoped[ArithmeticFunction.Omega] notation "Ω" => ArithmeticFunction.cardFactors
-
-Depends on / 依赖: length, n.primeFactorsList.length, primeFactorsList
--/
-def cardFactors : ArithmeticFunction Nat :=
+def cardFactors : ArithmeticFunction ℕ :=
   ⟨fun n => n.primeFactorsList.length, by simp⟩
 
 @[inherit_doc]
 scoped[ArithmeticFunction.Omega] notation "Ω" => ArithmeticFunction.cardFactors
 
 open scoped Omega
-
-/--
-theorem `cardFactors_apply` / 定理 `cardFactors_apply`
-
-English:
-theorem cardFactors_apply
-  given: {n : Nat}
-  statement: Ω n = n.primeFactorsList.length
-  proof: rfl
-
-中文:
-定理 cardFactors_apply
-  条件: {n : 自然数}
-  结论: Ω n = n.primeFactorsList.length
-  证明: rfl
+/-
+**ArithmeticFunction.cardFactors_apply** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunc
+tion`。
+形式化陈述：cardFactors_apply {n : Nat} : Ω n = n.primeFactorsList.length
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cardFactors_apply {n : Nat} : Ω n = n.primeFactorsList.length :=
+theorem cardFactors_apply {n : ℕ} : Ω n = n.primeFactorsList.length :=
   rfl
-
-/--
-lemma `cardFactors_zero` / 引理 `cardFactors_zero`
-
-English:
-lemma cardFactors_zero
-  statement: Ω 0 = 0
-  proof: by simp
-
-中文:
-引理 cardFactors_zero
-  结论: Ω 0 = 0
-  证明: by simp
+/-
+**ArithmeticFunction.cardFactors_zero** 是 Mathlib 中的一个引理，位于命名空间 `ArithmeticFunct
+ion`。
+形式化陈述：cardFactors_zero : Ω 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.map_zero`：map_zero {f : ArithmeticFunction R} : f 0 =
+ 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma cardFactors_zero : Ω 0 = 0 := by simp
-
-/--
-theorem `cardFactors_one` / 定理 `cardFactors_one`
-
-English:
-theorem cardFactors_one
-  statement: Ω 1 = 0
-  proof: by simp [cardFactors_apply]
-
-@[simp]
-
-中文:
-定理 cardFactors_one
-  结论: Ω 1 = 0
-  证明: by simp [cardFactors_apply]
-
-@[simp]
+/-
+**ArithmeticFunction.cardFactors_one** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFuncti
+on`。
+形式化陈述：ArithmeticFunction.cardFactors 1 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.primeFactorsList_one`：primeFactorsList_one : primeFactorsList 1 = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem cardFactors_one : Ω 1 = 0 := by simp [cardFactors_apply]
 
 @[simp]
-/--
-theorem `cardFactors_eq_zero_iff_eq_zero_or_one` / 定理 `cardFactors_eq_zero_iff_eq_zero_or_one`
-
-English:
-theorem cardFactors_eq_zero_iff_eq_zero_or_one
-  given: {n : Nat}
-  statement: Ω n = 0 ↔ n = 0 ∨ n = 1
-  proof: by
-  rw [cardFactors_apply]; rw [List.length_eq_zero_iff]; rw [primeFactorsList_eq_nil]
-
-@[simp]
-
-中文:
-定理 cardFactors_eq_zero_iff_eq_zero_or_one
-  条件: {n : 自然数}
-  结论: Ω n = 0 ↔ n = 0 ∨ n = 1
-  证明: by
-  rw [cardFactors_apply]; rw [List.length_eq_zero_iff]; rw [primeFactorsList_eq_nil]
-
-@[simp]
-
-Depends on / 依赖: List.length_eq_zero_iff, cardFactors_apply, length_eq_zero_iff, primeFactorsList_eq_nil
+/-
+**ArithmeticFunction.cardFactors_eq_zero_iff_eq_zero_or_one** 是 Mathlib 中的一个定理，位
+于命名空间 `ArithmeticFunction`。
+形式化陈述：cardFactors_eq_zero_iff_eq_zero_or_one {n : Nat} : Ω n = 0 ↔ n = 0 ∨ n = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.cardFactors_apply`：cardFactors_apply {n : Nat} : Ω n 
+= n.primeFactorsList.length
+· 使用定理 `List.length_eq_zero_iff`：∀ {α : Type u_1} {l : List α}, l.length = 0 ↔ l
+ = []
+· 使用定理 `Nat.primeFactorsList_eq_nil`：primeFactorsList_eq_nil (n : Nat) : n.prime
+FactorsList = [] ↔ n = 0 ∨ n = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cardFactors_eq_zero_iff_eq_zero_or_one {n : Nat} : Ω n = 0 ↔ n = 0 ∨ n = 1 := by
-  rw [cardFactors_apply]; rw [List.length_eq_zero_iff]; rw [primeFactorsList_eq_nil]
+theorem cardFactors_eq_zero_iff_eq_zero_or_one {n : ℕ} : Ω n = 0 ↔ n = 0 ∨ n = 1 := by
+  rw [cardFactors_apply, List.length_eq_zero_iff, primeFactorsList_eq_nil]
 
 @[simp]
-/--
-theorem `cardFactors_pos_iff_one_lt` / 定理 `cardFactors_pos_iff_one_lt`
-
-English:
-theorem cardFactors_pos_iff_one_lt
-  given: {n : Nat}
-  statement: 0 < Ω n ↔ 1 < n
-  proof: by
-  rw [cardFactors_apply]; rw [List.length_pos_iff]; rw [primeFactorsList_ne_nil]
-
-@[simp]
-
-中文:
-定理 cardFactors_pos_iff_one_lt
-  条件: {n : 自然数}
-  结论: 0 < Ω n ↔ 1 < n
-  证明: by
-  rw [cardFactors_apply]; rw [List.length_pos_iff]; rw [primeFactorsList_ne_nil]
-
-@[simp]
-
-Depends on / 依赖: List.length_pos_iff, cardFactors_apply, length_pos_iff, primeFactorsList_ne_nil
+/-
+**ArithmeticFunction.cardFactors_pos_iff_one_lt** 是 Mathlib 中的一个定理，位于命名空间 `Arith
+meticFunction`。
+形式化陈述：cardFactors_pos_iff_one_lt {n : Nat} : 0 < Ω n ↔ 1 < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.cardFactors_apply`：cardFactors_apply {n : Nat} : Ω n 
+= n.primeFactorsList.length
+· 使用定理 `List.length_pos_iff`：∀ {α : Type u_1} {l : List α}, 0 < l.length ↔ l ≠ [
+]
+· 使用定理 `Nat.primeFactorsList_ne_nil`：primeFactorsList_ne_nil (n : Nat) : n.prime
+FactorsList != [] ↔ 1 < n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cardFactors_pos_iff_one_lt {n : Nat} : 0 < Ω n ↔ 1 < n := by
-  rw [cardFactors_apply]; rw [List.length_pos_iff]; rw [primeFactorsList_ne_nil]
+theorem cardFactors_pos_iff_one_lt {n : ℕ} : 0 < Ω n ↔ 1 < n := by
+  rw [cardFactors_apply, List.length_pos_iff, primeFactorsList_ne_nil]
 
 @[simp]
-/--
-theorem `cardFactors_eq_one_iff_prime` / 定理 `cardFactors_eq_one_iff_prime`
-
-English:
-theorem cardFactors_eq_one_iff_prime
-  given: {n : Nat}
-  statement: Ω n = 1 ↔ n.Prime
-  proof: by
+/-
+**ArithmeticFunction.cardFactors_eq_one_iff_prime** 是 Mathlib 中的一个定理，位于命名空间 `Ari
+thmeticFunction`。
+形式化陈述：cardFactors_eq_one_iff_prime {n : Nat} : Ω n = 1 ↔ n.Prime
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.map_zero`：map_zero {f : ArithmeticFunction R} : f 0 =
+ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.length_eq_one_iff`：∀ {α : Type u_1} {l : List α}, l.length = 1 ↔ ∃ 
+a, l = [a]
+· 使用定理 `Nat.prod_primeFactorsList`：prod_primeFactorsList : forall {n}, n != 0 ->
+ List.prod (primeFactorsList n) = n | 0 => by simp | 1 => by simp | k + 2 => fun
+ _ => let m
+· 使用定理 `Nat.add_one_ne_zero`：∀ (n : ℕ), n + 1 ≠ 0
+· 使用定理 `List.prod_singleton`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : One α] [S
+td.LawfulRightIdentity (fun x1 x2 => x1 * x2) 1] {x : α},   [x].prod = x
+· 使用定理 `Std.LawfulIdentity.toLawfulRightIdentity`：∀ {α : Sort u} {op : α → α → α
+} {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulRightIdentity op 
+o
+· 使用定理 `Nat.instLawfulIdentityHMulOfNat`：Std.LawfulIdentity (fun x1 x2 => x1 * x
+2) 1
+· 使用定理 `Nat.prime_of_mem_primeFactorsList`：prime_of_mem_primeFactorsList {n : Na
+t} : forall {p : Nat}, p in primeFactorsList n -> Prime p
+· 使用定理 `List.mem_singleton`：∀ {α : Type u_1} {a b : α}, a ∈ [b] ↔ a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.primeFactorsList_prime`：primeFactorsList_prime {p : Nat} (hp : Nat.P
+rime p) : p.primeFactorsList = [p]
+-/
+theorem cardFactors_eq_one_iff_prime {n : ℕ} : Ω n = 1 ↔ n.Prime := by
   refine ⟨fun h => ?_, fun h => List.length_eq_one_iff.2 ⟨n, primeFactorsList_prime h⟩⟩
   cases n with | zero => simp at h | succ n =>
   rcases List.length_eq_one_iff.1 h with ⟨x, hx⟩
-  rw [← prod_primeFactorsList n.add_one_ne_zero]; rw [hx]; rw [List.prod_singleton]
+  rw [← prod_primeFactorsList n.add_one_ne_zero, hx, List.prod_singleton]
   apply prime_of_mem_primeFactorsList
-  rw [hx]; rw [List.mem_singleton]
-
-中文:
-定理 cardFactors_eq_one_iff_prime
-  条件: {n : 自然数}
-  结论: Ω n = 1 ↔ n.素
-  证明: by
-  refine ⟨fun h => ?_, fun h => List.length_eq_one_iff.2 ⟨n, primeFactorsList_prime h⟩⟩
-  cases n with | zero => simp at h | succ n =>
-  rcases List.length_eq_one_iff.1 h with ⟨x, hx⟩
-  rw [← prod_primeFactorsList n.add_one_ne_zero]; rw [hx]; rw [List.prod_singleton]
-  apply prime_of_mem_primeFactorsList
-  rw [hx]; rw [List.mem_singleton]
-
-Depends on / 依赖: List.length_eq_one_iff, List.mem_singleton, List.prod_singleton, add_one_ne_zero, length_eq_one_iff, mem_singleton, n.add_one_ne_zero, primeFactorsList_prime, prime_of_mem_primeFactorsList, prod_primeFactorsList, prod_singleton
+  rw [hx, List.mem_singleton]
+/-
+**ArithmeticFunction.cardFactors_mul** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFuncti
+on`。
+形式化陈述：cardFactors_mul {m n : Nat} (m0 : m != 0) (n0 : n != 0) : Ω (m * n) = Ω m 
++ Ω n
+参数：m0 : m != 0；n0 : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.cardFactors_apply`：cardFactors_apply {n : Nat} : Ω n 
+= n.primeFactorsList.length
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.coe_card`：coe_card (l : List α) : card (l : Multiset α) = lengt
+h l
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Nat.factors_eq`：∀ (n : ℕ), UniqueFactorizationMonoid.normalizedFactors n
+ = ↑n.primeFactorsList
+· 使用定理 `UniqueFactorizationMonoid.normalizedFactors_mul`：normalizedFactors_mul {
+x y : α} (hx : x != 0) (hy : y != 0) : normalizedFactors (x * y) = normalizedFac
+tors x + normalizedFactors y
+· 使用定理 `Multiset.card_add`：card_add (s t : Multiset α) : card (s + t) = card s +
+ card t
 -/
-theorem cardFactors_eq_one_iff_prime {n : Nat} : Ω n = 1 ↔ n.Prime := by
-  refine ⟨fun h => ?_, fun h => List.length_eq_one_iff.2 ⟨n, primeFactorsList_prime h⟩⟩
-  cases n with | zero => simp at h | succ n =>
-  rcases List.length_eq_one_iff.1 h with ⟨x, hx⟩
-  rw [← prod_primeFactorsList n.add_one_ne_zero]; rw [hx]; rw [List.prod_singleton]
-  apply prime_of_mem_primeFactorsList
-  rw [hx]; rw [List.mem_singleton]
-
-/--
-theorem `cardFactors_mul` / 定理 `cardFactors_mul`
-
-English:
-theorem cardFactors_mul
-  given: {m n : Nat} (m0 : m != 0) (n0 : n != 0)
-  statement: Ω (m * n) = Ω m + Ω n
-  proof: by
-  rw [cardFactors_apply]; rw [cardFactors_apply]; rw [cardFactors_apply]; rw [← Multiset.coe_card]; rw [← factors_eq]; rw [UniqueFactorizationMonoid.normalizedFactors_mul m0 n0]; rw [factors_eq]; rw [factors_eq]; rw [Multiset.card_add]; rw [Multiset.coe_card]; rw [Multiset.coe_card]
-
-中文:
-定理 cardFactors_mul
-  条件: {m n : 自然数} (m0 : m != 0) (n0 : n != 0)
-  结论: Ω (m * n) = Ω m + Ω n
-  证明: by
-  rw [cardFactors_apply]; rw [cardFactors_apply]; rw [cardFactors_apply]; rw [← Multiset.coe_card]; rw [← factors_eq]; rw [UniqueFactorizationMonoid.normalizedFactors_mul m0 n0]; rw [factors_eq]; rw [factors_eq]; rw [Multiset.card_add]; rw [Multiset.coe_card]; rw [Multiset.coe_card]
-
-Depends on / 依赖: Multiset, Multiset.card_add, Multiset.coe_card, UniqueFactorizationMonoid, UniqueFactorizationMonoid.normalizedFactors_mul, cardFactors_apply, card_add, coe_card, factors_eq, normalizedFactors_mul
+theorem cardFactors_mul {m n : ℕ} (m0 : m ≠ 0) (n0 : n ≠ 0) : Ω (m * n) = Ω m + Ω n := by
+  rw [cardFactors_apply, cardFactors_apply, cardFactors_apply, ← Multiset.coe_card, ← factors_eq,
+    UniqueFactorizationMonoid.normalizedFactors_mul m0 n0, factors_eq, factors_eq,
+    Multiset.card_add, Multiset.coe_card, Multiset.coe_card]
+/-
+**ArithmeticFunction.cardFactors_multiset_prod** 是 Mathlib 中的一个定理，位于命名空间 `Arithm
+eticFunction`。
+形式化陈述：cardFactors_multiset_prod {s : Multiset Nat} (h0 : s.prod != 0) : Ω s.prod
+ = (Multiset.map Ω s).sum
+参数：h0 : s.prod != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.cardFactors_one`：ArithmeticFunction.cardFactors 1 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.prod_cons`：prod_cons (a : M) (s) : prod (a ::ₘ s) = a * prod s
+· 使用定理 `ArithmeticFunction.cardFactors_mul`：cardFactors_mul {m n : Nat} (m0 : m 
+!= 0) (n0 : n != 0) : Ω (m * n) = Ω m + Ω n
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `Multiset.sum_cons`：∀ {M : Type u_3} [inst : AddCommMonoid M] (a : M) (s 
+: Multiset M), (a ::ₘ s).sum = a + s.sum
 -/
-theorem cardFactors_mul {m n : Nat} (m0 : m != 0) (n0 : n != 0) : Ω (m * n) = Ω m + Ω n := by
-  rw [cardFactors_apply]; rw [cardFactors_apply]; rw [cardFactors_apply]; rw [← Multiset.coe_card]; rw [← factors_eq]; rw [UniqueFactorizationMonoid.normalizedFactors_mul m0 n0]; rw [factors_eq]; rw [factors_eq]; rw [Multiset.card_add]; rw [Multiset.coe_card]; rw [Multiset.coe_card]
-
-/--
-theorem `cardFactors_multiset_prod` / 定理 `cardFactors_multiset_prod`
-
-English:
-theorem cardFactors_multiset_prod
-  given: {s : Multiset Nat} (h0 : s.prod != 0)
-  proof: by
-  induction s using Multiset.induction_on with
-  | empty => simp
-  | cons ih => simp_all [cardFactors_mul, not_or]
-
-@[simp]
-
-中文:
-定理 cardFactors_multiset_prod
-  条件: {s : Multiset 自然数} (h0 : s.乘积 != 0)
-  证明: by
-  induction s using Multiset.induction_on with
-  | empty => simp
-  | cons ih => simp_all [cardFactors_mul, not_or]
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.induction_on, cardFactors_mul, induction_on, not_or
--/
-theorem cardFactors_multiset_prod {s : Multiset Nat} (h0 : s.prod != 0) :
+theorem cardFactors_multiset_prod {s : Multiset ℕ} (h0 : s.prod ≠ 0) :
     Ω s.prod = (Multiset.map Ω s).sum := by
   induction s using Multiset.induction_on with
   | empty => simp
   | cons ih => simp_all [cardFactors_mul, not_or]
 
 @[simp]
-/--
-theorem `cardFactors_apply_prime` / 定理 `cardFactors_apply_prime`
-
-English:
-theorem cardFactors_apply_prime
-  given: {p : Nat} (hp : p.Prime)
-  statement: Ω p = 1
-  proof: cardFactors_eq_one_iff_prime.2 hp
-
-中文:
-定理 cardFactors_apply_prime
-  条件: {p : 自然数} (hp : p.素)
-  结论: Ω p = 1
-  证明: cardFactors_eq_one_iff_prime.2 hp
-
-Depends on / 依赖: cardFactors_eq_one_iff_prime
+/-
+**ArithmeticFunction.cardFactors_apply_prime** 是 Mathlib 中的一个定理，位于命名空间 `Arithmet
+icFunction`。
+形式化陈述：cardFactors_apply_prime {p : Nat} (hp : p.Prime) : Ω p = 1
+参数：hp : p.Prime。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ArithmeticFunction.cardFactors_eq_one_iff_prime`：cardFactors_eq_one_iff_
+prime {n : Nat} : Ω n = 1 ↔ n.Prime
 -/
-theorem cardFactors_apply_prime {p : Nat} (hp : p.Prime) : Ω p = 1 :=
+theorem cardFactors_apply_prime {p : ℕ} (hp : p.Prime) : Ω p = 1 :=
   cardFactors_eq_one_iff_prime.2 hp
-
-/--
-lemma `cardFactors_pow` / 引理 `cardFactors_pow`
-
-English:
-lemma cardFactors_pow
-  given: {m k : Nat}
-  statement: Ω (m ^ k) = k * Ω m
-  proof: by
+/-
+**ArithmeticFunction.cardFactors_pow** 是 Mathlib 中的一个引理，位于命名空间 `ArithmeticFuncti
+on`。
+形式化陈述：cardFactors_pow {m k : Nat} : Ω (m ^ k) = k * Ω m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `ArithmeticFunction.cardFactors_one`：ArithmeticFunction.cardFactors 1 = 0
+· 使用定理 `ArithmeticFunction.map_zero`：map_zero {f : ArithmeticFunction R} : f 0 =
+ 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `ArithmeticFunction.cardFactors_mul`：cardFactors_mul {m n : Nat} (m0 : m 
+!= 0) (n0 : n != 0) : Ω (m * n) = Ω m + Ω n
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+（共 40 条，此处仅展示前 30 条）
+-/
+lemma cardFactors_pow {m k : ℕ} : Ω (m ^ k) = k * Ω m := by
   by_cases hm : m = 0
   · cases k <;> aesop
   induction k with
   | zero => simp
   | succ n ih =>
-    rw [pow_succ]; rw [cardFactors_mul (pow_ne_zero n hm) hm]; rw [ih]
+    rw [pow_succ, cardFactors_mul (pow_ne_zero n hm) hm, ih]
     ring
 
 @[simp]
-
-中文:
-引理 cardFactors_pow
-  条件: {m k : 自然数}
-  结论: Ω (m ^ k) = k * Ω m
-  证明: by
-  by_cases hm : m = 0
-  · cases k <;> aesop
-  induction k with
-  | zero => simp
-  | succ n ih =>
-    rw [pow_succ]; rw [cardFactors_mul (pow_ne_zero n hm) hm]; rw [ih]
-    ring
-
-@[simp]
-
-Depends on / 依赖: cardFactors_mul, pow_ne_zero, pow_succ
+/-
+**ArithmeticFunction.cardFactors_apply_prime_pow** 是 Mathlib 中的一个定理，位于命名空间 `Arit
+hmeticFunction`。
+形式化陈述：cardFactors_apply_prime_pow {p k : Nat} (hp : p.Prime) : Ω (p ^ k) = k
+参数：hp : p.Prime。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ArithmeticFunction.cardFactors_pow`：cardFactors_pow {m k : Nat} : Ω (m ^
+ k) = k * Ω m
+· 使用定理 `ArithmeticFunction.cardFactors_apply_prime`：cardFactors_apply_prime {p :
+ Nat} (hp : p.Prime) : Ω p = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma cardFactors_pow {m k : Nat} : Ω (m ^ k) = k * Ω m := by
-  by_cases hm : m = 0
-  · cases k <;> aesop
-  induction k with
-  | zero => simp
-  | succ n ih =>
-    rw [pow_succ]; rw [cardFactors_mul (pow_ne_zero n hm) hm]; rw [ih]
-    ring
-
-@[simp]
-/--
-theorem `cardFactors_apply_prime_pow` / 定理 `cardFactors_apply_prime_pow`
-
-English:
-theorem cardFactors_apply_prime_pow
-  given: {p k : Nat} (hp : p.Prime)
-  statement: Ω (p ^ k) = k
-  proof: by
+theorem cardFactors_apply_prime_pow {p k : ℕ} (hp : p.Prime) : Ω (p ^ k) = k := by
   simp [cardFactors_pow, hp]
-
-中文:
-定理 cardFactors_apply_prime_pow
-  条件: {p k : 自然数} (hp : p.素)
-  结论: Ω (p ^ k) = k
-  证明: by
-  simp [cardFactors_pow, hp]
-
-Depends on / 依赖: cardFactors_pow
+/-
+**ArithmeticFunction.cardFactors_eq_sum_factorization** 是 Mathlib 中的一个定理，位于命名空间 
+`ArithmeticFunction`。
+形式化陈述：cardFactors_eq_sum_factorization {n : Nat} : Ω n = n.factorization.sum fun
+ _ k => k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.primeFactorsList_count_eq`：primeFactorsList_count_eq {n p : Nat} : n
+.primeFactorsList.count p = n.factorization p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cardFactors_apply_prime_pow {p k : Nat} (hp : p.Prime) : Ω (p ^ k) = k := by
-  simp [cardFactors_pow, hp]
-
-/--
-theorem `cardFactors_eq_sum_factorization` / 定理 `cardFactors_eq_sum_factorization`
-
-English:
-theorem cardFactors_eq_sum_factorization
-  given: {n : Nat}
-  proof: by
-  simp [cardFactors_apply, ← List.sum_toFinset_count_eq_length, Finsupp.sum]
-
-中文:
-定理 cardFactors_eq_sum_factorization
-  条件: {n : 自然数}
-  证明: by
-  simp [cardFactors_apply, ← List.sum_toFinset_count_eq_length, Finsupp.sum]
-
-Depends on / 依赖: Finsupp, Finsupp.sum, List.sum_toFinset_count_eq_length, cardFactors_apply, sum_toFinset_count_eq_length
--/
-theorem cardFactors_eq_sum_factorization {n : Nat} :
+theorem cardFactors_eq_sum_factorization {n : ℕ} :
     Ω n = n.factorization.sum fun _ k => k := by
   simp [cardFactors_apply, ← List.sum_toFinset_count_eq_length, Finsupp.sum]
 
-/--
-Definition of `cardDistinctFactors` / `cardDistinctFactors` 的定义
+/-- `ω n` is the number of distinct prime factors of `n`. -/
+/-
+**ArithmeticFunction.cardDistinctFactors** 是 Mathlib 中的一个定义，位于命名空间 `ArithmeticFu
+nction`。
+形式化陈述：cardDistinctFactors : ArithmeticFunction Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cardDistinctFactors
-  signature: : ArithmeticFunction Nat
-  body: ⟨fun n => n.primeFactorsList.dedup.length, by simp⟩
-
-@[inherit_doc]
-scoped[ArithmeticFunction.omega] notation "ω" => ArithmeticFunction.cardDistinctFactors
-
-中文:
-定义 cardDistinctFactors
-  签名: : ArithmeticFunction 自然数
-  定义体: ⟨fun n => n.primeFactorsList.dedup.length, by simp⟩
-
-@[inherit_doc]
-scoped[ArithmeticFunction.omega] notation "ω" => ArithmeticFunction.cardDistinctFactors
-
-Depends on / 依赖: length, n.primeFactorsList.dedup.length, primeFactorsList
+--- 原说明 ---
+`ω n` is the number of distinct prime factors of `n`.
 -/
-def cardDistinctFactors : ArithmeticFunction Nat :=
+def cardDistinctFactors : ArithmeticFunction ℕ :=
   ⟨fun n => n.primeFactorsList.dedup.length, by simp⟩
 
 @[inherit_doc]
 scoped[ArithmeticFunction.omega] notation "ω" => ArithmeticFunction.cardDistinctFactors
 
 open scoped omega
-
-/--
-theorem `cardDistinctFactors_zero` / 定理 `cardDistinctFactors_zero`
-
-English:
-theorem cardDistinctFactors_zero
-  statement: ω 0 = 0
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 cardDistinctFactors_zero
-  结论: ω 0 = 0
-  证明: by simp
-
-@[simp]
+/-
+**ArithmeticFunction.cardDistinctFactors_zero** 是 Mathlib 中的一个定理，位于命名空间 `Arithme
+ticFunction`。
+形式化陈述：cardDistinctFactors_zero : ω 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.map_zero`：map_zero {f : ArithmeticFunction R} : f 0 =
+ 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem cardDistinctFactors_zero : ω 0 = 0 := by simp
 
 @[simp]
-/--
-theorem `cardDistinctFactors_one` / 定理 `cardDistinctFactors_one`
-
-English:
-theorem cardDistinctFactors_one
-  statement: ω 1 = 0
-  proof: by simp [cardDistinctFactors]
-
-中文:
-定理 cardDistinctFactors_one
-  结论: ω 1 = 0
-  证明: by simp [cardDistinctFactors]
-
-Depends on / 依赖: cardDistinctFactors
+/-
+**ArithmeticFunction.cardDistinctFactors_one** 是 Mathlib 中的一个定理，位于命名空间 `Arithmet
+icFunction`。
+形式化陈述：cardDistinctFactors_one : ω 1 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.primeFactorsList_one`：primeFactorsList_one : primeFactorsList 1 = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem cardDistinctFactors_one : ω 1 = 0 := by simp [cardDistinctFactors]
-
-/--
-theorem `cardDistinctFactors_apply` / 定理 `cardDistinctFactors_apply`
-
-English:
-theorem cardDistinctFactors_apply
-  given: {n : Nat}
-  statement: ω n = n.primeFactorsList.dedup.length
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cardDistinctFactors_apply
-  条件: {n : 自然数}
-  结论: ω n = n.primeFactorsList.dedup.length
-  证明: rfl
-
-@[simp]
+/-
+**ArithmeticFunction.cardDistinctFactors_apply** 是 Mathlib 中的一个定理，位于命名空间 `Arithm
+eticFunction`。
+形式化陈述：cardDistinctFactors_apply {n : Nat} : ω n = n.primeFactorsList.dedup.lengt
+h
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cardDistinctFactors_apply {n : Nat} : ω n = n.primeFactorsList.dedup.length :=
+theorem cardDistinctFactors_apply {n : ℕ} : ω n = n.primeFactorsList.dedup.length :=
   rfl
 
 @[simp]
-/--
-theorem `cardDistinctFactors_eq_zero` / 定理 `cardDistinctFactors_eq_zero`
-
-English:
-theorem cardDistinctFactors_eq_zero
-  given: {n : Nat}
-  statement: ω n = 0 ↔ n <= 1
-  proof: by
+/-
+**ArithmeticFunction.cardDistinctFactors_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Arit
+hmeticFunction`。
+形式化陈述：cardDistinctFactors_eq_zero {n : Nat} : ω n = 0 ↔ n <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem cardDistinctFactors_eq_zero {n : ℕ} : ω n = 0 ↔ n ≤ 1 := by
   simp [cardDistinctFactors_apply, le_one_iff_eq_zero_or_eq_one]
 
 @[simp]
-
-中文:
-定理 cardDistinctFactors_eq_zero
-  条件: {n : 自然数}
-  结论: ω n = 0 ↔ n <= 1
-  证明: by
-  simp [cardDistinctFactors_apply, le_one_iff_eq_zero_or_eq_one]
-
-@[simp]
-
-Depends on / 依赖: cardDistinctFactors_apply, le_one_iff_eq_zero_or_eq_one
+/-
+**ArithmeticFunction.cardDistinctFactors_pos** 是 Mathlib 中的一个定理，位于命名空间 `Arithmet
+icFunction`。
+形式化陈述：cardDistinctFactors_pos {n : Nat} : 0 < ω n ↔ 1 < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem cardDistinctFactors_eq_zero {n : Nat} : ω n = 0 ↔ n <= 1 := by
-  simp [cardDistinctFactors_apply, le_one_iff_eq_zero_or_eq_one]
-
-@[simp]
-/--
-theorem `cardDistinctFactors_pos` / 定理 `cardDistinctFactors_pos`
-
-English:
-theorem cardDistinctFactors_pos
-  given: {n : Nat}
-  statement: 0 < ω n ↔ 1 < n
-  proof: by simp [pos_iff_ne_zero]
-
-中文:
-定理 cardDistinctFactors_pos
-  条件: {n : 自然数}
-  结论: 0 < ω n ↔ 1 < n
-  证明: by simp [pos_iff_ne_zero]
-
-Depends on / 依赖: pos_iff_ne_zero
+theorem cardDistinctFactors_pos {n : ℕ} : 0 < ω n ↔ 1 < n := by simp [pos_iff_ne_zero]
+/-
+**ArithmeticFunction.cardDistinctFactors_eq_cardFactors_iff_squarefree** 是 Mathl
+ib 中的一个定理，位于命名空间 `ArithmeticFunction`。
+形式化陈述：cardDistinctFactors_eq_cardFactors_iff_squarefree {n : Nat} (h0 : n != 0) 
+: ω n = Ω n ↔ Squarefree n
+参数：h0 : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.squarefree_iff_nodup_primeFactorsList`：squarefree_iff_nodup_primeFac
+torsList {n : Nat} (h0 : n != 0) : Squarefree n ↔ n.primeFactorsList.Nodup
+· 使用定理 `ArithmeticFunction.cardDistinctFactors_apply`：cardDistinctFactors_apply 
+{n : Nat} : ω n = n.primeFactorsList.dedup.length
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Sublist.eq_of_length`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Sublist
+ l₂ → l₁.length = l₂.length → l₁ = l₂
+· 使用定理 `List.dedup_sublist`：dedup_sublist : forall l : List α, dedup l <+ l
+· 使用定理 `List.nodup_dedup`：nodup_dedup : forall l : List α, Nodup (dedup l)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {l : List α}, 
+l.Nodup → l.dedup = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cardDistinctFactors_pos {n : Nat} : 0 < ω n ↔ 1 < n := by simp [pos_iff_ne_zero]
-
-/--
-theorem `cardDistinctFactors_eq_cardFactors_iff_squarefree` / 定理 `cardDistinctFactors_eq_cardFactors_iff_squarefree`
-
-English:
-theorem cardDistinctFactors_eq_cardFactors_iff_squarefree
-  given: {n : Nat} (h0 : n != 0)
-  proof: by
-  rw [squarefree_iff_nodup_primeFactorsList h0]; rw [cardDistinctFactors_apply]
-  constructor <;> intro h
-  · rw [← n.primeFactorsList.dedup_sublist.eq_of_length h]
-    apply List.nodup_dedup
-  · simp [h.dedup, cardFactors]
-
-中文:
-定理 cardDistinctFactors_eq_cardFactors_iff_squarefree
-  条件: {n : 自然数} (h0 : n != 0)
-  证明: by
-  rw [squarefree_iff_nodup_primeFactorsList h0]; rw [cardDistinctFactors_apply]
-  constructor <;> intro h
-  · rw [← n.primeFactorsList.dedup_sublist.eq_of_length h]
-    apply List.nodup_dedup
-  · simp [h.dedup, cardFactors]
-
-Depends on / 依赖: List.nodup_dedup, cardDistinctFactors_apply, cardFactors, dedup_sublist, eq_of_length, h.dedup, n.primeFactorsList.dedup_sublist.eq_of_length, nodup_dedup, primeFactorsList, squarefree_iff_nodup_primeFactorsList
--/
-theorem cardDistinctFactors_eq_cardFactors_iff_squarefree {n : Nat} (h0 : n != 0) :
+theorem cardDistinctFactors_eq_cardFactors_iff_squarefree {n : ℕ} (h0 : n ≠ 0) :
     ω n = Ω n ↔ Squarefree n := by
-  rw [squarefree_iff_nodup_primeFactorsList h0]; rw [cardDistinctFactors_apply]
+  rw [squarefree_iff_nodup_primeFactorsList h0, cardDistinctFactors_apply]
   constructor <;> intro h
   · rw [← n.primeFactorsList.dedup_sublist.eq_of_length h]
     apply List.nodup_dedup
   · simp [h.dedup, cardFactors]
-
-/--
-theorem `cardDistinctFactors_eq_one_iff` / 定理 `cardDistinctFactors_eq_one_iff`
-
-English:
-theorem cardDistinctFactors_eq_one_iff
-  given: {n : Nat}
-  statement: ω n = 1 ↔ IsPrimePow n
-  proof: by
-  rw [ArithmeticFunction.cardDistinctFactors_apply]; rw [isPrimePow_iff_card_primeFactors_eq_one]; rw [← toFinset_factors]; rw [List.card_toFinset]
-
-@[simp]
-
-中文:
-定理 cardDistinctFactors_eq_one_iff
-  条件: {n : 自然数}
-  结论: ω n = 1 ↔ IsPrimePow n
-  证明: by
-  rw [ArithmeticFunction.cardDistinctFactors_apply]; rw [isPrimePow_iff_card_primeFactors_eq_one]; rw [← toFinset_factors]; rw [List.card_toFinset]
-
-@[simp]
-
-Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.cardDistinctFactors_apply, List.card_toFinset, cardDistinctFactors_apply, card_toFinset, isPrimePow_iff_card_primeFactors_eq_one, toFinset_factors
+/-
+**ArithmeticFunction.cardDistinctFactors_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `A
+rithmeticFunction`。
+形式化陈述：cardDistinctFactors_eq_one_iff {n : Nat} : ω n = 1 ↔ IsPrimePow n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.cardDistinctFactors_apply`：cardDistinctFactors_apply 
+{n : Nat} : ω n = n.primeFactorsList.dedup.length
+· 使用定理 `isPrimePow_iff_card_primeFactors_eq_one`：isPrimePow_iff_card_primeFactor
+s_eq_one {n : Nat} : IsPrimePow n ↔ n.primeFactors.card = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.toFinset_factors`：∀ (n : ℕ), n.primeFactorsList.toFinset = n.primeFa
+ctors
+· 使用定理 `List.card_toFinset`：List.card_toFinset : #l.toFinset = l.dedup.length
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cardDistinctFactors_eq_one_iff {n : Nat} : ω n = 1 ↔ IsPrimePow n := by
-  rw [ArithmeticFunction.cardDistinctFactors_apply]; rw [isPrimePow_iff_card_primeFactors_eq_one]; rw [← toFinset_factors]; rw [List.card_toFinset]
+theorem cardDistinctFactors_eq_one_iff {n : ℕ} : ω n = 1 ↔ IsPrimePow n := by
+  rw [ArithmeticFunction.cardDistinctFactors_apply, isPrimePow_iff_card_primeFactors_eq_one,
+    ← toFinset_factors, List.card_toFinset]
 
 @[simp]
-/--
-theorem `cardDistinctFactors_apply_prime_pow` / 定理 `cardDistinctFactors_apply_prime_pow`
-
-English:
-theorem cardDistinctFactors_apply_prime_pow
-  given: {p k : Nat} (hp : p.Prime) (hk : k != 0)
-  proof: cardDistinctFactors_eq_one_iff.mpr hp.isPrimePow.pow hk
-
-@[simp]
-
-中文:
-定理 cardDistinctFactors_apply_prime_pow
-  条件: {p k : 自然数} (hp : p.素) (hk : k != 0)
-  证明: cardDistinctFactors_eq_one_iff.mpr hp.isPrimePow.pow hk
-
-@[simp]
-
-Depends on / 依赖: cardDistinctFactors_eq_one_iff, cardDistinctFactors_eq_one_iff.mpr, hp.isPrimePow.pow, isPrimePow
+/-
+**ArithmeticFunction.cardDistinctFactors_apply_prime_pow** 是 Mathlib 中的一个定理，位于命名
+空间 `ArithmeticFunction`。
+形式化陈述：cardDistinctFactors_apply_prime_pow {p k : Nat} (hp : p.Prime) (hk : k != 
+0) : ω (p ^ k) = 1
+参数：hp : p.Prime；hk : k != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ArithmeticFunction.cardDistinctFactors_eq_one_iff`：cardDistinctFactors_e
+q_one_iff {n : Nat} : ω n = 1 ↔ IsPrimePow n
+· 使用定理 `IsPrimePow.pow`：IsPrimePow.pow {n : R} (hn : IsPrimePow n) {k : Nat} (hk
+ : k != 0) : IsPrimePow (n ^ k)
+· 使用定理 `Nat.Prime.isPrimePow`：Nat.Prime.isPrimePow {p : Nat} (hp : p.Prime) : Is
+PrimePow p
 -/
-theorem cardDistinctFactors_apply_prime_pow {p k : Nat} (hp : p.Prime) (hk : k != 0) :
+theorem cardDistinctFactors_apply_prime_pow {p k : ℕ} (hp : p.Prime) (hk : k ≠ 0) :
     ω (p ^ k) = 1 :=
-cardDistinctFactors_eq_one_iff.mpr hp.isPrimePow.pow hk
+  cardDistinctFactors_eq_one_iff.mpr <| hp.isPrimePow.pow hk
 
 @[simp]
-/--
-theorem `cardDistinctFactors_apply_prime` / 定理 `cardDistinctFactors_apply_prime`
-
-English:
-theorem cardDistinctFactors_apply_prime
-  given: {p : Nat} (hp : p.Prime)
-  statement: ω p = 1
-  proof: by
-  rw [← pow_one p]; rw [cardDistinctFactors_apply_prime_pow hp one_ne_zero]
-
-中文:
-定理 cardDistinctFactors_apply_prime
-  条件: {p : 自然数} (hp : p.素)
-  结论: ω p = 1
-  证明: by
-  rw [← pow_one p]; rw [cardDistinctFactors_apply_prime_pow hp one_ne_zero]
-
-Depends on / 依赖: cardDistinctFactors_apply_prime_pow, one_ne_zero, pow_one
+/-
+**ArithmeticFunction.cardDistinctFactors_apply_prime** 是 Mathlib 中的一个定理，位于命名空间 `
+ArithmeticFunction`。
+形式化陈述：cardDistinctFactors_apply_prime {p : Nat} (hp : p.Prime) : ω p = 1
+参数：hp : p.Prime。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `ArithmeticFunction.cardDistinctFactors_apply_prime_pow`：cardDistinctFact
+ors_apply_prime_pow {p k : Nat} (hp : p.Prime) (hk : k != 0) : ω (p ^ k) = 1
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-theorem cardDistinctFactors_apply_prime {p : Nat} (hp : p.Prime) : ω p = 1 := by
-  rw [← pow_one p]; rw [cardDistinctFactors_apply_prime_pow hp one_ne_zero]
-
-/--
-theorem `cardDistinctFactors_mul` / 定理 `cardDistinctFactors_mul`
-
-English:
-theorem cardDistinctFactors_mul
-  given: {m n : Nat} (h : m.Coprime n)
-  statement: ω (m * n) = ω m + ω n
-  proof: by
-  simp [cardDistinctFactors_apply, perm_primeFactorsList_mul_of_coprime h |>.dedup |>.length_eq,
-.dedup_append] coprime_primeFactorsList_disjoint h
-
-中文:
-定理 cardDistinctFactors_mul
-  条件: {m n : 自然数} (h : m.Coprime n)
-  结论: ω (m * n) = ω m + ω n
-  证明: by
-  simp [cardDistinctFactors_apply, perm_primeFactorsList_mul_of_coprime h |>.dedup |>.length_eq,
-.dedup_append] coprime_primeFactorsList_disjoint h
-
-Depends on / 依赖: cardDistinctFactors_apply, coprime_primeFactorsList_disjoint, dedup_append, length_eq, perm_primeFactorsList_mul_of_coprime
+theorem cardDistinctFactors_apply_prime {p : ℕ} (hp : p.Prime) : ω p = 1 := by
+  rw [← pow_one p, cardDistinctFactors_apply_prime_pow hp one_ne_zero]
+/-
+**ArithmeticFunction.cardDistinctFactors_mul** 是 Mathlib 中的一个定理，位于命名空间 `Arithmet
+icFunction`。
+形式化陈述：cardDistinctFactors_mul {m n : Nat} (h : m.Coprime n) : ω (m * n) = ω m + 
+ω n
+参数：h : m.Coprime n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Perm.length_eq`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₁.
+length = l₂.length
+· 使用定理 `List.Perm.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {l₁ l₂ : List α
+}, l₁.Perm l₂ → l₁.dedup.Perm l₂.dedup
+· 使用定理 `Nat.perm_primeFactorsList_mul_of_coprime`：perm_primeFactorsList_mul_of_c
+oprime {a b : Nat} (hab : Coprime a b) : (a * b).primeFactorsList ~ a.primeFacto
+rsList ++ b.primeFactorsList
+· 使用定理 `List.Disjoint.dedup_append`：∀ {α : Type u_1} [inst : DecidableEq α] {xs 
+ys : List α}, xs.Disjoint ys → (xs ++ ys).dedup = xs.dedup ++ ys.dedup
+· 使用定理 `Nat.coprime_primeFactorsList_disjoint`：coprime_primeFactorsList_disjoint
+ {a b : Nat} (hab : a.Coprime b) : List.Disjoint a.primeFactorsList b.primeFacto
+rsList
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem cardDistinctFactors_mul {m n : Nat} (h : m.Coprime n) : ω (m * n) = ω m + ω n := by
+theorem cardDistinctFactors_mul {m n : ℕ} (h : m.Coprime n) : ω (m * n) = ω m + ω n := by
   simp [cardDistinctFactors_apply, perm_primeFactorsList_mul_of_coprime h |>.dedup |>.length_eq,
-.dedup_append] coprime_primeFactorsList_disjoint h
+    coprime_primeFactorsList_disjoint h |>.dedup_append]
 
 open scoped Function in
-/--
-theorem `cardDistinctFactors_prod` / 定理 `cardDistinctFactors_prod`
-
-English:
-theorem cardDistinctFactors_prod
-  statement: {ι : Type*} {s : Finset ι} {f : ι -> Nat}
-  proof: by
-  induction s using cons_induction_on with
-  | empty => simp
-  | cons a s ha ih =>
-    rw [prod_cons]; rw [sum_cons]; rw [cardDistinctFactors_mul]; rw [ih]
-    · exact fun x hx y hy hxy => h (by simp [hx]) (by simp [hy]) hxy
-    · exact Coprime.prod_right fun i hi =>
-        h (by simp) (by simp [hi]) (ne_of_mem_of_not_mem hi ha).symm
-
-中文:
-定理 cardDistinctFactors_prod
-  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 自然数}
-  证明: by
-  induction s using cons_induction_on with
-  | empty => simp
-  | cons a s ha ih =>
-    rw [prod_cons]; rw [sum_cons]; rw [cardDistinctFactors_mul]; rw [ih]
-    · exact fun x hx y hy hxy => h (by simp [hx]) (by simp [hy]) hxy
-    · exact Coprime.prod_right fun i hi =>
-        h (by simp) (by simp [hi]) (ne_of_mem_of_not_mem hi ha).symm
-
-Depends on / 依赖: Coprime, Coprime.prod_right, cardDistinctFactors_mul, cons_induction_on, ne_of_mem_of_not_mem, prod_cons, prod_right, sum_cons
+/-
+**ArithmeticFunction.cardDistinctFactors_prod** 是 Mathlib 中的一个定理，位于命名空间 `Arithme
+ticFunction`。
+形式化陈述：cardDistinctFactors_prod {ι : Type*} {s : Finset ι} {f : ι -> Nat} (h : (s
+ : Set ι).Pairwise (Coprime on f)) : ω (∏ i in s, f i) = ∑ i in s, ω (f i)
+参数：h : (s : Set ι).Pairwise (Coprime on f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction_on`：cons_induction_on {α : Type*} {motive : Finset
+ α -> Prop} (s : Finset α) (empty : motive ∅) (cons : forall (a : α) (s : Finset
+ α) (h : a ∉ s…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.cardDistinctFactors_one`：cardDistinctFactors_one : ω 
+1 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.prod_cons`：prod_cons (h : a ∉ s) : ∏ x in cons a s h, f x = f a *
+ ∏ x in s, f x
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `ArithmeticFunction.cardDistinctFactors_mul`：cardDistinctFactors_mul {m n
+ : Nat} (h : m.Coprime n) : ω (m * n) = ω m + ω n
+· 使用定理 `Nat.Coprime.prod_right`：∀ {ι : Type u_1} {x : ℕ} {t : Finset ι} {s : ι →
+ ℕ}, (∀ i ∈ t, x.Coprime (s i)) → x.Coprime (∏ i ∈ t, s i)
+· 使用定理 `Finset.coe_cons`：coe_cons {a s h} : (@cons α a s h : Set α) = insert a (
+s : Set α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
 -/
-theorem cardDistinctFactors_prod {ι : Type*} {s : Finset ι} {f : ι -> Nat}
-    (h : (s : Set ι).Pairwise (Coprime on f)) : ω (∏ i in s, f i) = ∑ i in s, ω (f i) := by
+theorem cardDistinctFactors_prod {ι : Type*} {s : Finset ι} {f : ι → ℕ}
+    (h : (s : Set ι).Pairwise (Coprime on f)) : ω (∏ i ∈ s, f i) = ∑ i ∈ s, ω (f i) := by
   induction s using cons_induction_on with
   | empty => simp
   | cons a s ha ih =>
-    rw [prod_cons]; rw [sum_cons]; rw [cardDistinctFactors_mul]; rw [ih]
+    rw [prod_cons, sum_cons, cardDistinctFactors_mul, ih]
     · exact fun x hx y hy hxy => h (by simp [hx]) (by simp [hy]) hxy
     · exact Coprime.prod_right fun i hi =>
         h (by simp) (by simp [hi]) (ne_of_mem_of_not_mem hi ha).symm
@@ -1593,87 +1552,158 @@ end SpecialFunctions
 
 section Sum
 
-/--
-theorem `sum_Ioc_zeta` / 定理 `sum_Ioc_zeta`
-
-English:
-theorem sum_Ioc_zeta
-  given: (N : Nat)
-  statement: ∑ n in Ioc 0 N, zeta n = N
-  proof: by
-  simp only [zeta_apply, sum_ite, sum_const_zero, sum_const, smul_eq_mul, mul_one, zero_add]
-  rw [show {x in Ioc 0 N | ¬x = 0} = Ioc 0 N by ext; simp; lia]
-  simp
-
-中文:
-定理 sum_Ioc_zeta
-  条件: (N : 自然数)
-  结论: ∑ n in 左开右闭区间 0 N, zeta n = N
-  证明: by
-  simp only [zeta_apply, sum_ite, sum_const_zero, sum_const, smul_eq_mul, mul_one, zero_add]
-  rw [show {x in Ioc 0 N | ¬x = 0} = Ioc 0 N by ext; simp; lia]
-  simp
-
-Depends on / 依赖: mul_one, smul_eq_mul, sum_const, sum_const_zero, sum_ite, zero_add, zeta_apply
+/-
+**ArithmeticFunction.sum_Ioc_zeta** 是 Mathlib 中的一个定理，位于命名空间 `ArithmeticFunction`
+。
+形式化陈述：sum_Ioc_zeta (N : Nat) : ∑ n in Ioc 0 N, zeta n = N
+参数：N : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_ite`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M]
+ {s : Finset ι} {p : ι → Prop} [inst_1 : DecidablePred p]   (f g : ι → M), (∑ x 
+∈ s,…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.card_Ioc`：∀ (a b : ℕ), (Finset.Ioc a b).card = b - a
+· 使用定理 `tsub_zero`：tsub_zero (a : α) : a - 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_Ioc_zeta (N : Nat) : ∑ n in Ioc 0 N, zeta n = N := by
+theorem sum_Ioc_zeta (N : ℕ) : ∑ n ∈ Ioc 0 N, zeta n = N := by
   simp only [zeta_apply, sum_ite, sum_const_zero, sum_const, smul_eq_mul, mul_one, zero_add]
-  rw [show {x in Ioc 0 N | ¬x = 0} = Ioc 0 N by ext; simp; lia]
+  rw [show {x ∈ Ioc 0 N | ¬x = 0} = Ioc 0 N by ext; simp; lia]
   simp
 
 variable {R : Type*} [Semiring R]
-
-/--
-theorem `sum_Ioc_mul_eq_sum_prod_filter` / 定理 `sum_Ioc_mul_eq_sum_prod_filter`
-
-English:
-theorem sum_Ioc_mul_eq_sum_prod_filter
-  given: (f g : ArithmeticFunction R) (N : Nat)
-  proof: by
-  simp only [mul_apply]
-  trans ∑ n in Ioc 0 N, ∑ x in Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2 = n, f x.1 * g x.2
-  · refine sum_congr rfl fun n hn => ?_
-    simp only [mem_Ioc] at hn
-    rw [divisorsAntidiagonal_eq_prod_filter_of_le hn.1.ne' hn.2]
-  · simp_rw [sum_filter]
-    rw [sum_comm]
-    exact sum_congr rfl fun _ _ => (by simp_all)
-
-中文:
-定理 sum_Ioc_mul_eq_sum_prod_filter
-  条件: (f g : ArithmeticFunction R) (N : 自然数)
-  证明: by
-  simp only [mul_apply]
-  trans ∑ n in Ioc 0 N, ∑ x in Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2 = n, f x.1 * g x.2
-  · refine sum_congr rfl fun n hn => ?_
-    simp only [mem_Ioc] at hn
-    rw [divisorsAntidiagonal_eq_prod_filter_of_le hn.1.ne' hn.2]
-  · simp_rw [sum_filter]
-    rw [sum_comm]
-    exact sum_congr rfl fun _ _ => (by simp_all)
-
-Depends on / 依赖: divisorsAntidiagonal_eq_prod_filter_of_le, mem_Ioc, mul_apply, simp_rw, sum_comm, sum_congr, sum_filter
+/-
+**ArithmeticFunction.sum_Ioc_mul_eq_sum_prod_filter** 是 Mathlib 中的一个定理，位于命名空间 `A
+rithmeticFunction`。
+形式化陈述：sum_Ioc_mul_eq_sum_prod_filter (f g : ArithmeticFunction R) (N : Nat) : ∑ 
+n in Ioc 0 N, (f * g) n = ∑ x in Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2 <= N, f x.1 *
+ g x.2
+参数：f g : ArithmeticFunction R；N : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Nat.divisorsAntidiagonal_eq_prod_filter_of_le`：divisorsAntidiagonal_eq_p
+rod_filter_of_le {n N : Nat} (n_ne_zero : n != 0) (hn : n <= N) : n.divisorsAnti
+diagonal = (Ioc 0 N ×ˢ Ioc 0 N).fil…
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_filter`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst 
+: AddCommMonoid M] (p : ι → Prop) [inst_1 : DecidablePred p]   (f : ι → M), ∑ a 
+∈ s wit…
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_Ioc_mul_eq_sum_prod_filter (f g : ArithmeticFunction R) (N : Nat) :
-    ∑ n in Ioc 0 N, (f * g) n = ∑ x in Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2 <= N, f x.1 * g x.2 := by
+theorem sum_Ioc_mul_eq_sum_prod_filter (f g : ArithmeticFunction R) (N : ℕ) :
+    ∑ n ∈ Ioc 0 N, (f * g) n = ∑ x ∈ Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2 ≤ N, f x.1 * g x.2 := by
   simp only [mul_apply]
-  trans ∑ n in Ioc 0 N, ∑ x in Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2 = n, f x.1 * g x.2
-  · refine sum_congr rfl fun n hn => ?_
+  trans ∑ n ∈ Ioc 0 N, ∑ x ∈ Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2 = n, f x.1 * g x.2
+  · refine sum_congr rfl fun n hn ↦ ?_
     simp only [mem_Ioc] at hn
     rw [divisorsAntidiagonal_eq_prod_filter_of_le hn.1.ne' hn.2]
   · simp_rw [sum_filter]
     rw [sum_comm]
-    exact sum_congr rfl fun _ _ => (by simp_all)
-
-/--
-theorem `sum_Ioc_mul_eq_sum_sum` / 定理 `sum_Ioc_mul_eq_sum_sum`
-
-English:
-theorem sum_Ioc_mul_eq_sum_sum
-  given: (f g : ArithmeticFunction R) (N : Nat)
-  proof: by
-  rw [sum_Ioc_mul_eq_sum_prod_filter]; rw [sum_filter]; rw [sum_product]
-  refine sum_congr rfl fun n hn => ?_
+    exact sum_congr rfl fun _ _ ↦ (by simp_all)
+/-
+**ArithmeticFunction.sum_Ioc_mul_eq_sum_sum** 是 Mathlib 中的一个定理，位于命名空间 `Arithmeti
+cFunction`。
+形式化陈述：sum_Ioc_mul_eq_sum_sum (f g : ArithmeticFunction R) (N : Nat) : ∑ n in Ioc
+ 0 N, (f * g) n = ∑ n in Ioc 0 N, f n * ∑ m in Ioc 0 (N / n), g m
+参数：f g : ArithmeticFunction R；N : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.sum_Ioc_mul_eq_sum_prod_filter`：sum_Ioc_mul_eq_sum_pr
+od_filter (f g : ArithmeticFunction R) (N : Nat) : ∑ n in Ioc 0 N, (f * g) n = ∑
+ x in Ioc 0 N ×ˢ Ioc 0 N with x.1 * x.2…
+· 使用定理 `Finset.sum_filter`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst 
+: AddCommMonoid M] (p : ι → Prop) [inst_1 : DecidablePred p]   (f : ι → M), ∑ a 
+∈ s wit…
+· 使用定理 `Finset.sum_product`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst
+ : AddCommMonoid β] (s : Finset γ) (t : Finset α) (f : γ × α → β),   ∑ x ∈ s ×ˢ 
+t, f x =…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Finset.sum_ite`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M]
+ {s : Finset ι} {p : ι → Prop} [inst_1 : DecidablePred p]   (f g : ι → M), (∑ x 
+∈ s,…
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `Finset.mul_sum`：mul_sum (s : Finset ι) (f : ι -> R) (a : R) : a * ∑ i in
+ s, f i = ∑ i in s, a * f i
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Nat.div_le_div_right`：∀ {a b c : ℕ}, a ≤ b → a / c ≤ b / c
+· 使用定理 `Nat.mul_div_cancel_left`：∀ (m : ℕ) {n : ℕ}, 0 < n → n * m / n = m
+· 使用引理 `Mathlib.Tactic.GCongr.and_mono`：and_mono (h₁ : a -> c) (h₂ : a -> b -> d
+) : (a ∧ b) -> c ∧ d
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+-/
+theorem sum_Ioc_mul_eq_sum_sum (f g : ArithmeticFunction R) (N : ℕ) :
+    ∑ n ∈ Ioc 0 N, (f * g) n = ∑ n ∈ Ioc 0 N, f n * ∑ m ∈ Ioc 0 (N / n), g m := by
+  rw [sum_Ioc_mul_eq_sum_prod_filter, sum_filter, sum_product]
+  refine sum_congr rfl fun n hn ↦ ?_
   simp only [sum_ite, not_le, sum_const_zero, add_zero, mul_sum]
   congr
   ext
@@ -1685,98 +1715,74 @@ theorem sum_Ioc_mul_eq_sum_sum
   · intro hm
     grw [hm]
     simp [mul_div_le, div_le_self]
-
-中文:
-定理 sum_Ioc_mul_eq_sum_sum
-  条件: (f g : ArithmeticFunction R) (N : 自然数)
-  证明: by
-  rw [sum_Ioc_mul_eq_sum_prod_filter]; rw [sum_filter]; rw [sum_product]
-  refine sum_congr rfl fun n hn => ?_
-  simp only [sum_ite, not_le, sum_const_zero, add_zero, mul_sum]
-  congr
-  ext
-  simp only [mem_filter, mem_Ioc, and_assoc, and_congr_right_iff] at hn ⊢
-  intro _
-  constructor
-  · intro ⟨_, h⟩
-    grw [← h, Nat.mul_div_cancel_left _ (by lia)]
-  · intro hm
-    grw [hm]
-    simp [mul_div_le, div_le_self]
-
-Depends on / 依赖: Nat.mul_div_cancel_left, add_zero, and_assoc, and_congr_right_iff, div_le_self, mem_Ioc, mem_filter, mul_div_cancel_left, mul_div_le, mul_sum, not_le, sum_Ioc_mul_eq_sum_prod_filter, sum_congr, sum_const_zero, sum_filter, sum_ite, sum_product
+/-
+**ArithmeticFunction.sum_Ioc_mul_zeta_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `Arithmet
+icFunction`。
+形式化陈述：sum_Ioc_mul_zeta_eq_sum (f : ArithmeticFunction R) (N : Nat) : ∑ n in Ioc 
+0 N, (f * zeta) n = ∑ n in Ioc 0 N, f n * ↑(N / n)
+参数：f : ArithmeticFunction R；N : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.sum_Ioc_mul_eq_sum_sum`：sum_Ioc_mul_eq_sum_sum (f g :
+ ArithmeticFunction R) (N : Nat) : ∑ n in Ioc 0 N, (f * g) n = ∑ n in Ioc 0 N, f
+ n * ∑ m in Ioc 0 (N / n), g m
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ArithmeticFunction.sum_Ioc_zeta`：sum_Ioc_zeta (N : Nat) : ∑ n in Ioc 0 N
+, zeta n = N
 -/
-theorem sum_Ioc_mul_eq_sum_sum (f g : ArithmeticFunction R) (N : Nat) :
-    ∑ n in Ioc 0 N, (f * g) n = ∑ n in Ioc 0 N, f n * ∑ m in Ioc 0 (N / n), g m := by
-  rw [sum_Ioc_mul_eq_sum_prod_filter]; rw [sum_filter]; rw [sum_product]
-  refine sum_congr rfl fun n hn => ?_
-  simp only [sum_ite, not_le, sum_const_zero, add_zero, mul_sum]
-  congr
-  ext
-  simp only [mem_filter, mem_Ioc, and_assoc, and_congr_right_iff] at hn ⊢
-  intro _
-  constructor
-  · intro ⟨_, h⟩
-    grw [← h, Nat.mul_div_cancel_left _ (by lia)]
-  · intro hm
-    grw [hm]
-    simp [mul_div_le, div_le_self]
-
-/--
-theorem `sum_Ioc_mul_zeta_eq_sum` / 定理 `sum_Ioc_mul_zeta_eq_sum`
-
-English:
-theorem sum_Ioc_mul_zeta_eq_sum
-  given: (f : ArithmeticFunction R) (N : Nat)
-  proof: by
+theorem sum_Ioc_mul_zeta_eq_sum (f : ArithmeticFunction R) (N : ℕ) :
+    ∑ n ∈ Ioc 0 N, (f * zeta) n = ∑ n ∈ Ioc 0 N, f n * ↑(N / n) := by
   rw [sum_Ioc_mul_eq_sum_sum]
-  refine sum_congr rfl fun n hn => ?_
-  simp_rw [natCoe_apply]
-  rw_mod_cast [sum_Ioc_zeta]
-
-中文:
-定理 sum_Ioc_mul_zeta_eq_sum
-  条件: (f : ArithmeticFunction R) (N : 自然数)
-  证明: by
-  rw [sum_Ioc_mul_eq_sum_sum]
-  refine sum_congr rfl fun n hn => ?_
-  simp_rw [natCoe_apply]
-  rw_mod_cast [sum_Ioc_zeta]
-
-Depends on / 依赖: natCoe_apply, rw_mod_cast, simp_rw, sum_Ioc_mul_eq_sum_sum, sum_Ioc_zeta, sum_congr
--/
-theorem sum_Ioc_mul_zeta_eq_sum (f : ArithmeticFunction R) (N : Nat) :
-    ∑ n in Ioc 0 N, (f * zeta) n = ∑ n in Ioc 0 N, f n * ↑(N / n) := by
-  rw [sum_Ioc_mul_eq_sum_sum]
-  refine sum_congr rfl fun n hn => ?_
+  refine sum_congr rfl fun n hn ↦ ?_
   simp_rw [natCoe_apply]
   rw_mod_cast [sum_Ioc_zeta]
 
 --TODO: Dirichlet hyperbola method to get sums of length `sqrt N`
-/--
-theorem `sum_Ioc_sigma0_eq_sum_div` / 定理 `sum_Ioc_sigma0_eq_sum_div`
+/-- An `O(N)` formula for the sum of the number of divisors function. -/
+/-
+**ArithmeticFunction.sum_Ioc_sigma0_eq_sum_div** 是 Mathlib 中的一个定理，位于命名空间 `Arithm
+eticFunction`。
+形式化陈述：sum_Ioc_sigma0_eq_sum_div (N : Nat) : ∑ n in Ioc 0 N, sigma 0 n = ∑ n in I
+oc 0 N, (N / n)
+参数：N : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ArithmeticFunction.zeta_mul_pow_eq_sigma`：zeta_mul_pow_eq_sigma {k : Nat
+} : ζ * pow k = σ k
+· 使用定理 `ArithmeticFunction.pow_zero_eq_zeta`：pow_zero_eq_zeta : pow 0 = ζ
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `ArithmeticFunction.sum_Ioc_mul_zeta_eq_sum`：sum_Ioc_mul_zeta_eq_sum (f :
+ ArithmeticFunction R) (N : Nat) : ∑ n in Ioc 0 N, (f * zeta) n = ∑ n in Ioc 0 N
+, f n * ↑(N / n)
 
-English:
-theorem sum_Ioc_sigma0_eq_sum_div
-  given: (N : Nat)
-  proof: by
-  rw [← zeta_mul_pow_eq_sigma]; rw [pow_zero_eq_zeta]
-  convert! sum_Ioc_mul_zeta_eq_sum zeta N using 1
-  simpa using sum_congr rfl (by grind)
-
-中文:
-定理 sum_Ioc_sigma0_eq_sum_div
-  条件: (N : 自然数)
-  证明: by
-  rw [← zeta_mul_pow_eq_sigma]; rw [pow_zero_eq_zeta]
-  convert! sum_Ioc_mul_zeta_eq_sum zeta N using 1
-  simpa using sum_congr rfl (by grind)
-
-Depends on / 依赖: convert, pow_zero_eq_zeta, sum_Ioc_mul_zeta_eq_sum, sum_congr, zeta_mul_pow_eq_sigma
+--- 原说明 ---
+An `O(N)` formula for the sum of the number of divisors function.
 -/
-theorem sum_Ioc_sigma0_eq_sum_div (N : Nat) :
-    ∑ n in Ioc 0 N, sigma 0 n = ∑ n in Ioc 0 N, (N / n) := by
-  rw [← zeta_mul_pow_eq_sigma]; rw [pow_zero_eq_zeta]
+theorem sum_Ioc_sigma0_eq_sum_div (N : ℕ) :
+    ∑ n ∈ Ioc 0 N, sigma 0 n = ∑ n ∈ Ioc 0 N, (N / n) := by
+  rw [← zeta_mul_pow_eq_sigma, pow_zero_eq_zeta]
   convert! sum_Ioc_mul_zeta_eq_sum zeta N using 1
   simpa using sum_congr rfl (by grind)
 
@@ -1788,46 +1794,51 @@ namespace Nat.Coprime
 
 open ArithmeticFunction
 
-/--
-theorem `card_divisors_mul` / 定理 `card_divisors_mul`
-
-English:
-theorem card_divisors_mul
-  given: {m n : Nat} (hmn : m.Coprime n)
-  proof: by
-  simp only [← sigma_zero_apply, isMultiplicative_sigma.map_mul_of_coprime hmn]
-
-中文:
-定理 card_divisors_mul
-  条件: {m n : 自然数} (hmn : m.Coprime n)
-  证明: by
-  simp only [← sigma_zero_apply, isMultiplicative_sigma.map_mul_of_coprime hmn]
-
-Depends on / 依赖: isMultiplicative_sigma, isMultiplicative_sigma.map_mul_of_coprime, map_mul_of_coprime, sigma_zero_apply
+/-
+**Nat.Coprime.card_divisors_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Coprime`。
+形式化陈述：card_divisors_mul {m n : Nat} (hmn : m.Coprime n) : #(m * n).divisors = #m
+.divisors * #n.divisors
+参数：hmn : m.Coprime n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.IsMultiplicative.map_mul_of_coprime`：map_mul_of_copri
+me {f : ArithmeticFunction R} (hf : f.IsMultiplicative) {m n : Nat} (h : m.gcd n
+ = 1) : f (m * n) = f m * f n
+· 使用定理 `ArithmeticFunction.isMultiplicative_sigma`：isMultiplicative_sigma {k : N
+at} : IsMultiplicative (σ k)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem card_divisors_mul {m n : Nat} (hmn : m.Coprime n) :
+theorem card_divisors_mul {m n : ℕ} (hmn : m.Coprime n) :
     #(m * n).divisors = #m.divisors * #n.divisors := by
   simp only [← sigma_zero_apply, isMultiplicative_sigma.map_mul_of_coprime hmn]
-
-/--
-theorem `sum_divisors_mul` / 定理 `sum_divisors_mul`
-
-English:
-theorem sum_divisors_mul
-  given: {m n : Nat} (hmn : m.Coprime n)
-  proof: by
-  simp only [← sigma_one_apply, isMultiplicative_sigma.map_mul_of_coprime hmn]
-
-中文:
-定理 sum_divisors_mul
-  条件: {m n : 自然数} (hmn : m.Coprime n)
-  证明: by
-  simp only [← sigma_one_apply, isMultiplicative_sigma.map_mul_of_coprime hmn]
-
-Depends on / 依赖: isMultiplicative_sigma, isMultiplicative_sigma.map_mul_of_coprime, map_mul_of_coprime, sigma_one_apply
+/-
+**Nat.Coprime.sum_divisors_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nat.Coprime`。
+形式化陈述：sum_divisors_mul {m n : Nat} (hmn : m.Coprime n) : ∑ d in (m * n).divisors
+, d = (∑ d in m.divisors, d) * ∑ d in n.divisors, d
+参数：hmn : m.Coprime n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ArithmeticFunction.IsMultiplicative.map_mul_of_coprime`：map_mul_of_copri
+me {f : ArithmeticFunction R} (hf : f.IsMultiplicative) {m n : Nat} (h : m.gcd n
+ = 1) : f (m * n) = f m * f n
+· 使用定理 `ArithmeticFunction.isMultiplicative_sigma`：isMultiplicative_sigma {k : N
+at} : IsMultiplicative (σ k)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_divisors_mul {m n : Nat} (hmn : m.Coprime n) :
-    ∑ d in (m * n).divisors, d = (∑ d in m.divisors, d) * ∑ d in n.divisors, d := by
+theorem sum_divisors_mul {m n : ℕ} (hmn : m.Coprime n) :
+    ∑ d ∈ (m * n).divisors, d = (∑ d ∈ m.divisors, d) * ∑ d ∈ n.divisors, d := by
   simp only [← sigma_one_apply, isMultiplicative_sigma.map_mul_of_coprime hmn]
 
 end Nat.Coprime
@@ -1840,7 +1851,7 @@ open Lean Meta Qq
 meta def evalArithmeticFunctionSigma : PositivityExt where eval {u α} z p? e :=
   match p? with | none => throwError "no PartialOrder instance" | some p => do
   match u, α, e with
-  | 0, ~q(Nat), ~q(ArithmeticFunction.sigma $k $n) =>
+  | 0, ~q(ℕ), ~q(ArithmeticFunction.sigma $k $n) =>
     assumeInstancesCommute
     let rn ← core z p n
     match rn with
@@ -1850,3 +1861,4 @@ meta def evalArithmeticFunctionSigma : PositivityExt where eval {u α} z p? e :=
 
 
 end Mathlib.Meta.Positivity
+

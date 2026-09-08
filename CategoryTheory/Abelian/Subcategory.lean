@@ -25,53 +25,20 @@ open Limits
 
 variable {C : Type*} [Category* C] (P : ObjectProperty C)
 
-/--
-lemma `preservesMonomorphisms_ι_of_isNormalEpiCategory` / 引理 `preservesMonomorphisms_ι_of_isNormalEpiCategory`
-
-English:
-lemma preservesMonomorphisms_ι_of_isNormalEpiCategory
-  statement: [HasZeroMorphisms C] [HasFiniteCoproducts C]
-  proof: have := P.preservesKernels_ι
-  NormalEpiCategory.preservesMonomorphisms_of_preservesKernels P.ι
-
-中文:
-引理 preservesMonomorphisms_ι_of_isNormalEpiCategory
-  结论: [有ZeroMorphisms C] [有FiniteCoproducts C]
-  证明: have := P.preservesKernels_ι
-  NormalEpiCategory.preservesMonomorphisms_of_preservesKernels P.ι
-
-Depends on / 依赖: NormalEpiCategory, NormalEpiCategory.preservesMonomorphisms_of_preservesKernels, P.preservesKernels_, preservesMonomorphisms_of_preservesKernels
+/-
+**CategoryTheory.ObjectProperty.preservesMonomorphisms_** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preservesMonomorphisms_ι_of_isNormalEpiCategory [HasZeroMorphisms C] [HasFiniteCoproducts C]
     [HasKernels C] [HasCokernels C] [IsNormalEpiCategory C] [HasZeroObject C] [P.ContainsZero]
     [P.IsClosedUnderKernels] : P.ι.PreservesMonomorphisms :=
   have := P.preservesKernels_ι
   NormalEpiCategory.preservesMonomorphisms_of_preservesKernels P.ι
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Abelian
-  signature: C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels] :
-  body: have := P.preservesMonomorphisms_ι_of_isNormalEpiCategory
-    ⟨{Z := .mk _ (P.prop_cokernel f.hom X.property Y.property)
-      g := P.homMk (cokernel.π f.hom)
-      w := by cat_disch
-      isLimit := isLimitOfReflects P.ι ((KernelFork.isLimitMapConeEquiv _ _).symm
-        (Abelian.monoIsKernelOfCokernel _ (cokernelIsCokernel (P.ι.map f)) :))}⟩
-
-中文:
-实例 [交换
-  签名: C] [P.余ntainsZero] [P.是ClosedUnderKernels] [P.是ClosedUnderCokernels] :
-  定义体: have := P.preservesMonomorphisms_ι_of_isNormalEpiCategory
-    ⟨{Z := .mk _ (P.prop_cokernel f.hom X.property Y.property)
-      g := P.homMk (cokernel.π f.hom)
-      w := by cat_disch
-      isLimit := isLimitOfReflects P.ι ((KernelFork.isLimitMapConeEquiv _ _).symm
-        (Abelian.monoIsKernelOfCokernel _ (cokernelIsCokernel (P.ι.map f)) :))}⟩
-
-Depends on / 依赖: Abelian, Abelian.monoIsKernelOfCokernel, KernelFork, KernelFork.isLimitMapConeEquiv, P.homMk, P.preservesMonomorphisms_, P.prop_cokernel, X.property, Y.property, cat_disch, cokernel, cokernelIsCokernel, f.hom, isLimit, isLimitMapConeEquiv, isLimitOfReflects, monoIsKernelOfCokernel, prop_cokernel, property
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Abelian C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels] :
     IsNormalMonoCategory P.FullSubcategory where
@@ -82,54 +49,20 @@ instance [Abelian C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderC
       w := by cat_disch
       isLimit := isLimitOfReflects P.ι ((KernelFork.isLimitMapConeEquiv _ _).symm
         (Abelian.monoIsKernelOfCokernel _ (cokernelIsCokernel (P.ι.map f)) :))}⟩
-
-/--
-lemma `preservesEpimorphisms_ι_of_isNormalMonoCategory` / 引理 `preservesEpimorphisms_ι_of_isNormalMonoCategory`
-
-English:
-lemma preservesEpimorphisms_ι_of_isNormalMonoCategory
-  statement: [HasZeroMorphisms C] [HasFiniteProducts C]
-  proof: have := P.preservesCokernels_ι
-  NormalMonoCategory.preservesEpimorphisms_of_preservesCokernels P.ι
-
-中文:
-引理 preservesEpimorphisms_ι_of_isNormalMonoCategory
-  结论: [有ZeroMorphisms C] [有FiniteProducts C]
-  证明: have := P.preservesCokernels_ι
-  NormalMonoCategory.preservesEpimorphisms_of_preservesCokernels P.ι
-
-Depends on / 依赖: NormalMonoCategory, NormalMonoCategory.preservesEpimorphisms_of_preservesCokernels, P.preservesCokernels_, preservesEpimorphisms_of_preservesCokernels
+/-
+**CategoryTheory.ObjectProperty.preservesEpimorphisms_** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.ObjectProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preservesEpimorphisms_ι_of_isNormalMonoCategory [HasZeroMorphisms C] [HasFiniteProducts C]
     [HasKernels C] [HasCokernels C] [IsNormalMonoCategory C] [HasZeroObject C] [P.ContainsZero]
     [P.IsClosedUnderCokernels] : P.ι.PreservesEpimorphisms :=
   have := P.preservesCokernels_ι
   NormalMonoCategory.preservesEpimorphisms_of_preservesCokernels P.ι
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Abelian
-  signature: C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels] :
-  body: have := P.preservesEpimorphisms_ι_of_isNormalMonoCategory
-    ⟨{W := .mk _ (P.prop_kernel f.hom X.property Y.property)
-      g := P.homMk (kernel.ι f.hom)
-      w := by cat_disch
-      isColimit := isColimitOfReflects P.ι ((CokernelCofork.isColimitMapCoconeEquiv _ _).symm
-        (Abelian.epiIsCokernelOfKernel _ (kernelIsKernel (P.ι.map f)) :))}⟩
-
-中文:
-实例 [交换
-  签名: C] [P.余ntainsZero] [P.是ClosedUnderKernels] [P.是ClosedUnderCokernels] :
-  定义体: have := P.preservesEpimorphisms_ι_of_isNormalMonoCategory
-    ⟨{W := .mk _ (P.prop_kernel f.hom X.property Y.property)
-      g := P.homMk (kernel.ι f.hom)
-      w := by cat_disch
-      isColimit := isColimitOfReflects P.ι ((CokernelCofork.isColimitMapCoconeEquiv _ _).symm
-        (Abelian.epiIsCokernelOfKernel _ (kernelIsKernel (P.ι.map f)) :))}⟩
-
-Depends on / 依赖: Abelian, Abelian.epiIsCokernelOfKernel, CokernelCofork, CokernelCofork.isColimitMapCoconeEquiv, P.homMk, P.preservesEpimorphisms_, P.prop_kernel, X.property, Y.property, cat_disch, epiIsCokernelOfKernel, f.hom, isColimit, isColimitMapCoconeEquiv, isColimitOfReflects, kernel, kernelIsKernel, prop_kernel, property
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Abelian C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels] :
     IsNormalEpiCategory P.FullSubcategory where
@@ -140,19 +73,13 @@ instance [Abelian C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderC
       w := by cat_disch
       isColimit := isColimitOfReflects P.ι ((CokernelCofork.isColimitMapCoconeEquiv _ _).symm
         (Abelian.epiIsCokernelOfKernel _ (kernelIsKernel (P.ι.map f)) :))}⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Abelian
-  signature: C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels]
-
-中文:
-实例 [交换
-  签名: C] [P.余ntainsZero] [P.是ClosedUnderKernels] [P.是ClosedUnderCokernels]
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Abelian C] [P.ContainsZero] [P.IsClosedUnderKernels] [P.IsClosedUnderCokernels]
     [P.IsClosedUnderFiniteProducts] : Abelian P.FullSubcategory where
 
 end CategoryTheory.ObjectProperty
+

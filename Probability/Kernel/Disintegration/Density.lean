@@ -94,499 +94,516 @@ section DensityProcess
 `countablePartition γ n`. Used to define its limit `ProbabilityTheory.Kernel.density`, which is
 a density for those kernels for all measurable sets. -/
 noncomputable
-/--
-Definition of `densityProcess` / `densityProcess` 的定义
-
-English:
-definition densityProcess
-  signature: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) (s : Set β)
-  body: (κ a (countablePartitionSet n x ×ˢ s) / ν a (countablePartitionSet n x)).toReal
-
-中文:
-定义 densityProcess
-  签名: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数) (a : α) (x : γ) (s : 集合 β)
-  定义体: (κ a (countablePartitionSet n x ×ˢ s) / ν a (countablePartitionSet n x)).toReal
-
-Depends on / 依赖: countablePartitionSet, toReal
+/-
+**ProbabilityTheory.Kernel.densityProcess** 是 Mathlib 中的一个定义，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (
+x : γ) (s : Set β) : Real
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；x : γ；s : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) (s : Set β) :
-    Real :=
+def densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ) (a : α) (x : γ) (s : Set β) :
+    ℝ :=
   (κ a (countablePartitionSet n x ×ˢ s) / ν a (countablePartitionSet n x)).toReal
-
-/--
-lemma `densityProcess_def` / 引理 `densityProcess_def`
-
-English:
-lemma densityProcess_def
-  given: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (s : Set β)
-  proof: rfl
-
-中文:
-引理 densityProcess_def
-  条件: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数) (a : α) (s : 集合 β)
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.densityProcess_def** 是 Mathlib 中的一个引理，位于命名空间 `Probabi
+lityTheory.Kernel`。
+形式化陈述：densityProcess_def (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : 
+α) (s : Set β) : (fun t => densityProcess κ ν n a t s) = fun t => (κ a (countabl
+ePartitionSet n t ×ˢ s) / ν a (countablePartitionSet n t)).toReal
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；s : Set β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma densityProcess_def (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (s : Set β) :
-    (fun t => densityProcess κ ν n a t s)
-      = fun t => (κ a (countablePartitionSet n t ×ˢ s) / ν a (countablePartitionSet n t)).toReal :=
+lemma densityProcess_def (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ) (a : α) (s : Set β) :
+    (fun t ↦ densityProcess κ ν n a t s)
+      = fun t ↦ (κ a (countablePartitionSet n t ×ˢ s) / ν a (countablePartitionSet n t)).toReal :=
   rfl
-
-/--
-lemma `measurable_densityProcess_countableFiltration_aux` / 引理 `measurable_densityProcess_countableFiltration_aux`
-
-English:
-lemma measurable_densityProcess_countableFiltration_aux
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-  proof: by
-  change Measurable[mα.prod (countableFiltration γ n)]
-      ((fun (p : α × countablePartition γ n) => κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2)
-        ∘ (fun (p : α × γ) => (p.1, ⟨countablePartitionSet n p.2, countablePartitionSet_mem n p.2⟩)))
-  have h1 : @Measurable _ _ (mα.prod ⊤) _
-      (fun p : α × countablePartition γ n => κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2) := by
-    refine Measurable.div ?_ ?_
-    · refine measurable_from_prod_countable_left (fun t => ?_)
-      exact Kernel.measurable_coe _ ((measurableSet_countablePartition _ t.prop).prod hs)
-    · refine measurable_from_prod_countable_left ?_
-      rintro ⟨t, ht⟩
-      exact Kernel.measurable_coe _ (measurableSet_countablePartition _ ht)
-  refine h1.comp (measurable_fst.prodMk ?_)
-  change @Measurable (α × γ) (countablePartition γ n) (mα.prod (countableFiltration γ n)) ⊤
-    ((fun c => ⟨countablePartitionSet n c, countablePartitionSet_mem n c⟩) ∘ (fun p : α × γ => p.2))
-  exact (measurable_countablePartitionSet_subtype n ⊤).comp measurable_snd
-
-中文:
-引理 measurable_densityProcess_countableFiltration_aux
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
-  证明: by
-  change Measurable[mα.prod (countableFiltration γ n)]
-      ((fun (p : α × countablePartition γ n) => κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2)
-        ∘ (fun (p : α × γ) => (p.1, ⟨countablePartitionSet n p.2, countablePartitionSet_mem n p.2⟩)))
-  have h1 : @Measurable _ _ (mα.prod ⊤) _
-      (fun p : α × countablePartition γ n => κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2) := by
-    refine Measurable.div ?_ ?_
-    · refine measurable_from_prod_countable_left (fun t => ?_)
-      exact Kernel.measurable_coe _ ((measurableSet_countablePartition _ t.prop).prod hs)
-    · refine measurable_from_prod_countable_left ?_
-      rintro ⟨t, ht⟩
-      exact Kernel.measurable_coe _ (measurableSet_countablePartition _ ht)
-  refine h1.comp (measurable_fst.prodMk ?_)
-  change @Measurable (α × γ) (countablePartition γ n) (mα.prod (countableFiltration γ n)) ⊤
-    ((fun c => ⟨countablePartitionSet n c, countablePartitionSet_mem n c⟩) ∘ (fun p : α × γ => p.2))
-  exact (measurable_countablePartitionSet_subtype n ⊤).comp measurable_snd
-
-Depends on / 依赖: Kernel, Kernel.measurable_coe, Measurable, Measurable.div, countableFiltration, countablePartition, countablePartitionSet, countablePartitionSet_mem, measurableSet_countablePartition, measurable_coe, measurable_from_prod_countable_left, t.prop
+/-
+**ProbabilityTheory.Kernel.measurable_densityProcess_countableFiltration_aux** 是
+ Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：measurable_densityProcess_countableFiltration_aux (κ : Kernel α (γ × β)) (
+ν : Kernel α γ) (n : Nat) {s : Set β} (hs : MeasurableSet s) : Measurable[mα.pro
+d (countableFiltration γ n)] (fun (p : α × γ) => κ p.1 (countablePartitionSet n 
+p.2 ×ˢ s) / ν p.1 (countablePartitionSet n p.2))
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.div`：Measurable.div [MeasurableDiv₂ G] (hf : Measurable f) (h
+g : Measurable g) : Measurable (f / g)
+· 使用定理 `measurableDiv₂_of_mul_inv`：∀ (G : Type u_2) [inst : MeasurableSpace G] [
+inst_1 : DivInvMonoid G] [MeasurableMul₂ G] [MeasurableInv G],   MeasurableDiv₂ 
+G
+· 使用定理 `measurable_from_prod_countable_left`：measurable_from_prod_countable_left
+ [Countable β] [MeasurableSingletonClass β] {f : α × β -> γ} (hf : forall y, Mea
+surable fun x => f (x, y)…
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `StandardBorelSpace.instMeasurableEq`：∀ {α : Type u_1} [inst : Measurable
+Space α] [StandardBorelSpace α], MeasurableEq α
+· 使用定理 `standardBorelSpace_of_discreteMeasurableSpace`：∀ {α : Type u_1} [inst : 
+MeasurableSpace α] [DiscreteMeasurableSpace α] [Countable α], StandardBorelSpace
+ α
+· 使用定理 `instDiscreteMeasurableSpace`：∀ {α : Type u_1}, DiscreteMeasurableSpace α
+· 使用定理 `ProbabilityTheory.Kernel.measurable_coe`：∀ {α : Type u_1} {β : Type u_2}
+ {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (κ : ProbabilityTheory.Kernel
+ α β)   {s : Set β}, Measurab…
+· 使用定理 `MeasurableSet.prod`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSpace
+ α} {mβ : MeasurableSpace β} {s : Set α} {t : Set β},   MeasurableSet s → Measur
+ableSet …
+· 使用引理 `MeasurableSpace.measurableSet_countablePartition`：measurableSet_countabl
+ePartition (n : Nat) {s : Set α} (hs : s in countablePartition α n) : Measurable
+Set s
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `MeasurableSpace.countablePartitionSet_mem`：countablePartitionSet_mem (n 
+: Nat) (a : α) : countablePartitionSet n a in countablePartition α n
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_fst`：measurable_fst {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.fst : α × β -> α)
+· 使用引理 `ProbabilityTheory.measurable_countablePartitionSet_subtype`：measurable_c
+ountablePartitionSet_subtype (n : Nat) (m : MeasurableSpace (countablePartition 
+α n)) : @Measurable α (countablePartition α n) (…
+· 使用定理 `measurable_snd`：measurable_snd {_ : MeasurableSpace α} {_ : MeasurableSp
+ace β} : Measurable (Prod.snd : α × β -> β)
 -/
 lemma measurable_densityProcess_countableFiltration_aux (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-    (n : Nat) {s : Set β} (hs : MeasurableSet s) :
-    Measurable[mα.prod (countableFiltration γ n)] (fun (p : α × γ) =>
+    (n : ℕ) {s : Set β} (hs : MeasurableSet s) :
+    Measurable[mα.prod (countableFiltration γ n)] (fun (p : α × γ) ↦
       κ p.1 (countablePartitionSet n p.2 ×ˢ s) / ν p.1 (countablePartitionSet n p.2)) := by
   change Measurable[mα.prod (countableFiltration γ n)]
-      ((fun (p : α × countablePartition γ n) => κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2)
-        ∘ (fun (p : α × γ) => (p.1, ⟨countablePartitionSet n p.2, countablePartitionSet_mem n p.2⟩)))
+      ((fun (p : α × countablePartition γ n) ↦ κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2)
+        ∘ (fun (p : α × γ) ↦ (p.1, ⟨countablePartitionSet n p.2, countablePartitionSet_mem n p.2⟩)))
   have h1 : @Measurable _ _ (mα.prod ⊤) _
-      (fun p : α × countablePartition γ n => κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2) := by
+      (fun p : α × countablePartition γ n ↦ κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2) := by
     refine Measurable.div ?_ ?_
-    · refine measurable_from_prod_countable_left (fun t => ?_)
+    · refine measurable_from_prod_countable_left (fun t ↦ ?_)
       exact Kernel.measurable_coe _ ((measurableSet_countablePartition _ t.prop).prod hs)
     · refine measurable_from_prod_countable_left ?_
       rintro ⟨t, ht⟩
       exact Kernel.measurable_coe _ (measurableSet_countablePartition _ ht)
   refine h1.comp (measurable_fst.prodMk ?_)
   change @Measurable (α × γ) (countablePartition γ n) (mα.prod (countableFiltration γ n)) ⊤
-    ((fun c => ⟨countablePartitionSet n c, countablePartitionSet_mem n c⟩) ∘ (fun p : α × γ => p.2))
+    ((fun c ↦ ⟨countablePartitionSet n c, countablePartitionSet_mem n c⟩) ∘ (fun p : α × γ ↦ p.2))
   exact (measurable_countablePartitionSet_subtype n ⊤).comp measurable_snd
-
-/--
-lemma `measurable_densityProcess_aux` / 引理 `measurable_densityProcess_aux`
-
-English:
-lemma measurable_densityProcess_aux
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
-  proof: by
-  refine Measurable.mono (measurable_densityProcess_countableFiltration_aux κ ν n hs) ?_ le_rfl
-  exact sup_le_sup le_rfl (comap_mono ((countableFiltration γ).le _))
-
-中文:
-引理 measurable_densityProcess_aux
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
-  证明: by
-  refine Measurable.mono (measurable_densityProcess_countableFiltration_aux κ ν n hs) ?_ le_rfl
-  exact sup_le_sup le_rfl (comap_mono ((countableFiltration γ).le _))
-
-Depends on / 依赖: Measurable, Measurable.mono, comap_mono, countableFiltration, le_rfl, measurable_densityProcess_countableFiltration_aux, sup_le_sup
+/-
+**ProbabilityTheory.Kernel.measurable_densityProcess_aux** 是 Mathlib 中的一个引理，位于命名
+空间 `ProbabilityTheory.Kernel`。
+形式化陈述：measurable_densityProcess_aux (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n :
+ Nat) {s : Set β} (hs : MeasurableSet s) : Measurable (fun (p : α × γ) => κ p.1 
+(countablePartitionSet n p.2 ×ˢ s) / ν p.1 (countablePartitionSet n p.2))
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.mono`：Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : 
+MeasurableSpace β} {f : α -> β} (hf : @Measurable α β ma mb f) (ha : ma <= ma') 
+(hb :…
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess_countableFiltration_a
+ux`：measurable_densityProcess_countableFiltration_aux (κ : Kernel α (γ × β)) (ν 
+: Kernel α γ) (n : Nat) {s : Set β} (hs : MeasurableSet s) : Mea…
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MeasurableSpace.comap_mono`：comap_mono (h : m₁ <= m₂) : m₁.comap g <= m₂
+.comap g
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
 -/
-lemma measurable_densityProcess_aux (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
+lemma measurable_densityProcess_aux (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ)
     {s : Set β} (hs : MeasurableSet s) :
-    Measurable (fun (p : α × γ) =>
+    Measurable (fun (p : α × γ) ↦
       κ p.1 (countablePartitionSet n p.2 ×ˢ s) / ν p.1 (countablePartitionSet n p.2)) := by
   refine Measurable.mono (measurable_densityProcess_countableFiltration_aux κ ν n hs) ?_ le_rfl
   exact sup_le_sup le_rfl (comap_mono ((countableFiltration γ).le _))
-
-/--
-lemma `measurable_densityProcess` / 引理 `measurable_densityProcess`
-
-English:
-lemma measurable_densityProcess
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
-  proof: (measurable_densityProcess_aux κ ν n hs).ennreal_toReal
-
-中文:
-引理 measurable_densityProcess
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
-  证明: (measurable_densityProcess_aux κ ν n hs).ennreal_toReal
-
-Depends on / 依赖: ennreal_toReal, measurable_densityProcess_aux
+/-
+**ProbabilityTheory.Kernel.measurable_densityProcess** 是 Mathlib 中的一个引理，位于命名空间 `
+ProbabilityTheory.Kernel`。
+形式化陈述：measurable_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat
+) {s : Set β} (hs : MeasurableSet s) : Measurable (fun (p : α × γ) => densityPro
+cess κ ν n p.1 p.2 s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.ennreal_toReal`：Measurable.ennreal_toReal {f : α -> Real>=0∞}
+ (hf : Measurable f) : Measurable fun x => ENNReal.toReal (f x)
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess_aux`：measurable_densi
+tyProcess_aux (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) {s : Set β} (hs 
+: MeasurableSet s) : Measurable (fun (p : α …
 -/
-lemma measurable_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
+lemma measurable_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ)
     {s : Set β} (hs : MeasurableSet s) :
-    Measurable (fun (p : α × γ) => densityProcess κ ν n p.1 p.2 s) :=
+    Measurable (fun (p : α × γ) ↦ densityProcess κ ν n p.1 p.2 s) :=
   (measurable_densityProcess_aux κ ν n hs).ennreal_toReal
 
 -- The following two lemmas also work without the `( :)`, but they are slow.
-/--
-lemma `measurable_densityProcess_left` / 引理 `measurable_densityProcess_left`
-
-English:
-lemma measurable_densityProcess_left
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
-  proof: ((measurable_densityProcess κ ν n hs).comp (measurable_id.prodMk measurable_const) :)
-
-中文:
-引理 measurable_densityProcess_left
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
-  证明: ((measurable_densityProcess κ ν n hs).comp (measurable_id.prodMk measurable_const) :)
-
-Depends on / 依赖: measurable_const, measurable_densityProcess, measurable_id, measurable_id.prodMk, prodMk
+/-
+**ProbabilityTheory.Kernel.measurable_densityProcess_left** 是 Mathlib 中的一个引理，位于命
+名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：measurable_densityProcess_left (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n 
+: Nat) (x : γ) {s : Set β} (hs : MeasurableSet s) : Measurable (fun a => density
+Process κ ν n a x s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；x : γ；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess`：measurable_densityPr
+ocess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) {s : Set β} (hs : Measur
+ableSet s) : Measurable (fun (p : α × γ)…
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
 -/
-lemma measurable_densityProcess_left (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
+lemma measurable_densityProcess_left (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ)
     (x : γ) {s : Set β} (hs : MeasurableSet s) :
-    Measurable (fun a => densityProcess κ ν n a x s) :=
+    Measurable (fun a ↦ densityProcess κ ν n a x s) :=
   ((measurable_densityProcess κ ν n hs).comp (measurable_id.prodMk measurable_const) :)
-
-/--
-lemma `measurable_densityProcess_right` / 引理 `measurable_densityProcess_right`
-
-English:
-lemma measurable_densityProcess_right
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
-  proof: ((measurable_densityProcess κ ν n hs).comp (measurable_const.prodMk measurable_id) :)
-
-中文:
-引理 measurable_densityProcess_right
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
-  证明: ((measurable_densityProcess κ ν n hs).comp (measurable_const.prodMk measurable_id) :)
-
-Depends on / 依赖: _algebraMap, inertiaDeg, inertiaDeg_eq_of_isMaximal, measurable_const, measurable_const.prodMk, measurable_densityProcess, measurable_id, prodMk
+/-
+**ProbabilityTheory.Kernel.measurable_densityProcess_right** 是 Mathlib 中的一个引理，位于
+命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：measurable_densityProcess_right (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n
+ : Nat) {s : Set β} (a : α) (hs : MeasurableSet s) : Measurable (fun x => densit
+yProcess κ ν n a x s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess`：measurable_densityPr
+ocess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) {s : Set β} (hs : Measur
+ableSet s) : Measurable (fun (p : α × γ)…
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
-lemma measurable_densityProcess_right (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
+lemma measurable_densityProcess_right (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ)
     {s : Set β} (a : α) (hs : MeasurableSet s) :
-    Measurable (fun x => densityProcess κ ν n a x s) :=
+    Measurable (fun x ↦ densityProcess κ ν n a x s) :=
   ((measurable_densityProcess κ ν n hs).comp (measurable_const.prodMk measurable_id) :)
-
-/--
-lemma `measurable_countableFiltration_densityProcess` / 引理 `measurable_countableFiltration_densityProcess`
-
-English:
-lemma measurable_countableFiltration_densityProcess
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
-  proof: by
-  refine @Measurable.ennreal_toReal _ (countableFiltration γ n) _ ?_
-  -- The exact also works without the `( :)`, but is a bit slow.
-  exact ((measurable_densityProcess_countableFiltration_aux κ ν n hs).comp measurable_prodMk_left :)
-
-中文:
-引理 measurable_countableFiltration_densityProcess
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
-  证明: by
-  refine @Measurable.ennreal_toReal _ (countableFiltration γ n) _ ?_
-  -- The exact also works without the `( :)`, but is a bit slow.
-  exact ((measurable_densityProcess_countableFiltration_aux κ ν n hs).comp measurable_prodMk_left :)
-
-Depends on / 依赖: Measurable, Measurable.ennreal_toReal, countableFiltration, ennreal_toReal
+/-
+**ProbabilityTheory.Kernel.measurable_countableFiltration_densityProcess** 是 Mat
+hlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：measurable_countableFiltration_densityProcess (κ : Kernel α (γ × β)) (ν : 
+Kernel α γ) (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) : Measurable[co
+untableFiltration γ n] (fun x => densityProcess κ ν n a x s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.ennreal_toReal`：Measurable.ennreal_toReal {f : α -> Real>=0∞}
+ (hf : Measurable f) : Measurable fun x => ENNReal.toReal (f x)
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess_countableFiltration_a
+ux`：measurable_densityProcess_countableFiltration_aux (κ : Kernel α (γ × β)) (ν 
+: Kernel α γ) (n : Nat) {s : Set β} (hs : MeasurableSet s) : Mea…
+· 使用定理 `measurable_prodMk_left`：measurable_prodMk_left {x : α} : Measurable (@Pr
+od.mk _ β x)
 -/
-lemma measurable_countableFiltration_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
+lemma measurable_countableFiltration_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ)
     (a : α) {s : Set β} (hs : MeasurableSet s) :
-    Measurable[countableFiltration γ n] (fun x => densityProcess κ ν n a x s) := by
+    Measurable[countableFiltration γ n] (fun x ↦ densityProcess κ ν n a x s) := by
   refine @Measurable.ennreal_toReal _ (countableFiltration γ n) _ ?_
   -- The exact also works without the `( :)`, but is a bit slow.
   exact ((measurable_densityProcess_countableFiltration_aux κ ν n hs).comp measurable_prodMk_left :)
-
-/--
-lemma `stronglyMeasurable_countableFiltration_densityProcess` / 引理 `stronglyMeasurable_countableFiltration_densityProcess`
-
-English:
-lemma stronglyMeasurable_countableFiltration_densityProcess
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-  proof: (measurable_countableFiltration_densityProcess κ ν n a hs).stronglyMeasurable
-
-中文:
-引理 stronglyMeasurable_countableFiltration_densityProcess
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
-  证明: (measurable_countableFiltration_densityProcess κ ν n a hs).stronglyMeasurable
-
-Depends on / 依赖: measurable_countableFiltration_densityProcess, stronglyMeasurable
+/-
+**ProbabilityTheory.Kernel.stronglyMeasurable_countableFiltration_densityProcess
+** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：stronglyMeasurable_countableFiltration_densityProcess (κ : Kernel α (γ × β
+)) (ν : Kernel α γ) (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) : Stron
+glyMeasurable[countableFiltration γ n] (fun x => densityProcess κ ν n a x s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.stronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {mα : MeasurableSpace α} [inst : MeasurableSpace β]   [inst_1 : TopologicalSp
+ace β] [Topological…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用引理 `ProbabilityTheory.Kernel.measurable_countableFiltration_densityProcess`：
+measurable_countableFiltration_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel
+ α γ) (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) :…
 -/
 lemma stronglyMeasurable_countableFiltration_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-    (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) :
-    StronglyMeasurable[countableFiltration γ n] (fun x => densityProcess κ ν n a x s) :=
+    (n : ℕ) (a : α) {s : Set β} (hs : MeasurableSet s) :
+    StronglyMeasurable[countableFiltration γ n] (fun x ↦ densityProcess κ ν n a x s) :=
   (measurable_countableFiltration_densityProcess κ ν n a hs).stronglyMeasurable
-
-/--
-lemma `stronglyAdapted_densityProcess` / 引理 `stronglyAdapted_densityProcess`
-
-English:
-lemma stronglyAdapted_densityProcess
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α)
-  proof: fun n => stronglyMeasurable_countableFiltration_densityProcess κ ν n a hs
-
-中文:
-引理 stronglyAdapted_densityProcess
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (a : α)
-  证明: fun n => stronglyMeasurable_countableFiltration_densityProcess κ ν n a hs
-
-Depends on / 依赖: stronglyMeasurable_countableFiltration_densityProcess
+/-
+**ProbabilityTheory.Kernel.stronglyAdapted_densityProcess** 是 Mathlib 中的一个引理，位于命
+名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：stronglyAdapted_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a 
+: α) {s : Set β} (hs : MeasurableSet s) : StronglyAdapted (countableFiltration γ
+) (fun n x => densityProcess κ ν n a x s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.stronglyMeasurable_countableFiltration_densityP
+rocess`：stronglyMeasurable_countableFiltration_densityProcess (κ : Kernel α (γ ×
+ β)) (ν : Kernel α γ) (n : Nat) (a : α) {s : Set β} (hs : Measurable…
 -/
 lemma stronglyAdapted_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α)
     {s : Set β} (hs : MeasurableSet s) :
-    StronglyAdapted (countableFiltration γ) (fun n x => densityProcess κ ν n a x s) :=
-  fun n => stronglyMeasurable_countableFiltration_densityProcess κ ν n a hs
-
-/--
-lemma `densityProcess_nonneg` / 引理 `densityProcess_nonneg`
-
-English:
-lemma densityProcess_nonneg
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
-  proof: ENNReal.toReal_nonneg
-
-中文:
-引理 densityProcess_nonneg
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
-  证明: ENNReal.toReal_nonneg
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, toReal_nonneg
+    StronglyAdapted (countableFiltration γ) (fun n x ↦ densityProcess κ ν n a x s) :=
+  fun n ↦ stronglyMeasurable_countableFiltration_densityProcess κ ν n a hs
+/-
+**ProbabilityTheory.Kernel.densityProcess_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Prob
+abilityTheory.Kernel`。
+形式化陈述：densityProcess_nonneg (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a
+ : α) (x : γ) (s : Set β) : 0 <= densityProcess κ ν n a x s
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；x : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_nonneg`：∀ {a : ENNReal}, 0 ≤ a.toReal
 -/
-lemma densityProcess_nonneg (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat)
+lemma densityProcess_nonneg (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ)
     (a : α) (x : γ) (s : Set β) :
-    0 <= densityProcess κ ν n a x s :=
+    0 ≤ densityProcess κ ν n a x s :=
   ENNReal.toReal_nonneg
-
-/--
-lemma `meas_countablePartitionSet_le_of_fst_le` / 引理 `meas_countablePartitionSet_le_of_fst_le`
-
-English:
-lemma meas_countablePartitionSet_le_of_fst_le
-  statement: (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ)
-  proof: by
-  calc κ a (countablePartitionSet n x ×ˢ s)
-    <= fst κ a (countablePartitionSet n x) := by
-        rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-        refine measure_mono (fun x => ?_)
-        simp only [mem_prod, mem_ofPred_eq, and_imp]
-        exact fun h _ => h
-  _ <= ν a (countablePartitionSet n x) := hκν a _
-
-中文:
-引理 meas_countablePartitionSet_le_of_fst_le
-  结论: (hκν : fst κ <= ν) (n : 自然数) (a : α) (x : γ)
-  证明: by
-  calc κ a (countablePartitionSet n x ×ˢ s)
-    <= fst κ a (countablePartitionSet n x) := by
-        rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-        refine measure_mono (fun x => ?_)
-        simp only [mem_prod, mem_ofPred_eq, and_imp]
-        exact fun h _ => h
-  _ <= ν a (countablePartitionSet n x) := hκν a _
-
-Depends on / 依赖: and_imp, countablePartitionSet, fst_apply, measurableSet_countablePartitionSet, measure_mono, mem_ofPred_eq, mem_prod
+/-
+**ProbabilityTheory.Kernel.meas_countablePartitionSet_le_of_fst_le** 是 Mathlib 中
+的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：meas_countablePartitionSet_le_of_fst_le (hκν : fst κ <= ν) (n : Nat) (a : 
+α) (x : γ) (s : Set β) : κ a (countablePartitionSet n x ×ˢ s) <= ν a (countableP
+artitionSet n x)
+参数：hκν : fst κ <= ν；n : Nat；a : α；x : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用引理 `MeasurableSpace.measurableSet_countablePartitionSet`：measurableSet_count
+ablePartitionSet (n : Nat) (a : α) : MeasurableSet (countablePartitionSet n a)
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-lemma meas_countablePartitionSet_le_of_fst_le (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ)
+lemma meas_countablePartitionSet_le_of_fst_le (hκν : fst κ ≤ ν) (n : ℕ) (a : α) (x : γ)
     (s : Set β) :
-    κ a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) := by
+    κ a (countablePartitionSet n x ×ˢ s) ≤ ν a (countablePartitionSet n x) := by
   calc κ a (countablePartitionSet n x ×ˢ s)
-    <= fst κ a (countablePartitionSet n x) := by
+    ≤ fst κ a (countablePartitionSet n x) := by
         rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-        refine measure_mono (fun x => ?_)
+        refine measure_mono (fun x ↦ ?_)
         simp only [mem_prod, mem_ofPred_eq, and_imp]
-        exact fun h _ => h
-  _ <= ν a (countablePartitionSet n x) := hκν a _
-
-/--
-lemma `densityProcess_le_one` / 引理 `densityProcess_le_one`
-
-English:
-lemma densityProcess_le_one
-  given: (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β)
-  proof: by
-  refine ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.div_le_of_le_mul ?_)
-  rw [ENNReal.ofReal_one]; rw [one_mul]
-  exact meas_countablePartitionSet_le_of_fst_le hκν n a x s
-
-中文:
-引理 densityProcess_le_one
-  条件: (hκν : fst κ <= ν) (n : 自然数) (a : α) (x : γ) (s : 集合 β)
-  证明: by
-  refine ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.div_le_of_le_mul ?_)
-  rw [ENNReal.ofReal_one]; rw [one_mul]
-  exact meas_countablePartitionSet_le_of_fst_le hκν n a x s
-
-Depends on / 依赖: ENNReal, ENNReal.div_le_of_le_mul, ENNReal.ofReal_one, ENNReal.toReal_le_of_le_ofReal, div_le_of_le_mul, meas_countablePartitionSet_le_of_fst_le, ofReal_one, one_mul, toReal_le_of_le_ofReal, zero_le_one
+        exact fun h _ ↦ h
+  _ ≤ ν a (countablePartitionSet n x) := hκν a _
+/-
+**ProbabilityTheory.Kernel.densityProcess_le_one** 是 Mathlib 中的一个引理，位于命名空间 `Prob
+abilityTheory.Kernel`。
+形式化陈述：densityProcess_le_one (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Se
+t β) : densityProcess κ ν n a x s <= 1
+参数：hκν : fst κ <= ν；n : Nat；a : α；x : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_le_of_le_ofReal`：toReal_le_of_le_ofReal {a : Real>=0∞} {b
+ : Real} (hb : 0 <= b) (h : a <= ENNReal.ofReal b) : ENNReal.toReal a <= b
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `ENNReal.div_le_of_le_mul`：div_le_of_le_mul (h : a <= b * c) : a / c <= b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.ofReal_one`：ENNReal.ofReal 1 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用引理 `ProbabilityTheory.Kernel.meas_countablePartitionSet_le_of_fst_le`：meas_c
+ountablePartitionSet_le_of_fst_le (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (
+s : Set β) : κ a (countablePartitionSet n x ×ˢ s) <= ν…
 -/
-lemma densityProcess_le_one (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) :
-    densityProcess κ ν n a x s <= 1 := by
+lemma densityProcess_le_one (hκν : fst κ ≤ ν) (n : ℕ) (a : α) (x : γ) (s : Set β) :
+    densityProcess κ ν n a x s ≤ 1 := by
   refine ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.div_le_of_le_mul ?_)
-  rw [ENNReal.ofReal_one]; rw [one_mul]
+  rw [ENNReal.ofReal_one, one_mul]
   exact meas_countablePartitionSet_le_of_fst_le hκν n a x s
-
-/--
-lemma `eLpNorm_densityProcess_le` / 引理 `eLpNorm_densityProcess_le`
-
-English:
-lemma eLpNorm_densityProcess_le
-  given: (hκν : fst κ <= ν) (n : Nat) (a : α) (s : Set β)
-  proof: by
-  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun x => ?_))).trans ?_
+/-
+**ProbabilityTheory.Kernel.eLpNorm_densityProcess_le** 是 Mathlib 中的一个引理，位于命名空间 `
+ProbabilityTheory.Kernel`。
+形式化陈述：eLpNorm_densityProcess_le (hκν : fst κ <= ν) (n : Nat) (a : α) (s : Set β)
+ : eLpNorm (fun x => densityProcess κ ν n a x s) 1 (ν a) <= ν a univ
+参数：hκν : fst κ <= ν；n : Nat；a : α；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.eLpNorm_le_of_ae_bound`：eLpNorm_le_of_ae_bound {f : α -> F
+} {C : Real} (hfC : forallᵐ x ∂μ, ‖f x‖ <= C) : eLpNorm f p μ <= μ Set.univ ^ p.
+toReal⁻¹ * ENNReal.ofReal …
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_nonneg`：densityProcess_nonneg (κ
+ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) (s : Set β) : 0 
+<= densityProcess κ ν n a x s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_le_one`：densityProcess_le_one (h
+κν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) : densityProcess κ ν n a 
+x s <= 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `ENNReal.rpow_one`：rpow_one (x : Real>=0∞) : x ^ (1 : Real) = x
+· 使用定理 `ENNReal.ofReal_one`：ENNReal.ofReal 1 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+-/
+lemma eLpNorm_densityProcess_le (hκν : fst κ ≤ ν) (n : ℕ) (a : α) (s : Set β) :
+    eLpNorm (fun x ↦ densityProcess κ ν n a x s) 1 (ν a) ≤ ν a univ := by
+  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun x ↦ ?_))).trans ?_
   · simp only [Real.norm_eq_abs, abs_of_nonneg (densityProcess_nonneg κ ν n a x s),
       densityProcess_le_one hκν n a x s]
   · simp
-
-中文:
-引理 eLpNorm_densityProcess_le
-  条件: (hκν : fst κ <= ν) (n : 自然数) (a : α) (s : 集合 β)
-  证明: by
-  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun x => ?_))).trans ?_
-  · simp only [Real.norm_eq_abs, abs_of_nonneg (densityProcess_nonneg κ ν n a x s),
-      densityProcess_le_one hκν n a x s]
-  · simp
-
-Depends on / 依赖: Real.norm_eq_abs, abs_of_nonneg, ae_of_all, densityProcess_le_one, densityProcess_nonneg, eLpNorm_le_of_ae_bound, norm_eq_abs
+/-
+**ProbabilityTheory.Kernel.integrable_densityProcess** 是 Mathlib 中的一个引理，位于命名空间 `
+ProbabilityTheory.Kernel`。
+形式化陈述：integrable_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) 
+(a : α) {s : Set β} (hs : MeasurableSet s) : Integrable (fun x => densityProcess
+ κ ν n a x s) (ν a)
+参数：hκν : fst κ <= ν；n : Nat；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.memLp_one_iff_integrable`：memLp_one_iff_integrable {f : α 
+-> ε} : MemLp f 1 μ ↔ Integrable f μ
+· 使用定理 `Measurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 :…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess_right`：measurable_den
+sityProcess_right (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) {s : Set β} 
+(a : α) (hs : MeasurableSet s) : Measurable (f…
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用引理 `ProbabilityTheory.Kernel.eLpNorm_densityProcess_le`：eLpNorm_densityProce
+ss_le (hκν : fst κ <= ν) (n : Nat) (a : α) (s : Set β) : eLpNorm (fun x => densi
+tyProcess κ ν n a x s) 1 (ν a) <= ν a un…
+· 使用定理 `MeasureTheory.measure_lt_top`：measure_lt_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s < ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
 -/
-lemma eLpNorm_densityProcess_le (hκν : fst κ <= ν) (n : Nat) (a : α) (s : Set β) :
-    eLpNorm (fun x => densityProcess κ ν n a x s) 1 (ν a) <= ν a univ := by
-  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun x => ?_))).trans ?_
-  · simp only [Real.norm_eq_abs, abs_of_nonneg (densityProcess_nonneg κ ν n a x s),
-      densityProcess_le_one hκν n a x s]
-  · simp
-
-/--
-lemma `integrable_densityProcess` / 引理 `integrable_densityProcess`
-
-English:
-lemma integrable_densityProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat)
-  proof: by
-  rw [← memLp_one_iff_integrable]
-  refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
-  · exact measurable_densityProcess_right κ ν n a hs
-  · exact (eLpNorm_densityProcess_le hκν n a s).trans_lt (measure_lt_top _ _)
-
-中文:
-引理 integrable_densityProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν] (n : 自然数)
-  证明: by
-  rw [← memLp_one_iff_integrable]
-  refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
-  · exact measurable_densityProcess_right κ ν n a hs
-  · exact (eLpNorm_densityProcess_le hκν n a s).trans_lt (measure_lt_top _ _)
-
-Depends on / 依赖: Measurable, Measurable.aestronglyMeasurable, aestronglyMeasurable, eLpNorm_densityProcess_le, measurable_densityProcess_right, measure_lt_top, memLp_one_iff_integrable, trans_lt
--/
-lemma integrable_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat)
+lemma integrable_densityProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν] (n : ℕ)
     (a : α) {s : Set β} (hs : MeasurableSet s) :
-    Integrable (fun x => densityProcess κ ν n a x s) (ν a) := by
+    Integrable (fun x ↦ densityProcess κ ν n a x s) (ν a) := by
   rw [← memLp_one_iff_integrable]
   refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
   · exact measurable_densityProcess_right κ ν n a hs
   · exact (eLpNorm_densityProcess_le hκν n a s).trans_lt (measure_lt_top _ _)
-
-/--
-lemma `setIntegral_densityProcess_of_mem` / 引理 `setIntegral_densityProcess_of_mem`
-
-English:
-lemma setIntegral_densityProcess_of_mem
-  statement: (hκν : fst κ <= ν) [hν : IsFiniteKernel ν]
-  proof: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  have hu_meas : MeasurableSet u := measurableSet_countablePartition n hu
-  simp_rw [densityProcess]
-  rw [integral_toReal]
-  rotate_left
-  · refine Measurable.aemeasurable ?_
-    change Measurable ((fun (p : α × _) => κ p.1 (countablePartitionSet n p.2 ×ˢ s)
-      / ν p.1 (countablePartitionSet n p.2)) ∘ (fun x => (a, x)))
-    exact (measurable_densityProcess_aux κ ν n hs).comp measurable_prodMk_left
-  · refine ae_of_all _ (fun x => ?_)
-    by_cases h0 : ν a (countablePartitionSet n x) = 0
-    · suffices κ a (countablePartitionSet n x ×ˢ s) = 0 by simp [h0, this]
-      have h0' : fst κ a (countablePartitionSet n x) = 0 := by simpa using (hκν a _).trans h0.le
-      rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h0'
-      refine measure_mono_null (fun x => ?_) h0'
-      simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
-    · finiteness
-  congr
-  have : ∫⁻ x in u, κ a (countablePartitionSet n x ×ˢ s) / ν a (countablePartitionSet n x) ∂(ν a)
-      = ∫⁻ _ in u, κ a (u ×ˢ s) / ν a u ∂(ν a) := by
-    refine setLIntegral_congr_fun hu_meas (fun t ht => ?_)
-    rw [countablePartitionSet_of_mem hu ht]
-  rw [this]
-  simp only [MeasureTheory.lintegral_const, MeasurableSet.univ, Measure.restrict_apply, univ_inter]
-  by_cases h0 : ν a u = 0
-  · simp only [h0, mul_zero]
-    have h0' : fst κ a u = 0 := by simpa using (hκν a _).trans h0.le
-    rw [fst_apply' _ _ hu_meas] at h0'
-    refine (measure_mono_null ?_ h0').symm
-    intro p
-    simp only [mem_prod, mem_ofPred_eq, and_imp]
-    exact fun h _ => h
-  rw [div_eq_mul_inv]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel h0]; rw [mul_one]
-  exact measure_ne_top _ _
-
-中文:
-引理 set整数egral_densityProcess_of_mem
-  结论: (hκν : fst κ <= ν) [hν : 是FiniteKernel ν]
-  证明: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  have hu_meas : MeasurableSet u := measurableSet_countablePartition n hu
-  simp_rw [densityProcess]
-  rw [integral_toReal]
-  rotate_left
-  · refine Measurable.aemeasurable ?_
-    change Measurable ((fun (p : α × _) => κ p.1 (countablePartitionSet n p.2 ×ˢ s)
-      / ν p.1 (countablePartitionSet n p.2)) ∘ (fun x => (a, x)))
-    exact (measurable_densityProcess_aux κ ν n hs).comp measurable_prodMk_left
-  · refine ae_of_all _ (fun x => ?_)
-    by_cases h0 : ν a (countablePartitionSet n x) = 0
-    · suffices κ a (countablePartitionSet n x ×ˢ s) = 0 by simp [h0, this]
-      have h0' : fst κ a (countablePartitionSet n x) = 0 := by simpa using (hκν a _).trans h0.le
-      rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h0'
-      refine measure_mono_null (fun x => ?_) h0'
-      simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
-    · finiteness
-  congr
-  have : ∫⁻ x in u, κ a (countablePartitionSet n x ×ˢ s) / ν a (countablePartitionSet n x) ∂(ν a)
-      = ∫⁻ _ in u, κ a (u ×ˢ s) / ν a u ∂(ν a) := by
-    refine setLIntegral_congr_fun hu_meas (fun t ht => ?_)
-    rw [countablePartitionSet_of_mem hu ht]
-  rw [this]
-  simp only [MeasureTheory.lintegral_const, MeasurableSet.univ, Measure.restrict_apply, univ_inter]
-  by_cases h0 : ν a u = 0
-  · simp only [h0, mul_zero]
-    have h0' : fst κ a u = 0 := by simpa using (hκν a _).trans h0.le
-    rw [fst_apply' _ _ hu_meas] at h0'
-    refine (measure_mono_null ?_ h0').symm
-    intro p
-    simp only [mem_prod, mem_ofPred_eq, and_imp]
-    exact fun h _ => h
-  rw [div_eq_mul_inv]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel h0]; rw [mul_one]
-  exact measure_ne_top _ _
-
-Depends on / 依赖: IsFiniteKernel, Measurable, Measurable.aemeasurable, MeasurableSet, ae_of_all, aemeasurable, countablePartitionSet, densityProcess, hu_meas, integral_toReal, isFiniteKernel_of_isFiniteKernel_fst, isFiniteKernel_of_le, measurableSet_countablePartition, measurable_densityProcess_aux, measurable_prodMk_left, rotate_left, simp_rw
+/-
+**ProbabilityTheory.Kernel.setIntegral_densityProcess_of_mem** 是 Mathlib 中的一个引理，
+位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：setIntegral_densityProcess_of_mem (hκν : fst κ <= ν) [hν : IsFiniteKernel 
+ν] (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) {u : Set γ} (hu : u in c
+ountablePartition γ n) : ∫ x in u, densityProcess κ ν n a x s ∂(ν a) = (κ a).rea
+l (u ×ˢ s)
+参数：hκν : fst κ <= ν；n : Nat；a : α；hs : MeasurableSet s；hu : u in countablePartit
+ion γ n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.isFiniteKernel_of_isFiniteKernel_fst`：∀ {α : Ty
+pe u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β}   {mγ : MeasurableSpace γ} {κ : Probability…
+· 使用引理 `ProbabilityTheory.isFiniteKernel_of_le`：isFiniteKernel_of_le {κ ν : Kern
+el α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν) : IsFiniteKernel κ
+· 使用引理 `MeasurableSpace.measurableSet_countablePartition`：measurableSet_countabl
+ePartition (n : Nat) {s : Set α} (hs : s in countablePartition α n) : Measurable
+Set s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_toReal`：integral_toReal {f : α -> Real>=0∞} (hfm 
+: AEMeasurable f μ) (hf : forallᵐ x ∂μ, f x < ∞) : ∫ a, (f a).toReal ∂μ = (∫⁻ a,
+ f a ∂μ).toReal
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess_aux`：measurable_densi
+tyProcess_aux (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) {s : Set β} (hs 
+: MeasurableSet s) : Measurable (fun (p : α …
+· 使用定理 `measurable_prodMk_left`：measurable_prodMk_left {x : α} : Measurable (@Pr
+od.mk _ β x)
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `MeasureTheory.measure_mono_null`：measure_mono_null (h : s subseteq t) (h
+t : μ t = 0) : μ s = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用引理 `MeasurableSpace.measurableSet_countablePartitionSet`：measurableSet_count
+ablePartitionSet (n : Nat) (a : α) : MeasurableSet (countablePartitionSet n a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ENNReal.zero_div`：∀ {a : ENNReal}, 0 / a = 0
+· 使用定理 `Ne.lt_top`：Ne.lt_top (h : a != ⊤) : a < ⊤
+· 使用定理 `ENNReal.div_ne_top`：div_ne_top {x y : Real>=0∞} (h1 : x != ∞) (h2 : y !=
+ 0) : x / y != ∞
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `MeasureTheory.setLIntegral_congr_fun`：setLIntegral_congr_fun {f g : α ->
+ Real>=0∞} {s : Set α} (hs : MeasurableSet s) (hfg : EqOn f g s) : ∫⁻ x in s, f 
+x ∂μ = ∫⁻ x in s, g x ∂μ
+· 使用引理 `MeasurableSpace.countablePartitionSet_of_mem`：countablePartitionSet_of_m
+em {n : Nat} {a : α} {s : Set α} (hs : s in countablePartition α n) (ha : a in s
+) : countablePartitionSet n a = s
+（共 39 条，此处仅展示前 30 条）
 -/
-lemma setIntegral_densityProcess_of_mem (hκν : fst κ <= ν) [hν : IsFiniteKernel ν]
-    (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) {u : Set γ}
-    (hu : u in countablePartition γ n) :
+lemma setIntegral_densityProcess_of_mem (hκν : fst κ ≤ ν) [hν : IsFiniteKernel ν]
+    (n : ℕ) (a : α) {s : Set β} (hs : MeasurableSet s) {u : Set γ}
+    (hu : u ∈ countablePartition γ n) :
     ∫ x in u, densityProcess κ ν n a x s ∂(ν a) = (κ a).real (u ×ˢ s) := by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   have hu_meas : MeasurableSet u := measurableSet_countablePartition n hu
@@ -594,22 +611,22 @@ lemma setIntegral_densityProcess_of_mem (hκν : fst κ <= ν) [hν : IsFiniteKe
   rw [integral_toReal]
   rotate_left
   · refine Measurable.aemeasurable ?_
-    change Measurable ((fun (p : α × _) => κ p.1 (countablePartitionSet n p.2 ×ˢ s)
-      / ν p.1 (countablePartitionSet n p.2)) ∘ (fun x => (a, x)))
+    change Measurable ((fun (p : α × _) ↦ κ p.1 (countablePartitionSet n p.2 ×ˢ s)
+      / ν p.1 (countablePartitionSet n p.2)) ∘ (fun x ↦ (a, x)))
     exact (measurable_densityProcess_aux κ ν n hs).comp measurable_prodMk_left
-  · refine ae_of_all _ (fun x => ?_)
+  · refine ae_of_all _ (fun x ↦ ?_)
     by_cases h0 : ν a (countablePartitionSet n x) = 0
     · suffices κ a (countablePartitionSet n x ×ˢ s) = 0 by simp [h0, this]
       have h0' : fst κ a (countablePartitionSet n x) = 0 := by simpa using (hκν a _).trans h0.le
       rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h0'
-      refine measure_mono_null (fun x => ?_) h0'
+      refine measure_mono_null (fun x ↦ ?_) h0'
       simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
+      exact fun h _ ↦ h
     · finiteness
   congr
   have : ∫⁻ x in u, κ a (countablePartitionSet n x ×ˢ s) / ν a (countablePartitionSet n x) ∂(ν a)
       = ∫⁻ _ in u, κ a (u ×ˢ s) / ν a u ∂(ν a) := by
-    refine setLIntegral_congr_fun hu_meas (fun t ht => ?_)
+    refine setLIntegral_congr_fun hu_meas (fun t ht ↦ ?_)
     rw [countablePartitionSet_of_mem hu ht]
   rw [this]
   simp only [MeasureTheory.lintegral_const, MeasurableSet.univ, Measure.restrict_apply, univ_inter]
@@ -620,402 +637,486 @@ lemma setIntegral_densityProcess_of_mem (hκν : fst κ <= ν) [hν : IsFiniteKe
     refine (measure_mono_null ?_ h0').symm
     intro p
     simp only [mem_prod, mem_ofPred_eq, and_imp]
-    exact fun h _ => h
-  rw [div_eq_mul_inv]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel h0]; rw [mul_one]
+    exact fun h _ ↦ h
+  rw [div_eq_mul_inv, mul_assoc, ENNReal.inv_mul_cancel h0, mul_one]
   exact measure_ne_top _ _
 
 open scoped Function in -- required for scoped `on` notation
-/--
-lemma `setIntegral_densityProcess` / 引理 `setIntegral_densityProcess`
-
-English:
-lemma setIntegral_densityProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  obtain ⟨S, hS_subset, rfl⟩ := (measurableSet_generateFrom_countablePartition_iff _ _).mp hA
-  simp_rw [sUnion_eq_iUnion]
-  have h_disj : Pairwise (Disjoint on fun i : S => (i : Set γ)) := by
-    intro u v huv
-    simp only [Function.onFun]
-    refine disjoint_countablePartition (hS_subset (by simp)) (hS_subset (by simp)) ?_
-    rwa [ne_eq, ← Subtype.ext_iff]
-  rw [integral_iUnion]; rw [iUnion_prod_const]; rw [measureReal_def]; rw [measure_iUnion]; rw [ENNReal.tsum_toReal_eq (fun _ => measure_ne_top _ _)]
-  · congr with u
-    rw [setIntegral_densityProcess_of_mem hκν _ _ hs (hS_subset (by simp))]
-    rfl
-  · intro u v huv
-    simp only [Finset.coe_sort_coe, Set.disjoint_prod, disjoint_self]
-    exact Or.inl (h_disj huv)
-  · exact fun _ => (measurableSet_countablePartition n (hS_subset (by simp))).prod hs
-  · exact fun _ => measurableSet_countablePartition n (hS_subset (by simp))
-  · exact h_disj
-  · exact (integrable_densityProcess hκν _ _ hs).integrableOn
-
-中文:
-引理 set整数egral_densityProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  obtain ⟨S, hS_subset, rfl⟩ := (measurableSet_generateFrom_countablePartition_iff _ _).mp hA
-  simp_rw [sUnion_eq_iUnion]
-  have h_disj : Pairwise (Disjoint on fun i : S => (i : Set γ)) := by
-    intro u v huv
-    simp only [Function.onFun]
-    refine disjoint_countablePartition (hS_subset (by simp)) (hS_subset (by simp)) ?_
-    rwa [ne_eq, ← Subtype.ext_iff]
-  rw [integral_iUnion]; rw [iUnion_prod_const]; rw [measureReal_def]; rw [measure_iUnion]; rw [ENNReal.tsum_toReal_eq (fun _ => measure_ne_top _ _)]
-  · congr with u
-    rw [setIntegral_densityProcess_of_mem hκν _ _ hs (hS_subset (by simp))]
-    rfl
-  · intro u v huv
-    simp only [Finset.coe_sort_coe, Set.disjoint_prod, disjoint_self]
-    exact Or.inl (h_disj huv)
-  · exact fun _ => (measurableSet_countablePartition n (hS_subset (by simp))).prod hs
-  · exact fun _ => measurableSet_countablePartition n (hS_subset (by simp))
-  · exact h_disj
-  · exact (integrable_densityProcess hκν _ _ hs).integrableOn
-
-Depends on / 依赖: Disjoint, Function, Function.onFun, IsFiniteKernel, Pairwise, Subtype, Subtype.ext_iff, disjoint_countablePartition, ext_iff, hS_subset, h_disj, iUnion_prod_const, integral_iUnion, isFiniteKernel_of_isFiniteKernel_fst, isFiniteKernel_of_le, measurableSet_generateFrom_countablePartition_iff, measureRea, ne_eq, sUnion_eq_iUnion, simp_rw
+/-
+**ProbabilityTheory.Kernel.setIntegral_densityProcess** 是 Mathlib 中的一个引理，位于命名空间 
+`ProbabilityTheory.Kernel`。
+形式化陈述：setIntegral_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat)
+ (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ} (hA : MeasurableSet[coun
+tableFiltration γ n] A) : ∫ x in A, densityProcess κ ν n a x s ∂(ν a) = (κ a).re
+al (A ×ˢ s)
+参数：hκν : fst κ <= ν；n : Nat；a : α；hs : MeasurableSet s；hA : MeasurableSet[counta
+bleFiltration γ n] A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.isFiniteKernel_of_isFiniteKernel_fst`：∀ {α : Ty
+pe u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β}   {mγ : MeasurableSpace γ} {κ : Probability…
+· 使用引理 `ProbabilityTheory.isFiniteKernel_of_le`：isFiniteKernel_of_le {κ ν : Kern
+el α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν) : IsFiniteKernel κ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `MeasurableSpace.measurableSet_generateFrom_countablePartition_iff`：measu
+rableSet_generateFrom_countablePartition_iff (n : Nat) (s : Set α) : MeasurableS
+et[generateFrom (countablePartition α n)] s ↔ exists S …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.sUnion_eq_iUnion`：sUnion_eq_iUnion {s : Set (Set α)} : ⋃₀ s = ⋃ i : 
+s, i
+· 使用引理 `MeasurableSpace.disjoint_countablePartition`：disjoint_countablePartition
+ {n : Nat} {s t : Set α} (hs : s in countablePartition α n) (ht : t in countable
+Partition α n) (hst : s != t) : D…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `MeasureTheory.integral_iUnion`：integral_iUnion {ι : Type*} [Countable ι]
+ {s : ι -> Set X} (hm : forall i, MeasurableSet (s i)) (hd : Pairwise (Disjoint 
+on s)) (hfi : Integ…
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `MeasurableSpace.measurableSet_countablePartition`：measurableSet_countabl
+ePartition (n : Nat) {s : Set α} (hs : s in countablePartition α n) : Measurable
+Set s
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用引理 `ProbabilityTheory.Kernel.integrable_densityProcess`：integrable_densityPr
+ocess (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs : 
+MeasurableSet s) : Integrable (fun x => …
+· 使用定理 `Set.iUnion_prod_const`：iUnion_prod_const {s : ι -> Set α} {t : Set β} : 
+(⋃ i, s i) ×ˢ t = ⋃ i, s i ×ˢ t
+· 使用定理 `MeasureTheory.measureReal_def`：measureReal_def {α : Type*} {m : Measurab
+leSpace α} (μ : Measure α) (s : Set α) : μ.real s = (μ s).toReal
+· 使用定理 `MeasureTheory.measure_iUnion`：measure_iUnion {m0 : MeasurableSpace α} {μ
+ : Measure α} [Countable ι] {f : ι -> Set α} (hn : Pairwise (Disjoint on f)) (h 
+: forall i, Measur…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasurableSet.prod`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSpace
+ α} {mβ : MeasurableSpace β} {s : Set α} {t : Set β},   MeasurableSet s → Measur
+ableSet …
+· 使用定理 `ENNReal.tsum_toReal_eq`：tsum_toReal_eq {f : α -> Real>=0∞} (hf : forall 
+a, f a != ∞) : (∑' a, f a).toReal = ∑' a, (f a).toReal
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_densityProcess_of_mem`：setIntegral_
+densityProcess_of_mem (hκν : fst κ <= ν) [hν : IsFiniteKernel ν] (n : Nat) (a : 
+α) {s : Set β} (hs : MeasurableSet s) {u : Set γ…
 -/
-lemma setIntegral_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν]
-    (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ}
+lemma setIntegral_densityProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
+    (n : ℕ) (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ}
     (hA : MeasurableSet[countableFiltration γ n] A) :
     ∫ x in A, densityProcess κ ν n a x s ∂(ν a) = (κ a).real (A ×ˢ s) := by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   obtain ⟨S, hS_subset, rfl⟩ := (measurableSet_generateFrom_countablePartition_iff _ _).mp hA
   simp_rw [sUnion_eq_iUnion]
-  have h_disj : Pairwise (Disjoint on fun i : S => (i : Set γ)) := by
+  have h_disj : Pairwise (Disjoint on fun i : S ↦ (i : Set γ)) := by
     intro u v huv
     simp only [Function.onFun]
     refine disjoint_countablePartition (hS_subset (by simp)) (hS_subset (by simp)) ?_
     rwa [ne_eq, ← Subtype.ext_iff]
-  rw [integral_iUnion]; rw [iUnion_prod_const]; rw [measureReal_def]; rw [measure_iUnion]; rw [ENNReal.tsum_toReal_eq (fun _ => measure_ne_top _ _)]
+  rw [integral_iUnion, iUnion_prod_const, measureReal_def, measure_iUnion,
+      ENNReal.tsum_toReal_eq (fun _ ↦ measure_ne_top _ _)]
   · congr with u
     rw [setIntegral_densityProcess_of_mem hκν _ _ hs (hS_subset (by simp))]
     rfl
   · intro u v huv
     simp only [Finset.coe_sort_coe, Set.disjoint_prod, disjoint_self]
     exact Or.inl (h_disj huv)
-  · exact fun _ => (measurableSet_countablePartition n (hS_subset (by simp))).prod hs
-  · exact fun _ => measurableSet_countablePartition n (hS_subset (by simp))
+  · exact fun _ ↦ (measurableSet_countablePartition n (hS_subset (by simp))).prod hs
+  · exact fun _ ↦ measurableSet_countablePartition n (hS_subset (by simp))
   · exact h_disj
   · exact (integrable_densityProcess hκν _ _ hs).integrableOn
-
-/--
-lemma `integral_densityProcess` / 引理 `integral_densityProcess`
-
-English:
-lemma integral_densityProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  rw [← setIntegral_univ]; rw [setIntegral_densityProcess hκν _ _ hs MeasurableSet.univ]
-
-中文:
-引理 integral_densityProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  rw [← setIntegral_univ]; rw [setIntegral_densityProcess hκν _ _ hs MeasurableSet.univ]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, setIntegral_densityProcess, setIntegral_univ
+/-
+**ProbabilityTheory.Kernel.integral_densityProcess** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+obabilityTheory.Kernel`。
+形式化陈述：integral_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a
+ : α) {s : Set β} (hs : MeasurableSet s) : ∫ x, densityProcess κ ν n a x s ∂(ν a
+) = (κ a).real (univ ×ˢ s)
+参数：hκν : fst κ <= ν；n : Nat；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.setIntegral_univ`：setIntegral_univ : ∫ x in univ, f x ∂μ =
+ ∫ x, f x ∂μ
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_densityProcess`：setIntegral_density
+Process (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs 
+: MeasurableSet s) {A : Set γ} (hA : Meas…
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
 -/
-lemma integral_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν]
-    (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) :
+lemma integral_densityProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
+    (n : ℕ) (a : α) {s : Set β} (hs : MeasurableSet s) :
     ∫ x, densityProcess κ ν n a x s ∂(ν a) = (κ a).real (univ ×ˢ s) := by
-  rw [← setIntegral_univ]; rw [setIntegral_densityProcess hκν _ _ hs MeasurableSet.univ]
-
-/--
-lemma `setIntegral_densityProcess_of_le` / 引理 `setIntegral_densityProcess_of_le`
-
-English:
-lemma setIntegral_densityProcess_of_le
-  statement: (hκν : fst κ <= ν)
-  proof: setIntegral_densityProcess hκν m a hs ((countableFiltration γ).mono hnm A hA)
-
-中文:
-引理 set整数egral_densityProcess_of_le
-  结论: (hκν : fst κ <= ν)
-  证明: setIntegral_densityProcess hκν m a hs ((countableFiltration γ).mono hnm A hA)
-
-Depends on / 依赖: countableFiltration, setIntegral_densityProcess
+  rw [← setIntegral_univ, setIntegral_densityProcess hκν _ _ hs MeasurableSet.univ]
+/-
+**ProbabilityTheory.Kernel.setIntegral_densityProcess_of_le** 是 Mathlib 中的一个引理，位
+于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：setIntegral_densityProcess_of_le (hκν : fst κ <= ν) [IsFiniteKernel ν] {n 
+m : Nat} (hnm : n <= m) (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ} (
+hA : MeasurableSet[countableFiltration γ n] A) : ∫ x in A, densityProcess κ ν m 
+a x s ∂(ν a) = (κ a).real (A ×ˢ s)
+参数：hκν : fst κ <= ν；hnm : n <= m；a : α；hs : MeasurableSet s；hA : MeasurableSet[c
+ountableFiltration γ n] A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_densityProcess`：setIntegral_density
+Process (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs 
+: MeasurableSet s) {A : Set γ} (hA : Meas…
+· 使用定理 `MeasureTheory.Filtration.mono`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Meas
+urableSpace Ω} [inst : Preorder ι] {i j : ι}   (f : MeasureTheory.Filtration ι m
+), i ≤ j → ↑f i ≤ ↑…
 -/
-lemma setIntegral_densityProcess_of_le (hκν : fst κ <= ν)
-    [IsFiniteKernel ν] {n m : Nat} (hnm : n <= m) (a : α) {s : Set β} (hs : MeasurableSet s)
+lemma setIntegral_densityProcess_of_le (hκν : fst κ ≤ ν)
+    [IsFiniteKernel ν] {n m : ℕ} (hnm : n ≤ m) (a : α) {s : Set β} (hs : MeasurableSet s)
     {A : Set γ} (hA : MeasurableSet[countableFiltration γ n] A) :
     ∫ x in A, densityProcess κ ν m a x s ∂(ν a) = (κ a).real (A ×ˢ s) :=
   setIntegral_densityProcess hκν m a hs ((countableFiltration γ).mono hnm A hA)
-
-/--
-lemma `condExp_densityProcess` / 引理 `condExp_densityProcess`
-
-English:
-lemma condExp_densityProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  refine (ae_eq_condExp_of_forall_setIntegral_eq ?_ ?_ ?_ ?_ ?_).symm
-  · exact integrable_densityProcess hκν j a hs
-  · exact fun _ _ _ => (integrable_densityProcess hκν _ _ hs).integrableOn
-  · intro x hx _
-    rw [setIntegral_densityProcess hκν i a hs hx]; rw [setIntegral_densityProcess_of_le hκν hij a hs hx]
-  · exact StronglyMeasurable.aestronglyMeasurable
-      (stronglyMeasurable_countableFiltration_densityProcess κ ν i a hs)
-
-中文:
-引理 condExp_densityProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  refine (ae_eq_condExp_of_forall_setIntegral_eq ?_ ?_ ?_ ?_ ?_).symm
-  · exact integrable_densityProcess hκν j a hs
-  · exact fun _ _ _ => (integrable_densityProcess hκν _ _ hs).integrableOn
-  · intro x hx _
-    rw [setIntegral_densityProcess hκν i a hs hx]; rw [setIntegral_densityProcess_of_le hκν hij a hs hx]
-  · exact StronglyMeasurable.aestronglyMeasurable
-      (stronglyMeasurable_countableFiltration_densityProcess κ ν i a hs)
-
-Depends on / 依赖: StronglyMeasurable, StronglyMeasurable.aestronglyMeasurable, ae_eq_condExp_of_forall_setIntegral_eq, aestronglyMeasurable, integrableOn, integrable_densityProcess, setIntegral_densityProcess, setIntegral_densityProcess_of_le, stronglyMeasurable_countableFiltration_densityProcess
+/-
+**ProbabilityTheory.Kernel.condExp_densityProcess** 是 Mathlib 中的一个引理，位于命名空间 `Pro
+babilityTheory.Kernel`。
+形式化陈述：condExp_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] {i j : Nat} (
+hij : i <= j) (a : α) {s : Set β} (hs : MeasurableSet s) : (ν a)[fun x => densit
+yProcess κ ν j a x s | countableFiltration γ i] =ᵐ[ν a] fun x => densityProcess 
+κ ν i a x s
+参数：hκν : fst κ <= ν；hij : i <= j；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.ae_eq_condExp_of_forall_setIntegral_eq`：ae_eq_condExp_of_f
+orall_setIntegral_eq (hm : m <= m₀) [SigmaFinite (μ.trim hm)] {f g : α -> E} (hf
+ : Integrable f μ) (hg_int_finite : forall…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.IsFiniteMeasure.sigmaFiniteFiltration`：∀ {Ω : Type u_1} {ι
+ : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι] (μ : MeasureTheory.Meas
+ure Ω)   (f : MeasureTheory.Filtration ι …
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用引理 `ProbabilityTheory.Kernel.integrable_densityProcess`：integrable_densityPr
+ocess (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs : 
+MeasurableSet s) : Integrable (fun x => …
+· 使用定理 `MeasureTheory.Integrable.integrableOn`：∀ {α : Type u_1} {ε : Type u_3} {
+mα : MeasurableSpace α} {f : α → ε} {s : Set α} {μ : MeasureTheory.Measure α}   
+[inst : TopologicalSpace ε]…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_densityProcess`：setIntegral_density
+Process (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs 
+: MeasurableSet s) {A : Set γ} (hA : Meas…
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_densityProcess_of_le`：setIntegral_d
+ensityProcess_of_le (hκν : fst κ <= ν) [IsFiniteKernel ν] {n m : Nat} (hnm : n <
+= m) (a : α) {s : Set β} (hs : MeasurableSet s)…
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用引理 `ProbabilityTheory.Kernel.stronglyMeasurable_countableFiltration_densityP
+rocess`：stronglyMeasurable_countableFiltration_densityProcess (κ : Kernel α (γ ×
+ β)) (ν : Kernel α γ) (n : Nat) (a : α) {s : Set β} (hs : Measurable…
 -/
-lemma condExp_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν]
-    {i j : Nat} (hij : i <= j) (a : α) {s : Set β} (hs : MeasurableSet s) :
-    (ν a)[fun x => densityProcess κ ν j a x s | countableFiltration γ i]
-      =ᵐ[ν a] fun x => densityProcess κ ν i a x s := by
+lemma condExp_densityProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
+    {i j : ℕ} (hij : i ≤ j) (a : α) {s : Set β} (hs : MeasurableSet s) :
+    (ν a)[fun x ↦ densityProcess κ ν j a x s | countableFiltration γ i]
+      =ᵐ[ν a] fun x ↦ densityProcess κ ν i a x s := by
   refine (ae_eq_condExp_of_forall_setIntegral_eq ?_ ?_ ?_ ?_ ?_).symm
   · exact integrable_densityProcess hκν j a hs
-  · exact fun _ _ _ => (integrable_densityProcess hκν _ _ hs).integrableOn
+  · exact fun _ _ _ ↦ (integrable_densityProcess hκν _ _ hs).integrableOn
   · intro x hx _
-    rw [setIntegral_densityProcess hκν i a hs hx]; rw [setIntegral_densityProcess_of_le hκν hij a hs hx]
+    rw [setIntegral_densityProcess hκν i a hs hx,
+      setIntegral_densityProcess_of_le hκν hij a hs hx]
   · exact StronglyMeasurable.aestronglyMeasurable
       (stronglyMeasurable_countableFiltration_densityProcess κ ν i a hs)
-
-/--
-lemma `martingale_densityProcess` / 引理 `martingale_densityProcess`
-
-English:
-lemma martingale_densityProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: ⟨stronglyAdapted_densityProcess κ ν a hs, fun _ _ h => condExp_densityProcess hκν h a hs⟩
-
-中文:
-引理 martingale_densityProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: ⟨stronglyAdapted_densityProcess κ ν a hs, fun _ _ h => condExp_densityProcess hκν h a hs⟩
-
-Depends on / 依赖: condExp_densityProcess, stronglyAdapted_densityProcess
+/-
+**ProbabilityTheory.Kernel.martingale_densityProcess** 是 Mathlib 中的一个引理，位于命名空间 `
+ProbabilityTheory.Kernel`。
+形式化陈述：martingale_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s
+ : Set β} (hs : MeasurableSet s) : Martingale (fun n x => densityProcess κ ν n a
+ x s) (countableFiltration γ) (ν a)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.stronglyAdapted_densityProcess`：stronglyAdapted
+_densityProcess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α) {s : Set β} (hs 
+: MeasurableSet s) : StronglyAdapted (countab…
+· 使用引理 `ProbabilityTheory.Kernel.condExp_densityProcess`：condExp_densityProcess 
+(hκν : fst κ <= ν) [IsFiniteKernel ν] {i j : Nat} (hij : i <= j) (a : α) {s : Se
+t β} (hs : MeasurableSet s) : (ν a)[f…
 -/
-lemma martingale_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma martingale_densityProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) :
-    Martingale (fun n x => densityProcess κ ν n a x s) (countableFiltration γ) (ν a) :=
-  ⟨stronglyAdapted_densityProcess κ ν a hs, fun _ _ h => condExp_densityProcess hκν h a hs⟩
-
-/--
-lemma `densityProcess_mono_set` / 引理 `densityProcess_mono_set`
-
-English:
-lemma densityProcess_mono_set
-  statement: (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ)
-  proof: by
-  unfold densityProcess
-  obtain h₀ | h₀ := eq_or_ne (ν a (countablePartitionSet n x)) 0
-  · simp [h₀]
-  · gcongr
-    simp only [ne_eq, ENNReal.div_eq_top, h₀, and_false, false_or, not_and, not_not]
-    exact eq_top_mono (meas_countablePartitionSet_le_of_fst_le hκν n a x s')
-
-中文:
-引理 densityProcess_mono_set
-  结论: (hκν : fst κ <= ν) (n : 自然数) (a : α) (x : γ)
-  证明: by
-  unfold densityProcess
-  obtain h₀ | h₀ := eq_or_ne (ν a (countablePartitionSet n x)) 0
-  · simp [h₀]
-  · gcongr
-    simp only [ne_eq, ENNReal.div_eq_top, h₀, and_false, false_or, not_and, not_not]
-    exact eq_top_mono (meas_countablePartitionSet_le_of_fst_le hκν n a x s')
-
-Depends on / 依赖: ENNReal, ENNReal.div_eq_top, and_false, countablePartitionSet, densityProcess, div_eq_top, eq_or_ne, eq_top_mono, false_or, meas_countablePartitionSet_le_of_fst_le, ne_eq, not_and, not_not
+    Martingale (fun n x ↦ densityProcess κ ν n a x s) (countableFiltration γ) (ν a) :=
+  ⟨stronglyAdapted_densityProcess κ ν a hs, fun _ _ h ↦ condExp_densityProcess hκν h a hs⟩
+/-
+**ProbabilityTheory.Kernel.densityProcess_mono_set** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+obabilityTheory.Kernel`。
+形式化陈述：densityProcess_mono_set (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) {s s'
+ : Set β} (h : s subseteq s') : densityProcess κ ν n a x s <= densityProcess κ ν
+ n a x s'
+参数：hκν : fst κ <= ν；n : Nat；a : α；x : γ；h : s subseteq s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_div`：∀ (a b : ENNReal), (a / b).toReal = a.toReal / b.toR
+eal
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_top_mono`：eq_top_mono (h : a <= b) (h₂ : a = ⊤) : b = ⊤
+· 使用引理 `ProbabilityTheory.Kernel.meas_countablePartitionSet_le_of_fst_le`：meas_c
+ountablePartitionSet_le_of_fst_le (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (
+s : Set β) : κ a (countablePartitionSet n x ×ˢ s) <= ν…
+· 使用定理 `ENNReal.div_le_div`：∀ {a b c d : ENNReal}, a ≤ b → d ≤ c → a / c ≤ b / d
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.prod_mono`：prod_mono (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) : s
+₁ ×ˢ t₁ subseteq s₂ ×ˢ t₂
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma densityProcess_mono_set (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ)
-    {s s' : Set β} (h : s subseteq s') :
-    densityProcess κ ν n a x s <= densityProcess κ ν n a x s' := by
+lemma densityProcess_mono_set (hκν : fst κ ≤ ν) (n : ℕ) (a : α) (x : γ)
+    {s s' : Set β} (h : s ⊆ s') :
+    densityProcess κ ν n a x s ≤ densityProcess κ ν n a x s' := by
   unfold densityProcess
   obtain h₀ | h₀ := eq_or_ne (ν a (countablePartitionSet n x)) 0
   · simp [h₀]
   · gcongr
     simp only [ne_eq, ENNReal.div_eq_top, h₀, and_false, false_or, not_and, not_not]
     exact eq_top_mono (meas_countablePartitionSet_le_of_fst_le hκν n a x s')
-
-/--
-lemma `densityProcess_mono_kernel_left` / 引理 `densityProcess_mono_kernel_left`
-
-English:
-lemma densityProcess_mono_kernel_left
-  statement: {κ' : Kernel α (γ × β)} (hκκ' : κ <= κ')
-  proof: by
-  unfold densityProcess
-  by_cases h0 : ν a (countablePartitionSet n x) = 0
-  · rw [h0, ENNReal.toReal_div, ENNReal.toReal_div]
-    simp
-  have h_le : κ' a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) :=
-    meas_countablePartitionSet_le_of_fst_le hκ'ν n a x s
-  gcongr
-  · simp only [ne_eq, ENNReal.div_eq_top, h0, and_false, false_or, not_and, not_not]
-    exact fun h_top => eq_top_mono h_le h_top
-  · apply hκκ'
-
-中文:
-引理 densityProcess_mono_kernel_left
-  结论: {κ' : 核 α (γ × β)} (hκκ' : κ <= κ')
-  证明: by
-  unfold densityProcess
-  by_cases h0 : ν a (countablePartitionSet n x) = 0
-  · rw [h0, ENNReal.toReal_div, ENNReal.toReal_div]
-    simp
-  have h_le : κ' a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) :=
-    meas_countablePartitionSet_le_of_fst_le hκ'ν n a x s
-  gcongr
-  · simp only [ne_eq, ENNReal.div_eq_top, h0, and_false, false_or, not_and, not_not]
-    exact fun h_top => eq_top_mono h_le h_top
-  · apply hκκ'
-
-Depends on / 依赖: ENNReal, ENNReal.div_eq_top, ENNReal.toReal_div, and_false, countablePartitionSet, densityProcess, div_eq_top, eq_top_mono, false_or, h_le, h_top, meas_countablePartitionSet_le_of_fst_le, ne_eq, not_and, not_not, toReal_div
+/-
+**ProbabilityTheory.Kernel.densityProcess_mono_kernel_left** 是 Mathlib 中的一个引理，位于
+命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：densityProcess_mono_kernel_left {κ' : Kernel α (γ × β)} (hκκ' : κ <= κ') (
+hκ'ν : fst κ' <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) : densityProcess κ ν n
+ a x s <= densityProcess κ' ν n a x s
+参数：γ × β；hκκ' : κ <= κ'；hκ'ν : fst κ' <= ν；n : Nat；a : α；x : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_div`：∀ (a b : ENNReal), (a / b).toReal = a.toReal / b.toR
+eal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用引理 `ProbabilityTheory.Kernel.meas_countablePartitionSet_le_of_fst_le`：meas_c
+ountablePartitionSet_le_of_fst_le (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (
+s : Set β) : κ a (countablePartitionSet n x ×ˢ s) <= ν…
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_top_mono`：eq_top_mono (h : a <= b) (h₂ : a = ⊤) : b = ⊤
+· 使用定理 `ENNReal.div_le_div`：∀ {a b c d : ENNReal}, a ≤ b → d ≤ c → a / c ≤ b / d
+· 使用定理 `MeasureTheory.Measure.measure_mono_left`：∀ {α : Type u_1} {m0 : Measurab
+leSpace α} {μ ν : MeasureTheory.Measure α}, μ ≤ ν → ∀ (s : Set α), μ s ≤ ν s
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma densityProcess_mono_kernel_left {κ' : Kernel α (γ × β)} (hκκ' : κ <= κ')
-    (hκ'ν : fst κ' <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) :
-    densityProcess κ ν n a x s <= densityProcess κ' ν n a x s := by
+lemma densityProcess_mono_kernel_left {κ' : Kernel α (γ × β)} (hκκ' : κ ≤ κ')
+    (hκ'ν : fst κ' ≤ ν) (n : ℕ) (a : α) (x : γ) (s : Set β) :
+    densityProcess κ ν n a x s ≤ densityProcess κ' ν n a x s := by
   unfold densityProcess
   by_cases h0 : ν a (countablePartitionSet n x) = 0
   · rw [h0, ENNReal.toReal_div, ENNReal.toReal_div]
     simp
-  have h_le : κ' a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) :=
+  have h_le : κ' a (countablePartitionSet n x ×ˢ s) ≤ ν a (countablePartitionSet n x) :=
     meas_countablePartitionSet_le_of_fst_le hκ'ν n a x s
   gcongr
   · simp only [ne_eq, ENNReal.div_eq_top, h0, and_false, false_or, not_and, not_not]
-    exact fun h_top => eq_top_mono h_le h_top
+    exact fun h_top ↦ eq_top_mono h_le h_top
   · apply hκκ'
-
-/--
-lemma `densityProcess_antitone_kernel_right` / 引理 `densityProcess_antitone_kernel_right`
-
-English:
-lemma densityProcess_antitone_kernel_right
-  statement: {ν' : Kernel α γ}
-  proof: by
-  unfold densityProcess
-  have h_le : κ a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) :=
-    meas_countablePartitionSet_le_of_fst_le hκν n a x s
-  by_cases h0 : ν a (countablePartitionSet n x) = 0
-  · simp [nonpos_iff_eq_zero.1 (h_le.trans h0.le), h0]
-  gcongr
-  · simp only [ne_eq, ENNReal.div_eq_top, h0, and_false, false_or, not_and, not_not]
-    exact fun h_top => eq_top_mono h_le h_top
-  · apply hνν'
-
-@[simp]
-
-中文:
-引理 densityProcess_antitone_kernel_right
-  结论: {ν' : 核 α γ}
-  证明: by
-  unfold densityProcess
-  have h_le : κ a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) :=
-    meas_countablePartitionSet_le_of_fst_le hκν n a x s
-  by_cases h0 : ν a (countablePartitionSet n x) = 0
-  · simp [nonpos_iff_eq_zero.1 (h_le.trans h0.le), h0]
-  gcongr
-  · simp only [ne_eq, ENNReal.div_eq_top, h0, and_false, false_or, not_and, not_not]
-    exact fun h_top => eq_top_mono h_le h_top
-  · apply hνν'
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.div_eq_top, and_false, countablePartitionSet, densityProcess, div_eq_top, eq_top_mono, false_or, h0.le, h_le, h_le.trans, h_top, meas_countablePartitionSet_le_of_fst_le, ne_eq, nonpos_iff_eq_zero, not_and, not_not
+/-
+**ProbabilityTheory.Kernel.densityProcess_antitone_kernel_right** 是 Mathlib 中的一个
+引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：densityProcess_antitone_kernel_right {ν' : Kernel α γ} (hνν' : ν <= ν') (h
+κν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) : densityProcess κ ν' n a
+ x s <= densityProcess κ ν n a x s
+参数：hνν' : ν <= ν'；hκν : fst κ <= ν；n : Nat；a : α；x : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.meas_countablePartitionSet_le_of_fst_le`：meas_c
+ountablePartitionSet_le_of_fst_le (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (
+s : Set β) : κ a (countablePartitionSet n x ×ˢ s) <= ν…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `ENNReal.zero_div`：∀ {a : ENNReal}, 0 / a = 0
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_top_mono`：eq_top_mono (h : a <= b) (h₂ : a = ⊤) : b = ⊤
+· 使用定理 `ENNReal.div_le_div`：∀ {a b c d : ENNReal}, a ≤ b → d ≤ c → a / c ≤ b / d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `MeasureTheory.Measure.measure_mono_left`：∀ {α : Type u_1} {m0 : Measurab
+leSpace α} {μ ν : MeasureTheory.Measure α}, μ ≤ ν → ∀ (s : Set α), μ s ≤ ν s
 -/
 lemma densityProcess_antitone_kernel_right {ν' : Kernel α γ}
-    (hνν' : ν <= ν') (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) :
-    densityProcess κ ν' n a x s <= densityProcess κ ν n a x s := by
+    (hνν' : ν ≤ ν') (hκν : fst κ ≤ ν) (n : ℕ) (a : α) (x : γ) (s : Set β) :
+    densityProcess κ ν' n a x s ≤ densityProcess κ ν n a x s := by
   unfold densityProcess
-  have h_le : κ a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) :=
+  have h_le : κ a (countablePartitionSet n x ×ˢ s) ≤ ν a (countablePartitionSet n x) :=
     meas_countablePartitionSet_le_of_fst_le hκν n a x s
   by_cases h0 : ν a (countablePartitionSet n x) = 0
   · simp [nonpos_iff_eq_zero.1 (h_le.trans h0.le), h0]
   gcongr
   · simp only [ne_eq, ENNReal.div_eq_top, h0, and_false, false_or, not_and, not_not]
-    exact fun h_top => eq_top_mono h_le h_top
+    exact fun h_top ↦ eq_top_mono h_le h_top
   · apply hνν'
 
 @[simp]
-/--
-lemma `densityProcess_empty` / 引理 `densityProcess_empty`
-
-English:
-lemma densityProcess_empty
-  given: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ)
-  proof: by
-  simp [densityProcess]
-
-中文:
-引理 densityProcess_empty
-  条件: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数) (a : α) (x : γ)
-  证明: by
-  simp [densityProcess]
-
-Depends on / 依赖: AtPrime, Ideal.eq_prime_pow_mul_coprime, Ideal.map_mul, Ideal.map_p, IsDedekindDomain, IsDedekindDomain.ramificationIdx, IsMaximal, IsScalarTower, IsScalarTower.algebraMap_eq, Localization, Localization.AtPrime, _eq_normalizedFactors_count, algebraMap, algebraMap_eq, apply_fun, contrapose, densityProcess, eq_prime_pow_mul_coprime, hq.isMaximal, hq.ne_top
+/-
+**ProbabilityTheory.Kernel.densityProcess_empty** 是 Mathlib 中的一个引理，位于命名空间 `Proba
+bilityTheory.Kernel`。
+形式化陈述：densityProcess_empty (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a 
+: α) (x : γ) : densityProcess κ ν n a x ∅ = 0
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；x : γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.prod_empty`：prod_empty : s ×ˢ (∅ : Set β) = ∅
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `ENNReal.zero_div`：∀ {a : ENNReal}, 0 / a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma densityProcess_empty (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) :
+lemma densityProcess_empty (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : ℕ) (a : α) (x : γ) :
     densityProcess κ ν n a x ∅ = 0 := by
   simp [densityProcess]
-
-/--
-lemma `tendsto_densityProcess_atTop_empty_of_antitone` / 引理 `tendsto_densityProcess_atTop_empty_of_antitone`
-
-English:
-lemma tendsto_densityProcess_atTop_empty_of_antitone
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-  proof: by
-  simp_rw [densityProcess]
-  by_cases h0 : ν a (countablePartitionSet n x) = 0
-  · simp_rw [h0, ENNReal.toReal_div]
-    simp
-  refine (ENNReal.tendsto_toReal ?_).comp ?_
-  · rw [ne_eq, ENNReal.div_eq_top]
-    push Not
-    simp
-  refine ENNReal.Tendsto.div_const ?_ (.inr h0)
-  have : Tendsto (fun m => κ a (countablePartitionSet n x ×ˢ seq m)) atTop
-      (𝓝 ((κ a) (⋂ n_1, countablePartitionSet n x ×ˢ seq n_1))) := by
-    apply tendsto_measure_iInter_atTop
-    · measurability
-· exact fun _ _ h => prod_mono_right hseq h
-    · exact ⟨0, measure_ne_top _ _⟩
-  simpa only [← prod_iInter, hseq_iInter] using this
-
-中文:
-引理 tendsto_densityProcess_atTop_empty_of_antitone
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
-  证明: by
-  simp_rw [densityProcess]
-  by_cases h0 : ν a (countablePartitionSet n x) = 0
-  · simp_rw [h0, ENNReal.toReal_div]
-    simp
-  refine (ENNReal.tendsto_toReal ?_).comp ?_
-  · rw [ne_eq, ENNReal.div_eq_top]
-    push Not
-    simp
-  refine ENNReal.Tendsto.div_const ?_ (.inr h0)
-  have : Tendsto (fun m => κ a (countablePartitionSet n x ×ˢ seq m)) atTop
-      (𝓝 ((κ a) (⋂ n_1, countablePartitionSet n x ×ˢ seq n_1))) := by
-    apply tendsto_measure_iInter_atTop
-    · measurability
-· exact fun _ _ h => prod_mono_right hseq h
-    · exact ⟨0, measure_ne_top _ _⟩
-  simpa only [← prod_iInter, hseq_iInter] using this
-
-Depends on / 依赖: ENNReal, ENNReal.Tendsto.div_const, ENNReal.div_eq_top, ENNReal.tendsto_toReal, ENNReal.toReal_div, Tendsto, _eq_ramificationIdx, algebraMap, countablePartitionSet, densityProcess, div_const, div_eq_top, map_ne_bot_of_ne_bot, measurability, ne_eq, p.map, prod_mono_right, ramificationIdx, simp_rw, tendsto_measure_iInter_atTop
+/-
+**ProbabilityTheory.Kernel.tendsto_densityProcess_atTop_empty_of_antitone** 是 Ma
+thlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_densityProcess_atTop_empty_of_antitone (κ : Kernel α (γ × β)) (ν :
+ Kernel α γ) [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ) (seq : Nat -> Set β) (
+hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅) (hseq_meas : forall m, Measu
+rableSet (seq m)) : Tendsto (fun m => densityProcess κ ν n a x (seq m)) atTop (𝓝
+ (densityProcess κ ν n a x ∅))
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；x : γ；seq : Nat -> Set β；hs
+eq : Antitone seq；hseq_iInter : ⋂ i, seq i = ∅；hseq_meas : forall m, MeasurableS
+et (seq m)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ENNReal.toReal_div`：∀ (a b : ENNReal), (a / b).toReal = a.toReal / b.toR
+eal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用定理 `Set.prod_empty`：prod_empty : s ×ˢ (∅ : Set β) = ∅
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `T5Space.toT1Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T5
+Space X], T1Space X
+· 使用定理 `T6Space.toT5Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T6Space
+ X], T5Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `ENNReal.tendsto_toReal`：tendsto_toReal {a : Real>=0∞} (ha : a != ∞) : Te
+ndsto ENNReal.toReal (𝓝 a) (𝓝 a.toReal)
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `ENNReal.div_eq_top`：div_eq_top : a / b = ∞ ↔ a != 0 ∧ b = 0 ∨ a = ∞ ∧ b 
+!= ∞
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `ENNReal.Tendsto.div_const`：∀ {α : Type u_1} {f : Filter α} {m : α → ENNR
+eal} {a b : ENNReal},   Filter.Tendsto m f (nhds a) → a ≠ 0 ∨ b ≠ 0 → Filter.Ten
+dsto (fun x => …
+· 使用定理 `MeasureTheory.tendsto_measure_iInter_atTop`：tendsto_measure_iInter_atTop
+ [Preorder ι] [IsCountablyGenerated (atTop : Filter ι)] {s : ι -> Set α} (hs : f
+orall i, NullMeasurableSet (s i)…
+（共 43 条，此处仅展示前 30 条）
 -/
 lemma tendsto_densityProcess_atTop_empty_of_antitone (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-    [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ)
-    (seq : Nat -> Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
-    (hseq_meas : forall m, MeasurableSet (seq m)) :
-    Tendsto (fun m => densityProcess κ ν n a x (seq m)) atTop
+    [IsFiniteKernel κ] (n : ℕ) (a : α) (x : γ)
+    (seq : ℕ → Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
+    (hseq_meas : ∀ m, MeasurableSet (seq m)) :
+    Tendsto (fun m ↦ densityProcess κ ν n a x (seq m)) atTop
       (𝓝 (densityProcess κ ν n a x ∅)) := by
   simp_rw [densityProcess]
   by_cases h0 : ν a (countablePartitionSet n x) = 0
@@ -1026,196 +1127,247 @@ lemma tendsto_densityProcess_atTop_empty_of_antitone (κ : Kernel α (γ × β))
     push Not
     simp
   refine ENNReal.Tendsto.div_const ?_ (.inr h0)
-  have : Tendsto (fun m => κ a (countablePartitionSet n x ×ˢ seq m)) atTop
+  have : Tendsto (fun m ↦ κ a (countablePartitionSet n x ×ˢ seq m)) atTop
       (𝓝 ((κ a) (⋂ n_1, countablePartitionSet n x ×ˢ seq n_1))) := by
     apply tendsto_measure_iInter_atTop
     · measurability
-· exact fun _ _ h => prod_mono_right hseq h
+    · exact fun _ _ h ↦ prod_mono_right <| hseq h
     · exact ⟨0, measure_ne_top _ _⟩
   simpa only [← prod_iInter, hseq_iInter] using this
-
-/--
-lemma `tendsto_densityProcess_atTop_of_antitone` / 引理 `tendsto_densityProcess_atTop_of_antitone`
-
-English:
-lemma tendsto_densityProcess_atTop_of_antitone
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-  proof: by
-  rw [← densityProcess_empty κ ν n a x]
-  exact tendsto_densityProcess_atTop_empty_of_antitone κ ν n a x seq hseq hseq_iInter hseq_meas
-
-中文:
-引理 tendsto_densityProcess_atTop_of_antitone
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
-  证明: by
-  rw [← densityProcess_empty κ ν n a x]
-  exact tendsto_densityProcess_atTop_empty_of_antitone κ ν n a x seq hseq hseq_iInter hseq_meas
-
-Depends on / 依赖: densityProcess_empty, hseq_iInter, hseq_meas, tendsto_densityProcess_atTop_empty_of_antitone
+/-
+**ProbabilityTheory.Kernel.tendsto_densityProcess_atTop_of_antitone** 是 Mathlib 
+中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_densityProcess_atTop_of_antitone (κ : Kernel α (γ × β)) (ν : Kerne
+l α γ) [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ) (seq : Nat -> Set β) (hseq :
+ Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅) (hseq_meas : forall m, MeasurableS
+et (seq m)) : Tendsto (fun m => densityProcess κ ν n a x (seq m)) atTop (𝓝 0)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；n : Nat；a : α；x : γ；seq : Nat -> Set β；hs
+eq : Antitone seq；hseq_iInter : ⋂ i, seq i = ∅；hseq_meas : forall m, MeasurableS
+et (seq m)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_empty`：densityProcess_empty (κ :
+ Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) : densityProcess κ
+ ν n a x ∅ = 0
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_densityProcess_atTop_empty_of_antitone`
+：tendsto_densityProcess_atTop_empty_of_antitone (κ : Kernel α (γ × β)) (ν : Kern
+el α γ) [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ) (seq : N…
 -/
 lemma tendsto_densityProcess_atTop_of_antitone (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-    [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ)
-    (seq : Nat -> Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
-    (hseq_meas : forall m, MeasurableSet (seq m)) :
-    Tendsto (fun m => densityProcess κ ν n a x (seq m)) atTop (𝓝 0) := by
+    [IsFiniteKernel κ] (n : ℕ) (a : α) (x : γ)
+    (seq : ℕ → Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
+    (hseq_meas : ∀ m, MeasurableSet (seq m)) :
+    Tendsto (fun m ↦ densityProcess κ ν n a x (seq m)) atTop (𝓝 0) := by
   rw [← densityProcess_empty κ ν n a x]
   exact tendsto_densityProcess_atTop_empty_of_antitone κ ν n a x seq hseq hseq_iInter hseq_meas
-
-/--
-lemma `tendsto_densityProcess_limitProcess` / 引理 `tendsto_densityProcess_limitProcess`
-
-English:
-lemma tendsto_densityProcess_limitProcess
-  statement: (hκν : fst κ <= ν)
-  proof: by
-  refine Submartingale.ae_tendsto_limitProcess (martingale_densityProcess hκν a hs).submartingale
-    (R := (ν a univ).toNNReal) (fun n => ?_)
-  refine (eLpNorm_densityProcess_le hκν n a s).trans_eq ?_
-  rw [ENNReal.coe_toNNReal]
-  exact measure_ne_top _ _
-
-中文:
-引理 tendsto_densityProcess_limitProcess
-  结论: (hκν : fst κ <= ν)
-  证明: by
-  refine Submartingale.ae_tendsto_limitProcess (martingale_densityProcess hκν a hs).submartingale
-    (R := (ν a univ).toNNReal) (fun n => ?_)
-  refine (eLpNorm_densityProcess_le hκν n a s).trans_eq ?_
-  rw [ENNReal.coe_toNNReal]
-  exact measure_ne_top _ _
-
-Depends on / 依赖: ENNReal, ENNReal.coe_toNNReal, Submartingale, Submartingale.ae_tendsto_limitProcess, ae_tendsto_limitProcess, coe_toNNReal, eLpNorm_densityProcess_le, martingale_densityProcess, measure_ne_top, submartingale, toNNReal, trans_eq
+/-
+**ProbabilityTheory.Kernel.tendsto_densityProcess_limitProcess** 是 Mathlib 中的一个引
+理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_densityProcess_limitProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] 
+(a : α) {s : Set β} (hs : MeasurableSet s) : forallᵐ x ∂(ν a), Tendsto (fun n =>
+ densityProcess κ ν n a x s) atTop (𝓝 ((countableFiltration γ).limitProcess (fun
+ n x => densityProcess κ ν n a x s) (ν a) x))
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Submartingale.ae_tendsto_limitProcess`：∀ {Ω : Type u_1} {m
+0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtrati
+on ℕ m0}   {f : ℕ → Ω → ℝ} {R : NNReal} […
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `MeasureTheory.Martingale.submartingale`：submartingale [Preorder E] (hf :
+ Martingale f ℱ μ) : Submartingale f ℱ μ
+· 使用引理 `ProbabilityTheory.Kernel.martingale_densityProcess`：martingale_densityPr
+ocess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : Measurable
+Set s) : Martingale (fun n x => densityP…
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `ProbabilityTheory.Kernel.eLpNorm_densityProcess_le`：eLpNorm_densityProce
+ss_le (hκν : fst κ <= ν) (n : Nat) (a : α) (s : Set β) : eLpNorm (fun x => densi
+tyProcess κ ν n a x s) 1 (ν a) <= ν a un…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.coe_toNNReal`：∀ {a : ENNReal}, a ≠ ⊤ → ↑a.toNNReal = a
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
-lemma tendsto_densityProcess_limitProcess (hκν : fst κ <= ν)
+lemma tendsto_densityProcess_limitProcess (hκν : fst κ ≤ ν)
     [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) :
-    forallᵐ x ∂(ν a), Tendsto (fun n => densityProcess κ ν n a x s) atTop
+    ∀ᵐ x ∂(ν a), Tendsto (fun n ↦ densityProcess κ ν n a x s) atTop
       (𝓝 ((countableFiltration γ).limitProcess
-      (fun n x => densityProcess κ ν n a x s) (ν a) x)) := by
+      (fun n x ↦ densityProcess κ ν n a x s) (ν a) x)) := by
   refine Submartingale.ae_tendsto_limitProcess (martingale_densityProcess hκν a hs).submartingale
-    (R := (ν a univ).toNNReal) (fun n => ?_)
+    (R := (ν a univ).toNNReal) (fun n ↦ ?_)
   refine (eLpNorm_densityProcess_le hκν n a s).trans_eq ?_
   rw [ENNReal.coe_toNNReal]
   exact measure_ne_top _ _
-
-/--
-lemma `memL1_limitProcess_densityProcess` / 引理 `memL1_limitProcess_densityProcess`
-
-English:
-lemma memL1_limitProcess_densityProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  refine Submartingale.memLp_limitProcess (martingale_densityProcess hκν a hs).submartingale
-    (R := (ν a univ).toNNReal) (fun n => ?_)
-  refine (eLpNorm_densityProcess_le hκν n a s).trans_eq ?_
-  rw [ENNReal.coe_toNNReal]
-  exact measure_ne_top _ _
-
-中文:
-引理 memL1_limitProcess_densityProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  refine Submartingale.memLp_limitProcess (martingale_densityProcess hκν a hs).submartingale
-    (R := (ν a univ).toNNReal) (fun n => ?_)
-  refine (eLpNorm_densityProcess_le hκν n a s).trans_eq ?_
-  rw [ENNReal.coe_toNNReal]
-  exact measure_ne_top _ _
-
-Depends on / 依赖: ENNReal, ENNReal.coe_toNNReal, Submartingale, Submartingale.memLp_limitProcess, coe_toNNReal, eLpNorm_densityProcess_le, martingale_densityProcess, measure_ne_top, memLp_limitProcess, submartingale, toNNReal, trans_eq
+/-
+**ProbabilityTheory.Kernel.memL1_limitProcess_densityProcess** 是 Mathlib 中的一个引理，
+位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：memL1_limitProcess_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a
+ : α) {s : Set β} (hs : MeasurableSet s) : MemLp ((countableFiltration γ).limitP
+rocess (fun n x => densityProcess κ ν n a x s) (ν a)) 1 (ν a)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Submartingale.memLp_limitProcess`：∀ {Ω : Type u_1} {m0 : M
+easurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory.Filtration ℕ 
+m0}   {f : ℕ → Ω → ℝ} {R : NNReal} {…
+· 使用定理 `MeasureTheory.Martingale.submartingale`：submartingale [Preorder E] (hf :
+ Martingale f ℱ μ) : Submartingale f ℱ μ
+· 使用引理 `ProbabilityTheory.Kernel.martingale_densityProcess`：martingale_densityPr
+ocess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : Measurable
+Set s) : Martingale (fun n x => densityP…
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `ProbabilityTheory.Kernel.eLpNorm_densityProcess_le`：eLpNorm_densityProce
+ss_le (hκν : fst κ <= ν) (n : Nat) (a : α) (s : Set β) : eLpNorm (fun x => densi
+tyProcess κ ν n a x s) 1 (ν a) <= ν a un…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.coe_toNNReal`：∀ {a : ENNReal}, a ≠ ⊤ → ↑a.toNNReal = a
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
 -/
-lemma memL1_limitProcess_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma memL1_limitProcess_densityProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) :
     MemLp ((countableFiltration γ).limitProcess
-      (fun n x => densityProcess κ ν n a x s) (ν a)) 1 (ν a) := by
+      (fun n x ↦ densityProcess κ ν n a x s) (ν a)) 1 (ν a) := by
   refine Submartingale.memLp_limitProcess (martingale_densityProcess hκν a hs).submartingale
-    (R := (ν a univ).toNNReal) (fun n => ?_)
+    (R := (ν a univ).toNNReal) (fun n ↦ ?_)
   refine (eLpNorm_densityProcess_le hκν n a s).trans_eq ?_
   rw [ENNReal.coe_toNNReal]
   exact measure_ne_top _ _
-
-/--
-lemma `tendsto_eLpNorm_one_densityProcess_limitProcess` / 引理 `tendsto_eLpNorm_one_densityProcess_limitProcess`
-
-English:
-lemma tendsto_eLpNorm_one_densityProcess_limitProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  refine Submartingale.tendsto_eLpNorm_one_limitProcess ?_ ?_
-  · exact (martingale_densityProcess hκν a hs).submartingale
-  · refine uniformIntegrable_of le_rfl ENNReal.one_ne_top ?_ ?_
-    · exact fun n => (measurable_densityProcess_right κ ν n a hs).aestronglyMeasurable
-    · refine fun ε _ => ⟨2, fun n => le_of_eq_of_le ?_ (?_ : 0 <= ENNReal.ofReal ε)⟩
-      · suffices {x | 2 <= ‖densityProcess κ ν n a x s‖₊} = ∅ by simp [this]
-        ext x
-        simp only [mem_ofPred_eq, mem_empty_iff_false, iff_false, not_le]
-        refine (?_ : _ <= (1 : Real>=0)).trans_lt one_lt_two
-        rw [Real.nnnorm_of_nonneg (densityProcess_nonneg _ _ _ _ _ _)]
-        exact mod_cast (densityProcess_le_one hκν _ _ _ _)
-      · simp
-
-中文:
-引理 tendsto_eLpNorm_one_densityProcess_limitProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  refine Submartingale.tendsto_eLpNorm_one_limitProcess ?_ ?_
-  · exact (martingale_densityProcess hκν a hs).submartingale
-  · refine uniformIntegrable_of le_rfl ENNReal.one_ne_top ?_ ?_
-    · exact fun n => (measurable_densityProcess_right κ ν n a hs).aestronglyMeasurable
-    · refine fun ε _ => ⟨2, fun n => le_of_eq_of_le ?_ (?_ : 0 <= ENNReal.ofReal ε)⟩
-      · suffices {x | 2 <= ‖densityProcess κ ν n a x s‖₊} = ∅ by simp [this]
-        ext x
-        simp only [mem_ofPred_eq, mem_empty_iff_false, iff_false, not_le]
-        refine (?_ : _ <= (1 : Real>=0)).trans_lt one_lt_two
-        rw [Real.nnnorm_of_nonneg (densityProcess_nonneg _ _ _ _ _ _)]
-        exact mod_cast (densityProcess_le_one hκν _ _ _ _)
-      · simp
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.one_ne_top, Submartingale, Submartingale.tendsto_eLpNorm_one_limitProcess, aestronglyMeasurable, densityProcess, iff_false, le_of_eq_of_le, le_rfl, martingale_densityProcess, measurable_densityProcess_right, mem_empty_iff_false, mem_ofPred_eq, not_le, ofReal, one_ne_top, submartingale, tendsto_eLpNorm_one_limitProcess, uniformIntegrable_of
+/-
+**ProbabilityTheory.Kernel.tendsto_eLpNorm_one_densityProcess_limitProcess** 是 M
+athlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_eLpNorm_one_densityProcess_limitProcess (hκν : fst κ <= ν) [IsFini
+teKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Tendsto (fun n => eLpNo
+rm ((fun x => densityProcess κ ν n a x s) - (countableFiltration γ).limitProcess
+ (fun n x => densityProcess κ ν n a x s) (ν a)) 1 (ν a)) atTop (𝓝 0)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Submartingale.tendsto_eLpNorm_one_limitProcess`：∀ {Ω : Typ
+e u_1} {m0 : MeasurableSpace Ω} {μ : MeasureTheory.Measure Ω} {ℱ : MeasureTheory
+.Filtration ℕ m0}   {f : ℕ → Ω → ℝ} [MeasureTheory…
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `MeasureTheory.Martingale.submartingale`：submartingale [Preorder E] (hf :
+ Martingale f ℱ μ) : Submartingale f ℱ μ
+· 使用引理 `ProbabilityTheory.Kernel.martingale_densityProcess`：martingale_densityPr
+ocess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : Measurable
+Set s) : Martingale (fun n x => densityP…
+· 使用定理 `MeasureTheory.uniformIntegrable_of`：uniformIntegrable_of [IsFiniteMeasur
+e μ] (hp : 1 <= p) (hp' : p != ∞) (hf : forall i, AEStronglyMeasurable (f i) μ) 
+(h : forall ε : Real, 0 …
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `ENNReal.one_ne_top`：1 ≠ ⊤
+· 使用定理 `Measurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 :…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess_right`：measurable_den
+sityProcess_right (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) {s : Set β} 
+(a : α) (hs : MeasurableSet s) : Measurable (f…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `le_of_eq_of_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ 
+c → a ≤ c
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_nonneg`：densityProcess_nonneg (κ
+ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) (s : Set β) : 0 
+<= densityProcess κ ν n a x s
+· 使用定理 `Real.nnnorm_of_nonneg`：nnnorm_of_nonneg (hr : 0 <= r) : ‖r‖₊ = .mk r hr
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_le_one`：densityProcess_le_one (h
+κν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) : densityProcess κ ν n a 
+x s <= 1
+· 使用引理 `one_lt_two`：one_lt_two [AddLeftStrictMono α] : (1 : α) < 2
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+（共 40 条，此处仅展示前 30 条）
 -/
-lemma tendsto_eLpNorm_one_densityProcess_limitProcess (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma tendsto_eLpNorm_one_densityProcess_limitProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) :
-    Tendsto (fun n => eLpNorm ((fun x => densityProcess κ ν n a x s)
-      - (countableFiltration γ).limitProcess (fun n x => densityProcess κ ν n a x s) (ν a))
+    Tendsto (fun n ↦ eLpNorm ((fun x ↦ densityProcess κ ν n a x s)
+      - (countableFiltration γ).limitProcess (fun n x ↦ densityProcess κ ν n a x s) (ν a))
       1 (ν a)) atTop (𝓝 0) := by
   refine Submartingale.tendsto_eLpNorm_one_limitProcess ?_ ?_
   · exact (martingale_densityProcess hκν a hs).submartingale
   · refine uniformIntegrable_of le_rfl ENNReal.one_ne_top ?_ ?_
-    · exact fun n => (measurable_densityProcess_right κ ν n a hs).aestronglyMeasurable
-    · refine fun ε _ => ⟨2, fun n => le_of_eq_of_le ?_ (?_ : 0 <= ENNReal.ofReal ε)⟩
-      · suffices {x | 2 <= ‖densityProcess κ ν n a x s‖₊} = ∅ by simp [this]
+    · exact fun n ↦ (measurable_densityProcess_right κ ν n a hs).aestronglyMeasurable
+    · refine fun ε _ ↦ ⟨2, fun n ↦ le_of_eq_of_le ?_ (?_ : 0 ≤ ENNReal.ofReal ε)⟩
+      · suffices {x | 2 ≤ ‖densityProcess κ ν n a x s‖₊} = ∅ by simp [this]
         ext x
         simp only [mem_ofPred_eq, mem_empty_iff_false, iff_false, not_le]
-        refine (?_ : _ <= (1 : Real>=0)).trans_lt one_lt_two
+        refine (?_ : _ ≤ (1 : ℝ≥0)).trans_lt one_lt_two
         rw [Real.nnnorm_of_nonneg (densityProcess_nonneg _ _ _ _ _ _)]
         exact mod_cast (densityProcess_le_one hκν _ _ _ _)
       · simp
-
-/--
-lemma `tendsto_eLpNorm_one_restrict_densityProcess_limitProcess` / 引理 `tendsto_eLpNorm_one_restrict_densityProcess_limitProcess`
-
-English:
-lemma tendsto_eLpNorm_one_restrict_densityProcess_limitProcess
-  statement: [IsFiniteKernel ν]
-  proof: tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
-    (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs) (fun _ => zero_le)
-    (fun _ => eLpNorm_restrict_le ..)
-
-中文:
-引理 tendsto_eLpNorm_one_restrict_densityProcess_limitProcess
-  结论: [是FiniteKernel ν]
-  证明: tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
-    (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs) (fun _ => zero_le)
-    (fun _ => eLpNorm_restrict_le ..)
-
-Depends on / 依赖: eLpNorm_restrict_le, tendsto_const_nhds, tendsto_eLpNorm_one_densityProcess_limitProcess, tendsto_of_tendsto_of_tendsto_of_le_of_le, zero_le
+/-
+**ProbabilityTheory.Kernel.tendsto_eLpNorm_one_restrict_densityProcess_limitProc
+ess** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_eLpNorm_one_restrict_densityProcess_limitProcess [IsFiniteKernel ν
+] (hκν : fst κ <= ν) (a : α) {s : Set β} (hs : MeasurableSet s) (A : Set γ) : Te
+ndsto (fun n => eLpNorm ((fun x => densityProcess κ ν n a x s) - (countableFiltr
+ation γ).limitProcess (fun n x => densityProcess κ ν n a x s) (ν a)) 1 ((ν a).re
+strict A)) atTop (𝓝 0)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s；A : Set γ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_of_tendsto_of_tendsto_of_le_of_le`：tendsto_of_tendsto_of_tendsto
+_of_le_of_le [OrderTopology α] {f g h : β -> α} {b : Filter β} {a : α} (hg : Ten
+dsto g b (𝓝 a)) (hh : Tendsto h…
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_eLpNorm_one_densityProcess_limitProcess
+`：tendsto_eLpNorm_one_densityProcess_limitProcess (hκν : fst κ <= ν) [IsFiniteKe
+rnel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Tendsto (…
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用引理 `MeasureTheory.eLpNorm_restrict_le`：eLpNorm_restrict_le (f : α -> ε') (p 
+: Real>=0∞) (μ : Measure α) (s : Set α) : eLpNorm f p (μ.restrict s) <= eLpNorm 
+f p μ
 -/
 lemma tendsto_eLpNorm_one_restrict_densityProcess_limitProcess [IsFiniteKernel ν]
-    (hκν : fst κ <= ν) (a : α) {s : Set β} (hs : MeasurableSet s) (A : Set γ) :
-    Tendsto (fun n => eLpNorm ((fun x => densityProcess κ ν n a x s)
-      - (countableFiltration γ).limitProcess (fun n x => densityProcess κ ν n a x s) (ν a))
+    (hκν : fst κ ≤ ν) (a : α) {s : Set β} (hs : MeasurableSet s) (A : Set γ) :
+    Tendsto (fun n ↦ eLpNorm ((fun x ↦ densityProcess κ ν n a x s)
+      - (countableFiltration γ).limitProcess (fun n x ↦ densityProcess κ ν n a x s) (ν a))
       1 ((ν a).restrict A)) atTop (𝓝 0) :=
   tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
-    (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs) (fun _ => zero_le)
-    (fun _ => eLpNorm_restrict_le ..)
+    (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs) (fun _ ↦ zero_le)
+    (fun _ ↦ eLpNorm_restrict_le ..)
 
 end DensityProcess
 
@@ -1225,498 +1377,551 @@ section Density
 is measurable on `α × γ` for all measurable sets `s : Set β` and satisfies that
 `∫ x in A, density κ ν a x s ∂(ν a) = (κ a).real (A ×ˢ s)` for all measurable `A : Set γ`. -/
 noncomputable
-/--
-Definition of `density` / `density` 的定义
-
-English:
-definition density
-  signature: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α) (x : γ) (s : Set β)
-  body: limsup (fun n => densityProcess κ ν n a x s) atTop
-
-中文:
-定义 density
-  签名: (κ : 核 α (γ × β)) (ν : 核 α γ) (a : α) (x : γ) (s : 集合 β)
-  定义体: limsup (fun n => densityProcess κ ν n a x s) atTop
-
-Depends on / 依赖: densityProcess, limsup
+/-
+**ProbabilityTheory.Kernel.density** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.
+Kernel`。
+形式化陈述：density (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α) (x : γ) (s : Set β
+) : Real
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；a : α；x : γ；s : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def density (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α) (x : γ) (s : Set β) : Real :=
-  limsup (fun n => densityProcess κ ν n a x s) atTop
-
-/--
-lemma `density_ae_eq_limitProcess` / 引理 `density_ae_eq_limitProcess`
-
-English:
-lemma density_ae_eq_limitProcess
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  filter_upwards [tendsto_densityProcess_limitProcess hκν a hs] with t ht using ht.limsup_eq
-
-中文:
-引理 density_ae_eq_limitProcess
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  filter_upwards [tendsto_densityProcess_limitProcess hκν a hs] with t ht using ht.limsup_eq
-
-Depends on / 依赖: filter_upwards, ht.limsup_eq, limsup_eq, tendsto_densityProcess_limitProcess
+def density (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α) (x : γ) (s : Set β) : ℝ :=
+  limsup (fun n ↦ densityProcess κ ν n a x s) atTop
+/-
+**ProbabilityTheory.Kernel.density_ae_eq_limitProcess** 是 Mathlib 中的一个引理，位于命名空间 
+`ProbabilityTheory.Kernel`。
+形式化陈述：density_ae_eq_limitProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {
+s : Set β} (hs : MeasurableSet s) : (fun x => density κ ν a x s) =ᵐ[ν a] (counta
+bleFiltration γ).limitProcess (fun n x => densityProcess κ ν n a x s) (ν a)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_densityProcess_limitProcess`：tendsto_de
+nsityProcess_limitProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set
+ β} (hs : MeasurableSet s) : forallᵐ x ∂(ν a), Ten…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Filter.Tendsto.limsup_eq`：Filter.Tendsto.limsup_eq {f : Filter β} {u : β
+ -> α} {a : α} [NeBot f] (h : Tendsto u f (𝓝 a)) : limsup u f = a
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-lemma density_ae_eq_limitProcess (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma density_ae_eq_limitProcess (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) :
-    (fun x => density κ ν a x s)
+    (fun x ↦ density κ ν a x s)
       =ᵐ[ν a] (countableFiltration γ).limitProcess
-        (fun n x => densityProcess κ ν n a x s) (ν a) := by
+        (fun n x ↦ densityProcess κ ν n a x s) (ν a) := by
   filter_upwards [tendsto_densityProcess_limitProcess hκν a hs] with t ht using ht.limsup_eq
-
-/--
-lemma `tendsto_m_density` / 引理 `tendsto_m_density`
-
-English:
-lemma tendsto_m_density
-  statement: (hκν : fst κ <= ν) (a : α) [IsFiniteKernel ν]
-  proof: by
-  filter_upwards [tendsto_densityProcess_limitProcess hκν a hs, density_ae_eq_limitProcess hκν a hs]
-    with t h1 h2 using h2 ▸ h1
-
-中文:
-引理 tendsto_m_density
-  结论: (hκν : fst κ <= ν) (a : α) [是FiniteKernel ν]
-  证明: by
-  filter_upwards [tendsto_densityProcess_limitProcess hκν a hs, density_ae_eq_limitProcess hκν a hs]
-    with t h1 h2 using h2 ▸ h1
-
-Depends on / 依赖: density_ae_eq_limitProcess, filter_upwards, tendsto_densityProcess_limitProcess
+/-
+**ProbabilityTheory.Kernel.tendsto_m_density** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：tendsto_m_density (hκν : fst κ <= ν) (a : α) [IsFiniteKernel ν] {s : Set β
+} (hs : MeasurableSet s) : forallᵐ x ∂(ν a), Tendsto (fun n => densityProcess κ 
+ν n a x s) atTop (𝓝 (density κ ν a x s))
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.density_ae_eq_limitProcess`：density_ae_eq_limit
+Process (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : Measurab
+leSet s) : (fun x => density κ ν a x s) =…
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_densityProcess_limitProcess`：tendsto_de
+nsityProcess_limitProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set
+ β} (hs : MeasurableSet s) : forallᵐ x ∂(ν a), Ten…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma tendsto_m_density (hκν : fst κ <= ν) (a : α) [IsFiniteKernel ν]
+lemma tendsto_m_density (hκν : fst κ ≤ ν) (a : α) [IsFiniteKernel ν]
     {s : Set β} (hs : MeasurableSet s) :
-    forallᵐ x ∂(ν a),
-      Tendsto (fun n => densityProcess κ ν n a x s) atTop (𝓝 (density κ ν a x s)) := by
+    ∀ᵐ x ∂(ν a),
+      Tendsto (fun n ↦ densityProcess κ ν n a x s) atTop (𝓝 (density κ ν a x s)) := by
   filter_upwards [tendsto_densityProcess_limitProcess hκν a hs, density_ae_eq_limitProcess hκν a hs]
     with t h1 h2 using h2 ▸ h1
-
-/--
-lemma `measurable_density` / 引理 `measurable_density`
-
-English:
-lemma measurable_density
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-  proof: .limsup (fun n => measurable_densityProcess κ ν n hs)
-
-中文:
-引理 measurable_density
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
-  证明: .limsup (fun n => measurable_densityProcess κ ν n hs)
-
-Depends on / 依赖: limsup, measurable_densityProcess
+/-
+**ProbabilityTheory.Kernel.measurable_density** 是 Mathlib 中的一个引理，位于命名空间 `Probabi
+lityTheory.Kernel`。
+形式化陈述：measurable_density (κ : Kernel α (γ × β)) (ν : Kernel α γ) {s : Set β} (hs
+ : MeasurableSet s) : Measurable (fun (p : α × γ) => density κ ν p.1 p.2 s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.limsup`：Measurable.limsup {f : Nat -> δ -> α} (hf : forall i,
+ Measurable (f i)) : Measurable fun x => limsup (fun i => f i x) atTop
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用引理 `ProbabilityTheory.Kernel.measurable_densityProcess`：measurable_densityPr
+ocess (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) {s : Set β} (hs : Measur
+ableSet s) : Measurable (fun (p : α × γ)…
 -/
 lemma measurable_density (κ : Kernel α (γ × β)) (ν : Kernel α γ)
     {s : Set β} (hs : MeasurableSet s) :
-    Measurable (fun (p : α × γ) => density κ ν p.1 p.2 s) :=
-  .limsup (fun n => measurable_densityProcess κ ν n hs)
-
-/--
-lemma `measurable_density_left` / 引理 `measurable_density_left`
-
-English:
-lemma measurable_density_left
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (x : γ)
-  proof: by
-  change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun a => (a, x)))
-  exact (measurable_density κ ν hs).comp measurable_prodMk_right
-
-中文:
-引理 measurable_density_left
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (x : γ)
-  证明: by
-  change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun a => (a, x)))
-  exact (measurable_density κ ν hs).comp measurable_prodMk_right
-
-Depends on / 依赖: Measurable, density, measurable_density, measurable_prodMk_right
+    Measurable (fun (p : α × γ) ↦ density κ ν p.1 p.2 s) :=
+  .limsup (fun n ↦ measurable_densityProcess κ ν n hs)
+/-
+**ProbabilityTheory.Kernel.measurable_density_left** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+obabilityTheory.Kernel`。
+形式化陈述：measurable_density_left (κ : Kernel α (γ × β)) (ν : Kernel α γ) (x : γ) {s
+ : Set β} (hs : MeasurableSet s) : Measurable (fun a => density κ ν a x s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；x : γ；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `ProbabilityTheory.Kernel.measurable_density`：measurable_density (κ : Ker
+nel α (γ × β)) (ν : Kernel α γ) {s : Set β} (hs : MeasurableSet s) : Measurable 
+(fun (p : α × γ) => density κ ν p…
+· 使用定理 `measurable_prodMk_right`：measurable_prodMk_right {y : β} : Measurable fu
+n x : α => (x, y)
 -/
 lemma measurable_density_left (κ : Kernel α (γ × β)) (ν : Kernel α γ) (x : γ)
     {s : Set β} (hs : MeasurableSet s) :
-    Measurable (fun a => density κ ν a x s) := by
-  change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun a => (a, x)))
+    Measurable (fun a ↦ density κ ν a x s) := by
+  change Measurable ((fun (p : α × γ) ↦ density κ ν p.1 p.2 s) ∘ (fun a ↦ (a, x)))
   exact (measurable_density κ ν hs).comp measurable_prodMk_right
-
-/--
-lemma `measurable_density_right` / 引理 `measurable_density_right`
-
-English:
-lemma measurable_density_right
-  statement: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
-  proof: by
-  change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun x => (a, x)))
-  exact (measurable_density κ ν hs).comp measurable_prodMk_left
-
-中文:
-引理 measurable_density_right
-  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
-  证明: by
-  change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun x => (a, x)))
-  exact (measurable_density κ ν hs).comp measurable_prodMk_left
-
-Depends on / 依赖: Measurable, density, measurable_density, measurable_prodMk_left
+/-
+**ProbabilityTheory.Kernel.measurable_density_right** 是 Mathlib 中的一个引理，位于命名空间 `P
+robabilityTheory.Kernel`。
+形式化陈述：measurable_density_right (κ : Kernel α (γ × β)) (ν : Kernel α γ) {s : Set 
+β} (hs : MeasurableSet s) (a : α) : Measurable (fun x => density κ ν a x s)
+参数：κ : Kernel α (γ × β)；ν : Kernel α γ；hs : MeasurableSet s；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `ProbabilityTheory.Kernel.measurable_density`：measurable_density (κ : Ker
+nel α (γ × β)) (ν : Kernel α γ) {s : Set β} (hs : MeasurableSet s) : Measurable 
+(fun (p : α × γ) => density κ ν p…
+· 使用定理 `measurable_prodMk_left`：measurable_prodMk_left {x : α} : Measurable (@Pr
+od.mk _ β x)
 -/
 lemma measurable_density_right (κ : Kernel α (γ × β)) (ν : Kernel α γ)
     {s : Set β} (hs : MeasurableSet s) (a : α) :
-    Measurable (fun x => density κ ν a x s) := by
-  change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun x => (a, x)))
+    Measurable (fun x ↦ density κ ν a x s) := by
+  change Measurable ((fun (p : α × γ) ↦ density κ ν p.1 p.2 s) ∘ (fun x ↦ (a, x)))
   exact (measurable_density κ ν hs).comp measurable_prodMk_left
-
-/--
-lemma `density_mono_set` / 引理 `density_mono_set`
-
-English:
-lemma density_mono_set
-  given: (hκν : fst κ <= ν) (a : α) (x : γ) {s s' : Set β} (h : s subseteq s')
-  proof: by
-  refine limsup_le_limsup ?_ ?_ ?_
-  · exact Eventually.of_forall (fun n => densityProcess_mono_set hκν n a x h)
-  · exact isCoboundedUnder_le_of_le atTop (fun i => densityProcess_nonneg _ _ _ _ _ _)
-  · exact isBoundedUnder_of ⟨1, fun n => densityProcess_le_one hκν _ _ _ _⟩
-
-中文:
-引理 density_mono_set
-  条件: (hκν : fst κ <= ν) (a : α) (x : γ) {s s' : 集合 β} (h : s subseteq s')
-  证明: by
-  refine limsup_le_limsup ?_ ?_ ?_
-  · exact Eventually.of_forall (fun n => densityProcess_mono_set hκν n a x h)
-  · exact isCoboundedUnder_le_of_le atTop (fun i => densityProcess_nonneg _ _ _ _ _ _)
-  · exact isBoundedUnder_of ⟨1, fun n => densityProcess_le_one hκν _ _ _ _⟩
-
-Depends on / 依赖: Eventually, Eventually.of_forall, densityProcess_le_one, densityProcess_mono_set, densityProcess_nonneg, isBoundedUnder_of, isCoboundedUnder_le_of_le, limsup_le_limsup, of_forall
+/-
+**ProbabilityTheory.Kernel.density_mono_set** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：density_mono_set (hκν : fst κ <= ν) (a : α) (x : γ) {s s' : Set β} (h : s 
+subseteq s') : density κ ν a x s <= density κ ν a x s'
+参数：hκν : fst κ <= ν；a : α；x : γ；h : s subseteq s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.limsup_le_limsup`：limsup_le_limsup {α : Type*} [ConditionallyComp
+leteLattice β] {f : Filter α} {u v : α -> β} (h : u <=ᶠ[f] v) (hu : f.IsCobounde
+dUnder (· <= …
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_mono_set`：densityProcess_mono_se
+t (hκν : fst κ <= ν) (n : Nat) (a : α) (x : γ) {s s' : Set β} (h : s subseteq s'
+) : densityProcess κ ν n a x s <= dens…
+· 使用引理 `Filter.isCoboundedUnder_le_of_le`：isCoboundedUnder_le_of_le [Preorder α]
+ (l : Filter ι) [NeBot l] {f : ι -> α} {x : α} (hf : forall i, x <= f i) : IsCob
+oundedUnder (· <= ·) l…
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_nonneg`：densityProcess_nonneg (κ
+ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) (s : Set β) : 0 
+<= densityProcess κ ν n a x s
+· 使用定理 `Filter.isBoundedUnder_of`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → P
+rop} {f : Filter β} {u : β → α},   (∃ b, ∀ (x : β), r (u x) b) → Filter.IsBounde
+dUnder r f u
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_le_one`：densityProcess_le_one (h
+κν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) : densityProcess κ ν n a 
+x s <= 1
 -/
-lemma density_mono_set (hκν : fst κ <= ν) (a : α) (x : γ) {s s' : Set β} (h : s subseteq s') :
-    density κ ν a x s <= density κ ν a x s' := by
+lemma density_mono_set (hκν : fst κ ≤ ν) (a : α) (x : γ) {s s' : Set β} (h : s ⊆ s') :
+    density κ ν a x s ≤ density κ ν a x s' := by
   refine limsup_le_limsup ?_ ?_ ?_
-  · exact Eventually.of_forall (fun n => densityProcess_mono_set hκν n a x h)
-  · exact isCoboundedUnder_le_of_le atTop (fun i => densityProcess_nonneg _ _ _ _ _ _)
-  · exact isBoundedUnder_of ⟨1, fun n => densityProcess_le_one hκν _ _ _ _⟩
-
-/--
-lemma `density_nonneg` / 引理 `density_nonneg`
-
-English:
-lemma density_nonneg
-  given: (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β)
-  proof: by
-  refine le_limsup_of_frequently_le ?_ ?_
-  · exact Frequently.of_forall (fun n => densityProcess_nonneg _ _ _ _ _ _)
-  · exact isBoundedUnder_of ⟨1, fun n => densityProcess_le_one hκν _ _ _ _⟩
-
-中文:
-引理 density_nonneg
-  条件: (hκν : fst κ <= ν) (a : α) (x : γ) (s : 集合 β)
-  证明: by
-  refine le_limsup_of_frequently_le ?_ ?_
-  · exact Frequently.of_forall (fun n => densityProcess_nonneg _ _ _ _ _ _)
-  · exact isBoundedUnder_of ⟨1, fun n => densityProcess_le_one hκν _ _ _ _⟩
-
-Depends on / 依赖: Frequently, Frequently.of_forall, densityProcess_le_one, densityProcess_nonneg, isBoundedUnder_of, le_limsup_of_frequently_le, of_forall
+  · exact Eventually.of_forall (fun n ↦ densityProcess_mono_set hκν n a x h)
+  · exact isCoboundedUnder_le_of_le atTop (fun i ↦ densityProcess_nonneg _ _ _ _ _ _)
+  · exact isBoundedUnder_of ⟨1, fun n ↦ densityProcess_le_one hκν _ _ _ _⟩
+/-
+**ProbabilityTheory.Kernel.density_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：density_nonneg (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β) : 0 <= densi
+ty κ ν a x s
+参数：hκν : fst κ <= ν；a : α；x : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Filter.le_limsup_of_frequently_le`：le_limsup_of_frequently_le (hu : exis
+tsᶠ i in f, a <= u i) (hu_le : f.IsBoundedUnder (· <= ·) u
+· 使用定理 `Filter.Frequently.of_forall`：∀ {α : Type u} {f : Filter α} [f.NeBot] {p 
+: α → Prop}, (∀ (x : α), p x) → ∃ᶠ (x : α) in f, p x
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_nonneg`：densityProcess_nonneg (κ
+ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) (s : Set β) : 0 
+<= densityProcess κ ν n a x s
+· 使用定理 `Filter.isBoundedUnder_of`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → P
+rop} {f : Filter β} {u : β → α},   (∃ b, ∀ (x : β), r (u x) b) → Filter.IsBounde
+dUnder r f u
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_le_one`：densityProcess_le_one (h
+κν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) : densityProcess κ ν n a 
+x s <= 1
 -/
-lemma density_nonneg (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β) :
-    0 <= density κ ν a x s := by
+lemma density_nonneg (hκν : fst κ ≤ ν) (a : α) (x : γ) (s : Set β) :
+    0 ≤ density κ ν a x s := by
   refine le_limsup_of_frequently_le ?_ ?_
-  · exact Frequently.of_forall (fun n => densityProcess_nonneg _ _ _ _ _ _)
-  · exact isBoundedUnder_of ⟨1, fun n => densityProcess_le_one hκν _ _ _ _⟩
-
-/--
-lemma `density_le_one` / 引理 `density_le_one`
-
-English:
-lemma density_le_one
-  given: (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β)
-  proof: by
-  refine limsup_le_of_le ?_ ?_
-  · exact isCoboundedUnder_le_of_le atTop (fun i => densityProcess_nonneg _ _ _ _ _ _)
-  · exact Eventually.of_forall (fun n => densityProcess_le_one hκν _ _ _ _)
-
-中文:
-引理 density_le_one
-  条件: (hκν : fst κ <= ν) (a : α) (x : γ) (s : 集合 β)
-  证明: by
-  refine limsup_le_of_le ?_ ?_
-  · exact isCoboundedUnder_le_of_le atTop (fun i => densityProcess_nonneg _ _ _ _ _ _)
-  · exact Eventually.of_forall (fun n => densityProcess_le_one hκν _ _ _ _)
-
-Depends on / 依赖: Eventually, Eventually.of_forall, densityProcess_le_one, densityProcess_nonneg, isCoboundedUnder_le_of_le, limsup_le_of_le, of_forall
+  · exact Frequently.of_forall (fun n ↦ densityProcess_nonneg _ _ _ _ _ _)
+  · exact isBoundedUnder_of ⟨1, fun n ↦ densityProcess_le_one hκν _ _ _ _⟩
+/-
+**ProbabilityTheory.Kernel.density_le_one** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：density_le_one (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β) : density κ 
+ν a x s <= 1
+参数：hκν : fst κ <= ν；a : α；x : γ；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.limsup_le_of_le`：limsup_le_of_le {f : Filter β} {u : β -> α} {a} 
+(hf : f.IsCoboundedUnder (· <= ·) u
+· 使用引理 `Filter.isCoboundedUnder_le_of_le`：isCoboundedUnder_le_of_le [Preorder α]
+ (l : Filter ι) [NeBot l] {f : ι -> α} {x : α} (hf : forall i, x <= f i) : IsCob
+oundedUnder (· <= ·) l…
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_nonneg`：densityProcess_nonneg (κ
+ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (x : γ) (s : Set β) : 0 
+<= densityProcess κ ν n a x s
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_le_one`：densityProcess_le_one (h
+κν : fst κ <= ν) (n : Nat) (a : α) (x : γ) (s : Set β) : densityProcess κ ν n a 
+x s <= 1
 -/
-lemma density_le_one (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β) :
-    density κ ν a x s <= 1 := by
+lemma density_le_one (hκν : fst κ ≤ ν) (a : α) (x : γ) (s : Set β) :
+    density κ ν a x s ≤ 1 := by
   refine limsup_le_of_le ?_ ?_
-  · exact isCoboundedUnder_le_of_le atTop (fun i => densityProcess_nonneg _ _ _ _ _ _)
-  · exact Eventually.of_forall (fun n => densityProcess_le_one hκν _ _ _ _)
+  · exact isCoboundedUnder_le_of_le atTop (fun i ↦ densityProcess_nonneg _ _ _ _ _ _)
+  · exact Eventually.of_forall (fun n ↦ densityProcess_le_one hκν _ _ _ _)
 
 section Integral
 
-/--
-lemma `eLpNorm_density_le` / 引理 `eLpNorm_density_le`
-
-English:
-lemma eLpNorm_density_le
-  given: (hκν : fst κ <= ν) (a : α) (s : Set β)
-  proof: by
-  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun t => ?_))).trans ?_
-  · simp only [Real.norm_eq_abs, abs_of_nonneg (density_nonneg hκν a t s),
-      density_le_one hκν a t s]
-  · simp
-
-中文:
-引理 eLpNorm_density_le
-  条件: (hκν : fst κ <= ν) (a : α) (s : 集合 β)
-  证明: by
-  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun t => ?_))).trans ?_
-  · simp only [Real.norm_eq_abs, abs_of_nonneg (density_nonneg hκν a t s),
-      density_le_one hκν a t s]
-  · simp
-
-Depends on / 依赖: Real.norm_eq_abs, abs_of_nonneg, ae_of_all, density_le_one, density_nonneg, eLpNorm_le_of_ae_bound, norm_eq_abs
+/-
+**ProbabilityTheory.Kernel.eLpNorm_density_le** 是 Mathlib 中的一个引理，位于命名空间 `Probabi
+lityTheory.Kernel`。
+形式化陈述：eLpNorm_density_le (hκν : fst κ <= ν) (a : α) (s : Set β) : eLpNorm (fun x
+ => density κ ν a x s) 1 (ν a) <= ν a univ
+参数：hκν : fst κ <= ν；a : α；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.eLpNorm_le_of_ae_bound`：eLpNorm_le_of_ae_bound {f : α -> F
+} {C : Real} (hfC : forallᵐ x ∂μ, ‖f x‖ <= C) : eLpNorm f p μ <= μ Set.univ ^ p.
+toReal⁻¹ * ENNReal.ofReal …
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `ProbabilityTheory.Kernel.density_nonneg`：density_nonneg (hκν : fst κ <= 
+ν) (a : α) (x : γ) (s : Set β) : 0 <= density κ ν a x s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `ProbabilityTheory.Kernel.density_le_one`：density_le_one (hκν : fst κ <= 
+ν) (a : α) (x : γ) (s : Set β) : density κ ν a x s <= 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `ENNReal.rpow_one`：rpow_one (x : Real>=0∞) : x ^ (1 : Real) = x
+· 使用定理 `ENNReal.ofReal_one`：ENNReal.ofReal 1 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-lemma eLpNorm_density_le (hκν : fst κ <= ν) (a : α) (s : Set β) :
-    eLpNorm (fun x => density κ ν a x s) 1 (ν a) <= ν a univ := by
-  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun t => ?_))).trans ?_
+lemma eLpNorm_density_le (hκν : fst κ ≤ ν) (a : α) (s : Set β) :
+    eLpNorm (fun x ↦ density κ ν a x s) 1 (ν a) ≤ ν a univ := by
+  refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun t ↦ ?_))).trans ?_
   · simp only [Real.norm_eq_abs, abs_of_nonneg (density_nonneg hκν a t s),
       density_le_one hκν a t s]
   · simp
-
-/--
-lemma `integrable_density` / 引理 `integrable_density`
-
-English:
-lemma integrable_density
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  rw [← memLp_one_iff_integrable]
-  refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
-  · exact measurable_density_right κ ν hs a
-  · exact (eLpNorm_density_le hκν a s).trans_lt (measure_lt_top _ _)
-
-中文:
-引理 integrable_density
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  rw [← memLp_one_iff_integrable]
-  refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
-  · exact measurable_density_right κ ν hs a
-  · exact (eLpNorm_density_le hκν a s).trans_lt (measure_lt_top _ _)
-
-Depends on / 依赖: Measurable, Measurable.aestronglyMeasurable, aestronglyMeasurable, eLpNorm_density_le, measurable_density_right, measure_lt_top, memLp_one_iff_integrable, trans_lt
+/-
+**ProbabilityTheory.Kernel.integrable_density** 是 Mathlib 中的一个引理，位于命名空间 `Probabi
+lityTheory.Kernel`。
+形式化陈述：integrable_density (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set 
+β} (hs : MeasurableSet s) : Integrable (fun x => density κ ν a x s) (ν a)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.memLp_one_iff_integrable`：memLp_one_iff_integrable {f : α 
+-> ε} : MemLp f 1 μ ↔ Integrable f μ
+· 使用定理 `Measurable.aestronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : MeasureTheory.Measure α}   
+{f : α → β} [inst_1 :…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用引理 `ProbabilityTheory.Kernel.measurable_density_right`：measurable_density_ri
+ght (κ : Kernel α (γ × β)) (ν : Kernel α γ) {s : Set β} (hs : MeasurableSet s) (
+a : α) : Measurable (fun x => density κ…
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用引理 `ProbabilityTheory.Kernel.eLpNorm_density_le`：eLpNorm_density_le (hκν : f
+st κ <= ν) (a : α) (s : Set β) : eLpNorm (fun x => density κ ν a x s) 1 (ν a) <=
+ ν a univ
+· 使用定理 `MeasureTheory.measure_lt_top`：measure_lt_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s < ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
 -/
-lemma integrable_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma integrable_density (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) :
-    Integrable (fun x => density κ ν a x s) (ν a) := by
+    Integrable (fun x ↦ density κ ν a x s) (ν a) := by
   rw [← memLp_one_iff_integrable]
   refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
   · exact measurable_density_right κ ν hs a
   · exact (eLpNorm_density_le hκν a s).trans_lt (measure_lt_top _ _)
-
-/--
-lemma `tendsto_setIntegral_densityProcess` / 引理 `tendsto_setIntegral_densityProcess`
-
-English:
-lemma tendsto_setIntegral_densityProcess
-  statement: (hκν : fst κ <= ν)
-  proof: by
-  refine tendsto_setIntegral_of_L1' (μ := ν a) (fun x => density κ ν a x s)
-    (integrable_density hκν a hs).aestronglyMeasurable
-    (F := fun i x => densityProcess κ ν i a x s) (l := atTop)
-    (Eventually.of_forall (fun n => integrable_densityProcess hκν _ _ hs)) ?_ A
-  refine (tendsto_congr fun n => ?_).mp (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs)
-  refine eLpNorm_congr_ae ?_
-  exact EventuallyEq.rfl.sub (density_ae_eq_limitProcess hκν a hs).symm
-
-中文:
-引理 tendsto_set整数egral_densityProcess
-  结论: (hκν : fst κ <= ν)
-  证明: by
-  refine tendsto_setIntegral_of_L1' (μ := ν a) (fun x => density κ ν a x s)
-    (integrable_density hκν a hs).aestronglyMeasurable
-    (F := fun i x => densityProcess κ ν i a x s) (l := atTop)
-    (Eventually.of_forall (fun n => integrable_densityProcess hκν _ _ hs)) ?_ A
-  refine (tendsto_congr fun n => ?_).mp (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs)
-  refine eLpNorm_congr_ae ?_
-  exact EventuallyEq.rfl.sub (density_ae_eq_limitProcess hκν a hs).symm
-
-Depends on / 依赖: Eventually, Eventually.of_forall, EventuallyEq, EventuallyEq.rfl.sub, aestronglyMeasurable, density, densityProcess, density_ae_eq_limitProcess, eLpNorm_congr_ae, integrable_density, integrable_densityProcess, of_forall, tendsto_congr, tendsto_eLpNorm_one_densityProcess_limitProcess, tendsto_setIntegral_of_L1
+/-
+**ProbabilityTheory.Kernel.tendsto_setIntegral_densityProcess** 是 Mathlib 中的一个引理
+，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_setIntegral_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (
+a : α) {s : Set β} (hs : MeasurableSet s) (A : Set γ) : Tendsto (fun i => ∫ x in
+ A, densityProcess κ ν i a x s ∂(ν a)) atTop (𝓝 (∫ x in A, density κ ν a x s ∂(ν
+ a)))
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s；A : Set γ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.tendsto_setIntegral_of_L1'`：tendsto_setIntegral_of_L1' {ι}
+ (f : α -> G) (hfi : AEStronglyMeasurable f μ) {F : ι -> α -> G} {l : Filter ι} 
+(hFi : forallᶠ i in l, Integra…
+· 使用定理 `MeasureTheory.Integrable.aestronglyMeasurable`：∀ {α : Type u_1} {ε : Typ
+e u_5} {m : MeasurableSpace α} {μ : MeasureTheory.Measure α} [inst : Topological
+Space ε]   [inst_1 : ContinuousENor…
+· 使用引理 `ProbabilityTheory.Kernel.integrable_density`：integrable_density (hκν : f
+st κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Integ
+rable (fun x => density κ ν a x s…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用引理 `ProbabilityTheory.Kernel.integrable_densityProcess`：integrable_densityPr
+ocess (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs : 
+MeasurableSet s) : Integrable (fun x => …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.tendsto_congr`：tendsto_congr {f₁ f₂ : α -> β} {l₁ : Filter α} {l₂
+ : Filter β} (h : forall x, f₁ x = f₂ x) : Tendsto f₁ l₁ l₂ ↔ Tendsto f₂ l₁ l₂
+· 使用定理 `MeasureTheory.eLpNorm_congr_ae`：eLpNorm_congr_ae {f g : α -> ε} (hfg : f
+ =ᵐ[μ] g) : eLpNorm f p μ = eLpNorm g p μ
+· 使用定理 `Filter.EventuallyEq.sub`：∀ {α : Type u} {β : Type v} [inst : Sub β] {f f
+' g g' : α → β} {l : Filter α},   f =ᶠ[l] g → f' =ᶠ[l] g' → f - f' =ᶠ[l] g - g'
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.EventuallyEq.rfl`：∀ {α : Type u} {β : Type v} {l : Filter α} {f :
+ α → β}, f =ᶠ[l] f
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用引理 `ProbabilityTheory.Kernel.density_ae_eq_limitProcess`：density_ae_eq_limit
+Process (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : Measurab
+leSet s) : (fun x => density κ ν a x s) =…
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_eLpNorm_one_densityProcess_limitProcess
+`：tendsto_eLpNorm_one_densityProcess_limitProcess (hκν : fst κ <= ν) [IsFiniteKe
+rnel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Tendsto (…
 -/
-lemma tendsto_setIntegral_densityProcess (hκν : fst κ <= ν)
+lemma tendsto_setIntegral_densityProcess (hκν : fst κ ≤ ν)
     [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) (A : Set γ) :
-    Tendsto (fun i => ∫ x in A, densityProcess κ ν i a x s ∂(ν a)) atTop
+    Tendsto (fun i ↦ ∫ x in A, densityProcess κ ν i a x s ∂(ν a)) atTop
       (𝓝 (∫ x in A, density κ ν a x s ∂(ν a))) := by
-  refine tendsto_setIntegral_of_L1' (μ := ν a) (fun x => density κ ν a x s)
+  refine tendsto_setIntegral_of_L1' (μ := ν a) (fun x ↦ density κ ν a x s)
     (integrable_density hκν a hs).aestronglyMeasurable
-    (F := fun i x => densityProcess κ ν i a x s) (l := atTop)
-    (Eventually.of_forall (fun n => integrable_densityProcess hκν _ _ hs)) ?_ A
-  refine (tendsto_congr fun n => ?_).mp (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs)
+    (F := fun i x ↦ densityProcess κ ν i a x s) (l := atTop)
+    (Eventually.of_forall (fun n ↦ integrable_densityProcess hκν _ _ hs)) ?_ A
+  refine (tendsto_congr fun n ↦ ?_).mp (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs)
   refine eLpNorm_congr_ae ?_
   exact EventuallyEq.rfl.sub (density_ae_eq_limitProcess hκν a hs).symm
 
-/--
-lemma `setIntegral_density_of_measurableSet` / 引理 `setIntegral_density_of_measurableSet`
+/-- Auxiliary lemma for `setIntegral_density`. -/
+/-
+**ProbabilityTheory.Kernel.setIntegral_density_of_measurableSet** 是 Mathlib 中的一个
+引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：setIntegral_density_of_measurableSet (hκν : fst κ <= ν) [IsFiniteKernel ν]
+ (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ} (hA : Measurab
+leSet[countableFiltration γ n] A) : ∫ x in A, density κ ν a x s ∂(ν a) = (κ a).r
+eal (A ×ˢ s)
+参数：hκν : fst κ <= ν；n : Nat；a : α；hs : MeasurableSet s；hA : MeasurableSet[counta
+bleFiltration γ n] A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_setIntegral_densityProcess`：tendsto_set
+Integral_densityProcess (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β
+} (hs : MeasurableSet s) (A : Set γ) : Tendsto (f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.Tendsto.limsup_eq`：Filter.Tendsto.limsup_eq {f : Filter β} {u : β
+ -> α} {a : α} [NeBot f] (h : Tendsto u f (𝓝 a)) : limsup u f = a
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.limsup_const`：limsup_const {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} [NeBot f] (b : β) : limsup (fun _ => b) f = b
+· 使用定理 `Filter.limsup_congr`：limsup_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : limsup u 
+f = limsu…
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_densityProcess_of_le`：setIntegral_d
+ensityProcess_of_le (hκν : fst κ <= ν) [IsFiniteKernel ν] {n m : Nat} (hnm : n <
+= m) (a : α) {s : Set β} (hs : MeasurableSet s)…
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_densityProcess`：setIntegral_density
+Process (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs 
+: MeasurableSet s) {A : Set γ} (hA : Meas…
 
-English:
-lemma setIntegral_density_of_measurableSet
-  statement: (hκν : fst κ <= ν)
-  proof: by
-  suffices ∫ x in A, density κ ν a x s ∂(ν a) = ∫ x in A, densityProcess κ ν n a x s ∂(ν a) by
-    exact this ▸ setIntegral_densityProcess hκν _ _ hs hA
-  suffices ∫ x in A, density κ ν a x s ∂(ν a)
-      = limsup (fun i => ∫ x in A, densityProcess κ ν i a x s ∂(ν a)) atTop by
-    rw [this]; rw [← limsup_const (α := Nat) (f := atTop) (∫ x in A]; rw [densityProcess κ ν n a x s ∂(ν a))]; rw [limsup_congr]
-    simp only [eventually_atTop]
-    refine ⟨n, fun m hnm => ?_⟩
-    rw [setIntegral_densityProcess_of_le hκν hnm _ hs hA]; rw [setIntegral_densityProcess hκν _ _ hs hA]
-  -- use L1 convergence
-  have h := tendsto_setIntegral_densityProcess hκν a hs A
-  rw [h.limsup_eq]
-
-中文:
-引理 set整数egral_density_of_measurableSet
-  结论: (hκν : fst κ <= ν)
-  证明: by
-  suffices ∫ x in A, density κ ν a x s ∂(ν a) = ∫ x in A, densityProcess κ ν n a x s ∂(ν a) by
-    exact this ▸ setIntegral_densityProcess hκν _ _ hs hA
-  suffices ∫ x in A, density κ ν a x s ∂(ν a)
-      = limsup (fun i => ∫ x in A, densityProcess κ ν i a x s ∂(ν a)) atTop by
-    rw [this]; rw [← limsup_const (α := Nat) (f := atTop) (∫ x in A]; rw [densityProcess κ ν n a x s ∂(ν a))]; rw [limsup_congr]
-    simp only [eventually_atTop]
-    refine ⟨n, fun m hnm => ?_⟩
-    rw [setIntegral_densityProcess_of_le hκν hnm _ hs hA]; rw [setIntegral_densityProcess hκν _ _ hs hA]
-  -- use L1 convergence
-  have h := tendsto_setIntegral_densityProcess hκν a hs A
-  rw [h.limsup_eq]
-
-Depends on / 依赖: density, densityProcess, eventually_atTop, limsup, limsup_congr, limsup_const, setIntegral_densityProcess, setIntegral_densityProcess_of_le
+--- 原说明 ---
+Auxiliary lemma for `setIntegral_density`.
 -/
-lemma setIntegral_density_of_measurableSet (hκν : fst κ <= ν)
-    [IsFiniteKernel ν] (n : Nat) (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ}
+lemma setIntegral_density_of_measurableSet (hκν : fst κ ≤ ν)
+    [IsFiniteKernel ν] (n : ℕ) (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ}
     (hA : MeasurableSet[countableFiltration γ n] A) :
     ∫ x in A, density κ ν a x s ∂(ν a) = (κ a).real (A ×ˢ s) := by
   suffices ∫ x in A, density κ ν a x s ∂(ν a) = ∫ x in A, densityProcess κ ν n a x s ∂(ν a) by
     exact this ▸ setIntegral_densityProcess hκν _ _ hs hA
   suffices ∫ x in A, density κ ν a x s ∂(ν a)
-      = limsup (fun i => ∫ x in A, densityProcess κ ν i a x s ∂(ν a)) atTop by
-    rw [this]; rw [← limsup_const (α := Nat) (f := atTop) (∫ x in A]; rw [densityProcess κ ν n a x s ∂(ν a))]; rw [limsup_congr]
+      = limsup (fun i ↦ ∫ x in A, densityProcess κ ν i a x s ∂(ν a)) atTop by
+    rw [this, ← limsup_const (α := ℕ) (f := atTop) (∫ x in A, densityProcess κ ν n a x s ∂(ν a)),
+      limsup_congr]
     simp only [eventually_atTop]
-    refine ⟨n, fun m hnm => ?_⟩
-    rw [setIntegral_densityProcess_of_le hκν hnm _ hs hA]; rw [setIntegral_densityProcess hκν _ _ hs hA]
+    refine ⟨n, fun m hnm ↦ ?_⟩
+    rw [setIntegral_densityProcess_of_le hκν hnm _ hs hA,
+      setIntegral_densityProcess hκν _ _ hs hA]
   -- use L1 convergence
   have h := tendsto_setIntegral_densityProcess hκν a hs A
   rw [h.limsup_eq]
-
-/--
-lemma `integral_density` / 引理 `integral_density`
-
-English:
-lemma integral_density
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  rw [← setIntegral_univ]; rw [setIntegral_density_of_measurableSet hκν 0 a hs MeasurableSet.univ]
-
-中文:
-引理 integral_density
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  rw [← setIntegral_univ]; rw [setIntegral_density_of_measurableSet hκν 0 a hs MeasurableSet.univ]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, setIntegral_density_of_measurableSet, setIntegral_univ
+/-
+**ProbabilityTheory.Kernel.integral_density** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：integral_density (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β}
+ (hs : MeasurableSet s) : ∫ x, density κ ν a x s ∂(ν a) = (κ a).real (univ ×ˢ s)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.setIntegral_univ`：setIntegral_univ : ∫ x in univ, f x ∂μ =
+ ∫ x, f x ∂μ
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_density_of_measurableSet`：setIntegr
+al_density_of_measurableSet (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a :
+ α) {s : Set β} (hs : MeasurableSet s) {A : Set γ} …
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
 -/
-lemma integral_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma integral_density (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) :
     ∫ x, density κ ν a x s ∂(ν a) = (κ a).real (univ ×ˢ s) := by
-  rw [← setIntegral_univ]; rw [setIntegral_density_of_measurableSet hκν 0 a hs MeasurableSet.univ]
-
-/--
-lemma `setIntegral_density` / 引理 `setIntegral_density`
-
-English:
-lemma setIntegral_density
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  have hgen : ‹MeasurableSpace γ› =
-      .generateFrom {s | exists n, MeasurableSet[countableFiltration γ n] s} := by
-    rw [ofPred_exists]; rw [generateFrom_iUnion_measurableSet (countableFiltration γ)]; rw [iSup_countableFiltration]
-  have hpi : IsPiSystem {s | exists n, MeasurableSet[countableFiltration γ n] s} := by
-    rw [ofPred_exists]
-    exact isPiSystem_iUnion_of_monotone _
-      (fun n => @isPiSystem_measurableSet _ (countableFiltration γ n))
-      fun _ _ => (countableFiltration γ).mono
-  induction A, hA using induction_on_inter hgen hpi with
-  | empty => simp
-  | basic s hs =>
-    rcases hs with ⟨n, hn⟩
-    exact setIntegral_density_of_measurableSet hκν n a hs hn
-  | compl A hA hA_eq =>
-    have h := integral_add_compl hA (integrable_density hκν a hs)
-    rw [hA_eq]; rw [integral_density hκν a hs] at h
-    have : Aᶜ ×ˢ s = univ ×ˢ s \ A ×ˢ s := by
-      rw [prod_sdiff_prod]; rw [compl_eq_univ_sdiff]
-      simp
-    rw [this]; rw [measureReal_def]; rw [measure_sdiff (by intro; simp) (hA.prod hs).nullMeasurableSet (measure_ne_top (κ a) _)]; rw [ENNReal.toReal_sub_of_le (measure_mono (by intro x; simp)) (measure_ne_top _ _)]
-    rw [eq_tsub_iff_add_eq_of_le]; rw [add_comm]
-    · exact h
-    · gcongr <;> simp
-  | iUnion f hf_disj hf h_eq =>
-    rw [integral_iUnion hf hf_disj (integrable_density hκν _ hs).integrableOn]
-    simp_rw [h_eq, measureReal_def]
-    rw [← ENNReal.tsum_toReal_eq (fun _ => measure_ne_top _ _)]
-    congr
-    rw [iUnion_prod_const]; rw [measure_iUnion]
-    · exact hf_disj.mono fun _ _ h => h.set_prod_left _ _
-    · exact fun i => (hf i).prod hs
-
-中文:
-引理 set整数egral_density
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  have hgen : ‹MeasurableSpace γ› =
-      .generateFrom {s | exists n, MeasurableSet[countableFiltration γ n] s} := by
-    rw [ofPred_exists]; rw [generateFrom_iUnion_measurableSet (countableFiltration γ)]; rw [iSup_countableFiltration]
-  have hpi : IsPiSystem {s | exists n, MeasurableSet[countableFiltration γ n] s} := by
-    rw [ofPred_exists]
-    exact isPiSystem_iUnion_of_monotone _
-      (fun n => @isPiSystem_measurableSet _ (countableFiltration γ n))
-      fun _ _ => (countableFiltration γ).mono
-  induction A, hA using induction_on_inter hgen hpi with
-  | empty => simp
-  | basic s hs =>
-    rcases hs with ⟨n, hn⟩
-    exact setIntegral_density_of_measurableSet hκν n a hs hn
-  | compl A hA hA_eq =>
-    have h := integral_add_compl hA (integrable_density hκν a hs)
-    rw [hA_eq]; rw [integral_density hκν a hs] at h
-    have : Aᶜ ×ˢ s = univ ×ˢ s \ A ×ˢ s := by
-      rw [prod_sdiff_prod]; rw [compl_eq_univ_sdiff]
-      simp
-    rw [this]; rw [measureReal_def]; rw [measure_sdiff (by intro; simp) (hA.prod hs).nullMeasurableSet (measure_ne_top (κ a) _)]; rw [ENNReal.toReal_sub_of_le (measure_mono (by intro x; simp)) (measure_ne_top _ _)]
-    rw [eq_tsub_iff_add_eq_of_le]; rw [add_comm]
-    · exact h
-    · gcongr <;> simp
-  | iUnion f hf_disj hf h_eq =>
-    rw [integral_iUnion hf hf_disj (integrable_density hκν _ hs).integrableOn]
-    simp_rw [h_eq, measureReal_def]
-    rw [← ENNReal.tsum_toReal_eq (fun _ => measure_ne_top _ _)]
-    congr
-    rw [iUnion_prod_const]; rw [measure_iUnion]
-    · exact hf_disj.mono fun _ _ h => h.set_prod_left _ _
-    · exact fun i => (hf i).prod hs
-
-Depends on / 依赖: IsFiniteKernel, IsPiSystem, MeasurableSet, MeasurableSpace, countableFiltration, generateFrom, generateFrom_iUnion_measurableSet, iSup_countableFiltration, isFiniteKernel_of_isFiniteKernel_fst, isFiniteKernel_of_le, isPiSystem_iUnion_of_monotone, isPiSystem_measurableSe, ofPred_exists
+  rw [← setIntegral_univ, setIntegral_density_of_measurableSet hκν 0 a hs MeasurableSet.univ]
+/-
+**ProbabilityTheory.Kernel.setIntegral_density** 是 Mathlib 中的一个引理，位于命名空间 `Probab
+ilityTheory.Kernel`。
+形式化陈述：setIntegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set
+ β} (hs : MeasurableSet s) {A : Set γ} (hA : MeasurableSet A) : ∫ x in A, densit
+y κ ν a x s ∂(ν a) = (κ a).real (A ×ˢ s)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s；hA : MeasurableSet A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.isFiniteKernel_of_isFiniteKernel_fst`：∀ {α : Ty
+pe u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β}   {mγ : MeasurableSpace γ} {κ : Probability…
+· 使用引理 `ProbabilityTheory.isFiniteKernel_of_le`：isFiniteKernel_of_le {κ ν : Kern
+el α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν) : IsFiniteKernel κ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.ofPred_exists`：ofPred_exists (p : ι -> β -> Prop) : { x | exists i, 
+p i x } = ⋃ i, { x | p i x }
+· 使用定理 `MeasurableSpace.generateFrom_iUnion_measurableSet`：generateFrom_iUnion_m
+easurableSet (m : ι -> MeasurableSpace α) : generateFrom (⋃ n, { t | MeasurableS
+et[m n] t }) = ⨆ n, m n
+· 使用引理 `ProbabilityTheory.iSup_countableFiltration`：iSup_countableFiltration (α 
+: Type*) [m : MeasurableSpace α] [CountablyGenerated α] : ⨆ n, countableFiltrati
+on α n = m
+· 使用定理 `isPiSystem_iUnion_of_monotone`：isPiSystem_iUnion_of_monotone {α ι} [Semi
+latticeSup ι] (p : ι -> Set (Set α)) (hp_pi : forall n, IsPiSystem (p n)) (hp_mo
+no : Monotone p) : …
+· 使用定理 `MeasurableSpace.isPiSystem_measurableSet`：isPiSystem_measurableSet {α : 
+Type*} [MeasurableSpace α] : IsPiSystem { s : Set α | MeasurableSet s }
+· 使用定理 `MeasureTheory.Filtration.mono`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Meas
+urableSpace Ω} [inst : Preorder ι] {i j : ι}   (f : MeasureTheory.Filtration ι m
+), i ≤ j → ↑f i ≤ ↑…
+· 使用定理 `MeasurableSpace.induction_on_inter`：induction_on_inter {m : MeasurableSp
+ace α} {C : forall s : Set α, MeasurableSet s -> Prop} {s : Set (Set α)} (h_eq :
+ m = generateFrom s) (h_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.Measure.restrict_empty`：restrict_empty : μ.restrict ∅ = 0
+· 使用定理 `MeasureTheory.integral_zero_measure`：integral_zero_measure {m : Measurab
+leSpace α} (f : α -> G) : (∫ x, f x ∂(0 : Measure α)) = 0
+· 使用定理 `Set.empty_prod`：empty_prod : (∅ : Set α) ×ˢ t = ∅
+· 使用定理 `MeasureTheory.measureReal_empty`：∀ {α : Type u_1} {x : MeasurableSpace α
+} {μ : MeasureTheory.Measure α}, μ.real ∅ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_density_of_measurableSet`：setIntegr
+al_density_of_measurableSet (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : Nat) (a :
+ α) {s : Set β} (hs : MeasurableSet s) {A : Set γ} …
+· 使用定理 `MeasureTheory.integral_add_compl`：integral_add_compl (hs : MeasurableSet
+ s) (hfi : Integrable f μ) : ∫ x in s, f x ∂μ + ∫ x in sᶜ, f x ∂μ = ∫ x, f x ∂μ
+· 使用引理 `ProbabilityTheory.Kernel.integrable_density`：integrable_density (hκν : f
+st κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Integ
+rable (fun x => density κ ν a x s…
+· 使用定理 `Set.prod_sdiff_prod`：prod_sdiff_prod : s ×ˢ t \ s₁ ×ˢ t₁ = s ×ˢ (t \ t₁)
+ union (s \ s₁) ×ˢ t
+· 使用定理 `Set.compl_eq_univ_sdiff`：compl_eq_univ_sdiff (s : Set α) : sᶜ = univ \ s
+· 使用定理 `sdiff_self`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a :
+ α}, a \ a = ⊥
+· 使用定理 `Set.prod_empty`：prod_empty : s ×ˢ (∅ : Set β) = ∅
+· 使用定理 `Set.empty_union`：empty_union (a : Set α) : ∅ union a = a
+· 使用定理 `MeasureTheory.measureReal_def`：measureReal_def {α : Type*} {m : Measurab
+leSpace α} (μ : Measure α) (s : Set α) : μ.real s = (μ s).toReal
+· 使用定理 `MeasureTheory.measure_sdiff`：measure_sdiff (h : s₂ subseteq s₁) (h₂ : Nu
+llMeasurableSet s₂ μ) (h_fin : μ s₂ != ∞) : μ (s₁ \ s₂) = μ s₁ - μ s₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+（共 62 条，此处仅展示前 30 条）
 -/
-lemma setIntegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma setIntegral_density (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ} (hA : MeasurableSet A) :
     ∫ x in A, density κ ν a x s ∂(ν a) = (κ a).real (A ×ˢ s) := by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   have hgen : ‹MeasurableSpace γ› =
-      .generateFrom {s | exists n, MeasurableSet[countableFiltration γ n] s} := by
-    rw [ofPred_exists]; rw [generateFrom_iUnion_measurableSet (countableFiltration γ)]; rw [iSup_countableFiltration]
-  have hpi : IsPiSystem {s | exists n, MeasurableSet[countableFiltration γ n] s} := by
+      .generateFrom {s | ∃ n, MeasurableSet[countableFiltration γ n] s} := by
+    rw [ofPred_exists, generateFrom_iUnion_measurableSet (countableFiltration γ),
+      iSup_countableFiltration]
+  have hpi : IsPiSystem {s | ∃ n, MeasurableSet[countableFiltration γ n] s} := by
     rw [ofPred_exists]
     exact isPiSystem_iUnion_of_monotone _
-      (fun n => @isPiSystem_measurableSet _ (countableFiltration γ n))
-      fun _ _ => (countableFiltration γ).mono
+      (fun n ↦ @isPiSystem_measurableSet _ (countableFiltration γ n))
+      fun _ _ ↦ (countableFiltration γ).mono
   induction A, hA using induction_on_inter hgen hpi with
   | empty => simp
   | basic s hs =>
@@ -1724,51 +1929,70 @@ lemma setIntegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
     exact setIntegral_density_of_measurableSet hκν n a hs hn
   | compl A hA hA_eq =>
     have h := integral_add_compl hA (integrable_density hκν a hs)
-    rw [hA_eq]; rw [integral_density hκν a hs] at h
+    rw [hA_eq, integral_density hκν a hs] at h
     have : Aᶜ ×ˢ s = univ ×ˢ s \ A ×ˢ s := by
-      rw [prod_sdiff_prod]; rw [compl_eq_univ_sdiff]
+      rw [prod_sdiff_prod, compl_eq_univ_sdiff]
       simp
-    rw [this]; rw [measureReal_def]; rw [measure_sdiff (by intro; simp) (hA.prod hs).nullMeasurableSet (measure_ne_top (κ a) _)]; rw [ENNReal.toReal_sub_of_le (measure_mono (by intro x; simp)) (measure_ne_top _ _)]
-    rw [eq_tsub_iff_add_eq_of_le]; rw [add_comm]
+    rw [this, measureReal_def,
+      measure_sdiff (by intro; simp) (hA.prod hs).nullMeasurableSet (measure_ne_top (κ a) _),
+      ENNReal.toReal_sub_of_le (measure_mono (by intro x; simp)) (measure_ne_top _ _)]
+    rw [eq_tsub_iff_add_eq_of_le, add_comm]
     · exact h
     · gcongr <;> simp
   | iUnion f hf_disj hf h_eq =>
     rw [integral_iUnion hf hf_disj (integrable_density hκν _ hs).integrableOn]
     simp_rw [h_eq, measureReal_def]
-    rw [← ENNReal.tsum_toReal_eq (fun _ => measure_ne_top _ _)]
+    rw [← ENNReal.tsum_toReal_eq (fun _ ↦ measure_ne_top _ _)]
     congr
-    rw [iUnion_prod_const]; rw [measure_iUnion]
-    · exact hf_disj.mono fun _ _ h => h.set_prod_left _ _
-    · exact fun i => (hf i).prod hs
-
-/--
-lemma `setLIntegral_density` / 引理 `setLIntegral_density`
-
-English:
-lemma setLIntegral_density
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  rw [← ofReal_integral_eq_lintegral_ofReal]
-  · rw [setIntegral_density hκν a hs hA, measureReal_def,
-      ENNReal.ofReal_toReal (measure_ne_top _ _)]
-  · exact (integrable_density hκν a hs).restrict
-  · exact ae_of_all _ (fun _ => density_nonneg hκν _ _ _)
-
-中文:
-引理 setL整数egral_density
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  rw [← ofReal_integral_eq_lintegral_ofReal]
-  · rw [setIntegral_density hκν a hs hA, measureReal_def,
-      ENNReal.ofReal_toReal (measure_ne_top _ _)]
-  · exact (integrable_density hκν a hs).restrict
-  · exact ae_of_all _ (fun _ => density_nonneg hκν _ _ _)
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_toReal, IsFiniteKernel, ae_of_all, density_nonneg, integrable_density, isFiniteKernel_of_isFiniteKernel_fst, isFiniteKernel_of_le, measureReal_def, measure_ne_top, ofReal_integral_eq_lintegral_ofReal, ofReal_toReal, restrict, setIntegral_density
+    rw [iUnion_prod_const, measure_iUnion]
+    · exact hf_disj.mono fun _ _ h ↦ h.set_prod_left _ _
+    · exact fun i ↦ (hf i).prod hs
+/-
+**ProbabilityTheory.Kernel.setLIntegral_density** 是 Mathlib 中的一个引理，位于命名空间 `Proba
+bilityTheory.Kernel`。
+形式化陈述：setLIntegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Se
+t β} (hs : MeasurableSet s) {A : Set γ} (hA : MeasurableSet A) : ∫⁻ x in A, ENNR
+eal.ofReal (density κ ν a x s) ∂(ν a) = κ a (A ×ˢ s)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s；hA : MeasurableSet A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.isFiniteKernel_of_isFiniteKernel_fst`：∀ {α : Ty
+pe u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β}   {mγ : MeasurableSpace γ} {κ : Probability…
+· 使用引理 `ProbabilityTheory.isFiniteKernel_of_le`：isFiniteKernel_of_le {κ ν : Kern
+el α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν) : IsFiniteKernel κ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.ofReal_integral_eq_lintegral_ofReal`：ofReal_integral_eq_li
+ntegral_ofReal {f : α -> Real} (hfi : Integrable f μ) (f_nn : 0 <=ᵐ[μ] f) : ENNR
+eal.ofReal (∫ x, f x ∂μ) = ∫⁻ x, ENNRea…
+· 使用定理 `MeasureTheory.Integrable.restrict`：∀ {α : Type u_1} {m : MeasurableSpace
+ α} {μ : MeasureTheory.Measure α} {ε : Type u_8} [inst : TopologicalSpace ε]   [
+inst_1 : ContinuousENor…
+· 使用引理 `ProbabilityTheory.Kernel.integrable_density`：integrable_density (hκν : f
+st κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Integ
+rable (fun x => density κ ν a x s…
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.density_nonneg`：density_nonneg (hκν : fst κ <= 
+ν) (a : α) (x : γ) (s : Set β) : 0 <= density κ ν a x s
+· 使用引理 `ProbabilityTheory.Kernel.setIntegral_density`：setIntegral_density (hκν :
+ fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) {A : 
+Set γ} (hA : MeasurableSet A) : ∫ …
+· 使用定理 `MeasureTheory.measureReal_def`：measureReal_def {α : Type*} {m : Measurab
+leSpace α} (μ : Measure α) (s : Set α) : μ.real s = (μ s).toReal
+· 使用定理 `ENNReal.ofReal_toReal`：ofReal_toReal {a : Real>=0∞} (h : a != ∞) : ENNRe
+al.ofReal a.toReal = a
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
 -/
-lemma setLIntegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma setLIntegral_density (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) {A : Set γ} (hA : MeasurableSet A) :
     ∫⁻ x in A, ENNReal.ofReal (density κ ν a x s) ∂(ν a) = κ a (A ×ˢ s) := by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
@@ -1776,28 +2000,28 @@ lemma setLIntegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
   · rw [setIntegral_density hκν a hs hA, measureReal_def,
       ENNReal.ofReal_toReal (measure_ne_top _ _)]
   · exact (integrable_density hκν a hs).restrict
-  · exact ae_of_all _ (fun _ => density_nonneg hκν _ _ _)
-
-/--
-lemma `lintegral_density` / 引理 `lintegral_density`
-
-English:
-lemma lintegral_density
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
-  rw [← setLIntegral_univ]
-  exact setLIntegral_density hκν a hs MeasurableSet.univ
-
-中文:
-引理 lintegral_density
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  rw [← setLIntegral_univ]
-  exact setLIntegral_density hκν a hs MeasurableSet.univ
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, setLIntegral_density, setLIntegral_univ
+  · exact ae_of_all _ (fun _ ↦ density_nonneg hκν _ _ _)
+/-
+**ProbabilityTheory.Kernel.lintegral_density** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：lintegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β
+} (hs : MeasurableSet s) : ∫⁻ x, ENNReal.ofReal (density κ ν a x s) ∂(ν a) = κ a
+ (univ ×ˢ s)
+参数：hκν : fst κ <= ν；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.setLIntegral_univ`：setLIntegral_univ (f : α -> Real>=0∞) :
+ ∫⁻ x in univ, f x ∂μ = ∫⁻ x, f x ∂μ
+· 使用引理 `ProbabilityTheory.Kernel.setLIntegral_density`：setLIntegral_density (hκν
+ : fst κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) {A 
+: Set γ} (hA : MeasurableSet A) : ∫…
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
 -/
-lemma lintegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
+lemma lintegral_density (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
     (a : α) {s : Set β} (hs : MeasurableSet s) :
     ∫⁻ x, ENNReal.ofReal (density κ ν a x s) ∂(ν a) = κ a (univ ×ˢ s) := by
   rw [← setLIntegral_univ]
@@ -1805,203 +2029,283 @@ lemma lintegral_density (hκν : fst κ <= ν) [IsFiniteKernel ν]
 
 end Integral
 
-/--
-lemma `tendsto_integral_density_of_monotone` / 引理 `tendsto_integral_density_of_monotone`
-
-English:
-lemma tendsto_integral_density_of_monotone
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν]
-  proof: by
+/-
+**ProbabilityTheory.Kernel.tendsto_integral_density_of_monotone** 是 Mathlib 中的一个
+引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_integral_density_of_monotone (hκν : fst κ <= ν) [IsFiniteKernel ν]
+ (a : α) (seq : Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = 
+univ) (hseq_meas : forall m, MeasurableSet (seq m)) : Tendsto (fun m => ∫ x, den
+sity κ ν a x (seq m) ∂(ν a)) atTop (𝓝 ((κ a).real univ))
+参数：hκν : fst κ <= ν；a : α；seq : Nat -> Set β；hseq : Monotone seq；hseq_iUnion : ⋃
+ i, seq i = univ；hseq_meas : forall m, MeasurableSet (seq m)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.isFiniteKernel_of_isFiniteKernel_fst`：∀ {α : Ty
+pe u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β}   {mγ : MeasurableSpace γ} {κ : Probability…
+· 使用引理 `ProbabilityTheory.isFiniteKernel_of_le`：isFiniteKernel_of_le {κ ν : Kern
+el α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν) : IsFiniteKernel κ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `ProbabilityTheory.Kernel.integral_density`：integral_density (hκν : fst κ
+ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : ∫ x, dens
+ity κ ν a x s ∂(ν a) = (κ a).re…
+· 使用定理 `ContinuousOn.continuousAt`：ContinuousOn.continuousAt (h : ContinuousOn f
+ s) (hx : s in 𝓝 x) : ContinuousAt f x
+· 使用引理 `ENNReal.continuousOn_toReal`：continuousOn_toReal : ContinuousOn ENNReal.
+toReal { a | a != ∞ }
+· 使用定理 `mem_nhds_iff`：mem_nhds_iff : s in 𝓝 x ↔ exists t subseteq s, IsOpen t ∧ 
+x in t
+· 使用定理 `ne_top_of_lt`：ne_top_of_lt (h : a < b) : a != ⊤
+· 使用定理 `isOpen_Iio`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : LinearO
+rder α] [ClosedIciTopology α] {a : α}, IsOpen (Set.Iio a)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `ENNReal.lt_add_right`：lt_add_right (ha : a != ∞) (hb : b != 0) : a < a +
+ b
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `ContinuousAt.tendsto`：ContinuousAt.tendsto (h : ContinuousAt f x) : Tend
+sto f (𝓝 x) (𝓝 (f x))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.prod_iUnion`：prod_iUnion {s : Set α} {t : ι -> Set β} : (s ×ˢ ⋃ i, t
+ i) = ⋃ i, s ×ˢ t i
+· 使用定理 `Set.univ_prod_univ`：univ_prod_univ : @univ α ×ˢ @univ β = univ
+· 使用定理 `MeasureTheory.tendsto_measure_iUnion_atTop`：tendsto_measure_iUnion_atTop
+ [Preorder ι] [IsCountablyGenerated (atTop : Filter ι)] {s : ι -> Set α} (hm : M
+onotone s) : Tendsto (μ ∘ s) atT…
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+（共 34 条，此处仅展示前 30 条）
+-/
+lemma tendsto_integral_density_of_monotone (hκν : fst κ ≤ ν) [IsFiniteKernel ν]
+    (a : α) (seq : ℕ → Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ)
+    (hseq_meas : ∀ m, MeasurableSet (seq m)) :
+    Tendsto (fun m ↦ ∫ x, density κ ν a x (seq m) ∂(ν a)) atTop (𝓝 ((κ a).real univ)) := by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   simp_rw [integral_density hκν a (hseq_meas _)]
   have h_cont := ENNReal.continuousOn_toReal.continuousAt (x := κ a univ) ?_
   swap
   · rw [mem_nhds_iff]
-    refine ⟨Iio (κ a univ + 1), fun x hx => ne_top_of_lt (?_ : x < κ a univ + 1), isOpen_Iio, ?_⟩
+    refine ⟨Iio (κ a univ + 1), fun x hx ↦ ne_top_of_lt (?_ : x < κ a univ + 1), isOpen_Iio, ?_⟩
     · simpa using hx
     · simp only [mem_Iio]
       exact ENNReal.lt_add_right (measure_ne_top _ _) one_ne_zero
   refine h_cont.tendsto.comp ?_
   convert! tendsto_measure_iUnion_atTop (monotone_const.set_prod hseq)
-  rw [← prod_iUnion]; rw [hseq_iUnion]; rw [univ_prod_univ]
-
-中文:
-引理 tendsto_integral_density_of_monotone
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
-  证明: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  simp_rw [integral_density hκν a (hseq_meas _)]
-  have h_cont := ENNReal.continuousOn_toReal.continuousAt (x := κ a univ) ?_
-  swap
-  · rw [mem_nhds_iff]
-    refine ⟨Iio (κ a univ + 1), fun x hx => ne_top_of_lt (?_ : x < κ a univ + 1), isOpen_Iio, ?_⟩
-    · simpa using hx
-    · simp only [mem_Iio]
-      exact ENNReal.lt_add_right (measure_ne_top _ _) one_ne_zero
-  refine h_cont.tendsto.comp ?_
-  convert! tendsto_measure_iUnion_atTop (monotone_const.set_prod hseq)
-  rw [← prod_iUnion]; rw [hseq_iUnion]; rw [univ_prod_univ]
-
-Depends on / 依赖: ENNReal, ENNReal.continuousOn_toReal.continuousAt, ENNReal.lt_add_right, IsFiniteKernel, continuousAt, continuousOn_toReal, convert, h_cont, h_cont.tendsto.comp, hseq_meas, integral_density, isFiniteKernel_of_isFiniteKernel_fst, isFiniteKernel_of_le, isOpen_Iio, lt_add_right, measure_ne_top, mem_Iio, mem_nhds_iff, ne_top_of_lt, one_ne_zero
+  rw [← prod_iUnion, hseq_iUnion, univ_prod_univ]
+/-
+**ProbabilityTheory.Kernel.tendsto_integral_density_of_antitone** 是 Mathlib 中的一个
+引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_integral_density_of_antitone (hκν : fst κ <= ν) [IsFiniteKernel ν]
+ (a : α) (seq : Nat -> Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = 
+∅) (hseq_meas : forall m, MeasurableSet (seq m)) : Tendsto (fun m => ∫ x, densit
+y κ ν a x (seq m) ∂(ν a)) atTop (𝓝 0)
+参数：hκν : fst κ <= ν；a : α；seq : Nat -> Set β；hseq : Antitone seq；hseq_iInter : ⋂
+ i, seq i = ∅；hseq_meas : forall m, MeasurableSet (seq m)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.isFiniteKernel_of_isFiniteKernel_fst`：∀ {α : Ty
+pe u_1} {β : Type u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β}   {mγ : MeasurableSpace γ} {κ : Probability…
+· 使用引理 `ProbabilityTheory.isFiniteKernel_of_le`：isFiniteKernel_of_le {κ ν : Kern
+el α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν) : IsFiniteKernel κ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `ProbabilityTheory.Kernel.integral_density`：integral_density (hκν : fst κ
+ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : ∫ x, dens
+ity κ ν a x s ∂(ν a) = (κ a).re…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.toReal_zero`：ENNReal.toReal 0 = 0
+· 使用引理 `ENNReal.continuousAt_toReal`：continuousAt_toReal (hx : x != ∞) : Continu
+ousAt ENNReal.toReal x
+· 使用定理 `ENNReal.zero_ne_top`：0 ≠ ⊤
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `ContinuousAt.tendsto`：ContinuousAt.tendsto (h : ContinuousAt f x) : Tend
+sto f (𝓝 x) (𝓝 (f x))
+· 使用定理 `MeasureTheory.tendsto_measure_iInter_atTop`：tendsto_measure_iInter_atTop
+ [Preorder ι] [IsCountablyGenerated (atTop : Filter ι)] {s : ι -> Set α} (hs : f
+orall i, NullMeasurableSet (s i)…
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
+· 使用定理 `MeasurableSet.prod`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSpace
+ α} {mβ : MeasurableSpace β} {s : Set α} {t : Set β},   MeasurableSet s → Measur
+ableSet …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Antitone.set_prod`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst 
+: Preorder α] {f : α → Set β} {g : α → Set γ},   Antitone f → Antitone g → Antit
+one fun…
+· 使用定理 `antitone_const`：antitone_const [Preorder α] [Preorder β] {c : β} : Antit
+one fun _ : α => c
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Set.prod_empty`：prod_empty : s ×ˢ (∅ : Set β) = ∅
+（共 32 条，此处仅展示前 30 条）
 -/
-lemma tendsto_integral_density_of_monotone (hκν : fst κ <= ν) [IsFiniteKernel ν]
-    (a : α) (seq : Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ)
-    (hseq_meas : forall m, MeasurableSet (seq m)) :
-    Tendsto (fun m => ∫ x, density κ ν a x (seq m) ∂(ν a)) atTop (𝓝 ((κ a).real univ)) := by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  simp_rw [integral_density hκν a (hseq_meas _)]
-  have h_cont := ENNReal.continuousOn_toReal.continuousAt (x := κ a univ) ?_
-  swap
-  · rw [mem_nhds_iff]
-    refine ⟨Iio (κ a univ + 1), fun x hx => ne_top_of_lt (?_ : x < κ a univ + 1), isOpen_Iio, ?_⟩
-    · simpa using hx
-    · simp only [mem_Iio]
-      exact ENNReal.lt_add_right (measure_ne_top _ _) one_ne_zero
-  refine h_cont.tendsto.comp ?_
-  convert! tendsto_measure_iUnion_atTop (monotone_const.set_prod hseq)
-  rw [← prod_iUnion]; rw [hseq_iUnion]; rw [univ_prod_univ]
-
-/--
-lemma `tendsto_integral_density_of_antitone` / 引理 `tendsto_integral_density_of_antitone`
-
-English:
-lemma tendsto_integral_density_of_antitone
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α)
-  proof: by
+lemma tendsto_integral_density_of_antitone (hκν : fst κ ≤ ν) [IsFiniteKernel ν] (a : α)
+    (seq : ℕ → Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
+    (hseq_meas : ∀ m, MeasurableSet (seq m)) :
+    Tendsto (fun m ↦ ∫ x, density κ ν a x (seq m) ∂(ν a)) atTop (𝓝 0) := by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   simp_rw [integral_density hκν a (hseq_meas _)]
   rw [← ENNReal.toReal_zero]
   have h_cont := ENNReal.continuousAt_toReal ENNReal.zero_ne_top
   refine h_cont.tendsto.comp ?_
-  have h : Tendsto (fun m => κ a (univ ×ˢ seq m)) atTop
-      (𝓝 ((κ a) (⋂ n, (fun m => univ ×ˢ seq m) n))) := by
+  have h : Tendsto (fun m ↦ κ a (univ ×ˢ seq m)) atTop
+      (𝓝 ((κ a) (⋂ n, (fun m ↦ univ ×ˢ seq m) n))) := by
     apply tendsto_measure_iInter_atTop
     · measurability
     · exact antitone_const.set_prod hseq
     · exact ⟨0, measure_ne_top _ _⟩
   simpa [← prod_iInter, hseq_iInter] using h
-
-中文:
-引理 tendsto_integral_density_of_antitone
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν] (a : α)
-  证明: by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  simp_rw [integral_density hκν a (hseq_meas _)]
-  rw [← ENNReal.toReal_zero]
-  have h_cont := ENNReal.continuousAt_toReal ENNReal.zero_ne_top
-  refine h_cont.tendsto.comp ?_
-  have h : Tendsto (fun m => κ a (univ ×ˢ seq m)) atTop
-      (𝓝 ((κ a) (⋂ n, (fun m => univ ×ˢ seq m) n))) := by
-    apply tendsto_measure_iInter_atTop
-    · measurability
-    · exact antitone_const.set_prod hseq
-    · exact ⟨0, measure_ne_top _ _⟩
-  simpa [← prod_iInter, hseq_iInter] using h
-
-Depends on / 依赖: ENNReal, ENNReal.continuousAt_toReal, ENNReal.toReal_zero, ENNReal.zero_ne_top, IsFiniteKernel, Tendsto, antitone_const, antitone_const.set_prod, continuousAt_toReal, h_cont, h_cont.tendsto.comp, hseq_meas, integral_density, isFiniteKernel_of_isFiniteKernel_fst, isFiniteKernel_of_le, measurability, measure_ne_top, set_prod, simp_rw, tendsto
+/-
+**ProbabilityTheory.Kernel.tendsto_density_atTop_ae_of_antitone** 是 Mathlib 中的一个
+引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_density_atTop_ae_of_antitone (hκν : fst κ <= ν) [IsFiniteKernel ν]
+ (a : α) (seq : Nat -> Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = 
+∅) (hseq_meas : forall m, MeasurableSet (seq m)) : forallᵐ x ∂(ν a), Tendsto (fu
+n m => density κ ν a x (seq m)) atTop (𝓝 0)
+参数：hκν : fst κ <= ν；a : α；seq : Nat -> Set β；hseq : Antitone seq；hseq_iInter : ⋂
+ i, seq i = ∅；hseq_meas : forall m, MeasurableSet (seq m)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.tendsto_of_integral_tendsto_of_antitone`：tendsto_of_integr
+al_tendsto_of_antitone {μ : Measure α} {f : Nat -> α -> Real} {F : α -> Real} (h
+f_int : forall n, Integrable (f n) μ) (hF_i…
+· 使用引理 `ProbabilityTheory.Kernel.integrable_density`：integrable_density (hκν : f
+st κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Integ
+rable (fun x => density κ ν a x s…
+· 使用定理 `MeasureTheory.integrable_const`：integrable_const [IsFiniteMeasure μ] (c 
+: β) : Integrable (fun _ : α => c) μ
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_zero`：integral_zero : ∫ _ : α, (0 : G) ∂μ = 0
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_integral_density_of_antitone`：tendsto_i
+ntegral_density_of_antitone (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) (seq :
+ Nat -> Set β) (hseq : Antitone seq) (hseq_iInter :…
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.density_mono_set`：density_mono_set (hκν : fst κ
+ <= ν) (a : α) (x : γ) {s s' : Set β} (h : s subseteq s') : density κ ν a x s <=
+ density κ ν a x s'
+· 使用引理 `ProbabilityTheory.Kernel.density_nonneg`：density_nonneg (hκν : fst κ <= 
+ν) (a : α) (x : γ) (s : Set β) : 0 <= density κ ν a x s
 -/
-lemma tendsto_integral_density_of_antitone (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α)
-    (seq : Nat -> Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
-    (hseq_meas : forall m, MeasurableSet (seq m)) :
-    Tendsto (fun m => ∫ x, density κ ν a x (seq m) ∂(ν a)) atTop (𝓝 0) := by
-  have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
-  simp_rw [integral_density hκν a (hseq_meas _)]
-  rw [← ENNReal.toReal_zero]
-  have h_cont := ENNReal.continuousAt_toReal ENNReal.zero_ne_top
-  refine h_cont.tendsto.comp ?_
-  have h : Tendsto (fun m => κ a (univ ×ˢ seq m)) atTop
-      (𝓝 ((κ a) (⋂ n, (fun m => univ ×ˢ seq m) n))) := by
-    apply tendsto_measure_iInter_atTop
-    · measurability
-    · exact antitone_const.set_prod hseq
-    · exact ⟨0, measure_ne_top _ _⟩
-  simpa [← prod_iInter, hseq_iInter] using h
-
-/--
-lemma `tendsto_density_atTop_ae_of_antitone` / 引理 `tendsto_density_atTop_ae_of_antitone`
-
-English:
-lemma tendsto_density_atTop_ae_of_antitone
-  statement: (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α)
-  proof: by
+lemma tendsto_density_atTop_ae_of_antitone (hκν : fst κ ≤ ν) [IsFiniteKernel ν] (a : α)
+    (seq : ℕ → Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
+    (hseq_meas : ∀ m, MeasurableSet (seq m)) :
+    ∀ᵐ x ∂(ν a), Tendsto (fun m ↦ density κ ν a x (seq m)) atTop (𝓝 0) := by
   refine tendsto_of_integral_tendsto_of_antitone ?_ (integrable_const _) ?_ ?_ ?_
-  · exact fun m => integrable_density hκν _ (hseq_meas m)
+  · exact fun m ↦ integrable_density hκν _ (hseq_meas m)
   · rw [integral_zero]
     exact tendsto_integral_density_of_antitone hκν a seq hseq hseq_iInter hseq_meas
-  · exact ae_of_all _ (fun c n m hnm => density_mono_set hκν a c (hseq hnm))
-  · exact ae_of_all _ (fun x m => density_nonneg hκν a x (seq m))
-
-中文:
-引理 tendsto_density_atTop_ae_of_antitone
-  结论: (hκν : fst κ <= ν) [是FiniteKernel ν] (a : α)
-  证明: by
-  refine tendsto_of_integral_tendsto_of_antitone ?_ (integrable_const _) ?_ ?_ ?_
-  · exact fun m => integrable_density hκν _ (hseq_meas m)
-  · rw [integral_zero]
-    exact tendsto_integral_density_of_antitone hκν a seq hseq hseq_iInter hseq_meas
-  · exact ae_of_all _ (fun c n m hnm => density_mono_set hκν a c (hseq hnm))
-  · exact ae_of_all _ (fun x m => density_nonneg hκν a x (seq m))
-
-Depends on / 依赖: ae_of_all, density_mono_set, density_nonneg, hseq_iInter, hseq_meas, integrable_const, integrable_density, integral_zero, tendsto_integral_density_of_antitone, tendsto_of_integral_tendsto_of_antitone
--/
-lemma tendsto_density_atTop_ae_of_antitone (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α)
-    (seq : Nat -> Set β) (hseq : Antitone seq) (hseq_iInter : ⋂ i, seq i = ∅)
-    (hseq_meas : forall m, MeasurableSet (seq m)) :
-    forallᵐ x ∂(ν a), Tendsto (fun m => density κ ν a x (seq m)) atTop (𝓝 0) := by
-  refine tendsto_of_integral_tendsto_of_antitone ?_ (integrable_const _) ?_ ?_ ?_
-  · exact fun m => integrable_density hκν _ (hseq_meas m)
-  · rw [integral_zero]
-    exact tendsto_integral_density_of_antitone hκν a seq hseq hseq_iInter hseq_meas
-  · exact ae_of_all _ (fun c n m hnm => density_mono_set hκν a c (hseq hnm))
-  · exact ae_of_all _ (fun x m => density_nonneg hκν a x (seq m))
+  · exact ae_of_all _ (fun c n m hnm ↦ density_mono_set hκν a c (hseq hnm))
+  · exact ae_of_all _ (fun x m ↦ density_nonneg hκν a x (seq m))
 
 section UnivFst
 
+/-! We specialize to `ν = fst κ`, for which `density κ (fst κ) a t univ = 1` almost everywhere. -/
 
-/--
-lemma `densityProcess_fst_univ` / 引理 `densityProcess_fst_univ`
+/-
+**ProbabilityTheory.Kernel.densityProcess_fst_univ** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+obabilityTheory.Kernel`。
+形式化陈述：densityProcess_fst_univ [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ) : den
+sityProcess κ (fst κ) n a x univ = if fst κ a (countablePartitionSet n x) = 0 th
+en 0 else 1
+参数：n : Nat；a : α；x : γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.densityProcess.eq_1`：∀ {α : Type u_1} {β : Type
+ u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : M
+easurableSpace γ} [inst : Measurab…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ENNReal.zero_div`：∀ {a : ENNReal}, 0 / a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ENNReal.toReal_div`：∀ (a b : ENNReal), (a / b).toReal = a.toReal / b.toR
+eal
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用引理 `MeasurableSpace.measurableSet_countablePartitionSet`：measurableSet_count
+ablePartitionSet (n : Nat) (a : α) : MeasurableSet (countablePartitionSet n a)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `ENNReal.div_self`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a / a = 1
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
 
-English:
-lemma densityProcess_fst_univ
-  given: [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ)
-  proof: by
-  rw [densityProcess]
-  split_ifs with h
-  · simp only [h]
-    by_cases h' : κ a (countablePartitionSet n x ×ˢ univ) = 0
-    · simp [h']
-    · simp
-  · rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-    have : countablePartitionSet n x ×ˢ univ = {p : γ × β | p.1 in countablePartitionSet n x} := by
-      ext x
-      simp
-    rw [this]; rw [ENNReal.div_self]
-    · simp
-    · rwa [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h
-    · exact measure_ne_top _ _
-
-中文:
-引理 densityProcess_fst_univ
-  条件: [是FiniteKernel κ] (n : 自然数) (a : α) (x : γ)
-  证明: by
-  rw [densityProcess]
-  split_ifs with h
-  · simp only [h]
-    by_cases h' : κ a (countablePartitionSet n x ×ˢ univ) = 0
-    · simp [h']
-    · simp
-  · rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-    have : countablePartitionSet n x ×ˢ univ = {p : γ × β | p.1 in countablePartitionSet n x} := by
-      ext x
-      simp
-    rw [this]; rw [ENNReal.div_self]
-    · simp
-    · rwa [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h
-    · exact measure_ne_top _ _
-
-Depends on / 依赖: ENNReal, ENNReal.div_self, countablePartitionSet, densityProcess, div_self, fst_apply, measurableSet_countablePartitionSet, measure_ne_top, split_ifs
+--- 原说明 ---
+We specialize to `ν = fst κ`, for which `density κ (fst κ) a t univ = 1` almost 
+everywhere.
 -/
-lemma densityProcess_fst_univ [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ) :
+lemma densityProcess_fst_univ [IsFiniteKernel κ] (n : ℕ) (a : α) (x : γ) :
     densityProcess κ (fst κ) n a x univ
       = if fst κ a (countablePartitionSet n x) = 0 then 0 else 1 := by
   rw [densityProcess]
@@ -2011,91 +2315,89 @@ lemma densityProcess_fst_univ [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ) :
     · simp [h']
     · simp
   · rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-    have : countablePartitionSet n x ×ˢ univ = {p : γ × β | p.1 in countablePartitionSet n x} := by
+    have : countablePartitionSet n x ×ˢ univ = {p : γ × β | p.1 ∈ countablePartitionSet n x} := by
       ext x
       simp
-    rw [this]; rw [ENNReal.div_self]
+    rw [this, ENNReal.div_self]
     · simp
     · rwa [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h
     · exact measure_ne_top _ _
-
-/--
-lemma `densityProcess_fst_univ_ae` / 引理 `densityProcess_fst_univ_ae`
-
-English:
-lemma densityProcess_fst_univ_ae
-  given: (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (n : Nat) (a : α)
-  proof: by
-  rw [ae_iff]
-  have : {x | ¬ densityProcess κ (fst κ) n a x univ = 1}
-      subseteq {x | fst κ a (countablePartitionSet n x) = 0} := by
-    intro x hx
-    simp only [mem_ofPred_eq] at hx ⊢
-    rw [densityProcess_fst_univ] at hx
-    simpa using hx
-  refine measure_mono_null this ?_
-  have : {x | fst κ a (countablePartitionSet n x) = 0}
-      subseteq ⋃ (u) (_ : u in countablePartition γ n) (_ : fst κ a u = 0), u := by
-    intro t ht
-    simp only [mem_ofPred_eq, mem_iUnion, exists_prop] at ht ⊢
-    exact ⟨countablePartitionSet n t, countablePartitionSet_mem _ _, ht,
-      mem_countablePartitionSet _ _⟩
-  refine measure_mono_null this ?_
-  rw [measure_biUnion]
-  · simp
-  · exact (finite_countablePartition _ _).countable
-  · intro s hs t ht hst
-    simp only [disjoint_iUnion_right, disjoint_iUnion_left]
-    exact fun _ _ => disjoint_countablePartition hs ht hst
-  · intro s hs
-    by_cases h : fst κ a s = 0
-    · simp [h, measurableSet_countablePartition n hs]
-    · simp [h]
-
-中文:
-引理 densityProcess_fst_univ_ae
-  条件: (κ : 核 α (γ × β)) [是FiniteKernel κ] (n : 自然数) (a : α)
-  证明: by
-  rw [ae_iff]
-  have : {x | ¬ densityProcess κ (fst κ) n a x univ = 1}
-      subseteq {x | fst κ a (countablePartitionSet n x) = 0} := by
-    intro x hx
-    simp only [mem_ofPred_eq] at hx ⊢
-    rw [densityProcess_fst_univ] at hx
-    simpa using hx
-  refine measure_mono_null this ?_
-  have : {x | fst κ a (countablePartitionSet n x) = 0}
-      subseteq ⋃ (u) (_ : u in countablePartition γ n) (_ : fst κ a u = 0), u := by
-    intro t ht
-    simp only [mem_ofPred_eq, mem_iUnion, exists_prop] at ht ⊢
-    exact ⟨countablePartitionSet n t, countablePartitionSet_mem _ _, ht,
-      mem_countablePartitionSet _ _⟩
-  refine measure_mono_null this ?_
-  rw [measure_biUnion]
-  · simp
-  · exact (finite_countablePartition _ _).countable
-  · intro s hs t ht hst
-    simp only [disjoint_iUnion_right, disjoint_iUnion_left]
-    exact fun _ _ => disjoint_countablePartition hs ht hst
-  · intro s hs
-    by_cases h : fst κ a s = 0
-    · simp [h, measurableSet_countablePartition n hs]
-    · simp [h]
-
-Depends on / 依赖: ae_iff, counta, countablePartition, countablePartitionSet, densityProcess, densityProcess_fst_univ, exists_prop, measure_mono_null, mem_iUnion, mem_ofPred_eq, subseteq
+/-
+**ProbabilityTheory.Kernel.densityProcess_fst_univ_ae** 是 Mathlib 中的一个引理，位于命名空间 
+`ProbabilityTheory.Kernel`。
+形式化陈述：densityProcess_fst_univ_ae (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (n : 
+Nat) (a : α) : forallᵐ x ∂(fst κ a), densityProcess κ (fst κ) n a x univ = 1
+参数：κ : Kernel α (γ × β)；n : Nat；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.ae_iff`：ae_iff {p : α -> Prop} : (forallᵐ a ∂μ, p a) ↔ μ {
+ a | ¬p a } = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_fst_univ`：densityProcess_fst_uni
+v [IsFiniteKernel κ] (n : Nat) (a : α) (x : γ) : densityProcess κ (fst κ) n a x 
+univ = if fst κ a (countablePartitionS…
+· 使用定理 `MeasureTheory.measure_mono_null`：measure_mono_null (h : s subseteq t) (h
+t : μ t = 0) : μ s = 0
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `MeasurableSpace.countablePartitionSet_mem`：countablePartitionSet_mem (n 
+: Nat) (a : α) : countablePartitionSet n a in countablePartition α n
+· 使用引理 `MeasurableSpace.mem_countablePartitionSet`：mem_countablePartitionSet (n 
+: Nat) (a : α) : a in countablePartitionSet n a
+· 使用定理 `MeasureTheory.measure_biUnion`：measure_biUnion {s : Set β} {f : β -> Set
+ α} (hs : s.Countable) (hd : s.PairwiseDisjoint f) (h : forall b in s, Measurabl
+eSet (f b)) : μ (⋃ …
+· 使用定理 `Set.Finite.countable`：∀ {α : Type u} {s : Set α}, s.Finite → s.Countable
+· 使用引理 `MeasurableSpace.finite_countablePartition`：finite_countablePartition (α 
+: Type*) [MeasurableSpace α] [CountablyGenerated α] (n : Nat) : Set.Finite (coun
+tablePartition α n)
+· 使用引理 `MeasurableSpace.disjoint_countablePartition`：disjoint_countablePartition
+ {n : Nat} {s t : Set α} (hs : s in countablePartition α n) (ht : t in countable
+Partition α n) (hst : s != t) : D…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.iUnion_true`：iUnion_true {s : True -> Set α} : iUnion s = s trivial
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `MeasurableSpace.measurableSet_countablePartition`：measurableSet_countabl
+ePartition (n : Nat) {s : Set α} (hs : s in countablePartition α n) : Measurable
+Set s
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Prop.countable`：∀ (p : Prop), Countable p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma densityProcess_fst_univ_ae (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (n : Nat) (a : α) :
-    forallᵐ x ∂(fst κ a), densityProcess κ (fst κ) n a x univ = 1 := by
+lemma densityProcess_fst_univ_ae (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (n : ℕ) (a : α) :
+    ∀ᵐ x ∂(fst κ a), densityProcess κ (fst κ) n a x univ = 1 := by
   rw [ae_iff]
   have : {x | ¬ densityProcess κ (fst κ) n a x univ = 1}
-      subseteq {x | fst κ a (countablePartitionSet n x) = 0} := by
+      ⊆ {x | fst κ a (countablePartitionSet n x) = 0} := by
     intro x hx
     simp only [mem_ofPred_eq] at hx ⊢
     rw [densityProcess_fst_univ] at hx
     simpa using hx
   refine measure_mono_null this ?_
   have : {x | fst κ a (countablePartitionSet n x) = 0}
-      subseteq ⋃ (u) (_ : u in countablePartition γ n) (_ : fst κ a u = 0), u := by
+      ⊆ ⋃ (u) (_ : u ∈ countablePartition γ n) (_ : fst κ a u = 0), u := by
     intro t ht
     simp only [mem_ofPred_eq, mem_iUnion, exists_prop] at ht ⊢
     exact ⟨countablePartitionSet n t, countablePartitionSet_mem _ _, ht,
@@ -2106,86 +2408,72 @@ lemma densityProcess_fst_univ_ae (κ : Kernel α (γ × β)) [IsFiniteKernel κ]
   · exact (finite_countablePartition _ _).countable
   · intro s hs t ht hst
     simp only [disjoint_iUnion_right, disjoint_iUnion_left]
-    exact fun _ _ => disjoint_countablePartition hs ht hst
+    exact fun _ _ ↦ disjoint_countablePartition hs ht hst
   · intro s hs
     by_cases h : fst κ a s = 0
     · simp [h, measurableSet_countablePartition n hs]
     · simp [h]
-
-/--
-lemma `tendsto_densityProcess_fst_atTop_univ_of_monotone` / 引理 `tendsto_densityProcess_fst_atTop_univ_of_monotone`
-
-English:
-lemma tendsto_densityProcess_fst_atTop_univ_of_monotone
-  statement: (κ : Kernel α (γ × β)) (n : Nat) (a : α)
-  proof: by
-  simp_rw [densityProcess]
-  refine (ENNReal.tendsto_toReal ?_).comp ?_
-  · rw [ne_eq, ENNReal.div_eq_top]
-    push Not
-    simp_rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-    constructor
-    · refine fun h h0 => h (measure_mono_null (fun x => ?_) h0)
-      simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
-    · refine fun h_top => eq_top_mono (measure_mono (fun x => ?_)) h_top
-      simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
-  by_cases h0 : fst κ a (countablePartitionSet n x) = 0
-  · rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h0 ⊢
-    suffices forall m, κ a (countablePartitionSet n x ×ˢ seq m) = 0 by
-      simp only [this, h0, ENNReal.zero_div, tendsto_const_nhds_iff]
-      suffices κ a (countablePartitionSet n x ×ˢ univ) = 0 by
-        simp only [this, ENNReal.zero_div]
-      convert! h0
-      ext x
-      simp only [mem_prod, mem_univ, and_true, mem_ofPred_eq]
-    refine fun m => measure_mono_null (fun x => ?_) h0
-    simp only [mem_prod, mem_ofPred_eq, and_imp]
-    exact fun h _ => h
-  refine ENNReal.Tendsto.div_const ?_ ?_
-  · convert! tendsto_measure_iUnion_atTop (monotone_const.set_prod hseq)
-    rw [← prod_iUnion]; rw [hseq_iUnion]
-  · exact Or.inr h0
-
-中文:
-引理 tendsto_densityProcess_fst_atTop_univ_of_monotone
-  结论: (κ : 核 α (γ × β)) (n : 自然数) (a : α)
-  证明: by
-  simp_rw [densityProcess]
-  refine (ENNReal.tendsto_toReal ?_).comp ?_
-  · rw [ne_eq, ENNReal.div_eq_top]
-    push Not
-    simp_rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
-    constructor
-    · refine fun h h0 => h (measure_mono_null (fun x => ?_) h0)
-      simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
-    · refine fun h_top => eq_top_mono (measure_mono (fun x => ?_)) h_top
-      simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
-  by_cases h0 : fst κ a (countablePartitionSet n x) = 0
-  · rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h0 ⊢
-    suffices forall m, κ a (countablePartitionSet n x ×ˢ seq m) = 0 by
-      simp only [this, h0, ENNReal.zero_div, tendsto_const_nhds_iff]
-      suffices κ a (countablePartitionSet n x ×ˢ univ) = 0 by
-        simp only [this, ENNReal.zero_div]
-      convert! h0
-      ext x
-      simp only [mem_prod, mem_univ, and_true, mem_ofPred_eq]
-    refine fun m => measure_mono_null (fun x => ?_) h0
-    simp only [mem_prod, mem_ofPred_eq, and_imp]
-    exact fun h _ => h
-  refine ENNReal.Tendsto.div_const ?_ ?_
-  · convert! tendsto_measure_iUnion_atTop (monotone_const.set_prod hseq)
-    rw [← prod_iUnion]; rw [hseq_iUnion]
-  · exact Or.inr h0
-
-Depends on / 依赖: ENNReal, ENNReal.div_eq_top, ENNReal.tendsto_toReal, and_imp, countablePartitionSet, densityProcess, div_eq_top, eq_top_mono, fst_apply, h_top, measurableSet_countablePartitionSet, measure_mono, measure_mono_null, mem_ofPred_eq, mem_prod, ne_eq, simp_rw, tendsto_toReal
+/-
+**ProbabilityTheory.Kernel.tendsto_densityProcess_fst_atTop_univ_of_monotone** 是
+ Mathlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_densityProcess_fst_atTop_univ_of_monotone (κ : Kernel α (γ × β)) (
+n : Nat) (a : α) (x : γ) (seq : Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion
+ : ⋃ i, seq i = univ) : Tendsto (fun m => densityProcess κ (fst κ) n a x (seq m)
+) atTop (𝓝 (densityProcess κ (fst κ) n a x univ))
+参数：κ : Kernel α (γ × β)；n : Nat；a : α；x : γ；seq : Nat -> Set β；hseq : Monotone s
+eq；hseq_iUnion : ⋃ i, seq i = univ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `ENNReal.tendsto_toReal`：tendsto_toReal {a : Real>=0∞} (ha : a != ∞) : Te
+ndsto ENNReal.toReal (𝓝 a) (𝓝 a.toReal)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `ENNReal.div_eq_top`：div_eq_top : a / b = ∞ ↔ a != 0 ∧ b = 0 ∨ a = ∞ ∧ b 
+!= ∞
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用引理 `MeasurableSpace.measurableSet_countablePartitionSet`：measurableSet_count
+ablePartitionSet (n : Nat) (a : α) : MeasurableSet (countablePartitionSet n a)
+· 使用定理 `MeasureTheory.measure_mono_null`：measure_mono_null (h : s subseteq t) (h
+t : μ t = 0) : μ s = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `eq_top_mono`：eq_top_mono (h : a <= b) (h₂ : a = ⊤) : b = ⊤
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ENNReal.zero_div`：∀ {a : ENNReal}, 0 / a = 0
+· 使用定理 `T5Space.toT1Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T5
+Space X], T1Space X
+· 使用定理 `ENNReal.instT5Space`：T5Space ENNReal
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 41 条，此处仅展示前 30 条）
 -/
-lemma tendsto_densityProcess_fst_atTop_univ_of_monotone (κ : Kernel α (γ × β)) (n : Nat) (a : α)
-    (x : γ) (seq : Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ) :
-    Tendsto (fun m => densityProcess κ (fst κ) n a x (seq m)) atTop
+lemma tendsto_densityProcess_fst_atTop_univ_of_monotone (κ : Kernel α (γ × β)) (n : ℕ) (a : α)
+    (x : γ) (seq : ℕ → Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ) :
+    Tendsto (fun m ↦ densityProcess κ (fst κ) n a x (seq m)) atTop
       (𝓝 (densityProcess κ (fst κ) n a x univ)) := by
   simp_rw [densityProcess]
   refine (ENNReal.tendsto_toReal ?_).comp ?_
@@ -2193,133 +2481,173 @@ lemma tendsto_densityProcess_fst_atTop_univ_of_monotone (κ : Kernel α (γ × �
     push Not
     simp_rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)]
     constructor
-    · refine fun h h0 => h (measure_mono_null (fun x => ?_) h0)
+    · refine fun h h0 ↦ h (measure_mono_null (fun x ↦ ?_) h0)
       simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
-    · refine fun h_top => eq_top_mono (measure_mono (fun x => ?_)) h_top
+      exact fun h _ ↦ h
+    · refine fun h_top ↦ eq_top_mono (measure_mono (fun x ↦ ?_)) h_top
       simp only [mem_prod, mem_ofPred_eq, and_imp]
-      exact fun h _ => h
+      exact fun h _ ↦ h
   by_cases h0 : fst κ a (countablePartitionSet n x) = 0
   · rw [fst_apply' _ _ (measurableSet_countablePartitionSet _ _)] at h0 ⊢
-    suffices forall m, κ a (countablePartitionSet n x ×ˢ seq m) = 0 by
+    suffices ∀ m, κ a (countablePartitionSet n x ×ˢ seq m) = 0 by
       simp only [this, h0, ENNReal.zero_div, tendsto_const_nhds_iff]
       suffices κ a (countablePartitionSet n x ×ˢ univ) = 0 by
         simp only [this, ENNReal.zero_div]
       convert! h0
       ext x
       simp only [mem_prod, mem_univ, and_true, mem_ofPred_eq]
-    refine fun m => measure_mono_null (fun x => ?_) h0
+    refine fun m ↦ measure_mono_null (fun x ↦ ?_) h0
     simp only [mem_prod, mem_ofPred_eq, and_imp]
-    exact fun h _ => h
+    exact fun h _ ↦ h
   refine ENNReal.Tendsto.div_const ?_ ?_
   · convert! tendsto_measure_iUnion_atTop (monotone_const.set_prod hseq)
-    rw [← prod_iUnion]; rw [hseq_iUnion]
+    rw [← prod_iUnion, hseq_iUnion]
   · exact Or.inr h0
-
-/--
-lemma `tendsto_densityProcess_fst_atTop_ae_of_monotone` / 引理 `tendsto_densityProcess_fst_atTop_ae_of_monotone`
-
-English:
-lemma tendsto_densityProcess_fst_atTop_ae_of_monotone
-  statement: (κ : Kernel α (γ × β)) [IsFiniteKernel κ]
-  proof: by
-  filter_upwards [densityProcess_fst_univ_ae κ n a] with x hx
-  rw [← hx]
-  exact tendsto_densityProcess_fst_atTop_univ_of_monotone κ n a x seq hseq hseq_iUnion
-
-中文:
-引理 tendsto_densityProcess_fst_atTop_ae_of_monotone
-  结论: (κ : 核 α (γ × β)) [是FiniteKernel κ]
-  证明: by
-  filter_upwards [densityProcess_fst_univ_ae κ n a] with x hx
-  rw [← hx]
-  exact tendsto_densityProcess_fst_atTop_univ_of_monotone κ n a x seq hseq hseq_iUnion
-
-Depends on / 依赖: densityProcess_fst_univ_ae, filter_upwards, hseq_iUnion, tendsto_densityProcess_fst_atTop_univ_of_monotone
+/-
+**ProbabilityTheory.Kernel.tendsto_densityProcess_fst_atTop_ae_of_monotone** 是 M
+athlib 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_densityProcess_fst_atTop_ae_of_monotone (κ : Kernel α (γ × β)) [Is
+FiniteKernel κ] (n : Nat) (a : α) (seq : Nat -> Set β) (hseq : Monotone seq) (hs
+eq_iUnion : ⋃ i, seq i = univ) : forallᵐ x ∂(fst κ a), Tendsto (fun m => density
+Process κ (fst κ) n a x (seq m)) atTop (𝓝 1)
+参数：κ : Kernel α (γ × β)；n : Nat；a : α；seq : Nat -> Set β；hseq : Monotone seq；hse
+q_iUnion : ⋃ i, seq i = univ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_fst_univ_ae`：densityProcess_fst_
+univ_ae (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (n : Nat) (a : α) : forallᵐ x 
+∂(fst κ a), densityProcess κ (fst κ) n a …
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_densityProcess_fst_atTop_univ_of_monoto
+ne`：tendsto_densityProcess_fst_atTop_univ_of_monotone (κ : Kernel α (γ × β)) (n 
+: Nat) (a : α) (x : γ) (seq : Nat -> Set β) (hseq : Monotone seq…
 -/
 lemma tendsto_densityProcess_fst_atTop_ae_of_monotone (κ : Kernel α (γ × β)) [IsFiniteKernel κ]
-    (n : Nat) (a : α) (seq : Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ) :
-    forallᵐ x ∂(fst κ a), Tendsto (fun m => densityProcess κ (fst κ) n a x (seq m)) atTop (𝓝 1) := by
+    (n : ℕ) (a : α) (seq : ℕ → Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ) :
+    ∀ᵐ x ∂(fst κ a), Tendsto (fun m ↦ densityProcess κ (fst κ) n a x (seq m)) atTop (𝓝 1) := by
   filter_upwards [densityProcess_fst_univ_ae κ n a] with x hx
   rw [← hx]
   exact tendsto_densityProcess_fst_atTop_univ_of_monotone κ n a x seq hseq hseq_iUnion
-
-/--
-lemma `density_fst_univ` / 引理 `density_fst_univ`
-
-English:
-lemma density_fst_univ
-  given: (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (a : α)
-  proof: by
-  have h := fun n => densityProcess_fst_univ_ae κ n a
-  rw [← ae_all_iff] at h
-  filter_upwards [h] with x hx
-  simp [density, hx]
-
-中文:
-引理 density_fst_univ
-  条件: (κ : 核 α (γ × β)) [是FiniteKernel κ] (a : α)
-  证明: by
-  have h := fun n => densityProcess_fst_univ_ae κ n a
-  rw [← ae_all_iff] at h
-  filter_upwards [h] with x hx
-  simp [density, hx]
-
-Depends on / 依赖: ae_all_iff, density, densityProcess_fst_univ_ae, filter_upwards
+/-
+**ProbabilityTheory.Kernel.density_fst_univ** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：density_fst_univ (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (a : α) : foral
+lᵐ x ∂(fst κ a), density κ (fst κ) a x univ = 1
+参数：κ : Kernel α (γ × β)；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.densityProcess_fst_univ_ae`：densityProcess_fst_
+univ_ae (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (n : Nat) (a : α) : forallᵐ x 
+∂(fst κ a), densityProcess κ (fst κ) n a …
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.ae_all_iff`：ae_all_iff {ι : Sort*} [Countable ι] {p : α ->
+ ι -> Prop} : (forallᵐ a ∂μ, forall i, p a i) ↔ forall i, forallᵐ a ∂μ, p a i
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.limsup_const`：limsup_const {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} [NeBot f] (b : β) : limsup (fun _ => b) f = b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma density_fst_univ (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (a : α) :
-    forallᵐ x ∂(fst κ a), density κ (fst κ) a x univ = 1 := by
-  have h := fun n => densityProcess_fst_univ_ae κ n a
+    ∀ᵐ x ∂(fst κ a), density κ (fst κ) a x univ = 1 := by
+  have h := fun n ↦ densityProcess_fst_univ_ae κ n a
   rw [← ae_all_iff] at h
   filter_upwards [h] with x hx
   simp [density, hx]
-
-/--
-lemma `tendsto_density_fst_atTop_ae_of_monotone` / 引理 `tendsto_density_fst_atTop_ae_of_monotone`
-
-English:
-lemma tendsto_density_fst_atTop_ae_of_monotone
-  statement: [IsFiniteKernel κ]
-  proof: by
-  refine tendsto_of_integral_tendsto_of_monotone ?_ (integrable_const _) ?_ ?_ ?_
-  · exact fun m => integrable_density le_rfl _ (hseq_meas m)
-  · rw [MeasureTheory.integral_const, smul_eq_mul, mul_one]
-    convert! tendsto_integral_density_of_monotone (κ := κ) le_rfl a seq hseq hseq_iUnion hseq_meas
-    simp only [measureReal_def]
-    rw [fst_apply' _ _ MeasurableSet.univ]
-    simp only [mem_univ, ofPred_true]
-  · exact ae_of_all _ (fun c n m hnm => density_mono_set le_rfl a c (hseq hnm))
-  · exact ae_of_all _ (fun x m => density_le_one le_rfl a x (seq m))
-
-中文:
-引理 tendsto_density_fst_atTop_ae_of_monotone
-  结论: [是FiniteKernel κ]
-  证明: by
-  refine tendsto_of_integral_tendsto_of_monotone ?_ (integrable_const _) ?_ ?_ ?_
-  · exact fun m => integrable_density le_rfl _ (hseq_meas m)
-  · rw [MeasureTheory.integral_const, smul_eq_mul, mul_one]
-    convert! tendsto_integral_density_of_monotone (κ := κ) le_rfl a seq hseq hseq_iUnion hseq_meas
-    simp only [measureReal_def]
-    rw [fst_apply' _ _ MeasurableSet.univ]
-    simp only [mem_univ, ofPred_true]
-  · exact ae_of_all _ (fun c n m hnm => density_mono_set le_rfl a c (hseq hnm))
-  · exact ae_of_all _ (fun x m => density_le_one le_rfl a x (seq m))
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, MeasureTheory, MeasureTheory.integral_const, ae_of_all, convert, density_mono_set, fst_apply, hseq_iUnion, hseq_meas, integrable_const, integrable_density, integral_const, le_rfl, measureReal_def, mem_univ, mul_one, ofPred_true, smul_eq_mul, tendsto_integral_density_of_monotone
+/-
+**ProbabilityTheory.Kernel.tendsto_density_fst_atTop_ae_of_monotone** 是 Mathlib 
+中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：tendsto_density_fst_atTop_ae_of_monotone [IsFiniteKernel κ] (a : α) (seq :
+ Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ) (hseq_mea
+s : forall m, MeasurableSet (seq m)) : forallᵐ x ∂(fst κ a), Tendsto (fun m => d
+ensity κ (fst κ) a x (seq m)) atTop (𝓝 1)
+参数：a : α；seq : Nat -> Set β；hseq : Monotone seq；hseq_iUnion : ⋃ i, seq i = univ；
+hseq_meas : forall m, MeasurableSet (seq m)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.tendsto_of_integral_tendsto_of_monotone`：tendsto_of_integr
+al_tendsto_of_monotone {μ : Measure α} {f : Nat -> α -> Real} {F : α -> Real} (h
+f_int : forall n, Integrable (f n) μ) (hF_i…
+· 使用引理 `ProbabilityTheory.Kernel.integrable_density`：integrable_density (hκν : f
+st κ <= ν) [IsFiniteKernel ν] (a : α) {s : Set β} (hs : MeasurableSet s) : Integ
+rable (fun x => density κ ν a x s…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.fst`：∀ {α : Type u_1} {β : Type 
+u_2} {γ : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : Me
+asurableSpace γ} (κ : Probability…
+· 使用定理 `MeasureTheory.integrable_const`：integrable_const [IsFiniteMeasure μ] (c 
+: β) : Integrable (fun _ : α => c) μ
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.isFiniteMeasure`：∀ {α : Type u_1} {β : 
+Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheo
+ry.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.integral_const`：integral_const (c : E) : ∫ _ : α, c ∂μ = μ
+.real univ • c
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.fst_apply'`：fst_apply' (κ : Kernel α (β × γ)) (
+a : α) {s : Set β} (hs : MeasurableSet s) : fst κ a s = κ a {p | p.1 in s}
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `ProbabilityTheory.Kernel.tendsto_integral_density_of_monotone`：tendsto_i
+ntegral_density_of_monotone (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α) (seq :
+ Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion :…
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ProbabilityTheory.Kernel.density_mono_set`：density_mono_set (hκν : fst κ
+ <= ν) (a : α) (x : γ) {s s' : Set β} (h : s subseteq s') : density κ ν a x s <=
+ density κ ν a x s'
+· 使用引理 `ProbabilityTheory.Kernel.density_le_one`：density_le_one (hκν : fst κ <= 
+ν) (a : α) (x : γ) (s : Set β) : density κ ν a x s <= 1
 -/
 lemma tendsto_density_fst_atTop_ae_of_monotone [IsFiniteKernel κ]
-    (a : α) (seq : Nat -> Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ)
-    (hseq_meas : forall m, MeasurableSet (seq m)) :
-    forallᵐ x ∂(fst κ a), Tendsto (fun m => density κ (fst κ) a x (seq m)) atTop (𝓝 1) := by
+    (a : α) (seq : ℕ → Set β) (hseq : Monotone seq) (hseq_iUnion : ⋃ i, seq i = univ)
+    (hseq_meas : ∀ m, MeasurableSet (seq m)) :
+    ∀ᵐ x ∂(fst κ a), Tendsto (fun m ↦ density κ (fst κ) a x (seq m)) atTop (𝓝 1) := by
   refine tendsto_of_integral_tendsto_of_monotone ?_ (integrable_const _) ?_ ?_ ?_
-  · exact fun m => integrable_density le_rfl _ (hseq_meas m)
+  · exact fun m ↦ integrable_density le_rfl _ (hseq_meas m)
   · rw [MeasureTheory.integral_const, smul_eq_mul, mul_one]
     convert! tendsto_integral_density_of_monotone (κ := κ) le_rfl a seq hseq hseq_iUnion hseq_meas
     simp only [measureReal_def]
     rw [fst_apply' _ _ MeasurableSet.univ]
     simp only [mem_univ, ofPred_true]
-  · exact ae_of_all _ (fun c n m hnm => density_mono_set le_rfl a c (hseq hnm))
-  · exact ae_of_all _ (fun x m => density_le_one le_rfl a x (seq m))
+  · exact ae_of_all _ (fun c n m hnm ↦ density_mono_set le_rfl a c (hseq hnm))
+  · exact ae_of_all _ (fun x m ↦ density_le_one le_rfl a x (seq m))
 
 end UnivFst
 
@@ -2328,3 +2656,4 @@ end Density
 end Kernel
 
 end ProbabilityTheory
+

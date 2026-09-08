@@ -34,746 +34,675 @@ section HammingDistNorm
 
 open Finset Function
 
-variable {α ι : Type*} {β : ι -> Type*} [Fintype ι] [forall i, DecidableEq (β i)]
-variable {γ : ι -> Type*} [forall i, DecidableEq (γ i)]
+variable {α ι : Type*} {β : ι → Type*} [Fintype ι] [∀ i, DecidableEq (β i)]
+variable {γ : ι → Type*} [∀ i, DecidableEq (γ i)]
 
-/--
-Definition of `hammingDist` / `hammingDist` 的定义
+/-- The Hamming distance function to the naturals. -/
+/-
+**hammingDist** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：hammingDist (x y : forall i, β i) : Nat
+参数：x y : forall i, β i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hammingDist
-  signature: (x y : forall i, β i)
-  body: #{i | x i != y i}
-
-中文:
-定义 hammingDist
-  签名: (x y : 对任意 i, β i)
-  定义体: #{i | x i != y i}
+--- 原说明 ---
+The Hamming distance function to the naturals.
 -/
-def hammingDist (x y : forall i, β i) : Nat := #{i | x i != y i}
+def hammingDist (x y : ∀ i, β i) : ℕ := #{i | x i ≠ y i}
 
 /-- Corresponds to `dist_self`. -/
 @[simp]
-/--
-theorem `hammingDist_self` / 定理 `hammingDist_self`
+/-
+**hammingDist_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_self (x : forall i, β i) : hammingDist x x = 0
+参数：x : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hammingDist.eq_1`：∀ {ι : Type u_2} {β : ι → Type u_3} [inst : Fintype ι]
+ [inst_1 : (i : ι) → DecidableEq (β i)] (x y : (i : ι) → β i),   hammingDist x y
+ = {i …
+· 使用定理 `Finset.card_eq_zero`：∀ {α : Type u_1} {s : Finset α}, s.card = 0 ↔ s = ∅
+· 使用定理 `Finset.filter_eq_empty_iff`：∀ {α : Type u_1} {p : α → Prop} [inst : Deci
+dablePred p] {s : Finset α}, Finset.filter p s = ∅ ↔ ∀ ⦃x : α⦄, x ∈ s → ¬p x
 
-English:
-theorem hammingDist_self
-  given: (x : forall i, β i)
-  statement: hammingDist x x = 0
-  proof: by
-  rw [hammingDist]; rw [card_eq_zero]; rw [filter_eq_empty_iff]
-  exact fun _ _ H => H rfl
-
-中文:
-定理 hammingDist_self
-  条件: (x : 对任意 i, β i)
-  结论: hammingDist x x = 0
-  证明: by
-  rw [hammingDist]; rw [card_eq_zero]; rw [filter_eq_empty_iff]
-  exact fun _ _ H => H rfl
-
-Depends on / 依赖: card_eq_zero, filter_eq_empty_iff, hammingDist
+--- 原说明 ---
+Corresponds to `dist_self`.
 -/
-theorem hammingDist_self (x : forall i, β i) : hammingDist x x = 0 := by
-  rw [hammingDist]; rw [card_eq_zero]; rw [filter_eq_empty_iff]
+theorem hammingDist_self (x : ∀ i, β i) : hammingDist x x = 0 := by
+  rw [hammingDist, card_eq_zero, filter_eq_empty_iff]
   exact fun _ _ H => H rfl
 
 -- TODO: this seems unnecessary.
-/--
-theorem `hammingDist_nonneg` / 定理 `hammingDist_nonneg`
+/-- Corresponds to `dist_nonneg`. -/
+/-
+**hammingDist_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_nonneg {x y : forall i, β i} : 0 <= hammingDist x y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 
-English:
-theorem hammingDist_nonneg
-  given: {x y : forall i, β i}
-  statement: 0 <= hammingDist x y
-  proof: zero_le
-
-中文:
-定理 hammingDist_nonneg
-  条件: {x y : 对任意 i, β i}
-  结论: 0 <= hammingDist x y
-  证明: zero_le
-
-Depends on / 依赖: zero_le
+--- 原说明 ---
+Corresponds to `dist_nonneg`.
 -/
-theorem hammingDist_nonneg {x y : forall i, β i} : 0 <= hammingDist x y :=
+theorem hammingDist_nonneg {x y : ∀ i, β i} : 0 ≤ hammingDist x y :=
   zero_le
 
-/--
-theorem `hammingDist_comm` / 定理 `hammingDist_comm`
+/-- Corresponds to `dist_comm`. -/
+/-
+**hammingDist_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_comm (x y : forall i, β i) : hammingDist x y = hammingDist y x
+参数：x y : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem hammingDist_comm
-  given: (x y : forall i, β i)
-  statement: hammingDist x y = hammingDist y x
-  proof: by
-  simp_rw [hammingDist, ne_comm]
-
-中文:
-定理 hammingDist_comm
-  条件: (x y : 对任意 i, β i)
-  结论: hammingDist x y = hammingDist y x
-  证明: by
-  simp_rw [hammingDist, ne_comm]
-
-Depends on / 依赖: hammingDist, ne_comm, simp_rw
+--- 原说明 ---
+Corresponds to `dist_comm`.
 -/
-theorem hammingDist_comm (x y : forall i, β i) : hammingDist x y = hammingDist y x := by
+theorem hammingDist_comm (x y : ∀ i, β i) : hammingDist x y = hammingDist y x := by
   simp_rw [hammingDist, ne_comm]
 
-/--
-theorem `hammingDist_triangle` / 定理 `hammingDist_triangle`
+/-- Corresponds to `dist_triangle`. -/
+/-
+**hammingDist_triangle** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_triangle (x y z : forall i, β i) : hammingDist x z <= hammingD
+ist x y + hammingDist y z
+参数：x y z : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Finset.card_mono`：card_mono : Monotone (@card α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_or`：filter_or (s : Finset α) : (s.filter fun a => p a ∨ q 
+a) = s.filter p union s.filter q
+· 使用定理 `Finset.monotone_filter_right`：∀ {α : Type u_1} (s : Finset α) ⦃p q : α →
+ Prop⦄ [inst : DecidablePred p] [inst_1 : DecidablePred q],   (∀ a ∈ s, p a → q 
+a) → Finset.filter…
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Ne.ne_or_ne`：Ne.ne_or_ne {x y : α} (z : α) (h : x != y) : x != z ∨ y != 
+z
+· 使用定理 `Finset.card_union_le`：card_union_le (s t : Finset α) : #(s union t) <= #
+s + #t
 
-English:
-theorem hammingDist_triangle
-  given: (x y z : forall i, β i)
-  proof: by
+--- 原说明 ---
+Corresponds to `dist_triangle`.
+-/
+theorem hammingDist_triangle (x y z : ∀ i, β i) :
+    hammingDist x z ≤ hammingDist x y + hammingDist y z := by
   classical
     unfold hammingDist
     refine le_trans (card_mono ?_) (card_union_le _ _)
     rw [← filter_or]
-    exact monotone_filter_right _ fun i _ h => (h.ne_or_ne _).imp_right Ne.symm
+    exact monotone_filter_right _ fun i _ h ↦ (h.ne_or_ne _).imp_right Ne.symm
 
-中文:
-定理 hammingDist_triangle
-  条件: (x y z : 对任意 i, β i)
-  证明: by
-  classical
-    unfold hammingDist
-    refine le_trans (card_mono ?_) (card_union_le _ _)
-    rw [← filter_or]
-    exact monotone_filter_right _ fun i _ h => (h.ne_or_ne _).imp_right Ne.symm
+/-- Corresponds to `dist_triangle_left`. -/
+/-
+**hammingDist_triangle_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_triangle_left (x y z : forall i, β i) : hammingDist x y <= ham
+mingDist z x + hammingDist z y
+参数：x y z : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hammingDist_comm`：hammingDist_comm (x y : forall i, β i) : hammingDist x
+ y = hammingDist y x
+· 使用定理 `hammingDist_triangle`：hammingDist_triangle (x y z : forall i, β i) : ham
+mingDist x z <= hammingDist x y + hammingDist y z
 
-Depends on / 依赖: Ne.symm, card_mono, card_union_le, classical, filter_or, h.ne_or_ne, hammingDist, imp_right, le_trans, monotone_filter_right, ne_or_ne
+--- 原说明 ---
+Corresponds to `dist_triangle_left`.
 -/
-theorem hammingDist_triangle (x y z : forall i, β i) :
-    hammingDist x z <= hammingDist x y + hammingDist y z := by
-  classical
-    unfold hammingDist
-    refine le_trans (card_mono ?_) (card_union_le _ _)
-    rw [← filter_or]
-    exact monotone_filter_right _ fun i _ h => (h.ne_or_ne _).imp_right Ne.symm
-
-/--
-theorem `hammingDist_triangle_left` / 定理 `hammingDist_triangle_left`
-
-English:
-theorem hammingDist_triangle_left
-  given: (x y z : forall i, β i)
-  proof: by
+theorem hammingDist_triangle_left (x y z : ∀ i, β i) :
+    hammingDist x y ≤ hammingDist z x + hammingDist z y := by
   rw [hammingDist_comm z]
   exact hammingDist_triangle _ _ _
 
-中文:
-定理 hammingDist_triangle_left
-  条件: (x y z : 对任意 i, β i)
-  证明: by
-  rw [hammingDist_comm z]
-  exact hammingDist_triangle _ _ _
+/-- Corresponds to `dist_triangle_right`. -/
+/-
+**hammingDist_triangle_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_triangle_right (x y z : forall i, β i) : hammingDist x y <= ha
+mmingDist x z + hammingDist y z
+参数：x y z : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hammingDist_comm`：hammingDist_comm (x y : forall i, β i) : hammingDist x
+ y = hammingDist y x
+· 使用定理 `hammingDist_triangle`：hammingDist_triangle (x y z : forall i, β i) : ham
+mingDist x z <= hammingDist x y + hammingDist y z
 
-Depends on / 依赖: hammingDist_comm, hammingDist_triangle, isChain_cons_raise
+--- 原说明 ---
+Corresponds to `dist_triangle_right`.
 -/
-theorem hammingDist_triangle_left (x y z : forall i, β i) :
-    hammingDist x y <= hammingDist z x + hammingDist z y := by
-  rw [hammingDist_comm z]
-  exact hammingDist_triangle _ _ _
-
-/--
-theorem `hammingDist_triangle_right` / 定理 `hammingDist_triangle_right`
-
-English:
-theorem hammingDist_triangle_right
-  given: (x y z : forall i, β i)
-  proof: by
+theorem hammingDist_triangle_right (x y z : ∀ i, β i) :
+    hammingDist x y ≤ hammingDist x z + hammingDist y z := by
   rw [hammingDist_comm y]
   exact hammingDist_triangle _ _ _
 
-中文:
-定理 hammingDist_triangle_right
-  条件: (x y z : 对任意 i, β i)
-  证明: by
-  rw [hammingDist_comm y]
-  exact hammingDist_triangle _ _ _
+/-- Corresponds to `swap_dist`. -/
+/-
+**swap_hammingDist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：swap_hammingDist : swap (@hammingDist _ β _ _) = hammingDist
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `hammingDist_comm`：hammingDist_comm (x y : forall i, β i) : hammingDist x
+ y = hammingDist y x
 
-Depends on / 依赖: hammingDist_comm, hammingDist_triangle
--/
-theorem hammingDist_triangle_right (x y z : forall i, β i) :
-    hammingDist x y <= hammingDist x z + hammingDist y z := by
-  rw [hammingDist_comm y]
-  exact hammingDist_triangle _ _ _
-
-/--
-theorem `swap_hammingDist` / 定理 `swap_hammingDist`
-
-English:
-theorem swap_hammingDist
-  statement: swap (@hammingDist _ β _ _) = hammingDist
-  proof: by
-  funext x y
-  exact hammingDist_comm _ _
-
-中文:
-定理 swap_hammingDist
-  结论: swap (@hammingDist _ β _ _) = hammingDist
-  证明: by
-  funext x y
-  exact hammingDist_comm _ _
-
-Depends on / 依赖: _sorted, hammingDist_comm
+--- 原说明 ---
+Corresponds to `swap_dist`.
 -/
 theorem swap_hammingDist : swap (@hammingDist _ β _ _) = hammingDist := by
   funext x y
   exact hammingDist_comm _ _
 
-/--
-theorem `eq_of_hammingDist_eq_zero` / 定理 `eq_of_hammingDist_eq_zero`
+/-- Corresponds to `eq_of_dist_eq_zero`. -/
+/-
+**eq_of_hammingDist_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_of_hammingDist_eq_zero {x y : forall i, β i} : hammingDist x y = 0 -> x
+ = y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 
-English:
-theorem eq_of_hammingDist_eq_zero
-  given: {x y : forall i, β i}
-  statement: hammingDist x y = 0 -> x = y
-  proof: by
-  simp_rw [hammingDist, card_eq_zero, filter_eq_empty_iff, Classical.not_not, funext_iff, mem_univ,
-    forall_true_left, imp_self]
-
-中文:
-定理 eq_of_hammingDist_eq_zero
-  条件: {x y : 对任意 i, β i}
-  结论: hammingDist x y = 0 -> x = y
-  证明: by
-  simp_rw [hammingDist, card_eq_zero, filter_eq_empty_iff, Classical.not_not, funext_iff, mem_univ,
-    forall_true_left, imp_self]
-
-Depends on / 依赖: Classical, Classical.not_not, card_eq_zero, filter_eq_empty_iff, forall_true_left, funext_iff, hammingDist, imp_self, mem_univ, not_not, simp_rw
+--- 原说明 ---
+Corresponds to `eq_of_dist_eq_zero`.
 -/
-theorem eq_of_hammingDist_eq_zero {x y : forall i, β i} : hammingDist x y = 0 -> x = y := by
+theorem eq_of_hammingDist_eq_zero {x y : ∀ i, β i} : hammingDist x y = 0 → x = y := by
   simp_rw [hammingDist, card_eq_zero, filter_eq_empty_iff, Classical.not_not, funext_iff, mem_univ,
     forall_true_left, imp_self]
 
 /-- Corresponds to `dist_eq_zero`. -/
 @[simp]
-/--
-theorem `hammingDist_eq_zero` / 定理 `hammingDist_eq_zero`
+/-
+**hammingDist_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_eq_zero {x y : forall i, β i} : hammingDist x y = 0 ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_hammingDist_eq_zero`：eq_of_hammingDist_eq_zero {x y : forall i, β 
+i} : hammingDist x y = 0 -> x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hammingDist_self`：hammingDist_self (x : forall i, β i) : hammingDist x x
+ = 0
 
-English:
-theorem hammingDist_eq_zero
-  given: {x y : forall i, β i}
-  statement: hammingDist x y = 0 ↔ x = y
-  proof: ⟨eq_of_hammingDist_eq_zero, fun H => by
-    rw [H]
-    exact hammingDist_self _⟩
-
-中文:
-定理 hammingDist_eq_zero
-  条件: {x y : 对任意 i, β i}
-  结论: hammingDist x y = 0 ↔ x = y
-  证明: ⟨eq_of_hammingDist_eq_zero, fun H => by
-    rw [H]
-    exact hammingDist_self _⟩
-
-Depends on / 依赖: eq_of_hammingDist_eq_zero, hammingDist_self
+--- 原说明 ---
+Corresponds to `dist_eq_zero`.
 -/
-theorem hammingDist_eq_zero {x y : forall i, β i} : hammingDist x y = 0 ↔ x = y :=
+theorem hammingDist_eq_zero {x y : ∀ i, β i} : hammingDist x y = 0 ↔ x = y :=
   ⟨eq_of_hammingDist_eq_zero, fun H => by
     rw [H]
     exact hammingDist_self _⟩
 
 /-- Corresponds to `zero_eq_dist`. -/
 @[simp]
-/--
-theorem `hamming_zero_eq_dist` / 定理 `hamming_zero_eq_dist`
+/-
+**hamming_zero_eq_dist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hamming_zero_eq_dist {x y : forall i, β i} : 0 = hammingDist x y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `hammingDist_eq_zero`：hammingDist_eq_zero {x y : forall i, β i} : hamming
+Dist x y = 0 ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem hamming_zero_eq_dist
-  given: {x y : forall i, β i}
-  statement: 0 = hammingDist x y ↔ x = y
-  proof: by
-  rw [eq_comm]; rw [hammingDist_eq_zero]
-
-中文:
-定理 hamming_zero_eq_dist
-  条件: {x y : 对任意 i, β i}
-  结论: 0 = hammingDist x y ↔ x = y
-  证明: by
-  rw [eq_comm]; rw [hammingDist_eq_zero]
-
-Depends on / 依赖: eq_comm, hammingDist_eq_zero
+--- 原说明 ---
+Corresponds to `zero_eq_dist`.
 -/
-theorem hamming_zero_eq_dist {x y : forall i, β i} : 0 = hammingDist x y ↔ x = y := by
-  rw [eq_comm]; rw [hammingDist_eq_zero]
+theorem hamming_zero_eq_dist {x y : ∀ i, β i} : 0 = hammingDist x y ↔ x = y := by
+  rw [eq_comm, hammingDist_eq_zero]
 
-/--
-theorem `hammingDist_ne_zero` / 定理 `hammingDist_ne_zero`
+/-- Corresponds to `dist_ne_zero`. -/
+/-
+**hammingDist_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_ne_zero {x y : forall i, β i} : hammingDist x y != 0 ↔ x != y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `hammingDist_eq_zero`：hammingDist_eq_zero {x y : forall i, β i} : hamming
+Dist x y = 0 ↔ x = y
 
-English:
-theorem hammingDist_ne_zero
-  given: {x y : forall i, β i}
-  statement: hammingDist x y != 0 ↔ x != y
-  proof: hammingDist_eq_zero.not
-
-中文:
-定理 hammingDist_ne_zero
-  条件: {x y : 对任意 i, β i}
-  结论: hammingDist x y != 0 ↔ x != y
-  证明: hammingDist_eq_zero.not
-
-Depends on / 依赖: hammingDist_eq_zero, hammingDist_eq_zero.not
+--- 原说明 ---
+Corresponds to `dist_ne_zero`.
 -/
-theorem hammingDist_ne_zero {x y : forall i, β i} : hammingDist x y != 0 ↔ x != y :=
+theorem hammingDist_ne_zero {x y : ∀ i, β i} : hammingDist x y ≠ 0 ↔ x ≠ y :=
   hammingDist_eq_zero.not
 
 /-- Corresponds to `dist_pos`. -/
 @[simp]
-/--
-theorem `hammingDist_pos` / 定理 `hammingDist_pos`
+/-
+**hammingDist_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_pos {x y : forall i, β i} : 0 < hammingDist x y ↔ x != y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `hammingDist_ne_zero`：hammingDist_ne_zero {x y : forall i, β i} : hamming
+Dist x y != 0 ↔ x != y
+· 使用定理 `iff_not_comm`：iff_not_comm : (a ↔ ¬b) ↔ (b ↔ ¬a)
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Nat.le_zero`：∀ {i : ℕ}, i ≤ 0 ↔ i = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem hammingDist_pos
-  given: {x y : forall i, β i}
-  statement: 0 < hammingDist x y ↔ x != y
-  proof: by
-  rw [← hammingDist_ne_zero]; rw [iff_not_comm]; rw [not_lt]; rw [Nat.le_zero]
-
-中文:
-定理 hammingDist_pos
-  条件: {x y : 对任意 i, β i}
-  结论: 0 < hammingDist x y ↔ x != y
-  证明: by
-  rw [← hammingDist_ne_zero]; rw [iff_not_comm]; rw [not_lt]; rw [Nat.le_zero]
-
-Depends on / 依赖: Nat.le_zero, hammingDist_ne_zero, iff_not_comm, le_zero, not_lt
+--- 原说明 ---
+Corresponds to `dist_pos`.
 -/
-theorem hammingDist_pos {x y : forall i, β i} : 0 < hammingDist x y ↔ x != y := by
-  rw [← hammingDist_ne_zero]; rw [iff_not_comm]; rw [not_lt]; rw [Nat.le_zero]
-
-/--
-theorem `hammingDist_lt_one` / 定理 `hammingDist_lt_one`
-
-English:
-theorem hammingDist_lt_one
-  given: {x y : forall i, β i}
-  statement: hammingDist x y < 1 ↔ x = y
-  proof: by
-  rw [Nat.lt_one_iff]; rw [hammingDist_eq_zero]
-
-中文:
-定理 hammingDist_lt_one
-  条件: {x y : 对任意 i, β i}
-  结论: hammingDist x y < 1 ↔ x = y
-  证明: by
-  rw [Nat.lt_one_iff]; rw [hammingDist_eq_zero]
-
-Depends on / 依赖: Nat.lt_one_iff, hammingDist_eq_zero, lt_one_iff
+theorem hammingDist_pos {x y : ∀ i, β i} : 0 < hammingDist x y ↔ x ≠ y := by
+  rw [← hammingDist_ne_zero, iff_not_comm, not_lt, Nat.le_zero]
+/-
+**hammingDist_lt_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_lt_one {x y : forall i, β i} : hammingDist x y < 1 ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.lt_one_iff`：∀ {n : ℕ}, n < 1 ↔ n = 0
+· 使用定理 `hammingDist_eq_zero`：hammingDist_eq_zero {x y : forall i, β i} : hamming
+Dist x y = 0 ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem hammingDist_lt_one {x y : forall i, β i} : hammingDist x y < 1 ↔ x = y := by
-  rw [Nat.lt_one_iff]; rw [hammingDist_eq_zero]
-
-/--
-theorem `hammingDist_le_card_fintype` / 定理 `hammingDist_le_card_fintype`
-
-English:
-theorem hammingDist_le_card_fintype
-  given: {x y : forall i, β i}
-  statement: hammingDist x y <= Fintype.card ι
-  proof: card_le_univ _
-
-中文:
-定理 hammingDist_le_card_fintype
-  条件: {x y : 对任意 i, β i}
-  结论: hammingDist x y <= 有限类型.card ι
-  证明: card_le_univ _
-
-Depends on / 依赖: card_le_univ
+theorem hammingDist_lt_one {x y : ∀ i, β i} : hammingDist x y < 1 ↔ x = y := by
+  rw [Nat.lt_one_iff, hammingDist_eq_zero]
+/-
+**hammingDist_le_card_fintype** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_le_card_fintype {x y : forall i, β i} : hammingDist x y <= Fin
+type.card ι
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_le_univ`：Finset.card_le_univ [Fintype α] (s : Finset α) : #s
+ <= Fintype.card α
 -/
-theorem hammingDist_le_card_fintype {x y : forall i, β i} : hammingDist x y <= Fintype.card ι :=
+theorem hammingDist_le_card_fintype {x y : ∀ i, β i} : hammingDist x y ≤ Fintype.card ι :=
   card_le_univ _
-
-/--
-theorem `hammingDist_comp_le_hammingDist` / 定理 `hammingDist_comp_le_hammingDist`
-
-English:
-theorem hammingDist_comp_le_hammingDist
-  given: (f : forall i, γ i -> β i) {x y : forall i, γ i}
-  proof: by
-  dsimp [hammingDist]; gcongr; simp +contextual
-
-中文:
-定理 hammingDist_comp_le_hammingDist
-  条件: (f : 对任意 i, γ i -> β i) {x y : 对任意 i, γ i}
-  证明: by
-  dsimp [hammingDist]; gcongr; simp +contextual
-
-Depends on / 依赖: contextual, hammingDist
+/-
+**hammingDist_comp_le_hammingDist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_comp_le_hammingDist (f : forall i, γ i -> β i) {x y : forall i
+, γ i} : hammingDist (fun i => f i (x i)) (fun i => f i (y i)) <= hammingDist x 
+y
+参数：f : forall i, γ i -> β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `Finset.monotone_filter_right`：∀ {α : Type u_1} (s : Finset α) ⦃p q : α →
+ Prop⦄ [inst : DecidablePred p] [inst_1 : DecidablePred q],   (∀ a ∈ s, p a → q 
+a) → Finset.filter…
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem hammingDist_comp_le_hammingDist (f : forall i, γ i -> β i) {x y : forall i, γ i} :
-    hammingDist (fun i => f i (x i)) (fun i => f i (y i)) <= hammingDist x y := by
+theorem hammingDist_comp_le_hammingDist (f : ∀ i, γ i → β i) {x y : ∀ i, γ i} :
+    hammingDist (fun i => f i (x i)) (fun i => f i (y i)) ≤ hammingDist x y := by
   dsimp [hammingDist]; gcongr; simp +contextual
-
-/--
-theorem `hammingDist_comp` / 定理 `hammingDist_comp`
-
-English:
-theorem hammingDist_comp
-  given: (f : forall i, γ i -> β i) {x y : forall i, γ i} (hf : forall i, Injective (f i))
-  proof: le_antisymm (hammingDist_comp_le_hammingDist _) by dsimp [hammingDist]; gcongr; exact @hf _ _ _
-
-中文:
-定理 hammingDist_comp
-  条件: (f : 对任意 i, γ i -> β i) {x y : 对任意 i, γ i} (hf : 对任意 i, 单射 (f i))
-  证明: le_antisymm (hammingDist_comp_le_hammingDist _) by dsimp [hammingDist]; gcongr; exact @hf _ _ _
-
-Depends on / 依赖: hammingDist, hammingDist_comp_le_hammingDist, le_antisymm
+/-
+**hammingDist_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_comp (f : forall i, γ i -> β i) {x y : forall i, γ i} (hf : fo
+rall i, Injective (f i)) : hammingDist (fun i => f i (x i)) (fun i => f i (y i))
+ = hammingDist x y
+参数：f : forall i, γ i -> β i；hf : forall i, Injective (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `hammingDist_comp_le_hammingDist`：hammingDist_comp_le_hammingDist (f : fo
+rall i, γ i -> β i) {x y : forall i, γ i} : hammingDist (fun i => f i (x i)) (fu
+n i => f i (y i)) <= …
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `Finset.monotone_filter_right`：∀ {α : Type u_1} (s : Finset α) ⦃p q : α →
+ Prop⦄ [inst : DecidablePred p] [inst_1 : DecidablePred q],   (∀ a ∈ s, p a → q 
+a) → Finset.filter…
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
 -/
-theorem hammingDist_comp (f : forall i, γ i -> β i) {x y : forall i, γ i} (hf : forall i, Injective (f i)) :
+theorem hammingDist_comp (f : ∀ i, γ i → β i) {x y : ∀ i, γ i} (hf : ∀ i, Injective (f i)) :
     hammingDist (fun i => f i (x i)) (fun i => f i (y i)) = hammingDist x y :=
-le_antisymm (hammingDist_comp_le_hammingDist _) by dsimp [hammingDist]; gcongr; exact @hf _ _ _
-
-/--
-theorem `hammingDist_smul_le_hammingDist` / 定理 `hammingDist_smul_le_hammingDist`
-
-English:
-theorem hammingDist_smul_le_hammingDist
-  given: [forall i, SMul α (β i)] {k : α} {x y : forall i, β i}
-  proof: hammingDist_comp_le_hammingDist fun i => (k • · : β i -> β i)
-
-中文:
-定理 hammingDist_smul_le_hammingDist
-  条件: [对任意 i, 标量乘法 α (β i)] {k : α} {x y : 对任意 i, β i}
-  证明: hammingDist_comp_le_hammingDist fun i => (k • · : β i -> β i)
-
-Depends on / 依赖: hammingDist_comp_le_hammingDist
+  le_antisymm (hammingDist_comp_le_hammingDist _) <| by dsimp [hammingDist]; gcongr; exact @hf _ _ _
+/-
+**hammingDist_smul_le_hammingDist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_smul_le_hammingDist [forall i, SMul α (β i)] {k : α} {x y : fo
+rall i, β i} : hammingDist (k • x) (k • y) <= hammingDist x y
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingDist_comp_le_hammingDist`：hammingDist_comp_le_hammingDist (f : fo
+rall i, γ i -> β i) {x y : forall i, γ i} : hammingDist (fun i => f i (x i)) (fu
+n i => f i (y i)) <= …
 -/
-theorem hammingDist_smul_le_hammingDist [forall i, SMul α (β i)] {k : α} {x y : forall i, β i} :
-    hammingDist (k • x) (k • y) <= hammingDist x y :=
-  hammingDist_comp_le_hammingDist fun i => (k • · : β i -> β i)
+theorem hammingDist_smul_le_hammingDist [∀ i, SMul α (β i)] {k : α} {x y : ∀ i, β i} :
+    hammingDist (k • x) (k • y) ≤ hammingDist x y :=
+  hammingDist_comp_le_hammingDist fun i => (k • · : β i → β i)
 
-/--
-theorem `hammingDist_smul` / 定理 `hammingDist_smul`
+/-- Corresponds to `dist_smul` with the discrete norm on `α`. -/
+/-
+**hammingDist_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_smul [forall i, SMul α (β i)] {k : α} {x y : forall i, β i} (h
+k : forall i, IsSMulRegular (β i) k) : hammingDist (k • x) (k • y) = hammingDist
+ x y
+参数：β i；hk : forall i, IsSMulRegular (β i) k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingDist_comp`：hammingDist_comp (f : forall i, γ i -> β i) {x y : for
+all i, γ i} (hf : forall i, Injective (f i)) : hammingDist (fun i => f i (x i)) 
+(fun i…
 
-English:
-theorem hammingDist_smul
-  statement: [forall i, SMul α (β i)] {k : α} {x y : forall i, β i}
-  proof: hammingDist_comp (fun i => (k • · : β i -> β i)) hk
-
-中文:
-定理 hammingDist_smul
-  结论: [对任意 i, 标量乘法 α (β i)] {k : α} {x y : 对任意 i, β i}
-  证明: hammingDist_comp (fun i => (k • · : β i -> β i)) hk
-
-Depends on / 依赖: hammingDist_comp
+--- 原说明 ---
+Corresponds to `dist_smul` with the discrete norm on `α`.
 -/
-theorem hammingDist_smul [forall i, SMul α (β i)] {k : α} {x y : forall i, β i}
-    (hk : forall i, IsSMulRegular (β i) k) : hammingDist (k • x) (k • y) = hammingDist x y :=
-  hammingDist_comp (fun i => (k • · : β i -> β i)) hk
+theorem hammingDist_smul [∀ i, SMul α (β i)] {k : α} {x y : ∀ i, β i}
+    (hk : ∀ i, IsSMulRegular (β i) k) : hammingDist (k • x) (k • y) = hammingDist x y :=
+  hammingDist_comp (fun i => (k • · : β i → β i)) hk
 
 section Zero
 
-variable [forall i, Zero (β i)] [forall i, Zero (γ i)]
+variable [∀ i, Zero (β i)] [∀ i, Zero (γ i)]
 
-/--
-Definition of `hammingNorm` / `hammingNorm` 的定义
+/-- The Hamming weight function to the naturals. -/
+/-
+**hammingNorm** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：hammingNorm (x : forall i, β i) : Nat
+参数：x : forall i, β i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hammingNorm
-  signature: (x : forall i, β i)
-  body: #{i | x i != 0}
-
-中文:
-定义 hammingNorm
-  签名: (x : 对任意 i, β i)
-  定义体: #{i | x i != 0}
+--- 原说明 ---
+The Hamming weight function to the naturals.
 -/
-def hammingNorm (x : forall i, β i) : Nat := #{i | x i != 0}
+def hammingNorm (x : ∀ i, β i) : ℕ := #{i | x i ≠ 0}
 
 /-- Corresponds to `dist_zero_right`. -/
 @[simp]
-/--
-theorem `hammingDist_zero_right` / 定理 `hammingDist_zero_right`
+/-
+**hammingDist_zero_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_zero_right (x : forall i, β i) : hammingDist x 0 = hammingNorm
+ x
+参数：x : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hammingDist_zero_right
-  given: (x : forall i, β i)
-  statement: hammingDist x 0 = hammingNorm x
-  proof: rfl
-
-中文:
-定理 hammingDist_zero_right
-  条件: (x : 对任意 i, β i)
-  结论: hammingDist x 0 = hammingNorm x
-  证明: rfl
+--- 原说明 ---
+Corresponds to `dist_zero_right`.
 -/
-theorem hammingDist_zero_right (x : forall i, β i) : hammingDist x 0 = hammingNorm x :=
+theorem hammingDist_zero_right (x : ∀ i, β i) : hammingDist x 0 = hammingNorm x :=
   rfl
 
 /-- Corresponds to `dist_zero_left`. -/
 @[simp]
-/--
-theorem `hammingDist_zero_left` / 定理 `hammingDist_zero_left`
+/-
+**hammingDist_zero_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_zero_left : hammingDist (0 : forall i, β i) = hammingNorm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hammingDist_comm`：hammingDist_comm (x y : forall i, β i) : hammingDist x
+ y = hammingDist y x
+· 使用定理 `hammingDist_zero_right`：hammingDist_zero_right (x : forall i, β i) : ham
+mingDist x 0 = hammingNorm x
 
-English:
-theorem hammingDist_zero_left
-  statement: hammingDist (0 : forall i, β i) = hammingNorm
-  proof: funext fun x => by rw [hammingDist_comm, hammingDist_zero_right]
-
-中文:
-定理 hammingDist_zero_left
-  结论: hammingDist (0 : 对任意 i, β i) = hammingNorm
-  证明: funext fun x => by rw [hammingDist_comm, hammingDist_zero_right]
-
-Depends on / 依赖: hammingDist_comm, hammingDist_zero_right
+--- 原说明 ---
+Corresponds to `dist_zero_left`.
 -/
-theorem hammingDist_zero_left : hammingDist (0 : forall i, β i) = hammingNorm :=
+theorem hammingDist_zero_left : hammingDist (0 : ∀ i, β i) = hammingNorm :=
   funext fun x => by rw [hammingDist_comm, hammingDist_zero_right]
 
 -- TODO: this seems unnecessary.
-/--
-theorem `hammingNorm_nonneg` / 定理 `hammingNorm_nonneg`
+/-- Corresponds to `norm_nonneg`. -/
+/-
+**hammingNorm_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_nonneg {x : forall i, β i} : 0 <= hammingNorm x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 
-English:
-theorem hammingNorm_nonneg
-  given: {x : forall i, β i}
-  statement: 0 <= hammingNorm x
-  proof: zero_le
-
-中文:
-定理 hammingNorm_nonneg
-  条件: {x : 对任意 i, β i}
-  结论: 0 <= hammingNorm x
-  证明: zero_le
-
-Depends on / 依赖: zero_le
+--- 原说明 ---
+Corresponds to `norm_nonneg`.
 -/
-theorem hammingNorm_nonneg {x : forall i, β i} : 0 <= hammingNorm x :=
+theorem hammingNorm_nonneg {x : ∀ i, β i} : 0 ≤ hammingNorm x :=
   zero_le
 
 /-- Corresponds to `norm_zero`. -/
 @[simp]
-/--
-theorem `hammingNorm_zero` / 定理 `hammingNorm_zero`
+/-
+**hammingNorm_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_zero : hammingNorm (0 : forall i, β i) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingDist_self`：hammingDist_self (x : forall i, β i) : hammingDist x x
+ = 0
 
-English:
-theorem hammingNorm_zero
-  statement: hammingNorm (0 : forall i, β i) = 0
-  proof: hammingDist_self _
-
-中文:
-定理 hammingNorm_zero
-  结论: hammingNorm (0 : 对任意 i, β i) = 0
-  证明: hammingDist_self _
-
-Depends on / 依赖: hammingDist_self
+--- 原说明 ---
+Corresponds to `norm_zero`.
 -/
-theorem hammingNorm_zero : hammingNorm (0 : forall i, β i) = 0 :=
+theorem hammingNorm_zero : hammingNorm (0 : ∀ i, β i) = 0 :=
   hammingDist_self _
 
 /-- Corresponds to `norm_eq_zero`. -/
 @[simp]
-/--
-theorem `hammingNorm_eq_zero` / 定理 `hammingNorm_eq_zero`
+/-
+**hammingNorm_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_eq_zero {x : forall i, β i} : hammingNorm x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingDist_eq_zero`：hammingDist_eq_zero {x y : forall i, β i} : hamming
+Dist x y = 0 ↔ x = y
 
-English:
-theorem hammingNorm_eq_zero
-  given: {x : forall i, β i}
-  statement: hammingNorm x = 0 ↔ x = 0
-  proof: hammingDist_eq_zero
-
-中文:
-定理 hammingNorm_eq_zero
-  条件: {x : 对任意 i, β i}
-  结论: hammingNorm x = 0 ↔ x = 0
-  证明: hammingDist_eq_zero
-
-Depends on / 依赖: hammingDist_eq_zero
+--- 原说明 ---
+Corresponds to `norm_eq_zero`.
 -/
-theorem hammingNorm_eq_zero {x : forall i, β i} : hammingNorm x = 0 ↔ x = 0 :=
+theorem hammingNorm_eq_zero {x : ∀ i, β i} : hammingNorm x = 0 ↔ x = 0 :=
   hammingDist_eq_zero
 
-/--
-theorem `hammingNorm_ne_zero_iff` / 定理 `hammingNorm_ne_zero_iff`
+/-- Corresponds to `norm_ne_zero_iff`. -/
+/-
+**hammingNorm_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_ne_zero_iff {x : forall i, β i} : hammingNorm x != 0 ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `hammingNorm_eq_zero`：hammingNorm_eq_zero {x : forall i, β i} : hammingNo
+rm x = 0 ↔ x = 0
 
-English:
-theorem hammingNorm_ne_zero_iff
-  given: {x : forall i, β i}
-  statement: hammingNorm x != 0 ↔ x != 0
-  proof: hammingNorm_eq_zero.not
-
-中文:
-定理 hammingNorm_ne_zero_iff
-  条件: {x : 对任意 i, β i}
-  结论: hammingNorm x != 0 ↔ x != 0
-  证明: hammingNorm_eq_zero.not
-
-Depends on / 依赖: hammingNorm_eq_zero, hammingNorm_eq_zero.not
+--- 原说明 ---
+Corresponds to `norm_ne_zero_iff`.
 -/
-theorem hammingNorm_ne_zero_iff {x : forall i, β i} : hammingNorm x != 0 ↔ x != 0 :=
+theorem hammingNorm_ne_zero_iff {x : ∀ i, β i} : hammingNorm x ≠ 0 ↔ x ≠ 0 :=
   hammingNorm_eq_zero.not
 
 /-- Corresponds to `norm_pos_iff`. -/
 @[simp]
-/--
-theorem `hammingNorm_pos_iff` / 定理 `hammingNorm_pos_iff`
+/-
+**hammingNorm_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_pos_iff {x : forall i, β i} : 0 < hammingNorm x ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingDist_pos`：hammingDist_pos {x y : forall i, β i} : 0 < hammingDist
+ x y ↔ x != y
 
-English:
-theorem hammingNorm_pos_iff
-  given: {x : forall i, β i}
-  statement: 0 < hammingNorm x ↔ x != 0
-  proof: hammingDist_pos
-
-中文:
-定理 hammingNorm_pos_iff
-  条件: {x : 对任意 i, β i}
-  结论: 0 < hammingNorm x ↔ x != 0
-  证明: hammingDist_pos
-
-Depends on / 依赖: hammingDist_pos
+--- 原说明 ---
+Corresponds to `norm_pos_iff`.
 -/
-theorem hammingNorm_pos_iff {x : forall i, β i} : 0 < hammingNorm x ↔ x != 0 :=
+theorem hammingNorm_pos_iff {x : ∀ i, β i} : 0 < hammingNorm x ↔ x ≠ 0 :=
   hammingDist_pos
-
-/--
-theorem `hammingNorm_lt_one` / 定理 `hammingNorm_lt_one`
-
-English:
-theorem hammingNorm_lt_one
-  given: {x : forall i, β i}
-  statement: hammingNorm x < 1 ↔ x = 0
-  proof: hammingDist_lt_one
-
-中文:
-定理 hammingNorm_lt_one
-  条件: {x : 对任意 i, β i}
-  结论: hammingNorm x < 1 ↔ x = 0
-  证明: hammingDist_lt_one
-
-Depends on / 依赖: hammingDist_lt_one
+/-
+**hammingNorm_lt_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_lt_one {x : forall i, β i} : hammingNorm x < 1 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingDist_lt_one`：hammingDist_lt_one {x y : forall i, β i} : hammingDi
+st x y < 1 ↔ x = y
 -/
-theorem hammingNorm_lt_one {x : forall i, β i} : hammingNorm x < 1 ↔ x = 0 :=
+theorem hammingNorm_lt_one {x : ∀ i, β i} : hammingNorm x < 1 ↔ x = 0 :=
   hammingDist_lt_one
-
-/--
-theorem `hammingNorm_le_card_fintype` / 定理 `hammingNorm_le_card_fintype`
-
-English:
-theorem hammingNorm_le_card_fintype
-  given: {x : forall i, β i}
-  statement: hammingNorm x <= Fintype.card ι
-  proof: hammingDist_le_card_fintype
-
-中文:
-定理 hammingNorm_le_card_fintype
-  条件: {x : 对任意 i, β i}
-  结论: hammingNorm x <= 有限类型.card ι
-  证明: hammingDist_le_card_fintype
-
-Depends on / 依赖: hammingDist_le_card_fintype
+/-
+**hammingNorm_le_card_fintype** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_le_card_fintype {x : forall i, β i} : hammingNorm x <= Fintype
+.card ι
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingDist_le_card_fintype`：hammingDist_le_card_fintype {x y : forall i
+, β i} : hammingDist x y <= Fintype.card ι
 -/
-theorem hammingNorm_le_card_fintype {x : forall i, β i} : hammingNorm x <= Fintype.card ι :=
+theorem hammingNorm_le_card_fintype {x : ∀ i, β i} : hammingNorm x ≤ Fintype.card ι :=
   hammingDist_le_card_fintype
-
-/--
-theorem `hammingNorm_comp_le_hammingNorm` / 定理 `hammingNorm_comp_le_hammingNorm`
-
-English:
-theorem hammingNorm_comp_le_hammingNorm
-  given: (f : forall i, γ i -> β i) {x : forall i, γ i} (hf : forall i, f i 0 = 0)
-  proof: by
-  simpa only [← hammingDist_zero_right, hf]
-    using! hammingDist_comp_le_hammingDist f (y := fun _ => 0)
-
-中文:
-定理 hammingNorm_comp_le_hammingNorm
-  条件: (f : 对任意 i, γ i -> β i) {x : 对任意 i, γ i} (hf : 对任意 i, f i 0 = 0)
-  证明: by
-  simpa only [← hammingDist_zero_right, hf]
-    using! hammingDist_comp_le_hammingDist f (y := fun _ => 0)
-
-Depends on / 依赖: hammingDist_comp_le_hammingDist, hammingDist_zero_right
+/-
+**hammingNorm_comp_le_hammingNorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_comp_le_hammingNorm (f : forall i, γ i -> β i) {x : forall i, 
+γ i} (hf : forall i, f i 0 = 0) : (hammingNorm fun i => f i (x i)) <= hammingNor
+m x
+参数：f : forall i, γ i -> β i；hf : forall i, f i 0 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hammingDist.congr_simp`：∀ {ι : Type u_2} {β : ι → Type u_3} [inst : Fint
+ype ι] {inst_1 : (i : ι) → DecidableEq (β i)}   [inst_2 : (i : ι) → DecidableEq 
+(β i)] (x x_…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `hammingDist_comp_le_hammingDist`：hammingDist_comp_le_hammingDist (f : fo
+rall i, γ i -> β i) {x y : forall i, γ i} : hammingDist (fun i => f i (x i)) (fu
+n i => f i (y i)) <= …
 -/
-theorem hammingNorm_comp_le_hammingNorm (f : forall i, γ i -> β i) {x : forall i, γ i} (hf : forall i, f i 0 = 0) :
-    (hammingNorm fun i => f i (x i)) <= hammingNorm x := by
+theorem hammingNorm_comp_le_hammingNorm (f : ∀ i, γ i → β i) {x : ∀ i, γ i} (hf : ∀ i, f i 0 = 0) :
+    (hammingNorm fun i => f i (x i)) ≤ hammingNorm x := by
   simpa only [← hammingDist_zero_right, hf]
-    using! hammingDist_comp_le_hammingDist f (y := fun _ => 0)
-
-/--
-theorem `hammingNorm_comp` / 定理 `hammingNorm_comp`
-
-English:
-theorem hammingNorm_comp
-  statement: (f : forall i, γ i -> β i) {x : forall i, γ i} (hf₁ : forall i, Injective (f i))
-  proof: by
-  simpa only [← hammingDist_zero_right, hf₂] using! hammingDist_comp f hf₁ (y := fun _ => 0)
-
-中文:
-定理 hammingNorm_comp
-  结论: (f : 对任意 i, γ i -> β i) {x : 对任意 i, γ i} (hf₁ : 对任意 i, 单射 (f i))
-  证明: by
-  simpa only [← hammingDist_zero_right, hf₂] using! hammingDist_comp f hf₁ (y := fun _ => 0)
-
-Depends on / 依赖: hammingDist_comp, hammingDist_zero_right
+    using! hammingDist_comp_le_hammingDist f (y := fun _ ↦ 0)
+/-
+**hammingNorm_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_comp (f : forall i, γ i -> β i) {x : forall i, γ i} (hf₁ : for
+all i, Injective (f i)) (hf₂ : forall i, f i 0 = 0) : (hammingNorm fun i => f i 
+(x i)) = hammingNorm x
+参数：f : forall i, γ i -> β i；hf₁ : forall i, Injective (f i)；hf₂ : forall i, f i 
+0 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hammingDist.congr_simp`：∀ {ι : Type u_2} {β : ι → Type u_3} [inst : Fint
+ype ι] {inst_1 : (i : ι) → DecidableEq (β i)}   [inst_2 : (i : ι) → DecidableEq 
+(β i)] (x x_…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `hammingDist_comp`：hammingDist_comp (f : forall i, γ i -> β i) {x y : for
+all i, γ i} (hf : forall i, Injective (f i)) : hammingDist (fun i => f i (x i)) 
+(fun i…
 -/
-theorem hammingNorm_comp (f : forall i, γ i -> β i) {x : forall i, γ i} (hf₁ : forall i, Injective (f i))
-    (hf₂ : forall i, f i 0 = 0) : (hammingNorm fun i => f i (x i)) = hammingNorm x := by
-  simpa only [← hammingDist_zero_right, hf₂] using! hammingDist_comp f hf₁ (y := fun _ => 0)
-
-/--
-theorem `hammingNorm_smul_le_hammingNorm` / 定理 `hammingNorm_smul_le_hammingNorm`
-
-English:
-theorem hammingNorm_smul_le_hammingNorm
-  statement: [Zero α] [forall i, SMulWithZero α (β i)] {k : α}
-  proof: hammingNorm_comp_le_hammingNorm (fun i (c : β i) => k • c) fun i => by simp_rw [smul_zero]
-
-中文:
-定理 hammingNorm_smul_le_hammingNorm
-  结论: [零 α] [对任意 i, 带零标量乘法 α (β i)] {k : α}
-  证明: hammingNorm_comp_le_hammingNorm (fun i (c : β i) => k • c) fun i => by simp_rw [smul_zero]
-
-Depends on / 依赖: hammingNorm_comp_le_hammingNorm, simp_rw, smul_zero
+theorem hammingNorm_comp (f : ∀ i, γ i → β i) {x : ∀ i, γ i} (hf₁ : ∀ i, Injective (f i))
+    (hf₂ : ∀ i, f i 0 = 0) : (hammingNorm fun i => f i (x i)) = hammingNorm x := by
+  simpa only [← hammingDist_zero_right, hf₂] using! hammingDist_comp f hf₁ (y := fun _ ↦ 0)
+/-
+**hammingNorm_smul_le_hammingNorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_smul_le_hammingNorm [Zero α] [forall i, SMulWithZero α (β i)] 
+{k : α} {x : forall i, β i} : hammingNorm (k • x) <= hammingNorm x
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingNorm_comp_le_hammingNorm`：hammingNorm_comp_le_hammingNorm (f : fo
+rall i, γ i -> β i) {x : forall i, γ i} (hf : forall i, f i 0 = 0) : (hammingNor
+m fun i => f i (x i))…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem hammingNorm_smul_le_hammingNorm [Zero α] [forall i, SMulWithZero α (β i)] {k : α}
-    {x : forall i, β i} : hammingNorm (k • x) <= hammingNorm x :=
+theorem hammingNorm_smul_le_hammingNorm [Zero α] [∀ i, SMulWithZero α (β i)] {k : α}
+    {x : ∀ i, β i} : hammingNorm (k • x) ≤ hammingNorm x :=
   hammingNorm_comp_le_hammingNorm (fun i (c : β i) => k • c) fun i => by simp_rw [smul_zero]
-
-/--
-theorem `hammingNorm_smul` / 定理 `hammingNorm_smul`
-
-English:
-theorem hammingNorm_smul
-  statement: [Zero α] [forall i, SMulWithZero α (β i)] {k : α}
-  proof: hammingNorm_comp (fun i (c : β i) => k • c) hk fun i => by simp_rw [smul_zero]
-
-中文:
-定理 hammingNorm_smul
-  结论: [零 α] [对任意 i, 带零标量乘法 α (β i)] {k : α}
-  证明: hammingNorm_comp (fun i (c : β i) => k • c) hk fun i => by simp_rw [smul_zero]
-
-Depends on / 依赖: hammingNorm_comp, simp_rw, smul_zero
+/-
+**hammingNorm_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingNorm_smul [Zero α] [forall i, SMulWithZero α (β i)] {k : α} (hk : f
+orall i, IsSMulRegular (β i) k) (x : forall i, β i) : hammingNorm (k • x) = hamm
+ingNorm x
+参数：β i；hk : forall i, IsSMulRegular (β i) k；x : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `hammingNorm_comp`：hammingNorm_comp (f : forall i, γ i -> β i) {x : foral
+l i, γ i} (hf₁ : forall i, Injective (f i)) (hf₂ : forall i, f i 0 = 0) : (hammi
+ngNorm…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem hammingNorm_smul [Zero α] [forall i, SMulWithZero α (β i)] {k : α}
-    (hk : forall i, IsSMulRegular (β i) k) (x : forall i, β i) : hammingNorm (k • x) = hammingNorm x :=
+theorem hammingNorm_smul [Zero α] [∀ i, SMulWithZero α (β i)] {k : α}
+    (hk : ∀ i, IsSMulRegular (β i) k) (x : ∀ i, β i) : hammingNorm (k • x) = hammingNorm x :=
   hammingNorm_comp (fun i (c : β i) => k • c) hk fun i => by simp_rw [smul_zero]
 
 end Zero
 
-/--
-theorem `hammingDist_eq_hammingNorm` / 定理 `hammingDist_eq_hammingNorm`
+/-- Corresponds to `dist_eq_norm`. -/
+/-
+**hammingDist_eq_hammingNorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hammingDist_eq_hammingNorm [forall i, AddGroup (β i)] (x y : forall i, β i
+) : hammingDist x y = hammingNorm (-x + y)
+参数：β i；x y : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem hammingDist_eq_hammingNorm
-  given: [forall i, AddGroup (β i)] (x y : forall i, β i)
-  proof: by
-  simp_rw [hammingNorm, hammingDist, Pi.add_apply, Pi.neg_apply, ne_eq, neg_add_eq_zero]
-
-中文:
-定理 hammingDist_eq_hammingNorm
-  条件: [对任意 i, 加法群 (β i)] (x y : 对任意 i, β i)
-  证明: by
-  simp_rw [hammingNorm, hammingDist, Pi.add_apply, Pi.neg_apply, ne_eq, neg_add_eq_zero]
-
-Depends on / 依赖: Pi.add_apply, Pi.neg_apply, add_apply, hammingDist, hammingNorm, ne_eq, neg_add_eq_zero, neg_apply, simp_rw
+--- 原说明 ---
+Corresponds to `dist_eq_norm`.
 -/
-theorem hammingDist_eq_hammingNorm [forall i, AddGroup (β i)] (x y : forall i, β i) :
+theorem hammingDist_eq_hammingNorm [∀ i, AddGroup (β i)] (x y : ∀ i, β i) :
     hammingDist x y = hammingNorm (-x + y) := by
   simp_rw [hammingNorm, hammingDist, Pi.add_apply, Pi.neg_apply, ne_eq, neg_add_eq_zero]
 
@@ -781,665 +710,341 @@ end HammingDistNorm
 
 /-! ### The `Hamming` type synonym -/
 
-/--
-Definition of `Hamming` / `Hamming` 的定义
+/-- Type synonym for a Pi type which inherits the usual algebraic instances, but is equipped with
+the Hamming metric and norm, instead of `Pi.normedAddCommGroup` which uses the sup norm. -/
+/-
+**Hamming** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Hamming {ι : Type*} (β : ι -> Type*) : Type _
+参数：β : ι -> Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hamming
-  signature: {ι : Type*} (β : ι -> Type*)
-  body: forall i, β i
-
-中文:
-定义 Hamming
-  签名: {ι : 类型} (β : ι -> 类型)
-  定义体: forall i, β i
+--- 原说明 ---
+Type synonym for a Pi type which inherits the usual algebraic instances, but is 
+equipped with
+the Hamming metric and norm, instead of `Pi.normedAddCommGroup` which uses the s
+up norm.
 -/
-def Hamming {ι : Type*} (β : ι -> Type*) : Type _ :=
-  forall i, β i
+def Hamming {ι : Type*} (β : ι → Type*) : Type _ :=
+  ∀ i, β i
 
 namespace Hamming
 
-variable {α ι : Type*} {β : ι -> Type*}
+variable {α ι : Type*} {β : ι → Type*}
 
+/-! Instances inherited from normal Pi types. -/
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [forall
-  signature: i, Inhabited (β i)] : Inhabited (Hamming β)
-  body: inferInstanceAs Inhabited (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 可居 (β i)] : 可居 (Hamming β)
-  定义体: inferInstanceAs Inhabited (forall i, β i)
-
-Depends on / 依赖: Inhabited
+--- 原说明 ---
+Instances inherited from normal Pi types.
 -/
-instance [forall i, Inhabited (β i)] : Inhabited (Hamming β) :=
-inferInstanceAs Inhabited (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: ι] [Fintype ι] [forall i, Fintype (β i)] : Fintype (Hamming β)
-  body: inferInstanceAs Fintype (forall i, β i)
-
-中文:
-实例 [DecidableEq
-  签名: ι] [有限类型 ι] [对任意 i, 有限类型 (β i)] : 有限类型 (Hamming β)
-  定义体: inferInstanceAs Fintype (forall i, β i)
-
-Depends on / 依赖: Fintype
+instance [∀ i, Inhabited (β i)] : Inhabited (Hamming β) :=
+  inferInstanceAs <| Inhabited (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DecidableEq ι] [Fintype ι] [forall i, Fintype (β i)] : Fintype (Hamming β) :=
-inferInstanceAs Fintype (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: ι] [forall i, Nonempty (β i)] [Nontrivial (β default)] : Nontrivial (Hamming β)
-  body: inferInstanceAs Nontrivial (forall i, β i)
-
-中文:
-实例 [可居
-  签名: ι] [对任意 i, 非空 (β i)] [非平凡 (β default)] : 非平凡 (Hamming β)
-  定义体: inferInstanceAs Nontrivial (forall i, β i)
-
-Depends on / 依赖: Nontrivial
+instance [DecidableEq ι] [Fintype ι] [∀ i, Fintype (β i)] : Fintype (Hamming β) :=
+  inferInstanceAs <| Fintype (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Inhabited ι] [forall i, Nonempty (β i)] [Nontrivial (β default)] : Nontrivial (Hamming β) :=
-inferInstanceAs Nontrivial (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: ι] [forall i, DecidableEq (β i)] : DecidableEq (Hamming β)
-  body: inferInstanceAs DecidableEq (forall i, β i)
-
-中文:
-实例 [有限类型
-  签名: ι] [对任意 i, DecidableEq (β i)] : DecidableEq (Hamming β)
-  定义体: inferInstanceAs DecidableEq (forall i, β i)
-
-Depends on / 依赖: DecidableEq
+instance [Inhabited ι] [∀ i, Nonempty (β i)] [Nontrivial (β default)] : Nontrivial (Hamming β) :=
+  inferInstanceAs <| Nontrivial (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Fintype ι] [forall i, DecidableEq (β i)] : DecidableEq (Hamming β) :=
-inferInstanceAs DecidableEq (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Zero (β i)] : Zero (Hamming β)
-  body: inferInstanceAs Zero (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 零 (β i)] : 零 (Hamming β)
-  定义体: inferInstanceAs Zero (forall i, β i)
+instance [Fintype ι] [∀ i, DecidableEq (β i)] : DecidableEq (Hamming β) :=
+  inferInstanceAs <| DecidableEq (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Zero (β i)] : Zero (Hamming β) :=
-inferInstanceAs Zero (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Neg (β i)] : Neg (Hamming β)
-  body: inferInstanceAs Neg (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 取负 (β i)] : 取负 (Hamming β)
-  定义体: inferInstanceAs Neg (forall i, β i)
+instance [∀ i, Zero (β i)] : Zero (Hamming β) :=
+  inferInstanceAs <| Zero (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Neg (β i)] : Neg (Hamming β) :=
-inferInstanceAs Neg (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Add (β i)] : Add (Hamming β)
-  body: inferInstanceAs Add (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 加法 (β i)] : 加法 (Hamming β)
-  定义体: inferInstanceAs Add (forall i, β i)
+instance [∀ i, Neg (β i)] : Neg (Hamming β) :=
+  inferInstanceAs <| Neg (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Add (β i)] : Add (Hamming β) :=
-inferInstanceAs Add (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Sub (β i)] : Sub (Hamming β)
-  body: inferInstanceAs Sub (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 减法 (β i)] : 减法 (Hamming β)
-  定义体: inferInstanceAs Sub (forall i, β i)
+instance [∀ i, Add (β i)] : Add (Hamming β) :=
+  inferInstanceAs <| Add (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Sub (β i)] : Sub (Hamming β) :=
-inferInstanceAs Sub (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, SMul α (β i)] : SMul α (Hamming β)
-  body: inferInstanceAs SMul α (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 标量乘法 α (β i)] : 标量乘法 α (Hamming β)
-  定义体: inferInstanceAs SMul α (forall i, β i)
+instance [∀ i, Sub (β i)] : Sub (Hamming β) :=
+  inferInstanceAs <| Sub (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, SMul α (β i)] : SMul α (Hamming β) :=
-inferInstanceAs SMul α (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: α] [forall i, Zero (β i)] [forall i, SMulWithZero α (β i)] : SMulWithZero α (Hamming β)
-  body: inferInstanceAs SMulWithZero α (forall i, β i)
-
-中文:
-实例 [零
-  签名: α] [对任意 i, 零 (β i)] [对任意 i, 带零标量乘法 α (β i)] : 带零标量乘法 α (Hamming β)
-  定义体: inferInstanceAs SMulWithZero α (forall i, β i)
-
-Depends on / 依赖: SMulWithZero
+instance [∀ i, SMul α (β i)] : SMul α (Hamming β) :=
+  inferInstanceAs <| SMul α (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Zero α] [forall i, Zero (β i)] [forall i, SMulWithZero α (β i)] : SMulWithZero α (Hamming β) :=
-inferInstanceAs SMulWithZero α (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, AddMonoid (β i)] : AddMonoid (Hamming β)
-  body: inferInstanceAs AddMonoid (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 加法幺半群 (β i)] : 加法幺半群 (Hamming β)
-  定义体: inferInstanceAs AddMonoid (forall i, β i)
-
-Depends on / 依赖: AddMonoid
+instance [Zero α] [∀ i, Zero (β i)] [∀ i, SMulWithZero α (β i)] : SMulWithZero α (Hamming β) :=
+  inferInstanceAs <| SMulWithZero α (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, AddMonoid (β i)] : AddMonoid (Hamming β) :=
-inferInstanceAs AddMonoid (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, AddGroup (β i)] : AddGroup (Hamming β)
-  body: inferInstanceAs AddGroup (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 加法群 (β i)] : 加法群 (Hamming β)
-  定义体: inferInstanceAs AddGroup (forall i, β i)
-
-Depends on / 依赖: AddGroup
+instance [∀ i, AddMonoid (β i)] : AddMonoid (Hamming β) :=
+  inferInstanceAs <| AddMonoid (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, AddGroup (β i)] : AddGroup (Hamming β) :=
-inferInstanceAs AddGroup (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, AddCommMonoid (β i)] : AddCommMonoid (Hamming β)
-  body: inferInstanceAs AddCommMonoid (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 加法交换幺半群 (β i)] : 加法交换幺半群 (Hamming β)
-  定义体: inferInstanceAs AddCommMonoid (forall i, β i)
-
-Depends on / 依赖: AddCommMonoid
+instance [∀ i, AddGroup (β i)] : AddGroup (Hamming β) :=
+  inferInstanceAs <| AddGroup (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, AddCommMonoid (β i)] : AddCommMonoid (Hamming β) :=
-inferInstanceAs AddCommMonoid (forall i, β i)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, AddCommGroup (β i)] : AddCommGroup (Hamming β)
-  body: inferInstanceAs AddCommGroup (forall i, β i)
-
-中文:
-实例 [对任意
-  签名: i, 加法交换群 (β i)] : 加法交换群 (Hamming β)
-  定义体: inferInstanceAs AddCommGroup (forall i, β i)
-
-Depends on / 依赖: AddCommGroup
+instance [∀ i, AddCommMonoid (β i)] : AddCommMonoid (Hamming β) :=
+  inferInstanceAs <| AddCommMonoid (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, AddCommGroup (β i)] : AddCommGroup (Hamming β) :=
-inferInstanceAs AddCommGroup (forall i, β i)
-
-instance (α) [Semiring α] (β : ι -> Type*) [forall i, AddCommMonoid (β i)] [forall i, Module α (β i)] :
+instance [∀ i, AddCommGroup (β i)] : AddCommGroup (Hamming β) :=
+  inferInstanceAs <| AddCommGroup (∀ i, β i)
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (α) [Semiring α] (β : ι → Type*) [∀ i, AddCommMonoid (β i)] [∀ i, Module α (β i)] :
     Module α (Hamming β) :=
-inferInstanceAs Module α (forall i, β i)
+  inferInstanceAs <| Module α (∀ i, β i)
 
 /-! API to/from the type synonym. -/
 
 
 /-- `Hamming.toHamming` is the identity function to the `Hamming` of a type. -/
 @[match_pattern]
-/--
-Definition of `toHamming` / `toHamming` 的定义
+/-
+**Hamming.toHamming** 是 Mathlib 中的一个定义，位于命名空间 `Hamming`。
+形式化陈述：toHamming : (forall i, β i) ≃ Hamming β
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition toHamming
-  signature: : (forall i, β i) ≃ Hamming β
-  body: Equiv.refl _
-
-中文:
-定义 toHamming
-  签名: : (对任意 i, β i) ≃ Hamming β
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`Hamming.toHamming` is the identity function to the `Hamming` of a type.
 -/
-def toHamming : (forall i, β i) ≃ Hamming β :=
+def toHamming : (∀ i, β i) ≃ Hamming β :=
   Equiv.refl _
 
 /-- `Hamming.ofHamming` is the identity function from the `Hamming` of a type. -/
 @[match_pattern]
-/--
-Definition of `ofHamming` / `ofHamming` 的定义
+/-
+**Hamming.ofHamming** 是 Mathlib 中的一个定义，位于命名空间 `Hamming`。
+形式化陈述：ofHamming : Hamming β ≃ forall i, β i
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition ofHamming
-  signature: : Hamming β ≃ forall i, β i
-  body: Equiv.refl _
-
-@[simp]
-
-中文:
-定义 ofHamming
-  签名: : Hamming β ≃ 对任意 i, β i
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+`Hamming.ofHamming` is the identity function from the `Hamming` of a type.
 -/
-def ofHamming : Hamming β ≃ forall i, β i :=
+def ofHamming : Hamming β ≃ ∀ i, β i :=
   Equiv.refl _
 
 @[simp]
-/--
-theorem `toHamming_symm_eq` / 定理 `toHamming_symm_eq`
-
-English:
-theorem toHamming_symm_eq
-  statement: (@toHamming _ β).symm = ofHamming
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toHamming_symm_eq
-  结论: (@toHamming _ β).symm = ofHamming
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.toHamming_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_symm_eq : (@toHamming _ β).symm = ofHamming
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toHamming_symm_eq : (@toHamming _ β).symm = ofHamming :=
   rfl
 
 @[simp]
-/--
-theorem `ofHamming_symm_eq` / 定理 `ofHamming_symm_eq`
-
-English:
-theorem ofHamming_symm_eq
-  statement: (@ofHamming _ β).symm = toHamming
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofHamming_symm_eq
-  结论: (@ofHamming _ β).symm = toHamming
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.ofHamming_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_symm_eq : (@ofHamming _ β).symm = toHamming
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem ofHamming_symm_eq : (@ofHamming _ β).symm = toHamming :=
   rfl
 
 @[simp]
-/--
-theorem `toHamming_ofHamming` / 定理 `toHamming_ofHamming`
-
-English:
-theorem toHamming_ofHamming
-  given: (x : Hamming β)
-  statement: toHamming (ofHamming x) = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toHamming_ofHamming
-  条件: (x : Hamming β)
-  结论: toHamming (ofHamming x) = x
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.toHamming_ofHamming** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_ofHamming (x : Hamming β) : toHamming (ofHamming x) = x
+参数：x : Hamming β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toHamming_ofHamming (x : Hamming β) : toHamming (ofHamming x) = x :=
   rfl
 
 @[simp]
-/--
-theorem `ofHamming_toHamming` / 定理 `ofHamming_toHamming`
-
-English:
-theorem ofHamming_toHamming
-  given: (x : forall i, β i)
-  statement: ofHamming (toHamming x) = x
-  proof: rfl
-
-中文:
-定理 ofHamming_toHamming
-  条件: (x : 对任意 i, β i)
-  结论: ofHamming (toHamming x) = x
-  证明: rfl
+/-
+**Hamming.ofHamming_toHamming** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_toHamming (x : forall i, β i) : ofHamming (toHamming x) = x
+参数：x : forall i, β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofHamming_toHamming (x : forall i, β i) : ofHamming (toHamming x) = x :=
+theorem ofHamming_toHamming (x : ∀ i, β i) : ofHamming (toHamming x) = x :=
   rfl
-
-/--
-theorem `toHamming_inj` / 定理 `toHamming_inj`
-
-English:
-theorem toHamming_inj
-  given: {x y : forall i, β i}
-  statement: toHamming x = toHamming y ↔ x = y
-  proof: Iff.rfl
-
-中文:
-定理 toHamming_inj
-  条件: {x y : 对任意 i, β i}
-  结论: toHamming x = toHamming y ↔ x = y
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Hamming.toHamming_inj** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_inj {x y : forall i, β i} : toHamming x = toHamming y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toHamming_inj {x y : forall i, β i} : toHamming x = toHamming y ↔ x = y :=
+theorem toHamming_inj {x y : ∀ i, β i} : toHamming x = toHamming y ↔ x = y :=
   Iff.rfl
-
-/--
-theorem `ofHamming_inj` / 定理 `ofHamming_inj`
-
-English:
-theorem ofHamming_inj
-  given: {x y : Hamming β}
-  statement: ofHamming x = ofHamming y ↔ x = y
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 ofHamming_inj
-  条件: {x y : Hamming β}
-  结论: ofHamming x = ofHamming y ↔ x = y
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Hamming.ofHamming_inj** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_inj {x y : Hamming β} : ofHamming x = ofHamming y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofHamming_inj {x y : Hamming β} : ofHamming x = ofHamming y ↔ x = y :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `toHamming_zero` / 定理 `toHamming_zero`
-
-English:
-theorem toHamming_zero
-  given: [forall i, Zero (β i)]
-  statement: toHamming (0 : forall i, β i) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toHamming_zero
-  条件: [对任意 i, 零 (β i)]
-  结论: toHamming (0 : 对任意 i, β i) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.toHamming_zero** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_zero [forall i, Zero (β i)] : toHamming (0 : forall i, β i) = 0
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toHamming_zero [forall i, Zero (β i)] : toHamming (0 : forall i, β i) = 0 :=
+theorem toHamming_zero [∀ i, Zero (β i)] : toHamming (0 : ∀ i, β i) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `ofHamming_zero` / 定理 `ofHamming_zero`
-
-English:
-theorem ofHamming_zero
-  given: [forall i, Zero (β i)]
-  statement: ofHamming (0 : Hamming β) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofHamming_zero
-  条件: [对任意 i, 零 (β i)]
-  结论: ofHamming (0 : Hamming β) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.ofHamming_zero** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_zero [forall i, Zero (β i)] : ofHamming (0 : Hamming β) = 0
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofHamming_zero [forall i, Zero (β i)] : ofHamming (0 : Hamming β) = 0 :=
+theorem ofHamming_zero [∀ i, Zero (β i)] : ofHamming (0 : Hamming β) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `toHamming_neg` / 定理 `toHamming_neg`
-
-English:
-theorem toHamming_neg
-  given: [forall i, Neg (β i)] {x : forall i, β i}
-  statement: toHamming (-x) = -toHamming x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toHamming_neg
-  条件: [对任意 i, 取负 (β i)] {x : 对任意 i, β i}
-  结论: toHamming (-x) = -toHamming x
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.toHamming_neg** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_neg [forall i, Neg (β i)] {x : forall i, β i} : toHamming (-x) =
+ -toHamming x
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toHamming_neg [forall i, Neg (β i)] {x : forall i, β i} : toHamming (-x) = -toHamming x :=
+theorem toHamming_neg [∀ i, Neg (β i)] {x : ∀ i, β i} : toHamming (-x) = -toHamming x :=
   rfl
 
 @[simp]
-/--
-theorem `ofHamming_neg` / 定理 `ofHamming_neg`
-
-English:
-theorem ofHamming_neg
-  given: [forall i, Neg (β i)] {x : Hamming β}
-  statement: ofHamming (-x) = -ofHamming x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofHamming_neg
-  条件: [对任意 i, 取负 (β i)] {x : Hamming β}
-  结论: ofHamming (-x) = -ofHamming x
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.ofHamming_neg** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_neg [forall i, Neg (β i)] {x : Hamming β} : ofHamming (-x) = -of
+Hamming x
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofHamming_neg [forall i, Neg (β i)] {x : Hamming β} : ofHamming (-x) = -ofHamming x :=
+theorem ofHamming_neg [∀ i, Neg (β i)] {x : Hamming β} : ofHamming (-x) = -ofHamming x :=
   rfl
 
 @[simp]
-/--
-theorem `toHamming_add` / 定理 `toHamming_add`
-
-English:
-theorem toHamming_add
-  given: [forall i, Add (β i)] {x y : forall i, β i}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toHamming_add
-  条件: [对任意 i, 加法 (β i)] {x y : 对任意 i, β i}
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.toHamming_add** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_add [forall i, Add (β i)] {x y : forall i, β i} : toHamming (x +
+ y) = toHamming x + toHamming y
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toHamming_add [forall i, Add (β i)] {x y : forall i, β i} :
+theorem toHamming_add [∀ i, Add (β i)] {x y : ∀ i, β i} :
     toHamming (x + y) = toHamming x + toHamming y :=
   rfl
 
 @[simp]
-/--
-theorem `ofHamming_add` / 定理 `ofHamming_add`
-
-English:
-theorem ofHamming_add
-  given: [forall i, Add (β i)] {x y : Hamming β}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofHamming_add
-  条件: [对任意 i, 加法 (β i)] {x y : Hamming β}
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.ofHamming_add** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_add [forall i, Add (β i)] {x y : Hamming β} : ofHamming (x + y) 
+= ofHamming x + ofHamming y
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofHamming_add [forall i, Add (β i)] {x y : Hamming β} :
+theorem ofHamming_add [∀ i, Add (β i)] {x y : Hamming β} :
     ofHamming (x + y) = ofHamming x + ofHamming y :=
   rfl
 
 @[simp]
-/--
-theorem `toHamming_sub` / 定理 `toHamming_sub`
-
-English:
-theorem toHamming_sub
-  given: [forall i, Sub (β i)] {x y : forall i, β i}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toHamming_sub
-  条件: [对任意 i, 减法 (β i)] {x y : 对任意 i, β i}
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.toHamming_sub** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_sub [forall i, Sub (β i)] {x y : forall i, β i} : toHamming (x -
+ y) = toHamming x - toHamming y
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toHamming_sub [forall i, Sub (β i)] {x y : forall i, β i} :
+theorem toHamming_sub [∀ i, Sub (β i)] {x y : ∀ i, β i} :
     toHamming (x - y) = toHamming x - toHamming y :=
   rfl
 
 @[simp]
-/--
-theorem `ofHamming_sub` / 定理 `ofHamming_sub`
-
-English:
-theorem ofHamming_sub
-  given: [forall i, Sub (β i)] {x y : Hamming β}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofHamming_sub
-  条件: [对任意 i, 减法 (β i)] {x y : Hamming β}
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.ofHamming_sub** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_sub [forall i, Sub (β i)] {x y : Hamming β} : ofHamming (x - y) 
+= ofHamming x - ofHamming y
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofHamming_sub [forall i, Sub (β i)] {x y : Hamming β} :
+theorem ofHamming_sub [∀ i, Sub (β i)] {x y : Hamming β} :
     ofHamming (x - y) = ofHamming x - ofHamming y :=
   rfl
 
 @[simp]
-/--
-theorem `toHamming_smul` / 定理 `toHamming_smul`
-
-English:
-theorem toHamming_smul
-  given: [forall i, SMul α (β i)] {r : α} {x : forall i, β i}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toHamming_smul
-  条件: [对任意 i, 标量乘法 α (β i)] {r : α} {x : 对任意 i, β i}
-  证明: rfl
-
-@[simp]
+/-
+**Hamming.toHamming_smul** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：toHamming_smul [forall i, SMul α (β i)] {r : α} {x : forall i, β i} : toHa
+mming (r • x) = r • toHamming x
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toHamming_smul [forall i, SMul α (β i)] {r : α} {x : forall i, β i} :
+theorem toHamming_smul [∀ i, SMul α (β i)] {r : α} {x : ∀ i, β i} :
     toHamming (r • x) = r • toHamming x :=
   rfl
 
 @[simp]
-/--
-theorem `ofHamming_smul` / 定理 `ofHamming_smul`
-
-English:
-theorem ofHamming_smul
-  given: [forall i, SMul α (β i)] {r : α} {x : Hamming β}
-  proof: rfl
-
-中文:
-定理 ofHamming_smul
-  条件: [对任意 i, 标量乘法 α (β i)] {r : α} {x : Hamming β}
-  证明: rfl
+/-
+**Hamming.ofHamming_smul** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：ofHamming_smul [forall i, SMul α (β i)] {r : α} {x : Hamming β} : ofHammin
+g (r • x) = r • ofHamming x
+参数：β i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofHamming_smul [forall i, SMul α (β i)] {r : α} {x : Hamming β} :
+theorem ofHamming_smul [∀ i, SMul α (β i)] {r : α} {x : Hamming β} :
     ofHamming (r • x) = r • ofHamming x :=
   rfl
 
@@ -1447,110 +1052,30 @@ section
 
 /-! Instances equipping `Hamming` with `hammingNorm` and `hammingDist`. -/
 
-variable [Fintype ι] [forall i, DecidableEq (β i)]
+variable [Fintype ι] [∀ i, DecidableEq (β i)]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Dist (Hamming β)
-  body: ⟨fun x y => hammingDist (ofHamming x) (ofHamming y)⟩
-
-@[simp, push_cast]
-
-中文:
-实例 :
-  签名: Dist (Hamming β)
-  定义体: ⟨fun x y => hammingDist (ofHamming x) (ofHamming y)⟩
-
-@[simp, push_cast]
-
-Depends on / 依赖: hammingDist, ofHamming
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Dist (Hamming β) :=
   ⟨fun x y => hammingDist (ofHamming x) (ofHamming y)⟩
 
 @[simp, push_cast]
-/--
-theorem `dist_eq_hammingDist` / 定理 `dist_eq_hammingDist`
-
-English:
-theorem dist_eq_hammingDist
-  given: (x y : Hamming β)
-  proof: rfl
-
-中文:
-定理 dist_eq_hammingDist
-  条件: (x y : Hamming β)
-  证明: rfl
+/-
+**Hamming.dist_eq_hammingDist** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：dist_eq_hammingDist (x y : Hamming β) : dist x y = hammingDist (ofHamming 
+x) (ofHamming y)
+参数：x y : Hamming β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dist_eq_hammingDist (x y : Hamming β) :
     dist x y = hammingDist (ofHamming x) (ofHamming y) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PseudoMetricSpace (Hamming β)
-  body: by
-    push_cast
-    exact mod_cast hammingDist_self
-  dist_comm := by
-    push_cast
-    exact mod_cast hammingDist_comm
-  dist_triangle := by
-    push_cast
-    exact mod_cast hammingDist_triangle
-  toUniformSpace := ⊥
-  uniformity_dist := uniformity_dist_of_mem_uniformity _ _ fun s => by
-    push_cast
-    constructor
-· refine fun hs => ⟨1, zero_lt_one, fun hab => hs by simpa using hab⟩
-    · rintro ⟨_, hε, hs⟩ ⟨_, _⟩ rfl
-      refine hs (lt_of_eq_of_lt ?_ hε)
-      exact mod_cast hammingDist_self _
-  toBornology := ⟨⊥, bot_le⟩
-  cobounded_sets := by
-    ext
-    push_cast
-    refine iff_of_true (Filter.mem_sets.mpr Filter.mem_bot) ⟨Fintype.card ι, fun _ _ _ _ => ?_⟩
-    exact mod_cast hammingDist_le_card_fintype
-
-@[simp, push_cast]
-
-中文:
-实例 :
-  签名: 伪度量空间 (Hamming β)
-  定义体: by
-    push_cast
-    exact mod_cast hammingDist_self
-  dist_comm := by
-    push_cast
-    exact mod_cast hammingDist_comm
-  dist_triangle := by
-    push_cast
-    exact mod_cast hammingDist_triangle
-  toUniformSpace := ⊥
-  uniformity_dist := uniformity_dist_of_mem_uniformity _ _ fun s => by
-    push_cast
-    constructor
-· refine fun hs => ⟨1, zero_lt_one, fun hab => hs by simpa using hab⟩
-    · rintro ⟨_, hε, hs⟩ ⟨_, _⟩ rfl
-      refine hs (lt_of_eq_of_lt ?_ hε)
-      exact mod_cast hammingDist_self _
-  toBornology := ⟨⊥, bot_le⟩
-  cobounded_sets := by
-    ext
-    push_cast
-    refine iff_of_true (Filter.mem_sets.mpr Filter.mem_bot) ⟨Fintype.card ι, fun _ _ _ _ => ?_⟩
-    exact mod_cast hammingDist_le_card_fintype
-
-@[simp, push_cast]
-
-Depends on / 依赖: bot_le, cobounded_sets, dist_comm, dist_triangle, hammingDist_comm, hammingDist_self, hammingDist_triangle, lt_of_eq_of_lt, mod_cast, toBornology, toUniformSpace, uniformity_dist, uniformity_dist_of_mem_uniformity, zero_lt_one
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PseudoMetricSpace (Hamming β) where
   dist_self := by
@@ -1566,7 +1091,7 @@ instance : PseudoMetricSpace (Hamming β) where
   uniformity_dist := uniformity_dist_of_mem_uniformity _ _ fun s => by
     push_cast
     constructor
-· refine fun hs => ⟨1, zero_lt_one, fun hab => hs by simpa using hab⟩
+    · refine fun hs ↦ ⟨1, zero_lt_one, fun hab ↦ hs <| by simpa using hab⟩
     · rintro ⟨_, hε, hs⟩ ⟨_, _⟩ rfl
       refine hs (lt_of_eq_of_lt ?_ hε)
       exact mod_cast hammingDist_self _
@@ -1578,153 +1103,71 @@ instance : PseudoMetricSpace (Hamming β) where
     exact mod_cast hammingDist_le_card_fintype
 
 @[simp, push_cast]
-/--
-theorem `nndist_eq_hammingDist` / 定理 `nndist_eq_hammingDist`
-
-English:
-theorem nndist_eq_hammingDist
-  given: (x y : Hamming β)
-  proof: rfl
-
-中文:
-定理 nndist_eq_hammingDist
-  条件: (x y : Hamming β)
-  证明: rfl
+/-
+**Hamming.nndist_eq_hammingDist** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：nndist_eq_hammingDist (x y : Hamming β) : nndist x y = hammingDist (ofHamm
+ing x) (ofHamming y)
+参数：x y : Hamming β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem nndist_eq_hammingDist (x y : Hamming β) :
     nndist x y = hammingDist (ofHamming x) (ofHamming y) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DiscreteTopology (Hamming β)
-  body: ⟨rfl⟩
-
-中文:
-实例 :
-  签名: 离散拓扑 (Hamming β)
-  定义体: ⟨rfl⟩
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DiscreteTopology (Hamming β) := ⟨rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MetricSpace (Hamming β)
-  body: .ofT0PseudoMetricSpace _
-
-中文:
-实例 :
-  签名: 度量空间 (Hamming β)
-  定义体: .ofT0PseudoMetricSpace _
-
-Depends on / 依赖: ofT0PseudoMetricSpace
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MetricSpace (Hamming β) := .ofT0PseudoMetricSpace _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Zero (β i)] : Norm (Hamming β)
-  body: ⟨fun x => hammingNorm (ofHamming x)⟩
-
-@[simp, push_cast]
-
-中文:
-实例 [对任意
-  签名: i, 零 (β i)] : 范数 (Hamming β)
-  定义体: ⟨fun x => hammingNorm (ofHamming x)⟩
-
-@[simp, push_cast]
-
-Depends on / 依赖: hammingNorm, ofHamming
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Zero (β i)] : Norm (Hamming β) :=
+instance [∀ i, Zero (β i)] : Norm (Hamming β) :=
   ⟨fun x => hammingNorm (ofHamming x)⟩
 
 @[simp, push_cast]
-/--
-theorem `norm_eq_hammingNorm` / 定理 `norm_eq_hammingNorm`
-
-English:
-theorem norm_eq_hammingNorm
-  given: [forall i, Zero (β i)] (x : Hamming β)
-  statement: ‖x‖ = hammingNorm (ofHamming x)
-  proof: rfl
-
-中文:
-定理 norm_eq_hammingNorm
-  条件: [对任意 i, 零 (β i)] (x : Hamming β)
-  结论: ‖x‖ = hammingNorm (ofHamming x)
-  证明: rfl
+/-
+**Hamming.norm_eq_hammingNorm** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：norm_eq_hammingNorm [forall i, Zero (β i)] (x : Hamming β) : ‖x‖ = hamming
+Norm (ofHamming x)
+参数：β i；x : Hamming β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem norm_eq_hammingNorm [forall i, Zero (β i)] (x : Hamming β) : ‖x‖ = hammingNorm (ofHamming x) :=
+theorem norm_eq_hammingNorm [∀ i, Zero (β i)] (x : Hamming β) : ‖x‖ = hammingNorm (ofHamming x) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, AddGroup (β i)] : NormedAddGroup (Hamming β) where
-  body: by push_cast; exact mod_cast hammingDist_eq_hammingNorm
-
-中文:
-实例 [对任意
-  签名: i, 加法群 (β i)] : 赋范加群 (Hamming β) where
-  定义体: by push_cast; exact mod_cast hammingDist_eq_hammingNorm
-
-Depends on / 依赖: hammingDist_eq_hammingNorm, mod_cast
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, AddGroup (β i)] : NormedAddGroup (Hamming β) where
+instance [∀ i, AddGroup (β i)] : NormedAddGroup (Hamming β) where
   dist_eq := by push_cast; exact mod_cast hammingDist_eq_hammingNorm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, AddCommGroup (β i)] : NormedAddCommGroup (Hamming β) where
-  body: fun x y => NormedAddGroup.dist_eq x y
-
-@[simp, push_cast]
-
-中文:
-实例 [对任意
-  签名: i, 加法交换群 (β i)] : 赋范交换加群 (Hamming β) where
-  定义体: fun x y => NormedAddGroup.dist_eq x y
-
-@[simp, push_cast]
-
-Depends on / 依赖: NormedAddGroup, NormedAddGroup.dist_eq, dist_eq
+/-
+**Hamming.** 是 Mathlib 中的一个实例，位于命名空间 `Hamming`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, AddCommGroup (β i)] : NormedAddCommGroup (Hamming β) where
+instance [∀ i, AddCommGroup (β i)] : NormedAddCommGroup (Hamming β) where
   dist_eq := fun x y => NormedAddGroup.dist_eq x y
 
 @[simp, push_cast]
-/--
-theorem `nnnorm_eq_hammingNorm` / 定理 `nnnorm_eq_hammingNorm`
-
-English:
-theorem nnnorm_eq_hammingNorm
-  given: [forall i, AddGroup (β i)] (x : Hamming β)
-  proof: rfl
-
-中文:
-定理 nnnorm_eq_hammingNorm
-  条件: [对任意 i, 加法群 (β i)] (x : Hamming β)
-  证明: rfl
+/-
+**Hamming.nnnorm_eq_hammingNorm** 是 Mathlib 中的一个定理，位于命名空间 `Hamming`。
+形式化陈述：nnnorm_eq_hammingNorm [forall i, AddGroup (β i)] (x : Hamming β) : ‖x‖₊ = 
+hammingNorm (ofHamming x)
+参数：β i；x : Hamming β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nnnorm_eq_hammingNorm [forall i, AddGroup (β i)] (x : Hamming β) :
+theorem nnnorm_eq_hammingNorm [∀ i, AddGroup (β i)] (x : Hamming β) :
     ‖x‖₊ = hammingNorm (ofHamming x) := rfl
 
 end
 
 end Hamming
+

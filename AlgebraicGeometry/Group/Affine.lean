@@ -24,8 +24,8 @@ diagram so that the bottom edge can be obtained by composing the three.
 
 ```
   Cogrp Mod_R ≌ Grp AffSch_{Spec R} ≌ Aff Grp Sch_{Spec R}
-      ↑ ↓ ↑ ↓
-R-Hopf algebras ⇄ Affine group schemes over Spec R
+      ↑ ↓                                      ↑ ↓
+R-Hopf algebras         ⇄       Affine group schemes over Spec R
 ```
 
 If we do not care about going back from affine group schemes over `Spec R` to `R`-Hopf algebras
@@ -33,8 +33,8 @@ If we do not care about going back from affine group schemes over `Spec R` to `R
 follow the following simpler diagram:
 
 ```
-  Cogrp Mod_R ⥤ Grp Sch_{Spec R}
-      ↑ ↓ ↓
+  Cogrp Mod_R   ⥤        Grp Sch_{Spec R}
+      ↑ ↓                        ↓
 R-Hopf algebras → Affine group schemes over Spec R
 ```
 where the top `⥤` comes from the essentially surjective functor `Cogrp Mod_R ⥤ Grp Sch_{Spec R}`,
@@ -69,200 +69,165 @@ namespace AlgebraicGeometry
 section topEdge
 
 variable (R) in
-/--
-Definition of `algSpec` / `algSpec` 的定义
+/-- `Spec` as a functor from `R`-algebras to schemes over `Spec R`. -/
+/-
+**AlgebraicGeometry.algSpec** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：(R : CommRingCat) → CategoryTheory.Functor (CommAlgCat ↑R)ᵒᵖ (CategoryTheo
+ry.Over (AlgebraicGeometry.Spec R))
+参数：AlgebraicGeometry.Spec R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algSpec
-  signature: : (CommAlgCat R)ᵒᵖ ⥤ Over (Spec R)
-  body: (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
-
-中文:
-定义 algSpec
-  签名: : (交换Alg范畴 R)ᵒᵖ ⥤ Over (Spec R)
-  定义体: (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
+--- 原说明 ---
+`Spec` as a functor from `R`-algebras to schemes over `Spec R`.
 -/
 @[implicit_reducible] def algSpec : (CommAlgCat R)ᵒᵖ ⥤ Over (Spec R) :=
   (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 
 variable (R) in
-/--
-Definition of `algΓ` / `algΓ` 的定义
+/-- The Gamma functor as a functor from schemes over `Spec R` to `R`-algebras. -/
+/-
+**AlgebraicGeometry.alg** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algΓ
-  signature: : Over (Spec R) ⥤ (CommAlgCat R)ᵒᵖ
-  body: Over.post Γ.rightOp ⋙ Over.map (ΓSpecIso R).inv.op ⋙
-    (Over.opEquivOpUnder R).functor ⋙ (commAlgCatEquivUnder R).inverse.op
-
-中文:
-定义 algΓ
-  签名: : Over (Spec R) ⥤ (交换Alg范畴 R)ᵒᵖ
-  定义体: Over.post Γ.rightOp ⋙ Over.map (ΓSpecIso R).inv.op ⋙
-    (Over.opEquivOpUnder R).functor ⋙ (commAlgCatEquivUnder R).inverse.op
+--- 原说明 ---
+The Gamma functor as a functor from schemes over `Spec R` to `R`-algebras.
 -/
 @[implicit_reducible] def algΓ : Over (Spec R) ⥤ (CommAlgCat R)ᵒᵖ :=
   Over.post Γ.rightOp ⋙ Over.map (ΓSpecIso R).inv.op ⋙
     (Over.opEquivOpUnder R).functor ⋙ (commAlgCatEquivUnder R).inverse.op
-
-/--
-Instance `preservesLimitsOfSize_algSpec` / 实例 `preservesLimitsOfSize_algSpec`
-
-English:
-instance preservesLimitsOfSize_algSpec
-  signature: : PreservesLimitsOfSize.{w, v} (algSpec R)
-  body: inferInstanceAs PreservesLimitsOfSize.{w, v}
-    (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
-
-中文:
-实例 preservesLimitsOfSize_algSpec
-  签名: : 保持LimitsOfSize.{w, v} (algSpec R)
-  定义体: inferInstanceAs PreservesLimitsOfSize.{w, v}
-    (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
-
-Depends on / 依赖: Over.opEquivOpUnder, Over.post, PreservesLimitsOfSize, Scheme, Scheme.Spec, commAlgCatEquivUnder, functor, inverse, op.functor, opEquivOpUnder
+/-
+**AlgebraicGeometry.preservesLimitsOfSize_algSpec** 是 Mathlib 中的一个实例，位于命名空间 `Alg
+ebraicGeometry`。
+形式化陈述：preservesLimitsOfSize_algSpec : PreservesLimitsOfSize.{w, v} (algSpec R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance preservesLimitsOfSize_algSpec : PreservesLimitsOfSize.{w, v} (algSpec R) :=
-inferInstanceAs PreservesLimitsOfSize.{w, v}
+  inferInstanceAs <| PreservesLimitsOfSize.{w, v} <|
     (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `preservesColimitsOfSize_algΓ` / 实例 `preservesColimitsOfSize_algΓ`
-
-English:
-instance preservesColimitsOfSize_algΓ
-  signature: : PreservesColimitsOfSize.{w, v} (algΓ R)
-  body: by
-  unfold algΓ; infer_instance
-
-中文:
-实例 preservesColimitsOfSize_algΓ
-  签名: : 保持余limitsOfSize.{w, v} (algΓ R)
-  定义体: by
-  unfold algΓ; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**AlgebraicGeometry.preservesColimitsOfSize_alg** 是 Mathlib 中的一个实例，位于命名空间 `Algeb
+raicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance preservesColimitsOfSize_algΓ : PreservesColimitsOfSize.{w, v} (algΓ R) := by
   unfold algΓ; infer_instance
-
-/--
-lemma `algSpec_obj_hom` / 引理 `algSpec_obj_hom`
-
-English:
-lemma algSpec_obj_hom
-  given: (X : (CommAlgCat R)ᵒᵖ)
-  proof: rfl
-
-中文:
-引理 algSpec_obj_hom
-  条件: (X : (交换Alg范畴 R)ᵒᵖ)
-  证明: rfl
+/-
+**AlgebraicGeometry.algSpec_obj_hom** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry
+`。
+形式化陈述：∀ {R : CommRingCat} (X : (CommAlgCat ↑R)ᵒᵖ),   ((AlgebraicGeometry.algSpec
+ R).obj X).hom =     AlgebraicGeometry.Spec.map (CommRingCat.ofHom (algebraMap ↑
+R ↑(Opposite.unop X)))
+参数：X : (CommAlgCat ↑R)ᵒᵖ；(AlgebraicGeometry.algSpec R).obj X；CommRingCat.ofHom (
+algebraMap ↑R ↑(Opposite.unop X))。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma algSpec_obj_hom (X : (CommAlgCat R)ᵒᵖ) :
     ((algSpec R).obj X).hom = Spec.map (CommRingCat.ofHom (algebraMap R X.unop)) := rfl
-
-/--
-lemma `algSpec_map_left` / 引理 `algSpec_map_left`
-
-English:
-lemma algSpec_map_left
-  given: {X Y : (CommAlgCat R)ᵒᵖ} (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-引理 algSpec_map_left
-  条件: {X Y : (交换Alg范畴 R)ᵒᵖ} (f : X ⟶ Y)
-  证明: rfl
+/-
+**AlgebraicGeometry.algSpec_map_left** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y`。
+形式化陈述：∀ {R : CommRingCat} {X Y : (CommAlgCat ↑R)ᵒᵖ} (f : X ⟶ Y),   CategoryTheor
+y.Over.Hom.left ((AlgebraicGeometry.algSpec R).map f) =     AlgebraicGeometry.Sp
+ec.map (CategoryTheory.Under.Hom.right ((commAlgCatEquivUnder R).functor.map f.u
+nop))
+参数：CommAlgCat ↑R；f : X ⟶ Y；(AlgebraicGeometry.algSpec R).map f；CategoryTheory.Un
+der.Hom.right ((commAlgCatEquivUnder R).functor.map f.unop)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma algSpec_map_left {X Y : (CommAlgCat R)ᵒᵖ} (f : X ⟶ Y) :
     ((algSpec R).map f).left = Spec.map ((commAlgCatEquivUnder R).functor.map f.unop).right := rfl
-
-/--
-lemma `preservesTerminalIso_algSpec` / 引理 `preservesTerminalIso_algSpec`
-
-English:
-lemma preservesTerminalIso_algSpec
-  proof: by
-  ext : 1; exact toUnit_unique ..
-
-中文:
-引理 preservesTerminalIso_algSpec
-  证明: by
-  ext : 1; exact toUnit_unique ..
-
-Depends on / 依赖: toUnit_unique
+/-
+**AlgebraicGeometry.preservesTerminalIso_algSpec** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry`。
+形式化陈述：preservesTerminalIso_algSpec : preservesTerminalIso (algSpec R) = Over.iso
+Mk (.refl (Spec R))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteLimits.preservesFiniteLimits`：∀ {C 
+: Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesLimits.preservesFiniteLimits`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categor
+yTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用引理 `CategoryTheory.SemiCartesianMonoidalCategory.toUnit_unique`：toUnit_uniqu
+e {X : C} (f g : X ⟶ 𝟙_ _) : f = g
 -/
 lemma preservesTerminalIso_algSpec :
     preservesTerminalIso (algSpec R) = Over.isoMk (.refl (Spec R)) := by
   ext : 1; exact toUnit_unique ..
-
-/--
-lemma `preservesTerminalIso_algSpec_inv_left` / 引理 `preservesTerminalIso_algSpec_inv_left`
-
-English:
-lemma preservesTerminalIso_algSpec_inv_left
-  proof: by
-  rw [preservesTerminalIso_algSpec]; rfl
-
-@[simp]
-
-中文:
-引理 preservesTerminalIso_algSpec_inv_left
-  证明: by
-  rw [preservesTerminalIso_algSpec]; rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.preservesTerminalIso_algSpec_inv_left** 是 Mathlib 中的一个定理，位于命
+名空间 `AlgebraicGeometry`。
+形式化陈述：∀ {R : CommRingCat},   CategoryTheory.Over.Hom.left       (CategoryTheory.
+CartesianMonoidalCategory.preservesTerminalIso (AlgebraicGeometry.algSpec R)).in
+v =     CategoryTheory.CategoryStruct.id (AlgebraicGeometry.Spec R)
+参数：CategoryTheory.CartesianMonoidalCategory.preservesTerminalIso (AlgebraicGeome
+try.algSpec R)；AlgebraicGeometry.Spec R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteLimits.preservesFiniteLimits`：∀ {C 
+: Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesLimits.preservesFiniteLimits`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categor
+yTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.preservesTerminalIso_algSpec`：preservesTerminalIso_alg
+Spec : preservesTerminalIso (algSpec R) = Over.isoMk (.refl (Spec R))
 -/
 @[simp] lemma preservesTerminalIso_algSpec_inv_left :
     (preservesTerminalIso (algSpec R)).inv.left = 𝟙 (Spec R) := by
   rw [preservesTerminalIso_algSpec]; rfl
 
 @[simp]
-/--
-lemma `prodComparison_algSpec_left` / 引理 `prodComparison_algSpec_left`
-
-English:
-lemma prodComparison_algSpec_left
-  given: (X Y : (CommAlgCat R)ᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 prodComparison_algSpec_left
-  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.prodComparison_algSpec_left** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry`。
+形式化陈述：prodComparison_algSpec_left (X Y : (CommAlgCat R)ᵒᵖ) : (prodComparison (al
+gSpec R) X Y).left = (pullbackSpecIso R X.unop Y.unop).inv
+参数：X Y : (CommAlgCat R)ᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prodComparison_algSpec_left (X Y : (CommAlgCat R)ᵒᵖ) :
     (prodComparison (algSpec R) X Y).left = (pullbackSpecIso R X.unop Y.unop).inv := rfl
 
 @[simp]
-/--
-lemma `prodComparisonIso_algSpec_inv_left` / 引理 `prodComparisonIso_algSpec_inv_left`
-
-English:
-lemma prodComparisonIso_algSpec_inv_left
-  given: (X Y : (CommAlgCat R)ᵒᵖ)
-  proof: by
-  have : (Over.forget (Spec R)).mapIso (prodComparisonIso (algSpec R) X Y) =
-      (pullbackSpecIso R X.unop Y.unop).symm :=
-    Iso.ext (prodComparison_algSpec_left X Y)
-  exact congrArg Iso.inv this
-
-中文:
-引理 prodComparisonIso_algSpec_inv_left
-  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
-  证明: by
-  have : (Over.forget (Spec R)).mapIso (prodComparisonIso (algSpec R) X Y) =
-      (pullbackSpecIso R X.unop Y.unop).symm :=
-    Iso.ext (prodComparison_algSpec_left X Y)
-  exact congrArg Iso.inv this
-
-Depends on / 依赖: Iso.ext, Iso.inv, Over.forget, X.unop, Y.unop, algSpec, forget, mapIso, prodComparisonIso, prodComparison_algSpec_left, pullbackSpecIso
+/-
+**AlgebraicGeometry.prodComparisonIso_algSpec_inv_left** 是 Mathlib 中的一个引理，位于命名空间
+ `AlgebraicGeometry`。
+形式化陈述：prodComparisonIso_algSpec_inv_left (X Y : (CommAlgCat R)ᵒᵖ) : (prodCompari
+sonIso (algSpec R) X Y).inv.left = (pullbackSpecIso R X.unop Y.unop).hom
+参数：X Y : (CommAlgCat R)ᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteLimits.preservesFiniteLimits`：∀ {C 
+: Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesLimits.preservesFiniteLimits`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categor
+yTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `AlgebraicGeometry.prodComparison_algSpec_left`：prodComparison_algSpec_le
+ft (X Y : (CommAlgCat R)ᵒᵖ) : (prodComparison (algSpec R) X Y).left = (pullbackS
+pecIso R X.unop Y.unop).inv
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma prodComparisonIso_algSpec_inv_left (X Y : (CommAlgCat R)ᵒᵖ) :
     (prodComparisonIso (algSpec R) X Y).inv.left = (pullbackSpecIso R X.unop Y.unop).hom := by
@@ -273,313 +238,246 @@ lemma prodComparisonIso_algSpec_inv_left (X Y : (CommAlgCat R)ᵒᵖ) :
 
 attribute [local simp] ε_of_cartesianMonoidalCategory μ_of_cartesianMonoidalCategory in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `braidedAlgSpec` / 实例 `braidedAlgSpec`
+/-- `Spec` as a functor from `R`-algebras to schemes over `Spec R` is braided.
 
-English:
-instance braidedAlgSpec
-  signature: : (algSpec R).Braided
-  body: .copy (.ofChosenFiniteProducts _)
-    (Over.homMk <| 𝟙 <| Spec R)
-    (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).hom)
-    (Over.homMk <| 𝟙 <| Spec R)
-    (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).inv <| by
-      simpa using Over.w (prodComparison (algSpec R) X Y))
-    (Over.OverMorphism.ext (by simp))
-    (funext fun X => funext fun Y => Over.OverMorphism.ext (by simp))
-    (Over.OverMorphism.ext (by
-      rw [Functor.OplaxMonoidal.η_of_cartesianMonoidalCategory]; rw [← preservesTerminalIso_hom]; rw [preservesTerminalIso_algSpec]; rfl))
-    (funext fun X => funext fun Y => Over.OverMorphism.ext (by
-      rw [Functor.OplaxMonoidal.δ_of_cartesianMonoidalCategory]; rw [prodComparison_algSpec_left]; rfl))
+The monoidal data is copied from `Functor.Braided.ofChosenFiniteProducts` so that `ε`, `η` are
+definitionally `𝟙 (Spec R)` and `μ`, `δ` are definitionally `pullbackSpecIso`. -/
+/-
+**AlgebraicGeometry.braidedAlgSpec** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`
+。
+形式化陈述：braidedAlgSpec : (algSpec R).Braided
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 braidedAlgSpec
-  签名: : (algSpec R).辫
-  定义体: .copy (.ofChosenFiniteProducts _)
-    (Over.homMk <| 𝟙 <| Spec R)
-    (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).hom)
-    (Over.homMk <| 𝟙 <| Spec R)
-    (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).inv <| by
-      simpa using Over.w (prodComparison (algSpec R) X Y))
-    (Over.OverMorphism.ext (by simp))
-    (funext fun X => funext fun Y => Over.OverMorphism.ext (by simp))
-    (Over.OverMorphism.ext (by
-      rw [Functor.OplaxMonoidal.η_of_cartesianMonoidalCategory]; rw [← preservesTerminalIso_hom]; rw [preservesTerminalIso_algSpec]; rfl))
-    (funext fun X => funext fun Y => Over.OverMorphism.ext (by
-      rw [Functor.OplaxMonoidal.δ_of_cartesianMonoidalCategory]; rw [prodComparison_algSpec_left]; rfl))
+--- 原说明 ---
+`Spec` as a functor from `R`-algebras to schemes over `Spec R` is braided.
 
-Depends on / 依赖: Functor, Functor.OplaxMonoidal, OplaxMonoidal, Over.OverMorphism.ext, Over.homMk, Over.w, OverMorphism, X.unop, Y.unop, algSpec, ofChosenFiniteProducts, preservesTerminalIso_hom, prodComparison, pullbackSpecIso
+The monoidal data is copied from `Functor.Braided.ofChosenFiniteProducts` so tha
+t `ε`, `η` are
+definitionally `𝟙 (Spec R)` and `μ`, `δ` are definitionally `pullbackSpecIso`.
 -/
 instance braidedAlgSpec : (algSpec R).Braided :=
   .copy (.ofChosenFiniteProducts _)
     (Over.homMk <| 𝟙 <| Spec R)
-    (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).hom)
+    (fun X Y ↦ Over.homMk (pullbackSpecIso R X.unop Y.unop).hom)
     (Over.homMk <| 𝟙 <| Spec R)
-    (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).inv <| by
+    (fun X Y ↦ Over.homMk (pullbackSpecIso R X.unop Y.unop).inv <| by
       simpa using Over.w (prodComparison (algSpec R) X Y))
     (Over.OverMorphism.ext (by simp))
-    (funext fun X => funext fun Y => Over.OverMorphism.ext (by simp))
+    (funext fun X ↦ funext fun Y ↦ Over.OverMorphism.ext (by simp))
     (Over.OverMorphism.ext (by
-      rw [Functor.OplaxMonoidal.η_of_cartesianMonoidalCategory]; rw [← preservesTerminalIso_hom]; rw [preservesTerminalIso_algSpec]; rfl))
-    (funext fun X => funext fun Y => Over.OverMorphism.ext (by
-      rw [Functor.OplaxMonoidal.δ_of_cartesianMonoidalCategory]; rw [prodComparison_algSpec_left]; rfl))
-
-/--
-lemma `ε_algSpec_left` / 引理 `ε_algSpec_left`
-
-English:
-lemma ε_algSpec_left
-  statement: (LaxMonoidal.ε (algSpec R)).left = 𝟙 (Spec R)
-  proof: rfl
-
-中文:
-引理 ε_algSpec_left
-  结论: (松弛幺半群.ε (algSpec R)).left = 𝟙 (Spec R)
-  证明: rfl
+      rw [Functor.OplaxMonoidal.η_of_cartesianMonoidalCategory, ← preservesTerminalIso_hom,
+        preservesTerminalIso_algSpec]; rfl))
+    (funext fun X ↦ funext fun Y ↦ Over.OverMorphism.ext (by
+      rw [Functor.OplaxMonoidal.δ_of_cartesianMonoidalCategory, prodComparison_algSpec_left]; rfl))
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ε_algSpec_left : (LaxMonoidal.ε (algSpec R)).left = 𝟙 (Spec R) := rfl
-/--
-lemma `η_algSpec_left` / 引理 `η_algSpec_left`
-
-English:
-lemma η_algSpec_left
-  statement: (OplaxMonoidal.η (algSpec R)).left = 𝟙 (Spec R)
-  proof: rfl
-
-中文:
-引理 η_algSpec_left
-  结论: (反松弛幺半群.η (algSpec R)).left = 𝟙 (Spec R)
-  证明: rfl
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma η_algSpec_left : (OplaxMonoidal.η (algSpec R)).left = 𝟙 (Spec R) := rfl
-
-/--
-lemma `δ_algSpec_left` / 引理 `δ_algSpec_left`
-
-English:
-lemma δ_algSpec_left
-  given: (X Y : (CommAlgCat R)ᵒᵖ)
-  proof: rfl
-
-中文:
-引理 δ_algSpec_left
-  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
-  证明: rfl
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma δ_algSpec_left (X Y : (CommAlgCat R)ᵒᵖ) :
     (OplaxMonoidal.δ (algSpec R) X Y).left = (pullbackSpecIso R X.unop Y.unop).inv := rfl
-
-/--
-lemma `μ_algSpec_left` / 引理 `μ_algSpec_left`
-
-English:
-lemma μ_algSpec_left
-  given: (X Y : (CommAlgCat R)ᵒᵖ)
-  proof: rfl
-
-中文:
-引理 μ_algSpec_left
-  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
-  证明: rfl
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma μ_algSpec_left (X Y : (CommAlgCat R)ᵒᵖ) :
     (LaxMonoidal.μ (algSpec R) X Y).left = (pullbackSpecIso R X.unop Y.unop).hom := rfl
 
-/--
-Instance `algSpec.instFull` / 实例 `algSpec.instFull`
+/-- `Spec` is full on `R`-algebras. -/
+/-
+**AlgebraicGeometry.algSpec.instFull** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.algSpec`。
+形式化陈述：∀ {R : CommRingCat}, (AlgebraicGeometry.algSpec R).Full
+参数：AlgebraicGeometry.algSpec R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance algSpec.instFull
-  signature: : (algSpec R).Full
-  body: inferInstanceAs Functor.Full
-    (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
-
-中文:
-实例 algSpec.instFull
-  签名: : (algSpec R).满
-  定义体: inferInstanceAs Functor.Full
-    (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
-
-Depends on / 依赖: Functor, Functor.Full, Over.opEquivOpUnder, Over.post, Scheme, Scheme.Spec, commAlgCatEquivUnder, functor, inverse, op.functor, opEquivOpUnder
+--- 原说明 ---
+`Spec` is full on `R`-algebras.
 -/
 instance algSpec.instFull : (algSpec R).Full :=
-inferInstanceAs Functor.Full
+  inferInstanceAs <| Functor.Full <|
     (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 
-/--
-Instance `algSpec.instFaithful` / 实例 `algSpec.instFaithful`
+/-- `Spec` is faithful on `R`-algebras. -/
+/-
+**AlgebraicGeometry.algSpec.instFaithful** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeo
+metry.algSpec`。
+形式化陈述：∀ {R : CommRingCat}, (AlgebraicGeometry.algSpec R).Faithful
+参数：AlgebraicGeometry.algSpec R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance algSpec.instFaithful
-  signature: : (algSpec R).Faithful
-  body: inferInstanceAs Functor.Faithful
-    (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
-
-中文:
-实例 algSpec.instFaithful
-  签名: : (algSpec R).忠实
-  定义体: inferInstanceAs Functor.Faithful
-    (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful, Over.opEquivOpUnder, Over.post, Scheme, Scheme.Spec, commAlgCatEquivUnder, functor, inverse, op.functor, opEquivOpUnder
+--- 原说明 ---
+`Spec` is faithful on `R`-algebras.
 -/
 instance algSpec.instFaithful : (algSpec R).Faithful :=
-inferInstanceAs Functor.Faithful
+  inferInstanceAs <| Functor.Faithful <|
     (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 
-/--
-Definition of `algSpec.fullyFaithful` / `algSpec.fullyFaithful` 的定义
+/-- `Spec` is fully faithful on `R`-algebras, with inverse `Gamma`. -/
+/-
+**AlgebraicGeometry.algSpec.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGe
+ometry.algSpec`。
+形式化陈述：{R : CommRingCat} → (AlgebraicGeometry.algSpec R).FullyFaithful
+参数：AlgebraicGeometry.algSpec R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algSpec.fullyFaithful
-  signature: : (algSpec R).FullyFaithful
-  body: ((commAlgCatEquivUnder R).op.trans (Over.opEquivOpUnder R).symm).fullyFaithfulFunctor.comp
-    Spec.fullyFaithful.over _
-
-中文:
-定义 algSpec.fullyFaithful
-  签名: : (algSpec R).满忠实
-  定义体: ((commAlgCatEquivUnder R).op.trans (Over.opEquivOpUnder R).symm).fullyFaithfulFunctor.comp
-    Spec.fullyFaithful.over _
-
-Depends on / 依赖: Over.opEquivOpUnder, Spec.fullyFaithful.over, commAlgCatEquivUnder, fullyFaithful, fullyFaithfulFunctor, fullyFaithfulFunctor.comp, op.trans, opEquivOpUnder
+--- 原说明 ---
+`Spec` is fully faithful on `R`-algebras, with inverse `Gamma`.
 -/
 def algSpec.fullyFaithful : (algSpec R).FullyFaithful :=
-((commAlgCatEquivUnder R).op.trans (Over.opEquivOpUnder R).symm).fullyFaithfulFunctor.comp
+  ((commAlgCatEquivUnder R).op.trans (Over.opEquivOpUnder R).symm).fullyFaithfulFunctor.comp <|
     Spec.fullyFaithful.over _
 
 variable (R) in
-/--
-Definition of `bialgSpec` / `bialgSpec` 的定义
+/-- `Spec` as a functor from `R`-bialgebras to monoid schemes over `Spec R`. -/
+/-
+**AlgebraicGeometry.bialgSpec** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：bialgSpec : (CommBialgCat R)ᵒᵖ ⥤ Mon (Over <| Spec R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation bialgSpec
-  signature: : (CommBialgCat R)ᵒᵖ ⥤ Mon (Over <| Spec R)
-  body: (commBialgCatEquivComonCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapMon
-
-中文:
-缩写 bialgSpec
-  签名: : (交换Bialg范畴 R)ᵒᵖ ⥤ 幺半群 (Over <| Spec R)
-  定义体: (commBialgCatEquivComonCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapMon
-
-Depends on / 依赖: algSpec, commBialgCatEquivComonCommAlgCat, functor, functor.leftOp, leftOp, mapMon
+--- 原说明 ---
+`Spec` as a functor from `R`-bialgebras to monoid schemes over `Spec R`.
 -/
 abbrev bialgSpec : (CommBialgCat R)ᵒᵖ ⥤ Mon (Over <| Spec R) :=
   (commBialgCatEquivComonCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapMon
 
-/--
-Instance `bialgSpec.instFull` / 实例 `bialgSpec.instFull`
+/-- `Spec` is full on `R`-bialgebras. -/
+/-
+**AlgebraicGeometry.bialgSpec.instFull** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try.bialgSpec`。
+形式化陈述：∀ {R : CommRingCat}, (AlgebraicGeometry.bialgSpec R).Full
+参数：AlgebraicGeometry.bialgSpec R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Full.comp`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.Full.mapMon`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {D : Type u
+₂}   [inst_2 : CategoryT…
+· 使用定理 `AlgebraicGeometry.algSpec.instFull`：∀ {R : CommRingCat}, (AlgebraicGeome
+try.algSpec R).Full
+· 使用定理 `AlgebraicGeometry.algSpec.instFaithful`：∀ {R : CommRingCat}, (AlgebraicG
+eometry.algSpec R).Faithful
 
-English:
-instance bialgSpec.instFull
-  signature: : (bialgSpec R).Full
-  body: inferInstance
-
-中文:
-实例 bialgSpec.instFull
-  签名: : (bialgSpec R).满
-  定义体: inferInstance
+--- 原说明 ---
+`Spec` is full on `R`-bialgebras.
 -/
 instance bialgSpec.instFull : (bialgSpec R).Full := inferInstance
 
-/--
-Instance `bialgSpec.instFaithful` / 实例 `bialgSpec.instFaithful`
+/-- `Spec` is faithful on `R`-bialgebras. -/
+/-
+**AlgebraicGeometry.bialgSpec.instFaithful** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry.bialgSpec`。
+形式化陈述：∀ {R : CommRingCat}, (AlgebraicGeometry.bialgSpec R).Faithful
+参数：AlgebraicGeometry.bialgSpec R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.comp`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.Faithful.mapMon`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {D : Ty
+pe u₂}   [inst_2 : CategoryT…
+· 使用定理 `AlgebraicGeometry.algSpec.instFaithful`：∀ {R : CommRingCat}, (AlgebraicG
+eometry.algSpec R).Faithful
 
-English:
-instance bialgSpec.instFaithful
-  signature: : (bialgSpec R).Faithful
-  body: inferInstance
-
-中文:
-实例 bialgSpec.instFaithful
-  签名: : (bialgSpec R).忠实
-  定义体: inferInstance
+--- 原说明 ---
+`Spec` is faithful on `R`-bialgebras.
 -/
 instance bialgSpec.instFaithful : (bialgSpec R).Faithful := inferInstance
 
-/--
-Definition of `bialgSpec.fullyFaithful` / `bialgSpec.fullyFaithful` 的定义
+/-- `Spec` is fully faithful on `R`-bialgebras, with inverse `Gamma`. -/
+/-
+**AlgebraicGeometry.bialgSpec.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `Algebraic
+Geometry.bialgSpec`。
+形式化陈述：{R : CommRingCat} → (AlgebraicGeometry.bialgSpec R).FullyFaithful
+参数：AlgebraicGeometry.bialgSpec R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bialgSpec.fullyFaithful
-  signature: : (bialgSpec R).FullyFaithful
-  body: (commBialgCatEquivComonCommAlgCat R).fullyFaithfulFunctor.leftOp.comp algSpec.fullyFaithful.mapMon
-
-中文:
-定义 bialgSpec.fullyFaithful
-  签名: : (bialgSpec R).满忠实
-  定义体: (commBialgCatEquivComonCommAlgCat R).fullyFaithfulFunctor.leftOp.comp algSpec.fullyFaithful.mapMon
-
-Depends on / 依赖: algSpec, algSpec.fullyFaithful.mapMon, commBialgCatEquivComonCommAlgCat, fullyFaithful, fullyFaithfulFunctor, fullyFaithfulFunctor.leftOp.comp, leftOp, mapMon
+--- 原说明 ---
+`Spec` is fully faithful on `R`-bialgebras, with inverse `Gamma`.
 -/
 def bialgSpec.fullyFaithful : (bialgSpec R).FullyFaithful :=
   (commBialgCatEquivComonCommAlgCat R).fullyFaithfulFunctor.leftOp.comp algSpec.fullyFaithful.mapMon
 
 variable (R) in
-/--
-Definition of `hopfSpec` / `hopfSpec` 的定义
+/-- `Spec` as a functor from `R`-Hopf algebras to group schemes over `Spec R`. -/
+/-
+**AlgebraicGeometry.hopfSpec** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：hopfSpec : (CommHopfAlgCat R)ᵒᵖ ⥤ Grp (Over <| Spec R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation hopfSpec
-  signature: : (CommHopfAlgCat R)ᵒᵖ ⥤ Grp (Over <| Spec R)
-  body: (commHopfAlgCatEquivCogrpCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapGrp
-
-中文:
-缩写 hopfSpec
-  签名: : (交换HopfAlg范畴 R)ᵒᵖ ⥤ 群 (Over <| Spec R)
-  定义体: (commHopfAlgCatEquivCogrpCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapGrp
-
-Depends on / 依赖: algSpec, commHopfAlgCatEquivCogrpCommAlgCat, functor, functor.leftOp, leftOp, mapGrp
+--- 原说明 ---
+`Spec` as a functor from `R`-Hopf algebras to group schemes over `Spec R`.
 -/
 abbrev hopfSpec : (CommHopfAlgCat R)ᵒᵖ ⥤ Grp (Over <| Spec R) :=
   (commHopfAlgCatEquivCogrpCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapGrp
 
-/--
-Instance `hopfSpec.instFull` / 实例 `hopfSpec.instFull`
+/-- `Spec` is full on `R`-Hopf algebras. -/
+/-
+**AlgebraicGeometry.hopfSpec.instFull** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeomet
+ry.hopfSpec`。
+形式化陈述：∀ {R : CommRingCat}, (AlgebraicGeometry.hopfSpec R).Full
+参数：AlgebraicGeometry.hopfSpec R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Full.comp`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.Full.mapGrp`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   
+{D : Type u₂} [inst_2 : …
+· 使用定理 `AlgebraicGeometry.algSpec.instFull`：∀ {R : CommRingCat}, (AlgebraicGeome
+try.algSpec R).Full
+· 使用定理 `AlgebraicGeometry.algSpec.instFaithful`：∀ {R : CommRingCat}, (AlgebraicG
+eometry.algSpec R).Faithful
 
-English:
-instance hopfSpec.instFull
-  signature: : (hopfSpec R).Full
-  body: inferInstance
-
-中文:
-实例 hopfSpec.instFull
-  签名: : (hopfSpec R).满
-  定义体: inferInstance
+--- 原说明 ---
+`Spec` is full on `R`-Hopf algebras.
 -/
 instance hopfSpec.instFull : (hopfSpec R).Full := inferInstance
 
-/--
-Instance `hopfSpec.instFaithful` / 实例 `hopfSpec.instFaithful`
+/-- `Spec` is faithful on `R`-Hopf algebras. -/
+/-
+**AlgebraicGeometry.hopfSpec.instFaithful** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.hopfSpec`。
+形式化陈述：∀ {R : CommRingCat}, (AlgebraicGeometry.hopfSpec R).Faithful
+参数：AlgebraicGeometry.hopfSpec R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.comp`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.Faithful.mapGrp`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C
+]   {D : Type u₂} [inst_2 : …
+· 使用定理 `AlgebraicGeometry.algSpec.instFaithful`：∀ {R : CommRingCat}, (AlgebraicG
+eometry.algSpec R).Faithful
 
-English:
-instance hopfSpec.instFaithful
-  signature: : (hopfSpec R).Faithful
-  body: inferInstance
-
-中文:
-实例 hopfSpec.instFaithful
-  签名: : (hopfSpec R).忠实
-  定义体: inferInstance
+--- 原说明 ---
+`Spec` is faithful on `R`-Hopf algebras.
 -/
 instance hopfSpec.instFaithful : (hopfSpec R).Faithful := inferInstance
 
-/--
-Definition of `hopfSpec.fullyFaithful` / `hopfSpec.fullyFaithful` 的定义
+/-- `Spec` is fully faithful on `R`-Hopf algebras, with inverse `Gamma`. -/
+/-
+**AlgebraicGeometry.hopfSpec.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry.hopfSpec`。
+形式化陈述：{R : CommRingCat} → (AlgebraicGeometry.hopfSpec R).FullyFaithful
+参数：AlgebraicGeometry.hopfSpec R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hopfSpec.fullyFaithful
-  signature: : (hopfSpec R).FullyFaithful
-  body: (commHopfAlgCatEquivCogrpCommAlgCat R).fullyFaithfulFunctor.leftOp.comp
-    algSpec.fullyFaithful.mapGrp
-
-中文:
-定义 hopfSpec.fullyFaithful
-  签名: : (hopfSpec R).满忠实
-  定义体: (commHopfAlgCatEquivCogrpCommAlgCat R).fullyFaithfulFunctor.leftOp.comp
-    algSpec.fullyFaithful.mapGrp
-
-Depends on / 依赖: algSpec, algSpec.fullyFaithful.mapGrp, commHopfAlgCatEquivCogrpCommAlgCat, fullyFaithful, fullyFaithfulFunctor, fullyFaithfulFunctor.leftOp.comp, leftOp, mapGrp
+--- 原说明 ---
+`Spec` is fully faithful on `R`-Hopf algebras, with inverse `Gamma`.
 -/
 def hopfSpec.fullyFaithful : (hopfSpec R).FullyFaithful :=
   (commHopfAlgCatEquivCogrpCommAlgCat R).fullyFaithfulFunctor.leftOp.comp
@@ -593,84 +491,63 @@ variable {R A : CommRingCat.{u}}
 -- the diamond will be downgraded to the invariant about the `outParam` argument of `OverClass`
 -- being determined by the first two arguments being broken.
 @[simps -isSimp]
-/--
-Instance `specOverSpec` / 实例 `specOverSpec`
-
-English:
-instance specOverSpec
-  signature: [Algebra R A]
-  body: Spec.map CommRingCat.ofHom algebraMap ..
-
-中文:
-实例 specOverSpec
-  签名: [代数 R A]
-  定义体: Spec.map CommRingCat.ofHom algebraMap ..
-
-Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Spec.map, algebraMap
+/-
+**AlgebraicGeometry.specOverSpec** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：specOverSpec [Algebra R A] : (Spec A).Over (Spec R) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance specOverSpec [Algebra R A] : (Spec A).Over (Spec R) where
-hom := Spec.map CommRingCat.ofHom algebraMap ..
-
-/--
-Instance `locallyOfFiniteType_specOverSpec` / 实例 `locallyOfFiniteType_specOverSpec`
-
-English:
-instance locallyOfFiniteType_specOverSpec
-  signature: [Algebra R A] [Algebra.FiniteType R A]
-  body: by
-  rw [specOverSpec_over]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
-  simpa [RingHom.finiteType_algebraMap]
-
-中文:
-实例 locallyOfFiniteType_specOverSpec
-  签名: [代数 R A] [代数.有限型 R A]
-  定义体: by
-  rw [specOverSpec_over]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
-  simpa [RingHom.finiteType_algebraMap]
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.Spec_iff, LocallyOfFiniteType, RingHom, RingHom.finiteType_algebraMap, Spec_iff, finiteType_algebraMap, specOverSpec_over
+  hom := Spec.map <| CommRingCat.ofHom <| algebraMap ..
+/-
+**AlgebraicGeometry.locallyOfFiniteType_specOverSpec** 是 Mathlib 中的一个实例，位于命名空间 `
+AlgebraicGeometry`。
+形式化陈述：locallyOfFiniteType_specOverSpec [Algebra R A] [Algebra.FiniteType R A] : 
+LocallyOfFiniteType (Spec A ↘ Spec R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.specOverSpec_over`：∀ {R A : CommRingCat} [inst : Algeb
+ra ↑R ↑A],   AlgebraicGeometry.Spec A ↘ AlgebraicGeometry.Spec R =     Algebraic
+Geometry.Spec.map (CommRi…
+· 使用定理 `AlgebraicGeometry.HasRingHomProperty.Spec_iff`：Spec_iff {R S : CommRingC
+at.{u}} {φ : R ⟶ S} : P (Spec.map φ) ↔ Q φ.hom
+· 使用定理 `AlgebraicGeometry.instHasRingHomPropertyLocallyOfFiniteTypeFiniteType`：A
+lgebraicGeometry.HasRingHomProperty @AlgebraicGeometry.LocallyOfFiniteType fun {
+R S} [CommRing R] [CommRing S] =>   RingHom.FiniteType
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
 -/
 instance locallyOfFiniteType_specOverSpec [Algebra R A] [Algebra.FiniteType R A] :
     LocallyOfFiniteType (Spec A ↘ Spec R) := by
-  rw [specOverSpec_over]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
+  rw [specOverSpec_over, HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
   simpa [RingHom.finiteType_algebraMap]
 
 attribute [local simp] AlgHom.toUnder in
 @[simps! one]
-/--
-Instance `instMonObjSpecAsOverSpec` / 实例 `instMonObjSpecAsOverSpec`
-
-English:
-instance instMonObjSpecAsOverSpec
-  signature: [Bialgebra R A]
-  body: ((bialgSpec R).obj <| .op <| .of R A).mon
-
-中文:
-实例 instMonObjSpecAsOverSpec
-  签名: [双代数 R A]
-  定义体: ((bialgSpec R).obj <| .op <| .of R A).mon
-
-Depends on / 依赖: bialgSpec
+/-
+**AlgebraicGeometry.instMonObjSpecAsOverSpec** 是 Mathlib 中的一个实例，位于命名空间 `Algebrai
+cGeometry`。
+形式化陈述：instMonObjSpecAsOverSpec [Bialgebra R A] : MonObj ((Spec A).asOver (Spec R
+))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonObjSpecAsOverSpec [Bialgebra R A] : MonObj ((Spec A).asOver (Spec R)) :=
   ((bialgSpec R).obj <| .op <| .of R A).mon
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `one_spec_asOver_spec` / 引理 `one_spec_asOver_spec`
-
-English:
-lemma one_spec_asOver_spec
-  given: [Bialgebra R A]
-  proof: rfl
-
-中文:
-引理 one_spec_asOver_spec
-  条件: [双代数 R A]
-  证明: rfl
-
-Depends on / 依赖: asOver
+/-
+**AlgebraicGeometry.one_spec_asOver_spec** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeo
+metry`。
+形式化陈述：one_spec_asOver_spec [Bialgebra R A] : η[(Spec A).asOver (Spec R)] = LaxMo
+noidal.ε (algSpec R) ≫ Over.homMk (V
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_spec_asOver_spec [Bialgebra R A] :
     η[(Spec A).asOver (Spec R)] = LaxMonoidal.ε (algSpec R) ≫
@@ -678,36 +555,25 @@ lemma one_spec_asOver_spec [Bialgebra R A] :
         (Spec.map <| CommRingCat.ofHom <| Bialgebra.counitAlgHom R A)
           (by simp [specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
             CommRingCat.of_carrier]) := rfl
-
-/--
-lemma `one_spec_asOver_spec_left` / 引理 `one_spec_asOver_spec_left`
-
-English:
-lemma one_spec_asOver_spec_left
-  given: [Bialgebra R A]
-  proof: rfl
-
-中文:
-引理 one_spec_asOver_spec_left
-  条件: [双代数 R A]
-  证明: rfl
+/-
+**AlgebraicGeometry.one_spec_asOver_spec_left** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry`。
+形式化陈述：one_spec_asOver_spec_left [Bialgebra R A] : η[(Spec A).asOver (Spec R)].le
+ft = (Spec.map <| CommRingCat.ofHom <| Bialgebra.counitAlgHom R A)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_spec_asOver_spec_left [Bialgebra R A] :
     η[(Spec A).asOver (Spec R)].left =
       (Spec.map <| CommRingCat.ofHom <| Bialgebra.counitAlgHom R A) := rfl
-
-/--
-lemma `mul_spec_asOver_spec_left` / 引理 `mul_spec_asOver_spec_left`
-
-English:
-lemma mul_spec_asOver_spec_left
-  given: [Bialgebra R A]
-  proof: rfl
-
-中文:
-引理 mul_spec_asOver_spec_left
-  条件: [双代数 R A]
-  证明: rfl
+/-
+**AlgebraicGeometry.mul_spec_asOver_spec_left** 是 Mathlib 中的一个引理，位于命名空间 `Algebra
+icGeometry`。
+形式化陈述：mul_spec_asOver_spec_left [Bialgebra R A] : μ[(Spec A).asOver (Spec R)].le
+ft = (pullbackSpecIso R A A).hom ≫ Spec.map (CommRingCat.ofHom (Bialgebra.comulA
+lgHom R A))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mul_spec_asOver_spec_left [Bialgebra R A] :
     μ[(Spec A).asOver (Spec R)].left =
@@ -715,195 +581,158 @@ lemma mul_spec_asOver_spec_left [Bialgebra R A] :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `isCommMonObj_spec_asOver_spec` / 实例 `isCommMonObj_spec_asOver_spec`
-
-English:
-instance isCommMonObj_spec_asOver_spec
-  signature: [Bialgebra R A] [IsCocomm R A]
-  body: by
-    ext
-    have := congr((pullbackSpecIso R A A).hom ≫ ((bialgSpec R).map <| .op <| CommBialgCat.ofHom <|
- (Bialgebra.comm_comp_comulBialgHom (R := R) (A := A))).hom.left)
-    dsimp [commBialgCatEquivComonCommAlgCat] at this ⊢
-    have h₁ : (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) =
-      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
-        Algebra.TensorProduct.includeLeftRingHom := rfl
-    have h₂ : (Algebra.TensorProduct.includeLeftRingHom) =
-      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
-       (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) := rfl
-    convert! this using 1
-    simp only [mul_spec_asOver_spec_left, ← Category.assoc, algSpec, Equivalence.op_functor,
-      comp_obj, op_obj, commAlgCatEquivUnder_functor_obj, Over.opEquivOpUnder_inverse_obj,
-      CommRingCat.mkUnder_hom, Over.post_obj, Spec_obj, Over.mk_left, Over.mk_hom, Spec_map,
-      Quiver.Hom.unop_op, Spec.map_comp]
-    congr 1
-    rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [← Iso.inv_comp_eq]
-    ext
-    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₁]; rfl
-    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₂]; rfl
-
-中文:
-实例 isCommMonObj_spec_asOver_spec
-  签名: [双代数 R A] [是余comm R A]
-  定义体: by
-    ext
-    have := congr((pullbackSpecIso R A A).hom ≫ ((bialgSpec R).map <| .op <| CommBialgCat.ofHom <|
- (Bialgebra.comm_comp_comulBialgHom (R := R) (A := A))).hom.left)
-    dsimp [commBialgCatEquivComonCommAlgCat] at this ⊢
-    have h₁ : (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) =
-      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
-        Algebra.TensorProduct.includeLeftRingHom := rfl
-    have h₂ : (Algebra.TensorProduct.includeLeftRingHom) =
-      (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
-       (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) := rfl
-    convert! this using 1
-    simp only [mul_spec_asOver_spec_left, ← Category.assoc, algSpec, Equivalence.op_functor,
-      comp_obj, op_obj, commAlgCatEquivUnder_functor_obj, Over.opEquivOpUnder_inverse_obj,
-      CommRingCat.mkUnder_hom, Over.post_obj, Spec_obj, Over.mk_left, Over.mk_hom, Spec_map,
-      Quiver.Hom.unop_op, Spec.map_comp]
-    congr 1
-    rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [← Iso.inv_comp_eq]
-    ext
-    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₁]; rfl
-    · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₂]; rfl
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.includeLeftRingHom, Algebra.TensorProduct.includeRight, Bialgebra, Bialgebra.Ten, Bialgebra.TensorProduct.comm, Bialgebra.comm_comp_comulBialgHom, CommBialgCat, CommBialgCat.ofHom, RingHomClass, RingHomClass.toRingHom, TensorProduct, bialgSpec, commBialgCatEquivComonCommAlgCat, comm_comp_comulBialgHom, hom.left, includeLeftRingHom, includeRight, otimes, pullbackSpecIso
+/-
+**AlgebraicGeometry.isCommMonObj_spec_asOver_spec** 是 Mathlib 中的一个实例，位于命名空间 `Alg
+ebraicGeometry`。
+形式化陈述：isCommMonObj_spec_asOver_spec [Bialgebra R A] [IsCocomm R A] : IsCommMonOb
+j ((Spec A).asOver (Spec R)) where mul_comm
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Over.OverMorphism.ext`：∀ {T : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} T] {X : T} {U V : CategoryTheory.Over X} {f g : U ⟶ V},  
+ CategoryTheory.Over.Hom.l…
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Bialgebra.comm_comp_comulBialgHom`：comm_comp_comulBialgHom [IsCocomm R A
+] : (TensorProduct.comm R A A).toBialgHom.comp (comulBialgHom R A) = comulBialgH
+om R A
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `BialgHomClass.toAlgHomClass`：∀ {R : Type u_1} {A : Type u_2} {B : Type u
+_3} {F : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Alg
+ebra R A] [inst_3…
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullbacks`：CategoryTheory.Limit
+s.HasPullbacks AlgebraicGeometry.Scheme
+· 使用定理 `CategoryTheory.Limits.hasPullback_symmetry`：hasPullback_symmetry [HasPul
+lback f g] : HasPullback g f
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgebraicGeometry.Spec.map_comp`：∀ {R S T : CommRingCat} (f : R ⟶ S) (g 
+: S ⟶ T),   AlgebraicGeometry.Spec.map (CategoryTheory.CategoryStruct.comp f g) 
+=     CategoryTheory.…
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_fst`：pullbackSymmetry_ho
+m_comp_fst [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.fst g f = p
+ullback.snd f g
+· 使用引理 `AlgebraicGeometry.pullbackSpecIso_inv_snd`：pullbackSpecIso_inv_snd : (pu
+llbackSpecIso R S T).inv ≫ pullback.snd _ _ = Spec.map (ofHom (R
+· 使用引理 `AlgebraicGeometry.pullbackSpecIso_inv_fst`：pullbackSpecIso_inv_fst : (pu
+llbackSpecIso R S T).inv ≫ pullback.fst _ _ = Spec.map (ofHom includeLeftRingHom
+)
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_snd`：pullbackSymmetry_ho
+m_comp_snd [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.snd g f = p
+ullback.fst f g
 -/
 instance isCommMonObj_spec_asOver_spec [Bialgebra R A] [IsCocomm R A] :
     IsCommMonObj ((Spec A).asOver (Spec R)) where
   mul_comm := by
     ext
     have := congr((pullbackSpecIso R A A).hom ≫ ((bialgSpec R).map <| .op <| CommBialgCat.ofHom <|
- (Bialgebra.comm_comp_comulBialgHom (R := R) (A := A))).hom.left)
+      $(Bialgebra.comm_comp_comulBialgHom (R := R) (A := A))).hom.left)
     dsimp [commBialgCatEquivComonCommAlgCat] at this ⊢
-    have h₁ : (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) =
+    have h₁ : (Algebra.TensorProduct.includeRight : A →ₐ[R] A ⊗[R] A) =
       (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
         Algebra.TensorProduct.includeLeftRingHom := rfl
     have h₂ : (Algebra.TensorProduct.includeLeftRingHom) =
       (RingHomClass.toRingHom (Bialgebra.TensorProduct.comm R A A)).comp
-       (Algebra.TensorProduct.includeRight : A ->ₐ[R] A otimes[R] A) := rfl
+       (Algebra.TensorProduct.includeRight : A →ₐ[R] A ⊗[R] A) := rfl
     convert! this using 1
     simp only [mul_spec_asOver_spec_left, ← Category.assoc, algSpec, Equivalence.op_functor,
       comp_obj, op_obj, commAlgCatEquivUnder_functor_obj, Over.opEquivOpUnder_inverse_obj,
       CommRingCat.mkUnder_hom, Over.post_obj, Spec_obj, Over.mk_left, Over.mk_hom, Spec_map,
       Quiver.Hom.unop_op, Spec.map_comp]
     congr 1
-    rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [← Iso.inv_comp_eq]
+    rw [← Iso.eq_comp_inv, Category.assoc, ← Iso.inv_comp_eq]
     ext
     · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₁]; rfl
     · simp [AlgHom.toUnder, specOverSpec, over, OverClass.hom, h₂]; rfl
-
-/--
-Instance `instGrpObjSpecAsOverSpec` / 实例 `instGrpObjSpecAsOverSpec`
-
-English:
-instance instGrpObjSpecAsOverSpec
-  signature: [HopfAlgebra R A]
-  body: instMonObjSpecAsOverSpec
-  __ := ((hopfSpec R).obj <| .op <| .of R A).grp
-
-中文:
-实例 instGrpObjSpecAsOverSpec
-  签名: [Hopf代数 R A]
-  定义体: instMonObjSpecAsOverSpec
-  __ := ((hopfSpec R).obj <| .op <| .of R A).grp
-
-Depends on / 依赖: instMonObjSpecAsOverSpec
+/-
+**AlgebraicGeometry.instGrpObjSpecAsOverSpec** 是 Mathlib 中的一个实例，位于命名空间 `Algebrai
+cGeometry`。
+形式化陈述：instGrpObjSpecAsOverSpec [HopfAlgebra R A] : GrpObj ((Spec A).asOver (Spec
+ R)) where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instGrpObjSpecAsOverSpec [HopfAlgebra R A] : GrpObj ((Spec A).asOver (Spec R)) where
   __ := instMonObjSpecAsOverSpec
   __ := ((hopfSpec R).obj <| .op <| .of R A).grp
-
-/--
-Instance `instCommGrpObjSpecAsOverSpec` / 实例 `instCommGrpObjSpecAsOverSpec`
-
-English:
-instance instCommGrpObjSpecAsOverSpec
-  signature: [HopfAlgebra R A] [IsCocomm R A]
-
-中文:
-实例 instCommGrpObjSpecAsOverSpec
-  签名: [Hopf代数 R A] [是余comm R A]
+/-
+**AlgebraicGeometry.instCommGrpObjSpecAsOverSpec** 是 Mathlib 中的一个定义，位于命名空间 `Alge
+braicGeometry`。
+形式化陈述：{R A : CommRingCat} →   [inst : HopfAlgebra ↑R ↑A] →     [Coalgebra.IsCoco
+mm ↑R ↑A] →       CategoryTheory.CommGrpObj ((AlgebraicGeometry.Spec A).asOver (
+AlgebraicGeometry.Spec R))
+参数：(AlgebraicGeometry.Spec A).asOver (AlgebraicGeometry.Spec R)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommGrpObjSpecAsOverSpec [HopfAlgebra R A] [IsCocomm R A] :
     CommGrpObj ((Spec A).asOver (Spec R)) where
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T]
-    (f : S ->ₐ[R] T) : (Spec.map (CommRingCat.ofHom f.toRingHom)).IsOver (Spec (.of R)) where
+    (f : S →ₐ[R] T) : (Spec.map (CommRingCat.ofHom f.toRingHom)).IsOver (Spec (.of R)) where
   comp_over := by simp [specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Spec.mapMulEquiv` / `Spec.mapMulEquiv` 的定义
+/-- `Spec.map` as a `MulEquiv` on hom-sets. -/
+/-
+**AlgebraicGeometry.Spec.mapMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y.Spec`。
+形式化陈述：{R S T : Type u} →   [inst : CommRing R] →     [inst_1 : CommRing S] →    
+   [inst_2 : CommRing T] →         [inst_3 : Bialgebra R S] →           [inst_4 
+: Algebra R T] →             WithConv (S →ₐ[R] T) ≃*               ((AlgebraicGe
+ometry.Spec (CommRingCat.of T)).asOver (AlgebraicGeometry.Spec (CommRingCat.of R
+)) ⟶                 (AlgebraicGeometry.Spec (CommRingCat.of S)).asOver (Algebra
+icGeometry.Spec (CommRingCat.of R)))
+参数：S →ₐ[R] T；(AlgebraicGeometry.Spec (CommRingCat.of T)).asOver (AlgebraicGeomet
+ry.Spec (CommRingCat.of R)) ⟶                 (AlgebraicGeometry.Spec (CommRingC
+at.of S)).asOver (AlgebraicGeometry.Spec (CommRingCat.of R))。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Spec.mapMulEquiv
-  signature: {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] [Bialgebra R S]
-  body: (Spec.map (CommRingCat.ofHom f.ofConv.toRingHom)).asOver _
-  invFun f := ⟨(Spec.preimage f.left).hom, by
-    suffices CommRingCat.ofHom (algebraMap R S) ≫ Spec.preimage f.left =
-      CommRingCat.ofHom (algebraMap R T) from fun r => congr($this r)
-    apply Spec.map_injective
-    simpa [-comp_over] using! f.w⟩
-  left_inv f := by
-    apply WithConv.ofConv_injective
-    apply AlgHom.coe_ringHom_injective
-    simp
-  right_inv f := by ext1; simp
-  map_mul' f g := by
-    ext1
-    dsimp [AlgHom.convMul_def, AlgHom.comp_toRingHom, Hom.mul_def]
-    simp only [← Category.assoc, Spec.map_comp, mul_spec_asOver_spec_left]
-    congr 1
-    rw [← Iso.comp_inv_eq]
-    ext
-    all_goals
-    · simp only [specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-      ← AlgHom.comp_toRingHom, Category.assoc, pullbackSpecIso_inv_fst, pullbackSpecIso_inv_snd,
-      limit.lift_π, PullbackCone.mk_pt, PullbackCone.mk_π_app]
-      congr 3
-      ext; simp
-
-中文:
-定义 Spec.mapMulEquiv
-  签名: {R S T : 类型u} [交换环 R] [交换环 S] [交换环 T] [双代数 R S]
-  定义体: (Spec.map (CommRingCat.ofHom f.ofConv.toRingHom)).asOver _
-  invFun f := ⟨(Spec.preimage f.left).hom, by
-    suffices CommRingCat.ofHom (algebraMap R S) ≫ Spec.preimage f.left =
-      CommRingCat.ofHom (algebraMap R T) from fun r => congr($this r)
-    apply Spec.map_injective
-    simpa [-comp_over] using! f.w⟩
-  left_inv f := by
-    apply WithConv.ofConv_injective
-    apply AlgHom.coe_ringHom_injective
-    simp
-  right_inv f := by ext1; simp
-  map_mul' f g := by
-    ext1
-    dsimp [AlgHom.convMul_def, AlgHom.comp_toRingHom, Hom.mul_def]
-    simp only [← Category.assoc, Spec.map_comp, mul_spec_asOver_spec_left]
-    congr 1
-    rw [← Iso.comp_inv_eq]
-    ext
-    all_goals
-    · simp only [specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-      ← AlgHom.comp_toRingHom, Category.assoc, pullbackSpecIso_inv_fst, pullbackSpecIso_inv_snd,
-      limit.lift_π, PullbackCone.mk_pt, PullbackCone.mk_π_app]
-      congr 3
-      ext; simp
-
-Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Spec.map, asOver, f.ofConv.toRingHom, ofConv, toRingHom
+--- 原说明 ---
+`Spec.map` as a `MulEquiv` on hom-sets.
 -/
 def Spec.mapMulEquiv {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] [Bialgebra R S]
     [Algebra R T] :
-    WithConv (S ->ₐ[R] T) ≃*
+    WithConv (S →ₐ[R] T) ≃*
       ((Spec (.of T)).asOver (Spec (.of R)) ⟶ (Spec (.of S)).asOver (Spec (.of R))) where
   toFun f := (Spec.map (CommRingCat.ofHom f.ofConv.toRingHom)).asOver _
   invFun f := ⟨(Spec.preimage f.left).hom, by
     suffices CommRingCat.ofHom (algebraMap R S) ≫ Spec.preimage f.left =
-      CommRingCat.ofHom (algebraMap R T) from fun r => congr($this r)
+      CommRingCat.ofHom (algebraMap R T) from fun r ↦ congr($this r)
     apply Spec.map_injective
     simpa [-comp_over] using! f.w⟩
   left_inv f := by
@@ -925,26 +754,16 @@ def Spec.mapMulEquiv {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] [Bi
       congr 3
       ext; simp
 
-/--
-Definition of `algΓAlgSpecAdjunction` / `algΓAlgSpecAdjunction` 的定义
+/-- The adjunction between `Spec` and `Γ` as functors between commutative `R`-algebras and
+schemes over `Spec R`. -/
+/-
+**AlgebraicGeometry.alg** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algΓAlgSpecAdjunction
-  signature: (R : CommRingCat.{u})
-  body: by
-  have overAdjunction := Over.postAdjunctionRight (Y := .op <| R) ΓSpec.adjunction
-  have overEquivAlg := ((Over.opEquivOpUnder R).trans (commAlgCatEquivUnder R).op.symm).toAdjunction
-  simpa using! overAdjunction.comp overEquivAlg
-
-中文:
-定义 algΓAlgSpecAdjunction
-  签名: (R : 交换环范畴.{u})
-  定义体: by
-  have overAdjunction := Over.postAdjunctionRight (Y := .op <| R) ΓSpec.adjunction
-  have overEquivAlg := ((Over.opEquivOpUnder R).trans (commAlgCatEquivUnder R).op.symm).toAdjunction
-  simpa using! overAdjunction.comp overEquivAlg
-
-Depends on / 依赖: Over.opEquivOpUnder, Over.postAdjunctionRight, Spec.adjunction, adjunction, commAlgCatEquivUnder, op.symm, opEquivOpUnder, overAdjunction, overAdjunction.comp, overEquivAlg, postAdjunctionRight, toAdjunction
+--- 原说明 ---
+The adjunction between `Spec` and `Γ` as functors between commutative `R`-algebr
+as and
+schemes over `Spec R`.
 -/
 def algΓAlgSpecAdjunction (R : CommRingCat.{u}) : algΓ R ⊣ algSpec R := by
   have overAdjunction := Over.postAdjunctionRight (Y := .op <| R) ΓSpec.adjunction
@@ -956,39 +775,25 @@ end universe_polymorphic
 section universe_monomorphic
 variable {R A : CommRingCat.{u}} {X M G : Scheme.{u}}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The global sections of an affine scheme over `Spec R` are a `R`-algebra. -/
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [X.Over
-  signature: (Spec R)] [IsAffine X] : Algebra R Γ(X, ⊤)
-  body: ((commAlgCatEquivUnder R).inverse.obj <|
-    .mk (Spec.fullyFaithful.preimage <| X.isoSpec.inv ≫ X ↘ Spec R).unop).algebra
-
-中文:
-实例 [X.Over
-  签名: (Spec R)] [是仿射 X] : 代数 R Γ(X, ⊤)
-  定义体: ((commAlgCatEquivUnder R).inverse.obj <|
-    .mk (Spec.fullyFaithful.preimage <| X.isoSpec.inv ≫ X ↘ Spec R).unop).algebra
-
-Depends on / 依赖: Spec.fullyFaithful.preimage, X.isoSpec.inv, algebra, commAlgCatEquivUnder, fullyFaithful, inverse, inverse.obj, isoSpec, preimage
+--- 原说明 ---
+The global sections of an affine scheme over `Spec R` are a `R`-algebra.
 -/
 instance [X.Over (Spec R)] [IsAffine X] : Algebra R Γ(X, ⊤) :=
   ((commAlgCatEquivUnder R).inverse.obj <|
     .mk (Spec.fullyFaithful.preimage <| X.isoSpec.inv ≫ X ↘ Spec R).unop).algebra
-
-/--
-lemma `algebraMap_presheafObj` / 引理 `algebraMap_presheafObj`
-
-English:
-lemma algebraMap_presheafObj
-  given: [X.Over (Spec R)] [IsAffine X]
-  proof: rfl
-
-中文:
-引理 algebraMap_presheafObj
-  条件: [X.Over (Spec R)] [是仿射 X]
-  证明: rfl
+/-
+**AlgebraicGeometry.algebraMap_presheafObj** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicG
+eometry`。
+形式化陈述：algebraMap_presheafObj [X.Over (Spec R)] [IsAffine X] : algebraMap R Γ(X, 
+⊤) = (Spec.fullyFaithful.preimage <| X.isoSpec.inv ≫ X ↘ Spec R).unop.hom
+参数：Spec R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma algebraMap_presheafObj [X.Over (Spec R)] [IsAffine X] :
     algebraMap R Γ(X, ⊤) = (Spec.fullyFaithful.preimage <| X.isoSpec.inv ≫ X ↘ Spec R).unop.hom :=
@@ -996,168 +801,138 @@ lemma algebraMap_presheafObj [X.Over (Spec R)] [IsAffine X] :
 
 attribute [local simp] specOverSpec_over algebraMap_presheafObj in
 attribute [-simp] Hom.isOver_iff in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [X.Over
-  signature: (Spec R)] [IsAffine X] : X.toSpecΓ.IsOver (Spec R) where
-
-中文:
-实例 [X.Over
-  签名: (Spec R)] [是仿射 X] : X.toSpecΓ.是Over (Spec R) where
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [X.Over (Spec R)] [IsAffine X] : X.toSpecΓ.IsOver (Spec R) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [X.Over
-  signature: (Spec R)] [IsAffine X] : X.isoSpec.hom.IsOver (Spec R)
-  body: inferInstanceAs (X.toSpecΓ.IsOver (Spec R))
-
-中文:
-实例 [X.Over
-  签名: (Spec R)] [是仿射 X] : X.isoSpec.hom.是Over (Spec R)
-  定义体: inferInstanceAs (X.toSpecΓ.IsOver (Spec R))
-
-Depends on / 依赖: IsOver, X.toSpec
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [X.Over (Spec R)] [IsAffine X] : X.isoSpec.hom.IsOver (Spec R) :=
   inferInstanceAs (X.toSpecΓ.IsOver (Spec R))
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The global sections of an affine monoid scheme over `Spec R` are a `R`-bialgebra. -/
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [M.Over
-  signature: (Spec R)] [MonObj (M.asOver (Spec R))] [IsAffine M] :
-  body: by
-  have : MonObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(M, ⊤)) :=
-.ofIso M.isoSpec.asOver (Spec R)
-  have : MonObj (op <| CommAlgCat.of R Γ(M, ⊤)) := algSpec.fullyFaithful.monObj _
-  exact ((commBialgCatEquivComonCommAlgCat R).inverse.obj <|
-.op .mk .op .of R Γ(M, ⊤)).bialgebra
-
-中文:
-实例 [M.Over
-  签名: (Spec R)] [MonObj (M.asOver (Spec R))] [是仿射 M] :
-  定义体: by
-  have : MonObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(M, ⊤)) :=
-.ofIso M.isoSpec.asOver (Spec R)
-  have : MonObj (op <| CommAlgCat.of R Γ(M, ⊤)) := algSpec.fullyFaithful.monObj _
-  exact ((commBialgCatEquivComonCommAlgCat R).inverse.obj <|
-.op .mk .op .of R Γ(M, ⊤)).bialgebra
-
-Depends on / 依赖: CommAlgCat, CommAlgCat.of, M.isoSpec.asOver, MonObj, algSpec, algSpec.fullyFaithful.monObj, asOver, bialgebra, commBialgCatEquivComonCommAlgCat, fullyFaithful, inverse, inverse.obj, isoSpec, monObj
+--- 原说明 ---
+The global sections of an affine monoid scheme over `Spec R` are a `R`-bialgebra
+.
 -/
 instance [M.Over (Spec R)] [MonObj (M.asOver (Spec R))] [IsAffine M] :
     Bialgebra R Γ(M, ⊤) := by
   have : MonObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(M, ⊤)) :=
-.ofIso M.isoSpec.asOver (Spec R)
+    .ofIso <| M.isoSpec.asOver (Spec R)
   have : MonObj (op <| CommAlgCat.of R Γ(M, ⊤)) := algSpec.fullyFaithful.monObj _
   exact ((commBialgCatEquivComonCommAlgCat R).inverse.obj <|
-.op .mk .op .of R Γ(M, ⊤)).bialgebra
+    .op <| .mk <| .op <| .of R Γ(M, ⊤)).bialgebra
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The global sections of an affine group scheme over `Spec R` are a `R`-Hopf algebra. -/
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [G.Over
-  signature: (Spec R)] [GrpObj (G.asOver (Spec R))] [IsAffine G] :
-  body: by
-  have : GrpObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(G, ⊤)) :=
-.ofIso G.isoSpec.asOver (Spec R)
-  have : GrpObj (op <| CommAlgCat.of R Γ(G, ⊤)) := algSpec.fullyFaithful.grpObj _
-  exact ((commHopfAlgCatEquivCogrpCommAlgCat R).inverse.obj <|
-.op .mk .op .of R Γ(G, ⊤)).hopfAlgebra
-
-中文:
-实例 [G.Over
-  签名: (Spec R)] [GrpObj (G.asOver (Spec R))] [是仿射 G] :
-  定义体: by
-  have : GrpObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(G, ⊤)) :=
-.ofIso G.isoSpec.asOver (Spec R)
-  have : GrpObj (op <| CommAlgCat.of R Γ(G, ⊤)) := algSpec.fullyFaithful.grpObj _
-  exact ((commHopfAlgCatEquivCogrpCommAlgCat R).inverse.obj <|
-.op .mk .op .of R Γ(G, ⊤)).hopfAlgebra
-
-Depends on / 依赖: CommAlgCat, CommAlgCat.of, G.isoSpec.asOver, GrpObj, algSpec, algSpec.fullyFaithful.grpObj, asOver, commHopfAlgCatEquivCogrpCommAlgCat, fullyFaithful, grpObj, hopfAlgebra, inverse, inverse.obj, isoSpec
+--- 原说明 ---
+The global sections of an affine group scheme over `Spec R` are a `R`-Hopf algeb
+ra.
 -/
 instance [G.Over (Spec R)] [GrpObj (G.asOver (Spec R))] [IsAffine G] :
     HopfAlgebra R Γ(G, ⊤) := by
   have : GrpObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(G, ⊤)) :=
-.ofIso G.isoSpec.asOver (Spec R)
+    .ofIso <| G.isoSpec.asOver (Spec R)
   have : GrpObj (op <| CommAlgCat.of R Γ(G, ⊤)) := algSpec.fullyFaithful.grpObj _
   exact ((commHopfAlgCatEquivCogrpCommAlgCat R).inverse.obj <|
-.op .mk .op .of R Γ(G, ⊤)).hopfAlgebra
+    .op <| .mk <| .op <| .of R Γ(G, ⊤)).hopfAlgebra
 
 variable {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] [Algebra R S]
 
 open TensorProduct Algebra.TensorProduct CommRingCat RingHomClass
 
 variable (R S T) in
-/--
-Definition of `pullbackSpecIso'` / `pullbackSpecIso'` 的定义
+/-- The isomorphism between the fiber product of two schemes `Spec S` and `Spec T`
+over a scheme `Spec R` and the `Spec` of the tensor product `S ⊗[R] T`.
 
-English:
-definition pullbackSpecIso'
-  signature: [Algebra R T]
-  body: pullbackSpecIso ..
+This is a version of `pullbackSpecIso` stated in terms of `specOverSpec`.
+TODO: Unify with `pullbackSpecIso` once `OverClass` is refactored to not bundle the morphism. -/
+/-
+**AlgebraicGeometry.pullbackSpecIso'** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y`。
+形式化陈述：pullbackSpecIso' [Algebra R T] : pullback (Spec (.of S) ↘ Spec (.of R)) (S
+pec (.of T) ↘ Spec (.of R)) ≅ Spec (.of <| S otimes[R] T)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 pullbackSpecIso'
-  签名: [代数 R T]
-  定义体: pullbackSpecIso ..
+--- 原说明 ---
+The isomorphism between the fiber product of two schemes `Spec S` and `Spec T`
+over a scheme `Spec R` and the `Spec` of the tensor product `S ⊗[R] T`.
 
-Depends on / 依赖: pullbackSpecIso
+This is a version of `pullbackSpecIso` stated in terms of `specOverSpec`.
+TODO: Unify with `pullbackSpecIso` once `OverClass` is refactored to not bundle 
+the morphism.
 -/
 def pullbackSpecIso' [Algebra R T] :
     pullback (Spec (.of S) ↘ Spec (.of R)) (Spec (.of T) ↘ Spec (.of R)) ≅
-      Spec (.of <| S otimes[R] T) := pullbackSpecIso ..
+      Spec (.of <| S ⊗[R] T) := pullbackSpecIso ..
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `pullbackSpecIso'_symmetry` / 引理 `pullbackSpecIso'_symmetry`
-
-English:
-lemma pullbackSpecIso'_symmetry
-  given: [Algebra R T]
-  proof: by
-  simp_rw [Iso.trans_hom, ← Iso.eq_comp_inv, Category.assoc, ← Iso.inv_comp_eq]
-  ext
-  · have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
-      Algebra.TensorProduct.includeLeftRingHom =
-      RingHomClass.toRingHom Algebra.TensorProduct.includeRight := rfl
-    rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_fst]
-    simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_snd, Category.assoc,
-      pullbackSpecIso_inv_fst, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
-  have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
-      (RingHomClass.toRingHom Algebra.TensorProduct.includeRight) =
-      Algebra.TensorProduct.includeLeftRingHom := rfl
-  rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_snd]
-  simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_fst, Category.assoc,
-    pullbackSpecIso_inv_snd, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
-
-中文:
-引理 pullbackSpecIso'_symmetry
-  条件: [代数 R T]
-  证明: by
-  simp_rw [Iso.trans_hom, ← Iso.eq_comp_inv, Category.assoc, ← Iso.inv_comp_eq]
-  ext
-  · have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
-      Algebra.TensorProduct.includeLeftRingHom =
-      RingHomClass.toRingHom Algebra.TensorProduct.includeRight := rfl
-    rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_fst]
-    simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_snd, Category.assoc,
-      pullbackSpecIso_inv_fst, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
-  have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
-      (RingHomClass.toRingHom Algebra.TensorProduct.includeRight) =
-      Algebra.TensorProduct.includeLeftRingHom := rfl
-  rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_snd]
-  simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_fst, Category.assoc,
-    pullbackSpecIso_inv_snd, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
+/-
+**AlgebraicGeometry.pullbackSpecIso'_symmetry** 是 Mathlib 中的一个定理，位于命名空间 `Algebra
+icGeometry`。
+形式化陈述：∀ {R S T : Type u} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Com
+mRing T] [inst_3 : Algebra R S]   [inst_4 : Algebra R T],   (CategoryTheory.Limi
+ts.pullbackSymmetry           (AlgebraicGeometry.Spec (CommRingCat.of T) ↘ Algeb
+raicGeometry.Spec (CommRingCat.of R))           (AlgebraicGeometry.Spec (CommRin
+gCat.of S) ↘ AlgebraicGeometry.Spec (CommRingCat.of R)) ≪≫         AlgebraicGeom
+etry.pullbackSpecIso' R S T).hom =     CategoryTheory.CategoryStruct.comp (Algeb
+raicGeometry.pullbackSpecIso' R T S).hom       (AlgebraicGeometry.Spec.map (Comm
+RingCat.ofHom ↑(Algebra.TensorProduct.comm R S T)))
+参数：CategoryTheory.Limits.pullbackSymmetry           (AlgebraicGeometry.Spec (Com
+mRingCat.of T) ↘ AlgebraicGeometry.Spec (CommRingCat.of R))           (Algebraic
+Geometry.Spec (CommRingCat.of S) ↘ AlgebraicGeometry.Spec (CommRingCat.of R)) ≪≫
+         AlgebraicGeometry.pullbackSpecIso' R S T；AlgebraicGeometry.pullbackSpec
+Iso' R T S；AlgebraicGeometry.Spec.map (CommRingCat.ofHom ↑(Algebra.TensorProduct
+.comm R S T))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.Pullback.instHasPullback`：∀ {X Y Z : AlgebraicG
+eometry.Scheme} (f : X ⟶ Z) (g : Y ⟶ Z), CategoryTheory.Limits.HasPullback f g
+· 使用定理 `CategoryTheory.Limits.hasPullback_symmetry`：hasPullback_symmetry [HasPul
+lback f g] : HasPullback g f
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_fst`：pullbackSymmetry_ho
+m_comp_fst [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.fst g f = p
+ullback.snd f g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `AlgebraicGeometry.pullbackSpecIso_inv_snd`：pullbackSpecIso_inv_snd : (pu
+llbackSpecIso R S T).inv ≫ pullback.snd _ _ = Spec.map (ofHom (R
+· 使用引理 `AlgebraicGeometry.pullbackSpecIso_inv_fst`：pullbackSpecIso_inv_fst : (pu
+llbackSpecIso R S T).inv ≫ pullback.fst _ _ = Spec.map (ofHom includeLeftRingHom
+)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.pullbackSymmetry_hom_comp_snd`：pullbackSymmetry_ho
+m_comp_snd [HasPullback f g] : (pullbackSymmetry f g).hom ≫ pullback.snd g f = p
+ullback.fst f g
 -/
 lemma pullbackSpecIso'_symmetry [Algebra R T] :
     (pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom =
@@ -1168,40 +943,27 @@ lemma pullbackSpecIso'_symmetry [Algebra R T] :
   · have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
       Algebra.TensorProduct.includeLeftRingHom =
       RingHomClass.toRingHom Algebra.TensorProduct.includeRight := rfl
-    rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_fst]
+    rw [Category.assoc, pullbackSymmetry_hom_comp_fst]
     simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_snd, Category.assoc,
       pullbackSpecIso_inv_fst, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
   have : (RingHomClass.toRingHom (Algebra.TensorProduct.comm R S T)).comp
       (RingHomClass.toRingHom Algebra.TensorProduct.includeRight) =
       Algebra.TensorProduct.includeLeftRingHom := rfl
-  rw [Category.assoc]; rw [pullbackSymmetry_hom_comp_snd]
+  rw [Category.assoc, pullbackSymmetry_hom_comp_snd]
   simp only [pullbackSpecIso', specOverSpec_over, pullbackSpecIso_inv_fst, Category.assoc,
     pullbackSpecIso_inv_snd, ← Spec.map_comp, ← CommRingCat.ofHom_comp, this]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Algebra
-  signature: R T] :
-  body: by
-    rw [← cancel_epi (pullbackSymmetry .. ≪≫ pullbackSpecIso' ..).inv]; rw [Scheme.canonicallyOverPullback_over]; rw [Iso.inv_hom_id_assoc]; rw [Iso.trans_inv]; rw [Category.assoc]; rw [pullbackSymmetry_inv_comp_snd]
-    exact (pullbackSpecIso_inv_fst ..).symm
-
-中文:
-实例 [代数
-  签名: R T] :
-  定义体: by
-    rw [← cancel_epi (pullbackSymmetry .. ≪≫ pullbackSpecIso' ..).inv]; rw [Scheme.canonicallyOverPullback_over]; rw [Iso.inv_hom_id_assoc]; rw [Iso.trans_inv]; rw [Category.assoc]; rw [pullbackSymmetry_inv_comp_snd]
-    exact (pullbackSpecIso_inv_fst ..).symm
-
-Depends on / 依赖: Category, Category.assoc, Iso.inv_hom_id_assoc, Iso.trans_inv, Scheme, Scheme.canonicallyOverPullback_over, cancel_epi, canonicallyOverPullback_over, inv_hom_id_assoc, pullbackSpecIso, pullbackSpecIso_inv_fst, pullbackSymmetry, pullbackSymmetry_inv_comp_snd, trans_inv
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Algebra R T] :
     (pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom.IsOver (Spec (.of S)) where
   comp_over := by
-    rw [← cancel_epi (pullbackSymmetry .. ≪≫ pullbackSpecIso' ..).inv]; rw [Scheme.canonicallyOverPullback_over]; rw [Iso.inv_hom_id_assoc]; rw [Iso.trans_inv]; rw [Category.assoc]; rw [pullbackSymmetry_inv_comp_snd]
+    rw [← cancel_epi (pullbackSymmetry .. ≪≫ pullbackSpecIso' ..).inv,
+      Scheme.canonicallyOverPullback_over, Iso.inv_hom_id_assoc, Iso.trans_inv, Category.assoc,
+      pullbackSymmetry_inv_comp_snd]
     exact (pullbackSpecIso_inv_fst ..).symm
 
 set_option backward.defeqAttrib.useBackward true in
@@ -1211,57 +973,18 @@ set_option linter.flexible false in
 -- If this proof breaks because of a non-terminal `simp` in the future, it is likely that one can
 -- simply remove the following `erw`.
 variable (R S T) in
-/--
-lemma `μ_pullback_left_fst` / 引理 `μ_pullback_left_fst`
-
-English:
-lemma μ_pullback_left_fst
-  given: [Algebra R T]
-  proof: by
-  simp
-  ext <;> simp
-  · simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp,
-      Algebra.TensorProduct.mapRingHom_comp_includeLeftRingHom]
-    simp [specOverSpec_over]
-    erw [Over.tensorHom_left_fst_assoc]
-    simp [pullbackSpecIso']
-    rfl
-  · simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp,
-      Algebra.TensorProduct.mapRingHom_comp_includeRight]
-    simp [specOverSpec_over]
-    erw [Over.tensorHom_left_snd_assoc]
-    simp [pullbackSpecIso']
-    rfl
-
-中文:
-引理 μ_pullback_left_fst
-  条件: [代数 R T]
-  证明: by
-  simp
-  ext <;> simp
-  · simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp,
-      Algebra.TensorProduct.mapRingHom_comp_includeLeftRingHom]
-    simp [specOverSpec_over]
-    erw [Over.tensorHom_left_fst_assoc]
-    simp [pullbackSpecIso']
-    rfl
-  · simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp,
-      Algebra.TensorProduct.mapRingHom_comp_includeRight]
-    simp [specOverSpec_over]
-    erw [Over.tensorHom_left_snd_assoc]
-    simp [pullbackSpecIso']
-    rfl
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.mapRingHom_comp_includeLeftRingHom, Algebra.TensorProduct.mapRingHom_comp_includeRight, CommRingCat, CommRingCat.ofHom_comp, Over.tensorHom_left_fst_assoc, Over.tensorHom_left_snd_assoc, Spec.map_comp, TensorProduct, mapRingHom_comp_includeLeftRingHom, mapRingHom_comp_includeRight, map_comp, ofHom_comp, pullbackSpecIso, specOverSpec_over, tensorHom_left_fst_assoc, tensorHom_left_snd_assoc
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_pullback_left_fst [Algebra R T] :
     (LaxMonoidal.μ (Over.pullback (Spec.map (CommRingCat.ofHom (algebraMap R S))))
       (Over.mk (Spec.map (CommRingCat.ofHom (algebraMap R T))))
       (Over.mk (Spec.map (CommRingCat.ofHom (algebraMap R T))))).left ≫
         pullback.fst _ _ =
-    (((pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom.asOver (Spec (.of S)) otimesₘ
+    (((pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom.asOver (Spec (.of S)) ⊗ₘ
         ((pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom.asOver (Spec (.of S)))).left) ≫
-          (pullbackSpecIso S (S otimes[R] T) (S otimes[R] T)).hom ≫
+          (pullbackSpecIso S (S ⊗[R] T) (S ⊗[R] T)).hom ≫
             Spec.map (CommRingCat.ofHom (Algebra.TensorProduct.mapRingHom (algebraMap _ _)
               Algebra.TensorProduct.includeRight.toRingHom
               Algebra.TensorProduct.includeRight.toRingHom
@@ -1284,81 +1007,12 @@ lemma μ_pullback_left_fst [Algebra R T] :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Bialgebra
-  signature: R T] :
-  body: by
-    ext
-    rw [← cancel_mono (pullbackSpecIso' ..).inv]
-    ext
-    · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
-        pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-        AlgHom.toUnder, Under.homMk_right, Bialgebra.TensorProduct.counitAlgHom_def,
-        AlgHom.comp_toRingHom, RingHom.comp_assoc]
-    · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
-        pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-        AlgHom.toUnder, Under.homMk_right,
-        ← AlgHom.coe_restrictScalars R (Bialgebra.counitAlgHom S _), -AlgHom.coe_restrictScalars,
-        ← AlgHom.comp_toRingHom, Bialgebra.counitAlgHom_comp_includeRight]
-      simp [AlgHom.comp_toRingHom, Algebra.toRingHom_ofId]
-  mul_hom := by
-    ext
-    rw [← cancel_mono (pullbackSpecIso' ..).inv]
-    ext
-    · have : includeLeftRingHom = algebraMap S (S otimes[R] T) := rfl
-      simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over, ← Spec.map_comp,
-        ← CommRingCat.ofHom_comp, OverClass.asOver, mul_spec_asOver_spec_left, this, Hom.asOver,
-        OverClass.asOverHom, pullback.condition]
-      rfl
-    · convert! congr($(μ_pullback_left_fst R S T) ≫ (pullbackSpecIso R T T).hom ≫
-        Spec.map (CommRingCat.ofHom (Bialgebra.comulAlgHom R T).toRingHom)) using 1
-      · simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over,
-          OverClass.asOver, Hom.asOver, OverClass.asOverHom, mul_spec_asOver_spec_left]
-      · simp [pullbackSpecIso', specOverSpec_over, OverClass.asOver, Hom.asOver, ← Spec.map_comp,
-          OverClass.asOverHom, mul_spec_asOver_spec_left, ← CommRingCat.ofHom_comp,
-          ← Bialgebra.comul_includeRight]
-
-中文:
-实例 [双代数
-  签名: R T] :
-  定义体: by
-    ext
-    rw [← cancel_mono (pullbackSpecIso' ..).inv]
-    ext
-    · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
-        pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-        AlgHom.toUnder, Under.homMk_right, Bialgebra.TensorProduct.counitAlgHom_def,
-        AlgHom.comp_toRingHom, RingHom.comp_assoc]
-    · simp [Scheme.monObjAsOverPullback_one, ε_algSpec_left (R := CommRingCat.of _),
-        pullbackSpecIso', specOverSpec_over, ← Spec.map_comp, ← CommRingCat.ofHom_comp,
-        AlgHom.toUnder, Under.homMk_right,
-        ← AlgHom.coe_restrictScalars R (Bialgebra.counitAlgHom S _), -AlgHom.coe_restrictScalars,
-        ← AlgHom.comp_toRingHom, Bialgebra.counitAlgHom_comp_includeRight]
-      simp [AlgHom.comp_toRingHom, Algebra.toRingHom_ofId]
-  mul_hom := by
-    ext
-    rw [← cancel_mono (pullbackSpecIso' ..).inv]
-    ext
-    · have : includeLeftRingHom = algebraMap S (S otimes[R] T) := rfl
-      simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over, ← Spec.map_comp,
-        ← CommRingCat.ofHom_comp, OverClass.asOver, mul_spec_asOver_spec_left, this, Hom.asOver,
-        OverClass.asOverHom, pullback.condition]
-      rfl
-    · convert! congr($(μ_pullback_left_fst R S T) ≫ (pullbackSpecIso R T T).hom ≫
-        Spec.map (CommRingCat.ofHom (Bialgebra.comulAlgHom R T).toRingHom)) using 1
-      · simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over,
-          OverClass.asOver, Hom.asOver, OverClass.asOverHom, mul_spec_asOver_spec_left]
-      · simp [pullbackSpecIso', specOverSpec_over, OverClass.asOver, Hom.asOver, ← Spec.map_comp,
-          OverClass.asOverHom, mul_spec_asOver_spec_left, ← CommRingCat.ofHom_comp,
-          ← Bialgebra.comul_includeRight]
-
-Depends on / 依赖: AlgHom, AlgHom.comp_toRingHom, AlgHom.toUnder, Bialgebra, Bialgebra.TensorProduct.counitAlgHom_def, CommRingCat, CommRingCat.of, CommRingCat.ofHom_comp, RingHom, RingHom.comp_assoc, Scheme, Scheme.monObjAsOverPullback_one, Spec.map_comp, TensorProduct, Under.homMk_right, cancel_mono, comp_assoc, comp_toRingHom, counitAlgHom_def, homMk_right
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Bialgebra R T] :
-IsMonHom (pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom.asOver (Spec (.of S)) where
+    IsMonHom <| (pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom.asOver (Spec (.of S)) where
   one_hom := by
     ext
     rw [← cancel_mono (pullbackSpecIso' ..).inv]
@@ -1377,7 +1031,7 @@ IsMonHom (pullbackSymmetry .. ≪≫ pullbackSpecIso' R S T).hom.asOver (Spec (.
     ext
     rw [← cancel_mono (pullbackSpecIso' ..).inv]
     ext
-    · have : includeLeftRingHom = algebraMap S (S otimes[R] T) := rfl
+    · have : includeLeftRingHom = algebraMap S (S ⊗[R] T) := rfl
       simp [Scheme.monObjAsOverPullback_mul, pullbackSpecIso', specOverSpec_over, ← Spec.map_comp,
         ← CommRingCat.ofHom_comp, OverClass.asOver, mul_spec_asOver_spec_left, this, Hom.asOver,
         OverClass.asOverHom, pullback.condition]
@@ -1404,24 +1058,39 @@ section rightEdge
 
 /-- The essential image of `R`-algebras under `Spec` is precisely affine schemes over `Spec R`. -/
 @[simp]
-/--
-lemma `essImage_algSpec` / 引理 `essImage_algSpec`
+/-
+**AlgebraicGeometry.essImage_algSpec** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometr
+y`。
+形式化陈述：essImage_algSpec {G : Over <| Spec R} : (algSpec R).essImage G ↔ IsAffine 
+G.left
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Equivalence.op_functor`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   (e : C ≌ D), e.op.…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.essImage_comp_of_essSurj`：∀ {C : Type u₁} {D : Ty
+pe u₂} {E : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C]   [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D] [ins…
+· 使用定理 `CategoryTheory.Functor.instEssSurjOppositeOp`：∀ (C : Type u₁) [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] (D : Type u₂) [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.essImage_overPost`：∀ {T : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} T] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {X : T} {F : Categ…
+· 使用定理 `AlgebraicGeometry.Spec.full`：AlgebraicGeometry.Scheme.Spec.Full
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma essImage_algSpec
-  given: {G : Over <| Spec R}
-  statement: (algSpec R).essImage G ↔ IsAffine G.left
-  proof: by
-  simp [algSpec, Functor.essImage_overPost (F := Scheme.Spec)]
-
-中文:
-引理 essImage_algSpec
-  条件: {G : Over <| Spec R}
-  结论: (algSpec R).essImage G ↔ 是仿射 G.left
-  证明: by
-  simp [algSpec, Functor.essImage_overPost (F := Scheme.Spec)]
-
-Depends on / 依赖: Functor, Functor.essImage_overPost, Scheme, Scheme.Spec, algSpec, essImage_overPost
+--- 原说明 ---
+The essential image of `R`-algebras under `Spec` is precisely affine schemes ove
+r `Spec R`.
 -/
 lemma essImage_algSpec {G : Over <| Spec R} : (algSpec R).essImage G ↔ IsAffine G.left := by
   simp [algSpec, Functor.essImage_overPost (F := Scheme.Spec)]
@@ -1429,18 +1098,37 @@ lemma essImage_algSpec {G : Over <| Spec R} : (algSpec R).essImage G ↔ IsAffin
 /-- The essential image of `R`-bialgebras under `Spec` is precisely affine monoid schemes over
 `Spec R`. -/
 @[simp]
-/--
-lemma `essImage_bialgSpec` / 引理 `essImage_bialgSpec`
+/-
+**AlgebraicGeometry.essImage_bialgSpec** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeome
+try`。
+形式化陈述：essImage_bialgSpec {G : Mon <| Over <| Spec R} : (bialgSpec R).essImage G 
+↔ IsAffine G.X.left
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.essImage_comp_of_essSurj`：∀ {C : Type u₁} {D : Ty
+pe u₂} {E : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C]   [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D] [ins…
+· 使用定理 `CategoryTheory.Functor.instEssSurjOppositeLeftOp`：∀ (C : Type u₁) [inst 
+: CategoryTheory.Category.{v₁, u₁} C] (D : Type u₂) [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `AlgebraicGeometry.algSpec.instFull`：∀ {R : CommRingCat}, (AlgebraicGeome
+try.algSpec R).Full
+· 使用定理 `AlgebraicGeometry.algSpec.instFaithful`：∀ {R : CommRingCat}, (AlgebraicG
+eometry.algSpec R).Faithful
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma essImage_bialgSpec
-  given: {G : Mon <| Over <| Spec R}
-  proof: by simp
-
-中文:
-引理 essImage_bialgSpec
-  条件: {G : 幺半群 <| Over <| Spec R}
-  证明: by simp
+--- 原说明 ---
+The essential image of `R`-bialgebras under `Spec` is precisely affine monoid sc
+hemes over
+`Spec R`.
 -/
 lemma essImage_bialgSpec {G : Mon <| Over <| Spec R} :
     (bialgSpec R).essImage G ↔ IsAffine G.X.left := by simp
@@ -1448,18 +1136,37 @@ lemma essImage_bialgSpec {G : Mon <| Over <| Spec R} :
 /-- The essential image of `R`-Hopf algebras under `Spec` is precisely affine group schemes over
 `Spec R`. -/
 @[simp]
-/--
-lemma `essImage_hopfSpec` / 引理 `essImage_hopfSpec`
+/-
+**AlgebraicGeometry.essImage_hopfSpec** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeomet
+ry`。
+形式化陈述：essImage_hopfSpec {G : Grp <| Over <| Spec R} : (hopfSpec R).essImage G ↔ 
+IsAffine G.X.left
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.essImage_comp_of_essSurj`：∀ {C : Type u₁} {D : Ty
+pe u₂} {E : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C]   [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D] [ins…
+· 使用定理 `CategoryTheory.Functor.instEssSurjOppositeLeftOp`：∀ (C : Type u₁) [inst 
+: CategoryTheory.Category.{v₁, u₁} C] (D : Type u₂) [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `AlgebraicGeometry.algSpec.instFull`：∀ {R : CommRingCat}, (AlgebraicGeome
+try.algSpec R).Full
+· 使用定理 `AlgebraicGeometry.algSpec.instFaithful`：∀ {R : CommRingCat}, (AlgebraicG
+eometry.algSpec R).Faithful
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma essImage_hopfSpec
-  given: {G : Grp <| Over <| Spec R}
-  proof: by simp
-
-中文:
-引理 essImage_hopfSpec
-  条件: {G : 群 <| Over <| Spec R}
-  证明: by simp
+--- 原说明 ---
+The essential image of `R`-Hopf algebras under `Spec` is precisely affine group 
+schemes over
+`Spec R`.
 -/
 lemma essImage_hopfSpec {G : Grp <| Over <| Spec R} :
     (hopfSpec R).essImage G ↔ IsAffine G.X.left := by simp
@@ -1467,3 +1174,4 @@ lemma essImage_hopfSpec {G : Grp <| Over <| Spec R} :
 end rightEdge
 
 end AlgebraicGeometry
+

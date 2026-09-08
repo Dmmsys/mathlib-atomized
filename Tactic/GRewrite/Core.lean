@@ -54,26 +54,19 @@ public structure Config extends Rewrite.Config where
 
 section kabstract
 
-/--
-Definition of `dischargeMain` / `dischargeMain` 的定义
+/-- Given a proof of `a ~ b`, close a goal of the form `a ~' b` or `b ~' a`
+for some possibly different relation `~'`. -/
+/-
+**Mathlib.Tactic.GRewrite.dischargeMain** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.GRewrite`。
+形式化陈述：dischargeMain (hrel : Expr) (goal : MVarId) : MetaM Bool
+参数：hrel : Expr；goal : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dischargeMain
-  signature: (hrel : Expr) (goal : MVarId)
-  body: do
-  if ← goal.gcongrForward #[hrel] then
-    return true
-  else
-    throwTacticEx `grewrite goal m!"could not discharge {← goal.getType} using {← inferType hrel}"
-
-中文:
-定义 dischargeMain
-  签名: (hrel : Expr) (goal : MVarId)
-  定义体: do
-  if ← goal.gcongrForward #[hrel] then
-    return true
-  else
-    throwTacticEx `grewrite goal m!"could not discharge {← goal.getType} using {← inferType hrel}"
+--- 原说明 ---
+Given a proof of `a ~ b`, close a goal of the form `a ~' b` or `b ~' a`
+for some possibly different relation `~'`.
 -/
 def dischargeMain (hrel : Expr) (goal : MVarId) : MetaM Bool := do
   if ← goal.gcongrForward #[hrel] then
@@ -81,80 +74,28 @@ def dischargeMain (hrel : Expr) (goal : MVarId) : MetaM Bool := do
   else
     throwTacticEx `grewrite goal m!"could not discharge {← goal.getType} using {← inferType hrel}"
 
-/--
-Definition of `grewriteUsingKAbstract` / `grewriteUsingKAbstract` 的定义
+/-- Execute a generalized rewrite by first using `kabstract` to generate the replacement expression,
+and then calling `gcongr` to prove that this is related to the original expression. -/
+/-
+**Mathlib.Tactic.GRewrite.grewriteUsingKAbstract** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.GRewrite`。
+形式化陈述：grewriteUsingKAbstract (goal : MVarId) (e hrel pattern replacement : Expr)
+ (forwardImp : Bool) (config : GRewrite.Config) : MetaM (Expr × Expr × Array MVa
+rId)
+参数：goal : MVarId；e hrel pattern replacement : Expr；forwardImp : Bool；config : GR
+ewrite.Config。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition grewriteUsingKAbstract
-  signature: (goal : MVarId) (e hrel pattern replacement : Expr)
-  body: do
-let eAbst ← withConfig (fun oldConfig => { config, oldConfig with })
-    kabstract e pattern config.occs
-  unless eAbst.hasLooseBVars do
-    throwTacticEx `grewrite goal
-      m!"did not find instance of the pattern in the target expression{indentExpr pattern}"
-  -- construct `eNew` by instantiating `eAbst` with `replacement`.
-  let eNew := eAbst.instantiate1 replacement
-  let eNew ← instantiateMVars eNew
-  -- check that `eNew` is well typed
-  try
-    check eNew
-  catch ex =>
-    throwTacticEx `grewrite goal m!"\
-      rewritten expression is not type correct:{indentD eNew}\nError: {ex.toMessageData}\
-      \n\n\
-      Possible solutions: use grewrite's 'occs' configuration option \
-      to limit which occurrences are rewritten, \
-      or specify what the rewritten expression should be and use 'gcongr'."
-  let eNew ← if replacement.hasBinderNameHint then eNew.resolveBinderNameHint else pure eNew
-  -- Construct the implication proof using `gcongr`.
-  -- Although `e` and `e'` are defEq, they may not be defEq in the `reducible` transparency.
-  -- So, it is important to use `e'` in the `gcongr` goal.
-  let e' := eAbst.instantiate1 (GCongr.mkHoleAnnotation pattern)
-  let mkImp (e₁ e₂ : Expr) : Expr := .forallE `_a e₁ e₂ .default
-  let imp := if forwardImp then mkImp e' eNew else mkImp eNew e'
-  let gcongrGoal ← mkFreshExprMVar imp
-  let (_, sideGoals) ← gcongrGoal.mvarId!.gcongr forwardImp
-.run (mainGoalDischarger := GRewrite.dischargeMain hrel)
-  pure (eNew, gcongrGoal, sideGoals)
-
-中文:
-定义 grewriteUsingKAbstract
-  签名: (goal : MVarId) (e hrel pattern replacement : Expr)
-  定义体: do
-let eAbst ← withConfig (fun oldConfig => { config, oldConfig with })
-    kabstract e pattern config.occs
-  unless eAbst.hasLooseBVars do
-    throwTacticEx `grewrite goal
-      m!"did not find instance of the pattern in the target expression{indentExpr pattern}"
-  -- construct `eNew` by instantiating `eAbst` with `replacement`.
-  let eNew := eAbst.instantiate1 replacement
-  let eNew ← instantiateMVars eNew
-  -- check that `eNew` is well typed
-  try
-    check eNew
-  catch ex =>
-    throwTacticEx `grewrite goal m!"\
-      rewritten expression is not type correct:{indentD eNew}\nError: {ex.toMessageData}\
-      \n\n\
-      Possible solutions: use grewrite's 'occs' configuration option \
-      to limit which occurrences are rewritten, \
-      or specify what the rewritten expression should be and use 'gcongr'."
-  let eNew ← if replacement.hasBinderNameHint then eNew.resolveBinderNameHint else pure eNew
-  -- Construct the implication proof using `gcongr`.
-  -- Although `e` and `e'` are defEq, they may not be defEq in the `reducible` transparency.
-  -- So, it is important to use `e'` in the `gcongr` goal.
-  let e' := eAbst.instantiate1 (GCongr.mkHoleAnnotation pattern)
-  let mkImp (e₁ e₂ : Expr) : Expr := .forallE `_a e₁ e₂ .default
-  let imp := if forwardImp then mkImp e' eNew else mkImp eNew e'
-  let gcongrGoal ← mkFreshExprMVar imp
-  let (_, sideGoals) ← gcongrGoal.mvarId!.gcongr forwardImp
-.run (mainGoalDischarger := GRewrite.dischargeMain hrel)
-  pure (eNew, gcongrGoal, sideGoals)
+--- 原说明 ---
+Execute a generalized rewrite by first using `kabstract` to generate the replace
+ment expression,
+and then calling `gcongr` to prove that this is related to the original expressi
+on.
 -/
 def grewriteUsingKAbstract (goal : MVarId) (e hrel pattern replacement : Expr)
     (forwardImp : Bool) (config : GRewrite.Config) : MetaM (Expr × Expr × Array MVarId) := do
-let eAbst ← withConfig (fun oldConfig => { config, oldConfig with })
+  let eAbst ← withConfig (fun oldConfig => { config, oldConfig with }) <|
     kabstract e pattern config.occs
   unless eAbst.hasLooseBVars do
     throwTacticEx `grewrite goal
@@ -181,7 +122,7 @@ let eAbst ← withConfig (fun oldConfig => { config, oldConfig with })
   let imp := if forwardImp then mkImp e' eNew else mkImp eNew e'
   let gcongrGoal ← mkFreshExprMVar imp
   let (_, sideGoals) ← gcongrGoal.mvarId!.gcongr forwardImp
-.run (mainGoalDischarger := GRewrite.dischargeMain hrel)
+    |>.run (mainGoalDischarger := GRewrite.dischargeMain hrel)
   pure (eNew, gcongrGoal, sideGoals)
 
 end kabstract
@@ -190,24 +131,29 @@ section singlePass
 
 initialize registerTraceClass `Meta.grewrite
 
-/--
-Inductive type `Progress` / 归纳类型 `Progress`
+/-- The congruence loop keeps track of its progress using 3 states.
+- Each rewrite starts off as `noMatch`.
+- As soon as a rewrite has successfully been applied with `GRewriteLemma.apply`,
+  this switches to `matched`. In this state we continue trying to rewrite.
+- When the rewrite lemma is not valid anymore in the local context, i.e. if the lemma depends on a
+  free variable that is not in scope anymore, then we switch to `matchedOutOfScope`.
+  In this state we stop trying to rewrite.
+-/
+/-
+**Mathlib.Tactic.GRewrite.Progress** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.G
+Rewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Progress
-  parameters: where
-  constructors (3):
-    - noMatch: 
-    - matched: 
-    - matchedOutOfScope: (lctx : LocalContext)
-
-中文:
-归纳类型 Progress
-  参数: where
-  构造子 (3 个):
-    - noMatch: 
-    - matched: 
-    - matchedOutOfScope: (lctx : LocalContext)
+--- 原说明 ---
+The congruence loop keeps track of its progress using 3 states.
+- Each rewrite starts off as `noMatch`.
+- As soon as a rewrite has successfully been applied with `GRewriteLemma.apply`,
+  this switches to `matched`. In this state we continue trying to rewrite.
+- When the rewrite lemma is not valid anymore in the local context, i.e. if the 
+lemma depends on a
+  free variable that is not in scope anymore, then we switch to `matchedOutOfSco
+pe`.
+  In this state we stop trying to rewrite.
 -/
 inductive Progress where
   /-- The rewrite lemma has not unified with anything yet. -/
@@ -218,22 +164,21 @@ inductive Progress where
   out of scope. We store a local context in which the rewrite makes sense. -/
   | matchedOutOfScope (lctx : LocalContext)
 
-/--
-Definition of `State` / `State` 的定义
+/-- The state used in `GRewriteM`. -/
+/-
+**Mathlib.Tactic.GRewrite.State** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.GRewri
+te`。
+形式化陈述：State where /-- The cache used in `grw` to avoid trying and failing to rew
+rite the same term multiple times. Each key stores the relation (`none` encodes 
+the `→` relation), rewritten expression, and direction of the rewrite. This lets
+ us avoid an exponential blowup when there are multiple `gcongr` lemmas for rewr
+iting in the same place, such as `add_le_add`, `add_le_add_left` and `add_le_add
+_right`. -/ cache : Std.HashSet (Option Expr × Expr × Bool)
+参数：`none` encodes the `→` relation。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure State
-  parameters: where
-  axioms and operations (2):
-    - cache : Std.HashSet (Option Expr × Expr × Bool)  [default: {}]
-    - progress : Progress  [default: .noMatch]
-
-中文:
-结构 State
-  参数: where
-  公理与运算 (2 个):
-    - cache : Std.HashSet (选项类型 Expr × Expr × 布尔值)  [默认: {}]
-    - progress : Progress  [默认: .noMatch]
+--- 原说明 ---
+The state used in `GRewriteM`.
 -/
 structure State where
   /-- The cache used in `grw` to avoid trying and failing to rewrite the same term multiple times.
@@ -245,28 +190,14 @@ structure State where
   /-- The current progress level. -/
   progress : Progress := .noMatch
 
-/--
-Definition of `GRewriteLemma` / `GRewriteLemma` 的定义
+/-- The information about the given rewrite lemma. -/
+/-
+**Mathlib.Tactic.GRewrite.GRewriteLemma** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tacti
+c.GRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GRewriteLemma
-  parameters: where
-  axioms and operations (5):
-    - symm : Bool
-    - proof : Expr
-    - type : Expr
-    - index : HeadIndex × Nat
-    - mvarIds : Array (MVarId × Array LocalDecl)
-
-中文:
-结构 GRewriteLemma
-  参数: where
-  公理与运算 (5 个):
-    - symm : 布尔值
-    - proof : Expr
-    - type : Expr
-    - index : HeadIndex × 自然数
-    - mvarIds : 数组 (MVarId × 数组 LocalDecl)
+--- 原说明 ---
+The information about the given rewrite lemma.
 -/
 structure GRewriteLemma where
   /-- Whether the lemma rewrites right-to-left (i.e. whether it has a `←`). -/
@@ -281,73 +212,40 @@ structure GRewriteLemma where
   modifying their local context in order to be able to unify with bound variables. -/
   mvarIds : Array (MVarId × Array LocalDecl)
 
-/--
-Definition of `GRewriteM` / `GRewriteM` 的定义
+/-- The monad used for `grw`. -/
+/-
+**Mathlib.Tactic.GRewrite.GRewriteM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.
+GRewrite`。
+形式化陈述：GRewriteM
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation GRewriteM
-  body: ReaderT GRewriteLemma StateRefT State GCongr.GCongrM
-
-中文:
-缩写 GRewriteM
-  定义体: ReaderT GRewriteLemma StateRefT State GCongr.GCongrM
-
-Depends on / 依赖: GCongr, GCongr.GCongrM, GCongrM, GRewriteLemma, ReaderT, StateRefT
+--- 原说明 ---
+The monad used for `grw`.
 -/
 abbrev GRewriteM := ReaderT GRewriteLemma StateRefT State GCongr.GCongrM
 
-/--
-Definition of `GRewriteLemma.apply` / `GRewriteLemma.apply` 的定义
+/-- Unify the given generalized rewrite lemma with the goal, so as to rewrite with it.
+If `symm := true`, first use the `symm` tactic to swap the direction of the lemma.
+`gcongr_forward` is used to deal with the case where the lemma is `a < b` and the goal is `a ≤ b`.
+Returns whether the goal was closed by the lemma.
+-/
+/-
+**Mathlib.Tactic.GRewrite.GRewriteLemma.apply** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.GRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GRewriteLemma.apply
-  signature: (lem : GRewriteLemma) (goal : MVarId) (symm : Bool)
-  body: do
-  withTraceNode `Meta.grewrite (fun _ => return m!"rewriting with `{lem.proof}`") do
-  let (type, proof) ←
-    if symm then
-      let proof ← try lem.proof.applySymm catch _ => return false
-      pure (← inferType proof, proof)
-    else
-      pure (lem.type, lem.proof)
-  withConfig (fun oldConfig => { config, oldConfig with }) do
-  if ← isDefEq (← goal.getType) type then
-    goal.assign proof
-    return true
-  let mctx ← getMCtx
-  for (n, tac) in (forwardExt.getState (← getEnv)).2 do
-    -- Explicitly exclude a few `gcongr_forward` extensions that are not relevant here.
-    if n matches ``GCongr.exact | ``GCongr.exactRefl then continue
-    try tac.eval proof goal; return true
-    catch _ => setMCtx mctx
-  return false
-
-中文:
-定义 GRewriteLemma.apply
-  签名: (lem : GRewriteLemma) (goal : MVarId) (symm : 布尔值)
-  定义体: do
-  withTraceNode `Meta.grewrite (fun _ => return m!"rewriting with `{lem.proof}`") do
-  let (type, proof) ←
-    if symm then
-      let proof ← try lem.proof.applySymm catch _ => return false
-      pure (← inferType proof, proof)
-    else
-      pure (lem.type, lem.proof)
-  withConfig (fun oldConfig => { config, oldConfig with }) do
-  if ← isDefEq (← goal.getType) type then
-    goal.assign proof
-    return true
-  let mctx ← getMCtx
-  for (n, tac) in (forwardExt.getState (← getEnv)).2 do
-    -- Explicitly exclude a few `gcongr_forward` extensions that are not relevant here.
-    if n matches ``GCongr.exact | ``GCongr.exactRefl then continue
-    try tac.eval proof goal; return true
-    catch _ => setMCtx mctx
-  return false
+--- 原说明 ---
+Unify the given generalized rewrite lemma with the goal, so as to rewrite with i
+t.
+If `symm := true`, first use the `symm` tactic to swap the direction of the lemm
+a.
+`gcongr_forward` is used to deal with the case where the lemma is `a < b` and th
+e goal is `a ≤ b`.
+Returns whether the goal was closed by the lemma.
 -/
 def GRewriteLemma.apply (lem : GRewriteLemma) (goal : MVarId) (symm : Bool)
     (config : GRewrite.Config) : MetaM Bool := do
-  withTraceNode `Meta.grewrite (fun _ => return m!"rewriting with `{lem.proof}`") do
+  withTraceNode `Meta.grewrite (fun _ ↦ return m!"rewriting with `{lem.proof}`") do
   let (type, proof) ←
     if symm then
       let proof ← try lem.proof.applySymm catch _ => return false
@@ -366,46 +264,20 @@ def GRewriteLemma.apply (lem : GRewriteLemma) (goal : MVarId) (symm : Bool)
     catch _ => setMCtx mctx
   return false
 
-/--
-Definition of `makeGCongrGoal` / `makeGCongrGoal` 的定义
+/-- Create the `gcongr` goal corresponding to rewriting `e` by relation `rel?`,
+so that we can apply `gcongr` lemmas to it. -/
+/-
+**Mathlib.Tactic.GRewrite.makeGCongrGoal** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.GRewrite`。
+形式化陈述：makeGCongrGoal (rel? : Option Expr) (e : Expr) (forward : Bool) : MetaM (E
+xpr × Expr)
+参数：rel? : Option Expr；e : Expr；forward : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition makeGCongrGoal
-  signature: (rel? : Option Expr) (e : Expr) (forward : Bool)
-  body: do
-  if let some rel := rel? then
-    let .forallE _ d₁ (.forallE _ d₂ _ _) _ ← whnf (← inferType rel) | throwFunctionExpected rel
-    -- note that `@[gcongr]`'s checks should prevent this happening
-    if d₂.hasLooseBVars then throwError "grw: {rel} is a dependent relation"
-    if forward then
-      let mvar ← mkFreshExprMVar d₂
-      return (mvar, ← mkFreshExprMVar <| mkApp2 rel e mvar)
-    else
-      let mvar ← mkFreshExprMVar d₁
-      return (mvar, ← mkFreshExprMVar <| mkApp2 rel mvar e)
-  else
-    let mvar ← mkFreshTypeMVar
-    let target := if forward then .forallE `_a e mvar .default else .forallE `_a mvar e .default
-    return (mvar, ← mkFreshExprMVar (some target))
-
-中文:
-定义 makeGCongrGoal
-  签名: (rel? : 选项类型 Expr) (e : Expr) (forward : 布尔值)
-  定义体: do
-  if let some rel := rel? then
-    let .forallE _ d₁ (.forallE _ d₂ _ _) _ ← whnf (← inferType rel) | throwFunctionExpected rel
-    -- note that `@[gcongr]`'s checks should prevent this happening
-    if d₂.hasLooseBVars then throwError "grw: {rel} is a dependent relation"
-    if forward then
-      let mvar ← mkFreshExprMVar d₂
-      return (mvar, ← mkFreshExprMVar <| mkApp2 rel e mvar)
-    else
-      let mvar ← mkFreshExprMVar d₁
-      return (mvar, ← mkFreshExprMVar <| mkApp2 rel mvar e)
-  else
-    let mvar ← mkFreshTypeMVar
-    let target := if forward then .forallE `_a e mvar .default else .forallE `_a mvar e .default
-    return (mvar, ← mkFreshExprMVar (some target))
+--- 原说明 ---
+Create the `gcongr` goal corresponding to rewriting `e` by relation `rel?`,
+so that we can apply `gcongr` lemmas to it.
 -/
 def makeGCongrGoal (rel? : Option Expr) (e : Expr) (forward : Bool) : MetaM (Expr × Expr) := do
   if let some rel := rel? then
@@ -423,38 +295,17 @@ def makeGCongrGoal (rel? : Option Expr) (e : Expr) (forward : Bool) : MetaM (Exp
     let target := if forward then .forallE `_a e mvar .default else .forallE `_a mvar e .default
     return (mvar, ← mkFreshExprMVar (some target))
 
-/--
-Definition of `getRel'` / `getRel'` 的定义
+/-- Version of `getRel` that also returns the expression of the relation. -/
+/-
+**Mathlib.Tactic.GRewrite.getRel'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.GRew
+rite`。
+形式化陈述：getRel' (e : Expr) : Option (Name × Option Expr × Expr × Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getRel'
-  signature: (e : Expr)
-  body: match e with
-  | .app (.app rel lhs) rhs => rel.getAppFn.constName?.map (·, rel, lhs, rhs)
-  | .forallE _ lhs rhs _ =>
-    if !rhs.hasLooseBVars then
-      some (`_Implies, none, lhs, rhs)
-    else
-      none
-  | _ => none
-
-mutual
-
-中文:
-定义 getRel'
-  签名: (e : Expr)
-  定义体: match e with
-  | .app (.app rel lhs) rhs => rel.getAppFn.constName?.map (·, rel, lhs, rhs)
-  | .forallE _ lhs rhs _ =>
-    if !rhs.hasLooseBVars then
-      some (`_Implies, none, lhs, rhs)
-    else
-      none
-  | _ => none
-
-mutual
-
-Depends on / 依赖: _Implies, constName, forallE, getAppFn, hasLooseBVars, rel.getAppFn.constName, rhs.hasLooseBVars
+--- 原说明 ---
+Version of `getRel` that also returns the expression of the relation.
 -/
 def getRel' (e : Expr) : Option (Name × Option Expr × Expr × Expr) :=
   match e with
@@ -468,44 +319,19 @@ def getRel' (e : Expr) : Option (Name × Option Expr × Expr × Expr) :=
 
 mutual
 
-/--
-Definition of `processGCongrHypothesisAux` / `processGCongrHypothesisAux` 的定义
+/-- Recursively call `grewriteCore` to process a subgoal of a `gcongr` lemma.
 
-English:
-definition processGCongrHypothesisAux
-  signature: (goal : MVarId) (forward : Bool) (config : Config)
-  body: do
-  let some (relName, rel?, lhs, rhs) := getRel' (← whnf (← goal.getType)) |
-    throwError "internal `grewrite` error: invalid `gcongr` goal {goal}"
-  let (target, mvarApp) := if forward then (lhs, rhs) else (rhs, lhs)
-  if let some (result, proof) ← grewriteCore relName rel? target forward config then
-    mvarApp.withApp fun mvar xs => do
-      /- Note: the names of the free variables `xs` end up in the new goal as lambda binders.
-      `applyGCongrLemma` ensures that these are the binder names that appear in the original goal.
-      As a result, when rewriting inside of `{x | p x}`, the binder name `x` is preserved. -/
-      mvar.mvarId!.assign (← mkLambdaFVars xs result)
-      goal.assign proof
-      return true
-  else
-    return false
+Returns whether we have done a rewrite in this subgoal, in which case it has been closed. -/
+/-
+**Mathlib.Tactic.GRewrite.processGCongrHypothesisAux** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.GRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 processGCongrHypothesisAux
-  签名: (goal : MVarId) (forward : 布尔值) (config : 余nfig)
-  定义体: do
-  let some (relName, rel?, lhs, rhs) := getRel' (← whnf (← goal.getType)) |
-    throwError "internal `grewrite` error: invalid `gcongr` goal {goal}"
-  let (target, mvarApp) := if forward then (lhs, rhs) else (rhs, lhs)
-  if let some (result, proof) ← grewriteCore relName rel? target forward config then
-    mvarApp.withApp fun mvar xs => do
-      /- Note: the names of the free variables `xs` end up in the new goal as lambda binders.
-      `applyGCongrLemma` ensures that these are the binder names that appear in the original goal.
-      As a result, when rewriting inside of `{x | p x}`, the binder name `x` is preserved. -/
-      mvar.mvarId!.assign (← mkLambdaFVars xs result)
-      goal.assign proof
-      return true
-  else
-    return false
+--- 原说明 ---
+Recursively call `grewriteCore` to process a subgoal of a `gcongr` lemma.
+
+Returns whether we have done a rewrite in this subgoal, in which case it has bee
+n closed.
 -/
 partial def processGCongrHypothesisAux (goal : MVarId) (forward : Bool) (config : Config) :
     GRewriteM Bool := do
@@ -513,7 +339,7 @@ partial def processGCongrHypothesisAux (goal : MVarId) (forward : Bool) (config 
     throwError "internal `grewrite` error: invalid `gcongr` goal {goal}"
   let (target, mvarApp) := if forward then (lhs, rhs) else (rhs, lhs)
   if let some (result, proof) ← grewriteCore relName rel? target forward config then
-    mvarApp.withApp fun mvar xs => do
+    mvarApp.withApp fun mvar xs ↦ do
       /- Note: the names of the free variables `xs` end up in the new goal as lambda binders.
       `applyGCongrLemma` ensures that these are the binder names that appear in the original goal.
       As a result, when rewriting inside of `{x | p x}`, the binder name `x` is preserved. -/
@@ -523,76 +349,22 @@ partial def processGCongrHypothesisAux (goal : MVarId) (forward : Bool) (config 
   else
     return false
 
-/--
-Definition of `processGCongrHypothesis` / `processGCongrHypothesis` 的定义
+/-- Update the local contexts of the metavariables to include the variables introduced by the
+`gcongr` lemma. This is a bit of a hack.
 
-English:
-definition processGCongrHypothesis
-  signature: (goal : MVarId) (forward : Bool)
-  body: do
-  -- If the local context was not changed, we don't need to modify the local contexts.
-  if (← goal.getDecl).lctx.numIndices == (← getLCtx).numIndices then
-    processGCongrHypothesisAux goal forward config
-  else
-  let outerLCtx ← getLCtx
-  goal.withContext do
-  -- We can only modify the metavariable local contexts if no match has happened yet.
-  if (← get).progress matches .noMatch then
-    let mctx ← getMCtx
-    let lctx ← getLCtx
-setMCtx (← read).mvarIds.foldl (init := mctx) fun mctx (mvarId, decls) =>
-      -- Create a local context for `mvarId` by adding `decls` to the current local context.
-      let lctx := decls.foldl (·.addDecl ·) lctx
-      { mctx with decls := mctx.decls.insert mvarId { mctx.getDecl mvarId with lctx } }
-    let result ← processGCongrHypothesisAux goal forward config
-    if (← get).progress matches .noMatch then
-      -- If we still don't have a match, then revert the changes to the metavariable local contexts.
-      setMCtx mctx
-    else
-      -- If we did get a match, then we might be exiting the scope where this rewrite makes sense,
-      -- in which case we should not rewrite any more.
-      let validInOuterLCtx ← (← read).mvarIds.allM fun (mvarId, _) => do
-        let some val ← getExprMVarAssignment? mvarId | return false
-        return (Lean.collectFVars {} val).fvarIds.all outerLCtx.contains
-      unless validInOuterLCtx do
-        modify ({ · with progress := .matchedOutOfScope (← getLCtx) })
-    return result
-  else
-    processGCongrHypothesisAux goal forward config
+Returns whether we have done a rewrite in this subgoal, in which case it has been closed. -/
+/-
+**Mathlib.Tactic.GRewrite.processGCongrHypothesis** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.GRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 processGCongrHypothesis
-  签名: (goal : MVarId) (forward : 布尔值)
-  定义体: do
-  -- If the local context was not changed, we don't need to modify the local contexts.
-  if (← goal.getDecl).lctx.numIndices == (← getLCtx).numIndices then
-    processGCongrHypothesisAux goal forward config
-  else
-  let outerLCtx ← getLCtx
-  goal.withContext do
-  -- We can only modify the metavariable local contexts if no match has happened yet.
-  if (← get).progress matches .noMatch then
-    let mctx ← getMCtx
-    let lctx ← getLCtx
-setMCtx (← read).mvarIds.foldl (init := mctx) fun mctx (mvarId, decls) =>
-      -- Create a local context for `mvarId` by adding `decls` to the current local context.
-      let lctx := decls.foldl (·.addDecl ·) lctx
-      { mctx with decls := mctx.decls.insert mvarId { mctx.getDecl mvarId with lctx } }
-    let result ← processGCongrHypothesisAux goal forward config
-    if (← get).progress matches .noMatch then
-      -- If we still don't have a match, then revert the changes to the metavariable local contexts.
-      setMCtx mctx
-    else
-      -- If we did get a match, then we might be exiting the scope where this rewrite makes sense,
-      -- in which case we should not rewrite any more.
-      let validInOuterLCtx ← (← read).mvarIds.allM fun (mvarId, _) => do
-        let some val ← getExprMVarAssignment? mvarId | return false
-        return (Lean.collectFVars {} val).fvarIds.all outerLCtx.contains
-      unless validInOuterLCtx do
-        modify ({ · with progress := .matchedOutOfScope (← getLCtx) })
-    return result
-  else
-    processGCongrHypothesisAux goal forward config
+--- 原说明 ---
+Update the local contexts of the metavariables to include the variables introduc
+ed by the
+`gcongr` lemma. This is a bit of a hack.
+
+Returns whether we have done a rewrite in this subgoal, in which case it has bee
+n closed.
 -/
 partial def processGCongrHypothesis (goal : MVarId) (forward : Bool)
     (config : Config) : GRewriteM Bool := do
@@ -606,7 +378,7 @@ partial def processGCongrHypothesis (goal : MVarId) (forward : Bool)
   if (← get).progress matches .noMatch then
     let mctx ← getMCtx
     let lctx ← getLCtx
-setMCtx (← read).mvarIds.foldl (init := mctx) fun mctx (mvarId, decls) =>
+    setMCtx <| (← read).mvarIds.foldl (init := mctx) fun mctx (mvarId, decls) ↦
       -- Create a local context for `mvarId` by adding `decls` to the current local context.
       let lctx := decls.foldl (·.addDecl ·) lctx
       { mctx with decls := mctx.decls.insert mvarId { mctx.getDecl mvarId with lctx } }
@@ -617,7 +389,7 @@ setMCtx (← read).mvarIds.foldl (init := mctx) fun mctx (mvarId, decls) =>
     else
       -- If we did get a match, then we might be exiting the scope where this rewrite makes sense,
       -- in which case we should not rewrite any more.
-      let validInOuterLCtx ← (← read).mvarIds.allM fun (mvarId, _) => do
+      let validInOuterLCtx ← (← read).mvarIds.allM fun (mvarId, _) ↦ do
         let some val ← getExprMVarAssignment? mvarId | return false
         return (Lean.collectFVars {} val).fvarIds.all outerLCtx.contains
       unless validInOuterLCtx do
@@ -626,84 +398,29 @@ setMCtx (← read).mvarIds.foldl (init := mctx) fun mctx (mvarId, decls) =>
   else
     processGCongrHypothesisAux goal forward config
 
-/--
-Definition of `processGCongrLemma` / `processGCongrLemma` 的定义
+/-- Apply the `gcongr` lemma to the goal. The main subgoals are visited for rewriting in,
+and otherwise closed `by rfl`. If at least one rewrite has happened, we commit to this lemma,
+and we try to discharge the side goals.
 
-English:
-definition processGCongrLemma
-  signature: (goal : MVarId) (lem : GCongrLemma) (forward : Bool)
-  body: withTraceNode `Meta.grewrite (fun _ =>
-    return m!"applying `gcongr` lemma {.ofConstName lem.declName}") do
-  let (mainGoals, sideGoals) ← try applyGCongrLemma goal lem catch _ => return false
-  -- Recursively rewrite in the main subgoals
-  let mut anyProgress := false
-  for (goal, isContra) in mainGoals do
-    -- Any of the rewrites in this loop could make a match that is out of scope here.
-    -- In that case we should stop rewriting, and the remaining goals should be closed `by rfl`.
-    unless (← get).progress matches .matchedOutOfScope _ do
-      if ← processGCongrHypothesis goal (forward != isContra) config then
-        anyProgress := true
-        continue
-    try
-      -- Due to an issue in `rfl`, we need this transparency bump. See https://leanprover.zulipchat.com/#narrow/channel/270676-lean4/topic/.60with_reducible.20rfl.60.20failing/with/590957602
-      withReducibleAndInstances goal.applyRflOrId
-    catch ex =>
-      -- In principle, this case should not happen.
-      trace[Meta.grewrite] "{← goal.getType} could not be closed with `rfl`:\n{ex.toMessageData}"
-      return false
-  -- Only continue if at least one rewrite happened
-  unless anyProgress do return false
-  -- Finally, run the discharger on the side goals.
-  for mvarId in sideGoals do
-    let type ← mvarId.getType
-    -- There may be instance side goals that still had metavariables before recursively rewriting.
-    if (← isClass? type).isSome then
-      if let some inst ← synthInstance? type then
-        mvarId.assign inst
-        continue
-    else
-      dischargeSide mvarId
-  return true
+Returns whether we have done a rewrite in this subgoal, in which case it has been closed. -/
+/-
+**Mathlib.Tactic.GRewrite.processGCongrLemma** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.GRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 processGCongrLemma
-  签名: (goal : MVarId) (lem : GCongrLemma) (forward : 布尔值)
-  定义体: withTraceNode `Meta.grewrite (fun _ =>
-    return m!"applying `gcongr` lemma {.ofConstName lem.declName}") do
-  let (mainGoals, sideGoals) ← try applyGCongrLemma goal lem catch _ => return false
-  -- Recursively rewrite in the main subgoals
-  let mut anyProgress := false
-  for (goal, isContra) in mainGoals do
-    -- Any of the rewrites in this loop could make a match that is out of scope here.
-    -- In that case we should stop rewriting, and the remaining goals should be closed `by rfl`.
-    unless (← get).progress matches .matchedOutOfScope _ do
-      if ← processGCongrHypothesis goal (forward != isContra) config then
-        anyProgress := true
-        continue
-    try
-      -- Due to an issue in `rfl`, we need this transparency bump. See https://leanprover.zulipchat.com/#narrow/channel/270676-lean4/topic/.60with_reducible.20rfl.60.20failing/with/590957602
-      withReducibleAndInstances goal.applyRflOrId
-    catch ex =>
-      -- In principle, this case should not happen.
-      trace[Meta.grewrite] "{← goal.getType} could not be closed with `rfl`:\n{ex.toMessageData}"
-      return false
-  -- Only continue if at least one rewrite happened
-  unless anyProgress do return false
-  -- Finally, run the discharger on the side goals.
-  for mvarId in sideGoals do
-    let type ← mvarId.getType
-    -- There may be instance side goals that still had metavariables before recursively rewriting.
-    if (← isClass? type).isSome then
-      if let some inst ← synthInstance? type then
-        mvarId.assign inst
-        continue
-    else
-      dischargeSide mvarId
-  return true
+--- 原说明 ---
+Apply the `gcongr` lemma to the goal. The main subgoals are visited for rewritin
+g in,
+and otherwise closed `by rfl`. If at least one rewrite has happened, we commit t
+o this lemma,
+and we try to discharge the side goals.
+
+Returns whether we have done a rewrite in this subgoal, in which case it has bee
+n closed.
 -/
 partial def processGCongrLemma (goal : MVarId) (lem : GCongrLemma) (forward : Bool)
     (config : Config) : GRewriteM Bool :=
-  withTraceNode `Meta.grewrite (fun _ =>
+  withTraceNode `Meta.grewrite (fun _ ↦
     return m!"applying `gcongr` lemma {.ofConstName lem.declName}") do
   let (mainGoals, sideGoals) ← try applyGCongrLemma goal lem catch _ => return false
   -- Recursively rewrite in the main subgoals
@@ -736,83 +453,36 @@ partial def processGCongrLemma (goal : MVarId) (lem : GCongrLemma) (forward : Bo
       dischargeSide mvarId
   return true
 
-/--
-Definition of `grewriteCore` / `grewriteCore` 的定义
+/-- The core of the `grw` implementation. Rewrite in the expression `e` which occurs under the
+relation `relName`/`rel?`, using the `GRewriteLemma` stored in `GRewriteM`.
+If `e` itself cannot be rewritten, descend into subexpressions of `e` using `@[gcongr]` lemmas.
 
-English:
-definition grewriteCore
-  signature: (relName : Name) (rel? : Option Expr) (e : Expr) (forward : Bool)
-  body: withTraceNodeBefore `Meta.grewrite (fun _ => return m!"visiting `{e}` in the \
-    {if forward then "LHS" else "RHS"} of relation `{rel?.elim m!"->" (m!"{·}")}`") do
-  let e ← instantiateMVars e; let rel? ← rel?.mapM instantiateMVars
-  let cacheKey := (rel?, e, forward)
-  if (← get).cache.contains cacheKey then
-    trace[Meta.grewrite] "cached: no rewrite"
-    return none
-  let (mvar, goal) ← makeGCongrGoal rel? e forward
-  -- Try the given grewrite lemma.
-  let lem ← read
-  if (e.toHeadIndex, e.headNumArgs) == lem.index then
-    if ← lem.apply goal.mvarId! (forward == lem.symm) config then
-      modify ({ · with progress := .matched })
-      return (mvar, goal)
-  -- Try all applicable `@[gcongr]` lemmas.
-  if let some (head, args) := getCongrAppFnArgs e then
-    let mut lemmas ← findGCongrLemmas?' relName head forward args.size
-    if relName == `_Implies then
-      lemmas := lemmas ++ relImpRelLemma args.size
-    let mctx ← getMCtx
-    for gcongrLem in lemmas do
-      if gcongrLem.forGrw then
-        if ← processGCongrLemma goal.mvarId! gcongrLem forward config then
-          -- Preserve the binder name/info in a forall.
-          match e, ← instantiateMVars mvar with
-          | .forallE n _ _ bi, .forallE _ d b _ => return some (.forallE n d b bi, goal)
-          | _, result => return some (result, goal)
-        setMCtx mctx
-  -- Cache the fact that there was nothing to rewrite.
-  modify fun s => { s with cache := s.cache.insert cacheKey }
-  return none
+`rel?` should be an expression with head symbol `relName`,
+unless the relation is `→`: `relName` is `_Implies` and `rel?` is `none`.
 
-中文:
-定义 grewriteCore
-  签名: (relName : Name) (rel? : 选项类型 Expr) (e : Expr) (forward : 布尔值)
-  定义体: withTraceNodeBefore `Meta.grewrite (fun _ => return m!"visiting `{e}` in the \
-    {if forward then "LHS" else "RHS"} of relation `{rel?.elim m!"->" (m!"{·}")}`") do
-  let e ← instantiateMVars e; let rel? ← rel?.mapM instantiateMVars
-  let cacheKey := (rel?, e, forward)
-  if (← get).cache.contains cacheKey then
-    trace[Meta.grewrite] "cached: no rewrite"
-    return none
-  let (mvar, goal) ← makeGCongrGoal rel? e forward
-  -- Try the given grewrite lemma.
-  let lem ← read
-  if (e.toHeadIndex, e.headNumArgs) == lem.index then
-    if ← lem.apply goal.mvarId! (forward == lem.symm) config then
-      modify ({ · with progress := .matched })
-      return (mvar, goal)
-  -- Try all applicable `@[gcongr]` lemmas.
-  if let some (head, args) := getCongrAppFnArgs e then
-    let mut lemmas ← findGCongrLemmas?' relName head forward args.size
-    if relName == `_Implies then
-      lemmas := lemmas ++ relImpRelLemma args.size
-    let mctx ← getMCtx
-    for gcongrLem in lemmas do
-      if gcongrLem.forGrw then
-        if ← processGCongrLemma goal.mvarId! gcongrLem forward config then
-          -- Preserve the binder name/info in a forall.
-          match e, ← instantiateMVars mvar with
-          | .forallE n _ _ bi, .forallE _ d b _ => return some (.forallE n d b bi, goal)
-          | _, result => return some (result, goal)
-        setMCtx mctx
-  -- Cache the fact that there was nothing to rewrite.
-  modify fun s => { s with cache := s.cache.insert cacheKey }
-  return none
+Returns the new expression and a proof that it is related to `e`, if a rewrite was found. -/
+/-
+**Mathlib.Tactic.GRewrite.grewriteCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.GRewrite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The core of the `grw` implementation. Rewrite in the expression `e` which occurs
+ under the
+relation `relName`/`rel?`, using the `GRewriteLemma` stored in `GRewriteM`.
+If `e` itself cannot be rewritten, descend into subexpressions of `e` using `@[g
+congr]` lemmas.
+
+`rel?` should be an expression with head symbol `relName`,
+unless the relation is `→`: `relName` is `_Implies` and `rel?` is `none`.
+
+Returns the new expression and a proof that it is related to `e`, if a rewrite w
+as found.
 -/
 partial def grewriteCore (relName : Name) (rel? : Option Expr) (e : Expr) (forward : Bool)
     (config : Config) : GRewriteM (Option (Expr × Expr)) :=
-  withTraceNodeBefore `Meta.grewrite (fun _ => return m!"visiting `{e}` in the \
-    {if forward then "LHS" else "RHS"} of relation `{rel?.elim m!"->" (m!"{·}")}`") do
+  withTraceNodeBefore `Meta.grewrite (fun _ ↦ return m!"visiting `{e}` in the \
+    {if forward then "LHS" else "RHS"} of relation `{rel?.elim m!"→" (m!"{·}")}`") do
   let e ← instantiateMVars e; let rel? ← rel?.mapM instantiateMVars
   let cacheKey := (rel?, e, forward)
   if (← get).cache.contains cacheKey then
@@ -840,7 +510,7 @@ partial def grewriteCore (relName : Name) (rel? : Option Expr) (e : Expr) (forwa
           | _, result => return some (result, goal)
         setMCtx mctx
   -- Cache the fact that there was nothing to rewrite.
-  modify fun s => { s with cache := s.cache.insert cacheKey }
+  modify fun s ↦ { s with cache := s.cache.insert cacheKey }
   return none
 
 end
@@ -872,7 +542,7 @@ public def _root_.Lean.MVarId.grewrite (goal : MVarId) (e : Expr) (hrel : Expr)
       else
         pure none
     let (newMVars, binderInfos, hrelType) ←
-withReducible forallMetaTelescopeReducing hrelType maxMVars?
+      withReducible <| forallMetaTelescopeReducing hrelType maxMVars?
     /- We don't reduce `hrelType` because if it is `a > b`, turning it into `b < a` would
     reverse the direction of the rewrite. However, we do need to clear metadata annotations. -/
     let hrelType := hrelType.cleanupAnnotations
@@ -897,7 +567,7 @@ withReducible forallMetaTelescopeReducing hrelType maxMVars?
     let e ← instantiateMVars e
     let (lctx?, eNew, impProof, sideGoals) ←
       if config.useKAbstract then
-(none, ·) < > grewriteUsingKAbstract goal e hrel pattern replacement forwardImp config
+        (none, ·) <$> grewriteUsingKAbstract goal e hrel pattern replacement forwardImp config
       else
       withReducible do
       let some (_, lhs', rhs') := GCongr.getRel (← whnf hrelType) |
@@ -910,15 +580,15 @@ withReducible forallMetaTelescopeReducing hrelType maxMVars?
       let index := (pattern.toHeadIndex, pattern.headNumArgs)
       let mvarIds := mvarIds ++ newMVars.map (·.mvarId!, #[])
       if let ((some (eNew, impProof), { progress, ..}), newGoals) ←
-.run grewriteCore `_Implies none e (forward := forwardImp) config
+        grewriteCore `_Implies none e (forward := forwardImp) config |>.run
           { symm := symm', proof := hrel, type := hrelType, index, mvarIds }
-.run then .run {}
+          |>.run {} |>.run then
         let lctx? := match progress with
           | .matchedOutOfScope lctx => some lctx
           | _ => none
         pure (lctx?, eNew, impProof, newGoals)
       else
-        withLocalDeclD `_ (← inferType replacement) fun replacement' => do
+        withLocalDeclD `_ (← inferType replacement) fun replacement' ↦ do
           let hrelType := updateRel hrelType replacement' symm
           throwTacticEx `grewrite goal
             m!"Did not find a rewrite with{indentExpr hrelType}\n\
@@ -934,3 +604,4 @@ withReducible forallMetaTelescopeReducing hrelType maxMVars?
     pure { eNew, impProof, mvarIds := newMVarIds.toList, lctx? }
 
 end Mathlib.Tactic.GRewrite
+

@@ -53,28 +53,16 @@ than typeclass inference, it does not exist as a local variable otherwise.
 
 public section
 
-/--
-Definition of `Preorder.OfStdArgs` / `Preorder.OfStdArgs` 的定义
+/-- Arguments for `Preorder.ofStd`; see that function for details. -/
+/-
+**Preorder.OfStdArgs** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Preorder.OfStdArgs (α : Type*) where /-- The `LE` instance of the order. -
+/ le : LE α
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Preorder.OfStdArgs
-  parameters: (α : Type*)
-  axioms and operations (4):
-    - le : LE α  [default: by first | infer_instance | exact LE.ofOrd _ | fail "failed ]
-    - lt : let  [default: le LT α := by extract_lets first | infer_instance | exact ⟨f]
-    - lawfulOrderLT : let  [default: le; let := lt Std.LawfulOrderLT α := by extract_lets first |]
-    - isPreorder : let  [default: le Std.IsPreorder α := by extract_lets first | infer_instanc]
-
-中文:
-结构 预序.OfStdArgs
-  参数: (α : 类型)
-  公理与运算 (4 个):
-    - le : LE α  [默认: by first | infer_instance | exact LE.ofOrd _ | fail "failed ]
-    - lt : let  [默认: le LT α := by extract_lets first | infer_instance | exact ⟨f]
-    - lawfulOrderLT : let  [默认: le; let := lt Std.LawfulOrderLT α := by extract_lets first |]
-    - isPreorder : let  [默认: le Std.IsPreorder α := by extract_lets first | infer_instanc]
-
-Depends on / 依赖: LE.ofOrd, failed, infer_instance, instance
+--- 原说明 ---
+Arguments for `Preorder.ofStd`; see that function for details.
 -/
 structure Preorder.OfStdArgs (α : Type*) where
   /-- The `LE` instance of the order. -/
@@ -91,7 +79,7 @@ structure Preorder.OfStdArgs (α : Type*) where
     extract_lets
     first
     | infer_instance
-    | exact ⟨fun a b => a <= b ∧ ¬b <= a⟩
+    | exact ⟨fun a b ↦ a ≤ b ∧ ¬b ≤ a⟩
   /-- `a < b` is equivalent to `a ≤ b ∧ ¬b ≤ a`. -/
   lawfulOrderLT :
       let := le; let := lt
@@ -100,7 +88,7 @@ structure Preorder.OfStdArgs (α : Type*) where
     first
     /- Try the case where `LT` is synthesized from `LE` first so the error message points to the
     lack of an instance and not the lack of a definitional equality. -/
-    | exact ⟨fun _ _ => _root_.Iff.rfl⟩
+    | exact ⟨fun _ _ ↦ _root_.Iff.rfl⟩
     | infer_instance
   /-- ≤ forms a preorder. -/
   isPreorder :
@@ -124,28 +112,25 @@ If no `LE` instance exists, it can be generated from `Ord` and `Std.TransOrd` in
 If an `LT` instance exists, an `Std.LawfulOrderLT` instance must exist also; otherwise, a suitable
 `LT` instance will be generated. -/
 @[expose, implicit_reducible]
-/--
-Definition of `Preorder.ofStd` / `Preorder.ofStd` 的定义
+/-
+**Preorder.ofStd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Preorder.ofStd (α : Type*) (args : OfStdArgs α
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Preorder.ofStd
-  signature: (α : Type*) (args : OfStdArgs α := by exact {})
-  body: args.le
-  toLT := args.lt
-  le_refl := args.isPreorder.le_refl
-  le_trans := args.isPreorder.le_trans
-  lt_iff_le_not_ge := args.lawfulOrderLT.lt_iff
+--- 原说明 ---
+Create a `Preorder` from a type satisfying `Std.IsPreorder`.
 
-中文:
-定义 预序.ofStd
-  签名: (α : 类型) (args : OfStdArgs α := by exact {})
-  定义体: args.le
-  toLT := args.lt
-  le_refl := args.isPreorder.le_refl
-  le_trans := args.isPreorder.le_trans
-  lt_iff_le_not_ge := args.lawfulOrderLT.lt_iff
+If an `LE` instance exists, either an `Std.IsPreorder` instance must exist, or t
+here must be an
+`Ord` instance together with `Std.LawfulOrderOrd` and `Std.TransOrd` instances.
 
-Depends on / 依赖: Preorder, args.isPreorder.le_refl, args.isPreorder.le_trans, args.lawfulOrderLT.lt_iff, args.le, args.lt, isPreorder, lawfulOrderLT, le_refl, le_trans, lt_iff, lt_iff_le_not_ge
+If no `LE` instance exists, it can be generated from `Ord` and `Std.TransOrd` in
+stances.
+
+If an `LT` instance exists, an `Std.LawfulOrderLT` instance must exist also; oth
+erwise, a suitable
+`LT` instance will be generated.
 -/
 def Preorder.ofStd (α : Type*) (args : OfStdArgs α := by exact {}) : Preorder α where
   toLE := args.le
@@ -154,22 +139,17 @@ def Preorder.ofStd (α : Type*) (args : OfStdArgs α := by exact {}) : Preorder 
   le_trans := args.isPreorder.le_trans
   lt_iff_le_not_ge := args.lawfulOrderLT.lt_iff
 
-/--
-Definition of `PartialOrder.OfStdArgs` / `PartialOrder.OfStdArgs` 的定义
+/-- Arguments for `PartialOrder.ofStd`; see that function for details. -/
+/-
+**PartialOrder.OfStdArgs** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：PartialOrder.OfStdArgs (α : Type*) extends toPreorderArgs : Preorder.OfStd
+Args α where /-- ≤ forms a partial order. -/ isPartialOrder : let
+参数：α : Type*。
+继承自：toPreorderArgs : Preorder.OfStdArgs α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PartialOrder.OfStdArgs
-  parameters: (α : Type*)
-  extends: toPreorderArgs : Preorder.OfStdArgs α
-  axioms and operations (1):
-    - isPartialOrder : let  [default: le Std.IsPartialOrder α := by extract_lets first | infer_ins]
-
-中文:
-结构 偏序.OfStdArgs
-  参数: (α : 类型)
-  继承: toPreorderArgs : 预序.OfStdArgs α
-  公理与运算 (1 个):
-    - isPartialOrder : let  [默认: le Std.IsPartialOrder α := by extract_lets first | infer_ins]
+--- 原说明 ---
+Arguments for `PartialOrder.ofStd`; see that function for details.
 -/
 structure PartialOrder.OfStdArgs (α : Type*) extends toPreorderArgs : Preorder.OfStdArgs α where
   /-- ≤ forms a partial order. -/
@@ -195,97 +175,93 @@ instances.
 If an `LT` instance exists, an `Std.LawfulOrderLT` instance must exist also; otherwise, a suitable
 `LT` instance will be generated. -/
 @[expose, implicit_reducible]
-/--
-Definition of `PartialOrder.ofStd` / `PartialOrder.ofStd` 的定义
+/-
+**PartialOrder.ofStd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PartialOrder.ofStd (α : Type*) (args : OfStdArgs α
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PartialOrder.ofStd
-  signature: (α : Type*) (args : OfStdArgs α := by exact {})
-  body: .ofStd α args.toPreorderArgs
-  le_antisymm := args.isPartialOrder.le_antisymm
+--- 原说明 ---
+Create a `PartialOrder` from a type satisfying `Std.IsPartialOrder`.
 
-中文:
-定义 偏序.ofStd
-  签名: (α : 类型) (args : OfStdArgs α := by exact {})
-  定义体: .ofStd α args.toPreorderArgs
-  le_antisymm := args.isPartialOrder.le_antisymm
+If an `LE` instance exists, either an `Std.IsPartialOrder` instance must exist, 
+or there must be an
+`Ord` instance together with `Std.LawfulOrderOrd`, `Std.LawfulEqOrd`, and `Std.T
+ransOrd` instances.
 
-Depends on / 依赖: PartialOrder, args.isPartialOrder.le_antisymm, args.toPreorderArgs, isPartialOrder, le_antisymm, toPreorder, toPreorderArgs
+If no `LE` instance exists, it can be generated from `Ord`, `Std.LawfulEqOrd`, a
+nd `Std.TransOrd`
+instances.
+
+If an `LT` instance exists, an `Std.LawfulOrderLT` instance must exist also; oth
+erwise, a suitable
+`LT` instance will be generated.
 -/
 def PartialOrder.ofStd (α : Type*) (args : OfStdArgs α := by exact {}) : PartialOrder α where
   toPreorder := .ofStd α args.toPreorderArgs
   le_antisymm := args.isPartialOrder.le_antisymm
 
-/--
-theorem `Std.LawfulOrderCmp.compareOfLessAndEq` / 定理 `Std.LawfulOrderCmp.compareOfLessAndEq`
+/- Although Batteries provides that `compareOfLessAndEq` satisfies `LawfulLECmp`, there is
+unfortunately no link between that and `LawfulOrderCmp` even though they are essentially the same
+thing. -/
+/-
+**Std.LawfulOrderCmp.compareOfLessAndEq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Std.LawfulOrderCmp.compareOfLessAndEq (α : Type*) [LE α] [LT α] [LawfulOrd
+erLT α] [IsLinearOrder α] [DecidableEq α] [DecidableLT α] : LawfulOrderCmp (fun 
+a b : α => compareOfLessAndEq a b)
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isLE_compareOfLessAndEq`：∀ {α : Type u} [inst : LT α] [inst_1 : LE α] [i
+nst_2 : DecidableLT α] [DecidableLE α] [inst_4 : DecidableEq α],   (∀ {x y : α},
+ x ≤ y → y ≤ …
+· 使用定理 `Std.le_antisymm`：∀ {α : Type u} [inst : LE α] [Std.Antisymm fun x1 x2 =>
+ x1 ≤ x2] {a b : α}, a ≤ b → b ≤ a → a = b
+· 使用定理 `Std.instAntisymmLeOfIsPartialOrder`：∀ {α : Type u} [inst : LE α] [Std.Is
+PartialOrder α], Std.Antisymm fun x1 x2 => x1 ≤ x2
+· 使用定理 `Std.IsLinearOrder.toIsPartialOrder`：∀ {α : Type u} {inst : LE α} [self :
+ Std.IsLinearOrder α], Std.IsPartialOrder α
+· 使用定理 `Std.not_le`：∀ {α : Type u} [inst : LT α] [inst_1 : LE α] [Std.Total fun 
+x1 x2 => x1 ≤ x2] [Std.LawfulOrderLT α] {a b : α},   ¬a ≤ b ↔ b < a
+· 使用定理 `Std.instTotalLeOfIsLinearPreorder`：∀ {α : Type u} [inst : LE α] [Std.IsL
+inearPreorder α], Std.Total fun x1 x2 => x1 ≤ x2
+· 使用定理 `Std.IsLinearOrder.toIsLinearPreorder`：∀ {α : Type u} [inst : LE α] [self
+ : Std.IsLinearOrder α], Std.IsLinearPreorder α
+· 使用定理 `Std.le_total`：∀ {α : Type u} [inst : LE α] [Std.Total fun x1 x2 => x1 ≤ 
+x2] {a b : α}, a ≤ b ∨ b ≤ a
+· 使用定理 `isGE_compareOfLessAndEq`：∀ {α : Type u} [inst : LT α] [inst_1 : LE α] [i
+nst_2 : DecidableLT α] [DecidableLE α] [inst_4 : DecidableEq α],   (∀ {x y : α},
+ x ≤ y → y ≤ …
 
-English:
-theorem Std.LawfulOrderCmp.compareOfLessAndEq
-  statement: (α : Type*)
-  proof: let : Ord α := ⟨fun a b : α => _root_.compareOfLessAndEq a b⟩
-  { isLE_compare _ _ :=
-      have : DecidableLE α := fun _ _ => Classical.propDecidable _
-      isLE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total)
-    isGE_compare _ _ :=
-      have : DecidableLE α := fun _ _ => Classical.propDecidable _
-      isGE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total) }
-
-中文:
-定理 Std.LawfulOrderCmp.compareOfLessAndEq
-  结论: (α : 类型)
-  证明: let : Ord α := ⟨fun a b : α => _root_.compareOfLessAndEq a b⟩
-  { isLE_compare _ _ :=
-      have : DecidableLE α := fun _ _ => Classical.propDecidable _
-      isLE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total)
-    isGE_compare _ _ :=
-      have : DecidableLE α := fun _ _ => Classical.propDecidable _
-      isGE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total) }
-
-Depends on / 依赖: Classical, Classical.propDecidable, DecidableLE, Std.le_antisymm, Std.le_total, Std.not_le, _root_, _root_.compareOfLessAndEq, compareOfLessAndEq, isGE_compare, isGE_compareOfLessAndEq, isLE_compare, isLE_compareOfLessAndEq, le_antisymm, le_total, not_le, propDecidable
+--- 原说明 ---
+Although Batteries provides that `compareOfLessAndEq` satisfies `LawfulLECmp`, t
+here is
+unfortunately no link between that and `LawfulOrderCmp` even though they are ess
+entially the same
+thing.
 -/
 theorem Std.LawfulOrderCmp.compareOfLessAndEq (α : Type*)
     [LE α] [LT α] [LawfulOrderLT α] [IsLinearOrder α] [DecidableEq α] [DecidableLT α] :
-    LawfulOrderCmp (fun a b : α => compareOfLessAndEq a b) :=
-  let : Ord α := ⟨fun a b : α => _root_.compareOfLessAndEq a b⟩
+    LawfulOrderCmp (fun a b : α ↦ compareOfLessAndEq a b) :=
+  let : Ord α := ⟨fun a b : α ↦ _root_.compareOfLessAndEq a b⟩
   { isLE_compare _ _ :=
-      have : DecidableLE α := fun _ _ => Classical.propDecidable _
-      isLE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total)
+      have : DecidableLE α := fun _ _ ↦ Classical.propDecidable _
+      isLE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ ↦ Std.le_total)
     isGE_compare _ _ :=
-      have : DecidableLE α := fun _ _ => Classical.propDecidable _
-      isGE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ => Std.le_total) }
+      have : DecidableLE α := fun _ _ ↦ Classical.propDecidable _
+      isGE_compareOfLessAndEq Std.le_antisymm Std.not_le (fun _ _ ↦ Std.le_total) }
 
-/--
-Definition of `LinearOrder.OfStdArgs` / `LinearOrder.OfStdArgs` 的定义
+/-- Arguments for `LinearOrder.ofStd`; see that function for details. -/
+/-
+**LinearOrder.OfStdArgs** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：LinearOrder.OfStdArgs (α : Type*) extends toPartialOrderArgs : PartialOrde
+r.OfStdArgs α where /-- ≤ forms a linear order. -/ isLinearOrder : let
+参数：α : Type*。
+继承自：toPartialOrderArgs : PartialOrder.OfStdArgs α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LinearOrder.OfStdArgs
-  parameters: (α : Type*)
-  axioms and operations (10):
-    - isLinearOrder : let  [default: le Std.IsLinearOrder α := by extract_lets first | infer_inst]
-    - decidableLE : DecidableLE α  [default: by first | infer_instance | exact _root_.DecidableLE.ofOrd _]
-    - decidableEq : let  [default: toPartialOrderArgs; let := decidableLE DecidableEq α := by e]
-    - decidableLT : let  [default: toPreorderArgs; let := decidableLE DecidableLT α := by extra]
-    - min : let  [default: le; let := decidableLE Min α := by extract_lets first | infe]
-    - max : let  [default: le; let := decidableLE Max α := by extract_lets first | infe]
-    - lawfulOrderLeftLeaningMin : Std.LawfulOrderLeftLeaningMin α  [default: by infer_instance]
-    - lawfulOrderLeftLeaningMax : Std.LawfulOrderLeftLeaningMax α  [default: by infer_instance]
-    - ord : let  [default: lt; let := decidableEq; let := decidableLT Ord α := by extra]
-    - lawfulOrderOrd : let  [default: le; let := lt; let := lawfulOrderLT; let := isLinearOrder le]
-
-中文:
-结构 线性序.OfStdArgs
-  参数: (α : 类型)
-  公理与运算 (10 个):
-    - isLinearOrder : let  [默认: le Std.IsLinearOrder α := by extract_lets first | infer_inst]
-    - decidableLE : DecidableLE α  [默认: by first | infer_instance | exact _root_.DecidableLE.ofOrd _]
-    - decidableEq : let  [默认: toPartialOrderArgs; let := decidableLE DecidableEq α := by e]
-    - decidableLT : let  [默认: toPreorderArgs; let := decidableLE DecidableLT α := by extra]
-    - min : let  [默认: le; let := decidableLE Min α := by extract_lets first | infe]
-    - max : let  [默认: le; let := decidableLE Max α := by extract_lets first | infe]
-    - lawfulOrderLeftLeaningMin : Std.LawfulOrderLeftLeaningMin α  [默认: by infer_instance]
-    - lawfulOrderLeftLeaningMax : Std.LawfulOrderLeftLeaningMax α  [默认: by infer_instance]
-    - ord : let  [默认: lt; let := decidableEq; let := decidableLT Ord α := by extra]
-    - lawfulOrderOrd : let  [默认: le; let := lt; let := lawfulOrderLT; let := isLinearOrder le]
+--- 原说明 ---
+Arguments for `LinearOrder.ofStd`; see that function for details.
 -/
 structure LinearOrder.OfStdArgs (α : Type*) extends
     toPartialOrderArgs : PartialOrder.OfStdArgs α where
@@ -351,7 +327,7 @@ structure LinearOrder.OfStdArgs (α : Type*) extends
     extract_lets
     first
     | infer_instance
-    | exact ⟨fun a b => _root_.compareOfLessAndEq a b⟩
+    | exact ⟨fun a b ↦ _root_.compareOfLessAndEq a b⟩
   /-- `Ord` is compatible with ≤. -/
   lawfulOrderOrd :
       let := le; let := lt; let := lawfulOrderLT; let := isLinearOrder
@@ -388,82 +364,51 @@ will be generated.
 If an `Ord` instance exists, it will be used, in which case the user must provide an
 `Std.LawfulOrderOrd` instance. Otherwise, it will be generated. -/
 @[expose, implicit_reducible]
-/--
-Definition of `LinearOrder.ofStd` / `LinearOrder.ofStd` 的定义
+/-
+**LinearOrder.ofStd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LinearOrder.ofStd (α : Type*) (args : OfStdArgs α
+参数：α : Type*。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearOrder.OfStdArgs.isLinearOrder`：∀ {α : Type u_1} (self : LinearOrde
+r.OfStdArgs α),   let this := self.le;   Std.IsLinearOrder α
+· 使用定理 `LinearOrder.OfStdArgs.lawfulOrderLeftLeaningMin`：∀ {α : Type u_1} (self 
+: LinearOrder.OfStdArgs α), Std.LawfulOrderLeftLeaningMin α
+· 使用定理 `LinearOrder.OfStdArgs.lawfulOrderLeftLeaningMax`：∀ {α : Type u_1} (self 
+: LinearOrder.OfStdArgs α), Std.LawfulOrderLeftLeaningMax α
 
-English:
-definition LinearOrder.ofStd
-  signature: (α : Type*) (args : OfStdArgs α := by exact {})
-  body: let := args.le
-  let := args.lt
-  have := args.lawfulOrderLT
-  have := args.isLinearOrder
-  let := args.decidableLE
-  have := args.lawfulOrderLeftLeaningMin
-  have := args.lawfulOrderLeftLeaningMax
-  { toPartialOrder := .ofStd _ args.toPartialOrderArgs
-    le_total := args.isLinearOrder.le_total
-    toDecidableLE := args.decidableLE
-    toDecidableEq := args.decidableEq
-    toDecidableLT := args.decidableLT
-    toMin := args.min
-    toMax := args.max
-    min_def _ _ := Std.min_eq_if
-    max_def a b := by
-      rw [Std.max_eq_if]
-      split
-      · split
-        · exact Std.le_antisymm ‹_› ‹_›
-        · rfl
-      case _ h => rw [if_pos (Std.le_of_lt (Std.not_le.mp h))]
-    toOrd := args.ord
-    compare_eq_compareOfLessAndEq a b := by
-      let := args.ord
-      have := args.lawfulOrderOrd
-      rw [compareOfLessAndEq]
-      split_ifs
-      case _ => rwa [Std.compare_eq_lt]
-      case _ => rwa [Std.compare_eq_iff_eq]
-      case _ h h' =>
-exact Std.compare_eq_gt.mpr Std.lt_of_le_of_ne (Std.not_lt.mp h) (Ne.symm h') }
+--- 原说明 ---
+Create a `LinearOrder` from a type satisfying `Std.IsLinearOrder`.
 
-中文:
-定义 线性序.ofStd
-  签名: (α : 类型) (args : OfStdArgs α := by exact {})
-  定义体: let := args.le
-  let := args.lt
-  have := args.lawfulOrderLT
-  have := args.isLinearOrder
-  let := args.decidableLE
-  have := args.lawfulOrderLeftLeaningMin
-  have := args.lawfulOrderLeftLeaningMax
-  { toPartialOrder := .ofStd _ args.toPartialOrderArgs
-    le_total := args.isLinearOrder.le_total
-    toDecidableLE := args.decidableLE
-    toDecidableEq := args.decidableEq
-    toDecidableLT := args.decidableLT
-    toMin := args.min
-    toMax := args.max
-    min_def _ _ := Std.min_eq_if
-    max_def a b := by
-      rw [Std.max_eq_if]
-      split
-      · split
-        · exact Std.le_antisymm ‹_› ‹_›
-        · rfl
-      case _ h => rw [if_pos (Std.le_of_lt (Std.not_le.mp h))]
-    toOrd := args.ord
-    compare_eq_compareOfLessAndEq a b := by
-      let := args.ord
-      have := args.lawfulOrderOrd
-      rw [compareOfLessAndEq]
-      split_ifs
-      case _ => rwa [Std.compare_eq_lt]
-      case _ => rwa [Std.compare_eq_iff_eq]
-      case _ h h' =>
-exact Std.compare_eq_gt.mpr Std.lt_of_le_of_ne (Std.not_lt.mp h) (Ne.symm h') }
+If an `LE` instance exists, either an `Std.IsLinearOrder` instance must exist, o
+r there must be an
+`Ord` instance together with `Std.LawfulOrderOrd`, `Std.LawfulEqOrd`, and `Std.T
+ransOrd` instances.
 
-Depends on / 依赖: LinearOrder, Std.min_eq_if, args.decidableEq, args.decidableLE, args.decidableLT, args.isLinearOrder, args.isLinearOrder.le_total, args.lawfulOrderLT, args.lawfulOrderLeftLeaningMax, args.lawfulOrderLeftLeaningMin, args.le, args.lt, args.max, args.min, args.toPartialOrderArgs, decidableEq, decidableLE, decidableLT, isLinearOrder, lawfulOrderLT
+If no `LE` instance exists, it can be generated from `Ord`, `Std.LawfulEqOrd`, a
+nd `Std.TransOrd`
+instances.
+
+If an `LT` instance exists, an `Std.LawfulOrderLT` instance must exist also; oth
+erwise, a suitable
+`LT` instance will be generated.
+
+If a `DecidableLE` instance exists, it will be used. Otherwise, it can be genera
+ted from an `Ord`
+instance.
+
+If `DecidableEq` and `DecidableLT` instances exist, they will be used. Otherwise
+, they will be
+generated from the `DecidableLE` instance.
+
+If `Min` and `Max` instances exist, they will be used, in which case the user mu
+st provide
+`Std.LawfulOrderLeftLeaningMin` or `Std.LawfulOrderLeftLeaningMax` respectively.
+ Otherwise, they
+will be generated.
+
+If an `Ord` instance exists, it will be used, in which case the user must provid
+e an
+`Std.LawfulOrderOrd` instance. Otherwise, it will be generated.
 -/
 def LinearOrder.ofStd (α : Type*) (args : OfStdArgs α := by exact {}) : LinearOrder α :=
   let := args.le
@@ -497,4 +442,4 @@ def LinearOrder.ofStd (α : Type*) (args : OfStdArgs α := by exact {}) : Linear
       case _ => rwa [Std.compare_eq_lt]
       case _ => rwa [Std.compare_eq_iff_eq]
       case _ h h' =>
-exact Std.compare_eq_gt.mpr Std.lt_of_le_of_ne (Std.not_lt.mp h) (Ne.symm h') }
+        exact Std.compare_eq_gt.mpr <| Std.lt_of_le_of_ne (Std.not_lt.mp h) (Ne.symm h') }

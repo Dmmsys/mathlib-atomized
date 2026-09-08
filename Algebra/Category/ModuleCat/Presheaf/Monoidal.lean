@@ -31,6 +31,10 @@ universe v u v₁ u₁
 
 variable {C : Type*} [Category* C] {R : Cᵒᵖ ⥤ CommRingCat.{u}}
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Cᵒᵖ) : CommRing ((R ⋙ forget₂ _ RingCat).obj X) :=
   inferInstanceAs (CommRing (R.obj X))
 
@@ -41,96 +45,49 @@ namespace Monoidal
 variable (M₁ M₂ M₃ M₄ : PresheafOfModules.{u} (R ⋙ forget₂ _ _))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `tensorObjMap` / `tensorObjMap` 的定义
+/-- Auxiliary definition for `tensorObj`. -/
+/-
+**PresheafOfModules.Monoidal.tensorObjMap** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfM
+odules.Monoidal`。
+形式化陈述：tensorObjMap {X Y : Cᵒᵖ} (f : X ⟶ Y) : M₁.obj X otimes M₂.obj X ⟶ (ModuleC
+at.restrictScalars (R.map f).hom).obj (M₁.obj Y otimes M₂.obj Y)
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorObjMap
-  signature: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  body: ModuleCat.MonoidalCategory.tensorLift (fun m₁ m₂ => M₁.map f m₁ otimesₜ M₂.map f m₂)
-    (by
-      intro m₁ m₁' m₂
-      dsimp +instances
-      rw [map_add]; rw [TensorProduct.add_tmul])
-    (by intro a m₁ m₂; dsimp; erw [M₁.map_smul]; rfl)
-    (by
-      intro m₁ m₂ m₂'
-      dsimp +instances
-      rw [map_add]; rw [TensorProduct.tmul_add])
-    (by intro a m₁ m₂; dsimp; erw [M₂.map_smul, TensorProduct.tmul_smul (r := R.map f a)]; rfl)
-
-中文:
-定义 tensorObjMap
-  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  定义体: ModuleCat.MonoidalCategory.tensorLift (fun m₁ m₂ => M₁.map f m₁ otimesₜ M₂.map f m₂)
-    (by
-      intro m₁ m₁' m₂
-      dsimp +instances
-      rw [map_add]; rw [TensorProduct.add_tmul])
-    (by intro a m₁ m₂; dsimp; erw [M₁.map_smul]; rfl)
-    (by
-      intro m₁ m₂ m₂'
-      dsimp +instances
-      rw [map_add]; rw [TensorProduct.tmul_add])
-    (by intro a m₁ m₂; dsimp; erw [M₂.map_smul, TensorProduct.tmul_smul (r := R.map f a)]; rfl)
-
-Depends on / 依赖: ModuleCat, ModuleCat.MonoidalCategory.tensorLift, MonoidalCategory, R.map, TensorProduct, TensorProduct.add_tmul, TensorProduct.tmul_add, TensorProduct.tmul_smul, add_tmul, instances, map_add, map_smul, tensorLift, tmul_add, tmul_smul
+--- 原说明 ---
+Auxiliary definition for `tensorObj`.
 -/
-noncomputable def tensorObjMap {X Y : Cᵒᵖ} (f : X ⟶ Y) : M₁.obj X otimes M₂.obj X ⟶
-    (ModuleCat.restrictScalars (R.map f).hom).obj (M₁.obj Y otimes M₂.obj Y) :=
-  ModuleCat.MonoidalCategory.tensorLift (fun m₁ m₂ => M₁.map f m₁ otimesₜ M₂.map f m₂)
+noncomputable def tensorObjMap {X Y : Cᵒᵖ} (f : X ⟶ Y) : M₁.obj X ⊗ M₂.obj X ⟶
+    (ModuleCat.restrictScalars (R.map f).hom).obj (M₁.obj Y ⊗ M₂.obj Y) :=
+  ModuleCat.MonoidalCategory.tensorLift (fun m₁ m₂ ↦ M₁.map f m₁ ⊗ₜ M₂.map f m₂)
     (by
       intro m₁ m₁' m₂
       dsimp +instances
-      rw [map_add]; rw [TensorProduct.add_tmul])
+      rw [map_add, TensorProduct.add_tmul])
     (by intro a m₁ m₂; dsimp; erw [M₁.map_smul]; rfl)
     (by
       intro m₁ m₂ m₂'
       dsimp +instances
-      rw [map_add]; rw [TensorProduct.tmul_add])
+      rw [map_add, TensorProduct.tmul_add])
     (by intro a m₁ m₂; dsimp; erw [M₂.map_smul, TensorProduct.tmul_smul (r := R.map f a)]; rfl)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The tensor product of two presheaves of modules. -/
 @[simps obj]
-/--
-Definition of `tensorObj` / `tensorObj` 的定义
+/-
+**PresheafOfModules.Monoidal.tensorObj** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfModu
+les.Monoidal`。
+形式化陈述：tensorObj : PresheafOfModules (R ⋙ forget₂ _ _) where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorObj
-  signature: : PresheafOfModules (R ⋙ forget₂ _ _) where
-  body: M₁.obj X otimes M₂.obj X
-  map f := tensorObjMap M₁ M₂ f
-  map_id X := ModuleCat.MonoidalCategory.tensor_ext (by
-    intro m₁ m₂
-    dsimp [tensorObjMap]
-    simp
-    rfl) -- `ModuleCat.restrictScalarsId'App_inv_apply` doesn't get picked up due to type mismatch
-  map_comp f g := ModuleCat.MonoidalCategory.tensor_ext (by
-    intro m₁ m₂
-    dsimp [tensorObjMap]
-    simp +instances)
-
-中文:
-定义 tensorObj
-  签名: : 预模层 (R ⋙ forget₂ _ _) where
-  定义体: M₁.obj X otimes M₂.obj X
-  map f := tensorObjMap M₁ M₂ f
-  map_id X := ModuleCat.MonoidalCategory.tensor_ext (by
-    intro m₁ m₂
-    dsimp [tensorObjMap]
-    simp
-    rfl) -- `ModuleCat.restrictScalarsId'App_inv_apply` doesn't get picked up due to type mismatch
-  map_comp f g := ModuleCat.MonoidalCategory.tensor_ext (by
-    intro m₁ m₂
-    dsimp [tensorObjMap]
-    simp +instances)
-
-Depends on / 依赖: otimes
+--- 原说明 ---
+The tensor product of two presheaves of modules.
 -/
 noncomputable def tensorObj : PresheafOfModules (R ⋙ forget₂ _ _) where
-  obj X := M₁.obj X otimes M₂.obj X
+  obj X := M₁.obj X ⊗ M₂.obj X
   map f := tensorObjMap M₁ M₂ f
   map_id X := ModuleCat.MonoidalCategory.tensor_ext (by
     intro m₁ m₂
@@ -146,68 +103,45 @@ variable {M₁ M₂ M₃ M₄}
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `tensorObj_map_tmul` / 引理 `tensorObj_map_tmul`
-
-English:
-lemma tensorObj_map_tmul
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m₁ : M₁.obj X) (m₂ : M₂.obj X)
-  proof: rfl
-
-中文:
-引理 tensorObj_map_tmul
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) (m₁ : M₁.obj X) (m₂ : M₂.obj X)
-  证明: rfl
-
-Depends on / 依赖: otimes
+/-
+**PresheafOfModules.Monoidal.tensorObj_map_tmul** 是 Mathlib 中的一个引理，位于命名空间 `Presh
+eafOfModules.Monoidal`。
+形式化陈述：tensorObj_map_tmul {X Y : Cᵒᵖ} (f : X ⟶ Y) (m₁ : M₁.obj X) (m₂ : M₂.obj X)
+ : DFunLike.coe (α
+参数：f : X ⟶ Y；m₁ : M₁.obj X；m₂ : M₂.obj X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorObj_map_tmul {X Y : Cᵒᵖ} (f : X ⟶ Y) (m₁ : M₁.obj X) (m₂ : M₂.obj X) :
-    DFunLike.coe (α := (M₁.obj X otimes M₂.obj X :))
-      (β := fun _ => (ModuleCat.restrictScalars (R.map f).hom).obj (M₁.obj Y otimes M₂.obj Y))
-      (ModuleCat.Hom.hom (R := ↑(R.obj X)) ((tensorObj M₁ M₂).map f)) (m₁ otimesₜ[R.obj X] m₂) =
-    M₁.map f m₁ otimesₜ[R.obj Y] M₂.map f m₂ := rfl
+    DFunLike.coe (α := (M₁.obj X ⊗ M₂.obj X :))
+      (β := fun _ ↦ (ModuleCat.restrictScalars (R.map f).hom).obj (M₁.obj Y ⊗ M₂.obj Y))
+      (ModuleCat.Hom.hom (R := ↑(R.obj X)) ((tensorObj M₁ M₂).map f)) (m₁ ⊗ₜ[R.obj X] m₂) =
+    M₁.map f m₁ ⊗ₜ[R.obj Y] M₂.map f m₂ := rfl
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The tensor product of two morphisms of presheaves of modules. -/
 @[simps]
-/--
-Definition of `tensorHom` / `tensorHom` 的定义
+/-
+**PresheafOfModules.Monoidal.tensorHom** 是 Mathlib 中的一个定义，位于命名空间 `PresheafOfModu
+les.Monoidal`。
+形式化陈述：tensorHom (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄) : tensorObj M₁ M₃ ⟶ tensorObj M₂ M₄ 
+where app X
+参数：f : M₁ ⟶ M₂；g : M₃ ⟶ M₄。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorHom
-  signature: (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄)
-  body: f.app X otimesₘ g.app X
-  naturality {X Y} φ := ModuleCat.MonoidalCategory.tensor_ext (fun m₁ m₃ => by
-    dsimp
-    rw [tensorObj_map_tmul]
-    -- Need `erw` because of the type mismatch in `map` and the tensor product.
-    erw [ModuleCat.MonoidalCategory.tensorHom_tmul, tensorObj_map_tmul]
-    rw [naturality_apply]; rw [naturality_apply]
-    simp)
-
-中文:
-定义 tensorHom
-  签名: (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄)
-  定义体: f.app X otimesₘ g.app X
-  naturality {X Y} φ := ModuleCat.MonoidalCategory.tensor_ext (fun m₁ m₃ => by
-    dsimp
-    rw [tensorObj_map_tmul]
-    -- Need `erw` because of the type mismatch in `map` and the tensor product.
-    erw [ModuleCat.MonoidalCategory.tensorHom_tmul, tensorObj_map_tmul]
-    rw [naturality_apply]; rw [naturality_apply]
-    simp)
-
-Depends on / 依赖: f.app, g.app
+--- 原说明 ---
+The tensor product of two morphisms of presheaves of modules.
 -/
 noncomputable def tensorHom (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄) : tensorObj M₁ M₃ ⟶ tensorObj M₂ M₄ where
-  app X := f.app X otimesₘ g.app X
-  naturality {X Y} φ := ModuleCat.MonoidalCategory.tensor_ext (fun m₁ m₃ => by
+  app X := f.app X ⊗ₘ g.app X
+  naturality {X Y} φ := ModuleCat.MonoidalCategory.tensor_ext (fun m₁ m₃ ↦ by
     dsimp
     rw [tensorObj_map_tmul]
     -- Need `erw` because of the type mismatch in `map` and the tensor product.
     erw [ModuleCat.MonoidalCategory.tensorHom_tmul, tensorObj_map_tmul]
-    rw [naturality_apply]; rw [naturality_apply]
+    rw [naturality_apply, naturality_apply]
     simp)
 
 end Monoidal
@@ -215,52 +149,13 @@ end Monoidal
 open Monoidal
 
 open ModuleCat.MonoidalCategory in
-/--
-Instance `monoidalCategoryStruct` / 实例 `monoidalCategoryStruct`
-
-English:
-instance monoidalCategoryStruct
-  signature: :
-  body: tensorObj
-  whiskerLeft _ _ _ g := tensorHom (𝟙 _) g
-  whiskerRight f _ := tensorHom f (𝟙 _)
-  tensorHom := tensorHom
-  tensorUnit := unit _
-  associator M₁ M₂ M₃ := isoMk (fun _ => α_ _ _ _)
-    (fun _ _ _ => ModuleCat.MonoidalCategory.tensor_ext₃' (by intros; rfl))
-  leftUnitor M := Iso.symm (isoMk (fun _ => (fun_ _).symm) (fun X Y f => by
-    ext m
-    dsimp [CommRingCat.forgetToRingCat_obj]
-    erw [leftUnitor_inv_apply, leftUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
-    rfl))
-  rightUnitor M := Iso.symm (isoMk (fun _ => (ρ_ _).symm) (fun X Y f => by
-    ext m
-    dsimp [CommRingCat.forgetToRingCat_obj]
-    erw [rightUnitor_inv_apply, rightUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
-    rfl))
-
-中文:
-实例 monoidalCategoryStruct
-  签名: :
-  定义体: tensorObj
-  whiskerLeft _ _ _ g := tensorHom (𝟙 _) g
-  whiskerRight f _ := tensorHom f (𝟙 _)
-  tensorHom := tensorHom
-  tensorUnit := unit _
-  associator M₁ M₂ M₃ := isoMk (fun _ => α_ _ _ _)
-    (fun _ _ _ => ModuleCat.MonoidalCategory.tensor_ext₃' (by intros; rfl))
-  leftUnitor M := Iso.symm (isoMk (fun _ => (fun_ _).symm) (fun X Y f => by
-    ext m
-    dsimp [CommRingCat.forgetToRingCat_obj]
-    erw [leftUnitor_inv_apply, leftUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
-    rfl))
-  rightUnitor M := Iso.symm (isoMk (fun _ => (ρ_ _).symm) (fun X Y f => by
-    ext m
-    dsimp [CommRingCat.forgetToRingCat_obj]
-    erw [rightUnitor_inv_apply, rightUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
-    rfl))
-
-Depends on / 依赖: tensorObj
+/-
+**PresheafOfModules.monoidalCategoryStruct** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOf
+Modules`。
+形式化陈述：monoidalCategoryStruct : MonoidalCategoryStruct (PresheafOfModules.{u} (R 
+⋙ forget₂ _ _)) where tensorObj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance monoidalCategoryStruct :
     MonoidalCategoryStruct (PresheafOfModules.{u} (R ⋙ forget₂ _ _)) where
@@ -269,59 +164,25 @@ noncomputable instance monoidalCategoryStruct :
   whiskerRight f _ := tensorHom f (𝟙 _)
   tensorHom := tensorHom
   tensorUnit := unit _
-  associator M₁ M₂ M₃ := isoMk (fun _ => α_ _ _ _)
-    (fun _ _ _ => ModuleCat.MonoidalCategory.tensor_ext₃' (by intros; rfl))
-  leftUnitor M := Iso.symm (isoMk (fun _ => (fun_ _).symm) (fun X Y f => by
+  associator M₁ M₂ M₃ := isoMk (fun _ ↦ α_ _ _ _)
+    (fun _ _ _ ↦ ModuleCat.MonoidalCategory.tensor_ext₃' (by intros; rfl))
+  leftUnitor M := Iso.symm (isoMk (fun _ ↦ (λ_ _).symm) (fun X Y f ↦ by
     ext m
     dsimp [CommRingCat.forgetToRingCat_obj]
     erw [leftUnitor_inv_apply, leftUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
     rfl))
-  rightUnitor M := Iso.symm (isoMk (fun _ => (ρ_ _).symm) (fun X Y f => by
+  rightUnitor M := Iso.symm (isoMk (fun _ ↦ (ρ_ _).symm) (fun X Y f ↦ by
     ext m
     dsimp [CommRingCat.forgetToRingCat_obj]
     erw [rightUnitor_inv_apply, rightUnitor_inv_apply, tensorObj_map_tmul, (R.map f).hom.map_one]
     rfl))
-
-/--
-Instance `monoidalCategory` / 实例 `monoidalCategory`
-
-English:
-instance monoidalCategory
-  signature: :
-  body: by ext1; apply tensorHom_def
-  id_tensorHom_id _ _ := by ext1; apply id_tensorHom_id
-  tensorHom_comp_tensorHom _ _ _ _ := by ext1; apply tensorHom_comp_tensorHom
-  whiskerLeft_id M₁ M₂ := by
-    ext1 X
-    apply MonoidalCategory.whiskerLeft_id (C := ModuleCat (R.obj X))
-  id_whiskerRight _ _ := by
-    ext1 X
-    apply MonoidalCategory.id_whiskerRight (C := ModuleCat (R.obj X))
-  associator_naturality _ _ _ := by ext1; apply associator_naturality
-  leftUnitor_naturality _ := by ext1; apply leftUnitor_naturality
-  rightUnitor_naturality _ := by ext1; apply rightUnitor_naturality
-  pentagon _ _ _ _ := by ext1; apply pentagon
-  triangle _ _ := by ext1; apply triangle
-
-中文:
-实例 monoidalCategory
-  签名: :
-  定义体: by ext1; apply tensorHom_def
-  id_tensorHom_id _ _ := by ext1; apply id_tensorHom_id
-  tensorHom_comp_tensorHom _ _ _ _ := by ext1; apply tensorHom_comp_tensorHom
-  whiskerLeft_id M₁ M₂ := by
-    ext1 X
-    apply MonoidalCategory.whiskerLeft_id (C := ModuleCat (R.obj X))
-  id_whiskerRight _ _ := by
-    ext1 X
-    apply MonoidalCategory.id_whiskerRight (C := ModuleCat (R.obj X))
-  associator_naturality _ _ _ := by ext1; apply associator_naturality
-  leftUnitor_naturality _ := by ext1; apply leftUnitor_naturality
-  rightUnitor_naturality _ := by ext1; apply rightUnitor_naturality
-  pentagon _ _ _ _ := by ext1; apply pentagon
-  triangle _ _ := by ext1; apply triangle
-
-Depends on / 依赖: ModuleCat, MonoidalCategory, MonoidalCategory.id_whiskerRight, MonoidalCategory.whiskerLeft_id, R.obj, associator_naturality, id_tensorHom_id, id_whiskerRight, leftUnitor_naturality, rightUnitor, tensorHom_comp_tensorHom, tensorHom_def, whiskerLeft_id
+/-
+**PresheafOfModules.monoidalCategory** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModule
+s`。
+形式化陈述：monoidalCategory : MonoidalCategory (PresheafOfModules.{u} (R ⋙ forget₂ _ 
+_)) where tensorHom_def _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance monoidalCategory :
     MonoidalCategory (PresheafOfModules.{u} (R ⋙ forget₂ _ _)) where
@@ -341,65 +202,25 @@ noncomputable instance monoidalCategory :
   triangle _ _ := by ext1; apply triangle
 
 open BraidedCategory
-
-/--
-Instance `symmetricCategory` / 实例 `symmetricCategory`
-
-English:
-instance symmetricCategory
-  signature: :
-  body: isoMk (fun X => braiding (C := ModuleCat (R.obj X)) (M₁.obj X) (M₂.obj X))
-      (fun _ _ f => ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl))
-  braiding_naturality_right _ _ _ _ := by
-    ext : 1
-    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
-  braiding_naturality_left _ _ := by
-    ext : 1
-    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
-  hexagon_forward _ _ _ := by
-    ext : 1
-    apply hexagon_forward (C := ModuleCat (R.obj _))
-  hexagon_reverse _ _ _ := by
-    ext : 1
-    apply hexagon_reverse (C := ModuleCat (R.obj _))
-  symmetry _ _ := by
-    ext : 1
-    apply SymmetricCategory.symmetry (C := ModuleCat (R.obj _))
-
-中文:
-实例 symmetricCategory
-  签名: :
-  定义体: isoMk (fun X => braiding (C := ModuleCat (R.obj X)) (M₁.obj X) (M₂.obj X))
-      (fun _ _ f => ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl))
-  braiding_naturality_right _ _ _ _ := by
-    ext : 1
-    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
-  braiding_naturality_left _ _ := by
-    ext : 1
-    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
-  hexagon_forward _ _ _ := by
-    ext : 1
-    apply hexagon_forward (C := ModuleCat (R.obj _))
-  hexagon_reverse _ _ _ := by
-    ext : 1
-    apply hexagon_reverse (C := ModuleCat (R.obj _))
-  symmetry _ _ := by
-    ext : 1
-    apply SymmetricCategory.symmetry (C := ModuleCat (R.obj _))
-
-Depends on / 依赖: ModuleCat, ModuleCat.MonoidalCategory.tensor_ext, MonoidalCategory, R.obj, braiding, braiding_naturality_left, braiding_naturality_right, hexagon_forward, hexagon_reverse, tensor_ext
+/-
+**PresheafOfModules.symmetricCategory** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModul
+es`。
+形式化陈述：symmetricCategory : SymmetricCategory (PresheafOfModules.{u} (R ⋙ forget₂ 
+_ _)) where braiding M₁ M₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance symmetricCategory :
     SymmetricCategory (PresheafOfModules.{u} (R ⋙ forget₂ _ _)) where
   braiding M₁ M₂ :=
-    isoMk (fun X => braiding (C := ModuleCat (R.obj X)) (M₁.obj X) (M₂.obj X))
-      (fun _ _ f => ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl))
+    isoMk (fun X ↦ braiding (C := ModuleCat (R.obj X)) (M₁.obj X) (M₂.obj X))
+      (fun _ _ f ↦ ModuleCat.MonoidalCategory.tensor_ext (fun _ _ ↦ rfl))
   braiding_naturality_right _ _ _ _ := by
     ext : 1
-    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
+    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ ↦ rfl)
   braiding_naturality_left _ _ := by
     ext : 1
-    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ => rfl)
+    exact ModuleCat.MonoidalCategory.tensor_ext (fun _ _ ↦ rfl)
   hexagon_forward _ _ _ := by
     ext : 1
     apply hexagon_forward (C := ModuleCat (R.obj _))
@@ -414,43 +235,30 @@ section
 
 variable (M₁ M₂ M₃ M₄ : PresheafOfModules.{u} (R ⋙ forget₂ _ _))
 
-/--
-lemma `tensorObj_obj` / 引理 `tensorObj_obj`
-
-English:
-lemma tensorObj_obj
-  given: (X : Cᵒᵖ)
-  proof: rfl
-
-中文:
-引理 tensorObj_obj
-  条件: (X : Cᵒᵖ)
-  证明: rfl
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.tensorObj_obj** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModules`。
+形式化陈述：tensorObj_obj (X : Cᵒᵖ) : (M₁ otimes M₂).obj X = MonoidalCategory.tensorOb
+j (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorObj_obj (X : Cᵒᵖ) :
-    (M₁ otimes M₂).obj X =
+    (M₁ ⊗ M₂).obj X =
       MonoidalCategory.tensorObj (C := ModuleCat (R.obj X)) (M₁.obj X) (M₂.obj X) := rfl
 
 attribute [local simp] tensorObj_obj
 
 variable {M₂ M₃} in
 @[simp]
-/--
-lemma `whiskerLeft_app` / 引理 `whiskerLeft_app`
-
-English:
-lemma whiskerLeft_app
-  given: (f : M₂ ⟶ M₃) (X : Cᵒᵖ)
-  proof: rfl
-
-中文:
-引理 whiskerLeft_app
-  条件: (f : M₂ ⟶ M₃) (X : Cᵒᵖ)
-  证明: rfl
-
-Depends on / 依赖: ModuleCat, R.obj, f.app
+/-
+**PresheafOfModules.whiskerLeft_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModules
+`。
+形式化陈述：whiskerLeft_app (f : M₂ ⟶ M₃) (X : Cᵒᵖ) : dsimp% (M₁ ◁ f).app X = whiskerL
+eft (C
+参数：f : M₂ ⟶ M₃；X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft_app (f : M₂ ⟶ M₃) (X : Cᵒᵖ) :
     dsimp% (M₁ ◁ f).app X = whiskerLeft (C := ModuleCat (R.obj X)) (M₁.obj X) (f.app X) :=
@@ -458,166 +266,92 @@ lemma whiskerLeft_app (f : M₂ ⟶ M₃) (X : Cᵒᵖ) :
 
 variable {M₁ M₂} in
 @[simp]
-/--
-lemma `whiskerRight_app` / 引理 `whiskerRight_app`
-
-English:
-lemma whiskerRight_app
-  given: (f : M₁ ⟶ M₂) (M₃ : PresheafOfModules.{u} (R ⋙ forget₂ _ _)) (X : Cᵒᵖ)
-  proof: rfl
-
-中文:
-引理 whiskerRight_app
-  条件: (f : M₁ ⟶ M₂) (M₃ : 预模层.{u} (R ⋙ forget₂ _ _)) (X : Cᵒᵖ)
-  证明: rfl
-
-Depends on / 依赖: ModuleCat, R.obj, f.app
+/-
+**PresheafOfModules.whiskerRight_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModule
+s`。
+形式化陈述：whiskerRight_app (f : M₁ ⟶ M₂) (M₃ : PresheafOfModules.{u} (R ⋙ forget₂ _ 
+_)) (X : Cᵒᵖ) : dsimp% (f ▷ M₃).app X = whiskerRight (C
+参数：f : M₁ ⟶ M₂；M₃ : PresheafOfModules.{u} (R ⋙ forget₂ _ _)；X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerRight_app (f : M₁ ⟶ M₂) (M₃ : PresheafOfModules.{u} (R ⋙ forget₂ _ _)) (X : Cᵒᵖ) :
     dsimp% (f ▷ M₃).app X = whiskerRight (C := ModuleCat (R.obj X)) (f.app X) (M₃.obj X) := rfl
 
 variable {M₁ M₂ M₃ M₄} in
 @[simp]
-/--
-lemma `tensorHom_app` / 引理 `tensorHom_app`
-
-English:
-lemma tensorHom_app
-  given: (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄) (X : Cᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 tensorHom_app
-  条件: (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄) (X : Cᵒᵖ)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj, f.app, g.app
+/-
+**PresheafOfModules.tensorHom_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModules`。
+形式化陈述：tensorHom_app (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄) (X : Cᵒᵖ) : dsimp% (f otimesₘ g)
+.app X = MonoidalCategory.tensorHom (C
+参数：f : M₁ ⟶ M₂；g : M₃ ⟶ M₄；X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorHom_app (f : M₁ ⟶ M₂) (g : M₃ ⟶ M₄) (X : Cᵒᵖ) :
-    dsimp% (f otimesₘ g).app X =
+    dsimp% (f ⊗ₘ g).app X =
       MonoidalCategory.tensorHom (C := ModuleCat (R.obj X)) (f.app X) (g.app X) := rfl
 
 @[simp]
-/--
-lemma `leftUnitor_hom_app` / 引理 `leftUnitor_hom_app`
-
-English:
-lemma leftUnitor_hom_app
-  given: (X : Cᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 leftUnitor_hom_app
-  条件: (X : Cᵒᵖ)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.leftUnitor_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModu
+les`。
+形式化陈述：leftUnitor_hom_app (X : Cᵒᵖ) : dsimp% (fun_ M₁).hom.app X = (leftUnitor (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma leftUnitor_hom_app (X : Cᵒᵖ) :
-    dsimp% (fun_ M₁).hom.app X = (leftUnitor (C := ModuleCat (R.obj X)) (M₁.obj X)).hom :=
+    dsimp% (λ_ M₁).hom.app X = (leftUnitor (C := ModuleCat (R.obj X)) (M₁.obj X)).hom :=
   rfl
 
 @[simp]
-/--
-lemma `leftUnitor_inv_app` / 引理 `leftUnitor_inv_app`
-
-English:
-lemma leftUnitor_inv_app
-  given: (X : Cᵒᵖ)
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 leftUnitor_inv_app
-  条件: (X : Cᵒᵖ)
-  证明: by
-  rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.leftUnitor_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModu
+les`。
+形式化陈述：leftUnitor_inv_app (X : Cᵒᵖ) : dsimp% (fun_ M₁).inv.app X = (leftUnitor (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma leftUnitor_inv_app (X : Cᵒᵖ) :
-    dsimp% (fun_ M₁).inv.app X = (leftUnitor (C := ModuleCat (R.obj X)) (M₁.obj X)).inv := by
+    dsimp% (λ_ M₁).inv.app X = (leftUnitor (C := ModuleCat (R.obj X)) (M₁.obj X)).inv := by
   rfl
 
 @[simp]
-/--
-lemma `rightUnitor_hom_app` / 引理 `rightUnitor_hom_app`
-
-English:
-lemma rightUnitor_hom_app
-  given: (X : Cᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 rightUnitor_hom_app
-  条件: (X : Cᵒᵖ)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.rightUnitor_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfMod
+ules`。
+形式化陈述：rightUnitor_hom_app (X : Cᵒᵖ) : dsimp% (ρ_ M₁).hom.app X = (rightUnitor (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_hom_app (X : Cᵒᵖ) :
     dsimp% (ρ_ M₁).hom.app X = (rightUnitor (C := ModuleCat (R.obj X)) (M₁.obj X)).hom :=
   rfl
 
 @[simp]
-/--
-lemma `rightUnitor_inv_app` / 引理 `rightUnitor_inv_app`
-
-English:
-lemma rightUnitor_inv_app
-  given: (X : Cᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 rightUnitor_inv_app
-  条件: (X : Cᵒᵖ)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.rightUnitor_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfMod
+ules`。
+形式化陈述：rightUnitor_inv_app (X : Cᵒᵖ) : dsimp% (ρ_ M₁).inv.app X = (rightUnitor (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_inv_app (X : Cᵒᵖ) :
     dsimp% (ρ_ M₁).inv.app X = (rightUnitor (C := ModuleCat (R.obj X)) (M₁.obj X)).inv :=
   rfl
 
 @[simp]
-/--
-lemma `associator_hom_app` / 引理 `associator_hom_app`
-
-English:
-lemma associator_hom_app
-  given: (X : Cᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 associator_hom_app
-  条件: (X : Cᵒᵖ)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.associator_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModu
+les`。
+形式化陈述：associator_hom_app (X : Cᵒᵖ) : (α_ M₁ M₂ M₃).hom.app X = (associator (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma associator_hom_app (X : Cᵒᵖ) :
     (α_ M₁ M₂ M₃).hom.app X =
@@ -625,24 +359,13 @@ lemma associator_hom_app (X : Cᵒᵖ) :
   rfl
 
 @[simp]
-/--
-lemma `associator_inv_app` / 引理 `associator_inv_app`
-
-English:
-lemma associator_inv_app
-  given: (X : Cᵒᵖ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 associator_inv_app
-  条件: (X : Cᵒᵖ)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.associator_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModu
+les`。
+形式化陈述：associator_inv_app (X : Cᵒᵖ) : (α_ M₁ M₂ M₃).inv.app X = (associator (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma associator_inv_app (X : Cᵒᵖ) :
     (α_ M₁ M₂ M₃).inv.app X =
@@ -650,26 +373,14 @@ lemma associator_inv_app (X : Cᵒᵖ) :
   rfl
 
 @[simp]
-/--
-lemma `braiding_hom_app` / 引理 `braiding_hom_app`
-
-English:
-lemma braiding_hom_app
-  given: (X : Cᵒᵖ)
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-引理 braiding_hom_app
-  条件: (X : Cᵒᵖ)
-  证明: by
-  rfl
-
-@[simp]
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.braiding_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModule
+s`。
+形式化陈述：braiding_hom_app (X : Cᵒᵖ) : dsimp% (braiding M₁ M₂).hom.app X = (braiding
+ (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma braiding_hom_app (X : Cᵒᵖ) :
     dsimp% (braiding M₁ M₂).hom.app X =
@@ -677,20 +388,14 @@ lemma braiding_hom_app (X : Cᵒᵖ) :
   rfl
 
 @[simp]
-/--
-lemma `braiding_inv_app` / 引理 `braiding_inv_app`
-
-English:
-lemma braiding_inv_app
-  given: (X : Cᵒᵖ)
-  proof: rfl
-
-中文:
-引理 braiding_inv_app
-  条件: (X : Cᵒᵖ)
-  证明: rfl
-
-Depends on / 依赖: ModuleCat, R.obj
+/-
+**PresheafOfModules.braiding_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `PresheafOfModule
+s`。
+形式化陈述：braiding_inv_app (X : Cᵒᵖ) : dsimp% (braiding M₁ M₂).inv.app X = (braiding
+ (C
+参数：X : Cᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma braiding_inv_app (X : Cᵒᵖ) :
     dsimp% (braiding M₁ M₂).inv.app X =
@@ -698,14 +403,22 @@ lemma braiding_inv_app (X : Cᵒᵖ) :
 
 end
 
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : PresheafOfModules.{u} (R ⋙ forget₂ _ _)) :
     PreservesColimitsOfSize.{u, u} (tensorLeft F) where
-  preservesColimitsOfShape := ⟨⟨fun hc => ⟨evaluationJointlyReflectsColimits _ _
-      (fun X => isColimitOfPreserves (tensorLeft (show ModuleCat (R.obj X) from F.obj X))
+  preservesColimitsOfShape := ⟨⟨fun hc ↦ ⟨evaluationJointlyReflectsColimits _ _
+      (fun X ↦ isColimitOfPreserves (tensorLeft (show ModuleCat (R.obj X) from F.obj X))
         (isColimitOfPreserves (evaluation _ X) hc))⟩⟩⟩
-
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : PresheafOfModules.{u} (R ⋙ forget₂ _ _)) :
     PreservesColimitsOfSize.{u, u} (tensorRight F) :=
   preservesColimits_of_natIso (tensorLeftIsoTensorRight F)
 
 end PresheafOfModules
+

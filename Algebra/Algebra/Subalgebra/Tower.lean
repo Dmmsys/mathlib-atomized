@@ -44,25 +44,24 @@ variable [CommSemiring R] [Semiring A] [Algebra R A]
 variable [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M]
 variable {A}
 
-/--
-theorem `lmul_algebraMap` / 定理 `lmul_algebraMap`
-
-English:
-theorem lmul_algebraMap
-  given: (x : R)
-  statement: Algebra.lmul R A (algebraMap R A x) = Algebra.lsmul R R A x
-  proof: Eq.symm LinearMap.ext smul_def x
-
-中文:
-定理 lmul_algebraMap
-  条件: (x : R)
-  结论: 代数.lmul R A (algebraMap R A x) = 代数.lsmul R R A x
-  证明: Eq.symm LinearMap.ext smul_def x
-
-Depends on / 依赖: Eq.symm, LinearMap, LinearMap.ext, smul_def
+/-
+**Algebra.lmul_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：lmul_algebraMap (x : R) : Algebra.lmul R A (algebraMap R A x) = Algebra.ls
+mul R R A x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 -/
 theorem lmul_algebraMap (x : R) : Algebra.lmul R A (algebraMap R A x) = Algebra.lsmul R R A x :=
-Eq.symm LinearMap.ext smul_def x
+  Eq.symm <| LinearMap.ext <| smul_def x
 
 end Algebra
 
@@ -73,45 +72,34 @@ section Semiring
 variable [CommSemiring R] [CommSemiring S] [Semiring A]
 variable [Algebra R S] [Algebra S A]
 
-/--
-Instance `subalgebra` / 实例 `subalgebra`
-
-English:
-instance subalgebra
-  signature: (S₀ : Subalgebra R S)
-  body: of_algebraMap_eq fun _ => rfl
-
-中文:
-实例 subalgebra
-  签名: (S₀ : 子代数 R S)
-  定义体: of_algebraMap_eq fun _ => rfl
-
-Depends on / 依赖: of_algebraMap_eq
+/-
+**IsScalarTower.subalgebra** 是 Mathlib 中的一个实例，位于命名空间 `IsScalarTower`。
+形式化陈述：subalgebra (S₀ : Subalgebra R S) : IsScalarTower S₀ S A
+参数：S₀ : Subalgebra R S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq`：of_algebraMap_eq [Algebra R A] (h : fora
+ll x, algebraMap R A x = algebraMap S A (algebraMap R S x)) : IsScalarTower R S 
+A
 -/
 instance subalgebra (S₀ : Subalgebra R S) : IsScalarTower S₀ S A :=
-  of_algebraMap_eq fun _ => rfl
+  of_algebraMap_eq fun _ ↦ rfl
 
 variable [Algebra R A] [IsScalarTower R S A]
-
-/--
-Instance `subalgebra'` / 实例 `subalgebra'`
-
-English:
-instance subalgebra'
-  signature: (S₀ : Subalgebra R S)
-  body: @IsScalarTower.of_algebraMap_eq R S₀ A _ _ _ _ _ _ fun _ =>
-    (IsScalarTower.algebraMap_apply R S A _ :)
-
-中文:
-实例 subalgebra'
-  签名: (S₀ : 子代数 R S)
-  定义体: @IsScalarTower.of_algebraMap_eq R S₀ A _ _ _ _ _ _ fun _ =>
-    (IsScalarTower.algebraMap_apply R S A _ :)
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.of_algebraMap_eq, algebraMap_apply, of_algebraMap_eq
+/-
+**IsScalarTower.subalgebra'** 是 Mathlib 中的一个实例，位于命名空间 `IsScalarTower`。
+形式化陈述：subalgebra' (S₀ : Subalgebra R S) : IsScalarTower R S₀ A
+参数：S₀ : Subalgebra R S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq`：of_algebraMap_eq [Algebra R A] (h : fora
+ll x, algebraMap R A x = algebraMap S A (algebraMap R S x)) : IsScalarTower R S 
+A
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
 -/
 instance subalgebra' (S₀ : Subalgebra R S) : IsScalarTower R S₀ A :=
-  @IsScalarTower.of_algebraMap_eq R S₀ A _ _ _ _ _ _ fun _ =>
+  @IsScalarTower.of_algebraMap_eq R S₀ A _ _ _ _ _ _ fun _ ↦
     (IsScalarTower.algebraMap_apply R S A _ :)
 
 end Semiring
@@ -128,169 +116,115 @@ variable {S A B} [CommSemiring R] [CommSemiring S] [Semiring A] [Semiring B]
 variable [Algebra R S] [Algebra S A] [Algebra R A] [Algebra S B] [Algebra R B]
 variable [IsScalarTower R S A] [IsScalarTower R S B]
 
-/--
-Definition of `restrictScalars` / `restrictScalars` 的定义
+/-- Given a tower `A / ↥U / S / R` of algebras, where `U` is an `S`-subalgebra of `A`, reinterpret
+`U` as an `R`-subalgebra of `A`. -/
+/-
+**Subalgebra.restrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `Subalgebra`。
+形式化陈述：restrictScalars (U : Subalgebra S A) : Subalgebra R A
+参数：U : Subalgebra S A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictScalars
-  signature: (U : Subalgebra S A)
-  body: { U with
-    algebraMap_mem' := fun x => by
-      rw [IsScalarTower.algebraMap_apply R S A]
-      exact U.algebraMap_mem _ }
-
-@[simp]
-
-中文:
-定义 restrictScalars
-  签名: (U : 子代数 S A)
-  定义体: { U with
-    algebraMap_mem' := fun x => by
-      rw [IsScalarTower.algebraMap_apply R S A]
-      exact U.algebraMap_mem _ }
-
-@[simp]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_apply, U.algebraMap_mem, algebraMap_apply, algebraMap_mem
+--- 原说明 ---
+Given a tower `A / ↥U / S / R` of algebras, where `U` is an `S`-subalgebra of `A
+`, reinterpret
+`U` as an `R`-subalgebra of `A`.
 -/
 def restrictScalars (U : Subalgebra S A) : Subalgebra R A :=
   { U with
-    algebraMap_mem' := fun x => by
+    algebraMap_mem' := fun x ↦ by
       rw [IsScalarTower.algebraMap_apply R S A]
       exact U.algebraMap_mem _ }
 
 @[simp]
-/--
-theorem `coe_restrictScalars` / 定理 `coe_restrictScalars`
-
-English:
-theorem coe_restrictScalars
-  given: {U : Subalgebra S A}
-  statement: (restrictScalars R U : Set A) = (U : Set A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_restrictScalars
-  条件: {U : 子代数 S A}
-  结论: (restrictScalars R U : 集合 A) = (U : 集合 A)
-  证明: rfl
-
-@[simp]
+/-
+**Subalgebra.coe_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：coe_restrictScalars {U : Subalgebra S A} : (restrictScalars R U : Set A) =
+ (U : Set A)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_restrictScalars {U : Subalgebra S A} : (restrictScalars R U : Set A) = (U : Set A) :=
   rfl
 
 @[simp]
-/--
-theorem `restrictScalars_top` / 定理 `restrictScalars_top`
-
-English:
-theorem restrictScalars_top
-  statement: restrictScalars R (⊤ : Subalgebra S A) = ⊤
-  proof: -- Porting note: `by dsimp` used to be `rfl`. This appears to work but causes
-  -- this theorem to timeout in the kernel after minutes of thinking.
-SetLike.coe_injective by dsimp
-
-@[simp]
-
-中文:
-定理 restrictScalars_top
-  结论: restrictScalars R (⊤ : 子代数 S A) = ⊤
-  证明: -- Porting note: `by dsimp` used to be `rfl`. This appears to work but causes
-  -- this theorem to timeout in the kernel after minutes of thinking.
-SetLike.coe_injective by dsimp
-
-@[simp]
+/-
+**Subalgebra.restrictScalars_top** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：restrictScalars_top : restrictScalars R (⊤ : Subalgebra S A) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem restrictScalars_top : restrictScalars R (⊤ : Subalgebra S A) = ⊤ :=
   -- Porting note: `by dsimp` used to be `rfl`. This appears to work but causes
   -- this theorem to timeout in the kernel after minutes of thinking.
-SetLike.coe_injective by dsimp
+  SetLike.coe_injective <| by dsimp
 
 @[simp]
-/--
-theorem `restrictScalars_toSubmodule` / 定理 `restrictScalars_toSubmodule`
-
-English:
-theorem restrictScalars_toSubmodule
-  given: {U : Subalgebra S A}
-  proof: SetLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 restrictScalars_toSubmodule
-  条件: {U : 子代数 S A}
-  证明: SetLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
+/-
+**Subalgebra.restrictScalars_toSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：restrictScalars_toSubmodule {U : Subalgebra S A} : Subalgebra.toSubmodule 
+(U.restrictScalars R) = U.toSubmodule.restrictScalars R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 -/
 theorem restrictScalars_toSubmodule {U : Subalgebra S A} :
     Subalgebra.toSubmodule (U.restrictScalars R) = U.toSubmodule.restrictScalars R :=
   SetLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `mem_restrictScalars` / 定理 `mem_restrictScalars`
-
-English:
-theorem mem_restrictScalars
-  given: {U : Subalgebra S A} {x : A}
-  statement: x in restrictScalars R U ↔ x in U
-  proof: Iff.rfl
-
-中文:
-定理 mem_restrictScalars
-  条件: {U : 子代数 S A} {x : A}
-  结论: x in restrictScalars R U ↔ x in U
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subalgebra.mem_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：mem_restrictScalars {U : Subalgebra S A} {x : A} : x in restrictScalars R 
+U ↔ x in U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_restrictScalars {U : Subalgebra S A} {x : A} : x in restrictScalars R U ↔ x in U :=
+theorem mem_restrictScalars {U : Subalgebra S A} {x : A} : x ∈ restrictScalars R U ↔ x ∈ U :=
   Iff.rfl
-
-/--
-theorem `restrictScalars_injective` / 定理 `restrictScalars_injective`
-
-English:
-theorem restrictScalars_injective
-  proof: fun U V H =>
-  ext fun x => by rw [← mem_restrictScalars R, H, mem_restrictScalars]
-
-中文:
-定理 restrictScalars_injective
-  证明: fun U V H =>
-  ext fun x => by rw [← mem_restrictScalars R, H, mem_restrictScalars]
+/-
+**Subalgebra.restrictScalars_injective** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：restrictScalars_injective : Function.Injective (restrictScalars R : Subalg
+ebra S A -> Subalgebra R A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.ext`：ext {S T : Subalgebra R A} (h : forall x : A, x in S ↔ x
+ in T) : S = T
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subalgebra.mem_restrictScalars`：mem_restrictScalars {U : Subalgebra S A}
+ {x : A} : x in restrictScalars R U ↔ x in U
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem restrictScalars_injective :
-    Function.Injective (restrictScalars R : Subalgebra S A -> Subalgebra R A) := fun U V H =>
-  ext fun x => by rw [← mem_restrictScalars R, H, mem_restrictScalars]
+    Function.Injective (restrictScalars R : Subalgebra S A → Subalgebra R A) := fun U V H ↦
+  ext fun x ↦ by rw [← mem_restrictScalars R, H, mem_restrictScalars]
 
 /-- Produces an `R`-algebra map from `U.restrictScalars R` given an `S`-algebra map from `U`.
 
 This is a special case of `AlgHom.restrictScalars` that can be helpful in elaboration. -/
 @[simp]
-/--
-Definition of `ofRestrictScalars` / `ofRestrictScalars` 的定义
+/-
+**Subalgebra.ofRestrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `Subalgebra`。
+形式化陈述：ofRestrictScalars (U : Subalgebra S A) (f : U ->ₐ[S] B) : U.restrictScalar
+s R ->ₐ[R] B
+参数：U : Subalgebra S A；f : U ->ₐ[S] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRestrictScalars
-  signature: (U : Subalgebra S A) (f : U ->ₐ[S] B)
-  body: f.restrictScalars R
+--- 原说明 ---
+Produces an `R`-algebra map from `U.restrictScalars R` given an `S`-algebra map 
+from `U`.
 
-中文:
-定义 ofRestrictScalars
-  签名: (U : 子代数 S A) (f : U ->ₐ[S] B)
-  定义体: f.restrictScalars R
-
-Depends on / 依赖: f.restrictScalars, restrictScalars
+This is a special case of `AlgHom.restrictScalars` that can be helpful in elabor
+ation.
 -/
-def ofRestrictScalars (U : Subalgebra S A) (f : U ->ₐ[S] B) : U.restrictScalars R ->ₐ[R] B :=
+def ofRestrictScalars (U : Subalgebra S A) (f : U →ₐ[S] B) : U.restrictScalars R →ₐ[R] B :=
   f.restrictScalars R
 
 end Semiring
@@ -300,65 +234,88 @@ section CommSemiring
 variable [CommSemiring R] [CommSemiring A] [Algebra R A] (S : Subalgebra R A)
 
 @[simp]
-/--
-theorem `restrictScalars_one` / 定理 `restrictScalars_one`
-
-English:
-theorem restrictScalars_one
-  proof: by
-  ext; simp
-
-中文:
-定理 restrictScalars_one
-  证明: by
-  ext; simp
+/-
+**Subalgebra.restrictScalars_one** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：restrictScalars_one : Submodule.restrictScalars R (1 : Submodule S A) = Su
+balgebra.toSubmodule S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem restrictScalars_one :
     Submodule.restrictScalars R (1 : Submodule S A) = Subalgebra.toSubmodule S := by
   ext; simp
-
-/--
-theorem `codisjoint_one_iff` / 定理 `codisjoint_one_iff`
-
-English:
-theorem codisjoint_one_iff
-  given: (I : Ideal A)
-  proof: by
-  simp [← Submodule.codisjoint_restrictScalars_iff R]
-
-中文:
-定理 codisjoint_one_iff
-  条件: (I : 理想 A)
-  证明: by
-  simp [← Submodule.codisjoint_restrictScalars_iff R]
-
-Depends on / 依赖: Submodule, Submodule.codisjoint_restrictScalars_iff, codisjoint_restrictScalars_iff
+/-
+**Subalgebra.codisjoint_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：codisjoint_one_iff (I : Ideal A) : Codisjoint (1 : Submodule S A) (I.restr
+ictScalars S) ↔ Codisjoint (Subalgebra.toSubmodule S) (I.restrictScalars R)
+参数：I : Ideal A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.codisjoint_restrictScalars_iff`：codisjoint_restrictScalars_iff
+ {s t : Submodule R M} : Codisjoint (s.restrictScalars S) (t.restrictScalars S) 
+↔ Codisjoint s t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subalgebra.restrictScalars_one`：restrictScalars_one : Submodule.restrict
+Scalars R (1 : Submodule S A) = Subalgebra.toSubmodule S
+· 使用定理 `Submodule.restrictScalars_self`：restrictScalars_self (V : Submodule R M)
+ : V.restrictScalars R = V
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem codisjoint_one_iff (I : Ideal A) :
     Codisjoint (1 : Submodule S A) (I.restrictScalars S) ↔
       Codisjoint (Subalgebra.toSubmodule S) (I.restrictScalars R) := by
   simp [← Submodule.codisjoint_restrictScalars_iff R]
-
-/--
-theorem `disjoint_one_iff` / 定理 `disjoint_one_iff`
-
-English:
-theorem disjoint_one_iff
-  given: (I : Ideal A)
-  proof: by
-  simp [← Submodule.disjoint_restrictScalars_iff R]
-
-@[simp]
-
-中文:
-定理 disjoint_one_iff
-  条件: (I : 理想 A)
-  证明: by
-  simp [← Submodule.disjoint_restrictScalars_iff R]
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.disjoint_restrictScalars_iff, disjoint_restrictScalars_iff
+/-
+**Subalgebra.disjoint_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subalgebra`。
+形式化陈述：disjoint_one_iff (I : Ideal A) : Disjoint (1 : Submodule S A) (I.restrictS
+calars S) ↔ Disjoint (Subalgebra.toSubmodule S) (I.restrictScalars R)
+参数：I : Ideal A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.disjoint_restrictScalars_iff`：disjoint_restrictScalars_iff {s 
+t : Submodule R M} : Disjoint (s.restrictScalars S) (t.restrictScalars S) ↔ Disj
+oint s t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subalgebra.restrictScalars_one`：restrictScalars_one : Submodule.restrict
+Scalars R (1 : Submodule S A) = Subalgebra.toSubmodule S
+· 使用定理 `Submodule.restrictScalars_self`：restrictScalars_self (V : Submodule R M)
+ : V.restrictScalars R = V
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem disjoint_one_iff (I : Ideal A) :
     Disjoint (1 : Submodule S A) (I.restrictScalars S) ↔
@@ -366,25 +323,45 @@ theorem disjoint_one_iff (I : Ideal A) :
   simp [← Submodule.disjoint_restrictScalars_iff R]
 
 @[simp]
-/--
-lemma `range_isScalarTower_toAlgHom` / 引理 `range_isScalarTower_toAlgHom`
-
-English:
-lemma range_isScalarTower_toAlgHom
-  proof: by
-  ext
-  simp [algebraMap_eq]
-
-中文:
-引理 range_isScalarTower_toAlgHom
-  证明: by
-  ext
-  simp [algebraMap_eq]
-
-Depends on / 依赖: algebraMap_eq
+/-
+**Subalgebra.range_isScalarTower_toAlgHom** 是 Mathlib 中的一个引理，位于命名空间 `Subalgebra`
+。
+形式化陈述：range_isScalarTower_toAlgHom : LinearMap.range (IsScalarTower.toAlgHom R S
+ A : S ->ₗ[R] A) = Subalgebra.toSubmodule S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `RingHomCompTriple.comp_eq`：∀ {R₁ : Type u_1} {R₂ : Type u_2} {R₃ : Type 
+u_3} {inst : Semiring R₁} {inst_1 : Semiring R₂} {inst_2 : Semiring R₃}   {σ₁₂ :
+ R₁ →+* R₂} {σ₂…
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma range_isScalarTower_toAlgHom :
-    LinearMap.range (IsScalarTower.toAlgHom R S A : S ->ₗ[R] A) = Subalgebra.toSubmodule S := by
+    LinearMap.range (IsScalarTower.toAlgHom R S A : S →ₗ[R] A) = Subalgebra.toSubmodule S := by
   ext
   simp [algebraMap_eq]
 
@@ -399,30 +376,37 @@ open Subalgebra
 variable [CommSemiring R] [CommSemiring S] [CommSemiring A]
 variable [Algebra R S] [Algebra S A] [Algebra R A] [IsScalarTower R S A]
 
-/--
-theorem `adjoin_range_toAlgHom` / 定理 `adjoin_range_toAlgHom`
-
-English:
-theorem adjoin_range_toAlgHom
-  given: (t : Set A)
-  proof: Subalgebra.ext fun z =>
-    show z in Subsemiring.closure (Set.range (algebraMap (toAlgHom R S A).range A) union t : Set A) ↔
-         z in Subsemiring.closure (Set.range (algebraMap S A) union t : Set A) by simp
-
-中文:
-定理 adjoin_range_toAlgHom
-  条件: (t : 集合 A)
-  证明: Subalgebra.ext fun z =>
-    show z in Subsemiring.closure (Set.range (algebraMap (toAlgHom R S A).range A) union t : Set A) ↔
-         z in Subsemiring.closure (Set.range (algebraMap S A) union t : Set A) by simp
-
-Depends on / 依赖: Set.range, Subalgebra, Subalgebra.ext, Subsemiring, Subsemiring.closure, algebraMap, closure, toAlgHom
+/-
+**IsScalarTower.adjoin_range_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `IsScalarTower`。
+形式化陈述：adjoin_range_toAlgHom (t : Set A) : (Algebra.adjoin (toAlgHom R S A).range
+ t).restrictScalars R = (Algebra.adjoin S t).restrictScalars R
+参数：t : Set A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subalgebra.ext`：ext {S T : Subalgebra R A} (h : forall x : A, x in S ↔ x
+ in T) : S = T
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Subalgebra.setRange_algebraMap`：setRange_algebraMap {R A : Type*} [CommS
+emiring R] [CommSemiring A] [Algebra R A] (S : Subalgebra R A) : Set.range (alge
+braMap S A) = (S : S…
+· 使用定理 `AlgHom.coe_range`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semiring B] 
+[inst_…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem adjoin_range_toAlgHom (t : Set A) :
     (Algebra.adjoin (toAlgHom R S A).range t).restrictScalars R =
       (Algebra.adjoin S t).restrictScalars R :=
-  Subalgebra.ext fun z =>
-    show z in Subsemiring.closure (Set.range (algebraMap (toAlgHom R S A).range A) union t : Set A) ↔
-         z in Subsemiring.closure (Set.range (algebraMap S A) union t : Set A) by simp
+  Subalgebra.ext fun z ↦
+    show z ∈ Subsemiring.closure (Set.range (algebraMap (toAlgHom R S A).range A) ∪ t : Set A) ↔
+         z ∈ Subsemiring.closure (Set.range (algebraMap S A) ∪ t : Set A) by simp
 
 end IsScalarTower
+

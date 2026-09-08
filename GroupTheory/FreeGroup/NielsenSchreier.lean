@@ -62,47 +62,52 @@ open CategoryTheory CategoryTheory.ActionCategory CategoryTheory.SingleObj Quive
 the vertices of the generating quiver of `G` when `G` is free. We can't use `G` directly,
 since `G` already has a quiver instance from being a groupoid. -/
 @[nolint unusedArguments]
-/--
-Definition of `IsFreeGroupoid.Generators` / `IsFreeGroupoid.Generators` 的定义
+/-
+**IsFreeGroupoid.Generators** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsFreeGroupoid.Generators (G) [Groupoid G]
+参数：G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsFreeGroupoid.Generators
-  signature: (G) [Groupoid G]
-  body: G
-
-中文:
-定义 是FreeGroupoid.生成元
-  签名: (G) [群胚 G]
-  定义体: G
+--- 原说明 ---
+`IsFreeGroupoid.Generators G` is a type synonym for `G`. We think of this as
+the vertices of the generating quiver of `G` when `G` is free. We can't use `G` 
+directly,
+since `G` already has a quiver instance from being a groupoid.
 -/
 def IsFreeGroupoid.Generators (G) [Groupoid G] :=
   G
 
 /--
-Definition of `IsFreeGroupoid` / `IsFreeGroupoid` 的定义
+A groupoid `G` is free when we have the following data:
+- a quiver on `IsFreeGroupoid.Generators G` (a type synonym for `G`)
+- a function `of` taking a generating arrow to a morphism in `G`
+- such that a functor from `G` to any group `X` is uniquely determined
+  by assigning labels in `X` to the generating arrows.
 
-English:
-class IsFreeGroupoid
-  parameters: (G) [Groupoid.{v} G]
-  axioms and operations (3):
-    - quiverGenerators : Quiver.{v} (IsFreeGroupoid.Generators G)
-    - of : forall {a b : IsFreeGroupoid.Generators G}, (a ⟶ b) -> ((show G from a) ⟶ b)
-    - unique_lift : forall {X : Type v} [Group X] (f : Labelling (IsFreeGroupoid.Generators G) X), exists! F : G ⥤ CategoryTheory.SingleObj X, forall (a b) (g : a ⟶ b), F.map (of g) = f g
+This definition is nonstandard. Normally one would require that functors `G ⥤ X`
+to any _groupoid_ `X` are given by graph homomorphisms from `generators`. -/
+/-
+**IsFreeGroupoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_1) → [CategoryTheory.Groupoid G] → Type (max u_1 (v + 1))
+参数：v + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 是FreeGroupoid
-  参数: (G) [群胚.{v} G]
-  公理与运算 (3 个):
-    - quiverGenerators : 箭图.{v} (是FreeGroupoid.生成元 G)
-    - of : 对任意 {a b : 是FreeGroupoid.生成元 G}, (a ⟶ b) -> ((show G from a) ⟶ b)
-    - unique_lift : 对任意 {X : 类型v} [群 X] (f : Labelling (是FreeGroupoid.生成元 G) X), 存在! F : G ⥤ 范畴论.SingleObj X, 对任意 (a b) (g : a ⟶ b), F.map (of g) = f g
+--- 原说明 ---
+A groupoid `G` is free when we have the following data:
+- a quiver on `IsFreeGroupoid.Generators G` (a type synonym for `G`)
+- a function `of` taking a generating arrow to a morphism in `G`
+- such that a functor from `G` to any group `X` is uniquely determined
+  by assigning labels in `X` to the generating arrows.
+
+This definition is nonstandard. Normally one would require that functors `G ⥤ X`
+to any _groupoid_ `X` are given by graph homomorphisms from `generators`.
 -/
 class IsFreeGroupoid (G) [Groupoid.{v} G] where
   quiverGenerators : Quiver.{v} (IsFreeGroupoid.Generators G)
-  of : forall {a b : IsFreeGroupoid.Generators G}, (a ⟶ b) -> ((show G from a) ⟶ b)
+  of : ∀ {a b : IsFreeGroupoid.Generators G}, (a ⟶ b) → ((show G from a) ⟶ b)
   unique_lift :
-    forall {X : Type v} [Group X] (f : Labelling (IsFreeGroupoid.Generators G) X),
-      exists! F : G ⥤ CategoryTheory.SingleObj X, forall (a b) (g : a ⟶ b), F.map (of g) = f g
+    ∀ {X : Type v} [Group X] (f : Labelling (IsFreeGroupoid.Generators G) X),
+      ∃! F : G ⥤ CategoryTheory.SingleObj X, ∀ (a b) (g : a ⟶ b), F.map (of g) = f g
 
 attribute [nolint docBlame] IsFreeGroupoid.of IsFreeGroupoid.unique_lift
 
@@ -113,108 +118,61 @@ attribute [instance_reducible, instance] quiverGenerators
 /-- Two functors from a free groupoid to a group are equal when they agree on the generating
 quiver. -/
 @[ext]
-/--
-theorem `ext_functor` / 定理 `ext_functor`
+/-
+**IsFreeGroupoid.ext_functor** 是 Mathlib 中的一个定理，位于命名空间 `IsFreeGroupoid`。
+形式化陈述：ext_functor {G} [Groupoid.{v} G] [IsFreeGroupoid G] {X : Type v} [Group X]
+ (f g : G ⥤ CategoryTheory.SingleObj X) (h : forall (a b) (e : a ⟶ b), f.map (of
+ e) = g.map (of e)) : f = g
+参数：f g : G ⥤ CategoryTheory.SingleObj X；h : forall (a b) (e : a ⟶ b), f.map (of 
+e) = g.map (of e)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFreeGroupoid.unique_lift`：∀ {G : Type u_1} {inst : CategoryTheory.Grou
+poid G} [self : IsFreeGroupoid G] {X : Type v} [inst_1 : Group X]   (f : Quiver.
+Labelling (IsFre…
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem ext_functor
-  statement: {G} [Groupoid.{v} G] [IsFreeGroupoid G] {X : Type v} [Group X]
-  proof: let ⟨_, _, u⟩ := @unique_lift G _ _ X _ fun (a b : Generators G) (e : a ⟶ b) => g.map (of e)
-  _root_.trans (u _ h) (u _ fun _ _ _ => rfl).symm
-
-中文:
-定理 ext_functor
-  结论: {G} [群胚.{v} G] [是FreeGroupoid G] {X : 类型v} [群 X]
-  证明: let ⟨_, _, u⟩ := @unique_lift G _ _ X _ fun (a b : Generators G) (e : a ⟶ b) => g.map (of e)
-  _root_.trans (u _ h) (u _ fun _ _ _ => rfl).symm
-
-Depends on / 依赖: Generators, _root_, _root_.trans, g.map, unique_lift
+--- 原说明 ---
+Two functors from a free groupoid to a group are equal when they agree on the ge
+nerating
+quiver.
 -/
 theorem ext_functor {G} [Groupoid.{v} G] [IsFreeGroupoid G] {X : Type v} [Group X]
-    (f g : G ⥤ CategoryTheory.SingleObj X) (h : forall (a b) (e : a ⟶ b), f.map (of e) = g.map (of e)) :
+    (f g : G ⥤ CategoryTheory.SingleObj X) (h : ∀ (a b) (e : a ⟶ b), f.map (of e) = g.map (of e)) :
     f = g :=
   let ⟨_, _, u⟩ := @unique_lift G _ _ X _ fun (a b : Generators G) (e : a ⟶ b) => g.map (of e)
   _root_.trans (u _ h) (u _ fun _ _ _ => rfl).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `actionGroupoidIsFree` / 实例 `actionGroupoidIsFree`
+/-- An action groupoid over a free group is free. More generally, one could show that the groupoid
+of elements over a free groupoid is free, but this version is easier to prove and suffices for our
+purposes.
 
-English:
-instance actionGroupoidIsFree
-  signature: {G A : Type u} [Group G] [IsFreeGroup G] [MulAction G A]
-  body: ⟨fun a b => { e : IsFreeGroup.Generators G // IsFreeGroup.of e • a.back = b.back }⟩
-  of := fun (e : Subtype _) => ⟨IsFreeGroup.of e, e.property⟩
-  unique_lift := by
-    intro X _ f
-    let f' : IsFreeGroup.Generators G -> (A -> X) ⋊[mulAutArrow] G := fun e =>
-      ⟨fun b => @f ⟨(), _⟩ ⟨(), b⟩ ⟨e, smul_inv_smul _ b⟩, IsFreeGroup.of e⟩
-    rcases IsFreeGroup.unique_lift f' with ⟨F', hF', uF'⟩
-    refine ⟨uncurry F' ?_, ?_, ?_⟩
-    · suffices SemidirectProduct.rightHom.comp F' = MonoidHom.id _ by
-        exact DFunLike.ext_iff.mp this
-      apply IsFreeGroup.ext_hom (fun x => ?_)
-      rw [MonoidHom.comp_apply]; rw [hF']
-      rfl
-    · rintro ⟨⟨⟩, a : A⟩ ⟨⟨⟩, b⟩ ⟨e, h : IsFreeGroup.of e • a = b⟩
-      change (F' (IsFreeGroup.of _)).left _ = _
-      rw [hF']
-      cases inv_smul_eq_iff.mpr h.symm
-      rfl
-    · intro E hE
-      have : curry E = F' := by
-        apply uF'
-        intro e
-        ext
-        · convert! hE _ _ _
-          rfl
-        · rfl
-      apply Functor.hext
-      · intro
-        apply Unit.ext
-      · refine ActionCategory.cases ?_
-        intros
-        simp only [← this, uncurry_map, curry_apply_left, coe_back, homOfPair.val]
-        rfl
+Analogous to the fact that a covering space of a graph is a graph. (A free groupoid is like a graph,
+and a groupoid of elements is like a covering space.) -/
+/-
+**IsFreeGroupoid.actionGroupoidIsFree** 是 Mathlib 中的一个实例，位于命名空间 `IsFreeGroupoid`
+。
+形式化陈述：actionGroupoidIsFree {G A : Type u} [Group G] [IsFreeGroup G] [MulAction G
+ A] : IsFreeGroupoid (ActionCategory G A) where quiverGenerators
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 actionGroupoidIsFree
-  签名: {G A : 类型u} [群 G] [是自由群 G] [乘法作用 G A]
-  定义体: ⟨fun a b => { e : IsFreeGroup.Generators G // IsFreeGroup.of e • a.back = b.back }⟩
-  of := fun (e : Subtype _) => ⟨IsFreeGroup.of e, e.property⟩
-  unique_lift := by
-    intro X _ f
-    let f' : IsFreeGroup.Generators G -> (A -> X) ⋊[mulAutArrow] G := fun e =>
-      ⟨fun b => @f ⟨(), _⟩ ⟨(), b⟩ ⟨e, smul_inv_smul _ b⟩, IsFreeGroup.of e⟩
-    rcases IsFreeGroup.unique_lift f' with ⟨F', hF', uF'⟩
-    refine ⟨uncurry F' ?_, ?_, ?_⟩
-    · suffices SemidirectProduct.rightHom.comp F' = MonoidHom.id _ by
-        exact DFunLike.ext_iff.mp this
-      apply IsFreeGroup.ext_hom (fun x => ?_)
-      rw [MonoidHom.comp_apply]; rw [hF']
-      rfl
-    · rintro ⟨⟨⟩, a : A⟩ ⟨⟨⟩, b⟩ ⟨e, h : IsFreeGroup.of e • a = b⟩
-      change (F' (IsFreeGroup.of _)).left _ = _
-      rw [hF']
-      cases inv_smul_eq_iff.mpr h.symm
-      rfl
-    · intro E hE
-      have : curry E = F' := by
-        apply uF'
-        intro e
-        ext
-        · convert! hE _ _ _
-          rfl
-        · rfl
-      apply Functor.hext
-      · intro
-        apply Unit.ext
-      · refine ActionCategory.cases ?_
-        intros
-        simp only [← this, uncurry_map, curry_apply_left, coe_back, homOfPair.val]
-        rfl
+--- 原说明 ---
+An action groupoid over a free group is free. More generally, one could show tha
+t the groupoid
+of elements over a free groupoid is free, but this version is easier to prove an
+d suffices for our
+purposes.
 
-Depends on / 依赖: DFunLike, DFunLike.ext_iff.mp, Generators, IsFreeGroup, IsFreeGroup.Generators, IsFreeGroup.of, IsFreeGroup.unique_lift, MonoidHom, MonoidHom.id, SemidirectProduct, SemidirectProduct.rightHom.comp, Subtype, a.back, b.back, e.property, ext_iff, mulAutArrow, property, rightHom, smul_inv_smul
+Analogous to the fact that a covering space of a graph is a graph. (A free group
+oid is like a graph,
+and a groupoid of elements is like a covering space.)
 -/
 instance actionGroupoidIsFree {G A : Type u} [Group G] [IsFreeGroup G] [MulAction G A] :
     IsFreeGroupoid (ActionCategory G A) where
@@ -223,14 +181,14 @@ instance actionGroupoidIsFree {G A : Type u} [Group G] [IsFreeGroup G] [MulActio
   of := fun (e : Subtype _) => ⟨IsFreeGroup.of e, e.property⟩
   unique_lift := by
     intro X _ f
-    let f' : IsFreeGroup.Generators G -> (A -> X) ⋊[mulAutArrow] G := fun e =>
+    let f' : IsFreeGroup.Generators G → (A → X) ⋊[mulAutArrow] G := fun e =>
       ⟨fun b => @f ⟨(), _⟩ ⟨(), b⟩ ⟨e, smul_inv_smul _ b⟩, IsFreeGroup.of e⟩
     rcases IsFreeGroup.unique_lift f' with ⟨F', hF', uF'⟩
     refine ⟨uncurry F' ?_, ?_, ?_⟩
     · suffices SemidirectProduct.rightHom.comp F' = MonoidHom.id _ by
         exact DFunLike.ext_iff.mp this
-      apply IsFreeGroup.ext_hom (fun x => ?_)
-      rw [MonoidHom.comp_apply]; rw [hF']
+      apply IsFreeGroup.ext_hom (fun x ↦ ?_)
+      rw [MonoidHom.comp_apply, hF']
       rfl
     · rintro ⟨⟨⟩, a : A⟩ ⟨⟨⟩, b⟩ ⟨e, h : IsFreeGroup.of e • a = b⟩
       change (F' (IsFreeGroup.of _)).left _ = _
@@ -263,18 +221,14 @@ variable {G : Type u} [Groupoid.{u} G] [IsFreeGroupoid G]
   (T : WideSubquiver (Symmetrify <| Generators G)) [Arborescence T]
 
 set_option backward.privateInPublic true in
-/--
-Definition of `root'` / `root'` 的定义
+/-- The root of `T`, except its type is `G` instead of the type synonym `T`. -/
+/-
+**IsFreeGroupoid.SpanningTree.root'** 是 Mathlib 中的一个定义，位于命名空间 `IsFreeGroupoid.Sp
+anningTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition root'
-  signature: : G
-  body: show T from root T
-
-中文:
-定义 root'
-  签名: : G
-  定义体: show T from root T
+--- 原说明 ---
+The root of `T`, except its type is `G` instead of the type synonym `T`.
 -/
 private def root' : G :=
   show T from root T
@@ -284,84 +238,87 @@ private def root' : G :=
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `homOfPath` / `homOfPath` 的定义
+/-- A path in the tree gives a hom, by composition. -/
+/-
+**IsFreeGroupoid.SpanningTree.homOfPath** 是 Mathlib 中的一个定义，位于命名空间 `IsFreeGroupoi
+d.SpanningTree`。
+形式化陈述：{G : Type u} →   [inst : CategoryTheory.Groupoid G] →     [inst_1 : IsFree
+Groupoid G] →       (T : WideSubquiver (Quiver.Symmetrify (IsFreeGroupoid.Genera
+tors G))) →         [inst_2 : Quiver.Arborescence (WideSubquiver.toType (Quiver.
+Symmetrify (IsFreeGroupoid.Generators G)) T)] →           {a : G} →             
+Quiver.Path (Quiver.root (WideSubquiver.toType (Quiver.Symmetrify (IsFreeGroupoi
+d.Generators G)) T)) a →               (IsFreeGroupoid.SpanningTree.root'✝ T ⟶ a
+)
+参数：T : WideSubquiver (Quiver.Symmetrify (IsFreeGroupoid.Generators G))；WideSubqu
+iver.toType (Quiver.Symmetrify (IsFreeGroupoid.Generators G)) T；Quiver.root (Wid
+eSubquiver.toType (Quiver.Symmetrify (IsFreeGroupoid.Generators G)) T)；IsFreeGro
+upoid.SpanningTree.root'✝ T ⟶ a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homOfPath
-  signature: : forall {a : G}, Path (root T) a -> (root' T ⟶ a)
-
-中文:
-定义 homOfPath
-  签名: : 对任意 {a : G}, 道路 (root T) a -> (root' T ⟶ a)
+--- 原说明 ---
+A path in the tree gives a hom, by composition.
 -/
-def homOfPath : forall {a : G}, Path (root T) a -> (root' T ⟶ a)
+def homOfPath : ∀ {a : G}, Path (root T) a → (root' T ⟶ a)
   | _, Path.nil => 𝟙 _
   | _, Path.cons p f => homOfPath p ≫ Sum.recOn f.val (fun e => of e) fun e => inv (of e)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `treeHom` / `treeHom` 的定义
+/-- For every vertex `a`, there is a canonical hom from the root, given by the path in the tree. -/
+/-
+**IsFreeGroupoid.SpanningTree.treeHom** 是 Mathlib 中的一个定义，位于命名空间 `IsFreeGroupoid.
+SpanningTree`。
+形式化陈述：treeHom (a : G) : root' T ⟶ a
+参数：a : G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition treeHom
-  signature: (a : G)
-  body: homOfPath T default
-
-中文:
-定义 treeHom
-  签名: (a : G)
-  定义体: homOfPath T default
-
-Depends on / 依赖: homOfPath
+--- 原说明 ---
+For every vertex `a`, there is a canonical hom from the root, given by the path 
+in the tree.
 -/
 def treeHom (a : G) : root' T ⟶ a :=
   homOfPath T default
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `treeHom_eq` / 定理 `treeHom_eq`
+/-- Any path to `a` gives `treeHom T a`, since paths in the tree are unique. -/
+/-
+**IsFreeGroupoid.SpanningTree.treeHom_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsFreeGroupo
+id.SpanningTree`。
+形式化陈述：treeHom_eq {a : G} (p : Path (root T) a) : treeHom T a = homOfPath T p
+参数：p : Path (root T) a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFreeGroupoid.SpanningTree.treeHom.eq_1`：∀ {G : Type u} [inst : Categor
+yTheory.Groupoid G] [inst_1 : IsFreeGroupoid G]   (T : WideSubquiver (Quiver.Sym
+metrify (IsFreeGroupoid.Genera…
+· 使用定理 `Unique.default_eq`：default_eq (a : α) : default = a
 
-English:
-theorem treeHom_eq
-  given: {a : G} (p : Path (root T) a)
-  statement: treeHom T a = homOfPath T p
-  proof: by
-  rw [treeHom]; rw [Unique.default_eq]
-
-中文:
-定理 treeHom_eq
-  条件: {a : G} (p : 道路 (root T) a)
-  结论: treeHom T a = homOfPath T p
-  证明: by
-  rw [treeHom]; rw [Unique.default_eq]
-
-Depends on / 依赖: Unique, Unique.default_eq, default_eq, treeHom
+--- 原说明 ---
+Any path to `a` gives `treeHom T a`, since paths in the tree are unique.
 -/
 theorem treeHom_eq {a : G} (p : Path (root T) a) : treeHom T a = homOfPath T p := by
-  rw [treeHom]; rw [Unique.default_eq]
+  rw [treeHom, Unique.default_eq]
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[simp]
-/--
-theorem `treeHom_root` / 定理 `treeHom_root`
-
-English:
-theorem treeHom_root
-  statement: treeHom T (root' T) = 𝟙 _
-  proof: -- this should just be `treeHom_eq T Path.nil`, but Lean treats `homOfPath` with suspicion.
-    _root_.trans
-    (treeHom_eq T Path.nil) rfl
-
-中文:
-定理 treeHom_root
-  结论: treeHom T (root' T) = 𝟙 _
-  证明: -- this should just be `treeHom_eq T Path.nil`, but Lean treats `homOfPath` with suspicion.
-    _root_.trans
-    (treeHom_eq T Path.nil) rfl
+/-
+**IsFreeGroupoid.SpanningTree.treeHom_root** 是 Mathlib 中的一个定理，位于命名空间 `IsFreeGrou
+poid.SpanningTree`。
+形式化陈述：treeHom_root : treeHom T (root' T) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `IsFreeGroupoid.SpanningTree.treeHom_eq`：treeHom_eq {a : G} (p : Path (ro
+ot T) a) : treeHom T a = homOfPath T p
 -/
 theorem treeHom_root : treeHom T (root' T) = 𝟙 _ :=
   -- this should just be `treeHom_eq T Path.nil`, but Lean treats `homOfPath` with suspicion.
@@ -370,20 +327,17 @@ theorem treeHom_root : treeHom T (root' T) = 𝟙 _ :=
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `loopOfHom` / `loopOfHom` 的定义
+/-- Any hom in `G` can be made into a loop, by conjugating with `treeHom`s. -/
+/-
+**IsFreeGroupoid.SpanningTree.loopOfHom** 是 Mathlib 中的一个定义，位于命名空间 `IsFreeGroupoi
+d.SpanningTree`。
+形式化陈述：loopOfHom {a b : G} (p : a ⟶ b) : End (root' T)
+参数：p : a ⟶ b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition loopOfHom
-  signature: {a b : G} (p : a ⟶ b)
-  body: treeHom T a ≫ p ≫ inv (treeHom T b)
-
-中文:
-定义 loopOfHom
-  签名: {a b : G} (p : a ⟶ b)
-  定义体: treeHom T a ≫ p ≫ inv (treeHom T b)
-
-Depends on / 依赖: treeHom
+--- 原说明 ---
+Any hom in `G` can be made into a loop, by conjugating with `treeHom`s.
 -/
 def loopOfHom {a b : G} (p : a ⟶ b) : End (root' T) :=
   treeHom T a ≫ p ≫ inv (treeHom T b)
@@ -391,36 +345,52 @@ def loopOfHom {a b : G} (p : a ⟶ b) : End (root' T) :=
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `loopOfHom_eq_id` / 定理 `loopOfHom_eq_id`
+/-- Turning an edge in the spanning tree into a loop gives the identity loop. -/
+/-
+**IsFreeGroupoid.SpanningTree.loopOfHom_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `IsFreeG
+roupoid.SpanningTree`。
+形式化陈述：loopOfHom_eq_id {a b : Generators G} (e) (H : e in wideSubquiverSymmetrify
+ T a b) : loopOfHom T (of e) = 𝟙 (root' T)
+参数：e；H : e in wideSubquiverSymmetrify T a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFreeGroupoid.SpanningTree.loopOfHom.eq_1`：∀ {G : Type u} [inst : Categ
+oryTheory.Groupoid G] [inst_1 : IsFreeGroupoid G]   (T : WideSubquiver (Quiver.S
+ymmetrify (IsFreeGroupoid.Genera…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsIso.comp_inv_eq`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `IsFreeGroupoid.SpanningTree.treeHom_eq`：treeHom_eq {a : G} (p : Path (ro
+ot T) a) : treeHom T a = homOfPath T p
+· 使用定理 `IsFreeGroupoid.SpanningTree.homOfPath.eq_2`：∀ {G : Type u} [inst : Categ
+oryTheory.Groupoid G] [inst_1 : IsFreeGroupoid G]   (T : WideSubquiver (Quiver.S
+ymmetrify (IsFreeGroupoid.Genera…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem loopOfHom_eq_id
-  given: {a b : Generators G} (e) (H : e in wideSubquiverSymmetrify T a b)
-  proof: by
-  rw [loopOfHom]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
-  rcases H with H | H
-  · rw [treeHom_eq T (Path.cons default ⟨Sum.inl e, H⟩), homOfPath]
-    rfl
-  · rw [treeHom_eq T (Path.cons default ⟨Sum.inr e, H⟩), homOfPath]
-    simp only [IsIso.inv_hom_id, Category.comp_id, Category.assoc, treeHom]
-
-中文:
-定理 loopOfHom_eq_id
-  条件: {a b : 生成元 G} (e) (H : e in wideSubquiverSymmetrify T a b)
-  证明: by
-  rw [loopOfHom]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
-  rcases H with H | H
-  · rw [treeHom_eq T (Path.cons default ⟨Sum.inl e, H⟩), homOfPath]
-    rfl
-  · rw [treeHom_eq T (Path.cons default ⟨Sum.inr e, H⟩), homOfPath]
-    simp only [IsIso.inv_hom_id, Category.comp_id, Category.assoc, treeHom]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, IsIso.comp_inv_eq, IsIso.inv_hom_id, Path.cons, Sum.inl, Sum.inr, comp_id, comp_inv_eq, homOfPath, id_comp, inv_hom_id, loopOfHom, treeHom, treeHom_eq
+--- 原说明 ---
+Turning an edge in the spanning tree into a loop gives the identity loop.
 -/
-theorem loopOfHom_eq_id {a b : Generators G} (e) (H : e in wideSubquiverSymmetrify T a b) :
+theorem loopOfHom_eq_id {a b : Generators G} (e) (H : e ∈ wideSubquiverSymmetrify T a b) :
     loopOfHom T (of e) = 𝟙 (root' T) := by
-  rw [loopOfHom]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [Category.id_comp]
+  rw [loopOfHom, ← Category.assoc, IsIso.comp_inv_eq, Category.id_comp]
   rcases H with H | H
   · rw [treeHom_eq T (Path.cons default ⟨Sum.inl e, H⟩), homOfPath]
     rfl
@@ -433,142 +403,110 @@ set_option backward.privateInPublic.warn false in
 /-- Since a hom gives a loop, any homomorphism from the vertex group at the root
 extends to a functor on the whole groupoid. -/
 @[simps]
-/--
-Definition of `functorOfMonoidHom` / `functorOfMonoidHom` 的定义
+/-
+**IsFreeGroupoid.SpanningTree.functorOfMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `IsFr
+eeGroupoid.SpanningTree`。
+形式化陈述：functorOfMonoidHom {X} [Monoid X] (f : End (root' T) ->* X) : G ⥤ Category
+Theory.SingleObj X where obj _
+参数：f : End (root' T) ->* X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorOfMonoidHom
-  signature: {X} [Monoid X] (f : End (root' T) ->* X)
-  body: ()
-  map p := f (loopOfHom T p)
-  map_id := by
-    intro a
-    dsimp only [loopOfHom]
-    rw [Category.id_comp]; rw [IsIso.hom_inv_id]; rw [← End.one_def]; rw [f.map_one]; rw [id_as_one]
-  map_comp := by
-    intros
-    rw [comp_as_mul]; rw [← f.map_mul]
-    simp only [IsIso.inv_hom_id_assoc, loopOfHom, End.mul_def, Category.assoc]
-
-中文:
-定义 functorOfMonoidHom
-  签名: {X} [幺半群 X] (f : End (root' T) ->* X)
-  定义体: ()
-  map p := f (loopOfHom T p)
-  map_id := by
-    intro a
-    dsimp only [loopOfHom]
-    rw [Category.id_comp]; rw [IsIso.hom_inv_id]; rw [← End.one_def]; rw [f.map_one]; rw [id_as_one]
-  map_comp := by
-    intros
-    rw [comp_as_mul]; rw [← f.map_mul]
-    simp only [IsIso.inv_hom_id_assoc, loopOfHom, End.mul_def, Category.assoc]
+--- 原说明 ---
+Since a hom gives a loop, any homomorphism from the vertex group at the root
+extends to a functor on the whole groupoid.
 -/
-def functorOfMonoidHom {X} [Monoid X] (f : End (root' T) ->* X) :
+def functorOfMonoidHom {X} [Monoid X] (f : End (root' T) →* X) :
     G ⥤ CategoryTheory.SingleObj X where
   obj _ := ()
   map p := f (loopOfHom T p)
   map_id := by
     intro a
     dsimp only [loopOfHom]
-    rw [Category.id_comp]; rw [IsIso.hom_inv_id]; rw [← End.one_def]; rw [f.map_one]; rw [id_as_one]
+    rw [Category.id_comp, IsIso.hom_inv_id, ← End.one_def, f.map_one, id_as_one]
   map_comp := by
     intros
-    rw [comp_as_mul]; rw [← f.map_mul]
+    rw [comp_as_mul, ← f.map_mul]
     simp only [IsIso.inv_hom_id_assoc, loopOfHom, End.mul_def, Category.assoc]
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 open scoped Classical in
-/--
-lemma `endIsFree` / 引理 `endIsFree`
+/-- Given a free groupoid and an arborescence of its generating quiver, the vertex
+group at the root is freely generated by loops coming from generating arrows
+in the complement of the tree. -/
+/-
+**IsFreeGroupoid.SpanningTree.endIsFree** 是 Mathlib 中的一个引理，位于命名空间 `IsFreeGroupoi
+d.SpanningTree`。
+形式化陈述：endIsFree : IsFreeGroup (End (root' T))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsFreeGroup.ofUniqueLift`：ofUniqueLift {G : Type u} [Group G] (X : Type 
+u) (of : X -> G) (h : forall {H : Type u} [Group H] (f : X -> H), exists! F : G 
+->* H, forall …
+· 使用定理 `IsFreeGroupoid.unique_lift`：∀ {G : Type u_1} {inst : CategoryTheory.Grou
+poid G} [self : IsFreeGroupoid G] {X : Type v} [inst_1 : Group X]   (f : Quiver.
+Labelling (IsFre…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFreeGroupoid.SpanningTree.homOfPath.eq_1`：∀ {G : Type u} [inst : Categ
+oryTheory.Groupoid G] [inst_1 : IsFreeGroupoid G]   (T : WideSubquiver (Quiver.S
+ymmetrify (IsFreeGroupoid.Genera…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.SingleObj.id_as_one`：id_as_one (x : SingleObj M) : 𝟙 x = 
+1
+· 使用定理 `IsFreeGroupoid.SpanningTree.homOfPath.eq_2`：∀ {G : Type u} [inst : Categ
+oryTheory.Groupoid G] [inst_1 : IsFreeGroupoid G]   (T : WideSubquiver (Quiver.S
+ymmetrify (IsFreeGroupoid.Genera…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.SingleObj.comp_as_mul`：comp_as_mul {x y z : SingleObj M} 
+(f : x ⟶ y) (g : y ⟶ z) : f ≫ g = g * f
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.IsGroupoid.all_isIso`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.IsGroupoid C] {X Y : C} (f : X ⟶ Y)
+,   CategoryTheory.IsIso …
+· 使用定理 `CategoryTheory.instIsGroupoid`：∀ {C : Type u} [inst : CategoryTheory.Gro
+upoid C], CategoryTheory.IsGroupoid C
+· 使用定理 `CategoryTheory.SingleObj.inv_as_inv`：inv_as_inv {x y : SingleObj G} (f :
+ x ⟶ y) : inv f = f⁻¹
+· 使用定理 `inv_eq_one`：inv_eq_one : a⁻¹ = 1 ↔ a = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.inv.congr_simp`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (f f_1 : X ⟶ Y) (e_f : f = f_1)   [I : CategoryTheory.
+IsIso f], CategoryT…
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `IsFreeGroupoid.SpanningTree.loopOfHom_eq_id`：loopOfHom_eq_id {a b : Gene
+rators G} (e) (H : e in wideSubquiverSymmetrify T a b) : loopOfHom T (of e) = 𝟙 
+(root' T)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 36 条，此处仅展示前 30 条）
 
-English:
-lemma endIsFree
-  statement: IsFreeGroup (End (root' T))
-  proof: IsFreeGroup.ofUniqueLift ((wideSubquiverEquivSetTotal <| wideSubquiverSymmetrify T)ᶜ : Set _)
-    (fun e => loopOfHom T (of e.val.hom))
-    (by
-      intro X _ f
-      let f' : Labelling (Generators G) X := fun a b e =>
-        if h : e in wideSubquiverSymmetrify T a b then 1 else f ⟨⟨a, b, e⟩, h⟩
-      rcases unique_lift f' with ⟨F', hF', uF'⟩
-      refine ⟨F'.mapEnd _, ?_, ?_⟩
-      · suffices forall {x y} (q : x ⟶ y), F'.map (loopOfHom T q) = (F'.map q : X) by
-          rintro ⟨⟨a, b, e⟩, h⟩
-          simp only [Functor.mapEnd, DFunLike.coe, this, hF']
-          exact dif_neg h
-        intro x y q
-        suffices forall {a} (p : Path (root T) a), F'.map (homOfPath T p) = 1 by
-          simp only [this, treeHom, comp_as_mul, inv_as_inv, loopOfHom, inv_one, mul_one,
-            one_mul, Functor.map_inv, Functor.map_comp]
-        intro a p
-        induction p with
-        | nil => rw [homOfPath, F'.map_id, id_as_one]
-        | cons p e ih =>
-          rw [homOfPath]; rw [F'.map_comp]; rw [comp_as_mul]; rw [ih]; rw [mul_one]
-          rcases e with ⟨e | e, eT⟩
-          · rw [hF']
-            exact dif_pos (Or.inl eT)
-          · rw [F'.map_inv, inv_as_inv, inv_eq_one, hF']
-            exact dif_pos (Or.inr eT)
-      · intro E hE
-        ext x
-        suffices (functorOfMonoidHom T E).map x = F'.map x by
-          simpa only [loopOfHom, functorOfMonoidHom, IsIso.inv_id, treeHom_root,
-            Category.id_comp, Category.comp_id] using! this
-        congr
-        apply uF'
-        intro a b e
-        change E (loopOfHom T _) = dite _ _ _
-        split_ifs with h
-        · rw [loopOfHom_eq_id T e h, ← End.one_def, E.map_one]
-        · exact hE ⟨⟨a, b, e⟩, h⟩)
-
-中文:
-引理 endIsFree
-  结论: 是自由群 (End (root' T))
-  证明: IsFreeGroup.ofUniqueLift ((wideSubquiverEquivSetTotal <| wideSubquiverSymmetrify T)ᶜ : Set _)
-    (fun e => loopOfHom T (of e.val.hom))
-    (by
-      intro X _ f
-      let f' : Labelling (Generators G) X := fun a b e =>
-        if h : e in wideSubquiverSymmetrify T a b then 1 else f ⟨⟨a, b, e⟩, h⟩
-      rcases unique_lift f' with ⟨F', hF', uF'⟩
-      refine ⟨F'.mapEnd _, ?_, ?_⟩
-      · suffices forall {x y} (q : x ⟶ y), F'.map (loopOfHom T q) = (F'.map q : X) by
-          rintro ⟨⟨a, b, e⟩, h⟩
-          simp only [Functor.mapEnd, DFunLike.coe, this, hF']
-          exact dif_neg h
-        intro x y q
-        suffices forall {a} (p : Path (root T) a), F'.map (homOfPath T p) = 1 by
-          simp only [this, treeHom, comp_as_mul, inv_as_inv, loopOfHom, inv_one, mul_one,
-            one_mul, Functor.map_inv, Functor.map_comp]
-        intro a p
-        induction p with
-        | nil => rw [homOfPath, F'.map_id, id_as_one]
-        | cons p e ih =>
-          rw [homOfPath]; rw [F'.map_comp]; rw [comp_as_mul]; rw [ih]; rw [mul_one]
-          rcases e with ⟨e | e, eT⟩
-          · rw [hF']
-            exact dif_pos (Or.inl eT)
-          · rw [F'.map_inv, inv_as_inv, inv_eq_one, hF']
-            exact dif_pos (Or.inr eT)
-      · intro E hE
-        ext x
-        suffices (functorOfMonoidHom T E).map x = F'.map x by
-          simpa only [loopOfHom, functorOfMonoidHom, IsIso.inv_id, treeHom_root,
-            Category.id_comp, Category.comp_id] using! this
-        congr
-        apply uF'
-        intro a b e
-        change E (loopOfHom T _) = dite _ _ _
-        split_ifs with h
-        · rw [loopOfHom_eq_id T e h, ← End.one_def, E.map_one]
-        · exact hE ⟨⟨a, b, e⟩, h⟩)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, Functor, Functor.mapEnd, Generators, IsFreeGroup, IsFreeGroup.ofUniqueLift, Labelling, e.val.hom, loopOfHom, mapEnd, ofUniqueLift, unique_lift, wideSubquiverEquivSetTotal, wideSubquiverSymmetrify
+--- 原说明 ---
+Given a free groupoid and an arborescence of its generating quiver, the vertex
+group at the root is freely generated by loops coming from generating arrows
+in the complement of the tree.
 -/
 lemma endIsFree : IsFreeGroup (End (root' T)) :=
   IsFreeGroup.ofUniqueLift ((wideSubquiverEquivSetTotal <| wideSubquiverSymmetrify T)ᶜ : Set _)
@@ -576,22 +514,22 @@ lemma endIsFree : IsFreeGroup (End (root' T)) :=
     (by
       intro X _ f
       let f' : Labelling (Generators G) X := fun a b e =>
-        if h : e in wideSubquiverSymmetrify T a b then 1 else f ⟨⟨a, b, e⟩, h⟩
+        if h : e ∈ wideSubquiverSymmetrify T a b then 1 else f ⟨⟨a, b, e⟩, h⟩
       rcases unique_lift f' with ⟨F', hF', uF'⟩
       refine ⟨F'.mapEnd _, ?_, ?_⟩
-      · suffices forall {x y} (q : x ⟶ y), F'.map (loopOfHom T q) = (F'.map q : X) by
+      · suffices ∀ {x y} (q : x ⟶ y), F'.map (loopOfHom T q) = (F'.map q : X) by
           rintro ⟨⟨a, b, e⟩, h⟩
           simp only [Functor.mapEnd, DFunLike.coe, this, hF']
           exact dif_neg h
         intro x y q
-        suffices forall {a} (p : Path (root T) a), F'.map (homOfPath T p) = 1 by
+        suffices ∀ {a} (p : Path (root T) a), F'.map (homOfPath T p) = 1 by
           simp only [this, treeHom, comp_as_mul, inv_as_inv, loopOfHom, inv_one, mul_one,
             one_mul, Functor.map_inv, Functor.map_comp]
         intro a p
         induction p with
         | nil => rw [homOfPath, F'.map_id, id_as_one]
         | cons p e ih =>
-          rw [homOfPath]; rw [F'.map_comp]; rw [comp_as_mul]; rw [ih]; rw [mul_one]
+          rw [homOfPath, F'.map_comp, comp_as_mul, ih, mul_one]
           rcases e with ⟨e | e, eT⟩
           · rw [hF']
             exact dif_pos (Or.inl eT)
@@ -613,134 +551,146 @@ lemma endIsFree : IsFreeGroup (End (root' T)) :=
 end SpanningTree
 
 set_option backward.privateInPublic true in
-/--
-Definition of `symgen` / `symgen` 的定义
+/-- Another name for the identity function `G → G`, to help type checking. -/
+/-
+**IsFreeGroupoid.symgen** 是 Mathlib 中的一个定义，位于命名空间 `IsFreeGroupoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symgen
-  signature: {G : Type u} [Groupoid.{v} G]
-  body: id
-
-中文:
-定义 symgen
-  签名: {G : 类型u} [群胚.{v} G]
-  定义体: id
+--- 原说明 ---
+Another name for the identity function `G → G`, to help type checking.
 -/
-private def symgen {G : Type u} [Groupoid.{v} G] : G -> Symmetrify (Generators G) := id
+private def symgen {G : Type u} [Groupoid.{v} G] : G → Symmetrify (Generators G) := id
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `path_nonempty_of_hom` / 定理 `path_nonempty_of_hom`
+/-- If there exists a morphism `a → b` in a free groupoid, then there also exists a zigzag
+from `a` to `b` in the generating quiver. -/
+/-
+**IsFreeGroupoid.path_nonempty_of_hom** 是 Mathlib 中的一个定理，位于命名空间 `IsFreeGroupoid`
+。
+形式化陈述：path_nonempty_of_hom {G} [Groupoid.{u, u} G] [IsFreeGroupoid G] {a b : G} 
+: Nonempty (a ⟶ b) -> Nonempty (Path (symgen a) (symgen b))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Quiver.WeaklyConnectedComponent.eq`：∀ {V : Type u_1} [inst : Quiver V] (
+a b : V),   Quiver.WeaklyConnectedComponent.mk a = Quiver.WeaklyConnectedCompone
+nt.mk b ↔ Nonempty (Quiv…
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `FreeGroup.of_injective`：of_injective : Function.Injective (@of α)
+· 使用定理 `mul_inv_eq_one`：mul_inv_eq_one : a * b⁻¹ = 1 ↔ a = b
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `IsFreeGroupoid.ext_functor`：ext_functor {G} [Groupoid.{v} G] [IsFreeGrou
+poid G] {X : Type v} [Group X] (f g : G ⥤ CategoryTheory.SingleObj X) (h : foral
+l (a b) (e : a ⟶…
+· 使用定理 `CategoryTheory.Functor.const_obj_map`：∀ (J : Type u₁) [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u
+₂} C]   (X : C) {X_1 Y : J…
+· 使用定理 `CategoryTheory.SingleObj.id_as_one`：id_as_one (x : SingleObj M) : 𝟙 x = 
+1
+· 使用定理 `CategoryTheory.SingleObj.differenceFunctor_map`：∀ {G : Type u} [inst : G
+roup G] {C : Type v} [inst_1 : CategoryTheory.Category.{w, v} C] (f : C → G) {x 
+y : C}   (x_1 : x ⟶ y), (CategoryThe…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-theorem path_nonempty_of_hom
-  given: {G} [Groupoid.{u, u} G] [IsFreeGroupoid G] {a b : G}
-  proof: by
-  rintro ⟨p⟩
-  rw [← @WeaklyConnectedComponent.eq (Generators G)]; rw [eq_comm]; rw [← FreeGroup.of_injective.eq_iff]; rw [←
-    mul_inv_eq_one]
-  let X := FreeGroup (WeaklyConnectedComponent <| Generators G)
-  let f : G -> X := fun g => FreeGroup.of (WeaklyConnectedComponent.mk g)
-  let F : G ⥤ CategoryTheory.SingleObj.{u} (X : Type u) := SingleObj.differenceFunctor f
-  change (F.map p) = ((@CategoryTheory.Functor.const G _ _ (SingleObj.category X)).obj ()).map p
-  congr; ext
-  rw [Functor.const_obj_map]; rw [id_as_one]; rw [differenceFunctor_map]; rw [@mul_inv_eq_one _ _ (f _)]
-  apply congr_arg FreeGroup.of
-  apply (WeaklyConnectedComponent.eq _ _).mpr
-  exact ⟨Hom.toPath (Sum.inr (by assumption))⟩
-
-中文:
-定理 path_nonempty_of_hom
-  条件: {G} [群胚.{u, u} G] [是FreeGroupoid G] {a b : G}
-  证明: by
-  rintro ⟨p⟩
-  rw [← @WeaklyConnectedComponent.eq (Generators G)]; rw [eq_comm]; rw [← FreeGroup.of_injective.eq_iff]; rw [←
-    mul_inv_eq_one]
-  let X := FreeGroup (WeaklyConnectedComponent <| Generators G)
-  let f : G -> X := fun g => FreeGroup.of (WeaklyConnectedComponent.mk g)
-  let F : G ⥤ CategoryTheory.SingleObj.{u} (X : Type u) := SingleObj.differenceFunctor f
-  change (F.map p) = ((@CategoryTheory.Functor.const G _ _ (SingleObj.category X)).obj ()).map p
-  congr; ext
-  rw [Functor.const_obj_map]; rw [id_as_one]; rw [differenceFunctor_map]; rw [@mul_inv_eq_one _ _ (f _)]
-  apply congr_arg FreeGroup.of
-  apply (WeaklyConnectedComponent.eq _ _).mpr
-  exact ⟨Hom.toPath (Sum.inr (by assumption))⟩
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.const, CategoryTheory.SingleObj, F.map, FreeGroup, FreeGroup.of, FreeGroup.of_injective.eq_iff, Functor, Functor.const_obj_map, Generators, SingleObj, SingleObj.category, SingleObj.differenceFunctor, WeaklyConnectedComponent, WeaklyConnectedComponent.eq, WeaklyConnectedComponent.mk, category, const_obj_map, differenceFunctor, eq_comm
+--- 原说明 ---
+If there exists a morphism `a → b` in a free groupoid, then there also exists a 
+zigzag
+from `a` to `b` in the generating quiver.
 -/
 theorem path_nonempty_of_hom {G} [Groupoid.{u, u} G] [IsFreeGroupoid G] {a b : G} :
-    Nonempty (a ⟶ b) -> Nonempty (Path (symgen a) (symgen b)) := by
+    Nonempty (a ⟶ b) → Nonempty (Path (symgen a) (symgen b)) := by
   rintro ⟨p⟩
-  rw [← @WeaklyConnectedComponent.eq (Generators G)]; rw [eq_comm]; rw [← FreeGroup.of_injective.eq_iff]; rw [←
+  rw [← @WeaklyConnectedComponent.eq (Generators G), eq_comm, ← FreeGroup.of_injective.eq_iff, ←
     mul_inv_eq_one]
   let X := FreeGroup (WeaklyConnectedComponent <| Generators G)
-  let f : G -> X := fun g => FreeGroup.of (WeaklyConnectedComponent.mk g)
+  let f : G → X := fun g => FreeGroup.of (WeaklyConnectedComponent.mk g)
   let F : G ⥤ CategoryTheory.SingleObj.{u} (X : Type u) := SingleObj.differenceFunctor f
   change (F.map p) = ((@CategoryTheory.Functor.const G _ _ (SingleObj.category X)).obj ()).map p
   congr; ext
-  rw [Functor.const_obj_map]; rw [id_as_one]; rw [differenceFunctor_map]; rw [@mul_inv_eq_one _ _ (f _)]
+  rw [Functor.const_obj_map, id_as_one, differenceFunctor_map, @mul_inv_eq_one _ _ (f _)]
   apply congr_arg FreeGroup.of
   apply (WeaklyConnectedComponent.eq _ _).mpr
   exact ⟨Hom.toPath (Sum.inr (by assumption))⟩
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `generators_connected` / 实例 `generators_connected`
+/-- Given a connected free groupoid, its generating quiver is rooted-connected. -/
+/-
+**IsFreeGroupoid.generators_connected** 是 Mathlib 中的一个实例，位于命名空间 `IsFreeGroupoid`
+。
+形式化陈述：generators_connected (G) [Groupoid.{u, u} G] [IsConnected G] [IsFreeGroupo
+id G] (r : G) : RootedConnected (symgen r)
+参数：G；r : G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFreeGroupoid.path_nonempty_of_hom`：path_nonempty_of_hom {G} [Groupoid.
+{u, u} G] [IsFreeGroupoid G] {a b : G} : Nonempty (a ⟶ b) -> Nonempty (Path (sym
+gen a) (symgen b))
+· 使用定理 `CategoryTheory.nonempty_hom_of_preconnected_groupoid`：nonempty_hom_of_pr
+econnected_groupoid {G} [Groupoid G] [IsPreconnected G] : forall x y : G, Nonemp
+ty (x ⟶ y)
+· 使用定理 `CategoryTheory.IsConnected.toIsPreconnected`：∀ {J : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} J} [self : CategoryTheory.IsConnected J],   Catego
+ryTheory.IsPreconnected J
 
-English:
-instance generators_connected
-  signature: (G) [Groupoid.{u, u} G] [IsConnected G] [IsFreeGroupoid G] (r : G)
-  body: ⟨fun b => path_nonempty_of_hom (CategoryTheory.nonempty_hom_of_preconnected_groupoid r b)⟩
-
-中文:
-实例 generators_connected
-  签名: (G) [群胚.{u, u} G] [是连通 G] [是FreeGroupoid G] (r : G)
-  定义体: ⟨fun b => path_nonempty_of_hom (CategoryTheory.nonempty_hom_of_preconnected_groupoid r b)⟩
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.nonempty_hom_of_preconnected_groupoid, nonempty_hom_of_preconnected_groupoid, path_nonempty_of_hom
+--- 原说明 ---
+Given a connected free groupoid, its generating quiver is rooted-connected.
 -/
 instance generators_connected (G) [Groupoid.{u, u} G] [IsConnected G] [IsFreeGroupoid G] (r : G) :
     RootedConnected (symgen r) :=
   ⟨fun b => path_nonempty_of_hom (CategoryTheory.nonempty_hom_of_preconnected_groupoid r b)⟩
 
-/--
-Instance `endIsFreeOfConnectedFree` / 实例 `endIsFreeOfConnectedFree`
+/-- A vertex group in a free connected groupoid is free. With some work one could drop the
+connectedness assumption, by looking at connected components. -/
+/-
+**IsFreeGroupoid.endIsFreeOfConnectedFree** 是 Mathlib 中的一个实例，位于命名空间 `IsFreeGroup
+oid`。
+形式化陈述：endIsFreeOfConnectedFree {G : Type u} [Groupoid G] [IsConnected G] [IsFree
+Groupoid G] (r : G) : IsFreeGroup.{u} (End r)
+参数：r : G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsFreeGroupoid.SpanningTree.endIsFree`：endIsFree : IsFreeGroup (End (roo
+t' T))
 
-English:
-instance endIsFreeOfConnectedFree
-  body: SpanningTree.endIsFree geodesicSubtree (symgen r)
-
-中文:
-实例 endIsFreeOfConnectedFree
-  定义体: SpanningTree.endIsFree geodesicSubtree (symgen r)
-
-Depends on / 依赖: SpanningTree, SpanningTree.endIsFree, endIsFree, geodesicSubtree, symgen
+--- 原说明 ---
+A vertex group in a free connected groupoid is free. With some work one could dr
+op the
+connectedness assumption, by looking at connected components.
 -/
 instance endIsFreeOfConnectedFree
     {G : Type u} [Groupoid G] [IsConnected G] [IsFreeGroupoid G] (r : G) :
     IsFreeGroup.{u} (End r) :=
-SpanningTree.endIsFree geodesicSubtree (symgen r)
+  SpanningTree.endIsFree <| geodesicSubtree (symgen r)
 
 end IsFreeGroupoid
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `subgroupIsFreeOfIsFree` / 实例 `subgroupIsFreeOfIsFree`
+/-- The Nielsen-Schreier theorem: a subgroup of a free group is free. -/
+/-
+**subgroupIsFreeOfIsFree** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：subgroupIsFreeOfIsFree {G : Type u} [Group G] [IsFreeGroup G] (H : Subgrou
+p G) : IsFreeGroup H
+参数：H : Subgroup G。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsFreeGroup.ofMulEquiv`：ofMulEquiv (e : G ≃* H) : IsFreeGroup H
+· 使用定理 `CategoryTheory.ActionCategory.instIsConnectedOfIsPretransitiveOfNonempty
+`：∀ {M : Type u_1} [inst : Monoid M] {X : Type u} [inst_1 : MulAction M X] [MulA
+ction.IsPretransitive M X] [Nonempty X],   CategoryTheory.IsCo…
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 
-English:
-instance subgroupIsFreeOfIsFree
-  signature: {G : Type u} [Group G] [IsFreeGroup G] (H : Subgroup G)
-  body: IsFreeGroup.ofMulEquiv (endMulEquivSubgroup H)
-
-中文:
-实例 subgroupIsFreeOfIsFree
-  签名: {G : 类型u} [群 G] [是自由群 G] (H : 子群 G)
-  定义体: IsFreeGroup.ofMulEquiv (endMulEquivSubgroup H)
-
-Depends on / 依赖: IsFreeGroup, IsFreeGroup.ofMulEquiv, endMulEquivSubgroup, ofMulEquiv
+--- 原说明 ---
+The Nielsen-Schreier theorem: a subgroup of a free group is free.
 -/
 instance subgroupIsFreeOfIsFree {G : Type u} [Group G] [IsFreeGroup G] (H : Subgroup G) :
     IsFreeGroup H :=

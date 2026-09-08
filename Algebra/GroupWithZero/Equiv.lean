@@ -18,6 +18,10 @@ namespace MulEquivClass
 variable {F α β : Type*} [EquivLike F α β]
 
 -- See note [lower instance priority]
+/-
+**MulEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `MulEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toZeroHomClass [MulZeroClass α] [MulZeroClass β] [MulEquivClass F α β] :
     ZeroHomClass F α β where
   map_zero f :=
@@ -26,6 +30,10 @@ instance (priority := 100) toZeroHomClass [MulZeroClass α] [MulZeroClass β] [M
         _ = 0 := by simp
 
 -- See note [lower instance priority]
+/-
+**MulEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `MulEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toMonoidWithZeroHomClass
     [MulZeroOneClass α] [MulZeroOneClass β] [MulEquivClass F α β] :
     MonoidWithZeroHomClass F α β :=
@@ -37,114 +45,85 @@ namespace MulEquiv
 
 variable {G H : Type*} [MulZeroOneClass G] [MulZeroOneClass H]
 
-/--
-Definition of `toMonoidWithZeroHom` / `toMonoidWithZeroHom` 的定义
+/-- An isomorphism of monoids with zero can be treated as a homomorphism preserving zero.
+This is a helper projection that utilizes the `MonoidWithZeroHomClass` instance. -/
+/-
+**MulEquiv.toMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间 `MulEquiv`。
+形式化陈述：toMonoidWithZeroHom (f : G ≃* H) : G ->*₀ H
+参数：f : G ≃* H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMonoidWithZeroHom
-  signature: (f : G ≃* H)
-  body: .ofClass f
-
-中文:
-定义 toMonoidWithZeroHom
-  签名: (f : G ≃* H)
-  定义体: .ofClass f
-
-Depends on / 依赖: ofClass
+--- 原说明 ---
+An isomorphism of monoids with zero can be treated as a homomorphism preserving 
+zero.
+This is a helper projection that utilizes the `MonoidWithZeroHomClass` instance.
 -/
-def toMonoidWithZeroHom (f : G ≃* H) : G ->*₀ H := .ofClass f
-
-/--
-lemma `toMonoidWithZeroHom_apply` / 引理 `toMonoidWithZeroHom_apply`
-
-English:
-lemma toMonoidWithZeroHom_apply
-  given: (f : G ≃* H) (x : G)
-  statement: f.toMonoidWithZeroHom x = f x
-  proof: rfl
-
-中文:
-引理 toMonoidWithZeroHom_apply
-  条件: (f : G ≃* H) (x : G)
-  结论: f.toMonoidWithZeroHom x = f x
-  证明: rfl
+def toMonoidWithZeroHom (f : G ≃* H) : G →*₀ H := .ofClass f
+/-
+**MulEquiv.toMonoidWithZeroHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `MulEquiv`。
+形式化陈述：∀ {G : Type u_1} {H : Type u_2} [inst : MulZeroOneClass G] [inst_1 : MulZe
+roOneClass H] (f : G ≃* H) (x : G),   f.toMonoidWithZeroHom x = f x
+参数：f : G ≃* H；x : G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toMonoidWithZeroHom_apply (f : G ≃* H) (x : G) : f.toMonoidWithZeroHom x = f x := rfl
-
-/--
-lemma `toMonoidWithZeroHom_injective` / 引理 `toMonoidWithZeroHom_injective`
-
-English:
-lemma toMonoidWithZeroHom_injective
-  given: (f : G ≃* H)
-  proof: f.injective
-
-中文:
-引理 toMonoidWithZeroHom_injective
-  条件: (f : G ≃* H)
-  证明: f.injective
-
-Depends on / 依赖: f.injective, injective
+/-
+**MulEquiv.toMonoidWithZeroHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：toMonoidWithZeroHom_injective (f : G ≃* H) : Function.Injective f.toMonoid
+WithZeroHom
+参数：f : G ≃* H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [inst
+_1 : Mul N] (e : M ≃* N), Function.Injective ⇑e
 -/
 lemma toMonoidWithZeroHom_injective (f : G ≃* H) :
     Function.Injective f.toMonoidWithZeroHom :=
   f.injective
-
-/--
-lemma `toMonoidWithZeroHom_surjective` / 引理 `toMonoidWithZeroHom_surjective`
-
-English:
-lemma toMonoidWithZeroHom_surjective
-  given: (f : G ≃* H)
-  proof: f.surjective
-
-中文:
-引理 toMonoidWithZeroHom_surjective
-  条件: (f : G ≃* H)
-  证明: f.surjective
-
-Depends on / 依赖: f.surjective, surjective
+/-
+**MulEquiv.toMonoidWithZeroHom_surjective** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：toMonoidWithZeroHom_surjective (f : G ≃* H) : Function.Surjective f.toMono
+idWithZeroHom
+参数：f : G ≃* H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquiv.surjective`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [ins
+t_1 : Mul N] (e : M ≃* N), Function.Surjective ⇑e
 -/
 lemma toMonoidWithZeroHom_surjective (f : G ≃* H) :
     Function.Surjective f.toMonoidWithZeroHom :=
   f.surjective
-
-/--
-lemma `toMonoidWithZeroHom_bijective` / 引理 `toMonoidWithZeroHom_bijective`
-
-English:
-lemma toMonoidWithZeroHom_bijective
-  given: (f : G ≃* H)
-  proof: f.bijective
-
-中文:
-引理 toMonoidWithZeroHom_bijective
-  条件: (f : G ≃* H)
-  证明: f.bijective
-
-Depends on / 依赖: bijective, f.bijective
+/-
+**MulEquiv.toMonoidWithZeroHom_bijective** 是 Mathlib 中的一个引理，位于命名空间 `MulEquiv`。
+形式化陈述：toMonoidWithZeroHom_bijective (f : G ≃* H) : Function.Bijective f.toMonoid
+WithZeroHom
+参数：f : G ≃* H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquiv.bijective`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [inst
+_1 : Mul N] (e : M ≃* N), Function.Bijective ⇑e
 -/
 lemma toMonoidWithZeroHom_bijective (f : G ≃* H) :
     Function.Bijective f.toMonoidWithZeroHom :=
   f.bijective
-
-/--
-lemma `toMonoidWithZeroHom_inj` / 引理 `toMonoidWithZeroHom_inj`
-
-English:
-lemma toMonoidWithZeroHom_inj
-  given: {f g : G ≃* H}
-  proof: by
-  simp [MonoidWithZeroHom.ext_iff, MulEquiv.ext_iff]
-
-中文:
-引理 toMonoidWithZeroHom_inj
-  条件: {f g : G ≃* H}
-  证明: by
-  simp [MonoidWithZeroHom.ext_iff, MulEquiv.ext_iff]
+/-
+**MulEquiv.toMonoidWithZeroHom_inj** 是 Mathlib 中的一个定理，位于命名空间 `MulEquiv`。
+形式化陈述：∀ {G : Type u_1} {H : Type u_2} [inst : MulZeroOneClass G] [inst_1 : MulZe
+roOneClass H] {f g : G ≃* H},   f.toMonoidWithZeroHom = g.toMonoidWithZeroHom ↔ 
+f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toMonoidWithZeroHom_inj {f g : G ≃* H} :
     f.toMonoidWithZeroHom = g.toMonoidWithZeroHom ↔ f = g := by
   simp [MonoidWithZeroHom.ext_iff, MulEquiv.ext_iff]
 
 end MulEquiv
+

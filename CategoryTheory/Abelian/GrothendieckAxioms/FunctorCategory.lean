@@ -22,42 +22,20 @@ open CategoryTheory Limits Opposite
 
 variable {A C J : Type*} [Category* A] [Category* C] [Category* J]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimitsOfShape
-  signature: J A] [HasExactColimitsOfShape J A] [HasFiniteLimits A] :
-  body: { preservesFiniteLimits _ := inferInstance }
-
-中文:
-实例 [有形状余极限
-  签名: J A] [有ExactColimitsOfShape J A] [有有限极限 A] :
-  定义体: { preservesFiniteLimits _ := inferInstance }
-
-Depends on / 依赖: preservesFiniteLimits
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasColimitsOfShape J A] [HasExactColimitsOfShape J A] [HasFiniteLimits A] :
     HasExactColimitsOfShape J (C ⥤ A) where
   preservesFiniteLimits := { preservesFiniteLimits _ := inferInstance }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimitsOfShape
-  signature: J A] [HasExactLimitsOfShape J A] [HasFiniteColimits A] :
-  body: { preservesFiniteColimits _ := inferInstance }
-
-中文:
-实例 [有形状极限
-  签名: J A] [有ExactLimitsOfShape J A] [有有限余极限 A] :
-  定义体: { preservesFiniteColimits _ := inferInstance }
-
-Depends on / 依赖: preservesFiniteColimits
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasLimitsOfShape J A] [HasExactLimitsOfShape J A] [HasFiniteColimits A] :
     HasExactLimitsOfShape J (C ⥤ A) where
   preservesFiniteColimits := { preservesFiniteColimits _ := inferInstance }
 
 end CategoryTheory
+

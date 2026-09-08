@@ -26,851 +26,558 @@ variable {α : Type*} {β : Type*} {γ : Type*} {δ : Type*}
 
 namespace Prod
 
-/--
-lemma `swap_eq_iff_eq_swap` / 引理 `swap_eq_iff_eq_swap`
-
-English:
-lemma swap_eq_iff_eq_swap
-  given: {x : α × β} {y : β × α}
-  statement: x.swap = y ↔ x = y.swap
-  proof: by grind
-
-中文:
-引理 swap_eq_iff_eq_swap
-  条件: {x : α × β} {y : β × α}
-  结论: x.swap = y ↔ x = y.swap
-  证明: by grind
+/-
+**Prod.swap_eq_iff_eq_swap** 是 Mathlib 中的一个引理，位于命名空间 `Prod`。
+形式化陈述：swap_eq_iff_eq_swap {x : α × β} {y : β × α} : x.swap = y ↔ x = y.swap
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma swap_eq_iff_eq_swap {x : α × β} {y : β × α} : x.swap = y ↔ x = y.swap := by grind
-
-/--
-Definition of `mk.injArrow` / `mk.injArrow` 的定义
-
-English:
-definition mk.injArrow
-  signature: {x₁ : α} {y₁ : β} {x₂ : α} {y₂ : β}
-  body: by
-  intros h P w
-  cases h
-  exact w rfl rfl
-
-@[simp]
-
-中文:
-定义 mk.injArrow
-  签名: {x₁ : α} {y₁ : β} {x₂ : α} {y₂ : β}
-  定义体: by
-  intros h P w
-  cases h
-  exact w rfl rfl
-
-@[simp]
-
-Depends on / 依赖: intros
+/-
+**Prod.mk.injArrow** 是 Mathlib 中的一个定义，位于命名空间 `Prod.mk`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     {x₁ : α} → {y₁ : β} → {x₂ : α} → {
+y₂ : β} → (x₁, y₁) = (x₂, y₂) → ⦃P : Sort u_5⦄ → (x₁ = x₂ → y₁ = y₂ → P) → P
+参数：x₁, y₁；x₂, y₂。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mk.injArrow {x₁ : α} {y₁ : β} {x₂ : α} {y₂ : β} :
-    (x₁, y₁) = (x₂, y₂) -> forall ⦃P : Sort*⦄, (x₁ = x₂ -> y₁ = y₂ -> P) -> P := by
+    (x₁, y₁) = (x₂, y₂) → ∀ ⦃P : Sort*⦄, (x₁ = x₂ → y₁ = y₂ → P) → P := by
   intros h P w
   cases h
   exact w rfl rfl
 
 @[simp]
-/--
-theorem `mk.eta` / 定理 `mk.eta`
-
-English:
-theorem mk.eta
-  statement: forall {p : α × β}, (p.1, p.2) = p
-
-中文:
-定理 mk.eta
-  结论: 对任意 {p : α × β}, (p.1, p.2) = p
+/-
+**Prod.mk.eta** 是 Mathlib 中的一个定理，位于命名空间 `Prod.mk`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : α × β}, (p.1, p.2) = p
+参数：p.1, p.2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk.eta : forall {p : α × β}, (p.1, p.2) = p
+theorem mk.eta : ∀ {p : α × β}, (p.1, p.2) = p
   | (_, _) => rfl
-
-/--
-theorem `forall'` / 定理 `forall'`
-
-English:
-theorem forall'
-  given: {p : α -> β -> Prop}
-  statement: (forall x : α × β, p x.1 x.2) ↔ forall a b, p a b
-  proof: Prod.forall
-
-中文:
-定理 对任意'
-  条件: {p : α -> β -> 命题}
-  结论: (对任意 x : α × β, p x.1 x.2) ↔ 对任意 a b, p a b
-  证明: Prod.forall
-
-Depends on / 依赖: Prod.forall
+/-
+**Prod.forall'** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：forall' {p : α -> β -> Prop} : (forall x : α × β, p x.1 x.2) ↔ forall a b,
+ p a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.forall`：∀ {α : Type u_1} {β : Type u_2} {p : α × β → Prop}, (∀ (x :
+ α × β), p x) ↔ ∀ (a : α) (b : β), p (a, b)
 -/
-theorem forall' {p : α -> β -> Prop} : (forall x : α × β, p x.1 x.2) ↔ forall a b, p a b :=
+theorem forall' {p : α → β → Prop} : (∀ x : α × β, p x.1 x.2) ↔ ∀ a b, p a b :=
   Prod.forall
-
-/--
-theorem `exists'` / 定理 `exists'`
-
-English:
-theorem exists'
-  given: {p : α -> β -> Prop}
-  statement: (exists x : α × β, p x.1 x.2) ↔ exists a b, p a b
-  proof: Prod.exists
-
-@[simp]
-
-中文:
-定理 存在'
-  条件: {p : α -> β -> 命题}
-  结论: (存在 x : α × β, p x.1 x.2) ↔ 存在 a b, p a b
-  证明: Prod.exists
-
-@[simp]
-
-Depends on / 依赖: Prod.exists
+/-
+**Prod.exists'** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：exists' {p : α -> β -> Prop} : (exists x : α × β, p x.1 x.2) ↔ exists a b,
+ p a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.exists`：∀ {α : Type u_1} {β : Type u_2} {p : α × β → Prop}, (∃ x, p
+ x) ↔ ∃ a b, p (a, b)
 -/
-theorem exists' {p : α -> β -> Prop} : (exists x : α × β, p x.1 x.2) ↔ exists a b, p a b :=
+theorem exists' {p : α → β → Prop} : (∃ x : α × β, p x.1 x.2) ↔ ∃ a b, p a b :=
   Prod.exists
 
 @[simp]
-/--
-theorem `snd_comp_mk` / 定理 `snd_comp_mk`
-
-English:
-theorem snd_comp_mk
-  given: (x : α)
-  statement: Prod.snd ∘ (Prod.mk x : β -> α × β) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 snd_comp_mk
-  条件: (x : α)
-  结论: 积类型.snd ∘ (积类型.mk x : β -> α × β) = id
-  证明: rfl
-
-@[simp]
+/-
+**Prod.snd_comp_mk** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：snd_comp_mk (x : α) : Prod.snd ∘ (Prod.mk x : β -> α × β) = id
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem snd_comp_mk (x : α) : Prod.snd ∘ (Prod.mk x : β -> α × β) = id :=
+theorem snd_comp_mk (x : α) : Prod.snd ∘ (Prod.mk x : β → α × β) = id :=
   rfl
 
 @[simp]
-/--
-theorem `fst_comp_mk` / 定理 `fst_comp_mk`
-
-English:
-theorem fst_comp_mk
-  given: (x : α)
-  statement: Prod.fst ∘ (Prod.mk x : β -> α × β) = Function.const β x
-  proof: rfl
-
-中文:
-定理 fst_comp_mk
-  条件: (x : α)
-  结论: 积类型.fst ∘ (积类型.mk x : β -> α × β) = 函数.const β x
-  证明: rfl
+/-
+**Prod.fst_comp_mk** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：fst_comp_mk (x : α) : Prod.fst ∘ (Prod.mk x : β -> α × β) = Function.const
+ β x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem fst_comp_mk (x : α) : Prod.fst ∘ (Prod.mk x : β -> α × β) = Function.const β x :=
+theorem fst_comp_mk (x : α) : Prod.fst ∘ (Prod.mk x : β → α × β) = Function.const β x :=
   rfl
 
 attribute [mfld_simps] map_apply
 
 -- This was previously a `simp` lemma, but no longer is on the basis that it destructures the pair.
--- See `map_apply`, `map_fst`, and `map_snd` for slightly weaker lemmas in the `simp` set.
-/--
-theorem `map_apply'` / 定理 `map_apply'`
-
-English:
-theorem map_apply'
-  given: (f : α -> γ) (g : β -> δ) (p : α × β)
-  statement: map f g p = (f p.1, g p.2)
-  proof: rfl
-
-中文:
-定理 map_apply'
-  条件: (f : α -> γ) (g : β -> δ) (p : α × β)
-  结论: map f g p = (f p.1, g p.2)
-  证明: rfl
+--  See `map_apply`, `map_fst`, and `map_snd` for slightly weaker lemmas in the `simp` set.
+/-
+**Prod.map_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_apply' (f : α -> γ) (g : β -> δ) (p : α × β) : map f g p = (f p.1, g p
+.2)
+参数：f : α -> γ；g : β -> δ；p : α × β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply' (f : α -> γ) (g : β -> δ) (p : α × β) : map f g p = (f p.1, g p.2) :=
+theorem map_apply' (f : α → γ) (g : β → δ) (p : α × β) : map f g p = (f p.1, g p.2) :=
   rfl
-
-/--
-theorem `map_fst'` / 定理 `map_fst'`
-
-English:
-theorem map_fst'
-  given: (f : α -> γ) (g : β -> δ)
-  statement: Prod.fst ∘ map f g = f ∘ Prod.fst
-  proof: funext map_fst f g
-
-中文:
-定理 map_fst'
-  条件: (f : α -> γ) (g : β -> δ)
-  结论: 积类型.fst ∘ map f g = f ∘ 积类型.fst
-  证明: funext map_fst f g
-
-Depends on / 依赖: map_fst
+/-
+**Prod.map_fst'** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_fst' (f : α -> γ) (g : β -> δ) : Prod.fst ∘ map f g = f ∘ Prod.fst
+参数：f : α -> γ；g : β -> δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.map_fst`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u
+_4} (f : α → β) (g : γ → δ) (x : α × γ),   (Prod.map f g x).1 = f x.1
 -/
-theorem map_fst' (f : α -> γ) (g : β -> δ) : Prod.fst ∘ map f g = f ∘ Prod.fst :=
-funext map_fst f g
-
-/--
-theorem `map_snd'` / 定理 `map_snd'`
-
-English:
-theorem map_snd'
-  given: (f : α -> γ) (g : β -> δ)
-  statement: Prod.snd ∘ map f g = g ∘ Prod.snd
-  proof: funext map_snd f g
-
-中文:
-定理 map_snd'
-  条件: (f : α -> γ) (g : β -> δ)
-  结论: 积类型.snd ∘ map f g = g ∘ 积类型.snd
-  证明: funext map_snd f g
-
-Depends on / 依赖: map_snd
+theorem map_fst' (f : α → γ) (g : β → δ) : Prod.fst ∘ map f g = f ∘ Prod.fst :=
+  funext <| map_fst f g
+/-
+**Prod.map_snd'** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_snd' (f : α -> γ) (g : β -> δ) : Prod.snd ∘ map f g = g ∘ Prod.snd
+参数：f : α -> γ；g : β -> δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.map_snd`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u
+_4} (f : α → β) (g : γ → δ) (x : α × γ),   (Prod.map f g x).2 = g x.2
 -/
-theorem map_snd' (f : α -> γ) (g : β -> δ) : Prod.snd ∘ map f g = g ∘ Prod.snd :=
-funext map_snd f g
-
-/--
-theorem `mk_inj` / 定理 `mk_inj`
-
-English:
-theorem mk_inj
-  given: {a₁ a₂ : α} {b₁ b₂ : β}
-  statement: (a₁, b₁) = (a₂, b₂) ↔ a₁ = a₂ ∧ b₁ = b₂
-  proof: by simp
-
-中文:
-定理 mk_inj
-  条件: {a₁ a₂ : α} {b₁ b₂ : β}
-  结论: (a₁, b₁) = (a₂, b₂) ↔ a₁ = a₂ ∧ b₁ = b₂
-  证明: by simp
+theorem map_snd' (f : α → γ) (g : β → δ) : Prod.snd ∘ map f g = g ∘ Prod.snd :=
+  funext <| map_snd f g
+/-
+**Prod.mk_inj** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：mk_inj {a₁ a₂ : α} {b₁ b₂ : β} : (a₁, b₁) = (a₂, b₂) ↔ a₁ = a₂ ∧ b₁ = b₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mk_inj {a₁ a₂ : α} {b₁ b₂ : β} : (a₁, b₁) = (a₂, b₂) ↔ a₁ = a₂ ∧ b₁ = b₂ := by simp
-
-/--
-theorem `mk_right_injective` / 定理 `mk_right_injective`
-
-English:
-theorem mk_right_injective
-  given: {α β : Type*} (a : α)
-  statement: (mk a : β -> α × β).Injective
-  proof: by
-  intro b₁ b₂ h
-  simpa only [true_and, Prod.mk_inj, eq_self_iff_true] using h
-
-中文:
-定理 mk_right_injective
-  条件: {α β : 类型} (a : α)
-  结论: (mk a : β -> α × β).单射
-  证明: by
-  intro b₁ b₂ h
-  simpa only [true_and, Prod.mk_inj, eq_self_iff_true] using h
-
-Depends on / 依赖: Prod.mk_inj, eq_self_iff_true, mk_inj, true_and
+/-
+**Prod.mk_right_injective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：mk_right_injective {α β : Type*} (a : α) : (mk a : β -> α × β).Injective
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
-theorem mk_right_injective {α β : Type*} (a : α) : (mk a : β -> α × β).Injective := by
+theorem mk_right_injective {α β : Type*} (a : α) : (mk a : β → α × β).Injective := by
   intro b₁ b₂ h
   simpa only [true_and, Prod.mk_inj, eq_self_iff_true] using h
-
-/--
-theorem `mk_left_injective` / 定理 `mk_left_injective`
-
-English:
-theorem mk_left_injective
-  given: {α β : Type*} (b : β)
-  statement: (fun a => mk a b : α -> α × β).Injective
-  proof: by
-  intro b₁ b₂ h
-  simpa only [and_true, eq_self_iff_true, mk_inj] using h
-
-中文:
-定理 mk_left_injective
-  条件: {α β : 类型} (b : β)
-  结论: (fun a => mk a b : α -> α × β).单射
-  证明: by
-  intro b₁ b₂ h
-  simpa only [and_true, eq_self_iff_true, mk_inj] using h
-
-Depends on / 依赖: and_true, eq_self_iff_true, mk_inj
+/-
+**Prod.mk_left_injective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：mk_left_injective {α β : Type*} (b : β) : (fun a => mk a b : α -> α × β).I
+njective
+参数：b : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem mk_left_injective {α β : Type*} (b : β) : (fun a => mk a b : α -> α × β).Injective := by
+theorem mk_left_injective {α β : Type*} (b : β) : (fun a ↦ mk a b : α → α × β).Injective := by
   intro b₁ b₂ h
   simpa only [and_true, eq_self_iff_true, mk_inj] using h
-
-/--
-lemma `mk_right_inj` / 引理 `mk_right_inj`
-
-English:
-lemma mk_right_inj
-  given: {a : α} {b₁ b₂ : β}
-  statement: (a, b₁) = (a, b₂) ↔ b₁ = b₂
-  proof: (mk_right_injective _).eq_iff
-
-中文:
-引理 mk_right_inj
-  条件: {a : α} {b₁ b₂ : β}
-  结论: (a, b₁) = (a, b₂) ↔ b₁ = b₂
-  证明: (mk_right_injective _).eq_iff
-
-Depends on / 依赖: eq_iff, mk_right_injective
+/-
+**Prod.mk_right_inj** 是 Mathlib 中的一个引理，位于命名空间 `Prod`。
+形式化陈述：mk_right_inj {a : α} {b₁ b₂ : β} : (a, b₁) = (a, b₂) ↔ b₁ = b₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Prod.mk_right_injective`：mk_right_injective {α β : Type*} (a : α) : (mk 
+a : β -> α × β).Injective
 -/
 lemma mk_right_inj {a : α} {b₁ b₂ : β} : (a, b₁) = (a, b₂) ↔ b₁ = b₂ :=
     (mk_right_injective _).eq_iff
-
-/--
-lemma `mk_left_inj` / 引理 `mk_left_inj`
-
-English:
-lemma mk_left_inj
-  given: {a₁ a₂ : α} {b : β}
-  statement: (a₁, b) = (a₂, b) ↔ a₁ = a₂
-  proof: (mk_left_injective _).eq_iff
-
-中文:
-引理 mk_left_inj
-  条件: {a₁ a₂ : α} {b : β}
-  结论: (a₁, b) = (a₂, b) ↔ a₁ = a₂
-  证明: (mk_left_injective _).eq_iff
-
-Depends on / 依赖: eq_iff, mk_left_injective
+/-
+**Prod.mk_left_inj** 是 Mathlib 中的一个引理，位于命名空间 `Prod`。
+形式化陈述：mk_left_inj {a₁ a₂ : α} {b : β} : (a₁, b) = (a₂, b) ↔ a₁ = a₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Prod.mk_left_injective`：mk_left_injective {α β : Type*} (b : β) : (fun a
+ => mk a b : α -> α × β).Injective
 -/
 lemma mk_left_inj {a₁ a₂ : α} {b : β} : (a₁, b) = (a₂, b) ↔ a₁ = a₂ := (mk_left_injective _).eq_iff
-
-/--
-theorem `map_def` / 定理 `map_def`
-
-English:
-theorem map_def
-  given: {f : α -> γ} {g : β -> δ}
-  statement: Prod.map f g = fun p : α × β => (f p.1, g p.2)
-  proof: funext fun p => Prod.ext (map_fst f g p) (map_snd f g p)
-
-中文:
-定理 map_def
-  条件: {f : α -> γ} {g : β -> δ}
-  结论: 积类型.map f g = fun p : α × β => (f p.1, g p.2)
-  证明: funext fun p => Prod.ext (map_fst f g p) (map_snd f g p)
-
-Depends on / 依赖: Prod.ext, map_fst, map_snd
+/-
+**Prod.map_def** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_def {f : α -> γ} {g : β -> δ} : Prod.map f g = fun p : α × β => (f p.1
+, g p.2)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `Prod.map_fst`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u
+_4} (f : α → β) (g : γ → δ) (x : α × γ),   (Prod.map f g x).1 = f x.1
+· 使用定理 `Prod.map_snd`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u
+_4} (f : α → β) (g : γ → δ) (x : α × γ),   (Prod.map f g x).2 = g x.2
 -/
-theorem map_def {f : α -> γ} {g : β -> δ} : Prod.map f g = fun p : α × β => (f p.1, g p.2) :=
-  funext fun p => Prod.ext (map_fst f g p) (map_snd f g p)
-
-/--
-theorem `id_prod` / 定理 `id_prod`
-
-English:
-theorem id_prod
-  statement: (fun p : α × β => (p.1, p.2)) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_prod
-  结论: (fun p : α × β => (p.1, p.2)) = id
-  证明: rfl
-
-@[simp]
+theorem map_def {f : α → γ} {g : β → δ} : Prod.map f g = fun p : α × β ↦ (f p.1, g p.2) :=
+  funext fun p ↦ Prod.ext (map_fst f g p) (map_snd f g p)
+/-
+**Prod.id_prod** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：id_prod : (fun p : α × β => (p.1, p.2)) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem id_prod : (fun p : α × β => (p.1, p.2)) = id :=
+theorem id_prod : (fun p : α × β ↦ (p.1, p.2)) = id :=
   rfl
 
 @[simp]
-/--
-theorem `map_iterate` / 定理 `map_iterate`
-
-English:
-theorem map_iterate
-  given: (f : α -> α) (g : β -> β) (n : Nat)
-  proof: by induction n <;> simp [*, Prod.map_comp_map]
-
-中文:
-定理 map_iterate
-  条件: (f : α -> α) (g : β -> β) (n : 自然数)
-  证明: by induction n <;> simp [*, Prod.map_comp_map]
-
-Depends on / 依赖: Prod.map_comp_map, map_comp_map
+/-
+**Prod.map_iterate** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_iterate (f : α -> α) (g : β -> β) (n : Nat) : (Prod.map f g)^[n] = Pro
+d.map f^[n] g^[n]
+参数：f : α -> α；g : β -> β；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem map_iterate (f : α -> α) (g : β -> β) (n : Nat) :
+theorem map_iterate (f : α → α) (g : β → β) (n : ℕ) :
     (Prod.map f g)^[n] = Prod.map f^[n] g^[n] := by induction n <;> simp [*, Prod.map_comp_map]
-
-/--
-theorem `fst_surjective` / 定理 `fst_surjective`
-
-English:
-theorem fst_surjective
-  given: [h : Nonempty β]
-  statement: Function.Surjective (@fst α β)
-  proof: fun x => h.elim fun y => ⟨⟨x, y⟩, rfl⟩
-
-中文:
-定理 fst_surjective
-  条件: [h : 非空 β]
-  结论: 函数.满射 (@fst α β)
-  证明: fun x => h.elim fun y => ⟨⟨x, y⟩, rfl⟩
-
-Depends on / 依赖: h.elim
+/-
+**Prod.fst_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：fst_surjective [h : Nonempty β] : Function.Surjective (@fst α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
 -/
 theorem fst_surjective [h : Nonempty β] : Function.Surjective (@fst α β) :=
-  fun x => h.elim fun y => ⟨⟨x, y⟩, rfl⟩
-
-/--
-theorem `snd_surjective` / 定理 `snd_surjective`
-
-English:
-theorem snd_surjective
-  given: [h : Nonempty α]
-  statement: Function.Surjective (@snd α β)
-  proof: fun y => h.elim fun x => ⟨⟨x, y⟩, rfl⟩
-
-中文:
-定理 snd_surjective
-  条件: [h : 非空 α]
-  结论: 函数.满射 (@snd α β)
-  证明: fun y => h.elim fun x => ⟨⟨x, y⟩, rfl⟩
-
-Depends on / 依赖: h.elim
+  fun x ↦ h.elim fun y ↦ ⟨⟨x, y⟩, rfl⟩
+/-
+**Prod.snd_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：snd_surjective [h : Nonempty α] : Function.Surjective (@snd α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
 -/
 theorem snd_surjective [h : Nonempty α] : Function.Surjective (@snd α β) :=
-  fun y => h.elim fun x => ⟨⟨x, y⟩, rfl⟩
-
-/--
-theorem `fst_injective` / 定理 `fst_injective`
-
-English:
-theorem fst_injective
-  given: [Subsingleton β]
-  statement: Function.Injective (@fst α β)
-  proof: fun _ _ h => Prod.ext h (Subsingleton.elim _ _)
-
-中文:
-定理 fst_injective
-  条件: [子单例 β]
-  结论: 函数.单射 (@fst α β)
-  证明: fun _ _ h => Prod.ext h (Subsingleton.elim _ _)
-
-Depends on / 依赖: Prod.ext, Subsingleton, Subsingleton.elim
+  fun y ↦ h.elim fun x ↦ ⟨⟨x, y⟩, rfl⟩
+/-
+**Prod.fst_injective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：fst_injective [Subsingleton β] : Function.Injective (@fst α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 theorem fst_injective [Subsingleton β] : Function.Injective (@fst α β) :=
-  fun _ _ h => Prod.ext h (Subsingleton.elim _ _)
-
-/--
-theorem `snd_injective` / 定理 `snd_injective`
-
-English:
-theorem snd_injective
-  given: [Subsingleton α]
-  statement: Function.Injective (@snd α β)
-  proof: fun _ _ h => Prod.ext (Subsingleton.elim _ _) h
-
-@[simp]
-
-中文:
-定理 snd_injective
-  条件: [子单例 α]
-  结论: 函数.单射 (@snd α β)
-  证明: fun _ _ h => Prod.ext (Subsingleton.elim _ _) h
-
-@[simp]
-
-Depends on / 依赖: Prod.ext, Subsingleton, Subsingleton.elim
+  fun _ _ h ↦ Prod.ext h (Subsingleton.elim _ _)
+/-
+**Prod.snd_injective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：snd_injective [Subsingleton α] : Function.Injective (@snd α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 theorem snd_injective [Subsingleton α] : Function.Injective (@snd α β) :=
-  fun _ _ h => Prod.ext (Subsingleton.elim _ _) h
+  fun _ _ h ↦ Prod.ext (Subsingleton.elim _ _) h
 
 @[simp]
-/--
-theorem `swap_leftInverse` / 定理 `swap_leftInverse`
-
-English:
-theorem swap_leftInverse
-  statement: Function.LeftInverse (@swap α β) swap
-  proof: swap_swap
-
-@[simp]
-
-中文:
-定理 swap_leftInverse
-  结论: 函数.左逆 (@swap α β) swap
-  证明: swap_swap
-
-@[simp]
-
-Depends on / 依赖: swap_swap
+/-
+**Prod.swap_leftInverse** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：swap_leftInverse : Function.LeftInverse (@swap α β) swap
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.swap_swap`：∀ {α : Type u_1} {β : Type u_2} (x : α × β), x.swap.swap
+ = x
 -/
 theorem swap_leftInverse : Function.LeftInverse (@swap α β) swap :=
   swap_swap
 
 @[simp]
-/--
-theorem `swap_rightInverse` / 定理 `swap_rightInverse`
-
-English:
-theorem swap_rightInverse
-  statement: Function.RightInverse (@swap α β) swap
-  proof: swap_swap
-
-中文:
-定理 swap_rightInverse
-  结论: 函数.右逆 (@swap α β) swap
-  证明: swap_swap
-
-Depends on / 依赖: swap_swap
+/-
+**Prod.swap_rightInverse** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：swap_rightInverse : Function.RightInverse (@swap α β) swap
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.swap_swap`：∀ {α : Type u_1} {β : Type u_2} (x : α × β), x.swap.swap
+ = x
 -/
 theorem swap_rightInverse : Function.RightInverse (@swap α β) swap :=
   swap_swap
-
-/--
-theorem `swap_injective` / 定理 `swap_injective`
-
-English:
-theorem swap_injective
-  statement: Function.Injective (@swap α β)
-  proof: swap_leftInverse.injective
-
-中文:
-定理 swap_injective
-  结论: 函数.单射 (@swap α β)
-  证明: swap_leftInverse.injective
-
-Depends on / 依赖: injective, swap_leftInverse, swap_leftInverse.injective
+/-
+**Prod.swap_injective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：swap_injective : Function.Injective (@swap α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `Prod.swap_leftInverse`：swap_leftInverse : Function.LeftInverse (@swap α 
+β) swap
 -/
 theorem swap_injective : Function.Injective (@swap α β) :=
   swap_leftInverse.injective
-
-/--
-theorem `swap_surjective` / 定理 `swap_surjective`
-
-English:
-theorem swap_surjective
-  statement: Function.Surjective (@swap α β)
-  proof: swap_leftInverse.surjective
-
-中文:
-定理 swap_surjective
-  结论: 函数.满射 (@swap α β)
-  证明: swap_leftInverse.surjective
-
-Depends on / 依赖: surjective, swap_leftInverse, swap_leftInverse.surjective
+/-
+**Prod.swap_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：swap_surjective : Function.Surjective (@swap α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.LeftInverse f g → Function.Surjective f
+· 使用定理 `Prod.swap_leftInverse`：swap_leftInverse : Function.LeftInverse (@swap α 
+β) swap
 -/
 theorem swap_surjective : Function.Surjective (@swap α β) :=
   swap_leftInverse.surjective
-
-/--
-theorem `swap_bijective` / 定理 `swap_bijective`
-
-English:
-theorem swap_bijective
-  statement: Function.Bijective (@swap α β)
-  proof: ⟨swap_injective, swap_surjective⟩
-
-中文:
-定理 swap_bijective
-  结论: 函数.双射 (@swap α β)
-  证明: ⟨swap_injective, swap_surjective⟩
-
-Depends on / 依赖: swap_injective, swap_surjective
+/-
+**Prod.swap_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：swap_bijective : Function.Bijective (@swap α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.swap_injective`：swap_injective : Function.Injective (@swap α β)
+· 使用定理 `Prod.swap_surjective`：swap_surjective : Function.Surjective (@swap α β)
 -/
 theorem swap_bijective : Function.Bijective (@swap α β) :=
   ⟨swap_injective, swap_surjective⟩
-
-/--
-theorem `_root_.Function.Semiconj.swap_map` / 定理 `_root_.Function.Semiconj.swap_map`
-
-English:
-theorem _root_.Function.Semiconj.swap_map
-  given: (f : α -> α) (g : β -> β)
-  proof: Function.semiconj_iff_comp_eq.2 (map_comp_swap g f).symm
-
-中文:
-定理 _root_.函数.Semiconj.swap_map
-  条件: (f : α -> α) (g : β -> β)
-  证明: Function.semiconj_iff_comp_eq.2 (map_comp_swap g f).symm
-
-Depends on / 依赖: Function, Function.semiconj_iff_comp_eq, map_comp_swap, semiconj_iff_comp_eq
+/-
+**Prod._root_.Function.Semiconj.swap_map** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Function.Semiconj.swap_map (f : α -> α) (g : β -> β) :
+theorem _root_.Function.Semiconj.swap_map (f : α → α) (g : β → β) :
     Function.Semiconj swap (map f g) (map g f) :=
   Function.semiconj_iff_comp_eq.2 (map_comp_swap g f).symm
-
-/--
-theorem `eq_iff_fst_eq_snd_eq` / 定理 `eq_iff_fst_eq_snd_eq`
-
-English:
-theorem eq_iff_fst_eq_snd_eq
-  statement: forall {p q : α × β}, p = q ↔ p.1 = q.1 ∧ p.2 = q.2
-
-中文:
-定理 eq_iff_fst_eq_snd_eq
-  结论: 对任意 {p q : α × β}, p = q ↔ p.1 = q.1 ∧ p.2 = q.2
+/-
+**Prod.eq_iff_fst_eq_snd_eq** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p q : α × β}, p = q ↔ p.1 = q.1 ∧ p.2 = q
+.2
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem eq_iff_fst_eq_snd_eq : forall {p q : α × β}, p = q ↔ p.1 = q.1 ∧ p.2 = q.2
+theorem eq_iff_fst_eq_snd_eq : ∀ {p q : α × β}, p = q ↔ p.1 = q.1 ∧ p.2 = q.2
   | ⟨p₁, p₂⟩, ⟨q₁, q₂⟩ => by simp
-
-/--
-theorem `fst_eq_iff` / 定理 `fst_eq_iff`
-
-English:
-theorem fst_eq_iff
-  statement: forall {p : α × β} {x : α}, p.1 = x ↔ p = (x, p.2)
-
-中文:
-定理 fst_eq_iff
-  结论: 对任意 {p : α × β} {x : α}, p.1 = x ↔ p = (x, p.2)
+/-
+**Prod.fst_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : α × β} {x : α}, p.1 = x ↔ p = (x, p.2
+)
+参数：x, p.2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem fst_eq_iff : forall {p : α × β} {x : α}, p.1 = x ↔ p = (x, p.2)
+theorem fst_eq_iff : ∀ {p : α × β} {x : α}, p.1 = x ↔ p = (x, p.2)
+  | ⟨a, b⟩, x => by simp
+/-
+**Prod.snd_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {p : α × β} {x : β}, p.2 = x ↔ p = (p.1, x
+)
+参数：p.1, x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem snd_eq_iff : ∀ {p : α × β} {x : β}, p.2 = x ↔ p = (p.1, x)
   | ⟨a, b⟩, x => by simp
 
-/--
-theorem `snd_eq_iff` / 定理 `snd_eq_iff`
-
-English:
-theorem snd_eq_iff
-  statement: forall {p : α × β} {x : β}, p.2 = x ↔ p = (p.1, x)
-
-中文:
-定理 snd_eq_iff
-  结论: 对任意 {p : α × β} {x : β}, p.2 = x ↔ p = (p.1, x)
--/
-theorem snd_eq_iff : forall {p : α × β} {x : β}, p.2 = x ↔ p = (p.1, x)
-  | ⟨a, b⟩, x => by simp
-
-variable {r : α -> α -> Prop} {s : β -> β -> Prop} {x y : α × β}
-
-/--
-lemma `lex_iff` / 引理 `lex_iff`
-
-English:
-lemma lex_iff
-  statement: Prod.Lex r s x y ↔ r x.1 y.1 ∨ x.1 = y.1 ∧ s x.2 y.2
-  proof: lex_def
-
-中文:
-引理 lex_iff
-  结论: 积类型.Lex r s x y ↔ r x.1 y.1 ∨ x.1 = y.1 ∧ s x.2 y.2
-  证明: lex_def
-
-Depends on / 依赖: lex_def
+variable {r : α → α → Prop} {s : β → β → Prop} {x y : α × β}
+/-
+**Prod.lex_iff** 是 Mathlib 中的一个引理，位于命名空间 `Prod`。
+形式化陈述：lex_iff : Prod.Lex r s x y ↔ r x.1 y.1 ∨ x.1 = y.1 ∧ s x.2 y.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.lex_def`：∀ {α : Type u} {β : Type v} {r : α → α → Prop} {s : β → β 
+→ Prop} {p q : α × β},   Prod.Lex r s p q ↔ r p.1 q.1 ∨ p.1 = q.1 ∧ s p.2 q.2
 -/
 lemma lex_iff : Prod.Lex r s x y ↔ r x.1 y.1 ∨ x.1 = y.1 ∧ s x.2 y.2 := lex_def
-
-/--
-Instance `Lex.decidable` / 实例 `Lex.decidable`
-
-English:
-instance Lex.decidable
-  signature: [DecidableEq α]
-  body: fun _ _ => decidable_of_decidable_of_iff lex_def.symm
-
-@[refl]
-
-中文:
-实例 Lex.decidable
-  签名: [DecidableEq α]
-  定义体: fun _ _ => decidable_of_decidable_of_iff lex_def.symm
-
-@[refl]
-
-Depends on / 依赖: decidable_of_decidable_of_iff, lex_def, lex_def.symm
+/-
+**Prod.Lex.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Prod.Lex`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [DecidableEq α] →       (r : α → α
+ → Prop) → (s : β → β → Prop) → [DecidableRel r] → [DecidableRel s] → DecidableR
+el (Prod.Lex r s)
+参数：r : α → α → Prop；s : β → β → Prop；Prod.Lex r s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Lex.decidable [DecidableEq α]
-    (r : α -> α -> Prop) (s : β -> β -> Prop) [DecidableRel r] [DecidableRel s] :
+    (r : α → α → Prop) (s : β → β → Prop) [DecidableRel r] [DecidableRel s] :
     DecidableRel (Prod.Lex r s) :=
-  fun _ _ => decidable_of_decidable_of_iff lex_def.symm
+  fun _ _ ↦ decidable_of_decidable_of_iff lex_def.symm
 
 @[refl]
-/--
-theorem `Lex.refl_left` / 定理 `Lex.refl_left`
-
-English:
-theorem Lex.refl_left
-  given: (r : α -> α -> Prop) (s : β -> β -> Prop) [Std.Refl r]
-  statement: forall x, Prod.Lex r s x x
-
-中文:
-定理 Lex.refl_left
-  条件: (r : α -> α -> 命题) (s : β -> β -> 命题) [Std.Refl r]
-  结论: 对任意 x, 积类型.Lex r s x x
+/-
+**Prod.Lex.refl_left** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (r : α → α → Prop) (s : β → β → Prop) [Std
+.Refl r] (x : α × β), Prod.Lex r s x x
+参数：r : α → α → Prop；s : β → β → Prop；x : α × β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
 -/
-theorem Lex.refl_left (r : α -> α -> Prop) (s : β -> β -> Prop) [Std.Refl r] : forall x, Prod.Lex r s x x
+theorem Lex.refl_left (r : α → α → Prop) (s : β → β → Prop) [Std.Refl r] : ∀ x, Prod.Lex r s x x
   | (_, _) => Lex.left _ _ (refl _)
-
-instance {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Refl r] : Std.Refl (Prod.Lex r s) :=
+/-
+**Prod.** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {r : α → α → Prop} {s : β → β → Prop} [Std.Refl r] : Std.Refl (Prod.Lex r s) :=
   ⟨Lex.refl_left _ _⟩
 
 @[refl]
-/--
-theorem `Lex.refl_right` / 定理 `Lex.refl_right`
-
-English:
-theorem Lex.refl_right
-  given: (r : α -> α -> Prop) (s : β -> β -> Prop) [Std.Refl s]
-  statement: forall x, Prod.Lex r s x x
-
-中文:
-定理 Lex.refl_right
-  条件: (r : α -> α -> 命题) (s : β -> β -> 命题) [Std.Refl s]
-  结论: 对任意 x, 积类型.Lex r s x x
+/-
+**Prod.Lex.refl_right** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (r : α → α → Prop) (s : β → β → Prop) [Std
+.Refl s] (x : α × β), Prod.Lex r s x x
+参数：r : α → α → Prop；s : β → β → Prop；x : α × β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
 -/
-theorem Lex.refl_right (r : α -> α -> Prop) (s : β -> β -> Prop) [Std.Refl s] : forall x, Prod.Lex r s x x
+theorem Lex.refl_right (r : α → α → Prop) (s : β → β → Prop) [Std.Refl s] : ∀ x, Prod.Lex r s x x
   | (_, _) => Lex.right _ (refl _)
-
-instance {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Refl s] : Std.Refl (Prod.Lex r s) :=
+/-
+**Prod.** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {r : α → α → Prop} {s : β → β → Prop} [Std.Refl s] : Std.Refl (Prod.Lex r s) :=
   ⟨Lex.refl_right _ _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Irrefl
-  signature: r] [Std.Irrefl s] : Std.Irrefl (Prod.Lex r s)
-  body: ⟨by rintro ⟨i, a⟩ (⟨_, _, h⟩ | ⟨_, h⟩) <;> exact irrefl _ h⟩
-
-中文:
-实例 [Std.Irrefl
-  签名: r] [Std.Irrefl s] : Std.Irrefl (积类型.Lex r s)
-  定义体: ⟨by rintro ⟨i, a⟩ (⟨_, _, h⟩ | ⟨_, h⟩) <;> exact irrefl _ h⟩
-
-Depends on / 依赖: irrefl
+/-
+**Prod.** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Std.Irrefl r] [Std.Irrefl s] : Std.Irrefl (Prod.Lex r s) :=
   ⟨by rintro ⟨i, a⟩ (⟨_, _, h⟩ | ⟨_, h⟩) <;> exact irrefl _ h⟩
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
 @[trans]
-/--
-theorem `Lex.trans` / 定理 `Lex.trans`
-
-English:
-theorem Lex.trans
-  given: {r : α -> α -> Prop} {s : β -> β -> Prop} [IsTrans α r] [IsTrans β s]
-
-中文:
-定理 Lex.trans
-  条件: {r : α -> α -> 命题} {s : β -> β -> 命题} [是Trans α r] [是Trans β s]
+/-
+**Prod.Lex.trans** 是 Mathlib 中的一个定理，位于命名空间 `Prod.Lex`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {s : β → β → Prop} [IsT
+rans α r] [IsTrans β s] {x y z : α × β},   Prod.Lex r s x y → Prod.Lex r s y z →
+ Prod.Lex r s x z
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
 -/
-theorem Lex.trans {r : α -> α -> Prop} {s : β -> β -> Prop} [IsTrans α r] [IsTrans β s] :
-    forall {x y z : α × β}, Prod.Lex r s x y -> Prod.Lex r s y z -> Prod.Lex r s x z
-  | (_, _), (_, _), (_, _), left _ _ hxy₁, left _ _ hyz₁ => left _ _ (_root_.trans hxy₁ hyz₁)
-  | (_, _), (_, _), (_, _), left _ _ hxy₁, right _ _ => left _ _ hxy₁
-  | (_, _), (_, _), (_, _), right _ _, left _ _ hyz₁ => left _ _ hyz₁
-  | (_, _), (_, _), (_, _), right _ hxy₂, right _ hyz₂ => right _ (_root_.trans hxy₂ hyz₂)
-
-instance {r : α -> α -> Prop} {s : β -> β -> Prop} [IsTrans α r] [IsTrans β s] :
+theorem Lex.trans {r : α → α → Prop} {s : β → β → Prop} [IsTrans α r] [IsTrans β s] :
+    ∀ {x y z : α × β}, Prod.Lex r s x y → Prod.Lex r s y z → Prod.Lex r s x z
+  | (_, _), (_, _), (_, _), left  _ _ hxy₁, left  _ _ hyz₁ => left  _ _ (_root_.trans hxy₁ hyz₁)
+  | (_, _), (_, _), (_, _), left  _ _ hxy₁, right _ _      => left  _ _ hxy₁
+  | (_, _), (_, _), (_, _), right _ _,      left  _ _ hyz₁ => left  _ _ hyz₁
+  | (_, _), (_, _), (_, _), right _ hxy₂,   right _ hyz₂   => right _ (_root_.trans hxy₂ hyz₂)
+/-
+**Prod.** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {r : α → α → Prop} {s : β → β → Prop} [IsTrans α r] [IsTrans β s] :
     IsTrans (α × β) (Prod.Lex r s) :=
-  ⟨fun _ _ _ => Lex.trans⟩
-
-instance {r : α -> α -> Prop} {s : β -> β -> Prop} [IsStrictOrder α r] [Std.Antisymm s] :
+  ⟨fun _ _ _ ↦ Lex.trans⟩
+/-
+**Prod.** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {r : α → α → Prop} {s : β → β → Prop} [IsStrictOrder α r] [Std.Antisymm s] :
     Std.Antisymm (Prod.Lex r s) :=
-  ⟨fun x₁ x₂ h₁₂ h₂₁ =>
+  ⟨fun x₁ x₂ h₁₂ h₂₁ ↦
     match x₁, x₂, h₁₂, h₂₁ with
-    | (a, _), (_, _), .left _ _ hr₁, .left _ _ hr₂ => (irrefl a (_root_.trans hr₁ hr₂)).elim
-    | (_, _), (_, _), .left _ _ hr₁, .right _ _ => (irrefl _ hr₁).elim
-    | (_, _), (_, _), .right _ _, .left _ _ hr₂ => (irrefl _ hr₂).elim
-    | (_, _), (_, _), .right _ hs₁, .right _ hs₂ => antisymm hs₁ hs₂ ▸ rfl⟩
-
-/--
-Instance `total_left` / 实例 `total_left`
-
-English:
-instance total_left
-  signature: {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Total r]
-  body: ⟨fun ⟨a₁, _⟩ ⟨a₂, _⟩ => (Std.Total.total a₁ a₂).imp (Lex.left _ _) (Lex.left _ _)⟩
-
-中文:
-实例 total_left
-  签名: {r : α -> α -> 命题} {s : β -> β -> 命题} [Std.全 r]
-  定义体: ⟨fun ⟨a₁, _⟩ ⟨a₂, _⟩ => (Std.Total.total a₁ a₂).imp (Lex.left _ _) (Lex.left _ _)⟩
-
-Depends on / 依赖: Lex.left, Std.Total.total
+    | (a, _), (_, _), .left  _ _ hr₁, .left  _ _ hr₂ => (irrefl a (_root_.trans hr₁ hr₂)).elim
+    | (_, _), (_, _), .left  _ _ hr₁, .right _ _     => (irrefl _ hr₁).elim
+    | (_, _), (_, _), .right _ _,     .left  _ _ hr₂ => (irrefl _ hr₂).elim
+    | (_, _), (_, _), .right _ hs₁,   .right _ hs₂   => antisymm hs₁ hs₂ ▸ rfl⟩
+/-
+**Prod.total_left** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：total_left {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Total r] : Std.T
+otal (Prod.Lex r s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Std.Total.total`：∀ {α : Sort u} {r : α → α → Prop} [self : Std.Total r] 
+(a b : α), r a b ∨ r b a
 -/
-instance total_left {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Total r] :
+instance total_left {r : α → α → Prop} {s : β → β → Prop} [Std.Total r] :
     Std.Total (Prod.Lex r s) :=
-  ⟨fun ⟨a₁, _⟩ ⟨a₂, _⟩ => (Std.Total.total a₁ a₂).imp (Lex.left _ _) (Lex.left _ _)⟩
-
-/--
-Instance `total_right` / 实例 `total_right`
-
-English:
-instance total_right
-  signature: {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Trichotomous r] [Std.Total s]
-  body: ⟨fun ⟨i, a⟩ ⟨j, b⟩ => by
-    obtain hij | rfl | hji := trichotomous_of r i j
-    · exact Or.inl (.left _ _ hij)
-    · exact (total_of s a b).imp (.right _) (.right _)
-    · exact Or.inr (.left _ _ hji) ⟩
-
-中文:
-实例 total_right
-  签名: {r : α -> α -> 命题} {s : β -> β -> 命题} [Std.三歧 r] [Std.全 s]
-  定义体: ⟨fun ⟨i, a⟩ ⟨j, b⟩ => by
-    obtain hij | rfl | hji := trichotomous_of r i j
-    · exact Or.inl (.left _ _ hij)
-    · exact (total_of s a b).imp (.right _) (.right _)
-    · exact Or.inr (.left _ _ hji) ⟩
-
-Depends on / 依赖: Or.inl, Or.inr, total_of, trichotomous_of
+  ⟨fun ⟨a₁, _⟩ ⟨a₂, _⟩ ↦ (Std.Total.total a₁ a₂).imp (Lex.left _ _) (Lex.left _ _)⟩
+/-
+**Prod.total_right** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：total_right {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Trichotomous r]
+ [Std.Total s] : Std.Total (Prod.Lex r s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `trichotomous_of`：trichotomous_of [Std.Trichotomous r] : forall a b : α, 
+a ≺ b ∨ a = b ∨ b ≺ a
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用引理 `total_of`：total_of [Std.Total r] (a b : α) : a ≺ b ∨ b ≺ a
 -/
-instance total_right {r : α -> α -> Prop} {s : β -> β -> Prop} [Std.Trichotomous r] [Std.Total s] :
+instance total_right {r : α → α → Prop} {s : β → β → Prop} [Std.Trichotomous r] [Std.Total s] :
     Std.Total (Prod.Lex r s) :=
-  ⟨fun ⟨i, a⟩ ⟨j, b⟩ => by
+  ⟨fun ⟨i, a⟩ ⟨j, b⟩ ↦ by
     obtain hij | rfl | hji := trichotomous_of r i j
     · exact Or.inl (.left _ _ hij)
     · exact (total_of s a b).imp (.right _) (.right _)
     · exact Or.inr (.left _ _ hji) ⟩
-
-/--
-Instance `trichotomous` / 实例 `trichotomous`
-
-English:
-instance trichotomous
-  signature: [Std.Trichotomous r] [Std.Trichotomous s]
-  body: Std.trichotomous_of_rel_or_eq_or_rel_swap by
-    intro ⟨i, a⟩ ⟨j, b⟩
-    obtain hij | rfl | hji := trichotomous_of r i j
-    { exact Or.inl (Lex.left _ _ hij) }
-    { exact (trichotomous_of (s) a b).imp3 (Lex.right _) (congr_arg _) (Lex.right _) }
-    { exact Or.inr (Or.inr <| Lex.left _ _ hji) }
-
-中文:
-实例 trichotomous
-  签名: [Std.三歧 r] [Std.三歧 s]
-  定义体: Std.trichotomous_of_rel_or_eq_or_rel_swap by
-    intro ⟨i, a⟩ ⟨j, b⟩
-    obtain hij | rfl | hji := trichotomous_of r i j
-    { exact Or.inl (Lex.left _ _ hij) }
-    { exact (trichotomous_of (s) a b).imp3 (Lex.right _) (congr_arg _) (Lex.right _) }
-    { exact Or.inr (Or.inr <| Lex.left _ _ hji) }
-
-Depends on / 依赖: Lex.left, Lex.right, Or.inl, Or.inr, Std.trichotomous_of_rel_or_eq_or_rel_swap, congr_arg, trichotomous_of, trichotomous_of_rel_or_eq_or_rel_swap
+/-
+**Prod.trichotomous** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：trichotomous [Std.Trichotomous r] [Std.Trichotomous s] : Std.Trichotomous 
+(Prod.Lex r s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.trichotomous_of_rel_or_eq_or_rel_swap`：∀ {α : Sort u_1} {r : α → α →
+ Prop}, (∀ {a b : α}, r a b ∨ a = b ∨ r b a) → Std.Trichotomous r
+· 使用引理 `trichotomous_of`：trichotomous_of [Std.Trichotomous r] : forall a b : α, 
+a ≺ b ∨ a = b ∨ b ≺ a
+· 使用定理 `Or.imp3`：Or.imp3 {d e c f : Prop} (had : a -> d) (hbe : b -> e) (hcf : c
+ -> f) : a ∨ b ∨ c -> d ∨ e ∨ f
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 instance trichotomous [Std.Trichotomous r] [Std.Trichotomous s] :
     Std.Trichotomous (Prod.Lex r s) :=
-Std.trichotomous_of_rel_or_eq_or_rel_swap by
+  Std.trichotomous_of_rel_or_eq_or_rel_swap <| by
     intro ⟨i, a⟩ ⟨j, b⟩
     obtain hij | rfl | hji := trichotomous_of r i j
     { exact Or.inl (Lex.left _ _ hij) }
     { exact (trichotomous_of (s) a b).imp3 (Lex.right _) (congr_arg _) (Lex.right _) }
     { exact Or.inr (Or.inr <| Lex.left _ _ hji) }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Asymm
-  signature: r] [Std.Asymm s] :
-
-中文:
-实例 [Std.Asymm
-  签名: r] [Std.Asymm s] :
+/-
+**Prod.** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Std.Asymm r] [Std.Asymm s] :
     Std.Asymm (Prod.Lex r s) where
@@ -886,130 +593,102 @@ open Prod
 
 namespace Function
 
-variable {f : α -> γ} {g : β -> δ} {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α} {g₂ : δ -> γ}
+variable {f : α → γ} {g : β → δ} {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ}
 
-/--
-theorem `Injective.prodMap` / 定理 `Injective.prodMap`
-
-English:
-theorem Injective.prodMap
-  given: (hf : Injective f) (hg : Injective g)
-  statement: Injective (map f g)
-  proof: fun _ _ h => Prod.ext (hf <| congr_arg Prod.fst h) (hg <| congr_arg Prod.snd h)
-
-中文:
-定理 单射.prodMap
-  条件: (hf : 单射 f) (hg : 单射 g)
-  结论: 单射 (map f g)
-  证明: fun _ _ h => Prod.ext (hf <| congr_arg Prod.fst h) (hg <| congr_arg Prod.snd h)
-
-Depends on / 依赖: Prod.ext, Prod.fst, Prod.snd, congr_arg
+/-
+**Function.Injective.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Function.Injective`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} {f : α → γ} 
+{g : β → δ},   Function.Injective f → Function.Injective g → Function.Injective 
+(Prod.map f g)
+参数：Prod.map f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem Injective.prodMap (hf : Injective f) (hg : Injective g) : Injective (map f g) :=
-  fun _ _ h => Prod.ext (hf <| congr_arg Prod.fst h) (hg <| congr_arg Prod.snd h)
-
-/--
-theorem `Surjective.prodMap` / 定理 `Surjective.prodMap`
-
-English:
-theorem Surjective.prodMap
-  given: (hf : Surjective f) (hg : Surjective g)
-  statement: Surjective (map f g)
-  proof: fun p =>
-  let ⟨x, hx⟩ := hf p.1
-  let ⟨y, hy⟩ := hg p.2
-  ⟨(x, y), Prod.ext hx hy⟩
-
-中文:
-定理 满射.prodMap
-  条件: (hf : 满射 f) (hg : 满射 g)
-  结论: 满射 (map f g)
-  证明: fun p =>
-  let ⟨x, hx⟩ := hf p.1
-  let ⟨y, hy⟩ := hg p.2
-  ⟨(x, y), Prod.ext hx hy⟩
-
-Depends on / 依赖: Prod.ext
+  fun _ _ h ↦ Prod.ext (hf <| congr_arg Prod.fst h) (hg <| congr_arg Prod.snd h)
+/-
+**Function.Surjective.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Function.Surjective`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} {f : α → γ} 
+{g : β → δ},   Function.Surjective f → Function.Surjective g → Function.Surjecti
+ve (Prod.map f g)
+参数：Prod.map f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
 -/
 theorem Surjective.prodMap (hf : Surjective f) (hg : Surjective g) : Surjective (map f g) :=
-  fun p =>
+  fun p ↦
   let ⟨x, hx⟩ := hf p.1
   let ⟨y, hy⟩ := hg p.2
   ⟨(x, y), Prod.ext hx hy⟩
-
-/--
-theorem `Bijective.prodMap` / 定理 `Bijective.prodMap`
-
-English:
-theorem Bijective.prodMap
-  given: (hf : Bijective f) (hg : Bijective g)
-  statement: Bijective (map f g)
-  proof: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2⟩
-
-中文:
-定理 双射.prodMap
-  条件: (hf : 双射 f) (hg : 双射 g)
-  结论: 双射 (map f g)
-  证明: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2⟩
-
-Depends on / 依赖: prodMap
+/-
+**Function.Bijective.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Function.Bijective`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} {f : α → γ} 
+{g : β → δ},   Function.Bijective f → Function.Bijective g → Function.Bijective 
+(Prod.map f g)
+参数：Prod.map f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_
+3} {δ : Type u_4} {f : α → γ} {g : β → δ},   Function.Injective f → Function.Inj
+ective g → Funct…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Function.Surjective.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u
+_3} {δ : Type u_4} {f : α → γ} {g : β → δ},   Function.Surjective f → Function.S
+urjective g → Fun…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem Bijective.prodMap (hf : Bijective f) (hg : Bijective g) : Bijective (map f g) :=
   ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2⟩
-
-/--
-theorem `LeftInverse.prodMap` / 定理 `LeftInverse.prodMap`
-
-English:
-theorem LeftInverse.prodMap
-  given: (hf : LeftInverse f₁ f₂) (hg : LeftInverse g₁ g₂)
-  proof: fun a => by rw [Prod.map_map, hf.comp_eq_id, hg.comp_eq_id, map_id, id]
-
-中文:
-定理 左逆.prodMap
-  条件: (hf : 左逆 f₁ f₂) (hg : 左逆 g₁ g₂)
-  证明: fun a => by rw [Prod.map_map, hf.comp_eq_id, hg.comp_eq_id, map_id, id]
-
-Depends on / 依赖: Prod.map_map, comp_eq_id, hf.comp_eq_id, hg.comp_eq_id, map_id, map_map
+/-
+**Function.LeftInverse.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Function.LeftInverse`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} {f₁ : α → β}
+ {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ},   Function.LeftInverse f₁ f₂ → Function
+.LeftInverse g₁ g₂ → Function.LeftInverse (Prod.map f₁ g₁) (Prod.map f₂ g₂)
+参数：Prod.map f₁ g₁；Prod.map f₂ g₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.map_map`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u
+_4} {ε : Type u_5} {ζ : Type u_6} (f : α → β) (f' : γ → δ)   (g : β → ε) (g' : δ
+ →…
+· 使用定理 `Function.LeftInverse.comp_eq_id`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.LeftInverse f g → f ∘ g = id
+· 使用定理 `Prod.map_id`：∀ {α : Type u_1} {β : Type u_2}, Prod.map id id = id
+· 使用定理 `id.eq_1`：∀ {α : Sort u} (a : α), id a = a
 -/
 theorem LeftInverse.prodMap (hf : LeftInverse f₁ f₂) (hg : LeftInverse g₁ g₂) :
     LeftInverse (map f₁ g₁) (map f₂ g₂) :=
-  fun a => by rw [Prod.map_map, hf.comp_eq_id, hg.comp_eq_id, map_id, id]
-
-/--
-theorem `RightInverse.prodMap` / 定理 `RightInverse.prodMap`
-
-English:
-theorem RightInverse.prodMap
-  proof: LeftInverse.prodMap
-
-中文:
-定理 右逆.prodMap
-  证明: LeftInverse.prodMap
-
-Depends on / 依赖: LeftInverse, LeftInverse.prodMap, prodMap
+  fun a ↦ by rw [Prod.map_map, hf.comp_eq_id, hg.comp_eq_id, map_id, id]
+/-
+**Function.RightInverse.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Function.RightInverse
+`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {δ : Type u_4} {f₁ : α → β}
+ {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ},   Function.RightInverse f₁ f₂ → Functio
+n.RightInverse g₁ g₂ → Function.RightInverse (Prod.map f₁ g₁) (Prod.map f₂ g₂)
+参数：Prod.map f₁ g₁；Prod.map f₂ g₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type 
+u_3} {δ : Type u_4} {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ},   Funct
+ion.LeftInverse f₁…
 -/
 theorem RightInverse.prodMap :
-    RightInverse f₁ f₂ -> RightInverse g₁ g₂ -> RightInverse (map f₁ g₁) (map f₂ g₂) :=
+    RightInverse f₁ f₂ → RightInverse g₁ g₂ → RightInverse (map f₁ g₁) (map f₂ g₂) :=
   LeftInverse.prodMap
-
-/--
-theorem `Involutive.prodMap` / 定理 `Involutive.prodMap`
-
-English:
-theorem Involutive.prodMap
-  given: {f : α -> α} {g : β -> β}
-  proof: LeftInverse.prodMap
-
-中文:
-定理 对合.prodMap
-  条件: {f : α -> α} {g : β -> β}
-  证明: LeftInverse.prodMap
-
-Depends on / 依赖: LeftInverse, LeftInverse.prodMap, prodMap
+/-
+**Function.Involutive.prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Function.Involutive`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {f : α → α} {g : β → β},   Function.Involu
+tive f → Function.Involutive g → Function.Involutive (Prod.map f g)
+参数：Prod.map f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type 
+u_3} {δ : Type u_4} {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ},   Funct
+ion.LeftInverse f₁…
 -/
-theorem Involutive.prodMap {f : α -> α} {g : β -> β} :
-    Involutive f -> Involutive g -> Involutive (map f g) :=
+theorem Involutive.prodMap {f : α → α} {g : β → β} :
+    Involutive f → Involutive g → Involutive (map f g) :=
   LeftInverse.prodMap
 
 end Function
@@ -1019,42 +698,22 @@ namespace Prod
 open Function
 
 @[simp]
-/--
-theorem `map_injective` / 定理 `map_injective`
-
-English:
-theorem map_injective
-  given: [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ}
-  proof: ⟨fun h =>
-    ⟨fun a₁ a₂ ha => by
-      inhabit β
-      injection
-        @h (a₁, default) (a₂, default) (congr_arg (fun c : γ => Prod.mk c (g default)) ha :),
-      fun b₁ b₂ hb => by
-      inhabit α
-      injection @h (default, b₁) (default, b₂) (congr_arg (Prod.mk (f default)) hb :)⟩,
-    fun h => h.1.prodMap h.2⟩
-
-@[simp]
-
-中文:
-定理 map_injective
-  条件: [非空 α] [非空 β] {f : α -> γ} {g : β -> δ}
-  证明: ⟨fun h =>
-    ⟨fun a₁ a₂ ha => by
-      inhabit β
-      injection
-        @h (a₁, default) (a₂, default) (congr_arg (fun c : γ => Prod.mk c (g default)) ha :),
-      fun b₁ b₂ hb => by
-      inhabit α
-      injection @h (default, b₁) (default, b₂) (congr_arg (Prod.mk (f default)) hb :)⟩,
-    fun h => h.1.prodMap h.2⟩
-
-@[simp]
-
-Depends on / 依赖: Prod.mk, congr_arg, inhabit, injection, prodMap
+/-
+**Prod.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_injective [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ} : Inject
+ive (map f g) ↔ Injective f ∧ Injective g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Function.Injective.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_
+3} {δ : Type u_4} {f : α → γ} {g : β → δ},   Function.Injective f → Function.Inj
+ective g → Funct…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem map_injective [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ} :
+theorem map_injective [Nonempty α] [Nonempty β] {f : α → γ} {g : β → δ} :
     Injective (map f g) ↔ Injective f ∧ Injective g :=
   ⟨fun h =>
     ⟨fun a₁ a₂ ha => by
@@ -1067,44 +726,21 @@ theorem map_injective [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ} 
     fun h => h.1.prodMap h.2⟩
 
 @[simp]
-/--
-theorem `map_surjective` / 定理 `map_surjective`
-
-English:
-theorem map_surjective
-  given: [Nonempty γ] [Nonempty δ] {f : α -> γ} {g : β -> δ}
-  proof: ⟨fun h =>
-    ⟨fun c => by
-      inhabit δ
-      obtain ⟨⟨a, b⟩, h⟩ := h (c, default)
-      exact ⟨a, congr_arg Prod.fst h⟩,
-      fun d => by
-      inhabit γ
-      obtain ⟨⟨a, b⟩, h⟩ := h (default, d)
-      exact ⟨b, congr_arg Prod.snd h⟩⟩,
-    fun h => h.1.prodMap h.2⟩
-
-@[simp]
-
-中文:
-定理 map_surjective
-  条件: [非空 γ] [非空 δ] {f : α -> γ} {g : β -> δ}
-  证明: ⟨fun h =>
-    ⟨fun c => by
-      inhabit δ
-      obtain ⟨⟨a, b⟩, h⟩ := h (c, default)
-      exact ⟨a, congr_arg Prod.fst h⟩,
-      fun d => by
-      inhabit γ
-      obtain ⟨⟨a, b⟩, h⟩ := h (default, d)
-      exact ⟨b, congr_arg Prod.snd h⟩⟩,
-    fun h => h.1.prodMap h.2⟩
-
-@[simp]
-
-Depends on / 依赖: Prod.fst, Prod.snd, congr_arg, inhabit, prodMap
+/-
+**Prod.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_surjective [Nonempty γ] [Nonempty δ] {f : α -> γ} {g : β -> δ} : Surje
+ctive (map f g) ↔ Surjective f ∧ Surjective g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Function.Surjective.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u
+_3} {δ : Type u_4} {f : α → γ} {g : β → δ},   Function.Surjective f → Function.S
+urjective g → Fun…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem map_surjective [Nonempty γ] [Nonempty δ] {f : α -> γ} {g : β -> δ} :
+theorem map_surjective [Nonempty γ] [Nonempty δ] {f : α → γ} {g : β → δ} :
     Surjective (map f g) ↔ Surjective f ∧ Surjective g :=
   ⟨fun h =>
     ⟨fun c => by
@@ -1118,73 +754,47 @@ theorem map_surjective [Nonempty γ] [Nonempty δ] {f : α -> γ} {g : β -> δ}
     fun h => h.1.prodMap h.2⟩
 
 @[simp]
-/--
-theorem `map_bijective` / 定理 `map_bijective`
-
-English:
-theorem map_bijective
-  given: [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ}
-  proof: by
-  have := Nonempty.map f ‹_›
-  have := Nonempty.map g ‹_›
-  exact (map_injective.and map_surjective).trans and_and_and_comm
-
-@[simp]
-
-中文:
-定理 map_bijective
-  条件: [非空 α] [非空 β] {f : α -> γ} {g : β -> δ}
-  证明: by
-  have := Nonempty.map f ‹_›
-  have := Nonempty.map g ‹_›
-  exact (map_injective.and map_surjective).trans and_and_and_comm
-
-@[simp]
-
-Depends on / 依赖: Nonempty, Nonempty.map, and_and_and_comm, map_injective, map_injective.and, map_surjective
+/-
+**Prod.map_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_bijective [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ} : Biject
+ive (map f g) ↔ Bijective f ∧ Bijective g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Prod.map_injective`：map_injective [Nonempty α] [Nonempty β] {f : α -> γ}
+ {g : β -> δ} : Injective (map f g) ↔ Injective f ∧ Injective g
+· 使用定理 `Prod.map_surjective`：map_surjective [Nonempty γ] [Nonempty δ] {f : α -> 
+γ} {g : β -> δ} : Surjective (map f g) ↔ Surjective f ∧ Surjective g
+· 使用定理 `and_and_and_comm`：∀ {a b c d : Prop}, (a ∧ b) ∧ c ∧ d ↔ (a ∧ c) ∧ b ∧ d
 -/
-theorem map_bijective [Nonempty α] [Nonempty β] {f : α -> γ} {g : β -> δ} :
+theorem map_bijective [Nonempty α] [Nonempty β] {f : α → γ} {g : β → δ} :
     Bijective (map f g) ↔ Bijective f ∧ Bijective g := by
   have := Nonempty.map f ‹_›
   have := Nonempty.map g ‹_›
   exact (map_injective.and map_surjective).trans and_and_and_comm
 
 @[simp]
-/--
-theorem `map_leftInverse` / 定理 `map_leftInverse`
-
-English:
-theorem map_leftInverse
-  statement: [Nonempty β] [Nonempty δ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
-  proof: ⟨fun h =>
-    ⟨fun b => by
-      inhabit δ
-      exact congr_arg Prod.fst (h (b, default)),
-      fun d => by
-      inhabit β
-      exact congr_arg Prod.snd (h (default, d))⟩,
-    fun h => h.1.prodMap h.2 ⟩
-
-@[simp]
-
-中文:
-定理 map_leftInverse
-  结论: [非空 β] [非空 δ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
-  证明: ⟨fun h =>
-    ⟨fun b => by
-      inhabit δ
-      exact congr_arg Prod.fst (h (b, default)),
-      fun d => by
-      inhabit β
-      exact congr_arg Prod.snd (h (default, d))⟩,
-    fun h => h.1.prodMap h.2 ⟩
-
-@[simp]
-
-Depends on / 依赖: Prod.fst, Prod.snd, congr_arg, inhabit, prodMap
+/-
+**Prod.map_leftInverse** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_leftInverse [Nonempty β] [Nonempty δ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ 
+: β -> α} {g₂ : δ -> γ} : LeftInverse (map f₁ g₁) (map f₂ g₂) ↔ LeftInverse f₁ f
+₂ ∧ LeftInverse g₁ g₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Function.LeftInverse.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type 
+u_3} {δ : Type u_4} {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α} {g₂ : δ → γ},   Funct
+ion.LeftInverse f₁…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem map_leftInverse [Nonempty β] [Nonempty δ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
-    {g₂ : δ -> γ} : LeftInverse (map f₁ g₁) (map f₂ g₂) ↔ LeftInverse f₁ f₂ ∧ LeftInverse g₁ g₂ :=
+theorem map_leftInverse [Nonempty β] [Nonempty δ] {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α}
+    {g₂ : δ → γ} : LeftInverse (map f₁ g₁) (map f₂ g₂) ↔ LeftInverse f₁ f₂ ∧ LeftInverse g₁ g₂ :=
   ⟨fun h =>
     ⟨fun b => by
       inhabit δ
@@ -1195,46 +805,33 @@ theorem map_leftInverse [Nonempty β] [Nonempty δ] {f₁ : α -> β} {g₁ : γ
     fun h => h.1.prodMap h.2 ⟩
 
 @[simp]
-/--
-theorem `map_rightInverse` / 定理 `map_rightInverse`
-
-English:
-theorem map_rightInverse
-  statement: [Nonempty α] [Nonempty γ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
-  proof: map_leftInverse
-
-@[simp]
-
-中文:
-定理 map_rightInverse
-  结论: [非空 α] [非空 γ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
-  证明: map_leftInverse
-
-@[simp]
-
-Depends on / 依赖: map_leftInverse
+/-
+**Prod.map_rightInverse** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_rightInverse [Nonempty α] [Nonempty γ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂
+ : β -> α} {g₂ : δ -> γ} : RightInverse (map f₁ g₁) (map f₂ g₂) ↔ RightInverse f
+₁ f₂ ∧ RightInverse g₁ g₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.map_leftInverse`：map_leftInverse [Nonempty β] [Nonempty δ] {f₁ : α 
+-> β} {g₁ : γ -> δ} {f₂ : β -> α} {g₂ : δ -> γ} : LeftInverse (map f₁ g₁) (map f
+₂ g₂) ↔ Le…
 -/
-theorem map_rightInverse [Nonempty α] [Nonempty γ] {f₁ : α -> β} {g₁ : γ -> δ} {f₂ : β -> α}
-    {g₂ : δ -> γ} : RightInverse (map f₁ g₁) (map f₂ g₂) ↔ RightInverse f₁ f₂ ∧ RightInverse g₁ g₂ :=
+theorem map_rightInverse [Nonempty α] [Nonempty γ] {f₁ : α → β} {g₁ : γ → δ} {f₂ : β → α}
+    {g₂ : δ → γ} : RightInverse (map f₁ g₁) (map f₂ g₂) ↔ RightInverse f₁ f₂ ∧ RightInverse g₁ g₂ :=
   map_leftInverse
 
 @[simp]
-/--
-theorem `map_involutive` / 定理 `map_involutive`
-
-English:
-theorem map_involutive
-  given: [Nonempty α] [Nonempty β] {f : α -> α} {g : β -> β}
-  proof: map_leftInverse
-
-中文:
-定理 map_involutive
-  条件: [非空 α] [非空 β] {f : α -> α} {g : β -> β}
-  证明: map_leftInverse
-
-Depends on / 依赖: map_leftInverse
+/-
+**Prod.map_involutive** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：map_involutive [Nonempty α] [Nonempty β] {f : α -> α} {g : β -> β} : Invol
+utive (map f g) ↔ Involutive f ∧ Involutive g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.map_leftInverse`：map_leftInverse [Nonempty β] [Nonempty δ] {f₁ : α 
+-> β} {g₁ : γ -> δ} {f₂ : β -> α} {g₂ : δ -> γ} : LeftInverse (map f₁ g₁) (map f
+₂ g₂) ↔ Le…
 -/
-theorem map_involutive [Nonempty α] [Nonempty β] {f : α -> α} {g : β -> β} :
+theorem map_involutive [Nonempty α] [Nonempty β] {f : α → α} {g : β → β} :
     Involutive (map f g) ↔ Involutive f ∧ Involutive g :=
   map_leftInverse
 
@@ -1258,9 +855,9 @@ meta def getPPNumericProjProd (o : Options) : Bool :=
 /-- Delaborator for `Prod.fst x` as `x.1`. -/
 @[app_delab Prod.fst]
 meta def delabProdFst : Delab :=
-whenPPOption getPPNumericProjProd
-whenPPOption getPPFieldNotation
-whenNotPPOption getPPExplicit
+  whenPPOption getPPNumericProjProd <|
+  whenPPOption getPPFieldNotation <|
+  whenNotPPOption getPPExplicit <|
   withOverApp 3 do
     let x ← SubExpr.withAppArg delab
     `($(x).1)
@@ -1268,9 +865,9 @@ whenNotPPOption getPPExplicit
 /-- Delaborator for `Prod.snd x` as `x.2`. -/
 @[app_delab Prod.snd]
 meta def delabProdSnd : Delab :=
-whenPPOption getPPNumericProjProd
-whenPPOption getPPFieldNotation
-whenNotPPOption getPPExplicit
+  whenPPOption getPPNumericProjProd <|
+  whenPPOption getPPFieldNotation <|
+  whenNotPPOption getPPExplicit <|
   withOverApp 3 do
     let x ← SubExpr.withAppArg delab
     `($(x).2)
@@ -1278,3 +875,4 @@ whenNotPPOption getPPExplicit
 end PrettyPrinting
 
 end Prod
+

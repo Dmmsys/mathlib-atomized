@@ -29,27 +29,22 @@ namespace Cat
 
 /-- Assigning to each category `C` the small category `AsSmall C` induces a functor `Cat ⥤ Cat`. -/
 @[simps]
-/--
-Definition of `asSmallFunctor` / `asSmallFunctor` 的定义
+/-
+**CategoryTheory.Cat.asSmallFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ca
+t`。
+形式化陈述：asSmallFunctor : Cat.{v, u} ⥤ Cat.{max w v u, max w v u} where obj C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asSmallFunctor
-  signature: : Cat.{v, u} ⥤ Cat.{max w v u, max w v u} where
-  body: .of AsSmall C
-  map F := (AsSmall.down ⋙ F.toFunctor ⋙ AsSmall.up).toCatHom
-
-中文:
-定义 asSmallFunctor
-  签名: : Cat.{v, u} ⥤ Cat.{最大值 w v u, 最大值 w v u} where
-  定义体: .of AsSmall C
-  map F := (AsSmall.down ⋙ F.toFunctor ⋙ AsSmall.up).toCatHom
-
-Depends on / 依赖: AsSmall
+--- 原说明 ---
+Assigning to each category `C` the small category `AsSmall C` induces a functor 
+`Cat ⥤ Cat`.
 -/
 def asSmallFunctor : Cat.{v, u} ⥤ Cat.{max w v u, max w v u} where
-obj C := .of AsSmall C
+  obj C := .of <| AsSmall C
   map F := (AsSmall.down ⋙ F.toFunctor ⋙ AsSmall.up).toCatHom
 
 end Cat
 
 end CategoryTheory
+

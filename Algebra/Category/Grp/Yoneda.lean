@@ -23,25 +23,17 @@ universe u
 
 /-- The `CommGrpCat`-valued coyoneda embedding. -/
 @[to_additive (attr := simps) /-- The `AddCommGrpCat`-valued coyoneda embedding. -/]
-/--
-Definition of `CommGrpCat.coyoneda` / `CommGrpCat.coyoneda` 的定义
+/-
+**CommGrpCat.coyoneda** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CommGrpCat.coyoneda : CommGrpCatᵒᵖ ⥤ CommGrpCat ⥤ CommGrpCat where obj M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CommGrpCat.coyoneda
-  signature: : CommGrpCatᵒᵖ ⥤ CommGrpCat ⥤ CommGrpCat where
-  body: { obj N := of (M.unop ->* N), map f := ofHom (.compHom f.hom) }
-  map f := { app N := ofHom (.compHom' f.unop.hom) }
-
-中文:
-定义 交换群范畴.coyoneda
-  签名: : CommGrpCatᵒᵖ ⥤ 交换群范畴 ⥤ 交换群范畴 where
-  定义体: { obj N := of (M.unop ->* N), map f := ofHom (.compHom f.hom) }
-  map f := { app N := ofHom (.compHom' f.unop.hom) }
-
-Depends on / 依赖: M.unop, compHom, f.hom
+--- 原说明 ---
+The `CommGrpCat`-valued coyoneda embedding.
 -/
 def CommGrpCat.coyoneda : CommGrpCatᵒᵖ ⥤ CommGrpCat ⥤ CommGrpCat where
-  obj M := { obj N := of (M.unop ->* N), map f := ofHom (.compHom f.hom) }
+  obj M := { obj N := of (M.unop →* N), map f := ofHom (.compHom f.hom) }
   map f := { app N := ofHom (.compHom' f.unop.hom) }
 
 set_option backward.defeqAttrib.useBackward true in
@@ -50,30 +42,18 @@ coyoneda embedding. -/
 @[to_additive (attr := simps!)
 /-- The `AddCommGrpCat`-valued coyoneda embedding composed with the forgetful functor is the usual
 coyoneda embedding. -/]
-/--
-Definition of `CommGrpCat.coyonedaForget` / `CommGrpCat.coyonedaForget` 的定义
-
-English:
-definition CommGrpCat.coyonedaForget
-  signature: :
-  body: dsimp% NatIso.ofComponents fun X => NatIso.ofComponents fun Y => {
-    hom := ↾fun f => ofHom f,
-    inv := ↾fun f => f.hom }
-
-中文:
-定义 交换群范畴.coyonedaForget
-  签名: :
-  定义体: dsimp% NatIso.ofComponents fun X => NatIso.ofComponents fun Y => {
-    hom := ↾fun f => ofHom f,
-    inv := ↾fun f => f.hom }
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, f.hom, ofComponents
+/-
+**CommGrpCat.coyonedaForget** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CommGrpCat.coyonedaForget : coyoneda ⋙ (Functor.whiskeringRight _ _ _).obj
+ (forget _) ≅ CategoryTheory.coyoneda
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def CommGrpCat.coyonedaForget :
     coyoneda ⋙ (Functor.whiskeringRight _ _ _).obj (forget _) ≅ CategoryTheory.coyoneda :=
-  dsimp% NatIso.ofComponents fun X => NatIso.ofComponents fun Y => {
-    hom := ↾fun f => ofHom f,
-    inv := ↾fun f => f.hom }
+  dsimp% NatIso.ofComponents fun X ↦ NatIso.ofComponents fun Y ↦ {
+    hom := ↾fun f ↦ ofHom f,
+    inv := ↾fun f ↦ f.hom }
 
 /-- The Hom bifunctor sending a type `X` and a commutative group `G` to the commutative group
 `X → G` with pointwise operations.
@@ -86,26 +66,14 @@ groups. -/
 
 This is also the coyoneda embedding of `Type` into `AddCommGrpCat`-valued presheaves of commutative
 groups. -/]
-/--
-Definition of `CommGrpCat.coyonedaType` / `CommGrpCat.coyonedaType` 的定义
-
-English:
-definition CommGrpCat.coyonedaType
-  signature: : (Type u)ᵒᵖ ⥤ CommGrpCat.{u} ⥤ CommGrpCat.{u} where
-  body: { obj G := of <| X.unop -> G
-map f := ofHom MonoidHom.pi fun i => f.hom.comp Pi.evalMonoidHom _ i }
-  map f := { app G := ofHom <| MonoidHom.pi fun i => Pi.evalMonoidHom _ <| f.unop i }
-
-中文:
-定义 交换群范畴.coyonedaType
-  签名: : (类型u)ᵒᵖ ⥤ 交换群范畴.{u} ⥤ 交换群范畴.{u} where
-  定义体: { obj G := of <| X.unop -> G
-map f := ofHom MonoidHom.pi fun i => f.hom.comp Pi.evalMonoidHom _ i }
-  map f := { app G := ofHom <| MonoidHom.pi fun i => Pi.evalMonoidHom _ <| f.unop i }
-
-Depends on / 依赖: X.unop
+/-
+**CommGrpCat.coyonedaType** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CommGrpCat.coyonedaType : (Type u)ᵒᵖ ⥤ CommGrpCat.{u} ⥤ CommGrpCat.{u} whe
+re obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def CommGrpCat.coyonedaType : (Type u)ᵒᵖ ⥤ CommGrpCat.{u} ⥤ CommGrpCat.{u} where
-  obj X := { obj G := of <| X.unop -> G
-map f := ofHom MonoidHom.pi fun i => f.hom.comp Pi.evalMonoidHom _ i }
-  map f := { app G := ofHom <| MonoidHom.pi fun i => Pi.evalMonoidHom _ <| f.unop i }
+  obj X := { obj G := of <| X.unop → G
+             map f := ofHom <| MonoidHom.pi fun i ↦ f.hom.comp <| Pi.evalMonoidHom _ i }
+  map f := { app G := ofHom <| MonoidHom.pi fun i ↦ Pi.evalMonoidHom _ <| f.unop i }

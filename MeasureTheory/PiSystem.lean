@@ -66,97 +66,79 @@ open MeasureTheory
 
 variable {α β : Type*}
 
-/--
-Definition of `IsPiSystem` / `IsPiSystem` 的定义
+/-- A π-system is a collection of subsets of `α` that is closed under binary intersection of
+  non-disjoint sets. Usually it is also required that the collection is nonempty, but we don't do
+  that here. -/
+/-
+**IsPiSystem** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsPiSystem (C : Set (Set α)) : Prop
+参数：C : Set (Set α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPiSystem
-  signature: (C : Set (Set α))
-  body: forallᵉ (s in C) (t in C), (s inter t : Set α).Nonempty -> s inter t in C
-
-中文:
-定义 IsPiSystem
-  签名: (C : 集合 (集合 α))
-  定义体: forallᵉ (s in C) (t in C), (s inter t : Set α).Nonempty -> s inter t in C
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+A π-system is a collection of subsets of `α` that is closed under binary interse
+ction of
+  non-disjoint sets. Usually it is also required that the collection is nonempty
+, but we don't do
+  that here.
 -/
 def IsPiSystem (C : Set (Set α)) : Prop :=
-  forallᵉ (s in C) (t in C), (s inter t : Set α).Nonempty -> s inter t in C
+  ∀ᵉ (s ∈ C) (t ∈ C), (s ∩ t : Set α).Nonempty → s ∩ t ∈ C
 
 namespace MeasurableSpace
 
-/--
-theorem `isPiSystem_measurableSet` / 定理 `isPiSystem_measurableSet`
-
-English:
-theorem isPiSystem_measurableSet
-  given: {α : Type*} [MeasurableSpace α]
-  proof: fun _ hs _ ht _ => hs.inter ht
-
-中文:
-定理 isPiSystem_measurableSet
-  条件: {α : 类型} [可测空间 α]
-  证明: fun _ hs _ ht _ => hs.inter ht
-
-Depends on / 依赖: hs.inter
+/-
+**MeasurableSpace.isPiSystem_measurableSet** 是 Mathlib 中的一个定理，位于命名空间 `Measurable
+Space`。
+形式化陈述：isPiSystem_measurableSet {α : Type*} [MeasurableSpace α] : IsPiSystem { s 
+: Set α | MeasurableSet s }
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
 -/
 theorem isPiSystem_measurableSet {α : Type*} [MeasurableSpace α] :
     IsPiSystem { s : Set α | MeasurableSet s } := fun _ hs _ ht _ => hs.inter ht
 
 end MeasurableSpace
 
-/--
-theorem `IsPiSystem.singleton` / 定理 `IsPiSystem.singleton`
-
-English:
-theorem IsPiSystem.singleton
-  given: (S : Set α)
-  statement: IsPiSystem ({S} : Set (Set α))
-  proof: by
-  intro s h_s t h_t _
-  rw [Set.mem_singleton_iff.1 h_s]; rw [Set.mem_singleton_iff.1 h_t]; rw [Set.inter_self]; rw [Set.mem_singleton_iff]
-
-中文:
-定理 IsPiSystem.singleton
-  条件: (S : 集合 α)
-  结论: IsPiSystem ({S} : 集合 (集合 α))
-  证明: by
-  intro s h_s t h_t _
-  rw [Set.mem_singleton_iff.1 h_s]; rw [Set.mem_singleton_iff.1 h_t]; rw [Set.inter_self]; rw [Set.mem_singleton_iff]
-
-Depends on / 依赖: Set.inter_self, Set.mem_singleton_iff, inter_self, mem_singleton_iff
+/-
+**IsPiSystem.singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPiSystem.singleton (S : Set α) : IsPiSystem ({S} : Set (Set α))
+参数：S : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Set.inter_self`：inter_self (a : Set α) : a inter a = a
 -/
 theorem IsPiSystem.singleton (S : Set α) : IsPiSystem ({S} : Set (Set α)) := by
   intro s h_s t h_t _
-  rw [Set.mem_singleton_iff.1 h_s]; rw [Set.mem_singleton_iff.1 h_t]; rw [Set.inter_self]; rw [Set.mem_singleton_iff]
-
-/--
-theorem `IsPiSystem.insert_empty` / 定理 `IsPiSystem.insert_empty`
-
-English:
-theorem IsPiSystem.insert_empty
-  given: {S : Set (Set α)} (h_pi : IsPiSystem S)
-  proof: by
-  intro s hs t ht hst
-  rcases hs with hs | hs
-  · simp [hs]
-  · rcases ht with ht | ht
-    · simp [ht]
-    · exact Set.mem_insert_of_mem _ (h_pi s hs t ht hst)
-
-中文:
-定理 IsPiSystem.insert_empty
-  条件: {S : 集合 (集合 α)} (h_pi : IsPiSystem S)
-  证明: by
-  intro s hs t ht hst
-  rcases hs with hs | hs
-  · simp [hs]
-  · rcases ht with ht | ht
-    · simp [ht]
-    · exact Set.mem_insert_of_mem _ (h_pi s hs t ht hst)
-
-Depends on / 依赖: Set.mem_insert_of_mem, h_pi, mem_insert_of_mem
+  rw [Set.mem_singleton_iff.1 h_s, Set.mem_singleton_iff.1 h_t, Set.inter_self,
+    Set.mem_singleton_iff]
+/-
+**IsPiSystem.insert_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPiSystem.insert_empty {S : Set (Set α)} (h_pi : IsPiSystem S) : IsPiSyst
+em (insert ∅ S)
+参数：Set α；h_pi : IsPiSystem S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.empty_inter`：empty_inter (a : Set α) : ∅ inter a = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Set.inter_empty`：inter_empty (a : Set α) : a inter ∅ = ∅
+· 使用定理 `Set.mem_insert_of_mem`：mem_insert_of_mem {x : α} {s : Set α} (y : α) : x
+ in s -> x in insert y s
 -/
 theorem IsPiSystem.insert_empty {S : Set (Set α)} (h_pi : IsPiSystem S) :
     IsPiSystem (insert ∅ S) := by
@@ -166,33 +148,30 @@ theorem IsPiSystem.insert_empty {S : Set (Set α)} (h_pi : IsPiSystem S) :
   · rcases ht with ht | ht
     · simp [ht]
     · exact Set.mem_insert_of_mem _ (h_pi s hs t ht hst)
-
-/--
-theorem `IsPiSystem.insert_univ` / 定理 `IsPiSystem.insert_univ`
-
-English:
-theorem IsPiSystem.insert_univ
-  given: {S : Set (Set α)} (h_pi : IsPiSystem S)
-  proof: by
-  intro s hs t ht hst
-  rcases hs with hs | hs
-  · rcases ht with ht | ht <;> simp [hs, ht]
-  · rcases ht with ht | ht
-    · simp [hs, ht]
-    · exact Set.mem_insert_of_mem _ (h_pi s hs t ht hst)
-
-中文:
-定理 IsPiSystem.insert_univ
-  条件: {S : 集合 (集合 α)} (h_pi : IsPiSystem S)
-  证明: by
-  intro s hs t ht hst
-  rcases hs with hs | hs
-  · rcases ht with ht | ht <;> simp [hs, ht]
-  · rcases ht with ht | ht
-    · simp [hs, ht]
-    · exact Set.mem_insert_of_mem _ (h_pi s hs t ht hst)
-
-Depends on / 依赖: Set.mem_insert_of_mem, h_pi, mem_insert_of_mem
+/-
+**IsPiSystem.insert_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPiSystem.insert_univ {S : Set (Set α)} (h_pi : IsPiSystem S) : IsPiSyste
+m (insert Set.univ S)
+参数：Set α；h_pi : IsPiSystem S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.inter_self`：inter_self (a : Set α) : a inter a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `Set.mem_insert_of_mem`：mem_insert_of_mem {x : α} {s : Set α} (y : α) : x
+ in s -> x in insert y s
 -/
 theorem IsPiSystem.insert_univ {S : Set (Set α)} (h_pi : IsPiSystem S) :
     IsPiSystem (insert Set.univ S) := by
@@ -202,144 +181,123 @@ theorem IsPiSystem.insert_univ {S : Set (Set α)} (h_pi : IsPiSystem S) :
   · rcases ht with ht | ht
     · simp [hs, ht]
     · exact Set.mem_insert_of_mem _ (h_pi s hs t ht hst)
-
-/--
-theorem `IsPiSystem.comap` / 定理 `IsPiSystem.comap`
-
-English:
-theorem IsPiSystem.comap
-  given: {α β} {S : Set (Set β)} (h_pi : IsPiSystem S) (f : α -> β)
-  proof: by
-  rintro _ ⟨s, hs_mem, rfl⟩ _ ⟨t, ht_mem, rfl⟩ hst
-  rw [← Set.preimage_inter] at hst ⊢
-  exact ⟨s inter t, h_pi s hs_mem t ht_mem (nonempty_of_nonempty_preimage hst), rfl⟩
-
-中文:
-定理 IsPiSystem.comap
-  条件: {α β} {S : 集合 (集合 β)} (h_pi : IsPiSystem S) (f : α -> β)
-  证明: by
-  rintro _ ⟨s, hs_mem, rfl⟩ _ ⟨t, ht_mem, rfl⟩ hst
-  rw [← Set.preimage_inter] at hst ⊢
-  exact ⟨s inter t, h_pi s hs_mem t ht_mem (nonempty_of_nonempty_preimage hst), rfl⟩
-
-Depends on / 依赖: Set.preimage_inter, h_pi, hs_mem, ht_mem, nonempty_of_nonempty_preimage, preimage_inter
+/-
+**IsPiSystem.comap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPiSystem.comap {α β} {S : Set (Set β)} (h_pi : IsPiSystem S) (f : α -> β
+) : IsPiSystem { s : Set α | exists t in S, f ⁻¹' t = s }
+参数：Set β；h_pi : IsPiSystem S；f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.preimage_inter`：preimage_inter {s t : Set β} : f ⁻¹' (s inter t) = f
+ ⁻¹' s inter f ⁻¹' t
+· 使用定理 `Set.nonempty_of_nonempty_preimage`：nonempty_of_nonempty_preimage {s : Se
+t β} {f : α -> β} (hf : (f ⁻¹' s).Nonempty) : s.Nonempty
 -/
-theorem IsPiSystem.comap {α β} {S : Set (Set β)} (h_pi : IsPiSystem S) (f : α -> β) :
-    IsPiSystem { s : Set α | exists t in S, f ⁻¹' t = s } := by
+theorem IsPiSystem.comap {α β} {S : Set (Set β)} (h_pi : IsPiSystem S) (f : α → β) :
+    IsPiSystem { s : Set α | ∃ t ∈ S, f ⁻¹' t = s } := by
   rintro _ ⟨s, hs_mem, rfl⟩ _ ⟨t, ht_mem, rfl⟩ hst
   rw [← Set.preimage_inter] at hst ⊢
-  exact ⟨s inter t, h_pi s hs_mem t ht_mem (nonempty_of_nonempty_preimage hst), rfl⟩
+  exact ⟨s ∩ t, h_pi s hs_mem t ht_mem (nonempty_of_nonempty_preimage hst), rfl⟩
 
-/--
-lemma `IsPiSystem.dissipate_mem` / 引理 `IsPiSystem.dissipate_mem`
+/-- For a `π`-system `C` over `α` and a sequence of sets `s` belonging to `C`,
+`dissipate s n` belongs to `C`. -/
+/-
+**IsPiSystem.dissipate_mem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsPiSystem.dissipate_mem {s : Nat -> Set α} {C : Set (Set α)} (hC : IsPiSy
+stem C) (h : forall n, s n in C) (n : Nat) (h' : (dissipate s n).Nonempty) : dis
+sipate s n in C
+参数：Set α；hC : IsPiSystem C；h : forall n, s n in C；n : Nat；h' : (dissipate s n).N
+onempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.dissipate_zero_nat`：dissipate_zero_nat (s : Nat -> Set β) : dissipat
+e s 0 = s 0
+· 使用定理 `Set.dissipate_succ`：dissipate_succ (s : Nat -> Set α) (n : Nat) : dissip
+ate s (n + 1) = (dissipate s n) inter s (n + 1)
+· 使用定理 `Set.Nonempty.left`：∀ {α : Type u} {s t : Set α}, (s ∩ t).Nonempty → s.No
+nempty
 
-English:
-lemma IsPiSystem.dissipate_mem
-  statement: {s : Nat -> Set α} {C : Set (Set α)}
-  proof: by
+--- 原说明 ---
+For a `π`-system `C` over `α` and a sequence of sets `s` belonging to `C`,
+`dissipate s n` belongs to `C`.
+-/
+lemma IsPiSystem.dissipate_mem {s : ℕ → Set α} {C : Set (Set α)}
+    (hC : IsPiSystem C) (h : ∀ n, s n ∈ C) (n : ℕ) (h' : (dissipate s n).Nonempty) :
+    dissipate s n ∈ C := by
   induction n with
   | zero => simpa using h 0
   | succ n hn =>
     rw [dissipate_succ] at h' ⊢
     exact hC (dissipate s n) (hn h'.left) (s (n + 1)) (h (n + 1)) h'
-
-中文:
-引理 IsPiSystem.dissipate_mem
-  结论: {s : 自然数 -> 集合 α} {C : 集合 (集合 α)}
-  证明: by
-  induction n with
-  | zero => simpa using h 0
-  | succ n hn =>
-    rw [dissipate_succ] at h' ⊢
-    exact hC (dissipate s n) (hn h'.left) (s (n + 1)) (h (n + 1)) h'
-
-Depends on / 依赖: dissipate, dissipate_succ
+/-
+**isPiSystem_iUnion_of_directed_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_iUnion_of_directed_le {α ι} (p : ι -> Set (Set α)) (hp_pi : for
+all n, IsPiSystem (p n)) (hp_directed : Directed (· <= ·) p) : IsPiSystem (⋃ n, 
+p n)
+参数：p : ι -> Set (Set α)；hp_pi : forall n, IsPiSystem (p n)；hp_directed : Directe
+d (· <= ·) p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
 -/
-lemma IsPiSystem.dissipate_mem {s : Nat -> Set α} {C : Set (Set α)}
-    (hC : IsPiSystem C) (h : forall n, s n in C) (n : Nat) (h' : (dissipate s n).Nonempty) :
-    dissipate s n in C := by
-  induction n with
-  | zero => simpa using h 0
-  | succ n hn =>
-    rw [dissipate_succ] at h' ⊢
-    exact hC (dissipate s n) (hn h'.left) (s (n + 1)) (h (n + 1)) h'
-
-/--
-theorem `isPiSystem_iUnion_of_directed_le` / 定理 `isPiSystem_iUnion_of_directed_le`
-
-English:
-theorem isPiSystem_iUnion_of_directed_le
-  statement: {α ι} (p : ι -> Set (Set α))
-  proof: by
-  intro t1 ht1 t2 ht2 h
-  rw [Set.mem_iUnion] at ht1 ht2 ⊢
-  obtain ⟨n, ht1⟩ := ht1
-  obtain ⟨m, ht2⟩ := ht2
-  obtain ⟨k, hpnk, hpmk⟩ : exists k, p n <= p k ∧ p m <= p k := hp_directed n m
-  exact ⟨k, hp_pi k t1 (hpnk ht1) t2 (hpmk ht2) h⟩
-
-中文:
-定理 isPiSystem_iUnion_of_directed_le
-  结论: {α ι} (p : ι -> 集合 (集合 α))
-  证明: by
-  intro t1 ht1 t2 ht2 h
-  rw [Set.mem_iUnion] at ht1 ht2 ⊢
-  obtain ⟨n, ht1⟩ := ht1
-  obtain ⟨m, ht2⟩ := ht2
-  obtain ⟨k, hpnk, hpmk⟩ : exists k, p n <= p k ∧ p m <= p k := hp_directed n m
-  exact ⟨k, hp_pi k t1 (hpnk ht1) t2 (hpmk ht2) h⟩
-
-Depends on / 依赖: Set.mem_iUnion, hp_directed, hp_pi, mem_iUnion
--/
-theorem isPiSystem_iUnion_of_directed_le {α ι} (p : ι -> Set (Set α))
-    (hp_pi : forall n, IsPiSystem (p n)) (hp_directed : Directed (· <= ·) p) :
+theorem isPiSystem_iUnion_of_directed_le {α ι} (p : ι → Set (Set α))
+    (hp_pi : ∀ n, IsPiSystem (p n)) (hp_directed : Directed (· ≤ ·) p) :
     IsPiSystem (⋃ n, p n) := by
   intro t1 ht1 t2 ht2 h
   rw [Set.mem_iUnion] at ht1 ht2 ⊢
   obtain ⟨n, ht1⟩ := ht1
   obtain ⟨m, ht2⟩ := ht2
-  obtain ⟨k, hpnk, hpmk⟩ : exists k, p n <= p k ∧ p m <= p k := hp_directed n m
+  obtain ⟨k, hpnk, hpmk⟩ : ∃ k, p n ≤ p k ∧ p m ≤ p k := hp_directed n m
   exact ⟨k, hp_pi k t1 (hpnk ht1) t2 (hpmk ht2) h⟩
-
-/--
-theorem `isPiSystem_iUnion_of_monotone` / 定理 `isPiSystem_iUnion_of_monotone`
-
-English:
-theorem isPiSystem_iUnion_of_monotone
-  statement: {α ι} [SemilatticeSup ι] (p : ι -> Set (Set α))
-  proof: isPiSystem_iUnion_of_directed_le p hp_pi (Monotone.directed_le hp_mono)
-
-中文:
-定理 isPiSystem_iUnion_of_monotone
-  结论: {α ι} [SemilatticeSup ι] (p : ι -> 集合 (集合 α))
-  证明: isPiSystem_iUnion_of_directed_le p hp_pi (Monotone.directed_le hp_mono)
-
-Depends on / 依赖: Monotone, Monotone.directed_le, directed_le, hp_mono, hp_pi, isPiSystem_iUnion_of_directed_le
+/-
+**isPiSystem_iUnion_of_monotone** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_iUnion_of_monotone {α ι} [SemilatticeSup ι] (p : ι -> Set (Set 
+α)) (hp_pi : forall n, IsPiSystem (p n)) (hp_mono : Monotone p) : IsPiSystem (⋃ 
+n, p n)
+参数：p : ι -> Set (Set α)；hp_pi : forall n, IsPiSystem (p n)；hp_mono : Monotone p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_iUnion_of_directed_le`：isPiSystem_iUnion_of_directed_le {α ι}
+ (p : ι -> Set (Set α)) (hp_pi : forall n, IsPiSystem (p n)) (hp_directed : Dire
+cted (· <= ·) p) : IsP…
+· 使用定理 `Monotone.directed_le`：Monotone.directed_le [Preorder α] [IsDirectedOrder
+ α] [Preorder β] {f : α -> β} : Monotone f -> Directed (· <= ·) f
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
 -/
-theorem isPiSystem_iUnion_of_monotone {α ι} [SemilatticeSup ι] (p : ι -> Set (Set α))
-    (hp_pi : forall n, IsPiSystem (p n)) (hp_mono : Monotone p) : IsPiSystem (⋃ n, p n) :=
+theorem isPiSystem_iUnion_of_monotone {α ι} [SemilatticeSup ι] (p : ι → Set (Set α))
+    (hp_pi : ∀ n, IsPiSystem (p n)) (hp_mono : Monotone p) : IsPiSystem (⋃ n, p n) :=
   isPiSystem_iUnion_of_directed_le p hp_pi (Monotone.directed_le hp_mono)
 
-/--
-lemma `IsPiSystem.prod` / 引理 `IsPiSystem.prod`
+/-- Rectangles formed by π-systems form a π-system. -/
+/-
+**IsPiSystem.prod** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsPiSystem.prod {C : Set (Set α)} {D : Set (Set β)} (hC : IsPiSystem C) (h
+D : IsPiSystem D) : IsPiSystem (image2 (· ×ˢ ·) C D)
+参数：Set α；Set β；hC : IsPiSystem C；hD : IsPiSystem D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.prod_inter_prod`：prod_inter_prod : s₁ ×ˢ t₁ inter s₂ ×ˢ t₂ = (s₁ int
+er s₂) ×ˢ (t₁ inter t₂)
+· 使用定理 `Set.mem_image2_of_mem`：mem_image2_of_mem (ha : a in s) (hb : b in t) : f
+ a b in image2 f s t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.prod_nonempty_iff`：prod_nonempty_iff : (s ×ˢ t).Nonempty ↔ s.Nonempt
+y ∧ t.Nonempty
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-lemma IsPiSystem.prod
-  given: {C : Set (Set α)} {D : Set (Set β)} (hC : IsPiSystem C) (hD : IsPiSystem D)
-  proof: by
-  rintro _ ⟨s₁, hs₁, t₁, ht₁, rfl⟩ _ ⟨s₂, hs₂, t₂, ht₂, rfl⟩ hst
-  rw [prod_inter_prod] at hst ⊢; rw [prod_nonempty_iff] at hst
-  exact mem_image2_of_mem (hC _ hs₁ _ hs₂ hst.1) (hD _ ht₁ _ ht₂ hst.2)
-
-中文:
-引理 IsPiSystem.乘积
-  条件: {C : 集合 (集合 α)} {D : 集合 (集合 β)} (hC : IsPiSystem C) (hD : IsPiSystem D)
-  证明: by
-  rintro _ ⟨s₁, hs₁, t₁, ht₁, rfl⟩ _ ⟨s₂, hs₂, t₂, ht₂, rfl⟩ hst
-  rw [prod_inter_prod] at hst ⊢; rw [prod_nonempty_iff] at hst
-  exact mem_image2_of_mem (hC _ hs₁ _ hs₂ hst.1) (hD _ ht₁ _ ht₂ hst.2)
-
-Depends on / 依赖: mem_image2_of_mem, prod_inter_prod, prod_nonempty_iff
+--- 原说明 ---
+Rectangles formed by π-systems form a π-system.
 -/
 lemma IsPiSystem.prod {C : Set (Set α)} {D : Set (Set β)} (hC : IsPiSystem C) (hD : IsPiSystem D) :
     IsPiSystem (image2 (· ×ˢ ·) C D) := by
@@ -347,624 +305,487 @@ lemma IsPiSystem.prod {C : Set (Set α)} {D : Set (Set β)} (hC : IsPiSystem C) 
   rw [prod_inter_prod] at hst ⊢; rw [prod_nonempty_iff] at hst
   exact mem_image2_of_mem (hC _ hs₁ _ hs₂ hst.1) (hD _ ht₁ _ ht₂ hst.2)
 
-/--
-lemma `IsPiSystem.biInter_mem` / 引理 `IsPiSystem.biInter_mem`
+/-- A nonempty finite intersection of sets in a π-system belongs to the π-system. -/
+/-
+**IsPiSystem.biInter_mem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsPiSystem.biInter_mem {S : Set (Set α)} (h_pi : IsPiSystem S) {t : Finset
+ (Set α)} (t_ne : t.Nonempty) (ht : forall s in t, s in S) (h' : (⋂ s in t, s).N
+onempty) : (⋂ s in t, s) in S
+参数：Set α；h_pi : IsPiSystem S；Set α；t_ne : t.Nonempty；ht : forall s in t, s in S；
+h' : (⋂ s in t, s).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.cons_induction`：∀ {α : Type u_3} {motive : (s : Finset α
+) → s.Nonempty → Prop},   (∀ (a : α), motive {a} ⋯) →     (∀ (a : α) (s : Finset
+ α) (h : a ∉ s) (hs …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `Set.iInter_iInter_eq_or_left`：iInter_iInter_eq_or_left {b : β} {p : β ->
+ Prop} {s : forall x : β, x = b ∨ p x -> Set α} : ⋂ (x) (h), s x h = s b (Or.inl
+ rfl) inter ⋂ (x) …
+· 使用定理 `Set.Nonempty.right`：∀ {α : Type u} {s t : Set α}, (s ∩ t).Nonempty → t.N
+onempty
 
-English:
-lemma IsPiSystem.biInter_mem
-  statement: {S : Set (Set α)} (h_pi : IsPiSystem S) {t : Finset (Set α)}
-  proof: by
-  induction t_ne using Finset.Nonempty.cons_induction with
-  | singleton a => simpa using ht
-  | cons a t hat t_ne ih =>
-    simp only [Finset.cons_eq_insert, Finset.mem_insert, iInter_iInter_eq_or_left] at h' ht ⊢
-    refine h_pi _ (ht a (Or.inl rfl)) _ ?_ h'
-    refine ih (fun s hs => ?_) h'.right
-    exact ht s (Or.inr hs)
-
-中文:
-引理 IsPiSystem.bi整数er_mem
-  结论: {S : 集合 (集合 α)} (h_pi : IsPiSystem S) {t : 有限集 (集合 α)}
-  证明: by
-  induction t_ne using Finset.Nonempty.cons_induction with
-  | singleton a => simpa using ht
-  | cons a t hat t_ne ih =>
-    simp only [Finset.cons_eq_insert, Finset.mem_insert, iInter_iInter_eq_or_left] at h' ht ⊢
-    refine h_pi _ (ht a (Or.inl rfl)) _ ?_ h'
-    refine ih (fun s hs => ?_) h'.right
-    exact ht s (Or.inr hs)
-
-Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.cons_eq_insert, Finset.mem_insert, Nonempty, Or.inl, Or.inr, cons_eq_insert, cons_induction, h_pi, iInter_iInter_eq_or_left, mem_insert, singleton, t_ne
+--- 原说明 ---
+A nonempty finite intersection of sets in a π-system belongs to the π-system.
 -/
 lemma IsPiSystem.biInter_mem {S : Set (Set α)} (h_pi : IsPiSystem S) {t : Finset (Set α)}
-    (t_ne : t.Nonempty) (ht : forall s in t, s in S) (h' : (⋂ s in t, s).Nonempty) :
-    (⋂ s in t, s) in S := by
+    (t_ne : t.Nonempty) (ht : ∀ s ∈ t, s ∈ S) (h' : (⋂ s ∈ t, s).Nonempty) :
+    (⋂ s ∈ t, s) ∈ S := by
   induction t_ne using Finset.Nonempty.cons_induction with
   | singleton a => simpa using ht
   | cons a t hat t_ne ih =>
     simp only [Finset.cons_eq_insert, Finset.mem_insert, iInter_iInter_eq_or_left] at h' ht ⊢
     refine h_pi _ (ht a (Or.inl rfl)) _ ?_ h'
-    refine ih (fun s hs => ?_) h'.right
+    refine ih (fun s hs ↦ ?_) h'.right
     exact ht s (Or.inr hs)
 
 section Order
 
 variable {ι ι' : Sort*} [LinearOrder α]
 
-/--
-theorem `isPiSystem_image_Iio` / 定理 `isPiSystem_image_Iio`
-
-English:
-theorem isPiSystem_image_Iio
-  given: (s : Set α)
-  statement: IsPiSystem (Iio '' s)
-  proof: by
-  rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
-  exact ⟨a ⊓ b, inf_ind a b ha hb, Iio_inter_Iio.symm⟩
-
-中文:
-定理 isPiSystem_image_Iio
-  条件: (s : 集合 α)
-  结论: IsPiSystem (左无界右开区间 '' s)
-  证明: by
-  rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
-  exact ⟨a ⊓ b, inf_ind a b ha hb, Iio_inter_Iio.symm⟩
-
-Depends on / 依赖: Iio_inter_Iio, Iio_inter_Iio.symm, inf_ind
+/-
+**isPiSystem_image_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_image_Iio (s : Set α) : IsPiSystem (Iio '' s)
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_ind`：∀ {α : Type u} [inst : LinearOrder α] (a b : α) {p : α → Prop},
+ p a → p b → p (min a b)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Iio_inter_Iio`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, Se
+t.Iio a ∩ Set.Iio b = Set.Iio (min a b)
 -/
 theorem isPiSystem_image_Iio (s : Set α) : IsPiSystem (Iio '' s) := by
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
   exact ⟨a ⊓ b, inf_ind a b ha hb, Iio_inter_Iio.symm⟩
-
-/--
-theorem `isPiSystem_Iio` / 定理 `isPiSystem_Iio`
-
-English:
-theorem isPiSystem_Iio
-  statement: IsPiSystem (range Iio : Set (Set α))
-  proof: @image_univ α _ Iio ▸ isPiSystem_image_Iio univ
-
-中文:
-定理 isPiSystem_Iio
-  结论: IsPiSystem (range 左无界右开区间 : 集合 (集合 α))
-  证明: @image_univ α _ Iio ▸ isPiSystem_image_Iio univ
-
-Depends on / 依赖: image_univ, isPiSystem_image_Iio
+/-
+**isPiSystem_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Iio : IsPiSystem (range Iio : Set (Set α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_image_Iio`：isPiSystem_image_Iio (s : Set α) : IsPiSystem (Iio
+ '' s)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
 -/
 theorem isPiSystem_Iio : IsPiSystem (range Iio : Set (Set α)) :=
   @image_univ α _ Iio ▸ isPiSystem_image_Iio univ
-
-/--
-theorem `isPiSystem_image_Ioi` / 定理 `isPiSystem_image_Ioi`
-
-English:
-theorem isPiSystem_image_Ioi
-  given: (s : Set α)
-  statement: IsPiSystem (Ioi '' s)
-  proof: @isPiSystem_image_Iio αᵒᵈ _ s
-
-中文:
-定理 isPiSystem_image_Ioi
-  条件: (s : 集合 α)
-  结论: IsPiSystem (左开右无界区间 '' s)
-  证明: @isPiSystem_image_Iio αᵒᵈ _ s
-
-Depends on / 依赖: isPiSystem_image_Iio
+/-
+**isPiSystem_image_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_image_Ioi (s : Set α) : IsPiSystem (Ioi '' s)
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_image_Iio`：isPiSystem_image_Iio (s : Set α) : IsPiSystem (Iio
+ '' s)
 -/
 theorem isPiSystem_image_Ioi (s : Set α) : IsPiSystem (Ioi '' s) :=
   @isPiSystem_image_Iio αᵒᵈ _ s
-
-/--
-theorem `isPiSystem_Ioi` / 定理 `isPiSystem_Ioi`
-
-English:
-theorem isPiSystem_Ioi
-  statement: IsPiSystem (range Ioi : Set (Set α))
-  proof: @image_univ α _ Ioi ▸ isPiSystem_image_Ioi univ
-
-中文:
-定理 isPiSystem_Ioi
-  结论: IsPiSystem (range 左开右无界区间 : 集合 (集合 α))
-  证明: @image_univ α _ Ioi ▸ isPiSystem_image_Ioi univ
-
-Depends on / 依赖: image_univ, isPiSystem_image_Ioi
+/-
+**isPiSystem_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ioi : IsPiSystem (range Ioi : Set (Set α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_image_Ioi`：isPiSystem_image_Ioi (s : Set α) : IsPiSystem (Ioi
+ '' s)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
 -/
 theorem isPiSystem_Ioi : IsPiSystem (range Ioi : Set (Set α)) :=
   @image_univ α _ Ioi ▸ isPiSystem_image_Ioi univ
-
-/--
-theorem `isPiSystem_image_Iic` / 定理 `isPiSystem_image_Iic`
-
-English:
-theorem isPiSystem_image_Iic
-  given: (s : Set α)
-  statement: IsPiSystem (Iic '' s)
-  proof: by
-  rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
-  exact ⟨a ⊓ b, inf_ind a b ha hb, Iic_inter_Iic.symm⟩
-
-中文:
-定理 isPiSystem_image_Iic
-  条件: (s : 集合 α)
-  结论: IsPiSystem (左无界右闭区间 '' s)
-  证明: by
-  rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
-  exact ⟨a ⊓ b, inf_ind a b ha hb, Iic_inter_Iic.symm⟩
-
-Depends on / 依赖: Iic_inter_Iic, Iic_inter_Iic.symm, inf_ind
+/-
+**isPiSystem_image_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_image_Iic (s : Set α) : IsPiSystem (Iic '' s)
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_ind`：∀ {α : Type u} [inst : LinearOrder α] (a b : α) {p : α → Prop},
+ p a → p b → p (min a b)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Iic_inter_Iic`：Iic_inter_Iic {a b : α} : Iic a inter Iic b = Iic (a 
+⊓ b)
 -/
 theorem isPiSystem_image_Iic (s : Set α) : IsPiSystem (Iic '' s) := by
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ -
   exact ⟨a ⊓ b, inf_ind a b ha hb, Iic_inter_Iic.symm⟩
-
-/--
-theorem `isPiSystem_Iic` / 定理 `isPiSystem_Iic`
-
-English:
-theorem isPiSystem_Iic
-  statement: IsPiSystem (range Iic : Set (Set α))
-  proof: @image_univ α _ Iic ▸ isPiSystem_image_Iic univ
-
-中文:
-定理 isPiSystem_Iic
-  结论: IsPiSystem (range 左无界右闭区间 : 集合 (集合 α))
-  证明: @image_univ α _ Iic ▸ isPiSystem_image_Iic univ
-
-Depends on / 依赖: image_univ, isPiSystem_image_Iic
+/-
+**isPiSystem_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Iic : IsPiSystem (range Iic : Set (Set α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_image_Iic`：isPiSystem_image_Iic (s : Set α) : IsPiSystem (Iic
+ '' s)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
 -/
 theorem isPiSystem_Iic : IsPiSystem (range Iic : Set (Set α)) :=
   @image_univ α _ Iic ▸ isPiSystem_image_Iic univ
-
-/--
-theorem `isPiSystem_image_Ici` / 定理 `isPiSystem_image_Ici`
-
-English:
-theorem isPiSystem_image_Ici
-  given: (s : Set α)
-  statement: IsPiSystem (Ici '' s)
-  proof: @isPiSystem_image_Iic αᵒᵈ _ s
-
-中文:
-定理 isPiSystem_image_Ici
-  条件: (s : 集合 α)
-  结论: IsPiSystem (左闭右无界区间 '' s)
-  证明: @isPiSystem_image_Iic αᵒᵈ _ s
-
-Depends on / 依赖: isPiSystem_image_Iic
+/-
+**isPiSystem_image_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_image_Ici (s : Set α) : IsPiSystem (Ici '' s)
+参数：s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_image_Iic`：isPiSystem_image_Iic (s : Set α) : IsPiSystem (Iic
+ '' s)
 -/
 theorem isPiSystem_image_Ici (s : Set α) : IsPiSystem (Ici '' s) :=
   @isPiSystem_image_Iic αᵒᵈ _ s
-
-/--
-theorem `isPiSystem_Ici` / 定理 `isPiSystem_Ici`
-
-English:
-theorem isPiSystem_Ici
-  statement: IsPiSystem (range Ici : Set (Set α))
-  proof: @image_univ α _ Ici ▸ isPiSystem_image_Ici univ
-
-中文:
-定理 isPiSystem_Ici
-  结论: IsPiSystem (range 左闭右无界区间 : 集合 (集合 α))
-  证明: @image_univ α _ Ici ▸ isPiSystem_image_Ici univ
-
-Depends on / 依赖: image_univ, isPiSystem_image_Ici
+/-
+**isPiSystem_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ici : IsPiSystem (range Ici : Set (Set α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_image_Ici`：isPiSystem_image_Ici (s : Set α) : IsPiSystem (Ici
+ '' s)
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
 -/
 theorem isPiSystem_Ici : IsPiSystem (range Ici : Set (Set α)) :=
   @image_univ α _ Ici ▸ isPiSystem_image_Ici univ
-
-/--
-theorem `isPiSystem_Ixx_mem` / 定理 `isPiSystem_Ixx_mem`
-
-English:
-theorem isPiSystem_Ixx_mem
-  statement: {Ixx : α -> α -> Set α} {p : α -> α -> Prop}
-  proof: by
-  rintro _ ⟨l₁, hls₁, u₁, hut₁, _, rfl⟩ _ ⟨l₂, hls₂, u₂, hut₂, _, rfl⟩
-  simp only [Hi]
-  exact fun H => ⟨l₁ ⊔ l₂, sup_ind l₁ l₂ hls₁ hls₂, u₁ ⊓ u₂, inf_ind u₁ u₂ hut₁ hut₂, Hne H, rfl⟩
-
-中文:
-定理 isPiSystem_Ixx_mem
-  结论: {Ixx : α -> α -> 集合 α} {p : α -> α -> 命题}
-  证明: by
-  rintro _ ⟨l₁, hls₁, u₁, hut₁, _, rfl⟩ _ ⟨l₂, hls₂, u₂, hut₂, _, rfl⟩
-  simp only [Hi]
-  exact fun H => ⟨l₁ ⊔ l₂, sup_ind l₁ l₂ hls₁ hls₂, u₁ ⊓ u₂, inf_ind u₁ u₂ hut₁ hut₂, Hne H, rfl⟩
-
-Depends on / 依赖: inf_ind, sup_ind
+/-
+**isPiSystem_Ixx_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ixx_mem {Ixx : α -> α -> Set α} {p : α -> α -> Prop} (Hne : for
+all {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b₁ a₂ b₂}, Ixx a₁ b₁ in
+ter Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)) (s t : Set α) : IsPiSystem { S | ex
+istsᵉ (l in s) (u in t), p l u ∧ Ixx l u = S }
+参数：Hne : forall {a b}, (Ixx a b).Nonempty -> p a b；Hi : forall {a₁ b₁ a₂ b₂}, Ix
+x a₁ b₁ inter Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)；s t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_ind`：sup_ind (a b : α) {p : α -> Prop} (ha : p a) (hb : p b) : p (a 
+⊔ b)
+· 使用定理 `inf_ind`：∀ {α : Type u} [inst : LinearOrder α] (a b : α) {p : α → Prop},
+ p a → p b → p (min a b)
 -/
-theorem isPiSystem_Ixx_mem {Ixx : α -> α -> Set α} {p : α -> α -> Prop}
-    (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b)
-    (Hi : forall {a₁ b₁ a₂ b₂}, Ixx a₁ b₁ inter Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)) (s t : Set α) :
-    IsPiSystem { S | existsᵉ (l in s) (u in t), p l u ∧ Ixx l u = S } := by
+theorem isPiSystem_Ixx_mem {Ixx : α → α → Set α} {p : α → α → Prop}
+    (Hne : ∀ {a b}, (Ixx a b).Nonempty → p a b)
+    (Hi : ∀ {a₁ b₁ a₂ b₂}, Ixx a₁ b₁ ∩ Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)) (s t : Set α) :
+    IsPiSystem { S | ∃ᵉ (l ∈ s) (u ∈ t), p l u ∧ Ixx l u = S } := by
   rintro _ ⟨l₁, hls₁, u₁, hut₁, _, rfl⟩ _ ⟨l₂, hls₂, u₂, hut₂, _, rfl⟩
   simp only [Hi]
   exact fun H => ⟨l₁ ⊔ l₂, sup_ind l₁ l₂ hls₁ hls₂, u₁ ⊓ u₂, inf_ind u₁ u₂ hut₁ hut₂, Hne H, rfl⟩
-
-/--
-theorem `isPiSystem_Ixx` / 定理 `isPiSystem_Ixx`
-
-English:
-theorem isPiSystem_Ixx
-  statement: {Ixx : α -> α -> Set α} {p : α -> α -> Prop}
-  proof: by
-  simpa only [exists_range_iff] using isPiSystem_Ixx_mem (@Hne) (@Hi) (range f) (range g)
-
-中文:
-定理 isPiSystem_Ixx
-  结论: {Ixx : α -> α -> 集合 α} {p : α -> α -> 命题}
-  证明: by
-  simpa only [exists_range_iff] using isPiSystem_Ixx_mem (@Hne) (@Hi) (range f) (range g)
-
-Depends on / 依赖: exists_range_iff, isPiSystem_Ixx_mem
+/-
+**isPiSystem_Ixx** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ixx {Ixx : α -> α -> Set α} {p : α -> α -> Prop} (Hne : forall 
+{a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b₁ a₂ b₂}, Ixx a₁ b₁ inter 
+Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)) (f : ι -> α) (g : ι' -> α) : @IsPiSyste
+m α { S | exists i j, p (f i) (g j) ∧ Ixx (f i) (g j) = S }
+参数：Hne : forall {a b}, (Ixx a b).Nonempty -> p a b；Hi : forall {a₁ b₁ a₂ b₂}, Ix
+x a₁ b₁ inter Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)；f : ι -> α；g : ι' -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `isPiSystem_Ixx_mem`：isPiSystem_Ixx_mem {Ixx : α -> α -> Set α} {p : α ->
+ α -> Prop} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b
+₁ a₂ b₂}…
 -/
-theorem isPiSystem_Ixx {Ixx : α -> α -> Set α} {p : α -> α -> Prop}
-    (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b)
-    (Hi : forall {a₁ b₁ a₂ b₂}, Ixx a₁ b₁ inter Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)) (f : ι -> α)
-    (g : ι' -> α) : @IsPiSystem α { S | exists i j, p (f i) (g j) ∧ Ixx (f i) (g j) = S } := by
+theorem isPiSystem_Ixx {Ixx : α → α → Set α} {p : α → α → Prop}
+    (Hne : ∀ {a b}, (Ixx a b).Nonempty → p a b)
+    (Hi : ∀ {a₁ b₁ a₂ b₂}, Ixx a₁ b₁ ∩ Ixx a₂ b₂ = Ixx (max a₁ a₂) (min b₁ b₂)) (f : ι → α)
+    (g : ι' → α) : @IsPiSystem α { S | ∃ i j, p (f i) (g j) ∧ Ixx (f i) (g j) = S } := by
   simpa only [exists_range_iff] using isPiSystem_Ixx_mem (@Hne) (@Hi) (range f) (range g)
-
-/--
-theorem `isPiSystem_Ioo_mem` / 定理 `isPiSystem_Ioo_mem`
-
-English:
-theorem isPiSystem_Ioo_mem
-  given: (s t : Set α)
-  proof: isPiSystem_Ixx_mem (Ixx := Ioo) (fun ⟨_, hax, hxb⟩ => hax.trans hxb) Ioo_inter_Ioo s t
-
-中文:
-定理 isPiSystem_Ioo_mem
-  条件: (s t : 集合 α)
-  证明: isPiSystem_Ixx_mem (Ixx := Ioo) (fun ⟨_, hax, hxb⟩ => hax.trans hxb) Ioo_inter_Ioo s t
-
-Depends on / 依赖: Ioo_inter_Ioo, hax.trans, isPiSystem_Ixx_mem
+/-
+**isPiSystem_Ioo_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ioo_mem (s t : Set α) : IsPiSystem { S | existsᵉ (l in s) (u in
+ t), l < u ∧ Ioo l u = S }
+参数：s t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx_mem`：isPiSystem_Ixx_mem {Ixx : α -> α -> Set α} {p : α ->
+ α -> Prop} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b
+₁ a₂ b₂}…
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Set.Ioo_inter_Ioo`：Ioo_inter_Ioo : Ioo a₁ b₁ inter Ioo a₂ b₂ = Ioo (a₁ ⊔
+ a₂) (b₁ ⊓ b₂)
 -/
 theorem isPiSystem_Ioo_mem (s t : Set α) :
-    IsPiSystem { S | existsᵉ (l in s) (u in t), l < u ∧ Ioo l u = S } :=
+    IsPiSystem { S | ∃ᵉ (l ∈ s) (u ∈ t), l < u ∧ Ioo l u = S } :=
   isPiSystem_Ixx_mem (Ixx := Ioo) (fun ⟨_, hax, hxb⟩ => hax.trans hxb) Ioo_inter_Ioo s t
-
-/--
-theorem `isPiSystem_Ioo` / 定理 `isPiSystem_Ioo`
-
-English:
-theorem isPiSystem_Ioo
-  given: (f : ι -> α) (g : ι' -> α)
-  proof: isPiSystem_Ixx (Ixx := Ioo) (fun ⟨_, hax, hxb⟩ => hax.trans hxb) Ioo_inter_Ioo f g
-
-中文:
-定理 isPiSystem_Ioo
-  条件: (f : ι -> α) (g : ι' -> α)
-  证明: isPiSystem_Ixx (Ixx := Ioo) (fun ⟨_, hax, hxb⟩ => hax.trans hxb) Ioo_inter_Ioo f g
-
-Depends on / 依赖: Ioo_inter_Ioo, hax.trans, isPiSystem_Ixx
+/-
+**isPiSystem_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ioo (f : ι -> α) (g : ι' -> α) : @IsPiSystem α { S | exists l u
+, f l < g u ∧ Ioo (f l) (g u) = S }
+参数：f : ι -> α；g : ι' -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx`：isPiSystem_Ixx {Ixx : α -> α -> Set α} {p : α -> α -> Pr
+op} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b₁ a₂ b₂}
+, Ix…
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Set.Ioo_inter_Ioo`：Ioo_inter_Ioo : Ioo a₁ b₁ inter Ioo a₂ b₂ = Ioo (a₁ ⊔
+ a₂) (b₁ ⊓ b₂)
 -/
-theorem isPiSystem_Ioo (f : ι -> α) (g : ι' -> α) :
-    @IsPiSystem α { S | exists l u, f l < g u ∧ Ioo (f l) (g u) = S } :=
+theorem isPiSystem_Ioo (f : ι → α) (g : ι' → α) :
+    @IsPiSystem α { S | ∃ l u, f l < g u ∧ Ioo (f l) (g u) = S } :=
   isPiSystem_Ixx (Ixx := Ioo) (fun ⟨_, hax, hxb⟩ => hax.trans hxb) Ioo_inter_Ioo f g
-
-/--
-theorem `isPiSystem_Ioc_mem` / 定理 `isPiSystem_Ioc_mem`
-
-English:
-theorem isPiSystem_Ioc_mem
-  given: (s t : Set α)
-  proof: isPiSystem_Ixx_mem (Ixx := Ioc) (fun ⟨_, hax, hxb⟩ => hax.trans_le hxb) Ioc_inter_Ioc s t
-
-中文:
-定理 isPiSystem_Ioc_mem
-  条件: (s t : 集合 α)
-  证明: isPiSystem_Ixx_mem (Ixx := Ioc) (fun ⟨_, hax, hxb⟩ => hax.trans_le hxb) Ioc_inter_Ioc s t
-
-Depends on / 依赖: Ioc_inter_Ioc, hax.trans_le, isPiSystem_Ixx_mem, trans_le
+/-
+**isPiSystem_Ioc_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ioc_mem (s t : Set α) : IsPiSystem { S | existsᵉ (l in s) (u in
+ t), l < u ∧ Ioc l u = S }
+参数：s t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx_mem`：isPiSystem_Ixx_mem {Ixx : α -> α -> Set α} {p : α ->
+ α -> Prop} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b
+₁ a₂ b₂}…
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioc_inter_Ioc`：∀ {α : Type u_1} [inst : LinearOrder α] {a₁ a₂ b₁ b₂ 
+: α},   Set.Ioc b₁ a₁ ∩ Set.Ioc b₂ a₂ = Set.Ioc (max b₁ b₂) (min a₁ a₂)
 -/
 theorem isPiSystem_Ioc_mem (s t : Set α) :
-    IsPiSystem { S | existsᵉ (l in s) (u in t), l < u ∧ Ioc l u = S } :=
+    IsPiSystem { S | ∃ᵉ (l ∈ s) (u ∈ t), l < u ∧ Ioc l u = S } :=
   isPiSystem_Ixx_mem (Ixx := Ioc) (fun ⟨_, hax, hxb⟩ => hax.trans_le hxb) Ioc_inter_Ioc s t
-
-/--
-theorem `isPiSystem_Ioc` / 定理 `isPiSystem_Ioc`
-
-English:
-theorem isPiSystem_Ioc
-  given: (f : ι -> α) (g : ι' -> α)
-  proof: isPiSystem_Ixx (Ixx := Ioc) (fun ⟨_, hax, hxb⟩ => hax.trans_le hxb) Ioc_inter_Ioc f g
-
-中文:
-定理 isPiSystem_Ioc
-  条件: (f : ι -> α) (g : ι' -> α)
-  证明: isPiSystem_Ixx (Ixx := Ioc) (fun ⟨_, hax, hxb⟩ => hax.trans_le hxb) Ioc_inter_Ioc f g
-
-Depends on / 依赖: Ioc_inter_Ioc, hax.trans_le, isPiSystem_Ixx, trans_le
+/-
+**isPiSystem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ioc (f : ι -> α) (g : ι' -> α) : @IsPiSystem α { S | exists i j
+, f i < g j ∧ Ioc (f i) (g j) = S }
+参数：f : ι -> α；g : ι' -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx`：isPiSystem_Ixx {Ixx : α -> α -> Set α} {p : α -> α -> Pr
+op} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b₁ a₂ b₂}
+, Ix…
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioc_inter_Ioc`：∀ {α : Type u_1} [inst : LinearOrder α] {a₁ a₂ b₁ b₂ 
+: α},   Set.Ioc b₁ a₁ ∩ Set.Ioc b₂ a₂ = Set.Ioc (max b₁ b₂) (min a₁ a₂)
 -/
-theorem isPiSystem_Ioc (f : ι -> α) (g : ι' -> α) :
-    @IsPiSystem α { S | exists i j, f i < g j ∧ Ioc (f i) (g j) = S } :=
+theorem isPiSystem_Ioc (f : ι → α) (g : ι' → α) :
+    @IsPiSystem α { S | ∃ i j, f i < g j ∧ Ioc (f i) (g j) = S } :=
   isPiSystem_Ixx (Ixx := Ioc) (fun ⟨_, hax, hxb⟩ => hax.trans_le hxb) Ioc_inter_Ioc f g
-
-/--
-theorem `isPiSystem_Ico_mem` / 定理 `isPiSystem_Ico_mem`
-
-English:
-theorem isPiSystem_Ico_mem
-  given: (s t : Set α)
-  proof: isPiSystem_Ixx_mem (Ixx := Ico) (fun ⟨_, hax, hxb⟩ => hax.trans_lt hxb) Ico_inter_Ico s t
-
-中文:
-定理 isPiSystem_Ico_mem
-  条件: (s t : 集合 α)
-  证明: isPiSystem_Ixx_mem (Ixx := Ico) (fun ⟨_, hax, hxb⟩ => hax.trans_lt hxb) Ico_inter_Ico s t
-
-Depends on / 依赖: Ico_inter_Ico, hax.trans_lt, isPiSystem_Ixx_mem, trans_lt
+/-
+**isPiSystem_Ico_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ico_mem (s t : Set α) : IsPiSystem { S | existsᵉ (l in s) (u in
+ t), l < u ∧ Ico l u = S }
+参数：s t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx_mem`：isPiSystem_Ixx_mem {Ixx : α -> α -> Set α} {p : α ->
+ α -> Prop} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b
+₁ a₂ b₂}…
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Set.Ico_inter_Ico`：Ico_inter_Ico : Ico a₁ b₁ inter Ico a₂ b₂ = Ico (a₁ ⊔
+ a₂) (b₁ ⊓ b₂)
 -/
 theorem isPiSystem_Ico_mem (s t : Set α) :
-    IsPiSystem { S | existsᵉ (l in s) (u in t), l < u ∧ Ico l u = S } :=
+    IsPiSystem { S | ∃ᵉ (l ∈ s) (u ∈ t), l < u ∧ Ico l u = S } :=
   isPiSystem_Ixx_mem (Ixx := Ico) (fun ⟨_, hax, hxb⟩ => hax.trans_lt hxb) Ico_inter_Ico s t
-
-/--
-theorem `isPiSystem_Ico` / 定理 `isPiSystem_Ico`
-
-English:
-theorem isPiSystem_Ico
-  given: (f : ι -> α) (g : ι' -> α)
-  proof: isPiSystem_Ixx (Ixx := Ico) (fun ⟨_, hax, hxb⟩ => hax.trans_lt hxb) Ico_inter_Ico f g
-
-中文:
-定理 isPiSystem_Ico
-  条件: (f : ι -> α) (g : ι' -> α)
-  证明: isPiSystem_Ixx (Ixx := Ico) (fun ⟨_, hax, hxb⟩ => hax.trans_lt hxb) Ico_inter_Ico f g
-
-Depends on / 依赖: Ico_inter_Ico, hax.trans_lt, isPiSystem_Ixx, trans_lt
+/-
+**isPiSystem_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Ico (f : ι -> α) (g : ι' -> α) : @IsPiSystem α { S | exists i j
+, f i < g j ∧ Ico (f i) (g j) = S }
+参数：f : ι -> α；g : ι' -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx`：isPiSystem_Ixx {Ixx : α -> α -> Set α} {p : α -> α -> Pr
+op} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b₁ a₂ b₂}
+, Ix…
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Set.Ico_inter_Ico`：Ico_inter_Ico : Ico a₁ b₁ inter Ico a₂ b₂ = Ico (a₁ ⊔
+ a₂) (b₁ ⊓ b₂)
 -/
-theorem isPiSystem_Ico (f : ι -> α) (g : ι' -> α) :
-    @IsPiSystem α { S | exists i j, f i < g j ∧ Ico (f i) (g j) = S } :=
+theorem isPiSystem_Ico (f : ι → α) (g : ι' → α) :
+    @IsPiSystem α { S | ∃ i j, f i < g j ∧ Ico (f i) (g j) = S } :=
   isPiSystem_Ixx (Ixx := Ico) (fun ⟨_, hax, hxb⟩ => hax.trans_lt hxb) Ico_inter_Ico f g
-
-/--
-theorem `isPiSystem_Icc_mem` / 定理 `isPiSystem_Icc_mem`
-
-English:
-theorem isPiSystem_Icc_mem
-  given: (s t : Set α)
-  proof: isPiSystem_Ixx_mem (Ixx := Icc) nonempty_Icc.1 (by exact Icc_inter_Icc) s t
-
-中文:
-定理 isPiSystem_Icc_mem
-  条件: (s t : 集合 α)
-  证明: isPiSystem_Ixx_mem (Ixx := Icc) nonempty_Icc.1 (by exact Icc_inter_Icc) s t
-
-Depends on / 依赖: Icc_inter_Icc, isPiSystem_Ixx_mem, nonempty_Icc
+/-
+**isPiSystem_Icc_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Icc_mem (s t : Set α) : IsPiSystem { S | existsᵉ (l in s) (u in
+ t), l <= u ∧ Icc l u = S }
+参数：s t : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx_mem`：isPiSystem_Ixx_mem {Ixx : α -> α -> Set α} {p : α ->
+ α -> Prop} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b
+₁ a₂ b₂}…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.nonempty_Icc`：nonempty_Icc : (Icc a b).Nonempty ↔ a <= b
+· 使用定理 `Set.Icc_inter_Icc`：Icc_inter_Icc : Icc a₁ b₁ inter Icc a₂ b₂ = Icc (a₁ ⊔
+ a₂) (b₁ ⊓ b₂)
 -/
 theorem isPiSystem_Icc_mem (s t : Set α) :
-    IsPiSystem { S | existsᵉ (l in s) (u in t), l <= u ∧ Icc l u = S } :=
+    IsPiSystem { S | ∃ᵉ (l ∈ s) (u ∈ t), l ≤ u ∧ Icc l u = S } :=
   isPiSystem_Ixx_mem (Ixx := Icc) nonempty_Icc.1 (by exact Icc_inter_Icc) s t
-
-/--
-theorem `isPiSystem_Icc` / 定理 `isPiSystem_Icc`
-
-English:
-theorem isPiSystem_Icc
-  given: (f : ι -> α) (g : ι' -> α)
-  proof: isPiSystem_Ixx (Ixx := Icc) nonempty_Icc.1 (by exact Icc_inter_Icc) f g
-
-中文:
-定理 isPiSystem_Icc
-  条件: (f : ι -> α) (g : ι' -> α)
-  证明: isPiSystem_Ixx (Ixx := Icc) nonempty_Icc.1 (by exact Icc_inter_Icc) f g
-
-Depends on / 依赖: Icc_inter_Icc, isPiSystem_Ixx, nonempty_Icc
+/-
+**isPiSystem_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_Icc (f : ι -> α) (g : ι' -> α) : @IsPiSystem α { S | exists i j
+, f i <= g j ∧ Icc (f i) (g j) = S }
+参数：f : ι -> α；g : ι' -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPiSystem_Ixx`：isPiSystem_Ixx {Ixx : α -> α -> Set α} {p : α -> α -> Pr
+op} (Hne : forall {a b}, (Ixx a b).Nonempty -> p a b) (Hi : forall {a₁ b₁ a₂ b₂}
+, Ix…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.nonempty_Icc`：nonempty_Icc : (Icc a b).Nonempty ↔ a <= b
+· 使用定理 `Set.Icc_inter_Icc`：Icc_inter_Icc : Icc a₁ b₁ inter Icc a₂ b₂ = Icc (a₁ ⊔
+ a₂) (b₁ ⊓ b₂)
 -/
-theorem isPiSystem_Icc (f : ι -> α) (g : ι' -> α) :
-    @IsPiSystem α { S | exists i j, f i <= g j ∧ Icc (f i) (g j) = S } :=
+theorem isPiSystem_Icc (f : ι → α) (g : ι' → α) :
+    @IsPiSystem α { S | ∃ i j, f i ≤ g j ∧ Icc (f i) (g j) = S } :=
   isPiSystem_Ixx (Ixx := Icc) nonempty_Icc.1 (by exact Icc_inter_Icc) f g
 
 end Order
 
-/--
-Inductive type `generatePiSystem` / 归纳类型 `generatePiSystem`
+/-- Given a collection `S` of subsets of `α`, then `generatePiSystem S` is the smallest
+π-system containing `S`. -/
+/-
+**generatePiSystem** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → Set (Set α) → Set (Set α)
+参数：Set α；Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive generatePiSystem
-  parameters: (S : Set (Set α))
-  constructors (2):
-    - base: {s : Set α} (h_s : s in S) : generatePiSystem S s
-    - inter: {s t : Set α} (h_s : generatePiSystem S s) (h_t : generatePiSystem S t) (h_nonempty : (s inter t).Nonempty) : generatePiSystem S (s inter t)
-
-中文:
-归纳类型 generatePiSystem
-  参数: (S : 集合 (集合 α))
-  构造子 (2 个):
-    - base: {s : 集合 α} (h_s : s in S) : generatePiSystem S s
-    - inter: {s t : 集合 α} (h_s : generatePiSystem S s) (h_t : generatePiSystem S t) (h_nonempty : (s inter t).非空) : generatePiSystem S (s inter t)
+--- 原说明 ---
+Given a collection `S` of subsets of `α`, then `generatePiSystem S` is the small
+est
+π-system containing `S`.
 -/
 inductive generatePiSystem (S : Set (Set α)) : Set (Set α)
-  | base {s : Set α} (h_s : s in S) : generatePiSystem S s
+  | base {s : Set α} (h_s : s ∈ S) : generatePiSystem S s
   | inter {s t : Set α} (h_s : generatePiSystem S s) (h_t : generatePiSystem S t)
-    (h_nonempty : (s inter t).Nonempty) : generatePiSystem S (s inter t)
-
-/--
-theorem `isPiSystem_generatePiSystem` / 定理 `isPiSystem_generatePiSystem`
-
-English:
-theorem isPiSystem_generatePiSystem
-  given: (S : Set (Set α))
-  statement: IsPiSystem (generatePiSystem S)
-  proof: fun _ h_s _ h_t h_nonempty => generatePiSystem.inter h_s h_t h_nonempty
-
-中文:
-定理 isPiSystem_generatePiSystem
-  条件: (S : 集合 (集合 α))
-  结论: IsPiSystem (generatePiSystem S)
-  证明: fun _ h_s _ h_t h_nonempty => generatePiSystem.inter h_s h_t h_nonempty
-
-Depends on / 依赖: generatePiSystem, generatePiSystem.inter, h_nonempty
+    (h_nonempty : (s ∩ t).Nonempty) : generatePiSystem S (s ∩ t)
+/-
+**isPiSystem_generatePiSystem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_generatePiSystem (S : Set (Set α)) : IsPiSystem (generatePiSyst
+em S)
+参数：S : Set (Set α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isPiSystem_generatePiSystem (S : Set (Set α)) : IsPiSystem (generatePiSystem S) :=
   fun _ h_s _ h_t h_nonempty => generatePiSystem.inter h_s h_t h_nonempty
-
-/--
-theorem `subset_generatePiSystem_self` / 定理 `subset_generatePiSystem_self`
-
-English:
-theorem subset_generatePiSystem_self
-  given: (S : Set (Set α))
-  statement: S subseteq generatePiSystem S
-  proof: fun _ =>
-  generatePiSystem.base
-
-中文:
-定理 subset_generatePiSystem_self
-  条件: (S : 集合 (集合 α))
-  结论: S subseteq generatePiSystem S
-  证明: fun _ =>
-  generatePiSystem.base
+/-
+**subset_generatePiSystem_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_generatePiSystem_self (S : Set (Set α)) : S subseteq generatePiSyst
+em S
+参数：S : Set (Set α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_generatePiSystem_self (S : Set (Set α)) : S subseteq generatePiSystem S := fun _ =>
+theorem subset_generatePiSystem_self (S : Set (Set α)) : S ⊆ generatePiSystem S := fun _ =>
   generatePiSystem.base
-
-/--
-theorem `generatePiSystem_subset_self` / 定理 `generatePiSystem_subset_self`
-
-English:
-theorem generatePiSystem_subset_self
-  given: {S : Set (Set α)} (h_S : IsPiSystem S)
-  proof: fun x h => by
-  induction h with
-  | base h_s => exact h_s
-  | inter _ _ h_nonempty h_s h_u => exact h_S _ h_s _ h_u h_nonempty
-
-中文:
-定理 generatePiSystem_subset_self
-  条件: {S : 集合 (集合 α)} (h_S : IsPiSystem S)
-  证明: fun x h => by
-  induction h with
-  | base h_s => exact h_s
-  | inter _ _ h_nonempty h_s h_u => exact h_S _ h_s _ h_u h_nonempty
-
-Depends on / 依赖: h_nonempty
+/-
+**generatePiSystem_subset_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generatePiSystem_subset_self {S : Set (Set α)} (h_S : IsPiSystem S) : gene
+ratePiSystem S subseteq S
+参数：Set α；h_S : IsPiSystem S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem generatePiSystem_subset_self {S : Set (Set α)} (h_S : IsPiSystem S) :
-    generatePiSystem S subseteq S := fun x h => by
+    generatePiSystem S ⊆ S := fun x h => by
   induction h with
   | base h_s => exact h_s
   | inter _ _ h_nonempty h_s h_u => exact h_S _ h_s _ h_u h_nonempty
-
-/--
-theorem `generatePiSystem_eq` / 定理 `generatePiSystem_eq`
-
-English:
-theorem generatePiSystem_eq
-  given: {S : Set (Set α)} (h_pi : IsPiSystem S)
-  statement: generatePiSystem S = S
-  proof: Set.Subset.antisymm (generatePiSystem_subset_self h_pi) (subset_generatePiSystem_self S)
-
-中文:
-定理 generatePiSystem_eq
-  条件: {S : 集合 (集合 α)} (h_pi : IsPiSystem S)
-  结论: generatePiSystem S = S
-  证明: Set.Subset.antisymm (generatePiSystem_subset_self h_pi) (subset_generatePiSystem_self S)
-
-Depends on / 依赖: Set.Subset.antisymm, Subset, antisymm, generatePiSystem_subset_self, h_pi, subset_generatePiSystem_self
+/-
+**generatePiSystem_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generatePiSystem_eq {S : Set (Set α)} (h_pi : IsPiSystem S) : generatePiSy
+stem S = S
+参数：Set α；h_pi : IsPiSystem S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `generatePiSystem_subset_self`：generatePiSystem_subset_self {S : Set (Set
+ α)} (h_S : IsPiSystem S) : generatePiSystem S subseteq S
+· 使用定理 `subset_generatePiSystem_self`：subset_generatePiSystem_self (S : Set (Set
+ α)) : S subseteq generatePiSystem S
 -/
 theorem generatePiSystem_eq {S : Set (Set α)} (h_pi : IsPiSystem S) : generatePiSystem S = S :=
   Set.Subset.antisymm (generatePiSystem_subset_self h_pi) (subset_generatePiSystem_self S)
-
-/--
-theorem `generatePiSystem_mono` / 定理 `generatePiSystem_mono`
-
-English:
-theorem generatePiSystem_mono
-  given: {S T : Set (Set α)} (hST : S subseteq T)
-  proof: fun t ht => by
-  induction ht with
-  | base h_s => exact generatePiSystem.base (Set.mem_of_subset_of_mem hST h_s)
-  | inter _ _ h_nonempty h_s h_u => exact isPiSystem_generatePiSystem T _ h_s _ h_u h_nonempty
-
-中文:
-定理 generatePiSystem_mono
-  条件: {S T : 集合 (集合 α)} (hST : S subseteq T)
-  证明: fun t ht => by
-  induction ht with
-  | base h_s => exact generatePiSystem.base (Set.mem_of_subset_of_mem hST h_s)
-  | inter _ _ h_nonempty h_s h_u => exact isPiSystem_generatePiSystem T _ h_s _ h_u h_nonempty
-
-Depends on / 依赖: Set.mem_of_subset_of_mem, generatePiSystem, generatePiSystem.base, h_nonempty, isPiSystem_generatePiSystem, mem_of_subset_of_mem
+/-
+**generatePiSystem_mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generatePiSystem_mono {S T : Set (Set α)} (hST : S subseteq T) : generateP
+iSystem S subseteq generatePiSystem T
+参数：Set α；hST : S subseteq T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_of_subset_of_mem`：∀ {α : Type u} {s₁ s₂ : Set α} {a : α}, s₁ ⊆ s
+₂ → a ∈ s₁ → a ∈ s₂
+· 使用定理 `isPiSystem_generatePiSystem`：isPiSystem_generatePiSystem (S : Set (Set α
+)) : IsPiSystem (generatePiSystem S)
 -/
-theorem generatePiSystem_mono {S T : Set (Set α)} (hST : S subseteq T) :
-    generatePiSystem S subseteq generatePiSystem T := fun t ht => by
+theorem generatePiSystem_mono {S T : Set (Set α)} (hST : S ⊆ T) :
+    generatePiSystem S ⊆ generatePiSystem T := fun t ht => by
   induction ht with
   | base h_s => exact generatePiSystem.base (Set.mem_of_subset_of_mem hST h_s)
   | inter _ _ h_nonempty h_s h_u => exact isPiSystem_generatePiSystem T _ h_s _ h_u h_nonempty
-
-/--
-theorem `generatePiSystem_measurableSet` / 定理 `generatePiSystem_measurableSet`
-
-English:
-theorem generatePiSystem_measurableSet
-  statement: [M : MeasurableSpace α] {S : Set (Set α)}
-  proof: by
-  induction h_in_pi with
-  | base h_s => apply h_meas_S _ h_s
-  | inter _ _ _ h_s h_u => apply MeasurableSet.inter h_s h_u
-
-中文:
-定理 generatePiSystem_measurableSet
-  结论: [M : 可测空间 α] {S : 集合 (集合 α)}
-  证明: by
-  induction h_in_pi with
-  | base h_s => apply h_meas_S _ h_s
-  | inter _ _ _ h_s h_u => apply MeasurableSet.inter h_s h_u
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.inter, h_in_pi, h_meas_S
+/-
+**generatePiSystem_measurableSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generatePiSystem_measurableSet [M : MeasurableSpace α] {S : Set (Set α)} (
+h_meas_S : forall s in S, MeasurableSet s) (t : Set α) (h_in_pi : t in generateP
+iSystem S) : MeasurableSet t
+参数：Set α；h_meas_S : forall s in S, MeasurableSet s；t : Set α；h_in_pi : t in gene
+ratePiSystem S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
 -/
 theorem generatePiSystem_measurableSet [M : MeasurableSpace α] {S : Set (Set α)}
-    (h_meas_S : forall s in S, MeasurableSet s) (t : Set α) (h_in_pi : t in generatePiSystem S) :
+    (h_meas_S : ∀ s ∈ S, MeasurableSet s) (t : Set α) (h_in_pi : t ∈ generatePiSystem S) :
     MeasurableSet t := by
   induction h_in_pi with
   | base h_s => apply h_meas_S _ h_s
   | inter _ _ _ h_s h_u => apply MeasurableSet.inter h_s h_u
-
-/--
-theorem `generateFrom_measurableSet_of_generatePiSystem` / 定理 `generateFrom_measurableSet_of_generatePiSystem`
-
-English:
-theorem generateFrom_measurableSet_of_generatePiSystem
-  statement: {g : Set (Set α)} (t : Set α)
-  proof: @generatePiSystem_measurableSet α (generateFrom g) g
-    (fun _ h_s_in_g => measurableSet_generateFrom h_s_in_g) t ht
-
-中文:
-定理 generateFrom_measurableSet_of_generatePiSystem
-  结论: {g : 集合 (集合 α)} (t : 集合 α)
-  证明: @generatePiSystem_measurableSet α (generateFrom g) g
-    (fun _ h_s_in_g => measurableSet_generateFrom h_s_in_g) t ht
-
-Depends on / 依赖: generateFrom, generatePiSystem_measurableSet, h_s_in_g, measurableSet_generateFrom
+/-
+**generateFrom_measurableSet_of_generatePiSystem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_measurableSet_of_generatePiSystem {g : Set (Set α)} (t : Set 
+α) (ht : t in generatePiSystem g) : MeasurableSet[generateFrom g] t
+参数：Set α；t : Set α；ht : t in generatePiSystem g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `generatePiSystem_measurableSet`：generatePiSystem_measurableSet [M : Meas
+urableSpace α] {S : Set (Set α)} (h_meas_S : forall s in S, MeasurableSet s) (t 
+: Set α) (h_in_pi : …
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
 -/
 theorem generateFrom_measurableSet_of_generatePiSystem {g : Set (Set α)} (t : Set α)
-    (ht : t in generatePiSystem g) : MeasurableSet[generateFrom g] t :=
+    (ht : t ∈ generatePiSystem g) : MeasurableSet[generateFrom g] t :=
   @generatePiSystem_measurableSet α (generateFrom g) g
     (fun _ h_s_in_g => measurableSet_generateFrom h_s_in_g) t ht
-
-/--
-theorem `generateFrom_generatePiSystem_eq` / 定理 `generateFrom_generatePiSystem_eq`
-
-English:
-theorem generateFrom_generatePiSystem_eq
-  given: {g : Set (Set α)}
-  proof: by
-  apply le_antisymm <;> apply generateFrom_le
-  · exact fun t h_t => generateFrom_measurableSet_of_generatePiSystem t h_t
-  · exact fun t h_t => measurableSet_generateFrom (generatePiSystem.base h_t)
-
-中文:
-定理 generateFrom_generatePiSystem_eq
-  条件: {g : 集合 (集合 α)}
-  证明: by
-  apply le_antisymm <;> apply generateFrom_le
-  · exact fun t h_t => generateFrom_measurableSet_of_generatePiSystem t h_t
-  · exact fun t h_t => measurableSet_generateFrom (generatePiSystem.base h_t)
-
-Depends on / 依赖: generateFrom_le, generateFrom_measurableSet_of_generatePiSystem, generatePiSystem, generatePiSystem.base, le_antisymm, measurableSet_generateFrom
+/-
+**generateFrom_generatePiSystem_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_generatePiSystem_eq {g : Set (Set α)} : generateFrom (generat
+ePiSystem g) = generateFrom g
+参数：Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `generateFrom_measurableSet_of_generatePiSystem`：generateFrom_measurableS
+et_of_generatePiSystem {g : Set (Set α)} (t : Set α) (ht : t in generatePiSystem
+ g) : MeasurableSet[generateFrom g] …
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
 -/
 theorem generateFrom_generatePiSystem_eq {g : Set (Set α)} :
     generateFrom (generatePiSystem g) = generateFrom g := by
@@ -972,72 +793,63 @@ theorem generateFrom_generatePiSystem_eq {g : Set (Set α)} :
   · exact fun t h_t => generateFrom_measurableSet_of_generatePiSystem t h_t
   · exact fun t h_t => measurableSet_generateFrom (generatePiSystem.base h_t)
 
-/--
-theorem `mem_generatePiSystem_iUnion_elim` / 定理 `mem_generatePiSystem_iUnion_elim`
+/-- Every element of the π-system generated by the union of a family of π-systems
+is a finite intersection of elements from the π-systems.
+For an indexed union version, see `mem_generatePiSystem_iUnion_elim'`. -/
+/-
+**mem_generatePiSystem_iUnion_elim** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_generatePiSystem_iUnion_elim {α β} {g : β -> Set (Set α)} (h_pi : fora
+ll b, IsPiSystem (g b)) (t : Set α) (h_t : t in generatePiSystem (⋃ b, g b)) : e
+xists (T : Finset β) (f : β -> Set α), (t = ⋂ b in T, f b) ∧ forall b in T, f b 
+in g b
+参数：Set α；h_pi : forall b, IsPiSystem (g b)；t : Set α；h_t : t in generatePiSystem
+ (⋃ b, g b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `Set.inter_subset_inter`：inter_subset_inter {s₁ s₂ t₁ t₂ : Set α} (h₁ : s
+₁ subseteq t₁) (h₂ : s₂ subseteq t₂) : s₁ inter s₂ subseteq t₁ inter t₂
+· 使用定理 `Set.biInter_subset_of_mem`：biInter_subset_of_mem {s : Set α} {t : α -> S
+et β} {x : α} (xs : x in s) : ⋂ x in s, t x subseteq t x
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Finset.mem_union`：mem_union : a in s union t ↔ a in s ∨ a in t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem mem_generatePiSystem_iUnion_elim
-  statement: {α β} {g : β -> Set (Set α)} (h_pi : forall b, IsPiSystem (g b))
-  proof: by
-  classical
-  induction h_t with
-  | @base s h_s =>
-    rcases h_s with ⟨t', ⟨⟨b, rfl⟩, h_s_in_t'⟩⟩
-    refine ⟨{b}, fun _ => s, ?_⟩
-    simpa using h_s_in_t'
-  | inter h_gen_s h_gen_t' h_nonempty h_s h_t' =>
-    rcases h_t' with ⟨T_t', ⟨f_t', ⟨rfl, h_t'⟩⟩⟩
-    rcases h_s with ⟨T_s, ⟨f_s, ⟨rfl, h_s⟩⟩⟩
-    use T_s union T_t', fun b : β =>
-      if b in T_s then if b in T_t' then f_s b inter f_t' b else f_s b
-      else if b in T_t' then f_t' b else (∅ : Set α)
-    constructor
-    · ext a
-      simp_rw [Set.mem_inter_iff, Set.mem_iInter, Finset.mem_union]
-      grind
-    intro b h_b
-    split_ifs with hbs hbt hbt
-    · refine h_pi b (f_s b) (h_s b hbs) (f_t' b) (h_t' b hbt) (Set.Nonempty.mono ?_ h_nonempty)
-      exact Set.inter_subset_inter (Set.biInter_subset_of_mem hbs) (Set.biInter_subset_of_mem hbt)
-    · exact h_s b hbs
-    · exact h_t' b hbt
-    · rw [Finset.mem_union] at h_b
-      apply False.elim (h_b.elim hbs hbt)
-
-中文:
-定理 mem_generatePiSystem_iUnion_elim
-  结论: {α β} {g : β -> 集合 (集合 α)} (h_pi : 对任意 b, IsPiSystem (g b))
-  证明: by
-  classical
-  induction h_t with
-  | @base s h_s =>
-    rcases h_s with ⟨t', ⟨⟨b, rfl⟩, h_s_in_t'⟩⟩
-    refine ⟨{b}, fun _ => s, ?_⟩
-    simpa using h_s_in_t'
-  | inter h_gen_s h_gen_t' h_nonempty h_s h_t' =>
-    rcases h_t' with ⟨T_t', ⟨f_t', ⟨rfl, h_t'⟩⟩⟩
-    rcases h_s with ⟨T_s, ⟨f_s, ⟨rfl, h_s⟩⟩⟩
-    use T_s union T_t', fun b : β =>
-      if b in T_s then if b in T_t' then f_s b inter f_t' b else f_s b
-      else if b in T_t' then f_t' b else (∅ : Set α)
-    constructor
-    · ext a
-      simp_rw [Set.mem_inter_iff, Set.mem_iInter, Finset.mem_union]
-      grind
-    intro b h_b
-    split_ifs with hbs hbt hbt
-    · refine h_pi b (f_s b) (h_s b hbs) (f_t' b) (h_t' b hbt) (Set.Nonempty.mono ?_ h_nonempty)
-      exact Set.inter_subset_inter (Set.biInter_subset_of_mem hbs) (Set.biInter_subset_of_mem hbt)
-    · exact h_s b hbs
-    · exact h_t' b hbt
-    · rw [Finset.mem_union] at h_b
-      apply False.elim (h_b.elim hbs hbt)
-
-Depends on / 依赖: Finset, Finset.mem_un, Set.mem_iInter, Set.mem_inter_iff, classical, h_gen_s, h_gen_t, h_nonempty, h_s_in_t, mem_iInter, mem_inter_iff, mem_un, simp_rw
+--- 原说明 ---
+Every element of the π-system generated by the union of a family of π-systems
+is a finite intersection of elements from the π-systems.
+For an indexed union version, see `mem_generatePiSystem_iUnion_elim'`.
 -/
-theorem mem_generatePiSystem_iUnion_elim {α β} {g : β -> Set (Set α)} (h_pi : forall b, IsPiSystem (g b))
-    (t : Set α) (h_t : t in generatePiSystem (⋃ b, g b)) :
-    exists (T : Finset β) (f : β -> Set α), (t = ⋂ b in T, f b) ∧ forall b in T, f b in g b := by
+theorem mem_generatePiSystem_iUnion_elim {α β} {g : β → Set (Set α)} (h_pi : ∀ b, IsPiSystem (g b))
+    (t : Set α) (h_t : t ∈ generatePiSystem (⋃ b, g b)) :
+    ∃ (T : Finset β) (f : β → Set α), (t = ⋂ b ∈ T, f b) ∧ ∀ b ∈ T, f b ∈ g b := by
   classical
   induction h_t with
   | @base s h_s =>
@@ -1047,9 +859,9 @@ theorem mem_generatePiSystem_iUnion_elim {α β} {g : β -> Set (Set α)} (h_pi 
   | inter h_gen_s h_gen_t' h_nonempty h_s h_t' =>
     rcases h_t' with ⟨T_t', ⟨f_t', ⟨rfl, h_t'⟩⟩⟩
     rcases h_s with ⟨T_s, ⟨f_s, ⟨rfl, h_s⟩⟩⟩
-    use T_s union T_t', fun b : β =>
-      if b in T_s then if b in T_t' then f_s b inter f_t' b else f_s b
-      else if b in T_t' then f_t' b else (∅ : Set α)
+    use T_s ∪ T_t', fun b : β =>
+      if b ∈ T_s then if b ∈ T_t' then f_s b ∩ f_t' b else f_s b
+      else if b ∈ T_t' then f_t' b else (∅ : Set α)
     constructor
     · ext a
       simp_rw [Set.mem_inter_iff, Set.mem_iInter, Finset.mem_union]
@@ -1064,83 +876,68 @@ theorem mem_generatePiSystem_iUnion_elim {α β} {g : β -> Set (Set α)} (h_pi 
       apply False.elim (h_b.elim hbs hbt)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mem_generatePiSystem_iUnion_elim'` / 定理 `mem_generatePiSystem_iUnion_elim'`
+/-- Every element of the π-system generated by an indexed union of a family of π-systems
+is a finite intersection of elements from the π-systems.
+For a total union version, see `mem_generatePiSystem_iUnion_elim`. -/
+/-
+**mem_generatePiSystem_iUnion_elim'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_generatePiSystem_iUnion_elim' {α β} {g : β -> Set (Set α)} {s : Set β}
+ (h_pi : forall b in s, IsPiSystem (g b)) (t : Set α) (h_t : t in generatePiSyst
+em (⋃ b in s, g b)) : exists (T : Finset β) (f : β -> Set α), ↑T subseteq s ∧ (t
+ = ⋂ b in T, f b) ∧ forall b in T, f b in g b
+参数：Set α；h_pi : forall b in s, IsPiSystem (g b)；t : Set α；h_t : t in generatePiS
+ystem (⋃ b in s, g b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `mem_generatePiSystem_iUnion_elim`：mem_generatePiSystem_iUnion_elim {α β}
+ {g : β -> Set (Set α)} (h_pi : forall b, IsPiSystem (g b)) (t : Set α) (h_t : t
+ in generatePiSystem (…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Subtype.coe_preimage_self`：coe_preimage_self (s : Set α) : ((↑) : s -> α
+) ⁻¹' s = univ
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Finset.set_biInter_finset_image`：set_biInter_finset_image {f : γ -> α} {
+g : α -> Set β} {s : Finset γ} : ⋂ x in s.image f, g x = ⋂ y in s, g (f y)
+· 使用定理 `Function.Injective.extend_apply`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Injective f → ∀ (g : α → γ) (e' : β → γ) (a : α)
+, Function.extend f g…
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem mem_generatePiSystem_iUnion_elim'
-  statement: {α β} {g : β -> Set (Set α)} {s : Set β}
-  proof: by
-  classical
-  have : t in generatePiSystem (⋃ b : s, (g ∘ Subtype.val) b) := by
-    suffices h1 : ⋃ b : s, (g ∘ Subtype.val) b = ⋃ b in s, g b by rwa [h1]
-    ext x
-    simp only [exists_prop, Set.mem_iUnion, Function.comp_apply, Subtype.exists]
-  rcases @mem_generatePiSystem_iUnion_elim α s (g ∘ Subtype.val)
-      (fun b => h_pi b.val b.property) t this with
-    ⟨T, ⟨f, ⟨rfl, h_t'⟩⟩⟩
-  refine
-    ⟨T.image (fun x : s => (x : β)),
-      Function.extend (fun x : s => (x : β)) f fun _ : β => (∅ : Set α), by simp, ?_, ?_⟩
-  · ext a
-    constructor <;>
-      · simp -proj only
-          [Set.mem_iInter, Subtype.forall, Finset.set_biInter_finset_image]
-        intro h1 b h_b h_b_in_T
-        have h2 := h1 b h_b h_b_in_T
-        revert h2
-        rw [Subtype.val_injective.extend_apply]
-        apply id
-  · intro b h_b
-    simp_rw [Finset.mem_image, Subtype.exists, exists_and_right, exists_eq_right]
-      at h_b
-    obtain ⟨h_b_w, h_b_h⟩ := h_b
-    have h_b_alt : b = (Subtype.mk b h_b_w).val := rfl
-    rw [h_b_alt]; rw [Subtype.val_injective.extend_apply]
-    apply h_t'
-    apply h_b_h
-
-中文:
-定理 mem_generatePiSystem_iUnion_elim'
-  结论: {α β} {g : β -> 集合 (集合 α)} {s : 集合 β}
-  证明: by
-  classical
-  have : t in generatePiSystem (⋃ b : s, (g ∘ Subtype.val) b) := by
-    suffices h1 : ⋃ b : s, (g ∘ Subtype.val) b = ⋃ b in s, g b by rwa [h1]
-    ext x
-    simp only [exists_prop, Set.mem_iUnion, Function.comp_apply, Subtype.exists]
-  rcases @mem_generatePiSystem_iUnion_elim α s (g ∘ Subtype.val)
-      (fun b => h_pi b.val b.property) t this with
-    ⟨T, ⟨f, ⟨rfl, h_t'⟩⟩⟩
-  refine
-    ⟨T.image (fun x : s => (x : β)),
-      Function.extend (fun x : s => (x : β)) f fun _ : β => (∅ : Set α), by simp, ?_, ?_⟩
-  · ext a
-    constructor <;>
-      · simp -proj only
-          [Set.mem_iInter, Subtype.forall, Finset.set_biInter_finset_image]
-        intro h1 b h_b h_b_in_T
-        have h2 := h1 b h_b h_b_in_T
-        revert h2
-        rw [Subtype.val_injective.extend_apply]
-        apply id
-  · intro b h_b
-    simp_rw [Finset.mem_image, Subtype.exists, exists_and_right, exists_eq_right]
-      at h_b
-    obtain ⟨h_b_w, h_b_h⟩ := h_b
-    have h_b_alt : b = (Subtype.mk b h_b_w).val := rfl
-    rw [h_b_alt]; rw [Subtype.val_injective.extend_apply]
-    apply h_t'
-    apply h_b_h
-
-Depends on / 依赖: Function, Function.comp_apply, Function.extend, Set.mem_iUnion, Subtype, Subtype.exists, Subtype.val, T.image, b.property, b.val, classical, comp_apply, exists_prop, extend, generatePiSystem, h_pi, mem_generatePiSystem_iUnion_elim, mem_iUnion, property
+--- 原说明 ---
+Every element of the π-system generated by an indexed union of a family of π-sys
+tems
+is a finite intersection of elements from the π-systems.
+For a total union version, see `mem_generatePiSystem_iUnion_elim`.
 -/
-theorem mem_generatePiSystem_iUnion_elim' {α β} {g : β -> Set (Set α)} {s : Set β}
-    (h_pi : forall b in s, IsPiSystem (g b)) (t : Set α) (h_t : t in generatePiSystem (⋃ b in s, g b)) :
-    exists (T : Finset β) (f : β -> Set α), ↑T subseteq s ∧ (t = ⋂ b in T, f b) ∧ forall b in T, f b in g b := by
+theorem mem_generatePiSystem_iUnion_elim' {α β} {g : β → Set (Set α)} {s : Set β}
+    (h_pi : ∀ b ∈ s, IsPiSystem (g b)) (t : Set α) (h_t : t ∈ generatePiSystem (⋃ b ∈ s, g b)) :
+    ∃ (T : Finset β) (f : β → Set α), ↑T ⊆ s ∧ (t = ⋂ b ∈ T, f b) ∧ ∀ b ∈ T, f b ∈ g b := by
   classical
-  have : t in generatePiSystem (⋃ b : s, (g ∘ Subtype.val) b) := by
-    suffices h1 : ⋃ b : s, (g ∘ Subtype.val) b = ⋃ b in s, g b by rwa [h1]
+  have : t ∈ generatePiSystem (⋃ b : s, (g ∘ Subtype.val) b) := by
+    suffices h1 : ⋃ b : s, (g ∘ Subtype.val) b = ⋃ b ∈ s, g b by rwa [h1]
     ext x
     simp only [exists_prop, Set.mem_iUnion, Function.comp_apply, Subtype.exists]
   rcases @mem_generatePiSystem_iUnion_elim α s (g ∘ Subtype.val)
@@ -1163,7 +960,7 @@ theorem mem_generatePiSystem_iUnion_elim' {α β} {g : β -> Set (Set α)} {s : 
       at h_b
     obtain ⟨h_b_w, h_b_h⟩ := h_b
     have h_b_alt : b = (Subtype.mk b h_b_w).val := rfl
-    rw [h_b_alt]; rw [Subtype.val_injective.extend_apply]
+    rw [h_b_alt, Subtype.val_injective.extend_apply]
     apply h_t'
     apply h_b_h
 
@@ -1174,104 +971,88 @@ variable {α ι : Type*}
 /-! ### π-system generated by finite intersections of sets of a π-system family -/
 
 
-/--
-Definition of `piiUnionInter` / `piiUnionInter` 的定义
+/-- From a set of indices `S : Set ι` and a family of sets of sets `π : ι → Set (Set α)`,
+define the set of sets that can be written as `⋂ x ∈ t, f x` for some finset `t ⊆ S` and sets
+`f x ∈ π x`. If `π` is a family of π-systems, then it is a π-system. -/
+/-
+**piiUnionInter** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：piiUnionInter (π : ι -> Set (Set α)) (S : Set ι) : Set (Set α)
+参数：π : ι -> Set (Set α)；S : Set ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piiUnionInter
-  signature: (π : ι -> Set (Set α)) (S : Set ι)
-  body: { s : Set α |
-    exists (t : Finset ι) (_ : ↑t subseteq S) (f : ι -> Set α) (_ : forall x, x in t -> f x in π x), s = ⋂ x in t, f x }
-
-中文:
-定义 piiUnion整数er
-  签名: (π : ι -> 集合 (集合 α)) (S : 集合 ι)
-  定义体: { s : Set α |
-    exists (t : Finset ι) (_ : ↑t subseteq S) (f : ι -> Set α) (_ : forall x, x in t -> f x in π x), s = ⋂ x in t, f x }
-
-Depends on / 依赖: Finset, subseteq
+--- 原说明 ---
+From a set of indices `S : Set ι` and a family of sets of sets `π : ι → Set (Set
+ α)`,
+define the set of sets that can be written as `⋂ x ∈ t, f x` for some finset `t 
+⊆ S` and sets
+`f x ∈ π x`. If `π` is a family of π-systems, then it is a π-system.
 -/
-def piiUnionInter (π : ι -> Set (Set α)) (S : Set ι) : Set (Set α) :=
+def piiUnionInter (π : ι → Set (Set α)) (S : Set ι) : Set (Set α) :=
   { s : Set α |
-    exists (t : Finset ι) (_ : ↑t subseteq S) (f : ι -> Set α) (_ : forall x, x in t -> f x in π x), s = ⋂ x in t, f x }
-
-/--
-theorem `piiUnionInter_singleton` / 定理 `piiUnionInter_singleton`
-
-English:
-theorem piiUnionInter_singleton
-  given: (π : ι -> Set (Set α)) (i : ι)
-  proof: by
-  ext1 s
-  simp only [piiUnionInter, exists_prop, mem_union]
-  refine ⟨?_, fun h => ?_⟩
-  · rintro ⟨t, hti, f, hfπ, rfl⟩
-    simp only [subset_singleton_iff, Finset.mem_coe] at hti
-    by_cases hi : i in t
-    · have ht_eq_i : t = {i} := by
-        ext1 x
-        rw [Finset.mem_singleton]
-        exact ⟨fun h => hti x h, fun h => h.symm ▸ hi⟩
-      simp only [ht_eq_i, Finset.mem_singleton, iInter_iInter_eq_left]
-      exact Or.inl (hfπ i hi)
-    · have ht_empty : t = ∅ := by
-        ext1 x
-        simp only [Finset.notMem_empty, iff_false]
-        exact fun hx => hi (hti x hx ▸ hx)
-      simp [ht_empty, iInter_univ, Set.mem_singleton univ]
-  · rcases h with hs | hs
-    · refine ⟨{i}, ?_, fun _ => s, ⟨fun x hx => ?_, ?_⟩⟩
-      · rw [Finset.coe_singleton]
-      · rw [Finset.mem_singleton] at hx
-        rwa [hx]
-      · simp only [Finset.mem_singleton, iInter_iInter_eq_left]
-    · refine ⟨∅, ?_⟩
-      simpa only [Finset.coe_empty, subset_singleton_iff, mem_empty_iff_false, IsEmpty.forall_iff,
-        imp_true_iff, Finset.notMem_empty, iInter_false, iInter_univ, true_and,
-        exists_const] using! hs
-
-中文:
-定理 piiUnion整数er_singleton
-  条件: (π : ι -> 集合 (集合 α)) (i : ι)
-  证明: by
-  ext1 s
-  simp only [piiUnionInter, exists_prop, mem_union]
-  refine ⟨?_, fun h => ?_⟩
-  · rintro ⟨t, hti, f, hfπ, rfl⟩
-    simp only [subset_singleton_iff, Finset.mem_coe] at hti
-    by_cases hi : i in t
-    · have ht_eq_i : t = {i} := by
-        ext1 x
-        rw [Finset.mem_singleton]
-        exact ⟨fun h => hti x h, fun h => h.symm ▸ hi⟩
-      simp only [ht_eq_i, Finset.mem_singleton, iInter_iInter_eq_left]
-      exact Or.inl (hfπ i hi)
-    · have ht_empty : t = ∅ := by
-        ext1 x
-        simp only [Finset.notMem_empty, iff_false]
-        exact fun hx => hi (hti x hx ▸ hx)
-      simp [ht_empty, iInter_univ, Set.mem_singleton univ]
-  · rcases h with hs | hs
-    · refine ⟨{i}, ?_, fun _ => s, ⟨fun x hx => ?_, ?_⟩⟩
-      · rw [Finset.coe_singleton]
-      · rw [Finset.mem_singleton] at hx
-        rwa [hx]
-      · simp only [Finset.mem_singleton, iInter_iInter_eq_left]
-    · refine ⟨∅, ?_⟩
-      simpa only [Finset.coe_empty, subset_singleton_iff, mem_empty_iff_false, IsEmpty.forall_iff,
-        imp_true_iff, Finset.notMem_empty, iInter_false, iInter_univ, true_and,
-        exists_const] using! hs
-
-Depends on / 依赖: Finset, Finset.mem_coe, Finset.mem_singleton, Finset.notMem_empty, Or.inl, exists_prop, h.symm, ht_empty, ht_eq_i, iInter_iInter_eq_left, iff_false, mem_coe, mem_singleton, mem_union, notMem_empty, piiUnionInter, subset_singleton_iff
+    ∃ (t : Finset ι) (_ : ↑t ⊆ S) (f : ι → Set α) (_ : ∀ x, x ∈ t → f x ∈ π x), s = ⋂ x ∈ t, f x }
+/-
+**piiUnionInter_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：piiUnionInter_singleton (π : ι -> Set (Set α)) (i : ι) : piiUnionInter π {
+i} = π i union {univ}
+参数：π : ι -> Set (Set α)；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Finset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Finset α) ↔ 
+b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.iInter_of_empty`：iInter_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋂ i,
+ s i = univ
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `Set.iInter_univ`：iInter_univ : (⋂ _ : ι, univ : Set α) = univ
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Set.iInter_false`：iInter_false {s : False -> Set α} : iInter s = univ
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Pi.instNonempty`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Nonempty (β
+ a)], Nonempty ((a : α) → β a)
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem piiUnionInter_singleton (π : ι -> Set (Set α)) (i : ι) :
-    piiUnionInter π {i} = π i union {univ} := by
+theorem piiUnionInter_singleton (π : ι → Set (Set α)) (i : ι) :
+    piiUnionInter π {i} = π i ∪ {univ} := by
   ext1 s
   simp only [piiUnionInter, exists_prop, mem_union]
   refine ⟨?_, fun h => ?_⟩
   · rintro ⟨t, hti, f, hfπ, rfl⟩
     simp only [subset_singleton_iff, Finset.mem_coe] at hti
-    by_cases hi : i in t
+    by_cases hi : i ∈ t
     · have ht_eq_i : t = {i} := by
         ext1 x
         rw [Finset.mem_singleton]
@@ -1293,75 +1074,79 @@ theorem piiUnionInter_singleton (π : ι -> Set (Set α)) (i : ι) :
       simpa only [Finset.coe_empty, subset_singleton_iff, mem_empty_iff_false, IsEmpty.forall_iff,
         imp_true_iff, Finset.notMem_empty, iInter_false, iInter_univ, true_and,
         exists_const] using! hs
-
-/--
-theorem `piiUnionInter_singleton_left` / 定理 `piiUnionInter_singleton_left`
-
-English:
-theorem piiUnionInter_singleton_left
-  given: (s : ι -> Set α) (S : Set ι)
-  proof: by
-  ext1 s'
-  simp_rw [piiUnionInter, Set.mem_singleton_iff, exists_prop, Set.mem_ofPred_eq]
-  refine ⟨fun h => ?_, fun ⟨t, htS, h_eq⟩ => ⟨t, htS, s, fun _ _ => rfl, h_eq⟩⟩
-  grind
-
-中文:
-定理 piiUnion整数er_singleton_left
-  条件: (s : ι -> 集合 α) (S : 集合 ι)
-  证明: by
-  ext1 s'
-  simp_rw [piiUnionInter, Set.mem_singleton_iff, exists_prop, Set.mem_ofPred_eq]
-  refine ⟨fun h => ?_, fun ⟨t, htS, h_eq⟩ => ⟨t, htS, s, fun _ _ => rfl, h_eq⟩⟩
-  grind
-
-Depends on / 依赖: Set.mem_ofPred_eq, Set.mem_singleton_iff, exists_prop, h_eq, mem_ofPred_eq, mem_singleton_iff, piiUnionInter, simp_rw
+/-
+**piiUnionInter_singleton_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：piiUnionInter_singleton_left (s : ι -> Set α) (S : Set ι) : piiUnionInter 
+(fun i => ({s i} : Set (Set α))) S = { s' : Set α | exists (t : Finset ι) (_ : ↑
+t subseteq S), s' = ⋂ i in t, s i }
+参数：s : ι -> Set α；S : Set ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem piiUnionInter_singleton_left (s : ι -> Set α) (S : Set ι) :
+theorem piiUnionInter_singleton_left (s : ι → Set α) (S : Set ι) :
     piiUnionInter (fun i => ({s i} : Set (Set α))) S =
-      { s' : Set α | exists (t : Finset ι) (_ : ↑t subseteq S), s' = ⋂ i in t, s i } := by
+      { s' : Set α | ∃ (t : Finset ι) (_ : ↑t ⊆ S), s' = ⋂ i ∈ t, s i } := by
   ext1 s'
   simp_rw [piiUnionInter, Set.mem_singleton_iff, exists_prop, Set.mem_ofPred_eq]
   refine ⟨fun h => ?_, fun ⟨t, htS, h_eq⟩ => ⟨t, htS, s, fun _ _ => rfl, h_eq⟩⟩
   grind
-
-/--
-theorem `generateFrom_piiUnionInter_singleton_left` / 定理 `generateFrom_piiUnionInter_singleton_left`
-
-English:
-theorem generateFrom_piiUnionInter_singleton_left
-  given: (s : ι -> Set α) (S : Set ι)
-  proof: by
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_mono ?_)
-  · rintro _ ⟨I, hI, f, hf, rfl⟩
-    refine Finset.measurableSet_biInter _ fun m hm => measurableSet_generateFrom ?_
-    exact ⟨m, hI hm, (hf m hm).symm⟩
-  · rintro _ ⟨k, hk, rfl⟩
-    refine ⟨{k}, fun m hm => ?_, s, fun i _ => ?_, ?_⟩
-    · rw [Finset.mem_coe, Finset.mem_singleton] at hm
-      rwa [hm]
-    · exact Set.mem_singleton _
-    · simp only [Finset.mem_singleton, Set.iInter_iInter_eq_left]
-
-中文:
-定理 generateFrom_piiUnion整数er_singleton_left
-  条件: (s : ι -> 集合 α) (S : 集合 ι)
-  证明: by
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_mono ?_)
-  · rintro _ ⟨I, hI, f, hf, rfl⟩
-    refine Finset.measurableSet_biInter _ fun m hm => measurableSet_generateFrom ?_
-    exact ⟨m, hI hm, (hf m hm).symm⟩
-  · rintro _ ⟨k, hk, rfl⟩
-    refine ⟨{k}, fun m hm => ?_, s, fun i _ => ?_, ?_⟩
-    · rw [Finset.mem_coe, Finset.mem_singleton] at hm
-      rwa [hm]
-    · exact Set.mem_singleton _
-    · simp only [Finset.mem_singleton, Set.iInter_iInter_eq_left]
-
-Depends on / 依赖: Finset, Finset.measurableSet_biInter, Finset.mem_coe, Finset.mem_singleton, Set.iInter_iInter_eq_left, Set.mem_singleton, generateFrom_le, generateFrom_mono, iInter_iInter_eq_left, le_antisymm, measurableSet_biInter, measurableSet_generateFrom, mem_coe, mem_singleton
+/-
+**generateFrom_piiUnionInter_singleton_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_piiUnionInter_singleton_left (s : ι -> Set α) (S : Set ι) : g
+enerateFrom (piiUnionInter (fun k => {s k}) S) = generateFrom { t | exists k in 
+S, s k = t }
+参数：s : ι -> Set α；S : Set ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Finset.measurableSet_biInter`：Finset.measurableSet_biInter {f : β -> Set
+ α} (s : Finset β) (h : forall b in s, MeasurableSet (f b)) : MeasurableSet (⋂ b
+ in s, f b)
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Finset α) ↔ 
+b = a
+· 使用定理 `Finset.mem_coe`：mem_coe {a : α} {s : Finset α} : a in (s : Set α) ↔ a in
+ (s : Finset α)
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem generateFrom_piiUnionInter_singleton_left (s : ι -> Set α) (S : Set ι) :
-    generateFrom (piiUnionInter (fun k => {s k}) S) = generateFrom { t | exists k in S, s k = t } := by
+theorem generateFrom_piiUnionInter_singleton_left (s : ι → Set α) (S : Set ι) :
+    generateFrom (piiUnionInter (fun k => {s k}) S) = generateFrom { t | ∃ k ∈ S, s k = t } := by
   refine le_antisymm (generateFrom_le ?_) (generateFrom_mono ?_)
   · rintro _ ⟨I, hI, f, hf, rfl⟩
     refine Finset.measurableSet_biInter _ fun m hm => measurableSet_generateFrom ?_
@@ -1373,84 +1158,60 @@ theorem generateFrom_piiUnionInter_singleton_left (s : ι -> Set α) (S : Set ι
     · exact Set.mem_singleton _
     · simp only [Finset.mem_singleton, Set.iInter_iInter_eq_left]
 
-/--
-theorem `isPiSystem_piiUnionInter` / 定理 `isPiSystem_piiUnionInter`
+/-- If `π` is a family of π-systems, then `piiUnionInter π S` is a π-system. -/
+/-
+**isPiSystem_piiUnionInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_piiUnionInter (π : ι -> Set (Set α)) (hpi : forall x, IsPiSyste
+m (π x)) (S : Set ι) : IsPiSystem (piiUnionInter π S)
+参数：π : ι -> Set (Set α)；hpi : forall x, IsPiSystem (π x)；S : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_iff_ne_empty`：nonempty_iff_ne_empty : s.Nonempty ↔ s != ∅
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Set.iInter_subset_of_subset`：iInter_subset_of_subset {s : ι -> Set α} {t
+ : Set α} (i : ι) (h : s i subseteq t) : ⋂ i, s i subseteq t
+· 使用定理 `Set.empty_subset`：empty_subset (s : Set α) : ∅ subseteq s
+· 使用定理 `Set.not_nonempty_iff_eq_empty`：not_nonempty_iff_eq_empty : ¬s.Nonempty ↔
+ s = ∅
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
 
-English:
-theorem isPiSystem_piiUnionInter
-  given: (π : ι -> Set (Set α)) (hpi : forall x, IsPiSystem (π x)) (S : Set ι)
-  proof: by
-  classical
-  rintro t1 ⟨p1, hp1S, f1, hf1m, ht1_eq⟩ t2 ⟨p2, hp2S, f2, hf2m, ht2_eq⟩ h_nonempty
-  simp_rw [piiUnionInter, Set.mem_ofPred_eq]
-  let g n := ite (n in p1) (f1 n) Set.univ inter ite (n in p2) (f2 n) Set.univ
-  have hp_union_ss : ↑(p1 union p2) subseteq S := by
-    simp only [hp1S, hp2S, Finset.coe_union, union_subset_iff, and_self_iff]
-  use p1 union p2, hp_union_ss, g
-  have h_inter_eq : t1 inter t2 = ⋂ i in p1 union p2, g i := by
-    rw [ht1_eq]; rw [ht2_eq]
-    simp_rw [← Set.inf_eq_inter]
-    ext1 x
-    simp only [inf_eq_inter, mem_inter_iff, mem_iInter]
-    grind
-  refine ⟨fun n hn => ?_, h_inter_eq⟩
-  simp only [g]
-  split_ifs with hn1 hn2 h
-  · refine hpi n (f1 n) (hf1m n hn1) (f2 n) (hf2m n hn2) (Set.nonempty_iff_ne_empty.2 fun h => ?_)
-    rw [h_inter_eq] at h_nonempty
-    suffices h_empty : ⋂ i in p1 union p2, g i = ∅ from
-      (Set.not_nonempty_iff_eq_empty.mpr h_empty) h_nonempty
-    refine le_antisymm (Set.iInter_subset_of_subset n ?_) (Set.empty_subset _)
-    refine Set.iInter_subset_of_subset hn ?_
-    grind
-  · simp [hf1m n hn1]
-  · simp [hf2m n h]
-  · exact absurd hn (by simp [hn1, h])
-
-中文:
-定理 isPiSystem_piiUnion整数er
-  条件: (π : ι -> 集合 (集合 α)) (hpi : 对任意 x, IsPiSystem (π x)) (S : 集合 ι)
-  证明: by
-  classical
-  rintro t1 ⟨p1, hp1S, f1, hf1m, ht1_eq⟩ t2 ⟨p2, hp2S, f2, hf2m, ht2_eq⟩ h_nonempty
-  simp_rw [piiUnionInter, Set.mem_ofPred_eq]
-  let g n := ite (n in p1) (f1 n) Set.univ inter ite (n in p2) (f2 n) Set.univ
-  have hp_union_ss : ↑(p1 union p2) subseteq S := by
-    simp only [hp1S, hp2S, Finset.coe_union, union_subset_iff, and_self_iff]
-  use p1 union p2, hp_union_ss, g
-  have h_inter_eq : t1 inter t2 = ⋂ i in p1 union p2, g i := by
-    rw [ht1_eq]; rw [ht2_eq]
-    simp_rw [← Set.inf_eq_inter]
-    ext1 x
-    simp only [inf_eq_inter, mem_inter_iff, mem_iInter]
-    grind
-  refine ⟨fun n hn => ?_, h_inter_eq⟩
-  simp only [g]
-  split_ifs with hn1 hn2 h
-  · refine hpi n (f1 n) (hf1m n hn1) (f2 n) (hf2m n hn2) (Set.nonempty_iff_ne_empty.2 fun h => ?_)
-    rw [h_inter_eq] at h_nonempty
-    suffices h_empty : ⋂ i in p1 union p2, g i = ∅ from
-      (Set.not_nonempty_iff_eq_empty.mpr h_empty) h_nonempty
-    refine le_antisymm (Set.iInter_subset_of_subset n ?_) (Set.empty_subset _)
-    refine Set.iInter_subset_of_subset hn ?_
-    grind
-  · simp [hf1m n hn1]
-  · simp [hf2m n h]
-  · exact absurd hn (by simp [hn1, h])
-
-Depends on / 依赖: Finset, Finset.coe_union, Set.inf_eq_inter, Set.mem_ofPred_eq, Set.univ, and_self_iff, classical, coe_union, h_inter_eq, h_nonempty, hp_union_ss, ht1_eq, ht2_eq, inf_eq_inter, mem_ofPred_eq, piiUnionInter, simp_rw, subseteq, union_subset_iff
+--- 原说明 ---
+If `π` is a family of π-systems, then `piiUnionInter π S` is a π-system.
 -/
-theorem isPiSystem_piiUnionInter (π : ι -> Set (Set α)) (hpi : forall x, IsPiSystem (π x)) (S : Set ι) :
+theorem isPiSystem_piiUnionInter (π : ι → Set (Set α)) (hpi : ∀ x, IsPiSystem (π x)) (S : Set ι) :
     IsPiSystem (piiUnionInter π S) := by
   classical
   rintro t1 ⟨p1, hp1S, f1, hf1m, ht1_eq⟩ t2 ⟨p2, hp2S, f2, hf2m, ht2_eq⟩ h_nonempty
   simp_rw [piiUnionInter, Set.mem_ofPred_eq]
-  let g n := ite (n in p1) (f1 n) Set.univ inter ite (n in p2) (f2 n) Set.univ
-  have hp_union_ss : ↑(p1 union p2) subseteq S := by
+  let g n := ite (n ∈ p1) (f1 n) Set.univ ∩ ite (n ∈ p2) (f2 n) Set.univ
+  have hp_union_ss : ↑(p1 ∪ p2) ⊆ S := by
     simp only [hp1S, hp2S, Finset.coe_union, union_subset_iff, and_self_iff]
-  use p1 union p2, hp_union_ss, g
-  have h_inter_eq : t1 inter t2 = ⋂ i in p1 union p2, g i := by
-    rw [ht1_eq]; rw [ht2_eq]
+  use p1 ∪ p2, hp_union_ss, g
+  have h_inter_eq : t1 ∩ t2 = ⋂ i ∈ p1 ∪ p2, g i := by
+    rw [ht1_eq, ht2_eq]
     simp_rw [← Set.inf_eq_inter]
     ext1 x
     simp only [inf_eq_inter, mem_inter_iff, mem_iInter]
@@ -1460,7 +1221,7 @@ theorem isPiSystem_piiUnionInter (π : ι -> Set (Set α)) (hpi : forall x, IsPi
   split_ifs with hn1 hn2 h
   · refine hpi n (f1 n) (hf1m n hn1) (f2 n) (hf2m n hn2) (Set.nonempty_iff_ne_empty.2 fun h => ?_)
     rw [h_inter_eq] at h_nonempty
-    suffices h_empty : ⋂ i in p1 union p2, g i = ∅ from
+    suffices h_empty : ⋂ i ∈ p1 ∪ p2, g i = ∅ from
       (Set.not_nonempty_iff_eq_empty.mpr h_empty) h_nonempty
     refine le_antisymm (Set.iInter_subset_of_subset n ?_) (Set.empty_subset _)
     refine Set.iInter_subset_of_subset hn ?_
@@ -1468,222 +1229,165 @@ theorem isPiSystem_piiUnionInter (π : ι -> Set (Set α)) (hpi : forall x, IsPi
   · simp [hf1m n hn1]
   · simp [hf2m n h]
   · exact absurd hn (by simp [hn1, h])
-
-/--
-theorem `piiUnionInter_mono_left` / 定理 `piiUnionInter_mono_left`
-
-English:
-theorem piiUnionInter_mono_left
-  given: {π π' : ι -> Set (Set α)} (h_le : forall i, π i subseteq π' i) (S : Set ι)
-  proof: fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
-  ⟨t, ht_mem, ft, fun x hxt => h_le x (hft_mem_pi x hxt), h_eq⟩
-
-中文:
-定理 piiUnion整数er_mono_left
-  条件: {π π' : ι -> 集合 (集合 α)} (h_le : 对任意 i, π i subseteq π' i) (S : 集合 ι)
-  证明: fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
-  ⟨t, ht_mem, ft, fun x hxt => h_le x (hft_mem_pi x hxt), h_eq⟩
-
-Depends on / 依赖: h_eq, hft_mem_pi, ht_mem
+/-
+**piiUnionInter_mono_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：piiUnionInter_mono_left {π π' : ι -> Set (Set α)} (h_le : forall i, π i su
+bseteq π' i) (S : Set ι) : piiUnionInter π S subseteq piiUnionInter π' S
+参数：Set α；h_le : forall i, π i subseteq π' i；S : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piiUnionInter_mono_left {π π' : ι -> Set (Set α)} (h_le : forall i, π i subseteq π' i) (S : Set ι) :
-    piiUnionInter π S subseteq piiUnionInter π' S := fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
+theorem piiUnionInter_mono_left {π π' : ι → Set (Set α)} (h_le : ∀ i, π i ⊆ π' i) (S : Set ι) :
+    piiUnionInter π S ⊆ piiUnionInter π' S := fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
   ⟨t, ht_mem, ft, fun x hxt => h_le x (hft_mem_pi x hxt), h_eq⟩
-
-/--
-theorem `piiUnionInter_mono_right` / 定理 `piiUnionInter_mono_right`
-
-English:
-theorem piiUnionInter_mono_right
-  given: {π : ι -> Set (Set α)} {S T : Set ι} (hST : S subseteq T)
-  proof: fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
-  ⟨t, ht_mem.trans hST, ft, hft_mem_pi, h_eq⟩
-
-中文:
-定理 piiUnion整数er_mono_right
-  条件: {π : ι -> 集合 (集合 α)} {S T : 集合 ι} (hST : S subseteq T)
-  证明: fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
-  ⟨t, ht_mem.trans hST, ft, hft_mem_pi, h_eq⟩
-
-Depends on / 依赖: h_eq, hft_mem_pi, ht_mem
+/-
+**piiUnionInter_mono_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：piiUnionInter_mono_right {π : ι -> Set (Set α)} {S T : Set ι} (hST : S sub
+seteq T) : piiUnionInter π S subseteq piiUnionInter π T
+参数：Set α；hST : S subseteq T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-theorem piiUnionInter_mono_right {π : ι -> Set (Set α)} {S T : Set ι} (hST : S subseteq T) :
-    piiUnionInter π S subseteq piiUnionInter π T := fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
+theorem piiUnionInter_mono_right {π : ι → Set (Set α)} {S T : Set ι} (hST : S ⊆ T) :
+    piiUnionInter π S ⊆ piiUnionInter π T := fun _ ⟨t, ht_mem, ft, hft_mem_pi, h_eq⟩ =>
   ⟨t, ht_mem.trans hST, ft, hft_mem_pi, h_eq⟩
-
-/--
-theorem `generateFrom_piiUnionInter_le` / 定理 `generateFrom_piiUnionInter_le`
-
-English:
-theorem generateFrom_piiUnionInter_le
-  statement: {m : MeasurableSpace α} (π : ι -> Set (Set α))
-  proof: by
+/-
+**generateFrom_piiUnionInter_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_piiUnionInter_le {m : MeasurableSpace α} (π : ι -> Set (Set α
+)) (h : forall n, generateFrom (π n) <= m) (S : Set ι) : generateFrom (piiUnionI
+nter π S) <= m
+参数：π : ι -> Set (Set α)；h : forall n, generateFrom (π n) <= m；S : Set ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Finset.measurableSet_biInter`：Finset.measurableSet_biInter {f : β -> Set
+ α} (s : Finset β) (h : forall b in s, MeasurableSet (f b)) : MeasurableSet (⋂ b
+ in s, f b)
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem generateFrom_piiUnionInter_le {m : MeasurableSpace α} (π : ι → Set (Set α))
+    (h : ∀ n, generateFrom (π n) ≤ m) (S : Set ι) : generateFrom (piiUnionInter π S) ≤ m := by
   refine generateFrom_le ?_
   rintro t ⟨ht_p, _, ft, hft_mem_pi, rfl⟩
   refine Finset.measurableSet_biInter _ fun x hx_mem => (h x) _ ?_
   exact measurableSet_generateFrom (hft_mem_pi x hx_mem)
-
-中文:
-定理 generateFrom_piiUnion整数er_le
-  结论: {m : 可测空间 α} (π : ι -> 集合 (集合 α))
-  证明: by
-  refine generateFrom_le ?_
-  rintro t ⟨ht_p, _, ft, hft_mem_pi, rfl⟩
-  refine Finset.measurableSet_biInter _ fun x hx_mem => (h x) _ ?_
-  exact measurableSet_generateFrom (hft_mem_pi x hx_mem)
-
-Depends on / 依赖: Finset, Finset.measurableSet_biInter, generateFrom_le, hft_mem_pi, ht_p, hx_mem, measurableSet_biInter, measurableSet_generateFrom
+/-
+**subset_piiUnionInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_piiUnionInter {π : ι -> Set (Set α)} {S : Set ι} {i : ι} (his : i i
+n S) : π i subseteq piiUnionInter π S
+参数：Set α；his : i in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `piiUnionInter_singleton`：piiUnionInter_singleton (π : ι -> Set (Set α)) 
+(i : ι) : piiUnionInter π {i} = π i union {univ}
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `piiUnionInter_mono_right`：piiUnionInter_mono_right {π : ι -> Set (Set α)
+} {S T : Set ι} (hST : S subseteq T) : piiUnionInter π S subseteq piiUnionInter 
+π T
 -/
-theorem generateFrom_piiUnionInter_le {m : MeasurableSpace α} (π : ι -> Set (Set α))
-    (h : forall n, generateFrom (π n) <= m) (S : Set ι) : generateFrom (piiUnionInter π S) <= m := by
-  refine generateFrom_le ?_
-  rintro t ⟨ht_p, _, ft, hft_mem_pi, rfl⟩
-  refine Finset.measurableSet_biInter _ fun x hx_mem => (h x) _ ?_
-  exact measurableSet_generateFrom (hft_mem_pi x hx_mem)
-
-/--
-theorem `subset_piiUnionInter` / 定理 `subset_piiUnionInter`
-
-English:
-theorem subset_piiUnionInter
-  given: {π : ι -> Set (Set α)} {S : Set ι} {i : ι} (his : i in S)
-  proof: by
-  have h_ss : {i} subseteq S := by
+theorem subset_piiUnionInter {π : ι → Set (Set α)} {S : Set ι} {i : ι} (his : i ∈ S) :
+    π i ⊆ piiUnionInter π S := by
+  have h_ss : {i} ⊆ S := by
     intro j hj
     rw [mem_singleton_iff] at hj
     rwa [hj]
   refine Subset.trans ?_ (piiUnionInter_mono_right h_ss)
   rw [piiUnionInter_singleton]
   exact subset_union_left
-
-中文:
-定理 subset_piiUnion整数er
-  条件: {π : ι -> 集合 (集合 α)} {S : 集合 ι} {i : ι} (his : i in S)
-  证明: by
-  have h_ss : {i} subseteq S := by
-    intro j hj
-    rw [mem_singleton_iff] at hj
-    rwa [hj]
-  refine Subset.trans ?_ (piiUnionInter_mono_right h_ss)
-  rw [piiUnionInter_singleton]
-  exact subset_union_left
-
-Depends on / 依赖: Subset, Subset.trans, h_ss, mem_singleton_iff, piiUnionInter_mono_right, piiUnionInter_singleton, subset_union_left, subseteq
+/-
+**mem_piiUnionInter_of_measurableSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_piiUnionInter_of_measurableSet (m : ι -> MeasurableSpace α) {S : Set ι
+} {i : ι} (hiS : i in S) (s : Set α) (hs : MeasurableSet[m i] s) : s in piiUnion
+Inter (fun n => { s | MeasurableSet[m n] s }) S
+参数：m : ι -> MeasurableSpace α；hiS : i in S；s : Set α；hs : MeasurableSet[m i] s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_piiUnionInter`：subset_piiUnionInter {π : ι -> Set (Set α)} {S : S
+et ι} {i : ι} (his : i in S) : π i subseteq piiUnionInter π S
 -/
-theorem subset_piiUnionInter {π : ι -> Set (Set α)} {S : Set ι} {i : ι} (his : i in S) :
-    π i subseteq piiUnionInter π S := by
-  have h_ss : {i} subseteq S := by
-    intro j hj
-    rw [mem_singleton_iff] at hj
-    rwa [hj]
-  refine Subset.trans ?_ (piiUnionInter_mono_right h_ss)
-  rw [piiUnionInter_singleton]
-  exact subset_union_left
-
-/--
-theorem `mem_piiUnionInter_of_measurableSet` / 定理 `mem_piiUnionInter_of_measurableSet`
-
-English:
-theorem mem_piiUnionInter_of_measurableSet
-  statement: (m : ι -> MeasurableSpace α) {S : Set ι} {i : ι}
-  proof: subset_piiUnionInter hiS hs
-
-中文:
-定理 mem_piiUnion整数er_of_measurableSet
-  结论: (m : ι -> 可测空间 α) {S : 集合 ι} {i : ι}
-  证明: subset_piiUnionInter hiS hs
-
-Depends on / 依赖: subset_piiUnionInter
--/
-theorem mem_piiUnionInter_of_measurableSet (m : ι -> MeasurableSpace α) {S : Set ι} {i : ι}
-    (hiS : i in S) (s : Set α) (hs : MeasurableSet[m i] s) :
-    s in piiUnionInter (fun n => { s | MeasurableSet[m n] s }) S :=
+theorem mem_piiUnionInter_of_measurableSet (m : ι → MeasurableSpace α) {S : Set ι} {i : ι}
+    (hiS : i ∈ S) (s : Set α) (hs : MeasurableSet[m i] s) :
+    s ∈ piiUnionInter (fun n => { s | MeasurableSet[m n] s }) S :=
   subset_piiUnionInter hiS hs
-
-/--
-theorem `le_generateFrom_piiUnionInter` / 定理 `le_generateFrom_piiUnionInter`
-
-English:
-theorem le_generateFrom_piiUnionInter
-  given: {π : ι -> Set (Set α)} (S : Set ι) {x : ι} (hxS : x in S)
-  proof: generateFrom_mono (subset_piiUnionInter hxS)
-
-中文:
-定理 le_generateFrom_piiUnion整数er
-  条件: {π : ι -> 集合 (集合 α)} (S : 集合 ι) {x : ι} (hxS : x in S)
-  证明: generateFrom_mono (subset_piiUnionInter hxS)
-
-Depends on / 依赖: generateFrom_mono, subset_piiUnionInter
+/-
+**le_generateFrom_piiUnionInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_generateFrom_piiUnionInter {π : ι -> Set (Set α)} (S : Set ι) {x : ι} (
+hxS : x in S) : generateFrom (π x) <= generateFrom (piiUnionInter π S)
+参数：Set α；S : Set ι；hxS : x in S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `subset_piiUnionInter`：subset_piiUnionInter {π : ι -> Set (Set α)} {S : S
+et ι} {i : ι} (his : i in S) : π i subseteq piiUnionInter π S
 -/
-theorem le_generateFrom_piiUnionInter {π : ι -> Set (Set α)} (S : Set ι) {x : ι} (hxS : x in S) :
-    generateFrom (π x) <= generateFrom (piiUnionInter π S) :=
+theorem le_generateFrom_piiUnionInter {π : ι → Set (Set α)} (S : Set ι) {x : ι} (hxS : x ∈ S) :
+    generateFrom (π x) ≤ generateFrom (piiUnionInter π S) :=
   generateFrom_mono (subset_piiUnionInter hxS)
-
-/--
-theorem `measurableSet_iSup_of_mem_piiUnionInter` / 定理 `measurableSet_iSup_of_mem_piiUnionInter`
-
-English:
-theorem measurableSet_iSup_of_mem_piiUnionInter
-  statement: (m : ι -> MeasurableSpace α) (S : Set ι) (t : Set α)
-  proof: by
-  rcases ht with ⟨pt, hpt, ft, ht_m, rfl⟩
-  refine pt.measurableSet_biInter fun i hi => ?_
-  suffices h_le : m i <= ⨆ i in S, m i from h_le (ft i) (ht_m i hi)
-  have hi' : i in S := hpt hi
-  exact le_iSup₂ (f := fun i (_ : i in S) => m i) i hi'
-
-中文:
-定理 measurableSet_iSup_of_mem_piiUnion整数er
-  结论: (m : ι -> 可测空间 α) (S : 集合 ι) (t : 集合 α)
-  证明: by
-  rcases ht with ⟨pt, hpt, ft, ht_m, rfl⟩
-  refine pt.measurableSet_biInter fun i hi => ?_
-  suffices h_le : m i <= ⨆ i in S, m i from h_le (ft i) (ht_m i hi)
-  have hi' : i in S := hpt hi
-  exact le_iSup₂ (f := fun i (_ : i in S) => m i) i hi'
-
-Depends on / 依赖: h_le, ht_m, measurableSet_biInter, pt.measurableSet_biInter
+/-
+**measurableSet_iSup_of_mem_piiUnionInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_iSup_of_mem_piiUnionInter (m : ι -> MeasurableSpace α) (S : 
+Set ι) (t : Set α) (ht : t in piiUnionInter (fun n => { s | MeasurableSet[m n] s
+ }) S) : MeasurableSet[⨆ i in S, m i] t
+参数：m : ι -> MeasurableSpace α；S : Set ι；t : Set α；ht : t in piiUnionInter (fun n
+ => { s | MeasurableSet[m n] s }) S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.measurableSet_biInter`：Finset.measurableSet_biInter {f : β -> Set
+ α} (s : Finset β) (h : forall b in s, MeasurableSet (f b)) : MeasurableSet (⋂ b
+ in s, f b)
+· 使用定理 `le_iSup₂`：le_iSup₂ {f : forall i, κ i -> α} (i : ι) (j : κ i) : f i j <=
+ ⨆ (i) (j), f i j
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem measurableSet_iSup_of_mem_piiUnionInter (m : ι -> MeasurableSpace α) (S : Set ι) (t : Set α)
-    (ht : t in piiUnionInter (fun n => { s | MeasurableSet[m n] s }) S) :
-    MeasurableSet[⨆ i in S, m i] t := by
+theorem measurableSet_iSup_of_mem_piiUnionInter (m : ι → MeasurableSpace α) (S : Set ι) (t : Set α)
+    (ht : t ∈ piiUnionInter (fun n => { s | MeasurableSet[m n] s }) S) :
+    MeasurableSet[⨆ i ∈ S, m i] t := by
   rcases ht with ⟨pt, hpt, ft, ht_m, rfl⟩
   refine pt.measurableSet_biInter fun i hi => ?_
-  suffices h_le : m i <= ⨆ i in S, m i from h_le (ft i) (ht_m i hi)
-  have hi' : i in S := hpt hi
-  exact le_iSup₂ (f := fun i (_ : i in S) => m i) i hi'
-
-/--
-theorem `generateFrom_piiUnionInter_measurableSet` / 定理 `generateFrom_piiUnionInter_measurableSet`
-
-English:
-theorem generateFrom_piiUnionInter_measurableSet
-  given: (m : ι -> MeasurableSpace α) (S : Set ι)
-  proof: by
-  refine le_antisymm ?_ ?_
-  · rw [← @generateFrom_measurableSet α (⨆ i in S, m i)]
-    exact generateFrom_mono (measurableSet_iSup_of_mem_piiUnionInter m S)
-  · refine iSup₂_le fun i hi => ?_
-    rw [← @generateFrom_measurableSet α (m i)]
-    exact generateFrom_mono (mem_piiUnionInter_of_measurableSet m hi)
-
-中文:
-定理 generateFrom_piiUnion整数er_measurableSet
-  条件: (m : ι -> 可测空间 α) (S : 集合 ι)
-  证明: by
-  refine le_antisymm ?_ ?_
-  · rw [← @generateFrom_measurableSet α (⨆ i in S, m i)]
-    exact generateFrom_mono (measurableSet_iSup_of_mem_piiUnionInter m S)
-  · refine iSup₂_le fun i hi => ?_
-    rw [← @generateFrom_measurableSet α (m i)]
-    exact generateFrom_mono (mem_piiUnionInter_of_measurableSet m hi)
-
-Depends on / 依赖: generateFrom_measurableSet, generateFrom_mono, le_antisymm, measurableSet_iSup_of_mem_piiUnionInter, mem_piiUnionInter_of_measurableSet
+  suffices h_le : m i ≤ ⨆ i ∈ S, m i from h_le (ft i) (ht_m i hi)
+  have hi' : i ∈ S := hpt hi
+  exact le_iSup₂ (f := fun i (_ : i ∈ S) => m i) i hi'
+/-
+**generateFrom_piiUnionInter_measurableSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_piiUnionInter_measurableSet (m : ι -> MeasurableSpace α) (S :
+ Set ι) : generateFrom (piiUnionInter (fun n => { s | MeasurableSet[m n] s }) S)
+ = ⨆ i in S, m i
+参数：m : ι -> MeasurableSpace α；S : Set ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasurableSpace.generateFrom_measurableSet`：generateFrom_measurableSet [
+MeasurableSpace α] : generateFrom {s : Set α | MeasurableSet s} = ‹_›
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `measurableSet_iSup_of_mem_piiUnionInter`：measurableSet_iSup_of_mem_piiUn
+ionInter (m : ι -> MeasurableSpace α) (S : Set ι) (t : Set α) (ht : t in piiUnio
+nInter (fun n => { s | Measur…
+· 使用定理 `iSup₂_le`：iSup₂_le {f : forall i, κ i -> α} (h : forall i j, f i j <= a)
+ : ⨆ (i) (j), f i j <= a
+· 使用定理 `mem_piiUnionInter_of_measurableSet`：mem_piiUnionInter_of_measurableSet (
+m : ι -> MeasurableSpace α) {S : Set ι} {i : ι} (hiS : i in S) (s : Set α) (hs :
+ MeasurableSet[m i] s) :…
 -/
-theorem generateFrom_piiUnionInter_measurableSet (m : ι -> MeasurableSpace α) (S : Set ι) :
-    generateFrom (piiUnionInter (fun n => { s | MeasurableSet[m n] s }) S) = ⨆ i in S, m i := by
+theorem generateFrom_piiUnionInter_measurableSet (m : ι → MeasurableSpace α) (S : Set ι) :
+    generateFrom (piiUnionInter (fun n => { s | MeasurableSet[m n] s }) S) = ⨆ i ∈ S, m i := by
   refine le_antisymm ?_ ?_
-  · rw [← @generateFrom_measurableSet α (⨆ i in S, m i)]
+  · rw [← @generateFrom_measurableSet α (⨆ i ∈ S, m i)]
     exact generateFrom_mono (measurableSet_iSup_of_mem_piiUnionInter m S)
   · refine iSup₂_le fun i hi => ?_
     rw [← @generateFrom_measurableSet α (m i)]
@@ -1700,250 +1404,206 @@ variable {α : Type*}
 /-! ## Dynkin systems and Π-λ theorem -/
 
 
-/--
-Definition of `DynkinSystem` / `DynkinSystem` 的定义
+/-- A Dynkin system is a collection of subsets of a type `α` that contains the empty set,
+  is closed under complementation and under countable union of pairwise disjoint sets.
+  The disjointness condition is the only difference with `σ`-algebras.
 
-English:
-structure DynkinSystem
-  parameters: (α : Type*)
-  axioms and operations (4):
-    - Has : Set α -> Prop
-    - has_empty : Has ∅
-    - has_compl : forall {a}, Has a -> Has aᶜ
-    - has_iUnion_nat : forall {f : Nat -> Set α}, Pairwise (Disjoint on f) -> (forall i, Has (f i)) -> Has (⋃ i, f i)
+  The main purpose of Dynkin systems is to provide a powerful induction rule for σ-algebras
+  generated by a collection of sets which is stable under intersection.
 
-中文:
-结构 DynkinSystem
-  参数: (α : 类型)
-  公理与运算 (4 个):
-    - Has : 集合 α -> 命题
-    - has_empty : Has ∅
-    - has_compl : 对任意 {a}, Has a -> Has aᶜ
-    - has_iUnion_nat : 对任意 {f : 自然数 -> 集合 α}, 两两 (Disjoint on f) -> (对任意 i, Has (f i)) -> Has (⋃ i, f i)
+  A Dynkin system is also known as a "λ-system" or a "d-system".
+-/
+/-
+**MeasurableSpace.DynkinSystem** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasurableSpace`。
+形式化陈述：Type u_4 → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A Dynkin system is a collection of subsets of a type `α` that contains the empty
+ set,
+  is closed under complementation and under countable union of pairwise disjoint
+ sets.
+  The disjointness condition is the only difference with `σ`-algebras.
+
+  The main purpose of Dynkin systems is to provide a powerful induction rule for
+ σ-algebras
+  generated by a collection of sets which is stable under intersection.
+
+  A Dynkin system is also known as a "λ-system" or a "d-system".
 -/
 structure DynkinSystem (α : Type*) where
   /-- Predicate saying that a given set is contained in the Dynkin system. -/
-  Has : Set α -> Prop
+  Has : Set α → Prop
   /-- A Dynkin system contains the empty set. -/
   has_empty : Has ∅
   /-- A Dynkin system is closed under complementation. -/
-  has_compl : forall {a}, Has a -> Has aᶜ
+  has_compl : ∀ {a}, Has a → Has aᶜ
   /-- A Dynkin system is closed under countable union of pairwise disjoint sets. Use a more general
   `MeasurableSpace.DynkinSystem.has_iUnion` instead. -/
-  has_iUnion_nat : forall {f : Nat -> Set α}, Pairwise (Disjoint on f) -> (forall i, Has (f i)) -> Has (⋃ i, f i)
+  has_iUnion_nat : ∀ {f : ℕ → Set α}, Pairwise (Disjoint on f) → (∀ i, Has (f i)) → Has (⋃ i, f i)
 
 namespace DynkinSystem
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: forall {d₁ d₂ : DynkinSystem α}, (forall s : Set α, d₁.Has s ↔ d₂.Has s) -> d₁ = d₂
-  proof: funext fun x => propext h x
-    subst this
-    rfl
-
-中文:
-定理 ext
-  结论: 对任意 {d₁ d₂ : DynkinSystem α}, (对任意 s : 集合 α, d₁.Has s ↔ d₂.Has s) -> d₁ = d₂
-  证明: funext fun x => propext h x
-    subst this
-    rfl
-
-Depends on / 依赖: propext
+/-
+**MeasurableSpace.DynkinSystem.ext** 是 Mathlib 中的一个定理，位于命名空间 `MeasurableSpace.Dy
+nkinSystem`。
+形式化陈述：ext : forall {d₁ d₂ : DynkinSystem α}, (forall s : Set α, d₁.Has s ↔ d₂.Ha
+s s) -> d₁ = d₂ | ⟨s₁, _, _, _⟩, ⟨s₂, _, _, _⟩, h => by have : s₁ = s₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem ext : forall {d₁ d₂ : DynkinSystem α}, (forall s : Set α, d₁.Has s ↔ d₂.Has s) -> d₁ = d₂
+theorem ext : ∀ {d₁ d₂ : DynkinSystem α}, (∀ s : Set α, d₁.Has s ↔ d₂.Has s) → d₁ = d₂
   | ⟨s₁, _, _, _⟩, ⟨s₂, _, _, _⟩, h => by
-have : s₁ = s₂ := funext fun x => propext h x
+    have : s₁ = s₂ := funext fun x => propext <| h x
     subst this
     rfl
 
 variable (d : DynkinSystem α)
-
-/--
-theorem `has_compl_iff` / 定理 `has_compl_iff`
-
-English:
-theorem has_compl_iff
-  given: {a}
-  statement: d.Has aᶜ ↔ d.Has a
-  proof: ⟨fun h => by simpa using d.has_compl h, fun h => d.has_compl h⟩
-
-中文:
-定理 has_compl_iff
-  条件: {a}
-  结论: d.Has aᶜ ↔ d.Has a
-  证明: ⟨fun h => by simpa using d.has_compl h, fun h => d.has_compl h⟩
-
-Depends on / 依赖: d.has_compl, has_compl
+/-
+**MeasurableSpace.DynkinSystem.has_compl_iff** 是 Mathlib 中的一个定理，位于命名空间 `Measurab
+leSpace.DynkinSystem`。
+形式化陈述：has_compl_iff {a} : d.Has aᶜ ↔ d.Has a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `MeasurableSpace.DynkinSystem.has_compl`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α) {a : Set α}, self.Has a → self.Has aᶜ
 -/
 theorem has_compl_iff {a} : d.Has aᶜ ↔ d.Has a :=
   ⟨fun h => by simpa using d.has_compl h, fun h => d.has_compl h⟩
-
-/--
-theorem `has_univ` / 定理 `has_univ`
-
-English:
-theorem has_univ
-  statement: d.Has univ
-  proof: by simpa using d.has_compl d.has_empty
-
-中文:
-定理 has_univ
-  结论: d.Has univ
-  证明: by simpa using d.has_compl d.has_empty
-
-Depends on / 依赖: d.has_compl, d.has_empty, has_compl, has_empty
+/-
+**MeasurableSpace.DynkinSystem.has_univ** 是 Mathlib 中的一个定理，位于命名空间 `MeasurableSpa
+ce.DynkinSystem`。
+形式化陈述：has_univ : d.Has univ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.compl_empty`：compl_empty : (∅ : Set α)ᶜ = univ
+· 使用定理 `MeasurableSpace.DynkinSystem.has_compl`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α) {a : Set α}, self.Has a → self.Has aᶜ
+· 使用定理 `MeasurableSpace.DynkinSystem.has_empty`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α), self.Has ∅
 -/
 theorem has_univ : d.Has univ := by simpa using d.has_compl d.has_empty
-
-/--
-theorem `has_iUnion` / 定理 `has_iUnion`
-
-English:
-theorem has_iUnion
-  statement: {β} [Countable β] {f : β -> Set α} (hd : Pairwise (Disjoint on f))
-  proof: by
-  cases nonempty_encodable β
-  rw [← Encodable.iUnion_decode₂]
-  exact
-    d.has_iUnion_nat (Encodable.iUnion_decode₂_disjoint_on hd) fun n =>
-      Encodable.iUnion_decode₂_cases d.has_empty h
-
-中文:
-定理 has_iUnion
-  结论: {β} [可数 β] {f : β -> 集合 α} (hd : 两两 (Disjoint on f))
-  证明: by
-  cases nonempty_encodable β
-  rw [← Encodable.iUnion_decode₂]
-  exact
-    d.has_iUnion_nat (Encodable.iUnion_decode₂_disjoint_on hd) fun n =>
-      Encodable.iUnion_decode₂_cases d.has_empty h
-
-Depends on / 依赖: Encodable, Encodable.iUnion_decode, d.has_empty, d.has_iUnion_nat, has_empty, has_iUnion_nat, nonempty_encodable
+/-
+**MeasurableSpace.DynkinSystem.has_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `MeasurableS
+pace.DynkinSystem`。
+形式化陈述：has_iUnion {β} [Countable β] {f : β -> Set α} (hd : Pairwise (Disjoint on 
+f)) (h : forall i, d.Has (f i)) : d.Has (⋃ i, f i)
+参数：hd : Pairwise (Disjoint on f)；h : forall i, d.Has (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_encodable`：nonempty_encodable (α : Type*) [Countable α] : Nonem
+pty (Encodable α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Encodable.iUnion_decode₂`：iUnion_decode₂ (f : β -> Set α) : ⋃ (i : Nat) 
+(b in decode₂ β i), f b = ⋃ b, f b
+· 使用定理 `MeasurableSpace.DynkinSystem.has_iUnion_nat`：∀ {α : Type u_4} (self : Me
+asurableSpace.DynkinSystem α) {f : ℕ → Set α},   Pairwise (Function.onFun Disjoi
+nt f) → (∀ (i : ℕ), self.Has (f i…
+· 使用定理 `Encodable.iUnion_decode₂_disjoint_on`：iUnion_decode₂_disjoint_on {f : β 
+-> Set α} (hd : Pairwise (Disjoint on f)) : Pairwise (Disjoint on fun i => ⋃ b i
+n decode₂ β i, f b)
+· 使用定理 `Encodable.iUnion_decode₂_cases`：iUnion_decode₂_cases {f : β -> Set α} {C
+ : Set α -> Prop} (H0 : C ∅) (H1 : forall b, C (f b)) {n} : C (⋃ b in decode₂ β 
+n, f b)
+· 使用定理 `MeasurableSpace.DynkinSystem.has_empty`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α), self.Has ∅
 -/
-theorem has_iUnion {β} [Countable β] {f : β -> Set α} (hd : Pairwise (Disjoint on f))
-    (h : forall i, d.Has (f i)) : d.Has (⋃ i, f i) := by
+theorem has_iUnion {β} [Countable β] {f : β → Set α} (hd : Pairwise (Disjoint on f))
+    (h : ∀ i, d.Has (f i)) : d.Has (⋃ i, f i) := by
   cases nonempty_encodable β
   rw [← Encodable.iUnion_decode₂]
   exact
     d.has_iUnion_nat (Encodable.iUnion_decode₂_disjoint_on hd) fun n =>
       Encodable.iUnion_decode₂_cases d.has_empty h
-
-/--
-theorem `has_union` / 定理 `has_union`
-
-English:
-theorem has_union
-  given: {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : Disjoint s₁ s₂)
-  proof: by
-  rw [union_eq_iUnion]
-  exact d.has_iUnion (pairwise_disjoint_on_bool.2 h) (Bool.forall_bool.2 ⟨h₂, h₁⟩)
-
-中文:
-定理 has_union
-  条件: {s₁ s₂ : 集合 α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : Disjoint s₁ s₂)
-  证明: by
-  rw [union_eq_iUnion]
-  exact d.has_iUnion (pairwise_disjoint_on_bool.2 h) (Bool.forall_bool.2 ⟨h₂, h₁⟩)
-
-Depends on / 依赖: Bool.forall_bool, d.has_iUnion, forall_bool, has_iUnion, pairwise_disjoint_on_bool, union_eq_iUnion
+/-
+**MeasurableSpace.DynkinSystem.has_union** 是 Mathlib 中的一个定理，位于命名空间 `MeasurableSp
+ace.DynkinSystem`。
+形式化陈述：has_union {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : Disjoint s₁
+ s₂) : d.Has (s₁ union s₂)
+参数：h₁ : d.Has s₁；h₂ : d.Has s₂；h : Disjoint s₁ s₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.union_eq_iUnion`：union_eq_iUnion {s₁ s₂ : Set α} : s₁ union s₂ = ⋃ b
+ : Bool, cond b s₁ s₂
+· 使用定理 `MeasurableSpace.DynkinSystem.has_iUnion`：has_iUnion {β} [Countable β] {f
+ : β -> Set α} (hd : Pairwise (Disjoint on f)) (h : forall i, d.Has (f i)) : d.H
+as (⋃ i, f i)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pairwise_disjoint_on_bool`：pairwise_disjoint_on_bool [PartialOrder α] [O
+rderBot α] {a b : α} : Pairwise (Disjoint on fun c => cond c a b) ↔ Disjoint a b
+· 使用定理 `Bool.forall_bool`：∀ {p : Bool → Prop}, (∀ (b : Bool), p b) ↔ p false ∧ p
+ true
 -/
 theorem has_union {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : Disjoint s₁ s₂) :
-    d.Has (s₁ union s₂) := by
+    d.Has (s₁ ∪ s₂) := by
   rw [union_eq_iUnion]
   exact d.has_iUnion (pairwise_disjoint_on_bool.2 h) (Bool.forall_bool.2 ⟨h₂, h₁⟩)
-
-/--
-theorem `has_sdiff` / 定理 `has_sdiff`
-
-English:
-theorem has_sdiff
-  given: {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : s₂ subseteq s₁)
-  proof: by
-  apply d.has_compl_iff.1
-  simp only [sdiff_eq, compl_inter, compl_compl]
-  exact d.has_union (d.has_compl h₁) h₂ (disjoint_compl_left.mono_right h)
-
-@[deprecated (since := "2026-06-03")] alias has_diff := has_sdiff
-
-中文:
-定理 has_sdiff
-  条件: {s₁ s₂ : 集合 α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : s₂ subseteq s₁)
-  证明: by
-  apply d.has_compl_iff.1
-  simp only [sdiff_eq, compl_inter, compl_compl]
-  exact d.has_union (d.has_compl h₁) h₂ (disjoint_compl_left.mono_right h)
-
-@[deprecated (since := "2026-06-03")] alias has_diff := has_sdiff
-
-Depends on / 依赖: compl_compl, compl_inter, d.has_compl, d.has_compl_iff, d.has_union, disjoint_compl_left, disjoint_compl_left.mono_right, has_compl, has_compl_iff, has_union, mono_right, sdiff_eq
+/-
+**MeasurableSpace.DynkinSystem.has_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `MeasurableSp
+ace.DynkinSystem`。
+形式化陈述：has_sdiff {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : s₂ subseteq
+ s₁) : d.Has (s₁ \ s₂)
+参数：h₁ : d.Has s₁；h₂ : d.Has s₂；h : s₂ subseteq s₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasurableSpace.DynkinSystem.has_compl_iff`：has_compl_iff {a} : d.Has aᶜ
+ ↔ d.Has a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.compl_inter`：compl_inter (s t : Set α) : (s inter t)ᶜ = sᶜ union tᶜ
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `MeasurableSpace.DynkinSystem.has_union`：has_union {s₁ s₂ : Set α} (h₁ : 
+d.Has s₁) (h₂ : d.Has s₂) (h : Disjoint s₁ s₂) : d.Has (s₁ union s₂)
+· 使用定理 `MeasurableSpace.DynkinSystem.has_compl`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α) {a : Set α}, self.Has a → self.Has aᶜ
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
+· 使用定理 `disjoint_compl_left`：disjoint_compl_left : Disjoint aᶜ a
 -/
-theorem has_sdiff {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : s₂ subseteq s₁) :
+theorem has_sdiff {s₁ s₂ : Set α} (h₁ : d.Has s₁) (h₂ : d.Has s₂) (h : s₂ ⊆ s₁) :
     d.Has (s₁ \ s₂) := by
   apply d.has_compl_iff.1
   simp only [sdiff_eq, compl_inter, compl_compl]
   exact d.has_union (d.has_compl h₁) h₂ (disjoint_compl_left.mono_right h)
 
 @[deprecated (since := "2026-06-03")] alias has_diff := has_sdiff
-
-/--
-Instance `instLEDynkinSystem` / 实例 `instLEDynkinSystem`
-
-English:
-instance instLEDynkinSystem
-  signature: : LE (DynkinSystem α) where le m₁ m₂
-  body: m₁.Has <= m₂.Has
-
-中文:
-实例 instLEDynkinSystem
-  签名: : LE (DynkinSystem α) where le m₁ m₂
-  定义体: m₁.Has <= m₂.Has
+/-
+**MeasurableSpace.DynkinSystem.instLEDynkinSystem** 是 Mathlib 中的一个实例，位于命名空间 `Mea
+surableSpace.DynkinSystem`。
+形式化陈述：instLEDynkinSystem : LE (DynkinSystem α) where le m₁ m₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instLEDynkinSystem : LE (DynkinSystem α) where le m₁ m₂ := m₁.Has <= m₂.Has
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: {a b : DynkinSystem α}
-  statement: a <= b ↔ a.Has <= b.Has
-  proof: Iff.rfl
-
-中文:
-定理 le_def
-  条件: {a b : DynkinSystem α}
-  结论: a <= b ↔ a.Has <= b.Has
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+instance instLEDynkinSystem : LE (DynkinSystem α) where le m₁ m₂ := m₁.Has ≤ m₂.Has
+/-
+**MeasurableSpace.DynkinSystem.le_def** 是 Mathlib 中的一个定理，位于命名空间 `MeasurableSpace
+.DynkinSystem`。
+形式化陈述：le_def {a b : DynkinSystem α} : a <= b ↔ a.Has <= b.Has
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def {a b : DynkinSystem α} : a <= b ↔ a.Has <= b.Has :=
+theorem le_def {a b : DynkinSystem α} : a ≤ b ↔ a.Has ≤ b.Has :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (DynkinSystem α)
-  body: { DynkinSystem.instLEDynkinSystem with
-    le_refl := fun _ _ => le_rfl
-    le_trans := fun _ _ _ hab hbc => le_def.mpr (le_trans hab hbc)
-    le_antisymm := fun _ _ h₁ h₂ => ext fun s => ⟨h₁ s, h₂ s⟩ }
-
-中文:
-实例 :
-  签名: 偏序 (DynkinSystem α)
-  定义体: { DynkinSystem.instLEDynkinSystem with
-    le_refl := fun _ _ => le_rfl
-    le_trans := fun _ _ _ hab hbc => le_def.mpr (le_trans hab hbc)
-    le_antisymm := fun _ _ h₁ h₂ => ext fun s => ⟨h₁ s, h₂ s⟩ }
-
-Depends on / 依赖: DynkinSystem, DynkinSystem.instLEDynkinSystem, instLEDynkinSystem, le_antisymm, le_def, le_def.mpr, le_refl, le_rfl, le_trans
+/-
+**MeasurableSpace.DynkinSystem.** 是 Mathlib 中的一个实例，位于命名空间 `MeasurableSpace.Dynki
+nSystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (DynkinSystem α) :=
   { DynkinSystem.instLEDynkinSystem with
@@ -1951,104 +1611,79 @@ instance : PartialOrder (DynkinSystem α) :=
     le_trans := fun _ _ _ hab hbc => le_def.mpr (le_trans hab hbc)
     le_antisymm := fun _ _ h₁ h₂ => ext fun s => ⟨h₁ s, h₂ s⟩ }
 
-/--
-Definition of `ofMeasurableSpace` / `ofMeasurableSpace` 的定义
+/-- Every measurable space (σ-algebra) forms a Dynkin system -/
+/-
+**MeasurableSpace.DynkinSystem.ofMeasurableSpace** 是 Mathlib 中的一个定义，位于命名空间 `Meas
+urableSpace.DynkinSystem`。
+形式化陈述：ofMeasurableSpace (m : MeasurableSpace α) : DynkinSystem α where Has
+参数：m : MeasurableSpace α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.measurableSet_empty`：∀ {α : Type u_7} (self : Measurable
+Space α), MeasurableSpace.MeasurableSet' self ∅
+· 使用定理 `MeasurableSpace.measurableSet_compl`：∀ {α : Type u_7} (self : Measurable
+Space α) (s : Set α),   MeasurableSpace.MeasurableSet' self s → MeasurableSpace.
+MeasurableSet' self sᶜ
+· 使用定理 `MeasurableSpace.measurableSet_iUnion`：∀ {α : Type u_7} (self : Measurabl
+eSpace α) (f : ℕ → Set α),   (∀ (i : ℕ), MeasurableSpace.MeasurableSet' self (f 
+i)) → MeasurableSpace.Meas…
 
-English:
-definition ofMeasurableSpace
-  signature: (m : MeasurableSpace α)
-  body: m.MeasurableSet'
-  has_empty := m.measurableSet_empty
-  has_compl {a} := m.measurableSet_compl a
-  has_iUnion_nat {f} _ hf := m.measurableSet_iUnion f hf
-
-中文:
-定义 ofMeasurableSpace
-  签名: (m : 可测空间 α)
-  定义体: m.MeasurableSet'
-  has_empty := m.measurableSet_empty
-  has_compl {a} := m.measurableSet_compl a
-  has_iUnion_nat {f} _ hf := m.measurableSet_iUnion f hf
-
-Depends on / 依赖: MeasurableSet, m.MeasurableSet
+--- 原说明 ---
+Every measurable space (σ-algebra) forms a Dynkin system
 -/
 def ofMeasurableSpace (m : MeasurableSpace α) : DynkinSystem α where
   Has := m.MeasurableSet'
   has_empty := m.measurableSet_empty
   has_compl {a} := m.measurableSet_compl a
   has_iUnion_nat {f} _ hf := m.measurableSet_iUnion f hf
-
-/--
-theorem `ofMeasurableSpace_le_ofMeasurableSpace_iff` / 定理 `ofMeasurableSpace_le_ofMeasurableSpace_iff`
-
-English:
-theorem ofMeasurableSpace_le_ofMeasurableSpace_iff
-  given: {m₁ m₂ : MeasurableSpace α}
-  proof: Iff.rfl
-
-中文:
-定理 ofMeasurableSpace_le_ofMeasurableSpace_iff
-  条件: {m₁ m₂ : 可测空间 α}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**MeasurableSpace.DynkinSystem.ofMeasurableSpace_le_ofMeasurableSpace_iff** 是 Ma
+thlib 中的一个定理，位于命名空间 `MeasurableSpace.DynkinSystem`。
+形式化陈述：ofMeasurableSpace_le_ofMeasurableSpace_iff {m₁ m₂ : MeasurableSpace α} : o
+fMeasurableSpace m₁ <= ofMeasurableSpace m₂ ↔ m₁ <= m₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofMeasurableSpace_le_ofMeasurableSpace_iff {m₁ m₂ : MeasurableSpace α} :
-    ofMeasurableSpace m₁ <= ofMeasurableSpace m₂ ↔ m₁ <= m₂ :=
+    ofMeasurableSpace m₁ ≤ ofMeasurableSpace m₂ ↔ m₁ ≤ m₂ :=
   Iff.rfl
 
-/--
-Inductive type `GenerateHas` / 归纳类型 `GenerateHas`
+/-- The least Dynkin system containing a collection of basic sets.
+  This inductive type gives the underlying collection of sets. -/
+/-
+**MeasurableSpace.DynkinSystem.GenerateHas** 是 Mathlib 中的一个归纳类型，位于命名空间 `Measurab
+leSpace.DynkinSystem`。
+形式化陈述：{α : Type u_3} → Set (Set α) → Set α → Prop
+参数：Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive GenerateHas
-  parameters: (s : Set (Set α))
-  constructors (4):
-    - basic: forall t in s, GenerateHas s t
-    - empty: GenerateHas s ∅
-    - compl: forall {a}, GenerateHas s a -> GenerateHas s aᶜ
-    - iUnion: forall {f : Nat -> Set α}, Pairwise (Disjoint on f) -> (forall i, GenerateHas s (f i)) -> GenerateHas s (⋃ i, f i)
-
-中文:
-归纳类型 GenerateHas
-  参数: (s : 集合 (集合 α))
-  构造子 (4 个):
-    - basic: 对任意 t in s, GenerateHas s t
-    - empty: GenerateHas s ∅
-    - compl: 对任意 {a}, GenerateHas s a -> GenerateHas s aᶜ
-    - iUnion: 对任意 {f : 自然数 -> 集合 α}, 两两 (Disjoint on f) -> (对任意 i, GenerateHas s (f i)) -> GenerateHas s (⋃ i, f i)
+--- 原说明 ---
+The least Dynkin system containing a collection of basic sets.
+  This inductive type gives the underlying collection of sets.
 -/
-inductive GenerateHas (s : Set (Set α)) : Set α -> Prop
-  | basic : forall t in s, GenerateHas s t
+inductive GenerateHas (s : Set (Set α)) : Set α → Prop
+  | basic : ∀ t ∈ s, GenerateHas s t
   | empty : GenerateHas s ∅
-  | compl : forall {a}, GenerateHas s a -> GenerateHas s aᶜ
-  | iUnion : forall {f : Nat -> Set α},
-    Pairwise (Disjoint on f) -> (forall i, GenerateHas s (f i)) -> GenerateHas s (⋃ i, f i)
-
-/--
-theorem `generateHas_compl` / 定理 `generateHas_compl`
-
-English:
-theorem generateHas_compl
-  given: {C : Set (Set α)} {s : Set α}
-  statement: GenerateHas C sᶜ ↔ GenerateHas C s
-  proof: by
-  refine ⟨?_, GenerateHas.compl⟩
-  intro h
-  convert! GenerateHas.compl h
-  simp
-
-中文:
-定理 generateHas_compl
-  条件: {C : 集合 (集合 α)} {s : 集合 α}
-  结论: GenerateHas C sᶜ ↔ GenerateHas C s
-  证明: by
-  refine ⟨?_, GenerateHas.compl⟩
-  intro h
-  convert! GenerateHas.compl h
-  simp
-
-Depends on / 依赖: GenerateHas, GenerateHas.compl, convert
+  | compl : ∀ {a}, GenerateHas s a → GenerateHas s aᶜ
+  | iUnion : ∀ {f : ℕ → Set α},
+    Pairwise (Disjoint on f) → (∀ i, GenerateHas s (f i)) → GenerateHas s (⋃ i, f i)
+/-
+**MeasurableSpace.DynkinSystem.generateHas_compl** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+urableSpace.DynkinSystem`。
+形式化陈述：generateHas_compl {C : Set (Set α)} {s : Set α} : GenerateHas C sᶜ ↔ Gener
+ateHas C s
+参数：Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem generateHas_compl {C : Set (Set α)} {s : Set α} : GenerateHas C sᶜ ↔ GenerateHas C s := by
   refine ⟨?_, GenerateHas.compl⟩
@@ -2056,101 +1691,61 @@ theorem generateHas_compl {C : Set (Set α)} {s : Set α} : GenerateHas C sᶜ �
   convert! GenerateHas.compl h
   simp
 
-/--
-Definition of `generate` / `generate` 的定义
+/-- The least Dynkin system containing a collection of basic sets. -/
+/-
+**MeasurableSpace.DynkinSystem.generate** 是 Mathlib 中的一个定义，位于命名空间 `MeasurableSpa
+ce.DynkinSystem`。
+形式化陈述：generate (s : Set (Set α)) : DynkinSystem α where Has
+参数：s : Set (Set α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition generate
-  signature: (s : Set (Set α))
-  body: GenerateHas s
-  has_empty := GenerateHas.empty
-  has_compl {_} := GenerateHas.compl
-  has_iUnion_nat {_} := GenerateHas.iUnion
-
-中文:
-定义 generate
-  签名: (s : 集合 (集合 α))
-  定义体: GenerateHas s
-  has_empty := GenerateHas.empty
-  has_compl {_} := GenerateHas.compl
-  has_iUnion_nat {_} := GenerateHas.iUnion
-
-Depends on / 依赖: GenerateHas
+--- 原说明 ---
+The least Dynkin system containing a collection of basic sets.
 -/
 def generate (s : Set (Set α)) : DynkinSystem α where
   Has := GenerateHas s
   has_empty := GenerateHas.empty
   has_compl {_} := GenerateHas.compl
   has_iUnion_nat {_} := GenerateHas.iUnion
-
-/--
-theorem `generateHas_def` / 定理 `generateHas_def`
-
-English:
-theorem generateHas_def
-  given: {C : Set (Set α)}
-  statement: (generate C).Has = GenerateHas C
-  proof: rfl
-
-中文:
-定理 generateHas_def
-  条件: {C : 集合 (集合 α)}
-  结论: (generate C).Has = GenerateHas C
-  证明: rfl
+/-
+**MeasurableSpace.DynkinSystem.generateHas_def** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+ableSpace.DynkinSystem`。
+形式化陈述：generateHas_def {C : Set (Set α)} : (generate C).Has = GenerateHas C
+参数：Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem generateHas_def {C : Set (Set α)} : (generate C).Has = GenerateHas C :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (DynkinSystem α)
-  body: ⟨generate univ⟩
-
-中文:
-实例 :
-  签名: 可居 (DynkinSystem α)
-  定义体: ⟨generate univ⟩
-
-Depends on / 依赖: generate
+/-
+**MeasurableSpace.DynkinSystem.** 是 Mathlib 中的一个实例，位于命名空间 `MeasurableSpace.Dynki
+nSystem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (DynkinSystem α) :=
   ⟨generate univ⟩
 
 /-- If a Dynkin system is closed under binary intersection, then it forms a `σ`-algebra. -/
 @[instance_reducible]
-/--
-Definition of `toMeasurableSpace` / `toMeasurableSpace` 的定义
+/-
+**MeasurableSpace.DynkinSystem.toMeasurableSpace** 是 Mathlib 中的一个定义，位于命名空间 `Meas
+urableSpace.DynkinSystem`。
+形式化陈述：toMeasurableSpace (h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d.Has (
+s₁ inter s₂)) : MeasurableSpace α where MeasurableSet'
+参数：h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d.Has (s₁ inter s₂)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.DynkinSystem.has_empty`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α), self.Has ∅
+· 使用定理 `MeasurableSpace.DynkinSystem.has_compl`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α) {a : Set α}, self.Has a → self.Has aᶜ
 
-English:
-definition toMeasurableSpace
-  signature: (h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d.Has (s₁ inter s₂))
-  body: d.Has
-  measurableSet_empty := d.has_empty
-  measurableSet_compl _ h := d.has_compl h
-  measurableSet_iUnion f hf := by
-    rw [← iUnion_disjointed]
-    exact
-      d.has_iUnion (disjoint_disjointed _) fun n =>
-        disjointedRec (fun (t : Set α) i h => h_inter _ _ h <| d.has_compl <| hf i) (hf n)
-
-中文:
-定义 toMeasurableSpace
-  签名: (h_inter : 对任意 s₁ s₂, d.Has s₁ -> d.Has s₂ -> d.Has (s₁ inter s₂))
-  定义体: d.Has
-  measurableSet_empty := d.has_empty
-  measurableSet_compl _ h := d.has_compl h
-  measurableSet_iUnion f hf := by
-    rw [← iUnion_disjointed]
-    exact
-      d.has_iUnion (disjoint_disjointed _) fun n =>
-        disjointedRec (fun (t : Set α) i h => h_inter _ _ h <| d.has_compl <| hf i) (hf n)
-
-Depends on / 依赖: d.Has
+--- 原说明 ---
+If a Dynkin system is closed under binary intersection, then it forms a `σ`-alge
+bra.
 -/
-def toMeasurableSpace (h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d.Has (s₁ inter s₂)) :
+def toMeasurableSpace (h_inter : ∀ s₁ s₂, d.Has s₁ → d.Has s₂ → d.Has (s₁ ∩ s₂)) :
     MeasurableSpace α where
   MeasurableSet' := d.Has
   measurableSet_empty := d.has_empty
@@ -2160,67 +1755,43 @@ def toMeasurableSpace (h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d
     exact
       d.has_iUnion (disjoint_disjointed _) fun n =>
         disjointedRec (fun (t : Set α) i h => h_inter _ _ h <| d.has_compl <| hf i) (hf n)
-
-/--
-theorem `ofMeasurableSpace_toMeasurableSpace` / 定理 `ofMeasurableSpace_toMeasurableSpace`
-
-English:
-theorem ofMeasurableSpace_toMeasurableSpace
-  proof: ext fun _ => Iff.rfl
-
-中文:
-定理 ofMeasurableSpace_toMeasurableSpace
-  证明: ext fun _ => Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**MeasurableSpace.DynkinSystem.ofMeasurableSpace_toMeasurableSpace** 是 Mathlib 中
+的一个定理，位于命名空间 `MeasurableSpace.DynkinSystem`。
+形式化陈述：ofMeasurableSpace_toMeasurableSpace (h_inter : forall s₁ s₂, d.Has s₁ -> d
+.Has s₂ -> d.Has (s₁ inter s₂)) : ofMeasurableSpace (d.toMeasurableSpace h_inter
+) = d
+参数：h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d.Has (s₁ inter s₂)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.DynkinSystem.ext`：ext : forall {d₁ d₂ : DynkinSystem α},
+ (forall s : Set α, d₁.Has s ↔ d₂.Has s) -> d₁ = d₂ | ⟨s₁, _, _, _⟩, ⟨s₂, _, _, 
+_⟩, h => by have : s₁ …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ofMeasurableSpace_toMeasurableSpace
-    (h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d.Has (s₁ inter s₂)) :
+    (h_inter : ∀ s₁ s₂, d.Has s₁ → d.Has s₂ → d.Has (s₁ ∩ s₂)) :
     ofMeasurableSpace (d.toMeasurableSpace h_inter) = d :=
   ext fun _ => Iff.rfl
 
-/--
-Definition of `restrictOn` / `restrictOn` 的定义
+/-- If `s` is in a Dynkin system `d`, we can form the new Dynkin system `{s ∩ t | t ∈ d}`. -/
+/-
+**MeasurableSpace.DynkinSystem.restrictOn** 是 Mathlib 中的一个定义，位于命名空间 `MeasurableS
+pace.DynkinSystem`。
+形式化陈述：restrictOn {s : Set α} (h : d.Has s) : DynkinSystem α where Has t
+参数：h : d.Has s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictOn
-  signature: {s : Set α} (h : d.Has s)
-  body: d.Has (t inter s)
-  has_empty := by simp [d.has_empty]
-  has_compl {t} hts := by
-    have : tᶜ inter s = (t inter s)ᶜ \ sᶜ := Set.ext fun x => by by_cases h : x in s <;> simp [h]
-    simp_rw [this]
-    exact
-      d.has_sdiff (d.has_compl hts) (d.has_compl h)
-        (compl_subset_compl.mpr inter_subset_right)
-  has_iUnion_nat {f} hd hf := by
-    rw [iUnion_inter]
-    refine d.has_iUnion_nat ?_ hf
-    exact hd.mono fun i j => Disjoint.mono inter_subset_left inter_subset_left
-
-中文:
-定义 restrictOn
-  签名: {s : 集合 α} (h : d.Has s)
-  定义体: d.Has (t inter s)
-  has_empty := by simp [d.has_empty]
-  has_compl {t} hts := by
-    have : tᶜ inter s = (t inter s)ᶜ \ sᶜ := Set.ext fun x => by by_cases h : x in s <;> simp [h]
-    simp_rw [this]
-    exact
-      d.has_sdiff (d.has_compl hts) (d.has_compl h)
-        (compl_subset_compl.mpr inter_subset_right)
-  has_iUnion_nat {f} hd hf := by
-    rw [iUnion_inter]
-    refine d.has_iUnion_nat ?_ hf
-    exact hd.mono fun i j => Disjoint.mono inter_subset_left inter_subset_left
-
-Depends on / 依赖: d.Has
+--- 原说明 ---
+If `s` is in a Dynkin system `d`, we can form the new Dynkin system `{s ∩ t | t 
+∈ d}`.
 -/
 def restrictOn {s : Set α} (h : d.Has s) : DynkinSystem α where
-  Has t := d.Has (t inter s)
+  Has t := d.Has (t ∩ s)
   has_empty := by simp [d.has_empty]
   has_compl {t} hts := by
-    have : tᶜ inter s = (t inter s)ᶜ \ sᶜ := Set.ext fun x => by by_cases h : x in s <;> simp [h]
+    have : tᶜ ∩ s = (t ∩ s)ᶜ \ sᶜ := Set.ext fun x => by by_cases h : x ∈ s <;> simp [h]
     simp_rw [this]
     exact
       d.has_sdiff (d.has_compl hts) (d.has_compl h)
@@ -2229,115 +1800,119 @@ def restrictOn {s : Set α} (h : d.Has s) : DynkinSystem α where
     rw [iUnion_inter]
     refine d.has_iUnion_nat ?_ hf
     exact hd.mono fun i j => Disjoint.mono inter_subset_left inter_subset_left
-
-/--
-theorem `generate_le` / 定理 `generate_le`
-
-English:
-theorem generate_le
-  given: {s : Set (Set α)} (h : forall t in s, d.Has t)
-  statement: generate s <= d
-  proof: fun _ ht =>
-  ht.recOn h d.has_empty (fun {_} _ h => d.has_compl h) fun {_} hd _ hf => d.has_iUnion hd hf
-
-中文:
-定理 generate_le
-  条件: {s : 集合 (集合 α)} (h : 对任意 t in s, d.Has t)
-  结论: generate s <= d
-  证明: fun _ ht =>
-  ht.recOn h d.has_empty (fun {_} _ h => d.has_compl h) fun {_} hd _ hf => d.has_iUnion hd hf
+/-
+**MeasurableSpace.DynkinSystem.generate_le** 是 Mathlib 中的一个定理，位于命名空间 `Measurable
+Space.DynkinSystem`。
+形式化陈述：generate_le {s : Set (Set α)} (h : forall t in s, d.Has t) : generate s <=
+ d
+参数：Set α；h : forall t in s, d.Has t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.DynkinSystem.has_empty`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α), self.Has ∅
+· 使用定理 `MeasurableSpace.DynkinSystem.has_compl`：∀ {α : Type u_4} (self : Measura
+bleSpace.DynkinSystem α) {a : Set α}, self.Has a → self.Has aᶜ
+· 使用定理 `MeasurableSpace.DynkinSystem.has_iUnion`：has_iUnion {β} [Countable β] {f
+ : β -> Set α} (hd : Pairwise (Disjoint on f)) (h : forall i, d.Has (f i)) : d.H
+as (⋃ i, f i)
+· 使用定理 `instCountableNat`：Countable ℕ
 -/
-theorem generate_le {s : Set (Set α)} (h : forall t in s, d.Has t) : generate s <= d := fun _ ht =>
+theorem generate_le {s : Set (Set α)} (h : ∀ t ∈ s, d.Has t) : generate s ≤ d := fun _ ht =>
   ht.recOn h d.has_empty (fun {_} _ h => d.has_compl h) fun {_} hd _ hf => d.has_iUnion hd hf
-
-/--
-theorem `generate_has_subset_generate_measurable` / 定理 `generate_has_subset_generate_measurable`
-
-English:
-theorem generate_has_subset_generate_measurable
-  statement: {C : Set (Set α)} {s : Set α}
-  proof: generate_le (ofMeasurableSpace (generateFrom C)) (fun _ => measurableSet_generateFrom) s hs
-
-中文:
-定理 generate_has_subset_generate_measurable
-  结论: {C : 集合 (集合 α)} {s : 集合 α}
-  证明: generate_le (ofMeasurableSpace (generateFrom C)) (fun _ => measurableSet_generateFrom) s hs
-
-Depends on / 依赖: generateFrom, generate_le, measurableSet_generateFrom, ofMeasurableSpace
+/-
+**MeasurableSpace.DynkinSystem.generate_has_subset_generate_measurable** 是 Mathl
+ib 中的一个定理，位于命名空间 `MeasurableSpace.DynkinSystem`。
+形式化陈述：generate_has_subset_generate_measurable {C : Set (Set α)} {s : Set α} (hs 
+: (generate C).Has s) : MeasurableSet[generateFrom C] s
+参数：Set α；hs : (generate C).Has s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.DynkinSystem.generate_le`：generate_le {s : Set (Set α)} 
+(h : forall t in s, d.Has t) : generate s <= d
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
 -/
 theorem generate_has_subset_generate_measurable {C : Set (Set α)} {s : Set α}
     (hs : (generate C).Has s) : MeasurableSet[generateFrom C] s :=
   generate_le (ofMeasurableSpace (generateFrom C)) (fun _ => measurableSet_generateFrom) s hs
-
-/--
-theorem `generate_inter` / 定理 `generate_inter`
-
-English:
-theorem generate_inter
-  statement: {s : Set (Set α)} (hs : IsPiSystem s) {t₁ t₂ : Set α}
-  proof: have : generate s <= (generate s).restrictOn ht₂ :=
-    generate_le _ fun s₁ hs₁ =>
-      have : (generate s).Has s₁ := GenerateHas.basic s₁ hs₁
-      have : generate s <= (generate s).restrictOn this :=
-        generate_le _ fun s₂ hs₂ =>
-          show (generate s).Has (s₂ inter s₁) from
-            (s₂ inter s₁).eq_empty_or_nonempty.elim (fun h => h.symm ▸ GenerateHas.empty) fun h =>
-GenerateHas.basic _ hs _ hs₂ _ hs₁ h
-      have : (generate s).Has (t₂ inter s₁) := this _ ht₂
-      show (generate s).Has (s₁ inter t₂) by rwa [inter_comm]
-  this _ ht₁
-
-中文:
-定理 generate_inter
-  结论: {s : 集合 (集合 α)} (hs : IsPiSystem s) {t₁ t₂ : 集合 α}
-  证明: have : generate s <= (generate s).restrictOn ht₂ :=
-    generate_le _ fun s₁ hs₁ =>
-      have : (generate s).Has s₁ := GenerateHas.basic s₁ hs₁
-      have : generate s <= (generate s).restrictOn this :=
-        generate_le _ fun s₂ hs₂ =>
-          show (generate s).Has (s₂ inter s₁) from
-            (s₂ inter s₁).eq_empty_or_nonempty.elim (fun h => h.symm ▸ GenerateHas.empty) fun h =>
-GenerateHas.basic _ hs _ hs₂ _ hs₁ h
-      have : (generate s).Has (t₂ inter s₁) := this _ ht₂
-      show (generate s).Has (s₁ inter t₂) by rwa [inter_comm]
-  this _ ht₁
-
-Depends on / 依赖: GenerateHas, GenerateHas.basic, GenerateHas.empty, eq_empty_or_nonempty, eq_empty_or_nonempty.elim, generate, generate_le, h.symm, inter_comm, restrictOn
+/-
+**MeasurableSpace.DynkinSystem.generate_inter** 是 Mathlib 中的一个定理，位于命名空间 `Measura
+bleSpace.DynkinSystem`。
+形式化陈述：generate_inter {s : Set (Set α)} (hs : IsPiSystem s) {t₁ t₂ : Set α} (ht₁ 
+: (generate s).Has t₁) (ht₂ : (generate s).Has t₂) : (generate s).Has (t₁ inter 
+t₂)
+参数：Set α；hs : IsPiSystem s；ht₁ : (generate s).Has t₁；ht₂ : (generate s).Has t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.DynkinSystem.generate_le`：generate_le {s : Set (Set α)} 
+(h : forall t in s, d.Has t) : generate s <= d
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
 theorem generate_inter {s : Set (Set α)} (hs : IsPiSystem s) {t₁ t₂ : Set α}
-    (ht₁ : (generate s).Has t₁) (ht₂ : (generate s).Has t₂) : (generate s).Has (t₁ inter t₂) :=
-  have : generate s <= (generate s).restrictOn ht₂ :=
+    (ht₁ : (generate s).Has t₁) (ht₂ : (generate s).Has t₂) : (generate s).Has (t₁ ∩ t₂) :=
+  have : generate s ≤ (generate s).restrictOn ht₂ :=
     generate_le _ fun s₁ hs₁ =>
       have : (generate s).Has s₁ := GenerateHas.basic s₁ hs₁
-      have : generate s <= (generate s).restrictOn this :=
+      have : generate s ≤ (generate s).restrictOn this :=
         generate_le _ fun s₂ hs₂ =>
-          show (generate s).Has (s₂ inter s₁) from
-            (s₂ inter s₁).eq_empty_or_nonempty.elim (fun h => h.symm ▸ GenerateHas.empty) fun h =>
-GenerateHas.basic _ hs _ hs₂ _ hs₁ h
-      have : (generate s).Has (t₂ inter s₁) := this _ ht₂
-      show (generate s).Has (s₁ inter t₂) by rwa [inter_comm]
+          show (generate s).Has (s₂ ∩ s₁) from
+            (s₂ ∩ s₁).eq_empty_or_nonempty.elim (fun h => h.symm ▸ GenerateHas.empty) fun h =>
+              GenerateHas.basic _ <| hs _ hs₂ _ hs₁ h
+      have : (generate s).Has (t₂ ∩ s₁) := this _ ht₂
+      show (generate s).Has (s₁ ∩ t₂) by rwa [inter_comm]
   this _ ht₁
 
-/--
-theorem `generateFrom_eq` / 定理 `generateFrom_eq`
+/-- **Dynkin's π-λ theorem**:
+  Given a collection of sets closed under binary intersections, then the Dynkin system it
+  generates is equal to the σ-algebra it generates.
+  This result is known as the π-λ theorem.
+  A collection of sets closed under binary intersection is called a π-system (often requiring
+  additionally that it is non-empty, but we drop this condition in the formalization).
+-/
+/-
+**MeasurableSpace.DynkinSystem.generateFrom_eq** 是 Mathlib 中的一个定理，位于命名空间 `Measur
+ableSpace.DynkinSystem`。
+形式化陈述：generateFrom_eq {s : Set (Set α)} (hs : IsPiSystem s) : generateFrom s = (
+generate s).toMeasurableSpace fun _ _ => generate_inter hs
+参数：Set α；hs : IsPiSystem s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.DynkinSystem.generate_inter`：generate_inter {s : Set (Se
+t α)} (hs : IsPiSystem s) {t₁ t₂ : Set α} (ht₁ : (generate s).Has t₁) (ht₂ : (ge
+nerate s).Has t₂) : (generate s).…
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasurableSpace.DynkinSystem.ofMeasurableSpace_le_ofMeasurableSpace_iff`
+：ofMeasurableSpace_le_ofMeasurableSpace_iff {m₁ m₂ : MeasurableSpace α} : ofMeas
+urableSpace m₁ <= ofMeasurableSpace m₂ ↔ m₁ <= m₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableSpace.DynkinSystem.ofMeasurableSpace_toMeasurableSpace`：ofMeas
+urableSpace_toMeasurableSpace (h_inter : forall s₁ s₂, d.Has s₁ -> d.Has s₂ -> d
+.Has (s₁ inter s₂)) : ofMeasurableSpace (d.toMeasurabl…
+· 使用定理 `MeasurableSpace.DynkinSystem.generate_le`：generate_le {s : Set (Set α)} 
+(h : forall t in s, d.Has t) : generate s <= d
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
 
-English:
-theorem generateFrom_eq
-  given: {s : Set (Set α)} (hs : IsPiSystem s)
-  proof: le_antisymm (generateFrom_le fun t ht => GenerateHas.basic t ht)
-    (ofMeasurableSpace_le_ofMeasurableSpace_iff.mp <| by
-      rw [ofMeasurableSpace_toMeasurableSpace]
-      exact generate_le _ fun t ht => measurableSet_generateFrom ht)
-
-中文:
-定理 generateFrom_eq
-  条件: {s : 集合 (集合 α)} (hs : IsPiSystem s)
-  证明: le_antisymm (generateFrom_le fun t ht => GenerateHas.basic t ht)
-    (ofMeasurableSpace_le_ofMeasurableSpace_iff.mp <| by
-      rw [ofMeasurableSpace_toMeasurableSpace]
-      exact generate_le _ fun t ht => measurableSet_generateFrom ht)
-
-Depends on / 依赖: GenerateHas, GenerateHas.basic, generateFrom_le, generate_le, le_antisymm, measurableSet_generateFrom, ofMeasurableSpace_le_ofMeasurableSpace_iff, ofMeasurableSpace_le_ofMeasurableSpace_iff.mp, ofMeasurableSpace_toMeasurableSpace
+--- 原说明 ---
+**Dynkin's π-λ theorem**:
+  Given a collection of sets closed under binary intersections, then the Dynkin 
+system it
+  generates is equal to the σ-algebra it generates.
+  This result is known as the π-λ theorem.
+  A collection of sets closed under binary intersection is called a π-system (of
+ten requiring
+  additionally that it is non-empty, but we drop this condition in the formaliza
+tion).
 -/
 theorem generateFrom_eq {s : Set (Set α)} (hs : IsPiSystem s) :
     generateFrom s = (generate s).toMeasurableSpace fun _ _ => generate_inter hs :=
@@ -2359,55 +1934,66 @@ and a predicate `C` defined on measurable sets is true
 
 then it is true on all measurable sets in `α`. -/
 @[elab_as_elim]
-/--
-theorem `induction_on_inter` / 定理 `induction_on_inter`
+/-
+**MeasurableSpace.induction_on_inter** 是 Mathlib 中的一个定理，位于命名空间 `MeasurableSpace`
+。
+形式化陈述：induction_on_inter {m : MeasurableSpace α} {C : forall s : Set α, Measurab
+leSet s -> Prop} {s : Set (Set α)} (h_eq : m = generateFrom s) (h_inter : IsPiSy
+stem s) (empty : C ∅ .empty) (basic : forall t (ht : t in s), C t <| h_eq ▸ .bas
+ic t ht) (compl : forall t (htm : MeasurableSet t), C t htm -> C tᶜ htm.compl) (
+iUnion : forall (f : Nat -> Set α), Pairwise (Disjoint on f) -> forall (hfm : fo
+rall i, MeasurableSet (f i)), (forall i, C (f i) (hfm i)) -> C (⋃ i, f i) (.iUni
+on hfm)) : forall t (ht : 
+参数：Set α；h_eq : m = generateFrom s；h_inter : IsPiSystem s；empty : C ∅ .empty；bas
+ic : forall t (ht : t in s), C t <| h_eq ▸ .basic t ht；compl : forall t (htm : M
+easurableSet t), C t htm -> C tᶜ htm.compl；iUnion : forall (f : Nat -> Set α), P
+airwise (Disjoint on f) -> forall (hfm : forall i, MeasurableSet (f i)), (forall
+ i, C (f i) (hfm i)) -> C (⋃ i, f i) (.iUnion hfm)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.empty`：MeasurableSet.empty [MeasurableSpace α] : Measurabl
+eSet (∅ : Set α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableSpace.DynkinSystem.generate_inter`：generate_inter {s : Set (Se
+t α)} (hs : IsPiSystem s) {t₁ t₂ : Set α} (ht₁ : (generate s).Has t₁) (ht₂ : (ge
+nerate s).Has t₂) : (generate s).…
+· 使用定理 `MeasurableSpace.DynkinSystem.generateFrom_eq`：generateFrom_eq {s : Set (
+Set α)} (hs : IsPiSystem s) : generateFrom s = (generate s).toMeasurableSpace fu
+n _ _ => generate_inter hs
 
-English:
-theorem induction_on_inter
-  statement: {m : MeasurableSpace α} {C : forall s : Set α, MeasurableSet s -> Prop}
-  proof: by
-  have eq : MeasurableSet = DynkinSystem.GenerateHas s := by
-    rw [h_eq]; rw [DynkinSystem.generateFrom_eq h_inter]
-    rfl
-  suffices forall t (ht : DynkinSystem.GenerateHas s t), C t (eq ▸ ht) from
-    fun t ht => this t (eq ▸ ht)
-  intro t ht
-  induction ht with
-  | basic u hu => exact basic u hu
-  | empty => exact empty
-  | @compl u hu ihu => exact compl _ (eq ▸ hu) ihu
-  | @iUnion f hfd hf ihf => exact iUnion f hfd (eq ▸ hf) ihf
+--- 原说明 ---
+Induction principle for measurable sets.
+If `s` is a π-system that generates the product `σ`-algebra on `α`
+and a predicate `C` defined on measurable sets is true
 
-中文:
-定理 induction_on_inter
-  结论: {m : 可测空间 α} {C : 对任意 s : 集合 α, 可测集 s -> 命题}
-  证明: by
-  have eq : MeasurableSet = DynkinSystem.GenerateHas s := by
-    rw [h_eq]; rw [DynkinSystem.generateFrom_eq h_inter]
-    rfl
-  suffices forall t (ht : DynkinSystem.GenerateHas s t), C t (eq ▸ ht) from
-    fun t ht => this t (eq ▸ ht)
-  intro t ht
-  induction ht with
-  | basic u hu => exact basic u hu
-  | empty => exact empty
-  | @compl u hu ihu => exact compl _ (eq ▸ hu) ihu
-  | @iUnion f hfd hf ihf => exact iUnion f hfd (eq ▸ hf) ihf
+- on the empty set;
+- on each set `t ∈ s`;
+- on the complement of a measurable set that satisfies `C`;
+- on the union of a sequence of pairwise disjoint measurable sets that satisfy `
+C`,
 
-Depends on / 依赖: DynkinSystem, DynkinSystem.GenerateHas, DynkinSystem.generateFrom_eq, GenerateHas, MeasurableSet, generateFrom_eq, h_eq, h_inter, iUnion
+then it is true on all measurable sets in `α`.
 -/
-theorem induction_on_inter {m : MeasurableSpace α} {C : forall s : Set α, MeasurableSet s -> Prop}
+theorem induction_on_inter {m : MeasurableSpace α} {C : ∀ s : Set α, MeasurableSet s → Prop}
     {s : Set (Set α)} (h_eq : m = generateFrom s) (h_inter : IsPiSystem s)
-    (empty : C ∅ .empty) (basic : forall t (ht : t in s), C t <| h_eq ▸ .basic t ht)
-    (compl : forall t (htm : MeasurableSet t), C t htm -> C tᶜ htm.compl)
-    (iUnion : forall (f : Nat -> Set α), Pairwise (Disjoint on f) -> forall (hfm : forall i, MeasurableSet (f i)),
-      (forall i, C (f i) (hfm i)) -> C (⋃ i, f i) (.iUnion hfm)) :
-    forall t (ht : MeasurableSet t), C t ht := by
+    (empty : C ∅ .empty) (basic : ∀ t (ht : t ∈ s), C t <| h_eq ▸ .basic t ht)
+    (compl : ∀ t (htm : MeasurableSet t), C t htm → C tᶜ htm.compl)
+    (iUnion : ∀ (f : ℕ → Set α), Pairwise (Disjoint on f) → ∀ (hfm : ∀ i, MeasurableSet (f i)),
+      (∀ i, C (f i) (hfm i)) → C (⋃ i, f i) (.iUnion hfm)) :
+    ∀ t (ht : MeasurableSet t), C t ht := by
   have eq : MeasurableSet = DynkinSystem.GenerateHas s := by
-    rw [h_eq]; rw [DynkinSystem.generateFrom_eq h_inter]
+    rw [h_eq, DynkinSystem.generateFrom_eq h_inter]
     rfl
-  suffices forall t (ht : DynkinSystem.GenerateHas s t), C t (eq ▸ ht) from
-    fun t ht => this t (eq ▸ ht)
+  suffices ∀ t (ht : DynkinSystem.GenerateHas s t), C t (eq ▸ ht) from
+    fun t ht ↦ this t (eq ▸ ht)
   intro t ht
   induction ht with
   | basic u hu => exact basic u hu
@@ -2416,3 +2002,4 @@ theorem induction_on_inter {m : MeasurableSpace α} {C : forall s : Set α, Meas
   | @iUnion f hfd hf ihf => exact iUnion f hfd (eq ▸ hf) ihf
 
 end MeasurableSpace
+

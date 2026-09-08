@@ -29,30 +29,24 @@ namespace CategoryTheory
 variable {C : Type v} [SmallCategory C] [Abelian C]
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Ind C} (f : X ⟶ Y) : IsIso (Abelian.coimageImageComparison f) := by
   obtain ⟨I, _, _, F, G, ϕ, ⟨i⟩⟩ := Ind.exists_nonempty_arrow_mk_iso_ind_lim (f := f)
   let i' := coimageImageComparisonFunctor.mapIso i
   dsimp only [coimageImageComparisonFunctor_obj, Arrow.mk_left, Arrow.mk_right, Arrow.mk_hom] at i'
   have := Iso.isIso_hom i'
-  rw [Arrow.isIso_iff_isIso_of_isIso i'.hom]; rw [Arrow.isIso_iff_isIso_of_isIso (PreservesCoimageImageComparison.iso (Ind.lim I) ϕ).inv]
+  rw [Arrow.isIso_iff_isIso_of_isIso i'.hom,
+    Arrow.isIso_iff_isIso_of_isIso (PreservesCoimageImageComparison.iso (Ind.lim I) ϕ).inv]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Abelian (Ind C)
-  body: .ofCoimageImageComparisonIsIso
-
-中文:
-实例 :
-  签名: 交换 (Ind C)
-  定义体: .ofCoimageImageComparisonIsIso
-
-Depends on / 依赖: ofCoimageImageComparisonIsIso
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Abelian (Ind C) :=
   .ofCoimageImageComparisonIsIso
 
 end CategoryTheory
+

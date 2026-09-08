@@ -38,24 +38,17 @@ namespace AlgebraicGeometry
 open _root_.PrimeSpectrum
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `modulesSpecToSheaf` / `modulesSpecToSheaf` 的定义
+/-- The forgetful functor from `𝒪_{Spec R}` modules to sheaves of `R`-modules. -/
+/-
+**AlgebraicGeometry.modulesSpecToSheaf** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeome
+try`。
+形式化陈述：modulesSpecToSheaf : (Spec R).Modules ⥤ TopCat.Sheaf (ModuleCat R) (Spec R
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition modulesSpecToSheaf
-  signature: :
-  body: SheafOfModules.forgetToSheafModuleCat (Spec R).ringCatSheaf (.op ⊤)
-    (Limits.initialOpOfTerminal Limits.isTerminalTop) ⋙
-  sheafCompose _ (ModuleCat.restrictScalars (Scheme.ΓSpecIso R).inv.hom)
-
-中文:
-定义 modulesSpecToSheaf
-  签名: :
-  定义体: SheafOfModules.forgetToSheafModuleCat (Spec R).ringCatSheaf (.op ⊤)
-    (Limits.initialOpOfTerminal Limits.isTerminalTop) ⋙
-  sheafCompose _ (ModuleCat.restrictScalars (Scheme.ΓSpecIso R).inv.hom)
-
-Depends on / 依赖: Limits, Limits.initialOpOfTerminal, Limits.isTerminalTop, ModuleCat, ModuleCat.restrictScalars, Scheme, SheafOfModules, SheafOfModules.forgetToSheafModuleCat, forgetToSheafModuleCat, initialOpOfTerminal, inv.hom, isTerminalTop, restrictScalars, ringCatSheaf, sheafCompose
+--- 原说明 ---
+The forgetful functor from `𝒪_{Spec R}` modules to sheaves of `R`-modules.
 -/
 def modulesSpecToSheaf :
     (Spec R).Modules ⥤ TopCat.Sheaf (ModuleCat R) (Spec R) :=
@@ -65,97 +58,33 @@ def modulesSpecToSheaf :
 
 /-- The global section functor for `𝒪_{Spec R}` modules -/
 noncomputable
-/--
-Definition of `moduleSpecΓFunctor` / `moduleSpecΓFunctor` 的定义
-
-English:
-definition moduleSpecΓFunctor
-  signature: : (Spec (.of R)).Modules ⥤ ModuleCat R
-  body: modulesSpecToSheaf ⋙ TopCat.Sheaf.forget _ _ ⋙ (evaluation _ _).obj (.op ⊤)
-
-中文:
-定义 moduleSpecΓFunctor
-  签名: : (Spec (.of R)).Modules ⥤ 模范畴 R
-  定义体: modulesSpecToSheaf ⋙ TopCat.Sheaf.forget _ _ ⋙ (evaluation _ _).obj (.op ⊤)
-
-Depends on / 依赖: TopCat, TopCat.Sheaf.forget, evaluation, forget, modulesSpecToSheaf
+/-
+**AlgebraicGeometry.moduleSpec** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def moduleSpecΓFunctor : (Spec (.of R)).Modules ⥤ ModuleCat R :=
   modulesSpecToSheaf ⋙ TopCat.Sheaf.forget _ _ ⋙ (evaluation _ _).obj (.op ⊤)
 
 set_option backward.isDefEq.respectTransparency false in
 open PrimeSpectrum in
-/--
-Definition of `SpecModulesToSheafFullyFaithful` / `SpecModulesToSheafFullyFaithful` 的定义
+/-- The forgetful functor from `𝒪_{Spec R}` modules to sheaves of `R`-modules is fully faithful. -/
+/-
+**AlgebraicGeometry.SpecModulesToSheafFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry`。
+形式化陈述：SpecModulesToSheafFullyFaithful : (modulesSpecToSheaf (R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SpecModulesToSheafFullyFaithful
-  signature: : (modulesSpecToSheaf (R := R)).FullyFaithful where
-  body: ⟨fun U => ModuleCat.ofHom ⟨(f.1.app U).hom.toAddHom, by
-    intro t m
-    apply TopCat.Presheaf.IsSheaf.section_ext (modulesSpecToSheaf.obj N).2
-    intro x hxU
-    obtain ⟨a, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU : basicOpen _ <= _⟩ :=
-      PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU U.unop.2
-    refine ⟨_, hrU, hxr, ?_⟩
-    refine Eq.trans ?_ (N.val.map_smul (homOfLE hrU).op t _).symm
-    change N.1.map (homOfLE hrU).op (f.1.app _ _) = _ • N.1.map (homOfLE hrU).op (f.1.app _ _)
-    have (x : _) :
-        f.1.app _ (M.1.map (homOfLE hrU).op _) = N.1.map (homOfLE hrU).op (f.1.app _ x) :=
-      congr($(f.1.naturality (homOfLE hrU).op).hom x)
-    rw [← this]; rw [← this]; rw [M.val.map_smul]
-    generalize (Spec R).ringCatSheaf.obj.map (homOfLE hrU).op t = t
-    let := Module.compHom (R := Γ(Spec R, basicOpen r)) Γ(M, basicOpen r)
-      (algebraMap R Γ(Spec R, basicOpen r))
-    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(M, basicOpen r) :=
-      .of_algebraMap_smul fun _ _ => rfl
-    let := Module.compHom Γ(N, basicOpen r) (algebraMap R Γ(Spec R, basicOpen r))
-    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(N, basicOpen r) :=
-      .of_algebraMap_smul fun _ _ => rfl
-    exact (IsLocalization.linearMap_compatibleSMul (.powers (M := R) r)
-      Γ(Spec R, basicOpen r) Γ(M, basicOpen r) Γ(N, basicOpen r)).map_smul
-      (f.hom.app _).hom _ _⟩, fun i => by ext x; exact congr($(f.1.naturality i).hom x)⟩
-  map_preimage f := rfl
-  preimage_map f := rfl
-
-中文:
-定义 SpecModulesToSheafFullyFaithful
-  签名: : (modulesSpecToSheaf (R := R)).满忠实 where
-  定义体: ⟨fun U => ModuleCat.ofHom ⟨(f.1.app U).hom.toAddHom, by
-    intro t m
-    apply TopCat.Presheaf.IsSheaf.section_ext (modulesSpecToSheaf.obj N).2
-    intro x hxU
-    obtain ⟨a, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU : basicOpen _ <= _⟩ :=
-      PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU U.unop.2
-    refine ⟨_, hrU, hxr, ?_⟩
-    refine Eq.trans ?_ (N.val.map_smul (homOfLE hrU).op t _).symm
-    change N.1.map (homOfLE hrU).op (f.1.app _ _) = _ • N.1.map (homOfLE hrU).op (f.1.app _ _)
-    have (x : _) :
-        f.1.app _ (M.1.map (homOfLE hrU).op _) = N.1.map (homOfLE hrU).op (f.1.app _ x) :=
-      congr($(f.1.naturality (homOfLE hrU).op).hom x)
-    rw [← this]; rw [← this]; rw [M.val.map_smul]
-    generalize (Spec R).ringCatSheaf.obj.map (homOfLE hrU).op t = t
-    let := Module.compHom (R := Γ(Spec R, basicOpen r)) Γ(M, basicOpen r)
-      (algebraMap R Γ(Spec R, basicOpen r))
-    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(M, basicOpen r) :=
-      .of_algebraMap_smul fun _ _ => rfl
-    let := Module.compHom Γ(N, basicOpen r) (algebraMap R Γ(Spec R, basicOpen r))
-    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(N, basicOpen r) :=
-      .of_algebraMap_smul fun _ _ => rfl
-    exact (IsLocalization.linearMap_compatibleSMul (.powers (M := R) r)
-      Γ(Spec R, basicOpen r) Γ(M, basicOpen r) Γ(N, basicOpen r)).map_smul
-      (f.hom.app _).hom _ _⟩, fun i => by ext x; exact congr($(f.1.naturality i).hom x)⟩
-  map_preimage f := rfl
-  preimage_map f := rfl
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+The forgetful functor from `𝒪_{Spec R}` modules to sheaves of `R`-modules is ful
+ly faithful.
 -/
 def SpecModulesToSheafFullyFaithful : (modulesSpecToSheaf (R := R)).FullyFaithful where
-  preimage {M N} f := ⟨fun U => ModuleCat.ofHom ⟨(f.1.app U).hom.toAddHom, by
+  preimage {M N} f := ⟨fun U ↦ ModuleCat.ofHom ⟨(f.1.app U).hom.toAddHom, by
     intro t m
     apply TopCat.Presheaf.IsSheaf.section_ext (modulesSpecToSheaf.obj N).2
     intro x hxU
-    obtain ⟨a, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU : basicOpen _ <= _⟩ :=
+    obtain ⟨a, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU : basicOpen _ ≤ _⟩ :=
       PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU U.unop.2
     refine ⟨_, hrU, hxr, ?_⟩
     refine Eq.trans ?_ (N.val.map_smul (homOfLE hrU).op t _).symm
@@ -163,52 +92,28 @@ def SpecModulesToSheafFullyFaithful : (modulesSpecToSheaf (R := R)).FullyFaithfu
     have (x : _) :
         f.1.app _ (M.1.map (homOfLE hrU).op _) = N.1.map (homOfLE hrU).op (f.1.app _ x) :=
       congr($(f.1.naturality (homOfLE hrU).op).hom x)
-    rw [← this]; rw [← this]; rw [M.val.map_smul]
+    rw [← this, ← this, M.val.map_smul]
     generalize (Spec R).ringCatSheaf.obj.map (homOfLE hrU).op t = t
     let := Module.compHom (R := Γ(Spec R, basicOpen r)) Γ(M, basicOpen r)
       (algebraMap R Γ(Spec R, basicOpen r))
     have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(M, basicOpen r) :=
-      .of_algebraMap_smul fun _ _ => rfl
+      .of_algebraMap_smul fun _ _ ↦ rfl
     let := Module.compHom Γ(N, basicOpen r) (algebraMap R Γ(Spec R, basicOpen r))
     have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(N, basicOpen r) :=
-      .of_algebraMap_smul fun _ _ => rfl
+      .of_algebraMap_smul fun _ _ ↦ rfl
     exact (IsLocalization.linearMap_compatibleSMul (.powers (M := R) r)
       Γ(Spec R, basicOpen r) Γ(M, basicOpen r) Γ(N, basicOpen r)).map_smul
-      (f.hom.app _).hom _ _⟩, fun i => by ext x; exact congr($(f.1.naturality i).hom x)⟩
+      (f.hom.app _).hom _ _⟩, fun i ↦ by ext x; exact congr($(f.1.naturality i).hom x)⟩
   map_preimage f := rfl
   preimage_map f := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (modulesSpecToSheaf (R := R)).Faithful
-  body: SpecModulesToSheafFullyFaithful.faithful
-
-中文:
-实例 :
-  签名: (modulesSpecToSheaf (R := R)).忠实
-  定义体: SpecModulesToSheafFullyFaithful.faithful
-
-Depends on / 依赖: Faithful, SpecModulesToSheafFullyFaithful, SpecModulesToSheafFullyFaithful.faithful, faithful
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (modulesSpecToSheaf (R := R)).Faithful := SpecModulesToSheafFullyFaithful.faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (modulesSpecToSheaf (R := R)).Full
-  body: SpecModulesToSheafFullyFaithful.full
-
-中文:
-实例 :
-  签名: (modulesSpecToSheaf (R := R)).满
-  定义体: SpecModulesToSheafFullyFaithful.full
-
-Depends on / 依赖: SpecModulesToSheafFullyFaithful, SpecModulesToSheafFullyFaithful.full
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (modulesSpecToSheaf (R := R)).Full := SpecModulesToSheafFullyFaithful.full
 
@@ -216,147 +121,109 @@ namespace Scheme.Modules
 
 variable {M : (Spec R).Modules} {U V : (Spec R).Opens}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module R Γ(M, U)
-  body: inferInstanceAs Module R ((modulesSpecToSheaf.obj M).obj.obj (.op U))
-
-中文:
-实例 :
-  签名: 模 R Γ(M, U)
-  定义体: inferInstanceAs Module R ((modulesSpecToSheaf.obj M).obj.obj (.op U))
-
-Depends on / 依赖: Module, modulesSpecToSheaf, modulesSpecToSheaf.obj, obj.obj
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module R Γ(M, U) :=
-inferInstanceAs Module R ((modulesSpecToSheaf.obj M).obj.obj (.op U))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower R Γ(Spec R, U) Γ(M, U)
-  body: IsScalarTower.of_compHom R Γ(Spec R, U) Γ(M, U)
-
-中文:
-实例 :
-  签名: 标量塔 R Γ(Spec R, U) Γ(M, U)
-  定义体: IsScalarTower.of_compHom R Γ(Spec R, U) Γ(M, U)
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.of_compHom, of_compHom
+  inferInstanceAs <| Module R ((modulesSpecToSheaf.obj M).obj.obj (.op U))
+/-
+**AlgebraicGeometry.Scheme.Modules.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry
+.Scheme.Modules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower R Γ(Spec R, U) Γ(M, U) :=
   IsScalarTower.of_compHom R Γ(Spec R, U) Γ(M, U)
-
-/--
-lemma `smul_Spec_def` / 引理 `smul_Spec_def`
-
-English:
-lemma smul_Spec_def
-  given: (r : R) (x : Γ(M, U))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 smul_Spec_def
-  条件: (r : R) (x : Γ(M, U))
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicGeometry.Scheme.Modules.smul_Spec_def** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry.Scheme.Modules`。
+形式化陈述：smul_Spec_def (r : R) (x : Γ(M, U)) : r • x = ((Spec R).presheaf.map U.leT
+op.op) ((Scheme.ΓSpecIso R).inv r) • x
+参数：r : R；x : Γ(M, U)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_Spec_def (r : R) (x : Γ(M, U)) :
     r • x = ((Spec R).presheaf.map U.leTop.op) ((Scheme.ΓSpecIso R).inv r) • x :=
   rfl
 
 @[simp]
-/--
-lemma `map_smul_Spec` / 引理 `map_smul_Spec`
-
-English:
-lemma map_smul_Spec
-  given: (hUV : .op V ⟶ .op U) (f : R) (x : Γ(M, V))
-  proof: ((modulesSpecToSheaf.obj M).obj.map hUV).hom.map_smul f x
-
-中文:
-引理 map_smul_Spec
-  条件: (hUV : .op V ⟶ .op U) (f : R) (x : Γ(M, V))
-  证明: ((modulesSpecToSheaf.obj M).obj.map hUV).hom.map_smul f x
-
-Depends on / 依赖: hom.map_smul, map_smul, modulesSpecToSheaf, modulesSpecToSheaf.obj, obj.map
+/-
+**AlgebraicGeometry.Scheme.Modules.map_smul_Spec** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry.Scheme.Modules`。
+形式化陈述：map_smul_Spec (hUV : .op V ⟶ .op U) (f : R) (x : Γ(M, V)) : dsimp% M.presh
+eaf.map hUV (f • x) = f • M.presheaf.map hUV x
+参数：hUV : .op V ⟶ .op U；f : R；x : Γ(M, V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
 -/
 lemma map_smul_Spec (hUV : .op V ⟶ .op U) (f : R) (x : Γ(M, V)) :
     dsimp% M.presheaf.map hUV (f • x) = f • M.presheaf.map hUV x :=
   ((modulesSpecToSheaf.obj M).obj.map hUV).hom.map_smul f x
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isUnit_algebraMap_end_of_le_basicOpen` / 引理 `isUnit_algebraMap_end_of_le_basicOpen`
-
-English:
-lemma isUnit_algebraMap_end_of_le_basicOpen
-  given: (f : R) (hf : U <= PrimeSpectrum.basicOpen f)
-  proof: by
-  rw [Module.End.isUnit_iff]
-  have : ⇑((algebraMap R (Module.End ↑R ↑Γ(M, U))) f) =
-      algebraMap (Γ(Spec R, U)) (Module.End Γ(Spec R, U) Γ(M, U))
-        (((Spec R).presheaf.map (homOfLE hf).op) <| algebraMap R _ f) :=
-    rfl
-  rw [this]; rw [← Module.End.isUnit_iff]
-  exact ((IsLocalization.Away.algebraMap_isUnit _).map _).map _
-
-中文:
-引理 isUnit_algebraMap_end_of_le_basicOpen
-  条件: (f : R) (hf : U <= 素谱.basicOpen f)
-  证明: by
-  rw [Module.End.isUnit_iff]
-  have : ⇑((algebraMap R (Module.End ↑R ↑Γ(M, U))) f) =
-      algebraMap (Γ(Spec R, U)) (Module.End Γ(Spec R, U) Γ(M, U))
-        (((Spec R).presheaf.map (homOfLE hf).op) <| algebraMap R _ f) :=
-    rfl
-  rw [this]; rw [← Module.End.isUnit_iff]
-  exact ((IsLocalization.Away.algebraMap_isUnit _).map _).map _
-
-Depends on / 依赖: IsLocalization, IsLocalization.Away.algebraMap_isUnit, Module, Module.End, Module.End.isUnit_iff, algebraMap, algebraMap_isUnit, homOfLE, isUnit_iff, presheaf, presheaf.map
+/-
+**AlgebraicGeometry.Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen** 是 Mat
+hlib 中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：isUnit_algebraMap_end_of_le_basicOpen (f : R) (hf : U <= PrimeSpectrum.bas
+icOpen f) : IsUnit (algebraMap R (Module.End R Γ(M, U)) f)
+参数：f : R；hf : U <= PrimeSpectrum.basicOpen f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.isUnit_iff`：∀ {R : Type u_1} {M : Type u_5} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (f : Module.End R M
+), IsUnit f…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `IsLocalization.Away.algebraMap_isUnit`：algebraMap_isUnit : IsUnit (algeb
+raMap R S x)
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.instAwayCarrierObjOppositeOpensCarrierCar
+rierCommRingCatSpecPresheafOpOpensBasicOpen`：∀ {R : CommRingCat} {f : ↑R},   IsL
+ocalization.Away f ↑((AlgebraicGeometry.Spec R).presheaf.obj (Opposite.op (Prime
+Spectrum.basicOpen f)))
 -/
-lemma isUnit_algebraMap_end_of_le_basicOpen (f : R) (hf : U <= PrimeSpectrum.basicOpen f) :
+lemma isUnit_algebraMap_end_of_le_basicOpen (f : R) (hf : U ≤ PrimeSpectrum.basicOpen f) :
     IsUnit (algebraMap R (Module.End R Γ(M, U)) f) := by
   rw [Module.End.isUnit_iff]
   have : ⇑((algebraMap R (Module.End ↑R ↑Γ(M, U))) f) =
       algebraMap (Γ(Spec R, U)) (Module.End Γ(Spec R, U) Γ(M, U))
         (((Spec R).presheaf.map (homOfLE hf).op) <| algebraMap R _ f) :=
     rfl
-  rw [this]; rw [← Module.End.isUnit_iff]
+  rw [this, ← Module.End.isUnit_iff]
   exact ((IsLocalization.Away.algebraMap_isUnit _).map _).map _
-
-/--
-lemma `isSMulRegular_of_le_basicOpen` / 引理 `isSMulRegular_of_le_basicOpen`
-
-English:
-lemma isSMulRegular_of_le_basicOpen
-  given: {f : R} (hle : U <= PrimeSpectrum.basicOpen f)
-  proof: by
-  intro x y hxy
-  have := M.isUnit_algebraMap_end_of_le_basicOpen _ hle
-  rw [Module.End.isUnit_iff] at this
-  exact this.injective hxy
-
-中文:
-引理 isSMulRegular_of_le_basicOpen
-  条件: {f : R} (hle : U <= 素谱.basicOpen f)
-  证明: by
-  intro x y hxy
-  have := M.isUnit_algebraMap_end_of_le_basicOpen _ hle
-  rw [Module.End.isUnit_iff] at this
-  exact this.injective hxy
-
-Depends on / 依赖: M.isUnit_algebraMap_end_of_le_basicOpen, Module, Module.End.isUnit_iff, injective, isUnit_algebraMap_end_of_le_basicOpen, isUnit_iff, this.injective
+/-
+**AlgebraicGeometry.Scheme.Modules.isSMulRegular_of_le_basicOpen** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：isSMulRegular_of_le_basicOpen {f : R} (hle : U <= PrimeSpectrum.basicOpen 
+f) : IsSMulRegular Γ(M, U) f
+参数：hle : U <= PrimeSpectrum.basicOpen f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen`：
+isUnit_algebraMap_end_of_le_basicOpen (f : R) (hf : U <= PrimeSpectrum.basicOpen
+ f) : IsUnit (algebraMap R (Module.End R Γ(M, U)) f)
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.isUnit_iff`：∀ {R : Type u_1} {M : Type u_5} [inst : Semiring 
+R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (f : Module.End R M
+), IsUnit f…
 -/
-lemma isSMulRegular_of_le_basicOpen {f : R} (hle : U <= PrimeSpectrum.basicOpen f) :
+lemma isSMulRegular_of_le_basicOpen {f : R} (hle : U ≤ PrimeSpectrum.basicOpen f) :
     IsSMulRegular Γ(M, U) f := by
   intro x y hxy
   have := M.isUnit_algebraMap_end_of_le_basicOpen _ hle
@@ -365,43 +232,60 @@ lemma isSMulRegular_of_le_basicOpen {f : R} (hle : U <= PrimeSpectrum.basicOpen 
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `restrictAppIso_smul_Spec` / 引理 `restrictAppIso_smul_Spec`
-
-English:
-lemma restrictAppIso_smul_Spec
-  statement: {S : CommRingCat.{u}} (f : R ⟶ S)
-  proof: by
-  rw [smul_Spec_def]; rw [smul_Spec_def]
-  simp_rw [smul_restrictAppIso_hom_apply, ← ConcreteCategory.comp_apply, Category.assoc]
-  have :
-      f ≫ (ΓSpecIso S).inv ≫ (Spec S).presheaf.map U.leTop.op ≫ (Hom.appIso (Spec.map f) U).inv =
-        (ΓSpecIso R).inv ≫ (Spec R).presheaf.map (Spec.map f ''ᵁ U).leTop.op := by
-    simp [Iso.cancel_iso_inv_left, Hom.app_eq_appLE]
-    rfl
-  rw [this]
-
-中文:
-引理 restrictAppIso_smul_Spec
-  结论: {S : 交换环范畴.{u}} (f : R ⟶ S)
-  证明: by
-  rw [smul_Spec_def]; rw [smul_Spec_def]
-  simp_rw [smul_restrictAppIso_hom_apply, ← ConcreteCategory.comp_apply, Category.assoc]
-  have :
-      f ≫ (ΓSpecIso S).inv ≫ (Spec S).presheaf.map U.leTop.op ≫ (Hom.appIso (Spec.map f) U).inv =
-        (ΓSpecIso R).inv ≫ (Spec R).presheaf.map (Spec.map f ''ᵁ U).leTop.op := by
-    simp [Iso.cancel_iso_inv_left, Hom.app_eq_appLE]
-    rfl
-  rw [this]
-
-Depends on / 依赖: Category, Category.assoc, ConcreteCategory, ConcreteCategory.comp_apply, Hom.appIso, Hom.app_eq_appLE, Iso.cancel_iso_inv_left, Spec.map, U.leTop.op, appIso, app_eq_appLE, cancel_iso_inv_left, comp_apply, leTop.op, presheaf, presheaf.map, simp_rw, smul_Spec_def, smul_restrictAppIso_hom_apply
+/-
+**AlgebraicGeometry.Scheme.Modules.restrictAppIso_smul_Spec** 是 Mathlib 中的一个引理，位
+于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：restrictAppIso_smul_Spec {S : CommRingCat.{u}} (f : R ⟶ S) [IsOpenImmersio
+n (Spec.map f)] {U : (Spec S).Opens} (r : R) (x : Γ(M.restrict (Spec.map f), U))
+ : dsimp% (M.restrictAppIso (Spec.map f) U).hom (f r • x) = r • (M.restrictAppIs
+o (Spec.map f) U).hom x
+参数：f : R ⟶ S；Spec.map f；Spec S；r : R；x : Γ(M.restrict (Spec.map f), U)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Modules.smul_Spec_def`：smul_Spec_def (r : R) (x
+ : Γ(M, U)) : r • x = ((Spec R).presheaf.map U.leTop.op) ((Scheme.ΓSpecIso R).in
+v r) • x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicGeometry.Scheme.Modules.smul_restrictAppIso_hom_apply`：∀ {X Y :
+ AlgebraicGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion
+ f] (M : Y.Modules)   (U : X.Opens) (r : ↑(X.preshea…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_mono`：image_mono {U V : X.Opens} (e :
+ U <= V) : f ''ᵁ U <= f ''ᵁ V
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.image_preimage_eq_opensRange_inf`：image_pre
+image_eq_opensRange_inf (U : Y.Opens) : f ''ᵁ f ⁻¹ᵁ U = f.opensRange ⊓ U
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appIso_inv_naturality`：appIso_inv_naturalit
+y {U V : X.Opens} (i : op U ⟶ op V) : X.presheaf.map i ≫ (f.appIso V).inv = (f.a
+ppIso U).inv ≫ Y.presheaf.map (f.opensFu…
+· 使用定理 `AlgebraicGeometry.Scheme.ΓSpecIso_inv_naturality_assoc`：∀ {R S : CommRin
+gCat} (f : R ⟶ S) {Z : CommRingCat} (h : (AlgebraicGeometry.Spec S).presheaf.obj
+ (Opposite.op ⊤) ⟶ Z),   CategoryTheory.Cate…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.app_eq_appLE`：app_eq_appLE {U : Y.Opens} : 
+f.app U = f.appLE U _ le_rfl
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appLE_appIso_inv_assoc`：∀ {X Y : AlgebraicG
+eometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmersion f] {U : Y.
+Opens} {V : X.Opens}   (e : V ≤ (Topologi…
 -/
 lemma restrictAppIso_smul_Spec {S : CommRingCat.{u}} (f : R ⟶ S)
     [IsOpenImmersion (Spec.map f)] {U : (Spec S).Opens} (r : R)
     (x : Γ(M.restrict (Spec.map f), U)) :
     dsimp% (M.restrictAppIso (Spec.map f) U).hom (f r • x) =
       r • (M.restrictAppIso (Spec.map f) U).hom x := by
-  rw [smul_Spec_def]; rw [smul_Spec_def]
+  rw [smul_Spec_def, smul_Spec_def]
   simp_rw [smul_restrictAppIso_hom_apply, ← ConcreteCategory.comp_apply, Category.assoc]
   have :
       f ≫ (ΓSpecIso S).inv ≫ (Spec S).presheaf.map U.leTop.op ≫ (Hom.appIso (Spec.map f) U).inv =
@@ -417,23 +301,16 @@ alias Scheme.Modules.restrictAppIso_smul_Spec := restrictAppIso_smul_Spec
 end Scheme.Modules
 
 /--
-Definition of `tilde` / `tilde` 的定义
+`M^~` as a sheaf of `𝒪_{Spec R}`-modules
+-/
+/-
+**AlgebraicGeometry.tilde** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：tilde : (Spec R).Modules where val
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tilde
-  signature: : (Spec R).Modules where
-  body: moduleStructurePresheaf R M
-  isSheaf := (TopCat.Presheaf.isSheaf_iff_isSheaf_comp (forget AddCommGrpCat) _).2
-    (structureSheafInType R M).2
-
-中文:
-定义 tilde
-  签名: : (Spec R).Modules where
-  定义体: moduleStructurePresheaf R M
-  isSheaf := (TopCat.Presheaf.isSheaf_iff_isSheaf_comp (forget AddCommGrpCat) _).2
-    (structureSheafInType R M).2
-
-Depends on / 依赖: moduleStructurePresheaf
+--- 原说明 ---
+`M^~` as a sheaf of `𝒪_{Spec R}`-modules
 -/
 def tilde : (Spec R).Modules where
   val := moduleStructurePresheaf R M
@@ -446,123 +323,113 @@ set_option backward.isDefEq.respectTransparency false in
 /-- (Implementation). The image of `tilde` under `modulesSpecToSheaf` is isomorphic to
 `structurePresheafInModuleCat`. They are defeq as types but the `Smul` instance are not defeq. -/
 noncomputable
-/--
-Definition of `modulesSpecToSheafIso` / `modulesSpecToSheafIso` 的定义
-
-English:
-definition modulesSpecToSheafIso
-  signature: :
-  body: NatIso.ofComponents (fun U => LinearEquiv.toModuleIso
-    (X₁ := (modulesSpecToSheaf.obj (tilde M)).presheaf.obj _)
-    { __ := AddEquiv.refl _,
-      map_smul' r m := IsScalarTower.algebraMap_smul (M := ((structureSheafInType R M).obj.obj U))
-        ((structureSheafInType R R).obj.obj U) r m }) fun _ => rfl
-
-中文:
-定义 modulesSpecToSheafIso
-  签名: :
-  定义体: NatIso.ofComponents (fun U => LinearEquiv.toModuleIso
-    (X₁ := (modulesSpecToSheaf.obj (tilde M)).presheaf.obj _)
-    { __ := AddEquiv.refl _,
-      map_smul' r m := IsScalarTower.algebraMap_smul (M := ((structureSheafInType R M).obj.obj U))
-        ((structureSheafInType R R).obj.obj U) r m }) fun _ => rfl
-
-Depends on / 依赖: AddEquiv, AddEquiv.refl, IsScalarTower, IsScalarTower.algebraMap_smul, LinearEquiv, LinearEquiv.toModuleIso, NatIso, NatIso.ofComponents, algebraMap_smul, map_smul, modulesSpecToSheaf, modulesSpecToSheaf.obj, obj.obj, ofComponents, presheaf, presheaf.obj, structureSheafInType, toModuleIso
+/-
+**AlgebraicGeometry.tilde.modulesSpecToSheafIso** 是 Mathlib 中的一个定义，位于命名空间 `Algeb
+raicGeometry.tilde`。
+形式化陈述：modulesSpecToSheafIso : (modulesSpecToSheaf.obj (tilde M)).1 ≅ structurePr
+esheafInModuleCat R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def modulesSpecToSheafIso :
     (modulesSpecToSheaf.obj (tilde M)).1 ≅ structurePresheafInModuleCat R M :=
-  NatIso.ofComponents (fun U => LinearEquiv.toModuleIso
+  NatIso.ofComponents (fun U ↦ LinearEquiv.toModuleIso
     (X₁ := (modulesSpecToSheaf.obj (tilde M)).presheaf.obj _)
     { __ := AddEquiv.refl _,
       map_smul' r m := IsScalarTower.algebraMap_smul (M := ((structureSheafInType R M).obj.obj U))
-        ((structureSheafInType R R).obj.obj U) r m }) fun _ => rfl
+        ((structureSheafInType R R).obj.obj U) r m }) fun _ ↦ rfl
 
-/--
-Definition of `toOpen` / `toOpen` 的定义
+/-- The map from `M` to `Γ(M, U)`. This is a localization map when `U = D(f)`. -/
+/-
+**AlgebraicGeometry.tilde.toOpen** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.ti
+lde`。
+形式化陈述：toOpen (U : (Spec R).Opens) : M ⟶ (modulesSpecToSheaf.obj (tilde M)).presh
+eaf.obj (.op U)
+参数：U : (Spec R).Opens。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOpen
-  signature: (U : (Spec R).Opens)
-  body: ModuleCat.ofHom (StructureSheaf.toOpenₗ R M U) ≫ ((modulesSpecToSheafIso M).app _).inv
-
-中文:
-定义 toOpen
-  签名: (U : (Spec R).Opens)
-  定义体: ModuleCat.ofHom (StructureSheaf.toOpenₗ R M U) ≫ ((modulesSpecToSheafIso M).app _).inv
-
-Depends on / 依赖: ModuleCat, ModuleCat.ofHom, StructureSheaf, StructureSheaf.toOpen, modulesSpecToSheafIso
+--- 原说明 ---
+The map from `M` to `Γ(M, U)`. This is a localization map when `U = D(f)`.
 -/
 def toOpen (U : (Spec R).Opens) : M ⟶ (modulesSpecToSheaf.obj (tilde M)).presheaf.obj (.op U) :=
   ModuleCat.ofHom (StructureSheaf.toOpenₗ R M U) ≫ ((modulesSpecToSheafIso M).app _).inv
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-theorem `toOpen_res` / 定理 `toOpen_res`
-
-English:
-theorem toOpen_res
-  given: (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U)
-  proof: rfl
-
-中文:
-定理 toOpen_res
-  条件: (U V : Opens (素谱.顶元素 R)) (i : V ⟶ U)
-  证明: rfl
+/-
+**AlgebraicGeometry.tilde.toOpen_res** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometr
+y.tilde`。
+形式化陈述：toOpen_res (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U) : toOpen M U ≫ 
+(modulesSpecToSheaf.obj (tilde M)).presheaf.map i.op = toOpen M V
+参数：U V : Opens (PrimeSpectrum.Top R)；i : V ⟶ U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toOpen_res (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U) :
     toOpen M U ≫ (modulesSpecToSheaf.obj (tilde M)).presheaf.map i.op = toOpen M V :=
   rfl
-
+/-
+**AlgebraicGeometry.tilde.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.tilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : R) : IsLocalizedModule.Away f (toOpen M (basicOpen f)).hom :=
   .of_linearEquiv (.powers f) (StructureSheaf.toOpenₗ R M (basicOpen f))
     ((modulesSpecToSheafIso M).app _).toLinearEquiv.symm
 
 noncomputable
+/-
+**AlgebraicGeometry.tilde.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.tilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) : Module R ((tilde M).presheaf.stalk x) :=
   inferInstanceAs (Module R ↑(TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x))
 
 /--
-Definition of `toStalk` / `toStalk` 的定义
+If `x` is a point of `Spec R`, this is the morphism of `R`-modules from `M` to the stalk of
+`M^~` at `x`.
+-/
+/-
+**AlgebraicGeometry.tilde.toStalk** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.t
+ilde`。
+形式化陈述：toStalk (x : PrimeSpectrum.Top R) : ModuleCat.of R M ⟶ ModuleCat.of R ((ti
+lde M).presheaf.stalk x)
+参数：x : PrimeSpectrum.Top R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGrpCat.hasColimitsOfSize`：∀ [UnivLE.{u, w}], CategoryTheory.Limit
+s.HasColimitsOfSize.{v, u, w, w + 1} AddCommGrpCat
 
-English:
-definition toStalk
-  signature: (x : PrimeSpectrum.Top R)
-  body: ModuleCat.ofHom (StructureSheaf.toStalkₗ ..)
-
-中文:
-定义 toStalk
-  签名: (x : 素谱.顶元素 R)
-  定义体: ModuleCat.ofHom (StructureSheaf.toStalkₗ ..)
-
-Depends on / 依赖: ModuleCat, ModuleCat.ofHom, StructureSheaf, StructureSheaf.toStalk
+--- 原说明 ---
+If `x` is a point of `Spec R`, this is the morphism of `R`-modules from `M` to t
+he stalk of
+`M^~` at `x`.
 -/
 noncomputable def toStalk (x : PrimeSpectrum.Top R) :
     ModuleCat.of R M ⟶ ModuleCat.of R ((tilde M).presheaf.stalk x) :=
   ModuleCat.ofHom (StructureSheaf.toStalkₗ ..)
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.tilde.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.tilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : PrimeSpectrum.Top R) :
     IsLocalizedModule x.asIdeal.primeCompl (toStalk M x).hom :=
   inferInstanceAs (IsLocalizedModule x.asIdeal.primeCompl (StructureSheaf.toStalkₗ ..))
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The tilde construction is functorial. -/
+/-
+**AlgebraicGeometry.tilde.map** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.tilde
+`。
+形式化陈述：{R : CommRingCat} → {M N : ModuleCat ↑R} → (M ⟶ N) → (AlgebraicGeometry.ti
+lde M ⟶ AlgebraicGeometry.tilde N)
+参数：M ⟶ N；AlgebraicGeometry.tilde M ⟶ AlgebraicGeometry.tilde N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def map {M N : ModuleCat R} (f : M ⟶ N)
-  body: SpecModulesToSheafFullyFaithful.preimage ⟨(modulesSpecToSheafIso M).hom ≫
-    { app U := ModuleCat.ofHom (StructureSheaf.comapₗ f.hom _ _ .rfl) } ≫
-    (modulesSpecToSheafIso N).inv⟩
-
-中文:
-定义 noncomputable
-  签名: def map {M N : 模范畴 R} (f : M ⟶ N)
-  定义体: SpecModulesToSheafFullyFaithful.preimage ⟨(modulesSpecToSheafIso M).hom ≫
-    { app U := ModuleCat.ofHom (StructureSheaf.comapₗ f.hom _ _ .rfl) } ≫
-    (modulesSpecToSheafIso N).inv⟩
+--- 原说明 ---
+The tilde construction is functorial.
 -/
 protected noncomputable def map {M N : ModuleCat R} (f : M ⟶ N) : tilde M ⟶ tilde N :=
   SpecModulesToSheafFullyFaithful.preimage ⟨(modulesSpecToSheafIso M).hom ≫
@@ -571,162 +438,175 @@ protected noncomputable def map {M N : ModuleCat R} (f : M ⟶ N) : tilde M ⟶ 
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp, reassoc]
-/--
-lemma `map_id` / 引理 `map_id`
-
-English:
-lemma map_id
-  given: {M : ModuleCat R}
-  statement: tilde.map (𝟙 M) = 𝟙 _
-  proof: by
-  ext p x
-  exact Subtype.ext (funext fun y => DFunLike.congr_fun (LocalizedModule.map_id _) _)
-
-中文:
-引理 map_id
-  条件: {M : 模范畴 R}
-  结论: tilde.map (𝟙 M) = 𝟙 _
-  证明: by
-  ext p x
-  exact Subtype.ext (funext fun y => DFunLike.congr_fun (LocalizedModule.map_id _) _)
+/-
+**AlgebraicGeometry.tilde.map_id** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.ti
+lde`。
+形式化陈述：∀ {R : CommRingCat} {M : ModuleCat ↑R},   AlgebraicGeometry.tilde.map (Cat
+egoryTheory.CategoryStruct.id M) =     CategoryTheory.CategoryStruct.id (Algebra
+icGeometry.tilde M)
+参数：CategoryTheory.CategoryStruct.id M；AlgebraicGeometry.tilde M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.Modules.hom_ext`：hom_ext (f g : M ⟶ N) (H : for
+all U, f.app U = g.app U) : f = g
+· 使用定理 `AddCommGrpCat.hom_ext`：∀ {X Y : AddCommGrpCat} {f g : X ⟶ Y}, AddCommGrp
+Cat.Hom.hom f = AddCommGrpCat.Hom.hom g → f = g
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `OreLocalization.instIsScalarTower_1`：∀ {R : Type u_1} {M : Type u_3} {X 
+: Type u_4} [inst : Monoid M] {S : Submonoid M} [inst_1 : OreLocalization.OreSet
+ S]   [inst_2 : MulAction…
+· 使用引理 `LocalizedModule.map_id`：LocalizedModule.map_id : LocalizedModule.map S (
+.id (R
 -/
 protected lemma map_id {M : ModuleCat R} : tilde.map (𝟙 M) = 𝟙 _ := by
   ext p x
-  exact Subtype.ext (funext fun y => DFunLike.congr_fun (LocalizedModule.map_id _) _)
+  exact Subtype.ext (funext fun y ↦ DFunLike.congr_fun (LocalizedModule.map_id _) _)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp, reassoc]
-/--
-lemma `map_comp` / 引理 `map_comp`
-
-English:
-lemma map_comp
-  given: {M N P : ModuleCat R} (f : M ⟶ N) (g : N ⟶ P)
-  proof: by
-  ext p x
-  exact Subtype.ext (funext
-    fun y => DFunLike.congr_fun (IsLocalizedModule.map_comp' y.1.asIdeal.primeCompl
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N)
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl P) _ _) _)
-
-中文:
-引理 map_comp
-  条件: {M N P : 模范畴 R} (f : M ⟶ N) (g : N ⟶ P)
-  证明: by
-  ext p x
-  exact Subtype.ext (funext
-    fun y => DFunLike.congr_fun (IsLocalizedModule.map_comp' y.1.asIdeal.primeCompl
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N)
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl P) _ _) _)
+/-
+**AlgebraicGeometry.tilde.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.
+tilde`。
+形式化陈述：∀ {R : CommRingCat} {M N P : ModuleCat ↑R} (f : M ⟶ N) (g : N ⟶ P),   Alge
+braicGeometry.tilde.map (CategoryTheory.CategoryStruct.comp f g) =     CategoryT
+heory.CategoryStruct.comp (AlgebraicGeometry.tilde.map f) (AlgebraicGeometry.til
+de.map g)
+参数：f : M ⟶ N；g : N ⟶ P；CategoryTheory.CategoryStruct.comp f g；AlgebraicGeometry.
+tilde.map f；AlgebraicGeometry.tilde.map g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.Modules.hom_ext`：hom_ext (f g : M ⟶ N) (H : for
+all U, f.app U = g.app U) : f = g
+· 使用定理 `AddCommGrpCat.hom_ext`：∀ {X Y : AddCommGrpCat} {f g : X ⟶ Y}, AddCommGrp
+Cat.Hom.hom f = AddCommGrpCat.Hom.hom g → f = g
+· 使用定理 `AddMonoidHom.ext`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M] [in
+st_1 : AddZero N] ⦃f g : M →+ N⦄, (∀ (x : M), f x = g x) → f = g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsLocalizedModule.map_comp'`：map_comp' (g : M₀ ->ₗ[R] M₁) (h : M₁ ->ₗ[R]
+ M₂) : map S f₀ f₂ (h ∘ₗ g) = map S f₁ f₂ h ∘ₗ map S f₀ f₁ g
 -/
 protected lemma map_comp {M N P : ModuleCat R} (f : M ⟶ N) (g : N ⟶ P) :
     tilde.map (f ≫ g) = tilde.map f ≫ tilde.map g := by
   ext p x
   exact Subtype.ext (funext
-    fun y => DFunLike.congr_fun (IsLocalizedModule.map_comp' y.1.asIdeal.primeCompl
+    fun y ↦ DFunLike.congr_fun (IsLocalizedModule.map_comp' y.1.asIdeal.primeCompl
       (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
       (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N)
       (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl P) _ _) _)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `toOpen_map_app` / 引理 `toOpen_map_app`
-
-English:
-lemma toOpen_map_app
-  statement: {M N : ModuleCat R} (f : M ⟶ N)
-  proof: by
-  ext x; exact Subtype.ext (funext fun y => IsLocalizedModule.map_apply y.1.asIdeal.primeCompl
-    (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
-     (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N) _ x)
-
-中文:
-引理 toOpen_map_app
-  结论: {M N : 模范畴 R} (f : M ⟶ N)
-  证明: by
-  ext x; exact Subtype.ext (funext fun y => IsLocalizedModule.map_apply y.1.asIdeal.primeCompl
-    (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
-     (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N) _ x)
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.map_apply, LocalizedModule, LocalizedModule.mkLinearMap, Subtype, Subtype.ext, asIdeal, asIdeal.primeCompl, map_apply, mkLinearMap, primeCompl
+/-
+**AlgebraicGeometry.tilde.toOpen_map_app** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeo
+metry.tilde`。
+形式化陈述：toOpen_map_app {M N : ModuleCat R} (f : M ⟶ N) (U : TopologicalSpace.Opens
+ (PrimeSpectrum R)) : toOpen M U ≫ (modulesSpecToSheaf.map (tilde.map f)).1.app 
+_ = f ≫ toOpen N U
+参数：f : M ⟶ N；U : TopologicalSpace.Opens (PrimeSpectrum R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `IsLocalizedModule.map_apply`：map_apply (h : M ->ₗ[R] N) (x) : map S f g 
+h (f x) = g (h x)
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 lemma toOpen_map_app {M N : ModuleCat R} (f : M ⟶ N)
     (U : TopologicalSpace.Opens (PrimeSpectrum R)) :
     toOpen M U ≫ (modulesSpecToSheaf.map (tilde.map f)).1.app _ =
     f ≫ toOpen N U := by
-  ext x; exact Subtype.ext (funext fun y => IsLocalizedModule.map_apply y.1.asIdeal.primeCompl
+  ext x; exact Subtype.ext (funext fun y ↦ IsLocalizedModule.map_apply y.1.asIdeal.primeCompl
     (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N) _ x)
 
 variable (R) in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Tilde as a functor -/
+/-
+**AlgebraicGeometry.tilde.functor** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.t
+ilde`。
+形式化陈述：(R : CommRingCat) → CategoryTheory.Functor (ModuleCat ↑R) (AlgebraicGeomet
+ry.Spec (CommRingCat.of ↑R)).Modules
+参数：CommRingCat.of ↑R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def functor
-  body: tilde
-  map := tilde.map
-
-中文:
-定义 noncomputable
-  签名: def functor
-  定义体: tilde
-  map := tilde.map
+--- 原说明 ---
+Tilde as a functor
 -/
 @[simps] protected noncomputable def functor : ModuleCat R ⥤ (Spec (.of R)).Modules where
   obj := tilde
   map := tilde.map
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isIso_toOpen_top` / 实例 `isIso_toOpen_top`
-
-English:
-instance isIso_toOpen_top
-  signature: {M : ModuleCat R}
-  body: by
-  rw [toOpen]; rw [isIso_comp_right_iff]; rw [ConcreteCategory.isIso_iff_bijective]
-  exact StructureSheaf.toOpenₗ_top_bijective
-
-中文:
-实例 isIso_toOpen_top
-  签名: {M : 模范畴 R}
-  定义体: by
-  rw [toOpen]; rw [isIso_comp_right_iff]; rw [ConcreteCategory.isIso_iff_bijective]
-  exact StructureSheaf.toOpenₗ_top_bijective
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.isIso_iff_bijective, StructureSheaf, StructureSheaf.toOpen, isIso_comp_right_iff, isIso_iff_bijective, toOpen
+/-
+**AlgebraicGeometry.tilde.isIso_toOpen_top** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicG
+eometry.tilde`。
+形式化陈述：isIso_toOpen_top {M : ModuleCat R} : IsIso (toOpen M ⊤)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.tilde.toOpen.eq_1`：∀ {R : CommRingCat} (M : ModuleCat 
+↑R) (U : (AlgebraicGeometry.Spec R).Opens),   AlgebraicGeometry.tilde.toOpen M U
+ =     CategoryTheory.Cat…
+· 使用定理 `CategoryTheory.isIso_comp_right_iff`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) (f : Y ⟶ X) [CategoryTheory.IsIso 
+f],   CategoryTheory.IsIs…
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.ConcreteCategory.isIso_iff_bijective`：isIso_iff_bijective
+ [(forget C).ReflectsIsomorphisms] {X Y : C} (f : X ⟶ Y) : IsIso f ↔ Function.Bi
+jective f
+· 使用定理 `ModuleCat.instReflectsIsomorphismsForgetLinearMapIdCarrier`：∀ {R : Type 
+u} [inst : Ring R], (CategoryTheory.forget (ModuleCat R)).ReflectsIsomorphisms
+· 使用定理 `AlgebraicGeometry.StructureSheaf.toOpenₗ_top_bijective`：∀ {R M : Type u}
+ [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   F
+unction.Bijective ⇑(AlgebraicGeometry.Struct…
 -/
 instance isIso_toOpen_top {M : ModuleCat R} : IsIso (toOpen M ⊤) := by
-  rw [toOpen]; rw [isIso_comp_right_iff]; rw [ConcreteCategory.isIso_iff_bijective]
+  rw [toOpen, isIso_comp_right_iff, ConcreteCategory.isIso_iff_bijective]
   exact StructureSheaf.toOpenₗ_top_bijective
 
 /-- The isomorphism between the global sections of `M^~` and `M`. -/
 @[simps! hom]
-/--
-Definition of `isoTop` / `isoTop` 的定义
+/-
+**AlgebraicGeometry.tilde.isoTop** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.ti
+lde`。
+形式化陈述：isoTop (M : ModuleCat R) : M ≅ (modulesSpecToSheaf.obj (tilde M)).presheaf
+.obj (.op ⊤)
+参数：M : ModuleCat R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoTop
-  signature: (M : ModuleCat R)
-  body: asIso (toOpen M ⊤)
-
-@[deprecated (since := "2026-05-30")]
-alias isUnit_algebraMap_end_basicOpen := Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen
-
-中文:
-定义 isoTop
-  签名: (M : 模范畴 R)
-  定义体: asIso (toOpen M ⊤)
-
-@[deprecated (since := "2026-05-30")]
-alias isUnit_algebraMap_end_basicOpen := Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen
-
-Depends on / 依赖: toOpen
+--- 原说明 ---
+The isomorphism between the global sections of `M^~` and `M`.
 -/
 noncomputable def isoTop (M : ModuleCat R) :
     M ≅ (modulesSpecToSheaf.obj (tilde M)).presheaf.obj (.op ⊤) :=
@@ -739,78 +619,14 @@ end tilde
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Scheme.Modules.fromTildeΓ` / `Scheme.Modules.fromTildeΓ` 的定义
+/-- This is the counit of the tilde-Gamma adjunction. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.fromTilde** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.Modules.fromTildeΓ
-  signature: (M : (Spec (.of R)).Modules)
-  body: SpecModulesToSheafFullyFaithful.preimage
-    ⟨TopCat.Sheaf.restrictHomEquivHom _ _ isBasis_basic_opens
-    { app (f : Rᵒᵖ) := by
-        refine (ModuleCat.ofHom (IsLocalizedModule.lift (.powers (M := R) f.unop)
-          (tilde.toOpen _ (PrimeSpectrum.basicOpen f.unop)).hom
-          ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom ?_):)
-        rw [Subtype.forall]
-        change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-        simp only [inducedFunctor_obj, Submonoid.powers_le, Submonoid.mem_comap]
-        exact M.isUnit_algebraMap_end_of_le_basicOpen f.unop le_rfl
-      naturality {f g : Rᵒᵖ} i := by
-        let N := (modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)
-        ext1
-        apply IsLocalizedModule.ext (.powers (M := R) f.unop)
-          (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) f.unop)).hom
-        · rw [Subtype.forall]
-          change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-          simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
-          obtain ⟨n, a, e⟩ : exists n, f.unop ∣ g.unop ^ n := by
-            simpa only [Ideal.mem_radical_iff, Ideal.mem_span_singleton] using
-              (basicOpen_le_basicOpen_iff _ _).mp (i.1.hom.le)
-          refine ((Commute.isUnit_mul_iff (b := algebraMap R _ a) (.map (.all _ _) _)).mp ?_).1
-          rw [← map_mul]; rw [← e]; rw [map_pow]
-          exact (M.isUnit_algebraMap_end_of_le_basicOpen g.unop le_rfl).pow n
-        · dsimp [← ModuleCat.hom_comp]
-          rw [tilde.toOpen_res_assoc]
-          ext x
-          dsimp
-          simp only [IsLocalizedModule.lift_apply, ← ModuleCat.comp_apply, ← Functor.map_comp]
-          rfl }⟩
-
-中文:
-定义 概形.Modules.fromTildeΓ
-  签名: (M : (Spec (.of R)).Modules)
-  定义体: SpecModulesToSheafFullyFaithful.preimage
-    ⟨TopCat.Sheaf.restrictHomEquivHom _ _ isBasis_basic_opens
-    { app (f : Rᵒᵖ) := by
-        refine (ModuleCat.ofHom (IsLocalizedModule.lift (.powers (M := R) f.unop)
-          (tilde.toOpen _ (PrimeSpectrum.basicOpen f.unop)).hom
-          ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom ?_):)
-        rw [Subtype.forall]
-        change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-        simp only [inducedFunctor_obj, Submonoid.powers_le, Submonoid.mem_comap]
-        exact M.isUnit_algebraMap_end_of_le_basicOpen f.unop le_rfl
-      naturality {f g : Rᵒᵖ} i := by
-        let N := (modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)
-        ext1
-        apply IsLocalizedModule.ext (.powers (M := R) f.unop)
-          (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) f.unop)).hom
-        · rw [Subtype.forall]
-          change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-          simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
-          obtain ⟨n, a, e⟩ : exists n, f.unop ∣ g.unop ^ n := by
-            simpa only [Ideal.mem_radical_iff, Ideal.mem_span_singleton] using
-              (basicOpen_le_basicOpen_iff _ _).mp (i.1.hom.le)
-          refine ((Commute.isUnit_mul_iff (b := algebraMap R _ a) (.map (.all _ _) _)).mp ?_).1
-          rw [← map_mul]; rw [← e]; rw [map_pow]
-          exact (M.isUnit_algebraMap_end_of_le_basicOpen g.unop le_rfl).pow n
-        · dsimp [← ModuleCat.hom_comp]
-          rw [tilde.toOpen_res_assoc]
-          ext x
-          dsimp
-          simp only [IsLocalizedModule.lift_apply, ← ModuleCat.comp_apply, ← Functor.map_comp]
-          rfl }⟩
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift, IsUnit, IsUnit.submonoid, M.isUnit_algebraMap_end_of_, ModuleCat, ModuleCat.ofHom, PrimeSpectrum, PrimeSpectrum.basicOpen, SpecModulesToSheafFullyFaithful, SpecModulesToSheafFullyFaithful.preimage, Submonoid, Submonoid.mem_comap, Submonoid.powers, Submonoid.powers_le, Subtype, Subtype.forall, TopCat, TopCat.Sheaf.restrictHomEquivHom, basicOpen
+--- 原说明 ---
+This is the counit of the tilde-Gamma adjunction.
 -/
 noncomputable def Scheme.Modules.fromTildeΓ (M : (Spec (.of R)).Modules) :
     tilde ((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)) ⟶ M :=
@@ -821,7 +637,7 @@ noncomputable def Scheme.Modules.fromTildeΓ (M : (Spec (.of R)).Modules) :
           (tilde.toOpen _ (PrimeSpectrum.basicOpen f.unop)).hom
           ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom ?_):)
         rw [Subtype.forall]
-        change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+        change Submonoid.powers _ ≤ (IsUnit.submonoid _).comap _
         simp only [inducedFunctor_obj, Submonoid.powers_le, Submonoid.mem_comap]
         exact M.isUnit_algebraMap_end_of_le_basicOpen f.unop le_rfl
       naturality {f g : Rᵒᵖ} i := by
@@ -830,13 +646,13 @@ noncomputable def Scheme.Modules.fromTildeΓ (M : (Spec (.of R)).Modules) :
         apply IsLocalizedModule.ext (.powers (M := R) f.unop)
           (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) f.unop)).hom
         · rw [Subtype.forall]
-          change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+          change Submonoid.powers _ ≤ (IsUnit.submonoid _).comap _
           simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
-          obtain ⟨n, a, e⟩ : exists n, f.unop ∣ g.unop ^ n := by
+          obtain ⟨n, a, e⟩ : ∃ n, f.unop ∣ g.unop ^ n := by
             simpa only [Ideal.mem_radical_iff, Ideal.mem_span_singleton] using
               (basicOpen_le_basicOpen_iff _ _).mp (i.1.hom.le)
           refine ((Commute.isUnit_mul_iff (b := algebraMap R _ a) (.map (.all _ _) _)).mp ?_).1
-          rw [← map_mul]; rw [← e]; rw [map_pow]
+          rw [← map_mul, ← e, map_pow]
           exact (M.isUnit_algebraMap_end_of_le_basicOpen g.unop le_rfl).pow n
         · dsimp [← ModuleCat.hom_comp]
           rw [tilde.toOpen_res_assoc]
@@ -847,42 +663,10 @@ noncomputable def Scheme.Modules.fromTildeΓ (M : (Spec (.of R)).Modules) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `Scheme.Modules.toOpen_fromTildeΓ_app` / 引理 `Scheme.Modules.toOpen_fromTildeΓ_app`
-
-English:
-lemma Scheme.Modules.toOpen_fromTildeΓ_app
-  given: (M : (Spec (.of R)).Modules) (U)
-  proof: by
-  wlog hU : U = PrimeSpectrum.basicOpen 1 generalizing U
-  · rw [← tilde.toOpen_res _ (PrimeSpectrum.basicOpen 1) _ (homOfLE (by simp)), Category.assoc,
-      NatTrans.naturality, ← Category.assoc, this, ← Functor.map_comp, ← op_comp, homOfLE_comp]
-    simp
-  subst hU
-  simp only [fromTildeΓ, inducedFunctor_obj, homOfLE_leOfHom, Functor.FullyFaithful.map_preimage,
-    TopCat.Sheaf.extend_hom_app]
-  ext x
-  refine (IsLocalizedModule.lift_apply (.powers (M := R) 1)
-    (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) 1)).hom
-    ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom (by simp) x)
-
-中文:
-引理 概形.Modules.toOpen_fromTildeΓ_app
-  条件: (M : (Spec (.of R)).Modules) (U)
-  证明: by
-  wlog hU : U = PrimeSpectrum.basicOpen 1 generalizing U
-  · rw [← tilde.toOpen_res _ (PrimeSpectrum.basicOpen 1) _ (homOfLE (by simp)), Category.assoc,
-      NatTrans.naturality, ← Category.assoc, this, ← Functor.map_comp, ← op_comp, homOfLE_comp]
-    simp
-  subst hU
-  simp only [fromTildeΓ, inducedFunctor_obj, homOfLE_leOfHom, Functor.FullyFaithful.map_preimage,
-    TopCat.Sheaf.extend_hom_app]
-  ext x
-  refine (IsLocalizedModule.lift_apply (.powers (M := R) 1)
-    (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) 1)).hom
-    ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom (by simp) x)
-
-Depends on / 依赖: Category, Category.assoc, FullyFaithful, Functor, Functor.FullyFaithful.map_preimage, Functor.map_comp, IsLocalizedModule, IsLocalizedModule.lift_apply, NatTrans, NatTrans.naturality, PrimeSpectrum, PrimeSpectrum.basicOpen, TopCat, TopCat.Sheaf.extend_hom_app, basicOpen, extend_hom_app, generalizing, homOfLE, homOfLE_comp, homOfLE_leOfHom
+/-
+**AlgebraicGeometry.Scheme.Modules.toOpen_fromTilde** 是 Mathlib 中的一个引理，位于命名空间 `A
+lgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Scheme.Modules.toOpen_fromTildeΓ_app (M : (Spec (.of R)).Modules) (U) :
     tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)) U ≫
@@ -902,58 +686,14 @@ lemma Scheme.Modules.toOpen_fromTildeΓ_app (M : (Spec (.of R)).Modules) (U) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Scheme.Modules.fromTildeΓNatTrans` / `Scheme.Modules.fromTildeΓNatTrans` 的定义
+/-- This is the counit of the tilde-Gamma adjunction. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.fromTilde** 是 Mathlib 中的一个定义，位于命名空间 `Algebrai
+cGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.Modules.fromTildeΓNatTrans
-  signature: :
-  body: fromTildeΓ
-  naturality {M N} f := by
-    apply SpecModulesToSheafFullyFaithful.map_injective
-    apply CategoryTheory.Sheaf.hom_ext
-    apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
-    ext r : 3
-    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
-      (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤))
-        (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
-    · rw [Subtype.forall]
-      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
-      exact N.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
-    dsimp [TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
-      moduleSpecΓFunctor, Sheaf.forget]
-    simp only [← ModuleCat.hom_comp, Functor.map_comp]
-    congr 1
-    erw [tilde.toOpen_map_app_assoc, toOpen_fromTildeΓ_app N (PrimeSpectrum.basicOpen r.unop),
-      toOpen_fromTildeΓ_app_assoc M (PrimeSpectrum.basicOpen r.unop),
-      ← (modulesSpecToSheaf.map f).hom.naturality]
-
-中文:
-定义 概形.Modules.fromTildeΓ自然数Trans
-  签名: :
-  定义体: fromTildeΓ
-  naturality {M N} f := by
-    apply SpecModulesToSheafFullyFaithful.map_injective
-    apply CategoryTheory.Sheaf.hom_ext
-    apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
-    ext r : 3
-    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
-      (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤))
-        (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
-    · rw [Subtype.forall]
-      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
-      exact N.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
-    dsimp [TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
-      moduleSpecΓFunctor, Sheaf.forget]
-    simp only [← ModuleCat.hom_comp, Functor.map_comp]
-    congr 1
-    erw [tilde.toOpen_map_app_assoc, toOpen_fromTildeΓ_app N (PrimeSpectrum.basicOpen r.unop),
-      toOpen_fromTildeΓ_app_assoc M (PrimeSpectrum.basicOpen r.unop),
-      ← (modulesSpecToSheaf.map f).hom.naturality]
-
-Depends on / 依赖: functor, tilde.functor
+--- 原说明 ---
+This is the counit of the tilde-Gamma adjunction.
 -/
 noncomputable def Scheme.Modules.fromTildeΓNatTrans :
     moduleSpecΓFunctor (R := R) ⋙ tilde.functor (R := R) ⟶ 𝟭 _ where
@@ -967,7 +707,7 @@ noncomputable def Scheme.Modules.fromTildeΓNatTrans :
       (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤))
         (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
     · rw [Subtype.forall]
-      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+      change Submonoid.powers _ ≤ (IsUnit.submonoid _).comap _
       simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
       exact N.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
     dsimp [TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
@@ -978,91 +718,32 @@ noncomputable def Scheme.Modules.fromTildeΓNatTrans :
       toOpen_fromTildeΓ_app_assoc M (PrimeSpectrum.basicOpen r.unop),
       ← (modulesSpecToSheaf.map f).hom.naturality]
 
-/--
-Definition of `tilde.toTildeΓNatIso` / `tilde.toTildeΓNatIso` 的定义
+/-- `tilde.isoTop` bundled as a natural isomorphism.
+This is the unit of the tilde-Gamma adjunction. -/
+/-
+**AlgebraicGeometry.tilde.toTilde** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tilde.toTildeΓNatIso
-  signature: : 𝟭 _ ≅ tilde.functor R ⋙ moduleSpecΓFunctor
-  body: NatIso.ofComponents tilde.isoTop fun f => (tilde.toOpen_map_app f _).symm
-
-中文:
-定义 tilde.toTildeΓ自然数Iso
-  签名: : 𝟭 _ ≅ tilde.functor R ⋙ moduleSpecΓFunctor
-  定义体: NatIso.ofComponents tilde.isoTop fun f => (tilde.toOpen_map_app f _).symm
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, isoTop, ofComponents, tilde.isoTop, tilde.toOpen_map_app, toOpen_map_app
+--- 原说明 ---
+`tilde.isoTop` bundled as a natural isomorphism.
+This is the unit of the tilde-Gamma adjunction.
 -/
 def tilde.toTildeΓNatIso : 𝟭 _ ≅ tilde.functor R ⋙ moduleSpecΓFunctor :=
-  NatIso.ofComponents tilde.isoTop fun f => (tilde.toOpen_map_app f _).symm
+  NatIso.ofComponents tilde.isoTop fun f ↦ (tilde.toOpen_map_app f _).symm
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 open Scheme.Modules in
-/--
-Definition of `tilde.adjunction` / `tilde.adjunction` 的定义
+/-- The tilde-Gamma adjunction. -/
+/-
+**AlgebraicGeometry.tilde.adjunction** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometr
+y.tilde`。
+形式化陈述：{R : CommRingCat} → AlgebraicGeometry.tilde.functor R ⊣ AlgebraicGeometry.
+moduleSpecΓFunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tilde.adjunction
-  signature: : tilde.functor R ⊣ moduleSpecΓFunctor where
-  body: toTildeΓNatIso.hom
-  counit := fromTildeΓNatTrans
-  left_triangle_components M := by
-    apply SpecModulesToSheafFullyFaithful.map_injective
-    apply CategoryTheory.Sheaf.hom_ext
-    apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
-    ext r : 3
-    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
-      (toOpen _ (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
-    · rw [Subtype.forall]
-      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
-      exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
-    dsimp [toTildeΓNatIso, isoTop,
-      TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
-      fromTildeΓNatTrans, moduleSpecΓFunctor, Sheaf.forget, sheafToPresheaf]
-    simp only [← ModuleCat.hom_comp, Functor.map_comp]
-    congr 1
-    rw [ObjectProperty.FullSubcategory.comp_hom]
-    dsimp
-    rw [toOpen_map_app_assoc]; rw [toOpen_fromTildeΓ_app]
-    rfl
-  right_triangle_components M := by
-    dsimp [toTildeΓNatIso, fromTildeΓNatTrans, tilde.isoTop, moduleSpecΓFunctor, Sheaf.forget]
-    rw [toOpen_fromTildeΓ_app]
-    exact (modulesSpecToSheaf.obj M).obj.map_id _
-
-中文:
-定义 tilde.adjunction
-  签名: : tilde.functor R ⊣ moduleSpecΓFunctor where
-  定义体: toTildeΓNatIso.hom
-  counit := fromTildeΓNatTrans
-  left_triangle_components M := by
-    apply SpecModulesToSheafFullyFaithful.map_injective
-    apply CategoryTheory.Sheaf.hom_ext
-    apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
-    ext r : 3
-    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
-      (toOpen _ (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
-    · rw [Subtype.forall]
-      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
-      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
-      exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
-    dsimp [toTildeΓNatIso, isoTop,
-      TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
-      fromTildeΓNatTrans, moduleSpecΓFunctor, Sheaf.forget, sheafToPresheaf]
-    simp only [← ModuleCat.hom_comp, Functor.map_comp]
-    congr 1
-    rw [ObjectProperty.FullSubcategory.comp_hom]
-    dsimp
-    rw [toOpen_map_app_assoc]; rw [toOpen_fromTildeΓ_app]
-    rfl
-  right_triangle_components M := by
-    dsimp [toTildeΓNatIso, fromTildeΓNatTrans, tilde.isoTop, moduleSpecΓFunctor, Sheaf.forget]
-    rw [toOpen_fromTildeΓ_app]
-    exact (modulesSpecToSheaf.obj M).obj.map_id _
-
-Depends on / 依赖: NatIso.hom
+--- 原说明 ---
+The tilde-Gamma adjunction.
 -/
 def tilde.adjunction : tilde.functor R ⊣ moduleSpecΓFunctor where
   unit := toTildeΓNatIso.hom
@@ -1075,7 +756,7 @@ def tilde.adjunction : tilde.functor R ⊣ moduleSpecΓFunctor where
     apply IsLocalizedModule.ext (.powers (M := R) r.unop)
       (toOpen _ (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
     · rw [Subtype.forall]
-      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+      change Submonoid.powers _ ≤ (IsUnit.submonoid _).comap _
       simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
       exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
     dsimp [toTildeΓNatIso, isoTop,
@@ -1085,7 +766,7 @@ def tilde.adjunction : tilde.functor R ⊣ moduleSpecΓFunctor where
     congr 1
     rw [ObjectProperty.FullSubcategory.comp_hom]
     dsimp
-    rw [toOpen_map_app_assoc]; rw [toOpen_fromTildeΓ_app]
+    rw [toOpen_map_app_assoc, toOpen_fromTildeΓ_app]
     rfl
   right_triangle_components M := by
     dsimp [toTildeΓNatIso, fromTildeΓNatTrans, tilde.isoTop, moduleSpecΓFunctor, Sheaf.forget]
@@ -1093,108 +774,50 @@ def tilde.adjunction : tilde.functor R ⊣ moduleSpecΓFunctor where
     exact (modulesSpecToSheaf.obj M).obj.map_id _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (tilde.adjunction (R := R)).unit
-  body: by
-  dsimp [tilde.adjunction]; infer_instance
-
-中文:
-实例 :
-  签名: 是同构 (tilde.adjunction (R := R)).unit
-  定义体: by
-  dsimp [tilde.adjunction]; infer_instance
-
-Depends on / 依赖: adjunction, infer_instance, tilde.adjunction
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (tilde.adjunction (R := R)).unit := by
   dsimp [tilde.adjunction]; infer_instance
 
-/--
-Definition of `tilde.fullyFaithfulFunctor` / `tilde.fullyFaithfulFunctor` 的定义
+/-- The tilde functor is fully faithful. We will later show that the essential image is
+exactly quasi-coherent modules. -/
+/-
+**AlgebraicGeometry.tilde.fullyFaithfulFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.tilde`。
+形式化陈述：{R : CommRingCat} → (AlgebraicGeometry.tilde.functor R).FullyFaithful
+参数：AlgebraicGeometry.tilde.functor R。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.instIsIsoFunctorModuleCatCarrierUnitModulesSpecOfAdjun
+ction`：∀ {R : CommRingCat}, CategoryTheory.IsIso AlgebraicGeometry.tilde.adjunct
+ion.unit
 
-English:
-definition tilde.fullyFaithfulFunctor
-  signature: : (tilde.functor R).FullyFaithful
-  body: tilde.adjunction.fullyFaithfulLOfIsIsoUnit
-
-中文:
-定义 tilde.fullyFaithfulFunctor
-  签名: : (tilde.functor R).满忠实
-  定义体: tilde.adjunction.fullyFaithfulLOfIsIsoUnit
-
-Depends on / 依赖: adjunction, fullyFaithfulLOfIsIsoUnit, tilde.adjunction.fullyFaithfulLOfIsIsoUnit
+--- 原说明 ---
+The tilde functor is fully faithful. We will later show that the essential image
+ is
+exactly quasi-coherent modules.
 -/
 def tilde.fullyFaithfulFunctor : (tilde.functor R).FullyFaithful :=
   tilde.adjunction.fullyFaithfulLOfIsIsoUnit
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (tilde.functor R).Full
-  body: tilde.fullyFaithfulFunctor.full
-
-中文:
-实例 :
-  签名: (tilde.functor R).满
-  定义体: tilde.fullyFaithfulFunctor.full
-
-Depends on / 依赖: fullyFaithfulFunctor, tilde.fullyFaithfulFunctor.full
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (tilde.functor R).Full := tilde.fullyFaithfulFunctor.full
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (tilde.functor R).Faithful
-  body: tilde.fullyFaithfulFunctor.faithful
-
-中文:
-实例 :
-  签名: (tilde.functor R).忠实
-  定义体: tilde.fullyFaithfulFunctor.faithful
-
-Depends on / 依赖: faithful, fullyFaithfulFunctor, tilde.fullyFaithfulFunctor.faithful
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (tilde.functor R).Faithful := tilde.fullyFaithfulFunctor.faithful
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (tilde.functor R).IsLeftAdjoint
-  body: tilde.adjunction.isLeftAdjoint
-
-中文:
-实例 :
-  签名: (tilde.functor R).是左伴随
-  定义体: tilde.adjunction.isLeftAdjoint
-
-Depends on / 依赖: adjunction, isLeftAdjoint, tilde.adjunction.isLeftAdjoint
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (tilde.functor R).IsLeftAdjoint := tilde.adjunction.isLeftAdjoint
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (tilde.functor R).Additive
-  body: have := Limits.preservesBinaryBiproducts_of_preservesBinaryCoproducts (tilde.functor R)
-  Functor.additive_of_preservesBinaryBiproducts _
-
-中文:
-实例 :
-  签名: (tilde.functor R).加性
-  定义体: have := Limits.preservesBinaryBiproducts_of_preservesBinaryCoproducts (tilde.functor R)
-  Functor.additive_of_preservesBinaryBiproducts _
-
-Depends on / 依赖: Functor, Functor.additive_of_preservesBinaryBiproducts, Limits, Limits.preservesBinaryBiproducts_of_preservesBinaryCoproducts, additive_of_preservesBinaryBiproducts, functor, preservesBinaryBiproducts_of_preservesBinaryCoproducts, tilde.functor
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (tilde.functor R).Additive :=
   have := Limits.preservesBinaryBiproducts_of_preservesBinaryCoproducts (tilde.functor R)
@@ -1204,69 +827,70 @@ section
 
 variable {M N : ModuleCat R} (f g : M ⟶ N)
 
-/--
-lemma `tilde.map_zero` / 引理 `tilde.map_zero`
-
-English:
-lemma tilde.map_zero
-  statement: tilde.map (0 : M ⟶ N) = 0
-  proof: (tilde.functor R).map_zero _ _
-
-中文:
-引理 tilde.map_zero
-  结论: tilde.map (0 : M ⟶ N) = 0
-  证明: (tilde.functor R).map_zero _ _
+/-
+**AlgebraicGeometry.tilde.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.
+tilde`。
+形式化陈述：∀ {R : CommRingCat} {M N : ModuleCat ↑R}, AlgebraicGeometry.tilde.map 0 = 
+0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_zero`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   [inst_2 : Category…
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `AlgebraicGeometry.instAdditiveModuleCatCarrierModulesSpecOfFunctor`：∀ {R
+ : CommRingCat}, (AlgebraicGeometry.tilde.functor R).Additive
 -/
 @[simp] lemma tilde.map_zero : tilde.map (0 : M ⟶ N) = 0 :=
   (tilde.functor R).map_zero _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `tilde.map_add` / 引理 `tilde.map_add`
-
-English:
-lemma tilde.map_add
-  statement: tilde.map (f + g) = tilde.map f + tilde.map g
-  proof: (tilde.functor R).map_add
-
-中文:
-引理 tilde.map_add
-  结论: tilde.map (f + g) = tilde.map f + tilde.map g
-  证明: (tilde.functor R).map_add
+/-
+**AlgebraicGeometry.tilde.map_add** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.t
+ilde`。
+形式化陈述：∀ {R : CommRingCat} {M N : ModuleCat ↑R} (f g : M ⟶ N),   AlgebraicGeometr
+y.tilde.map (f + g) = AlgebraicGeometry.tilde.map f + AlgebraicGeometry.tilde.ma
+p g
+参数：f g : M ⟶ N；f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_add`：map_add {X Y : C} {f g : X ⟶ Y} : F.map 
+(f + g) = F.map f + F.map g
+· 使用定理 `AlgebraicGeometry.instAdditiveModuleCatCarrierModulesSpecOfFunctor`：∀ {R
+ : CommRingCat}, (AlgebraicGeometry.tilde.functor R).Additive
 -/
 @[simp] lemma tilde.map_add : tilde.map (f + g) = tilde.map f + tilde.map g :=
   (tilde.functor R).map_add
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `tilde.map_sub` / 引理 `tilde.map_sub`
-
-English:
-lemma tilde.map_sub
-  statement: tilde.map (f - g) = tilde.map f - tilde.map g
-  proof: (tilde.functor R).map_sub
-
-中文:
-引理 tilde.map_sub
-  结论: tilde.map (f - g) = tilde.map f - tilde.map g
-  证明: (tilde.functor R).map_sub
+/-
+**AlgebraicGeometry.tilde.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.t
+ilde`。
+形式化陈述：∀ {R : CommRingCat} {M N : ModuleCat ↑R} (f g : M ⟶ N),   AlgebraicGeometr
+y.tilde.map (f - g) = AlgebraicGeometry.tilde.map f - AlgebraicGeometry.tilde.ma
+p g
+参数：f g : M ⟶ N；f - g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_sub`：map_sub {X Y : C} {f g : X ⟶ Y} : F.map 
+(f - g) = F.map f - F.map g
+· 使用定理 `AlgebraicGeometry.instAdditiveModuleCatCarrierModulesSpecOfFunctor`：∀ {R
+ : CommRingCat}, (AlgebraicGeometry.tilde.functor R).Additive
 -/
 @[simp] lemma tilde.map_sub : tilde.map (f - g) = tilde.map f - tilde.map g :=
   (tilde.functor R).map_sub
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `tilde.map_neg` / 引理 `tilde.map_neg`
-
-English:
-lemma tilde.map_neg
-  statement: tilde.map (-f) = - tilde.map f
-  proof: (tilde.functor R).map_neg
-
-中文:
-引理 tilde.map_neg
-  结论: tilde.map (-f) = - tilde.map f
-  证明: (tilde.functor R).map_neg
+/-
+**AlgebraicGeometry.tilde.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.t
+ilde`。
+形式化陈述：∀ {R : CommRingCat} {M N : ModuleCat ↑R} (f : M ⟶ N), AlgebraicGeometry.ti
+lde.map (-f) = -AlgebraicGeometry.tilde.map f
+参数：f : M ⟶ N；-f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_neg`：map_neg {X Y : C} {f : X ⟶ Y} : F.map (-
+f) = -F.map f
+· 使用定理 `AlgebraicGeometry.instAdditiveModuleCatCarrierModulesSpecOfFunctor`：∀ {R
+ : CommRingCat}, (AlgebraicGeometry.tilde.functor R).Additive
 -/
 @[simp] lemma tilde.map_neg : tilde.map (-f) = - tilde.map f :=
   (tilde.functor R).map_neg
@@ -1274,20 +898,10 @@ lemma tilde.map_neg
 end
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `isIso_fromTildeΓ_iff` / 引理 `isIso_fromTildeΓ_iff`
-
-English:
-lemma isIso_fromTildeΓ_iff
-  given: {M : (Spec R).Modules}
-  proof: tilde.adjunction.isIso_counit_app_iff_mem_essImage
-
-中文:
-引理 isIso_fromTildeΓ_iff
-  条件: {M : (Spec R).Modules}
-  证明: tilde.adjunction.isIso_counit_app_iff_mem_essImage
-
-Depends on / 依赖: adjunction, isIso_counit_app_iff_mem_essImage, tilde.adjunction.isIso_counit_app_iff_mem_essImage
+/-
+**AlgebraicGeometry.isIso_fromTilde** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_fromTildeΓ_iff {M : (Spec R).Modules} :
     IsIso M.fromTildeΓ ↔ (tilde.functor R).essImage M :=
@@ -1299,77 +913,43 @@ open Limits
 
 /-- Tilde of `R` as an `R`-module is isomorphic to the structure sheaf `𝒪_{Spec R}`. -/
 noncomputable
-/--
-Definition of `tildeSelf` / `tildeSelf` 的定义
-
-English:
-definition tildeSelf
-  signature: : tilde (ModuleCat.of R R) ≅ SheafOfModules.unit.{u} _
-  body: .refl _
-
-中文:
-定义 tildeSelf
-  签名: : tilde (模范畴.of R R) ≅ 模层.unit.{u} _
-  定义体: .refl _
+/-
+**AlgebraicGeometry.tildeSelf** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：tildeSelf : tilde (ModuleCat.of R R) ≅ SheafOfModules.unit.{u} _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def tildeSelf : tilde (ModuleCat.of R R) ≅ SheafOfModules.unit.{u} _ := .refl _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (Scheme.Modules.fromTildeΓ (SheafOfModules.unit.{u} (Spec R).ringCatSheaf))
-  body: isIso_fromTildeΓ_iff.mpr ⟨_, ⟨tildeSelf⟩⟩
-
-中文:
-实例 :
-  签名: 是同构 (概形.Modules.fromTildeΓ (模层.unit.{u} (Spec R).ringCatSheaf))
-  定义体: isIso_fromTildeΓ_iff.mpr ⟨_, ⟨tildeSelf⟩⟩
-
-Depends on / 依赖: _iff.mpr, tildeSelf
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (Scheme.Modules.fromTildeΓ (SheafOfModules.unit.{u} (Spec R).ringCatSheaf)) :=
   isIso_fromTildeΓ_iff.mpr ⟨_, ⟨tildeSelf⟩⟩
 
 /-- Tilde of direct sums of `R` as an `R`-module is isomorphic to the free sheaf. -/
 noncomputable
-/--
-Definition of `tildeFinsupp` / `tildeFinsupp` 的定义
-
-English:
-definition tildeFinsupp
-  signature: (ι : Type u)
-  body: letI H : IsColimit (tilde.functor R).mapCocone (ModuleCat.finsuppCocone R R ι) :=
-    isColimitOfPreserves (tilde.functor R) (ModuleCat.finsuppCoconeIsColimit R R ι)
-  letI iso : (Discrete.functor fun (_ : ι) => ModuleCat.of R R) ⋙ tilde.functor R ≅
-         Discrete.functor fun _ => SheafOfModules.unit.{u} _ :=
-      Discrete.natIso (fun _ => tildeSelf)
-  IsColimit.coconePointUniqueUpToIso
-    ((IsColimit.precomposeHomEquiv iso.symm _).symm H) (coproductIsCoproduct _)
-
-中文:
-定义 tildeFinsupp
-  签名: (ι : 类型u)
-  定义体: letI H : IsColimit (tilde.functor R).mapCocone (ModuleCat.finsuppCocone R R ι) :=
-    isColimitOfPreserves (tilde.functor R) (ModuleCat.finsuppCoconeIsColimit R R ι)
-  letI iso : (Discrete.functor fun (_ : ι) => ModuleCat.of R R) ⋙ tilde.functor R ≅
-         Discrete.functor fun _ => SheafOfModules.unit.{u} _ :=
-      Discrete.natIso (fun _ => tildeSelf)
-  IsColimit.coconePointUniqueUpToIso
-    ((IsColimit.precomposeHomEquiv iso.symm _).symm H) (coproductIsCoproduct _)
-
-Depends on / 依赖: Discrete, Discrete.functor, Discrete.natIso, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.precomposeHomEquiv, ModuleCat, ModuleCat.finsuppCocone, ModuleCat.finsuppCoconeIsColimit, ModuleCat.of, SheafOfModules, SheafOfModules.unit, coconePointUniqueUpToIso, coproductIsCoproduct, finsuppCocone, finsuppCoconeIsColimit, functor, isColimitOfPreserves, iso.symm, mapCocone
+/-
+**AlgebraicGeometry.tildeFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：tildeFinsupp (ι : Type u) : tilde (ModuleCat.of R (ι ->₀ R)) ≅ SheafOfModu
+les.free.{u} ι
+参数：ι : Type u。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-def tildeFinsupp (ι : Type u) : tilde (ModuleCat.of R (ι ->₀ R)) ≅ SheafOfModules.free.{u} ι :=
-letI H : IsColimit (tilde.functor R).mapCocone (ModuleCat.finsuppCocone R R ι) :=
+def tildeFinsupp (ι : Type u) : tilde (ModuleCat.of R (ι →₀ R)) ≅ SheafOfModules.free.{u} ι :=
+  letI H : IsColimit <| (tilde.functor R).mapCocone (ModuleCat.finsuppCocone R R ι) :=
     isColimitOfPreserves (tilde.functor R) (ModuleCat.finsuppCoconeIsColimit R R ι)
-  letI iso : (Discrete.functor fun (_ : ι) => ModuleCat.of R R) ⋙ tilde.functor R ≅
-         Discrete.functor fun _ => SheafOfModules.unit.{u} _ :=
-      Discrete.natIso (fun _ => tildeSelf)
+  letI iso : (Discrete.functor fun (_ : ι) ↦ ModuleCat.of R R) ⋙ tilde.functor R ≅
+         Discrete.functor fun _ ↦ SheafOfModules.unit.{u} _ :=
+      Discrete.natIso (fun _ ↦ tildeSelf)
   IsColimit.coconePointUniqueUpToIso
     ((IsColimit.precomposeHomEquiv iso.symm _).symm H) (coproductIsCoproduct _)
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (ι : Type u) :
     IsIso (Scheme.Modules.fromTildeΓ (R := R) (SheafOfModules.free.{u} ι)) :=
   isIso_fromTildeΓ_iff.mpr ⟨_, ⟨tildeFinsupp _⟩⟩
@@ -1377,56 +957,20 @@ instance (ι : Type u) :
 set_option backward.isDefEq.respectTransparency false in
 /-- Given a presentation of a module `M`, we may construct an associated presentation of `M^~`. -/
 noncomputable
-/--
-Definition of `presentationTilde` / `presentationTilde` 的定义
-
-English:
-definition presentationTilde
-  signature: (s : Set M) (hs : Submodule.span R s = ⊤)
-  body: by
-  haveI H₁ : Function.Exact
-      (ModuleCat.ofHom (Finsupp.linearCombination (α := t) R (↑)))
-      (ModuleCat.ofHom (Finsupp.linearCombination (α := s) (M := M) R (↑))) :=
-    (LinearMap.exact_iff.mpr (by simp [Finsupp.range_linearCombination, ht]))
-  refine SheafOfModules.presentationOfIsCokernelFree.{u}
-      ((tildeFinsupp t).inv ≫ tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑))) ≫
-        (tildeFinsupp s).hom) ((tildeFinsupp s).inv ≫
-          tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑)))) (by
-    simp only [Category.assoc, Iso.hom_inv_id_assoc, Preadditive.IsIso.comp_left_eq_zero]
-    rw [← tilde.map_comp]; rw [← ModuleCat.ofHom_comp]
-    convert! tilde.map_zero
-    exact congr(ModuleCat.ofHom $(H₁.linearMap_comp_eq_zero))) ?_
-  letI h₁ := ModuleCat.isColimitCokernelCofork _ _ H₁
-    (by simp [← LinearMap.range_eq_top, Finsupp.range_linearCombination, hs])
-  refine IsCokernel.ofIso _ (CokernelCofork.mapIsColimit _ h₁ (tilde.functor R)) _ (tildeFinsupp t)
-    (tildeFinsupp s) (.refl _) (by simp) (by simp)
-
-中文:
-定义 presentationTilde
-  签名: (s : 集合 M) (hs : 子模.span R s = ⊤)
-  定义体: by
-  haveI H₁ : Function.Exact
-      (ModuleCat.ofHom (Finsupp.linearCombination (α := t) R (↑)))
-      (ModuleCat.ofHom (Finsupp.linearCombination (α := s) (M := M) R (↑))) :=
-    (LinearMap.exact_iff.mpr (by simp [Finsupp.range_linearCombination, ht]))
-  refine SheafOfModules.presentationOfIsCokernelFree.{u}
-      ((tildeFinsupp t).inv ≫ tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑))) ≫
-        (tildeFinsupp s).hom) ((tildeFinsupp s).inv ≫
-          tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑)))) (by
-    simp only [Category.assoc, Iso.hom_inv_id_assoc, Preadditive.IsIso.comp_left_eq_zero]
-    rw [← tilde.map_comp]; rw [← ModuleCat.ofHom_comp]
-    convert! tilde.map_zero
-    exact congr(ModuleCat.ofHom $(H₁.linearMap_comp_eq_zero))) ?_
-  letI h₁ := ModuleCat.isColimitCokernelCofork _ _ H₁
-    (by simp [← LinearMap.range_eq_top, Finsupp.range_linearCombination, hs])
-  refine IsCokernel.ofIso _ (CokernelCofork.mapIsColimit _ h₁ (tilde.functor R)) _ (tildeFinsupp t)
-    (tildeFinsupp s) (.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.range_linearCombination, Function, Function.Exact, LinearMap, LinearMap.exact_iff.mpr, ModuleCat, ModuleCat.ofHom, SheafOfModules, SheafOfModules.presentationOfIsCokernelFree, exact_iff, linearCombination, presentationOfIsCokernelFree, range_linearCombination, tilde.map, tildeFinsupp
+/-
+**AlgebraicGeometry.presentationTilde** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeomet
+ry`。
+形式化陈述：presentationTilde (s : Set M) (hs : Submodule.span R s = ⊤) (t : Set (s ->
+₀ R)) (ht : Submodule.span R t = LinearMap.ker (Finsupp.linearCombination R ((↑)
+ : s -> M))) : (tilde M).Presentation
+参数：s : Set M；hs : Submodule.span R s = ⊤；t : Set (s ->₀ R)；ht : Submodule.span R
+ t = LinearMap.ker (Finsupp.linearCombination R ((↑) : s -> M))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def presentationTilde (s : Set M) (hs : Submodule.span R s = ⊤)
-    (t : Set (s ->₀ R))
-    (ht : Submodule.span R t = LinearMap.ker (Finsupp.linearCombination R ((↑) : s -> M))) :
+    (t : Set (s →₀ R))
+    (ht : Submodule.span R t = LinearMap.ker (Finsupp.linearCombination R ((↑) : s → M))) :
     (tilde M).Presentation := by
   haveI H₁ : Function.Exact
       (ModuleCat.ofHom (Finsupp.linearCombination (α := t) R (↑)))
@@ -1437,88 +981,36 @@ def presentationTilde (s : Set M) (hs : Submodule.span R s = ⊤)
         (tildeFinsupp s).hom) ((tildeFinsupp s).inv ≫
           tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑)))) (by
     simp only [Category.assoc, Iso.hom_inv_id_assoc, Preadditive.IsIso.comp_left_eq_zero]
-    rw [← tilde.map_comp]; rw [← ModuleCat.ofHom_comp]
+    rw [← tilde.map_comp, ← ModuleCat.ofHom_comp]
     convert! tilde.map_zero
     exact congr(ModuleCat.ofHom $(H₁.linearMap_comp_eq_zero))) ?_
   letI h₁ := ModuleCat.isColimitCokernelCofork _ _ H₁
     (by simp [← LinearMap.range_eq_top, Finsupp.range_linearCombination, hs])
   refine IsCokernel.ofIso _ (CokernelCofork.mapIsColimit _ h₁ (tilde.functor R)) _ (tildeFinsupp t)
     (tildeFinsupp s) (.refl _) (by simp) (by simp)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (tilde M).IsQuasicoherent
-  body: (presentationTilde.{u} _ .univ (by simp) _ (Submodule.span_eq _)).isQuasicoherent
-
-中文:
-实例 :
-  签名: (tilde M).是Quasicoherent
-  定义体: (presentationTilde.{u} _ .univ (by simp) _ (Submodule.span_eq _)).isQuasicoherent
-
-Depends on / 依赖: Submodule, Submodule.span_eq, isQuasicoherent, presentationTilde, span_eq
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (tilde M).IsQuasicoherent :=
   (presentationTilde.{u} _ .univ (by simp) _ (Submodule.span_eq _)).isQuasicoherent
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ((tilde.functor R).obj M).IsQuasicoherent
-  body: inferInstanceAs (tilde M).IsQuasicoherent
-
-中文:
-实例 :
-  签名: ((tilde.functor R).obj M).是Quasicoherent
-  定义体: inferInstanceAs (tilde M).IsQuasicoherent
-
-Depends on / 依赖: IsQuasicoherent
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ((tilde.functor R).obj M).IsQuasicoherent :=
-inferInstanceAs (tilde M).IsQuasicoherent
+  inferInstanceAs <| (tilde M).IsQuasicoherent
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isIso_fromTildeΓ_of_presentation` / 引理 `isIso_fromTildeΓ_of_presentation`
-
-English:
-lemma isIso_fromTildeΓ_of_presentation
-  given: (M : (Spec R).Modules) (P : M.Presentation)
-  proof: by
-  rw [isIso_fromTildeΓ_iff]
-let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ kernel.ι _ ≫
-    (tildeFinsupp _).inv
-  let iso : cokernel ((tilde.functor R).map g) ≅ cokernel (P.relations.π ≫ kernel.ι _) := by
-    refine cokernel.mapIso _ _ (tildeFinsupp _) (tildeFinsupp _) ?_
-    simp only [g, (tilde.functor R).map_preimage]
-    simp
-  exact ⟨cokernel g, ⟨PreservesCokernel.iso (tilde.functor R) g ≪≫ iso ≪≫
-    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) P.isColimit⟩⟩
-
-中文:
-引理 isIso_fromTildeΓ_of_presentation
-  条件: (M : (Spec R).Modules) (P : M.呈现)
-  证明: by
-  rw [isIso_fromTildeΓ_iff]
-let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ kernel.ι _ ≫
-    (tildeFinsupp _).inv
-  let iso : cokernel ((tilde.functor R).map g) ≅ cokernel (P.relations.π ≫ kernel.ι _) := by
-    refine cokernel.mapIso _ _ (tildeFinsupp _) (tildeFinsupp _) ?_
-    simp only [g, (tilde.functor R).map_preimage]
-    simp
-  exact ⟨cokernel g, ⟨PreservesCokernel.iso (tilde.functor R) g ≪≫ iso ≪≫
-    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) P.isColimit⟩⟩
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, P.isColimit, P.relations, PreservesCokernel, PreservesCokernel.iso, coconePointUniqueUpToIso, cokernel, cokernel.mapIso, colimit, colimit.isColimit, functor, isColimit, kernel, mapIso, map_preimage, preimage, relations, tilde.functor, tildeFinsupp
+/-
+**AlgebraicGeometry.isIso_fromTilde** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isIso_fromTildeΓ_of_presentation (M : (Spec R).Modules) (P : M.Presentation) :
     IsIso M.fromTildeΓ := by
   rw [isIso_fromTildeΓ_iff]
-let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ kernel.ι _ ≫
+  let g := (tilde.functor _).preimage <| (tildeFinsupp _).hom ≫ P.relations.π ≫ kernel.ι _ ≫
     (tildeFinsupp _).inv
   let iso : cokernel ((tilde.functor R).map g) ≅ cokernel (P.relations.π ≫ kernel.ι _) := by
     refine cokernel.mapIso _ _ (tildeFinsupp _) (tildeFinsupp _) ?_
@@ -1533,97 +1025,105 @@ variable (M : (Spec R).Modules) (f : R) {S : CommRingCat.{u}} (φ : R ⟶ S)
 
 open TopologicalSpace
 
-/--
-Definition of `IsLocalizing` / `IsLocalizing` 的定义
+/-- A sheaf `M` of `R-modules` is localizing if for all `f` in `R`, the restriction map
+from `M(⊤)` to `M(D(f))` is localization with respect to `f`. -/
+/-
+**AlgebraicGeometry.IsLocalizing** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicGeometry`
+。
+形式化陈述：IsLocalizing (M : TopCat.Sheaf (ModuleCat R) (Spec R)) : Prop
+参数：M : TopCat.Sheaf (ModuleCat R) (Spec R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsLocalizing
-  signature: (M : TopCat.Sheaf (ModuleCat R) (Spec R))
-  body: forall f : R, IsLocalizedModule (.powers f) (M.obj.map (basicOpen f).leTop.op).hom
-
-中文:
-缩写 IsLocalizing
-  签名: (M : 顶元素范畴.层 (模范畴 R) (Spec R))
-  定义体: forall f : R, IsLocalizedModule (.powers f) (M.obj.map (basicOpen f).leTop.op).hom
-
-Depends on / 依赖: IsLocalizedModule, M.obj.map, basicOpen, leTop.op, powers
+--- 原说明 ---
+A sheaf `M` of `R-modules` is localizing if for all `f` in `R`, the restriction 
+map
+from `M(⊤)` to `M(D(f))` is localization with respect to `f`.
 -/
 abbrev IsLocalizing (M : TopCat.Sheaf (ModuleCat R) (Spec R)) : Prop :=
-  forall f : R, IsLocalizedModule (.powers f) (M.obj.map (basicOpen f).leTop.op).hom
+  ∀ f : R, IsLocalizedModule (.powers f) (M.obj.map (basicOpen f).leTop.op).hom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `isLocalizing_of_iso` / 定理 `isLocalizing_of_iso`
-
-English:
-theorem isLocalizing_of_iso
-  statement: {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N)
-  proof: by
-  intro f
-  rw [← IsLocalizedModule.comp_iff_of_bijective_left _ _ <|
-    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f)))]; rw [← ModuleCat.hom_comp]; rw [φ.inv.hom.naturality (basicOpen f).leTop.op]; rw [ModuleCat.hom_comp]; rw [IsLocalizedModule.comp_iff_of_bijective_right _ _ ConcreteCategory.bijective_of_isIso _]
-  exact hM f
-
-中文:
-定理 isLocalizing_of_iso
-  结论: {M N : 顶元素范畴.层 (模范畴 R) (Spec R)} (φ : M ≅ N)
-  证明: by
-  intro f
-  rw [← IsLocalizedModule.comp_iff_of_bijective_left _ _ <|
-    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f)))]; rw [← ModuleCat.hom_comp]; rw [φ.inv.hom.naturality (basicOpen f).leTop.op]; rw [ModuleCat.hom_comp]; rw [IsLocalizedModule.comp_iff_of_bijective_right _ _ ConcreteCategory.bijective_of_isIso _]
-  exact hM f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.bijective_of_isIso, IsLocalizedModule, IsLocalizedModule.comp_iff_of_bijective_left, IsLocalizedModule.comp_iff_of_bijective_right, ModuleCat, ModuleCat.hom_comp, basicOpen, bijective_of_isIso, comp_iff_of_bijective_left, comp_iff_of_bijective_right, hom_comp, inv.hom.app, inv.hom.naturality, leTop.op, naturality
+/-
+**AlgebraicGeometry.isLocalizing_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeom
+etry`。
+形式化陈述：isLocalizing_of_iso {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N
+) (hM : IsLocalizing M) : IsLocalizing N
+参数：ModuleCat R；Spec R；φ : M ≅ N；hM : IsLocalizing M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `IsLocalizedModule.comp_iff_of_bijective_left`：IsLocalizedModule.comp_iff
+_of_bijective_left {f : M ->ₗ[R] M'} (e : M' ->ₗ[R] M'') (he : Function.Bijectiv
+e e) : IsLocalizedModule S (e ∘ₗ f…
+· 使用定理 `CategoryTheory.ConcreteCategory.bijective_of_isIso`：bijective_of_isIso {
+X Y : C} (f : X ⟶ Y) [IsIso f] : Function.Bijective f
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsIsoHomFullSubcategory`：∀ {C : Type u
+} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C
+} {X Y : P.FullSubcategory}   (f : X ⟶ Y) [Cate…
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用引理 `ModuleCat.hom_comp`：hom_comp {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : 
+N ⟶ O) : (f ≫ g).hom = g.hom.comp f.hom
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用引理 `IsLocalizedModule.comp_iff_of_bijective_right`：IsLocalizedModule.comp_if
+f_of_bijective_right (e : M ->ₗ[R] M') {f : M' ->ₗ[R] M''} (he : Function.Biject
+ive e) : IsLocalizedModule S (f ∘ₗ …
 -/
 theorem isLocalizing_of_iso {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N)
     (hM : IsLocalizing M) :
     IsLocalizing N := by
   intro f
   rw [← IsLocalizedModule.comp_iff_of_bijective_left _ _ <|
-    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f)))]; rw [← ModuleCat.hom_comp]; rw [φ.inv.hom.naturality (basicOpen f).leTop.op]; rw [ModuleCat.hom_comp]; rw [IsLocalizedModule.comp_iff_of_bijective_right _ _ ConcreteCategory.bijective_of_isIso _]
+    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f))), ← ModuleCat.hom_comp,
+    φ.inv.hom.naturality (basicOpen f).leTop.op, ModuleCat.hom_comp,
+    IsLocalizedModule.comp_iff_of_bijective_right _ _ <| ConcreteCategory.bijective_of_isIso _]
   exact hM f
-
-/--
-theorem `isLocalizing_iff_of_iso` / 定理 `isLocalizing_iff_of_iso`
-
-English:
-theorem isLocalizing_iff_of_iso
-  given: {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N)
-  proof: ⟨fun h => isLocalizing_of_iso φ h, fun h => isLocalizing_of_iso φ.symm h⟩
-
-中文:
-定理 isLocalizing_iff_of_iso
-  条件: {M N : 顶元素范畴.层 (模范畴 R) (Spec R)} (φ : M ≅ N)
-  证明: ⟨fun h => isLocalizing_of_iso φ h, fun h => isLocalizing_of_iso φ.symm h⟩
-
-Depends on / 依赖: isLocalizing_of_iso
+/-
+**AlgebraicGeometry.isLocalizing_iff_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `Algebraic
+Geometry`。
+形式化陈述：isLocalizing_iff_of_iso {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M
+ ≅ N) : IsLocalizing M ↔ IsLocalizing N
+参数：ModuleCat R；Spec R；φ : M ≅ N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.isLocalizing_of_iso`：isLocalizing_of_iso {M N : TopCat
+.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N) (hM : IsLocalizing M) : IsLocalizing 
+N
 -/
 theorem isLocalizing_iff_of_iso {M N : TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N) :
     IsLocalizing M ↔ IsLocalizing N :=
   ⟨fun h => isLocalizing_of_iso φ h, fun h => isLocalizing_of_iso φ.symm h⟩
-
-/--
-theorem `isLocalizing_of_isIso_app_top` / 定理 `isLocalizing_of_isIso_app_top`
-
-English:
-theorem isLocalizing_of_isIso_app_top
-  statement: {M N : TopCat.Sheaf (ModuleCat.{u} R) (Spec R)} {φ : M ⟶ N}
-  proof: by
-  refine TopCat.Sheaf.isIso_iff_isIso_basis (φ := φ) isBasis_basic_opens (fun f => ?_)
-  refine ModuleCat.isIso_of_isLocalizedModule_comp (hM f) ?_
-  rw [φ.hom.naturality]
-  exact IsLocalizedModule.of_linearEquiv_right _ _ (asIso (φ.hom.app (op ⊤))).toLinearEquiv
-
-中文:
-定理 isLocalizing_of_isIso_app_top
-  结论: {M N : 顶元素范畴.层 (模范畴.{u} R) (Spec R)} {φ : M ⟶ N}
-  证明: by
-  refine TopCat.Sheaf.isIso_iff_isIso_basis (φ := φ) isBasis_basic_opens (fun f => ?_)
-  refine ModuleCat.isIso_of_isLocalizedModule_comp (hM f) ?_
-  rw [φ.hom.naturality]
-  exact IsLocalizedModule.of_linearEquiv_right _ _ (asIso (φ.hom.app (op ⊤))).toLinearEquiv
-
-Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.of_linearEquiv_right, ModuleCat, ModuleCat.isIso_of_isLocalizedModule_comp, TopCat, TopCat.Sheaf.isIso_iff_isIso_basis, hom.app, hom.naturality, isBasis_basic_opens, isIso_iff_isIso_basis, isIso_of_isLocalizedModule_comp, naturality, of_linearEquiv_right, toLinearEquiv
+/-
+**AlgebraicGeometry.isLocalizing_of_isIso_app_top** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry`。
+形式化陈述：isLocalizing_of_isIso_app_top {M N : TopCat.Sheaf (ModuleCat.{u} R) (Spec 
+R)} {φ : M ⟶ N} (h : IsIso (φ.hom.app (op ⊤))) (hM : IsLocalizing M) (hN : IsLoc
+alizing N) : IsIso φ
+参数：ModuleCat.{u} R；Spec R；h : IsIso (φ.hom.app (op ⊤))；hM : IsLocalizing M；hN : 
+IsLocalizing N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Sheaf.isIso_iff_isIso_basis`：isIso_iff_isIso_basis {F G : Sheaf C
+ X} (h : Opens.IsBasis (Set.range B)) {φ : F ⟶ G} (hi : forall i, IsIso (φ.hom.a
+pp (op (B i)))) : IsIso …
+· 使用定理 `PrimeSpectrum.isBasis_basic_opens`：isBasis_basic_opens : TopologicalSpac
+e.Opens.IsBasis (Set.range (@basicOpen R _))
+· 使用引理 `ModuleCat.isIso_of_isLocalizedModule_comp`：isIso_of_isLocalizedModule_co
+mp {S : Submonoid R} {M₁ M₂ M₃ : ModuleCat R} {f₁ : M₁ ⟶ M₂} {f₂ : M₂ ⟶ M₃} (h₁ 
+: IsLocalizedModule S f₁.hom) (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem isLocalizing_of_isIso_app_top {M N : TopCat.Sheaf (ModuleCat.{u} R) (Spec R)} {φ : M ⟶ N}
     (h : IsIso (φ.hom.app (op ⊤))) (hM : IsLocalizing M) (hN : IsLocalizing N) :
@@ -1632,37 +1132,31 @@ theorem isLocalizing_of_isIso_app_top {M N : TopCat.Sheaf (ModuleCat.{u} R) (Spe
   refine ModuleCat.isIso_of_isLocalizedModule_comp (hM f) ?_
   rw [φ.hom.naturality]
   exact IsLocalizedModule.of_linearEquiv_right _ _ (asIso (φ.hom.app (op ⊤))).toLinearEquiv
-
-/--
-theorem `isLocalizing_tilde` / 定理 `isLocalizing_tilde`
-
-English:
-theorem isLocalizing_tilde
-  given: (M : ModuleCat R)
-  proof: by
-  intro f
-  -- We can't rewrite with `tilde.toOpen_res` below, because of def-eq abuse between
-  -- `Spec R` and `PrimeSpectrum R`.
-  have heq : tilde.toOpen M ⊤ ≫ (modulesSpecToSheaf.obj (tilde M)).obj.map (basicOpen f).leTop.op =
-      tilde.toOpen M (basicOpen f) :=
-    tilde.toOpen_res _ _ _ _
-  rw [← IsLocalizedModule.comp_iff_of_bijective_right _ _ <|
-    ConcreteCategory.bijective_of_isIso (tilde.toOpen M ⊤)]; rw [← ModuleCat.hom_comp]; rw [heq]
-  infer_instance
-
-中文:
-定理 isLocalizing_tilde
-  条件: (M : 模范畴 R)
-  证明: by
-  intro f
-  -- We can't rewrite with `tilde.toOpen_res` below, because of def-eq abuse between
-  -- `Spec R` and `PrimeSpectrum R`.
-  have heq : tilde.toOpen M ⊤ ≫ (modulesSpecToSheaf.obj (tilde M)).obj.map (basicOpen f).leTop.op =
-      tilde.toOpen M (basicOpen f) :=
-    tilde.toOpen_res _ _ _ _
-  rw [← IsLocalizedModule.comp_iff_of_bijective_right _ _ <|
-    ConcreteCategory.bijective_of_isIso (tilde.toOpen M ⊤)]; rw [← ModuleCat.hom_comp]; rw [heq]
-  infer_instance
+/-
+**AlgebraicGeometry.isLocalizing_tilde** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeome
+try`。
+形式化陈述：isLocalizing_tilde (M : ModuleCat R) : IsLocalizing (modulesSpecToSheaf.ob
+j (tilde M))
+参数：M : ModuleCat R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.tilde.toOpen_res`：toOpen_res (U V : Opens (PrimeSpectr
+um.Top R)) (i : V ⟶ U) : toOpen M U ≫ (modulesSpecToSheaf.obj (tilde M)).preshea
+f.map i.op = toOpen M V
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `IsLocalizedModule.comp_iff_of_bijective_right`：IsLocalizedModule.comp_if
+f_of_bijective_right (e : M ->ₗ[R] M') {f : M' ->ₗ[R] M''} (he : Function.Biject
+ive e) : IsLocalizedModule S (f ∘ₗ …
+· 使用定理 `CategoryTheory.ConcreteCategory.bijective_of_isIso`：bijective_of_isIso {
+X Y : C} (f : X ⟶ Y) [IsIso f] : Function.Bijective f
+· 使用引理 `ModuleCat.hom_comp`：hom_comp {M N O : ModuleCat.{v} R} (f : M ⟶ N) (g : 
+N ⟶ O) : (f ≫ g).hom = g.hom.comp f.hom
+· 使用定理 `AlgebraicGeometry.tilde.instAwayCarrierCarrierObjOppositeOpensCarrierCar
+rierCommRingCatSpecModuleCatPresheafModulesSheafModulesSpecToSheafOpBasicOpenHom
+ToOpen`：∀ {R : CommRingCat} (M : ModuleCat ↑R) (f : ↑R),   IsLocalizedModule.Awa
+y f (ModuleCat.Hom.hom (AlgebraicGeometry.tilde.toOpen M (PrimeSpect…
 -/
 theorem isLocalizing_tilde (M : ModuleCat R) :
     IsLocalizing (modulesSpecToSheaf.obj (tilde M)) := by
@@ -1673,72 +1167,44 @@ theorem isLocalizing_tilde (M : ModuleCat R) :
       tilde.toOpen M (basicOpen f) :=
     tilde.toOpen_res _ _ _ _
   rw [← IsLocalizedModule.comp_iff_of_bijective_right _ _ <|
-    ConcreteCategory.bijective_of_isIso (tilde.toOpen M ⊤)]; rw [← ModuleCat.hom_comp]; rw [heq]
+    ConcreteCategory.bijective_of_isIso (tilde.toOpen M ⊤), ← ModuleCat.hom_comp, heq]
   infer_instance
 
-/--
-theorem `isIso_fromTildeΓ_iff_isLocalizing` / 定理 `isIso_fromTildeΓ_iff_isLocalizing`
+/-- An `𝓞_Spec R` module `M` is isomorphic to `Γ(M)^~` if and only if it is localizing
+as a sheaf of `R` modules -/
+/-
+**AlgebraicGeometry.isIso_fromTilde** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem isIso_fromTildeΓ_iff_isLocalizing
-  given: (M : (Spec R).Modules)
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← isLocalizing_iff_of_iso (modulesSpecToSheaf.mapIso (asIso M.fromTildeΓ))]
-    exact isLocalizing_tilde _
-  · rw [← isIso_iff_of_reflects_iso _ modulesSpecToSheaf]
-    refine isLocalizing_of_isIso_app_top ?_ (isLocalizing_tilde _) h
-    rw [← isIso_comp_left_iff (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (op ⊤)) ⊤)]; rw [Scheme.Modules.toOpen_fromTildeΓ_app]
-    simpa using IsIso.id _
-
-中文:
-定理 isIso_fromTildeΓ_iff_isLocalizing
-  条件: (M : (Spec R).Modules)
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← isLocalizing_iff_of_iso (modulesSpecToSheaf.mapIso (asIso M.fromTildeΓ))]
-    exact isLocalizing_tilde _
-  · rw [← isIso_iff_of_reflects_iso _ modulesSpecToSheaf]
-    refine isLocalizing_of_isIso_app_top ?_ (isLocalizing_tilde _) h
-    rw [← isIso_comp_left_iff (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (op ⊤)) ⊤)]; rw [Scheme.Modules.toOpen_fromTildeΓ_app]
-    simpa using IsIso.id _
-
-Depends on / 依赖: IsIso.id, M.fromTilde, Modules, Scheme, Scheme.Modules.toOpen_fromTilde, infer_instance, isIso_comp_left_iff, isIso_iff_of_reflects_iso, isLocalizing_iff_of_iso, isLocalizing_of_isIso_app_top, isLocalizing_tilde, mapIso, modulesSpecToSheaf, modulesSpecToSheaf.mapIso, modulesSpecToSheaf.obj, presheaf, presheaf.obj, tilde.toOpen, toOpen
+--- 原说明 ---
+An `𝓞_Spec R` module `M` is isomorphic to `Γ(M)^~` if and only if it is localizi
+ng
+as a sheaf of `R` modules
 -/
 theorem isIso_fromTildeΓ_iff_isLocalizing (M : (Spec R).Modules) :
     IsIso M.fromTildeΓ ↔ IsLocalizing (modulesSpecToSheaf.obj M) := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · rw [← isLocalizing_iff_of_iso (modulesSpecToSheaf.mapIso (asIso M.fromTildeΓ))]
     exact isLocalizing_tilde _
   · rw [← isIso_iff_of_reflects_iso _ modulesSpecToSheaf]
     refine isLocalizing_of_isIso_app_top ?_ (isLocalizing_tilde _) h
-    rw [← isIso_comp_left_iff (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (op ⊤)) ⊤)]; rw [Scheme.Modules.toOpen_fromTildeΓ_app]
+    rw [← isIso_comp_left_iff (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (op ⊤)) ⊤),
+      Scheme.Modules.toOpen_fromTildeΓ_app]
     simpa using IsIso.id _
 
-/--
-Definition of `pushforwardCompModulesSpecToSheafIso` / `pushforwardCompModulesSpecToSheafIso` 的定义
+/-- `Scheme.Modules.pushforward` and `modulesSpecToSheaf` commute -/
+/-
+**AlgebraicGeometry.pushforwardCompModulesSpecToSheafIso** 是 Mathlib 中的一个定义，位于命名
+空间 `AlgebraicGeometry`。
+形式化陈述：pushforwardCompModulesSpecToSheafIso : Scheme.Modules.pushforward (Spec.ma
+p φ) ⋙ modulesSpecToSheaf ≅ modulesSpecToSheaf ⋙ TopCat.Sheaf.pushforward (Modul
+eCat S) (Spec.map φ).base ⋙ sheafCompose _ (ModuleCat.restrictScalars φ.hom)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforwardCompModulesSpecToSheafIso
-  signature: :
-  body: (Functor.associator _ _ _).symm ≪≫
-    Functor.isoWhiskerRight (SheafOfModules.pushforwardCompForgetToSheafModuleCat _ _ _
-    (initialOpOfTerminal isTerminalTop)) _ ≪≫ Functor.associator _ _ _ ≪≫
-    (Functor.isoWhiskerLeft _ (Functor.associator _ _ _)) ≪≫
-    Functor.isoWhiskerLeft _ (Scheme.Modules.sheafComposePushforwardComp φ) ≪≫
-    (Functor.associator _ _ _).symm
-
-中文:
-定义 pushforwardCompModulesSpecToSheafIso
-  签名: :
-  定义体: (Functor.associator _ _ _).symm ≪≫
-    Functor.isoWhiskerRight (SheafOfModules.pushforwardCompForgetToSheafModuleCat _ _ _
-    (initialOpOfTerminal isTerminalTop)) _ ≪≫ Functor.associator _ _ _ ≪≫
-    (Functor.isoWhiskerLeft _ (Functor.associator _ _ _)) ≪≫
-    Functor.isoWhiskerLeft _ (Scheme.Modules.sheafComposePushforwardComp φ) ≪≫
-    (Functor.associator _ _ _).symm
-
-Depends on / 依赖: Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Modules, Scheme, Scheme.Modules.sheafComposePushforwardComp, SheafOfModules, SheafOfModules.pushforwardCompForgetToSheafModuleCat, associator, initialOpOfTerminal, isTerminalTop, isoWhiskerLeft, isoWhiskerRight, pushforwardCompForgetToSheafModuleCat, sheafComposePushforwardComp
+--- 原说明 ---
+`Scheme.Modules.pushforward` and `modulesSpecToSheaf` commute
 -/
 def pushforwardCompModulesSpecToSheafIso :
     Scheme.Modules.pushforward (Spec.map φ) ⋙ modulesSpecToSheaf ≅
@@ -1752,58 +1218,57 @@ def pushforwardCompModulesSpecToSheafIso :
     (Functor.associator _ _ _).symm
 
 open scoped ModuleCat.Algebra in
-/--
-theorem `isLocalizing_pushforward_of_isLocalizing` / 定理 `isLocalizing_pushforward_of_isLocalizing`
-
-English:
-theorem isLocalizing_pushforward_of_isLocalizing
-  statement: {M : (Spec S).Modules}
-  proof: by
-  rw [← Functor.comp_obj]; rw [isLocalizing_iff_of_iso ((pushforwardCompModulesSpecToSheafIso φ).app M)]
-  have : CommRing ((Spec S).ringCatSheaf.obj.obj ((Opens.map (Spec.map φ).base).op.obj (op ⊤))) :=
-    inferInstanceAs (CommRing Γ(Spec S, ⊤))
-  algebraize [φ.hom]
-  exact fun f => IsLocalizedModule.restrictScalars_powers f _ (h := h (φ f))
-
-中文:
-定理 isLocalizing_pushforward_of_isLocalizing
-  结论: {M : (Spec S).Modules}
-  证明: by
-  rw [← Functor.comp_obj]; rw [isLocalizing_iff_of_iso ((pushforwardCompModulesSpecToSheafIso φ).app M)]
-  have : CommRing ((Spec S).ringCatSheaf.obj.obj ((Opens.map (Spec.map φ).base).op.obj (op ⊤))) :=
-    inferInstanceAs (CommRing Γ(Spec S, ⊤))
-  algebraize [φ.hom]
-  exact fun f => IsLocalizedModule.restrictScalars_powers f _ (h := h (φ f))
-
-Depends on / 依赖: CommRing, Functor, Functor.comp_obj, IsLocalizedModule, IsLocalizedModule.restrictScalars_powers, Opens.map, Spec.map, algebraize, comp_obj, isLocalizing_iff_of_iso, op.obj, pushforwardCompModulesSpecToSheafIso, restrictScalars_powers, ringCatSheaf, ringCatSheaf.obj.obj
+/-
+**AlgebraicGeometry.isLocalizing_pushforward_of_isLocalizing** 是 Mathlib 中的一个定理，
+位于命名空间 `AlgebraicGeometry`。
+形式化陈述：isLocalizing_pushforward_of_isLocalizing {M : (Spec S).Modules} (h : IsLoc
+alizing (modulesSpecToSheaf.obj M)) : IsLocalizing (modulesSpecToSheaf.obj ((Sch
+eme.Modules.pushforward (Spec.map φ)).obj M))
+参数：Spec S；h : IsLocalizing (modulesSpecToSheaf.obj M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.comp_obj`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AlgebraicGeometry.isLocalizing_iff_of_iso`：isLocalizing_iff_of_iso {M N 
+: TopCat.Sheaf (ModuleCat R) (Spec R)} (φ : M ≅ N) : IsLocalizing M ↔ IsLocalizi
+ng N
+· 使用引理 `IsLocalizedModule.restrictScalars_powers`：IsLocalizedModule.restrictScal
+ars_powers [Module A M] {N : Type*} [AddCommMonoid N] [Module R N] [Module A N] 
+[IsScalarTower R A M] [IsScala…
+· 使用定理 `ModuleCat.Algebra.instIsScalarTowerCarrier`：∀ {S₀ : Type u₀} [inst : Com
+mSemiring S₀] {S : Type u} [inst_1 : Ring S] [inst_2 : Algebra S₀ S] {M : Module
+Cat S},   IsScalarTower S₀ S ↑M
 -/
 theorem isLocalizing_pushforward_of_isLocalizing {M : (Spec S).Modules}
     (h : IsLocalizing (modulesSpecToSheaf.obj M)) :
     IsLocalizing (modulesSpecToSheaf.obj ((Scheme.Modules.pushforward (Spec.map φ)).obj M)) := by
-  rw [← Functor.comp_obj]; rw [isLocalizing_iff_of_iso ((pushforwardCompModulesSpecToSheafIso φ).app M)]
+  rw [← Functor.comp_obj,
+  isLocalizing_iff_of_iso ((pushforwardCompModulesSpecToSheafIso φ).app M)]
   have : CommRing ((Spec S).ringCatSheaf.obj.obj ((Opens.map (Spec.map φ).base).op.obj (op ⊤))) :=
     inferInstanceAs (CommRing Γ(Spec S, ⊤))
   algebraize [φ.hom]
   exact fun f => IsLocalizedModule.restrictScalars_powers f _ (h := h (φ f))
 
-/--
-theorem `isIso_fromTildeΓ_pushforward` / 定理 `isIso_fromTildeΓ_pushforward`
+/- TODO: Once `IsIso M.fromTildeΓ` is shown to be equivalent to `M` being quasicoherent, use
+this to show that quasicoherent sheaves pushforward to quasicoherent sheaves for affine morphisms -/
+/-
+**AlgebraicGeometry.isIso_fromTilde** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem isIso_fromTildeΓ_pushforward
-  given: (M : (Spec S).Modules) [h : IsIso M.fromTildeΓ]
-  proof: by
-  simp_all only [isIso_fromTildeΓ_iff_isLocalizing]
-  exact isLocalizing_pushforward_of_isLocalizing φ h
-
-中文:
-定理 isIso_fromTildeΓ_pushforward
-  条件: (M : (Spec S).Modules) [h : 是同构 M.fromTildeΓ]
-  证明: by
-  simp_all only [isIso_fromTildeΓ_iff_isLocalizing]
-  exact isLocalizing_pushforward_of_isLocalizing φ h
-
-Depends on / 依赖: isLocalizing_pushforward_of_isLocalizing
+--- 原说明 ---
+TODO: Once `IsIso M.fromTildeΓ` is shown to be equivalent to `M` being quasicohe
+rent, use
+this to show that quasicoherent sheaves pushforward to quasicoherent sheaves for
+ affine morphisms
 -/
 theorem isIso_fromTildeΓ_pushforward (M : (Spec S).Modules) [h : IsIso M.fromTildeΓ] :
     IsIso ((Scheme.Modules.pushforward (Spec.map φ)).obj M).fromTildeΓ := by
@@ -1813,40 +1278,93 @@ theorem isIso_fromTildeΓ_pushforward (M : (Spec S).Modules) [h : IsIso M.fromTi
 end IsLocalizing
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Scheme.Modules.isQuasicoherent_restrictFunctor` / 实例 `Scheme.Modules.isQuasicoherent_restrictFunctor`
-
-English:
-instance Scheme.Modules.isQuasicoherent_restrictFunctor
-  signature: {X Y : Scheme.{u}} (f : X ⟶ Y)
-  body: by
-  let α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
-  have hα : IsIso α := NatIso.isIso_of_isIso_app _
-  let φ : X.ringCatSheaf ⟶ (f.opensFunctor.sheafPushforwardContinuous _ _ _).obj Y.ringCatSheaf :=
-    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCat)⟩
-  have : IsIso φ := by
-    rw [← isIso_iff_of_reflects_iso _ (ObjectProperty.ι _)]
-    dsimp [φ]
-    infer_instance
-  exact SheafOfModules.isQuasicoherent_pushforward_of_isLeftAdjoint.{u}
-    f.opensFunctor φ (Scheme.Modules.restrictUnitIso _)
-
-中文:
-实例 概形.Modules.isQuasicoherent_restrictFunctor
-  签名: {X Y : 概形.{u}} (f : X ⟶ Y)
-  定义体: by
-  let α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
-  have hα : IsIso α := NatIso.isIso_of_isIso_app _
-  let φ : X.ringCatSheaf ⟶ (f.opensFunctor.sheafPushforwardContinuous _ _ _).obj Y.ringCatSheaf :=
-    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCat)⟩
-  have : IsIso φ := by
-    rw [← isIso_iff_of_reflects_iso _ (ObjectProperty.ι _)]
-    dsimp [φ]
-    infer_instance
-  exact SheafOfModules.isQuasicoherent_pushforward_of_isLeftAdjoint.{u}
-    f.opensFunctor φ (Scheme.Modules.restrictUnitIso _)
-
-Depends on / 依赖: CommRingCat, Functor, Functor.whiskerRight, Modules, NatIso, NatIso.isIso_of_isIso_app, ObjectProperty, RingCat, Scheme, Scheme.Modules.r, SheafOfModules, SheafOfModules.isQuasicoherent_pushforward_of_isLeftAdjoint, U.unop, X.presheaf, X.ringCatSheaf, Y.presheaf, Y.ringCatSheaf, appIso, f.appIso, f.opensFunctor
+/-
+**AlgebraicGeometry.Scheme.Modules.isQuasicoherent_restrictFunctor** 是 Mathlib 中
+的一个定理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.I
+sOpenImmersion f] (M : Y.Modules)   [SheafOfModules.IsQuasicoherent M],   SheafO
+fModules.IsQuasicoherent ((AlgebraicGeometry.Scheme.Modules.restrictFunctor f).o
+bj M)
+参数：f : X ⟶ Y；M : Y.Modules；(AlgebraicGeometry.Scheme.Modules.restrictFunctor f).
+obj M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.instHasSheafifyOfPreservesLimitsForgetOfHasFiniteLimitsOf
+SmallOppositeCover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J 
+: CategoryTheory.GrothendieckTopology C) (D : Type w)   [inst_1 : CategoryTheory
+…
+· 使用定理 `AddCommGrpCat.hasLimit`：∀ {J : Type v} [inst : CategoryTheory.Category.{
+w, v} J] (F : CategoryTheory.Functor J AddCommGrpCat)   [Small.{u, max u v} ↑(F.
+comp (Catego…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AddCommGrpCat.hasColimitsOfShape`：∀ {J : Type u} [inst : CategoryTheory.
+Category.{v, u} J] [Small.{w, u} J],   CategoryTheory.Limits.HasColimitsOfShape 
+J AddCommGrpCat
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `AddCommGrpCat.FilteredColimits.forget_preservesFilteredColimits`：Categor
+yTheory.Limits.PreservesFilteredColimits (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.isCofiltered_of_directed_ge_nonempty`：∀ (α : Type u) [ins
+t : Preorder α] [IsCodirectedOrder α] [Nonempty α], CategoryTheory.IsCofiltered 
+α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `AddCommGrpCat.forget_reflects_isos`：(CategoryTheory.forget AddCommGrpCat
+).ReflectsIsomorphisms
+· 使用定理 `AddCommGrpCat.forget_preservesLimitsOfShape`：∀ {J : Type v} [inst : Cate
+goryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.Preserve
+sLimitsOfShape J (CategoryTheory.…
+· 使用定理 `AddCommGrpCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLim
+its (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `CategoryTheory.GrothendieckTopology.instWEqualsLocallyBijectiveOfHasWeak
+SheafifyOfHasSheafComposeOfPreservesSheafificationOfReflectsIsomorphismsForget`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Gro
+thendieckTopology C) {D : Type w}   [inst_1 : CategoryTheory…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.GrothendieckTopology.instPreservesSheafificationForgetOfP
+reservesLimitsOfHasColimitsOfShapeOfPreservesColimitsOfShapeOppositeCoverOfHasLi
+mitsOfShapeWalkingMulticospanOfReflectsIsomorphisms`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.GrothendieckTopology C) {D : T
+ype u_3}   [inst_1 : CategoryTheo…
+· 使用定理 `AddCommGrpCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Ca
+tegory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Ad
+dCommGrpCat
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appIso_inv_naturality`：appIso_inv_naturalit
+y {U V : X.Opens} (i : op U ⟶ op V) : X.presheaf.map i ≫ (f.appIso V).inv = (f.a
+ppIso U).inv ≫ Y.presheaf.map (f.opensFu…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.NatIso.isIso_of_isIso_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.instIsContinuousOpensOpensFunctorGrothendie
+ckTopologyCarrierCarrierCommRingCat`：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶
+ Y) [H : AlgebraicGeometry.IsOpenImmersion f],   (AlgebraicGeometry.Scheme.Hom.o
+pensFunctor f).Is…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isIso_iff_of_reflects_iso`：isIso_iff_of_reflects_iso {A B
+ : C} (f : A ⟶ B) (F : C ⥤ D) [F.ReflectsIsomorphisms] : IsIso (F.map f) ↔ IsIso
+ f
+（共 40 条，此处仅展示前 30 条）
 -/
 instance Scheme.Modules.isQuasicoherent_restrictFunctor {X Y : Scheme.{u}} (f : X ⟶ Y)
     [IsOpenImmersion f] (M : Y.Modules) [M.IsQuasicoherent] :
@@ -1863,24 +1381,18 @@ instance Scheme.Modules.isQuasicoherent_restrictFunctor {X Y : Scheme.{u}} (f : 
     f.opensFunctor φ (Scheme.Modules.restrictUnitIso _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `Scheme.Modules.presentationRestrict` / `Scheme.Modules.presentationRestrict` 的定义
+/-- The presentation of `M.restrict f` by restricting a presentation of `M`. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.presentationRestrict** 是 Mathlib 中的一个定义，位于命名空
+间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：{X Y : AlgebraicGeometry.Scheme} →   (f : Y ⟶ X) →     [inst : AlgebraicGe
+ometry.IsOpenImmersion f] →       {M : X.Modules} → SheafOfModules.Presentation 
+M → SheafOfModules.Presentation (M.restrict f)
+参数：f : Y ⟶ X；M.restrict f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Scheme.Modules.presentationRestrict
-  signature: {X Y : Scheme.{u}} (f : Y ⟶ X)
-  body: have : PreservesColimitsOfSize.{u, u} (Scheme.Modules.restrictFunctor f) :=
-    inferInstance
-  pres.map (Scheme.Modules.restrictFunctor.{u} f) (Scheme.Modules.restrictUnitIso _).symm
-
-中文:
-定义 概形.Modules.presentationRestrict
-  签名: {X Y : 概形.{u}} (f : Y ⟶ X)
-  定义体: have : PreservesColimitsOfSize.{u, u} (Scheme.Modules.restrictFunctor f) :=
-    inferInstance
-  pres.map (Scheme.Modules.restrictFunctor.{u} f) (Scheme.Modules.restrictUnitIso _).symm
-
-Depends on / 依赖: Modules, PreservesColimitsOfSize, Scheme, Scheme.Modules.restrictFunctor, Scheme.Modules.restrictUnitIso, pres.map, restrictFunctor, restrictUnitIso
+--- 原说明 ---
+The presentation of `M.restrict f` by restricting a presentation of `M`.
 -/
 def Scheme.Modules.presentationRestrict {X Y : Scheme.{u}} (f : Y ⟶ X)
     [IsOpenImmersion f] {M : X.Modules} (pres : M.Presentation) :
@@ -1890,64 +1402,100 @@ def Scheme.Modules.presentationRestrict {X Y : Scheme.{u}} (f : Y ⟶ X)
   pres.map (Scheme.Modules.restrictFunctor.{u} f) (Scheme.Modules.restrictUnitIso _).symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Scheme.Modules.exists_isOpenCover_presentation` / 引理 `Scheme.Modules.exists_isOpenCover_presentation`
-
-English:
-lemma Scheme.Modules.exists_isOpenCover_presentation
-  statement: {X : Scheme.{u}} (M : X.Modules)
-  proof: by
-  obtain ⟨⟨I, W, cov, pres⟩⟩ := SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData (M := M)
-  choose κ hsub heq using fun i => Opens.isBasis_iff_cover.mp X.isBasis_affineOpens (W i)
-  refine ⟨Σ (i : I), κ i, fun j => j.2, fun i => ?_, ?_, ?_⟩
-  · let u := X.homOfLE (U := i.2) (V := W i.1) (by simp [heq, le_sSup])
-    have : PreservesColimitsOfSize.{u, u} (restrictFunctor u) := inferInstance
-    let F := (overEquiv (W i.1)).functor ⋙ restrictFunctor u
-    let iso : SheafOfModules.overFunctor X.ringCatSheaf _ ⋙ F ≅ restrictFunctor
-      (Scheme.Opens.ι i.2.1) := (Functor.associator _ _ _).symm ≪≫
-        Functor.isoWhiskerRight (Scheme.Modules.overFunctorEquiv _) _ ≪≫
-        (restrictFunctorComp _ _).symm ≪≫ (restrictFunctorCongr (by simp [u]))
-exact SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
-      (pres i.1).map F (Scheme.Modules.restrictUnitIso _).symm
-  · rw [Opens.coversTop_iff, IsOpenCover] at cov
-    rw [IsOpenCover]; rw [iSup_sigma]; rw [← cov]
-    refine iSup_congr fun i => ?_
-    rw [heq i]; rw [sSup_eq_iSup']
-  · intro j
-    exact hsub _ j.2.2
-
-中文:
-引理 概形.Modules.存在_isOpenCover_presentation
-  结论: {X : 概形.{u}} (M : X.Modules)
-  证明: by
-  obtain ⟨⟨I, W, cov, pres⟩⟩ := SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData (M := M)
-  choose κ hsub heq using fun i => Opens.isBasis_iff_cover.mp X.isBasis_affineOpens (W i)
-  refine ⟨Σ (i : I), κ i, fun j => j.2, fun i => ?_, ?_, ?_⟩
-  · let u := X.homOfLE (U := i.2) (V := W i.1) (by simp [heq, le_sSup])
-    have : PreservesColimitsOfSize.{u, u} (restrictFunctor u) := inferInstance
-    let F := (overEquiv (W i.1)).functor ⋙ restrictFunctor u
-    let iso : SheafOfModules.overFunctor X.ringCatSheaf _ ⋙ F ≅ restrictFunctor
-      (Scheme.Opens.ι i.2.1) := (Functor.associator _ _ _).symm ≪≫
-        Functor.isoWhiskerRight (Scheme.Modules.overFunctorEquiv _) _ ≪≫
-        (restrictFunctorComp _ _).symm ≪≫ (restrictFunctorCongr (by simp [u]))
-exact SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
-      (pres i.1).map F (Scheme.Modules.restrictUnitIso _).symm
-  · rw [Opens.coversTop_iff, IsOpenCover] at cov
-    rw [IsOpenCover]; rw [iSup_sigma]; rw [← cov]
-    refine iSup_congr fun i => ?_
-    rw [heq i]; rw [sSup_eq_iSup']
-  · intro j
-    exact hsub _ j.2.2
-
-Depends on / 依赖: IsQuasicoherent, Opens.isBasis_iff_cover.mp, PreservesColimitsOfSize, SheafOfModules, SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData, SheafOfModules.overFunctor, X.homOfLE, X.isBasis_affineOpens, X.ringCatSheaf, functor, homOfLE, isBasis_affineOpens, isBasis_iff_cover, le_sSup, nonempty_quasicoherentData, overEquiv, overFunctor, restrictFunctor, ringCatSheaf
+/-
+**AlgebraicGeometry.Scheme.Modules.exists_isOpenCover_presentation** 是 Mathlib 中
+的一个定理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (M : X.Modules) [SheafOfModules.IsQuasico
+herent M],   ∃ ι U x, TopologicalSpace.IsOpenCover U ∧ ∀ (i : ι), AlgebraicGeome
+try.IsAffineOpen (U i)
+参数：M : X.Modules；i : ι；U i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.instHasSheafifyOfPreservesLimitsForgetOfHasFiniteLimitsOf
+SmallOppositeCover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J 
+: CategoryTheory.GrothendieckTopology C) (D : Type w)   [inst_1 : CategoryTheory
+…
+· 使用定理 `AddCommGrpCat.hasLimit`：∀ {J : Type v} [inst : CategoryTheory.Category.{
+w, v} J] (F : CategoryTheory.Functor J AddCommGrpCat)   [Small.{u, max u v} ↑(F.
+comp (Catego…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AddCommGrpCat.hasColimitsOfShape`：∀ {J : Type u} [inst : CategoryTheory.
+Category.{v, u} J] [Small.{w, u} J],   CategoryTheory.Limits.HasColimitsOfShape 
+J AddCommGrpCat
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `AddCommGrpCat.FilteredColimits.forget_preservesFilteredColimits`：Categor
+yTheory.Limits.PreservesFilteredColimits (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.isCofiltered_of_directed_ge_nonempty`：∀ (α : Type u) [ins
+t : Preorder α] [IsCodirectedOrder α] [Nonempty α], CategoryTheory.IsCofiltered 
+α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `AddCommGrpCat.forget_reflects_isos`：(CategoryTheory.forget AddCommGrpCat
+).ReflectsIsomorphisms
+· 使用定理 `AddCommGrpCat.forget_preservesLimitsOfShape`：∀ {J : Type v} [inst : Cate
+goryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.Preserve
+sLimitsOfShape J (CategoryTheory.…
+· 使用定理 `AddCommGrpCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLim
+its (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `CategoryTheory.GrothendieckTopology.instWEqualsLocallyBijectiveOfHasWeak
+SheafifyOfHasSheafComposeOfPreservesSheafificationOfReflectsIsomorphismsForget`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Gro
+thendieckTopology C) {D : Type w}   [inst_1 : CategoryTheory…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.GrothendieckTopology.instPreservesSheafificationForgetOfP
+reservesLimitsOfHasColimitsOfShapeOfPreservesColimitsOfShapeOppositeCoverOfHasLi
+mitsOfShapeWalkingMulticospanOfReflectsIsomorphisms`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.GrothendieckTopology C) {D : T
+ype u_3}   [inst_1 : CategoryTheo…
+· 使用定理 `AddCommGrpCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Ca
+tegory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Ad
+dCommGrpCat
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData`：∀ {C : Type u
+₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {J : CategoryTheory.GrothendieckT
+opology C}   {R : CategoryTheory.Sheaf J RingCa…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `AlgebraicGeometry.instIsOpenImmersionHomOfLE`：∀ (X : AlgebraicGeometry.S
+cheme) {U V : X.Opens} (e : U ≤ V), AlgebraicGeometry.IsOpenImmersion (X.homOfLE
+ e)
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `AlgebraicGeometry.Scheme.Modules.instIsLeftAdjointRestrictFunctor`：∀ {X 
+Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [inst : AlgebraicGeometry.IsOpenImmers
+ion f],   (AlgebraicGeometry.Scheme.Modules.restrictFun…
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+（共 48 条，此处仅展示前 30 条）
 -/
 lemma Scheme.Modules.exists_isOpenCover_presentation {X : Scheme.{u}} (M : X.Modules)
     [M.IsQuasicoherent] :
-    exists (ι : Type u) (U : ι -> X.Opens) (_ : forall i, (M.restrict (U i).ι).Presentation),
-      IsOpenCover U ∧ (forall i, IsAffineOpen (U i)) := by
+    ∃ (ι : Type u) (U : ι → X.Opens) (_ : ∀ i, (M.restrict (U i).ι).Presentation),
+      IsOpenCover U ∧ (∀ i, IsAffineOpen (U i)) := by
   obtain ⟨⟨I, W, cov, pres⟩⟩ := SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData (M := M)
-  choose κ hsub heq using fun i => Opens.isBasis_iff_cover.mp X.isBasis_affineOpens (W i)
-  refine ⟨Σ (i : I), κ i, fun j => j.2, fun i => ?_, ?_, ?_⟩
+  choose κ hsub heq using fun i ↦ Opens.isBasis_iff_cover.mp X.isBasis_affineOpens (W i)
+  refine ⟨Σ (i : I), κ i, fun j ↦ j.2, fun i ↦ ?_, ?_, ?_⟩
   · let u := X.homOfLE (U := i.2) (V := W i.1) (by simp [heq, le_sSup])
     have : PreservesColimitsOfSize.{u, u} (restrictFunctor u) := inferInstance
     let F := (overEquiv (W i.1)).functor ⋙ restrictFunctor u
@@ -1955,46 +1503,100 @@ lemma Scheme.Modules.exists_isOpenCover_presentation {X : Scheme.{u}} (M : X.Mod
       (Scheme.Opens.ι i.2.1) := (Functor.associator _ _ _).symm ≪≫
         Functor.isoWhiskerRight (Scheme.Modules.overFunctorEquiv _) _ ≪≫
         (restrictFunctorComp _ _).symm ≪≫ (restrictFunctorCongr (by simp [u]))
-exact SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
+    exact SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom <|
       (pres i.1).map F (Scheme.Modules.restrictUnitIso _).symm
   · rw [Opens.coversTop_iff, IsOpenCover] at cov
-    rw [IsOpenCover]; rw [iSup_sigma]; rw [← cov]
-    refine iSup_congr fun i => ?_
-    rw [heq i]; rw [sSup_eq_iSup']
+    rw [IsOpenCover, iSup_sigma, ← cov]
+    refine iSup_congr fun i ↦ ?_
+    rw [heq i, sSup_eq_iSup']
   · intro j
     exact hsub _ j.2.2
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `Scheme.Modules.exists_affineOpenCover_presentation` / 引理 `Scheme.Modules.exists_affineOpenCover_presentation`
-
-English:
-lemma Scheme.Modules.exists_affineOpenCover_presentation
-  statement: {X : Scheme.{u}} (M : X.Modules)
-  proof: by
-  obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
-  refine ⟨Scheme.AffineOpenCover.ofIsOpenCover _ hU hU', fun i => ⟨?_⟩⟩
-exact SheafOfModules.Presentation.ofIsIso.{u, u, u} ((restrictFunctorComp _ _).app M).inv
-    (presentationRestrict (hU' i).isoSpec.inv (pres i))
-
-中文:
-引理 概形.Modules.存在_affineOpenCover_presentation
-  结论: {X : 概形.{u}} (M : X.Modules)
-  证明: by
-  obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
-  refine ⟨Scheme.AffineOpenCover.ofIsOpenCover _ hU hU', fun i => ⟨?_⟩⟩
-exact SheafOfModules.Presentation.ofIsIso.{u, u, u} ((restrictFunctorComp _ _).app M).inv
-    (presentationRestrict (hU' i).isoSpec.inv (pres i))
-
-Depends on / 依赖: AffineOpenCover, M.exists_isOpenCover_presentation, Presentation, Scheme, Scheme.AffineOpenCover.ofIsOpenCover, SheafOfModules, SheafOfModules.Presentation.ofIsIso, exists_isOpenCover_presentation, isoSpec, isoSpec.inv, ofIsIso, ofIsOpenCover, presentationRestrict, restrictFunctorComp
+/-
+**AlgebraicGeometry.Scheme.Modules.exists_affineOpenCover_presentation** 是 Mathl
+ib 中的一个定理，位于命名空间 `AlgebraicGeometry.Scheme.Modules`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} (M : X.Modules) [SheafOfModules.IsQuasico
+herent M],   ∃ 𝒰, ∀ (i : 𝒰.I₀), Nonempty (SheafOfModules.Presentation (M.restric
+t (𝒰.f i)))
+参数：M : X.Modules；i : 𝒰.I₀；SheafOfModules.Presentation (M.restrict (𝒰.f i))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.instHasSheafifyOfPreservesLimitsForgetOfHasFiniteLimitsOf
+SmallOppositeCover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J 
+: CategoryTheory.GrothendieckTopology C) (D : Type w)   [inst_1 : CategoryTheory
+…
+· 使用定理 `AddCommGrpCat.hasLimit`：∀ {J : Type v} [inst : CategoryTheory.Category.{
+w, v} J] (F : CategoryTheory.Functor J AddCommGrpCat)   [Small.{u, max u v} ↑(F.
+comp (Catego…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AddCommGrpCat.hasColimitsOfShape`：∀ {J : Type u} [inst : CategoryTheory.
+Category.{v, u} J] [Small.{w, u} J],   CategoryTheory.Limits.HasColimitsOfShape 
+J AddCommGrpCat
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `AddCommGrpCat.FilteredColimits.forget_preservesFilteredColimits`：Categor
+yTheory.Limits.PreservesFilteredColimits (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.isCofiltered_of_directed_ge_nonempty`：∀ (α : Type u) [ins
+t : Preorder α] [IsCodirectedOrder α] [Nonempty α], CategoryTheory.IsCofiltered 
+α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `AddCommGrpCat.forget_reflects_isos`：(CategoryTheory.forget AddCommGrpCat
+).ReflectsIsomorphisms
+· 使用定理 `AddCommGrpCat.forget_preservesLimitsOfShape`：∀ {J : Type v} [inst : Cate
+goryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.Preserve
+sLimitsOfShape J (CategoryTheory.…
+· 使用定理 `AddCommGrpCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLim
+its (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `CategoryTheory.GrothendieckTopology.instWEqualsLocallyBijectiveOfHasWeak
+SheafifyOfHasSheafComposeOfPreservesSheafificationOfReflectsIsomorphismsForget`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Gro
+thendieckTopology C) {D : Type w}   [inst_1 : CategoryTheory…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.GrothendieckTopology.instPreservesSheafificationForgetOfP
+reservesLimitsOfHasColimitsOfShapeOfPreservesColimitsOfShapeOppositeCoverOfHasLi
+mitsOfShapeWalkingMulticospanOfReflectsIsomorphisms`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.GrothendieckTopology C) {D : T
+ype u_3}   [inst_1 : CategoryTheo…
+· 使用定理 `AddCommGrpCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Ca
+tegory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Ad
+dCommGrpCat
+· 使用定理 `AlgebraicGeometry.Scheme.Opens.instIsOpenImmersionι`：∀ {X : AlgebraicGeo
+metry.Scheme} (U : X.Opens), AlgebraicGeometry.IsOpenImmersion U.ι
+· 使用定理 `AlgebraicGeometry.Scheme.AffineOpenCover.instIsOpenImmersionF`：∀ {X : Al
+gebraicGeometry.Scheme} (𝒰 : X.AffineOpenCover) (j : 𝒰.I₀), AlgebraicGeometry.Is
+OpenImmersion (𝒰.f j)
+· 使用定理 `AlgebraicGeometry.Scheme.Modules.exists_isOpenCover_presentation`：∀ {X :
+ AlgebraicGeometry.Scheme} (M : X.Modules) [SheafOfModules.IsQuasicoherent M],  
+ ∃ ι U x, TopologicalSpace.IsOpenCover U ∧ ∀ (i : ι), …
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.comp`：∀ {X Y Z : AlgebraicGeometry.Sch
+eme} (f : X ⟶ Y) (g : Y ⟶ Z) [AlgebraicGeometry.IsOpenImmersion f]   [AlgebraicG
+eometry.IsOpenImmersion g], …
 -/
 lemma Scheme.Modules.exists_affineOpenCover_presentation {X : Scheme.{u}} (M : X.Modules)
     [M.IsQuasicoherent] :
-    exists (𝒰 : Scheme.AffineOpenCover.{u} X),
-      forall i, Nonempty (M.restrict (𝒰.f i)).Presentation := by
+    ∃ (𝒰 : Scheme.AffineOpenCover.{u} X),
+      ∀ i, Nonempty (M.restrict (𝒰.f i)).Presentation := by
   obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
-  refine ⟨Scheme.AffineOpenCover.ofIsOpenCover _ hU hU', fun i => ⟨?_⟩⟩
-exact SheafOfModules.Presentation.ofIsIso.{u, u, u} ((restrictFunctorComp _ _).app M).inv
+  refine ⟨Scheme.AffineOpenCover.ofIsOpenCover _ hU hU', fun i ↦ ⟨?_⟩⟩
+  exact SheafOfModules.Presentation.ofIsIso.{u, u, u} ((restrictFunctorComp _ _).app M).inv <|
     (presentationRestrict (hU' i).isoSpec.inv (pres i))
 
 namespace QuasicoherentTilde
@@ -2002,66 +1604,28 @@ namespace QuasicoherentTilde
 variable (M : (Spec R).Modules)
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-- Auxiliary structure used in the proof of `Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent`.
+These are conditions d1) and d2) from [Theoreme 1.4.1, grothendieck-1971]. -/
 -- TODO: Generalise this to a general scheme, replacing `f : R` by sections over a suitable set.
-/--
-Definition of `Aux` / `Aux` 的定义
-
-English:
-structure Aux
-  parameters: (V : (Spec R).Opens)
-  axioms and operations (2):
-    - existence((f : R) (hf : basicOpen f <= V) (s : Γ(M, basicOpen f))) : exists (n : Nat) (t : Γ(M, V)), M.presheaf.map (homOfLE hf).op t = f ^ n • s
-    - uniqueness((f : R) (hf : basicOpen f <= V) (t : Γ(M, V))) : M.presheaf.map (.op <| homOfLE hf) t = (0 : Γ(M, basicOpen f)) -> exists (n : Nat), f ^ n • t = 0
-
-中文:
-结构 Aux
-  参数: (V : (Spec R).Opens)
-  公理与运算 (2 个):
-    - existence((f : R) (hf : basicOpen f <= V) (s : Γ(M, basicOpen f))) : 存在 (n : 自然数) (t : Γ(M, V)), M.presheaf.map (homOfLE hf).op t = f ^ n • s
-    - uniqueness((f : R) (hf : basicOpen f <= V) (t : Γ(M, V))) : M.presheaf.map (.op <| homOfLE hf) t = (0 : Γ(M, basicOpen f)) -> 存在 (n : 自然数), f ^ n • t = 0
+/-
+**AlgebraicGeometry.QuasicoherentTilde.Aux** 是 Mathlib 中的一个结构，位于命名空间 `AlgebraicG
+eometry.QuasicoherentTilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private structure Aux (V : (Spec R).Opens) where
-  existence (f : R) (hf : basicOpen f <= V) (s : Γ(M, basicOpen f)) :
-    exists (n : Nat) (t : Γ(M, V)), M.presheaf.map (homOfLE hf).op t = f ^ n • s
-  uniqueness (f : R) (hf : basicOpen f <= V) (t : Γ(M, V)) :
-    M.presheaf.map (.op <| homOfLE hf) t = (0 : Γ(M, basicOpen f)) ->
-    exists (n : Nat), f ^ n • t = 0
+  existence (f : R) (hf : basicOpen f ≤ V) (s : Γ(M, basicOpen f)) :
+    ∃ (n : ℕ) (t : Γ(M, V)), M.presheaf.map (homOfLE hf).op t = f ^ n • s
+  uniqueness (f : R) (hf : basicOpen f ≤ V) (t : Γ(M, V)) :
+    M.presheaf.map (.op <| homOfLE hf) t = (0 : Γ(M, basicOpen f)) →
+    ∃ (n : ℕ), f ^ n • t = 0
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Aux.of_le` / 引理 `Aux.of_le`
-
-English:
-lemma Aux.of_le
-  statement: {M : (Spec R).Modules} {V : (Spec R).Opens} (g : R) (hg : basicOpen g <= V)
-  proof: by
-    obtain ⟨n, t, ht⟩ := hV.existence f (le_trans hfg hg) s
-    use n, M.presheaf.map (homOfLE hg).op t
-    simp [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp, ht]
-  uniqueness f hfg t ht := by
-    obtain ⟨n, t', ht'⟩ := hV.existence g hg t
-obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg hg) t' by
-      rw [← homOfLE_comp hfg hg]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [ht']; rw [M.map_smul_Spec]; rw [ht]
-      simp
-    refine ⟨m, ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul ?_⟩
-    simp [smul_comm, ← ht', ← M.map_smul_Spec, hm]
-
-中文:
-引理 Aux.of_le
-  结论: {M : (Spec R).Modules} {V : (Spec R).Opens} (g : R) (hg : basicOpen g <= V)
-  证明: by
-    obtain ⟨n, t, ht⟩ := hV.existence f (le_trans hfg hg) s
-    use n, M.presheaf.map (homOfLE hg).op t
-    simp [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp, ht]
-  uniqueness f hfg t ht := by
-    obtain ⟨n, t', ht'⟩ := hV.existence g hg t
-obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg hg) t' by
-      rw [← homOfLE_comp hfg hg]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [ht']; rw [M.map_smul_Spec]; rw [ht]
-      simp
-    refine ⟨m, ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul ?_⟩
-    simp [smul_comm, ← ht', ← M.map_smul_Spec, hm]
+/-
+**AlgebraicGeometry.QuasicoherentTilde.Aux.of_le** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry.QuasicoherentTilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma Aux.of_le {M : (Spec R).Modules} {V : (Spec R).Opens} (g : R) (hg : basicOpen g <= V)
+private lemma Aux.of_le {M : (Spec R).Modules} {V : (Spec R).Opens} (g : R) (hg : basicOpen g ≤ V)
     (hV : Aux M V) :
     Aux M (basicOpen g) where
   existence f hfg s := by
@@ -2070,279 +1634,69 @@ private lemma Aux.of_le {M : (Spec R).Modules} {V : (Spec R).Opens} (g : R) (hg 
     simp [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp, ht]
   uniqueness f hfg t ht := by
     obtain ⟨n, t', ht'⟩ := hV.existence g hg t
-obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg hg) t' by
-      rw [← homOfLE_comp hfg hg]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [ht']; rw [M.map_smul_Spec]; rw [ht]
+    obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg hg) t' <| by
+      rw [← homOfLE_comp hfg hg, op_comp, M.presheaf.map_comp_apply, ht', M.map_smul_Spec, ht]
       simp
     refine ⟨m, ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul ?_⟩
     simp [smul_comm, ← ht', ← M.map_smul_Spec, hm]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Aux.of_eq_iSup_basicOpen` / 引理 `Aux.of_eq_iSup_basicOpen`
+/-- This is the key computation for the proof of
+`Scheme.Modules.isQuasicoherent_iff_isIso_fromTildeΓ`.
+ [Lemme 1.4.1.1][grothendieck-1971] -/
+/-
+**AlgebraicGeometry.QuasicoherentTilde.Aux.of_eq_iSup_basicOpen** 是 Mathlib 中的一个
+引理，位于命名空间 `AlgebraicGeometry.QuasicoherentTilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Aux.of_eq_iSup_basicOpen
-  statement: {M : (Spec R).Modules} (V : (Spec R).Opens)
-  proof: by
-  have h₂ (i j : ι) : Aux M (basicOpen (g i * g j)) :=
-    .of_le _ (basicOpen_mul_le_left _ _) (h₁ i)
-  have hgle (i : ι) : basicOpen (g i) <= V := by rw [hg]; exact le_iSup_of_le _ le_rfl
-  have hug (i : ι) (m : Nat) :
-      IsUnit (algebraMap R (Module.End R Γ(M, basicOpen (g i))) (g i ^ m)) := by
-    rw [map_pow]
-    exact (Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen (g i) le_rfl).pow m
-  -- We show existence and uniqueness separately.
-  refine ⟨fun f hf s => ?_, fun f hf t hs => ?_⟩
-  · have hfgi (i : ι) : basicOpen (f * g i) <= basicOpen (g i) := basicOpen_mul_le_right f (g i)
-    let s' (i : ι) : Γ(M, basicOpen (f * g i)) :=
-      M.presheaf.map (homOfLE <| basicOpen_mul_le_left f (g i)).op s
-    /- By `h₁`, up to a factor of `f ^ N`, the restrictions of `s` to `D(f) ∩ D(gᵢ)` lift
-    to sections `tᵢ` over `D(gᵢ)`. -/
-    obtain ⟨N, t, ht⟩ : exists (N : Nat) (t : forall i, Γ(M, basicOpen (g i))),
-        forall i, f ^ N • s' i = M.presheaf.map (homOfLE (basicOpen_mul_le_right f (g i))).op (t i) := by
-      have (i : ι) : exists (n : Nat) (t : Γ(M, basicOpen (g i))),
-          f ^ n • s' i = M.presheaf.map (homOfLE (hfgi i)).op t := by
-        obtain ⟨n, t', ht'⟩ := (h₁ i).existence (f * g i) (hfgi i) (s' i)
-        rw [mul_pow]; rw [mul_smul]; rw [smul_comm] at ht'
-        obtain ⟨ψ, hψ⟩ := IsUnit.exists_right_inv (hug i n)
-        use n, ψ t'
-        apply (M.isSMulRegular_of_le_basicOpen (basicOpen_mul_le_right f (g i))).pow n
-        dsimp
-        rw [← ht']; rw [← Scheme.Modules.map_smul_Spec]
-        congr 1
-        exact congr($hψ t').symm
-      choose n t' ht' using this
-      have (i : ι) : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
-      have hN (i : ι) : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by grind
-      refine ⟨⨆ i, n i, fun i => f ^ ((⨆ i, n i) - n i) • t' i, fun i => ?_⟩
-      conv_lhs => rw [hN i]
-      rw [pow_add]; rw [mul_smul]; rw [ht']; rw [M.map_smul_Spec]
-    /- By `h₂`, up to a factor of `f ^ K`, the restrictions of `tᵢ` and `tⱼ` to
-    to `D(gᵢ) ∩ D(gⱼ)` agree. -/
-    obtain ⟨K, hK⟩ : exists (K : Nat), forall (i j : ι),
-        M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ K • t i) =
-          M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ K • t j) := by
-      have (i j : ι) : exists (m : Nat),
-          M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ m • t i) =
-            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ m • t j) := by
-        have := (h₂ i j).uniqueness (f * (g i * g j)) (basicOpen_mul_le_right _ _)
-          (M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (t i) -
-            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (t j)) ?_
-        · obtain ⟨m, hm⟩ := this
-          use m
-          apply (M.isSMulRegular_of_le_basicOpen le_rfl).pow m
-          simpa [M.map_smul_Spec _ (f ^ m), ← mul_smul, ← mul_smul, ← mul_pow, ← mul_comm f,
-            smul_sub, sub_eq_zero] using hm
-        · have hfgigi : basicOpen (f * (g i * g j)) <= basicOpen (f * g i) := by
-            rw [← mul_assoc]
-            exact basicOpen_mul_le_left _ _
-          have hfgigj : basicOpen (f * (g i * g j)) <= basicOpen (f * g j) := by
-            rw [mul_comm (g i) (g j)]; rw [← mul_assoc]
-            exact basicOpen_mul_le_left _ _
-          rw [map_sub]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp hfgigi (hfgi i)]; rw [← homOfLE_comp hfgigj (hfgi j)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht i]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht j]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]
-          simp
-      choose m hm using this
-      let K := ⨆ i, ⨆ j, m i j
-      refine ⟨K, fun i j => ?_⟩
-      have : m i j <= K :=
-        le_ciSup_of_le (Finite.bddAbove_range _) i (le_ciSup (Finite.bddAbove_range _) _)
-      have : K = (K - m i j) + m i j := by lia
-      rw [this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]; rw [M.map_smul_Spec]; rw [M.map_smul_Spec _ (f ^ (K - m i j))]; rw [hm i j]
-    -- So up to a factor of `f ^ (N + K)`, the `tᵢ` glue.
-    refine ⟨N + K, ?_⟩
-    have := TopCat.Sheaf.existsUnique_gluing' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) V
-      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl)) (by simp [hg])
-      (fun i => f ^ K • t i) ?_
-    · obtain ⟨a, ha, -⟩ := this
-      use a
-      refine TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (f * g i)) _
-          (fun i => homOfLE (basicOpen_mul_le_left f (g i))) ?_ _ _ ?_
-      · rw [left_eq_inf.mpr hf, hg, inf_iSup_eq]
-        simp_rw [basicOpen_mul]
-        exact le_rfl
-      · intro i
-        rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp (basicOpen_mul_le_right _ _) (hgle i)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [M.map_smul_Spec]; rw [ha]; rw [M.map_smul_Spec]; rw [pow_add]; rw [mul_smul]; rw [smul_comm]; rw [ht i]
-    · intro i j
-      have : Function.Injective (M.presheaf.map (eqToHom <| (basicOpen_mul (g i) (g j))).op) :=
-        ConcreteCategory.injective_of_mono_of_preservesPullback _
-      apply this
-      dsimp [Opens.infLELeft, Opens.infLERight]
-      simp_rw [← M.presheaf.map_comp_apply, ← op_comp, eqToHom_comp_homOfLE]
-      exact hK i j
-  · have (i : ι) : exists (n : Nat), M.presheaf.map (homOfLE (hgle i)).op (f ^ n • t) = 0 := by
-      have := (h₁ i).uniqueness (f * g i) (basicOpen_mul_le_right f (g i))
-        (M.presheaf.map (homOfLE (hgle i)).op t) ?_
-      · obtain ⟨n, hn⟩ := this
-        use n
-        rw [mul_pow]; rw [mul_comm]; rw [mul_smul]; rw [← Scheme.Modules.map_smul_Spec] at hn
-        exact ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul hn
-      · rw [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp,
-          ← homOfLE_comp ((basicOpen_mul_le_left f (g i))) hf, op_comp, M.presheaf.map_comp_apply]
-        simp [hs]
-    choose n hn using this
-    use ⨆ i, n i
-    apply TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) _
-      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl))
-    · simp [hg]
-    · intro i
-      have : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
-      have : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by lia
-      rw [this]; rw [pow_add]; rw [mul_smul]; rw [Scheme.Modules.map_smul_Spec]; rw [hn i]
-      simp
-
-中文:
-引理 Aux.of_eq_iSup_basicOpen
-  结论: {M : (Spec R).Modules} (V : (Spec R).Opens)
-  证明: by
-  have h₂ (i j : ι) : Aux M (basicOpen (g i * g j)) :=
-    .of_le _ (basicOpen_mul_le_left _ _) (h₁ i)
-  have hgle (i : ι) : basicOpen (g i) <= V := by rw [hg]; exact le_iSup_of_le _ le_rfl
-  have hug (i : ι) (m : Nat) :
-      IsUnit (algebraMap R (Module.End R Γ(M, basicOpen (g i))) (g i ^ m)) := by
-    rw [map_pow]
-    exact (Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen (g i) le_rfl).pow m
-  -- We show existence and uniqueness separately.
-  refine ⟨fun f hf s => ?_, fun f hf t hs => ?_⟩
-  · have hfgi (i : ι) : basicOpen (f * g i) <= basicOpen (g i) := basicOpen_mul_le_right f (g i)
-    let s' (i : ι) : Γ(M, basicOpen (f * g i)) :=
-      M.presheaf.map (homOfLE <| basicOpen_mul_le_left f (g i)).op s
-    /- By `h₁`, up to a factor of `f ^ N`, the restrictions of `s` to `D(f) ∩ D(gᵢ)` lift
-    to sections `tᵢ` over `D(gᵢ)`. -/
-    obtain ⟨N, t, ht⟩ : exists (N : Nat) (t : forall i, Γ(M, basicOpen (g i))),
-        forall i, f ^ N • s' i = M.presheaf.map (homOfLE (basicOpen_mul_le_right f (g i))).op (t i) := by
-      have (i : ι) : exists (n : Nat) (t : Γ(M, basicOpen (g i))),
-          f ^ n • s' i = M.presheaf.map (homOfLE (hfgi i)).op t := by
-        obtain ⟨n, t', ht'⟩ := (h₁ i).existence (f * g i) (hfgi i) (s' i)
-        rw [mul_pow]; rw [mul_smul]; rw [smul_comm] at ht'
-        obtain ⟨ψ, hψ⟩ := IsUnit.exists_right_inv (hug i n)
-        use n, ψ t'
-        apply (M.isSMulRegular_of_le_basicOpen (basicOpen_mul_le_right f (g i))).pow n
-        dsimp
-        rw [← ht']; rw [← Scheme.Modules.map_smul_Spec]
-        congr 1
-        exact congr($hψ t').symm
-      choose n t' ht' using this
-      have (i : ι) : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
-      have hN (i : ι) : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by grind
-      refine ⟨⨆ i, n i, fun i => f ^ ((⨆ i, n i) - n i) • t' i, fun i => ?_⟩
-      conv_lhs => rw [hN i]
-      rw [pow_add]; rw [mul_smul]; rw [ht']; rw [M.map_smul_Spec]
-    /- By `h₂`, up to a factor of `f ^ K`, the restrictions of `tᵢ` and `tⱼ` to
-    to `D(gᵢ) ∩ D(gⱼ)` agree. -/
-    obtain ⟨K, hK⟩ : exists (K : Nat), forall (i j : ι),
-        M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ K • t i) =
-          M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ K • t j) := by
-      have (i j : ι) : exists (m : Nat),
-          M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ m • t i) =
-            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ m • t j) := by
-        have := (h₂ i j).uniqueness (f * (g i * g j)) (basicOpen_mul_le_right _ _)
-          (M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (t i) -
-            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (t j)) ?_
-        · obtain ⟨m, hm⟩ := this
-          use m
-          apply (M.isSMulRegular_of_le_basicOpen le_rfl).pow m
-          simpa [M.map_smul_Spec _ (f ^ m), ← mul_smul, ← mul_smul, ← mul_pow, ← mul_comm f,
-            smul_sub, sub_eq_zero] using hm
-        · have hfgigi : basicOpen (f * (g i * g j)) <= basicOpen (f * g i) := by
-            rw [← mul_assoc]
-            exact basicOpen_mul_le_left _ _
-          have hfgigj : basicOpen (f * (g i * g j)) <= basicOpen (f * g j) := by
-            rw [mul_comm (g i) (g j)]; rw [← mul_assoc]
-            exact basicOpen_mul_le_left _ _
-          rw [map_sub]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp hfgigi (hfgi i)]; rw [← homOfLE_comp hfgigj (hfgi j)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht i]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht j]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]
-          simp
-      choose m hm using this
-      let K := ⨆ i, ⨆ j, m i j
-      refine ⟨K, fun i j => ?_⟩
-      have : m i j <= K :=
-        le_ciSup_of_le (Finite.bddAbove_range _) i (le_ciSup (Finite.bddAbove_range _) _)
-      have : K = (K - m i j) + m i j := by lia
-      rw [this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]; rw [M.map_smul_Spec]; rw [M.map_smul_Spec _ (f ^ (K - m i j))]; rw [hm i j]
-    -- So up to a factor of `f ^ (N + K)`, the `tᵢ` glue.
-    refine ⟨N + K, ?_⟩
-    have := TopCat.Sheaf.existsUnique_gluing' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) V
-      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl)) (by simp [hg])
-      (fun i => f ^ K • t i) ?_
-    · obtain ⟨a, ha, -⟩ := this
-      use a
-      refine TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (f * g i)) _
-          (fun i => homOfLE (basicOpen_mul_le_left f (g i))) ?_ _ _ ?_
-      · rw [left_eq_inf.mpr hf, hg, inf_iSup_eq]
-        simp_rw [basicOpen_mul]
-        exact le_rfl
-      · intro i
-        rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp (basicOpen_mul_le_right _ _) (hgle i)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [M.map_smul_Spec]; rw [ha]; rw [M.map_smul_Spec]; rw [pow_add]; rw [mul_smul]; rw [smul_comm]; rw [ht i]
-    · intro i j
-      have : Function.Injective (M.presheaf.map (eqToHom <| (basicOpen_mul (g i) (g j))).op) :=
-        ConcreteCategory.injective_of_mono_of_preservesPullback _
-      apply this
-      dsimp [Opens.infLELeft, Opens.infLERight]
-      simp_rw [← M.presheaf.map_comp_apply, ← op_comp, eqToHom_comp_homOfLE]
-      exact hK i j
-  · have (i : ι) : exists (n : Nat), M.presheaf.map (homOfLE (hgle i)).op (f ^ n • t) = 0 := by
-      have := (h₁ i).uniqueness (f * g i) (basicOpen_mul_le_right f (g i))
-        (M.presheaf.map (homOfLE (hgle i)).op t) ?_
-      · obtain ⟨n, hn⟩ := this
-        use n
-        rw [mul_pow]; rw [mul_comm]; rw [mul_smul]; rw [← Scheme.Modules.map_smul_Spec] at hn
-        exact ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul hn
-      · rw [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp,
-          ← homOfLE_comp ((basicOpen_mul_le_left f (g i))) hf, op_comp, M.presheaf.map_comp_apply]
-        simp [hs]
-    choose n hn using this
-    use ⨆ i, n i
-    apply TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) _
-      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl))
-    · simp [hg]
-    · intro i
-      have : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
-      have : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by lia
-      rw [this]; rw [pow_add]; rw [mul_smul]; rw [Scheme.Modules.map_smul_Spec]; rw [hn i]
-      simp
+--- 原说明 ---
+This is the key computation for the proof of
+`Scheme.Modules.isQuasicoherent_iff_isIso_fromTildeΓ`.
+ [Lemme 1.4.1.1][grothendieck-1971]
 -/
 private lemma Aux.of_eq_iSup_basicOpen {M : (Spec R).Modules} (V : (Spec R).Opens)
-    {ι : Type*} [Finite ι] (g : ι -> R) (hg : V = ⨆ i, basicOpen (g i))
-    (h₁ : forall (i : ι), Aux M (basicOpen (g i))) :
+    {ι : Type*} [Finite ι] (g : ι → R) (hg : V = ⨆ i, basicOpen (g i))
+    (h₁ : ∀ (i : ι), Aux M (basicOpen (g i))) :
     Aux M V := by
   have h₂ (i j : ι) : Aux M (basicOpen (g i * g j)) :=
     .of_le _ (basicOpen_mul_le_left _ _) (h₁ i)
-  have hgle (i : ι) : basicOpen (g i) <= V := by rw [hg]; exact le_iSup_of_le _ le_rfl
-  have hug (i : ι) (m : Nat) :
+  have hgle (i : ι) : basicOpen (g i) ≤ V := by rw [hg]; exact le_iSup_of_le _ le_rfl
+  have hug (i : ι) (m : ℕ) :
       IsUnit (algebraMap R (Module.End R Γ(M, basicOpen (g i))) (g i ^ m)) := by
     rw [map_pow]
     exact (Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen (g i) le_rfl).pow m
   -- We show existence and uniqueness separately.
-  refine ⟨fun f hf s => ?_, fun f hf t hs => ?_⟩
-  · have hfgi (i : ι) : basicOpen (f * g i) <= basicOpen (g i) := basicOpen_mul_le_right f (g i)
+  refine ⟨fun f hf s ↦ ?_, fun f hf t hs ↦ ?_⟩
+  · have hfgi (i : ι) : basicOpen (f * g i) ≤ basicOpen (g i) := basicOpen_mul_le_right f (g i)
     let s' (i : ι) : Γ(M, basicOpen (f * g i)) :=
       M.presheaf.map (homOfLE <| basicOpen_mul_le_left f (g i)).op s
     /- By `h₁`, up to a factor of `f ^ N`, the restrictions of `s` to `D(f) ∩ D(gᵢ)` lift
     to sections `tᵢ` over `D(gᵢ)`. -/
-    obtain ⟨N, t, ht⟩ : exists (N : Nat) (t : forall i, Γ(M, basicOpen (g i))),
-        forall i, f ^ N • s' i = M.presheaf.map (homOfLE (basicOpen_mul_le_right f (g i))).op (t i) := by
-      have (i : ι) : exists (n : Nat) (t : Γ(M, basicOpen (g i))),
+    obtain ⟨N, t, ht⟩ : ∃ (N : ℕ) (t : ∀ i, Γ(M, basicOpen (g i))),
+        ∀ i, f ^ N • s' i = M.presheaf.map (homOfLE (basicOpen_mul_le_right f (g i))).op (t i) := by
+      have (i : ι) : ∃ (n : ℕ) (t : Γ(M, basicOpen (g i))),
           f ^ n • s' i = M.presheaf.map (homOfLE (hfgi i)).op t := by
         obtain ⟨n, t', ht'⟩ := (h₁ i).existence (f * g i) (hfgi i) (s' i)
-        rw [mul_pow]; rw [mul_smul]; rw [smul_comm] at ht'
+        rw [mul_pow, mul_smul, smul_comm] at ht'
         obtain ⟨ψ, hψ⟩ := IsUnit.exists_right_inv (hug i n)
         use n, ψ t'
         apply (M.isSMulRegular_of_le_basicOpen (basicOpen_mul_le_right f (g i))).pow n
         dsimp
-        rw [← ht']; rw [← Scheme.Modules.map_smul_Spec]
+        rw [← ht', ← Scheme.Modules.map_smul_Spec]
         congr 1
         exact congr($hψ t').symm
       choose n t' ht' using this
-      have (i : ι) : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
+      have (i : ι) : n i ≤ ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
       have hN (i : ι) : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by grind
-      refine ⟨⨆ i, n i, fun i => f ^ ((⨆ i, n i) - n i) • t' i, fun i => ?_⟩
+      refine ⟨⨆ i, n i, fun i ↦ f ^ ((⨆ i, n i) - n i) • t' i, fun i ↦ ?_⟩
       conv_lhs => rw [hN i]
-      rw [pow_add]; rw [mul_smul]; rw [ht']; rw [M.map_smul_Spec]
+      rw [pow_add, mul_smul, ht', M.map_smul_Spec]
     /- By `h₂`, up to a factor of `f ^ K`, the restrictions of `tᵢ` and `tⱼ` to
     to `D(gᵢ) ∩ D(gⱼ)` agree. -/
-    obtain ⟨K, hK⟩ : exists (K : Nat), forall (i j : ι),
+    obtain ⟨K, hK⟩ : ∃ (K : ℕ), ∀ (i j : ι),
         M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ K • t i) =
           M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ K • t j) := by
-      have (i j : ι) : exists (m : Nat),
+      have (i j : ι) : ∃ (m : ℕ),
           M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ m • t i) =
             M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ m • t j) := by
         have := (h₂ i j).uniqueness (f * (g i * g j)) (basicOpen_mul_le_right _ _)
@@ -2353,35 +1707,43 @@ private lemma Aux.of_eq_iSup_basicOpen {M : (Spec R).Modules} (V : (Spec R).Open
           apply (M.isSMulRegular_of_le_basicOpen le_rfl).pow m
           simpa [M.map_smul_Spec _ (f ^ m), ← mul_smul, ← mul_smul, ← mul_pow, ← mul_comm f,
             smul_sub, sub_eq_zero] using hm
-        · have hfgigi : basicOpen (f * (g i * g j)) <= basicOpen (f * g i) := by
+        · have hfgigi : basicOpen (f * (g i * g j)) ≤ basicOpen (f * g i) := by
             rw [← mul_assoc]
             exact basicOpen_mul_le_left _ _
-          have hfgigj : basicOpen (f * (g i * g j)) <= basicOpen (f * g j) := by
-            rw [mul_comm (g i) (g j)]; rw [← mul_assoc]
+          have hfgigj : basicOpen (f * (g i * g j)) ≤ basicOpen (f * g j) := by
+            rw [mul_comm (g i) (g j), ← mul_assoc]
             exact basicOpen_mul_le_left _ _
-          rw [map_sub]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp hfgigi (hfgi i)]; rw [← homOfLE_comp hfgigj (hfgi j)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht i]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht j]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]
+          rw [map_sub, ← M.presheaf.map_comp_apply, ← op_comp, ← M.presheaf.map_comp_apply,
+            ← op_comp, homOfLE_comp, homOfLE_comp, ← homOfLE_comp hfgigi (hfgi i),
+            ← homOfLE_comp hfgigj (hfgi j), op_comp, M.presheaf.map_comp_apply, ← ht i,
+            M.map_smul_Spec, ← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp, op_comp,
+            M.presheaf.map_comp_apply, ← ht j, M.map_smul_Spec, ← M.presheaf.map_comp_apply,
+            ← op_comp, homOfLE_comp]
           simp
       choose m hm using this
       let K := ⨆ i, ⨆ j, m i j
-      refine ⟨K, fun i j => ?_⟩
-      have : m i j <= K :=
+      refine ⟨K, fun i j ↦ ?_⟩
+      have : m i j ≤ K :=
         le_ciSup_of_le (Finite.bddAbove_range _) i (le_ciSup (Finite.bddAbove_range _) _)
       have : K = (K - m i j) + m i j := by lia
-      rw [this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]; rw [M.map_smul_Spec]; rw [M.map_smul_Spec _ (f ^ (K - m i j))]; rw [hm i j]
+      rw [this, pow_add, mul_smul, mul_smul, M.map_smul_Spec, M.map_smul_Spec _ (f ^ (K - m i j)),
+        hm i j]
     -- So up to a factor of `f ^ (N + K)`, the `tᵢ` glue.
     refine ⟨N + K, ?_⟩
-    have := TopCat.Sheaf.existsUnique_gluing' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) V
-      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl)) (by simp [hg])
-      (fun i => f ^ K • t i) ?_
+    have := TopCat.Sheaf.existsUnique_gluing' ⟨_, M.isSheaf⟩ (fun i ↦ basicOpen (g i)) V
+      (fun i ↦ homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl)) (by simp [hg])
+      (fun i ↦ f ^ K • t i) ?_
     · obtain ⟨a, ha, -⟩ := this
       use a
-      refine TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (f * g i)) _
-          (fun i => homOfLE (basicOpen_mul_le_left f (g i))) ?_ _ _ ?_
+      refine TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i ↦ basicOpen (f * g i)) _
+          (fun i ↦ homOfLE (basicOpen_mul_le_left f (g i))) ?_ _ _ ?_
       · rw [left_eq_inf.mpr hf, hg, inf_iSup_eq]
         simp_rw [basicOpen_mul]
         exact le_rfl
       · intro i
-        rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp (basicOpen_mul_le_right _ _) (hgle i)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [M.map_smul_Spec]; rw [ha]; rw [M.map_smul_Spec]; rw [pow_add]; rw [mul_smul]; rw [smul_comm]; rw [ht i]
+        rw [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp,
+          ← homOfLE_comp (basicOpen_mul_le_right _ _) (hgle i), op_comp, M.presheaf.map_comp_apply,
+          M.map_smul_Spec, ha, M.map_smul_Spec, pow_add, mul_smul, smul_comm, ht i]
     · intro i j
       have : Function.Injective (M.presheaf.map (eqToHom <| (basicOpen_mul (g i) (g j))).op) :=
         ConcreteCategory.injective_of_mono_of_preservesPullback _
@@ -2389,76 +1751,37 @@ private lemma Aux.of_eq_iSup_basicOpen {M : (Spec R).Modules} (V : (Spec R).Open
       dsimp [Opens.infLELeft, Opens.infLERight]
       simp_rw [← M.presheaf.map_comp_apply, ← op_comp, eqToHom_comp_homOfLE]
       exact hK i j
-  · have (i : ι) : exists (n : Nat), M.presheaf.map (homOfLE (hgle i)).op (f ^ n • t) = 0 := by
+  · have (i : ι) : ∃ (n : ℕ), M.presheaf.map (homOfLE (hgle i)).op (f ^ n • t) = 0 := by
       have := (h₁ i).uniqueness (f * g i) (basicOpen_mul_le_right f (g i))
         (M.presheaf.map (homOfLE (hgle i)).op t) ?_
       · obtain ⟨n, hn⟩ := this
         use n
-        rw [mul_pow]; rw [mul_comm]; rw [mul_smul]; rw [← Scheme.Modules.map_smul_Spec] at hn
+        rw [mul_pow, mul_comm, mul_smul, ← Scheme.Modules.map_smul_Spec] at hn
         exact ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul hn
       · rw [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp,
           ← homOfLE_comp ((basicOpen_mul_le_left f (g i))) hf, op_comp, M.presheaf.map_comp_apply]
         simp [hs]
     choose n hn using this
     use ⨆ i, n i
-    apply TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) _
-      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl))
+    apply TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i ↦ basicOpen (g i)) _
+      (fun i ↦ homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl))
     · simp [hg]
     · intro i
-      have : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
+      have : n i ≤ ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
       have : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by lia
-      rw [this]; rw [pow_add]; rw [mul_smul]; rw [Scheme.Modules.map_smul_Spec]; rw [hn i]
+      rw [this, pow_add, mul_smul, Scheme.Modules.map_smul_Spec, hn i]
       simp
-
-/--
-lemma `isLocalizing_iff_aux` / 引理 `isLocalizing_iff_aux`
-
-English:
-lemma isLocalizing_iff_aux
-  given: (M : (Spec R).Modules)
-  proof: by
-  let φ (f : R) := ((modulesSpecToSheaf.obj M).obj.map (basicOpen f).leTop.op).hom
-  refine ⟨fun h => ?_, fun h f => IsLocalizedModule.Away.mk_of_addCommGroup ?_ ?_ ?_⟩
-  · have hf (f : R) : IsLocalizedModule.Away f (φ f) := h f
-    refine ⟨fun f hle s => ?_, fun f hle s hs => ?_⟩
-    · obtain ⟨n, y, hy⟩ := (hf f).surj _ _ s
-      use n, y, hy.symm
-    · obtain ⟨⟨_, n, rfl⟩, hn⟩ := (IsLocalizedModule.eq_zero_iff (.powers f) (φ f)).mp hs
-      use n, hn
-  · exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen f le_rfl
-  · intro x
-    obtain ⟨n, t, ht⟩ := h.existence _ _ x
-    use n, t, ht.symm
-  · intro x hx
-    obtain ⟨n, hn⟩ := h.uniqueness _ _ _ hx
-    use n, hn
-
-中文:
-引理 isLocalizing_iff_aux
-  条件: (M : (Spec R).Modules)
-  证明: by
-  let φ (f : R) := ((modulesSpecToSheaf.obj M).obj.map (basicOpen f).leTop.op).hom
-  refine ⟨fun h => ?_, fun h f => IsLocalizedModule.Away.mk_of_addCommGroup ?_ ?_ ?_⟩
-  · have hf (f : R) : IsLocalizedModule.Away f (φ f) := h f
-    refine ⟨fun f hle s => ?_, fun f hle s hs => ?_⟩
-    · obtain ⟨n, y, hy⟩ := (hf f).surj _ _ s
-      use n, y, hy.symm
-    · obtain ⟨⟨_, n, rfl⟩, hn⟩ := (IsLocalizedModule.eq_zero_iff (.powers f) (φ f)).mp hs
-      use n, hn
-  · exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen f le_rfl
-  · intro x
-    obtain ⟨n, t, ht⟩ := h.existence _ _ x
-    use n, t, ht.symm
-  · intro x hx
-    obtain ⟨n, hn⟩ := h.uniqueness _ _ _ hx
-    use n, hn
+/-
+**AlgebraicGeometry.QuasicoherentTilde.isLocalizing_iff_aux** 是 Mathlib 中的一个引理，位
+于命名空间 `AlgebraicGeometry.QuasicoherentTilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma isLocalizing_iff_aux (M : (Spec R).Modules) :
     IsLocalizing (modulesSpecToSheaf.obj M) ↔ Aux M ⊤ := by
   let φ (f : R) := ((modulesSpecToSheaf.obj M).obj.map (basicOpen f).leTop.op).hom
-  refine ⟨fun h => ?_, fun h f => IsLocalizedModule.Away.mk_of_addCommGroup ?_ ?_ ?_⟩
+  refine ⟨fun h ↦ ?_, fun h f ↦ IsLocalizedModule.Away.mk_of_addCommGroup ?_ ?_ ?_⟩
   · have hf (f : R) : IsLocalizedModule.Away f (φ f) := h f
-    refine ⟨fun f hle s => ?_, fun f hle s hs => ?_⟩
+    refine ⟨fun f hle s ↦ ?_, fun f hle s hs ↦ ?_⟩
     · obtain ⟨n, y, hy⟩ := (hf f).surj _ _ s
       use n, y, hy.symm
     · obtain ⟨⟨_, n, rfl⟩, hn⟩ := (IsLocalizedModule.eq_zero_iff (.powers f) (φ f)).mp hs
@@ -2473,100 +1796,28 @@ private lemma isLocalizing_iff_aux (M : (Spec R).Modules) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `aux_basicOpen_of_aux_restrict` / 引理 `aux_basicOpen_of_aux_restrict`
-
-English:
-lemma aux_basicOpen_of_aux_restrict
-  statement: (M : (Spec R).Modules) (g : R)
-  proof: by
-  let a : R ⟶ CommRingCat.of (Localization.Away g) :=
-CommRingCat.ofHom algebraMap R _
-  set ψ : Spec (.of <| Localization.Away g) ⟶ Spec (.of R) := Spec.map a
-  set M' : (Spec (.of <| Localization.Away g)).Modules := M.restrict ψ
-  have heq (f : R) (hf : basicOpen f <= basicOpen g) :
-      basicOpen f = ψ ''ᵁ basicOpen (a f) := by
-    rw [← SpecMap_preimage_basicOpen]; rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
-    simp [a, ψ, hf]
-  let iso : Γ(M.restrict ψ, ⊤) ≅ Γ(M, basicOpen g) :=
-    M.restrictAppIso _ _ ≪≫ M.presheaf.mapIso (eqToIso <| by simp [ψ, a]).op
-  let e (f : R) (hf : basicOpen f <= basicOpen g) : Γ(M', basicOpen (a f)) ≅ Γ(M, basicOpen f) :=
-    M.restrictAppIso ψ (basicOpen (a f)) ≪≫ M.presheaf.mapIso (eqToIso <| heq f hf).op
-  refine ⟨fun f hf s => ?_, fun f hf t ht => ?_⟩
-  · obtain ⟨n, t, ht⟩ := h.existence (a f) le_top ((e _ hf).inv s)
-    use n, iso.hom t
-    have := congr((e _ hf).hom $ht)
-    dsimp [M'] at this
-    rw [← ConcreteCategory.comp_apply] at this
-    simp only [homOfLE_leOfHom, Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
-      eqToHom_op, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, eqToIso.inv, e, iso] at this ⊢
-    simp only [homOfLE_leOfHom, Scheme.Modules.map_restrictAppIso_hom_assoc, AddCommGrpCat.hom_comp,
-      AddMonoidHom.coe_comp, Function.comp_apply, ← map_pow, ψ] at this
-    rw [Scheme.Modules.restrictAppIso_smul_Spec] at this
-    simpa [← Functor.map_comp_apply, eqToHom_comp_homOfLE_op, homOfLE_op_comp_eqToHom] using this
-· obtain ⟨n, hn⟩ := h.uniqueness (a f) le_top (iso.inv t) by
-      simpa [M', iso, ← M.presheaf.map_comp_apply, homOfLE_op_comp_eqToHom, e] using
-        congr((e _ hf).inv $ht)
-    use n
-    have := congr(iso.hom $hn)
-    dsimp [iso, ψ] at this
-    rw [eqToHom_op]; rw [map_zero]; rw [← map_pow]; rw [Scheme.Modules.restrictAppIso_smul_Spec]; rw [M.map_smul_Spec]; rw [Iso.inv_hom_id_apply] at this
-    simpa using this
-
-中文:
-引理 aux_basicOpen_of_aux_restrict
-  结论: (M : (Spec R).Modules) (g : R)
-  证明: by
-  let a : R ⟶ CommRingCat.of (Localization.Away g) :=
-CommRingCat.ofHom algebraMap R _
-  set ψ : Spec (.of <| Localization.Away g) ⟶ Spec (.of R) := Spec.map a
-  set M' : (Spec (.of <| Localization.Away g)).Modules := M.restrict ψ
-  have heq (f : R) (hf : basicOpen f <= basicOpen g) :
-      basicOpen f = ψ ''ᵁ basicOpen (a f) := by
-    rw [← SpecMap_preimage_basicOpen]; rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
-    simp [a, ψ, hf]
-  let iso : Γ(M.restrict ψ, ⊤) ≅ Γ(M, basicOpen g) :=
-    M.restrictAppIso _ _ ≪≫ M.presheaf.mapIso (eqToIso <| by simp [ψ, a]).op
-  let e (f : R) (hf : basicOpen f <= basicOpen g) : Γ(M', basicOpen (a f)) ≅ Γ(M, basicOpen f) :=
-    M.restrictAppIso ψ (basicOpen (a f)) ≪≫ M.presheaf.mapIso (eqToIso <| heq f hf).op
-  refine ⟨fun f hf s => ?_, fun f hf t ht => ?_⟩
-  · obtain ⟨n, t, ht⟩ := h.existence (a f) le_top ((e _ hf).inv s)
-    use n, iso.hom t
-    have := congr((e _ hf).hom $ht)
-    dsimp [M'] at this
-    rw [← ConcreteCategory.comp_apply] at this
-    simp only [homOfLE_leOfHom, Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
-      eqToHom_op, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, eqToIso.inv, e, iso] at this ⊢
-    simp only [homOfLE_leOfHom, Scheme.Modules.map_restrictAppIso_hom_assoc, AddCommGrpCat.hom_comp,
-      AddMonoidHom.coe_comp, Function.comp_apply, ← map_pow, ψ] at this
-    rw [Scheme.Modules.restrictAppIso_smul_Spec] at this
-    simpa [← Functor.map_comp_apply, eqToHom_comp_homOfLE_op, homOfLE_op_comp_eqToHom] using this
-· obtain ⟨n, hn⟩ := h.uniqueness (a f) le_top (iso.inv t) by
-      simpa [M', iso, ← M.presheaf.map_comp_apply, homOfLE_op_comp_eqToHom, e] using
-        congr((e _ hf).inv $ht)
-    use n
-    have := congr(iso.hom $hn)
-    dsimp [iso, ψ] at this
-    rw [eqToHom_op]; rw [map_zero]; rw [← map_pow]; rw [Scheme.Modules.restrictAppIso_smul_Spec]; rw [M.map_smul_Spec]; rw [Iso.inv_hom_id_apply] at this
-    simpa using this
+/-
+**AlgebraicGeometry.QuasicoherentTilde.aux_basicOpen_of_aux_restrict** 是 Mathlib
+ 中的一个引理，位于命名空间 `AlgebraicGeometry.QuasicoherentTilde`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma aux_basicOpen_of_aux_restrict (M : (Spec R).Modules) (g : R)
     (h : Aux (M.restrict <|
-Spec.map CommRingCat.ofHom algebraMap R Localization.Away g) ⊤) :
+        Spec.map <| CommRingCat.ofHom <| algebraMap R <| Localization.Away g) ⊤) :
       Aux M (basicOpen g) := by
   let a : R ⟶ CommRingCat.of (Localization.Away g) :=
-CommRingCat.ofHom algebraMap R _
+    CommRingCat.ofHom <| algebraMap R _
   set ψ : Spec (.of <| Localization.Away g) ⟶ Spec (.of R) := Spec.map a
   set M' : (Spec (.of <| Localization.Away g)).Modules := M.restrict ψ
-  have heq (f : R) (hf : basicOpen f <= basicOpen g) :
+  have heq (f : R) (hf : basicOpen f ≤ basicOpen g) :
       basicOpen f = ψ ''ᵁ basicOpen (a f) := by
-    rw [← SpecMap_preimage_basicOpen]; rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
+    rw [← SpecMap_preimage_basicOpen, Scheme.Hom.image_preimage_eq_opensRange_inf]
     simp [a, ψ, hf]
   let iso : Γ(M.restrict ψ, ⊤) ≅ Γ(M, basicOpen g) :=
     M.restrictAppIso _ _ ≪≫ M.presheaf.mapIso (eqToIso <| by simp [ψ, a]).op
-  let e (f : R) (hf : basicOpen f <= basicOpen g) : Γ(M', basicOpen (a f)) ≅ Γ(M, basicOpen f) :=
+  let e (f : R) (hf : basicOpen f ≤ basicOpen g) : Γ(M', basicOpen (a f)) ≅ Γ(M, basicOpen f) :=
     M.restrictAppIso ψ (basicOpen (a f)) ≪≫ M.presheaf.mapIso (eqToIso <| heq f hf).op
-  refine ⟨fun f hf s => ?_, fun f hf t ht => ?_⟩
+  refine ⟨fun f hf s ↦ ?_, fun f hf t ht ↦ ?_⟩
   · obtain ⟨n, t, ht⟩ := h.existence (a f) le_top ((e _ hf).inv s)
     use n, iso.hom t
     have := congr((e _ hf).hom $ht)
@@ -2578,13 +1829,14 @@ CommRingCat.ofHom algebraMap R _
       AddMonoidHom.coe_comp, Function.comp_apply, ← map_pow, ψ] at this
     rw [Scheme.Modules.restrictAppIso_smul_Spec] at this
     simpa [← Functor.map_comp_apply, eqToHom_comp_homOfLE_op, homOfLE_op_comp_eqToHom] using this
-· obtain ⟨n, hn⟩ := h.uniqueness (a f) le_top (iso.inv t) by
+  · obtain ⟨n, hn⟩ := h.uniqueness (a f) le_top (iso.inv t) <| by
       simpa [M', iso, ← M.presheaf.map_comp_apply, homOfLE_op_comp_eqToHom, e] using
         congr((e _ hf).inv $ht)
     use n
     have := congr(iso.hom $hn)
     dsimp [iso, ψ] at this
-    rw [eqToHom_op]; rw [map_zero]; rw [← map_pow]; rw [Scheme.Modules.restrictAppIso_smul_Spec]; rw [M.map_smul_Spec]; rw [Iso.inv_hom_id_apply] at this
+    rw [eqToHom_op, map_zero, ← map_pow, Scheme.Modules.restrictAppIso_smul_Spec,
+      M.map_smul_Spec, Iso.inv_hom_id_apply] at this
     simpa using this
 
 end QuasicoherentTilde
@@ -2592,74 +1844,26 @@ end QuasicoherentTilde
 open QuasicoherentTilde in
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent` / 实例 `Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent`
+/-- If `M` is a quasi-coherent `𝒪_{Spec R}` module, it is isomorphic to `Γ(M)^~`. -/
+/-
+**AlgebraicGeometry.Scheme.Modules.isIso_fromTilde** 是 Mathlib 中的一个实例，位于命名空间 `Al
+gebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent
-  signature: (M : (Spec R).Modules)
-  body: by
-  rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux]
-  obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
-  obtain ⟨s, hs⟩ := hU.exists_finite_of_compactSpace
-  choose κ hκ a ha using fun i : s =>
-    PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i) (hU' i).isCompact
-  refine Aux.of_eq_iSup_basicOpen _ (fun i : Sigma κ => a _ i.2) ?_ ?_
-  · rw [IsOpenCover] at hs
-    rw [eq_comm]; rw [iSup_sigma]; rw [← hs]
-    exact iSup_congr fun i => (ha i).symm
-  · intro i
-    let t := (Spec R).homOfLE (U := PrimeSpectrum.basicOpen (a _ i.2)) (V := U i.1)
-      (by rw [ha]; exact le_iSup_of_le _ le_rfl)
-    let iso : restrictFunctor (U i.1).ι ⋙ restrictFunctor ((basicOpenIsoSpecAway _).inv ≫ t) ≅
-        restrictFunctor (Spec.map (CommRingCat.ofHom <| algebraMap _ _)) :=
-      (restrictFunctorComp _ _).symm ≪≫
-        restrictFunctorCongr (by simp [t, basicOpenIsoSpecAway])
-let pres := SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
-      presentationRestrict ((basicOpenIsoSpecAway _).inv ≫ t) (pres i.1)
-    have : IsIso _ := isIso_fromTildeΓ_of_presentation (M.restrict _) pres
-    rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux] at this
-    exact aux_basicOpen_of_aux_restrict _ _ this
-
-中文:
-实例 概形.Modules.isIso_fromTildeΓ_of_isQuasicoherent
-  签名: (M : (Spec R).Modules)
-  定义体: by
-  rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux]
-  obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
-  obtain ⟨s, hs⟩ := hU.exists_finite_of_compactSpace
-  choose κ hκ a ha using fun i : s =>
-    PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i) (hU' i).isCompact
-  refine Aux.of_eq_iSup_basicOpen _ (fun i : Sigma κ => a _ i.2) ?_ ?_
-  · rw [IsOpenCover] at hs
-    rw [eq_comm]; rw [iSup_sigma]; rw [← hs]
-    exact iSup_congr fun i => (ha i).symm
-  · intro i
-    let t := (Spec R).homOfLE (U := PrimeSpectrum.basicOpen (a _ i.2)) (V := U i.1)
-      (by rw [ha]; exact le_iSup_of_le _ le_rfl)
-    let iso : restrictFunctor (U i.1).ι ⋙ restrictFunctor ((basicOpenIsoSpecAway _).inv ≫ t) ≅
-        restrictFunctor (Spec.map (CommRingCat.ofHom <| algebraMap _ _)) :=
-      (restrictFunctorComp _ _).symm ≪≫
-        restrictFunctorCongr (by simp [t, basicOpenIsoSpecAway])
-let pres := SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
-      presentationRestrict ((basicOpenIsoSpecAway _).inv ≫ t) (pres i.1)
-    have : IsIso _ := isIso_fromTildeΓ_of_presentation (M.restrict _) pres
-    rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux] at this
-    exact aux_basicOpen_of_aux_restrict _ _ this
-
-Depends on / 依赖: Aux.of_eq_iSup_basicOpen, IsOpenCover, M.exists_isOpenCover_presentation, PrimeSpectrum, PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact, eq_comm, exists_finite_of_compactSpace, exists_iSup_eq_of_isCompact, exists_isOpenCover_presentation, hU.exists_finite_of_compactSpace, iSup_congr, iSup_sigma, isBasis_basic_opens, isCompact, isLocalizing_iff_aux, of_eq_iSup_basicOpen
+--- 原说明 ---
+If `M` is a quasi-coherent `𝒪_{Spec R}` module, it is isomorphic to `Γ(M)^~`.
 -/
 instance Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent (M : (Spec R).Modules)
     [M.IsQuasicoherent] : IsIso M.fromTildeΓ := by
-  rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux]
+  rw [isIso_fromTildeΓ_iff_isLocalizing, isLocalizing_iff_aux]
   obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
   obtain ⟨s, hs⟩ := hU.exists_finite_of_compactSpace
-  choose κ hκ a ha using fun i : s =>
+  choose κ hκ a ha using fun i : s ↦
     PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i) (hU' i).isCompact
-  refine Aux.of_eq_iSup_basicOpen _ (fun i : Sigma κ => a _ i.2) ?_ ?_
+  refine Aux.of_eq_iSup_basicOpen _ (fun i : Sigma κ ↦ a _ i.2) ?_ ?_
   · rw [IsOpenCover] at hs
-    rw [eq_comm]; rw [iSup_sigma]; rw [← hs]
-    exact iSup_congr fun i => (ha i).symm
+    rw [eq_comm, iSup_sigma, ← hs]
+    exact iSup_congr fun i ↦ (ha i).symm
   · intro i
     let t := (Spec R).homOfLE (U := PrimeSpectrum.basicOpen (a _ i.2)) (V := U i.1)
       (by rw [ha]; exact le_iSup_of_le _ le_rfl)
@@ -2667,68 +1871,103 @@ instance Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent (M : (Spec R).Modul
         restrictFunctor (Spec.map (CommRingCat.ofHom <| algebraMap _ _)) :=
       (restrictFunctorComp _ _).symm ≪≫
         restrictFunctorCongr (by simp [t, basicOpenIsoSpecAway])
-let pres := SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
+    let pres := SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom <|
       presentationRestrict ((basicOpenIsoSpecAway _).inv ≫ t) (pres i.1)
     have : IsIso _ := isIso_fromTildeΓ_of_presentation (M.restrict _) pres
-    rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux] at this
+    rw [isIso_fromTildeΓ_iff_isLocalizing, isLocalizing_iff_aux] at this
     exact aux_basicOpen_of_aux_restrict _ _ this
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isQuasicoherent_iff_isIso_fromTildeΓ` / 定理 `isQuasicoherent_iff_isIso_fromTildeΓ`
+/-- An `𝒪_{Spec R}` module `M` is quasicoherent if and only if it is isomorphic to `Γ(M)^~`. -/
+/-
+**AlgebraicGeometry.isQuasicoherent_iff_isIso_fromTilde** 是 Mathlib 中的一个定理，位于命名空
+间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem isQuasicoherent_iff_isIso_fromTildeΓ
-  given: (M : (Spec R).Modules)
-  proof: by
-  refine ⟨fun h => inferInstance, fun h => ?_⟩
-  exact (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).prop_of_iso
-    (asIso <| M.fromTildeΓ) inferInstance
-
-中文:
-定理 isQuasicoherent_iff_isIso_fromTildeΓ
-  条件: (M : (Spec R).Modules)
-  证明: by
-  refine ⟨fun h => inferInstance, fun h => ?_⟩
-  exact (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).prop_of_iso
-    (asIso <| M.fromTildeΓ) inferInstance
-
-Depends on / 依赖: M.fromTilde, SheafOfModules, SheafOfModules.isQuasicoherent, isQuasicoherent, prop_of_iso, ringCatSheaf
+--- 原说明 ---
+An `𝒪_{Spec R}` module `M` is quasicoherent if and only if it is isomorphic to `
+Γ(M)^~`.
 -/
 theorem isQuasicoherent_iff_isIso_fromTildeΓ (M : (Spec R).Modules) :
     M.IsQuasicoherent ↔ IsIso M.fromTildeΓ := by
-  refine ⟨fun h => inferInstance, fun h => ?_⟩
+  refine ⟨fun h ↦ inferInstance, fun h ↦ ?_⟩
   exact (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).prop_of_iso
     (asIso <| M.fromTildeΓ) inferInstance
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `essImage_tilde` / 引理 `essImage_tilde`
-
-English:
-lemma essImage_tilde
-  statement: (tilde.functor R).essImage =
-  proof: by
-  refine le_antisymm ?_ ?_
-  · intro M ⟨N, ⟨e⟩⟩
-    exact (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).prop_of_iso e
-      (by dsimp; infer_instance)
-  · intro M (h : M.IsQuasicoherent)
-exact ⟨((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)), ⟨asIso M.fromTildeΓ⟩⟩
-
-中文:
-引理 essImage_tilde
-  结论: (tilde.functor R).essImage =
-  证明: by
-  refine le_antisymm ?_ ?_
-  · intro M ⟨N, ⟨e⟩⟩
-    exact (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).prop_of_iso e
-      (by dsimp; infer_instance)
-  · intro M (h : M.IsQuasicoherent)
-exact ⟨((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)), ⟨asIso M.fromTildeΓ⟩⟩
-
-Depends on / 依赖: IsQuasicoherent, M.IsQuasicoherent, M.fromTilde, SheafOfModules, SheafOfModules.isQuasicoherent, infer_instance, isQuasicoherent, le_antisymm, modulesSpecToSheaf, modulesSpecToSheaf.obj, presheaf, presheaf.obj, prop_of_iso, ringCatSheaf
+/-
+**AlgebraicGeometry.essImage_tilde** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`
+。
+形式化陈述：essImage_tilde : (tilde.functor R).essImage = SheafOfModules.isQuasicohere
+nt (Spec R).ringCatSheaf
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.instHasSheafifyOfPreservesLimitsForgetOfHasFiniteLimitsOf
+SmallOppositeCover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J 
+: CategoryTheory.GrothendieckTopology C) (D : Type w)   [inst_1 : CategoryTheory
+…
+· 使用定理 `AddCommGrpCat.hasLimit`：∀ {J : Type v} [inst : CategoryTheory.Category.{
+w, v} J] (F : CategoryTheory.Functor J AddCommGrpCat)   [Small.{u, max u v} ↑(F.
+comp (Catego…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `AddCommGrpCat.hasColimitsOfShape`：∀ {J : Type u} [inst : CategoryTheory.
+Category.{v, u} J] [Small.{w, u} J],   CategoryTheory.Limits.HasColimitsOfShape 
+J AddCommGrpCat
+· 使用定理 `CategoryTheory.Limits.PreservesFilteredColimitsOfSize.preserves_filtered
+_colimits`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type
+ u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `AddCommGrpCat.FilteredColimits.forget_preservesFilteredColimits`：Categor
+yTheory.Limits.PreservesFilteredColimits (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.isCofiltered_of_directed_ge_nonempty`：∀ (α : Type u) [ins
+t : Preorder α] [IsCodirectedOrder α] [Nonempty α], CategoryTheory.IsCofiltered 
+α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `AddCommGrpCat.forget_reflects_isos`：(CategoryTheory.forget AddCommGrpCat
+).ReflectsIsomorphisms
+· 使用定理 `AddCommGrpCat.forget_preservesLimitsOfShape`：∀ {J : Type v} [inst : Cate
+goryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.Preserve
+sLimitsOfShape J (CategoryTheory.…
+· 使用定理 `AddCommGrpCat.forget_preservesLimits`：CategoryTheory.Limits.PreservesLim
+its (CategoryTheory.forget AddCommGrpCat)
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `CategoryTheory.GrothendieckTopology.instWEqualsLocallyBijectiveOfHasWeak
+SheafifyOfHasSheafComposeOfPreservesSheafificationOfReflectsIsomorphismsForget`：
+∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (J : CategoryTheory.Gro
+thendieckTopology C) {D : Type w}   [inst_1 : CategoryTheory…
+· 使用定理 `CategoryTheory.hasSheafCompose_of_preservesMulticospan`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {A : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} A]   {B : Type u₃} [ins…
+· 使用定理 `CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.GrothendieckTopology.instPreservesSheafificationForgetOfP
+reservesLimitsOfHasColimitsOfShapeOfPreservesColimitsOfShapeOppositeCoverOfHasLi
+mitsOfShapeWalkingMulticospanOfReflectsIsomorphisms`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.GrothendieckTopology C) {D : T
+ype u_3}   [inst_1 : CategoryTheo…
+· 使用定理 `AddCommGrpCat.hasLimitsOfShape`：∀ {J : Type v} [inst : CategoryTheory.Ca
+tegory.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimitsOfShape J Ad
+dCommGrpCat
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_iso`：prop_of_iso [IsClosedUnderIso
+morphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y
+· 使用定理 `SheafOfModules.instIsClosedUnderIsomorphismsIsQuasicoherent`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendiec
+kTopology C}   {R : CategoryTheory.Sheaf J RingCa…
+· 使用定理 `AlgebraicGeometry.instIsQuasicoherentOpensCarrierCarrierCommRingCatSpecT
+ilde`：∀ {R : CommRingCat} (M : ModuleCat ↑R), SheafOfModules.IsQuasicoherent (Al
+gebraicGeometry.tilde M)
+· 使用定理 `AlgebraicGeometry.Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent`：∀ 
+{R : CommRingCat} (M : (AlgebraicGeometry.Spec R).Modules) [SheafOfModules.IsQua
+sicoherent M],   CategoryTheory.IsIso M.fromTildeΓ
 -/
 lemma essImage_tilde : (tilde.functor R).essImage =
     SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf := by
@@ -2737,55 +1976,28 @@ lemma essImage_tilde : (tilde.functor R).essImage =
     exact (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).prop_of_iso e
       (by dsimp; infer_instance)
   · intro M (h : M.IsQuasicoherent)
-exact ⟨((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)), ⟨asIso M.fromTildeΓ⟩⟩
+    exact ⟨((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)), ⟨asIso <| M.fromTildeΓ⟩⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- `M ↦ M^~` is an equivalence of categories from `ModuleCat R` to the full subcategory
 of quasi-coherent `𝒪_{Spec R}`-modules. -/
 @[simps! functor inverse unitIso counitIso_hom_app_hom]
-/--
-Definition of `tildeEquiv` / `tildeEquiv` 的定义
+/-
+**AlgebraicGeometry.tildeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：tildeEquiv : ModuleCat R ≌ (SheafOfModules.isQuasicoherent (Spec R).ringCa
+tSheaf).FullSubcategory where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tildeEquiv
-  signature: :
-  body: ObjectProperty.lift _ (tilde.functor R) fun _ => by
-    dsimp [SheafOfModules.isQuasicoherent]
-    infer_instance
-  inverse := ObjectProperty.ι _ ⋙ moduleSpecΓFunctor (R := R)
-  unitIso := tilde.toTildeΓNatIso
-  counitIso :=
-    haveI (M : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullSubcategory) :
-      IsIso (Scheme.Modules.fromTildeΓ M.obj) := inferInstance
-    NatIso.ofComponents
-      (fun M => ObjectProperty.isoMk _ (asIso <| Scheme.Modules.fromTildeΓ M.obj))
-      fun f => ObjectProperty.hom_ext _ (tilde.adjunction (R := R).counit.naturality f.hom)
-  functor_unitIso_comp M :=
-    ObjectProperty.hom_ext _ (tilde.adjunction (R := R).left_triangle_components M)
-
-中文:
-定义 tildeEquiv
-  签名: :
-  定义体: ObjectProperty.lift _ (tilde.functor R) fun _ => by
-    dsimp [SheafOfModules.isQuasicoherent]
-    infer_instance
-  inverse := ObjectProperty.ι _ ⋙ moduleSpecΓFunctor (R := R)
-  unitIso := tilde.toTildeΓNatIso
-  counitIso :=
-    haveI (M : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullSubcategory) :
-      IsIso (Scheme.Modules.fromTildeΓ M.obj) := inferInstance
-    NatIso.ofComponents
-      (fun M => ObjectProperty.isoMk _ (asIso <| Scheme.Modules.fromTildeΓ M.obj))
-      fun f => ObjectProperty.hom_ext _ (tilde.adjunction (R := R).counit.naturality f.hom)
-  functor_unitIso_comp M :=
-    ObjectProperty.hom_ext _ (tilde.adjunction (R := R).left_triangle_components M)
-
-Depends on / 依赖: FullSubcategory, M.obj, Modules, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.hom_ext, ObjectProperty.isoMk, ObjectProperty.lift, Scheme, Scheme.Modules.fromTilde, SheafOfModules, SheafOfModules.isQuasicoherent, adjunctio, counitIso, functor, hom_ext, infer_instance, inverse, isQuasicoherent
+--- 原说明 ---
+`M ↦ M^~` is an equivalence of categories from `ModuleCat R` to the full subcate
+gory
+of quasi-coherent `𝒪_{Spec R}`-modules.
 -/
 def tildeEquiv :
     ModuleCat R ≌ (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullSubcategory where
-  functor := ObjectProperty.lift _ (tilde.functor R) fun _ => by
+  functor := ObjectProperty.lift _ (tilde.functor R) fun _ ↦ by
     dsimp [SheafOfModules.isQuasicoherent]
     infer_instance
   inverse := ObjectProperty.ι _ ⋙ moduleSpecΓFunctor (R := R)
@@ -2794,8 +2006,8 @@ def tildeEquiv :
     haveI (M : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullSubcategory) :
       IsIso (Scheme.Modules.fromTildeΓ M.obj) := inferInstance
     NatIso.ofComponents
-      (fun M => ObjectProperty.isoMk _ (asIso <| Scheme.Modules.fromTildeΓ M.obj))
-      fun f => ObjectProperty.hom_ext _ (tilde.adjunction (R := R).counit.naturality f.hom)
+      (fun M ↦ ObjectProperty.isoMk _ (asIso <| Scheme.Modules.fromTildeΓ M.obj))
+      fun f ↦ ObjectProperty.hom_ext _ (tilde.adjunction (R := R).counit.naturality f.hom)
   functor_unitIso_comp M :=
     ObjectProperty.hom_ext _ (tilde.adjunction (R := R).left_triangle_components M)
 
@@ -2811,3 +2023,4 @@ namespace ModuleCat
 @[deprecated (since := "2026-02-11")] noncomputable alias Tilde.toStalk := tilde.toStalk
 
 end ModuleCat
+

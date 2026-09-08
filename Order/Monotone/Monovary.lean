@@ -35,1111 +35,644 @@ variable {ι ι' α β γ : Type*}
 
 section Preorder
 
-variable [Preorder α] [Preorder β] [Preorder γ] {f : ι -> α} {f' : α -> γ} {g : ι -> β}
+variable [Preorder α] [Preorder β] [Preorder γ] {f : ι → α} {f' : α → γ} {g : ι → β}
   {s t : Set ι}
 
-/--
-Definition of `Monovary` / `Monovary` 的定义
+/-- `f` monovaries with `g` if `g i < g j` implies `f i ≤ f j`. -/
+/-
+**Monovary** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Monovary (f : ι -> α) (g : ι -> β) : Prop
+参数：f : ι -> α；g : ι -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Monovary
-  signature: (f : ι -> α) (g : ι -> β)
-  body: forall ⦃i j⦄, g i < g j -> f i <= f j
-
-中文:
-定义 Monovary
-  签名: (f : ι -> α) (g : ι -> β)
-  定义体: forall ⦃i j⦄, g i < g j -> f i <= f j
+--- 原说明 ---
+`f` monovaries with `g` if `g i < g j` implies `f i ≤ f j`.
 -/
-def Monovary (f : ι -> α) (g : ι -> β) : Prop :=
-  forall ⦃i j⦄, g i < g j -> f i <= f j
+def Monovary (f : ι → α) (g : ι → β) : Prop :=
+  ∀ ⦃i j⦄, g i < g j → f i ≤ f j
 
-/--
-Definition of `Antivary` / `Antivary` 的定义
+/-- `f` antivaries with `g` if `g i < g j` implies `f j ≤ f i`. -/
+/-
+**Antivary** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Antivary (f : ι -> α) (g : ι -> β) : Prop
+参数：f : ι -> α；g : ι -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Antivary
-  signature: (f : ι -> α) (g : ι -> β)
-  body: forall ⦃i j⦄, g i < g j -> f j <= f i
-
-中文:
-定义 Antivary
-  签名: (f : ι -> α) (g : ι -> β)
-  定义体: forall ⦃i j⦄, g i < g j -> f j <= f i
+--- 原说明 ---
+`f` antivaries with `g` if `g i < g j` implies `f j ≤ f i`.
 -/
-def Antivary (f : ι -> α) (g : ι -> β) : Prop :=
-  forall ⦃i j⦄, g i < g j -> f j <= f i
+def Antivary (f : ι → α) (g : ι → β) : Prop :=
+  ∀ ⦃i j⦄, g i < g j → f j ≤ f i
 
-/--
-Definition of `MonovaryOn` / `MonovaryOn` 的定义
+/-- `f` monovaries with `g` on `s` if `g i < g j` implies `f i ≤ f j` for all `i, j ∈ s`. -/
+/-
+**MonovaryOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonovaryOn (f : ι -> α) (g : ι -> β) (s : Set ι) : Prop
+参数：f : ι -> α；g : ι -> β；s : Set ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MonovaryOn
-  signature: (f : ι -> α) (g : ι -> β) (s : Set ι)
-  body: forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f i <= f j
-
-中文:
-定义 MonovaryOn
-  签名: (f : ι -> α) (g : ι -> β) (s : 集合 ι)
-  定义体: forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f i <= f j
+--- 原说明 ---
+`f` monovaries with `g` on `s` if `g i < g j` implies `f i ≤ f j` for all `i, j 
+∈ s`.
 -/
-def MonovaryOn (f : ι -> α) (g : ι -> β) (s : Set ι) : Prop :=
-  forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f i <= f j
+def MonovaryOn (f : ι → α) (g : ι → β) (s : Set ι) : Prop :=
+  ∀ ⦃i⦄ (_ : i ∈ s) ⦃j⦄ (_ : j ∈ s), g i < g j → f i ≤ f j
 
-/--
-Definition of `AntivaryOn` / `AntivaryOn` 的定义
+/-- `f` antivaries with `g` on `s` if `g i < g j` implies `f j ≤ f i` for all `i, j ∈ s`. -/
+/-
+**AntivaryOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AntivaryOn (f : ι -> α) (g : ι -> β) (s : Set ι) : Prop
+参数：f : ι -> α；g : ι -> β；s : Set ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AntivaryOn
-  signature: (f : ι -> α) (g : ι -> β) (s : Set ι)
-  body: forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f j <= f i
-
-中文:
-定义 AntivaryOn
-  签名: (f : ι -> α) (g : ι -> β) (s : 集合 ι)
-  定义体: forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f j <= f i
+--- 原说明 ---
+`f` antivaries with `g` on `s` if `g i < g j` implies `f j ≤ f i` for all `i, j 
+∈ s`.
 -/
-def AntivaryOn (f : ι -> α) (g : ι -> β) (s : Set ι) : Prop :=
-  forall ⦃i⦄ (_ : i in s) ⦃j⦄ (_ : j in s), g i < g j -> f j <= f i
-
-/--
-theorem `Monovary.monovaryOn` / 定理 `Monovary.monovaryOn`
-
-English:
-theorem Monovary.monovaryOn
-  given: (h : Monovary f g) (s : Set ι)
-  statement: MonovaryOn f g s
-  proof: fun _ _ _ _ hij => h hij
-
-中文:
-定理 Monovary.monovaryOn
-  条件: (h : Monovary f g) (s : 集合 ι)
-  结论: MonovaryOn f g s
-  证明: fun _ _ _ _ hij => h hij
+def AntivaryOn (f : ι → α) (g : ι → β) (s : Set ι) : Prop :=
+  ∀ ⦃i⦄ (_ : i ∈ s) ⦃j⦄ (_ : j ∈ s), g i < g j → f j ≤ f i
+/-
+**Monovary.monovaryOn** 是 Mathlib 中的一个定理，位于命名空间 `Monovary`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β},   Monovary f g → ∀ (s : Set ι), Monovary
+On f g s
+参数：s : Set ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Monovary.monovaryOn (h : Monovary f g) (s : Set ι) : MonovaryOn f g s :=
   fun _ _ _ _ hij => h hij
-
-/--
-theorem `Antivary.antivaryOn` / 定理 `Antivary.antivaryOn`
-
-English:
-theorem Antivary.antivaryOn
-  given: (h : Antivary f g) (s : Set ι)
-  statement: AntivaryOn f g s
-  proof: fun _ _ _ _ hij => h hij
-
-@[simp]
-
-中文:
-定理 Antivary.antivaryOn
-  条件: (h : Antivary f g) (s : 集合 ι)
-  结论: AntivaryOn f g s
-  证明: fun _ _ _ _ hij => h hij
-
-@[simp]
+/-
+**Antivary.antivaryOn** 是 Mathlib 中的一个定理，位于命名空间 `Antivary`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β},   Antivary f g → ∀ (s : Set ι), Antivary
+On f g s
+参数：s : Set ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Antivary.antivaryOn (h : Antivary f g) (s : Set ι) : AntivaryOn f g s :=
   fun _ _ _ _ hij => h hij
 
 @[simp]
-/--
-theorem `MonovaryOn.empty` / 定理 `MonovaryOn.empty`
-
-English:
-theorem MonovaryOn.empty
-  statement: MonovaryOn f g ∅
-  proof: fun _ => False.elim
-
-@[simp]
-
-中文:
-定理 MonovaryOn.empty
-  结论: MonovaryOn f g ∅
-  证明: fun _ => False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim
+/-
+**MonovaryOn.empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.empty : MonovaryOn f g ∅
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MonovaryOn.empty : MonovaryOn f g ∅ := fun _ => False.elim
 
 @[simp]
-/--
-theorem `AntivaryOn.empty` / 定理 `AntivaryOn.empty`
-
-English:
-theorem AntivaryOn.empty
-  statement: AntivaryOn f g ∅
-  proof: fun _ => False.elim
-
-@[simp]
-
-中文:
-定理 AntivaryOn.empty
-  结论: AntivaryOn f g ∅
-  证明: fun _ => False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim
+/-
+**AntivaryOn.empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.empty : AntivaryOn f g ∅
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem AntivaryOn.empty : AntivaryOn f g ∅ := fun _ => False.elim
 
 @[simp]
-/--
-theorem `monovaryOn_univ` / 定理 `monovaryOn_univ`
-
-English:
-theorem monovaryOn_univ
-  statement: MonovaryOn f g univ ↔ Monovary f g
-  proof: ⟨fun h _ _ => h trivial trivial, fun h _ _ _ _ hij => h hij⟩
-
-@[simp]
-
-中文:
-定理 monovaryOn_univ
-  结论: MonovaryOn f g univ ↔ Monovary f g
-  证明: ⟨fun h _ _ => h trivial trivial, fun h _ _ _ _ hij => h hij⟩
-
-@[simp]
+/-
+**monovaryOn_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_univ : MonovaryOn f g univ ↔ Monovary f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 theorem monovaryOn_univ : MonovaryOn f g univ ↔ Monovary f g :=
   ⟨fun h _ _ => h trivial trivial, fun h _ _ _ _ hij => h hij⟩
 
 @[simp]
-/--
-theorem `antivaryOn_univ` / 定理 `antivaryOn_univ`
-
-English:
-theorem antivaryOn_univ
-  statement: AntivaryOn f g univ ↔ Antivary f g
-  proof: ⟨fun h _ _ => h trivial trivial, fun h _ _ _ _ hij => h hij⟩
-
-中文:
-定理 antivaryOn_univ
-  结论: AntivaryOn f g univ ↔ Antivary f g
-  证明: ⟨fun h _ _ => h trivial trivial, fun h _ _ _ _ hij => h hij⟩
+/-
+**antivaryOn_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivaryOn_univ : AntivaryOn f g univ ↔ Antivary f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 theorem antivaryOn_univ : AntivaryOn f g univ ↔ Antivary f g :=
   ⟨fun h _ _ => h trivial trivial, fun h _ _ _ _ hij => h hij⟩
-
-/--
-lemma `monovaryOn_iff_monovary` / 引理 `monovaryOn_iff_monovary`
-
-English:
-lemma monovaryOn_iff_monovary
-  statement: MonovaryOn f g s ↔ Monovary (fun i : s => f i) fun i => g i
-  proof: by
-  simp [Monovary, MonovaryOn]
-
-中文:
-引理 monovaryOn_iff_monovary
-  结论: MonovaryOn f g s ↔ Monovary (fun i : s => f i) fun i => g i
-  证明: by
-  simp [Monovary, MonovaryOn]
-
-Depends on / 依赖: Monovary, MonovaryOn
+/-
+**monovaryOn_iff_monovary** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：monovaryOn_iff_monovary : MonovaryOn f g s ↔ Monovary (fun i : s => f i) f
+un i => g i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma monovaryOn_iff_monovary : MonovaryOn f g s ↔ Monovary (fun i : s => f i) fun i => g i := by
+lemma monovaryOn_iff_monovary : MonovaryOn f g s ↔ Monovary (fun i : s ↦ f i) fun i ↦ g i := by
   simp [Monovary, MonovaryOn]
-
-/--
-lemma `antivaryOn_iff_antivary` / 引理 `antivaryOn_iff_antivary`
-
-English:
-lemma antivaryOn_iff_antivary
-  statement: AntivaryOn f g s ↔ Antivary (fun i : s => f i) fun i => g i
-  proof: by
-  simp [Antivary, AntivaryOn]
-
-中文:
-引理 antivaryOn_iff_antivary
-  结论: AntivaryOn f g s ↔ Antivary (fun i : s => f i) fun i => g i
-  证明: by
-  simp [Antivary, AntivaryOn]
-
-Depends on / 依赖: Antivary, AntivaryOn
+/-
+**antivaryOn_iff_antivary** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：antivaryOn_iff_antivary : AntivaryOn f g s ↔ Antivary (fun i : s => f i) f
+un i => g i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma antivaryOn_iff_antivary : AntivaryOn f g s ↔ Antivary (fun i : s => f i) fun i => g i := by
+lemma antivaryOn_iff_antivary : AntivaryOn f g s ↔ Antivary (fun i : s ↦ f i) fun i ↦ g i := by
   simp [Antivary, AntivaryOn]
-
-/--
-theorem `MonovaryOn.subset` / 定理 `MonovaryOn.subset`
-
-English:
-theorem MonovaryOn.subset
-  given: (hst : s subseteq t) (h : MonovaryOn f g t)
-  statement: MonovaryOn f g s
-  proof: fun _ hi _ hj => h (hst hi) (hst hj)
-
-中文:
-定理 MonovaryOn.subset
-  条件: (hst : s subseteq t) (h : MonovaryOn f g t)
-  结论: MonovaryOn f g s
-  证明: fun _ hi _ hj => h (hst hi) (hst hj)
+/-
+**MonovaryOn.subset** 是 Mathlib 中的一个定理，位于命名空间 `MonovaryOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   {s t : Set ι}, s ⊆ t → MonovaryOn f g t
+ → MonovaryOn f g s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem MonovaryOn.subset (hst : s subseteq t) (h : MonovaryOn f g t) : MonovaryOn f g s :=
+protected theorem MonovaryOn.subset (hst : s ⊆ t) (h : MonovaryOn f g t) : MonovaryOn f g s :=
   fun _ hi _ hj => h (hst hi) (hst hj)
-
-/--
-theorem `AntivaryOn.subset` / 定理 `AntivaryOn.subset`
-
-English:
-theorem AntivaryOn.subset
-  given: (hst : s subseteq t) (h : AntivaryOn f g t)
-  statement: AntivaryOn f g s
-  proof: fun _ hi _ hj => h (hst hi) (hst hj)
-
-中文:
-定理 AntivaryOn.subset
-  条件: (hst : s subseteq t) (h : AntivaryOn f g t)
-  结论: AntivaryOn f g s
-  证明: fun _ hi _ hj => h (hst hi) (hst hj)
+/-
+**AntivaryOn.subset** 是 Mathlib 中的一个定理，位于命名空间 `AntivaryOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   {s t : Set ι}, s ⊆ t → AntivaryOn f g t
+ → AntivaryOn f g s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem AntivaryOn.subset (hst : s subseteq t) (h : AntivaryOn f g t) : AntivaryOn f g s :=
+protected theorem AntivaryOn.subset (hst : s ⊆ t) (h : AntivaryOn f g t) : AntivaryOn f g s :=
   fun _ hi _ hj => h (hst hi) (hst hj)
-
-/--
-theorem `monovary_const_left` / 定理 `monovary_const_left`
-
-English:
-theorem monovary_const_left
-  given: (g : ι -> β) (a : α)
-  statement: Monovary (const ι a) g
-  proof: fun _ _ _ => le_rfl
-
-中文:
-定理 monovary_const_left
-  条件: (g : ι -> β) (a : α)
-  结论: Monovary (const ι a) g
-  证明: fun _ _ _ => le_rfl
-
-Depends on / 依赖: le_rfl
+/-
+**monovary_const_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovary_const_left (g : ι -> β) (a : α) : Monovary (const ι a) g
+参数：g : ι -> β；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem monovary_const_left (g : ι -> β) (a : α) : Monovary (const ι a) g := fun _ _ _ => le_rfl
-
-/--
-theorem `antivary_const_left` / 定理 `antivary_const_left`
-
-English:
-theorem antivary_const_left
-  given: (g : ι -> β) (a : α)
-  statement: Antivary (const ι a) g
-  proof: fun _ _ _ => le_rfl
-
-中文:
-定理 antivary_const_left
-  条件: (g : ι -> β) (a : α)
-  结论: Antivary (const ι a) g
-  证明: fun _ _ _ => le_rfl
-
-Depends on / 依赖: le_rfl
+theorem monovary_const_left (g : ι → β) (a : α) : Monovary (const ι a) g := fun _ _ _ => le_rfl
+/-
+**antivary_const_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivary_const_left (g : ι -> β) (a : α) : Antivary (const ι a) g
+参数：g : ι -> β；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem antivary_const_left (g : ι -> β) (a : α) : Antivary (const ι a) g := fun _ _ _ => le_rfl
-
-/--
-theorem `monovary_const_right` / 定理 `monovary_const_right`
-
-English:
-theorem monovary_const_right
-  given: (f : ι -> α) (b : β)
-  statement: Monovary f (const ι b)
-  proof: fun _ _ h =>
+theorem antivary_const_left (g : ι → β) (a : α) : Antivary (const ι a) g := fun _ _ _ => le_rfl
+/-
+**monovary_const_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovary_const_right (f : ι -> α) (b : β) : Monovary f (const ι b)
+参数：f : ι -> α；b : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+-/
+theorem monovary_const_right (f : ι → α) (b : β) : Monovary f (const ι b) := fun _ _ h =>
   (h.ne rfl).elim
-
-中文:
-定理 monovary_const_right
-  条件: (f : ι -> α) (b : β)
-  结论: Monovary f (const ι b)
-  证明: fun _ _ h =>
-  (h.ne rfl).elim
+/-
+**antivary_const_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivary_const_right (f : ι -> α) (b : β) : Antivary f (const ι b)
+参数：f : ι -> α；b : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
 -/
-theorem monovary_const_right (f : ι -> α) (b : β) : Monovary f (const ι b) := fun _ _ h =>
+theorem antivary_const_right (f : ι → α) (b : β) : Antivary f (const ι b) := fun _ _ h =>
   (h.ne rfl).elim
-
-/--
-theorem `antivary_const_right` / 定理 `antivary_const_right`
-
-English:
-theorem antivary_const_right
-  given: (f : ι -> α) (b : β)
-  statement: Antivary f (const ι b)
-  proof: fun _ _ h =>
-  (h.ne rfl).elim
-
-中文:
-定理 antivary_const_right
-  条件: (f : ι -> α) (b : β)
-  结论: Antivary f (const ι b)
-  证明: fun _ _ h =>
-  (h.ne rfl).elim
+/-
+**monovary_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovary_self (f : ι -> α) : Monovary f f
+参数：f : ι -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-theorem antivary_const_right (f : ι -> α) (b : β) : Antivary f (const ι b) := fun _ _ h =>
-  (h.ne rfl).elim
-
-/--
-theorem `monovary_self` / 定理 `monovary_self`
-
-English:
-theorem monovary_self
-  given: (f : ι -> α)
-  statement: Monovary f f
-  proof: fun _ _ => le_of_lt
-
-中文:
-定理 monovary_self
-  条件: (f : ι -> α)
-  结论: Monovary f f
-  证明: fun _ _ => le_of_lt
-
-Depends on / 依赖: le_of_lt
+theorem monovary_self (f : ι → α) : Monovary f f := fun _ _ => le_of_lt
+/-
+**monovaryOn_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_self (f : ι -> α) (s : Set ι) : MonovaryOn f f s
+参数：f : ι -> α；s : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-theorem monovary_self (f : ι -> α) : Monovary f f := fun _ _ => le_of_lt
-
-/--
-theorem `monovaryOn_self` / 定理 `monovaryOn_self`
-
-English:
-theorem monovaryOn_self
-  given: (f : ι -> α) (s : Set ι)
-  statement: MonovaryOn f f s
-  proof: fun _ _ _ _ => le_of_lt
-
-中文:
-定理 monovaryOn_self
-  条件: (f : ι -> α) (s : 集合 ι)
-  结论: MonovaryOn f f s
-  证明: fun _ _ _ _ => le_of_lt
-
-Depends on / 依赖: le_of_lt
+theorem monovaryOn_self (f : ι → α) (s : Set ι) : MonovaryOn f f s := fun _ _ _ _ => le_of_lt
+/-
+**Subsingleton.monovary** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] [Subsingleton ι] (f : ι → α)   (g : ι → β), Monovary f g
+参数：f : ι → α；g : ι → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem monovaryOn_self (f : ι -> α) (s : Set ι) : MonovaryOn f f s := fun _ _ _ _ => le_of_lt
-
-/--
-theorem `Subsingleton.monovary` / 定理 `Subsingleton.monovary`
-
-English:
-theorem Subsingleton.monovary
-  given: [Subsingleton ι] (f : ι -> α) (g : ι -> β)
-  statement: Monovary f g
-  proof: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-中文:
-定理 子单例.monovary
-  条件: [子单例 ι] (f : ι -> α) (g : ι -> β)
-  结论: Monovary f g
-  证明: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
--/
-protected theorem Subsingleton.monovary [Subsingleton ι] (f : ι -> α) (g : ι -> β) : Monovary f g :=
+protected theorem Subsingleton.monovary [Subsingleton ι] (f : ι → α) (g : ι → β) : Monovary f g :=
   fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-/--
-theorem `Subsingleton.antivary` / 定理 `Subsingleton.antivary`
-
-English:
-theorem Subsingleton.antivary
-  given: [Subsingleton ι] (f : ι -> α) (g : ι -> β)
-  statement: Antivary f g
-  proof: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-中文:
-定理 子单例.antivary
-  条件: [子单例 ι] (f : ι -> α) (g : ι -> β)
-  结论: Antivary f g
-  证明: fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
+/-
+**Subsingleton.antivary** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] [Subsingleton ι] (f : ι → α)   (g : ι → β), Antivary f g
+参数：f : ι → α；g : ι → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem Subsingleton.antivary [Subsingleton ι] (f : ι -> α) (g : ι -> β) : Antivary f g :=
+protected theorem Subsingleton.antivary [Subsingleton ι] (f : ι → α) (g : ι → β) : Antivary f g :=
   fun _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-/--
-theorem `Subsingleton.monovaryOn` / 定理 `Subsingleton.monovaryOn`
-
-English:
-theorem Subsingleton.monovaryOn
-  given: [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι)
-  proof: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-中文:
-定理 子单例.monovaryOn
-  条件: [子单例 ι] (f : ι -> α) (g : ι -> β) (s : 集合 ι)
-  证明: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
+/-
+**Subsingleton.monovaryOn** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] [Subsingleton ι] (f : ι → α)   (g : ι → β) (s : Set ι), MonovaryO
+n f g s
+参数：f : ι → α；g : ι → β；s : Set ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem Subsingleton.monovaryOn [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι) :
+protected theorem Subsingleton.monovaryOn [Subsingleton ι] (f : ι → α) (g : ι → β) (s : Set ι) :
     MonovaryOn f g s := fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-/--
-theorem `Subsingleton.antivaryOn` / 定理 `Subsingleton.antivaryOn`
-
-English:
-theorem Subsingleton.antivaryOn
-  given: [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι)
-  proof: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-中文:
-定理 子单例.antivaryOn
-  条件: [子单例 ι] (f : ι -> α) (g : ι -> β) (s : 集合 ι)
-  证明: fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
+/-
+**Subsingleton.antivaryOn** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] [Subsingleton ι] (f : ι → α)   (g : ι → β) (s : Set ι), AntivaryO
+n f g s
+参数：f : ι → α；g : ι → β；s : Set ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem Subsingleton.antivaryOn [Subsingleton ι] (f : ι -> α) (g : ι -> β) (s : Set ι) :
+protected theorem Subsingleton.antivaryOn [Subsingleton ι] (f : ι → α) (g : ι → β) (s : Set ι) :
     AntivaryOn f g s := fun _ _ _ _ h => (ne_of_apply_ne _ h.ne <| Subsingleton.elim _ _).elim
-
-/--
-theorem `monovaryOn_const_left` / 定理 `monovaryOn_const_left`
-
-English:
-theorem monovaryOn_const_left
-  given: (g : ι -> β) (a : α) (s : Set ι)
-  statement: MonovaryOn (const ι a) g s
-  proof: fun _ _ _ _ _ => le_rfl
-
-中文:
-定理 monovaryOn_const_left
-  条件: (g : ι -> β) (a : α) (s : 集合 ι)
-  结论: MonovaryOn (const ι a) g s
-  证明: fun _ _ _ _ _ => le_rfl
-
-Depends on / 依赖: le_rfl
+/-
+**monovaryOn_const_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_const_left (g : ι -> β) (a : α) (s : Set ι) : MonovaryOn (const
+ ι a) g s
+参数：g : ι -> β；a : α；s : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem monovaryOn_const_left (g : ι -> β) (a : α) (s : Set ι) : MonovaryOn (const ι a) g s :=
+theorem monovaryOn_const_left (g : ι → β) (a : α) (s : Set ι) : MonovaryOn (const ι a) g s :=
   fun _ _ _ _ _ => le_rfl
-
-/--
-theorem `antivaryOn_const_left` / 定理 `antivaryOn_const_left`
-
-English:
-theorem antivaryOn_const_left
-  given: (g : ι -> β) (a : α) (s : Set ι)
-  statement: AntivaryOn (const ι a) g s
-  proof: fun _ _ _ _ _ => le_rfl
-
-中文:
-定理 antivaryOn_const_left
-  条件: (g : ι -> β) (a : α) (s : 集合 ι)
-  结论: AntivaryOn (const ι a) g s
-  证明: fun _ _ _ _ _ => le_rfl
-
-Depends on / 依赖: le_rfl
+/-
+**antivaryOn_const_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivaryOn_const_left (g : ι -> β) (a : α) (s : Set ι) : AntivaryOn (const
+ ι a) g s
+参数：g : ι -> β；a : α；s : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem antivaryOn_const_left (g : ι -> β) (a : α) (s : Set ι) : AntivaryOn (const ι a) g s :=
+theorem antivaryOn_const_left (g : ι → β) (a : α) (s : Set ι) : AntivaryOn (const ι a) g s :=
   fun _ _ _ _ _ => le_rfl
-
-/--
-theorem `monovaryOn_const_right` / 定理 `monovaryOn_const_right`
-
-English:
-theorem monovaryOn_const_right
-  given: (f : ι -> α) (b : β) (s : Set ι)
-  statement: MonovaryOn f (const ι b) s
-  proof: fun _ _ _ _ h => (h.ne rfl).elim
-
-中文:
-定理 monovaryOn_const_right
-  条件: (f : ι -> α) (b : β) (s : 集合 ι)
-  结论: MonovaryOn f (const ι b) s
-  证明: fun _ _ _ _ h => (h.ne rfl).elim
-
-Depends on / 依赖: h.ne
+/-
+**monovaryOn_const_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_const_right (f : ι -> α) (b : β) (s : Set ι) : MonovaryOn f (co
+nst ι b) s
+参数：f : ι -> α；b : β；s : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
 -/
-theorem monovaryOn_const_right (f : ι -> α) (b : β) (s : Set ι) : MonovaryOn f (const ι b) s :=
+theorem monovaryOn_const_right (f : ι → α) (b : β) (s : Set ι) : MonovaryOn f (const ι b) s :=
   fun _ _ _ _ h => (h.ne rfl).elim
-
-/--
-theorem `antivaryOn_const_right` / 定理 `antivaryOn_const_right`
-
-English:
-theorem antivaryOn_const_right
-  given: (f : ι -> α) (b : β) (s : Set ι)
-  statement: AntivaryOn f (const ι b) s
-  proof: fun _ _ _ _ h => (h.ne rfl).elim
-
-中文:
-定理 antivaryOn_const_right
-  条件: (f : ι -> α) (b : β) (s : 集合 ι)
-  结论: AntivaryOn f (const ι b) s
-  证明: fun _ _ _ _ h => (h.ne rfl).elim
-
-Depends on / 依赖: h.ne
+/-
+**antivaryOn_const_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivaryOn_const_right (f : ι -> α) (b : β) (s : Set ι) : AntivaryOn f (co
+nst ι b) s
+参数：f : ι -> α；b : β；s : Set ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
 -/
-theorem antivaryOn_const_right (f : ι -> α) (b : β) (s : Set ι) : AntivaryOn f (const ι b) s :=
+theorem antivaryOn_const_right (f : ι → α) (b : β) (s : Set ι) : AntivaryOn f (const ι b) s :=
   fun _ _ _ _ h => (h.ne rfl).elim
-
-/--
-theorem `Monovary.comp_right` / 定理 `Monovary.comp_right`
-
-English:
-theorem Monovary.comp_right
-  given: (h : Monovary f g) (k : ι' -> ι)
-  statement: Monovary (f ∘ k) (g ∘ k)
-  proof: fun _ _ hij => h hij
-
-中文:
-定理 Monovary.comp_right
-  条件: (h : Monovary f g) (k : ι' -> ι)
-  结论: Monovary (f ∘ k) (g ∘ k)
-  证明: fun _ _ hij => h hij
+/-
+**Monovary.comp_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monovary.comp_right (h : Monovary f g) (k : ι' -> ι) : Monovary (f ∘ k) (g
+ ∘ k)
+参数：h : Monovary f g；k : ι' -> ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Monovary.comp_right (h : Monovary f g) (k : ι' -> ι) : Monovary (f ∘ k) (g ∘ k) :=
+theorem Monovary.comp_right (h : Monovary f g) (k : ι' → ι) : Monovary (f ∘ k) (g ∘ k) :=
   fun _ _ hij => h hij
-
-/--
-theorem `Antivary.comp_right` / 定理 `Antivary.comp_right`
-
-English:
-theorem Antivary.comp_right
-  given: (h : Antivary f g) (k : ι' -> ι)
-  statement: Antivary (f ∘ k) (g ∘ k)
-  proof: fun _ _ hij => h hij
-
-中文:
-定理 Antivary.comp_right
-  条件: (h : Antivary f g) (k : ι' -> ι)
-  结论: Antivary (f ∘ k) (g ∘ k)
-  证明: fun _ _ hij => h hij
+/-
+**Antivary.comp_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antivary.comp_right (h : Antivary f g) (k : ι' -> ι) : Antivary (f ∘ k) (g
+ ∘ k)
+参数：h : Antivary f g；k : ι' -> ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Antivary.comp_right (h : Antivary f g) (k : ι' -> ι) : Antivary (f ∘ k) (g ∘ k) :=
+theorem Antivary.comp_right (h : Antivary f g) (k : ι' → ι) : Antivary (f ∘ k) (g ∘ k) :=
   fun _ _ hij => h hij
-
-/--
-theorem `MonovaryOn.comp_right` / 定理 `MonovaryOn.comp_right`
-
-English:
-theorem MonovaryOn.comp_right
-  given: (h : MonovaryOn f g s) (k : ι' -> ι)
-  proof: fun _ hi _ hj => h hi hj
-
-中文:
-定理 MonovaryOn.comp_right
-  条件: (h : MonovaryOn f g s) (k : ι' -> ι)
-  证明: fun _ hi _ hj => h hi hj
+/-
+**MonovaryOn.comp_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.comp_right (h : MonovaryOn f g s) (k : ι' -> ι) : MonovaryOn (f
+ ∘ k) (g ∘ k) (k ⁻¹' s)
+参数：h : MonovaryOn f g s；k : ι' -> ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MonovaryOn.comp_right (h : MonovaryOn f g s) (k : ι' -> ι) :
+theorem MonovaryOn.comp_right (h : MonovaryOn f g s) (k : ι' → ι) :
     MonovaryOn (f ∘ k) (g ∘ k) (k ⁻¹' s) := fun _ hi _ hj => h hi hj
-
-/--
-theorem `AntivaryOn.comp_right` / 定理 `AntivaryOn.comp_right`
-
-English:
-theorem AntivaryOn.comp_right
-  given: (h : AntivaryOn f g s) (k : ι' -> ι)
-  proof: fun _ hi _ hj => h hi hj
-
-中文:
-定理 AntivaryOn.comp_right
-  条件: (h : AntivaryOn f g s) (k : ι' -> ι)
-  证明: fun _ hi _ hj => h hi hj
+/-
+**AntivaryOn.comp_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.comp_right (h : AntivaryOn f g s) (k : ι' -> ι) : AntivaryOn (f
+ ∘ k) (g ∘ k) (k ⁻¹' s)
+参数：h : AntivaryOn f g s；k : ι' -> ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AntivaryOn.comp_right (h : AntivaryOn f g s) (k : ι' -> ι) :
+theorem AntivaryOn.comp_right (h : AntivaryOn f g s) (k : ι' → ι) :
     AntivaryOn (f ∘ k) (g ∘ k) (k ⁻¹' s) := fun _ hi _ hj => h hi hj
-
-/--
-theorem `Monovary.comp_monotone_left` / 定理 `Monovary.comp_monotone_left`
-
-English:
-theorem Monovary.comp_monotone_left
-  given: (h : Monovary f g) (hf : Monotone f')
-  statement: Monovary (f' ∘ f) g
-  proof: fun _ _ hij => hf h hij
-
-中文:
-定理 Monovary.comp_monotone_left
-  条件: (h : Monovary f g) (hf : 递增 f')
-  结论: Monovary (f' ∘ f) g
-  证明: fun _ _ hij => hf h hij
+/-
+**Monovary.comp_monotone_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monovary.comp_monotone_left (h : Monovary f g) (hf : Monotone f') : Monova
+ry (f' ∘ f) g
+参数：h : Monovary f g；hf : Monotone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Monovary.comp_monotone_left (h : Monovary f g) (hf : Monotone f') : Monovary (f' ∘ f) g :=
-fun _ _ hij => hf h hij
-
-/--
-theorem `Monovary.comp_antitone_left` / 定理 `Monovary.comp_antitone_left`
-
-English:
-theorem Monovary.comp_antitone_left
-  given: (h : Monovary f g) (hf : Antitone f')
-  statement: Antivary (f' ∘ f) g
-  proof: fun _ _ hij => hf h hij
-
-中文:
-定理 Monovary.comp_antitone_left
-  条件: (h : Monovary f g) (hf : 递减 f')
-  结论: Antivary (f' ∘ f) g
-  证明: fun _ _ hij => hf h hij
+  fun _ _ hij => hf <| h hij
+/-
+**Monovary.comp_antitone_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monovary.comp_antitone_left (h : Monovary f g) (hf : Antitone f') : Antiva
+ry (f' ∘ f) g
+参数：h : Monovary f g；hf : Antitone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Monovary.comp_antitone_left (h : Monovary f g) (hf : Antitone f') : Antivary (f' ∘ f) g :=
-fun _ _ hij => hf h hij
-
-/--
-theorem `Antivary.comp_monotone_left` / 定理 `Antivary.comp_monotone_left`
-
-English:
-theorem Antivary.comp_monotone_left
-  given: (h : Antivary f g) (hf : Monotone f')
-  statement: Antivary (f' ∘ f) g
-  proof: fun _ _ hij => hf h hij
-
-中文:
-定理 Antivary.comp_monotone_left
-  条件: (h : Antivary f g) (hf : 递增 f')
-  结论: Antivary (f' ∘ f) g
-  证明: fun _ _ hij => hf h hij
+  fun _ _ hij => hf <| h hij
+/-
+**Antivary.comp_monotone_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antivary.comp_monotone_left (h : Antivary f g) (hf : Monotone f') : Antiva
+ry (f' ∘ f) g
+参数：h : Antivary f g；hf : Monotone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Antivary.comp_monotone_left (h : Antivary f g) (hf : Monotone f') : Antivary (f' ∘ f) g :=
-fun _ _ hij => hf h hij
-
-/--
-theorem `Antivary.comp_antitone_left` / 定理 `Antivary.comp_antitone_left`
-
-English:
-theorem Antivary.comp_antitone_left
-  given: (h : Antivary f g) (hf : Antitone f')
-  statement: Monovary (f' ∘ f) g
-  proof: fun _ _ hij => hf h hij
-
-中文:
-定理 Antivary.comp_antitone_left
-  条件: (h : Antivary f g) (hf : 递减 f')
-  结论: Monovary (f' ∘ f) g
-  证明: fun _ _ hij => hf h hij
+  fun _ _ hij => hf <| h hij
+/-
+**Antivary.comp_antitone_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antivary.comp_antitone_left (h : Antivary f g) (hf : Antitone f') : Monova
+ry (f' ∘ f) g
+参数：h : Antivary f g；hf : Antitone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Antivary.comp_antitone_left (h : Antivary f g) (hf : Antitone f') : Monovary (f' ∘ f) g :=
-fun _ _ hij => hf h hij
-
-/--
-theorem `MonovaryOn.comp_monotone_on_left` / 定理 `MonovaryOn.comp_monotone_on_left`
-
-English:
-theorem MonovaryOn.comp_monotone_on_left
-  given: (h : MonovaryOn f g s) (hf : Monotone f')
-  proof: fun _ hi _ hj hij => hf h hi hj hij
-
-中文:
-定理 MonovaryOn.comp_monotone_on_left
-  条件: (h : MonovaryOn f g s) (hf : 递增 f')
-  证明: fun _ hi _ hj hij => hf h hi hj hij
+  fun _ _ hij => hf <| h hij
+/-
+**MonovaryOn.comp_monotone_on_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.comp_monotone_on_left (h : MonovaryOn f g s) (hf : Monotone f')
+ : MonovaryOn (f' ∘ f) g s
+参数：h : MonovaryOn f g s；hf : Monotone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MonovaryOn.comp_monotone_on_left (h : MonovaryOn f g s) (hf : Monotone f') :
-MonovaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf h hi hj hij
-
-/--
-theorem `MonovaryOn.comp_antitone_on_left` / 定理 `MonovaryOn.comp_antitone_on_left`
-
-English:
-theorem MonovaryOn.comp_antitone_on_left
-  given: (h : MonovaryOn f g s) (hf : Antitone f')
-  proof: fun _ hi _ hj hij => hf h hi hj hij
-
-中文:
-定理 MonovaryOn.comp_antitone_on_left
-  条件: (h : MonovaryOn f g s) (hf : 递减 f')
-  证明: fun _ hi _ hj hij => hf h hi hj hij
+    MonovaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf <| h hi hj hij
+/-
+**MonovaryOn.comp_antitone_on_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.comp_antitone_on_left (h : MonovaryOn f g s) (hf : Antitone f')
+ : AntivaryOn (f' ∘ f) g s
+参数：h : MonovaryOn f g s；hf : Antitone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MonovaryOn.comp_antitone_on_left (h : MonovaryOn f g s) (hf : Antitone f') :
-AntivaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf h hi hj hij
-
-/--
-theorem `AntivaryOn.comp_monotone_on_left` / 定理 `AntivaryOn.comp_monotone_on_left`
-
-English:
-theorem AntivaryOn.comp_monotone_on_left
-  given: (h : AntivaryOn f g s) (hf : Monotone f')
-  proof: fun _ hi _ hj hij => hf h hi hj hij
-
-中文:
-定理 AntivaryOn.comp_monotone_on_left
-  条件: (h : AntivaryOn f g s) (hf : 递增 f')
-  证明: fun _ hi _ hj hij => hf h hi hj hij
+    AntivaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf <| h hi hj hij
+/-
+**AntivaryOn.comp_monotone_on_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.comp_monotone_on_left (h : AntivaryOn f g s) (hf : Monotone f')
+ : AntivaryOn (f' ∘ f) g s
+参数：h : AntivaryOn f g s；hf : Monotone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem AntivaryOn.comp_monotone_on_left (h : AntivaryOn f g s) (hf : Monotone f') :
-AntivaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf h hi hj hij
-
-/--
-theorem `AntivaryOn.comp_antitone_on_left` / 定理 `AntivaryOn.comp_antitone_on_left`
-
-English:
-theorem AntivaryOn.comp_antitone_on_left
-  given: (h : AntivaryOn f g s) (hf : Antitone f')
-  proof: fun _ hi _ hj hij => hf h hi hj hij
-
-中文:
-定理 AntivaryOn.comp_antitone_on_left
-  条件: (h : AntivaryOn f g s) (hf : 递减 f')
-  证明: fun _ hi _ hj hij => hf h hi hj hij
+    AntivaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf <| h hi hj hij
+/-
+**AntivaryOn.comp_antitone_on_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.comp_antitone_on_left (h : AntivaryOn f g s) (hf : Antitone f')
+ : MonovaryOn (f' ∘ f) g s
+参数：h : AntivaryOn f g s；hf : Antitone f'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem AntivaryOn.comp_antitone_on_left (h : AntivaryOn f g s) (hf : Antitone f') :
-MonovaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf h hi hj hij
+    MonovaryOn (f' ∘ f) g s := fun _ hi _ hj hij => hf <| h hi hj hij
 
 section OrderDual
 
 open OrderDual
 
-/--
-theorem `Monovary.dual` / 定理 `Monovary.dual`
-
-English:
-theorem Monovary.dual
-  statement: Monovary f g -> Monovary (toDual ∘ f) (toDual ∘ g)
-  proof: swap
-
-中文:
-定理 Monovary.dual
-  结论: Monovary f g -> Monovary (toDual ∘ f) (toDual ∘ g)
-  证明: swap
+/-
+**Monovary.dual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monovary.dual : Monovary f g -> Monovary (toDual ∘ f) (toDual ∘ g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Monovary.dual : Monovary f g -> Monovary (toDual ∘ f) (toDual ∘ g) :=
+theorem Monovary.dual : Monovary f g → Monovary (toDual ∘ f) (toDual ∘ g) :=
   swap
-
-/--
-theorem `Antivary.dual` / 定理 `Antivary.dual`
-
-English:
-theorem Antivary.dual
-  statement: Antivary f g -> Antivary (toDual ∘ f) (toDual ∘ g)
-  proof: swap
-
-中文:
-定理 Antivary.dual
-  结论: Antivary f g -> Antivary (toDual ∘ f) (toDual ∘ g)
-  证明: swap
+/-
+**Antivary.dual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antivary.dual : Antivary f g -> Antivary (toDual ∘ f) (toDual ∘ g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Antivary.dual : Antivary f g -> Antivary (toDual ∘ f) (toDual ∘ g) :=
+theorem Antivary.dual : Antivary f g → Antivary (toDual ∘ f) (toDual ∘ g) :=
   swap
-
-/--
-theorem `Monovary.dual_left` / 定理 `Monovary.dual_left`
-
-English:
-theorem Monovary.dual_left
-  statement: Monovary f g -> Antivary (toDual ∘ f) g
-  proof: id
-
-中文:
-定理 Monovary.dual_left
-  结论: Monovary f g -> Antivary (toDual ∘ f) g
-  证明: id
+/-
+**Monovary.dual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monovary.dual_left : Monovary f g -> Antivary (toDual ∘ f) g
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Monovary.dual_left : Monovary f g -> Antivary (toDual ∘ f) g :=
+theorem Monovary.dual_left : Monovary f g → Antivary (toDual ∘ f) g :=
   id
-
-/--
-theorem `Antivary.dual_left` / 定理 `Antivary.dual_left`
-
-English:
-theorem Antivary.dual_left
-  statement: Antivary f g -> Monovary (toDual ∘ f) g
-  proof: id
-
-中文:
-定理 Antivary.dual_left
-  结论: Antivary f g -> Monovary (toDual ∘ f) g
-  证明: id
+/-
+**Antivary.dual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antivary.dual_left : Antivary f g -> Monovary (toDual ∘ f) g
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Antivary.dual_left : Antivary f g -> Monovary (toDual ∘ f) g :=
+theorem Antivary.dual_left : Antivary f g → Monovary (toDual ∘ f) g :=
   id
-
-/--
-theorem `Monovary.dual_right` / 定理 `Monovary.dual_right`
-
-English:
-theorem Monovary.dual_right
-  statement: Monovary f g -> Antivary f (toDual ∘ g)
-  proof: swap
-
-中文:
-定理 Monovary.dual_right
-  结论: Monovary f g -> Antivary f (toDual ∘ g)
-  证明: swap
+/-
+**Monovary.dual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monovary.dual_right : Monovary f g -> Antivary f (toDual ∘ g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Monovary.dual_right : Monovary f g -> Antivary f (toDual ∘ g) :=
+theorem Monovary.dual_right : Monovary f g → Antivary f (toDual ∘ g) :=
   swap
-
-/--
-theorem `Antivary.dual_right` / 定理 `Antivary.dual_right`
-
-English:
-theorem Antivary.dual_right
-  statement: Antivary f g -> Monovary f (toDual ∘ g)
-  proof: swap
-
-中文:
-定理 Antivary.dual_right
-  结论: Antivary f g -> Monovary f (toDual ∘ g)
-  证明: swap
+/-
+**Antivary.dual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antivary.dual_right : Antivary f g -> Monovary f (toDual ∘ g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Antivary.dual_right : Antivary f g -> Monovary f (toDual ∘ g) :=
+theorem Antivary.dual_right : Antivary f g → Monovary f (toDual ∘ g) :=
   swap
-
-/--
-theorem `MonovaryOn.dual` / 定理 `MonovaryOn.dual`
-
-English:
-theorem MonovaryOn.dual
-  statement: MonovaryOn f g s -> MonovaryOn (toDual ∘ f) (toDual ∘ g) s
-  proof: swap₂
-
-中文:
-定理 MonovaryOn.dual
-  结论: MonovaryOn f g s -> MonovaryOn (toDual ∘ f) (toDual ∘ g) s
-  证明: swap₂
+/-
+**MonovaryOn.dual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.dual : MonovaryOn f g s -> MonovaryOn (toDual ∘ f) (toDual ∘ g)
+ s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MonovaryOn.dual : MonovaryOn f g s -> MonovaryOn (toDual ∘ f) (toDual ∘ g) s :=
+theorem MonovaryOn.dual : MonovaryOn f g s → MonovaryOn (toDual ∘ f) (toDual ∘ g) s :=
   swap₂
-
-/--
-theorem `AntivaryOn.dual` / 定理 `AntivaryOn.dual`
-
-English:
-theorem AntivaryOn.dual
-  statement: AntivaryOn f g s -> AntivaryOn (toDual ∘ f) (toDual ∘ g) s
-  proof: swap₂
-
-中文:
-定理 AntivaryOn.dual
-  结论: AntivaryOn f g s -> AntivaryOn (toDual ∘ f) (toDual ∘ g) s
-  证明: swap₂
+/-
+**AntivaryOn.dual** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.dual : AntivaryOn f g s -> AntivaryOn (toDual ∘ f) (toDual ∘ g)
+ s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AntivaryOn.dual : AntivaryOn f g s -> AntivaryOn (toDual ∘ f) (toDual ∘ g) s :=
+theorem AntivaryOn.dual : AntivaryOn f g s → AntivaryOn (toDual ∘ f) (toDual ∘ g) s :=
   swap₂
-
-/--
-theorem `MonovaryOn.dual_left` / 定理 `MonovaryOn.dual_left`
-
-English:
-theorem MonovaryOn.dual_left
-  statement: MonovaryOn f g s -> AntivaryOn (toDual ∘ f) g s
-  proof: id
-
-中文:
-定理 MonovaryOn.dual_left
-  结论: MonovaryOn f g s -> AntivaryOn (toDual ∘ f) g s
-  证明: id
+/-
+**MonovaryOn.dual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.dual_left : MonovaryOn f g s -> AntivaryOn (toDual ∘ f) g s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MonovaryOn.dual_left : MonovaryOn f g s -> AntivaryOn (toDual ∘ f) g s :=
+theorem MonovaryOn.dual_left : MonovaryOn f g s → AntivaryOn (toDual ∘ f) g s :=
   id
-
-/--
-theorem `AntivaryOn.dual_left` / 定理 `AntivaryOn.dual_left`
-
-English:
-theorem AntivaryOn.dual_left
-  statement: AntivaryOn f g s -> MonovaryOn (toDual ∘ f) g s
-  proof: id
-
-中文:
-定理 AntivaryOn.dual_left
-  结论: AntivaryOn f g s -> MonovaryOn (toDual ∘ f) g s
-  证明: id
+/-
+**AntivaryOn.dual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.dual_left : AntivaryOn f g s -> MonovaryOn (toDual ∘ f) g s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AntivaryOn.dual_left : AntivaryOn f g s -> MonovaryOn (toDual ∘ f) g s :=
+theorem AntivaryOn.dual_left : AntivaryOn f g s → MonovaryOn (toDual ∘ f) g s :=
   id
-
-/--
-theorem `MonovaryOn.dual_right` / 定理 `MonovaryOn.dual_right`
-
-English:
-theorem MonovaryOn.dual_right
-  statement: MonovaryOn f g s -> AntivaryOn f (toDual ∘ g) s
-  proof: swap₂
-
-中文:
-定理 MonovaryOn.dual_right
-  结论: MonovaryOn f g s -> AntivaryOn f (toDual ∘ g) s
-  证明: swap₂
+/-
+**MonovaryOn.dual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.dual_right : MonovaryOn f g s -> AntivaryOn f (toDual ∘ g) s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem MonovaryOn.dual_right : MonovaryOn f g s -> AntivaryOn f (toDual ∘ g) s :=
+theorem MonovaryOn.dual_right : MonovaryOn f g s → AntivaryOn f (toDual ∘ g) s :=
   swap₂
-
-/--
-theorem `AntivaryOn.dual_right` / 定理 `AntivaryOn.dual_right`
-
-English:
-theorem AntivaryOn.dual_right
-  statement: AntivaryOn f g s -> MonovaryOn f (toDual ∘ g) s
-  proof: swap₂
-
-@[simp]
-
-中文:
-定理 AntivaryOn.dual_right
-  结论: AntivaryOn f g s -> MonovaryOn f (toDual ∘ g) s
-  证明: swap₂
-
-@[simp]
+/-
+**AntivaryOn.dual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.dual_right : AntivaryOn f g s -> MonovaryOn f (toDual ∘ g) s
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AntivaryOn.dual_right : AntivaryOn f g s -> MonovaryOn f (toDual ∘ g) s :=
+theorem AntivaryOn.dual_right : AntivaryOn f g s → MonovaryOn f (toDual ∘ g) s :=
   swap₂
 
 @[simp]
-/--
-theorem `monovary_toDual_left` / 定理 `monovary_toDual_left`
-
-English:
-theorem monovary_toDual_left
-  statement: Monovary (toDual ∘ f) g ↔ Antivary f g
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 monovary_toDual_left
-  结论: Monovary (toDual ∘ f) g ↔ Antivary f g
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**monovary_toDual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovary_toDual_left : Monovary (toDual ∘ f) g ↔ Antivary f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem monovary_toDual_left : Monovary (toDual ∘ f) g ↔ Antivary f g :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `monovary_toDual_right` / 定理 `monovary_toDual_right`
-
-English:
-theorem monovary_toDual_right
-  statement: Monovary f (toDual ∘ g) ↔ Antivary f g
-  proof: forall_comm
-
-@[simp]
-
-中文:
-定理 monovary_toDual_right
-  结论: Monovary f (toDual ∘ g) ↔ Antivary f g
-  证明: forall_comm
-
-@[simp]
-
-Depends on / 依赖: forall_comm
+/-
+**monovary_toDual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovary_toDual_right : Monovary f (toDual ∘ g) ↔ Antivary f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
 -/
 theorem monovary_toDual_right : Monovary f (toDual ∘ g) ↔ Antivary f g :=
   forall_comm
 
 @[simp]
-/--
-theorem `antivary_toDual_left` / 定理 `antivary_toDual_left`
-
-English:
-theorem antivary_toDual_left
-  statement: Antivary (toDual ∘ f) g ↔ Monovary f g
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 antivary_toDual_left
-  结论: Antivary (toDual ∘ f) g ↔ Monovary f g
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**antivary_toDual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivary_toDual_left : Antivary (toDual ∘ f) g ↔ Monovary f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem antivary_toDual_left : Antivary (toDual ∘ f) g ↔ Monovary f g :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `antivary_toDual_right` / 定理 `antivary_toDual_right`
-
-English:
-theorem antivary_toDual_right
-  statement: Antivary f (toDual ∘ g) ↔ Monovary f g
-  proof: forall_comm
-
-@[simp]
-
-中文:
-定理 antivary_toDual_right
-  结论: Antivary f (toDual ∘ g) ↔ Monovary f g
-  证明: forall_comm
-
-@[simp]
-
-Depends on / 依赖: forall_comm
+/-
+**antivary_toDual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivary_toDual_right : Antivary f (toDual ∘ g) ↔ Monovary f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
 -/
 theorem antivary_toDual_right : Antivary f (toDual ∘ g) ↔ Monovary f g :=
   forall_comm
 
 @[simp]
-/--
-theorem `monovaryOn_toDual_left` / 定理 `monovaryOn_toDual_left`
-
-English:
-theorem monovaryOn_toDual_left
-  statement: MonovaryOn (toDual ∘ f) g s ↔ AntivaryOn f g s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 monovaryOn_toDual_left
-  结论: MonovaryOn (toDual ∘ f) g s ↔ AntivaryOn f g s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**monovaryOn_toDual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_toDual_left : MonovaryOn (toDual ∘ f) g s ↔ AntivaryOn f g s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem monovaryOn_toDual_left : MonovaryOn (toDual ∘ f) g s ↔ AntivaryOn f g s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `monovaryOn_toDual_right` / 定理 `monovaryOn_toDual_right`
-
-English:
-theorem monovaryOn_toDual_right
-  statement: MonovaryOn f (toDual ∘ g) s ↔ AntivaryOn f g s
-  proof: forall₂_comm
-
-@[simp]
-
-中文:
-定理 monovaryOn_toDual_right
-  结论: MonovaryOn f (toDual ∘ g) s ↔ AntivaryOn f g s
-  证明: forall₂_comm
-
-@[simp]
+/-
+**monovaryOn_toDual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_toDual_right : MonovaryOn f (toDual ∘ g) s ↔ AntivaryOn f g s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₂_comm`：forall₂_comm {ι₁ ι₂ : Sort*} {κ₁ : ι₁ -> Sort*} {κ₂ : ι₂ -
+> Sort*} {p : forall i₁, κ₁ i₁ -> forall i₂, κ₂ i₂ -> Prop} : (forall i₁ j₁ i₂ j
+₂,…
 -/
 theorem monovaryOn_toDual_right : MonovaryOn f (toDual ∘ g) s ↔ AntivaryOn f g s :=
   forall₂_comm
 
 @[simp]
-/--
-theorem `antivaryOn_toDual_left` / 定理 `antivaryOn_toDual_left`
-
-English:
-theorem antivaryOn_toDual_left
-  statement: AntivaryOn (toDual ∘ f) g s ↔ MonovaryOn f g s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 antivaryOn_toDual_left
-  结论: AntivaryOn (toDual ∘ f) g s ↔ MonovaryOn f g s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**antivaryOn_toDual_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivaryOn_toDual_left : AntivaryOn (toDual ∘ f) g s ↔ MonovaryOn f g s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem antivaryOn_toDual_left : AntivaryOn (toDual ∘ f) g s ↔ MonovaryOn f g s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `antivaryOn_toDual_right` / 定理 `antivaryOn_toDual_right`
-
-English:
-theorem antivaryOn_toDual_right
-  statement: AntivaryOn f (toDual ∘ g) s ↔ MonovaryOn f g s
-  proof: forall₂_comm
-
-中文:
-定理 antivaryOn_toDual_right
-  结论: AntivaryOn f (toDual ∘ g) s ↔ MonovaryOn f g s
-  证明: forall₂_comm
+/-
+**antivaryOn_toDual_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivaryOn_toDual_right : AntivaryOn f (toDual ∘ g) s ↔ MonovaryOn f g s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₂_comm`：forall₂_comm {ι₁ ι₂ : Sort*} {κ₁ : ι₁ -> Sort*} {κ₂ : ι₂ -
+> Sort*} {p : forall i₁, κ₁ i₁ -> forall i₂, κ₂ i₂ -> Prop} : (forall i₁ j₁ i₂ j
+₂,…
 -/
 theorem antivaryOn_toDual_right : AntivaryOn f (toDual ∘ g) s ↔ MonovaryOn f g s :=
   forall₂_comm
@@ -1151,383 +684,287 @@ section PartialOrder
 variable [PartialOrder ι]
 
 @[simp]
-/--
-theorem `monovary_id_iff` / 定理 `monovary_id_iff`
-
-English:
-theorem monovary_id_iff
-  statement: Monovary f id ↔ Monotone f
-  proof: monotone_iff_forall_lt.symm
-
-@[simp]
-
-中文:
-定理 monovary_id_iff
-  结论: Monovary f id ↔ 递增 f
-  证明: monotone_iff_forall_lt.symm
-
-@[simp]
-
-Depends on / 依赖: monotone_iff_forall_lt, monotone_iff_forall_lt.symm
+/-
+**monovary_id_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovary_id_iff : Monovary f id ↔ Monotone f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `monotone_iff_forall_lt`：monotone_iff_forall_lt : Monotone f ↔ forall ⦃a 
+b⦄, a < b -> f a <= f b
 -/
 theorem monovary_id_iff : Monovary f id ↔ Monotone f :=
   monotone_iff_forall_lt.symm
 
 @[simp]
-/--
-theorem `antivary_id_iff` / 定理 `antivary_id_iff`
-
-English:
-theorem antivary_id_iff
-  statement: Antivary f id ↔ Antitone f
-  proof: antitone_iff_forall_lt.symm
-
-@[simp]
-
-中文:
-定理 antivary_id_iff
-  结论: Antivary f id ↔ 递减 f
-  证明: antitone_iff_forall_lt.symm
-
-@[simp]
-
-Depends on / 依赖: antitone_iff_forall_lt, antitone_iff_forall_lt.symm
+/-
+**antivary_id_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivary_id_iff : Antivary f id ↔ Antitone f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `antitone_iff_forall_lt`：antitone_iff_forall_lt : Antitone f ↔ forall ⦃a 
+b⦄, a < b -> f b <= f a
 -/
 theorem antivary_id_iff : Antivary f id ↔ Antitone f :=
   antitone_iff_forall_lt.symm
 
 @[simp]
-/--
-theorem `monovaryOn_id_iff` / 定理 `monovaryOn_id_iff`
-
-English:
-theorem monovaryOn_id_iff
-  statement: MonovaryOn f id s ↔ MonotoneOn f s
-  proof: monotoneOn_iff_forall_lt.symm
-
-@[simp]
-
-中文:
-定理 monovaryOn_id_iff
-  结论: MonovaryOn f id s ↔ MonotoneOn f s
-  证明: monotoneOn_iff_forall_lt.symm
-
-@[simp]
-
-Depends on / 依赖: monotoneOn_iff_forall_lt, monotoneOn_iff_forall_lt.symm
+/-
+**monovaryOn_id_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_id_iff : MonovaryOn f id s ↔ MonotoneOn f s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `monotoneOn_iff_forall_lt`：monotoneOn_iff_forall_lt : MonotoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a <= f b
 -/
 theorem monovaryOn_id_iff : MonovaryOn f id s ↔ MonotoneOn f s :=
   monotoneOn_iff_forall_lt.symm
 
 @[simp]
-/--
-theorem `antivaryOn_id_iff` / 定理 `antivaryOn_id_iff`
-
-English:
-theorem antivaryOn_id_iff
-  statement: AntivaryOn f id s ↔ AntitoneOn f s
-  proof: antitoneOn_iff_forall_lt.symm
-
-中文:
-定理 antivaryOn_id_iff
-  结论: AntivaryOn f id s ↔ AntitoneOn f s
-  证明: antitoneOn_iff_forall_lt.symm
-
-Depends on / 依赖: antitoneOn_iff_forall_lt, antitoneOn_iff_forall_lt.symm
+/-
+**antivaryOn_id_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivaryOn_id_iff : AntivaryOn f id s ↔ AntitoneOn f s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `antitoneOn_iff_forall_lt`：antitoneOn_iff_forall_lt : AntitoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b <= f a
 -/
 theorem antivaryOn_id_iff : AntivaryOn f id s ↔ AntitoneOn f s :=
   antitoneOn_iff_forall_lt.symm
-
-/--
-lemma `StrictMono.trans_monovary` / 引理 `StrictMono.trans_monovary`
-
-English:
-lemma StrictMono.trans_monovary
-  given: (hf : StrictMono f) (h : Monovary g f)
-  statement: Monotone g
-  proof: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-中文:
-引理 严格递增.trans_monovary
-  条件: (hf : 严格递增 f) (h : Monovary g f)
-  结论: 递增 g
-  证明: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-Depends on / 依赖: monotone_iff_forall_lt
+/-
+**StrictMono.trans_monovary** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMono.trans_monovary (hf : StrictMono f) (h : Monovary g f) : Monoton
+e g
+参数：hf : StrictMono f；h : Monovary g f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotone_iff_forall_lt`：monotone_iff_forall_lt : Monotone f ↔ forall ⦃a 
+b⦄, a < b -> f a <= f b
 -/
 lemma StrictMono.trans_monovary (hf : StrictMono f) (h : Monovary g f) : Monotone g :=
-monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-/--
-lemma `StrictMono.trans_antivary` / 引理 `StrictMono.trans_antivary`
-
-English:
-lemma StrictMono.trans_antivary
-  given: (hf : StrictMono f) (h : Antivary g f)
-  statement: Antitone g
-  proof: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-中文:
-引理 严格递增.trans_antivary
-  条件: (hf : 严格递增 f) (h : Antivary g f)
-  结论: 递减 g
-  证明: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-Depends on / 依赖: antitone_iff_forall_lt
+  monotone_iff_forall_lt.2 fun _a _b hab ↦ h <| hf hab
+/-
+**StrictMono.trans_antivary** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMono.trans_antivary (hf : StrictMono f) (h : Antivary g f) : Antiton
+e g
+参数：hf : StrictMono f；h : Antivary g f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `antitone_iff_forall_lt`：antitone_iff_forall_lt : Antitone f ↔ forall ⦃a 
+b⦄, a < b -> f b <= f a
 -/
 lemma StrictMono.trans_antivary (hf : StrictMono f) (h : Antivary g f) : Antitone g :=
-antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-/--
-lemma `StrictAnti.trans_monovary` / 引理 `StrictAnti.trans_monovary`
-
-English:
-lemma StrictAnti.trans_monovary
-  given: (hf : StrictAnti f) (h : Monovary g f)
-  statement: Antitone g
-  proof: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-中文:
-引理 严格递减.trans_monovary
-  条件: (hf : 严格递减 f) (h : Monovary g f)
-  结论: 递减 g
-  证明: antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-Depends on / 依赖: antitone_iff_forall_lt
+  antitone_iff_forall_lt.2 fun _a _b hab ↦ h <| hf hab
+/-
+**StrictAnti.trans_monovary** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictAnti.trans_monovary (hf : StrictAnti f) (h : Monovary g f) : Antiton
+e g
+参数：hf : StrictAnti f；h : Monovary g f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `antitone_iff_forall_lt`：antitone_iff_forall_lt : Antitone f ↔ forall ⦃a 
+b⦄, a < b -> f b <= f a
 -/
 lemma StrictAnti.trans_monovary (hf : StrictAnti f) (h : Monovary g f) : Antitone g :=
-antitone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-/--
-lemma `StrictAnti.trans_antivary` / 引理 `StrictAnti.trans_antivary`
-
-English:
-lemma StrictAnti.trans_antivary
-  given: (hf : StrictAnti f) (h : Antivary g f)
-  statement: Monotone g
-  proof: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-中文:
-引理 严格递减.trans_antivary
-  条件: (hf : 严格递减 f) (h : Antivary g f)
-  结论: 递增 g
-  证明: monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-Depends on / 依赖: monotone_iff_forall_lt
+  antitone_iff_forall_lt.2 fun _a _b hab ↦ h <| hf hab
+/-
+**StrictAnti.trans_antivary** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictAnti.trans_antivary (hf : StrictAnti f) (h : Antivary g f) : Monoton
+e g
+参数：hf : StrictAnti f；h : Antivary g f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotone_iff_forall_lt`：monotone_iff_forall_lt : Monotone f ↔ forall ⦃a 
+b⦄, a < b -> f a <= f b
 -/
 lemma StrictAnti.trans_antivary (hf : StrictAnti f) (h : Antivary g f) : Monotone g :=
-monotone_iff_forall_lt.2 fun _a _b hab => h hf hab
-
-/--
-lemma `StrictMonoOn.trans_monovaryOn` / 引理 `StrictMonoOn.trans_monovaryOn`
-
-English:
-lemma StrictMonoOn.trans_monovaryOn
-  given: (hf : StrictMonoOn f s) (h : MonovaryOn g f s)
-  proof: monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h ha hb hf ha hb hab
-
-中文:
-引理 StrictMonoOn.trans_monovaryOn
-  条件: (hf : StrictMonoOn f s) (h : MonovaryOn g f s)
-  证明: monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h ha hb hf ha hb hab
-
-Depends on / 依赖: monotoneOn_iff_forall_lt
+  monotone_iff_forall_lt.2 fun _a _b hab ↦ h <| hf hab
+/-
+**StrictMonoOn.trans_monovaryOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.trans_monovaryOn (hf : StrictMonoOn f s) (h : MonovaryOn g f 
+s) : MonotoneOn g s
+参数：hf : StrictMonoOn f s；h : MonovaryOn g f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotoneOn_iff_forall_lt`：monotoneOn_iff_forall_lt : MonotoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a <= f b
 -/
 lemma StrictMonoOn.trans_monovaryOn (hf : StrictMonoOn f s) (h : MonovaryOn g f s) :
-MonotoneOn g s := monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h ha hb hf ha hb hab
-
-/--
-lemma `StrictMonoOn.trans_antivaryOn` / 引理 `StrictMonoOn.trans_antivaryOn`
-
-English:
-lemma StrictMonoOn.trans_antivaryOn
-  given: (hf : StrictMonoOn f s) (h : AntivaryOn g f s)
-  proof: antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h ha hb hf ha hb hab
-
-中文:
-引理 StrictMonoOn.trans_antivaryOn
-  条件: (hf : StrictMonoOn f s) (h : AntivaryOn g f s)
-  证明: antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h ha hb hf ha hb hab
-
-Depends on / 依赖: antitoneOn_iff_forall_lt
+    MonotoneOn g s := monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab ↦ h ha hb <| hf ha hb hab
+/-
+**StrictMonoOn.trans_antivaryOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMonoOn.trans_antivaryOn (hf : StrictMonoOn f s) (h : AntivaryOn g f 
+s) : AntitoneOn g s
+参数：hf : StrictMonoOn f s；h : AntivaryOn g f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `antitoneOn_iff_forall_lt`：antitoneOn_iff_forall_lt : AntitoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b <= f a
 -/
 lemma StrictMonoOn.trans_antivaryOn (hf : StrictMonoOn f s) (h : AntivaryOn g f s) :
-AntitoneOn g s := antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h ha hb hf ha hb hab
-
-/--
-lemma `StrictAntiOn.trans_monovaryOn` / 引理 `StrictAntiOn.trans_monovaryOn`
-
-English:
-lemma StrictAntiOn.trans_monovaryOn
-  given: (hf : StrictAntiOn f s) (h : MonovaryOn g f s)
-  proof: antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h hb ha hf ha hb hab
-
-中文:
-引理 StrictAntiOn.trans_monovaryOn
-  条件: (hf : StrictAntiOn f s) (h : MonovaryOn g f s)
-  证明: antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h hb ha hf ha hb hab
-
-Depends on / 依赖: antitoneOn_iff_forall_lt
+    AntitoneOn g s := antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab ↦ h ha hb <| hf ha hb hab
+/-
+**StrictAntiOn.trans_monovaryOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictAntiOn.trans_monovaryOn (hf : StrictAntiOn f s) (h : MonovaryOn g f 
+s) : AntitoneOn g s
+参数：hf : StrictAntiOn f s；h : MonovaryOn g f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `antitoneOn_iff_forall_lt`：antitoneOn_iff_forall_lt : AntitoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b <= f a
 -/
 lemma StrictAntiOn.trans_monovaryOn (hf : StrictAntiOn f s) (h : MonovaryOn g f s) :
-AntitoneOn g s := antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h hb ha hf ha hb hab
-
-/--
-lemma `StrictAntiOn.trans_antivaryOn` / 引理 `StrictAntiOn.trans_antivaryOn`
-
-English:
-lemma StrictAntiOn.trans_antivaryOn
-  given: (hf : StrictAntiOn f s) (h : AntivaryOn g f s)
-  proof: monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h hb ha hf ha hb hab
-
-中文:
-引理 StrictAntiOn.trans_antivaryOn
-  条件: (hf : StrictAntiOn f s) (h : AntivaryOn g f s)
-  证明: monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h hb ha hf ha hb hab
-
-Depends on / 依赖: monotoneOn_iff_forall_lt
+    AntitoneOn g s := antitoneOn_iff_forall_lt.2 fun _a ha _b hb hab ↦ h hb ha <| hf ha hb hab
+/-
+**StrictAntiOn.trans_antivaryOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictAntiOn.trans_antivaryOn (hf : StrictAntiOn f s) (h : AntivaryOn g f 
+s) : MonotoneOn g s
+参数：hf : StrictAntiOn f s；h : AntivaryOn g f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotoneOn_iff_forall_lt`：monotoneOn_iff_forall_lt : MonotoneOn f s ↔ fo
+rall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a <= f b
 -/
 lemma StrictAntiOn.trans_antivaryOn (hf : StrictAntiOn f s) (h : AntivaryOn g f s) :
-MonotoneOn g s := monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab => h hb ha hf ha hb hab
+    MonotoneOn g s := monotoneOn_iff_forall_lt.2 fun _a ha _b hb hab ↦ h hb ha <| hf ha hb hab
 
 end PartialOrder
 
 variable [LinearOrder ι]
 
-/--
-theorem `Monotone.monovary` / 定理 `Monotone.monovary`
-
-English:
-theorem Monotone.monovary
-  given: (hf : Monotone f) (hg : Monotone g)
-  statement: Monovary f g
-  proof: fun _ _ hij => hf (hg.reflect_lt hij).le
-
-中文:
-定理 递增.monovary
-  条件: (hf : 递增 f) (hg : 递增 g)
-  结论: Monovary f g
-  证明: fun _ _ hij => hf (hg.reflect_lt hij).le
+/-
+**Monotone.monovary** 是 Mathlib 中的一个定理，位于命名空间 `Monotone`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   [inst_2 : LinearOrder ι], Monotone f → 
+Monotone g → Monovary f g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Monotone.reflect_lt`：Monotone.reflect_lt (hf : Monotone f) {a b : α} (h 
+: f a < f b) : a < b
 -/
 protected theorem Monotone.monovary (hf : Monotone f) (hg : Monotone g) : Monovary f g :=
   fun _ _ hij => hf (hg.reflect_lt hij).le
-
-/--
-theorem `Monotone.antivary` / 定理 `Monotone.antivary`
-
-English:
-theorem Monotone.antivary
-  given: (hf : Monotone f) (hg : Antitone g)
-  statement: Antivary f g
-  proof: (hf.monovary hg.dual_right).dual_right
-
-中文:
-定理 递增.antivary
-  条件: (hf : 递增 f) (hg : 递减 g)
-  结论: Antivary f g
-  证明: (hf.monovary hg.dual_right).dual_right
+/-
+**Monotone.antivary** 是 Mathlib 中的一个定理，位于命名空间 `Monotone`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   [inst_2 : LinearOrder ι], Monotone f → 
+Antitone g → Antivary f g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monovary.dual_right`：Monovary.dual_right : Monovary f g -> Antivary f (t
+oDual ∘ g)
+· 使用定理 `Monotone.monovary`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst 
+: Preorder α] [inst_1 : Preorder β] {f : ι → α} {g : ι → β}   [inst_2 : LinearOr
+der ι],…
+· 使用定理 `Antitone.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Antitone f → Monotone (⇑OrderDual.toDual ∘ f)
 -/
 protected theorem Monotone.antivary (hf : Monotone f) (hg : Antitone g) : Antivary f g :=
   (hf.monovary hg.dual_right).dual_right
-
-/--
-theorem `Antitone.monovary` / 定理 `Antitone.monovary`
-
-English:
-theorem Antitone.monovary
-  given: (hf : Antitone f) (hg : Antitone g)
-  statement: Monovary f g
-  proof: (hf.dual_right.antivary hg).dual_left
-
-中文:
-定理 递减.monovary
-  条件: (hf : 递减 f) (hg : 递减 g)
-  结论: Monovary f g
-  证明: (hf.dual_right.antivary hg).dual_left
+/-
+**Antitone.monovary** 是 Mathlib 中的一个定理，位于命名空间 `Antitone`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   [inst_2 : LinearOrder ι], Antitone f → 
+Antitone g → Monovary f g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Antivary.dual_left`：Antivary.dual_left : Antivary f g -> Monovary (toDua
+l ∘ f) g
+· 使用定理 `Monotone.antivary`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst 
+: Preorder α] [inst_1 : Preorder β] {f : ι → α} {g : ι → β}   [inst_2 : LinearOr
+der ι],…
+· 使用定理 `Antitone.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Antitone f → Monotone (⇑OrderDual.toDual ∘ f)
 -/
 protected theorem Antitone.monovary (hf : Antitone f) (hg : Antitone g) : Monovary f g :=
   (hf.dual_right.antivary hg).dual_left
-
-/--
-theorem `Antitone.antivary` / 定理 `Antitone.antivary`
-
-English:
-theorem Antitone.antivary
-  given: (hf : Antitone f) (hg : Monotone g)
-  statement: Antivary f g
-  proof: (hf.monovary hg.dual_right).dual_right
-
-中文:
-定理 递减.antivary
-  条件: (hf : 递减 f) (hg : 递增 g)
-  结论: Antivary f g
-  证明: (hf.monovary hg.dual_right).dual_right
+/-
+**Antitone.antivary** 是 Mathlib 中的一个定理，位于命名空间 `Antitone`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   [inst_2 : LinearOrder ι], Antitone f → 
+Monotone g → Antivary f g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monovary.dual_right`：Monovary.dual_right : Monovary f g -> Antivary f (t
+oDual ∘ g)
+· 使用定理 `Antitone.monovary`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst 
+: Preorder α] [inst_1 : Preorder β] {f : ι → α} {g : ι → β}   [inst_2 : LinearOr
+der ι],…
+· 使用定理 `Monotone.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Monotone f → Antitone (⇑OrderDual.toDual ∘ f)
 -/
 protected theorem Antitone.antivary (hf : Antitone f) (hg : Monotone g) : Antivary f g :=
   (hf.monovary hg.dual_right).dual_right
-
-/--
-theorem `MonotoneOn.monovaryOn` / 定理 `MonotoneOn.monovaryOn`
-
-English:
-theorem MonotoneOn.monovaryOn
-  given: (hf : MonotoneOn f s) (hg : MonotoneOn g s)
-  proof: fun _ hi _ hj hij => hf hi hj (hg.reflect_lt hi hj hij).le
-
-中文:
-定理 MonotoneOn.monovaryOn
-  条件: (hf : MonotoneOn f s) (hg : MonotoneOn g s)
-  证明: fun _ hi _ hj hij => hf hi hj (hg.reflect_lt hi hj hij).le
+/-
+**MonotoneOn.monovaryOn** 是 Mathlib 中的一个定理，位于命名空间 `MonotoneOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   {s : Set ι} [inst_2 : LinearOrder ι], M
+onotoneOn f s → MonotoneOn g s → MonovaryOn f g s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `MonotoneOn.reflect_lt`：MonotoneOn.reflect_lt (hf : MonotoneOn f s) {a b 
+: α} (ha : a in s) (hb : b in s) (h : f a < f b) : a < b
 -/
 protected theorem MonotoneOn.monovaryOn (hf : MonotoneOn f s) (hg : MonotoneOn g s) :
     MonovaryOn f g s := fun _ hi _ hj hij => hf hi hj (hg.reflect_lt hi hj hij).le
-
-/--
-theorem `MonotoneOn.antivaryOn` / 定理 `MonotoneOn.antivaryOn`
-
-English:
-theorem MonotoneOn.antivaryOn
-  given: (hf : MonotoneOn f s) (hg : AntitoneOn g s)
-  proof: (hf.monovaryOn hg.dual_right).dual_right
-
-中文:
-定理 MonotoneOn.antivaryOn
-  条件: (hf : MonotoneOn f s) (hg : AntitoneOn g s)
-  证明: (hf.monovaryOn hg.dual_right).dual_right
+/-
+**MonotoneOn.antivaryOn** 是 Mathlib 中的一个定理，位于命名空间 `MonotoneOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   {s : Set ι} [inst_2 : LinearOrder ι], M
+onotoneOn f s → AntitoneOn g s → AntivaryOn f g s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonovaryOn.dual_right`：MonovaryOn.dual_right : MonovaryOn f g s -> Antiv
+aryOn f (toDual ∘ g) s
+· 使用定理 `MonotoneOn.monovaryOn`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [i
+nst : Preorder α] [inst_1 : Preorder β] {f : ι → α} {g : ι → β}   {s : Set ι} [i
+nst_2 : Lin…
+· 使用定理 `AntitoneOn.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [
+inst_1 : Preorder β] {f : α → β} {s : Set α},   AntitoneOn f s → MonotoneOn (⇑Or
+derDual.toD…
 -/
 protected theorem MonotoneOn.antivaryOn (hf : MonotoneOn f s) (hg : AntitoneOn g s) :
     AntivaryOn f g s :=
   (hf.monovaryOn hg.dual_right).dual_right
-
-/--
-theorem `AntitoneOn.monovaryOn` / 定理 `AntitoneOn.monovaryOn`
-
-English:
-theorem AntitoneOn.monovaryOn
-  given: (hf : AntitoneOn f s) (hg : AntitoneOn g s)
-  proof: (hf.dual_right.antivaryOn hg).dual_left
-
-中文:
-定理 AntitoneOn.monovaryOn
-  条件: (hf : AntitoneOn f s) (hg : AntitoneOn g s)
-  证明: (hf.dual_right.antivaryOn hg).dual_left
+/-
+**AntitoneOn.monovaryOn** 是 Mathlib 中的一个定理，位于命名空间 `AntitoneOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   {s : Set ι} [inst_2 : LinearOrder ι], A
+ntitoneOn f s → AntitoneOn g s → MonovaryOn f g s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntivaryOn.dual_left`：AntivaryOn.dual_left : AntivaryOn f g s -> Monovar
+yOn (toDual ∘ f) g s
+· 使用定理 `MonotoneOn.antivaryOn`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [i
+nst : Preorder α] [inst_1 : Preorder β] {f : ι → α} {g : ι → β}   {s : Set ι} [i
+nst_2 : Lin…
+· 使用定理 `AntitoneOn.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [
+inst_1 : Preorder β] {f : α → β} {s : Set α},   AntitoneOn f s → MonotoneOn (⇑Or
+derDual.toD…
 -/
 protected theorem AntitoneOn.monovaryOn (hf : AntitoneOn f s) (hg : AntitoneOn g s) :
     MonovaryOn f g s :=
   (hf.dual_right.antivaryOn hg).dual_left
-
-/--
-theorem `AntitoneOn.antivaryOn` / 定理 `AntitoneOn.antivaryOn`
-
-English:
-theorem AntitoneOn.antivaryOn
-  given: (hf : AntitoneOn f s) (hg : MonotoneOn g s)
-  proof: (hf.monovaryOn hg.dual_right).dual_right
-
-中文:
-定理 AntitoneOn.antivaryOn
-  条件: (hf : AntitoneOn f s) (hg : MonotoneOn g s)
-  证明: (hf.monovaryOn hg.dual_right).dual_right
+/-
+**AntitoneOn.antivaryOn** 是 Mathlib 中的一个定理，位于命名空间 `AntitoneOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : Preorder β] {f : ι → α} {g : ι → β}   {s : Set ι} [inst_2 : LinearOrder ι], A
+ntitoneOn f s → MonotoneOn g s → AntivaryOn f g s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonovaryOn.dual_right`：MonovaryOn.dual_right : MonovaryOn f g s -> Antiv
+aryOn f (toDual ∘ g) s
+· 使用定理 `AntitoneOn.monovaryOn`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [i
+nst : Preorder α] [inst_1 : Preorder β] {f : ι → α} {g : ι → β}   {s : Set ι} [i
+nst_2 : Lin…
+· 使用定理 `MonotoneOn.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [
+inst_1 : Preorder β] {f : α → β} {s : Set α},   MonotoneOn f s → AntitoneOn (⇑Or
+derDual.toD…
 -/
 protected theorem AntitoneOn.antivaryOn (hf : AntitoneOn f s) (hg : MonotoneOn g s) :
     AntivaryOn f g s :=
@@ -1537,261 +974,174 @@ end Preorder
 
 section LinearOrder
 
-variable [Preorder α] [LinearOrder β] [Preorder γ] {f : ι -> α} {g : ι -> β} {g' : β -> γ}
+variable [Preorder α] [LinearOrder β] [Preorder γ] {f : ι → α} {g : ι → β} {g' : β → γ}
   {s : Set ι}
 
-/--
-theorem `MonovaryOn.comp_monotoneOn_right` / 定理 `MonovaryOn.comp_monotoneOn_right`
-
-English:
-theorem MonovaryOn.comp_monotoneOn_right
-  given: (h : MonovaryOn f g s) (hg : MonotoneOn g' (g '' s))
-  proof: fun _ hi _ hj hij =>
-h hi hj hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-中文:
-定理 MonovaryOn.comp_monotoneOn_right
-  条件: (h : MonovaryOn f g s) (hg : MonotoneOn g' (g '' s))
-  证明: fun _ hi _ hj hij =>
-h hi hj hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
+/-
+**MonovaryOn.comp_monotoneOn_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.comp_monotoneOn_right (h : MonovaryOn f g s) (hg : MonotoneOn g
+' (g '' s)) : MonovaryOn f (g' ∘ g) s
+参数：h : MonovaryOn f g s；hg : MonotoneOn g' (g '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonotoneOn.reflect_lt`：MonotoneOn.reflect_lt (hf : MonotoneOn f s) {a b 
+: α} (ha : a in s) (hb : b in s) (h : f a < f b) : a < b
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem MonovaryOn.comp_monotoneOn_right (h : MonovaryOn f g s) (hg : MonotoneOn g' (g '' s)) :
     MonovaryOn f (g' ∘ g) s := fun _ hi _ hj hij =>
-h hi hj hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-/--
-theorem `MonovaryOn.comp_antitoneOn_right` / 定理 `MonovaryOn.comp_antitoneOn_right`
-
-English:
-theorem MonovaryOn.comp_antitoneOn_right
-  given: (h : MonovaryOn f g s) (hg : AntitoneOn g' (g '' s))
-  proof: fun _ hi _ hj hij =>
-h hj hi hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-中文:
-定理 MonovaryOn.comp_antitoneOn_right
-  条件: (h : MonovaryOn f g s) (hg : AntitoneOn g' (g '' s))
-  证明: fun _ hi _ hj hij =>
-h hj hi hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
+  h hi hj <| hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
+/-
+**MonovaryOn.comp_antitoneOn_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonovaryOn.comp_antitoneOn_right (h : MonovaryOn f g s) (hg : AntitoneOn g
+' (g '' s)) : AntivaryOn f (g' ∘ g) s
+参数：h : MonovaryOn f g s；hg : AntitoneOn g' (g '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntitoneOn.reflect_lt`：AntitoneOn.reflect_lt (hf : AntitoneOn f s) {a b 
+: α} (ha : a in s) (hb : b in s) (h : f a < f b) : b < a
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem MonovaryOn.comp_antitoneOn_right (h : MonovaryOn f g s) (hg : AntitoneOn g' (g '' s)) :
     AntivaryOn f (g' ∘ g) s := fun _ hi _ hj hij =>
-h hj hi hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-/--
-theorem `AntivaryOn.comp_monotoneOn_right` / 定理 `AntivaryOn.comp_monotoneOn_right`
-
-English:
-theorem AntivaryOn.comp_monotoneOn_right
-  given: (h : AntivaryOn f g s) (hg : MonotoneOn g' (g '' s))
-  proof: fun _ hi _ hj hij =>
-h hi hj hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-中文:
-定理 AntivaryOn.comp_monotoneOn_right
-  条件: (h : AntivaryOn f g s) (hg : MonotoneOn g' (g '' s))
-  证明: fun _ hi _ hj hij =>
-h hi hj hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
+  h hj hi <| hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
+/-
+**AntivaryOn.comp_monotoneOn_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.comp_monotoneOn_right (h : AntivaryOn f g s) (hg : MonotoneOn g
+' (g '' s)) : AntivaryOn f (g' ∘ g) s
+参数：h : AntivaryOn f g s；hg : MonotoneOn g' (g '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonotoneOn.reflect_lt`：MonotoneOn.reflect_lt (hf : MonotoneOn f s) {a b 
+: α} (ha : a in s) (hb : b in s) (h : f a < f b) : a < b
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem AntivaryOn.comp_monotoneOn_right (h : AntivaryOn f g s) (hg : MonotoneOn g' (g '' s)) :
     AntivaryOn f (g' ∘ g) s := fun _ hi _ hj hij =>
-h hi hj hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-/--
-theorem `AntivaryOn.comp_antitoneOn_right` / 定理 `AntivaryOn.comp_antitoneOn_right`
-
-English:
-theorem AntivaryOn.comp_antitoneOn_right
-  given: (h : AntivaryOn f g s) (hg : AntitoneOn g' (g '' s))
-  proof: fun _ hi _ hj hij =>
-h hj hi hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-@[symm]
-
-中文:
-定理 AntivaryOn.comp_antitoneOn_right
-  条件: (h : AntivaryOn f g s) (hg : AntitoneOn g' (g '' s))
-  证明: fun _ hi _ hj hij =>
-h hj hi hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
-
-@[symm]
+  h hi hj <| hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
+/-
+**AntivaryOn.comp_antitoneOn_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntivaryOn.comp_antitoneOn_right (h : AntivaryOn f g s) (hg : AntitoneOn g
+' (g '' s)) : MonovaryOn f (g' ∘ g) s
+参数：h : AntivaryOn f g s；hg : AntitoneOn g' (g '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntitoneOn.reflect_lt`：AntitoneOn.reflect_lt (hf : AntitoneOn f s) {a b 
+: α} (ha : a in s) (hb : b in s) (h : f a < f b) : b < a
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 -/
 theorem AntivaryOn.comp_antitoneOn_right (h : AntivaryOn f g s) (hg : AntitoneOn g' (g '' s)) :
     MonovaryOn f (g' ∘ g) s := fun _ hi _ hj hij =>
-h hj hi hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
+  h hj hi <| hg.reflect_lt (mem_image_of_mem _ hi) (mem_image_of_mem _ hj) hij
 
 @[symm]
-/--
-theorem `Monovary.symm` / 定理 `Monovary.symm`
-
-English:
-theorem Monovary.symm
-  given: (h : Monovary f g)
-  statement: Monovary g f
-  proof: fun _ _ hf =>
-le_of_not_gt fun hg => hf.not_ge h hg
-
-@[symm]
-
-中文:
-定理 Monovary.symm
-  条件: (h : Monovary f g)
-  结论: Monovary g f
-  证明: fun _ _ hf =>
-le_of_not_gt fun hg => hf.not_ge h hg
-
-@[symm]
+/-
+**Monovary.symm** 是 Mathlib 中的一个定理，位于命名空间 `Monovary`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : LinearOrder β] {f : ι → α} {g : ι → β},   Monovary f g → Monovary g f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
 protected theorem Monovary.symm (h : Monovary f g) : Monovary g f := fun _ _ hf =>
-le_of_not_gt fun hg => hf.not_ge h hg
+  le_of_not_gt fun hg => hf.not_ge <| h hg
 
 @[symm]
-/--
-theorem `Antivary.symm` / 定理 `Antivary.symm`
-
-English:
-theorem Antivary.symm
-  given: (h : Antivary f g)
-  statement: Antivary g f
-  proof: fun _ _ hf =>
-le_of_not_gt fun hg => hf.not_ge h hg
-
-@[symm]
-
-中文:
-定理 Antivary.symm
-  条件: (h : Antivary f g)
-  结论: Antivary g f
-  证明: fun _ _ hf =>
-le_of_not_gt fun hg => hf.not_ge h hg
-
-@[symm]
+/-
+**Antivary.symm** 是 Mathlib 中的一个定理，位于命名空间 `Antivary`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : LinearOrder β] {f : ι → α} {g : ι → β},   Antivary f g → Antivary g f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
 protected theorem Antivary.symm (h : Antivary f g) : Antivary g f := fun _ _ hf =>
-le_of_not_gt fun hg => hf.not_ge h hg
+  le_of_not_gt fun hg => hf.not_ge <| h hg
 
 @[symm]
-/--
-theorem `MonovaryOn.symm` / 定理 `MonovaryOn.symm`
-
-English:
-theorem MonovaryOn.symm
-  given: (h : MonovaryOn f g s)
-  statement: MonovaryOn g f s
-  proof: fun _ hi _ hj hf =>
-le_of_not_gt fun hg => hf.not_ge h hj hi hg
-
-@[symm]
-
-中文:
-定理 MonovaryOn.symm
-  条件: (h : MonovaryOn f g s)
-  结论: MonovaryOn g f s
-  证明: fun _ hi _ hj hf =>
-le_of_not_gt fun hg => hf.not_ge h hj hi hg
-
-@[symm]
+/-
+**MonovaryOn.symm** 是 Mathlib 中的一个定理，位于命名空间 `MonovaryOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : LinearOrder β] {f : ι → α} {g : ι → β}   {s : Set ι}, MonovaryOn f g s → Mono
+varyOn g f s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
 protected theorem MonovaryOn.symm (h : MonovaryOn f g s) : MonovaryOn g f s := fun _ hi _ hj hf =>
-le_of_not_gt fun hg => hf.not_ge h hj hi hg
+  le_of_not_gt fun hg => hf.not_ge <| h hj hi hg
 
 @[symm]
-/--
-theorem `AntivaryOn.symm` / 定理 `AntivaryOn.symm`
-
-English:
-theorem AntivaryOn.symm
-  given: (h : AntivaryOn f g s)
-  statement: AntivaryOn g f s
-  proof: fun _ hi _ hj hf =>
-le_of_not_gt fun hg => hf.not_ge h hi hj hg
-
-中文:
-定理 AntivaryOn.symm
-  条件: (h : AntivaryOn f g s)
-  结论: AntivaryOn g f s
-  证明: fun _ hi _ hj hf =>
-le_of_not_gt fun hg => hf.not_ge h hi hj hg
+/-
+**AntivaryOn.symm** 是 Mathlib 中的一个定理，位于命名空间 `AntivaryOn`。
+形式化陈述：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Preorder α] [inst_1
+ : LinearOrder β] {f : ι → α} {g : ι → β}   {s : Set ι}, AntivaryOn f g s → Anti
+varyOn g f s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
 protected theorem AntivaryOn.symm (h : AntivaryOn f g s) : AntivaryOn g f s := fun _ hi _ hj hf =>
-le_of_not_gt fun hg => hf.not_ge h hi hj hg
+  le_of_not_gt fun hg => hf.not_ge <| h hi hj hg
 
 end LinearOrder
 
 section LinearOrder
 
-variable [LinearOrder α] [LinearOrder β] {f : ι -> α} {g : ι -> β} {s : Set ι}
+variable [LinearOrder α] [LinearOrder β] {f : ι → α} {g : ι → β} {s : Set ι}
 
-/--
-theorem `monovary_comm` / 定理 `monovary_comm`
-
-English:
-theorem monovary_comm
-  statement: Monovary f g ↔ Monovary g f
-  proof: ⟨Monovary.symm, Monovary.symm⟩
-
-中文:
-定理 monovary_comm
-  结论: Monovary f g ↔ Monovary g f
-  证明: ⟨Monovary.symm, Monovary.symm⟩
-
-Depends on / 依赖: Monovary, Monovary.symm
+/-
+**monovary_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovary_comm : Monovary f g ↔ Monovary g f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monovary.symm`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Pr
+eorder α] [inst_1 : LinearOrder β] {f : ι → α} {g : ι → β},   Monovary f g → Mon
+ova…
 -/
 theorem monovary_comm : Monovary f g ↔ Monovary g f :=
   ⟨Monovary.symm, Monovary.symm⟩
-
-/--
-theorem `antivary_comm` / 定理 `antivary_comm`
-
-English:
-theorem antivary_comm
-  statement: Antivary f g ↔ Antivary g f
-  proof: ⟨Antivary.symm, Antivary.symm⟩
-
-中文:
-定理 antivary_comm
-  结论: Antivary f g ↔ Antivary g f
-  证明: ⟨Antivary.symm, Antivary.symm⟩
-
-Depends on / 依赖: Antivary, Antivary.symm
+/-
+**antivary_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivary_comm : Antivary f g ↔ Antivary g f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Antivary.symm`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Pr
+eorder α] [inst_1 : LinearOrder β] {f : ι → α} {g : ι → β},   Antivary f g → Ant
+iva…
 -/
 theorem antivary_comm : Antivary f g ↔ Antivary g f :=
   ⟨Antivary.symm, Antivary.symm⟩
-
-/--
-theorem `monovaryOn_comm` / 定理 `monovaryOn_comm`
-
-English:
-theorem monovaryOn_comm
-  statement: MonovaryOn f g s ↔ MonovaryOn g f s
-  proof: ⟨MonovaryOn.symm, MonovaryOn.symm⟩
-
-中文:
-定理 monovaryOn_comm
-  结论: MonovaryOn f g s ↔ MonovaryOn g f s
-  证明: ⟨MonovaryOn.symm, MonovaryOn.symm⟩
-
-Depends on / 依赖: MonovaryOn, MonovaryOn.symm
+/-
+**monovaryOn_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monovaryOn_comm : MonovaryOn f g s ↔ MonovaryOn g f s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonovaryOn.symm`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : 
+Preorder α] [inst_1 : LinearOrder β] {f : ι → α} {g : ι → β}   {s : Set ι}, Mono
+varyO…
 -/
 theorem monovaryOn_comm : MonovaryOn f g s ↔ MonovaryOn g f s :=
   ⟨MonovaryOn.symm, MonovaryOn.symm⟩
-
-/--
-theorem `antivaryOn_comm` / 定理 `antivaryOn_comm`
-
-English:
-theorem antivaryOn_comm
-  statement: AntivaryOn f g s ↔ AntivaryOn g f s
-  proof: ⟨AntivaryOn.symm, AntivaryOn.symm⟩
-
-中文:
-定理 antivaryOn_comm
-  结论: AntivaryOn f g s ↔ AntivaryOn g f s
-  证明: ⟨AntivaryOn.symm, AntivaryOn.symm⟩
-
-Depends on / 依赖: AntivaryOn, AntivaryOn.symm
+/-
+**antivaryOn_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antivaryOn_comm : AntivaryOn f g s ↔ AntivaryOn g f s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntivaryOn.symm`：∀ {ι : Type u_1} {α : Type u_3} {β : Type u_4} [inst : 
+Preorder α] [inst_1 : LinearOrder β] {f : ι → α} {g : ι → β}   {s : Set ι}, Anti
+varyO…
 -/
 theorem antivaryOn_comm : AntivaryOn f g s ↔ AntivaryOn g f s :=
   ⟨AntivaryOn.symm, AntivaryOn.symm⟩
 
 end LinearOrder
+

@@ -39,143 +39,149 @@ as much as possible.
 open scoped CStarAlgebra
 
 /--
-Definition of `CompletelyPositiveMap` / `CompletelyPositiveMap` 的定义
+A linear map `φ : A₁ →ₗ[ℂ] A₂`  is called *completely positive (CP)* if
+`CStarMatrix.mapₗ (Fin k) (Fin k) φ` (i.e. applying `φ` to all entries of a k × k matrix) is also
+positive for every `k ∈ ℕ`.
 
-English:
-structure CompletelyPositiveMap
-  parameters: (A₁ : Type*) (A₂ : Type*) [NonUnitalCStarAlgebra A₁]
-  extends: A₁ ->ₗ[Complex] A₂
-  axioms and operations (1):
-    - map_cstarMatrix_nonneg'((k : Nat) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M)) : 0 <= M.map toLinearMap
+Note that `Fin k` here is hardcoded to avoid having to quantify over types and introduce a new
+universe parameter. See `CompletelyPositiveMap.map_cstarMatrix_nonneg` for a version of the
+property that holds for matrices indexed by any finite type.
+-/
+/-
+**CompletelyPositiveMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A₁ : Type u_1) →   (A₂ : Type u_2) →     [inst : NonUnitalCStarAlgebra A₁
+] →       [inst_1 : NonUnitalCStarAlgebra A₂] →         [inst_2 : PartialOrder A
+₁] →           [inst_3 : PartialOrder A₂] → [StarOrderedRing A₁] → [StarOrderedR
+ing A₂] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 余mpletelyPositive映射
-  参数: (A₁ : 类型) (A₂ : 类型) [非幺CStar代数 A₁]
-  继承: A₁ ->ₗ[复形] A₂
-  公理与运算 (1 个):
-    - map_cstarMatrix_nonneg'((k : 自然数) (M : CStarMatrix (有限集 k) (有限集 k) A₁) (hM : 0 <= M)) : 0 <= M.map toLinearMap
+--- 原说明 ---
+A linear map `φ : A₁ →ₗ[ℂ] A₂`  is called *completely positive (CP)* if
+`CStarMatrix.mapₗ (Fin k) (Fin k) φ` (i.e. applying `φ` to all entries of a k × 
+k matrix) is also
+positive for every `k ∈ ℕ`.
+
+Note that `Fin k` here is hardcoded to avoid having to quantify over types and i
+ntroduce a new
+universe parameter. See `CompletelyPositiveMap.map_cstarMatrix_nonneg` for a ver
+sion of the
+property that holds for matrices indexed by any finite type.
 -/
 structure CompletelyPositiveMap (A₁ : Type*) (A₂ : Type*) [NonUnitalCStarAlgebra A₁]
     [NonUnitalCStarAlgebra A₂] [PartialOrder A₁] [PartialOrder A₂] [StarOrderedRing A₁]
-    [StarOrderedRing A₂] extends A₁ ->ₗ[Complex] A₂ where
-  map_cstarMatrix_nonneg' (k : Nat) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M) :
-      0 <= M.map toLinearMap
+    [StarOrderedRing A₂] extends A₁ →ₗ[ℂ] A₂ where
+  map_cstarMatrix_nonneg' (k : ℕ) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 ≤ M) :
+      0 ≤ M.map toLinearMap
 
 /--
-Definition of `CompletelyPositiveMapClass` / `CompletelyPositiveMapClass` 的定义
+A linear map `φ : A₁ →ₗ[ℂ] A₂`  is called *completely positive (CP)* if
+`CStarMatrix.mapₗ (Fin k) (Fin k) φ` (i.e. applying `φ` to all entries of a k × k matrix) is also
+positive for every `k ∈ ℕ`.
 
-English:
-class CompletelyPositiveMapClass
-  parameters: (F : Type*) (A₁ : Type*) (A₂ : Type*)
-  axioms and operations (1):
-    - map_cstarMatrix_nonneg'((φ : F) (k : Nat) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M)) : 0 <= M.map φ
+Note that `Fin k` here is hardcoded to avoid having to quantify over types and introduce a new
+universe parameter. See `CompletelyPositiveMap.map_cstarMatrix_nonneg` for a version of the
+property that holds for matrices indexed by any finite type.
+-/
+/-
+**CompletelyPositiveMapClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (A₁ : Type u_2) →     (A₂ : Type u_3) →       [inst : N
+onUnitalCStarAlgebra A₁] →         [inst_1 : NonUnitalCStarAlgebra A₂] →        
+   [inst_2 : PartialOrder A₁] →             [inst_3 : PartialOrder A₂] → [StarOr
+deredRing A₁] → [StarOrderedRing A₂] → [FunLike F A₁ A₂] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 余mpletelyPositive映射类
-  参数: (F : 类型) (A₁ : 类型) (A₂ : 类型)
-  公理与运算 (1 个):
-    - map_cstarMatrix_nonneg'((φ : F) (k : 自然数) (M : CStarMatrix (有限集 k) (有限集 k) A₁) (hM : 0 <= M)) : 0 <= M.map φ
+--- 原说明 ---
+A linear map `φ : A₁ →ₗ[ℂ] A₂`  is called *completely positive (CP)* if
+`CStarMatrix.mapₗ (Fin k) (Fin k) φ` (i.e. applying `φ` to all entries of a k × 
+k matrix) is also
+positive for every `k ∈ ℕ`.
+
+Note that `Fin k` here is hardcoded to avoid having to quantify over types and i
+ntroduce a new
+universe parameter. See `CompletelyPositiveMap.map_cstarMatrix_nonneg` for a ver
+sion of the
+property that holds for matrices indexed by any finite type.
 -/
 class CompletelyPositiveMapClass (F : Type*) (A₁ : Type*) (A₂ : Type*)
     [NonUnitalCStarAlgebra A₁] [NonUnitalCStarAlgebra A₂] [PartialOrder A₁]
     [PartialOrder A₂] [StarOrderedRing A₁] [StarOrderedRing A₂] [FunLike F A₁ A₂] where
-  map_cstarMatrix_nonneg' (φ : F) (k : Nat) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 <= M) :
-    0 <= M.map φ
+  map_cstarMatrix_nonneg' (φ : F) (k : ℕ) (M : CStarMatrix (Fin k) (Fin k) A₁) (hM : 0 ≤ M) :
+    0 ≤ M.map φ
 
 /-- Notation for a `CompletelyPositiveMap`. -/
-scoped[CStarAlgebra] notation:25 A₁ " ->CP " A₂:0 => CompletelyPositiveMap A₁ A₂
+scoped[CStarAlgebra] notation:25 A₁ " →CP " A₂:0 => CompletelyPositiveMap A₁ A₂
 
 namespace CompletelyPositiveMapClass
 
 variable {F A₁ A₂ : Type*} [NonUnitalCStarAlgebra A₁]
   [NonUnitalCStarAlgebra A₂] [PartialOrder A₁] [PartialOrder A₂] [StarOrderedRing A₁]
-  [StarOrderedRing A₂] [FunLike F A₁ A₂] [LinearMapClass F Complex A₁ A₂]
+  [StarOrderedRing A₂] [FunLike F A₁ A₂] [LinearMapClass F ℂ A₁ A₂]
 
 /-- Reinterpret an element of a type of completely positive maps as a completely positive linear
   map. -/
 @[coe]
-/--
-Definition of `toCompletelyPositiveLinearMap` / `toCompletelyPositiveLinearMap` 的定义
+/-
+**CompletelyPositiveMapClass.toCompletelyPositiveLinearMap** 是 Mathlib 中的一个定义，位于
+命名空间 `CompletelyPositiveMapClass`。
+形式化陈述：toCompletelyPositiveLinearMap [CompletelyPositiveMapClass F A₁ A₂] (f : F)
+ : A₁ ->CP A₂
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompletelyPositiveMapClass.map_cstarMatrix_nonneg'`：∀ {F : Type u_1} {A₁
+ : Type u_2} {A₂ : Type u_3} {inst : NonUnitalCStarAlgebra A₁} {inst_1 : NonUnit
+alCStarAlgebra A₂}   {inst_2 : PartialOr…
 
-English:
-definition toCompletelyPositiveLinearMap
-  signature: [CompletelyPositiveMapClass F A₁ A₂] (f : F)
-  body: { (f : A₁ ->ₗ[Complex] A₂) with
-    map_cstarMatrix_nonneg' := CompletelyPositiveMapClass.map_cstarMatrix_nonneg' f }
-
-中文:
-定义 toCompletelyPositiveLinearMap
-  签名: [余mpletelyPositive映射类 F A₁ A₂] (f : F)
-  定义体: { (f : A₁ ->ₗ[Complex] A₂) with
-    map_cstarMatrix_nonneg' := CompletelyPositiveMapClass.map_cstarMatrix_nonneg' f }
-
-Depends on / 依赖: CompletelyPositiveMapClass, CompletelyPositiveMapClass.map_cstarMatrix_nonneg, map_cstarMatrix_nonneg
+--- 原说明 ---
+Reinterpret an element of a type of completely positive maps as a completely pos
+itive linear
+  map.
 -/
-def toCompletelyPositiveLinearMap [CompletelyPositiveMapClass F A₁ A₂] (f : F) : A₁ ->CP A₂ :=
-  { (f : A₁ ->ₗ[Complex] A₂) with
+def toCompletelyPositiveLinearMap [CompletelyPositiveMapClass F A₁ A₂] (f : F) : A₁ →CP A₂ :=
+  { (f : A₁ →ₗ[ℂ] A₂) with
     map_cstarMatrix_nonneg' := CompletelyPositiveMapClass.map_cstarMatrix_nonneg' f }
 
-/--
-Instance `instCoeToCompletelyPositiveMap` / 实例 `instCoeToCompletelyPositiveMap`
+/-- Reinterpret an element of a type of completely positive maps as a completely positive linear
+map. -/
+/-
+**CompletelyPositiveMapClass.instCoeToCompletelyPositiveMap** 是 Mathlib 中的一个实例，位
+于命名空间 `CompletelyPositiveMapClass`。
+形式化陈述：instCoeToCompletelyPositiveMap [CompletelyPositiveMapClass F A₁ A₂] : CoeH
+ead F (A₁ ->CP A₂) where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCoeToCompletelyPositiveMap
-  signature: [CompletelyPositiveMapClass F A₁ A₂]
-  body: toCompletelyPositiveLinearMap f
-
-中文:
-实例 instCoeToCompletelyPositiveMap
-  签名: [余mpletelyPositive映射类 F A₁ A₂]
-  定义体: toCompletelyPositiveLinearMap f
-
-Depends on / 依赖: toCompletelyPositiveLinearMap
+--- 原说明 ---
+Reinterpret an element of a type of completely positive maps as a completely pos
+itive linear
+map.
 -/
 instance instCoeToCompletelyPositiveMap [CompletelyPositiveMapClass F A₁ A₂] :
-    CoeHead F (A₁ ->CP A₂) where
+    CoeHead F (A₁ →CP A₂) where
   coe f := toCompletelyPositiveLinearMap f
 
 set_option backward.isDefEq.respectTransparency false in
 open CStarMatrix in
-/--
-lemma `_root_.OrderHomClass.of_map_cstarMatrix_nonneg` / 引理 `_root_.OrderHomClass.of_map_cstarMatrix_nonneg`
+/-- Linear maps which are completely positive are order homomorphisms (i.e., positive maps). -/
+/-
+**CompletelyPositiveMapClass._root_.OrderHomClass.of_map_cstarMatrix_nonneg** 是 
+Mathlib 中的一个引理，位于命名空间 `CompletelyPositiveMapClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.OrderHomClass.of_map_cstarMatrix_nonneg
-  proof: .of_addMonoidHom by
-  intro φ a ha
-simpa using! map_nonneg (toOneByOne (Fin 1) Complex A₂).symm
-h φ 1 _ map_nonneg (toOneByOne (Fin 1) Complex A₁) ha
-
-中文:
-引理 _root_.序态射类.of_map_cstarMatrix_nonneg
-  证明: .of_addMonoidHom by
-  intro φ a ha
-simpa using! map_nonneg (toOneByOne (Fin 1) Complex A₂).symm
-h φ 1 _ map_nonneg (toOneByOne (Fin 1) Complex A₁) ha
-
-Depends on / 依赖: map_nonneg, of_addMonoidHom, toOneByOne
+--- 原说明 ---
+Linear maps which are completely positive are order homomorphisms (i.e., positiv
+e maps).
 -/
 lemma _root_.OrderHomClass.of_map_cstarMatrix_nonneg
-    (h : forall (φ : F) (k : Nat) (M : CStarMatrix (Fin k) (Fin k) A₁), 0 <= M -> 0 <= M.map φ) :
-OrderHomClass F A₁ A₂ := .of_addMonoidHom by
+    (h : ∀ (φ : F) (k : ℕ) (M : CStarMatrix (Fin k) (Fin k) A₁), 0 ≤ M → 0 ≤ M.map φ) :
+    OrderHomClass F A₁ A₂ := .of_addMonoidHom <| by
   intro φ a ha
-simpa using! map_nonneg (toOneByOne (Fin 1) Complex A₂).symm
-h φ 1 _ map_nonneg (toOneByOne (Fin 1) Complex A₁) ha
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CompletelyPositiveMapClass
-  signature: F A₁ A₂] : OrderHomClass F A₁ A₂
-  body: .of_map_cstarMatrix_nonneg CompletelyPositiveMapClass.map_cstarMatrix_nonneg'
-
-中文:
-实例 [余mpletelyPositive映射类
-  签名: F A₁ A₂] : 序态射类 F A₁ A₂
-  定义体: .of_map_cstarMatrix_nonneg CompletelyPositiveMapClass.map_cstarMatrix_nonneg'
-
-Depends on / 依赖: CompletelyPositiveMapClass, CompletelyPositiveMapClass.map_cstarMatrix_nonneg, map_cstarMatrix_nonneg, of_map_cstarMatrix_nonneg
+  simpa using! map_nonneg (toOneByOne (Fin 1) ℂ A₂).symm <|
+    h φ 1 _ <| map_nonneg (toOneByOne (Fin 1) ℂ A₁) ha
+/-
+**CompletelyPositiveMapClass.** 是 Mathlib 中的一个实例，位于命名空间 `CompletelyPositiveMapCl
+ass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CompletelyPositiveMapClass F A₁ A₂] : OrderHomClass F A₁ A₂ :=
   .of_map_cstarMatrix_nonneg CompletelyPositiveMapClass.map_cstarMatrix_nonneg'
@@ -188,34 +194,11 @@ variable {A₁ A₂ : Type*} [NonUnitalCStarAlgebra A₁]
   [NonUnitalCStarAlgebra A₂] [PartialOrder A₁] [PartialOrder A₂] [StarOrderedRing A₁]
   [StarOrderedRing A₂]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (A₁ ->CP A₂) A₁ A₂
-  body: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-    apply DFunLike.coe_injective
-    exact h
-
-中文:
-实例 :
-  签名: 函数状 (A₁ ->CP A₂) A₁ A₂
-  定义体: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-    apply DFunLike.coe_injective
-    exact h
-
-Depends on / 依赖: f.toFun
+/-
+**CompletelyPositiveMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompletelyPositiveMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (A₁ ->CP A₂) A₁ A₂ where
+instance : FunLike (A₁ →CP A₂) A₁ A₂ where
   coe f := f.toFun
   coe_injective f g h := by
     cases f
@@ -223,85 +206,100 @@ instance : FunLike (A₁ ->CP A₂) A₁ A₂ where
     congr
     apply DFunLike.coe_injective
     exact h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LinearMapClass (A₁ ->CP A₂) Complex A₁ A₂
-  body: map_add f.toLinearMap
-  map_smulₛₗ f := map_smulₛₗ f.toLinearMap
-
-中文:
-实例 :
-  签名: 线性映射类 (A₁ ->CP A₂) 复形 A₁ A₂
-  定义体: map_add f.toLinearMap
-  map_smulₛₗ f := map_smulₛₗ f.toLinearMap
-
-Depends on / 依赖: f.toLinearMap, map_add, toLinearMap
+/-
+**CompletelyPositiveMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompletelyPositiveMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LinearMapClass (A₁ ->CP A₂) Complex A₁ A₂ where
+instance : LinearMapClass (A₁ →CP A₂) ℂ A₁ A₂ where
   map_add f := map_add f.toLinearMap
   map_smulₛₗ f := map_smulₛₗ f.toLinearMap
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompletelyPositiveMapClass (A₁ ->CP A₂) A₁ A₂
-  body: f.map_cstarMatrix_nonneg'
-
-中文:
-实例 :
-  签名: 余mpletelyPositive映射类 (A₁ ->CP A₂) A₁ A₂
-  定义体: f.map_cstarMatrix_nonneg'
-
-Depends on / 依赖: f.map_cstarMatrix_nonneg, map_cstarMatrix_nonneg
+/-
+**CompletelyPositiveMap.** 是 Mathlib 中的一个实例，位于命名空间 `CompletelyPositiveMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CompletelyPositiveMapClass (A₁ ->CP A₂) A₁ A₂ where
+instance : CompletelyPositiveMapClass (A₁ →CP A₂) A₁ A₂ where
   map_cstarMatrix_nonneg' f := f.map_cstarMatrix_nonneg'
 
 open CStarMatrix in
-/--
-lemma `map_cstarMatrix_nonneg` / 引理 `map_cstarMatrix_nonneg`
-
-English:
-lemma map_cstarMatrix_nonneg
-  statement: {n : Type*} [Fintype n] (φ : A₁ ->CP A₂) (M : CStarMatrix n n A₁)
-  proof: by
-  let k := Fintype.card n
-  let e := Fintype.equivFinOfCardEq (rfl : Fintype.card n = k)
-  have hmain : 0 <= (reindexₐ Complex A₁ e M).mapₗ (φ : A₁ ->ₗ[Complex] A₂) := by
-    simp only [mapₗ, LinearMap.coe_coe, LinearMap.coe_mk, AddHom.coe_mk]
-    exact CompletelyPositiveMapClass.map_cstarMatrix_nonneg' _ k _ (map_nonneg _ hM)
-  rw [← mapₗ_reindexₐ] at hmain
-  simpa [reindexₐ_symm] using map_nonneg (reindexₐ Complex A₂ e).symm hmain
-
-中文:
-引理 map_cstarMatrix_nonneg
-  结论: {n : 类型} [有限类型 n] (φ : A₁ ->CP A₂) (M : CStarMatrix n n A₁)
-  证明: by
-  let k := Fintype.card n
-  let e := Fintype.equivFinOfCardEq (rfl : Fintype.card n = k)
-  have hmain : 0 <= (reindexₐ Complex A₁ e M).mapₗ (φ : A₁ ->ₗ[Complex] A₂) := by
-    simp only [mapₗ, LinearMap.coe_coe, LinearMap.coe_mk, AddHom.coe_mk]
-    exact CompletelyPositiveMapClass.map_cstarMatrix_nonneg' _ k _ (map_nonneg _ hM)
-  rw [← mapₗ_reindexₐ] at hmain
-  simpa [reindexₐ_symm] using map_nonneg (reindexₐ Complex A₂ e).symm hmain
-
-Depends on / 依赖: AddHom, AddHom.coe_mk, CompletelyPositiveMapClass, CompletelyPositiveMapClass.map_cstarMatrix_nonneg, Fintype, Fintype.card, Fintype.equivFinOfCardEq, LinearMap, LinearMap.coe_coe, LinearMap.coe_mk, coe_coe, coe_mk, equivFinOfCardEq, map_cstarMatrix_nonneg, map_nonneg
+/-
+**CompletelyPositiveMap.map_cstarMatrix_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Comple
+telyPositiveMap`。
+形式化陈述：map_cstarMatrix_nonneg {n : Type*} [Fintype n] (φ : A₁ ->CP A₂) (M : CStar
+Matrix n n A₁) (hM : 0 <= M) : 0 <= M.map φ
+参数：φ : A₁ ->CP A₂；M : CStarMatrix n n A₁；hM : 0 <= M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompletelyPositiveMap.instLinearMapClassComplex`：∀ {A₁ : Type u_1} {A₂ :
+ Type u_2} [inst : NonUnitalCStarAlgebra A₁] [inst_1 : NonUnitalCStarAlgebra A₂]
+   [inst_2 : PartialOrder A₁] [inst_3…
+· 使用定理 `CompletelyPositiveMapClass.map_cstarMatrix_nonneg'`：∀ {F : Type u_1} {A₁
+ : Type u_2} {A₂ : Type u_3} {inst : NonUnitalCStarAlgebra A₁} {inst_1 : NonUnit
+alCStarAlgebra A₂}   {inst_2 : PartialOr…
+· 使用定理 `CompletelyPositiveMap.instCompletelyPositiveMapClass`：∀ {A₁ : Type u_1} 
+{A₂ : Type u_2} [inst : NonUnitalCStarAlgebra A₁] [inst_1 : NonUnitalCStarAlgebr
+a A₂]   [inst_2 : PartialOrder A₁] [inst_3…
+· 使用定理 `map_nonneg`：map_nonneg (ha : 0 <= a) : 0 <= f a
+· 使用定理 `StarRingHomClass.instOrderHomClass`：∀ {F : Type u_3} {R : Type u_4} {S :
+ Type u_5} [inst : NonUnitalSemiring R] [inst_1 : PartialOrder R]   [inst_2 : St
+arRing R] [StarOrderedRi…
+· 使用定理 `NonUnitalAlgHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} {S : Type u_3} {A : Type u_4} {B : Type u_5} {x : Monoid R} {x_1 : Monoid 
+S}   {φ : outParam (R →* S)} {x_2 …
+· 使用定理 `instNonUnitalAlgHomClassOfNonUnitalAlgEquivClass`：∀ {F : Type u_1} {R : 
+Type u_2} {A : Type u_3} {B : Type u_4} [inst : Monoid R] [inst_1 : NonUnitalNon
+AssocSemiring A]   [inst_2 : DistribMu…
+· 使用定理 `StarAlgEquiv.instNonUnitalAlgEquivClass`：∀ {R : Type u_2} {A : Type u_3}
+ {B : Type u_4} [inst : Add A] [inst_1 : Add B] [inst_2 : Mul A] [inst_3 : Mul B
+]   [inst_4 : SMul R A] [inst…
+· 使用定理 `NonUnitalStarAlgHomClass.instNonUnitalStarRingHomClassOfStarHomClass`：∀ 
+{F : Type u_1} {R : Type u_2} {A : Type u_3} {B : Type u_4} [inst : Monoid R] [i
+nst_1 : NonUnitalNonAssocSemiring A]   [inst_2 : DistribMu…
+· 使用定理 `NonUnitalStarRingHomClass.toStarHomClass`：∀ {F : Type u_1} {A : outParam
+ (Type u_2)} {B : outParam (Type u_3)} {inst : NonUnitalNonAssocSemiring A}   {i
+nst_1 : Star A} {inst_2 : NonU…
+· 使用定理 `RingEquivClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type u_4} 
+{S : Type u_5} [inst : EquivLike F R S] [inst_1 : NonUnitalNonAssocSemiring R]  
+ [inst_2 : NonUnitalNonAssoc…
+· 使用定理 `StarRingEquivClass.toRingEquivClass`：∀ {F : Type u_1} {A : outParam (Typ
+e u_2)} {B : outParam (Type u_3)} {inst : Add A} {inst_1 : Mul A} {inst_2 : Star
+ A}   {inst_3 : Add B} {i…
+· 使用定理 `StarAlgEquiv.instStarRingEquivClass`：∀ {R : Type u_2} {A : Type u_3} {B 
+: Type u_4} [inst : Add A] [inst_1 : Add B] [inst_2 : Mul A] [inst_3 : Mul B]   
+[inst_4 : SMul R A] [inst…
+· 使用定理 `StarRingEquivClass.instNonUnitalStarRingHomClass`：∀ {F : Type u_1} {A : 
+Type u_2} {B : Type u_3} [inst : NonUnitalNonAssocSemiring A] [inst_1 : Star A] 
+  [inst_2 : NonUnitalNonAssocSemiring …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CStarMatrix.mapₗ_apply`：∀ {m : Type u_1} {n : Type u_2} {R : Type u_3} {
+S : Type u_4} {A : Type u_5} {B : Type u_6} [inst : Semiring R]   [inst_1 : Semi
+ring S] {σ :…
+· 使用定理 `StarAlgEquiv.symm_apply_apply`：symm_apply_apply (e : A ≃⋆ₐ[R] B) : foral
+l x, e.symm (e x) = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CStarMatrix.mapₗ_reindexₐ`：mapₗ_reindexₐ [Fintype m] [Fintype n] [Semiri
+ng R] [AddCommMonoid A] [Mul A] [Module R A] [Star A] [AddCommMonoid B] [Mul B] 
+[Module R B] [S…
 -/
-lemma map_cstarMatrix_nonneg {n : Type*} [Fintype n] (φ : A₁ ->CP A₂) (M : CStarMatrix n n A₁)
-    (hM : 0 <= M) : 0 <= M.map φ := by
+lemma map_cstarMatrix_nonneg {n : Type*} [Fintype n] (φ : A₁ →CP A₂) (M : CStarMatrix n n A₁)
+    (hM : 0 ≤ M) : 0 ≤ M.map φ := by
   let k := Fintype.card n
   let e := Fintype.equivFinOfCardEq (rfl : Fintype.card n = k)
-  have hmain : 0 <= (reindexₐ Complex A₁ e M).mapₗ (φ : A₁ ->ₗ[Complex] A₂) := by
+  have hmain : 0 ≤ (reindexₐ ℂ A₁ e M).mapₗ (φ : A₁ →ₗ[ℂ] A₂) := by
     simp only [mapₗ, LinearMap.coe_coe, LinearMap.coe_mk, AddHom.coe_mk]
     exact CompletelyPositiveMapClass.map_cstarMatrix_nonneg' _ k _ (map_nonneg _ hM)
   rw [← mapₗ_reindexₐ] at hmain
-  simpa [reindexₐ_symm] using map_nonneg (reindexₐ Complex A₂ e).symm hmain
+  simpa [reindexₐ_symm] using map_nonneg (reindexₐ ℂ A₂ e).symm hmain
 
 end CompletelyPositiveMap
 
@@ -309,31 +307,50 @@ namespace NonUnitalStarAlgHomClass
 
 variable {F A₁ A₂ : Type*} [NonUnitalCStarAlgebra A₁] [NonUnitalCStarAlgebra A₂] [PartialOrder A₁]
   [PartialOrder A₂] [StarOrderedRing A₁] [StarOrderedRing A₂] [FunLike F A₁ A₂]
-  [NonUnitalAlgHomClass F Complex A₁ A₂] [StarHomClass F A₁ A₂]
+  [NonUnitalAlgHomClass F ℂ A₁ A₂] [StarHomClass F A₁ A₂]
 
 open CStarMatrix CFC in
-/--
-Instance `instCompletelyPositiveMapClass` / 实例 `instCompletelyPositiveMapClass`
+/-- Non-unital star algebra homomorphisms are completely positive. -/
+/-
+**NonUnitalStarAlgHomClass.instCompletelyPositiveMapClass** 是 Mathlib 中的一个实例，位于命
+名空间 `NonUnitalStarAlgHomClass`。
+形式化陈述：instCompletelyPositiveMapClass : CompletelyPositiveMapClass F A₁ A₂ where 
+map_cstarMatrix_nonneg' φ k M hM
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_nonneg`：map_nonneg (ha : 0 <= a) : 0 <= f a
+· 使用定理 `StarRingHomClass.instOrderHomClass`：∀ {F : Type u_3} {R : Type u_4} {S :
+ Type u_5} [inst : NonUnitalSemiring R] [inst_1 : PartialOrder R]   [inst_2 : St
+arRing R] [StarOrderedRi…
+· 使用定理 `NonUnitalAlgHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} {S : Type u_3} {A : Type u_4} {B : Type u_5} {x : Monoid R} {x_1 : Monoid 
+S}   {φ : outParam (R →* S)} {x_2 …
+· 使用定理 `NonUnitalStarAlgHom.instNonUnitalAlgHomClass`：∀ {R : Type u_1} {A : Type
+ u_2} {B : Type u_3} [inst : Monoid R] [inst_1 : NonUnitalNonAssocSemiring A]   
+[inst_2 : DistribMulAction R A] [i…
+· 使用定理 `NonUnitalStarAlgHomClass.instNonUnitalStarRingHomClassOfStarHomClass`：∀ 
+{F : Type u_1} {R : Type u_2} {A : Type u_3} {B : Type u_4} [inst : Monoid R] [i
+nst_1 : NonUnitalNonAssocSemiring A]   [inst_2 : DistribMu…
+· 使用定理 `NonUnitalStarAlgHom.instStarHomClass`：∀ {R : Type u_1} {A : Type u_2} {B
+ : Type u_3} [inst : Monoid R] [inst_1 : NonUnitalNonAssocSemiring A]   [inst_2 
+: DistribMulAction R A] [i…
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
 
-English:
-instance instCompletelyPositiveMapClass
-  signature: : CompletelyPositiveMapClass F A₁ A₂ where
-  body: by
-    change 0 <= (mapₙₐ (φ : A₁ ->⋆ₙₐ[Complex] A₂)) M
-    exact map_nonneg _ hM
-
-中文:
-实例 instCompletelyPositiveMapClass
-  签名: : 余mpletelyPositive映射类 F A₁ A₂ where
-  定义体: by
-    change 0 <= (mapₙₐ (φ : A₁ ->⋆ₙₐ[Complex] A₂)) M
-    exact map_nonneg _ hM
-
-Depends on / 依赖: map_nonneg
+--- 原说明 ---
+Non-unital star algebra homomorphisms are completely positive.
 -/
 instance instCompletelyPositiveMapClass : CompletelyPositiveMapClass F A₁ A₂ where
   map_cstarMatrix_nonneg' φ k M hM := by
-    change 0 <= (mapₙₐ (φ : A₁ ->⋆ₙₐ[Complex] A₂)) M
+    change 0 ≤ (mapₙₐ (φ : A₁ →⋆ₙₐ[ℂ] A₂)) M
     exact map_nonneg _ hM
 
 end NonUnitalStarAlgHomClass
+

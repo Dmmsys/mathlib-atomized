@@ -26,31 +26,20 @@ namespace HomologicalComplex
 variable {C : Type*} [Category* C] [Preadditive C]
   {ι : Type*} {c : ComplexShape ι} [DecidableRel c.Rel]
   (K : HomologicalComplex C c)
-  [forall i, HasBinaryBiproduct (K.X i) (K.X i)]
+  [∀ i, HasBinaryBiproduct (K.X i) (K.X i)]
 
 /-- The precylinder object of a homological complex that is given by
 `HomologicalComplex.cylinder`. -/
 @[simps]
-/--
-Definition of `precylinder` / `precylinder` 的定义
+/-
+**HomologicalComplex.precylinder** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：precylinder [K.HasCylinder] : Precylinder K where I
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precylinder
-  signature: [K.HasCylinder]
-  body: K.cylinder
-  i₀ := cylinder.ι₀ _
-  i₁ := cylinder.ι₁ _
-  π := cylinder.π _
-
-中文:
-定义 precylinder
-  签名: [K.HasCylinder]
-  定义体: K.cylinder
-  i₀ := cylinder.ι₀ _
-  i₁ := cylinder.ι₁ _
-  π := cylinder.π _
-
-Depends on / 依赖: K.cylinder, cylinder
+--- 原说明 ---
+The precylinder object of a homological complex that is given by
+`HomologicalComplex.cylinder`.
 -/
 noncomputable def precylinder [K.HasCylinder] : Precylinder K where
   I := K.cylinder
@@ -61,26 +50,16 @@ noncomputable def precylinder [K.HasCylinder] : Precylinder K where
 /-- The pre-path object of a homological complex that is given by
 `HomologicalComplex.pathObject`. -/
 @[simps]
-/--
-Definition of `prepathObject` / `prepathObject` 的定义
+/-
+**HomologicalComplex.prepathObject** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex
+`。
+形式化陈述：prepathObject [K.HasPathObject] : PrepathObject K where P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prepathObject
-  signature: [K.HasPathObject]
-  body: K.pathObject
-  p₀ := pathObject.π₀ _
-  p₁ := pathObject.π₁ _
-  ι := pathObject.ι _
-
-中文:
-定义 prepathObject
-  签名: [K.HasPathObject]
-  定义体: K.pathObject
-  p₀ := pathObject.π₀ _
-  p₁ := pathObject.π₁ _
-  ι := pathObject.ι _
-
-Depends on / 依赖: K.pathObject, pathObject
+--- 原说明 ---
+The pre-path object of a homological complex that is given by
+`HomologicalComplex.pathObject`.
 -/
 noncomputable def prepathObject [K.HasPathObject] : PrepathObject K where
   P := K.pathObject
@@ -89,3 +68,4 @@ noncomputable def prepathObject [K.HasPathObject] : PrepathObject K where
   ι := pathObject.ι _
 
 end HomologicalComplex
+

@@ -23,17 +23,21 @@ namespace Mathlib.Tactic
 open Lean Meta Elab Tactic
 
 /--
-Definition of `getUnassignedGoalMVarDependencies` / `getUnassignedGoalMVarDependencies` 的定义
+Get all metavariables which `mvarId` depends on. These are the metavariables
+which occur in the target or local context or delayed assignment (if any) of
+`mvarId`, plus the metavariables which occur in these metavariables, etc.
+-/
+/-
+**Mathlib.Tactic.getUnassignedGoalMVarDependencies** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic`。
+形式化陈述：MVarId → MetaM (Std.HashSet MVarId)
+参数：Std.HashSet MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getUnassignedGoalMVarDependencies
-  signature: (mvarId : MVarId)
-  body: return (← go mvarId |>.run {}).snd
-
-中文:
-定义 getUnassignedGoalMVarDependencies
-  签名: (mvarId : MVarId)
-  定义体: return (← go mvarId |>.run {}).snd
+--- 原说明 ---
+Get all metavariables which `mvarId` depends on. These are the metavariables
+which occur in the target or local context or delayed assignment (if any) of
+`mvarId`, plus the metavariables which occur in these metavariables, etc.
 -/
 partial def getUnassignedGoalMVarDependencies (mvarId : MVarId) :
     MetaM (Std.HashSet MVarId) :=
@@ -60,7 +64,7 @@ where
             addMVars val
         if let (some ass) ← getDelayedMVarAssignment? mvarId then
           let pendingMVarId := ass.mvarIdPending
-unless ← pendingMVarId.isAssigned pendingMVarId.isDelayedAssigned do
+          unless ← pendingMVarId.isAssigned <||> pendingMVarId.isDelayedAssigned do
             modify (·.insert pendingMVarId)
           go pendingMVarId
 
@@ -73,10 +77,11 @@ elab "recover " tacs:tacticSeq : tactic => do
   evalTactic tacs
   let mut unassigned : Std.HashSet MVarId := {}
   for mvarId in originalGoals do
-unless ← mvarId.isAssigned mvarId.isDelayedAssigned do
+    unless ← mvarId.isAssigned <||> mvarId.isDelayedAssigned do
       unassigned := unassigned.insert mvarId
     let unassignedMVarDependencies ← getUnassignedGoalMVarDependencies mvarId
     unassigned := unassigned.insertMany unassignedMVarDependencies.toList
-setGoals ((← getGoals) ++ unassigned.toList).eraseDups
+  setGoals <| ((← getGoals) ++ unassigned.toList).eraseDups
 
 end Mathlib.Tactic
+

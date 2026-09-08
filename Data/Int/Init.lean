@@ -27,444 +27,301 @@ open Nat
 
 namespace Int
 
-variable {a b c d m n : Int}
+variable {a b c d m n : ℤ}
 
-/--
-theorem `neg_eq_neg` / 定理 `neg_eq_neg`
-
-English:
-theorem neg_eq_neg
-  given: {a b : Int} (h : -a = -b)
-  statement: a = b
-  proof: Int.neg_inj.1 h
-
-中文:
-定理 neg_eq_neg
-  条件: {a b : 整数} (h : -a = -b)
-  结论: a = b
-  证明: Int.neg_inj.1 h
+/-
+**Int.neg_eq_neg** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {a b : ℤ}, -a = -b → a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.neg_inj`：∀ {a b : ℤ}, -a = -b ↔ a = b
 -/
-protected theorem neg_eq_neg {a b : Int} (h : -a = -b) : a = b := Int.neg_inj.1 h
+protected theorem neg_eq_neg {a b : ℤ} (h : -a = -b) : a = b := Int.neg_inj.1 h
 
 /-! ### succ and pred -/
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- Immediate successor of an integer: `succ n = n + 1` -/
+/-
+**Int.succ** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：succ (a : Int)
+参数：a : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succ
-  signature: (a : Int)
-  body: a + 1
-
-中文:
-定义 succ
-  签名: (a : 整数)
-  定义体: a + 1
+--- 原说明 ---
+Immediate successor of an integer: `succ n = n + 1`
 -/
-def succ (a : Int) := a + 1
+def succ (a : ℤ) := a + 1
 
-/--
-Definition of `pred` / `pred` 的定义
+/-- Immediate predecessor of an integer: `pred n = n - 1` -/
+/-
+**Int.pred** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：pred (a : Int)
+参数：a : Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pred
-  signature: (a : Int)
-  body: a - 1
-
-中文:
-定义 pred
-  签名: (a : 整数)
-  定义体: a - 1
+--- 原说明 ---
+Immediate predecessor of an integer: `pred n = n - 1`
 -/
-def pred (a : Int) := a - 1
-
-/--
-lemma `pred_succ` / 引理 `pred_succ`
-
-English:
-lemma pred_succ
-  given: (a : Int)
-  statement: pred (succ a) = a
-  proof: Int.add_sub_cancel _ _
-
-中文:
-引理 pred_succ
-  条件: (a : 整数)
-  结论: pred (succ a) = a
-  证明: Int.add_sub_cancel _ _
-
-Depends on / 依赖: Int.add_sub_cancel, add_sub_cancel
+def pred (a : ℤ) := a - 1
+/-
+**Int.pred_succ** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：pred_succ (a : Int) : pred (succ a) = a
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.add_sub_cancel`：∀ (a b : ℤ), a + b - b = a
 -/
-lemma pred_succ (a : Int) : pred (succ a) = a := Int.add_sub_cancel _ _
-
-/--
-lemma `succ_pred` / 引理 `succ_pred`
-
-English:
-lemma succ_pred
-  given: (a : Int)
-  statement: succ (pred a) = a
-  proof: Int.sub_add_cancel _ _
-
-中文:
-引理 succ_pred
-  条件: (a : 整数)
-  结论: succ (pred a) = a
-  证明: Int.sub_add_cancel _ _
-
-Depends on / 依赖: Int.sub_add_cancel, sub_add_cancel
+lemma pred_succ (a : ℤ) : pred (succ a) = a := Int.add_sub_cancel _ _
+/-
+**Int.succ_pred** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：succ_pred (a : Int) : succ (pred a) = a
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.sub_add_cancel`：∀ (a b : ℤ), a - b + b = a
 -/
-lemma succ_pred (a : Int) : succ (pred a) = a := Int.sub_add_cancel _ _
-
-/--
-lemma `neg_succ` / 引理 `neg_succ`
-
-English:
-lemma neg_succ
-  given: (a : Int)
-  statement: -succ a = pred (-a)
-  proof: Int.neg_add
-
-中文:
-引理 neg_succ
-  条件: (a : 整数)
-  结论: -succ a = pred (-a)
-  证明: Int.neg_add
-
-Depends on / 依赖: Int.neg_add, neg_add
+lemma succ_pred (a : ℤ) : succ (pred a) = a := Int.sub_add_cancel _ _
+/-
+**Int.neg_succ** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：neg_succ (a : Int) : -succ a = pred (-a)
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.neg_add`：∀ {a b : ℤ}, -(a + b) = -a + -b
 -/
-lemma neg_succ (a : Int) : -succ a = pred (-a) := Int.neg_add
-
-/--
-lemma `succ_neg_succ` / 引理 `succ_neg_succ`
-
-English:
-lemma succ_neg_succ
-  given: (a : Int)
-  statement: succ (-succ a) = -a
-  proof: by rw [neg_succ, succ_pred]
-
-中文:
-引理 succ_neg_succ
-  条件: (a : 整数)
-  结论: succ (-succ a) = -a
-  证明: by rw [neg_succ, succ_pred]
-
-Depends on / 依赖: neg_succ, succ_pred
+lemma neg_succ (a : ℤ) : -succ a = pred (-a) := Int.neg_add
+/-
+**Int.succ_neg_succ** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：succ_neg_succ (a : Int) : succ (-succ a) = -a
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.neg_succ`：neg_succ (a : Int) : -succ a = pred (-a)
+· 使用引理 `Int.succ_pred`：succ_pred (a : Int) : succ (pred a) = a
 -/
-lemma succ_neg_succ (a : Int) : succ (-succ a) = -a := by rw [neg_succ, succ_pred]
-
-/--
-lemma `neg_pred` / 引理 `neg_pred`
-
-English:
-lemma neg_pred
-  given: (a : Int)
-  statement: -pred a = succ (-a)
-  proof: by
-  rw [← Int.neg_eq_comm.mp (neg_succ (-a))]; rw [Int.neg_neg]
-
-中文:
-引理 neg_pred
-  条件: (a : 整数)
-  结论: -pred a = succ (-a)
-  证明: by
-  rw [← Int.neg_eq_comm.mp (neg_succ (-a))]; rw [Int.neg_neg]
-
-Depends on / 依赖: Int.neg_eq_comm.mp, Int.neg_neg, neg_eq_comm, neg_neg, neg_succ
+lemma succ_neg_succ (a : ℤ) : succ (-succ a) = -a := by rw [neg_succ, succ_pred]
+/-
+**Int.neg_pred** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：neg_pred (a : Int) : -pred a = succ (-a)
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.neg_eq_comm`：∀ {a b : ℤ}, -a = b ↔ -b = a
+· 使用引理 `Int.neg_succ`：neg_succ (a : Int) : -succ a = pred (-a)
+· 使用定理 `Int.neg_neg`：∀ (a : ℤ), - -a = a
 -/
-lemma neg_pred (a : Int) : -pred a = succ (-a) := by
-  rw [← Int.neg_eq_comm.mp (neg_succ (-a))]; rw [Int.neg_neg]
-
-/--
-lemma `pred_neg_pred` / 引理 `pred_neg_pred`
-
-English:
-lemma pred_neg_pred
-  given: (a : Int)
-  statement: pred (-pred a) = -a
-  proof: by rw [neg_pred, pred_succ]
-
-中文:
-引理 pred_neg_pred
-  条件: (a : 整数)
-  结论: pred (-pred a) = -a
-  证明: by rw [neg_pred, pred_succ]
-
-Depends on / 依赖: neg_pred, pred_succ
+lemma neg_pred (a : ℤ) : -pred a = succ (-a) := by
+  rw [← Int.neg_eq_comm.mp (neg_succ (-a)), Int.neg_neg]
+/-
+**Int.pred_neg_pred** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：pred_neg_pred (a : Int) : pred (-pred a) = -a
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.neg_pred`：neg_pred (a : Int) : -pred a = succ (-a)
+· 使用引理 `Int.pred_succ`：pred_succ (a : Int) : pred (succ a) = a
 -/
-lemma pred_neg_pred (a : Int) : pred (-pred a) = -a := by rw [neg_pred, pred_succ]
-
-/--
-lemma `pred_nat_succ` / 引理 `pred_nat_succ`
-
-English:
-lemma pred_nat_succ
-  given: (n : Nat)
-  statement: pred (Nat.succ n) = n
-  proof: pred_succ n
-
-中文:
-引理 pred_nat_succ
-  条件: (n : 自然数)
-  结论: pred (自然数.succ n) = n
-  证明: pred_succ n
-
-Depends on / 依赖: pred_succ
+lemma pred_neg_pred (a : ℤ) : pred (-pred a) = -a := by rw [neg_pred, pred_succ]
+/-
+**Int.pred_nat_succ** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：pred_nat_succ (n : Nat) : pred (Nat.succ n) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.pred_succ`：pred_succ (a : Int) : pred (succ a) = a
 -/
-lemma pred_nat_succ (n : Nat) : pred (Nat.succ n) = n := pred_succ n
-
-/--
-lemma `neg_nat_succ` / 引理 `neg_nat_succ`
-
-English:
-lemma neg_nat_succ
-  given: (n : Nat)
-  statement: -(Nat.succ n : Int) = pred (-n)
-  proof: neg_succ n
-
-中文:
-引理 neg_nat_succ
-  条件: (n : 自然数)
-  结论: -(自然数.succ n : 整数) = pred (-n)
-  证明: neg_succ n
-
-Depends on / 依赖: neg_succ
+lemma pred_nat_succ (n : ℕ) : pred (Nat.succ n) = n := pred_succ n
+/-
+**Int.neg_nat_succ** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：neg_nat_succ (n : Nat) : -(Nat.succ n : Int) = pred (-n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.neg_succ`：neg_succ (a : Int) : -succ a = pred (-a)
 -/
-lemma neg_nat_succ (n : Nat) : -(Nat.succ n : Int) = pred (-n) := neg_succ n
-
-/--
-lemma `succ_neg_natCast_succ` / 引理 `succ_neg_natCast_succ`
-
-English:
-lemma succ_neg_natCast_succ
-  given: (n : Nat)
-  statement: succ (-Nat.succ n) = -n
-  proof: succ_neg_succ n
-
-中文:
-引理 succ_neg_natCast_succ
-  条件: (n : 自然数)
-  结论: succ (-自然数.succ n) = -n
-  证明: succ_neg_succ n
-
-Depends on / 依赖: succ_neg_succ
+lemma neg_nat_succ (n : ℕ) : -(Nat.succ n : ℤ) = pred (-n) := neg_succ n
+/-
+**Int.succ_neg_natCast_succ** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：succ_neg_natCast_succ (n : Nat) : succ (-Nat.succ n) = -n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.succ_neg_succ`：succ_neg_succ (a : Int) : succ (-succ a) = -a
 -/
-lemma succ_neg_natCast_succ (n : Nat) : succ (-Nat.succ n) = -n := succ_neg_succ n
-
-/--
-lemma `natCast_pred_of_pos` / 引理 `natCast_pred_of_pos`
-
-English:
-lemma natCast_pred_of_pos
-  given: {n : Nat} (h : 0 < n)
-  statement: ((n - 1 : Nat) : Int) = (n : Int) - 1
-  proof: by
+lemma succ_neg_natCast_succ (n : ℕ) : succ (-Nat.succ n) = -n := succ_neg_succ n
+/-
+**Int.natCast_pred_of_pos** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {n : ℕ}, 0 < n → ↑(n - 1) = ↑n - 1
+参数：n - 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[norm_cast] lemma natCast_pred_of_pos {n : ℕ} (h : 0 < n) : ((n - 1 : ℕ) : ℤ) = (n : ℤ) - 1 := by
   grind
-
-中文:
-引理 natCast_pred_of_pos
-  条件: {n : 自然数} (h : 0 < n)
-  结论: ((n - 1 : 自然数) : 整数) = (n : 整数) - 1
-  证明: by
-  grind
+/-
+**Int.lt_succ_self** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：lt_succ_self (a : Int) : a < succ a
+参数：a : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[norm_cast] lemma natCast_pred_of_pos {n : Nat} (h : 0 < n) : ((n - 1 : Nat) : Int) = (n : Int) - 1 := by
-  grind
+lemma lt_succ_self (a : ℤ) : a < succ a := by unfold succ; lia
+/-
+**Int.pred_self_lt** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：pred_self_lt (a : Int) : pred a < a
+参数：a : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma pred_self_lt (a : ℤ) : pred a < a := by unfold pred; lia
 
 /--
-lemma `lt_succ_self` / 引理 `lt_succ_self`
+Induction on integers: prove a proposition `p i` by proving the base case `p 0`,
+the upwards induction step `p i → p (i + 1)` and the downwards induction step `p (-i) → p (-i - 1)`.
 
-English:
-lemma lt_succ_self
-  given: (a : Int)
-  statement: a < succ a
-  proof: by unfold succ; lia
-
-中文:
-引理 lt_succ_self
-  条件: (a : 整数)
-  结论: a < succ a
-  证明: by unfold succ; lia
+It is used as the default induction principle for the `induction` tactic.
 -/
-lemma lt_succ_self (a : Int) : a < succ a := by unfold succ; lia
+/-
+**Int.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {motive : ℤ → Prop} (i : ℤ),   motive 0 → (∀ (i : ℕ), motive ↑i → motive
+ (↑i + 1)) → (∀ (i : ℕ), motive (-↑i) → motive (-↑i - 1)) → motive i
+参数：i : ℤ；∀ (i : ℕ), motive ↑i → motive (↑i + 1)；∀ (i : ℕ), motive (-↑i) → motive
+ (-↑i - 1)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.neg_add`：∀ {a b : ℤ}, -(a + b) = -a + -b
 
-/--
-lemma `pred_self_lt` / 引理 `pred_self_lt`
+--- 原说明 ---
+Induction on integers: prove a proposition `p i` by proving the base case `p 0`,
+the upwards induction step `p i → p (i + 1)` and the downwards induction step `p
+ (-i) → p (-i - 1)`.
 
-English:
-lemma pred_self_lt
-  given: (a : Int)
-  statement: pred a < a
-  proof: by unfold pred; lia
-
-中文:
-引理 pred_self_lt
-  条件: (a : 整数)
-  结论: pred a < a
-  证明: by unfold pred; lia
+It is used as the default induction principle for the `induction` tactic.
 -/
-lemma pred_self_lt (a : Int) : pred a < a := by unfold pred; lia
-
-/--
-lemma `induction_on` / 引理 `induction_on`
-
-English:
-lemma induction_on
-  statement: {motive : Int -> Prop} (i : Int)
-  proof: by
+@[elab_as_elim, induction_eliminator] protected lemma induction_on {motive : ℤ → Prop} (i : ℤ)
+    (zero : motive 0) (succ : ∀ i : ℕ, motive i → motive (i + 1))
+    (pred : ∀ i : ℕ, motive (-i) → motive (-i - 1)) : motive i := by
   cases i with
   | ofNat i =>
     induction i with
     | zero => exact zero
     | succ i ih => exact succ _ ih
   | negSucc i =>
-    suffices forall n : Nat, motive (-n) from this (i + 1)
-    intro n; induction n with
-    | zero => simp [zero]
-    | succ n ih => simpa [natCast_succ, Int.neg_add, Int.sub_eq_add_neg] using pred _ ih
-
-中文:
-引理 induction_on
-  结论: {motive : 整数 -> 命题} (i : 整数)
-  证明: by
-  cases i with
-  | ofNat i =>
-    induction i with
-    | zero => exact zero
-    | succ i ih => exact succ _ ih
-  | negSucc i =>
-    suffices forall n : Nat, motive (-n) from this (i + 1)
-    intro n; induction n with
-    | zero => simp [zero]
-    | succ n ih => simpa [natCast_succ, Int.neg_add, Int.sub_eq_add_neg] using pred _ ih
--/
-@[elab_as_elim, induction_eliminator] protected lemma induction_on {motive : Int -> Prop} (i : Int)
-    (zero : motive 0) (succ : forall i : Nat, motive i -> motive (i + 1))
-    (pred : forall i : Nat, motive (-i) -> motive (-i - 1)) : motive i := by
-  cases i with
-  | ofNat i =>
-    induction i with
-    | zero => exact zero
-    | succ i ih => exact succ _ ih
-  | negSucc i =>
-    suffices forall n : Nat, motive (-n) from this (i + 1)
+    suffices ∀ n : ℕ, motive (-n) from this (i + 1)
     intro n; induction n with
     | zero => simp [zero]
     | succ n ih => simpa [natCast_succ, Int.neg_add, Int.sub_eq_add_neg] using pred _ ih
 
 section inductionOn'
 
-variable {motive : Int -> Sort*} (z b : Int) (zero : motive b)
-  (succ : forall k, b <= k -> motive k -> motive (k + 1)) (pred : forall k <= b, motive k -> motive (k - 1))
+variable {motive : ℤ → Sort*} (z b : ℤ) (zero : motive b)
+  (succ : ∀ k, b ≤ k → motive k → motive (k + 1)) (pred : ∀ k ≤ b, motive k → motive (k - 1))
 
-/--
-Definition of `inductionOn'` / `inductionOn'` 的定义
+/-- Inductively define a function on `ℤ` by defining it at `b`, for the `succ` of a number greater
+than `b`, and the `pred` of a number less than `b`. -/
+/-
+**Int.inductionOn'** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：inductionOn'_self : b.inductionOn' b zero succ pred = zero
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inductionOn'
-  signature: : motive z
-  body: cast (congrArg motive <| show b + (z - b) = z by lia)
-  match z - b with
-  | .ofNat n => pos n
-  | .negSucc n => neg n
-
-中文:
-定义 inductionOn'
-  签名: : motive z
-  定义体: cast (congrArg motive <| show b + (z - b) = z by lia)
-  match z - b with
-  | .ofNat n => pos n
-  | .negSucc n => neg n
+--- 原说明 ---
+Inductively define a function on `ℤ` by defining it at `b`, for the `succ` of a 
+number greater
+than `b`, and the `pred` of a number less than `b`.
 -/
 @[elab_as_elim] protected def inductionOn' : motive z :=
-cast (congrArg motive <| show b + (z - b) = z by lia)
+  cast (congrArg motive <| show b + (z - b) = z by lia) <|
   match z - b with
   | .ofNat n => pos n
   | .negSucc n => neg n
 where
   /-- The positive case of `Int.inductionOn'`. -/
-  pos : forall n : Nat, motive (b + n)
+  pos : ∀ n : ℕ, motive (b + n)
   | 0 => cast (by simp) zero
-| n + 1 => cast (by lia) succ _ (Int.le_add_of_nonneg_right (natCast_nonneg _)) (pos n)
+  | n + 1 => cast (by lia) <| succ _ (Int.le_add_of_nonneg_right (natCast_nonneg _)) (pos n)
   /-- The negative case of `Int.inductionOn'`. -/
-  neg : forall n : Nat, motive (b + -[n+1])
+  neg : ∀ n : ℕ, motive (b + -[n+1])
   | 0 => pred _ Int.le_rfl zero
-| n + 1 => cast (by lia) pred _ (by lia) (neg n)
+  | n + 1 => cast (by lia) <| pred _ (by lia) (neg n)
 
 variable {z b zero succ pred}
-
-/--
-lemma `inductionOn'_self` / 引理 `inductionOn'_self`
-
-English:
-lemma inductionOn'_self
-  statement: b.inductionOn' b zero succ pred = zero
-  proof: cast_eq_iff_heq.mpr .symm by rw [b.sub_self, ← cast_eq_iff_heq]; rfl
-
-中文:
-引理 inductionOn'_self
-  结论: b.inductionOn' b zero succ pred = zero
-  证明: cast_eq_iff_heq.mpr .symm by rw [b.sub_self, ← cast_eq_iff_heq]; rfl
-
-Depends on / 依赖: b.sub_self, cast_eq_iff_heq, cast_eq_iff_heq.mpr, sub_self
+/-
+**Int.inductionOn'_self** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {motive : ℤ → Sort u_1} {b : ℤ} {zero : motive b} {succ : (k : ℤ) → b ≤ 
+k → motive k → motive (k + 1)}   {pred : (k : ℤ) → k ≤ b → motive k → motive (k 
+- 1)}, Int.inductionOn' b b zero succ pred = zero
+参数：k : ℤ；k + 1；k : ℤ；k - 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `cast_eq_iff_heq`：∀ {a a_1 : Sort u_1} {e : a = a_1} {a_2 : a} {a' : a_1}
+, cast e a_2 = a' ↔ a_2 ≍ a'
+· 使用定理 `HEq.symm`：∀ {α β : Sort u} {a : α} {b : β}, a ≍ b → b ≍ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.sub_self`：∀ (a : ℤ), a - a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma inductionOn'_self : b.inductionOn' b zero succ pred = zero :=
-cast_eq_iff_heq.mpr .symm by rw [b.sub_self, ← cast_eq_iff_heq]; rfl
-
-/--
-theorem `inductionOn'_add_one` / 定理 `inductionOn'_add_one`
-
-English:
-theorem inductionOn'_add_one
-  given: (hz : b <= z)
-  proof: by
-  unfold Int.inductionOn'
-  rw! [show z - b = (z - b).toNat by lia, show z + 1 - b = ((z - b).toNat + 1 : Nat) by lia]
-  grind [inductionOn'.pos, show b + (z - b).toNat = z by lia]
-
-中文:
-定理 inductionOn'_add_one
-  条件: (hz : b <= z)
-  证明: by
-  unfold Int.inductionOn'
-  rw! [show z - b = (z - b).toNat by lia, show z + 1 - b = ((z - b).toNat + 1 : Nat) by lia]
-  grind [inductionOn'.pos, show b + (z - b).toNat = z by lia]
+  cast_eq_iff_heq.mpr <| .symm <| by rw [b.sub_self, ← cast_eq_iff_heq]; rfl
+/-
+**Int.inductionOn'_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {motive : ℤ → Sort u_1} {z b : ℤ} {zero : motive b} {succ : (k : ℤ) → b 
+≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) → k ≤ b → motive k → motive (
+k - 1)} (hz : b ≤ z),   Int.inductionOn' (z + 1) b zero succ pred = succ z hz (I
+nt.inductionOn' z b zero succ pred)
+参数：k : ℤ；k + 1；k : ℤ；k - 1；hz : b ≤ z；z + 1；Int.inductionOn' z b zero succ pred。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `Mathlib.Tactic.DepRewrite.eq_of_heq`：eq_of_heq.{u} {α : Sort u} {a a' : 
+α} (h : a ≍ a') : a = a'
+· 使用定理 `Mathlib.Tactic.DepRewrite.hdcongrArg`：hdcongrArg.{u, v} {α : Sort u} {a 
+a' : α} {β : (a' : α) -> a = a' -> Sort v} (h : a = a') (f : (a' : α) -> (h : a 
+= a') -> β a' h) : f a rfl…
 -/
-theorem inductionOn'_add_one (hz : b <= z) :
+theorem inductionOn'_add_one (hz : b ≤ z) :
     (z + 1).inductionOn' b zero succ pred = succ z hz (z.inductionOn' b zero succ pred) := by
   unfold Int.inductionOn'
-  rw! [show z - b = (z - b).toNat by lia, show z + 1 - b = ((z - b).toNat + 1 : Nat) by lia]
+  rw! [show z - b = (z - b).toNat by lia, show z + 1 - b = ((z - b).toNat + 1 : ℕ) by lia]
   grind [inductionOn'.pos, show b + (z - b).toNat = z by lia]
-
-/--
-theorem `inductionOn'_sub_one` / 定理 `inductionOn'_sub_one`
-
-English:
-theorem inductionOn'_sub_one
-  given: (hz : z <= b)
-  proof: by
-  unfold Int.inductionOn'
-  conv => lhs; unfold inductionOn'.neg
-  by_cases z = b
-  · rw! [show z - 1 - b = -[(b - z).toNat+1] by lia, show z - b = 0 by lia]
-    grind [inductionOn'.pos]
-  rw! [show z - 1 - b = -[(b - z).toNat+1] by lia, show z - b = -[(b - z - 1).toNat+1] by lia]
-  grind
-
-中文:
-定理 inductionOn'_sub_one
-  条件: (hz : z <= b)
-  证明: by
-  unfold Int.inductionOn'
-  conv => lhs; unfold inductionOn'.neg
-  by_cases z = b
-  · rw! [show z - 1 - b = -[(b - z).toNat+1] by lia, show z - b = 0 by lia]
-    grind [inductionOn'.pos]
-  rw! [show z - 1 - b = -[(b - z).toNat+1] by lia, show z - b = -[(b - z - 1).toNat+1] by lia]
-  grind
+/-
+**Int.inductionOn'_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {motive : ℤ → Sort u_1} {z b : ℤ} {zero : motive b} {succ : (k : ℤ) → b 
+≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) → k ≤ b → motive k → motive (
+k - 1)} (hz : z ≤ b),   Int.inductionOn' (z - 1) b zero succ pred = pred z hz (I
+nt.inductionOn' z b zero succ pred)
+参数：k : ℤ；k + 1；k : ℤ；k - 1；hz : z ≤ b；z - 1；Int.inductionOn' z b zero succ pred。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `Int.le_rfl`：∀ {a : ℤ}, a ≤ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `cast.congr_simp`：∀ {α β : Sort u} (h : α = β) (a a_1 : α), a = a_1 → cas
+t h a = cast h a_1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Int.inductionOn'.neg.eq_def`：∀ {motive : ℤ → Sort u_1} (b : ℤ) (zero : m
+otive b) (pred : (k : ℤ) → k ≤ b → motive k → motive (k - 1)) (n : ℕ),   Int.ind
+uctionOn'.neg b z…
+· 使用定理 `Mathlib.Tactic.DepRewrite.eq_of_heq`：eq_of_heq.{u} {α : Sort u} {a a' : 
+α} (h : a ≍ a') : a = a'
+· 使用定理 `Mathlib.Tactic.DepRewrite.hdcongrArg`：hdcongrArg.{u, v} {α : Sort u} {a 
+a' : α} {β : (a' : α) -> a = a' -> Sort v} (h : a = a') (f : (a' : α) -> (h : a 
+= a') -> β a' h) : f a rfl…
 -/
-theorem inductionOn'_sub_one (hz : z <= b) :
+theorem inductionOn'_sub_one (hz : z ≤ b) :
     (z - 1).inductionOn' b zero succ pred = pred z hz (z.inductionOn' b zero succ pred) := by
   unfold Int.inductionOn'
   conv => lhs; unfold inductionOn'.neg
@@ -476,223 +333,217 @@ theorem inductionOn'_sub_one (hz : z <= b) :
 
 end inductionOn'
 
-/--
-Definition of `negInduction` / `negInduction` 的定义
+/-- Inductively define a function on `ℤ` by defining it on `ℕ` and extending it from `n` to `-n`. -/
+/-
+**Int.negInduction** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：{motive : ℤ → Sort u_1} → ((n : ℕ) → motive ↑n) → (((n : ℕ) → motive ↑n) →
+ (n : ℕ) → motive (-↑n)) → (n : ℤ) → motive n
+参数：(n : ℕ) → motive ↑n；((n : ℕ) → motive ↑n) → (n : ℕ) → motive (-↑n)；n : ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition negInduction
-  signature: {motive : Int -> Sort*} (nat : forall n : Nat, motive n)
-
-中文:
-定义 negInduction
-  签名: {motive : 整数 -> 类型层*} (nat : 对任意 n : 自然数, motive n)
+--- 原说明 ---
+Inductively define a function on `ℤ` by defining it on `ℕ` and extending it from
+ `n` to `-n`.
 -/
-@[elab_as_elim] protected def negInduction {motive : Int -> Sort*} (nat : forall n : Nat, motive n)
-    (neg : (forall n : Nat, motive n) -> forall n : Nat, motive (-n)) : forall n : Int, motive n
+@[elab_as_elim] protected def negInduction {motive : ℤ → Sort*} (nat : ∀ n : ℕ, motive n)
+    (neg : (∀ n : ℕ, motive n) → ∀ n : ℕ, motive (-n)) : ∀ n : ℤ, motive n
   | .ofNat n => nat n
-| .negSucc n => neg nat n + 1
+  | .negSucc n => neg nat <| n + 1
 
 /-- See `Int.inductionOn'` for an induction in both directions. -/
 @[elab_as_elim]
-/--
-Definition of `leInduction` / `leInduction` 的定义
+/-
+**Int.leInduction** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：{m : ℤ} →   {motive : (n : ℤ) → m ≤ n → Sort u_1} →     motive m ⋯ → ((n :
+ ℤ) → (hmn : m ≤ n) → motive n hmn → motive (n + 1) ⋯) → (n : ℤ) → (hmn : m ≤ n)
+ → motive n hmn
+参数：n : ℤ；(n : ℤ) → (hmn : m ≤ n) → motive n hmn → motive (n + 1) ⋯；n : ℤ；hmn : m
+ ≤ n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_refl`：∀ (a : ℤ), a ≤ a
+· 使用定理 `Int.le_add_one`：∀ {a b : ℤ}, a ≤ b → a ≤ b + 1
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
 
-English:
-definition leInduction
-  signature: {m : Int} {motive : forall n, m <= n -> Sort*} (base : motive m m.le_refl)
-  body: fun n => n.inductionOn' m
-    (fun _ => base) (fun k hle ih _ => succ k hle <| ih hle) (fun _ _ _ _ => False.elim <| by lia)
-
-@[deprecated (since := "2026-03-25")] protected alias le_induction := Int.leInduction
-
-中文:
-定义 leInduction
-  签名: {m : 整数} {motive : 对任意 n, m <= n -> 类型层*} (base : motive m m.le_refl)
-  定义体: fun n => n.inductionOn' m
-    (fun _ => base) (fun k hle ih _ => succ k hle <| ih hle) (fun _ _ _ _ => False.elim <| by lia)
-
-@[deprecated (since := "2026-03-25")] protected alias le_induction := Int.leInduction
+--- 原说明 ---
+See `Int.inductionOn'` for an induction in both directions.
 -/
-protected def leInduction {m : Int} {motive : forall n, m <= n -> Sort*} (base : motive m m.le_refl)
-    (succ : forall n hmn, motive n hmn -> motive (n + 1) (le_add_one hmn)) : forall n hmn, motive n hmn :=
-  fun n => n.inductionOn' m
-    (fun _ => base) (fun k hle ih _ => succ k hle <| ih hle) (fun _ _ _ _ => False.elim <| by lia)
+protected def leInduction {m : ℤ} {motive : ∀ n, m ≤ n → Sort*} (base : motive m m.le_refl)
+    (succ : ∀ n hmn, motive n hmn → motive (n + 1) (le_add_one hmn)) : ∀ n hmn, motive n hmn :=
+  fun n ↦ n.inductionOn' m
+    (fun _ ↦ base) (fun k hle ih _ ↦ succ k hle <| ih hle) (fun _ _ _ _ ↦ False.elim <| by lia)
 
 @[deprecated (since := "2026-03-25")] protected alias le_induction := Int.leInduction
-
-/--
-theorem `leInduction_base` / 定理 `leInduction_base`
-
-English:
-theorem leInduction_base
-  statement: {m : Int} {motive : forall n, m <= n -> Sort*} (base : motive m m.le_refl)
-  proof: by
-  rw [Int.leInduction]; rw [inductionOn'_self]
-
-中文:
-定理 leInduction_base
-  结论: {m : 整数} {motive : 对任意 n, m <= n -> 类型层*} (base : motive m m.le_refl)
-  证明: by
-  rw [Int.leInduction]; rw [inductionOn'_self]
-
-Depends on / 依赖: Int.leInduction, _self, inductionOn, leInduction, le_refl, m.le_refl, motive
+/-
+**Int.leInduction_base** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：leInduction_base {m : Int} {motive : forall n, m <= n -> Sort*} (base : mo
+tive m m.le_refl) (succ : forall n hmn, motive n hmn -> motive (n + 1) (le_add_o
+ne hmn)) : Int.leInduction (motive
+参数：base : motive m m.le_refl；succ : forall n hmn, motive n hmn -> motive (n + 1)
+ (le_add_one hmn)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_refl`：∀ (a : ℤ), a ≤ a
+· 使用定理 `Int.le_add_one`：∀ {a b : ℤ}, a ≤ b → a ≤ b + 1
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.leInduction.eq_1`：∀ {m : ℤ} {motive : (n : ℤ) → m ≤ n → Sort u_1} (b
+ase : motive m ⋯)   (succ : (n : ℤ) → (hmn : m ≤ n) → motive n hmn → motive (n +
+ 1) ⋯) (n …
+· 使用定理 `Int.inductionOn'_self`：∀ {motive : ℤ → Sort u_1} {b : ℤ} {zero : motive 
+b} {succ : (k : ℤ) → b ≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) → k ≤ 
+b → motive …
 -/
-theorem leInduction_base {m : Int} {motive : forall n, m <= n -> Sort*} (base : motive m m.le_refl)
-    (succ : forall n hmn, motive n hmn -> motive (n + 1) (le_add_one hmn)) :
+theorem leInduction_base {m : ℤ} {motive : ∀ n, m ≤ n → Sort*} (base : motive m m.le_refl)
+    (succ : ∀ n hmn, motive n hmn → motive (n + 1) (le_add_one hmn)) :
     Int.leInduction (motive := motive) base succ m m.le_refl = base := by
-  rw [Int.leInduction]; rw [inductionOn'_self]
-
-/--
-theorem `leInduction_add_one` / 定理 `leInduction_add_one`
-
-English:
-theorem leInduction_add_one
-  statement: {m : Int} {motive : forall n, m <= n -> Sort*} (base : motive m m.le_refl)
-  proof: by
-  rw [Int.leInduction]; rw [inductionOn'_add_one hmn]
-  rfl
-
-中文:
-定理 leInduction_add_one
-  结论: {m : 整数} {motive : 对任意 n, m <= n -> 类型层*} (base : motive m m.le_refl)
-  证明: by
-  rw [Int.leInduction]; rw [inductionOn'_add_one hmn]
-  rfl
-
-Depends on / 依赖: motive
+  rw [Int.leInduction, inductionOn'_self]
+/-
+**Int.leInduction_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：leInduction_add_one {m : Int} {motive : forall n, m <= n -> Sort*} (base :
+ motive m m.le_refl) (succ : forall n hmn, motive n hmn -> motive (n + 1) (le_ad
+d_one hmn)) (n : Int) (hmn : m <= n) : Int.leInduction (motive
+参数：base : motive m m.le_refl；succ : forall n hmn, motive n hmn -> motive (n + 1)
+ (le_add_one hmn)；n : Int；hmn : m <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_refl`：∀ (a : ℤ), a ≤ a
+· 使用定理 `Int.le_add_one`：∀ {a b : ℤ}, a ≤ b → a ≤ b + 1
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.leInduction.eq_1`：∀ {m : ℤ} {motive : (n : ℤ) → m ≤ n → Sort u_1} (b
+ase : motive m ⋯)   (succ : (n : ℤ) → (hmn : m ≤ n) → motive n hmn → motive (n +
+ 1) ⋯) (n …
+· 使用定理 `Int.inductionOn'_add_one`：∀ {motive : ℤ → Sort u_1} {z b : ℤ} {zero : mo
+tive b} {succ : (k : ℤ) → b ≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) →
+ k ≤ b → motiv…
 -/
-theorem leInduction_add_one {m : Int} {motive : forall n, m <= n -> Sort*} (base : motive m m.le_refl)
-    (succ : forall n hmn, motive n hmn -> motive (n + 1) (le_add_one hmn)) (n : Int) (hmn : m <= n) :
+theorem leInduction_add_one {m : ℤ} {motive : ∀ n, m ≤ n → Sort*} (base : motive m m.le_refl)
+    (succ : ∀ n hmn, motive n hmn → motive (n + 1) (le_add_one hmn)) (n : ℤ) (hmn : m ≤ n) :
     Int.leInduction (motive := motive) base succ (n + 1) (by lia) =
       succ n hmn (Int.leInduction (motive := motive) base succ n hmn) := by
-  rw [Int.leInduction]; rw [inductionOn'_add_one hmn]
+  rw [Int.leInduction, inductionOn'_add_one hmn]
   rfl
 
 /-- See `Int.inductionOn'` for an induction in both directions. -/
 @[elab_as_elim]
-/--
-Definition of `leInductionDown` / `leInductionDown` 的定义
+/-
+**Int.leInductionDown** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：{m : ℤ} →   {motive : (n : ℤ) → n ≤ m → Sort u_1} →     motive m ⋯ → ((n :
+ ℤ) → (hnm : n ≤ m) → motive n hnm → motive (n - 1) ⋯) → (n : ℤ) → (hnm : n ≤ m)
+ → motive n hnm
+参数：n : ℤ；(n : ℤ) → (hnm : n ≤ m) → motive n hnm → motive (n - 1) ⋯；n : ℤ；hnm : n
+ ≤ m。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_refl`：∀ (a : ℤ), a ≤ a
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
 
-English:
-definition leInductionDown
-  signature: {m : Int} {motive : forall n, n <= m -> Sort*} (base : motive m m.le_refl)
-  body: fun n => n.inductionOn' m
-    (fun _ => base) (fun _ _ _ _ => False.elim <| by lia) (fun k hle ih _ => pred k hle <| ih hle)
-
-中文:
-定义 leInductionDown
-  签名: {m : 整数} {motive : 对任意 n, n <= m -> 类型层*} (base : motive m m.le_refl)
-  定义体: fun n => n.inductionOn' m
-    (fun _ => base) (fun _ _ _ _ => False.elim <| by lia) (fun k hle ih _ => pred k hle <| ih hle)
+--- 原说明 ---
+See `Int.inductionOn'` for an induction in both directions.
 -/
-protected def leInductionDown {m : Int} {motive : forall n, n <= m -> Sort*} (base : motive m m.le_refl)
-    (pred : forall n hnm, motive n hnm -> motive (n - 1) (by lia)) : forall n hnm, motive n hnm :=
-  fun n => n.inductionOn' m
-    (fun _ => base) (fun _ _ _ _ => False.elim <| by lia) (fun k hle ih _ => pred k hle <| ih hle)
-
-/--
-theorem `leInductionDown_base` / 定理 `leInductionDown_base`
-
-English:
-theorem leInductionDown_base
-  statement: {m : Int} {motive : forall n, n <= m -> Sort*} (base : motive m m.le_refl)
-  proof: by
-  rw [Int.leInductionDown]; rw [inductionOn'_self]
-
-中文:
-定理 leInductionDown_base
-  结论: {m : 整数} {motive : 对任意 n, n <= m -> 类型层*} (base : motive m m.le_refl)
-  证明: by
-  rw [Int.leInductionDown]; rw [inductionOn'_self]
-
-Depends on / 依赖: Int.leInductionDown, _self, inductionOn, leInductionDown, le_refl, m.le_refl, motive
+protected def leInductionDown {m : ℤ} {motive : ∀ n, n ≤ m → Sort*} (base : motive m m.le_refl)
+    (pred : ∀ n hnm, motive n hnm → motive (n - 1) (by lia)) : ∀ n hnm, motive n hnm :=
+  fun n ↦ n.inductionOn' m
+    (fun _ ↦ base) (fun _ _ _ _ ↦ False.elim <| by lia) (fun k hle ih _ ↦ pred k hle <| ih hle)
+/-
+**Int.leInductionDown_base** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：leInductionDown_base {m : Int} {motive : forall n, n <= m -> Sort*} (base 
+: motive m m.le_refl) (pred : forall n hnm, motive n hnm -> motive (n - 1) (by l
+ia)) : Int.leInductionDown (motive
+参数：base : motive m m.le_refl；pred : forall n hnm, motive n hnm -> motive (n - 1)
+ (by lia)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_refl`：∀ (a : ℤ), a ≤ a
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.leInductionDown.eq_1`：∀ {m : ℤ} {motive : (n : ℤ) → n ≤ m → Sort u_1
+} (base : motive m ⋯)   (pred : (n : ℤ) → (hnm : n ≤ m) → motive n hnm → motive 
+(n - 1) ⋯) (n …
+· 使用定理 `Int.inductionOn'_self`：∀ {motive : ℤ → Sort u_1} {b : ℤ} {zero : motive 
+b} {succ : (k : ℤ) → b ≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) → k ≤ 
+b → motive …
 -/
-theorem leInductionDown_base {m : Int} {motive : forall n, n <= m -> Sort*} (base : motive m m.le_refl)
-    (pred : forall n hnm, motive n hnm -> motive (n - 1) (by lia)) :
+theorem leInductionDown_base {m : ℤ} {motive : ∀ n, n ≤ m → Sort*} (base : motive m m.le_refl)
+    (pred : ∀ n hnm, motive n hnm → motive (n - 1) (by lia)) :
     Int.leInductionDown (motive := motive) base pred m m.le_refl = base := by
-  rw [Int.leInductionDown]; rw [inductionOn'_self]
-
-/--
-theorem `leInductionDown_sub_one` / 定理 `leInductionDown_sub_one`
-
-English:
-theorem leInductionDown_sub_one
-  statement: {m : Int} {motive : forall n, n <= m -> Sort*} (base : motive m m.le_refl)
-  proof: by
-  rw [Int.leInductionDown]; rw [inductionOn'_sub_one hnm]
-  rfl
-
-@[deprecated (since := "2026-03-25")] protected alias le_induction_down := Int.leInductionDown
-
-中文:
-定理 leInductionDown_sub_one
-  结论: {m : 整数} {motive : 对任意 n, n <= m -> 类型层*} (base : motive m m.le_refl)
-  证明: by
-  rw [Int.leInductionDown]; rw [inductionOn'_sub_one hnm]
-  rfl
-
-@[deprecated (since := "2026-03-25")] protected alias le_induction_down := Int.leInductionDown
-
-Depends on / 依赖: motive
+  rw [Int.leInductionDown, inductionOn'_self]
+/-
+**Int.leInductionDown_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：leInductionDown_sub_one {m : Int} {motive : forall n, n <= m -> Sort*} (ba
+se : motive m m.le_refl) (pred : forall n hnm, motive n hnm -> motive (n - 1) (b
+y lia)) (n : Int) (hnm : n <= m) : Int.leInductionDown (motive
+参数：base : motive m m.le_refl；pred : forall n hnm, motive n hnm -> motive (n - 1)
+ (by lia)；n : Int；hnm : n <= m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_refl`：∀ (a : ℤ), a ≤ a
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.leInductionDown.eq_1`：∀ {m : ℤ} {motive : (n : ℤ) → n ≤ m → Sort u_1
+} (base : motive m ⋯)   (pred : (n : ℤ) → (hnm : n ≤ m) → motive n hnm → motive 
+(n - 1) ⋯) (n …
+· 使用定理 `Int.inductionOn'_sub_one`：∀ {motive : ℤ → Sort u_1} {z b : ℤ} {zero : mo
+tive b} {succ : (k : ℤ) → b ≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) →
+ k ≤ b → motiv…
 -/
-theorem leInductionDown_sub_one {m : Int} {motive : forall n, n <= m -> Sort*} (base : motive m m.le_refl)
-    (pred : forall n hnm, motive n hnm -> motive (n - 1) (by lia)) (n : Int) (hnm : n <= m) :
+theorem leInductionDown_sub_one {m : ℤ} {motive : ∀ n, n ≤ m → Sort*} (base : motive m m.le_refl)
+    (pred : ∀ n hnm, motive n hnm → motive (n - 1) (by lia)) (n : ℤ) (hnm : n ≤ m) :
     Int.leInductionDown (motive := motive) base pred (n - 1) (by lia) =
       pred n hnm (Int.leInductionDown (motive := motive) base pred n hnm) := by
-  rw [Int.leInductionDown]; rw [inductionOn'_sub_one hnm]
+  rw [Int.leInductionDown, inductionOn'_sub_one hnm]
   rfl
 
 @[deprecated (since := "2026-03-25")] protected alias le_induction_down := Int.leInductionDown
 
 section strongRec
 
-variable {motive : Int -> Sort*} (lt : forall n < m, motive n)
-  (ge : forall n >= m, (forall k < n, motive k) -> motive n)
+variable {motive : ℤ → Sort*} (lt : ∀ n < m, motive n)
+  (ge : ∀ n ≥ m, (∀ k < n, motive k) → motive n)
 
-/--
-Definition of `strongRec` / `strongRec` 的定义
+/-- A strong recursor for `Int` that specifies explicit values for integers below a threshold,
+and is analogous to `Nat.strongRec` for integers on or above the threshold. -/
+/-
+**Int.strongRec** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：{m : ℤ} →   {motive : ℤ → Sort u_1} →     ((n : ℤ) → n < m → motive n) → (
+(n : ℤ) → n ≥ m → ((k : ℤ) → k < n → motive k) → motive n) → (n : ℤ) → motive n
+参数：(n : ℤ) → n < m → motive n；(n : ℤ) → n ≥ m → ((k : ℤ) → k < n → motive k) → m
+otive n；n : ℤ。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
 
-English:
-definition strongRec
-  signature: (n : Int)
-  body: by
-  refine if hnm : n < m then lt n hnm else ge n (by lia) (n.inductionOn' m lt ?_ ?_)
-  · intro _n _ ih l _
-    exact if hlm : l < m then lt l hlm else ge l (by lia) fun k _ => ih k (by lia)
-  · exact fun n _ hn l _ => hn l (by lia)
-
-中文:
-定义 strongRec
-  签名: (n : 整数)
-  定义体: by
-  refine if hnm : n < m then lt n hnm else ge n (by lia) (n.inductionOn' m lt ?_ ?_)
-  · intro _n _ ih l _
-    exact if hlm : l < m then lt l hlm else ge l (by lia) fun k _ => ih k (by lia)
-  · exact fun n _ hn l _ => hn l (by lia)
+--- 原说明 ---
+A strong recursor for `Int` that specifies explicit values for integers below a 
+threshold,
+and is analogous to `Nat.strongRec` for integers on or above the threshold.
 -/
-@[elab_as_elim] protected def strongRec (n : Int) : motive n := by
+@[elab_as_elim] protected def strongRec (n : ℤ) : motive n := by
   refine if hnm : n < m then lt n hnm else ge n (by lia) (n.inductionOn' m lt ?_ ?_)
   · intro _n _ ih l _
-    exact if hlm : l < m then lt l hlm else ge l (by lia) fun k _ => ih k (by lia)
-  · exact fun n _ hn l _ => hn l (by lia)
+    exact if hlm : l < m then lt l hlm else ge l (by lia) fun k _ ↦ ih k (by lia)
+  · exact fun n _ hn l _ ↦ hn l (by lia)
 
 variable {lt ge}
-/--
-lemma `strongRec_of_lt` / 引理 `strongRec_of_lt`
-
-English:
-lemma strongRec_of_lt
-  given: (hn : n < m)
-  statement: m.strongRec lt ge n = lt n hn
-  proof: dif_pos _
-
-中文:
-引理 strongRec_of_lt
-  条件: (hn : n < m)
-  结论: m.strongRec lt ge n = lt n hn
-  证明: dif_pos _
-
-Depends on / 依赖: dif_pos
+/-
+**Int.strongRec_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：strongRec_of_lt (hn : n < m) : m.strongRec lt ge n = lt n hn
+参数：hn : n < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
 -/
 lemma strongRec_of_lt (hn : n < m) : m.strongRec lt ge n = lt n hn := dif_pos _
 
@@ -704,651 +555,454 @@ end strongRec
 
 alias natAbs_sq := natAbs_pow_two
 
-/--
-theorem `sign_mul_self_eq_natAbs` / 定理 `sign_mul_self_eq_natAbs`
-
-English:
-theorem sign_mul_self_eq_natAbs
-  given: (a : Int)
-  statement: sign a * a = natAbs a
-  proof: sign_mul_self a
-
-中文:
-定理 sign_mul_self_eq_natAbs
-  条件: (a : 整数)
-  结论: sign a * a = natAbs a
-  证明: sign_mul_self a
-
-Depends on / 依赖: sign_mul_self
+/-
+**Int.sign_mul_self_eq_natAbs** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sign_mul_self_eq_natAbs (a : Int) : sign a * a = natAbs a
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.sign_mul_self`：∀ (i : ℤ), i.sign * i = ↑i.natAbs
 -/
 theorem sign_mul_self_eq_natAbs (a : Int) : sign a * a = natAbs a :=
   sign_mul_self a
 
+/-! ### `/` -/
 
-/--
-lemma `natCast_div` / 引理 `natCast_div`
+/-
+**Int.natCast_div** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：natCast_div (m n : Nat) : ((m / n : Nat) : Int) = m / n
+参数：m n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natCast_ediv`：∀ (m n : ℕ), ↑(m / n) = ↑m / ↑n
 
-English:
-lemma natCast_div
-  given: (m n : Nat)
-  statement: ((m / n : Nat) : Int) = m / n
-  proof: natCast_ediv m n
-
-中文:
-引理 natCast_div
-  条件: (m n : 自然数)
-  结论: ((m / n : 自然数) : 整数) = m / n
-  证明: natCast_ediv m n
-
-Depends on / 依赖: natCast_ediv
+--- 原说明 ---
+### `/`
 -/
-lemma natCast_div (m n : Nat) : ((m / n : Nat) : Int) = m / n := natCast_ediv m n
-
-/--
-lemma `ediv_of_neg_of_pos` / 引理 `ediv_of_neg_of_pos`
-
-English:
-lemma ediv_of_neg_of_pos
-  given: {a b : Int} (Ha : a < 0) (Hb : 0 < b)
-  statement: ediv a b = -((-a - 1) / b + 1)
-  proof: match a, b, eq_negSucc_of_lt_zero Ha, eq_succ_of_zero_lt Hb with
-  | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by
-    rw [show (- -[m+1] : Int) = (m + 1 : Int) by rfl]; rw [Int.add_sub_cancel]; rfl
-
-中文:
-引理 ediv_of_neg_of_pos
-  条件: {a b : 整数} (Ha : a < 0) (Hb : 0 < b)
-  结论: ediv a b = -((-a - 1) / b + 1)
-  证明: match a, b, eq_negSucc_of_lt_zero Ha, eq_succ_of_zero_lt Hb with
-  | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by
-    rw [show (- -[m+1] : Int) = (m + 1 : Int) by rfl]; rw [Int.add_sub_cancel]; rfl
-
-Depends on / 依赖: Int.add_sub_cancel, add_sub_cancel, eq_negSucc_of_lt_zero, eq_succ_of_zero_lt
+lemma natCast_div (m n : ℕ) : ((m / n : ℕ) : ℤ) = m / n := natCast_ediv m n
+/-
+**Int.ediv_of_neg_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：ediv_of_neg_of_pos {a b : Int} (Ha : a < 0) (Hb : 0 < b) : ediv a b = -((-
+a - 1) / b + 1)
+参数：Ha : a < 0；Hb : 0 < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.eq_negSucc_of_lt_zero`：∀ {a : ℤ}, a < 0 → ∃ n, a = Int.negSucc n
+· 使用定理 `Int.eq_succ_of_zero_lt`：∀ {a : ℤ}, 0 < a → ∃ n, a = ↑n + 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_sub_cancel`：∀ (a b : ℤ), a + b - b = a
 -/
-lemma ediv_of_neg_of_pos {a b : Int} (Ha : a < 0) (Hb : 0 < b) : ediv a b = -((-a - 1) / b + 1) :=
+lemma ediv_of_neg_of_pos {a b : ℤ} (Ha : a < 0) (Hb : 0 < b) : ediv a b = -((-a - 1) / b + 1) :=
   match a, b, eq_negSucc_of_lt_zero Ha, eq_succ_of_zero_lt Hb with
   | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by
-    rw [show (- -[m+1] : Int) = (m + 1 : Int) by rfl]; rw [Int.add_sub_cancel]; rfl
+    rw [show (- -[m+1] : ℤ) = (m + 1 : ℤ) by rfl]; rw [Int.add_sub_cancel]; rfl
 
+/-! ### mod -/
 
-/--
-lemma `natCast_mod` / 引理 `natCast_mod`
+/-
+**Int.natCast_mod** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ (m n : ℕ), ↑(m % n) = ↑m % ↑n
+参数：m n : ℕ；m % n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma natCast_mod
-  given: (m n : Nat)
-  statement: (↑(m % n) : Int) = ↑m % ↑n
-  proof: rfl
-
-中文:
-引理 natCast_mod
-  条件: (m n : 自然数)
-  结论: (↑(m % n) : 整数) = ↑m % ↑n
-  证明: rfl
+--- 原说明 ---
+### mod
 -/
-@[simp, norm_cast] lemma natCast_mod (m n : Nat) : (↑(m % n) : Int) = ↑m % ↑n := rfl
+@[simp, norm_cast] lemma natCast_mod (m n : ℕ) : (↑(m % n) : ℤ) = ↑m % ↑n := rfl
+/-
+**Int.div_le_iff_of_dvd_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_le_iff_of_dvd_of_pos (hb : 0 < b) (hba : b ∣ a) : a / b <= c ↔ a <= b 
+* c
+参数：hb : 0 < b；hba : b ∣ a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_le_iff_of_dvd_of_pos`：∀ {a b c : ℤ}, 0 < b → b ∣ a → (a / b ≤ c
+ ↔ a ≤ b * c)
 
-/--
-lemma `div_le_iff_of_dvd_of_pos` / 引理 `div_le_iff_of_dvd_of_pos`
-
-English:
-lemma div_le_iff_of_dvd_of_pos
-  given: (hb : 0 < b) (hba : b ∣ a)
-  statement: a / b <= c ↔ a <= b * c
-  proof: ediv_le_iff_of_dvd_of_pos hb hba
-
-中文:
-引理 div_le_iff_of_dvd_of_pos
-  条件: (hb : 0 < b) (hba : b ∣ a)
-  结论: a / b <= c ↔ a <= b * c
-  证明: ediv_le_iff_of_dvd_of_pos hb hba
-
-Depends on / 依赖: ediv_le_iff_of_dvd_of_pos
+--- 原说明 ---
+### mod
 -/
-lemma div_le_iff_of_dvd_of_pos (hb : 0 < b) (hba : b ∣ a) : a / b <= c ↔ a <= b * c :=
+lemma div_le_iff_of_dvd_of_pos (hb : 0 < b) (hba : b ∣ a) : a / b ≤ c ↔ a ≤ b * c :=
   ediv_le_iff_of_dvd_of_pos hb hba
-
-/--
-lemma `div_le_iff_of_dvd_of_neg` / 引理 `div_le_iff_of_dvd_of_neg`
-
-English:
-lemma div_le_iff_of_dvd_of_neg
-  given: (hb : b < 0) (hba : b ∣ a)
-  statement: a / b <= c ↔ b * c <= a
-  proof: ediv_le_iff_of_dvd_of_neg hb hba
-
-中文:
-引理 div_le_iff_of_dvd_of_neg
-  条件: (hb : b < 0) (hba : b ∣ a)
-  结论: a / b <= c ↔ b * c <= a
-  证明: ediv_le_iff_of_dvd_of_neg hb hba
-
-Depends on / 依赖: ediv_le_iff_of_dvd_of_neg
+/-
+**Int.div_le_iff_of_dvd_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_le_iff_of_dvd_of_neg (hb : b < 0) (hba : b ∣ a) : a / b <= c ↔ b * c <
+= a
+参数：hb : b < 0；hba : b ∣ a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_le_iff_of_dvd_of_neg`：∀ {a b c : ℤ}, b < 0 → b ∣ a → (a / b ≤ c
+ ↔ b * c ≤ a)
 -/
-lemma div_le_iff_of_dvd_of_neg (hb : b < 0) (hba : b ∣ a) : a / b <= c ↔ b * c <= a :=
+lemma div_le_iff_of_dvd_of_neg (hb : b < 0) (hba : b ∣ a) : a / b ≤ c ↔ b * c ≤ a :=
   ediv_le_iff_of_dvd_of_neg hb hba
-
-/--
-lemma `div_lt_iff_of_dvd_of_pos` / 引理 `div_lt_iff_of_dvd_of_pos`
-
-English:
-lemma div_lt_iff_of_dvd_of_pos
-  given: (hb : 0 < b) (hba : b ∣ a)
-  statement: a / b < c ↔ a < b * c
-  proof: ediv_lt_iff_of_dvd_of_pos hb hba
-
-中文:
-引理 div_lt_iff_of_dvd_of_pos
-  条件: (hb : 0 < b) (hba : b ∣ a)
-  结论: a / b < c ↔ a < b * c
-  证明: ediv_lt_iff_of_dvd_of_pos hb hba
-
-Depends on / 依赖: ediv_lt_iff_of_dvd_of_pos
+/-
+**Int.div_lt_iff_of_dvd_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_lt_iff_of_dvd_of_pos (hb : 0 < b) (hba : b ∣ a) : a / b < c ↔ a < b * 
+c
+参数：hb : 0 < b；hba : b ∣ a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_lt_iff_of_dvd_of_pos`：∀ {a b c : ℤ}, 0 < b → b ∣ a → (a / b < c
+ ↔ a < b * c)
 -/
 lemma div_lt_iff_of_dvd_of_pos (hb : 0 < b) (hba : b ∣ a) : a / b < c ↔ a < b * c :=
   ediv_lt_iff_of_dvd_of_pos hb hba
-
-/--
-lemma `div_lt_iff_of_dvd_of_neg` / 引理 `div_lt_iff_of_dvd_of_neg`
-
-English:
-lemma div_lt_iff_of_dvd_of_neg
-  given: (hb : b < 0) (hba : b ∣ a)
-  statement: a / b < c ↔ b * c < a
-  proof: ediv_lt_iff_of_dvd_of_neg hb hba
-
-中文:
-引理 div_lt_iff_of_dvd_of_neg
-  条件: (hb : b < 0) (hba : b ∣ a)
-  结论: a / b < c ↔ b * c < a
-  证明: ediv_lt_iff_of_dvd_of_neg hb hba
-
-Depends on / 依赖: ediv_lt_iff_of_dvd_of_neg
+/-
+**Int.div_lt_iff_of_dvd_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_lt_iff_of_dvd_of_neg (hb : b < 0) (hba : b ∣ a) : a / b < c ↔ b * c < 
+a
+参数：hb : b < 0；hba : b ∣ a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_lt_iff_of_dvd_of_neg`：∀ {a b c : ℤ}, b < 0 → b ∣ a → (a / b < c
+ ↔ b * c < a)
 -/
 lemma div_lt_iff_of_dvd_of_neg (hb : b < 0) (hba : b ∣ a) : a / b < c ↔ b * c < a :=
   ediv_lt_iff_of_dvd_of_neg hb hba
-
-/--
-lemma `le_div_iff_of_dvd_of_pos` / 引理 `le_div_iff_of_dvd_of_pos`
-
-English:
-lemma le_div_iff_of_dvd_of_pos
-  given: (hc : 0 < c) (hcb : c ∣ b)
-  statement: a <= b / c ↔ c * a <= b
-  proof: le_ediv_iff_of_dvd_of_pos hc hcb
-
-中文:
-引理 le_div_iff_of_dvd_of_pos
-  条件: (hc : 0 < c) (hcb : c ∣ b)
-  结论: a <= b / c ↔ c * a <= b
-  证明: le_ediv_iff_of_dvd_of_pos hc hcb
-
-Depends on / 依赖: le_ediv_iff_of_dvd_of_pos
+/-
+**Int.le_div_iff_of_dvd_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：le_div_iff_of_dvd_of_pos (hc : 0 < c) (hcb : c ∣ b) : a <= b / c ↔ c * a <
+= b
+参数：hc : 0 < c；hcb : c ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_ediv_iff_of_dvd_of_pos`：∀ {a b c : ℤ}, 0 < c → c ∣ b → (a ≤ b / c
+ ↔ c * a ≤ b)
 -/
-lemma le_div_iff_of_dvd_of_pos (hc : 0 < c) (hcb : c ∣ b) : a <= b / c ↔ c * a <= b :=
+lemma le_div_iff_of_dvd_of_pos (hc : 0 < c) (hcb : c ∣ b) : a ≤ b / c ↔ c * a ≤ b :=
   le_ediv_iff_of_dvd_of_pos hc hcb
-
-/--
-lemma `le_div_iff_of_dvd_of_neg` / 引理 `le_div_iff_of_dvd_of_neg`
-
-English:
-lemma le_div_iff_of_dvd_of_neg
-  given: (hc : c < 0) (hcb : c ∣ b)
-  statement: a <= b / c ↔ b <= c * a
-  proof: le_ediv_iff_of_dvd_of_neg hc hcb
-
-中文:
-引理 le_div_iff_of_dvd_of_neg
-  条件: (hc : c < 0) (hcb : c ∣ b)
-  结论: a <= b / c ↔ b <= c * a
-  证明: le_ediv_iff_of_dvd_of_neg hc hcb
-
-Depends on / 依赖: le_ediv_iff_of_dvd_of_neg
+/-
+**Int.le_div_iff_of_dvd_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：le_div_iff_of_dvd_of_neg (hc : c < 0) (hcb : c ∣ b) : a <= b / c ↔ b <= c 
+* a
+参数：hc : c < 0；hcb : c ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_ediv_iff_of_dvd_of_neg`：∀ {a b c : ℤ}, c < 0 → c ∣ b → (a ≤ b / c
+ ↔ b ≤ c * a)
 -/
-lemma le_div_iff_of_dvd_of_neg (hc : c < 0) (hcb : c ∣ b) : a <= b / c ↔ b <= c * a :=
+lemma le_div_iff_of_dvd_of_neg (hc : c < 0) (hcb : c ∣ b) : a ≤ b / c ↔ b ≤ c * a :=
   le_ediv_iff_of_dvd_of_neg hc hcb
-
-/--
-lemma `lt_div_iff_of_dvd_of_pos` / 引理 `lt_div_iff_of_dvd_of_pos`
-
-English:
-lemma lt_div_iff_of_dvd_of_pos
-  given: (hc : 0 < c) (hcb : c ∣ b)
-  statement: a < b / c ↔ c * a < b
-  proof: lt_ediv_iff_of_dvd_of_pos hc hcb
-
-中文:
-引理 lt_div_iff_of_dvd_of_pos
-  条件: (hc : 0 < c) (hcb : c ∣ b)
-  结论: a < b / c ↔ c * a < b
-  证明: lt_ediv_iff_of_dvd_of_pos hc hcb
-
-Depends on / 依赖: lt_ediv_iff_of_dvd_of_pos
+/-
+**Int.lt_div_iff_of_dvd_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：lt_div_iff_of_dvd_of_pos (hc : 0 < c) (hcb : c ∣ b) : a < b / c ↔ c * a < 
+b
+参数：hc : 0 < c；hcb : c ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.lt_ediv_iff_of_dvd_of_pos`：∀ {a b c : ℤ}, 0 < c → c ∣ b → (a < b / c
+ ↔ c * a < b)
 -/
 lemma lt_div_iff_of_dvd_of_pos (hc : 0 < c) (hcb : c ∣ b) : a < b / c ↔ c * a < b :=
   lt_ediv_iff_of_dvd_of_pos hc hcb
-
-/--
-lemma `lt_div_iff_of_dvd_of_neg` / 引理 `lt_div_iff_of_dvd_of_neg`
-
-English:
-lemma lt_div_iff_of_dvd_of_neg
-  given: (hc : c < 0) (hcb : c ∣ b)
-  statement: a < b / c ↔ b < c * a
-  proof: lt_ediv_iff_of_dvd_of_neg hc hcb
-
-中文:
-引理 lt_div_iff_of_dvd_of_neg
-  条件: (hc : c < 0) (hcb : c ∣ b)
-  结论: a < b / c ↔ b < c * a
-  证明: lt_ediv_iff_of_dvd_of_neg hc hcb
-
-Depends on / 依赖: lt_ediv_iff_of_dvd_of_neg
+/-
+**Int.lt_div_iff_of_dvd_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：lt_div_iff_of_dvd_of_neg (hc : c < 0) (hcb : c ∣ b) : a < b / c ↔ b < c * 
+a
+参数：hc : c < 0；hcb : c ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.lt_ediv_iff_of_dvd_of_neg`：∀ {a b c : ℤ}, c < 0 → c ∣ b → (a < b / c
+ ↔ b < c * a)
 -/
 lemma lt_div_iff_of_dvd_of_neg (hc : c < 0) (hcb : c ∣ b) : a < b / c ↔ b < c * a :=
   lt_ediv_iff_of_dvd_of_neg hc hcb
-
-/--
-lemma `div_le_div_iff_of_dvd_of_pos_of_pos` / 引理 `div_le_div_iff_of_dvd_of_pos_of_pos`
-
-English:
-lemma div_le_div_iff_of_dvd_of_pos_of_pos
-  statement: (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a)
-  proof: ediv_le_ediv_iff_of_dvd_of_pos_of_pos hb hd hba hdc
-
-中文:
-引理 div_le_div_iff_of_dvd_of_pos_of_pos
-  结论: (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a)
-  证明: ediv_le_ediv_iff_of_dvd_of_pos_of_pos hb hd hba hdc
-
-Depends on / 依赖: ediv_le_ediv_iff_of_dvd_of_pos_of_pos
+/-
+**Int.div_le_div_iff_of_dvd_of_pos_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_le_div_iff_of_dvd_of_pos_of_pos (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a
+) (hdc : d ∣ c) : a / b <= c / d ↔ d * a <= c * b
+参数：hb : 0 < b；hd : 0 < d；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_le_ediv_iff_of_dvd_of_pos_of_pos`：∀ {a b c d : ℤ}, 0 < b → 0 < 
+d → b ∣ a → d ∣ c → (a / b ≤ c / d ↔ d * a ≤ c * b)
 -/
 lemma div_le_div_iff_of_dvd_of_pos_of_pos (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a)
-    (hdc : d ∣ c) : a / b <= c / d ↔ d * a <= c * b :=
+    (hdc : d ∣ c) : a / b ≤ c / d ↔ d * a ≤ c * b :=
   ediv_le_ediv_iff_of_dvd_of_pos_of_pos hb hd hba hdc
-
-/--
-lemma `div_le_div_iff_of_dvd_of_pos_of_neg` / 引理 `div_le_div_iff_of_dvd_of_pos_of_neg`
-
-English:
-lemma div_le_div_iff_of_dvd_of_pos_of_neg
-  given: (hb : 0 < b) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  proof: ediv_le_ediv_iff_of_dvd_of_pos_of_neg hb hd hba hdc
-
-中文:
-引理 div_le_div_iff_of_dvd_of_pos_of_neg
-  条件: (hb : 0 < b) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  证明: ediv_le_ediv_iff_of_dvd_of_pos_of_neg hb hd hba hdc
-
-Depends on / 依赖: ediv_le_ediv_iff_of_dvd_of_pos_of_neg
+/-
+**Int.div_le_div_iff_of_dvd_of_pos_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_le_div_iff_of_dvd_of_pos_of_neg (hb : 0 < b) (hd : d < 0) (hba : b ∣ a
+) (hdc : d ∣ c) : a / b <= c / d ↔ c * b <= d * a
+参数：hb : 0 < b；hd : d < 0；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_le_ediv_iff_of_dvd_of_pos_of_neg`：∀ {a b c d : ℤ}, 0 < b → d < 
+0 → b ∣ a → d ∣ c → (a / b ≤ c / d ↔ c * b ≤ d * a)
 -/
 lemma div_le_div_iff_of_dvd_of_pos_of_neg (hb : 0 < b) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c) :
-    a / b <= c / d ↔ c * b <= d * a :=
+    a / b ≤ c / d ↔ c * b ≤ d * a :=
   ediv_le_ediv_iff_of_dvd_of_pos_of_neg hb hd hba hdc
-
-/--
-lemma `div_le_div_iff_of_dvd_of_neg_of_pos` / 引理 `div_le_div_iff_of_dvd_of_neg_of_pos`
-
-English:
-lemma div_le_div_iff_of_dvd_of_neg_of_pos
-  given: (hb : b < 0) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c)
-  proof: ediv_le_ediv_iff_of_dvd_of_neg_of_pos hb hd hba hdc
-
-中文:
-引理 div_le_div_iff_of_dvd_of_neg_of_pos
-  条件: (hb : b < 0) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c)
-  证明: ediv_le_ediv_iff_of_dvd_of_neg_of_pos hb hd hba hdc
-
-Depends on / 依赖: ediv_le_ediv_iff_of_dvd_of_neg_of_pos
+/-
+**Int.div_le_div_iff_of_dvd_of_neg_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_le_div_iff_of_dvd_of_neg_of_pos (hb : b < 0) (hd : 0 < d) (hba : b ∣ a
+) (hdc : d ∣ c) : a / b <= c / d ↔ c * b <= d * a
+参数：hb : b < 0；hd : 0 < d；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_le_ediv_iff_of_dvd_of_neg_of_pos`：∀ {a b c d : ℤ}, b < 0 → 0 < 
+d → b ∣ a → d ∣ c → (a / b ≤ c / d ↔ c * b ≤ d * a)
 -/
 lemma div_le_div_iff_of_dvd_of_neg_of_pos (hb : b < 0) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c) :
-    a / b <= c / d ↔ c * b <= d * a :=
+    a / b ≤ c / d ↔ c * b ≤ d * a :=
   ediv_le_ediv_iff_of_dvd_of_neg_of_pos hb hd hba hdc
-
-/--
-lemma `div_le_div_iff_of_dvd_of_neg_of_neg` / 引理 `div_le_div_iff_of_dvd_of_neg_of_neg`
-
-English:
-lemma div_le_div_iff_of_dvd_of_neg_of_neg
-  given: (hb : b < 0) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  proof: ediv_le_ediv_iff_of_dvd_of_neg_of_neg hb hd hba hdc
-
-中文:
-引理 div_le_div_iff_of_dvd_of_neg_of_neg
-  条件: (hb : b < 0) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  证明: ediv_le_ediv_iff_of_dvd_of_neg_of_neg hb hd hba hdc
-
-Depends on / 依赖: ediv_le_ediv_iff_of_dvd_of_neg_of_neg
+/-
+**Int.div_le_div_iff_of_dvd_of_neg_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_le_div_iff_of_dvd_of_neg_of_neg (hb : b < 0) (hd : d < 0) (hba : b ∣ a
+) (hdc : d ∣ c) : a / b <= c / d ↔ d * a <= c * b
+参数：hb : b < 0；hd : d < 0；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_le_ediv_iff_of_dvd_of_neg_of_neg`：∀ {a b c d : ℤ}, b < 0 → d < 
+0 → b ∣ a → d ∣ c → (a / b ≤ c / d ↔ d * a ≤ c * b)
 -/
 lemma div_le_div_iff_of_dvd_of_neg_of_neg (hb : b < 0) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c) :
-    a / b <= c / d ↔ d * a <= c * b :=
+    a / b ≤ c / d ↔ d * a ≤ c * b :=
   ediv_le_ediv_iff_of_dvd_of_neg_of_neg hb hd hba hdc
-
-/--
-lemma `div_lt_div_iff_of_dvd_of_pos` / 引理 `div_lt_div_iff_of_dvd_of_pos`
-
-English:
-lemma div_lt_div_iff_of_dvd_of_pos
-  given: (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c)
-  proof: ediv_lt_ediv_iff_of_dvd_of_pos hb hd hba hdc
-
-中文:
-引理 div_lt_div_iff_of_dvd_of_pos
-  条件: (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c)
-  证明: ediv_lt_ediv_iff_of_dvd_of_pos hb hd hba hdc
-
-Depends on / 依赖: ediv_lt_ediv_iff_of_dvd_of_pos
+/-
+**Int.div_lt_div_iff_of_dvd_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_lt_div_iff_of_dvd_of_pos (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a) (hdc 
+: d ∣ c) : a / b < c / d ↔ d * a < c * b
+参数：hb : 0 < b；hd : 0 < d；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_lt_ediv_iff_of_dvd_of_pos`：∀ {a b c d : ℤ}, 0 < b → 0 < d → b ∣
+ a → d ∣ c → (a / b < c / d ↔ d * a < c * b)
 -/
 lemma div_lt_div_iff_of_dvd_of_pos (hb : 0 < b) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c) :
     a / b < c / d ↔ d * a < c * b :=
   ediv_lt_ediv_iff_of_dvd_of_pos hb hd hba hdc
-
-/--
-lemma `div_lt_div_iff_of_dvd_of_pos_of_neg` / 引理 `div_lt_div_iff_of_dvd_of_pos_of_neg`
-
-English:
-lemma div_lt_div_iff_of_dvd_of_pos_of_neg
-  given: (hb : 0 < b) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  proof: ediv_lt_ediv_iff_of_dvd_of_pos_of_neg hb hd hba hdc
-
-中文:
-引理 div_lt_div_iff_of_dvd_of_pos_of_neg
-  条件: (hb : 0 < b) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  证明: ediv_lt_ediv_iff_of_dvd_of_pos_of_neg hb hd hba hdc
-
-Depends on / 依赖: ediv_lt_ediv_iff_of_dvd_of_pos_of_neg
+/-
+**Int.div_lt_div_iff_of_dvd_of_pos_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_lt_div_iff_of_dvd_of_pos_of_neg (hb : 0 < b) (hd : d < 0) (hba : b ∣ a
+) (hdc : d ∣ c) : a / b < c / d ↔ c * b < d * a
+参数：hb : 0 < b；hd : d < 0；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_lt_ediv_iff_of_dvd_of_pos_of_neg`：∀ {a b c d : ℤ}, 0 < b → d < 
+0 → b ∣ a → d ∣ c → (a / b < c / d ↔ c * b < d * a)
 -/
 lemma div_lt_div_iff_of_dvd_of_pos_of_neg (hb : 0 < b) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c) :
     a / b < c / d ↔ c * b < d * a :=
   ediv_lt_ediv_iff_of_dvd_of_pos_of_neg hb hd hba hdc
-
-/--
-lemma `div_lt_div_iff_of_dvd_of_neg_of_pos` / 引理 `div_lt_div_iff_of_dvd_of_neg_of_pos`
-
-English:
-lemma div_lt_div_iff_of_dvd_of_neg_of_pos
-  given: (hb : b < 0) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c)
-  proof: ediv_lt_ediv_iff_of_dvd_of_neg_of_pos hb hd hba hdc
-
-中文:
-引理 div_lt_div_iff_of_dvd_of_neg_of_pos
-  条件: (hb : b < 0) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c)
-  证明: ediv_lt_ediv_iff_of_dvd_of_neg_of_pos hb hd hba hdc
-
-Depends on / 依赖: ediv_lt_ediv_iff_of_dvd_of_neg_of_pos
+/-
+**Int.div_lt_div_iff_of_dvd_of_neg_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_lt_div_iff_of_dvd_of_neg_of_pos (hb : b < 0) (hd : 0 < d) (hba : b ∣ a
+) (hdc : d ∣ c) : a / b < c / d ↔ c * b < d * a
+参数：hb : b < 0；hd : 0 < d；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_lt_ediv_iff_of_dvd_of_neg_of_pos`：∀ {a b c d : ℤ}, b < 0 → 0 < 
+d → b ∣ a → d ∣ c → (a / b < c / d ↔ c * b < d * a)
 -/
 lemma div_lt_div_iff_of_dvd_of_neg_of_pos (hb : b < 0) (hd : 0 < d) (hba : b ∣ a) (hdc : d ∣ c) :
     a / b < c / d ↔ c * b < d * a :=
   ediv_lt_ediv_iff_of_dvd_of_neg_of_pos hb hd hba hdc
-
-/--
-lemma `div_lt_div_iff_of_dvd_of_neg_of_neg` / 引理 `div_lt_div_iff_of_dvd_of_neg_of_neg`
-
-English:
-lemma div_lt_div_iff_of_dvd_of_neg_of_neg
-  given: (hb : b < 0) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  proof: ediv_lt_ediv_iff_of_dvd_of_neg_of_neg hb hd hba hdc
-
-中文:
-引理 div_lt_div_iff_of_dvd_of_neg_of_neg
-  条件: (hb : b < 0) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c)
-  证明: ediv_lt_ediv_iff_of_dvd_of_neg_of_neg hb hd hba hdc
-
-Depends on / 依赖: ediv_lt_ediv_iff_of_dvd_of_neg_of_neg
+/-
+**Int.div_lt_div_iff_of_dvd_of_neg_of_neg** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_lt_div_iff_of_dvd_of_neg_of_neg (hb : b < 0) (hd : d < 0) (hba : b ∣ a
+) (hdc : d ∣ c) : a / b < c / d ↔ d * a < c * b
+参数：hb : b < 0；hd : d < 0；hba : b ∣ a；hdc : d ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_lt_ediv_iff_of_dvd_of_neg_of_neg`：∀ {a b c d : ℤ}, b < 0 → d < 
+0 → b ∣ a → d ∣ c → (a / b < c / d ↔ d * a < c * b)
 -/
 lemma div_lt_div_iff_of_dvd_of_neg_of_neg (hb : b < 0) (hd : d < 0) (hba : b ∣ a) (hdc : d ∣ c) :
     a / b < c / d ↔ d * a < c * b :=
   ediv_lt_ediv_iff_of_dvd_of_neg_of_neg hb hd hba hdc
 
+/-! ### properties of `/` and `%` -/
 
-/--
-lemma `emod_two_eq_zero_or_one` / 引理 `emod_two_eq_zero_or_one`
+/-
+**Int.emod_two_eq_zero_or_one** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：emod_two_eq_zero_or_one (n : Int) : n % 2 = 0 ∨ n % 2 = 1
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.emod_two_eq`：∀ (x : ℤ), x % 2 = 0 ∨ x % 2 = 1
 
-English:
-lemma emod_two_eq_zero_or_one
-  given: (n : Int)
-  statement: n % 2 = 0 ∨ n % 2 = 1
-  proof: emod_two_eq n
-
-中文:
-引理 emod_two_eq_zero_or_one
-  条件: (n : 整数)
-  结论: n % 2 = 0 ∨ n % 2 = 1
-  证明: emod_two_eq n
-
-Depends on / 依赖: emod_two_eq
+--- 原说明 ---
+### properties of `/` and `%`
 -/
-lemma emod_two_eq_zero_or_one (n : Int) : n % 2 = 0 ∨ n % 2 = 1 :=
+lemma emod_two_eq_zero_or_one (n : ℤ) : n % 2 = 0 ∨ n % 2 = 1 :=
   emod_two_eq n
 
+/-! ### dvd -/
 
-/--
-lemma `dvd_mul_of_div_dvd` / 引理 `dvd_mul_of_div_dvd`
+/-
+**Int.dvd_mul_of_div_dvd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：dvd_mul_of_div_dvd (h : b ∣ a) (hdiv : a / b ∣ c) : a ∣ b * c
+参数：h : b ∣ a；hdiv : a / b ∣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.dvd_mul_of_ediv_dvd`：∀ {a b c : ℤ}, b ∣ a → a / b ∣ c → a ∣ b * c
 
-English:
-lemma dvd_mul_of_div_dvd
-  given: (h : b ∣ a) (hdiv : a / b ∣ c)
-  statement: a ∣ b * c
-  proof: dvd_mul_of_ediv_dvd h hdiv
-
-中文:
-引理 dvd_mul_of_div_dvd
-  条件: (h : b ∣ a) (hdiv : a / b ∣ c)
-  结论: a ∣ b * c
-  证明: dvd_mul_of_ediv_dvd h hdiv
-
-Depends on / 依赖: dvd_mul_of_ediv_dvd
+--- 原说明 ---
+### dvd
 -/
 lemma dvd_mul_of_div_dvd (h : b ∣ a) (hdiv : a / b ∣ c) : a ∣ b * c :=
   dvd_mul_of_ediv_dvd h hdiv
-
-/--
-lemma `div_dvd_iff_dvd_mul` / 引理 `div_dvd_iff_dvd_mul`
-
-English:
-lemma div_dvd_iff_dvd_mul
-  given: (h : b ∣ a) (hb : b != 0)
-  statement: a / b ∣ c ↔ a ∣ b * c
-  proof: ediv_dvd_iff_dvd_mul h hb
-
-中文:
-引理 div_dvd_iff_dvd_mul
-  条件: (h : b ∣ a) (hb : b != 0)
-  结论: a / b ∣ c ↔ a ∣ b * c
-  证明: ediv_dvd_iff_dvd_mul h hb
-
-Depends on / 依赖: ediv_dvd_iff_dvd_mul
+/-
+**Int.div_dvd_iff_dvd_mul** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：div_dvd_iff_dvd_mul (h : b ∣ a) (hb : b != 0) : a / b ∣ c ↔ a ∣ b * c
+参数：h : b ∣ a；hb : b != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ediv_dvd_iff_dvd_mul`：∀ {a b c : ℤ}, b ∣ a → b ≠ 0 → (a / b ∣ c ↔ a 
+∣ b * c)
 -/
-lemma div_dvd_iff_dvd_mul (h : b ∣ a) (hb : b != 0) : a / b ∣ c ↔ a ∣ b * c :=
+lemma div_dvd_iff_dvd_mul (h : b ∣ a) (hb : b ≠ 0) : a / b ∣ c ↔ a ∣ b * c :=
   ediv_dvd_iff_dvd_mul h hb
-
-/--
-lemma `mul_dvd_of_dvd_div` / 引理 `mul_dvd_of_dvd_div`
-
-English:
-lemma mul_dvd_of_dvd_div
-  given: (hcb : c ∣ b) (h : a ∣ b / c)
-  statement: c * a ∣ b
-  proof: mul_dvd_of_dvd_ediv hcb h
-
-中文:
-引理 mul_dvd_of_dvd_div
-  条件: (hcb : c ∣ b) (h : a ∣ b / c)
-  结论: c * a ∣ b
-  证明: mul_dvd_of_dvd_ediv hcb h
-
-Depends on / 依赖: mul_dvd_of_dvd_ediv
+/-
+**Int.mul_dvd_of_dvd_div** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：mul_dvd_of_dvd_div (hcb : c ∣ b) (h : a ∣ b / c) : c * a ∣ b
+参数：hcb : c ∣ b；h : a ∣ b / c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.mul_dvd_of_dvd_ediv`：∀ {a b c : ℤ}, c ∣ b → a ∣ b / c → c * a ∣ b
 -/
 lemma mul_dvd_of_dvd_div (hcb : c ∣ b) (h : a ∣ b / c) : c * a ∣ b :=
   mul_dvd_of_dvd_ediv hcb h
-
-/--
-lemma `dvd_div_of_mul_dvd` / 引理 `dvd_div_of_mul_dvd`
-
-English:
-lemma dvd_div_of_mul_dvd
-  given: (h : a * b ∣ c)
-  statement: b ∣ c / a
-  proof: dvd_ediv_of_mul_dvd h
-
-中文:
-引理 dvd_div_of_mul_dvd
-  条件: (h : a * b ∣ c)
-  结论: b ∣ c / a
-  证明: dvd_ediv_of_mul_dvd h
-
-Depends on / 依赖: dvd_ediv_of_mul_dvd
+/-
+**Int.dvd_div_of_mul_dvd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：dvd_div_of_mul_dvd (h : a * b ∣ c) : b ∣ c / a
+参数：h : a * b ∣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.dvd_ediv_of_mul_dvd`：∀ {a b c : ℤ}, a * b ∣ c → b ∣ c / a
 -/
 lemma dvd_div_of_mul_dvd (h : a * b ∣ c) : b ∣ c / a :=
   dvd_ediv_of_mul_dvd h
-
-/--
-lemma `dvd_div_iff_mul_dvd` / 引理 `dvd_div_iff_mul_dvd`
-
-English:
-lemma dvd_div_iff_mul_dvd
-  given: (hbc : c ∣ b)
-  statement: a ∣ b / c ↔ c * a ∣ b
-  proof: by
-  simp [hbc]
-
-中文:
-引理 dvd_div_iff_mul_dvd
-  条件: (hbc : c ∣ b)
-  结论: a ∣ b / c ↔ c * a ∣ b
-  证明: by
-  simp [hbc]
+/-
+**Int.dvd_div_iff_mul_dvd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：dvd_div_iff_mul_dvd (hbc : c ∣ b) : a ∣ b / c ↔ c * a ∣ b
+参数：hbc : c ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma dvd_div_iff_mul_dvd (hbc : c ∣ b) : a ∣ b / c ↔ c * a ∣ b := by
   simp [hbc]
 
-/--
-lemma `exists_lt_and_lt_iff_not_dvd` / 引理 `exists_lt_and_lt_iff_not_dvd`
+/-- If `n > 0` then `m` is not divisible by `n` iff it is between `n * k` and `n * (k + 1)`
+  for some `k`. -/
+/-
+**Int.exists_lt_and_lt_iff_not_dvd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：exists_lt_and_lt_iff_not_dvd (m : Int) (hn : 0 < n) : (exists k, n * k < m
+ ∧ m < n * (k + 1)) ↔ ¬n ∣ m
+参数：m : Int；hn : 0 < n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Int.not_dvd_iff_lt_mul_succ`：∀ {n : ℤ} (m : ℤ), 0 < n → (¬n ∣ m ↔ ∃ k, n
+ * k < m ∧ m < n * (k + 1))
 
-English:
-lemma exists_lt_and_lt_iff_not_dvd
-  given: (m : Int) (hn : 0 < n)
-  proof: (not_dvd_iff_lt_mul_succ m hn).symm
-
-中文:
-引理 存在_lt_and_lt_iff_not_dvd
-  条件: (m : 整数) (hn : 0 < n)
-  证明: (not_dvd_iff_lt_mul_succ m hn).symm
-
-Depends on / 依赖: not_dvd_iff_lt_mul_succ
+--- 原说明 ---
+If `n > 0` then `m` is not divisible by `n` iff it is between `n * k` and `n * (
+k + 1)`
+  for some `k`.
 -/
-lemma exists_lt_and_lt_iff_not_dvd (m : Int) (hn : 0 < n) :
-    (exists k, n * k < m ∧ m < n * (k + 1)) ↔ ¬n ∣ m :=
+lemma exists_lt_and_lt_iff_not_dvd (m : ℤ) (hn : 0 < n) :
+    (∃ k, n * k < m ∧ m < n * (k + 1)) ↔ ¬n ∣ m :=
   (not_dvd_iff_lt_mul_succ m hn).symm
-
-/--
-lemma `eq_mul_div_of_mul_eq_mul_of_dvd_left` / 引理 `eq_mul_div_of_mul_eq_mul_of_dvd_left`
-
-English:
-lemma eq_mul_div_of_mul_eq_mul_of_dvd_left
-  given: (hb : b != 0) (hbc : b ∣ c) (h : b * a = c * d)
-  proof: by
-  obtain ⟨k, rfl⟩ := hbc
-  rw [Int.mul_ediv_cancel_left _ hb]
-  rwa [Int.mul_assoc, Int.mul_eq_mul_left_iff hb] at h
-
-中文:
-引理 eq_mul_div_of_mul_eq_mul_of_dvd_left
-  条件: (hb : b != 0) (hbc : b ∣ c) (h : b * a = c * d)
-  证明: by
-  obtain ⟨k, rfl⟩ := hbc
-  rw [Int.mul_ediv_cancel_left _ hb]
-  rwa [Int.mul_assoc, Int.mul_eq_mul_left_iff hb] at h
-
-Depends on / 依赖: Int.mul_assoc, Int.mul_ediv_cancel_left, Int.mul_eq_mul_left_iff, mul_assoc, mul_ediv_cancel_left, mul_eq_mul_left_iff
+/-
+**Int.eq_mul_div_of_mul_eq_mul_of_dvd_left** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：eq_mul_div_of_mul_eq_mul_of_dvd_left (hb : b != 0) (hbc : b ∣ c) (h : b * 
+a = c * d) : a = c / b * d
+参数：hb : b != 0；hbc : b ∣ c；h : b * a = c * d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.mul_ediv_cancel_left`：∀ {a : ℤ} (b : ℤ), a ≠ 0 → a * b / a = b
+· 使用定理 `Int.mul_eq_mul_left_iff`：∀ {a b c : ℤ}, c ≠ 0 → (c * a = c * b ↔ a = b)
+· 使用定理 `Int.mul_assoc`：∀ (a b c : ℤ), a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma eq_mul_div_of_mul_eq_mul_of_dvd_left (hb : b != 0) (hbc : b ∣ c) (h : b * a = c * d) :
+lemma eq_mul_div_of_mul_eq_mul_of_dvd_left (hb : b ≠ 0) (hbc : b ∣ c) (h : b * a = c * d) :
     a = c / b * d := by
   obtain ⟨k, rfl⟩ := hbc
   rw [Int.mul_ediv_cancel_left _ hb]
   rwa [Int.mul_assoc, Int.mul_eq_mul_left_iff hb] at h
-
-/--
-lemma `ofNat_add_negSucc_of_ge` / 引理 `ofNat_add_negSucc_of_ge`
-
-English:
-lemma ofNat_add_negSucc_of_ge
-  given: {m n : Nat} (h : n.succ <= m)
-  proof: by
-  rw [negSucc_eq]; rw [ofNat_eq_natCast]; rw [ofNat_eq_natCast]; rw [← Int.natCast_one]; rw [← Int.natCast_add]; rw [← Int.sub_eq_add_neg]; rw [← Int.natCast_sub h]
-
-中文:
-引理 of自然数_add_negSucc_of_ge
-  条件: {m n : 自然数} (h : n.succ <= m)
-  证明: by
-  rw [negSucc_eq]; rw [ofNat_eq_natCast]; rw [ofNat_eq_natCast]; rw [← Int.natCast_one]; rw [← Int.natCast_add]; rw [← Int.sub_eq_add_neg]; rw [← Int.natCast_sub h]
-
-Depends on / 依赖: Int.natCast_add, Int.natCast_one, Int.natCast_sub, Int.sub_eq_add_neg, natCast_add, natCast_one, natCast_sub, negSucc_eq, ofNat_eq_natCast, sub_eq_add_neg
+/-
+**Int.ofNat_add_negSucc_of_ge** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：ofNat_add_negSucc_of_ge {m n : Nat} (h : n.succ <= m) : ofNat m + -[n+1] =
+ ofNat (m - n.succ)
+参数：h : n.succ <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.negSucc_eq`：∀ (n : ℕ), Int.negSucc n = -(↑n + 1)
+· 使用定理 `Int.ofNat_eq_natCast`：∀ (n : ℕ), Int.ofNat n = ↑n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.natCast_one`：↑1 = 1
+· 使用定理 `Int.natCast_add`：∀ (n m : ℕ), ↑(n + m) = ↑n + ↑m
+· 使用定理 `Int.sub_eq_add_neg`：∀ {a b : ℤ}, a - b = a + -b
+· 使用定理 `Int.natCast_sub`：∀ {n m : ℕ}, n ≤ m → ↑(m - n) = ↑m - ↑n
 -/
-lemma ofNat_add_negSucc_of_ge {m n : Nat} (h : n.succ <= m) :
+lemma ofNat_add_negSucc_of_ge {m n : ℕ} (h : n.succ ≤ m) :
     ofNat m + -[n+1] = ofNat (m - n.succ) := by
-  rw [negSucc_eq]; rw [ofNat_eq_natCast]; rw [ofNat_eq_natCast]; rw [← Int.natCast_one]; rw [← Int.natCast_add]; rw [← Int.sub_eq_add_neg]; rw [← Int.natCast_sub h]
+  rw [negSucc_eq, ofNat_eq_natCast, ofNat_eq_natCast, ← Int.natCast_one, ← Int.natCast_add,
+    ← Int.sub_eq_add_neg, ← Int.natCast_sub h]
 
+/-! #### `/` and ordering -/
 
-/--
-lemma `le_iff_pos_of_dvd` / 引理 `le_iff_pos_of_dvd`
+/-
+**Int.le_iff_pos_of_dvd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：le_iff_pos_of_dvd (ha : 0 < a) (hab : a ∣ b) : a <= b ↔ 0 < b
+参数：ha : 0 < a；hab : a ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.lt_of_lt_of_le`：∀ {a b c : ℤ}, a < b → b ≤ c → a < c
+· 使用定理 `Int.le_of_dvd`：∀ {a b : ℤ}, 0 < b → a ∣ b → a ≤ b
 
-English:
-lemma le_iff_pos_of_dvd
-  given: (ha : 0 < a) (hab : a ∣ b)
-  statement: a <= b ↔ 0 < b
-  proof: ⟨Int.lt_of_lt_of_le ha, (Int.le_of_dvd · hab)⟩
-
-中文:
-引理 le_iff_pos_of_dvd
-  条件: (ha : 0 < a) (hab : a ∣ b)
-  结论: a <= b ↔ 0 < b
-  证明: ⟨Int.lt_of_lt_of_le ha, (Int.le_of_dvd · hab)⟩
-
-Depends on / 依赖: Int.le_of_dvd, Int.lt_of_lt_of_le, le_of_dvd, lt_of_lt_of_le
+--- 原说明 ---
+#### `/` and ordering
 -/
-lemma le_iff_pos_of_dvd (ha : 0 < a) (hab : a ∣ b) : a <= b ↔ 0 < b :=
+lemma le_iff_pos_of_dvd (ha : 0 < a) (hab : a ∣ b) : a ≤ b ↔ 0 < b :=
   ⟨Int.lt_of_lt_of_le ha, (Int.le_of_dvd · hab)⟩
-
-/--
-lemma `le_add_iff_lt_of_dvd_sub` / 引理 `le_add_iff_lt_of_dvd_sub`
-
-English:
-lemma le_add_iff_lt_of_dvd_sub
-  given: (ha : 0 < a) (hab : a ∣ c - b)
-  statement: a + b <= c ↔ b < c
-  proof: by
-  rw [Int.add_le_iff_le_sub]; rw [← Int.sub_pos]; rw [le_iff_pos_of_dvd ha hab]
-
-中文:
-引理 le_add_iff_lt_of_dvd_sub
-  条件: (ha : 0 < a) (hab : a ∣ c - b)
-  结论: a + b <= c ↔ b < c
-  证明: by
-  rw [Int.add_le_iff_le_sub]; rw [← Int.sub_pos]; rw [le_iff_pos_of_dvd ha hab]
-
-Depends on / 依赖: Int.add_le_iff_le_sub, Int.sub_pos, add_le_iff_le_sub, le_iff_pos_of_dvd, sub_pos
+/-
+**Int.le_add_iff_lt_of_dvd_sub** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：le_add_iff_lt_of_dvd_sub (ha : 0 < a) (hab : a ∣ c - b) : a + b <= c ↔ b <
+ c
+参数：ha : 0 < a；hab : a ∣ c - b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.add_le_iff_le_sub`：∀ {a b c : ℤ}, a + b ≤ c ↔ a ≤ c - b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.sub_pos`：∀ {a b : ℤ}, 0 < a - b ↔ b < a
+· 使用引理 `Int.le_iff_pos_of_dvd`：le_iff_pos_of_dvd (ha : 0 < a) (hab : a ∣ b) : a 
+<= b ↔ 0 < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma le_add_iff_lt_of_dvd_sub (ha : 0 < a) (hab : a ∣ c - b) : a + b <= c ↔ b < c := by
-  rw [Int.add_le_iff_le_sub]; rw [← Int.sub_pos]; rw [le_iff_pos_of_dvd ha hab]
+lemma le_add_iff_lt_of_dvd_sub (ha : 0 < a) (hab : a ∣ c - b) : a + b ≤ c ↔ b < c := by
+  rw [Int.add_le_iff_le_sub, ← Int.sub_pos, le_iff_pos_of_dvd ha hab]
 
+/-! ### sign -/
 
-/--
-lemma `sign_add_eq_of_sign_eq` / 引理 `sign_add_eq_of_sign_eq`
+/-
+**Int.sign_add_eq_of_sign_eq** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：sign_add_eq_of_sign_eq : forall {m n : Int}, m.sign = n.sign -> (m + n).si
+gn = n.sign
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma sign_add_eq_of_sign_eq
-  statement: forall {m n : Int}, m.sign = n.sign -> (m + n).sign = n.sign
-  proof: by
-  lia
-
-中文:
-引理 sign_add_eq_of_sign_eq
-  结论: 对任意 {m n : 整数}, m.sign = n.sign -> (m + n).sign = n.sign
-  证明: by
-  lia
+--- 原说明 ---
+### sign
 -/
-lemma sign_add_eq_of_sign_eq : forall {m n : Int}, m.sign = n.sign -> (m + n).sign = n.sign := by
+lemma sign_add_eq_of_sign_eq : ∀ {m n : ℤ}, m.sign = n.sign → (m + n).sign = n.sign := by
   lia
 
 /-! ### toNat -/
@@ -1362,165 +1016,133 @@ from the default simp set, which simplifies the LHS to `max i 0 - 1`.
 Therefore we mark this lemma as `@[simp high]`.
 -/
 @[simp high]
-/--
-lemma `toNat_pred_coe_of_pos` / 引理 `toNat_pred_coe_of_pos`
+/-
+**Int.toNat_pred_coe_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：toNat_pred_coe_of_pos {i : Int} (h : 0 < i) : ((i.toNat - 1 : Nat) : Int) 
+= i - 1
+参数：h : 0 < i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natCast_pred_of_pos`：∀ {n : ℕ}, 0 < n → ↑(n - 1) = ↑n - 1
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Int.toNat_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.toNat = a
+· 使用定理 `Int.le_of_lt`：∀ {a b : ℤ}, a < b → a ≤ b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma toNat_pred_coe_of_pos
-  given: {i : Int} (h : 0 < i)
-  statement: ((i.toNat - 1 : Nat) : Int) = i - 1
-  proof: by
+--- 原说明 ---
+The following lemma is non-confluent with
+```
+simp only [*, @Int.lt_toNat, CharP.cast_eq_zero, @Nat.cast_pred, Int.ofNat_toNat
+]
+```
+from the default simp set, which simplifies the LHS to `max i 0 - 1`.
+Therefore we mark this lemma as `@[simp high]`.
+-/
+lemma toNat_pred_coe_of_pos {i : ℤ} (h : 0 < i) : ((i.toNat - 1 : ℕ) : ℤ) = i - 1 := by
   simp only [lt_toNat, Int.cast_ofNat_Int, h, natCast_pred_of_pos, Int.le_of_lt h, toNat_of_nonneg]
-
-中文:
-引理 to自然数_pred_coe_of_pos
-  条件: {i : 整数} (h : 0 < i)
-  结论: ((i.to自然数 - 1 : 自然数) : 整数) = i - 1
-  证明: by
-  simp only [lt_toNat, Int.cast_ofNat_Int, h, natCast_pred_of_pos, Int.le_of_lt h, toNat_of_nonneg]
-
-Depends on / 依赖: Int.cast_ofNat_Int, Int.le_of_lt, cast_ofNat_Int, le_of_lt, lt_toNat, natCast_pred_of_pos, toNat_of_nonneg
+/-
+**Int.toNat_lt_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：toNat_lt_of_ne_zero {n : Nat} (hn : n != 0) : m.toNat < n ↔ m < n
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toNat_pred_coe_of_pos {i : Int} (h : 0 < i) : ((i.toNat - 1 : Nat) : Int) = i - 1 := by
-  simp only [lt_toNat, Int.cast_ofNat_Int, h, natCast_pred_of_pos, Int.le_of_lt h, toNat_of_nonneg]
+lemma toNat_lt_of_ne_zero {n : ℕ} (hn : n ≠ 0) : m.toNat < n ↔ m < n := by lia
 
-/--
-lemma `toNat_lt_of_ne_zero` / 引理 `toNat_lt_of_ne_zero`
+/-- The modulus of an integer by another as a natural. Uses the E-rounding convention. -/
+/-
+**Int.natMod** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：natMod (m n : Int) : Nat
+参数：m n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma toNat_lt_of_ne_zero
-  given: {n : Nat} (hn : n != 0)
-  statement: m.toNat < n ↔ m < n
-  proof: by lia
-
-中文:
-引理 to自然数_lt_of_ne_zero
-  条件: {n : 自然数} (hn : n != 0)
-  结论: m.to自然数 < n ↔ m < n
-  证明: by lia
+--- 原说明 ---
+The modulus of an integer by another as a natural. Uses the E-rounding conventio
+n.
 -/
-lemma toNat_lt_of_ne_zero {n : Nat} (hn : n != 0) : m.toNat < n ↔ m < n := by lia
-
-/--
-Definition of `natMod` / `natMod` 的定义
-
-English:
-definition natMod
-  signature: (m n : Int)
-  body: (m % n).toNat
-
-中文:
-定义 natMod
-  签名: (m n : 整数)
-  定义体: (m % n).toNat
+def natMod (m n : ℤ) : ℕ := (m % n).toNat
+/-
+**Int.natMod_lt** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：natMod_lt {n : Nat} (hn : n != 0) : m.natMod n < n
+参数：hn : n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Int.toNat_lt_of_ne_zero`：toNat_lt_of_ne_zero {n : Nat} (hn : n != 0) : m
+.toNat < n ↔ m < n
+· 使用定理 `Int.emod_lt_of_pos`：∀ (a : ℤ) {b : ℤ}, 0 < b → a % b < b
 -/
-def natMod (m n : Int) : Nat := (m % n).toNat
+lemma natMod_lt {n : ℕ} (hn : n ≠ 0) : m.natMod n < n :=
+  (toNat_lt_of_ne_zero hn).2 <| emod_lt_of_pos _ <| by lia
 
-/--
-lemma `natMod_lt` / 引理 `natMod_lt`
+/-- For use in `Mathlib/Tactic/NormNum/Pow.lean` -/
+/-
+**Int.pow_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ (m : ℤ) (n : ℕ), m.pow n = m ^ n
+参数：m : ℤ；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma natMod_lt
-  given: {n : Nat} (hn : n != 0)
-  statement: m.natMod n < n
-  proof: (toNat_lt_of_ne_zero hn).2 emod_lt_of_pos _ by lia
-
-中文:
-引理 natMod_lt
-  条件: {n : 自然数} (hn : n != 0)
-  结论: m.natMod n < n
-  证明: (toNat_lt_of_ne_zero hn).2 emod_lt_of_pos _ by lia
-
-Depends on / 依赖: emod_lt_of_pos, toNat_lt_of_ne_zero
+--- 原说明 ---
+For use in `Mathlib/Tactic/NormNum/Pow.lean`
 -/
-lemma natMod_lt {n : Nat} (hn : n != 0) : m.natMod n < n :=
-(toNat_lt_of_ne_zero hn).2 emod_lt_of_pos _ by lia
+@[simp] lemma pow_eq (m : ℤ) (n : ℕ) : m.pow n = m ^ n := rfl
+/-
+**Int.gcd_ofNat_negSucc** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ (m n : ℕ), (↑m).gcd (Int.negSucc n) = m.gcd (n + 1)
+参数：m n : ℕ；↑m；Int.negSucc n；n + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-/--
-lemma `pow_eq` / 引理 `pow_eq`
-
-English:
-lemma pow_eq
-  given: (m : Int) (n : Nat)
-  statement: m.pow n = m ^ n
-  proof: rfl
-
-中文:
-引理 pow_eq
-  条件: (m : 整数) (n : 自然数)
-  结论: m.pow n = m ^ n
-  证明: rfl
+--- 原说明 ---
+For use in `Mathlib/Tactic/NormNum/Pow.lean`
 -/
-@[simp] lemma pow_eq (m : Int) (n : Nat) : m.pow n = m ^ n := rfl
+@[simp] lemma gcd_ofNat_negSucc (m n : ℕ) : gcd m (negSucc n) = m.gcd (n + 1) := by simp [gcd]
+/-
+**Int.gcd_negSucc_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ (m n : ℕ), (Int.negSucc m).gcd ↑n = (m + 1).gcd n
+参数：m n : ℕ；Int.negSucc m；m + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-/--
-lemma `gcd_ofNat_negSucc` / 引理 `gcd_ofNat_negSucc`
-
-English:
-lemma gcd_ofNat_negSucc
-  given: (m n : Nat)
-  statement: gcd m (negSucc n) = m.gcd (n + 1)
-  proof: by simp [gcd]
-
-中文:
-引理 gcd_of自然数_negSucc
-  条件: (m n : 自然数)
-  结论: 最大公约数 m (negSucc n) = m.最大公约数 (n + 1)
-  证明: by simp [gcd]
+--- 原说明 ---
+For use in `Mathlib/Tactic/NormNum/Pow.lean`
 -/
-@[simp] lemma gcd_ofNat_negSucc (m n : Nat) : gcd m (negSucc n) = m.gcd (n + 1) := by simp [gcd]
-/--
-lemma `gcd_negSucc_ofNat` / 引理 `gcd_negSucc_ofNat`
+@[simp] lemma gcd_negSucc_ofNat (m n : ℕ) : gcd (negSucc m) n = (m + 1).gcd n := by simp [gcd]
+/-
+**Int.gcd_negSucc_negSucc** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ (m n : ℕ), (Int.negSucc m).gcd (Int.negSucc n) = (m + 1).gcd (n + 1)
+参数：m n : ℕ；Int.negSucc m；Int.negSucc n；m + 1；n + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma gcd_negSucc_ofNat
-  given: (m n : Nat)
-  statement: gcd (negSucc m) n = (m + 1).gcd n
-  proof: by simp [gcd]
-
-中文:
-引理 gcd_negSucc_of自然数
-  条件: (m n : 自然数)
-  结论: 最大公约数 (negSucc m) n = (m + 1).最大公约数 n
-  证明: by simp [gcd]
+--- 原说明 ---
+For use in `Mathlib/Tactic/NormNum/Pow.lean`
 -/
-@[simp] lemma gcd_negSucc_ofNat (m n : Nat) : gcd (negSucc m) n = (m + 1).gcd n := by simp [gcd]
-/--
-lemma `gcd_negSucc_negSucc` / 引理 `gcd_negSucc_negSucc`
-
-English:
-lemma gcd_negSucc_negSucc
-  given: (m n : Nat)
-  proof: by simp [gcd]
-
-中文:
-引理 gcd_negSucc_negSucc
-  条件: (m n : 自然数)
-  证明: by simp [gcd]
--/
-@[simp] lemma gcd_negSucc_negSucc (m n : Nat) :
+@[simp] lemma gcd_negSucc_negSucc (m n : ℕ) :
     (negSucc m).gcd (negSucc n) = (m + 1).gcd (n + 1) := by simp [gcd]
-
-/--
-theorem `gcd_right_comm` / 定理 `gcd_right_comm`
-
-English:
-theorem gcd_right_comm
-  given: (a b c : Int)
-  statement: gcd (gcd a b) c = gcd (gcd a c) b
-  proof: by
-  rw [gcd_assoc]; rw [gcd_assoc]; rw [gcd_comm b c]
-
-中文:
-定理 gcd_right_comm
-  条件: (a b c : 整数)
-  结论: 最大公约数 (最大公约数 a b) c = 最大公约数 (最大公约数 a c) b
-  证明: by
-  rw [gcd_assoc]; rw [gcd_assoc]; rw [gcd_comm b c]
-
-Depends on / 依赖: gcd_assoc, gcd_comm
+/-
+**Int.gcd_right_comm** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：gcd_right_comm (a b c : Int) : gcd (gcd a b) c = gcd (gcd a c) b
+参数：a b c : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.gcd_assoc`：∀ (a b c : ℤ), (↑(a.gcd b)).gcd c = a.gcd ↑(b.gcd c)
+· 使用定理 `Int.gcd_comm`：∀ (a b : ℤ), a.gcd b = b.gcd a
 -/
-theorem gcd_right_comm (a b c : Int) : gcd (gcd a b) c = gcd (gcd a c) b := by
-  rw [gcd_assoc]; rw [gcd_assoc]; rw [gcd_comm b c]
+theorem gcd_right_comm (a b c : ℤ) : gcd (gcd a b) c = gcd (gcd a c) b := by
+  rw [gcd_assoc, gcd_assoc, gcd_comm b c]
 
 end Int
+

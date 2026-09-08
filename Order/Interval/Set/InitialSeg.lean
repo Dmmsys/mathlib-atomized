@@ -23,26 +23,17 @@ variable {α : Type*} [Preorder α] {i j : α}
 set_option backward.isDefEq.respectTransparency false in
 /-- `Iic j` is an initial segment. -/
 @[simps]
-/--
-Definition of `initialSegIic` / `initialSegIic` 的定义
+/-
+**Set.initialSegIic** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：initialSegIic (j : α) : Iic j <=i α where toFun j
+参数：j : α。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initialSegIic
-  signature: (j : α)
-  body: j
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_of_rel' x k h := by simpa using h.le.trans x.2
-
-中文:
-定义 initialSegIic
-  签名: (j : α)
-  定义体: j
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_of_rel' x k h := by simpa using h.le.trans x.2
+--- 原说明 ---
+`Iic j` is an initial segment.
 -/
-def initialSegIic (j : α) : Iic j <=i α where
+def initialSegIic (j : α) : Iic j ≤i α where
   toFun j := j
   inj' _ _ _ := by aesop
   map_rel_iff' := by aesop
@@ -50,30 +41,15 @@ def initialSegIic (j : α) : Iic j <=i α where
 
 /-- `Iio j` is a principal segment. -/
 @[simps]
-/--
-Definition of `principalSegIio` / `principalSegIio` 的定义
+/-
+**Set.principalSegIio** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：principalSegIio (j : α) : Iio j <i α where top
+参数：j : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition principalSegIio
-  signature: (j : α)
-  body: j
-  toFun j := j
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_iff_rel' := by aesop
-
-@[simp]
-
-中文:
-定义 principalSegIio
-  签名: (j : α)
-  定义体: j
-  toFun j := j
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_iff_rel' := by aesop
-
-@[simp]
+--- 原说明 ---
+`Iio j` is a principal segment.
 -/
 def principalSegIio (j : α) : Iio j <i α where
   top := j
@@ -83,26 +59,12 @@ def principalSegIio (j : α) : Iio j <i α where
   mem_range_iff_rel' := by aesop
 
 @[simp]
-/--
-lemma `principalSegIio_apply` / 引理 `principalSegIio_apply`
-
-English:
-lemma principalSegIio_apply
-  given: (k : Iio j)
-  statement: principalSegIio j k = k.1
-  proof: rfl
-
-@[deprecated (since := "2026-04-12")]
-alias principalSegIio_toRelEmbedding := principalSegIio_apply
-
-中文:
-引理 principalSegIio_apply
-  条件: (k : 左无界右开区间 j)
-  结论: principalSegIio j k = k.1
-  证明: rfl
-
-@[deprecated (since := "2026-04-12")]
-alias principalSegIio_toRelEmbedding := principalSegIio_apply
+/-
+**Set.principalSegIio_apply** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：principalSegIio_apply (k : Iio j) : principalSegIio j k = k.1
+参数：k : Iio j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma principalSegIio_apply (k : Iio j) : principalSegIio j k = k.1 :=
   rfl
@@ -113,26 +75,17 @@ alias principalSegIio_toRelEmbedding := principalSegIio_apply
 set_option backward.isDefEq.respectTransparency false in
 /-- If `i ≤ j`, then `Iic i` is an initial segment of `Iic j`. -/
 @[simps]
-/--
-Definition of `initialSegIicIicOfLE` / `initialSegIicIicOfLE` 的定义
+/-
+**Set.initialSegIicIicOfLE** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：initialSegIicIicOfLE (h : i <= j) : Iic i <=i Iic j where toFun k
+参数：h : i <= j。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initialSegIicIicOfLE
-  signature: (h : i <= j)
-  body: ⟨k, k.2.trans h⟩
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_of_rel' x k h := ⟨⟨k.1, (Subtype.coe_le_coe.2 h.le).trans x.2⟩, rfl⟩
-
-中文:
-定义 initialSegIicIicOfLE
-  签名: (h : i <= j)
-  定义体: ⟨k, k.2.trans h⟩
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_of_rel' x k h := ⟨⟨k.1, (Subtype.coe_le_coe.2 h.le).trans x.2⟩, rfl⟩
+--- 原说明 ---
+If `i ≤ j`, then `Iic i` is an initial segment of `Iic j`.
 -/
-def initialSegIicIicOfLE (h : i <= j) : Iic i <=i Iic j where
+def initialSegIicIicOfLE (h : i ≤ j) : Iic i ≤i Iic j where
   toFun k := ⟨k, k.2.trans h⟩
   inj' _ _ _ := by aesop
   map_rel_iff' := by aesop
@@ -141,32 +94,17 @@ def initialSegIicIicOfLE (h : i <= j) : Iic i <=i Iic j where
 set_option backward.isDefEq.respectTransparency false in
 /-- If `i ≤ j`, then `Iio i` is a principal segment of `Iic j`. -/
 @[simps top]
-/--
-Definition of `principalSegIioIicOfLE` / `principalSegIioIicOfLE` 的定义
+/-
+**Set.principalSegIioIicOfLE** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：principalSegIioIicOfLE (h : i <= j) : Iio i <i Iic j where top
+参数：h : i <= j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition principalSegIioIicOfLE
-  signature: (h : i <= j)
-  body: ⟨i, h⟩
-  toFun k := ⟨k, k.2.le.trans h⟩
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_iff_rel' := by aesop
-
-@[simp]
-
-中文:
-定义 principalSegIioIicOfLE
-  签名: (h : i <= j)
-  定义体: ⟨i, h⟩
-  toFun k := ⟨k, k.2.le.trans h⟩
-  inj' _ _ _ := by aesop
-  map_rel_iff' := by aesop
-  mem_range_iff_rel' := by aesop
-
-@[simp]
+--- 原说明 ---
+If `i ≤ j`, then `Iio i` is a principal segment of `Iic j`.
 -/
-def principalSegIioIicOfLE (h : i <= j) : Iio i <i Iic j where
+def principalSegIioIicOfLE (h : i ≤ j) : Iio i <i Iic j where
   top := ⟨i, h⟩
   toFun k := ⟨k, k.2.le.trans h⟩
   inj' _ _ _ := by aesop
@@ -174,26 +112,15 @@ def principalSegIioIicOfLE (h : i <= j) : Iio i <i Iic j where
   mem_range_iff_rel' := by aesop
 
 @[simp]
-/--
-lemma `principalSegIioIicOfLE_apply` / 引理 `principalSegIioIicOfLE_apply`
-
-English:
-lemma principalSegIioIicOfLE_apply
-  given: (h : i <= j) (k : Iio i)
-  proof: rfl
-
-@[deprecated (since := "2026-04-12")]
-alias principalSegIioIicOfLE_toRelEmbedding := principalSegIioIicOfLE_apply
-
-中文:
-引理 principalSegIioIicOfLE_apply
-  条件: (h : i <= j) (k : 左无界右开区间 i)
-  证明: rfl
-
-@[deprecated (since := "2026-04-12")]
-alias principalSegIioIicOfLE_toRelEmbedding := principalSegIioIicOfLE_apply
+/-
+**Set.principalSegIioIicOfLE_apply** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：principalSegIioIicOfLE_apply (h : i <= j) (k : Iio i) : principalSegIioIic
+OfLE h k = ⟨k, k.2.le.trans h⟩
+参数：h : i <= j；k : Iio i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma principalSegIioIicOfLE_apply (h : i <= j) (k : Iio i) :
+lemma principalSegIioIicOfLE_apply (h : i ≤ j) (k : Iio i) :
     principalSegIioIicOfLE h k = ⟨k, k.2.le.trans h⟩ := rfl
 
 @[deprecated (since := "2026-04-12")]
@@ -205,20 +132,17 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `f : α <i β` is a principal segment, this is the induced order
 isomorphism `α ≃o Iio f.top`. -/
 @[simps! apply_coe]
-/--
-Definition of `PrincipalSeg.orderIsoIio` / `PrincipalSeg.orderIsoIio` 的定义
+/-
+**PrincipalSeg.orderIsoIio** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PrincipalSeg.orderIsoIio {α β : Type*} [PartialOrder α] [PartialOrder β] (
+f : α <i β) : α ≃o Set.Iio f.top
+参数：f : α <i β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PrincipalSeg.orderIsoIio
-  signature: {α β : Type*} [PartialOrder α] [PartialOrder β]
-  body: .ofRelIsoLT f.subrelIso.symm
-
-中文:
-定义 主段.orderIsoIio
-  签名: {α β : 类型} [偏序 α] [偏序 β]
-  定义体: .ofRelIsoLT f.subrelIso.symm
-
-Depends on / 依赖: f.subrelIso.symm, ofRelIsoLT, subrelIso
+--- 原说明 ---
+If `f : α <i β` is a principal segment, this is the induced order
+isomorphism `α ≃o Iio f.top`.
 -/
 noncomputable def PrincipalSeg.orderIsoIio {α β : Type*} [PartialOrder α] [PartialOrder β]
     (f : α <i β) : α ≃o Set.Iio f.top :=

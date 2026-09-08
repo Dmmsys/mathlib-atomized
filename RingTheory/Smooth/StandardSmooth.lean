@@ -47,7 +47,7 @@ universe t t' w w' u v
 
 open TensorProduct Module MvPolynomial
 
-variable (n m : Nat)
+variable (n m : ℕ)
 
 namespace Algebra
 
@@ -56,108 +56,120 @@ variable (R : Type u) (S : Type v) (ι : Type w) (σ : Type t) [CommRing R] [Com
 attribute [local instance] Fintype.ofFinite
 
 /--
-Definition of `IsStandardSmooth` / `IsStandardSmooth` 的定义
+An `R`-algebra `S` is called standard smooth, if there
+exists a submersive presentation.
+-/
+/-
+**Algebra.IsStandardSmooth** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra`。
+形式化陈述：(R : Type u) → (S : Type v) → [inst : CommRing R] → [inst_1 : CommRing S] 
+→ [Algebra R S] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStandardSmooth
-  parameters: : Prop where
-  axioms and operations (1):
-    - out : exists (ι σ : Type) (_ : Finite σ), Finite ι ∧ Nonempty (SubmersivePresentation R S ι σ)
-
-中文:
-类 是StandardSmooth
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out : 存在 (ι σ : 类型) (_ : 有限 σ), 有限 ι ∧ 非空 (浸没呈现 R S ι σ)
+--- 原说明 ---
+An `R`-algebra `S` is called standard smooth, if there
+exists a submersive presentation.
 -/
 class IsStandardSmooth : Prop where
-  out : exists (ι σ : Type) (_ : Finite σ), Finite ι ∧ Nonempty (SubmersivePresentation R S ι σ)
+  out : ∃ (ι σ : Type) (_ : Finite σ), Finite ι ∧ Nonempty (SubmersivePresentation R S ι σ)
 
 variable [Finite σ]
 
 variable {R S ι σ} in
-/--
-lemma `SubmersivePresentation.isStandardSmooth` / 引理 `SubmersivePresentation.isStandardSmooth`
-
-English:
-lemma SubmersivePresentation.isStandardSmooth
-  given: [Finite ι] (P : SubmersivePresentation R S ι σ)
-  proof: by
-  exact ⟨_, _, _, inferInstance, ⟨P.reindex (Fintype.equivFin _).symm (Fintype.equivFin _).symm⟩⟩
-
-中文:
-引理 浸没呈现.isStandardSmooth
-  条件: [有限 ι] (P : 浸没呈现 R S ι σ)
-  证明: by
-  exact ⟨_, _, _, inferInstance, ⟨P.reindex (Fintype.equivFin _).symm (Fintype.equivFin _).symm⟩⟩
-
-Depends on / 依赖: Fintype, Fintype.equivFin, P.reindex, equivFin, reindex
+/-
+**Algebra.SubmersivePresentation.isStandardSmooth** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebra.SubmersivePresentation`。
+形式化陈述：∀ {R : Type u} {S : Type v} {ι : Type w} {σ : Type t} [inst : CommRing R] 
+[inst_1 : CommRing S] [inst_2 : Algebra R S]   [inst_3 : Finite σ] [Finite ι] (P
+ : Algebra.SubmersivePresentation R S ι σ), Algebra.IsStandardSmooth R S
+参数：P : Algebra.SubmersivePresentation R S ι σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma SubmersivePresentation.isStandardSmooth [Finite ι] (P : SubmersivePresentation R S ι σ) :
     IsStandardSmooth R S := by
   exact ⟨_, _, _, inferInstance, ⟨P.reindex (Fintype.equivFin _).symm (Fintype.equivFin _).symm⟩⟩
 
 /--
-Definition of `IsStandardSmooth.relativeDimension` / `IsStandardSmooth.relativeDimension` 的定义
+The relative dimension of a standard smooth `R`-algebra `S` is
+the dimension of an arbitrarily chosen submersive `R`-presentation of `S`.
 
-English:
-definition IsStandardSmooth.relativeDimension
-  signature: [IsStandardSmooth R S]
-  body: letI := ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose
-  ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose_spec.2.some.dimension
-
-中文:
-定义 是StandardSmooth.relativeDimension
-  签名: [是StandardSmooth R S]
-  定义体: letI := ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose
-  ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose_spec.2.some.dimension
-
-Depends on / 依赖: IsStandardSmooth, choose_spec, dimension, out.choose_spec.choose_spec.choose, out.choose_spec.choose_spec.choose_spec, some.dimension
+Note: If `S` is non-trivial, this number is independent of the choice of the presentation as it is
+equal to the `S`-rank of `Ω[S/R]`
+(see `IsStandardSmoothOfRelativeDimension.rank_kaehlerDifferential`).
 -/
-noncomputable def IsStandardSmooth.relativeDimension [IsStandardSmooth R S] : Nat :=
+/-
+**Algebra.IsStandardSmooth.relativeDimension** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.
+IsStandardSmooth`。
+形式化陈述：(R : Type u) →   (S : Type v) →     [inst : CommRing R] → [inst_1 : CommRi
+ng S] → [inst_2 : Algebra R S] → [Algebra.IsStandardSmooth R S] → ℕ
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.IsStandardSmooth.out`：∀ {R : Type u} {S : Type v} {inst : CommRi
+ng R} {inst_1 : CommRing S} {inst_2 : Algebra R S}   [self : Algebra.IsStandardS
+mooth R S],   ∃ ι …
+
+--- 原说明 ---
+The relative dimension of a standard smooth `R`-algebra `S` is
+the dimension of an arbitrarily chosen submersive `R`-presentation of `S`.
+
+Note: If `S` is non-trivial, this number is independent of the choice of the pre
+sentation as it is
+equal to the `S`-rank of `Ω[S/R]`
+(see `IsStandardSmoothOfRelativeDimension.rank_kaehlerDifferential`).
+-/
+noncomputable def IsStandardSmooth.relativeDimension [IsStandardSmooth R S] : ℕ :=
   letI := ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose
   ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose_spec.2.some.dimension
 
 /--
-Definition of `IsStandardSmoothOfRelativeDimension` / `IsStandardSmoothOfRelativeDimension` 的定义
+An `R`-algebra `S` is called standard smooth of relative dimension `n`, if there exists
+a submersive presentation of dimension `n`.
+-/
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algeb
+ra`。
+形式化陈述：ℕ → (R : Type u) → (S : Type v) → [inst : CommRing R] → [inst_1 : CommRing
+ S] → [Algebra R S] → Prop
+参数：R : Type u；S : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsStandardSmoothOfRelativeDimension
-  parameters: : Prop where
-  axioms and operations (1):
-    - out : exists (ι σ : Type) (_ : Finite σ) (_ : Finite ι) (P : SubmersivePresentation R S ι σ), P.dimension = n
-
-中文:
-类 是StandardSmoothOfRelativeDimension
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - out : 存在 (ι σ : 类型) (_ : 有限 σ) (_ : 有限 ι) (P : 浸没呈现 R S ι σ), P.dimension = n
+--- 原说明 ---
+An `R`-algebra `S` is called standard smooth of relative dimension `n`, if there
+ exists
+a submersive presentation of dimension `n`.
 -/
 class IsStandardSmoothOfRelativeDimension : Prop where
-  out : exists (ι σ : Type) (_ : Finite σ) (_ : Finite ι) (P : SubmersivePresentation R S ι σ),
+  out : ∃ (ι σ : Type) (_ : Finite σ) (_ : Finite ι) (P : SubmersivePresentation R S ι σ),
     P.dimension = n
 
 variable {R S ι σ n} in
-/--
-lemma `SubmersivePresentation.isStandardSmoothOfRelativeDimension` / 引理 `SubmersivePresentation.isStandardSmoothOfRelativeDimension`
-
-English:
-lemma SubmersivePresentation.isStandardSmoothOfRelativeDimension
-  statement: [Finite ι]
-  proof: by
-  refine ⟨⟨_, _, _, inferInstance,
-    P.reindex (Fintype.equivFin _).symm (Fintype.equivFin σ).symm, ?_⟩⟩
-  simp [hP]
-
-中文:
-引理 浸没呈现.isStandardSmoothOfRelativeDimension
-  结论: [有限 ι]
-  证明: by
-  refine ⟨⟨_, _, _, inferInstance,
-    P.reindex (Fintype.equivFin _).symm (Fintype.equivFin σ).symm, ?_⟩⟩
-  simp [hP]
-
-Depends on / 依赖: Fintype, Fintype.equivFin, P.reindex, equivFin, reindex
+/-
+**Algebra.SubmersivePresentation.isStandardSmoothOfRelativeDimension** 是 Mathlib
+ 中的一个定理，位于命名空间 `Algebra.SubmersivePresentation`。
+形式化陈述：∀ {n : ℕ} {R : Type u} {S : Type v} {ι : Type w} {σ : Type t} [inst : Comm
+Ring R] [inst_1 : CommRing S]   [inst_2 : Algebra R S] [inst_3 : Finite σ] [Fini
+te ι] (P : Algebra.SubmersivePresentation R S ι σ),   P.dimension = n → Algebra.
+IsStandardSmoothOfRelativeDimension n R S
+参数：P : Algebra.SubmersivePresentation R S ι σ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.SubmersivePresentation.reindex_toPreSubmersivePresentation`：∀ {R
+ : Type u} {S : Type v} {ι : Type w} {σ : Type t} [inst : CommRing R] [inst_1 : 
+CommRing S] [inst_2 : Algebra R S]   [inst_3 : Finite σ]…
+· 使用定理 `Algebra.PreSubmersivePresentation.reindex_toPresentation`：∀ {R : Type u}
+ {S : Type v} {ι : Type w} {σ : Type t} [inst : CommRing R] [inst_1 : CommRing S
+] [inst_2 : Algebra R S]   (P : Algebra.PreSub…
+· 使用引理 `Algebra.Presentation.dimension_reindex`：dimension_reindex (P : Presentat
+ion R S ι σ) {ι' σ' : Type*} (e : ι' ≃ ι) (f : σ' ≃ σ) : (P.reindex e f).dimensi
+on = P.dimension
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma SubmersivePresentation.isStandardSmoothOfRelativeDimension [Finite ι]
     (P : SubmersivePresentation R S ι σ) (hP : P.dimension = n) :
@@ -167,39 +179,38 @@ lemma SubmersivePresentation.isStandardSmoothOfRelativeDimension [Finite ι]
   simp [hP]
 
 variable {R} {S}
-
-/--
-lemma `IsStandardSmoothOfRelativeDimension.isStandardSmooth` / 引理 `IsStandardSmoothOfRelativeDimension.isStandardSmooth`
-
-English:
-lemma IsStandardSmoothOfRelativeDimension.isStandardSmooth
-  proof: ⟨_, _, _, H.out.choose_spec.choose_spec.choose_spec.choose,
-    H.out.choose_spec.choose_spec.choose_spec.choose_spec.nonempty⟩
-
-中文:
-引理 是StandardSmoothOfRelativeDimension.isStandardSmooth
-  证明: ⟨_, _, _, H.out.choose_spec.choose_spec.choose_spec.choose,
-    H.out.choose_spec.choose_spec.choose_spec.choose_spec.nonempty⟩
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension.isStandardSmooth** 是 Mathlib 中的一个定
+理，位于命名空间 `Algebra.IsStandardSmoothOfRelativeDimension`。
+形式化陈述：∀ (n : ℕ) {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing
+ S] [inst_2 : Algebra R S]   [H : Algebra.IsStandardSmoothOfRelativeDimension n 
+R S], Algebra.IsStandardSmooth R S
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.IsStandardSmoothOfRelativeDimension.out`：∀ {n : ℕ} {R : Type u} 
+{S : Type v} {inst : CommRing R} {inst_1 : CommRing S} {inst_2 : Algebra R S}   
+[self : Algebra.IsStandardSmoothOfRel…
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `Exists.nonempty`：∀ {α : Sort u_1} {p : α → Prop}, (∃ x, p x) → Nonempty 
+α
 -/
 lemma IsStandardSmoothOfRelativeDimension.isStandardSmooth
     [H : IsStandardSmoothOfRelativeDimension n R S] : IsStandardSmooth R S :=
   ⟨_, _, _, H.out.choose_spec.choose_spec.choose_spec.choose,
     H.out.choose_spec.choose_spec.choose_spec.choose_spec.nonempty⟩
-
-/--
-lemma `IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective` / 引理 `IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective`
-
-English:
-lemma IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective
-  proof: ⟨_, _, _, inferInstance,
-    SubmersivePresentation.ofBijectiveAlgebraMap h, Presentation.ofBijectiveAlgebraMap_dimension h⟩
-
-中文:
-引理 是StandardSmoothOfRelativeDimension.of_algebraMap_bijective
-  证明: ⟨_, _, _, inferInstance,
-    SubmersivePresentation.ofBijectiveAlgebraMap h, Presentation.ofBijectiveAlgebraMap_dimension h⟩
-
-Depends on / 依赖: Presentation, Presentation.ofBijectiveAlgebraMap_dimension, SubmersivePresentation, SubmersivePresentation.ofBijectiveAlgebraMap, ofBijectiveAlgebraMap, ofBijectiveAlgebraMap_dimension
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective** 是 Mathli
+b 中的一个定理，位于命名空间 `Algebra.IsStandardSmoothOfRelativeDimension`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S],   Function.Bijective ⇑(algebraMap R S) → Algebra.IsStandardS
+moothOfRelativeDimension 0 R S
+参数：algebraMap R S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `Algebra.Presentation.ofBijectiveAlgebraMap_dimension`：ofBijectiveAlgebra
+Map_dimension (h : Function.Bijective (algebraMap R S)) : (ofBijectiveAlgebraMap
+ h).dimension = 0
 -/
 lemma IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective
     (h : Function.Bijective (algebraMap R S)) :
@@ -208,70 +219,68 @@ lemma IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective
     SubmersivePresentation.ofBijectiveAlgebraMap h, Presentation.ofBijectiveAlgebraMap_dimension h⟩
 
 variable (R) in
-/--
-Instance `IsStandardSmoothOfRelativeDimension.id` / 实例 `IsStandardSmoothOfRelativeDimension.id`
-
-English:
-instance IsStandardSmoothOfRelativeDimension.id
-  signature: :
-  body: IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective Function.bijective_id
-
-中文:
-实例 是StandardSmoothOfRelativeDimension.id
-  签名: :
-  定义体: IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective Function.bijective_id
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension.id** 是 Mathlib 中的一个定理，位于命名空间 `Alge
+bra.IsStandardSmoothOfRelativeDimension`。
+形式化陈述：∀ (R : Type u) [inst : CommRing R], Algebra.IsStandardSmoothOfRelativeDime
+nsion 0 R R
+参数：R : Type u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective`：∀ {
+R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Alg
+ebra R S],   Function.Bijective ⇑(algebraMap R S) → Algeb…
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 -/
 instance IsStandardSmoothOfRelativeDimension.id :
     IsStandardSmoothOfRelativeDimension 0 R R :=
   IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective Function.bijective_id
-
+/-
+**Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsStandardSmooth.finitePresentation [IsStandardSmooth R S] :
     FinitePresentation R S := by
   obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
   exact P.finitePresentation_of_isFinite
-
-/--
-lemma `IsStandardSmooth.of_algEquiv` / 引理 `IsStandardSmooth.of_algEquiv`
-
-English:
-lemma IsStandardSmooth.of_algEquiv
-  statement: {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
-  proof: by
-  obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
-  exact (P.ofAlgEquiv e).isStandardSmooth
-
-中文:
-引理 是StandardSmooth.of_algEquiv
-  结论: {T : 类型} [交换环 T] [代数 R T] (e : S ≃ₐ[R] T)
-  证明: by
-  obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
-  exact (P.ofAlgEquiv e).isStandardSmooth
-
-Depends on / 依赖: IsStandardSmooth, P.ofAlgEquiv, isStandardSmooth, ofAlgEquiv
+/-
+**Algebra.IsStandardSmooth.of_algEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.IsStan
+dardSmooth`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S] {T : Type u_1}   [inst_3 : CommRing T] [inst_4 : Algebra R T]
+ (e : S ≃ₐ[R] T) [Algebra.IsStandardSmooth R S],   Algebra.IsStandardSmooth R T
+参数：e : S ≃ₐ[R] T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.SubmersivePresentation.isStandardSmooth`：∀ {R : Type u} {S : Typ
+e v} {ι : Type w} {σ : Type t} [inst : CommRing R] [inst_1 : CommRing S] [inst_2
+ : Algebra R S]   [inst_3 : Finite σ]…
 -/
 lemma IsStandardSmooth.of_algEquiv {T : Type*} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
     [IsStandardSmooth R S] : IsStandardSmooth R T := by
   obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
   exact (P.ofAlgEquiv e).isStandardSmooth
-
-/--
-lemma `IsStandardSmoothOfRelativeDimension.of_algEquiv` / 引理 `IsStandardSmoothOfRelativeDimension.of_algEquiv`
-
-English:
-lemma IsStandardSmoothOfRelativeDimension.of_algEquiv
-  statement: {T : Type*} [CommRing T] [Algebra R T]
-  proof: by
-  obtain ⟨_, _, _, _, ⟨P, hP⟩⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
-  exact (P.ofAlgEquiv e).isStandardSmoothOfRelativeDimension (by simpa)
-
-中文:
-引理 是StandardSmoothOfRelativeDimension.of_algEquiv
-  结论: {T : 类型} [交换环 T] [代数 R T]
-  证明: by
-  obtain ⟨_, _, _, _, ⟨P, hP⟩⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
-  exact (P.ofAlgEquiv e).isStandardSmoothOfRelativeDimension (by simpa)
-
-Depends on / 依赖: IsStandardSmoothOfRelativeDimension, P.ofAlgEquiv, isStandardSmoothOfRelativeDimension, ofAlgEquiv
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension.of_algEquiv** 是 Mathlib 中的一个定理，位于命
+名空间 `Algebra.IsStandardSmoothOfRelativeDimension`。
+形式化陈述：∀ (n : ℕ) {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing
+ S] [inst_2 : Algebra R S] {T : Type u_1}   [inst_3 : CommRing T] [inst_4 : Alge
+bra R T] (e : S ≃ₐ[R] T) [Algebra.IsStandardSmoothOfRelativeDimension n R S],   
+Algebra.IsStandardSmoothOfRelativeDimension n R T
+参数：n : ℕ；e : S ≃ₐ[R] T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.SubmersivePresentation.isStandardSmoothOfRelativeDimension`：∀ {n
+ : ℕ} {R : Type u} {S : Type v} {ι : Type w} {σ : Type t} [inst : CommRing R] [i
+nst_1 : CommRing S]   [inst_2 : Algebra R S] [inst_3 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Algebra.SubmersivePresentation.ofAlgEquiv_toPreSubmersivePresentation`：∀
+ {R : Type u} {S : Type v} {ι : Type w} {σ : Type t} [inst : CommRing R] [inst_1
+ : CommRing S] [inst_2 : Algebra R S]   [inst_3 : Finite σ]…
+· 使用定理 `Algebra.PreSubmersivePresentation.ofAlgEquiv_toPresentation`：∀ {R : Type
+ u} {S : Type v} {ι : Type w} {σ : Type t} [inst : CommRing R] [inst_1 : CommRin
+g S] [inst_2 : Algebra R S]   (P : Algebra.PreSub…
 -/
 lemma IsStandardSmoothOfRelativeDimension.of_algEquiv {T : Type*} [CommRing T] [Algebra R T]
     (e : S ≃ₐ[R] T) [IsStandardSmoothOfRelativeDimension n R S] :
@@ -283,26 +292,17 @@ section Composition
 
 variable (R S T) [CommRing T] [Algebra R T] [Algebra S T] [IsScalarTower R S T]
 
-/--
-lemma `IsStandardSmooth.trans` / 引理 `IsStandardSmooth.trans`
-
-English:
-lemma IsStandardSmooth.trans
-  given: [IsStandardSmooth R S] [IsStandardSmooth S T]
-  proof: by
-    obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
-    obtain ⟨_, _, _, _, ⟨Q⟩⟩ := ‹IsStandardSmooth S T›
-    exact ⟨_, _, _, inferInstance, ⟨Q.comp P⟩⟩
-
-中文:
-引理 是StandardSmooth.trans
-  条件: [是StandardSmooth R S] [是StandardSmooth S T]
-  证明: by
-    obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
-    obtain ⟨_, _, _, _, ⟨Q⟩⟩ := ‹IsStandardSmooth S T›
-    exact ⟨_, _, _, inferInstance, ⟨Q.comp P⟩⟩
-
-Depends on / 依赖: IsStandardSmooth, Q.comp
+/-
+**Algebra.IsStandardSmooth.trans** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.IsStandardSm
+ooth`。
+形式化陈述：∀ (R : Type u) (S : Type v) [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S] (T : Type u_1)   [inst_3 : CommRing T] [inst_4 : Algebra R T]
+ [inst_5 : Algebra S T] [IsScalarTower R S T]   [Algebra.IsStandardSmooth R S] [
+Algebra.IsStandardSmooth S T], Algebra.IsStandardSmooth R T
+参数：R : Type u；S : Type v；T : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.instSum`：∀ {α : Type u_1} {β : Type u_2} [Finite α] [Finite β], F
+inite (α ⊕ β)
 -/
 lemma IsStandardSmooth.trans [IsStandardSmooth R S] [IsStandardSmooth S T] :
     IsStandardSmooth R T where
@@ -310,29 +310,21 @@ lemma IsStandardSmooth.trans [IsStandardSmooth R S] [IsStandardSmooth S T] :
     obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
     obtain ⟨_, _, _, _, ⟨Q⟩⟩ := ‹IsStandardSmooth S T›
     exact ⟨_, _, _, inferInstance, ⟨Q.comp P⟩⟩
-
-/--
-lemma `IsStandardSmoothOfRelativeDimension.trans` / 引理 `IsStandardSmoothOfRelativeDimension.trans`
-
-English:
-lemma IsStandardSmoothOfRelativeDimension.trans
-  statement: [IsStandardSmoothOfRelativeDimension n R S]
-  proof: by
-    obtain ⟨_, _, _, _, P, hP⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
-    obtain ⟨_, _, _, _, Q, hQ⟩ := ‹IsStandardSmoothOfRelativeDimension m S T›
-    refine ⟨_, _, _, inferInstance, Q.comp P, hP ▸ hQ ▸ ?_⟩
-    apply PreSubmersivePresentation.dimension_comp_eq_dimension_add_dimension
-
-中文:
-引理 是StandardSmoothOfRelativeDimension.trans
-  结论: [是StandardSmoothOfRelativeDimension n R S]
-  证明: by
-    obtain ⟨_, _, _, _, P, hP⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
-    obtain ⟨_, _, _, _, Q, hQ⟩ := ‹IsStandardSmoothOfRelativeDimension m S T›
-    refine ⟨_, _, _, inferInstance, Q.comp P, hP ▸ hQ ▸ ?_⟩
-    apply PreSubmersivePresentation.dimension_comp_eq_dimension_add_dimension
-
-Depends on / 依赖: IsStandardSmoothOfRelativeDimension, PreSubmersivePresentation, PreSubmersivePresentation.dimension_comp_eq_dimension_add_dimension, Q.comp, dimension_comp_eq_dimension_add_dimension
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension.trans** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebra.IsStandardSmoothOfRelativeDimension`。
+形式化陈述：∀ (n m : ℕ) (R : Type u) (S : Type v) [inst : CommRing R] [inst_1 : CommRi
+ng S] [inst_2 : Algebra R S] (T : Type u_1)   [inst_3 : CommRing T] [inst_4 : Al
+gebra R T] [inst_5 : Algebra S T] [IsScalarTower R S T]   [Algebra.IsStandardSmo
+othOfRelativeDimension n R S] [Algebra.IsStandardSmoothOfRelativeDimension m S T
+],   Algebra.IsStandardSmoothOfRelativeDimension (m + n) R T
+参数：n m : ℕ；R : Type u；S : Type v；T : Type u_1；m + n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.instSum`：∀ {α : Type u_1} {β : Type u_2} [Finite α] [Finite β], F
+inite (α ⊕ β)
+· 使用引理 `Algebra.PreSubmersivePresentation.dimension_comp_eq_dimension_add_dimens
+ion`：dimension_comp_eq_dimension_add_dimension [Finite ι] [Finite ι'] [Finite σ]
+ [Finite σ'] : (Q.comp P).dimension = Q.dimension + P.dimension
 -/
 lemma IsStandardSmoothOfRelativeDimension.trans [IsStandardSmoothOfRelativeDimension n R S]
     [IsStandardSmoothOfRelativeDimension m S T] :
@@ -345,41 +337,30 @@ lemma IsStandardSmoothOfRelativeDimension.trans [IsStandardSmoothOfRelativeDimen
 
 end Composition
 
-/--
-lemma `IsStandardSmooth.localization_away` / 引理 `IsStandardSmooth.localization_away`
-
-English:
-lemma IsStandardSmooth.localization_away
-  given: (r : R) [IsLocalization.Away r S]
-  proof: ⟨_, _, _, inferInstance, ⟨SubmersivePresentation.localizationAway S r⟩⟩
-
-中文:
-引理 是StandardSmooth.localization_away
-  条件: (r : R) [是Localization.Away r S]
-  证明: ⟨_, _, _, inferInstance, ⟨SubmersivePresentation.localizationAway S r⟩⟩
-
-Depends on / 依赖: SubmersivePresentation, SubmersivePresentation.localizationAway, localizationAway
+/-
+**Algebra.IsStandardSmooth.localization_away** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.
+IsStandardSmooth`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S] (r : R)   [IsLocalization.Away r S], Algebra.IsStandardSmooth
+ R S
+参数：r : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 lemma IsStandardSmooth.localization_away (r : R) [IsLocalization.Away r S] :
     IsStandardSmooth R S where
   out := ⟨_, _, _, inferInstance, ⟨SubmersivePresentation.localizationAway S r⟩⟩
-
-/--
-lemma `IsStandardSmoothOfRelativeDimension.localization_away` / 引理 `IsStandardSmoothOfRelativeDimension.localization_away`
-
-English:
-lemma IsStandardSmoothOfRelativeDimension.localization_away
-  given: (r : R) [IsLocalization.Away r S]
-  proof: ⟨_, _, _, inferInstance, SubmersivePresentation.localizationAway S r,
-    Presentation.localizationAway_dimension_zero r⟩
-
-中文:
-引理 是StandardSmoothOfRelativeDimension.localization_away
-  条件: (r : R) [是Localization.Away r S]
-  证明: ⟨_, _, _, inferInstance, SubmersivePresentation.localizationAway S r,
-    Presentation.localizationAway_dimension_zero r⟩
-
-Depends on / 依赖: SubmersivePresentation, SubmersivePresentation.localizationAway, localizationAway
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension.localization_away** 是 Mathlib 中的一个
+定理，位于命名空间 `Algebra.IsStandardSmoothOfRelativeDimension`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S] (r : R)   [IsLocalization.Away r S], Algebra.IsStandardSmooth
+OfRelativeDimension 0 R S
+参数：r : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `Algebra.Presentation.localizationAway_dimension_zero`：localizationAway_d
+imension_zero : (localizationAway S r).dimension = 0
 -/
 lemma IsStandardSmoothOfRelativeDimension.localization_away (r : R) [IsLocalization.Away r S] :
     IsStandardSmoothOfRelativeDimension 0 R S where
@@ -390,51 +371,38 @@ section BaseChange
 
 variable (T) [CommRing T] [Algebra R T]
 
-/--
-Instance `IsStandardSmooth.baseChange` / 实例 `IsStandardSmooth.baseChange`
-
-English:
-instance IsStandardSmooth.baseChange
-  signature: [IsStandardSmooth R S]
-  body: by
-    obtain ⟨ι, σ, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
-    exact ⟨ι, σ, _, inferInstance, ⟨P.baseChange T⟩⟩
-
-中文:
-实例 是StandardSmooth.baseChange
-  签名: [是StandardSmooth R S]
-  定义体: by
-    obtain ⟨ι, σ, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
-    exact ⟨ι, σ, _, inferInstance, ⟨P.baseChange T⟩⟩
-
-Depends on / 依赖: IsStandardSmooth, P.baseChange, baseChange
+/-
+**Algebra.IsStandardSmooth.baseChange** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.IsStand
+ardSmooth`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S] (T : Type u_1)   [inst_3 : CommRing T] [inst_4 : Algebra R T]
+ [Algebra.IsStandardSmooth R S],   Algebra.IsStandardSmooth T (TensorProduct R T
+ S)
+参数：T : Type u_1；TensorProduct R T S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 instance IsStandardSmooth.baseChange [IsStandardSmooth R S] :
-    IsStandardSmooth T (T otimes[R] S) where
+    IsStandardSmooth T (T ⊗[R] S) where
   out := by
     obtain ⟨ι, σ, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
     exact ⟨ι, σ, _, inferInstance, ⟨P.baseChange T⟩⟩
-
-/--
-Instance `IsStandardSmoothOfRelativeDimension.baseChange` / 实例 `IsStandardSmoothOfRelativeDimension.baseChange`
-
-English:
-instance IsStandardSmoothOfRelativeDimension.baseChange
-  body: by
-    obtain ⟨_, _, _, _, P, hP⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
-    exact ⟨_, _, _, inferInstance, P.baseChange T, hP⟩
-
-中文:
-实例 是StandardSmoothOfRelativeDimension.baseChange
-  定义体: by
-    obtain ⟨_, _, _, _, P, hP⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
-    exact ⟨_, _, _, inferInstance, P.baseChange T, hP⟩
-
-Depends on / 依赖: IsStandardSmoothOfRelativeDimension, P.baseChange, baseChange
+/-
+**Algebra.IsStandardSmoothOfRelativeDimension.baseChange** 是 Mathlib 中的一个定理，位于命名
+空间 `Algebra.IsStandardSmoothOfRelativeDimension`。
+形式化陈述：∀ (n : ℕ) {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing
+ S] [inst_2 : Algebra R S] (T : Type u_1)   [inst_3 : CommRing T] [inst_4 : Alge
+bra R T] [Algebra.IsStandardSmoothOfRelativeDimension n R S],   Algebra.IsStanda
+rdSmoothOfRelativeDimension n T (TensorProduct R T S)
+参数：n : ℕ；T : Type u_1；TensorProduct R T S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 instance IsStandardSmoothOfRelativeDimension.baseChange
     [IsStandardSmoothOfRelativeDimension n R S] :
-    IsStandardSmoothOfRelativeDimension n T (T otimes[R] S) where
+    IsStandardSmoothOfRelativeDimension n T (T ⊗[R] S) where
   out := by
     obtain ⟨_, _, _, _, P, hP⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
     exact ⟨_, _, _, inferInstance, P.baseChange T, hP⟩
@@ -442,11 +410,20 @@ instance IsStandardSmoothOfRelativeDimension.baseChange
 end BaseChange
 
 @[nontriviality]
+/-
+**Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [Subsingleton S] : IsStandardSmooth R S :=
   ⟨Unit, Unit, inferInstance, inferInstance, ⟨.ofSubsingleton R S⟩⟩
 
 @[nontriviality]
+/-
+**Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [Subsingleton S] : IsStandardSmoothOfRelativeDimension 0 R S :=
   ⟨Unit, Unit, inferInstance, inferInstance, .ofSubsingleton R S, by simp [Presentation.dimension]⟩
 
 end Algebra
+

@@ -33,278 +33,200 @@ namespace IsLocalization
 -- This was previously a `hasCoe` instance, but if `S = R` then this will loop.
 -- It could be a `hasCoeT` instance, but we keep it explicit here to avoid slowing down
 -- the rest of the library.
-/--
-Definition of `coeSubmodule` / `coeSubmodule` 的定义
+/-- Map from ideals of `R` to submodules of `S` induced by `f`. -/
+/-
+**IsLocalization.coeSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule (I : Ideal R) : Submodule R S
+参数：I : Ideal R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeSubmodule
-  signature: (I : Ideal R)
-  body: Submodule.map (Algebra.linearMap R S) I
-
-中文:
-定义 coeSubmodule
-  签名: (I : 理想 R)
-  定义体: Submodule.map (Algebra.linearMap R S) I
-
-Depends on / 依赖: Algebra, Algebra.linearMap, Submodule, Submodule.map, linearMap
+--- 原说明 ---
+Map from ideals of `R` to submodules of `S` induced by `f`.
 -/
 def coeSubmodule (I : Ideal R) : Submodule R S :=
   Submodule.map (Algebra.linearMap R S) I
-
-/--
-theorem `mem_coeSubmodule` / 定理 `mem_coeSubmodule`
-
-English:
-theorem mem_coeSubmodule
-  given: (I : Ideal R) {x : S}
-  proof: Iff.rfl
-
-中文:
-定理 mem_coeSubmodule
-  条件: (I : 理想 R) {x : S}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**IsLocalization.mem_coeSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：mem_coeSubmodule (I : Ideal R) {x : S} : x in coeSubmodule S I ↔ exists y 
+: R, y in I ∧ algebraMap R S y = x
+参数：I : Ideal R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_coeSubmodule (I : Ideal R) {x : S} :
-    x in coeSubmodule S I ↔ exists y : R, y in I ∧ algebraMap R S y = x :=
+    x ∈ coeSubmodule S I ↔ ∃ y : R, y ∈ I ∧ algebraMap R S y = x :=
   Iff.rfl
-
-/--
-theorem `coeSubmodule_mono` / 定理 `coeSubmodule_mono`
-
-English:
-theorem coeSubmodule_mono
-  given: {I J : Ideal R} (h : I <= J)
-  statement: coeSubmodule S I <= coeSubmodule S J
-  proof: Submodule.map_mono h
-
-@[simp]
-
-中文:
-定理 coeSubmodule_mono
-  条件: {I J : 理想 R} (h : I <= J)
-  结论: coeSubmodule S I <= coeSubmodule S J
-  证明: Submodule.map_mono h
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_mono, map_mono
+/-
+**IsLocalization.coeSubmodule_mono** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule_mono {I J : Ideal R} (h : I <= J) : coeSubmodule S I <= coeSu
+bmodule S J
+参数：h : I <= J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_mono`：map_mono {f : M ->ₛₗ[σ₁₂] M₂} {p p' : Submodule R M}
+ : p <= p' -> map f p <= map f p'
 -/
-theorem coeSubmodule_mono {I J : Ideal R} (h : I <= J) : coeSubmodule S I <= coeSubmodule S J :=
+theorem coeSubmodule_mono {I J : Ideal R} (h : I ≤ J) : coeSubmodule S I ≤ coeSubmodule S J :=
   Submodule.map_mono h
 
 @[simp]
-/--
-theorem `coeSubmodule_bot` / 定理 `coeSubmodule_bot`
-
-English:
-theorem coeSubmodule_bot
-  statement: coeSubmodule S (⊥ : Ideal R) = ⊥
-  proof: by
-  rw [coeSubmodule]; rw [Submodule.map_bot]
-
-@[simp]
-
-中文:
-定理 coeSubmodule_bot
-  结论: coeSubmodule S (⊥ : 理想 R) = ⊥
-  证明: by
-  rw [coeSubmodule]; rw [Submodule.map_bot]
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_bot, coeSubmodule, map_bot
+/-
+**IsLocalization.coeSubmodule_bot** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule_bot : coeSubmodule S (⊥ : Ideal R) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.coeSubmodule.eq_1`：∀ {R : Type u_1} [inst : CommSemiring 
+R] (S : Type u_2) [inst_1 : CommSemiring S] [inst_2 : Algebra R S] (I : Ideal R)
+,   IsLocalization.coe…
+· 使用定理 `Submodule.map_bot`：map_bot (f : M ->ₛₗ[σ₁₂] M₂) : map f ⊥ = ⊥
 -/
 theorem coeSubmodule_bot : coeSubmodule S (⊥ : Ideal R) = ⊥ := by
-  rw [coeSubmodule]; rw [Submodule.map_bot]
+  rw [coeSubmodule, Submodule.map_bot]
 
 @[simp]
-/--
-theorem `coeSubmodule_top` / 定理 `coeSubmodule_top`
-
-English:
-theorem coeSubmodule_top
-  statement: coeSubmodule S (⊤ : Ideal R) = 1
-  proof: by
-  rw [coeSubmodule]; rw [Submodule.map_top]; rw [Submodule.one_eq_range]
-
-@[simp]
-
-中文:
-定理 coeSubmodule_top
-  结论: coeSubmodule S (⊤ : 理想 R) = 1
-  证明: by
-  rw [coeSubmodule]; rw [Submodule.map_top]; rw [Submodule.one_eq_range]
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_top, Submodule.one_eq_range, coeSubmodule, map_top, one_eq_range
+/-
+**IsLocalization.coeSubmodule_top** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule_top : coeSubmodule S (⊤ : Ideal R) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.coeSubmodule.eq_1`：∀ {R : Type u_1} [inst : CommSemiring 
+R] (S : Type u_2) [inst_1 : CommSemiring S] [inst_2 : Algebra R S] (I : Ideal R)
+,   IsLocalization.coe…
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Submodule.one_eq_range`：one_eq_range : (1 : Submodule R A) = LinearMap.r
+ange (Algebra.linearMap R A)
 -/
 theorem coeSubmodule_top : coeSubmodule S (⊤ : Ideal R) = 1 := by
-  rw [coeSubmodule]; rw [Submodule.map_top]; rw [Submodule.one_eq_range]
+  rw [coeSubmodule, Submodule.map_top, Submodule.one_eq_range]
 
 @[simp]
-/--
-theorem `coeSubmodule_sup` / 定理 `coeSubmodule_sup`
-
-English:
-theorem coeSubmodule_sup
-  given: (I J : Ideal R)
-  proof: Submodule.map_sup _ _ _
-
-@[simp]
-
-中文:
-定理 coeSubmodule_sup
-  条件: (I J : 理想 R)
-  证明: Submodule.map_sup _ _ _
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_sup, map_sup
+/-
+**IsLocalization.coeSubmodule_sup** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule_sup (I J : Ideal R) : coeSubmodule S (I ⊔ J) = coeSubmodule S
+ I ⊔ coeSubmodule S J
+参数：I J : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_sup`：map_sup (f : M ->ₛₗ[σ₁₂] M₂) : map f (p ⊔ p') = map f
+ p ⊔ map f p'
 -/
 theorem coeSubmodule_sup (I J : Ideal R) :
     coeSubmodule S (I ⊔ J) = coeSubmodule S I ⊔ coeSubmodule S J :=
   Submodule.map_sup _ _ _
 
 @[simp]
-/--
-theorem `coeSubmodule_mul` / 定理 `coeSubmodule_mul`
-
-English:
-theorem coeSubmodule_mul
-  given: (I J : Ideal R)
-  proof: Submodule.map_mul _ _ (Algebra.ofId R S)
-
-中文:
-定理 coeSubmodule_mul
-  条件: (I J : 理想 R)
-  证明: Submodule.map_mul _ _ (Algebra.ofId R S)
-
-Depends on / 依赖: Algebra, Algebra.ofId, Submodule, Submodule.map_mul, map_mul
+/-
+**IsLocalization.coeSubmodule_mul** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule_mul (I J : Ideal R) : coeSubmodule S (I * J) = coeSubmodule S
+ I * coeSubmodule S J
+参数：I J : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_mul`：∀ {R : Type u} [inst : CommSemiring R] {A : Type v} [
+inst_1 : Semiring A] [inst_2 : Algebra R A] (M N : Submodule R A)   {A' : Type u
+_1} [in…
 -/
 theorem coeSubmodule_mul (I J : Ideal R) :
     coeSubmodule S (I * J) = coeSubmodule S I * coeSubmodule S J :=
   Submodule.map_mul _ _ (Algebra.ofId R S)
-
-/--
-theorem `coeSubmodule_fg` / 定理 `coeSubmodule_fg`
-
-English:
-theorem coeSubmodule_fg
-  given: (hS : Function.Injective (algebraMap R S)) (I : Ideal R)
-  proof: ⟨Submodule.fg_of_fg_map_injective _ hS, Submodule.FG.map _⟩
-
-@[simp]
-
-中文:
-定理 coeSubmodule_fg
-  条件: (hS : 函数.单射 (algebraMap R S)) (I : 理想 R)
-  证明: ⟨Submodule.fg_of_fg_map_injective _ hS, Submodule.FG.map _⟩
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.FG.map, Submodule.fg_of_fg_map_injective, fg_of_fg_map_injective
+/-
+**IsLocalization.coeSubmodule_fg** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule_fg (hS : Function.Injective (algebraMap R S)) (I : Ideal R) :
+ Submodule.FG (coeSubmodule S I) ↔ Submodule.FG I
+参数：hS : Function.Injective (algebraMap R S)；I : Ideal R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.fg_of_fg_map_injective`：fg_of_fg_map_injective (hf : Function.
+Injective f) {N : Submodule R M} (hfn : (N.map f).FG) : N.FG
+· 使用定理 `Submodule.FG.map`：∀ {R : Type u_1} {M : Type u_2} [inst : Semiring R] [i
+nst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {S : Type u_3} {P : Type
+ u_4} …
 -/
 theorem coeSubmodule_fg (hS : Function.Injective (algebraMap R S)) (I : Ideal R) :
     Submodule.FG (coeSubmodule S I) ↔ Submodule.FG I :=
   ⟨Submodule.fg_of_fg_map_injective _ hS, Submodule.FG.map _⟩
 
 @[simp]
-/--
-theorem `coeSubmodule_span` / 定理 `coeSubmodule_span`
-
-English:
-theorem coeSubmodule_span
-  given: (s : Set R)
-  proof: by
-  rw [IsLocalization.coeSubmodule]; rw [Ideal.span]; rw [Submodule.map_span]
-  rfl
-
-中文:
-定理 coeSubmodule_span
-  条件: (s : 集合 R)
-  证明: by
-  rw [IsLocalization.coeSubmodule]; rw [Ideal.span]; rw [Submodule.map_span]
-  rfl
-
-Depends on / 依赖: Ideal.span, IsLocalization, IsLocalization.coeSubmodule, Submodule, Submodule.map_span, coeSubmodule, map_span
+/-
+**IsLocalization.coeSubmodule_span** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：coeSubmodule_span (s : Set R) : coeSubmodule S (Ideal.span s) = Submodule.
+span R (algebraMap R S '' s)
+参数：s : Set R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.coeSubmodule.eq_1`：∀ {R : Type u_1} [inst : CommSemiring 
+R] (S : Type u_2) [inst_1 : CommSemiring S] [inst_2 : Algebra R S] (I : Ideal R)
+,   IsLocalization.coe…
+· 使用定理 `Ideal.span.eq_1`：∀ {α : Type u} [inst : Semiring α] (s : Set α), Ideal.s
+pan s = Submodule.span α s
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
 -/
 theorem coeSubmodule_span (s : Set R) :
     coeSubmodule S (Ideal.span s) = Submodule.span R (algebraMap R S '' s) := by
-  rw [IsLocalization.coeSubmodule]; rw [Ideal.span]; rw [Submodule.map_span]
+  rw [IsLocalization.coeSubmodule, Ideal.span, Submodule.map_span]
   rfl
-
-/--
-theorem `coeSubmodule_span_singleton` / 定理 `coeSubmodule_span_singleton`
-
-English:
-theorem coeSubmodule_span_singleton
-  given: (x : R)
-  proof: by
-  rw [coeSubmodule_span]; rw [Set.image_singleton]
-
-中文:
-定理 coeSubmodule_span_singleton
-  条件: (x : R)
-  证明: by
-  rw [coeSubmodule_span]; rw [Set.image_singleton]
-
-Depends on / 依赖: Set.image_singleton, coeSubmodule_span, image_singleton
+/-
+**IsLocalization.coeSubmodule_span_singleton** 是 Mathlib 中的一个定理，位于命名空间 `IsLocali
+zation`。
+形式化陈述：coeSubmodule_span_singleton (x : R) : coeSubmodule S (Ideal.span {x}) = Su
+bmodule.span R {(algebraMap R S) x}
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.coeSubmodule_span`：coeSubmodule_span (s : Set R) : coeSub
+module S (Ideal.span s) = Submodule.span R (algebraMap R S '' s)
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
 -/
 theorem coeSubmodule_span_singleton (x : R) :
     coeSubmodule S (Ideal.span {x}) = Submodule.span R {(algebraMap R S) x} := by
-  rw [coeSubmodule_span]; rw [Set.image_singleton]
+  rw [coeSubmodule_span, Set.image_singleton]
 
 variable [IsLocalization M S]
 
 include M in
-/--
-theorem `isNoetherianRing` / 定理 `isNoetherianRing`
-
-English:
-theorem isNoetherianRing
-  given: (h : IsNoetherianRing R)
-  statement: IsNoetherianRing S
-  proof: by
-  rw [isNoetherianRing_iff]; rw [isNoetherian_iff] at h ⊢
-  exact OrderEmbedding.wellFounded (IsLocalization.orderEmbedding M S).dual h
-
-中文:
-定理 isNoetherianRing
-  条件: (h : 是Noether环 R)
-  结论: 是Noether环 S
-  证明: by
-  rw [isNoetherianRing_iff]; rw [isNoetherian_iff] at h ⊢
-  exact OrderEmbedding.wellFounded (IsLocalization.orderEmbedding M S).dual h
-
-Depends on / 依赖: IsLinearTopology, IsLocalization, IsLocalization.orderEmbedding, OrderEmbedding, OrderEmbedding.wellFounded, isNoetherianRing_iff, isNoetherian_iff, orderEmbedding, wellFounded
+/-
+**IsLocalization.isNoetherianRing** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：isNoetherianRing (h : IsNoetherianRing R) : IsNoetherianRing S
+参数：h : IsNoetherianRing R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isNoetherianRing_iff`：isNoetherianRing_iff {R} [Semiring R] : IsNoetheri
+anRing R ↔ IsNoetherian R R
+· 使用定理 `isNoetherian_iff`：isNoetherian_iff : IsNoetherian R M ↔ WellFounded ((· 
+> ·) : Submodule R M -> Submodule R M -> Prop)
+· 使用定理 `OrderEmbedding.wellFounded`：∀ {α : Type u_2} {β : Type u_3} [inst : Preo
+rder α] [inst_1 : Preorder β] (f : α ↪o β),   (WellFounded fun x1 x2 => x1 < x2)
+ → WellFounded f…
 -/
 theorem isNoetherianRing (h : IsNoetherianRing R) : IsNoetherianRing S := by
-  rw [isNoetherianRing_iff]; rw [isNoetherian_iff] at h ⊢
+  rw [isNoetherianRing_iff, isNoetherian_iff] at h ⊢
   exact OrderEmbedding.wellFounded (IsLocalization.orderEmbedding M S).dual h
-
+/-
+**IsLocalization.** 是 Mathlib 中的一个实例，位于命名空间 `IsLocalization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R} [CommRing R] [IsNoetherianRing R] (S : Submonoid R) :
     IsNoetherianRing (Localization S) :=
   IsLocalization.isNoetherianRing S _ ‹_›
-
-/--
-lemma `_root_.Algebra.EssFiniteType.isNoetherianRing` / 引理 `_root_.Algebra.EssFiniteType.isNoetherianRing`
-
-English:
-lemma _root_.Algebra.EssFiniteType.isNoetherianRing
-  proof: by
-  exact IsLocalization.isNoetherianRing (Algebra.EssFiniteType.submonoid R S) _
-    (Algebra.FiniteType.isNoetherianRing R _)
-
-中文:
-引理 _root_.代数.EssFiniteType.isNoetherianRing
-  证明: by
-  exact IsLocalization.isNoetherianRing (Algebra.EssFiniteType.submonoid R S) _
-    (Algebra.FiniteType.isNoetherianRing R _)
-
-Depends on / 依赖: Algebra, Algebra.EssFiniteType.submonoid, Algebra.FiniteType.isNoetherianRing, EssFiniteType, FiniteType, IsLocalization, IsLocalization.isNoetherianRing, isNoetherianRing, submonoid
+/-
+**IsLocalization._root_.Algebra.EssFiniteType.isNoetherianRing** 是 Mathlib 中的一个引
+理，位于命名空间 `IsLocalization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Algebra.EssFiniteType.isNoetherianRing
     (R S : Type*) [CommRing R] [CommRing S] [Algebra R S]
@@ -317,177 +239,170 @@ variable {R : Type*} [CommRing R] {M : Submonoid R}
   {S : Type*} [CommRing S] [Algebra R S] [IsLocalization M S]
 
 @[gcongr, mono]
-/--
-theorem `coeSubmodule_le_coeSubmodule` / 定理 `coeSubmodule_le_coeSubmodule`
-
-English:
-theorem coeSubmodule_le_coeSubmodule
-  given: (h : M <= nonZeroDivisors R) {I J : Ideal R}
-  proof: -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify the value of `f` here:
-  Submodule.map_le_map_iff_of_injective (f := Algebra.linearMap R S) (IsLocalization.injective _ h)
-    _ _
-
-@[gcongr, mono]
-
-中文:
-定理 coeSubmodule_le_coeSubmodule
-  条件: (h : M <= nonZeroDivisors R) {I J : 理想 R}
-  证明: -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify the value of `f` here:
-  Submodule.map_le_map_iff_of_injective (f := Algebra.linearMap R S) (IsLocalization.injective _ h)
-    _ _
-
-@[gcongr, mono]
+/-
+**IsLocalization.coeSubmodule_le_coeSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `IsLocal
+ization`。
+形式化陈述：coeSubmodule_le_coeSubmodule (h : M <= nonZeroDivisors R) {I J : Ideal R} 
+: coeSubmodule S I <= coeSubmodule S J ↔ I <= J
+参数：h : M <= nonZeroDivisors R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_le_map_iff_of_injective`：map_le_map_iff_of_injective (p q 
+: Submodule R M) : p.map f <= q.map f ↔ p <= q
+· 使用定理 `IsLocalization.injective`：∀ {R : Type u_1} [inst : CommRing R] {M : Subm
+onoid R} (S : Type u_2) [inst_1 : CommRing S] [inst_2 : Algebra R S]   [IsLocali
+zation M S], M…
 -/
-theorem coeSubmodule_le_coeSubmodule (h : M <= nonZeroDivisors R) {I J : Ideal R} :
-    coeSubmodule S I <= coeSubmodule S J ↔ I <= J :=
+theorem coeSubmodule_le_coeSubmodule (h : M ≤ nonZeroDivisors R) {I J : Ideal R} :
+    coeSubmodule S I ≤ coeSubmodule S J ↔ I ≤ J :=
   -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify the value of `f` here:
   Submodule.map_le_map_iff_of_injective (f := Algebra.linearMap R S) (IsLocalization.injective _ h)
     _ _
 
 @[gcongr, mono]
-/--
-theorem `coeSubmodule_strictMono` / 定理 `coeSubmodule_strictMono`
-
-English:
-theorem coeSubmodule_strictMono
-  given: (h : M <= nonZeroDivisors R)
-  proof: strictMono_of_le_iff_le fun _ _ => (coeSubmodule_le_coeSubmodule h).symm
-
-中文:
-定理 coeSubmodule_strictMono
-  条件: (h : M <= nonZeroDivisors R)
-  证明: strictMono_of_le_iff_le fun _ _ => (coeSubmodule_le_coeSubmodule h).symm
-
-Depends on / 依赖: coeSubmodule_le_coeSubmodule, strictMono_of_le_iff_le
+/-
+**IsLocalization.coeSubmodule_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalizati
+on`。
+形式化陈述：coeSubmodule_strictMono (h : M <= nonZeroDivisors R) : StrictMono (coeSubm
+odule S : Ideal R -> Submodule R S)
+参数：h : M <= nonZeroDivisors R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `strictMono_of_le_iff_le`：strictMono_of_le_iff_le [Preorder α] [Preorder 
+β] {f : α -> β} (h : forall x y, x <= y ↔ f x <= f y) : StrictMono f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `IsLocalization.coeSubmodule_le_coeSubmodule`：coeSubmodule_le_coeSubmodul
+e (h : M <= nonZeroDivisors R) {I J : Ideal R} : coeSubmodule S I <= coeSubmodul
+e S J ↔ I <= J
 -/
-theorem coeSubmodule_strictMono (h : M <= nonZeroDivisors R) :
-    StrictMono (coeSubmodule S : Ideal R -> Submodule R S) :=
+theorem coeSubmodule_strictMono (h : M ≤ nonZeroDivisors R) :
+    StrictMono (coeSubmodule S : Ideal R → Submodule R S) :=
   strictMono_of_le_iff_le fun _ _ => (coeSubmodule_le_coeSubmodule h).symm
 
 variable (S)
-
-/--
-theorem `coeSubmodule_injective` / 定理 `coeSubmodule_injective`
-
-English:
-theorem coeSubmodule_injective
-  given: (h : M <= nonZeroDivisors R)
-  proof: .of_eq_imp_le fun hl => (coeSubmodule_le_coeSubmodule h).mp hl.le
-
-中文:
-定理 coeSubmodule_injective
-  条件: (h : M <= nonZeroDivisors R)
-  证明: .of_eq_imp_le fun hl => (coeSubmodule_le_coeSubmodule h).mp hl.le
-
-Depends on / 依赖: coeSubmodule_le_coeSubmodule, hl.le, of_eq_imp_le
+/-
+**IsLocalization.coeSubmodule_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalizatio
+n`。
+形式化陈述：coeSubmodule_injective (h : M <= nonZeroDivisors R) : Function.Injective (
+coeSubmodule S : Ideal R -> Submodule R S)
+参数：h : M <= nonZeroDivisors R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_eq_imp_le`：Function.Injective.of_eq_imp_le [Partia
+lOrder α] {f : α -> β} (h : forall {x y}, f x = f y -> x <= y) : f.Injective
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsLocalization.coeSubmodule_le_coeSubmodule`：coeSubmodule_le_coeSubmodul
+e (h : M <= nonZeroDivisors R) {I J : Ideal R} : coeSubmodule S I <= coeSubmodul
+e S J ↔ I <= J
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-theorem coeSubmodule_injective (h : M <= nonZeroDivisors R) :
-    Function.Injective (coeSubmodule S : Ideal R -> Submodule R S) :=
+theorem coeSubmodule_injective (h : M ≤ nonZeroDivisors R) :
+    Function.Injective (coeSubmodule S : Ideal R → Submodule R S) :=
   .of_eq_imp_le fun hl => (coeSubmodule_le_coeSubmodule h).mp hl.le
-
-/--
-theorem `coeSubmodule_isPrincipal` / 定理 `coeSubmodule_isPrincipal`
-
-English:
-theorem coeSubmodule_isPrincipal
-  given: {I : Ideal R} (h : M <= nonZeroDivisors R)
-  proof: by
-  constructor <;> rintro ⟨⟨x, hx⟩⟩
-  · have x_mem : x in coeSubmodule S I := hx.symm ▸ Submodule.mem_span_singleton_self x
-    obtain ⟨x, _, rfl⟩ := (mem_coeSubmodule _ _).mp x_mem
-    refine ⟨⟨x, coeSubmodule_injective S h ?_⟩⟩
-    rw [Ideal.submodule_span_eq]; rw [hx]; rw [coeSubmodule_span_singleton]
-  · refine ⟨⟨algebraMap R S x, ?_⟩⟩
-    rw [hx]; rw [Ideal.submodule_span_eq]; rw [coeSubmodule_span_singleton]
-
-中文:
-定理 coeSubmodule_isPrincipal
-  条件: {I : 理想 R} (h : M <= nonZeroDivisors R)
-  证明: by
-  constructor <;> rintro ⟨⟨x, hx⟩⟩
-  · have x_mem : x in coeSubmodule S I := hx.symm ▸ Submodule.mem_span_singleton_self x
-    obtain ⟨x, _, rfl⟩ := (mem_coeSubmodule _ _).mp x_mem
-    refine ⟨⟨x, coeSubmodule_injective S h ?_⟩⟩
-    rw [Ideal.submodule_span_eq]; rw [hx]; rw [coeSubmodule_span_singleton]
-  · refine ⟨⟨algebraMap R S x, ?_⟩⟩
-    rw [hx]; rw [Ideal.submodule_span_eq]; rw [coeSubmodule_span_singleton]
-
-Depends on / 依赖: Ideal.submodule_span_eq, Submodule, Submodule.mem_span_singleton_self, algebraMap, coeSubmodule, coeSubmodule_injective, coeSubmodule_span_singleton, hx.symm, mem_coeSubmodule, mem_span_singleton_self, submodule_span_eq, x_mem
+/-
+**IsLocalization.coeSubmodule_isPrincipal** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalizat
+ion`。
+形式化陈述：coeSubmodule_isPrincipal {I : Ideal R} (h : M <= nonZeroDivisors R) : (coe
+Submodule S I).IsPrincipal ↔ I.IsPrincipal
+参数：h : M <= nonZeroDivisors R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.mem_span_singleton_self`：mem_span_singleton_self (x : M) : x i
+n R ∙ x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsLocalization.mem_coeSubmodule`：mem_coeSubmodule (I : Ideal R) {x : S} 
+: x in coeSubmodule S I ↔ exists y : R, y in I ∧ algebraMap R S y = x
+· 使用定理 `IsLocalization.coeSubmodule_injective`：coeSubmodule_injective (h : M <= 
+nonZeroDivisors R) : Function.Injective (coeSubmodule S : Ideal R -> Submodule R
+ S)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.submodule_span_eq`：submodule_span_eq {s : Set α} : Submodule.span 
+α s = Ideal.span s
+· 使用定理 `IsLocalization.coeSubmodule_span_singleton`：coeSubmodule_span_singleton 
+(x : R) : coeSubmodule S (Ideal.span {x}) = Submodule.span R {(algebraMap R S) x
+}
 -/
-theorem coeSubmodule_isPrincipal {I : Ideal R} (h : M <= nonZeroDivisors R) :
+theorem coeSubmodule_isPrincipal {I : Ideal R} (h : M ≤ nonZeroDivisors R) :
     (coeSubmodule S I).IsPrincipal ↔ I.IsPrincipal := by
   constructor <;> rintro ⟨⟨x, hx⟩⟩
-  · have x_mem : x in coeSubmodule S I := hx.symm ▸ Submodule.mem_span_singleton_self x
+  · have x_mem : x ∈ coeSubmodule S I := hx.symm ▸ Submodule.mem_span_singleton_self x
     obtain ⟨x, _, rfl⟩ := (mem_coeSubmodule _ _).mp x_mem
     refine ⟨⟨x, coeSubmodule_injective S h ?_⟩⟩
-    rw [Ideal.submodule_span_eq]; rw [hx]; rw [coeSubmodule_span_singleton]
+    rw [Ideal.submodule_span_eq, hx, coeSubmodule_span_singleton]
   · refine ⟨⟨algebraMap R S x, ?_⟩⟩
-    rw [hx]; rw [Ideal.submodule_span_eq]; rw [coeSubmodule_span_singleton]
+    rw [hx, Ideal.submodule_span_eq, coeSubmodule_span_singleton]
 
 end NonZeroDivisors
 
 variable {S}
 
-/--
-theorem `mem_span_iff` / 定理 `mem_span_iff`
-
-English:
-theorem mem_span_iff
-  statement: {N : Type*} [AddCommMonoid N] [Module R N] [Module S N] [IsScalarTower R S N]
-  proof: by
-  constructor
-  · intro h
-    refine Submodule.span_induction ?_ ?_ ?_ ?_ h
-    · rintro x hx
-      exact ⟨x, Submodule.subset_span hx, 1, by rw [mk'_one, map_one, one_smul]⟩
-    · exact ⟨0, Submodule.zero_mem _, 1, by rw [mk'_one, map_one, one_smul]⟩
-    · rintro _ _ _ _ ⟨y, hy, z, rfl⟩ ⟨y', hy', z', rfl⟩
-      refine
-        ⟨(z' : R) • y + (z : R) • y',
-          Submodule.add_mem _ (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hy'), z * z', ?_⟩
-      rw [smul_add]; rw [← IsScalarTower.algebraMap_smul S (z : R)]; rw [←
-        IsScalarTower.algebraMap_smul S (z' : R)]; rw [smul_smul]; rw [smul_smul]
-      congr 1
-      · rw [← mul_one (1 : R), mk'_mul, mul_assoc, mk'_spec, map_one, mul_one, mul_one]
-      · rw [← mul_one (1 : R), mk'_mul, mul_right_comm, mk'_spec, map_one, mul_one, one_mul]
-    · rintro a _ _ ⟨y, hy, z, rfl⟩
-      obtain ⟨y', z', rfl⟩ := exists_mk'_eq M a
-      refine ⟨y' • y, Submodule.smul_mem _ _ hy, z' * z, ?_⟩
-      rw [← IsScalarTower.algebraMap_smul S y']; rw [smul_smul]; rw [← mk'_mul]; rw [smul_smul]; rw [mul_comm (mk' S _ _)]; rw [mul_mk'_eq_mk'_of_mul]
-  · rintro ⟨y, hy, z, rfl⟩
-    exact Submodule.smul_mem _ _ (Submodule.span_subset_span R S _ hy)
-
-中文:
-定理 mem_span_iff
-  结论: {N : 类型} [加法交换幺半群 N] [模 R N] [模 S N] [标量塔 R S N]
-  证明: by
-  constructor
-  · intro h
-    refine Submodule.span_induction ?_ ?_ ?_ ?_ h
-    · rintro x hx
-      exact ⟨x, Submodule.subset_span hx, 1, by rw [mk'_one, map_one, one_smul]⟩
-    · exact ⟨0, Submodule.zero_mem _, 1, by rw [mk'_one, map_one, one_smul]⟩
-    · rintro _ _ _ _ ⟨y, hy, z, rfl⟩ ⟨y', hy', z', rfl⟩
-      refine
-        ⟨(z' : R) • y + (z : R) • y',
-          Submodule.add_mem _ (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hy'), z * z', ?_⟩
-      rw [smul_add]; rw [← IsScalarTower.algebraMap_smul S (z : R)]; rw [←
-        IsScalarTower.algebraMap_smul S (z' : R)]; rw [smul_smul]; rw [smul_smul]
-      congr 1
-      · rw [← mul_one (1 : R), mk'_mul, mul_assoc, mk'_spec, map_one, mul_one, mul_one]
-      · rw [← mul_one (1 : R), mk'_mul, mul_right_comm, mk'_spec, map_one, mul_one, one_mul]
-    · rintro a _ _ ⟨y, hy, z, rfl⟩
-      obtain ⟨y', z', rfl⟩ := exists_mk'_eq M a
-      refine ⟨y' • y, Submodule.smul_mem _ _ hy, z' * z, ?_⟩
-      rw [← IsScalarTower.algebraMap_smul S y']; rw [smul_smul]; rw [← mk'_mul]; rw [smul_smul]; rw [mul_comm (mk' S _ _)]; rw [mul_mk'_eq_mk'_of_mul]
-  · rintro ⟨y, hy, z, rfl⟩
-    exact Submodule.smul_mem _ _ (Submodule.span_subset_span R S _ hy)
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algeb, IsScalarTower.algebraMap_smul, Submodule, Submodule.add_mem, Submodule.smul_mem, Submodule.span_induction, Submodule.subset_span, Submodule.zero_mem, _one, add_mem, algebraMap_smul, map_one, one_smul, smul_add, smul_mem, span_induction, subset_span, zero_mem
+/-
+**IsLocalization.mem_span_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：mem_span_iff {N : Type*} [AddCommMonoid N] [Module R N] [Module S N] [IsSc
+alarTower R S N] {x : N} {a : Set N} : x in Submodule.span S a ↔ exists y in Sub
+module.span R a, exists z : M, x = mk' S 1 z • y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `Submodule.span_induction`：span_induction {p : (x : M) -> x in span R s -
+> Prop} (mem : forall (x) (h : x in s), p x (subset_span h)) (zero : p 0 (Submod
+ule.zero_mem _…
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLocalization.mk'_one`：∀ {R : Type u_1} [inst : CommSemiring R] {M : Su
+bmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [in
+st_3 : IsLoc…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Submodule.zero_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [ins
+t_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M), 0 ∈
+ p
+· 使用定理 `Submodule.add_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [inst
+_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M) {x y 
+: M}, x…
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_smul`：algebraMap_smul [SMul R M] [IsScalarTower
+ R A M] (r : R) (x : M) : algebraMap R A r • x = r • x
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `IsLocalization.mk'_mul`：∀ {R : Type u_1} [inst : CommSemiring R] {M : Su
+bmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [in
+st_3 : IsLoc…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `IsLocalization.mk'_spec`：∀ {R : Type u_1} [inst : CommSemiring R] {M : S
+ubmonoid R} (S : Type u_2) [inst_1 : CommSemiring S]   [inst_2 : Algebra R S] [i
+nst_3 : IsLoc…
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `IsLocalization.exists_mk'_eq`：∀ {R : Type u_1} [inst : CommSemiring R] (
+M : Submonoid R) {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R 
+S] [inst_3 : IsLoc…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `IsLocalization.mul_mk'_eq_mk'_of_mul`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Al
+gebra R S] [inst_3 : IsLoc…
+· 使用定理 `Submodule.span_subset_span`：span_subset_span : ↑(span R s) subseteq (spa
+n S s : Set M)
 -/
 theorem mem_span_iff {N : Type*} [AddCommMonoid N] [Module R N] [Module S N] [IsScalarTower R S N]
     {x : N} {a : Set N} :
-    x in Submodule.span S a ↔ exists y in Submodule.span R a, exists z : M, x = mk' S 1 z • y := by
+    x ∈ Submodule.span S a ↔ ∃ y ∈ Submodule.span R a, ∃ z : M, x = mk' S 1 z • y := by
   constructor
   · intro h
     refine Submodule.span_induction ?_ ?_ ?_ ?_ h
@@ -498,62 +413,61 @@ theorem mem_span_iff {N : Type*} [AddCommMonoid N] [Module R N] [Module S N] [Is
       refine
         ⟨(z' : R) • y + (z : R) • y',
           Submodule.add_mem _ (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hy'), z * z', ?_⟩
-      rw [smul_add]; rw [← IsScalarTower.algebraMap_smul S (z : R)]; rw [←
-        IsScalarTower.algebraMap_smul S (z' : R)]; rw [smul_smul]; rw [smul_smul]
+      rw [smul_add, ← IsScalarTower.algebraMap_smul S (z : R), ←
+        IsScalarTower.algebraMap_smul S (z' : R), smul_smul, smul_smul]
       congr 1
       · rw [← mul_one (1 : R), mk'_mul, mul_assoc, mk'_spec, map_one, mul_one, mul_one]
       · rw [← mul_one (1 : R), mk'_mul, mul_right_comm, mk'_spec, map_one, mul_one, one_mul]
     · rintro a _ _ ⟨y, hy, z, rfl⟩
       obtain ⟨y', z', rfl⟩ := exists_mk'_eq M a
       refine ⟨y' • y, Submodule.smul_mem _ _ hy, z' * z, ?_⟩
-      rw [← IsScalarTower.algebraMap_smul S y']; rw [smul_smul]; rw [← mk'_mul]; rw [smul_smul]; rw [mul_comm (mk' S _ _)]; rw [mul_mk'_eq_mk'_of_mul]
+      rw [← IsScalarTower.algebraMap_smul S y', smul_smul, ← mk'_mul, smul_smul,
+        mul_comm (mk' S _ _), mul_mk'_eq_mk'_of_mul]
   · rintro ⟨y, hy, z, rfl⟩
     exact Submodule.smul_mem _ _ (Submodule.span_subset_span R S _ hy)
-
-/--
-theorem `mem_span_map` / 定理 `mem_span_map`
-
-English:
-theorem mem_span_map
-  given: {x : S} {a : Set R}
-  proof: by
-  refine (mem_span_iff M).trans ?_
-  constructor
-  · rw [← coeSubmodule_span]
-    rintro ⟨_, ⟨y, hy, rfl⟩, z, hz⟩
-    refine ⟨y, hy, z, ?_⟩
-    rw [hz]; rw [Algebra.linearMap_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
-  · rintro ⟨y, hy, z, hz⟩
-    refine ⟨algebraMap R S y, Submodule.map_mem_span_algebraMap_image _ _ hy, z, ?_⟩
-    rw [hz]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
-
-中文:
-定理 mem_span_map
-  条件: {x : S} {a : 集合 R}
-  证明: by
-  refine (mem_span_iff M).trans ?_
-  constructor
-  · rw [← coeSubmodule_span]
-    rintro ⟨_, ⟨y, hy, rfl⟩, z, hz⟩
-    refine ⟨y, hy, z, ?_⟩
-    rw [hz]; rw [Algebra.linearMap_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
-  · rintro ⟨y, hy, z, hz⟩
-    refine ⟨algebraMap R S y, Submodule.map_mem_span_algebraMap_image _ _ hy, z, ?_⟩
-    rw [hz]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
-
-Depends on / 依赖: Algebra, Algebra.linearMap_apply, Submodule, Submodule.map_mem_span_algebraMap_image, _eq_mk, _of_mul, algebraMap, coeSubmodule_span, linearMap_apply, map_mem_span_algebraMap_image, mem_span_iff, mul_comm, mul_mk, mul_one, smul_eq_mul
+/-
+**IsLocalization.mem_span_map** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：mem_span_map {x : S} {a : Set R} : x in Ideal.span (algebraMap R S '' a) ↔
+ exists y in Ideal.span a, exists z : M, x = mk' S y z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.mem_span_iff`：mem_span_iff {N : Type*} [AddCommMonoid N] 
+[Module R N] [Module S N] [IsScalarTower R S N] {x : N} {a : Set N} : x in Submo
+dule.span S a ↔ e…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalization.coeSubmodule_span`：coeSubmodule_span (s : Set R) : coeSub
+module S (Ideal.span s) = Submodule.span R (algebraMap R S '' s)
+· 使用定理 `Algebra.linearMap_apply`：linearMap_apply (r : R) : Algebra.linearMap R A
+ r = algebraMap R A r
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `IsLocalization.mul_mk'_eq_mk'_of_mul`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {M : Submonoid R} {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Al
+gebra R S] [inst_3 : IsLoc…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Submodule.map_mem_span_algebraMap_image`：map_mem_span_algebraMap_image {
+S T : Type*} [CommSemiring S] [Semiring T] [Algebra R S] [Algebra R T] [Algebra 
+S T] [IsScalarTower R S T] (x…
 -/
 theorem mem_span_map {x : S} {a : Set R} :
-    x in Ideal.span (algebraMap R S '' a) ↔ exists y in Ideal.span a, exists z : M, x = mk' S y z := by
+    x ∈ Ideal.span (algebraMap R S '' a) ↔ ∃ y ∈ Ideal.span a, ∃ z : M, x = mk' S y z := by
   refine (mem_span_iff M).trans ?_
   constructor
   · rw [← coeSubmodule_span]
     rintro ⟨_, ⟨y, hy, rfl⟩, z, hz⟩
     refine ⟨y, hy, z, ?_⟩
-    rw [hz]; rw [Algebra.linearMap_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
+    rw [hz, Algebra.linearMap_apply, smul_eq_mul, mul_comm, mul_mk'_eq_mk'_of_mul, mul_one]
   · rintro ⟨y, hy, z, hz⟩
     refine ⟨algebraMap R S y, Submodule.map_mem_span_algebraMap_image _ _ hy, z, ?_⟩
-    rw [hz]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
+    rw [hz, smul_eq_mul, mul_comm, mul_mk'_eq_mk'_of_mul, mul_one]
 
 end IsLocalization
 
@@ -568,89 +482,69 @@ section CommRing
 variable [CommRing R] [CommRing K] [Algebra R K] [IsFractionRing R K]
 
 @[simp, mono, gcongr]
-/--
-theorem `coeSubmodule_le_coeSubmodule` / 定理 `coeSubmodule_le_coeSubmodule`
-
-English:
-theorem coeSubmodule_le_coeSubmodule
-  given: {I J : Ideal R}
-  proof: IsLocalization.coeSubmodule_le_coeSubmodule le_rfl
-
-@[gcongr, mono]
-
-中文:
-定理 coeSubmodule_le_coeSubmodule
-  条件: {I J : 理想 R}
-  证明: IsLocalization.coeSubmodule_le_coeSubmodule le_rfl
-
-@[gcongr, mono]
-
-Depends on / 依赖: IsLocalization, IsLocalization.coeSubmodule_le_coeSubmodule, coeSubmodule_le_coeSubmodule, le_rfl
+/-
+**IsFractionRing.coeSubmodule_le_coeSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `IsFract
+ionRing`。
+形式化陈述：coeSubmodule_le_coeSubmodule {I J : Ideal R} : coeSubmodule K I <= coeSubm
+odule K J ↔ I <= J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.coeSubmodule_le_coeSubmodule`：coeSubmodule_le_coeSubmodul
+e (h : M <= nonZeroDivisors R) {I J : Ideal R} : coeSubmodule S I <= coeSubmodul
+e S J ↔ I <= J
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem coeSubmodule_le_coeSubmodule {I J : Ideal R} :
-    coeSubmodule K I <= coeSubmodule K J ↔ I <= J :=
+    coeSubmodule K I ≤ coeSubmodule K J ↔ I ≤ J :=
   IsLocalization.coeSubmodule_le_coeSubmodule le_rfl
 
 @[gcongr, mono]
-/--
-theorem `coeSubmodule_strictMono` / 定理 `coeSubmodule_strictMono`
-
-English:
-theorem coeSubmodule_strictMono
-  statement: StrictMono (coeSubmodule K : Ideal R -> Submodule R K)
-  proof: strictMono_of_le_iff_le fun _ _ => coeSubmodule_le_coeSubmodule.symm
-
-中文:
-定理 coeSubmodule_strictMono
-  结论: 严格递增 (coeSubmodule K : 理想 R -> 子模 R K)
-  证明: strictMono_of_le_iff_le fun _ _ => coeSubmodule_le_coeSubmodule.symm
-
-Depends on / 依赖: coeSubmodule_le_coeSubmodule, coeSubmodule_le_coeSubmodule.symm, strictMono_of_le_iff_le
+/-
+**IsFractionRing.coeSubmodule_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRi
+ng`。
+形式化陈述：coeSubmodule_strictMono : StrictMono (coeSubmodule K : Ideal R -> Submodul
+e R K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `strictMono_of_le_iff_le`：strictMono_of_le_iff_le [Preorder α] [Preorder 
+β] {f : α -> β} (h : forall x y, x <= y ↔ f x <= f y) : StrictMono f
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `IsFractionRing.coeSubmodule_le_coeSubmodule`：coeSubmodule_le_coeSubmodul
+e {I J : Ideal R} : coeSubmodule K I <= coeSubmodule K J ↔ I <= J
 -/
-theorem coeSubmodule_strictMono : StrictMono (coeSubmodule K : Ideal R -> Submodule R K) :=
+theorem coeSubmodule_strictMono : StrictMono (coeSubmodule K : Ideal R → Submodule R K) :=
   strictMono_of_le_iff_le fun _ _ => coeSubmodule_le_coeSubmodule.symm
 
 variable (R K)
-
-/--
-theorem `coeSubmodule_injective` / 定理 `coeSubmodule_injective`
-
-English:
-theorem coeSubmodule_injective
-  statement: Function.Injective (coeSubmodule K : Ideal R -> Submodule R K)
-  proof: .of_eq_imp_le fun hl => coeSubmodule_le_coeSubmodule.mp hl.le
-
-@[simp]
-
-中文:
-定理 coeSubmodule_injective
-  结论: 函数.单射 (coeSubmodule K : 理想 R -> 子模 R K)
-  证明: .of_eq_imp_le fun hl => coeSubmodule_le_coeSubmodule.mp hl.le
-
-@[simp]
-
-Depends on / 依赖: coeSubmodule_le_coeSubmodule, coeSubmodule_le_coeSubmodule.mp, hl.le, of_eq_imp_le
+/-
+**IsFractionRing.coeSubmodule_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionRin
+g`。
+形式化陈述：coeSubmodule_injective : Function.Injective (coeSubmodule K : Ideal R -> S
+ubmodule R K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_eq_imp_le`：Function.Injective.of_eq_imp_le [Partia
+lOrder α] {f : α -> β} (h : forall {x y}, f x = f y -> x <= y) : f.Injective
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsFractionRing.coeSubmodule_le_coeSubmodule`：coeSubmodule_le_coeSubmodul
+e {I J : Ideal R} : coeSubmodule K I <= coeSubmodule K J ↔ I <= J
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-theorem coeSubmodule_injective : Function.Injective (coeSubmodule K : Ideal R -> Submodule R K) :=
+theorem coeSubmodule_injective : Function.Injective (coeSubmodule K : Ideal R → Submodule R K) :=
   .of_eq_imp_le fun hl => coeSubmodule_le_coeSubmodule.mp hl.le
 
 @[simp]
-/--
-theorem `coeSubmodule_isPrincipal` / 定理 `coeSubmodule_isPrincipal`
-
-English:
-theorem coeSubmodule_isPrincipal
-  given: {I : Ideal R}
-  statement: (coeSubmodule K I).IsPrincipal ↔ I.IsPrincipal
-  proof: IsLocalization.coeSubmodule_isPrincipal _ le_rfl
-
-中文:
-定理 coeSubmodule_isPrincipal
-  条件: {I : 理想 R}
-  结论: (coeSubmodule K I).是Principal ↔ I.是Principal
-  证明: IsLocalization.coeSubmodule_isPrincipal _ le_rfl
-
-Depends on / 依赖: IsLocalization, IsLocalization.coeSubmodule_isPrincipal, coeSubmodule_isPrincipal, le_rfl
+/-
+**IsFractionRing.coeSubmodule_isPrincipal** 是 Mathlib 中的一个定理，位于命名空间 `IsFractionR
+ing`。
+形式化陈述：coeSubmodule_isPrincipal {I : Ideal R} : (coeSubmodule K I).IsPrincipal ↔ 
+I.IsPrincipal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.coeSubmodule_isPrincipal`：coeSubmodule_isPrincipal {I : I
+deal R} (h : M <= nonZeroDivisors R) : (coeSubmodule S I).IsPrincipal ↔ I.IsPrin
+cipal
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem coeSubmodule_isPrincipal {I : Ideal R} : (coeSubmodule K I).IsPrincipal ↔ I.IsPrincipal :=
   IsLocalization.coeSubmodule_isPrincipal _ le_rfl
@@ -658,3 +552,4 @@ theorem coeSubmodule_isPrincipal {I : Ideal R} : (coeSubmodule K I).IsPrincipal 
 end CommRing
 
 end IsFractionRing
+

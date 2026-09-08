@@ -33,64 +33,19 @@ open scoped ENNReal NNReal
 public section
 
 namespace Finsupp
-variable {ι X : Type*} [Zero X] {p : Real>=0} [Fact (1 <= p)]
+variable {ι X : Type*} [Zero X] {p : ℝ≥0} [Fact (1 ≤ p)]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The L^1 extended metric on `ι`-many copies of a metric space `X` -/
+/-
+**Finsupp.** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [PseudoEMetricSpace
-  signature: X] : PseudoEMetricSpace (WithLp p <| ι ->₀ X) where
-  body: ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real)
-  edist_self f := by
-    have : 0 < p := zero_lt_one.trans_le Fact.out
-    simp [sum, *]
-  edist_comm f g := by
-    simp only [sum, zipWith_apply, edist_comm]
-    congr 2
-    ext i
-    simp [edist_comm]
-  edist_triangle f g h := by
-    classical
-    have : 0 < p := zero_lt_one.trans_le Fact.out
-    let s := f.ofLp.support union g.ofLp.support union h.ofLp.support
-    rw [sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
-      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
-      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*])]
-    simp only [zipWith_apply, ← one_div]
-    grw [← ENNReal.Lp_add_le _ _ _ (mod_cast Fact.out)]
-    gcongr
-    exact edist_triangle ..
-
-中文:
-实例 [PseudoEMetric空间
-  签名: X] : PseudoEMetric空间 (WithLp p <| ι ->₀ X) where
-  定义体: ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real)
-  edist_self f := by
-    have : 0 < p := zero_lt_one.trans_le Fact.out
-    simp [sum, *]
-  edist_comm f g := by
-    simp only [sum, zipWith_apply, edist_comm]
-    congr 2
-    ext i
-    simp [edist_comm]
-  edist_triangle f g h := by
-    classical
-    have : 0 < p := zero_lt_one.trans_le Fact.out
-    let s := f.ofLp.support union g.ofLp.support union h.ofLp.support
-    rw [sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
-      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
-      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*])]
-    simp only [zipWith_apply, ← one_div]
-    grw [← ENNReal.Lp_add_le _ _ _ (mod_cast Fact.out)]
-    gcongr
-    exact edist_triangle ..
-
-Depends on / 依赖: Fact.out, classical, edist_comm, edist_self, edist_triangle, f.ofLp.support, f.ofLp.zipWith, g.ofLp, g.ofLp.support, h.ofLp.support, sum_of_support_subset, support, support_zipWith, trans_le, zero_lt_one, zero_lt_one.trans_le, zipWith, zipWith_apply
+--- 原说明 ---
+The L^1 extended metric on `ι`-many copies of a metric space `X`
 -/
-noncomputable instance [PseudoEMetricSpace X] : PseudoEMetricSpace (WithLp p <| ι ->₀ X) where
+noncomputable instance [PseudoEMetricSpace X] : PseudoEMetricSpace (WithLp p <| ι →₀ X) where
   edist f g :=
-  ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real)
+  ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum fun i r ↦ r ^ (p : ℝ)) ^ (p⁻¹ : ℝ)
   edist_self f := by
     have : 0 < p := zero_lt_one.trans_le Fact.out
     simp [sum, *]
@@ -102,7 +57,7 @@ noncomputable instance [PseudoEMetricSpace X] : PseudoEMetricSpace (WithLp p <| 
   edist_triangle f g h := by
     classical
     have : 0 < p := zero_lt_one.trans_le Fact.out
-    let s := f.ofLp.support union g.ofLp.support union h.ofLp.support
+    let s := f.ofLp.support ∪ g.ofLp.support ∪ h.ofLp.support
     rw [sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
       sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
       sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*])]
@@ -110,158 +65,108 @@ noncomputable instance [PseudoEMetricSpace X] : PseudoEMetricSpace (WithLp p <| 
     grw [← ENNReal.Lp_add_le _ _ _ (mod_cast Fact.out)]
     gcongr
     exact edist_triangle ..
-
-/--
-lemma `edist_def` / 引理 `edist_def`
-
-English:
-lemma edist_def
-  statement: [PseudoEMetricSpace X] {p : Real>=0} [Fact (1 <= p)]
-  proof: rfl
-
-中文:
-引理 edist_def
-  结论: [PseudoEMetric空间 X] {p : 实数>=0} [Fact (1 <= p)]
-  证明: rfl
+/-
+**Finsupp.edist_def** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：edist_def [PseudoEMetricSpace X] {p : Real>=0} [Fact (1 <= p)] (f g : With
+Lp p <| ι ->₀ X) : edist f g = ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum
+ fun _i r => r ^ (p : Real)) ^ (p⁻¹ : Real)
+参数：1 <= p；f g : WithLp p <| ι ->₀ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma edist_def [PseudoEMetricSpace X] {p : Real>=0} [Fact (1 <= p)]
-    (f g : WithLp p <| ι ->₀ X) :
+lemma edist_def [PseudoEMetricSpace X] {p : ℝ≥0} [Fact (1 ≤ p)]
+    (f g : WithLp p <| ι →₀ X) :
     edist f g =
-      ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum fun _i r => r ^ (p : Real)) ^ (p⁻¹ : Real) := rfl
+      ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum fun _i r ↦ r ^ (p : ℝ)) ^ (p⁻¹ : ℝ) := rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The L^1 extended metric on `ι`-many copies of a metric space `X` -/
+/-
+**Finsupp.** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [EMetricSpace
-  signature: X] : EMetricSpace (WithLp p <| ι ->₀ X) where
-  body: by simp_all [edist_def, sum, WithLp.ext_iff, DFunLike.ext_iff]
-
-中文:
-实例 [广义度量空间
-  签名: X] : 广义度量空间 (WithLp p <| ι ->₀ X) where
-  定义体: by simp_all [edist_def, sum, WithLp.ext_iff, DFunLike.ext_iff]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, WithLp, WithLp.ext_iff, edist_def, ext_iff
+--- 原说明 ---
+The L^1 extended metric on `ι`-many copies of a metric space `X`
 -/
-noncomputable instance [EMetricSpace X] : EMetricSpace (WithLp p <| ι ->₀ X) where
+noncomputable instance [EMetricSpace X] : EMetricSpace (WithLp p <| ι →₀ X) where
   eq_of_edist_eq_zero {f g} hfg := by simp_all [edist_def, sum, WithLp.ext_iff, DFunLike.ext_iff]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The L^1 metric on `ι`-many copies of a metric space `X` -/
+/-
+**Finsupp.** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [PseudoMetricSpace
-  signature: X] : PseudoMetricSpace (WithLp p <| ι ->₀ X)
-  body: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
-    (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
-    (fun f g => by dsimp [sum]; positivity) fun f g => by
-      simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_le_coe,
-        ← ENNReal.coe_rpow_of_nonneg, ← ENNReal.ofNNReal_finsetSum, inv_nonneg, ← coe_nndist,
-        ← NNReal.coe_rpow, ← NNReal.coe_sum, ENNReal.ofReal_coe_nnreal, ENNReal.coe_inj]
-      congr! 2
-      ext i
-      simp [← coe_nndist, ← coe_nnreal_ennreal_nndist]
-
-中文:
-实例 [伪度量空间
-  签名: X] : 伪度量空间 (WithLp p <| ι ->₀ X)
-  定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
-    (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
-    (fun f g => by dsimp [sum]; positivity) fun f g => by
-      simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_le_coe,
-        ← ENNReal.coe_rpow_of_nonneg, ← ENNReal.ofNNReal_finsetSum, inv_nonneg, ← coe_nndist,
-        ← NNReal.coe_rpow, ← NNReal.coe_sum, ENNReal.ofReal_coe_nnreal, ENNReal.coe_inj]
-      congr! 2
-      ext i
-      simp [← coe_nndist, ← coe_nnreal_ennreal_nndist]
-
-Depends on / 依赖: ENNReal, ENNReal.coe_inj, ENNReal.coe_rpow_of_nonneg, ENNReal.ofNNReal_finsetSum, ENNReal.ofReal_coe_nnreal, NNReal, NNReal.coe_rpow, NNReal.coe_sum, NNReal.zero_le_coe, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, coe_inj, coe_nndist, coe_nnreal_ennreal_nndist, coe_rpow, coe_rpow_of_nonneg, coe_sum, dist_self, edist_def, f.ofLp.zipWith
+--- 原说明 ---
+The L^1 metric on `ι`-many copies of a metric space `X`
 -/
-noncomputable instance [PseudoMetricSpace X] : PseudoMetricSpace (WithLp p <| ι ->₀ X) :=
+noncomputable instance [PseudoMetricSpace X] : PseudoMetricSpace (WithLp p <| ι →₀ X) :=
   PseudoEMetricSpace.toPseudoMetricSpaceOfDist
-    (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
-    (fun f g => by dsimp [sum]; positivity) fun f g => by
+    (fun f g ↦ ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r ↦ r ^ (p : ℝ)) ^ (p⁻¹ : ℝ))
+    (fun f g ↦ by dsimp [sum]; positivity) fun f g ↦ by
       simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_le_coe,
         ← ENNReal.coe_rpow_of_nonneg, ← ENNReal.ofNNReal_finsetSum, inv_nonneg, ← coe_nndist,
         ← NNReal.coe_rpow, ← NNReal.coe_sum, ENNReal.ofReal_coe_nnreal, ENNReal.coe_inj]
       congr! 2
       ext i
       simp [← coe_nndist, ← coe_nnreal_ennreal_nndist]
-
-/--
-lemma `dist_def` / 引理 `dist_def`
-
-English:
-lemma dist_def
-  given: [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X)
-  proof: rfl
-
-中文:
-引理 dist_def
-  条件: [伪度量空间 X] (f g : WithLp p <| ι ->₀ X)
-  证明: rfl
+/-
+**Finsupp.dist_def** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：dist_def [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X) : dist f g = ((
+f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun _i r => r ^ (p : Real)) ^ (p⁻¹
+ : Real)
+参数：f g : WithLp p <| ι ->₀ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma dist_def [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X) :
+lemma dist_def [PseudoMetricSpace X] (f g : WithLp p <| ι →₀ X) :
     dist f g =
-      ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun _i r => r ^ (p : Real)) ^ (p⁻¹ : Real) := rfl
-
-/--
-lemma `nndist_def` / 引理 `nndist_def`
-
-English:
-lemma nndist_def
-  given: [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X)
-  proof: by
-  ext
-  simp only [coe_nndist, dist_def, sum, zipWith_apply, NNReal.coe_sum, NNReal.coe_rpow]
-  congr 2
-  ext i
-  simp [← coe_nndist]
-
-中文:
-引理 nndist_def
-  条件: [伪度量空间 X] (f g : WithLp p <| ι ->₀ X)
-  证明: by
-  ext
-  simp only [coe_nndist, dist_def, sum, zipWith_apply, NNReal.coe_sum, NNReal.coe_rpow]
-  congr 2
-  ext i
-  simp [← coe_nndist]
-
-Depends on / 依赖: NNReal, NNReal.coe_rpow, NNReal.coe_sum, coe_nndist, coe_rpow, coe_sum, dist_def, zipWith_apply
+      ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun _i r ↦ r ^ (p : ℝ)) ^ (p⁻¹ : ℝ) := rfl
+/-
+**Finsupp.nndist_def** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：nndist_def [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X) : nndist f g 
+= ((f.ofLp.zipWith nndist (nndist_self _) g.ofLp).sum fun _i r => r ^ (p : Real)
+) ^ (p⁻¹ : Real)
+参数：f g : WithLp p <| ι ->₀ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `nndist_self`：∀ {α : Type u} [inst : PseudoMetricSpace α] (a : α), nndist
+ a a = 0
+· 使用定理 `dist_self`：dist_self (x : α) : dist x x = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNReal.coe_sum`：coe_sum (s : Finset ι) (f : ι -> Real>=0) : ∑ i in s, f 
+i = ∑ i in s, (f i : Real)
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma nndist_def [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X) :
+lemma nndist_def [PseudoMetricSpace X] (f g : WithLp p <| ι →₀ X) :
     nndist f g =
-      ((f.ofLp.zipWith nndist (nndist_self _) g.ofLp).sum fun _i r => r ^ (p : Real)) ^ (p⁻¹ : Real) := by
+      ((f.ofLp.zipWith nndist (nndist_self _) g.ofLp).sum fun _i r ↦ r ^ (p : ℝ)) ^ (p⁻¹ : ℝ) := by
   ext
   simp only [coe_nndist, dist_def, sum, zipWith_apply, NNReal.coe_sum, NNReal.coe_rpow]
   congr 2
   ext i
   simp [← coe_nndist]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The L^1 metric on `ι`-many copies of a metric space `X` -/
+/-
+**Finsupp.** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [MetricSpace
-  signature: X] : MetricSpace (WithLp p <| ι ->₀ X)
-  body: EMetricSpace.toMetricSpaceOfDist
-    (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
-    (fun f g => by dsimp [sum]; positivity) fun f g => by rw [edist_dist, dist_def]
-
-中文:
-实例 [度量空间
-  签名: X] : 度量空间 (WithLp p <| ι ->₀ X)
-  定义体: EMetricSpace.toMetricSpaceOfDist
-    (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
-    (fun f g => by dsimp [sum]; positivity) fun f g => by rw [edist_dist, dist_def]
-
-Depends on / 依赖: EMetricSpace, EMetricSpace.toMetricSpaceOfDist, dist_def, dist_self, edist_dist, f.ofLp.zipWith, g.ofLp, toMetricSpaceOfDist, zipWith
+--- 原说明 ---
+The L^1 metric on `ι`-many copies of a metric space `X`
 -/
-noncomputable instance [MetricSpace X] : MetricSpace (WithLp p <| ι ->₀ X) :=
+noncomputable instance [MetricSpace X] : MetricSpace (WithLp p <| ι →₀ X) :=
   EMetricSpace.toMetricSpaceOfDist
-    (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
-    (fun f g => by dsimp [sum]; positivity) fun f g => by rw [edist_dist, dist_def]
+    (fun f g ↦ ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r ↦ r ^ (p : ℝ)) ^ (p⁻¹ : ℝ))
+    (fun f g ↦ by dsimp [sum]; positivity) fun f g ↦ by rw [edist_dist, dist_def]
 
 end Finsupp
+

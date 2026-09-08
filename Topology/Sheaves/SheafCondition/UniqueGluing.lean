@@ -43,8 +43,8 @@ open TopCat TopCat.Presheaf CategoryTheory CategoryTheory.Limits
 
 universe x
 
-variable {C : Type*} [Category* C] {FC : C -> C -> Type*} {CC : C -> Type*}
-variable [forall X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory C FC]
+variable {C : Type*} [Category* C] {FC : C → C → Type*} {CC : C → Type*}
+variable [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory C FC]
 
 namespace TopCat
 
@@ -52,115 +52,119 @@ namespace Presheaf
 
 section
 
-variable {X : TopCat.{x}} (F : Presheaf C X) {ι : Type*} (U : ι -> Opens X)
+variable {X : TopCat.{x}} (F : Presheaf C X) {ι : Type*} (U : ι → Opens X)
 
-/--
-Definition of `IsCompatible` / `IsCompatible` 的定义
-
-English:
-definition IsCompatible
-  signature: (sf : forall i : ι, ToType (F.obj (op (U i))))
-  body: forall i j : ι, F.map (infLELeft (U i) (U j)).op (sf i) = F.map (infLERight (U i) (U j)).op (sf j)
-
-中文:
-定义 IsCompatible
-  签名: (sf : 对任意 i : ι, ToType (F.obj (op (U i))))
-  定义体: forall i j : ι, F.map (infLELeft (U i) (U j)).op (sf i) = F.map (infLERight (U i) (U j)).op (sf j)
-
-Depends on / 依赖: F.map, infLELeft, infLERight
+/-- A family of sections `sf` is compatible, if the restrictions of `sf i` and `sf j` to `U i ⊓ U j`
+agree, for all `i` and `j`
 -/
-def IsCompatible (sf : forall i : ι, ToType (F.obj (op (U i)))) : Prop :=
-  forall i j : ι, F.map (infLELeft (U i) (U j)).op (sf i) = F.map (infLERight (U i) (U j)).op (sf j)
+/-
+**TopCat.Presheaf.IsCompatible** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Presheaf`。
+形式化陈述：IsCompatible (sf : forall i : ι, ToType (F.obj (op (U i)))) : Prop
+参数：sf : forall i : ι, ToType (F.obj (op (U i)))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `IsGluing` / `IsGluing` 的定义
-
-English:
-definition IsGluing
-  signature: (sf : forall i : ι, ToType (F.obj (op (U i)))) (s : ToType (F.obj (op (iSup U))))
-  body: forall i : ι, F.map (Opens.leSupr U i).op s = sf i
-
-中文:
-定义 IsGluing
-  签名: (sf : 对任意 i : ι, ToType (F.obj (op (U i)))) (s : ToType (F.obj (op (iSup U))))
-  定义体: forall i : ι, F.map (Opens.leSupr U i).op s = sf i
-
-Depends on / 依赖: F.map, Opens.leSupr, leSupr
+--- 原说明 ---
+A family of sections `sf` is compatible, if the restrictions of `sf i` and `sf j
+` to `U i ⊓ U j`
+agree, for all `i` and `j`
 -/
-def IsGluing (sf : forall i : ι, ToType (F.obj (op (U i)))) (s : ToType (F.obj (op (iSup U)))) : Prop :=
-  forall i : ι, F.map (Opens.leSupr U i).op s = sf i
+def IsCompatible (sf : ∀ i : ι, ToType (F.obj (op (U i)))) : Prop :=
+  ∀ i j : ι, F.map (infLELeft (U i) (U j)).op (sf i) = F.map (infLERight (U i) (U j)).op (sf j)
+
+/-- A section `s` is a gluing for a family of sections `sf` if it restricts to `sf i` on `U i`,
+for all `i`
+-/
+/-
+**TopCat.Presheaf.IsGluing** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Presheaf`。
+形式化陈述：IsGluing (sf : forall i : ι, ToType (F.obj (op (U i)))) (s : ToType (F.obj
+ (op (iSup U)))) : Prop
+参数：sf : forall i : ι, ToType (F.obj (op (U i)))；s : ToType (F.obj (op (iSup U)))
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A section `s` is a gluing for a family of sections `sf` if it restricts to `sf i
+` on `U i`,
+for all `i`
+-/
+def IsGluing (sf : ∀ i : ι, ToType (F.obj (op (U i)))) (s : ToType (F.obj (op (iSup U)))) : Prop :=
+  ∀ i : ι, F.map (Opens.leSupr U i).op s = sf i
 
 /--
-Definition of `IsSheafUniqueGluing` / `IsSheafUniqueGluing` 的定义
+The sheaf condition in terms of unique gluings. A presheaf `F : Presheaf C X` satisfies this sheaf
+condition if and only if, for every compatible family of sections `sf : Π i : ι, F.obj (op (U i))`,
+there exists a unique gluing `s : F.obj (op (iSup U))`.
 
-English:
-definition IsSheafUniqueGluing
-  signature: : Prop
-  body: forall ⦃ι : Type x⦄ (U : ι -> Opens X) (sf : forall i : ι, ToType (F.obj (op (U i)))),
-    IsCompatible F U sf -> exists! s : ToType (F.obj (op (iSup U))), IsGluing F U sf s
+We prove this to be equivalent to the usual one below in
+`TopCat.Presheaf.isSheaf_iff_isSheafUniqueGluing`
+-/
+/-
+**TopCat.Presheaf.IsSheafUniqueGluing** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Presheaf
+`。
+形式化陈述：IsSheafUniqueGluing : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 IsSheafUniqueGluing
-  签名: : 命题
-  定义体: forall ⦃ι : Type x⦄ (U : ι -> Opens X) (sf : forall i : ι, ToType (F.obj (op (U i)))),
-    IsCompatible F U sf -> exists! s : ToType (F.obj (op (iSup U))), IsGluing F U sf s
+--- 原说明 ---
+The sheaf condition in terms of unique gluings. A presheaf `F : Presheaf C X` sa
+tisfies this sheaf
+condition if and only if, for every compatible family of sections `sf : Π i : ι,
+ F.obj (op (U i))`,
+there exists a unique gluing `s : F.obj (op (iSup U))`.
 
-Depends on / 依赖: F.obj, IsCompatible, IsGluing, ToType
+We prove this to be equivalent to the usual one below in
+`TopCat.Presheaf.isSheaf_iff_isSheafUniqueGluing`
 -/
 def IsSheafUniqueGluing : Prop :=
-  forall ⦃ι : Type x⦄ (U : ι -> Opens X) (sf : forall i : ι, ToType (F.obj (op (U i)))),
-    IsCompatible F U sf -> exists! s : ToType (F.obj (op (iSup U))), IsGluing F U sf s
+  ∀ ⦃ι : Type x⦄ (U : ι → Opens X) (sf : ∀ i : ι, ToType (F.obj (op (U i)))),
+    IsCompatible F U sf → ∃! s : ToType (F.obj (op (iSup U))), IsGluing F U sf s
 
 end
 
 section TypeValued
 
-variable {X : TopCat.{x}} {F : Presheaf Type* X} {ι : Type*} {U : ι -> Opens X}
+variable {X : TopCat.{x}} {F : Presheaf Type* X} {ι : Type*} {U : ι → Opens X}
 
-/--
-Definition of `objPairwiseOfFamily` / `objPairwiseOfFamily` 的定义
+/-- Given sections over a family of open sets, extend it to include
+  sections over pairwise intersections of the open sets. -/
+/-
+**TopCat.Presheaf.objPairwiseOfFamily** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Presheaf
+`。
+形式化陈述：{X : TopCat} →   {F : TopCat.Presheaf (Type u_4) X} →     {ι : Type u_5} →
+       {U : ι → TopologicalSpace.Opens ↑X} →         ((i : ι) → F.obj (Opposite.
+op (U i))) →           (i : (CategoryTheory.Pairwise ι)ᵒᵖ) → ((CategoryTheory.Pa
+irwise.diagram U).op.comp F).obj i
+参数：Type u_4；(i : ι) → F.obj (Opposite.op (U i))；i : (CategoryTheory.Pairwise ι)ᵒ
+ᵖ；(CategoryTheory.Pairwise.diagram U).op.comp F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition objPairwiseOfFamily
-  signature: (sf : forall i, F.obj (op (U i)))
-
-中文:
-定义 objPairwiseOfFamily
-  签名: (sf : 对任意 i, F.obj (op (U i)))
+--- 原说明 ---
+Given sections over a family of open sets, extend it to include
+  sections over pairwise intersections of the open sets.
 -/
-def objPairwiseOfFamily (sf : forall i, F.obj (op (U i))) :
-    forall i, ((Pairwise.diagram U).op ⋙ F).obj i
+def objPairwiseOfFamily (sf : ∀ i, F.obj (op (U i))) :
+    ∀ i, ((Pairwise.diagram U).op ⋙ F).obj i
   | ⟨Pairwise.single i⟩ => sf i
   | ⟨Pairwise.pair i j⟩ => F.map (infLELeft (U i) (U j)).op (sf i)
 
-/--
-Definition of `IsCompatible.sectionPairwise` / `IsCompatible.sectionPairwise` 的定义
+/-- Given a compatible family of sections over open sets, extend it to a
+  section of the functor `(Pairwise.diagram U).op ⋙ F`. -/
+/-
+**TopCat.Presheaf.IsCompatible.sectionPairwise** 是 Mathlib 中的一个定义，位于命名空间 `TopCat
+.Presheaf.IsCompatible`。
+形式化陈述：{X : TopCat} →   {F : TopCat.Presheaf (Type u_4) X} →     {ι : Type u_5} →
+       {U : ι → TopologicalSpace.Opens ↑X} →         {sf : (i : ι) → CategoryThe
+ory.ToType (F.obj (Opposite.op (U i)))} →           F.IsCompatible U sf → ↑((Cat
+egoryTheory.Pairwise.diagram U).op.comp F).sections
+参数：Type u_4；i : ι；F.obj (Opposite.op (U i))；(CategoryTheory.Pairwise.diagram U).
+op.comp F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsCompatible.sectionPairwise
-  signature: {sf} (h : IsCompatible F U sf)
-  body: by
-  refine ⟨objPairwiseOfFamily sf, ?_⟩
-  let G := (Pairwise.diagram U).op ⋙ F
-  rintro (i | ⟨i, j⟩) (i' | ⟨i', j'⟩) (_ | _ | _ | _)
-  · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.single i) _
-  · rfl
-  · exact (h i' i).symm
-  · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.pair i j) _
-
-中文:
-定义 IsCompatible.sectionPairwise
-  签名: {sf} (h : IsCompatible F U sf)
-  定义体: by
-  refine ⟨objPairwiseOfFamily sf, ?_⟩
-  let G := (Pairwise.diagram U).op ⋙ F
-  rintro (i | ⟨i, j⟩) (i' | ⟨i', j'⟩) (_ | _ | _ | _)
-  · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.single i) _
-  · rfl
-  · exact (h i' i).symm
-  · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.pair i j) _
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, G.map_id, Pairwise, Pairwise.diagram, Pairwise.pair, Pairwise.single, congr_hom, diagram, map_id, objPairwiseOfFamily, single
+--- 原说明 ---
+Given a compatible family of sections over open sets, extend it to a
+  section of the functor `(Pairwise.diagram U).op ⋙ F`.
 -/
 def IsCompatible.sectionPairwise {sf} (h : IsCompatible F U sf) :
     ((Pairwise.diagram U).op ⋙ F).sections := by
@@ -171,129 +175,122 @@ def IsCompatible.sectionPairwise {sf} (h : IsCompatible F U sf) :
   · rfl
   · exact (h i' i).symm
   · exact ConcreteCategory.congr_hom (G.map_id <| op <| Pairwise.pair i j) _
-
-/--
-theorem `isGluing_iff_pairwise` / 定理 `isGluing_iff_pairwise`
-
-English:
-theorem isGluing_iff_pairwise
-  given: {sf s}
-  statement: IsGluing F U sf s ↔
-  proof: by
-  refine ⟨fun h => ?_, fun h i => h (op <| Pairwise.single i)⟩
-  rintro (i | ⟨i, j⟩)
-  · exact h i
-  · rw [← (F.mapCone (Pairwise.cocone U).op).w (op <| Pairwise.Hom.left i j)]
-    exact congr_arg _ (h i)
-
-中文:
-定理 isGluing_iff_pairwise
-  条件: {sf s}
-  结论: IsGluing F U sf s ↔
-  证明: by
-  refine ⟨fun h => ?_, fun h i => h (op <| Pairwise.single i)⟩
-  rintro (i | ⟨i, j⟩)
-  · exact h i
-  · rw [← (F.mapCone (Pairwise.cocone U).op).w (op <| Pairwise.Hom.left i j)]
-    exact congr_arg _ (h i)
-
-Depends on / 依赖: F.mapCone, Pairwise, Pairwise.Hom.left, Pairwise.cocone, Pairwise.single, cocone, congr_arg, mapCone, single
+/-
+**TopCat.Presheaf.isGluing_iff_pairwise** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Preshe
+af`。
+形式化陈述：isGluing_iff_pairwise {sf s} : IsGluing F U sf s ↔ forall i, (F.mapCone (P
+airwise.cocone U).op).π.app i s = objPairwiseOfFamily sf i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem isGluing_iff_pairwise {sf s} : IsGluing F U sf s ↔
-    forall i, (F.mapCone (Pairwise.cocone U).op).π.app i s = objPairwiseOfFamily sf i := by
-  refine ⟨fun h => ?_, fun h i => h (op <| Pairwise.single i)⟩
+    ∀ i, (F.mapCone (Pairwise.cocone U).op).π.app i s = objPairwiseOfFamily sf i := by
+  refine ⟨fun h ↦ ?_, fun h i ↦ h (op <| Pairwise.single i)⟩
   rintro (i | ⟨i, j⟩)
   · exact h i
   · rw [← (F.mapCone (Pairwise.cocone U).op).w (op <| Pairwise.Hom.left i j)]
     exact congr_arg _ (h i)
-
-/--
-theorem `IsSheaf.isSheafUniqueGluing_types` / 定理 `IsSheaf.isSheafUniqueGluing_types`
-
-English:
-theorem IsSheaf.isSheafUniqueGluing_types
-  statement: (h : F.IsSheaf) (sf : forall i : ι, F.obj (op (U i)))
-  proof: by
-  simp_rw [isGluing_iff_pairwise]
-  exact (Types.isLimit_iff _).mp (h.isSheafPairwiseIntersections U) _ cpt.sectionPairwise.prop
-
-中文:
-定理 是层.isSheafUniqueGluing_types
-  结论: (h : F.是层) (sf : 对任意 i : ι, F.obj (op (U i)))
-  证明: by
-  simp_rw [isGluing_iff_pairwise]
-  exact (Types.isLimit_iff _).mp (h.isSheafPairwiseIntersections U) _ cpt.sectionPairwise.prop
-
-Depends on / 依赖: Types.isLimit_iff, cpt.sectionPairwise.prop, h.isSheafPairwiseIntersections, isGluing_iff_pairwise, isLimit_iff, isSheafPairwiseIntersections, sectionPairwise, simp_rw
+/-
+**TopCat.Presheaf.IsSheaf.isSheafUniqueGluing_types** 是 Mathlib 中的一个定理，位于命名空间 `T
+opCat.Presheaf.IsSheaf`。
+形式化陈述：∀ {X : TopCat} {F : TopCat.Presheaf (Type u_4) X} {ι : Type u_5} {U : ι → 
+TopologicalSpace.Opens ↑X},   F.IsSheaf → ∀ (sf : (i : ι) → F.obj (Opposite.op (
+U i))), F.IsCompatible U sf → ∃! s, F.IsGluing U sf s
+参数：Type u_4；sf : (i : ι) → F.obj (Opposite.op (U i))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.Limits.Types.isLimit_iff`：isLimit_iff (c : Cone F) : None
+mpty (IsLimit c) ↔ forall s in F.sections, exists! x : c.pt, forall j, c.π.app j
+ x = s j
+· 使用定理 `TopCat.Presheaf.IsSheaf.isSheafPairwiseIntersections`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] {X : TopCat} {F : TopCat.Presheaf C
+ X} {ι : Type u_2}   (U : ι → TopologicalS…
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
-theorem IsSheaf.isSheafUniqueGluing_types (h : F.IsSheaf) (sf : forall i : ι, F.obj (op (U i)))
-    (cpt : IsCompatible F U sf) : exists! s : F.obj (op (iSup U)), IsGluing F U sf s := by
+theorem IsSheaf.isSheafUniqueGluing_types (h : F.IsSheaf) (sf : ∀ i : ι, F.obj (op (U i)))
+    (cpt : IsCompatible F U sf) : ∃! s : F.obj (op (iSup U)), IsGluing F U sf s := by
   simp_rw [isGluing_iff_pairwise]
   exact (Types.isLimit_iff _).mp (h.isSheafPairwiseIntersections U) _ cpt.sectionPairwise.prop
 
 variable (F)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isSheaf_iff_isSheafUniqueGluing_types` / 定理 `isSheaf_iff_isSheafUniqueGluing_types`
+/-- For type-valued presheaves, the sheaf condition in terms of unique gluings is equivalent to the
+usual sheaf condition.
+-/
+/-
+**TopCat.Presheaf.isSheaf_iff_isSheafUniqueGluing_types** 是 Mathlib 中的一个定理，位于命名空
+间 `TopCat.Presheaf`。
+形式化陈述：isSheaf_iff_isSheafUniqueGluing_types : F.IsSheaf ↔ F.IsSheafUniqueGluing
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 
-English:
-theorem isSheaf_iff_isSheafUniqueGluing_types
-  statement: F.IsSheaf ↔ F.IsSheafUniqueGluing
-  proof: by
-  simp_rw [isSheaf_iff_isSheafPairwiseIntersections, IsSheafPairwiseIntersections,
-    Types.isLimit_iff, IsSheafUniqueGluing, isGluing_iff_pairwise]
-  refine forall₂_congr fun ι U => ⟨fun h sf cpt => ?_, fun h s hs => ?_⟩
-  · exact h _ cpt.sectionPairwise.prop
-  · specialize h (fun i => s <| op <| Pairwise.single i) fun i j =>
-      (hs <| op <| Pairwise.Hom.left i j).trans (hs <| op <| Pairwise.Hom.right i j).symm
-    convert! h; ext (i | ⟨i, j⟩)
-    · rfl
-    · exact (hs <| op <| Pairwise.Hom.left i j).symm
-
-中文:
-定理 isSheaf_iff_isSheafUniqueGluing_types
-  结论: F.是层 ↔ F.IsSheafUniqueGluing
-  证明: by
-  simp_rw [isSheaf_iff_isSheafPairwiseIntersections, IsSheafPairwiseIntersections,
-    Types.isLimit_iff, IsSheafUniqueGluing, isGluing_iff_pairwise]
-  refine forall₂_congr fun ι U => ⟨fun h sf cpt => ?_, fun h s hs => ?_⟩
-  · exact h _ cpt.sectionPairwise.prop
-  · specialize h (fun i => s <| op <| Pairwise.single i) fun i j =>
-      (hs <| op <| Pairwise.Hom.left i j).trans (hs <| op <| Pairwise.Hom.right i j).symm
-    convert! h; ext (i | ⟨i, j⟩)
-    · rfl
-    · exact (hs <| op <| Pairwise.Hom.left i j).symm
-
-Depends on / 依赖: IsSheafPairwiseIntersections, IsSheafUniqueGluing, Pairwise, Pairwise.Hom.left, Pairwise.Hom.right, Pairwise.single, Types.isLimit_iff, convert, cpt.sectionPairwise.prop, isGluing_iff_pairwise, isLimit_iff, isSheaf_iff_isSheafPairwiseIntersections, sectionPairwise, simp_rw, single, specialize
+--- 原说明 ---
+For type-valued presheaves, the sheaf condition in terms of unique gluings is eq
+uivalent to the
+usual sheaf condition.
 -/
 theorem isSheaf_iff_isSheafUniqueGluing_types : F.IsSheaf ↔ F.IsSheafUniqueGluing := by
   simp_rw [isSheaf_iff_isSheafPairwiseIntersections, IsSheafPairwiseIntersections,
     Types.isLimit_iff, IsSheafUniqueGluing, isGluing_iff_pairwise]
-  refine forall₂_congr fun ι U => ⟨fun h sf cpt => ?_, fun h s hs => ?_⟩
+  refine forall₂_congr fun ι U ↦ ⟨fun h sf cpt ↦ ?_, fun h s hs ↦ ?_⟩
   · exact h _ cpt.sectionPairwise.prop
-  · specialize h (fun i => s <| op <| Pairwise.single i) fun i j =>
+  · specialize h (fun i ↦ s <| op <| Pairwise.single i) fun i j ↦
       (hs <| op <| Pairwise.Hom.left i j).trans (hs <| op <| Pairwise.Hom.right i j).symm
     convert! h; ext (i | ⟨i, j⟩)
     · rfl
     · exact (hs <| op <| Pairwise.Hom.left i j).symm
 
-/--
-theorem `isSheaf_of_isSheafUniqueGluing_types` / 定理 `isSheaf_of_isSheafUniqueGluing_types`
+/-- The usual sheaf condition can be obtained from the sheaf condition
+in terms of unique gluings.
+-/
+/-
+**TopCat.Presheaf.isSheaf_of_isSheafUniqueGluing_types** 是 Mathlib 中的一个定理，位于命名空间
+ `TopCat.Presheaf`。
+形式化陈述：isSheaf_of_isSheafUniqueGluing_types (Fsh : F.IsSheafUniqueGluing) : F.IsS
+heaf
+参数：Fsh : F.IsSheafUniqueGluing。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `TopCat.Presheaf.isSheaf_iff_isSheafUniqueGluing_types`：isSheaf_iff_isShe
+afUniqueGluing_types : F.IsSheaf ↔ F.IsSheafUniqueGluing
 
-English:
-theorem isSheaf_of_isSheafUniqueGluing_types
-  given: (Fsh : F.IsSheafUniqueGluing)
-  statement: F.IsSheaf
-  proof: (isSheaf_iff_isSheafUniqueGluing_types F).mpr Fsh
-
-中文:
-定理 isSheaf_of_isSheafUniqueGluing_types
-  条件: (Fsh : F.IsSheafUniqueGluing)
-  结论: F.是层
-  证明: (isSheaf_iff_isSheafUniqueGluing_types F).mpr Fsh
-
-Depends on / 依赖: isSheaf_iff_isSheafUniqueGluing_types
+--- 原说明 ---
+The usual sheaf condition can be obtained from the sheaf condition
+in terms of unique gluings.
 -/
 theorem isSheaf_of_isSheafUniqueGluing_types (Fsh : F.IsSheafUniqueGluing) : F.IsSheaf :=
   (isSheaf_iff_isSheafUniqueGluing_types F).mpr Fsh
@@ -306,44 +303,58 @@ variable [HasLimitsOfSize.{x, x} C] [(forget C).ReflectsIsomorphisms]
   [PreservesLimitsOfSize.{x, x} (forget C)]
 variable {X : TopCat.{x}} {F : Presheaf C X}
 
-/--
-theorem `IsSheaf.isSheafUniqueGluing` / 定理 `IsSheaf.isSheafUniqueGluing`
-
-English:
-theorem IsSheaf.isSheafUniqueGluing
-  statement: (h : F.IsSheaf) {ι : Type*} (U : ι -> Opens X)
-  proof: ((isSheaf_iff_isSheaf_comp' (forget C) F).mp h).isSheafUniqueGluing_types sf cpt
-
-中文:
-定理 是层.isSheafUniqueGluing
-  结论: (h : F.是层) {ι : 类型} (U : ι -> Opens X)
-  证明: ((isSheaf_iff_isSheaf_comp' (forget C) F).mp h).isSheafUniqueGluing_types sf cpt
-
-Depends on / 依赖: forget, isSheafUniqueGluing_types, isSheaf_iff_isSheaf_comp
+/-
+**TopCat.Presheaf.IsSheaf.isSheafUniqueGluing** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.
+Presheaf.IsSheaf`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {FC : C → C
+ → Type u_2} {CC : C → Type u_3}   [inst_1 : (X Y : C) → FunLike (FC X Y) (CC X)
+ (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory C FC]   [CategoryTheory.Limit
+s.HasLimitsOfSize.{x, x, v_1, u_1} C] [(CategoryTheory.forget C).ReflectsIsomorp
+hisms]   [CategoryTheory.Limits.PreservesLimitsOfSize.{x, x, v_1, u_3, u_1, u_3 
++ 1} (CategoryTheory.forget C)] {X : TopCat}   {F : TopCat.Presheaf C X},   F.Is
+Sheaf →     ∀ {ι : Type u_4} (U : ι → TopologicalSpace.Opens ↑X)       (sf : (i 
+: ι) → CategoryTheory.ToType (F.obj (Opposite.op (U i)))), F.IsCompatible U sf →
+ ∃! s, F.IsGluing U sf s
+参数：X Y : C；FC X Y；CC X；CC Y；CategoryTheory.forget C；CategoryTheory.forget C；U : 
+ι → TopologicalSpace.Opens ↑X；sf : (i : ι) → CategoryTheory.ToType (F.obj (Oppos
+ite.op (U i)))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.IsSheaf.isSheafUniqueGluing_types`：∀ {X : TopCat} {F : T
+opCat.Presheaf (Type u_4) X} {ι : Type u_5} {U : ι → TopologicalSpace.Opens ↑X},
+   F.IsSheaf → ∀ (sf : (i : ι) → F.obj …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopCat.Presheaf.isSheaf_iff_isSheaf_comp'`：isSheaf_iff_isSheaf_comp' {C 
+: Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D] (G : C ⥤ D) [G.Refl
+ectsIsomorphisms] [HasLimitsOfS…
 -/
-theorem IsSheaf.isSheafUniqueGluing (h : F.IsSheaf) {ι : Type*} (U : ι -> Opens X)
-    (sf : forall i : ι, ToType (F.obj (op (U i))))
-    (cpt : IsCompatible F U sf) : exists! s : ToType (F.obj (op (iSup U))), IsGluing F U sf s :=
+theorem IsSheaf.isSheafUniqueGluing (h : F.IsSheaf) {ι : Type*} (U : ι → Opens X)
+    (sf : ∀ i : ι, ToType (F.obj (op (U i))))
+    (cpt : IsCompatible F U sf) : ∃! s : ToType (F.obj (op (iSup U))), IsGluing F U sf s :=
   ((isSheaf_iff_isSheaf_comp' (forget C) F).mp h).isSheafUniqueGluing_types sf cpt
 
 variable (F)
 
-/--
-theorem `isSheaf_iff_isSheafUniqueGluing` / 定理 `isSheaf_iff_isSheafUniqueGluing`
+/-- For presheaves valued in a concrete category, whose forgetful functor reflects isomorphisms and
+preserves limits, the sheaf condition in terms of unique gluings is equivalent to the usual one.
+-/
+/-
+**TopCat.Presheaf.isSheaf_iff_isSheafUniqueGluing** 是 Mathlib 中的一个定理，位于命名空间 `Top
+Cat.Presheaf`。
+形式化陈述：isSheaf_iff_isSheafUniqueGluing : F.IsSheaf ↔ F.IsSheafUniqueGluing
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `TopCat.Presheaf.isSheaf_iff_isSheaf_comp'`：isSheaf_iff_isSheaf_comp' {C 
+: Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D] (G : C ⥤ D) [G.Refl
+ectsIsomorphisms] [HasLimitsOfS…
+· 使用定理 `TopCat.Presheaf.isSheaf_iff_isSheafUniqueGluing_types`：isSheaf_iff_isShe
+afUniqueGluing_types : F.IsSheaf ↔ F.IsSheafUniqueGluing
 
-English:
-theorem isSheaf_iff_isSheafUniqueGluing
-  statement: F.IsSheaf ↔ F.IsSheafUniqueGluing
-  proof: Iff.trans (isSheaf_iff_isSheaf_comp' (forget C) F)
-    (isSheaf_iff_isSheafUniqueGluing_types (F ⋙ forget C))
-
-中文:
-定理 isSheaf_iff_isSheafUniqueGluing
-  结论: F.是层 ↔ F.IsSheafUniqueGluing
-  证明: Iff.trans (isSheaf_iff_isSheaf_comp' (forget C) F)
-    (isSheaf_iff_isSheafUniqueGluing_types (F ⋙ forget C))
-
-Depends on / 依赖: Iff.trans, forget, isSheaf_iff_isSheafUniqueGluing_types, isSheaf_iff_isSheaf_comp
+--- 原说明 ---
+For presheaves valued in a concrete category, whose forgetful functor reflects i
+somorphisms and
+preserves limits, the sheaf condition in terms of unique gluings is equivalent t
+o the usual one.
 -/
 theorem isSheaf_iff_isSheafUniqueGluing : F.IsSheaf ↔ F.IsSheafUniqueGluing :=
   Iff.trans (isSheaf_iff_isSheaf_comp' (forget C) F)
@@ -361,131 +372,154 @@ section
 
 variable [HasLimitsOfSize.{x, x} C] [(CategoryTheory.forget C).ReflectsIsomorphisms]
 variable [PreservesLimitsOfSize.{x, x} (CategoryTheory.forget C)]
-variable {X : TopCat.{x}} (F : Sheaf C X) {ι : Type*} (U : ι -> Opens X)
+variable {X : TopCat.{x}} (F : Sheaf C X) {ι : Type*} (U : ι → Opens X)
 
-/--
-theorem `existsUnique_gluing` / 定理 `existsUnique_gluing`
-
-English:
-theorem existsUnique_gluing
-  statement: (sf : forall i : ι, ToType (F.1.obj (op (U i))))
-  proof: IsSheaf.isSheafUniqueGluing F.property U sf h
-
-中文:
-定理 存在Unique_gluing
-  结论: (sf : 对任意 i : ι, ToType (F.1.obj (op (U i))))
-  证明: IsSheaf.isSheafUniqueGluing F.property U sf h
-
-Depends on / 依赖: F.property, IsSheaf, IsSheaf.isSheafUniqueGluing, isSheafUniqueGluing, property
+/-- A more convenient way of obtaining a unique gluing of sections for a sheaf.
 -/
-theorem existsUnique_gluing (sf : forall i : ι, ToType (F.1.obj (op (U i))))
+/-
+**TopCat.Sheaf.existsUnique_gluing** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {FC : C → C
+ → Type u_2} {CC : C → Type u_3}   [inst_1 : (X Y : C) → FunLike (FC X Y) (CC X)
+ (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory C FC]   [CategoryTheory.Limit
+s.HasLimitsOfSize.{x, x, v_1, u_1} C] [(CategoryTheory.forget C).ReflectsIsomorp
+hisms]   [CategoryTheory.Limits.PreservesLimitsOfSize.{x, x, v_1, u_3, u_1, u_3 
++ 1} (CategoryTheory.forget C)] {X : TopCat}   (F : TopCat.Sheaf C X) {ι : Type 
+u_4} (U : ι → TopologicalSpace.Opens ↑X)   (sf : (i : ι) → CategoryTheory.ToType
+ (F.obj.obj (Opposite.op (U i)))),   TopCat.Presheaf.IsCompatible F.obj U sf → ∃
+! s, TopCat.Presheaf.IsGluing F.obj U sf s
+参数：X Y : C；FC X Y；CC X；CC Y；CategoryTheory.forget C；CategoryTheory.forget C；F : 
+TopCat.Sheaf C X；U : ι → TopologicalSpace.Opens ↑X；sf : (i : ι) → CategoryTheory
+.ToType (F.obj.obj (Opposite.op (U i)))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.IsSheaf.isSheafUniqueGluing`：∀ {C : Type u_1} [inst : Ca
+tegoryTheory.Category.{v_1, u_1} C] {FC : C → C → Type u_2} {CC : C → Type u_3} 
+  [inst_1 : (X Y : C) → FunLike (…
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+
+--- 原说明 ---
+A more convenient way of obtaining a unique gluing of sections for a sheaf.
+-/
+theorem existsUnique_gluing (sf : ∀ i : ι, ToType (F.1.obj (op (U i))))
     (h : IsCompatible F.1 U sf) :
-    exists! s : ToType (F.1.obj (op (iSup U))), IsGluing F.1 U sf s :=
+    ∃! s : ToType (F.1.obj (op (iSup U))), IsGluing F.1 U sf s :=
   IsSheaf.isSheafUniqueGluing F.property U sf h
 
-/--
-theorem `existsUnique_gluing'` / 定理 `existsUnique_gluing'`
-
-English:
-theorem existsUnique_gluing'
-  statement: (V : Opens X) (iUV : forall i : ι, U i ⟶ V) (hcover : V <= iSup U)
-  proof: by
-  have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
-  obtain ⟨gl, gl_spec, gl_uniq⟩ := F.existsUnique_gluing U sf h
-  refine ⟨F.1.map (eqToHom V_eq_supr_U).op gl, ?_, ?_⟩
-  · intro i
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
-    exact gl_spec i
-  · intro gl' gl'_spec
-    convert! congr_arg _ (gl_uniq (F.1.map (eqToHom V_eq_supr_U.symm).op gl') fun i => _) <;>
-      rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
-    · simp
-    · exact gl'_spec i
-
-@[ext]
-
-中文:
-定理 存在Unique_gluing'
-  结论: (V : Opens X) (iUV : 对任意 i : ι, U i ⟶ V) (hcover : V <= iSup U)
-  证明: by
-  have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
-  obtain ⟨gl, gl_spec, gl_uniq⟩ := F.existsUnique_gluing U sf h
-  refine ⟨F.1.map (eqToHom V_eq_supr_U).op gl, ?_, ?_⟩
-  · intro i
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
-    exact gl_spec i
-  · intro gl' gl'_spec
-    convert! congr_arg _ (gl_uniq (F.1.map (eqToHom V_eq_supr_U.symm).op gl') fun i => _) <;>
-      rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
-    · simp
-    · exact gl'_spec i
-
-@[ext]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, F.existsUnique_gluing, V_eq_supr_U, V_eq_supr_U.symm, _spec, comp_apply, congr_arg, convert, eqToHom, existsUnique_gluing, gl_spec, gl_uniq, hcover, iSup_le, le_antisymm, map_comp
+/-- In this version of the lemma, the inclusion homs `iUV` can be specified directly by the user,
+which can be more convenient in practice.
 -/
-theorem existsUnique_gluing' (V : Opens X) (iUV : forall i : ι, U i ⟶ V) (hcover : V <= iSup U)
-    (sf : forall i : ι, ToType (F.1.obj (op (U i)))) (h : IsCompatible F.1 U sf) :
-    exists! s : ToType (F.1.obj (op V)), forall i : ι, F.1.map (iUV i).op s = sf i := by
+/-
+**TopCat.Sheaf.existsUnique_gluing'** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {FC : C → C
+ → Type u_2} {CC : C → Type u_3}   [inst_1 : (X Y : C) → FunLike (FC X Y) (CC X)
+ (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory C FC]   [CategoryTheory.Limit
+s.HasLimitsOfSize.{x, x, v_1, u_1} C] [(CategoryTheory.forget C).ReflectsIsomorp
+hisms]   [CategoryTheory.Limits.PreservesLimitsOfSize.{x, x, v_1, u_3, u_1, u_3 
++ 1} (CategoryTheory.forget C)] {X : TopCat}   (F : TopCat.Sheaf C X) {ι : Type 
+u_4} (U : ι → TopologicalSpace.Opens ↑X) (V : TopologicalSpace.Opens ↑X)   (iUV 
+: (i : ι) → U i ⟶ V),   V ≤ iSup U →     ∀ (sf : (i : ι) → CategoryTheory.ToType
+ (F.obj.obj (Opposite.op (U i)))),       TopCat.Presheaf.IsCompatible F.obj U sf
+ →         ∃! s, ∀ (i : ι), (CategoryTheory.ConcreteCategory.hom (F.obj.map (iUV
+ i).op)) s = sf i
+参数：X Y : C；FC X Y；CC X；CC Y；CategoryTheory.forget C；CategoryTheory.forget C；F : 
+TopCat.Sheaf C X；U : ι → TopologicalSpace.Opens ↑X；V : TopologicalSpace.Opens ↑X
+；iUV : (i : ι) → U i ⟶ V；sf : (i : ι) → CategoryTheory.ToType (F.obj.obj (Opposi
+te.op (U i)))；i : ι；CategoryTheory.ConcreteCategory.hom (F.obj.map (iUV i).op)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `TopCat.Sheaf.existsUnique_gluing`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] {FC : C → C → Type u_2} {CC : C → Type u_3}   [inst_1 :
+ (X Y : C) → FunLike (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+
+--- 原说明 ---
+In this version of the lemma, the inclusion homs `iUV` can be specified directly
+ by the user,
+which can be more convenient in practice.
+-/
+theorem existsUnique_gluing' (V : Opens X) (iUV : ∀ i : ι, U i ⟶ V) (hcover : V ≤ iSup U)
+    (sf : ∀ i : ι, ToType (F.1.obj (op (U i)))) (h : IsCompatible F.1 U sf) :
+    ∃! s : ToType (F.1.obj (op V)), ∀ i : ι, F.1.map (iUV i).op s = sf i := by
   have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
   obtain ⟨gl, gl_spec, gl_uniq⟩ := F.existsUnique_gluing U sf h
   refine ⟨F.1.map (eqToHom V_eq_supr_U).op gl, ?_, ?_⟩
   · intro i
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
+    rw [← ConcreteCategory.comp_apply, ← F.1.map_comp]
     exact gl_spec i
   · intro gl' gl'_spec
     convert! congr_arg _ (gl_uniq (F.1.map (eqToHom V_eq_supr_U.symm).op gl') fun i => _) <;>
-      rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
+      rw [← ConcreteCategory.comp_apply, ← F.1.map_comp]
     · simp
     · exact gl'_spec i
 
 @[ext]
-/--
-theorem `eq_of_locally_eq` / 定理 `eq_of_locally_eq`
-
-English:
-theorem eq_of_locally_eq
-  statement: (s t : ToType (F.1.obj (op (iSup U))))
-  proof: by
-  let sf : forall i : ι, ToType (F.1.obj (op (U i))) := fun i => F.1.map (Opens.leSupr U i).op s
-  have sf_compatible : IsCompatible _ U sf := by
-    intro i j
-    simp_rw [sf, ← ConcreteCategory.comp_apply, ← F.1.map_comp]
-    rfl
-  obtain ⟨gl, -, gl_uniq⟩ := F.existsUnique_gluing U sf sf_compatible
-  trans gl
-  · apply gl_uniq
-    intro i
-    rfl
-  · symm
-    apply gl_uniq
-    intro i
-    rw [← h]
-
-中文:
-定理 eq_of_locally_eq
-  结论: (s t : ToType (F.1.obj (op (iSup U))))
-  证明: by
-  let sf : forall i : ι, ToType (F.1.obj (op (U i))) := fun i => F.1.map (Opens.leSupr U i).op s
-  have sf_compatible : IsCompatible _ U sf := by
-    intro i j
-    simp_rw [sf, ← ConcreteCategory.comp_apply, ← F.1.map_comp]
-    rfl
-  obtain ⟨gl, -, gl_uniq⟩ := F.existsUnique_gluing U sf sf_compatible
-  trans gl
-  · apply gl_uniq
-    intro i
-    rfl
-  · symm
-    apply gl_uniq
-    intro i
-    rw [← h]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, F.existsUnique_gluing, IsCompatible, Opens.leSupr, ToType, comp_apply, existsUnique_gluing, gl_uniq, leSupr, map_comp, sf_compatible, simp_rw
+/-
+**TopCat.Sheaf.eq_of_locally_eq** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {FC : C → C
+ → Type u_2} {CC : C → Type u_3}   [inst_1 : (X Y : C) → FunLike (FC X Y) (CC X)
+ (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory C FC]   [CategoryTheory.Limit
+s.HasLimitsOfSize.{x, x, v_1, u_1} C] [(CategoryTheory.forget C).ReflectsIsomorp
+hisms]   [CategoryTheory.Limits.PreservesLimitsOfSize.{x, x, v_1, u_3, u_1, u_3 
++ 1} (CategoryTheory.forget C)] {X : TopCat}   (F : TopCat.Sheaf C X) {ι : Type 
+u_4} (U : ι → TopologicalSpace.Opens ↑X)   (s t : CategoryTheory.ToType (F.obj.o
+bj (Opposite.op (iSup U)))),   (∀ (i : ι),       (CategoryTheory.ConcreteCategor
+y.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op)) s =         (CategoryT
+heory.ConcreteCategory.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op)) t
+) →     s = t
+参数：X Y : C；FC X Y；CC X；CC Y；CategoryTheory.forget C；CategoryTheory.forget C；F : 
+TopCat.Sheaf C X；U : ι → TopologicalSpace.Opens ↑X；s t : CategoryTheory.ToType (
+F.obj.obj (Opposite.op (iSup U)))；∀ (i : ι),       (CategoryTheory.ConcreteCateg
+ory.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op)) s =         (Categor
+yTheory.ConcreteCategory.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op))
+ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `TopCat.Sheaf.existsUnique_gluing`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] {FC : C → C → Type u_2} {CC : C → Type u_3}   [inst_1 :
+ (X Y : C) → FunLike (…
 -/
 theorem eq_of_locally_eq (s t : ToType (F.1.obj (op (iSup U))))
-    (h : forall i, F.1.map (Opens.leSupr U i).op s = F.1.map (Opens.leSupr U i).op t) : s = t := by
-  let sf : forall i : ι, ToType (F.1.obj (op (U i))) := fun i => F.1.map (Opens.leSupr U i).op s
+    (h : ∀ i, F.1.map (Opens.leSupr U i).op s = F.1.map (Opens.leSupr U i).op t) : s = t := by
+  let sf : ∀ i : ι, ToType (F.1.obj (op (U i))) := fun i => F.1.map (Opens.leSupr U i).op s
   have sf_compatible : IsCompatible _ U sf := by
     intro i j
     simp_rw [sf, ← ConcreteCategory.comp_apply, ← F.1.map_comp]
@@ -500,85 +534,112 @@ theorem eq_of_locally_eq (s t : ToType (F.1.obj (op (iSup U))))
     intro i
     rw [← h]
 
-/--
-theorem `eq_of_locally_eq'` / 定理 `eq_of_locally_eq'`
-
-English:
-theorem eq_of_locally_eq'
-  statement: (V : Opens X) (iUV : forall i : ι, U i ⟶ V) (hcover : V <= iSup U)
-  proof: by
-  have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
-  suffices F.1.map (eqToHom V_eq_supr_U.symm).op s = F.1.map (eqToHom V_eq_supr_U.symm).op t by
-    convert! congr_arg (F.1.map (eqToHom V_eq_supr_U).op) this <;>
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]; rw [eqToHom_op]; rw [eqToHom_op]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [F.1.map_id]; rw [ConcreteCategory.id_apply]
-  apply eq_of_locally_eq
-  intro i
-  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
-  exact h i
-
-中文:
-定理 eq_of_locally_eq'
-  结论: (V : Opens X) (iUV : 对任意 i : ι, U i ⟶ V) (hcover : V <= iSup U)
-  证明: by
-  have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
-  suffices F.1.map (eqToHom V_eq_supr_U.symm).op s = F.1.map (eqToHom V_eq_supr_U.symm).op t by
-    convert! congr_arg (F.1.map (eqToHom V_eq_supr_U).op) this <;>
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]; rw [eqToHom_op]; rw [eqToHom_op]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [F.1.map_id]; rw [ConcreteCategory.id_apply]
-  apply eq_of_locally_eq
-  intro i
-  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
-  exact h i
-
-Depends on / 依赖: Concret, ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.id_apply, V_eq_supr_U, V_eq_supr_U.symm, comp_apply, congr_arg, convert, eqToHom, eqToHom_op, eqToHom_refl, eqToHom_trans, eq_of_locally_eq, hcover, iSup_le, id_apply, le_antisymm, map_comp, map_id
+/-- In this version of the lemma, the inclusion homs `iUV` can be specified directly by the user,
+which can be more convenient in practice.
 -/
-theorem eq_of_locally_eq' (V : Opens X) (iUV : forall i : ι, U i ⟶ V) (hcover : V <= iSup U)
-    (s t : ToType (F.1.obj (op V))) (h : forall i, F.1.map (iUV i).op s = F.1.map (iUV i).op t) :
+/-
+**TopCat.Sheaf.eq_of_locally_eq'** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {FC : C → C
+ → Type u_2} {CC : C → Type u_3}   [inst_1 : (X Y : C) → FunLike (FC X Y) (CC X)
+ (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory C FC]   [CategoryTheory.Limit
+s.HasLimitsOfSize.{x, x, v_1, u_1} C] [(CategoryTheory.forget C).ReflectsIsomorp
+hisms]   [CategoryTheory.Limits.PreservesLimitsOfSize.{x, x, v_1, u_3, u_1, u_3 
++ 1} (CategoryTheory.forget C)] {X : TopCat}   (F : TopCat.Sheaf C X) {ι : Type 
+u_4} (U : ι → TopologicalSpace.Opens ↑X) (V : TopologicalSpace.Opens ↑X)   (iUV 
+: (i : ι) → U i ⟶ V),   V ≤ iSup U →     ∀ (s t : CategoryTheory.ToType (F.obj.o
+bj (Opposite.op V))),       (∀ (i : ι),           (CategoryTheory.ConcreteCatego
+ry.hom (F.obj.map (iUV i).op)) s =             (CategoryTheory.ConcreteCategory.
+hom (F.obj.map (iUV i).op)) t) →         s = t
+参数：X Y : C；FC X Y；CC X；CC Y；CategoryTheory.forget C；CategoryTheory.forget C；F : 
+TopCat.Sheaf C X；U : ι → TopologicalSpace.Opens ↑X；V : TopologicalSpace.Opens ↑X
+；iUV : (i : ι) → U i ⟶ V；s t : CategoryTheory.ToType (F.obj.obj (Opposite.op V))
+；∀ (i : ι),           (CategoryTheory.ConcreteCategory.hom (F.obj.map (iUV i).op
+)) s =             (CategoryTheory.ConcreteCategory.hom (F.obj.map (iUV i).op)) 
+t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TopCat.Sheaf.eq_of_locally_eq`：∀ {C : Type u_1} [inst : CategoryTheory.C
+ategory.{v_1, u_1} C] {FC : C → C → Type u_2} {CC : C → Type u_3}   [inst_1 : (X
+ Y : C) → FunLike (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.eqToHom_op`：eqToHom_op {X Y : C} (h : X = Y) : (eqToHom h
+).op = eqToHom (congr_arg op h.symm)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.ConcreteCategory.id_apply`：∀ {C : Type u} {inst : Categor
+yTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C 
+→ Type w)}   {inst_1 : outPara…
+
+--- 原说明 ---
+In this version of the lemma, the inclusion homs `iUV` can be specified directly
+ by the user,
+which can be more convenient in practice.
+-/
+theorem eq_of_locally_eq' (V : Opens X) (iUV : ∀ i : ι, U i ⟶ V) (hcover : V ≤ iSup U)
+    (s t : ToType (F.1.obj (op V))) (h : ∀ i, F.1.map (iUV i).op s = F.1.map (iUV i).op t) :
     s = t := by
   have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
   suffices F.1.map (eqToHom V_eq_supr_U.symm).op s = F.1.map (eqToHom V_eq_supr_U.symm).op t by
     convert! congr_arg (F.1.map (eqToHom V_eq_supr_U).op) this <;>
-    rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]; rw [eqToHom_op]; rw [eqToHom_op]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [F.1.map_id]; rw [ConcreteCategory.id_apply]
+    rw [← ConcreteCategory.comp_apply, ← F.1.map_comp, eqToHom_op, eqToHom_op, eqToHom_trans,
+      eqToHom_refl, F.1.map_id, ConcreteCategory.id_apply]
   apply eq_of_locally_eq
   intro i
-  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← F.1.map_comp]
+  rw [← ConcreteCategory.comp_apply, ← ConcreteCategory.comp_apply, ← F.1.map_comp]
   exact h i
-
-/--
-theorem `eq_of_locally_eq₂` / 定理 `eq_of_locally_eq₂`
-
-English:
-theorem eq_of_locally_eq₂
-  statement: {U₁ U₂ V : Opens X} (i₁ : U₁ ⟶ V) (i₂ : U₂ ⟶ V) (hcover : V <= U₁ ⊔ U₂)
-  proof: by
-  fapply F.eq_of_locally_eq' fun t : Bool => if t then U₁ else U₂
-  · exact fun i => if h : i then eqToHom (if_pos h) ≫ i₁ else eqToHom (if_neg h) ≫ i₂
-  · refine le_trans hcover ?_
-    rw [sup_le_iff]
-    constructor
-    · exact le_iSup (fun t : Bool => if t then U₁ else U₂) true
-    · exact le_iSup (fun t : Bool => if t then U₁ else U₂) false
-  · rintro ⟨_ | _⟩
-    any_goals exact h₁
-    any_goals exact h₂
-
-中文:
-定理 eq_of_locally_eq₂
-  结论: {U₁ U₂ V : Opens X} (i₁ : U₁ ⟶ V) (i₂ : U₂ ⟶ V) (hcover : V <= U₁ ⊔ U₂)
-  证明: by
-  fapply F.eq_of_locally_eq' fun t : Bool => if t then U₁ else U₂
-  · exact fun i => if h : i then eqToHom (if_pos h) ≫ i₁ else eqToHom (if_neg h) ≫ i₂
-  · refine le_trans hcover ?_
-    rw [sup_le_iff]
-    constructor
-    · exact le_iSup (fun t : Bool => if t then U₁ else U₂) true
-    · exact le_iSup (fun t : Bool => if t then U₁ else U₂) false
-  · rintro ⟨_ | _⟩
-    any_goals exact h₁
-    any_goals exact h₂
-
-Depends on / 依赖: F.eq_of_locally_eq, any_goals, eqToHom, eq_of_locally_eq, fapply, hcover, if_neg, if_pos, le_iSup, le_trans, sup_le_iff
+/-
+**TopCat.Sheaf.eq_of_locally_eq** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {FC : C → C
+ → Type u_2} {CC : C → Type u_3}   [inst_1 : (X Y : C) → FunLike (FC X Y) (CC X)
+ (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory C FC]   [CategoryTheory.Limit
+s.HasLimitsOfSize.{x, x, v_1, u_1} C] [(CategoryTheory.forget C).ReflectsIsomorp
+hisms]   [CategoryTheory.Limits.PreservesLimitsOfSize.{x, x, v_1, u_3, u_1, u_3 
++ 1} (CategoryTheory.forget C)] {X : TopCat}   (F : TopCat.Sheaf C X) {ι : Type 
+u_4} (U : ι → TopologicalSpace.Opens ↑X)   (s t : CategoryTheory.ToType (F.obj.o
+bj (Opposite.op (iSup U)))),   (∀ (i : ι),       (CategoryTheory.ConcreteCategor
+y.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op)) s =         (CategoryT
+heory.ConcreteCategory.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op)) t
+) →     s = t
+参数：X Y : C；FC X Y；CC X；CC Y；CategoryTheory.forget C；CategoryTheory.forget C；F : 
+TopCat.Sheaf C X；U : ι → TopologicalSpace.Opens ↑X；s t : CategoryTheory.ToType (
+F.obj.obj (Opposite.op (iSup U)))；∀ (i : ι),       (CategoryTheory.ConcreteCateg
+ory.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op)) s =         (Categor
+yTheory.ConcreteCategory.hom (F.obj.map (TopologicalSpace.Opens.leSupr U i).op))
+ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `TopCat.Sheaf.existsUnique_gluing`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] {FC : C → C → Type u_2} {CC : C → Type u_3}   [inst_1 :
+ (X Y : C) → FunLike (…
 -/
-theorem eq_of_locally_eq₂ {U₁ U₂ V : Opens X} (i₁ : U₁ ⟶ V) (i₂ : U₂ ⟶ V) (hcover : V <= U₁ ⊔ U₂)
+theorem eq_of_locally_eq₂ {U₁ U₂ V : Opens X} (i₁ : U₁ ⟶ V) (i₂ : U₂ ⟶ V) (hcover : V ≤ U₁ ⊔ U₂)
     (s t : ToType (F.1.obj (op V))) (h₁ : F.1.map i₁.op s = F.1.map i₁.op t)
     (h₂ : F.1.map i₂.op s = F.1.map i₂.op t) : s = t := by
   fapply F.eq_of_locally_eq' fun t : Bool => if t then U₁ else U₂
@@ -593,34 +654,55 @@ theorem eq_of_locally_eq₂ {U₁ U₂ V : Opens X} (i₁ : U₁ ⟶ V) (i₂ : 
     any_goals exact h₂
 
 variable {F} {U} in
-/--
-theorem `eq_app_of_locally_eq` / 定理 `eq_app_of_locally_eq`
-
-English:
-theorem eq_app_of_locally_eq
-  statement: {V : Opens X} {G : Sheaf C X} {f : F ⟶ G}
-  proof: by
-  refine eq_of_locally_eq G U _ _ (fun _ => ?_)
-  rw [← NatTrans.naturality_apply]; rw [h]; rw [ht]; rw [← ConcreteCategory.comp_apply]; rw [← Functor.map_comp]
-  rfl
-
-中文:
-定理 eq_app_of_locally_eq
-  结论: {V : Opens X} {G : 层 C X} {f : F ⟶ G}
-  证明: by
-  refine eq_of_locally_eq G U _ _ (fun _ => ?_)
-  rw [← NatTrans.naturality_apply]; rw [h]; rw [ht]; rw [← ConcreteCategory.comp_apply]; rw [← Functor.map_comp]
-  rfl
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, Functor, Functor.map_comp, NatTrans, NatTrans.naturality_apply, comp_apply, eq_of_locally_eq, map_comp, naturality_apply
+/-
+**TopCat.Sheaf.eq_app_of_locally_eq** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Sheaf`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {FC : C → C
+ → Type u_2} {CC : C → Type u_3}   [inst_1 : (X Y : C) → FunLike (FC X Y) (CC X)
+ (CC Y)] [inst_2 : CategoryTheory.ConcreteCategory C FC]   [CategoryTheory.Limit
+s.HasLimitsOfSize.{x, x, v_1, u_1} C] [(CategoryTheory.forget C).ReflectsIsomorp
+hisms]   [CategoryTheory.Limits.PreservesLimitsOfSize.{x, x, v_1, u_3, u_1, u_3 
++ 1} (CategoryTheory.forget C)] {X : TopCat}   {F : TopCat.Sheaf C X} {ι : Type 
+u_4} {U : ι → TopologicalSpace.Opens ↑X} {V : TopologicalSpace.Opens ↑X}   {G : 
+TopCat.Sheaf C X} {f : F ⟶ G} {s : CategoryTheory.ToType (F.obj.obj (Opposite.op
+ (iSup U)))}   {t : CategoryTheory.ToType (G.obj.obj (Opposite.op V))}   {sf : (
+i : ι) → CategoryTheory.ToType (F.obj.obj (Opposite.op (U i)))},   TopCat.Preshe
+af.IsGluing F.obj U sf s →     ∀ (hV : ∀ (i : ι), U i ≤ V),       (∀ (i : ι),   
+        (CategoryTheory.ConcreteCategory.hom (f.hom.app (Opposite.op (U i)))) (s
+f i) =             (CategoryTheory.ConcreteCategory.hom (G.obj.map (CategoryTheo
+ry.homOfLE ⋯).op)) t) →         (CategoryTheory.ConcreteCategory.hom (f.hom.app 
+(Opposite.op (iSup U)))) s =           (CategoryTheory.ConcreteCategory.hom (G.o
+bj.map (CategoryTheory.homOfLE ⋯).op)) t
+参数：X Y : C；FC X Y；CC X；CC Y；CategoryTheory.forget C；CategoryTheory.forget C；F.ob
+j.obj (Opposite.op (iSup U))；G.obj.obj (Opposite.op V)；i : ι；F.obj.obj (Opposite
+.op (U i))；hV : ∀ (i : ι), U i ≤ V；∀ (i : ι),           (CategoryTheory.Concrete
+Category.hom (f.hom.app (Opposite.op (U i)))) (sf i) =             (CategoryTheo
+ry.ConcreteCategory.hom (G.obj.map (CategoryTheory.homOfLE ⋯).op)) t；CategoryThe
+ory.ConcreteCategory.hom (f.hom.app (Opposite.op (iSup U)))；CategoryTheory.Concr
+eteCategory.hom (G.obj.map (CategoryTheory.homOfLE ⋯).op)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Sheaf.eq_of_locally_eq`：∀ {C : Type u_1} [inst : CategoryTheory.C
+ategory.{v_1, u_1} C] {FC : C → C → Type u_2} {CC : C → Type u_3}   [inst_1 : (X
+ Y : C) → FunLike (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
+· 使用定理 `CategoryTheory.ConcreteCategory.comp_apply`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (
+C → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem eq_app_of_locally_eq {V : Opens X} {G : Sheaf C X} {f : F ⟶ G}
     {s : ToType (F.1.obj (op (iSup U)))} {t : ToType (G.1.obj (op V))}
-    {sf : forall i : ι, ToType (F.1.obj (op (U i)))} (h : IsGluing F.1 U sf s) (hV : forall i : ι, U i <= V)
-    (ht : forall i : ι, f.1.app (op (U i)) (sf i) = G.1.map (homOfLE (hV i)).op t) :
+    {sf : ∀ i : ι, ToType (F.1.obj (op (U i)))} (h : IsGluing F.1 U sf s) (hV : ∀ i : ι, U i ≤ V)
+    (ht : ∀ i : ι, f.1.app (op (U i)) (sf i) = G.1.map (homOfLE (hV i)).op t) :
     f.hom.app (op (iSup U)) s = G.obj.map (homOfLE (by aesop_cat)).op t := by
-  refine eq_of_locally_eq G U _ _ (fun _ => ?_)
-  rw [← NatTrans.naturality_apply]; rw [h]; rw [ht]; rw [← ConcreteCategory.comp_apply]; rw [← Functor.map_comp]
+  refine eq_of_locally_eq G U _ _ (fun _ ↦ ?_)
+  rw [← NatTrans.naturality_apply, h, ht, ← ConcreteCategory.comp_apply, ← Functor.map_comp]
   rfl
 
 end
@@ -628,3 +710,4 @@ end
 end Sheaf
 
 end TopCat
+

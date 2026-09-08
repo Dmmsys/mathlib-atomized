@@ -31,32 +31,34 @@ If you wish to recursively replace things in the implementation of `f?`, you can
 
 The function is also memoised, which means that if the
 same expression (by reference) is encountered the cached replacement is used. -/
-@[deprecated "use `MonadCacheT` and `checkCache`" (since := "2026-01-24")]
-/--
-Definition of `replaceRec` / `replaceRec` 的定义
+@[deprecated "use `MonadCacheT`  and `checkCache`" (since := "2026-01-24")]
+/-
+**Lean.Expr.replaceRec** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：replaceRec (f? : (Expr -> Expr) -> Expr -> Option Expr) : Expr -> Expr
+参数：f? : (Expr -> Expr) -> Expr -> Option Expr。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 
-English:
-definition replaceRec
-  signature: (f? : (Expr -> Expr) -> Expr -> Option Expr)
-  body: memoFix fun r e =>
-    match f? r e with
-    | some x => x
-| none => Id.run traverseChildren (pure <| r ·) e
+--- 原说明 ---
+A version of `Expr.replace` where the replacement function is available to the f
+unction `f?`.
 
-中文:
-定义 replaceRec
-  签名: (f? : (Expr -> Expr) -> Expr -> 选项类型 Expr)
-  定义体: memoFix fun r e =>
-    match f? r e with
-    | some x => x
-| none => Id.run traverseChildren (pure <| r ·) e
+`replaceRec f? e` will call `f? r e` where `r = replaceRec f?`.
+If `f? r e = none` then `r` will be called on each immediate subexpression of `e
+` and reassembled.
+If it is `some x`, traversal terminates and `x` is returned.
+If you wish to recursively replace things in the implementation of `f?`, you can
+ apply `r`.
 
-Depends on / 依赖: Id.run, memoFix, traverseChildren
+The function is also memoised, which means that if the
+same expression (by reference) is encountered the cached replacement is used.
 -/
-def replaceRec (f? : (Expr -> Expr) -> Expr -> Option Expr) : Expr -> Expr :=
-  memoFix fun r e =>
+def replaceRec (f? : (Expr → Expr) → Expr → Option Expr) : Expr → Expr :=
+  memoFix fun r e ↦
     match f? r e with
     | some x => x
-| none => Id.run traverseChildren (pure <| r ·) e
+    | none   => Id.run <| traverseChildren (pure <| r ·) e
 
 end Lean.Expr
+

@@ -52,30 +52,23 @@ section NonSmall
 
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `IndObjectPresentation` / `IndObjectPresentation` 的定义
+/-- The data that witnesses that a presheaf `A` is an ind-object. It consists of a small
+filtered indexing category `I`, a diagram `F : I ⥤ C` and the data for a colimit cocone on
+`F ⋙ yoneda : I ⥤ Cᵒᵖ ⥤ Type v` with cocone point `A`. -/
+/-
+**CategoryTheory.Limits.IndObjectPresentation** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Functor Cᵒᵖ (Type v) → Type (max u (v + 1))
+参数：Type v；max u (v + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IndObjectPresentation
-  parameters: (A : Cᵒᵖ ⥤ Type v)
-  axioms and operations (6):
-    - I : Type v
-    - [ℐ : SmallCategory I]
-    - [hI : IsFiltered I]
-    - F : I ⥤ C
-    - ι : F ⋙ yoneda ⟶ (Functor.const I).obj A
-    - isColimit : IsColimit (Cocone.mk A ι)
-
-中文:
-结构 IndObjectPresentation
-  参数: (A : Cᵒᵖ ⥤ 类型v)
-  公理与运算 (6 个):
-    - I : 类型v
-    - [ℐ : 小范畴 I]
-    - [hI : 是Filtered I]
-    - F : I ⥤ C
-    - ι : F ⋙ yoneda ⟶ (函子.const I).obj A
-    - isColimit : 是余极限 (余锥.mk A ι)
+--- 原说明 ---
+The data that witnesses that a presheaf `A` is an ind-object. It consists of a s
+mall
+filtered indexing category `I`, a diagram `F : I ⥤ C` and the data for a colimit
+ cocone on
+`F ⋙ yoneda : I ⥤ Cᵒᵖ ⥤ Type v` with cocone point `A`.
 -/
 structure IndObjectPresentation (A : Cᵒᵖ ⥤ Type v) where
   /-- The indexing category of the filtered colimit presentation -/
@@ -95,24 +88,19 @@ namespace IndObjectPresentation
 /-- Alternative constructor for `IndObjectPresentation` taking a cocone instead of its defining
 natural transformation. -/
 @[simps]
-/--
-Definition of `ofCocone` / `ofCocone` 的定义
+/-
+**CategoryTheory.Limits.IndObjectPresentation.ofCocone** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.IndObjectPresentation`。
+形式化陈述：ofCocone {I : Type v} [SmallCategory I] [IsFiltered I] {F : I ⥤ C} (c : Co
+cone (F ⋙ yoneda)) (hc : IsColimit c) : IndObjectPresentation c.pt where I
+参数：c : Cocone (F ⋙ yoneda)；hc : IsColimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCocone
-  signature: {I : Type v} [SmallCategory I] [IsFiltered I] {F : I ⥤ C}
-  body: I
-  F := F
-  ι := c.ι
-  isColimit := hc
-
-中文:
-定义 ofCocone
-  签名: {I : 类型v} [小范畴 I] [是Filtered I] {F : I ⥤ C}
-  定义体: I
-  F := F
-  ι := c.ι
-  isColimit := hc
+--- 原说明 ---
+Alternative constructor for `IndObjectPresentation` taking a cocone instead of i
+ts defining
+natural transformation.
 -/
 def ofCocone {I : Type v} [SmallCategory I] [IsFiltered I] {F : I ⥤ C}
     (c : Cocone (F ⋙ yoneda)) (hc : IsColimit c) : IndObjectPresentation c.pt where
@@ -122,73 +110,45 @@ def ofCocone {I : Type v} [SmallCategory I] [IsFiltered I] {F : I ⥤ C}
   isColimit := hc
 
 variable {A : Cᵒᵖ ⥤ Type v} (P : IndObjectPresentation A)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SmallCategory P.I
-  body: P.ℐ
-
-中文:
-实例 :
-  签名: 小范畴 P.I
-  定义体: P.ℐ
+/-
+**CategoryTheory.Limits.IndObjectPresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Limits.IndObjectPresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SmallCategory P.I := P.ℐ
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsFiltered P.I
-  body: P.hI
-
-中文:
-实例 :
-  签名: 是Filtered P.I
-  定义体: P.hI
-
-Depends on / 依赖: P.hI
+/-
+**CategoryTheory.Limits.IndObjectPresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Limits.IndObjectPresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsFiltered P.I := P.hI
 
 /-- The (colimit) cocone with cocone point `A`. -/
 @[simps pt]
-/--
-Definition of `cocone` / `cocone` 的定义
+/-
+**CategoryTheory.Limits.IndObjectPresentation.cocone** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.IndObjectPresentation`。
+形式化陈述：cocone : Cocone (P.F ⋙ yoneda) where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cocone
-  signature: : Cocone (P.F ⋙ yoneda) where
-  body: A
-  ι := P.ι
-
-中文:
-定义 cocone
-  签名: : 余锥 (P.F ⋙ yoneda) where
-  定义体: A
-  ι := P.ι
+--- 原说明 ---
+The (colimit) cocone with cocone point `A`.
 -/
 def cocone : Cocone (P.F ⋙ yoneda) where
   pt := A
   ι := P.ι
 
-/--
-Definition of `coconeIsColimit` / `coconeIsColimit` 的定义
+/-- `P.cocone` is a colimit cocone. -/
+/-
+**CategoryTheory.Limits.IndObjectPresentation.coconeIsColimit** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Limits.IndObjectPresentation`。
+形式化陈述：coconeIsColimit : IsColimit P.cocone
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeIsColimit
-  signature: : IsColimit P.cocone
-  body: P.isColimit
-
-中文:
-定义 coconeIsColimit
-  签名: : 是余极限 P.cocone
-  定义体: P.isColimit
-
-Depends on / 依赖: P.isColimit, isColimit
+--- 原说明 ---
+`P.cocone` is a colimit cocone.
 -/
 def coconeIsColimit : IsColimit P.cocone :=
   P.isColimit
@@ -197,24 +157,22 @@ set_option backward.isDefEq.respectTransparency false in
 /-- If `A` and `B` are isomorphic, then an ind-object presentation of `A` can be extended to an
 ind-object presentation of `B`. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `extend` / `extend` 的定义
+/-
+**CategoryTheory.Limits.IndObjectPresentation.extend** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.IndObjectPresentation`。
+形式化陈述：extend {A B : Cᵒᵖ ⥤ Type v} (P : IndObjectPresentation A) (η : A ⟶ B) [IsI
+so η] : IndObjectPresentation B
+参数：P : IndObjectPresentation A；η : A ⟶ B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IndObjectPresentation.instIsFilteredI`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {A : CategoryTheory.Functor Cᵒᵖ (T
+ype v)}   (P : CategoryTheory.Limits.IndObjectPre…
 
-English:
-definition extend
-  signature: {A B : Cᵒᵖ ⥤ Type v} (P : IndObjectPresentation A) (η : A ⟶ B)
-  body: .ofCocone (P.cocone.extend η) (P.coconeIsColimit.extendIso η)
-
-#adaptation_note
-
-中文:
-定义 extend
-  签名: {A B : Cᵒᵖ ⥤ 类型v} (P : IndObjectPresentation A) (η : A ⟶ B)
-  定义体: .ofCocone (P.cocone.extend η) (P.coconeIsColimit.extendIso η)
-
-#adaptation_note
-
-Depends on / 依赖: P.cocone.extend, P.coconeIsColimit.extendIso, cocone, coconeIsColimit, extend, extendIso, ofCocone
+--- 原说明 ---
+If `A` and `B` are isomorphic, then an ind-object presentation of `A` can be ext
+ended to an
+ind-object presentation of `B`.
 -/
 noncomputable def extend {A B : Cᵒᵖ ⥤ Type v} (P : IndObjectPresentation A) (η : A ⟶ B)
     [IsIso η] : IndObjectPresentation B :=
@@ -226,38 +184,24 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The canonical comparison functor between the indexing category of the presentation and the
 comma category `CostructuredArrow yoneda A`. This functor is always final. -/
 @[simps! obj_left obj_right_as obj_hom map_left]
-/--
-Definition of `toCostructuredArrow` / `toCostructuredArrow` 的定义
+/-
+**CategoryTheory.Limits.IndObjectPresentation.toCostructuredArrow** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Limits.IndObjectPresentation`。
+形式化陈述：toCostructuredArrow : P.I ⥤ CostructuredArrow yoneda A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toCostructuredArrow
-  signature: : P.I ⥤ CostructuredArrow yoneda A
-  body: P.cocone.toCostructuredArrow ⋙ CostructuredArrow.pre _ _ _
-
-中文:
-定义 toCostructuredArrow
-  签名: : P.I ⥤ CostructuredArrow yoneda A
-  定义体: P.cocone.toCostructuredArrow ⋙ CostructuredArrow.pre _ _ _
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, P.cocone.toCostructuredArrow, cocone, toCostructuredArrow
+--- 原说明 ---
+The canonical comparison functor between the indexing category of the presentati
+on and the
+comma category `CostructuredArrow yoneda A`. This functor is always final.
 -/
 def toCostructuredArrow : P.I ⥤ CostructuredArrow yoneda A :=
   P.cocone.toCostructuredArrow ⋙ CostructuredArrow.pre _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: P.toCostructuredArrow.Final
-  body: Presheaf.final_toCostructuredArrow_comp_pre _ P.coconeIsColimit
-
-中文:
-实例 :
-  签名: P.toCostructuredArrow.终
-  定义体: Presheaf.final_toCostructuredArrow_comp_pre _ P.coconeIsColimit
-
-Depends on / 依赖: P.coconeIsColimit, Presheaf, Presheaf.final_toCostructuredArrow_comp_pre, coconeIsColimit, final_toCostructuredArrow_comp_pre
+/-
+**CategoryTheory.Limits.IndObjectPresentation.** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Limits.IndObjectPresentation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : P.toCostructuredArrow.Final :=
   Presheaf.final_toCostructuredArrow_comp_pre _ P.coconeIsColimit
@@ -265,30 +209,18 @@ instance : P.toCostructuredArrow.Final :=
 set_option backward.defeqAttrib.useBackward true in
 /-- Representable presheaves are (trivially) ind-objects. -/
 @[simps]
-/--
-Definition of `yoneda` / `yoneda` 的定义
+/-
+**CategoryTheory.Limits.IndObjectPresentation.yoneda** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.IndObjectPresentation`。
+形式化陈述：yoneda (X : C) : IndObjectPresentation (yoneda.obj X) where I
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instIsFilteredDiscretePUnit`：CategoryTheory.IsFiltered (C
+ategoryTheory.Discrete PUnit.{u_1 + 1})
 
-English:
-definition yoneda
-  signature: (X : C)
-  body: Discrete PUnit.{v + 1}
-  F := Functor.fromPUnit X
-  ι := { app := fun _ => 𝟙 _ }
-  isColimit :=
-    { desc := fun s => s.ι.app ⟨PUnit.unit⟩
-      uniq := fun _ _ h => h ⟨PUnit.unit⟩ }
-
-中文:
-定义 yoneda
-  签名: (X : C)
-  定义体: Discrete PUnit.{v + 1}
-  F := Functor.fromPUnit X
-  ι := { app := fun _ => 𝟙 _ }
-  isColimit :=
-    { desc := fun s => s.ι.app ⟨PUnit.unit⟩
-      uniq := fun _ _ h => h ⟨PUnit.unit⟩ }
-
-Depends on / 依赖: Discrete
+--- 原说明 ---
+Representable presheaves are (trivially) ind-objects.
 -/
 def yoneda (X : C) : IndObjectPresentation (yoneda.obj X) where
   I := Discrete PUnit.{v + 1}
@@ -300,165 +232,141 @@ def yoneda (X : C) : IndObjectPresentation (yoneda.obj X) where
 
 end IndObjectPresentation
 
-/--
-Definition of `IsIndObject` / `IsIndObject` 的定义
+/-- A presheaf is called an ind-object if it can be written as a filtered colimit of representable
+presheaves. -/
+/-
+**CategoryTheory.Limits.IsIndObject** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Functor Cᵒᵖ (Type v) → Prop
+参数：Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsIndObject
-  parameters: (A : Cᵒᵖ ⥤ Type v)
-  axioms and operations (1):
-    - mk' : : nonempty_presentation : Nonempty (IndObjectPresentation A)
-
-中文:
-结构 是IndObject
-  参数: (A : Cᵒᵖ ⥤ 类型v)
-  公理与运算 (1 个):
-    - mk' : : nonempty_presentation : 非空 (IndObjectPresentation A)
+--- 原说明 ---
+A presheaf is called an ind-object if it can be written as a filtered colimit of
+ representable
+presheaves.
 -/
 structure IsIndObject (A : Cᵒᵖ ⥤ Type v) : Prop where
   mk' :: nonempty_presentation : Nonempty (IndObjectPresentation A)
-
-/--
-theorem `IsIndObject.mk` / 定理 `IsIndObject.mk`
-
-English:
-theorem IsIndObject.mk
-  given: {A : Cᵒᵖ ⥤ Type v} (P : IndObjectPresentation A)
-  statement: IsIndObject A
-  proof: ⟨⟨P⟩⟩
-
-中文:
-定理 是IndObject.mk
-  条件: {A : Cᵒᵖ ⥤ 类型v} (P : IndObjectPresentation A)
-  结论: 是IndObject A
-  证明: ⟨⟨P⟩⟩
+/-
+**CategoryTheory.Limits.IsIndObject.mk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.IsIndObject`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {A : CategoryTheo
+ry.Functor Cᵒᵖ (Type v)}   (P : CategoryTheory.Limits.IndObjectPresentation A), 
+CategoryTheory.Limits.IsIndObject A
+参数：Type v；P : CategoryTheory.Limits.IndObjectPresentation A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsIndObject.mk {A : Cᵒᵖ ⥤ Type v} (P : IndObjectPresentation A) : IsIndObject A :=
   ⟨⟨P⟩⟩
 
-/--
-theorem `isIndObject_yoneda` / 定理 `isIndObject_yoneda`
+/-- Representable presheaves are (trivially) ind-objects. -/
+/-
+**CategoryTheory.Limits.isIndObject_yoneda** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：isIndObject_yoneda (X : C) : IsIndObject (yoneda.obj X)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsIndObject.mk`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {A : CategoryTheory.Functor Cᵒᵖ (Type v)}   (P : Category
+Theory.Limits.IndObjectPre…
 
-English:
-theorem isIndObject_yoneda
-  given: (X : C)
-  statement: IsIndObject (yoneda.obj X)
-  proof: .mk IndObjectPresentation.yoneda X
-
-中文:
-定理 isIndObject_yoneda
-  条件: (X : C)
-  结论: 是IndObject (yoneda.obj X)
-  证明: .mk IndObjectPresentation.yoneda X
-
-Depends on / 依赖: IndObjectPresentation, IndObjectPresentation.yoneda, yoneda
+--- 原说明 ---
+Representable presheaves are (trivially) ind-objects.
 -/
 theorem isIndObject_yoneda (X : C) : IsIndObject (yoneda.obj X) :=
-.mk IndObjectPresentation.yoneda X
+  .mk <| IndObjectPresentation.yoneda X
 
 namespace IsIndObject
 
 variable {A : Cᵒᵖ ⥤ Type v}
 
-/--
-theorem `map` / 定理 `map`
-
-English:
-theorem map
-  given: {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η]
-  statement: IsIndObject A -> IsIndObject B
-
-中文:
-定理 map
-  条件: {A B : Cᵒᵖ ⥤ 类型v} (η : A ⟶ B) [是同构 η]
-  结论: 是IndObject A -> 是IndObject B
+/-
+**CategoryTheory.Limits.IsIndObject.map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.IsIndObject`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {A B : CategoryTh
+eory.Functor Cᵒᵖ (Type v)} (η : A ⟶ B)   [CategoryTheory.IsIso η], CategoryTheor
+y.Limits.IsIndObject A → CategoryTheory.Limits.IsIndObject B
+参数：Type v；η : A ⟶ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η] : IsIndObject A -> IsIndObject B
+theorem map {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η] : IsIndObject A → IsIndObject B
   | ⟨⟨P⟩⟩ => ⟨⟨P.extend η⟩⟩
-
-/--
-theorem `iff_of_iso` / 定理 `iff_of_iso`
-
-English:
-theorem iff_of_iso
-  given: {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η]
-  proof: ⟨.map η, .map (inv η)⟩
-
-中文:
-定理 iff_of_iso
-  条件: {A B : Cᵒᵖ ⥤ 类型v} (η : A ⟶ B) [是同构 η]
-  证明: ⟨.map η, .map (inv η)⟩
+/-
+**CategoryTheory.Limits.IsIndObject.iff_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits.IsIndObject`。
+形式化陈述：iff_of_iso {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η] : IsIndObject A ↔ Is
+IndObject B
+参数：η : A ⟶ B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsIndObject.map`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {A B : CategoryTheory.Functor Cᵒᵖ (Type v)} (η : A ⟶ B) 
+  [CategoryTheory.IsIso η],…
 -/
 theorem iff_of_iso {A B : Cᵒᵖ ⥤ Type v} (η : A ⟶ B) [IsIso η] :
     IsIndObject A ↔ IsIndObject B :=
   ⟨.map η, .map (inv η)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ObjectProperty.IsClosedUnderIsomorphisms (IsIndObject (C := C))
-  body: h.map i.hom
-
-中文:
-实例 :
-  签名: ObjectProperty.在同构下封闭 (是IndObject (C := C))
-  定义体: h.map i.hom
+/-
+**CategoryTheory.Limits.IsIndObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.L
+imits.IsIndObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ObjectProperty.IsClosedUnderIsomorphisms (IsIndObject (C := C)) where
   of_iso i h := h.map i.hom
 
-/--
-Definition of `presentation` / `presentation` 的定义
+/-- Pick a presentation for an ind-object using choice. -/
+/-
+**CategoryTheory.Limits.IsIndObject.presentation** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.IsIndObject`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {A : Cate
+goryTheory.Functor Cᵒᵖ (Type v)} →       CategoryTheory.Limits.IsIndObject A → C
+ategoryTheory.Limits.IndObjectPresentation A
+参数：Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presentation
-  signature: : IsIndObject A -> IndObjectPresentation A
-
-中文:
-定义 presentation
-  签名: : 是IndObject A -> IndObjectPresentation A
+--- 原说明 ---
+Pick a presentation for an ind-object using choice.
 -/
-noncomputable def presentation : IsIndObject A -> IndObjectPresentation A
+noncomputable def presentation : IsIndObject A → IndObjectPresentation A
   | ⟨P⟩ => P.some
-
-/--
-theorem `isFiltered` / 定理 `isFiltered`
-
-English:
-theorem isFiltered
-  given: (h : IsIndObject A)
-  statement: IsFiltered (CostructuredArrow yoneda A)
-  proof: IsFiltered.of_final h.presentation.toCostructuredArrow
-
-中文:
-定理 isFiltered
-  条件: (h : 是IndObject A)
-  结论: 是Filtered (CostructuredArrow yoneda A)
-  证明: IsFiltered.of_final h.presentation.toCostructuredArrow
-
-Depends on / 依赖: IsFiltered, IsFiltered.of_final, h.presentation.toCostructuredArrow, of_final, presentation, toCostructuredArrow
+/-
+**CategoryTheory.Limits.IsIndObject.isFiltered** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits.IsIndObject`。
+形式化陈述：isFiltered (h : IsIndObject A) : IsFiltered (CostructuredArrow yoneda A)
+参数：h : IsIndObject A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.of_final`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IndObjectPresentation.instFinalICostructuredArrowF
+unctorOppositeTypeYonedaToCostructuredArrow`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {A : CategoryTheory.Functor Cᵒᵖ (Type v)}   (P : CategoryT
+heory.Limits.IndObjectPre…
+· 使用定理 `CategoryTheory.Limits.IndObjectPresentation.instIsFilteredI`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {A : CategoryTheory.Functor Cᵒᵖ (T
+ype v)}   (P : CategoryTheory.Limits.IndObjectPre…
 -/
 theorem isFiltered (h : IsIndObject A) : IsFiltered (CostructuredArrow yoneda A) :=
   IsFiltered.of_final h.presentation.toCostructuredArrow
-
-/--
-theorem `finallySmall` / 定理 `finallySmall`
-
-English:
-theorem finallySmall
-  given: (h : IsIndObject A)
-  statement: FinallySmall.{v} (CostructuredArrow yoneda A)
-  proof: FinallySmall.mk' h.presentation.toCostructuredArrow
-
-中文:
-定理 finallySmall
-  条件: (h : 是IndObject A)
-  结论: FinallySmall.{v} (CostructuredArrow yoneda A)
-  证明: FinallySmall.mk' h.presentation.toCostructuredArrow
-
-Depends on / 依赖: FinallySmall, FinallySmall.mk, h.presentation.toCostructuredArrow, presentation, toCostructuredArrow
+/-
+**CategoryTheory.Limits.IsIndObject.finallySmall** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits.IsIndObject`。
+形式化陈述：finallySmall (h : IsIndObject A) : FinallySmall.{v} (CostructuredArrow yon
+eda A)
+参数：h : IsIndObject A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinallySmall.mk'`：∀ {J : Type u} [inst : CategoryTheory.C
+ategory.{v, u} J] {S : Type w} [inst_1 : CategoryTheory.SmallCategory S]   (F : 
+CategoryTheory.Functo…
+· 使用定理 `CategoryTheory.Limits.IndObjectPresentation.instFinalICostructuredArrowF
+unctorOppositeTypeYonedaToCostructuredArrow`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {A : CategoryTheory.Functor Cᵒᵖ (Type v)}   (P : CategoryT
+heory.Limits.IndObjectPre…
 -/
 theorem finallySmall (h : IsIndObject A) : FinallySmall.{v} (CostructuredArrow yoneda A) :=
   FinallySmall.mk' h.presentation.toCostructuredArrow
@@ -467,44 +375,37 @@ end IsIndObject
 
 open IsFiltered.SmallFilteredIntermediate
 
-/--
-theorem `isIndObject_of_isFiltered_of_finallySmall` / 定理 `isIndObject_of_isFiltered_of_finallySmall`
-
-English:
-theorem isIndObject_of_isFiltered_of_finallySmall
-  statement: (A : Cᵒᵖ ⥤ Type v)
-  proof: by
-  have h₁ : (factoring (fromFinalModel (CostructuredArrow yoneda A)) ⋙
-      inclusion (fromFinalModel (CostructuredArrow yoneda A))).Final := Functor.final_of_natIso
-    (factoringCompInclusion (fromFinalModel <| CostructuredArrow yoneda A)).symm
-  have h₂ : Functor.Final (inclusion (fromFinalModel (CostructuredArrow yoneda A))) :=
-    Functor.final_of_comp_full_faithful' (factoring _) (inclusion _)
-  let c := (Presheaf.tautologicalCocone A).whisker
-    (inclusion (fromFinalModel (CostructuredArrow yoneda A)))
-  let hc : IsColimit c := (Functor.Final.isColimitWhiskerEquiv _ _).symm
-    (Presheaf.isColimitTautologicalCocone A)
-  have hq : Nonempty (FinalModel (CostructuredArrow yoneda A)) := Nonempty.map
-    (Functor.Final.lift (fromFinalModel (CostructuredArrow yoneda A))) IsFiltered.nonempty
-  exact ⟨_, inclusion (fromFinalModel _) ⋙ CostructuredArrow.proj yoneda A, c.ι, hc⟩
-
-中文:
-定理 isIndObject_of_isFiltered_of_finallySmall
-  结论: (A : Cᵒᵖ ⥤ 类型v)
-  证明: by
-  have h₁ : (factoring (fromFinalModel (CostructuredArrow yoneda A)) ⋙
-      inclusion (fromFinalModel (CostructuredArrow yoneda A))).Final := Functor.final_of_natIso
-    (factoringCompInclusion (fromFinalModel <| CostructuredArrow yoneda A)).symm
-  have h₂ : Functor.Final (inclusion (fromFinalModel (CostructuredArrow yoneda A))) :=
-    Functor.final_of_comp_full_faithful' (factoring _) (inclusion _)
-  let c := (Presheaf.tautologicalCocone A).whisker
-    (inclusion (fromFinalModel (CostructuredArrow yoneda A)))
-  let hc : IsColimit c := (Functor.Final.isColimitWhiskerEquiv _ _).symm
-    (Presheaf.isColimitTautologicalCocone A)
-  have hq : Nonempty (FinalModel (CostructuredArrow yoneda A)) := Nonempty.map
-    (Functor.Final.lift (fromFinalModel (CostructuredArrow yoneda A))) IsFiltered.nonempty
-  exact ⟨_, inclusion (fromFinalModel _) ⋙ CostructuredArrow.proj yoneda A, c.ι, hc⟩
-
-Depends on / 依赖: CostructuredArrow, Functor, Functor.Final, Functor.final_of_comp_full_faithful, Functor.final_of_natIso, Presheaf, Presheaf.tautologicalCocone, factoring, factoringCompInclusion, final_of_comp_full_faithful, final_of_natIso, fromFinalModel, inclusion, tautologicalCocone, whisker, yoneda
+/-
+**CategoryTheory.Limits.isIndObject_of_isFiltered_of_finallySmall** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：isIndObject_of_isFiltered_of_finallySmall (A : Cᵒᵖ ⥤ Type v) [IsFiltered (
+CostructuredArrow yoneda A)] [FinallySmall.{v} (CostructuredArrow yoneda A)] : I
+sIndObject A
+参数：A : Cᵒᵖ ⥤ Type v；CostructuredArrow yoneda A；CostructuredArrow yoneda A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `CategoryTheory.Functor.final_of_natIso`：final_of_natIso {F F' : C ⥤ D} [
+Final F] (i : F ≅ F') : Final F' where out _
+· 使用定理 `CategoryTheory.Functor.final_of_comp_full_faithful'`：final_of_comp_full_
+faithful' [Full G] [Faithful G] [Final (F ⋙ G)] : Final G
+· 使用定理 `CategoryTheory.IsFiltered.SmallFilteredIntermediate.instFullInclusion`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory
+.IsFilteredOrEmpty C] {D : Type u₁}   [inst_2 : CategoryThe…
+· 使用定理 `CategoryTheory.IsFiltered.SmallFilteredIntermediate.instFaithfulInclusio
+n`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTh
+eory.IsFilteredOrEmpty C] {D : Type u₁}   [inst_2 : CategoryThe…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `CategoryTheory.IsFiltered.nonempty`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} [self : CategoryTheory.IsFiltered C], Nonempty C
+· 使用定理 `CategoryTheory.IsFiltered.SmallFilteredIntermediate.instOfNonempty`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Is
+FilteredOrEmpty C] {D : Type u₁}   [inst_2 : CategoryThe…
 -/
 theorem isIndObject_of_isFiltered_of_finallySmall (A : Cᵒᵖ ⥤ Type v)
     [IsFiltered (CostructuredArrow yoneda A)] [FinallySmall.{v} (CostructuredArrow yoneda A)] :
@@ -522,44 +423,67 @@ theorem isIndObject_of_isFiltered_of_finallySmall (A : Cᵒᵖ ⥤ Type v)
     (Functor.Final.lift (fromFinalModel (CostructuredArrow yoneda A))) IsFiltered.nonempty
   exact ⟨_, inclusion (fromFinalModel _) ⋙ CostructuredArrow.proj yoneda A, c.ι, hc⟩
 
-/--
-theorem `isIndObject_iff` / 定理 `isIndObject_iff`
+/-- The recognition theorem for ind-objects: `A : Cᵒᵖ ⥤ Type v` is an ind-object if and only if
+`CostructuredArrow yoneda A` is filtered and finally `v`-small.
+Theorem 6.1.5 of [Kashiwara2006] -/
+/-
+**CategoryTheory.Limits.isIndObject_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：isIndObject_iff (A : Cᵒᵖ ⥤ Type v) : IsIndObject A ↔ (IsFiltered (Costruct
+uredArrow yoneda A) ∧ FinallySmall.{v} (CostructuredArrow yoneda A))
+参数：A : Cᵒᵖ ⥤ Type v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsIndObject.isFiltered`：isFiltered (h : IsIndObjec
+t A) : IsFiltered (CostructuredArrow yoneda A)
+· 使用定理 `CategoryTheory.Limits.IsIndObject.finallySmall`：finallySmall (h : IsIndO
+bject A) : FinallySmall.{v} (CostructuredArrow yoneda A)
+· 使用定理 `CategoryTheory.Limits.isIndObject_of_isFiltered_of_finallySmall`：isIndOb
+ject_of_isFiltered_of_finallySmall (A : Cᵒᵖ ⥤ Type v) [IsFiltered (CostructuredA
+rrow yoneda A)] [FinallySmall.{v} (CostructuredArrow …
 
-English:
-theorem isIndObject_iff
-  given: (A : Cᵒᵖ ⥤ Type v)
-  statement: IsIndObject A ↔
-  proof: ⟨fun h => ⟨h.isFiltered, h.finallySmall⟩,
-   fun ⟨_, _⟩ => isIndObject_of_isFiltered_of_finallySmall A⟩
-
-中文:
-定理 isIndObject_iff
-  条件: (A : Cᵒᵖ ⥤ 类型v)
-  结论: 是IndObject A ↔
-  证明: ⟨fun h => ⟨h.isFiltered, h.finallySmall⟩,
-   fun ⟨_, _⟩ => isIndObject_of_isFiltered_of_finallySmall A⟩
-
-Depends on / 依赖: finallySmall, h.finallySmall, h.isFiltered, isFiltered, isIndObject_of_isFiltered_of_finallySmall
+--- 原说明 ---
+The recognition theorem for ind-objects: `A : Cᵒᵖ ⥤ Type v` is an ind-object if 
+and only if
+`CostructuredArrow yoneda A` is filtered and finally `v`-small.
+Theorem 6.1.5 of [Kashiwara2006]
 -/
 theorem isIndObject_iff (A : Cᵒᵖ ⥤ Type v) : IsIndObject A ↔
     (IsFiltered (CostructuredArrow yoneda A) ∧ FinallySmall.{v} (CostructuredArrow yoneda A)) :=
   ⟨fun h => ⟨h.isFiltered, h.finallySmall⟩,
    fun ⟨_, _⟩ => isIndObject_of_isFiltered_of_finallySmall A⟩
 
-/--
-theorem `isIndObject_limit_comp_yoneda` / 定理 `isIndObject_limit_comp_yoneda`
+/-- If a limit already exists in `C`, then the limit of the image of the diagram under the Yoneda
+embedding is an ind-object. -/
+/-
+**CategoryTheory.Limits.isIndObject_limit_comp_yoneda** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：isIndObject_limit_comp_yoneda {J : Type u'} [Category.{v'} J] (F : J ⥤ C) 
+[HasLimit F] : IsIndObject (limit (F ⋙ yoneda))
+参数：F : J ⥤ C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsIndObject.map`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {A B : CategoryTheory.Functor Cᵒᵖ (Type v)} (η : A ⟶ B) 
+  [CategoryTheory.IsIso η],…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfSize.preservesLimitsOfShape`：∀ {C
+ : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : 
+CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Limits.isIndObject_yoneda`：isIndObject_yoneda (X : C) : I
+sIndObject (yoneda.obj X)
 
-English:
-theorem isIndObject_limit_comp_yoneda
-  given: {J : Type u'} [Category.{v'} J] (F : J ⥤ C) [HasLimit F]
-  proof: IsIndObject.map (preservesLimitIso yoneda F).hom (isIndObject_yoneda (limit F))
-
-中文:
-定理 isIndObject_limit_comp_yoneda
-  条件: {J : 类型u'} [范畴.{v'} J] (F : J ⥤ C) [有极限 F]
-  证明: IsIndObject.map (preservesLimitIso yoneda F).hom (isIndObject_yoneda (limit F))
-
-Depends on / 依赖: IsIndObject, IsIndObject.map, isIndObject_yoneda, preservesLimitIso, yoneda
+--- 原说明 ---
+If a limit already exists in `C`, then the limit of the image of the diagram und
+er the Yoneda
+embedding is an ind-object.
 -/
 theorem isIndObject_limit_comp_yoneda {J : Type u'} [Category.{v'} J] (F : J ⥤ C) [HasLimit F] :
     IsIndObject (limit (F ⋙ yoneda)) :=
@@ -571,34 +495,39 @@ section Small
 
 variable {C : Type u} [SmallCategory C]
 
-/--
-lemma `isIndObject_iff_preservesFiniteLimits` / 引理 `isIndObject_iff_preservesFiniteLimits`
+/-- Presheaves over a small finitely cocomplete category `C : Type u` are Ind-objects if and only if
+they are left-exact. -/
+/-
+**CategoryTheory.Limits.isIndObject_iff_preservesFiniteLimits** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：isIndObject_iff_preservesFiniteLimits [HasFiniteColimits C] (A : Cᵒᵖ ⥤ Typ
+e u) : IsIndObject A ↔ PreservesFiniteLimits A
+参数：A : Cᵒᵖ ⥤ Type u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `CategoryTheory.Limits.isIndObject_iff`：isIndObject_iff (A : Cᵒᵖ ⥤ Type v
+) : IsIndObject A ↔ (IsFiltered (CostructuredArrow yoneda A) ∧ FinallySmall.{v} 
+(CostructuredArrow yoneda A…
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_isFiltered_costructuredAr
+row_yoneda`：preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda [IsFilt
+ered (CostructuredArrow yoneda A)] : PreservesFiniteLimits A where prese…
+· 使用定理 `CategoryTheory.Limits.isFiltered_costructuredArrow_yoneda_of_preservesFi
+niteLimits`：isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits [Preser
+vesFiniteLimits A] : IsFiltered (CostructuredArrow yoneda A)
+· 使用定理 `CategoryTheory.essentiallySmallSelf`：essentiallySmallSelf : EssentiallyS
+mall.{max w v u} C
+· 使用定理 `CategoryTheory.finallySmall_of_essentiallySmall`：finallySmall_of_essenti
+allySmall [EssentiallySmall.{w} J] : FinallySmall.{w} J
 
-English:
-lemma isIndObject_iff_preservesFiniteLimits
-  given: [HasFiniteColimits C] (A : Cᵒᵖ ⥤ Type u)
-  proof: (isIndObject_iff A).trans by
-    refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun h => ⟨?_, ?_⟩⟩
-    · apply preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda
-    · exact isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits A
-    · have := essentiallySmallSelf (CostructuredArrow yoneda A)
-      apply finallySmall_of_essentiallySmall
-
-中文:
-引理 isIndObject_iff_preservesFiniteLimits
-  条件: [有有限余极限 C] (A : Cᵒᵖ ⥤ 类型u)
-  证明: (isIndObject_iff A).trans by
-    refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun h => ⟨?_, ?_⟩⟩
-    · apply preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda
-    · exact isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits A
-    · have := essentiallySmallSelf (CostructuredArrow yoneda A)
-      apply finallySmall_of_essentiallySmall
-
-Depends on / 依赖: CostructuredArrow, essentiallySmallSelf, finallySmall_of_essentiallySmall, isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits, isIndObject_iff, preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda, yoneda
+--- 原说明 ---
+Presheaves over a small finitely cocomplete category `C : Type u` are Ind-object
+s if and only if
+they are left-exact.
 -/
 lemma isIndObject_iff_preservesFiniteLimits [HasFiniteColimits C] (A : Cᵒᵖ ⥤ Type u) :
     IsIndObject A ↔ PreservesFiniteLimits A :=
-(isIndObject_iff A).trans by
+  (isIndObject_iff A).trans <| by
     refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun h => ⟨?_, ?_⟩⟩
     · apply preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda
     · exact isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits A
@@ -608,3 +537,4 @@ lemma isIndObject_iff_preservesFiniteLimits [HasFiniteColimits C] (A : Cᵒᵖ �
 end Small
 
 end CategoryTheory.Limits
+

@@ -57,208 +57,149 @@ open AlgebraicTopology.DoldKan
 `N' : SimplicialObject C ⥤ Karoubi (ChainComplex C ℕ)` and the inverse
 of the equivalence `ChainComplex C ℕ ≌ Karoubi (ChainComplex C ℕ)`. -/
 @[simps!, nolint unusedArguments]
-/--
-Definition of `N` / `N` 的定义
+/-
+**CategoryTheory.Idempotents.DoldKan.N** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Idempotents.DoldKan`。
+形式化陈述：N [IsIdempotentComplete C] [HasFiniteCoproducts C] : SimplicialObject C ⥤ 
+ChainComplex C Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition N
-  signature: [IsIdempotentComplete C] [HasFiniteCoproducts C]
-  body: N₁ ⋙ (toKaroubiEquivalence _).inverse
-
-中文:
-定义 N
-  签名: [是IdempotentComplete C] [有FiniteCoproducts C]
-  定义体: N₁ ⋙ (toKaroubiEquivalence _).inverse
-
-Depends on / 依赖: inverse, toKaroubiEquivalence
+--- 原说明 ---
+The functor `N` for the equivalence is obtained by composing
+`N' : SimplicialObject C ⥤ Karoubi (ChainComplex C ℕ)` and the inverse
+of the equivalence `ChainComplex C ℕ ≌ Karoubi (ChainComplex C ℕ)`.
 -/
-def N [IsIdempotentComplete C] [HasFiniteCoproducts C] : SimplicialObject C ⥤ ChainComplex C Nat :=
+def N [IsIdempotentComplete C] [HasFiniteCoproducts C] : SimplicialObject C ⥤ ChainComplex C ℕ :=
   N₁ ⋙ (toKaroubiEquivalence _).inverse
 
 /-- The functor `Γ` for the equivalence is `Γ₀`. -/
 @[simps!, nolint unusedArguments]
-/--
-Definition of `Γ` / `Γ` 的定义
+/-
+**CategoryTheory.Idempotents.DoldKan.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Γ
-  signature: [IsIdempotentComplete C] [HasFiniteCoproducts C]
-  body: Γ₀
-
-中文:
-定义 Γ
-  签名: [是IdempotentComplete C] [有FiniteCoproducts C]
-  定义体: Γ₀
+--- 原说明 ---
+The functor `Γ` for the equivalence is `Γ₀`.
 -/
-def Γ [IsIdempotentComplete C] [HasFiniteCoproducts C] : ChainComplex C Nat ⥤ SimplicialObject C :=
+def Γ [IsIdempotentComplete C] [HasFiniteCoproducts C] : ChainComplex C ℕ ⥤ SimplicialObject C :=
   Γ₀
 
 variable [IsIdempotentComplete C] [HasFiniteCoproducts C]
 
-/--
-Definition of `isoN₁` / `isoN₁` 的定义
+/-- A reformulation of the isomorphism `toKaroubi (SimplicialObject C) ⋙ N₂ ≅ N₁` -/
+/-
+**CategoryTheory.Idempotents.DoldKan.isoN** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoN₁
-  signature: :
-  body: toKaroubiCompN₂IsoN₁
-
-@[simp]
-
-中文:
-定义 isoN₁
-  签名: :
-  定义体: toKaroubiCompN₂IsoN₁
-
-@[simp]
+--- 原说明 ---
+A reformulation of the isomorphism `toKaroubi (SimplicialObject C) ⋙ N₂ ≅ N₁`
 -/
 def isoN₁ :
     (toKaroubiEquivalence (SimplicialObject C)).functor ⋙
       Preadditive.DoldKan.equivalence.functor ≅ N₁ := toKaroubiCompN₂IsoN₁
 
 @[simp]
-/--
-lemma `isoN₁_hom_app_f` / 引理 `isoN₁_hom_app_f`
-
-English:
-lemma isoN₁_hom_app_f
-  given: (X : SimplicialObject C)
-  proof: rfl
-
-中文:
-引理 isoN₁_hom_app_f
-  条件: (X : SimplicialObject C)
-  证明: rfl
+/-
+**CategoryTheory.Idempotents.DoldKan.isoN** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isoN₁_hom_app_f (X : SimplicialObject C) :
     (isoN₁.hom.app X).f = PInfty := rfl
 
-/--
-Definition of `isoΓ₀` / `isoΓ₀` 的定义
+/-- A reformulation of the canonical isomorphism
+`toKaroubi (ChainComplex C ℕ) ⋙ Γ₂ ≅ Γ ⋙ toKaroubi (SimplicialObject C)`. -/
+/-
+**CategoryTheory.Idempotents.DoldKan.iso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoΓ₀
-  signature: :
-  body: (functorExtension₂CompWhiskeringLeftToKaroubiIso _ _).app Γ₀
-
-@[simp]
-
-中文:
-定义 isoΓ₀
-  签名: :
-  定义体: (functorExtension₂CompWhiskeringLeftToKaroubiIso _ _).app Γ₀
-
-@[simp]
+--- 原说明 ---
+A reformulation of the canonical isomorphism
+`toKaroubi (ChainComplex C ℕ) ⋙ Γ₂ ≅ Γ ⋙ toKaroubi (SimplicialObject C)`.
 -/
 def isoΓ₀ :
-    (toKaroubiEquivalence (ChainComplex C Nat)).functor ⋙ Preadditive.DoldKan.equivalence.inverse ≅
+    (toKaroubiEquivalence (ChainComplex C ℕ)).functor ⋙ Preadditive.DoldKan.equivalence.inverse ≅
       Γ ⋙ (toKaroubiEquivalence _).functor :=
   (functorExtension₂CompWhiskeringLeftToKaroubiIso _ _).app Γ₀
 
 @[simp]
-/--
-lemma `N₂_map_isoΓ₀_hom_app_f` / 引理 `N₂_map_isoΓ₀_hom_app_f`
-
-English:
-lemma N₂_map_isoΓ₀_hom_app_f
-  given: (X : ChainComplex C Nat)
-  proof: by
-  ext
-  apply comp_id
-
-中文:
-引理 N₂_map_isoΓ₀_hom_app_f
-  条件: (X : 链复形 C 自然数)
-  证明: by
-  ext
-  apply comp_id
-
-Depends on / 依赖: comp_id
+/-
+**CategoryTheory.Idempotents.DoldKan.N** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Idempotents.DoldKan`。
+形式化陈述：N [IsIdempotentComplete C] [HasFiniteCoproducts C] : SimplicialObject C ⥤ 
+ChainComplex C Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma N₂_map_isoΓ₀_hom_app_f (X : ChainComplex C Nat) :
+lemma N₂_map_isoΓ₀_hom_app_f (X : ChainComplex C ℕ) :
     (N₂.map (isoΓ₀.hom.app X)).f = PInfty := by
   ext
   apply comp_id
 
-/--
-Definition of `equivalence` / `equivalence` 的定义
+/-- The Dold-Kan equivalence for pseudoabelian categories given
+by the functors `N` and `Γ`. It is obtained by applying the results in
+`Compatibility.lean` to the equivalence `Preadditive.DoldKan.Equivalence`. -/
+/-
+**CategoryTheory.Idempotents.DoldKan.equivalence** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Idempotents.DoldKan`。
+形式化陈述：equivalence : SimplicialObject C ≌ ChainComplex C Nat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Idempotents.instIsIdempotentCompleteSimplicialObject`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [CategoryTheory.IsId
+empotentComplete C],   CategoryTheory.IsIdempotentComplet…
 
-English:
-definition equivalence
-  signature: : SimplicialObject C ≌ ChainComplex C Nat
-  body: Compatibility.equivalence isoN₁ isoΓ₀
-
-中文:
-定义 equivalence
-  签名: : SimplicialObject C ≌ 链复形 C 自然数
-  定义体: Compatibility.equivalence isoN₁ isoΓ₀
-
-Depends on / 依赖: Compatibility, Compatibility.equivalence, equivalence
+--- 原说明 ---
+The Dold-Kan equivalence for pseudoabelian categories given
+by the functors `N` and `Γ`. It is obtained by applying the results in
+`Compatibility.lean` to the equivalence `Preadditive.DoldKan.Equivalence`.
 -/
-def equivalence : SimplicialObject C ≌ ChainComplex C Nat :=
+def equivalence : SimplicialObject C ≌ ChainComplex C ℕ :=
   Compatibility.equivalence isoN₁ isoΓ₀
-
-/--
-theorem `equivalence_functor` / 定理 `equivalence_functor`
-
-English:
-theorem equivalence_functor
-  statement: (equivalence : SimplicialObject C ≌ _).functor = N
-  proof: rfl
-
-中文:
-定理 equivalence_functor
-  结论: (equivalence : SimplicialObject C ≌ _).functor = N
-  证明: rfl
+/-
+**CategoryTheory.Idempotents.DoldKan.equivalence_functor** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Idempotents.DoldKan`。
+形式化陈述：equivalence_functor : (equivalence : SimplicialObject C ≌ _).functor = N
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem equivalence_functor : (equivalence : SimplicialObject C ≌ _).functor = N :=
   rfl
-
-/--
-theorem `equivalence_inverse` / 定理 `equivalence_inverse`
-
-English:
-theorem equivalence_inverse
-  statement: (equivalence : SimplicialObject C ≌ _).inverse = Γ
-  proof: rfl
-
-中文:
-定理 equivalence_inverse
-  结论: (equivalence : SimplicialObject C ≌ _).inverse = Γ
-  证明: rfl
+/-
+**CategoryTheory.Idempotents.DoldKan.equivalence_inverse** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Idempotents.DoldKan`。
+形式化陈述：equivalence_inverse : (equivalence : SimplicialObject C ≌ _).inverse = Γ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem equivalence_inverse : (equivalence : SimplicialObject C ≌ _).inverse = Γ :=
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hη` / 定理 `hη`
+/-- The natural isomorphism `NΓ'` satisfies the compatibility that is needed
+for the construction of our counit isomorphism `η`. -/
+/-
+**CategoryTheory.Idempotents.DoldKan.h** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hη
-  proof: by
-  ext K : 3
-  simp only [Compatibility.τ₀_hom_app, Compatibility.τ₁_hom_app]
-  exact (N₂Γ₂_compatible_with_N₁Γ₀ K).trans (by simp)
-
-#adaptation_note
-
-中文:
-定理 hη
-  证明: by
-  ext K : 3
-  simp only [Compatibility.τ₀_hom_app, Compatibility.τ₁_hom_app]
-  exact (N₂Γ₂_compatible_with_N₁Γ₀ K).trans (by simp)
-
-#adaptation_note
-
-Depends on / 依赖: Compatibility
+--- 原说明 ---
+The natural isomorphism `NΓ'` satisfies the compatibility that is needed
+for the construction of our counit isomorphism `η`.
 -/
 theorem hη :
     Compatibility.τ₀ =
       Compatibility.τ₁ isoN₁ isoΓ₀
-        (N₁Γ₀ : Γ ⋙ N₁ ≅ (toKaroubiEquivalence (ChainComplex C Nat)).functor) := by
+        (N₁Γ₀ : Γ ⋙ N₁ ≅ (toKaroubiEquivalence (ChainComplex C ℕ)).functor) := by
   ext K : 3
   simp only [Compatibility.τ₀_hom_app, Compatibility.τ₁_hom_app]
   exact (N₂Γ₂_compatible_with_N₁Γ₀ K).trans (by simp)
@@ -268,76 +209,46 @@ theorem hη :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The counit isomorphism induced by `N₁Γ₀` -/
 @[simps!]
-/--
-Definition of `η` / `η` 的定义
+/-
+**CategoryTheory.Idempotents.DoldKan.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition η
-  signature: : Γ ⋙ N ≅ 𝟭 (ChainComplex C Nat)
-  body: Compatibility.equivalenceCounitIso
-    (N₁Γ₀ : (Γ : ChainComplex C Nat ⥤ _) ⋙ N₁ ≅ (toKaroubiEquivalence _).functor)
-
-中文:
-定义 η
-  签名: : Γ ⋙ N ≅ 𝟭 (链复形 C 自然数)
-  定义体: Compatibility.equivalenceCounitIso
-    (N₁Γ₀ : (Γ : ChainComplex C Nat ⥤ _) ⋙ N₁ ≅ (toKaroubiEquivalence _).functor)
-
-Depends on / 依赖: ChainComplex, Compatibility, Compatibility.equivalenceCounitIso, equivalenceCounitIso, functor, toKaroubiEquivalence
+--- 原说明 ---
+The counit isomorphism induced by `N₁Γ₀`
 -/
-def η : Γ ⋙ N ≅ 𝟭 (ChainComplex C Nat) :=
+def η : Γ ⋙ N ≅ 𝟭 (ChainComplex C ℕ) :=
   Compatibility.equivalenceCounitIso
-    (N₁Γ₀ : (Γ : ChainComplex C Nat ⥤ _) ⋙ N₁ ≅ (toKaroubiEquivalence _).functor)
-
-/--
-theorem `equivalence_counitIso` / 定理 `equivalence_counitIso`
-
-English:
-theorem equivalence_counitIso
-  proof: Compatibility.equivalenceCounitIso_eq hη
-
-中文:
-定理 equivalence_counitIso
-  证明: Compatibility.equivalenceCounitIso_eq hη
-
-Depends on / 依赖: Compatibility, Compatibility.equivalenceCounitIso_eq, equivalenceCounitIso_eq
+    (N₁Γ₀ : (Γ : ChainComplex C ℕ ⥤ _) ⋙ N₁ ≅ (toKaroubiEquivalence _).functor)
+/-
+**CategoryTheory.Idempotents.DoldKan.equivalence_counitIso** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Idempotents.DoldKan`。
+形式化陈述：equivalence_counitIso : DoldKan.equivalence.counitIso = (η : Γ ⋙ N ≅ 𝟭 (Ch
+ainComplex C Nat))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalenceCounitIso_eq`：equival
+enceCounitIso_eq (hη : τ₀ = τ₁ hF hG η) : (equivalence hF hG).counitIso = equiva
+lenceCounitIso η
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Idempotents.instIsIdempotentCompleteSimplicialObject`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [CategoryTheory.IsId
+empotentComplete C],   CategoryTheory.IsIdempotentComplet…
+· 使用定理 `CategoryTheory.Idempotents.DoldKan.hη`：hη : Compatibility.τ₀ = Compatibi
+lity.τ₁ isoN₁ isoΓ₀ (N₁Γ₀ : Γ ⋙ N₁ ≅ (toKaroubiEquivalence (ChainComplex C Nat))
+.functor)
 -/
 theorem equivalence_counitIso :
-    DoldKan.equivalence.counitIso = (η : Γ ⋙ N ≅ 𝟭 (ChainComplex C Nat)) :=
+    DoldKan.equivalence.counitIso = (η : Γ ⋙ N ≅ 𝟭 (ChainComplex C ℕ)) :=
   Compatibility.equivalenceCounitIso_eq hη
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hε` / 定理 `hε`
-
-English:
-theorem hε
-  proof: by
-  dsimp only [isoN₁]
-  ext1
-  rw [← cancel_epi Γ₂N₁.inv]; rw [Iso.inv_hom_id]
-  ext X : 2
-  rw [NatTrans.comp_app]; rw [Γ₂N₁_inv]; rw [compatibility_Γ₂N₁_Γ₂N₂_natTrans X]; rw [Compatibility.υ_hom_app]; rw [Preadditive.DoldKan.equivalence_unitIso]; rw [Iso.app_inv]; rw [assoc]
-  dsimp only [Functor.comp_obj, Preadditive.DoldKan.equivalence_inverse, Preadditive.DoldKan.Γ.eq_1,
-    toKaroubiEquivalence, Functor.asEquivalence_functor, Preadditive.DoldKan.N.eq_1,
-    NatTrans.id_app]
-  rw [← NatTrans.comp_app_assoc]; rw [← Γ₂N₂_inv]; rw [Iso.inv_hom_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [Γ₂N₂ToKaroubiIso_inv_app]; rw [← Γ₂.map_comp]; rw [Iso.inv_hom_id_app]; rw [Γ₂.map_id]
-
-中文:
-定理 hε
-  证明: by
-  dsimp only [isoN₁]
-  ext1
-  rw [← cancel_epi Γ₂N₁.inv]; rw [Iso.inv_hom_id]
-  ext X : 2
-  rw [NatTrans.comp_app]; rw [Γ₂N₁_inv]; rw [compatibility_Γ₂N₁_Γ₂N₂_natTrans X]; rw [Compatibility.υ_hom_app]; rw [Preadditive.DoldKan.equivalence_unitIso]; rw [Iso.app_inv]; rw [assoc]
-  dsimp only [Functor.comp_obj, Preadditive.DoldKan.equivalence_inverse, Preadditive.DoldKan.Γ.eq_1,
-    toKaroubiEquivalence, Functor.asEquivalence_functor, Preadditive.DoldKan.N.eq_1,
-    NatTrans.id_app]
-  rw [← NatTrans.comp_app_assoc]; rw [← Γ₂N₂_inv]; rw [Iso.inv_hom_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [Γ₂N₂ToKaroubiIso_inv_app]; rw [← Γ₂.map_comp]; rw [Iso.inv_hom_id_app]; rw [Γ₂.map_id]
-
-Depends on / 依赖: Compatibility, DoldKan, Functor, Functor.asEquivalence_functor, Functor.comp_obj, Iso.app_inv, Iso.inv_hom_id, NatTrans, NatTrans.comp_app, NatTrans.comp_app_assoc, NatTrans.id_app, Preadditive, Preadditive.DoldKan, Preadditive.DoldKan.N.eq_1, Preadditive.DoldKan.equivalence_inverse, Preadditive.DoldKan.equivalence_unitIso, app_inv, asEquivalence_functor, cancel_epi, comp_app
+/-
+**CategoryTheory.Idempotents.DoldKan.h** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hε :
     Compatibility.υ (isoN₁) =
@@ -345,44 +256,45 @@ theorem hε :
           (N₁ : SimplicialObject C ⥤ _) ⋙ Preadditive.DoldKan.equivalence.inverse) := by
   dsimp only [isoN₁]
   ext1
-  rw [← cancel_epi Γ₂N₁.inv]; rw [Iso.inv_hom_id]
+  rw [← cancel_epi Γ₂N₁.inv, Iso.inv_hom_id]
   ext X : 2
-  rw [NatTrans.comp_app]; rw [Γ₂N₁_inv]; rw [compatibility_Γ₂N₁_Γ₂N₂_natTrans X]; rw [Compatibility.υ_hom_app]; rw [Preadditive.DoldKan.equivalence_unitIso]; rw [Iso.app_inv]; rw [assoc]
+  rw [NatTrans.comp_app, Γ₂N₁_inv, compatibility_Γ₂N₁_Γ₂N₂_natTrans X, Compatibility.υ_hom_app,
+    Preadditive.DoldKan.equivalence_unitIso, Iso.app_inv, assoc]
   dsimp only [Functor.comp_obj, Preadditive.DoldKan.equivalence_inverse, Preadditive.DoldKan.Γ.eq_1,
     toKaroubiEquivalence, Functor.asEquivalence_functor, Preadditive.DoldKan.N.eq_1,
     NatTrans.id_app]
-  rw [← NatTrans.comp_app_assoc]; rw [← Γ₂N₂_inv]; rw [Iso.inv_hom_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [Γ₂N₂ToKaroubiIso_inv_app]; rw [← Γ₂.map_comp]; rw [Iso.inv_hom_id_app]; rw [Γ₂.map_id]
+  rw [← NatTrans.comp_app_assoc, ← Γ₂N₂_inv, Iso.inv_hom_id, NatTrans.id_app, id_comp,
+    Γ₂N₂ToKaroubiIso_inv_app, ← Γ₂.map_comp, Iso.inv_hom_id_app, Γ₂.map_id]
 
-/--
-Definition of `ε` / `ε` 的定义
+/-- The unit isomorphism induced by `Γ₂N₁`. -/
+/-
+**CategoryTheory.Idempotents.DoldKan.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Idempotents.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ε
-  signature: : 𝟭 (SimplicialObject C) ≅ N ⋙ Γ
-  body: Compatibility.equivalenceUnitIso isoΓ₀ Γ₂N₁
-
-中文:
-定义 ε
-  签名: : 𝟭 (SimplicialObject C) ≅ N ⋙ Γ
-  定义体: Compatibility.equivalenceUnitIso isoΓ₀ Γ₂N₁
-
-Depends on / 依赖: Compatibility, Compatibility.equivalenceUnitIso, equivalenceUnitIso
+--- 原说明 ---
+The unit isomorphism induced by `Γ₂N₁`.
 -/
 def ε : 𝟭 (SimplicialObject C) ≅ N ⋙ Γ :=
   Compatibility.equivalenceUnitIso isoΓ₀ Γ₂N₁
-
-/--
-theorem `equivalence_unitIso` / 定理 `equivalence_unitIso`
-
-English:
-theorem equivalence_unitIso
-  proof: Compatibility.equivalenceUnitIso_eq hε
-
-中文:
-定理 equivalence_unitIso
-  证明: Compatibility.equivalenceUnitIso_eq hε
-
-Depends on / 依赖: Compatibility, Compatibility.equivalenceUnitIso_eq, equivalenceUnitIso_eq
+/-
+**CategoryTheory.Idempotents.DoldKan.equivalence_unitIso** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Idempotents.DoldKan`。
+形式化陈述：equivalence_unitIso : DoldKan.equivalence.unitIso = (ε : 𝟭 (SimplicialObje
+ct C) ≅ N ⋙ Γ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicTopology.DoldKan.Compatibility.equivalenceUnitIso_eq`：equivalen
+ceUnitIso_eq (hε : υ hF = ε) : (equivalence hF hG).unitIso = equivalenceUnitIso 
+hG ε
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Idempotents.instIsIdempotentCompleteSimplicialObject`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [CategoryTheory.IsId
+empotentComplete C],   CategoryTheory.IsIdempotentComplet…
+· 使用定理 `CategoryTheory.Idempotents.DoldKan.hε`：hε : Compatibility.υ (isoN₁) = (Γ
+₂N₁ : (toKaroubiEquivalence _).functor ≅ (N₁ : SimplicialObject C ⥤ _) ⋙ Preaddi
+tive.DoldKan.equivalence.in…
 -/
 theorem equivalence_unitIso :
     DoldKan.equivalence.unitIso = (ε : 𝟭 (SimplicialObject C) ≅ N ⋙ Γ) :=
@@ -393,3 +305,4 @@ end DoldKan
 end Idempotents
 
 end CategoryTheory
+

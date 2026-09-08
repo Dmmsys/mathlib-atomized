@@ -31,43 +31,54 @@ section Coherent
 
 variable [Precoherent C]
 
-/--
-theorem `precoherent` / 定理 `precoherent`
+/-- `Precoherent` is preserved by equivalence of categories. -/
+/-
+**CategoryTheory.Equivalence.precoherent** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Equivalence`。
+形式化陈述：precoherent (e : C ≌ D) : Precoherent D
+参数：e : C ≌ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.reflects_precoherent`：∀ {C : Type u_1} {D : Type 
+u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Ca
+tegory.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.instPreservesFiniteEffectiveEpiFamiliesOfPreserve
+sEffectiveEpiFamilies`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_
+1} C] {D : Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Cate
+gor…
+· 使用定理 `CategoryTheory.Functor.instPreservesEffectiveEpiFamiliesOfIsEquivalence`
+：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}  
+ [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `CategoryTheory.Functor.instReflectsFiniteEffectiveEpiFamiliesOfReflectsE
+ffectiveEpiFamilies`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1}
+ C] {D : Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Catego
+r…
+· 使用定理 `CategoryTheory.Functor.instReflectsEffectiveEpiFamiliesOfIsEquivalence`：
+∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   
+[inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.instEffectivelyEnoughOfIsEquivalence`：∀ {C : Type
+ u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : C
+ategoryTheory.Category.{v_2, u_2} D] (F : Categor…
 
-English:
-theorem precoherent
-  given: (e : C ≌ D)
-  statement: Precoherent D
-  proof: e.inverse.reflects_precoherent
-
-中文:
-定理 precoherent
-  条件: (e : C ≌ D)
-  结论: Precoherent D
-  证明: e.inverse.reflects_precoherent
-
-Depends on / 依赖: e.inverse.reflects_precoherent, inverse, reflects_precoherent
+--- 原说明 ---
+`Precoherent` is preserved by equivalence of categories.
 -/
 theorem precoherent (e : C ≌ D) : Precoherent D := e.inverse.reflects_precoherent
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [EssentiallySmall
-  signature: C] :
-  body: (equivSmallModel C).precoherent
-
-中文:
-实例 [EssentiallySmall
-  签名: C] :
-  定义体: (equivSmallModel C).precoherent
-
-Depends on / 依赖: equivSmallModel, precoherent
+/-
+**CategoryTheory.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Equivale
+nce`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [EssentiallySmall C] :
     Precoherent (SmallModel C) := (equivSmallModel C).precoherent
-
+/-
+**CategoryTheory.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Equivale
+nce`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (e : C ≌ D) : haveI := precoherent e
     e.inverse.IsDenseSubsite (coherentTopology D) (coherentTopology C) where
   functorPushforward_mem_iff := by
@@ -79,22 +90,21 @@ variable (A : Type*) [Category* A]
 Equivalent precoherent categories give equivalent coherent toposes.
 -/
 @[simps!]
-/--
-Definition of `sheafCongrPrecoherent` / `sheafCongrPrecoherent` 的定义
+/-
+**CategoryTheory.Equivalence.sheafCongrPrecoherent** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Equivalence`。
+形式化陈述：sheafCongrPrecoherent (e : C ≌ D) : haveI
+参数：e : C ≌ D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.precoherent`：precoherent (e : C ≌ D) : Precoh
+erent D
+· 使用定理 `CategoryTheory.Equivalence.instIsDenseSubsiteCoherentTopologyInverse`：∀ 
+{C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [i
+nst_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
 
-English:
-definition sheafCongrPrecoherent
-  signature: (e : C ≌ D)
-  body: e.precoherent
-    Sheaf (coherentTopology C) A ≌ Sheaf (coherentTopology D) A := e.sheafCongr _ _ _
-
-中文:
-定义 sheafCongrPrecoherent
-  签名: (e : C ≌ D)
-  定义体: e.precoherent
-    Sheaf (coherentTopology C) A ≌ Sheaf (coherentTopology D) A := e.sheafCongr _ _ _
-
-Depends on / 依赖: e.precoherent, precoherent
+--- 原说明 ---
+Equivalent precoherent categories give equivalent coherent toposes.
 -/
 def sheafCongrPrecoherent (e : C ≌ D) : haveI := e.precoherent
     Sheaf (coherentTopology C) A ≌ Sheaf (coherentTopology D) A := e.sheafCongr _ _ _
@@ -102,53 +112,56 @@ def sheafCongrPrecoherent (e : C ≌ D) : haveI := e.precoherent
 open Presheaf
 
 /--
-theorem `precoherent_isSheaf_iff` / 定理 `precoherent_isSheaf_iff`
+The coherent sheaf condition can be checked after precomposing with the equivalence.
+-/
+/-
+**CategoryTheory.Equivalence.precoherent_isSheaf_iff** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Equivalence`。
+形式化陈述：precoherent_isSheaf_iff (e : C ≌ D) (F : Cᵒᵖ ⥤ A) : haveI
+参数：e : C ≌ D；F : Cᵒᵖ ⥤ A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.precoherent`：precoherent (e : C ≌ D) : Precoh
+erent D
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presheaf.isSheaf_of_iso_iff`：isSheaf_of_iso_iff {P P' : C
+ᵒᵖ ⥤ A} (e : P ≅ P') : IsSheaf J P ↔ IsSheaf J P'
 
-English:
-theorem precoherent_isSheaf_iff
-  given: (e : C ≌ D) (F : Cᵒᵖ ⥤ A)
-  statement: haveI
-  proof: e.precoherent
-    IsSheaf (coherentTopology C) F ↔ IsSheaf (coherentTopology D) (e.inverse.op ⋙ F) := by
-  refine ⟨fun hF => ((e.sheafCongrPrecoherent A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
-  rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPrecoherent A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
-  · exact Functor.isoWhiskerRight e.op.unitIso F
-
-中文:
-定理 precoherent_isSheaf_iff
-  条件: (e : C ≌ D) (F : Cᵒᵖ ⥤ A)
-  结论: haveI
-  证明: e.precoherent
-    IsSheaf (coherentTopology C) F ↔ IsSheaf (coherentTopology D) (e.inverse.op ⋙ F) := by
-  refine ⟨fun hF => ((e.sheafCongrPrecoherent A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
-  rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPrecoherent A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
-  · exact Functor.isoWhiskerRight e.op.unitIso F
-
-Depends on / 依赖: e.precoherent, precoherent
+--- 原说明 ---
+The coherent sheaf condition can be checked after precomposing with the equivale
+nce.
 -/
 theorem precoherent_isSheaf_iff (e : C ≌ D) (F : Cᵒᵖ ⥤ A) : haveI := e.precoherent
     IsSheaf (coherentTopology C) F ↔ IsSheaf (coherentTopology D) (e.inverse.op ⋙ F) := by
-  refine ⟨fun hF => ((e.sheafCongrPrecoherent A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
+  refine ⟨fun hF ↦ ((e.sheafCongrPrecoherent A).functor.obj ⟨F, hF⟩).property, fun hF ↦ ?_⟩
   rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPrecoherent A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
+  · exact (e.sheafCongrPrecoherent A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩ |>.property
   · exact Functor.isoWhiskerRight e.op.unitIso F
 
 /--
-theorem `precoherent_isSheaf_iff_of_essentiallySmall` / 定理 `precoherent_isSheaf_iff_of_essentiallySmall`
+The coherent sheaf condition on an essentially small site can be checked after precomposing with
+the equivalence with a small category.
+-/
+/-
+**CategoryTheory.Equivalence.precoherent_isSheaf_iff_of_essentiallySmall** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.Equivalence`。
+形式化陈述：precoherent_isSheaf_iff_of_essentiallySmall [EssentiallySmall C] (F : Cᵒᵖ 
+⥤ A) : IsSheaf (coherentTopology C) F ↔ IsSheaf (coherentTopology (SmallModel C)
+) ((equivSmallModel C).inverse.op ⋙ F)
+参数：F : Cᵒᵖ ⥤ A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.precoherent_isSheaf_iff`：precoherent_isSheaf_
+iff (e : C ≌ D) (F : Cᵒᵖ ⥤ A) : haveI
 
-English:
-theorem precoherent_isSheaf_iff_of_essentiallySmall
-  given: [EssentiallySmall C] (F : Cᵒᵖ ⥤ A)
-  proof: precoherent_isSheaf_iff _ _ _
-
-中文:
-定理 precoherent_isSheaf_iff_of_essentiallySmall
-  条件: [EssentiallySmall C] (F : Cᵒᵖ ⥤ A)
-  证明: precoherent_isSheaf_iff _ _ _
-
-Depends on / 依赖: precoherent_isSheaf_iff
+--- 原说明 ---
+The coherent sheaf condition on an essentially small site can be checked after p
+recomposing with
+the equivalence with a small category.
 -/
 theorem precoherent_isSheaf_iff_of_essentiallySmall [EssentiallySmall C] (F : Cᵒᵖ ⥤ A) :
     IsSheaf (coherentTopology C) F ↔
@@ -161,43 +174,60 @@ section Regular
 
 variable [Preregular C]
 
-/--
-theorem `preregular` / 定理 `preregular`
+/-- `Preregular` is preserved by equivalence of categories. -/
+/-
+**CategoryTheory.Equivalence.preregular** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Equivalence`。
+形式化陈述：preregular (e : C ≌ D) : Preregular D
+参数：e : C ≌ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.reflects_preregular`：∀ {C : Type u_1} {D : Type u
+_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.instPreservesEffectiveEpisOfPreservesFiniteEffect
+iveEpiFamilies`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {
+D : Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.instPreservesFiniteEffectiveEpiFamiliesOfPreserve
+sEffectiveEpiFamilies`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_
+1} C] {D : Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Cate
+gor…
+· 使用定理 `CategoryTheory.Functor.instPreservesEffectiveEpiFamiliesOfIsEquivalence`
+：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}  
+ [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `CategoryTheory.Functor.instReflectsEffectiveEpisOfReflectsFiniteEffectiv
+eEpiFamilies`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D 
+: Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.instReflectsFiniteEffectiveEpiFamiliesOfReflectsE
+ffectiveEpiFamilies`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1}
+ C] {D : Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Catego
+r…
+· 使用定理 `CategoryTheory.Functor.instReflectsEffectiveEpiFamiliesOfIsEquivalence`：
+∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   
+[inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.instEffectivelyEnoughOfIsEquivalence`：∀ {C : Type
+ u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : C
+ategoryTheory.Category.{v_2, u_2} D] (F : Categor…
 
-English:
-theorem preregular
-  given: (e : C ≌ D)
-  statement: Preregular D
-  proof: e.inverse.reflects_preregular
-
-中文:
-定理 preregular
-  条件: (e : C ≌ D)
-  结论: Preregular D
-  证明: e.inverse.reflects_preregular
-
-Depends on / 依赖: e.inverse.reflects_preregular, inverse, reflects_preregular
+--- 原说明 ---
+`Preregular` is preserved by equivalence of categories.
 -/
 theorem preregular (e : C ≌ D) : Preregular D := e.inverse.reflects_preregular
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [EssentiallySmall
-  signature: C] :
-  body: (equivSmallModel C).preregular
-
-中文:
-实例 [EssentiallySmall
-  签名: C] :
-  定义体: (equivSmallModel C).preregular
-
-Depends on / 依赖: equivSmallModel, preregular
+/-
+**CategoryTheory.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Equivale
+nce`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [EssentiallySmall C] :
     Preregular (SmallModel C) := (equivSmallModel C).preregular
-
+/-
+**CategoryTheory.Equivalence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Equivale
+nce`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (e : C ≌ D) : haveI := preregular e
     e.inverse.IsDenseSubsite (regularTopology D) (regularTopology C) where
   functorPushforward_mem_iff := by
@@ -209,22 +239,21 @@ variable (A : Type*) [Category* A]
 Equivalent preregular categories give equivalent regular toposes.
 -/
 @[simps!]
-/--
-Definition of `sheafCongrPreregular` / `sheafCongrPreregular` 的定义
+/-
+**CategoryTheory.Equivalence.sheafCongrPreregular** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：sheafCongrPreregular (e : C ≌ D) : haveI
+参数：e : C ≌ D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.preregular`：preregular (e : C ≌ D) : Preregul
+ar D
+· 使用定理 `CategoryTheory.Equivalence.instIsDenseSubsiteRegularTopologyInverse`：∀ {
+C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [in
+st_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
 
-English:
-definition sheafCongrPreregular
-  signature: (e : C ≌ D)
-  body: e.preregular
-    Sheaf (regularTopology C) A ≌ Sheaf (regularTopology D) A := e.sheafCongr _ _ _
-
-中文:
-定义 sheafCongrPreregular
-  签名: (e : C ≌ D)
-  定义体: e.preregular
-    Sheaf (regularTopology C) A ≌ Sheaf (regularTopology D) A := e.sheafCongr _ _ _
-
-Depends on / 依赖: e.preregular, preregular
+--- 原说明 ---
+Equivalent preregular categories give equivalent regular toposes.
 -/
 def sheafCongrPreregular (e : C ≌ D) : haveI := e.preregular
     Sheaf (regularTopology C) A ≌ Sheaf (regularTopology D) A := e.sheafCongr _ _ _
@@ -232,53 +261,56 @@ def sheafCongrPreregular (e : C ≌ D) : haveI := e.preregular
 open Presheaf
 
 /--
-theorem `preregular_isSheaf_iff` / 定理 `preregular_isSheaf_iff`
+The regular sheaf condition can be checked after precomposing with the equivalence.
+-/
+/-
+**CategoryTheory.Equivalence.preregular_isSheaf_iff** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Equivalence`。
+形式化陈述：preregular_isSheaf_iff (e : C ≌ D) (F : Cᵒᵖ ⥤ A) : haveI
+参数：e : C ≌ D；F : Cᵒᵖ ⥤ A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.preregular`：preregular (e : C ≌ D) : Preregul
+ar D
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presheaf.isSheaf_of_iso_iff`：isSheaf_of_iso_iff {P P' : C
+ᵒᵖ ⥤ A} (e : P ≅ P') : IsSheaf J P ↔ IsSheaf J P'
 
-English:
-theorem preregular_isSheaf_iff
-  given: (e : C ≌ D) (F : Cᵒᵖ ⥤ A)
-  statement: haveI
-  proof: e.preregular
-    IsSheaf (regularTopology C) F ↔ IsSheaf (regularTopology D) (e.inverse.op ⋙ F) := by
-  refine ⟨fun hF => ((e.sheafCongrPreregular A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
-  rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPreregular A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
-  · exact Functor.isoWhiskerRight e.op.unitIso F
-
-中文:
-定理 preregular_isSheaf_iff
-  条件: (e : C ≌ D) (F : Cᵒᵖ ⥤ A)
-  结论: haveI
-  证明: e.preregular
-    IsSheaf (regularTopology C) F ↔ IsSheaf (regularTopology D) (e.inverse.op ⋙ F) := by
-  refine ⟨fun hF => ((e.sheafCongrPreregular A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
-  rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPreregular A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
-  · exact Functor.isoWhiskerRight e.op.unitIso F
-
-Depends on / 依赖: e.preregular, preregular
+--- 原说明 ---
+The regular sheaf condition can be checked after precomposing with the equivalen
+ce.
 -/
 theorem preregular_isSheaf_iff (e : C ≌ D) (F : Cᵒᵖ ⥤ A) : haveI := e.preregular
     IsSheaf (regularTopology C) F ↔ IsSheaf (regularTopology D) (e.inverse.op ⋙ F) := by
-  refine ⟨fun hF => ((e.sheafCongrPreregular A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
+  refine ⟨fun hF ↦ ((e.sheafCongrPreregular A).functor.obj ⟨F, hF⟩).property, fun hF ↦ ?_⟩
   rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPreregular A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
+  · exact (e.sheafCongrPreregular A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩ |>.property
   · exact Functor.isoWhiskerRight e.op.unitIso F
 
 /--
-theorem `preregular_isSheaf_iff_of_essentiallySmall` / 定理 `preregular_isSheaf_iff_of_essentiallySmall`
+The regular sheaf condition on an essentially small site can be checked after precomposing with
+the equivalence with a small category.
+-/
+/-
+**CategoryTheory.Equivalence.preregular_isSheaf_iff_of_essentiallySmall** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.Equivalence`。
+形式化陈述：preregular_isSheaf_iff_of_essentiallySmall [EssentiallySmall C] (F : Cᵒᵖ ⥤
+ A) : IsSheaf (regularTopology C) F ↔ IsSheaf (regularTopology (SmallModel C)) (
+(equivSmallModel C).inverse.op ⋙ F)
+参数：F : Cᵒᵖ ⥤ A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.preregular_isSheaf_iff`：preregular_isSheaf_if
+f (e : C ≌ D) (F : Cᵒᵖ ⥤ A) : haveI
 
-English:
-theorem preregular_isSheaf_iff_of_essentiallySmall
-  given: [EssentiallySmall C] (F : Cᵒᵖ ⥤ A)
-  proof: preregular_isSheaf_iff _ _ _
-
-中文:
-定理 preregular_isSheaf_iff_of_essentiallySmall
-  条件: [EssentiallySmall C] (F : Cᵒᵖ ⥤ A)
-  证明: preregular_isSheaf_iff _ _ _
-
-Depends on / 依赖: preregular_isSheaf_iff
+--- 原说明 ---
+The regular sheaf condition on an essentially small site can be checked after pr
+ecomposing with
+the equivalence with a small category.
 -/
 theorem preregular_isSheaf_iff_of_essentiallySmall [EssentiallySmall C] (F : Cᵒᵖ ⥤ A) :
     IsSheaf (regularTopology C) F ↔ IsSheaf (regularTopology (SmallModel C))
@@ -289,3 +321,4 @@ end Regular
 end Equivalence
 
 end CategoryTheory
+

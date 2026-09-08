@@ -30,22 +30,9 @@ open Set Topology TopologicalSpace
 
 namespace EReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SecondCountableTopology EReal
-  body: have : SeparableSpace EReal := ⟨⟨_, countable_range _, denseRange_ratCast⟩⟩
-  .of_separableSpace_orderTopology _
-
-中文:
-实例 :
-  签名: 第二可数拓扑 E实数
-  定义体: have : SeparableSpace EReal := ⟨⟨_, countable_range _, denseRange_ratCast⟩⟩
-  .of_separableSpace_orderTopology _
-
-Depends on / 依赖: SeparableSpace, countable_range, denseRange_ratCast, of_separableSpace_orderTopology
+/-
+**EReal.** 是 Mathlib 中的一个实例，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SecondCountableTopology EReal :=
   have : SeparableSpace EReal := ⟨⟨_, countable_range _, denseRange_ratCast⟩⟩
@@ -55,69 +42,52 @@ end EReal
 
 namespace NNReal
 
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SecondCountableTopology Real>=0
-  body: inferInstanceAs (SecondCountableTopology { x : Real | 0 <= x })
-
-中文:
-实例 :
-  签名: 第二可数拓扑 实数>=0
-  定义体: inferInstanceAs (SecondCountableTopology { x : Real | 0 <= x })
-
-Depends on / 依赖: SecondCountableTopology
+/-!
+Instances for `ℝ≥0` are inherited from the corresponding structures on the reals.
 -/
-instance : SecondCountableTopology Real>=0 :=
-  inferInstanceAs (SecondCountableTopology { x : Real | 0 <= x })
 
-/--
-Instance `instProperSpace` / 实例 `instProperSpace`
+/-
+**NNReal.** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instProperSpace
-  signature: : ProperSpace Real>=0 where
-  body: by
-    have emb : IsClosedEmbedding ((↑) : Real>=0 -> Real) := Isometry.isClosedEmbedding fun _ => congrFun rfl
-    exact emb.isCompact_preimage (K := Metric.closedBall x r) (isCompact_closedBall _ _)
-
-中文:
-实例 instProperSpace
-  签名: : 真空间 实数>=0 where
-  定义体: by
-    have emb : IsClosedEmbedding ((↑) : Real>=0 -> Real) := Isometry.isClosedEmbedding fun _ => congrFun rfl
-    exact emb.isCompact_preimage (K := Metric.closedBall x r) (isCompact_closedBall _ _)
-
-Depends on / 依赖: IsClosedEmbedding, Isometry, Isometry.isClosedEmbedding, Metric, Metric.closedBall, closedBall, emb.isCompact_preimage, isClosedEmbedding, isCompact_closedBall, isCompact_preimage
+--- 原说明 ---
+Instances for `ℝ≥0` are inherited from the corresponding structures on the reals
+.
 -/
-instance instProperSpace : ProperSpace Real>=0 where
+instance : SecondCountableTopology ℝ≥0 :=
+  inferInstanceAs (SecondCountableTopology { x : ℝ | 0 ≤ x })
+/-
+**NNReal.instProperSpace** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+形式化陈述：instProperSpace : ProperSpace Real>=0 where isCompact_closedBall x r
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Isometry.isClosedEmbedding`：isClosedEmbedding [CompleteSpace α] [EMetric
+Space γ] {f : α -> γ} (hf : Isometry f) : IsClosedEmbedding f
+· 使用定理 `NNReal.instCompleteSpace`：CompleteSpace NNReal
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Topology.IsClosedEmbedding.isCompact_preimage`：Topology.IsClosedEmbeddin
+g.isCompact_preimage (hf : IsClosedEmbedding f) {K : Set Y} (hK : IsCompact K) :
+ IsCompact (f ⁻¹' K)
+· 使用定理 `ProperSpace.isCompact_closedBall`：∀ {α : Type u} {inst : PseudoMetricSpa
+ce α} [self : ProperSpace α] (x : α) (r : ℝ), IsCompact (Metric.closedBall x r)
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
+-/
+instance instProperSpace : ProperSpace ℝ≥0 where
   isCompact_closedBall x r := by
-    have emb : IsClosedEmbedding ((↑) : Real>=0 -> Real) := Isometry.isClosedEmbedding fun _ => congrFun rfl
+    have emb : IsClosedEmbedding ((↑) : ℝ≥0 → ℝ) := Isometry.isClosedEmbedding fun _ ↦ congrFun rfl
     exact emb.isCompact_preimage (K := Metric.closedBall x r) (isCompact_closedBall _ _)
 
 end NNReal
 
 namespace ENNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SecondCountableTopology Real>=0∞
-  body: orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.secondCountableTopology
-
-中文:
-实例 :
-  签名: 第二可数拓扑 实数>=0∞
-  定义体: orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.secondCountableTopology
-
-Depends on / 依赖: isEmbedding, orderIsoUnitIntervalBirational, orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.secondCountableTopology, secondCountableTopology, toHomeomorph
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SecondCountableTopology Real>=0∞ :=
+instance : SecondCountableTopology ℝ≥0∞ :=
   orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.secondCountableTopology
 
 end ENNReal
+

@@ -27,341 +27,336 @@ variable {α β ι : Type*}
 
 namespace Finsupp
 
-/--
-Definition of `toMultiset` / `toMultiset` 的定义
+/-- Given `f : α →₀ ℕ`, `f.toMultiset` is the multiset with multiplicities given by the values of
+`f` on the elements of `α`. We define this function as an `AddMonoidHom`.
 
-English:
-definition toMultiset
-  signature: : (α ->₀ Nat) ->+ Multiset α where
-  body: Finsupp.sum f fun a n => n • {a}
-  -- Porting note: have to specify `h` or add a `dsimp only` before `sum_add_index'`.
-  -- see also: https://github.com/leanprover-community/mathlib4/issues/12129
-  map_add' _f _g := sum_add_index' (h := fun _ n => n • _)
-    (fun _ => zero_nsmul _) (fun _ => add_nsmul _)
-  map_zero' := sum_zero_index
+Under the additional assumption of `[DecidableEq α]`, this is available as
+`Multiset.toFinsupp : Multiset α ≃+ (α →₀ ℕ)`; the two declarations are separate as this assumption
+is only needed for one direction. -/
+/-
+**Finsupp.toMultiset** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset : (α ->₀ Nat) ->+ Multiset α where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 toMultiset
-  签名: : (α ->₀ 自然数) ->+ Multiset α where
-  定义体: Finsupp.sum f fun a n => n • {a}
-  -- Porting note: have to specify `h` or add a `dsimp only` before `sum_add_index'`.
-  -- see also: https://github.com/leanprover-community/mathlib4/issues/12129
-  map_add' _f _g := sum_add_index' (h := fun _ n => n • _)
-    (fun _ => zero_nsmul _) (fun _ => add_nsmul _)
-  map_zero' := sum_zero_index
+--- 原说明 ---
+Given `f : α →₀ ℕ`, `f.toMultiset` is the multiset with multiplicities given by 
+the values of
+`f` on the elements of `α`. We define this function as an `AddMonoidHom`.
 
-Depends on / 依赖: Finsupp, Finsupp.sum
+Under the additional assumption of `[DecidableEq α]`, this is available as
+`Multiset.toFinsupp : Multiset α ≃+ (α →₀ ℕ)`; the two declarations are separate
+ as this assumption
+is only needed for one direction.
 -/
-def toMultiset : (α ->₀ Nat) ->+ Multiset α where
+def toMultiset : (α →₀ ℕ) →+ Multiset α where
   toFun f := Finsupp.sum f fun a n => n • {a}
   -- Porting note: have to specify `h` or add a `dsimp only` before `sum_add_index'`.
   -- see also: https://github.com/leanprover-community/mathlib4/issues/12129
   map_add' _f _g := sum_add_index' (h := fun _ n => n • _)
-    (fun _ => zero_nsmul _) (fun _ => add_nsmul _)
+    (fun _ ↦ zero_nsmul _) (fun _ ↦ add_nsmul _)
   map_zero' := sum_zero_index
-
-/--
-theorem `toMultiset_zero` / 定理 `toMultiset_zero`
-
-English:
-theorem toMultiset_zero
-  statement: toMultiset (0 : α ->₀ Nat) = 0
-  proof: rfl
-
-中文:
-定理 toMultiset_zero
-  结论: toMultiset (0 : α ->₀ 自然数) = 0
-  证明: rfl
+/-
+**Finsupp.toMultiset_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_zero : toMultiset (0 : α ->₀ Nat) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toMultiset_zero : toMultiset (0 : α ->₀ Nat) = 0 :=
+theorem toMultiset_zero : toMultiset (0 : α →₀ ℕ) = 0 :=
   rfl
-
-/--
-theorem `toMultiset_add` / 定理 `toMultiset_add`
-
-English:
-theorem toMultiset_add
-  given: (m n : α ->₀ Nat)
-  statement: toMultiset (m + n) = toMultiset m + toMultiset n
-  proof: toMultiset.map_add m n
-
-中文:
-定理 toMultiset_add
-  条件: (m n : α ->₀ 自然数)
-  结论: toMultiset (m + n) = toMultiset m + toMultiset n
-  证明: toMultiset.map_add m n
-
-Depends on / 依赖: ListShape, actual, map_add, notation, toMultiset, toMultiset.map_add
+/-
+**Finsupp.toMultiset_add** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_add (m n : α ->₀ Nat) : toMultiset (m + n) = toMultiset m + toM
+ultiset n
+参数：m n : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_add`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZero M]
+ [inst_1 : AddZero N] (f : M →+ N) (a b : M), f (a + b) = f a + f b
 -/
-theorem toMultiset_add (m n : α ->₀ Nat) : toMultiset (m + n) = toMultiset m + toMultiset n :=
+theorem toMultiset_add (m n : α →₀ ℕ) : toMultiset (m + n) = toMultiset m + toMultiset n :=
   toMultiset.map_add m n
-
-/--
-theorem `toMultiset_apply` / 定理 `toMultiset_apply`
-
-English:
-theorem toMultiset_apply
-  given: (f : α ->₀ Nat)
-  statement: toMultiset f = f.sum fun a n => n • {a}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toMultiset_apply
-  条件: (f : α ->₀ 自然数)
-  结论: toMultiset f = f.求和 fun a n => n • {a}
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: List.perm, QPF.quot, actual, notion
+/-
+**Finsupp.toMultiset_apply** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_apply (f : α ->₀ Nat) : toMultiset f = f.sum fun a n => n • {a}
+参数：f : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toMultiset_apply (f : α ->₀ Nat) : toMultiset f = f.sum fun a n => n • {a} :=
+theorem toMultiset_apply (f : α →₀ ℕ) : toMultiset f = f.sum fun a n => n • {a} :=
   rfl
 
 @[simp]
-/--
-theorem `toMultiset_single` / 定理 `toMultiset_single`
-
-English:
-theorem toMultiset_single
-  given: (a : α) (n : Nat)
-  statement: toMultiset (single a n) = n • {a}
-  proof: by
-  rw [toMultiset_apply]; rw [sum_single_index]; apply zero_nsmul
-
-中文:
-定理 toMultiset_single
-  条件: (a : α) (n : 自然数)
-  结论: toMultiset (single a n) = n • {a}
-  证明: by
-  rw [toMultiset_apply]; rw [sum_single_index]; apply zero_nsmul
-
-Depends on / 依赖: sum_single_index, toMultiset_apply, zero_nsmul
+/-
+**Finsupp.toMultiset_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_single (a : α) (n : Nat) : toMultiset (single a n) = n • {a}
+参数：a : α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.toMultiset_apply`：toMultiset_apply (f : α ->₀ Nat) : toMultiset 
+f = f.sum fun a n => n • {a}
+· 使用定理 `Finsupp.sum_single_index`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10
+} [inst : Zero M] [inst_1 : AddCommMonoid N] {a : α} {b : M}   {h : α → M → N}, 
+h a 0 = 0 → (f…
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
 -/
-theorem toMultiset_single (a : α) (n : Nat) : toMultiset (single a n) = n • {a} := by
-  rw [toMultiset_apply]; rw [sum_single_index]; apply zero_nsmul
-
-/--
-theorem `toMultiset_sum` / 定理 `toMultiset_sum`
-
-English:
-theorem toMultiset_sum
-  given: {f : ι -> α ->₀ Nat} (s : Finset ι)
-  proof: map_sum Finsupp.toMultiset _ _
-
-中文:
-定理 toMultiset_sum
-  条件: {f : ι -> α ->₀ 自然数} (s : 有限集 ι)
-  证明: map_sum Finsupp.toMultiset _ _
-
-Depends on / 依赖: Finsupp, Finsupp.toMultiset, LawfulMvFunctor, lawfulMvFunctor, map_sum, toMultiset
+theorem toMultiset_single (a : α) (n : ℕ) : toMultiset (single a n) = n • {a} := by
+  rw [toMultiset_apply, sum_single_index]; apply zero_nsmul
+/-
+**Finsupp.toMultiset_sum** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_sum {f : ι -> α ->₀ Nat} (s : Finset ι) : Finsupp.toMultiset (∑
+ i in s, f i) = ∑ i in s, Finsupp.toMultiset (f i)
+参数：s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem toMultiset_sum {f : ι -> α ->₀ Nat} (s : Finset ι) :
-    Finsupp.toMultiset (∑ i in s, f i) = ∑ i in s, Finsupp.toMultiset (f i) :=
+theorem toMultiset_sum {f : ι → α →₀ ℕ} (s : Finset ι) :
+    Finsupp.toMultiset (∑ i ∈ s, f i) = ∑ i ∈ s, Finsupp.toMultiset (f i) :=
   map_sum Finsupp.toMultiset _ _
-
-/--
-theorem `toMultiset_sum_single` / 定理 `toMultiset_sum_single`
-
-English:
-theorem toMultiset_sum_single
-  given: (s : Finset ι) (n : Nat)
-  proof: by
+/-
+**Finsupp.toMultiset_sum_single** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_sum_single (s : Finset ι) (n : Nat) : Finsupp.toMultiset (∑ i i
+n s, single i n) = n • s.val
+参数：s : Finset ι；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.toMultiset_sum`：toMultiset_sum {f : ι -> α ->₀ Nat} (s : Finset 
+ι) : Finsupp.toMultiset (∑ i in s, f i) = ∑ i in s, Finsupp.toMultiset (f i)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finsupp.toMultiset_single`：toMultiset_single (a : α) (n : Nat) : toMulti
+set (single a n) = n • {a}
+· 使用定理 `Finset.sum_nsmul`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid 
+M] (s : Finset ι) (n : ℕ) (f : ι → M),   ∑ x ∈ s, n • f x = n • ∑ x ∈ s, f x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_multiset_singleton`：sum_multiset_singleton (s : Finset ι) : ∑
+ a in s, {a} = s.val
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem toMultiset_sum_single (s : Finset ι) (n : ℕ) :
+    Finsupp.toMultiset (∑ i ∈ s, single i n) = n • s.val := by
   simp_rw [toMultiset_sum, Finsupp.toMultiset_single, Finset.sum_nsmul, sum_multiset_singleton]
 
 @[simp]
-
-中文:
-定理 toMultiset_sum_single
-  条件: (s : 有限集 ι) (n : 自然数)
-  证明: by
-  simp_rw [toMultiset_sum, Finsupp.toMultiset_single, Finset.sum_nsmul, sum_multiset_singleton]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_nsmul, Finsupp, Finsupp.toMultiset_single, simp_rw, sum_multiset_singleton, sum_nsmul, toMultiset_single, toMultiset_sum
+/-
+**Finsupp.card_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_toMultiset (f : α ->₀ Nat) : Multiset.card (toMultiset f) = f.sum fun
+ _ => id
+参数：f : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.card_finsuppSum`：∀ {α : Type u_1} {ι : Type u_2} {M : Type u_8}
+ [inst : Zero M] (f : ι →₀ M) (g : ι → M → Multiset α),   (f.sum g).card = f.sum
+ fun i m => (g…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Multiset.card_nsmul`：card_nsmul (s : Multiset α) (n : Nat) : card (n • s
+) = n * card s
+· 使用定理 `Multiset.card_singleton`：card_singleton (a : α) : card ({a} : Multiset α
+) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMultiset_sum_single (s : Finset ι) (n : Nat) :
-    Finsupp.toMultiset (∑ i in s, single i n) = n • s.val := by
-  simp_rw [toMultiset_sum, Finsupp.toMultiset_single, Finset.sum_nsmul, sum_multiset_singleton]
-
-@[simp]
-/--
-theorem `card_toMultiset` / 定理 `card_toMultiset`
-
-English:
-theorem card_toMultiset
-  given: (f : α ->₀ Nat)
-  statement: Multiset.card (toMultiset f) = f.sum fun _ => id
-  proof: by
+theorem card_toMultiset (f : α →₀ ℕ) : Multiset.card (toMultiset f) = f.sum fun _ => id := by
   simp [toMultiset_apply, Function.id_def]
-
-中文:
-定理 card_toMultiset
-  条件: (f : α ->₀ 自然数)
-  结论: Multiset.card (toMultiset f) = f.求和 fun _ => id
-  证明: by
-  simp [toMultiset_apply, Function.id_def]
-
-Depends on / 依赖: Function, Function.id_def, id_def, toMultiset_apply
+/-
+**Finsupp.toMultiset_map** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_map (f : α ->₀ Nat) (g : α -> β) : f.toMultiset.map g = toMulti
+set (f.mapDomain g)
+参数：f : α ->₀ Nat；g : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.induction`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass 
+M] {motive : (ι →₀ M) → Prop} (f : ι →₀ M),   motive 0 →     (∀ (a : ι) (b : M) 
+(f : ι …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.toMultiset_zero`：toMultiset_zero : toMultiset (0 : α ->₀ Nat) = 
+0
+· 使用定理 `Multiset.map_zero`：map_zero (f : α -> β) : map f 0 = 0
+· 使用定理 `Finsupp.mapDomain_zero`：mapDomain_zero {f : α -> β} : mapDomain f (0 : α
+ ->₀ M) = (0 : β ->₀ M)
+· 使用定理 `Finsupp.toMultiset_add`：toMultiset_add (m n : α ->₀ Nat) : toMultiset (m
+ + n) = toMultiset m + toMultiset n
+· 使用定理 `Multiset.map_add`：map_add (f : α -> β) (s t) : map f (s + t) = map f s +
+ map f t
+· 使用定理 `Finsupp.mapDomain_add`：mapDomain_add {f : α -> β} : mapDomain f (v₁ + v₂
+) = mapDomain f v₁ + mapDomain f v₂
+· 使用定理 `Finsupp.mapDomain_single`：mapDomain_single {f : α -> β} {a : α} {b : M} 
+: mapDomain f (single a b) = single (f a) b
+· 使用定理 `Finsupp.toMultiset_single`：toMultiset_single (a : α) (n : Nat) : toMulti
+set (single a n) = n • {a}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Multiset.coe_mapAddMonoidHom`：coe_mapAddMonoidHom (f : α -> β) : (mapAdd
+MonoidHom f : Multiset α -> Multiset β) = map f
+· 使用定理 `AddMonoidHom.map_nsmul`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoi
+d M] [inst_1 : AddMonoid N] (f : M →+ N) (n : ℕ) (a : M),   f (n • a) = n • f a
 -/
-theorem card_toMultiset (f : α ->₀ Nat) : Multiset.card (toMultiset f) = f.sum fun _ => id := by
-  simp [toMultiset_apply, Function.id_def]
-
-/--
-theorem `toMultiset_map` / 定理 `toMultiset_map`
-
-English:
-theorem toMultiset_map
-  given: (f : α ->₀ Nat) (g : α -> β)
-  proof: by
-  refine f.induction ?_ ?_
-  · rw [toMultiset_zero, Multiset.map_zero, mapDomain_zero, toMultiset_zero]
-  · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.map_add]; rw [ih]; rw [mapDomain_add]; rw [mapDomain_single]; rw [toMultiset_single]; rw [toMultiset_add]; rw [toMultiset_single]; rw [← Multiset.coe_mapAddMonoidHom]; rw [(Multiset.mapAddMonoidHom g).map_nsmul]
-    rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toMultiset_map
-  条件: (f : α ->₀ 自然数) (g : α -> β)
-  证明: by
-  refine f.induction ?_ ?_
-  · rw [toMultiset_zero, Multiset.map_zero, mapDomain_zero, toMultiset_zero]
-  · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.map_add]; rw [ih]; rw [mapDomain_add]; rw [mapDomain_single]; rw [toMultiset_single]; rw [toMultiset_add]; rw [toMultiset_single]; rw [← Multiset.coe_mapAddMonoidHom]; rw [(Multiset.mapAddMonoidHom g).map_nsmul]
-    rfl
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Multiset, Multiset.coe_mapAddMonoidHom, Multiset.mapAddMonoidHom, Multiset.map_add, Multiset.map_zero, coe_mapAddMonoidHom, f.induction, mapAddMonoidHom, mapDomain_add, mapDomain_single, mapDomain_zero, map_add, map_nsmul, map_zero, toMultiset_add, toMultiset_single, toMultiset_zero
--/
-theorem toMultiset_map (f : α ->₀ Nat) (g : α -> β) :
+theorem toMultiset_map (f : α →₀ ℕ) (g : α → β) :
     f.toMultiset.map g = toMultiset (f.mapDomain g) := by
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.map_zero, mapDomain_zero, toMultiset_zero]
   · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.map_add]; rw [ih]; rw [mapDomain_add]; rw [mapDomain_single]; rw [toMultiset_single]; rw [toMultiset_add]; rw [toMultiset_single]; rw [← Multiset.coe_mapAddMonoidHom]; rw [(Multiset.mapAddMonoidHom g).map_nsmul]
+    rw [toMultiset_add, Multiset.map_add, ih, mapDomain_add, mapDomain_single,
+      toMultiset_single, toMultiset_add, toMultiset_single, ← Multiset.coe_mapAddMonoidHom,
+      (Multiset.mapAddMonoidHom g).map_nsmul]
     rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `prod_toMultiset` / 定理 `prod_toMultiset`
-
-English:
-theorem prod_toMultiset
-  given: [CommMonoid α] (f : α ->₀ Nat)
-  proof: by
-  refine f.induction ?_ ?_
-  · rw [toMultiset_zero, Multiset.prod_zero, Finsupp.prod_zero_index]
-  · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.prod_add]; rw [ih]; rw [toMultiset_single]; rw [Multiset.prod_nsmul]; rw [Finsupp.prod_add_index' pow_zero pow_add]; rw [Finsupp.prod_single_index]; rw [Multiset.prod_singleton]
-    exact pow_zero a
-
-@[simp]
-
-中文:
-定理 prod_toMultiset
-  条件: [交换幺半群 α] (f : α ->₀ 自然数)
-  证明: by
-  refine f.induction ?_ ?_
-  · rw [toMultiset_zero, Multiset.prod_zero, Finsupp.prod_zero_index]
-  · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.prod_add]; rw [ih]; rw [toMultiset_single]; rw [Multiset.prod_nsmul]; rw [Finsupp.prod_add_index' pow_zero pow_add]; rw [Finsupp.prod_single_index]; rw [Multiset.prod_singleton]
-    exact pow_zero a
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.prod_add_index, Finsupp.prod_single_index, Finsupp.prod_zero_index, Multiset, Multiset.prod_add, Multiset.prod_nsmul, Multiset.prod_singleton, Multiset.prod_zero, f.induction, pow_add, pow_zero, prod_add, prod_add_index, prod_nsmul, prod_single_index, prod_singleton, prod_zero, prod_zero_index, toMultiset_add
+/-
+**Finsupp.prod_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：prod_toMultiset [CommMonoid α] (f : α ->₀ Nat) : f.toMultiset.prod = f.pro
+d fun a n => a ^ n
+参数：f : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.induction`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass 
+M] {motive : (ι →₀ M) → Prop} (f : ι →₀ M),   motive 0 →     (∀ (a : ι) (b : M) 
+(f : ι …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.toMultiset_zero`：toMultiset_zero : toMultiset (0 : α ->₀ Nat) = 
+0
+· 使用定理 `Multiset.prod_zero`：prod_zero : @prod M _ 0 = 1
+· 使用定理 `Finsupp.prod_zero_index`：prod_zero_index {h : α -> M -> N} : (0 : α ->₀ 
+M).prod h = 1
+· 使用定理 `Finsupp.toMultiset_add`：toMultiset_add (m n : α ->₀ Nat) : toMultiset (m
+ + n) = toMultiset m + toMultiset n
+· 使用定理 `Multiset.prod_add`：prod_add (s t : Multiset M) : prod (s + t) = prod s *
+ prod t
+· 使用定理 `Finsupp.toMultiset_single`：toMultiset_single (a : α) (n : Nat) : toMulti
+set (single a n) = n • {a}
+· 使用定理 `Multiset.prod_nsmul`：∀ {M : Type u_5} [inst : CommMonoid M] (m : Multise
+t M) (n : ℕ), (n • m).prod = m.prod ^ n
+· 使用定理 `Finsupp.prod_add_index'`：prod_add_index' [AddZeroClass M] [CommMonoid N]
+ {f g : α ->₀ M} {h : α -> M -> N} (h_zero : forall a, h a 0 = 1) (h_add : foral
+l a b₁ b₂, h …
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Finsupp.prod_single_index`：prod_single_index {a : α} {b : M} {h : α -> M
+ -> N} (h_zero : h a 0 = 1) : (single a b).prod h = h a b
+· 使用定理 `Multiset.prod_singleton`：prod_singleton (a : M) : prod {a} = a
 -/
-theorem prod_toMultiset [CommMonoid α] (f : α ->₀ Nat) :
+theorem prod_toMultiset [CommMonoid α] (f : α →₀ ℕ) :
     f.toMultiset.prod = f.prod fun a n => a ^ n := by
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.prod_zero, Finsupp.prod_zero_index]
   · intro a n f _ _ ih
-    rw [toMultiset_add]; rw [Multiset.prod_add]; rw [ih]; rw [toMultiset_single]; rw [Multiset.prod_nsmul]; rw [Finsupp.prod_add_index' pow_zero pow_add]; rw [Finsupp.prod_single_index]; rw [Multiset.prod_singleton]
+    rw [toMultiset_add, Multiset.prod_add, ih, toMultiset_single, Multiset.prod_nsmul,
+      Finsupp.prod_add_index' pow_zero pow_add, Finsupp.prod_single_index, Multiset.prod_singleton]
     exact pow_zero a
 
 @[simp]
-/--
-theorem `toFinset_toMultiset` / 定理 `toFinset_toMultiset`
-
-English:
-theorem toFinset_toMultiset
-  given: [DecidableEq α] (f : α ->₀ Nat)
-  statement: f.toMultiset.toFinset = f.support
-  proof: by
-  refine f.induction ?_ ?_
-  · rw [toMultiset_zero, Multiset.toFinset_zero, support_zero]
-  · intro a n f ha hn ih
-    rw [toMultiset_add]; rw [Multiset.toFinset_add]; rw [ih]; rw [toMultiset_single]; rw [support_add_eq]; rw [support_single _ hn]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset.toFinset_singleton]
-    refine Disjoint.mono_left support_single_subset ?_
-    rwa [Finset.disjoint_singleton_left]
-
-@[simp]
-
-中文:
-定理 toFinset_toMultiset
-  条件: [DecidableEq α] (f : α ->₀ 自然数)
-  结论: f.toMultiset.toFinset = f.support
-  证明: by
-  refine f.induction ?_ ?_
-  · rw [toMultiset_zero, Multiset.toFinset_zero, support_zero]
-  · intro a n f ha hn ih
-    rw [toMultiset_add]; rw [Multiset.toFinset_add]; rw [ih]; rw [toMultiset_single]; rw [support_add_eq]; rw [support_single _ hn]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset.toFinset_singleton]
-    refine Disjoint.mono_left support_single_subset ?_
-    rwa [Finset.disjoint_singleton_left]
-
-@[simp]
-
-Depends on / 依赖: Disjoint, Disjoint.mono_left, Finset, Finset.disjoint_singleton_left, Multiset, Multiset.toFinset_add, Multiset.toFinset_nsmul, Multiset.toFinset_singleton, Multiset.toFinset_zero, disjoint_singleton_left, f.induction, mono_left, support_add_eq, support_single, support_single_subset, support_zero, toFinset_add, toFinset_nsmul, toFinset_singleton, toFinset_zero
+/-
+**Finsupp.toFinset_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toFinset_toMultiset [DecidableEq α] (f : α ->₀ Nat) : f.toMultiset.toFinse
+t = f.support
+参数：f : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.induction`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddZeroClass 
+M] {motive : (ι →₀ M) → Prop} (f : ι →₀ M),   motive 0 →     (∀ (a : ι) (b : M) 
+(f : ι …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.toMultiset_zero`：toMultiset_zero : toMultiset (0 : α ->₀ Nat) = 
+0
+· 使用定理 `Multiset.toFinset_zero`：toFinset_zero : toFinset (0 : Multiset α) = ∅
+· 使用定理 `Finsupp.support_zero`：support_zero : (0 : α ->₀ M).support = ∅
+· 使用定理 `Finsupp.toMultiset_add`：toMultiset_add (m n : α ->₀ Nat) : toMultiset (m
+ + n) = toMultiset m + toMultiset n
+· 使用定理 `Multiset.toFinset_add`：toFinset_add (s t : Multiset α) : (s + t).toFinse
+t = s.toFinset union t.toFinset
+· 使用定理 `Finsupp.toMultiset_single`：toMultiset_single (a : α) (n : Nat) : toMulti
+set (single a n) = n • {a}
+· 使用引理 `Finsupp.support_add_eq`：support_add_eq [DecidableEq ι] (h : Disjoint g₁.
+support g₂.support) : (g₁ + g₂).support = g₁.support union g₂.support
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
+· 使用定理 `Finsupp.support_single_subset`：support_single_subset : (single a b).supp
+ort subseteq {a}
+· 使用定理 `Finset.disjoint_singleton_left`：disjoint_singleton_left : Disjoint (sing
+leton a) s ↔ a ∉ s
+· 使用定理 `Finsupp.support_single`：∀ {α : Type u_1} {M : Type u_5} [inst : Zero M] 
+{b : M} (a : α), b ≠ 0 → (fun₀ | a => b).support = {a}
+· 使用定理 `Multiset.toFinset_nsmul`：∀ {α : Type u_1} [inst : DecidableEq α] (s : Mu
+ltiset α) (n : ℕ), n ≠ 0 → (n • s).toFinset = s.toFinset
+· 使用定理 `Multiset.toFinset_singleton`：toFinset_singleton (a : α) : toFinset ({a} 
+: Multiset α) = {a}
 -/
-theorem toFinset_toMultiset [DecidableEq α] (f : α ->₀ Nat) : f.toMultiset.toFinset = f.support := by
+theorem toFinset_toMultiset [DecidableEq α] (f : α →₀ ℕ) : f.toMultiset.toFinset = f.support := by
   refine f.induction ?_ ?_
   · rw [toMultiset_zero, Multiset.toFinset_zero, support_zero]
   · intro a n f ha hn ih
-    rw [toMultiset_add]; rw [Multiset.toFinset_add]; rw [ih]; rw [toMultiset_single]; rw [support_add_eq]; rw [support_single _ hn]; rw [Multiset.toFinset_nsmul _ _ hn]; rw [Multiset.toFinset_singleton]
+    rw [toMultiset_add, Multiset.toFinset_add, ih, toMultiset_single, support_add_eq,
+      support_single _ hn, Multiset.toFinset_nsmul _ _ hn, Multiset.toFinset_singleton]
     refine Disjoint.mono_left support_single_subset ?_
     rwa [Finset.disjoint_singleton_left]
 
 @[simp]
-/--
-theorem `count_toMultiset` / 定理 `count_toMultiset`
-
-English:
-theorem count_toMultiset
-  given: [DecidableEq α] (f : α ->₀ Nat) (a : α)
-  statement: (toMultiset f).count a = f a
-  proof: calc
-    (toMultiset f).count a = Finsupp.sum f (fun x n => (n • {x} : Multiset α).count a) := by
-      rw [toMultiset_apply]; exact map_sum (Multiset.countAddMonoidHom a) _ f.support
-    _ = f.sum fun x n => n * ({x} : Multiset α).count a := by simp only [Multiset.count_nsmul]
-    _ = f a * ({a} : Multiset α).count a :=
-      sum_eq_single _
-        (fun a' _ H => by simp only [Multiset.count_singleton, if_false, H.symm, mul_zero])
-        (fun _ => zero_mul _)
-    _ = f a := by rw [Multiset.count_singleton_self, mul_one]
-
-中文:
-定理 count_toMultiset
-  条件: [DecidableEq α] (f : α ->₀ 自然数) (a : α)
-  结论: (toMultiset f).count a = f a
-  证明: calc
-    (toMultiset f).count a = Finsupp.sum f (fun x n => (n • {x} : Multiset α).count a) := by
-      rw [toMultiset_apply]; exact map_sum (Multiset.countAddMonoidHom a) _ f.support
-    _ = f.sum fun x n => n * ({x} : Multiset α).count a := by simp only [Multiset.count_nsmul]
-    _ = f a * ({a} : Multiset α).count a :=
-      sum_eq_single _
-        (fun a' _ H => by simp only [Multiset.count_singleton, if_false, H.symm, mul_zero])
-        (fun _ => zero_mul _)
-    _ = f a := by rw [Multiset.count_singleton_self, mul_one]
-
-Depends on / 依赖: Finsupp, Finsupp.sum, H.symm, Multiset, Multiset.countAddMonoidHom, Multiset.count_nsmul, Multiset.count_singleton, Multiset.count_singleton_self, countAddMonoidHom, count_nsmul, count_singleton, count_singleton_self, f.sum, f.support, if_false, map_sum, mul_one, mul_zero, sum_eq_single, support
+/-
+**Finsupp.count_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：count_toMultiset [DecidableEq α] (f : α ->₀ Nat) (a : α) : (toMultiset f).
+count a = f a
+参数：f : α ->₀ Nat；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.toMultiset_apply`：toMultiset_apply (f : α ->₀ Nat) : toMultiset 
+f = f.sum fun a n => n • {a}
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Multiset.count_nsmul`：count_nsmul (a : α) (n s) : count a (n • s) = n * 
+count a s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finsupp.sum_eq_single`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [
+inst : Zero M] [inst_1 : AddCommMonoid N] {f : α →₀ M} (a : α)   {g : α → M → N}
+, (∀ (b : α…
+· 使用定理 `Multiset.count_singleton`：count_singleton (a b : α) : count a ({b} : Mul
+tiset α) = if a = b then 1 else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Multiset.count_singleton_self`：count_singleton_self (a : α) : count a ({
+a} : Multiset α) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem count_toMultiset [DecidableEq α] (f : α ->₀ Nat) (a : α) : (toMultiset f).count a = f a :=
+theorem count_toMultiset [DecidableEq α] (f : α →₀ ℕ) (a : α) : (toMultiset f).count a = f a :=
   calc
     (toMultiset f).count a = Finsupp.sum f (fun x n => (n • {x} : Multiset α).count a) := by
       rw [toMultiset_apply]; exact map_sum (Multiset.countAddMonoidHom a) _ f.support
@@ -371,84 +366,76 @@ theorem count_toMultiset [DecidableEq α] (f : α ->₀ Nat) (a : α) : (toMulti
         (fun a' _ H => by simp only [Multiset.count_singleton, if_false, H.symm, mul_zero])
         (fun _ => zero_mul _)
     _ = f a := by rw [Multiset.count_singleton_self, mul_one]
-
-/--
-theorem `toMultiset_sup` / 定理 `toMultiset_sup`
-
-English:
-theorem toMultiset_sup
-  given: [DecidableEq α] (f g : α ->₀ Nat)
-  proof: by
-  ext
-  simp_rw [Multiset.count_union, Finsupp.count_toMultiset, Finsupp.sup_apply]
-
-中文:
-定理 toMultiset_sup
-  条件: [DecidableEq α] (f g : α ->₀ 自然数)
-  证明: by
-  ext
-  simp_rw [Multiset.count_union, Finsupp.count_toMultiset, Finsupp.sup_apply]
-
-Depends on / 依赖: Finsupp, Finsupp.count_toMultiset, Finsupp.sup_apply, Multiset, Multiset.count_union, count_toMultiset, count_union, simp_rw, sup_apply
+/-
+**Finsupp.toMultiset_sup** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_sup [DecidableEq α] (f g : α ->₀ Nat) : toMultiset (f ⊔ g) = to
+Multiset f union toMultiset g
+参数：f g : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.ext'`：ext' {s t : Multiset α} : (forall a, count a s = count a 
+t) -> s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Multiset.count_union`：count_union (a : α) (s t : Multiset α) : count a (
+s union t) = max (count a s) (count a t)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.count_toMultiset`：count_toMultiset [DecidableEq α] (f : α ->₀ Na
+t) (a : α) : (toMultiset f).count a = f a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMultiset_sup [DecidableEq α] (f g : α ->₀ Nat) :
-    toMultiset (f ⊔ g) = toMultiset f union toMultiset g := by
+theorem toMultiset_sup [DecidableEq α] (f g : α →₀ ℕ) :
+    toMultiset (f ⊔ g) = toMultiset f ∪ toMultiset g := by
   ext
   simp_rw [Multiset.count_union, Finsupp.count_toMultiset, Finsupp.sup_apply]
-
-/--
-theorem `toMultiset_inf` / 定理 `toMultiset_inf`
-
-English:
-theorem toMultiset_inf
-  given: [DecidableEq α] (f g : α ->₀ Nat)
-  proof: by
+/-
+**Finsupp.toMultiset_inf** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_inf [DecidableEq α] (f g : α ->₀ Nat) : toMultiset (f ⊓ g) = to
+Multiset f inter toMultiset g
+参数：f g : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.ext'`：ext' {s t : Multiset α} : (forall a, count a s = count a 
+t) -> s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Multiset.count_inter`：count_inter (a : α) (s t : Multiset α) : count a (
+s inter t) = min (count a s) (count a t)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.count_toMultiset`：count_toMultiset [DecidableEq α] (f : α ->₀ Na
+t) (a : α) : (toMultiset f).count a = f a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem toMultiset_inf [DecidableEq α] (f g : α →₀ ℕ) :
+    toMultiset (f ⊓ g) = toMultiset f ∩ toMultiset g := by
   ext
   simp_rw [Multiset.count_inter, Finsupp.count_toMultiset, Finsupp.inf_apply]
 
 @[simp]
-
-中文:
-定理 toMultiset_inf
-  条件: [DecidableEq α] (f g : α ->₀ 自然数)
-  证明: by
-  ext
-  simp_rw [Multiset.count_inter, Finsupp.count_toMultiset, Finsupp.inf_apply]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.count_toMultiset, Finsupp.inf_apply, Multiset, Multiset.count_inter, count_inter, count_toMultiset, inf_apply, simp_rw
+/-
+**Finsupp.mem_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mem_toMultiset (f : α ->₀ Nat) (i : α) : i in toMultiset f ↔ i in f.suppor
+t
+参数：f : α ->₀ Nat；i : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Multiset.count_ne_zero`：count_ne_zero {a : α} : count a s != 0 ↔ a in s
+· 使用定理 `Finsupp.count_toMultiset`：count_toMultiset [DecidableEq α] (f : α ->₀ Na
+t) (a : α) : (toMultiset f).count a = f a
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toMultiset_inf [DecidableEq α] (f g : α ->₀ Nat) :
-    toMultiset (f ⊓ g) = toMultiset f inter toMultiset g := by
-  ext
-  simp_rw [Multiset.count_inter, Finsupp.count_toMultiset, Finsupp.inf_apply]
-
-@[simp]
-/--
-theorem `mem_toMultiset` / 定理 `mem_toMultiset`
-
-English:
-theorem mem_toMultiset
-  given: (f : α ->₀ Nat) (i : α)
-  statement: i in toMultiset f ↔ i in f.support
-  proof: by
+theorem mem_toMultiset (f : α →₀ ℕ) (i : α) : i ∈ toMultiset f ↔ i ∈ f.support := by
   classical
-  rw [← Multiset.count_ne_zero]; rw [Finsupp.count_toMultiset]; rw [Finsupp.mem_support_iff]
-
-中文:
-定理 mem_toMultiset
-  条件: (f : α ->₀ 自然数) (i : α)
-  结论: i in toMultiset f ↔ i in f.support
-  证明: by
-  classical
-  rw [← Multiset.count_ne_zero]; rw [Finsupp.count_toMultiset]; rw [Finsupp.mem_support_iff]
-
-Depends on / 依赖: Finsupp, Finsupp.count_toMultiset, Finsupp.mem_support_iff, Multiset, Multiset.count_ne_zero, classical, count_ne_zero, count_toMultiset, mem_support_iff
--/
-theorem mem_toMultiset (f : α ->₀ Nat) (i : α) : i in toMultiset f ↔ i in f.support := by
-  classical
-  rw [← Multiset.count_ne_zero]; rw [Finsupp.count_toMultiset]; rw [Finsupp.mem_support_iff]
+  rw [← Multiset.count_ne_zero, Finsupp.count_toMultiset, Finsupp.mem_support_iff]
 
 end Finsupp
 
@@ -459,46 +446,18 @@ variable [DecidableEq α]
 /-- Given a multiset `s`, `s.toFinsupp` returns the finitely supported function on `ℕ` given by
 the multiplicities of the elements of `s`. -/
 @[simps symm_apply]
-/--
-Definition of `toFinsupp` / `toFinsupp` 的定义
+/-
+**Multiset.toFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp : Multiset α ≃+ (α ->₀ Nat) where toFun s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFinsupp
-  signature: : Multiset α ≃+ (α ->₀ Nat) where
-  body: ⟨s.toFinset, fun a => s.count a, fun a => by simp⟩
-  invFun f := Finsupp.toMultiset f
-  map_add' _ _ := Finsupp.ext fun _ => count_add _ _ _
-  right_inv f :=
-    Finsupp.ext fun a => by
-      simp only [Finsupp.toMultiset_apply, Finsupp.sum, Multiset.count_sum',
-        Multiset.count_singleton, mul_boole, Finsupp.coe_mk, Finsupp.mem_support_iff,
-        Multiset.count_nsmul, Finset.sum_ite_eq, ite_not, ite_eq_right_iff]
-      exact Eq.symm
-  left_inv s := by simp only [Finsupp.toMultiset_apply, Finsupp.sum, Finsupp.coe_mk,
-    Multiset.toFinset_sum_count_nsmul_eq]
-
-@[simp]
-
-中文:
-定义 toFinsupp
-  签名: : Multiset α ≃+ (α ->₀ 自然数) where
-  定义体: ⟨s.toFinset, fun a => s.count a, fun a => by simp⟩
-  invFun f := Finsupp.toMultiset f
-  map_add' _ _ := Finsupp.ext fun _ => count_add _ _ _
-  right_inv f :=
-    Finsupp.ext fun a => by
-      simp only [Finsupp.toMultiset_apply, Finsupp.sum, Multiset.count_sum',
-        Multiset.count_singleton, mul_boole, Finsupp.coe_mk, Finsupp.mem_support_iff,
-        Multiset.count_nsmul, Finset.sum_ite_eq, ite_not, ite_eq_right_iff]
-      exact Eq.symm
-  left_inv s := by simp only [Finsupp.toMultiset_apply, Finsupp.sum, Finsupp.coe_mk,
-    Multiset.toFinset_sum_count_nsmul_eq]
-
-@[simp]
-
-Depends on / 依赖: s.count, s.toFinset, toFinset
+--- 原说明 ---
+Given a multiset `s`, `s.toFinsupp` returns the finitely supported function on `
+ℕ` given by
+the multiplicities of the elements of `s`.
 -/
-noncomputable def toFinsupp : Multiset α ≃+ (α ->₀ Nat) where
+noncomputable def toFinsupp : Multiset α ≃+ (α →₀ ℕ) where
   toFun s := ⟨s.toFinset, fun a => s.count a, fun a => by simp⟩
   invFun f := Finsupp.toMultiset f
   map_add' _ _ := Finsupp.ext fun _ => count_add _ _ _
@@ -512,442 +471,316 @@ noncomputable def toFinsupp : Multiset α ≃+ (α ->₀ Nat) where
     Multiset.toFinset_sum_count_nsmul_eq]
 
 @[simp]
-/--
-theorem `toFinsupp_support` / 定理 `toFinsupp_support`
-
-English:
-theorem toFinsupp_support
-  given: (s : Multiset α)
-  statement: s.toFinsupp.support = s.toFinset
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFinsupp_support
-  条件: (s : Multiset α)
-  结论: s.toFinsupp.support = s.toFinset
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.toFinsupp_support** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_support (s : Multiset α) : s.toFinsupp.support = s.toFinset
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFinsupp_support (s : Multiset α) : s.toFinsupp.support = s.toFinset := rfl
 
 @[simp]
-/--
-theorem `toFinsupp_apply` / 定理 `toFinsupp_apply`
-
-English:
-theorem toFinsupp_apply
-  given: (s : Multiset α) (a : α)
-  statement: toFinsupp s a = s.count a
-  proof: rfl
-
-中文:
-定理 toFinsupp_apply
-  条件: (s : Multiset α) (a : α)
-  结论: toFinsupp s a = s.count a
-  证明: rfl
+/-
+**Multiset.toFinsupp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_apply (s : Multiset α) (a : α) : toFinsupp s a = s.count a
+参数：s : Multiset α；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFinsupp_apply (s : Multiset α) (a : α) : toFinsupp s a = s.count a := rfl
-
-/--
-theorem `toFinsupp_zero` / 定理 `toFinsupp_zero`
-
-English:
-theorem toFinsupp_zero
-  statement: toFinsupp (0 : Multiset α) = 0
-  proof: _root_.map_zero _
-
-中文:
-定理 toFinsupp_zero
-  结论: toFinsupp (0 : Multiset α) = 0
-  证明: _root_.map_zero _
-
-Depends on / 依赖: _root_, _root_.map_zero, map_zero
+/-
+**Multiset.toFinsupp_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_zero : toFinsupp (0 : Multiset α) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem toFinsupp_zero : toFinsupp (0 : Multiset α) = 0 := _root_.map_zero _
-
-/--
-theorem `toFinsupp_add` / 定理 `toFinsupp_add`
-
-English:
-theorem toFinsupp_add
-  given: (s t : Multiset α)
-  statement: toFinsupp (s + t) = toFinsupp s + toFinsupp t
-  proof: _root_.map_add toFinsupp s t
-
-@[simp]
-
-中文:
-定理 toFinsupp_add
-  条件: (s t : Multiset α)
-  结论: toFinsupp (s + t) = toFinsupp s + toFinsupp t
-  证明: _root_.map_add toFinsupp s t
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.map_add, map_add, toFinsupp
+/-
+**Multiset.toFinsupp_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_add (s t : Multiset α) : toFinsupp (s + t) = toFinsupp s + toFin
+supp t
+参数：s t : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem toFinsupp_add (s t : Multiset α) : toFinsupp (s + t) = toFinsupp s + toFinsupp t :=
   _root_.map_add toFinsupp s t
 
 @[simp]
-/--
-theorem `toFinsupp_singleton` / 定理 `toFinsupp_singleton`
-
-English:
-theorem toFinsupp_singleton
-  given: (a : α)
-  statement: toFinsupp ({a} : Multiset α) = Finsupp.single a 1
-  proof: by
-  ext; rw [toFinsupp_apply, count_singleton, Finsupp.single_eq_pi_single, Pi.single_apply]
-
-@[simp]
-
-中文:
-定理 toFinsupp_singleton
-  条件: (a : α)
-  结论: toFinsupp ({a} : Multiset α) = 有限支撑.single a 1
-  证明: by
-  ext; rw [toFinsupp_apply, count_singleton, Finsupp.single_eq_pi_single, Pi.single_apply]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.single_eq_pi_single, Pi.single_apply, count_singleton, single_apply, single_eq_pi_single, toFinsupp_apply
+/-
+**Multiset.toFinsupp_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_singleton (a : α) : toFinsupp ({a} : Multiset α) = Finsupp.singl
+e a 1
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.toFinsupp_apply`：toFinsupp_apply (s : Multiset α) (a : α) : toF
+insupp s a = s.count a
+· 使用定理 `Multiset.count_singleton`：count_singleton (a b : α) : count a ({b} : Mul
+tiset α) = if a = b then 1 else 0
+· 使用定理 `Finsupp.single_eq_pi_single`：single_eq_pi_single [DecidableEq α] (a : α)
+ (b : M) : ⇑(single a b) = Pi.single a b
+· 使用定理 `Pi.single_apply`：∀ {ι : Type u_1} [inst : DecidableEq ι] {M : Type u_9} 
+[inst_1 : Zero M] (i : ι) (x : M) (i' : ι),   Pi.single i x i' = if i' = i then 
+x els…
 -/
 theorem toFinsupp_singleton (a : α) : toFinsupp ({a} : Multiset α) = Finsupp.single a 1 := by
   ext; rw [toFinsupp_apply, count_singleton, Finsupp.single_eq_pi_single, Pi.single_apply]
 
 @[simp]
-/--
-theorem `toFinsupp_toMultiset` / 定理 `toFinsupp_toMultiset`
-
-English:
-theorem toFinsupp_toMultiset
-  given: (s : Multiset α)
-  statement: Finsupp.toMultiset (toFinsupp s) = s
-  proof: Multiset.toFinsupp.symm_apply_apply s
-
-中文:
-定理 toFinsupp_toMultiset
-  条件: (s : Multiset α)
-  结论: 有限支撑.toMultiset (toFinsupp s) = s
-  证明: Multiset.toFinsupp.symm_apply_apply s
-
-Depends on / 依赖: Multiset, Multiset.toFinsupp.symm_apply_apply, symm_apply_apply, toFinsupp
+/-
+**Multiset.toFinsupp_toMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_toMultiset (s : Multiset α) : Finsupp.toMultiset (toFinsupp s) =
+ s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.symm_apply_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (x : M), e.symm (e x) = x
 -/
 theorem toFinsupp_toMultiset (s : Multiset α) : Finsupp.toMultiset (toFinsupp s) = s :=
   Multiset.toFinsupp.symm_apply_apply s
-
-/--
-theorem `toFinsupp_eq_iff` / 定理 `toFinsupp_eq_iff`
-
-English:
-theorem toFinsupp_eq_iff
-  given: {s : Multiset α} {f : α ->₀ Nat}
-  proof: Multiset.toFinsupp.eq_symm_apply.symm
-
-中文:
-定理 toFinsupp_eq_iff
-  条件: {s : Multiset α} {f : α ->₀ 自然数}
-  证明: Multiset.toFinsupp.eq_symm_apply.symm
-
-Depends on / 依赖: Multiset, Multiset.toFinsupp.eq_symm_apply.symm, eq_symm_apply, toFinsupp
+/-
+**Multiset.toFinsupp_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_eq_iff {s : Multiset α} {f : α ->₀ Nat} : toFinsupp s = f ↔ s = 
+Finsupp.toMultiset f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `AddEquiv.eq_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [
+inst_1 : Add N] (e : M ≃+ N) {x : N} {y : M}, y = e.symm x ↔ e y = x
 -/
-theorem toFinsupp_eq_iff {s : Multiset α} {f : α ->₀ Nat} :
+theorem toFinsupp_eq_iff {s : Multiset α} {f : α →₀ ℕ} :
     toFinsupp s = f ↔ s = Finsupp.toMultiset f :=
   Multiset.toFinsupp.eq_symm_apply.symm
-
-/--
-theorem `toFinsupp_union` / 定理 `toFinsupp_union`
-
-English:
-theorem toFinsupp_union
-  given: (s t : Multiset α)
-  statement: toFinsupp (s union t) = toFinsupp s ⊔ toFinsupp t
-  proof: by
-  ext
-  simp
-
-中文:
-定理 toFinsupp_union
-  条件: (s t : Multiset α)
-  结论: toFinsupp (s union t) = toFinsupp s ⊔ toFinsupp t
-  证明: by
-  ext
-  simp
+/-
+**Multiset.toFinsupp_union** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_union (s t : Multiset α) : toFinsupp (s union t) = toFinsupp s ⊔
+ toFinsupp t
+参数：s t : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Multiset.count_union`：count_union (a : α) (s t : Multiset α) : count a (
+s union t) = max (count a s) (count a t)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toFinsupp_union (s t : Multiset α) : toFinsupp (s union t) = toFinsupp s ⊔ toFinsupp t := by
+theorem toFinsupp_union (s t : Multiset α) : toFinsupp (s ∪ t) = toFinsupp s ⊔ toFinsupp t := by
   ext
   simp
-
-/--
-theorem `toFinsupp_inter` / 定理 `toFinsupp_inter`
-
-English:
-theorem toFinsupp_inter
-  given: (s t : Multiset α)
-  statement: toFinsupp (s inter t) = toFinsupp s ⊓ toFinsupp t
-  proof: by
+/-
+**Multiset.toFinsupp_inter** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_inter (s t : Multiset α) : toFinsupp (s inter t) = toFinsupp s ⊓
+ toFinsupp t
+参数：s t : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Multiset.count_inter`：count_inter (a : α) (s t : Multiset α) : count a (
+s inter t) = min (count a s) (count a t)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem toFinsupp_inter (s t : Multiset α) : toFinsupp (s ∩ t) = toFinsupp s ⊓ toFinsupp t := by
   ext
   simp
 
 @[simp]
-
-中文:
-定理 toFinsupp_inter
-  条件: (s t : Multiset α)
-  结论: toFinsupp (s inter t) = toFinsupp s ⊓ toFinsupp t
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Multiset.toFinsupp_sum_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：toFinsupp_sum_eq (s : Multiset α) : s.toFinsupp.sum (fun _ => id) = Multis
+et.card s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.card_toMultiset`：card_toMultiset (f : α ->₀ Nat) : Multiset.card
+ (toMultiset f) = f.sum fun _ => id
+· 使用定理 `Multiset.toFinsupp_toMultiset`：toFinsupp_toMultiset (s : Multiset α) : F
+insupp.toMultiset (toFinsupp s) = s
 -/
-theorem toFinsupp_inter (s t : Multiset α) : toFinsupp (s inter t) = toFinsupp s ⊓ toFinsupp t := by
-  ext
-  simp
-
-@[simp]
-/--
-theorem `toFinsupp_sum_eq` / 定理 `toFinsupp_sum_eq`
-
-English:
-theorem toFinsupp_sum_eq
-  given: (s : Multiset α)
-  statement: s.toFinsupp.sum (fun _ => id) = Multiset.card s
-  proof: by
-  rw [← Finsupp.card_toMultiset]; rw [toFinsupp_toMultiset]
-
-中文:
-定理 toFinsupp_sum_eq
-  条件: (s : Multiset α)
-  结论: s.toFinsupp.求和 (fun _ => id) = Multiset.card s
-  证明: by
-  rw [← Finsupp.card_toMultiset]; rw [toFinsupp_toMultiset]
-
-Depends on / 依赖: Finsupp, Finsupp.card_toMultiset, card_toMultiset, toFinsupp_toMultiset
--/
-theorem toFinsupp_sum_eq (s : Multiset α) : s.toFinsupp.sum (fun _ => id) = Multiset.card s := by
-  rw [← Finsupp.card_toMultiset]; rw [toFinsupp_toMultiset]
+theorem toFinsupp_sum_eq (s : Multiset α) : s.toFinsupp.sum (fun _ ↦ id) = Multiset.card s := by
+  rw [← Finsupp.card_toMultiset, toFinsupp_toMultiset]
 
 end Multiset
 
 @[simp]
-/--
-theorem `Finsupp.toMultiset_toFinsupp` / 定理 `Finsupp.toMultiset_toFinsupp`
-
-English:
-theorem Finsupp.toMultiset_toFinsupp
-  given: [DecidableEq α] (f : α ->₀ Nat)
-  proof: Multiset.toFinsupp.apply_symm_apply _
-
-中文:
-定理 有限支撑.toMultiset_toFinsupp
-  条件: [DecidableEq α] (f : α ->₀ 自然数)
-  证明: Multiset.toFinsupp.apply_symm_apply _
-
-Depends on / 依赖: Multiset, Multiset.toFinsupp.apply_symm_apply, apply_symm_apply, toFinsupp
+/-
+**Finsupp.toMultiset_toFinsupp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toMultiset_toFinsupp [DecidableEq α] (f : α ->₀ Nat) : Multiset.to
+Finsupp (Finsupp.toMultiset f) = f
+参数：f : α ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
 -/
-theorem Finsupp.toMultiset_toFinsupp [DecidableEq α] (f : α ->₀ Nat) :
+theorem Finsupp.toMultiset_toFinsupp [DecidableEq α] (f : α →₀ ℕ) :
     Multiset.toFinsupp (Finsupp.toMultiset f) = f :=
   Multiset.toFinsupp.apply_symm_apply _
-
-/--
-theorem `Finsupp.toMultiset_eq_iff` / 定理 `Finsupp.toMultiset_eq_iff`
-
-English:
-theorem Finsupp.toMultiset_eq_iff
-  given: [DecidableEq α] {f : α ->₀ Nat} {s : Multiset α}
-  proof: Multiset.toFinsupp.symm_apply_eq
-
-中文:
-定理 有限支撑.toMultiset_eq_iff
-  条件: [DecidableEq α] {f : α ->₀ 自然数} {s : Multiset α}
-  证明: Multiset.toFinsupp.symm_apply_eq
-
-Depends on / 依赖: Multiset, Multiset.toFinsupp.symm_apply_eq, Quot.mk, symm_apply_eq, toFinsupp
+/-
+**Finsupp.toMultiset_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finsupp.toMultiset_eq_iff [DecidableEq α] {f : α ->₀ Nat} {s : Multiset α}
+ : Finsupp.toMultiset f = s ↔ f = Multiset.toFinsupp s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.symm_apply_eq`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [
+inst_1 : Add N] (e : M ≃+ N) {x : N} {y : M}, e.symm x = y ↔ x = e y
 -/
-theorem Finsupp.toMultiset_eq_iff [DecidableEq α] {f : α ->₀ Nat} {s : Multiset α} :
+theorem Finsupp.toMultiset_eq_iff [DecidableEq α] {f : α →₀ ℕ} {s : Multiset α} :
     Finsupp.toMultiset f = s ↔ f = Multiset.toFinsupp s :=
   Multiset.toFinsupp.symm_apply_eq
 
 /-! ### As an order isomorphism -/
 
 namespace Finsupp
-/--
-Definition of `orderIsoMultiset` / `orderIsoMultiset` 的定义
+/-- `Finsupp.toMultiset` as an order isomorphism. -/
+/-
+**Finsupp.orderIsoMultiset** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：orderIsoMultiset [DecidableEq ι] : (ι ->₀ Nat) ≃o Multiset ι where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoMultiset
-  signature: [DecidableEq ι]
-  body: Multiset.toFinsupp.symm.toEquiv
-  map_rel_iff' {f g} := by simp [le_def, Multiset.le_iff_count]
-
-@[simp]
-
-中文:
-定义 orderIsoMultiset
-  签名: [DecidableEq ι]
-  定义体: Multiset.toFinsupp.symm.toEquiv
-  map_rel_iff' {f g} := by simp [le_def, Multiset.le_iff_count]
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.toFinsupp.symm.toEquiv, toEquiv, toFinsupp
+--- 原说明 ---
+`Finsupp.toMultiset` as an order isomorphism.
 -/
-noncomputable def orderIsoMultiset [DecidableEq ι] : (ι ->₀ Nat) ≃o Multiset ι where
+noncomputable def orderIsoMultiset [DecidableEq ι] : (ι →₀ ℕ) ≃o Multiset ι where
   toEquiv := Multiset.toFinsupp.symm.toEquiv
   map_rel_iff' {f g} := by simp [le_def, Multiset.le_iff_count]
 
 @[simp]
-/--
-theorem `coe_orderIsoMultiset` / 定理 `coe_orderIsoMultiset`
-
-English:
-theorem coe_orderIsoMultiset
-  given: [DecidableEq ι]
-  statement: ⇑(@orderIsoMultiset ι _) = toMultiset
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_orderIsoMultiset
-  条件: [DecidableEq ι]
-  结论: ⇑(@orderIsoMultiset ι _) = toMultiset
-  证明: rfl
-
-@[simp]
+/-
+**Finsupp.coe_orderIsoMultiset** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：coe_orderIsoMultiset [DecidableEq ι] : ⇑(@orderIsoMultiset ι _) = toMultis
+et
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_orderIsoMultiset [DecidableEq ι] : ⇑(@orderIsoMultiset ι _) = toMultiset :=
   rfl
 
 @[simp]
-/--
-theorem `coe_orderIsoMultiset_symm` / 定理 `coe_orderIsoMultiset_symm`
-
-English:
-theorem coe_orderIsoMultiset_symm
-  given: [DecidableEq ι]
-  proof: rfl
-
-中文:
-定理 coe_orderIsoMultiset_symm
-  条件: [DecidableEq ι]
-  证明: rfl
+/-
+**Finsupp.coe_orderIsoMultiset_symm** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：coe_orderIsoMultiset_symm [DecidableEq ι] : ⇑(@orderIsoMultiset ι).symm = 
+Multiset.toFinsupp
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_orderIsoMultiset_symm [DecidableEq ι] :
     ⇑(@orderIsoMultiset ι).symm = Multiset.toFinsupp :=
   rfl
-
-/--
-theorem `toMultiset_strictMono` / 定理 `toMultiset_strictMono`
-
-English:
-theorem toMultiset_strictMono
-  statement: StrictMono (@toMultiset ι)
-  proof: by
-  classical exact (@orderIsoMultiset ι _).strictMono
-
-中文:
-定理 toMultiset_strictMono
-  结论: 严格递增 (@toMultiset ι)
-  证明: by
-  classical exact (@orderIsoMultiset ι _).strictMono
-
-Depends on / 依赖: classical, orderIsoMultiset, strictMono
+/-
+**Finsupp.toMultiset_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：toMultiset_strictMono : StrictMono (@toMultiset ι)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
 -/
 theorem toMultiset_strictMono : StrictMono (@toMultiset ι) := by
   classical exact (@orderIsoMultiset ι _).strictMono
-
-/--
-theorem `sum_id_lt_of_lt` / 定理 `sum_id_lt_of_lt`
-
-English:
-theorem sum_id_lt_of_lt
-  given: (m n : ι ->₀ Nat) (h : m < n)
-  statement: (m.sum fun _ => id) < n.sum fun _ => id
-  proof: by
-  rw [← card_toMultiset]; rw [← card_toMultiset]
-  apply Multiset.card_lt_card
-  exact toMultiset_strictMono h
-
-中文:
-定理 sum_id_lt_of_lt
-  条件: (m n : ι ->₀ 自然数) (h : m < n)
-  结论: (m.求和 fun _ => id) < n.求和 fun _ => id
-  证明: by
-  rw [← card_toMultiset]; rw [← card_toMultiset]
-  apply Multiset.card_lt_card
-  exact toMultiset_strictMono h
-
-Depends on / 依赖: Multiset, Multiset.card_lt_card, card_lt_card, card_toMultiset, toMultiset_strictMono
+/-
+**Finsupp.sum_id_lt_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：sum_id_lt_of_lt (m n : ι ->₀ Nat) (h : m < n) : (m.sum fun _ => id) < n.su
+m fun _ => id
+参数：m n : ι ->₀ Nat；h : m < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.card_toMultiset`：card_toMultiset (f : α ->₀ Nat) : Multiset.card
+ (toMultiset f) = f.sum fun _ => id
+· 使用定理 `Multiset.card_lt_card`：card_lt_card {s t : Multiset α} (h : s < t) : car
+d s < card t
+· 使用定理 `Finsupp.toMultiset_strictMono`：toMultiset_strictMono : StrictMono (@toMu
+ltiset ι)
 -/
-theorem sum_id_lt_of_lt (m n : ι ->₀ Nat) (h : m < n) : (m.sum fun _ => id) < n.sum fun _ => id := by
-  rw [← card_toMultiset]; rw [← card_toMultiset]
+theorem sum_id_lt_of_lt (m n : ι →₀ ℕ) (h : m < n) : (m.sum fun _ => id) < n.sum fun _ => id := by
+  rw [← card_toMultiset, ← card_toMultiset]
   apply Multiset.card_lt_card
   exact toMultiset_strictMono h
 
 variable (ι)
 
-/--
-theorem `lt_wf` / 定理 `lt_wf`
+/-- The order on `ι →₀ ℕ` is well-founded. -/
+/-
+**Finsupp.lt_wf** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：lt_wf : WellFounded (@LT.lt (ι ->₀ Nat) _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subrelation.wf`：∀ {α : Sort u} {r q : α → α → Prop}, Subrelation q r → W
+ellFounded r → WellFounded q
+· 使用定理 `Finsupp.sum_id_lt_of_lt`：sum_id_lt_of_lt (m n : ι ->₀ Nat) (h : m < n) :
+ (m.sum fun _ => id) < n.sum fun _ => id
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用定理 `WellFoundedRelation.wf`：∀ {α : Sort u} [self : WellFoundedRelation α], W
+ellFounded WellFoundedRelation.rel
 
-English:
-theorem lt_wf
-  statement: WellFounded (@LT.lt (ι ->₀ Nat) _)
-  proof: Subrelation.wf (sum_id_lt_of_lt _ _) InvImage.wf _ Nat.lt_wfRel.2
-
-中文:
-定理 lt_wf
-  结论: 良基 (@LT.lt (ι ->₀ 自然数) _)
-  证明: Subrelation.wf (sum_id_lt_of_lt _ _) InvImage.wf _ Nat.lt_wfRel.2
-
-Depends on / 依赖: InvImage, InvImage.wf, Nat.lt_wfRel, Subrelation, Subrelation.wf, lt_wfRel, sum_id_lt_of_lt
+--- 原说明 ---
+The order on `ι →₀ ℕ` is well-founded.
 -/
-theorem lt_wf : WellFounded (@LT.lt (ι ->₀ Nat) _) :=
-Subrelation.wf (sum_id_lt_of_lt _ _) InvImage.wf _ Nat.lt_wfRel.2
+theorem lt_wf : WellFounded (@LT.lt (ι →₀ ℕ) _) :=
+  Subrelation.wf (sum_id_lt_of_lt _ _) <| InvImage.wf _ Nat.lt_wfRel.2
 
 -- TODO: generalize to `[WellFoundedRelation α] → WellFoundedRelation (ι →₀ α)`
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WellFoundedRelation (ι ->₀ Nat)
-  body: (· < ·)
-  wf := lt_wf _
-
-中文:
-实例 :
-  签名: 良基关系 (ι ->₀ 自然数)
-  定义体: (· < ·)
-  wf := lt_wf _
+/-
+**Finsupp.** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : WellFoundedRelation (ι ->₀ Nat) where
+instance : WellFoundedRelation (ι →₀ ℕ) where
   rel := (· < ·)
   wf := lt_wf _
 
 end Finsupp
 
-/--
-theorem `Multiset.toFinsupp_strictMono` / 定理 `Multiset.toFinsupp_strictMono`
-
-English:
-theorem Multiset.toFinsupp_strictMono
-  given: [DecidableEq ι]
-  statement: StrictMono (@Multiset.toFinsupp ι _)
-  proof: (@Finsupp.orderIsoMultiset ι).symm.strictMono
-
-中文:
-定理 Multiset.toFinsupp_strictMono
-  条件: [DecidableEq ι]
-  结论: 严格递增 (@Multiset.toFinsupp ι _)
-  证明: (@Finsupp.orderIsoMultiset ι).symm.strictMono
-
-Depends on / 依赖: Finsupp, Finsupp.orderIsoMultiset, orderIsoMultiset, strictMono, symm.strictMono
+/-
+**Multiset.toFinsupp_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.toFinsupp_strictMono [DecidableEq ι] : StrictMono (@Multiset.toFi
+nsupp ι _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
 -/
 theorem Multiset.toFinsupp_strictMono [DecidableEq ι] : StrictMono (@Multiset.toFinsupp ι _) :=
   (@Finsupp.orderIsoMultiset ι).symm.strictMono
@@ -955,122 +788,133 @@ theorem Multiset.toFinsupp_strictMono [DecidableEq ι] : StrictMono (@Multiset.t
 namespace Sym
 
 variable (α)
-variable [DecidableEq α] (n : Nat)
+variable [DecidableEq α] (n : ℕ)
 
-/--
-Definition of `equivNatSum` / `equivNatSum` 的定义
+/-- The `n`th symmetric power of a type `α` is naturally equivalent to the subtype of
+finitely-supported maps `α →₀ ℕ` with total mass `n`.
 
-English:
-definition equivNatSum
-  signature: :
-  body: Multiset.toFinsupp.toEquiv.subtypeEquiv by simp
+See also `Sym.equivNatSumOfFintype` when `α` is finite. -/
+/-
+**Sym.equivNatSum** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：equivNatSum : Sym α n ≃ {P : α ->₀ Nat // P.sum (fun _ => id) = n}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 equiv自然数Sum
-  签名: :
-  定义体: Multiset.toFinsupp.toEquiv.subtypeEquiv by simp
+--- 原说明 ---
+The `n`th symmetric power of a type `α` is naturally equivalent to the subtype o
+f
+finitely-supported maps `α →₀ ℕ` with total mass `n`.
 
-Depends on / 依赖: Cofix.corec, Cofix.dest, Multiset, Multiset.toFinsupp.toEquiv.subtypeEquiv, MvFunctor, MvFunctor.map, Sum.elim, Sum.inl, Sum.inr, subtypeEquiv, toEquiv, toFinsupp
+See also `Sym.equivNatSumOfFintype` when `α` is finite.
 -/
 noncomputable def equivNatSum :
-    Sym α n ≃ {P : α ->₀ Nat // P.sum (fun _ => id) = n} :=
-Multiset.toFinsupp.toEquiv.subtypeEquiv by simp
-
-/--
-lemma `coe_equivNatSum_apply_apply` / 引理 `coe_equivNatSum_apply_apply`
-
-English:
-lemma coe_equivNatSum_apply_apply
-  given: (s : Sym α n) (a : α)
-  proof: rfl
-
-中文:
-引理 coe_equiv自然数Sum_apply_apply
-  条件: (s : Sym α n) (a : α)
-  证明: rfl
+    Sym α n ≃ {P : α →₀ ℕ // P.sum (fun _ ↦ id) = n} :=
+  Multiset.toFinsupp.toEquiv.subtypeEquiv <| by simp
+/-
+**Sym.coe_equivNatSum_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：∀ (α : Type u_1) [inst : DecidableEq α] (n : ℕ) (s : Sym α n) (a : α),   ↑
+((Sym.equivNatSum α n) s) a = Multiset.count a ↑s
+参数：α : Type u_1；n : ℕ；s : Sym α n；a : α；(Sym.equivNatSum α n) s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_equivNatSum_apply_apply (s : Sym α n) (a : α) :
-    (equivNatSum α n s : α ->₀ Nat) a = (s : Multiset α).count a :=
+    (equivNatSum α n s : α →₀ ℕ) a = (s : Multiset α).count a :=
   rfl
-
-/--
-lemma `coe_equivNatSum_symm_apply` / 引理 `coe_equivNatSum_symm_apply`
-
-English:
-lemma coe_equivNatSum_symm_apply
-  given: (P : {P : α ->₀ Nat // P.sum (fun _ => id) = n})
-  proof: rfl
-
-中文:
-引理 coe_equiv自然数Sum_symm_apply
-  条件: (P : {P : α ->₀ 自然数 // P.求和 (fun _ => id) = n})
-  证明: rfl
+/-
+**Sym.coe_equivNatSum_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：∀ (α : Type u_1) [inst : DecidableEq α] (n : ℕ) (P : { P // (P.sum fun x =
+> id) = n }),   ↑((Sym.equivNatSum α n).symm P) = Finsupp.toMultiset ↑P
+参数：α : Type u_1；n : ℕ；P : { P // (P.sum fun x => id) = n }；(Sym.equivNatSum α n)
+.symm P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] lemma coe_equivNatSum_symm_apply (P : {P : α ->₀ Nat // P.sum (fun _ => id) = n}) :
+@[simp] lemma coe_equivNatSum_symm_apply (P : {P : α →₀ ℕ // P.sum (fun _ ↦ id) = n}) :
     ((equivNatSum α n).symm P : Multiset α) = Finsupp.toMultiset P :=
   rfl
 
-/--
-Definition of `equivNatSumOfFintype` / `equivNatSumOfFintype` 的定义
+/-- The `n`th symmetric power of a finite type `α` is naturally equivalent to the subtype of maps
+`α → ℕ` with total mass `n`.
 
-English:
-definition equivNatSumOfFintype
-  signature: [Fintype α]
-  body: (equivNatSum α n).trans Finsupp.equivFunOnFinite.subtypeEquiv by simp [Finsupp.sum_fintype]
+See also `Sym.equivNatSum` when `α` is not necessarily finite. -/
+/-
+**Sym.equivNatSumOfFintype** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：equivNatSumOfFintype [Fintype α] : Sym α n ≃ {P : α -> Nat // ∑ i, P i = n
+}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-中文:
-定义 equiv自然数SumOfFintype
-  签名: [有限类型 α]
-  定义体: (equivNatSum α n).trans Finsupp.equivFunOnFinite.subtypeEquiv by simp [Finsupp.sum_fintype]
+--- 原说明 ---
+The `n`th symmetric power of a finite type `α` is naturally equivalent to the su
+btype of maps
+`α → ℕ` with total mass `n`.
 
-Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.subtypeEquiv, Finsupp.sum_fintype, equivFunOnFinite, equivNatSum, subtypeEquiv, sum_fintype
+See also `Sym.equivNatSum` when `α` is not necessarily finite.
 -/
 noncomputable def equivNatSumOfFintype [Fintype α] :
-    Sym α n ≃ {P : α -> Nat // ∑ i, P i = n} :=
-(equivNatSum α n).trans Finsupp.equivFunOnFinite.subtypeEquiv by simp [Finsupp.sum_fintype]
-
-/--
-lemma `coe_equivNatSumOfFintype_apply_apply` / 引理 `coe_equivNatSumOfFintype_apply_apply`
-
-English:
-lemma coe_equivNatSumOfFintype_apply_apply
-  given: [Fintype α] (s : Sym α n) (a : α)
-  proof: rfl
-
-中文:
-引理 coe_equiv自然数SumOfFintype_apply_apply
-  条件: [有限类型 α] (s : Sym α n) (a : α)
-  证明: rfl
+    Sym α n ≃ {P : α → ℕ // ∑ i, P i = n} :=
+  (equivNatSum α n).trans <| Finsupp.equivFunOnFinite.subtypeEquiv <| by simp [Finsupp.sum_fintype]
+/-
+**Sym.coe_equivNatSumOfFintype_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：∀ (α : Type u_1) [inst : DecidableEq α] (n : ℕ) [inst_1 : Fintype α] (s : 
+Sym α n) (a : α),   ↑((Sym.equivNatSumOfFintype α n) s) a = Multiset.count a ↑s
+参数：α : Type u_1；n : ℕ；s : Sym α n；a : α；(Sym.equivNatSumOfFintype α n) s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_equivNatSumOfFintype_apply_apply [Fintype α] (s : Sym α n) (a : α) :
-    (equivNatSumOfFintype α n s : α -> Nat) a = (s : Multiset α).count a :=
+    (equivNatSumOfFintype α n s : α → ℕ) a = (s : Multiset α).count a :=
   rfl
-
-/--
-lemma `coe_equivNatSumOfFintype_symm_apply` / 引理 `coe_equivNatSumOfFintype_symm_apply`
-
-English:
-lemma coe_equivNatSumOfFintype_symm_apply
-  given: [Fintype α] (P : {P : α -> Nat // ∑ i, P i = n})
-  proof: by
-  obtain ⟨P, hP⟩ := P
-  change Finsupp.toMultiset (Finsupp.equivFunOnFinite.symm P) = Multiset.sum _
-  ext a
-  rw [Multiset.count_sum]
-  simp [Multiset.count_singleton]
-
-中文:
-引理 coe_equiv自然数SumOfFintype_symm_apply
-  条件: [有限类型 α] (P : {P : α -> 自然数 // ∑ i, P i = n})
-  证明: by
-  obtain ⟨P, hP⟩ := P
-  change Finsupp.toMultiset (Finsupp.equivFunOnFinite.symm P) = Multiset.sum _
-  ext a
-  rw [Multiset.count_sum]
-  simp [Multiset.count_singleton]
+/-
+**Sym.coe_equivNatSumOfFintype_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：∀ (α : Type u_1) [inst : DecidableEq α] (n : ℕ) [inst_1 : Fintype α] (P : 
+{ P // ∑ i, P i = n }),   ↑((Sym.equivNatSumOfFintype α n).symm P) = ∑ a, ↑P a •
+ {a}
+参数：α : Type u_1；n : ℕ；P : { P // ∑ i, P i = n }；(Sym.equivNatSumOfFintype α n).s
+ymm P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Multiset.ext'`：ext' {s t : Multiset α} : (forall a, count a s = count a 
+t) -> s = t
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.count_sum`：count_sum [DecidableEq α] {m : Multiset β} {f : β ->
+ Multiset α} {a : α} : count a (map f m).sum = sum (m.map fun b => count a <| f 
+b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finsupp.count_toMultiset`：count_toMultiset [DecidableEq α] (f : α ->₀ Na
+t) (a : α) : (toMultiset f).count a = f a
+· 使用定理 `Finsupp.equivFunOnFinite_symm_apply_apply`：∀ {α : Type u_1} {M : Type u_
+4} [inst : Zero M] [inst_1 : Finite α] (f : α → M) (a : α),   (Finsupp.equivFunO
+nFinite.symm f) a = f a
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用引理 `Multiset.count_nsmul`：count_nsmul (a : α) (n s) : count a (n • s) = n * 
+count a s
+· 使用定理 `Multiset.count_singleton`：count_singleton (a b : α) : count a ({b} : Mul
+tiset α) = if a = b then 1 else 0
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma coe_equivNatSumOfFintype_symm_apply [Fintype α] (P : {P : α -> Nat // ∑ i, P i = n}) :
-    ((equivNatSumOfFintype α n).symm P : Multiset α) = ∑ a, ((P : α -> Nat) a) • {a} := by
+@[simp] lemma coe_equivNatSumOfFintype_symm_apply [Fintype α] (P : {P : α → ℕ // ∑ i, P i = n}) :
+    ((equivNatSumOfFintype α n).symm P : Multiset α) = ∑ a, ((P : α → ℕ) a) • {a} := by
   obtain ⟨P, hP⟩ := P
   change Finsupp.toMultiset (Finsupp.equivFunOnFinite.symm P) = Multiset.sum _
   ext a
@@ -1078,3 +922,4 @@ lemma coe_equivNatSumOfFintype_symm_apply
   simp [Multiset.count_singleton]
 
 end Sym
+

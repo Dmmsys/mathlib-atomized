@@ -53,24 +53,33 @@ variable {C : Type u} [Category.{v} C] {F : LocallyDiscrete Cᵒᵖ ⥤ᵖ Cat.{
 
 namespace LocallyDiscreteOpToCat
 
-/--
-Definition of `pullHom` / `pullHom` 的定义
+/-- Given a pseudofunctor `F` from  `LocallyDiscrete Cᵒᵖ` to `Cat`, objects `M₁` and `M₂`
+of `F` over `X₁` and `X₂`, morphisms `f₁ : Y ⟶ X₁` and `f₂ : Y ⟶ X₂`, this is a version
+of the pullback map `(f₁^* M₁ ⟶ f₂^* M₂) → (g^* (f₁^* M₁) ⟶ g^* (f₂^* M₂))` by a
+morphism `g : Y' ⟶ Y`, where we actually replace `g^* (f₁^* M₁)` by `gf₁^* M₁`
+where `gf₁ : Y' ⟶ X₁` is a morphism such that `g ≫ f₁ = gf₁` (and similarly for `M₂`). -/
+/-
+**CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat.pullHom** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat`。
+形式化陈述：pullHom ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂))⦄ 
+⦃Y : C⦄ ⦃f₁ : Y ⟶ X₁⦄ ⦃f₂ : Y ⟶ X₂⦄ (φ : (F.map f₁.op.toLoc).toFunctor.obj M₁ ⟶ 
+(F.map f₂.op.toLoc).toFunctor.obj M₂) ⦃Y' : C⦄ (g : Y' ⟶ Y) (gf₁ : Y' ⟶ X₁) (gf₂
+ : Y' ⟶ X₂) (hgf₁ : g ≫ f₁ = gf₁
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp'`：mapComp'_hom_naturality : (F.map 
+fg).toFunctor.map a ≫ (F.mapComp' f g fg hfg).hom.toNatTrans.app Y = (F.mapComp'
+ f g fg hfg).hom.toNatTrans…
 
-English:
-definition pullHom
-  signature: ⦃X₁ X₂
-  body: (F.mapComp' f₁.op.toLoc g.op.toLoc gf₁.op.toLoc (by aesop)).hom.toNatTrans.app _ ≫
-    (F.map g.op.toLoc).toFunctor.map φ ≫
-      (F.mapComp' f₂.op.toLoc g.op.toLoc gf₂.op.toLoc (by aesop)).inv.toNatTrans.app _
-
-中文:
-定义 pullHom
-  签名: ⦃X₁ X₂
-  定义体: (F.mapComp' f₁.op.toLoc g.op.toLoc gf₁.op.toLoc (by aesop)).hom.toNatTrans.app _ ≫
-    (F.map g.op.toLoc).toFunctor.map φ ≫
-      (F.mapComp' f₂.op.toLoc g.op.toLoc gf₂.op.toLoc (by aesop)).inv.toNatTrans.app _
-
-Depends on / 依赖: F.map, F.mapComp, cat_disch, g.op.toLoc, hom.toNatTrans.app, inv.toNatTrans.app, mapComp, op.toLoc, toFunctor, toFunctor.map, toFunctor.obj, toNatTrans
+--- 原说明 ---
+Given a pseudofunctor `F` from  `LocallyDiscrete Cᵒᵖ` to `Cat`, objects `M₁` and
+ `M₂`
+of `F` over `X₁` and `X₂`, morphisms `f₁ : Y ⟶ X₁` and `f₂ : Y ⟶ X₂`, this is a 
+version
+of the pullback map `(f₁^* M₁ ⟶ f₂^* M₂) → (g^* (f₁^* M₁) ⟶ g^* (f₂^* M₂))` by a
+morphism `g : Y' ⟶ Y`, where we actually replace `g^* (f₁^* M₁)` by `gf₁^* M₁`
+where `gf₁ : Y' ⟶ X₁` is a morphism such that `g ≫ f₁ = gf₁` (and similarly for 
+`M₂`).
 -/
 def pullHom ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂))⦄
     ⦃Y : C⦄ ⦃f₁ : Y ⟶ X₁⦄ ⦃f₂ : Y ⟶ X₂⦄
@@ -85,20 +94,50 @@ def pullHom ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.o
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `map_eq_pullHom` / 引理 `map_eq_pullHom`
-
-English:
-lemma map_eq_pullHom
-  proof: by
-  simp [Cat.Hom.comp_toFunctor, pullHom, ← reassoc_of% Cat.Hom₂.comp_app, ← Cat.Hom₂.comp_app]
-
-中文:
-引理 map_eq_pullHom
-  证明: by
-  simp [Cat.Hom.comp_toFunctor, pullHom, ← reassoc_of% Cat.Hom₂.comp_app, ← Cat.Hom₂.comp_app]
-
-Depends on / 依赖: Cat.Hom, Cat.Hom.comp_toFunctor, comp_app, comp_toFunctor, pullHom, reassoc_of
+/-
+**CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat.map_eq_pullHom** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat`。
+形式化陈述：map_eq_pullHom ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op
+ X₂))⦄ ⦃Y : C⦄ ⦃f₁ : Y ⟶ X₁⦄ ⦃f₂ : Y ⟶ X₂⦄ (φ : (F.map f₁.op.toLoc).toFunctor.ob
+j M₁ ⟶ (F.map f₂.op.toLoc).toFunctor.obj M₂) ⦃Y' : C⦄ (g : Y' ⟶ Y) (gf₁ : Y' ⟶ X
+₁) (gf₂ : Y' ⟶ X₂) (hgf₁ : g ≫ f₁ = gf₁) (hgf₂ : g ≫ f₂ = gf₂) : (F.map g.op.toL
+oc).toFunctor.map φ = (F.mapComp' f₁.op.toLoc g.op.toLoc gf₁.op.toLoc (by aesop)
+).inv.toNatTrans.app _ ≫ pullHom φ g gf₁ gf₂ hgf₁ hgf₂ ≫ (F.mapComp' f₂.op.toLoc
+ g.op.toLoc gf₂.op.toLoc (
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp'`：mapComp'_hom_naturality : (F.map 
+fg).toFunctor.map a ≫ (F.mapComp' f g fg hfg).hom.toNatTrans.app Y = (F.mapComp'
+ f g fg hfg).hom.toNatTrans…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.Cat.Hom₂.comp_app`：∀ {C D : CategoryTheory.Cat} {F G H : 
+C ⟶ D} (α : F ⟶ G) (β : G ⟶ H) (X : ↑C),   (CategoryTheory.CategoryStruct.comp α
+ β).toNatTrans.app X =…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_eq_pullHom
     ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂))⦄
@@ -113,26 +152,57 @@ lemma map_eq_pullHom
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `pullHom_id` / 引理 `pullHom_id`
-
-English:
-lemma pullHom_id
-  given: ⦃X₁ X₂
-  statement: C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂))⦄
-  proof: by
-  simp [pullHom, mapComp'_comp_id_hom_app, mapComp'_comp_id_inv_app,
-    ← reassoc_of% Cat.Hom₂.comp_app, Iso.inv_hom_id]
-
-中文:
-引理 pullHom_id
-  条件: ⦃X₁ X₂
-  结论: C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂))⦄
-  证明: by
-  simp [pullHom, mapComp'_comp_id_hom_app, mapComp'_comp_id_inv_app,
-    ← reassoc_of% Cat.Hom₂.comp_app, Iso.inv_hom_id]
-
-Depends on / 依赖: Cat.Hom, Iso.inv_hom_id, _comp_id_hom_app, _comp_id_inv_app, comp_app, inv_hom_id, mapComp, pullHom, reassoc_of
+/-
+**CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat.pullHom_id** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat`。
+形式化陈述：pullHom_id ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂)
+)⦄ ⦃Y : C⦄ ⦃f₁ : Y ⟶ X₁⦄ ⦃f₂ : Y ⟶ X₂⦄ (φ : (F.map f₁.op.toLoc).toFunctor.obj M₁
+ ⟶ (F.map f₂.op.toLoc).toFunctor.obj M₂) : pullHom φ (𝟙 _) f₁ f₂ = φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp'`：mapComp'_hom_naturality : (F.map 
+fg).toFunctor.map a ≫ (F.mapComp' f g fg hfg).hom.toNatTrans.app Y = (F.mapComp'
+ f g fg hfg).hom.toNatTrans…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Pseudofunctor.mapComp'_comp_id_hom_app`：∀ {B : Type u_1} 
+[inst : CategoryTheory.Bicategory B] [inst_1 : CategoryTheory.Bicategory.Strict 
+B]   (F : CategoryTheory.Pseudofunctor B Ca…
+· 使用定理 `CategoryTheory.locallyDiscreteBicategory.strict`：∀ (C : Type u) [inst : 
+CategoryTheory.Category.{v, u} C],   CategoryTheory.Bicategory.Strict (CategoryT
+heory.LocallyDiscrete C)
+· 使用定理 `CategoryTheory.Pseudofunctor.mapComp'_comp_id_inv_app`：∀ {B : Type u_1} 
+[inst : CategoryTheory.Bicategory B] [inst_1 : CategoryTheory.Bicategory.Strict 
+B]   (F : CategoryTheory.Pseudofunctor B Ca…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.Cat.Hom₂.comp_app`：∀ {C D : CategoryTheory.Cat} {F G H : 
+C ⟶ D} (α : F ⟶ G) (β : G ⟶ H) (X : ↑C),   (CategoryTheory.CategoryStruct.comp α
+ β).toNatTrans.app X =…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma pullHom_id ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂))⦄
     ⦃Y : C⦄ ⦃f₁ : Y ⟶ X₁⦄ ⦃f₂ : Y ⟶ X₂⦄
@@ -144,24 +214,62 @@ lemma pullHom_id ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `pullHom_pullHom` / 引理 `pullHom_pullHom`
-
-English:
-lemma pullHom_pullHom
-  proof: by
-  dsimp [pullHom]
-  rw [Functor.map_comp_assoc]; rw [Functor.map_comp_assoc]; rw [F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _ _ rfl (by aesop)]; rw [F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc _ _ _ _ _ _ _ rfl (by aesop)]
-  simp [mapComp'_inv_naturality_assoc, ← reassoc_of% Cat.Hom₂.comp_app]
-
-中文:
-引理 pullHom_pullHom
-  证明: by
-  dsimp [pullHom]
-  rw [Functor.map_comp_assoc]; rw [Functor.map_comp_assoc]; rw [F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _ _ rfl (by aesop)]; rw [F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc _ _ _ _ _ _ _ rfl (by aesop)]
-  simp [mapComp'_inv_naturality_assoc, ← reassoc_of% Cat.Hom₂.comp_app]
-
-Depends on / 依赖: F.mapComp, Functor, Functor.map_comp_assoc, _hom_whiskerRight_app_assoc, _inv_whiskerRight_mapComp, cat_disch, mapComp, map_comp_assoc, pullHom
+/-
+**CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat.pullHom_pullHom** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.Pseudofunctor.LocallyDiscreteOpToCat`。
+形式化陈述：pullHom_pullHom ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (o
+p X₂))⦄ ⦃Y : C⦄ ⦃f₁ : Y ⟶ X₁⦄ ⦃f₂ : Y ⟶ X₂⦄ (φ : (F.map f₁.op.toLoc).toFunctor.o
+bj M₁ ⟶ (F.map f₂.op.toLoc).toFunctor.obj M₂) ⦃Y' : C⦄ (g : Y' ⟶ Y) (gf₁ : Y' ⟶ 
+X₁) (gf₂ : Y' ⟶ X₂) ⦃Y'' : C⦄ (g' : Y'' ⟶ Y') (g'f₁ : Y'' ⟶ X₁) (g'f₂ : Y'' ⟶ X₂
+) (hgf₁ : g ≫ f₁ = gf₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp'`：mapComp'_hom_naturality : (F.map 
+fg).toFunctor.map a ≫ (F.mapComp' f g fg hfg).hom.toNatTrans.app Y = (F.mapComp'
+ f g fg hfg).hom.toNatTrans…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.locallyDiscreteBicategory.strict`：∀ (C : Type u) [inst : 
+CategoryTheory.Category.{v, u} C],   CategoryTheory.Bicategory.Strict (CategoryT
+heory.LocallyDiscrete C)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Pseudofunctor.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_a
+pp`：∀ {B : Type u_1} [inst : CategoryTheory.Bicategory B] [inst_1 : CategoryTheo
+ry.Bicategory.Strict B]   (F : CategoryTheory.Pseudofunctor B Ca…
+· 使用定理 `CategoryTheory.Pseudofunctor.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRi
+ght_app_assoc`：∀ {B : Type u_1} [inst : CategoryTheory.Bicategory B] [inst_1 : C
+ategoryTheory.Bicategory.Strict B]   (F : CategoryTheory.Pseudofunctor B Ca…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Pseudofunctor.mapComp'_inv_naturality_assoc`：∀ {B : Type 
+u} [inst : CategoryTheory.Bicategory B] (F : CategoryTheory.Pseudofunctor B Cate
+goryTheory.Cat)   {b₀ b₁ b₂ : B} {X Y : ↑(F.obj …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.Cat.Hom₂.comp_app`：∀ {C D : CategoryTheory.Cat} {F G H : 
+C ⟶ D} (α : F ⟶ G) (β : G ⟶ H) (X : ↑C),   (CategoryTheory.CategoryStruct.comp α
+ β).toNatTrans.app X =…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma pullHom_pullHom
     ⦃X₁ X₂ : C⦄ ⦃M₁ : F.obj (.mk (op X₁))⦄ ⦃M₂ : F.obj (.mk (op X₂))⦄
@@ -173,7 +281,9 @@ lemma pullHom_pullHom
     pullHom (pullHom φ g gf₁ gf₂ hgf₁ hgf₂) g' g'f₁ g'f₂ hg'f₁ hg'f₂ =
       pullHom φ (g' ≫ g) g'f₁ g'f₂ := by
   dsimp [pullHom]
-  rw [Functor.map_comp_assoc]; rw [Functor.map_comp_assoc]; rw [F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _ _ rfl (by aesop)]; rw [F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc _ _ _ _ _ _ _ rfl (by aesop)]
+  rw [Functor.map_comp_assoc, Functor.map_comp_assoc,
+    F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app _ _ _ _ _ _ _ rfl (by aesop),
+    F.mapComp'₀₂₃_hom_comp_mapComp'_hom_whiskerRight_app_assoc _ _ _ _ _ _ _ rfl (by aesop)]
   simp [mapComp'_inv_naturality_assoc, ← reassoc_of% Cat.Hom₂.comp_app]
 
 end LocallyDiscreteOpToCat
@@ -189,48 +299,38 @@ variable (F) {S : C} (M N : F.obj (.mk (op S)))
 an object `T : Over S` corresponding to a morphism `p : X ⟶ S` to the type
 of morphisms $p^* M ⟶ p^* N$. -/
 @[simps, implicit_reducible]
-/--
-Definition of `presheafHom` / `presheafHom` 的定义
+/-
+**CategoryTheory.Pseudofunctor.presheafHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pseudofunctor`。
+形式化陈述：presheafHom : (Over S)ᵒᵖ ⥤ Type v' where obj T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presheafHom
-  signature: : (Over S)ᵒᵖ ⥤ Type v' where
-  body: (F.map (.toLoc T.unop.hom.op)).toFunctor.obj M ⟶
-    (F.map (.toLoc T.unop.hom.op)).toFunctor.obj N
-  map {T₁ T₂} p := ↾fun f => pullHom f p.unop.left T₂.unop.hom T₂.unop.hom
-
-中文:
-定义 presheafHom
-  签名: : (Over S)ᵒᵖ ⥤ 类型v' where
-  定义体: (F.map (.toLoc T.unop.hom.op)).toFunctor.obj M ⟶
-    (F.map (.toLoc T.unop.hom.op)).toFunctor.obj N
-  map {T₁ T₂} p := ↾fun f => pullHom f p.unop.left T₂.unop.hom T₂.unop.hom
-
-Depends on / 依赖: F.map, T.unop.hom.op, toFunctor, toFunctor.obj
+--- 原说明 ---
+If `F` is a pseudofunctor from `Cᵒᵖ` to `Cat`, and `M` and `N` are objects in
+`F.obj (.mk (op S))`, this is the presheaf of morphisms from `M` to `N`: it send
+s
+an object `T : Over S` corresponding to a morphism `p : X ⟶ S` to the type
+of morphisms $p^* M ⟶ p^* N$.
 -/
 def presheafHom : (Over S)ᵒᵖ ⥤ Type v' where
   obj T := (F.map (.toLoc T.unop.hom.op)).toFunctor.obj M ⟶
     (F.map (.toLoc T.unop.hom.op)).toFunctor.obj N
-  map {T₁ T₂} p := ↾fun f => pullHom f p.unop.left T₂.unop.hom T₂.unop.hom
+  map {T₁ T₂} p := ↾fun f ↦ pullHom f p.unop.left T₂.unop.hom T₂.unop.hom
 
 /-- The bijection `(M ⟶ N) ≃ (F.presheafHom M N).obj (op (Over.mk (𝟙 S)))`. -/
 @[simps! -isSimp]
-/--
-Definition of `presheafHomObjHomEquiv` / `presheafHomObjHomEquiv` 的定义
+/-
+**CategoryTheory.Pseudofunctor.presheafHomObjHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Pseudofunctor`。
+形式化陈述：presheafHomObjHomEquiv {M N : (F.obj (.mk (op S)))} : (M ⟶ N) ≃ (F.preshea
+fHom M N).obj (op (Over.mk (𝟙 S)))
+参数：F.obj (.mk (op S))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presheafHomObjHomEquiv
-  signature: {M N : (F.obj (.mk (op S)))}
-  body: Iso.homCongr ((Cat.Hom.toNatIso (F.mapId (.mk (op S)))).symm.app M)
-    ((Cat.Hom.toNatIso (F.mapId (.mk (op S)))).symm.app N)
-
-中文:
-定义 presheafHomObjHomEquiv
-  签名: {M N : (F.obj (.mk (op S)))}
-  定义体: Iso.homCongr ((Cat.Hom.toNatIso (F.mapId (.mk (op S)))).symm.app M)
-    ((Cat.Hom.toNatIso (F.mapId (.mk (op S)))).symm.app N)
-
-Depends on / 依赖: Cat.Hom.toNatIso, F.mapId, Iso.homCongr, homCongr, symm.app, toNatIso
+--- 原说明 ---
+The bijection `(M ⟶ N) ≃ (F.presheafHom M N).obj (op (Over.mk (𝟙 S)))`.
 -/
 def presheafHomObjHomEquiv {M N : (F.obj (.mk (op S)))} :
     (M ⟶ N) ≃ (F.presheafHom M N).obj (op (Over.mk (𝟙 S))) :=
@@ -239,46 +339,30 @@ def presheafHomObjHomEquiv {M N : (F.obj (.mk (op S)))} :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `overMapCompPresheafHomIso` / `overMapCompPresheafHomIso` 的定义
+/-- Compatibility isomorphism of `Pseudofunctor.presheafHom` with "restrictions". -/
+/-
+**CategoryTheory.Pseudofunctor.overMapCompPresheafHomIso** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Pseudofunctor`。
+形式化陈述：overMapCompPresheafHomIso {S' : C} (q : S' ⟶ S) : (Over.map q).op ⋙ F.pres
+heafHom M N ≅ F.presheafHom ((F.map (.toLoc q.op)).toFunctor.obj M) ((F.map (.to
+Loc q.op)).toFunctor.obj N)
+参数：q : S' ⟶ S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp'`：mapComp'_hom_naturality : (F.map 
+fg).toFunctor.map a ≫ (F.mapComp' f g fg hfg).hom.toNatTrans.app Y = (F.mapComp'
+ f g fg hfg).hom.toNatTrans…
 
-English:
-definition overMapCompPresheafHomIso
-  signature: {S' : C} (q : S' ⟶ S)
-  body: NatIso.ofComponents (fun T => Equiv.toIso (by
-    letI e := Cat.Hom.toNatIso (F.mapComp' (.toLoc q.op) (.toLoc T.unop.hom.op)
-      (.toLoc ((Over.map q).obj T.unop).hom.op))
-    exact (Iso.homFromEquiv (e.app M)).trans (Iso.homToEquiv (e.app N)))) (by
-      rintro ⟨T₁⟩ ⟨T₂⟩ ⟨f⟩
-      ext g
-      dsimp [pullHom]
-      simp only [Category.assoc,
-        Functor.map_comp]
-      rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ rfl _ rfl]; rw [F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ (by
-          simp only [← Quiver.Hom.comp_toLoc]; rw [← op_comp]; rw [Over.w_assoc])])
-
-中文:
-定义 overMapCompPresheafHomIso
-  签名: {S' : C} (q : S' ⟶ S)
-  定义体: NatIso.ofComponents (fun T => Equiv.toIso (by
-    letI e := Cat.Hom.toNatIso (F.mapComp' (.toLoc q.op) (.toLoc T.unop.hom.op)
-      (.toLoc ((Over.map q).obj T.unop).hom.op))
-    exact (Iso.homFromEquiv (e.app M)).trans (Iso.homToEquiv (e.app N)))) (by
-      rintro ⟨T₁⟩ ⟨T₂⟩ ⟨f⟩
-      ext g
-      dsimp [pullHom]
-      simp only [Category.assoc,
-        Functor.map_comp]
-      rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ rfl _ rfl]; rw [F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ (by
-          simp only [← Quiver.Hom.comp_toLoc]; rw [← op_comp]; rw [Over.w_assoc])])
-
-Depends on / 依赖: Cat.Hom.toNatIso, Category, Category.assoc, Equiv.toIso, F.mapComp, Functor, Functor.map_comp, Iso.homFromEquiv, Iso.homToEquiv, NatIso, NatIso.ofComponents, Over.map, Quiver, Quiver.Hom.comp_, T.unop, T.unop.hom.op, comp_, e.app, hom.op, homFromEquiv
+--- 原说明 ---
+Compatibility isomorphism of `Pseudofunctor.presheafHom` with "restrictions".
 -/
 def overMapCompPresheafHomIso {S' : C} (q : S' ⟶ S) :
     (Over.map q).op ⋙ F.presheafHom M N ≅
       F.presheafHom ((F.map (.toLoc q.op)).toFunctor.obj M)
         ((F.map (.toLoc q.op)).toFunctor.obj N) :=
-  NatIso.ofComponents (fun T => Equiv.toIso (by
+  NatIso.ofComponents (fun T ↦ Equiv.toIso (by
     letI e := Cat.Hom.toNatIso (F.mapComp' (.toLoc q.op) (.toLoc T.unop.hom.op)
       (.toLoc ((Over.map q).obj T.unop).hom.op))
     exact (Iso.homFromEquiv (e.app M)).trans (Iso.homToEquiv (e.app N)))) (by
@@ -287,8 +371,9 @@ def overMapCompPresheafHomIso {S' : C} (q : S' ⟶ S) :
       dsimp [pullHom]
       simp only [Category.assoc,
         Functor.map_comp]
-      rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ rfl _ rfl]; rw [F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ (by
-          simp only [← Quiver.Hom.comp_toLoc]; rw [← op_comp]; rw [Over.w_assoc])])
+      rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ rfl _ rfl,
+        F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ (by
+          simp only [← Quiver.Hom.comp_toLoc, ← op_comp, Over.w_assoc])])
 
 end
 
@@ -298,20 +383,20 @@ variable (F)
 satisfies the descent property for morphisms, i.e. is a prestack.
 (See the terminological note in the introduction of the file `Sites.Descent.IsPrestack`.) -/
 @[stacks 026F "(2)"]
-/--
-Definition of `IsPrestack` / `IsPrestack` 的定义
+/-
+**CategoryTheory.Pseudofunctor.IsPrestack** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryT
+heory.Pseudofunctor`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     CategoryT
+heory.Pseudofunctor (CategoryTheory.LocallyDiscrete Cᵒᵖ) CategoryTheory.Cat →   
+    CategoryTheory.GrothendieckTopology C → Prop
+参数：CategoryTheory.LocallyDiscrete Cᵒᵖ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsPrestack
-  parameters: (J : GrothendieckTopology C)
-  axioms and operations (1):
-    - isSheaf((J) {S : C} (M N : F.obj (.mk (op S)))) : Presheaf.IsSheaf (J.over S) (F.presheafHom M N)
-
-中文:
-类 是Prestack
-  参数: (J : Grothendieck拓扑 C)
-  公理与运算 (1 个):
-    - isSheaf((J) {S : C} (M N : F.obj (.mk (op S)))) : 预层.是层 (J.over S) (F.presheafHom M N)
+--- 原说明 ---
+The property that a pseudofunctor `F : LocallyDiscrete Cᵒᵖ ⥤ᵖ Cat`
+satisfies the descent property for morphisms, i.e. is a prestack.
+(See the terminological note in the introduction of the file `Sites.Descent.IsPr
+estack`.)
 -/
 class IsPrestack (J : GrothendieckTopology C) : Prop where
   isSheaf (J) {S : C} (M N : F.obj (.mk (op S))) :
@@ -322,22 +407,24 @@ and `M` and `N` are two objects in `F.obj (.mk (op S))`, this is the sheaf of
 morphisms from `M` to `N`: it sends an object `T : Over S` corresponding to
 a morphism `p : X ⟶ S` to the type of morphisms $p^* M ⟶ p^* N$. -/
 @[simps]
-/--
-Definition of `sheafHom` / `sheafHom` 的定义
+/-
+**CategoryTheory.Pseudofunctor.sheafHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Pseudofunctor`。
+形式化陈述：sheafHom (J : GrothendieckTopology C) [F.IsPrestack J] {S : C} (M N : F.ob
+j (.mk (op S))) : Sheaf (J.over S) (Type v') where obj
+参数：J : GrothendieckTopology C；M N : F.obj (.mk (op S))。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pseudofunctor.IsPrestack.isSheaf`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C}   {F : CategoryTheory.Pseudofunctor (CategoryT
+heory.LocallyDiscrete Cᵒᵖ) CategoryTh…
 
-English:
-definition sheafHom
-  signature: (J : GrothendieckTopology C) [F.IsPrestack J]
-  body: F.presheafHom M N
-  property := IsPrestack.isSheaf _ _ _
-
-中文:
-定义 sheafHom
-  签名: (J : Grothendieck拓扑 C) [F.是Prestack J]
-  定义体: F.presheafHom M N
-  property := IsPrestack.isSheaf _ _ _
-
-Depends on / 依赖: F.presheafHom, presheafHom
+--- 原说明 ---
+If `F` is a prestack from `Cᵒᵖ` to `Cat` relatively to a Grothendieck topology `
+J`,
+and `M` and `N` are two objects in `F.obj (.mk (op S))`, this is the sheaf of
+morphisms from `M` to `N`: it sends an object `T : Over S` corresponding to
+a morphism `p : X ⟶ S` to the type of morphisms $p^* M ⟶ p^* N$.
 -/
 def sheafHom (J : GrothendieckTopology C) [F.IsPrestack J]
     {S : C} (M N : F.obj (.mk (op S))) :
@@ -348,3 +435,4 @@ def sheafHom (J : GrothendieckTopology C) [F.IsPrestack J]
 end Pseudofunctor
 
 end CategoryTheory
+

@@ -51,24 +51,18 @@ register_option linter.tacticAnalysis : Bool := {
 
 namespace Mathlib.TacticAnalysis
 
-/--
-Definition of `TacticNode` / `TacticNode` 的定义
+/-- Information about a tactic in a sequence, parsed from infotrees and passed to a tactic
+analysis pass. -/
+/-
+**Mathlib.TacticAnalysis.TacticNode** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.TacticA
+nalysis`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TacticNode
-  parameters: where
-  axioms and operations (3):
-    - ctxI : ContextInfo
-    - tacI : TacticInfo
-    - mayFail : Bool
-
-中文:
-结构 TacticNode
-  参数: where
-  公理与运算 (3 个):
-    - ctxI : ContextInfo
-    - tacI : TacticInfo
-    - mayFail : 布尔值
+--- 原说明 ---
+Information about a tactic in a sequence, parsed from infotrees and passed to a 
+tactic
+analysis pass.
 -/
 structure TacticNode where
   /-- `ContextInfo` at the infotree node. -/
@@ -78,82 +72,85 @@ structure TacticNode where
   /-- This tactic is allowed to fail because it is in a `try`/`anyGoals`/etc block. -/
   mayFail : Bool
 
-/--
-Definition of `TacticNode.runTacticCode` / `TacticNode.runTacticCode` 的定义
+/-- Run tactic code, given by a piece of syntax, in the context of a tactic info node.
 
-English:
-abbreviation TacticNode.runTacticCode
-  signature: (i : TacticNode)
-  body: i.ctxI.runTacticCode i.tacI
+Convenience abbreviation for `ContextInfo.runTacticCode`. -/
+/-
+**Mathlib.TacticAnalysis.TacticNode.runTacticCode** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.TacticAnalysis.TacticNode`。
+形式化陈述：Mathlib.TacticAnalysis.TacticNode → MVarId → Syntax → CommandElabM (List M
+VarId)
+参数：List MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 TacticNode.runTacticCode
-  签名: (i : TacticNode)
-  定义体: i.ctxI.runTacticCode i.tacI
+--- 原说明 ---
+Run tactic code, given by a piece of syntax, in the context of a tactic info nod
+e.
 
-Depends on / 依赖: i.ctxI.runTacticCode, i.tacI, runTacticCode
+Convenience abbreviation for `ContextInfo.runTacticCode`.
 -/
 abbrev TacticNode.runTacticCode (i : TacticNode) :
-    MVarId -> Syntax -> CommandElabM (List MVarId) :=
+    MVarId → Syntax → CommandElabM (List MVarId) :=
   i.ctxI.runTacticCode i.tacI
 
-/--
-Definition of `TacticNode.runTacticCodeCapturingInfoTree` / `TacticNode.runTacticCodeCapturingInfoTree` 的定义
+/-- Run tactic code, capturing InfoTrees for extracting "Try this:" suggestions.
 
-English:
-abbreviation TacticNode.runTacticCodeCapturingInfoTree
-  signature: (i : TacticNode)
-  body: i.ctxI.runTacticCodeCapturingInfoTree i.tacI
+Returns both the resulting goals and the InfoTrees produced during tactic execution.
+Use `collectTryThisSuggestions` from `Mathlib.Lean.Elab.InfoTree` to extract suggestions. -/
+/-
+**Mathlib.TacticAnalysis.TacticNode.runTacticCodeCapturingInfoTree** 是 Mathlib 中
+的一个定义，位于命名空间 `Mathlib.TacticAnalysis.TacticNode`。
+形式化陈述：Mathlib.TacticAnalysis.TacticNode → MVarId → Syntax → CommandElabM (List M
+VarId × PersistentArray Elab.InfoTree)
+参数：List MVarId × PersistentArray Elab.InfoTree。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 TacticNode.runTacticCodeCapturingInfoTree
-  签名: (i : TacticNode)
-  定义体: i.ctxI.runTacticCodeCapturingInfoTree i.tacI
+--- 原说明 ---
+Run tactic code, capturing InfoTrees for extracting "Try this:" suggestions.
 
-Depends on / 依赖: i.ctxI.runTacticCodeCapturingInfoTree, i.tacI, runTacticCodeCapturingInfoTree
+Returns both the resulting goals and the InfoTrees produced during tactic execut
+ion.
+Use `collectTryThisSuggestions` from `Mathlib.Lean.Elab.InfoTree` to extract sug
+gestions.
 -/
 abbrev TacticNode.runTacticCodeCapturingInfoTree (i : TacticNode) :
-    MVarId -> Syntax -> CommandElabM (List MVarId × PersistentArray InfoTree) :=
+    MVarId → Syntax → CommandElabM (List MVarId × PersistentArray InfoTree) :=
   i.ctxI.runTacticCodeCapturingInfoTree i.tacI
 
-/--
-Definition of `Config` / `Config` 的定义
+/-- Stores the configuration for a tactic analysis pass.
 
-English:
-structure Config
-  parameters: where
-  axioms and operations (1):
-    - run : Array TacticNode -> CommandElabM Unit
+This provides the low-level interface into the tactic analysis framework.
+-/
+/-
+**Mathlib.TacticAnalysis.Config** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.TacticAnaly
+sis`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 余nfig
-  参数: where
-  公理与运算 (1 个):
-    - run : 数组 TacticNode -> CommandElabM 单元
+--- 原说明 ---
+Stores the configuration for a tactic analysis pass.
+
+This provides the low-level interface into the tactic analysis framework.
 -/
 structure Config where
   /-- The function that runs this pass. Takes an array of infotree nodes corresponding
   to a sequence of tactics from the source file. Should do all reporting itself,
   for example by `Lean.Linter.logLint`.
   -/
-  run : Array TacticNode -> CommandElabM Unit
+  run : Array TacticNode → CommandElabM Unit
 
-/--
-Definition of `Pass` / `Pass` 的定义
+/-- The internal representation of a tactic analysis pass,
+extending `Config` with some declaration meta-information.
+-/
+/-
+**Mathlib.TacticAnalysis.Pass** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.TacticAnalysi
+s`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Pass
-  parameters: extends Config
-  extends: Config
-  axioms and operations (1):
-    - opt : Option (Lean.Option Bool)
-
-中文:
-结构 Pass
-  参数: extends 余nfig
-  继承: 余nfig
-  公理与运算 (1 个):
-    - opt : 选项类型 (Lean.选项类型 布尔值)
+--- 原说明 ---
+The internal representation of a tactic analysis pass,
+extending `Config` with some declaration meta-information.
 -/
 structure Pass extends Config where
   /-- The option corresponding to this pass, used to enable it.
@@ -162,22 +159,16 @@ structure Pass extends Config where
   -/
   opt : Option (Lean.Option Bool)
 
-/--
-Definition of `Entry` / `Entry` 的定义
+/-- Each tactic analysis round is represented by the declaration name for the `Config`. -/
+/-
+**Mathlib.TacticAnalysis.Entry** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.TacticAnalys
+is`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Entry
-  parameters: where
-  axioms and operations (2):
-    - declName : Name
-    - optionName : Name
-
-中文:
-结构 Entry
-  参数: where
-  公理与运算 (2 个):
-    - declName : Name
-    - optionName : Name
+--- 原说明 ---
+Each tactic analysis round is represented by the declaration name for the `Confi
+g`.
 -/
 structure Entry where
   /-- The declaration, of type `Config`, that defines this pass. -/
@@ -185,53 +176,26 @@ structure Entry where
   /-- The option, of type `Lean.Option Bool`, that controls whether the pass is enabled. -/
   optionName : Name
 
-/--
-Definition of `Entry.import` / `Entry.import` 的定义
+/-- Read a configuration from a declaration of the right type. -/
+/-
+**Mathlib.TacticAnalysis.Entry.import** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.TacticA
+nalysis.Entry`。
+形式化陈述：Mathlib.TacticAnalysis.Entry → ImportM Mathlib.TacticAnalysis.Pass
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Entry.import
-  signature: (e : Entry)
-  body: do
-  let { env, opts, .. } ← read
-let cfg ← IO.ofExcept
-    unsafe env.evalConstCheck Config opts ``Config e.declName
-  -- This next line can return `none` in the file where the option is declared:
-  let opt := (unsafe env.evalConst (Lean.Option Bool) opts e.optionName).toOption
-  return { cfg with opt }
-
-中文:
-定义 Entry.import
-  签名: (e : Entry)
-  定义体: do
-  let { env, opts, .. } ← read
-let cfg ← IO.ofExcept
-    unsafe env.evalConstCheck Config opts ``Config e.declName
-  -- This next line can return `none` in the file where the option is declared:
-  let opt := (unsafe env.evalConst (Lean.Option Bool) opts e.optionName).toOption
-  return { cfg with opt }
+--- 原说明 ---
+Read a configuration from a declaration of the right type.
 -/
 def Entry.import (e : Entry) : ImportM Pass := do
   let { env, opts, .. } ← read
-let cfg ← IO.ofExcept
+  let cfg ← IO.ofExcept <|
     unsafe env.evalConstCheck Config opts ``Config e.declName
   -- This next line can return `none` in the file where the option is declared:
   let opt := (unsafe env.evalConst (Lean.Option Bool) opts e.optionName).toOption
   return { cfg with opt }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Ord Entry
-  body: (@lexOrd _ _ ⟨Lean.Name.cmp⟩ ⟨Lean.Name.cmp⟩).compare (a.1, a.2) (b.1, b.2)
-
-中文:
-实例 :
-  签名: 序 Entry
-  定义体: (@lexOrd _ _ ⟨Lean.Name.cmp⟩ ⟨Lean.Name.cmp⟩).compare (a.1, a.2) (b.1, b.2)
-
-Depends on / 依赖: Lean.Name.cmp, compare, lexOrd
+/-
+**Mathlib.TacticAnalysis.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.TacticAnalysis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Ord Entry where
   compare a b := (@lexOrd _ _ ⟨Lean.Name.cmp⟩ ⟨Lean.Name.cmp⟩).compare (a.1, a.2) (b.1, b.2)
@@ -273,108 +237,57 @@ initialize registerBuiltinAttribute {
         optionName := Syntax.getId optionName
       }
       let ext ← entry.import
-setEnv tacticAnalysisExt.addEntry env (entry, ext)
+      setEnv <| tacticAnalysisExt.addEntry env (entry, ext)
     | _ => throwUnsupportedSyntax
 }
 
-/--
-Definition of `findTacticSeqs` / `findTacticSeqs` 的定义
+/-- Parse an infotree to find all the sequences of tactics contained within `stx`.
 
-English:
-definition findTacticSeqs
-  signature: (tree : InfoTree)
-  body: do
-  -- Turn the CommandElabM into a surrounding context for traversing the tree.
-  let ctx ← read
-  let state ← get
-  let ctxInfo := { env := state.env, fileMap := ctx.fileMap, ngen := state.ngen }
-  let out ← tree.visitM (m := CommandElabM) (ctx? := some ctxInfo)
-    (fun _ _ _ => pure true) -- Assumption: a tactic can occur as a child of any piece of syntax.
-    (fun ctx i _c cs => do
-      let relevantChildren := (cs.filterMap id).toArray
-      let childTactics := relevantChildren.filterMap Prod.fst
-      let childSequences := (relevantChildren.map Prod.snd).flatten
-      let stx := i.stx
-      -- Tactic sequencing operators: collect all the child tactics into a new sequence.
-      -- This must happen regardless of source info, as `have h := by ...` creates tacticSeq
-      -- nodes with synthetic source info.
-      if stx.getKind in [``Lean.Parser.Tactic.tacticSeq, ``Lean.Parser.Tactic.tacticSeq1Indented,
-          ``Lean.Parser.Term.byTactic] then
-        return (none, if childTactics.isEmpty then
-            childSequences
-          else
-            childSequences.push childTactics)
-      if let some (.original _ _ _ _) := stx.getHeadInfo? then
-        -- Punctuation: skip this.
-        if stx.getKind in [`«;», `Lean.cdotTk, `«]», nullKind, `«by»] then
-          return (none, childSequences)
-        -- Tactic modifiers: return the children unmodified.
-        if stx.getKind in [``Lean.Parser.Tactic.withAnnotateState] then
-          return (childTactics[0]?, childSequences)
+We consider a sequence here to be a maximal interval of tactics joined by `;` or newlines.
+This function returns an array of sequences. For example, a proof of the form:
+```
+by
+  tac1
+  · tac2; tac3
+  · tac4; tac5
+```
+would result in three sequences:
+* `#[tac1, (· tac2; tac3), (· tac4; tac5)]`
+* `#[tac2, tac3]`
+* `#[tac4, tac5]`
 
-        -- Remaining options: plain pieces of syntax.
-        -- We discard `childTactics` here, because those are either already picked up by a
-        -- sequencing operator, or come from macros.
-        if let .ofTacticInfo i := i then
-          let childSequences :=
-            -- This tactic accepts the failure of its children.
-            if stx.getKind in [``Lean.Parser.Tactic.tacticTry_, ``Lean.Parser.Tactic.anyGoals] then
-              childSequences.map (·.map fun i => { i with mayFail := true })
-            else
-              childSequences
-          return (some ⟨ctx, i, false⟩, childSequences)
-        return (none, childSequences)
-      else
-        return (none, childSequences))
-  return (out.map Prod.snd).getD #[]
+Similarly, a declaration with multiple `by` blocks results in each of the blocks getting its
+own sequence.
+-/
+/-
+**Mathlib.TacticAnalysis.findTacticSeqs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+cAnalysis`。
+形式化陈述：findTacticSeqs (tree : InfoTree) : CommandElabM (Array (Array TacticNode))
+参数：tree : InfoTree。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Lean.Name.instLawfulBEq`：LawfulBEq Name
 
-中文:
-定义 findTacticSeqs
-  签名: (tree : InfoTree)
-  定义体: do
-  -- Turn the CommandElabM into a surrounding context for traversing the tree.
-  let ctx ← read
-  let state ← get
-  let ctxInfo := { env := state.env, fileMap := ctx.fileMap, ngen := state.ngen }
-  let out ← tree.visitM (m := CommandElabM) (ctx? := some ctxInfo)
-    (fun _ _ _ => pure true) -- Assumption: a tactic can occur as a child of any piece of syntax.
-    (fun ctx i _c cs => do
-      let relevantChildren := (cs.filterMap id).toArray
-      let childTactics := relevantChildren.filterMap Prod.fst
-      let childSequences := (relevantChildren.map Prod.snd).flatten
-      let stx := i.stx
-      -- Tactic sequencing operators: collect all the child tactics into a new sequence.
-      -- This must happen regardless of source info, as `have h := by ...` creates tacticSeq
-      -- nodes with synthetic source info.
-      if stx.getKind in [``Lean.Parser.Tactic.tacticSeq, ``Lean.Parser.Tactic.tacticSeq1Indented,
-          ``Lean.Parser.Term.byTactic] then
-        return (none, if childTactics.isEmpty then
-            childSequences
-          else
-            childSequences.push childTactics)
-      if let some (.original _ _ _ _) := stx.getHeadInfo? then
-        -- Punctuation: skip this.
-        if stx.getKind in [`«;», `Lean.cdotTk, `«]», nullKind, `«by»] then
-          return (none, childSequences)
-        -- Tactic modifiers: return the children unmodified.
-        if stx.getKind in [``Lean.Parser.Tactic.withAnnotateState] then
-          return (childTactics[0]?, childSequences)
+--- 原说明 ---
+Parse an infotree to find all the sequences of tactics contained within `stx`.
 
-        -- Remaining options: plain pieces of syntax.
-        -- We discard `childTactics` here, because those are either already picked up by a
-        -- sequencing operator, or come from macros.
-        if let .ofTacticInfo i := i then
-          let childSequences :=
-            -- This tactic accepts the failure of its children.
-            if stx.getKind in [``Lean.Parser.Tactic.tacticTry_, ``Lean.Parser.Tactic.anyGoals] then
-              childSequences.map (·.map fun i => { i with mayFail := true })
-            else
-              childSequences
-          return (some ⟨ctx, i, false⟩, childSequences)
-        return (none, childSequences)
-      else
-        return (none, childSequences))
-  return (out.map Prod.snd).getD #[]
+We consider a sequence here to be a maximal interval of tactics joined by `;` or
+ newlines.
+This function returns an array of sequences. For example, a proof of the form:
+```
+by
+  tac1
+  · tac2; tac3
+  · tac4; tac5
+```
+would result in three sequences:
+* `#[tac1, (· tac2; tac3), (· tac4; tac5)]`
+* `#[tac2, tac3]`
+* `#[tac4, tac5]`
+
+Similarly, a declaration with multiple `by` blocks results in each of the blocks
+ getting its
+own sequence.
 -/
 def findTacticSeqs (tree : InfoTree) : CommandElabM (Array (Array TacticNode)) := do
   -- Turn the CommandElabM into a surrounding context for traversing the tree.
@@ -391,7 +304,7 @@ def findTacticSeqs (tree : InfoTree) : CommandElabM (Array (Array TacticNode)) :
       -- Tactic sequencing operators: collect all the child tactics into a new sequence.
       -- This must happen regardless of source info, as `have h := by ...` creates tacticSeq
       -- nodes with synthetic source info.
-      if stx.getKind in [``Lean.Parser.Tactic.tacticSeq, ``Lean.Parser.Tactic.tacticSeq1Indented,
+      if stx.getKind ∈ [``Lean.Parser.Tactic.tacticSeq, ``Lean.Parser.Tactic.tacticSeq1Indented,
           ``Lean.Parser.Term.byTactic] then
         return (none, if childTactics.isEmpty then
             childSequences
@@ -399,10 +312,10 @@ def findTacticSeqs (tree : InfoTree) : CommandElabM (Array (Array TacticNode)) :
             childSequences.push childTactics)
       if let some (.original _ _ _ _) := stx.getHeadInfo? then
         -- Punctuation: skip this.
-        if stx.getKind in [`«;», `Lean.cdotTk, `«]», nullKind, `«by»] then
+        if stx.getKind ∈ [`«;», `Lean.cdotTk, `«]», nullKind, `«by»] then
           return (none, childSequences)
         -- Tactic modifiers: return the children unmodified.
-        if stx.getKind in [``Lean.Parser.Tactic.withAnnotateState] then
+        if stx.getKind ∈ [``Lean.Parser.Tactic.withAnnotateState] then
           return (childTactics[0]?, childSequences)
 
         -- Remaining options: plain pieces of syntax.
@@ -411,7 +324,7 @@ def findTacticSeqs (tree : InfoTree) : CommandElabM (Array (Array TacticNode)) :
         if let .ofTacticInfo i := i then
           let childSequences :=
             -- This tactic accepts the failure of its children.
-            if stx.getKind in [``Lean.Parser.Tactic.tacticTry_, ``Lean.Parser.Tactic.anyGoals] then
+            if stx.getKind ∈ [``Lean.Parser.Tactic.tacticTry_, ``Lean.Parser.Tactic.anyGoals] then
               childSequences.map (·.map fun i => { i with mayFail := true })
             else
               childSequences
@@ -421,38 +334,20 @@ def findTacticSeqs (tree : InfoTree) : CommandElabM (Array (Array TacticNode)) :
         return (none, childSequences))
   return (out.map Prod.snd).getD #[]
 
-/--
-Definition of `runPasses` / `runPasses` 的定义
+/-- Run the tactic analysis passes from `configs` on the tactic sequences in `stx`,
+using `trees` to get the infotrees. -/
+/-
+**Mathlib.TacticAnalysis.runPasses** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.TacticAnal
+ysis`。
+形式化陈述：runPasses (configs : Array Pass) (trees : PersistentArray InfoTree) : Comm
+andElabM Unit
+参数：configs : Array Pass；trees : PersistentArray InfoTree。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runPasses
-  signature: (configs : Array Pass) (trees : PersistentArray InfoTree)
-  body: do
-  let opts ← getLinterOptions
-  let enabledConfigs := configs.filter fun config =>
-    -- This can be `none` in the file where the option is declared.
-    if let some opt := config.opt then getLinterValue opt opts else false
-  if enabledConfigs.isEmpty then
-    return
-  for i in trees do
-    for seq in (← findTacticSeqs i) do
-      for config in enabledConfigs do
-        config.run seq
-
-中文:
-定义 runPasses
-  签名: (configs : 数组 Pass) (trees : PersistentArray InfoTree)
-  定义体: do
-  let opts ← getLinterOptions
-  let enabledConfigs := configs.filter fun config =>
-    -- This can be `none` in the file where the option is declared.
-    if let some opt := config.opt then getLinterValue opt opts else false
-  if enabledConfigs.isEmpty then
-    return
-  for i in trees do
-    for seq in (← findTacticSeqs i) do
-      for config in enabledConfigs do
-        config.run seq
+--- 原说明 ---
+Run the tactic analysis passes from `configs` on the tactic sequences in `stx`,
+using `trees` to get the infotrees.
 -/
 def runPasses (configs : Array Pass) (trees : PersistentArray InfoTree) : CommandElabM Unit := do
   let opts ← getLinterOptions
@@ -466,34 +361,29 @@ def runPasses (configs : Array Pass) (trees : PersistentArray InfoTree) : Comman
       for config in enabledConfigs do
         config.run seq
 
-/--
-Definition of `tacticAnalysis` / `tacticAnalysis` 的定义
+/-- A tactic analysis framework.
+It is aimed at allowing developers to specify refactoring patterns,
+which will be tested against a whole project,
+to report proposed changes.
 
-English:
-definition tacticAnalysis
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-  if (← get).messages.hasErrors then
-    return
-  profileitM Exception "tacticAnalysis" (← getOptions) do
-  let env ← getEnv
-  let configs := (tacticAnalysisExt.getState env).2
-  let trees ← getInfoTrees
-  runPasses configs trees
+It hooks into the linting system to move through the infotree,
+collecting tactic syntax and state to call the passes on.
+-/
+/-
+**Mathlib.TacticAnalysis.tacticAnalysis** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+cAnalysis`。
+形式化陈述：tacticAnalysis : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 tacticAnalysis
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-  if (← get).messages.hasErrors then
-    return
-  profileitM Exception "tacticAnalysis" (← getOptions) do
-  let env ← getEnv
-  let configs := (tacticAnalysisExt.getState env).2
-  let trees ← getInfoTrees
-  runPasses configs trees
+--- 原说明 ---
+A tactic analysis framework.
+It is aimed at allowing developers to specify refactoring patterns,
+which will be tested against a whole project,
+to report proposed changes.
 
-Depends on / 依赖: withSetOptionIn
+It hooks into the linting system to move through the infotree,
+collecting tactic syntax and state to call the passes on.
 -/
 def tacticAnalysis : Linter where run := withSetOptionIn fun stx => do
   if (← get).messages.hasErrors then
@@ -519,23 +409,24 @@ Please do not rely on it being stable!
 -/
 
 /--
-Inductive type `TriggerCondition` / 归纳类型 `TriggerCondition`
+The condition is returned from the `.trigger` function to indicate which sublists of a
+tactic sequence to test.
 
-English:
-inductive TriggerCondition
-  parameters: (ctx : Type _)
-  constructors (3):
-    - skip: 
-    - continue: (context : ctx)
-    - accept: (context : ctx)
+The `context` field can be used to accumulate data between different invocations of `.trigger`.
+-/
+/-
+**Mathlib.TacticAnalysis.TriggerCondition** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.T
+acticAnalysis`。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-归纳类型 TriggerCondition
-  参数: (ctx : 类型 _)
-  构造子 (3 个):
-    - skip: 
-    - continue: (context : ctx)
-    - accept: (context : ctx)
+--- 原说明 ---
+The condition is returned from the `.trigger` function to indicate which sublist
+s of a
+tactic sequence to test.
+
+The `context` field can be used to accumulate data between different invocations
+ of `.trigger`.
 -/
 inductive TriggerCondition (ctx : Type _)
   /-- `skip` means that the current tactic and the ones before it will be discarded. -/
@@ -546,28 +437,29 @@ inductive TriggerCondition (ctx : Type _)
   | accept (context : ctx)
 deriving BEq
 
-/--
-Definition of `ComplexConfig` / `ComplexConfig` 的定义
+/-- Specifies which analysis steps to take.
 
-English:
-structure ComplexConfig
-  parameters: where
-  axioms and operations (5):
-    - out : Type
-    - ctx : Type
-    - trigger((context : Option ctx) (currentTactic : Syntax)) : TriggerCondition ctx
-    - test((ctxI : ContextInfo) (i : TacticInfo) (context : ctx) (goal : MVarId)) : CommandElabM out
-    - tell((stx : Syntax) (originalSubgoals : List MVarId) (originalHeartbeats : Nat) (new : out) (newHeartbeats : Nat)) : CommandElabM (Option MessageData)
+The overall design will have three user-supplied components:
 
-中文:
-结构 余mplexConfig
-  参数: where
-  公理与运算 (5 个):
-    - out : 类型
-    - ctx : 类型
-    - trigger((context : 选项类型 ctx) (currentTactic : Syntax)) : TriggerCondition ctx
-    - test((ctxI : ContextInfo) (i : TacticInfo) (context : ctx) (goal : MVarId)) : CommandElabM out
-    - tell((stx : Syntax) (originalSubgoals : 列表 MVarId) (originalHeartbeats : 自然数) (new : out) (newHeartbeats : 自然数)) : CommandElabM (选项类型 MessageData)
+  * **trigger** on a piece of syntax (which could contain multiple tactic calls);
+  * **test** if a suggested change is indeed an improvement;
+  * **tell** the user where changes can be made.
+-/
+/-
+**Mathlib.TacticAnalysis.ComplexConfig** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tact
+icAnalysis`。
+形式化陈述：Type 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Specifies which analysis steps to take.
+
+The overall design will have three user-supplied components:
+
+  * **trigger** on a piece of syntax (which could contain multiple tactic calls)
+;
+  * **test** if a suggested change is indeed an improvement;
+  * **tell** the user where changes can be made.
 -/
 structure ComplexConfig where
   /-- Type returned by the `.test` function. -/
@@ -590,50 +482,22 @@ structure ComplexConfig where
   tell (stx : Syntax) (originalSubgoals : List MVarId) (originalHeartbeats : Nat)
     (new : out) (newHeartbeats : Nat) : CommandElabM (Option MessageData)
 
-/--
-Definition of `testTacticSeq` / `testTacticSeq` 的定义
+/-- Test the `config` against a sequence of tactics, using the context info and tactic info
+from the start of the sequence. -/
+/-
+**Mathlib.TacticAnalysis.testTacticSeq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+Analysis`。
+形式化陈述：testTacticSeq (config : ComplexConfig) (tacticSeq : Array (TSyntax `tactic
+)) (i : TacticNode) (ctx : config.ctx) : CommandElabM Unit
+参数：config : ComplexConfig；tacticSeq : Array (TSyntax `tactic)；i : TacticNode；ctx
+ : config.ctx。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition testTacticSeq
-  signature: (config : ComplexConfig) (tacticSeq : Array (TSyntax `tactic))
-  body: do
-  /- Syntax quotations use the current ref's position info even for nodes which do not usually
-  carry position info. We set the ref here to ensure we log messages on the correct range. -/
-  withRef (mkNullNode tacticSeq) do
-    let stx ← `(tactic| $tacticSeq;*)
-    -- TODO: support more than 1 goal. Probably by requiring all tests to succeed in a row
-    if let [goal] := i.tacI.goalsBefore then
-let (oldGoals, oldHeartbeats) ← withHeartbeats
-        try
-          i.runTacticCode goal stx
-        catch e =>
-          if !i.mayFail then
-            logWarning m!"original tactic '{stx}' failed: {e.toMessageData}"
-          return [goal]
-let (new, newHeartbeats) ← withHeartbeats config.test i.ctxI i.tacI ctx goal
-      if let some msg ← config.tell stx oldGoals oldHeartbeats new newHeartbeats then
-        logWarning msg
-
-中文:
-定义 testTacticSeq
-  签名: (config : 余mplexConfig) (tacticSeq : 数组 (TSyntax `tactic))
-  定义体: do
-  /- Syntax quotations use the current ref's position info even for nodes which do not usually
-  carry position info. We set the ref here to ensure we log messages on the correct range. -/
-  withRef (mkNullNode tacticSeq) do
-    let stx ← `(tactic| $tacticSeq;*)
-    -- TODO: support more than 1 goal. Probably by requiring all tests to succeed in a row
-    if let [goal] := i.tacI.goalsBefore then
-let (oldGoals, oldHeartbeats) ← withHeartbeats
-        try
-          i.runTacticCode goal stx
-        catch e =>
-          if !i.mayFail then
-            logWarning m!"original tactic '{stx}' failed: {e.toMessageData}"
-          return [goal]
-let (new, newHeartbeats) ← withHeartbeats config.test i.ctxI i.tacI ctx goal
-      if let some msg ← config.tell stx oldGoals oldHeartbeats new newHeartbeats then
-        logWarning msg
+--- 原说明 ---
+Test the `config` against a sequence of tactics, using the context info and tact
+ic info
+from the start of the sequence.
 -/
 def testTacticSeq (config : ComplexConfig) (tacticSeq : Array (TSyntax `tactic))
     (i : TacticNode) (ctx : config.ctx) :
@@ -644,83 +508,32 @@ def testTacticSeq (config : ComplexConfig) (tacticSeq : Array (TSyntax `tactic))
     let stx ← `(tactic| $tacticSeq;*)
     -- TODO: support more than 1 goal. Probably by requiring all tests to succeed in a row
     if let [goal] := i.tacI.goalsBefore then
-let (oldGoals, oldHeartbeats) ← withHeartbeats
+      let (oldGoals, oldHeartbeats) ← withHeartbeats <|
         try
           i.runTacticCode goal stx
         catch e =>
           if !i.mayFail then
             logWarning m!"original tactic '{stx}' failed: {e.toMessageData}"
           return [goal]
-let (new, newHeartbeats) ← withHeartbeats config.test i.ctxI i.tacI ctx goal
-      if let some msg ← config.tell stx oldGoals oldHeartbeats new newHeartbeats then
+      let (new, newHeartbeats) ← withHeartbeats <| config.test i.ctxI i.tacI ctx goal
+      if let some msg ← config.tell stx oldGoals oldHeartbeats new newHeartbeats  then
         logWarning msg
 
-/--
-Definition of `runPass` / `runPass` 的定义
+/-- Run the `config` against a sequence of tactics, using the `trigger` to determine which
+subsequences should be `test`ed. -/
+/-
+**Mathlib.TacticAnalysis.runPass** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.TacticAnalys
+is`。
+形式化陈述：runPass (config : ComplexConfig) (seq : Array TacticNode) : CommandElabM U
+nit
+参数：config : ComplexConfig；seq : Array TacticNode。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runPass
-  signature: (config : ComplexConfig) (seq : Array TacticNode)
-  body: do
-  let mut acc := none
-  let mut firstInfo := none
-  let mut tacticSeq := #[]
-  for i in seq do
-    if firstInfo.isNone then
-      firstInfo := some i
-    let stx : TSyntax `tactic := ⟨i.tacI.stx⟩
-    tacticSeq := tacticSeq.push stx
-    match config.trigger acc stx with
-    | .continue ctx =>
-      acc := ctx
-    | .skip =>
-      acc := none
-      tacticSeq := #[]
-      firstInfo := none
-    | .accept ctx =>
-      if let some i := firstInfo then
-        testTacticSeq config tacticSeq i ctx
-      else
-        logWarningAt stx m!"internal error in tactic analysis: accepted an empty sequence."
-      acc := none
-  -- Insert a `done` at the end so we can handle a final `.continue` at the end.
-  match config.trigger acc (← `(tactic| done)) with
-  | .accept ctx =>
-    if let some i := firstInfo then
-      testTacticSeq config tacticSeq i ctx
-  | _ => pure ()
-
-中文:
-定义 runPass
-  签名: (config : 余mplexConfig) (seq : 数组 TacticNode)
-  定义体: do
-  let mut acc := none
-  let mut firstInfo := none
-  let mut tacticSeq := #[]
-  for i in seq do
-    if firstInfo.isNone then
-      firstInfo := some i
-    let stx : TSyntax `tactic := ⟨i.tacI.stx⟩
-    tacticSeq := tacticSeq.push stx
-    match config.trigger acc stx with
-    | .continue ctx =>
-      acc := ctx
-    | .skip =>
-      acc := none
-      tacticSeq := #[]
-      firstInfo := none
-    | .accept ctx =>
-      if let some i := firstInfo then
-        testTacticSeq config tacticSeq i ctx
-      else
-        logWarningAt stx m!"internal error in tactic analysis: accepted an empty sequence."
-      acc := none
-  -- Insert a `done` at the end so we can handle a final `.continue` at the end.
-  match config.trigger acc (← `(tactic| done)) with
-  | .accept ctx =>
-    if let some i := firstInfo then
-      testTacticSeq config tacticSeq i ctx
-  | _ => pure ()
+--- 原说明 ---
+Run the `config` against a sequence of tactics, using the `trigger` to determine
+ which
+subsequences should be `test`ed.
 -/
 def runPass (config : ComplexConfig) (seq : Array TacticNode) :
     CommandElabM Unit := do
@@ -752,20 +565,15 @@ def runPass (config : ComplexConfig) (seq : Array TacticNode) :
       testTacticSeq config tacticSeq i ctx
   | _ => pure ()
 
-/--
-Definition of `Config.ofComplex` / `Config.ofComplex` 的定义
+/-- Constructor for a `Config` which breaks the pass up into multiple pieces. -/
+/-
+**Mathlib.TacticAnalysis.Config.ofComplex** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+ticAnalysis.Config`。
+形式化陈述：Mathlib.TacticAnalysis.ComplexConfig → Mathlib.TacticAnalysis.Config
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Config.ofComplex
-  signature: (config : ComplexConfig)
-  body: runPass config
-
-中文:
-定义 余nfig.ofComplex
-  签名: (config : 余mplexConfig)
-  定义体: runPass config
-
-Depends on / 依赖: config, runPass
+--- 原说明 ---
+Constructor for a `Config` which breaks the pass up into multiple pieces.
 -/
 def Config.ofComplex (config : ComplexConfig) : Config where
   run := runPass config
@@ -778,3 +586,4 @@ end Mathlib.TacticAnalysis
 register_option linter.tacticAnalysis.dummy : Bool := {
   defValue := false
 }
+

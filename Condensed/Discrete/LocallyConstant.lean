@@ -33,7 +33,7 @@ by `gᵢ` the canonical map `Y(*) → Y(Sᵢ)`. Our map then takes `f` to the im
 `(g₁(y₁), ⋯, gₙ(yₙ))` under the isomorphism `Y(S₁) × ⋯ × Y(Sₙ) ≅ Y(S₁ ⊔ ⋯ ⊔ Sₙ) = Y(S)`.
 
 Now we need to prove that the counit is natural in `S : CompHausLike P` and
-`Y : Sheaf (coherentTopology (CompHausLike P)) (Type _)`. There are two key lemmas in all
+`Y : Sheaf  (coherentTopology (CompHausLike P)) (Type _)`. There are two key lemmas in all
 naturality proofs in this file (both lemmas are in the `CompHausLike.LocallyConstant` namespace):
 
 * `presheaf_ext`: given `S`, `Y` and `f : LocallyConstant S Y(*)` like above, another presheaf
@@ -42,7 +42,7 @@ naturality proofs in this file (both lemmas are in the `CompHausLike.LocallyCons
   Here it is important that we set everything up in such a way that the `Sᵢ` are literally subtypes
   of `S`.
 
-* `incl_of_counitAppApp`: given `S`, `Y` and `f : LocallyConstant S Y(*)` like above, we have
+* `incl_of_counitAppApp`: given  `S`, `Y` and `f : LocallyConstant S Y(*)` like above, we have
   `Y(ιᵢ)(ε_{S, Y}(f)) = gᵢ(yᵢ)` where `ε` denotes the counit and the other notation is like above.
 
 ## Main definitions
@@ -73,7 +73,7 @@ universe u w
 
 open CategoryTheory Limits LocallyConstant TopologicalSpace.Fiber Opposite Function Fiber
 
-variable {P : TopCat.{u} -> Prop}
+variable {P : TopCat.{u} → Prop}
 
 namespace CompHausLike.LocallyConstant
 
@@ -82,153 +82,177 @@ The functor from the category of sets to presheaves on `CompHausLike P` given by
 maps.
 -/
 @[simps obj_obj obj_map map_app]
-/--
-Definition of `functorToPresheaves` / `functorToPresheaves` 的定义
+/-
+**CompHausLike.LocallyConstant.functorToPresheaves** 是 Mathlib 中的一个定义，位于命名空间 `Co
+mpHausLike.LocallyConstant`。
+形式化陈述：functorToPresheaves : Type (max u w) ⥤ ((CompHausLike.{u} P)ᵒᵖ ⥤ Type (max
+ u w)) where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToPresheaves
-  signature: : Type (max u w) ⥤ ((CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)) where
-  body: {
-    obj := fun ⟨S⟩ => (LocallyConstant S X)
-    map f := ↾fun g => g.comap f.unop.hom.hom }
-  map f := { app _ := ↾fun t => t.map f }
-
-中文:
-定义 functorToPresheaves
-  签名: : 类型 (最大值 u w) ⥤ ((余mpHausLike.{u} P)ᵒᵖ ⥤ 类型 (最大值 u w)) where
-  定义体: {
-    obj := fun ⟨S⟩ => (LocallyConstant S X)
-    map f := ↾fun g => g.comap f.unop.hom.hom }
-  map f := { app _ := ↾fun t => t.map f }
+--- 原说明 ---
+The functor from the category of sets to presheaves on `CompHausLike P` given by
+ locally constant
+maps.
 -/
 def functorToPresheaves : Type (max u w) ⥤ ((CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)) where
   obj X := {
-    obj := fun ⟨S⟩ => (LocallyConstant S X)
-    map f := ↾fun g => g.comap f.unop.hom.hom }
-  map f := { app _ := ↾fun t => t.map f }
+    obj := fun ⟨S⟩ ↦ (LocallyConstant S X)
+    map f := ↾fun g ↦ g.comap f.unop.hom.hom }
+  map f := { app _ := ↾fun t ↦ t.map f }
 
 /--
 Locally constant maps are the same as continuous maps when the target is equipped with the discrete
 topology
 -/
 @[simps]
-/--
-Definition of `locallyConstantIsoContinuousMap` / `locallyConstantIsoContinuousMap` 的定义
+/-
+**CompHausLike.LocallyConstant.locallyConstantIsoContinuousMap** 是 Mathlib 中的一个定
+义，位于命名空间 `CompHausLike.LocallyConstant`。
+形式化陈述：locallyConstantIsoContinuousMap (Y X : Type*) [TopologicalSpace Y] : Local
+lyConstant Y X ≅ C(Y, TopCat.discrete.obj X)
+参数：Y X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition locallyConstantIsoContinuousMap
-  signature: (Y X : Type*) [TopologicalSpace Y]
-  body: letI : TopologicalSpace X := ⊥
-  haveI : DiscreteTopology X := ⟨rfl⟩
-  { hom := ↾fun f => (f : C(Y, X))
-    inv := ↾fun f => ⟨f, (IsLocallyConstant.iff_continuous f).mpr f.2⟩ }
-
-中文:
-定义 locallyConstantIsoContinuousMap
-  签名: (Y X : 类型) [拓扑空间 Y]
-  定义体: letI : TopologicalSpace X := ⊥
-  haveI : DiscreteTopology X := ⟨rfl⟩
-  { hom := ↾fun f => (f : C(Y, X))
-    inv := ↾fun f => ⟨f, (IsLocallyConstant.iff_continuous f).mpr f.2⟩ }
-
-Depends on / 依赖: DiscreteTopology, IsLocallyConstant, IsLocallyConstant.iff_continuous, TopologicalSpace, iff_continuous
+--- 原说明 ---
+Locally constant maps are the same as continuous maps when the target is equippe
+d with the discrete
+topology
 -/
 def locallyConstantIsoContinuousMap (Y X : Type*) [TopologicalSpace Y] :
     LocallyConstant Y X ≅ C(Y, TopCat.discrete.obj X) :=
   letI : TopologicalSpace X := ⊥
   haveI : DiscreteTopology X := ⟨rfl⟩
-  { hom := ↾fun f => (f : C(Y, X))
-    inv := ↾fun f => ⟨f, (IsLocallyConstant.iff_continuous f).mpr f.2⟩ }
+  { hom := ↾fun f ↦ (f : C(Y, X))
+    inv := ↾fun f ↦ ⟨f, (IsLocallyConstant.iff_continuous f).mpr f.2⟩ }
 
 section Adjunction
 
-variable [forall (S : CompHausLike.{u} P) (p : S -> Prop), HasProp P (Subtype p)]
+variable [∀ (S : CompHausLike.{u} P) (p : S → Prop), HasProp P (Subtype p)]
 
 section
 
 variable {Q : CompHausLike.{u} P} {Z : Type max u w} (r : LocallyConstant Q Z) (a : Fiber r)
 
-/--
-Definition of `fiber` / `fiber` 的定义
+/-- A fiber of a locally constant map as a `CompHausLike P`. -/
+/-
+**CompHausLike.LocallyConstant.fiber** 是 Mathlib 中的一个缩写定义，位于命名空间 `CompHausLike.L
+ocallyConstant`。
+形式化陈述：fiber : CompHausLike.{u} P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fiber
-  signature: : CompHausLike.{u} P
-  body: CompHausLike.of P a.val
-
-中文:
-缩写 fiber
-  签名: : 余mpHausLike.{u} P
-  定义体: CompHausLike.of P a.val
-
-Depends on / 依赖: CompHausLike, CompHausLike.of, a.val
+--- 原说明 ---
+A fiber of a locally constant map as a `CompHausLike P`.
 -/
 abbrev fiber : CompHausLike.{u} P := CompHausLike.of P a.val
 
-/--
-Definition of `sigmaIncl` / `sigmaIncl` 的定义
+/-- The inclusion map from a component of the coproduct induced by `f` into `S`. -/
+/-
+**CompHausLike.LocallyConstant.sigmaIncl** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike
+.LocallyConstant`。
+形式化陈述：sigmaIncl : fiber r a ⟶ Q
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
 
-English:
-definition sigmaIncl
-  signature: : fiber r a ⟶ Q
-  body: ofHom _ (TopologicalSpace.Fiber.sigmaIncl _ a)
-
-中文:
-定义 sigmaIncl
-  签名: : fiber r a ⟶ Q
-  定义体: ofHom _ (TopologicalSpace.Fiber.sigmaIncl _ a)
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.Fiber.sigmaIncl, sigmaIncl
+--- 原说明 ---
+The inclusion map from a component of the coproduct induced by `f` into `S`.
 -/
 def sigmaIncl : fiber r a ⟶ Q := ofHom _ (TopologicalSpace.Fiber.sigmaIncl _ a)
 
-/--
-Definition of `sigmaIso` / `sigmaIso` 的定义
+/-- The canonical map from the coproduct induced by `f` to `S` as an isomorphism in
+`CompHausLike P`. -/
+/-
+**CompHausLike.LocallyConstant.sigmaIso** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike.
+LocallyConstant`。
+形式化陈述：sigmaIso [HasExplicitFiniteCoproducts.{u} P] : (finiteCoproduct (fiber r))
+ ≅ Q
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
 
-English:
-definition sigmaIso
-  signature: [HasExplicitFiniteCoproducts.{u} P]
-  body: isoOfBijective (ofHom _ (sigmaIsoHom r)) ⟨sigmaIsoHom_inj r, sigmaIsoHom_surj r⟩
-
-中文:
-定义 sigmaIso
-  签名: [有ExplicitFiniteCoproducts.{u} P]
-  定义体: isoOfBijective (ofHom _ (sigmaIsoHom r)) ⟨sigmaIsoHom_inj r, sigmaIsoHom_surj r⟩
-
-Depends on / 依赖: isoOfBijective, sigmaIsoHom, sigmaIsoHom_inj, sigmaIsoHom_surj
+--- 原说明 ---
+The canonical map from the coproduct induced by `f` to `S` as an isomorphism in
+`CompHausLike P`.
 -/
 noncomputable def sigmaIso [HasExplicitFiniteCoproducts.{u} P] : (finiteCoproduct (fiber r)) ≅ Q :=
   isoOfBijective (ofHom _ (sigmaIsoHom r)) ⟨sigmaIsoHom_inj r, sigmaIsoHom_surj r⟩
-
-/--
-lemma `sigmaComparison_comp_sigmaIso` / 引理 `sigmaComparison_comp_sigmaIso`
-
-English:
-lemma sigmaComparison_comp_sigmaIso
-  statement: [HasExplicitFiniteCoproducts.{u} P]
-  proof: by
-  ext
-  simp only [Functor.mapIso_hom, Iso.op_hom, sigmaComparison, TypeCat.Fun.toFun_apply,
-    CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
-    ← X.map_comp_apply]
-  rfl
-
-中文:
-引理 sigmaComparison_comp_sigmaIso
-  结论: [有ExplicitFiniteCoproducts.{u} P]
-  证明: by
-  ext
-  simp only [Functor.mapIso_hom, Iso.op_hom, sigmaComparison, TypeCat.Fun.toFun_apply,
-    CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
-    ← X.map_comp_apply]
-  rfl
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, CoeFun, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.mapIso_hom, Iso.op_hom, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply, X.map_comp_apply, coe_mk, comp_apply, hom_ofHom, mapIso_hom, map_comp_apply, op_hom, sigmaComparison, toCoeFun
+/-
+**CompHausLike.LocallyConstant.sigmaComparison_comp_sigmaIso** 是 Mathlib 中的一个引理，
+位于命名空间 `CompHausLike.LocallyConstant`。
+形式化陈述：sigmaComparison_comp_sigmaIso [HasExplicitFiniteCoproducts.{u} P] (X : (Co
+mpHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)) : (X.mapIso (sigmaIso r).op).hom ≫ sigmaCo
+mparison X (fun a => (fiber r a).1) ≫ (↾fun g => g a) = X.map (sigmaIncl r a).op
+参数：X : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TopologicalSpace.Fiber.instCompactSpaceElemValSetMemRangeCoeLocallyConst
+antPreimageSingleton`：∀ {S : Type u_1} {Y : Type u_2} [inst : TopologicalSpace S
+] (l : LocallyConstant S Y) [CompactSpace S]   (x : Function.Fiber ⇑l), CompactS
+pa…
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `instT2SpaceSubtype`：∀ {X : Type u_1} [inst : TopologicalSpace X] {p : X 
+→ Prop} [T2Space X], T2Space (Subtype p)
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `TopologicalSpace.Fiber.instFiniteFiberCoeLocallyConstant`：∀ {S : Type u_
+1} {Y : Type u_2} [inst : TopologicalSpace S] (l : LocallyConstant S Y) [Compact
+Space S],   Finite (Function.Fiber ⇑l)
+· 使用定理 `CompHausLike.HasExplicitFiniteCoproducts.hasProp`：∀ {P : TopCat → Prop} 
+[self : CompHausLike.HasExplicitFiniteCoproducts P] {α : Type w} [Finite α]   (X
+ : α → CompHausLike P), CompHausLike.H…
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instCompactSpaceSigmaOfFinite`：∀ {ι : Type u_1} {X : ι → Type u_2} [Fini
+te ι] [inst : (i : ι) → TopologicalSpace (X i)]   [∀ (i : ι), CompactSpace (X i)
+], CompactSpace ((i…
+· 使用定理 `CompHausLike.instHasPropSigma`：∀ {P : TopCat → Prop} [CompHausLike.HasEx
+plicitFiniteCoproducts P] {α : Type u} [Finite α] (σ : α → Type u)   [inst : (a 
+: α) → TopologicalS…
+· 使用定理 `continuous_sigmaMk`：continuous_sigmaMk {i : ι} : Continuous (@Sigma.mk ι
+ σ i)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Iso.op_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Catego
+ry.{v₁, u₁} C] {X Y : C} (α : X ≅ Y), α.op.hom = α.hom.op
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_apply`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   (self : CategoryTh…
 -/
 lemma sigmaComparison_comp_sigmaIso [HasExplicitFiniteCoproducts.{u} P]
     (X : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)) :
-    (X.mapIso (sigmaIso r).op).hom ≫ sigmaComparison X (fun a => (fiber r a).1) ≫
-      (↾fun g => g a) = X.map (sigmaIncl r a).op := by
+    (X.mapIso (sigmaIso r).op).hom ≫ sigmaComparison X (fun a ↦ (fiber r a).1) ≫
+      (↾fun g ↦ g a) = X.map (sigmaIncl r a).op := by
   ext
   simp only [Functor.mapIso_hom, Iso.op_hom, sigmaComparison, TypeCat.Fun.toFun_apply,
     CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
@@ -240,149 +264,255 @@ end
 variable {S : CompHausLike.{u} P} {Y : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)}
   [HasProp P PUnit.{u + 1}] (f : LocallyConstant S (Y.obj (op (CompHausLike.of P PUnit.{u + 1}))))
 
-/--
-Definition of `counitAppAppImage` / `counitAppAppImage` 的定义
+/-- The projection of the counit. -/
+/-
+**CompHausLike.LocallyConstant.counitAppAppImage** 是 Mathlib 中的一个定义，位于命名空间 `Comp
+HausLike.LocallyConstant`。
+形式化陈述：counitAppAppImage : (a : Fiber f) -> Y.obj ⟨fiber f a⟩
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `DiscreteTopology.toT2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X]
+ [DiscreteTopology X], T2Space X
+· 使用定理 `instDiscreteTopologyPUnit`：DiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition counitAppAppImage
-  signature: : (a : Fiber f) -> Y.obj ⟨fiber f a⟩
-  body: fun a => Y.map (CompHausLike.isTerminalPUnit.from _).op a.image
-
-中文:
-定义 counitAppAppImage
-  签名: : (a : Fiber f) -> Y.obj ⟨fiber f a⟩
-  定义体: fun a => Y.map (CompHausLike.isTerminalPUnit.from _).op a.image
-
-Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit.from, Y.map, a.image, isTerminalPUnit
+--- 原说明 ---
+The projection of the counit.
 -/
-noncomputable def counitAppAppImage : (a : Fiber f) -> Y.obj ⟨fiber f a⟩ :=
-  fun a => Y.map (CompHausLike.isTerminalPUnit.from _).op a.image
+noncomputable def counitAppAppImage : (a : Fiber f) → Y.obj ⟨fiber f a⟩ :=
+  fun a ↦ Y.map (CompHausLike.isTerminalPUnit.from _).op a.image
 
 /--
-Definition of `counitAppApp` / `counitAppApp` 的定义
+The counit is defined as follows: given a locally constant map `f : S → Y(*)`, let
+`S = S₁ ⊔ ⋯ ⊔ Sₙ` be the corresponding decomposition of `S` into the fibers. We need to provide an
+element of `Y(S)`. It suffices to provide an element of `Y(Sᵢ)` for all `i`. Let `yᵢ ∈ Y(*)` denote
+the value of `f` on `Sᵢ`. Our desired element is the image of `yᵢ` under the canonical map
+`Y(*) → Y(Sᵢ)`.
+-/
+/-
+**CompHausLike.LocallyConstant.counitAppApp** 是 Mathlib 中的一个定义，位于命名空间 `CompHausL
+ike.LocallyConstant`。
+形式化陈述：counitAppApp (S : CompHausLike.{u} P) (Y : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (
+max u w)) [PreservesFiniteProducts Y] [HasExplicitFiniteCoproducts.{u} P] : Loca
+llyConstant S (Y.obj (op (CompHausLike.of P PUnit.{u + 1}))) ⟶ Y.obj ⟨S⟩
+参数：S : CompHausLike.{u} P；Y : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition counitAppApp
-  signature: (S : CompHausLike.{u} P)
-  body: ↾fun r => (inv (sigmaComparison Y (fun a => (fiber r a).1)) ≫
-    (Y.mapIso (sigmaIso r).op).inv) (counitAppAppImage r)
-
-中文:
-定义 counitAppApp
-  签名: (S : 余mpHausLike.{u} P)
-  定义体: ↾fun r => (inv (sigmaComparison Y (fun a => (fiber r a).1)) ≫
-    (Y.mapIso (sigmaIso r).op).inv) (counitAppAppImage r)
-
-Depends on / 依赖: Y.mapIso, counitAppAppImage, mapIso, sigmaComparison, sigmaIso
+--- 原说明 ---
+The counit is defined as follows: given a locally constant map `f : S → Y(*)`, l
+et
+`S = S₁ ⊔ ⋯ ⊔ Sₙ` be the corresponding decomposition of `S` into the fibers. We 
+need to provide an
+element of `Y(S)`. It suffices to provide an element of `Y(Sᵢ)` for all `i`. Let
+ `yᵢ ∈ Y(*)` denote
+the value of `f` on `Sᵢ`. Our desired element is the image of `yᵢ` under the can
+onical map
+`Y(*) → Y(Sᵢ)`.
 -/
 noncomputable def counitAppApp (S : CompHausLike.{u} P)
     (Y : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w))
     [PreservesFiniteProducts Y] [HasExplicitFiniteCoproducts.{u} P] :
     LocallyConstant S (Y.obj (op (CompHausLike.of P PUnit.{u + 1}))) ⟶ Y.obj ⟨S⟩ :=
-  ↾fun r => (inv (sigmaComparison Y (fun a => (fiber r a).1)) ≫
+  ↾fun r ↦ (inv (sigmaComparison Y (fun a ↦ (fiber r a).1)) ≫
     (Y.mapIso (sigmaIso r).op).inv) (counitAppAppImage r)
 
 -- This is the key lemma to prove naturality of the counit:
 /--
-lemma `presheaf_ext` / 引理 `presheaf_ext`
+To check equality of two elements of `X(S)`, it suffices to check equality after composing with
+each `X(S) → X(Sᵢ)`.
+-/
+/-
+**CompHausLike.LocallyConstant.presheaf_ext** 是 Mathlib 中的一个引理，位于命名空间 `CompHausL
+ike.LocallyConstant`。
+形式化陈述：presheaf_ext (X : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)) [PreservesFinit
+eProducts X] (x y : X.obj ⟨S⟩) [HasExplicitFiniteCoproducts.{u} P] (h : forall (
+a : Fiber f), X.map (sigmaIncl f a).op x = X.map (sigmaIncl f a).op y) : x = y
+参数：X : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)；x y : X.obj ⟨S⟩；h : forall (a : F
+iber f), X.map (sigmaIncl f a).op x = X.map (sigmaIncl f a).op y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `CategoryTheory.injective_of_mono`：injective_of_mono {X Y : Type u} (f : 
+X ⟶ Y) [hf : Mono f] : Function.Injective f
+· 使用定理 `TopologicalSpace.Fiber.instFiniteFiberCoeLocallyConstant`：∀ {S : Type u_
+1} {Y : Type u_2} [inst : TopologicalSpace S] (l : LocallyConstant S Y) [Compact
+Space S],   Finite (Function.Fiber ⇑l)
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.HasExplicitFiniteCoproducts.hasProp`：∀ {P : TopCat → Prop} 
+[self : CompHausLike.HasExplicitFiniteCoproducts P] {α : Type w} [Finite α]   (X
+ : α → CompHausLike P), CompHausLike.H…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `instCompactSpaceSigmaOfFinite`：∀ {ι : Type u_1} {X : ι → Type u_2} [Fini
+te ι] [inst : (i : ι) → TopologicalSpace (X i)]   [∀ (i : ι), CompactSpace (X i)
+], CompactSpace ((i…
+· 使用定理 `TopologicalSpace.Fiber.instCompactSpaceElemValSetMemRangeCoeLocallyConst
+antPreimageSingleton`：∀ {S : Type u_1} {Y : Type u_2} [inst : TopologicalSpace S
+] (l : LocallyConstant S Y) [CompactSpace S]   (x : Function.Fiber ⇑l), CompactS
+pa…
+· 使用定理 `instT2SpaceSubtype`：∀ {X : Type u_1} [inst : TopologicalSpace X] {p : X 
+→ Prop} [T2Space X], T2Space (Subtype p)
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropSigma`：∀ {P : TopCat → Prop} [CompHausLike.HasEx
+plicitFiniteCoproducts P] {α : Type u} [Finite α] (σ : α → Type u)   [inst : (a 
+: α) → TopologicalS…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CompHausLike.LocallyConstant.sigmaComparison_comp_sigmaIso`：sigmaCompari
+son_comp_sigmaIso [HasExplicitFiniteCoproducts.{u} P] (X : (CompHausLike.{u} P)ᵒ
+ᵖ ⥤ Type (max u w)) : (X.mapIso (sigmaIso r).op)…
 
-English:
-lemma presheaf_ext
-  statement: (X : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w))
-  proof: by
-  apply injective_of_mono (X.mapIso (sigmaIso f).op).hom
-  apply injective_of_mono (sigmaComparison X (fun a => (fiber f a).1))
-  ext a
-  specialize h a
-  rw [← sigmaComparison_comp_sigmaIso] at h
-  exact h
-
-中文:
-引理 presheaf_ext
-  结论: (X : (余mpHausLike.{u} P)ᵒᵖ ⥤ 类型 (最大值 u w))
-  证明: by
-  apply injective_of_mono (X.mapIso (sigmaIso f).op).hom
-  apply injective_of_mono (sigmaComparison X (fun a => (fiber f a).1))
-  ext a
-  specialize h a
-  rw [← sigmaComparison_comp_sigmaIso] at h
-  exact h
-
-Depends on / 依赖: X.mapIso, injective_of_mono, mapIso, sigmaComparison, sigmaComparison_comp_sigmaIso, sigmaIso, specialize
+--- 原说明 ---
+To check equality of two elements of `X(S)`, it suffices to check equality after
+ composing with
+each `X(S) → X(Sᵢ)`.
 -/
 lemma presheaf_ext (X : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w))
     [PreservesFiniteProducts X] (x y : X.obj ⟨S⟩)
     [HasExplicitFiniteCoproducts.{u} P]
-    (h : forall (a : Fiber f), X.map (sigmaIncl f a).op x = X.map (sigmaIncl f a).op y) : x = y := by
+    (h : ∀ (a : Fiber f), X.map (sigmaIncl f a).op x = X.map (sigmaIncl f a).op y) : x = y := by
   apply injective_of_mono (X.mapIso (sigmaIso f).op).hom
-  apply injective_of_mono (sigmaComparison X (fun a => (fiber f a).1))
+  apply injective_of_mono (sigmaComparison X (fun a ↦ (fiber f a).1))
   ext a
   specialize h a
   rw [← sigmaComparison_comp_sigmaIso] at h
   exact h
-
-/--
-lemma `incl_of_counitAppApp` / 引理 `incl_of_counitAppApp`
-
-English:
-lemma incl_of_counitAppApp
-  statement: [PreservesFiniteProducts Y] [HasExplicitFiniteCoproducts.{u} P]
-  proof: by
-  rw [← sigmaComparison_comp_sigmaIso]; rw [Functor.mapIso_hom]; rw [Iso.op_hom]; rw [types_comp_apply]
-  simp only [counitAppApp, Functor.mapIso_inv, ← Iso.op_hom, CategoryTheory.comp_apply,
-    ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, ← Functor.map_comp_apply, Iso.inv_hom_id,
-    Functor.map_id_apply]
-  exact congrFun (Iso.inv_hom_id_apply (asIso (sigmaComparison Y (fun a => (fiber f a).1)))
-    (counitAppAppImage f)) _
-
-中文:
-引理 incl_of_counitAppApp
-  结论: [保持FiniteProducts Y] [有ExplicitFiniteCoproducts.{u} P]
-  证明: by
-  rw [← sigmaComparison_comp_sigmaIso]; rw [Functor.mapIso_hom]; rw [Iso.op_hom]; rw [types_comp_apply]
-  simp only [counitAppApp, Functor.mapIso_inv, ← Iso.op_hom, CategoryTheory.comp_apply,
-    ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, ← Functor.map_comp_apply, Iso.inv_hom_id,
-    Functor.map_id_apply]
-  exact congrFun (Iso.inv_hom_id_apply (asIso (sigmaComparison Y (fun a => (fiber f a).1)))
-    (counitAppAppImage f)) _
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.mapIso_hom, Functor.mapIso_inv, Functor.map_comp_apply, Functor.map_id_apply, Iso.inv_hom_id, Iso.inv_hom_id_apply, Iso.op_hom, TypeCat, TypeCat.Fun.coe_mk, coe_fn_eq, coe_fn_eq.symm, coe_mk, comp_apply, counitAppApp, counitAppAppImage
+/-
+**CompHausLike.LocallyConstant.incl_of_counitAppApp** 是 Mathlib 中的一个引理，位于命名空间 `C
+ompHausLike.LocallyConstant`。
+形式化陈述：incl_of_counitAppApp [PreservesFiniteProducts Y] [HasExplicitFiniteCoprodu
+cts.{u} P] (a : Fiber f) : Y.map (sigmaIncl f a).op (counitAppApp S Y f) = couni
+tAppAppImage f a
+参数：a : Fiber f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `TopologicalSpace.Fiber.instFiniteFiberCoeLocallyConstant`：∀ {S : Type u_
+1} {Y : Type u_2} [inst : TopologicalSpace S] (l : LocallyConstant S Y) [Compact
+Space S],   Finite (Function.Fiber ⇑l)
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.HasExplicitFiniteCoproducts.hasProp`：∀ {P : TopCat → Prop} 
+[self : CompHausLike.HasExplicitFiniteCoproducts P] {α : Type w} [Finite α]   (X
+ : α → CompHausLike P), CompHausLike.H…
+· 使用定理 `TopologicalSpace.Fiber.instCompactSpaceElemValSetMemRangeCoeLocallyConst
+antPreimageSingleton`：∀ {S : Type u_1} {Y : Type u_2} [inst : TopologicalSpace S
+] (l : LocallyConstant S Y) [CompactSpace S]   (x : Function.Fiber ⇑l), CompactS
+pa…
+· 使用定理 `instT2SpaceSubtype`：∀ {X : Type u_1} [inst : TopologicalSpace X] {p : X 
+→ Prop} [T2Space X], T2Space (Subtype p)
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CompHausLike.LocallyConstant.sigmaComparison_comp_sigmaIso`：sigmaCompari
+son_comp_sigmaIso [HasExplicitFiniteCoproducts.{u} P] (X : (CompHausLike.{u} P)ᵒ
+ᵖ ⥤ Type (max u w)) : (X.mapIso (sigmaIso r).op)…
+· 使用定理 `CategoryTheory.Functor.mapIso_hom`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D] 
+  (F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Iso.op_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Catego
+ry.{v₁, u₁} C] {X Y : C} (α : X ≅ Y), α.op.hom = α.hom.op
+· 使用引理 `CategoryTheory.types_comp_apply`：types_comp_apply {X Y Z : Type u} (f : 
+X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Functor.map_id_apply`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   (self : CategoryTh…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `instCompactSpaceSigmaOfFinite`：∀ {ι : Type u_1} {X : ι → Type u_2} [Fini
+te ι] [inst : (i : ι) → TopologicalSpace (X i)]   [∀ (i : ι), CompactSpace (X i)
+], CompactSpace ((i…
+· 使用定理 `CompHausLike.instHasPropSigma`：∀ {P : TopCat → Prop} [CompHausLike.HasEx
+plicitFiniteCoproducts P] {α : Type u} [Finite α] (σ : α → Type u)   [inst : (a 
+: α) → TopologicalS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
 -/
 lemma incl_of_counitAppApp [PreservesFiniteProducts Y] [HasExplicitFiniteCoproducts.{u} P]
     (a : Fiber f) : Y.map (sigmaIncl f a).op (counitAppApp S Y f) = counitAppAppImage f a := by
-  rw [← sigmaComparison_comp_sigmaIso]; rw [Functor.mapIso_hom]; rw [Iso.op_hom]; rw [types_comp_apply]
+  rw [← sigmaComparison_comp_sigmaIso, Functor.mapIso_hom, Iso.op_hom, types_comp_apply]
   simp only [counitAppApp, Functor.mapIso_inv, ← Iso.op_hom, CategoryTheory.comp_apply,
     ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, ← Functor.map_comp_apply, Iso.inv_hom_id,
     Functor.map_id_apply]
-  exact congrFun (Iso.inv_hom_id_apply (asIso (sigmaComparison Y (fun a => (fiber f a).1)))
+  exact congrFun (Iso.inv_hom_id_apply (asIso (sigmaComparison Y (fun a ↦ (fiber f a).1)))
     (counitAppAppImage f)) _
 
 variable {T : CompHausLike.{u} P} (g : T ⟶ S)
 
 /--
-Definition of `componentHom` / `componentHom` 的定义
+This is an auxiliary definition, the details do not matter. What's important is that this map exists
+so that the lemma `incl_comap` works.
+-/
+/-
+**CompHausLike.LocallyConstant.componentHom** 是 Mathlib 中的一个定义，位于命名空间 `CompHausL
+ike.LocallyConstant`。
+形式化陈述：componentHom (a : Fiber (f.comap g.hom.hom)) : fiber _ a ⟶ fiber _ (Fiber.
+mk f (g a.preimage))
+参数：a : Fiber (f.comap g.hom.hom)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition componentHom
-  signature: (a : Fiber (f.comap g.hom.hom))
-  body: ConcreteCategory.ofHom
-  { toFun x := ⟨g x.val, by
-      simp only [Fiber.mk, Set.mem_preimage, Set.mem_singleton_iff]
-      convert! map_eq_image _ _ x
-      exact map_preimage_eq_image_map _ _ a⟩
-    continuous_toFun := by fun_prop }
-
-中文:
-定义 componentHom
-  签名: (a : Fiber (f.comap g.hom.hom))
-  定义体: ConcreteCategory.ofHom
-  { toFun x := ⟨g x.val, by
-      simp only [Fiber.mk, Set.mem_preimage, Set.mem_singleton_iff]
-      convert! map_eq_image _ _ x
-      exact map_preimage_eq_image_map _ _ a⟩
-    continuous_toFun := by fun_prop }
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, Fiber.mk, Set.mem_preimage, Set.mem_singleton_iff, continuous_toFun, convert, fun_prop, map_eq_image, map_preimage_eq_image_map, mem_preimage, mem_singleton_iff, x.val
+--- 原说明 ---
+This is an auxiliary definition, the details do not matter. What's important is 
+that this map exists
+so that the lemma `incl_comap` works.
 -/
 noncomputable def componentHom (a : Fiber (f.comap g.hom.hom)) :
     fiber _ a ⟶ fiber _ (Fiber.mk f (g a.preimage)) :=
@@ -392,19 +522,24 @@ noncomputable def componentHom (a : Fiber (f.comap g.hom.hom)) :
       convert! map_eq_image _ _ x
       exact map_preimage_eq_image_map _ _ a⟩
     continuous_toFun := by fun_prop }
-
-/--
-lemma `incl_comap` / 引理 `incl_comap`
-
-English:
-lemma incl_comap
-  statement: {S T : (CompHausLike P)ᵒᵖ}
-  proof: rfl
-
-中文:
-引理 incl_comap
-  结论: {S T : (余mpHausLike P)ᵒᵖ}
-  证明: rfl
+/-
+**CompHausLike.LocallyConstant.incl_comap** 是 Mathlib 中的一个引理，位于命名空间 `CompHausLik
+e.LocallyConstant`。
+形式化陈述：incl_comap {S T : (CompHausLike P)ᵒᵖ} (f : LocallyConstant S.unop (Y.obj (
+op (CompHausLike.of P PUnit.{u + 1})))) (g : S ⟶ T) (a : Fiber (f.comap g.unop.h
+om.hom)) : g ≫ (sigmaIncl (f.comap g.unop.hom.hom) a).op = (sigmaIncl f _).op ≫ 
+(componentHom f g.unop a).op
+参数：CompHausLike P；f : LocallyConstant S.unop (Y.obj (op (CompHausLike.of P PUnit
+.{u + 1})))；g : S ⟶ T；a : Fiber (f.comap g.unop.hom.hom)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
 lemma incl_comap {S T : (CompHausLike P)ᵒᵖ}
     (f : LocallyConstant S.unop (Y.obj (op (CompHausLike.of P PUnit.{u + 1}))))
@@ -417,49 +552,26 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The counit is natural in `S : CompHausLike P` -/
 @[simps! app]
-/--
-Definition of `counitApp` / `counitApp` 的定义
+/-
+**CompHausLike.LocallyConstant.counitApp** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike
+.LocallyConstant`。
+形式化陈述：counitApp [HasExplicitFiniteCoproducts.{u} P] (Y : (CompHausLike.{u} P)ᵒᵖ 
+⥤ Type (max u w)) [PreservesFiniteProducts Y] : (functorToPresheaves.obj (Y.obj 
+(op (CompHausLike.of P PUnit.{u + 1})))) ⟶ Y where app
+参数：Y : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition counitApp
-  signature: [HasExplicitFiniteCoproducts.{u} P]
-  body: fun ⟨S⟩ => counitAppApp S Y
-  naturality := by
-    intro S T g
-    ext f
-    apply presheaf_ext (f.comap g.unop.hom.hom)
-    intro a
-    simp only [op_unop, functorToPresheaves_obj_obj, functorToPresheaves_obj_map,
-      TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom,
-      TypeCat.Fun.coe_mk]
-    rw [incl_of_counitAppApp]; rw [← Functor.map_comp_apply]; rw [incl_comap]; rw [Functor.map_comp_apply]; rw [incl_of_counitAppApp]
-    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
-    apply congrArg
-    exact image_eq_image_mk (g := g.unop) (a := a)
-
-中文:
-定义 counitApp
-  签名: [有ExplicitFiniteCoproducts.{u} P]
-  定义体: fun ⟨S⟩ => counitAppApp S Y
-  naturality := by
-    intro S T g
-    ext f
-    apply presheaf_ext (f.comap g.unop.hom.hom)
-    intro a
-    simp only [op_unop, functorToPresheaves_obj_obj, functorToPresheaves_obj_map,
-      TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom,
-      TypeCat.Fun.coe_mk]
-    rw [incl_of_counitAppApp]; rw [← Functor.map_comp_apply]; rw [incl_comap]; rw [Functor.map_comp_apply]; rw [incl_of_counitAppApp]
-    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
-    apply congrArg
-    exact image_eq_image_mk (g := g.unop) (a := a)
-
-Depends on / 依赖: counitAppApp
+--- 原说明 ---
+The counit is natural in `S : CompHausLike P`
 -/
 noncomputable def counitApp [HasExplicitFiniteCoproducts.{u} P]
     (Y : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)) [PreservesFiniteProducts Y] :
     (functorToPresheaves.obj (Y.obj (op (CompHausLike.of P PUnit.{u + 1})))) ⟶ Y where
-  app := fun ⟨S⟩ => counitAppApp S Y
+  app := fun ⟨S⟩ ↦ counitAppApp S Y
   naturality := by
     intro S T g
     ext f
@@ -468,69 +580,49 @@ noncomputable def counitApp [HasExplicitFiniteCoproducts.{u} P]
     simp only [op_unop, functorToPresheaves_obj_obj, functorToPresheaves_obj_map,
       TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply, ConcreteCategory.hom_ofHom,
       TypeCat.Fun.coe_mk]
-    rw [incl_of_counitAppApp]; rw [← Functor.map_comp_apply]; rw [incl_comap]; rw [Functor.map_comp_apply]; rw [incl_of_counitAppApp]
+    rw [incl_of_counitAppApp, ← Functor.map_comp_apply, incl_comap,
+      Functor.map_comp_apply, incl_of_counitAppApp]
     simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
     apply congrArg
     exact image_eq_image_mk (g := g.unop) (a := a)
 
 variable (P) (X : TopCat.{max u w})
     [HasExplicitFiniteCoproducts.{0} P] [HasExplicitPullbacks P]
-    (hs : forall ⦃X Y : CompHausLike P⦄ (f : X ⟶ Y), EffectiveEpi f -> Function.Surjective f)
+    (hs : ∀ ⦃X Y : CompHausLike P⦄ (f : X ⟶ Y), EffectiveEpi f → Function.Surjective f)
 
-/--
-Definition of `functorToPresheavesIso` / `functorToPresheavesIso` 的定义
+/-- `locallyConstantIsoContinuousMap` is a natural isomorphism. -/
+/-
+**CompHausLike.LocallyConstant.functorToPresheavesIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CompHausLike.LocallyConstant`。
+形式化陈述：functorToPresheavesIso (X : Type (max u w)) : functorToPresheaves.{u, w}.o
+bj X ≅ ((TopCat.discrete.obj X).toSheafCompHausLike P hs).obj
+参数：X : Type (max u w)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToPresheavesIso
-  signature: (X : Type (max u w))
-  body: NatIso.ofComponents (fun S => locallyConstantIsoContinuousMap _ _)
-
-中文:
-定义 functorToPresheavesIso
-  签名: (X : 类型 (最大值 u w))
-  定义体: NatIso.ofComponents (fun S => locallyConstantIsoContinuousMap _ _)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, locallyConstantIsoContinuousMap, ofComponents
+--- 原说明 ---
+`locallyConstantIsoContinuousMap` is a natural isomorphism.
 -/
 noncomputable def functorToPresheavesIso (X : Type (max u w)) :
     functorToPresheaves.{u, w}.obj X ≅ ((TopCat.discrete.obj X).toSheafCompHausLike P hs).obj :=
-  NatIso.ofComponents (fun S => locallyConstantIsoContinuousMap _ _)
+  NatIso.ofComponents (fun S ↦ locallyConstantIsoContinuousMap _ _)
 
 /-- `CompHausLike.LocallyConstant.functorToPresheaves` lands in sheaves. -/
 @[simps! obj_obj_obj obj_obj_map map_hom_app]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CompHausLike.LocallyConstant.functor** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike.L
+ocallyConstant`。
+形式化陈述：functor : haveI
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: :
-  body: CompHausLike.preregular hs
-    Type (max u w) ⥤ Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w)) :=
-  ObjectProperty.lift _ (functorToPresheaves.{u, w}) (fun X => by
-    rw [Presheaf.isSheaf_of_iso_iff (functorToPresheavesIso P hs X)]
-    exact ((TopCat.discrete.obj X).toSheafCompHausLike P hs).property)
-
-@[deprecated (since := "2026-03-20")] alias functor_obj_obj := functor_obj_obj_obj
-@[deprecated (since := "2026-03-20")] alias functor_map_hom := functor_map_hom_app
-
-中文:
-定义 functor
-  签名: :
-  定义体: CompHausLike.preregular hs
-    Type (max u w) ⥤ Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w)) :=
-  ObjectProperty.lift _ (functorToPresheaves.{u, w}) (fun X => by
-    rw [Presheaf.isSheaf_of_iso_iff (functorToPresheavesIso P hs X)]
-    exact ((TopCat.discrete.obj X).toSheafCompHausLike P hs).property)
-
-@[deprecated (since := "2026-03-20")] alias functor_obj_obj := functor_obj_obj_obj
-@[deprecated (since := "2026-03-20")] alias functor_map_hom := functor_map_hom_app
-
-Depends on / 依赖: CompHausLike, CompHausLike.preregular, preregular
+--- 原说明 ---
+`CompHausLike.LocallyConstant.functorToPresheaves` lands in sheaves.
 -/
 def functor :
     haveI := CompHausLike.preregular hs
     Type (max u w) ⥤ Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w)) :=
-  ObjectProperty.lift _ (functorToPresheaves.{u, w}) (fun X => by
+  ObjectProperty.lift _ (functorToPresheaves.{u, w}) (fun X ↦ by
     rw [Presheaf.isSheaf_of_iso_iff (functorToPresheavesIso P hs X)]
     exact ((TopCat.discrete.obj X).toSheafCompHausLike P hs).property)
 
@@ -538,25 +630,25 @@ def functor :
 @[deprecated (since := "2026-03-20")] alias functor_map_hom := functor_map_hom_app
 
 /--
-Definition of `functorIso` / `functorIso` 的定义
+`CompHausLike.LocallyConstant.functor` is naturally isomorphic to the restriction of
+`topCatToSheafCompHausLike` to discrete topological spaces.
+-/
+/-
+**CompHausLike.LocallyConstant.functorIso** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLik
+e.LocallyConstant`。
+形式化陈述：functorIso : functor.{u, w} P hs ≅ TopCat.discrete.{max w u} ⋙ topCatToShe
+afCompHausLike P hs
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorIso
-  signature: :
-  body: NatIso.ofComponents (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
-    (functorToPresheavesIso P hs X))
-
-中文:
-定义 functorIso
-  签名: :
-  定义体: NatIso.ofComponents (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
-    (functorToPresheavesIso P hs X))
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, fullyFaithfulSheafToPresheaf, functorToPresheavesIso, ofComponents, preimageIso
+--- 原说明 ---
+`CompHausLike.LocallyConstant.functor` is naturally isomorphic to the restrictio
+n of
+`topCatToSheafCompHausLike` to discrete topological spaces.
 -/
 noncomputable def functorIso :
     functor.{u, w} P hs ≅ TopCat.discrete.{max w u} ⋙ topCatToSheafCompHausLike P hs :=
-  NatIso.ofComponents (fun X => (fullyFaithfulSheafToPresheaf _ _).preimageIso
+  NatIso.ofComponents (fun X ↦ (fullyFaithfulSheafToPresheaf _ _).preimageIso
     (functorToPresheavesIso P hs X))
 
 set_option backward.defeqAttrib.useBackward true in
@@ -564,98 +656,19 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The counit is natural in both `S : CompHausLike P` and
 `Y : Sheaf (coherentTopology (CompHausLike P)) (Type (max u w))` -/
 @[simps!]
-/--
-Definition of `counit` / `counit` 的定义
+/-
+**CompHausLike.LocallyConstant.counit** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike.Lo
+callyConstant`。
+形式化陈述：counit [HasExplicitFiniteCoproducts.{u} P] : haveI
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition counit
-  signature: [HasExplicitFiniteCoproducts.{u} P]
-  body: CompHausLike.preregular hs
-    (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ ⋙ functor.{u, w} P hs ⟶
-        𝟭 (Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w))) where
-  app X := haveI := CompHausLike.preregular hs
-    (ObjectProperty.homMk) (counitApp X.obj)
-  naturality X Y g := by
-    have := CompHausLike.preregular hs
-    apply InducedCategory.hom_ext
-    simp only [functor, Functor.comp_obj, Functor.flip_obj_obj, ObjectProperty.ι_obj,
-      ObjectProperty.lift_obj_obj, Functor.id_obj, Functor.comp_map, Functor.flip_obj_map,
-      ObjectProperty.ι_map, ObjectProperty.lift_map, ObjectProperty.FullSubcategory.comp_hom,
-      ObjectProperty.homMk_hom, Functor.id_map]
-    ext S (f : LocallyConstant _ _)
-    simp only [NatTrans.comp_app, counitApp_app, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply]
-    apply presheaf_ext (f.map (g.hom.app (op (CompHausLike.of P PUnit.{u + 1}))))
-    intro a
-    simp only [functorToPresheaves_obj_obj, functorToPresheaves_map_app, TypeCat.hom_ofHom,
-      TypeCat.Fun.coe_mk, dsimp% incl_of_counitAppApp]
-    apply presheaf_ext (f.comap (sigmaIncl _ _).hom.hom)
-    intro b
-    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp,
-      map_apply, IsTerminal.comp_from, ← map_preimage_eq_image_map]
-    change (_ ≫ Y.obj.map _) _ = (_ ≫ Y.obj.map _) _
-    simp only [← g.hom.naturality]
-    rw [show sigmaIncl (f.comap (sigmaIncl (f.map _) a).hom.hom) b ≫ sigmaIncl (f.map _) a =
-        CompHausLike.ofHom P (X := fiber _ b) (sigmaInclIncl f _ a b) ≫ sigmaIncl f (Fiber.mk f _)
-      by ext; rfl]
-    simp only [op_comp, Functor.map_comp, types_comp_apply, dsimp% incl_of_counitAppApp]
-    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
-    rw [mk_image]
-    change (X.obj.map _ ≫ _) _ = (X.obj.map _ ≫ _) _
-    simp only [g.hom.naturality]
-    simp only [types_comp_apply]
-    have := map_preimage_eq_image (f := g.hom.app _ ∘ f) (a := a)
-    simp only [Function.comp_apply] at this
-    rw [this]
-    apply congrArg
-    symm
-    convert! (b.preimage).prop
-    exact (mem_iff_eq_image (g.hom.app _ ∘ f) _ _).symm
-
-中文:
-定义 counit
-  签名: [有ExplicitFiniteCoproducts.{u} P]
-  定义体: CompHausLike.preregular hs
-    (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ ⋙ functor.{u, w} P hs ⟶
-        𝟭 (Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w))) where
-  app X := haveI := CompHausLike.preregular hs
-    (ObjectProperty.homMk) (counitApp X.obj)
-  naturality X Y g := by
-    have := CompHausLike.preregular hs
-    apply InducedCategory.hom_ext
-    simp only [functor, Functor.comp_obj, Functor.flip_obj_obj, ObjectProperty.ι_obj,
-      ObjectProperty.lift_obj_obj, Functor.id_obj, Functor.comp_map, Functor.flip_obj_map,
-      ObjectProperty.ι_map, ObjectProperty.lift_map, ObjectProperty.FullSubcategory.comp_hom,
-      ObjectProperty.homMk_hom, Functor.id_map]
-    ext S (f : LocallyConstant _ _)
-    simp only [NatTrans.comp_app, counitApp_app, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply]
-    apply presheaf_ext (f.map (g.hom.app (op (CompHausLike.of P PUnit.{u + 1}))))
-    intro a
-    simp only [functorToPresheaves_obj_obj, functorToPresheaves_map_app, TypeCat.hom_ofHom,
-      TypeCat.Fun.coe_mk, dsimp% incl_of_counitAppApp]
-    apply presheaf_ext (f.comap (sigmaIncl _ _).hom.hom)
-    intro b
-    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp,
-      map_apply, IsTerminal.comp_from, ← map_preimage_eq_image_map]
-    change (_ ≫ Y.obj.map _) _ = (_ ≫ Y.obj.map _) _
-    simp only [← g.hom.naturality]
-    rw [show sigmaIncl (f.comap (sigmaIncl (f.map _) a).hom.hom) b ≫ sigmaIncl (f.map _) a =
-        CompHausLike.ofHom P (X := fiber _ b) (sigmaInclIncl f _ a b) ≫ sigmaIncl f (Fiber.mk f _)
-      by ext; rfl]
-    simp only [op_comp, Functor.map_comp, types_comp_apply, dsimp% incl_of_counitAppApp]
-    simp only [counitAppAppImage, ← Functor.map_comp_apply, ← op_comp]
-    rw [mk_image]
-    change (X.obj.map _ ≫ _) _ = (X.obj.map _ ≫ _) _
-    simp only [g.hom.naturality]
-    simp only [types_comp_apply]
-    have := map_preimage_eq_image (f := g.hom.app _ ∘ f) (a := a)
-    simp only [Function.comp_apply] at this
-    rw [this]
-    apply congrArg
-    symm
-    convert! (b.preimage).prop
-    exact (mem_iff_eq_image (g.hom.app _ ∘ f) _ _).symm
-
-Depends on / 依赖: CompHausLike, CompHausLike.preregular, preregular
+--- 原说明 ---
+The counit is natural in both `S : CompHausLike P` and
+`Y : Sheaf (coherentTopology (CompHausLike P)) (Type (max u w))`
 -/
 noncomputable def counit [HasExplicitFiniteCoproducts.{u} P] : haveI := CompHausLike.preregular hs
     (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ ⋙ functor.{u, w} P hs ⟶
@@ -702,98 +715,120 @@ noncomputable def counit [HasExplicitFiniteCoproducts.{u} P] : haveI := CompHaus
 The unit of the adjunction is given by mapping each element to the corresponding constant map.
 -/
 @[simps]
-/--
-Definition of `unit` / `unit` 的定义
+/-
+**CompHausLike.LocallyConstant.unit** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike.Loca
+llyConstant`。
+形式化陈述：unit : 𝟭 _ ⟶ functor P hs ⋙ (sheafSections _ _).obj ⟨CompHausLike.of P PUn
+it.{u + 1}⟩ where app _
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition unit
-  signature: : 𝟭 _ ⟶ functor P hs ⋙ (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ where
-  body: ↾fun x => LocallyConstant.const _ x
-
-中文:
-定义 unit
-  签名: : 𝟭 _ ⟶ functor P hs ⋙ (sheafSections _ _).obj ⟨余mpHausLike.of P 命题单元.{u + 1}⟩ where
-  定义体: ↾fun x => LocallyConstant.const _ x
-
-Depends on / 依赖: LocallyConstant, LocallyConstant.const
+--- 原说明 ---
+The unit of the adjunction is given by mapping each element to the corresponding
+ constant map.
 -/
 def unit : 𝟭 _ ⟶ functor P hs ⋙ (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ where
-  app _ := ↾fun x => LocallyConstant.const _ x
+  app _ := ↾fun x ↦ LocallyConstant.const _ x
 
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-- The unit of the adjunction is an iso. -/
+/-
+**CompHausLike.LocallyConstant.unitIso** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike.L
+ocallyConstant`。
+形式化陈述：unitIso : 𝟭 (Type (max u w)) ≅ functor.{u, w} P hs ⋙ (sheafSections _ _).o
+bj ⟨CompHausLike.of P PUnit.{u + 1}⟩ where hom
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition unitIso
-  signature: : 𝟭 (Type (max u w)) ≅ functor.{u, w} P hs ⋙
-  body: unit P hs
-  inv := { app _ := ↾fun f => f.toFun PUnit.unit }
-
-中文:
-定义 unitIso
-  签名: : 𝟭 (类型 (最大值 u w)) ≅ functor.{u, w} P hs ⋙
-  定义体: unit P hs
-  inv := { app _ := ↾fun f => f.toFun PUnit.unit }
-
-Depends on / 依赖: MyEmbedding, MyEmbedding.toFun
+--- 原说明 ---
+The unit of the adjunction is an iso.
 -/
 noncomputable def unitIso : 𝟭 (Type (max u w)) ≅ functor.{u, w} P hs ⋙
     (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ where
   hom := unit P hs
-  inv := { app _ := ↾fun f => f.toFun PUnit.unit }
+  inv := { app _ := ↾fun f ↦ f.toFun PUnit.unit }
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `adjunction_left_triangle` / 引理 `adjunction_left_triangle`
-
-English:
-lemma adjunction_left_triangle
-  statement: [HasExplicitFiniteCoproducts.{u} P]
-  proof: by
-  ext ⟨S⟩ (f : LocallyConstant _ X)
-  simp only [Functor.id_obj, functor_obj_obj_obj, functorToPresheaves_obj_obj, Functor.comp_obj,
-    Functor.flip_obj_obj, ObjectProperty.ι_obj, unit_app, NatTrans.comp_app,
-    functorToPresheaves_map_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.toFun_apply,
-    CategoryTheory.comp_apply, TypeCat.Fun.coe_mk, NatTrans.id_app, id_apply]
-  simp only [counit]
-  have := CompHausLike.preregular hs
-  apply presheaf_ext
-    (X := ((functor P hs).obj X).obj) (Y := ((functor.{u, w} P hs).obj X).obj)
-      (f.map ((unit P hs).app X))
-  intro a
-  erw [incl_of_counitAppApp]
-  simp only [functor_obj_obj_obj, Functor.id_obj, Functor.comp_obj, Functor.flip_obj_obj,
-    ObjectProperty.ι_obj, unit_app, counitAppAppImage, functor_obj_obj_map,
-    Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom]
-  ext x
-  erw [← map_eq_image _ a x]
-  rfl
-
-中文:
-引理 adjunction_left_triangle
-  结论: [有ExplicitFiniteCoproducts.{u} P]
-  证明: by
-  ext ⟨S⟩ (f : LocallyConstant _ X)
-  simp only [Functor.id_obj, functor_obj_obj_obj, functorToPresheaves_obj_obj, Functor.comp_obj,
-    Functor.flip_obj_obj, ObjectProperty.ι_obj, unit_app, NatTrans.comp_app,
-    functorToPresheaves_map_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.toFun_apply,
-    CategoryTheory.comp_apply, TypeCat.Fun.coe_mk, NatTrans.id_app, id_apply]
-  simp only [counit]
-  have := CompHausLike.preregular hs
-  apply presheaf_ext
-    (X := ((functor P hs).obj X).obj) (Y := ((functor.{u, w} P hs).obj X).obj)
-      (f.map ((unit P hs).app X))
-  intro a
-  erw [incl_of_counitAppApp]
-  simp only [functor_obj_obj_obj, Functor.id_obj, Functor.comp_obj, Functor.flip_obj_obj,
-    ObjectProperty.ι_obj, unit_app, counitAppAppImage, functor_obj_obj_map,
-    Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom]
-  ext x
-  erw [← map_eq_image _ a x]
-  rfl
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, CompHausLike, CompHausLike.preregular, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.comp_obj, Functor.flip_obj_obj, Functor.id_obj, LocallyConstant, MyEmbedding, MyEmbedding.injective, NatTrans, NatTrans.comp_app, NatTrans.id_app, ObjectProperty, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply
+/-
+**CompHausLike.LocallyConstant.adjunction_left_triangle** 是 Mathlib 中的一个引理，位于命名空
+间 `CompHausLike.LocallyConstant`。
+形式化陈述：adjunction_left_triangle [HasExplicitFiniteCoproducts.{u} P] (X : Type (ma
+x u w)) : functorToPresheaves.{u, w}.map ((unit P hs).app X) ≫ ((counit P hs).ap
+p ((functor P hs).obj X)).hom = 𝟙 (functorToPresheaves.obj X)
+参数：X : Type (max u w)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `CategoryTheory.instPrecoherentOfFinitaryPreExtensiveOfPreregular`：∀ (C :
+ Type u_1) [inst : CategoryTheory.Category.{v_1, u_1} C] [CategoryTheory.Finitar
+yPreExtensive C]   [CategoryTheory.Preregular C], Cate…
+· 使用定理 `CategoryTheory.FinitaryExtensive.toFinitaryPreExtensive`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.FinitaryExtensive C], 
+  CategoryTheory.FinitaryPreExtensive C
+· 使用定理 `CompHausLike.instFinitaryExtensiveOfHasExplicitPullbacksOfInclusions`：∀ 
+{P : TopCat → Prop} [inst : CompHausLike.HasExplicitFiniteCoproducts P]   [CompH
+ausLike.HasExplicitPullbacksOfInclusions P], CategoryTheor…
+· 使用定理 `CompHausLike.instHasExplicitPullbacksOfInclusionsOfHasExplicitPullbacks`
+：∀ {P : TopCat → Prop} [CompHausLike.HasExplicitPullbacks P] [inst : CompHausLik
+e.HasExplicitFiniteCoproducts P],   CompHausLike.HasExplicitP…
+· 使用定理 `CompHausLike.preregular`：preregular [HasExplicitPullbacks P] (hs : foral
+l ⦃X Y : CompHausLike P⦄ (f : X ⟶ Y), EffectiveEpi f -> Function.Surjective f) :
+ Preregular (…
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用引理 `CompHausLike.LocallyConstant.presheaf_ext`：presheaf_ext (X : (CompHausLi
+ke.{u} P)ᵒᵖ ⥤ Type (max u w)) [PreservesFiniteProducts X] (x y : X.obj ⟨S⟩) [Has
+ExplicitFiniteCoproducts.{u} P]…
+· 使用定理 `CategoryTheory.Presheaf.instPreservesFiniteProductsOppositeObjFunctorIsS
+heafCoherentTopology`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1
+} C] {A : Type u₃}   [inst_1 : CategoryTheory.Category.{v₃, u₃} A] [inst_2 : Cat
+eg…
+· 使用引理 `CompHausLike.LocallyConstant.incl_of_counitAppApp`：incl_of_counitAppApp 
+[PreservesFiniteProducts Y] [HasExplicitFiniteCoproducts.{u} P] (a : Fiber f) : 
+Y.map (sigmaIncl f a).op (counitAppApp …
+· 使用定理 `DiscreteTopology.toT2Space`：∀ {X : Type u_1} [inst : TopologicalSpace X]
+ [DiscreteTopology X], T2Space X
+· 使用定理 `instDiscreteTopologyPUnit`：DiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `LocallyConstant.ext`：ext ⦃f g : LocallyConstant X Y⦄ (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Function.Fiber.map_eq_image`：map_eq_image (f : Y -> Z) (a : Fiber f) (x 
+: a.1) : f x = a.image
 -/
 lemma adjunction_left_triangle [HasExplicitFiniteCoproducts.{u} P]
     (X : Type (max u w)) : functorToPresheaves.{u, w}.map ((unit P hs).app X) ≫
@@ -822,54 +857,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 `CompHausLike.LocallyConstant.functor` is left adjoint to the forgetful functor.
 -/
 @[simps]
-/--
-Definition of `adjunction` / `adjunction` 的定义
+/-
+**CompHausLike.LocallyConstant.adjunction** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLik
+e.LocallyConstant`。
+形式化陈述：adjunction [HasExplicitFiniteCoproducts.{u} P] : functor.{u, w} P hs ⊣ (sh
+eafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ where unit
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition adjunction
-  signature: [HasExplicitFiniteCoproducts.{u} P]
-  body: unit P hs
-  counit := counit P hs
-  left_triangle_components := by
-    intro X
-    ext : 1
-    exact adjunction_left_triangle P hs X
-  right_triangle_components X := by
-    ext (x : X.obj.obj _)
-    dsimp
-    have := CompHausLike.preregular hs
-    let : PreservesFiniteProducts ((sheafToPresheaf (coherentTopology _) _).obj X) :=
-      inferInstanceAs (PreservesFiniteProducts X.obj)
-    apply presheaf_ext ((unit P hs).app _ x)
-    intro a
-    erw [incl_of_counitAppApp]
-    simp only [counitAppAppImage]
-    erw [← map_eq_image _ a ⟨PUnit.unit, by simp [mem_iff_eq_image, ← map_preimage_eq_image]⟩]
-    rfl
-
-中文:
-定义 adjunction
-  签名: [有ExplicitFiniteCoproducts.{u} P]
-  定义体: unit P hs
-  counit := counit P hs
-  left_triangle_components := by
-    intro X
-    ext : 1
-    exact adjunction_left_triangle P hs X
-  right_triangle_components X := by
-    ext (x : X.obj.obj _)
-    dsimp
-    have := CompHausLike.preregular hs
-    let : PreservesFiniteProducts ((sheafToPresheaf (coherentTopology _) _).obj X) :=
-      inferInstanceAs (PreservesFiniteProducts X.obj)
-    apply presheaf_ext ((unit P hs).app _ x)
-    intro a
-    erw [incl_of_counitAppApp]
-    simp only [counitAppAppImage]
-    erw [← map_eq_image _ a ⟨PUnit.unit, by simp [mem_iff_eq_image, ← map_preimage_eq_image]⟩]
-    rfl
-
-Depends on / 依赖: MyEmbeddingClass, MyEmbeddingClass.map_op, map_op
+--- 原说明 ---
+`CompHausLike.LocallyConstant.functor` is left adjoint to the forgetful functor.
 -/
 noncomputable def adjunction [HasExplicitFiniteCoproducts.{u} P] :
     functor.{u, w} P hs ⊣ (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ where
@@ -891,21 +891,10 @@ noncomputable def adjunction [HasExplicitFiniteCoproducts.{u} P] :
     simp only [counitAppAppImage]
     erw [← map_eq_image _ a ⟨PUnit.unit, by simp [mem_iff_eq_image, ← map_preimage_eq_image]⟩]
     rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasExplicitFiniteCoproducts.{u}
-  signature: P] : IsIso (adjunction P hs).unit
-  body: inferInstanceAs (IsIso (unitIso P hs).hom)
-
-中文:
-实例 [有ExplicitFiniteCoproducts.{u}
-  签名: P] : 是同构 (adjunction P hs).unit
-  定义体: inferInstanceAs (IsIso (unitIso P hs).hom)
-
-Depends on / 依赖: unitIso
+/-
+**CompHausLike.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasExplicitFiniteCoproducts.{u} P] : IsIso (adjunction P hs).unit :=
   inferInstanceAs (IsIso (unitIso P hs).hom)
@@ -920,128 +909,97 @@ open Condensed CompHausLike
 
 namespace CondensedSet.LocallyConstant
 
-/--
-Definition of `functor` / `functor` 的定义
+/-- The functor from sets to condensed sets given by locally constant maps into the set. -/
+/-
+**CondensedSet.LocallyConstant.functor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CondensedSet
+.LocallyConstant`。
+形式化陈述：functor : Type (u + 1) ⥤ CondensedSet.{u}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instHasExplicitFiniteCoproductsTrue`：CompHausLike.HasExplicitFi
+niteCoproducts fun x => True
+· 使用定理 `CompHaus.instHasExplicitPullbacksTrue`：CompHausLike.HasExplicitPullbacks
+ fun x => True
 
-English:
-abbreviation functor
-  signature: : Type (u + 1) ⥤ CondensedSet.{u}
-  body: CompHausLike.LocallyConstant.functor.{u, u + 1} (P := fun _ => True)
-    (hs := fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
-
-中文:
-缩写 functor
-  签名: : 类型 (u + 1) ⥤ CondensedSet.{u}
-  定义体: CompHausLike.LocallyConstant.functor.{u, u + 1} (P := fun _ => True)
-    (hs := fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
-
-Depends on / 依赖: CompHaus, CompHaus.effectiveEpi_tfae, CompHausLike, CompHausLike.LocallyConstant.functor, LocallyConstant, effectiveEpi_tfae, functor
+--- 原说明 ---
+The functor from sets to condensed sets given by locally constant maps into the 
+set.
 -/
 abbrev functor : Type (u + 1) ⥤ CondensedSet.{u} :=
-  CompHausLike.LocallyConstant.functor.{u, u + 1} (P := fun _ => True)
-    (hs := fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
+  CompHausLike.LocallyConstant.functor.{u, u + 1} (P := fun _ ↦ True)
+    (hs := fun _ _ _ ↦ ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
 
 /--
-Definition of `iso` / `iso` 的定义
+`CondensedSet.LocallyConstant.functor` is isomorphic to `Condensed.discrete`
+(by uniqueness of adjoints).
+-/
+/-
+**CondensedSet.LocallyConstant.iso** 是 Mathlib 中的一个定义，位于命名空间 `CondensedSet.Local
+lyConstant`。
+形式化陈述：iso : functor ≅ discrete (Type (u + 1))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instHasExplicitFiniteCoproductsTrue`：CompHausLike.HasExplicitFi
+niteCoproducts fun x => True
+· 使用定理 `CompHaus.instHasExplicitPullbacksTrue`：CompHausLike.HasExplicitPullbacks
+ fun x => True
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `CompHaus.instHasPropTrue`：∀ (X : Type u_1) [inst : TopologicalSpace X], 
+CompHausLike.HasProp (fun x => True) X
 
-English:
-definition iso
-  signature: : functor ≅ discrete (Type (u + 1))
-  body: (LocallyConstant.adjunction _ _).leftAdjointUniq (discreteUnderlyingAdj _)
-
-中文:
-定义 iso
-  签名: : functor ≅ discrete (类型 (u + 1))
-  定义体: (LocallyConstant.adjunction _ _).leftAdjointUniq (discreteUnderlyingAdj _)
-
-Depends on / 依赖: LocallyConstant, LocallyConstant.adjunction, adjunction, discreteUnderlyingAdj, leftAdjointUniq
+--- 原说明 ---
+`CondensedSet.LocallyConstant.functor` is isomorphic to `Condensed.discrete`
+(by uniqueness of adjoints).
 -/
 noncomputable def iso : functor ≅ discrete (Type (u + 1)) :=
   (LocallyConstant.adjunction _ _).leftAdjointUniq (discreteUnderlyingAdj _)
 
-/--
-Definition of `functorFullyFaithful` / `functorFullyFaithful` 的定义
+/-- `CondensedSet.LocallyConstant.functor` is fully faithful. -/
+/-
+**CondensedSet.LocallyConstant.functorFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `C
+ondensedSet.LocallyConstant`。
+形式化陈述：functorFullyFaithful : functor.FullyFaithful
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instHasExplicitFiniteCoproductsTrue`：CompHausLike.HasExplicitFi
+niteCoproducts fun x => True
+· 使用定理 `CompHaus.instHasExplicitPullbacksTrue`：CompHausLike.HasExplicitPullbacks
+ fun x => True
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `CompHaus.instHasPropTrue`：∀ (X : Type u_1) [inst : TopologicalSpace X], 
+CompHausLike.HasProp (fun x => True) X
 
-English:
-definition functorFullyFaithful
-  signature: : functor.FullyFaithful
-  body: (LocallyConstant.adjunction.{u, u + 1} _ _).fullyFaithfulLOfIsIsoUnit
-
-中文:
-定义 functorFullyFaithful
-  签名: : functor.满忠实
-  定义体: (LocallyConstant.adjunction.{u, u + 1} _ _).fullyFaithfulLOfIsIsoUnit
-
-Depends on / 依赖: LocallyConstant, LocallyConstant.adjunction, adjunction, fullyFaithfulLOfIsIsoUnit
+--- 原说明 ---
+`CondensedSet.LocallyConstant.functor` is fully faithful.
 -/
 noncomputable def functorFullyFaithful : functor.FullyFaithful :=
   (LocallyConstant.adjunction.{u, u + 1} _ _).fullyFaithfulLOfIsIsoUnit
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: functor.Faithful
-  body: functorFullyFaithful.faithful
-
-中文:
-实例 :
-  签名: functor.忠实
-  定义体: functorFullyFaithful.faithful
-
-Depends on / 依赖: faithful, functorFullyFaithful, functorFullyFaithful.faithful
+/-
+**CondensedSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : functor.Faithful := functorFullyFaithful.faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: functor.Full
-  body: functorFullyFaithful.full
-
-中文:
-实例 :
-  签名: functor.满
-  定义体: functorFullyFaithful.full
-
-Depends on / 依赖: functorFullyFaithful, functorFullyFaithful.full
+/-
+**CondensedSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : functor.Full := functorFullyFaithful.full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (discrete <| Type _).Faithful
-  body: Functor.Faithful.of_iso iso
-
-中文:
-实例 :
-  签名: (discrete <| 类型 _).忠实
-  定义体: Functor.Faithful.of_iso iso
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, of_iso
+/-
+**CondensedSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (discrete <| Type _).Faithful := Functor.Faithful.of_iso iso
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (discrete <| Type _).Full
-  body: Functor.Full.of_iso iso
-
-中文:
-实例 :
-  签名: (discrete <| 类型 _).满
-  定义体: Functor.Full.of_iso iso
-
-Depends on / 依赖: Functor, Functor.Full.of_iso, of_iso
+/-
+**CondensedSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (discrete <| Type _).Full := Functor.Full.of_iso iso
 
@@ -1049,139 +1007,125 @@ end CondensedSet.LocallyConstant
 
 namespace LightCondSet.LocallyConstant
 
-/--
-Definition of `functor` / `functor` 的定义
+/-- The functor from sets to light condensed sets given by locally constant maps into the set. -/
+/-
+**LightCondSet.LocallyConstant.functor** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightCondSet
+.LocallyConstant`。
+形式化陈述：functor : Type u ⥤ LightCondSet.{u}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LightProfinite.instHasExplicitFiniteCoproductsAndTotallyDisconnectedSpac
+eCarrierSecondCountableTopology`：CompHausLike.HasExplicitFiniteCoproducts fun Y 
+=> TotallyDisconnectedSpace ↑Y ∧ SecondCountableTopology ↑Y
+· 使用定理 `LightProfinite.instHasExplicitPullbacksAndTotallyDisconnectedSpaceCarrie
+rSecondCountableTopology`：CompHausLike.HasExplicitPullbacks fun Y => TotallyDisc
+onnectedSpace ↑Y ∧ SecondCountableTopology ↑Y
 
-English:
-abbreviation functor
-  signature: : Type u ⥤ LightCondSet.{u}
-  body: CompHausLike.LocallyConstant.functor.{u, u}
-    (P := fun X => TotallyDisconnectedSpace X ∧ SecondCountableTopology X)
-    (hs := fun _ _ _ => (LightProfinite.effectiveEpi_iff_surjective _).mp)
-
-中文:
-缩写 functor
-  签名: : 类型u ⥤ LightCondSet.{u}
-  定义体: CompHausLike.LocallyConstant.functor.{u, u}
-    (P := fun X => TotallyDisconnectedSpace X ∧ SecondCountableTopology X)
-    (hs := fun _ _ _ => (LightProfinite.effectiveEpi_iff_surjective _).mp)
-
-Depends on / 依赖: CompHausLike, CompHausLike.LocallyConstant.functor, LightProfinite, LightProfinite.effectiveEpi_iff_surjective, LocallyConstant, SecondCountableTopology, TotallyDisconnectedSpace, effectiveEpi_iff_surjective, f.toFun, functor
+--- 原说明 ---
+The functor from sets to light condensed sets given by locally constant maps int
+o the set.
 -/
 abbrev functor : Type u ⥤ LightCondSet.{u} :=
   CompHausLike.LocallyConstant.functor.{u, u}
-    (P := fun X => TotallyDisconnectedSpace X ∧ SecondCountableTopology X)
-    (hs := fun _ _ _ => (LightProfinite.effectiveEpi_iff_surjective _).mp)
-
-instance (S : LightProfinite.{u}) (p : S -> Prop) :
-    HasProp (fun X => TotallyDisconnectedSpace X ∧ SecondCountableTopology X) (Subtype p) :=
+    (P := fun X ↦ TotallyDisconnectedSpace X ∧ SecondCountableTopology X)
+    (hs := fun _ _ _ ↦ (LightProfinite.effectiveEpi_iff_surjective _).mp)
+/-
+**LightCondSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (S : LightProfinite.{u}) (p : S → Prop) :
+    HasProp (fun X ↦ TotallyDisconnectedSpace X ∧ SecondCountableTopology X) (Subtype p) :=
   ⟨⟨(inferInstance : TotallyDisconnectedSpace (Subtype p)),
     (inferInstance : SecondCountableTopology {s | p s})⟩⟩
 
 /--
-Definition of `iso` / `iso` 的定义
+`LightCondSet.LocallyConstant.functor` is isomorphic to `LightCondensed.discrete`
+(by uniqueness of adjoints).
+-/
+/-
+**LightCondSet.LocallyConstant.iso** 是 Mathlib 中的一个定义，位于命名空间 `LightCondSet.Local
+lyConstant`。
+形式化陈述：iso : functor ≅ LightCondensed.discrete (Type u)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LightProfinite.instHasExplicitFiniteCoproductsAndTotallyDisconnectedSpac
+eCarrierSecondCountableTopology`：CompHausLike.HasExplicitFiniteCoproducts fun Y 
+=> TotallyDisconnectedSpace ↑Y ∧ SecondCountableTopology ↑Y
+· 使用定理 `LightProfinite.instHasExplicitPullbacksAndTotallyDisconnectedSpaceCarrie
+rSecondCountableTopology`：CompHausLike.HasExplicitPullbacks fun Y => TotallyDisc
+onnectedSpace ↑Y ∧ SecondCountableTopology ↑Y
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `LightProfinite.instHasPropAndTotallyDisconnectedSpaceCarrierSecondCounta
+bleTopology`：∀ (X : Type u_1) [inst : TopologicalSpace X] [TotallyDisconnectedSp
+ace X] [SecondCountableTopology X],   CompHausLike.HasProp (fun Y => Tota…
+· 使用定理 `LightCondSet.LocallyConstant.instHasPropAndTotallyDisconnectedSpaceCarri
+erSecondCountableTopologySubtypeToTop`：∀ (S : LightProfinite) (p : ↑S.toTop → Pr
+op),   CompHausLike.HasProp (fun X => TotallyDisconnectedSpace ↑X ∧ SecondCounta
+bleTopology ↑X) (Su…
 
-English:
-definition iso
-  signature: : functor ≅ LightCondensed.discrete (Type u)
-  body: (LocallyConstant.adjunction _ _).leftAdjointUniq (LightCondensed.discreteUnderlyingAdj _)
-
-中文:
-定义 iso
-  签名: : functor ≅ LightCondensed.discrete (类型u)
-  定义体: (LocallyConstant.adjunction _ _).leftAdjointUniq (LightCondensed.discreteUnderlyingAdj _)
-
-Depends on / 依赖: LightCondensed, LightCondensed.discreteUnderlyingAdj, LocallyConstant, LocallyConstant.adjunction, adjunction, discreteUnderlyingAdj, leftAdjointUniq
+--- 原说明 ---
+`LightCondSet.LocallyConstant.functor` is isomorphic to `LightCondensed.discrete
+`
+(by uniqueness of adjoints).
 -/
 noncomputable def iso : functor ≅ LightCondensed.discrete (Type u) :=
   (LocallyConstant.adjunction _ _).leftAdjointUniq (LightCondensed.discreteUnderlyingAdj _)
 
-/--
-Definition of `functorFullyFaithful` / `functorFullyFaithful` 的定义
+/-- `LightCondSet.LocallyConstant.functor` is fully faithful. -/
+/-
+**LightCondSet.LocallyConstant.functorFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `L
+ightCondSet.LocallyConstant`。
+形式化陈述：functorFullyFaithful : functor.{u}.FullyFaithful
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LightProfinite.instHasExplicitFiniteCoproductsAndTotallyDisconnectedSpac
+eCarrierSecondCountableTopology`：CompHausLike.HasExplicitFiniteCoproducts fun Y 
+=> TotallyDisconnectedSpace ↑Y ∧ SecondCountableTopology ↑Y
+· 使用定理 `LightProfinite.instHasExplicitPullbacksAndTotallyDisconnectedSpaceCarrie
+rSecondCountableTopology`：CompHausLike.HasExplicitPullbacks fun Y => TotallyDisc
+onnectedSpace ↑Y ∧ SecondCountableTopology ↑Y
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `LightCondSet.LocallyConstant.instHasPropAndTotallyDisconnectedSpaceCarri
+erSecondCountableTopologySubtypeToTop`：∀ (S : LightProfinite) (p : ↑S.toTop → Pr
+op),   CompHausLike.HasProp (fun X => TotallyDisconnectedSpace ↑X ∧ SecondCounta
+bleTopology ↑X) (Su…
 
-English:
-definition functorFullyFaithful
-  signature: : functor.{u}.FullyFaithful
-  body: (LocallyConstant.adjunction _ _).fullyFaithfulLOfIsIsoUnit
-
-中文:
-定义 functorFullyFaithful
-  签名: : functor.{u}.满忠实
-  定义体: (LocallyConstant.adjunction _ _).fullyFaithfulLOfIsIsoUnit
-
-Depends on / 依赖: LocallyConstant, LocallyConstant.adjunction, adjunction, fullyFaithfulLOfIsIsoUnit
+--- 原说明 ---
+`LightCondSet.LocallyConstant.functor` is fully faithful.
 -/
 noncomputable def functorFullyFaithful : functor.{u}.FullyFaithful :=
   (LocallyConstant.adjunction _ _).fullyFaithfulLOfIsIsoUnit
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: functor.{u}.Faithful
-  body: functorFullyFaithful.faithful
-
-中文:
-实例 :
-  签名: functor.{u}.忠实
-  定义体: functorFullyFaithful.faithful
-
-Depends on / 依赖: faithful, functorFullyFaithful, functorFullyFaithful.faithful
+/-
+**LightCondSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : functor.{u}.Faithful := functorFullyFaithful.faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LightCondSet.LocallyConstant.functor.Full
-  body: functorFullyFaithful.full
-
-中文:
-实例 :
-  签名: LightCondSet.局部常数.functor.满
-  定义体: functorFullyFaithful.full
-
-Depends on / 依赖: functorFullyFaithful, functorFullyFaithful.full
+/-
+**LightCondSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LightCondSet.LocallyConstant.functor.Full := functorFullyFaithful.full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (LightCondensed.discrete <| Type u).Faithful
-  body: Functor.Faithful.of_iso iso.{u}
-
-中文:
-实例 :
-  签名: (LightCondensed.discrete <| 类型u).忠实
-  定义体: Functor.Faithful.of_iso iso.{u}
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, of_iso
+/-
+**LightCondSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (LightCondensed.discrete <| Type u).Faithful := Functor.Faithful.of_iso iso.{u}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (LightCondensed.discrete <| Type u).Full
-  body: Functor.Full.of_iso iso.{u}
-
-中文:
-实例 :
-  签名: (LightCondensed.discrete <| 类型u).满
-  定义体: Functor.Full.of_iso iso.{u}
-
-Depends on / 依赖: Functor, Functor.Full.of_iso, of_iso
+/-
+**LightCondSet.LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondSet.LocallyC
+onstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (LightCondensed.discrete <| Type u).Full := Functor.Full.of_iso iso.{u}
 
 end LightCondSet.LocallyConstant
 
 end Condensed
+

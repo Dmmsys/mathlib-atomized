@@ -44,205 +44,193 @@ integer numbers, least element, greatest element
 
 namespace Int
 
-/--
-Definition of `leastOfBdd` / `leastOfBdd` 的定义
+/-- A computable version of `exists_least_of_bdd`: given a decidable predicate on the
+integers, with an explicit lower bound and a proof that it is somewhere true, return
+the least value for which the predicate is true. -/
+/-
+**Int.leastOfBdd** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：leastOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z : 
+Int, P z -> b <= z) (Hinh : exists z : Int, P z) : { lb : Int // P lb ∧ forall z
+ : Int, P z -> lb <= z }
+参数：b : Int；Hb : forall z : Int, P z -> b <= z；Hinh : exists z : Int, P z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leastOfBdd
-  signature: {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z : Int, P z -> b <= z)
-  body: have EX : exists n : Nat, P (b + n) :=
-    let ⟨elt, Helt⟩ := Hinh
-    match elt, le.dest (Hb _ Helt), Helt with
-    | _, ⟨n, rfl⟩, Hn => ⟨n, Hn⟩
-  ⟨b + (Nat.find EX : Int), Nat.find_spec EX, fun z h => by
-    obtain ⟨n, rfl⟩ := le.dest (Hb _ h); grw [Nat.find_min' EX h]⟩
-
-中文:
-定义 leastOfBdd
-  签名: {P : 整数 -> 命题} [DecidablePred P] (b : 整数) (Hb : 对任意 z : 整数, P z -> b <= z)
-  定义体: have EX : exists n : Nat, P (b + n) :=
-    let ⟨elt, Helt⟩ := Hinh
-    match elt, le.dest (Hb _ Helt), Helt with
-    | _, ⟨n, rfl⟩, Hn => ⟨n, Hn⟩
-  ⟨b + (Nat.find EX : Int), Nat.find_spec EX, fun z h => by
-    obtain ⟨n, rfl⟩ := le.dest (Hb _ h); grw [Nat.find_min' EX h]⟩
-
-Depends on / 依赖: Nat.find, Nat.find_min, Nat.find_spec, find_min, find_spec, le.dest
+--- 原说明 ---
+A computable version of `exists_least_of_bdd`: given a decidable predicate on th
+e
+integers, with an explicit lower bound and a proof that it is somewhere true, re
+turn
+the least value for which the predicate is true.
 -/
-def leastOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z : Int, P z -> b <= z)
-    (Hinh : exists z : Int, P z) : { lb : Int // P lb ∧ forall z : Int, P z -> lb <= z } :=
-  have EX : exists n : Nat, P (b + n) :=
+def leastOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → b ≤ z)
+    (Hinh : ∃ z : ℤ, P z) : { lb : ℤ // P lb ∧ ∀ z : ℤ, P z → lb ≤ z } :=
+  have EX : ∃ n : ℕ, P (b + n) :=
     let ⟨elt, Helt⟩ := Hinh
     match elt, le.dest (Hb _ Helt), Helt with
     | _, ⟨n, rfl⟩, Hn => ⟨n, Hn⟩
-  ⟨b + (Nat.find EX : Int), Nat.find_spec EX, fun z h => by
+  ⟨b + (Nat.find EX : ℤ), Nat.find_spec EX, fun z h => by
     obtain ⟨n, rfl⟩ := le.dest (Hb _ h); grw [Nat.find_min' EX h]⟩
 
-/--
-lemma `isLeast_coe_leastOfBdd` / 引理 `isLeast_coe_leastOfBdd`
+/-- `Int.leastOfBdd` is the least integer satisfying a predicate which is false for all `z : ℤ` with
+`z < b` for some fixed `b : ℤ`. -/
+/-
+**Int.isLeast_coe_leastOfBdd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：isLeast_coe_leastOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb :
+ forall z : Int, P z -> b <= z) (Hinh : exists z : Int, P z) : IsLeast {z | P z}
+ (leastOfBdd b Hb Hinh : Int)
+参数：b : Int；Hb : forall z : Int, P z -> b <= z；Hinh : exists z : Int, P z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-lemma isLeast_coe_leastOfBdd
-  statement: {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z : Int, P z -> b <= z)
-  proof: (leastOfBdd b Hb Hinh).2
-
-中文:
-引理 isLeast_coe_leastOfBdd
-  结论: {P : 整数 -> 命题} [DecidablePred P] (b : 整数) (Hb : 对任意 z : 整数, P z -> b <= z)
-  证明: (leastOfBdd b Hb Hinh).2
-
-Depends on / 依赖: leastOfBdd
+--- 原说明 ---
+`Int.leastOfBdd` is the least integer satisfying a predicate which is false for 
+all `z : ℤ` with
+`z < b` for some fixed `b : ℤ`.
 -/
-lemma isLeast_coe_leastOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z : Int, P z -> b <= z)
-    (Hinh : exists z : Int, P z) : IsLeast {z | P z} (leastOfBdd b Hb Hinh : Int) :=
+lemma isLeast_coe_leastOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → b ≤ z)
+    (Hinh : ∃ z : ℤ, P z) : IsLeast {z | P z} (leastOfBdd b Hb Hinh : ℤ) :=
   (leastOfBdd b Hb Hinh).2
 
 /--
-theorem `exists_least_of_bdd` / 定理 `exists_least_of_bdd`
+If `P : ℤ → Prop` is a predicate such that the set `{m : P m}` is bounded below and nonempty,
+then this set has the least element. This lemma uses classical logic to avoid assumption
+`[DecidablePred P]`. See `Int.leastOfBdd` for a constructive counterpart. -/
+/-
+**Int.exists_least_of_bdd** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：exists_least_of_bdd {P : Int -> Prop} (Hbdd : exists b : Int, forall z : I
+nt, P z -> b <= z) (Hinh : exists z : Int, P z) : exists lb : Int, P lb ∧ forall
+ z : Int, P z -> lb <= z
+参数：Hbdd : exists b : Int, forall z : Int, P z -> b <= z；Hinh : exists z : Int, P
+ z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem exists_least_of_bdd
-  proof: by
-  classical
-  let ⟨b, Hb⟩ := Hbdd
-  let ⟨lb, H⟩ := leastOfBdd b Hb Hinh
-  exact ⟨lb, H⟩
-
-中文:
-定理 存在_least_of_bdd
-  证明: by
-  classical
-  let ⟨b, Hb⟩ := Hbdd
-  let ⟨lb, H⟩ := leastOfBdd b Hb Hinh
-  exact ⟨lb, H⟩
-
-Depends on / 依赖: classical, leastOfBdd
+--- 原说明 ---
+If `P : ℤ → Prop` is a predicate such that the set `{m : P m}` is bounded below 
+and nonempty,
+then this set has the least element. This lemma uses classical logic to avoid as
+sumption
+`[DecidablePred P]`. See `Int.leastOfBdd` for a constructive counterpart.
 -/
 theorem exists_least_of_bdd
-    {P : Int -> Prop}
-    (Hbdd : exists b : Int, forall z : Int, P z -> b <= z)
-    (Hinh : exists z : Int, P z) : exists lb : Int, P lb ∧ forall z : Int, P z -> lb <= z := by
+    {P : ℤ → Prop}
+    (Hbdd : ∃ b : ℤ, ∀ z : ℤ, P z → b ≤ z)
+    (Hinh : ∃ z : ℤ, P z) : ∃ lb : ℤ, P lb ∧ ∀ z : ℤ, P z → lb ≤ z := by
   classical
   let ⟨b, Hb⟩ := Hbdd
   let ⟨lb, H⟩ := leastOfBdd b Hb Hinh
   exact ⟨lb, H⟩
-
-/--
-theorem `coe_leastOfBdd_eq` / 定理 `coe_leastOfBdd_eq`
-
-English:
-theorem coe_leastOfBdd_eq
-  statement: {P : Int -> Prop} [DecidablePred P] {b b' : Int} (Hb : forall z : Int, P z -> b <= z)
-  proof: by grind
-
-中文:
-定理 coe_leastOfBdd_eq
-  结论: {P : 整数 -> 命题} [DecidablePred P] {b b' : 整数} (Hb : 对任意 z : 整数, P z -> b <= z)
-  证明: by grind
+/-
+**Int.coe_leastOfBdd_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：coe_leastOfBdd_eq {P : Int -> Prop} [DecidablePred P] {b b' : Int} (Hb : f
+orall z : Int, P z -> b <= z) (Hb' : forall z : Int, P z -> b' <= z) (Hinh : exi
+sts z : Int, P z) : (leastOfBdd b Hb Hinh : Int) = leastOfBdd b' Hb' Hinh
+参数：Hb : forall z : Int, P z -> b <= z；Hb' : forall z : Int, P z -> b' <= z；Hinh 
+: exists z : Int, P z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_leastOfBdd_eq {P : Int -> Prop} [DecidablePred P] {b b' : Int} (Hb : forall z : Int, P z -> b <= z)
-    (Hb' : forall z : Int, P z -> b' <= z) (Hinh : exists z : Int, P z) :
-    (leastOfBdd b Hb Hinh : Int) = leastOfBdd b' Hb' Hinh := by grind
+theorem coe_leastOfBdd_eq {P : ℤ → Prop} [DecidablePred P] {b b' : ℤ} (Hb : ∀ z : ℤ, P z → b ≤ z)
+    (Hb' : ∀ z : ℤ, P z → b' ≤ z) (Hinh : ∃ z : ℤ, P z) :
+    (leastOfBdd b Hb Hinh : ℤ) = leastOfBdd b' Hb' Hinh := by grind
 
-/--
-Definition of `greatestOfBdd` / `greatestOfBdd` 的定义
+/-- A computable version of `exists_greatest_of_bdd`: given a decidable predicate on the
+integers, with an explicit upper bound and a proof that it is somewhere true, return
+the greatest value for which the predicate is true. -/
+/-
+**Int.greatestOfBdd** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：greatestOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z
+ : Int, P z -> z <= b) (Hinh : exists z : Int, P z) : { ub : Int // P ub ∧ foral
+l z : Int, P z -> z <= ub }
+参数：b : Int；Hb : forall z : Int, P z -> z <= b；Hinh : exists z : Int, P z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition greatestOfBdd
-  signature: {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z : Int, P z -> z <= b)
-  body: have Hbdd' : forall z : Int, P (-z) -> -b <= z := fun _ h => neg_le.1 (Hb _ h)
-  have Hinh' : exists z : Int, P (-z) :=
+--- 原说明 ---
+A computable version of `exists_greatest_of_bdd`: given a decidable predicate on
+ the
+integers, with an explicit upper bound and a proof that it is somewhere true, re
+turn
+the greatest value for which the predicate is true.
+-/
+def greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → z ≤ b)
+    (Hinh : ∃ z : ℤ, P z) : { ub : ℤ // P ub ∧ ∀ z : ℤ, P z → z ≤ ub } :=
+  have Hbdd' : ∀ z : ℤ, P (-z) → -b ≤ z := fun _ h => neg_le.1 (Hb _ h)
+  have Hinh' : ∃ z : ℤ, P (-z) :=
     let ⟨elt, Helt⟩ := Hinh
     ⟨-elt, by rw [neg_neg]; exact Helt⟩
   let ⟨lb, Plb, al⟩ := leastOfBdd (-b) Hbdd' Hinh'
-⟨-lb, Plb, fun z h => le_neg.1 al _ by rwa [neg_neg]⟩
+  ⟨-lb, Plb, fun z h => le_neg.1 <| al _ <| by rwa [neg_neg]⟩
 
-中文:
-定义 greatestOfBdd
-  签名: {P : 整数 -> 命题} [DecidablePred P] (b : 整数) (Hb : 对任意 z : 整数, P z -> z <= b)
-  定义体: have Hbdd' : forall z : Int, P (-z) -> -b <= z := fun _ h => neg_le.1 (Hb _ h)
-  have Hinh' : exists z : Int, P (-z) :=
-    let ⟨elt, Helt⟩ := Hinh
-    ⟨-elt, by rw [neg_neg]; exact Helt⟩
-  let ⟨lb, Plb, al⟩ := leastOfBdd (-b) Hbdd' Hinh'
-⟨-lb, Plb, fun z h => le_neg.1 al _ by rwa [neg_neg]⟩
+/-- `Int.greatestOfBdd` is the greatest integer satisfying a predicate which is false for all
+`z : ℤ` with `b < z` for some fixed `b : ℤ`. -/
+/-
+**Int.isGreatest_coe_greatestOfBdd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：isGreatest_coe_greatestOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int)
+ (Hb : forall z : Int, P z -> z <= b) (Hinh : exists z : Int, P z) : IsGreatest 
+{z | P z} (greatestOfBdd b Hb Hinh : Int)
+参数：b : Int；Hb : forall z : Int, P z -> z <= b；Hinh : exists z : Int, P z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-Depends on / 依赖: le_neg, leastOfBdd, neg_le, neg_neg
+--- 原说明 ---
+`Int.greatestOfBdd` is the greatest integer satisfying a predicate which is fals
+e for all
+`z : ℤ` with `b < z` for some fixed `b : ℤ`.
 -/
-def greatestOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int) (Hb : forall z : Int, P z -> z <= b)
-    (Hinh : exists z : Int, P z) : { ub : Int // P ub ∧ forall z : Int, P z -> z <= ub } :=
-  have Hbdd' : forall z : Int, P (-z) -> -b <= z := fun _ h => neg_le.1 (Hb _ h)
-  have Hinh' : exists z : Int, P (-z) :=
-    let ⟨elt, Helt⟩ := Hinh
-    ⟨-elt, by rw [neg_neg]; exact Helt⟩
-  let ⟨lb, Plb, al⟩ := leastOfBdd (-b) Hbdd' Hinh'
-⟨-lb, Plb, fun z h => le_neg.1 al _ by rwa [neg_neg]⟩
-
-/--
-lemma `isGreatest_coe_greatestOfBdd` / 引理 `isGreatest_coe_greatestOfBdd`
-
-English:
-lemma isGreatest_coe_greatestOfBdd
-  statement: {P : Int -> Prop} [DecidablePred P] (b : Int)
-  proof: (greatestOfBdd b Hb Hinh).2
-
-中文:
-引理 isGreatest_coe_greatestOfBdd
-  结论: {P : 整数 -> 命题} [DecidablePred P] (b : 整数)
-  证明: (greatestOfBdd b Hb Hinh).2
-
-Depends on / 依赖: greatestOfBdd
--/
-lemma isGreatest_coe_greatestOfBdd {P : Int -> Prop} [DecidablePred P] (b : Int)
-    (Hb : forall z : Int, P z -> z <= b) (Hinh : exists z : Int, P z) :
-    IsGreatest {z | P z} (greatestOfBdd b Hb Hinh : Int) :=
+lemma isGreatest_coe_greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ)
+    (Hb : ∀ z : ℤ, P z → z ≤ b) (Hinh : ∃ z : ℤ, P z) :
+    IsGreatest {z | P z} (greatestOfBdd b Hb Hinh : ℤ) :=
   (greatestOfBdd b Hb Hinh).2
 
 /--
-theorem `exists_greatest_of_bdd` / 定理 `exists_greatest_of_bdd`
+If `P : ℤ → Prop` is a predicate such that the set `{m : P m}` is bounded above and nonempty,
+then this set has the greatest element. This lemma uses classical logic to avoid assumption
+`[DecidablePred P]`. See `Int.greatestOfBdd` for a constructive counterpart. -/
+/-
+**Int.exists_greatest_of_bdd** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：exists_greatest_of_bdd {P : Int -> Prop} (Hbdd : exists b : Int, forall z 
+: Int, P z -> z <= b) (Hinh : exists z : Int, P z) : exists ub : Int, P ub ∧ for
+all z : Int, P z -> z <= ub
+参数：Hbdd : exists b : Int, forall z : Int, P z -> z <= b；Hinh : exists z : Int, P
+ z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem exists_greatest_of_bdd
-  proof: by
-  classical
-  let ⟨b, Hb⟩ := Hbdd
-  let ⟨lb, H⟩ := greatestOfBdd b Hb Hinh
-  exact ⟨lb, H⟩
-
-中文:
-定理 存在_greatest_of_bdd
-  证明: by
-  classical
-  let ⟨b, Hb⟩ := Hbdd
-  let ⟨lb, H⟩ := greatestOfBdd b Hb Hinh
-  exact ⟨lb, H⟩
-
-Depends on / 依赖: classical, greatestOfBdd
+--- 原说明 ---
+If `P : ℤ → Prop` is a predicate such that the set `{m : P m}` is bounded above 
+and nonempty,
+then this set has the greatest element. This lemma uses classical logic to avoid
+ assumption
+`[DecidablePred P]`. See `Int.greatestOfBdd` for a constructive counterpart.
 -/
 theorem exists_greatest_of_bdd
-    {P : Int -> Prop}
-    (Hbdd : exists b : Int, forall z : Int, P z -> z <= b)
-    (Hinh : exists z : Int, P z) : exists ub : Int, P ub ∧ forall z : Int, P z -> z <= ub := by
+    {P : ℤ → Prop}
+    (Hbdd : ∃ b : ℤ, ∀ z : ℤ, P z → z ≤ b)
+    (Hinh : ∃ z : ℤ, P z) : ∃ ub : ℤ, P ub ∧ ∀ z : ℤ, P z → z ≤ ub := by
   classical
   let ⟨b, Hb⟩ := Hbdd
   let ⟨lb, H⟩ := greatestOfBdd b Hb Hinh
   exact ⟨lb, H⟩
-
-/--
-theorem `coe_greatestOfBdd_eq` / 定理 `coe_greatestOfBdd_eq`
-
-English:
-theorem coe_greatestOfBdd_eq
-  statement: {P : Int -> Prop} [DecidablePred P] {b b' : Int}
-  proof: by grind
-
-中文:
-定理 coe_greatestOfBdd_eq
-  结论: {P : 整数 -> 命题} [DecidablePred P] {b b' : 整数}
-  证明: by grind
+/-
+**Int.coe_greatestOfBdd_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：coe_greatestOfBdd_eq {P : Int -> Prop} [DecidablePred P] {b b' : Int} (Hb 
+: forall z : Int, P z -> z <= b) (Hb' : forall z : Int, P z -> z <= b') (Hinh : 
+exists z : Int, P z) : (greatestOfBdd b Hb Hinh : Int) = greatestOfBdd b' Hb' Hi
+nh
+参数：Hb : forall z : Int, P z -> z <= b；Hb' : forall z : Int, P z -> z <= b'；Hinh 
+: exists z : Int, P z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_greatestOfBdd_eq {P : Int -> Prop} [DecidablePred P] {b b' : Int}
-    (Hb : forall z : Int, P z -> z <= b) (Hb' : forall z : Int, P z -> z <= b') (Hinh : exists z : Int, P z) :
-    (greatestOfBdd b Hb Hinh : Int) = greatestOfBdd b' Hb' Hinh := by grind
+theorem coe_greatestOfBdd_eq {P : ℤ → Prop} [DecidablePred P] {b b' : ℤ}
+    (Hb : ∀ z : ℤ, P z → z ≤ b) (Hb' : ∀ z : ℤ, P z → z ≤ b') (Hinh : ∃ z : ℤ, P z) :
+    (greatestOfBdd b Hb Hinh : ℤ) = greatestOfBdd b' Hb' Hinh := by grind
 
 end Int
+

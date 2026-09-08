@@ -37,36 +37,38 @@ variable {I : Type u} [SmallCategory I] [IsCofiltered I]
     {F : I ⥤ FintypeCat.{max u w}} (c : Cone <| F ⋙ toProfinite)
 
 /--
-lemma `exists_hom` / 引理 `exists_hom`
+A continuous map from a profinite set to a finite set factors through one of the components of
+the profinite set when written as a cofiltered limit of finite sets.
+-/
+/-
+**Profinite.exists_hom** 是 Mathlib 中的一个引理，位于命名空间 `Profinite`。
+形式化陈述：exists_hom (hc : IsLimit c) {X : FintypeCat} (f : c.pt ⟶ toProfinite.obj X
+) : exists (i : I) (g : F.obj i ⟶ X), f = c.π.app i ≫ toProfinite.map g
+参数：hc : IsLimit c；f : c.pt ⟶ toProfinite.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsLocallyConstant.iff_continuous`：iff_continuous {_ : TopologicalSpace Y
+} [DiscreteTopology Y] (f : X -> Y) : IsLocallyConstant f ↔ Continuous f
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `Profinite.exists_locallyConstant`：exists_locallyConstant {α : Type*} (hC
+ : IsLimit C) (f : LocallyConstant C.pt α) : exists (j : J) (g : LocallyConstant
+ (F.obj j) α), f = g.c…
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `LocallyConstant.congr_fun`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topol
+ogicalSpace X] {f g : LocallyConstant X Y}, f = g → ∀ (x : X), f x = g x
 
-English:
-lemma exists_hom
-  given: (hc : IsLimit c) {X : FintypeCat} (f : c.pt ⟶ toProfinite.obj X)
-  proof: by
-  have : DiscreteTopology (toProfinite.obj X) := ⟨rfl⟩
-  let f' : LocallyConstant c.pt (toProfinite.obj X) :=
-    ⟨f, (IsLocallyConstant.iff_continuous _).mpr f.hom.hom.continuous⟩
-  obtain ⟨i, g, h⟩ := exists_locallyConstant.{_, u} c hc f'
-  refine ⟨i, ⟨↾g⟩, ?_⟩
-  ext x
-  exact LocallyConstant.congr_fun h x
-
-中文:
-引理 存在_hom
-  条件: (hc : 是极限 c) {X : FintypeCat} (f : c.pt ⟶ toProfinite.obj X)
-  证明: by
-  have : DiscreteTopology (toProfinite.obj X) := ⟨rfl⟩
-  let f' : LocallyConstant c.pt (toProfinite.obj X) :=
-    ⟨f, (IsLocallyConstant.iff_continuous _).mpr f.hom.hom.continuous⟩
-  obtain ⟨i, g, h⟩ := exists_locallyConstant.{_, u} c hc f'
-  refine ⟨i, ⟨↾g⟩, ?_⟩
-  ext x
-  exact LocallyConstant.congr_fun h x
-
-Depends on / 依赖: DiscreteTopology, IsLocallyConstant, IsLocallyConstant.iff_continuous, LocallyConstant, LocallyConstant.congr_fun, c.pt, congr_fun, continuous, exists_locallyConstant, f.hom.hom.continuous, iff_continuous, toProfinite, toProfinite.obj
+--- 原说明 ---
+A continuous map from a profinite set to a finite set factors through one of the
+ components of
+the profinite set when written as a cofiltered limit of finite sets.
 -/
 lemma exists_hom (hc : IsLimit c) {X : FintypeCat} (f : c.pt ⟶ toProfinite.obj X) :
-    exists (i : I) (g : F.obj i ⟶ X), f = c.π.app i ≫ toProfinite.map g := by
+    ∃ (i : I) (g : F.obj i ⟶ X), f = c.π.app i ≫ toProfinite.map g := by
   have : DiscreteTopology (toProfinite.obj X) := ⟨rfl⟩
   let f' : LocallyConstant c.pt (toProfinite.obj X) :=
     ⟨f, (IsLocallyConstant.iff_continuous _).mpr f.hom.hom.continuous⟩
@@ -82,28 +84,27 @@ Given a cone in `Profinite`, consisting of finite sets and indexed by a cofilter
 we obtain a functor from the indexing category to `StructuredArrow c.pt toProfinite`.
 -/
 @[simps]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**Profinite.Extend.functor** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.Extend`。
+形式化陈述：functor : I ⥤ StructuredArrow c.pt toProfinite where obj i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : I ⥤ StructuredArrow c.pt toProfinite where
-  body: StructuredArrow.mk (c.π.app i)
-  map f := StructuredArrow.homMk (F.map f) (c.w f)
-
-中文:
-定义 functor
-  签名: : I ⥤ 结构化箭头 c.pt toProfinite where
-  定义体: StructuredArrow.mk (c.π.app i)
-  map f := StructuredArrow.homMk (F.map f) (c.w f)
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.mk
+--- 原说明 ---
+Given a cone in `Profinite`, consisting of finite sets and indexed by a cofilter
+ed category,
+we obtain a functor from the indexing category to `StructuredArrow c.pt toProfin
+ite`.
 -/
 def functor : I ⥤ StructuredArrow c.pt toProfinite where
   obj i := StructuredArrow.mk (c.π.app i)
   map f := StructuredArrow.homMk (F.map f) (c.w f)
 
 -- We check that the original diagram factors through `Profinite.Extend.functor`.
+/-
+**Profinite.Extend.** 是 Mathlib 中的一个示例，位于命名空间 `Profinite.Extend`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : functor c ⋙ StructuredArrow.proj c.pt toProfinite ≅ F := Iso.refl _
 
 /--
@@ -112,77 +113,92 @@ we obtain a functor from the opposite of the indexing category to
 `CostructuredArrow toProfinite.op ⟨c.pt⟩`.
 -/
 @[simps! obj map]
-/--
-Definition of `functorOp` / `functorOp` 的定义
+/-
+**Profinite.Extend.functorOp** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.Extend`。
+形式化陈述：functorOp : Iᵒᵖ ⥤ CostructuredArrow toProfinite.op ⟨c.pt⟩
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorOp
-  signature: : Iᵒᵖ ⥤ CostructuredArrow toProfinite.op ⟨c.pt⟩
-  body: (functor c).op ⋙ StructuredArrow.toCostructuredArrow _ _
-
-中文:
-定义 functorOp
-  签名: : Iᵒᵖ ⥤ CostructuredArrow toProfinite.op ⟨c.pt⟩
-  定义体: (functor c).op ⋙ StructuredArrow.toCostructuredArrow _ _
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.toCostructuredArrow, functor, toCostructuredArrow
+--- 原说明 ---
+Given a cone in `Profinite`, consisting of finite sets and indexed by a cofilter
+ed category,
+we obtain a functor from the opposite of the indexing category to
+`CostructuredArrow toProfinite.op ⟨c.pt⟩`.
 -/
 def functorOp : Iᵒᵖ ⥤ CostructuredArrow toProfinite.op ⟨c.pt⟩ :=
   (functor c).op ⋙ StructuredArrow.toCostructuredArrow _ _
 
 -- We check that the opposite of the original diagram factors through `Profinite.Extend.functorOp`.
+/-
+**Profinite.Extend.** 是 Mathlib 中的一个示例，位于命名空间 `Profinite.Extend`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : functorOp c ⋙ CostructuredArrow.proj toProfinite.op ⟨c.pt⟩ ≅ F.op := Iso.refl _
 
 set_option backward.isDefEq.respectTransparency false in
 attribute [local instance] uliftCategory in
 /--
-lemma `functor_initial` / 引理 `functor_initial`
+If the projection maps in the cone are epimorphic and the cone is limiting, then
+`Profinite.Extend.functor` is initial.
 
-English:
-lemma functor_initial
-  given: (hc : IsLimit c) [forall i, Epi (c.π.app i)]
-  statement: Initial (functor c)
-  proof: by
-  let e : I ≌ ULiftHom.{w} (ULift.{w} I) := ULiftHomULiftCategory.equiv _
-  suffices (e.inverse ⋙ functor c).Initial from initial_of_equivalence_comp e.inverse (functor c)
-  rw [initial_iff_of_isCofiltered (F := e.inverse ⋙ functor c)]
-  constructor
-  · intro ⟨_, X, (f : c.pt ⟶ _)⟩
-    obtain ⟨i, g, h⟩ := exists_hom c hc f
-    exact ⟨⟨i⟩, ⟨StructuredArrow.homMk g h.symm⟩⟩
-  · intro ⟨_, X, (f : c.pt ⟶ _)⟩ ⟨i⟩ ⟨_, (s : F.obj i ⟶ X), (w : f = c.π.app i ≫ _)⟩
-      ⟨_, (s' : F.obj i ⟶ X), (w' : f = c.π.app i ≫ _)⟩
-    simp only [StructuredArrow.hom_eq_iff,
-      StructuredArrow.comp_right]
-    refine ⟨⟨i⟩, 𝟙 _, ?_⟩
-    simp only [CategoryTheory.Functor.map_id]
-    rw [w] at w'
-exact toProfinite.map_injective Epi.left_cancellation _ _ w'
-
-中文:
-引理 functor_initial
-  条件: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
-  结论: 初始 (functor c)
-  证明: by
-  let e : I ≌ ULiftHom.{w} (ULift.{w} I) := ULiftHomULiftCategory.equiv _
-  suffices (e.inverse ⋙ functor c).Initial from initial_of_equivalence_comp e.inverse (functor c)
-  rw [initial_iff_of_isCofiltered (F := e.inverse ⋙ functor c)]
-  constructor
-  · intro ⟨_, X, (f : c.pt ⟶ _)⟩
-    obtain ⟨i, g, h⟩ := exists_hom c hc f
-    exact ⟨⟨i⟩, ⟨StructuredArrow.homMk g h.symm⟩⟩
-  · intro ⟨_, X, (f : c.pt ⟶ _)⟩ ⟨i⟩ ⟨_, (s : F.obj i ⟶ X), (w : f = c.π.app i ≫ _)⟩
-      ⟨_, (s' : F.obj i ⟶ X), (w' : f = c.π.app i ≫ _)⟩
-    simp only [StructuredArrow.hom_eq_iff,
-      StructuredArrow.comp_right]
-    refine ⟨⟨i⟩, 𝟙 _, ?_⟩
-    simp only [CategoryTheory.Functor.map_id]
-    rw [w] at w'
-exact toProfinite.map_injective Epi.left_cancellation _ _ w'
-
-Depends on / 依赖: F.obj, Initial, StructuredArrow, StructuredArrow.homMk, ULiftHom, ULiftHomULiftCategory, ULiftHomULiftCategory.equiv, c.pt, e.inverse, exists_hom, functor, h.symm, initial_iff_of_isCofiltered, initial_of_equivalence_comp, inverse
+TODO: investigate how to weaken the assumption `∀ i, Epi (c.π.app i)` to
+`∀ i, ∃ j (_ : j ⟶ i), Epi (c.π.app j)`.
 -/
-lemma functor_initial (hc : IsLimit c) [forall i, Epi (c.π.app i)] : Initial (functor c) := by
+/-
+**Profinite.Extend.functor_initial** 是 Mathlib 中的一个引理，位于命名空间 `Profinite.Extend`。
+形式化陈述：functor_initial (hc : IsLimit c) [forall i, Epi (c.π.app i)] : Initial (fu
+nctor c)
+参数：hc : IsLimit c；c.π.app i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.initial_iff_of_isCofiltered`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.IsCofiltered.toIsCofilteredOrEmpty`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C],   Ca
+tegoryTheory.IsCofilteredOrEmpty C
+· 使用定理 `CategoryTheory.instIsCofilteredULiftHom`：∀ (C : Type u) [inst : Category
+Theory.Category.{v, u} C] [CategoryTheory.IsCofiltered C],   CategoryTheory.IsCo
+filtered (CategoryTheory.ULif…
+· 使用定理 `CategoryTheory.instIsCofilteredULift`：∀ (C : Type u) [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.IsCofiltered C],   CategoryTheory.IsCofil
+tered (ULift.{u₂, u} C)
+· 使用引理 `Profinite.exists_hom`：exists_hom (hc : IsLimit c) {X : FintypeCat} (f : 
+c.pt ⟶ toProfinite.obj X) : exists (i : I) (g : F.obj i ⟶ X), f = c.π.app i ≫ to
+Profinite.…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `instFaithfulFintypeCatProfiniteToProfinite`：FintypeCat.toProfinite.Faith
+ful
+· 使用定理 `CategoryTheory.Epi.left_cancellation`：∀ {C : Type u} {inst : CategoryThe
+ory.Category.{v, u} C} {X Y : C} {f : X ⟶ Y} [self : CategoryTheory.Epi f] {Z : 
+C}   (g h : Y ⟶ Z), Catego…
+· 使用定理 `CategoryTheory.Functor.initial_of_equivalence_comp`：initial_of_equivalen
+ce_comp [IsEquivalence F] [Initial (F ⋙ G)] : Initial G where out d
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+
+--- 原说明 ---
+If the projection maps in the cone are epimorphic and the cone is limiting, then
+`Profinite.Extend.functor` is initial.
+
+TODO: investigate how to weaken the assumption `∀ i, Epi (c.π.app i)` to
+`∀ i, ∃ j (_ : j ⟶ i), Epi (c.π.app j)`.
+-/
+lemma functor_initial (hc : IsLimit c) [∀ i, Epi (c.π.app i)] : Initial (functor c) := by
   let e : I ≌ ULiftHom.{w} (ULift.{w} I) := ULiftHomULiftCategory.equiv _
   suffices (e.inverse ⋙ functor c).Initial from initial_of_equivalence_comp e.inverse (functor c)
   rw [initial_iff_of_isCofiltered (F := e.inverse ⋙ functor c)]
@@ -197,34 +213,36 @@ lemma functor_initial (hc : IsLimit c) [forall i, Epi (c.π.app i)] : Initial (f
     refine ⟨⟨i⟩, 𝟙 _, ?_⟩
     simp only [CategoryTheory.Functor.map_id]
     rw [w] at w'
-exact toProfinite.map_injective Epi.left_cancellation _ _ w'
+    exact toProfinite.map_injective <| Epi.left_cancellation _ _ w'
 
 /--
-lemma `functorOp_final` / 引理 `functorOp_final`
-
-English:
-lemma functorOp_final
-  given: (hc : IsLimit c) [forall i, Epi (c.π.app i)]
-  statement: Final (functorOp c)
-  proof: by
-  have := functor_initial c hc
-  have : ((StructuredArrow.toCostructuredArrow toProfinite c.pt)).IsEquivalence :=
-    (inferInstance : (structuredArrowOpEquivalence _ _).functor.IsEquivalence)
-  exact Functor.final_comp (functor c).op _
-
-中文:
-引理 functorOp_final
-  条件: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)]
-  结论: 终 (functorOp c)
-  证明: by
-  have := functor_initial c hc
-  have : ((StructuredArrow.toCostructuredArrow toProfinite c.pt)).IsEquivalence :=
-    (inferInstance : (structuredArrowOpEquivalence _ _).functor.IsEquivalence)
-  exact Functor.final_comp (functor c).op _
-
-Depends on / 依赖: Functor, Functor.final_comp, IsEquivalence, StructuredArrow, StructuredArrow.toCostructuredArrow, c.pt, final_comp, functor, functor.IsEquivalence, functor_initial, structuredArrowOpEquivalence, toCostructuredArrow, toProfinite
+If the projection maps in the cone are epimorphic and the cone is limiting, then
+`Profinite.Extend.functorOp` is final.
 -/
-lemma functorOp_final (hc : IsLimit c) [forall i, Epi (c.π.app i)] : Final (functorOp c) := by
+/-
+**Profinite.Extend.functorOp_final** 是 Mathlib 中的一个引理，位于命名空间 `Profinite.Extend`。
+形式化陈述：functorOp_final (hc : IsLimit c) [forall i, Epi (c.π.app i)] : Final (func
+torOp c)
+参数：hc : IsLimit c；c.π.app i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Profinite.Extend.functor_initial`：functor_initial (hc : IsLimit c) [fora
+ll i, Epi (c.π.app i)] : Initial (functor c)
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
+· 使用定理 `CategoryTheory.Functor.final_of_isRightAdjoint`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+
+--- 原说明 ---
+If the projection maps in the cone are epimorphic and the cone is limiting, then
+`Profinite.Extend.functorOp` is final.
+-/
+lemma functorOp_final (hc : IsLimit c) [∀ i, Epi (c.π.app i)] : Final (functorOp c) := by
   have := functor_initial c hc
   have : ((StructuredArrow.toCostructuredArrow toProfinite c.pt)).IsEquivalence :=
     (inferInstance : (structuredArrowOpEquivalence _ _).functor.IsEquivalence)
@@ -243,38 +261,33 @@ Whiskering this cone with `Profinite.Extend.functor c` gives `G.mapCone c` as we
 example below.
 -/
 @[simps]
-/--
-Definition of `cone` / `cone` 的定义
+/-
+**Profinite.Extend.cone** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.Extend`。
+形式化陈述：cone (S : Profinite) : Cone (StructuredArrow.proj S toProfinite ⋙ toProfin
+ite ⋙ G) where pt
+参数：S : Profinite。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cone
-  signature: (S : Profinite)
-  body: G.obj S
-  π := {
-    app := fun i => G.map i.hom
-    naturality := fun _ _ f => (by simp [← map_comp]) }
+--- 原说明 ---
+Given a functor `G` from `Profinite` and `S : Profinite`, we obtain a cone on
+`(StructuredArrow.proj S toProfinite ⋙ toProfinite ⋙ G)` with cone point `G.obj 
+S`.
 
-example : G.mapCone c = (cone G c.pt).whisker (functor c) := rfl
-
-中文:
-定义 cone
-  签名: (S : Profinite)
-  定义体: G.obj S
-  π := {
-    app := fun i => G.map i.hom
-    naturality := fun _ _ f => (by simp [← map_comp]) }
-
-example : G.mapCone c = (cone G c.pt).whisker (functor c) := rfl
-
-Depends on / 依赖: G.obj
+Whiskering this cone with `Profinite.Extend.functor c` gives `G.mapCone c` as we
+ check in the
+example below.
 -/
 def cone (S : Profinite) :
     Cone (StructuredArrow.proj S toProfinite ⋙ toProfinite ⋙ G) where
   pt := G.obj S
   π := {
-    app := fun i => G.map i.hom
-    naturality := fun _ _ f => (by simp [← map_comp]) }
-
+    app := fun i ↦ G.map i.hom
+    naturality := fun _ _ f ↦ (by simp [← map_comp]) }
+/-
+**Profinite.Extend.** 是 Mathlib 中的一个示例，位于命名空间 `Profinite.Extend`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : G.mapCone c = (cone G c.pt).whisker (functor c) := rfl
 
 /--
@@ -282,22 +295,17 @@ If `c` and `G.mapCone c` are limit cones and the projection maps in `c` are epim
 then `cone G c.pt` is a limit cone.
 -/
 noncomputable
-/--
-Definition of `isLimitCone` / `isLimitCone` 的定义
-
-English:
-definition isLimitCone
-  signature: (hc : IsLimit c) [forall i, Epi (c.π.app i)] (hc' : IsLimit <| G.mapCone c)
-  body: (functor_initial c hc).isLimitWhiskerEquiv _ _ hc'
-
-中文:
-定义 isLimitCone
-  签名: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)] (hc' : 是极限 <| G.mapCone c)
-  定义体: (functor_initial c hc).isLimitWhiskerEquiv _ _ hc'
-
-Depends on / 依赖: functor_initial, isLimitWhiskerEquiv
+/-
+**Profinite.Extend.isLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.Extend`。
+形式化陈述：isLimitCone (hc : IsLimit c) [forall i, Epi (c.π.app i)] (hc' : IsLimit <|
+ G.mapCone c) : IsLimit (cone G c.pt)
+参数：hc : IsLimit c；c.π.app i；hc' : IsLimit <| G.mapCone c。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Profinite.Extend.functor_initial`：functor_initial (hc : IsLimit c) [fora
+ll i, Epi (c.π.app i)] : Initial (functor c)
 -/
-def isLimitCone (hc : IsLimit c) [forall i, Epi (c.π.app i)] (hc' : IsLimit <| G.mapCone c) :
+def isLimitCone (hc : IsLimit c) [∀ i, Epi (c.π.app i)] (hc' : IsLimit <| G.mapCone c) :
     IsLimit (cone G c.pt) := (functor_initial c hc).isLimitWhiskerEquiv _ _ hc'
 
 end Limit
@@ -315,50 +323,38 @@ Whiskering this cocone with `Profinite.Extend.functorOp c` gives `G.mapCocone c.
 the example below.
 -/
 @[simps]
-/--
-Definition of `cocone` / `cocone` 的定义
+/-
+**Profinite.Extend.cocone** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.Extend`。
+形式化陈述：cocone (S : Profinite) : Cocone (CostructuredArrow.proj toProfinite.op ⟨S⟩
+ ⋙ toProfinite.op ⋙ G) where pt
+参数：S : Profinite。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cocone
-  signature: (S : Profinite)
-  body: G.obj ⟨S⟩
-  ι := {
-    app := fun i => G.map i.hom
-    naturality := fun _ _ f => (by
-      have := f.w
-      simp only [op_obj, const_obj_obj, op_map, CostructuredArrow.right_eq_id, const_obj_map,
-        Category.comp_id] at this
-      simp [← map_comp, this]) }
+--- 原说明 ---
+Given a functor `G` from `Profiniteᵒᵖ` and `S : Profinite`, we obtain a cocone o
+n
+`(CostructuredArrow.proj toProfinite.op ⟨S⟩ ⋙ toProfinite.op ⋙ G)` with cocone p
+oint `G.obj ⟨S⟩`.
 
-example : G.mapCocone c.op = (cocone G c.pt).whisker (functorOp c) := rfl
-
-中文:
-定义 cocone
-  签名: (S : Profinite)
-  定义体: G.obj ⟨S⟩
-  ι := {
-    app := fun i => G.map i.hom
-    naturality := fun _ _ f => (by
-      have := f.w
-      simp only [op_obj, const_obj_obj, op_map, CostructuredArrow.right_eq_id, const_obj_map,
-        Category.comp_id] at this
-      simp [← map_comp, this]) }
-
-example : G.mapCocone c.op = (cocone G c.pt).whisker (functorOp c) := rfl
-
-Depends on / 依赖: G.obj
+Whiskering this cocone with `Profinite.Extend.functorOp c` gives `G.mapCocone c.
+op` as we check in
+the example below.
 -/
 def cocone (S : Profinite) :
     Cocone (CostructuredArrow.proj toProfinite.op ⟨S⟩ ⋙ toProfinite.op ⋙ G) where
   pt := G.obj ⟨S⟩
   ι := {
-    app := fun i => G.map i.hom
-    naturality := fun _ _ f => (by
+    app := fun i ↦ G.map i.hom
+    naturality := fun _ _ f ↦ (by
       have := f.w
       simp only [op_obj, const_obj_obj, op_map, CostructuredArrow.right_eq_id, const_obj_map,
         Category.comp_id] at this
       simp [← map_comp, this]) }
-
+/-
+**Profinite.Extend.** 是 Mathlib 中的一个示例，位于命名空间 `Profinite.Extend`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : G.mapCocone c.op = (cocone G c.pt).whisker (functorOp c) := rfl
 
 /--
@@ -366,22 +362,17 @@ If `c` is a limit cone, `G.mapCocone c.op` is a colimit cone and the projection 
 are epimorphic, then `cocone G c.pt` is a colimit cone.
 -/
 noncomputable
-/--
-Definition of `isColimitCocone` / `isColimitCocone` 的定义
-
-English:
-definition isColimitCocone
-  signature: (hc : IsLimit c) [forall i, Epi (c.π.app i)] (hc' : IsColimit <| G.mapCocone c.op)
-  body: (functorOp_final c hc).isColimitWhiskerEquiv _ _ hc'
-
-中文:
-定义 isColimitCocone
-  签名: (hc : 是极限 c) [对任意 i, 满态射 (c.π.app i)] (hc' : 是余极限 <| G.mapCocone c.op)
-  定义体: (functorOp_final c hc).isColimitWhiskerEquiv _ _ hc'
-
-Depends on / 依赖: functorOp_final, isColimitWhiskerEquiv
+/-
+**Profinite.Extend.isColimitCocone** 是 Mathlib 中的一个定义，位于命名空间 `Profinite.Extend`。
+形式化陈述：isColimitCocone (hc : IsLimit c) [forall i, Epi (c.π.app i)] (hc' : IsColi
+mit <| G.mapCocone c.op) : IsColimit (cocone G c.pt)
+参数：hc : IsLimit c；c.π.app i；hc' : IsColimit <| G.mapCocone c.op。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Profinite.Extend.functorOp_final`：functorOp_final (hc : IsLimit c) [fora
+ll i, Epi (c.π.app i)] : Final (functorOp c)
 -/
-def isColimitCocone (hc : IsLimit c) [forall i, Epi (c.π.app i)] (hc' : IsColimit <| G.mapCocone c.op) :
+def isColimitCocone (hc : IsLimit c) [∀ i, Epi (c.π.app i)] (hc' : IsColimit <| G.mapCocone c.op) :
     IsColimit (cocone G c.pt) := (functorOp_final c hc).isColimitWhiskerEquiv _ _ hc'
 
 end Colimit
@@ -395,93 +386,82 @@ section ProfiniteAsLimit
 variable (S : Profinite.{u})
 
 /--
-Definition of `fintypeDiagram'` / `fintypeDiagram'` 的定义
+A functor `StructuredArrow S toProfinite ⥤ FintypeCat` whose limit in `Profinite` is isomorphic
+to `S`.
+-/
+/-
+**Profinite.fintypeDiagram'** 是 Mathlib 中的一个缩写定义，位于命名空间 `Profinite`。
+形式化陈述：fintypeDiagram' : StructuredArrow S toProfinite ⥤ FintypeCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fintypeDiagram'
-  signature: : StructuredArrow S toProfinite ⥤ FintypeCat
-  body: StructuredArrow.proj S toProfinite
-
-中文:
-缩写 fintypeDiagram'
-  签名: : 结构化箭头 S toProfinite ⥤ FintypeCat
-  定义体: StructuredArrow.proj S toProfinite
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.proj, toProfinite
+--- 原说明 ---
+A functor `StructuredArrow S toProfinite ⥤ FintypeCat` whose limit in `Profinite
+` is isomorphic
+to `S`.
 -/
 abbrev fintypeDiagram' : StructuredArrow S toProfinite ⥤ FintypeCat :=
   StructuredArrow.proj S toProfinite
 
-/--
-Definition of `diagram'` / `diagram'` 的定义
+/-- An abbreviation for `S.fintypeDiagram' ⋙ toProfinite`. -/
+/-
+**Profinite.diagram'** 是 Mathlib 中的一个缩写定义，位于命名空间 `Profinite`。
+形式化陈述：diagram' : StructuredArrow S toProfinite ⥤ Profinite
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation diagram'
-  signature: : StructuredArrow S toProfinite ⥤ Profinite
-  body: S.fintypeDiagram' ⋙ toProfinite
-
-中文:
-缩写 diagram'
-  签名: : 结构化箭头 S toProfinite ⥤ Profinite
-  定义体: S.fintypeDiagram' ⋙ toProfinite
-
-Depends on / 依赖: S.fintypeDiagram, fintypeDiagram, toProfinite
+--- 原说明 ---
+An abbreviation for `S.fintypeDiagram' ⋙ toProfinite`.
 -/
 abbrev diagram' : StructuredArrow S toProfinite ⥤ Profinite :=
   S.fintypeDiagram' ⋙ toProfinite
 
-/--
-Definition of `asLimitCone'` / `asLimitCone'` 的定义
+/-- A cone over `S.diagram'` whose cone point is `S`. -/
+/-
+**Profinite.asLimitCone'** 是 Mathlib 中的一个缩写定义，位于命名空间 `Profinite`。
+形式化陈述：asLimitCone' : Cone (S.diagram')
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation asLimitCone'
-  signature: : Cone (S.diagram')
-  body: cone (𝟭 _) S
-
-中文:
-缩写 asLimitCone'
-  签名: : 锥 (S.diagram')
-  定义体: cone (𝟭 _) S
+--- 原说明 ---
+A cone over `S.diagram'` whose cone point is `S`.
 -/
 abbrev asLimitCone' : Cone (S.diagram') := cone (𝟭 _) S
-
+/-
+**Profinite.** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : DiscreteQuotient S) : Epi (S.asLimitCone.π.app i) :=
   (epi_iff_surjective _).mpr i.proj_surjective
 
-/--
-Definition of `asLimit'` / `asLimit'` 的定义
+/-- `S.asLimitCone'` is a limit cone. -/
+/-
+**Profinite.asLimit'** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：asLimit' : IsLimit S.asLimitCone'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Profinite.instEpiAppDiscreteQuotientCarrierToTopTotallyDisconnectedSpace
+πAsLimitCone`：∀ (S : Profinite) (i : DiscreteQuotient ↑S.toTop), CategoryTheory.
+Epi (S.asLimitCone.π.app i)
 
-English:
-definition asLimit'
-  signature: : IsLimit S.asLimitCone'
-  body: isLimitCone _ (𝟭 _) S.asLimit S.asLimit
-
-中文:
-定义 asLimit'
-  签名: : 是极限 S.asLimitCone'
-  定义体: isLimitCone _ (𝟭 _) S.asLimit S.asLimit
-
-Depends on / 依赖: S.asLimit, asLimit, isLimitCone
+--- 原说明 ---
+`S.asLimitCone'` is a limit cone.
 -/
 noncomputable def asLimit' : IsLimit S.asLimitCone' := isLimitCone _ (𝟭 _) S.asLimit S.asLimit
 
-/--
-Definition of `lim'` / `lim'` 的定义
+/-- A bundled version of `S.asLimitCone'` and `S.asLimit'`. -/
+/-
+**Profinite.lim'** 是 Mathlib 中的一个定义，位于命名空间 `Profinite`。
+形式化陈述：lim' : LimitCone S.diagram'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lim'
-  signature: : LimitCone S.diagram'
-  body: ⟨S.asLimitCone', S.asLimit'⟩
-
-中文:
-定义 lim'
-  签名: : 极限锥 S.diagram'
-  定义体: ⟨S.asLimitCone', S.asLimit'⟩
-
-Depends on / 依赖: S.asLimit, S.asLimitCone, asLimit, asLimitCone
+--- 原说明 ---
+A bundled version of `S.asLimitCone'` and `S.asLimit'`.
 -/
 noncomputable def lim' : LimitCone S.diagram' := ⟨S.asLimitCone', S.asLimit'⟩
 
 end ProfiniteAsLimit
 
 end Profinite
+

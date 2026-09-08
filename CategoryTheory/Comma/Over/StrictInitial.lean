@@ -32,36 +32,20 @@ set_option backward.isDefEq.respectTransparency false in
 `Over X` is equivalent to a point. -/
 @[simps, pp_with_univ]
 noncomputable
-/--
-Definition of `overEquivOfIsInitial` / `overEquivOfIsInitial` 的定义
-
-English:
-definition overEquivOfIsInitial
-  signature: [HasStrictInitialObjects C] (X : C) (h : IsInitial X)
-  body: Functor.star _
-  inverse := Functor.fromPUnit (.mk (𝟙 X))
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_to A.hom
-    Over.isoMk (asIso A.hom)
-  counitIso := Iso.refl _
-
-中文:
-定义 overEquivOfIsInitial
-  签名: [有StrictInitialObjects C] (X : C) (h : IsInitial X)
-  定义体: Functor.star _
-  inverse := Functor.fromPUnit (.mk (𝟙 X))
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_to A.hom
-    Over.isoMk (asIso A.hom)
-  counitIso := Iso.refl _
-
-Depends on / 依赖: Functor, Functor.star
+/-
+**CategoryTheory.overEquivOfIsInitial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：overEquivOfIsInitial [HasStrictInitialObjects C] (X : C) (h : IsInitial X)
+ : Over X ≌ Discrete PUnit.{w + 1} where functor
+参数：X : C；h : IsInitial X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def overEquivOfIsInitial [HasStrictInitialObjects C] (X : C) (h : IsInitial X) :
     Over X ≌ Discrete PUnit.{w + 1} where
   functor := Functor.star _
   inverse := Functor.fromPUnit (.mk (𝟙 X))
-  unitIso := NatIso.ofComponents fun A =>
+  unitIso := NatIso.ofComponents fun A ↦
     haveI := h.isIso_to A.hom
     Over.isoMk (asIso A.hom)
   counitIso := Iso.refl _
@@ -72,37 +56,21 @@ set_option backward.defeqAttrib.useBackward true in
 `Under X` is equivalent to a point. -/
 @[simps, pp_with_univ]
 noncomputable
-/--
-Definition of `underEquivOfIsTerminal` / `underEquivOfIsTerminal` 的定义
-
-English:
-definition underEquivOfIsTerminal
-  signature: [HasStrictTerminalObjects C] (X : C) (h : IsTerminal X)
-  body: Functor.star _
-  inverse := Functor.fromPUnit (.mk (𝟙 X))
-  counitIso := Iso.refl _
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_from A.hom
-    Under.isoMk (asIso A.hom).symm
-
-中文:
-定义 underEquivOfIsTerminal
-  签名: [有StrictTerminalObjects C] (X : C) (h : 是终止 X)
-  定义体: Functor.star _
-  inverse := Functor.fromPUnit (.mk (𝟙 X))
-  counitIso := Iso.refl _
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_from A.hom
-    Under.isoMk (asIso A.hom).symm
-
-Depends on / 依赖: Functor, Functor.star
+/-
+**CategoryTheory.underEquivOfIsTerminal** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：underEquivOfIsTerminal [HasStrictTerminalObjects C] (X : C) (h : IsTermina
+l X) : Under X ≌ Discrete PUnit.{w + 1} where functor
+参数：X : C；h : IsTerminal X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def underEquivOfIsTerminal [HasStrictTerminalObjects C] (X : C) (h : IsTerminal X) :
     Under X ≌ Discrete PUnit.{w + 1} where
   functor := Functor.star _
   inverse := Functor.fromPUnit (.mk (𝟙 X))
   counitIso := Iso.refl _
-  unitIso := NatIso.ofComponents fun A =>
+  unitIso := NatIso.ofComponents fun A ↦
     haveI := h.isIso_from A.hom
     Under.isoMk (asIso A.hom).symm
 
@@ -114,36 +82,25 @@ set_option backward.isDefEq.respectTransparency false in
 `P.Over Q X` is equivalent to a point. -/
 @[simps, pp_with_univ]
 noncomputable
-/--
-Definition of `MorphismProperty.overEquivOfIsInitial` / `MorphismProperty.overEquivOfIsInitial` 的定义
-
-English:
-definition MorphismProperty.overEquivOfIsInitial
-  signature: [HasStrictInitialObjects C] (X : C) (h : IsInitial X)
-  body: Functor.star _
-  inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_to A.hom
-    Over.isoMk (asIso A.hom)
-  counitIso := Iso.refl _
-
-中文:
-定义 MorphismProperty.overEquivOfIsInitial
-  签名: [有StrictInitialObjects C] (X : C) (h : IsInitial X)
-  定义体: Functor.star _
-  inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_to A.hom
-    Over.isoMk (asIso A.hom)
-  counitIso := Iso.refl _
-
-Depends on / 依赖: Functor, Functor.star
+/-
+**CategoryTheory.MorphismProperty.overEquivOfIsInitial** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     (P 
+Q : CategoryTheory.MorphismProperty C) →       [P.ContainsIdentities] →         
+[inst_2 : Q.IsMultiplicative] →           [Q.RespectsIso] →             [Categor
+yTheory.Limits.HasStrictInitialObjects C] →               (X : C) → CategoryTheo
+ry.Limits.IsInitial X → (P.Over Q X ≌ CategoryTheory.Discrete PUnit.{w + 1})
+参数：P Q : CategoryTheory.MorphismProperty C；X : C；P.Over Q X ≌ CategoryTheory.Dis
+crete PUnit.{w + 1}。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
 -/
 def MorphismProperty.overEquivOfIsInitial [HasStrictInitialObjects C] (X : C) (h : IsInitial X) :
     P.Over Q X ≌ Discrete PUnit.{w + 1} where
   functor := Functor.star _
   inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
-  unitIso := NatIso.ofComponents fun A =>
+  unitIso := NatIso.ofComponents fun A ↦
     haveI := h.isIso_to A.hom
     Over.isoMk (asIso A.hom)
   counitIso := Iso.refl _
@@ -153,30 +110,19 @@ set_option backward.isDefEq.respectTransparency false in
 `P.Under Q X` is equivalent to a point. -/
 @[simps, pp_with_univ]
 noncomputable
-/--
-Definition of `MorphismProperty.underEquivOfIsTerminal` / `MorphismProperty.underEquivOfIsTerminal` 的定义
-
-English:
-definition MorphismProperty.underEquivOfIsTerminal
-  signature: [HasStrictTerminalObjects C] (X : C)
-  body: Functor.star _
-  inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
-  counitIso := Iso.refl _
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_from A.hom
-    Under.isoMk (asIso A.hom).symm
-
-中文:
-定义 MorphismProperty.underEquivOfIsTerminal
-  签名: [有StrictTerminalObjects C] (X : C)
-  定义体: Functor.star _
-  inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
-  counitIso := Iso.refl _
-  unitIso := NatIso.ofComponents fun A =>
-    haveI := h.isIso_from A.hom
-    Under.isoMk (asIso A.hom).symm
-
-Depends on / 依赖: Functor, Functor.star
+/-
+**CategoryTheory.MorphismProperty.underEquivOfIsTerminal** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     (P 
+Q : CategoryTheory.MorphismProperty C) →       [P.ContainsIdentities] →         
+[inst_2 : Q.IsMultiplicative] →           [Q.RespectsIso] →             [Categor
+yTheory.Limits.HasStrictTerminalObjects C] →               (X : C) → CategoryThe
+ory.Limits.IsTerminal X → (P.Under Q X ≌ CategoryTheory.Discrete PUnit.{w + 1})
+参数：P Q : CategoryTheory.MorphismProperty C；X : C；P.Under Q X ≌ CategoryTheory.Di
+screte PUnit.{w + 1}。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
 -/
 def MorphismProperty.underEquivOfIsTerminal [HasStrictTerminalObjects C] (X : C)
     (h : IsTerminal X) :
@@ -184,8 +130,9 @@ def MorphismProperty.underEquivOfIsTerminal [HasStrictTerminalObjects C] (X : C)
   functor := Functor.star _
   inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
   counitIso := Iso.refl _
-  unitIso := NatIso.ofComponents fun A =>
+  unitIso := NatIso.ofComponents fun A ↦
     haveI := h.isIso_from A.hom
     Under.isoMk (asIso A.hom).symm
 
 end CategoryTheory
+

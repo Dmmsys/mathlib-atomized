@@ -11,7 +11,7 @@ public import Lean.Meta.TryThis
 public import Batteries.Tactic.Lint.Misc
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-import Mathlib.Tactic.Linter.Header -- shake: keep
+import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Batteries.Tactic.Lint.Basic
 import Lean.Elab.Term.TermElabM
 
@@ -27,23 +27,23 @@ open Lean.Meta
 open Lean.Meta.Tactic.TryThis
 
 /--
-Definition of `collectTryThisSuggestions` / `collectTryThisSuggestions` 的定义
+Collects all suggestions from all `TryThisInfo`s in `trees`.
+Does not require context - works with context-free trees.
+-/
+/-
+**Lean.Elab.collectTryThisSuggestions** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab`。
+形式化陈述：PersistentArray Elab.InfoTree → Array Meta.Tactic.TryThis.Suggestion
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition collectTryThisSuggestions
-  signature: (trees : PersistentArray InfoTree)
-  body: trees.foldl (init := #[]) fun acc tree => go acc tree
-
-中文:
-定义 collectTryThisSuggestions
-  签名: (trees : PersistentArray InfoTree)
-  定义体: trees.foldl (init := #[]) fun acc tree => go acc tree
+--- 原说明 ---
+Collects all suggestions from all `TryThisInfo`s in `trees`.
+Does not require context - works with context-free trees.
 -/
 partial def collectTryThisSuggestions (trees : PersistentArray InfoTree) : Array Suggestion :=
   trees.foldl (init := #[]) fun acc tree => go acc tree
 where
   /-- Traverses an `InfoTree` to collect `TryThisInfo` suggestions. -/
-  go (acc : Array Suggestion) : InfoTree -> Array Suggestion
+  go (acc : Array Suggestion) : InfoTree → Array Suggestion
     | .context _ t => go acc t
     | .node i children =>
       let acc := match i with
@@ -58,20 +58,33 @@ where
 namespace InfoTree
 
 /--
-Definition of `findSomeM?` / `findSomeM?` 的定义
+Finds the first result of `← f ctx info children` which is `some a`, descending the
+tree from the top. Merges and updates contexts as it descends the tree.
 
-English:
-definition findSomeM?
-  signature: {m : Type -> Type} [Monad m] {α}
-  body: go ctx? t
-
-中文:
-定义 findSomeM?
-  签名: {m : 类型 -> 类型} [单子 m] {α}
-  定义体: go ctx? t
+`f` is **only** evaluated on nodes when some context is present. An initial context should be
+provided via the `ctx?` argument if invoking `findSomeM?` during a larger traversal of the
+infotree. A failure to provide `ctx? := some ctx` when `t` is not the outermost `InfoTree` is thus
+likely to cause `findSomeM?` to always return `none`.
 -/
-partial def findSomeM? {m : Type -> Type} [Monad m] {α}
-    (f : ContextInfo -> Info -> PersistentArray InfoTree -> m (Option α))
+/-
+**Lean.Elab.InfoTree.findSomeM** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.InfoTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Finds the first result of `← f ctx info children` which is `some a`, descending 
+the
+tree from the top. Merges and updates contexts as it descends the tree.
+
+`f` is **only** evaluated on nodes when some context is present. An initial cont
+ext should be
+provided via the `ctx?` argument if invoking `findSomeM?` during a larger traver
+sal of the
+infotree. A failure to provide `ctx? := some ctx` when `t` is not the outermost 
+`InfoTree` is thus
+likely to cause `findSomeM?` to always return `none`.
+-/
+partial def findSomeM? {m : Type → Type} [Monad m] {α}
+    (f : ContextInfo → Info → PersistentArray InfoTree → m (Option α))
     (t : InfoTree) (ctx? : Option ContextInfo := none) : m (Option α) :=
   go ctx? t
 where
@@ -88,89 +101,128 @@ where
   | hole _ => pure none
 
 /--
-Definition of `findSome?` / `findSome?` 的定义
+Finds the first result of `f ctx info children` which is `some a`, descending the
+tree from the top. Merges and updates contexts as it descends the tree.
 
-English:
-definition findSome?
-  signature: {α} (f : ContextInfo -> Info -> PersistentArray InfoTree -> Option α)
-  body: Id.run t.findSomeM? f ctx?
-
-中文:
-定义 findSome?
-  签名: {α} (f : ContextInfo -> Info -> PersistentArray InfoTree -> 选项类型 α)
-  定义体: Id.run t.findSomeM? f ctx?
+`f` is **only** evaluated on nodes when some context is present. An initial context should be
+provided via the `ctx?` argument if invoking `findSome?` during a larger traversal of the infotree.
+A failure to provide `ctx? := some ctx` when `t` is not the outermost `InfoTree` is thus likely to
+cause `findSome?` to always return `none`.
 -/
-def findSome? {α} (f : ContextInfo -> Info -> PersistentArray InfoTree -> Option α)
+/-
+**Lean.Elab.InfoTree.findSome** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.InfoTree`。
+形式化陈述：findSome? {α} (f : ContextInfo -> Info -> PersistentArray InfoTree -> Opti
+on α) (t : InfoTree) (ctx? : Option ContextInfo
+参数：f : ContextInfo -> Info -> PersistentArray InfoTree -> Option α；t : InfoTree。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Finds the first result of `f ctx info children` which is `some a`, descending th
+e
+tree from the top. Merges and updates contexts as it descends the tree.
+
+`f` is **only** evaluated on nodes when some context is present. An initial cont
+ext should be
+provided via the `ctx?` argument if invoking `findSome?` during a larger travers
+al of the infotree.
+A failure to provide `ctx? := some ctx` when `t` is not the outermost `InfoTree`
+ is thus likely to
+cause `findSome?` to always return `none`.
+-/
+def findSome? {α} (f : ContextInfo → Info → PersistentArray InfoTree → Option α)
     (t : InfoTree) (ctx? : Option ContextInfo := none) : Option α :=
-Id.run t.findSomeM? f ctx?
+  Id.run <| t.findSomeM? f ctx?
 
 /--
-Definition of `onHighestNode?` / `onHighestNode?` 的定义
+Returns the value of `f ctx info children` on the outermost `.node info children` which has
+context, having merged and updated contexts appropriately.
 
-English:
-definition onHighestNode?
-  signature: {α} (t : InfoTree) (ctx? : Option ContextInfo)
-  body: t.findSome? (ctx? := ctx?) fun ctx i ch => some (f ctx i ch)
+If `ctx?` is `some ctx`, `ctx` is used as an initial context. A `ctx?` of `none` should **only** be
+used when operating on the first node of the entire infotree. Otherwise, it is likely that no
+context will be found.
+-/
+/-
+**Lean.Elab.InfoTree.onHighestNode** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.InfoTree
+`。
+形式化陈述：onHighestNode? {α} (t : InfoTree) (ctx? : Option ContextInfo) (f : Context
+Info -> Info -> PersistentArray InfoTree -> α) : Option α
+参数：t : InfoTree；ctx? : Option ContextInfo；f : ContextInfo -> Info -> PersistentA
+rray InfoTree -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 onHighestNode?
-  签名: {α} (t : InfoTree) (ctx? : 选项类型 ContextInfo)
-  定义体: t.findSome? (ctx? := ctx?) fun ctx i ch => some (f ctx i ch)
+--- 原说明 ---
+Returns the value of `f ctx info children` on the outermost `.node info children
+` which has
+context, having merged and updated contexts appropriately.
 
-Depends on / 依赖: findSome, t.findSome
+If `ctx?` is `some ctx`, `ctx` is used as an initial context. A `ctx?` of `none`
+ should **only** be
+used when operating on the first node of the entire infotree. Otherwise, it is l
+ikely that no
+context will be found.
 -/
 def onHighestNode? {α} (t : InfoTree) (ctx? : Option ContextInfo)
-    (f : ContextInfo -> Info -> PersistentArray InfoTree -> α) : Option α :=
+    (f : ContextInfo → Info → PersistentArray InfoTree → α) : Option α :=
   t.findSome? (ctx? := ctx?) fun ctx i ch => some (f ctx i ch)
 
 /--
-Definition of `getHighestInfo?` / `getHighestInfo?` 的定义
+Returns the context and `info` on the outermost `.node info _` which has
+context, having merged and updated contexts appropriately.
 
-English:
-definition getHighestInfo?
-  signature: (t : InfoTree) (ctx? : Option ContextInfo)
-  body: t.onHighestNode? ctx? fun ctx i _ => (ctx, i)
+If `ctx?` is `some ctx`, `ctx` is used as an initial context. A `ctx?` of `none` should **only** be
+used when operating on the first node of the entire infotree. Otherwise, it is likely that no
+context will be found.
+-/
+/-
+**Lean.Elab.InfoTree.getHighestInfo** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.InfoTre
+e`。
+形式化陈述：getHighestInfo? (t : InfoTree) (ctx? : Option ContextInfo) : Option (Conte
+xtInfo × Info)
+参数：t : InfoTree；ctx? : Option ContextInfo。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getHighestInfo?
-  签名: (t : InfoTree) (ctx? : 选项类型 ContextInfo)
-  定义体: t.onHighestNode? ctx? fun ctx i _ => (ctx, i)
+--- 原说明 ---
+Returns the context and `info` on the outermost `.node info _` which has
+context, having merged and updated contexts appropriately.
 
-Depends on / 依赖: onHighestNode, t.onHighestNode
+If `ctx?` is `some ctx`, `ctx` is used as an initial context. A `ctx?` of `none`
+ should **only** be
+used when operating on the first node of the entire infotree. Otherwise, it is l
+ikely that no
+context will be found.
 -/
 def getHighestInfo? (t : InfoTree) (ctx? : Option ContextInfo) : Option (ContextInfo × Info) :=
   t.onHighestNode? ctx? fun ctx i _ => (ctx, i)
 
 /--
-Definition of `getDeclsByBody` / `getDeclsByBody` 的定义
+Get the `parentDecl`s of every elaborated body.
 
-English:
-definition getDeclsByBody
-  signature: (t : InfoTree)
-  body: t.collectNodesBottomUp fun ctx i _ decls =>
-    match i with
-    | .ofCustomInfo i =>
-      if i.value.typeName == ``Lean.Elab.Term.BodyInfo then
-        if let some decl := ctx.parentDecl? then
-          decl :: decls
-        else decls
-      else decls
-    | _ => decls
+This includes `let rec`/`where` definitions, but excludes decls without "bodies" (such as
+`alias`es, `structure`s, declarations generated by attributes like `@[ext]`, and so on) as we
+might find by considering every `parentDeclCtx` throughout the infotree.
 
-中文:
-定义 getDeclsByBody
-  签名: (t : InfoTree)
-  定义体: t.collectNodesBottomUp fun ctx i _ decls =>
-    match i with
-    | .ofCustomInfo i =>
-      if i.value.typeName == ``Lean.Elab.Term.BodyInfo then
-        if let some decl := ctx.parentDecl? then
-          decl :: decls
-        else decls
-      else decls
-    | _ => decls
+Assumes that every body elaboration proceeds through `Lean.Elab.Term.BodyInfo`.
+-/
+/-
+**Lean.Elab.InfoTree.getDeclsByBody** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.InfoTre
+e`。
+形式化陈述：getDeclsByBody (t : InfoTree) : List Name
+参数：t : InfoTree。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: BodyInfo, Lean.Elab.Term.BodyInfo, collectNodesBottomUp, ctx.parentDecl, i.value.typeName, ofCustomInfo, parentDecl, t.collectNodesBottomUp, typeName
+--- 原说明 ---
+Get the `parentDecl`s of every elaborated body.
+
+This includes `let rec`/`where` definitions, but excludes decls without "bodies"
+ (such as
+`alias`es, `structure`s, declarations generated by attributes like `@[ext]`, and
+ so on) as we
+might find by considering every `parentDeclCtx` throughout the infotree.
+
+Assumes that every body elaboration proceeds through `Lean.Elab.Term.BodyInfo`.
 -/
 def getDeclsByBody (t : InfoTree) : List Name :=
   t.collectNodesBottomUp fun ctx i _ decls =>
@@ -183,40 +235,23 @@ def getDeclsByBody (t : InfoTree) : List Name :=
       else decls
     | _ => decls
 
-/--
-Definition of `getDeclBodyInfos` / `getDeclBodyInfos` 的定义
+/-- Gets the first child info of each `Lean.Elab.BodyInfo`, which should be the only child, and
+should be a `TermInfo`, `PartialTermInfo`, or `TacticInfo`. `getDeclBodyInfos` does not validate
+either of these conditions. -/
+/-
+**Lean.Elab.InfoTree.getDeclBodyInfos** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.InfoT
+ree`。
+形式化陈述：getDeclBodyInfos (t : InfoTree) : List (Syntax × ContextInfo × Info)
+参数：t : InfoTree。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getDeclBodyInfos
-  signature: (t : InfoTree)
-  body: t.foldInfoTree (init := []) fun ctx t acc =>
-    match t with
-    | .node (.ofCustomInfo i) body => Id.run do
-      if i.value.typeName == ``Lean.Elab.Term.BodyInfo then
-        if h : 0 < body.size then
-          -- See through `.context`s instead of just matching on `.node`:
-          let result? := body[0].getHighestInfo? ctx
-          if let some result := result? then
-            return (i.stx, result) :: acc
-      return acc
-    | _ => acc
-
-中文:
-定义 getDeclBodyInfos
-  签名: (t : InfoTree)
-  定义体: t.foldInfoTree (init := []) fun ctx t acc =>
-    match t with
-    | .node (.ofCustomInfo i) body => Id.run do
-      if i.value.typeName == ``Lean.Elab.Term.BodyInfo then
-        if h : 0 < body.size then
-          -- See through `.context`s instead of just matching on `.node`:
-          let result? := body[0].getHighestInfo? ctx
-          if let some result := result? then
-            return (i.stx, result) :: acc
-      return acc
-    | _ => acc
-
-Depends on / 依赖: BodyInfo, Id.run, Lean.Elab.Term.BodyInfo, body.size, foldInfoTree, i.value.typeName, ofCustomInfo, t.foldInfoTree, typeName
+--- 原说明 ---
+Gets the first child info of each `Lean.Elab.BodyInfo`, which should be the only
+ child, and
+should be a `TermInfo`, `PartialTermInfo`, or `TacticInfo`. `getDeclBodyInfos` d
+oes not validate
+either of these conditions.
 -/
 def getDeclBodyInfos (t : InfoTree) : List (Syntax × ContextInfo × Info) :=
   t.foldInfoTree (init := []) fun ctx t acc =>
@@ -232,19 +267,23 @@ def getDeclBodyInfos (t : InfoTree) : List (Syntax × ContextInfo × Info) :=
     | _ => acc
 
 /--
-Definition of `getTheorems` / `getTheorems` 的定义
+Get the declarations elaborated in the infotree `t` which are theorems according to the
+environment. This includes e.g. `instance`s of `Prop` classes in addition to declarations declared
+using the keyword `theorem` directly.
+-/
+/-
+**Lean.Elab.InfoTree.getTheorems** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.InfoTree`。
+形式化陈述：getTheorems (t : InfoTree) (env : Environment) : List ConstantVal
+参数：t : InfoTree；env : Environment。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getTheorems
-  signature: (t : InfoTree) (env : Environment)
-  body: t.getDeclsByBody.filterMap env.findTheoremConstVal?
-
-中文:
-定义 getTheorems
-  签名: (t : InfoTree) (env : Environment)
-  定义体: t.getDeclsByBody.filterMap env.findTheoremConstVal?
-
-Depends on / 依赖: env.findTheoremConstVal, filterMap, findTheoremConstVal, getDeclsByBody, t.getDeclsByBody.filterMap
+--- 原说明 ---
+Get the declarations elaborated in the infotree `t` which are theorems according
+ to the
+environment. This includes e.g. `instance`s of `Prop` classes in addition to dec
+larations declared
+using the keyword `theorem` directly.
 -/
 def getTheorems (t : InfoTree) (env : Environment) : List ConstantVal :=
   t.getDeclsByBody.filterMap env.findTheoremConstVal?
@@ -253,18 +292,23 @@ end InfoTree
 
 namespace Info
 
-/--
-Definition of `getLCtx?` / `getLCtx?` 的定义
+/-- Gets the local context, and the expected type of the `Info`.
+Handles `TacticInfo`s (looking at the first goal), `TermInfo`s, and `PartialTermInfo`s.
+Does not get the metavariable context; assumes that the caller has accumulated an ambient
+`ContextInfo` at this point which is sufficient. -/
+/-
+**Lean.Elab.Info.getLCtx** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Info`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getLCtx?
-  signature: : Info -> Option (LocalContext × Option Expr)
-
-中文:
-定义 getLCtx?
-  签名: : Info -> 选项类型 (LocalContext × 选项类型 Expr)
+--- 原说明 ---
+Gets the local context, and the expected type of the `Info`.
+Handles `TacticInfo`s (looking at the first goal), `TermInfo`s, and `PartialTerm
+Info`s.
+Does not get the metavariable context; assumes that the caller has accumulated a
+n ambient
+`ContextInfo` at this point which is sufficient.
 -/
-def getLCtx? : Info -> Option (LocalContext × Option Expr)
+def getLCtx? : Info → Option (LocalContext × Option Expr)
   | .ofTacticInfo i => do
     let g ← i.goalsBefore.head?
     let decl ← i.mctxBefore.findDecl? g
@@ -274,3 +318,4 @@ def getLCtx? : Info -> Option (LocalContext × Option Expr)
   | _ => none
 
 end Lean.Elab.Info
+

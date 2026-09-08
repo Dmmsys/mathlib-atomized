@@ -22,19 +22,16 @@ public section
 
 
 /--
-Definition of `IsSimpleRing` / `IsSimpleRing` 的定义
+A ring `R` is **simple** if it has only two two-sided ideals, namely `⊥` and `⊤`.
+-/
+/-
+**IsSimpleRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [NonUnitalNonAssocRing R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsSimpleRing
-  parameters: (R : Type*) [NonUnitalNonAssocRing R]
-  axioms and operations (1):
-    - simple : IsSimpleOrder (TwoSidedIdeal R)
-
-中文:
-类 是单环
-  参数: (R : 类型) [非幺非结合环 R]
-  公理与运算 (1 个):
-    - simple : 是单序 (TwoSided理想 R)
+--- 原说明 ---
+A ring `R` is **simple** if it has only two two-sided ideals, namely `⊥` and `⊤`
+.
 -/
 @[mk_iff] class IsSimpleRing (R : Type*) [NonUnitalNonAssocRing R] : Prop where
   simple : IsSimpleOrder (TwoSidedIdeal R)

@@ -69,22 +69,15 @@ namespace Mathlib.Tactic.BicategoryLike
 
 section
 
-/--
-Inductive type `WhiskerRight` / 归纳类型 `WhiskerRight`
+/-- Expressions of the form `η ▷ f₁ ▷ ... ▷ fₙ`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerRight** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathli
+b.Tactic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive WhiskerRight
-  parameters: : Type
-  constructors (2):
-    - of: (η : Atom) : WhiskerRight
-    - whisker: (e : Mor₂) (η : WhiskerRight) (f : Atom₁) : WhiskerRight
-
-中文:
-归纳类型 WhiskerRight
-  参数: : 类型
-  构造子 (2 个):
-    - of: (η : 原子) : WhiskerRight
-    - whisker: (e : Mor₂) (η : WhiskerRight) (f : Atom₁) : WhiskerRight
+--- 原说明 ---
+Expressions of the form `η ▷ f₁ ▷ ... ▷ fₙ`.
 -/
 inductive WhiskerRight : Type
   /-- Construct the expression for an atomic 2-morphism. -/
@@ -93,37 +86,30 @@ inductive WhiskerRight : Type
   | whisker (e : Mor₂) (η : WhiskerRight) (f : Atom₁) : WhiskerRight
   deriving Inhabited
 
-/--
-Definition of `WhiskerRight.e` / `WhiskerRight.e` 的定义
+/-- The underlying `Mor₂` term of a `WhiskerRight` term. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerRight.e** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.BicategoryLike.WhiskerRight`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.WhiskerRight → Mathlib.Tactic.BicategoryLike
+.Mor₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerRight.e
-  signature: : WhiskerRight -> Mor₂
-
-中文:
-定义 WhiskerRight.e
-  签名: : WhiskerRight -> Mor₂
+--- 原说明 ---
+The underlying `Mor₂` term of a `WhiskerRight` term.
 -/
-def WhiskerRight.e : WhiskerRight -> Mor₂
+def WhiskerRight.e : WhiskerRight → Mor₂
   | .of η => .of η
   | .whisker e .. => e
 
-/--
-Inductive type `HorizontalComp` / 归纳类型 `HorizontalComp`
+/-- Expressions of the form `η₁ ⊗ ... ⊗ ηₙ`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.HorizontalComp** 是 Mathlib 中的一个归纳类型，位于命名空间 `Math
+lib.Tactic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive HorizontalComp
-  parameters: : Type
-  constructors (2):
-    - of: (η : WhiskerRight) : HorizontalComp
-    - cons: (e : Mor₂) (η : WhiskerRight) (ηs : HorizontalComp) : HorizontalComp
-
-中文:
-归纳类型 HorizontalComp
-  参数: : 类型
-  构造子 (2 个):
-    - of: (η : WhiskerRight) : HorizontalComp
-    - cons: (e : Mor₂) (η : WhiskerRight) (ηs : HorizontalComp) : HorizontalComp
+--- 原说明 ---
+Expressions of the form `η₁ ⊗ ... ⊗ ηₙ`.
 -/
 inductive HorizontalComp : Type
   | of (η : WhiskerRight) : HorizontalComp
@@ -131,37 +117,30 @@ inductive HorizontalComp : Type
     HorizontalComp
   deriving Inhabited
 
-/--
-Definition of `HorizontalComp.e` / `HorizontalComp.e` 的定义
+/-- The underlying `Mor₂` term of a `HorizontalComp` term. -/
+/-
+**Mathlib.Tactic.BicategoryLike.HorizontalComp.e** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.BicategoryLike.HorizontalComp`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.HorizontalComp → Mathlib.Tactic.BicategoryLi
+ke.Mor₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HorizontalComp.e
-  signature: : HorizontalComp -> Mor₂
-
-中文:
-定义 HorizontalComp.e
-  签名: : HorizontalComp -> Mor₂
+--- 原说明 ---
+The underlying `Mor₂` term of a `HorizontalComp` term.
 -/
-def HorizontalComp.e : HorizontalComp -> Mor₂
+def HorizontalComp.e : HorizontalComp → Mor₂
   | .of η => η.e
   | .cons e .. => e
 
-/--
-Inductive type `WhiskerLeft` / 归纳类型 `WhiskerLeft`
+/-- Expressions of the form `f₁ ◁ ... ◁ fₙ ◁ η`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerLeft** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib
+.Tactic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive WhiskerLeft
-  parameters: : Type
-  constructors (2):
-    - of: (η : HorizontalComp) : WhiskerLeft
-    - whisker: (e : Mor₂) (f : Atom₁) (η : WhiskerLeft) : WhiskerLeft
-
-中文:
-归纳类型 WhiskerLeft
-  参数: : 类型
-  构造子 (2 个):
-    - of: (η : HorizontalComp) : WhiskerLeft
-    - whisker: (e : Mor₂) (f : Atom₁) (η : WhiskerLeft) : WhiskerLeft
+--- 原说明 ---
+Expressions of the form `f₁ ◁ ... ◁ fₙ ◁ η`.
 -/
 inductive WhiskerLeft : Type
   /-- Construct the expression for a right-whiskered 2-morphism. -/
@@ -170,51 +149,29 @@ inductive WhiskerLeft : Type
   | whisker (e : Mor₂) (f : Atom₁) (η : WhiskerLeft) : WhiskerLeft
   deriving Inhabited
 
-/--
-Definition of `WhiskerLeft.e` / `WhiskerLeft.e` 的定义
+/-- The underlying `Mor₂` term of a `WhiskerLeft` term. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerLeft.e** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.BicategoryLike.WhiskerLeft`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.WhiskerLeft → Mathlib.Tactic.BicategoryLike.
+Mor₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerLeft.e
-  signature: : WhiskerLeft -> Mor₂
-
-中文:
-定义 WhiskerLeft.e
-  签名: : WhiskerLeft -> Mor₂
+--- 原说明 ---
+The underlying `Mor₂` term of a `WhiskerLeft` term.
 -/
-def WhiskerLeft.e : WhiskerLeft -> Mor₂
+def WhiskerLeft.e : WhiskerLeft → Mor₂
   | .of η => η.e
   | .whisker e .. => e
 
-/--
-Definition of `Mor₂Iso.isStructural` / `Mor₂Iso.isStructural` 的定义
+/-- Whether a given 2-isomorphism is structural or not. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Mor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Bi
+categoryLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mor₂Iso.isStructural
-  signature: (α : Mor₂Iso)
-  body: match α with
-  | .structuralAtom _ => true
-  | .comp _ _ _ _ η θ => η.isStructural && θ.isStructural
-  | .whiskerLeft _ _ _ _ η => η.isStructural
-  | .whiskerRight _ _ _ η _ => η.isStructural
-  | .horizontalComp _ _ _ _ _ η θ => η.isStructural && θ.isStructural
-  | .inv _ _ _ η => η.isStructural
-  | .coherenceComp _ _ _ _ _ _ η θ => η.isStructural && θ.isStructural
-  | .of _ => false
-
-中文:
-定义 Mor₂Iso.isStructural
-  签名: (α : Mor₂Iso)
-  定义体: match α with
-  | .structuralAtom _ => true
-  | .comp _ _ _ _ η θ => η.isStructural && θ.isStructural
-  | .whiskerLeft _ _ _ _ η => η.isStructural
-  | .whiskerRight _ _ _ η _ => η.isStructural
-  | .horizontalComp _ _ _ _ _ η θ => η.isStructural && θ.isStructural
-  | .inv _ _ _ η => η.isStructural
-  | .coherenceComp _ _ _ _ _ _ η θ => η.isStructural && θ.isStructural
-  | .of _ => false
-
-Depends on / 依赖: coherenceComp, horizontalComp, isStructural, structuralAtom, whiskerLeft, whiskerRight
+--- 原说明 ---
+Whether a given 2-isomorphism is structural or not.
 -/
 def Mor₂Iso.isStructural (α : Mor₂Iso) : Bool :=
   match α with
@@ -227,35 +184,30 @@ def Mor₂Iso.isStructural (α : Mor₂Iso) : Bool :=
   | .coherenceComp _ _ _ _ _ _ η θ => η.isStructural && θ.isStructural
   | .of _ => false
 
-/--
-Definition of `Structural` / `Structural` 的定义
+/-- Expressions for structural isomorphisms. We do not impose the condition `isStructural` since
+it is not needed to write the tactic. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Structural** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.
+Tactic.BicategoryLike`。
+形式化陈述：Structural
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Structural
-  body: Mor₂Iso
-
-中文:
-缩写 Structural
-  定义体: Mor₂Iso
+--- 原说明 ---
+Expressions for structural isomorphisms. We do not impose the condition `isStruc
+tural` since
+it is not needed to write the tactic.
 -/
 abbrev Structural := Mor₂Iso
 
-/--
-Inductive type `NormalExpr` / 归纳类型 `NormalExpr`
+/-- Normalized expressions for 2-morphisms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.
+Tactic.BicategoryLike`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive NormalExpr
-  parameters: : Type
-  constructors (2):
-    - nil: (e : Mor₂) (α : Structural) : NormalExpr
-    - cons: (e : Mor₂) (α : Structural) (η : WhiskerLeft) (ηs : NormalExpr) : NormalExpr
-
-中文:
-归纳类型 NormalExpr
-  参数: : 类型
-  构造子 (2 个):
-    - nil: (e : Mor₂) (α : Structural) : NormalExpr
-    - cons: (e : Mor₂) (α : Structural) (η : WhiskerLeft) (ηs : NormalExpr) : NormalExpr
+--- 原说明 ---
+Normalized expressions for 2-morphisms.
 -/
 inductive NormalExpr : Type
   /-- Construct the expression for a structural 2-morphism. -/
@@ -264,230 +216,208 @@ inductive NormalExpr : Type
   | cons (e : Mor₂) (α : Structural) (η : WhiskerLeft) (ηs : NormalExpr) : NormalExpr
   deriving Inhabited
 
-/--
-Definition of `NormalExpr.e` / `NormalExpr.e` 的定义
+/-- The underlying `Mor₂` term of a `NormalExpr` term. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.e** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.NormalExpr → Mathlib.Tactic.BicategoryLike.M
+or₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalExpr.e
-  signature: : NormalExpr -> Mor₂
-
-中文:
-定义 NormalExpr.e
-  签名: : NormalExpr -> Mor₂
+--- 原说明 ---
+The underlying `Mor₂` term of a `NormalExpr` term.
 -/
-def NormalExpr.e : NormalExpr -> Mor₂
+def NormalExpr.e : NormalExpr → Mor₂
   | .nil e .. => e
   | .cons e .. => e
 
-/--
-Definition of `MonadWhiskerRight` / `MonadWhiskerRight` 的定义
+/-- A monad equipped with the ability to construct `WhiskerRight` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadWhiskerRight** 是 Mathlib 中的一个归纳类型，位于命名空间 `M
+athlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadWhiskerRight
-  parameters: (m : Type -> Type)
-  axioms and operations (1):
-    - whiskerRightM((η : WhiskerRight) (f : Atom₁)) : m WhiskerRight
-
-中文:
-类 MonadWhiskerRight
-  参数: (m : 类型 -> 类型)
-  公理与运算 (1 个):
-    - whiskerRightM((η : WhiskerRight) (f : Atom₁)) : m WhiskerRight
+--- 原说明 ---
+A monad equipped with the ability to construct `WhiskerRight` terms.
 -/
-class MonadWhiskerRight (m : Type -> Type) where
+class MonadWhiskerRight (m : Type → Type) where
   /-- The expression for the right whiskering `η ▷ f`. -/
   whiskerRightM (η : WhiskerRight) (f : Atom₁) : m WhiskerRight
 
-/--
-Definition of `MonadHorizontalComp` / `MonadHorizontalComp` 的定义
+/-- A monad equipped with the ability to construct `HorizontalComp` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadHorizontalComp** 是 Mathlib 中的一个归纳类型，位于命名空间 
+`Mathlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadHorizontalComp
-  parameters: (m : Type -> Type)
-  extends: MonadWhiskerRight m
-  axioms and operations (1):
-    - hConsM((η : WhiskerRight) (ηs : HorizontalComp)) : m HorizontalComp
-
-中文:
-类 MonadHorizontalComp
-  参数: (m : 类型 -> 类型)
-  继承: MonadWhiskerRight m
-  公理与运算 (1 个):
-    - hConsM((η : WhiskerRight) (ηs : HorizontalComp)) : m HorizontalComp
+--- 原说明 ---
+A monad equipped with the ability to construct `HorizontalComp` terms.
 -/
-class MonadHorizontalComp (m : Type -> Type) extends MonadWhiskerRight m where
+class MonadHorizontalComp (m : Type → Type) extends MonadWhiskerRight m where
   /-- The expression for the horizontal composition `η ◫ ηs`. -/
   hConsM (η : WhiskerRight) (ηs : HorizontalComp) : m HorizontalComp
 
-/--
-Definition of `MonadWhiskerLeft` / `MonadWhiskerLeft` 的定义
+/-- A monad equipped with the ability to construct `WhiskerLeft` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadWhiskerLeft** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ma
+thlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadWhiskerLeft
-  parameters: (m : Type -> Type)
-  extends: MonadHorizontalComp m
-  axioms and operations (1):
-    - whiskerLeftM((f : Atom₁) (η : WhiskerLeft)) : m WhiskerLeft
-
-中文:
-类 MonadWhiskerLeft
-  参数: (m : 类型 -> 类型)
-  继承: MonadHorizontalComp m
-  公理与运算 (1 个):
-    - whiskerLeftM((f : Atom₁) (η : WhiskerLeft)) : m WhiskerLeft
-
-Depends on / 依赖: OrderClosedTopology, OrderTopology, OrderTopology.to_orderClosedTopology, to_orderClosedTopology
+--- 原说明 ---
+A monad equipped with the ability to construct `WhiskerLeft` terms.
 -/
-class MonadWhiskerLeft (m : Type -> Type) extends MonadHorizontalComp m where
+class MonadWhiskerLeft (m : Type → Type) extends MonadHorizontalComp m where
   /-- The expression for the left whiskering `f ▷ η`. -/
   whiskerLeftM (f : Atom₁) (η : WhiskerLeft) : m WhiskerLeft
 
-/--
-Definition of `MonadNormalExpr` / `MonadNormalExpr` 的定义
+/-- A monad equipped with the ability to construct `NormalExpr` terms. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MonadNormalExpr** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mat
+hlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonadNormalExpr
-  parameters: (m : Type -> Type)
-  extends: MonadWhiskerLeft m
-  axioms and operations (2):
-    - nilM((α : Structural)) : m NormalExpr
-    - consM((headStructural : Structural) (η : WhiskerLeft) (ηs : NormalExpr)) : m NormalExpr
-
-中文:
-类 MonadNormalExpr
-  参数: (m : 类型 -> 类型)
-  继承: MonadWhiskerLeft m
-  公理与运算 (2 个):
-    - nilM((α : Structural)) : m NormalExpr
-    - consM((headStructural : Structural) (η : WhiskerLeft) (ηs : NormalExpr)) : m NormalExpr
+--- 原说明 ---
+A monad equipped with the ability to construct `NormalExpr` terms.
 -/
-class MonadNormalExpr (m : Type -> Type) extends MonadWhiskerLeft m where
+class MonadNormalExpr (m : Type → Type) extends MonadWhiskerLeft m where
   /-- The expression for the structural 2-morphism `α`. -/
   nilM (α : Structural) : m NormalExpr
   /-- The expression for the normalized 2-morphism `α ≫ η ≫ ηs`. -/
   consM (headStructural : Structural) (η : WhiskerLeft) (ηs : NormalExpr) : m NormalExpr
 
-variable {m : Type -> Type} [Monad m]
+variable {m : Type → Type} [Monad m]
 
 open MonadMor₁
 
-/--
-Definition of `WhiskerRight.srcM` / `WhiskerRight.srcM` 的定义
+/-- The domain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerRight.srcM** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.BicategoryLike.WhiskerRight`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.WhiskerRight → m Mathlib.Tactic.Bi
+categoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerRight.srcM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 WhiskerRight.srcM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The domain of a 2-morphism.
 -/
-def WhiskerRight.srcM [MonadMor₁ m] : WhiskerRight -> m Mor₁
+def WhiskerRight.srcM [MonadMor₁ m] : WhiskerRight → m Mor₁
   | WhiskerRight.of η => return η.src
   | WhiskerRight.whisker _ η f => do comp₁M (← η.srcM) (.of f)
 
-/--
-Definition of `WhiskerRight.tgtM` / `WhiskerRight.tgtM` 的定义
+/-- The codomain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerRight.tgtM** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.BicategoryLike.WhiskerRight`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.WhiskerRight → m Mathlib.Tactic.Bi
+categoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerRight.tgtM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 WhiskerRight.tgtM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The codomain of a 2-morphism.
 -/
-def WhiskerRight.tgtM [MonadMor₁ m] : WhiskerRight -> m Mor₁
+def WhiskerRight.tgtM [MonadMor₁ m] : WhiskerRight → m Mor₁
   | WhiskerRight.of η => return η.tgt
   | WhiskerRight.whisker _ η f => do comp₁M (← η.tgtM) (.of f)
 
-/--
-Definition of `HorizontalComp.srcM` / `HorizontalComp.srcM` 的定义
+/-- The domain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.HorizontalComp.srcM** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.BicategoryLike.HorizontalComp`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.HorizontalComp → m Mathlib.Tactic.
+BicategoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HorizontalComp.srcM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 HorizontalComp.srcM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The domain of a 2-morphism.
 -/
-def HorizontalComp.srcM [MonadMor₁ m] : HorizontalComp -> m Mor₁
+def HorizontalComp.srcM [MonadMor₁ m] : HorizontalComp → m Mor₁
   | HorizontalComp.of η => η.srcM
   | HorizontalComp.cons _ η ηs => do comp₁M (← η.srcM) (← ηs.srcM)
 
-/--
-Definition of `HorizontalComp.tgtM` / `HorizontalComp.tgtM` 的定义
+/-- The codomain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.HorizontalComp.tgtM** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.BicategoryLike.HorizontalComp`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.HorizontalComp → m Mathlib.Tactic.
+BicategoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HorizontalComp.tgtM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 HorizontalComp.tgtM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The codomain of a 2-morphism.
 -/
-def HorizontalComp.tgtM [MonadMor₁ m] : HorizontalComp -> m Mor₁
+def HorizontalComp.tgtM [MonadMor₁ m] : HorizontalComp → m Mor₁
   | HorizontalComp.of η => η.tgtM
   | HorizontalComp.cons _ η ηs => do comp₁M (← η.tgtM) (← ηs.tgtM)
 
-/--
-Definition of `WhiskerLeft.srcM` / `WhiskerLeft.srcM` 的定义
+/-- The domain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerLeft.srcM** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.BicategoryLike.WhiskerLeft`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.WhiskerLeft → m Mathlib.Tactic.Bic
+ategoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerLeft.srcM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 WhiskerLeft.srcM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The domain of a 2-morphism.
 -/
-def WhiskerLeft.srcM [MonadMor₁ m] : WhiskerLeft -> m Mor₁
+def WhiskerLeft.srcM [MonadMor₁ m] : WhiskerLeft → m Mor₁
   | WhiskerLeft.of η => η.srcM
   | WhiskerLeft.whisker _ f η => do comp₁M (.of f) (← η.srcM)
 
-/--
-Definition of `WhiskerLeft.tgtM` / `WhiskerLeft.tgtM` 的定义
+/-- The codomain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerLeft.tgtM** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.BicategoryLike.WhiskerLeft`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.WhiskerLeft → m Mathlib.Tactic.Bic
+ategoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerLeft.tgtM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 WhiskerLeft.tgtM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The codomain of a 2-morphism.
 -/
-def WhiskerLeft.tgtM [MonadMor₁ m] : WhiskerLeft -> m Mor₁
+def WhiskerLeft.tgtM [MonadMor₁ m] : WhiskerLeft → m Mor₁
   | WhiskerLeft.of η => η.tgtM
   | WhiskerLeft.whisker _ f η => do comp₁M (.of f) (← η.tgtM)
 
-/--
-Definition of `NormalExpr.srcM` / `NormalExpr.srcM` 的定义
+/-- The domain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.srcM** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.NormalExpr → m Mathlib.Tactic.Bica
+tegoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalExpr.srcM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 NormalExpr.srcM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The domain of a 2-morphism.
 -/
-def NormalExpr.srcM [MonadMor₁ m] : NormalExpr -> m Mor₁
+def NormalExpr.srcM [MonadMor₁ m] : NormalExpr → m Mor₁
   | NormalExpr.nil _ η => η.srcM
   | NormalExpr.cons _ α _ _ => α.srcM
 
-/--
-Definition of `NormalExpr.tgtM` / `NormalExpr.tgtM` 的定义
+/-- The codomain of a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.tgtM** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：{m : Type → Type} →   [Monad m] →     [Mathlib.Tactic.BicategoryLike.Monad
+Mor₁ m] →       Mathlib.Tactic.BicategoryLike.NormalExpr → m Mathlib.Tactic.Bica
+tegoryLike.Mor₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalExpr.tgtM
-  signature: [MonadMor₁ m]
-
-中文:
-定义 NormalExpr.tgtM
-  签名: [MonadMor₁ m]
+--- 原说明 ---
+The codomain of a 2-morphism.
 -/
-def NormalExpr.tgtM [MonadMor₁ m] : NormalExpr -> m Mor₁
+def NormalExpr.tgtM [MonadMor₁ m] : NormalExpr → m Mor₁
   | NormalExpr.nil _ η => η.tgtM
   | NormalExpr.cons _ _ _ ηs => ηs.tgtM
 
@@ -495,188 +425,158 @@ namespace NormalExpr
 
 variable [MonadMor₂Iso m] [MonadNormalExpr m]
 
-/--
-Definition of `idM` / `idM` 的定义
+/-- The identity 2-morphism as a term of `normalExpr`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.idM** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：idM (f : Mor₁) : m NormalExpr
+参数：f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition idM
-  signature: (f : Mor₁)
-  body: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.id₂M f
-
-中文:
-定义 idM
-  签名: (f : Mor₁)
-  定义体: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.id₂M f
+--- 原说明 ---
+The identity 2-morphism as a term of `normalExpr`.
 -/
 def idM (f : Mor₁) : m NormalExpr := do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.id₂M f
+  MonadNormalExpr.nilM <| .structuralAtom <| ← MonadMor₂Iso.id₂M f
 
-/--
-Definition of `associatorM` / `associatorM` 的定义
+/-- The associator as a term of `normalExpr`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.associatorM** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：associatorM (f g h : Mor₁) : m NormalExpr
+参数：f g h : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associatorM
-  signature: (f g h : Mor₁)
-  body: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.associatorM f g h
-
-中文:
-定义 associatorM
-  签名: (f g h : Mor₁)
-  定义体: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.associatorM f g h
+--- 原说明 ---
+The associator as a term of `normalExpr`.
 -/
 def associatorM (f g h : Mor₁) : m NormalExpr := do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.associatorM f g h
+  MonadNormalExpr.nilM <| .structuralAtom <| ← MonadMor₂Iso.associatorM f g h
 
-/--
-Definition of `associatorInvM` / `associatorInvM` 的定义
+/-- The inverse of the associator as a term of `normalExpr`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.associatorInvM** 是 Mathlib 中的一个定义，位于命
+名空间 `Mathlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：associatorInvM (f g h : Mor₁) : m NormalExpr
+参数：f g h : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associatorInvM
-  signature: (f g h : Mor₁)
-  body: do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM
-.structuralAtom ← MonadMor₂Iso.associatorM f g h
-
-中文:
-定义 associatorInvM
-  签名: (f g h : Mor₁)
-  定义体: do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM
-.structuralAtom ← MonadMor₂Iso.associatorM f g h
+--- 原说明 ---
+The inverse of the associator as a term of `normalExpr`.
 -/
 def associatorInvM (f g h : Mor₁) : m NormalExpr := do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM
-.structuralAtom ← MonadMor₂Iso.associatorM f g h
+  MonadNormalExpr.nilM <| ← MonadMor₂Iso.symmM <|
+    .structuralAtom <| ← MonadMor₂Iso.associatorM f g h
 
-/--
-Definition of `leftUnitorM` / `leftUnitorM` 的定义
+/-- The left unitor as a term of `normalExpr`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.leftUnitorM** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：leftUnitorM (f : Mor₁) : m NormalExpr
+参数：f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitorM
-  signature: (f : Mor₁)
-  body: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.leftUnitorM f
-
-中文:
-定义 leftUnitorM
-  签名: (f : Mor₁)
-  定义体: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.leftUnitorM f
+--- 原说明 ---
+The left unitor as a term of `normalExpr`.
 -/
 def leftUnitorM (f : Mor₁) : m NormalExpr := do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.leftUnitorM f
+  MonadNormalExpr.nilM <| .structuralAtom <| ← MonadMor₂Iso.leftUnitorM f
 
-/--
-Definition of `leftUnitorInvM` / `leftUnitorInvM` 的定义
+/-- The inverse of the left unitor as a term of `normalExpr`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.leftUnitorInvM** 是 Mathlib 中的一个定义，位于命
+名空间 `Mathlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：leftUnitorInvM (f : Mor₁) : m NormalExpr
+参数：f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitorInvM
-  signature: (f : Mor₁)
-  body: do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM .structuralAtom ← MonadMor₂Iso.leftUnitorM f
-
-中文:
-定义 leftUnitorInvM
-  签名: (f : Mor₁)
-  定义体: do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM .structuralAtom ← MonadMor₂Iso.leftUnitorM f
+--- 原说明 ---
+The inverse of the left unitor as a term of `normalExpr`.
 -/
 def leftUnitorInvM (f : Mor₁) : m NormalExpr := do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM .structuralAtom ← MonadMor₂Iso.leftUnitorM f
+  MonadNormalExpr.nilM <| ← MonadMor₂Iso.symmM <| .structuralAtom <| ← MonadMor₂Iso.leftUnitorM f
 
-/--
-Definition of `rightUnitorM` / `rightUnitorM` 的定义
+/-- The right unitor as a term of `normalExpr`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.rightUnitorM** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：rightUnitorM (f : Mor₁) : m NormalExpr
+参数：f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitorM
-  signature: (f : Mor₁)
-  body: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.rightUnitorM f
-
-中文:
-定义 rightUnitorM
-  签名: (f : Mor₁)
-  定义体: do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.rightUnitorM f
+--- 原说明 ---
+The right unitor as a term of `normalExpr`.
 -/
 def rightUnitorM (f : Mor₁) : m NormalExpr := do
-MonadNormalExpr.nilM .structuralAtom ← MonadMor₂Iso.rightUnitorM f
+  MonadNormalExpr.nilM <| .structuralAtom <| ← MonadMor₂Iso.rightUnitorM f
 
-/--
-Definition of `rightUnitorInvM` / `rightUnitorInvM` 的定义
+/-- The inverse of the right unitor as a term of `normalExpr`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.rightUnitorInvM** 是 Mathlib 中的一个定义，位于
+命名空间 `Mathlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：rightUnitorInvM (f : Mor₁) : m NormalExpr
+参数：f : Mor₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitorInvM
-  signature: (f : Mor₁)
-  body: do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM .structuralAtom ← MonadMor₂Iso.rightUnitorM f
-
-中文:
-定义 rightUnitorInvM
-  签名: (f : Mor₁)
-  定义体: do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM .structuralAtom ← MonadMor₂Iso.rightUnitorM f
+--- 原说明 ---
+The inverse of the right unitor as a term of `normalExpr`.
 -/
 def rightUnitorInvM (f : Mor₁) : m NormalExpr := do
-MonadNormalExpr.nilM ← MonadMor₂Iso.symmM .structuralAtom ← MonadMor₂Iso.rightUnitorM f
+  MonadNormalExpr.nilM <| ← MonadMor₂Iso.symmM <| .structuralAtom <| ← MonadMor₂Iso.rightUnitorM f
 
-/--
-Definition of `ofM` / `ofM` 的定义
+/-- Construct a `NormalExpr` expression from a `WhiskerLeft` expression. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.ofM** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：ofM [MonadMor₁ m] (η : WhiskerLeft) : m NormalExpr
+参数：η : WhiskerLeft。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofM
-  signature: [MonadMor₁ m] (η : WhiskerLeft)
-  body: do
-  MonadNormalExpr.consM ((.structuralAtom <| ← MonadMor₂Iso.id₂M (← η.srcM))) η
-    (← MonadNormalExpr.nilM ((.structuralAtom <| ← MonadMor₂Iso.id₂M (← η.tgtM))))
-
-中文:
-定义 ofM
-  签名: [MonadMor₁ m] (η : WhiskerLeft)
-  定义体: do
-  MonadNormalExpr.consM ((.structuralAtom <| ← MonadMor₂Iso.id₂M (← η.srcM))) η
-    (← MonadNormalExpr.nilM ((.structuralAtom <| ← MonadMor₂Iso.id₂M (← η.tgtM))))
+--- 原说明 ---
+Construct a `NormalExpr` expression from a `WhiskerLeft` expression.
 -/
 def ofM [MonadMor₁ m] (η : WhiskerLeft) : m NormalExpr := do
   MonadNormalExpr.consM ((.structuralAtom <| ← MonadMor₂Iso.id₂M (← η.srcM))) η
     (← MonadNormalExpr.nilM ((.structuralAtom <| ← MonadMor₂Iso.id₂M (← η.tgtM))))
 
-/--
-Definition of `ofAtomM` / `ofAtomM` 的定义
+/-- Construct a `NormalExpr` expression from a Lean expression for an atomic 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.ofAtomM** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：ofAtomM [MonadMor₁ m] (η : Atom) : m NormalExpr
+参数：η : Atom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAtomM
-  signature: [MonadMor₁ m] (η : Atom)
-  body: NormalExpr.ofM .of .of .of η
-
-中文:
-定义 ofAtomM
-  签名: [MonadMor₁ m] (η : 原子)
-  定义体: NormalExpr.ofM .of .of .of η
-
-Depends on / 依赖: NormalExpr, NormalExpr.ofM
+--- 原说明 ---
+Construct a `NormalExpr` expression from a Lean expression for an atomic 2-morph
+ism.
 -/
 def ofAtomM [MonadMor₁ m] (η : Atom) : m NormalExpr :=
-NormalExpr.ofM .of .of .of η
+  NormalExpr.ofM <| .of <| .of <| .of η
 
 end NormalExpr
 
-/--
-Definition of `NormalExpr.toList` / `NormalExpr.toList` 的定义
+/-- Convert a `NormalExpr` expression into a list of `WhiskerLeft` expressions. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.toList** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：Mathlib.Tactic.BicategoryLike.NormalExpr → List Mathlib.Tactic.BicategoryL
+ike.WhiskerLeft
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalExpr.toList
-  signature: : NormalExpr -> List WhiskerLeft
-
-中文:
-定义 NormalExpr.toList
-  签名: : NormalExpr -> 列表 WhiskerLeft
+--- 原说明 ---
+Convert a `NormalExpr` expression into a list of `WhiskerLeft` expressions.
 -/
-def NormalExpr.toList : NormalExpr -> List WhiskerLeft
+def NormalExpr.toList : NormalExpr → List WhiskerLeft
   | NormalExpr.nil _ _ => []
   | NormalExpr.cons _ _ η ηs => η :: NormalExpr.toList ηs
 
@@ -684,22 +584,15 @@ end
 
 section
 
-/--
-Definition of `Eval.Result` / `Eval.Result` 的定义
+/-- The result of evaluating an expression into normal form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.Eval.Result** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib
+.Tactic.BicategoryLike.Eval`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Eval.Result
-  parameters: where
-  axioms and operations (2):
-    - expr : NormalExpr
-    - proof : Expr
-
-中文:
-结构 Eval.Result
-  参数: where
-  公理与运算 (2 个):
-    - expr : NormalExpr
-    - proof : Expr
+--- 原说明 ---
+The result of evaluating an expression into normal form.
 -/
 structure Eval.Result where
   /-- The normalized expression of the 2-morphism. -/
@@ -708,28 +601,19 @@ structure Eval.Result where
   proof : Expr
   deriving Inhabited
 
-variable {m : Type -> Type}
+variable {m : Type → Type}
 
-/--
-Definition of `MkEvalComp` / `MkEvalComp` 的定义
+/-- Evaluate the expression `α ≫ β`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkEvalComp** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.
+Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkEvalComp
-  parameters: (m : Type -> Type)
-  axioms and operations (3):
-    - mkEvalCompNilNil((α β : Structural)) : m Expr
-    - mkEvalCompNilCons((α β : Structural) (η : WhiskerLeft) (ηs : NormalExpr)) : m Expr
-    - mkEvalCompCons((α : Structural) (η : WhiskerLeft) (ηs θ ι : NormalExpr) (e_η : Expr)) : m Expr
-
-中文:
-类 MkEvalComp
-  参数: (m : 类型 -> 类型)
-  公理与运算 (3 个):
-    - mkEvalCompNilNil((α β : Structural)) : m Expr
-    - mkEvalCompNilCons((α β : Structural) (η : WhiskerLeft) (ηs : NormalExpr)) : m Expr
-    - mkEvalCompCons((α : Structural) (η : WhiskerLeft) (ηs θ ι : NormalExpr) (e_η : Expr)) : m Expr
+--- 原说明 ---
+Evaluate the expression `α ≫ β`.
 -/
-class MkEvalComp (m : Type -> Type) where
+class MkEvalComp (m : Type → Type) where
   /-- Evaluate `α ≫ β` -/
   mkEvalCompNilNil (α β : Structural) : m Expr
   /-- Evaluate `α ≫ (β ≫ η ≫ ηs)` -/
@@ -737,28 +621,17 @@ class MkEvalComp (m : Type -> Type) where
   /-- Evaluate `(α ≫ η ≫ ηs) ≫ θ` -/
   mkEvalCompCons (α : Structural) (η : WhiskerLeft) (ηs θ ι : NormalExpr) (e_η : Expr) : m Expr
 
-/--
-Definition of `MkEvalWhiskerLeft` / `MkEvalWhiskerLeft` 的定义
+/-- Evaluate the expression `f ◁ η`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkEvalWhiskerLeft** 是 Mathlib 中的一个归纳类型，位于命名空间 `M
+athlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkEvalWhiskerLeft
-  parameters: (m : Type -> Type)
-  axioms and operations (4):
-    - mkEvalWhiskerLeftNil((f : Mor₁) (α : Structural)) : m Expr
-    - mkEvalWhiskerLeftOfCons((f : Atom₁) (α : Structural) (η : WhiskerLeft) (ηs θ : NormalExpr) (e_θ : Expr)) : m Expr
-    - mkEvalWhiskerLeftComp((f g : Mor₁) (η η₁ η₂ η₃ η₄ : NormalExpr) (e_η₁ e_η₂ e_η₃ e_η₄ : Expr)) : m Expr
-    - mkEvalWhiskerLeftId((η η₁ η₂ : NormalExpr) (e_η₁ e_η₂ : Expr)) : m Expr
-
-中文:
-类 MkEvalWhiskerLeft
-  参数: (m : 类型 -> 类型)
-  公理与运算 (4 个):
-    - mkEvalWhiskerLeftNil((f : Mor₁) (α : Structural)) : m Expr
-    - mkEvalWhiskerLeftOfCons((f : Atom₁) (α : Structural) (η : WhiskerLeft) (ηs θ : NormalExpr) (e_θ : Expr)) : m Expr
-    - mkEvalWhiskerLeftComp((f g : Mor₁) (η η₁ η₂ η₃ η₄ : NormalExpr) (e_η₁ e_η₂ e_η₃ e_η₄ : Expr)) : m Expr
-    - mkEvalWhiskerLeftId((η η₁ η₂ : NormalExpr) (e_η₁ e_η₂ : Expr)) : m Expr
+--- 原说明 ---
+Evaluate the expression `f ◁ η`.
 -/
-class MkEvalWhiskerLeft (m : Type -> Type) where
+class MkEvalWhiskerLeft (m : Type → Type) where
   /-- Evaluate `f ◁ α` -/
   mkEvalWhiskerLeftNil (f : Mor₁) (α : Structural) : m Expr
   /-- Evaluate `f ◁ (α ≫ η ≫ ηs)`. -/
@@ -770,34 +643,17 @@ class MkEvalWhiskerLeft (m : Type -> Type) where
   /-- Evaluate `𝟙 _ ◁ η` -/
   mkEvalWhiskerLeftId (η η₁ η₂ : NormalExpr) (e_η₁ e_η₂ : Expr) : m Expr
 
-/--
-Definition of `MkEvalWhiskerRight` / `MkEvalWhiskerRight` 的定义
+/-- Evaluate the expression `η ▷ f`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkEvalWhiskerRight** 是 Mathlib 中的一个归纳类型，位于命名空间 `
+Mathlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkEvalWhiskerRight
-  parameters: (m : Type -> Type)
-  axioms and operations (7):
-    - mkEvalWhiskerRightAuxOf((η : WhiskerRight) (f : Atom₁)) : m Expr
-    - mkEvalWhiskerRightAuxCons((f : Atom₁) (η : WhiskerRight) (ηs : HorizontalComp) (ηs' η₁ η₂ η₃ : NormalExpr) (e_ηs' e_η₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalWhiskerRightNil((α : Structural) (f : Mor₁)) : m Expr
-    - mkEvalWhiskerRightConsOfOf((f : Atom₁) (α : Structural) (η : HorizontalComp) (ηs ηs₁ η₁ η₂ η₃ : NormalExpr) (e_ηs₁ e_η₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalWhiskerRightConsWhisker((f : Atom₁) (g : Mor₁) (α : Structural) (η : WhiskerLeft) (ηs η₁ η₂ ηs₁ ηs₂ η₃ η₄ η₅ : NormalExpr) (e_η₁ e_η₂ e_ηs₁ e_ηs₂ e_η₃ e_η₄ e_η₅ : Expr)) : m Expr
-    - mkEvalWhiskerRightComp((g h : Mor₁) (η η₁ η₂ η₃ η₄ : NormalExpr) (e_η₁ e_η₂ e_η₃ e_η₄ : Expr)) : m Expr
-    - mkEvalWhiskerRightId((η η₁ η₂ : NormalExpr) (e_η₁ e_η₂ : Expr)) : m Expr
-
-中文:
-类 MkEvalWhiskerRight
-  参数: (m : 类型 -> 类型)
-  公理与运算 (7 个):
-    - mkEvalWhiskerRightAuxOf((η : WhiskerRight) (f : Atom₁)) : m Expr
-    - mkEvalWhiskerRightAuxCons((f : Atom₁) (η : WhiskerRight) (ηs : HorizontalComp) (ηs' η₁ η₂ η₃ : NormalExpr) (e_ηs' e_η₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalWhiskerRightNil((α : Structural) (f : Mor₁)) : m Expr
-    - mkEvalWhiskerRightConsOfOf((f : Atom₁) (α : Structural) (η : HorizontalComp) (ηs ηs₁ η₁ η₂ η₃ : NormalExpr) (e_ηs₁ e_η₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalWhiskerRightConsWhisker((f : Atom₁) (g : Mor₁) (α : Structural) (η : WhiskerLeft) (ηs η₁ η₂ ηs₁ ηs₂ η₃ η₄ η₅ : NormalExpr) (e_η₁ e_η₂ e_ηs₁ e_ηs₂ e_η₃ e_η₄ e_η₅ : Expr)) : m Expr
-    - mkEvalWhiskerRightComp((g h : Mor₁) (η η₁ η₂ η₃ η₄ : NormalExpr) (e_η₁ e_η₂ e_η₃ e_η₄ : Expr)) : m Expr
-    - mkEvalWhiskerRightId((η η₁ η₂ : NormalExpr) (e_η₁ e_η₂ : Expr)) : m Expr
+--- 原说明 ---
+Evaluate the expression `η ▷ f`.
 -/
-class MkEvalWhiskerRight (m : Type -> Type) where
+class MkEvalWhiskerRight (m : Type → Type) where
   /-- Evaluate `η ▷ f` -/
   mkEvalWhiskerRightAuxOf (η : WhiskerRight) (f : Atom₁) : m Expr
   /-- Evaluate `(η ◫ ηs) ▷ f` -/
@@ -818,36 +674,17 @@ class MkEvalWhiskerRight (m : Type -> Type) where
   /-- Evaluate `η ▷ 𝟙 _` -/
   mkEvalWhiskerRightId (η η₁ η₂ : NormalExpr) (e_η₁ e_η₂ : Expr) : m Expr
 
-/--
-Definition of `MkEvalHorizontalComp` / `MkEvalHorizontalComp` 的定义
+/-- Evaluate the expression `η ◫ θ`. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkEvalHorizontalComp** 是 Mathlib 中的一个归纳类型，位于命名空间
+ `Mathlib.Tactic.BicategoryLike`。
+形式化陈述：(Type → Type) → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkEvalHorizontalComp
-  parameters: (m : Type -> Type)
-  axioms and operations (8):
-    - mkEvalHorizontalCompAuxOf((η : WhiskerRight) (θ : HorizontalComp)) : m Expr
-    - mkEvalHorizontalCompAuxCons((η : WhiskerRight) (ηs θ : HorizontalComp) (ηθ η₁ ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_η₁ e_ηθ₁ e_ηθ₂ : Expr)) : m Expr
-    - mkEvalHorizontalCompAux'Whisker((f : Atom₁) (η θ : WhiskerLeft) (ηθ ηθ₁ ηθ₂ ηθ₃ : NormalExpr) (e_ηθ e_ηθ₁ e_ηθ₂ e_ηθ₃ : Expr)) : m Expr
-    - mkEvalHorizontalCompAux'OfWhisker((f : Atom₁) (η : HorizontalComp) (θ : WhiskerLeft) (η₁ ηθ ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_η₁ e_ηθ₁ e_ηθ₂ : Expr)) : m Expr
-    - mkEvalHorizontalCompNilNil((α β : Structural)) : m Expr
-    - mkEvalHorizontalCompNilCons((α β : Structural) (η : WhiskerLeft) (ηs η₁ ηs₁ η₂ η₃ : NormalExpr) (e_η₁ e_ηs₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalHorizontalCompConsNil((α β : Structural) (η : WhiskerLeft) (ηs : NormalExpr) (η₁ ηs₁ η₂ η₃ : NormalExpr) (e_η₁ e_ηs₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalHorizontalCompConsCons((α β : Structural) (η θ : WhiskerLeft) (ηs θs ηθ ηθs ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_ηθs e_ηθ₁ e_ηθ₂ : Expr)) : m Expr
-
-中文:
-类 MkEvalHorizontalComp
-  参数: (m : 类型 -> 类型)
-  公理与运算 (8 个):
-    - mkEvalHorizontalCompAuxOf((η : WhiskerRight) (θ : HorizontalComp)) : m Expr
-    - mkEvalHorizontalCompAuxCons((η : WhiskerRight) (ηs θ : HorizontalComp) (ηθ η₁ ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_η₁ e_ηθ₁ e_ηθ₂ : Expr)) : m Expr
-    - mkEvalHorizontalCompAux'Whisker((f : Atom₁) (η θ : WhiskerLeft) (ηθ ηθ₁ ηθ₂ ηθ₃ : NormalExpr) (e_ηθ e_ηθ₁ e_ηθ₂ e_ηθ₃ : Expr)) : m Expr
-    - mkEvalHorizontalCompAux'OfWhisker((f : Atom₁) (η : HorizontalComp) (θ : WhiskerLeft) (η₁ ηθ ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_η₁ e_ηθ₁ e_ηθ₂ : Expr)) : m Expr
-    - mkEvalHorizontalCompNilNil((α β : Structural)) : m Expr
-    - mkEvalHorizontalCompNilCons((α β : Structural) (η : WhiskerLeft) (ηs η₁ ηs₁ η₂ η₃ : NormalExpr) (e_η₁ e_ηs₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalHorizontalCompConsNil((α β : Structural) (η : WhiskerLeft) (ηs : NormalExpr) (η₁ ηs₁ η₂ η₃ : NormalExpr) (e_η₁ e_ηs₁ e_η₂ e_η₃ : Expr)) : m Expr
-    - mkEvalHorizontalCompConsCons((α β : Structural) (η θ : WhiskerLeft) (ηs θs ηθ ηθs ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_ηθs e_ηθ₁ e_ηθ₂ : Expr)) : m Expr
+--- 原说明 ---
+Evaluate the expression `η ◫ θ`.
 -/
-class MkEvalHorizontalComp (m : Type -> Type) where
+class MkEvalHorizontalComp (m : Type → Type) where
   /-- Evaluate `η ◫ θ` -/
   mkEvalHorizontalCompAuxOf (η : WhiskerRight) (θ : HorizontalComp) : m Expr
   /-- Evaluate `(η ◫ ηs) ◫ θ` -/
@@ -871,34 +708,26 @@ class MkEvalHorizontalComp (m : Type -> Type) where
   mkEvalHorizontalCompConsCons (α β : Structural) (η θ : WhiskerLeft)
     (ηs θs ηθ ηθs ηθ₁ ηθ₂ : NormalExpr) (e_ηθ e_ηθs e_ηθ₁ e_ηθ₂ : Expr) : m Expr
 
-/--
-Definition of `MkEval` / `MkEval` 的定义
+/-- Evaluate the expression of a 2-morphism into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.MkEval** 是 Mathlib 中的一个类，位于命名空间 `Mathlib.Tactic.
+BicategoryLike`。
+形式化陈述：MkEval (m : Type -> Type) extends MkEvalComp m, MkEvalWhiskerLeft m, MkEva
+lWhiskerRight m, MkEvalHorizontalComp m where /-- Evaluate the expression `η ≫ θ
+` into a normalized form. -/ mkEvalComp (η θ : Mor₂) (η' θ' ηθ : NormalExpr) (e_
+η e_θ e_ηθ : Expr) : m Expr /-- Evaluate the expression `f ◁ η` into a normalize
+d form. -/ mkEvalWhiskerLeft (f : Mor₁) (η : Mor₂) (η' θ : NormalExpr) (e_η e_θ 
+: Expr) : m Expr /-- Evaluate the expression `η ▷ f` into a normalized form. -/ 
+mkEvalWhiskerRight (η : Mo
+参数：m : Type -> Type；η θ : Mor₂；η' θ' ηθ : NormalExpr；e_η e_θ e_ηθ : Expr。
+继承自：MkEvalComp m, MkEvalWhiskerLeft m, MkEvalWhiskerRight m, MkEvalHorizontalCom
+p m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MkEval
-  parameters: (m : Type -> Type)
-  axioms and operations (6):
-    - mkEvalComp((η θ : Mor₂) (η' θ' ηθ : NormalExpr) (e_η e_θ e_ηθ : Expr)) : m Expr
-    - mkEvalWhiskerLeft((f : Mor₁) (η : Mor₂) (η' θ : NormalExpr) (e_η e_θ : Expr)) : m Expr
-    - mkEvalWhiskerRight((η : Mor₂) (h : Mor₁) (η' θ : NormalExpr) (e_η e_θ : Expr)) : m Expr
-    - mkEvalHorizontalComp((η θ : Mor₂) (η' θ' ι : NormalExpr) (e_η e_θ e_ι : Expr)) : m Expr
-    - mkEvalOf((η : Atom)) : m Expr
-    - mkEvalMonoidalComp((η θ : Mor₂) (α : Structural) (η' θ' αθ ηαθ : NormalExpr) (e_η e_θ e_αθ e_ηαθ : Expr)) : m Expr
-
-中文:
-类 MkEval
-  参数: (m : 类型 -> 类型)
-  公理与运算 (6 个):
-    - mkEvalComp((η θ : Mor₂) (η' θ' ηθ : NormalExpr) (e_η e_θ e_ηθ : Expr)) : m Expr
-    - mkEvalWhiskerLeft((f : Mor₁) (η : Mor₂) (η' θ : NormalExpr) (e_η e_θ : Expr)) : m Expr
-    - mkEvalWhiskerRight((η : Mor₂) (h : Mor₁) (η' θ : NormalExpr) (e_η e_θ : Expr)) : m Expr
-    - mkEvalHorizontalComp((η θ : Mor₂) (η' θ' ι : NormalExpr) (e_η e_θ e_ι : Expr)) : m Expr
-    - mkEvalOf((η : 原子)) : m Expr
-    - mkEvalMonoidalComp((η θ : Mor₂) (α : Structural) (η' θ' αθ ηαθ : NormalExpr) (e_η e_θ e_αθ e_ηαθ : Expr)) : m Expr
-
-Depends on / 依赖: normalized
+--- 原说明 ---
+Evaluate the expression of a 2-morphism into a normalized form.
 -/
-class MkEval (m : Type -> Type) extends
+class MkEval (m : Type → Type) extends
     MkEvalComp m, MkEvalWhiskerLeft m, MkEvalWhiskerRight m, MkEvalHorizontalComp m where
   /-- Evaluate the expression `η ≫ θ` into a normalized form. -/
   mkEvalComp (η θ : Mor₂) (η' θ' ηθ : NormalExpr) (e_η e_θ e_ηθ : Expr) : m Expr
@@ -919,33 +748,47 @@ variable [MonadMor₂Iso (CoherenceM ρ)] [MonadNormalExpr (CoherenceM ρ)] [MkE
 
 open MkEvalComp MonadMor₂Iso MonadNormalExpr
 
-/--
-Definition of `evalCompNil` / `evalCompNil` 的定义
+/-- Evaluate the expression `α ≫ η` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalCompNil** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         Mathlib.
+Tactic.BicategoryLike.Structural →           Mathlib.Tactic.BicategoryLike.Norma
+lExpr →             Mathlib.Tactic.BicategoryLike.CoherenceM ρ Mathlib.Tactic.Bi
+categoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalCompNil
-  signature: (α : Structural)
-
-中文:
-定义 evalCompNil
-  签名: (α : Structural)
+--- 原说明 ---
+Evaluate the expression `α ≫ η` into a normalized form.
 -/
-def evalCompNil (α : Structural) : NormalExpr -> CoherenceM ρ Eval.Result
+def evalCompNil (α : Structural) : NormalExpr → CoherenceM ρ Eval.Result
   | .nil _ β => do return ⟨← nilM (← comp₂M α β), ← mkEvalCompNilNil α β⟩
   | .cons _ β η ηs => do return ⟨← consM (← comp₂M α β) η ηs, ← mkEvalCompNilCons α β η ηs⟩
 
-/--
-Definition of `evalComp` / `evalComp` 的定义
+/-- Evaluate the expression `η ≫ θ` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalComp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         Mathlib.
+Tactic.BicategoryLike.NormalExpr →           Mathlib.Tactic.BicategoryLike.Norma
+lExpr →             Mathlib.Tactic.BicategoryLike.CoherenceM ρ Mathlib.Tactic.Bi
+categoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalComp
-  signature: : NormalExpr -> NormalExpr -> CoherenceM ρ Eval.Result
-
-中文:
-定义 evalComp
-  签名: : NormalExpr -> NormalExpr -> CoherenceM ρ Eval.Result
+--- 原说明 ---
+Evaluate the expression `η ≫ θ` into a normalized form.
 -/
-def evalComp : NormalExpr -> NormalExpr -> CoherenceM ρ Eval.Result
+def evalComp : NormalExpr → NormalExpr → CoherenceM ρ Eval.Result
   | .nil _ α, η => do evalCompNil α η
   | .cons _ α η ηs, θ => do
     let ⟨ι, e_ι⟩ ← evalComp ηs θ
@@ -955,18 +798,27 @@ open MkEvalWhiskerLeft
 
 variable [MonadMor₁ (CoherenceM ρ)]
 
-/--
-Definition of `evalWhiskerLeft` / `evalWhiskerLeft` 的定义
+/-- Evaluate the expression `f ◁ η` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalWhiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         [Mathlib
+.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →
+           Mathlib.Tactic.BicategoryLike.Mor₁ →             Mathlib.Tactic.Bicat
+egoryLike.NormalExpr →               Mathlib.Tactic.BicategoryLike.CoherenceM ρ 
+Mathlib.Tactic.BicategoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLik
+e.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalWhiskerLeft
-  signature: : Mor₁ -> NormalExpr -> CoherenceM ρ Eval.Result
-
-中文:
-定义 evalWhiskerLeft
-  签名: : Mor₁ -> NormalExpr -> CoherenceM ρ Eval.Result
+--- 原说明 ---
+Evaluate the expression `f ◁ η` into a normalized form.
 -/
-def evalWhiskerLeft : Mor₁ -> NormalExpr -> CoherenceM ρ Eval.Result
+def evalWhiskerLeft : Mor₁ → NormalExpr → CoherenceM ρ Eval.Result
   | f, .nil _ α => do
     return ⟨← nilM (← whiskerLeftM f α), ← mkEvalWhiskerLeftNil f α⟩
   | .of f, .cons _ α η ηs => do
@@ -993,20 +845,29 @@ open MkEvalWhiskerRight MkEvalHorizontalComp
 
 mutual
 
-/--
-Definition of `evalWhiskerRightAux` / `evalWhiskerRightAux` 的定义
+/-- Evaluate the expression `η ▷ f` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalWhiskerRightAux** 是 Mathlib 中的一个不透明定义，位于命名空间
+ `Mathlib.Tactic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         [Mathlib
+.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →
+           Mathlib.Tactic.BicategoryLike.HorizontalComp →             Mathlib.Ta
+ctic.BicategoryLike.Atom₁ →               Mathlib.Tactic.BicategoryLike.Coherenc
+eM ρ Mathlib.Tactic.BicategoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLik
+e.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalWhiskerRightAux
-  signature: : HorizontalComp -> Atom₁ -> CoherenceM ρ Eval.Result
-
-中文:
-定义 evalWhiskerRightAux
-  签名: : HorizontalComp -> Atom₁ -> CoherenceM ρ Eval.Result
+--- 原说明 ---
+Evaluate the expression `η ▷ f` into a normalized form.
 -/
-partial def evalWhiskerRightAux : HorizontalComp -> Atom₁ -> CoherenceM ρ Eval.Result
+partial def evalWhiskerRightAux : HorizontalComp → Atom₁ → CoherenceM ρ Eval.Result
   | .of η, f => do
-let η' ← NormalExpr.ofM .of .of ← MonadWhiskerRight.whiskerRightM η f
+    let η' ← NormalExpr.ofM <| .of <| .of <| ← MonadWhiskerRight.whiskerRightM η f
     return ⟨η', ← mkEvalWhiskerRightAuxOf η f⟩
   | .cons _ η ηs, f => do
     let ⟨ηs', e_ηs'⟩ ← evalWhiskerRightAux ηs f
@@ -1015,18 +876,27 @@ let η' ← NormalExpr.ofM .of .of ← MonadWhiskerRight.whiskerRightM η f
     let ⟨η₃, e_η₃⟩ ← evalComp (← NormalExpr.associatorM (← η.srcM) (← ηs.srcM) (.of f)) η₂
     return ⟨η₃, ← mkEvalWhiskerRightAuxCons f η ηs ηs' η₁ η₂ η₃ e_ηs' e_η₁ e_η₂ e_η₃⟩
 
-/--
-Definition of `evalWhiskerRight` / `evalWhiskerRight` 的定义
+/-- Evaluate the expression `η ▷ f` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalWhiskerRight** 是 Mathlib 中的一个不透明定义，位于命名空间 `M
+athlib.Tactic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         [Mathlib
+.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →
+           Mathlib.Tactic.BicategoryLike.NormalExpr →             Mathlib.Tactic
+.BicategoryLike.Mor₁ →               Mathlib.Tactic.BicategoryLike.CoherenceM ρ 
+Mathlib.Tactic.BicategoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLik
+e.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalWhiskerRight
-  signature: : NormalExpr -> Mor₁ -> CoherenceM ρ Eval.Result
-
-中文:
-定义 evalWhiskerRight
-  签名: : NormalExpr -> Mor₁ -> CoherenceM ρ Eval.Result
+--- 原说明 ---
+Evaluate the expression `η ▷ f` into a normalized form.
 -/
-partial def evalWhiskerRight : NormalExpr -> Mor₁ -> CoherenceM ρ Eval.Result
+partial def evalWhiskerRight : NormalExpr → Mor₁ → CoherenceM ρ Eval.Result
   | .nil _ α, h => do
     return ⟨← nilM (← whiskerRightM α h), ← mkEvalWhiskerRightNil α h⟩
   | .cons _ α (.of η) ηs, .of f => do
@@ -1063,20 +933,29 @@ partial def evalWhiskerRight : NormalExpr -> Mor₁ -> CoherenceM ρ Eval.Result
     let ⟨η₂, e_η₂⟩ ← evalComp (← NormalExpr.rightUnitorM f) η₁
     return ⟨η₂, ← mkEvalWhiskerRightId η η₁ η₂ e_η₁ e_η₂⟩
 
-/--
-Definition of `evalHorizontalCompAux` / `evalHorizontalCompAux` 的定义
+/-- Evaluate the expression `η ⊗ θ` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalHorizontalCompAux** 是 Mathlib 中的一个不透明定义，位于命名
+空间 `Mathlib.Tactic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         [Mathlib
+.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →
+           Mathlib.Tactic.BicategoryLike.HorizontalComp →             Mathlib.Ta
+ctic.BicategoryLike.HorizontalComp →               Mathlib.Tactic.BicategoryLike
+.CoherenceM ρ Mathlib.Tactic.BicategoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLik
+e.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalHorizontalCompAux
-  signature: : HorizontalComp -> HorizontalComp -> CoherenceM ρ Eval.Result
-
-中文:
-定义 evalHorizontalCompAux
-  签名: : HorizontalComp -> HorizontalComp -> CoherenceM ρ Eval.Result
+--- 原说明 ---
+Evaluate the expression `η ⊗ θ` into a normalized form.
 -/
-partial def evalHorizontalCompAux : HorizontalComp -> HorizontalComp -> CoherenceM ρ Eval.Result
+partial def evalHorizontalCompAux : HorizontalComp → HorizontalComp → CoherenceM ρ Eval.Result
   | .of η, θ => do
-return ⟨← NormalExpr.ofM .of ← MonadHorizontalComp.hConsM η θ,
+    return ⟨← NormalExpr.ofM <| .of <| ← MonadHorizontalComp.hConsM η θ,
       ← mkEvalHorizontalCompAuxOf η θ⟩
   | .cons _ η ηs, θ => do
     let α ← NormalExpr.associatorM (← η.srcM) (← ηs.srcM) (← θ.srcM)
@@ -1087,18 +966,27 @@ return ⟨← NormalExpr.ofM .of ← MonadHorizontalComp.hConsM η θ,
     let ⟨ηθ₂, e_ηθ₂⟩ ← evalComp α ηθ₁
     return ⟨ηθ₂, ← mkEvalHorizontalCompAuxCons η ηs θ ηθ η₁ ηθ₁ ηθ₂ e_ηθ e_η₁ e_ηθ₁ e_ηθ₂⟩
 
-/--
-Definition of `evalHorizontalCompAux'` / `evalHorizontalCompAux'` 的定义
+/-- Evaluate the expression `η ⊗ θ` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalHorizontalCompAux'** 是 Mathlib 中的一个不透明定义，位于命
+名空间 `Mathlib.Tactic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         [Mathlib
+.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →
+           Mathlib.Tactic.BicategoryLike.WhiskerLeft →             Mathlib.Tacti
+c.BicategoryLike.WhiskerLeft →               Mathlib.Tactic.BicategoryLike.Coher
+enceM ρ Mathlib.Tactic.BicategoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLik
+e.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalHorizontalCompAux'
-  signature: : WhiskerLeft -> WhiskerLeft -> CoherenceM ρ Eval.Result
-
-中文:
-定义 evalHorizontalCompAux'
-  签名: : WhiskerLeft -> WhiskerLeft -> CoherenceM ρ Eval.Result
+--- 原说明 ---
+Evaluate the expression `η ⊗ θ` into a normalized form.
 -/
-partial def evalHorizontalCompAux' : WhiskerLeft -> WhiskerLeft -> CoherenceM ρ Eval.Result
+partial def evalHorizontalCompAux' : WhiskerLeft → WhiskerLeft → CoherenceM ρ Eval.Result
   | .of η, .of θ => evalHorizontalCompAux η θ
   | .whisker _ f η, θ => do
     let ⟨ηθ, e_ηθ⟩ ← evalHorizontalCompAux' η θ
@@ -1113,20 +1001,29 @@ partial def evalHorizontalCompAux' : WhiskerLeft -> WhiskerLeft -> CoherenceM ρ
     let ⟨ηθ₂, e_ηθ₂⟩ ← evalComp (← NormalExpr.associatorInvM (← η.srcM) (.of f) (← θ.srcM)) ηθ₁
     return ⟨ηθ₂, ← mkEvalHorizontalCompAux'OfWhisker f η θ ηθ η₁ ηθ₁ ηθ₂ e_η₁ e_ηθ e_ηθ₁ e_ηθ₂⟩
 
-/--
-Definition of `evalHorizontalComp` / `evalHorizontalComp` 的定义
+/-- Evaluate the expression `η ⊗ θ` into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.evalHorizontalComp** 是 Mathlib 中的一个不透明定义，位于命名空间 
+`Mathlib.Tactic.BicategoryLike`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₂Iso (Mathlib.Tactic
+.BicategoryLike.CoherenceM ρ)] →     [Mathlib.Tactic.BicategoryLike.MonadNormalE
+xpr (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →       [Mathlib.Tactic.Bicate
+goryLike.MkEval (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →         [Mathlib
+.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.BicategoryLike.CoherenceM ρ)] →
+           Mathlib.Tactic.BicategoryLike.NormalExpr →             Mathlib.Tactic
+.BicategoryLike.NormalExpr →               Mathlib.Tactic.BicategoryLike.Coheren
+ceM ρ Mathlib.Tactic.BicategoryLike.Eval.Result
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLike.Cohe
+renceM ρ；Mathlib.Tactic.BicategoryLike.CoherenceM ρ；Mathlib.Tactic.BicategoryLik
+e.CoherenceM ρ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalHorizontalComp
-  signature: : NormalExpr -> NormalExpr -> CoherenceM ρ Eval.Result
-
-中文:
-定义 evalHorizontalComp
-  签名: : NormalExpr -> NormalExpr -> CoherenceM ρ Eval.Result
+--- 原说明 ---
+Evaluate the expression `η ⊗ θ` into a normalized form.
 -/
-partial def evalHorizontalComp : NormalExpr -> NormalExpr -> CoherenceM ρ Eval.Result
+partial def evalHorizontalComp : NormalExpr → NormalExpr → CoherenceM ρ Eval.Result
   | .nil _ α, .nil _ β => do
-return ⟨← nilM ← horizontalCompM α β, ← mkEvalHorizontalCompNilNil α β⟩
+    return ⟨← nilM <| ← horizontalCompM α β, ← mkEvalHorizontalCompNilNil α β⟩
   | .nil _ α, .cons _ β η ηs => do
     let ⟨η₁, e_η₁⟩ ← evalWhiskerLeft (← α.tgtM) (← NormalExpr.ofM η)
     let ⟨ηs₁, e_ηs₁⟩ ← evalWhiskerLeft (← α.tgtM) ηs
@@ -1157,174 +1054,40 @@ variable {ρ : Type}
     [MonadNormalExpr (CoherenceM ρ)] [MkEval (CoherenceM ρ)]
     [MonadMor₂ (CoherenceM ρ)]
 
-/--
-Definition of `traceProof` / `traceProof` 的定义
+/-- Trace the proof of the normalization. -/
+/-
+**Mathlib.Tactic.BicategoryLike.traceProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.BicategoryLike`。
+形式化陈述：traceProof (nm : Name) (result : Expr) : CoherenceM ρ Unit
+参数：nm : Name；result : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition traceProof
-  signature: (nm : Name) (result : Expr)
-  body: do
-  withTraceNode nm (fun _ => return m!"{← inferType result}") do
-    if ← isTracingEnabledFor nm then addTrace nm m!"proof: {result}"
-
-中文:
-定义 traceProof
-  签名: (nm : Name) (result : Expr)
-  定义体: do
-  withTraceNode nm (fun _ => return m!"{← inferType result}") do
-    if ← isTracingEnabledFor nm then addTrace nm m!"proof: {result}"
+--- 原说明 ---
+Trace the proof of the normalization.
 -/
 def traceProof (nm : Name) (result : Expr) : CoherenceM ρ Unit := do
   withTraceNode nm (fun _ => return m!"{← inferType result}") do
     if ← isTracingEnabledFor nm then addTrace nm m!"proof: {result}"
 
 -- TODO: It takes a while to compile. Find out why.
-/--
-Definition of `eval` / `eval` 的定义
+/-- Evaluate the expression of a 2-morphism into a normalized form. -/
+/-
+**Mathlib.Tactic.BicategoryLike.eval** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.B
+icategoryLike`。
+形式化陈述：eval (nm : Name) (e : Mor₂) : CoherenceM ρ Eval.Result
+参数：nm : Name；e : Mor₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (nm : Name) (e : Mor₂)
-  body: do
-  withTraceNode nm (fun _ => return m!"eval: {e.e}") do
-    match e with
-    | .isoHom _ _ α => withTraceNode nm (fun _ => return m!"Iso.hom") do match α with
-| .structuralAtom α => return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
-      | .of η =>
-        let η ← MonadMor₂.atomHomM η
-        let result ← mkEvalOf η
-        traceProof nm result
-        return ⟨← NormalExpr.ofAtomM η, result⟩
-      | _ => throwError "not implemented. try dsimp first."
-    | .isoInv _ _ α => withTraceNode nm (fun _ => return m!"Iso.inv") do match α with
-| .structuralAtom α => return ⟨← nilM (← symmM (.structuralAtom α)), ← mkEqRefl e.e⟩
-      | .of η =>
-        let η ← MonadMor₂.atomInvM η
-        let result ← mkEvalOf η
-        traceProof nm result
-        return ⟨← NormalExpr.ofAtomM η, result⟩
-      | _ => throwError "not implemented. try dsimp first."
-    | .id _ _ f =>
-      let α ← MonadMor₂Iso.id₂M f
-return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
-    | .comp _ _ _ _ _ η θ => withTraceNode nm (fun _ => return m!"comp") do
-      let ⟨η', e_η⟩ ← eval nm η
-      let ⟨θ', e_θ⟩ ← eval nm θ
-      let ⟨ηθ, pf⟩ ← evalComp η' θ'
-      let result ← mkEvalComp η θ η' θ' ηθ e_η e_θ pf
-      traceProof nm result
-      return ⟨ηθ, result⟩
-    | .whiskerLeft _ _ f _ _ η => withTraceNode nm (fun _ => return m!"whiskerLeft") do
-      let ⟨η', e_η⟩ ← eval nm η
-      let ⟨θ, e_θ⟩ ← evalWhiskerLeft f η'
-      let result ← mkEvalWhiskerLeft f η η' θ e_η e_θ
-      traceProof nm result
-      return ⟨θ, result⟩
-    | .whiskerRight _ _ _ _ η h =>
-      withTraceNode nm (fun _ => return m!"whiskerRight") do
-        let ⟨η', e_η⟩ ← eval nm η
-        let ⟨θ, e_θ⟩ ← evalWhiskerRight η' h
-        let result ← mkEvalWhiskerRight η h η' θ e_η e_θ
-        traceProof nm result
-        return ⟨θ, result⟩
-    | .coherenceComp _ _ _ _ _ _ α₀ η θ =>
-      withTraceNode nm (fun _ => return m!"monoidalComp") do
-        let ⟨η', e_η⟩ ← eval nm η
-let α₀ := .structuralAtom .coherenceHom α₀
-        let α ← nilM α₀
-        let ⟨θ', e_θ⟩ ← eval nm θ
-        let ⟨αθ, e_αθ⟩ ← evalComp α θ'
-        let ⟨ηαθ, e_ηαθ⟩ ← evalComp η' αθ
-        let result ← mkEvalMonoidalComp η θ α₀ η' θ' αθ ηαθ e_η e_θ e_αθ e_ηαθ
-        traceProof nm result
-        return ⟨ηαθ, result⟩
-    | .horizontalComp _ _ _ _ _ _ η θ =>
-      withTraceNode nm (fun _ => return m!"horizontalComp") do
-        let ⟨η', e_η⟩ ← eval nm η
-        let ⟨θ', e_θ⟩ ← eval nm θ
-        let ⟨ηθ, e_ηθ⟩ ← evalHorizontalComp η' θ'
-        let result ← mkEvalHorizontalComp η θ η' θ' ηθ e_η e_θ e_ηθ
-        traceProof nm result
-        return ⟨ηθ, result⟩
-    | .of η =>
-      let result ← mkEvalOf η
-      traceProof nm result
-      return ⟨← NormalExpr.ofAtomM η, result⟩
-
-中文:
-定义 eval
-  签名: (nm : Name) (e : Mor₂)
-  定义体: do
-  withTraceNode nm (fun _ => return m!"eval: {e.e}") do
-    match e with
-    | .isoHom _ _ α => withTraceNode nm (fun _ => return m!"Iso.hom") do match α with
-| .structuralAtom α => return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
-      | .of η =>
-        let η ← MonadMor₂.atomHomM η
-        let result ← mkEvalOf η
-        traceProof nm result
-        return ⟨← NormalExpr.ofAtomM η, result⟩
-      | _ => throwError "not implemented. try dsimp first."
-    | .isoInv _ _ α => withTraceNode nm (fun _ => return m!"Iso.inv") do match α with
-| .structuralAtom α => return ⟨← nilM (← symmM (.structuralAtom α)), ← mkEqRefl e.e⟩
-      | .of η =>
-        let η ← MonadMor₂.atomInvM η
-        let result ← mkEvalOf η
-        traceProof nm result
-        return ⟨← NormalExpr.ofAtomM η, result⟩
-      | _ => throwError "not implemented. try dsimp first."
-    | .id _ _ f =>
-      let α ← MonadMor₂Iso.id₂M f
-return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
-    | .comp _ _ _ _ _ η θ => withTraceNode nm (fun _ => return m!"comp") do
-      let ⟨η', e_η⟩ ← eval nm η
-      let ⟨θ', e_θ⟩ ← eval nm θ
-      let ⟨ηθ, pf⟩ ← evalComp η' θ'
-      let result ← mkEvalComp η θ η' θ' ηθ e_η e_θ pf
-      traceProof nm result
-      return ⟨ηθ, result⟩
-    | .whiskerLeft _ _ f _ _ η => withTraceNode nm (fun _ => return m!"whiskerLeft") do
-      let ⟨η', e_η⟩ ← eval nm η
-      let ⟨θ, e_θ⟩ ← evalWhiskerLeft f η'
-      let result ← mkEvalWhiskerLeft f η η' θ e_η e_θ
-      traceProof nm result
-      return ⟨θ, result⟩
-    | .whiskerRight _ _ _ _ η h =>
-      withTraceNode nm (fun _ => return m!"whiskerRight") do
-        let ⟨η', e_η⟩ ← eval nm η
-        let ⟨θ, e_θ⟩ ← evalWhiskerRight η' h
-        let result ← mkEvalWhiskerRight η h η' θ e_η e_θ
-        traceProof nm result
-        return ⟨θ, result⟩
-    | .coherenceComp _ _ _ _ _ _ α₀ η θ =>
-      withTraceNode nm (fun _ => return m!"monoidalComp") do
-        let ⟨η', e_η⟩ ← eval nm η
-let α₀ := .structuralAtom .coherenceHom α₀
-        let α ← nilM α₀
-        let ⟨θ', e_θ⟩ ← eval nm θ
-        let ⟨αθ, e_αθ⟩ ← evalComp α θ'
-        let ⟨ηαθ, e_ηαθ⟩ ← evalComp η' αθ
-        let result ← mkEvalMonoidalComp η θ α₀ η' θ' αθ ηαθ e_η e_θ e_αθ e_ηαθ
-        traceProof nm result
-        return ⟨ηαθ, result⟩
-    | .horizontalComp _ _ _ _ _ _ η θ =>
-      withTraceNode nm (fun _ => return m!"horizontalComp") do
-        let ⟨η', e_η⟩ ← eval nm η
-        let ⟨θ', e_θ⟩ ← eval nm θ
-        let ⟨ηθ, e_ηθ⟩ ← evalHorizontalComp η' θ'
-        let result ← mkEvalHorizontalComp η θ η' θ' ηθ e_η e_θ e_ηθ
-        traceProof nm result
-        return ⟨ηθ, result⟩
-    | .of η =>
-      let result ← mkEvalOf η
-      traceProof nm result
-      return ⟨← NormalExpr.ofAtomM η, result⟩
+--- 原说明 ---
+Evaluate the expression of a 2-morphism into a normalized form.
 -/
 def eval (nm : Name) (e : Mor₂) : CoherenceM ρ Eval.Result := do
   withTraceNode nm (fun _ => return m!"eval: {e.e}") do
     match e with
     | .isoHom _ _ α => withTraceNode nm (fun _ => return m!"Iso.hom") do match α with
-| .structuralAtom α => return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
+      | .structuralAtom α => return ⟨← nilM <| .structuralAtom α, ← mkEqRefl e.e⟩
       | .of η =>
         let η ← MonadMor₂.atomHomM η
         let result ← mkEvalOf η
@@ -1332,16 +1095,16 @@ def eval (nm : Name) (e : Mor₂) : CoherenceM ρ Eval.Result := do
         return ⟨← NormalExpr.ofAtomM η, result⟩
       | _ => throwError "not implemented. try dsimp first."
     | .isoInv _ _ α => withTraceNode nm (fun _ => return m!"Iso.inv") do match α with
-| .structuralAtom α => return ⟨← nilM (← symmM (.structuralAtom α)), ← mkEqRefl e.e⟩
+      | .structuralAtom α => return ⟨← nilM <| (← symmM (.structuralAtom α)), ← mkEqRefl e.e⟩
       | .of η =>
         let η ← MonadMor₂.atomInvM η
         let result ← mkEvalOf η
         traceProof nm result
         return ⟨← NormalExpr.ofAtomM η, result⟩
       | _ => throwError "not implemented. try dsimp first."
-    | .id _ _ f =>
+    | .id _ _ f  =>
       let α ← MonadMor₂Iso.id₂M f
-return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
+      return  ⟨← nilM <| .structuralAtom α, ← mkEqRefl e.e⟩
     | .comp _ _ _ _ _ η θ => withTraceNode nm (fun _ => return m!"comp") do
       let ⟨η', e_η⟩ ← eval nm η
       let ⟨θ', e_θ⟩ ← eval nm θ
@@ -1365,7 +1128,7 @@ return ⟨← nilM .structuralAtom α, ← mkEqRefl e.e⟩
     | .coherenceComp _ _ _ _ _ _ α₀ η θ =>
       withTraceNode nm (fun _ => return m!"monoidalComp") do
         let ⟨η', e_η⟩ ← eval nm η
-let α₀ := .structuralAtom .coherenceHom α₀
+        let α₀ := .structuralAtom <| .coherenceHom α₀
         let α ← nilM α₀
         let ⟨θ', e_θ⟩ ← eval nm θ
         let ⟨αθ, e_αθ⟩ ← evalComp α θ'
@@ -1381,7 +1144,7 @@ let α₀ := .structuralAtom .coherenceHom α₀
         let result ← mkEvalHorizontalComp η θ η' θ' ηθ e_η e_θ e_ηθ
         traceProof nm result
         return ⟨ηθ, result⟩
-    | .of η =>
+    | .of η  =>
       let result ← mkEvalOf η
       traceProof nm result
       return ⟨← NormalExpr.ofAtomM η, result⟩
@@ -1389,3 +1152,4 @@ let α₀ := .structuralAtom .coherenceHom α₀
 end
 
 end Mathlib.Tactic.BicategoryLike
+

@@ -23,75 +23,42 @@ universe u w
 
 open CategoryTheory Limits CompHausLike
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasExplicitPullbacks (fun Y => TotallyDisconnectedSpace Y)
-  body: { hasProp :=
-    show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance }
-
-中文:
-实例 :
-  签名: 有ExplicitPullbacks (fun Y => 全不连通空间 Y)
-  定义体: { hasProp :=
-    show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance }
-
-Depends on / 依赖: hasProp
+/-
+**Profinite.** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : HasExplicitPullbacks (fun Y => TotallyDisconnectedSpace Y) where
+instance : HasExplicitPullbacks (fun Y ↦ TotallyDisconnectedSpace Y) where
   hasProp _ _ := { hasProp :=
     show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasExplicitFiniteCoproducts.{w, u} (fun Y => TotallyDisconnectedSpace Y)
-  body: { hasProp :=
-    show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance }
-
-中文:
-实例 :
-  签名: 有ExplicitFiniteCoproducts.{w, u} (fun Y => 全不连通空间 Y)
-  定义体: { hasProp :=
-    show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance }
-
-Depends on / 依赖: hasProp
+/-
+**Profinite.** 是 Mathlib 中的一个实例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : HasExplicitFiniteCoproducts.{w, u} (fun Y => TotallyDisconnectedSpace Y) where
+instance : HasExplicitFiniteCoproducts.{w, u} (fun Y ↦ TotallyDisconnectedSpace Y) where
   hasProp _ := { hasProp :=
     show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance }
 
-/--
-Definition of `isTerminalPUnit` / `isTerminalPUnit` 的定义
+/-- A one-element space is terminal in `Profinite` -/
+/-
+**Profinite.isTerminalPUnit** 是 Mathlib 中的一个缩写定义，位于命名空间 `Profinite`。
+形式化陈述：isTerminalPUnit : IsTerminal (Profinite.of PUnit.{u + 1})
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation isTerminalPUnit
-  signature: : IsTerminal (Profinite.of PUnit.{u + 1})
-  body: CompHausLike.isTerminalPUnit
-
-example : FinitaryExtensive Profinite.{u} := inferInstance
-
-noncomputable example : PreservesFiniteCoproducts profiniteToCompHaus := inferInstance
-
-中文:
-缩写 isTerminalPUnit
-  签名: : 是终止 (Profinite.of 命题单元.{u + 1})
-  定义体: CompHausLike.isTerminalPUnit
-
-example : FinitaryExtensive Profinite.{u} := inferInstance
-
-noncomputable example : PreservesFiniteCoproducts profiniteToCompHaus := inferInstance
-
-Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit, isTerminalPUnit
+--- 原说明 ---
+A one-element space is terminal in `Profinite`
 -/
 abbrev isTerminalPUnit : IsTerminal (Profinite.of PUnit.{u + 1}) := CompHausLike.isTerminalPUnit
-
+/-
+**Profinite.** 是 Mathlib 中的一个示例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : FinitaryExtensive Profinite.{u} := inferInstance
-
+/-
+**Profinite.** 是 Mathlib 中的一个示例，位于命名空间 `Profinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable example : PreservesFiniteCoproducts profiniteToCompHaus := inferInstance
 
 end Profinite
+

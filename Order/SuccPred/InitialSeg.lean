@@ -23,130 +23,97 @@ open Order
 namespace InitialSeg
 
 @[simp]
-/--
-theorem `apply_covBy_apply_iff` / 定理 `apply_covBy_apply_iff`
-
-English:
-theorem apply_covBy_apply_iff
-  given: (f : α <=i β)
-  statement: f a ⋖ f b ↔ a ⋖ b
-  proof: (isLowerSet_range f).ordConnected.apply_covBy_apply_iff f.toOrderEmbedding
-
-@[simp]
-
-中文:
-定理 apply_covBy_apply_iff
-  条件: (f : α <=i β)
-  结论: f a ⋖ f b ↔ a ⋖ b
-  证明: (isLowerSet_range f).ordConnected.apply_covBy_apply_iff f.toOrderEmbedding
-
-@[simp]
-
-Depends on / 依赖: apply_covBy_apply_iff, f.toOrderEmbedding, isLowerSet_range, ordConnected, ordConnected.apply_covBy_apply_iff, toOrderEmbedding
+/-
+**InitialSeg.apply_covBy_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `InitialSeg`。
+形式化陈述：apply_covBy_apply_iff (f : α <=i β) : f a ⋖ f b ↔ a ⋖ b
+参数：f : α <=i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.apply_covBy_apply_iff`：Set.OrdConnected.apply_covBy_app
+ly_iff (f : α ↪o β) (h : (range f).OrdConnected) : f a ⋖ f b ↔ a ⋖ b
+· 使用定理 `IsLowerSet.ordConnected`：IsLowerSet.ordConnected (h : IsLowerSet s) : s.
+OrdConnected
+· 使用定理 `InitialSeg.isLowerSet_range`：isLowerSet_range [LT α] (f : α <=i β) : IsL
+owerSet (Set.range f)
 -/
-theorem apply_covBy_apply_iff (f : α <=i β) : f a ⋖ f b ↔ a ⋖ b :=
+theorem apply_covBy_apply_iff (f : α ≤i β) : f a ⋖ f b ↔ a ⋖ b :=
   (isLowerSet_range f).ordConnected.apply_covBy_apply_iff f.toOrderEmbedding
 
 @[simp]
-/--
-theorem `apply_wCovBy_apply_iff` / 定理 `apply_wCovBy_apply_iff`
-
-English:
-theorem apply_wCovBy_apply_iff
-  given: (f : α <=i β)
-  statement: f a ⩿ f b ↔ a ⩿ b
-  proof: by
-  simp [wcovBy_iff_eq_or_covBy]
-
-中文:
-定理 apply_wCovBy_apply_iff
-  条件: (f : α <=i β)
-  结论: f a ⩿ f b ↔ a ⩿ b
-  证明: by
-  simp [wcovBy_iff_eq_or_covBy]
-
-Depends on / 依赖: wcovBy_iff_eq_or_covBy
+/-
+**InitialSeg.apply_wCovBy_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `InitialSeg`。
+形式化陈述：apply_wCovBy_apply_iff (f : α <=i β) : f a ⩿ f b ↔ a ⩿ b
+参数：f : α <=i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `InitialSeg.instEmbeddingLike`：∀ {α : Type u_1} {β : Type u_2} {r : α → α
+ → Prop} {s : β → β → Prop}, EmbeddingLike (InitialSeg r s) α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem apply_wCovBy_apply_iff (f : α <=i β) : f a ⩿ f b ↔ a ⩿ b := by
+theorem apply_wCovBy_apply_iff (f : α ≤i β) : f a ⩿ f b ↔ a ⩿ b := by
   simp [wcovBy_iff_eq_or_covBy]
-
-/--
-theorem `map_succ` / 定理 `map_succ`
-
-English:
-theorem map_succ
-  given: [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <=i β) (a : α)
-  proof: (f.apply_covBy_apply_iff.2 (covBy_succ a)).succ_eq.symm
-
-中文:
-定理 map_succ
-  条件: [Succ序 α] [NoMax序 α] [Succ序 β] (f : α <=i β) (a : α)
-  证明: (f.apply_covBy_apply_iff.2 (covBy_succ a)).succ_eq.symm
-
-Depends on / 依赖: apply_covBy_apply_iff, covBy_succ, f.apply_covBy_apply_iff, succ_eq, succ_eq.symm
+/-
+**InitialSeg.map_succ** 是 Mathlib 中的一个定理，位于命名空间 `InitialSeg`。
+形式化陈述：map_succ [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <=i β) (a : α) 
+: f (succ a) = succ (f a)
+参数：f : α <=i β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CovBy.succ_eq`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : SuccOr
+der α] {a b : α}, a ⋖ b → Order.succ a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `InitialSeg.apply_covBy_apply_iff`：apply_covBy_apply_iff (f : α <=i β) : 
+f a ⋖ f b ↔ a ⋖ b
+· 使用定理 `Order.covBy_succ`：covBy_succ (a : α) : a ⋖ succ a
 -/
-theorem map_succ [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <=i β) (a : α) :
+theorem map_succ [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α ≤i β) (a : α) :
     f (succ a) = succ (f a) :=
   (f.apply_covBy_apply_iff.2 (covBy_succ a)).succ_eq.symm
-
-/--
-theorem `map_pred` / 定理 `map_pred`
-
-English:
-theorem map_pred
-  given: [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α)
-  proof: (f.apply_covBy_apply_iff.2 (pred_covBy a)).pred_eq.symm
-
-@[simp]
-
-中文:
-定理 map_pred
-  条件: [Pred序 α] [NoMin序 α] [Pred序 β] (f : α <=i β) (a : α)
-  证明: (f.apply_covBy_apply_iff.2 (pred_covBy a)).pred_eq.symm
-
-@[simp]
-
-Depends on / 依赖: apply_covBy_apply_iff, f.apply_covBy_apply_iff, pred_covBy, pred_eq, pred_eq.symm
+/-
+**InitialSeg.map_pred** 是 Mathlib 中的一个定理，位于命名空间 `InitialSeg`。
+形式化陈述：map_pred [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α) 
+: f (pred a) = pred (f a)
+参数：f : α <=i β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CovBy.pred_eq`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : PredOr
+der α] {a b : α}, b ⋖ a → Order.pred a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `InitialSeg.apply_covBy_apply_iff`：apply_covBy_apply_iff (f : α <=i β) : 
+f a ⋖ f b ↔ a ⋖ b
+· 使用定理 `Order.pred_covBy`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : PredOrd
+er α] [NoMinOrder α] (a : α), Order.pred a ⋖ a
 -/
-theorem map_pred [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α) :
+theorem map_pred [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α ≤i β) (a : α) :
     f (pred a) = pred (f a) :=
   (f.apply_covBy_apply_iff.2 (pred_covBy a)).pred_eq.symm
 
 @[simp]
-/--
-theorem `isSuccPrelimit_apply_iff` / 定理 `isSuccPrelimit_apply_iff`
-
-English:
-theorem isSuccPrelimit_apply_iff
-  given: (f : α <=i β)
-  statement: IsSuccPrelimit (f a) ↔ IsSuccPrelimit a
-  proof: by
-  constructor <;> intro h b hb
-  · rw [← f.apply_covBy_apply_iff] at hb
-    exact h _ hb
-  · obtain ⟨c, rfl⟩ := f.mem_range_of_rel hb.lt
-    rw [f.apply_covBy_apply_iff] at hb
-    exact h _ hb
-
-@[simp]
-
-中文:
-定理 isSuccPrelimit_apply_iff
-  条件: (f : α <=i β)
-  结论: IsSuccPrelimit (f a) ↔ IsSuccPrelimit a
-  证明: by
-  constructor <;> intro h b hb
-  · rw [← f.apply_covBy_apply_iff] at hb
-    exact h _ hb
-  · obtain ⟨c, rfl⟩ := f.mem_range_of_rel hb.lt
-    rw [f.apply_covBy_apply_iff] at hb
-    exact h _ hb
-
-@[simp]
-
-Depends on / 依赖: apply_covBy_apply_iff, f.apply_covBy_apply_iff, f.mem_range_of_rel, hb.lt, mem_range_of_rel
+/-
+**InitialSeg.isSuccPrelimit_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `InitialSeg`。
+形式化陈述：isSuccPrelimit_apply_iff (f : α <=i β) : IsSuccPrelimit (f a) ↔ IsSuccPrel
+imit a
+参数：f : α <=i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `InitialSeg.apply_covBy_apply_iff`：apply_covBy_apply_iff (f : α <=i β) : 
+f a ⋖ f b ↔ a ⋖ b
+· 使用定理 `InitialSeg.mem_range_of_rel`：mem_range_of_rel (f : r ≼i s) {a : α} {b : 
+β} : s b (f a) -> b in Set.range f
+· 使用定理 `CovBy.lt`：CovBy.lt (h : a ⋖ b) : a < b
 -/
-theorem isSuccPrelimit_apply_iff (f : α <=i β) : IsSuccPrelimit (f a) ↔ IsSuccPrelimit a := by
+theorem isSuccPrelimit_apply_iff (f : α ≤i β) : IsSuccPrelimit (f a) ↔ IsSuccPrelimit a := by
   constructor <;> intro h b hb
   · rw [← f.apply_covBy_apply_iff] at hb
     exact h _ hb
@@ -155,32 +122,23 @@ theorem isSuccPrelimit_apply_iff (f : α <=i β) : IsSuccPrelimit (f a) ↔ IsSu
     exact h _ hb
 
 @[simp]
-/--
-theorem `isSuccLimit_apply_iff` / 定理 `isSuccLimit_apply_iff`
-
-English:
-theorem isSuccLimit_apply_iff
-  given: (f : α <=i β)
-  statement: IsSuccLimit (f a) ↔ IsSuccLimit a
-  proof: by
-  simp [isSuccLimit_iff]
-
-alias ⟨_, map_isSuccPrelimit⟩ := isSuccPrelimit_apply_iff
-alias ⟨_, map_isSuccLimit⟩ := isSuccLimit_apply_iff
-
-中文:
-定理 isSuccLimit_apply_iff
-  条件: (f : α <=i β)
-  结论: 是SuccLimit (f a) ↔ 是SuccLimit a
-  证明: by
-  simp [isSuccLimit_iff]
-
-alias ⟨_, map_isSuccPrelimit⟩ := isSuccPrelimit_apply_iff
-alias ⟨_, map_isSuccLimit⟩ := isSuccLimit_apply_iff
-
-Depends on / 依赖: isSuccLimit_iff
+/-
+**InitialSeg.isSuccLimit_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `InitialSeg`。
+形式化陈述：isSuccLimit_apply_iff (f : α <=i β) : IsSuccLimit (f a) ↔ IsSuccLimit a
+参数：f : α <=i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isSuccLimit_apply_iff (f : α <=i β) : IsSuccLimit (f a) ↔ IsSuccLimit a := by
+theorem isSuccLimit_apply_iff (f : α ≤i β) : IsSuccLimit (f a) ↔ IsSuccLimit a := by
   simp [isSuccLimit_iff]
 
 alias ⟨_, map_isSuccPrelimit⟩ := isSuccPrelimit_apply_iff
@@ -191,146 +149,107 @@ end InitialSeg
 namespace PrincipalSeg
 
 @[simp]
-/--
-theorem `apply_covBy_apply_iff` / 定理 `apply_covBy_apply_iff`
-
-English:
-theorem apply_covBy_apply_iff
-  given: (f : α <i β)
-  statement: f a ⋖ f b ↔ a ⋖ b
-  proof: (f : α <=i β).apply_covBy_apply_iff
-
-@[simp]
-
-中文:
-定理 apply_covBy_apply_iff
-  条件: (f : α <i β)
-  结论: f a ⋖ f b ↔ a ⋖ b
-  证明: (f : α <=i β).apply_covBy_apply_iff
-
-@[simp]
-
-Depends on / 依赖: apply_covBy_apply_iff
+/-
+**PrincipalSeg.apply_covBy_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `PrincipalSeg`。
+形式化陈述：apply_covBy_apply_iff (f : α <i β) : f a ⋖ f b ↔ a ⋖ b
+参数：f : α <i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InitialSeg.apply_covBy_apply_iff`：apply_covBy_apply_iff (f : α <=i β) : 
+f a ⋖ f b ↔ a ⋖ b
+· 使用定理 `PrincipalSeg.mem_range_of_rel`：mem_range_of_rel [IsTrans β s] (f : r ≺i 
+s) {a : α} {b : β} (h : s b (f a)) : b in Set.range f
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 theorem apply_covBy_apply_iff (f : α <i β) : f a ⋖ f b ↔ a ⋖ b :=
-  (f : α <=i β).apply_covBy_apply_iff
+  (f : α ≤i β).apply_covBy_apply_iff
 
 @[simp]
-/--
-theorem `apply_wCovBy_apply_iff` / 定理 `apply_wCovBy_apply_iff`
-
-English:
-theorem apply_wCovBy_apply_iff
-  given: (f : α <i β)
-  statement: f a ⩿ f b ↔ a ⩿ b
-  proof: (f : α <=i β).apply_wCovBy_apply_iff
-
-中文:
-定理 apply_wCovBy_apply_iff
-  条件: (f : α <i β)
-  结论: f a ⩿ f b ↔ a ⩿ b
-  证明: (f : α <=i β).apply_wCovBy_apply_iff
-
-Depends on / 依赖: apply_wCovBy_apply_iff
+/-
+**PrincipalSeg.apply_wCovBy_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `PrincipalSeg`。
+形式化陈述：apply_wCovBy_apply_iff (f : α <i β) : f a ⩿ f b ↔ a ⩿ b
+参数：f : α <i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InitialSeg.apply_wCovBy_apply_iff`：apply_wCovBy_apply_iff (f : α <=i β) 
+: f a ⩿ f b ↔ a ⩿ b
+· 使用定理 `PrincipalSeg.mem_range_of_rel`：mem_range_of_rel [IsTrans β s] (f : r ≺i 
+s) {a : α} {b : β} (h : s b (f a)) : b in Set.range f
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 theorem apply_wCovBy_apply_iff (f : α <i β) : f a ⩿ f b ↔ a ⩿ b :=
-  (f : α <=i β).apply_wCovBy_apply_iff
-
-/--
-theorem `map_succ` / 定理 `map_succ`
-
-English:
-theorem map_succ
-  given: [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <i β) (a : α)
-  proof: (f : α <=i β).map_succ a
-
-中文:
-定理 map_succ
-  条件: [Succ序 α] [NoMax序 α] [Succ序 β] (f : α <i β) (a : α)
-  证明: (f : α <=i β).map_succ a
-
-Depends on / 依赖: map_succ
+  (f : α ≤i β).apply_wCovBy_apply_iff
+/-
+**PrincipalSeg.map_succ** 是 Mathlib 中的一个定理，位于命名空间 `PrincipalSeg`。
+形式化陈述：map_succ [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <i β) (a : α) :
+ f (succ a) = succ (f a)
+参数：f : α <i β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InitialSeg.map_succ`：map_succ [SuccOrder α] [NoMaxOrder α] [SuccOrder β]
+ (f : α <=i β) (a : α) : f (succ a) = succ (f a)
+· 使用定理 `PrincipalSeg.mem_range_of_rel`：mem_range_of_rel [IsTrans β s] (f : r ≺i 
+s) {a : α} {b : β} (h : s b (f a)) : b in Set.range f
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 theorem map_succ [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <i β) (a : α) :
     f (succ a) = succ (f a) :=
-  (f : α <=i β).map_succ a
-
-/--
-theorem `map_pred` / 定理 `map_pred`
-
-English:
-theorem map_pred
-  given: [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α)
-  proof: (f : α <=i β).map_pred a
-
-@[simp]
-
-中文:
-定理 map_pred
-  条件: [Pred序 α] [NoMin序 α] [Pred序 β] (f : α <=i β) (a : α)
-  证明: (f : α <=i β).map_pred a
-
-@[simp]
-
-Depends on / 依赖: map_pred
+  (f : α ≤i β).map_succ a
+/-
+**PrincipalSeg.map_pred** 是 Mathlib 中的一个定理，位于命名空间 `PrincipalSeg`。
+形式化陈述：map_pred [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α) 
+: f (pred a) = pred (f a)
+参数：f : α <=i β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InitialSeg.map_pred`：map_pred [PredOrder α] [NoMinOrder α] [PredOrder β]
+ (f : α <=i β) (a : α) : f (pred a) = pred (f a)
 -/
-theorem map_pred [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α) :
+theorem map_pred [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α ≤i β) (a : α) :
     f (pred a) = pred (f a) :=
-  (f : α <=i β).map_pred a
+  (f : α ≤i β).map_pred a
 
 @[simp]
-/--
-theorem `isSuccPrelimit_apply_iff` / 定理 `isSuccPrelimit_apply_iff`
-
-English:
-theorem isSuccPrelimit_apply_iff
-  given: (f : α <i β)
-  statement: IsSuccPrelimit (f a) ↔ IsSuccPrelimit a
-  proof: (f : α <=i β).isSuccPrelimit_apply_iff
-
-@[simp]
-
-中文:
-定理 isSuccPrelimit_apply_iff
-  条件: (f : α <i β)
-  结论: IsSuccPrelimit (f a) ↔ IsSuccPrelimit a
-  证明: (f : α <=i β).isSuccPrelimit_apply_iff
-
-@[simp]
-
-Depends on / 依赖: isSuccPrelimit_apply_iff
+/-
+**PrincipalSeg.isSuccPrelimit_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `PrincipalSeg`
+。
+形式化陈述：isSuccPrelimit_apply_iff (f : α <i β) : IsSuccPrelimit (f a) ↔ IsSuccPreli
+mit a
+参数：f : α <i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InitialSeg.isSuccPrelimit_apply_iff`：isSuccPrelimit_apply_iff (f : α <=i
+ β) : IsSuccPrelimit (f a) ↔ IsSuccPrelimit a
+· 使用定理 `PrincipalSeg.mem_range_of_rel`：mem_range_of_rel [IsTrans β s] (f : r ≺i 
+s) {a : α} {b : β} (h : s b (f a)) : b in Set.range f
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 theorem isSuccPrelimit_apply_iff (f : α <i β) : IsSuccPrelimit (f a) ↔ IsSuccPrelimit a :=
-  (f : α <=i β).isSuccPrelimit_apply_iff
+  (f : α ≤i β).isSuccPrelimit_apply_iff
 
 @[simp]
-/--
-theorem `isSuccLimit_apply_iff` / 定理 `isSuccLimit_apply_iff`
-
-English:
-theorem isSuccLimit_apply_iff
-  given: (f : α <i β)
-  statement: IsSuccLimit (f a) ↔ IsSuccLimit a
-  proof: (f : α <=i β).isSuccLimit_apply_iff
-
-alias ⟨_, map_isSuccPrelimit⟩ := isSuccPrelimit_apply_iff
-alias ⟨_, map_isSuccLimit⟩ := isSuccLimit_apply_iff
-
-中文:
-定理 isSuccLimit_apply_iff
-  条件: (f : α <i β)
-  结论: 是SuccLimit (f a) ↔ 是SuccLimit a
-  证明: (f : α <=i β).isSuccLimit_apply_iff
-
-alias ⟨_, map_isSuccPrelimit⟩ := isSuccPrelimit_apply_iff
-alias ⟨_, map_isSuccLimit⟩ := isSuccLimit_apply_iff
-
-Depends on / 依赖: isSuccLimit_apply_iff
+/-
+**PrincipalSeg.isSuccLimit_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `PrincipalSeg`。
+形式化陈述：isSuccLimit_apply_iff (f : α <i β) : IsSuccLimit (f a) ↔ IsSuccLimit a
+参数：f : α <i β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InitialSeg.isSuccLimit_apply_iff`：isSuccLimit_apply_iff (f : α <=i β) : 
+IsSuccLimit (f a) ↔ IsSuccLimit a
+· 使用定理 `PrincipalSeg.mem_range_of_rel`：mem_range_of_rel [IsTrans β s] (f : r ≺i 
+s) {a : α} {b : β} (h : s b (f a)) : b in Set.range f
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 theorem isSuccLimit_apply_iff (f : α <i β) : IsSuccLimit (f a) ↔ IsSuccLimit a :=
-  (f : α <=i β).isSuccLimit_apply_iff
+  (f : α ≤i β).isSuccLimit_apply_iff
 
 alias ⟨_, map_isSuccPrelimit⟩ := isSuccPrelimit_apply_iff
 alias ⟨_, map_isSuccLimit⟩ := isSuccLimit_apply_iff
 
 end PrincipalSeg
+

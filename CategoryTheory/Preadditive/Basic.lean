@@ -60,32 +60,21 @@ variable (C : Type u) [Category.{v} C]
 /-- A category is called preadditive if `P ⟶ Q` is an abelian group such that composition is
 linear in both variables. -/
 @[stacks 00ZY]
-/--
-Definition of `Preadditive` / `Preadditive` 的定义
+/-
+**CategoryTheory.Preadditive** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：Preadditive where homGroup : forall P Q : C, AddCommGroup (P ⟶ Q)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Preadditive
-  parameters: where
-  axioms and operations (3):
-    - homGroup : forall P Q : C, AddCommGroup (P ⟶ Q)  [default: by infer_instance]
-    - add_comp : forall (P Q R : C) (f f' : P ⟶ Q) (g : Q ⟶ R), (f + f') ≫ g = f ≫ g + f' ≫ g  [default: by cat_disch]
-    - comp_add : forall (P Q R : C) (f : P ⟶ Q) (g g' : Q ⟶ R), f ≫ (g + g') = f ≫ g + f ≫ g'  [default: by cat_disch]
-
-中文:
-类 预加性
-  参数: where
-  公理与运算 (3 个):
-    - homGroup : 对任意 P Q : C, 加法交换群 (P ⟶ Q)  [默认: by infer_instance]
-    - add_comp : 对任意 (P Q R : C) (f f' : P ⟶ Q) (g : Q ⟶ R), (f + f') ≫ g = f ≫ g + f' ≫ g  [默认: by cat_disch]
-    - comp_add : 对任意 (P Q R : C) (f : P ⟶ Q) (g g' : Q ⟶ R), f ≫ (g + g') = f ≫ g + f ≫ g'  [默认: by cat_disch]
-
-Depends on / 依赖: add_comp, cat_disch, comp_add, infer_instance
+--- 原说明 ---
+A category is called preadditive if `P ⟶ Q` is an abelian group such that compos
+ition is
+linear in both variables.
 -/
 class Preadditive where
-  homGroup : forall P Q : C, AddCommGroup (P ⟶ Q) := by infer_instance
-  add_comp : forall (P Q R : C) (f f' : P ⟶ Q) (g : Q ⟶ R), (f + f') ≫ g = f ≫ g + f' ≫ g := by
+  homGroup : ∀ P Q : C, AddCommGroup (P ⟶ Q) := by infer_instance
+  add_comp : ∀ (P Q R : C) (f f' : P ⟶ Q) (g : Q ⟶ R), (f + f') ≫ g = f ≫ g + f' ≫ g := by
     cat_disch
-  comp_add : forall (P Q R : C) (f : P ⟶ Q) (g g' : Q ⟶ R), f ≫ (g + g') = f ≫ g + f ≫ g' := by
+  comp_add : ∀ (P Q R : C) (f : P ⟶ Q) (g g' : Q ⟶ R), f ≫ (g + g') = f ≫ g + f ≫ g' := by
     cat_disch
 
 attribute [inherit_doc Preadditive] Preadditive.homGroup Preadditive.add_comp Preadditive.comp_add
@@ -117,26 +106,14 @@ section InducedCategory
 
 universe u'
 
-variable {D : Type u'} (F : D -> C)
+variable {D : Type u'} (F : D → C)
 
-/--
-Instance `inducedCategory` / 实例 `inducedCategory`
-
-English:
-instance inducedCategory
-  signature: : Preadditive.{v} (InducedCategory C F) where
-  body: InducedCategory.homEquiv.addCommGroup
-  add_comp _ _ _ _ _ _ := by ext; apply add_comp
-  comp_add _ _ _ _ _ _ := by ext; apply comp_add
-
-中文:
-实例 inducedCategory
-  签名: : 预加性.{v} (InducedCategory C F) where
-  定义体: InducedCategory.homEquiv.addCommGroup
-  add_comp _ _ _ _ _ _ := by ext; apply add_comp
-  comp_add _ _ _ _ _ _ := by ext; apply comp_add
-
-Depends on / 依赖: InducedCategory, InducedCategory.homEquiv.addCommGroup, addCommGroup, homEquiv
+/-
+**CategoryTheory.Preadditive.inducedCategory** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Preadditive`。
+形式化陈述：inducedCategory : Preadditive.{v} (InducedCategory C F) where homGroup P Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inducedCategory : Preadditive.{v} (InducedCategory C F) where
   homGroup P Q := InducedCategory.homEquiv.addCommGroup
@@ -147,20 +124,14 @@ variable {F} in
 /-- The additive equivalence `(X ⟶ Y) ≃+ (F X ⟶ F Y)` when `F : D → C` and
 `C` is a preadditive category. -/
 @[simps!]
-/--
-Definition of `_root_.CategoryTheory.InducedCategory.homAddEquiv` / `_root_.CategoryTheory.InducedCategory.homAddEquiv` 的定义
+/-
+**CategoryTheory.Preadditive._root_.CategoryTheory.InducedCategory.homAddEquiv**
+ 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Preadditive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.CategoryTheory.InducedCategory.homAddEquiv
-  body: InducedCategory.homEquiv
-  map_add' := by aesop_cat
-
-中文:
-定义 _root_.范畴论.InducedCategory.homAddEquiv
-  定义体: InducedCategory.homEquiv
-  map_add' := by aesop_cat
-
-Depends on / 依赖: InducedCategory, InducedCategory.homEquiv, homEquiv
+--- 原说明 ---
+The additive equivalence `(X ⟶ Y) ≃+ (F X ⟶ F Y)` when `F : D → C` and
+`C` is a preadditive category.
 -/
 def _root_.CategoryTheory.InducedCategory.homAddEquiv
     {X Y : InducedCategory C F} :
@@ -170,28 +141,14 @@ def _root_.CategoryTheory.InducedCategory.homAddEquiv
 
 end InducedCategory
 
-/--
-Instance `fullSubcategory` / 实例 `fullSubcategory`
-
-English:
-instance fullSubcategory
-  signature: (Z : ObjectProperty C)
-  body: {
-      -- Note: Add zero field explicitly for a better transparency of definitional properties
-      zero := Z.homMk 0
-      __ := InducedCategory.homEquiv.addCommGroup }
-  add_comp _ _ _ _ _ _ := by ext; apply add_comp
-  comp_add _ _ _ _ _ _ := by ext; apply comp_add
-
-中文:
-实例 fullSubcategory
-  签名: (Z : ObjectProperty C)
-  定义体: {
-      -- Note: Add zero field explicitly for a better transparency of definitional properties
-      zero := Z.homMk 0
-      __ := InducedCategory.homEquiv.addCommGroup }
-  add_comp _ _ _ _ _ _ := by ext; apply add_comp
-  comp_add _ _ _ _ _ _ := by ext; apply comp_add
+/-
+**CategoryTheory.Preadditive.fullSubcategory** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Preadditive`。
+形式化陈述：fullSubcategory (Z : ObjectProperty C) : Preadditive Z.FullSubcategory whe
+re homGroup P Q
+参数：Z : ObjectProperty C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance fullSubcategory (Z : ObjectProperty C) : Preadditive Z.FullSubcategory where
   homGroup P Q := {
@@ -200,648 +157,598 @@ instance fullSubcategory (Z : ObjectProperty C) : Preadditive Z.FullSubcategory 
       __ := InducedCategory.homEquiv.addCommGroup }
   add_comp _ _ _ _ _ _ := by ext; apply add_comp
   comp_add _ _ _ _ _ _ := by ext; apply comp_add
-
-instance (X : C) : AddCommGroup (End X) :=
-inferInstanceAs AddCommGroup (X ⟶ X)
-
-/--
-Definition of `leftComp` / `leftComp` 的定义
-
-English:
-definition leftComp
-  signature: {P Q : C} (R : C) (f : P ⟶ Q)
-  body: mk' (fun g => f ≫ g) fun g g' => by simp
-
-中文:
-定义 leftComp
-  签名: {P Q : C} (R : C) (f : P ⟶ Q)
-  定义体: mk' (fun g => f ≫ g) fun g g' => by simp
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def leftComp {P Q : C} (R : C) (f : P ⟶ Q) : (Q ⟶ R) ->+ (P ⟶ R) :=
+instance (X : C) : AddCommGroup (End X) :=
+  inferInstanceAs <| AddCommGroup (X ⟶ X)
+
+/-- Composition by a fixed left argument as a group homomorphism -/
+/-
+**CategoryTheory.Preadditive.leftComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Preadditive`。
+形式化陈述：leftComp {P Q : C} (R : C) (f : P ⟶ Q) : (Q ⟶ R) ->+ (P ⟶ R)
+参数：R : C；f : P ⟶ Q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Composition by a fixed left argument as a group homomorphism
+-/
+def leftComp {P Q : C} (R : C) (f : P ⟶ Q) : (Q ⟶ R) →+ (P ⟶ R) :=
   mk' (fun g => f ≫ g) fun g g' => by simp
 
-/--
-Definition of `rightComp` / `rightComp` 的定义
+/-- Composition by a fixed right argument as a group homomorphism -/
+/-
+**CategoryTheory.Preadditive.rightComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Preadditive`。
+形式化陈述：rightComp (P : C) {Q R : C} (g : Q ⟶ R) : (P ⟶ Q) ->+ (P ⟶ R)
+参数：P : C；g : Q ⟶ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightComp
-  signature: (P : C) {Q R : C} (g : Q ⟶ R)
-  body: mk' (fun f => f ≫ g) fun f f' => by simp
-
-中文:
-定义 rightComp
-  签名: (P : C) {Q R : C} (g : Q ⟶ R)
-  定义体: mk' (fun f => f ≫ g) fun f f' => by simp
+--- 原说明 ---
+Composition by a fixed right argument as a group homomorphism
 -/
-def rightComp (P : C) {Q R : C} (g : Q ⟶ R) : (P ⟶ Q) ->+ (P ⟶ R) :=
+def rightComp (P : C) {Q R : C} (g : Q ⟶ R) : (P ⟶ Q) →+ (P ⟶ R) :=
   mk' (fun f => f ≫ g) fun f f' => by simp
 
 variable {P Q R : C} (f f' : P ⟶ Q) (g g' : Q ⟶ R)
 
-/--
-Definition of `compHom` / `compHom` 的定义
+/-- Composition as a bilinear group homomorphism -/
+/-
+**CategoryTheory.Preadditive.compHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.P
+readditive`。
+形式化陈述：compHom : (P ⟶ Q) ->+ (Q ⟶ R) ->+ (P ⟶ R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compHom
-  signature: : (P ⟶ Q) ->+ (Q ⟶ R) ->+ (P ⟶ R)
-  body: AddMonoidHom.mk' (fun f => leftComp _ f) fun f₁ f₂ =>
-    AddMonoidHom.ext fun g => (rightComp _ g).map_add f₁ f₂
-
-中文:
-定义 compHom
-  签名: : (P ⟶ Q) ->+ (Q ⟶ R) ->+ (P ⟶ R)
-  定义体: AddMonoidHom.mk' (fun f => leftComp _ f) fun f₁ f₂ =>
-    AddMonoidHom.ext fun g => (rightComp _ g).map_add f₁ f₂
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, AddMonoidHom.mk, leftComp, map_add, rightComp
+--- 原说明 ---
+Composition as a bilinear group homomorphism
 -/
-def compHom : (P ⟶ Q) ->+ (Q ⟶ R) ->+ (P ⟶ R) :=
+def compHom : (P ⟶ Q) →+ (Q ⟶ R) →+ (P ⟶ R) :=
   AddMonoidHom.mk' (fun f => leftComp _ f) fun f₁ f₂ =>
     AddMonoidHom.ext fun g => (rightComp _ g).map_add f₁ f₂
 
 -- simp can prove the reassoc version
 @[reassoc, simp]
-/--
-theorem `sub_comp` / 定理 `sub_comp`
-
-English:
-theorem sub_comp
-  statement: (f - f') ≫ g = f ≫ g - f' ≫ g
-  proof: map_sub (rightComp P g) f f'
-
-中文:
-定理 sub_comp
-  结论: (f - f') ≫ g = f ≫ g - f' ≫ g
-  证明: map_sub (rightComp P g) f f'
-
-Depends on / 依赖: map_sub, rightComp
+/-
+**CategoryTheory.Preadditive.sub_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Preadditive`。
+形式化陈述：sub_comp : (f - f') ≫ g = f ≫ g - f' ≫ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem sub_comp : (f - f') ≫ g = f ≫ g - f' ≫ g :=
   map_sub (rightComp P g) f f'
 
 -- simp can prove the reassoc version
 @[reassoc, simp]
-/--
-theorem `comp_sub` / 定理 `comp_sub`
-
-English:
-theorem comp_sub
-  statement: f ≫ (g - g') = f ≫ g - f ≫ g'
-  proof: map_sub (leftComp R f) g g'
-
-中文:
-定理 comp_sub
-  结论: f ≫ (g - g') = f ≫ g - f ≫ g'
-  证明: map_sub (leftComp R f) g g'
-
-Depends on / 依赖: leftComp, map_sub
+/-
+**CategoryTheory.Preadditive.comp_sub** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Preadditive`。
+形式化陈述：comp_sub : f ≫ (g - g') = f ≫ g - f ≫ g'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem comp_sub : f ≫ (g - g') = f ≫ g - f ≫ g' :=
   map_sub (leftComp R f) g g'
 
 -- simp can prove the reassoc version
 @[reassoc, simp]
-/--
-theorem `neg_comp` / 定理 `neg_comp`
-
-English:
-theorem neg_comp
-  statement: (-f) ≫ g = -f ≫ g
-  proof: map_neg (rightComp P g) f
-
-中文:
-定理 neg_comp
-  结论: (-f) ≫ g = -f ≫ g
-  证明: map_neg (rightComp P g) f
-
-Depends on / 依赖: map_neg, rightComp
+/-
+**CategoryTheory.Preadditive.neg_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Preadditive`。
+形式化陈述：neg_comp : (-f) ≫ g = -f ≫ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem neg_comp : (-f) ≫ g = -f ≫ g :=
   map_neg (rightComp P g) f
 
 -- simp can prove the reassoc version
 @[reassoc, simp]
-/--
-theorem `comp_neg` / 定理 `comp_neg`
-
-English:
-theorem comp_neg
-  statement: f ≫ (-g) = -f ≫ g
-  proof: map_neg (leftComp R f) g
-
-@[reassoc]
-
-中文:
-定理 comp_neg
-  结论: f ≫ (-g) = -f ≫ g
-  证明: map_neg (leftComp R f) g
-
-@[reassoc]
-
-Depends on / 依赖: leftComp, map_neg
+/-
+**CategoryTheory.Preadditive.comp_neg** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Preadditive`。
+形式化陈述：comp_neg : f ≫ (-g) = -f ≫ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem comp_neg : f ≫ (-g) = -f ≫ g :=
   map_neg (leftComp R f) g
 
 @[reassoc]
-/--
-theorem `neg_comp_neg` / 定理 `neg_comp_neg`
-
-English:
-theorem neg_comp_neg
-  statement: (-f) ≫ (-g) = f ≫ g
-  proof: by simp
-
-中文:
-定理 neg_comp_neg
-  结论: (-f) ≫ (-g) = f ≫ g
-  证明: by simp
+/-
+**CategoryTheory.Preadditive.neg_comp_neg** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Preadditive`。
+形式化陈述：neg_comp_neg : (-f) ≫ (-g) = f ≫ g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Preadditive.comp_neg`：comp_neg : f ≫ (-g) = -f ≫ g
+· 使用定理 `CategoryTheory.Preadditive.neg_comp`：neg_comp : (-f) ≫ g = -f ≫ g
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neg_comp_neg : (-f) ≫ (-g) = f ≫ g := by simp
-
-/--
-theorem `nsmul_comp` / 定理 `nsmul_comp`
-
-English:
-theorem nsmul_comp
-  given: (n : Nat)
-  statement: (n • f) ≫ g = n • f ≫ g
-  proof: map_nsmul (rightComp P g) n f
-
-中文:
-定理 nsmul_comp
-  条件: (n : 自然数)
-  结论: (n • f) ≫ g = n • f ≫ g
-  证明: map_nsmul (rightComp P g) n f
-
-Depends on / 依赖: map_nsmul, rightComp
+/-
+**CategoryTheory.Preadditive.nsmul_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Preadditive`。
+形式化陈述：nsmul_comp (n : Nat) : (n • f) ≫ g = n • f ≫ g
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_nsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddMonoid G] [inst_2 : AddMonoid H]   [AddMonoidHomClass F G…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem nsmul_comp (n : Nat) : (n • f) ≫ g = n • f ≫ g :=
+theorem nsmul_comp (n : ℕ) : (n • f) ≫ g = n • f ≫ g :=
   map_nsmul (rightComp P g) n f
-
-/--
-theorem `comp_nsmul` / 定理 `comp_nsmul`
-
-English:
-theorem comp_nsmul
-  given: (n : Nat)
-  statement: f ≫ (n • g) = n • f ≫ g
-  proof: map_nsmul (leftComp R f) n g
-
-中文:
-定理 comp_nsmul
-  条件: (n : 自然数)
-  结论: f ≫ (n • g) = n • f ≫ g
-  证明: map_nsmul (leftComp R f) n g
-
-Depends on / 依赖: leftComp, map_nsmul
+/-
+**CategoryTheory.Preadditive.comp_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Preadditive`。
+形式化陈述：comp_nsmul (n : Nat) : f ≫ (n • g) = n • f ≫ g
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_nsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddMonoid G] [inst_2 : AddMonoid H]   [AddMonoidHomClass F G…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem comp_nsmul (n : Nat) : f ≫ (n • g) = n • f ≫ g :=
+theorem comp_nsmul (n : ℕ) : f ≫ (n • g) = n • f ≫ g :=
   map_nsmul (leftComp R f) n g
-
-/--
-theorem `zsmul_comp` / 定理 `zsmul_comp`
-
-English:
-theorem zsmul_comp
-  given: (n : Int)
-  statement: (n • f) ≫ g = n • f ≫ g
-  proof: map_zsmul (rightComp P g) n f
-
-中文:
-定理 zsmul_comp
-  条件: (n : 整数)
-  结论: (n • f) ≫ g = n • f ≫ g
-  证明: map_zsmul (rightComp P g) n f
-
-Depends on / 依赖: map_zsmul, rightComp
+/-
+**CategoryTheory.Preadditive.zsmul_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Preadditive`。
+形式化陈述：zsmul_comp (n : Int) : (n • f) ≫ g = n • f ≫ g
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem zsmul_comp (n : Int) : (n • f) ≫ g = n • f ≫ g :=
+theorem zsmul_comp (n : ℤ) : (n • f) ≫ g = n • f ≫ g :=
   map_zsmul (rightComp P g) n f
-
-/--
-theorem `comp_zsmul` / 定理 `comp_zsmul`
-
-English:
-theorem comp_zsmul
-  given: (n : Int)
-  statement: f ≫ (n • g) = n • f ≫ g
-  proof: map_zsmul (leftComp R f) n g
-
-@[reassoc]
-
-中文:
-定理 comp_zsmul
-  条件: (n : 整数)
-  结论: f ≫ (n • g) = n • f ≫ g
-  证明: map_zsmul (leftComp R f) n g
-
-@[reassoc]
-
-Depends on / 依赖: leftComp, map_zsmul
+/-
+**CategoryTheory.Preadditive.comp_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Preadditive`。
+形式化陈述：comp_zsmul (n : Int) : f ≫ (n • g) = n • f ≫ g
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem comp_zsmul (n : Int) : f ≫ (n • g) = n • f ≫ g :=
+theorem comp_zsmul (n : ℤ) : f ≫ (n • g) = n • f ≫ g :=
   map_zsmul (leftComp R f) n g
 
 @[reassoc]
-/--
-theorem `comp_sum` / 定理 `comp_sum`
-
-English:
-theorem comp_sum
-  given: {P Q R : C} {J : Type*} (s : Finset J) (f : P ⟶ Q) (g : J -> (Q ⟶ R))
-  proof: map_sum (leftComp R f) _ _
-
-@[reassoc]
-
-中文:
-定理 comp_sum
-  条件: {P Q R : C} {J : 类型} (s : 有限集 J) (f : P ⟶ Q) (g : J -> (Q ⟶ R))
-  证明: map_sum (leftComp R f) _ _
-
-@[reassoc]
-
-Depends on / 依赖: leftComp, map_sum
+/-
+**CategoryTheory.Preadditive.comp_sum** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Preadditive`。
+形式化陈述：comp_sum {P Q R : C} {J : Type*} (s : Finset J) (f : P ⟶ Q) (g : J -> (Q ⟶
+ R)) : (f ≫ ∑ j in s, g j) = ∑ j in s, f ≫ g j
+参数：s : Finset J；f : P ⟶ Q；g : J -> (Q ⟶ R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem comp_sum {P Q R : C} {J : Type*} (s : Finset J) (f : P ⟶ Q) (g : J -> (Q ⟶ R)) :
-    (f ≫ ∑ j in s, g j) = ∑ j in s, f ≫ g j :=
+theorem comp_sum {P Q R : C} {J : Type*} (s : Finset J) (f : P ⟶ Q) (g : J → (Q ⟶ R)) :
+    (f ≫ ∑ j ∈ s, g j) = ∑ j ∈ s, f ≫ g j :=
   map_sum (leftComp R f) _ _
 
 @[reassoc]
-/--
-theorem `sum_comp` / 定理 `sum_comp`
-
-English:
-theorem sum_comp
-  given: {P Q R : C} {J : Type*} (s : Finset J) (f : J -> (P ⟶ Q)) (g : Q ⟶ R)
-  proof: map_sum (rightComp P g) _ _
-
-@[reassoc]
-
-中文:
-定理 sum_comp
-  条件: {P Q R : C} {J : 类型} (s : 有限集 J) (f : J -> (P ⟶ Q)) (g : Q ⟶ R)
-  证明: map_sum (rightComp P g) _ _
-
-@[reassoc]
-
-Depends on / 依赖: map_sum, rightComp
+/-
+**CategoryTheory.Preadditive.sum_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Preadditive`。
+形式化陈述：sum_comp {P Q R : C} {J : Type*} (s : Finset J) (f : J -> (P ⟶ Q)) (g : Q 
+⟶ R) : (∑ j in s, f j) ≫ g = ∑ j in s, f j ≫ g
+参数：s : Finset J；f : J -> (P ⟶ Q)；g : Q ⟶ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem sum_comp {P Q R : C} {J : Type*} (s : Finset J) (f : J -> (P ⟶ Q)) (g : Q ⟶ R) :
-    (∑ j in s, f j) ≫ g = ∑ j in s, f j ≫ g :=
+theorem sum_comp {P Q R : C} {J : Type*} (s : Finset J) (f : J → (P ⟶ Q)) (g : Q ⟶ R) :
+    (∑ j ∈ s, f j) ≫ g = ∑ j ∈ s, f j ≫ g :=
   map_sum (rightComp P g) _ _
 
 @[reassoc]
-/--
-theorem `sum_comp'` / 定理 `sum_comp'`
-
-English:
-theorem sum_comp'
-  statement: {P Q R S : C} {J : Type*} (s : Finset J) (f : J -> (P ⟶ Q)) (g : J -> (Q ⟶ R))
-  proof: by
-  simp only [← Category.assoc]
-  apply sum_comp
-
-中文:
-定理 sum_comp'
-  结论: {P Q R S : C} {J : 类型} (s : 有限集 J) (f : J -> (P ⟶ Q)) (g : J -> (Q ⟶ R))
-  证明: by
-  simp only [← Category.assoc]
-  apply sum_comp
-
-Depends on / 依赖: Category, Category.assoc, sum_comp
+/-
+**CategoryTheory.Preadditive.sum_comp'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Preadditive`。
+形式化陈述：sum_comp' {P Q R S : C} {J : Type*} (s : Finset J) (f : J -> (P ⟶ Q)) (g :
+ J -> (Q ⟶ R)) (h : R ⟶ S) : (∑ j in s, f j ≫ g j) ≫ h = ∑ j in s, f j ≫ g j ≫ h
+参数：s : Finset J；f : J -> (P ⟶ Q)；g : J -> (Q ⟶ R)；h : R ⟶ S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Preadditive.sum_comp`：sum_comp {P Q R : C} {J : Type*} (s
+ : Finset J) (f : J -> (P ⟶ Q)) (g : Q ⟶ R) : (∑ j in s, f j) ≫ g = ∑ j in s, f 
+j ≫ g
 -/
-theorem sum_comp' {P Q R S : C} {J : Type*} (s : Finset J) (f : J -> (P ⟶ Q)) (g : J -> (Q ⟶ R))
-    (h : R ⟶ S) : (∑ j in s, f j ≫ g j) ≫ h = ∑ j in s, f j ≫ g j ≫ h := by
+theorem sum_comp' {P Q R S : C} {J : Type*} (s : Finset J) (f : J → (P ⟶ Q)) (g : J → (Q ⟶ R))
+    (h : R ⟶ S) : (∑ j ∈ s, f j ≫ g j) ≫ h = ∑ j ∈ s, f j ≫ g j ≫ h := by
   simp only [← Category.assoc]
   apply sum_comp
-
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P Q : C} {f : P ⟶ Q} [Epi f] : Epi (-f) :=
   ⟨fun g g' H => by rwa [neg_comp, neg_comp, ← comp_neg, ← comp_neg, cancel_epi, neg_inj] at H⟩
-
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P Q : C} {f : P ⟶ Q} [Mono f] : Mono (-f) :=
   ⟨fun g g' H => by rwa [comp_neg, comp_neg, ← neg_comp, ← neg_comp, cancel_mono, neg_inj] at H⟩
-
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) preadditiveHasZeroMorphisms : HasZeroMorphisms C where
   zero := inferInstance
   comp_zero f R := show leftComp R f 0 = 0 from map_zero _
   zero_comp P _ _ f := show rightComp P f 0 = 0 from map_zero _
 
 /-- This instance is split off from the `Ring (End X)` instance to speed up instance search. -/
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This instance is split off from the `Ring (End X)` instance to speed up instance
+ search.
+-/
 instance {X : C} : Semiring (End X) :=
   { End.monoid with
     zero_mul := fun f => by dsimp [mul]; exact HasZeroMorphisms.comp_zero f _
     mul_zero := fun f => by dsimp [mul]; exact HasZeroMorphisms.zero_comp _ f
     left_distrib := fun f g h => Preadditive.add_comp X X X g h f
     right_distrib := fun f g h => Preadditive.comp_add X X X h f g }
-
+/-
+**CategoryTheory.Preadditive.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Preaddit
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : C} : Ring (End X) :=
   { (inferInstance : Semiring (End X)),
     (inferInstance : AddCommGroup (End X)) with
     neg_add_cancel := neg_add_cancel }
-
-/--
-Instance `moduleEndRight` / 实例 `moduleEndRight`
-
-English:
-instance moduleEndRight
-  signature: {X Y : C}
-  body: add_comp _ _ _ _ _ _
-  smul_zero _ := zero_comp
-  add_smul _ _ _ := comp_add _ _ _ _ _ _
-  zero_smul _ := comp_zero
-
-中文:
-实例 moduleEndRight
-  签名: {X Y : C}
-  定义体: add_comp _ _ _ _ _ _
-  smul_zero _ := zero_comp
-  add_smul _ _ _ := comp_add _ _ _ _ _ _
-  zero_smul _ := comp_zero
-
-Depends on / 依赖: add_comp
+/-
+**CategoryTheory.Preadditive.moduleEndRight** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Preadditive`。
+形式化陈述：moduleEndRight {X Y : C} : Module (End Y) (X ⟶ Y) where smul_add _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.add_comp`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C)   (f f' 
+: P ⟶ Q) (g : Q ⟶ R),   C…
+· 使用定理 `CategoryTheory.Preadditive.comp_add`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C) (f : P ⟶
+ Q)   (g g' : Q ⟶ R),   C…
 -/
 instance moduleEndRight {X Y : C} : Module (End Y) (X ⟶ Y) where
   smul_add _ _ _ := add_comp _ _ _ _ _ _
   smul_zero _ := zero_comp
   add_smul _ _ _ := comp_add _ _ _ _ _ _
   zero_smul _ := comp_zero
-
-/--
-theorem `mono_of_cancel_zero` / 定理 `mono_of_cancel_zero`
-
-English:
-theorem mono_of_cancel_zero
-  given: {Q R : C} (f : Q ⟶ R) (h : forall {P : C} (g : P ⟶ Q), g ≫ f = 0 -> g = 0)
-  proof: fun {Z} g₁ g₂ hg =>
-sub_eq_zero.1 h _ (map_sub (rightComp Z f) g₁ g₂).trans sub_eq_zero.2 hg
-
-中文:
-定理 mono_of_cancel_zero
-  条件: {Q R : C} (f : Q ⟶ R) (h : 对任意 {P : C} (g : P ⟶ Q), g ≫ f = 0 -> g = 0)
-  证明: fun {Z} g₁ g₂ hg =>
-sub_eq_zero.1 h _ (map_sub (rightComp Z f) g₁ g₂).trans sub_eq_zero.2 hg
+/-
+**CategoryTheory.Preadditive.mono_of_cancel_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Preadditive`。
+形式化陈述：mono_of_cancel_zero {Q R : C} (f : Q ⟶ R) (h : forall {P : C} (g : P ⟶ Q),
+ g ≫ f = 0 -> g = 0) : Mono f where right_cancellation
+参数：f : Q ⟶ R；h : forall {P : C} (g : P ⟶ Q), g ≫ f = 0 -> g = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem mono_of_cancel_zero {Q R : C} (f : Q ⟶ R) (h : forall {P : C} (g : P ⟶ Q), g ≫ f = 0 -> g = 0) :
+theorem mono_of_cancel_zero {Q R : C} (f : Q ⟶ R) (h : ∀ {P : C} (g : P ⟶ Q), g ≫ f = 0 → g = 0) :
     Mono f where
   right_cancellation := fun {Z} g₁ g₂ hg =>
-sub_eq_zero.1 h _ (map_sub (rightComp Z f) g₁ g₂).trans sub_eq_zero.2 hg
-
-/--
-theorem `mono_iff_cancel_zero` / 定理 `mono_iff_cancel_zero`
-
-English:
-theorem mono_iff_cancel_zero
-  given: {Q R : C} (f : Q ⟶ R)
-  proof: ⟨fun _ _ _ => zero_of_comp_mono _, mono_of_cancel_zero f⟩
-
-中文:
-定理 mono_iff_cancel_zero
-  条件: {Q R : C} (f : Q ⟶ R)
-  证明: ⟨fun _ _ _ => zero_of_comp_mono _, mono_of_cancel_zero f⟩
-
-Depends on / 依赖: mono_of_cancel_zero, zero_of_comp_mono
+    sub_eq_zero.1 <| h _ <| (map_sub (rightComp Z f) g₁ g₂).trans <| sub_eq_zero.2 hg
+/-
+**CategoryTheory.Preadditive.mono_iff_cancel_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Preadditive`。
+形式化陈述：mono_iff_cancel_zero {Q R : C} (f : Q ⟶ R) : Mono f ↔ forall (P : C) (g : 
+P ⟶ Q), g ≫ f = 0 -> g = 0
+参数：f : Q ⟶ R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.zero_of_comp_mono`：zero_of_comp_mono {X Y Z : C} {
+f : X ⟶ Y} (g : Y ⟶ Z) [Mono g] (h : f ≫ g = 0) : f = 0
+· 使用定理 `CategoryTheory.Preadditive.mono_of_cancel_zero`：mono_of_cancel_zero {Q R
+ : C} (f : Q ⟶ R) (h : forall {P : C} (g : P ⟶ Q), g ≫ f = 0 -> g = 0) : Mono f 
+where right_cancellation
 -/
 theorem mono_iff_cancel_zero {Q R : C} (f : Q ⟶ R) :
-    Mono f ↔ forall (P : C) (g : P ⟶ Q), g ≫ f = 0 -> g = 0 :=
+    Mono f ↔ ∀ (P : C) (g : P ⟶ Q), g ≫ f = 0 → g = 0 :=
   ⟨fun _ _ _ => zero_of_comp_mono _, mono_of_cancel_zero f⟩
-
-/--
-theorem `mono_of_kernel_zero` / 定理 `mono_of_kernel_zero`
-
-English:
-theorem mono_of_kernel_zero
-  statement: {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)]
-  proof: mono_of_cancel_zero f fun g h => by rw [← kernel.lift_ι f g h, w, Limits.comp_zero]
-
-中文:
-定理 mono_of_kernel_zero
-  结论: {X Y : C} {f : X ⟶ Y} [有极限 (parallelPair f 0)]
-  证明: mono_of_cancel_zero f fun g h => by rw [← kernel.lift_ι f g h, w, Limits.comp_zero]
-
-Depends on / 依赖: Limits, Limits.comp_zero, comp_zero, kernel, kernel.lift_, mono_of_cancel_zero
+/-
+**CategoryTheory.Preadditive.mono_of_kernel_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Preadditive`。
+形式化陈述：mono_of_kernel_zero {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)] (w
+ : kernel.ι f = 0) : Mono f
+参数：parallelPair f 0；w : kernel.ι f = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.mono_of_cancel_zero`：mono_of_cancel_zero {Q R
+ : C} (f : Q ⟶ R) (h : forall {P : C} (g : P ⟶ Q), g ≫ f = 0 -> g = 0) : Mono f 
+where right_cancellation
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.kernel.lift_ι`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] {X Y :
+ C}   (f : X ⟶ Y) [inst_2…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
 -/
 theorem mono_of_kernel_zero {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)]
     (w : kernel.ι f = 0) : Mono f :=
   mono_of_cancel_zero f fun g h => by rw [← kernel.lift_ι f g h, w, Limits.comp_zero]
-
-/--
-lemma `mono_of_isZero_kernel'` / 引理 `mono_of_isZero_kernel'`
-
-English:
-lemma mono_of_isZero_kernel'
-  statement: {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c)
-  proof: mono_of_cancel_zero _ (fun g hg => by
-  obtain ⟨a, ha⟩ := KernelFork.IsLimit.lift' hc _ hg
-  rw [← ha]; rw [h.eq_of_tgt a 0]; rw [Limits.zero_comp])
-
-中文:
-引理 mono_of_isZero_kernel'
-  结论: {X Y : C} {f : X ⟶ Y} (c : 核叉 f) (hc : 是极限 c)
-  证明: mono_of_cancel_zero _ (fun g hg => by
-  obtain ⟨a, ha⟩ := KernelFork.IsLimit.lift' hc _ hg
-  rw [← ha]; rw [h.eq_of_tgt a 0]; rw [Limits.zero_comp])
-
-Depends on / 依赖: IsLimit, KernelFork, KernelFork.IsLimit.lift, Limits, Limits.zero_comp, eq_of_tgt, h.eq_of_tgt, mono_of_cancel_zero, zero_comp
+/-
+**CategoryTheory.Preadditive.mono_of_isZero_kernel'** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Preadditive`。
+形式化陈述：mono_of_isZero_kernel' {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLi
+mit c) (h : IsZero c.pt) : Mono f
+参数：c : KernelFork f；hc : IsLimit c；h : IsZero c.pt。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.mono_of_cancel_zero`：mono_of_cancel_zero {Q R
+ : C} (f : Q ⟶ R) (h : forall {P : C} (g : P ⟶ Q), g ≫ f = 0 -> g = 0) : Mono f 
+where right_cancellation
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_tgt`：eq_of_tgt (hX : IsZero X) (f g :
+ Y ⟶ X) : f = g
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 lemma mono_of_isZero_kernel' {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c)
     (h : IsZero c.pt) : Mono f := mono_of_cancel_zero _ (fun g hg => by
   obtain ⟨a, ha⟩ := KernelFork.IsLimit.lift' hc _ hg
-  rw [← ha]; rw [h.eq_of_tgt a 0]; rw [Limits.zero_comp])
-
-/--
-lemma `mono_iff_isZero_kernel'` / 引理 `mono_iff_isZero_kernel'`
-
-English:
-lemma mono_iff_isZero_kernel'
-  given: {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c)
-  proof: ⟨fun _ => KernelFork.IsLimit.isZero_of_mono hc, mono_of_isZero_kernel' c hc⟩
-
-中文:
-引理 mono_iff_isZero_kernel'
-  条件: {X Y : C} {f : X ⟶ Y} (c : 核叉 f) (hc : 是极限 c)
-  证明: ⟨fun _ => KernelFork.IsLimit.isZero_of_mono hc, mono_of_isZero_kernel' c hc⟩
-
-Depends on / 依赖: IsLimit, KernelFork, KernelFork.IsLimit.isZero_of_mono, isZero_of_mono, mono_of_isZero_kernel
+  rw [← ha, h.eq_of_tgt a 0, Limits.zero_comp])
+/-
+**CategoryTheory.Preadditive.mono_iff_isZero_kernel'** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Preadditive`。
+形式化陈述：mono_iff_isZero_kernel' {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsL
+imit c) : Mono f ↔ IsZero c.pt
+参数：c : KernelFork f；hc : IsLimit c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.KernelFork.IsLimit.isZero_of_mono`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZer
+oMorphisms C] {X Y : C}   {f : X ⟶ Y} {c : Ca…
+· 使用引理 `CategoryTheory.Preadditive.mono_of_isZero_kernel'`：mono_of_isZero_kernel
+' {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c) (h : IsZero c.pt) : 
+Mono f
 -/
 lemma mono_iff_isZero_kernel' {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c) :
     Mono f ↔ IsZero c.pt :=
-  ⟨fun _ => KernelFork.IsLimit.isZero_of_mono hc, mono_of_isZero_kernel' c hc⟩
-
-/--
-lemma `mono_of_isZero_kernel` / 引理 `mono_of_isZero_kernel`
-
-English:
-lemma mono_of_isZero_kernel
-  given: {X Y : C} (f : X ⟶ Y) [HasKernel f] (h : IsZero (kernel f))
-  proof: mono_of_isZero_kernel' _ (kernelIsKernel _) h
-
-中文:
-引理 mono_of_isZero_kernel
-  条件: {X Y : C} (f : X ⟶ Y) [HasKernel f] (h : 是零 (kernel f))
-  证明: mono_of_isZero_kernel' _ (kernelIsKernel _) h
-
-Depends on / 依赖: kernelIsKernel, mono_of_isZero_kernel
+  ⟨fun _ ↦ KernelFork.IsLimit.isZero_of_mono hc, mono_of_isZero_kernel' c hc⟩
+/-
+**CategoryTheory.Preadditive.mono_of_isZero_kernel** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Preadditive`。
+形式化陈述：mono_of_isZero_kernel {X Y : C} (f : X ⟶ Y) [HasKernel f] (h : IsZero (ker
+nel f)) : Mono f
+参数：f : X ⟶ Y；h : IsZero (kernel f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Preadditive.mono_of_isZero_kernel'`：mono_of_isZero_kernel
+' {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c) (h : IsZero c.pt) : 
+Mono f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.kernel.condition`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] {X 
+Y : C}   (f : X ⟶ Y) [inst_2…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
 -/
 lemma mono_of_isZero_kernel {X Y : C} (f : X ⟶ Y) [HasKernel f] (h : IsZero (kernel f)) :
     Mono f :=
   mono_of_isZero_kernel' _ (kernelIsKernel _) h
-
-/--
-lemma `mono_iff_isZero_kernel` / 引理 `mono_iff_isZero_kernel`
-
-English:
-lemma mono_iff_isZero_kernel
-  given: {X Y : C} (f : X ⟶ Y) [HasKernel f]
-  proof: mono_iff_isZero_kernel' _ (limit.isLimit _)
-
-中文:
-引理 mono_iff_isZero_kernel
-  条件: {X Y : C} (f : X ⟶ Y) [HasKernel f]
-  证明: mono_iff_isZero_kernel' _ (limit.isLimit _)
-
-Depends on / 依赖: isLimit, limit.isLimit, mono_iff_isZero_kernel
+/-
+**CategoryTheory.Preadditive.mono_iff_isZero_kernel** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Preadditive`。
+形式化陈述：mono_iff_isZero_kernel {X Y : C} (f : X ⟶ Y) [HasKernel f] : Mono f ↔ IsZe
+ro (kernel f)
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Preadditive.mono_iff_isZero_kernel'`：mono_iff_isZero_kern
+el' {X Y : C} {f : X ⟶ Y} (c : KernelFork f) (hc : IsLimit c) : Mono f ↔ IsZero 
+c.pt
 -/
 lemma mono_iff_isZero_kernel {X Y : C} (f : X ⟶ Y) [HasKernel f] :
     Mono f ↔ IsZero (kernel f) :=
   mono_iff_isZero_kernel' _ (limit.isLimit _)
-
-/--
-theorem `epi_of_cancel_zero` / 定理 `epi_of_cancel_zero`
-
-English:
-theorem epi_of_cancel_zero
-  given: {P Q : C} (f : P ⟶ Q) (h : forall {R : C} (g : Q ⟶ R), f ≫ g = 0 -> g = 0)
-  proof: ⟨fun {Z} g g' hg =>
-sub_eq_zero.1 h _ (map_sub (leftComp Z f) g g').trans sub_eq_zero.2 hg⟩
-
-中文:
-定理 epi_of_cancel_zero
-  条件: {P Q : C} (f : P ⟶ Q) (h : 对任意 {R : C} (g : Q ⟶ R), f ≫ g = 0 -> g = 0)
-  证明: ⟨fun {Z} g g' hg =>
-sub_eq_zero.1 h _ (map_sub (leftComp Z f) g g').trans sub_eq_zero.2 hg⟩
-
-Depends on / 依赖: leftComp, map_sub, sub_eq_zero
+/-
+**CategoryTheory.Preadditive.epi_of_cancel_zero** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Preadditive`。
+形式化陈述：epi_of_cancel_zero {P Q : C} (f : P ⟶ Q) (h : forall {R : C} (g : Q ⟶ R), 
+f ≫ g = 0 -> g = 0) : Epi f
+参数：f : P ⟶ Q；h : forall {R : C} (g : Q ⟶ R), f ≫ g = 0 -> g = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem epi_of_cancel_zero {P Q : C} (f : P ⟶ Q) (h : forall {R : C} (g : Q ⟶ R), f ≫ g = 0 -> g = 0) :
+theorem epi_of_cancel_zero {P Q : C} (f : P ⟶ Q) (h : ∀ {R : C} (g : Q ⟶ R), f ≫ g = 0 → g = 0) :
     Epi f :=
   ⟨fun {Z} g g' hg =>
-sub_eq_zero.1 h _ (map_sub (leftComp Z f) g g').trans sub_eq_zero.2 hg⟩
-
-/--
-theorem `epi_iff_cancel_zero` / 定理 `epi_iff_cancel_zero`
-
-English:
-theorem epi_iff_cancel_zero
-  given: {P Q : C} (f : P ⟶ Q)
-  proof: ⟨fun _ _ _ => zero_of_epi_comp _, epi_of_cancel_zero f⟩
-
-中文:
-定理 epi_iff_cancel_zero
-  条件: {P Q : C} (f : P ⟶ Q)
-  证明: ⟨fun _ _ _ => zero_of_epi_comp _, epi_of_cancel_zero f⟩
-
-Depends on / 依赖: epi_of_cancel_zero, zero_of_epi_comp
+    sub_eq_zero.1 <| h _ <| (map_sub (leftComp Z f) g g').trans <| sub_eq_zero.2 hg⟩
+/-
+**CategoryTheory.Preadditive.epi_iff_cancel_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Preadditive`。
+形式化陈述：epi_iff_cancel_zero {P Q : C} (f : P ⟶ Q) : Epi f ↔ forall (R : C) (g : Q 
+⟶ R), f ≫ g = 0 -> g = 0
+参数：f : P ⟶ Q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.zero_of_epi_comp`：zero_of_epi_comp {X Y Z : C} (f 
+: X ⟶ Y) {g : Y ⟶ Z} [Epi f] (h : f ≫ g = 0) : g = 0
+· 使用定理 `CategoryTheory.Preadditive.epi_of_cancel_zero`：epi_of_cancel_zero {P Q :
+ C} (f : P ⟶ Q) (h : forall {R : C} (g : Q ⟶ R), f ≫ g = 0 -> g = 0) : Epi f
 -/
 theorem epi_iff_cancel_zero {P Q : C} (f : P ⟶ Q) :
-    Epi f ↔ forall (R : C) (g : Q ⟶ R), f ≫ g = 0 -> g = 0 :=
+    Epi f ↔ ∀ (R : C) (g : Q ⟶ R), f ≫ g = 0 → g = 0 :=
   ⟨fun _ _ _ => zero_of_epi_comp _, epi_of_cancel_zero f⟩
-
-/--
-theorem `epi_of_cokernel_zero` / 定理 `epi_of_cokernel_zero`
-
-English:
-theorem epi_of_cokernel_zero
-  statement: {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)]
-  proof: epi_of_cancel_zero f fun g h => by rw [← cokernel.π_desc f g h, w, Limits.zero_comp]
-
-中文:
-定理 epi_of_cokernel_zero
-  结论: {X Y : C} {f : X ⟶ Y} [有余极限 (parallelPair f 0)]
-  证明: epi_of_cancel_zero f fun g h => by rw [← cokernel.π_desc f g h, w, Limits.zero_comp]
-
-Depends on / 依赖: Limits, Limits.zero_comp, cokernel, epi_of_cancel_zero, zero_comp
+/-
+**CategoryTheory.Preadditive.epi_of_cokernel_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Preadditive`。
+形式化陈述：epi_of_cokernel_zero {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)]
+ (w : cokernel.π f = 0) : Epi f
+参数：parallelPair f 0；w : cokernel.π f = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.epi_of_cancel_zero`：epi_of_cancel_zero {P Q :
+ C} (f : P ⟶ Q) (h : forall {R : C} (g : Q ⟶ R), f ≫ g = 0 -> g = 0) : Epi f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.cokernel.π_desc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] {X Y
+ : C}   (f : X ⟶ Y) [inst_2…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 theorem epi_of_cokernel_zero {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)]
     (w : cokernel.π f = 0) : Epi f :=
   epi_of_cancel_zero f fun g h => by rw [← cokernel.π_desc f g h, w, Limits.zero_comp]
-
-/--
-lemma `epi_of_isZero_cokernel'` / 引理 `epi_of_isZero_cokernel'`
-
-English:
-lemma epi_of_isZero_cokernel'
-  statement: {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c)
-  proof: epi_of_cancel_zero _ (fun g hg => by
-  obtain ⟨a, ha⟩ := CokernelCofork.IsColimit.desc' hc _ hg
-  rw [← ha]; rw [h.eq_of_src a 0]; rw [Limits.comp_zero])
-
-中文:
-引理 epi_of_isZero_cokernel'
-  结论: {X Y : C} {f : X ⟶ Y} (c : 余核余叉 f) (hc : 是余极限 c)
-  证明: epi_of_cancel_zero _ (fun g hg => by
-  obtain ⟨a, ha⟩ := CokernelCofork.IsColimit.desc' hc _ hg
-  rw [← ha]; rw [h.eq_of_src a 0]; rw [Limits.comp_zero])
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, Limits, Limits.comp_zero, comp_zero, epi_of_cancel_zero, eq_of_src, h.eq_of_src
+/-
+**CategoryTheory.Preadditive.epi_of_isZero_cokernel'** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Preadditive`。
+形式化陈述：epi_of_isZero_cokernel' {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc :
+ IsColimit c) (h : IsZero c.pt) : Epi f
+参数：c : CokernelCofork f；hc : IsColimit c；h : IsZero c.pt。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.epi_of_cancel_zero`：epi_of_cancel_zero {P Q :
+ C} (f : P ⟶ Q) (h : forall {R : C} (g : Q ⟶ R), f ≫ g = 0 -> g = 0) : Epi f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
 -/
 lemma epi_of_isZero_cokernel' {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c)
     (h : IsZero c.pt) : Epi f := epi_of_cancel_zero _ (fun g hg => by
   obtain ⟨a, ha⟩ := CokernelCofork.IsColimit.desc' hc _ hg
-  rw [← ha]; rw [h.eq_of_src a 0]; rw [Limits.comp_zero])
-
-/--
-lemma `epi_iff_isZero_cokernel'` / 引理 `epi_iff_isZero_cokernel'`
-
-English:
-lemma epi_iff_isZero_cokernel'
-  given: {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c)
-  proof: ⟨fun _ => CokernelCofork.IsColimit.isZero_of_epi hc, epi_of_isZero_cokernel' c hc⟩
-
-中文:
-引理 epi_iff_isZero_cokernel'
-  条件: {X Y : C} {f : X ⟶ Y} (c : 余核余叉 f) (hc : 是余极限 c)
-  证明: ⟨fun _ => CokernelCofork.IsColimit.isZero_of_epi hc, epi_of_isZero_cokernel' c hc⟩
-
-Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.isZero_of_epi, IsColimit, epi_of_isZero_cokernel, isZero_of_epi
+  rw [← ha, h.eq_of_src a 0, Limits.comp_zero])
+/-
+**CategoryTheory.Preadditive.epi_iff_isZero_cokernel'** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Preadditive`。
+形式化陈述：epi_iff_isZero_cokernel' {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc 
+: IsColimit c) : Epi f ↔ IsZero c.pt
+参数：c : CokernelCofork f；hc : IsColimit c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.CokernelCofork.IsColimit.isZero_of_epi`：∀ {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.H
+asZeroMorphisms C] {X Y : C}   {f : X ⟶ Y} {c : Ca…
+· 使用引理 `CategoryTheory.Preadditive.epi_of_isZero_cokernel'`：epi_of_isZero_cokern
+el' {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c) (h : IsZero 
+c.pt) : Epi f
 -/
 lemma epi_iff_isZero_cokernel' {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c) :
     Epi f ↔ IsZero c.pt :=
-  ⟨fun _ => CokernelCofork.IsColimit.isZero_of_epi hc, epi_of_isZero_cokernel' c hc⟩
-
-/--
-lemma `epi_of_isZero_cokernel` / 引理 `epi_of_isZero_cokernel`
-
-English:
-lemma epi_of_isZero_cokernel
-  given: {X Y : C} (f : X ⟶ Y) [HasCokernel f] (h : IsZero (cokernel f))
-  proof: epi_of_isZero_cokernel' _ (cokernelIsCokernel _) h
-
-中文:
-引理 epi_of_isZero_cokernel
-  条件: {X Y : C} (f : X ⟶ Y) [HasCokernel f] (h : 是零 (cokernel f))
-  证明: epi_of_isZero_cokernel' _ (cokernelIsCokernel _) h
-
-Depends on / 依赖: cokernelIsCokernel, epi_of_isZero_cokernel
+  ⟨fun _ ↦ CokernelCofork.IsColimit.isZero_of_epi hc, epi_of_isZero_cokernel' c hc⟩
+/-
+**CategoryTheory.Preadditive.epi_of_isZero_cokernel** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Preadditive`。
+形式化陈述：epi_of_isZero_cokernel {X Y : C} (f : X ⟶ Y) [HasCokernel f] (h : IsZero (
+cokernel f)) : Epi f
+参数：f : X ⟶ Y；h : IsZero (cokernel f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Preadditive.epi_of_isZero_cokernel'`：epi_of_isZero_cokern
+el' {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c) (h : IsZero 
+c.pt) : Epi f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.cokernel.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms C] {
+X Y : C}   (f : X ⟶ Y) [inst_2…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 lemma epi_of_isZero_cokernel {X Y : C} (f : X ⟶ Y) [HasCokernel f] (h : IsZero (cokernel f)) :
     Epi f :=
   epi_of_isZero_cokernel' _ (cokernelIsCokernel _) h
-
-/--
-lemma `epi_iff_isZero_cokernel` / 引理 `epi_iff_isZero_cokernel`
-
-English:
-lemma epi_iff_isZero_cokernel
-  given: {X Y : C} (f : X ⟶ Y) [HasCokernel f]
-  proof: epi_iff_isZero_cokernel' _ (colimit.isColimit _)
-
-中文:
-引理 epi_iff_isZero_cokernel
-  条件: {X Y : C} (f : X ⟶ Y) [HasCokernel f]
-  证明: epi_iff_isZero_cokernel' _ (colimit.isColimit _)
-
-Depends on / 依赖: colimit, colimit.isColimit, epi_iff_isZero_cokernel, isColimit
+/-
+**CategoryTheory.Preadditive.epi_iff_isZero_cokernel** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Preadditive`。
+形式化陈述：epi_iff_isZero_cokernel {X Y : C} (f : X ⟶ Y) [HasCokernel f] : Epi f ↔ Is
+Zero (cokernel f)
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Preadditive.epi_iff_isZero_cokernel'`：epi_iff_isZero_coke
+rnel' {X Y : C} {f : X ⟶ Y} (c : CokernelCofork f) (hc : IsColimit c) : Epi f ↔ 
+IsZero c.pt
 -/
 lemma epi_iff_isZero_cokernel {X Y : C} (f : X ⟶ Y) [HasCokernel f] :
     Epi f ↔ IsZero (cokernel f) :=
@@ -850,54 +757,43 @@ lemma epi_iff_isZero_cokernel {X Y : C} (f : X ⟶ Y) [HasCokernel f] :
 namespace IsIso
 
 @[simp]
-/--
-theorem `comp_left_eq_zero` / 定理 `comp_left_eq_zero`
-
-English:
-theorem comp_left_eq_zero
-  given: [IsIso f]
-  statement: f ≫ g = 0 ↔ g = 0
-  proof: by
-  rw [← IsIso.eq_inv_comp]; rw [Limits.comp_zero]
-
-@[simp]
-
-中文:
-定理 comp_left_eq_zero
-  条件: [是同构 f]
-  结论: f ≫ g = 0 ↔ g = 0
-  证明: by
-  rw [← IsIso.eq_inv_comp]; rw [Limits.comp_zero]
-
-@[simp]
-
-Depends on / 依赖: IsIso.eq_inv_comp, Limits, Limits.comp_zero, comp_zero, eq_inv_comp
+/-
+**CategoryTheory.Preadditive.IsIso.comp_left_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Preadditive.IsIso`。
+形式化陈述：comp_left_eq_zero [IsIso f] : f ≫ g = 0 ↔ g = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsIso.eq_inv_comp`：eq_inv_comp (α : X ⟶ Y) [IsIso α] {f :
+ X ⟶ Z} {g : Y ⟶ Z} : g = inv α ≫ f ↔ α ≫ g = f
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem comp_left_eq_zero [IsIso f] : f ≫ g = 0 ↔ g = 0 := by
-  rw [← IsIso.eq_inv_comp]; rw [Limits.comp_zero]
+  rw [← IsIso.eq_inv_comp, Limits.comp_zero]
 
 @[simp]
-/--
-theorem `comp_right_eq_zero` / 定理 `comp_right_eq_zero`
-
-English:
-theorem comp_right_eq_zero
-  given: [IsIso g]
-  statement: f ≫ g = 0 ↔ f = 0
-  proof: by
-  rw [← IsIso.eq_comp_inv]; rw [Limits.zero_comp]
-
-中文:
-定理 comp_right_eq_zero
-  条件: [是同构 g]
-  结论: f ≫ g = 0 ↔ f = 0
-  证明: by
-  rw [← IsIso.eq_comp_inv]; rw [Limits.zero_comp]
-
-Depends on / 依赖: IsIso.eq_comp_inv, Limits, Limits.zero_comp, eq_comp_inv, zero_comp
+/-
+**CategoryTheory.Preadditive.IsIso.comp_right_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Preadditive.IsIso`。
+形式化陈述：comp_right_eq_zero [IsIso g] : f ≫ g = 0 ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsIso.eq_comp_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (α : Y ⟶ X) [inst_1 : CategoryTheory.IsIso α]   {
+f : Z ⟶ X} {g : Z ⟶ Y}…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem comp_right_eq_zero [IsIso g] : f ≫ g = 0 ↔ f = 0 := by
-  rw [← IsIso.eq_comp_inv]; rw [Limits.zero_comp]
+  rw [← IsIso.eq_comp_inv, Limits.zero_comp]
 
 end IsIso
 
@@ -905,39 +801,35 @@ open ZeroObject
 
 variable [HasZeroObject C]
 
-/--
-theorem `mono_of_kernel_iso_zero` / 定理 `mono_of_kernel_iso_zero`
-
-English:
-theorem mono_of_kernel_iso_zero
-  statement: {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)]
-  proof: mono_of_kernel_zero (zero_of_source_iso_zero _ w)
-
-中文:
-定理 mono_of_kernel_iso_zero
-  结论: {X Y : C} {f : X ⟶ Y} [有极限 (parallelPair f 0)]
-  证明: mono_of_kernel_zero (zero_of_source_iso_zero _ w)
-
-Depends on / 依赖: mono_of_kernel_zero, zero_of_source_iso_zero
+/-
+**CategoryTheory.Preadditive.mono_of_kernel_iso_zero** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Preadditive`。
+形式化陈述：mono_of_kernel_iso_zero {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)
+] (w : kernel f ≅ 0) : Mono f
+参数：parallelPair f 0；w : kernel f ≅ 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.mono_of_kernel_zero`：mono_of_kernel_zero {X Y
+ : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)] (w : kernel.ι f = 0) : Mono f
+· 使用定理 `CategoryTheory.Limits.zero_of_source_iso_zero`：zero_of_source_iso_zero {
+X Y : C} (f : X ⟶ Y) (i : X ≅ 0) : f = 0
 -/
 theorem mono_of_kernel_iso_zero {X Y : C} {f : X ⟶ Y} [HasLimit (parallelPair f 0)]
     (w : kernel f ≅ 0) : Mono f :=
   mono_of_kernel_zero (zero_of_source_iso_zero _ w)
-
-/--
-theorem `epi_of_cokernel_iso_zero` / 定理 `epi_of_cokernel_iso_zero`
-
-English:
-theorem epi_of_cokernel_iso_zero
-  statement: {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)]
-  proof: epi_of_cokernel_zero (zero_of_target_iso_zero _ w)
-
-中文:
-定理 epi_of_cokernel_iso_zero
-  结论: {X Y : C} {f : X ⟶ Y} [有余极限 (parallelPair f 0)]
-  证明: epi_of_cokernel_zero (zero_of_target_iso_zero _ w)
-
-Depends on / 依赖: epi_of_cokernel_zero, zero_of_target_iso_zero
+/-
+**CategoryTheory.Preadditive.epi_of_cokernel_iso_zero** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Preadditive`。
+形式化陈述：epi_of_cokernel_iso_zero {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f
+ 0)] (w : cokernel f ≅ 0) : Epi f
+参数：parallelPair f 0；w : cokernel f ≅ 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Preadditive.epi_of_cokernel_zero`：epi_of_cokernel_zero {X
+ Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)] (w : cokernel.π f = 0) : Epi
+ f
+· 使用定理 `CategoryTheory.Limits.zero_of_target_iso_zero`：zero_of_target_iso_zero {
+X Y : C} (f : X ⟶ Y) (i : Y ≅ 0) : f = 0
 -/
 theorem epi_of_cokernel_iso_zero {X Y : C} {f : X ⟶ Y} [HasColimit (parallelPair f 0)]
     (w : cokernel f ≅ 0) : Epi f :=
@@ -955,131 +847,61 @@ variable {X Y : C} {f : X ⟶ Y} {g : X ⟶ Y}
 
 /-- Map a kernel cone on the difference of two morphisms to the equalizer fork. -/
 @[simps! pt]
-/--
-Definition of `forkOfKernelFork` / `forkOfKernelFork` 的定义
+/-
+**CategoryTheory.forkOfKernelFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forkOfKernelFork
-  signature: (c : KernelFork (f - g))
-  body: Fork.ofι c.ι by rw [← sub_eq_zero, ← comp_sub, c.condition]
-
-@[simp]
-
-中文:
-定义 forkOfKernelFork
-  签名: (c : 核叉 (f - g))
-  定义体: Fork.ofι c.ι by rw [← sub_eq_zero, ← comp_sub, c.condition]
-
-@[simp]
-
-Depends on / 依赖: Fork.of, c.condition, comp_sub, condition, sub_eq_zero
+--- 原说明 ---
+Map a kernel cone on the difference of two morphisms to the equalizer fork.
 -/
 def forkOfKernelFork (c : KernelFork (f - g)) : Fork f g :=
-Fork.ofι c.ι by rw [← sub_eq_zero, ← comp_sub, c.condition]
+  Fork.ofι c.ι <| by rw [← sub_eq_zero, ← comp_sub, c.condition]
 
 @[simp]
-/--
-theorem `forkOfKernelFork_ι` / 定理 `forkOfKernelFork_ι`
-
-English:
-theorem forkOfKernelFork_ι
-  given: (c : KernelFork (f - g))
-  statement: (forkOfKernelFork c).ι = c.ι
-  proof: rfl
-
-中文:
-定理 forkOfKernelFork_ι
-  条件: (c : 核叉 (f - g))
-  结论: (forkOfKernelFork c).ι = c.ι
-  证明: rfl
+/-
+**CategoryTheory.forkOfKernelFork_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forkOfKernelFork_ι (c : KernelFork (f - g)) : (forkOfKernelFork c).ι = c.ι :=
   rfl
 
-/--
-Definition of `kernelForkOfFork` / `kernelForkOfFork` 的定义
+/-- Map any equalizer fork to a cone on the difference of the two morphisms. -/
+/-
+**CategoryTheory.kernelForkOfFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kernelForkOfFork
-  signature: (c : Fork f g)
-  body: Fork.ofι c.ι by rw [comp_sub, comp_zero, sub_eq_zero, c.condition]
-
-@[simp]
-
-中文:
-定义 kernelForkOfFork
-  签名: (c : 叉 f g)
-  定义体: Fork.ofι c.ι by rw [comp_sub, comp_zero, sub_eq_zero, c.condition]
-
-@[simp]
-
-Depends on / 依赖: Fork.of, c.condition, comp_sub, comp_zero, condition, sub_eq_zero
+--- 原说明 ---
+Map any equalizer fork to a cone on the difference of the two morphisms.
 -/
 def kernelForkOfFork (c : Fork f g) : KernelFork (f - g) :=
-Fork.ofι c.ι by rw [comp_sub, comp_zero, sub_eq_zero, c.condition]
+  Fork.ofι c.ι <| by rw [comp_sub, comp_zero, sub_eq_zero, c.condition]
 
 @[simp]
-/--
-theorem `kernelForkOfFork_ι` / 定理 `kernelForkOfFork_ι`
-
-English:
-theorem kernelForkOfFork_ι
-  given: (c : Fork f g)
-  statement: (kernelForkOfFork c).ι = c.ι
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 kernelForkOfFork_ι
-  条件: (c : 叉 f g)
-  结论: (kernelForkOfFork c).ι = c.ι
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.kernelForkOfFork_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem kernelForkOfFork_ι (c : Fork f g) : (kernelForkOfFork c).ι = c.ι :=
   rfl
 
 @[simp]
-/--
-theorem `kernelForkOfFork_ofι` / 定理 `kernelForkOfFork_ofι`
-
-English:
-theorem kernelForkOfFork_ofι
-  given: {P : C} (ι : P ⟶ X) (w : ι ≫ f = ι ≫ g)
-  proof: rfl
-
-中文:
-定理 kernelForkOfFork_ofι
-  条件: {P : C} (ι : P ⟶ X) (w : ι ≫ f = ι ≫ g)
-  证明: rfl
+/-
+**CategoryTheory.kernelForkOfFork_of** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem kernelForkOfFork_ofι {P : C} (ι : P ⟶ X) (w : ι ≫ f = ι ≫ g) :
     kernelForkOfFork (Fork.ofι ι w) = KernelFork.ofι ι (by simp [w]) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isLimitForkOfKernelFork` / `isLimitForkOfKernelFork` 的定义
+/-- A kernel of `f - g` is an equalizer of `f` and `g`. -/
+/-
+**CategoryTheory.isLimitForkOfKernelFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitForkOfKernelFork
-  signature: {c : KernelFork (f - g)} (i : IsLimit c)
-  body: Fork.IsLimit.mk' _ fun s =>
-    ⟨i.lift (kernelForkOfFork s), i.fac _ _, fun h => by apply Fork.IsLimit.hom_ext i; cat_disch⟩
-
-@[simp]
-
-中文:
-定义 isLimitForkOfKernelFork
-  签名: {c : 核叉 (f - g)} (i : 是极限 c)
-  定义体: Fork.IsLimit.mk' _ fun s =>
-    ⟨i.lift (kernelForkOfFork s), i.fac _ _, fun h => by apply Fork.IsLimit.hom_ext i; cat_disch⟩
-
-@[simp]
-
-Depends on / 依赖: Fork.IsLimit.hom_ext, Fork.IsLimit.mk, IsLimit, cat_disch, hom_ext, i.fac, i.lift, kernelForkOfFork
+--- 原说明 ---
+A kernel of `f - g` is an equalizer of `f` and `g`.
 -/
 def isLimitForkOfKernelFork {c : KernelFork (f - g)} (i : IsLimit c) :
     IsLimit (forkOfKernelFork c) :=
@@ -1087,40 +909,24 @@ def isLimitForkOfKernelFork {c : KernelFork (f - g)} (i : IsLimit c) :
     ⟨i.lift (kernelForkOfFork s), i.fac _ _, fun h => by apply Fork.IsLimit.hom_ext i; cat_disch⟩
 
 @[simp]
-/--
-theorem `isLimitForkOfKernelFork_lift` / 定理 `isLimitForkOfKernelFork_lift`
-
-English:
-theorem isLimitForkOfKernelFork_lift
-  given: {c : KernelFork (f - g)} (i : IsLimit c) (s : Fork f g)
-  proof: rfl
-
-中文:
-定理 isLimitForkOfKernelFork_lift
-  条件: {c : 核叉 (f - g)} (i : 是极限 c) (s : 叉 f g)
-  证明: rfl
+/-
+**CategoryTheory.isLimitForkOfKernelFork_lift** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isLimitForkOfKernelFork_lift {c : KernelFork (f - g)} (i : IsLimit c) (s : Fork f g) :
     (isLimitForkOfKernelFork i).lift s = i.lift (kernelForkOfFork s) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isLimitKernelForkOfFork` / `isLimitKernelForkOfFork` 的定义
+/-- An equalizer of `f` and `g` is a kernel of `f - g`. -/
+/-
+**CategoryTheory.isLimitKernelForkOfFork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitKernelForkOfFork
-  signature: {c : Fork f g} (i : IsLimit c)
-  body: Fork.IsLimit.mk' _ fun s =>
-    ⟨i.lift (forkOfKernelFork s), i.fac _ _, fun h => by apply Fork.IsLimit.hom_ext i; cat_disch⟩
-
-中文:
-定义 isLimitKernelForkOfFork
-  签名: {c : 叉 f g} (i : 是极限 c)
-  定义体: Fork.IsLimit.mk' _ fun s =>
-    ⟨i.lift (forkOfKernelFork s), i.fac _ _, fun h => by apply Fork.IsLimit.hom_ext i; cat_disch⟩
-
-Depends on / 依赖: Fork.IsLimit.hom_ext, Fork.IsLimit.mk, IsLimit, cat_disch, forkOfKernelFork, hom_ext, i.fac, i.lift
+--- 原说明 ---
+An equalizer of `f` and `g` is a kernel of `f - g`.
 -/
 def isLimitKernelForkOfFork {c : Fork f g} (i : IsLimit c) : IsLimit (kernelForkOfFork c) :=
   Fork.IsLimit.mk' _ fun s =>
@@ -1128,52 +934,30 @@ def isLimitKernelForkOfFork {c : Fork f g} (i : IsLimit c) : IsLimit (kernelFork
 
 variable (f g)
 
-/--
-theorem `hasEqualizer_of_hasKernel` / 定理 `hasEqualizer_of_hasKernel`
+/-- A preadditive category has an equalizer for `f` and `g` if it has a kernel for `f - g`. -/
+/-
+**CategoryTheory.hasEqualizer_of_hasKernel** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hasEqualizer_of_hasKernel
-  given: [HasKernel (f - g)]
-  statement: HasEqualizer f g
-  proof: HasLimit.mk
-    { cone := forkOfKernelFork _
-      isLimit := isLimitForkOfKernelFork (equalizerIsEqualizer (f - g) 0) }
-
-中文:
-定理 hasEqualizer_of_hasKernel
-  条件: [HasKernel (f - g)]
-  结论: HasEqualizer f g
-  证明: HasLimit.mk
-    { cone := forkOfKernelFork _
-      isLimit := isLimitForkOfKernelFork (equalizerIsEqualizer (f - g) 0) }
-
-Depends on / 依赖: HasLimit, HasLimit.mk, equalizerIsEqualizer, forkOfKernelFork, isLimit, isLimitForkOfKernelFork
+--- 原说明 ---
+A preadditive category has an equalizer for `f` and `g` if it has a kernel for `
+f - g`.
 -/
 theorem hasEqualizer_of_hasKernel [HasKernel (f - g)] : HasEqualizer f g :=
   HasLimit.mk
     { cone := forkOfKernelFork _
       isLimit := isLimitForkOfKernelFork (equalizerIsEqualizer (f - g) 0) }
 
-/--
-theorem `hasKernel_of_hasEqualizer` / 定理 `hasKernel_of_hasEqualizer`
+/-- A preadditive category has a kernel for `f - g` if it has an equalizer for `f` and `g`. -/
+/-
+**CategoryTheory.hasKernel_of_hasEqualizer** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hasKernel_of_hasEqualizer
-  given: [HasEqualizer f g]
-  statement: HasKernel (f - g)
-  proof: HasLimit.mk
-    { cone := kernelForkOfFork (equalizer.fork f g)
-      isLimit := isLimitKernelForkOfFork (limit.isLimit (parallelPair f g)) }
-
-中文:
-定理 hasKernel_of_hasEqualizer
-  条件: [HasEqualizer f g]
-  结论: HasKernel (f - g)
-  证明: HasLimit.mk
-    { cone := kernelForkOfFork (equalizer.fork f g)
-      isLimit := isLimitKernelForkOfFork (limit.isLimit (parallelPair f g)) }
-
-Depends on / 依赖: HasLimit, HasLimit.mk, equalizer, equalizer.fork, isLimit, isLimitKernelForkOfFork, kernelForkOfFork, limit.isLimit, parallelPair
+--- 原说明 ---
+A preadditive category has a kernel for `f - g` if it has an equalizer for `f` a
+nd `g`.
 -/
 theorem hasKernel_of_hasEqualizer [HasEqualizer f g] : HasKernel (f - g) :=
   HasLimit.mk
@@ -1184,132 +968,68 @@ variable {f g}
 
 /-- Map a cokernel cocone on the difference of two morphisms to the coequalizer cofork. -/
 @[simps! pt]
-/--
-Definition of `coforkOfCokernelCofork` / `coforkOfCokernelCofork` 的定义
+/-
+**CategoryTheory.coforkOfCokernelCofork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coforkOfCokernelCofork
-  signature: (c : CokernelCofork (f - g))
-  body: Cofork.ofπ c.π by rw [← sub_eq_zero, ← sub_comp, c.condition]
-
-@[simp]
-
-中文:
-定义 coforkOfCokernelCofork
-  签名: (c : 余核余叉 (f - g))
-  定义体: Cofork.ofπ c.π by rw [← sub_eq_zero, ← sub_comp, c.condition]
-
-@[simp]
-
-Depends on / 依赖: Cofork, Cofork.of, c.condition, condition, sub_comp, sub_eq_zero
+--- 原说明 ---
+Map a cokernel cocone on the difference of two morphisms to the coequalizer cofo
+rk.
 -/
 def coforkOfCokernelCofork (c : CokernelCofork (f - g)) : Cofork f g :=
-Cofork.ofπ c.π by rw [← sub_eq_zero, ← sub_comp, c.condition]
+  Cofork.ofπ c.π <| by rw [← sub_eq_zero, ← sub_comp, c.condition]
 
 @[simp]
-/--
-theorem `coforkOfCokernelCofork_π` / 定理 `coforkOfCokernelCofork_π`
-
-English:
-theorem coforkOfCokernelCofork_π
-  given: (c : CokernelCofork (f - g))
-  proof: rfl
-
-中文:
-定理 coforkOfCokernelCofork_π
-  条件: (c : 余核余叉 (f - g))
-  证明: rfl
+/-
+**CategoryTheory.coforkOfCokernelCofork_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coforkOfCokernelCofork_π (c : CokernelCofork (f - g)) :
     (coforkOfCokernelCofork c).π = c.π :=
   rfl
 
-/--
-Definition of `cokernelCoforkOfCofork` / `cokernelCoforkOfCofork` 的定义
+/-- Map any coequalizer cofork to a cocone on the difference of the two morphisms. -/
+/-
+**CategoryTheory.cokernelCoforkOfCofork** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelCoforkOfCofork
-  signature: (c : Cofork f g)
-  body: Cofork.ofπ c.π by rw [sub_comp, zero_comp, sub_eq_zero, c.condition]
-
-@[simp]
-
-中文:
-定义 cokernelCoforkOfCofork
-  签名: (c : 余叉 f g)
-  定义体: Cofork.ofπ c.π by rw [sub_comp, zero_comp, sub_eq_zero, c.condition]
-
-@[simp]
-
-Depends on / 依赖: Cofork, Cofork.of, c.condition, condition, sub_comp, sub_eq_zero, zero_comp
+--- 原说明 ---
+Map any coequalizer cofork to a cocone on the difference of the two morphisms.
 -/
 def cokernelCoforkOfCofork (c : Cofork f g) : CokernelCofork (f - g) :=
-Cofork.ofπ c.π by rw [sub_comp, zero_comp, sub_eq_zero, c.condition]
+  Cofork.ofπ c.π <| by rw [sub_comp, zero_comp, sub_eq_zero, c.condition]
 
 @[simp]
-/--
-theorem `cokernelCoforkOfCofork_π` / 定理 `cokernelCoforkOfCofork_π`
-
-English:
-theorem cokernelCoforkOfCofork_π
-  given: (c : Cofork f g)
-  statement: (cokernelCoforkOfCofork c).π = c.π
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cokernelCoforkOfCofork_π
-  条件: (c : 余叉 f g)
-  结论: (cokernelCoforkOfCofork c).π = c.π
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.cokernelCoforkOfCofork_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cokernelCoforkOfCofork_π (c : Cofork f g) : (cokernelCoforkOfCofork c).π = c.π :=
   rfl
 
 @[simp]
-/--
-theorem `cokernelCoforkOfCofork_ofπ` / 定理 `cokernelCoforkOfCofork_ofπ`
-
-English:
-theorem cokernelCoforkOfCofork_ofπ
-  given: {P : C} (π : Y ⟶ P) (w : f ≫ π = g ≫ π)
-  proof: rfl
-
-中文:
-定理 cokernelCoforkOfCofork_ofπ
-  条件: {P : C} (π : Y ⟶ P) (w : f ≫ π = g ≫ π)
-  证明: rfl
+/-
+**CategoryTheory.cokernelCoforkOfCofork_of** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cokernelCoforkOfCofork_ofπ {P : C} (π : Y ⟶ P) (w : f ≫ π = g ≫ π) :
     cokernelCoforkOfCofork (Cofork.ofπ π w) = CokernelCofork.ofπ π (by simp [w]) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isColimitCoforkOfCokernelCofork` / `isColimitCoforkOfCokernelCofork` 的定义
+/-- A cokernel of `f - g` is a coequalizer of `f` and `g`. -/
+/-
+**CategoryTheory.isColimitCoforkOfCokernelCofork** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCoforkOfCokernelCofork
-  signature: {c : CokernelCofork (f - g)} (i : IsColimit c)
-  body: Cofork.IsColimit.mk' _ fun s =>
-    ⟨i.desc (cokernelCoforkOfCofork s), i.fac _ _, fun h => by
-      apply Cofork.IsColimit.hom_ext i; cat_disch⟩
-
-@[simp]
-
-中文:
-定义 isColimitCoforkOfCokernelCofork
-  签名: {c : 余核余叉 (f - g)} (i : 是余极限 c)
-  定义体: Cofork.IsColimit.mk' _ fun s =>
-    ⟨i.desc (cokernelCoforkOfCofork s), i.fac _ _, fun h => by
-      apply Cofork.IsColimit.hom_ext i; cat_disch⟩
-
-@[simp]
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, Cofork.IsColimit.mk, IsColimit, cat_disch, cokernelCoforkOfCofork, hom_ext, i.desc, i.fac
+--- 原说明 ---
+A cokernel of `f - g` is a coequalizer of `f` and `g`.
 -/
 def isColimitCoforkOfCokernelCofork {c : CokernelCofork (f - g)} (i : IsColimit c) :
     IsColimit (coforkOfCokernelCofork c) :=
@@ -1318,18 +1038,10 @@ def isColimitCoforkOfCokernelCofork {c : CokernelCofork (f - g)} (i : IsColimit 
       apply Cofork.IsColimit.hom_ext i; cat_disch⟩
 
 @[simp]
-/--
-theorem `isColimitCoforkOfCokernelCofork_desc` / 定理 `isColimitCoforkOfCokernelCofork_desc`
-
-English:
-theorem isColimitCoforkOfCokernelCofork_desc
-  statement: {c : CokernelCofork (f - g)} (i : IsColimit c)
-  proof: rfl
-
-中文:
-定理 isColimitCoforkOfCokernelCofork_desc
-  结论: {c : 余核余叉 (f - g)} (i : 是余极限 c)
-  证明: rfl
+/-
+**CategoryTheory.isColimitCoforkOfCokernelCofork_desc** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isColimitCoforkOfCokernelCofork_desc {c : CokernelCofork (f - g)} (i : IsColimit c)
     (s : Cofork f g) :
@@ -1337,24 +1049,14 @@ theorem isColimitCoforkOfCokernelCofork_desc {c : CokernelCofork (f - g)} (i : I
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isColimitCokernelCoforkOfCofork` / `isColimitCokernelCoforkOfCofork` 的定义
+/-- A coequalizer of `f` and `g` is a cokernel of `f - g`. -/
+/-
+**CategoryTheory.isColimitCokernelCoforkOfCofork** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCokernelCoforkOfCofork
-  signature: {c : Cofork f g} (i : IsColimit c)
-  body: Cofork.IsColimit.mk' _ fun s =>
-    ⟨i.desc (coforkOfCokernelCofork s), i.fac _ _, fun h => by
-      apply Cofork.IsColimit.hom_ext i; cat_disch⟩
-
-中文:
-定义 isColimitCokernelCoforkOfCofork
-  签名: {c : 余叉 f g} (i : 是余极限 c)
-  定义体: Cofork.IsColimit.mk' _ fun s =>
-    ⟨i.desc (coforkOfCokernelCofork s), i.fac _ _, fun h => by
-      apply Cofork.IsColimit.hom_ext i; cat_disch⟩
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, Cofork.IsColimit.mk, IsColimit, cat_disch, coforkOfCokernelCofork, hom_ext, i.desc, i.fac
+--- 原说明 ---
+A coequalizer of `f` and `g` is a cokernel of `f - g`.
 -/
 def isColimitCokernelCoforkOfCofork {c : Cofork f g} (i : IsColimit c) :
     IsColimit (cokernelCoforkOfCofork c) :=
@@ -1364,52 +1066,30 @@ def isColimitCokernelCoforkOfCofork {c : Cofork f g} (i : IsColimit c) :
 
 variable (f g)
 
-/--
-theorem `hasCoequalizer_of_hasCokernel` / 定理 `hasCoequalizer_of_hasCokernel`
+/-- A preadditive category has a coequalizer for `f` and `g` if it has a cokernel for `f - g`. -/
+/-
+**CategoryTheory.hasCoequalizer_of_hasCokernel** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hasCoequalizer_of_hasCokernel
-  given: [HasCokernel (f - g)]
-  statement: HasCoequalizer f g
-  proof: HasColimit.mk
-    { cocone := coforkOfCokernelCofork _
-      isColimit := isColimitCoforkOfCokernelCofork (coequalizerIsCoequalizer (f - g) 0) }
-
-中文:
-定理 hasCoequalizer_of_hasCokernel
-  条件: [HasCokernel (f - g)]
-  结论: HasCoequalizer f g
-  证明: HasColimit.mk
-    { cocone := coforkOfCokernelCofork _
-      isColimit := isColimitCoforkOfCokernelCofork (coequalizerIsCoequalizer (f - g) 0) }
-
-Depends on / 依赖: HasColimit, HasColimit.mk, cocone, coequalizerIsCoequalizer, coforkOfCokernelCofork, isColimit, isColimitCoforkOfCokernelCofork
+--- 原说明 ---
+A preadditive category has a coequalizer for `f` and `g` if it has a cokernel fo
+r `f - g`.
 -/
 theorem hasCoequalizer_of_hasCokernel [HasCokernel (f - g)] : HasCoequalizer f g :=
   HasColimit.mk
     { cocone := coforkOfCokernelCofork _
       isColimit := isColimitCoforkOfCokernelCofork (coequalizerIsCoequalizer (f - g) 0) }
 
-/--
-theorem `hasCokernel_of_hasCoequalizer` / 定理 `hasCokernel_of_hasCoequalizer`
+/-- A preadditive category has a cokernel for `f - g` if it has a coequalizer for `f` and `g`. -/
+/-
+**CategoryTheory.hasCokernel_of_hasCoequalizer** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hasCokernel_of_hasCoequalizer
-  given: [HasCoequalizer f g]
-  statement: HasCokernel (f - g)
-  proof: HasColimit.mk
-    { cocone := cokernelCoforkOfCofork (coequalizer.cofork f g)
-      isColimit := isColimitCokernelCoforkOfCofork (colimit.isColimit (parallelPair f g)) }
-
-中文:
-定理 hasCokernel_of_hasCoequalizer
-  条件: [HasCoequalizer f g]
-  结论: HasCokernel (f - g)
-  证明: HasColimit.mk
-    { cocone := cokernelCoforkOfCofork (coequalizer.cofork f g)
-      isColimit := isColimitCokernelCoforkOfCofork (colimit.isColimit (parallelPair f g)) }
-
-Depends on / 依赖: HasColimit, HasColimit.mk, cocone, coequalizer, coequalizer.cofork, cofork, cokernelCoforkOfCofork, colimit, colimit.isColimit, isColimit, isColimitCokernelCoforkOfCofork, parallelPair
+--- 原说明 ---
+A preadditive category has a cokernel for `f - g` if it has a coequalizer for `f
+` and `g`.
 -/
 theorem hasCokernel_of_hasCoequalizer [HasCoequalizer f g] : HasCokernel (f - g) :=
   HasColimit.mk
@@ -1418,44 +1098,26 @@ theorem hasCokernel_of_hasCoequalizer [HasCoequalizer f g] : HasCokernel (f - g)
 
 end
 
-/--
-theorem `hasEqualizers_of_hasKernels` / 定理 `hasEqualizers_of_hasKernels`
+/-- If a preadditive category has all kernels, then it also has all equalizers. -/
+/-
+**CategoryTheory.hasEqualizers_of_hasKernels** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hasEqualizers_of_hasKernels
-  given: [HasKernels C]
-  statement: HasEqualizers C
-  proof: @hasEqualizers_of_hasLimit_parallelPair _ _ fun {_} {_} f g => hasEqualizer_of_hasKernel f g
-
-中文:
-定理 hasEqualizers_of_hasKernels
-  条件: [有Kernels C]
-  结论: HasEqualizers C
-  证明: @hasEqualizers_of_hasLimit_parallelPair _ _ fun {_} {_} f g => hasEqualizer_of_hasKernel f g
-
-Depends on / 依赖: hasEqualizer_of_hasKernel, hasEqualizers_of_hasLimit_parallelPair
+--- 原说明 ---
+If a preadditive category has all kernels, then it also has all equalizers.
 -/
 theorem hasEqualizers_of_hasKernels [HasKernels C] : HasEqualizers C :=
   @hasEqualizers_of_hasLimit_parallelPair _ _ fun {_} {_} f g => hasEqualizer_of_hasKernel f g
 
-/--
-theorem `hasCoequalizers_of_hasCokernels` / 定理 `hasCoequalizers_of_hasCokernels`
+/-- If a preadditive category has all cokernels, then it also has all coequalizers. -/
+/-
+**CategoryTheory.hasCoequalizers_of_hasCokernels** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hasCoequalizers_of_hasCokernels
-  given: [HasCokernels C]
-  statement: HasCoequalizers C
-  proof: @hasCoequalizers_of_hasColimit_parallelPair _ _ fun {_} {_} f g =>
-    hasCoequalizer_of_hasCokernel f g
-
-中文:
-定理 hasCoequalizers_of_hasCokernels
-  条件: [有余kernels C]
-  结论: HasCoequalizers C
-  证明: @hasCoequalizers_of_hasColimit_parallelPair _ _ fun {_} {_} f g =>
-    hasCoequalizer_of_hasCokernel f g
-
-Depends on / 依赖: hasCoequalizer_of_hasCokernel, hasCoequalizers_of_hasColimit_parallelPair
+--- 原说明 ---
+If a preadditive category has all cokernels, then it also has all coequalizers.
 -/
 theorem hasCoequalizers_of_hasCokernels [HasCokernels C] : HasCoequalizers C :=
   @hasCoequalizers_of_hasColimit_parallelPair _ _ fun {_} {_} f g =>
@@ -1467,104 +1129,35 @@ section
 
 variable {C : Type*} [Category* C] [Preadditive C] {X Y : C}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul (Units Int) (X ≅ Y)
-  body: { hom := (a : Int) • e.hom
-      inv := ((a⁻¹ : Units Int) : Int) • e.inv
-      hom_inv_id := by
-        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.inv_mul, one_smul, e.hom_inv_id]
-      inv_hom_id := by
-        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.mul_inv, one_smul, e.inv_hom_id] }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 标量乘法 (单位群 整数) (X ≅ Y)
-  定义体: { hom := (a : Int) • e.hom
-      inv := ((a⁻¹ : Units Int) : Int) • e.inv
-      hom_inv_id := by
-        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.inv_mul, one_smul, e.hom_inv_id]
-      inv_hom_id := by
-        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.mul_inv, one_smul, e.inv_hom_id] }
-
-@[simp]
-
-Depends on / 依赖: Units.inv_mul, Units.mul_inv, comp_zsmul, e.hom, e.hom_inv_id, e.inv, e.inv_hom_id, hom_inv_id, inv_hom_id, inv_mul, mul_inv, one_smul, smul_smul, zsmul_comp
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SMul (Units Int) (X ≅ Y) where
+instance : SMul (Units ℤ) (X ≅ Y) where
   smul a e :=
-    { hom := (a : Int) • e.hom
-      inv := ((a⁻¹ : Units Int) : Int) • e.inv
+    { hom := (a : ℤ) • e.hom
+      inv := ((a⁻¹ : Units ℤ) : ℤ) • e.inv
       hom_inv_id := by
         simp only [comp_zsmul, zsmul_comp, smul_smul, Units.inv_mul, one_smul, e.hom_inv_id]
       inv_hom_id := by
         simp only [comp_zsmul, zsmul_comp, smul_smul, Units.mul_inv, one_smul, e.inv_hom_id] }
 
 @[simp]
-/--
-lemma `smul_iso_hom` / 引理 `smul_iso_hom`
-
-English:
-lemma smul_iso_hom
-  given: (a : Units Int) (e : X ≅ Y)
-  statement: (a • e).hom = a • e.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 smul_iso_hom
-  条件: (a : 单位群 整数) (e : X ≅ Y)
-  结论: (a • e).hom = a • e.hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.smul_iso_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma smul_iso_hom (a : Units Int) (e : X ≅ Y) : (a • e).hom = a • e.hom := rfl
+lemma smul_iso_hom (a : Units ℤ) (e : X ≅ Y) : (a • e).hom = a • e.hom := rfl
 
 @[simp]
-/--
-lemma `smul_iso_inv` / 引理 `smul_iso_inv`
-
-English:
-lemma smul_iso_inv
-  given: (a : Units Int) (e : X ≅ Y)
-  statement: (a • e).inv = a⁻¹ • e.inv
-  proof: rfl
-
-中文:
-引理 smul_iso_inv
-  条件: (a : 单位群 整数) (e : X ≅ Y)
-  结论: (a • e).inv = a⁻¹ • e.inv
-  证明: rfl
+/-
+**CategoryTheory.smul_iso_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma smul_iso_inv (a : Units Int) (e : X ≅ Y) : (a • e).inv = a⁻¹ • e.inv := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (X ≅ Y)
-  body: { hom := -e.hom
-      inv := -e.inv }
-
-@[simp]
-
-中文:
-实例 :
-  签名: 取负 (X ≅ Y)
-  定义体: { hom := -e.hom
-      inv := -e.inv }
-
-@[simp]
-
-Depends on / 依赖: e.hom, e.inv
+lemma smul_iso_inv (a : Units ℤ) (e : X ≅ Y) : (a • e).inv = a⁻¹ • e.inv := rfl
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (X ≅ Y) where
   neg e :=
@@ -1572,42 +1165,16 @@ instance : Neg (X ≅ Y) where
       inv := -e.inv }
 
 @[simp]
-/--
-lemma `neg_iso_hom` / 引理 `neg_iso_hom`
-
-English:
-lemma neg_iso_hom
-  given: (e : X ≅ Y)
-  statement: (-e).hom = -e.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 neg_iso_hom
-  条件: (e : X ≅ Y)
-  结论: (-e).hom = -e.hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.neg_iso_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma neg_iso_hom (e : X ≅ Y) : (-e).hom = -e.hom := rfl
 
 @[simp]
-/--
-lemma `neg_iso_inv` / 引理 `neg_iso_inv`
-
-English:
-lemma neg_iso_inv
-  given: (e : X ≅ Y)
-  statement: (-e).inv = -e.inv
-  proof: rfl
-
-中文:
-引理 neg_iso_inv
-  条件: (e : X ≅ Y)
-  结论: (-e).inv = -e.inv
-  证明: rfl
+/-
+**CategoryTheory.neg_iso_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma neg_iso_inv (e : X ≅ Y) : (-e).inv = -e.inv := rfl
 
@@ -1616,3 +1183,4 @@ end
 end Preadditive
 
 end CategoryTheory
+

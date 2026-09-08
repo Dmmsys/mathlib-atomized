@@ -71,59 +71,42 @@ universe u
   This definition is slightly generalised to include a well-founded relation
   `r` with the property that `r (a % b) b`, instead of a valuation. -/
 @[wikidata Q867345]
-/--
-Definition of `EuclideanDomain` / `EuclideanDomain` 的定义
+/-
+**EuclideanDomain** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class EuclideanDomain
-  parameters: (R : Type u)
-  extends: CommRing R, Nontrivial R
-  axioms and operations (8):
-    - quotient : R -> R -> R
-    - quotient_zero : forall a, quotient a 0 = 0
-    - remainder : R -> R -> R
-    - quotient_mul_add_remainder_eq : forall a b, b * quotient a b + remainder a b = a
-    - r : R -> R -> Prop
-    - r_wellFounded : WellFounded r
-    - remainder_lt : forall (a) {b}, b != 0 -> r (remainder a b) b
-    - mul_left_not_lt : forall (a) {b}, b != 0 -> ¬r (a * b) a
-
-中文:
-类 欧几里得整环
-  参数: (R : 类型u)
-  继承: 交换环 R, 非平凡 R
-  公理与运算 (8 个):
-    - quotient : R -> R -> R
-    - quotient_zero : 对任意 a, quotient a 0 = 0
-    - remainder : R -> R -> R
-    - quotient_mul_add_remainder_eq : 对任意 a b, b * quotient a b + remainder a b = a
-    - r : R -> R -> 命题
-    - r_wellFounded : 良基 r
-    - remainder_lt : 对任意 (a) {b}, b != 0 -> r (remainder a b) b
-    - mul_left_not_lt : 对任意 (a) {b}, b != 0 -> ¬r (a * b) a
+--- 原说明 ---
+A `EuclideanDomain` is a non-trivial commutative ring with a division and a rema
+inder,
+  satisfying `b * (a / b) + a % b = a`.
+  The definition of a Euclidean domain usually includes a valuation function `R 
+→ ℕ`.
+  This definition is slightly generalised to include a well-founded relation
+  `r` with the property that `r (a % b) b`, instead of a valuation.
 -/
 class EuclideanDomain (R : Type u) extends CommRing R, Nontrivial R where
   /-- A division function (denoted `/`) on `R`.
     This satisfies the property `b * (a / b) + a % b = a`, where `%` denotes `remainder`. -/
-  protected quotient : R -> R -> R
+  protected quotient : R → R → R
   /-- Division by zero should always give zero by convention. -/
-  protected quotient_zero : forall a, quotient a 0 = 0
+  protected quotient_zero : ∀ a, quotient a 0 = 0
   /-- A remainder function (denoted `%`) on `R`.
     This satisfies the property `b * (a / b) + a % b = a`, where `/` denotes `quotient`. -/
-  protected remainder : R -> R -> R
+  protected remainder : R → R → R
   /-- The property that links the quotient and remainder functions.
     This allows us to compute GCDs and LCMs. -/
-  protected quotient_mul_add_remainder_eq : forall a b, b * quotient a b + remainder a b = a
+  protected quotient_mul_add_remainder_eq : ∀ a b, b * quotient a b + remainder a b = a
   /-- A well-founded relation on `R`, satisfying `r (a % b) b`.
     This ensures that the GCD algorithm always terminates. -/
-  protected r : R -> R -> Prop
+  protected r : R → R → Prop
   /-- The relation `r` must be well-founded.
     This ensures that the GCD algorithm always terminates. -/
   r_wellFounded : WellFounded r
   /-- The relation `r` satisfies `r (a % b) b`. -/
-  protected remainder_lt : forall (a) {b}, b != 0 -> r (remainder a b) b
+  protected remainder_lt : ∀ (a) {b}, b ≠ 0 → r (remainder a b) b
   /-- An additional constraint on `r`. -/
-  mul_left_not_lt : forall (a) {b}, b != 0 -> ¬r (a * b) a
+  mul_left_not_lt : ∀ (a) {b}, b ≠ 0 → ¬r (a * b) a
 
 /-
 Lean has far more theorems about fields than about Euclidean domains. We thus
@@ -147,233 +130,162 @@ local instance wellFoundedRelation : WellFoundedRelation R where
   rel := EuclideanDomain.r
   wf := r_wellFounded
 
-/--
-Instance `isWellFounded` / 实例 `isWellFounded`
-
-English:
-instance isWellFounded
-  signature: : IsWellFounded R (· ≺ ·) where
-  body: r_wellFounded
-
-中文:
-实例 isWellFounded
-  签名: : 是良基 R (· ≺ ·) where
-  定义体: r_wellFounded
-
-Depends on / 依赖: r_wellFounded
+/-
+**EuclideanDomain.isWellFounded** 是 Mathlib 中的一个实例，位于命名空间 `EuclideanDomain`。
+形式化陈述：isWellFounded : IsWellFounded R (· ≺ ·) where wf
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.r_wellFounded`：∀ {R : Type u} [self : EuclideanDomain R]
+, WellFounded EuclideanDomain.r
 -/
 instance isWellFounded : IsWellFounded R (· ≺ ·) where
   wf := r_wellFounded
 
 -- see Note [lower instance priority]
+/-
+**EuclideanDomain.** 是 Mathlib 中的一个实例，位于命名空间 `EuclideanDomain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 70) : Div R :=
   ⟨EuclideanDomain.quotient⟩
 
 -- see Note [lower instance priority]
+/-
+**EuclideanDomain.** 是 Mathlib 中的一个实例，位于命名空间 `EuclideanDomain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 70) : Mod R :=
   ⟨EuclideanDomain.remainder⟩
-
-/--
-theorem `div_add_mod` / 定理 `div_add_mod`
-
-English:
-theorem div_add_mod
-  given: (a b : R)
-  statement: b * (a / b) + a % b = a
-  proof: EuclideanDomain.quotient_mul_add_remainder_eq _ _
-
-中文:
-定理 div_add_mod
-  条件: (a b : R)
-  结论: b * (a / b) + a % b = a
-  证明: EuclideanDomain.quotient_mul_add_remainder_eq _ _
-
-Depends on / 依赖: EuclideanDomain, EuclideanDomain.quotient_mul_add_remainder_eq, quotient_mul_add_remainder_eq
+/-
+**EuclideanDomain.div_add_mod** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：div_add_mod (a b : R) : b * (a / b) + a % b = a
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.quotient_mul_add_remainder_eq`：∀ {R : Type u} [self : Eu
+clideanDomain R] (a b : R),   b * EuclideanDomain.quotient a b + EuclideanDomain
+.remainder a b = a
 -/
 theorem div_add_mod (a b : R) : b * (a / b) + a % b = a :=
   EuclideanDomain.quotient_mul_add_remainder_eq _ _
-
-/--
-theorem `mod_add_div` / 定理 `mod_add_div`
-
-English:
-theorem mod_add_div
-  given: (a b : R)
-  statement: a % b + b * (a / b) = a
-  proof: (add_comm _ _).trans (div_add_mod _ _)
-
-中文:
-定理 mod_add_div
-  条件: (a b : R)
-  结论: a % b + b * (a / b) = a
-  证明: (add_comm _ _).trans (div_add_mod _ _)
-
-Depends on / 依赖: add_comm, div_add_mod
+/-
+**EuclideanDomain.mod_add_div** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：mod_add_div (a b : R) : a % b + b * (a / b) = a
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `EuclideanDomain.div_add_mod`：div_add_mod (a b : R) : b * (a / b) + a % b
+ = a
 -/
 theorem mod_add_div (a b : R) : a % b + b * (a / b) = a :=
   (add_comm _ _).trans (div_add_mod _ _)
-
-/--
-theorem `mod_add_div'` / 定理 `mod_add_div'`
-
-English:
-theorem mod_add_div'
-  given: (m k : R)
-  statement: m % k + m / k * k = m
-  proof: by
-  rw [mul_comm]
-  exact mod_add_div _ _
-
-中文:
-定理 mod_add_div'
-  条件: (m k : R)
-  结论: m % k + m / k * k = m
-  证明: by
-  rw [mul_comm]
-  exact mod_add_div _ _
-
-Depends on / 依赖: mod_add_div, mul_comm
+/-
+**EuclideanDomain.mod_add_div'** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：mod_add_div' (m k : R) : m % k + m / k * k = m
+参数：m k : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `EuclideanDomain.mod_add_div`：mod_add_div (a b : R) : a % b + b * (a / b)
+ = a
 -/
 theorem mod_add_div' (m k : R) : m % k + m / k * k = m := by
   rw [mul_comm]
   exact mod_add_div _ _
-
-/--
-theorem `div_add_mod'` / 定理 `div_add_mod'`
-
-English:
-theorem div_add_mod'
-  given: (m k : R)
-  statement: m / k * k + m % k = m
-  proof: by
-  rw [mul_comm]
-  exact div_add_mod _ _
-
-中文:
-定理 div_add_mod'
-  条件: (m k : R)
-  结论: m / k * k + m % k = m
-  证明: by
-  rw [mul_comm]
-  exact div_add_mod _ _
-
-Depends on / 依赖: div_add_mod, mul_comm
+/-
+**EuclideanDomain.div_add_mod'** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：div_add_mod' (m k : R) : m / k * k + m % k = m
+参数：m k : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `EuclideanDomain.div_add_mod`：div_add_mod (a b : R) : b * (a / b) + a % b
+ = a
 -/
 theorem div_add_mod' (m k : R) : m / k * k + m % k = m := by
   rw [mul_comm]
   exact div_add_mod _ _
-
-/--
-theorem `mod_lt` / 定理 `mod_lt`
-
-English:
-theorem mod_lt
-  statement: forall (a) {b : R}, b != 0 -> a % b ≺ b
-  proof: EuclideanDomain.remainder_lt
-
-中文:
-定理 mod_lt
-  结论: 对任意 (a) {b : R}, b != 0 -> a % b ≺ b
-  证明: EuclideanDomain.remainder_lt
-
-Depends on / 依赖: EuclideanDomain, EuclideanDomain.remainder_lt, remainder_lt
+/-
+**EuclideanDomain.mod_lt** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：mod_lt : forall (a) {b : R}, b != 0 -> a % b ≺ b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.remainder_lt`：∀ {R : Type u} [self : EuclideanDomain R] 
+(a : R) {b : R}, b ≠ 0 → EuclideanDomain.r (EuclideanDomain.remainder a b) b
 -/
-theorem mod_lt : forall (a) {b : R}, b != 0 -> a % b ≺ b :=
+theorem mod_lt : ∀ (a) {b : R}, b ≠ 0 → a % b ≺ b :=
   EuclideanDomain.remainder_lt
-
-/--
-theorem `mul_right_not_lt` / 定理 `mul_right_not_lt`
-
-English:
-theorem mul_right_not_lt
-  given: {a : R} (b) (h : a != 0)
-  statement: ¬a * b ≺ b
-  proof: by
-  rw [mul_comm]
-  exact mul_left_not_lt b h
-
-@[simp]
-
-中文:
-定理 mul_right_not_lt
-  条件: {a : R} (b) (h : a != 0)
-  结论: ¬a * b ≺ b
-  证明: by
-  rw [mul_comm]
-  exact mul_left_not_lt b h
-
-@[simp]
-
-Depends on / 依赖: mul_comm, mul_left_not_lt
+/-
+**EuclideanDomain.mul_right_not_lt** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：mul_right_not_lt {a : R} (b) (h : a != 0) : ¬a * b ≺ b
+参数：b；h : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `EuclideanDomain.mul_left_not_lt`：∀ {R : Type u} [self : EuclideanDomain 
+R] (a : R) {b : R}, b ≠ 0 → ¬EuclideanDomain.r (a * b) a
 -/
-theorem mul_right_not_lt {a : R} (b) (h : a != 0) : ¬a * b ≺ b := by
+theorem mul_right_not_lt {a : R} (b) (h : a ≠ 0) : ¬a * b ≺ b := by
   rw [mul_comm]
   exact mul_left_not_lt b h
 
 @[simp]
-/--
-theorem `mod_zero` / 定理 `mod_zero`
-
-English:
-theorem mod_zero
-  given: (a : R)
-  statement: a % 0 = a
-  proof: by simpa only [zero_mul, zero_add] using div_add_mod a 0
-
-中文:
-定理 mod_zero
-  条件: (a : R)
-  结论: a % 0 = a
-  证明: by simpa only [zero_mul, zero_add] using div_add_mod a 0
-
-Depends on / 依赖: div_add_mod, zero_add, zero_mul
+/-
+**EuclideanDomain.mod_zero** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：mod_zero (a : R) : a % 0 = a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `EuclideanDomain.div_add_mod`：div_add_mod (a b : R) : b * (a / b) + a % b
+ = a
 -/
 theorem mod_zero (a : R) : a % 0 = a := by simpa only [zero_mul, zero_add] using div_add_mod a 0
-
-/--
-theorem `lt_one` / 定理 `lt_one`
-
-English:
-theorem lt_one
-  given: (a : R)
-  statement: a ≺ (1 : R) -> a = 0
-  proof: haveI := Classical.dec
-  not_imp_not.1 fun h => by simpa only [one_mul] using mul_left_not_lt 1 h
-
-@[simp]
-
-中文:
-定理 lt_one
-  条件: (a : R)
-  结论: a ≺ (1 : R) -> a = 0
-  证明: haveI := Classical.dec
-  not_imp_not.1 fun h => by simpa only [one_mul] using mul_left_not_lt 1 h
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.dec, mul_left_not_lt, not_imp_not, one_mul
+/-
+**EuclideanDomain.lt_one** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：lt_one (a : R) : a ≺ (1 : R) -> a = 0
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `EuclideanDomain.mul_left_not_lt`：∀ {R : Type u} [self : EuclideanDomain 
+R] (a : R) {b : R}, b ≠ 0 → ¬EuclideanDomain.r (a * b) a
 -/
-theorem lt_one (a : R) : a ≺ (1 : R) -> a = 0 :=
+theorem lt_one (a : R) : a ≺ (1 : R) → a = 0 :=
   haveI := Classical.dec
   not_imp_not.1 fun h => by simpa only [one_mul] using mul_left_not_lt 1 h
 
 @[simp]
-/--
-theorem `div_zero` / 定理 `div_zero`
-
-English:
-theorem div_zero
-  given: (a : R)
-  statement: a / 0 = 0
-  proof: EuclideanDomain.quotient_zero a
-
-中文:
-定理 div_zero
-  条件: (a : R)
-  结论: a / 0 = 0
-  证明: EuclideanDomain.quotient_zero a
-
-Depends on / 依赖: EuclideanDomain, EuclideanDomain.quotient_zero, quotient_zero
+/-
+**EuclideanDomain.div_zero** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：div_zero (a : R) : a / 0 = 0
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.quotient_zero`：∀ {R : Type u} [self : EuclideanDomain R]
+ (a : R), EuclideanDomain.quotient a 0 = 0
 -/
 theorem div_zero (a : R) : a / 0 = 0 :=
   EuclideanDomain.quotient_zero a
@@ -381,37 +293,18 @@ theorem div_zero (a : R) : a / 0 = 0 :=
 section
 
 @[elab_as_elim]
-/--
-theorem `GCD.induction` / 定理 `GCD.induction`
-
-English:
-theorem GCD.induction
-  statement: {P : R -> R -> Prop} (a b : R) (H0 : forall x, P 0 x)
-  proof: by
-  classical
-  exact if a0 : a = 0 then
-    a0.symm ▸ H0 b
-  else
-    have _ := mod_lt b a0
-    H1 _ _ a0 (GCD.induction (b % a) a H0 H1)
-termination_by a
-
-中文:
-定理 GCD.induction
-  结论: {P : R -> R -> 命题} (a b : R) (H0 : 对任意 x, P 0 x)
-  证明: by
-  classical
-  exact if a0 : a = 0 then
-    a0.symm ▸ H0 b
-  else
-    have _ := mod_lt b a0
-    H1 _ _ a0 (GCD.induction (b % a) a H0 H1)
-termination_by a
-
-Depends on / 依赖: GCD.induction, a0.symm, classical, mod_lt, termination_by
+/-
+**EuclideanDomain.GCD.induction** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain.GCD`。
+形式化陈述：∀ {R : Type u} [inst : EuclideanDomain R] {P : R → R → Prop} (a b : R),   
+(∀ (x : R), P 0 x) → (∀ (a b : R), a ≠ 0 → P (b % a) a → P a b) → P a b
+参数：a b : R；∀ (x : R), P 0 x；∀ (a b : R), a ≠ 0 → P (b % a) a → P a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.GCD.induction._unary`：∀ {R : Type u} [inst : EuclideanDo
+main R] {P : R → R → Prop},   (∀ (x : R), P 0 x) → (∀ (a b : R), a ≠ 0 → P (b % 
+a) a → P a b) → ∀ (_x : (_…
 -/
-theorem GCD.induction {P : R -> R -> Prop} (a b : R) (H0 : forall x, P 0 x)
-    (H1 : forall a b, a != 0 -> P (b % a) a -> P a b) : P a b := by
+theorem GCD.induction {P : R → R → Prop} (a b : R) (H0 : ∀ x, P 0 x)
+    (H1 : ∀ a b, a ≠ 0 → P (b % a) a → P a b) : P a b := by
   classical
   exact if a0 : a = 0 then
     a0.symm ▸ H0 b
@@ -426,32 +319,19 @@ section GCD
 
 variable [DecidableEq R]
 
-/--
-Definition of `gcd` / `gcd` 的定义
+/-- `gcd a b` is a (non-unique) element such that `gcd a b ∣ a` `gcd a b ∣ b`, and for
+  any element `c` such that `c ∣ a` and `c ∣ b`, then `c ∣ gcd a b` -/
+/-
+**EuclideanDomain.gcd** 是 Mathlib 中的一个定义，位于命名空间 `EuclideanDomain`。
+形式化陈述：gcd (a b : R) : R
+参数：a b : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gcd
-  signature: (a b : R)
-  body: if a0 : a = 0 then b
-  else
-    have _ := mod_lt b a0
-    gcd (b % a) a
-termination_by a
-
-@[simp]
-
-中文:
-定义 最大公约数
-  签名: (a b : R)
-  定义体: if a0 : a = 0 then b
-  else
-    have _ := mod_lt b a0
-    gcd (b % a) a
-termination_by a
-
-@[simp]
-
-Depends on / 依赖: mod_lt, termination_by
+--- 原说明 ---
+`gcd a b` is a (non-unique) element such that `gcd a b ∣ a` `gcd a b ∣ b`, and f
+or
+  any element `c` such that `c ∣ a` and `c ∣ b`, then `c ∣ gcd a b`
 -/
 def gcd (a b : R) : R :=
   if a0 : a = 0 then b
@@ -461,59 +341,55 @@ def gcd (a b : R) : R :=
 termination_by a
 
 @[simp]
-/--
-theorem `gcd_zero_left` / 定理 `gcd_zero_left`
-
-English:
-theorem gcd_zero_left
-  given: (a : R)
-  statement: gcd 0 a = a
-  proof: by
-  rw [gcd]
-  exact if_pos rfl
-
-中文:
-定理 gcd_zero_left
-  条件: (a : R)
-  结论: 最大公约数 0 a = a
-  证明: by
-  rw [gcd]
-  exact if_pos rfl
-
-Depends on / 依赖: if_pos
+/-
+**EuclideanDomain.gcd_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：gcd_zero_left (a : R) : gcd 0 a = a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.mod_lt`：mod_lt : forall (a) {b : R}, b != 0 -> a % b ≺ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanDomain.gcd.eq_1`：∀ {R : Type u} [inst : EuclideanDomain R] [ins
+t_1 : DecidableEq R] (a b : R),   EuclideanDomain.gcd a b =     if a0 : a = 0 th
+en b     else …
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem gcd_zero_left (a : R) : gcd 0 a = a := by
   rw [gcd]
   exact if_pos rfl
 
-/--
-Definition of `xgcdAux` / `xgcdAux` 的定义
+/-- An implementation of the extended GCD algorithm.
+At each step we are computing a triple `(r, s, t)`, where `r` is the next value of the GCD
+algorithm, to compute the greatest common divisor of the input (say `x` and `y`), and `s` and `t`
+are the coefficients in front of `x` and `y` to obtain `r` (i.e. `r = s * x + t * y`).
+The function `xgcdAux` takes in two triples, and from these recursively computes the next triple:
+```
+xgcdAux (r, s, t) (r', s', t') = xgcdAux (r' % r, s' - (r' / r) * s, t' - (r' / r) * t) (r, s, t)
+```
+-/
+/-
+**EuclideanDomain.xgcdAux** 是 Mathlib 中的一个定义，位于命名空间 `EuclideanDomain`。
+形式化陈述：xgcdAux (r s t r' s' t' : R) : R × R × R
+参数：r s t r' s' t' : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition xgcdAux
-  signature: (r s t r' s' t' : R)
-  body: if _hr : r = 0 then (r', s', t')
-  else
-    let q := r' / r
-    have _ := mod_lt r' _hr
-    xgcdAux (r' % r) (s' - q * s) (t' - q * t) r s t
-termination_by r
-
-@[simp]
-
-中文:
-定义 xgcdAux
-  签名: (r s t r' s' t' : R)
-  定义体: if _hr : r = 0 then (r', s', t')
-  else
-    let q := r' / r
-    have _ := mod_lt r' _hr
-    xgcdAux (r' % r) (s' - q * s) (t' - q * t) r s t
-termination_by r
-
-@[simp]
-
-Depends on / 依赖: mod_lt, termination_by, xgcdAux
+--- 原说明 ---
+An implementation of the extended GCD algorithm.
+At each step we are computing a triple `(r, s, t)`, where `r` is the next value 
+of the GCD
+algorithm, to compute the greatest common divisor of the input (say `x` and `y`)
+, and `s` and `t`
+are the coefficients in front of `x` and `y` to obtain `r` (i.e. `r = s * x + t 
+* y`).
+The function `xgcdAux` takes in two triples, and from these recursively computes
+ the next triple:
+```
+xgcdAux (r, s, t) (r', s', t') = xgcdAux (r' % r, s' - (r' / r) * s, t' - (r' / 
+r) * t) (r, s, t)
+```
 -/
 def xgcdAux (r s t r' s' t' : R) : R × R × R :=
   if _hr : r = 0 then (r', s', t')
@@ -524,185 +400,134 @@ def xgcdAux (r s t r' s' t' : R) : R × R × R :=
 termination_by r
 
 @[simp]
-/--
-theorem `xgcd_zero_left` / 定理 `xgcd_zero_left`
-
-English:
-theorem xgcd_zero_left
-  given: {s t r' s' t' : R}
-  statement: xgcdAux 0 s t r' s' t' = (r', s', t')
-  proof: by
-  unfold xgcdAux
-  exact if_pos rfl
-
-中文:
-定理 xgcd_zero_left
-  条件: {s t r' s' t' : R}
-  结论: xgcdAux 0 s t r' s' t' = (r', s', t')
-  证明: by
-  unfold xgcdAux
-  exact if_pos rfl
-
-Depends on / 依赖: if_pos, xgcdAux
+/-
+**EuclideanDomain.xgcd_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：xgcd_zero_left {s t r' s' t' : R} : xgcdAux 0 s t r' s' t' = (r', s', t')
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.mod_lt`：mod_lt : forall (a) {b : R}, b != 0 -> a % b ≺ b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanDomain.xgcdAux.eq_def`：∀ {R : Type u} [inst : EuclideanDomain R
+] [inst_1 : DecidableEq R] (r s t r' s' t' : R),   EuclideanDomain.xgcdAux r s t
+ r' s' t' =     if _…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem xgcd_zero_left {s t r' s' t' : R} : xgcdAux 0 s t r' s' t' = (r', s', t') := by
   unfold xgcdAux
   exact if_pos rfl
-
-/--
-theorem `xgcdAux_rec` / 定理 `xgcdAux_rec`
-
-English:
-theorem xgcdAux_rec
-  given: {r s t r' s' t' : R} (h : r != 0)
-  proof: by
-  conv =>
-    lhs
-    rw [xgcdAux]
-  exact if_neg h
-
-中文:
-定理 xgcdAux_rec
-  条件: {r s t r' s' t' : R} (h : r != 0)
-  证明: by
-  conv =>
-    lhs
-    rw [xgcdAux]
-  exact if_neg h
-
-Depends on / 依赖: if_neg, xgcdAux
+/-
+**EuclideanDomain.xgcdAux_rec** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：xgcdAux_rec {r s t r' s' t' : R} (h : r != 0) : xgcdAux r s t r' s' t' = x
+gcdAux (r' % r) (s' - r' / r * s) (t' - r' / r * t) r s t
+参数：h : r != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.mod_lt`：mod_lt : forall (a) {b : R}, b != 0 -> a % b ≺ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanDomain.xgcdAux.eq_1`：∀ {R : Type u} [inst : EuclideanDomain R] 
+[inst_1 : DecidableEq R] (r s t r' s' t' : R),   EuclideanDomain.xgcdAux r s t r
+' s' t' =     if _…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem xgcdAux_rec {r s t r' s' t' : R} (h : r != 0) :
+theorem xgcdAux_rec {r s t r' s' t' : R} (h : r ≠ 0) :
     xgcdAux r s t r' s' t' = xgcdAux (r' % r) (s' - r' / r * s) (t' - r' / r * t) r s t := by
   conv =>
     lhs
     rw [xgcdAux]
   exact if_neg h
 
-/--
-Definition of `xgcd` / `xgcd` 的定义
+/-- Use the extended GCD algorithm to generate the `a` and `b` values
+  satisfying `gcd x y = x * a + y * b`. -/
+/-
+**EuclideanDomain.xgcd** 是 Mathlib 中的一个定义，位于命名空间 `EuclideanDomain`。
+形式化陈述：xgcd (x y : R) : R × R
+参数：x y : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition xgcd
-  signature: (x y : R)
-  body: (xgcdAux x 1 0 y 0 1).2
-
-中文:
-定义 xgcd
-  签名: (x y : R)
-  定义体: (xgcdAux x 1 0 y 0 1).2
-
-Depends on / 依赖: xgcdAux
+--- 原说明 ---
+Use the extended GCD algorithm to generate the `a` and `b` values
+  satisfying `gcd x y = x * a + y * b`.
 -/
 def xgcd (x y : R) : R × R :=
   (xgcdAux x 1 0 y 0 1).2
 
-/--
-Definition of `gcdA` / `gcdA` 的定义
+/-- The extended GCD `a` value in the equation `gcd x y = x * a + y * b`. -/
+/-
+**EuclideanDomain.gcdA** 是 Mathlib 中的一个定义，位于命名空间 `EuclideanDomain`。
+形式化陈述：gcdA (x y : R) : R
+参数：x y : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gcdA
-  signature: (x y : R)
-  body: (xgcd x y).1
-
-中文:
-定义 gcdA
-  签名: (x y : R)
-  定义体: (xgcd x y).1
+--- 原说明 ---
+The extended GCD `a` value in the equation `gcd x y = x * a + y * b`.
 -/
 def gcdA (x y : R) : R :=
   (xgcd x y).1
 
-/--
-Definition of `gcdB` / `gcdB` 的定义
+/-- The extended GCD `b` value in the equation `gcd x y = x * a + y * b`. -/
+/-
+**EuclideanDomain.gcdB** 是 Mathlib 中的一个定义，位于命名空间 `EuclideanDomain`。
+形式化陈述：gcdB (x y : R) : R
+参数：x y : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gcdB
-  signature: (x y : R)
-  body: (xgcd x y).2
-
-@[simp]
-
-中文:
-定义 gcdB
-  签名: (x y : R)
-  定义体: (xgcd x y).2
-
-@[simp]
+--- 原说明 ---
+The extended GCD `b` value in the equation `gcd x y = x * a + y * b`.
 -/
 def gcdB (x y : R) : R :=
   (xgcd x y).2
 
 @[simp]
-/--
-theorem `gcdA_zero_left` / 定理 `gcdA_zero_left`
-
-English:
-theorem gcdA_zero_left
-  given: {s : R}
-  statement: gcdA 0 s = 0
-  proof: by
-  unfold gcdA
-  rw [xgcd]; rw [xgcd_zero_left]
-
-@[simp]
-
-中文:
-定理 gcdA_zero_left
-  条件: {s : R}
-  结论: gcdA 0 s = 0
-  证明: by
-  unfold gcdA
-  rw [xgcd]; rw [xgcd_zero_left]
-
-@[simp]
-
-Depends on / 依赖: xgcd_zero_left
+/-
+**EuclideanDomain.gcdA_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：gcdA_zero_left {s : R} : gcdA 0 s = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanDomain.xgcd.eq_1`：∀ {R : Type u} [inst : EuclideanDomain R] [in
+st_1 : DecidableEq R] (x y : R),   EuclideanDomain.xgcd x y = (EuclideanDomain.x
+gcdAux x 1 0 y …
+· 使用定理 `EuclideanDomain.xgcd_zero_left`：xgcd_zero_left {s t r' s' t' : R} : xgcd
+Aux 0 s t r' s' t' = (r', s', t')
 -/
 theorem gcdA_zero_left {s : R} : gcdA 0 s = 0 := by
   unfold gcdA
-  rw [xgcd]; rw [xgcd_zero_left]
+  rw [xgcd, xgcd_zero_left]
 
 @[simp]
-/--
-theorem `gcdB_zero_left` / 定理 `gcdB_zero_left`
-
-English:
-theorem gcdB_zero_left
-  given: {s : R}
-  statement: gcdB 0 s = 1
-  proof: by
-  unfold gcdB
-  rw [xgcd]; rw [xgcd_zero_left]
-
-中文:
-定理 gcdB_zero_left
-  条件: {s : R}
-  结论: gcdB 0 s = 1
-  证明: by
-  unfold gcdB
-  rw [xgcd]; rw [xgcd_zero_left]
-
-Depends on / 依赖: semigroupDvd, xgcd_zero_left
+/-
+**EuclideanDomain.gcdB_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：gcdB_zero_left {s : R} : gcdB 0 s = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EuclideanDomain.xgcd.eq_1`：∀ {R : Type u} [inst : EuclideanDomain R] [in
+st_1 : DecidableEq R] (x y : R),   EuclideanDomain.xgcd x y = (EuclideanDomain.x
+gcdAux x 1 0 y …
+· 使用定理 `EuclideanDomain.xgcd_zero_left`：xgcd_zero_left {s t r' s' t' : R} : xgcd
+Aux 0 s t r' s' t' = (r', s', t')
 -/
 theorem gcdB_zero_left {s : R} : gcdB 0 s = 1 := by
   unfold gcdB
-  rw [xgcd]; rw [xgcd_zero_left]
-
-/--
-theorem `xgcd_val` / 定理 `xgcd_val`
-
-English:
-theorem xgcd_val
-  given: (x y : R)
-  statement: xgcd x y = (gcdA x y, gcdB x y)
-  proof: rfl
-
-中文:
-定理 xgcd_val
-  条件: (x y : R)
-  结论: xgcd x y = (gcdA x y, gcdB x y)
-  证明: rfl
+  rw [xgcd, xgcd_zero_left]
+/-
+**EuclideanDomain.xgcd_val** 是 Mathlib 中的一个定理，位于命名空间 `EuclideanDomain`。
+形式化陈述：xgcd_val (x y : R) : xgcd x y = (gcdA x y, gcdB x y)
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem xgcd_val (x y : R) : xgcd x y = (gcdA x y, gcdB x y) :=
   rfl
@@ -713,18 +538,19 @@ section LCM
 
 variable [DecidableEq R]
 
-/--
-Definition of `lcm` / `lcm` 的定义
+/-- `lcm a b` is a (non-unique) element such that `a ∣ lcm a b` `b ∣ lcm a b`, and for
+  any element `c` such that `a ∣ c` and `b ∣ c`, then `lcm a b ∣ c` -/
+/-
+**EuclideanDomain.lcm** 是 Mathlib 中的一个定义，位于命名空间 `EuclideanDomain`。
+形式化陈述：lcm (x y : R) : R
+参数：x y : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lcm
-  signature: (x y : R)
-  body: x * y / gcd x y
-
-中文:
-定义 最小公倍数
-  签名: (x y : R)
-  定义体: x * y / gcd x y
+--- 原说明 ---
+`lcm a b` is a (non-unique) element such that `a ∣ lcm a b` `b ∣ lcm a b`, and f
+or
+  any element `c` such that `a ∣ c` and `b ∣ c`, then `lcm a b ∣ c`
 -/
 def lcm (x y : R) : R :=
   x * y / gcd x y
@@ -732,3 +558,4 @@ def lcm (x y : R) : R :=
 end LCM
 
 end EuclideanDomain
+

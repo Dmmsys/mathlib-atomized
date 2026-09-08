@@ -37,121 +37,70 @@ section ofSurjective
 variable {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B]
   [HopfAlgebra R A] [HopfAlgebraStruct R B]
 
-/--
-lemma `_root_.LinearMap.algHom_comp_convOne` / 引理 `_root_.LinearMap.algHom_comp_convOne`
+/-- Post-composition by an algebra homomorphism preserves the convolution unit. -/
+/-
+**HopfAlgebra._root_.LinearMap.algHom_comp_convOne** 是 Mathlib 中的一个引理，位于命名空间 `Ho
+pfAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.LinearMap.algHom_comp_convOne
-  given: (g : A ->ₐ[R] B)
-  proof: by
-  ext a; simp
-
-中文:
-引理 _root_.线性映射.algHom_comp_convOne
-  条件: (g : A ->ₐ[R] B)
-  证明: by
-  ext a; simp
+--- 原说明 ---
+Post-composition by an algebra homomorphism preserves the convolution unit.
 -/
-lemma _root_.LinearMap.algHom_comp_convOne (g : A ->ₐ[R] B) :
-    g.toLinearMap ∘ₗ (1 : WithConv (A ->ₗ[R] A)).ofConv = (1 : WithConv (A ->ₗ[R] B)).ofConv := by
+lemma _root_.LinearMap.algHom_comp_convOne (g : A →ₐ[R] B) :
+    g.toLinearMap ∘ₗ (1 : WithConv (A →ₗ[R] A)).ofConv = (1 : WithConv (A →ₗ[R] B)).ofConv := by
   ext a; simp
 
-/--
-lemma `_root_.LinearMap.convOne_comp_coalgHom` / 引理 `_root_.LinearMap.convOne_comp_coalgHom`
+/-- Pre-composition by a coalgebra homomorphism preserves the convolution unit. -/
+/-
+**HopfAlgebra._root_.LinearMap.convOne_comp_coalgHom** 是 Mathlib 中的一个引理，位于命名空间 `
+HopfAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.LinearMap.convOne_comp_coalgHom
-  given: (g : A ->ₗc[R] B)
-  proof: by
-  ext a; simp
-
-中文:
-引理 _root_.线性映射.convOne_comp_coalgHom
-  条件: (g : A ->ₗc[R] B)
-  证明: by
-  ext a; simp
+--- 原说明 ---
+Pre-composition by a coalgebra homomorphism preserves the convolution unit.
 -/
-lemma _root_.LinearMap.convOne_comp_coalgHom (g : A ->ₗc[R] B) :
-    (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ g.toLinearMap = (1 : WithConv (A ->ₗ[R] B)).ofConv := by
+lemma _root_.LinearMap.convOne_comp_coalgHom (g : A →ₗc[R] B) :
+    (1 : WithConv (B →ₗ[R] B)).ofConv ∘ₗ g.toLinearMap = (1 : WithConv (A →ₗ[R] B)).ofConv := by
   ext a; simp
 
-/--
-Definition of `ofSurjective` / `ofSurjective` 的定义
+/-- Transfer the Hopf algebra axioms along a surjective bialgebra homomorphism intertwining
+the antipodes. -/
+/-
+**HopfAlgebra.ofSurjective** 是 Mathlib 中的一个缩写定义，位于命名空间 `HopfAlgebra`。
+形式化陈述：ofSurjective (f : A ->ₐc[R] B) (hf : Function.Surjective f) (hS : antipode
+ R ∘ₗ f.toLinearMap = f.toLinearMap ∘ₗ antipode R) : HopfAlgebra R B
+参数：f : A ->ₐc[R] B；hf : Function.Surjective f；hS : antipode R ∘ₗ f.toLinearMap =
+ f.toLinearMap ∘ₗ antipode R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofSurjective
-  signature: (f : A ->ₐc[R] B) (hf : Function.Surjective f)
-  body: by
-  refine .ofConvInverse (antipode R) (ofConv_injective ?_) (ofConv_injective ?_) <;>
-    rw [← LinearMap.cancel_right (show Function.Surjective f.toLinearMap from hf)]
-  · calc (toConv (antipode R) * toConv .id : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
-          f.toCoalgHom.toLinearMap
-        = (toConv (f.toLinearMap ∘ₗ antipode R) * toConv f.toLinearMap).ofConv := by
-          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
-      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
-            (toConv (antipode R) * toConv .id : WithConv (A ->ₗ[R] A)).ofConv := by
-          rw [algHom_comp_convMul_distrib]; rfl
-      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
-          rw [antipode_mul_id]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
-  · calc (toConv .id * toConv (antipode R) : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
-          f.toCoalgHom.toLinearMap
-        = (toConv f.toLinearMap * toConv (f.toLinearMap ∘ₗ antipode R)).ofConv := by
-          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
-      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
-            (toConv .id * toConv (antipode R) : WithConv (A ->ₗ[R] A)).ofConv := by
-          rw [algHom_comp_convMul_distrib]; rfl
-      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
-          rw [id_mul_antipode]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
-
-中文:
-缩写 ofSurjective
-  签名: (f : A ->ₐc[R] B) (hf : 函数.满射 f)
-  定义体: by
-  refine .ofConvInverse (antipode R) (ofConv_injective ?_) (ofConv_injective ?_) <;>
-    rw [← LinearMap.cancel_right (show Function.Surjective f.toLinearMap from hf)]
-  · calc (toConv (antipode R) * toConv .id : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
-          f.toCoalgHom.toLinearMap
-        = (toConv (f.toLinearMap ∘ₗ antipode R) * toConv f.toLinearMap).ofConv := by
-          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
-      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
-            (toConv (antipode R) * toConv .id : WithConv (A ->ₗ[R] A)).ofConv := by
-          rw [algHom_comp_convMul_distrib]; rfl
-      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
-          rw [antipode_mul_id]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
-  · calc (toConv .id * toConv (antipode R) : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
-          f.toCoalgHom.toLinearMap
-        = (toConv f.toLinearMap * toConv (f.toLinearMap ∘ₗ antipode R)).ofConv := by
-          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
-      _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
-            (toConv .id * toConv (antipode R) : WithConv (A ->ₗ[R] A)).ofConv := by
-          rw [algHom_comp_convMul_distrib]; rfl
-      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
-          rw [id_mul_antipode]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
-
-Depends on / 依赖: AlgHomClass, AlgHomClass.toAlgHom, Function, Function.Surjective, LinearMap, LinearMap.cancel_right, Surjective, WithConv, antipode, cancel_right, convMul_comp_coalgHom_distrib, f.toCoalgHom.toLinearMap, f.toLinearMap, ofConv, ofConvInverse, ofConv_injective, toAlgHom, toCoalgHom, toConv, toLinearMap
+--- 原说明 ---
+Transfer the Hopf algebra axioms along a surjective bialgebra homomorphism inter
+twining
+the antipodes.
 -/
-noncomputable abbrev ofSurjective (f : A ->ₐc[R] B) (hf : Function.Surjective f)
+noncomputable abbrev ofSurjective (f : A →ₐc[R] B) (hf : Function.Surjective f)
     (hS : antipode R ∘ₗ f.toLinearMap = f.toLinearMap ∘ₗ antipode R) : HopfAlgebra R B := by
   refine .ofConvInverse (antipode R) (ofConv_injective ?_) (ofConv_injective ?_) <;>
     rw [← LinearMap.cancel_right (show Function.Surjective f.toLinearMap from hf)]
-  · calc (toConv (antipode R) * toConv .id : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
+  · calc (toConv (antipode R) * toConv .id : WithConv (B →ₗ[R] B)).ofConv ∘ₗ
           f.toCoalgHom.toLinearMap
         = (toConv (f.toLinearMap ∘ₗ antipode R) * toConv f.toLinearMap).ofConv := by
-          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
+          rw [convMul_comp_coalgHom_distrib, hS]; rfl
       _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
-            (toConv (antipode R) * toConv .id : WithConv (A ->ₗ[R] A)).ofConv := by
+            (toConv (antipode R) * toConv .id : WithConv (A →ₗ[R] A)).ofConv := by
           rw [algHom_comp_convMul_distrib]; rfl
-      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
-          rw [antipode_mul_id]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
-  · calc (toConv .id * toConv (antipode R) : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ
+      _ = (1 : WithConv (B →ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
+          rw [antipode_mul_id, algHom_comp_convOne, ← convOne_comp_coalgHom f.toCoalgHom]
+  · calc (toConv .id * toConv (antipode R) : WithConv (B →ₗ[R] B)).ofConv ∘ₗ
           f.toCoalgHom.toLinearMap
         = (toConv f.toLinearMap * toConv (f.toLinearMap ∘ₗ antipode R)).ofConv := by
-          rw [convMul_comp_coalgHom_distrib]; rw [hS]; rfl
+          rw [convMul_comp_coalgHom_distrib, hS]; rfl
       _ = (AlgHomClass.toAlgHom f).toLinearMap ∘ₗ
-            (toConv .id * toConv (antipode R) : WithConv (A ->ₗ[R] A)).ofConv := by
+            (toConv .id * toConv (antipode R) : WithConv (A →ₗ[R] A)).ofConv := by
           rw [algHom_comp_convMul_distrib]; rfl
-      _ = (1 : WithConv (B ->ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
-          rw [id_mul_antipode]; rw [algHom_comp_convOne]; rw [← convOne_comp_coalgHom f.toCoalgHom]
+      _ = (1 : WithConv (B →ₗ[R] B)).ofConv ∘ₗ f.toLinearMap := by
+          rw [id_mul_antipode, algHom_comp_convOne, ← convOne_comp_coalgHom f.toCoalgHom]
 
 end ofSurjective
 
@@ -167,25 +116,20 @@ variable (R) in
 /-- An ideal whose underlying `R`-submodule is a coideal and which is stable under the
 antipode (`S(I) ⊆ I`). Together with `I.IsTwoSided`, this makes `I` a *Hopf ideal*. -/
 @[mk_iff]
-/--
-Definition of `Ideal.IsHopfIdeal` / `Ideal.IsHopfIdeal` 的定义
+/-
+**Ideal.IsHopfIdeal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ideal`。
+形式化陈述：(R : Type u_1) → {A : Type u_2} → [inst : CommRing R] → [inst_1 : Ring A] 
+→ [HopfAlgebraStruct R A] → Ideal A → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Ideal.IsHopfIdeal
-  parameters: (I : Ideal A)
-  extends: (I.restrictScalars R).IsCoideal
-  axioms and operations (1):
-    - antipode_mem : forall ⦃x : A⦄, x in I -> antipode R x in I
-
-中文:
-类 理想.是Hopf理想
-  参数: (I : 理想 A)
-  继承: (I.restrictScalars R).是余ideal
-  公理与运算 (1 个):
-    - antipode_mem : 对任意 ⦃x : A⦄, x in I -> antipode R x in I
+--- 原说明 ---
+An ideal whose underlying `R`-submodule is a coideal and which is stable under t
+he
+antipode (`S(I) ⊆ I`). Together with `I.IsTwoSided`, this makes `I` a *Hopf idea
+l*.
 -/
 class Ideal.IsHopfIdeal (I : Ideal A) : Prop extends (I.restrictScalars R).IsCoideal where
-  antipode_mem : forall ⦃x : A⦄, x in I -> antipode R x in I
+  antipode_mem : ∀ ⦃x : A⦄, x ∈ I → antipode R x ∈ I
 
 end HopfAlgebraStruct
 
@@ -195,58 +139,30 @@ section HopfAlgebraStruct
 
 variable [HopfAlgebraStruct R A] (I : Ideal A) [I.IsTwoSided] [I.IsHopfIdeal R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HopfAlgebraStruct R (A ⧸ I)
-  body: Submodule.mapQ (I.restrictScalars R) (I.restrictScalars R)
-    (antipode R) (Ideal.IsHopfIdeal.antipode_mem (R := R))
-
-@[simp]
-
-中文:
-实例 :
-  签名: HopfAlgebraStruct R (A ⧸ I)
-  定义体: Submodule.mapQ (I.restrictScalars R) (I.restrictScalars R)
-    (antipode R) (Ideal.IsHopfIdeal.antipode_mem (R := R))
-
-@[simp]
-
-Depends on / 依赖: I.restrictScalars, Submodule, Submodule.mapQ, restrictScalars
+/-
+**HopfAlgebra.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgebra.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HopfAlgebraStruct R (A ⧸ I) where
   antipode := Submodule.mapQ (I.restrictScalars R) (I.restrictScalars R)
     (antipode R) (Ideal.IsHopfIdeal.antipode_mem (R := R))
 
 @[simp]
-/--
-lemma `antipode_mk` / 引理 `antipode_mk`
-
-English:
-lemma antipode_mk
-  given: (a : A)
-  proof: rfl
-
-中文:
-引理 antipode_mk
-  条件: (a : A)
-  证明: rfl
+/-
+**HopfAlgebra.Quotient.antipode_mk** 是 Mathlib 中的一个引理，位于命名空间 `HopfAlgebra.Quotie
+nt`。
+形式化陈述：antipode_mk (a : A) : antipode R (Ideal.Quotient.mk I a) = Ideal.Quotient.
+mk I (antipode R a)
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma antipode_mk (a : A) :
     antipode R (Ideal.Quotient.mk I a) = Ideal.Quotient.mk I (antipode R a) := rfl
-
-/--
-lemma `antipode_comp_mkₐ` / 引理 `antipode_comp_mkₐ`
-
-English:
-lemma antipode_comp_mkₐ
-  proof: by ext; simp
-
-中文:
-引理 antipode_comp_mkₐ
-  证明: by ext; simp
+/-
+**HopfAlgebra.Quotient.antipode_comp_mk** 是 Mathlib 中的一个引理，位于命名空间 `HopfAlgebra.Q
+uotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma antipode_comp_mkₐ :
     antipode R ∘ₗ (Ideal.Quotient.mkₐ R I).toLinearMap =
@@ -256,22 +172,12 @@ end HopfAlgebraStruct
 
 variable [HopfAlgebra R A] (I : Ideal A) [I.IsTwoSided] [I.IsHopfIdeal R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HopfAlgebra R (A ⧸ I)
-  body: .ofSurjective (mkBialgHom I) mk_surjective (antipode_comp_mkₐ I)
-
-中文:
-实例 :
-  签名: Hopf代数 R (A ⧸ I)
-  定义体: .ofSurjective (mkBialgHom I) mk_surjective (antipode_comp_mkₐ I)
-
-Depends on / 依赖: mkBialgHom, mk_surjective, ofSurjective
+/-
+**HopfAlgebra.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgebra.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : HopfAlgebra R (A ⧸ I) :=
   .ofSurjective (mkBialgHom I) mk_surjective (antipode_comp_mkₐ I)
 
 end HopfAlgebra.Quotient
+

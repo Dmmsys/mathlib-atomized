@@ -49,26 +49,15 @@ open Meta Command
 
 initialize registerTraceClass `Elab.ProxyType
 
-/--
-Definition of `ProxyEquivConfig` / `ProxyEquivConfig` 的定义
+/-- Configuration used by `mkProxyEquiv`. -/
+/-
+**Mathlib.ProxyType.ProxyEquivConfig** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.ProxyT
+ype`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ProxyEquivConfig
-  parameters: where
-  axioms and operations (4):
-    - proxyName : Name
-    - proxyEquivName : Name
-    - mkCtorProxyType : List (Expr × Name) -> TermElabM (Expr × Term)
-    - mkProxyType : Array (Name × Expr × Term) -> TermElabM (Expr × Array Term × TSyntax `tactic)
-
-中文:
-结构 ProxyEquivConfig
-  参数: where
-  公理与运算 (4 个):
-    - proxyName : Name
-    - proxyEquivName : Name
-    - mkCtorProxyType : 列表 (Expr × Name) -> TermElabM (Expr × 项)
-    - mkProxyType : 数组 (Name × Expr × 项) -> TermElabM (Expr × 数组 项 × TSyntax `tactic)
+--- 原说明 ---
+Configuration used by `mkProxyEquiv`.
 -/
 structure ProxyEquivConfig where
   /-- Name to use for the declaration for a type that is `Equiv` to the given type. -/
@@ -78,64 +67,54 @@ structure ProxyEquivConfig where
   /-- Returns a proxy type for a constructor and a pattern to use to match against it,
   given a list of fvars for the constructor arguments and pattern names to use for the arguments.
   The proxy type is expected to be a `Type*`. -/
-  mkCtorProxyType : List (Expr × Name) -> TermElabM (Expr × Term)
+  mkCtorProxyType : List (Expr × Name) → TermElabM (Expr × Term)
   /-- Given (constructor name, proxy constructor type, proxy constructor pattern) triples
   constructed using `mkCtorProxyType`, return (1) the total proxy type (a `Type*`),
   (2) patterns to use for each constructor, and (3) a proof to use to prove `left_inv` for
   `proxy_type ≃ type` (this proof starts with `intro x`). -/
-  mkProxyType : Array (Name × Expr × Term) -> TermElabM (Expr × Array Term × TSyntax `tactic)
+  mkProxyType : Array (Name × Expr × Term) → TermElabM (Expr × Array Term × TSyntax `tactic)
 
-/--
-Definition of `defaultMkCtorProxyType` / `defaultMkCtorProxyType` 的定义
+/-- Returns a proxy type for a constructor and a pattern to use to match against it.
 
-English:
-definition defaultMkCtorProxyType
-  signature: (xs : List (Expr × Name))
-  body: match xs with
-  | [] => return (mkConst ``Unit, ← `(term| ()))
-  | [(x, a)] => do
-    let xty ← inferType x
-    if ← Meta.isProp xty then
-      return (← mkAppM ``PLift #[xty], ← `(term| ⟨$(mkIdent a)⟩))
-    else
-      return (xty, mkIdent a)
-  | (x, a) :: xs => do
-    let (xsty, patt) ← defaultMkCtorProxyType xs
-    let xty ← inferType x
-    if ← Meta.isProp xty then
-      withLocalDeclD `x' (← mkAppM ``PLift #[xty]) fun x' => do
-        let xsty' := xsty.replaceFVar x (← mkAppM ``PLift.down #[x'])
-        let ty ← decorateSigma (← mkAppM ``Sigma #[← mkLambdaFVars #[x'] xsty'])
-        return (ty, ← `(term| ⟨⟨$(mkIdent a)⟩, $patt⟩))
-    else
-      let ty ← decorateSigma (← mkAppM ``Sigma #[← mkLambdaFVars #[x] xsty])
-      return (ty, ← `(term| ⟨$(mkIdent a), $patt⟩))
+Input: a list of pairs associated to each argument of the constructor consisting
+of (1) an fvar for this argument and (2) a name to use for this argument in patterns.
 
-中文:
-定义 defaultMkCtorProxyType
-  签名: (xs : 列表 (Expr × Name))
-  定义体: match xs with
-  | [] => return (mkConst ``Unit, ← `(term| ()))
-  | [(x, a)] => do
-    let xty ← inferType x
-    if ← Meta.isProp xty then
-      return (← mkAppM ``PLift #[xty], ← `(term| ⟨$(mkIdent a)⟩))
-    else
-      return (xty, mkIdent a)
-  | (x, a) :: xs => do
-    let (xsty, patt) ← defaultMkCtorProxyType xs
-    let xty ← inferType x
-    if ← Meta.isProp xty then
-      withLocalDeclD `x' (← mkAppM ``PLift #[xty]) fun x' => do
-        let xsty' := xsty.replaceFVar x (← mkAppM ``PLift.down #[x'])
-        let ty ← decorateSigma (← mkAppM ``Sigma #[← mkLambdaFVars #[x'] xsty'])
-        return (ty, ← `(term| ⟨⟨$(mkIdent a)⟩, $patt⟩))
-    else
-      let ty ← decorateSigma (← mkAppM ``Sigma #[← mkLambdaFVars #[x] xsty])
-      return (ty, ← `(term| ⟨$(mkIdent a), $patt⟩))
+For example, given `#[(a, x), (b, y)]` with `x : Nat` and `y : Fin x`, then this function
+returns `Sigma (fun x => Fin x)` and `⟨a, b⟩`.
+
+Always returns a `Type*`. Uses `Unit`, `PLift`, and `Sigma`. Avoids using `PSigma` since
+the `Fintype` instances for it go through `Sigma`s anyway.
+
+The `decorateSigma` function is to wrap the `Sigma` a decorator such as `Lex`.
+It should yield a definitionally equal type. -/
+/-
+**Mathlib.ProxyType.defaultMkCtorProxyType** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Pr
+oxyType`。
+形式化陈述：defaultMkCtorProxyType (xs : List (Expr × Name)) (decorateSigma : Expr -> 
+TermElabM Expr
+参数：xs : List (Expr × Name)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Returns a proxy type for a constructor and a pattern to use to match against it.
+
+Input: a list of pairs associated to each argument of the constructor consisting
+of (1) an fvar for this argument and (2) a name to use for this argument in patt
+erns.
+
+For example, given `#[(a, x), (b, y)]` with `x : Nat` and `y : Fin x`, then this
+ function
+returns `Sigma (fun x => Fin x)` and `⟨a, b⟩`.
+
+Always returns a `Type*`. Uses `Unit`, `PLift`, and `Sigma`. Avoids using `PSigm
+a` since
+the `Fintype` instances for it go through `Sigma`s anyway.
+
+The `decorateSigma` function is to wrap the `Sigma` a decorator such as `Lex`.
+It should yield a definitionally equal type.
 -/
 def defaultMkCtorProxyType (xs : List (Expr × Name))
-    (decorateSigma : Expr -> TermElabM Expr := pure) :
+    (decorateSigma : Expr → TermElabM Expr := pure) :
     TermElabM (Expr × Term) :=
   match xs with
   | [] => return (mkConst ``Unit, ← `(term| ()))
@@ -157,44 +136,34 @@ def defaultMkCtorProxyType (xs : List (Expr × Name))
       let ty ← decorateSigma (← mkAppM ``Sigma #[← mkLambdaFVars #[x] xsty])
       return (ty, ← `(term| ⟨$(mkIdent a), $patt⟩))
 
-/--
-Definition of `defaultMkProxyType` / `defaultMkProxyType` 的定义
+/-- Create a `Sum` of types, mildly optimized to not have a trailing `Empty`.
 
-English:
-definition defaultMkProxyType
-  signature: (ctors : Array (Name × Expr × Term))
-  body: do
-  let mut types := #[]
-  let mut patts := #[]
-  for h : i in [0:ctors.size] do
-    let (_ctorName, ty, patt) := ctors[i]
-    types := types.push ty
-patts := patts.push ← wrapSumAccess i ctors.size patt
-  let (type, pf) ← mkCType types.toList
-  return (type, patts, pf)
+The `decorateSum` function is to wrap the `Sum` with a function such as `Lex`.
+It should yield a definitionally equal type. -/
+/-
+**Mathlib.ProxyType.defaultMkProxyType** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.ProxyT
+ype`。
+形式化陈述：defaultMkProxyType (ctors : Array (Name × Expr × Term)) (decorateSum : Exp
+r -> TermElabM Expr
+参数：ctors : Array (Name × Expr × Term)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-中文:
-定义 defaultMkProxyType
-  签名: (ctors : 数组 (Name × Expr × 项))
-  定义体: do
-  let mut types := #[]
-  let mut patts := #[]
-  for h : i in [0:ctors.size] do
-    let (_ctorName, ty, patt) := ctors[i]
-    types := types.push ty
-patts := patts.push ← wrapSumAccess i ctors.size patt
-  let (type, pf) ← mkCType types.toList
-  return (type, patts, pf)
+--- 原说明 ---
+Create a `Sum` of types, mildly optimized to not have a trailing `Empty`.
+
+The `decorateSum` function is to wrap the `Sum` with a function such as `Lex`.
+It should yield a definitionally equal type.
 -/
 def defaultMkProxyType (ctors : Array (Name × Expr × Term))
-    (decorateSum : Expr -> TermElabM Expr := pure) :
+    (decorateSum : Expr → TermElabM Expr := pure) :
     TermElabM (Expr × Array Term × TSyntax `tactic) := do
   let mut types := #[]
   let mut patts := #[]
   for h : i in [0:ctors.size] do
     let (_ctorName, ty, patt) := ctors[i]
     types := types.push ty
-patts := patts.push ← wrapSumAccess i ctors.size patt
+    patts := patts.push <| ← wrapSumAccess i ctors.size patt
   let (type, pf) ← mkCType types.toList
   return (type, patts, pf)
 where
@@ -219,26 +188,17 @@ where
       let spatt ← wrapSumAccess cidx' (nctors - 1) spatt
       `(term| Sum.inr $spatt)
 
-/--
-Definition of `ProxyEquivConfig.default` / `ProxyEquivConfig.default` 的定义
+/-- Default configuration. Defines `proxyType` and `proxyTypeEquiv` in the namespace
+of the inductive type. Uses `Unit`, `PLift`, `Sigma`, `Empty`, and `Sum`. -/
+/-
+**Mathlib.ProxyType.ProxyEquivConfig.default** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+ProxyType.ProxyEquivConfig`。
+形式化陈述：InductiveVal → Mathlib.ProxyType.ProxyEquivConfig
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ProxyEquivConfig.default
-  signature: (indVal : InductiveVal)
-  body: indVal.name.mkStr "proxyType"
-  proxyEquivName := indVal.name.mkStr "proxyTypeEquiv"
-  mkCtorProxyType := defaultMkCtorProxyType
-  mkProxyType := defaultMkProxyType
-
-中文:
-定义 ProxyEquivConfig.default
-  签名: (indVal : InductiveVal)
-  定义体: indVal.name.mkStr "proxyType"
-  proxyEquivName := indVal.name.mkStr "proxyTypeEquiv"
-  mkCtorProxyType := defaultMkCtorProxyType
-  mkProxyType := defaultMkProxyType
-
-Depends on / 依赖: indVal, indVal.name.mkStr, proxyType
+--- 原说明 ---
+Default configuration. Defines `proxyType` and `proxyTypeEquiv` in the namespace
+of the inductive type. Uses `Unit`, `PLift`, `Sigma`, `Empty`, and `Sum`.
 -/
 def ProxyEquivConfig.default (indVal : InductiveVal) : ProxyEquivConfig where
   proxyName := indVal.name.mkStr "proxyType"
@@ -247,197 +207,24 @@ def ProxyEquivConfig.default (indVal : InductiveVal) : ProxyEquivConfig where
   mkProxyType := defaultMkProxyType
 
 /--
-Definition of `ensureProxyEquiv` / `ensureProxyEquiv` 的定义
+Generates a proxy type for the inductive type and an equivalence from the proxy type to the type.
 
-English:
-definition ensureProxyEquiv
-  signature: (config : ProxyEquivConfig) (indVal : InductiveVal)
-  body: do
-  if indVal.isRec then
-    throwError
-      "proxy equivalence: recursive inductive types are not supported (and are usually infinite)"
-  if 0 < indVal.numIndices then
-    throwError "proxy equivalence: inductive indices are not supported"
+If the declarations already exist, there is a check that they are correct.
+-/
+/-
+**Mathlib.ProxyType.ensureProxyEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.ProxyTyp
+e`。
+形式化陈述：ensureProxyEquiv (config : ProxyEquivConfig) (indVal : InductiveVal) : Ter
+mElabM Unit
+参数：config : ProxyEquivConfig；indVal : InductiveVal。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  let levels := indVal.levelParams.map Level.param
-  forallBoundedTelescope indVal.type indVal.numParams fun params _sort => do
-    let mut cdata := #[]
-    for ctorName in indVal.ctors do
-      let ctorInfo ← getConstInfoCtor ctorName
-let ctorType ← inferType mkAppN (mkConst ctorName levels) params
-cdata := cdata.push ←
-        forallBoundedTelescope ctorType ctorInfo.numFields fun xs _itype => do
-          let names ← xs.mapM (fun _ => mkFreshUserName `a)
-          let (ty, ppatt) ← config.mkCtorProxyType (xs.zip names).toList
-          let places := .replicate ctorInfo.numParams (← `(term| _))
-          let argNames := names.map mkIdent
-          let cpatt ← `(term| @$(mkIdent ctorName) $places* $argNames*)
-          return (ctorName, ty, ppatt, cpatt)
-let (ctype, ppatts, pf) ← config.mkProxyType
-      cdata.map (fun (ctorName, ty, ppatt, _) => (ctorName, ty, ppatt))
-    let mut toFunAlts := #[]
-    let mut invFunAlts := #[]
-    for ppatt in ppatts, (_, _, _, cpatt) in cdata do
-toFunAlts := toFunAlts.push ← `(matchAltExpr| | $ppatt => $cpatt)
-invFunAlts := invFunAlts.push ← `(matchAltExpr| | $cpatt => $ppatt)
+--- 原说明 ---
+Generates a proxy type for the inductive type and an equivalence from the proxy 
+type to the type.
 
-    -- Create the proxy type definition
-    trace[Elab.ProxyType] "proxy type: {ctype}"
-    let ctype' ← mkLambdaFVars params ctype
-    if let some const := (← getEnv).find? config.proxyName then
-      unless ← isDefEq const.value! ctype' do
-        throwError "Declaration {config.proxyName} already exists and it is not the proxy type."
-      trace[Elab.ProxyType] "proxy type already exists"
-    else
-addAndCompile Declaration.defnDecl
-        { name := config.proxyName
-          levelParams := indVal.levelParams
-          safety := DefinitionSafety.safe
-          hints := ReducibilityHints.abbrev
-          type := ← inferType ctype'
-          value := ctype' }
-      -- Set to be reducible so that typeclass inference can see it's a Fintype
-      setReducibleAttribute config.proxyName
-      setProtected config.proxyName
-      -- Add a docstring
-      addDocStringCore config.proxyName s!"A \"proxy type\" equivalent to `{indVal.name}` that is \
-        constructed from `Unit`, `PLift`, `Sigma`, `Empty`, and `Sum`. \
-        See `{config.proxyEquivName}` for the equivalence. \
-        (Generated by the `proxy_equiv%` elaborator.)"
-      trace[Elab.ProxyType] "defined {config.proxyName}"
-
-    -- Create the `Equiv`
-    let equivType ← mkAppM ``Equiv #[ctype, mkAppN (mkConst indVal.name levels) params]
-    if let some const := (← getEnv).find? config.proxyEquivName then
-      unless ← isDefEq const.type (← mkForallFVars params equivType) do
-        throwError "Declaration {config.proxyEquivName} already exists and has the wrong type."
-      trace[Elab.ProxyType] "proxy equivalence already exists"
-    else
-      trace[Elab.ProxyType] "constructing proxy equivalence"
-      let mut toFun ← `(term| fun $toFunAlts:matchAlt*)
-      let mut invFun ← `(term| fun $invFunAlts:matchAlt*)
-      if indVal.numCtors == 0 then
-        -- Empty matches don't elaborate, so use `nomatch` here.
-        toFun ← `(term| fun x => nomatch x)
-        invFun ← `(term| fun x => nomatch x)
-      let equivBody ← `(term| { toFun := $toFun,
-invFun := invFun,
-                                right_inv := by intro x; cases x <;> rfl
-left_inv := by intro x; pf:tactic })
-      let equiv ← Term.elabTerm equivBody equivType
-      Term.synthesizeSyntheticMVarsNoPostponing
-      trace[Elab.ProxyType] "elaborated equivalence{indentExpr equiv}"
-      let equiv' ← mkLambdaFVars params (← instantiateMVars equiv)
-addAndCompile Declaration.defnDecl
-        { name := config.proxyEquivName
-          levelParams := indVal.levelParams
-          safety := DefinitionSafety.safe
-          hints := ReducibilityHints.abbrev
-          type := ← inferType equiv'
-          value := equiv' }
-      setProtected config.proxyEquivName
-      addDocStringCore config.proxyEquivName s!"An equivalence between the \"proxy type\" \
-        `{config.proxyName}` and `{indVal.name}`. The proxy type is a reducible definition \
-        that represents the inductive type using `Unit`, `PLift`, `Sigma`, `Empty`, and `Sum` \
-        (and whatever other inductive types appear within the inductive type), and the \
-        intended use is to define typeclass instances uses pre-existing instances on these. \
-        (Generated by the `proxy_equiv%` elaborator.)"
-      trace[Elab.ProxyType] "defined {config.proxyEquivName}"
-
-中文:
-定义 ensureProxyEquiv
-  签名: (config : ProxyEquivConfig) (indVal : InductiveVal)
-  定义体: do
-  if indVal.isRec then
-    throwError
-      "proxy equivalence: recursive inductive types are not supported (and are usually infinite)"
-  if 0 < indVal.numIndices then
-    throwError "proxy equivalence: inductive indices are not supported"
-
-  let levels := indVal.levelParams.map Level.param
-  forallBoundedTelescope indVal.type indVal.numParams fun params _sort => do
-    let mut cdata := #[]
-    for ctorName in indVal.ctors do
-      let ctorInfo ← getConstInfoCtor ctorName
-let ctorType ← inferType mkAppN (mkConst ctorName levels) params
-cdata := cdata.push ←
-        forallBoundedTelescope ctorType ctorInfo.numFields fun xs _itype => do
-          let names ← xs.mapM (fun _ => mkFreshUserName `a)
-          let (ty, ppatt) ← config.mkCtorProxyType (xs.zip names).toList
-          let places := .replicate ctorInfo.numParams (← `(term| _))
-          let argNames := names.map mkIdent
-          let cpatt ← `(term| @$(mkIdent ctorName) $places* $argNames*)
-          return (ctorName, ty, ppatt, cpatt)
-let (ctype, ppatts, pf) ← config.mkProxyType
-      cdata.map (fun (ctorName, ty, ppatt, _) => (ctorName, ty, ppatt))
-    let mut toFunAlts := #[]
-    let mut invFunAlts := #[]
-    for ppatt in ppatts, (_, _, _, cpatt) in cdata do
-toFunAlts := toFunAlts.push ← `(matchAltExpr| | $ppatt => $cpatt)
-invFunAlts := invFunAlts.push ← `(matchAltExpr| | $cpatt => $ppatt)
-
-    -- Create the proxy type definition
-    trace[Elab.ProxyType] "proxy type: {ctype}"
-    let ctype' ← mkLambdaFVars params ctype
-    if let some const := (← getEnv).find? config.proxyName then
-      unless ← isDefEq const.value! ctype' do
-        throwError "Declaration {config.proxyName} already exists and it is not the proxy type."
-      trace[Elab.ProxyType] "proxy type already exists"
-    else
-addAndCompile Declaration.defnDecl
-        { name := config.proxyName
-          levelParams := indVal.levelParams
-          safety := DefinitionSafety.safe
-          hints := ReducibilityHints.abbrev
-          type := ← inferType ctype'
-          value := ctype' }
-      -- Set to be reducible so that typeclass inference can see it's a Fintype
-      setReducibleAttribute config.proxyName
-      setProtected config.proxyName
-      -- Add a docstring
-      addDocStringCore config.proxyName s!"A \"proxy type\" equivalent to `{indVal.name}` that is \
-        constructed from `Unit`, `PLift`, `Sigma`, `Empty`, and `Sum`. \
-        See `{config.proxyEquivName}` for the equivalence. \
-        (Generated by the `proxy_equiv%` elaborator.)"
-      trace[Elab.ProxyType] "defined {config.proxyName}"
-
-    -- Create the `Equiv`
-    let equivType ← mkAppM ``Equiv #[ctype, mkAppN (mkConst indVal.name levels) params]
-    if let some const := (← getEnv).find? config.proxyEquivName then
-      unless ← isDefEq const.type (← mkForallFVars params equivType) do
-        throwError "Declaration {config.proxyEquivName} already exists and has the wrong type."
-      trace[Elab.ProxyType] "proxy equivalence already exists"
-    else
-      trace[Elab.ProxyType] "constructing proxy equivalence"
-      let mut toFun ← `(term| fun $toFunAlts:matchAlt*)
-      let mut invFun ← `(term| fun $invFunAlts:matchAlt*)
-      if indVal.numCtors == 0 then
-        -- Empty matches don't elaborate, so use `nomatch` here.
-        toFun ← `(term| fun x => nomatch x)
-        invFun ← `(term| fun x => nomatch x)
-      let equivBody ← `(term| { toFun := $toFun,
-invFun := invFun,
-                                right_inv := by intro x; cases x <;> rfl
-left_inv := by intro x; pf:tactic })
-      let equiv ← Term.elabTerm equivBody equivType
-      Term.synthesizeSyntheticMVarsNoPostponing
-      trace[Elab.ProxyType] "elaborated equivalence{indentExpr equiv}"
-      let equiv' ← mkLambdaFVars params (← instantiateMVars equiv)
-addAndCompile Declaration.defnDecl
-        { name := config.proxyEquivName
-          levelParams := indVal.levelParams
-          safety := DefinitionSafety.safe
-          hints := ReducibilityHints.abbrev
-          type := ← inferType equiv'
-          value := equiv' }
-      setProtected config.proxyEquivName
-      addDocStringCore config.proxyEquivName s!"An equivalence between the \"proxy type\" \
-        `{config.proxyName}` and `{indVal.name}`. The proxy type is a reducible definition \
-        that represents the inductive type using `Unit`, `PLift`, `Sigma`, `Empty`, and `Sum` \
-        (and whatever other inductive types appear within the inductive type), and the \
-        intended use is to define typeclass instances uses pre-existing instances on these. \
-        (Generated by the `proxy_equiv%` elaborator.)"
-      trace[Elab.ProxyType] "defined {config.proxyEquivName}"
+If the declarations already exist, there is a check that they are correct.
 -/
 def ensureProxyEquiv (config : ProxyEquivConfig) (indVal : InductiveVal) : TermElabM Unit := do
   if indVal.isRec then
@@ -451,8 +238,8 @@ def ensureProxyEquiv (config : ProxyEquivConfig) (indVal : InductiveVal) : TermE
     let mut cdata := #[]
     for ctorName in indVal.ctors do
       let ctorInfo ← getConstInfoCtor ctorName
-let ctorType ← inferType mkAppN (mkConst ctorName levels) params
-cdata := cdata.push ←
+      let ctorType ← inferType <| mkAppN (mkConst ctorName levels) params
+      cdata := cdata.push <| ←
         forallBoundedTelescope ctorType ctorInfo.numFields fun xs _itype => do
           let names ← xs.mapM (fun _ => mkFreshUserName `a)
           let (ty, ppatt) ← config.mkCtorProxyType (xs.zip names).toList
@@ -460,13 +247,13 @@ cdata := cdata.push ←
           let argNames := names.map mkIdent
           let cpatt ← `(term| @$(mkIdent ctorName) $places* $argNames*)
           return (ctorName, ty, ppatt, cpatt)
-let (ctype, ppatts, pf) ← config.mkProxyType
+    let (ctype, ppatts, pf) ← config.mkProxyType <|
       cdata.map (fun (ctorName, ty, ppatt, _) => (ctorName, ty, ppatt))
     let mut toFunAlts := #[]
     let mut invFunAlts := #[]
     for ppatt in ppatts, (_, _, _, cpatt) in cdata do
-toFunAlts := toFunAlts.push ← `(matchAltExpr| | $ppatt => $cpatt)
-invFunAlts := invFunAlts.push ← `(matchAltExpr| | $cpatt => $ppatt)
+      toFunAlts := toFunAlts.push <| ← `(matchAltExpr| | $ppatt => $cpatt)
+      invFunAlts := invFunAlts.push <| ← `(matchAltExpr| | $cpatt => $ppatt)
 
     -- Create the proxy type definition
     trace[Elab.ProxyType] "proxy type: {ctype}"
@@ -476,7 +263,7 @@ invFunAlts := invFunAlts.push ← `(matchAltExpr| | $cpatt => $ppatt)
         throwError "Declaration {config.proxyName} already exists and it is not the proxy type."
       trace[Elab.ProxyType] "proxy type already exists"
     else
-addAndCompile Declaration.defnDecl
+      addAndCompile <| Declaration.defnDecl
         { name := config.proxyName
           levelParams := indVal.levelParams
           safety := DefinitionSafety.safe
@@ -508,14 +295,14 @@ addAndCompile Declaration.defnDecl
         toFun ← `(term| fun x => nomatch x)
         invFun ← `(term| fun x => nomatch x)
       let equivBody ← `(term| { toFun := $toFun,
-invFun := invFun,
+                                invFun := $invFun,
                                 right_inv := by intro x; cases x <;> rfl
-left_inv := by intro x; pf:tactic })
+                                left_inv := by intro x; $pf:tactic })
       let equiv ← Term.elabTerm equivBody equivType
       Term.synthesizeSyntheticMVarsNoPostponing
       trace[Elab.ProxyType] "elaborated equivalence{indentExpr equiv}"
       let equiv' ← mkLambdaFVars params (← instantiateMVars equiv)
-addAndCompile Declaration.defnDecl
+      addAndCompile <| Declaration.defnDecl
         { name := config.proxyEquivName
           levelParams := indVal.levelParams
           safety := DefinitionSafety.safe
@@ -531,40 +318,24 @@ addAndCompile Declaration.defnDecl
         (Generated by the `proxy_equiv%` elaborator.)"
       trace[Elab.ProxyType] "defined {config.proxyEquivName}"
 
-/--
-Definition of `elabProxyEquiv` / `elabProxyEquiv` 的定义
+/-- Helper function for `proxy_equiv% type : expectedType` elaborators.
 
-English:
-definition elabProxyEquiv
-  signature: (type : Term) (expectedType? : Option Expr)
-  body: do
-  let type ← Term.elabType type
-  if let some expectedType := expectedType? then
-    let equivType ← Term.elabType (← `(_ ≃ $(← Term.exprToSyntax type)))
-    unless ← isDefEq expectedType equivType do
-      throwError
-        "Could not unify expected type{indentExpr expectedType}\nwith{indentExpr equivType}"
-  let type ← Term.tryPostponeIfHasMVars type "In proxy_equiv% elaborator"
-  let type ← whnf type
-  let .const declName _ := type.getAppFn
-    | throwError "{type} is not a constant or constant application"
-  return (type, ← getConstInfoInduct declName)
+Elaborate `type` and get its `InductiveVal`. Uses the `expectedType`, where the
+expected type should be of the form `_ ≃ type`. -/
+/-
+**Mathlib.ProxyType.elabProxyEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.ProxyType`
+。
+形式化陈述：elabProxyEquiv (type : Term) (expectedType? : Option Expr) : TermElabM (Ex
+pr × InductiveVal)
+参数：type : Term；expectedType? : Option Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 elabProxyEquiv
-  签名: (type : 项) (expectedType? : 选项类型 Expr)
-  定义体: do
-  let type ← Term.elabType type
-  if let some expectedType := expectedType? then
-    let equivType ← Term.elabType (← `(_ ≃ $(← Term.exprToSyntax type)))
-    unless ← isDefEq expectedType equivType do
-      throwError
-        "Could not unify expected type{indentExpr expectedType}\nwith{indentExpr equivType}"
-  let type ← Term.tryPostponeIfHasMVars type "In proxy_equiv% elaborator"
-  let type ← whnf type
-  let .const declName _ := type.getAppFn
-    | throwError "{type} is not a constant or constant application"
-  return (type, ← getConstInfoInduct declName)
+--- 原说明 ---
+Helper function for `proxy_equiv% type : expectedType` elaborators.
+
+Elaborate `type` and get its `InductiveVal`. Uses the `expectedType`, where the
+expected type should be of the form `_ ≃ type`.
 -/
 def elabProxyEquiv (type : Term) (expectedType? : Option Expr) :
     TermElabM (Expr × InductiveVal) := do
@@ -609,34 +380,15 @@ syntax (name := proxy_equiv) "proxy_equiv% " term : term
 
 /-- Elaborator for `proxy_equiv%`. -/
 @[term_elab proxy_equiv]
-/--
-Definition of `elab_proxy_equiv` / `elab_proxy_equiv` 的定义
+/-
+**Mathlib.ProxyType.elab_proxy_equiv** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.ProxyTyp
+e`。
+形式化陈述：elab_proxy_equiv : Elab.Term.TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elab_proxy_equiv
-  signature: : Elab.Term.TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(proxy_equiv% $t) => do
-    let (type, indVal) ← elabProxyEquiv t expectedType?
-    let config : ProxyEquivConfig := ProxyEquivConfig.default indVal
-    ensureProxyEquiv config indVal
-    mkAppOptM config.proxyEquivName (type.getAppArgs.map some)
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elab_proxy_equiv
-  签名: : Elab.项.TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(proxy_equiv% $t) => do
-    let (type, indVal) ← elabProxyEquiv t expectedType?
-    let config : ProxyEquivConfig := ProxyEquivConfig.default indVal
-    ensureProxyEquiv config indVal
-    mkAppOptM config.proxyEquivName (type.getAppArgs.map some)
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+--- 原说明 ---
+Elaborator for `proxy_equiv%`.
 -/
 def elab_proxy_equiv : Elab.Term.TermElab := fun stx expectedType? =>
   match stx with
@@ -648,3 +400,4 @@ def elab_proxy_equiv : Elab.Term.TermElab := fun stx expectedType? =>
   | _ => throwUnsupportedSyntax
 
 end Mathlib.ProxyType
+

@@ -110,428 +110,371 @@ section Semiring
 variable {R : Type*} [CommSemiring R]
 
 variable (m) in
-/--
-Definition of `degree` / `degree` 的定义
+/-- the degree of a multivariate polynomial with respect to a monomial ordering, where the
+polynomial `0` has degree `0`. For the variant mapping polynomial `0` to `⊥` which is less than
+`0`, see `MonomialOrder.withBotDegree`. -/
+/-
+**MonomialOrder.degree** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder`。
+形式化陈述：degree (f : MvPolynomial σ R) : σ ->₀ Nat
+参数：f : MvPolynomial σ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition degree
-  signature: (f : MvPolynomial σ R)
-  body: m.toSyn.symm (f.support.sup m.toSyn)
-
-中文:
-定义 degree
-  签名: (f : 多元多项式 σ R)
-  定义体: m.toSyn.symm (f.support.sup m.toSyn)
-
-Depends on / 依赖: f.support.sup, m.toSyn, m.toSyn.symm, support
+--- 原说明 ---
+the degree of a multivariate polynomial with respect to a monomial ordering, whe
+re the
+polynomial `0` has degree `0`. For the variant mapping polynomial `0` to `⊥` whi
+ch is less than
+`0`, see `MonomialOrder.withBotDegree`.
 -/
-noncomputable def degree (f : MvPolynomial σ R) : σ ->₀ Nat :=
+noncomputable def degree (f : MvPolynomial σ R) : σ →₀ ℕ :=
   m.toSyn.symm (f.support.sup m.toSyn)
 
 variable (m) in
-/--
-Definition of `leadingCoeff` / `leadingCoeff` 的定义
+/-- the leading coefficient of a multivariate polynomial with respect to a monomial ordering -/
+/-
+**MonomialOrder.leadingCoeff** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff (f : MvPolynomial σ R) : R
+参数：f : MvPolynomial σ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leadingCoeff
-  signature: (f : MvPolynomial σ R)
-  body: f.coeff (m.degree f)
-
-中文:
-定义 leadingCoeff
-  签名: (f : 多元多项式 σ R)
-  定义体: f.coeff (m.degree f)
-
-Depends on / 依赖: degree, f.coeff, m.degree
+--- 原说明 ---
+the leading coefficient of a multivariate polynomial with respect to a monomial 
+ordering
 -/
 noncomputable def leadingCoeff (f : MvPolynomial σ R) : R :=
   f.coeff (m.degree f)
 
 variable (m) in
-/--
-Definition of `Monic` / `Monic` 的定义
+/-- A multivariate polynomial is `Monic` with respect to a monomial order
+if its leading coefficient (for that monomial order) is 1. -/
+/-
+**MonomialOrder.Monic** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder`。
+形式化陈述：Monic (f : MvPolynomial σ R) : Prop
+参数：f : MvPolynomial σ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Monic
-  signature: (f : MvPolynomial σ R)
-  body: m.leadingCoeff f = 1
-
-中文:
-定义 Monic
-  签名: (f : 多元多项式 σ R)
-  定义体: m.leadingCoeff f = 1
-
-Depends on / 依赖: leadingCoeff, m.leadingCoeff
+--- 原说明 ---
+A multivariate polynomial is `Monic` with respect to a monomial order
+if its leading coefficient (for that monomial order) is 1.
 -/
 def Monic (f : MvPolynomial σ R) : Prop :=
   m.leadingCoeff f = 1
 
 variable (m) in
-/--
-Definition of `leadingTerm` / `leadingTerm` 的定义
+/-- The leading term of a multivariate polynomial with respect to a monomial ordering. -/
+/-
+**MonomialOrder.leadingTerm** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingTerm (f : MvPolynomial σ R) : MvPolynomial σ R
+参数：f : MvPolynomial σ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leadingTerm
-  signature: (f : MvPolynomial σ R)
-  body: monomial (m.degree f) (m.leadingCoeff f)
-
-@[simp]
-
-中文:
-定义 leadingTerm
-  签名: (f : 多元多项式 σ R)
-  定义体: monomial (m.degree f) (m.leadingCoeff f)
-
-@[simp]
-
-Depends on / 依赖: degree, leadingCoeff, m.degree, m.leadingCoeff, monomial
+--- 原说明 ---
+The leading term of a multivariate polynomial with respect to a monomial orderin
+g.
 -/
 noncomputable def leadingTerm (f : MvPolynomial σ R) : MvPolynomial σ R :=
   monomial (m.degree f) (m.leadingCoeff f)
 
 @[simp]
-/--
-lemma `C_mul_leadingCoeff_monomial_degree` / 引理 `C_mul_leadingCoeff_monomial_degree`
-
-English:
-lemma C_mul_leadingCoeff_monomial_degree
-  given: (p : MvPolynomial σ R)
-  proof: by
-  rw [MvPolynomial.C_mul_monomial]; rw [mul_one]; rw [leadingTerm]
-
-中文:
-引理 C_mul_leadingCoeff_monomial_degree
-  条件: (p : 多元多项式 σ R)
-  证明: by
-  rw [MvPolynomial.C_mul_monomial]; rw [mul_one]; rw [leadingTerm]
-
-Depends on / 依赖: C_mul_monomial, MvPolynomial, MvPolynomial.C_mul_monomial, leadingTerm, mul_one
+/-
+**MonomialOrder.C_mul_leadingCoeff_monomial_degree** 是 Mathlib 中的一个引理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：C_mul_leadingCoeff_monomial_degree (p : MvPolynomial σ R) : MvPolynomial.C
+ (m.leadingCoeff p : R) * MvPolynomial.monomial (m.degree p) (1 : R) = m.leading
+Term p
+参数：p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.C_mul_monomial`：C_mul_monomial : C a * monomial s a' = mono
+mial s (a * a')
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MonomialOrder.leadingTerm.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {
+R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingTerm f 
+= (MvPolynomial.mono…
 -/
 lemma C_mul_leadingCoeff_monomial_degree (p : MvPolynomial σ R) :
     MvPolynomial.C (m.leadingCoeff p : R) * MvPolynomial.monomial (m.degree p) (1 : R) =
       m.leadingTerm p := by
-  rw [MvPolynomial.C_mul_monomial]; rw [mul_one]; rw [leadingTerm]
-
-/--
-theorem `Monic.of_subsingleton` / 定理 `Monic.of_subsingleton`
-
-English:
-theorem Monic.of_subsingleton
-  given: [Subsingleton R] {f : MvPolynomial σ R}
-  proof: Subsingleton.eq_one (m.leadingCoeff f)
-
-中文:
-定理 Monic.of_subsingleton
-  条件: [子单例 R] {f : 多元多项式 σ R}
-  证明: Subsingleton.eq_one (m.leadingCoeff f)
+  rw [MvPolynomial.C_mul_monomial, mul_one, leadingTerm]
+/-
+**MonomialOrder.Monic.of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder.M
+onic`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] [Subsingleton R] {f : MvPolynomial σ R},   m.Monic f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.eq_one`：Subsingleton.eq_one [One α] [Subsingleton α] (a : α
+) : a = 1
 -/
 @[nontriviality] theorem Monic.of_subsingleton [Subsingleton R] {f : MvPolynomial σ R} :
     m.Monic f :=
   Subsingleton.eq_one (m.leadingCoeff f)
-
-/--
-Instance `Monic.decidable` / 实例 `Monic.decidable`
-
-English:
-instance Monic.decidable
-  signature: [DecidableEq R] (f : MvPolynomial σ R)
-  body: inferInstanceAs Decidable (m.leadingCoeff f = 1)
-
-@[simp]
-
-中文:
-实例 Monic.decidable
-  签名: [DecidableEq R] (f : 多元多项式 σ R)
-  定义体: inferInstanceAs Decidable (m.leadingCoeff f = 1)
-
-@[simp]
+/-
+**MonomialOrder.Monic.decidable** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder.Monic`。
+形式化陈述：{σ : Type u_1} →   {m : MonomialOrder σ} →     {R : Type u_2} → [inst : Co
+mmSemiring R] → [DecidableEq R] → (f : MvPolynomial σ R) → Decidable (m.Monic f)
+参数：f : MvPolynomial σ R；m.Monic f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance Monic.decidable [DecidableEq R] (f : MvPolynomial σ R) :
     Decidable (m.Monic f) :=
-inferInstanceAs Decidable (m.leadingCoeff f = 1)
+  inferInstanceAs <| Decidable (m.leadingCoeff f = 1)
 
 @[simp]
-/--
-theorem `Monic.leadingCoeff_eq_one` / 定理 `Monic.leadingCoeff_eq_one`
-
-English:
-theorem Monic.leadingCoeff_eq_one
-  given: {f : MvPolynomial σ R} (hf : m.Monic f)
-  statement: m.leadingCoeff f = 1
-  proof: hf
-
-中文:
-定理 Monic.leadingCoeff_eq_one
-  条件: {f : 多元多项式 σ R} (hf : m.Monic f)
-  结论: m.leadingCoeff f = 1
-  证明: hf
+/-
+**MonomialOrder.Monic.leadingCoeff_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrd
+er.Monic`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {f : MvPolynomial σ R},   m.Monic f → m.leadingCoeff f = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Monic.leadingCoeff_eq_one {f : MvPolynomial σ R} (hf : m.Monic f) : m.leadingCoeff f = 1 :=
   hf
-
-/--
-theorem `Monic.coeff_degree` / 定理 `Monic.coeff_degree`
-
-English:
-theorem Monic.coeff_degree
-  given: {f : MvPolynomial σ R} (hf : m.Monic f)
-  statement: f.coeff (m.degree f) = 1
-  proof: hf
-
-@[simp]
-
-中文:
-定理 Monic.coeff_degree
-  条件: {f : 多元多项式 σ R} (hf : m.Monic f)
-  结论: f.coeff (m.degree f) = 1
-  证明: hf
-
-@[simp]
+/-
+**MonomialOrder.Monic.coeff_degree** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder.Moni
+c`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {f : MvPolynomial σ R},   m.Monic f → MvPolynomial.coeff (m.degree f) f = 1
+参数：m.degree f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Monic.coeff_degree {f : MvPolynomial σ R} (hf : m.Monic f) : f.coeff (m.degree f) = 1 :=
   hf
 
 @[simp]
-/--
-theorem `degree_zero` / 定理 `degree_zero`
-
-English:
-theorem degree_zero
-  statement: m.degree (0 : MvPolynomial σ R) = 0
-  proof: by
-  simp [degree]
-
-中文:
-定理 degree_zero
-  结论: m.degree (0 : 多元多项式 σ R) = 0
-  证明: by
-  simp [degree]
-
-Depends on / 依赖: degree
+/-
+**MonomialOrder.degree_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_zero : m.degree (0 : MvPolynomial σ R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem degree_zero : m.degree (0 : MvPolynomial σ R) = 0 := by
   simp [degree]
-
-/--
-theorem `ne_zero_of_degree_ne_zero` / 定理 `ne_zero_of_degree_ne_zero`
-
-English:
-theorem ne_zero_of_degree_ne_zero
-  given: {f : MvPolynomial σ R} (h : m.degree f != 0)
-  statement: f != 0
-  proof: by
-  rintro rfl
-  exact h m.degree_zero
-
-@[simp, nontriviality]
-
-中文:
-定理 ne_zero_of_degree_ne_zero
-  条件: {f : 多元多项式 σ R} (h : m.degree f != 0)
-  结论: f != 0
-  证明: by
-  rintro rfl
-  exact h m.degree_zero
-
-@[simp, nontriviality]
-
-Depends on / 依赖: degree_zero, m.degree_zero
+/-
+**MonomialOrder.ne_zero_of_degree_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrd
+er`。
+形式化陈述：ne_zero_of_degree_ne_zero {f : MvPolynomial σ R} (h : m.degree f != 0) : f
+ != 0
+参数：h : m.degree f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ne_zero_of_degree_ne_zero {f : MvPolynomial σ R} (h : m.degree f != 0) : f != 0 := by
+theorem ne_zero_of_degree_ne_zero {f : MvPolynomial σ R} (h : m.degree f ≠ 0) : f ≠ 0 := by
   rintro rfl
   exact h m.degree_zero
 
 @[simp, nontriviality]
-/--
-theorem `degree_subsingleton` / 定理 `degree_subsingleton`
-
-English:
-theorem degree_subsingleton
-  given: [Subsingleton R] {f : MvPolynomial σ R}
-  proof: by
-  rw [Subsingleton.eq_zero f]; rw [degree_zero]
-
-@[simp]
-
-中文:
-定理 degree_subsingleton
-  条件: [子单例 R] {f : 多元多项式 σ R}
-  证明: by
-  rw [Subsingleton.eq_zero f]; rw [degree_zero]
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.eq_zero, degree_zero, eq_zero
+/-
+**MonomialOrder.degree_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_subsingleton [Subsingleton R] {f : MvPolynomial σ R} : m.degree f =
+ 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.eq_zero`：∀ {α : Type u} [inst : Zero α] [Subsingleton α] (a
+ : α), a = 0
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
 -/
 theorem degree_subsingleton [Subsingleton R] {f : MvPolynomial σ R} :
     m.degree f = 0 := by
-  rw [Subsingleton.eq_zero f]; rw [degree_zero]
+  rw [Subsingleton.eq_zero f, degree_zero]
 
 @[simp]
-/--
-theorem `leadingCoeff_zero` / 定理 `leadingCoeff_zero`
-
-English:
-theorem leadingCoeff_zero
-  statement: m.leadingCoeff (0 : MvPolynomial σ R) = 0
-  proof: by
-  simp [degree, leadingCoeff]
-
-中文:
-定理 leadingCoeff_zero
-  结论: m.leadingCoeff (0 : 多元多项式 σ R) = 0
-  证明: by
-  simp [degree, leadingCoeff]
-
-Depends on / 依赖: TopologicalSpace, continuousInv_of_discreteTopology, degree, leadingCoeff
+/-
+**MonomialOrder.leadingCoeff_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_zero : m.leadingCoeff (0 : MvPolynomial σ R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leadingCoeff_zero : m.leadingCoeff (0 : MvPolynomial σ R) = 0 := by
   simp [degree, leadingCoeff]
-
-/--
-theorem `Monic.ne_zero` / 定理 `Monic.ne_zero`
-
-English:
-theorem Monic.ne_zero
-  given: [Nontrivial R] {f : MvPolynomial σ R} (hf : m.Monic f)
-  proof: by
-  rintro rfl
-  simp [Monic, leadingCoeff_zero] at hf
-
-中文:
-定理 Monic.ne_zero
-  条件: [非平凡 R] {f : 多元多项式 σ R} (hf : m.Monic f)
-  证明: by
-  rintro rfl
-  simp [Monic, leadingCoeff_zero] at hf
-
-Depends on / 依赖: TopologicalSpace, continuousInv_of_indiscreteTopology
+/-
+**MonomialOrder.Monic.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder.Monic`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] [Nontrivial R] {f : MvPolynomial σ R},   m.Monic f → f ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Monic.ne_zero [Nontrivial R] {f : MvPolynomial σ R} (hf : m.Monic f) :
-    f != 0 := by
+    f ≠ 0 := by
   rintro rfl
   simp [Monic, leadingCoeff_zero] at hf
-
-/--
-theorem `degree_monomial_le` / 定理 `degree_monomial_le`
-
-English:
-theorem degree_monomial_le
-  given: {d : σ ->₀ Nat} (c : R)
-  proof: by
-  simp only [degree, AddEquiv.apply_symm_apply]
-  apply le_trans (Finset.sup_mono support_monomial_subset)
-  simp only [Finset.sup_singleton, le_refl]
-
-中文:
-定理 degree_monomial_le
-  条件: {d : σ ->₀ 自然数} (c : R)
-  证明: by
-  simp only [degree, AddEquiv.apply_symm_apply]
-  apply le_trans (Finset.sup_mono support_monomial_subset)
-  simp only [Finset.sup_singleton, le_refl]
-
-Depends on / 依赖: AddEquiv, AddEquiv.apply_symm_apply, Finset, Finset.sup_mono, Finset.sup_singleton, TopologicalSpace, apply_symm_apply, continuousDiv_of_discreteTopology, degree, le_refl, le_trans, sup_mono, sup_singleton, support_monomial_subset
+/-
+**MonomialOrder.degree_monomial_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_monomial_le {d : σ ->₀ Nat} (c : R) : m.degree (monomial d c) ≼[m] 
+d
+参数：c : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Finset.sup_mono`：sup_mono (h : s₁ subseteq s₂) : s₁.sup f <= s₂.sup f
+· 使用定理 `MvPolynomial.support_monomial_subset`：support_monomial_subset : (monomia
+l s a).support subseteq {s}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sup_singleton`：sup_singleton {b : β} : ({b} : Finset β).sup f = f
+ b
 -/
-theorem degree_monomial_le {d : σ ->₀ Nat} (c : R) :
+theorem degree_monomial_le {d : σ →₀ ℕ} (c : R) :
     m.degree (monomial d c) ≼[m] d := by
   simp only [degree, AddEquiv.apply_symm_apply]
   apply le_trans (Finset.sup_mono support_monomial_subset)
   simp only [Finset.sup_singleton, le_refl]
-
-/--
-theorem `degree_monomial` / 定理 `degree_monomial`
-
-English:
-theorem degree_monomial
-  given: {d : σ ->₀ Nat} (c : R) [Decidable (c = 0)]
-  proof: by
-  simp only [degree, support_monomial]
-  split_ifs with hc <;> simp
-
-中文:
-定理 degree_monomial
-  条件: {d : σ ->₀ 自然数} (c : R) [可判定 (c = 0)]
-  证明: by
-  simp only [degree, support_monomial]
-  split_ifs with hc <;> simp
-
-Depends on / 依赖: TopologicalSpace, continuousDiv_of_indiscreteTopology, degree, split_ifs, support_monomial
+/-
+**MonomialOrder.degree_monomial** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_monomial {d : σ ->₀ Nat} (c : R) [Decidable (c = 0)] : m.degree (mo
+nomial d c) = if c = 0 then 0 else d
+参数：c : R；c = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.support_monomial`：support_monomial [h : Decidable (a = 0)] 
+: (monomial s a).support = if a = 0 then ∅ else {s}
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Finset.sup_singleton`：sup_singleton {b : β} : ({b} : Finset β).sup f = f
+ b
+· 使用定理 `AddEquiv.symm_apply_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (x : M), e.symm (e x) = x
 -/
-theorem degree_monomial {d : σ ->₀ Nat} (c : R) [Decidable (c = 0)] :
+theorem degree_monomial {d : σ →₀ ℕ} (c : R) [Decidable (c = 0)] :
     m.degree (monomial d c) = if c = 0 then 0 else d := by
   simp only [degree, support_monomial]
   split_ifs with hc <;> simp
-
-/--
-theorem `degree_X_le_single` / 定理 `degree_X_le_single`
-
-English:
-theorem degree_X_le_single
-  given: {s : σ}
-  statement: m.degree (X s : MvPolynomial σ R) ≼[m] Finsupp.single s 1
-  proof: degree_monomial_le 1
-
-中文:
-定理 degree_X_le_single
-  条件: {s : σ}
-  结论: m.degree (X s : 多元多项式 σ R) ≼[m] 有限支撑.single s 1
-  证明: degree_monomial_le 1
-
-Depends on / 依赖: degree_monomial_le, topologicalGroup_of_discreteTopology
+/-
+**MonomialOrder.degree_X_le_single** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_X_le_single {s : σ} : m.degree (X s : MvPolynomial σ R) ≼[m] Finsup
+p.single s 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_monomial_le`：degree_monomial_le {d : σ ->₀ Nat} (c 
+: R) : m.degree (monomial d c) ≼[m] d
 -/
 theorem degree_X_le_single {s : σ} : m.degree (X s : MvPolynomial σ R) ≼[m] Finsupp.single s 1 :=
   degree_monomial_le 1
-
-/--
-theorem `degree_X` / 定理 `degree_X`
-
-English:
-theorem degree_X
-  given: [Nontrivial R] {s : σ}
-  proof: by
-  classical
-  change m.degree (monomial (Finsupp.single s 1) (1 : R)) = _
-  rw [degree_monomial]; rw [if_neg one_ne_zero]
-
-中文:
-定理 degree_X
-  条件: [非平凡 R] {s : σ}
-  证明: by
-  classical
-  change m.degree (monomial (Finsupp.single s 1) (1 : R)) = _
-  rw [degree_monomial]; rw [if_neg one_ne_zero]
-
-Depends on / 依赖: Finsupp, Finsupp.single, classical, degree, degree_monomial, if_neg, m.degree, monomial, one_ne_zero, single, topologicalGroup_of_indiscreteTopology
+/-
+**MonomialOrder.degree_X** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_X [Nontrivial R] {s : σ} : m.degree (X s : MvPolynomial σ R) = Fins
+upp.single s 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
 -/
 theorem degree_X [Nontrivial R] {s : σ} :
     m.degree (X s : MvPolynomial σ R) = Finsupp.single s 1 := by
   classical
   change m.degree (monomial (Finsupp.single s 1) (1 : R)) = _
-  rw [degree_monomial]; rw [if_neg one_ne_zero]
-
-/--
-theorem `degree_one` / 定理 `degree_one`
-
-English:
-theorem degree_one
-  statement: m.degree (1 : MvPolynomial σ R) = 0
-  proof: by
-  nontriviality R
-  classical rw [MvPolynomial.one_def, degree_monomial]
-  simp
-
-@[simp]
-
-中文:
-定理 degree_one
-  结论: m.degree (1 : 多元多项式 σ R) = 0
-  证明: by
-  nontriviality R
-  classical rw [MvPolynomial.one_def, degree_monomial]
-  simp
-
-@[simp]
+  rw [degree_monomial, if_neg one_ne_zero]
+/-
+**MonomialOrder.degree_one** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R], m.degree 1 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_subsingleton`：degree_subsingleton [Subsingleton R] 
+{f : MvPolynomial σ R} : m.degree f = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MvPolynomial.one_def`：one_def : (1 : MvPolynomial σ R) = monomial 0 1
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
 -/
 @[simp] theorem degree_one : m.degree (1 : MvPolynomial σ R) = 0 := by
   nontriviality R
@@ -539,567 +482,496 @@ theorem degree_one
   simp
 
 @[simp]
-/--
-theorem `leadingCoeff_monomial` / 定理 `leadingCoeff_monomial`
-
-English:
-theorem leadingCoeff_monomial
-  given: {d : σ ->₀ Nat} (c : R)
-  proof: by
-  classical
-  simp only [leadingCoeff, degree_monomial]
-  split_ifs with hc <;> simp [hc]
-
-中文:
-定理 leadingCoeff_monomial
-  条件: {d : σ ->₀ 自然数} (c : R)
-  证明: by
-  classical
-  simp only [leadingCoeff, degree_monomial]
-  split_ifs with hc <;> simp [hc]
-
-Depends on / 依赖: classical, degree_monomial, leadingCoeff, split_ifs
+/-
+**MonomialOrder.leadingCoeff_monomial** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_monomial {d : σ ->₀ Nat} (c : R) : m.leadingCoeff (monomial d
+ c) = c
+参数：c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `MvPolynomial.coeff_monomial`：coeff_monomial [DecidableEq σ] (m n) (a) : 
+coeff m (monomial n a : MvPolynomial σ R) = if n = m then a else 0
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
 -/
-theorem leadingCoeff_monomial {d : σ ->₀ Nat} (c : R) :
+theorem leadingCoeff_monomial {d : σ →₀ ℕ} (c : R) :
     m.leadingCoeff (monomial d c) = c := by
   classical
   simp only [leadingCoeff, degree_monomial]
   split_ifs with hc <;> simp [hc]
-
-/--
-theorem `monic_monomial_one` / 定理 `monic_monomial_one`
-
-English:
-theorem monic_monomial_one
-  given: {d : σ ->₀ Nat}
-  proof: m.leadingCoeff_monomial 1
-
-中文:
-定理 monic_monomial_one
-  条件: {d : σ ->₀ 自然数}
-  证明: m.leadingCoeff_monomial 1
+/-
+**MonomialOrder.monic_monomial_one** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {d : σ →₀ ℕ},   m.Monic ((MvPolynomial.monomial d) 1)
+参数：(MvPolynomial.monomial d) 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
 -/
-@[simp] theorem monic_monomial_one {d : σ ->₀ Nat} :
+@[simp] theorem monic_monomial_one {d : σ →₀ ℕ} :
     m.Monic (monomial d (1 : R)) :=
   m.leadingCoeff_monomial 1
-
-/--
-theorem `monic_monomial` / 定理 `monic_monomial`
-
-English:
-theorem monic_monomial
-  given: {d : σ ->₀ Nat} {c : R}
-  proof: by
-  rw [Monic]; rw [m.leadingCoeff_monomial]
-
-中文:
-定理 monic_monomial
-  条件: {d : σ ->₀ 自然数} {c : R}
-  证明: by
-  rw [Monic]; rw [m.leadingCoeff_monomial]
-
-Depends on / 依赖: leadingCoeff_monomial, m.leadingCoeff_monomial
+/-
+**MonomialOrder.monic_monomial** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：monic_monomial {d : σ ->₀ Nat} {c : R} : m.Monic (monomial d c) ↔ c = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.Monic.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {R : Ty
+pe u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.Monic f = (m.leading
+Coeff f = 1)
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem monic_monomial {d : σ ->₀ Nat} {c : R} :
+theorem monic_monomial {d : σ →₀ ℕ} {c : R} :
     m.Monic (monomial d c) ↔ c = 1 := by
-  rw [Monic]; rw [m.leadingCoeff_monomial]
-
-/--
-theorem `leadingCoeff_X` / 定理 `leadingCoeff_X`
-
-English:
-theorem leadingCoeff_X
-  given: {s : σ}
-  proof: m.leadingCoeff_monomial 1
-
-中文:
-定理 leadingCoeff_X
-  条件: {s : σ}
-  证明: m.leadingCoeff_monomial 1
-
-Depends on / 依赖: leadingCoeff_monomial, m.leadingCoeff_monomial
+  rw [Monic, m.leadingCoeff_monomial]
+/-
+**MonomialOrder.leadingCoeff_X** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_X {s : σ} : m.leadingCoeff (X s : MvPolynomial σ R) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
 -/
 theorem leadingCoeff_X {s : σ} :
     m.leadingCoeff (X s : MvPolynomial σ R) = 1 :=
   m.leadingCoeff_monomial 1
-
-/--
-theorem `monic_X` / 定理 `monic_X`
-
-English:
-theorem monic_X
-  given: {s : σ}
-  proof: monic_monomial_one
-
-中文:
-定理 monic_X
-  条件: {s : σ}
-  证明: monic_monomial_one
+/-
+**MonomialOrder.monic_X** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {s : σ}, m.Monic (MvPolynomial.X s)
+参数：MvPolynomial.X s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.monic_monomial_one`：∀ {σ : Type u_1} {m : MonomialOrder σ}
+ {R : Type u_2} [inst : CommSemiring R] {d : σ →₀ ℕ},   m.Monic ((MvPolynomial.m
+onomial d) 1)
 -/
 @[simp] theorem monic_X {s : σ} :
     m.Monic (X s : MvPolynomial σ R) :=
   monic_monomial_one
-
-/--
-theorem `leadingCoeff_one` / 定理 `leadingCoeff_one`
-
-English:
-theorem leadingCoeff_one
-  statement: m.leadingCoeff (1 : MvPolynomial σ R) = 1
-  proof: m.leadingCoeff_monomial 1
-
-中文:
-定理 leadingCoeff_one
-  结论: m.leadingCoeff (1 : 多元多项式 σ R) = 1
-  证明: m.leadingCoeff_monomial 1
-
-Depends on / 依赖: leadingCoeff_monomial, m.leadingCoeff_monomial
+/-
+**MonomialOrder.leadingCoeff_one** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_one : m.leadingCoeff (1 : MvPolynomial σ R) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
 -/
 theorem leadingCoeff_one : m.leadingCoeff (1 : MvPolynomial σ R) = 1 :=
   m.leadingCoeff_monomial 1
-
-/--
-theorem `monic_C_one` / 定理 `monic_C_one`
-
-English:
-theorem monic_C_one
-  statement: m.Monic (C 1 : MvPolynomial σ R)
-  proof: monic_monomial_one
-
-@[simp]
-
-中文:
-定理 monic_C_one
-  结论: m.Monic (C 1 : 多元多项式 σ R)
-  证明: monic_monomial_one
-
-@[simp]
-
-Depends on / 依赖: monic_monomial_one
+/-
+**MonomialOrder.monic_C_one** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：monic_C_one : m.Monic (C 1 : MvPolynomial σ R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.monic_monomial_one`：∀ {σ : Type u_1} {m : MonomialOrder σ}
+ {R : Type u_2} [inst : CommSemiring R] {d : σ →₀ ℕ},   m.Monic ((MvPolynomial.m
+onomial d) 1)
 -/
 theorem monic_C_one : m.Monic (C 1 : MvPolynomial σ R) :=
   monic_monomial_one
 
 @[simp]
-/--
-lemma `monic_one` / 引理 `monic_one`
-
-English:
-lemma monic_one
-  statement: m.Monic (1 : MvPolynomial σ R)
-  proof: monic_monomial_one
-
-中文:
-引理 monic_one
-  结论: m.Monic (1 : 多元多项式 σ R)
-  证明: monic_monomial_one
-
-Depends on / 依赖: monic_monomial_one
+/-
+**MonomialOrder.monic_one** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：monic_one : m.Monic (1 : MvPolynomial σ R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.monic_monomial_one`：∀ {σ : Type u_1} {m : MonomialOrder σ}
+ {R : Type u_2} [inst : CommSemiring R] {d : σ →₀ ℕ},   m.Monic ((MvPolynomial.m
+onomial d) 1)
 -/
 lemma monic_one : m.Monic (1 : MvPolynomial σ R) := monic_monomial_one
-
-/--
-theorem `degree_le_iff` / 定理 `degree_le_iff`
-
-English:
-theorem degree_le_iff
-  given: {f : MvPolynomial σ R} {d : σ ->₀ Nat}
-  proof: by
-  unfold degree
-  simp only [AddEquiv.apply_symm_apply, Finset.sup_le_iff, mem_support_iff, ne_eq]
-
-中文:
-定理 degree_le_iff
-  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数}
-  证明: by
-  unfold degree
-  simp only [AddEquiv.apply_symm_apply, Finset.sup_le_iff, mem_support_iff, ne_eq]
-
-Depends on / 依赖: AddEquiv, AddEquiv.apply_symm_apply, Finset, Finset.sup_le_iff, apply_symm_apply, degree, mem_support_iff, ne_eq, sup_le_iff
+/-
+**MonomialOrder.degree_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_le_iff {f : MvPolynomial σ R} {d : σ ->₀ Nat} : m.degree f ≼[m] d ↔
+ forall c in f.support, c ≼[m] d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem degree_le_iff {f : MvPolynomial σ R} {d : σ ->₀ Nat} :
-    m.degree f ≼[m] d ↔ forall c in f.support, c ≼[m] d := by
+theorem degree_le_iff {f : MvPolynomial σ R} {d : σ →₀ ℕ} :
+    m.degree f ≼[m] d ↔ ∀ c ∈ f.support, c ≼[m] d := by
   unfold degree
   simp only [AddEquiv.apply_symm_apply, Finset.sup_le_iff, mem_support_iff, ne_eq]
-
-/--
-theorem `degree_lt_iff` / 定理 `degree_lt_iff`
-
-English:
-theorem degree_lt_iff
-  given: {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : 0 ≺[m] d)
-  proof: by
+/-
+**MonomialOrder.degree_lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_lt_iff {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : 0 ≺[m] d) : m.d
+egree f ≺[m] d ↔ forall c in f.support, c ≺[m] d
+参数：hd : 0 ≺[m] d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用定理 `Finset.sup_lt_iff`：∀ {α : Type u_2} {ι : Type u_5} [inst : LinearOrder α
+] [inst_1 : OrderBot α] {s : Finset ι} {f : ι → α} {a : α},   ⊥ < a → (s.sup f <
+ a ↔ ∀ …
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+-/
+theorem degree_lt_iff {f : MvPolynomial σ R} {d : σ →₀ ℕ} (hd : 0 ≺[m] d) :
+    m.degree f ≺[m] d ↔ ∀ c ∈ f.support, c ≺[m] d := by
   simp only [map_zero] at hd
   unfold degree
   simp only [AddEquiv.apply_symm_apply]
   exact Finset.sup_lt_iff hd
-
-中文:
-定理 degree_lt_iff
-  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数} (hd : 0 ≺[m] d)
-  证明: by
-  simp only [map_zero] at hd
-  unfold degree
-  simp only [AddEquiv.apply_symm_apply]
-  exact Finset.sup_lt_iff hd
-
-Depends on / 依赖: AddEquiv, AddEquiv.apply_symm_apply, Finset, Finset.sup_lt_iff, apply_symm_apply, degree, map_zero, sup_lt_iff
+/-
+**MonomialOrder.le_degree** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : d in f.support) : d
+ ≼[m] m.degree f
+参数：hd : d in f.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
 -/
-theorem degree_lt_iff {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : 0 ≺[m] d) :
-    m.degree f ≺[m] d ↔ forall c in f.support, c ≺[m] d := by
-  simp only [map_zero] at hd
-  unfold degree
-  simp only [AddEquiv.apply_symm_apply]
-  exact Finset.sup_lt_iff hd
-
-/--
-theorem `le_degree` / 定理 `le_degree`
-
-English:
-theorem le_degree
-  given: {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : d in f.support)
-  proof: by
-  unfold degree
-  simp only [AddEquiv.apply_symm_apply, Finset.le_sup hd]
-
-中文:
-定理 le_degree
-  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数} (hd : d in f.support)
-  证明: by
-  unfold degree
-  simp only [AddEquiv.apply_symm_apply, Finset.le_sup hd]
-
-Depends on / 依赖: AddEquiv, AddEquiv.apply_symm_apply, Finset, Finset.le_sup, apply_symm_apply, degree, le_sup
--/
-theorem le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : d in f.support) :
+theorem le_degree {f : MvPolynomial σ R} {d : σ →₀ ℕ} (hd : d ∈ f.support) :
     d ≼[m] m.degree f := by
   unfold degree
   simp only [AddEquiv.apply_symm_apply, Finset.le_sup hd]
-
-/--
-theorem `coeff_eq_zero_of_lt` / 定理 `coeff_eq_zero_of_lt`
-
-English:
-theorem coeff_eq_zero_of_lt
-  given: {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d)
-  proof: by
-  rw [← not_le] at hd
-  by_contra hf
-  apply hd (m.le_degree (mem_support_iff.mpr hf))
-
-中文:
-定理 coeff_eq_zero_of_lt
-  条件: {f : 多元多项式 σ R} {d : σ ->₀ 自然数} (hd : m.degree f ≺[m] d)
-  证明: by
-  rw [← not_le] at hd
-  by_contra hf
-  apply hd (m.le_degree (mem_support_iff.mpr hf))
-
-Depends on / 依赖: le_degree, m.le_degree, mem_support_iff, mem_support_iff.mpr, not_le
+/-
+**MonomialOrder.coeff_eq_zero_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：coeff_eq_zero_of_lt {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : m.degree 
+f ≺[m] d) : f.coeff d = 0
+参数：hd : m.degree f ≺[m] d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
 -/
-theorem coeff_eq_zero_of_lt {f : MvPolynomial σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d) :
+theorem coeff_eq_zero_of_lt {f : MvPolynomial σ R} {d : σ →₀ ℕ} (hd : m.degree f ≺[m] d) :
     f.coeff d = 0 := by
   rw [← not_le] at hd
   by_contra hf
   apply hd (m.le_degree (mem_support_iff.mpr hf))
-
-/--
-theorem `leadingCoeff_ne_zero_iff` / 定理 `leadingCoeff_ne_zero_iff`
-
-English:
-theorem leadingCoeff_ne_zero_iff
-  given: {f : MvPolynomial σ R}
-  proof: by
-  constructor
-  · rw [not_imp_not]
-    intro hf
-    rw [hf]; rw [leadingCoeff_zero]
-  · intro hf
-    rw [← support_nonempty] at hf
-    rw [leadingCoeff]; rw [← mem_support_iff]; rw [degree]
-    suffices f.support.sup m.toSyn in m.toSyn '' f.support by
-      obtain ⟨d, hd, hd'⟩ := this
-      rw [← hd']; rw [AddEquiv.symm_apply_apply]
-      exact hd
-    exact Finset.sup_mem_of_nonempty hf
-
-@[simp]
-
-中文:
-定理 leadingCoeff_ne_zero_iff
-  条件: {f : 多元多项式 σ R}
-  证明: by
-  constructor
-  · rw [not_imp_not]
-    intro hf
-    rw [hf]; rw [leadingCoeff_zero]
-  · intro hf
-    rw [← support_nonempty] at hf
-    rw [leadingCoeff]; rw [← mem_support_iff]; rw [degree]
-    suffices f.support.sup m.toSyn in m.toSyn '' f.support by
-      obtain ⟨d, hd, hd'⟩ := this
-      rw [← hd']; rw [AddEquiv.symm_apply_apply]
-      exact hd
-    exact Finset.sup_mem_of_nonempty hf
-
-@[simp]
-
-Depends on / 依赖: AddEquiv, AddEquiv.symm_apply_apply, Finset, Finset.sup_mem_of_nonempty, degree, f.support, f.support.sup, leadingCoeff, leadingCoeff_zero, m.toSyn, mem_support_iff, not_imp_not, sup_mem_of_nonempty, support, support_nonempty, symm_apply_apply
+/-
+**MonomialOrder.leadingCoeff_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：leadingCoeff_ne_zero_iff {f : MvPolynomial σ R} : m.leadingCoeff f != 0 ↔ 
+f != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MonomialOrder.degree.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {R : T
+ype u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.degree f = m.toSyn.
+symm (f.support…
+· 使用定理 `Finset.sup_mem_of_nonempty`：sup_mem_of_nonempty (hs : s.Nonempty) : s.su
+p f in f '' s
+· 使用引理 `MvPolynomial.support_nonempty`：support_nonempty {p : MvPolynomial σ R} :
+ p.support.Nonempty ↔ p != 0
+· 使用定理 `AddEquiv.symm_apply_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (x : M), e.symm (e x) = x
 -/
 theorem leadingCoeff_ne_zero_iff {f : MvPolynomial σ R} :
-    m.leadingCoeff f != 0 ↔ f != 0 := by
+    m.leadingCoeff f ≠ 0 ↔ f ≠ 0 := by
   constructor
   · rw [not_imp_not]
     intro hf
-    rw [hf]; rw [leadingCoeff_zero]
+    rw [hf, leadingCoeff_zero]
   · intro hf
     rw [← support_nonempty] at hf
-    rw [leadingCoeff]; rw [← mem_support_iff]; rw [degree]
-    suffices f.support.sup m.toSyn in m.toSyn '' f.support by
+    rw [leadingCoeff, ← mem_support_iff, degree]
+    suffices f.support.sup m.toSyn ∈ m.toSyn '' f.support by
       obtain ⟨d, hd, hd'⟩ := this
-      rw [← hd']; rw [AddEquiv.symm_apply_apply]
+      rw [← hd', AddEquiv.symm_apply_apply]
       exact hd
     exact Finset.sup_mem_of_nonempty hf
 
 @[simp]
-/--
-theorem `leadingCoeff_eq_zero_iff` / 定理 `leadingCoeff_eq_zero_iff`
-
-English:
-theorem leadingCoeff_eq_zero_iff
-  given: {f : MvPolynomial σ R}
-  proof: by
-  simp only [← not_iff_not, leadingCoeff_ne_zero_iff]
-
-中文:
-定理 leadingCoeff_eq_zero_iff
-  条件: {f : 多元多项式 σ R}
-  证明: by
-  simp only [← not_iff_not, leadingCoeff_ne_zero_iff]
-
-Depends on / 依赖: leadingCoeff_ne_zero_iff, not_iff_not
+/-
+**MonomialOrder.leadingCoeff_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：leadingCoeff_eq_zero_iff {f : MvPolynomial σ R} : leadingCoeff m f = 0 ↔ f
+ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem leadingCoeff_eq_zero_iff {f : MvPolynomial σ R} :
     leadingCoeff m f = 0 ↔ f = 0 := by
   simp only [← not_iff_not, leadingCoeff_ne_zero_iff]
-
-/--
-theorem `coeff_degree_ne_zero_iff` / 定理 `coeff_degree_ne_zero_iff`
-
-English:
-theorem coeff_degree_ne_zero_iff
-  given: {f : MvPolynomial σ R}
-  proof: m.leadingCoeff_ne_zero_iff
-
-中文:
-定理 coeff_degree_ne_zero_iff
-  条件: {f : 多元多项式 σ R}
-  证明: m.leadingCoeff_ne_zero_iff
-
-Depends on / 依赖: leadingCoeff_ne_zero_iff, m.leadingCoeff_ne_zero_iff
+/-
+**MonomialOrder.coeff_degree_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：coeff_degree_ne_zero_iff {f : MvPolynomial σ R} : f.coeff (m.degree f) != 
+0 ↔ f != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.leadingCoeff_ne_zero_iff`：leadingCoeff_ne_zero_iff {f : Mv
+Polynomial σ R} : m.leadingCoeff f != 0 ↔ f != 0
 -/
 theorem coeff_degree_ne_zero_iff {f : MvPolynomial σ R} :
-    f.coeff (m.degree f) != 0 ↔ f != 0 :=
+    f.coeff (m.degree f) ≠ 0 ↔ f ≠ 0 :=
   m.leadingCoeff_ne_zero_iff
-
-/--
-theorem `degree_mem_support_iff` / 定理 `degree_mem_support_iff`
-
-English:
-theorem degree_mem_support_iff
-  given: (f : MvPolynomial σ R)
-  statement: m.degree f in f.support ↔ f != 0
-  proof: mem_support_iff.trans coeff_degree_ne_zero_iff
-
-@[simp]
-
-中文:
-定理 degree_mem_support_iff
-  条件: (f : 多元多项式 σ R)
-  结论: m.degree f in f.support ↔ f != 0
-  证明: mem_support_iff.trans coeff_degree_ne_zero_iff
-
-@[simp]
-
-Depends on / 依赖: coeff_degree_ne_zero_iff, mem_support_iff, mem_support_iff.trans
+/-
+**MonomialOrder.degree_mem_support_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：degree_mem_support_iff (f : MvPolynomial σ R) : m.degree f in f.support ↔ 
+f != 0
+参数：f : MvPolynomial σ R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MonomialOrder.coeff_degree_ne_zero_iff`：coeff_degree_ne_zero_iff {f : Mv
+Polynomial σ R} : f.coeff (m.degree f) != 0 ↔ f != 0
 -/
-theorem degree_mem_support_iff (f : MvPolynomial σ R) : m.degree f in f.support ↔ f != 0 :=
+theorem degree_mem_support_iff (f : MvPolynomial σ R) : m.degree f ∈ f.support ↔ f ≠ 0 :=
   mem_support_iff.trans coeff_degree_ne_zero_iff
 
 @[simp]
-/--
-theorem `coeff_degree_eq_zero_iff` / 定理 `coeff_degree_eq_zero_iff`
-
-English:
-theorem coeff_degree_eq_zero_iff
-  given: {f : MvPolynomial σ R}
-  proof: m.leadingCoeff_eq_zero_iff
-
-中文:
-定理 coeff_degree_eq_zero_iff
-  条件: {f : 多元多项式 σ R}
-  证明: m.leadingCoeff_eq_zero_iff
-
-Depends on / 依赖: leadingCoeff_eq_zero_iff, m.leadingCoeff_eq_zero_iff
+/-
+**MonomialOrder.coeff_degree_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：coeff_degree_eq_zero_iff {f : MvPolynomial σ R} : f.coeff (m.degree f) = 0
+ ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.leadingCoeff_eq_zero_iff`：leadingCoeff_eq_zero_iff {f : Mv
+Polynomial σ R} : leadingCoeff m f = 0 ↔ f = 0
 -/
 theorem coeff_degree_eq_zero_iff {f : MvPolynomial σ R} :
     f.coeff (m.degree f) = 0 ↔ f = 0 :=
   m.leadingCoeff_eq_zero_iff
-
-/--
-lemma `degree_mem_support` / 引理 `degree_mem_support`
-
-English:
-lemma degree_mem_support
-  given: {p : MvPolynomial σ R} (hp : p != 0)
-  proof: by
-  rwa [MvPolynomial.mem_support_iff, coeff_degree_ne_zero_iff]
-
-中文:
-引理 degree_mem_support
-  条件: {p : 多元多项式 σ R} (hp : p != 0)
-  证明: by
-  rwa [MvPolynomial.mem_support_iff, coeff_degree_ne_zero_iff]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.mem_support_iff, coeff_degree_ne_zero_iff, mem_support_iff
+/-
+**MonomialOrder.degree_mem_support** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_mem_support {p : MvPolynomial σ R} (hp : p != 0) : m.degree p in p.
+support
+参数：hp : p != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MonomialOrder.coeff_degree_ne_zero_iff`：coeff_degree_ne_zero_iff {f : Mv
+Polynomial σ R} : f.coeff (m.degree f) != 0 ↔ f != 0
 -/
-lemma degree_mem_support {p : MvPolynomial σ R} (hp : p != 0) :
-    m.degree p in p.support := by
+lemma degree_mem_support {p : MvPolynomial σ R} (hp : p ≠ 0) :
+    m.degree p ∈ p.support := by
   rwa [MvPolynomial.mem_support_iff, coeff_degree_ne_zero_iff]
-
-/--
-theorem `degree_eq_zero_iff_totalDegree_eq_zero` / 定理 `degree_eq_zero_iff_totalDegree_eq_zero`
-
-English:
-theorem degree_eq_zero_iff_totalDegree_eq_zero
-  given: {f : MvPolynomial σ R}
-  proof: by
-  rw [← m.toSyn.injective.eq_iff]
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [eq_bot_iff]; rw [m.bot_eq_zero]; rw [← m.toSyn.map_zero]
-  rw [degree_le_iff]
-  rw [totalDegree_eq_zero_iff]
-  apply forall_congr'
-  intro d
-  apply imp_congr (rfl.to_iff)
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [← eq_bot_iff]; rw [m.bot_eq_zero]
-  simp only [EmbeddingLike.map_eq_zero_iff]
-  exact Finsupp.ext_iff
-
-@[simp]
-
-中文:
-定理 degree_eq_zero_iff_totalDegree_eq_zero
-  条件: {f : 多元多项式 σ R}
-  证明: by
-  rw [← m.toSyn.injective.eq_iff]
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [eq_bot_iff]; rw [m.bot_eq_zero]; rw [← m.toSyn.map_zero]
-  rw [degree_le_iff]
-  rw [totalDegree_eq_zero_iff]
-  apply forall_congr'
-  intro d
-  apply imp_congr (rfl.to_iff)
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [← eq_bot_iff]; rw [m.bot_eq_zero]
-  simp only [EmbeddingLike.map_eq_zero_iff]
-  exact Finsupp.ext_iff
-
-@[simp]
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.map_eq_zero_iff, Finsupp, Finsupp.ext_iff, bot_eq_zero, degree_le_iff, eq_bot_iff, eq_iff, ext_iff, forall_congr, imp_congr, injective, m.bot_eq_zero, m.toSyn.injective.eq_iff, m.toSyn.map_zero, map_eq_zero_iff, map_zero, rfl.to_iff, to_iff, totalDegree_eq_zero_iff
+/-
+**MonomialOrder.degree_eq_zero_iff_totalDegree_eq_zero** 是 Mathlib 中的一个定理，位于命名空间
+ `MonomialOrder`。
+形式化陈述：degree_eq_zero_iff_totalDegree_eq_zero {f : MvPolynomial σ R} : m.degree f
+ = 0 ↔ f.totalDegree = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `MonomialOrder.bot_eq_zero`：bot_eq_zero : (⊥ : m.syn) = 0
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `AddEquiv.map_zero`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZeroClass 
+M] [inst_1 : AddZeroClass N] (h : M ≃+ N), h 0 = 0
+· 使用定理 `MonomialOrder.degree_le_iff`：degree_le_iff {f : MvPolynomial σ R} {d : σ
+ ->₀ Nat} : m.degree f ≼[m] d ↔ forall c in f.support, c ≼[m] d
+· 使用定理 `MvPolynomial.totalDegree_eq_zero_iff`：totalDegree_eq_zero_iff (p : MvPol
+ynomial σ R) : p.totalDegree = 0 ↔ forall (m : σ ->₀ Nat) (_ : m in p.support) (
+x : σ), m x = 0
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `imp_congr`：∀ {a b c d : Prop}, (a ↔ c) → (b ↔ d) → (a → b ↔ c → d)
+· 使用定理 `Eq.to_iff`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Finsupp.ext_iff`：∀ {α : Type u_1} {M : Type u_4} [inst : Zero M] {f g : 
+α →₀ M}, f = g ↔ ∀ (a : α), f a = g a
 -/
 theorem degree_eq_zero_iff_totalDegree_eq_zero {f : MvPolynomial σ R} :
     m.degree f = 0 ↔ f.totalDegree = 0 := by
   rw [← m.toSyn.injective.eq_iff]
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [eq_bot_iff]; rw [m.bot_eq_zero]; rw [← m.toSyn.map_zero]
+  rw [map_zero, ← m.bot_eq_zero, eq_bot_iff, m.bot_eq_zero, ← m.toSyn.map_zero]
   rw [degree_le_iff]
   rw [totalDegree_eq_zero_iff]
   apply forall_congr'
   intro d
   apply imp_congr (rfl.to_iff)
-  rw [map_zero]; rw [← m.bot_eq_zero]; rw [← eq_bot_iff]; rw [m.bot_eq_zero]
+  rw [map_zero, ← m.bot_eq_zero, ← eq_bot_iff, m.bot_eq_zero]
   simp only [EmbeddingLike.map_eq_zero_iff]
   exact Finsupp.ext_iff
 
 @[simp]
-/--
-theorem `degree_C` / 定理 `degree_C`
-
-English:
-theorem degree_C
-  given: (r : R)
-  proof: by
-  rw [degree_eq_zero_iff_totalDegree_eq_zero]; rw [totalDegree_C]
-
-@[simp]
-
-中文:
-定理 degree_C
-  条件: (r : R)
-  证明: by
-  rw [degree_eq_zero_iff_totalDegree_eq_zero]; rw [totalDegree_C]
-
-@[simp]
-
-Depends on / 依赖: degree_eq_zero_iff_totalDegree_eq_zero, totalDegree_C
+/-
+**MonomialOrder.degree_C** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_C (r : R) : m.degree (C r) = 0
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_eq_zero_iff_totalDegree_eq_zero`：degree_eq_zero_iff
+_totalDegree_eq_zero {f : MvPolynomial σ R} : m.degree f = 0 ↔ f.totalDegree = 0
+· 使用定理 `MvPolynomial.totalDegree_C`：totalDegree_C (a : R) : (C a : MvPolynomial 
+σ R).totalDegree = 0
 -/
 theorem degree_C (r : R) :
     m.degree (C r) = 0 := by
-  rw [degree_eq_zero_iff_totalDegree_eq_zero]; rw [totalDegree_C]
+  rw [degree_eq_zero_iff_totalDegree_eq_zero, totalDegree_C]
 
 @[simp]
-/--
-theorem `leadingCoeff_C` / 定理 `leadingCoeff_C`
-
-English:
-theorem leadingCoeff_C
-  given: (c : R)
-  statement: m.leadingCoeff (C c) = c
-  proof: by
-  simp [leadingCoeff]
-
-中文:
-定理 leadingCoeff_C
-  条件: (c : R)
-  结论: m.leadingCoeff (C c) = c
-  证明: by
-  simp [leadingCoeff]
-
-Depends on / 依赖: leadingCoeff
+/-
+**MonomialOrder.leadingCoeff_C** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_C (c : R) : m.leadingCoeff (C c) = c
+参数：c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
+· 使用定理 `MvPolynomial.coeff_zero_C`：coeff_zero_C (a) : coeff 0 (C a : MvPolynomia
+l σ R) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leadingCoeff_C (c : R) : m.leadingCoeff (C c) = c := by
   simp [leadingCoeff]
-
-/--
-theorem `eq_C_of_degree_eq_zero` / 定理 `eq_C_of_degree_eq_zero`
-
-English:
-theorem eq_C_of_degree_eq_zero
-  given: {f : MvPolynomial σ R} (hf : m.degree f = 0)
-  proof: by
-  ext d
-  simp only [leadingCoeff, hf]
-  classical
-  by_cases hd : d = 0
-  · simp [hd]
-  · rw [coeff_C, if_neg (Ne.symm hd)]
-    apply coeff_eq_zero_of_lt (m := m)
-    rw [hf]; rw [map_zero]; rw [lt_iff_le_and_ne]; rw [ne_eq]; rw [eq_comm]; rw [EmbeddingLike.map_eq_zero_iff]
-    exact ⟨bot_le, hd⟩
-
-中文:
-定理 eq_C_of_degree_eq_zero
-  条件: {f : 多元多项式 σ R} (hf : m.degree f = 0)
-  证明: by
-  ext d
-  simp only [leadingCoeff, hf]
-  classical
-  by_cases hd : d = 0
-  · simp [hd]
-  · rw [coeff_C, if_neg (Ne.symm hd)]
-    apply coeff_eq_zero_of_lt (m := m)
-    rw [hf]; rw [map_zero]; rw [lt_iff_le_and_ne]; rw [ne_eq]; rw [eq_comm]; rw [EmbeddingLike.map_eq_zero_iff]
-    exact ⟨bot_le, hd⟩
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.map_eq_zero_iff, IsDiscrete, IsDiscrete.image_of_isOpenMap, IsOpenMap, IsOpenMap.of_inverse, Ne.symm, SetLike, SetLike.coe_sort_coe, bot_le, classical, coe_sort_coe, coeff_C, coeff_eq_zero_of_lt, continuous_const_smul, eq_comm, if_neg, image_of_isOpenMap, isDiscrete_iff_discreteTopology, leadingCoeff
+/-
+**MonomialOrder.eq_C_of_degree_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：eq_C_of_degree_eq_zero {f : MvPolynomial σ R} (hf : m.degree f = 0) : f = 
+C (m.leadingCoeff f)
+参数：hf : m.degree f = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.ext`：ext (p q : MvPolynomial σ R) : (forall m, coeff m p = 
+coeff m q) -> p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.coeff_C`：coeff_C [DecidableEq σ] (m) (a) : coeff m (C a : M
+vPolynomial σ R) = if 0 = m then a else 0
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `MonomialOrder.coeff_eq_zero_of_lt`：coeff_eq_zero_of_lt {f : MvPolynomial
+ σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d) : f.coeff d = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `EmbeddingLike.map_eq_zero_iff`：∀ {F : Type u_1} {M : Type u_4} {N : Type
+ u_5} [inst : Zero M] [inst_1 : Zero N] [inst_2 : FunLike F M N]   [EmbeddingLik
+e F M N] [ZeroHomCl…
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
 theorem eq_C_of_degree_eq_zero {f : MvPolynomial σ R} (hf : m.degree f = 0) :
     f = C (m.leadingCoeff f) := by
@@ -1110,148 +982,164 @@ theorem eq_C_of_degree_eq_zero {f : MvPolynomial σ R} (hf : m.degree f = 0) :
   · simp [hd]
   · rw [coeff_C, if_neg (Ne.symm hd)]
     apply coeff_eq_zero_of_lt (m := m)
-    rw [hf]; rw [map_zero]; rw [lt_iff_le_and_ne]; rw [ne_eq]; rw [eq_comm]; rw [EmbeddingLike.map_eq_zero_iff]
+    rw [hf, map_zero, lt_iff_le_and_ne, ne_eq, eq_comm, EmbeddingLike.map_eq_zero_iff]
     exact ⟨bot_le, hd⟩
-
-/--
-theorem `degree_eq_zero_iff` / 定理 `degree_eq_zero_iff`
-
-English:
-theorem degree_eq_zero_iff
-  given: {f : MvPolynomial σ R}
-  proof: ⟨MonomialOrder.eq_C_of_degree_eq_zero, fun h => by rw [h, MonomialOrder.degree_C]⟩
-
-中文:
-定理 degree_eq_zero_iff
-  条件: {f : 多元多项式 σ R}
-  证明: ⟨MonomialOrder.eq_C_of_degree_eq_zero, fun h => by rw [h, MonomialOrder.degree_C]⟩
-
-Depends on / 依赖: MonomialOrder, MonomialOrder.degree_C, MonomialOrder.eq_C_of_degree_eq_zero, degree_C, eq_C_of_degree_eq_zero
+/-
+**MonomialOrder.degree_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_eq_zero_iff {f : MvPolynomial σ R} : m.degree f = 0 ↔ f = C (m.lead
+ingCoeff f)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.eq_C_of_degree_eq_zero`：eq_C_of_degree_eq_zero {f : MvPoly
+nomial σ R} (hf : m.degree f = 0) : f = C (m.leadingCoeff f)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
 -/
 theorem degree_eq_zero_iff {f : MvPolynomial σ R} :
     m.degree f = 0 ↔ f = C (m.leadingCoeff f) :=
   ⟨MonomialOrder.eq_C_of_degree_eq_zero, fun h => by rw [h, MonomialOrder.degree_C]⟩
-
-/--
-theorem `degree_add_le` / 定理 `degree_add_le`
-
-English:
-theorem degree_add_le
-  given: {f g : MvPolynomial σ R}
-  proof: by
-  conv_rhs => rw [← m.toSyn.apply_symm_apply (_ ⊔ _)]
-  rw [degree_le_iff]
-  simp only [AddEquiv.apply_symm_apply, le_sup_iff]
-  intro b hb
-  by_cases hf : b in f.support
-  · left
-    exact m.le_degree hf
-  · right
-    apply m.le_degree
-    simp only [notMem_support_iff] at hf
-    simpa only [mem_support_iff, coeff_add, hf, zero_add] using hb
-
-中文:
-定理 degree_add_le
-  条件: {f g : 多元多项式 σ R}
-  证明: by
-  conv_rhs => rw [← m.toSyn.apply_symm_apply (_ ⊔ _)]
-  rw [degree_le_iff]
-  simp only [AddEquiv.apply_symm_apply, le_sup_iff]
-  intro b hb
-  by_cases hf : b in f.support
-  · left
-    exact m.le_degree hf
-  · right
-    apply m.le_degree
-    simp only [notMem_support_iff] at hf
-    simpa only [mem_support_iff, coeff_add, hf, zero_add] using hb
-
-Depends on / 依赖: AddEquiv, AddEquiv.apply_symm_apply, apply_symm_apply, coeff_add, conv_rhs, degree_le_iff, f.support, le_degree, le_sup_iff, m.le_degree, m.toSyn.apply_symm_apply, mem_support_iff, notMem_support_iff, support, zero_add
+/-
+**MonomialOrder.degree_add_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_add_le {f g : MvPolynomial σ R} : m.toSyn (m.degree (f + g)) <= m.t
+oSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用定理 `MonomialOrder.degree_le_iff`：degree_le_iff {f : MvPolynomial σ R} {d : σ
+ ->₀ Nat} : m.degree f ≼[m] d ↔ forall c in f.support, c ≼[m] d
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.coeff_add`：coeff_add (m : σ ->₀ Nat) (p q : MvPolynomial σ 
+R) : coeff m (p + q) = coeff m p + coeff m q
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem degree_add_le {f g : MvPolynomial σ R} :
-    m.toSyn (m.degree (f + g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g) := by
+    m.toSyn (m.degree (f + g)) ≤ m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g) := by
   conv_rhs => rw [← m.toSyn.apply_symm_apply (_ ⊔ _)]
   rw [degree_le_iff]
   simp only [AddEquiv.apply_symm_apply, le_sup_iff]
   intro b hb
-  by_cases hf : b in f.support
+  by_cases hf : b ∈ f.support
   · left
     exact m.le_degree hf
   · right
     apply m.le_degree
     simp only [notMem_support_iff] at hf
     simpa only [mem_support_iff, coeff_add, hf, zero_add] using hb
-
-/--
-theorem `degree_sum_le` / 定理 `degree_sum_le`
-
-English:
-theorem degree_sum_le
-  given: {α : Type*} {s : Finset α} {f : α -> MvPolynomial σ R}
-  proof: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons a s haA h =>
-    rw [Finset.sum_cons]; rw [Finset.sup_cons]
-    exact le_trans m.degree_add_le (max_le_max le_rfl h)
-
-中文:
-定理 degree_sum_le
-  条件: {α : 类型} {s : 有限集 α} {f : α -> 多元多项式 σ R}
-  证明: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons a s haA h =>
-    rw [Finset.sum_cons]; rw [Finset.sup_cons]
-    exact le_trans m.degree_add_le (max_le_max le_rfl h)
-
-Depends on / 依赖: ConjAct, ConjAct.ofConjAct, Finset, Finset.cons_induction_on, Finset.sum_cons, Finset.sup_cons, IsTopologicalGroup, IsTopologicalGroup.continuous_conj, cons_induction_on, continuous_conj, degree_add_le, le_rfl, le_trans, m.degree_add_le, max_le_max, ofConjAct, sum_cons, sup_cons
+/-
+**MonomialOrder.degree_sum_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_sum_le {α : Type*} {s : Finset α} {f : α -> MvPolynomial σ R} : (m.
+toSyn <| m.degree <| ∑ x in s, f x) <= s.sup fun x => (m.toSyn <| m.degree <| f 
+x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction_on`：cons_induction_on {α : Type*} {motive : Finset
+ α -> Prop} (s : Finset α) (empty : motive ∅) (cons : forall (a : α) (s : Finset
+ α) (h : a ∉ s…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `Finset.sup_cons`：sup_cons {b : β} (h : b ∉ s) : (cons b s h).sup f = f b
+ ⊔ s.sup f
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MonomialOrder.degree_add_le`：degree_add_le {f g : MvPolynomial σ R} : m.
+toSyn (m.degree (f + g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+· 使用定理 `max_le_max`：max_le_max : a <= c -> b <= d -> max a b <= max c d
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem degree_sum_le {α : Type*} {s : Finset α} {f : α -> MvPolynomial σ R} :
-    (m.toSyn <| m.degree <| ∑ x in s, f x) <= s.sup fun x => (m.toSyn <| m.degree <| f x) := by
+theorem degree_sum_le {α : Type*} {s : Finset α} {f : α → MvPolynomial σ R} :
+    (m.toSyn <| m.degree <| ∑ x ∈ s, f x) ≤ s.sup fun x ↦ (m.toSyn <| m.degree <| f x) := by
   induction s using Finset.cons_induction_on with
   | empty => simp
   | cons a s haA h =>
-    rw [Finset.sum_cons]; rw [Finset.sup_cons]
+    rw [Finset.sum_cons, Finset.sup_cons]
     exact le_trans m.degree_add_le (max_le_max le_rfl h)
-
-/--
-theorem `degree_add_of_lt` / 定理 `degree_add_of_lt`
-
-English:
-theorem degree_add_of_lt
-  given: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
-  proof: by
-  apply m.toSyn.injective
-  apply le_antisymm
-  · apply le_trans degree_add_le
-    simp only [sup_le_iff, le_refl, true_and, le_of_lt h]
-  · apply le_degree
-    rw [mem_support_iff]; rw [coeff_add]; rw [m.coeff_eq_zero_of_lt h]; rw [add_zero]; rw [← leadingCoeff]; rw [leadingCoeff_ne_zero_iff]
-    intro hf
-    rw [← not_le]; rw [hf] at h
-    apply h
-    simp only [degree_zero, map_zero]
-    apply bot_le
-
-中文:
-定理 degree_add_of_lt
-  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
-  证明: by
-  apply m.toSyn.injective
-  apply le_antisymm
-  · apply le_trans degree_add_le
-    simp only [sup_le_iff, le_refl, true_and, le_of_lt h]
-  · apply le_degree
-    rw [mem_support_iff]; rw [coeff_add]; rw [m.coeff_eq_zero_of_lt h]; rw [add_zero]; rw [← leadingCoeff]; rw [leadingCoeff_ne_zero_iff]
-    intro hf
-    rw [← not_le]; rw [hf] at h
-    apply h
-    simp only [degree_zero, map_zero]
-    apply bot_le
-
-Depends on / 依赖: add_zero, bot_le, coeff_add, coeff_eq_zero_of_lt, degree_add_le, degree_zero, injective, le_antisymm, le_degree, le_of_lt, le_refl, le_trans, leadingCoeff, leadingCoeff_ne_zero_iff, m.coeff_eq_zero_of_lt, m.toSyn.injective, map_zero, mem_support_iff, not_le, sup_le_iff
+/-
+**MonomialOrder.degree_add_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_add_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
+ : m.degree (f + g) = m.degree f
+参数：h : m.degree g ≺[m] m.degree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MonomialOrder.degree_add_le`：degree_add_le {f g : MvPolynomial σ R} : m.
+toSyn (m.degree (f + g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MvPolynomial.coeff_add`：coeff_add (m : σ ->₀ Nat) (p q : MvPolynomial σ 
+R) : coeff m (p + q) = coeff m p + coeff m q
+· 使用定理 `MonomialOrder.coeff_eq_zero_of_lt`：coeff_eq_zero_of_lt {f : MvPolynomial
+ σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d) : f.coeff d = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
+· 使用定理 `MonomialOrder.leadingCoeff_ne_zero_iff`：leadingCoeff_ne_zero_iff {f : Mv
+Polynomial σ R} : m.leadingCoeff f != 0 ↔ f != 0
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
 theorem degree_add_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f) :
     m.degree (f + g) = m.degree f := by
@@ -1260,170 +1148,179 @@ theorem degree_add_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degr
   · apply le_trans degree_add_le
     simp only [sup_le_iff, le_refl, true_and, le_of_lt h]
   · apply le_degree
-    rw [mem_support_iff]; rw [coeff_add]; rw [m.coeff_eq_zero_of_lt h]; rw [add_zero]; rw [← leadingCoeff]; rw [leadingCoeff_ne_zero_iff]
+    rw [mem_support_iff, coeff_add, m.coeff_eq_zero_of_lt h, add_zero,
+      ← leadingCoeff, leadingCoeff_ne_zero_iff]
     intro hf
-    rw [← not_le]; rw [hf] at h
+    rw [← not_le, hf] at h
     apply h
     simp only [degree_zero, map_zero]
     apply bot_le
-
-/--
-theorem `degree_add_eq_right_of_lt` / 定理 `degree_add_eq_right_of_lt`
-
-English:
-theorem degree_add_eq_right_of_lt
-  given: {f g : MvPolynomial σ R} (h : m.degree f ≺[m] m.degree g)
-  proof: by
-  rw [add_comm]
-  exact degree_add_of_lt h
-
-中文:
-定理 degree_add_eq_right_of_lt
-  条件: {f g : 多元多项式 σ R} (h : m.degree f ≺[m] m.degree g)
-  证明: by
-  rw [add_comm]
-  exact degree_add_of_lt h
-
-Depends on / 依赖: add_comm, degree_add_of_lt
+/-
+**MonomialOrder.degree_add_eq_right_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrd
+er`。
+形式化陈述：degree_add_eq_right_of_lt {f g : MvPolynomial σ R} (h : m.degree f ≺[m] m.
+degree g) : m.degree (f + g) = m.degree g
+参数：h : m.degree f ≺[m] m.degree g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `MonomialOrder.degree_add_of_lt`：degree_add_of_lt {f g : MvPolynomial σ R
+} (h : m.degree g ≺[m] m.degree f) : m.degree (f + g) = m.degree f
 -/
 theorem degree_add_eq_right_of_lt {f g : MvPolynomial σ R} (h : m.degree f ≺[m] m.degree g) :
     m.degree (f + g) = m.degree g := by
   rw [add_comm]
   exact degree_add_of_lt h
-
-/--
-theorem `leadingCoeff_add_of_lt` / 定理 `leadingCoeff_add_of_lt`
-
-English:
-theorem leadingCoeff_add_of_lt
-  given: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
-  proof: by
-  simp only [leadingCoeff, m.degree_add_of_lt h, coeff_add, coeff_eq_zero_of_lt h, add_zero]
-
-中文:
-定理 leadingCoeff_add_of_lt
-  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
-  证明: by
-  simp only [leadingCoeff, m.degree_add_of_lt h, coeff_add, coeff_eq_zero_of_lt h, add_zero]
-
-Depends on / 依赖: add_zero, coeff_add, coeff_eq_zero_of_lt, degree_add_of_lt, leadingCoeff, m.degree_add_of_lt
+/-
+**MonomialOrder.leadingCoeff_add_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：leadingCoeff_add_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.deg
+ree f) : m.leadingCoeff (f + g) = m.leadingCoeff f
+参数：h : m.degree g ≺[m] m.degree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_add_of_lt`：degree_add_of_lt {f g : MvPolynomial σ R
+} (h : m.degree g ≺[m] m.degree f) : m.degree (f + g) = m.degree f
+· 使用定理 `MvPolynomial.coeff_add`：coeff_add (m : σ ->₀ Nat) (p q : MvPolynomial σ 
+R) : coeff m (p + q) = coeff m p + coeff m q
+· 使用定理 `MonomialOrder.coeff_eq_zero_of_lt`：coeff_eq_zero_of_lt {f : MvPolynomial
+ σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d) : f.coeff d = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leadingCoeff_add_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f) :
     m.leadingCoeff (f + g) = m.leadingCoeff f := by
   simp only [leadingCoeff, m.degree_add_of_lt h, coeff_add, coeff_eq_zero_of_lt h, add_zero]
-
-/--
-theorem `Monic.add_of_lt` / 定理 `Monic.add_of_lt`
-
-English:
-theorem Monic.add_of_lt
-  given: {f g : MvPolynomial σ R} (hf : m.Monic f) (h : m.degree g ≺[m] m.degree f)
-  proof: by
-  simp only [Monic, leadingCoeff_add_of_lt h, hf.leadingCoeff_eq_one]
-
-中文:
-定理 Monic.add_of_lt
-  条件: {f g : 多元多项式 σ R} (hf : m.Monic f) (h : m.degree g ≺[m] m.degree f)
-  证明: by
-  simp only [Monic, leadingCoeff_add_of_lt h, hf.leadingCoeff_eq_one]
-
-Depends on / 依赖: hf.leadingCoeff_eq_one, leadingCoeff_add_of_lt, leadingCoeff_eq_one
+/-
+**MonomialOrder.Monic.add_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder.Monic`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {f g : MvPolynomial σ R},   m.Monic f → m.toSyn (m.degree g) < m.toSyn (m.de
+gree f) → m.Monic (f + g)
+参数：m.degree g；m.degree f；f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingCoeff_add_of_lt`：leadingCoeff_add_of_lt {f g : MvPo
+lynomial σ R} (h : m.degree g ≺[m] m.degree f) : m.leadingCoeff (f + g) = m.lead
+ingCoeff f
+· 使用定理 `MonomialOrder.Monic.leadingCoeff_eq_one`：∀ {σ : Type u_1} {m : MonomialO
+rder σ} {R : Type u_2} [inst : CommSemiring R] {f : MvPolynomial σ R},   m.Monic
+ f → m.leadingCoeff f = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Monic.add_of_lt {f g : MvPolynomial σ R} (hf : m.Monic f) (h : m.degree g ≺[m] m.degree f) :
     m.Monic (f + g) := by
   simp only [Monic, leadingCoeff_add_of_lt h, hf.leadingCoeff_eq_one]
-
-/--
-theorem `degree_add_of_ne` / 定理 `degree_add_of_ne`
-
-English:
-theorem degree_add_of_ne
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  by_cases h' : m.degree g ≺[m] m.degree f
-  · simp [degree_add_of_lt h', le_of_lt h']
-  · rw [not_lt, le_iff_eq_or_lt, Classical.or_iff_not_imp_left, EmbeddingLike.apply_eq_iff_eq] at h'
-    rw [add_comm]; rw [degree_add_of_lt (h' h)]; rw [right_eq_sup]
-    simp only [le_of_lt (h' h)]
-
-中文:
-定理 degree_add_of_ne
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  by_cases h' : m.degree g ≺[m] m.degree f
-  · simp [degree_add_of_lt h', le_of_lt h']
-  · rw [not_lt, le_iff_eq_or_lt, Classical.or_iff_not_imp_left, EmbeddingLike.apply_eq_iff_eq] at h'
-    rw [add_comm]; rw [degree_add_of_lt (h' h)]; rw [right_eq_sup]
-    simp only [le_of_lt (h' h)]
-
-Depends on / 依赖: Classical, Classical.or_iff_not_imp_left, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, add_comm, apply_eq_iff_eq, degree, degree_add_of_lt, le_iff_eq_or_lt, le_of_lt, m.degree, not_lt, or_iff_not_imp_left, right_eq_sup
+/-
+**MonomialOrder.degree_add_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_add_of_ne {f g : MvPolynomial σ R} (h : m.degree f != m.degree g) :
+ m.toSyn (m.degree (f + g)) = m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+参数：h : m.degree f != m.degree g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_add_of_lt`：degree_add_of_lt {f g : MvPolynomial σ R
+} (h : m.degree g ≺[m] m.degree f) : m.degree (f + g) = m.degree f
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `EmbeddingLike.apply_eq_iff_eq`：apply_eq_iff_eq (f : F) {x y : α} : f x =
+ f y ↔ x = y
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `le_iff_eq_or_lt`：le_iff_eq_or_lt : a <= b ↔ a = b ∨ a < b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `right_eq_sup`：right_eq_sup : b = a ⊔ b ↔ a <= b
 -/
 theorem degree_add_of_ne {f g : MvPolynomial σ R}
-    (h : m.degree f != m.degree g) :
+    (h : m.degree f ≠ m.degree g) :
     m.toSyn (m.degree (f + g)) = m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g) := by
   by_cases h' : m.degree g ≺[m] m.degree f
   · simp [degree_add_of_lt h', le_of_lt h']
   · rw [not_lt, le_iff_eq_or_lt, Classical.or_iff_not_imp_left, EmbeddingLike.apply_eq_iff_eq] at h'
-    rw [add_comm]; rw [degree_add_of_lt (h' h)]; rw [right_eq_sup]
+    rw [add_comm, degree_add_of_lt (h' h), right_eq_sup]
     simp only [le_of_lt (h' h)]
-
-/--
-theorem `degree_mul_le` / 定理 `degree_mul_le`
-
-English:
-theorem degree_mul_le
-  given: {f g : MvPolynomial σ R}
-  proof: by
-  classical
-  rw [degree_le_iff]
-  intro c
-  rw [← not_lt]; rw [mem_support_iff]; rw [not_imp_not]
-  intro hc
-  rw [coeff_mul]
-  apply Finset.sum_eq_zero
-  rintro ⟨d, e⟩ hde
-  simp only [Finset.mem_antidiagonal] at hde
-  dsimp only
-  by_cases hd : m.degree f ≺[m] d
-  · rw [m.coeff_eq_zero_of_lt hd, zero_mul]
-  · suffices m.degree g ≺[m] e by
-      rw [m.coeff_eq_zero_of_lt this]; rw [mul_zero]
-    simp only [not_lt] at hd
-    apply lt_of_add_lt_add_left (a := m.toSyn d)
-    grw [← map_add _ _ e, hd, ← map_add, hde]
-    exact hc
-
-中文:
-定理 degree_mul_le
-  条件: {f g : 多元多项式 σ R}
-  证明: by
-  classical
-  rw [degree_le_iff]
-  intro c
-  rw [← not_lt]; rw [mem_support_iff]; rw [not_imp_not]
-  intro hc
-  rw [coeff_mul]
-  apply Finset.sum_eq_zero
-  rintro ⟨d, e⟩ hde
-  simp only [Finset.mem_antidiagonal] at hde
-  dsimp only
-  by_cases hd : m.degree f ≺[m] d
-  · rw [m.coeff_eq_zero_of_lt hd, zero_mul]
-  · suffices m.degree g ≺[m] e by
-      rw [m.coeff_eq_zero_of_lt this]; rw [mul_zero]
-    simp only [not_lt] at hd
-    apply lt_of_add_lt_add_left (a := m.toSyn d)
-    grw [← map_add _ _ e, hd, ← map_add, hde]
-    exact hc
-
-Depends on / 依赖: Finset, Finset.mem_antidiagonal, Finset.sum_eq_zero, classical, coeff_eq_zero_of_lt, coeff_mul, degree, degree_le_iff, lt_of_add_lt_add_left, m.coeff_eq_zero_of_lt, m.degree, m.toSyn, map_add, mem_antidiagonal, mem_support_iff, mul_zero, not_imp_not, not_lt, sum_eq_zero, zero_mul
+/-
+**MonomialOrder.degree_mul_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_mul_le {f g : MvPolynomial σ R} : m.degree (f * g) ≼[m] m.degree f 
++ m.degree g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_le_iff`：degree_le_iff {f : MvPolynomial σ R} {d : σ
+ ->₀ Nat} : m.degree f ≼[m] d ↔ forall c in f.support, c ≼[m] d
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `MvPolynomial.coeff_mul`：coeff_mul [DecidableEq σ] (p q : MvPolynomial σ 
+R) (n : σ ->₀ Nat) : coeff n (p * q) = ∑ x in Finset.antidiagonal n, coeff x.1 p
+ * coeff x.2…
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `MonomialOrder.coeff_eq_zero_of_lt`：coeff_eq_zero_of_lt {f : MvPolynomial
+ σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d) : f.coeff d = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `lt_of_add_lt_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [
+AddLeftReflectLT α] {a b c : α}, a + b < a + c → b < c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `MonomialOrder.isOrderedAddMonoid_syn`：∀ {σ : Type u_1} (self : MonomialO
+rder σ), IsOrderedAddMonoid self.syn
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 theorem degree_mul_le {f g : MvPolynomial σ R} :
     m.degree (f * g) ≼[m] m.degree f + m.degree g := by
   classical
   rw [degree_le_iff]
   intro c
-  rw [← not_lt]; rw [mem_support_iff]; rw [not_imp_not]
+  rw [← not_lt, mem_support_iff, not_imp_not]
   intro hc
   rw [coeff_mul]
   apply Finset.sum_eq_zero
@@ -1433,80 +1330,100 @@ theorem degree_mul_le {f g : MvPolynomial σ R} :
   by_cases hd : m.degree f ≺[m] d
   · rw [m.coeff_eq_zero_of_lt hd, zero_mul]
   · suffices m.degree g ≺[m] e by
-      rw [m.coeff_eq_zero_of_lt this]; rw [mul_zero]
+      rw [m.coeff_eq_zero_of_lt this, mul_zero]
     simp only [not_lt] at hd
     apply lt_of_add_lt_add_left (a := m.toSyn d)
     grw [← map_add _ _ e, hd, ← map_add, hde]
     exact hc
 
-/--
-theorem `coeff_mul_of_add_of_degree_le` / 定理 `coeff_mul_of_add_of_degree_le`
+/-- Multiplicativity of leading coefficients -/
+/-
+**MonomialOrder.coeff_mul_of_add_of_degree_le** 是 Mathlib 中的一个定理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：coeff_mul_of_add_of_degree_le {f g : MvPolynomial σ R} {a b : σ ->₀ Nat} (
+ha : m.degree f ≼[m] a) (hb : m.degree g ≼[m] b) : (f * g).coeff (a + b) = f.coe
+ff a * g.coeff b
+参数：ha : m.degree f ≼[m] a；hb : m.degree g ≼[m] b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.coeff_mul`：coeff_mul [DecidableEq σ] (p q : MvPolynomial σ 
+R) (n : σ ->₀ Nat) : coeff n (p * q) = ∑ x in Finset.antidiagonal n, coeff x.1 p
+ * coeff x.2…
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `MonomialOrder.coeff_eq_zero_of_lt`：coeff_eq_zero_of_lt {f : MvPolynomial
+ σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d) : f.coeff d = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `le_of_add_le_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] 
+[AddRightReflectLE α] {a b c : α}, b + a ≤ c + a → b ≤ c
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `MonomialOrder.isOrderedAddMonoid_syn`：∀ {σ : Type u_1} (self : MonomialO
+rder σ), IsOrderedAddMonoid self.syn
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+（共 35 条，此处仅展示前 30 条）
 
-English:
-theorem coeff_mul_of_add_of_degree_le
-  statement: {f g : MvPolynomial σ R} {a b : σ ->₀ Nat}
-  proof: by
-  classical
-  rw [coeff_mul]; rw [Finset.sum_eq_single (a]; rw [b)]
-  · rintro ⟨c, d⟩ hcd h
-    simp only [Finset.mem_antidiagonal] at hcd
-    by_cases hf : m.degree f ≺[m] c
-    · rw [m.coeff_eq_zero_of_lt hf, zero_mul]
-    · suffices m.degree g ≺[m] d by
-        rw [coeff_eq_zero_of_lt this]; rw [mul_zero]
-      rw [not_lt] at hf
-      rw [← not_le]
-      intro hf'
-      apply h
-      suffices c = a by
-        simpa [Prod.mk.injEq, this] using hcd
-      apply m.toSyn.injective
-      apply le_antisymm (le_trans hf ha)
-      apply le_of_add_le_add_right (a := m.toSyn b)
-      rw [← map_add]; rw [← hcd]; rw [map_add]
-      simp only [add_le_add_iff_left]
-      exact le_trans hf' hb
-  · simp
-
-中文:
-定理 coeff_mul_of_add_of_degree_le
-  结论: {f g : 多元多项式 σ R} {a b : σ ->₀ 自然数}
-  证明: by
-  classical
-  rw [coeff_mul]; rw [Finset.sum_eq_single (a]; rw [b)]
-  · rintro ⟨c, d⟩ hcd h
-    simp only [Finset.mem_antidiagonal] at hcd
-    by_cases hf : m.degree f ≺[m] c
-    · rw [m.coeff_eq_zero_of_lt hf, zero_mul]
-    · suffices m.degree g ≺[m] d by
-        rw [coeff_eq_zero_of_lt this]; rw [mul_zero]
-      rw [not_lt] at hf
-      rw [← not_le]
-      intro hf'
-      apply h
-      suffices c = a by
-        simpa [Prod.mk.injEq, this] using hcd
-      apply m.toSyn.injective
-      apply le_antisymm (le_trans hf ha)
-      apply le_of_add_le_add_right (a := m.toSyn b)
-      rw [← map_add]; rw [← hcd]; rw [map_add]
-      simp only [add_le_add_iff_left]
-      exact le_trans hf' hb
-  · simp
-
-Depends on / 依赖: Finset, Finset.mem_antidiagonal, Finset.sum_eq_single, Prod.mk.injEq, classical, coeff_eq_zero_of_lt, coeff_mul, degree, injective, le_antisymm, le_of_add_le_add_right, le_trans, m.coeff_eq_zero_of_lt, m.degree, m.toSyn, m.toSyn.injective, mem_antidiagonal, mul_zero, not_le, not_lt
+--- 原说明 ---
+Multiplicativity of leading coefficients
 -/
-theorem coeff_mul_of_add_of_degree_le {f g : MvPolynomial σ R} {a b : σ ->₀ Nat}
+theorem coeff_mul_of_add_of_degree_le {f g : MvPolynomial σ R} {a b : σ →₀ ℕ}
     (ha : m.degree f ≼[m] a) (hb : m.degree g ≼[m] b) :
     (f * g).coeff (a + b) = f.coeff a * g.coeff b := by
   classical
-  rw [coeff_mul]; rw [Finset.sum_eq_single (a]; rw [b)]
+  rw [coeff_mul, Finset.sum_eq_single (a, b)]
   · rintro ⟨c, d⟩ hcd h
     simp only [Finset.mem_antidiagonal] at hcd
     by_cases hf : m.degree f ≺[m] c
     · rw [m.coeff_eq_zero_of_lt hf, zero_mul]
     · suffices m.degree g ≺[m] d by
-        rw [coeff_eq_zero_of_lt this]; rw [mul_zero]
+        rw [coeff_eq_zero_of_lt this, mul_zero]
       rw [not_lt] at hf
       rw [← not_le]
       intro hf'
@@ -1516,241 +1433,281 @@ theorem coeff_mul_of_add_of_degree_le {f g : MvPolynomial σ R} {a b : σ ->₀ 
       apply m.toSyn.injective
       apply le_antisymm (le_trans hf ha)
       apply le_of_add_le_add_right (a := m.toSyn b)
-      rw [← map_add]; rw [← hcd]; rw [map_add]
+      rw [← map_add, ← hcd, map_add]
       simp only [add_le_add_iff_left]
       exact le_trans hf' hb
   · simp
 
-/--
-theorem `coeff_mul_of_degree_add` / 定理 `coeff_mul_of_degree_add`
+/-- Multiplicativity of leading coefficients -/
+/-
+**MonomialOrder.coeff_mul_of_degree_add** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder
+`。
+形式化陈述：coeff_mul_of_degree_add {f g : MvPolynomial σ R} : (f * g).coeff (m.degree
+ f + m.degree g) = m.leadingCoeff f * m.leadingCoeff g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.coeff_mul_of_add_of_degree_le`：coeff_mul_of_add_of_degree_
+le {f g : MvPolynomial σ R} {a b : σ ->₀ Nat} (ha : m.degree f ≼[m] a) (hb : m.d
+egree g ≼[m] b) : (f * g).coeff (…
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 
-English:
-theorem coeff_mul_of_degree_add
-  given: {f g : MvPolynomial σ R}
-  proof: coeff_mul_of_add_of_degree_le (le_of_eq rfl) (le_of_eq rfl)
-
-中文:
-定理 coeff_mul_of_degree_add
-  条件: {f g : 多元多项式 σ R}
-  证明: coeff_mul_of_add_of_degree_le (le_of_eq rfl) (le_of_eq rfl)
-
-Depends on / 依赖: coeff_mul_of_add_of_degree_le, le_of_eq
+--- 原说明 ---
+Multiplicativity of leading coefficients
 -/
 theorem coeff_mul_of_degree_add {f g : MvPolynomial σ R} :
     (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m.leadingCoeff g :=
   coeff_mul_of_add_of_degree_le (le_of_eq rfl) (le_of_eq rfl)
 
-/--
-theorem `degree_mul_of_mul_leadingCoeff_ne_zero` / 定理 `degree_mul_of_mul_leadingCoeff_ne_zero`
+/-- Monomial degree of product -/
+/-
+**MonomialOrder.degree_mul_of_mul_leadingCoeff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间
+ `MonomialOrder`。
+形式化陈述：degree_mul_of_mul_leadingCoeff_ne_zero {f g : MvPolynomial σ R} (hfg : m.l
+eadingCoeff f * m.leadingCoeff g != 0) : m.degree (f * g) = m.degree f + m.degre
+e g
+参数：hfg : m.leadingCoeff f * m.leadingCoeff g != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
 
-English:
-theorem degree_mul_of_mul_leadingCoeff_ne_zero
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  apply m.toSyn.injective
-  apply le_antisymm degree_mul_le
-  apply le_degree
-  rw [mem_support_iff]; rw [coeff_mul_of_degree_add]
-  exact hfg
-
-中文:
-定理 degree_mul_of_mul_leadingCoeff_ne_zero
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  apply m.toSyn.injective
-  apply le_antisymm degree_mul_le
-  apply le_degree
-  rw [mem_support_iff]; rw [coeff_mul_of_degree_add]
-  exact hfg
-
-Depends on / 依赖: coeff_mul_of_degree_add, degree_mul_le, injective, le_antisymm, le_degree, m.toSyn.injective, mem_support_iff
+--- 原说明 ---
+Monomial degree of product
 -/
 theorem degree_mul_of_mul_leadingCoeff_ne_zero {f g : MvPolynomial σ R}
-    (hfg : m.leadingCoeff f * m.leadingCoeff g != 0) :
+    (hfg : m.leadingCoeff f * m.leadingCoeff g ≠ 0) :
     m.degree (f * g) = m.degree f + m.degree g := by
   apply m.toSyn.injective
   apply le_antisymm degree_mul_le
   apply le_degree
-  rw [mem_support_iff]; rw [coeff_mul_of_degree_add]
+  rw [mem_support_iff, coeff_mul_of_degree_add]
   exact hfg
 
-/--
-theorem `leadingCoeff_mul_of_mul_leadingCoeff_ne_zero` / 定理 `leadingCoeff_mul_of_mul_leadingCoeff_ne_zero`
+/-- Multiplicativity of leading coefficients -/
+/-
+**MonomialOrder.leadingCoeff_mul_of_mul_leadingCoeff_ne_zero** 是 Mathlib 中的一个定理，
+位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_mul_of_mul_leadingCoeff_ne_zero {f g : MvPolynomial σ R} (hfg
+ : m.leadingCoeff f * m.leadingCoeff g != 0) : m.leadingCoeff (f * g) = m.leadin
+gCoeff f * m.leadingCoeff g
+参数：hfg : m.leadingCoeff f * m.leadingCoeff g != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
+· 使用定理 `MonomialOrder.degree_mul_of_mul_leadingCoeff_ne_zero`：degree_mul_of_mul_
+leadingCoeff_ne_zero {f g : MvPolynomial σ R} (hfg : m.leadingCoeff f * m.leadin
+gCoeff g != 0) : m.degree (f * g) = m.degr…
 
-English:
-theorem leadingCoeff_mul_of_mul_leadingCoeff_ne_zero
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  rw [leadingCoeff]; rw [← coeff_mul_of_degree_add]; rw [degree_mul_of_mul_leadingCoeff_ne_zero hfg]
-
-中文:
-定理 leadingCoeff_mul_of_mul_leadingCoeff_ne_zero
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  rw [leadingCoeff]; rw [← coeff_mul_of_degree_add]; rw [degree_mul_of_mul_leadingCoeff_ne_zero hfg]
-
-Depends on / 依赖: coeff_mul_of_degree_add, degree_mul_of_mul_leadingCoeff_ne_zero, leadingCoeff
+--- 原说明 ---
+Multiplicativity of leading coefficients
 -/
 theorem leadingCoeff_mul_of_mul_leadingCoeff_ne_zero {f g : MvPolynomial σ R}
-    (hfg : m.leadingCoeff f * m.leadingCoeff g != 0) :
+    (hfg : m.leadingCoeff f * m.leadingCoeff g ≠ 0) :
     m.leadingCoeff (f * g) = m.leadingCoeff f * m.leadingCoeff g := by
-  rw [leadingCoeff]; rw [← coeff_mul_of_degree_add]; rw [degree_mul_of_mul_leadingCoeff_ne_zero hfg]
-
-/--
-theorem `degree_mul_of_left_mem_nonZeroDivisors` / 定理 `degree_mul_of_left_mem_nonZeroDivisors`
-
-English:
-theorem degree_mul_of_left_mem_nonZeroDivisors
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  apply degree_mul_of_mul_leadingCoeff_ne_zero
-  apply not_imp_not.mpr (mem_nonZeroDivisors_iff.mp hf |>.1 _)
-  simp [hg]
-
-中文:
-定理 degree_mul_of_left_mem_nonZeroDivisors
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  apply degree_mul_of_mul_leadingCoeff_ne_zero
-  apply not_imp_not.mpr (mem_nonZeroDivisors_iff.mp hf |>.1 _)
-  simp [hg]
-
-Depends on / 依赖: degree_mul_of_mul_leadingCoeff_ne_zero, mem_nonZeroDivisors_iff, mem_nonZeroDivisors_iff.mp, not_imp_not, not_imp_not.mpr
+  rw [leadingCoeff, ← coeff_mul_of_degree_add, degree_mul_of_mul_leadingCoeff_ne_zero hfg]
+/-
+**MonomialOrder.degree_mul_of_left_mem_nonZeroDivisors** 是 Mathlib 中的一个定理，位于命名空间
+ `MonomialOrder`。
+形式化陈述：degree_mul_of_left_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf : m.le
+adingCoeff f in nonZeroDivisors _) (hg : g != 0) : m.degree (f * g) = m.degree f
+ + m.degree g
+参数：hf : m.leadingCoeff f in nonZeroDivisors _；hg : g != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_mul_of_mul_leadingCoeff_ne_zero`：degree_mul_of_mul_
+leadingCoeff_ne_zero {f g : MvPolynomial σ R} (hfg : m.leadingCoeff f * m.leadin
+gCoeff g != 0) : m.degree (f * g) = m.degr…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nonZeroDivisors_iff`：mem_nonZeroDivisors_iff : r in M₀⁰ ↔ (forall x,
+ r * x = 0 -> x = 0) ∧ forall x, x * r = 0 -> x = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem degree_mul_of_left_mem_nonZeroDivisors {f g : MvPolynomial σ R}
-    (hf : m.leadingCoeff f in nonZeroDivisors _) (hg : g != 0) :
+    (hf : m.leadingCoeff f ∈ nonZeroDivisors _) (hg : g ≠ 0) :
     m.degree (f * g) = m.degree f + m.degree g := by
   apply degree_mul_of_mul_leadingCoeff_ne_zero
   apply not_imp_not.mpr (mem_nonZeroDivisors_iff.mp hf |>.1 _)
   simp [hg]
-
-/--
-theorem `degree_mul_of_right_mem_nonZeroDivisors` / 定理 `degree_mul_of_right_mem_nonZeroDivisors`
-
-English:
-theorem degree_mul_of_right_mem_nonZeroDivisors
-  statement: {f g : MvPolynomial σ R}
-  proof: add_comm (m.degree f) (m.degree g) ▸ mul_comm f g ▸ degree_mul_of_left_mem_nonZeroDivisors hg hf
-
-中文:
-定理 degree_mul_of_right_mem_nonZeroDivisors
-  结论: {f g : 多元多项式 σ R}
-  证明: add_comm (m.degree f) (m.degree g) ▸ mul_comm f g ▸ degree_mul_of_left_mem_nonZeroDivisors hg hf
-
-Depends on / 依赖: add_comm, degree, degree_mul_of_left_mem_nonZeroDivisors, m.degree, mul_comm
+/-
+**MonomialOrder.degree_mul_of_right_mem_nonZeroDivisors** 是 Mathlib 中的一个定理，位于命名空
+间 `MonomialOrder`。
+形式化陈述：degree_mul_of_right_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf : f !
+= 0) (hg : m.leadingCoeff g in nonZeroDivisors _) : m.degree (f * g) = m.degree 
+f + m.degree g
+参数：hf : f != 0；hg : m.leadingCoeff g in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_mul_of_left_mem_nonZeroDivisors`：degree_mul_of_left
+_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf : m.leadingCoeff f in nonZeroD
+ivisors _) (hg : g != 0) : m.degree (f * g…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 theorem degree_mul_of_right_mem_nonZeroDivisors {f g : MvPolynomial σ R}
-    (hf : f != 0) (hg : m.leadingCoeff g in nonZeroDivisors _) :
+    (hf : f ≠ 0) (hg : m.leadingCoeff g ∈ nonZeroDivisors _) :
     m.degree (f * g) = m.degree f + m.degree g :=
   add_comm (m.degree f) (m.degree g) ▸ mul_comm f g ▸ degree_mul_of_left_mem_nonZeroDivisors hg hf
-
-/--
-theorem `leadingCoeff_mul_of_left_mem_nonZeroDivisors` / 定理 `leadingCoeff_mul_of_left_mem_nonZeroDivisors`
-
-English:
-theorem leadingCoeff_mul_of_left_mem_nonZeroDivisors
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  by_cases hg : g = 0
-  · simp [hg]
-  · simp only [leadingCoeff, degree_mul_of_left_mem_nonZeroDivisors hf hg, coeff_mul_of_degree_add]
-
-中文:
-定理 leadingCoeff_mul_of_left_mem_nonZeroDivisors
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  by_cases hg : g = 0
-  · simp [hg]
-  · simp only [leadingCoeff, degree_mul_of_left_mem_nonZeroDivisors hf hg, coeff_mul_of_degree_add]
-
-Depends on / 依赖: coeff_mul_of_degree_add, degree_mul_of_left_mem_nonZeroDivisors, leadingCoeff
+/-
+**MonomialOrder.leadingCoeff_mul_of_left_mem_nonZeroDivisors** 是 Mathlib 中的一个定理，
+位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_mul_of_left_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf 
+: m.leadingCoeff f in nonZeroDivisors _) : m.leadingCoeff (f * g) = m.leadingCoe
+ff f * m.leadingCoeff g
+参数：hf : m.leadingCoeff f in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_mul_of_left_mem_nonZeroDivisors`：degree_mul_of_left
+_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf : m.leadingCoeff f in nonZeroD
+ivisors _) (hg : g != 0) : m.degree (f * g…
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
 -/
 theorem leadingCoeff_mul_of_left_mem_nonZeroDivisors {f g : MvPolynomial σ R}
-    (hf : m.leadingCoeff f in nonZeroDivisors _) :
+    (hf : m.leadingCoeff f ∈ nonZeroDivisors _) :
     m.leadingCoeff (f * g) = m.leadingCoeff f * m.leadingCoeff g := by
   by_cases hg : g = 0
   · simp [hg]
   · simp only [leadingCoeff, degree_mul_of_left_mem_nonZeroDivisors hf hg, coeff_mul_of_degree_add]
-
-/--
-theorem `leadingCoeff_mul_of_right_mem_nonZeroDivisors` / 定理 `leadingCoeff_mul_of_right_mem_nonZeroDivisors`
-
-English:
-theorem leadingCoeff_mul_of_right_mem_nonZeroDivisors
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  by_cases hf : f = 0
-  · simp [hf]
-  · simp only [leadingCoeff, degree_mul_of_right_mem_nonZeroDivisors hf hg, coeff_mul_of_degree_add]
-
-中文:
-定理 leadingCoeff_mul_of_right_mem_nonZeroDivisors
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  by_cases hf : f = 0
-  · simp [hf]
-  · simp only [leadingCoeff, degree_mul_of_right_mem_nonZeroDivisors hf hg, coeff_mul_of_degree_add]
-
-Depends on / 依赖: coeff_mul_of_degree_add, degree_mul_of_right_mem_nonZeroDivisors, leadingCoeff
+/-
+**MonomialOrder.leadingCoeff_mul_of_right_mem_nonZeroDivisors** 是 Mathlib 中的一个定理
+，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_mul_of_right_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hg
+ : m.leadingCoeff g in nonZeroDivisors _) : m.leadingCoeff (f * g) = m.leadingCo
+eff f * m.leadingCoeff g
+参数：hg : m.leadingCoeff g in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MonomialOrder.degree_mul_of_right_mem_nonZeroDivisors`：degree_mul_of_rig
+ht_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf : f != 0) (hg : m.leadingCoe
+ff g in nonZeroDivisors _) : m.degree (f * …
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
 -/
 theorem leadingCoeff_mul_of_right_mem_nonZeroDivisors {f g : MvPolynomial σ R}
-    (hg : m.leadingCoeff g in nonZeroDivisors _) :
+    (hg : m.leadingCoeff g ∈ nonZeroDivisors _) :
     m.leadingCoeff (f * g) = m.leadingCoeff f * m.leadingCoeff g := by
   by_cases hf : f = 0
   · simp [hf]
   · simp only [leadingCoeff, degree_mul_of_right_mem_nonZeroDivisors hf hg, coeff_mul_of_degree_add]
 
-/--
-theorem `degree_mul_of_isRegular_left` / 定理 `degree_mul_of_isRegular_left`
+/-- Monomial degree of product -/
+/-
+**MonomialOrder.degree_mul_of_isRegular_left** 是 Mathlib 中的一个定理，位于命名空间 `Monomial
+Order`。
+形式化陈述：degree_mul_of_isRegular_left {f g : MvPolynomial σ R} (hf : IsRegular (m.l
+eadingCoeff f)) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree g
+参数：hf : IsRegular (m.leadingCoeff f)；hg : g != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_mul_of_mul_leadingCoeff_ne_zero`：degree_mul_of_mul_
+leadingCoeff_ne_zero {f g : MvPolynomial σ R} (hfg : m.leadingCoeff f * m.leadin
+gCoeff g != 0) : m.degree (f * g) = m.degr…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 
-English:
-theorem degree_mul_of_isRegular_left
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  apply degree_mul_of_mul_leadingCoeff_ne_zero
-  simp only [ne_eq, hf, IsRegular.left, IsLeftRegular.mul_left_eq_zero_iff,
-    leadingCoeff_eq_zero_iff]
-  exact hg
-
-中文:
-定理 degree_mul_of_isRegular_left
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  apply degree_mul_of_mul_leadingCoeff_ne_zero
-  simp only [ne_eq, hf, IsRegular.left, IsLeftRegular.mul_left_eq_zero_iff,
-    leadingCoeff_eq_zero_iff]
-  exact hg
-
-Depends on / 依赖: IsLeftRegular, IsLeftRegular.mul_left_eq_zero_iff, IsRegular, IsRegular.left, degree_mul_of_mul_leadingCoeff_ne_zero, leadingCoeff_eq_zero_iff, mul_left_eq_zero_iff, ne_eq
+--- 原说明 ---
+Monomial degree of product
 -/
 theorem degree_mul_of_isRegular_left {f g : MvPolynomial σ R}
-    (hf : IsRegular (m.leadingCoeff f)) (hg : g != 0) :
+    (hf : IsRegular (m.leadingCoeff f)) (hg : g ≠ 0) :
     m.degree (f * g) = m.degree f + m.degree g := by
   apply degree_mul_of_mul_leadingCoeff_ne_zero
   simp only [ne_eq, hf, IsRegular.left, IsLeftRegular.mul_left_eq_zero_iff,
     leadingCoeff_eq_zero_iff]
   exact hg
 
-/--
-theorem `leadingCoeff_mul_of_isRegular_left` / 定理 `leadingCoeff_mul_of_isRegular_left`
+/-- Multiplicativity of leading coefficients -/
+/-
+**MonomialOrder.leadingCoeff_mul_of_isRegular_left** 是 Mathlib 中的一个定理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：leadingCoeff_mul_of_isRegular_left {f g : MvPolynomial σ R} (hf : IsRegula
+r (m.leadingCoeff f)) : m.leadingCoeff (f * g) = m.leadingCoeff f * m.leadingCoe
+ff g
+参数：hf : IsRegular (m.leadingCoeff f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_mul_of_isRegular_left`：degree_mul_of_isRegular_left
+ {f g : MvPolynomial σ R} (hf : IsRegular (m.leadingCoeff f)) (hg : g != 0) : m.
+degree (f * g) = m.degree f + m.…
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
 
-English:
-theorem leadingCoeff_mul_of_isRegular_left
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  by_cases hg : g = 0
-  · simp [hg]
-  · simp only [leadingCoeff, degree_mul_of_isRegular_left hf hg, coeff_mul_of_degree_add]
-
-中文:
-定理 leadingCoeff_mul_of_isRegular_left
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  by_cases hg : g = 0
-  · simp [hg]
-  · simp only [leadingCoeff, degree_mul_of_isRegular_left hf hg, coeff_mul_of_degree_add]
-
-Depends on / 依赖: coeff_mul_of_degree_add, degree_mul_of_isRegular_left, leadingCoeff
+--- 原说明 ---
+Multiplicativity of leading coefficients
 -/
 theorem leadingCoeff_mul_of_isRegular_left {f g : MvPolynomial σ R}
     (hf : IsRegular (m.leadingCoeff f)) :
@@ -1759,48 +1716,64 @@ theorem leadingCoeff_mul_of_isRegular_left {f g : MvPolynomial σ R}
   · simp [hg]
   · simp only [leadingCoeff, degree_mul_of_isRegular_left hf hg, coeff_mul_of_degree_add]
 
-/--
-theorem `degree_mul_of_isRegular_right` / 定理 `degree_mul_of_isRegular_right`
+/-- Monomial degree of product -/
+/-
+**MonomialOrder.degree_mul_of_isRegular_right** 是 Mathlib 中的一个定理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：degree_mul_of_isRegular_right {f g : MvPolynomial σ R} (hf : f != 0) (hg :
+ IsRegular (m.leadingCoeff g)) : m.degree (f * g) = m.degree f + m.degree g
+参数：hf : f != 0；hg : IsRegular (m.leadingCoeff g)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MonomialOrder.degree_mul_of_isRegular_left`：degree_mul_of_isRegular_left
+ {f g : MvPolynomial σ R} (hf : IsRegular (m.leadingCoeff f)) (hg : g != 0) : m.
+degree (f * g) = m.degree f + m.…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 
-English:
-theorem degree_mul_of_isRegular_right
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  rw [mul_comm]; rw [m.degree_mul_of_isRegular_left hg hf]; rw [add_comm]
-
-中文:
-定理 degree_mul_of_isRegular_right
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  rw [mul_comm]; rw [m.degree_mul_of_isRegular_left hg hf]; rw [add_comm]
-
-Depends on / 依赖: add_comm, degree_mul_of_isRegular_left, m.degree_mul_of_isRegular_left, mul_comm
+--- 原说明 ---
+Monomial degree of product
 -/
 theorem degree_mul_of_isRegular_right {f g : MvPolynomial σ R}
-    (hf : f != 0) (hg : IsRegular (m.leadingCoeff g)) :
+    (hf : f ≠ 0) (hg : IsRegular (m.leadingCoeff g)) :
     m.degree (f * g) = m.degree f + m.degree g := by
-  rw [mul_comm]; rw [m.degree_mul_of_isRegular_left hg hf]; rw [add_comm]
+  rw [mul_comm, m.degree_mul_of_isRegular_left hg hf, add_comm]
 
-/--
-theorem `leadingCoeff_mul_of_isRegular_right` / 定理 `leadingCoeff_mul_of_isRegular_right`
+/-- Multiplicativity of leading coefficients -/
+/-
+**MonomialOrder.leadingCoeff_mul_of_isRegular_right** 是 Mathlib 中的一个定理，位于命名空间 `M
+onomialOrder`。
+形式化陈述：leadingCoeff_mul_of_isRegular_right {f g : MvPolynomial σ R} (hg : IsRegul
+ar (m.leadingCoeff g)) : m.leadingCoeff (f * g) = m.leadingCoeff f * m.leadingCo
+eff g
+参数：hg : IsRegular (m.leadingCoeff g)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MonomialOrder.degree_mul_of_isRegular_right`：degree_mul_of_isRegular_rig
+ht {f g : MvPolynomial σ R} (hf : f != 0) (hg : IsRegular (m.leadingCoeff g)) : 
+m.degree (f * g) = m.degree f + m…
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
 
-English:
-theorem leadingCoeff_mul_of_isRegular_right
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  by_cases hf : f = 0
-  · simp [hf]
-  · simp only [leadingCoeff, degree_mul_of_isRegular_right hf hg, coeff_mul_of_degree_add]
-
-中文:
-定理 leadingCoeff_mul_of_isRegular_right
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  by_cases hf : f = 0
-  · simp [hf]
-  · simp only [leadingCoeff, degree_mul_of_isRegular_right hf hg, coeff_mul_of_degree_add]
-
-Depends on / 依赖: coeff_mul_of_degree_add, degree_mul_of_isRegular_right, leadingCoeff
+--- 原说明 ---
+Multiplicativity of leading coefficients
 -/
 theorem leadingCoeff_mul_of_isRegular_right {f g : MvPolynomial σ R}
     (hg : IsRegular (m.leadingCoeff g)) :
@@ -1808,126 +1781,178 @@ theorem leadingCoeff_mul_of_isRegular_right {f g : MvPolynomial σ R}
   by_cases hf : f = 0
   · simp [hf]
   · simp only [leadingCoeff, degree_mul_of_isRegular_right hf hg, coeff_mul_of_degree_add]
-
-/--
-theorem `Monic.mul` / 定理 `Monic.mul`
-
-English:
-theorem Monic.mul
-  given: {f g : MvPolynomial σ R} (hf : m.Monic f) (hg : m.Monic g)
-  proof: by
-  nontriviality R
-  suffices m.leadingCoeff f * m.leadingCoeff g = 1 by
-    rw [Monic]; rw [MonomialOrder.leadingCoeff]; rw [degree_mul_of_mul_leadingCoeff_ne_zero]; rw [coeff_mul_of_degree_add]; rw [this]
-    rw [this]
-    exact one_ne_zero
-  rw [hf.leadingCoeff_eq_one]; rw [hg.leadingCoeff_eq_one]; rw [one_mul]
-
-中文:
-定理 Monic.mul
-  条件: {f g : 多元多项式 σ R} (hf : m.Monic f) (hg : m.Monic g)
-  证明: by
-  nontriviality R
-  suffices m.leadingCoeff f * m.leadingCoeff g = 1 by
-    rw [Monic]; rw [MonomialOrder.leadingCoeff]; rw [degree_mul_of_mul_leadingCoeff_ne_zero]; rw [coeff_mul_of_degree_add]; rw [this]
-    rw [this]
-    exact one_ne_zero
-  rw [hf.leadingCoeff_eq_one]; rw [hg.leadingCoeff_eq_one]; rw [one_mul]
+/-
+**MonomialOrder.Monic.mul** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder.Monic`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {f g : MvPolynomial σ R},   m.Monic f → m.Monic g → m.Monic (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.Monic.leadingCoeff_eq_one`：∀ {σ : Type u_1} {m : MonomialO
+rder σ} {R : Type u_2} [inst : CommSemiring R] {f : MvPolynomial σ R},   m.Monic
+ f → m.leadingCoeff f = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MonomialOrder.Monic.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {R : Ty
+pe u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.Monic f = (m.leading
+Coeff f = 1)
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
+· 使用定理 `MonomialOrder.degree_mul_of_mul_leadingCoeff_ne_zero`：degree_mul_of_mul_
+leadingCoeff_ne_zero {f g : MvPolynomial σ R} (hfg : m.leadingCoeff f * m.leadin
+gCoeff g != 0) : m.degree (f * g) = m.degr…
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
 -/
 theorem Monic.mul {f g : MvPolynomial σ R} (hf : m.Monic f) (hg : m.Monic g) :
     m.Monic (f * g) := by
   nontriviality R
   suffices m.leadingCoeff f * m.leadingCoeff g = 1 by
-    rw [Monic]; rw [MonomialOrder.leadingCoeff]; rw [degree_mul_of_mul_leadingCoeff_ne_zero]; rw [coeff_mul_of_degree_add]; rw [this]
+    rw [Monic, MonomialOrder.leadingCoeff,
+      degree_mul_of_mul_leadingCoeff_ne_zero, coeff_mul_of_degree_add, this]
     rw [this]
     exact one_ne_zero
-  rw [hf.leadingCoeff_eq_one]; rw [hg.leadingCoeff_eq_one]; rw [one_mul]
+  rw [hf.leadingCoeff_eq_one, hg.leadingCoeff_eq_one, one_mul]
 
-/--
-theorem `degree_mul` / 定理 `degree_mul`
+/-- Monomial degree of product -/
+/-
+**MonomialOrder.degree_mul** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_mul [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f != 0) (hg :
+ g != 0) : m.degree (f * g) = m.degree f + m.degree g
+参数：hf : f != 0；hg : g != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_mul_of_mul_leadingCoeff_ne_zero`：degree_mul_of_mul_
+leadingCoeff_ne_zero {f g : MvPolynomial σ R} (hfg : m.leadingCoeff f * m.leadin
+gCoeff g != 0) : m.degree (f * g) = m.degr…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 
-English:
-theorem degree_mul
-  given: [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f != 0) (hg : g != 0)
-  proof: by
-  apply degree_mul_of_mul_leadingCoeff_ne_zero
-  simp only [ne_eq, mul_eq_zero, leadingCoeff_eq_zero_iff, not_or]
-  tauto
-
-中文:
-定理 degree_mul
-  条件: [无零因子 R] {f g : 多元多项式 σ R} (hf : f != 0) (hg : g != 0)
-  证明: by
-  apply degree_mul_of_mul_leadingCoeff_ne_zero
-  simp only [ne_eq, mul_eq_zero, leadingCoeff_eq_zero_iff, not_or]
-  tauto
-
-Depends on / 依赖: degree_mul_of_mul_leadingCoeff_ne_zero, leadingCoeff_eq_zero_iff, mul_eq_zero, ne_eq, not_or
+--- 原说明 ---
+Monomial degree of product
 -/
-theorem degree_mul [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f != 0) (hg : g != 0) :
+theorem degree_mul [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f ≠ 0) (hg : g ≠ 0) :
     m.degree (f * g) = m.degree f + m.degree g := by
   apply degree_mul_of_mul_leadingCoeff_ne_zero
   simp only [ne_eq, mul_eq_zero, leadingCoeff_eq_zero_iff, not_or]
   tauto
 
-/--
-theorem `leadingCoeff_mul` / 定理 `leadingCoeff_mul`
+/-- Multiplicativity of leading coefficients -/
+/-
+**MonomialOrder.leadingCoeff_mul** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] [NoZeroDivisors R]   {f g : MvPolynomial σ R}, m.leadingCoeff (f * g) = m.le
+adingCoeff f * m.leadingCoeff g
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
 
-English:
-theorem leadingCoeff_mul
-  given: [NoZeroDivisors R] {f g : MvPolynomial σ R}
-  proof: by
-  by_cases! +distrib h : f = 0 ∨ g = 0
-  · cases h <;> simp [*]
-  obtain ⟨hf, hg⟩ := h
-  rw [leadingCoeff]; rw [degree_mul hf hg]; rw [← coeff_mul_of_degree_add]
-
-中文:
-定理 leadingCoeff_mul
-  条件: [无零因子 R] {f g : 多元多项式 σ R}
-  证明: by
-  by_cases! +distrib h : f = 0 ∨ g = 0
-  · cases h <;> simp [*]
-  obtain ⟨hf, hg⟩ := h
-  rw [leadingCoeff]; rw [degree_mul hf hg]; rw [← coeff_mul_of_degree_add]
+--- 原说明 ---
+Multiplicativity of leading coefficients
 -/
 @[simp] theorem leadingCoeff_mul [NoZeroDivisors R] {f g : MvPolynomial σ R} :
     m.leadingCoeff (f * g) = m.leadingCoeff f * m.leadingCoeff g := by
   by_cases! +distrib h : f = 0 ∨ g = 0
   · cases h <;> simp [*]
   obtain ⟨hf, hg⟩ := h
-  rw [leadingCoeff]; rw [degree_mul hf hg]; rw [← coeff_mul_of_degree_add]
+  rw [leadingCoeff, degree_mul hf hg, ← coeff_mul_of_degree_add]
 
-/--
-theorem `degree_pow_le` / 定理 `degree_pow_le`
+/-- Monomial degree of powers -/
+/-
+**MonomialOrder.degree_pow_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_pow_le {f : MvPolynomial σ R} (n : Nat) : m.degree (f ^ n) ≼[m] n •
+ (m.degree f)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `MonomialOrder.degree_one`：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Ty
+pe u_2} [inst : CommSemiring R], m.degree 1 = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `MonomialOrder.isOrderedAddMonoid_syn`：∀ {σ : Type u_1} (self : MonomialO
+rder σ), IsOrderedAddMonoid self.syn
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
 
-English:
-theorem degree_pow_le
-  given: {f : MvPolynomial σ R} (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp [m.degree_one]
-  | succ n hrec =>
-      simp only [pow_add, pow_one, add_smul, one_smul]
-      apply le_trans m.degree_mul_le
-      simp only [map_add, add_le_add_iff_right]
-      exact hrec
-
-中文:
-定理 degree_pow_le
-  条件: {f : 多元多项式 σ R} (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp [m.degree_one]
-  | succ n hrec =>
-      simp only [pow_add, pow_one, add_smul, one_smul]
-      apply le_trans m.degree_mul_le
-      simp only [map_add, add_le_add_iff_right]
-      exact hrec
-
-Depends on / 依赖: add_le_add_iff_right, add_smul, degree_mul_le, degree_one, le_trans, m.degree_mul_le, m.degree_one, map_add, one_smul, pow_add, pow_one
+--- 原说明 ---
+Monomial degree of powers
 -/
-theorem degree_pow_le {f : MvPolynomial σ R} (n : Nat) :
+theorem degree_pow_le {f : MvPolynomial σ R} (n : ℕ) :
     m.degree (f ^ n) ≼[m] n • (m.degree f) := by
   induction n with
   | zero => simp [m.degree_one]
@@ -1936,158 +1961,171 @@ theorem degree_pow_le {f : MvPolynomial σ R} (n : Nat) :
       apply le_trans m.degree_mul_le
       simp only [map_add, add_le_add_iff_right]
       exact hrec
-
-/--
-theorem `coeff_pow_nsmul_degree` / 定理 `coeff_pow_nsmul_degree`
-
-English:
-theorem coeff_pow_nsmul_degree
-  given: (f : MvPolynomial σ R) (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n hrec =>
-    simp only [add_smul, one_smul, pow_add, pow_one]
-    rw [m.coeff_mul_of_add_of_degree_le (m.degree_pow_le _) le_rfl]; rw [hrec]; rw [leadingCoeff]
-
-中文:
-定理 coeff_pow_nsmul_degree
-  条件: (f : 多元多项式 σ R) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n hrec =>
-    simp only [add_smul, one_smul, pow_add, pow_one]
-    rw [m.coeff_mul_of_add_of_degree_le (m.degree_pow_le _) le_rfl]; rw [hrec]; rw [leadingCoeff]
-
-Depends on / 依赖: add_smul, coeff_mul_of_add_of_degree_le, degree_pow_le, le_rfl, leadingCoeff, m.coeff_mul_of_add_of_degree_le, m.degree_pow_le, one_smul, pow_add, pow_one
+/-
+**MonomialOrder.coeff_pow_nsmul_degree** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：coeff_pow_nsmul_degree (f : MvPolynomial σ R) (n : Nat) : (f ^ n).coeff (n
+ • m.degree f) = m.leadingCoeff f ^ n
+参数：f : MvPolynomial σ R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `MvPolynomial.coeff_zero_one`：coeff_zero_one : coeff 0 (1 : MvPolynomial 
+σ R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `MonomialOrder.coeff_mul_of_add_of_degree_le`：coeff_mul_of_add_of_degree_
+le {f g : MvPolynomial σ R} {a b : σ ->₀ Nat} (ha : m.degree f ≼[m] a) (hb : m.d
+egree g ≼[m] b) : (f * g).coeff (…
+· 使用定理 `MonomialOrder.degree_pow_le`：degree_pow_le {f : MvPolynomial σ R} (n : N
+at) : m.degree (f ^ n) ≼[m] n • (m.degree f)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
 -/
-theorem coeff_pow_nsmul_degree (f : MvPolynomial σ R) (n : Nat) :
+theorem coeff_pow_nsmul_degree (f : MvPolynomial σ R) (n : ℕ) :
     (f ^ n).coeff (n • m.degree f) = m.leadingCoeff f ^ n := by
   induction n with
   | zero => simp
   | succ n hrec =>
     simp only [add_smul, one_smul, pow_add, pow_one]
-    rw [m.coeff_mul_of_add_of_degree_le (m.degree_pow_le _) le_rfl]; rw [hrec]; rw [leadingCoeff]
+    rw [m.coeff_mul_of_add_of_degree_le (m.degree_pow_le _) le_rfl, hrec, leadingCoeff]
 
-/--
-theorem `degree_pow_of_pow_leadingCoeff_ne_zero` / 定理 `degree_pow_of_pow_leadingCoeff_ne_zero`
+/-- Monomial degree of powers -/
+/-
+**MonomialOrder.degree_pow_of_pow_leadingCoeff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间
+ `MonomialOrder`。
+形式化陈述：degree_pow_of_pow_leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : Nat} (h
+f : m.leadingCoeff f ^ n != 0) : m.degree (f ^ n) = n • m.degree f
+参数：hf : m.leadingCoeff f ^ n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MonomialOrder.degree_pow_le`：degree_pow_le {f : MvPolynomial σ R} (n : N
+at) : m.degree (f ^ n) ≼[m] n • (m.degree f)
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MonomialOrder.coeff_pow_nsmul_degree`：coeff_pow_nsmul_degree (f : MvPoly
+nomial σ R) (n : Nat) : (f ^ n).coeff (n • m.degree f) = m.leadingCoeff f ^ n
 
-English:
-theorem degree_pow_of_pow_leadingCoeff_ne_zero
-  statement: {f : MvPolynomial σ R} {n : Nat}
-  proof: by
-  apply m.toSyn.injective
-  apply le_antisymm (m.degree_pow_le n)
-  apply le_degree
-  rw [mem_support_iff]; rw [coeff_pow_nsmul_degree]
-  exact hf
-
-中文:
-定理 degree_pow_of_pow_leadingCoeff_ne_zero
-  结论: {f : 多元多项式 σ R} {n : 自然数}
-  证明: by
-  apply m.toSyn.injective
-  apply le_antisymm (m.degree_pow_le n)
-  apply le_degree
-  rw [mem_support_iff]; rw [coeff_pow_nsmul_degree]
-  exact hf
-
-Depends on / 依赖: coeff_pow_nsmul_degree, degree_pow_le, injective, le_antisymm, le_degree, m.degree_pow_le, m.toSyn.injective, mem_support_iff
+--- 原说明 ---
+Monomial degree of powers
 -/
-theorem degree_pow_of_pow_leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : Nat}
-    (hf : m.leadingCoeff f ^ n != 0) :
+theorem degree_pow_of_pow_leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : ℕ}
+    (hf : m.leadingCoeff f ^ n ≠ 0) :
     m.degree (f ^ n) = n • m.degree f := by
   apply m.toSyn.injective
   apply le_antisymm (m.degree_pow_le n)
   apply le_degree
-  rw [mem_support_iff]; rw [coeff_pow_nsmul_degree]
+  rw [mem_support_iff, coeff_pow_nsmul_degree]
   exact hf
 
-/--
-theorem `leadingCoeff_pow_of_pow_leadingCoeff_ne_zero` / 定理 `leadingCoeff_pow_of_pow_leadingCoeff_ne_zero`
+/-- Leading coefficient of powers -/
+/-
+**MonomialOrder.leadingCoeff_pow_of_pow_leadingCoeff_ne_zero** 是 Mathlib 中的一个定理，
+位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_pow_of_pow_leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : N
+at} (hf : m.leadingCoeff f ^ n != 0) : m.leadingCoeff (f ^ n) = m.leadingCoeff f
+ ^ n
+参数：hf : m.leadingCoeff f ^ n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
+· 使用定理 `MonomialOrder.degree_pow_of_pow_leadingCoeff_ne_zero`：degree_pow_of_pow_
+leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : Nat} (hf : m.leadingCoeff f ^ n
+ != 0) : m.degree (f ^ n) = n • m.degree f
+· 使用定理 `MonomialOrder.coeff_pow_nsmul_degree`：coeff_pow_nsmul_degree (f : MvPoly
+nomial σ R) (n : Nat) : (f ^ n).coeff (n • m.degree f) = m.leadingCoeff f ^ n
 
-English:
-theorem leadingCoeff_pow_of_pow_leadingCoeff_ne_zero
-  statement: {f : MvPolynomial σ R} {n : Nat}
-  proof: by
-  rw [leadingCoeff]; rw [degree_pow_of_pow_leadingCoeff_ne_zero hf]; rw [coeff_pow_nsmul_degree]
-
-中文:
-定理 leadingCoeff_pow_of_pow_leadingCoeff_ne_zero
-  结论: {f : 多元多项式 σ R} {n : 自然数}
-  证明: by
-  rw [leadingCoeff]; rw [degree_pow_of_pow_leadingCoeff_ne_zero hf]; rw [coeff_pow_nsmul_degree]
-
-Depends on / 依赖: coeff_pow_nsmul_degree, degree_pow_of_pow_leadingCoeff_ne_zero, leadingCoeff
+--- 原说明 ---
+Leading coefficient of powers
 -/
-theorem leadingCoeff_pow_of_pow_leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : Nat}
-    (hf : m.leadingCoeff f ^ n != 0) :
+theorem leadingCoeff_pow_of_pow_leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : ℕ}
+    (hf : m.leadingCoeff f ^ n ≠ 0) :
     m.leadingCoeff (f ^ n) = m.leadingCoeff f ^ n := by
-  rw [leadingCoeff]; rw [degree_pow_of_pow_leadingCoeff_ne_zero hf]; rw [coeff_pow_nsmul_degree]
-
-/--
-theorem `Monic.pow` / 定理 `Monic.pow`
-
-English:
-theorem Monic.pow
-  given: {f : MvPolynomial σ R} {n : Nat} (hf : m.Monic f)
-  proof: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_pow_of_pow_leadingCoeff_ne_zero]; rw [hf.leadingCoeff_eq_one]; rw [one_pow]
-  rw [hf.leadingCoeff_eq_one]; rw [one_pow]
-  exact one_ne_zero
-
-中文:
-定理 Monic.pow
-  条件: {f : 多元多项式 σ R} {n : 自然数} (hf : m.Monic f)
-  证明: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_pow_of_pow_leadingCoeff_ne_zero]; rw [hf.leadingCoeff_eq_one]; rw [one_pow]
-  rw [hf.leadingCoeff_eq_one]; rw [one_pow]
-  exact one_ne_zero
+  rw [leadingCoeff, degree_pow_of_pow_leadingCoeff_ne_zero hf, coeff_pow_nsmul_degree]
+/-
+**MonomialOrder.Monic.pow** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder.Monic`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {f : MvPolynomial σ R} {n : ℕ},   m.Monic f → m.Monic (f ^ n)
+参数：f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.Monic.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {R : Ty
+pe u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.Monic f = (m.leading
+Coeff f = 1)
+· 使用定理 `MonomialOrder.leadingCoeff_pow_of_pow_leadingCoeff_ne_zero`：leadingCoeff
+_pow_of_pow_leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : Nat} (hf : m.leadin
+gCoeff f ^ n != 0) : m.leadingCoeff (f ^ n) = m.…
+· 使用定理 `MonomialOrder.Monic.leadingCoeff_eq_one`：∀ {σ : Type u_1} {m : MonomialO
+rder σ} {R : Type u_2} [inst : CommSemiring R] {f : MvPolynomial σ R},   m.Monic
+ f → m.leadingCoeff f = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
 -/
-protected theorem Monic.pow {f : MvPolynomial σ R} {n : Nat} (hf : m.Monic f) :
+protected theorem Monic.pow {f : MvPolynomial σ R} {n : ℕ} (hf : m.Monic f) :
     m.Monic (f ^ n) := by
   nontriviality R
-  rw [Monic]; rw [leadingCoeff_pow_of_pow_leadingCoeff_ne_zero]; rw [hf.leadingCoeff_eq_one]; rw [one_pow]
-  rw [hf.leadingCoeff_eq_one]; rw [one_pow]
+  rw [Monic, leadingCoeff_pow_of_pow_leadingCoeff_ne_zero, hf.leadingCoeff_eq_one, one_pow]
+  rw [hf.leadingCoeff_eq_one, one_pow]
   exact one_ne_zero
 
-/--
-theorem `degree_pow` / 定理 `degree_pow`
+/-- Monomial degree of powers (in a reduced ring) -/
+/-
+**MonomialOrder.degree_pow** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_pow [IsReduced R] (f : MvPolynomial σ R) (n : Nat) : m.degree (f ^ 
+n) = n • m.degree f
+参数：f : MvPolynomial σ R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `MonomialOrder.degree_one`：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Ty
+pe u_2} [inst : CommSemiring R], m.degree 1 = 0
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `MonomialOrder.degree_pow_of_pow_leadingCoeff_ne_zero`：degree_pow_of_pow_
+leadingCoeff_ne_zero {f : MvPolynomial σ R} {n : Nat} (hf : m.leadingCoeff f ^ n
+ != 0) : m.degree (f ^ n) = n • m.degree f
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `MonomialOrder.leadingCoeff_ne_zero_iff`：leadingCoeff_ne_zero_iff {f : Mv
+Polynomial σ R} : m.leadingCoeff f != 0 ↔ f != 0
 
-English:
-theorem degree_pow
-  given: [IsReduced R] (f : MvPolynomial σ R) (n : Nat)
-  proof: by
-  by_cases hf : f = 0
-  · rw [hf, degree_zero, smul_zero]
-    by_cases hn : n = 0
-    · rw [hn, pow_zero, degree_one]
-    · rw [zero_pow hn, degree_zero]
-  apply degree_pow_of_pow_leadingCoeff_ne_zero
-  apply pow_ne_zero
-  rw [leadingCoeff_ne_zero_iff]
-  exact hf
-
-中文:
-定理 degree_pow
-  条件: [是既约 R] (f : 多元多项式 σ R) (n : 自然数)
-  证明: by
-  by_cases hf : f = 0
-  · rw [hf, degree_zero, smul_zero]
-    by_cases hn : n = 0
-    · rw [hn, pow_zero, degree_one]
-    · rw [zero_pow hn, degree_zero]
-  apply degree_pow_of_pow_leadingCoeff_ne_zero
-  apply pow_ne_zero
-  rw [leadingCoeff_ne_zero_iff]
-  exact hf
-
-Depends on / 依赖: degree_one, degree_pow_of_pow_leadingCoeff_ne_zero, degree_zero, leadingCoeff_ne_zero_iff, pow_ne_zero, pow_zero, smul_zero, zero_pow
+--- 原说明 ---
+Monomial degree of powers (in a reduced ring)
 -/
-theorem degree_pow [IsReduced R] (f : MvPolynomial σ R) (n : Nat) :
+theorem degree_pow [IsReduced R] (f : MvPolynomial σ R) (n : ℕ) :
     m.degree (f ^ n) = n • m.degree f := by
   by_cases hf : f = 0
   · rw [hf, degree_zero, smul_zero]
@@ -2099,86 +2137,106 @@ theorem degree_pow [IsReduced R] (f : MvPolynomial σ R) (n : Nat) :
   rw [leadingCoeff_ne_zero_iff]
   exact hf
 
-/--
-theorem `leadingCoeff_pow` / 定理 `leadingCoeff_pow`
+/-- Leading coefficient of powers (in a reduced ring) -/
+/-
+**MonomialOrder.leadingCoeff_pow** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_pow [IsReduced R] (f : MvPolynomial σ R) (n : Nat) : m.leadin
+gCoeff (f ^ n) = m.leadingCoeff f ^ n
+参数：f : MvPolynomial σ R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingCoeff.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) 
+{R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingCoeff 
+f = MvPolynomial.coef…
+· 使用定理 `MonomialOrder.degree_pow`：degree_pow [IsReduced R] (f : MvPolynomial σ R
+) (n : Nat) : m.degree (f ^ n) = n • m.degree f
+· 使用定理 `MonomialOrder.coeff_pow_nsmul_degree`：coeff_pow_nsmul_degree (f : MvPoly
+nomial σ R) (n : Nat) : (f ^ n).coeff (n • m.degree f) = m.leadingCoeff f ^ n
 
-English:
-theorem leadingCoeff_pow
-  given: [IsReduced R] (f : MvPolynomial σ R) (n : Nat)
-  proof: by
-  rw [leadingCoeff]; rw [degree_pow]; rw [coeff_pow_nsmul_degree]
-
-中文:
-定理 leadingCoeff_pow
-  条件: [是既约 R] (f : 多元多项式 σ R) (n : 自然数)
-  证明: by
-  rw [leadingCoeff]; rw [degree_pow]; rw [coeff_pow_nsmul_degree]
-
-Depends on / 依赖: coeff_pow_nsmul_degree, degree_pow, leadingCoeff
+--- 原说明 ---
+Leading coefficient of powers (in a reduced ring)
 -/
-theorem leadingCoeff_pow [IsReduced R] (f : MvPolynomial σ R) (n : Nat) :
+theorem leadingCoeff_pow [IsReduced R] (f : MvPolynomial σ R) (n : ℕ) :
     m.leadingCoeff (f ^ n) = m.leadingCoeff f ^ n := by
-  rw [leadingCoeff]; rw [degree_pow]; rw [coeff_pow_nsmul_degree]
-
-/--
-theorem `degree_smul_le` / 定理 `degree_smul_le`
-
-English:
-theorem degree_smul_le
-  given: {r : R} {f : MvPolynomial σ R}
-  proof: by
-  rw [smul_eq_C_mul]
-  apply le_of_le_of_eq degree_mul_le
-  simp
-
-中文:
-定理 degree_smul_le
-  条件: {r : R} {f : 多元多项式 σ R}
-  证明: by
-  rw [smul_eq_C_mul]
-  apply le_of_le_of_eq degree_mul_le
-  simp
-
-Depends on / 依赖: degree_mul_le, le_of_le_of_eq, smul_eq_C_mul
+  rw [leadingCoeff, degree_pow, coeff_pow_nsmul_degree]
+/-
+**MonomialOrder.degree_smul_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_smul_le {r : R} {f : MvPolynomial σ R} : m.degree (r • f) ≼[m] m.de
+gree f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.smul_eq_C_mul`：smul_eq_C_mul (p : MvPolynomial σ R) (a : R)
+ : a • p = C a * p
+· 使用定理 `le_of_le_of_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem degree_smul_le {r : R} {f : MvPolynomial σ R} :
     m.degree (r • f) ≼[m] m.degree f := by
   rw [smul_eq_C_mul]
   apply le_of_le_of_eq degree_mul_le
   simp
-
-/--
-theorem `degree_smul_of_mem_nonZeroDivisors` / 定理 `degree_smul_of_mem_nonZeroDivisors`
-
-English:
-theorem degree_smul_of_mem_nonZeroDivisors
-  statement: {r : R} (hr : r in nonZeroDivisors _)
-  proof: by
-  by_cases hf : f = 0
-  · simp [hf]
-  apply m.toSyn.injective
-  apply le_antisymm degree_smul_le
-  apply le_degree
-  simp only [mem_support_iff, smul_eq_C_mul]
-  rw [← zero_add (degree m f)]; rw [← degree_C r]; rw [coeff_mul_of_degree_add]
-  simp [not_imp_not.mpr ((mem_nonZeroDivisors_iff.mp hr).1 _) <| m.leadingCoeff_ne_zero_iff.mpr hf]
-
-中文:
-定理 degree_smul_of_mem_nonZeroDivisors
-  结论: {r : R} (hr : r in nonZeroDivisors _)
-  证明: by
-  by_cases hf : f = 0
-  · simp [hf]
-  apply m.toSyn.injective
-  apply le_antisymm degree_smul_le
-  apply le_degree
-  simp only [mem_support_iff, smul_eq_C_mul]
-  rw [← zero_add (degree m f)]; rw [← degree_C r]; rw [coeff_mul_of_degree_add]
-  simp [not_imp_not.mpr ((mem_nonZeroDivisors_iff.mp hr).1 _) <| m.leadingCoeff_ne_zero_iff.mpr hf]
-
-Depends on / 依赖: coeff_mul_of_degree_add, degree, degree_C, degree_smul_le, injective, le_antisymm, le_degree, leadingCoeff_ne_zero_iff, m.leadingCoeff_ne_zero_iff.mpr, m.toSyn.injective, mem_nonZeroDivisors_iff, mem_nonZeroDivisors_iff.mp, mem_support_iff, not_imp_not, not_imp_not.mpr, smul_eq_C_mul, zero_add
+/-
+**MonomialOrder.degree_smul_of_mem_nonZeroDivisors** 是 Mathlib 中的一个定理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：degree_smul_of_mem_nonZeroDivisors {r : R} (hr : r in nonZeroDivisors _) {
+f : MvPolynomial σ R} : m.degree (r • f) = m.degree f
+参数：hr : r in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MonomialOrder.degree_smul_le`：degree_smul_le {r : R} {f : MvPolynomial σ
+ R} : m.degree (r • f) ≼[m] m.degree f
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.smul_eq_C_mul`：smul_eq_C_mul (p : MvPolynomial σ R) (a : R)
+ : a • p = C a * p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
+· 使用定理 `MonomialOrder.coeff_mul_of_degree_add`：coeff_mul_of_degree_add {f g : Mv
+Polynomial σ R} : (f * g).coeff (m.degree f + m.degree g) = m.leadingCoeff f * m
+.leadingCoeff g
+· 使用定理 `MonomialOrder.leadingCoeff_C`：leadingCoeff_C (c : R) : m.leadingCoeff (C
+ c) = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nonZeroDivisors_iff`：mem_nonZeroDivisors_iff : r in M₀⁰ ↔ (forall x,
+ r * x = 0 -> x = 0) ∧ forall x, x * r = 0 -> x = 0
+· 使用定理 `MonomialOrder.leadingCoeff_ne_zero_iff`：leadingCoeff_ne_zero_iff {f : Mv
+Polynomial σ R} : m.leadingCoeff f != 0 ↔ f != 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem degree_smul_of_mem_nonZeroDivisors {r : R} (hr : r in nonZeroDivisors _)
+theorem degree_smul_of_mem_nonZeroDivisors {r : R} (hr : r ∈ nonZeroDivisors _)
     {f : MvPolynomial σ R} :
     m.degree (r • f) = m.degree f := by
   by_cases hf : f = 0
@@ -2187,104 +2245,128 @@ theorem degree_smul_of_mem_nonZeroDivisors {r : R} (hr : r in nonZeroDivisors _)
   apply le_antisymm degree_smul_le
   apply le_degree
   simp only [mem_support_iff, smul_eq_C_mul]
-  rw [← zero_add (degree m f)]; rw [← degree_C r]; rw [coeff_mul_of_degree_add]
+  rw [← zero_add (degree m f), ← degree_C r, coeff_mul_of_degree_add]
   simp [not_imp_not.mpr ((mem_nonZeroDivisors_iff.mp hr).1 _) <| m.leadingCoeff_ne_zero_iff.mpr hf]
-
-/--
-theorem `degree_smul_of_isRegular` / 定理 `degree_smul_of_isRegular`
-
-English:
-theorem degree_smul_of_isRegular
-  given: {r : R} (hr : IsRegular r) {f : MvPolynomial σ R}
-  proof: m.degree_smul_of_mem_nonZeroDivisors hr.mem_nonZeroDivisors
-
-中文:
-定理 degree_smul_of_isRegular
-  条件: {r : R} (hr : 是正则 r) {f : 多元多项式 σ R}
-  证明: m.degree_smul_of_mem_nonZeroDivisors hr.mem_nonZeroDivisors
-
-Depends on / 依赖: degree_smul_of_mem_nonZeroDivisors, hr.mem_nonZeroDivisors, m.degree_smul_of_mem_nonZeroDivisors, mem_nonZeroDivisors
+/-
+**MonomialOrder.degree_smul_of_isRegular** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：degree_smul_of_isRegular {r : R} (hr : IsRegular r) {f : MvPolynomial σ R}
+ : m.degree (r • f) = m.degree f
+参数：hr : IsRegular r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_smul_of_mem_nonZeroDivisors`：degree_smul_of_mem_non
+ZeroDivisors {r : R} (hr : r in nonZeroDivisors _) {f : MvPolynomial σ R} : m.de
+gree (r • f) = m.degree f
+· 使用引理 `IsRegular.mem_nonZeroDivisors`：IsRegular.mem_nonZeroDivisors (h : IsRegu
+lar r) : r in M₀⁰
 -/
 theorem degree_smul_of_isRegular {r : R} (hr : IsRegular r) {f : MvPolynomial σ R} :
     m.degree (r • f) = m.degree f :=
   m.degree_smul_of_mem_nonZeroDivisors hr.mem_nonZeroDivisors
-
-/--
-theorem `degree_prod_le` / 定理 `degree_prod_le`
-
-English:
-theorem degree_prod_le
-  given: {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι}
-  proof: by
-  classical
-  induction s using Finset.induction_on with
-  | empty =>
-    simp only [Finset.prod_empty, Finset.sum_empty]
-    rw [← C_1]; rw [m.degree_C]; rw [map_zero]
-  | insert a s has hrec =>
-    rw [Finset.prod_insert has]; rw [Finset.sum_insert has]
-    apply le_trans degree_mul_le
-    simp only [map_add, add_le_add_iff_left, hrec]
-
-中文:
-定理 degree_prod_le
-  条件: {ι : 类型} {P : ι -> 多元多项式 σ R} {s : 有限集 ι}
-  证明: by
-  classical
-  induction s using Finset.induction_on with
-  | empty =>
-    simp only [Finset.prod_empty, Finset.sum_empty]
-    rw [← C_1]; rw [m.degree_C]; rw [map_zero]
-  | insert a s has hrec =>
-    rw [Finset.prod_insert has]; rw [Finset.sum_insert has]
-    apply le_trans degree_mul_le
-    simp only [map_add, add_le_add_iff_left, hrec]
-
-Depends on / 依赖: Finset, Finset.induction_on, Finset.prod_empty, Finset.prod_insert, Finset.sum_empty, Finset.sum_insert, add_le_add_iff_left, classical, degree_C, degree_mul_le, induction_on, insert, le_trans, m.degree_C, map_add, map_zero, prod_empty, prod_insert, sum_empty, sum_insert
+/-
+**MonomialOrder.degree_prod_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_prod_le {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι} : m.
+degree (∏ i in s, P i) ≼[m] ∑ i in s, m.degree (P i)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPolynomial.C_1`：C_1 : C 1 = (1 : MvPolynomial σ R)
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `MonomialOrder.isOrderedAddMonoid_syn`：∀ {σ : Type u_1} (self : MonomialO
+rder σ), IsOrderedAddMonoid self.syn
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem degree_prod_le {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι} :
-    m.degree (∏ i in s, P i) ≼[m] ∑ i in s, m.degree (P i) := by
+theorem degree_prod_le {ι : Type*} {P : ι → MvPolynomial σ R} {s : Finset ι} :
+    m.degree (∏ i ∈ s, P i) ≼[m] ∑ i ∈ s, m.degree (P i) := by
   classical
   induction s using Finset.induction_on with
   | empty =>
     simp only [Finset.prod_empty, Finset.sum_empty]
-    rw [← C_1]; rw [m.degree_C]; rw [map_zero]
+    rw [← C_1, m.degree_C, map_zero]
   | insert a s has hrec =>
-    rw [Finset.prod_insert has]; rw [Finset.sum_insert has]
+    rw [Finset.prod_insert has, Finset.sum_insert has]
     apply le_trans degree_mul_le
     simp only [map_add, add_le_add_iff_left, hrec]
-
-/--
-theorem `coeff_prod_sum_degree` / 定理 `coeff_prod_sum_degree`
-
-English:
-theorem coeff_prod_sum_degree
-  given: {ι : Type*} (P : ι -> MvPolynomial σ R) (s : Finset ι)
-  proof: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert a s has hrec =>
-    simp only [Finset.prod_insert has, Finset.sum_insert has]
-    rw [coeff_mul_of_add_of_degree_le (le_of_eq rfl) degree_prod_le]
-    exact congr_arg₂ _ rfl hrec
-
-中文:
-定理 coeff_prod_sum_degree
-  条件: {ι : 类型} (P : ι -> 多元多项式 σ R) (s : 有限集 ι)
-  证明: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert a s has hrec =>
-    simp only [Finset.prod_insert has, Finset.sum_insert has]
-    rw [coeff_mul_of_add_of_degree_le (le_of_eq rfl) degree_prod_le]
-    exact congr_arg₂ _ rfl hrec
-
-Depends on / 依赖: Finset, Finset.induction_on, Finset.prod_insert, Finset.sum_insert, classical, coeff_mul_of_add_of_degree_le, degree_prod_le, induction_on, insert, le_of_eq, prod_insert, sum_insert
+/-
+**MonomialOrder.coeff_prod_sum_degree** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：coeff_prod_sum_degree {ι : Type*} (P : ι -> MvPolynomial σ R) (s : Finset 
+ι) : coeff (∑ i in s, m.degree (P i)) (∏ i in s, P i) = ∏ i in s, m.leadingCoeff
+ (P i)
+参数：P : ι -> MvPolynomial σ R；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.coeff_zero_one`：coeff_zero_one : coeff 0 (1 : MvPolynomial 
+σ R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `MonomialOrder.coeff_mul_of_add_of_degree_le`：coeff_mul_of_add_of_degree_
+le {f g : MvPolynomial σ R} {a b : σ ->₀ Nat} (ha : m.degree f ≼[m] a) (hb : m.d
+egree g ≼[m] b) : (f * g).coeff (…
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `MonomialOrder.degree_prod_le`：degree_prod_le {ι : Type*} {P : ι -> MvPol
+ynomial σ R} {s : Finset ι} : m.degree (∏ i in s, P i) ≼[m] ∑ i in s, m.degree (
+P i)
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
 -/
-theorem coeff_prod_sum_degree {ι : Type*} (P : ι -> MvPolynomial σ R) (s : Finset ι) :
-    coeff (∑ i in s, m.degree (P i)) (∏ i in s, P i) = ∏ i in s, m.leadingCoeff (P i) := by
+theorem coeff_prod_sum_degree {ι : Type*} (P : ι → MvPolynomial σ R) (s : Finset ι) :
+    coeff (∑ i ∈ s, m.degree (P i)) (∏ i ∈ s, P i) = ∏ i ∈ s, m.leadingCoeff (P i) := by
   classical
   induction s using Finset.induction_on with
   | empty => simp
@@ -2292,244 +2374,309 @@ theorem coeff_prod_sum_degree {ι : Type*} (P : ι -> MvPolynomial σ R) (s : Fi
     simp only [Finset.prod_insert has, Finset.sum_insert has]
     rw [coeff_mul_of_add_of_degree_le (le_of_eq rfl) degree_prod_le]
     exact congr_arg₂ _ rfl hrec
-
-/--
-theorem `degree_prod_of_mem_nonZeroDivisors` / 定理 `degree_prod_of_mem_nonZeroDivisors`
-
-English:
-theorem degree_prod_of_mem_nonZeroDivisors
-  statement: {ι : Type*}
-  proof: by
-  cases subsingleton_or_nontrivial R with
-  | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
-  | inr _ =>
-    apply m.toSyn.injective
-    refine le_antisymm degree_prod_le (m.le_degree ?_)
-    rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
-    exact nonZeroDivisors.ne_zero (prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors H)
-
-中文:
-定理 degree_prod_of_mem_nonZeroDivisors
-  结论: {ι : 类型}
-  证明: by
-  cases subsingleton_or_nontrivial R with
-  | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
-  | inr _ =>
-    apply m.toSyn.injective
-    refine le_antisymm degree_prod_le (m.le_degree ?_)
-    rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
-    exact nonZeroDivisors.ne_zero (prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors H)
-
-Depends on / 依赖: IsInducing, IsInducing.subtypeVal.topologicalGroup, MvPolynomial, S.subtype, Subsingleton, Subsingleton.elim, coeff_prod_sum_degree, degree_prod_le, injective, le_antisymm, le_degree, m.coeff_prod_sum_degree, m.le_degree, m.toSyn.injective, mem_support_iff, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors, subsingleton_or_nontrivial
+/-
+**MonomialOrder.degree_prod_of_mem_nonZeroDivisors** 是 Mathlib 中的一个定理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：degree_prod_of_mem_nonZeroDivisors {ι : Type*} {P : ι -> MvPolynomial σ R}
+ {s : Finset ι} (H : forall i in s, m.leadingCoeff (P i) in nonZeroDivisors _) :
+ m.degree (∏ i in s, P i) = ∑ i in s, m.degree (P i)
+参数：H : forall i in s, m.leadingCoeff (P i) in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `MonomialOrder.degree_subsingleton`：degree_subsingleton [Subsingleton R] 
+{f : MvPolynomial σ R} : m.degree f = 0
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MonomialOrder.degree_prod_le`：degree_prod_le {ι : Type*} {P : ι -> MvPol
+ynomial σ R} {s : Finset ι} : m.degree (∏ i in s, P i) ≼[m] ∑ i in s, m.degree (
+P i)
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MonomialOrder.coeff_prod_sum_degree`：coeff_prod_sum_degree {ι : Type*} (
+P : ι -> MvPolynomial σ R) (s : Finset ι) : coeff (∑ i in s, m.degree (P i)) (∏ 
+i in s, P i) = ∏ i in s, …
+· 使用定理 `nonZeroDivisors.ne_zero`：nonZeroDivisors.ne_zero (hx : x in M₀⁰) : x != 
+0
+· 使用引理 `prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors`：prod_mem_nonZeroDivisor
+s_of_mem_nonZeroDivisors {ι : Type*} {s : Finset ι} {f : ι -> M₀} (h : forall i 
+in s, f i in M₀⁰) : ∏ i in s, f i in …
 -/
 theorem degree_prod_of_mem_nonZeroDivisors {ι : Type*}
-    {P : ι -> MvPolynomial σ R} {s : Finset ι}
-    (H : forall i in s, m.leadingCoeff (P i) in nonZeroDivisors _) :
-    m.degree (∏ i in s, P i) = ∑ i in s, m.degree (P i) := by
+    {P : ι → MvPolynomial σ R} {s : Finset ι}
+    (H : ∀ i ∈ s, m.leadingCoeff (P i) ∈ nonZeroDivisors _) :
+    m.degree (∏ i ∈ s, P i) = ∑ i ∈ s, m.degree (P i) := by
   cases subsingleton_or_nontrivial R with
   | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
   | inr _ =>
     apply m.toSyn.injective
     refine le_antisymm degree_prod_le (m.le_degree ?_)
-    rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
+    rw [mem_support_iff, m.coeff_prod_sum_degree]
     exact nonZeroDivisors.ne_zero (prod_mem_nonZeroDivisors_of_mem_nonZeroDivisors H)
 
 -- TODO : it suffices that all leading coefficients but one are regular
-/--
-theorem `degree_prod_of_regular` / 定理 `degree_prod_of_regular`
-
-English:
-theorem degree_prod_of_regular
-  statement: {ι : Type*}
-  proof: by
-  cases subsingleton_or_nontrivial R with
-  | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
-  | inr _ =>
-    apply m.toSyn.injective
-    refine le_antisymm degree_prod_le (m.le_degree ?_)
-    rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
-    exact (IsRegular.prod H).ne_zero
-
-中文:
-定理 degree_prod_of_regular
-  结论: {ι : 类型}
-  证明: by
-  cases subsingleton_or_nontrivial R with
-  | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
-  | inr _ =>
-    apply m.toSyn.injective
-    refine le_antisymm degree_prod_le (m.le_degree ?_)
-    rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
-    exact (IsRegular.prod H).ne_zero
-
-Depends on / 依赖: IsRegular, IsRegular.prod, MvPolynomial, Subsingleton, Subsingleton.elim, coeff_prod_sum_degree, degree_prod_le, injective, le_antisymm, le_degree, m.coeff_prod_sum_degree, m.le_degree, m.toSyn.injective, mem_support_iff, ne_zero, subsingleton_or_nontrivial
+/-
+**MonomialOrder.degree_prod_of_regular** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：degree_prod_of_regular {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset
+ ι} (H : forall i in s, IsRegular (m.leadingCoeff (P i))) : m.degree (∏ i in s, 
+P i) = ∑ i in s, m.degree (P i)
+参数：H : forall i in s, IsRegular (m.leadingCoeff (P i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `MonomialOrder.degree_subsingleton`：degree_subsingleton [Subsingleton R] 
+{f : MvPolynomial σ R} : m.degree f = 0
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MonomialOrder.degree_prod_le`：degree_prod_le {ι : Type*} {P : ι -> MvPol
+ynomial σ R} {s : Finset ι} : m.degree (∏ i in s, P i) ≼[m] ∑ i in s, m.degree (
+P i)
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MonomialOrder.coeff_prod_sum_degree`：coeff_prod_sum_degree {ι : Type*} (
+P : ι -> MvPolynomial σ R) (s : Finset ι) : coeff (∑ i in s, m.degree (P i)) (∏ 
+i in s, P i) = ∏ i in s, …
+· 使用定理 `IsRegular.ne_zero`：IsRegular.ne_zero [Nontrivial R] (la : IsRegular a) :
+ a != 0
+· 使用引理 `IsRegular.prod`：IsRegular.prod (h : forall i in s, IsRegular (f i)) : Is
+Regular (∏ i in s, f i)
 -/
 theorem degree_prod_of_regular {ι : Type*}
-    {P : ι -> MvPolynomial σ R} {s : Finset ι} (H : forall i in s, IsRegular (m.leadingCoeff (P i))) :
-    m.degree (∏ i in s, P i) = ∑ i in s, m.degree (P i) := by
+    {P : ι → MvPolynomial σ R} {s : Finset ι} (H : ∀ i ∈ s, IsRegular (m.leadingCoeff (P i))) :
+    m.degree (∏ i ∈ s, P i) = ∑ i ∈ s, m.degree (P i) := by
   cases subsingleton_or_nontrivial R with
   | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
   | inr _ =>
     apply m.toSyn.injective
     refine le_antisymm degree_prod_le (m.le_degree ?_)
-    rw [mem_support_iff]; rw [m.coeff_prod_sum_degree]
+    rw [mem_support_iff, m.coeff_prod_sum_degree]
     exact (IsRegular.prod H).ne_zero
-
-/--
-theorem `degree_prod` / 定理 `degree_prod`
-
-English:
-theorem degree_prod
-  statement: [NoZeroDivisors R] {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι}
-  proof: by
-  cases subsingleton_or_nontrivial R with
-  | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
-  | inr _ =>
-    apply m.toSyn.injective
-    refine le_antisymm degree_prod_le (m.le_degree ?_)
-    simpa [m.coeff_prod_sum_degree, Finset.prod_eq_zero_iff]
-
-中文:
-定理 degree_prod
-  结论: [无零因子 R] {ι : 类型} {P : ι -> 多元多项式 σ R} {s : 有限集 ι}
-  证明: by
-  cases subsingleton_or_nontrivial R with
-  | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
-  | inr _ =>
-    apply m.toSyn.injective
-    refine le_antisymm degree_prod_le (m.le_degree ?_)
-    simpa [m.coeff_prod_sum_degree, Finset.prod_eq_zero_iff]
-
-Depends on / 依赖: Finset, Finset.prod_eq_zero_iff, MvPolynomial, Subsingleton, Subsingleton.elim, coeff_prod_sum_degree, degree_prod_le, injective, le_antisymm, le_degree, m.coeff_prod_sum_degree, m.le_degree, m.toSyn.injective, prod_eq_zero_iff, subsingleton_or_nontrivial
+/-
+**MonomialOrder.degree_prod** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_prod [NoZeroDivisors R] {ι : Type*} {P : ι -> MvPolynomial σ R} {s 
+: Finset ι} (H : forall i in s, P i != 0) : m.degree (∏ i in s, P i) = ∑ i in s,
+ m.degree (P i)
+参数：H : forall i in s, P i != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `MonomialOrder.degree_subsingleton`：degree_subsingleton [Subsingleton R] 
+{f : MvPolynomial σ R} : m.degree f = 0
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MonomialOrder.degree_prod_le`：degree_prod_le {ι : Type*} {P : ι -> MvPol
+ynomial σ R} {s : Finset ι} : m.degree (∏ i in s, P i) ≼[m] ∑ i in s, m.degree (
+P i)
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.coeff_prod_sum_degree`：coeff_prod_sum_degree {ι : Type*} (
+P : ι -> MvPolynomial σ R) (s : Finset ι) : coeff (∑ i in s, m.degree (P i)) (∏ 
+i in s, P i) = ∏ i in s, …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-theorem degree_prod [NoZeroDivisors R] {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι}
-    (H : forall i in s, P i != 0) :
-    m.degree (∏ i in s, P i) = ∑ i in s, m.degree (P i) := by
+theorem degree_prod [NoZeroDivisors R] {ι : Type*} {P : ι → MvPolynomial σ R} {s : Finset ι}
+    (H : ∀ i ∈ s, P i ≠ 0) :
+    m.degree (∏ i ∈ s, P i) = ∑ i ∈ s, m.degree (P i) := by
   cases subsingleton_or_nontrivial R with
   | inl _ => simp [Subsingleton.elim _ (0 : MvPolynomial σ R)]
   | inr _ =>
     apply m.toSyn.injective
     refine le_antisymm degree_prod_le (m.le_degree ?_)
     simpa [m.coeff_prod_sum_degree, Finset.prod_eq_zero_iff]
-
-/--
-lemma `degree_mul'` / 引理 `degree_mul'`
-
-English:
-lemma degree_mul'
-  given: [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f * g != 0)
-  proof: by
-  apply ne_zero_and_ne_zero_of_mul at hf
-  exact m.degree_mul hf.1 hf.2
-
-中文:
-引理 degree_mul'
-  条件: [无零因子 R] {f g : 多元多项式 σ R} (hf : f * g != 0)
-  证明: by
-  apply ne_zero_and_ne_zero_of_mul at hf
-  exact m.degree_mul hf.1 hf.2
-
-Depends on / 依赖: degree_mul, m.degree_mul, ne_zero_and_ne_zero_of_mul
+/-
+**MonomialOrder.degree_mul'** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_mul' [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f * g != 0) 
+: m.degree (f * g) = m.degree f + m.degree g
+参数：hf : f * g != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `ne_zero_and_ne_zero_of_mul`：ne_zero_and_ne_zero_of_mul (h : a * b != 0) 
+: a != 0 ∧ b != 0
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma degree_mul' [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f * g != 0) :
+lemma degree_mul' [NoZeroDivisors R] {f g : MvPolynomial σ R} (hf : f * g ≠ 0) :
     m.degree (f * g) = m.degree f + m.degree g := by
   apply ne_zero_and_ne_zero_of_mul at hf
   exact m.degree_mul hf.1 hf.2
-
-/--
-lemma `notMem_support_of_degree_lt` / 引理 `notMem_support_of_degree_lt`
-
-English:
-lemma notMem_support_of_degree_lt
-  given: {f g : MvPolynomial σ R} (h : m.degree f ≺[m] m.degree g)
-  proof: by
-  simp [coeff_eq_zero_of_lt h]
-
-中文:
-引理 notMem_support_of_degree_lt
-  条件: {f g : 多元多项式 σ R} (h : m.degree f ≺[m] m.degree g)
-  证明: by
-  simp [coeff_eq_zero_of_lt h]
-
-Depends on / 依赖: coeff_eq_zero_of_lt
+/-
+**MonomialOrder.notMem_support_of_degree_lt** 是 Mathlib 中的一个引理，位于命名空间 `MonomialO
+rder`。
+形式化陈述：notMem_support_of_degree_lt {f g : MvPolynomial σ R} (h : m.degree f ≺[m] 
+m.degree g) : m.degree g ∉ f.support
+参数：h : m.degree f ≺[m] m.degree g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.coeff_eq_zero_of_lt`：coeff_eq_zero_of_lt {f : MvPolynomial
+ σ R} {d : σ ->₀ Nat} (hd : m.degree f ≺[m] d) : f.coeff d = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma notMem_support_of_degree_lt {f g : MvPolynomial σ R} (h : m.degree f ≺[m] m.degree g) :
     m.degree g ∉ f.support := by
   simp [coeff_eq_zero_of_lt h]
-
-/--
-theorem `leadingCoeff_prod_of_mem_nonZeroDivisors` / 定理 `leadingCoeff_prod_of_mem_nonZeroDivisors`
-
-English:
-theorem leadingCoeff_prod_of_mem_nonZeroDivisors
-  statement: {ι : Type*}
-  proof: by
-  simp only [leadingCoeff, degree_prod_of_mem_nonZeroDivisors H, coeff_prod_sum_degree]
-
-中文:
-定理 leadingCoeff_prod_of_mem_nonZeroDivisors
-  结论: {ι : 类型}
-  证明: by
-  simp only [leadingCoeff, degree_prod_of_mem_nonZeroDivisors H, coeff_prod_sum_degree]
-
-Depends on / 依赖: coeff_prod_sum_degree, degree_prod_of_mem_nonZeroDivisors, leadingCoeff
+/-
+**MonomialOrder.leadingCoeff_prod_of_mem_nonZeroDivisors** 是 Mathlib 中的一个定理，位于命名
+空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_prod_of_mem_nonZeroDivisors {ι : Type*} {P : ι -> MvPolynomia
+l σ R} {s : Finset ι} (H : forall i in s, m.leadingCoeff (P i) in nonZeroDivisor
+s _) : m.leadingCoeff (∏ i in s, P i) = ∏ i in s, m.leadingCoeff (P i)
+参数：H : forall i in s, m.leadingCoeff (P i) in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_prod_of_mem_nonZeroDivisors`：degree_prod_of_mem_non
+ZeroDivisors {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι} (H : forall 
+i in s, m.leadingCoeff (P i) in nonZer…
+· 使用定理 `MonomialOrder.coeff_prod_sum_degree`：coeff_prod_sum_degree {ι : Type*} (
+P : ι -> MvPolynomial σ R) (s : Finset ι) : coeff (∑ i in s, m.degree (P i)) (∏ 
+i in s, P i) = ∏ i in s, …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leadingCoeff_prod_of_mem_nonZeroDivisors {ι : Type*}
-    {P : ι -> MvPolynomial σ R} {s : Finset ι}
-    (H : forall i in s, m.leadingCoeff (P i) in nonZeroDivisors _) :
-    m.leadingCoeff (∏ i in s, P i) = ∏ i in s, m.leadingCoeff (P i) := by
+    {P : ι → MvPolynomial σ R} {s : Finset ι}
+    (H : ∀ i ∈ s, m.leadingCoeff (P i) ∈ nonZeroDivisors _) :
+    m.leadingCoeff (∏ i ∈ s, P i) = ∏ i ∈ s, m.leadingCoeff (P i) := by
   simp only [leadingCoeff, degree_prod_of_mem_nonZeroDivisors H, coeff_prod_sum_degree]
 
 -- TODO : it suffices that all leading coefficients but one are regular
-/--
-theorem `leadingCoeff_prod_of_regular` / 定理 `leadingCoeff_prod_of_regular`
-
-English:
-theorem leadingCoeff_prod_of_regular
-  statement: {ι : Type*}
-  proof: by
-  simp only [leadingCoeff, degree_prod_of_regular H, coeff_prod_sum_degree]
-
-中文:
-定理 leadingCoeff_prod_of_regular
-  结论: {ι : 类型}
-  证明: by
-  simp only [leadingCoeff, degree_prod_of_regular H, coeff_prod_sum_degree]
-
-Depends on / 依赖: coeff_prod_sum_degree, degree_prod_of_regular, leadingCoeff
+/-
+**MonomialOrder.leadingCoeff_prod_of_regular** 是 Mathlib 中的一个定理，位于命名空间 `Monomial
+Order`。
+形式化陈述：leadingCoeff_prod_of_regular {ι : Type*} {P : ι -> MvPolynomial σ R} {s : 
+Finset ι} (H : forall i in s, IsRegular (m.leadingCoeff (P i))) : m.leadingCoeff
+ (∏ i in s, P i) = ∏ i in s, m.leadingCoeff (P i)
+参数：H : forall i in s, IsRegular (m.leadingCoeff (P i))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_prod_of_regular`：degree_prod_of_regular {ι : Type*}
+ {P : ι -> MvPolynomial σ R} {s : Finset ι} (H : forall i in s, IsRegular (m.lea
+dingCoeff (P i))) : m.degr…
+· 使用定理 `MonomialOrder.coeff_prod_sum_degree`：coeff_prod_sum_degree {ι : Type*} (
+P : ι -> MvPolynomial σ R) (s : Finset ι) : coeff (∑ i in s, m.degree (P i)) (∏ 
+i in s, P i) = ∏ i in s, …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leadingCoeff_prod_of_regular {ι : Type*}
-    {P : ι -> MvPolynomial σ R} {s : Finset ι} (H : forall i in s, IsRegular (m.leadingCoeff (P i))) :
-    m.leadingCoeff (∏ i in s, P i) = ∏ i in s, m.leadingCoeff (P i) := by
+    {P : ι → MvPolynomial σ R} {s : Finset ι} (H : ∀ i ∈ s, IsRegular (m.leadingCoeff (P i))) :
+    m.leadingCoeff (∏ i ∈ s, P i) = ∏ i ∈ s, m.leadingCoeff (P i) := by
   simp only [leadingCoeff, degree_prod_of_regular H, coeff_prod_sum_degree]
 
-/--
-theorem `Monic.prod` / 定理 `Monic.prod`
+/-- A product of monic polynomials is monic -/
+/-
+**MonomialOrder.Monic.prod** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder.Monic`。
+形式化陈述：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type u_2} [inst : CommSemiring
+ R] {ι : Type u_3} {P : ι → MvPolynomial σ R}   {s : Finset ι}, (∀ i ∈ s, m.Moni
+c (P i)) → m.Monic (∏ i ∈ s, P i)
+参数：∀ i ∈ s, m.Monic (P i)；∏ i ∈ s, P i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.Monic.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {R : Ty
+pe u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.Monic f = (m.leading
+Coeff f = 1)
+· 使用定理 `MonomialOrder.leadingCoeff_prod_of_regular`：leadingCoeff_prod_of_regular
+ {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι} (H : forall i in s, IsRe
+gular (m.leadingCoeff (P i))) : …
+· 使用定理 `MonomialOrder.Monic.leadingCoeff_eq_one`：∀ {σ : Type u_1} {m : MonomialO
+rder σ} {R : Type u_2} [inst : CommSemiring R] {f : MvPolynomial σ R},   m.Monic
+ f → m.leadingCoeff f = 1
+· 使用定理 `isRegular_one`：isRegular_one : IsRegular (1 : R)
+· 使用定理 `Finset.prod_eq_one`：prod_eq_one (h : forall x in s, f x = 1) : ∏ x in s,
+ f x = 1
 
-English:
-theorem Monic.prod
-  statement: {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι}
-  proof: by
-  rw [Monic]; rw [leadingCoeff_prod_of_regular]
-  · exact Finset.prod_eq_one H
-  · intro i hi
-    rw [(H i hi).leadingCoeff_eq_one]
-    exact isRegular_one
-
-中文:
-定理 Monic.乘积
-  结论: {ι : 类型} {P : ι -> 多元多项式 σ R} {s : 有限集 ι}
-  证明: by
-  rw [Monic]; rw [leadingCoeff_prod_of_regular]
-  · exact Finset.prod_eq_one H
-  · intro i hi
-    rw [(H i hi).leadingCoeff_eq_one]
-    exact isRegular_one
+--- 原说明 ---
+A product of monic polynomials is monic
 -/
-protected theorem Monic.prod {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Finset ι}
-    (H : forall i in s, m.Monic (P i)) :
-    m.Monic (∏ i in s, P i) := by
-  rw [Monic]; rw [leadingCoeff_prod_of_regular]
+protected theorem Monic.prod {ι : Type*} {P : ι → MvPolynomial σ R} {s : Finset ι}
+    (H : ∀ i ∈ s, m.Monic (P i)) :
+    m.Monic (∏ i ∈ s, P i) := by
+  rw [Monic, leadingCoeff_prod_of_regular]
   · exact Finset.prod_eq_one H
   · intro i hi
     rw [(H i hi).leadingCoeff_eq_one]
@@ -2539,83 +2686,120 @@ protected theorem Monic.prod {ι : Type*} {P : ι -> MvPolynomial σ R} {s : Fin
 The leading term in a multivariate polynomial is zero if and only if this polynomial is zero.
 -/
 @[simp]
-/--
-lemma `leadingTerm_eq_zero_iff` / 引理 `leadingTerm_eq_zero_iff`
+/-
+**MonomialOrder.leadingTerm_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder
+`。
+形式化陈述：leadingTerm_eq_zero_iff (p : MvPolynomial σ R) : m.leadingTerm p = 0 ↔ p =
+ 0
+参数：p : MvPolynomial σ R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma leadingTerm_eq_zero_iff
-  given: (p : MvPolynomial σ R)
-  statement: m.leadingTerm p = 0 ↔ p = 0
-  proof: by
-  simp only [leadingTerm, monomial_eq_zero, leadingCoeff_eq_zero_iff]
-
-中文:
-引理 leadingTerm_eq_zero_iff
-  条件: (p : 多元多项式 σ R)
-  结论: m.leadingTerm p = 0 ↔ p = 0
-  证明: by
-  simp only [leadingTerm, monomial_eq_zero, leadingCoeff_eq_zero_iff]
-
-Depends on / 依赖: leadingCoeff_eq_zero_iff, leadingTerm, monomial_eq_zero
+--- 原说明 ---
+The leading term in a multivariate polynomial is zero if and only if this polyno
+mial is zero.
 -/
 lemma leadingTerm_eq_zero_iff (p : MvPolynomial σ R) : m.leadingTerm p = 0 ↔ p = 0 := by
   simp only [leadingTerm, monomial_eq_zero, leadingCoeff_eq_zero_iff]
 
 /-- The leading term of the zero polynomial is zero -/
 @[simp]
-/--
-lemma `leadingTerm_zero` / 引理 `leadingTerm_zero`
+/-
+**MonomialOrder.leadingTerm_zero** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingTerm_zero : m.leadingTerm (0 : MvPolynomial σ R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.leadingTerm_eq_zero_iff`：leadingTerm_eq_zero_iff (p : MvPo
+lynomial σ R) : m.leadingTerm p = 0 ↔ p = 0
 
-English:
-lemma leadingTerm_zero
-  statement: m.leadingTerm (0 : MvPolynomial σ R) = 0
-  proof: by
-  rw [leadingTerm_eq_zero_iff]
-
-中文:
-引理 leadingTerm_zero
-  结论: m.leadingTerm (0 : 多元多项式 σ R) = 0
-  证明: by
-  rw [leadingTerm_eq_zero_iff]
-
-Depends on / 依赖: leadingTerm_eq_zero_iff
+--- 原说明 ---
+The leading term of the zero polynomial is zero
 -/
 lemma leadingTerm_zero : m.leadingTerm (0 : MvPolynomial σ R) = 0 := by
   rw [leadingTerm_eq_zero_iff]
 
 /--
-lemma `image_leadingTerm_sdiff_singleton_zero` / 引理 `image_leadingTerm_sdiff_singleton_zero`
+The set of leading terms of non-zero polynomials within a set `B` is equal to the set of
+leading terms of all polynomials within `B`, excluding zero.
+-/
+/-
+**MonomialOrder.image_leadingTerm_sdiff_singleton_zero** 是 Mathlib 中的一个引理，位于命名空间
+ `MonomialOrder`。
+形式化陈述：image_leadingTerm_sdiff_singleton_zero (B : Set (MvPolynomial σ R)) : m.le
+adingTerm '' (B \ {0}) = (m.leadingTerm '' B) \ {0}
+参数：B : Set (MvPolynomial σ R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-lemma image_leadingTerm_sdiff_singleton_zero
-  given: (B : Set (MvPolynomial σ R))
-  proof: by
-  aesop
-
-中文:
-引理 image_leadingTerm_sdiff_singleton_zero
-  条件: (B : 集合 (多元多项式 σ R))
-  证明: by
-  aesop
+--- 原说明 ---
+The set of leading terms of non-zero polynomials within a set `B` is equal to th
+e set of
+leading terms of all polynomials within `B`, excluding zero.
 -/
 lemma image_leadingTerm_sdiff_singleton_zero (B : Set (MvPolynomial σ R)) :
     m.leadingTerm '' (B \ {0}) = (m.leadingTerm '' B) \ {0} := by
   aesop
 
 /--
-lemma `image_leadingTerm_insert_zero` / 引理 `image_leadingTerm_insert_zero`
+The set of leading terms of zero and polynomials within a set `B` is equal to the set of
+zero and leading terms of polynomials within `B`.
+-/
+/-
+**MonomialOrder.image_leadingTerm_insert_zero** 是 Mathlib 中的一个引理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：image_leadingTerm_insert_zero (B : Set (MvPolynomial σ R)) : m.leadingTerm
+ '' (insert (0 : MvPolynomial σ R) B) = insert 0 (m.leadingTerm '' B)
+参数：B : Set (MvPolynomial σ R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `MonomialOrder.leadingTerm_zero`：leadingTerm_zero : m.leadingTerm (0 : Mv
+Polynomial σ R) = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma image_leadingTerm_insert_zero
-  given: (B : Set (MvPolynomial σ R))
-  proof: by
-  aesop
-
-中文:
-引理 image_leadingTerm_insert_zero
-  条件: (B : 集合 (多元多项式 σ R))
-  证明: by
-  aesop
+--- 原说明 ---
+The set of leading terms of zero and polynomials within a set `B` is equal to th
+e set of
+zero and leading terms of polynomials within `B`.
 -/
 lemma image_leadingTerm_insert_zero (B : Set (MvPolynomial σ R)) :
     m.leadingTerm '' (insert (0 : MvPolynomial σ R) B) = insert 0 (m.leadingTerm '' B) := by
@@ -2623,30 +2807,29 @@ lemma image_leadingTerm_insert_zero (B : Set (MvPolynomial σ R)) :
 
 /-- The degree of `f` equals to the degree of `leadingTerm f` -/
 @[simp]
-/--
-lemma `degree_leadingTerm` / 引理 `degree_leadingTerm`
+/-
+**MonomialOrder.degree_leadingTerm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_leadingTerm (f : MvPolynomial σ R) : m.degree (m.leadingTerm f) = m
+.degree f
+参数：f : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma degree_leadingTerm
-  given: (f : MvPolynomial σ R)
-  proof: by
-  classical
-  simp only [leadingTerm, degree_monomial, leadingCoeff_eq_zero_iff, ite_eq_right_iff]
-  simp_intro h
-
-@[simp]
-
-中文:
-引理 degree_leadingTerm
-  条件: (f : 多元多项式 σ R)
-  证明: by
-  classical
-  simp only [leadingTerm, degree_monomial, leadingCoeff_eq_zero_iff, ite_eq_right_iff]
-  simp_intro h
-
-@[simp]
-
-Depends on / 依赖: classical, degree_monomial, ite_eq_right_iff, leadingCoeff_eq_zero_iff, leadingTerm, simp_intro
+--- 原说明 ---
+The degree of `f` equals to the degree of `leadingTerm f`
 -/
 lemma degree_leadingTerm (f : MvPolynomial σ R) :
     m.degree (m.leadingTerm f) = m.degree f := by
@@ -2655,54 +2838,59 @@ lemma degree_leadingTerm (f : MvPolynomial σ R) :
   simp_intro h
 
 @[simp]
-/--
-lemma `leadingCoeff_leadingTerm` / 引理 `leadingCoeff_leadingTerm`
-
-English:
-lemma leadingCoeff_leadingTerm
-  given: (f : MvPolynomial σ R)
-  proof: by
-  simp [leadingTerm, leadingCoeff_monomial]
-
-@[simp]
-
-中文:
-引理 leadingCoeff_leadingTerm
-  条件: (f : 多元多项式 σ R)
-  证明: by
-  simp [leadingTerm, leadingCoeff_monomial]
-
-@[simp]
-
-Depends on / 依赖: leadingCoeff_monomial, leadingTerm
+/-
+**MonomialOrder.leadingCoeff_leadingTerm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：leadingCoeff_leadingTerm (f : MvPolynomial σ R) : m.leadingCoeff (m.leadin
+gTerm f) = m.leadingCoeff f
+参数：f : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma leadingCoeff_leadingTerm (f : MvPolynomial σ R) :
     m.leadingCoeff (m.leadingTerm f) = m.leadingCoeff f := by
   simp [leadingTerm, leadingCoeff_monomial]
 
 @[simp]
-/--
-lemma `leadingTerm_leadingTerm` / 引理 `leadingTerm_leadingTerm`
-
-English:
-lemma leadingTerm_leadingTerm
-  given: (f : MvPolynomial σ R)
-  proof: by
-  classical
-  by_cases h : f = 0 <;> simp [leadingTerm, h, degree_monomial]
-
-@[simp]
-
-中文:
-引理 leadingTerm_leadingTerm
-  条件: (f : 多元多项式 σ R)
-  证明: by
-  classical
-  by_cases h : f = 0 <;> simp [leadingTerm, h, degree_monomial]
-
-@[simp]
-
-Depends on / 依赖: classical, degree_monomial, leadingTerm
+/-
+**MonomialOrder.leadingTerm_leadingTerm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder
+`。
+形式化陈述：leadingTerm_leadingTerm (f : MvPolynomial σ R) : m.leadingTerm (m.leadingT
+erm f) = m.leadingTerm f
+参数：f : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
 -/
 lemma leadingTerm_leadingTerm (f : MvPolynomial σ R) :
     m.leadingTerm (m.leadingTerm f) = m.leadingTerm f := by
@@ -2710,321 +2898,427 @@ lemma leadingTerm_leadingTerm (f : MvPolynomial σ R) :
   by_cases h : f = 0 <;> simp [leadingTerm, h, degree_monomial]
 
 @[simp]
-/--
-lemma `leadingTerm_C` / 引理 `leadingTerm_C`
-
-English:
-lemma leadingTerm_C
-  given: (c : R)
-  statement: m.leadingTerm (C c) = C c
-  proof: by
-  simp [leadingTerm, leadingCoeff_C]
-
-@[simp]
-
-中文:
-引理 leadingTerm_C
-  条件: (c : R)
-  结论: m.leadingTerm (C c) = C c
-  证明: by
-  simp [leadingTerm, leadingCoeff_C]
-
-@[simp]
-
-Depends on / 依赖: leadingCoeff_C, leadingTerm
+/-
+**MonomialOrder.leadingTerm_C** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingTerm_C (c : R) : m.leadingTerm (C c) = C c
+参数：c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
+· 使用定理 `MonomialOrder.leadingCoeff_C`：leadingCoeff_C (c : R) : m.leadingCoeff (C
+ c) = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma leadingTerm_C (c : R) : m.leadingTerm (C c) = C c := by
   simp [leadingTerm, leadingCoeff_C]
 
 @[simp]
-/--
-lemma `leadingTerm_monomial` / 引理 `leadingTerm_monomial`
-
-English:
-lemma leadingTerm_monomial
-  given: (s : σ ->₀ Nat) (c : R)
-  proof: by
-  classical
-  by_cases h : c = 0 <;> simp [leadingTerm, degree_monomial, h]
-
-@[simp]
-
-中文:
-引理 leadingTerm_monomial
-  条件: (s : σ ->₀ 自然数) (c : R)
-  证明: by
-  classical
-  by_cases h : c = 0 <;> simp [leadingTerm, degree_monomial, h]
-
-@[simp]
-
-Depends on / 依赖: classical, degree_monomial, leadingTerm
+/-
+**MonomialOrder.leadingTerm_monomial** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingTerm_monomial (s : σ ->₀ Nat) (c : R) : m.leadingTerm (monomial s c
+) = monomial s c
+参数：s : σ ->₀ Nat；c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
 -/
-lemma leadingTerm_monomial (s : σ ->₀ Nat) (c : R) :
+lemma leadingTerm_monomial (s : σ →₀ ℕ) (c : R) :
     m.leadingTerm (monomial s c) = monomial s c := by
   classical
   by_cases h : c = 0 <;> simp [leadingTerm, degree_monomial, h]
 
 @[simp]
-/--
-lemma `degree_leadingTerm_mul` / 引理 `degree_leadingTerm_mul`
-
-English:
-lemma degree_leadingTerm_mul
-  given: [NoZeroDivisors R] (p q : MvPolynomial σ R)
-  proof: by
-  wlog! +distrib h : p != 0 ∧ q != 0
-  · obtain rfl | rfl := h <;> simp
-  classical
-  simp [leadingTerm, degree_mul, h, degree_monomial]
-
-@[simp]
-
-中文:
-引理 degree_leadingTerm_mul
-  条件: [无零因子 R] (p q : 多元多项式 σ R)
-  证明: by
-  wlog! +distrib h : p != 0 ∧ q != 0
-  · obtain rfl | rfl := h <;> simp
-  classical
-  simp [leadingTerm, degree_mul, h, degree_monomial]
-
-@[simp]
-
-Depends on / 依赖: classical, degree_monomial, degree_mul, distrib, leadingTerm
+/-
+**MonomialOrder.degree_leadingTerm_mul** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：degree_leadingTerm_mul [NoZeroDivisors R] (p q : MvPolynomial σ R) : m.deg
+ree (m.leadingTerm p * q) = m.degree (p * q)
+参数：p q : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Mathlib.Tactic.Push.not_and_or_eq`：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ 
+¬ q)
+· 使用引理 `MonomialOrder.leadingTerm_zero`：leadingTerm_zero : m.leadingTerm (0 : Mv
+Polynomial σ R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 lemma degree_leadingTerm_mul [NoZeroDivisors R] (p q : MvPolynomial σ R) :
     m.degree (m.leadingTerm p * q) = m.degree (p * q) := by
-  wlog! +distrib h : p != 0 ∧ q != 0
+  wlog! +distrib h : p ≠ 0 ∧ q ≠ 0
   · obtain rfl | rfl := h <;> simp
   classical
   simp [leadingTerm, degree_mul, h, degree_monomial]
 
 @[simp]
-/--
-lemma `degree_mul_leadingTerm` / 引理 `degree_mul_leadingTerm`
-
-English:
-lemma degree_mul_leadingTerm
-  given: [NoZeroDivisors R] (p q : MvPolynomial σ R)
-  proof: mul_comm _ p ▸ mul_comm _ p ▸ m.degree_leadingTerm_mul q p
-
-中文:
-引理 degree_mul_leadingTerm
-  条件: [无零因子 R] (p q : 多元多项式 σ R)
-  证明: mul_comm _ p ▸ mul_comm _ p ▸ m.degree_leadingTerm_mul q p
-
-Depends on / 依赖: degree_leadingTerm_mul, m.degree_leadingTerm_mul, mul_comm
+/-
+**MonomialOrder.degree_mul_leadingTerm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：degree_mul_leadingTerm [NoZeroDivisors R] (p q : MvPolynomial σ R) : m.deg
+ree (p * m.leadingTerm q) = m.degree (p * q)
+参数：p q : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonomialOrder.degree_leadingTerm_mul`：degree_leadingTerm_mul [NoZeroDivi
+sors R] (p q : MvPolynomial σ R) : m.degree (m.leadingTerm p * q) = m.degree (p 
+* q)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 lemma degree_mul_leadingTerm [NoZeroDivisors R] (p q : MvPolynomial σ R) :
     m.degree (p * m.leadingTerm q) = m.degree (p * q) :=
   mul_comm _ p ▸ mul_comm _ p ▸ m.degree_leadingTerm_mul q p
-
-/--
-lemma `degree_lt_of_left_ne_zero_of_degree_mul_lt` / 引理 `degree_lt_of_left_ne_zero_of_degree_mul_lt`
-
-English:
-lemma degree_lt_of_left_ne_zero_of_degree_mul_lt
-  statement: [NoZeroDivisors R] {p p' q : MvPolynomial σ R}
-  proof: by
-  wlog! hq : q != 0
-  · simp [hq] at h
-  apply lt_of_le_of_lt' m.degree_mul_le at h
-  simpa [m.degree_mul hp hq] using h
-
-中文:
-引理 degree_lt_of_left_ne_zero_of_degree_mul_lt
-  结论: [无零因子 R] {p p' q : 多元多项式 σ R}
-  证明: by
-  wlog! hq : q != 0
-  · simp [hq] at h
-  apply lt_of_le_of_lt' m.degree_mul_le at h
-  simpa [m.degree_mul hp hq] using h
-
-Depends on / 依赖: degree_mul, degree_mul_le, lt_of_le_of_lt, m.degree_mul, m.degree_mul_le
+/-
+**MonomialOrder.degree_lt_of_left_ne_zero_of_degree_mul_lt** 是 Mathlib 中的一个引理，位于
+命名空间 `MonomialOrder`。
+形式化陈述：degree_lt_of_left_ne_zero_of_degree_mul_lt [NoZeroDivisors R] {p p' q : Mv
+Polynomial σ R} (hp : p != 0) (h : m.degree (p * q) ≺[m] m.degree (p' * q)) : m.
+degree p ≺[m] m.degree p'
+参数：hp : p != 0；h : m.degree (p * q) ≺[m] m.degree (p' * q)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `MonomialOrder.isOrderedAddMonoid_syn`：∀ {σ : Type u_1} (self : MonomialO
+rder σ), IsOrderedAddMonoid self.syn
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `lt_of_le_of_lt'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a
+ → c < b → c < a
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
 -/
 lemma degree_lt_of_left_ne_zero_of_degree_mul_lt [NoZeroDivisors R] {p p' q : MvPolynomial σ R}
-    (hp : p != 0) (h : m.degree (p * q) ≺[m] m.degree (p' * q)) :
+    (hp : p ≠ 0) (h : m.degree (p * q) ≺[m] m.degree (p' * q)) :
     m.degree p ≺[m] m.degree p' := by
-  wlog! hq : q != 0
+  wlog! hq : q ≠ 0
   · simp [hq] at h
   apply lt_of_le_of_lt' m.degree_mul_le at h
   simpa [m.degree_mul hp hq] using h
-
-/--
-lemma `degree_mul_lt_iff_left_lt_of_ne_zero` / 引理 `degree_mul_lt_iff_left_lt_of_ne_zero`
-
-English:
-lemma degree_mul_lt_iff_left_lt_of_ne_zero
-  statement: [NoZeroDivisors R] {p p' q : MvPolynomial σ R}
-  proof: by
-  refine ⟨m.degree_lt_of_left_ne_zero_of_degree_mul_lt hp, ?_⟩
-  intro h
-  simpa [m.degree_mul hp hq, m.degree_mul (show p' != 0 by contrapose! h; simp [h]) hq] using h
-
-@[simp]
-
-中文:
-引理 degree_mul_lt_iff_left_lt_of_ne_zero
-  结论: [无零因子 R] {p p' q : 多元多项式 σ R}
-  证明: by
-  refine ⟨m.degree_lt_of_left_ne_zero_of_degree_mul_lt hp, ?_⟩
-  intro h
-  simpa [m.degree_mul hp hq, m.degree_mul (show p' != 0 by contrapose! h; simp [h]) hq] using h
-
-@[simp]
-
-Depends on / 依赖: contrapose, degree_lt_of_left_ne_zero_of_degree_mul_lt, degree_mul, m.degree_lt_of_left_ne_zero_of_degree_mul_lt, m.degree_mul
+/-
+**MonomialOrder.degree_mul_lt_iff_left_lt_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `
+MonomialOrder`。
+形式化陈述：degree_mul_lt_iff_left_lt_of_ne_zero [NoZeroDivisors R] {p p' q : MvPolyno
+mial σ R} (hp : p != 0) (hq : q != 0) : m.degree (p * q) ≺[m] m.degree (p' * q) 
+↔ m.degree p ≺[m] m.degree p'
+参数：hp : p != 0；hq : q != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonomialOrder.degree_lt_of_left_ne_zero_of_degree_mul_lt`：degree_lt_of_l
+eft_ne_zero_of_degree_mul_lt [NoZeroDivisors R] {p p' q : MvPolynomial σ R} (hp 
+: p != 0) (h : m.degree (p * q) ≺[m] m.degree …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₃`：contrapose₃ {p q : Prop} : (q -> 
+¬ p) -> (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `MonomialOrder.isOrderedAddMonoid_syn`：∀ {σ : Type u_1} (self : MonomialO
+rder σ), IsOrderedAddMonoid self.syn
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
 -/
 lemma degree_mul_lt_iff_left_lt_of_ne_zero [NoZeroDivisors R] {p p' q : MvPolynomial σ R}
-    (hp : p != 0) (hq : q != 0) :
+    (hp : p ≠ 0) (hq : q ≠ 0) :
     m.degree (p * q) ≺[m] m.degree (p' * q) ↔ m.degree p ≺[m] m.degree p' := by
   refine ⟨m.degree_lt_of_left_ne_zero_of_degree_mul_lt hp, ?_⟩
   intro h
-  simpa [m.degree_mul hp hq, m.degree_mul (show p' != 0 by contrapose! h; simp [h]) hq] using h
+  simpa [m.degree_mul hp hq, m.degree_mul (show p' ≠ 0 by contrapose! h; simp [h]) hq] using h
 
 @[simp]
-/--
-lemma `monic_leadingTerm` / 引理 `monic_leadingTerm`
-
-English:
-lemma monic_leadingTerm
-  given: (p : MvPolynomial σ R)
-  proof: by simp [leadingTerm, Monic]
-
-中文:
-引理 monic_leadingTerm
-  条件: (p : 多元多项式 σ R)
-  证明: by simp [leadingTerm, Monic]
-
-Depends on / 依赖: leadingTerm
+/-
+**MonomialOrder.monic_leadingTerm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：monic_leadingTerm (p : MvPolynomial σ R) : m.Monic (m.leadingTerm p) ↔ m.M
+onic p
+参数：p : MvPolynomial σ R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma monic_leadingTerm (p : MvPolynomial σ R) :
     m.Monic (m.leadingTerm p) ↔ m.Monic p := by simp [leadingTerm, Monic]
-
-/--
-lemma `support_leadingTerm` / 引理 `support_leadingTerm`
-
-English:
-lemma support_leadingTerm
-  given: (p : MvPolynomial σ R) [Decidable (p = 0)]
-  proof: by
-  classical
-  simp [leadingTerm, support_monomial]
-
-中文:
-引理 support_leadingTerm
-  条件: (p : 多元多项式 σ R) [可判定 (p = 0)]
-  证明: by
-  classical
-  simp [leadingTerm, support_monomial]
-
-Depends on / 依赖: classical, leadingTerm, support_monomial
+/-
+**MonomialOrder.support_leadingTerm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：support_leadingTerm (p : MvPolynomial σ R) [Decidable (p = 0)] : support (
+m.leadingTerm p) = if p = 0 then ∅ else {m.degree p}
+参数：p : MvPolynomial σ R；p = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.support_monomial`：support_monomial [h : Decidable (a = 0)] 
+: (monomial s a).support = if a = 0 then ∅ else {s}
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma support_leadingTerm (p : MvPolynomial σ R) [Decidable (p = 0)] :
     support (m.leadingTerm p) = if p = 0 then ∅ else {m.degree p} := by
   classical
   simp [leadingTerm, support_monomial]
-
-/--
-lemma `support_leadingTerm'` / 引理 `support_leadingTerm'`
-
-English:
-lemma support_leadingTerm'
-  given: {p : MvPolynomial σ R} (hp : p != 0)
-  proof: by
-  classical
-  simp [leadingTerm, support_monomial, hp]
-
-中文:
-引理 support_leadingTerm'
-  条件: {p : 多元多项式 σ R} (hp : p != 0)
-  证明: by
-  classical
-  simp [leadingTerm, support_monomial, hp]
-
-Depends on / 依赖: classical, leadingTerm, support_monomial
+/-
+**MonomialOrder.support_leadingTerm'** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：support_leadingTerm' {p : MvPolynomial σ R} (hp : p != 0) : support (m.lea
+dingTerm p) = {m.degree p}
+参数：hp : p != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.support_monomial`：support_monomial [h : Decidable (a = 0)] 
+: (monomial s a).support = if a = 0 then ∅ else {s}
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma support_leadingTerm' {p : MvPolynomial σ R} (hp : p != 0) :
+lemma support_leadingTerm' {p : MvPolynomial σ R} (hp : p ≠ 0) :
     support (m.leadingTerm p) = {m.degree p} := by
   classical
   simp [leadingTerm, support_monomial, hp]
-
-/--
-lemma `le_degree_of_mem_support` / 引理 `le_degree_of_mem_support`
-
-English:
-lemma le_degree_of_mem_support
-  statement: {p : MvPolynomial σ R} {a : σ ->₀ Nat}
-  proof: by
-  simp [degree, Finset.le_sup ha]
-
-中文:
-引理 le_degree_of_mem_support
-  结论: {p : 多元多项式 σ R} {a : σ ->₀ 自然数}
-  证明: by
-  simp [degree, Finset.le_sup ha]
-
-Depends on / 依赖: Finset, Finset.le_sup, degree, le_sup
+/-
+**MonomialOrder.le_degree_of_mem_support** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：le_degree_of_mem_support {p : MvPolynomial σ R} {a : σ ->₀ Nat} (ha : a in
+ p.support) : a ≼[m] m.degree p
+参数：ha : a in p.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
 -/
-lemma le_degree_of_mem_support {p : MvPolynomial σ R} {a : σ ->₀ Nat}
-    (ha : a in p.support) : a ≼[m] m.degree p := by
+lemma le_degree_of_mem_support {p : MvPolynomial σ R} {a : σ →₀ ℕ}
+    (ha : a ∈ p.support) : a ≼[m] m.degree p := by
   simp [degree, Finset.le_sup ha]
-
-/--
-lemma `leadingTerm_eq_leadingTerm_iff` / 引理 `leadingTerm_eq_leadingTerm_iff`
-
-English:
-lemma leadingTerm_eq_leadingTerm_iff
-  given: {p q : MvPolynomial σ R}
-  proof: by
-  rw [leadingTerm]; rw [leadingTerm]; rw [monomial_eq_monomial_iff]
-  aesop
-
-@[simp]
-
-中文:
-引理 leadingTerm_eq_leadingTerm_iff
-  条件: {p q : 多元多项式 σ R}
-  证明: by
-  rw [leadingTerm]; rw [leadingTerm]; rw [monomial_eq_monomial_iff]
-  aesop
-
-@[simp]
-
-Depends on / 依赖: leadingTerm, monomial_eq_monomial_iff
+/-
+**MonomialOrder.leadingTerm_eq_leadingTerm_iff** 是 Mathlib 中的一个引理，位于命名空间 `Monomi
+alOrder`。
+形式化陈述：leadingTerm_eq_leadingTerm_iff {p q : MvPolynomial σ R} : m.leadingTerm p 
+= m.leadingTerm q ↔ m.leadingCoeff p = m.leadingCoeff q ∧ m.degree p = m.degree 
+q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.leadingTerm.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {
+R : Type u_2} [inst : CommSemiring R] (f : MvPolynomial σ R),   m.leadingTerm f 
+= (MvPolynomial.mono…
+· 使用定理 `MvPolynomial.monomial_eq_monomial_iff`：monomial_eq_monomial_iff {α : Typ
+e*} (a₁ a₂ : α ->₀ Nat) (b₁ b₂ : R) : monomial a₁ b₁ = monomial a₂ b₂ ↔ a₁ = a₂ 
+∧ b₁ = b₂ ∨ b₁ = 0 ∧ b₂ = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
 lemma leadingTerm_eq_leadingTerm_iff {p q : MvPolynomial σ R} :
     m.leadingTerm p = m.leadingTerm q ↔
     m.leadingCoeff p = m.leadingCoeff q ∧ m.degree p = m.degree q := by
-  rw [leadingTerm]; rw [leadingTerm]; rw [monomial_eq_monomial_iff]
+  rw [leadingTerm, leadingTerm, monomial_eq_monomial_iff]
   aesop
 
 @[simp]
-/--
-theorem `leadingTerm_mul` / 定理 `leadingTerm_mul`
-
-English:
-theorem leadingTerm_mul
-  given: [NoZeroDivisors R] (p q : MvPolynomial σ R)
-  proof: by
-  by_cases! h0 : p * q = 0
-  · simp [h0, zero_eq_mul.mp]
-  simp [leadingTerm, m.degree_mul' h0]
-
-@[simp, nontriviality]
-
-中文:
-定理 leadingTerm_mul
-  条件: [无零因子 R] (p q : 多元多项式 σ R)
-  证明: by
-  by_cases! h0 : p * q = 0
-  · simp [h0, zero_eq_mul.mp]
-  simp [leadingTerm, m.degree_mul' h0]
-
-@[simp, nontriviality]
-
-Depends on / 依赖: degree_mul, leadingTerm, m.degree_mul, zero_eq_mul, zero_eq_mul.mp
+/-
+**MonomialOrder.leadingTerm_mul** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingTerm_mul [NoZeroDivisors R] (p q : MvPolynomial σ R) : m.leadingTer
+m (p * q) = m.leadingTerm p * m.leadingTerm q
+参数：p q : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.leadingTerm_zero`：leadingTerm_zero : m.leadingTerm (0 : Mv
+Polynomial σ R) = 0
+· 使用定理 `MvPolynomial.instNoZeroDivisors`：∀ {R : Type u} {σ : Type u_1} [inst : C
+ommSemiring R] [NoZeroDivisors R], NoZeroDivisors (MvPolynomial σ R)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `zero_eq_mul`：zero_eq_mul : 0 = a * b ↔ a = 0 ∨ b = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `MonomialOrder.degree_mul'`：degree_mul' [NoZeroDivisors R] {f g : MvPolyn
+omial σ R} (hf : f * g != 0) : m.degree (f * g) = m.degree f + m.degree g
+· 使用定理 `MonomialOrder.leadingCoeff_mul`：∀ {σ : Type u_1} {m : MonomialOrder σ} {
+R : Type u_2} [inst : CommSemiring R] [NoZeroDivisors R]   {f g : MvPolynomial σ
+ R}, m.leadingCoeff …
+· 使用定理 `MvPolynomial.monomial_mul`：monomial_mul {s s' : σ ->₀ Nat} {a b : R} : m
+onomial s a * monomial s' b = monomial (s + s') (a * b)
 -/
 theorem leadingTerm_mul [NoZeroDivisors R] (p q : MvPolynomial σ R) :
     m.leadingTerm (p * q) = m.leadingTerm p * m.leadingTerm q := by
@@ -3033,94 +3327,97 @@ theorem leadingTerm_mul [NoZeroDivisors R] (p q : MvPolynomial σ R) :
   simp [leadingTerm, m.degree_mul' h0]
 
 @[simp, nontriviality]
-/--
-lemma `monic_of_subsingleton` / 引理 `monic_of_subsingleton`
-
-English:
-lemma monic_of_subsingleton
-  given: [Subsingleton R] (p : MvPolynomial σ R)
-  proof: by
-  simp [Subsingleton.eq_one (α := MvPolynomial σ R)]
-
-中文:
-引理 monic_of_subsingleton
-  条件: [子单例 R] (p : 多元多项式 σ R)
-  证明: by
-  simp [Subsingleton.eq_one (α := MvPolynomial σ R)]
-
-Depends on / 依赖: MvPolynomial, Subsingleton, Subsingleton.eq_one, eq_one
+/-
+**MonomialOrder.monic_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：monic_of_subsingleton [Subsingleton R] (p : MvPolynomial σ R) : m.Monic p
+参数：p : MvPolynomial σ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.eq_one`：Subsingleton.eq_one [One α] [Subsingleton α] (a : α
+) : a = 1
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 lemma monic_of_subsingleton [Subsingleton R] (p : MvPolynomial σ R) :
     m.Monic p := by
   simp [Subsingleton.eq_one (α := MvPolynomial σ R)]
-
-/--
-lemma `degree_le_degree_of_support_subset` / 引理 `degree_le_degree_of_support_subset`
-
-English:
-lemma degree_le_degree_of_support_subset
-  given: {p q : MvPolynomial σ R} (h : p.support subseteq q.support)
-  proof: by
-  simp_rw [degree, m.toSyn.apply_symm_apply]
-  exact Finset.sup_mono h
-
-中文:
-引理 degree_le_degree_of_support_subset
-  条件: {p q : 多元多项式 σ R} (h : p.support subseteq q.support)
-  证明: by
-  simp_rw [degree, m.toSyn.apply_symm_apply]
-  exact Finset.sup_mono h
-
-Depends on / 依赖: Finset, Finset.sup_mono, apply_symm_apply, degree, m.toSyn.apply_symm_apply, simp_rw, sup_mono
+/-
+**MonomialOrder.degree_le_degree_of_support_subset** 是 Mathlib 中的一个引理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：degree_le_degree_of_support_subset {p q : MvPolynomial σ R} (h : p.support
+ subseteq q.support) : m.degree p ≼[m] m.degree q
+参数：h : p.support subseteq q.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用定理 `Finset.sup_mono`：sup_mono (h : s₁ subseteq s₂) : s₁.sup f <= s₂.sup f
 -/
-lemma degree_le_degree_of_support_subset {p q : MvPolynomial σ R} (h : p.support subseteq q.support) :
+lemma degree_le_degree_of_support_subset {p q : MvPolynomial σ R} (h : p.support ⊆ q.support) :
     m.degree p ≼[m] m.degree q := by
   simp_rw [degree, m.toSyn.apply_symm_apply]
   exact Finset.sup_mono h
-
-/--
-theorem `toSyn_degree_mul_le` / 定理 `toSyn_degree_mul_le`
-
-English:
-theorem toSyn_degree_mul_le
-  given: {f g : MvPolynomial σ R}
-  proof: map_add m.toSyn _ _ ▸ degree_mul_le
-
-中文:
-定理 toSyn_degree_mul_le
-  条件: {f g : 多元多项式 σ R}
-  证明: map_add m.toSyn _ _ ▸ degree_mul_le
-
-Depends on / 依赖: degree_mul_le, m.toSyn, map_add
+/-
+**MonomialOrder.toSyn_degree_mul_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：toSyn_degree_mul_le {f g : MvPolynomial σ R} : m.toSyn (m.degree (f * g)) 
+<= m.toSyn (m.degree f) + m.toSyn (m.degree g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
 theorem toSyn_degree_mul_le {f g : MvPolynomial σ R} :
-    m.toSyn (m.degree (f * g)) <= m.toSyn (m.degree f) + m.toSyn (m.degree g) :=
+    m.toSyn (m.degree (f * g)) ≤ m.toSyn (m.degree f) + m.toSyn (m.degree g) :=
   map_add m.toSyn _ _ ▸ degree_mul_le
-
-/--
-lemma `mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors` / 引理 `mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors`
-
-English:
-lemma mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors
-  proof: by
-  rw [← nonZeroDivisorsLeft_eq_nonZeroDivisors]; rw [mem_nonZeroDivisorsLeft_iff]
-  intro g
-  simp [← m.leadingCoeff_eq_zero_iff (f := f * g),
-    m.leadingCoeff_mul_of_left_mem_nonZeroDivisors hf, mul_left_mem_nonZeroDivisors_eq_zero_iff hf]
-
-中文:
-引理 mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors
-  证明: by
-  rw [← nonZeroDivisorsLeft_eq_nonZeroDivisors]; rw [mem_nonZeroDivisorsLeft_iff]
-  intro g
-  simp [← m.leadingCoeff_eq_zero_iff (f := f * g),
-    m.leadingCoeff_mul_of_left_mem_nonZeroDivisors hf, mul_left_mem_nonZeroDivisors_eq_zero_iff hf]
-
-Depends on / 依赖: leadingCoeff_eq_zero_iff, leadingCoeff_mul_of_left_mem_nonZeroDivisors, m.leadingCoeff_eq_zero_iff, m.leadingCoeff_mul_of_left_mem_nonZeroDivisors, mem_nonZeroDivisorsLeft_iff, mul_left_mem_nonZeroDivisors_eq_zero_iff, nonZeroDivisorsLeft_eq_nonZeroDivisors
+/-
+**MonomialOrder.mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors** 是 Math
+lib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors {f : MvPolynomial 
+σ R} (hf : m.leadingCoeff f in R⁰) : f in (MvPolynomial σ R)⁰
+参数：hf : m.leadingCoeff f in R⁰。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `nonZeroDivisorsLeft_eq_nonZeroDivisors`：nonZeroDivisorsLeft_eq_nonZeroDi
+visors : nonZeroDivisorsLeft M₀ = nonZeroDivisors M₀
+· 使用引理 `mem_nonZeroDivisorsLeft_iff`：mem_nonZeroDivisorsLeft_iff : x in nonZeroD
+ivisorsLeft M₀ ↔ forall y, x * y = 0 -> y = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `MonomialOrder.leadingCoeff_eq_zero_iff`：leadingCoeff_eq_zero_iff {f : Mv
+Polynomial σ R} : leadingCoeff m f = 0 ↔ f = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.leadingCoeff_mul_of_left_mem_nonZeroDivisors`：leadingCoeff
+_mul_of_left_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf : m.leadingCoeff f
+ in nonZeroDivisors _) : m.leadingCoeff (f * g) …
+· 使用引理 `mul_left_mem_nonZeroDivisors_eq_zero_iff`：mul_left_mem_nonZeroDivisors_e
+q_zero_iff (hr : r in M₀⁰) : r * x = 0 ↔ x = 0
 -/
 lemma mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors
-    {f : MvPolynomial σ R} (hf : m.leadingCoeff f in R⁰) : f in (MvPolynomial σ R)⁰ := by
-  rw [← nonZeroDivisorsLeft_eq_nonZeroDivisors]; rw [mem_nonZeroDivisorsLeft_iff]
+    {f : MvPolynomial σ R} (hf : m.leadingCoeff f ∈ R⁰) : f ∈ (MvPolynomial σ R)⁰ := by
+  rw [← nonZeroDivisorsLeft_eq_nonZeroDivisors, mem_nonZeroDivisorsLeft_iff]
   intro g
   simp [← m.leadingCoeff_eq_zero_iff (f := f * g),
     m.leadingCoeff_mul_of_left_mem_nonZeroDivisors hf, mul_left_mem_nonZeroDivisors_eq_zero_iff hf]
@@ -3130,50 +3427,51 @@ section withBotDegree
 variable (f g : MvPolynomial σ R)
 
 variable (m) in
-/--
-Definition of `withBotDegree` / `withBotDegree` 的定义
+/-- the degree of a multivariate polynomial with respect to a monomial ordering, where polynomial
+`0` has degree `⊥`, which is not equal to `0`. `MonomialOrder.withBotDegree` is to
+`MonomialOrder.degree` as `Polynomial.degree` is to `Polynomial.natDegree`. -/
+/-
+**MonomialOrder.withBotDegree** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree : WithBot (σ ->₀ Nat)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withBotDegree
-  signature: : WithBot (σ ->₀ Nat)
-  body: .max.map m.toSyn.symm f.support.image m.toSyn
-
-中文:
-定义 withBotDegree
-  签名: : WithBot (σ ->₀ 自然数)
-  定义体: .max.map m.toSyn.symm f.support.image m.toSyn
-
-Depends on / 依赖: f.support.image, m.toSyn, m.toSyn.symm, max.map, support
+--- 原说明 ---
+the degree of a multivariate polynomial with respect to a monomial ordering, whe
+re polynomial
+`0` has degree `⊥`, which is not equal to `0`. `MonomialOrder.withBotDegree` is 
+to
+`MonomialOrder.degree` as `Polynomial.degree` is to `Polynomial.natDegree`.
 -/
-noncomputable def withBotDegree : WithBot (σ ->₀ Nat) :=
-.max.map m.toSyn.symm f.support.image m.toSyn
-
-/--
-lemma `withBotDegree_eq` / 引理 `withBotDegree_eq`
-
-English:
-lemma withBotDegree_eq
-  given: [Decidable (f = 0)]
-  proof: by
-  simp [withBotDegree, degree]
-  by_cases hf : f = 0
-  · simp [hf]
-  · simp [hf, Finset.max_eq_sup_coe, ← Finset.coe_sup_of_nonempty _ (⇑m.toSyn)]
-
-@[simp]
-
-中文:
-引理 withBotDegree_eq
-  条件: [可判定 (f = 0)]
-  证明: by
-  simp [withBotDegree, degree]
-  by_cases hf : f = 0
-  · simp [hf]
-  · simp [hf, Finset.max_eq_sup_coe, ← Finset.coe_sup_of_nonempty _ (⇑m.toSyn)]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.coe_sup_of_nonempty, Finset.max_eq_sup_coe, coe_sup_of_nonempty, degree, m.toSyn, max_eq_sup_coe, withBotDegree
+noncomputable def withBotDegree : WithBot (σ →₀ ℕ) :=
+  f.support.image m.toSyn |>.max.map m.toSyn.symm
+/-
+**MonomialOrder.withBotDegree_eq** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_eq [Decidable (f = 0)] : m.withBotDegree f = if f = 0 then ⊥
+ else ↑(m.degree f)
+参数：f = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sup_image`：sup_image [DecidableEq β] (s : Finset γ) (f : γ -> β) 
+(g : β -> α) : (s.image f).sup g = s.sup (g ∘ f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_sup_of_nonempty`：coe_sup_of_nonempty (h : s.Nonempty) (f : β 
+-> α) : (↑(s.sup f) : WithBot α) = s.sup ((↑) ∘ f)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
 -/
 lemma withBotDegree_eq [Decidable (f = 0)] :
     m.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f) := by
@@ -3183,456 +3481,503 @@ lemma withBotDegree_eq [Decidable (f = 0)] :
   · simp [hf, Finset.max_eq_sup_coe, ← Finset.coe_sup_of_nonempty _ (⇑m.toSyn)]
 
 @[simp]
-/--
-lemma `withBotDegree_eq_coe_degree_iff` / 引理 `withBotDegree_eq_coe_degree_iff`
-
-English:
-lemma withBotDegree_eq_coe_degree_iff
-  statement: m.withBotDegree f = m.degree f ↔ f != 0
-  proof: by
-  classical
-  simp [withBotDegree_eq]
-
-@[simp]
-
-中文:
-引理 withBotDegree_eq_coe_degree_iff
-  结论: m.withBotDegree f = m.degree f ↔ f != 0
-  证明: by
-  classical
-  simp [withBotDegree_eq]
-
-@[simp]
-
-Depends on / 依赖: classical, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_eq_coe_degree_iff** 是 Mathlib 中的一个引理，位于命名空间 `Monom
+ialOrder`。
+形式化陈述：withBotDegree_eq_coe_degree_iff : m.withBotDegree f = m.degree f ↔ f != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma withBotDegree_eq_coe_degree_iff : m.withBotDegree f = m.degree f ↔ f != 0 := by
+lemma withBotDegree_eq_coe_degree_iff : m.withBotDegree f = m.degree f ↔ f ≠ 0 := by
   classical
   simp [withBotDegree_eq]
 
 @[simp]
-/--
-lemma `withBotDegree_eq_bot_iff` / 引理 `withBotDegree_eq_bot_iff`
-
-English:
-lemma withBotDegree_eq_bot_iff
-  statement: m.withBotDegree f = ⊥ ↔ f = 0
-  proof: by
-  classical
-  simp [withBotDegree_eq]
-
-中文:
-引理 withBotDegree_eq_bot_iff
-  结论: m.withBotDegree f = ⊥ ↔ f = 0
-  证明: by
-  classical
-  simp [withBotDegree_eq]
-
-Depends on / 依赖: classical, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_eq_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：withBotDegree_eq_bot_iff : m.withBotDegree f = ⊥ ↔ f = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma withBotDegree_eq_bot_iff : m.withBotDegree f = ⊥ ↔ f = 0 := by
   classical
   simp [withBotDegree_eq]
-
-/--
-lemma `degree_eq_unbotD_withBotDegree` / 引理 `degree_eq_unbotD_withBotDegree`
-
-English:
-lemma degree_eq_unbotD_withBotDegree
-  statement: m.degree f = (m.withBotDegree f).unbotD 0
-  proof: by
-  classical
-  by_cases h : f = 0 <;> simp [withBotDegree_eq, h]
-
-@[simp]
-
-中文:
-引理 degree_eq_unbotD_withBotDegree
-  结论: m.degree f = (m.withBotDegree f).unbotD 0
-  证明: by
-  classical
-  by_cases h : f = 0 <;> simp [withBotDegree_eq, h]
-
-@[simp]
-
-Depends on / 依赖: classical, withBotDegree_eq
+/-
+**MonomialOrder.degree_eq_unbotD_withBotDegree** 是 Mathlib 中的一个引理，位于命名空间 `Monomi
+alOrder`。
+形式化陈述：degree_eq_unbotD_withBotDegree : m.degree f = (m.withBotDegree f).unbotD 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
 lemma degree_eq_unbotD_withBotDegree : m.degree f = (m.withBotDegree f).unbotD 0 := by
   classical
   by_cases h : f = 0 <;> simp [withBotDegree_eq, h]
 
 @[simp]
-/--
-lemma `withBotDegree_zero` / 引理 `withBotDegree_zero`
-
-English:
-lemma withBotDegree_zero
-  statement: m.withBotDegree (R := R) 0 = ⊥
-  proof: rfl
-
-中文:
-引理 withBotDegree_zero
-  结论: m.withBotDegree (R := R) 0 = ⊥
-  证明: rfl
+/-
+**MonomialOrder.withBotDegree_zero** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_zero : m.withBotDegree (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma withBotDegree_zero : m.withBotDegree (R := R) 0 = ⊥ := rfl
-
-/--
-lemma `withBotDegree_monomial` / 引理 `withBotDegree_monomial`
-
-English:
-lemma withBotDegree_monomial
-  given: (d) (c) [Decidable (c = 0)]
-  proof: by
-  classical
-  split_ifs <;> simp [withBotDegree_eq, *, m.degree_monomial]
-
-中文:
-引理 withBotDegree_monomial
-  条件: (d) (c) [可判定 (c = 0)]
-  证明: by
-  classical
-  split_ifs <;> simp [withBotDegree_eq, *, m.degree_monomial]
-
-Depends on / 依赖: classical, degree_monomial, m.degree_monomial, monomial, split_ifs, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_monomial** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：withBotDegree_monomial (d) (c) [Decidable (c = 0)] : m.withBotDegree (R
+参数：d；c；c = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
 -/
 lemma withBotDegree_monomial (d) (c) [Decidable (c = 0)] :
     m.withBotDegree (R := R) (monomial d c) = if c = 0 then ⊥ else ↑d := by
   classical
   split_ifs <;> simp [withBotDegree_eq, *, m.degree_monomial]
-
-/--
-lemma `withBotDegree_C` / 引理 `withBotDegree_C`
-
-English:
-lemma withBotDegree_C
-  given: (c) [Decidable (c = 0)]
-  proof: by
-  simp [← monomial_zero', withBotDegree_monomial]
-
-@[simp]
-
-中文:
-引理 withBotDegree_C
-  条件: (c) [可判定 (c = 0)]
-  证明: by
-  simp [← monomial_zero', withBotDegree_monomial]
-
-@[simp]
-
-Depends on / 依赖: monomial_zero, withBotDegree_monomial
+/-
+**MonomialOrder.withBotDegree_C** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_C (c) [Decidable (c = 0)] : m.withBotDegree (R
+参数：c；c = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_monomial`：withBotDegree_monomial (d) (c) [De
+cidable (c = 0)] : m.withBotDegree (R
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma withBotDegree_C (c) [Decidable (c = 0)] :
     m.withBotDegree (R := R) (C c) = if c = 0 then ⊥ else 0 := by
   simp [← monomial_zero', withBotDegree_monomial]
 
 @[simp]
-/--
-lemma `withBotDegree_leadingTerm` / 引理 `withBotDegree_leadingTerm`
-
-English:
-lemma withBotDegree_leadingTerm
-  statement: m.withBotDegree (m.leadingTerm f) = m.withBotDegree f
-  proof: by
-  classical
-  simp [withBotDegree_eq]
-
-@[simp]
-
-中文:
-引理 withBotDegree_leadingTerm
-  结论: m.withBotDegree (m.leadingTerm f) = m.withBotDegree f
-  证明: by
-  classical
-  simp [withBotDegree_eq]
-
-@[simp]
-
-Depends on / 依赖: classical, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_leadingTerm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrd
+er`。
+形式化陈述：withBotDegree_leadingTerm : m.withBotDegree (m.leadingTerm f) = m.withBotD
+egree f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用引理 `MonomialOrder.degree_leadingTerm`：degree_leadingTerm (f : MvPolynomial σ
+ R) : m.degree (m.leadingTerm f) = m.degree f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma withBotDegree_leadingTerm : m.withBotDegree (m.leadingTerm f) = m.withBotDegree f := by
   classical
   simp [withBotDegree_eq]
 
 @[simp]
-/--
-lemma `withBotDegree_one` / 引理 `withBotDegree_one`
-
-English:
-lemma withBotDegree_one
-  given: [Nontrivial R]
-  statement: m.withBotDegree (R := R) 1 = 0
-  proof: by
-  classical
-  simp [withBotDegree_eq]
-
-中文:
-引理 withBotDegree_one
-  条件: [非平凡 R]
-  结论: m.withBotDegree (R := R) 1 = 0
-  证明: by
-  classical
-  simp [withBotDegree_eq]
-
-Depends on / 依赖: classical, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_one** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_one [Nontrivial R] : m.withBotDegree (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `MonomialOrder.degree_one`：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Ty
+pe u_2} [inst : CommSemiring R], m.degree 1 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma withBotDegree_one [Nontrivial R] : m.withBotDegree (R := R) 1 = 0 := by
   classical
   simp [withBotDegree_eq]
 
 variable {f g} in
-/--
-lemma `withBotDegree_mul_of_left_mem_nonZeroDivisors` / 引理 `withBotDegree_mul_of_left_mem_nonZeroDivisors`
-
-English:
-lemma withBotDegree_mul_of_left_mem_nonZeroDivisors
-  given: (hf : m.leadingCoeff f in nonZeroDivisors _)
-  proof: by
-  classical
-  by_cases! h0 : f = 0 ∨ g = 0
-  · rcases h0 with h0 | h0 <;> simp [h0]
-  suffices f * g != 0 by simp [withBotDegree_eq, m.degree_mul_of_left_mem_nonZeroDivisors hf, *]
-  apply mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors at hf
-  rw [mem_nonZeroDivisors_iff_left] at hf
-  tauto
-
-中文:
-引理 withBotDegree_mul_of_left_mem_nonZeroDivisors
-  条件: (hf : m.leadingCoeff f in nonZeroDivisors _)
-  证明: by
-  classical
-  by_cases! h0 : f = 0 ∨ g = 0
-  · rcases h0 with h0 | h0 <;> simp [h0]
-  suffices f * g != 0 by simp [withBotDegree_eq, m.degree_mul_of_left_mem_nonZeroDivisors hf, *]
-  apply mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors at hf
-  rw [mem_nonZeroDivisors_iff_left] at hf
-  tauto
-
-Depends on / 依赖: classical, degree_mul_of_left_mem_nonZeroDivisors, m.degree_mul_of_left_mem_nonZeroDivisors, mem_nonZeroDivisors_iff_left, mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_mul_of_left_mem_nonZeroDivisors** 是 Mathlib 中的一个引理
+，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_mul_of_left_mem_nonZeroDivisors (hf : m.leadingCoeff f in no
+nZeroDivisors _) : m.withBotDegree (f * g) = m.withBotDegree f + m.withBotDegree
+ g
+参数：hf : m.leadingCoeff f in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `WithBot.add_bot`：∀ {α : Type u} [inst : Add α] (x : WithBot α), x + ⊥ = 
+⊥
+· 使用定理 `mem_nonZeroDivisors_iff_left`：mem_nonZeroDivisors_iff_left : r in M₀⁰ ↔ 
+forall x, r * x = 0 -> x = 0
+· 使用引理 `MonomialOrder.mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors`：m
+em_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors {f : MvPolynomial σ R} (h
+f : m.leadingCoeff f in R⁰) : f in (MvPolynomial σ R)⁰
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `MonomialOrder.degree_mul_of_left_mem_nonZeroDivisors`：degree_mul_of_left
+_mem_nonZeroDivisors {f g : MvPolynomial σ R} (hf : m.leadingCoeff f in nonZeroD
+ivisors _) (hg : g != 0) : m.degree (f * g…
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma withBotDegree_mul_of_left_mem_nonZeroDivisors (hf : m.leadingCoeff f in nonZeroDivisors _) :
+lemma withBotDegree_mul_of_left_mem_nonZeroDivisors (hf : m.leadingCoeff f ∈ nonZeroDivisors _) :
     m.withBotDegree (f * g) = m.withBotDegree f + m.withBotDegree g := by
   classical
   by_cases! h0 : f = 0 ∨ g = 0
   · rcases h0 with h0 | h0 <;> simp [h0]
-  suffices f * g != 0 by simp [withBotDegree_eq, m.degree_mul_of_left_mem_nonZeroDivisors hf, *]
+  suffices f * g ≠ 0 by simp [withBotDegree_eq, m.degree_mul_of_left_mem_nonZeroDivisors hf, *]
   apply mem_nonZeroDivisors_of_leadingCoeff_mem_nonZeroDivisors at hf
   rw [mem_nonZeroDivisors_iff_left] at hf
   tauto
 
 variable {f g} in
-/--
-lemma `withBotDegree_mul_of_right_mem_nonZeroDivisors` / 引理 `withBotDegree_mul_of_right_mem_nonZeroDivisors`
-
-English:
-lemma withBotDegree_mul_of_right_mem_nonZeroDivisors
-  given: (hf : m.leadingCoeff g in nonZeroDivisors _)
-  proof: by
-  rw [mul_comm]; rw [add_comm]; rw [withBotDegree_mul_of_left_mem_nonZeroDivisors (hf := hf)]
-
-@[simp]
-
-中文:
-引理 withBotDegree_mul_of_right_mem_nonZeroDivisors
-  条件: (hf : m.leadingCoeff g in nonZeroDivisors _)
-  证明: by
-  rw [mul_comm]; rw [add_comm]; rw [withBotDegree_mul_of_left_mem_nonZeroDivisors (hf := hf)]
-
-@[simp]
-
-Depends on / 依赖: add_comm, mul_comm, withBotDegree_mul_of_left_mem_nonZeroDivisors
+/-
+**MonomialOrder.withBotDegree_mul_of_right_mem_nonZeroDivisors** 是 Mathlib 中的一个引
+理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_mul_of_right_mem_nonZeroDivisors (hf : m.leadingCoeff g in n
+onZeroDivisors _) : m.withBotDegree (f * g) = m.withBotDegree f + m.withBotDegre
+e g
+参数：hf : m.leadingCoeff g in nonZeroDivisors _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `MonomialOrder.withBotDegree_mul_of_left_mem_nonZeroDivisors`：withBotDegr
+ee_mul_of_left_mem_nonZeroDivisors (hf : m.leadingCoeff f in nonZeroDivisors _) 
+: m.withBotDegree (f * g) = m.withBotDegree f + m…
 -/
-lemma withBotDegree_mul_of_right_mem_nonZeroDivisors (hf : m.leadingCoeff g in nonZeroDivisors _) :
+lemma withBotDegree_mul_of_right_mem_nonZeroDivisors (hf : m.leadingCoeff g ∈ nonZeroDivisors _) :
     m.withBotDegree (f * g) = m.withBotDegree f + m.withBotDegree g := by
-  rw [mul_comm]; rw [add_comm]; rw [withBotDegree_mul_of_left_mem_nonZeroDivisors (hf := hf)]
+  rw [mul_comm, add_comm, withBotDegree_mul_of_left_mem_nonZeroDivisors (hf := hf)]
 
 @[simp]
-/--
-lemma `withBotDegree_mul` / 引理 `withBotDegree_mul`
-
-English:
-lemma withBotDegree_mul
-  given: [NoZeroDivisors R]
-  proof: by
-  nontriviality R using Subsingleton.eq_zero (α := MvPolynomial σ R)
-  by_cases! hf : f = 0
-  · simp [hf]
-  rw [← m.leadingCoeff_ne_zero_iff]; rw [← mem_nonZeroDivisors_iff_ne_zero] at hf
-  exact m.withBotDegree_mul_of_left_mem_nonZeroDivisors hf
-
-中文:
-引理 withBotDegree_mul
-  条件: [无零因子 R]
-  证明: by
-  nontriviality R using Subsingleton.eq_zero (α := MvPolynomial σ R)
-  by_cases! hf : f = 0
-  · simp [hf]
-  rw [← m.leadingCoeff_ne_zero_iff]; rw [← mem_nonZeroDivisors_iff_ne_zero] at hf
-  exact m.withBotDegree_mul_of_left_mem_nonZeroDivisors hf
-
-Depends on / 依赖: MvPolynomial, Subsingleton, Subsingleton.eq_zero, eq_zero, leadingCoeff_ne_zero_iff, m.leadingCoeff_ne_zero_iff, m.withBotDegree_mul_of_left_mem_nonZeroDivisors, mem_nonZeroDivisors_iff_ne_zero, nontriviality, withBotDegree_mul_of_left_mem_nonZeroDivisors
+/-
+**MonomialOrder.withBotDegree_mul** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_mul [NoZeroDivisors R] : m.withBotDegree (f * g) = m.withBot
+Degree f + m.withBotDegree g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.eq_zero`：∀ {α : Type u} [inst : Zero α] [Subsingleton α] (a
+ : α), a = 0
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `WithBot.add_bot`：∀ {α : Type u} [inst : Add α] (x : WithBot α), x + ⊥ = 
+⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用引理 `MonomialOrder.withBotDegree_mul_of_left_mem_nonZeroDivisors`：withBotDegr
+ee_mul_of_left_mem_nonZeroDivisors (hf : m.leadingCoeff f in nonZeroDivisors _) 
+: m.withBotDegree (f * g) = m.withBotDegree f + m…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mem_nonZeroDivisors_iff_ne_zero`：∀ {M₀ : Type u_2} [inst : MonoidWithZer
+o M₀] {x : M₀} [NoZeroDivisors M₀] [Nontrivial M₀],   x ∈ nonZeroDivisors M₀ ↔ x
+ ≠ 0
+· 使用定理 `MonomialOrder.leadingCoeff_ne_zero_iff`：leadingCoeff_ne_zero_iff {f : Mv
+Polynomial σ R} : m.leadingCoeff f != 0 ↔ f != 0
 -/
 lemma withBotDegree_mul [NoZeroDivisors R] :
     m.withBotDegree (f * g) = m.withBotDegree f + m.withBotDegree g := by
   nontriviality R using Subsingleton.eq_zero (α := MvPolynomial σ R)
   by_cases! hf : f = 0
   · simp [hf]
-  rw [← m.leadingCoeff_ne_zero_iff]; rw [← mem_nonZeroDivisors_iff_ne_zero] at hf
+  rw [← m.leadingCoeff_ne_zero_iff, ← mem_nonZeroDivisors_iff_ne_zero] at hf
   exact m.withBotDegree_mul_of_left_mem_nonZeroDivisors hf
-
-/--
-lemma `withBotDegree_mul_le` / 引理 `withBotDegree_mul_le`
-
-English:
-lemma withBotDegree_mul_le
-  proof: by
-  by_cases! h0 : f * g = 0
-  · simp [h0]
-  simp [-map_add, m.withBotDegree_eq_coe_degree_iff _ |>.mpr h0,
-.mpr (by grind), m.withBotDegree_eq_coe_degree_iff f
-.mpr (by grind), ← WithBot.coe_add, m.degree_mul_le] m.withBotDegree_eq_coe_degree_iff g
-
-中文:
-引理 withBotDegree_mul_le
-  证明: by
-  by_cases! h0 : f * g = 0
-  · simp [h0]
-  simp [-map_add, m.withBotDegree_eq_coe_degree_iff _ |>.mpr h0,
-.mpr (by grind), m.withBotDegree_eq_coe_degree_iff f
-.mpr (by grind), ← WithBot.coe_add, m.degree_mul_le] m.withBotDegree_eq_coe_degree_iff g
-
-Depends on / 依赖: WithBot, WithBot.coe_add, coe_add, degree_mul_le, m.degree_mul_le, m.withBotDegree_eq_coe_degree_iff, map_add, withBotDegree_eq_coe_degree_iff
+/-
+**MonomialOrder.withBotDegree_mul_le** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_mul_le : m.withBotDegree (f * g) ≼'[m] m.withBotDegree f + m
+.withBotDegree g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `MonomialOrder.withBotDegree_eq_coe_degree_iff`：withBotDegree_eq_coe_degr
+ee_iff : m.withBotDegree f = m.degree f ↔ f != 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
 -/
 lemma withBotDegree_mul_le :
     m.withBotDegree (f * g) ≼'[m] m.withBotDegree f + m.withBotDegree g := by
   by_cases! h0 : f * g = 0
   · simp [h0]
   simp [-map_add, m.withBotDegree_eq_coe_degree_iff _ |>.mpr h0,
-.mpr (by grind), m.withBotDegree_eq_coe_degree_iff f
-.mpr (by grind), ← WithBot.coe_add, m.degree_mul_le] m.withBotDegree_eq_coe_degree_iff g
-
-/--
-lemma `toWithBotSyn_withBotDegree_mul_le` / 引理 `toWithBotSyn_withBotDegree_mul_le`
-
-English:
-lemma toWithBotSyn_withBotDegree_mul_le
-  proof: by
-  by_cases h0 : f * g = 0
-  · simp [h0]
-  simp [m.withBotDegree_eq_coe_degree_iff f |>.mpr (by grind),
-.mpr (by grind), m.withBotDegree_eq_coe_degree_iff g
-.mpr h0, ← WithBot.coe_add, m.withBotDegree_eq_coe_degree_iff _
-    m.toSyn_degree_mul_le]
-
-中文:
-引理 toWithBotSyn_withBotDegree_mul_le
-  证明: by
-  by_cases h0 : f * g = 0
-  · simp [h0]
-  simp [m.withBotDegree_eq_coe_degree_iff f |>.mpr (by grind),
-.mpr (by grind), m.withBotDegree_eq_coe_degree_iff g
-.mpr h0, ← WithBot.coe_add, m.withBotDegree_eq_coe_degree_iff _
-    m.toSyn_degree_mul_le]
-
-Depends on / 依赖: WithBot, WithBot.coe_add, coe_add, m.toSyn_degree_mul_le, m.withBotDegree_eq_coe_degree_iff, toSyn_degree_mul_le, withBotDegree_eq_coe_degree_iff
+    m.withBotDegree_eq_coe_degree_iff f |>.mpr (by grind),
+    m.withBotDegree_eq_coe_degree_iff g |>.mpr (by grind), ← WithBot.coe_add, m.degree_mul_le]
+/-
+**MonomialOrder.toWithBotSyn_withBotDegree_mul_le** 是 Mathlib 中的一个引理，位于命名空间 `Mon
+omialOrder`。
+形式化陈述：toWithBotSyn_withBotDegree_mul_le : m.toWithBotSyn (m.withBotDegree (f * g
+)) <= m.toWithBotSyn (m.withBotDegree f) + m.toWithBotSyn (m.withBotDegree g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `MonomialOrder.withBotDegree_eq_coe_degree_iff`：withBotDegree_eq_coe_degr
+ee_iff : m.withBotDegree f = m.degree f ↔ f != 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MonomialOrder.toSyn_degree_mul_le`：toSyn_degree_mul_le {f g : MvPolynomi
+al σ R} : m.toSyn (m.degree (f * g)) <= m.toSyn (m.degree f) + m.toSyn (m.degree
+ g)
 -/
 lemma toWithBotSyn_withBotDegree_mul_le :
-    m.toWithBotSyn (m.withBotDegree (f * g)) <=
+    m.toWithBotSyn (m.withBotDegree (f * g)) ≤
       m.toWithBotSyn (m.withBotDegree f) + m.toWithBotSyn (m.withBotDegree g) := by
   by_cases h0 : f * g = 0
   · simp [h0]
   simp [m.withBotDegree_eq_coe_degree_iff f |>.mpr (by grind),
-.mpr (by grind), m.withBotDegree_eq_coe_degree_iff g
-.mpr h0, ← WithBot.coe_add, m.withBotDegree_eq_coe_degree_iff _
+    m.withBotDegree_eq_coe_degree_iff g |>.mpr (by grind),
+    m.withBotDegree_eq_coe_degree_iff _ |>.mpr h0, ← WithBot.coe_add,
     m.toSyn_degree_mul_le]
-
-/--
-lemma `withBotDegree_le_withBotDegree_iff` / 引理 `withBotDegree_le_withBotDegree_iff`
-
-English:
-lemma withBotDegree_le_withBotDegree_iff
-  proof: by
-  classical
-  by_cases! +distrib h : f != 0 ∧ g != 0
-  · simp [m.withBotDegree_eq, h, m.toWithBotSyn_apply]
-  rcases h with h | _
-  · simp [h]
-  · aesop
-
-中文:
-引理 withBotDegree_le_withBotDegree_iff
-  证明: by
-  classical
-  by_cases! +distrib h : f != 0 ∧ g != 0
-  · simp [m.withBotDegree_eq, h, m.toWithBotSyn_apply]
-  rcases h with h | _
-  · simp [h]
-  · aesop
-
-Depends on / 依赖: classical, distrib, m.toWithBotSyn_apply, m.withBotDegree_eq, toWithBotSyn_apply, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_le_withBotDegree_iff** 是 Mathlib 中的一个引理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：withBotDegree_le_withBotDegree_iff : m.withBotDegree f ≼'[m] m.withBotDegr
+ee g ↔ (m.degree f ≼[m] m.degree g ∧ (g = 0 -> f = 0))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Mathlib.Tactic.Push.not_and_or_eq`：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ 
+¬ q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma withBotDegree_le_withBotDegree_iff :
     m.withBotDegree f ≼'[m] m.withBotDegree g ↔
-      (m.degree f ≼[m] m.degree g ∧ (g = 0 -> f = 0)) := by
+      (m.degree f ≼[m] m.degree g ∧ (g = 0 → f = 0)) := by
   classical
-  by_cases! +distrib h : f != 0 ∧ g != 0
+  by_cases! +distrib h : f ≠ 0 ∧ g ≠ 0
   · simp [m.withBotDegree_eq, h, m.toWithBotSyn_apply]
   rcases h with h | _
   · simp [h]
   · aesop
 
 variable {g} in
-/--
-lemma `withBotDegree_le_withBotDegree_iff_of_ne_zero` / 引理 `withBotDegree_le_withBotDegree_iff_of_ne_zero`
-
-English:
-lemma withBotDegree_le_withBotDegree_iff_of_ne_zero
-  given: (hg : g != 0)
-  proof: by
-  simp [withBotDegree_le_withBotDegree_iff, hg]
-
-中文:
-引理 withBotDegree_le_withBotDegree_iff_of_ne_zero
-  条件: (hg : g != 0)
-  证明: by
-  simp [withBotDegree_le_withBotDegree_iff, hg]
-
-Depends on / 依赖: withBotDegree_le_withBotDegree_iff
+/-
+**MonomialOrder.withBotDegree_le_withBotDegree_iff_of_ne_zero** 是 Mathlib 中的一个引理
+，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_le_withBotDegree_iff_of_ne_zero (hg : g != 0) : m.withBotDeg
+ree f ≼'[m] m.withBotDegree g ↔ m.degree f ≼[m] m.degree g
+参数：hg : g != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma withBotDegree_le_withBotDegree_iff_of_ne_zero (hg : g != 0) :
+lemma withBotDegree_le_withBotDegree_iff_of_ne_zero (hg : g ≠ 0) :
     m.withBotDegree f ≼'[m] m.withBotDegree g ↔ m.degree f ≼[m] m.degree g := by
   simp [withBotDegree_le_withBotDegree_iff, hg]
-
-/--
-lemma `withBotDegree_lt_withBotDegree_iff` / 引理 `withBotDegree_lt_withBotDegree_iff`
-
-English:
-lemma withBotDegree_lt_withBotDegree_iff
-  proof: by
-  classical
-  by_cases! hg : g = 0
-  · simp_rw [toWithBotSyn_apply]
-    aesop
-  by_cases! hf : f = 0
-  · simp [hg, hf, bot_lt_iff_ne_bot, toWithBotSyn_apply]
-  simp [withBotDegree_eq, hf, hg, toWithBotSyn_apply]
-
-中文:
-引理 withBotDegree_lt_withBotDegree_iff
-  证明: by
-  classical
-  by_cases! hg : g = 0
-  · simp_rw [toWithBotSyn_apply]
-    aesop
-  by_cases! hf : f = 0
-  · simp [hg, hf, bot_lt_iff_ne_bot, toWithBotSyn_apply]
-  simp [withBotDegree_eq, hf, hg, toWithBotSyn_apply]
-
-Depends on / 依赖: bot_lt_iff_ne_bot, classical, simp_rw, toWithBotSyn_apply, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_lt_withBotDegree_iff** 是 Mathlib 中的一个引理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：withBotDegree_lt_withBotDegree_iff : m.withBotDegree f ≺'[m] m.withBotDegr
+ee g ↔ (m.degree f ≺[m] m.degree g ∨ (f = 0 ∧ g != 0))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 lemma withBotDegree_lt_withBotDegree_iff :
     m.withBotDegree f ≺'[m] m.withBotDegree g ↔
-      (m.degree f ≺[m] m.degree g ∨ (f = 0 ∧ g != 0)) := by
+      (m.degree f ≺[m] m.degree g ∨ (f = 0 ∧ g ≠ 0)) := by
   classical
   by_cases! hg : g = 0
   · simp_rw [toWithBotSyn_apply]
@@ -3642,241 +3987,269 @@ lemma withBotDegree_lt_withBotDegree_iff :
   simp [withBotDegree_eq, hf, hg, toWithBotSyn_apply]
 
 variable {f} in
-/--
-lemma `withBotDegree_lt_withBotDegree_iff_of_ne_zero` / 引理 `withBotDegree_lt_withBotDegree_iff_of_ne_zero`
-
-English:
-lemma withBotDegree_lt_withBotDegree_iff_of_ne_zero
-  given: (hf : f != 0)
-  proof: by
-  simp [withBotDegree_lt_withBotDegree_iff, hf]
-
-中文:
-引理 withBotDegree_lt_withBotDegree_iff_of_ne_zero
-  条件: (hf : f != 0)
-  证明: by
-  simp [withBotDegree_lt_withBotDegree_iff, hf]
-
-Depends on / 依赖: withBotDegree_lt_withBotDegree_iff
+/-
+**MonomialOrder.withBotDegree_lt_withBotDegree_iff_of_ne_zero** 是 Mathlib 中的一个引理
+，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_lt_withBotDegree_iff_of_ne_zero (hf : f != 0) : m.withBotDeg
+ree f ≺'[m] m.withBotDegree g ↔ m.degree f ≺[m] m.degree g
+参数：hf : f != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma withBotDegree_lt_withBotDegree_iff_of_ne_zero (hf : f != 0) :
+lemma withBotDegree_lt_withBotDegree_iff_of_ne_zero (hf : f ≠ 0) :
     m.withBotDegree f ≺'[m] m.withBotDegree g ↔ m.degree f ≺[m] m.degree g := by
   simp [withBotDegree_lt_withBotDegree_iff, hf]
-
-/--
-lemma `withBotDegree_eq_withBotDegree_iff` / 引理 `withBotDegree_eq_withBotDegree_iff`
-
-English:
-lemma withBotDegree_eq_withBotDegree_iff
-  proof: by
-  classical
-  by_cases! +distrib h : f != 0 ∧ g != 0
-  · simp [h, m.withBotDegree_eq]
-  rcases h with h | h
-  all_goals
-    simp_rw [h]
-    revert f g
-    simp [m.withBotDegree_eq, m.degree_zero]
-
-中文:
-引理 withBotDegree_eq_withBotDegree_iff
-  证明: by
-  classical
-  by_cases! +distrib h : f != 0 ∧ g != 0
-  · simp [h, m.withBotDegree_eq]
-  rcases h with h | h
-  all_goals
-    simp_rw [h]
-    revert f g
-    simp [m.withBotDegree_eq, m.degree_zero]
-
-Depends on / 依赖: all_goals, classical, degree_zero, distrib, m.degree_zero, m.withBotDegree_eq, revert, simp_rw, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_eq_withBotDegree_iff** 是 Mathlib 中的一个引理，位于命名空间 `Mo
+nomialOrder`。
+形式化陈述：withBotDegree_eq_withBotDegree_iff : m.withBotDegree f = m.withBotDegree g
+ ↔ (m.degree f = m.degree g ∧ (f = 0 ↔ g = 0))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Mathlib.Tactic.Push.not_and_or_eq`：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ 
+¬ q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `true_iff`：∀ (p : Prop), (True ↔ p) = p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
 -/
 lemma withBotDegree_eq_withBotDegree_iff :
     m.withBotDegree f = m.withBotDegree g ↔ (m.degree f = m.degree g ∧ (f = 0 ↔ g = 0)) := by
   classical
-  by_cases! +distrib h : f != 0 ∧ g != 0
+  by_cases! +distrib h : f ≠ 0 ∧ g ≠ 0
   · simp [h, m.withBotDegree_eq]
   rcases h with h | h
   all_goals
     simp_rw [h]
     revert f g
     simp [m.withBotDegree_eq, m.degree_zero]
-
-/--
-lemma `withBotDegree_add_le` / 引理 `withBotDegree_add_le`
-
-English:
-lemma withBotDegree_add_le
-  proof: by
-  by_cases! h : f = 0 ∨ g = 0
-  · rcases h with h | h <;> simp [h, m.toWithBotSyn_apply]
-  simpa [withBotDegree_le_withBotDegree_iff, h] using degree_add_le (R := R)
-
-中文:
-引理 withBotDegree_add_le
-  证明: by
-  by_cases! h : f = 0 ∨ g = 0
-  · rcases h with h | h <;> simp [h, m.toWithBotSyn_apply]
-  simpa [withBotDegree_le_withBotDegree_iff, h] using degree_add_le (R := R)
-
-Depends on / 依赖: degree_add_le, m.toWithBotSyn_apply, toWithBotSyn_apply, withBotDegree_le_withBotDegree_iff
+/-
+**MonomialOrder.withBotDegree_add_le** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_add_le : (m.toWithBotSyn <| m.withBotDegree (f + g)) <= (m.t
+oWithBotSyn <| m.withBotDegree f) ⊔ (m.toWithBotSyn <| m.withBotDegree g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `MonomialOrder.degree_add_le`：degree_add_le {f g : MvPolynomial σ R} : m.
+toSyn (m.degree (f + g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g)
 -/
 lemma withBotDegree_add_le :
-    (m.toWithBotSyn <| m.withBotDegree (f + g)) <=
+    (m.toWithBotSyn <| m.withBotDegree (f + g)) ≤
       (m.toWithBotSyn <| m.withBotDegree f) ⊔ (m.toWithBotSyn <| m.withBotDegree g) := by
   by_cases! h : f = 0 ∨ g = 0
   · rcases h with h | h <;> simp [h, m.toWithBotSyn_apply]
   simpa [withBotDegree_le_withBotDegree_iff, h] using degree_add_le (R := R)
 
 variable {f g} in
-/--
-lemma `withBotDegree_add_of_lt` / 引理 `withBotDegree_add_of_lt`
-
-English:
-lemma withBotDegree_add_of_lt
-  given: (h : m.withBotDegree g ≺'[m] m.withBotDegree f)
-  proof: by
-  by_cases hg : g = 0
-  · simp [hg]
-  simp only [withBotDegree_lt_withBotDegree_iff, hg, ne_eq, false_and, or_false] at h
-  simp only [withBotDegree_eq_withBotDegree_iff, show f != 0 by contrapose h; simp [h], iff_false]
-  apply (show forall {p q}, p -> (p -> q) -> (p ∧ q) by tauto) (m.degree_add_of_lt h)
-  intro h'
-  contrapose! h
-  simp [← h', h]
-
-中文:
-引理 withBotDegree_add_of_lt
-  条件: (h : m.withBotDegree g ≺'[m] m.withBotDegree f)
-  证明: by
-  by_cases hg : g = 0
-  · simp [hg]
-  simp only [withBotDegree_lt_withBotDegree_iff, hg, ne_eq, false_and, or_false] at h
-  simp only [withBotDegree_eq_withBotDegree_iff, show f != 0 by contrapose h; simp [h], iff_false]
-  apply (show forall {p q}, p -> (p -> q) -> (p ∧ q) by tauto) (m.degree_add_of_lt h)
-  intro h'
-  contrapose! h
-  simp [← h', h]
-
-Depends on / 依赖: contrapose, degree_add_of_lt, false_and, iff_false, m.degree_add_of_lt, ne_eq, or_false, withBotDegree_eq_withBotDegree_iff, withBotDegree_lt_withBotDegree_iff
+/-
+**MonomialOrder.withBotDegree_add_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder
+`。
+形式化陈述：withBotDegree_add_of_lt (h : m.withBotDegree g ≺'[m] m.withBotDegree f) : 
+m.withBotDegree (f + g) = m.withBotDegree f
+参数：h : m.withBotDegree g ≺'[m] m.withBotDegree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₃`：contrapose₃ {p q : Prop} : (q -> 
+¬ p) -> (p -> ¬ q)
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `Decidable.not_or_of_imp`：∀ {a b : Prop} [Decidable a], (a → b) → ¬a ∨ b
+· 使用定理 `MonomialOrder.degree_add_of_lt`：degree_add_of_lt {f g : MvPolynomial σ R
+} (h : m.degree g ≺[m] m.degree f) : m.degree (f + g) = m.degree f
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma withBotDegree_add_of_lt (h : m.withBotDegree g ≺'[m] m.withBotDegree f) :
     m.withBotDegree (f + g) = m.withBotDegree f := by
   by_cases hg : g = 0
   · simp [hg]
   simp only [withBotDegree_lt_withBotDegree_iff, hg, ne_eq, false_and, or_false] at h
-  simp only [withBotDegree_eq_withBotDegree_iff, show f != 0 by contrapose h; simp [h], iff_false]
-  apply (show forall {p q}, p -> (p -> q) -> (p ∧ q) by tauto) (m.degree_add_of_lt h)
+  simp only [withBotDegree_eq_withBotDegree_iff, show f ≠ 0 by contrapose h; simp [h], iff_false]
+  apply (show ∀ {p q}, p → (p → q) → (p ∧ q) by tauto) (m.degree_add_of_lt h)
   intro h'
   contrapose! h
   simp [← h', h]
 
 variable {f g} in
-/--
-lemma `withBotDegree_add_of_right_lt` / 引理 `withBotDegree_add_of_right_lt`
-
-English:
-lemma withBotDegree_add_of_right_lt
-  given: (h : m.withBotDegree f ≺'[m] m.withBotDegree g)
-  proof: by
-  rw [add_comm]; rw [withBotDegree_add_of_lt h]
-
-中文:
-引理 withBotDegree_add_of_right_lt
-  条件: (h : m.withBotDegree f ≺'[m] m.withBotDegree g)
-  证明: by
-  rw [add_comm]; rw [withBotDegree_add_of_lt h]
-
-Depends on / 依赖: add_comm, withBotDegree_add_of_lt
+/-
+**MonomialOrder.withBotDegree_add_of_right_lt** 是 Mathlib 中的一个引理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：withBotDegree_add_of_right_lt (h : m.withBotDegree f ≺'[m] m.withBotDegree
+ g) : m.withBotDegree (f + g) = m.withBotDegree g
+参数：h : m.withBotDegree f ≺'[m] m.withBotDegree g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `MonomialOrder.withBotDegree_add_of_lt`：withBotDegree_add_of_lt (h : m.wi
+thBotDegree g ≺'[m] m.withBotDegree f) : m.withBotDegree (f + g) = m.withBotDegr
+ee f
 -/
 lemma withBotDegree_add_of_right_lt (h : m.withBotDegree f ≺'[m] m.withBotDegree g) :
     m.withBotDegree (f + g) = m.withBotDegree g := by
-  rw [add_comm]; rw [withBotDegree_add_of_lt h]
-
-/--
-lemma `withBotDegree_sum_le` / 引理 `withBotDegree_sum_le`
-
-English:
-lemma withBotDegree_sum_le
-  given: {α : Type*} {s : Finset α} {f : α -> MvPolynomial σ R}
-  proof: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons a s haA h =>
-    rw [Finset.sum_cons]; rw [Finset.sup_cons]
-    exact le_trans (m.withBotDegree_add_le _ _) (max_le_max le_rfl h)
-
-中文:
-引理 withBotDegree_sum_le
-  条件: {α : 类型} {s : 有限集 α} {f : α -> 多元多项式 σ R}
-  证明: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons a s haA h =>
-    rw [Finset.sum_cons]; rw [Finset.sup_cons]
-    exact le_trans (m.withBotDegree_add_le _ _) (max_le_max le_rfl h)
-
-Depends on / 依赖: Finset, Finset.cons_induction_on, Finset.sum_cons, Finset.sup_cons, cons_induction_on, le_rfl, le_trans, m.withBotDegree_add_le, max_le_max, sum_cons, sup_cons, withBotDegree_add_le
+  rw [add_comm, withBotDegree_add_of_lt h]
+/-
+**MonomialOrder.withBotDegree_sum_le** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_sum_le {α : Type*} {s : Finset α} {f : α -> MvPolynomial σ R
+} : (m.toWithBotSyn <| m.withBotDegree <| ∑ x in s, f x) <= s.sup fun x => (m.to
+WithBotSyn <| m.withBotDegree <| f x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction_on`：cons_induction_on {α : Type*} {motive : Finset
+ α -> Prop} (s : Finset α) (empty : motive ∅) (cons : forall (a : α) (s : Finset
+ α) (h : a ∉ s…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `Finset.sup_cons`：sup_cons {b : β} (h : b ∉ s) : (cons b s h).sup f = f b
+ ⊔ s.sup f
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `MonomialOrder.withBotDegree_add_le`：withBotDegree_add_le : (m.toWithBotS
+yn <| m.withBotDegree (f + g)) <= (m.toWithBotSyn <| m.withBotDegree f) ⊔ (m.toW
+ithBotSyn <| m.withBotDe…
+· 使用定理 `max_le_max`：max_le_max : a <= c -> b <= d -> max a b <= max c d
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma withBotDegree_sum_le {α : Type*} {s : Finset α} {f : α -> MvPolynomial σ R} :
-    (m.toWithBotSyn <| m.withBotDegree <| ∑ x in s, f x) <=
-      s.sup fun x => (m.toWithBotSyn <| m.withBotDegree <| f x) := by
+lemma withBotDegree_sum_le {α : Type*} {s : Finset α} {f : α → MvPolynomial σ R} :
+    (m.toWithBotSyn <| m.withBotDegree <| ∑ x ∈ s, f x) ≤
+      s.sup fun x ↦ (m.toWithBotSyn <| m.withBotDegree <| f x) := by
   induction s using Finset.cons_induction_on with
   | empty => simp
   | cons a s haA h =>
-    rw [Finset.sum_cons]; rw [Finset.sup_cons]
+    rw [Finset.sum_cons, Finset.sup_cons]
     exact le_trans (m.withBotDegree_add_le _ _) (max_le_max le_rfl h)
 
 variable {f} in
-/--
-lemma `le_withBotDegree` / 引理 `le_withBotDegree`
-
-English:
-lemma le_withBotDegree
-  given: {d : σ ->₀ Nat} (hd : d in f.support)
-  proof: by
-  classical
-  simp [withBotDegree_eq, toWithBotSyn_apply, ne_zero_iff.mpr ⟨d, by simpa using hd⟩, le_degree hd]
-
-中文:
-引理 le_withBotDegree
-  条件: {d : σ ->₀ 自然数} (hd : d in f.support)
-  证明: by
-  classical
-  simp [withBotDegree_eq, toWithBotSyn_apply, ne_zero_iff.mpr ⟨d, by simpa using hd⟩, le_degree hd]
-
-Depends on / 依赖: classical, le_degree, ne_zero_iff, ne_zero_iff.mpr, toWithBotSyn_apply, withBotDegree_eq
+/-
+**MonomialOrder.le_withBotDegree** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：le_withBotDegree {d : σ ->₀ Nat} (hd : d in f.support) : d ≼'[m] m.withBot
+Degree f
+参数：hd : d in f.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MvPolynomial.ne_zero_iff`：ne_zero_iff {p : MvPolynomial σ R} : p != 0 ↔ 
+exists d, coeff d p != 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MonomialOrder.le_degree`：le_degree {f : MvPolynomial σ R} {d : σ ->₀ Nat
+} (hd : d in f.support) : d ≼[m] m.degree f
 -/
-lemma le_withBotDegree {d : σ ->₀ Nat} (hd : d in f.support) :
+lemma le_withBotDegree {d : σ →₀ ℕ} (hd : d ∈ f.support) :
     d ≼'[m] m.withBotDegree f := by
   classical
   simp [withBotDegree_eq, toWithBotSyn_apply, ne_zero_iff.mpr ⟨d, by simpa using hd⟩, le_degree hd]
 
 variable {f g} in
-/--
-lemma `withBotDegree_le_withBotDegree_of_support_subset` / 引理 `withBotDegree_le_withBotDegree_of_support_subset`
-
-English:
-lemma withBotDegree_le_withBotDegree_of_support_subset
-  proof: by
-  by_cases hg : g = 0
-  · simpa [hg] using h
-  rw [m.withBotDegree_le_withBotDegree_iff_of_ne_zero _ hg]
-  exact m.degree_le_degree_of_support_subset h
-
-中文:
-引理 withBotDegree_le_withBotDegree_of_support_subset
-  证明: by
-  by_cases hg : g = 0
-  · simpa [hg] using h
-  rw [m.withBotDegree_le_withBotDegree_iff_of_ne_zero _ hg]
-  exact m.degree_le_degree_of_support_subset h
-
-Depends on / 依赖: degree_le_degree_of_support_subset, m.degree_le_degree_of_support_subset, m.withBotDegree_le_withBotDegree_iff_of_ne_zero, withBotDegree_le_withBotDegree_iff_of_ne_zero
+/-
+**MonomialOrder.withBotDegree_le_withBotDegree_of_support_subset** 是 Mathlib 中的一
+个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_le_withBotDegree_of_support_subset (h : f.support subseteq g
+.support) : m.withBotDegree f ≼'[m] m.withBotDegree g
+参数：h : f.support subseteq g.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_le_withBotDegree_iff_of_ne_zero`：withBotDegr
+ee_le_withBotDegree_iff_of_ne_zero (hg : g != 0) : m.withBotDegree f ≼'[m] m.wit
+hBotDegree g ↔ m.degree f ≼[m] m.degree g
+· 使用引理 `MonomialOrder.degree_le_degree_of_support_subset`：degree_le_degree_of_su
+pport_subset {p q : MvPolynomial σ R} (h : p.support subseteq q.support) : m.deg
+ree p ≼[m] m.degree q
 -/
 lemma withBotDegree_le_withBotDegree_of_support_subset
-    (h : f.support subseteq g.support) :
+    (h : f.support ⊆ g.support) :
     m.withBotDegree f ≼'[m] m.withBotDegree g := by
   by_cases hg : g = 0
   · simpa [hg] using h
@@ -3892,113 +4265,146 @@ section Ring
 variable {R : Type*} [CommRing R]
 
 variable (m) in
-/--
-Definition of `sPolynomial` / `sPolynomial` 的定义
+/-- The S-polynomial of two polynomials.
 
-English:
-definition sPolynomial
-  signature: (f g : MvPolynomial σ R)
-  body: monomial (m.degree g - m.degree f) (m.leadingCoeff g) * f -
-  monomial (m.degree f - m.degree g) (m.leadingCoeff f) * g
+Denoting
 
-中文:
-定义 sPolynomial
-  签名: (f g : 多元多项式 σ R)
-  定义体: monomial (m.degree g - m.degree f) (m.leadingCoeff g) * f -
-  monomial (m.degree f - m.degree g) (m.leadingCoeff f) * g
+- the leading monomial of polynomial $f$ and $g$ as $lm(f)$ and $lm(g)$,
+- the leading coefficient of $f$ and $g$ as $lc(f)$ and $lc(g)$
+  (formalized as `m.leadingCoeff f` and `m.leadingCoeff g`), and
+- the least common multiple of $lm(f)$ and $lm(g)$ as $lcm(lm(f),lm(g))$,
 
-Depends on / 依赖: degree, leadingCoeff, m.degree, m.leadingCoeff, monomial
+the S-polynomial of $f$ and $g$ is defined as
+$$sPoly(f,g) := (lcm(lm(f),lm(g)) / lm(f)) * lc(g) * f - (lcm(lm(f),lm(g)) / lm(g)) * lc(f) * g.$$
+
+$(lcm(lm(f),lm(g)) / lm(f))$ and $lcm(lm(f),lm(g)) / lm(g)$ is formalized as
+`monomial (m.degree g - m.degree f) 1` and `monomial (m.degree g - m.degree f) 1`, while there is
+also another more direct formalization in `sPolynomial_def`.
+
+Notice that, when the polynomial ring is over a field, S-polynomial is usually defined as
+$$sPoly'(f,g) :=
+  (lcm(lm(f),lm(g)) / (lm(f) * lc(f))) * f - (lcm(lm(f),lm(g)) / (lm(g) * lc(g))) * g,$$
+while we avoid inverting $lc(f)$ and $lc(g)$ in this formalization so that it doesn't require a
+field or units (`IsUnit`) over ring.
+
+An equality between these two versions holds: $$sPoly(f,g) = lc(f) * lc(g) * sPoly'(f,g).$$
+-/
+/-
+**MonomialOrder.sPolynomial** 是 Mathlib 中的一个定义，位于命名空间 `MonomialOrder`。
+形式化陈述：sPolynomial (f g : MvPolynomial σ R) : MvPolynomial σ R
+参数：f g : MvPolynomial σ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The S-polynomial of two polynomials.
+
+Denoting
+
+- the leading monomial of polynomial $f$ and $g$ as $lm(f)$ and $lm(g)$,
+- the leading coefficient of $f$ and $g$ as $lc(f)$ and $lc(g)$
+  (formalized as `m.leadingCoeff f` and `m.leadingCoeff g`), and
+- the least common multiple of $lm(f)$ and $lm(g)$ as $lcm(lm(f),lm(g))$,
+
+the S-polynomial of $f$ and $g$ is defined as
+$$sPoly(f,g) := (lcm(lm(f),lm(g)) / lm(f)) * lc(g) * f - (lcm(lm(f),lm(g)) / lm(
+g)) * lc(f) * g.$$
+
+$(lcm(lm(f),lm(g)) / lm(f))$ and $lcm(lm(f),lm(g)) / lm(g)$ is formalized as
+`monomial (m.degree g - m.degree f) 1` and `monomial (m.degree g - m.degree f) 1
+`, while there is
+also another more direct formalization in `sPolynomial_def`.
+
+Notice that, when the polynomial ring is over a field, S-polynomial is usually d
+efined as
+$$sPoly'(f,g) :=
+  (lcm(lm(f),lm(g)) / (lm(f) * lc(f))) * f - (lcm(lm(f),lm(g)) / (lm(g) * lc(g))
+) * g,$$
+while we avoid inverting $lc(f)$ and $lc(g)$ in this formalization so that it do
+esn't require a
+field or units (`IsUnit`) over ring.
+
+An equality between these two versions holds: $$sPoly(f,g) = lc(f) * lc(g) * sPo
+ly'(f,g).$$
 -/
 noncomputable def sPolynomial (f g : MvPolynomial σ R) : MvPolynomial σ R :=
   monomial (m.degree g - m.degree f) (m.leadingCoeff g) * f -
   monomial (m.degree f - m.degree g) (m.leadingCoeff f) * g
-
-/--
-lemma `sPolynomial_def` / 引理 `sPolynomial_def`
-
-English:
-lemma sPolynomial_def
-  given: (f g : MvPolynomial σ R)
-  proof: by
-  suffices forall f g, m.degree g - m.degree f = m.degree f ⊔ m.degree g - m.degree f by
-    rw [sPolynomial]; rw [this]; rw [this]; rw [sup_comm]
-  intro f g
-  ext a
-  obtain (h | h) := le_total (m.degree f a) (m.degree g a) <;> simp [h]
-
-中文:
-引理 sPolynomial_def
-  条件: (f g : 多元多项式 σ R)
-  证明: by
-  suffices forall f g, m.degree g - m.degree f = m.degree f ⊔ m.degree g - m.degree f by
-    rw [sPolynomial]; rw [this]; rw [this]; rw [sup_comm]
-  intro f g
-  ext a
-  obtain (h | h) := le_total (m.degree f a) (m.degree g a) <;> simp [h]
-
-Depends on / 依赖: degree, le_total, m.degree, sPolynomial, sup_comm
+/-
+**MonomialOrder.sPolynomial_def** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：sPolynomial_def (f g : MvPolynomial σ R) : m.sPolynomial f g = monomial (m
+.degree f ⊔ m.degree g - m.degree f) (m.leadingCoeff g) * f - monomial (m.degree
+ f ⊔ m.degree g - m.degree g) (m.leadingCoeff f) * g
+参数：f g : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `MonomialOrder.sPolynomial.eq_1`：∀ {σ : Type u_1} (m : MonomialOrder σ) {
+R : Type u_2} [inst : CommRing R] (f g : MvPolynomial σ R),   m.sPolynomial f g 
+=     (MvPolynomial.…
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
 -/
 lemma sPolynomial_def (f g : MvPolynomial σ R) :
     m.sPolynomial f g =
       monomial (m.degree f ⊔ m.degree g - m.degree f) (m.leadingCoeff g) * f -
       monomial (m.degree f ⊔ m.degree g - m.degree g) (m.leadingCoeff f) * g := by
-  suffices forall f g, m.degree g - m.degree f = m.degree f ⊔ m.degree g - m.degree f by
-    rw [sPolynomial]; rw [this]; rw [this]; rw [sup_comm]
+  suffices ∀ f g, m.degree g - m.degree f = m.degree f ⊔ m.degree g - m.degree f by
+    rw [sPolynomial, this, this, sup_comm]
   intro f g
   ext a
   obtain (h | h) := le_total (m.degree f a) (m.degree g a) <;> simp [h]
-
-/--
-lemma `degree_ne_zero_of_sub_leadingTerm_ne_zero` / 引理 `degree_ne_zero_of_sub_leadingTerm_ne_zero`
-
-English:
-lemma degree_ne_zero_of_sub_leadingTerm_ne_zero
-  statement: {f : MvPolynomial σ R}
-  proof: by
-  contrapose h
-  rw [m.degree_eq_zero_iff.mp h]; rw [leadingTerm_C]; rw [sub_eq_zero]
-
-@[simp]
-
-中文:
-引理 degree_ne_zero_of_sub_leadingTerm_ne_zero
-  结论: {f : 多元多项式 σ R}
-  证明: by
-  contrapose h
-  rw [m.degree_eq_zero_iff.mp h]; rw [leadingTerm_C]; rw [sub_eq_zero]
-
-@[simp]
-
-Depends on / 依赖: contrapose, degree_eq_zero_iff, leadingTerm_C, m.degree_eq_zero_iff.mp, sub_eq_zero
+/-
+**MonomialOrder.degree_ne_zero_of_sub_leadingTerm_ne_zero** 是 Mathlib 中的一个引理，位于命
+名空间 `MonomialOrder`。
+形式化陈述：degree_ne_zero_of_sub_leadingTerm_ne_zero {f : MvPolynomial σ R} (h : f - 
+m.leadingTerm f != 0) : m.degree f != 0
+参数：h : f - m.leadingTerm f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MonomialOrder.degree_eq_zero_iff`：degree_eq_zero_iff {f : MvPolynomial σ
+ R} : m.degree f = 0 ↔ f = C (m.leadingCoeff f)
+· 使用引理 `MonomialOrder.leadingTerm_C`：leadingTerm_C (c : R) : m.leadingTerm (C c)
+ = C c
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
 -/
 lemma degree_ne_zero_of_sub_leadingTerm_ne_zero {f : MvPolynomial σ R}
-    (h : f - m.leadingTerm f != 0) : m.degree f != 0 := by
+    (h : f - m.leadingTerm f ≠ 0) : m.degree f ≠ 0 := by
   contrapose h
-  rw [m.degree_eq_zero_iff.mp h]; rw [leadingTerm_C]; rw [sub_eq_zero]
+  rw [m.degree_eq_zero_iff.mp h, leadingTerm_C, sub_eq_zero]
 
 @[simp]
-/--
-theorem `degree_neg` / 定理 `degree_neg`
-
-English:
-theorem degree_neg
-  given: {f : MvPolynomial σ R}
-  proof: by
-  unfold degree
-  rw [support_neg]
-
-@[simp]
-
-中文:
-定理 degree_neg
-  条件: {f : 多元多项式 σ R}
-  证明: by
-  unfold degree
-  rw [support_neg]
-
-@[simp]
-
-Depends on / 依赖: degree, support_neg
+/-
+**MonomialOrder.degree_neg** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_neg {f : MvPolynomial σ R} : m.degree (-f) = m.degree f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.support_neg`：∀ {R : Type u} (σ : Type u_1) [inst : CommRing
+ R] {p : MvPolynomial σ R}, (-p).support = p.support
 -/
 theorem degree_neg {f : MvPolynomial σ R} :
     m.degree (-f) = m.degree f := by
@@ -4006,166 +4412,173 @@ theorem degree_neg {f : MvPolynomial σ R} :
   rw [support_neg]
 
 @[simp]
-/--
-theorem `leadingCoeff_neg` / 定理 `leadingCoeff_neg`
-
-English:
-theorem leadingCoeff_neg
-  given: {f : MvPolynomial σ R}
-  proof: by
-  simp only [leadingCoeff, degree_neg, coeff_neg]
-
-中文:
-定理 leadingCoeff_neg
-  条件: {f : 多元多项式 σ R}
-  证明: by
-  simp only [leadingCoeff, degree_neg, coeff_neg]
-
-Depends on / 依赖: coeff_neg, degree_neg, leadingCoeff
+/-
+**MonomialOrder.leadingCoeff_neg** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：leadingCoeff_neg {f : MvPolynomial σ R} : m.leadingCoeff (-f) = - m.leadin
+gCoeff f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_neg`：degree_neg {f : MvPolynomial σ R} : m.degree (
+-f) = m.degree f
+· 使用定理 `MvPolynomial.coeff_neg`：coeff_neg (m : σ ->₀ Nat) (p : MvPolynomial σ R)
+ : coeff m (-p) = -coeff m p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leadingCoeff_neg {f : MvPolynomial σ R} :
     m.leadingCoeff (-f) = - m.leadingCoeff f := by
   simp only [leadingCoeff, degree_neg, coeff_neg]
-
-/--
-theorem `degree_sub_le` / 定理 `degree_sub_le`
-
-English:
-theorem degree_sub_le
-  given: {f g : MvPolynomial σ R}
-  proof: by
-  rw [sub_eq_add_neg]
-  apply le_of_le_of_eq m.degree_add_le
-  rw [degree_neg]
-
-中文:
-定理 degree_sub_le
-  条件: {f g : 多元多项式 σ R}
-  证明: by
-  rw [sub_eq_add_neg]
-  apply le_of_le_of_eq m.degree_add_le
-  rw [degree_neg]
-
-Depends on / 依赖: degree_add_le, degree_neg, le_of_le_of_eq, m.degree_add_le, sub_eq_add_neg
+/-
+**MonomialOrder.degree_sub_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_sub_le {f g : MvPolynomial σ R} : m.toSyn (m.degree (f - g)) <= m.t
+oSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `le_of_le_of_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `MonomialOrder.degree_add_le`：degree_add_le {f g : MvPolynomial σ R} : m.
+toSyn (m.degree (f + g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+· 使用定理 `MonomialOrder.degree_neg`：degree_neg {f : MvPolynomial σ R} : m.degree (
+-f) = m.degree f
 -/
 theorem degree_sub_le {f g : MvPolynomial σ R} :
-    m.toSyn (m.degree (f - g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g) := by
+    m.toSyn (m.degree (f - g)) ≤ m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g) := by
   rw [sub_eq_add_neg]
   apply le_of_le_of_eq m.degree_add_le
   rw [degree_neg]
-
-/--
-theorem `degree_sub_of_lt` / 定理 `degree_sub_of_lt`
-
-English:
-theorem degree_sub_of_lt
-  given: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
-  proof: by
-  rw [sub_eq_add_neg]
-  apply degree_add_of_lt
-  simp only [degree_neg, h]
-
-中文:
-定理 degree_sub_of_lt
-  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
-  证明: by
-  rw [sub_eq_add_neg]
-  apply degree_add_of_lt
-  simp only [degree_neg, h]
-
-Depends on / 依赖: degree_add_of_lt, degree_neg, sub_eq_add_neg
+/-
+**MonomialOrder.degree_sub_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_sub_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
+ : m.degree (f - g) = m.degree f
+参数：h : m.degree g ≺[m] m.degree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `MonomialOrder.degree_add_of_lt`：degree_add_of_lt {f g : MvPolynomial σ R
+} (h : m.degree g ≺[m] m.degree f) : m.degree (f + g) = m.degree f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_neg`：degree_neg {f : MvPolynomial σ R} : m.degree (
+-f) = m.degree f
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem degree_sub_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f) :
     m.degree (f - g) = m.degree f := by
   rw [sub_eq_add_neg]
   apply degree_add_of_lt
   simp only [degree_neg, h]
-
-/--
-theorem `leadingCoeff_sub_of_lt` / 定理 `leadingCoeff_sub_of_lt`
-
-English:
-theorem leadingCoeff_sub_of_lt
-  given: {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f)
-  proof: by
-  rw [sub_eq_add_neg]
-  apply leadingCoeff_add_of_lt
-  simp only [degree_neg, h]
-
-中文:
-定理 leadingCoeff_sub_of_lt
-  条件: {f g : 多元多项式 σ R} (h : m.degree g ≺[m] m.degree f)
-  证明: by
-  rw [sub_eq_add_neg]
-  apply leadingCoeff_add_of_lt
-  simp only [degree_neg, h]
-
-Depends on / 依赖: degree_neg, leadingCoeff_add_of_lt, sub_eq_add_neg
+/-
+**MonomialOrder.leadingCoeff_sub_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：leadingCoeff_sub_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.deg
+ree f) : m.leadingCoeff (f - g) = m.leadingCoeff f
+参数：h : m.degree g ≺[m] m.degree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `MonomialOrder.leadingCoeff_add_of_lt`：leadingCoeff_add_of_lt {f g : MvPo
+lynomial σ R} (h : m.degree g ≺[m] m.degree f) : m.leadingCoeff (f + g) = m.lead
+ingCoeff f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_neg`：degree_neg {f : MvPolynomial σ R} : m.degree (
+-f) = m.degree f
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem leadingCoeff_sub_of_lt {f g : MvPolynomial σ R} (h : m.degree g ≺[m] m.degree f) :
     m.leadingCoeff (f - g) = m.leadingCoeff f := by
   rw [sub_eq_add_neg]
   apply leadingCoeff_add_of_lt
   simp only [degree_neg, h]
-
-/--
-theorem `degree_sub_leadingTerm_le` / 定理 `degree_sub_leadingTerm_le`
-
-English:
-theorem degree_sub_leadingTerm_le
-  given: (f : MvPolynomial σ R)
-  proof: by
-  apply le_trans degree_sub_le
-  simp [degree_leadingTerm]
-
-中文:
-定理 degree_sub_leadingTerm_le
-  条件: (f : 多元多项式 σ R)
-  证明: by
-  apply le_trans degree_sub_le
-  simp [degree_leadingTerm]
-
-Depends on / 依赖: degree_leadingTerm, degree_sub_le, le_trans
+/-
+**MonomialOrder.degree_sub_leadingTerm_le** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrd
+er`。
+形式化陈述：degree_sub_leadingTerm_le (f : MvPolynomial σ R) : m.degree (f - m.leading
+Term f) ≼[m] m.degree f
+参数：f : MvPolynomial σ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `MonomialOrder.degree_sub_le`：degree_sub_le {f g : MvPolynomial σ R} : m.
+toSyn (m.degree (f - g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.degree_leadingTerm`：degree_leadingTerm (f : MvPolynomial σ
+ R) : m.degree (m.leadingTerm f) = m.degree f
+· 使用定理 `max_self`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α), max a a = a
 -/
 theorem degree_sub_leadingTerm_le (f : MvPolynomial σ R) :
     m.degree (f - m.leadingTerm f) ≼[m] m.degree f := by
   apply le_trans degree_sub_le
   simp [degree_leadingTerm]
-
-/--
-theorem `degree_sub_leadingTerm_lt_degree` / 定理 `degree_sub_leadingTerm_lt_degree`
-
-English:
-theorem degree_sub_leadingTerm_lt_degree
-  given: {f : MvPolynomial σ R} (h : m.degree f != 0)
-  proof: by
-  classical
-  by_cases hl : f - m.leadingTerm f = 0
-  · simpa [hl, toSyn_lt_iff_ne_zero]
-  · apply lt_of_le_of_ne (m.degree_sub_leadingTerm_le f)
-    by_contra! h'
-    simp only [EmbeddingLike.apply_eq_iff_eq] at h'
-    apply m.degree_mem_support at hl
-    rw [h']; rw [mem_support_iff] at hl
-    simp [leadingTerm, leadingCoeff] at hl
-
-中文:
-定理 degree_sub_leadingTerm_lt_degree
-  条件: {f : 多元多项式 σ R} (h : m.degree f != 0)
-  证明: by
-  classical
-  by_cases hl : f - m.leadingTerm f = 0
-  · simpa [hl, toSyn_lt_iff_ne_zero]
-  · apply lt_of_le_of_ne (m.degree_sub_leadingTerm_le f)
-    by_contra! h'
-    simp only [EmbeddingLike.apply_eq_iff_eq] at h'
-    apply m.degree_mem_support at hl
-    rw [h']; rw [mem_support_iff] at hl
-    simp [leadingTerm, leadingCoeff] at hl
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, apply_eq_iff_eq, classical, degree_mem_support, degree_sub_leadingTerm_le, leadingCoeff, leadingTerm, lt_of_le_of_ne, m.degree_mem_support, m.degree_sub_leadingTerm_le, m.leadingTerm, mem_support_iff, toSyn_lt_iff_ne_zero
+/-
+**MonomialOrder.degree_sub_leadingTerm_lt_degree** 是 Mathlib 中的一个定理，位于命名空间 `Mono
+mialOrder`。
+形式化陈述：degree_sub_leadingTerm_lt_degree {f : MvPolynomial σ R} (h : m.degree f !=
+ 0) : m.degree (f - m.leadingTerm f) ≺[m] m.degree f
+参数：h : m.degree f != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `MonomialOrder.degree_sub_leadingTerm_le`：degree_sub_leadingTerm_le (f : 
+MvPolynomial σ R) : m.degree (f - m.leadingTerm f) ≼[m] m.degree f
+· 使用定理 `MvPolynomial.coeff_sub`：coeff_sub (m : σ ->₀ Nat) (p q : MvPolynomial σ 
+R) : coeff m (p - q) = coeff m p - coeff m q
+· 使用定理 `MvPolynomial.coeff_monomial`：coeff_monomial [DecidableEq σ] (m n) (a) : 
+coeff m (monomial n a : MvPolynomial σ R) = if n = m then a else 0
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用引理 `MonomialOrder.degree_mem_support`：degree_mem_support {p : MvPolynomial σ
+ R} (hp : p != 0) : m.degree p in p.support
 -/
-theorem degree_sub_leadingTerm_lt_degree {f : MvPolynomial σ R} (h : m.degree f != 0) :
+theorem degree_sub_leadingTerm_lt_degree {f : MvPolynomial σ R} (h : m.degree f ≠ 0) :
     m.degree (f - m.leadingTerm f) ≺[m] m.degree f := by
   classical
   by_cases hl : f - m.leadingTerm f = 0
@@ -4174,246 +4587,361 @@ theorem degree_sub_leadingTerm_lt_degree {f : MvPolynomial σ R} (h : m.degree f
     by_contra! h'
     simp only [EmbeddingLike.apply_eq_iff_eq] at h'
     apply m.degree_mem_support at hl
-    rw [h']; rw [mem_support_iff] at hl
+    rw [h', mem_support_iff] at hl
     simp [leadingTerm, leadingCoeff] at hl
-
-/--
-theorem `degree_sub_leadingTerm_lt_iff` / 定理 `degree_sub_leadingTerm_lt_iff`
-
-English:
-theorem degree_sub_leadingTerm_lt_iff
-  given: {f : MvPolynomial σ R}
-  proof: by
-  refine ⟨?_, degree_sub_leadingTerm_lt_degree⟩
-  intro h h'
-  simp only [h', map_zero] at h
-  exact not_lt_bot h
-
-中文:
-定理 degree_sub_leadingTerm_lt_iff
-  条件: {f : 多元多项式 σ R}
-  证明: by
-  refine ⟨?_, degree_sub_leadingTerm_lt_degree⟩
-  intro h h'
-  simp only [h', map_zero] at h
-  exact not_lt_bot h
-
-Depends on / 依赖: degree_sub_leadingTerm_lt_degree, map_zero, not_lt_bot
+/-
+**MonomialOrder.degree_sub_leadingTerm_lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：degree_sub_leadingTerm_lt_iff {f : MvPolynomial σ R} : m.degree (f - m.lea
+dingTerm f) ≺[m] m.degree f ↔ m.degree f != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_lt_bot`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α] {a 
+: α}, ¬a < ⊥
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `MonomialOrder.degree_sub_leadingTerm_lt_degree`：degree_sub_leadingTerm_l
+t_degree {f : MvPolynomial σ R} (h : m.degree f != 0) : m.degree (f - m.leadingT
+erm f) ≺[m] m.degree f
 -/
 theorem degree_sub_leadingTerm_lt_iff {f : MvPolynomial σ R} :
-    m.degree (f - m.leadingTerm f) ≺[m] m.degree f ↔ m.degree f != 0 := by
+    m.degree (f - m.leadingTerm f) ≺[m] m.degree f ↔ m.degree f ≠ 0 := by
   refine ⟨?_, degree_sub_leadingTerm_lt_degree⟩
   intro h h'
   simp only [h', map_zero] at h
   exact not_lt_bot h
-
-/--
-lemma `sPolynomial_antisymm` / 引理 `sPolynomial_antisymm`
-
-English:
-lemma sPolynomial_antisymm
-  given: (f g : MvPolynomial σ R)
-  proof: (neg_sub (_ * g) (_ * f)).symm
-
-@[simp]
-
-中文:
-引理 sPolynomial_antisymm
-  条件: (f g : 多元多项式 σ R)
-  证明: (neg_sub (_ * g) (_ * f)).symm
-
-@[simp]
-
-Depends on / 依赖: neg_sub
+/-
+**MonomialOrder.sPolynomial_antisymm** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：sPolynomial_antisymm (f g : MvPolynomial σ R) : m.sPolynomial f g = - m.sP
+olynomial g f
+参数：f g : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
 -/
 lemma sPolynomial_antisymm (f g : MvPolynomial σ R) :
     m.sPolynomial f g = - m.sPolynomial g f :=
   (neg_sub (_ * g) (_ * f)).symm
 
 @[simp]
-/--
-lemma `sPolynomial_left_zero` / 引理 `sPolynomial_left_zero`
-
-English:
-lemma sPolynomial_left_zero
-  given: (g : MvPolynomial σ R)
-  proof: by
-  simp [sPolynomial]
-
-@[simp]
-
-中文:
-引理 sPolynomial_left_zero
-  条件: (g : 多元多项式 σ R)
-  证明: by
-  simp [sPolynomial]
-
-@[simp]
-
-Depends on / 依赖: SeparableSpace, SeparableWeaklyLocallyCompactGroup, SeparableWeaklyLocallyCompactGroup.sigmaCompactSpace, sPolynomial, sigmaCompactSpace
+/-
+**MonomialOrder.sPolynomial_left_zero** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：sPolynomial_left_zero (g : MvPolynomial σ R) : m.sPolynomial 0 g = 0
+参数：g : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `tsub_zero`：tsub_zero (a : α) : a - 0 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_tsub`：zero_tsub (a : α) : 0 - a = 0
+· 使用定理 `Finsupp.instCanonicallyOrderedAddOfAddLeftMono`：∀ {ι : Type u_1} {α : Ty
+pe u_3} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [CanonicallyOrderedAd
+d α]   [inst_3 : Sub α] [OrderedSub …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sPolynomial_left_zero (g : MvPolynomial σ R) :
     m.sPolynomial 0 g = 0 := by
   simp [sPolynomial]
 
 @[simp]
-/--
-lemma `sPolynomial_right_zero` / 引理 `sPolynomial_right_zero`
-
-English:
-lemma sPolynomial_right_zero
-  given: (f : MvPolynomial σ R)
-  proof: by
-  rw [sPolynomial_antisymm]; rw [sPolynomial_left_zero]; rw [neg_zero]
-
-@[simp]
-
-中文:
-引理 sPolynomial_right_zero
-  条件: (f : 多元多项式 σ R)
-  证明: by
-  rw [sPolynomial_antisymm]; rw [sPolynomial_left_zero]; rw [neg_zero]
-
-@[simp]
-
-Depends on / 依赖: neg_zero, sPolynomial_antisymm, sPolynomial_left_zero
+/-
+**MonomialOrder.sPolynomial_right_zero** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`
+。
+形式化陈述：sPolynomial_right_zero (f : MvPolynomial σ R) : m.sPolynomial f 0 = 0
+参数：f : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.sPolynomial_antisymm`：sPolynomial_antisymm (f g : MvPolyno
+mial σ R) : m.sPolynomial f g = - m.sPolynomial g f
+· 使用引理 `MonomialOrder.sPolynomial_left_zero`：sPolynomial_left_zero (g : MvPolyno
+mial σ R) : m.sPolynomial 0 g = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 lemma sPolynomial_right_zero (f : MvPolynomial σ R) :
     m.sPolynomial f 0 = 0 := by
-  rw [sPolynomial_antisymm]; rw [sPolynomial_left_zero]; rw [neg_zero]
+  rw [sPolynomial_antisymm, sPolynomial_left_zero, neg_zero]
 
 @[simp]
-/--
-lemma `sPolynomial_self` / 引理 `sPolynomial_self`
-
-English:
-lemma sPolynomial_self
-  given: (f : MvPolynomial σ R)
-  statement: m.sPolynomial f f = 0
-  proof: sub_self _
-
-中文:
-引理 sPolynomial_self
-  条件: (f : 多元多项式 σ R)
-  结论: m.sPolynomial f f = 0
-  证明: sub_self _
-
-Depends on / 依赖: sub_self
+/-
+**MonomialOrder.sPolynomial_self** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：sPolynomial_self (f : MvPolynomial σ R) : m.sPolynomial f f = 0
+参数：f : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
 lemma sPolynomial_self (f : MvPolynomial σ R) : m.sPolynomial f f = 0 := sub_self _
-
-/--
-lemma `degree_sPolynomial_le` / 引理 `degree_sPolynomial_le`
-
-English:
-lemma degree_sPolynomial_le
-  given: (f g : MvPolynomial σ R)
-  proof: by
-  classical
-  wlog! +distrib h0 : f != 0 ∧ g != 0
-  · (obtain rfl | rfl := h0) <;> simp
-  simp only [sPolynomial_def]
-  apply degree_sub_le.trans
-  apply (sup_le_sup degree_mul_le degree_mul_le).trans
-  simp [degree_monomial, h0.1, h0.2, tsub_add_cancel_of_le, le_sup_left, le_sup_right]
-
-中文:
-引理 degree_sPolynomial_le
-  条件: (f g : 多元多项式 σ R)
-  证明: by
-  classical
-  wlog! +distrib h0 : f != 0 ∧ g != 0
-  · (obtain rfl | rfl := h0) <;> simp
-  simp only [sPolynomial_def]
-  apply degree_sub_le.trans
-  apply (sup_le_sup degree_mul_le degree_mul_le).trans
-  simp [degree_monomial, h0.1, h0.2, tsub_add_cancel_of_le, le_sup_left, le_sup_right]
-
-Depends on / 依赖: classical, degree_monomial, degree_mul_le, degree_sub_le, degree_sub_le.trans, distrib, le_sup_left, le_sup_right, sPolynomial_def, sup_le_sup, tsub_add_cancel_of_le
+/-
+**MonomialOrder.degree_sPolynomial_le** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_sPolynomial_le (f g : MvPolynomial σ R) : ((m.degree <| m.sPolynomi
+al f g) ≼[m] m.degree f ⊔ m.degree g)
+参数：f g : MvPolynomial σ R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.sPolynomial_def`：sPolynomial_def (f g : MvPolynomial σ R) 
+: m.sPolynomial f g = monomial (m.degree f ⊔ m.degree g - m.degree f) (m.leading
+Coeff g) * f - mono…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MonomialOrder.degree_sub_le`：degree_sub_le {f g : MvPolynomial σ R} : m.
+toSyn (m.degree (f - g)) <= m.toSyn (m.degree f) ⊔ m.toSyn (m.degree g)
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
+· 使用定理 `MonomialOrder.degree_mul_le`：degree_mul_le {f g : MvPolynomial σ R} : m.
+degree (f * g) ≼[m] m.degree f + m.degree g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `Finsupp.instCanonicallyOrderedAddOfAddLeftMono`：∀ {ι : Type u_1} {α : Ty
+pe u_3} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [CanonicallyOrderedAd
+d α]   [inst_3 : Sub α] [OrderedSub …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `max_self`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α), max a a = a
+· 使用定理 `Mathlib.Tactic.Push.not_and_or_eq`：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ 
+¬ q)
+· 使用引理 `MonomialOrder.sPolynomial_left_zero`：sPolynomial_left_zero (g : MvPolyno
+mial σ R) : m.sPolynomial 0 g = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `Finsupp.instIsBotZeroClass`：∀ {ι : Type u_1} {α : Type u_3} [inst : AddC
+ommMonoid α] [inst_1 : PartialOrder α] [IsBotZeroClass α],   IsBotZeroClass (ι →
+₀ α)
+（共 34 条，此处仅展示前 30 条）
 -/
 lemma degree_sPolynomial_le (f g : MvPolynomial σ R) :
     ((m.degree <| m.sPolynomial f g) ≼[m] m.degree f ⊔ m.degree g) := by
   classical
-  wlog! +distrib h0 : f != 0 ∧ g != 0
+  wlog! +distrib h0 : f ≠ 0 ∧ g ≠ 0
   · (obtain rfl | rfl := h0) <;> simp
   simp only [sPolynomial_def]
   apply degree_sub_le.trans
   apply (sup_le_sup degree_mul_le degree_mul_le).trans
   simp [degree_monomial, h0.1, h0.2, tsub_add_cancel_of_le, le_sup_left, le_sup_right]
-
-/--
-lemma `coeff_sPolynomial_sup_eq_zero` / 引理 `coeff_sPolynomial_sup_eq_zero`
-
-English:
-lemma coeff_sPolynomial_sup_eq_zero
-  given: (f g : MvPolynomial σ R)
-  proof: by
-  rw [sPolynomial_def]; rw [coeff_sub]
-  nth_rewrite 1 [← tsub_add_cancel_of_le le_sup_left, coeff_monomial_mul]
-  nth_rewrite 1 [← tsub_add_cancel_of_le le_sup_right, coeff_monomial_mul]
-  unfold leadingCoeff
-  ring
-
-中文:
-引理 coeff_sPolynomial_sup_eq_zero
-  条件: (f g : 多元多项式 σ R)
-  证明: by
-  rw [sPolynomial_def]; rw [coeff_sub]
-  nth_rewrite 1 [← tsub_add_cancel_of_le le_sup_left, coeff_monomial_mul]
-  nth_rewrite 1 [← tsub_add_cancel_of_le le_sup_right, coeff_monomial_mul]
-  unfold leadingCoeff
-  ring
-
-Depends on / 依赖: coeff_monomial_mul, coeff_sub, continuous_inv, le_sup_left, le_sup_right, leadingCoeff, nth_rewrite, sPolynomial_def, tsub_add_cancel_of_le
+/-
+**MonomialOrder.coeff_sPolynomial_sup_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Monomia
+lOrder`。
+形式化陈述：coeff_sPolynomial_sup_eq_zero (f g : MvPolynomial σ R) : (m.sPolynomial f 
+g).coeff (m.degree f ⊔ m.degree g) = 0
+参数：f g : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.sPolynomial_def`：sPolynomial_def (f g : MvPolynomial σ R) 
+: m.sPolynomial f g = monomial (m.degree f ⊔ m.degree g - m.degree f) (m.leading
+Coeff g) * f - mono…
+· 使用定理 `MvPolynomial.coeff_sub`：coeff_sub (m : σ ->₀ Nat) (p q : MvPolynomial σ 
+R) : coeff m (p - q) = coeff m p - coeff m q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `Finsupp.instCanonicallyOrderedAddOfAddLeftMono`：∀ {ι : Type u_1} {α : Ty
+pe u_3} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [CanonicallyOrderedAd
+d α]   [inst_3 : Sub α] [OrderedSub …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `MvPolynomial.coeff_monomial_mul`：coeff_monomial_mul (m) (s : σ ->₀ Nat) 
+(r : R) (p : MvPolynomial σ R) : coeff (s + m) (monomial s r * p) = r * coeff m 
+p
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+（共 41 条，此处仅展示前 30 条）
 -/
 lemma coeff_sPolynomial_sup_eq_zero (f g : MvPolynomial σ R) :
     (m.sPolynomial f g).coeff (m.degree f ⊔ m.degree g) = 0 := by
-  rw [sPolynomial_def]; rw [coeff_sub]
+  rw [sPolynomial_def, coeff_sub]
   nth_rewrite 1 [← tsub_add_cancel_of_le le_sup_left, coeff_monomial_mul]
   nth_rewrite 1 [← tsub_add_cancel_of_le le_sup_right, coeff_monomial_mul]
   unfold leadingCoeff
   ring
-
-/--
-lemma `degree_sPolynomial` / 引理 `degree_sPolynomial`
-
-English:
-lemma degree_sPolynomial
-  given: (f g : MvPolynomial σ R)
-  proof: by
-  by_cases hf : m.degree f = 0 ∧ m.degree g = 0
-  · rcases hf with ⟨h₁, h₂⟩
-    right
-    suffices C (m.leadingCoeff g) * f - C (m.leadingCoeff f) * g = 0 by simp_all [sPolynomial_def]
-    nth_rewrite 1 [degree_eq_zero_iff.mp h₁]
-    nth_rewrite 2 [degree_eq_zero_iff.mp h₂]
-    ring
-  · rw [or_iff_not_imp_right]
-    intro hs
-    apply (m.degree_sPolynomial_le f g).lt_of_ne
-    apply m.toSyn.injective.ne
-    contrapose hs
-    rw [← m.coeff_degree_eq_zero_iff]; rw [hs]; rw [m.coeff_sPolynomial_sup_eq_zero]
-
-中文:
-引理 degree_sPolynomial
-  条件: (f g : 多元多项式 σ R)
-  证明: by
-  by_cases hf : m.degree f = 0 ∧ m.degree g = 0
-  · rcases hf with ⟨h₁, h₂⟩
-    right
-    suffices C (m.leadingCoeff g) * f - C (m.leadingCoeff f) * g = 0 by simp_all [sPolynomial_def]
-    nth_rewrite 1 [degree_eq_zero_iff.mp h₁]
-    nth_rewrite 2 [degree_eq_zero_iff.mp h₂]
-    ring
-  · rw [or_iff_not_imp_right]
-    intro hs
-    apply (m.degree_sPolynomial_le f g).lt_of_ne
-    apply m.toSyn.injective.ne
-    contrapose hs
-    rw [← m.coeff_degree_eq_zero_iff]; rw [hs]; rw [m.coeff_sPolynomial_sup_eq_zero]
-
-Depends on / 依赖: coeff_degree_eq_zero_iff, coeff_sPolynomial_sup_eq_zero, continuous_neg, contrapose, degree, degree_eq_zero_iff, degree_eq_zero_iff.mp, degree_sPolynomial_le, injective, leadingCoeff, lt_of_ne, m.coeff_degree_eq_zero_iff, m.coeff_sPolynomial_sup_eq_zero, m.degree, m.degree_sPolynomial_le, m.leadingCoeff, m.toSyn.injective.ne, nth_rewrite, or_iff_not_imp_right, sPolynomial_def
+/-
+**MonomialOrder.degree_sPolynomial** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_sPolynomial (f g : MvPolynomial σ R) : (m.degree <| m.sPolynomial f
+ g) ≺[m] m.degree f ⊔ m.degree g ∨ m.sPolynomial f g = 0
+参数：f g : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MonomialOrder.degree_eq_zero_iff`：degree_eq_zero_iff {f : MvPolynomial σ
+ R} : m.degree f = 0 ↔ f = C (m.leadingCoeff f)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero`：∀ {R : Type u_1} [in
+st : CommSemiring R] {a₁ a₂ b₁ b₂ c : R},   Mathlib.Meta.NormNum.IsNat (a₁ + b₁)
+ 0 → a₂ + b₂ = c → a₁ + a₂ + (b₁ + b₂) =…
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf_zero`：∀ {R : Type u_1} [inst :
+ CommSemiring R] {a b : R} (x : R) (e : ℕ),   Mathlib.Meta.NormNum.IsNat (a + b)
+ 0 → Mathlib.Meta.NormNum.IsNat (x ^…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_add`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HAdd.hAdd →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.of_raw`：∀ (α : Type u_1) [inst : Ring α] (n :
+ ℤ), Mathlib.Meta.NormNum.IsInt n.rawCast n
+（共 52 条，此处仅展示前 30 条）
 -/
 lemma degree_sPolynomial (f g : MvPolynomial σ R) :
     (m.degree <| m.sPolynomial f g) ≺[m] m.degree f ⊔ m.degree g ∨ m.sPolynomial f g = 0 := by
@@ -4429,96 +4957,124 @@ lemma degree_sPolynomial (f g : MvPolynomial σ R) :
     apply (m.degree_sPolynomial_le f g).lt_of_ne
     apply m.toSyn.injective.ne
     contrapose hs
-    rw [← m.coeff_degree_eq_zero_iff]; rw [hs]; rw [m.coeff_sPolynomial_sup_eq_zero]
-
-/--
-lemma `degree_sPolynomial_lt_sup_degree` / 引理 `degree_sPolynomial_lt_sup_degree`
-
-English:
-lemma degree_sPolynomial_lt_sup_degree
-  given: {f g : MvPolynomial σ R} (h : m.sPolynomial f g != 0)
-  proof: (or_iff_left h).mp m.degree_sPolynomial f g
-
-中文:
-引理 degree_sPolynomial_lt_sup_degree
-  条件: {f g : 多元多项式 σ R} (h : m.sPolynomial f g != 0)
-  证明: (or_iff_left h).mp m.degree_sPolynomial f g
-
-Depends on / 依赖: degree_sPolynomial, m.degree_sPolynomial, or_iff_left
+    rw [← m.coeff_degree_eq_zero_iff, hs, m.coeff_sPolynomial_sup_eq_zero]
+/-
+**MonomialOrder.degree_sPolynomial_lt_sup_degree** 是 Mathlib 中的一个引理，位于命名空间 `Mono
+mialOrder`。
+形式化陈述：degree_sPolynomial_lt_sup_degree {f g : MvPolynomial σ R} (h : m.sPolynomi
+al f g != 0) : (m.degree <| m.sPolynomial f g) ≺[m] m.degree f ⊔ m.degree g
+参数：h : m.sPolynomial f g != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `or_iff_left`：∀ {b a : Prop}, ¬b → (a ∨ b ↔ a)
+· 使用引理 `MonomialOrder.degree_sPolynomial`：degree_sPolynomial (f g : MvPolynomial
+ σ R) : (m.degree <| m.sPolynomial f g) ≺[m] m.degree f ⊔ m.degree g ∨ m.sPolyno
+mial f g = 0
 -/
-lemma degree_sPolynomial_lt_sup_degree {f g : MvPolynomial σ R} (h : m.sPolynomial f g != 0) :
+lemma degree_sPolynomial_lt_sup_degree {f g : MvPolynomial σ R} (h : m.sPolynomial f g ≠ 0) :
     (m.degree <| m.sPolynomial f g) ≺[m] m.degree f ⊔ m.degree g :=
-(or_iff_left h).mp m.degree_sPolynomial f g
-
-/--
-lemma `sPolynomial_lt_of_degree_ne_zero_of_degree_eq` / 引理 `sPolynomial_lt_of_degree_ne_zero_of_degree_eq`
-
-English:
-lemma sPolynomial_lt_of_degree_ne_zero_of_degree_eq
-  statement: {f g : MvPolynomial σ R}
-  proof: by
-  simpa [h] using m.degree_sPolynomial_lt_sup_degree hs
-
-中文:
-引理 sPolynomial_lt_of_degree_ne_zero_of_degree_eq
-  结论: {f g : 多元多项式 σ R}
-  证明: by
-  simpa [h] using m.degree_sPolynomial_lt_sup_degree hs
-
-Depends on / 依赖: degree_sPolynomial_lt_sup_degree, m.degree_sPolynomial_lt_sup_degree
+  (or_iff_left h).mp <| m.degree_sPolynomial f g
+/-
+**MonomialOrder.sPolynomial_lt_of_degree_ne_zero_of_degree_eq** 是 Mathlib 中的一个引理
+，位于命名空间 `MonomialOrder`。
+形式化陈述：sPolynomial_lt_of_degree_ne_zero_of_degree_eq {f g : MvPolynomial σ R} (h 
+: m.degree f = m.degree g) (hs : m.sPolynomial f g != 0) : m.degree (m.sPolynomi
+al f g) ≺[m] m.degree f
+参数：h : m.degree f = m.degree g；hs : m.sPolynomial f g != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `MonomialOrder.degree_sPolynomial_lt_sup_degree`：degree_sPolynomial_lt_su
+p_degree {f g : MvPolynomial σ R} (h : m.sPolynomial f g != 0) : (m.degree <| m.
+sPolynomial f g) ≺[m] m.degree f ⊔ m…
 -/
 lemma sPolynomial_lt_of_degree_ne_zero_of_degree_eq {f g : MvPolynomial σ R}
-    (h : m.degree f = m.degree g) (hs : m.sPolynomial f g != 0) :
+    (h : m.degree f = m.degree g) (hs : m.sPolynomial f g ≠ 0) :
     m.degree (m.sPolynomial f g) ≺[m] m.degree f := by
   simpa [h] using m.degree_sPolynomial_lt_sup_degree hs
-
-/--
-lemma `sPolynomial_monomial_mul` / 引理 `sPolynomial_monomial_mul`
-
-English:
-lemma sPolynomial_monomial_mul
-  statement: [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ Nat)
-  proof: by
-  classical
-  simp only [sPolynomial_def]
-  wlog! +distrib H : c₁ != 0 ∧ c₂ != 0 ∧ p₁ != 0 ∧ p₂ != 0
-  · (obtain rfl | rfl | rfl | rfl := H) <;> simp
-  rcases H with ⟨hc1, hc2, hp1, hp2⟩
-  have hm1 := (monomial_eq_zero (s := d₁)).not.mpr hc1
-  have hm2 := (monomial_eq_zero (s := d₂)).not.mpr hc2
-  simp_rw [m.degree_mul hm1 hp1, m.degree_mul hm2 hp2,
-    mul_sub, ← mul_assoc _ _ p₁, ← mul_assoc _ _ p₂, monomial_mul,
-    m.leadingCoeff_mul, m.leadingCoeff_monomial,
-    degree_monomial, hc1, hc2, reduceIte, mul_right_comm, mul_comm c₂ c₁]
-  rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_eq_add_tsub le_sup_left]; rw [tsub_add_eq_add_tsub le_sup_right]; rw [add_comm d₁]; rw [add_comm d₂]; rw [add_tsub_add_eq_tsub_right]; rw [add_tsub_add_eq_tsub_right]
-
-中文:
-引理 sPolynomial_monomial_mul
-  结论: [无零因子 R] (p₁ p₂ : 多元多项式 σ R) (d₁ d₂ : σ ->₀ 自然数)
-  证明: by
-  classical
-  simp only [sPolynomial_def]
-  wlog! +distrib H : c₁ != 0 ∧ c₂ != 0 ∧ p₁ != 0 ∧ p₂ != 0
-  · (obtain rfl | rfl | rfl | rfl := H) <;> simp
-  rcases H with ⟨hc1, hc2, hp1, hp2⟩
-  have hm1 := (monomial_eq_zero (s := d₁)).not.mpr hc1
-  have hm2 := (monomial_eq_zero (s := d₂)).not.mpr hc2
-  simp_rw [m.degree_mul hm1 hp1, m.degree_mul hm2 hp2,
-    mul_sub, ← mul_assoc _ _ p₁, ← mul_assoc _ _ p₂, monomial_mul,
-    m.leadingCoeff_mul, m.leadingCoeff_monomial,
-    degree_monomial, hc1, hc2, reduceIte, mul_right_comm, mul_comm c₂ c₁]
-  rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_eq_add_tsub le_sup_left]; rw [tsub_add_eq_add_tsub le_sup_right]; rw [add_comm d₁]; rw [add_comm d₂]; rw [add_tsub_add_eq_tsub_right]; rw [add_tsub_add_eq_tsub_right]
-
-Depends on / 依赖: classical, degree_monomial, degree_mul, distrib, leadingCoeff_monomial, leadingCoeff_mul, m.degree_mul, m.leadingCoeff_monomial, m.leadingCoeff_mul, monomial_eq_zero, monomial_mul, mul_assoc, mul_right_comm, mul_sub, not.mpr, reduceIte, sPolynomial_def, simp_rw
+/-
+**MonomialOrder.sPolynomial_monomial_mul** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrde
+r`。
+形式化陈述：sPolynomial_monomial_mul [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁
+ d₂ : σ ->₀ Nat) (c₁ c₂ : R) : m.sPolynomial ((monomial d₁ c₁) * p₁) ((monomial 
+d₂ c₂) * p₂) = monomial ((d₁ + m.degree p₁) ⊔ (d₂ + m.degree p₂) - m.degree p₁ ⊔
+ m.degree p₂) (c₁ * c₂) * m.sPolynomial p₁ p₂
+参数：p₁ p₂ : MvPolynomial σ R；d₁ d₂ : σ ->₀ Nat；c₁ c₂ : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.sPolynomial_def`：sPolynomial_def (f g : MvPolynomial σ R) 
+: m.sPolynomial f g = monomial (m.degree f ⊔ m.degree g - m.degree f) (m.leading
+Coeff g) * f - mono…
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `MvPolynomial.monomial_eq_zero`：monomial_eq_zero {s : σ ->₀ Nat} {b : R} 
+: monomial s b = 0 ↔ b = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `MvPolynomial.monomial_mul`：monomial_mul {s s' : σ ->₀ Nat} {a b : R} : m
+onomial s a * monomial s' b = monomial (s + s') (a * b)
+· 使用定理 `MonomialOrder.leadingCoeff_mul`：∀ {σ : Type u_1} {m : MonomialOrder σ} {
+R : Type u_2} [inst : CommSemiring R] [NoZeroDivisors R]   {f g : MvPolynomial σ
+ R}, m.leadingCoeff …
+· 使用定理 `MonomialOrder.leadingCoeff_monomial`：leadingCoeff_monomial {d : σ ->₀ Na
+t} (c : R) : m.leadingCoeff (monomial d c) = c
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `tsub_add_tsub_cancel`：tsub_add_tsub_cancel (hab : b <= a) (hcb : c <= b)
+ : a - b + (b - c) = a - c
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `Finsupp.instCanonicallyOrderedAddOfAddLeftMono`：∀ {ι : Type u_1} {α : Ty
+pe u_3} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [CanonicallyOrderedAd
+d α]   [inst_3 : Sub α] [OrderedSub …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
+· 使用定理 `self_le_add_left`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [Canonic
+allyOrderedAdd α] (a b : α), a ≤ b + a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `tsub_add_eq_add_tsub`：tsub_add_eq_add_tsub (h : b <= a) : a - b + c = a 
++ c - b
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+（共 52 条，此处仅展示前 30 条）
 -/
-lemma sPolynomial_monomial_mul [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ Nat)
+lemma sPolynomial_monomial_mul [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ →₀ ℕ)
     (c₁ c₂ : R) :
     m.sPolynomial ((monomial d₁ c₁) * p₁) ((monomial d₂ c₂) * p₂) =
       monomial ((d₁ + m.degree p₁) ⊔ (d₂ + m.degree p₂) - m.degree p₁ ⊔ m.degree p₂) (c₁ * c₂) *
       m.sPolynomial p₁ p₂ := by
   classical
   simp only [sPolynomial_def]
-  wlog! +distrib H : c₁ != 0 ∧ c₂ != 0 ∧ p₁ != 0 ∧ p₂ != 0
+  wlog! +distrib H : c₁ ≠ 0 ∧ c₂ ≠ 0 ∧ p₁ ≠ 0 ∧ p₂ ≠ 0
   · (obtain rfl | rfl | rfl | rfl := H) <;> simp
   rcases H with ⟨hc1, hc2, hp1, hp2⟩
   have hm1 := (monomial_eq_zero (s := d₁)).not.mpr hc1
@@ -4527,58 +5083,97 @@ lemma sPolynomial_monomial_mul [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R
     mul_sub, ← mul_assoc _ _ p₁, ← mul_assoc _ _ p₂, monomial_mul,
     m.leadingCoeff_mul, m.leadingCoeff_monomial,
     degree_monomial, hc1, hc2, reduceIte, mul_right_comm, mul_comm c₂ c₁]
-  rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp)]; rw [tsub_add_eq_add_tsub le_sup_left]; rw [tsub_add_eq_add_tsub le_sup_right]; rw [add_comm d₁]; rw [add_comm d₂]; rw [add_tsub_add_eq_tsub_right]; rw [add_tsub_add_eq_tsub_right]
-
-/--
-lemma `sPolynomial_monomial_mul'` / 引理 `sPolynomial_monomial_mul'`
-
-English:
-lemma sPolynomial_monomial_mul'
-  statement: [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ Nat)
-  proof: by
-  classical
-  wlog! +distrib H : c₁ != 0 ∧ c₂ != 0 ∧ p₁ != 0 ∧ p₂ != 0
-  · (obtain rfl | rfl | rfl | rfl := H) <;> simp
-  simp [H, degree_mul, sPolynomial_monomial_mul, degree_monomial]
-
-中文:
-引理 sPolynomial_monomial_mul'
-  结论: [无零因子 R] (p₁ p₂ : 多元多项式 σ R) (d₁ d₂ : σ ->₀ 自然数)
-  证明: by
-  classical
-  wlog! +distrib H : c₁ != 0 ∧ c₂ != 0 ∧ p₁ != 0 ∧ p₂ != 0
-  · (obtain rfl | rfl | rfl | rfl := H) <;> simp
-  simp [H, degree_mul, sPolynomial_monomial_mul, degree_monomial]
-
-Depends on / 依赖: classical, degree_monomial, degree_mul, distrib, sPolynomial_monomial_mul
+  rw [tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp),
+    tsub_add_tsub_cancel (sup_le_sup (self_le_add_left _ _) (self_le_add_left _ _)) (by simp),
+    tsub_add_eq_add_tsub le_sup_left, tsub_add_eq_add_tsub le_sup_right,
+    add_comm d₁, add_comm d₂, add_tsub_add_eq_tsub_right, add_tsub_add_eq_tsub_right]
+/-
+**MonomialOrder.sPolynomial_monomial_mul'** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrd
+er`。
+形式化陈述：sPolynomial_monomial_mul' [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d
+₁ d₂ : σ ->₀ Nat) (c₁ c₂ : R) : m.sPolynomial (monomial d₁ c₁ * p₁) (monomial d₂
+ c₂ * p₂) = monomial (m.degree (monomial d₁ c₁ * p₁) ⊔ m.degree (monomial d₂ c₂ 
+* p₂) - m.degree p₁ ⊔ m.degree p₂) (c₁ * c₂) * m.sPolynomial p₁ p₂
+参数：p₁ p₂ : MvPolynomial σ R；d₁ d₂ : σ ->₀ Nat；c₁ c₂ : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.sPolynomial_monomial_mul`：sPolynomial_monomial_mul [NoZero
+Divisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ Nat) (c₁ c₂ : R) : m.sPoly
+nomial ((monomial d₁ c₁) * p…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MonomialOrder.degree_monomial`：degree_monomial {d : σ ->₀ Nat} (c : R) [
+Decidable (c = 0)] : m.degree (monomial d c) = if c = 0 then 0 else d
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Mathlib.Tactic.Push.not_and_or_eq`：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ 
+¬ q)
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用引理 `MonomialOrder.sPolynomial_left_zero`：sPolynomial_left_zero (g : MvPolyno
+mial σ R) : m.sPolynomial 0 g = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `Finsupp.instIsBotZeroClass`：∀ {ι : Type u_1} {α : Type u_3} [inst : AddC
+ommMonoid α] [inst_1 : PartialOrder α] [IsBotZeroClass α],   IsBotZeroClass (ι →
+₀ α)
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MonomialOrder.sPolynomial_right_zero`：sPolynomial_right_zero (f : MvPoly
+nomial σ R) : m.sPolynomial f 0 = 0
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-lemma sPolynomial_monomial_mul' [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ Nat)
+lemma sPolynomial_monomial_mul' [NoZeroDivisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ →₀ ℕ)
     (c₁ c₂ : R) :
     m.sPolynomial (monomial d₁ c₁ * p₁) (monomial d₂ c₂ * p₂) =
       monomial (m.degree (monomial d₁ c₁ * p₁) ⊔ m.degree (monomial d₂ c₂ * p₂) -
           m.degree p₁ ⊔ m.degree p₂) (c₁ * c₂) *
       m.sPolynomial p₁ p₂ := by
   classical
-  wlog! +distrib H : c₁ != 0 ∧ c₂ != 0 ∧ p₁ != 0 ∧ p₂ != 0
+  wlog! +distrib H : c₁ ≠ 0 ∧ c₂ ≠ 0 ∧ p₁ ≠ 0 ∧ p₂ ≠ 0
   · (obtain rfl | rfl | rfl | rfl := H) <;> simp
   simp [H, degree_mul, sPolynomial_monomial_mul, degree_monomial]
-
-/--
-lemma `sPolynomial_leadingTerm_mul` / 引理 `sPolynomial_leadingTerm_mul`
-
-English:
-lemma sPolynomial_leadingTerm_mul
-  given: [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomial σ R)
-  proof: by
-  simp [sPolynomial_monomial_mul, leadingTerm]
-
-中文:
-引理 sPolynomial_leadingTerm_mul
-  条件: [无零因子 R] (p₁ p₂ q₁ q₂ : 多元多项式 σ R)
-  证明: by
-  simp [sPolynomial_monomial_mul, leadingTerm]
-
-Depends on / 依赖: leadingTerm, sPolynomial_monomial_mul
+/-
+**MonomialOrder.sPolynomial_leadingTerm_mul** 是 Mathlib 中的一个引理，位于命名空间 `MonomialO
+rder`。
+形式化陈述：sPolynomial_leadingTerm_mul [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomial
+ σ R) : m.sPolynomial (m.leadingTerm p₁ * q₁) (m.leadingTerm p₂ * q₂) = monomial
+ ((m.degree p₁ + m.degree q₁) ⊔ (m.degree p₂ + m.degree q₂) - m.degree q₁ ⊔ m.de
+gree q₂) (m.leadingCoeff p₁ * m.leadingCoeff p₂) * m.sPolynomial q₁ q₂
+参数：p₁ p₂ q₁ q₂ : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.sPolynomial_monomial_mul`：sPolynomial_monomial_mul [NoZero
+Divisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ Nat) (c₁ c₂ : R) : m.sPoly
+nomial ((monomial d₁ c₁) * p…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sPolynomial_leadingTerm_mul [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomial σ R) :
     m.sPolynomial (m.leadingTerm p₁ * q₁) (m.leadingTerm p₂ * q₂) =
@@ -4587,27 +5182,62 @@ lemma sPolynomial_leadingTerm_mul [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPo
         (m.leadingCoeff p₁ * m.leadingCoeff p₂) *
       m.sPolynomial q₁ q₂ := by
   simp [sPolynomial_monomial_mul, leadingTerm]
-
-/--
-lemma `sPolynomial_leadingTerm_mul'` / 引理 `sPolynomial_leadingTerm_mul'`
-
-English:
-lemma sPolynomial_leadingTerm_mul'
-  given: [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomial σ R)
-  proof: by
-  wlog! +distrib H : p₁ != 0 ∧ p₂ != 0 ∧ q₁ != 0 ∧ q₂ != 0
-  · (obtain rfl | rfl | rfl | rfl := H) <;> simp
-  simp [H, leadingTerm, sPolynomial_monomial_mul, degree_mul]
-
-中文:
-引理 sPolynomial_leadingTerm_mul'
-  条件: [无零因子 R] (p₁ p₂ q₁ q₂ : 多元多项式 σ R)
-  证明: by
-  wlog! +distrib H : p₁ != 0 ∧ p₂ != 0 ∧ q₁ != 0 ∧ q₂ != 0
-  · (obtain rfl | rfl | rfl | rfl := H) <;> simp
-  simp [H, leadingTerm, sPolynomial_monomial_mul, degree_mul]
-
-Depends on / 依赖: degree_mul, distrib, leadingTerm, sPolynomial_monomial_mul
+/-
+**MonomialOrder.sPolynomial_leadingTerm_mul'** 是 Mathlib 中的一个引理，位于命名空间 `Monomial
+Order`。
+形式化陈述：sPolynomial_leadingTerm_mul' [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomia
+l σ R) : m.sPolynomial (m.leadingTerm p₁ * q₁) (m.leadingTerm p₂ * q₂) = monomia
+l ((m.degree (p₁ * q₁)) ⊔ (m.degree (p₂ * q₂)) - m.degree q₁ ⊔ m.degree q₂) (m.l
+eadingCoeff p₁ * m.leadingCoeff p₂) * m.sPolynomial q₁ q₂
+参数：p₁ p₂ q₁ q₂ : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.sPolynomial_monomial_mul`：sPolynomial_monomial_mul [NoZero
+Divisors R] (p₁ p₂ : MvPolynomial σ R) (d₁ d₂ : σ ->₀ Nat) (c₁ c₂ : R) : m.sPoly
+nomial ((monomial d₁ c₁) * p…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonomialOrder.degree_mul`：degree_mul [NoZeroDivisors R] {f g : MvPolynom
+ial σ R} (hf : f != 0) (hg : g != 0) : m.degree (f * g) = m.degree f + m.degree 
+g
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Mathlib.Tactic.Push.not_and_or_eq`：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ 
+¬ q)
+· 使用引理 `MonomialOrder.leadingTerm_zero`：leadingTerm_zero : m.leadingTerm (0 : Mv
+Polynomial σ R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用引理 `MonomialOrder.sPolynomial_left_zero`：sPolynomial_left_zero (g : MvPolyno
+mial σ R) : m.sPolynomial 0 g = 0
+· 使用定理 `MonomialOrder.degree_zero`：degree_zero : m.degree (0 : MvPolynomial σ R)
+ = 0
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `Finsupp.instIsBotZeroClass`：∀ {ι : Type u_1} {α : Type u_3} [inst : AddC
+ommMonoid α] [inst_1 : PartialOrder α] [IsBotZeroClass α],   IsBotZeroClass (ι →
+₀ α)
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `MonomialOrder.leadingCoeff_zero`：leadingCoeff_zero : m.leadingCoeff (0 :
+ MvPolynomial σ R) = 0
+· 使用定理 `MvPolynomial.monomial_zero`：monomial_zero {s : σ ->₀ Nat} : monomial s (
+0 : R) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MonomialOrder.sPolynomial_right_zero`：sPolynomial_right_zero (f : MvPoly
+nomial σ R) : m.sPolynomial f 0 = 0
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 lemma sPolynomial_leadingTerm_mul' [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvPolynomial σ R) :
     m.sPolynomial (m.leadingTerm p₁ * q₁) (m.leadingTerm p₂ * q₂) =
@@ -4615,100 +5245,79 @@ lemma sPolynomial_leadingTerm_mul' [NoZeroDivisors R] (p₁ p₂ q₁ q₂ : MvP
         ((m.degree (p₁ * q₁)) ⊔ (m.degree (p₂ * q₂)) - m.degree q₁ ⊔ m.degree q₂)
         (m.leadingCoeff p₁ * m.leadingCoeff p₂) *
       m.sPolynomial q₁ q₂ := by
-  wlog! +distrib H : p₁ != 0 ∧ p₂ != 0 ∧ q₁ != 0 ∧ q₂ != 0
+  wlog! +distrib H : p₁ ≠ 0 ∧ p₂ ≠ 0 ∧ q₁ ≠ 0 ∧ q₂ ≠ 0
   · (obtain rfl | rfl | rfl | rfl := H) <;> simp
   simp [H, leadingTerm, sPolynomial_monomial_mul, degree_mul]
-
-/--
-lemma `sPolynomial_decomposition` / 引理 `sPolynomial_decomposition`
-
-English:
-lemma sPolynomial_decomposition
-  statement: {d : m.syn} {ι : Type*}
-  proof: by
-  classical
-  induction B using Finset.induction_on with
-  | empty => simp
-  | insert b B hb h =>
-    by_cases hb0 : g b = 0
-    · simp_all
-    simp? [Finset.sum_insert hb, hb0] at hfd hd says
-      simp only [Finset.sum_insert hb, Finset.mem_insert, forall_eq_or_imp, hb0, or_false]
-        at hfd hd
-    obtain ⟨⟨rfl, isunit_gb⟩, hd⟩ := hd
-    use fun b₁ b₂ => if b₂ = b then ↑isunit_gb.unit⁻¹ else 0
-    simp? [Finset.sum_insert hb, hb] says
-      simp only [Finset.sum_insert hb, ite_smul, zero_smul, ↓reduceIte, Finset.sum_ite_eq', hb,
-        add_zero, sPolynomial_self, smul_zero, zero_add]
-    simp only [m.toSyn.injective.eq_iff] at *
-    trans ∑ b' in B, (g b' - (m.leadingCoeff (g b') * ↑isunit_gb.unit⁻¹) • g b)
-    · suffices (-(∑ i in B, m.leadingCoeff (g i))) = m.leadingCoeff (g b) by
-        rw [add_comm]; rw [Finset.sum_sub_distrib]; rw [sub_eq_add_neg]; rw [← Finset.sum_smul]; rw [← Finset.sum_mul]; rw [← neg_smul]; rw [← neg_mul]; rw [this]; rw [isunit_gb.mul_val_inv]; rw [one_smul]
-      rw [← add_eq_zero_iff_neg_eq']
-      trans (g b).coeff (m.degree <| g b) + ∑ i in B, (g i).coeff (m.degree <| g b)
-      · unfold leadingCoeff
-        congr 1
-        apply Finset.sum_congr rfl
-        intro b' hb'
-        rcases hd b' hb' with h | h <;> simp [h]
-      · rw [← coeff_sum, ← coeff_add, ← notMem_support_iff]
-        exact m.notMem_support_of_degree_lt hfd
-    · apply Finset.sum_congr rfl
-      intro b' hb'
-      rw [sPolynomial]
-      obtain (⟨h, -⟩ | h) := hd b' hb' <;>
-        simp [h, ← smul_eq_C_mul, smul_sub, ← mul_smul, mul_comm (m.leadingCoeff (g b'))]
-
-@[simp]
-
-中文:
-引理 sPolynomial_decomposition
-  结论: {d : m.syn} {ι : 类型}
-  证明: by
-  classical
-  induction B using Finset.induction_on with
-  | empty => simp
-  | insert b B hb h =>
-    by_cases hb0 : g b = 0
-    · simp_all
-    simp? [Finset.sum_insert hb, hb0] at hfd hd says
-      simp only [Finset.sum_insert hb, Finset.mem_insert, forall_eq_or_imp, hb0, or_false]
-        at hfd hd
-    obtain ⟨⟨rfl, isunit_gb⟩, hd⟩ := hd
-    use fun b₁ b₂ => if b₂ = b then ↑isunit_gb.unit⁻¹ else 0
-    simp? [Finset.sum_insert hb, hb] says
-      simp only [Finset.sum_insert hb, ite_smul, zero_smul, ↓reduceIte, Finset.sum_ite_eq', hb,
-        add_zero, sPolynomial_self, smul_zero, zero_add]
-    simp only [m.toSyn.injective.eq_iff] at *
-    trans ∑ b' in B, (g b' - (m.leadingCoeff (g b') * ↑isunit_gb.unit⁻¹) • g b)
-    · suffices (-(∑ i in B, m.leadingCoeff (g i))) = m.leadingCoeff (g b) by
-        rw [add_comm]; rw [Finset.sum_sub_distrib]; rw [sub_eq_add_neg]; rw [← Finset.sum_smul]; rw [← Finset.sum_mul]; rw [← neg_smul]; rw [← neg_mul]; rw [this]; rw [isunit_gb.mul_val_inv]; rw [one_smul]
-      rw [← add_eq_zero_iff_neg_eq']
-      trans (g b).coeff (m.degree <| g b) + ∑ i in B, (g i).coeff (m.degree <| g b)
-      · unfold leadingCoeff
-        congr 1
-        apply Finset.sum_congr rfl
-        intro b' hb'
-        rcases hd b' hb' with h | h <;> simp [h]
-      · rw [← coeff_sum, ← coeff_add, ← notMem_support_iff]
-        exact m.notMem_support_of_degree_lt hfd
-    · apply Finset.sum_congr rfl
-      intro b' hb'
-      rw [sPolynomial]
-      obtain (⟨h, -⟩ | h) := hd b' hb' <;>
-        simp [h, ← smul_eq_C_mul, smul_sub, ← mul_smul, mul_comm (m.leadingCoeff (g b'))]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.sum_insert, Finset.sum_ite_eq, add_zero, classical, forall_eq_or_imp, induction_on, insert, isunit_gb, isunit_gb.unit, ite_smul, mem_insert, or_false, reduceIte, sum_insert, sum_ite_eq, zero_smul
+/-
+**MonomialOrder.sPolynomial_decomposition** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrd
+er`。
+形式化陈述：sPolynomial_decomposition {d : m.syn} {ι : Type*} {B : Finset ι} {g : ι ->
+ MvPolynomial σ R} (hd : forall b in B, (m.toSyn <| m.degree <| g b) = d ∧ IsUni
+t (m.leadingCoeff <| g b) ∨ g b = 0) (hfd : (m.toSyn <| m.degree <| ∑ b in B, g 
+b) < d) : exists (c : ι -> ι -> R), ∑ b in B, g b = ∑ b₁ in B, ∑ b₂ in B, (c b₁ 
+b₂) • m.sPolynomial (g b₁) (g b₂)
+参数：hd : forall b in B, (m.toSyn <| m.degree <| g b) = d ∧ IsUnit (m.leadingCoeff
+ <| g b) ∨ g b = 0；hfd : (m.toSyn <| m.degree <| ∑ b in B, g b) < d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Pi.instNonempty`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Nonempty (β
+ a)], Nonempty ((a : α) → β a)
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `MonomialOrder.sPolynomial_right_zero`：sPolynomial_right_zero (f : MvPoly
+nomial σ R) : m.sPolynomial f 0 = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用引理 `MonomialOrder.sPolynomial_left_zero`：sPolynomial_left_zero (g : MvPolyno
+mial σ R) : m.sPolynomial 0 g = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `ite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) [
+inst_1 : Decidable p] (a : α) (b c : β),   (if p then b else c) • a = if p the…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+（共 67 条，此处仅展示前 30 条）
 -/
 lemma sPolynomial_decomposition {d : m.syn} {ι : Type*}
-    {B : Finset ι} {g : ι -> MvPolynomial σ R}
-    (hd : forall b in B,
+    {B : Finset ι} {g : ι → MvPolynomial σ R}
+    (hd : ∀ b ∈ B,
       (m.toSyn <| m.degree <| g b) = d ∧ IsUnit (m.leadingCoeff <| g b) ∨ g b = 0)
-    (hfd : (m.toSyn <| m.degree <| ∑ b in B, g b) < d) :
-    exists (c : ι -> ι -> R),
-      ∑ b in B, g b = ∑ b₁ in B, ∑ b₂ in B, (c b₁ b₂) • m.sPolynomial (g b₁) (g b₂) := by
+    (hfd : (m.toSyn <| m.degree <| ∑ b ∈ B, g b) < d) :
+    ∃ (c : ι → ι → R),
+      ∑ b ∈ B, g b = ∑ b₁ ∈ B, ∑ b₂ ∈ B, (c b₁ b₂) • m.sPolynomial (g b₁) (g b₂) := by
   classical
   induction B using Finset.induction_on with
   | empty => simp
@@ -4719,16 +5328,17 @@ lemma sPolynomial_decomposition {d : m.syn} {ι : Type*}
       simp only [Finset.sum_insert hb, Finset.mem_insert, forall_eq_or_imp, hb0, or_false]
         at hfd hd
     obtain ⟨⟨rfl, isunit_gb⟩, hd⟩ := hd
-    use fun b₁ b₂ => if b₂ = b then ↑isunit_gb.unit⁻¹ else 0
+    use fun b₁ b₂ ↦ if b₂ = b then ↑isunit_gb.unit⁻¹ else 0
     simp? [Finset.sum_insert hb, hb] says
       simp only [Finset.sum_insert hb, ite_smul, zero_smul, ↓reduceIte, Finset.sum_ite_eq', hb,
         add_zero, sPolynomial_self, smul_zero, zero_add]
     simp only [m.toSyn.injective.eq_iff] at *
-    trans ∑ b' in B, (g b' - (m.leadingCoeff (g b') * ↑isunit_gb.unit⁻¹) • g b)
-    · suffices (-(∑ i in B, m.leadingCoeff (g i))) = m.leadingCoeff (g b) by
-        rw [add_comm]; rw [Finset.sum_sub_distrib]; rw [sub_eq_add_neg]; rw [← Finset.sum_smul]; rw [← Finset.sum_mul]; rw [← neg_smul]; rw [← neg_mul]; rw [this]; rw [isunit_gb.mul_val_inv]; rw [one_smul]
+    trans ∑ b' ∈ B, (g b' - (m.leadingCoeff (g b') * ↑isunit_gb.unit⁻¹) • g b)
+    · suffices (-(∑ i ∈ B, m.leadingCoeff (g i))) = m.leadingCoeff (g b) by
+        rw [add_comm, Finset.sum_sub_distrib, sub_eq_add_neg, ← Finset.sum_smul, ← Finset.sum_mul,
+          ← neg_smul, ← neg_mul, this, isunit_gb.mul_val_inv, one_smul]
       rw [← add_eq_zero_iff_neg_eq']
-      trans (g b).coeff (m.degree <| g b) + ∑ i in B, (g i).coeff (m.degree <| g b)
+      trans (g b).coeff (m.degree <| g b) + ∑ i ∈ B, (g i).coeff (m.degree <| g b)
       · unfold leadingCoeff
         congr 1
         apply Finset.sum_congr rfl
@@ -4743,24 +5353,26 @@ lemma sPolynomial_decomposition {d : m.syn} {ι : Type*}
         simp [h, ← smul_eq_C_mul, smul_sub, ← mul_smul, mul_comm (m.leadingCoeff (g b'))]
 
 @[simp]
-/--
-lemma `withBotDegree_neg` / 引理 `withBotDegree_neg`
-
-English:
-lemma withBotDegree_neg
-  given: (f : MvPolynomial σ R)
-  proof: by
-  classical
-  simp [m.withBotDegree_eq]
-
-中文:
-引理 withBotDegree_neg
-  条件: (f : 多元多项式 σ R)
-  证明: by
-  classical
-  simp [m.withBotDegree_eq]
-
-Depends on / 依赖: classical, m.withBotDegree_eq, withBotDegree_eq
+/-
+**MonomialOrder.withBotDegree_neg** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：withBotDegree_neg (f : MvPolynomial σ R) : m.withBotDegree (-f) = m.withBo
+tDegree f
+参数：f : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonomialOrder.withBotDegree_eq`：withBotDegree_eq [Decidable (f = 0)] : m
+.withBotDegree f = if f = 0 then ⊥ else ↑(m.degree f)
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MonomialOrder.degree_neg`：degree_neg {f : MvPolynomial σ R} : m.degree (
+-f) = m.degree f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma withBotDegree_neg (f : MvPolynomial σ R) :
     m.withBotDegree (-f) = m.withBotDegree f := by
@@ -4773,52 +5385,55 @@ section Field
 
 variable {R : Type*} [Field R]
 
-/--
-theorem `isUnit_leadingCoeff` / 定理 `isUnit_leadingCoeff`
-
-English:
-theorem isUnit_leadingCoeff
-  given: {f : MvPolynomial σ R}
-  proof: by
-  simp only [isUnit_iff_ne_zero, ne_eq, leadingCoeff_eq_zero_iff]
-
-中文:
-定理 isUnit_leadingCoeff
-  条件: {f : 多元多项式 σ R}
-  证明: by
-  simp only [isUnit_iff_ne_zero, ne_eq, leadingCoeff_eq_zero_iff]
-
-Depends on / 依赖: isUnit_iff_ne_zero, leadingCoeff_eq_zero_iff, ne_eq
+/-
+**MonomialOrder.isUnit_leadingCoeff** 是 Mathlib 中的一个定理，位于命名空间 `MonomialOrder`。
+形式化陈述：isUnit_leadingCoeff {f : MvPolynomial σ R} : IsUnit (m.leadingCoeff f) ↔ f
+ != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isUnit_leadingCoeff {f : MvPolynomial σ R} :
-    IsUnit (m.leadingCoeff f) ↔ f != 0 := by
+    IsUnit (m.leadingCoeff f) ↔ f ≠ 0 := by
   simp only [isUnit_iff_ne_zero, ne_eq, leadingCoeff_eq_zero_iff]
-
-/--
-lemma `sPolynomial_decomposition'` / 引理 `sPolynomial_decomposition'`
-
-English:
-lemma sPolynomial_decomposition'
-  statement: {d : m.syn} {ι : Type*}
-  proof: by
-  refine m.sPolynomial_decomposition ?_ hfd
-  simpa [and_or_right, em']
-
-中文:
-引理 sPolynomial_decomposition'
-  结论: {d : m.syn} {ι : 类型}
-  证明: by
-  refine m.sPolynomial_decomposition ?_ hfd
-  simpa [and_or_right, em']
-
-Depends on / 依赖: and_or_right, m.sPolynomial_decomposition, sPolynomial_decomposition
+/-
+**MonomialOrder.sPolynomial_decomposition'** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOr
+der`。
+形式化陈述：sPolynomial_decomposition' {d : m.syn} {ι : Type*} {B : Finset ι} (g : ι -
+> MvPolynomial σ R) (hd : forall b in B, (m.toSyn <| m.degree <| g b) = d ∨ g b 
+= 0) (hfd : (m.toSyn <| m.degree <| ∑ b in B, g b) < d) : exists (c : ι -> ι -> 
+R), ∑ b in B, g b = ∑ b₁ in B, ∑ b₂ in B, (c b₁ b₂) • m.sPolynomial (g b₁) (g b₂
+)
+参数：g : ι -> MvPolynomial σ R；hd : forall b in B, (m.toSyn <| m.degree <| g b) = 
+d ∨ g b = 0；hfd : (m.toSyn <| m.degree <| ∑ b in B, g b) < d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonomialOrder.sPolynomial_decomposition`：sPolynomial_decomposition {d : 
+m.syn} {ι : Type*} {B : Finset ι} {g : ι -> MvPolynomial σ R} (hd : forall b in 
+B, (m.toSyn <| m.degree <| g …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 lemma sPolynomial_decomposition' {d : m.syn} {ι : Type*}
-    {B : Finset ι} (g : ι -> MvPolynomial σ R)
-    (hd : forall b in B, (m.toSyn <| m.degree <| g b) = d ∨ g b = 0)
-    (hfd : (m.toSyn <| m.degree <| ∑ b in B, g b) < d) :
-    exists (c : ι -> ι -> R),
-      ∑ b in B, g b = ∑ b₁ in B, ∑ b₂ in B, (c b₁ b₂) • m.sPolynomial (g b₁) (g b₂) := by
+    {B : Finset ι} (g : ι → MvPolynomial σ R)
+    (hd : ∀ b ∈ B, (m.toSyn <| m.degree <| g b) = d ∨ g b = 0)
+    (hfd : (m.toSyn <| m.degree <| ∑ b ∈ B, g b) < d) :
+    ∃ (c : ι → ι → R),
+      ∑ b ∈ B, g b = ∑ b₁ ∈ B, ∑ b₂ ∈ B, (c b₁ b₂) • m.sPolynomial (g b₁) (g b₂) := by
   refine m.sPolynomial_decomposition ?_ hfd
   simpa [and_or_right, em']
 
@@ -4830,110 +5445,144 @@ variable {R : Type*} [CommRing R]
 
 open Finsupp MvPolynomial
 
-/--
-lemma `degree_X_add_C` / 引理 `degree_X_add_C`
-
-English:
-lemma degree_X_add_C
-  statement: [Nontrivial R]
-  proof: by
-  rw [degree_add_of_lt]; rw [degree_X]
-  simp only [degree_C, map_zero, degree_X]
-  rw [← bot_eq_zero]; rw [bot_lt_iff_ne_bot]; rw [bot_eq_zero]; rw [← map_zero m.toSyn]
-  simp
-
-中文:
-引理 degree_X_add_C
-  结论: [非平凡 R]
-  证明: by
-  rw [degree_add_of_lt]; rw [degree_X]
-  simp only [degree_C, map_zero, degree_X]
-  rw [← bot_eq_zero]; rw [bot_lt_iff_ne_bot]; rw [bot_eq_zero]; rw [← map_zero m.toSyn]
-  simp
-
-Depends on / 依赖: bot_eq_zero, bot_lt_iff_ne_bot, degree_C, degree_X, degree_add_of_lt, m.toSyn, map_zero
+/-
+**MonomialOrder.degree_X_add_C** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_X_add_C [Nontrivial R] {ι : Type*} (m : MonomialOrder ι) (i : ι) (r
+ : R) : m.degree (X i + C r) = single i 1
+参数：m : MonomialOrder ι；i : ι；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_add_of_lt`：degree_add_of_lt {f g : MvPolynomial σ R
+} (h : m.degree g ≺[m] m.degree f) : m.degree (f + g) = m.degree f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `MonomialOrder.degree_X`：degree_X [Nontrivial R] {s : σ} : m.degree (X s 
+: MvPolynomial σ R) = Finsupp.single s 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonomialOrder.bot_eq_zero`：bot_eq_zero : (⊥ : m.syn) = 0
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma degree_X_add_C [Nontrivial R]
     {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R) :
     m.degree (X i + C r) = single i 1 := by
-  rw [degree_add_of_lt]; rw [degree_X]
+  rw [degree_add_of_lt, degree_X]
   simp only [degree_C, map_zero, degree_X]
-  rw [← bot_eq_zero]; rw [bot_lt_iff_ne_bot]; rw [bot_eq_zero]; rw [← map_zero m.toSyn]
+  rw [← bot_eq_zero, bot_lt_iff_ne_bot, bot_eq_zero, ← map_zero m.toSyn]
   simp
-
-/--
-lemma `degree_X_sub_C` / 引理 `degree_X_sub_C`
-
-English:
-lemma degree_X_sub_C
-  statement: [Nontrivial R]
-  proof: by
-  rw [sub_eq_add_neg]; rw [← map_neg]; rw [degree_X_add_C]
-
-中文:
-引理 degree_X_sub_C
-  结论: [非平凡 R]
-  证明: by
-  rw [sub_eq_add_neg]; rw [← map_neg]; rw [degree_X_add_C]
-
-Depends on / 依赖: degree_X_add_C, map_neg, sub_eq_add_neg
+/-
+**MonomialOrder.degree_X_sub_C** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：degree_X_sub_C [Nontrivial R] {ι : Type*} (m : MonomialOrder ι) (i : ι) (r
+ : R) : m.degree (X i - C r) = single i 1
+参数：m : MonomialOrder ι；i : ι；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用引理 `MonomialOrder.degree_X_add_C`：degree_X_add_C [Nontrivial R] {ι : Type*} 
+(m : MonomialOrder ι) (i : ι) (r : R) : m.degree (X i + C r) = single i 1
 -/
 lemma degree_X_sub_C [Nontrivial R]
     {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R) :
     m.degree (X i - C r) = single i 1 := by
-  rw [sub_eq_add_neg]; rw [← map_neg]; rw [degree_X_add_C]
-
-/--
-lemma `monic_X_add_C` / 引理 `monic_X_add_C`
-
-English:
-lemma monic_X_add_C
-  given: {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R)
-  proof: by
-  nontriviality R
-  apply monic_X.add_of_lt
-  simp [degree_C, degree_X, ← not_le, ← eq_zero_iff]
-
-中文:
-引理 monic_X_add_C
-  条件: {ι : 类型} (m : 单项式序 ι) (i : ι) (r : R)
-  证明: by
-  nontriviality R
-  apply monic_X.add_of_lt
-  simp [degree_C, degree_X, ← not_le, ← eq_zero_iff]
-
-Depends on / 依赖: add_of_lt, degree_C, degree_X, eq_zero_iff, monic_X, monic_X.add_of_lt, nontriviality, not_le
+  rw [sub_eq_add_neg, ← map_neg, degree_X_add_C]
+/-
+**MonomialOrder.monic_X_add_C** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：monic_X_add_C {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R) : m.Monic 
+(X i + C r)
+参数：m : MonomialOrder ι；i : ι；r : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MonomialOrder.Monic.add_of_lt`：∀ {σ : Type u_1} {m : MonomialOrder σ} {R
+ : Type u_2} [inst : CommSemiring R] {f g : MvPolynomial σ R},   m.Monic f → m.t
+oSyn (m.degree g) <…
+· 使用定理 `MonomialOrder.monic_X`：∀ {σ : Type u_1} {m : MonomialOrder σ} {R : Type 
+u_2} [inst : CommSemiring R] {s : σ}, m.Monic (MvPolynomial.X s)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonomialOrder.degree_C`：degree_C (r : R) : m.degree (C r) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `MonomialOrder.degree_X`：degree_X [Nontrivial R] {s : σ} : m.degree (X s 
+: MvPolynomial σ R) = Finsupp.single s 1
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma monic_X_add_C {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R) :
     m.Monic (X i + C r) := by
   nontriviality R
   apply monic_X.add_of_lt
   simp [degree_C, degree_X, ← not_le, ← eq_zero_iff]
-
-/--
-lemma `monic_X_sub_C` / 引理 `monic_X_sub_C`
-
-English:
-lemma monic_X_sub_C
-  given: {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R)
-  proof: by
-  rw [sub_eq_add_neg]; rw [← map_neg]
-  apply monic_X_add_C
-
-中文:
-引理 monic_X_sub_C
-  条件: {ι : 类型} (m : 单项式序 ι) (i : ι) (r : R)
-  证明: by
-  rw [sub_eq_add_neg]; rw [← map_neg]
-  apply monic_X_add_C
-
-Depends on / 依赖: map_neg, monic_X_add_C, sub_eq_add_neg
+/-
+**MonomialOrder.monic_X_sub_C** 是 Mathlib 中的一个引理，位于命名空间 `MonomialOrder`。
+形式化陈述：monic_X_sub_C {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R) : m.Monic 
+(X i - C r)
+参数：m : MonomialOrder ι；i : ι；r : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用引理 `MonomialOrder.monic_X_add_C`：monic_X_add_C {ι : Type*} (m : MonomialOrde
+r ι) (i : ι) (r : R) : m.Monic (X i + C r)
 -/
 lemma monic_X_sub_C {ι : Type*} (m : MonomialOrder ι) (i : ι) (r : R) :
     m.Monic (X i - C r) := by
-  rw [sub_eq_add_neg]; rw [← map_neg]
+  rw [sub_eq_add_neg, ← map_neg]
   apply monic_X_add_C
 
 end Binomial
 
 end MonomialOrder
+

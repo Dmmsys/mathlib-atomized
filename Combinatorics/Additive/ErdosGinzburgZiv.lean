@@ -29,155 +29,59 @@ open Finset MvPolynomial
 variable {ι : Type*}
 
 section prime
-variable {p : Nat} [Fact p.Prime] {s : Finset ι}
+variable {p : ℕ} [Fact p.Prime] {s : Finset ι}
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The first multivariate polynomial used in the proof of Erdős–Ginzburg–Ziv. -/
+/-
+**f** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def f₁ (s : Finset ι) (_a : ι -> ZMod p)
-  body: ∑ i, X i ^ (p - 1)
-
-中文:
-定义 noncomputable
-  签名: def f₁ (s : 有限集 ι) (_a : ι -> ZMod p)
-  定义体: ∑ i, X i ^ (p - 1)
+--- 原说明 ---
+The first multivariate polynomial used in the proof of Erdős–Ginzburg–Ziv.
 -/
-private noncomputable def f₁ (s : Finset ι) (_a : ι -> ZMod p) : MvPolynomial s (ZMod p) :=
+private noncomputable def f₁ (s : Finset ι) (_a : ι → ZMod p) : MvPolynomial s (ZMod p) :=
   ∑ i, X i ^ (p - 1)
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The second multivariate polynomial used in the proof of Erdős–Ginzburg–Ziv. -/
+/-
+**f** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def f₂ (s : Finset ι) (a : ι -> ZMod p)
-  body: ∑ i : s, a i • X i ^ (p - 1)
-
-中文:
-定义 noncomputable
-  签名: def f₂ (s : 有限集 ι) (a : ι -> ZMod p)
-  定义体: ∑ i : s, a i • X i ^ (p - 1)
+--- 原说明 ---
+The second multivariate polynomial used in the proof of Erdős–Ginzburg–Ziv.
 -/
-private noncomputable def f₂ (s : Finset ι) (a : ι -> ZMod p) : MvPolynomial s (ZMod p) :=
+private noncomputable def f₂ (s : Finset ι) (a : ι → ZMod p) : MvPolynomial s (ZMod p) :=
   ∑ i : s, a i • X i ^ (p - 1)
-
-/--
-lemma `totalDegree_f₁_add_totalDegree_f₂` / 引理 `totalDegree_f₁_add_totalDegree_f₂`
-
-English:
-lemma totalDegree_f₁_add_totalDegree_f₂
-  given: {a : ι -> ZMod p}
-  proof: by
-  calc
-    _ <= (p - 1) + (p - 1) := by
-      gcongr <;> apply totalDegree_finsetSum_le <;> rintro i _
-      · exact (totalDegree_X_pow ..).le
-      · exact (totalDegree_smul_le ..).trans (totalDegree_X_pow ..).le
-    _ < 2 * p - 1 := by have := (Fact.out : p.Prime).two_le; lia
-
-中文:
-引理 totalDegree_f₁_add_totalDegree_f₂
-  条件: {a : ι -> ZMod p}
-  证明: by
-  calc
-    _ <= (p - 1) + (p - 1) := by
-      gcongr <;> apply totalDegree_finsetSum_le <;> rintro i _
-      · exact (totalDegree_X_pow ..).le
-      · exact (totalDegree_smul_le ..).trans (totalDegree_X_pow ..).le
-    _ < 2 * p - 1 := by have := (Fact.out : p.Prime).two_le; lia
+/-
+**totalDegree_f** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma totalDegree_f₁_add_totalDegree_f₂ {a : ι -> ZMod p} :
+private lemma totalDegree_f₁_add_totalDegree_f₂ {a : ι → ZMod p} :
     (f₁ s a).totalDegree + (f₂ s a).totalDegree < 2 * p - 1 := by
   calc
-    _ <= (p - 1) + (p - 1) := by
+    _ ≤ (p - 1) + (p - 1) := by
       gcongr <;> apply totalDegree_finsetSum_le <;> rintro i _
       · exact (totalDegree_X_pow ..).le
       · exact (totalDegree_smul_le ..).trans (totalDegree_X_pow ..).le
     _ < 2 * p - 1 := by have := (Fact.out : p.Prime).two_le; lia
 
-/--
-theorem `ZMod.erdos_ginzburg_ziv_prime` / 定理 `ZMod.erdos_ginzburg_ziv_prime`
+/-- The prime case of the **Erdős–Ginzburg–Ziv theorem** for `ℤ/pℤ`.
 
-English:
-theorem ZMod.erdos_ginzburg_ziv_prime
-  given: (a : ι -> ZMod p) (hs : #s = 2 * p - 1)
-  proof: by
-  have : NeZero p := inferInstance
-  classical
-  -- Let `N` be the number of common roots of our polynomials `f₁` and `f₂` (`f s ff` and `f s tt`).
-  set N := Fintype.card {x // eval x (f₁ s a) = 0 ∧ eval x (f₂ s a) = 0}
-  -- Zero is a common root to `f₁` and `f₂`, so `N` is nonzero
-  let zero_sol : {x // eval x (f₁ s a) = 0 ∧ eval x (f₂ s a) = 0} :=
-    ⟨0, by simp [f₁, f₂, map_sum, (Fact.out : p.Prime).one_lt, tsub_eq_zero_iff_le]⟩
-  have hN₀ : 0 < N := @Fintype.card_pos _ _ ⟨zero_sol⟩
-  have hs' : 2 * p - 1 = Fintype.card s := by simp [hs]
-  -- Chevalley-Warning gives us that `p ∣ n` because the total degrees of `f₁` and `f₂` are at most
-  -- `p - 1`, and we have `2 * p - 1 > 2 * (p - 1)` variables.
-  have hpN : p ∣ N := char_dvd_card_solutions_of_add_lt p
-    (totalDegree_f₁_add_totalDegree_f₂.trans_eq hs')
-  -- Hence, `2 ≤ p ≤ N` and we can make a common root `x ≠ 0`.
-  obtain ⟨x, hx⟩ := Fintype.exists_ne_of_one_lt_card ((Fact.out : p.Prime).one_lt.trans_le <|
-    Nat.le_of_dvd hN₀ hpN) zero_sol
-  -- This common root gives us the required subsequence, namely the `i ∈ s` such that `x i ≠ 0`.
-  refine ⟨({a | x.1 a != 0} : Finset _).map ⟨(↑), Subtype.val_injective⟩, ?_, ?_, ?_⟩
-  · simp +contextual [subset_iff]
-  -- From `f₁ x = 0`, we get that `p` divides the number of `a` such that `x a ≠ 0`.
-  · rw [card_map]
-refine Nat.eq_of_dvd_of_lt_two_mul (Finset.card_pos.2 ?_).ne' ?_
-      (Finset.card_filter_le _ _).trans_lt ?_
-    -- This number is nonzero because `x ≠ 0`.
-    · rw [← Subtype.coe_ne_coe, Function.ne_iff] at hx
-      exact hx.imp (fun a ha => mem_filter.2 ⟨Finset.mem_attach _ _, ha⟩)
-    · rw [← CharP.cast_eq_zero_iff (ZMod p), ← Finset.sum_boole]
-      simpa only [f₁, map_sum, ZMod.pow_card_sub_one, map_pow, eval_X] using x.2.1
-    -- And it is at most `2 * p - 1`, so it must be `p`.
-    · rw [univ_eq_attach, card_attach, hs]
-      exact tsub_lt_self (mul_pos zero_lt_two (Fact.out : p.Prime).pos) zero_lt_one
-  -- From `f₂ x = 0`, we get that `p` divides the sum of the `a ∈ s` such that `x a ≠ 0`.
-  · simpa [f₂, ZMod.pow_card_sub_one, Finset.sum_filter] using x.2.2
+Any sequence of `2 * p - 1` elements of `ZMod p` contains a subsequence of `p` elements whose sum is
+zero. -/
+/-
+**ZMod.erdos_ginzburg_ziv_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 ZMod.erdos_ginzburg_ziv_prime
-  条件: (a : ι -> ZMod p) (hs : #s = 2 * p - 1)
-  证明: by
-  have : NeZero p := inferInstance
-  classical
-  -- Let `N` be the number of common roots of our polynomials `f₁` and `f₂` (`f s ff` and `f s tt`).
-  set N := Fintype.card {x // eval x (f₁ s a) = 0 ∧ eval x (f₂ s a) = 0}
-  -- Zero is a common root to `f₁` and `f₂`, so `N` is nonzero
-  let zero_sol : {x // eval x (f₁ s a) = 0 ∧ eval x (f₂ s a) = 0} :=
-    ⟨0, by simp [f₁, f₂, map_sum, (Fact.out : p.Prime).one_lt, tsub_eq_zero_iff_le]⟩
-  have hN₀ : 0 < N := @Fintype.card_pos _ _ ⟨zero_sol⟩
-  have hs' : 2 * p - 1 = Fintype.card s := by simp [hs]
-  -- Chevalley-Warning gives us that `p ∣ n` because the total degrees of `f₁` and `f₂` are at most
-  -- `p - 1`, and we have `2 * p - 1 > 2 * (p - 1)` variables.
-  have hpN : p ∣ N := char_dvd_card_solutions_of_add_lt p
-    (totalDegree_f₁_add_totalDegree_f₂.trans_eq hs')
-  -- Hence, `2 ≤ p ≤ N` and we can make a common root `x ≠ 0`.
-  obtain ⟨x, hx⟩ := Fintype.exists_ne_of_one_lt_card ((Fact.out : p.Prime).one_lt.trans_le <|
-    Nat.le_of_dvd hN₀ hpN) zero_sol
-  -- This common root gives us the required subsequence, namely the `i ∈ s` such that `x i ≠ 0`.
-  refine ⟨({a | x.1 a != 0} : Finset _).map ⟨(↑), Subtype.val_injective⟩, ?_, ?_, ?_⟩
-  · simp +contextual [subset_iff]
-  -- From `f₁ x = 0`, we get that `p` divides the number of `a` such that `x a ≠ 0`.
-  · rw [card_map]
-refine Nat.eq_of_dvd_of_lt_two_mul (Finset.card_pos.2 ?_).ne' ?_
-      (Finset.card_filter_le _ _).trans_lt ?_
-    -- This number is nonzero because `x ≠ 0`.
-    · rw [← Subtype.coe_ne_coe, Function.ne_iff] at hx
-      exact hx.imp (fun a ha => mem_filter.2 ⟨Finset.mem_attach _ _, ha⟩)
-    · rw [← CharP.cast_eq_zero_iff (ZMod p), ← Finset.sum_boole]
-      simpa only [f₁, map_sum, ZMod.pow_card_sub_one, map_pow, eval_X] using x.2.1
-    -- And it is at most `2 * p - 1`, so it must be `p`.
-    · rw [univ_eq_attach, card_attach, hs]
-      exact tsub_lt_self (mul_pos zero_lt_two (Fact.out : p.Prime).pos) zero_lt_one
-  -- From `f₂ x = 0`, we get that `p` divides the sum of the `a ∈ s` such that `x a ≠ 0`.
-  · simpa [f₂, ZMod.pow_card_sub_one, Finset.sum_filter] using x.2.2
+--- 原说明 ---
+The prime case of the **Erdős–Ginzburg–Ziv theorem** for `ℤ/pℤ`.
+
+Any sequence of `2 * p - 1` elements of `ZMod p` contains a subsequence of `p` e
+lements whose sum is
+zero.
 -/
-private theorem ZMod.erdos_ginzburg_ziv_prime (a : ι -> ZMod p) (hs : #s = 2 * p - 1) :
-    exists t subseteq s, #t = p ∧ ∑ i in t, a i = 0 := by
+private theorem ZMod.erdos_ginzburg_ziv_prime (a : ι → ZMod p) (hs : #s = 2 * p - 1) :
+    ∃ t ⊆ s, #t = p ∧ ∑ i ∈ t, a i = 0 := by
   have : NeZero p := inferInstance
   classical
   -- Let `N` be the number of common roots of our polynomials `f₁` and `f₂` (`f s ff` and `f s tt`).
@@ -195,15 +99,15 @@ private theorem ZMod.erdos_ginzburg_ziv_prime (a : ι -> ZMod p) (hs : #s = 2 * 
   obtain ⟨x, hx⟩ := Fintype.exists_ne_of_one_lt_card ((Fact.out : p.Prime).one_lt.trans_le <|
     Nat.le_of_dvd hN₀ hpN) zero_sol
   -- This common root gives us the required subsequence, namely the `i ∈ s` such that `x i ≠ 0`.
-  refine ⟨({a | x.1 a != 0} : Finset _).map ⟨(↑), Subtype.val_injective⟩, ?_, ?_, ?_⟩
+  refine ⟨({a | x.1 a ≠ 0} : Finset _).map ⟨(↑), Subtype.val_injective⟩, ?_, ?_, ?_⟩
   · simp +contextual [subset_iff]
   -- From `f₁ x = 0`, we get that `p` divides the number of `a` such that `x a ≠ 0`.
   · rw [card_map]
-refine Nat.eq_of_dvd_of_lt_two_mul (Finset.card_pos.2 ?_).ne' ?_
+    refine Nat.eq_of_dvd_of_lt_two_mul (Finset.card_pos.2 ?_).ne' ?_ <|
       (Finset.card_filter_le _ _).trans_lt ?_
     -- This number is nonzero because `x ≠ 0`.
     · rw [← Subtype.coe_ne_coe, Function.ne_iff] at hx
-      exact hx.imp (fun a ha => mem_filter.2 ⟨Finset.mem_attach _ _, ha⟩)
+      exact hx.imp (fun a ha ↦ mem_filter.2 ⟨Finset.mem_attach _ _, ha⟩)
     · rw [← CharP.cast_eq_zero_iff (ZMod p), ← Finset.sum_boole]
       simpa only [f₁, map_sum, ZMod.pow_card_sub_one, map_pow, eval_X] using x.2.1
     -- And it is at most `2 * p - 1`, so it must be `p`.
@@ -212,40 +116,102 @@ refine Nat.eq_of_dvd_of_lt_two_mul (Finset.card_pos.2 ?_).ne' ?_
   -- From `f₂ x = 0`, we get that `p` divides the sum of the `a ∈ s` such that `x a ≠ 0`.
   · simpa [f₂, ZMod.pow_card_sub_one, Finset.sum_filter] using x.2.2
 
-/--
-theorem `Int.erdos_ginzburg_ziv_prime` / 定理 `Int.erdos_ginzburg_ziv_prime`
+/-- The prime case of the **Erdős–Ginzburg–Ziv theorem** for `ℤ`.
 
-English:
-theorem Int.erdos_ginzburg_ziv_prime
-  given: (a : ι -> Int) (hs : #s = 2 * p - 1)
-  proof: by
-  simpa [← Int.cast_sum, ZMod.intCast_zmod_eq_zero_iff_dvd]
-    using ZMod.erdos_ginzburg_ziv_prime (Int.cast ∘ a) hs
+Any sequence of `2 * p - 1` elements of `ℤ` contains a subsequence of `p` elements whose sum is
+divisible by `p`. -/
+/-
+**Int.erdos_ginzburg_ziv_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 整数.erdos_ginzburg_ziv_prime
-  条件: (a : ι -> 整数) (hs : #s = 2 * p - 1)
-  证明: by
-  simpa [← Int.cast_sum, ZMod.intCast_zmod_eq_zero_iff_dvd]
-    using ZMod.erdos_ginzburg_ziv_prime (Int.cast ∘ a) hs
+--- 原说明 ---
+The prime case of the **Erdős–Ginzburg–Ziv theorem** for `ℤ`.
+
+Any sequence of `2 * p - 1` elements of `ℤ` contains a subsequence of `p` elemen
+ts whose sum is
+divisible by `p`.
 -/
-private theorem Int.erdos_ginzburg_ziv_prime (a : ι -> Int) (hs : #s = 2 * p - 1) :
-    exists t subseteq s, #t = p ∧ ↑p ∣ ∑ i in t, a i := by
+private theorem Int.erdos_ginzburg_ziv_prime (a : ι → ℤ) (hs : #s = 2 * p - 1) :
+    ∃ t ⊆ s, #t = p ∧ ↑p ∣ ∑ i ∈ t, a i := by
   simpa [← Int.cast_sum, ZMod.intCast_zmod_eq_zero_iff_dvd]
     using ZMod.erdos_ginzburg_ziv_prime (Int.cast ∘ a) hs
 
 end prime
 
 section composite
-variable {n : Nat} {s : Finset ι}
+variable {n : ℕ} {s : Finset ι}
 
-/--
-theorem `Int.erdos_ginzburg_ziv` / 定理 `Int.erdos_ginzburg_ziv`
+/-- The **Erdős–Ginzburg–Ziv theorem** for `ℤ`.
 
-English:
-theorem Int.erdos_ginzburg_ziv
-  given: (a : ι -> Int) (hs : 2 * n - 1 <= #s)
-  proof: by
+Any sequence of at least `2 * n - 1` elements of `ℤ` contains a subsequence of `n` elements whose
+sum is divisible by `n`. -/
+/-
+**Int.erdos_ginzburg_ziv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.erdos_ginzburg_ziv (a : ι -> Int) (hs : 2 * n - 1 <= #s) : exists t su
+bseteq s, #t = n ∧ ↑n ∣ ∑ i in t, a i
+参数：a : ι -> Int；hs : 2 * n - 1 <= #s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.prime_composite_induction`：prime_composite_induction {motive : Nat -
+> Prop} (zero : motive 0) (one : motive 1) (prime : forall p : Nat, p.Prime -> m
+otive p) (composite…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `Finset.exists_subset_card_eq`：exists_subset_card_eq (hns : n <= #s) : ex
+ists t subseteq s, #t = n
+· 使用定理 `_private.Mathlib.Combinatorics.Additive.ErdosGinzburgZiv.0.Int.erdos_gin
+zburg_ziv_prime`：∀ {ι : Type u_1} {p : ℕ} [Fact (Nat.Prime p)] {s : Finset ι} (a
+ : ι → ℤ),   s.card = 2 * p - 1 → ∃ t ⊆ s, t.card = p ∧ ↑p ∣ ∑ i ∈ t, a i
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Nat.le_of_succ_le`：∀ {n m : ℕ}, n.succ ≤ m → n ≤ m
+· 使用定理 `Nat.sub_le_sub_right`：∀ {n m : ℕ}, n ≤ m → ∀ (k : ℕ), n - k ≤ m - k
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `tsub_mul`：tsub_mul [MulRightMono R] (a b c : R) : (a - b) * c = a * c - 
+b * c
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+（共 57 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+The **Erdős–Ginzburg–Ziv theorem** for `ℤ`.
+
+Any sequence of at least `2 * n - 1` elements of `ℤ` contains a subsequence of `
+n` elements whose
+sum is divisible by `n`.
+-/
+theorem Int.erdos_ginzburg_ziv (a : ι → ℤ) (hs : 2 * n - 1 ≤ #s) :
+    ∃ t ⊆ s, #t = n ∧ ↑n ∣ ∑ i ∈ t, a i := by
   classical
   -- Do induction on the prime factorisation of `n`. Note that we will apply the induction
   -- hypothesis with `ι := Finset ι`, so we need to generalise.
@@ -265,20 +231,20 @@ theorem Int.erdos_ginzburg_ziv
   -- these sets whose sum is divisible by `m * n`.
   | composite m hm ihm n hn ihn =>
      -- First, show that it is enough to have those `2 * m - 1` sets.
-    suffices forall k <= 2 * m - 1, exists 𝒜 : Finset (Finset ι), #𝒜 = k ∧
+    suffices ∀ k ≤ 2 * m - 1, ∃ 𝒜 : Finset (Finset ι), #𝒜 = k ∧
       (𝒜 : Set (Finset ι)).Pairwise _root_.Disjoint ∧
-        forall ⦃t⦄, t in 𝒜 -> t subseteq s ∧ #t = n ∧ ↑n ∣ ∑ i in t, a i by
+        ∀ ⦃t⦄, t ∈ 𝒜 → t ⊆ s ∧ #t = n ∧ ↑n ∣ ∑ i ∈ t, a i by
      -- Assume `𝒜` is a family of `2 * m - 1` sets, each of size `n` and sum divisible by `n`.
       obtain ⟨𝒜, h𝒜card, h𝒜disj, h𝒜⟩ := this _ le_rfl
       -- By induction hypothesis on `m`, find a subfamily `ℬ` of size `m` such that the sum over
       -- `t ∈ ℬ` of `(∑ i ∈ t, a i) / n` is divisible by `m`.
-      obtain ⟨ℬ, hℬ𝒜, hℬcard, hℬ⟩ := ihm (fun t => (∑ i in t, a i) / n) h𝒜card.ge
+      obtain ⟨ℬ, hℬ𝒜, hℬcard, hℬ⟩ := ihm (fun t ↦ (∑ i ∈ t, a i) / n) h𝒜card.ge
       -- We are done.
-      refine ⟨ℬ.biUnion fun x => x, biUnion_subset.2 fun t ht => (h𝒜 <| hℬ𝒜 ht).1, ?_, ?_⟩
-      · rw [card_biUnion (h𝒜disj.mono hℬ𝒜), sum_const_nat fun t ht => (h𝒜 <| hℬ𝒜 ht).2.1, hℬcard]
+      refine ⟨ℬ.biUnion fun x ↦ x, biUnion_subset.2 fun t ht ↦ (h𝒜 <| hℬ𝒜 ht).1, ?_, ?_⟩
+      · rw [card_biUnion (h𝒜disj.mono hℬ𝒜), sum_const_nat fun t ht ↦ (h𝒜 <| hℬ𝒜 ht).2.1, hℬcard]
       rwa [sum_biUnion, Int.natCast_mul, mul_comm, ← Int.dvd_div_iff_mul_dvd, Int.sum_div]
-      · exact fun t ht => (h𝒜 <| hℬ𝒜 ht).2.2
-      · exact dvd_sum fun t ht => (h𝒜 <| hℬ𝒜 ht).2.2
+      · exact fun t ht ↦ (h𝒜 <| hℬ𝒜 ht).2.2
+      · exact dvd_sum fun t ht ↦ (h𝒜 <| hℬ𝒜 ht).2.2
       · exact h𝒜disj.mono hℬ𝒜
     -- Now, let's find those `2 * m - 1` sets.
     rintro k hk
@@ -291,13 +257,13 @@ theorem Int.erdos_ginzburg_ziv
     obtain ⟨𝒜, h𝒜card, h𝒜disj, h𝒜⟩ := ih (Nat.le_of_succ_le hk)
     -- There are at least `2 * (m * n) - 1 - k * n ≥ 2 * m - 1` elements in `s` that have not been
     -- taken in any element of `𝒜`.
-    have : 2 * n - 1 <= #(s \ 𝒜.biUnion id) := by
+    have : 2 * n - 1 ≤ #(s \ 𝒜.biUnion id) := by
       calc
-        _ <= (2 * m - k) * n - 1 := by gcongr; lia
-        _ = (2 * (m * n) - 1) - ∑ t in 𝒜, #t := by
-          rw [tsub_mul]; rw [mul_assoc]; rw [tsub_right_comm]; rw [sum_const_nat fun t ht => (h𝒜 ht).2.1]; rw [h𝒜card]
-        _ <= #s - #(𝒜.biUnion id) := by gcongr; exact card_biUnion_le
-        _ <= #(s \ 𝒜.biUnion id) := le_card_sdiff ..
+        _ ≤ (2 * m - k) * n - 1 := by gcongr; lia
+        _ = (2 * (m * n) - 1) - ∑ t ∈ 𝒜, #t := by
+          rw [tsub_mul, mul_assoc, tsub_right_comm, sum_const_nat fun t ht ↦ (h𝒜 ht).2.1, h𝒜card]
+        _ ≤ #s - #(𝒜.biUnion id) := by gcongr; exact card_biUnion_le
+        _ ≤ #(s \ 𝒜.biUnion id) := le_card_sdiff ..
     -- So by the induction hypothesis on `n` we can find a new set `t` of size `n` and sum divisible
     -- by `n`.
     obtain ⟨t₀, ht₀, ht₀card, ht₀sum⟩ := ihn a this
@@ -305,223 +271,129 @@ theorem Int.erdos_ginzburg_ziv
     have : t₀ ∉ 𝒜 := by
       rintro h
       obtain rfl : n = 0 := by
-simpa [← card_eq_zero, ht₀card] using sdiff_disjoint.mono ht₀ subset_biUnion_of_mem id h
+        simpa [← card_eq_zero, ht₀card] using sdiff_disjoint.mono ht₀ <| subset_biUnion_of_mem id h
       lia
     refine ⟨𝒜.cons t₀ this, by rw [card_cons, h𝒜card], ?_, ?_⟩
     · simp only [cons_eq_insert, coe_insert, Set.pairwise_insert_of_symm, mem_coe, ne_eq]
-exact ⟨h𝒜disj, fun t ht _ => sdiff_disjoint.mono ht₀ subset_biUnion_of_mem id ht⟩
+      exact ⟨h𝒜disj, fun t ht _ ↦ sdiff_disjoint.mono ht₀ <| subset_biUnion_of_mem id ht⟩
     · simp only [cons_eq_insert, mem_insert, forall_eq_or_imp, and_assoc]
       exact ⟨ht₀.trans sdiff_subset, ht₀card, ht₀sum, h𝒜⟩
 
-中文:
-定理 整数.erdos_ginzburg_ziv
-  条件: (a : ι -> 整数) (hs : 2 * n - 1 <= #s)
-  证明: by
-  classical
-  -- Do induction on the prime factorisation of `n`. Note that we will apply the induction
-  -- hypothesis with `ι := Finset ι`, so we need to generalise.
-  induction n using Nat.prime_composite_induction generalizing ι with
-  -- When `n := 0`, we can set `t := ∅`.
-  | zero => exact ⟨∅, by simp⟩
-  -- When `n := 1`, we can take `t` to be any subset of `s` of size `2 * n - 1`.
-  | one => simpa using exists_subset_card_eq hs
-  -- When `n := p` is prime, we use the prime case `Int.erdos_ginzburg_ziv_prime`.
-  | prime p hp =>
-    have := Fact.mk hp
-    obtain ⟨t, hts, ht⟩ := exists_subset_card_eq hs
-    obtain ⟨u, hut, hu⟩ := Int.erdos_ginzburg_ziv_prime a ht
-    exact ⟨u, hut.trans hts, hu⟩
-  -- When `n := m * n` is composite, we pick (by induction hypothesis on `n`) `2 * m - 1` sets of
-  -- size `n` and sums divisible by `n`. Then by induction hypothesis (on `m`) we can pick `m` of
-  -- these sets whose sum is divisible by `m * n`.
-  | composite m hm ihm n hn ihn =>
-     -- First, show that it is enough to have those `2 * m - 1` sets.
-    suffices forall k <= 2 * m - 1, exists 𝒜 : Finset (Finset ι), #𝒜 = k ∧
-      (𝒜 : Set (Finset ι)).Pairwise _root_.Disjoint ∧
-        forall ⦃t⦄, t in 𝒜 -> t subseteq s ∧ #t = n ∧ ↑n ∣ ∑ i in t, a i by
-     -- Assume `𝒜` is a family of `2 * m - 1` sets, each of size `n` and sum divisible by `n`.
-      obtain ⟨𝒜, h𝒜card, h𝒜disj, h𝒜⟩ := this _ le_rfl
-      -- By induction hypothesis on `m`, find a subfamily `ℬ` of size `m` such that the sum over
-      -- `t ∈ ℬ` of `(∑ i ∈ t, a i) / n` is divisible by `m`.
-      obtain ⟨ℬ, hℬ𝒜, hℬcard, hℬ⟩ := ihm (fun t => (∑ i in t, a i) / n) h𝒜card.ge
-      -- We are done.
-      refine ⟨ℬ.biUnion fun x => x, biUnion_subset.2 fun t ht => (h𝒜 <| hℬ𝒜 ht).1, ?_, ?_⟩
-      · rw [card_biUnion (h𝒜disj.mono hℬ𝒜), sum_const_nat fun t ht => (h𝒜 <| hℬ𝒜 ht).2.1, hℬcard]
-      rwa [sum_biUnion, Int.natCast_mul, mul_comm, ← Int.dvd_div_iff_mul_dvd, Int.sum_div]
-      · exact fun t ht => (h𝒜 <| hℬ𝒜 ht).2.2
-      · exact dvd_sum fun t ht => (h𝒜 <| hℬ𝒜 ht).2.2
-      · exact h𝒜disj.mono hℬ𝒜
-    -- Now, let's find those `2 * m - 1` sets.
-    rintro k hk
-    -- We induct on the size `k ≤ 2 * m - 1` of the family we are constructing.
-    induction k with
-    -- For `k = 0`, the empty family trivially works.
-    | zero => exact ⟨∅, by simp⟩
-    | succ k ih =>
-    -- At `k + 1`, call `𝒜` the existing family of size `k ≤ 2 * m - 2`.
-    obtain ⟨𝒜, h𝒜card, h𝒜disj, h𝒜⟩ := ih (Nat.le_of_succ_le hk)
-    -- There are at least `2 * (m * n) - 1 - k * n ≥ 2 * m - 1` elements in `s` that have not been
-    -- taken in any element of `𝒜`.
-    have : 2 * n - 1 <= #(s \ 𝒜.biUnion id) := by
-      calc
-        _ <= (2 * m - k) * n - 1 := by gcongr; lia
-        _ = (2 * (m * n) - 1) - ∑ t in 𝒜, #t := by
-          rw [tsub_mul]; rw [mul_assoc]; rw [tsub_right_comm]; rw [sum_const_nat fun t ht => (h𝒜 ht).2.1]; rw [h𝒜card]
-        _ <= #s - #(𝒜.biUnion id) := by gcongr; exact card_biUnion_le
-        _ <= #(s \ 𝒜.biUnion id) := le_card_sdiff ..
-    -- So by the induction hypothesis on `n` we can find a new set `t` of size `n` and sum divisible
-    -- by `n`.
-    obtain ⟨t₀, ht₀, ht₀card, ht₀sum⟩ := ihn a this
-    -- This set is distinct and disjoint from the previous ones, so we are done.
-    have : t₀ ∉ 𝒜 := by
-      rintro h
-      obtain rfl : n = 0 := by
-simpa [← card_eq_zero, ht₀card] using sdiff_disjoint.mono ht₀ subset_biUnion_of_mem id h
-      lia
-    refine ⟨𝒜.cons t₀ this, by rw [card_cons, h𝒜card], ?_, ?_⟩
-    · simp only [cons_eq_insert, coe_insert, Set.pairwise_insert_of_symm, mem_coe, ne_eq]
-exact ⟨h𝒜disj, fun t ht _ => sdiff_disjoint.mono ht₀ subset_biUnion_of_mem id ht⟩
-    · simp only [cons_eq_insert, mem_insert, forall_eq_or_imp, and_assoc]
-      exact ⟨ht₀.trans sdiff_subset, ht₀card, ht₀sum, h𝒜⟩
+/-- The **Erdős–Ginzburg–Ziv theorem** for `ℤ/nℤ`.
 
-Depends on / 依赖: classical
+Any sequence of at least `2 * n - 1` elements of `ZMod n` contains a subsequence of `n` elements
+whose sum is zero. -/
+/-
+**ZMod.erdos_ginzburg_ziv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ZMod.erdos_ginzburg_ziv (a : ι -> ZMod n) (hs : 2 * n - 1 <= #s) : exists 
+t subseteq s, #t = n ∧ ∑ i in t, a i = 0
+参数：a : ι -> ZMod n；hs : 2 * n - 1 <= #s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Int.cast_sum`：cast_sum [AddCommGroupWithOne R] (s : Finset ι) (f : ι -> 
+Int) : ↑(∑ x in s, f x : Int) = ∑ x in s, (f x : R)
+· 使用定理 `ZMod.intCast_cast`：intCast_cast (i : ZMod n) : ((cast i : Int) : R) = ca
+st i
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `ZMod.cast_id'`：cast_id' : (ZMod.cast : ZMod n -> ZMod n) = id
+· 使用定理 `Int.erdos_ginzburg_ziv`：Int.erdos_ginzburg_ziv (a : ι -> Int) (hs : 2 * 
+n - 1 <= #s) : exists t subseteq s, #t = n ∧ ↑n ∣ ∑ i in t, a i
+
+--- 原说明 ---
+The **Erdős–Ginzburg–Ziv theorem** for `ℤ/nℤ`.
+
+Any sequence of at least `2 * n - 1` elements of `ZMod n` contains a subsequence
+ of `n` elements
+whose sum is zero.
 -/
-theorem Int.erdos_ginzburg_ziv (a : ι -> Int) (hs : 2 * n - 1 <= #s) :
-    exists t subseteq s, #t = n ∧ ↑n ∣ ∑ i in t, a i := by
-  classical
-  -- Do induction on the prime factorisation of `n`. Note that we will apply the induction
-  -- hypothesis with `ι := Finset ι`, so we need to generalise.
-  induction n using Nat.prime_composite_induction generalizing ι with
-  -- When `n := 0`, we can set `t := ∅`.
-  | zero => exact ⟨∅, by simp⟩
-  -- When `n := 1`, we can take `t` to be any subset of `s` of size `2 * n - 1`.
-  | one => simpa using exists_subset_card_eq hs
-  -- When `n := p` is prime, we use the prime case `Int.erdos_ginzburg_ziv_prime`.
-  | prime p hp =>
-    have := Fact.mk hp
-    obtain ⟨t, hts, ht⟩ := exists_subset_card_eq hs
-    obtain ⟨u, hut, hu⟩ := Int.erdos_ginzburg_ziv_prime a ht
-    exact ⟨u, hut.trans hts, hu⟩
-  -- When `n := m * n` is composite, we pick (by induction hypothesis on `n`) `2 * m - 1` sets of
-  -- size `n` and sums divisible by `n`. Then by induction hypothesis (on `m`) we can pick `m` of
-  -- these sets whose sum is divisible by `m * n`.
-  | composite m hm ihm n hn ihn =>
-     -- First, show that it is enough to have those `2 * m - 1` sets.
-    suffices forall k <= 2 * m - 1, exists 𝒜 : Finset (Finset ι), #𝒜 = k ∧
-      (𝒜 : Set (Finset ι)).Pairwise _root_.Disjoint ∧
-        forall ⦃t⦄, t in 𝒜 -> t subseteq s ∧ #t = n ∧ ↑n ∣ ∑ i in t, a i by
-     -- Assume `𝒜` is a family of `2 * m - 1` sets, each of size `n` and sum divisible by `n`.
-      obtain ⟨𝒜, h𝒜card, h𝒜disj, h𝒜⟩ := this _ le_rfl
-      -- By induction hypothesis on `m`, find a subfamily `ℬ` of size `m` such that the sum over
-      -- `t ∈ ℬ` of `(∑ i ∈ t, a i) / n` is divisible by `m`.
-      obtain ⟨ℬ, hℬ𝒜, hℬcard, hℬ⟩ := ihm (fun t => (∑ i in t, a i) / n) h𝒜card.ge
-      -- We are done.
-      refine ⟨ℬ.biUnion fun x => x, biUnion_subset.2 fun t ht => (h𝒜 <| hℬ𝒜 ht).1, ?_, ?_⟩
-      · rw [card_biUnion (h𝒜disj.mono hℬ𝒜), sum_const_nat fun t ht => (h𝒜 <| hℬ𝒜 ht).2.1, hℬcard]
-      rwa [sum_biUnion, Int.natCast_mul, mul_comm, ← Int.dvd_div_iff_mul_dvd, Int.sum_div]
-      · exact fun t ht => (h𝒜 <| hℬ𝒜 ht).2.2
-      · exact dvd_sum fun t ht => (h𝒜 <| hℬ𝒜 ht).2.2
-      · exact h𝒜disj.mono hℬ𝒜
-    -- Now, let's find those `2 * m - 1` sets.
-    rintro k hk
-    -- We induct on the size `k ≤ 2 * m - 1` of the family we are constructing.
-    induction k with
-    -- For `k = 0`, the empty family trivially works.
-    | zero => exact ⟨∅, by simp⟩
-    | succ k ih =>
-    -- At `k + 1`, call `𝒜` the existing family of size `k ≤ 2 * m - 2`.
-    obtain ⟨𝒜, h𝒜card, h𝒜disj, h𝒜⟩ := ih (Nat.le_of_succ_le hk)
-    -- There are at least `2 * (m * n) - 1 - k * n ≥ 2 * m - 1` elements in `s` that have not been
-    -- taken in any element of `𝒜`.
-    have : 2 * n - 1 <= #(s \ 𝒜.biUnion id) := by
-      calc
-        _ <= (2 * m - k) * n - 1 := by gcongr; lia
-        _ = (2 * (m * n) - 1) - ∑ t in 𝒜, #t := by
-          rw [tsub_mul]; rw [mul_assoc]; rw [tsub_right_comm]; rw [sum_const_nat fun t ht => (h𝒜 ht).2.1]; rw [h𝒜card]
-        _ <= #s - #(𝒜.biUnion id) := by gcongr; exact card_biUnion_le
-        _ <= #(s \ 𝒜.biUnion id) := le_card_sdiff ..
-    -- So by the induction hypothesis on `n` we can find a new set `t` of size `n` and sum divisible
-    -- by `n`.
-    obtain ⟨t₀, ht₀, ht₀card, ht₀sum⟩ := ihn a this
-    -- This set is distinct and disjoint from the previous ones, so we are done.
-    have : t₀ ∉ 𝒜 := by
-      rintro h
-      obtain rfl : n = 0 := by
-simpa [← card_eq_zero, ht₀card] using sdiff_disjoint.mono ht₀ subset_biUnion_of_mem id h
-      lia
-    refine ⟨𝒜.cons t₀ this, by rw [card_cons, h𝒜card], ?_, ?_⟩
-    · simp only [cons_eq_insert, coe_insert, Set.pairwise_insert_of_symm, mem_coe, ne_eq]
-exact ⟨h𝒜disj, fun t ht _ => sdiff_disjoint.mono ht₀ subset_biUnion_of_mem id ht⟩
-    · simp only [cons_eq_insert, mem_insert, forall_eq_or_imp, and_assoc]
-      exact ⟨ht₀.trans sdiff_subset, ht₀card, ht₀sum, h𝒜⟩
-
-/--
-theorem `ZMod.erdos_ginzburg_ziv` / 定理 `ZMod.erdos_ginzburg_ziv`
-
-English:
-theorem ZMod.erdos_ginzburg_ziv
-  given: (a : ι -> ZMod n) (hs : 2 * n - 1 <= #s)
-  proof: by
+theorem ZMod.erdos_ginzburg_ziv (a : ι → ZMod n) (hs : 2 * n - 1 ≤ #s) :
+    ∃ t ⊆ s, #t = n ∧ ∑ i ∈ t, a i = 0 := by
   simpa [← ZMod.intCast_zmod_eq_zero_iff_dvd] using Int.erdos_ginzburg_ziv (ZMod.cast ∘ a) hs
 
-中文:
-定理 ZMod.erdos_ginzburg_ziv
-  条件: (a : ι -> ZMod n) (hs : 2 * n - 1 <= #s)
-  证明: by
-  simpa [← ZMod.intCast_zmod_eq_zero_iff_dvd] using Int.erdos_ginzburg_ziv (ZMod.cast ∘ a) hs
+/-- The **Erdős–Ginzburg–Ziv theorem** for `ℤ` for multiset.
 
-Depends on / 依赖: Int.erdos_ginzburg_ziv, ZMod.cast, ZMod.intCast_zmod_eq_zero_iff_dvd, erdos_ginzburg_ziv, intCast_zmod_eq_zero_iff_dvd
+Any multiset of at least `2 * n - 1` elements of `ℤ` contains a submultiset of `n` elements whose
+sum is divisible by `n`. -/
+/-
+**Int.erdos_ginzburg_ziv_multiset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.erdos_ginzburg_ziv_multiset (s : Multiset Int) (hs : 2 * n - 1 <= Mult
+iset.card s) : exists t <= s, Multiset.card t = n ∧ ↑n ∣ t.sum
+参数：s : Multiset Int；hs : 2 * n - 1 <= Multiset.card s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.erdos_ginzburg_ziv`：Int.erdos_ginzburg_ziv (a : ι -> Int) (hs : 2 * 
+n - 1 <= #s) : exists t subseteq s, #t = n ∧ ↑n ∣ ∑ i in t, a i
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.card_toEnumFinset`：card_toEnumFinset (m : Multiset α) : m.toEnu
+mFinset.card = Multiset.card m
+· 使用定理 `Multiset.map_fst_le_of_subset_toEnumFinset`：∀ {α : Type u_1} [inst : Dec
+idableEq α] {m : Multiset α} {s : Finset (α × ℕ)},   s ⊆ m.toEnumFinset → Multis
+et.map Prod.fst s.val ≤ m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
+
+--- 原说明 ---
+The **Erdős–Ginzburg–Ziv theorem** for `ℤ` for multiset.
+
+Any multiset of at least `2 * n - 1` elements of `ℤ` contains a submultiset of `
+n` elements whose
+sum is divisible by `n`.
 -/
-theorem ZMod.erdos_ginzburg_ziv (a : ι -> ZMod n) (hs : 2 * n - 1 <= #s) :
-    exists t subseteq s, #t = n ∧ ∑ i in t, a i = 0 := by
-  simpa [← ZMod.intCast_zmod_eq_zero_iff_dvd] using Int.erdos_ginzburg_ziv (ZMod.cast ∘ a) hs
-
-/--
-theorem `Int.erdos_ginzburg_ziv_multiset` / 定理 `Int.erdos_ginzburg_ziv_multiset`
-
-English:
-theorem Int.erdos_ginzburg_ziv_multiset
-  given: (s : Multiset Int) (hs : 2 * n - 1 <= Multiset.card s)
-  proof: by
+theorem Int.erdos_ginzburg_ziv_multiset (s : Multiset ℤ) (hs : 2 * n - 1 ≤ Multiset.card s) :
+    ∃ t ≤ s, Multiset.card t = n ∧ ↑n ∣ t.sum := by
   obtain ⟨t, hts, ht⟩ := Int.erdos_ginzburg_ziv (s := s.toEnumFinset) Prod.fst (by simpa using hs)
   exact ⟨t.1.map Prod.fst, Multiset.map_fst_le_of_subset_toEnumFinset hts, by simpa using ht⟩
 
-中文:
-定理 整数.erdos_ginzburg_ziv_multiset
-  条件: (s : Multiset 整数) (hs : 2 * n - 1 <= Multiset.card s)
-  证明: by
-  obtain ⟨t, hts, ht⟩ := Int.erdos_ginzburg_ziv (s := s.toEnumFinset) Prod.fst (by simpa using hs)
-  exact ⟨t.1.map Prod.fst, Multiset.map_fst_le_of_subset_toEnumFinset hts, by simpa using ht⟩
+/-- The **Erdős–Ginzburg–Ziv theorem** for `ℤ/nℤ` for multiset.
 
-Depends on / 依赖: Int.erdos_ginzburg_ziv, Multiset, Multiset.map_fst_le_of_subset_toEnumFinset, Prod.fst, erdos_ginzburg_ziv, map_fst_le_of_subset_toEnumFinset, s.toEnumFinset, toEnumFinset
--/
-theorem Int.erdos_ginzburg_ziv_multiset (s : Multiset Int) (hs : 2 * n - 1 <= Multiset.card s) :
-    exists t <= s, Multiset.card t = n ∧ ↑n ∣ t.sum := by
-  obtain ⟨t, hts, ht⟩ := Int.erdos_ginzburg_ziv (s := s.toEnumFinset) Prod.fst (by simpa using hs)
-  exact ⟨t.1.map Prod.fst, Multiset.map_fst_le_of_subset_toEnumFinset hts, by simpa using ht⟩
+Any multiset of at least `2 * n - 1` elements of `ℤ` contains a submultiset of `n` elements whose
+sum is divisible by `n`. -/
+/-
+**ZMod.erdos_ginzburg_ziv_multiset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ZMod.erdos_ginzburg_ziv_multiset (s : Multiset (ZMod n)) (hs : 2 * n - 1 <
+= Multiset.card s) : exists t <= s, Multiset.card t = n ∧ t.sum = 0
+参数：s : Multiset (ZMod n)；hs : 2 * n - 1 <= Multiset.card s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ZMod.erdos_ginzburg_ziv`：ZMod.erdos_ginzburg_ziv (a : ι -> ZMod n) (hs :
+ 2 * n - 1 <= #s) : exists t subseteq s, #t = n ∧ ∑ i in t, a i = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.card_toEnumFinset`：card_toEnumFinset (m : Multiset α) : m.toEnu
+mFinset.card = Multiset.card m
+· 使用定理 `Multiset.map_fst_le_of_subset_toEnumFinset`：∀ {α : Type u_1} [inst : Dec
+idableEq α] {m : Multiset α} {s : Finset (α × ℕ)},   s ⊆ m.toEnumFinset → Multis
+et.map Prod.fst s.val ≤ m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
 
-/--
-theorem `ZMod.erdos_ginzburg_ziv_multiset` / 定理 `ZMod.erdos_ginzburg_ziv_multiset`
+--- 原说明 ---
+The **Erdős–Ginzburg–Ziv theorem** for `ℤ/nℤ` for multiset.
 
-English:
-theorem ZMod.erdos_ginzburg_ziv_multiset
-  statement: (s : Multiset (ZMod n))
-  proof: by
-  obtain ⟨t, hts, ht⟩ := ZMod.erdos_ginzburg_ziv (s := s.toEnumFinset) Prod.fst (by simpa using hs)
-  exact ⟨t.1.map Prod.fst, Multiset.map_fst_le_of_subset_toEnumFinset hts, by simpa using ht⟩
-
-中文:
-定理 ZMod.erdos_ginzburg_ziv_multiset
-  结论: (s : Multiset (ZMod n))
-  证明: by
-  obtain ⟨t, hts, ht⟩ := ZMod.erdos_ginzburg_ziv (s := s.toEnumFinset) Prod.fst (by simpa using hs)
-  exact ⟨t.1.map Prod.fst, Multiset.map_fst_le_of_subset_toEnumFinset hts, by simpa using ht⟩
-
-Depends on / 依赖: Multiset, Multiset.map_fst_le_of_subset_toEnumFinset, Prod.fst, ZMod.erdos_ginzburg_ziv, erdos_ginzburg_ziv, map_fst_le_of_subset_toEnumFinset, s.toEnumFinset, toEnumFinset
+Any multiset of at least `2 * n - 1` elements of `ℤ` contains a submultiset of `
+n` elements whose
+sum is divisible by `n`.
 -/
 theorem ZMod.erdos_ginzburg_ziv_multiset (s : Multiset (ZMod n))
-    (hs : 2 * n - 1 <= Multiset.card s) : exists t <= s, Multiset.card t = n ∧ t.sum = 0 := by
+    (hs : 2 * n - 1 ≤ Multiset.card s) : ∃ t ≤ s, Multiset.card t = n ∧ t.sum = 0 := by
   obtain ⟨t, hts, ht⟩ := ZMod.erdos_ginzburg_ziv (s := s.toEnumFinset) Prod.fst (by simpa using hs)
   exact ⟨t.1.map Prod.fst, Multiset.map_fst_le_of_subset_toEnumFinset hts, by simpa using ht⟩
 
 end composite
+

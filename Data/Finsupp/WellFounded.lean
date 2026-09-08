@@ -31,223 +31,220 @@ variable {α N : Type*}
 
 namespace Finsupp
 
-variable [Zero N] {r : α -> α -> Prop} {s : N -> N -> Prop}
+variable [Zero N] {r : α → α → Prop} {s : N → N → Prop}
 
-/--
-theorem `Lex.acc` / 定理 `Lex.acc`
+/-- Transferred from `DFinsupp.Lex.acc`. See the top of that file for an explanation for the
+  appearance of the relation `rᶜ ⊓ (≠)`. -/
+/-
+**Finsupp.Lex.acc** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Lex`。
+形式化陈述：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] {r : α → α → Prop} {s : N 
+→ N → Prop},   (∀ ⦃n : N⦄, ¬s n 0) →     WellFounded s → ∀ (x : α →₀ N), (∀ a ∈ 
+x.support, Acc (rᶜ ⊓ fun x1 x2 => x1 ≠ x2) a) → Acc (Finsupp.Lex r s) x
+参数：∀ ⦃n : N⦄, ¬s n 0；x : α →₀ N；∀ a ∈ x.support, Acc (rᶜ ⊓ fun x1 x2 => x1 ≠ x2)
+ a；Finsupp.Lex r s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.lex_eq_invImage_dfinsupp_lex`：lex_eq_invImage_dfinsupp_lex (r : 
+α -> α -> Prop) (s : N -> N -> Prop) : Finsupp.Lex r s = InvImage (DFinsupp.Lex 
+r fun _ => s) toDFinsupp
+· 使用定理 `InvImage.accessible`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} {a :
+ α} (f : α → β), Acc r (f a) → Acc (InvImage r f) a
+· 使用定理 `DFinsupp.Lex.acc`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i : ι) → 
+Zero (α i)] {r : ι → ι → Prop} {s : (i : ι) → α i → α i → Prop},   (∀ ⦃i : ι⦄ ⦃a
+ : α i…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `toDFinsupp_support`：toDFinsupp_support (f : ι ->₀ M) : f.toDFinsupp.supp
+ort = f.support
 
-English:
-theorem Lex.acc
-  statement: (hbot : forall ⦃n⦄, ¬s n 0) (hs : WellFounded s) (x : α ->₀ N)
-  proof: by
-  rw [lex_eq_invImage_dfinsupp_lex]
-  classical
-    refine InvImage.accessible toDFinsupp (DFinsupp.Lex.acc (fun _ => hbot) (fun _ => hs) _ ?_)
-    simpa only [toDFinsupp_support] using h
-
-中文:
-定理 Lex.acc
-  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : 良基 s) (x : α ->₀ N)
-  证明: by
-  rw [lex_eq_invImage_dfinsupp_lex]
-  classical
-    refine InvImage.accessible toDFinsupp (DFinsupp.Lex.acc (fun _ => hbot) (fun _ => hs) _ ?_)
-    simpa only [toDFinsupp_support] using h
+--- 原说明 ---
+Transferred from `DFinsupp.Lex.acc`. See the top of that file for an explanation
+ for the
+  appearance of the relation `rᶜ ⊓ (≠)`.
 -/
-theorem Lex.acc (hbot : forall ⦃n⦄, ¬s n 0) (hs : WellFounded s) (x : α ->₀ N)
-    (h : forall a in x.support, Acc (rᶜ ⊓ (· != ·)) a) :
+theorem Lex.acc (hbot : ∀ ⦃n⦄, ¬s n 0) (hs : WellFounded s) (x : α →₀ N)
+    (h : ∀ a ∈ x.support, Acc (rᶜ ⊓ (· ≠ ·)) a) :
     Acc (Finsupp.Lex r s) x := by
   rw [lex_eq_invImage_dfinsupp_lex]
   classical
     refine InvImage.accessible toDFinsupp (DFinsupp.Lex.acc (fun _ => hbot) (fun _ => hs) _ ?_)
     simpa only [toDFinsupp_support] using h
-
-/--
-theorem `Lex.wellFounded` / 定理 `Lex.wellFounded`
-
-English:
-theorem Lex.wellFounded
-  statement: (hbot : forall ⦃n⦄, ¬s n 0) (hs : WellFounded s)
-  proof: ⟨fun x => Lex.acc hbot hs x fun a _ => hr.apply a⟩
-
-中文:
-定理 Lex.wellFounded
-  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : 良基 s)
-  证明: ⟨fun x => Lex.acc hbot hs x fun a _ => hr.apply a⟩
+/-
+**Finsupp.Lex.wellFounded** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Lex`。
+形式化陈述：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] {r : α → α → Prop} {s : N 
+→ N → Prop},   (∀ ⦃n : N⦄, ¬s n 0) → WellFounded s → WellFounded (rᶜ ⊓ fun x1 x2
+ => x1 ≠ x2) → WellFounded (Finsupp.Lex r s)
+参数：∀ ⦃n : N⦄, ¬s n 0；rᶜ ⊓ fun x1 x2 => x1 ≠ x2；Finsupp.Lex r s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.Lex.acc`：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] {r : α 
+→ α → Prop} {s : N → N → Prop},   (∀ ⦃n : N⦄, ¬s n 0) →     WellFounded s → ∀ (x
+ : α …
+· 使用定理 `WellFounded.apply`：∀ {α : Sort u} {r : α → α → Prop}, WellFounded r → ∀ 
+(a : α), Acc r a
 -/
-theorem Lex.wellFounded (hbot : forall ⦃n⦄, ¬s n 0) (hs : WellFounded s)
-    (hr : WellFounded <| rᶜ ⊓ (· != ·)) : WellFounded (Finsupp.Lex r s) :=
+theorem Lex.wellFounded (hbot : ∀ ⦃n⦄, ¬s n 0) (hs : WellFounded s)
+    (hr : WellFounded <| rᶜ ⊓ (· ≠ ·)) : WellFounded (Finsupp.Lex r s) :=
   ⟨fun x => Lex.acc hbot hs x fun a _ => hr.apply a⟩
-
-/--
-theorem `Lex.wellFounded'` / 定理 `Lex.wellFounded'`
-
-English:
-theorem Lex.wellFounded'
-  statement: (hbot : forall ⦃n⦄, ¬s n 0) (hs : WellFounded s)
-  proof: (lex_eq_invImage_dfinsupp_lex r s).symm ▸
-    InvImage.wf _ (DFinsupp.Lex.wellFounded' (fun _ => hbot) (fun _ => hs) hr)
-
-中文:
-定理 Lex.wellFounded'
-  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : 良基 s)
-  证明: (lex_eq_invImage_dfinsupp_lex r s).symm ▸
-    InvImage.wf _ (DFinsupp.Lex.wellFounded' (fun _ => hbot) (fun _ => hs) hr)
+/-
+**Finsupp.Lex.wellFounded'** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Lex`。
+形式化陈述：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] {r : α → α → Prop} {s : N 
+→ N → Prop},   (∀ ⦃n : N⦄, ¬s n 0) →     WellFounded s → ∀ [Std.Trichotomous r],
+ WellFounded (Function.swap r) → WellFounded (Finsupp.Lex r s)
+参数：∀ ⦃n : N⦄, ¬s n 0；Function.swap r；Finsupp.Lex r s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用定理 `DFinsupp.Lex.wellFounded'`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (
+i : ι) → Zero (α i)] {r : ι → ι → Prop} {s : (i : ι) → α i → α i → Prop},   (∀ ⦃
+i : ι⦄ ⦃a : α i…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.lex_eq_invImage_dfinsupp_lex`：lex_eq_invImage_dfinsupp_lex (r : 
+α -> α -> Prop) (s : N -> N -> Prop) : Finsupp.Lex r s = InvImage (DFinsupp.Lex 
+r fun _ => s) toDFinsupp
 -/
-theorem Lex.wellFounded' (hbot : forall ⦃n⦄, ¬s n 0) (hs : WellFounded s)
+theorem Lex.wellFounded' (hbot : ∀ ⦃n⦄, ¬s n 0) (hs : WellFounded s)
     [Std.Trichotomous r] (hr : WellFounded (Function.swap r)) : WellFounded (Finsupp.Lex r s) :=
   (lex_eq_invImage_dfinsupp_lex r s).symm ▸
     InvImage.wf _ (DFinsupp.Lex.wellFounded' (fun _ => hbot) (fun _ => hs) hr)
-
-/--
-Instance `Lex.wellFoundedLT` / 实例 `Lex.wellFoundedLT`
-
-English:
-instance Lex.wellFoundedLT
-  signature: {α N} [LT α] [@Std.Trichotomous α (· < ·)] [hα : WellFoundedGT α]
-  body: ⟨Lex.wellFounded' (fun _ => not_lt_zero) hN.wf hα.wf⟩
-
-中文:
-实例 Lex.wellFoundedLT
-  签名: {α N} [LT α] [@Std.三歧 α (· < ·)] [hα : WellFoundedGT α]
-  定义体: ⟨Lex.wellFounded' (fun _ => not_lt_zero) hN.wf hα.wf⟩
+/-
+**Finsupp.Lex.wellFoundedLT** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Lex`。
+形式化陈述：∀ {α : Type u_3} {N : Type u_4} [inst : LT α] [Std.Trichotomous fun x1 x2 
+=> x1 < x2] [hα : WellFoundedGT α]   [inst_2 : AddMonoid N] [inst_3 : PartialOrd
+er N] [IsBotZeroClass N] [hN : WellFoundedLT N],   WellFoundedLT (Lex (α →₀ N))
+参数：Lex (α →₀ N)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.Lex.wellFounded'`：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N
+] {r : α → α → Prop} {s : N → N → Prop},   (∀ ⦃n : N⦄, ¬s n 0) →     WellFounded
+ s → ∀ [Std.Tr…
+· 使用定理 `not_lt_zero`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], ¬a < 0
+· 使用定理 `IsWellFounded.wf`：∀ {α : Type u} {r : α → α → Prop} [self : IsWellFounde
+d α r], WellFounded r
 -/
 instance Lex.wellFoundedLT {α N} [LT α] [@Std.Trichotomous α (· < ·)] [hα : WellFoundedGT α]
     [AddMonoid N] [PartialOrder N] [IsBotZeroClass N]
-    [hN : WellFoundedLT N] : WellFoundedLT (Lex (α ->₀ N)) :=
+    [hN : WellFoundedLT N] : WellFoundedLT (Lex (α →₀ N)) :=
   ⟨Lex.wellFounded' (fun _ => not_lt_zero) hN.wf hα.wf⟩
-
-/--
-Instance `Colex.wellFoundedLT` / 实例 `Colex.wellFoundedLT`
-
-English:
-instance Colex.wellFoundedLT
-  signature: {α N} [LT α] [@Std.Trichotomous α (· < ·)] [WellFoundedLT α]
-  body: Lex.wellFoundedLT (α := αᵒᵈ)
-
-中文:
-实例 Colex.wellFoundedLT
-  签名: {α N} [LT α] [@Std.三歧 α (· < ·)] [WellFoundedLT α]
-  定义体: Lex.wellFoundedLT (α := αᵒᵈ)
+/-
+**Finsupp.Colex.wellFoundedLT** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Colex`。
+形式化陈述：∀ {α : Type u_3} {N : Type u_4} [inst : LT α] [Std.Trichotomous fun x1 x2 
+=> x1 < x2] [WellFoundedLT α]   [inst_3 : AddMonoid N] [inst_4 : PartialOrder N]
+ [IsBotZeroClass N] [WellFoundedLT N], WellFoundedLT (Colex (α →₀ N))
+参数：Colex (α →₀ N)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.Lex.wellFoundedLT`：∀ {α : Type u_3} {N : Type u_4} [inst : LT α]
+ [Std.Trichotomous fun x1 x2 => x1 < x2] [hα : WellFoundedGT α]   [inst_2 : AddM
+onoid N] [inst_…
+· 使用定理 `OrderDual.instTrichotomousLt`：∀ {α : Type u_1} [inst : LT α] [T : Std.Tr
+ichotomous LT.lt], Std.Trichotomous LT.lt
+· 使用定理 `instWellFoundedGTOrderDualOfWellFoundedLT`：∀ (α : Type u_1) [inst : LT α
+] [h : WellFoundedLT α], WellFoundedGT αᵒᵈ
 -/
 instance Colex.wellFoundedLT {α N} [LT α] [@Std.Trichotomous α (· < ·)] [WellFoundedLT α]
     [AddMonoid N] [PartialOrder N] [IsBotZeroClass N]
-    [WellFoundedLT N] : WellFoundedLT (Colex (α ->₀ N)) :=
+    [WellFoundedLT N] : WellFoundedLT (Colex (α →₀ N)) :=
   Lex.wellFoundedLT (α := αᵒᵈ)
 
 variable (r)
-
-/--
-theorem `Lex.wellFounded_of_finite` / 定理 `Lex.wellFounded_of_finite`
-
-English:
-theorem Lex.wellFounded_of_finite
-  statement: [IsStrictTotalOrder α r] [Finite α]
-  proof: InvImage.wf (@equivFunOnFinite α N _ _) (Pi.Lex.wellFounded r fun _ => hs)
-
-中文:
-定理 Lex.wellFounded_of_finite
-  结论: [是StrictTotal序 α r] [有限 α]
-  证明: InvImage.wf (@equivFunOnFinite α N _ _) (Pi.Lex.wellFounded r fun _ => hs)
-
-Depends on / 依赖: InvImage, InvImage.wf, Pi.Lex.wellFounded, equivFunOnFinite, wellFounded
+/-
+**Finsupp.Lex.wellFounded_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Lex`。
+形式化陈述：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] (r : α → α → Prop) {s : N 
+→ N → Prop} [IsStrictTotalOrder α r]   [Finite α], WellFounded s → WellFounded (
+Finsupp.Lex r s)
+参数：r : α → α → Prop；Finsupp.Lex r s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用定理 `Pi.Lex.wellFounded`：Pi.Lex.wellFounded [IsStrictTotalOrder ι r] [Finite 
+ι] (hs : forall i, WellFounded (s i)) : WellFounded (Pi.Lex r (fun {i} => s i))
 -/
 theorem Lex.wellFounded_of_finite [IsStrictTotalOrder α r] [Finite α]
     (hs : WellFounded s) : WellFounded (Finsupp.Lex r s) :=
   InvImage.wf (@equivFunOnFinite α N _ _) (Pi.Lex.wellFounded r fun _ => hs)
-
-/--
-theorem `Lex.wellFoundedLT_of_finite` / 定理 `Lex.wellFoundedLT_of_finite`
-
-English:
-theorem Lex.wellFoundedLT_of_finite
-  statement: [LinearOrder α] [Finite α] [LT N]
-  proof: ⟨Finsupp.Lex.wellFounded_of_finite (· < ·) hwf.1⟩
-
-中文:
-定理 Lex.wellFoundedLT_of_finite
-  结论: [线性序 α] [有限 α] [LT N]
-  证明: ⟨Finsupp.Lex.wellFounded_of_finite (· < ·) hwf.1⟩
-
-Depends on / 依赖: Finsupp, Finsupp.Lex.wellFounded_of_finite, wellFounded_of_finite
+/-
+**Finsupp.Lex.wellFoundedLT_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Lex`。
+形式化陈述：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] [inst_1 : LinearOrder α] [
+Finite α] [inst_3 : LT N]   [hwf : WellFoundedLT N], WellFoundedLT (Lex (α →₀ N)
+)
+参数：Lex (α →₀ N)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.Lex.wellFounded_of_finite`：∀ {α : Type u_1} {N : Type u_2} [inst
+ : Zero N] (r : α → α → Prop) {s : N → N → Prop} [IsStrictTotalOrder α r]   [Fin
+ite α], WellFounded s →…
+· 使用定理 `instIsStrictTotalOrderLt`：∀ {α : Type u} [inst : LinearOrder α], IsStric
+tTotalOrder α fun x1 x2 => x1 < x2
+· 使用定理 `IsWellFounded.wf`：∀ {α : Type u} {r : α → α → Prop} [self : IsWellFounde
+d α r], WellFounded r
 -/
 theorem Lex.wellFoundedLT_of_finite [LinearOrder α] [Finite α] [LT N]
-    [hwf : WellFoundedLT N] : WellFoundedLT (Lex (α ->₀ N)) :=
+    [hwf : WellFoundedLT N] : WellFoundedLT (Lex (α →₀ N)) :=
   ⟨Finsupp.Lex.wellFounded_of_finite (· < ·) hwf.1⟩
-
-/--
-theorem `Colex.wellFoundedLT_of_finite` / 定理 `Colex.wellFoundedLT_of_finite`
-
-English:
-theorem Colex.wellFoundedLT_of_finite
-  statement: [LinearOrder α] [Finite α] [LT N]
-  proof: Lex.wellFoundedLT_of_finite (α := αᵒᵈ)
-
-中文:
-定理 Colex.wellFoundedLT_of_finite
-  结论: [线性序 α] [有限 α] [LT N]
-  证明: Lex.wellFoundedLT_of_finite (α := αᵒᵈ)
-
-Depends on / 依赖: Lex.wellFoundedLT_of_finite, wellFoundedLT_of_finite
+/-
+**Finsupp.Colex.wellFoundedLT_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp.Colex
+`。
+形式化陈述：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] [inst_1 : LinearOrder α] [
+Finite α] [inst_3 : LT N] [WellFoundedLT N],   WellFoundedLT (Colex (α →₀ N))
+参数：Colex (α →₀ N)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.Lex.wellFoundedLT_of_finite`：∀ {α : Type u_1} {N : Type u_2} [in
+st : Zero N] [inst_1 : LinearOrder α] [Finite α] [inst_3 : LT N]   [hwf : WellFo
+undedLT N], WellFoundedLT…
 -/
 theorem Colex.wellFoundedLT_of_finite [LinearOrder α] [Finite α] [LT N]
-    [WellFoundedLT N] : WellFoundedLT (Colex (α ->₀ N)) :=
+    [WellFoundedLT N] : WellFoundedLT (Colex (α →₀ N)) :=
   Lex.wellFoundedLT_of_finite (α := αᵒᵈ)
-
-/--
-theorem `wellFoundedLT` / 定理 `wellFoundedLT`
-
-English:
-theorem wellFoundedLT
-  given: [Preorder N] [WellFoundedLT N] (hbot : forall n : N, ¬n < 0)
-  proof: ⟨InvImage.wf toDFinsupp (DFinsupp.wellFoundedLT fun _ a => hbot a).wf⟩
-
-中文:
-定理 wellFoundedLT
-  条件: [预序 N] [WellFoundedLT N] (hbot : 对任意 n : N, ¬n < 0)
-  证明: ⟨InvImage.wf toDFinsupp (DFinsupp.wellFoundedLT fun _ a => hbot a).wf⟩
+/-
+**Finsupp.wellFoundedLT** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] [inst_1 : Preorder N] [Wel
+lFoundedLT N],   (∀ (n : N), ¬n < 0) → WellFoundedLT (α →₀ N)
+参数：∀ (n : N), ¬n < 0；α →₀ N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用定理 `IsWellFounded.wf`：∀ {α : Type u} {r : α → α → Prop} [self : IsWellFounde
+d α r], WellFounded r
+· 使用定理 `DFinsupp.wellFoundedLT`：∀ {ι : Type u_1} {α : ι → Type u_2} [inst : (i :
+ ι) → Zero (α i)] [inst_1 : (i : ι) → Preorder (α i)]   [∀ (i : ι), WellFoundedL
+T (α i)], (∀…
 -/
-protected theorem wellFoundedLT [Preorder N] [WellFoundedLT N] (hbot : forall n : N, ¬n < 0) :
-    WellFoundedLT (α ->₀ N) :=
+protected theorem wellFoundedLT [Preorder N] [WellFoundedLT N] (hbot : ∀ n : N, ¬n < 0) :
+    WellFoundedLT (α →₀ N) :=
   ⟨InvImage.wf toDFinsupp (DFinsupp.wellFoundedLT fun _ a => hbot a).wf⟩
-
-/--
-Instance `wellFoundedLT'` / 实例 `wellFoundedLT'`
-
-English:
-instance wellFoundedLT'
-  signature: {N}
-  body: Finsupp.wellFoundedLT fun _ => not_lt_zero
-
-中文:
-实例 wellFoundedLT'
-  签名: {N}
-  定义体: Finsupp.wellFoundedLT fun _ => not_lt_zero
-
-Depends on / 依赖: Finsupp, Finsupp.wellFoundedLT, not_lt_zero, wellFoundedLT
+/-
+**Finsupp.wellFoundedLT'** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：wellFoundedLT' {N} [AddMonoid N] [PartialOrder N] [IsBotZeroClass N] [Well
+FoundedLT N] : WellFoundedLT (α ->₀ N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.wellFoundedLT`：∀ {α : Type u_1} {N : Type u_2} [inst : Zero N] [
+inst_1 : Preorder N] [WellFoundedLT N],   (∀ (n : N), ¬n < 0) → WellFoundedLT (α
+ →₀ N)
+· 使用定理 `not_lt_zero`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], ¬a < 0
 -/
 instance wellFoundedLT' {N}
     [AddMonoid N] [PartialOrder N] [IsBotZeroClass N] [WellFoundedLT N] :
-    WellFoundedLT (α ->₀ N) :=
+    WellFoundedLT (α →₀ N) :=
   Finsupp.wellFoundedLT fun _ => not_lt_zero
-
-/--
-Instance `wellFoundedLT_of_finite` / 实例 `wellFoundedLT_of_finite`
-
-English:
-instance wellFoundedLT_of_finite
-  signature: [Finite α] [Preorder N] [WellFoundedLT N]
-  body: ⟨InvImage.wf equivFunOnFinite Function.wellFoundedLT.wf⟩
-
-中文:
-实例 wellFoundedLT_of_finite
-  签名: [有限 α] [预序 N] [WellFoundedLT N]
-  定义体: ⟨InvImage.wf equivFunOnFinite Function.wellFoundedLT.wf⟩
-
-Depends on / 依赖: Function, Function.wellFoundedLT.wf, InvImage, InvImage.wf, equivFunOnFinite, wellFoundedLT
+/-
+**Finsupp.wellFoundedLT_of_finite** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：wellFoundedLT_of_finite [Finite α] [Preorder N] [WellFoundedLT N] : WellFo
+undedLT (α ->₀ N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `InvImage.wf`：∀ {α : Sort u} {β : Sort v} {r : β → β → Prop} (f : α → β),
+ WellFounded r → WellFounded (InvImage r f)
+· 使用定理 `IsWellFounded.wf`：∀ {α : Type u} {r : α → α → Prop} [self : IsWellFounde
+d α r], WellFounded r
 -/
 instance wellFoundedLT_of_finite [Finite α] [Preorder N] [WellFoundedLT N] :
-    WellFoundedLT (α ->₀ N) :=
+    WellFoundedLT (α →₀ N) :=
   ⟨InvImage.wf equivFunOnFinite Function.wellFoundedLT.wf⟩
 
 end Finsupp
+

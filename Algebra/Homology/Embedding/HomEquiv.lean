@@ -42,25 +42,22 @@ variable {K K' : HomologicalComplex C c'} {L L' : HomologicalComplex C c}
 
 section
 
-/--
-Definition of `HasLift` / `HasLift` 的定义
+/-- The condition on a morphism `K.restriction e ⟶ L` which allows to
+extend it as a morphism `K ⟶ L.extend e`, see `Embedding.homEquiv`. -/
+/-
+**ComplexShape.Embedding.HasLift** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.Embeddi
+ng`。
+形式化陈述：HasLift (φ : K.restriction e ⟶ L) : Prop
+参数：φ : K.restriction e ⟶ L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasLift
-  signature: (φ : K.restriction e ⟶ L)
-  body: forall (j : ι) (_ : e.BoundaryGE j) (i' : ι')
-    (_ : c'.Rel i' (e.f j)), K.d i' _ ≫ φ.f j = 0
-
-中文:
-定义 有Lift
-  签名: (φ : K.restriction e ⟶ L)
-  定义体: forall (j : ι) (_ : e.BoundaryGE j) (i' : ι')
-    (_ : c'.Rel i' (e.f j)), K.d i' _ ≫ φ.f j = 0
-
-Depends on / 依赖: BoundaryGE, Injective, Injective.isZero_under, K.isZero_of_isStrictlyGE, e.BoundaryGE, isStrictlyGE_iff, isZero_of_isStrictlyGE, isZero_under
+--- 原说明 ---
+The condition on a morphism `K.restriction e ⟶ L` which allows to
+extend it as a morphism `K ⟶ L.extend e`, see `Embedding.homEquiv`.
 -/
 def HasLift (φ : K.restriction e ⟶ L) : Prop :=
-  forall (j : ι) (_ : e.BoundaryGE j) (i' : ι')
+  ∀ (j : ι) (_ : e.BoundaryGE j) (i' : ι')
     (_ : c'.Rel i' (e.f j)), K.d i' _ ≫ φ.f j = 0
 
 namespace liftExtend
@@ -70,170 +67,147 @@ variable (φ : K.restriction e ⟶ L)
 variable {e}
 
 open scoped Classical in
-/--
-Definition of `f` / `f` 的定义
+/-- Auxiliary definition for `liftExtend`. -/
+/-
+**ComplexShape.Embedding.liftExtend.f** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.Em
+bedding.liftExtend`。
+形式化陈述：f (i' : ι') : K.X i' ⟶ (L.extend e).X i'
+参数：i' : ι'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition f
-  signature: (i' : ι')
-  body: if hi' : exists i, e.f i = i' then
-    (K.restrictionXIso e hi'.choose_spec).inv ≫ φ.f hi'.choose ≫
-      (L.extendXIso e hi'.choose_spec).inv
-  else 0
-
-中文:
-定义 f
-  签名: (i' : ι')
-  定义体: if hi' : exists i, e.f i = i' then
-    (K.restrictionXIso e hi'.choose_spec).inv ≫ φ.f hi'.choose ≫
-      (L.extendXIso e hi'.choose_spec).inv
-  else 0
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, HomologicalComplex, HomologicalComplex.eval, HomologicalComplex.eval_obj, IsZero, IsZero.of_iso, K.restrictionXIso, L.extendXIso, L.isZero_of_isStrictlyGE, all_goals, biprod_isZero_iff, choose_spec, eval_obj, extendXIso, isStrictlyGE_iff, isZero_X_iff, isZero_of_isStrictlyGE, mapBiprod, mappingCone
+--- 原说明 ---
+Auxiliary definition for `liftExtend`.
 -/
 noncomputable def f (i' : ι') : K.X i' ⟶ (L.extend e).X i' :=
-  if hi' : exists i, e.f i = i' then
+  if hi' : ∃ i, e.f i = i' then
     (K.restrictionXIso e hi'.choose_spec).inv ≫ φ.f hi'.choose ≫
       (L.extendXIso e hi'.choose_spec).inv
   else 0
-
-/--
-lemma `f_eq` / 引理 `f_eq`
-
-English:
-lemma f_eq
-  given: {i' : ι'} {i : ι} (hi : e.f i = i')
-  proof: by
-  have hi' : exists k, e.f k = i' := ⟨i, hi⟩
-  have : hi'.choose = i := e.injective_f (by rw [hi'.choose_spec, hi])
-  grind [f]
-
-中文:
-引理 f_eq
-  条件: {i' : ι'} {i : ι} (hi : e.f i = i')
-  证明: by
-  have hi' : exists k, e.f k = i' := ⟨i, hi⟩
-  have : hi'.choose = i := e.injective_f (by rw [hi'.choose_spec, hi])
-  grind [f]
-
-Depends on / 依赖: choose_spec, e.injective_f, injective_f
+/-
+**ComplexShape.Embedding.liftExtend.f_eq** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape
+.Embedding.liftExtend`。
+形式化陈述：f_eq {i' : ι'} {i : ι} (hi : e.f i = i') : f φ i' = (K.restrictionXIso e h
+i).inv ≫ φ.f i ≫ (L.extendXIso e hi).inv
+参数：hi : e.f i = i'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.Embedding.injective_f`：∀ {ι : Type u_1} {ι' : Type u_2} {c 
+: ComplexShape ι} {c' : ComplexShape ι'} (self : c.Embedding c'),   Function.Inj
+ective self.f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 lemma f_eq {i' : ι'} {i : ι} (hi : e.f i = i') :
     f φ i' = (K.restrictionXIso e hi).inv ≫ φ.f i ≫ (L.extendXIso e hi).inv := by
-  have hi' : exists k, e.f k = i' := ⟨i, hi⟩
+  have hi' : ∃ k, e.f k = i' := ⟨i, hi⟩
   have : hi'.choose = i := e.injective_f (by rw [hi'.choose_spec, hi])
   grind [f]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `comm` / 引理 `comm`
-
-English:
-lemma comm
-  given: (hφ : e.HasLift φ) (i' j' : ι')
-  proof: by
-  by_cases hij' : c'.Rel i' j'
-  · by_cases hi' : exists i, e.f i = i'
-    · obtain ⟨i, hi⟩ := hi'
-      rw [f_eq φ hi]
-      by_cases hj' : exists j, e.f j = j'
-      · obtain ⟨j, hj⟩ := hj'
-        rw [f_eq φ hj]; rw [L.extend_d_eq e hi hj]
-        subst hi hj
-        simp [HomologicalComplex.restrictionXIso]
-      · apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
-    · have : (L.extend e).d i' j' = 0 := by
-        apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_src
-      rw [this]; rw [comp_zero]
-      by_cases hj' : exists j, e.f j = j'
-      · obtain ⟨j, rfl⟩ := hj'
-        rw [f_eq φ rfl]
-        dsimp [restrictionXIso]
-        rw [id_comp]; rw [reassoc_of% (hφ j (e.boundaryGE hij'
-          (by simpa using hi')) i' hij')]; rw [zero_comp]
-      · have : f φ j' = 0 := by
-          apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
-        rw [this]; rw [comp_zero]
-  · simp [HomologicalComplex.shape _ _ _ hij']
-
-中文:
-引理 comm
-  条件: (hφ : e.有Lift φ) (i' j' : ι')
-  证明: by
-  by_cases hij' : c'.Rel i' j'
-  · by_cases hi' : exists i, e.f i = i'
-    · obtain ⟨i, hi⟩ := hi'
-      rw [f_eq φ hi]
-      by_cases hj' : exists j, e.f j = j'
-      · obtain ⟨j, hj⟩ := hj'
-        rw [f_eq φ hj]; rw [L.extend_d_eq e hi hj]
-        subst hi hj
-        simp [HomologicalComplex.restrictionXIso]
-      · apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
-    · have : (L.extend e).d i' j' = 0 := by
-        apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_src
-      rw [this]; rw [comp_zero]
-      by_cases hj' : exists j, e.f j = j'
-      · obtain ⟨j, rfl⟩ := hj'
-        rw [f_eq φ rfl]
-        dsimp [restrictionXIso]
-        rw [id_comp]; rw [reassoc_of% (hφ j (e.boundaryGE hij'
-          (by simpa using hi')) i' hij')]; rw [zero_comp]
-      · have : f φ j' = 0 := by
-          apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
-        rw [this]; rw [comp_zero]
-  · simp [HomologicalComplex.shape _ _ _ hij']
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.restrictionXIso, L.extend, L.extend_d_eq, L.isZero_extend_X, comp_zero, eq_of_src, eq_of_tgt, extend, extend_d_eq, f_eq, isZero_extend_X, restrictionXIso
+/-
+**ComplexShape.Embedding.liftExtend.comm** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape
+.Embedding.liftExtend`。
+形式化陈述：comm (hφ : e.HasLift φ) (i' j' : ι') : f φ i' ≫ (L.extend e).d i' j' = K.d
+ i' j' ≫ f φ j'
+参数：hφ : e.HasLift φ；i' j' : ι'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.Embedding.liftExtend.f_eq`：f_eq {i' : ι'} {i : ι} (hi : e.f
+ i = i') : f φ i' = (K.restrictionXIso e hi).inv ≫ φ.f i ≫ (L.extendXIso e hi).i
+nv
+· 使用引理 `HomologicalComplex.extend_d_eq`：extend_d_eq {i' j' : ι'} {i j : ι} (hi :
+ e.f i = i') (hj : e.f j = j') : (K.extend e).d i' j' = (K.extendXIso e hi).hom 
+≫ K.d i j ≫ (K.exten…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `HomologicalComplex.Hom.comm_assoc`：∀ {ι : Type u_1} {V : Type u} [inst :
+ CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms V] {c : ComplexSh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_tgt`：eq_of_tgt (hX : IsZero X) (f g :
+ Y ⟶ X) : f = g
+· 使用引理 `HomologicalComplex.isZero_extend_X`：isZero_extend_X (i' : ι') (hi' : for
+all i, e.f i != i') : IsZero ((K.extend e).X i')
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用引理 `ComplexShape.Embedding.boundaryGE`：boundaryGE {i' : ι'} {j : ι} (hj : c'
+.Rel i' (e.f j)) (hi' : forall i, e.f i != i') : e.BoundaryGE j
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
 -/
 lemma comm (hφ : e.HasLift φ) (i' j' : ι') :
     f φ i' ≫ (L.extend e).d i' j' = K.d i' j' ≫ f φ j' := by
   by_cases hij' : c'.Rel i' j'
-  · by_cases hi' : exists i, e.f i = i'
+  · by_cases hi' : ∃ i, e.f i = i'
     · obtain ⟨i, hi⟩ := hi'
       rw [f_eq φ hi]
-      by_cases hj' : exists j, e.f j = j'
+      by_cases hj' : ∃ j, e.f j = j'
       · obtain ⟨j, hj⟩ := hj'
-        rw [f_eq φ hj]; rw [L.extend_d_eq e hi hj]
+        rw [f_eq φ hj, L.extend_d_eq e hi hj]
         subst hi hj
         simp [HomologicalComplex.restrictionXIso]
       · apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
     · have : (L.extend e).d i' j' = 0 := by
         apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_src
-      rw [this]; rw [comp_zero]
-      by_cases hj' : exists j, e.f j = j'
+      rw [this, comp_zero]
+      by_cases hj' : ∃ j, e.f j = j'
       · obtain ⟨j, rfl⟩ := hj'
         rw [f_eq φ rfl]
         dsimp [restrictionXIso]
-        rw [id_comp]; rw [reassoc_of% (hφ j (e.boundaryGE hij'
-          (by simpa using hi')) i' hij')]; rw [zero_comp]
+        rw [id_comp, reassoc_of% (hφ j (e.boundaryGE hij'
+          (by simpa using hi')) i' hij'), zero_comp]
       · have : f φ j' = 0 := by
           apply (L.isZero_extend_X e j' (by simpa using hj')).eq_of_tgt
-        rw [this]; rw [comp_zero]
+        rw [this, comp_zero]
   · simp [HomologicalComplex.shape _ _ _ hij']
 
 end liftExtend
 
 variable (φ : K.restriction e ⟶ L) (hφ : e.HasLift φ)
 
-/--
-Definition of `liftExtend` / `liftExtend` 的定义
+/-- The morphism  `K ⟶ L.extend e` given by a morphism `K.restriction e ⟶ L`
+which satisfy `e.HasLift φ`. -/
+/-
+**ComplexShape.Embedding.liftExtend** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.Embe
+dding`。
+形式化陈述：liftExtend : K ⟶ L.extend e where f i'
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.liftExtend.comm`：comm (hφ : e.HasLift φ) (i' j' :
+ ι') : f φ i' ≫ (L.extend e).d i' j' = K.d i' j' ≫ f φ j'
 
-English:
-definition liftExtend
-  signature: :
-  body: liftExtend.f φ i'
-  comm' _ _ _ := liftExtend.comm φ hφ _ _
-
-中文:
-定义 liftExtend
-  签名: :
-  定义体: liftExtend.f φ i'
-  comm' _ _ _ := liftExtend.comm φ hφ _ _
-
-Depends on / 依赖: liftExtend, liftExtend.f
+--- 原说明 ---
+The morphism  `K ⟶ L.extend e` given by a morphism `K.restriction e ⟶ L`
+which satisfy `e.HasLift φ`.
 -/
 noncomputable def liftExtend :
     K ⟶ L.extend e where
@@ -241,21 +215,16 @@ noncomputable def liftExtend :
   comm' _ _ _ := liftExtend.comm φ hφ _ _
 
 variable {i' : ι'} {i : ι} (hi : e.f i = i')
-
-/--
-lemma `liftExtend_f` / 引理 `liftExtend_f`
-
-English:
-lemma liftExtend_f
-  proof: by
-  apply liftExtend.f_eq
-
-中文:
-引理 liftExtend_f
-  证明: by
-  apply liftExtend.f_eq
-
-Depends on / 依赖: f_eq, i_f_comp, liftExtend, liftExtend.f_eq, mono_of_mono_fac
+/-
+**ComplexShape.Embedding.liftExtend_f** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape.Em
+bedding`。
+形式化陈述：liftExtend_f : (e.liftExtend φ hφ).f i' = (K.restrictionXIso e hi).inv ≫ φ
+.f i ≫ (L.extendXIso e hi).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.liftExtend.f_eq`：f_eq {i' : ι'} {i : ι} (hi : e.f
+ i = i') : f φ i' = (K.restrictionXIso e hi).inv ≫ φ.f i ≫ (L.extendXIso e hi).i
+nv
 -/
 lemma liftExtend_f :
     (e.liftExtend φ hφ).f i' = (K.restrictionXIso e hi).inv ≫ φ.f i ≫
@@ -264,80 +233,76 @@ lemma liftExtend_f :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `liftExtendfArrowIso` / `liftExtendfArrowIso` 的定义
+/-- Given `φ : K.restriction e ⟶ L` such that `hφ : e.HasLift φ`, this is
+the isomorphisms in the category of arrows between the maps
+`(e.liftExtend φ hφ).f i'` and `φ.f i` when `e.f i = i'`. -/
+/-
+**ComplexShape.Embedding.liftExtendfArrowIso** 是 Mathlib 中的一个定义，位于命名空间 `ComplexS
+hape.Embedding`。
+形式化陈述：liftExtendfArrowIso : Arrow.mk ((e.liftExtend φ hφ).f i') ≅ Arrow.mk (φ.f 
+i)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftExtendfArrowIso
-  signature: :
-  body: Arrow.isoMk (K.restrictionXIso e hi).symm (L.extendXIso e hi)
-    (by simp [e.liftExtend_f φ hφ hi])
-
-中文:
-定义 liftExtendfArrowIso
-  签名: :
-  定义体: Arrow.isoMk (K.restrictionXIso e hi).symm (L.extendXIso e hi)
-    (by simp [e.liftExtend_f φ hφ hi])
-
-Depends on / 依赖: Arrow.isoMk, K.restrictionXIso, L.extendXIso, e.liftExtend_f, extendXIso, liftExtend_f, restrictionXIso
+--- 原说明 ---
+Given `φ : K.restriction e ⟶ L` such that `hφ : e.HasLift φ`, this is
+the isomorphisms in the category of arrows between the maps
+`(e.liftExtend φ hφ).f i'` and `φ.f i` when `e.f i = i'`.
 -/
 noncomputable def liftExtendfArrowIso :
     Arrow.mk ((e.liftExtend φ hφ).f i') ≅ Arrow.mk (φ.f i) :=
   Arrow.isoMk (K.restrictionXIso e hi).symm (L.extendXIso e hi)
     (by simp [e.liftExtend_f φ hφ hi])
-
-/--
-lemma `isIso_liftExtend_f_iff` / 引理 `isIso_liftExtend_f_iff`
-
-English:
-lemma isIso_liftExtend_f_iff
-  given: (hi : e.f i = i')
-  proof: (MorphismProperty.isomorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-中文:
-引理 isIso_liftExtend_f_iff
-  条件: (hi : e.f i = i')
-  证明: (MorphismProperty.isomorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.isomorphisms, arrow_mk_iso_iff, e.liftExtendfArrowIso, isomorphisms, liftExtendfArrowIso
+/-
+**ComplexShape.Embedding.isIso_liftExtend_f_iff** 是 Mathlib 中的一个引理，位于命名空间 `Compl
+exShape.Embedding`。
+形式化陈述：isIso_liftExtend_f_iff (hi : e.f i = i') : IsIso ((e.liftExtend φ hφ).f i'
+) ↔ IsIso (φ.f i)
+参数：hi : e.f i = i'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.isomorphisms`：∀ (C : Type u)
+ [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.MorphismProperty.iso
+morphisms C).RespectsIso
 -/
 lemma isIso_liftExtend_f_iff (hi : e.f i = i') :
     IsIso ((e.liftExtend φ hφ).f i') ↔ IsIso (φ.f i) :=
   (MorphismProperty.isomorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-/--
-lemma `mono_liftExtend_f_iff` / 引理 `mono_liftExtend_f_iff`
-
-English:
-lemma mono_liftExtend_f_iff
-  given: (hi : e.f i = i')
-  proof: (MorphismProperty.monomorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-中文:
-引理 mono_liftExtend_f_iff
-  条件: (hi : e.f i = i')
-  证明: (MorphismProperty.monomorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.homotopyCofiber.XIsoBiprod, Injective, Injective.of_iso, MorphismProperty, MorphismProperty.monomorphisms, XIsoBiprod, arrow_mk_iso_iff, e.liftExtendfArrowIso, homotopyCofiber, liftExtendfArrowIso, monomorphisms, of_iso
+/-
+**ComplexShape.Embedding.mono_liftExtend_f_iff** 是 Mathlib 中的一个引理，位于命名空间 `Comple
+xShape.Embedding`。
+形式化陈述：mono_liftExtend_f_iff (hi : e.f i = i') : Mono ((e.liftExtend φ hφ).f i') 
+↔ Mono (φ.f i)
+参数：hi : e.f i = i'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.monomorphisms`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.MorphismProperty.mo
+nomorphisms C).RespectsIso
 -/
 lemma mono_liftExtend_f_iff (hi : e.f i = i') :
     Mono ((e.liftExtend φ hφ).f i') ↔ Mono (φ.f i) :=
   (MorphismProperty.monomorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-/--
-lemma `epi_liftExtend_f_iff` / 引理 `epi_liftExtend_f_iff`
-
-English:
-lemma epi_liftExtend_f_iff
-  given: (hi : e.f i = i')
-  proof: (MorphismProperty.epimorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-中文:
-引理 epi_liftExtend_f_iff
-  条件: (hi : e.f i = i')
-  证明: (MorphismProperty.epimorphisms C).arrow_mk_iso_iff (e.liftExtendfArrowIso φ hφ hi)
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.epimorphisms, arrow_mk_iso_iff, e.liftExtendfArrowIso, epimorphisms, liftExtendfArrowIso
+/-
+**ComplexShape.Embedding.epi_liftExtend_f_iff** 是 Mathlib 中的一个引理，位于命名空间 `Complex
+Shape.Embedding`。
+形式化陈述：epi_liftExtend_f_iff (hi : e.f i = i') : Epi ((e.liftExtend φ hφ).f i') ↔ 
+Epi (φ.f i)
+参数：hi : e.f i = i'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.arrow_mk_iso_iff`：arrow_mk_iso_iff (P : 
+MorphismProperty C) [RespectsIso P] {W X Y Z : C} {f : W ⟶ X} {g : Y ⟶ Z} (e : A
+rrow.mk f ≅ Arrow.mk g) : P f ↔ P g
+· 使用定理 `CategoryTheory.MorphismProperty.RespectsIso.epimorphisms`：∀ (C : Type u)
+ [inst : CategoryTheory.Category.{v, u} C], (CategoryTheory.MorphismProperty.epi
+morphisms C).RespectsIso
 -/
 lemma epi_liftExtend_f_iff (hi : e.f i = i') :
     Epi ((e.liftExtend φ hφ).f i') ↔ Epi (φ.f i) :=
@@ -350,44 +315,39 @@ namespace homRestrict
 variable {e}
 variable (ψ : K ⟶ L.extend e)
 
-/--
-Definition of `f` / `f` 的定义
+/-- Auxiliary definition for `Embedding.homRestrict`. -/
+/-
+**ComplexShape.Embedding.homRestrict.f** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.E
+mbedding.homRestrict`。
+形式化陈述：f (i : ι) : (K.restriction e).X i ⟶ L.X i
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition f
-  signature: (i : ι)
-  body: ψ.f (e.f i) ≫ (L.extendXIso e rfl).hom
-
-中文:
-定义 f
-  签名: (i : ι)
-  定义体: ψ.f (e.f i) ≫ (L.extendXIso e rfl).hom
-
-Depends on / 依赖: L.extendXIso, extendXIso
+--- 原说明 ---
+Auxiliary definition for `Embedding.homRestrict`.
 -/
 noncomputable def f (i : ι) : (K.restriction e).X i ⟶ L.X i :=
   ψ.f (e.f i) ≫ (L.extendXIso e rfl).hom
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `f_eq` / 引理 `f_eq`
-
-English:
-lemma f_eq
-  given: {i : ι} {i' : ι'} (h : e.f i = i')
-  proof: by
-  subst h
-  simp [f, restrictionXIso]
-
-中文:
-引理 f_eq
-  条件: {i : ι} {i' : ι'} (h : e.f i = i')
-  证明: by
-  subst h
-  simp [f, restrictionXIso]
-
-Depends on / 依赖: restrictionXIso
+/-
+**ComplexShape.Embedding.homRestrict.f_eq** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShap
+e.Embedding.homRestrict`。
+形式化陈述：f_eq {i : ι} {i' : ι'} (h : e.f i = i') : f ψ i = (K.restrictionXIso e h).
+hom ≫ ψ.f i' ≫ (L.extendXIso e h).hom
+参数：h : e.f i = i'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma f_eq {i : ι} {i' : ι'} (h : e.f i = i') :
     f ψ i = (K.restrictionXIso e h).hom ≫ ψ.f i' ≫ (L.extendXIso e h).hom := by
@@ -396,24 +356,38 @@ lemma f_eq {i : ι} {i' : ι'} (h : e.f i = i') :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `comm` / 引理 `comm`
-
-English:
-lemma comm
-  given: (i j : ι)
-  proof: by
-  dsimp [f]
-  simp only [assoc, ← ψ.comm_assoc, L.extend_d_eq e rfl rfl, Iso.inv_hom_id, comp_id]
-
-中文:
-引理 comm
-  条件: (i j : ι)
-  证明: by
-  dsimp [f]
-  simp only [assoc, ← ψ.comm_assoc, L.extend_d_eq e rfl rfl, Iso.inv_hom_id, comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id, L.extend_d_eq, comm_assoc, comp_id, extend_d_eq, inv_hom_id
+/-
+**ComplexShape.Embedding.homRestrict.comm** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShap
+e.Embedding.homRestrict`。
+形式化陈述：comm (i j : ι) : f ψ i ≫ L.d i j = K.d (e.f i) (e.f j) ≫ f ψ j
+参数：i j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HomologicalComplex.Hom.comm_assoc`：∀ {ι : Type u_1} {V : Type u} [inst :
+ CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms V] {c : ComplexSh…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `HomologicalComplex.extend_d_eq`：extend_d_eq {i' j' : ι'} {i j : ι} (hi :
+ e.f i = i') (hj : e.f j = j') : (K.extend e).d i' j' = (K.extendXIso e hi).hom 
+≫ K.d i j ≫ (K.exten…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comm (i j : ι) :
     f ψ i ≫ L.d i j = K.d (e.f i) (e.f j) ≫ f ψ j := by
@@ -422,72 +396,74 @@ lemma comm (i j : ι) :
 
 end homRestrict
 
-/--
-Definition of `homRestrict` / `homRestrict` 的定义
+/-- The morphism `K.restriction e ⟶ L` induced by a morphism `K ⟶ L.extend e`. -/
+/-
+**ComplexShape.Embedding.homRestrict** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.Emb
+edding`。
+形式化陈述：homRestrict (ψ : K ⟶ L.extend e) : K.restriction e ⟶ L where f i
+参数：ψ : K ⟶ L.extend e。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homRestrict
-  signature: (ψ : K ⟶ L.extend e)
-  body: homRestrict.f ψ i
-
-中文:
-定义 homRestrict
-  签名: (ψ : K ⟶ L.extend e)
-  定义体: homRestrict.f ψ i
-
-Depends on / 依赖: homRestrict, homRestrict.f
+--- 原说明 ---
+The morphism `K.restriction e ⟶ L` induced by a morphism `K ⟶ L.extend e`.
 -/
 noncomputable def homRestrict (ψ : K ⟶ L.extend e) : K.restriction e ⟶ L where
   f i := homRestrict.f ψ i
-
-/--
-lemma `homRestrict_f` / 引理 `homRestrict_f`
-
-English:
-lemma homRestrict_f
-  given: (ψ : K ⟶ L.extend e) {i : ι} {i' : ι'} (h : e.f i = i')
-  proof: homRestrict.f_eq ψ h
-
-中文:
-引理 homRestrict_f
-  条件: (ψ : K ⟶ L.extend e) {i : ι} {i' : ι'} (h : e.f i = i')
-  证明: homRestrict.f_eq ψ h
-
-Depends on / 依赖: f_eq, homRestrict, homRestrict.f_eq
+/-
+**ComplexShape.Embedding.homRestrict_f** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape.E
+mbedding`。
+形式化陈述：homRestrict_f (ψ : K ⟶ L.extend e) {i : ι} {i' : ι'} (h : e.f i = i') : (e
+.homRestrict ψ).f i = (K.restrictionXIso e h).hom ≫ ψ.f i' ≫ (L.extendXIso e h).
+hom
+参数：ψ : K ⟶ L.extend e；h : e.f i = i'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.homRestrict.f_eq`：f_eq {i : ι} {i' : ι'} (h : e.f
+ i = i') : f ψ i = (K.restrictionXIso e h).hom ≫ ψ.f i' ≫ (L.extendXIso e h).hom
 -/
 lemma homRestrict_f (ψ : K ⟶ L.extend e) {i : ι} {i' : ι'} (h : e.f i = i') :
     (e.homRestrict ψ).f i = (K.restrictionXIso e h).hom ≫ ψ.f i' ≫ (L.extendXIso e h).hom :=
   homRestrict.f_eq ψ h
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `homRestrict_hasLift` / 引理 `homRestrict_hasLift`
-
-English:
-lemma homRestrict_hasLift
-  given: (ψ : K ⟶ L.extend e)
-  proof: by
-  intro j hj i' hij'
-  have : (L.extend e).d i' (e.f j) = 0 := by
-    apply (L.isZero_extend_X e i' (hj.notMem hij')).eq_of_src
-  dsimp [homRestrict]
-  rw [homRestrict.f_eq ψ rfl]; rw [restrictionXIso]; rw [eqToIso_refl]; rw [Iso.refl_hom]; rw [id_comp]; rw [← ψ.comm_assoc]; rw [this]; rw [zero_comp]; rw [comp_zero]
-
-@[simp]
-
-中文:
-引理 homRestrict_hasLift
-  条件: (ψ : K ⟶ L.extend e)
-  证明: by
-  intro j hj i' hij'
-  have : (L.extend e).d i' (e.f j) = 0 := by
-    apply (L.isZero_extend_X e i' (hj.notMem hij')).eq_of_src
-  dsimp [homRestrict]
-  rw [homRestrict.f_eq ψ rfl]; rw [restrictionXIso]; rw [eqToIso_refl]; rw [Iso.refl_hom]; rw [id_comp]; rw [← ψ.comm_assoc]; rw [this]; rw [zero_comp]; rw [comp_zero]
-
-@[simp]
-
-Depends on / 依赖: Iso.refl_hom, L.extend, L.isZero_extend_X, comm_assoc, comp_zero, eqToIso_refl, eq_of_src, extend, f_eq, hj.notMem, homRestrict, homRestrict.f_eq, id_comp, isZero_extend_X, notMem, refl_hom, restrictionXIso, zero_comp
+/-
+**ComplexShape.Embedding.homRestrict_hasLift** 是 Mathlib 中的一个引理，位于命名空间 `ComplexS
+hape.Embedding`。
+形式化陈述：homRestrict_hasLift (ψ : K ⟶ L.extend e) : e.HasLift (e.homRestrict ψ)
+参数：ψ : K ⟶ L.extend e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_src`：eq_of_src (hX : IsZero X) (f g :
+ X ⟶ Y) : f = g
+· 使用引理 `HomologicalComplex.isZero_extend_X`：isZero_extend_X (i' : ι') (hi' : for
+all i, e.f i != i') : IsZero ((K.extend e).X i')
+· 使用定理 `ComplexShape.Embedding.BoundaryGE.notMem`：∀ {ι : Type u_1} {ι' : Type u_
+2} {c : ComplexShape ι} {c' : ComplexShape ι'} {e : c.Embedding c'} {j : ι},   e
+.BoundaryGE j → ∀ {i' : ι'}, c…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.Embedding.homRestrict.f_eq`：f_eq {i : ι} {i' : ι'} (h : e.f
+ i = i') : f ψ i = (K.restrictionXIso e h).hom ≫ ψ.f i' ≫ (L.extendXIso e h).hom
+· 使用定理 `HomologicalComplex.restrictionXIso.eq_1`：∀ {ι : Type u_1} {ι' : Type u_2
+} {c : ComplexShape ι} {c' : ComplexShape ι'} {C : Type u_3}   [inst : CategoryT
+heory.Category.{v_1, u_3} C] …
+· 使用定理 `CategoryTheory.eqToIso_refl`：eqToIso_refl {X : C} (p : X = X) : eqToIso 
+p = Iso.refl X
+· 使用定理 `CategoryTheory.Iso.refl_hom`：∀ {C : Type u} [inst : CategoryTheory.Categ
+ory.{v, u} C] (X : C),   (CategoryTheory.Iso.refl X).hom = CategoryTheory.Catego
+ryStruct.id X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HomologicalComplex.Hom.comm_assoc`：∀ {ι : Type u_1} {V : Type u} [inst :
+ CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms V] {c : ComplexSh…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
 -/
 lemma homRestrict_hasLift (ψ : K ⟶ L.extend e) :
     e.HasLift (e.homRestrict ψ) := by
@@ -495,65 +471,94 @@ lemma homRestrict_hasLift (ψ : K ⟶ L.extend e) :
   have : (L.extend e).d i' (e.f j) = 0 := by
     apply (L.isZero_extend_X e i' (hj.notMem hij')).eq_of_src
   dsimp [homRestrict]
-  rw [homRestrict.f_eq ψ rfl]; rw [restrictionXIso]; rw [eqToIso_refl]; rw [Iso.refl_hom]; rw [id_comp]; rw [← ψ.comm_assoc]; rw [this]; rw [zero_comp]; rw [comp_zero]
+  rw [homRestrict.f_eq ψ rfl, restrictionXIso, eqToIso_refl, Iso.refl_hom, id_comp,
+    ← ψ.comm_assoc, this, zero_comp, comp_zero]
 
 @[simp]
-/--
-lemma `liftExtend_homRestrict` / 引理 `liftExtend_homRestrict`
-
-English:
-lemma liftExtend_homRestrict
-  given: (ψ : K ⟶ L.extend e)
-  proof: by
-  ext i'
-  by_cases hi' : exists i, e.f i = i'
-  · obtain ⟨i, rfl⟩ := hi'
-    simp [e.homRestrict_f _ rfl, e.liftExtend_f _ _ rfl]
-  · apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_tgt
-
-@[simp]
-
-中文:
-引理 liftExtend_homRestrict
-  条件: (ψ : K ⟶ L.extend e)
-  证明: by
-  ext i'
-  by_cases hi' : exists i, e.f i = i'
-  · obtain ⟨i, rfl⟩ := hi'
-    simp [e.homRestrict_f _ rfl, e.liftExtend_f _ _ rfl]
-  · apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_tgt
-
-@[simp]
-
-Depends on / 依赖: L.isZero_extend_X, e.homRestrict_f, e.liftExtend_f, eq_of_tgt, homRestrict_f, isZero_extend_X, liftExtend_f
+/-
+**ComplexShape.Embedding.liftExtend_homRestrict** 是 Mathlib 中的一个引理，位于命名空间 `Compl
+exShape.Embedding`。
+形式化陈述：liftExtend_homRestrict (ψ : K ⟶ L.extend e) : e.liftExtend (e.homRestrict 
+ψ) (e.homRestrict_hasLift ψ) = ψ
+参数：ψ : K ⟶ L.extend e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用引理 `ComplexShape.Embedding.homRestrict_hasLift`：homRestrict_hasLift (ψ : K ⟶
+ L.extend e) : e.HasLift (e.homRestrict ψ)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.Embedding.liftExtend_f`：liftExtend_f : (e.liftExtend φ hφ).
+f i' = (K.restrictionXIso e hi).inv ≫ φ.f i ≫ (L.extendXIso e hi).inv
+· 使用引理 `ComplexShape.Embedding.homRestrict_f`：homRestrict_f (ψ : K ⟶ L.extend e)
+ {i : ι} {i' : ι'} (h : e.f i = i') : (e.homRestrict ψ).f i = (K.restrictionXIso
+ e h).hom ≫ ψ.f i' ≫ (L.ex…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_of_tgt`：eq_of_tgt (hX : IsZero X) (f g :
+ Y ⟶ X) : f = g
+· 使用引理 `HomologicalComplex.isZero_extend_X`：isZero_extend_X (i' : ι') (hi' : for
+all i, e.f i != i') : IsZero ((K.extend e).X i')
 -/
 lemma liftExtend_homRestrict (ψ : K ⟶ L.extend e) :
     e.liftExtend (e.homRestrict ψ) (e.homRestrict_hasLift ψ) = ψ := by
   ext i'
-  by_cases hi' : exists i, e.f i = i'
+  by_cases hi' : ∃ i, e.f i = i'
   · obtain ⟨i, rfl⟩ := hi'
     simp [e.homRestrict_f _ rfl, e.liftExtend_f _ _ rfl]
   · apply (L.isZero_extend_X e i' (by simpa using hi')).eq_of_tgt
 
 @[simp]
-/--
-lemma `homRestrict_liftExtend` / 引理 `homRestrict_liftExtend`
-
-English:
-lemma homRestrict_liftExtend
-  given: (φ : K.restriction e ⟶ L) (hφ : e.HasLift φ)
-  proof: by
-  ext i
-  simp [e.homRestrict_f _ rfl, e.liftExtend_f _ _ rfl]
-
-中文:
-引理 homRestrict_liftExtend
-  条件: (φ : K.restriction e ⟶ L) (hφ : e.有Lift φ)
-  证明: by
-  ext i
-  simp [e.homRestrict_f _ rfl, e.liftExtend_f _ _ rfl]
-
-Depends on / 依赖: e.homRestrict_f, e.liftExtend_f, homRestrict_f, liftExtend_f
+/-
+**ComplexShape.Embedding.homRestrict_liftExtend** 是 Mathlib 中的一个引理，位于命名空间 `Compl
+exShape.Embedding`。
+形式化陈述：homRestrict_liftExtend (φ : K.restriction e ⟶ L) (hφ : e.HasLift φ) : e.ho
+mRestrict (e.liftExtend φ hφ) = φ
+参数：φ : K.restriction e ⟶ L；hφ : e.HasLift φ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.Embedding.homRestrict_f`：homRestrict_f (ψ : K ⟶ L.extend e)
+ {i : ι} {i' : ι'} (h : e.f i = i') : (e.homRestrict ψ).f i = (K.restrictionXIso
+ e h).hom ≫ ψ.f i' ≫ (L.ex…
+· 使用引理 `ComplexShape.Embedding.liftExtend_f`：liftExtend_f : (e.liftExtend φ hφ).
+f i' = (K.restrictionXIso e hi).inv ≫ φ.f i ≫ (L.extendXIso e hi).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homRestrict_liftExtend (φ : K.restriction e ⟶ L) (hφ : e.HasLift φ) :
     e.homRestrict (e.liftExtend φ hφ) = φ := by
@@ -563,28 +568,32 @@ lemma homRestrict_liftExtend (φ : K.restriction e ⟶ L) (hφ : e.HasLift φ) :
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `homRestrict_precomp` / 引理 `homRestrict_precomp`
-
-English:
-lemma homRestrict_precomp
-  given: (α : K' ⟶ K) (ψ : K ⟶ L.extend e)
-  proof: by
-  ext i
-  simp [homRestrict_f _ _ rfl, restrictionXIso]
-
-@[reassoc]
-
-中文:
-引理 homRestrict_precomp
-  条件: (α : K' ⟶ K) (ψ : K ⟶ L.extend e)
-  证明: by
-  ext i
-  simp [homRestrict_f _ _ rfl, restrictionXIso]
-
-@[reassoc]
-
-Depends on / 依赖: homRestrict_f, restrictionXIso
+/-
+**ComplexShape.Embedding.homRestrict_precomp** 是 Mathlib 中的一个引理，位于命名空间 `ComplexS
+hape.Embedding`。
+形式化陈述：homRestrict_precomp (α : K' ⟶ K) (ψ : K ⟶ L.extend e) : e.homRestrict (α ≫
+ ψ) = restrictionMap α e ≫ e.homRestrict ψ
+参数：α : K' ⟶ K；ψ : K ⟶ L.extend e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.Embedding.homRestrict_f`：homRestrict_f (ψ : K ⟶ L.extend e)
+ {i : ι} {i' : ι'} (h : e.f i = i') : (e.homRestrict ψ).f i = (K.restrictionXIso
+ e h).hom ≫ ψ.f i' ≫ (L.ex…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homRestrict_precomp (α : K' ⟶ K) (ψ : K ⟶ L.extend e) :
     e.homRestrict (α ≫ ψ) = restrictionMap α e ≫ e.homRestrict ψ := by
@@ -592,24 +601,40 @@ lemma homRestrict_precomp (α : K' ⟶ K) (ψ : K ⟶ L.extend e) :
   simp [homRestrict_f _ _ rfl, restrictionXIso]
 
 @[reassoc]
-/--
-lemma `homRestrict_comp_extendMap` / 引理 `homRestrict_comp_extendMap`
-
-English:
-lemma homRestrict_comp_extendMap
-  given: (ψ : K ⟶ L.extend e) (β : L ⟶ L')
-  proof: by
-  ext i
-  simp [homRestrict_f _ _ rfl, extendMap_f β e rfl]
-
-中文:
-引理 homRestrict_comp_extendMap
-  条件: (ψ : K ⟶ L.extend e) (β : L ⟶ L')
-  证明: by
-  ext i
-  simp [homRestrict_f _ _ rfl, extendMap_f β e rfl]
-
-Depends on / 依赖: extendMap_f, homRestrict_f
+/-
+**ComplexShape.Embedding.homRestrict_comp_extendMap** 是 Mathlib 中的一个引理，位于命名空间 `C
+omplexShape.Embedding`。
+形式化陈述：homRestrict_comp_extendMap (ψ : K ⟶ L.extend e) (β : L ⟶ L') : e.homRestri
+ct (ψ ≫ extendMap β e) = e.homRestrict ψ ≫ β
+参数：ψ : K ⟶ L.extend e；β : L ⟶ L'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.Embedding.homRestrict_f`：homRestrict_f (ψ : K ⟶ L.extend e)
+ {i : ι} {i' : ι'} (h : e.f i = i') : (e.homRestrict ψ).f i = (K.restrictionXIso
+ e h).hom ≫ ψ.f i' ≫ (L.ex…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `HomologicalComplex.extendMap_f`：extendMap_f {i : ι} {i' : ι'} (h : e.f i
+ = i') : (extendMap φ e).f i' = (extendXIso K e h).hom ≫ φ.f i ≫ (extendXIso L e
+ h).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma homRestrict_comp_extendMap (ψ : K ⟶ L.extend e) (β : L ⟶ L') :
     e.homRestrict (ψ ≫ extendMap β e) =
@@ -622,26 +647,19 @@ variable (K L)
 /-- The bijection between `K ⟶ L.extend e` and the subtype of `K.restriction e ⟶ L`
 consisting of morphisms `φ` such that `e.HasLift φ`. -/
 @[simps]
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
+/-
+**ComplexShape.Embedding.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.Embedd
+ing`。
+形式化陈述：homEquiv : (K ⟶ L.extend e) ≃ { φ : K.restriction e ⟶ L // e.HasLift φ } w
+here toFun ψ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.homRestrict_hasLift`：homRestrict_hasLift (ψ : K ⟶
+ L.extend e) : e.HasLift (e.homRestrict ψ)
 
-English:
-definition homEquiv
-  signature: :
-  body: ⟨e.homRestrict ψ, e.homRestrict_hasLift ψ⟩
-  invFun φ := e.liftExtend φ.1 φ.2
-  left_inv ψ := by simp
-  right_inv φ := by simp
-
-中文:
-定义 homEquiv
-  签名: :
-  定义体: ⟨e.homRestrict ψ, e.homRestrict_hasLift ψ⟩
-  invFun φ := e.liftExtend φ.1 φ.2
-  left_inv ψ := by simp
-  right_inv φ := by simp
-
-Depends on / 依赖: e.homRestrict, e.homRestrict_hasLift, homRestrict, homRestrict_hasLift
+--- 原说明 ---
+The bijection between `K ⟶ L.extend e` and the subtype of `K.restriction e ⟶ L`
+consisting of morphisms `φ` such that `e.HasLift φ`.
 -/
 noncomputable def homEquiv :
     (K ⟶ L.extend e) ≃ { φ : K.restriction e ⟶ L // e.HasLift φ } where
@@ -653,3 +671,4 @@ noncomputable def homEquiv :
 end Embedding
 
 end ComplexShape
+

@@ -30,140 +30,62 @@ namespace SSet.Subcomplex
 
 variable {X : SSet.{u}} (A : X.Subcomplex)
 
-/--
-Definition of `PairingCore` / `PairingCore` 的定义
+/-- A helper structure in order to construct a pairing for a subcomplex of a
+simplicial set `X`. The main difference with `Pairing` is that we provide
+an index type `ι` and a function `dim : ι → ℕ` which allow to
+parametrize type (I) simplices as `simplex s : X _⦋dim s + 1⦌` for `s : ι`,
+and type (II) simplices as a face of `simplex s` in `X _⦋dim s⦌`. -/
+/-
+**SSet.Subcomplex.PairingCore** 是 Mathlib 中的一个归纳类型，位于命名空间 `SSet.Subcomplex`。
+形式化陈述：{X : _root_.SSet} → X.Subcomplex → Type (max u (v + 1))
+参数：max u (v + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PairingCore
-  parameters: where
-  axioms and operations (12):
-    - ι : Type v
-    - dim((s : ι)) : Nat
-    - simplex((s : ι)) : X _⦋dim s + 1⦌
-    - index((s : ι)) : Fin (dim s + 2)
-    - nonDegenerate₁((s : ι)) : simplex s in X.nonDegenerate _
-    - nonDegenerate₂((s : ι)) : X.δ (index s) (simplex s) in X.nonDegenerate _
-    - notMem₁((s : ι)) : simplex s ∉ A.obj _
-    - notMem₂((s : ι)) : X.δ (index s) (simplex s) ∉ A.obj _
-    - injective_type₁'({s t : ι} (h : S.mk (simplex s) = S.mk (simplex t))) : s = t
-    - injective_type₂'({s t : ι} (h : S.mk (X.δ (index s) (simplex s)) = S.mk (X.δ (index t) (simplex t)))) : s = t
-    - type₁_ne_type₂'((s t : ι)) : S.mk (simplex s) != S.mk (X.δ (index t) (simplex t))
-    - surjective'((x : A.N)) : exists (s : ι), x.toS = S.mk (simplex s) ∨ x.toS = S.mk (X.δ (index s) (simplex s))
-
-中文:
-结构 PairingCore
-  参数: where
-  公理与运算 (12 个):
-    - ι : 类型v
-    - dim((s : ι)) : 自然数
-    - simplex((s : ι)) : X _⦋dim s + 1⦌
-    - index((s : ι)) : 有限集 (dim s + 2)
-    - nonDegenerate₁((s : ι)) : simplex s in X.nonDegenerate _
-    - nonDegenerate₂((s : ι)) : X.δ (index s) (simplex s) in X.nonDegenerate _
-    - notMem₁((s : ι)) : simplex s ∉ A.obj _
-    - notMem₂((s : ι)) : X.δ (index s) (simplex s) ∉ A.obj _
-    - injective_type₁'({s t : ι} (h : S.mk (simplex s) = S.mk (simplex t))) : s = t
-    - injective_type₂'({s t : ι} (h : S.mk (X.δ (index s) (simplex s)) = S.mk (X.δ (index t) (simplex t)))) : s = t
-    - type₁_ne_type₂'((s t : ι)) : S.mk (simplex s) != S.mk (X.δ (index t) (simplex t))
-    - surjective'((x : A.N)) : 存在 (s : ι), x.toS = S.mk (simplex s) ∨ x.toS = S.mk (X.δ (index s) (simplex s))
+--- 原说明 ---
+A helper structure in order to construct a pairing for a subcomplex of a
+simplicial set `X`. The main difference with `Pairing` is that we provide
+an index type `ι` and a function `dim : ι → ℕ` which allow to
+parametrize type (I) simplices as `simplex s : X _⦋dim s + 1⦌` for `s : ι`,
+and type (II) simplices as a face of `simplex s` in `X _⦋dim s⦌`.
 -/
 structure PairingCore where
   /-- the index type -/
   ι : Type v
   /-- the dimension of each type (II) simplex -/
-  dim (s : ι) : Nat
+  dim (s : ι) : ℕ
   /-- the family of type (I) simplices -/
   simplex (s : ι) : X _⦋dim s + 1⦌
   /-- the corresponding type (II) simplex is the `1`-codimensional
     face given by this index -/
   index (s : ι) : Fin (dim s + 2)
-  nonDegenerate₁ (s : ι) : simplex s in X.nonDegenerate _
-  nonDegenerate₂ (s : ι) : X.δ (index s) (simplex s) in X.nonDegenerate _
+  nonDegenerate₁ (s : ι) : simplex s ∈ X.nonDegenerate _
+  nonDegenerate₂ (s : ι) : X.δ (index s) (simplex s) ∈ X.nonDegenerate _
   notMem₁ (s : ι) : simplex s ∉ A.obj _
   notMem₂ (s : ι) : X.δ (index s) (simplex s) ∉ A.obj _
   injective_type₁' {s t : ι} (h : S.mk (simplex s) = S.mk (simplex t)) : s = t
   injective_type₂' {s t : ι}
     (h : S.mk (X.δ (index s) (simplex s)) = S.mk (X.δ (index t) (simplex t))) : s = t
-  type₁_ne_type₂' (s t : ι) : S.mk (simplex s) != S.mk (X.δ (index t) (simplex t))
+  type₁_ne_type₂' (s t : ι) : S.mk (simplex s) ≠ S.mk (X.δ (index t) (simplex t))
   surjective' (x : A.N) :
-    exists (s : ι), x.toS = S.mk (simplex s) ∨ x.toS = S.mk (X.δ (index s) (simplex s))
+    ∃ (s : ι), x.toS = S.mk (simplex s) ∨ x.toS = S.mk (X.δ (index s) (simplex s))
 
 variable {A}
 
-/--
-Definition of `Pairing.pairingCore` / `Pairing.pairingCore` 的定义
+/-- The `PairingCore` structure induced by a pairing. The opposite construction
+is `PairingCore.pairing`. -/
+/-
+**SSet.Subcomplex.Pairing.pairingCore** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex
+.Pairing`。
+形式化陈述：{X : _root_.SSet} → {A : X.Subcomplex} → (P : A.Pairing) → [P.IsProper] → 
+A.PairingCore
+参数：P : A.Pairing。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.Pairing.isUniquelyCodimOneFace`：isUniquelyCodimOneFace [
+P.IsProper] (x : P.II) : S.IsUniquelyCodimOneFace x.1.toS (P.p x).1.toS
 
-English:
-definition Pairing.pairingCore
-  signature: (P : A.Pairing) [P.IsProper]
-  body: P.II
-  dim s := s.val.dim
-  simplex s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).simplex
-  index s := (P.isUniquelyCodimOneFace s).index rfl
-  nonDegenerate₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).nonDegenerate
-  nonDegenerate₂ s := by
-    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
-    exact s.val.nonDegenerate
-  notMem₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).notMem
-  notMem₂ s := by
-    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
-    exact s.val.notMem
-  injective_type₁' {s t} _ := by
-    apply P.p.injective
-    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff,
-      ← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
-      ← (P.p t).val.cast_eq_self (P.isUniquelyCodimOneFace t).dim_eq]
-  injective_type₂' {s t} h := by
-    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]; rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
-    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff]
-  type₁_ne_type₂' s t h := (P.ne (P.p s) t) (by
-    rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
-    rwa [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
-      N.ext_iff, SSet.N.ext_iff])
-  surjective' x := by
-    obtain ⟨s, rfl | rfl⟩ := P.exists_or x
-    · refine ⟨s, Or.inr ?_⟩
-      simp [(P.isUniquelyCodimOneFace s).δ_index]
-    · refine ⟨s, Or.inl ?_⟩
-      nth_rw 1 [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq]
-      rfl
-
-中文:
-定义 Pairing.pairingCore
-  签名: (P : A.Pairing) [P.是真]
-  定义体: P.II
-  dim s := s.val.dim
-  simplex s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).simplex
-  index s := (P.isUniquelyCodimOneFace s).index rfl
-  nonDegenerate₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).nonDegenerate
-  nonDegenerate₂ s := by
-    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
-    exact s.val.nonDegenerate
-  notMem₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).notMem
-  notMem₂ s := by
-    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
-    exact s.val.notMem
-  injective_type₁' {s t} _ := by
-    apply P.p.injective
-    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff,
-      ← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
-      ← (P.p t).val.cast_eq_self (P.isUniquelyCodimOneFace t).dim_eq]
-  injective_type₂' {s t} h := by
-    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]; rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
-    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff]
-  type₁_ne_type₂' s t h := (P.ne (P.p s) t) (by
-    rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
-    rwa [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
-      N.ext_iff, SSet.N.ext_iff])
-  surjective' x := by
-    obtain ⟨s, rfl | rfl⟩ := P.exists_or x
-    · refine ⟨s, Or.inr ?_⟩
-      simp [(P.isUniquelyCodimOneFace s).δ_index]
-    · refine ⟨s, Or.inl ?_⟩
-      nth_rw 1 [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq]
-      rfl
-
-Depends on / 依赖: P.II
+--- 原说明 ---
+The `PairingCore` structure induced by a pairing. The opposite construction
+is `PairingCore.pairing`.
 -/
 noncomputable def Pairing.pairingCore (P : A.Pairing) [P.IsProper] :
     A.PairingCore where
@@ -185,7 +107,8 @@ noncomputable def Pairing.pairingCore (P : A.Pairing) [P.IsProper] :
       ← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
       ← (P.p t).val.cast_eq_self (P.isUniquelyCodimOneFace t).dim_eq]
   injective_type₂' {s t} h := by
-    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]; rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
+    rw [(P.isUniquelyCodimOneFace s).δ_index rfl,
+      (P.isUniquelyCodimOneFace t).δ_index rfl] at h
     rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff]
   type₁_ne_type₂' s t h := (P.ne (P.p s) t) (by
     rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
@@ -205,248 +128,144 @@ variable (h : A.PairingCore)
 
 /-- The type (I) simplices of `h : A.PairingCore`, as a family indexed by `h.ι`. -/
 @[simps!]
-/--
-Definition of `type₁` / `type₁` 的定义
+/-
+**SSet.Subcomplex.PairingCore.type** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.Pa
+iringCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition type₁
-  signature: (s : h.ι)
-  body: Subcomplex.N.mk (h.simplex s) (h.nonDegenerate₁ s) (h.notMem₁ s)
-
-中文:
-定义 type₁
-  签名: (s : h.ι)
-  定义体: Subcomplex.N.mk (h.simplex s) (h.nonDegenerate₁ s) (h.notMem₁ s)
-
-Depends on / 依赖: Subcomplex, Subcomplex.N.mk, h.nonDegenerate, h.notMem, h.simplex, simplex
+--- 原说明 ---
+The type (I) simplices of `h : A.PairingCore`, as a family indexed by `h.ι`.
 -/
 def type₁ (s : h.ι) : A.N :=
   Subcomplex.N.mk (h.simplex s) (h.nonDegenerate₁ s) (h.notMem₁ s)
 
 /-- The type (II) simplices of `h : A.PairingCore`, as a family indexed by `h.ι`. -/
 @[simps!]
-/--
-Definition of `type₂` / `type₂` 的定义
+/-
+**SSet.Subcomplex.PairingCore.type** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.Pa
+iringCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition type₂
-  signature: (s : h.ι)
-  body: Subcomplex.N.mk (X.δ (h.index s) (h.simplex s)) (h.nonDegenerate₂ s)
-    (h.notMem₂ s)
-
-中文:
-定义 type₂
-  签名: (s : h.ι)
-  定义体: Subcomplex.N.mk (X.δ (h.index s) (h.simplex s)) (h.nonDegenerate₂ s)
-    (h.notMem₂ s)
-
-Depends on / 依赖: Subcomplex, Subcomplex.N.mk, h.index, h.nonDegenerate, h.notMem, h.simplex, simplex
+--- 原说明 ---
+The type (II) simplices of `h : A.PairingCore`, as a family indexed by `h.ι`.
 -/
 def type₂ (s : h.ι) : A.N :=
   Subcomplex.N.mk (X.δ (h.index s) (h.simplex s)) (h.nonDegenerate₂ s)
     (h.notMem₂ s)
-
-/--
-lemma `injective_type₁` / 引理 `injective_type₁`
-
-English:
-lemma injective_type₁
-  statement: Function.Injective h.type₁
-  proof: fun _ _ hst => h.injective_type₁' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
-
-中文:
-引理 injective_type₁
-  结论: 函数.单射 h.type₁
-  证明: fun _ _ hst => h.injective_type₁' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
-
-Depends on / 依赖: SSet.N.ext_iff, Subcomplex, Subcomplex.N.ext_iff, ext_iff, h.injective_type
+/-
+**SSet.Subcomplex.PairingCore.injective_type** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Sub
+complex.PairingCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma injective_type₁ : Function.Injective h.type₁ :=
-  fun _ _ hst => h.injective_type₁' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
-
-/--
-lemma `injective_type₂` / 引理 `injective_type₂`
-
-English:
-lemma injective_type₂
-  statement: Function.Injective h.type₂
-  proof: fun s t hst => h.injective_type₂' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
-
-中文:
-引理 injective_type₂
-  结论: 函数.单射 h.type₂
-  证明: fun s t hst => h.injective_type₂' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
-
-Depends on / 依赖: SSet.N.ext_iff, Subcomplex, Subcomplex.N.ext_iff, ext_iff, h.injective_type
+  fun _ _ hst ↦ h.injective_type₁' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
+/-
+**SSet.Subcomplex.PairingCore.injective_type** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Sub
+complex.PairingCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma injective_type₂ : Function.Injective h.type₂ :=
-  fun s t hst => h.injective_type₂' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
-
-/--
-lemma `type₁_ne_type₂` / 引理 `type₁_ne_type₂`
-
-English:
-lemma type₁_ne_type₂
-  given: (s t : h.ι)
-  statement: h.type₁ s != h.type₂ t
-  proof: by
-  simpa only [ne_eq, N.ext_iff, SSet.N.ext_iff] using! h.type₁_ne_type₂' s t
-
-中文:
-引理 type₁_ne_type₂
-  条件: (s t : h.ι)
-  结论: h.type₁ s != h.type₂ t
-  证明: by
-  simpa only [ne_eq, N.ext_iff, SSet.N.ext_iff] using! h.type₁_ne_type₂' s t
-
-Depends on / 依赖: N.ext_iff, SSet.N.ext_iff, ext_iff, h.type, ne_eq
+  fun s t hst ↦ h.injective_type₂' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
+/-
+**SSet.Subcomplex.PairingCore.type** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.Pa
+iringCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma type₁_ne_type₂ (s t : h.ι) : h.type₁ s != h.type₂ t := by
+lemma type₁_ne_type₂ (s t : h.ι) : h.type₁ s ≠ h.type₂ t := by
   simpa only [ne_eq, N.ext_iff, SSet.N.ext_iff] using! h.type₁_ne_type₂' s t
-
-/--
-lemma `surjective` / 引理 `surjective`
-
-English:
-lemma surjective
-  given: (x : A.N)
-  proof: by
-  obtain ⟨s, _ | _⟩ := h.surjective' x
-  · exact ⟨s, Or.inl (by rwa [N.ext_iff, SSet.N.ext_iff])⟩
-  · exact ⟨s, Or.inr (by rwa [N.ext_iff, SSet.N.ext_iff])⟩
-
-中文:
-引理 surjective
-  条件: (x : A.N)
-  证明: by
-  obtain ⟨s, _ | _⟩ := h.surjective' x
-  · exact ⟨s, Or.inl (by rwa [N.ext_iff, SSet.N.ext_iff])⟩
-  · exact ⟨s, Or.inr (by rwa [N.ext_iff, SSet.N.ext_iff])⟩
-
-Depends on / 依赖: N.ext_iff, Or.inl, Or.inr, SSet.N.ext_iff, ext_iff, h.surjective, surjective
+/-
+**SSet.Subcomplex.PairingCore.surjective** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomp
+lex.PairingCore`。
+形式化陈述：surjective (x : A.N) : exists (s : h.ι), x = h.type₁ s ∨ x = h.type₂ s
+参数：x : A.N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Subcomplex.PairingCore.surjective'`：∀ {X : _root_.SSet} {A : X.Subc
+omplex} (self : A.PairingCore) (x : A.N),   ∃ s,     x.toS = { dim := self.dim s
+ + 1, simplex := self.simplex…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.Subcomplex.N.ext_iff`：ext_iff (x y : A.N) : x = y ↔ x.toN = y.toN
+· 使用引理 `SSet.N.ext_iff`：ext_iff (x y : X.N) : x = y ↔ x.toS = y.toS
 -/
 lemma surjective (x : A.N) :
-    exists (s : h.ι), x = h.type₁ s ∨ x = h.type₂ s := by
+    ∃ (s : h.ι), x = h.type₁ s ∨ x = h.type₂ s := by
   obtain ⟨s, _ | _⟩ := h.surjective' x
   · exact ⟨s, Or.inl (by rwa [N.ext_iff, SSet.N.ext_iff])⟩
   · exact ⟨s, Or.inr (by rwa [N.ext_iff, SSet.N.ext_iff])⟩
 
-/--
-Definition of `I` / `I` 的定义
+/-- The type (I) simplices of `h : A.PairingCore`, as a subset of `A.N`. -/
+/-
+**SSet.Subcomplex.PairingCore.I** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.Pairi
+ngCore`。
+形式化陈述：I : Set A.N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition I
-  signature: : Set A.N
-  body: Set.range h.type₁
-
-中文:
-定义 I
-  签名: : 集合 A.N
-  定义体: Set.range h.type₁
-
-Depends on / 依赖: Set.range, h.type
+--- 原说明 ---
+The type (I) simplices of `h : A.PairingCore`, as a subset of `A.N`.
 -/
 def I : Set A.N := Set.range h.type₁
 
-/--
-Definition of `II` / `II` 的定义
+/-- The type (II) simplices of `h : A.PairingCore`, as a subset of `A.N`. -/
+/-
+**SSet.Subcomplex.PairingCore.II** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.Pair
+ingCore`。
+形式化陈述：II : Set A.N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition II
-  signature: : Set A.N
-  body: Set.range h.type₂
-
-中文:
-定义 II
-  签名: : 集合 A.N
-  定义体: Set.range h.type₂
-
-Depends on / 依赖: Set.range, h.type
+--- 原说明 ---
+The type (II) simplices of `h : A.PairingCore`, as a subset of `A.N`.
 -/
 def II : Set A.N := Set.range h.type₂
 
 /-- The bijection `h.ι ≃ h.I` when `h : A.PairingCore`. -/
 @[simps! apply_coe]
-/--
-Definition of `equivI` / `equivI` 的定义
+/-
+**SSet.Subcomplex.PairingCore.equivI** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.
+PairingCore`。
+形式化陈述：equivI : h.ι ≃ h.I
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.PairingCore.injective_type₁`：injective_type₁ : Function.
+Injective h.type₁
 
-English:
-definition equivI
-  signature: : h.ι ≃ h.I
-  body: Equiv.ofInjective _ h.injective_type₁
-
-中文:
-定义 equivI
-  签名: : h.ι ≃ h.I
-  定义体: Equiv.ofInjective _ h.injective_type₁
-
-Depends on / 依赖: Equiv.ofInjective, h.injective_type, ofInjective
+--- 原说明 ---
+The bijection `h.ι ≃ h.I` when `h : A.PairingCore`.
 -/
 noncomputable def equivI : h.ι ≃ h.I := Equiv.ofInjective _ h.injective_type₁
 
 /-- The bijection `h.ι ≃ h.II` when `h : A.PairingCore`. -/
 @[simps! apply_coe]
-/--
-Definition of `equivII` / `equivII` 的定义
+/-
+**SSet.Subcomplex.PairingCore.equivII** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex
+.PairingCore`。
+形式化陈述：equivII : h.ι ≃ h.II
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.PairingCore.injective_type₂`：injective_type₂ : Function.
+Injective h.type₂
 
-English:
-definition equivII
-  signature: : h.ι ≃ h.II
-  body: Equiv.ofInjective _ h.injective_type₂
-
-中文:
-定义 equivII
-  签名: : h.ι ≃ h.II
-  定义体: Equiv.ofInjective _ h.injective_type₂
-
-Depends on / 依赖: Equiv.ofInjective, h.injective_type, ofInjective
+--- 原说明 ---
+The bijection `h.ι ≃ h.II` when `h : A.PairingCore`.
 -/
 noncomputable def equivII : h.ι ≃ h.II := Equiv.ofInjective _ h.injective_type₂
 
 /-- The pairing induced by `h : A.PairingCore`. -/
 @[simps I II]
-/--
-Definition of `pairing` / `pairing` 的定义
+/-
+**SSet.Subcomplex.PairingCore.pairing** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex
+.PairingCore`。
+形式化陈述：pairing : A.Pairing where I
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition pairing
-  signature: : A.Pairing where
-  body: h.I
-  II := h.II
-  inter := by
-    ext s
-    simp only [I, II, Set.mem_inter_iff, Set.mem_range, Set.mem_empty_iff_false,
-      iff_false, not_and, not_exists, forall_exists_index]
-    rintro t rfl s
-    exact (h.type₁_ne_type₂ t s).symm
-  union := by
-    ext s
-    have := h.surjective s
-    simp only [I, II, Set.mem_union, Set.mem_range, Set.mem_univ, iff_true]
-    aesop
-  p := h.equivII.symm.trans h.equivI
-
-@[simp]
-
-中文:
-定义 pairing
-  签名: : A.Pairing where
-  定义体: h.I
-  II := h.II
-  inter := by
-    ext s
-    simp only [I, II, Set.mem_inter_iff, Set.mem_range, Set.mem_empty_iff_false,
-      iff_false, not_and, not_exists, forall_exists_index]
-    rintro t rfl s
-    exact (h.type₁_ne_type₂ t s).symm
-  union := by
-    ext s
-    have := h.surjective s
-    simp only [I, II, Set.mem_union, Set.mem_range, Set.mem_univ, iff_true]
-    aesop
-  p := h.equivII.symm.trans h.equivI
-
-@[simp]
+--- 原说明 ---
+The pairing induced by `h : A.PairingCore`.
 -/
 noncomputable def pairing : A.Pairing where
   I := h.I
@@ -465,209 +284,169 @@ noncomputable def pairing : A.Pairing where
   p := h.equivII.symm.trans h.equivI
 
 @[simp]
-/--
-lemma `pairing_p_equivII` / 引理 `pairing_p_equivII`
-
-English:
-lemma pairing_p_equivII
-  given: (x : h.ι)
-  proof: by
-  simp [pairing]
-
-@[simp]
-
-中文:
-引理 pairing_p_equivII
-  条件: (x : h.ι)
-  证明: by
-  simp [pairing]
-
-@[simp]
-
-Depends on / 依赖: equivI, equivII, h.II, h.equivI, h.equivII, h.pairing.p, pairing
+/-
+**SSet.Subcomplex.PairingCore.pairing_p_equivII** 是 Mathlib 中的一个引理，位于命名空间 `SSet.
+Subcomplex.PairingCore`。
+形式化陈述：pairing_p_equivII (x : h.ι) : DFunLike.coe (F
+参数：x : h.ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma pairing_p_equivII (x : h.ι) :
     DFunLike.coe (F := h.II ≃ h.I) h.pairing.p (h.equivII x) = h.equivI x := by
   simp [pairing]
 
 @[simp]
-/--
-lemma `pairing_p_symm_equivI` / 引理 `pairing_p_symm_equivI`
-
-English:
-lemma pairing_p_symm_equivI
-  given: (x : h.ι)
-  proof: by
-  simp [pairing]
-
-中文:
-引理 pairing_p_symm_equivI
-  条件: (x : h.ι)
-  证明: by
-  simp [pairing]
-
-Depends on / 依赖: equivI, equivII, h.II, h.equivI, h.equivII, h.pairing.p.symm, pairing
+/-
+**SSet.Subcomplex.PairingCore.pairing_p_symm_equivI** 是 Mathlib 中的一个引理，位于命名空间 `S
+Set.Subcomplex.PairingCore`。
+形式化陈述：pairing_p_symm_equivI (x : h.ι) : DFunLike.coe (F
+参数：x : h.ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma pairing_p_symm_equivI (x : h.ι) :
     DFunLike.coe (F := h.I ≃ h.II) h.pairing.p.symm (h.equivI x) = h.equivII x := by
   simp [pairing]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `type₁_pairing` / 引理 `type₁_pairing`
-
-English:
-lemma type₁_pairing
-  given: (x : h.ι)
-  proof: by
-  simp +instances
-
-中文:
-引理 type₁_pairing
-  条件: (x : h.ι)
-  证明: by
-  simp +instances
-
-Depends on / 依赖: instances
+/-
+**SSet.Subcomplex.PairingCore.type** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.Pa
+iringCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma type₁_pairing (x : h.ι) :
     h.type₁ x = h.pairing.p (h.equivII x) := by
   simp +instances
 
-/--
-Definition of `IsProper` / `IsProper` 的定义
+/-- The condition that `h : A.PairingCore` is proper, i.e. for each `s : h.ι`,
+the type (II) simplex `h.type₂ s` is uniquely a `1`-codimensional
+face of the type (I) simplex `h.type₁ s`. -/
+/-
+**SSet.Subcomplex.PairingCore.IsProper** 是 Mathlib 中的一个归纳类型，位于命名空间 `SSet.Subcomp
+lex.PairingCore`。
+形式化陈述：{X : _root_.SSet} → {A : X.Subcomplex} → A.PairingCore → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsProper
-  parameters: : Prop where
-  axioms and operations (1):
-    - isUniquelyCodimOneFace((s : h.ι)) : S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s).toS
-
-中文:
-类 是真
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isUniquelyCodimOneFace((s : h.ι)) : S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s).toS
+--- 原说明 ---
+The condition that `h : A.PairingCore` is proper, i.e. for each `s : h.ι`,
+the type (II) simplex `h.type₂ s` is uniquely a `1`-codimensional
+face of the type (I) simplex `h.type₁ s`.
 -/
 class IsProper : Prop where
   isUniquelyCodimOneFace (s : h.ι) :
     S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s).toS
-
-/--
-lemma `isUniquelyCodimOneFace` / 引理 `isUniquelyCodimOneFace`
-
-English:
-lemma isUniquelyCodimOneFace
-  given: [h.IsProper] (s : h.ι)
-  proof: IsProper.isUniquelyCodimOneFace _
-
-中文:
-引理 isUniquelyCodimOneFace
-  条件: [h.是真] (s : h.ι)
-  证明: IsProper.isUniquelyCodimOneFace _
-
-Depends on / 依赖: IsProper, IsProper.isUniquelyCodimOneFace, isUniquelyCodimOneFace
+/-
+**SSet.Subcomplex.PairingCore.isUniquelyCodimOneFace** 是 Mathlib 中的一个引理，位于命名空间 `
+SSet.Subcomplex.PairingCore`。
+形式化陈述：isUniquelyCodimOneFace [h.IsProper] (s : h.ι) : S.IsUniquelyCodimOneFace (
+h.type₂ s).toS (h.type₁ s).toS
+参数：s : h.ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Subcomplex.PairingCore.IsProper.isUniquelyCodimOneFace`：∀ {X : _roo
+t_.SSet} {A : X.Subcomplex} {h : A.PairingCore} [self : h.IsProper] (s : h.ι),  
+ (h.type₂ s).IsUniquelyCodimOneFace (h.type₁ s).t…
 -/
 lemma isUniquelyCodimOneFace [h.IsProper] (s : h.ι) :
     S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s).toS :=
   IsProper.isUniquelyCodimOneFace _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [X.Nonsingular]
-  signature: : h.IsProper where
-  body: (S.IsUniquelyCodimOneFace.iff _ _).2
-      (existsUnique_of_exists_of_unique ⟨_, rfl⟩
-        (fun _ _ hi hj => Nonsingular.δ_injective _
-          (h.nonDegenerate₁ s) _ _ (hi.trans hj.symm)))
-
-中文:
-实例 [X.非奇异]
-  签名: : h.是真 where
-  定义体: (S.IsUniquelyCodimOneFace.iff _ _).2
-      (existsUnique_of_exists_of_unique ⟨_, rfl⟩
-        (fun _ _ hi hj => Nonsingular.δ_injective _
-          (h.nonDegenerate₁ s) _ _ (hi.trans hj.symm)))
-
-Depends on / 依赖: IsUniquelyCodimOneFace, Nonsingular, S.IsUniquelyCodimOneFace.iff, existsUnique_of_exists_of_unique, h.nonDegenerate, hi.trans, hj.symm
+/-
+**SSet.Subcomplex.PairingCore.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Subcomplex.Pairin
+gCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [X.Nonsingular] : h.IsProper where
   isUniquelyCodimOneFace s :=
     (S.IsUniquelyCodimOneFace.iff _ _).2
       (existsUnique_of_exists_of_unique ⟨_, rfl⟩
-        (fun _ _ hi hj => Nonsingular.δ_injective _
+        (fun _ _ hi hj ↦ Nonsingular.δ_injective _
           (h.nonDegenerate₁ s) _ _ (hi.trans hj.symm)))
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h.IsProper]
-  signature: : h.pairing.IsProper where
-  body: by
-    obtain ⟨s, rfl⟩ := h.equivII.surjective x
-    simpa using h.isUniquelyCodimOneFace s
-
-中文:
-实例 [h.是真]
-  签名: : h.pairing.是真 where
-  定义体: by
-    obtain ⟨s, rfl⟩ := h.equivII.surjective x
-    simpa using h.isUniquelyCodimOneFace s
-
-Depends on / 依赖: equivII, h.equivII.surjective, h.isUniquelyCodimOneFace, isUniquelyCodimOneFace, surjective
+/-
+**SSet.Subcomplex.PairingCore.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Subcomplex.Pairin
+gCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h.IsProper] : h.pairing.IsProper where
   isUniquelyCodimOneFace x := by
     obtain ⟨s, rfl⟩ := h.equivII.surjective x
     simpa using h.isUniquelyCodimOneFace s
-
-/--
-lemma `isProper_pairing_iff` / 引理 `isProper_pairing_iff`
-
-English:
-lemma isProper_pairing_iff
-  proof: by
-  refine ⟨fun _ => ⟨fun s => ?_⟩, fun _ => inferInstance⟩
-  simpa [type₁_pairing] using h.pairing.isUniquelyCodimOneFace (h.equivII s)
-
-中文:
-引理 isProper_pairing_iff
-  证明: by
-  refine ⟨fun _ => ⟨fun s => ?_⟩, fun _ => inferInstance⟩
-  simpa [type₁_pairing] using h.pairing.isUniquelyCodimOneFace (h.equivII s)
-
-Depends on / 依赖: equivII, h.equivII, h.pairing.isUniquelyCodimOneFace, isUniquelyCodimOneFace, pairing
+/-
+**SSet.Subcomplex.PairingCore.isProper_pairing_iff** 是 Mathlib 中的一个引理，位于命名空间 `SS
+et.Subcomplex.PairingCore`。
+形式化陈述：isProper_pairing_iff : h.pairing.IsProper ↔ h.IsProper
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.Subcomplex.PairingCore.type₁_pairing`：type₁_pairing (x : h.ι) : h.t
+ype₁ x = h.pairing.p (h.equivII x)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SSet.Subcomplex.PairingCore.equivII_apply_coe`：∀ {X : _root_.SSet} {A : 
+X.Subcomplex} (h : A.PairingCore) (a : h.ι), ↑(h.equivII a) = h.type₂ a
+· 使用引理 `SSet.Subcomplex.Pairing.isUniquelyCodimOneFace`：isUniquelyCodimOneFace [
+P.IsProper] (x : P.II) : S.IsUniquelyCodimOneFace x.1.toS (P.p x).1.toS
+· 使用定理 `SSet.Subcomplex.PairingCore.instIsProperPairingOfIsProper`：∀ {X : _root_
+.SSet} {A : X.Subcomplex} (h : A.PairingCore) [h.IsProper], h.pairing.IsProper
 -/
 lemma isProper_pairing_iff :
     h.pairing.IsProper ↔ h.IsProper := by
-  refine ⟨fun _ => ⟨fun s => ?_⟩, fun _ => inferInstance⟩
+  refine ⟨fun _ ↦ ⟨fun s ↦ ?_⟩, fun _ ↦ inferInstance⟩
   simpa [type₁_pairing] using h.pairing.isUniquelyCodimOneFace (h.equivII s)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `isUniquelyCodimOneFace_index` / 引理 `isUniquelyCodimOneFace_index`
-
-English:
-lemma isUniquelyCodimOneFace_index
-  given: [h.IsProper] (s : h.ι)
-  proof: by
-  symm
-  simp [← (h.isUniquelyCodimOneFace s).δ_eq_iff]
-
-中文:
-引理 isUniquelyCodimOneFace_index
-  条件: [h.是真] (s : h.ι)
-  证明: by
-  symm
-  simp [← (h.isUniquelyCodimOneFace s).δ_eq_iff]
-
-Depends on / 依赖: h.isUniquelyCodimOneFace, isUniquelyCodimOneFace
+/-
+**SSet.Subcomplex.PairingCore.isUniquelyCodimOneFace_index** 是 Mathlib 中的一个引理，位于
+命名空间 `SSet.Subcomplex.PairingCore`。
+形式化陈述：isUniquelyCodimOneFace_index [h.IsProper] (s : h.ι) : (h.isUniquelyCodimOn
+eFace s).index rfl = h.index s
+参数：s : h.ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.Subcomplex.PairingCore.isUniquelyCodimOneFace`：isUniquelyCodimOneFa
+ce [h.IsProper] (s : h.ι) : S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s)
+.toS
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.δ_eq_iff`：δ_eq_iff (i : Fin (d + 2)) : X.δ
+ i (y.cast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex ↔ i = hxy.ind
+ex hd
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SSet.Subcomplex.PairingCore.type₁_simplex`：∀ {X : _root_.SSet} {A : X.Su
+bcomplex} (h : A.PairingCore) (s : h.ι), (h.type₁ s).simplex = h.simplex s
+· 使用定理 `SSet.Subcomplex.PairingCore.type₂_simplex`：∀ {X : _root_.SSet} {A : X.Su
+bcomplex} (h : A.PairingCore) (s : h.ι),   (h.type₂ s).simplex =     (CategoryTh
+eory.ConcreteCategory.hom (Cate…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isUniquelyCodimOneFace_index [h.IsProper] (s : h.ι) :
     (h.isUniquelyCodimOneFace s).index rfl = h.index s := by
@@ -675,78 +454,54 @@ lemma isUniquelyCodimOneFace_index [h.IsProper] (s : h.ι) :
   simp [← (h.isUniquelyCodimOneFace s).δ_eq_iff]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isUniquelyCodimOneFace_index_coe` / 引理 `isUniquelyCodimOneFace_index_coe`
-
-English:
-lemma isUniquelyCodimOneFace_index_coe
-  proof: by
-  subst hd
-  simp
-
-中文:
-引理 isUniquelyCodimOneFace_index_coe
-  证明: by
-  subst hd
-  simp
+/-
+**SSet.Subcomplex.PairingCore.isUniquelyCodimOneFace_index_coe** 是 Mathlib 中的一个引
+理，位于命名空间 `SSet.Subcomplex.PairingCore`。
+形式化陈述：isUniquelyCodimOneFace_index_coe [h.IsProper] (s : h.ι) {d : Nat} (hd : h.
+dim s = d) : ((h.isUniquelyCodimOneFace s).index hd).val = (h.index s).val
+参数：s : h.ι；hd : h.dim s = d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.PairingCore.isUniquelyCodimOneFace`：isUniquelyCodimOneFa
+ce [h.IsProper] (s : h.ι) : S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s)
+.toS
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.Subcomplex.PairingCore.isUniquelyCodimOneFace_index`：isUniquelyCodi
+mOneFace_index [h.IsProper] (s : h.ι) : (h.isUniquelyCodimOneFace s).index rfl =
+ h.index s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isUniquelyCodimOneFace_index_coe
-    [h.IsProper] (s : h.ι) {d : Nat} (hd : h.dim s = d) :
+    [h.IsProper] (s : h.ι) {d : ℕ} (hd : h.dim s = d) :
     ((h.isUniquelyCodimOneFace s).index hd).val = (h.index s).val := by
   subst hd
   simp
 
-/--
-Definition of `IsInner` / `IsInner` 的定义
+/-- The condition that `h : A.PairingCore` involves only inner horns. -/
+/-
+**SSet.Subcomplex.PairingCore.IsInner** 是 Mathlib 中的一个归纳类型，位于命名空间 `SSet.Subcompl
+ex.PairingCore`。
+形式化陈述：{X : _root_.SSet} → {A : X.Subcomplex} → A.PairingCore → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsInner
-  parameters: where
-  axioms and operations (2):
-    - ne_zero((s : h.ι)) : h.index s != 0
-    - ne_last((s : h.ι)) : h.index s != Fin.last _
-
-中文:
-类 是内积
-  参数: where
-  公理与运算 (2 个):
-    - ne_zero((s : h.ι)) : h.index s != 0
-    - ne_last((s : h.ι)) : h.index s != 有限集.last _
+--- 原说明 ---
+The condition that `h : A.PairingCore` involves only inner horns.
 -/
 class IsInner where
-  ne_zero (s : h.ι) : h.index s != 0
-  ne_last (s : h.ι) : h.index s != Fin.last _
+  ne_zero (s : h.ι) : h.index s ≠ 0
+  ne_last (s : h.ι) : h.index s ≠ Fin.last _
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h.IsInner]
-  signature: [h.IsProper]
-  body: by
-    obtain ⟨s, rfl⟩ := h.equivII.surjective x
-    rintro _ rfl
-    simpa using IsInner.ne_zero s
-  ne_last x := by
-    obtain ⟨s, rfl⟩ := h.equivII.surjective x
-    rintro _ rfl
-    simpa using IsInner.ne_last s
-
-中文:
-实例 [h.是内积]
-  签名: [h.是真]
-  定义体: by
-    obtain ⟨s, rfl⟩ := h.equivII.surjective x
-    rintro _ rfl
-    simpa using IsInner.ne_zero s
-  ne_last x := by
-    obtain ⟨s, rfl⟩ := h.equivII.surjective x
-    rintro _ rfl
-    simpa using IsInner.ne_last s
-
-Depends on / 依赖: IsInner, IsInner.ne_last, IsInner.ne_zero, equivII, h.equivII.surjective, ne_last, ne_zero, surjective
+/-
+**SSet.Subcomplex.PairingCore.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Subcomplex.Pairin
+gCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h.IsInner] [h.IsProper] : h.pairing.IsInner where
   ne_zero x := by
@@ -758,143 +513,111 @@ instance [h.IsInner] [h.IsProper] : h.pairing.IsInner where
     rintro _ rfl
     simpa using IsInner.ne_last s
 
-/--
-Definition of `AncestralRel` / `AncestralRel` 的定义
+/-- The ancestrality relation on the index type of `h : A.PairingCore`. -/
+/-
+**SSet.Subcomplex.PairingCore.AncestralRel** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subco
+mplex.PairingCore`。
+形式化陈述：AncestralRel (s t : h.ι) : Prop
+参数：s t : h.ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AncestralRel
-  signature: (s t : h.ι)
-  body: s != t ∧ h.type₂ s < h.type₁ t
-
-中文:
-定义 AncestralRel
-  签名: (s t : h.ι)
-  定义体: s != t ∧ h.type₂ s < h.type₁ t
-
-Depends on / 依赖: h.type
+--- 原说明 ---
+The ancestrality relation on the index type of `h : A.PairingCore`.
 -/
 def AncestralRel (s t : h.ι) : Prop :=
-  s != t ∧ h.type₂ s < h.type₁ t
+  s ≠ t ∧ h.type₂ s < h.type₁ t
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ancestralRel_iff` / 引理 `ancestralRel_iff`
-
-English:
-lemma ancestralRel_iff
-  given: (s t : h.ι)
-  proof: by
-  simp [AncestralRel, Pairing.AncestralRel]
-
-中文:
-引理 ancestralRel_iff
-  条件: (s t : h.ι)
-  证明: by
-  simp [AncestralRel, Pairing.AncestralRel]
-
-Depends on / 依赖: AncestralRel, Pairing, Pairing.AncestralRel
+/-
+**SSet.Subcomplex.PairingCore.ancestralRel_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S
+ubcomplex.PairingCore`。
+形式化陈述：ancestralRel_iff (s t : h.ι) : h.AncestralRel s t ↔ h.pairing.AncestralRel
+ (h.equivII s) (h.equivII t)
+参数：s t : h.ι。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用引理 `SSet.Subcomplex.PairingCore.pairing_p_equivII`：pairing_p_equivII (x : h.
+ι) : DFunLike.coe (F
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma ancestralRel_iff (s t : h.ι) :
     h.AncestralRel s t ↔ h.pairing.AncestralRel (h.equivII s) (h.equivII t) := by
   simp [AncestralRel, Pairing.AncestralRel]
 
-/--
-Definition of `IsRegular` / `IsRegular` 的定义
+/-- When the ancestrality relation is well founded, we say that `h : A.PairingCore`
+is regular. -/
+/-
+**SSet.Subcomplex.PairingCore.IsRegular** 是 Mathlib 中的一个归纳类型，位于命名空间 `SSet.Subcom
+plex.PairingCore`。
+形式化陈述：{X : _root_.SSet} → {A : X.Subcomplex} → A.PairingCore → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRegular
-  parameters: (h : A.PairingCore)
-  extends: h.IsProper
-  axioms and operations (1):
-    - wf((h)) : WellFounded h.AncestralRel
-
-中文:
-类 是正则
-  参数: (h : A.PairingCore)
-  继承: h.是真
-  公理与运算 (1 个):
-    - wf((h)) : 良基 h.AncestralRel
+--- 原说明 ---
+When the ancestrality relation is well founded, we say that `h : A.PairingCore`
+is regular.
 -/
 class IsRegular (h : A.PairingCore) extends h.IsProper where
   wf (h) : WellFounded h.AncestralRel
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [h.IsRegular]
-  signature: : h.pairing.IsRegular where
-  body: by
-    have := IsRegular.wf h
-    rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
-    exact ⟨fun ⟨f, hf⟩ => this.false
-      ⟨fun n => h.equivII.symm (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
-
-中文:
-实例 [h.是正则]
-  签名: : h.pairing.是正则 where
-  定义体: by
-    have := IsRegular.wf h
-    rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
-    exact ⟨fun ⟨f, hf⟩ => this.false
-      ⟨fun n => h.equivII.symm (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
-
-Depends on / 依赖: IsRegular, IsRegular.wf, ancestralRel_iff, equivII, h.equivII.symm, this.false, wellFounded_iff_isEmpty_descending_chain
+/-
+**SSet.Subcomplex.PairingCore.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Subcomplex.Pairin
+gCore`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [h.IsRegular] : h.pairing.IsRegular where
   wf := by
     have := IsRegular.wf h
     rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
-    exact ⟨fun ⟨f, hf⟩ => this.false
-      ⟨fun n => h.equivII.symm (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
-
-/--
-lemma `isRegular_pairing_iff` / 引理 `isRegular_pairing_iff`
-
-English:
-lemma isRegular_pairing_iff
-  given: (h : A.PairingCore)
-  proof: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  have : h.IsProper := by
-    rw [← isProper_pairing_iff]
-    infer_instance
-  constructor
-  have := h.pairing.wf
-  rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
-  exact ⟨fun ⟨f, hf⟩ => this.false
-    ⟨fun n => h.equivII (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
-
-中文:
-引理 isRegular_pairing_iff
-  条件: (h : A.PairingCore)
-  证明: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  have : h.IsProper := by
-    rw [← isProper_pairing_iff]
-    infer_instance
-  constructor
-  have := h.pairing.wf
-  rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
-  exact ⟨fun ⟨f, hf⟩ => this.false
-    ⟨fun n => h.equivII (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
-
-Depends on / 依赖: IsProper, ancestralRel_iff, equivII, h.IsProper, h.equivII, h.pairing.wf, infer_instance, isProper_pairing_iff, pairing, this.false, wellFounded_iff_isEmpty_descending_chain
+    exact ⟨fun ⟨f, hf⟩ ↦ this.false
+      ⟨fun n ↦ h.equivII.symm (f n), fun n ↦ by simpa [ancestralRel_iff] using hf n⟩⟩
+/-
+**SSet.Subcomplex.PairingCore.isRegular_pairing_iff** 是 Mathlib 中的一个引理，位于命名空间 `S
+Set.Subcomplex.PairingCore`。
+形式化陈述：isRegular_pairing_iff (h : A.PairingCore) : h.pairing.IsRegular ↔ h.IsRegu
+lar
+参数：h : A.PairingCore。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.Subcomplex.PairingCore.isProper_pairing_iff`：isProper_pairing_iff :
+ h.pairing.IsProper ↔ h.IsProper
+· 使用定理 `SSet.Subcomplex.Pairing.IsRegular.toIsProper`：∀ {X : _root_.SSet} {A : X
+.Subcomplex} {P : A.Pairing} [self : P.IsRegular], P.IsProper
+· 使用引理 `SSet.Subcomplex.Pairing.wf`：wf : WellFounded P.AncestralRel
+· 使用定理 `wellFounded_iff_isEmpty_descending_chain`：wellFounded_iff_isEmpty_descen
+ding_chain {α} {r : α -> α -> Prop} : WellFounded r ↔ IsEmpty { f : Nat -> α // 
+forall n, r (f (n + 1)) (f n) …
+· 使用定理 `IsEmpty.false`：∀ {α : Sort u} [self : IsEmpty α] (a : α), False
+· 使用定理 `SSet.Subcomplex.PairingCore.instIsRegularPairingOfIsRegular`：∀ {X : _roo
+t_.SSet} {A : X.Subcomplex} (h : A.PairingCore) [h.IsRegular], h.pairing.IsRegul
+ar
 -/
 lemma isRegular_pairing_iff (h : A.PairingCore) :
     h.pairing.IsRegular ↔ h.IsRegular := by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
+  refine ⟨fun _ ↦ ?_, fun _ ↦ inferInstance⟩
   have : h.IsProper := by
     rw [← isProper_pairing_iff]
     infer_instance
   constructor
   have := h.pairing.wf
   rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
-  exact ⟨fun ⟨f, hf⟩ => this.false
-    ⟨fun n => h.equivII (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
+  exact ⟨fun ⟨f, hf⟩ ↦ this.false
+    ⟨fun n ↦ h.equivII (f n), fun n ↦ by simpa [ancestralRel_iff] using hf n⟩⟩
 
 end PairingCore
 
 end SSet.Subcomplex
+

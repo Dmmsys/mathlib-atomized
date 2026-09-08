@@ -33,20 +33,16 @@ namespace Functor
 
 variable {𝒮 : Type u₁} {𝒳 : Type u₂} [Category.{v₁} 𝒮] [Category.{v₂} 𝒳]
 
-/--
-Definition of `Fiber` / `Fiber` 的定义
+/-- `Fiber p S` is the type of elements of `𝒳` mapping to `S` via `p`. -/
+/-
+**CategoryTheory.Functor.Fiber** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：Fiber (p : 𝒳 ⥤ 𝒮) (S : 𝒮)
+参数：p : 𝒳 ⥤ 𝒮；S : 𝒮。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fiber
-  signature: (p : 𝒳 ⥤ 𝒮) (S : 𝒮)
-  body: { a : 𝒳 // p.obj a = S }
-
-中文:
-定义 Fiber
-  签名: (p : 𝒳 ⥤ 𝒮) (S : 𝒮)
-  定义体: { a : 𝒳 // p.obj a = S }
-
-Depends on / 依赖: p.obj
+--- 原说明 ---
+`Fiber p S` is the type of elements of `𝒳` mapping to `S` via `p`.
 -/
 def Fiber (p : 𝒳 ⥤ 𝒮) (S : 𝒮) := { a : 𝒳 // p.obj a = S }
 
@@ -54,262 +50,211 @@ namespace Fiber
 
 variable {p : 𝒳 ⥤ 𝒮} {S : 𝒮}
 
-/--
-Instance `fiberCategory` / 实例 `fiberCategory`
+/-- `Fiber p S` has the structure of a category with morphisms being those lying over `𝟙 S`. -/
+/-
+**CategoryTheory.Functor.Fiber.fiberCategory** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Functor.Fiber`。
+形式化陈述：fiberCategory : Category (Fiber p S) where Hom a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance fiberCategory
-  signature: : Category (Fiber p S) where
-  body: {φ : a.1 ⟶ b.1 // IsHomLift p (𝟙 S) φ}
-  id a := ⟨𝟙 a.1, IsHomLift.id a.2⟩
-  comp φ ψ := ⟨φ.val ≫ ψ.val, by have := φ.2; have := ψ.2; infer_instance⟩
-
-中文:
-实例 fiberCategory
-  签名: : 范畴 (Fiber p S) where
-  定义体: {φ : a.1 ⟶ b.1 // IsHomLift p (𝟙 S) φ}
-  id a := ⟨𝟙 a.1, IsHomLift.id a.2⟩
-  comp φ ψ := ⟨φ.val ≫ ψ.val, by have := φ.2; have := ψ.2; infer_instance⟩
-
-Depends on / 依赖: IsHomLift
+--- 原说明 ---
+`Fiber p S` has the structure of a category with morphisms being those lying ove
+r `𝟙 S`.
 -/
 instance fiberCategory : Category (Fiber p S) where
   Hom a b := {φ : a.1 ⟶ b.1 // IsHomLift p (𝟙 S) φ}
   id a := ⟨𝟙 a.1, IsHomLift.id a.2⟩
   comp φ ψ := ⟨φ.val ≫ ψ.val, by have := φ.2; have := ψ.2; infer_instance⟩
 
-/--
-Definition of `fiberInclusion` / `fiberInclusion` 的定义
+/-- The functor including `Fiber p S` into `𝒳`. -/
+/-
+**CategoryTheory.Functor.Fiber.fiberInclusion** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor.Fiber`。
+形式化陈述：fiberInclusion : Fiber p S ⥤ 𝒳 where obj a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fiberInclusion
-  signature: : Fiber p S ⥤ 𝒳 where
-  body: a.1
-  map φ := φ.1
-
-中文:
-定义 fiberInclusion
-  签名: : Fiber p S ⥤ 𝒳 where
-  定义体: a.1
-  map φ := φ.1
+--- 原说明 ---
+The functor including `Fiber p S` into `𝒳`.
 -/
 def fiberInclusion : Fiber p S ⥤ 𝒳 where
   obj a := a.1
   map φ := φ.1
-
+/-
+**CategoryTheory.Functor.Fiber.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functo
+r.Fiber`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {a b : Fiber p S} (φ : a ⟶ b) : IsHomLift p (𝟙 S) (fiberInclusion.map φ) := φ.2
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {a b : Fiber p S} {φ ψ : a ⟶ b}
-  proof: Subtype.ext h
-
-中文:
-引理 hom_ext
-  结论: {a b : Fiber p S} {φ ψ : a ⟶ b}
-  证明: Subtype.ext h
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**CategoryTheory.Functor.Fiber.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Functor.Fiber`。
+形式化陈述：hom_ext {a b : Fiber p S} {φ ψ : a ⟶ b} (h : fiberInclusion.map φ = fiberI
+nclusion.map ψ) : φ = ψ
+参数：h : fiberInclusion.map φ = fiberInclusion.map ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
 lemma hom_ext {a b : Fiber p S} {φ ψ : a ⟶ b}
     (h : fiberInclusion.map φ = fiberInclusion.map ψ) : φ = ψ :=
   Subtype.ext h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (fiberInclusion : Fiber p S ⥤ _).Faithful
-
-中文:
-实例 :
-  签名: (fiberInclusion : Fiber p S ⥤ _).忠实
+/-
+**CategoryTheory.Functor.Fiber.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functo
+r.Fiber`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (fiberInclusion : Fiber p S ⥤ _).Faithful where
-
-/--
-lemma `fiberInclusion_obj_inj` / 引理 `fiberInclusion_obj_inj`
-
-English:
-lemma fiberInclusion_obj_inj
-  statement: (fiberInclusion : Fiber p S ⥤ _).obj.Injective
-  proof: fun _ _ f => Subtype.val_inj.1 f
-
-中文:
-引理 fiberInclusion_obj_inj
-  结论: (fiberInclusion : Fiber p S ⥤ _).obj.单射
-  证明: fun _ _ f => Subtype.val_inj.1 f
-
-Depends on / 依赖: Subtype, Subtype.val_inj, val_inj
+/-
+**CategoryTheory.Functor.Fiber.fiberInclusion_obj_inj** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Functor.Fiber`。
+形式化陈述：fiberInclusion_obj_inj : (fiberInclusion : Fiber p S ⥤ _).obj.Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.val_inj`：val_inj {a b : Subtype p} : a.val = b.val ↔ a = b
 -/
 lemma fiberInclusion_obj_inj : (fiberInclusion : Fiber p S ⥤ _).obj.Injective :=
-  fun _ _ f => Subtype.val_inj.1 f
+  fun _ _ f ↦ Subtype.val_inj.1 f
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- For fixed `S : 𝒮` this is the natural isomorphism between `fiberInclusion ⋙ p` and the constant
 function valued at `S`. -/
 @[simps!]
-/--
-Definition of `fiberInclusionCompIsoConst` / `fiberInclusionCompIsoConst` 的定义
+/-
+**CategoryTheory.Functor.Fiber.fiberInclusionCompIsoConst** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor.Fiber`。
+形式化陈述：fiberInclusionCompIsoConst : fiberInclusion ⋙ p ≅ (const (Fiber p S)).obj 
+S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fiberInclusionCompIsoConst
-  signature: : fiberInclusion ⋙ p ≅ (const (Fiber p S)).obj S
-  body: NatIso.ofComponents (fun X => eqToIso X.2)
-    (fun φ => by simp [IsHomLift.fac' p (𝟙 S) (fiberInclusion.map φ)])
-
-中文:
-定义 fiberInclusionCompIsoConst
-  签名: : fiberInclusion ⋙ p ≅ (const (Fiber p S)).obj S
-  定义体: NatIso.ofComponents (fun X => eqToIso X.2)
-    (fun φ => by simp [IsHomLift.fac' p (𝟙 S) (fiberInclusion.map φ)])
-
-Depends on / 依赖: IsHomLift, IsHomLift.fac, NatIso, NatIso.ofComponents, eqToIso, fiberInclusion, fiberInclusion.map, ofComponents
+--- 原说明 ---
+For fixed `S : 𝒮` this is the natural isomorphism between `fiberInclusion ⋙ p` a
+nd the constant
+function valued at `S`.
 -/
 def fiberInclusionCompIsoConst : fiberInclusion ⋙ p ≅ (const (Fiber p S)).obj S :=
-  NatIso.ofComponents (fun X => eqToIso X.2)
-    (fun φ => by simp [IsHomLift.fac' p (𝟙 S) (fiberInclusion.map φ)])
-
-/--
-lemma `fiberInclusion_comp_eq_const` / 引理 `fiberInclusion_comp_eq_const`
-
-English:
-lemma fiberInclusion_comp_eq_const
-  statement: fiberInclusion ⋙ p = (const (Fiber p S)).obj S
-  proof: Functor.ext_of_iso fiberInclusionCompIsoConst (fun x => x.2)
-
-中文:
-引理 fiberInclusion_comp_eq_const
-  结论: fiberInclusion ⋙ p = (const (Fiber p S)).obj S
-  证明: Functor.ext_of_iso fiberInclusionCompIsoConst (fun x => x.2)
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, ext_of_iso, fiberInclusionCompIsoConst
+  NatIso.ofComponents (fun X ↦ eqToIso X.2)
+    (fun φ ↦ by simp [IsHomLift.fac' p (𝟙 S) (fiberInclusion.map φ)])
+/-
+**CategoryTheory.Functor.Fiber.fiberInclusion_comp_eq_const** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Functor.Fiber`。
+形式化陈述：fiberInclusion_comp_eq_const : fiberInclusion ⋙ p = (const (Fiber p S)).ob
+j S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.ext_of_iso`：ext_of_iso {F G : C ⥤ D} (e : F ≅ G) 
+(hobj : forall X, F.obj X = G.obj X) (happ : forall X, e.hom.app X = eqToHom (ho
+bj X)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma fiberInclusion_comp_eq_const : fiberInclusion ⋙ p = (const (Fiber p S)).obj S :=
-  Functor.ext_of_iso fiberInclusionCompIsoConst (fun x => x.2)
+  Functor.ext_of_iso fiberInclusionCompIsoConst (fun x ↦ x.2)
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The object of the fiber over `S` corresponding to a `a : 𝒳` such that `p(a) = S`. -/
+/-
+**CategoryTheory.Functor.Fiber.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor.Fiber`。
+形式化陈述：mk {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S) : Fiber p S
+参数：ha : p.obj a = S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  body: ⟨a, ha⟩
-
-@[simp]
-
-中文:
-定义 mk
-  签名: {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  定义体: ⟨a, ha⟩
-
-@[simp]
+--- 原说明 ---
+The object of the fiber over `S` corresponding to a `a : 𝒳` such that `p(a) = S`
+.
 -/
 def mk {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S) : Fiber p S := ⟨a, ha⟩
 
 @[simp]
-/--
-lemma `fiberInclusion_mk` / 引理 `fiberInclusion_mk`
-
-English:
-lemma fiberInclusion_mk
-  given: {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  proof: rfl
-
-中文:
-引理 fiberInclusion_mk
-  条件: {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S)
-  证明: rfl
+/-
+**CategoryTheory.Functor.Fiber.fiberInclusion_mk** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Functor.Fiber`。
+形式化陈述：fiberInclusion_mk {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S) : fiberIn
+clusion.obj (mk ha) = a
+参数：ha : p.obj a = S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fiberInclusion_mk {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {a : 𝒳} (ha : p.obj a = S) :
     fiberInclusion.obj (mk ha) = a :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `homMk` / `homMk` 的定义
+/-- The morphism in the fiber over `S` corresponding to a morphism in `𝒳` lifting `𝟙 S`. -/
+/-
+**CategoryTheory.Functor.Fiber.homMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctor.Fiber`。
+形式化陈述：homMk (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift p (𝟙 S) φ] : mk
+ (domain_eq p (𝟙 S) φ) ⟶ mk (codomain_eq p (𝟙 S) φ)
+参数：p : 𝒳 ⥤ 𝒮；S : 𝒮；φ : a ⟶ b；𝟙 S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift p (𝟙 S) φ]
-  body: ⟨φ, inferInstance⟩
-
-@[simp]
-
-中文:
-定义 homMk
-  签名: (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift p (𝟙 S) φ]
-  定义体: ⟨φ, inferInstance⟩
-
-@[simp]
+--- 原说明 ---
+The morphism in the fiber over `S` corresponding to a morphism in `𝒳` lifting `𝟙
+ S`.
 -/
 def homMk (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift p (𝟙 S) φ] :
     mk (domain_eq p (𝟙 S) φ) ⟶ mk (codomain_eq p (𝟙 S) φ) :=
   ⟨φ, inferInstance⟩
 
 @[simp]
-/--
-lemma `fiberInclusion_homMk` / 引理 `fiberInclusion_homMk`
-
-English:
-lemma fiberInclusion_homMk
-  given: (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift p (𝟙 S) φ]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fiberInclusion_homMk
-  条件: (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift p (𝟙 S) φ]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.Fiber.fiberInclusion_homMk** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Functor.Fiber`。
+形式化陈述：fiberInclusion_homMk (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift 
+p (𝟙 S) φ] : fiberInclusion.map (homMk p S φ) = φ
+参数：p : 𝒳 ⥤ 𝒮；S : 𝒮；φ : a ⟶ b；𝟙 S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsHomLift.domain_eq`：domain_eq (f : R ⟶ S) (φ : a ⟶ b) [p
+.IsHomLift f φ] : p.obj a = R
+· 使用引理 `CategoryTheory.IsHomLift.codomain_eq`：codomain_eq (f : R ⟶ S) (φ : a ⟶ b
+) [p.IsHomLift f φ] : p.obj b = S
 -/
 lemma fiberInclusion_homMk (p : 𝒳 ⥤ 𝒮) (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsHomLift p (𝟙 S) φ] :
     fiberInclusion.map (homMk p S φ) = φ :=
   rfl
 
 @[simp]
-/--
-lemma `homMk_id` / 引理 `homMk_id`
-
-English:
-lemma homMk_id
-  given: (p : 𝒳 ⥤ 𝒮) (S : 𝒮) (a : 𝒳) [IsHomLift p (𝟙 S) (𝟙 a)]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 homMk_id
-  条件: (p : 𝒳 ⥤ 𝒮) (S : 𝒮) (a : 𝒳) [IsHomLift p (𝟙 S) (𝟙 a)]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.Fiber.homMk_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.Fiber`。
+形式化陈述：homMk_id (p : 𝒳 ⥤ 𝒮) (S : 𝒮) (a : 𝒳) [IsHomLift p (𝟙 S) (𝟙 a)] : homMk p S
+ (𝟙 a) = 𝟙 (mk (domain_eq p (𝟙 S) (𝟙 a)))
+参数：p : 𝒳 ⥤ 𝒮；S : 𝒮；a : 𝒳；𝟙 S；𝟙 a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsHomLift.domain_eq`：domain_eq (f : R ⟶ S) (φ : a ⟶ b) [p
+.IsHomLift f φ] : p.obj a = R
+· 使用引理 `CategoryTheory.IsHomLift.codomain_eq`：codomain_eq (f : R ⟶ S) (φ : a ⟶ b
+) [p.IsHomLift f φ] : p.obj b = S
 -/
 lemma homMk_id (p : 𝒳 ⥤ 𝒮) (S : 𝒮) (a : 𝒳) [IsHomLift p (𝟙 S) (𝟙 a)] :
     homMk p S (𝟙 a) = 𝟙 (mk (domain_eq p (𝟙 S) (𝟙 a))) :=
   rfl
 
 @[simp]
-/--
-lemma `homMk_comp` / 引理 `homMk_comp`
-
-English:
-lemma homMk_comp
-  statement: {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c) [IsHomLift p (𝟙 S) φ]
-  proof: rfl
-
-中文:
-引理 homMk_comp
-  结论: {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c) [IsHomLift p (𝟙 S) φ]
-  证明: rfl
+/-
+**CategoryTheory.Functor.Fiber.homMk_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Functor.Fiber`。
+形式化陈述：homMk_comp {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c) [IsHomLift p (𝟙 S) φ] [IsHo
+mLift p (𝟙 S) ψ] : homMk p S φ ≫ homMk p S ψ = homMk p S (φ ≫ ψ)
+参数：φ : a ⟶ b；ψ : b ⟶ c；𝟙 S；𝟙 S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsHomLift.domain_eq`：domain_eq (f : R ⟶ S) (φ : a ⟶ b) [p
+.IsHomLift f φ] : p.obj a = R
+· 使用引理 `CategoryTheory.IsHomLift.codomain_eq`：codomain_eq (f : R ⟶ S) (φ : a ⟶ b
+) [p.IsHomLift f φ] : p.obj b = S
 -/
 lemma homMk_comp {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c) [IsHomLift p (𝟙 S) φ]
     [IsHomLift p (𝟙 S) ψ] : homMk p S φ ≫ homMk p S ψ = homMk p S (φ ≫ ψ) :=
@@ -321,105 +266,71 @@ variable {p : 𝒳 ⥤ 𝒮} {S : 𝒮} {C : Type u₃} [Category.{v₃} C] {F :
   (hF : F ⋙ p = (const C).obj S)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `inducedFunctor` / `inducedFunctor` 的定义
+/-- Given a functor `F : C ⥤ 𝒳` such that `F ⋙ p` is constant at some `S : 𝒮`, then
+we get an induced functor `C ⥤ Fiber p S` that `F` factors through. -/
+/-
+**CategoryTheory.Functor.Fiber.inducedFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Functor.Fiber`。
+形式化陈述：inducedFunctor : C ⥤ Fiber p S where obj x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inducedFunctor
-  signature: : C ⥤ Fiber p S where
-  body: ⟨F.obj x, by simp only [← comp_obj, hF, const_obj_obj]⟩
-map φ := ⟨F.map φ, of_commsq _ _ _ (congr_obj hF _) (congr_obj hF _)
-    by simpa using (eqToIso hF).hom.naturality φ⟩
-
-中文:
-定义 inducedFunctor
-  签名: : C ⥤ Fiber p S where
-  定义体: ⟨F.obj x, by simp only [← comp_obj, hF, const_obj_obj]⟩
-map φ := ⟨F.map φ, of_commsq _ _ _ (congr_obj hF _) (congr_obj hF _)
-    by simpa using (eqToIso hF).hom.naturality φ⟩
-
-Depends on / 依赖: F.obj, comp_obj, const_obj_obj
+--- 原说明 ---
+Given a functor `F : C ⥤ 𝒳` such that `F ⋙ p` is constant at some `S : 𝒮`, then
+we get an induced functor `C ⥤ Fiber p S` that `F` factors through.
 -/
 def inducedFunctor : C ⥤ Fiber p S where
   obj x := ⟨F.obj x, by simp only [← comp_obj, hF, const_obj_obj]⟩
-map φ := ⟨F.map φ, of_commsq _ _ _ (congr_obj hF _) (congr_obj hF _)
+  map φ := ⟨F.map φ, of_commsq _ _ _ (congr_obj hF _) (congr_obj hF _) <|
     by simpa using (eqToIso hF).hom.naturality φ⟩
 
 /-- Given a functor `F : C ⥤ 𝒳` such that `F ⋙ p` is constant at some `S : 𝒮`, then
 we get a natural isomorphism between `inducedFunctor _ ⋙ fiberInclusion` and `F`. -/
 @[simps!]
-/--
-Definition of `inducedFunctorCompIsoSelf` / `inducedFunctorCompIsoSelf` 的定义
+/-
+**CategoryTheory.Functor.Fiber.inducedFunctorCompIsoSelf** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Functor.Fiber`。
+形式化陈述：inducedFunctorCompIsoSelf : (inducedFunctor hF) ⋙ fiberInclusion ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inducedFunctorCompIsoSelf
-  signature: : (inducedFunctor hF) ⋙ fiberInclusion ≅ F
-  body: .refl _
-
-中文:
-定义 inducedFunctorCompIsoSelf
-  签名: : (inducedFunctor hF) ⋙ fiberInclusion ≅ F
-  定义体: .refl _
-
-Depends on / 依赖: B.retract, instIsSplitMonoI, retract
+--- 原说明 ---
+Given a functor `F : C ⥤ 𝒳` such that `F ⋙ p` is constant at some `S : 𝒮`, then
+we get a natural isomorphism between `inducedFunctor _ ⋙ fiberInclusion` and `F`
+.
 -/
 def inducedFunctorCompIsoSelf : (inducedFunctor hF) ⋙ fiberInclusion ≅ F := .refl _
-
-/--
-lemma `inducedFunctor_comp` / 引理 `inducedFunctor_comp`
-
-English:
-lemma inducedFunctor_comp
-  statement: (inducedFunctor hF) ⋙ fiberInclusion = F
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inducedFunctor_comp
-  结论: (inducedFunctor hF) ⋙ fiberInclusion = F
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: B.retract, instIsSplitEpiR, retract
+/-
+**CategoryTheory.Functor.Fiber.inducedFunctor_comp** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Functor.Fiber`。
+形式化陈述：inducedFunctor_comp : (inducedFunctor hF) ⋙ fiberInclusion = F
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inducedFunctor_comp : (inducedFunctor hF) ⋙ fiberInclusion = F := rfl
 
 @[simp]
-/--
-lemma `inducedFunctor_comp_obj` / 引理 `inducedFunctor_comp_obj`
-
-English:
-lemma inducedFunctor_comp_obj
-  given: (X : C)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inducedFunctor_comp_obj
-  条件: (X : C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.Fiber.inducedFunctor_comp_obj** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Functor.Fiber`。
+形式化陈述：inducedFunctor_comp_obj (X : C) : fiberInclusion.obj ((inducedFunctor hF).
+obj X) = F.obj X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inducedFunctor_comp_obj (X : C) :
     fiberInclusion.obj ((inducedFunctor hF).obj X) = F.obj X := rfl
 
 @[simp]
-/--
-lemma `inducedFunctor_comp_map` / 引理 `inducedFunctor_comp_map`
-
-English:
-lemma inducedFunctor_comp_map
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-引理 inducedFunctor_comp_map
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: rfl
+/-
+**CategoryTheory.Functor.Fiber.inducedFunctor_comp_map** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Functor.Fiber`。
+形式化陈述：inducedFunctor_comp_map {X Y : C} (f : X ⟶ Y) : fiberInclusion.map ((induc
+edFunctor hF).map f) = F.map f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inducedFunctor_comp_map {X Y : C} (f : X ⟶ Y) :
     fiberInclusion.map ((inducedFunctor hF).map f) = F.map f := rfl
@@ -431,3 +342,4 @@ end Fiber
 end Functor
 
 end CategoryTheory
+

@@ -37,50 +37,30 @@ variable [Ring R]
 
 /-- Universe lift functor for `R`-module. -/
 @[simps obj map, pp_with_univ]
-/--
-Definition of `uliftFunctor` / `uliftFunctor` 的定义
+/-
+**ModuleCat.uliftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：uliftFunctor : ModuleCat.{v} R ⥤ ModuleCat.{max v v'} R where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftFunctor
-  signature: : ModuleCat.{v} R ⥤ ModuleCat.{max v v'} R where
-  body: ModuleCat.of R (ULift.{v', v} X)
-map f := ModuleCat.ofHom
-    ULift.moduleEquiv.symm.toLinearMap.comp (f.hom.comp ULift.moduleEquiv.toLinearMap)
-
-中文:
-定义 uliftFunctor
-  签名: : 模范畴.{v} R ⥤ 模范畴.{最大值 v v'} R where
-  定义体: ModuleCat.of R (ULift.{v', v} X)
-map f := ModuleCat.ofHom
-    ULift.moduleEquiv.symm.toLinearMap.comp (f.hom.comp ULift.moduleEquiv.toLinearMap)
-
-Depends on / 依赖: ModuleCat, ModuleCat.of
+--- 原说明 ---
+Universe lift functor for `R`-module.
 -/
 def uliftFunctor : ModuleCat.{v} R ⥤ ModuleCat.{max v v'} R where
   obj X := ModuleCat.of R (ULift.{v', v} X)
-map f := ModuleCat.ofHom
+  map f := ModuleCat.ofHom <|
     ULift.moduleEquiv.symm.toLinearMap.comp (f.hom.comp ULift.moduleEquiv.toLinearMap)
 
-/--
-Definition of `fullyFaithfulUliftFunctor` / `fullyFaithfulUliftFunctor` 的定义
+/-- The universe lift functor for `R`-module is fully faithful. -/
+/-
+**ModuleCat.fullyFaithfulUliftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：fullyFaithfulUliftFunctor : (uliftFunctor R).FullyFaithful where preimage 
+f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulUliftFunctor
-  signature: : (uliftFunctor R).FullyFaithful where
-  body: ModuleCat.ofHom (ULift.moduleEquiv.toLinearMap.comp
-    (f.hom.comp ULift.moduleEquiv.symm.toLinearMap))
-
-#adaptation_note
-
-中文:
-定义 fullyFaithfulUliftFunctor
-  签名: : (uliftFunctor R).满忠实 where
-  定义体: ModuleCat.ofHom (ULift.moduleEquiv.toLinearMap.comp
-    (f.hom.comp ULift.moduleEquiv.symm.toLinearMap))
-
-#adaptation_note
-
-Depends on / 依赖: ModuleCat, ModuleCat.ofHom, ULift.moduleEquiv.toLinearMap.comp, moduleEquiv, toLinearMap
+--- 原说明 ---
+The universe lift functor for `R`-module is fully faithful.
 -/
 def fullyFaithfulUliftFunctor : (uliftFunctor R).FullyFaithful where
   preimage f := ModuleCat.ofHom (ULift.moduleEquiv.toLinearMap.comp
@@ -91,93 +71,39 @@ def fullyFaithfulUliftFunctor : (uliftFunctor R).FullyFaithful where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The `ULift` functor on `ModuleCat` is compatible with the one defined on categories of types. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `uliftFunctorForgetIso` / `uliftFunctorForgetIso` 的定义
+/-
+**ModuleCat.uliftFunctorForgetIso** 是 Mathlib 中的一个定义，位于命名空间 `ModuleCat`。
+形式化陈述：uliftFunctorForgetIso : ModuleCat.uliftFunctor.{v'} R ⋙ forget _ ≅ forget 
+_ ⋙ CategoryTheory.uliftFunctor.{v'}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftFunctorForgetIso
-  signature: :
-  body: .refl _
-
-中文:
-定义 uliftFunctorForgetIso
-  签名: :
-  定义体: .refl _
+--- 原说明 ---
+The `ULift` functor on `ModuleCat` is compatible with the one defined on categor
+ies of types.
 -/
 def uliftFunctorForgetIso :
     ModuleCat.uliftFunctor.{v'} R ⋙ forget _ ≅
     forget _ ⋙ CategoryTheory.uliftFunctor.{v'} :=
   .refl _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftFunctor.{v', v} R).Full
-  body: (fullyFaithfulUliftFunctor R).full
-
-中文:
-实例 :
-  签名: (uliftFunctor.{v', v} R).满
-  定义体: (fullyFaithfulUliftFunctor R).full
-
-Depends on / 依赖: fullyFaithfulUliftFunctor
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftFunctor.{v', v} R).Full := (fullyFaithfulUliftFunctor R).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftFunctor.{v', v} R).Faithful
-  body: (fullyFaithfulUliftFunctor R).faithful
-
-中文:
-实例 :
-  签名: (uliftFunctor.{v', v} R).忠实
-  定义体: (fullyFaithfulUliftFunctor R).faithful
-
-Depends on / 依赖: faithful, fullyFaithfulUliftFunctor
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftFunctor.{v', v} R).Faithful := (fullyFaithfulUliftFunctor R).faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftFunctor R).Additive
-
-中文:
-实例 :
-  签名: (uliftFunctor R).加性
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftFunctor R).Additive where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R)
-  body: let : Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R ⋙ forget _) := by
-    change Limits.PreservesLimitsOfSize.{v, v} (forget (ModuleCat R) ⋙
-      CategoryTheory.uliftFunctor.{v'})
-    infer_instance
-  Limits.preservesLimits_of_reflects_of_preserves (uliftFunctor.{v', v} R) (forget _)
-
-中文:
-实例 :
-  签名: Limits.保持LimitsOfSize.{v, v} (uliftFunctor.{v', v} R)
-  定义体: let : Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R ⋙ forget _) := by
-    change Limits.PreservesLimitsOfSize.{v, v} (forget (ModuleCat R) ⋙
-      CategoryTheory.uliftFunctor.{v'})
-    infer_instance
-  Limits.preservesLimits_of_reflects_of_preserves (uliftFunctor.{v', v} R) (forget _)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.uliftFunctor, Limits, Limits.PreservesLimitsOfSize, Limits.preservesLimits_of_reflects_of_preserves, ModuleCat, PreservesLimitsOfSize, forget, infer_instance, preservesLimits_of_reflects_of_preserves, uliftFunctor
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R) :=
   let : Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R ⋙ forget _) := by
@@ -185,53 +111,57 @@ instance : Limits.PreservesLimitsOfSize.{v, v} (uliftFunctor.{v', v} R) :=
       CategoryTheory.uliftFunctor.{v'})
     infer_instance
   Limits.preservesLimits_of_reflects_of_preserves (uliftFunctor.{v', v} R) (forget _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Limits.PreservesFiniteLimits (uliftFunctor.{v', v} R)
-  body: Limits.PreservesLimitsOfSize.preservesFiniteLimits _
-
-中文:
-实例 :
-  签名: Limits.保持FiniteLimits (uliftFunctor.{v', v} R)
-  定义体: Limits.PreservesLimitsOfSize.preservesFiniteLimits _
-
-Depends on / 依赖: Limits, Limits.PreservesLimitsOfSize.preservesFiniteLimits, PreservesLimitsOfSize, preservesFiniteLimits
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Limits.PreservesFiniteLimits (uliftFunctor.{v', v} R) :=
   Limits.PreservesLimitsOfSize.preservesFiniteLimits _
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `uliftFunctor_map_exact` / 引理 `uliftFunctor_map_exact`
-
-English:
-lemma uliftFunctor_map_exact
-  given: (S : ShortComplex (ModuleCat.{v} R)) (h : S.Exact)
-  proof: by
-  rw [CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact]
-  dsimp [uliftFunctor]
-  intro x
-  simp only [Function.comp_apply, Set.mem_range, LinearEquiv.symm_apply_eq, map_zero]
-  rw [(CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact S).mp h]
-  cat_disch
-
-中文:
-引理 uliftFunctor_map_exact
-  条件: (S : 短复形 (模范畴.{v} R)) (h : S.正合)
-  证明: by
-  rw [CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact]
-  dsimp [uliftFunctor]
-  intro x
-  simp only [Function.comp_apply, Set.mem_range, LinearEquiv.symm_apply_eq, map_zero]
-  rw [(CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact S).mp h]
-  cat_disch
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact, Function, Function.comp_apply, LinearEquiv, LinearEquiv.symm_apply_eq, Set.mem_range, ShortComplex, ShortExact, cat_disch, comp_apply, map_zero, mem_range, moduleCat_exact_iff_function_exact, symm_apply_eq, uliftFunctor
+/-
+**ModuleCat.uliftFunctor_map_exact** 是 Mathlib 中的一个引理，位于命名空间 `ModuleCat`。
+形式化陈述：uliftFunctor_map_exact (S : ShortComplex (ModuleCat.{v} R)) (h : S.Exact) 
+: (S.map (uliftFunctor R)).Exact
+参数：S : ShortComplex (ModuleCat.{v} R)；h : S.Exact。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `ModuleCat.instAdditiveUliftFunctor`：∀ (R : Type u) [inst : Ring R], (Mod
+uleCat.uliftFunctor.{u_2, u_1, u} R).Additive
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exac
+t`：∀ {R : Type u} [inst : Ring R] (S : CategoryTheory.ShortComplex (ModuleCat R)
+),   S.Exact ↔ Function.Exact ⇑(CategoryTheory.ConcreteCategory…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma uliftFunctor_map_exact (S : ShortComplex (ModuleCat.{v} R)) (h : S.Exact) :
     (S.map (uliftFunctor R)).Exact := by
@@ -241,27 +171,9 @@ lemma uliftFunctor_map_exact (S : ShortComplex (ModuleCat.{v} R)) (h : S.Exact) 
   simp only [Function.comp_apply, Set.mem_range, LinearEquiv.symm_apply_eq, map_zero]
   rw [(CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact S).mp h]
   cat_disch
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Limits.PreservesFiniteColimits (uliftFunctor.{v', v} R)
-  body: by
-  have := ((CategoryTheory.Functor.exact_tfae (uliftFunctor.{v', v} R)).out 1 3).mp
-    (uliftFunctor_map_exact R)
-  exact this.2
-
-中文:
-实例 :
-  签名: Limits.保持FiniteColimits (uliftFunctor.{v', v} R)
-  定义体: by
-  have := ((CategoryTheory.Functor.exact_tfae (uliftFunctor.{v', v} R)).out 1 3).mp
-    (uliftFunctor_map_exact R)
-  exact this.2
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.exact_tfae, Functor, exact_tfae, uliftFunctor, uliftFunctor_map_exact
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Limits.PreservesFiniteColimits (uliftFunctor.{v', v} R) := by
   have := ((CategoryTheory.Functor.exact_tfae (uliftFunctor.{v', v} R)).out 1 3).mp
@@ -269,49 +181,18 @@ instance : Limits.PreservesFiniteColimits (uliftFunctor.{v', v} R) := by
   exact this.2
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Small.{v}
-  signature: R] : (uliftFunctor.{v', v} R).PreservesProjectiveObjects where
-  body: by
-    have := small_lift.{u, v'} R
-    dsimp
-    infer_instance
-
-中文:
-实例 [Small.{v}
-  签名: R] : (uliftFunctor.{v', v} R).保持ProjectiveObjects where
-  定义体: by
-    have := small_lift.{u, v'} R
-    dsimp
-    infer_instance
-
-Depends on / 依赖: infer_instance, small_lift
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Small.{v} R] : (uliftFunctor.{v', v} R).PreservesProjectiveObjects where
   projective_obj {M} proj := by
     have := small_lift.{u, v'} R
     dsimp
     infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Small.{v}
-  signature: R] : (uliftFunctor.{v', v} R).PreservesInjectiveObjects where
-  body: (Module.injective_iff_injective_object R _).mp
-    (Module.ulift_injective_of_injective R ((Module.injective_iff_injective_object R M).mpr inj))
-
-中文:
-实例 [Small.{v}
-  签名: R] : (uliftFunctor.{v', v} R).保持InjectiveObjects where
-  定义体: (Module.injective_iff_injective_object R _).mp
-    (Module.ulift_injective_of_injective R ((Module.injective_iff_injective_object R M).mpr inj))
-
-Depends on / 依赖: Module, Module.injective_iff_injective_object, injective_iff_injective_object
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Small.{v} R] : (uliftFunctor.{v', v} R).PreservesInjectiveObjects where
   injective_obj {M} inj := (Module.injective_iff_injective_object R _).mp
@@ -319,17 +200,11 @@ instance [Small.{v} R] : (uliftFunctor.{v', v} R).PreservesInjectiveObjects wher
 
 end Ring
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommRing
-  signature: R] : (uliftFunctor.{v', v} R).Linear R where
-
-中文:
-实例 [交换环
-  签名: R] : (uliftFunctor.{v', v} R).线性 R where
+/-
+**ModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `ModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommRing R] : (uliftFunctor.{v', v} R).Linear R where
 
 end ModuleCat
+

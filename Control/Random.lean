@@ -34,146 +34,108 @@ defining objects that can be created randomly.
 
 set_option autoImplicit true -- Note: this file uses `autoImplicit` pervasively
 
-/--
-Definition of `RandGT` / `RandGT` 的定义
+/-- A monad transformer to generate random objects using the generic generator type `g` -/
+/-
+**RandGT** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：RandGT (g : Type)
+参数：g : Type。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RandGT
-  signature: (g : Type)
-  body: StateT (ULift g)
-
-中文:
-缩写 RandGT
-  签名: (g : 类型)
-  定义体: StateT (ULift g)
-
-Depends on / 依赖: StateT
+--- 原说明 ---
+A monad transformer to generate random objects using the generic generator type 
+`g`
 -/
 abbrev RandGT (g : Type) := StateT (ULift g)
-/--
-Definition of `RandG` / `RandG` 的定义
+/-- A monad to generate random objects using the generator type `g`. -/
+/-
+**RandG** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：RandG (g : Type)
+参数：g : Type。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RandG
-  signature: (g : Type)
-  body: RandGT g Id
-
-中文:
-缩写 RandG
-  签名: (g : 类型)
-  定义体: RandGT g Id
-
-Depends on / 依赖: RandGT
+--- 原说明 ---
+A monad to generate random objects using the generator type `g`.
 -/
 abbrev RandG (g : Type) := RandGT g Id
 
-/--
-Definition of `RandT` / `RandT` 的定义
+/-- A monad transformer to generate random objects using the generator type `StdGen`.
+`RandT m α` should be thought of a random value in `m α`. -/
+/-
+**RandT** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：RandT
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RandT
-  body: RandGT StdGen
-
-中文:
-缩写 RandT
-  定义体: RandGT StdGen
-
-Depends on / 依赖: RandGT, StdGen
+--- 原说明 ---
+A monad transformer to generate random objects using the generator type `StdGen`
+.
+`RandT m α` should be thought of a random value in `m α`.
 -/
 abbrev RandT := RandGT StdGen
 
-/--
-Definition of `Rand` / `Rand` 的定义
+/-- A monad to generate random objects using the generator type `StdGen`. -/
+/-
+**Rand** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Rand
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Rand
-  body: RandG StdGen
-
-中文:
-缩写 Rand
-  定义体: RandG StdGen
-
-Depends on / 依赖: StdGen
+--- 原说明 ---
+A monad to generate random objects using the generator type `StdGen`.
 -/
 abbrev Rand := RandG StdGen
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonadLift
-  signature: m n] : MonadLiftT (RandGT g m) (RandGT g n) where
-  body: fun s => x s
-
-中文:
-实例 [MonadLift
-  签名: m n] : MonadLiftT (RandGT g m) (RandGT g n) where
-  定义体: fun s => x s
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MonadLift m n] : MonadLiftT (RandGT g m) (RandGT g n) where
   monadLift x := fun s => x s
 
-/--
-Definition of `Random` / `Random` 的定义
+/-- `Random m α` gives us machinery to generate values of type `α` in the monad `m`.
 
-English:
-class Random
-  parameters: (m) (α : Type u)
-  axioms and operations (1):
-    - random([RandomGen g]) : RandGT g m α
+Note that `m` is a parameter as some types may only be sampleable with access to a certain monad. -/
+/-
+**Random** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(Type u → Type u_1) → Type u → Type (max (max 1 u) u_1)
+参数：max 1 u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 随机
-  参数: (m) (α : 类型u)
-  公理与运算 (1 个):
-    - random([RandomGen g]) : RandGT g m α
+--- 原说明 ---
+`Random m α` gives us machinery to generate values of type `α` in the monad `m`.
 
-Depends on / 依赖: decidable_of_iff, lookup_isSome
+Note that `m` is a parameter as some types may only be sampleable with access to
+ a certain monad.
 -/
 class Random (m) (α : Type u) where
   /-- Sample an element of this type from the provided generator. -/
   random [RandomGen g] : RandGT g m α
 
-/--
-Definition of `BoundedRandom` / `BoundedRandom` 的定义
+/-- `BoundedRandom m α` gives us machinery to generate values of type `α` between certain bounds in
+the monad `m`. -/
+/-
+**BoundedRandom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(Type u → Type u_1) → (α : Type u) → [Preorder α] → Type (max (max 1 u) u_
+1)
+参数：max 1 u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class BoundedRandom
-  parameters: (m) (α : Type u) [Preorder α]
-  axioms and operations (1):
-    - randomR({g : Type} (lo hi : α) (h : lo <= hi) [RandomGen g]) : RandGT g m {a // lo <= a ∧ a <= hi}
-
-中文:
-类 BoundedRandom
-  参数: (m) (α : 类型u) [预序 α]
-  公理与运算 (1 个):
-    - randomR({g : 类型} (lo hi : α) (h : lo <= hi) [RandomGen g]) : RandGT g m {a // lo <= a ∧ a <= hi}
+--- 原说明 ---
+`BoundedRandom m α` gives us machinery to generate values of type `α` between ce
+rtain bounds in
+the monad `m`.
 -/
 class BoundedRandom (m) (α : Type u) [Preorder α] where
   /-- Sample a bounded element of this type from the provided generator. -/
-  randomR {g : Type} (lo hi : α) (h : lo <= hi) [RandomGen g] : RandGT g m {a // lo <= a ∧ a <= hi}
+  randomR {g : Type} (lo hi : α) (h : lo ≤ hi) [RandomGen g] : RandGT g m {a // lo ≤ a ∧ a ≤ hi}
 
 namespace Rand
-/--
-Definition of `next` / `next` 的定义
+/-- Generate a random `Nat`. -/
+/-
+**Rand.next** 是 Mathlib 中的一个定义，位于命名空间 `Rand`。
+形式化陈述：next [RandomGen g] [Monad m] : RandGT g m Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition next
-  signature: [RandomGen g] [Monad m]
-  body: do
-  let rng := (← get).down
-  let (res, new) := RandomGen.next rng
-  set (ULift.up new)
-  pure res
-
-中文:
-定义 next
-  签名: [RandomGen g] [单子 m]
-  定义体: do
-  let rng := (← get).down
-  let (res, new) := RandomGen.next rng
-  set (ULift.up new)
-  pure res
+--- 原说明 ---
+Generate a random `Nat`.
 -/
 def next [RandomGen g] [Monad m] : RandGT g m Nat := do
   let rng := (← get).down
@@ -181,26 +143,15 @@ def next [RandomGen g] [Monad m] : RandGT g m Nat := do
   set (ULift.up new)
   pure res
 
-/--
-Definition of `split` / `split` 的定义
+/-- Create a new random number generator distinct from the one stored in the state. -/
+/-
+**Rand.split** 是 Mathlib 中的一个定义，位于命名空间 `Rand`。
+形式化陈述：split {g : Type} [RandomGen g] [Monad m] : RandGT g m g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition split
-  signature: {g : Type} [RandomGen g] [Monad m]
-  body: do
-  let rng := (← get).down
-  let (r1, r2) := RandomGen.split rng
-  set (ULift.up r1)
-  pure r2
-
-中文:
-定义 split
-  签名: {g : 类型} [RandomGen g] [单子 m]
-  定义体: do
-  let rng := (← get).down
-  let (r1, r2) := RandomGen.split rng
-  set (ULift.up r1)
-  pure r2
+--- 原说明 ---
+Create a new random number generator distinct from the one stored in the state.
 -/
 def split {g : Type} [RandomGen g] [Monad m] : RandGT g m g := do
   let rng := (← get).down
@@ -208,26 +159,19 @@ def split {g : Type} [RandomGen g] [Monad m] : RandGT g m g := do
   set (ULift.up r1)
   pure r2
 
-/--
-Definition of `range` / `range` 的定义
+/-- Get the range of `Nat` that can be generated by the generator `g`. -/
+/-
+**Rand.range** 是 Mathlib 中的一个定义，位于命名空间 `Rand`。
+形式化陈述：range {g : Type} [RandomGen g] [Monad m] : RandGT g m (Nat × Nat)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition range
-  signature: {g : Type} [RandomGen g] [Monad m]
-  body: do
-  let rng := (← get).down
-pure RandomGen.range rng
-
-中文:
-定义 range
-  签名: {g : 类型} [RandomGen g] [单子 m]
-  定义体: do
-  let rng := (← get).down
-pure RandomGen.range rng
+--- 原说明 ---
+Get the range of `Nat` that can be generated by the generator `g`.
 -/
 def range {g : Type} [RandomGen g] [Monad m] : RandGT g m (Nat × Nat) := do
   let rng := (← get).down
-pure RandomGen.range rng
+  pure <| RandomGen.range rng
 end Rand
 
 namespace Random
@@ -236,125 +180,82 @@ open Rand
 
 variable [Monad m]
 
-/--
-Definition of `rand` / `rand` 的定义
+/-- Generate a random value of type `α`. -/
+/-
+**Random.rand** 是 Mathlib 中的一个定义，位于命名空间 `Random`。
+形式化陈述：rand (α : Type u) [Random m α] [RandomGen g] : RandGT g m α
+参数：α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rand
-  signature: (α : Type u) [Random m α] [RandomGen g]
-  body: Random.random
-
-中文:
-定义 rand
-  签名: (α : 类型u) [随机 m α] [RandomGen g]
-  定义体: Random.random
-
-Depends on / 依赖: Random, Random.random, random
+--- 原说明 ---
+Generate a random value of type `α`.
 -/
 def rand (α : Type u) [Random m α] [RandomGen g] : RandGT g m α := Random.random
 
-/--
-Definition of `randBound` / `randBound` 的定义
+/-- Generate a random value of type `α` between `x` and `y` inclusive. -/
+/-
+**Random.randBound** 是 Mathlib 中的一个定义，位于命名空间 `Random`。
+形式化陈述：randBound (α : Type u) [Preorder α] [BoundedRandom m α] (lo hi : α) (h : l
+o <= hi) [RandomGen g] : RandGT g m {a // lo <= a ∧ a <= hi}
+参数：α : Type u；lo hi : α；h : lo <= hi。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition randBound
-  signature: (α : Type u)
-  body: (BoundedRandom.randomR lo hi h : RandGT g _ _)
-
-中文:
-定义 randBound
-  签名: (α : 类型u)
-  定义体: (BoundedRandom.randomR lo hi h : RandGT g _ _)
-
-Depends on / 依赖: BoundedRandom, BoundedRandom.randomR, RandGT, randomR
+--- 原说明 ---
+Generate a random value of type `α` between `x` and `y` inclusive.
 -/
 def randBound (α : Type u)
-    [Preorder α] [BoundedRandom m α] (lo hi : α) (h : lo <= hi) [RandomGen g] :
-    RandGT g m {a // lo <= a ∧ a <= hi} :=
+    [Preorder α] [BoundedRandom m α] (lo hi : α) (h : lo ≤ hi) [RandomGen g] :
+    RandGT g m {a // lo ≤ a ∧ a ≤ hi} :=
   (BoundedRandom.randomR lo hi h : RandGT g _ _)
 
-/--
-Definition of `randFin` / `randFin` 的定义
+/-- Generate a random `Fin`. -/
+/-
+**Random.randFin** 是 Mathlib 中的一个定义，位于命名空间 `Random`。
+形式化陈述：randFin {n : Nat} [NeZero n] [RandomGen g] : RandGT g m (Fin n)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition randFin
-  signature: {n : Nat} [NeZero n] [RandomGen g]
-  body: fun ⟨g⟩ => pure .map (Fin.ofNat n) ULift.up randNat g 0 (n - 1)
-
-中文:
-定义 randFin
-  签名: {n : 自然数} [NeZero n] [RandomGen g]
-  定义体: fun ⟨g⟩ => pure .map (Fin.ofNat n) ULift.up randNat g 0 (n - 1)
-
-Depends on / 依赖: Fin.ofNat, ULift.up, randNat
+--- 原说明 ---
+Generate a random `Fin`.
 -/
 def randFin {n : Nat} [NeZero n] [RandomGen g] : RandGT g m (Fin n) :=
-fun ⟨g⟩ => pure .map (Fin.ofNat n) ULift.up randNat g 0 (n - 1)
-
+  fun ⟨g⟩ ↦ pure <| randNat g 0 (n - 1) |>.map (Fin.ofNat n) ULift.up
+/-
+**Random.** 是 Mathlib 中的一个实例，位于命名空间 `Random`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n : Nat} [NeZero n] : Random m (Fin n) where
   random := randFin
 
-/--
-Definition of `randBool` / `randBool` 的定义
+/-- Generate a random `Bool`. -/
+/-
+**Random.randBool** 是 Mathlib 中的一个定义，位于命名空间 `Random`。
+形式化陈述：randBool [RandomGen g] : RandGT g m Bool
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition randBool
-  signature: [RandomGen g]
-  body: return (← rand (Fin 2)) == 1
-
-中文:
-定义 rand布尔
-  签名: [RandomGen g]
-  定义体: return (← rand (Fin 2)) == 1
-
-Depends on / 依赖: return
+--- 原说明 ---
+Generate a random `Bool`.
 -/
 def randBool [RandomGen g] : RandGT g m Bool :=
   return (← rand (Fin 2)) == 1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Random m Bool
-  body: randBool
-
-中文:
-实例 :
-  签名: 随机 m 布尔值
-  定义体: randBool
-
-Depends on / 依赖: randBool
+/-
+**Random.** 是 Mathlib 中的一个实例，位于命名空间 `Random`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Random m Bool where
   random := randBool
-
+/-
+**Random.** 是 Mathlib 中的一个实例，位于命名空间 `Random`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type u} [ULiftable m m'] [Random m α] : Random m' (ULift.{v} α) where
   random := ULiftable.up random
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BoundedRandom m Nat
-  body: do
-    let z ← rand (Fin (hi - lo + 1))
-    pure ⟨
-      lo + z.val, Nat.le_add_right _ _,
-      Nat.add_le_of_le_sub' h (Nat.le_of_lt_add_one z.isLt)
-    ⟩
-
-中文:
-实例 :
-  签名: BoundedRandom m 自然数
-  定义体: do
-    let z ← rand (Fin (hi - lo + 1))
-    pure ⟨
-      lo + z.val, Nat.le_add_right _ _,
-      Nat.add_le_of_le_sub' h (Nat.le_of_lt_add_one z.isLt)
-    ⟩
+/-
+**Random.** 是 Mathlib 中的一个实例，位于命名空间 `Random`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BoundedRandom m Nat where
   randomR lo hi h _ := do
@@ -363,33 +264,9 @@ instance : BoundedRandom m Nat where
       lo + z.val, Nat.le_add_right _ _,
       Nat.add_le_of_le_sub' h (Nat.le_of_lt_add_one z.isLt)
     ⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BoundedRandom m Int
-  body: do
-    let ⟨z, _, h2⟩ ← randBound Nat 0 (Int.natAbs <| hi - lo) (Nat.zero_le _)
-    pure ⟨
-      z + lo,
-      Int.le_add_of_nonneg_left (Int.natCast_nonneg z),
-Int.add_le_of_le_sub_right Int.le_trans
-        (Int.ofNat_le.mpr h2)
-        (le_of_eq <| Int.natAbs_of_nonneg <| Int.sub_nonneg_of_le h)⟩
-
-中文:
-实例 :
-  签名: BoundedRandom m 整数
-  定义体: do
-    let ⟨z, _, h2⟩ ← randBound Nat 0 (Int.natAbs <| hi - lo) (Nat.zero_le _)
-    pure ⟨
-      z + lo,
-      Int.le_add_of_nonneg_left (Int.natCast_nonneg z),
-Int.add_le_of_le_sub_right Int.le_trans
-        (Int.ofNat_le.mpr h2)
-        (le_of_eq <| Int.natAbs_of_nonneg <| Int.sub_nonneg_of_le h)⟩
+/-
+**Random.** 是 Mathlib 中的一个实例，位于命名空间 `Random`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BoundedRandom m Int where
   randomR lo hi h _ := do
@@ -397,15 +274,21 @@ instance : BoundedRandom m Int where
     pure ⟨
       z + lo,
       Int.le_add_of_nonneg_left (Int.natCast_nonneg z),
-Int.add_le_of_le_sub_right Int.le_trans
+      Int.add_le_of_le_sub_right <| Int.le_trans
         (Int.ofNat_le.mpr h2)
         (le_of_eq <| Int.natAbs_of_nonneg <| Int.sub_nonneg_of_le h)⟩
-
+/-
+**Random.** 是 Mathlib 中的一个实例，位于命名空间 `Random`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {n : Nat} : BoundedRandom m (Fin n) where
   randomR lo hi h _ := do
     let ⟨r, h1, h2⟩ ← randBound Nat lo.val hi.val h
     pure ⟨⟨r, Nat.lt_of_le_of_lt h2 hi.isLt⟩, h1, h2⟩
-
+/-
+**Random.** 是 Mathlib 中的一个实例，位于命名空间 `Random`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type u} [Preorder α] [ULiftable m m'] [BoundedRandom m α] [Monad m'] :
     BoundedRandom m' (ULift.{v} α) where
   randomR lo hi h := do
@@ -416,29 +299,33 @@ end Random
 
 namespace IO
 
-variable {m : Type* -> Type*} {m₀ : Type -> Type}
+variable {m : Type* → Type*} {m₀ : Type → Type}
 variable [Monad m] [MonadLiftT (ST RealWorld) m₀] [ULiftable m₀ m]
 
 /--
-Definition of `runRand` / `runRand` 的定义
+Execute `RandT m α` using the global `stdGenRef` as RNG.
 
-English:
-definition runRand
-  signature: (cmd : RandT m α)
-  body: do
-  let stdGen ← ULiftable.up (stdGenRef.get : m₀ _)
-  let (res, new) ← StateT.run cmd stdGen
-  let _ ← ULiftable.up (stdGenRef.set new.down : m₀ _)
-  pure res
+Note that:
+- `stdGenRef` is not necessarily properly seeded on program startup
+  as of now and will therefore be deterministic.
+- `stdGenRef` is not thread local, hence two threads accessing it
+  at the same time will get the exact same generator.
+-/
+/-
+**IO.runRand** 是 Mathlib 中的一个定义，位于命名空间 `IO`。
+形式化陈述：runRand (cmd : RandT m α) : m α
+参数：cmd : RandT m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 runRand
-  签名: (cmd : RandT m α)
-  定义体: do
-  let stdGen ← ULiftable.up (stdGenRef.get : m₀ _)
-  let (res, new) ← StateT.run cmd stdGen
-  let _ ← ULiftable.up (stdGenRef.set new.down : m₀ _)
-  pure res
+--- 原说明 ---
+Execute `RandT m α` using the global `stdGenRef` as RNG.
+
+Note that:
+- `stdGenRef` is not necessarily properly seeded on program startup
+  as of now and will therefore be deterministic.
+- `stdGenRef` is not thread local, hence two threads accessing it
+  at the same time will get the exact same generator.
 -/
 def runRand (cmd : RandT m α) : m α := do
   let stdGen ← ULiftable.up (stdGenRef.get : m₀ _)
@@ -446,22 +333,19 @@ def runRand (cmd : RandT m α) : m α := do
   let _ ← ULiftable.up (stdGenRef.set new.down : m₀ _)
   pure res
 
-/--
-Definition of `runRandWith` / `runRandWith` 的定义
+/-- Execute `RandT m α` using the global `stdGenRef` as RNG and the given `seed`. -/
+/-
+**IO.runRandWith** 是 Mathlib 中的一个定义，位于命名空间 `IO`。
+形式化陈述：runRandWith (seed : Nat) (cmd : RandT m α) : m α
+参数：seed : Nat；cmd : RandT m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runRandWith
-  signature: (seed : Nat) (cmd : RandT m α)
-  body: do
-pure (← cmd.run (ULift.up <| mkStdGen seed)).1
-
-中文:
-定义 runRandWith
-  签名: (seed : 自然数) (cmd : RandT m α)
-  定义体: do
-pure (← cmd.run (ULift.up <| mkStdGen seed)).1
+--- 原说明 ---
+Execute `RandT m α` using the global `stdGenRef` as RNG and the given `seed`.
 -/
 def runRandWith (seed : Nat) (cmd : RandT m α) : m α := do
-pure (← cmd.run (ULift.up <| mkStdGen seed)).1
+  pure <| (← cmd.run (ULift.up <| mkStdGen seed)).1
 
 end IO
+

@@ -23,398 +23,376 @@ open Set
 namespace Filter
 
 @[nontriviality]
-/--
-theorem `Subsingleton.atTop_eq` / 定理 `Subsingleton.atTop_eq`
-
-English:
-theorem Subsingleton.atTop_eq
-  given: (α) [Subsingleton α] [Preorder α]
-  statement: (atTop : Filter α) = ⊤
-  proof: by
-  refine top_unique fun s hs x => ?_
-  rw [atTop]; rw [ciInf_subsingleton x]; rw [mem_principal] at hs
-  exact hs self_mem_Ici
-
-@[nontriviality]
-
-中文:
-定理 子单例.atTop_eq
-  条件: (α) [子单例 α] [预序 α]
-  结论: (atTop : 滤子 α) = ⊤
-  证明: by
-  refine top_unique fun s hs x => ?_
-  rw [atTop]; rw [ciInf_subsingleton x]; rw [mem_principal] at hs
-  exact hs self_mem_Ici
-
-@[nontriviality]
-
-Depends on / 依赖: H.symm_of_commute, ciInf_subsingleton, mem_principal, mul_comm, self_mem_Ici, symm_of_commute, top_unique
+/-
+**Filter.Subsingleton.atTop_eq** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Subsingleton`。
+形式化陈述：∀ (α : Type u_6) [Subsingleton α] [inst : Preorder α], Filter.atTop = ⊤
+参数：α : Type u_6。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_principal`：∀ {α : Type u_1} {s t : Set α}, s ∈ Filter.princip
+al t ↔ t ⊆ s
+· 使用定理 `ciInf_subsingleton`：∀ {α : Type u_1} {ι : Sort u_4} [inst : Conditionall
+yCompletePartialOrderInf α] [Subsingleton ι] (i : ι) (s : ι → α),   ⨅ i, s i = s
+ i
+· 使用定理 `Filter.atTop.eq_1`：∀ {α : Type u_3} [inst : Preorder α], Filter.atTop = 
+⨅ a, Filter.principal (Set.Ici a)
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
 -/
 theorem Subsingleton.atTop_eq (α) [Subsingleton α] [Preorder α] : (atTop : Filter α) = ⊤ := by
   refine top_unique fun s hs x => ?_
-  rw [atTop]; rw [ciInf_subsingleton x]; rw [mem_principal] at hs
+  rw [atTop, ciInf_subsingleton x, mem_principal] at hs
   exact hs self_mem_Ici
 
 @[nontriviality]
-/--
-theorem `Subsingleton.atBot_eq` / 定理 `Subsingleton.atBot_eq`
-
-English:
-theorem Subsingleton.atBot_eq
-  given: (α) [Subsingleton α] [Preorder α]
-  statement: (atBot : Filter α) = ⊤
-  proof: @Subsingleton.atTop_eq αᵒᵈ _ _
-
-中文:
-定理 子单例.atBot_eq
-  条件: (α) [子单例 α] [预序 α]
-  结论: (atBot : 滤子 α) = ⊤
-  证明: @Subsingleton.atTop_eq αᵒᵈ _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.atTop_eq, atTop_eq
+/-
+**Filter.Subsingleton.atBot_eq** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Subsingleton`。
+形式化陈述：∀ (α : Type u_6) [Subsingleton α] [inst : Preorder α], Filter.atBot = ⊤
+参数：α : Type u_6。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Subsingleton.atTop_eq`：∀ (α : Type u_6) [Subsingleton α] [inst : 
+Preorder α], Filter.atTop = ⊤
+· 使用定理 `OrderDual.instSubsingleton`：∀ (α : Type u_2) [h : Subsingleton α], Subsi
+ngleton αᵒᵈ
 -/
 theorem Subsingleton.atBot_eq (α) [Subsingleton α] [Preorder α] : (atBot : Filter α) = ⊤ :=
   @Subsingleton.atTop_eq αᵒᵈ _ _
 
-/--
-theorem `_root_.Monotone.ciSup_comp_tendsto_atTop` / 定理 `_root_.Monotone.ciSup_comp_tendsto_atTop`
+/-- If `f` is a monotone function with bounded range
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 
-English:
-theorem _root_.Monotone.ciSup_comp_tendsto_atTop
-  statement: [Preorder β] [ConditionallyCompleteLattice γ]
-  proof: by
-  have : Nonempty α := nonempty_of_neBot l
-  have : Nonempty β := .map g ‹_›
-  rw [← csInf_upperBounds_range]; rw [← csInf_upperBounds_range]; rw [← hf.upperBounds_range_comp_tendsto_atTop hg]; rw [Function.comp_def]
-  exacts [hb, hb.mono <| range_comp_subset_range _ _]
+The assumption `BddAbove (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete lattice, see below.
+-/
+/-
+**Filter._root_.Monotone.ciSup_comp_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Fil
+ter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 _root_.递增.ciSup_comp_tendsto_atTop
-  结论: [预序 β] [条件完备格 γ]
-  证明: by
-  have : Nonempty α := nonempty_of_neBot l
-  have : Nonempty β := .map g ‹_›
-  rw [← csInf_upperBounds_range]; rw [← csInf_upperBounds_range]; rw [← hf.upperBounds_range_comp_tendsto_atTop hg]; rw [Function.comp_def]
-  exacts [hb, hb.mono <| range_comp_subset_range _ _]
+--- 原说明 ---
+If `f` is a monotone function with bounded range
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 
-Depends on / 依赖: Function, Function.comp_def, Nonempty, comp_def, csInf_upperBounds_range, exacts, hb.mono, hf.upperBounds_range_comp_tendsto_atTop, nonempty_of_neBot, range_comp_subset_range, upperBounds_range_comp_tendsto_atTop
+The assumption `BddAbove (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete la
+ttice, see below.
 -/
 theorem _root_.Monotone.ciSup_comp_tendsto_atTop [Preorder β] [ConditionallyCompleteLattice γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Monotone f) (hb : BddAbove (range f))
-    {g : α -> β} (hg : Tendsto g l atTop) : ⨆ a, f (g a) = ⨆ b, f b := by
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Monotone f) (hb : BddAbove (range f))
+    {g : α → β} (hg : Tendsto g l atTop) : ⨆ a, f (g a) = ⨆ b, f b := by
   have : Nonempty α := nonempty_of_neBot l
   have : Nonempty β := .map g ‹_›
-  rw [← csInf_upperBounds_range]; rw [← csInf_upperBounds_range]; rw [← hf.upperBounds_range_comp_tendsto_atTop hg]; rw [Function.comp_def]
+  rw [← csInf_upperBounds_range, ← csInf_upperBounds_range,
+    ← hf.upperBounds_range_comp_tendsto_atTop hg, Function.comp_def]
   exacts [hb, hb.mono <| range_comp_subset_range _ _]
 
-/--
-theorem `_root_.Monotone.ciInf_comp_tendsto_atBot` / 定理 `_root_.Monotone.ciInf_comp_tendsto_atBot`
+/-- If `f` is a monotone function with bounded range
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 
-English:
-theorem _root_.Monotone.ciInf_comp_tendsto_atBot
-  statement: [Preorder β] [ConditionallyCompleteLattice γ]
-  proof: hf.dual.ciSup_comp_tendsto_atTop hb hg
+The assumption `BddBelow (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete lattice, see below.
+-/
+/-
+**Filter._root_.Monotone.ciInf_comp_tendsto_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Fil
+ter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 _root_.递增.ciInf_comp_tendsto_atBot
-  结论: [预序 β] [条件完备格 γ]
-  证明: hf.dual.ciSup_comp_tendsto_atTop hb hg
+--- 原说明 ---
+If `f` is a monotone function with bounded range
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 
-Depends on / 依赖: ciSup_comp_tendsto_atTop, hf.dual.ciSup_comp_tendsto_atTop
+The assumption `BddBelow (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete la
+ttice, see below.
 -/
 theorem _root_.Monotone.ciInf_comp_tendsto_atBot [Preorder β] [ConditionallyCompleteLattice γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Monotone f) (hb : BddBelow (range f))
-    {g : α -> β} (hg : Tendsto g l atBot) : ⨅ a, f (g a) = ⨅ b, f b :=
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Monotone f) (hb : BddBelow (range f))
+    {g : α → β} (hg : Tendsto g l atBot) : ⨅ a, f (g a) = ⨅ b, f b :=
   hf.dual.ciSup_comp_tendsto_atTop hb hg
 
-/--
-theorem `_root_.Antitone.ciSup_comp_tendsto_atBot` / 定理 `_root_.Antitone.ciSup_comp_tendsto_atBot`
+/-- If `f` is an antitone function with bounded range
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 
-English:
-theorem _root_.Antitone.ciSup_comp_tendsto_atBot
-  statement: [Preorder β] [ConditionallyCompleteLattice γ]
-  proof: hf.dual_left.ciSup_comp_tendsto_atTop hb hg
+The assumption `BddAbove (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete lattice, see below.
+-/
+/-
+**Filter._root_.Antitone.ciSup_comp_tendsto_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Fil
+ter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 _root_.递减.ciSup_comp_tendsto_atBot
-  结论: [预序 β] [条件完备格 γ]
-  证明: hf.dual_left.ciSup_comp_tendsto_atTop hb hg
+--- 原说明 ---
+If `f` is an antitone function with bounded range
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 
-Depends on / 依赖: ciSup_comp_tendsto_atTop, dual_left, hf.dual_left.ciSup_comp_tendsto_atTop
+The assumption `BddAbove (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete la
+ttice, see below.
 -/
 theorem _root_.Antitone.ciSup_comp_tendsto_atBot [Preorder β] [ConditionallyCompleteLattice γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Antitone f) (hb : BddAbove (range f))
-    {g : α -> β} (hg : Tendsto g l atBot) : ⨆ a, f (g a) = ⨆ b, f b :=
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Antitone f) (hb : BddAbove (range f))
+    {g : α → β} (hg : Tendsto g l atBot) : ⨆ a, f (g a) = ⨆ b, f b :=
   hf.dual_left.ciSup_comp_tendsto_atTop hb hg
 
-/--
-theorem `_root_.Antitone.ciInf_comp_tendsto_atTop` / 定理 `_root_.Antitone.ciInf_comp_tendsto_atTop`
+/-- If `f` is an antitone function with bounded range
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 
-English:
-theorem _root_.Antitone.ciInf_comp_tendsto_atTop
-  statement: [Preorder β] [ConditionallyCompleteLattice γ]
-  proof: hf.dual.ciSup_comp_tendsto_atBot hb hg
+The assumption `BddBelow (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete lattice, see below.
+-/
+/-
+**Filter._root_.Antitone.ciInf_comp_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Fil
+ter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 _root_.递减.ciInf_comp_tendsto_atTop
-  结论: [预序 β] [条件完备格 γ]
-  证明: hf.dual.ciSup_comp_tendsto_atBot hb hg
+--- 原说明 ---
+If `f` is an antitone function with bounded range
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 
-Depends on / 依赖: ciSup_comp_tendsto_atBot, hf.dual.ciSup_comp_tendsto_atBot
+The assumption `BddBelow (range f)` can be omitted,
+if the codomain of `f` is a conditionally complete linear order or a complete la
+ttice, see below.
 -/
 theorem _root_.Antitone.ciInf_comp_tendsto_atTop [Preorder β] [ConditionallyCompleteLattice γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Antitone f) (hb : BddBelow (range f))
-    {g : α -> β} (hg : Tendsto g l atTop) : ⨅ a, f (g a) = ⨅ b, f b :=
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Antitone f) (hb : BddBelow (range f))
+    {g : α → β} (hg : Tendsto g l atTop) : ⨅ a, f (g a) = ⨅ b, f b :=
   hf.dual.ciSup_comp_tendsto_atBot hb hg
 
-/--
-theorem `_root_.Monotone.ciSup_comp_tendsto_atTop_of_linearOrder` / 定理 `_root_.Monotone.ciSup_comp_tendsto_atTop_of_linearOrder`
+/-- If `f` is a monotone function taking values in a conditionally complete linear order
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`. -/
+/-
+**Filter._root_.Monotone.ciSup_comp_tendsto_atTop_of_linearOrder** 是 Mathlib 中的一
+个定理，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Monotone.ciSup_comp_tendsto_atTop_of_linearOrder
-  statement: [Preorder β]
-  proof: by
-  if hb : BddAbove (range f) then
-    exact hf.ciSup_comp_tendsto_atTop hb hg
-  else
-    rw [iSup]; rw [iSup]; rw [csSup_of_not_bddAbove]; rw [csSup_of_not_bddAbove hb]
-    rwa [BddAbove, ← Function.comp_def f g, hf.upperBounds_range_comp_tendsto_atTop hg]
-
-中文:
-定理 _root_.递增.ciSup_comp_tendsto_atTop_of_linearOrder
-  结论: [预序 β]
-  证明: by
-  if hb : BddAbove (range f) then
-    exact hf.ciSup_comp_tendsto_atTop hb hg
-  else
-    rw [iSup]; rw [iSup]; rw [csSup_of_not_bddAbove]; rw [csSup_of_not_bddAbove hb]
-    rwa [BddAbove, ← Function.comp_def f g, hf.upperBounds_range_comp_tendsto_atTop hg]
-
-Depends on / 依赖: BddAbove, Function, Function.comp_def, ciSup_comp_tendsto_atTop, comp_def, csSup_of_not_bddAbove, hf.ciSup_comp_tendsto_atTop, hf.upperBounds_range_comp_tendsto_atTop, upperBounds_range_comp_tendsto_atTop
+--- 原说明 ---
+If `f` is a monotone function taking values in a conditionally complete linear o
+rder
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 -/
 theorem _root_.Monotone.ciSup_comp_tendsto_atTop_of_linearOrder [Preorder β]
-    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Monotone f)
-    {g : α -> β} (hg : Tendsto g l atTop) : ⨆ a, f (g a) = ⨆ b, f b := by
+    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β → γ} (hf : Monotone f)
+    {g : α → β} (hg : Tendsto g l atTop) : ⨆ a, f (g a) = ⨆ b, f b := by
   if hb : BddAbove (range f) then
     exact hf.ciSup_comp_tendsto_atTop hb hg
   else
-    rw [iSup]; rw [iSup]; rw [csSup_of_not_bddAbove]; rw [csSup_of_not_bddAbove hb]
+    rw [iSup, iSup, csSup_of_not_bddAbove, csSup_of_not_bddAbove hb]
     rwa [BddAbove, ← Function.comp_def f g, hf.upperBounds_range_comp_tendsto_atTop hg]
 
-/--
-theorem `_root_.Monotone.ciInf_comp_tendsto_atBot_of_linearOrder` / 定理 `_root_.Monotone.ciInf_comp_tendsto_atBot_of_linearOrder`
+/-- If `f` is a monotone function taking values in a conditionally complete linear order
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`. -/
+/-
+**Filter._root_.Monotone.ciInf_comp_tendsto_atBot_of_linearOrder** 是 Mathlib 中的一
+个定理，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Monotone.ciInf_comp_tendsto_atBot_of_linearOrder
-  statement: [Preorder β]
-  proof: hf.dual.ciSup_comp_tendsto_atTop_of_linearOrder hg
-
-中文:
-定理 _root_.递增.ciInf_comp_tendsto_atBot_of_linearOrder
-  结论: [预序 β]
-  证明: hf.dual.ciSup_comp_tendsto_atTop_of_linearOrder hg
-
-Depends on / 依赖: ciSup_comp_tendsto_atTop_of_linearOrder, hf.dual.ciSup_comp_tendsto_atTop_of_linearOrder
+--- 原说明 ---
+If `f` is a monotone function taking values in a conditionally complete linear o
+rder
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 -/
 theorem _root_.Monotone.ciInf_comp_tendsto_atBot_of_linearOrder [Preorder β]
-    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Monotone f)
-    {g : α -> β} (hg : Tendsto g l atBot) : ⨅ a, f (g a) = ⨅ b, f b :=
+    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β → γ} (hf : Monotone f)
+    {g : α → β} (hg : Tendsto g l atBot) : ⨅ a, f (g a) = ⨅ b, f b :=
   hf.dual.ciSup_comp_tendsto_atTop_of_linearOrder hg
 
-/--
-theorem `_root_.Antitone.ciInf_comp_tendsto_atTop_of_linearOrder` / 定理 `_root_.Antitone.ciInf_comp_tendsto_atTop_of_linearOrder`
+/-- If `f` is an antitone function taking values in a conditionally complete linear order
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`. -/
+/-
+**Filter._root_.Antitone.ciInf_comp_tendsto_atTop_of_linearOrder** 是 Mathlib 中的一
+个定理，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Antitone.ciInf_comp_tendsto_atTop_of_linearOrder
-  statement: [Preorder β]
-  proof: hf.dual_left.ciInf_comp_tendsto_atBot_of_linearOrder hg
-
-中文:
-定理 _root_.递减.ciInf_comp_tendsto_atTop_of_linearOrder
-  结论: [预序 β]
-  证明: hf.dual_left.ciInf_comp_tendsto_atBot_of_linearOrder hg
-
-Depends on / 依赖: ciInf_comp_tendsto_atBot_of_linearOrder, dual_left, hf.dual_left.ciInf_comp_tendsto_atBot_of_linearOrder
+--- 原说明 ---
+If `f` is an antitone function taking values in a conditionally complete linear 
+order
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 -/
 theorem _root_.Antitone.ciInf_comp_tendsto_atTop_of_linearOrder [Preorder β]
-    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Antitone f)
-    {g : α -> β} (hg : Tendsto g l atTop) : ⨅ a, f (g a) = ⨅ b, f b :=
+    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β → γ} (hf : Antitone f)
+    {g : α → β} (hg : Tendsto g l atTop) : ⨅ a, f (g a) = ⨅ b, f b :=
   hf.dual_left.ciInf_comp_tendsto_atBot_of_linearOrder hg
 
-/--
-theorem `_root_.Antitone.ciSup_comp_tendsto_atBot_of_linearOrder` / 定理 `_root_.Antitone.ciSup_comp_tendsto_atBot_of_linearOrder`
+/-- If `f` is an antitone function taking values in a conditionally complete linear order
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`. -/
+/-
+**Filter._root_.Antitone.ciSup_comp_tendsto_atBot_of_linearOrder** 是 Mathlib 中的一
+个定理，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Antitone.ciSup_comp_tendsto_atBot_of_linearOrder
-  statement: [Preorder β]
-  proof: hf.dual_left.ciSup_comp_tendsto_atTop_of_linearOrder hg
-
-中文:
-定理 _root_.递减.ciSup_comp_tendsto_atBot_of_linearOrder
-  结论: [预序 β]
-  证明: hf.dual_left.ciSup_comp_tendsto_atTop_of_linearOrder hg
-
-Depends on / 依赖: ciSup_comp_tendsto_atTop_of_linearOrder, dual_left, hf.dual_left.ciSup_comp_tendsto_atTop_of_linearOrder
+--- 原说明 ---
+If `f` is an antitone function taking values in a conditionally complete linear 
+order
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 -/
 theorem _root_.Antitone.ciSup_comp_tendsto_atBot_of_linearOrder [Preorder β]
-    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Antitone f)
-    {g : α -> β} (hg : Tendsto g l atBot) : ⨆ a, f (g a) = ⨆ b, f b :=
+    [ConditionallyCompleteLinearOrder γ] {l : Filter α} [l.NeBot] {f : β → γ} (hf : Antitone f)
+    {g : α → β} (hg : Tendsto g l atBot) : ⨆ a, f (g a) = ⨆ b, f b :=
   hf.dual_left.ciSup_comp_tendsto_atTop_of_linearOrder hg
 
-/--
-theorem `_root_.Monotone.iSup_comp_tendsto_atTop` / 定理 `_root_.Monotone.iSup_comp_tendsto_atTop`
+/-- If `f` is a monotone function taking values in a complete lattice
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`. -/
+/-
+**Filter._root_.Monotone.iSup_comp_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Filt
+er`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Monotone.iSup_comp_tendsto_atTop
-  proof: hf.ciSup_comp_tendsto_atTop (OrderTop.bddAbove _) hg
-
-中文:
-定理 _root_.递增.iSup_comp_tendsto_atTop
-  证明: hf.ciSup_comp_tendsto_atTop (OrderTop.bddAbove _) hg
-
-Depends on / 依赖: OrderTop, OrderTop.bddAbove, bddAbove, ciSup_comp_tendsto_atTop, hf.ciSup_comp_tendsto_atTop
+--- 原说明 ---
+If `f` is a monotone function taking values in a complete lattice
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 -/
 theorem _root_.Monotone.iSup_comp_tendsto_atTop
     [Preorder β] [ConditionallyCompleteLattice γ] [OrderTop γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Monotone f) {g : α -> β} (hg : Tendsto g l atTop) :
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Monotone f) {g : α → β} (hg : Tendsto g l atTop) :
     ⨆ a, f (g a) = ⨆ b, f b :=
   hf.ciSup_comp_tendsto_atTop (OrderTop.bddAbove _) hg
 
-/--
-theorem `_root_.Monotone.iInf_comp_tendsto_atBot` / 定理 `_root_.Monotone.iInf_comp_tendsto_atBot`
+/-- If `f` is a monotone function taking values in a complete lattice
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`. -/
+/-
+**Filter._root_.Monotone.iInf_comp_tendsto_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Filt
+er`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Monotone.iInf_comp_tendsto_atBot
-  proof: hf.ciInf_comp_tendsto_atBot (OrderBot.bddBelow _) hg
-
-中文:
-定理 _root_.递增.iInf_comp_tendsto_atBot
-  证明: hf.ciInf_comp_tendsto_atBot (OrderBot.bddBelow _) hg
-
-Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, ciInf_comp_tendsto_atBot, hf.ciInf_comp_tendsto_atBot
+--- 原说明 ---
+If `f` is a monotone function taking values in a complete lattice
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 -/
 theorem _root_.Monotone.iInf_comp_tendsto_atBot
     [Preorder β] [ConditionallyCompleteLattice γ] [OrderBot γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Monotone f) {g : α -> β} (hg : Tendsto g l atBot) :
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Monotone f) {g : α → β} (hg : Tendsto g l atBot) :
     ⨅ a, f (g a) = ⨅ b, f b :=
   hf.ciInf_comp_tendsto_atBot (OrderBot.bddBelow _) hg
 
-/--
-theorem `_root_.Antitone.iSup_comp_tendsto_atBot` / 定理 `_root_.Antitone.iSup_comp_tendsto_atBot`
+/-- If `f` is an antitone function taking values in a complete lattice
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`. -/
+/-
+**Filter._root_.Antitone.iSup_comp_tendsto_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Filt
+er`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Antitone.iSup_comp_tendsto_atBot
-  proof: hf.ciSup_comp_tendsto_atBot (OrderTop.bddAbove _) hg
-
-中文:
-定理 _root_.递减.iSup_comp_tendsto_atBot
-  证明: hf.ciSup_comp_tendsto_atBot (OrderTop.bddAbove _) hg
-
-Depends on / 依赖: OrderTop, OrderTop.bddAbove, bddAbove, ciSup_comp_tendsto_atBot, hf.ciSup_comp_tendsto_atBot
+--- 原说明 ---
+If `f` is an antitone function taking values in a complete lattice
+and `g` tends to `atBot` along a nontrivial filter,
+then the indexed supremum of `f ∘ g` is equal to the indexed supremum of `f`.
 -/
 theorem _root_.Antitone.iSup_comp_tendsto_atBot
     [Preorder β] [ConditionallyCompleteLattice γ] [OrderTop γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Antitone f) {g : α -> β} (hg : Tendsto g l atBot) :
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Antitone f) {g : α → β} (hg : Tendsto g l atBot) :
     ⨆ a, f (g a) = ⨆ b, f b :=
   hf.ciSup_comp_tendsto_atBot (OrderTop.bddAbove _) hg
 
-/--
-theorem `_root_.Antitone.iInf_comp_tendsto_atTop` / 定理 `_root_.Antitone.iInf_comp_tendsto_atTop`
+/-- If `f` is an antitone function taking values in a complete lattice
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`. -/
+/-
+**Filter._root_.Antitone.iInf_comp_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Filt
+er`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Antitone.iInf_comp_tendsto_atTop
-  proof: hf.ciInf_comp_tendsto_atTop (OrderBot.bddBelow _) hg
-
-中文:
-定理 _root_.递减.iInf_comp_tendsto_atTop
-  证明: hf.ciInf_comp_tendsto_atTop (OrderBot.bddBelow _) hg
-
-Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, ciInf_comp_tendsto_atTop, hf.ciInf_comp_tendsto_atTop
+--- 原说明 ---
+If `f` is an antitone function taking values in a complete lattice
+and `g` tends to `atTop` along a nontrivial filter,
+then the indexed infimum of `f ∘ g` is equal to the indexed infimum of `f`.
 -/
 theorem _root_.Antitone.iInf_comp_tendsto_atTop
     [Preorder β] [ConditionallyCompleteLattice γ] [OrderBot γ]
-    {l : Filter α} [l.NeBot] {f : β -> γ} (hf : Antitone f) {g : α -> β} (hg : Tendsto g l atTop) :
+    {l : Filter α} [l.NeBot] {f : β → γ} (hf : Antitone f) {g : α → β} (hg : Tendsto g l atTop) :
     ⨅ a, f (g a) = ⨅ b, f b :=
   hf.ciInf_comp_tendsto_atTop (OrderBot.bddBelow _) hg
 
-/--
-theorem `_root_.Monotone.iUnion_comp_tendsto_atTop` / 定理 `_root_.Monotone.iUnion_comp_tendsto_atTop`
+/-- If `s` is a monotone family of sets and `f` tends to `atTop` along a nontrivial filter,
+then the indexed union of `s ∘ f` is equal to the indexed union of `s`. -/
+/-
+**Filter._root_.Monotone.iUnion_comp_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+lter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Monotone.iUnion_comp_tendsto_atTop
-  statement: [Preorder β] {l : Filter α} [l.NeBot]
-  proof: hs.iSup_comp_tendsto_atTop hf
-
-中文:
-定理 _root_.递增.iUnion_comp_tendsto_atTop
-  结论: [预序 β] {l : 滤子 α} [l.NeBot]
-  证明: hs.iSup_comp_tendsto_atTop hf
-
-Depends on / 依赖: hs.iSup_comp_tendsto_atTop, iSup_comp_tendsto_atTop
+--- 原说明 ---
+If `s` is a monotone family of sets and `f` tends to `atTop` along a nontrivial 
+filter,
+then the indexed union of `s ∘ f` is equal to the indexed union of `s`.
 -/
 theorem _root_.Monotone.iUnion_comp_tendsto_atTop [Preorder β] {l : Filter α} [l.NeBot]
-    {s : β -> Set γ} (hs : Monotone s) {f : α -> β} (hf : Tendsto f l atTop) :
+    {s : β → Set γ} (hs : Monotone s) {f : α → β} (hf : Tendsto f l atTop) :
     ⋃ a, s (f a) = ⋃ b, s b :=
   hs.iSup_comp_tendsto_atTop hf
 
-/--
-theorem `_root_.Monotone.iInter_comp_tendsto_atBot` / 定理 `_root_.Monotone.iInter_comp_tendsto_atBot`
+/-- If `s` is a monotone family of sets and `f` tends to `atBot` along a nontrivial filter,
+then the indexed intersection of `s ∘ f` is equal to the indexed intersection of `s`. -/
+/-
+**Filter._root_.Monotone.iInter_comp_tendsto_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+lter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Monotone.iInter_comp_tendsto_atBot
-  statement: [Preorder β] {l : Filter α} [l.NeBot]
-  proof: hs.iInf_comp_tendsto_atBot hf
-
-中文:
-定理 _root_.递增.i整数er_comp_tendsto_atBot
-  结论: [预序 β] {l : 滤子 α} [l.NeBot]
-  证明: hs.iInf_comp_tendsto_atBot hf
-
-Depends on / 依赖: hs.iInf_comp_tendsto_atBot, iInf_comp_tendsto_atBot
+--- 原说明 ---
+If `s` is a monotone family of sets and `f` tends to `atBot` along a nontrivial 
+filter,
+then the indexed intersection of `s ∘ f` is equal to the indexed intersection of
+ `s`.
 -/
 theorem _root_.Monotone.iInter_comp_tendsto_atBot [Preorder β] {l : Filter α} [l.NeBot]
-    {s : β -> Set γ} (hs : Monotone s) {f : α -> β} (hf : Tendsto f l atBot) :
+    {s : β → Set γ} (hs : Monotone s) {f : α → β} (hf : Tendsto f l atBot) :
     ⋂ a, s (f a) = ⋂ b, s b :=
   hs.iInf_comp_tendsto_atBot hf
 
-/--
-theorem `_root_.Antitone.iInter_comp_tendsto_atTop` / 定理 `_root_.Antitone.iInter_comp_tendsto_atTop`
+/-- If `s` is an antitone family of sets and `f` tends to `atTop` along a nontrivial filter,
+then the indexed intersection of `s ∘ f` is equal to the indexed intersection of `s`. -/
+/-
+**Filter._root_.Antitone.iInter_comp_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+lter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Antitone.iInter_comp_tendsto_atTop
-  statement: [Preorder β] {l : Filter α} [l.NeBot]
-  proof: hs.iInf_comp_tendsto_atTop hf
-
-中文:
-定理 _root_.递减.i整数er_comp_tendsto_atTop
-  结论: [预序 β] {l : 滤子 α} [l.NeBot]
-  证明: hs.iInf_comp_tendsto_atTop hf
-
-Depends on / 依赖: hs.iInf_comp_tendsto_atTop, iInf_comp_tendsto_atTop
+--- 原说明 ---
+If `s` is an antitone family of sets and `f` tends to `atTop` along a nontrivial
+ filter,
+then the indexed intersection of `s ∘ f` is equal to the indexed intersection of
+ `s`.
 -/
 theorem _root_.Antitone.iInter_comp_tendsto_atTop [Preorder β] {l : Filter α} [l.NeBot]
-    {s : β -> Set γ} (hs : Antitone s) {f : α -> β} (hf : Tendsto f l atTop) :
+    {s : β → Set γ} (hs : Antitone s) {f : α → β} (hf : Tendsto f l atTop) :
     ⋂ a, s (f a) = ⋂ b, s b :=
   hs.iInf_comp_tendsto_atTop hf
 
-/--
-theorem `_root_.Antitone.iUnion_comp_tendsto_atBot` / 定理 `_root_.Antitone.iUnion_comp_tendsto_atBot`
+/-- If `s` is a monotone family of sets and `f` tends to `atBot` along a nontrivial filter,
+then the indexed union of `s ∘ f` is equal to the indexed union of `s`. -/
+/-
+**Filter._root_.Antitone.iUnion_comp_tendsto_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+lter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Antitone.iUnion_comp_tendsto_atBot
-  statement: [Preorder β] {l : Filter α} [l.NeBot]
-  proof: hs.iSup_comp_tendsto_atBot hf
-
-中文:
-定理 _root_.递减.iUnion_comp_tendsto_atBot
-  结论: [预序 β] {l : 滤子 α} [l.NeBot]
-  证明: hs.iSup_comp_tendsto_atBot hf
-
-Depends on / 依赖: hs.iSup_comp_tendsto_atBot, iSup_comp_tendsto_atBot
+--- 原说明 ---
+If `s` is a monotone family of sets and `f` tends to `atBot` along a nontrivial 
+filter,
+then the indexed union of `s ∘ f` is equal to the indexed union of `s`.
 -/
 theorem _root_.Antitone.iUnion_comp_tendsto_atBot [Preorder β] {l : Filter α} [l.NeBot]
-    {s : β -> Set γ} (hs : Antitone s) {f : α -> β} (hf : Tendsto f l atBot) :
+    {s : β → Set γ} (hs : Antitone s) {f : α → β} (hf : Tendsto f l atBot) :
     ⋃ a, s (f a) = ⋃ b, s b :=
   hs.iSup_comp_tendsto_atBot hf
 
 end Filter
+

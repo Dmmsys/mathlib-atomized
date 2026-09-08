@@ -45,22 +45,17 @@ variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D]
 /-- The canonical map from the (global) sections of a sheaf of modules
 to the (global) sections of its pushforward. -/
 @[simps]
-/--
-Definition of `pushforwardSections` / `pushforwardSections` 的定义
+/-
+**SheafOfModules.pushforwardSections** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：pushforwardSections {M : SheafOfModules.{v} R} (s : M.sections) : ((pushfo
+rward φ).obj M).sections where val _
+参数：s : M.sections。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushforwardSections
-  signature: {M : SheafOfModules.{v} R} (s : M.sections)
-  body: s.val _
-  property _ := s.property _
-
-中文:
-定义 pushforwardSections
-  签名: {M : 模层.{v} R} (s : M.sections)
-  定义体: s.val _
-  property _ := s.property _
-
-Depends on / 依赖: s.val
+--- 原说明 ---
+The canonical map from the (global) sections of a sheaf of modules
+to the (global) sections of its pushforward.
 -/
 def pushforwardSections {M : SheafOfModules.{v} R} (s : M.sections) :
     ((pushforward φ).obj M).sections where
@@ -68,93 +63,96 @@ def pushforwardSections {M : SheafOfModules.{v} R} (s : M.sections) :
   property _ := s.property _
 
 variable (M) in
-/--
-lemma `bijective_pushforwardSections` / 引理 `bijective_pushforwardSections`
-
-English:
-lemma bijective_pushforwardSections
-  given: [F.Final]
-  proof: Functor.bijective_sectionsPrecomp _ _
-
-中文:
-引理 bijective_pushforwardSections
-  条件: [F.终]
-  证明: Functor.bijective_sectionsPrecomp _ _
+/-
+**SheafOfModules.bijective_pushforwardSections** 是 Mathlib 中的一个引理，位于命名空间 `SheafO
+fModules`。
+形式化陈述：bijective_pushforwardSections [F.Final] : Function.Bijective (pushforwardS
+ections φ (M
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.bijective_sectionsPrecomp`：bijective_sectionsPrec
+omp (F : C ⥤ D) (P : D ⥤ Type w) [F.Initial] : Function.Bijective (F.sectionsPre
+comp (P
 -/
 lemma bijective_pushforwardSections [F.Final] :
     Function.Bijective (pushforwardSections φ (M := M)) :=
   Functor.bijective_sectionsPrecomp _ _
 
-/--
-Definition of `unitToPushforwardObjUnit` / `unitToPushforwardObjUnit` 的定义
+/-- The canonical morphism `unit S ⟶ (pushforward.{u} φ).obj (unit R)`
+of sheaves of modules corresponding to a continuous map between ringed sites. -/
+/-
+**SheafOfModules.unitToPushforwardObjUnit** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModu
+les`。
+形式化陈述：unitToPushforwardObjUnit : unit S ⟶ (pushforward.{u} φ).obj (unit R) where
+ val.app X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitToPushforwardObjUnit
-  signature: : unit S ⟶ (pushforward.{u} φ).obj (unit R) where
-  body: ModuleCat.homMk ((forget₂ RingCat AddCommGrpCat).map (φ.hom.app X)) (fun r => by
-    ext m
-    exact ((φ.hom.app X).hom.map_mul _ _).symm)
-  val.naturality f := by
-    ext
-    exact ConcreteCategory.congr_hom (φ.hom.naturality f) _
-
-中文:
-定义 unitToPushforwardObjUnit
-  签名: : unit S ⟶ (pushforward.{u} φ).obj (unit R) where
-  定义体: ModuleCat.homMk ((forget₂ RingCat AddCommGrpCat).map (φ.hom.app X)) (fun r => by
-    ext m
-    exact ((φ.hom.app X).hom.map_mul _ _).symm)
-  val.naturality f := by
-    ext
-    exact ConcreteCategory.congr_hom (φ.hom.naturality f) _
-
-Depends on / 依赖: AddCommGrpCat, ConcreteCategory, ConcreteCategory.congr_hom, ModuleCat, ModuleCat.homMk, RingCat, congr_hom, hom.app, hom.map_mul, hom.naturality, map_mul, naturality, val.naturality
+--- 原说明 ---
+The canonical morphism `unit S ⟶ (pushforward.{u} φ).obj (unit R)`
+of sheaves of modules corresponding to a continuous map between ringed sites.
 -/
 noncomputable def unitToPushforwardObjUnit : unit S ⟶ (pushforward.{u} φ).obj (unit R) where
-  val.app X := ModuleCat.homMk ((forget₂ RingCat AddCommGrpCat).map (φ.hom.app X)) (fun r => by
+  val.app X := ModuleCat.homMk ((forget₂ RingCat AddCommGrpCat).map (φ.hom.app X)) (fun r ↦ by
     ext m
     exact ((φ.hom.app X).hom.map_mul _ _).symm)
   val.naturality f := by
     ext
     exact ConcreteCategory.congr_hom (φ.hom.naturality f) _
-
-/--
-lemma `unitToPushforwardObjUnit_val_app_apply` / 引理 `unitToPushforwardObjUnit_val_app_apply`
-
-English:
-lemma unitToPushforwardObjUnit_val_app_apply
-  given: {X : Cᵒᵖ} (a : S.obj.obj X)
-  proof: rfl
-
-中文:
-引理 unitToPushforwardObjUnit_val_app_apply
-  条件: {X : Cᵒᵖ} (a : S.obj.obj X)
-  证明: rfl
+/-
+**SheafOfModules.unitToPushforwardObjUnit_val_app_apply** 是 Mathlib 中的一个引理，位于命名空
+间 `SheafOfModules`。
+形式化陈述：unitToPushforwardObjUnit_val_app_apply {X : Cᵒᵖ} (a : S.obj.obj X) : (unit
+ToPushforwardObjUnit φ).val.app X a = φ.hom.app X a
+参数：a : S.obj.obj X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma unitToPushforwardObjUnit_val_app_apply {X : Cᵒᵖ} (a : S.obj.obj X) :
     (unitToPushforwardObjUnit φ).val.app X a = φ.hom.app X a := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `pushforwardSections_unitHomEquiv` / 引理 `pushforwardSections_unitHomEquiv`
-
-English:
-lemma pushforwardSections_unitHomEquiv
-  proof: by
-  ext X
-  have := unitToPushforwardObjUnit_val_app_apply φ (X := X) 1
-  simp [this, map_one]
-  rfl
-
-中文:
-引理 pushforwardSections_unitHomEquiv
-  证明: by
-  ext X
-  have := unitToPushforwardObjUnit_val_app_apply φ (X := X) 1
-  simp [this, map_one]
-  rfl
-
-Depends on / 依赖: map_one, unitToPushforwardObjUnit_val_app_apply
+/-
+**SheafOfModules.pushforwardSections_unitHomEquiv** 是 Mathlib 中的一个引理，位于命名空间 `She
+afOfModules`。
+形式化陈述：pushforwardSections_unitHomEquiv {M : SheafOfModules.{u} R} (f : unit R ⟶ 
+M) : pushforwardSections φ (M.unitHomEquiv f) = ((pushforward φ).obj M).unitHomE
+quiv (unitToPushforwardObjUnit φ ≫ (pushforward φ).map f)
+参数：f : unit R ⟶ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `PresheafOfModules.sections_ext`：sections_ext {M : PresheafOfModules.{v} 
+R} (s t : M.sections) (h : forall (X : Cᵒᵖ), s.val X = t.val X) : s = t
+· 使用引理 `SheafOfModules.unitToPushforwardObjUnit_val_app_apply`：unitToPushforward
+ObjUnit_val_app_apply {X : Cᵒᵖ} (a : S.obj.obj X) : (unitToPushforwardObjUnit φ)
+.val.app X a = φ.hom.app X a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SheafOfModules.pushforwardSections_coe`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {J : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `SheafOfModules.pushforward_map_val`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {J : CategoryTheor…
+· 使用引理 `PresheafOfModules.comp_app`：comp_app {M₁ M₂ M₃ : PresheafOfModules R} (f
+ : M₁ ⟶ M₂) (g : M₂ ⟶ M₃) (X : Cᵒᵖ) : (f ≫ g).app X = f.app X ≫ g.app X
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 lemma pushforwardSections_unitHomEquiv
     {M : SheafOfModules.{u} R} (f : unit R ⟶ M) :
@@ -168,150 +166,99 @@ lemma pushforwardSections_unitHomEquiv
 
 variable [(pushforward.{u} φ).IsRightAdjoint]
 
-/--
-Definition of `pullbackObjUnitToUnit` / `pullbackObjUnitToUnit` 的定义
+/-- The canonical morphism `(pullback.{u} φ).obj (unit S) ⟶ unit R`
+of sheaves of modules corresponding to a continuous map between ringed sites. -/
+/-
+**SheafOfModules.pullbackObjUnitToUnit** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules
+`。
+形式化陈述：pullbackObjUnitToUnit : (pullback.{u} φ).obj (unit S) ⟶ unit R
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition pullbackObjUnitToUnit
-  signature: :
-  body: ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).symm (unitToPushforwardObjUnit φ)
-
-@[simp]
-
-中文:
-定义 pullbackObjUnitToUnit
-  签名: :
-  定义体: ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).symm (unitToPushforwardObjUnit φ)
-
-@[simp]
-
-Depends on / 依赖: homEquiv, pullbackPushforwardAdjunction, unitToPushforwardObjUnit
+--- 原说明 ---
+The canonical morphism `(pullback.{u} φ).obj (unit S) ⟶ unit R`
+of sheaves of modules corresponding to a continuous map between ringed sites.
 -/
 noncomputable def pullbackObjUnitToUnit :
     (pullback.{u} φ).obj (unit S) ⟶ unit R :=
   ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).symm (unitToPushforwardObjUnit φ)
 
 @[simp]
-/--
-lemma `pullbackPushforwardAdjunction_homEquiv_symm_unitToPushforwardObjUnit` / 引理 `pullbackPushforwardAdjunction_homEquiv_symm_unitToPushforwardObjUnit`
-
-English:
-lemma pullbackPushforwardAdjunction_homEquiv_symm_unitToPushforwardObjUnit
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 pullbackPushforwardAdjunction_homEquiv_symm_unitToPushforwardObjUnit
-  证明: rfl
-
-@[simp]
+/-
+**SheafOfModules.pullbackPushforwardAdjunction_homEquiv_symm_unitToPushforwardOb
+jUnit** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：pullbackPushforwardAdjunction_homEquiv_symm_unitToPushforwardObjUnit : ((p
+ullbackPushforwardAdjunction.{u} φ).homEquiv _ _).symm (unitToPushforwardObjUnit
+ φ) = pullbackObjUnitToUnit φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma pullbackPushforwardAdjunction_homEquiv_symm_unitToPushforwardObjUnit :
     ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).symm (unitToPushforwardObjUnit φ) =
       pullbackObjUnitToUnit φ := rfl
 
 @[simp]
-/--
-lemma `pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit` / 引理 `pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit`
-
-English:
-lemma pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit
-  proof: Equiv.apply_symm_apply _ _
-
-中文:
-引理 pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit
-  证明: Equiv.apply_symm_apply _ _
-
-Depends on / 依赖: Equiv.apply_symm_apply, apply_symm_apply
+/-
+**SheafOfModules.pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit** 
+是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+形式化陈述：pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit : (pullbackPu
+shforwardAdjunction.{u} φ).homEquiv _ _ (pullbackObjUnitToUnit φ) = unitToPushfo
+rwardObjUnit φ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 lemma pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit :
     (pullbackPushforwardAdjunction.{u} φ).homEquiv _ _ (pullbackObjUnitToUnit φ) =
       unitToPushforwardObjUnit φ :=
   Equiv.apply_symm_apply _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Final]
-  signature: : IsIso (pullbackObjUnitToUnit φ)
-  body: by
-  rw [isIso_iff_coyoneda_map_bijective]
-  intro M
-  rw [← ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).bijective.of_comp_iff']; rw [← (unitHomEquiv _).bijective.of_comp_iff']
-  convert! (bijective_pushforwardSections φ M).comp (unitHomEquiv _).bijective
-  ext f : 1
-  dsimp
-  rw [pushforwardSections_unitHomEquiv]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [Adjunction.homEquiv_naturality_right]; rw [pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit]
-
-中文:
-实例 [F.终]
-  签名: : 是同构 (pullbackObjUnitToUnit φ)
-  定义体: by
-  rw [isIso_iff_coyoneda_map_bijective]
-  intro M
-  rw [← ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).bijective.of_comp_iff']; rw [← (unitHomEquiv _).bijective.of_comp_iff']
-  convert! (bijective_pushforwardSections φ M).comp (unitHomEquiv _).bijective
-  ext f : 1
-  dsimp
-  rw [pushforwardSections_unitHomEquiv]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [Adjunction.homEquiv_naturality_right]; rw [pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_right, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, apply_eq_iff_eq, bijective, bijective.of_comp_iff, bijective_pushforwardSections, convert, homEquiv, homEquiv_naturality_right, isIso_iff_coyoneda_map_bijective, of_comp_iff, pullbackPushforwardAdjunction, pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit, pushforwardSections_unitHomEquiv, unitHomEquiv
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.Final] : IsIso (pullbackObjUnitToUnit φ) := by
   rw [isIso_iff_coyoneda_map_bijective]
   intro M
-  rw [← ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).bijective.of_comp_iff']; rw [← (unitHomEquiv _).bijective.of_comp_iff']
+  rw [← ((pullbackPushforwardAdjunction.{u} φ).homEquiv _ _).bijective.of_comp_iff',
+    ← (unitHomEquiv _).bijective.of_comp_iff']
   convert! (bijective_pushforwardSections φ M).comp (unitHomEquiv _).bijective
   ext f : 1
   dsimp
-  rw [pushforwardSections_unitHomEquiv]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [Adjunction.homEquiv_naturality_right]; rw [pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit]
+  rw [pushforwardSections_unitHomEquiv, EmbeddingLike.apply_eq_iff_eq,
+    Adjunction.homEquiv_naturality_right,
+    pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit]
 
 variable [HasWeakSheafify J AddCommGrpCat.{u}] [HasWeakSheafify K AddCommGrpCat.{u}]
   [J.WEqualsLocallyBijective AddCommGrpCat.{u}]
   [K.WEqualsLocallyBijective AddCommGrpCat.{u}] [F.Final]
 
-/--
-Definition of `pullbackObjFreeIso` / `pullbackObjFreeIso` 的定义
+/-- The pullback of a free sheaf of modules is a free sheaf of modules. -/
+/-
+**SheafOfModules.pullbackObjFreeIso** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModules`。
+形式化陈述：pullbackObjFreeIso (I : Type u) : (pullback φ).obj (free I) ≅ free I
+参数：I : Type u。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.instIsIsoPullbackObjUnitToUnitOfFinal`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory
+.Category.{v₂, u₂} D]   {J : CategoryTheor…
 
-English:
-definition pullbackObjFreeIso
-  signature: (I : Type u)
-  body: (asIso (sigmaComparison _ _)).symm ≪≫
-    Sigma.mapIso (fun _ => asIso (pullbackObjUnitToUnit φ))
-
-中文:
-定义 pullbackObjFreeIso
-  签名: (I : 类型u)
-  定义体: (asIso (sigmaComparison _ _)).symm ≪≫
-    Sigma.mapIso (fun _ => asIso (pullbackObjUnitToUnit φ))
-
-Depends on / 依赖: Sigma.mapIso, mapIso, pullbackObjUnitToUnit, sigmaComparison
+--- 原说明 ---
+The pullback of a free sheaf of modules is a free sheaf of modules.
 -/
 noncomputable def pullbackObjFreeIso (I : Type u) :
     (pullback φ).obj (free I) ≅ free I :=
   (asIso (sigmaComparison _ _)).symm ≪≫
-    Sigma.mapIso (fun _ => asIso (pullbackObjUnitToUnit φ))
+    Sigma.mapIso (fun _ ↦ asIso (pullbackObjUnitToUnit φ))
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `pullback_map_ιFree_comp_pullbackObjFreeIso_hom` / 引理 `pullback_map_ιFree_comp_pullbackObjFreeIso_hom`
-
-English:
-lemma pullback_map_ιFree_comp_pullbackObjFreeIso_hom
-  given: {I : Type u} (i : I)
-  proof: by
-  simp [pullbackObjFreeIso, ιFree]
-
-中文:
-引理 pullback_map_ιFree_comp_pullbackObjFreeIso_hom
-  条件: {I : 类型u} (i : I)
-  证明: by
-  simp [pullbackObjFreeIso, ιFree]
-
-Depends on / 依赖: pullbackObjFreeIso
+/-
+**SheafOfModules.pullback_map_** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma pullback_map_ιFree_comp_pullbackObjFreeIso_hom {I : Type u} (i : I) :
     (pullback φ).map (ιFree i) ≫ (pullbackObjFreeIso φ I).hom =
@@ -320,46 +267,69 @@ lemma pullback_map_ιFree_comp_pullbackObjFreeIso_hom {I : Type u} (i : I) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `pullbackObjFreeIso_hom_naturality` / 引理 `pullbackObjFreeIso_hom_naturality`
-
-English:
-lemma pullbackObjFreeIso_hom_naturality
-  given: {I J : Type u} (f : I -> J)
-  proof: Cofan.IsColimit.hom_ext (isColimitCofanMkObjOfIsColimit (pullback φ) _ _
-    (isColimitFreeCofan (R := S) I)) _ _ (fun i => by simp [← Functor.map_comp_assoc])
-
-中文:
-引理 pullbackObjFreeIso_hom_naturality
-  条件: {I J : 类型u} (f : I -> J)
-  证明: Cofan.IsColimit.hom_ext (isColimitCofanMkObjOfIsColimit (pullback φ) _ _
-    (isColimitFreeCofan (R := S) I)) _ _ (fun i => by simp [← Functor.map_comp_assoc])
-
-Depends on / 依赖: Cofan.IsColimit.hom_ext, Functor, Functor.map_comp_assoc, IsColimit, hom_ext, isColimitCofanMkObjOfIsColimit, isColimitFreeCofan, map_comp_assoc, pullback
+/-
+**SheafOfModules.pullbackObjFreeIso_hom_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Sh
+eafOfModules`。
+形式化陈述：pullbackObjFreeIso_hom_naturality {I J : Type u} (f : I -> J) : (pullback 
+φ).map (freeMap f) ≫ (pullbackObjFreeIso φ J).hom = (pullbackObjFreeIso φ I).hom
+ ≫ freeMap f
+参数：f : I -> J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cofan.IsColimit.hom_ext`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {I : Type u_1} {F : I → C} {c : CategoryTheory.L
+imits.Cofan F}   (hc : CategoryTheo…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfShapeOfIsLeftAdjoint`：∀ {J
+ : Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1,
+ u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `SheafOfModules.instIsLeftAdjointPullback`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {J : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `SheafOfModules.ιFree_freeMap`：ιFree_freeMap (i : I) : ιFree (R
+· 使用引理 `SheafOfModules.pullback_map_ιFree_comp_pullbackObjFreeIso_hom`：pullback_
+map_ιFree_comp_pullbackObjFreeIso_hom {I : Type u} (i : I) : (pullback φ).map (ι
+Free i) ≫ (pullbackObjFreeIso φ I).hom = pullbackOb…
+· 使用定理 `SheafOfModules.pullback_map_ιFree_comp_pullbackObjFreeIso_hom_assoc`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   {J : CategoryTheor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma pullbackObjFreeIso_hom_naturality {I J : Type u} (f : I -> J) :
+lemma pullbackObjFreeIso_hom_naturality {I J : Type u} (f : I → J) :
     (pullback φ).map (freeMap f) ≫ (pullbackObjFreeIso φ J).hom =
       (pullbackObjFreeIso φ I).hom ≫ freeMap f :=
   Cofan.IsColimit.hom_ext (isColimitCofanMkObjOfIsColimit (pullback φ) _ _
-    (isColimitFreeCofan (R := S) I)) _ _ (fun i => by simp [← Functor.map_comp_assoc])
+    (isColimitFreeCofan (R := S) I)) _ _ (fun i ↦ by simp [← Functor.map_comp_assoc])
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `freeFunctorCompPullbackIso` / `freeFunctorCompPullbackIso` 的定义
+/-- The canonical isomorphism `freeFunctor ⋙ pullback φ ≅ freeFunctor` for a
+continuous map between ringed sites, when the underlying functor between the sites
+is final. -/
+/-
+**SheafOfModules.freeFunctorCompPullbackIso** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfMo
+dules`。
+形式化陈述：freeFunctorCompPullbackIso : freeFunctor ⋙ pullback φ ≅ freeFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition freeFunctorCompPullbackIso
-  signature: : freeFunctor ⋙ pullback φ ≅ freeFunctor
-  body: NatIso.ofComponents (fun X => pullbackObjFreeIso φ X)
-
-中文:
-定义 freeFunctorCompPullbackIso
-  签名: : freeFunctor ⋙ pullback φ ≅ freeFunctor
-  定义体: NatIso.ofComponents (fun X => pullbackObjFreeIso φ X)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents, pullbackObjFreeIso
+--- 原说明 ---
+The canonical isomorphism `freeFunctor ⋙ pullback φ ≅ freeFunctor` for a
+continuous map between ringed sites, when the underlying functor between the sit
+es
+is final.
 -/
 noncomputable def freeFunctorCompPullbackIso : freeFunctor ⋙ pullback φ ≅ freeFunctor :=
-  NatIso.ofComponents (fun X => pullbackObjFreeIso φ X)
+  NatIso.ofComponents (fun X ↦ pullbackObjFreeIso φ X)
 
 end SheafOfModules
+

@@ -25,300 +25,243 @@ public section
 open Nat
 
 namespace Int
-variable {a b c d m n : Int}
+variable {a b c d m n : ℤ}
 
 attribute [gcongr] ofNat_le
 
-/--
-Instance `instNontrivial` / 实例 `instNontrivial`
-
-English:
-instance instNontrivial
-  signature: : Nontrivial Int
-  body: ⟨⟨0, 1, Int.zero_ne_one⟩⟩
-
-中文:
-实例 instNontrivial
-  签名: : 非平凡 整数
-  定义体: ⟨⟨0, 1, Int.zero_ne_one⟩⟩
-
-Depends on / 依赖: Int.zero_ne_one, zero_ne_one
+/-
+**Int.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+形式化陈述：instNontrivial : Nontrivial Int
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.zero_ne_one`：0 ≠ 1
 -/
-instance instNontrivial : Nontrivial Int := ⟨⟨0, 1, Int.zero_ne_one⟩⟩
-
-/--
-lemma `ofNat_injective` / 引理 `ofNat_injective`
-
-English:
-lemma ofNat_injective
-  statement: Function.Injective ofNat
-  proof: @Int.ofNat.inj
-
-中文:
-引理 of自然数_injective
-  结论: 函数.单射 of自然数
-  证明: @Int.ofNat.inj
+instance instNontrivial : Nontrivial ℤ := ⟨⟨0, 1, Int.zero_ne_one⟩⟩
+/-
+**Int.ofNat_injective** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：Function.Injective Int.ofNat
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.ofNat.inj`：∀ {a a_1 : ℕ}, Int.ofNat a = Int.ofNat a_1 → a = a_1
 -/
 @[simp] lemma ofNat_injective : Function.Injective ofNat := @Int.ofNat.inj
 
 section strongRec
 
-variable {P : Int -> Sort*} {lt : forall n < m, P n} {ge : forall n >= m, (forall k < n, P k) -> P n}
+variable {P : ℤ → Sort*} {lt : ∀ n < m, P n} {ge : ∀ n ≥ m, (∀ k < n, P k) → P n}
 
-/--
-lemma `strongRec_of_ge` / 引理 `strongRec_of_ge`
-
-English:
-lemma strongRec_of_ge
-  proof: by
-  refine m.strongRec (fun n hnm hmn => (Int.not_lt.mpr hmn hnm).elim) (fun n _ ih hn => ?_) n
-  rw [Int.strongRec]; rw [dif_neg (Int.not_lt.mpr hn)]
-  congr; revert ih
-  refine n.inductionOn' m (fun _ => ?_) (fun k hmk ih' ih => ?_) (fun k hkm ih' _ => ?_) <;> ext l hl
-  · rw [inductionOn'_self, strongRec_of_lt hl]
-  · rw [inductionOn'_add_one hmk]; split_ifs with hlm
-    · rw [strongRec_of_lt hlm]
-    · rw [ih' fun l hl => ih l (Int.lt_trans hl k.lt_succ), ih _ hl]
-  · rw [inductionOn'_sub_one hkm, ih']
-    exact fun l hlk hml => (Int.not_lt.mpr hkm <| Int.lt_of_le_of_lt hml hlk).elim
-
-中文:
-引理 strongRec_of_ge
-  证明: by
-  refine m.strongRec (fun n hnm hmn => (Int.not_lt.mpr hmn hnm).elim) (fun n _ ih hn => ?_) n
-  rw [Int.strongRec]; rw [dif_neg (Int.not_lt.mpr hn)]
-  congr; revert ih
-  refine n.inductionOn' m (fun _ => ?_) (fun k hmk ih' ih => ?_) (fun k hkm ih' _ => ?_) <;> ext l hl
-  · rw [inductionOn'_self, strongRec_of_lt hl]
-  · rw [inductionOn'_add_one hmk]; split_ifs with hlm
-    · rw [strongRec_of_lt hlm]
-    · rw [ih' fun l hl => ih l (Int.lt_trans hl k.lt_succ), ih _ hl]
-  · rw [inductionOn'_sub_one hkm, ih']
-    exact fun l hlk hml => (Int.not_lt.mpr hkm <| Int.lt_of_le_of_lt hml hlk).elim
-
-Depends on / 依赖: Int.lt_trans, Int.not_lt.mpr, Int.strongRec, _add_one, _self, _sub_one, dif_neg, inductionOn, k.lt_succ, lt_succ, lt_trans, m.strongRec, n.inductionOn, not_lt, revert, split_ifs, strongRec, strongRec_of_lt
+/-
+**Int.strongRec_of_ge** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：strongRec_of_ge : forall hn : m <= n, m.strongRec lt ge n = ge n hn fun k 
+_ => m.strongRec lt ge k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.not_lt`：∀ {a b : ℤ}, ¬a < b ↔ b ≤ a
+· 使用引理 `Int.inductionOn'`：inductionOn'_self : b.inductionOn' b zero succ pred = 
+zero
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.strongRec.eq_1`：∀ {m : ℤ} {motive : ℤ → Sort u_1} (lt : (n : ℤ) → n 
+< m → motive n)   (ge : (n : ℤ) → n ≥ m → ((k : ℤ) → k < n → motive k) → motive 
+n) (n : …
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Int.inductionOn'_self`：∀ {motive : ℤ → Sort u_1} {b : ℤ} {zero : motive 
+b} {succ : (k : ℤ) → b ≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) → k ≤ 
+b → motive …
+· 使用引理 `Int.strongRec_of_lt`：strongRec_of_lt (hn : n < m) : m.strongRec lt ge n 
+= lt n hn
+· 使用定理 `Int.inductionOn'_add_one`：∀ {motive : ℤ → Sort u_1} {z b : ℤ} {zero : mo
+tive b} {succ : (k : ℤ) → b ≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) →
+ k ≤ b → motiv…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Int.lt_trans`：∀ {a b c : ℤ}, a < b → b < c → a < c
+· 使用定理 `Int.lt_succ`：∀ (a : ℤ), a < a + 1
+· 使用定理 `Int.inductionOn'_sub_one`：∀ {motive : ℤ → Sort u_1} {z b : ℤ} {zero : mo
+tive b} {succ : (k : ℤ) → b ≤ k → motive k → motive (k + 1)}   {pred : (k : ℤ) →
+ k ≤ b → motiv…
+· 使用定理 `Int.lt_of_le_of_lt`：∀ {a b c : ℤ}, a ≤ b → b < c → a < c
 -/
 lemma strongRec_of_ge :
-    forall hn : m <= n, m.strongRec lt ge n = ge n hn fun k _ => m.strongRec lt ge k := by
-  refine m.strongRec (fun n hnm hmn => (Int.not_lt.mpr hmn hnm).elim) (fun n _ ih hn => ?_) n
-  rw [Int.strongRec]; rw [dif_neg (Int.not_lt.mpr hn)]
+    ∀ hn : m ≤ n, m.strongRec lt ge n = ge n hn fun k _ ↦ m.strongRec lt ge k := by
+  refine m.strongRec (fun n hnm hmn ↦ (Int.not_lt.mpr hmn hnm).elim) (fun n _ ih hn ↦ ?_) n
+  rw [Int.strongRec, dif_neg (Int.not_lt.mpr hn)]
   congr; revert ih
-  refine n.inductionOn' m (fun _ => ?_) (fun k hmk ih' ih => ?_) (fun k hkm ih' _ => ?_) <;> ext l hl
+  refine n.inductionOn' m (fun _ ↦ ?_) (fun k hmk ih' ih ↦ ?_) (fun k hkm ih' _ ↦ ?_) <;> ext l hl
   · rw [inductionOn'_self, strongRec_of_lt hl]
   · rw [inductionOn'_add_one hmk]; split_ifs with hlm
     · rw [strongRec_of_lt hlm]
-    · rw [ih' fun l hl => ih l (Int.lt_trans hl k.lt_succ), ih _ hl]
+    · rw [ih' fun l hl ↦ ih l (Int.lt_trans hl k.lt_succ), ih _ hl]
   · rw [inductionOn'_sub_one hkm, ih']
-    exact fun l hlk hml => (Int.not_lt.mpr hkm <| Int.lt_of_le_of_lt hml hlk).elim
+    exact fun l hlk hml ↦ (Int.not_lt.mpr hkm <| Int.lt_of_le_of_lt hml hlk).elim
 
 end strongRec
 
+/-! ### nat abs -/
 
-/--
-lemma `natAbs_surjective` / 引理 `natAbs_surjective`
+/-
+**Int.natAbs_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：natAbs_surjective : natAbs.Surjective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natAbs_natCast`：∀ (n : ℕ), (↑n).natAbs = n
 
-English:
-lemma natAbs_surjective
-  statement: natAbs.Surjective
-  proof: fun n => ⟨n, natAbs_natCast n⟩
-
-中文:
-引理 natAbs_surjective
-  结论: natAbs.满射
-  证明: fun n => ⟨n, natAbs_natCast n⟩
-
-Depends on / 依赖: natAbs_natCast
+--- 原说明 ---
+### nat abs
 -/
 lemma natAbs_surjective : natAbs.Surjective := fun n => ⟨n, natAbs_natCast n⟩
-
-/--
-lemma `pow_right_injective` / 引理 `pow_right_injective`
-
-English:
-lemma pow_right_injective
-  given: (h : 1 < a.natAbs)
-  statement: ((a ^ ·) : Nat -> Int).Injective
-  proof: by
-  refine (?_ : (natAbs ∘ (a ^ · : Nat -> Int)).Injective).of_comp
-  convert! Nat.pow_right_injective h using 2
-  rw [Function.comp_apply]; rw [natAbs_pow]
-
-中文:
-引理 pow_right_injective
-  条件: (h : 1 < a.natAbs)
-  结论: ((a ^ ·) : 自然数 -> 整数).单射
-  证明: by
-  refine (?_ : (natAbs ∘ (a ^ · : Nat -> Int)).Injective).of_comp
-  convert! Nat.pow_right_injective h using 2
-  rw [Function.comp_apply]; rw [natAbs_pow]
-
-Depends on / 依赖: Function, Function.comp_apply, Injective, Nat.pow_right_injective, comp_apply, convert, natAbs, natAbs_pow, of_comp, pow_right_injective
+/-
+**Int.pow_right_injective** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：pow_right_injective (h : 1 < a.natAbs) : ((a ^ ·) : Nat -> Int).Injective
+参数：h : 1 < a.natAbs。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Int.natAbs_pow`：∀ (n : ℤ) (k : ℕ), (n ^ k).natAbs = n.natAbs ^ k
+· 使用定理 `Nat.pow_right_injective`：∀ {a : ℕ}, 2 ≤ a → Function.Injective fun x => 
+a ^ x
 -/
-lemma pow_right_injective (h : 1 < a.natAbs) : ((a ^ ·) : Nat -> Int).Injective := by
-  refine (?_ : (natAbs ∘ (a ^ · : Nat -> Int)).Injective).of_comp
+lemma pow_right_injective (h : 1 < a.natAbs) : ((a ^ ·) : ℕ → ℤ).Injective := by
+  refine (?_ : (natAbs ∘ (a ^ · : ℕ → ℤ)).Injective).of_comp
   convert! Nat.pow_right_injective h using 2
-  rw [Function.comp_apply]; rw [natAbs_pow]
+  rw [Function.comp_apply, natAbs_pow]
 
+/-! ### dvd -/
 
-/--
-theorem `ofNat_dvd_natCast` / 定理 `ofNat_dvd_natCast`
+/-
+**Int.ofNat_dvd_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {x y : ℕ}, OfNat.ofNat x ∣ ↑y ↔ OfNat.ofNat x ∣ y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
 
-English:
-theorem ofNat_dvd_natCast
-  given: {x y : Nat}
-  statement: (ofNat(x) : Int) ∣ (y : Int) ↔ OfNat.ofNat x ∣ y
-  proof: natCast_dvd_natCast
-
-中文:
-定理 of自然数_dvd_natCast
-  条件: {x y : 自然数}
-  结论: (of自然数(x) : 整数) ∣ (y : 整数) ↔ Of自然数.of自然数 x ∣ y
-  证明: natCast_dvd_natCast
+--- 原说明 ---
+### dvd
 -/
-@[norm_cast] theorem ofNat_dvd_natCast {x y : Nat} : (ofNat(x) : Int) ∣ (y : Int) ↔ OfNat.ofNat x ∣ y :=
+@[norm_cast] theorem ofNat_dvd_natCast {x y : ℕ} : (ofNat(x) : ℤ) ∣ (y : ℤ) ↔ OfNat.ofNat x ∣ y :=
   natCast_dvd_natCast
-
-/--
-theorem `natCast_dvd_ofNat` / 定理 `natCast_dvd_ofNat`
-
-English:
-theorem natCast_dvd_ofNat
-  given: {x y : Nat}
-  statement: (x : Int) ∣ (ofNat(y) : Int) ↔ x ∣ OfNat.ofNat y
-  proof: natCast_dvd_natCast
-
-中文:
-定理 natCast_dvd_of自然数
-  条件: {x y : 自然数}
-  结论: (x : 整数) ∣ (of自然数(y) : 整数) ↔ x ∣ Of自然数.of自然数 y
-  证明: natCast_dvd_natCast
+/-
+**Int.natCast_dvd_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ {x y : ℕ}, ↑x ∣ OfNat.ofNat y ↔ x ∣ OfNat.ofNat y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natCast_dvd_natCast`：∀ {m n : ℕ}, ↑m ∣ ↑n ↔ m ∣ n
 -/
-@[norm_cast] theorem natCast_dvd_ofNat {x y : Nat} : (x : Int) ∣ (ofNat(y) : Int) ↔ x ∣ OfNat.ofNat y :=
+@[norm_cast] theorem natCast_dvd_ofNat {x y : ℕ} : (x : ℤ) ∣ (ofNat(y) : ℤ) ↔ x ∣ OfNat.ofNat y :=
   natCast_dvd_natCast
-
-/--
-lemma `natCast_dvd` / 引理 `natCast_dvd`
-
-English:
-lemma natCast_dvd
-  given: {m : Nat}
-  statement: (m : Int) ∣ n ↔ m ∣ n.natAbs
-  proof: by
-  obtain hn | hn := natAbs_eq n <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.dvd_neg]
-
-中文:
-引理 natCast_dvd
-  条件: {m : 自然数}
-  结论: (m : 整数) ∣ n ↔ m ∣ n.natAbs
-  证明: by
-  obtain hn | hn := natAbs_eq n <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.dvd_neg]
-
-Depends on / 依赖: Int.dvd_neg, dvd_neg, natAbs_eq, natCast_dvd_natCast
+/-
+**Int.natCast_dvd** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：natCast_dvd {m : Nat} : (m : Int) ∣ n ↔ m ∣ n.natAbs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natAbs_eq`：∀ (a : ℤ), a = ↑a.natAbs ∨ a = -↑a.natAbs
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.natAbs_neg`：∀ (a : ℤ), (-a).natAbs = a.natAbs
 -/
-lemma natCast_dvd {m : Nat} : (m : Int) ∣ n ↔ m ∣ n.natAbs := by
+lemma natCast_dvd {m : ℕ} : (m : ℤ) ∣ n ↔ m ∣ n.natAbs := by
   obtain hn | hn := natAbs_eq n <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.dvd_neg]
-
-/--
-lemma `dvd_natCast` / 引理 `dvd_natCast`
-
-English:
-lemma dvd_natCast
-  given: {n : Nat}
-  statement: m ∣ (n : Int) ↔ m.natAbs ∣ n
-  proof: by
-  obtain hn | hn := natAbs_eq m <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.neg_dvd]
-
-中文:
-引理 dvd_natCast
-  条件: {n : 自然数}
-  结论: m ∣ (n : 整数) ↔ m.natAbs ∣ n
-  证明: by
-  obtain hn | hn := natAbs_eq m <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.neg_dvd]
-
-Depends on / 依赖: Int.neg_dvd, Subsingleton, Subsingleton.elim, eq_univ_of_forall, natAbs_eq, natCast_dvd_natCast, neg_dvd
+/-
+**Int.dvd_natCast** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：dvd_natCast {n : Nat} : m ∣ (n : Int) ↔ m.natAbs ∣ n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natAbs_eq`：∀ (a : ℤ), a = ↑a.natAbs ∨ a = -↑a.natAbs
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.natAbs_neg`：∀ (a : ℤ), (-a).natAbs = a.natAbs
 -/
-lemma dvd_natCast {n : Nat} : m ∣ (n : Int) ↔ m.natAbs ∣ n := by
+lemma dvd_natCast {n : ℕ} : m ∣ (n : ℤ) ↔ m.natAbs ∣ n := by
   obtain hn | hn := natAbs_eq m <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.neg_dvd]
-
-/--
-lemma `eq_zero_of_dvd_of_nonneg_of_lt` / 引理 `eq_zero_of_dvd_of_nonneg_of_lt`
-
-English:
-lemma eq_zero_of_dvd_of_nonneg_of_lt
-  given: (hm : 0 <= m) (hmn : m < n) (hnm : n ∣ m)
-  statement: m = 0
-  proof: eq_zero_of_dvd_of_natAbs_lt_natAbs hnm (natAbs_lt_natAbs_of_nonneg_of_lt hm hmn)
-
-中文:
-引理 eq_zero_of_dvd_of_nonneg_of_lt
-  条件: (hm : 0 <= m) (hmn : m < n) (hnm : n ∣ m)
-  结论: m = 0
-  证明: eq_zero_of_dvd_of_natAbs_lt_natAbs hnm (natAbs_lt_natAbs_of_nonneg_of_lt hm hmn)
-
-Depends on / 依赖: eq_zero_of_dvd_of_natAbs_lt_natAbs, natAbs_lt_natAbs_of_nonneg_of_lt
+/-
+**Int.eq_zero_of_dvd_of_nonneg_of_lt** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：eq_zero_of_dvd_of_nonneg_of_lt (hm : 0 <= m) (hmn : m < n) (hnm : n ∣ m) :
+ m = 0
+参数：hm : 0 <= m；hmn : m < n；hnm : n ∣ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.eq_zero_of_dvd_of_natAbs_lt_natAbs`：∀ {d n : ℤ}, d ∣ n → n.natAbs < 
+d.natAbs → n = 0
+· 使用定理 `Int.natAbs_lt_natAbs_of_nonneg_of_lt`：∀ {a b : ℤ}, 0 ≤ a → a < b → a.nat
+Abs < b.natAbs
 -/
-lemma eq_zero_of_dvd_of_nonneg_of_lt (hm : 0 <= m) (hmn : m < n) (hnm : n ∣ m) : m = 0 :=
+lemma eq_zero_of_dvd_of_nonneg_of_lt (hm : 0 ≤ m) (hmn : m < n) (hnm : n ∣ m) : m = 0 :=
   eq_zero_of_dvd_of_natAbs_lt_natAbs hnm (natAbs_lt_natAbs_of_nonneg_of_lt hm hmn)
 
-/--
-lemma `eq_of_mod_eq_of_natAbs_sub_lt_natAbs` / 引理 `eq_of_mod_eq_of_natAbs_sub_lt_natAbs`
+/-- If two integers are congruent to a sufficiently large modulus, they are equal. -/
+/-
+**Int.eq_of_mod_eq_of_natAbs_sub_lt_natAbs** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：eq_of_mod_eq_of_natAbs_sub_lt_natAbs {a b c : Int} (h1 : a % b = c) (h2 : 
+natAbs (a - c) < natAbs b) : a = c
+参数：h1 : a % b = c；h2 : natAbs (a - c) < natAbs b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.eq_of_sub_eq_zero`：∀ {a b : ℤ}, a - b = 0 → a = b
+· 使用定理 `Int.eq_zero_of_dvd_of_natAbs_lt_natAbs`：∀ {d n : ℤ}, d ∣ n → n.natAbs < 
+d.natAbs → n = 0
+· 使用定理 `Int.dvd_self_sub_of_emod_eq`：∀ {a b c : ℤ}, a % b = c → b ∣ a - c
 
-English:
-lemma eq_of_mod_eq_of_natAbs_sub_lt_natAbs
-  statement: {a b c : Int} (h1 : a % b = c)
-  proof: Int.eq_of_sub_eq_zero (eq_zero_of_dvd_of_natAbs_lt_natAbs (dvd_self_sub_of_emod_eq h1) h2)
-
-中文:
-引理 eq_of_mod_eq_of_natAbs_sub_lt_natAbs
-  结论: {a b c : 整数} (h1 : a % b = c)
-  证明: Int.eq_of_sub_eq_zero (eq_zero_of_dvd_of_natAbs_lt_natAbs (dvd_self_sub_of_emod_eq h1) h2)
-
-Depends on / 依赖: Int.eq_of_sub_eq_zero, dvd_self_sub_of_emod_eq, eq_of_sub_eq_zero, eq_zero_of_dvd_of_natAbs_lt_natAbs
+--- 原说明 ---
+If two integers are congruent to a sufficiently large modulus, they are equal.
 -/
-lemma eq_of_mod_eq_of_natAbs_sub_lt_natAbs {a b c : Int} (h1 : a % b = c)
+lemma eq_of_mod_eq_of_natAbs_sub_lt_natAbs {a b c : ℤ} (h1 : a % b = c)
     (h2 : natAbs (a - c) < natAbs b) : a = c :=
   Int.eq_of_sub_eq_zero (eq_zero_of_dvd_of_natAbs_lt_natAbs (dvd_self_sub_of_emod_eq h1) h2)
-
-/--
-lemma `natAbs_le_of_dvd_ne_zero` / 引理 `natAbs_le_of_dvd_ne_zero`
-
-English:
-lemma natAbs_le_of_dvd_ne_zero
-  given: (hmn : m ∣ n) (hn : n != 0)
-  statement: natAbs m <= natAbs n
-  proof: not_lt.mp (mt (eq_zero_of_dvd_of_natAbs_lt_natAbs hmn) hn)
-
-中文:
-引理 natAbs_le_of_dvd_ne_zero
-  条件: (hmn : m ∣ n) (hn : n != 0)
-  结论: natAbs m <= natAbs n
-  证明: not_lt.mp (mt (eq_zero_of_dvd_of_natAbs_lt_natAbs hmn) hn)
-
-Depends on / 依赖: eq_zero_of_dvd_of_natAbs_lt_natAbs, not_lt, not_lt.mp
+/-
+**Int.natAbs_le_of_dvd_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：natAbs_le_of_dvd_ne_zero (hmn : m ∣ n) (hn : n != 0) : natAbs m <= natAbs 
+n
+参数：hmn : m ∣ n；hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Int.eq_zero_of_dvd_of_natAbs_lt_natAbs`：∀ {d n : ℤ}, d ∣ n → n.natAbs < 
+d.natAbs → n = 0
 -/
-lemma natAbs_le_of_dvd_ne_zero (hmn : m ∣ n) (hn : n != 0) : natAbs m <= natAbs n :=
+lemma natAbs_le_of_dvd_ne_zero (hmn : m ∣ n) (hn : n ≠ 0) : natAbs m ≤ natAbs n :=
   not_lt.mp (mt (eq_zero_of_dvd_of_natAbs_lt_natAbs hmn) hn)
-
-/--
-theorem `gcd_emod` / 定理 `gcd_emod`
-
-English:
-theorem gcd_emod
-  given: (m n : Int)
-  statement: (m % n).gcd n = m.gcd n
-  proof: by
-  conv_rhs => rw [← m.emod_add_mul_ediv n, gcd_add_mul_left_left]
-
-中文:
-定理 gcd_emod
-  条件: (m n : 整数)
-  结论: (m % n).最大公约数 n = m.最大公约数 n
-  证明: by
-  conv_rhs => rw [← m.emod_add_mul_ediv n, gcd_add_mul_left_left]
-
-Depends on / 依赖: conv_rhs, emod_add_mul_ediv, gcd_add_mul_left_left, m.emod_add_mul_ediv
+/-
+**Int.gcd_emod** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：gcd_emod (m n : Int) : (m % n).gcd n = m.gcd n
+参数：m n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.emod_add_mul_ediv`：∀ (a b : ℤ), a % b + b * (a / b) = a
+· 使用定理 `Int.gcd_add_mul_left_left`：∀ (m n k : ℤ), (n + m * k).gcd m = n.gcd m
 -/
-theorem gcd_emod (m n : Int) : (m % n).gcd n = m.gcd n := by
+theorem gcd_emod (m n : ℤ) : (m % n).gcd n = m.gcd n := by
   conv_rhs => rw [← m.emod_add_mul_ediv n, gcd_add_mul_left_left]
 
 end Int
+

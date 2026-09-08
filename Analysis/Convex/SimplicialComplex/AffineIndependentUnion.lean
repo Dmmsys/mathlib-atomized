@@ -35,51 +35,26 @@ namespace Geometry
 namespace AbstractSimplicialComplex
 
 /--
-Definition of `ofSimpleGraph` / `ofSimpleGraph` 的定义
+Construct an abstract simplicial complex from a simple graph, where vertices of the graph
+are 0-simplices and edges are 1-simplices.
+-/
+/-
+**Geometry.AbstractSimplicialComplex.ofSimpleGraph** 是 Mathlib 中的一个定义，位于命名空间 `Ge
+ometry.AbstractSimplicialComplex`。
+形式化陈述：ofSimpleGraph {ι : Type*} [DecidableEq ι] (G : SimpleGraph ι) : AbstractSi
+mplicialComplex ι where faces
+参数：G : SimpleGraph ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSimpleGraph
-  signature: {ι : Type*} [DecidableEq ι] (G : SimpleGraph ι)
-  body: ({s : Finset ι | exists v, s = {v}}) union Sym2.toFinset '' G.edgeSet
-  isRelLowerSet_faces := by
-    intro s hs
-    simp only [Set.mem_union, Set.mem_ofPred_eq, Set.mem_image] at hs
-    rcases hs with ⟨v, rfl⟩ | ⟨e, he, rfl⟩
-    · simp
-    · constructor
-      · exact Finset.nonempty_iff_ne_empty.mpr (Sym2.toFinset_ne_empty e)
-      · intro b hb_sub hb_nonempty
-        by_cases h : b.card = 1 <;>
-          grind [Finset.card_eq_one, Finset.eq_of_subset_of_card_le hb_sub, Sym2.card_toFinset]
-  singleton_mem := by
-    simp only [Set.mem_union, Set.mem_ofPred_eq, Set.mem_image]
-    intro v
-    exact Or.inl ⟨v, rfl⟩
-
-中文:
-定义 ofSimpleGraph
-  签名: {ι : 类型} [DecidableEq ι] (G : 简单图 ι)
-  定义体: ({s : Finset ι | exists v, s = {v}}) union Sym2.toFinset '' G.edgeSet
-  isRelLowerSet_faces := by
-    intro s hs
-    simp only [Set.mem_union, Set.mem_ofPred_eq, Set.mem_image] at hs
-    rcases hs with ⟨v, rfl⟩ | ⟨e, he, rfl⟩
-    · simp
-    · constructor
-      · exact Finset.nonempty_iff_ne_empty.mpr (Sym2.toFinset_ne_empty e)
-      · intro b hb_sub hb_nonempty
-        by_cases h : b.card = 1 <;>
-          grind [Finset.card_eq_one, Finset.eq_of_subset_of_card_le hb_sub, Sym2.card_toFinset]
-  singleton_mem := by
-    simp only [Set.mem_union, Set.mem_ofPred_eq, Set.mem_image]
-    intro v
-    exact Or.inl ⟨v, rfl⟩
-
-Depends on / 依赖: Finset, G.edgeSet, Sym2.toFinset, edgeSet, toFinset
+--- 原说明 ---
+Construct an abstract simplicial complex from a simple graph, where vertices of 
+the graph
+are 0-simplices and edges are 1-simplices.
 -/
 def ofSimpleGraph {ι : Type*} [DecidableEq ι] (G : SimpleGraph ι) :
     AbstractSimplicialComplex ι where
-  faces := ({s : Finset ι | exists v, s = {v}}) union Sym2.toFinset '' G.edgeSet
+  faces := ({s : Finset ι | ∃ v, s = {v}}) ∪ Sym2.toFinset '' G.edgeSet
   isRelLowerSet_faces := by
     intro s hs
     simp only [Set.mem_union, Set.mem_ofPred_eq, Set.mem_image] at hs
@@ -100,48 +75,37 @@ end AbstractSimplicialComplex
 namespace SimplicialComplex
 
 /--
-Definition of `ofAffineIndependent` / `ofAffineIndependent` 的定义
+Construct a simplicial complex from a `PreAbstractSimplicialComplex` on a set of points in a space,
+under the assumption that the union of the defining points is affinely independent.
+-/
+/-
+**Geometry.SimplicialComplex.ofAffineIndependent** 是 Mathlib 中的一个定义，位于命名空间 `Geom
+etry.SimplicialComplex`。
+形式化陈述：ofAffineIndependent {𝕜 E} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜
+] [DecidableEq E] [AddCommGroup E] [Module 𝕜 E] (abstract : PreAbstractSimplicia
+lComplex E) (indep : AffineIndependent 𝕜 (Subtype.val : (⋃ s in abstract.faces, 
+(s : Set E)) -> E)) : SimplicialComplex 𝕜 E where toPreAbstractSimplicialComplex
+参数：abstract : PreAbstractSimplicialComplex E；indep : AffineIndependent 𝕜 (Subtyp
+e.val : (⋃ s in abstract.faces, (s : Set E)) -> E)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAffineIndependent
-  signature: {𝕜 E}
-  body: abstract
-  indep {s} hs := indep.mono (Set.subset_biUnion_of_mem hs)
-  inter_subset_convexHull {s t} hs ht := by
-    apply subset_of_eq
-    rw [AffineIndependent.convexHull_inter (R := 𝕜) (s := s union t)]
-    · apply indep.mono
-      simp only [Finset.coe_union]
-      exact Set.union_subset (Set.subset_biUnion_of_mem hs) (Set.subset_biUnion_of_mem ht)
-    · exact Finset.subset_union_left
-    · exact Finset.subset_union_right
-
-中文:
-定义 ofAffineIndependent
-  签名: {𝕜 E}
-  定义体: abstract
-  indep {s} hs := indep.mono (Set.subset_biUnion_of_mem hs)
-  inter_subset_convexHull {s t} hs ht := by
-    apply subset_of_eq
-    rw [AffineIndependent.convexHull_inter (R := 𝕜) (s := s union t)]
-    · apply indep.mono
-      simp only [Finset.coe_union]
-      exact Set.union_subset (Set.subset_biUnion_of_mem hs) (Set.subset_biUnion_of_mem ht)
-    · exact Finset.subset_union_left
-    · exact Finset.subset_union_right
-
-Depends on / 依赖: abstract
+--- 原说明 ---
+Construct a simplicial complex from a `PreAbstractSimplicialComplex` on a set of
+ points in a space,
+under the assumption that the union of the defining points is affinely independe
+nt.
 -/
 def ofAffineIndependent {𝕜 E}
     [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [DecidableEq E] [AddCommGroup E] [Module 𝕜 E]
     (abstract : PreAbstractSimplicialComplex E)
-    (indep : AffineIndependent 𝕜 (Subtype.val : (⋃ s in abstract.faces, (s : Set E)) -> E)) :
+    (indep : AffineIndependent 𝕜 (Subtype.val : (⋃ s ∈ abstract.faces, (s : Set E)) → E)) :
     SimplicialComplex 𝕜 E where
   toPreAbstractSimplicialComplex := abstract
   indep {s} hs := indep.mono (Set.subset_biUnion_of_mem hs)
   inter_subset_convexHull {s t} hs ht := by
     apply subset_of_eq
-    rw [AffineIndependent.convexHull_inter (R := 𝕜) (s := s union t)]
+    rw [AffineIndependent.convexHull_inter (R := 𝕜) (s := s ∪ t)]
     · apply indep.mono
       simp only [Finset.coe_union]
       exact Set.union_subset (Set.subset_biUnion_of_mem hs) (Set.subset_biUnion_of_mem ht)
@@ -149,37 +113,29 @@ def ofAffineIndependent {𝕜 E}
     · exact Finset.subset_union_right
 
 /--
-Definition of `onFinsupp` / `onFinsupp` 的定义
+Construct a simplicial complex from an abstract simplicial complex on a set of points
+over the `𝕜`-module of finitely supported functions on those points.
+-/
+/-
+**Geometry.SimplicialComplex.onFinsupp** 是 Mathlib 中的一个定义，位于命名空间 `Geometry.Simpl
+icialComplex`。
+形式化陈述：onFinsupp {𝕜 ι : Type*} [DecidableEq ι] [DecidableEq 𝕜] [Field 𝕜] [LinearO
+rder 𝕜] [IsStrictOrderedRing 𝕜] (abstract : PreAbstractSimplicialComplex ι) : Si
+mplicialComplex 𝕜 (ι ->₀ 𝕜)
+参数：abstract : PreAbstractSimplicialComplex ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition onFinsupp
-  signature: {𝕜 ι : Type*} [DecidableEq ι]
-  body: ofAffineIndependent (𝕜 := 𝕜) (E := ι ->₀ 𝕜)
-    (abstract.map (fun i => Finsupp.single i (1 : 𝕜)))
-    (by
-      refine (Finsupp.linearIndependent_single_one 𝕜 ι).affineIndependent.range.mono fun x hx => ?_
-      simp only [Set.mem_iUnion, Finset.mem_coe] at hx
-      obtain ⟨_, ⟨_, _, rfl⟩, hx⟩ := hx
-      grind)
-
-中文:
-定义 onFinsupp
-  签名: {𝕜 ι : 类型} [DecidableEq ι]
-  定义体: ofAffineIndependent (𝕜 := 𝕜) (E := ι ->₀ 𝕜)
-    (abstract.map (fun i => Finsupp.single i (1 : 𝕜)))
-    (by
-      refine (Finsupp.linearIndependent_single_one 𝕜 ι).affineIndependent.range.mono fun x hx => ?_
-      simp only [Set.mem_iUnion, Finset.mem_coe] at hx
-      obtain ⟨_, ⟨_, _, rfl⟩, hx⟩ := hx
-      grind)
-
-Depends on / 依赖: Finset, Finset.mem_coe, Finsupp, Finsupp.linearIndependent_single_one, Finsupp.single, Set.mem_iUnion, abstract, abstract.map, affineIndependent, affineIndependent.range.mono, linearIndependent_single_one, mem_coe, mem_iUnion, ofAffineIndependent, single
+--- 原说明 ---
+Construct a simplicial complex from an abstract simplicial complex on a set of p
+oints
+over the `𝕜`-module of finitely supported functions on those points.
 -/
 noncomputable def onFinsupp {𝕜 ι : Type*} [DecidableEq ι]
     [DecidableEq 𝕜] [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
     (abstract : PreAbstractSimplicialComplex ι) :
-    SimplicialComplex 𝕜 (ι ->₀ 𝕜) :=
-  ofAffineIndependent (𝕜 := 𝕜) (E := ι ->₀ 𝕜)
+    SimplicialComplex 𝕜 (ι →₀ 𝕜) :=
+  ofAffineIndependent (𝕜 := 𝕜) (E := ι →₀ 𝕜)
     (abstract.map (fun i => Finsupp.single i (1 : 𝕜)))
     (by
       refine (Finsupp.linearIndependent_single_one 𝕜 ι).affineIndependent.range.mono fun x hx => ?_
@@ -188,26 +144,32 @@ noncomputable def onFinsupp {𝕜 ι : Type*} [DecidableEq ι]
       grind)
 
 /--
-Definition of `ofSimpleGraph` / `ofSimpleGraph` 的定义
+The simplicial complex associated to a simple graph, where vertices of the graph
+are 0-simplices and edges are 1-simplices. The complex is constructed over the
+`𝕜`-module of finitely supported functions on the vertex type.
+-/
+/-
+**Geometry.SimplicialComplex.ofSimpleGraph** 是 Mathlib 中的一个定义，位于命名空间 `Geometry.S
+implicialComplex`。
+形式化陈述：ofSimpleGraph {𝕜 V : Type*} [DecidableEq V] [DecidableEq 𝕜] [Field 𝕜] [Lin
+earOrder 𝕜] [IsStrictOrderedRing 𝕜] (G : SimpleGraph V) : SimplicialComplex 𝕜 (V
+ ->₀ 𝕜)
+参数：G : SimpleGraph V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSimpleGraph
-  signature: {𝕜 V : Type*} [DecidableEq V] [DecidableEq 𝕜]
-  body: onFinsupp (AbstractSimplicialComplex.ofSimpleGraph G).toPreAbstractSimplicialComplex
-
-中文:
-定义 ofSimpleGraph
-  签名: {𝕜 V : 类型} [DecidableEq V] [DecidableEq 𝕜]
-  定义体: onFinsupp (AbstractSimplicialComplex.ofSimpleGraph G).toPreAbstractSimplicialComplex
-
-Depends on / 依赖: AbstractSimplicialComplex, AbstractSimplicialComplex.ofSimpleGraph, ofSimpleGraph, onFinsupp, toPreAbstractSimplicialComplex
+--- 原说明 ---
+The simplicial complex associated to a simple graph, where vertices of the graph
+are 0-simplices and edges are 1-simplices. The complex is constructed over the
+`𝕜`-module of finitely supported functions on the vertex type.
 -/
 noncomputable def ofSimpleGraph {𝕜 V : Type*} [DecidableEq V] [DecidableEq 𝕜]
     [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
     (G : SimpleGraph V) :
-    SimplicialComplex 𝕜 (V ->₀ 𝕜) :=
+    SimplicialComplex 𝕜 (V →₀ 𝕜) :=
   onFinsupp (AbstractSimplicialComplex.ofSimpleGraph G).toPreAbstractSimplicialComplex
 
 end SimplicialComplex
 
 end Geometry
+

@@ -29,225 +29,102 @@ variable {α : Type u} {β : Type v} {x y : ULift.{w} α}
 namespace ULift
 
 @[to_additive]
-/--
-Instance `one` / 实例 `one`
-
-English:
-instance one
-  signature: [One α]
-  body: ⟨⟨1⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 one
-  签名: [幺 α]
-  定义体: ⟨⟨1⟩⟩
-
-@[to_additive (attr := simp)]
+/-
+**ULift.one** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：one [One α] : One (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance one [One α] : One (ULift α) :=
   ⟨⟨1⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `one_down` / 定理 `one_down`
-
-English:
-theorem one_down
-  given: [One α]
-  statement: (1 : ULift α).down = 1
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 one_down
-  条件: [幺 α]
-  结论: (1 : 类型层提升 α).down = 1
-  证明: rfl
-
-@[to_additive]
+/-
+**ULift.one_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：one_down [One α] : (1 : ULift α).down = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_down [One α] : (1 : ULift α).down = 1 :=
   rfl
 
 @[to_additive]
-/--
-Instance `mul` / 实例 `mul`
-
-English:
-instance mul
-  signature: [Mul α]
-  body: ⟨fun f g => ⟨f.down * g.down⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 mul
-  签名: [乘法 α]
-  定义体: ⟨fun f g => ⟨f.down * g.down⟩⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.down, g.down
+/-
+**ULift.mul** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mul [Mul α] : Mul (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mul [Mul α] : Mul (ULift α) :=
   ⟨fun f g => ⟨f.down * g.down⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `mul_down` / 定理 `mul_down`
-
-English:
-theorem mul_down
-  given: [Mul α]
-  statement: (x * y).down = x.down * y.down
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mul_down
-  条件: [乘法 α]
-  结论: (x * y).down = x.down * y.down
-  证明: rfl
-
-@[to_additive]
+/-
+**ULift.mul_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：mul_down [Mul α] : (x * y).down = x.down * y.down
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_down [Mul α] : (x * y).down = x.down * y.down :=
   rfl
 
 @[to_additive]
-/--
-Instance `div` / 实例 `div`
-
-English:
-instance div
-  signature: [Div α]
-  body: ⟨fun f g => ⟨f.down / g.down⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 div
-  签名: [除法 α]
-  定义体: ⟨fun f g => ⟨f.down / g.down⟩⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.down, g.down
+/-
+**ULift.div** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：div [Div α] : Div (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance div [Div α] : Div (ULift α) :=
   ⟨fun f g => ⟨f.down / g.down⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `div_down` / 定理 `div_down`
-
-English:
-theorem div_down
-  given: [Div α]
-  statement: (x / y).down = x.down / y.down
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 div_down
-  条件: [除法 α]
-  结论: (x / y).down = x.down / y.down
-  证明: rfl
-
-@[to_additive]
+/-
+**ULift.div_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：div_down [Div α] : (x / y).down = x.down / y.down
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem div_down [Div α] : (x / y).down = x.down / y.down :=
   rfl
 
 @[to_additive]
-/--
-Instance `inv` / 实例 `inv`
-
-English:
-instance inv
-  signature: [Inv α]
-  body: ⟨fun f => ⟨f.down⁻¹⟩⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 inv
-  签名: [取逆 α]
-  定义体: ⟨fun f => ⟨f.down⁻¹⟩⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.down
+/-
+**ULift.inv** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：inv [Inv α] : Inv (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inv [Inv α] : Inv (ULift α) :=
   ⟨fun f => ⟨f.down⁻¹⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_down` / 定理 `inv_down`
-
-English:
-theorem inv_down
-  given: [Inv α]
-  statement: x⁻¹.down = x.down⁻¹
-  proof: rfl
-
-@[to_additive (attr := to_additive) smul]
-
-中文:
-定理 inv_down
-  条件: [取逆 α]
-  结论: x⁻¹.down = x.down⁻¹
-  证明: rfl
-
-@[to_additive (attr := to_additive) smul]
+/-
+**ULift.inv_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：inv_down [Inv α] : x⁻¹.down = x.down⁻¹
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_down [Inv α] : x⁻¹.down = x.down⁻¹ :=
   rfl
 
 @[to_additive (attr := to_additive) smul]
-/--
-Instance `pow` / 实例 `pow`
-
-English:
-instance pow
-  signature: [Pow α β]
-  body: ⟨fun x n => up (x.down ^ n)⟩
-
-@[to_additive (attr := to_additive, simp) smul_down]
-
-中文:
-实例 pow
-  签名: [幂 α β]
-  定义体: ⟨fun x n => up (x.down ^ n)⟩
-
-@[to_additive (attr := to_additive, simp) smul_down]
-
-Depends on / 依赖: x.down
+/-
+**ULift.pow** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：pow [Pow α β] : Pow (ULift α) β
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance pow [Pow α β] : Pow (ULift α) β :=
   ⟨fun x n => up (x.down ^ n)⟩
 
 @[to_additive (attr := to_additive, simp) smul_down]
-/--
-theorem `pow_down` / 定理 `pow_down`
-
-English:
-theorem pow_down
-  given: [Pow α β] (a : ULift.{w} α) (b : β)
-  statement: (a ^ b).down = a.down ^ b
-  proof: rfl
-
-中文:
-定理 pow_down
-  条件: [幂 α β] (a : 类型层提升.{w} α) (b : β)
-  结论: (a ^ b).down = a.down ^ b
-  证明: rfl
+/-
+**ULift.pow_down** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：pow_down [Pow α β] (a : ULift.{w} α) (b : β) : (a ^ b).down = a.down ^ b
+参数：a : ULift.{w} α；b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pow_down [Pow α β] (a : ULift.{w} α) (b : β) : (a ^ b).down = a.down ^ b :=
   rfl
@@ -255,369 +132,170 @@ theorem pow_down [Pow α β] (a : ULift.{w} α) (b : β) : (a ^ b).down = a.down
 /-- The multiplicative equivalence between `ULift α` and `α`.
 -/
 @[to_additive /-- The additive equivalence between `ULift α` and `α`. -/]
-/--
-Definition of `_root_.MulEquiv.ulift` / `_root_.MulEquiv.ulift` 的定义
+/-
+**ULift._root_.MulEquiv.ulift** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.MulEquiv.ulift
-  signature: [Mul α]
-  body: { Equiv.ulift with map_mul' := fun _ _ => rfl }
-
-@[to_additive]
-
-中文:
-定义 _root_.乘法等价.ulift
-  签名: [乘法 α]
-  定义体: { Equiv.ulift with map_mul' := fun _ _ => rfl }
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift, map_mul
+--- 原说明 ---
+The multiplicative equivalence between `ULift α` and `α`.
 -/
 def _root_.MulEquiv.ulift [Mul α] : ULift α ≃* α :=
   { Equiv.ulift with map_mul' := fun _ _ => rfl }
 
 @[to_additive]
-/--
-Instance `semigroup` / 实例 `semigroup`
-
-English:
-instance semigroup
-  signature: [Semigroup α]
-  body: (MulEquiv.ulift.injective.semigroup _) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 semigroup
-  签名: [半群 α]
-  定义体: (MulEquiv.ulift.injective.semigroup _) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: MulEquiv, MulEquiv.ulift.injective.semigroup, injective, semigroup
+/-
+**ULift.semigroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：semigroup [Semigroup α] : Semigroup (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance semigroup [Semigroup α] : Semigroup (ULift α) :=
   (MulEquiv.ulift.injective.semigroup _) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `commSemigroup` / 实例 `commSemigroup`
-
-English:
-instance commSemigroup
-  signature: [CommSemigroup α]
-  body: (Equiv.ulift.injective.commSemigroup _) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 commSemigroup
-  签名: [交换半群 α]
-  定义体: (Equiv.ulift.injective.commSemigroup _) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.commSemigroup, commSemigroup, injective
+/-
+**ULift.commSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：commSemigroup [CommSemigroup α] : CommSemigroup (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commSemigroup [CommSemigroup α] : CommSemigroup (ULift α) :=
   (Equiv.ulift.injective.commSemigroup _) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `mulOneClass` / 实例 `mulOneClass`
-
-English:
-instance mulOneClass
-  signature: [MulOneClass α]
-  body: Equiv.ulift.injective.mulOneClass _ rfl (by intros; rfl)
-
-@[to_additive]
-
-中文:
-实例 mulOneClass
-  签名: [MulOne类 α]
-  定义体: Equiv.ulift.injective.mulOneClass _ rfl (by intros; rfl)
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.mulOneClass, injective, intros, mulOneClass
+/-
+**ULift.mulOneClass** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulOneClass [MulOneClass α] : MulOneClass (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulOneClass [MulOneClass α] : MulOneClass (ULift α) :=
   Equiv.ulift.injective.mulOneClass _ rfl (by intros; rfl)
 
 @[to_additive]
-/--
-Instance `monoid` / 实例 `monoid`
-
-English:
-instance monoid
-  signature: [Monoid α]
-  body: Equiv.ulift.injective.monoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 monoid
-  签名: [幺半群 α]
-  定义体: Equiv.ulift.injective.monoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.monoid, injective, monoid
+/-
+**ULift.monoid** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：monoid [Monoid α] : Monoid (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance monoid [Monoid α] : Monoid (ULift α) :=
   Equiv.ulift.injective.monoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `commMonoid` / 实例 `commMonoid`
-
-English:
-instance commMonoid
-  signature: [CommMonoid α]
-  body: Equiv.ulift.injective.commMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 commMonoid
-  签名: [交换幺半群 α]
-  定义体: Equiv.ulift.injective.commMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.commMonoid, commMonoid, injective
+/-
+**ULift.commMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：commMonoid [CommMonoid α] : CommMonoid (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commMonoid [CommMonoid α] : CommMonoid (ULift α) :=
   Equiv.ulift.injective.commMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `divInvMonoid` / 实例 `divInvMonoid`
-
-English:
-instance divInvMonoid
-  signature: [DivInvMonoid α]
-  body: Equiv.ulift.injective.divInvMonoid _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 divInvMonoid
-  签名: [除逆幺半群 α]
-  定义体: Equiv.ulift.injective.divInvMonoid _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.divInvMonoid, divInvMonoid, injective
+/-
+**ULift.divInvMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：divInvMonoid [DivInvMonoid α] : DivInvMonoid (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance divInvMonoid [DivInvMonoid α] : DivInvMonoid (ULift α) :=
   Equiv.ulift.injective.divInvMonoid _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `group` / 实例 `group`
-
-English:
-instance group
-  signature: [Group α]
-  body: Equiv.ulift.injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 group
-  签名: [群 α]
-  定义体: Equiv.ulift.injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.group, injective
+/-
+**ULift.group** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：group [Group α] : Group (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance group [Group α] : Group (ULift α) :=
   Equiv.ulift.injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `commGroup` / 实例 `commGroup`
-
-English:
-instance commGroup
-  signature: [CommGroup α]
-  body: Equiv.ulift.injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 commGroup
-  签名: [交换群 α]
-  定义体: Equiv.ulift.injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.commGroup, commGroup, injective
+/-
+**ULift.commGroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：commGroup [CommGroup α] : CommGroup (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commGroup [CommGroup α] : CommGroup (ULift α) :=
   Equiv.ulift.injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `leftCancelSemigroup` / 实例 `leftCancelSemigroup`
-
-English:
-instance leftCancelSemigroup
-  signature: [LeftCancelSemigroup α]
-  body: Equiv.ulift.injective.leftCancelSemigroup _ fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 leftCancelSemigroup
-  签名: [左消去半群 α]
-  定义体: Equiv.ulift.injective.leftCancelSemigroup _ fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.leftCancelSemigroup, injective, leftCancelSemigroup
+/-
+**ULift.leftCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：leftCancelSemigroup [LeftCancelSemigroup α] : LeftCancelSemigroup (ULift α
+)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance leftCancelSemigroup [LeftCancelSemigroup α] : LeftCancelSemigroup (ULift α) :=
   Equiv.ulift.injective.leftCancelSemigroup _ fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `rightCancelSemigroup` / 实例 `rightCancelSemigroup`
-
-English:
-instance rightCancelSemigroup
-  signature: [RightCancelSemigroup α]
-  body: Equiv.ulift.injective.rightCancelSemigroup _ fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 rightCancelSemigroup
-  签名: [右消去半群 α]
-  定义体: Equiv.ulift.injective.rightCancelSemigroup _ fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.rightCancelSemigroup, injective, rightCancelSemigroup
+/-
+**ULift.rightCancelSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：rightCancelSemigroup [RightCancelSemigroup α] : RightCancelSemigroup (ULif
+t α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance rightCancelSemigroup [RightCancelSemigroup α] : RightCancelSemigroup (ULift α) :=
   Equiv.ulift.injective.rightCancelSemigroup _ fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `leftCancelMonoid` / 实例 `leftCancelMonoid`
-
-English:
-instance leftCancelMonoid
-  signature: [LeftCancelMonoid α]
-  body: Equiv.ulift.injective.leftCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 leftCancelMonoid
-  签名: [左消去幺半群 α]
-  定义体: Equiv.ulift.injective.leftCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.leftCancelMonoid, injective, leftCancelMonoid
+/-
+**ULift.leftCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：leftCancelMonoid [LeftCancelMonoid α] : LeftCancelMonoid (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance leftCancelMonoid [LeftCancelMonoid α] : LeftCancelMonoid (ULift α) :=
   Equiv.ulift.injective.leftCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `rightCancelMonoid` / 实例 `rightCancelMonoid`
-
-English:
-instance rightCancelMonoid
-  signature: [RightCancelMonoid α]
-  body: Equiv.ulift.injective.rightCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 rightCancelMonoid
-  签名: [右消去幺半群 α]
-  定义体: Equiv.ulift.injective.rightCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.rightCancelMonoid, injective, rightCancelMonoid
+/-
+**ULift.rightCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：rightCancelMonoid [RightCancelMonoid α] : RightCancelMonoid (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance rightCancelMonoid [RightCancelMonoid α] : RightCancelMonoid (ULift α) :=
   Equiv.ulift.injective.rightCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `cancelMonoid` / 实例 `cancelMonoid`
-
-English:
-instance cancelMonoid
-  signature: [CancelMonoid α]
-  body: Equiv.ulift.injective.cancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 cancelMonoid
-  签名: [消去幺半群 α]
-  定义体: Equiv.ulift.injective.cancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ulift.injective.cancelMonoid, apply_symm_apply, cancelMonoid, injective
+/-
+**ULift.cancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：cancelMonoid [CancelMonoid α] : CancelMonoid (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance cancelMonoid [CancelMonoid α] : CancelMonoid (ULift α) :=
   Equiv.ulift.injective.cancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `cancelCommMonoid` / 实例 `cancelCommMonoid`
-
-English:
-instance cancelCommMonoid
-  signature: [CancelCommMonoid α]
-  body: Equiv.ulift.injective.cancelCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 cancelCommMonoid
-  签名: [消去交换幺半群 α]
-  定义体: Equiv.ulift.injective.cancelCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: Equiv.ulift.injective.cancelCommMonoid, cancelCommMonoid, injective
+/-
+**ULift.cancelCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：cancelCommMonoid [CancelCommMonoid α] : CancelCommMonoid (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance cancelCommMonoid [CancelCommMonoid α] : CancelCommMonoid (ULift α) :=
   Equiv.ulift.injective.cancelCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `nontrivial` / 实例 `nontrivial`
-
-English:
-instance nontrivial
-  signature: [Nontrivial α]
-  body: Equiv.ulift.symm.injective.nontrivial
-
-中文:
-实例 nontrivial
-  签名: [非平凡 α]
-  定义体: Equiv.ulift.symm.injective.nontrivial
-
-Depends on / 依赖: Equiv.ulift.symm.injective.nontrivial, injective, nontrivial
+/-
+**ULift.nontrivial** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：nontrivial [Nontrivial α] : Nontrivial (ULift α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontrivi
+al α] {f : α → β}, Function.Injective f → Nontrivial β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 instance nontrivial [Nontrivial α] : Nontrivial (ULift α) :=
   Equiv.ulift.symm.injective.nontrivial
@@ -625,3 +303,4 @@ instance nontrivial [Nontrivial α] : Nontrivial (ULift α) :=
 -- TODO: We don't do `IsOrderedCancelMonoid`.
 -- We'd need to add instances for `ULift` in `Order.Basic`.
 end ULift
+

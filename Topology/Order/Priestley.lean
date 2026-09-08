@@ -37,23 +37,21 @@ open Set
 
 variable {α : Type*}
 
-/--
-Definition of `PriestleySpace` / `PriestleySpace` 的定义
+/-- A Priestley space is an ordered topological space such that any two distinct points can be
+separated by a clopen upper set. Compactness is often assumed, but we do not include it here. -/
+/-
+**PriestleySpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_2) → [Preorder α] → [TopologicalSpace α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class PriestleySpace
-  parameters: (α : Type*) [Preorder α] [TopologicalSpace α]
-  axioms and operations (1):
-    - priestley({x y : α}) : ¬x <= y -> exists U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U
-
-中文:
-类 Priestley空间
-  参数: (α : 类型) [预序 α] [拓扑空间 α]
-  公理与运算 (1 个):
-    - priestley({x y : α}) : ¬x <= y -> 存在 U : 集合 α, IsClopen U ∧ 是上集 U ∧ x in U ∧ y ∉ U
+--- 原说明 ---
+A Priestley space is an ordered topological space such that any two distinct poi
+nts can be
+separated by a clopen upper set. Compactness is often assumed, but we do not inc
+lude it here.
 -/
 class PriestleySpace (α : Type*) [Preorder α] [TopologicalSpace α] : Prop where
-  priestley {x y : α} : ¬x <= y -> exists U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U
+  priestley {x y : α} : ¬x ≤ y → ∃ U : Set α, IsClopen U ∧ IsUpperSet U ∧ x ∈ U ∧ y ∉ U
 
 variable [TopologicalSpace α]
 
@@ -61,42 +59,35 @@ section Preorder
 
 variable [Preorder α] [PriestleySpace α] {x y : α}
 
-/--
-theorem `exists_isClopen_upper_of_not_le` / 定理 `exists_isClopen_upper_of_not_le`
-
-English:
-theorem exists_isClopen_upper_of_not_le
-  proof: PriestleySpace.priestley
-
-中文:
-定理 存在_isClopen_upper_of_not_le
-  证明: PriestleySpace.priestley
-
-Depends on / 依赖: PriestleySpace, PriestleySpace.priestley, priestley
+/-
+**exists_isClopen_upper_of_not_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_isClopen_upper_of_not_le : ¬x <= y -> exists U : Set α, IsClopen U 
+∧ IsUpperSet U ∧ x in U ∧ y ∉ U
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PriestleySpace.priestley`：∀ {α : Type u_2} {inst : Preorder α} {inst_1 :
+ TopologicalSpace α} [self : PriestleySpace α] {x y : α},   ¬x ≤ y → ∃ U, IsClop
+en U ∧ IsUpper…
 -/
 theorem exists_isClopen_upper_of_not_le :
-    ¬x <= y -> exists U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U :=
+    ¬x ≤ y → ∃ U : Set α, IsClopen U ∧ IsUpperSet U ∧ x ∈ U ∧ y ∉ U :=
   PriestleySpace.priestley
-
-/--
-theorem `exists_isClopen_lower_of_not_le` / 定理 `exists_isClopen_lower_of_not_le`
-
-English:
-theorem exists_isClopen_lower_of_not_le
-  given: (h : ¬x <= y)
-  proof: let ⟨U, hU, hU', hx, hy⟩ := exists_isClopen_upper_of_not_le h
-  ⟨Uᶜ, hU.compl, hU'.compl, Classical.not_not.2 hx, hy⟩
-
-中文:
-定理 存在_isClopen_lower_of_not_le
-  条件: (h : ¬x <= y)
-  证明: let ⟨U, hU, hU', hx, hy⟩ := exists_isClopen_upper_of_not_le h
-  ⟨Uᶜ, hU.compl, hU'.compl, Classical.not_not.2 hx, hy⟩
-
-Depends on / 依赖: Classical, Classical.not_not, exists_isClopen_upper_of_not_le, hU.compl, not_not
+/-
+**exists_isClopen_lower_of_not_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_isClopen_lower_of_not_le (h : ¬x <= y) : exists U : Set α, IsClopen
+ U ∧ IsLowerSet U ∧ x ∉ U ∧ y in U
+参数：h : ¬x <= y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_isClopen_upper_of_not_le`：exists_isClopen_upper_of_not_le : ¬x <=
+ y -> exists U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U
+· 使用定理 `IsClopen.compl`：IsClopen.compl (hs : IsClopen s) : IsClopen sᶜ
+· 使用定理 `IsUpperSet.compl`：IsUpperSet.compl (hs : IsUpperSet s) : IsLowerSet sᶜ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
 -/
-theorem exists_isClopen_lower_of_not_le (h : ¬x <= y) :
-    exists U : Set α, IsClopen U ∧ IsLowerSet U ∧ x ∉ U ∧ y in U :=
+theorem exists_isClopen_lower_of_not_le (h : ¬x ≤ y) :
+    ∃ U : Set α, IsClopen U ∧ IsLowerSet U ∧ x ∉ U ∧ y ∈ U :=
   let ⟨U, hU, hU', hx, hy⟩ := exists_isClopen_upper_of_not_le h
   ⟨Uᶜ, hU.compl, hU'.compl, Classical.not_not.2 hx, hy⟩
 
@@ -106,37 +97,36 @@ section PartialOrder
 
 variable [PartialOrder α] [PriestleySpace α] {x y : α}
 
-/--
-theorem `exists_isClopen_upper_or_lower_of_ne` / 定理 `exists_isClopen_upper_or_lower_of_ne`
-
-English:
-theorem exists_isClopen_upper_or_lower_of_ne
-  given: (h : x != y)
-  proof: by
-  obtain h | h := h.not_le_or_not_ge
-· exact (exists_isClopen_upper_of_not_le h).imp fun _ => And.imp_right And.imp_left Or.inl
-  · obtain ⟨U, hU, hU', hy, hx⟩ := exists_isClopen_lower_of_not_le h
-    exact ⟨U, hU, Or.inr hU', hx, hy⟩
-
-中文:
-定理 存在_isClopen_upper_or_lower_of_ne
-  条件: (h : x != y)
-  证明: by
-  obtain h | h := h.not_le_or_not_ge
-· exact (exists_isClopen_upper_of_not_le h).imp fun _ => And.imp_right And.imp_left Or.inl
-  · obtain ⟨U, hU, hU', hy, hx⟩ := exists_isClopen_lower_of_not_le h
-    exact ⟨U, hU, Or.inr hU', hx, hy⟩
-
-Depends on / 依赖: And.imp_left, And.imp_right, Or.inl, Or.inr, exists_isClopen_lower_of_not_le, exists_isClopen_upper_of_not_le, h.not_le_or_not_ge, imp_left, imp_right, not_le_or_not_ge
+/-
+**exists_isClopen_upper_or_lower_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_isClopen_upper_or_lower_of_ne (h : x != y) : exists U : Set α, IsCl
+open U ∧ (IsUpperSet U ∨ IsLowerSet U) ∧ x in U ∧ y ∉ U
+参数：h : x != y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ne.not_le_or_not_ge`：Ne.not_le_or_not_ge (h : a != b) : ¬a <= b ∨ ¬b <= 
+a
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用定理 `And.imp_left`：∀ {a b c : Prop}, (a → b) → a ∧ c → b ∧ c
+· 使用定理 `exists_isClopen_upper_of_not_le`：exists_isClopen_upper_of_not_le : ¬x <=
+ y -> exists U : Set α, IsClopen U ∧ IsUpperSet U ∧ x in U ∧ y ∉ U
+· 使用定理 `exists_isClopen_lower_of_not_le`：exists_isClopen_lower_of_not_le (h : ¬x
+ <= y) : exists U : Set α, IsClopen U ∧ IsLowerSet U ∧ x ∉ U ∧ y in U
 -/
-theorem exists_isClopen_upper_or_lower_of_ne (h : x != y) :
-    exists U : Set α, IsClopen U ∧ (IsUpperSet U ∨ IsLowerSet U) ∧ x in U ∧ y ∉ U := by
+theorem exists_isClopen_upper_or_lower_of_ne (h : x ≠ y) :
+    ∃ U : Set α, IsClopen U ∧ (IsUpperSet U ∨ IsLowerSet U) ∧ x ∈ U ∧ y ∉ U := by
   obtain h | h := h.not_le_or_not_ge
-· exact (exists_isClopen_upper_of_not_le h).imp fun _ => And.imp_right And.imp_left Or.inl
+  · exact (exists_isClopen_upper_of_not_le h).imp fun _ ↦ And.imp_right <| And.imp_left Or.inl
   · obtain ⟨U, hU, hU', hy, hx⟩ := exists_isClopen_lower_of_not_le h
     exact ⟨U, hU, Or.inr hU', hx, hy⟩
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) PriestleySpace.toTotallySeparatedSpace : TotallySeparatedSpace α where
   isTotallySeparated_univ _ _ _ _ h :=
     (exists_isClopen_upper_or_lower_of_ne h).elim fun U ⟨hU, _, hx, hy⟩ =>
@@ -144,3 +134,4 @@ instance (priority := 100) PriestleySpace.toTotallySeparatedSpace : TotallySepar
         union_compl_self U ▸ subset_rfl, disjoint_compl_right⟩
 
 end PartialOrder
+

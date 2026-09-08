@@ -43,252 +43,180 @@ variable {C : Type u₁} {D : Type u₂} [Category.{v₁} C] [Category.{v₂} D]
 
 namespace Functor
 
-/--
-Definition of `IsDense` / `IsDense` 的定义
+/-- A functor `F : C ⥤ D` is dense if any `Y : D` is a canonical colimit
+relatively to `F`. -/
+/-
+**CategoryTheory.Functor.IsDense** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.F
+unctor C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsDense
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - isDenseAt((F) (Y : D)) : F.isDenseAt Y
-
-中文:
-类 是稠密
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - isDenseAt((F) (Y : D)) : F.isDenseAt Y
+--- 原说明 ---
+A functor `F : C ⥤ D` is dense if any `Y : D` is a canonical colimit
+relatively to `F`.
 -/
 class IsDense (F : C ⥤ D) : Prop where
   isDenseAt (F) (Y : D) : F.isDenseAt Y
 
-/--
-Definition of `denseAt` / `denseAt` 的定义
+/-- This is a choice of structure `F.DenseAt Y` when `F : C ⥤ D`
+is dense, and `Y : D`. -/
+/-
+**CategoryTheory.Functor.denseAt** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：denseAt (F : C ⥤ D) [F.IsDense] (Y : D) : F.DenseAt Y
+参数：F : C ⥤ D；Y : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsDense.isDenseAt`：∀ {C : Type u₁} {D : Type u₂} 
+{inst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category.{v
+₂, u₂} D}   (F : CategoryTheor…
 
-English:
-definition denseAt
-  signature: (F : C ⥤ D) [F.IsDense] (Y : D)
-  body: (IsDense.isDenseAt F Y).some
-
-中文:
-定义 denseAt
-  签名: (F : C ⥤ D) [F.是稠密] (Y : D)
-  定义体: (IsDense.isDenseAt F Y).some
-
-Depends on / 依赖: IsDense, IsDense.isDenseAt, isDenseAt
+--- 原说明 ---
+This is a choice of structure `F.DenseAt Y` when `F : C ⥤ D`
+is dense, and `Y : D`.
 -/
 noncomputable def denseAt (F : C ⥤ D) [F.IsDense] (Y : D) : F.DenseAt Y :=
   (IsDense.isDenseAt F Y).some
-
-/--
-lemma `isDense_iff_nonempty_isPointwiseLeftKanExtension` / 引理 `isDense_iff_nonempty_isPointwiseLeftKanExtension`
-
-English:
-lemma isDense_iff_nonempty_isPointwiseLeftKanExtension
-  given: (F : C ⥤ D)
-  proof: ⟨fun _ => ⟨fun _ => F.denseAt _⟩, fun ⟨h⟩ => ⟨fun _ => ⟨h _⟩⟩⟩
-
-中文:
-引理 isDense_iff_nonempty_isPointwiseLeftKanExtension
-  条件: (F : C ⥤ D)
-  证明: ⟨fun _ => ⟨fun _ => F.denseAt _⟩, fun ⟨h⟩ => ⟨fun _ => ⟨h _⟩⟩⟩
-
-Depends on / 依赖: F.denseAt, denseAt
+/-
+**CategoryTheory.Functor.isDense_iff_nonempty_isPointwiseLeftKanExtension** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：isDense_iff_nonempty_isPointwiseLeftKanExtension (F : C ⥤ D) : F.IsDense ↔
+ Nonempty ((LeftExtension.mk _ (rightUnitor F).inv).IsPointwiseLeftKanExtension)
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isDense_iff_nonempty_isPointwiseLeftKanExtension (F : C ⥤ D) :
     F.IsDense ↔
       Nonempty ((LeftExtension.mk _ (rightUnitor F).inv).IsPointwiseLeftKanExtension) :=
-  ⟨fun _ => ⟨fun _ => F.denseAt _⟩, fun ⟨h⟩ => ⟨fun _ => ⟨h _⟩⟩⟩
-
+  ⟨fun _ ↦ ⟨fun _ ↦ F.denseAt _⟩, fun ⟨h⟩ ↦ ⟨fun _ ↦ ⟨h _⟩⟩⟩
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) [F.IsDense] : Functor.IsLeftKanExtension (𝟭 D) (Functor.rightUnitor F).inv :=
   ((Functor.isDense_iff_nonempty_isPointwiseLeftKanExtension F).mp ‹_›).some.isLeftKanExtension
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ D) [F.IsDense] : F.HasPointwiseLeftKanExtension F :=
-  fun X => (Functor.IsDense.isDenseAt F X).some.hasPointwiseLeftKanExtensionAt
-
-/--
-lemma `IsDense.of_iso` / 引理 `IsDense.of_iso`
-
-English:
-lemma IsDense.of_iso
-  given: {F G : C ⥤ D} (e : F ≅ G) [F.IsDense]
-  proof: by
-    rw [← Functor.congr_isDenseAt e]
-    exact ⟨F.denseAt Y⟩
-
-中文:
-引理 是稠密.of_iso
-  条件: {F G : C ⥤ D} (e : F ≅ G) [F.是稠密]
-  证明: by
-    rw [← Functor.congr_isDenseAt e]
-    exact ⟨F.denseAt Y⟩
-
-Depends on / 依赖: F.denseAt, Functor, Functor.congr_isDenseAt, congr_isDenseAt, denseAt
+  fun X ↦ (Functor.IsDense.isDenseAt F X).some.hasPointwiseLeftKanExtensionAt
+/-
+**CategoryTheory.Functor.IsDense.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Functor.IsDense`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : CategoryTheory.Functor C 
+D} (e : F ≅ G) [F.IsDense], G.IsDense
+参数：e : F ≅ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.congr_isDenseAt`：congr_isDenseAt {G : C ⥤ D} (e :
+ F ≅ G) : F.isDenseAt = G.isDenseAt
 -/
 lemma IsDense.of_iso {F G : C ⥤ D} (e : F ≅ G) [F.IsDense] :
     G.IsDense where
   isDenseAt Y := by
     rw [← Functor.congr_isDenseAt e]
     exact ⟨F.denseAt Y⟩
-
-/--
-lemma `IsDense.iff_of_iso` / 引理 `IsDense.iff_of_iso`
-
-English:
-lemma IsDense.iff_of_iso
-  given: {F G : C ⥤ D} (e : F ≅ G)
-  proof: ⟨fun _ => of_iso e, fun _ => of_iso e.symm⟩
-
-中文:
-引理 是稠密.iff_of_iso
-  条件: {F G : C ⥤ D} (e : F ≅ G)
-  证明: ⟨fun _ => of_iso e, fun _ => of_iso e.symm⟩
-
-Depends on / 依赖: e.symm, of_iso
+/-
+**CategoryTheory.Functor.IsDense.iff_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Functor.IsDense`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : CategoryTheory.Functor C 
+D} (e : F ≅ G), F.IsDense ↔ G.IsDense
+参数：e : F ≅ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsDense.of_iso`：∀ {C : Type u₁} {D : Type u₂} [in
+st : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   {F G : CategoryThe…
 -/
 lemma IsDense.iff_of_iso {F G : C ⥤ D} (e : F ≅ G) :
     F.IsDense ↔ G.IsDense :=
-  ⟨fun _ => of_iso e, fun _ => of_iso e.symm⟩
+  ⟨fun _ ↦ of_iso e, fun _ ↦ of_iso e.symm⟩
 
 variable (F : C ⥤ D)
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (G : C' ⥤ C) [F.IsDense] [G.IsEquivalence] :
     (G ⋙ F).IsDense where
   isDenseAt Y := ⟨(F.denseAt Y).precompOfFinal G⟩
-
-/--
-lemma `IsDense.comp_left_iff_of_isEquivalence` / 引理 `IsDense.comp_left_iff_of_isEquivalence`
-
-English:
-lemma IsDense.comp_left_iff_of_isEquivalence
-  given: (G : C' ⥤ C) [G.IsEquivalence]
-  proof: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  let e : G.inv ⋙ G ⋙ F ≅ F := (associator _ _ _).symm ≪≫
-    isoWhiskerRight (G.asEquivalence.counitIso) _ ≪≫ F.leftUnitor
-  exact of_iso e
-
-中文:
-引理 是稠密.comp_left_iff_of_isEquivalence
-  条件: (G : C' ⥤ C) [G.是等价]
-  证明: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  let e : G.inv ⋙ G ⋙ F ≅ F := (associator _ _ _).symm ≪≫
-    isoWhiskerRight (G.asEquivalence.counitIso) _ ≪≫ F.leftUnitor
-  exact of_iso e
-
-Depends on / 依赖: F.leftUnitor, G.asEquivalence.counitIso, G.inv, asEquivalence, associator, counitIso, isoWhiskerRight, leftUnitor, of_iso
+/-
+**CategoryTheory.Functor.IsDense.comp_left_iff_of_isEquivalence** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Functor.IsDense`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {C' : Type u₃} [inst_2 : Categor
+yTheory.Category.{v₃, u₃} C'] (F : CategoryTheory.Functor C D)   (G : CategoryTh
+eory.Functor C' C) [G.IsEquivalence], (G.comp F).IsDense ↔ F.IsDense
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor C' C；G.comp F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsDense.of_iso`：∀ {C : Type u₁} {D : Type u₂} [in
+st : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.instIsDenseCompOfIsEquivalence`：∀ {C : Type u₁} {
+D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {C' : Type u₃} [in…
 -/
 lemma IsDense.comp_left_iff_of_isEquivalence (G : C' ⥤ C) [G.IsEquivalence] :
     (G ⋙ F).IsDense ↔ F.IsDense := by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
+  refine ⟨fun _ ↦ ?_, fun _ ↦ inferInstance⟩
   let e : G.inv ⋙ G ⋙ F ≅ F := (associator _ _ _).symm ≪≫
     isoWhiskerRight (G.asEquivalence.counitIso) _ ≪≫ F.leftUnitor
   exact of_iso e
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (G : D ⥤ C') [F.IsDense] [G.IsEquivalence] :
     (F ⋙ G).IsDense where
   isDenseAt Y :=
     ⟨ letI e : Y ≅ G.obj (G.inv.obj Y) := G.asEquivalence.counitIso.symm.app Y
       DenseAt.ofIso (F.denseAt (G.inv.obj Y) |>.postcompEquivalence G) e.symm ⟩
-
-/--
-lemma `IsDense.comp_right_iff_of_isEquivalence` / 引理 `IsDense.comp_right_iff_of_isEquivalence`
-
-English:
-lemma IsDense.comp_right_iff_of_isEquivalence
-  given: (G : D ⥤ C') [G.IsEquivalence]
-  proof: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  let e : (F ⋙ G) ⋙ G.inv ≅ F := associator .. ≪≫
-    isoWhiskerLeft _ G.asEquivalence.unitIso.symm ≪≫ F.rightUnitor
-  exact of_iso e
-
-中文:
-引理 是稠密.comp_right_iff_of_isEquivalence
-  条件: (G : D ⥤ C') [G.是等价]
-  证明: by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
-  let e : (F ⋙ G) ⋙ G.inv ≅ F := associator .. ≪≫
-    isoWhiskerLeft _ G.asEquivalence.unitIso.symm ≪≫ F.rightUnitor
-  exact of_iso e
-
-Depends on / 依赖: F.rightUnitor, G.asEquivalence.unitIso.symm, G.inv, asEquivalence, associator, isoWhiskerLeft, of_iso, rightUnitor, unitIso
+/-
+**CategoryTheory.Functor.IsDense.comp_right_iff_of_isEquivalence** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Functor.IsDense`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {C' : Type u₃} [inst_2 : Categor
+yTheory.Category.{v₃, u₃} C'] (F : CategoryTheory.Functor C D)   (G : CategoryTh
+eory.Functor D C') [G.IsEquivalence], (F.comp G).IsDense ↔ F.IsDense
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D C'；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsDense.of_iso`：∀ {C : Type u₁} {D : Type u₂} [in
+st : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.instIsDenseCompOfIsEquivalence_1`：∀ {C : Type u₁}
+ {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   {C' : Type u₃} [in…
 -/
 lemma IsDense.comp_right_iff_of_isEquivalence (G : D ⥤ C') [G.IsEquivalence] :
     (F ⋙ G).IsDense ↔ F.IsDense := by
-  refine ⟨fun _ => ?_, fun _ => inferInstance⟩
+  refine ⟨fun _ ↦ ?_, fun _ ↦ inferInstance⟩
   let e : (F ⋙ G) ⋙ G.inv ≅ F := associator .. ≪≫
     isoWhiskerLeft _ G.asEquivalence.unitIso.symm ≪≫ F.rightUnitor
   exact of_iso e
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.IsDense]
-  signature: : (restrictedULiftYoneda.{w} F).Faithful where
-  body: (F.denseAt _).hom_ext' (fun X p => by
-      simpa using! ULift.up_injective (ConcreteCategory.congr_hom (CC := fun X => X)
-        (NatTrans.congr_app h (op X)) (ULift.up p)))
-
-中文:
-实例 [F.是稠密]
-  签名: : (restrictedULiftYoneda.{w} F).忠实 where
-  定义体: (F.denseAt _).hom_ext' (fun X p => by
-      simpa using! ULift.up_injective (ConcreteCategory.congr_hom (CC := fun X => X)
-        (NatTrans.congr_app h (op X)) (ULift.up p)))
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.denseAt, NatTrans, NatTrans.congr_app, ULift.up, ULift.up_injective, congr_app, congr_hom, denseAt, hom_ext, up_injective
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.IsDense] : (restrictedULiftYoneda.{w} F).Faithful where
   map_injective h :=
-    (F.denseAt _).hom_ext' (fun X p => by
-      simpa using! ULift.up_injective (ConcreteCategory.congr_hom (CC := fun X => X)
+    (F.denseAt _).hom_ext' (fun X p ↦ by
+      simpa using! ULift.up_injective (ConcreteCategory.congr_hom (CC := fun X ↦ X)
         (NatTrans.congr_app h (op X)) (ULift.up p)))
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.IsDense]
-  signature: : (restrictedULiftYoneda.{w} F).Full where
-  body: by
-    let c : Cocone (CostructuredArrow.proj F Y ⋙ F) :=
-      { pt := Z
-        ι :=
-          { app g := ((f.app (op g.left)) (ULift.up g.hom)).down
-            naturality g₁ g₂ φ := by
-              simpa [uliftFunctor, uliftYoneda,
-                restrictedULiftYoneda, ← ULift.down_inj] using
-                ((f.naturality_apply φ.left.op) (ULift.up g₂.hom)).symm } }
-    refine ⟨(F.denseAt Y).desc c, ?_⟩
-    ext ⟨X⟩ ⟨x⟩
-    have := (F.denseAt Y).fac c (.mk x)
-    dsimp [c] at this
-    simpa using ULift.down_injective this
-
-中文:
-实例 [F.是稠密]
-  签名: : (restrictedULiftYoneda.{w} F).满 where
-  定义体: by
-    let c : Cocone (CostructuredArrow.proj F Y ⋙ F) :=
-      { pt := Z
-        ι :=
-          { app g := ((f.app (op g.left)) (ULift.up g.hom)).down
-            naturality g₁ g₂ φ := by
-              simpa [uliftFunctor, uliftYoneda,
-                restrictedULiftYoneda, ← ULift.down_inj] using
-                ((f.naturality_apply φ.left.op) (ULift.up g₂.hom)).symm } }
-    refine ⟨(F.denseAt Y).desc c, ?_⟩
-    ext ⟨X⟩ ⟨x⟩
-    have := (F.denseAt Y).fac c (.mk x)
-    dsimp [c] at this
-    simpa using ULift.down_injective this
-
-Depends on / 依赖: Cocone, CostructuredArrow, CostructuredArrow.proj, F.denseAt, ULift.down_inj, ULift.down_injective, ULift.up, denseAt, down_inj, down_injective, f.app, f.naturality_apply, g.hom, g.left, left.op, naturality, naturality_apply, restrictedULiftYoneda, uliftFunctor, uliftYoneda
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.IsDense] : (restrictedULiftYoneda.{w} F).Full where
   map_surjective {Y Z} f := by
@@ -309,66 +237,54 @@ instance [F.IsDense] : (restrictedULiftYoneda.{w} F).Full where
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable {F} in
-/--
-lemma `IsDense.of_fullyFaithful_restrictedULiftYoneda` / 引理 `IsDense.of_fullyFaithful_restrictedULiftYoneda`
-
-English:
-lemma IsDense.of_fullyFaithful_restrictedULiftYoneda
-  statement: [F.Full]
-  proof: by
-    let φ (s : Cocone (CostructuredArrow.proj F Y ⋙ F)) :
-        (restrictedULiftYoneda.{w} F).obj Y ⟶ (restrictedULiftYoneda F).obj s.pt :=
-      { app := fun ⟨X⟩ => ↾fun ⟨x⟩ => ULift.up (s.ι.app (.mk x))
-        naturality := by
-          rintro ⟨X₁⟩ ⟨X₂⟩ ⟨f⟩
-          ext ⟨x⟩
-          let α : CostructuredArrow.mk (F.map f ≫ x) ⟶ CostructuredArrow.mk x :=
-            CostructuredArrow.homMk f
-          exact ULift.down_injective (s.w α).symm }
-    have hφ (s) (j) : (restrictedULiftYoneda F).map j.hom ≫ φ s =
-        (restrictedULiftYoneda F).map (s.ι.app j) := by
-      ext ⟨X⟩ ⟨x⟩
-      let α : .mk (x ≫ j.hom) ⟶ j := CostructuredArrow.homMk (F.preimage x)
-      have := s.w α
-      dsimp [uliftYoneda, φ, α] at this ⊢
-      apply ULift.down_injective
-      simpa using this.symm
-    exact
-      ⟨{desc s := (h.preimage (φ s))
-        fac s j := h.map_injective (by simp [hφ])
-        uniq s m hm := h.map_injective (by
-          ext ⟨_⟩ ⟨_⟩
-          simp [φ, ← hm]) }⟩
-
-中文:
-引理 是稠密.of_fullyFaithful_restrictedULiftYoneda
-  结论: [F.满]
-  证明: by
-    let φ (s : Cocone (CostructuredArrow.proj F Y ⋙ F)) :
-        (restrictedULiftYoneda.{w} F).obj Y ⟶ (restrictedULiftYoneda F).obj s.pt :=
-      { app := fun ⟨X⟩ => ↾fun ⟨x⟩ => ULift.up (s.ι.app (.mk x))
-        naturality := by
-          rintro ⟨X₁⟩ ⟨X₂⟩ ⟨f⟩
-          ext ⟨x⟩
-          let α : CostructuredArrow.mk (F.map f ≫ x) ⟶ CostructuredArrow.mk x :=
-            CostructuredArrow.homMk f
-          exact ULift.down_injective (s.w α).symm }
-    have hφ (s) (j) : (restrictedULiftYoneda F).map j.hom ≫ φ s =
-        (restrictedULiftYoneda F).map (s.ι.app j) := by
-      ext ⟨X⟩ ⟨x⟩
-      let α : .mk (x ≫ j.hom) ⟶ j := CostructuredArrow.homMk (F.preimage x)
-      have := s.w α
-      dsimp [uliftYoneda, φ, α] at this ⊢
-      apply ULift.down_injective
-      simpa using this.symm
-    exact
-      ⟨{desc s := (h.preimage (φ s))
-        fac s j := h.map_injective (by simp [hφ])
-        uniq s m hm := h.map_injective (by
-          ext ⟨_⟩ ⟨_⟩
-          simp [φ, ← hm]) }⟩
-
-Depends on / 依赖: Cocone, CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, CostructuredArrow.proj, F.map, ULift.down_injective, ULift.up, down_injective, j.hom, naturality, restrictedULiftYoneda, s.pt
+/-
+**CategoryTheory.Functor.IsDense.of_fullyFaithful_restrictedULiftYoneda** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.Functor.IsDense`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheory.Functor C D}
+ [F.Full] (h : (CategoryTheory.Presheaf.restrictedULiftYoneda F).FullyFaithful),
+   F.IsDense
+参数：h : (CategoryTheory.Presheaf.restrictedULiftYoneda F).FullyFaithful。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ULift.down_injective`：∀ {α : Type u_1}, Function.Injective ULift.down
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Cocone.w`：∀ {J : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C] 
+  {F : CategoryTheor…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_injective`：map_injective {X Y :
+ C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.map_preimage`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.NatTrans.mk.congr_simp`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   {F G : CategoryThe…
 -/
 lemma IsDense.of_fullyFaithful_restrictedULiftYoneda [F.Full]
     (h : (restrictedULiftYoneda.{w} F).FullyFaithful) :
@@ -376,7 +292,7 @@ lemma IsDense.of_fullyFaithful_restrictedULiftYoneda [F.Full]
   isDenseAt Y := by
     let φ (s : Cocone (CostructuredArrow.proj F Y ⋙ F)) :
         (restrictedULiftYoneda.{w} F).obj Y ⟶ (restrictedULiftYoneda F).obj s.pt :=
-      { app := fun ⟨X⟩ => ↾fun ⟨x⟩ => ULift.up (s.ι.app (.mk x))
+      { app := fun ⟨X⟩ ↦ ↾fun ⟨x⟩ ↦ ULift.up (s.ι.app (.mk x))
         naturality := by
           rintro ⟨X₁⟩ ⟨X₂⟩ ⟨f⟩
           ext ⟨x⟩
@@ -397,111 +313,139 @@ lemma IsDense.of_fullyFaithful_restrictedULiftYoneda [F.Full]
         uniq s m hm := h.map_injective (by
           ext ⟨_⟩ ⟨_⟩
           simp [φ, ← hm]) }⟩
-
-/--
-lemma `isDense_iff_fullyFaithful_restrictedULiftYoneda` / 引理 `isDense_iff_fullyFaithful_restrictedULiftYoneda`
-
-English:
-lemma isDense_iff_fullyFaithful_restrictedULiftYoneda
-  given: [F.Full]
-  proof: ⟨fun _ => ⟨FullyFaithful.ofFullyFaithful _⟩,
-    fun ⟨h⟩ => IsDense.of_fullyFaithful_restrictedULiftYoneda h⟩
-
-中文:
-引理 isDense_iff_fullyFaithful_restrictedULiftYoneda
-  条件: [F.满]
-  证明: ⟨fun _ => ⟨FullyFaithful.ofFullyFaithful _⟩,
-    fun ⟨h⟩ => IsDense.of_fullyFaithful_restrictedULiftYoneda h⟩
-
-Depends on / 依赖: FullyFaithful, FullyFaithful.ofFullyFaithful, IsDense, IsDense.of_fullyFaithful_restrictedULiftYoneda, ofFullyFaithful, of_fullyFaithful_restrictedULiftYoneda
+/-
+**CategoryTheory.Functor.isDense_iff_fullyFaithful_restrictedULiftYoneda** 是 Mat
+hlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：isDense_iff_fullyFaithful_restrictedULiftYoneda [F.Full] : F.IsDense ↔ Non
+empty (restrictedULiftYoneda.{w} F).FullyFaithful
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instFullOppositeTypeRestrictedULiftYonedaOfIsDens
+e`：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [in
+st_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instFaithfulOppositeTypeRestrictedULiftYonedaOfIs
+Dense`：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C]
+ [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsDense.of_fullyFaithful_restrictedULiftYoneda`：∀
+ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1
+ : CategoryTheory.Category.{v₂, u₂} D]   {F : CategoryTheor…
 -/
 lemma isDense_iff_fullyFaithful_restrictedULiftYoneda [F.Full] :
     F.IsDense ↔ Nonempty (restrictedULiftYoneda.{w} F).FullyFaithful :=
-  ⟨fun _ => ⟨FullyFaithful.ofFullyFaithful _⟩,
-    fun ⟨h⟩ => IsDense.of_fullyFaithful_restrictedULiftYoneda h⟩
+  ⟨fun _ ↦ ⟨FullyFaithful.ofFullyFaithful _⟩,
+    fun ⟨h⟩ ↦ IsDense.of_fullyFaithful_restrictedULiftYoneda h⟩
 
 open ObjectProperty in
-/--
-lemma `isStrongGenerator_of_isDense` / 引理 `isStrongGenerator_of_isDense`
-
-English:
-lemma isStrongGenerator_of_isDense
-  given: [F.IsDense]
-  proof: (IsStrongGenerator.mk_of_exists_colimitsOfShape.{max u₁ u₂ v₁ v₂,
-      max u₁ v₁ v₂} (fun Y => ⟨_, _, ⟨{
-    ι := _
-    diag := _
-    isColimit := (IsColimit.whiskerEquivalence (F.denseAt Y)
-      ((ShrinkHoms.equivalence _).symm.trans ((Shrink.equivalence _)).symm))
-    prop_diag_obj := by simp }⟩⟩))
-
-中文:
-引理 isStrongGenerator_of_isDense
-  条件: [F.是稠密]
-  证明: (IsStrongGenerator.mk_of_exists_colimitsOfShape.{max u₁ u₂ v₁ v₂,
-      max u₁ v₁ v₂} (fun Y => ⟨_, _, ⟨{
-    ι := _
-    diag := _
-    isColimit := (IsColimit.whiskerEquivalence (F.denseAt Y)
-      ((ShrinkHoms.equivalence _).symm.trans ((Shrink.equivalence _)).symm))
-    prop_diag_obj := by simp }⟩⟩))
-
-Depends on / 依赖: F.denseAt, IsColimit, IsColimit.whiskerEquivalence, IsStrongGenerator, IsStrongGenerator.mk_of_exists_colimitsOfShape, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, denseAt, equivalence, isColimit, mk_of_exists_colimitsOfShape, prop_diag_obj, symm.trans, whiskerEquivalence
+/-
+**CategoryTheory.Functor.isStrongGenerator_of_isDense** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Functor`。
+形式化陈述：isStrongGenerator_of_isDense [F.IsDense] : IsStrongGenerator (.ofObj F.obj
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsStrongGenerator.mk_of_exists_colimitsOfS
+hape`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheo
+ry.ObjectProperty C},   (∀ (X : C), ∃ J x, P.colimitsOfShape J X) …
+· 使用定理 `CategoryTheory.CostructuredArrow.instSmallOfLocallySmall`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   {S : CategoryTheor…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.Shrink.instLocallySmallShrink`：∀ (C : Type u) [inst : Cat
+egoryTheory.Category.{v, u} C] [inst_1 : Small.{w', u} C]   [CategoryTheory.Loca
+llySmall.{w, v, u} C], CategoryThe…
+· 使用定理 `CategoryTheory.locallySmall_of_essentiallySmall`：∀ (C : Type u) [inst : 
+CategoryTheory.Category.{v, u} C] [CategoryTheory.EssentiallySmall.{w, v, u} C],
+   CategoryTheory.LocallySmall.{w, v,…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Equivalence.trans_functor`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.ShrinkHoms.equivalence_inverse`：∀ (C : Type u) [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.LocallySmall.{w, v, u} 
+C],   (CategoryTheory.ShrinkHoms.eq…
+· 使用定理 `CategoryTheory.ShrinkHoms.inverse_obj`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.LocallySmall.{w, v, u} C]   (X 
+: CategoryTheory.ShrinkHoms…
+· 使用定理 `CategoryTheory.CostructuredArrow.proj_obj`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   (S : CategoryTheor…
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma isStrongGenerator_of_isDense [F.IsDense] :
     IsStrongGenerator (.ofObj F.obj) :=
   (IsStrongGenerator.mk_of_exists_colimitsOfShape.{max u₁ u₂ v₁ v₂,
-      max u₁ v₁ v₂} (fun Y => ⟨_, _, ⟨{
+      max u₁ v₁ v₂} (fun Y ↦ ⟨_, _, ⟨{
     ι := _
     diag := _
     isColimit := (IsColimit.whiskerEquivalence (F.denseAt Y)
       ((ShrinkHoms.equivalence _).symm.trans ((Shrink.equivalence _)).symm))
     prop_diag_obj := by simp }⟩⟩))
 
-/--
-Definition of `IsDense.leftKanExtensionIso` / `IsDense.leftKanExtensionIso` 的定义
+/-- If `F` is dense, the left Kan extension of `F` along `F` is isomorphic to the identity. -/
+/-
+**CategoryTheory.Functor.IsDense.leftKanExtensionIso** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor.IsDense`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Cat
+egoryTheory.Functor C D) → [inst_2 : F.IsDense] → F.leftKanExtension F ≅ Categor
+yTheory.Functor.id D
+参数：F : CategoryTheory.Functor C D。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instIsLeftKanExtensionIdInvRightUnitorOfIsDense`：
+∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_
+1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 
-English:
-definition IsDense.leftKanExtensionIso
-  signature: (F : C ⥤ D) [F.IsDense]
-  body: Functor.leftKanExtensionUnique _ (F.leftKanExtensionUnit F) _ F.rightUnitor.inv
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 是稠密.leftKanExtensionIso
-  签名: (F : C ⥤ D) [F.是稠密]
-  定义体: Functor.leftKanExtensionUnique _ (F.leftKanExtensionUnit F) _ F.rightUnitor.inv
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.leftKanExtensionUnit, F.rightUnitor.inv, Functor, Functor.leftKanExtensionUnique, leftKanExtensionUnique, leftKanExtensionUnit, rightUnitor
+--- 原说明 ---
+If `F` is dense, the left Kan extension of `F` along `F` is isomorphic to the id
+entity.
 -/
 noncomputable def IsDense.leftKanExtensionIso (F : C ⥤ D) [F.IsDense] :
     F.leftKanExtension F ≅ 𝟭 D :=
   Functor.leftKanExtensionUnique _ (F.leftKanExtensionUnit F) _ F.rightUnitor.inv
 
 @[reassoc (attr := simp)]
-/--
-lemma `IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom` / 引理 `IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom`
-
-English:
-lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom
-  given: (F : C ⥤ D) [F.IsDense]
-  proof: by
-  simp [Functor.IsDense.leftKanExtensionIso]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 是稠密.leftKanExtensionUnit_leftKanExtensionIso_hom
-  条件: (F : C ⥤ D) [F.是稠密]
-  证明: by
-  simp [Functor.IsDense.leftKanExtensionIso]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.IsDense.leftKanExtensionIso, IsDense, leftKanExtensionIso
+/-
+**CategoryTheory.Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom** 
+是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Functor.IsDense`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : F.IsDense],   CategoryTheory.CategoryStruct.comp (F.leftKanExtensionU
+nit F)       (F.whiskerLeft (CategoryTheory.Functor.IsDense.leftKanExtensionIso 
+F).hom) =     F.rightUnitor.inv
+参数：F : CategoryTheory.Functor C D；F.leftKanExtensionUnit F；F.whiskerLeft (Catego
+ryTheory.Functor.IsDense.leftKanExtensionIso F).hom。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.instHasPointwiseLeftKanExtensionOfIsDense`：∀ {C :
+ Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.leftKanExtensionUnique_hom`：∀ {C : Type u_1} {H :
+ Type u_3} {D : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_
+1 : CategoryTheory.Category.{v_3, u_3} …
+· 使用定理 `CategoryTheory.Functor.instIsLeftKanExtensionIdInvRightUnitorOfIsDense`：
+∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_
+1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用引理 `CategoryTheory.Functor.descOfIsLeftKanExtension_fac`：descOfIsLeftKanExte
+nsion_fac (G : D ⥤ H) (β : F ⟶ L ⋙ G) : α ≫ whiskerLeft L (F'.descOfIsLeftKanExt
+ension α G β) = β
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom (F : C ⥤ D) [F.IsDense] :
     F.leftKanExtensionUnit F ≫ F.whiskerLeft (Functor.IsDense.leftKanExtensionIso F).hom =
@@ -509,20 +453,28 @@ lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom (F : C ⥤ D) [F.IsDe
   simp [Functor.IsDense.leftKanExtensionIso]
 
 @[reassoc (attr := simp)]
-/--
-lemma `IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_app` / 引理 `IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_app`
-
-English:
-lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_app
-  given: [F.IsDense] (X : C)
-  proof: congr($(Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom _).app _)
-
-中文:
-引理 是稠密.leftKanExtensionUnit_leftKanExtensionIso_hom_app
-  条件: [F.是稠密] (X : C)
-  证明: congr($(Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom _).app _)
-
-Depends on / 依赖: Functor, Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom, IsDense, leftKanExtensionUnit_leftKanExtensionIso_hom
+/-
+**CategoryTheory.Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_ap
+p** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Functor.IsDense`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : F.IsDense] (X : C),   CategoryTheory.CategoryStruct.comp ((F.leftKanE
+xtensionUnit F).app X)       ((CategoryTheory.Functor.IsDense.leftKanExtensionIs
+o F).hom.app (F.obj X)) =     F.rightUnitor.inv.app X
+参数：F : CategoryTheory.Functor C D；X : C；(F.leftKanExtensionUnit F).app X；(Catego
+ryTheory.Functor.IsDense.leftKanExtensionIso F).hom.app (F.obj X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.instHasPointwiseLeftKanExtensionOfIsDense`：∀ {C :
+ Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.IsDense.leftKanExtensionUnit_leftKanExtensionIso_
+hom`：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [
+inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_app [F.IsDense] (X : C) :
     (F.leftKanExtensionUnit F).app X ≫ (Functor.IsDense.leftKanExtensionIso F).hom.app (F.obj X) =
@@ -531,76 +483,49 @@ lemma IsDense.leftKanExtensionUnit_leftKanExtensionIso_hom_app [F.IsDense] (X : 
 
 end Functor
 
-/--
-Definition of `denseAtYoneda` / `denseAtYoneda` 的定义
+/-- `yoneda` is dense: Every `X : Cᵒᵖ ⥤ Type v₁` is the colimit over
+`CostructuredArrow.proj yoneda X ⋙ yoneda`. -/
+/-
+**CategoryTheory.denseAtYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：denseAtYoneda (X : Cᵒᵖ ⥤ Type v₁) : yoneda.DenseAt X
+参数：X : Cᵒᵖ ⥤ Type v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition denseAtYoneda
-  signature: (X : Cᵒᵖ ⥤ Type v₁)
-  body: Presheaf.isColimitTautologicalCocone X
-
-中文:
-定义 denseAtYoneda
-  签名: (X : Cᵒᵖ ⥤ 类型v₁)
-  定义体: Presheaf.isColimitTautologicalCocone X
-
-Depends on / 依赖: Presheaf, Presheaf.isColimitTautologicalCocone, isColimitTautologicalCocone
+--- 原说明 ---
+`yoneda` is dense: Every `X : Cᵒᵖ ⥤ Type v₁` is the colimit over
+`CostructuredArrow.proj yoneda X ⋙ yoneda`.
 -/
 def denseAtYoneda (X : Cᵒᵖ ⥤ Type v₁) : yoneda.DenseAt X :=
   Presheaf.isColimitTautologicalCocone X
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (yoneda (C := C)).IsDense
-  body: ⟨denseAtYoneda X⟩
-
-中文:
-实例 :
-  签名: (yoneda (C := C)).是稠密
-  定义体: ⟨denseAtYoneda X⟩
-
-Depends on / 依赖: IsDense
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (yoneda (C := C)).IsDense where
   isDenseAt X := ⟨denseAtYoneda X⟩
 
-/--
-Definition of `denseAtUliftYoneda` / `denseAtUliftYoneda` 的定义
+/-- `uliftYoneda` is dense: Every `X : Cᵒᵖ ⥤ Type max w v₁` is the colimit over
+`CostructuredArrow.proj uliftYoneda X ⋙ uliftYoneda`. -/
+/-
+**CategoryTheory.denseAtUliftYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：denseAtUliftYoneda (X : Cᵒᵖ ⥤ Type max w v₁) : uliftYoneda.DenseAt X
+参数：X : Cᵒᵖ ⥤ Type max w v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition denseAtUliftYoneda
-  signature: (X : Cᵒᵖ ⥤ Type max w v₁)
-  body: Presheaf.isColimitTautologicalCocone' X
-
-中文:
-定义 denseAtUliftYoneda
-  签名: (X : Cᵒᵖ ⥤ 类型 最大值 w v₁)
-  定义体: Presheaf.isColimitTautologicalCocone' X
-
-Depends on / 依赖: Presheaf, Presheaf.isColimitTautologicalCocone, isColimitTautologicalCocone
+--- 原说明 ---
+`uliftYoneda` is dense: Every `X : Cᵒᵖ ⥤ Type max w v₁` is the colimit over
+`CostructuredArrow.proj uliftYoneda X ⋙ uliftYoneda`.
 -/
 def denseAtUliftYoneda (X : Cᵒᵖ ⥤ Type max w v₁) : uliftYoneda.DenseAt X :=
   Presheaf.isColimitTautologicalCocone' X
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (uliftYoneda.{w} (C := C)).IsDense
-  body: ⟨denseAtUliftYoneda X⟩
-
-中文:
-实例 :
-  签名: (uliftYoneda.{w} (C := C)).是稠密
-  定义体: ⟨denseAtUliftYoneda X⟩
-
-Depends on / 依赖: IsDense
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (uliftYoneda.{w} (C := C)).IsDense where
   isDenseAt X := ⟨denseAtUliftYoneda X⟩
 
 end CategoryTheory
+

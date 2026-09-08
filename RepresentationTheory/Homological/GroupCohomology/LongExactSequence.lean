@@ -47,32 +47,74 @@ include hX
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `map_cochainsFunctor_shortExact` / 引理 `map_cochainsFunctor_shortExact`
-
-English:
-lemma map_cochainsFunctor_shortExact
-  proof: HomologicalComplex.shortExact_of_degreewise_shortExact _ fun i => {
-    exact := by
-      have : LinearMap.range X.f.hom.toLinearMap = LinearMap.ker X.g.hom.toLinearMap :=
-        (hX.exact.map (forget₂ (Rep k G) (ModuleCat k))).moduleCat_range_eq_ker
-      simp [moduleCat_exact_iff_range_eq_ker, LinearMap.range_compLeft,
-        LinearMap.ker_compLeft, this]
-    mono_f := letI := hX.mono_f; cochainsMap_id_f_map_mono X.f i
-    epi_g := letI := hX.epi_g; cochainsMap_id_f_map_epi X.g i }
-
-中文:
-引理 map_cochainsFunctor_shortExact
-  证明: HomologicalComplex.shortExact_of_degreewise_shortExact _ fun i => {
-    exact := by
-      have : LinearMap.range X.f.hom.toLinearMap = LinearMap.ker X.g.hom.toLinearMap :=
-        (hX.exact.map (forget₂ (Rep k G) (ModuleCat k))).moduleCat_range_eq_ker
-      simp [moduleCat_exact_iff_range_eq_ker, LinearMap.range_compLeft,
-        LinearMap.ker_compLeft, this]
-    mono_f := letI := hX.mono_f; cochainsMap_id_f_map_mono X.f i
-    epi_g := letI := hX.epi_g; cochainsMap_id_f_map_epi X.g i }
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.shortExact_of_degreewise_shortExact, LinearMap, LinearMap.ker, LinearMap.ker_compLeft, LinearMap.range, LinearMap.range_compLeft, ModuleCat, X.f.hom.toLinearMap, X.g.hom.toLinearMap, cochainsMap_id_f_map_epi, cochainsMap_id_f_map_mono, epi_g, hX.epi_g, hX.exact.map, hX.mono_f, ker_compLeft, moduleCat_exact_iff_range_eq_ker, moduleCat_range_eq_ker, mono_f
+/-
+**groupCohomology.map_cochainsFunctor_shortExact** 是 Mathlib 中的一个引理，位于命名空间 `grou
+pCohomology`。
+形式化陈述：map_cochainsFunctor_shortExact : ShortExact (X.map (cochainsFunctor k G))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.shortExact_of_degreewise_shortExact`：shortExact_of_de
+greewise_shortExact (hS : forall (i : ι), (S.map (eval C c i)).ShortExact) : S.S
+hortExact where mono_f
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `groupCohomology.instPreservesZeroMorphismsRepCochainComplexModuleCatNatC
+ochainsFunctor`：∀ (k G : Type u) [inst : CommRing k] [inst_1 : Group G], (groupC
+ohomology.cochainsFunctor k G).PreservesZeroMorphisms
+· 使用定理 `HomologicalComplex.instPreservesZeroMorphismsEval`：∀ {ι : Type u_1} (V :
+ Type u) [inst : CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms V] (c : ComplexSh…
+· 使用定理 `CategoryTheory.ShortComplex.Exact.moduleCat_range_eq_ker`：∀ {R : Type u}
+ [inst : Ring R] {S : CategoryTheory.ShortComplex (ModuleCat R)},   S.Exact → (M
+oduleCat.Hom.hom S.f).range = (ModuleCat.Hom.h…
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_of_additive`：∀ {C : Type u
+_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Cat
+egoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `Rep.instAdditiveModuleCatForget₂IntertwiningMapVρLinearMapIdCarrier`：∀ (
+k : Type u) (G : Type v) [inst : Ring k] [inst_1 : Monoid G],   (CategoryTheory.
+forget₂ (Rep.{w, u, v} k G) (ModuleCat k)).Additive
+· 使用定理 `CategoryTheory.ShortComplex.Exact.map`：∀ {C : Type u_1} {D : Type u_2} [
+inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category
+.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.exact`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `CategoryTheory.Functor.PreservesHomology.preservesLeftHomologyOf`：∀ {C :
+ Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_
+1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Functor.preservesHomologyOfExact`：∀ {C : Type u_1} {D : T
+ype u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheor
+y.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `CategoryTheory.Limits.PreservesLimits.preservesFiniteLimits`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categor
+yTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.PreservesColimits.preservesFiniteColimits`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.PreservesHomology.preservesRightHomologyOf`：∀ {C 
+: Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst
+_1 : CategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.range_compLeft`：range_compLeft [AddCommMonoid M] [AddCommMonoi
+d M₂] [Module R M] [Module R M₂] (f : M ->ₗ[R] M₂) (I : Type*) : LinearMap.range
+ (f.compLeft I…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `LinearMap.ker_compLeft`：ker_compLeft [AddCommMonoid M] [AddCommMonoid M₂
+] [Module R M] [Module R M₂] (f : M ->ₗ[R] M₂) (I : Type*) : LinearMap.ker (f.co
+mpLeft I) = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.mono_f`：∀ {C : Type u_1} [inst : 
+CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMor
+phisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.epi_g`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms C]   {S : CategoryTheory.Sho…
 -/
 lemma map_cochainsFunctor_shortExact :
     ShortExact (X.map (cochainsFunctor k G)) :=
@@ -87,247 +129,155 @@ lemma map_cochainsFunctor_shortExact :
 
 open HomologicalComplex.HomologySequence
 
-/--
-Definition of `mapShortComplex₁` / `mapShortComplex₁` 的定义
+/-- The short complex `Hⁱ(G, X₃) ⟶ Hʲ(G, X₁) ⟶ Hʲ(G, X₂)` associated to an exact
+sequence of representations `0 ⟶ X₁ ⟶ X₂ ⟶ X₃ ⟶ 0`. -/
+/-
+**groupCohomology.mapShortComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mapShortComplex₁
-  signature: {i j : Nat} (hij : i + 1 = j)
-  body: (snakeInput (map_cochainsFunctor_shortExact hX) _ _ hij).L₂'
-
-中文:
-缩写 mapShortComplex₁
-  签名: {i j : 自然数} (hij : i + 1 = j)
-  定义体: (snakeInput (map_cochainsFunctor_shortExact hX) _ _ hij).L₂'
-
-Depends on / 依赖: map_cochainsFunctor_shortExact, snakeInput
+--- 原说明 ---
+The short complex `Hⁱ(G, X₃) ⟶ Hʲ(G, X₁) ⟶ Hʲ(G, X₂)` associated to an exact
+sequence of representations `0 ⟶ X₁ ⟶ X₂ ⟶ X₃ ⟶ 0`.
 -/
-noncomputable abbrev mapShortComplex₁ {i j : Nat} (hij : i + 1 = j) :=
+noncomputable abbrev mapShortComplex₁ {i j : ℕ} (hij : i + 1 = j) :=
   (snakeInput (map_cochainsFunctor_shortExact hX) _ _ hij).L₂'
 
 variable (X) in
-/--
-Definition of `mapShortComplex₂` / `mapShortComplex₂` 的定义
+/-- The short complex `Hⁱ(G, X₁) ⟶ Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃)` associated to a short complex of
+representations `X₁ ⟶ X₂ ⟶ X₃`. -/
+/-
+**groupCohomology.mapShortComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mapShortComplex₂
-  signature: (i : Nat)
-  body: X.map (functor k G i)
-
-中文:
-缩写 mapShortComplex₂
-  签名: (i : 自然数)
-  定义体: X.map (functor k G i)
-
-Depends on / 依赖: X.map, functor
+--- 原说明 ---
+The short complex `Hⁱ(G, X₁) ⟶ Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃)` associated to a short comp
+lex of
+representations `X₁ ⟶ X₂ ⟶ X₃`.
 -/
-noncomputable abbrev mapShortComplex₂ (i : Nat) := X.map (functor k G i)
+noncomputable abbrev mapShortComplex₂ (i : ℕ) := X.map (functor k G i)
 
-/--
-Definition of `mapShortComplex₃` / `mapShortComplex₃` 的定义
+/-- The short complex `Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃) ⟶ Hʲ(G, X₁)`. -/
+/-
+**groupCohomology.mapShortComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mapShortComplex₃
-  signature: {i j : Nat} (hij : i + 1 = j)
-  body: (snakeInput (map_cochainsFunctor_shortExact hX) _ _ hij).L₁'
-
-中文:
-缩写 mapShortComplex₃
-  签名: {i j : 自然数} (hij : i + 1 = j)
-  定义体: (snakeInput (map_cochainsFunctor_shortExact hX) _ _ hij).L₁'
-
-Depends on / 依赖: map_cochainsFunctor_shortExact, snakeInput
+--- 原说明 ---
+The short complex `Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃) ⟶ Hʲ(G, X₁)`.
 -/
-noncomputable abbrev mapShortComplex₃ {i j : Nat} (hij : i + 1 = j) :=
+noncomputable abbrev mapShortComplex₃ {i j : ℕ} (hij : i + 1 = j) :=
   (snakeInput (map_cochainsFunctor_shortExact hX) _ _ hij).L₁'
 
-/--
-lemma `mapShortComplex₁_exact` / 引理 `mapShortComplex₁_exact`
+/-- Exactness of `Hⁱ(G, X₃) ⟶ Hʲ(G, X₁) ⟶ Hʲ(G, X₂)`. -/
+/-
+**groupCohomology.mapShortComplex** 是 Mathlib 中的一个引理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mapShortComplex₁_exact
-  given: {i j : Nat} (hij : i + 1 = j)
-  proof: (map_cochainsFunctor_shortExact hX).homology_exact₁ i j hij
-
-中文:
-引理 mapShortComplex₁_exact
-  条件: {i j : 自然数} (hij : i + 1 = j)
-  证明: (map_cochainsFunctor_shortExact hX).homology_exact₁ i j hij
-
-Depends on / 依赖: map_cochainsFunctor_shortExact
+--- 原说明 ---
+Exactness of `Hⁱ(G, X₃) ⟶ Hʲ(G, X₁) ⟶ Hʲ(G, X₂)`.
 -/
-lemma mapShortComplex₁_exact {i j : Nat} (hij : i + 1 = j) :
+lemma mapShortComplex₁_exact {i j : ℕ} (hij : i + 1 = j) :
     (mapShortComplex₁ hX hij).Exact :=
   (map_cochainsFunctor_shortExact hX).homology_exact₁ i j hij
 
-/--
-lemma `mapShortComplex₂_exact` / 引理 `mapShortComplex₂_exact`
+/-- Exactness of `Hⁱ(G, X₁) ⟶ Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃)`. -/
+/-
+**groupCohomology.mapShortComplex** 是 Mathlib 中的一个引理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mapShortComplex₂_exact
-  given: (i : Nat)
-  proof: (map_cochainsFunctor_shortExact hX).homology_exact₂ i
-
-中文:
-引理 mapShortComplex₂_exact
-  条件: (i : 自然数)
-  证明: (map_cochainsFunctor_shortExact hX).homology_exact₂ i
-
-Depends on / 依赖: map_cochainsFunctor_shortExact
+--- 原说明 ---
+Exactness of `Hⁱ(G, X₁) ⟶ Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃)`.
 -/
-lemma mapShortComplex₂_exact (i : Nat) :
+lemma mapShortComplex₂_exact (i : ℕ) :
     (mapShortComplex₂ X i).Exact :=
   (map_cochainsFunctor_shortExact hX).homology_exact₂ i
 
-/--
-lemma `mapShortComplex₃_exact` / 引理 `mapShortComplex₃_exact`
+/-- Exactness of `Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃) ⟶ Hʲ(G, X₁)`. -/
+/-
+**groupCohomology.mapShortComplex** 是 Mathlib 中的一个引理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma mapShortComplex₃_exact
-  given: {i j : Nat} (hij : i + 1 = j)
-  proof: (map_cochainsFunctor_shortExact hX).homology_exact₃ i j hij
-
-中文:
-引理 mapShortComplex₃_exact
-  条件: {i j : 自然数} (hij : i + 1 = j)
-  证明: (map_cochainsFunctor_shortExact hX).homology_exact₃ i j hij
-
-Depends on / 依赖: map_cochainsFunctor_shortExact
+--- 原说明 ---
+Exactness of `Hⁱ(G, X₂) ⟶ Hⁱ(G, X₃) ⟶ Hʲ(G, X₁)`.
 -/
-lemma mapShortComplex₃_exact {i j : Nat} (hij : i + 1 = j) :
+lemma mapShortComplex₃_exact {i j : ℕ} (hij : i + 1 = j) :
     (mapShortComplex₃ hX hij).Exact :=
   (map_cochainsFunctor_shortExact hX).homology_exact₃ i j hij
 
-/--
-Definition of `δ` / `δ` 的定义
+/-- The connecting homomorphism `Hⁱ(G, X₃) ⟶ Hʲ(G, X₁)` associated to an exact sequence
+`0 ⟶ X₁ ⟶ X₂ ⟶ X₃ ⟶ 0` of representations. -/
+/-
+**groupCohomology.** 是 Mathlib 中的一个缩写定义，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation δ
-  signature: (i j : Nat) (hij : i + 1 = j)
-  body: (map_cochainsFunctor_shortExact hX).δ i j hij
-
-中文:
-缩写 δ
-  签名: (i j : 自然数) (hij : i + 1 = j)
-  定义体: (map_cochainsFunctor_shortExact hX).δ i j hij
-
-Depends on / 依赖: map_cochainsFunctor_shortExact
+--- 原说明 ---
+The connecting homomorphism `Hⁱ(G, X₃) ⟶ Hʲ(G, X₁)` associated to an exact seque
+nce
+`0 ⟶ X₁ ⟶ X₂ ⟶ X₃ ⟶ 0` of representations.
 -/
-noncomputable abbrev δ (i j : Nat) (hij : i + 1 = j) :
+noncomputable abbrev δ (i j : ℕ) (hij : i + 1 = j) :
     groupCohomology X.X₃ i ⟶ groupCohomology X.X₁ j :=
   (map_cochainsFunctor_shortExact hX).δ i j hij
 
 open Limits
-
-/--
-theorem `epi_δ_of_isZero` / 定理 `epi_δ_of_isZero`
-
-English:
-theorem epi_δ_of_isZero
-  given: (n : Nat) (h : IsZero (groupCohomology X.X₂ (n + 1)))
-  proof: SnakeInput.epi_δ _ h
-
-中文:
-定理 epi_δ_of_isZero
-  条件: (n : 自然数) (h : 是零 (groupCohomology X.X₂ (n + 1)))
-  证明: SnakeInput.epi_δ _ h
-
-Depends on / 依赖: SnakeInput, SnakeInput.epi_
+/-
+**groupCohomology.epi_** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem epi_δ_of_isZero (n : Nat) (h : IsZero (groupCohomology X.X₂ (n + 1))) :
+theorem epi_δ_of_isZero (n : ℕ) (h : IsZero (groupCohomology X.X₂ (n + 1))) :
     Epi (δ hX n (n + 1) rfl) := SnakeInput.epi_δ _ h
-
-/--
-theorem `mono_δ_of_isZero` / 定理 `mono_δ_of_isZero`
-
-English:
-theorem mono_δ_of_isZero
-  given: (n : Nat) (h : IsZero (groupCohomology X.X₂ n))
-  proof: SnakeInput.mono_δ _ h
-
-中文:
-定理 mono_δ_of_isZero
-  条件: (n : 自然数) (h : 是零 (groupCohomology X.X₂ n))
-  证明: SnakeInput.mono_δ _ h
-
-Depends on / 依赖: SnakeInput, SnakeInput.mono_
+/-
+**groupCohomology.mono_** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mono_δ_of_isZero (n : Nat) (h : IsZero (groupCohomology X.X₂ n)) :
+theorem mono_δ_of_isZero (n : ℕ) (h : IsZero (groupCohomology X.X₂ n)) :
     Mono (δ hX n (n + 1) rfl) := SnakeInput.mono_δ _ h
-
-/--
-theorem `isIso_δ_of_isZero` / 定理 `isIso_δ_of_isZero`
-
-English:
-theorem isIso_δ_of_isZero
-  statement: (n : Nat) (h : IsZero (groupCohomology X.X₂ n))
-  proof: SnakeInput.isIso_δ _ h hs
-
-中文:
-定理 isIso_δ_of_isZero
-  结论: (n : 自然数) (h : 是零 (groupCohomology X.X₂ n))
-  证明: SnakeInput.isIso_δ _ h hs
-
-Depends on / 依赖: SnakeInput, SnakeInput.isIso_
+/-
+**groupCohomology.isIso_** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isIso_δ_of_isZero (n : Nat) (h : IsZero (groupCohomology X.X₂ n))
+theorem isIso_δ_of_isZero (n : ℕ) (h : IsZero (groupCohomology X.X₂ n))
     (hs : IsZero (groupCohomology X.X₂ (n + 1))) :
     IsIso (δ hX n (n + 1) rfl) := SnakeInput.isIso_δ _ h hs
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `cocyclesMkOfCompEqD` / `cocyclesMkOfCompEqD` 的定义
+/-- Given an exact sequence of `G`-representations `0 ⟶ X₁ ⟶f X₂ ⟶g X₃ ⟶ 0`, this expresses an
+`n + 1`-cochain `x : Gⁿ⁺¹ → X₁` such that `f ∘ x ∈ Bⁿ⁺¹(G, X₂)` as a cocycle.
+Stated for readability of `δ_apply`. -/
+/-
+**groupCohomology.cocyclesMkOfCompEqD** 是 Mathlib 中的一个缩写定义，位于命名空间 `groupCohomolo
+gy`。
+形式化陈述：cocyclesMkOfCompEqD {i j : Nat} {y : (Fin i -> G) -> X.X₂} {x : (Fin j -> 
+G) -> X.X₁} (hx : X.f.hom ∘ x = (inhomogeneousCochains X.X₂).d i j y) : cocycles
+ X.X₁ j
+参数：Fin i -> G；Fin j -> G；hx : X.f.hom ∘ x = (inhomogeneousCochains X.X₂).d i j y
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation cocyclesMkOfCompEqD
-  signature: {i j : Nat} {y : (Fin i -> G) -> X.X₂}
-  body: cocyclesMk x by simpa [CochainComplex.of.d] using!
-    ((map_cochainsFunctor_shortExact hX).d_eq_zero_of_f_eq_d_apply i j y x
-      (by simpa using! hx) (j + 1))
-
-中文:
-缩写 cocyclesMkOfCompEqD
-  签名: {i j : 自然数} {y : (有限集 i -> G) -> X.X₂}
-  定义体: cocyclesMk x by simpa [CochainComplex.of.d] using!
-    ((map_cochainsFunctor_shortExact hX).d_eq_zero_of_f_eq_d_apply i j y x
-      (by simpa using! hx) (j + 1))
-
-Depends on / 依赖: CochainComplex, CochainComplex.of.d, cocyclesMk, d_eq_zero_of_f_eq_d_apply, map_cochainsFunctor_shortExact
+--- 原说明 ---
+Given an exact sequence of `G`-representations `0 ⟶ X₁ ⟶f X₂ ⟶g X₃ ⟶ 0`, this ex
+presses an
+`n + 1`-cochain `x : Gⁿ⁺¹ → X₁` such that `f ∘ x ∈ Bⁿ⁺¹(G, X₂)` as a cocycle.
+Stated for readability of `δ_apply`.
 -/
-noncomputable abbrev cocyclesMkOfCompEqD {i j : Nat} {y : (Fin i -> G) -> X.X₂}
-    {x : (Fin j -> G) -> X.X₁} (hx : X.f.hom ∘ x = (inhomogeneousCochains X.X₂).d i j y) :
+noncomputable abbrev cocyclesMkOfCompEqD {i j : ℕ} {y : (Fin i → G) → X.X₂}
+    {x : (Fin j → G) → X.X₁} (hx : X.f.hom ∘ x = (inhomogeneousCochains X.X₂).d i j y) :
     cocycles X.X₁ j :=
-cocyclesMk x by simpa [CochainComplex.of.d] using!
+  cocyclesMk x <| by simpa [CochainComplex.of.d] using!
     ((map_cochainsFunctor_shortExact hX).d_eq_zero_of_f_eq_d_apply i j y x
       (by simpa using! hx) (j + 1))
-
-/--
-theorem `δ_apply` / 定理 `δ_apply`
-
-English:
-theorem δ_apply
-  statement: {i j : Nat} (hij : i + 1 = j)
-  proof: by
-  exact (map_cochainsFunctor_shortExact hX).δ_apply i j hij z hz y hy x
-    (by simpa using! hx) (j + 1) (by simp)
-
-中文:
-定理 δ_apply
-  结论: {i j : 自然数} (hij : i + 1 = j)
-  证明: by
-  exact (map_cochainsFunctor_shortExact hX).δ_apply i j hij z hz y hy x
-    (by simpa using! hx) (j + 1) (by simp)
-
-Depends on / 依赖: map_cochainsFunctor_shortExact
+/-
+**groupCohomology.** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem δ_apply {i j : Nat} (hij : i + 1 = j)
+theorem δ_apply {i j : ℕ} (hij : i + 1 = j)
     -- Let `0 ⟶ X₁ ⟶f X₂ ⟶g X₃ ⟶ 0` be a short exact sequence of `G`-representations.
     -- Let `z` be an `i`-cocycle for `X₃`
-    (z : (Fin i -> G) -> X.X₃) (hz : (inhomogeneousCochains X.X₃).d i j z = 0)
+    (z : (Fin i → G) → X.X₃) (hz : (inhomogeneousCochains X.X₃).d i j z = 0)
     -- Let `y` be an `i`-cochain for `X₂` such that `g ∘ y = z`
-    (y : (Fin i -> G) -> X.X₂) (hy : (cochainsMap (MonoidHom.id G) X.g).f i y = z)
+    (y : (Fin i → G) → X.X₂) (hy : (cochainsMap (MonoidHom.id G) X.g).f i y = z)
     -- Let `x` be an `i + 1`-cochain for `X₁` such that `f ∘ x = d(y)`
-    (x : (Fin j -> G) -> X.X₁) (hx : X.f.hom ∘ x = (inhomogeneousCochains X.X₂).d i j y) :
+    (x : (Fin j → G) → X.X₁) (hx : X.f.hom ∘ x = (inhomogeneousCochains X.X₂).d i j y) :
     -- Then `x` is an `i + 1`-cocycle and `δ z = x` in `Hⁱ⁺¹(X₁)`.
     δ hX i j hij (π X.X₃ i <| cocyclesMk z (by subst hij; simpa [CochainComplex.of.d] using! hz)) =
       π X.X₁ j (cocyclesMkOfCompEqD hX hx) := by
@@ -335,206 +285,139 @@ theorem δ_apply {i j : Nat} (hij : i + 1 = j)
     (by simpa using! hx) (j + 1) (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mem_cocycles₁_of_comp_eq_d₀₁` / 定理 `mem_cocycles₁_of_comp_eq_d₀₁`
+/-- Stated for readability of `δ₀_apply`. -/
+/-
+**groupCohomology.mem_cocycles** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mem_cocycles₁_of_comp_eq_d₀₁
-  proof: by
-  apply Function.Injective.comp_left ((Rep.mono_iff_injective X.f).1 hX.2)
-  have := congr($((mapShortComplexH1 (MonoidHom.id G) X.f).comm₂₃.symm) x)
-  simp_all [shortComplexH1, LinearMap.compLeft]
-
-中文:
-定理 mem_cocycles₁_of_comp_eq_d₀₁
-  证明: by
-  apply Function.Injective.comp_left ((Rep.mono_iff_injective X.f).1 hX.2)
-  have := congr($((mapShortComplexH1 (MonoidHom.id G) X.f).comm₂₃.symm) x)
-  simp_all [shortComplexH1, LinearMap.compLeft]
-
-Depends on / 依赖: Function, Function.Injective.comp_left, Injective, LinearMap, LinearMap.compLeft, MonoidHom, MonoidHom.id, Rep.mono_iff_injective, compLeft, comp_left, mapShortComplexH1, mono_iff_injective, shortComplexH1
+--- 原说明 ---
+Stated for readability of `δ₀_apply`.
 -/
 theorem mem_cocycles₁_of_comp_eq_d₀₁
-    {y : X.X₂} {x : G -> X.X₁} (hx : X.f.hom ∘ x = d₀₁ X.X₂ y) :
-    x in cocycles₁ X.X₁ := by
+    {y : X.X₂} {x : G → X.X₁} (hx : X.f.hom ∘ x = d₀₁ X.X₂ y) :
+    x ∈ cocycles₁ X.X₁ := by
   apply Function.Injective.comp_left ((Rep.mono_iff_injective X.f).1 hX.2)
   have := congr($((mapShortComplexH1 (MonoidHom.id G) X.f).comm₂₃.symm) x)
   simp_all [shortComplexH1, LinearMap.compLeft]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `δ₀_apply` / 定理 `δ₀_apply`
-
-English:
-theorem δ₀_apply
-  proof: by
-  simpa [H0Iso, H1π, ← cocyclesMk₁_eq X.X₁, ← cocyclesMk₀_eq z] using!
-    δ_apply hX rfl ((cochainsIso₀ X.X₃).inv z.1) (by
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]; simp)
-      ((cochainsIso₀ X.X₂).inv y)
-(by ext; simp [← hy, cochainsIso₀]) ((cochainsIso₁ X.X₁).inv x) by
-      ext g
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]
-      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
-        ⟨cochainsMap_f_1_comp_cochainsIso₁ (MonoidHom.id G) X.f⟩).w) x)) g
-
-中文:
-定理 δ₀_apply
-  证明: by
-  simpa [H0Iso, H1π, ← cocyclesMk₁_eq X.X₁, ← cocyclesMk₀_eq z] using!
-    δ_apply hX rfl ((cochainsIso₀ X.X₃).inv z.1) (by
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]; simp)
-      ((cochainsIso₀ X.X₂).inv y)
-(by ext; simp [← hy, cochainsIso₀]) ((cochainsIso₁ X.X₁).inv x) by
-      ext g
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]
-      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
-        ⟨cochainsMap_f_1_comp_cochainsIso₁ (MonoidHom.id G) X.f⟩).w) x)) g
-
-Depends on / 依赖: CommSq, CommSq.vert_inv, LinearMap, LinearMap.comp_apply, ModuleCat, ModuleCat.hom_comp, MonoidHom, MonoidHom.id, comp_apply, congr_fun, hom_comp, vert_inv
+/-
+**groupCohomology.** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ₀_apply
     -- Let `0 ⟶ X₁ ⟶f X₂ ⟶g X₃ ⟶ 0` be a short exact sequence of `G`-representations.
     -- Let `z : X₃ᴳ` and `y : X₂` be such that `g(y) = z`.
     (z : X.X₃.ρ.invariants) (y : X.X₂) (hy : X.g.hom y = z)
     -- Let `x` be a 1-cochain for `X₁` such that `f ∘ x = d(y)`.
-    (x : G -> X.X₁) (hx : X.f.hom ∘ x = d₀₁ X.X₂ y) :
+    (x : G → X.X₁) (hx : X.f.hom ∘ x = d₀₁ X.X₂ y) :
     -- Then `x` is a 1-cocycle and `δ z = x` in `H¹(X₁)`.
     δ hX 0 1 rfl ((H0Iso X.X₃).inv z) = H1π X.X₁ ⟨x, mem_cocycles₁_of_comp_eq_d₀₁ hX hx⟩ := by
   simpa [H0Iso, H1π, ← cocyclesMk₁_eq X.X₁, ← cocyclesMk₀_eq z] using!
     δ_apply hX rfl ((cochainsIso₀ X.X₃).inv z.1) (by
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]; simp)
+      rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₀₁_comp_inv]; simp)
       ((cochainsIso₀ X.X₂).inv y)
-(by ext; simp [← hy, cochainsIso₀]) ((cochainsIso₁ X.X₁).inv x) by
+    (by ext; simp [← hy, cochainsIso₀]) ((cochainsIso₁ X.X₁).inv x) <| by
       ext g
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₀₁_comp_inv]
+      rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₀₁_comp_inv]
       simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
         ⟨cochainsMap_f_1_comp_cochainsIso₁ (MonoidHom.id G) X.f⟩).w) x)) g
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mem_cocycles₂_of_comp_eq_d₁₂` / 定理 `mem_cocycles₂_of_comp_eq_d₁₂`
+/-- Stated for readability of `δ₁_apply`. -/
+/-
+**groupCohomology.mem_cocycles** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem mem_cocycles₂_of_comp_eq_d₁₂
-  proof: by
-  apply Function.Injective.comp_left ((Rep.mono_iff_injective X.f).1 hX.2)
-  have := congr($((mapShortComplexH2 (MonoidHom.id G) X.f).comm₂₃.symm) x)
-  simp_all [shortComplexH2, LinearMap.compLeft]
-
-中文:
-定理 mem_cocycles₂_of_comp_eq_d₁₂
-  证明: by
-  apply Function.Injective.comp_left ((Rep.mono_iff_injective X.f).1 hX.2)
-  have := congr($((mapShortComplexH2 (MonoidHom.id G) X.f).comm₂₃.symm) x)
-  simp_all [shortComplexH2, LinearMap.compLeft]
-
-Depends on / 依赖: Function, Function.Injective.comp_left, Injective, LinearMap, LinearMap.compLeft, MonoidHom, MonoidHom.id, Rep.mono_iff_injective, Valuation, Valuation.map_zero, compLeft, comp_left, mapShortComplexH2, map_zero, mono_iff_injective, shortComplexH2
+--- 原说明 ---
+Stated for readability of `δ₁_apply`.
 -/
 theorem mem_cocycles₂_of_comp_eq_d₁₂
-    {y : G -> X.X₂} {x : G × G -> X.X₁} (hx : X.f.hom ∘ x = d₁₂ X.X₂ y) :
-    x in cocycles₂ X.X₁ := by
+    {y : G → X.X₂} {x : G × G → X.X₁} (hx : X.f.hom ∘ x = d₁₂ X.X₂ y) :
+    x ∈ cocycles₂ X.X₁ := by
   apply Function.Injective.comp_left ((Rep.mono_iff_injective X.f).1 hX.2)
   have := congr($((mapShortComplexH2 (MonoidHom.id G) X.f).comm₂₃.symm) x)
   simp_all [shortComplexH2, LinearMap.compLeft]
-
-/--
-theorem `δ₁_apply` / 定理 `δ₁_apply`
-
-English:
-theorem δ₁_apply
-  proof: by
-  simpa [H1π, H2π, ← cocyclesMk₂_eq X.X₁, ← cocyclesMk₁_eq X.X₃] using!
-    δ_apply hX rfl ((cochainsIso₁ X.X₃).inv z) (by
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
-      simp [cocycles₁.d₁₂_apply z]) ((cochainsIso₁ X.X₂).inv y) (by ext; simp [cochainsIso₁, ← hy])
-((cochainsIso₂ X.X₁).inv x) by
-      ext g
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
-      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
-        ⟨cochainsMap_f_2_comp_cochainsIso₂ (MonoidHom.id G) X.f⟩).w) x)) g
-
-中文:
-定理 δ₁_apply
-  证明: by
-  simpa [H1π, H2π, ← cocyclesMk₂_eq X.X₁, ← cocyclesMk₁_eq X.X₃] using!
-    δ_apply hX rfl ((cochainsIso₁ X.X₃).inv z) (by
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
-      simp [cocycles₁.d₁₂_apply z]) ((cochainsIso₁ X.X₂).inv y) (by ext; simp [cochainsIso₁, ← hy])
-((cochainsIso₂ X.X₁).inv x) by
-      ext g
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
-      simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
-        ⟨cochainsMap_f_2_comp_cochainsIso₂ (MonoidHom.id G) X.f⟩).w) x)) g
-
-Depends on / 依赖: CommSq, CommSq.vert_inv, LinearMap, LinearMap.comp_apply, ModuleCat, ModuleCat.hom_comp, Valuation, Valuation.map_one, comp_apply, congr_fun, hom_comp, map_one, vert_inv
+/-
+**groupCohomology.** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ₁_apply
     -- Let `0 ⟶ X₁ ⟶f X₂ ⟶g X₃ ⟶ 0` be a short exact sequence of `G`-representations.
     -- Let `z` be a 1-cocycle for `X₃` and `y` be a 1-cochain for `X₂` such that `g ∘ y = z`.
-    (z : cocycles₁ X.X₃) (y : G -> X.X₂) (hy : X.g.hom ∘ y = z)
+    (z : cocycles₁ X.X₃) (y : G → X.X₂) (hy : X.g.hom ∘ y = z)
     -- Let `x` be a 2-cochain for `X₁` such that `f ∘ x = d(y)`.
-    (x : G × G -> X.X₁) (hx : X.f.hom ∘ x = d₁₂ X.X₂ y) :
+    (x : G × G → X.X₁) (hx : X.f.hom ∘ x = d₁₂ X.X₂ y) :
     -- Then `x` is a 2-cocycle and `δ z = x` in `H²(X₁)`.
     δ hX 1 2 rfl (H1π X.X₃ z) = H2π X.X₁ ⟨x, mem_cocycles₂_of_comp_eq_d₁₂ hX hx⟩ := by
   simpa [H1π, H2π, ← cocyclesMk₂_eq X.X₁, ← cocyclesMk₁_eq X.X₃] using!
     δ_apply hX rfl ((cochainsIso₁ X.X₃).inv z) (by
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
+      rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₁₂_comp_inv]
       simp [cocycles₁.d₁₂_apply z]) ((cochainsIso₁ X.X₂).inv y) (by ext; simp [cochainsIso₁, ← hy])
-((cochainsIso₂ X.X₁).inv x) by
+    ((cochainsIso₂ X.X₁).inv x) <| by
       ext g
-      rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₂_comp_inv]
+      rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₁₂_comp_inv]
       simpa [← hx] using! congr_fun (congr($((CommSq.vert_inv
         ⟨cochainsMap_f_2_comp_cochainsIso₂ (MonoidHom.id G) X.f⟩).w) x)) g
 
-/--
-lemma `map_cochainsFunctor_eval_shortExact` / 引理 `map_cochainsFunctor_eval_shortExact`
+/-- `S.map (cochainsFunctor k G)` is short exact in each degree. -/
+/-
+**groupCohomology.map_cochainsFunctor_eval_shortExact** 是 Mathlib 中的一个引理，位于命名空间 
+`groupCohomology`。
+形式化陈述：map_cochainsFunctor_eval_shortExact (n : Nat) : ShortExact (X.map <| cocha
+insFunctor k G ⋙ HomologicalComplex.eval (ModuleCat k) (.up Nat) n)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.map_of_exact`：∀ {C : Type u_1} {D
+ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryT
+heory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `groupCohomology.instPreservesZeroMorphismsRepCochainComplexModuleCatNatC
+ochainsFunctor`：∀ (k G : Type u) [inst : CommRing k] [inst_1 : Group G], (groupC
+ohomology.cochainsFunctor k G).PreservesZeroMorphisms
+· 使用引理 `groupCohomology.map_cochainsFunctor_shortExact`：map_cochainsFunctor_shor
+tExact : ShortExact (X.map (cochainsFunctor k G))
+· 使用定理 `HomologicalComplex.instPreservesZeroMorphismsEval`：∀ {ι : Type u_1} (V :
+ Type u) [inst : CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Li
+mits.HasZeroMorphisms V] (c : ComplexSh…
+· 使用定理 `HomologicalComplex.instPreservesFiniteLimitsEvalOfHasFiniteLimits`：∀ {C 
+: Type u_1} {ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C] {c : Co
+mplexShape ι}   [inst_1 : CategoryTheory.Limits.HasZero…
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `HomologicalComplex.instPreservesFiniteColimitsEvalOfHasFiniteColimits`：∀
+ {C : Type u_1} {ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C] {c 
+: ComplexShape ι}   [inst_1 : CategoryTheory.Limits.HasZero…
+· 使用定理 `ModuleCat.instHasFiniteColimits`：∀ (R : Type w) [inst : Ring R], Categor
+yTheory.Limits.HasFiniteColimits (ModuleCat R)
 
-English:
-lemma map_cochainsFunctor_eval_shortExact
-  given: (n : Nat)
-  proof: (map_cochainsFunctor_shortExact hX).map_of_exact (HomologicalComplex.eval ..)
-
-omit hX in
-
-中文:
-引理 map_cochainsFunctor_eval_shortExact
-  条件: (n : 自然数)
-  证明: (map_cochainsFunctor_shortExact hX).map_of_exact (HomologicalComplex.eval ..)
-
-omit hX in
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.eval, Valuation, Valuation.map_mul, map_cochainsFunctor_shortExact, map_mul, map_of_exact
+--- 原说明 ---
+`S.map (cochainsFunctor k G)` is short exact in each degree.
 -/
-lemma map_cochainsFunctor_eval_shortExact (n : Nat) :
-    ShortExact (X.map <| cochainsFunctor k G ⋙ HomologicalComplex.eval (ModuleCat k) (.up Nat) n) :=
+lemma map_cochainsFunctor_eval_shortExact (n : ℕ) :
+    ShortExact (X.map <| cochainsFunctor k G ⋙ HomologicalComplex.eval (ModuleCat k) (.up ℕ) n) :=
   (map_cochainsFunctor_shortExact hX).map_of_exact (HomologicalComplex.eval ..)
 
 omit hX in
-/--
-theorem `δ_naturality` / 定理 `δ_naturality`
+/-- The connecting homomorphism `δ` is actually a natural transformation between
+  `groupCohomology.funtor`s. -/
+/-
+**groupCohomology.** 是 Mathlib 中的一个定理，位于命名空间 `groupCohomology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem δ_naturality
-  statement: {X1 X2 : ShortComplex (Rep k G)} (hX1 : X1.ShortExact)
-  proof: HomologicalComplex.HomologySequence.δ_naturality
-    ((cochainsFunctor k G).mapShortComplex.map F)
-    (map_cochainsFunctor_shortExact hX1) (map_cochainsFunctor_shortExact hX2) i j hij
-
-中文:
-定理 δ_naturality
-  结论: {X1 X2 : 短复形 (Rep k G)} (hX1 : X1.短正合)
-  证明: HomologicalComplex.HomologySequence.δ_naturality
-    ((cochainsFunctor k G).mapShortComplex.map F)
-    (map_cochainsFunctor_shortExact hX1) (map_cochainsFunctor_shortExact hX2) i j hij
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.HomologySequence, HomologySequence, Valuation, Valuation.map_add, cochainsFunctor, mapShortComplex, mapShortComplex.map, map_add, map_cochainsFunctor_shortExact
+--- 原说明 ---
+The connecting homomorphism `δ` is actually a natural transformation between
+  `groupCohomology.funtor`s.
 -/
 theorem δ_naturality {X1 X2 : ShortComplex (Rep k G)} (hX1 : X1.ShortExact)
-    (hX2 : X2.ShortExact) (F : X1 ⟶ X2) (i j : Nat) (hij : i + 1 = j) :
-    (δ hX1 i j hij) ≫ map (.id G) F.τ₁ j = map (.id G) F.τ₃ i ≫ δ hX2 i j hij :=
+    (hX2 : X2.ShortExact) (F : X1 ⟶ X2) (i j : ℕ) (hij : i + 1 = j) :
+    (δ hX1 i j hij) ≫ map (.id G) F.τ₁ j  = map (.id G) F.τ₃ i ≫ δ hX2 i j hij :=
   HomologicalComplex.HomologySequence.δ_naturality
     ((cochainsFunctor k G).mapShortComplex.map F)
     (map_cochainsFunctor_shortExact hX1) (map_cochainsFunctor_shortExact hX2) i j hij
 
 end groupCohomology
+

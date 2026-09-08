@@ -32,47 +32,24 @@ variable [HasCoequalizers C]
 
 section
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
 
-/--
-theorem `id_tensor_π_preserves_coequalizer_inv_desc` / 定理 `id_tensor_π_preserves_coequalizer_inv_desc`
-
-English:
-theorem id_tensor_π_preserves_coequalizer_inv_desc
-  statement: {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W)
-  proof: map_π_preserves_coequalizer_inv_desc (tensorLeft Z) f g h wh
-
-中文:
-定理 id_tensor_π_preserves_coequalizer_inv_desc
-  结论: {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W)
-  证明: map_π_preserves_coequalizer_inv_desc (tensorLeft Z) f g h wh
-
-Depends on / 依赖: tensorLeft
+/-
+**id_tensor_** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem id_tensor_π_preserves_coequalizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W)
+theorem id_tensor_π_preserves_coequalizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Z ⊗ Y ⟶ W)
     (wh : (Z ◁ f) ≫ h = (Z ◁ g) ≫ h) :
     (Z ◁ coequalizer.π f g) ≫
         (PreservesCoequalizer.iso (tensorLeft Z) f g).inv ≫ coequalizer.desc h wh =
       h :=
   map_π_preserves_coequalizer_inv_desc (tensorLeft Z) f g h wh
-
-/--
-theorem `id_tensor_π_preserves_coequalizer_inv_colimMap_desc` / 定理 `id_tensor_π_preserves_coequalizer_inv_colimMap_desc`
-
-English:
-theorem id_tensor_π_preserves_coequalizer_inv_colimMap_desc
-  statement: {X Y Z X' Y' Z' : C} (f g : X ⟶ Y)
-  proof: map_π_preserves_coequalizer_inv_colimMap_desc (tensorLeft Z) f g f' g' p q wf wg h wh
-
-中文:
-定理 id_tensor_π_preserves_coequalizer_inv_colimMap_desc
-  结论: {X Y Z X' Y' Z' : C} (f g : X ⟶ Y)
-  证明: map_π_preserves_coequalizer_inv_colimMap_desc (tensorLeft Z) f g f' g' p q wf wg h wh
-
-Depends on / 依赖: tensorLeft
+/-
+**id_tensor_** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_tensor_π_preserves_coequalizer_inv_colimMap_desc {X Y Z X' Y' Z' : C} (f g : X ⟶ Y)
-    (f' g' : X' ⟶ Y') (p : Z otimes X ⟶ X') (q : Z otimes Y ⟶ Y') (wf : (Z ◁ f) ≫ q = p ≫ f')
+    (f' g' : X' ⟶ Y') (p : Z ⊗ X ⟶ X') (q : Z ⊗ Y ⟶ Y') (wf : (Z ◁ f) ≫ q = p ≫ f')
     (wg : (Z ◁ g) ≫ q = p ≫ g') (h : Y' ⟶ Z') (wh : f' ≫ h = g' ≫ h) :
     (Z ◁ coequalizer.π f g) ≫
         (PreservesCoequalizer.iso (tensorLeft Z) f g).inv ≫
@@ -84,47 +61,24 @@ end
 
 section
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 
-/--
-theorem `π_tensor_id_preserves_coequalizer_inv_desc` / 定理 `π_tensor_id_preserves_coequalizer_inv_desc`
-
-English:
-theorem π_tensor_id_preserves_coequalizer_inv_desc
-  statement: {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W)
-  proof: map_π_preserves_coequalizer_inv_desc (tensorRight Z) f g h wh
-
-中文:
-定理 π_tensor_id_preserves_coequalizer_inv_desc
-  结论: {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W)
-  证明: map_π_preserves_coequalizer_inv_desc (tensorRight Z) f g h wh
-
-Depends on / 依赖: tensorRight
+/-
+**** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem π_tensor_id_preserves_coequalizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W)
+theorem π_tensor_id_preserves_coequalizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y ⊗ Z ⟶ W)
     (wh : (f ▷ Z) ≫ h = (g ▷ Z) ≫ h) :
     (coequalizer.π f g ▷ Z) ≫
         (PreservesCoequalizer.iso (tensorRight Z) f g).inv ≫ coequalizer.desc h wh =
       h :=
   map_π_preserves_coequalizer_inv_desc (tensorRight Z) f g h wh
-
-/--
-theorem `π_tensor_id_preserves_coequalizer_inv_colimMap_desc` / 定理 `π_tensor_id_preserves_coequalizer_inv_colimMap_desc`
-
-English:
-theorem π_tensor_id_preserves_coequalizer_inv_colimMap_desc
-  statement: {X Y Z X' Y' Z' : C} (f g : X ⟶ Y)
-  proof: map_π_preserves_coequalizer_inv_colimMap_desc (tensorRight Z) f g f' g' p q wf wg h wh
-
-中文:
-定理 π_tensor_id_preserves_coequalizer_inv_colimMap_desc
-  结论: {X Y Z X' Y' Z' : C} (f g : X ⟶ Y)
-  证明: map_π_preserves_coequalizer_inv_colimMap_desc (tensorRight Z) f g f' g' p q wf wg h wh
-
-Depends on / 依赖: tensorRight
+/-
+**** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem π_tensor_id_preserves_coequalizer_inv_colimMap_desc {X Y Z X' Y' Z' : C} (f g : X ⟶ Y)
-    (f' g' : X' ⟶ Y') (p : X otimes Z ⟶ X') (q : Y otimes Z ⟶ Y') (wf : (f ▷ Z) ≫ q = p ≫ f')
+    (f' g' : X' ⟶ Y') (p : X ⊗ Z ⟶ X') (q : Y ⊗ Z ⟶ Y') (wf : (f ▷ Z) ≫ q = p ≫ f')
     (wg : (g ▷ Z) ≫ q = p ≫ g') (h : Y' ⟶ Z') (wh : f' ≫ h = g' ≫ h) :
     (coequalizer.π f g ▷ Z) ≫
         (PreservesCoequalizer.iso (tensorRight Z) f g).inv ≫
@@ -136,47 +90,29 @@ end
 
 end
 
-/--
-Definition of `Bimod` / `Bimod` 的定义
+/-- A bimodule object for a pair of monoid objects, all internal to some monoidal category. -/
+/-
+**Bimod** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Bimod (A B : Mon C) where /-- The underlying monoidal category -/ X : C /-
+- The left action of this bimodule object -/ actLeft : A.X otimes X ⟶ X one_actL
+eft : η ▷ X ≫ actLeft = (fun_ X).hom
+参数：A B : Mon C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Bimod
-  parameters: (A B : Mon C)
-  axioms and operations (8):
-    - X : C
-    - actLeft : A.X otimes X ⟶ X
-    - one_actLeft : η ▷ X ≫ actLeft = (fun_ X).hom  [default: by cat_disch]
-    - left_assoc : μ ▷ X ≫ actLeft = (α_ A.X A.X X).hom ≫ A.X ◁ actLeft ≫ actLeft  [default: by cat_disch]
-    - actRight : X otimes B.X ⟶ X
-    - actRight_one : X ◁ η ≫ actRight = (ρ_ X).hom  [default: by cat_disch]
-    - right_assoc : X ◁ μ ≫ actRight = (α_ X B.X B.X).inv ≫ actRight ▷ B.X ≫ actRight  [default: by cat_disch]
-    - middle_assoc : actLeft ▷ B.X ≫ actRight = (α_ A.X X B.X).hom ≫ A.X ◁ actRight ≫ actLeft  [default: by cat_disch]
-
-中文:
-结构 双模
-  参数: (A B : 幺半群 C)
-  公理与运算 (8 个):
-    - X : C
-    - actLeft : A.X otimes X ⟶ X
-    - one_actLeft : η ▷ X ≫ actLeft = (fun_ X).hom  [默认: by cat_disch]
-    - left_assoc : μ ▷ X ≫ actLeft = (α_ A.X A.X X).hom ≫ A.X ◁ actLeft ≫ actLeft  [默认: by cat_disch]
-    - actRight : X otimes B.X ⟶ X
-    - actRight_one : X ◁ η ≫ actRight = (ρ_ X).hom  [默认: by cat_disch]
-    - right_assoc : X ◁ μ ≫ actRight = (α_ X B.X B.X).inv ≫ actRight ▷ B.X ≫ actRight  [默认: by cat_disch]
-    - middle_assoc : actLeft ▷ B.X ≫ actRight = (α_ A.X X B.X).hom ≫ A.X ◁ actRight ≫ actLeft  [默认: by cat_disch]
-
-Depends on / 依赖: actLeft, cat_disch, left_assoc
+--- 原说明 ---
+A bimodule object for a pair of monoid objects, all internal to some monoidal ca
+tegory.
 -/
 structure Bimod (A B : Mon C) where
   /-- The underlying monoidal category -/
   X : C
   /-- The left action of this bimodule object -/
-  actLeft : A.X otimes X ⟶ X
-  one_actLeft : η ▷ X ≫ actLeft = (fun_ X).hom := by cat_disch
+  actLeft : A.X ⊗ X ⟶ X
+  one_actLeft : η ▷ X ≫ actLeft = (λ_ X).hom := by cat_disch
   left_assoc :
     μ ▷ X ≫ actLeft = (α_ A.X A.X X).hom ≫ A.X ◁ actLeft ≫ actLeft := by cat_disch
   /-- The right action of this bimodule object -/
-  actRight : X otimes B.X ⟶ X
+  actRight : X ⊗ B.X ⟶ X
   actRight_one : X ◁ η ≫ actRight = (ρ_ X).hom := by cat_disch
   right_assoc :
     X ◁ μ ≫ actRight = (α_ X B.X B.X).inv ≫ actRight ▷ B.X ≫ actRight := by
@@ -194,26 +130,16 @@ variable {A B : Mon C} (M : Bimod A B)
 
 /-- A morphism of bimodule objects. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**Bimod.Hom** 是 Mathlib 中的一个结构，位于命名空间 `Bimod`。
+形式化陈述：Hom (M N : Bimod A B) where /-- The morphism between `M`'s monoidal catego
+ry and `N`'s monoidal category -/ hom : M.X ⟶ N.X left_act_hom : M.actLeft ≫ hom
+ = (A.X ◁ hom) ≫ N.actLeft
+参数：M N : Bimod A B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (M N : Bimod A B)
-  axioms and operations (3):
-    - hom : M.X ⟶ N.X
-    - left_act_hom : M.actLeft ≫ hom = (A.X ◁ hom) ≫ N.actLeft  [default: by cat_disch]
-    - right_act_hom : M.actRight ≫ hom = (hom ▷ B.X) ≫ N.actRight  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (M N : 双模 A B)
-  公理与运算 (3 个):
-    - hom : M.X ⟶ N.X
-    - left_act_hom : M.actLeft ≫ hom = (A.X ◁ hom) ≫ N.actLeft  [默认: by cat_disch]
-    - right_act_hom : M.actRight ≫ hom = (hom ▷ B.X) ≫ N.actRight  [默认: by cat_disch]
-
-Depends on / 依赖: M.actRight, N.actRight, actRight, cat_disch, right_act_hom
+--- 原说明 ---
+A morphism of bimodule objects.
 -/
 structure Hom (M N : Bimod A B) where
   /-- The morphism between `M`'s monoidal category and `N`'s monoidal category -/
@@ -225,76 +151,43 @@ attribute [reassoc (attr := simp)] Hom.left_act_hom Hom.right_act_hom
 
 /-- The identity morphism on a bimodule object. -/
 @[simps]
-/--
-Definition of `id'` / `id'` 的定义
+/-
+**Bimod.id'** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：id' (M : Bimod A B) : Hom M M where hom
+参数：M : Bimod A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id'
-  signature: (M : Bimod A B)
-  body: 𝟙 M.X
-
-中文:
-定义 id'
-  签名: (M : 双模 A B)
-  定义体: 𝟙 M.X
+--- 原说明 ---
+The identity morphism on a bimodule object.
 -/
 def id' (M : Bimod A B) : Hom M M where hom := 𝟙 M.X
-
-/--
-Instance `homInhabited` / 实例 `homInhabited`
-
-English:
-instance homInhabited
-  signature: (M : Bimod A B)
-  body: ⟨id' M⟩
-
-中文:
-实例 homInhabited
-  签名: (M : 双模 A B)
-  定义体: ⟨id' M⟩
+/-
+**Bimod.homInhabited** 是 Mathlib 中的一个实例，位于命名空间 `Bimod`。
+形式化陈述：homInhabited (M : Bimod A B) : Inhabited (Hom M M)
+参数：M : Bimod A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance homInhabited (M : Bimod A B) : Inhabited (Hom M M) :=
   ⟨id' M⟩
 
 /-- Composition of bimodule object morphisms. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**Bimod.comp** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：comp {M N O : Bimod A B} (f : Hom M N) (g : Hom N O) : Hom M O where hom
+参数：f : Hom M N；g : Hom N O。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {M N O : Bimod A B} (f : Hom M N) (g : Hom N O)
-  body: f.hom ≫ g.hom
-
-中文:
-定义 comp
-  签名: {M N O : 双模 A B} (f : 态射 M N) (g : 态射 N O)
-  定义体: f.hom ≫ g.hom
-
-Depends on / 依赖: f.hom, g.hom
+--- 原说明 ---
+Composition of bimodule object morphisms.
 -/
 def comp {M N O : Bimod A B} (f : Hom M N) (g : Hom N O) : Hom M O where hom := f.hom ≫ g.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (Bimod A B)
-  body: Hom M N
-  id := id'
-  comp f g := comp f g
-
-@[ext]
-
-中文:
-实例 :
-  签名: 范畴 (双模 A B)
-  定义体: Hom M N
-  id := id'
-  comp f g := comp f g
-
-@[ext]
+/-
+**Bimod.** 是 Mathlib 中的一个实例，位于命名空间 `Bimod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (Bimod A B) where
   Hom M N := Hom M N
@@ -302,66 +195,38 @@ instance : Category (Bimod A B) where
   comp f g := comp f g
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext h
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {M N : 双模 A B} (f g : M ⟶ N) (h : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext h
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**Bimod.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `Bimod`。
+形式化陈述：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.hom) : f = g
+参数：f g : M ⟶ N；h : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bimod.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} 
+C} {inst_1 : CategoryTheory.MonoidalCategory C}   {A B : CategoryTheory.Mon C} {
+M N…
 -/
 lemma hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.hom) : f = g :=
   Hom.ext h
 
 @[simp]
-/--
-theorem `id_hom'` / 定理 `id_hom'`
-
-English:
-theorem id_hom'
-  given: (M : Bimod A B)
-  statement: (𝟙 M : Hom M M).hom = 𝟙 M.X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_hom'
-  条件: (M : 双模 A B)
-  结论: (𝟙 M : 态射 M M).hom = 𝟙 M.X
-  证明: rfl
-
-@[simp]
+/-
+**Bimod.id_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：id_hom' (M : Bimod A B) : (𝟙 M : Hom M M).hom = 𝟙 M.X
+参数：M : Bimod A B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom' (M : Bimod A B) : (𝟙 M : Hom M M).hom = 𝟙 M.X :=
   rfl
 
 @[simp]
-/--
-theorem `comp_hom'` / 定理 `comp_hom'`
-
-English:
-theorem comp_hom'
-  given: {M N K : Bimod A B} (f : M ⟶ N) (g : N ⟶ K)
-  proof: rfl
-
-中文:
-定理 comp_hom'
-  条件: {M N K : 双模 A B} (f : M ⟶ N) (g : N ⟶ K)
-  证明: rfl
+/-
+**Bimod.comp_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：comp_hom' {M N K : Bimod A B} (f : M ⟶ N) (g : N ⟶ K) : (f ≫ g : Hom M K).
+hom = f.hom ≫ g.hom
+参数：f : M ⟶ N；g : N ⟶ K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom' {M N K : Bimod A B} (f : M ⟶ N) (g : N ⟶ K) :
     (f ≫ g : Hom M K).hom = f.hom ≫ g.hom :=
@@ -371,36 +236,21 @@ theorem comp_hom' {M N K : Bimod A B} (f : M ⟶ N) (g : N ⟶ K) :
 and checking compatibility with left and right actions only in the forward direction.
 -/
 @[simps]
-/--
-Definition of `isoOfIso` / `isoOfIso` 的定义
+/-
+**Bimod.isoOfIso** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：isoOfIso {X Y : Mon C} {P Q : Bimod X Y} (f : P.X ≅ Q.X) (f_left_act_hom :
+ P.actLeft ≫ f.hom = (X.X ◁ f.hom) ≫ Q.actLeft) (f_right_act_hom : P.actRight ≫ 
+f.hom = (f.hom ▷ Y.X) ≫ Q.actRight) : P ≅ Q where hom
+参数：f : P.X ≅ Q.X；f_left_act_hom : P.actLeft ≫ f.hom = (X.X ◁ f.hom) ≫ Q.actLeft；
+f_right_act_hom : P.actRight ≫ f.hom = (f.hom ▷ Y.X) ≫ Q.actRight。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfIso
-  signature: {X Y : Mon C} {P Q : Bimod X Y} (f : P.X ≅ Q.X)
-  body: { hom := f.hom }
-  inv :=
-    { hom := f.inv
-      left_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_left_act_hom]; rw [← Category.assoc]; rw [← whiskerLeft_comp]; rw [Iso.inv_hom_id]; rw [whiskerLeft_id]; rw [Category.id_comp]
-      right_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_right_act_hom]; rw [← Category.assoc]; rw [← comp_whiskerRight]; rw [Iso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.id_comp] }
-  hom_inv_id := by ext; dsimp; rw [Iso.hom_inv_id]
-  inv_hom_id := by ext; dsimp; rw [Iso.inv_hom_id]
-
-中文:
-定义 isoOfIso
-  签名: {X Y : 幺半群 C} {P Q : 双模 X Y} (f : P.X ≅ Q.X)
-  定义体: { hom := f.hom }
-  inv :=
-    { hom := f.inv
-      left_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_left_act_hom]; rw [← Category.assoc]; rw [← whiskerLeft_comp]; rw [Iso.inv_hom_id]; rw [whiskerLeft_id]; rw [Category.id_comp]
-      right_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_right_act_hom]; rw [← Category.assoc]; rw [← comp_whiskerRight]; rw [Iso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.id_comp] }
-  hom_inv_id := by ext; dsimp; rw [Iso.hom_inv_id]
-  inv_hom_id := by ext; dsimp; rw [Iso.inv_hom_id]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Iso.inv_hom_id, cancel_mono, comp_id, comp_whiskerRi, f.hom, f.inv, f_left_act_hom, f_right_act_hom, id_comp, inv_hom_id, left_act_hom, right_act_hom, whiskerLeft_comp, whiskerLeft_id
+--- 原说明 ---
+Construct an isomorphism of bimodules by giving an isomorphism between the under
+lying objects
+and checking compatibility with left and right actions only in the forward direc
+tion.
 -/
 def isoOfIso {X Y : Mon C} {P Q : Bimod X Y} (f : P.X ≅ Q.X)
     (f_left_act_hom : P.actLeft ≫ f.hom = (X.X ◁ f.hom) ≫ Q.actLeft)
@@ -410,9 +260,13 @@ def isoOfIso {X Y : Mon C} {P Q : Bimod X Y} (f : P.X ≅ Q.X)
   inv :=
     { hom := f.inv
       left_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_left_act_hom]; rw [← Category.assoc]; rw [← whiskerLeft_comp]; rw [Iso.inv_hom_id]; rw [whiskerLeft_id]; rw [Category.id_comp]
+        rw [← cancel_mono f.hom, Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id,
+          f_left_act_hom, ← Category.assoc, ← whiskerLeft_comp, Iso.inv_hom_id,
+          whiskerLeft_id, Category.id_comp]
       right_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_right_act_hom]; rw [← Category.assoc]; rw [← comp_whiskerRight]; rw [Iso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.id_comp] }
+        rw [← cancel_mono f.hom, Category.assoc, Category.assoc, Iso.inv_hom_id, Category.comp_id,
+          f_right_act_hom, ← Category.assoc, ← comp_whiskerRight, Iso.inv_hom_id,
+          id_whiskerRight, Category.id_comp] }
   hom_inv_id := by ext; dsimp; rw [Iso.hom_inv_id]
   inv_hom_id := by ext; dsimp; rw [Iso.inv_hom_id]
 
@@ -420,60 +274,35 @@ variable (A)
 
 /-- A monoid object as a bimodule over itself. -/
 @[simps]
-/--
-Definition of `regular` / `regular` 的定义
+/-
+**Bimod.regular** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：regular : Bimod A A where X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition regular
-  signature: : Bimod A A where
-  body: A.X
-  actLeft := μ
-  actRight := μ
-
-中文:
-定义 regular
-  签名: : 双模 A A where
-  定义体: A.X
-  actLeft := μ
-  actRight := μ
+--- 原说明 ---
+A monoid object as a bimodule over itself.
 -/
 def regular : Bimod A A where
   X := A.X
   actLeft := μ
   actRight := μ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Bimod A A)
-  body: ⟨regular A⟩
-
-中文:
-实例 :
-  签名: 可居 (双模 A A)
-  定义体: ⟨regular A⟩
-
-Depends on / 依赖: regular
+/-
+**Bimod.** 是 Mathlib 中的一个实例，位于命名空间 `Bimod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Bimod A A) :=
   ⟨regular A⟩
 
-/--
-Definition of `forget` / `forget` 的定义
+/-- The forgetful functor from bimodule objects to the ambient category. -/
+/-
+**Bimod.forget** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：forget : Bimod A B ⥤ C where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : Bimod A B ⥤ C where
-  body: A.X
-  map f := f.hom
-
-中文:
-定义 forget
-  签名: : 双模 A B ⥤ C where
-  定义体: A.X
-  map f := f.hom
+--- 原说明 ---
+The forgetful functor from bimodule objects to the ambient category.
 -/
 def forget : Bimod A B ⥤ C where
   obj A := A.X
@@ -487,77 +316,35 @@ namespace TensorBimod
 
 variable {R S T : Mon C} (P : Bimod R S) (Q : Bimod S T)
 
-/--
-Definition of `X` / `X` 的定义
+/-- The underlying object of the tensor product of two bimodules. -/
+/-
+**Bimod.TensorBimod.X** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：X : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition X
-  signature: : C
-  body: coequalizer (P.actRight ▷ Q.X) ((α_ _ _ _).hom ≫ (P.X ◁ Q.actLeft))
-
-中文:
-定义 X
-  签名: : C
-  定义体: coequalizer (P.actRight ▷ Q.X) ((α_ _ _ _).hom ≫ (P.X ◁ Q.actLeft))
-
-Depends on / 依赖: P.actRight, Q.actLeft, actLeft, actRight, coequalizer
+--- 原说明 ---
+The underlying object of the tensor product of two bimodules.
 -/
 noncomputable def X : C :=
   coequalizer (P.actRight ▷ Q.X) ((α_ _ _ _).hom ≫ (P.X ◁ Q.actLeft))
 
 section
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `actLeft` / `actLeft` 的定义
+/-- Left action for the tensor product of two bimodules. -/
+/-
+**Bimod.TensorBimod.actLeft** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：actLeft : R.X otimes X P Q ⟶ X P Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition actLeft
-  signature: : R.X otimes X P Q ⟶ X P Q
-  body: (PreservesCoequalizer.iso (tensorLeft R.X) _ _).inv ≫
-    colimMap
-      (parallelPairHom _ _ _ _
-        ((α_ _ _ _).inv ≫ ((α_ _ _ _).inv ▷ _) ≫ (P.actLeft ▷ S.X ▷ Q.X))
-        ((α_ _ _ _).inv ≫ (P.actLeft ▷ Q.X))
-        (by
-          dsimp
-          simp only [Category.assoc]
-          slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-          slice_rhs 3 4 => rw [← comp_whiskerRight, middle_assoc, comp_whiskerRight]
-          simp)
-        (by
-          dsimp
-          slice_lhs 1 1 => rw [whiskerLeft_comp]
-          slice_lhs 2 3 => rw [associator_inv_naturality_right]
-          slice_lhs 3 4 => rw [whisker_exchange]
-          simp))
-
-中文:
-定义 actLeft
-  签名: : R.X otimes X P Q ⟶ X P Q
-  定义体: (PreservesCoequalizer.iso (tensorLeft R.X) _ _).inv ≫
-    colimMap
-      (parallelPairHom _ _ _ _
-        ((α_ _ _ _).inv ≫ ((α_ _ _ _).inv ▷ _) ≫ (P.actLeft ▷ S.X ▷ Q.X))
-        ((α_ _ _ _).inv ≫ (P.actLeft ▷ Q.X))
-        (by
-          dsimp
-          simp only [Category.assoc]
-          slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-          slice_rhs 3 4 => rw [← comp_whiskerRight, middle_assoc, comp_whiskerRight]
-          simp)
-        (by
-          dsimp
-          slice_lhs 1 1 => rw [whiskerLeft_comp]
-          slice_lhs 2 3 => rw [associator_inv_naturality_right]
-          slice_lhs 3 4 => rw [whisker_exchange]
-          simp))
-
-Depends on / 依赖: Category, Category.assoc, P.actLeft, PreservesCoequalizer, PreservesCoequalizer.iso, actLeft, associator_inv_naturality_middle, associator_inv_naturality_right, colimMap, comp_whiskerRight, middle_assoc, parallelPairHom, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp, whisker_exch
+--- 原说明 ---
+Left action for the tensor product of two bimodules.
 -/
-noncomputable def actLeft : R.X otimes X P Q ⟶ X P Q :=
+noncomputable def actLeft : R.X ⊗ X P Q ⟶ X P Q :=
   (PreservesCoequalizer.iso (tensorLeft R.X) _ _).inv ≫
     colimMap
       (parallelPairHom _ _ _ _
@@ -577,22 +364,9 @@ noncomputable def actLeft : R.X otimes X P Q ⟶ X P Q :=
           simp))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `whiskerLeft_π_actLeft` / 定理 `whiskerLeft_π_actLeft`
-
-English:
-theorem whiskerLeft_π_actLeft
-  proof: by
-  erw [map_π_preserves_coequalizer_inv_colimMap (tensorLeft _)]
-  simp only [Category.assoc]
-
-中文:
-定理 whiskerLeft_π_actLeft
-  证明: by
-  erw [map_π_preserves_coequalizer_inv_colimMap (tensorLeft _)]
-  simp only [Category.assoc]
-
-Depends on / 依赖: Category, Category.assoc, tensorLeft
+/-
+**Bimod.TensorBimod.whiskerLeft_** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.TensorBimod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerLeft_π_actLeft :
     (R.X ◁ coequalizer.π _ _) ≫ actLeft P Q =
@@ -602,38 +376,85 @@ theorem whiskerLeft_π_actLeft :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `one_act_left'` / 定理 `one_act_left'`
-
-English:
-theorem one_act_left'
-  statement: (η ▷ _) ≫ actLeft P Q = (fun_ _).hom
-  proof: by
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
-  slice_lhs 1 2 => rw [associator_inv_naturality_left]
-  slice_lhs 2 3 => rw [← comp_whiskerRight, one_actLeft]
-  slice_rhs 1 2 => rw [leftUnitor_naturality]
-  monoidal
-
-中文:
-定理 one_act_left'
-  结论: (η ▷ _) ≫ actLeft P Q = (fun_ _).hom
-  证明: by
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
-  slice_lhs 1 2 => rw [associator_inv_naturality_left]
-  slice_lhs 2 3 => rw [← comp_whiskerRight, one_actLeft]
-  slice_rhs 1 2 => rw [leftUnitor_naturality]
-  monoidal
-
-Depends on / 依赖: associator_inv_naturality_left, cancel_epi, coequalizer, comp_whiskerRight, leftUnitor_naturality, monoidal, one_actLeft, slice_lhs, slice_rhs, tensorLeft, whisker_exchange
+/-
+**Bimod.TensorBimod.one_act_left'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：one_act_left' : (η ▷ _) ≫ actLeft P Q = (fun_ _).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Bimod.TensorBimod.whiskerLeft_π_actLeft`：whiskerLeft_π_actLeft : (R.X ◁ 
+coequalizer.π _ _) ≫ actLeft P Q = (α_ _ _ _).inv ≫ (P.actLeft ▷ Q.X) ≫ coequali
+zer.π _ _
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_left`：associat
+or_inv_naturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) ≫ (α
+_ X' Y Z).inv = (α_ X Y Z).inv ≫ f ▷ Y ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `Bimod.one_actLeft`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, 
+u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon 
+C} (sel…
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_naturality`：∀ {C : Type u} {𝒞
+ : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] 
+{X Y : C} (f : X ⟶ Y),   CategoryTheory.Cat…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_leftUnitor`：naturality_leftUnitor {p 
+f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (fun_ f) ≪≫ η_f = normalizeIsoComp (ρ_ p
+) η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
 -/
-theorem one_act_left' : (η ▷ _) ≫ actLeft P Q = (fun_ _).hom := by
+theorem one_act_left' : (η ▷ _) ≫ actLeft P Q = (λ_ _).hom := by
   refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
   dsimp [X]
   slice_lhs 1 2 => rw [whisker_exchange]
@@ -645,42 +466,86 @@ theorem one_act_left' : (η ▷ _) ≫ actLeft P Q = (fun_ _).hom := by
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `left_assoc'` / 定理 `left_assoc'`
-
-English:
-theorem left_assoc'
-  proof: by
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
-  slice_lhs 1 2 => rw [associator_inv_naturality_left]
-  slice_lhs 2 3 => rw [← comp_whiskerRight, left_assoc, comp_whiskerRight, comp_whiskerRight]
-  slice_rhs 1 2 => rw [associator_naturality_right]
-  slice_rhs 2 3 =>
-    rw [← whiskerLeft_comp]; rw [whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
-  slice_rhs 3 4 => rw [associator_inv_naturality_middle]
-  monoidal
-
-中文:
-定理 left_assoc'
-  证明: by
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
-  slice_lhs 1 2 => rw [associator_inv_naturality_left]
-  slice_lhs 2 3 => rw [← comp_whiskerRight, left_assoc, comp_whiskerRight, comp_whiskerRight]
-  slice_rhs 1 2 => rw [associator_naturality_right]
-  slice_rhs 2 3 =>
-    rw [← whiskerLeft_comp]; rw [whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
-  slice_rhs 3 4 => rw [associator_inv_naturality_middle]
-  monoidal
-
-Depends on / 依赖: associator_inv_naturality_left, associator_naturality_right, cancel_epi, coequalizer, comp_whiskerRight, left_assoc, slice_lhs, slice_rhs, tensorLeft, whisker, whiskerLeft_comp, whisker_exchange
+/-
+**Bimod.TensorBimod.left_assoc'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：left_assoc' : (μ ▷ _) ≫ actLeft P Q = (α_ R.X R.X _).hom ≫ (R.X ◁ actLeft 
+P Q) ≫ actLeft P Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Bimod.TensorBimod.whiskerLeft_π_actLeft`：whiskerLeft_π_actLeft : (R.X ◁ 
+coequalizer.π _ _) ≫ actLeft P Q = (α_ _ _ _).inv ≫ (P.actLeft ▷ Q.X) ≫ coequali
+zer.π _ _
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_left`：associat
+or_inv_naturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) ≫ (α
+_ X' Y Z).inv = (α_ X Y Z).inv ≫ f ▷ Y ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `Bimod.left_assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u
+₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon C
+} (sel…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_right`：associator_
+naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f ≫ (α_ X Y 
+Z').hom = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_middle`：associ
+ator_inv_naturality_middle (X : C) {Y Y' : C} (f : Y ⟶ Y') (Z : C) : X ◁ f ▷ Z ≫
+ (α_ X Y' Z).inv = (α_ X Y Z).inv ≫ (X ◁ f) ▷ Z
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_whisker`：evalWhiskerRight_
+cons_whisker {f g h i j k : C} {α : g ≅ f otimes h} {η : h ⟶ i} {ηs : f otimes i
+ ⟶ j} {η₁ : h otimes k ⟶ i otimes k} {η₂ : …
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+（共 39 条，此处仅展示前 30 条）
 -/
 theorem left_assoc' :
     (μ ▷ _) ≫ actLeft P Q = (α_ R.X R.X _).hom ≫ (R.X ◁ actLeft P Q) ≫ actLeft P Q := by
@@ -692,7 +557,8 @@ theorem left_assoc' :
   slice_lhs 2 3 => rw [← comp_whiskerRight, left_assoc, comp_whiskerRight, comp_whiskerRight]
   slice_rhs 1 2 => rw [associator_naturality_right]
   slice_rhs 2 3 =>
-    rw [← whiskerLeft_comp]; rw [whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+    rw [← whiskerLeft_comp, whiskerLeft_π_actLeft,
+      whiskerLeft_comp, whiskerLeft_comp]
   slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
   slice_rhs 3 4 => rw [associator_inv_naturality_middle]
   monoidal
@@ -701,55 +567,20 @@ end
 
 section
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `actRight` / `actRight` 的定义
+/-- Right action for the tensor product of two bimodules. -/
+/-
+**Bimod.TensorBimod.actRight** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：actRight : X P Q otimes T.X ⟶ X P Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition actRight
-  signature: : X P Q otimes T.X ⟶ X P Q
-  body: (PreservesCoequalizer.iso (tensorRight T.X) _ _).inv ≫
-    colimMap
-      (parallelPairHom _ _ _ _
-        ((α_ _ _ _).hom ≫ (α_ _ _ _).hom ≫ (P.X ◁ S.X ◁ Q.actRight) ≫ (α_ _ _ _).inv)
-        ((α_ _ _ _).hom ≫ (P.X ◁ Q.actRight))
-        (by
-          dsimp
-          slice_lhs 1 2 => rw [associator_naturality_left]
-          slice_lhs 2 3 => rw [← whisker_exchange]
-          simp)
-        (by
-          dsimp
-          simp only [comp_whiskerRight, whisker_assoc, Category.assoc, Iso.inv_hom_id_assoc]
-          slice_lhs 3 4 =>
-            rw [← whiskerLeft_comp]; rw [middle_assoc]; rw [whiskerLeft_comp]
-          simp))
-
-中文:
-定义 actRight
-  签名: : X P Q otimes T.X ⟶ X P Q
-  定义体: (PreservesCoequalizer.iso (tensorRight T.X) _ _).inv ≫
-    colimMap
-      (parallelPairHom _ _ _ _
-        ((α_ _ _ _).hom ≫ (α_ _ _ _).hom ≫ (P.X ◁ S.X ◁ Q.actRight) ≫ (α_ _ _ _).inv)
-        ((α_ _ _ _).hom ≫ (P.X ◁ Q.actRight))
-        (by
-          dsimp
-          slice_lhs 1 2 => rw [associator_naturality_left]
-          slice_lhs 2 3 => rw [← whisker_exchange]
-          simp)
-        (by
-          dsimp
-          simp only [comp_whiskerRight, whisker_assoc, Category.assoc, Iso.inv_hom_id_assoc]
-          slice_lhs 3 4 =>
-            rw [← whiskerLeft_comp]; rw [middle_assoc]; rw [whiskerLeft_comp]
-          simp))
-
-Depends on / 依赖: Category, Category.assoc, Iso.inv_hom_id_assoc, PreservesCoequalizer, PreservesCoequalizer.iso, Q.actRight, actRight, associator_naturality_left, colimMap, comp_whiskerRight, inv_hom_id_assoc, middle_assoc, parallelPairHom, slice_lhs, tensorRight, whiskerLeft_comp, whisker_assoc, whisker_exchange
+--- 原说明 ---
+Right action for the tensor product of two bimodules.
 -/
-noncomputable def actRight : X P Q otimes T.X ⟶ X P Q :=
+noncomputable def actRight : X P Q ⊗ T.X ⟶ X P Q :=
   (PreservesCoequalizer.iso (tensorRight T.X) _ _).inv ≫
     colimMap
       (parallelPairHom _ _ _ _
@@ -764,26 +595,13 @@ noncomputable def actRight : X P Q otimes T.X ⟶ X P Q :=
           dsimp
           simp only [comp_whiskerRight, whisker_assoc, Category.assoc, Iso.inv_hom_id_assoc]
           slice_lhs 3 4 =>
-            rw [← whiskerLeft_comp]; rw [middle_assoc]; rw [whiskerLeft_comp]
+            rw [← whiskerLeft_comp, middle_assoc, whiskerLeft_comp]
           simp))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `π_tensor_id_actRight` / 定理 `π_tensor_id_actRight`
-
-English:
-theorem π_tensor_id_actRight
-  proof: by
-  erw [map_π_preserves_coequalizer_inv_colimMap (tensorRight _)]
-  simp only [Category.assoc]
-
-中文:
-定理 π_tensor_id_actRight
-  证明: by
-  erw [map_π_preserves_coequalizer_inv_colimMap (tensorRight _)]
-  simp only [Category.assoc]
-
-Depends on / 依赖: Category, Category.assoc, tensorRight
+/-
+**Bimod.TensorBimod.** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.TensorBimod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem π_tensor_id_actRight :
     (coequalizer.π _ _ ▷ T.X) ≫ actRight P Q =
@@ -793,34 +611,63 @@ theorem π_tensor_id_actRight :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `actRight_one'` / 定理 `actRight_one'`
-
-English:
-theorem actRight_one'
-  statement: (_ ◁ η) ≫ actRight P Q = (ρ_ _).hom
-  proof: by
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [← whisker_exchange]
-  slice_lhs 2 3 => rw [π_tensor_id_actRight]
-  slice_lhs 1 2 => rw [associator_naturality_right]
-  slice_lhs 2 3 => rw [← whiskerLeft_comp, actRight_one]
-  simp
-
-中文:
-定理 actRight_one'
-  结论: (_ ◁ η) ≫ actRight P Q = (ρ_ _).hom
-  证明: by
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [← whisker_exchange]
-  slice_lhs 2 3 => rw [π_tensor_id_actRight]
-  slice_lhs 1 2 => rw [associator_naturality_right]
-  slice_lhs 2 3 => rw [← whiskerLeft_comp, actRight_one]
-  simp
-
-Depends on / 依赖: actRight_one, associator_naturality_right, cancel_epi, coequalizer, slice_lhs, tensorRight, whiskerLeft_comp, whisker_exchange
+/-
+**Bimod.TensorBimod.actRight_one'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：actRight_one' : (_ ◁ η) ≫ actRight P Q = (ρ_ _).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Bimod.TensorBimod.π_tensor_id_actRight`：π_tensor_id_actRight : (coequali
+zer.π _ _ ▷ T.X) ≫ actRight P Q = (α_ _ _ _).hom ≫ (P.X ◁ Q.actRight) ≫ coequali
+zer.π _ _
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_right`：associator_
+naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f ≫ (α_ X Y 
+Z').hom = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `Bimod.actRight_one`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁,
+ u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon
+ C} (sel…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_rightUnitor`：whiskerLeft_rig
+htUnitor (X Y : C) : X ◁ (ρ_ Y).hom = (α_ X Y (𝟙_ C)).inv ≫ (ρ_ (X otimes Y)).ho
+m
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_id`：whiskerRight_id {X Y : 
+C} (f : X ⟶ Y) : f ▷ 𝟙_ C = (ρ_ X).hom ≫ f ≫ (ρ_ Y).inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem actRight_one' : (_ ◁ η) ≫ actRight P Q = (ρ_ _).hom := by
   refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
@@ -833,42 +680,64 @@ theorem actRight_one' : (_ ◁ η) ≫ actRight P Q = (ρ_ _).hom := by
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `right_assoc'` / 定理 `right_assoc'`
-
-English:
-theorem right_assoc'
-  proof: by
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [← whisker_exchange]
-  slice_lhs 2 3 => rw [π_tensor_id_actRight]
-  slice_lhs 1 2 => rw [associator_naturality_right]
-  slice_lhs 2 3 => rw [← whiskerLeft_comp, right_assoc,
-    whiskerLeft_comp, whiskerLeft_comp]
-  slice_rhs 1 2 => rw [associator_inv_naturality_left]
-  slice_rhs 2 3 => rw [← comp_whiskerRight, π_tensor_id_actRight, comp_whiskerRight,
-    comp_whiskerRight]
-  slice_rhs 4 5 => rw [π_tensor_id_actRight]
-  simp
-
-中文:
-定理 right_assoc'
-  证明: by
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [← whisker_exchange]
-  slice_lhs 2 3 => rw [π_tensor_id_actRight]
-  slice_lhs 1 2 => rw [associator_naturality_right]
-  slice_lhs 2 3 => rw [← whiskerLeft_comp, right_assoc,
-    whiskerLeft_comp, whiskerLeft_comp]
-  slice_rhs 1 2 => rw [associator_inv_naturality_left]
-  slice_rhs 2 3 => rw [← comp_whiskerRight, π_tensor_id_actRight, comp_whiskerRight,
-    comp_whiskerRight]
-  slice_rhs 4 5 => rw [π_tensor_id_actRight]
-  simp
-
-Depends on / 依赖: associator_inv_naturality_left, associator_naturality_right, cancel_epi, coequalizer, comp_whiskerRight, right_assoc, slice_lhs, slice_rhs, tensorRight, whiskerLeft_comp, whisker_exchange
+/-
+**Bimod.TensorBimod.right_assoc'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：right_assoc' : (_ ◁ μ) ≫ actRight P Q = (α_ _ T.X T.X).inv ≫ (actRight P Q
+ ▷ T.X) ≫ actRight P Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Bimod.TensorBimod.π_tensor_id_actRight`：π_tensor_id_actRight : (coequali
+zer.π _ _ ▷ T.X) ≫ actRight P Q = (α_ _ _ _).hom ≫ (P.X ◁ Q.actRight) ≫ coequali
+zer.π _ _
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_right`：associator_
+naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f ≫ (α_ X Y 
+Z').hom = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `Bimod.right_assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, 
+u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon 
+C} (sel…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_left`：associat
+or_inv_naturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) ≫ (α
+_ X' Y Z).inv = (α_ X Y Z).inv ≫ f ▷ Y ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc`：whisker_assoc (X : C) {Y 
+Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z = (α_ X Y Z).hom ≫ X ◁ f ▷ Z ≫ (α_ X 
+Y' Z).inv
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.pentagon_inv_hom_hom_hom_inv_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mo
+noidalCategory C] {W X Y Z Z_1 : C}   (h :     CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem right_assoc' :
     (_ ◁ μ) ≫ actRight P Q =
@@ -890,49 +759,72 @@ end
 
 section
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `middle_assoc'` / 定理 `middle_assoc'`
-
-English:
-theorem middle_assoc'
-  proof: by
-  refine (cancel_epi ((tensorLeft _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [← comp_whiskerRight, whiskerLeft_π_actLeft, comp_whiskerRight,
-    comp_whiskerRight]
-  slice_lhs 3 4 => rw [π_tensor_id_actRight]
-  slice_lhs 2 3 => rw [associator_naturality_left]
-  slice_rhs 1 2 => rw [associator_naturality_middle]
-  slice_rhs 2 3 => rw [← whiskerLeft_comp, π_tensor_id_actRight,
-    whiskerLeft_comp, whiskerLeft_comp]
-  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
-  slice_rhs 3 4 => rw [associator_inv_naturality_right]
-  slice_rhs 4 5 => rw [whisker_exchange]
-  simp
-
-中文:
-定理 middle_assoc'
-  证明: by
-  refine (cancel_epi ((tensorLeft _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [X]
-  slice_lhs 1 2 => rw [← comp_whiskerRight, whiskerLeft_π_actLeft, comp_whiskerRight,
-    comp_whiskerRight]
-  slice_lhs 3 4 => rw [π_tensor_id_actRight]
-  slice_lhs 2 3 => rw [associator_naturality_left]
-  slice_rhs 1 2 => rw [associator_naturality_middle]
-  slice_rhs 2 3 => rw [← whiskerLeft_comp, π_tensor_id_actRight,
-    whiskerLeft_comp, whiskerLeft_comp]
-  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
-  slice_rhs 3 4 => rw [associator_inv_naturality_right]
-  slice_rhs 4 5 => rw [whisker_exchange]
-  simp
-
-Depends on / 依赖: associator_naturality_left, associator_naturality_middle, cancel_epi, coequalizer, comp_whiskerRight, slice_lhs, slice_rhs, tensorLeft, tensorRight, whiskerLeft_comp
+/-
+**Bimod.TensorBimod.middle_assoc'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.TensorBimod`。
+形式化陈述：middle_assoc' : (actLeft P Q ▷ T.X) ≫ actRight P Q = (α_ R.X _ T.X).hom ≫ 
+(R.X ◁ actRight P Q) ≫ actLeft P Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `Bimod.TensorBimod.whiskerLeft_π_actLeft`：whiskerLeft_π_actLeft : (R.X ◁ 
+coequalizer.π _ _) ≫ actLeft P Q = (α_ _ _ _).inv ≫ (P.actLeft ▷ Q.X) ≫ coequali
+zer.π _ _
+· 使用定理 `Bimod.TensorBimod.π_tensor_id_actRight`：π_tensor_id_actRight : (coequali
+zer.π _ _ ▷ T.X) ≫ actRight P Q = (α_ _ _ _).hom ≫ (P.X ◁ Q.actRight) ≫ coequali
+zer.π _ _
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_left`：associator_n
+aturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ Y ▷ Z ≫ (α_ X' Y Z).hom =
+ (α_ X Y Z).hom ≫ f ▷ (Y otimes Z)
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_middle`：associator
+_naturality_middle (X : C) {Y Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z ≫ (α_ X
+ Y' Z).hom = (α_ X Y Z).hom ≫ X ◁ f ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_right`：associa
+tor_inv_naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : X ◁ Y ◁ f ≫ (α_ X Y
+ Z').inv = (α_ X Y Z).inv ≫ (X otimes Y) ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_tensor`：whiskerRight_tensor
+ {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) = (α_ X Y Z).inv ≫ f ▷ Y ▷
+ Z ≫ (α_ X' Y Z).hom
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.pentagon_hom_inv_inv_inv_inv_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mo
+noidalCategory C] {W X Y Z Z_1 : C}   (h :     CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem middle_assoc' :
     (actLeft P Q ▷ T.X) ≫ actRight P Q =
@@ -957,39 +849,31 @@ end TensorBimod
 
 section
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 
 /-- Tensor product of two bimodule objects as a bimodule object. -/
 @[simps]
-/--
-Definition of `tensorBimod` / `tensorBimod` 的定义
+/-
+**Bimod.tensorBimod** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：tensorBimod {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z) : Bimod X Z wh
+ere X
+参数：M : Bimod X Y；N : Bimod Y Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bimod.TensorBimod.one_act_left'`：one_act_left' : (η ▷ _) ≫ actLeft P Q =
+ (fun_ _).hom
+· 使用定理 `Bimod.TensorBimod.left_assoc'`：left_assoc' : (μ ▷ _) ≫ actLeft P Q = (α_
+ R.X R.X _).hom ≫ (R.X ◁ actLeft P Q) ≫ actLeft P Q
+· 使用定理 `Bimod.TensorBimod.actRight_one'`：actRight_one' : (_ ◁ η) ≫ actRight P Q 
+= (ρ_ _).hom
+· 使用定理 `Bimod.TensorBimod.right_assoc'`：right_assoc' : (_ ◁ μ) ≫ actRight P Q = 
+(α_ _ T.X T.X).inv ≫ (actRight P Q ▷ T.X) ≫ actRight P Q
+· 使用定理 `Bimod.TensorBimod.middle_assoc'`：middle_assoc' : (actLeft P Q ▷ T.X) ≫ a
+ctRight P Q = (α_ R.X _ T.X).hom ≫ (R.X ◁ actRight P Q) ≫ actLeft P Q
 
-English:
-definition tensorBimod
-  signature: {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z)
-  body: TensorBimod.X M N
-  actLeft := TensorBimod.actLeft M N
-  actRight := TensorBimod.actRight M N
-  one_actLeft := TensorBimod.one_act_left' M N
-  actRight_one := TensorBimod.actRight_one' M N
-  left_assoc := TensorBimod.left_assoc' M N
-  right_assoc := TensorBimod.right_assoc' M N
-  middle_assoc := TensorBimod.middle_assoc' M N
-
-中文:
-定义 tensorBimod
-  签名: {X Y Z : 幺半群 C} (M : 双模 X Y) (N : 双模 Y Z)
-  定义体: TensorBimod.X M N
-  actLeft := TensorBimod.actLeft M N
-  actRight := TensorBimod.actRight M N
-  one_actLeft := TensorBimod.one_act_left' M N
-  actRight_one := TensorBimod.actRight_one' M N
-  left_assoc := TensorBimod.left_assoc' M N
-  right_assoc := TensorBimod.right_assoc' M N
-  middle_assoc := TensorBimod.middle_assoc' M N
-
-Depends on / 依赖: TensorBimod, TensorBimod.X
+--- 原说明 ---
+Tensor product of two bimodule objects as a bimodule object.
 -/
 noncomputable def tensorBimod {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z) : Bimod X Z where
   X := TensorBimod.X M N
@@ -1005,76 +889,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Left whiskering for morphisms of bimodule objects. -/
 @[simps]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**Bimod.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：whiskerLeft {X Y Z : Mon C} (M : Bimod X Y) {N₁ N₂ : Bimod Y Z} (f : N₁ ⟶ 
+N₂) : M.tensorBimod N₁ ⟶ M.tensorBimod N₂ where hom
+参数：M : Bimod X Y；f : N₁ ⟶ N₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: {X Y Z : Mon C} (M : Bimod X Y) {N₁ N₂ : Bimod Y Z} (f : N₁ ⟶ N₂)
-  body: colimMap
-      (parallelPairHom _ _ _ _ (_ ◁ f.hom) (_ ◁ f.hom)
-        (by rw [whisker_exchange])
-        (by
-          simp only [Category.assoc, tensor_whiskerLeft, Iso.inv_hom_id_assoc,
-            Iso.cancel_iso_hom_left]
-          slice_lhs 1 2 => rw [← whiskerLeft_comp, Hom.left_act_hom]
-          simp))
-  left_act_hom := by
-    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one,
-      whiskerLeft_comp]
-    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_rhs 1 2 => rw [associator_inv_naturality_right]
-    slice_rhs 2 3 => rw [whisker_exchange]
-    simp
-  right_act_hom := by
-    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_lhs 2 3 => rw [← whiskerLeft_comp, Hom.right_act_hom]
-    slice_rhs 1 2 =>
-      rw [← comp_whiskerRight]; rw [ι_colimMap]; rw [parallelPairHom_app_one]; rw [comp_whiskerRight]
-    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
-    simp
-
-中文:
-定义 whiskerLeft
-  签名: {X Y Z : 幺半群 C} (M : 双模 X Y) {N₁ N₂ : 双模 Y Z} (f : N₁ ⟶ N₂)
-  定义体: colimMap
-      (parallelPairHom _ _ _ _ (_ ◁ f.hom) (_ ◁ f.hom)
-        (by rw [whisker_exchange])
-        (by
-          simp only [Category.assoc, tensor_whiskerLeft, Iso.inv_hom_id_assoc,
-            Iso.cancel_iso_hom_left]
-          slice_lhs 1 2 => rw [← whiskerLeft_comp, Hom.left_act_hom]
-          simp))
-  left_act_hom := by
-    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one,
-      whiskerLeft_comp]
-    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_rhs 1 2 => rw [associator_inv_naturality_right]
-    slice_rhs 2 3 => rw [whisker_exchange]
-    simp
-  right_act_hom := by
-    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_lhs 2 3 => rw [← whiskerLeft_comp, Hom.right_act_hom]
-    slice_rhs 1 2 =>
-      rw [← comp_whiskerRight]; rw [ι_colimMap]; rw [parallelPairHom_app_one]; rw [comp_whiskerRight]
-    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
-    simp
-
-Depends on / 依赖: Category, Category.assoc, Hom.left_act_hom, Iso.cancel_iso_hom_left, Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.whiskerLeft_, cancel_epi, cancel_iso_hom_left, coequalizer, colimMap, f.hom, inv_hom_id_assoc, left_act_hom, parallelPairHom, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorLeft, tensor_whiskerLeft
+--- 原说明 ---
+Left whiskering for morphisms of bimodule objects.
 -/
 noncomputable def whiskerLeft {X Y Z : Mon C} (M : Bimod X Y) {N₁ N₂ : Bimod Y Z} (f : N₁ ⟶ N₂) :
     M.tensorBimod N₁ ⟶ M.tensorBimod N₂ where
@@ -1105,7 +929,7 @@ noncomputable def whiskerLeft {X Y Z : Mon C} (M : Bimod X Y) {N₁ N₂ : Bimod
     slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
     slice_lhs 2 3 => rw [← whiskerLeft_comp, Hom.right_act_hom]
     slice_rhs 1 2 =>
-      rw [← comp_whiskerRight]; rw [ι_colimMap]; rw [parallelPairHom_app_one]; rw [comp_whiskerRight]
+      rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one, comp_whiskerRight]
     slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
     simp
 
@@ -1113,70 +937,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Right whiskering for morphisms of bimodule objects. -/
 @[simps]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**Bimod.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：whiskerRight {X Y Z : Mon C} {M₁ M₂ : Bimod X Y} (f : M₁ ⟶ M₂) (N : Bimod 
+Y Z) : M₁.tensorBimod N ⟶ M₂.tensorBimod N where hom
+参数：f : M₁ ⟶ M₂；N : Bimod Y Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: {X Y Z : Mon C} {M₁ M₂ : Bimod X Y} (f : M₁ ⟶ M₂) (N : Bimod Y Z)
-  body: colimMap
-      (parallelPairHom _ _ _ _ (f.hom ▷ _ ▷ _) (f.hom ▷ _)
-        (by rw [← comp_whiskerRight, Hom.right_act_hom, comp_whiskerRight])
-        (by
-          slice_lhs 2 3 => rw [whisker_exchange]
-          simp))
-  left_act_hom := by
-    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_lhs 2 3 => rw [← comp_whiskerRight, Hom.left_act_hom]
-    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one, whiskerLeft_comp]
-    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_rhs 1 2 => rw [associator_inv_naturality_middle]
-    simp
-  right_act_hom := by
-    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_lhs 2 3 => rw [whisker_exchange]
-    slice_rhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one,
-      comp_whiskerRight]
-    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
-    simp
-
-中文:
-定义 whiskerRight
-  签名: {X Y Z : 幺半群 C} {M₁ M₂ : 双模 X Y} (f : M₁ ⟶ M₂) (N : 双模 Y Z)
-  定义体: colimMap
-      (parallelPairHom _ _ _ _ (f.hom ▷ _ ▷ _) (f.hom ▷ _)
-        (by rw [← comp_whiskerRight, Hom.right_act_hom, comp_whiskerRight])
-        (by
-          slice_lhs 2 3 => rw [whisker_exchange]
-          simp))
-  left_act_hom := by
-    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_lhs 2 3 => rw [← comp_whiskerRight, Hom.left_act_hom]
-    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one, whiskerLeft_comp]
-    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
-    slice_rhs 1 2 => rw [associator_inv_naturality_middle]
-    simp
-  right_act_hom := by
-    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-    dsimp
-    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
-    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-    slice_lhs 2 3 => rw [whisker_exchange]
-    slice_rhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one,
-      comp_whiskerRight]
-    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
-    simp
-
-Depends on / 依赖: Hom.left_act_hom, Hom.right_act_hom, TensorBimod, TensorBimod.whiskerLeft_, cancel_epi, coequalizer, colimMap, comp_whiskerRight, f.hom, left_act_hom, parallelPairHom, parallelPairHom_app_one, right_act_hom, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp, whisker_exchange
+--- 原说明 ---
+Right whiskering for morphisms of bimodule objects.
 -/
 noncomputable def whiskerRight {X Y Z : Mon C} {M₁ M₂ : Bimod X Y} (f : M₁ ⟶ M₂) (N : Bimod Y Z) :
     M₁.tensorBimod N ⟶ M₂.tensorBimod N where
@@ -1212,48 +982,28 @@ end
 
 namespace AssociatorBimod
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 variable {R S T U : Mon C} (P : Bimod R S) (Q : Bimod S T) (L : Bimod T U)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `homAux` / `homAux` 的定义
+/-- An auxiliary morphism for the definition of the underlying morphism of the forward component of
+the associator isomorphism. -/
+/-
+**Bimod.AssociatorBimod.homAux** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.AssociatorBimod`
+。
+形式化陈述：homAux : (P.tensorBimod Q).X otimes L.X ⟶ (P.tensorBimod (Q.tensorBimod L)
+).X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homAux
-  signature: : (P.tensorBimod Q).X otimes L.X ⟶ (P.tensorBimod (Q.tensorBimod L)).X
-  body: (PreservesCoequalizer.iso (tensorRight L.X) _ _).inv ≫
-    coequalizer.desc ((α_ _ _ _).hom ≫ (P.X ◁ coequalizer.π _ _) ≫ coequalizer.π _ _)
-      (by
-        dsimp; dsimp [TensorBimod.X]
-        slice_lhs 1 2 => rw [associator_naturality_left]
-        slice_lhs 2 3 => rw [← whisker_exchange]
-        slice_lhs 3 4 => rw [coequalizer.condition]
-        slice_lhs 2 3 => rw [associator_naturality_right]
-        slice_lhs 3 4 =>
-          rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]
-        simp)
-
-中文:
-定义 homAux
-  签名: : (P.tensorBimod Q).X otimes L.X ⟶ (P.tensorBimod (Q.tensorBimod L)).X
-  定义体: (PreservesCoequalizer.iso (tensorRight L.X) _ _).inv ≫
-    coequalizer.desc ((α_ _ _ _).hom ≫ (P.X ◁ coequalizer.π _ _) ≫ coequalizer.π _ _)
-      (by
-        dsimp; dsimp [TensorBimod.X]
-        slice_lhs 1 2 => rw [associator_naturality_left]
-        slice_lhs 2 3 => rw [← whisker_exchange]
-        slice_lhs 3 4 => rw [coequalizer.condition]
-        slice_lhs 2 3 => rw [associator_naturality_right]
-        slice_lhs 3 4 =>
-          rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]
-        simp)
-
-Depends on / 依赖: PreservesCoequalizer, PreservesCoequalizer.iso, TensorBimod, TensorBimod.X, TensorBimod.whiskerLeft_, associator_naturality_left, associator_naturality_right, coequalizer, coequalizer.condition, coequalizer.desc, condition, slice_lhs, tensorRight, whiskerLeft_comp, whisker_exchange
+--- 原说明 ---
+An auxiliary morphism for the definition of the underlying morphism of the forwa
+rd component of
+the associator isomorphism.
 -/
-noncomputable def homAux : (P.tensorBimod Q).X otimes L.X ⟶ (P.tensorBimod (Q.tensorBimod L)).X :=
+noncomputable def homAux : (P.tensorBimod Q).X ⊗ L.X ⟶ (P.tensorBimod (Q.tensorBimod L)).X :=
   (PreservesCoequalizer.iso (tensorRight L.X) _ _).inv ≫
     coequalizer.desc ((α_ _ _ _).hom ≫ (P.X ◁ coequalizer.π _ _) ≫ coequalizer.π _ _)
       (by
@@ -1263,53 +1013,21 @@ noncomputable def homAux : (P.tensorBimod Q).X otimes L.X ⟶ (P.tensorBimod (Q.
         slice_lhs 3 4 => rw [coequalizer.condition]
         slice_lhs 2 3 => rw [associator_naturality_right]
         slice_lhs 3 4 =>
-          rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]
+          rw [← whiskerLeft_comp, TensorBimod.whiskerLeft_π_actLeft, whiskerLeft_comp]
         simp)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `hom` / `hom` 的定义
+/-- The underlying morphism of the forward component of the associator isomorphism. -/
+/-
+**Bimod.AssociatorBimod.hom** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.AssociatorBimod`。
+形式化陈述：hom : ((P.tensorBimod Q).tensorBimod L).X ⟶ (P.tensorBimod (Q.tensorBimod 
+L)).X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hom
-  signature: :
-  body: coequalizer.desc (homAux P Q L)
-    (by
-      dsimp [homAux]
-      refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-      dsimp [TensorBimod.X]
-      slice_lhs 1 2 => rw [← comp_whiskerRight, TensorBimod.π_tensor_id_actRight,
-        comp_whiskerRight, comp_whiskerRight]
-      slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-      slice_lhs 2 3 => rw [associator_naturality_middle]
-      slice_lhs 3 4 =>
-        rw [← whiskerLeft_comp]; rw [coequalizer.condition]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-      slice_rhs 1 2 => rw [associator_naturality_left]
-      slice_rhs 2 3 => rw [← whisker_exchange]
-      slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-      simp)
-
-中文:
-定义 hom
-  签名: :
-  定义体: coequalizer.desc (homAux P Q L)
-    (by
-      dsimp [homAux]
-      refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-      dsimp [TensorBimod.X]
-      slice_lhs 1 2 => rw [← comp_whiskerRight, TensorBimod.π_tensor_id_actRight,
-        comp_whiskerRight, comp_whiskerRight]
-      slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-      slice_lhs 2 3 => rw [associator_naturality_middle]
-      slice_lhs 3 4 =>
-        rw [← whiskerLeft_comp]; rw [coequalizer.condition]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-      slice_rhs 1 2 => rw [associator_naturality_left]
-      slice_rhs 2 3 => rw [← whisker_exchange]
-      slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-      simp)
-
-Depends on / 依赖: TensorBimod, TensorBimod.X, associator_naturality_middle, cancel_epi, coequalizer, coequalizer.condition, coequalizer.desc, comp_whiskerRight, condition, homAux, slice_lhs, tensorRight, whiskerLeft_comp
+--- 原说明 ---
+The underlying morphism of the forward component of the associator isomorphism.
 -/
 noncomputable def hom :
     ((P.tensorBimod Q).tensorBimod L).X ⟶ (P.tensorBimod (Q.tensorBimod L)).X :=
@@ -1323,7 +1041,8 @@ noncomputable def hom :
       slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
       slice_lhs 2 3 => rw [associator_naturality_middle]
       slice_lhs 3 4 =>
-        rw [← whiskerLeft_comp]; rw [coequalizer.condition]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+        rw [← whiskerLeft_comp, coequalizer.condition,
+          whiskerLeft_comp, whiskerLeft_comp]
       slice_rhs 1 2 => rw [associator_naturality_left]
       slice_rhs 2 3 => rw [← whisker_exchange]
       slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
@@ -1331,56 +1050,88 @@ noncomputable def hom :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_left_act_hom'` / 定理 `hom_left_act_hom'`
-
-English:
-theorem hom_left_act_hom'
-  proof: by
-  dsimp; dsimp [hom, homAux]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  simp only [curriedTensor_obj_map]
-  slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc, whiskerLeft_comp]
-  refine (cancel_epi ((tensorRight _ ⋙ tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp; dsimp [TensorBimod.X]
-  slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-  slice_lhs 2 3 =>
-    rw [← comp_whiskerRight]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-  slice_lhs 4 6 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [associator_naturality_left]
-  slice_rhs 1 3 =>
-    rw [← whiskerLeft_comp]; rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  slice_rhs 3 4 => erw [TensorBimod.whiskerLeft_π_actLeft P (Q.tensorBimod L)]
-  slice_rhs 2 3 => erw [associator_inv_naturality_right]
-  slice_rhs 3 4 => erw [whisker_exchange]
-  monoidal
-
-中文:
-定理 hom_left_act_hom'
-  证明: by
-  dsimp; dsimp [hom, homAux]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  simp only [curriedTensor_obj_map]
-  slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc, whiskerLeft_comp]
-  refine (cancel_epi ((tensorRight _ ⋙ tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp; dsimp [TensorBimod.X]
-  slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-  slice_lhs 2 3 =>
-    rw [← comp_whiskerRight]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-  slice_lhs 4 6 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [associator_naturality_left]
-  slice_rhs 1 3 =>
-    rw [← whiskerLeft_comp]; rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  slice_rhs 3 4 => erw [TensorBimod.whiskerLeft_π_actLeft P (Q.tensorBimod L)]
-  slice_rhs 2 3 => erw [associator_inv_naturality_right]
-  slice_rhs 3 4 => erw [whisker_exchange]
-  monoidal
-
-Depends on / 依赖: TensorBimod, TensorBimod.X, TensorBimod.whiskerLeft_, associator_inv_naturality_middle, cancel_epi, coequalizer, comp_, curriedTensor_obj_map, homAux, slice_lhs, slice_rhs, tensorLeft, tensorRight, whiskerLeft_comp
+/-
+**Bimod.AssociatorBimod.hom_left_act_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.Assoc
+iatorBimod`。
+形式化陈述：hom_left_act_hom' : ((P.tensorBimod Q).tensorBimod L).actLeft ≫ hom P Q L 
+= (R.X ◁ hom P Q L) ≫ (P.tensorBimod (Q.tensorBimod L)).actLeft
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Bimod.TensorBimod.whiskerLeft_π_actLeft`：whiskerLeft_π_actLeft : (R.X ◁ 
+coequalizer.π _ _) ≫ actLeft P Q = (α_ _ _ _).inv ≫ (P.actLeft ▷ Q.X) ≫ coequali
+zer.π _ _
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_middle`：associ
+ator_inv_naturality_middle (X : C) {Y Y' : C} (f : Y ⟶ Y') (Z : C) : X ◁ f ▷ Z ≫
+ (α_ X Y' Z).inv = (α_ X Y Z).inv ≫ (X ◁ f) ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_left`：associator_n
+aturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ Y ▷ Z ≫ (α_ X' Y Z).hom =
+ (α_ X Y Z).hom ≫ f ▷ (Y otimes Z)
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_right`：associa
+tor_inv_naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : X ◁ Y ◁ f ≫ (α_ X Y
+ Z').inv = (α_ X Y Z).inv ≫ (X otimes Y) ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_comp`：evalWhiskerRight_comp {f 
+f' g h : C} {η : f ⟶ f'} {η₁ : f otimes g ⟶ f' otimes g} {η₂ : (f otimes g) otim
+es h ⟶ (f' otimes g) otimes h} {η₃ …
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+（共 40 条，此处仅展示前 30 条）
 -/
 theorem hom_left_act_hom' :
     ((P.tensorBimod Q).tensorBimod L).actLeft ≫ hom P Q L =
@@ -1395,11 +1146,13 @@ theorem hom_left_act_hom' :
   dsimp; dsimp [TensorBimod.X]
   slice_lhs 1 2 => rw [associator_inv_naturality_middle]
   slice_lhs 2 3 =>
-    rw [← comp_whiskerRight]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+    rw [← comp_whiskerRight, TensorBimod.whiskerLeft_π_actLeft,
+      comp_whiskerRight, comp_whiskerRight]
   slice_lhs 4 6 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
   slice_lhs 3 4 => rw [associator_naturality_left]
   slice_rhs 1 3 =>
-    rw [← whiskerLeft_comp]; rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+    rw [← whiskerLeft_comp, ← whiskerLeft_comp, π_tensor_id_preserves_coequalizer_inv_desc,
+      whiskerLeft_comp, whiskerLeft_comp]
   slice_rhs 3 4 => erw [TensorBimod.whiskerLeft_π_actLeft P (Q.tensorBimod L)]
   slice_rhs 2 3 => erw [associator_inv_naturality_right]
   slice_rhs 3 4 => erw [whisker_exchange]
@@ -1407,58 +1160,88 @@ theorem hom_left_act_hom' :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_right_act_hom'` / 定理 `hom_right_act_hom'`
-
-English:
-theorem hom_right_act_hom'
-  proof: by
-  dsimp; dsimp [hom, homAux]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc, comp_whiskerRight]
-  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp; dsimp [TensorBimod.X]
-  slice_lhs 1 2 => rw [associator_naturality_left]
-  slice_lhs 2 3 => rw [← whisker_exchange]
-  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 2 3 => rw [associator_naturality_right]
-  slice_rhs 1 3 =>
-    rw [← comp_whiskerRight]; rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-  slice_rhs 3 4 => erw [TensorBimod.π_tensor_id_actRight P (Q.tensorBimod L)]
-  slice_rhs 2 3 => erw [associator_naturality_middle]
-  dsimp
-  slice_rhs 3 4 =>
-    rw [← whiskerLeft_comp]; rw [TensorBimod.π_tensor_id_actRight]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  monoidal
-
-中文:
-定理 hom_right_act_hom'
-  证明: by
-  dsimp; dsimp [hom, homAux]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc, comp_whiskerRight]
-  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp; dsimp [TensorBimod.X]
-  slice_lhs 1 2 => rw [associator_naturality_left]
-  slice_lhs 2 3 => rw [← whisker_exchange]
-  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 2 3 => rw [associator_naturality_right]
-  slice_rhs 1 3 =>
-    rw [← comp_whiskerRight]; rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-  slice_rhs 3 4 => erw [TensorBimod.π_tensor_id_actRight P (Q.tensorBimod L)]
-  slice_rhs 2 3 => erw [associator_naturality_middle]
-  dsimp
-  slice_rhs 3 4 =>
-    rw [← whiskerLeft_comp]; rw [TensorBimod.π_tensor_id_actRight]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  monoidal
-
-Depends on / 依赖: Functor, Functor.flip_obj_map, TensorBimod, TensorBimod.X, associator_naturality_left, cancel_epi, coequalizer, comp_whiskerRight, curriedTensor_map_app, flip_obj_map, homAux, slice_lhs, slice_rhs, tensorRight
+/-
+**Bimod.AssociatorBimod.hom_right_act_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.Asso
+ciatorBimod`。
+形式化陈述：hom_right_act_hom' : ((P.tensorBimod Q).tensorBimod L).actRight ≫ hom P Q 
+L = (hom P Q L ▷ U.X) ≫ (P.tensorBimod (Q.tensorBimod L)).actRight
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Bimod.TensorBimod.π_tensor_id_actRight`：π_tensor_id_actRight : (coequali
+zer.π _ _ ▷ T.X) ≫ actRight P Q = (α_ _ _ _).hom ≫ (P.X ◁ Q.actRight) ≫ coequali
+zer.π _ _
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_left`：associator_n
+aturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ Y ▷ Z ≫ (α_ X' Y Z).hom =
+ (α_ X Y Z).hom ≫ f ▷ (Y otimes Z)
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_right`：associator_
+naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f ≫ (α_ X Y 
+Z').hom = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_middle`：associator
+_naturality_middle (X : C) {Y Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z ≫ (α_ X
+ Y' Z).hom = (α_ X Y Z).hom ≫ X ◁ f ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+（共 35 条，此处仅展示前 30 条）
 -/
 theorem hom_right_act_hom' :
     ((P.tensorBimod Q).tensorBimod L).actRight ≫ hom P Q L =
@@ -1476,66 +1259,42 @@ theorem hom_right_act_hom' :
   slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
   slice_lhs 2 3 => rw [associator_naturality_right]
   slice_rhs 1 3 =>
-    rw [← comp_whiskerRight]; rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+    rw [← comp_whiskerRight, ← comp_whiskerRight, π_tensor_id_preserves_coequalizer_inv_desc,
+      comp_whiskerRight, comp_whiskerRight]
   slice_rhs 3 4 => erw [TensorBimod.π_tensor_id_actRight P (Q.tensorBimod L)]
   slice_rhs 2 3 => erw [associator_naturality_middle]
   dsimp
   slice_rhs 3 4 =>
-    rw [← whiskerLeft_comp]; rw [TensorBimod.π_tensor_id_actRight]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+    rw [← whiskerLeft_comp, TensorBimod.π_tensor_id_actRight, whiskerLeft_comp, whiskerLeft_comp]
   monoidal
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `invAux` / `invAux` 的定义
+/-- An auxiliary morphism for the definition of the underlying morphism of the inverse component of
+the associator isomorphism. -/
+/-
+**Bimod.AssociatorBimod.invAux** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.AssociatorBimod`
+。
+形式化陈述：invAux : P.X otimes (Q.tensorBimod L).X ⟶ ((P.tensorBimod Q).tensorBimod L
+).X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invAux
-  signature: : P.X otimes (Q.tensorBimod L).X ⟶ ((P.tensorBimod Q).tensorBimod L).X
-  body: (PreservesCoequalizer.iso (tensorLeft P.X) _ _).inv ≫
-    coequalizer.desc ((α_ _ _ _).inv ≫ (coequalizer.π _ _ ▷ L.X) ≫ coequalizer.π _ _)
-      (by
-        dsimp; dsimp [TensorBimod.X]
-        slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X ◁ Q.actRight)]; rw [comp_whiskerRight]
-        slice_lhs 3 4 =>
-          rw [← comp_whiskerRight]; rw [Category.assoc]; rw [← TensorBimod.π_tensor_id_actRight]; rw [comp_whiskerRight]
-        slice_lhs 4 5 => rw [coequalizer.condition]
-        slice_lhs 3 4 => rw [associator_naturality_left]
-        slice_rhs 1 2 => rw [whiskerLeft_comp]
-        slice_rhs 2 3 => rw [associator_inv_naturality_right]
-        slice_rhs 3 4 => rw [whisker_exchange]
-        simp)
-
-中文:
-定义 invAux
-  签名: : P.X otimes (Q.tensorBimod L).X ⟶ ((P.tensorBimod Q).tensorBimod L).X
-  定义体: (PreservesCoequalizer.iso (tensorLeft P.X) _ _).inv ≫
-    coequalizer.desc ((α_ _ _ _).inv ≫ (coequalizer.π _ _ ▷ L.X) ≫ coequalizer.π _ _)
-      (by
-        dsimp; dsimp [TensorBimod.X]
-        slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X ◁ Q.actRight)]; rw [comp_whiskerRight]
-        slice_lhs 3 4 =>
-          rw [← comp_whiskerRight]; rw [Category.assoc]; rw [← TensorBimod.π_tensor_id_actRight]; rw [comp_whiskerRight]
-        slice_lhs 4 5 => rw [coequalizer.condition]
-        slice_lhs 3 4 => rw [associator_naturality_left]
-        slice_rhs 1 2 => rw [whiskerLeft_comp]
-        slice_rhs 2 3 => rw [associator_inv_naturality_right]
-        slice_rhs 3 4 => rw [whisker_exchange]
-        simp)
-
-Depends on / 依赖: Category, Category.assoc, Iso.inv_hom_id_assoc, PreservesCoequalizer, PreservesCoequalizer.iso, Q.actRight, TensorBimod, TensorBimod.X, actRight, associator_inv_naturality_middle, coequalizer, coequalizer.condition, coequalizer.desc, comp_whiskerRight, condition, inv_hom_id_assoc, slice_lhs, tensorLeft, trivial_covering, trivial_covering.mp
+--- 原说明 ---
+An auxiliary morphism for the definition of the underlying morphism of the inver
+se component of
+the associator isomorphism.
 -/
-noncomputable def invAux : P.X otimes (Q.tensorBimod L).X ⟶ ((P.tensorBimod Q).tensorBimod L).X :=
+noncomputable def invAux : P.X ⊗ (Q.tensorBimod L).X ⟶ ((P.tensorBimod Q).tensorBimod L).X :=
   (PreservesCoequalizer.iso (tensorLeft P.X) _ _).inv ≫
     coequalizer.desc ((α_ _ _ _).inv ≫ (coequalizer.π _ _ ▷ L.X) ≫ coequalizer.π _ _)
       (by
         dsimp; dsimp [TensorBimod.X]
         slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X ◁ Q.actRight)]; rw [comp_whiskerRight]
+        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X ◁ Q.actRight), comp_whiskerRight]
         slice_lhs 3 4 =>
-          rw [← comp_whiskerRight]; rw [Category.assoc]; rw [← TensorBimod.π_tensor_id_actRight]; rw [comp_whiskerRight]
+          rw [← comp_whiskerRight, Category.assoc, ← TensorBimod.π_tensor_id_actRight,
+            comp_whiskerRight]
         slice_lhs 4 5 => rw [coequalizer.condition]
         slice_lhs 3 4 => rw [associator_naturality_left]
         slice_rhs 1 2 => rw [whiskerLeft_comp]
@@ -1545,50 +1304,16 @@ noncomputable def invAux : P.X otimes (Q.tensorBimod L).X ⟶ ((P.tensorBimod Q)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `inv` / `inv` 的定义
+/-- The underlying morphism of the inverse component of the associator isomorphism. -/
+/-
+**Bimod.AssociatorBimod.inv** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.AssociatorBimod`。
+形式化陈述：inv : (P.tensorBimod (Q.tensorBimod L)).X ⟶ ((P.tensorBimod Q).tensorBimod
+ L).X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv
-  signature: :
-  body: coequalizer.desc (invAux P Q L)
-    (by
-      dsimp [invAux]
-      refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-      dsimp [TensorBimod.X]
-      slice_lhs 1 2 => rw [whisker_exchange]
-      slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-      slice_lhs 1 2 => rw [associator_inv_naturality_left]
-      slice_lhs 2 3 =>
-        rw [← comp_whiskerRight]; rw [coequalizer.condition]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-      slice_rhs 1 2 => rw [associator_naturality_right]
-      slice_rhs 2 3 =>
-        rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-      slice_rhs 4 6 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-      slice_rhs 3 4 => rw [associator_inv_naturality_middle]
-      monoidal)
-
-中文:
-定义 inv
-  签名: :
-  定义体: coequalizer.desc (invAux P Q L)
-    (by
-      dsimp [invAux]
-      refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-      dsimp [TensorBimod.X]
-      slice_lhs 1 2 => rw [whisker_exchange]
-      slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-      slice_lhs 1 2 => rw [associator_inv_naturality_left]
-      slice_lhs 2 3 =>
-        rw [← comp_whiskerRight]; rw [coequalizer.condition]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-      slice_rhs 1 2 => rw [associator_naturality_right]
-      slice_rhs 2 3 =>
-        rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-      slice_rhs 4 6 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-      slice_rhs 3 4 => rw [associator_inv_naturality_middle]
-      monoidal)
-
-Depends on / 依赖: TensorBimod, TensorBimod.X, associator_inv_naturality_left, associator_naturality_right, cancel_epi, coequalizer, coequalizer.condition, coequalizer.desc, comp_whiskerRight, condition, invAux, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_c, whisker_exchange
+--- 原说明 ---
+The underlying morphism of the inverse component of the associator isomorphism.
 -/
 noncomputable def inv :
     (P.tensorBimod (Q.tensorBimod L)).X ⟶ ((P.tensorBimod Q).tensorBimod L).X :=
@@ -1601,54 +1326,60 @@ noncomputable def inv :
       slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
       slice_lhs 1 2 => rw [associator_inv_naturality_left]
       slice_lhs 2 3 =>
-        rw [← comp_whiskerRight]; rw [coequalizer.condition]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+        rw [← comp_whiskerRight, coequalizer.condition, comp_whiskerRight, comp_whiskerRight]
       slice_rhs 1 2 => rw [associator_naturality_right]
       slice_rhs 2 3 =>
-        rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+        rw [← whiskerLeft_comp, TensorBimod.whiskerLeft_π_actLeft,
+          whiskerLeft_comp, whiskerLeft_comp]
       slice_rhs 4 6 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
       slice_rhs 3 4 => rw [associator_inv_naturality_middle]
       monoidal)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_inv_id` / 定理 `hom_inv_id`
-
-English:
-theorem hom_inv_id
-  statement: hom P Q L ≫ inv P Q L = 𝟙 _
-  proof: by
-  dsimp [hom, homAux, inv, invAux]
-  apply coequalizer.hom_ext
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_lhs 1 3 => rw [Iso.hom_inv_id_assoc]
-  dsimp only [TensorBimod.X]
-  slice_rhs 2 3 => rw [Category.comp_id]
-  rfl
-
-中文:
-定理 hom_inv_id
-  结论: hom P Q L ≫ inv P Q L = 𝟙 _
-  证明: by
-  dsimp [hom, homAux, inv, invAux]
-  apply coequalizer.hom_ext
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_lhs 1 3 => rw [Iso.hom_inv_id_assoc]
-  dsimp only [TensorBimod.X]
-  slice_rhs 2 3 => rw [Category.comp_id]
-  rfl
-
-Depends on / 依赖: Category, Category.com, Functor, Functor.flip_obj_map, Iso.hom_inv_id_assoc, TensorBimod, TensorBimod.X, cancel_epi, coequalizer, coequalizer.hom_ext, curriedTensor_map_app, flip_obj_map, homAux, hom_ext, hom_inv_id_assoc, invAux, slice_lhs, slice_rhs, tensorRight
+/-
+**Bimod.AssociatorBimod.hom_inv_id** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.AssociatorBi
+mod`。
+形式化陈述：hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `id_tensor_π_preserves_coequalizer_inv_desc`：id_tensor_π_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W) (wh : (Z ◁ f) ≫ 
+h = (Z ◁ g) ≫ h) : (Z ◁ coequali…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙 _ := by
   dsimp [hom, homAux, inv, invAux]
@@ -1666,44 +1397,49 @@ theorem hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙 _ := by
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `inv_hom_id` / 定理 `inv_hom_id`
-
-English:
-theorem inv_hom_id
-  statement: inv P Q L ≫ hom P Q L = 𝟙 _
-  proof: by
-  dsimp [hom, homAux, inv, invAux]
-  apply coequalizer.hom_ext
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  simp only [curriedTensor_obj_map]
-  slice_lhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_lhs 2 4 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 1 3 => rw [Iso.inv_hom_id_assoc]
-  dsimp only [TensorBimod.X]
-  slice_rhs 2 3 => rw [Category.comp_id]
-  rfl
-
-中文:
-定理 inv_hom_id
-  结论: inv P Q L ≫ hom P Q L = 𝟙 _
-  证明: by
-  dsimp [hom, homAux, inv, invAux]
-  apply coequalizer.hom_ext
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  simp only [curriedTensor_obj_map]
-  slice_lhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_lhs 2 4 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 1 3 => rw [Iso.inv_hom_id_assoc]
-  dsimp only [TensorBimod.X]
-  slice_rhs 2 3 => rw [Category.comp_id]
-  rfl
-
-Depends on / 依赖: Category, Category.comp_id, Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.X, cancel_epi, coequalizer, coequalizer.hom_ext, comp_id, curriedTensor_obj_map, homAux, hom_ext, invAux, inv_hom_id_assoc, slice_lhs, slice_rhs, tensorLeft
+/-
+**Bimod.AssociatorBimod.inv_hom_id** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.AssociatorBi
+mod`。
+形式化陈述：inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `id_tensor_π_preserves_coequalizer_inv_desc`：id_tensor_π_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W) (wh : (Z ◁ f) ≫ 
+h = (Z ◁ g) ≫ h) : (Z ◁ coequali…
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙 _ := by
   dsimp [hom, homAux, inv, invAux]
@@ -1726,80 +1462,111 @@ namespace LeftUnitorBimod
 variable {R S : Mon C} (P : Bimod R S)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `hom` / `hom` 的定义
+/-- The underlying morphism of the forward component of the left unitor isomorphism. -/
+/-
+**Bimod.LeftUnitorBimod.hom** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.LeftUnitorBimod`。
+形式化陈述：hom : TensorBimod.X (regular R) P ⟶ P.X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hom
-  signature: : TensorBimod.X (regular R) P ⟶ P.X
-  body: coequalizer.desc P.actLeft (by dsimp; rw [Category.assoc, left_assoc])
-
-中文:
-定义 hom
-  签名: : TensorBimod.X (regular R) P ⟶ P.X
-  定义体: coequalizer.desc P.actLeft (by dsimp; rw [Category.assoc, left_assoc])
-
-Depends on / 依赖: Category, Category.assoc, P.actLeft, actLeft, coequalizer, coequalizer.desc, left_assoc
+--- 原说明 ---
+The underlying morphism of the forward component of the left unitor isomorphism.
 -/
 noncomputable def hom : TensorBimod.X (regular R) P ⟶ P.X :=
   coequalizer.desc P.actLeft (by dsimp; rw [Category.assoc, left_assoc])
 
-/--
-Definition of `inv` / `inv` 的定义
+/-- The underlying morphism of the inverse component of the left unitor isomorphism. -/
+/-
+**Bimod.LeftUnitorBimod.inv** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.LeftUnitorBimod`。
+形式化陈述：inv : P.X ⟶ TensorBimod.X (regular R) P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv
-  signature: : P.X ⟶ TensorBimod.X (regular R) P
-  body: (fun_ P.X).inv ≫ (η[R.X] ▷ _) ≫ coequalizer.π _ _
-
-中文:
-定义 inv
-  签名: : P.X ⟶ TensorBimod.X (regular R) P
-  定义体: (fun_ P.X).inv ≫ (η[R.X] ▷ _) ≫ coequalizer.π _ _
-
-Depends on / 依赖: coequalizer, fun_
+--- 原说明 ---
+The underlying morphism of the inverse component of the left unitor isomorphism.
 -/
 noncomputable def inv : P.X ⟶ TensorBimod.X (regular R) P :=
-  (fun_ P.X).inv ≫ (η[R.X] ▷ _) ≫ coequalizer.π _ _
+  (λ_ P.X).inv ≫ (η[R.X] ▷ _) ≫ coequalizer.π _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `hom_inv_id` / 定理 `hom_inv_id`
-
-English:
-theorem hom_inv_id
-  statement: hom P ≫ inv P = 𝟙 _
-  proof: by
-  dsimp only [hom, inv, TensorBimod.X]
-  ext; dsimp
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  slice_lhs 1 2 => rw [leftUnitor_inv_naturality]
-  slice_lhs 2 3 => rw [whisker_exchange]
-  slice_lhs 3 3 => rw [← Iso.inv_hom_id_assoc (α_ R.X R.X P.X) (R.X ◁ P.actLeft)]
-  slice_lhs 4 6 => rw [← Category.assoc, ← coequalizer.condition]
-  slice_lhs 2 3 => rw [associator_inv_naturality_left]
-  slice_lhs 3 4 => rw [← comp_whiskerRight, MonObj.one_mul]
-  slice_rhs 1 2 => rw [Category.comp_id]
-  monoidal
-
-中文:
-定理 hom_inv_id
-  结论: hom P ≫ inv P = 𝟙 _
-  证明: by
-  dsimp only [hom, inv, TensorBimod.X]
-  ext; dsimp
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  slice_lhs 1 2 => rw [leftUnitor_inv_naturality]
-  slice_lhs 2 3 => rw [whisker_exchange]
-  slice_lhs 3 3 => rw [← Iso.inv_hom_id_assoc (α_ R.X R.X P.X) (R.X ◁ P.actLeft)]
-  slice_lhs 4 6 => rw [← Category.assoc, ← coequalizer.condition]
-  slice_lhs 2 3 => rw [associator_inv_naturality_left]
-  slice_lhs 3 4 => rw [← comp_whiskerRight, MonObj.one_mul]
-  slice_rhs 1 2 => rw [Category.comp_id]
-  monoidal
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Iso.inv_hom_id_assoc, MonObj, MonObj.one_mul, P.actLeft, TensorBimod, TensorBimod.X, actLeft, associator_inv_naturality_left, coequalizer, coequalizer.condition, comp_id, comp_whiskerRight, condition, inv_hom_id_assoc, leftUnitor_inv_naturality, monoidal, one_mul
+/-
+**Bimod.LeftUnitorBimod.hom_inv_id** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.LeftUnitorBi
+mod`。
+形式化陈述：hom_inv_id : hom P ≫ inv P = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_inv_naturality`：leftUnitor_in
+v_naturality {X Y : C} (f : X ⟶ Y) : f ≫ (fun_ Y).inv = (fun_ X).inv ≫ _ ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_left`：associat
+or_inv_naturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) ≫ (α
+_ X' Y Z).inv = (α_ X Y Z).inv ≫ f ▷ Y ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.MonObj.one_mul`：∀ {C : Type u₁} {inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} (X : C)   [self 
+: CategoryTheory.Mo…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_leftUnitor`：naturality_leftUnitor {p 
+f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (fun_ f) ≪≫ η_f = normalizeIsoComp (ρ_ p
+) η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
 -/
 theorem hom_inv_id : hom P ≫ inv P = 𝟙 _ := by
   dsimp only [hom, inv, TensorBimod.X]
@@ -1815,63 +1582,78 @@ theorem hom_inv_id : hom P ≫ inv P = 𝟙 _ := by
   monoidal
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `inv_hom_id` / 定理 `inv_hom_id`
-
-English:
-theorem inv_hom_id
-  statement: inv P ≫ hom P = 𝟙 _
-  proof: by
-  dsimp [hom, inv]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  rw [one_actLeft]; rw [Iso.inv_hom_id]
-
-中文:
-定理 inv_hom_id
-  结论: inv P ≫ hom P = 𝟙 _
-  证明: by
-  dsimp [hom, inv]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  rw [one_actLeft]; rw [Iso.inv_hom_id]
-
-Depends on / 依赖: Iso.inv_hom_id, coequalizer, inv_hom_id, one_actLeft, slice_lhs
+/-
+**Bimod.LeftUnitorBimod.inv_hom_id** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.LeftUnitorBi
+mod`。
+形式化陈述：inv_hom_id : inv P ≫ hom P = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Bimod.one_actLeft`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, 
+u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon 
+C} (sel…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
 -/
 theorem inv_hom_id : inv P ≫ hom P = 𝟙 _ := by
   dsimp [hom, inv]
   slice_lhs 3 4 => rw [coequalizer.π_desc]
-  rw [one_actLeft]; rw [Iso.inv_hom_id]
+  rw [one_actLeft, Iso.inv_hom_id]
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_left_act_hom'` / 定理 `hom_left_act_hom'`
-
-English:
-theorem hom_left_act_hom'
-  proof: by
-  dsimp; dsimp [hom, TensorBimod.actLeft, regular]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
-  slice_lhs 2 3 => rw [left_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  rw [Iso.inv_hom_id_assoc]
-
-中文:
-定理 hom_left_act_hom'
-  证明: by
-  dsimp; dsimp [hom, TensorBimod.actLeft, regular]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
-  slice_lhs 2 3 => rw [left_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.actLeft, actLeft, cancel_epi, coequalizer, inv_hom_id_assoc, left_assoc, regular, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp
+/-
+**Bimod.LeftUnitorBimod.hom_left_act_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.LeftU
+nitorBimod`。
+形式化陈述：hom_left_act_hom' : ((regular R).tensorBimod P).actLeft ≫ hom P = (R.X ◁ h
+om P) ≫ P.actLeft
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `id_tensor_π_preserves_coequalizer_inv_colimMap_desc`：id_tensor_π_preserv
+es_coequalizer_inv_colimMap_desc {X Y Z X' Y' Z' : C} (f g : X ⟶ Y) (f' g' : X' 
+⟶ Y') (p : Z otimes X ⟶ X') (q : Z otimes…
+· 使用定理 `Bimod.left_assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u
+₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon C
+} (sel…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 theorem hom_left_act_hom' :
     ((regular R).tensorBimod P).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft := by
@@ -1885,32 +1667,47 @@ theorem hom_left_act_hom' :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_right_act_hom'` / 定理 `hom_right_act_hom'`
-
-English:
-theorem hom_right_act_hom'
-  proof: by
-  dsimp; dsimp [hom, TensorBimod.actRight, regular]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [middle_assoc]
-  simp only [Category.assoc]
-
-中文:
-定理 hom_right_act_hom'
-  证明: by
-  dsimp; dsimp [hom, TensorBimod.actRight, regular]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [middle_assoc]
-  simp only [Category.assoc]
-
-Depends on / 依赖: Category, Category.assoc, TensorBimod, TensorBimod.actRight, actRight, cancel_epi, coequalizer, comp_whiskerRight, middle_assoc, regular, slice_lhs, slice_rhs, tensorRight
+/-
+**Bimod.LeftUnitorBimod.hom_right_act_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.Left
+UnitorBimod`。
+形式化陈述：hom_right_act_hom' : ((regular R).tensorBimod P).actRight ≫ hom P = (hom P
+ ▷ S.X) ≫ P.actRight
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_colimMap_desc`：π_tensor_id_preserv
+es_coequalizer_inv_colimMap_desc {X Y Z X' Y' Z' : C} (f g : X ⟶ Y) (f' g' : X' 
+⟶ Y') (p : X otimes Z ⟶ X') (q : Y otimes…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Bimod.middle_assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁,
+ u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon
+ C} (sel…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem hom_right_act_hom' :
     ((regular R).tensorBimod P).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight := by
@@ -1929,78 +1726,110 @@ namespace RightUnitorBimod
 variable {R S : Mon C} (P : Bimod R S)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `hom` / `hom` 的定义
+/-- The underlying morphism of the forward component of the right unitor isomorphism. -/
+/-
+**Bimod.RightUnitorBimod.hom** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.RightUnitorBimod`。
+形式化陈述：hom : TensorBimod.X P (regular S) ⟶ P.X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hom
-  signature: : TensorBimod.X P (regular S) ⟶ P.X
-  body: coequalizer.desc P.actRight (by dsimp; rw [Category.assoc, right_assoc, Iso.hom_inv_id_assoc])
-
-中文:
-定义 hom
-  签名: : TensorBimod.X P (regular S) ⟶ P.X
-  定义体: coequalizer.desc P.actRight (by dsimp; rw [Category.assoc, right_assoc, Iso.hom_inv_id_assoc])
-
-Depends on / 依赖: Category, Category.assoc, Iso.hom_inv_id_assoc, P.actRight, actRight, coequalizer, coequalizer.desc, hom_inv_id_assoc, right_assoc
+--- 原说明 ---
+The underlying morphism of the forward component of the right unitor isomorphism
+.
 -/
 noncomputable def hom : TensorBimod.X P (regular S) ⟶ P.X :=
   coequalizer.desc P.actRight (by dsimp; rw [Category.assoc, right_assoc, Iso.hom_inv_id_assoc])
 
-/--
-Definition of `inv` / `inv` 的定义
+/-- The underlying morphism of the inverse component of the right unitor isomorphism. -/
+/-
+**Bimod.RightUnitorBimod.inv** 是 Mathlib 中的一个定义，位于命名空间 `Bimod.RightUnitorBimod`。
+形式化陈述：inv : P.X ⟶ TensorBimod.X P (regular S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv
-  signature: : P.X ⟶ TensorBimod.X P (regular S)
-  body: (ρ_ P.X).inv ≫ (_ ◁ η[S.X]) ≫ coequalizer.π _ _
-
-中文:
-定义 inv
-  签名: : P.X ⟶ TensorBimod.X P (regular S)
-  定义体: (ρ_ P.X).inv ≫ (_ ◁ η[S.X]) ≫ coequalizer.π _ _
-
-Depends on / 依赖: coequalizer
+--- 原说明 ---
+The underlying morphism of the inverse component of the right unitor isomorphism
+.
 -/
 noncomputable def inv : P.X ⟶ TensorBimod.X P (regular S) :=
   (ρ_ P.X).inv ≫ (_ ◁ η[S.X]) ≫ coequalizer.π _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `hom_inv_id` / 定理 `hom_inv_id`
-
-English:
-theorem hom_inv_id
-  statement: hom P ≫ inv P = 𝟙 _
-  proof: by
-  dsimp only [hom, inv, TensorBimod.X]
-  ext; dsimp
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  slice_lhs 1 2 => rw [rightUnitor_inv_naturality]
-  slice_lhs 2 3 => rw [← whisker_exchange]
-  slice_lhs 3 4 => rw [coequalizer.condition]
-  slice_lhs 2 3 => rw [associator_naturality_right]
-  slice_lhs 3 4 => rw [← whiskerLeft_comp, MonObj.mul_one]
-  slice_rhs 1 2 => rw [Category.comp_id]
-  monoidal
-
-中文:
-定理 hom_inv_id
-  结论: hom P ≫ inv P = 𝟙 _
-  证明: by
-  dsimp only [hom, inv, TensorBimod.X]
-  ext; dsimp
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  slice_lhs 1 2 => rw [rightUnitor_inv_naturality]
-  slice_lhs 2 3 => rw [← whisker_exchange]
-  slice_lhs 3 4 => rw [coequalizer.condition]
-  slice_lhs 2 3 => rw [associator_naturality_right]
-  slice_lhs 3 4 => rw [← whiskerLeft_comp, MonObj.mul_one]
-  slice_rhs 1 2 => rw [Category.comp_id]
-  monoidal
-
-Depends on / 依赖: Category, Category.comp_id, MonObj, MonObj.mul_one, TensorBimod, TensorBimod.X, associator_naturality_right, coequalizer, coequalizer.condition, comp_id, condition, monoidal, mul_one, rightUnitor_inv_naturality, slice_lhs, slice_rhs, whiskerLeft_comp, whisker_exchange
+/-
+**Bimod.RightUnitorBimod.hom_inv_id** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.RightUnitor
+Bimod`。
+形式化陈述：hom_inv_id : hom P ≫ inv P = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.MonoidalCategory.rightUnitor_inv_naturality`：rightUnitor_
+inv_naturality {X X' : C} (f : X ⟶ X') : f ≫ (ρ_ X').inv = (ρ_ X).inv ≫ f ▷ _
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_right`：associator_
+naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f ≫ (α_ X Y 
+Z').hom = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonObj.mul_one`：∀ {C : Type u₁} {inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} (X : C)   [self 
+: CategoryTheory.Mo…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_rightUnitor`：naturality_rightUnitor {
+p f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (ρ_ f) ≪≫ η_f = normalizeIsoComp η_f (
+ρ_ pf)
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerLeft`：naturality_whiskerLeft {
+p f g h pf pfg : C} {η : g ≅ h} (η_f : p otimes f ≅ pf) (η_fg : pf otimes g ≅ pf
+g) (η_fh : (pf otimes h) ≅ pfg) (ih_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
 -/
 theorem hom_inv_id : hom P ≫ inv P = 𝟙 _ := by
   dsimp only [hom, inv, TensorBimod.X]
@@ -2015,63 +1844,78 @@ theorem hom_inv_id : hom P ≫ inv P = 𝟙 _ := by
   monoidal
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `inv_hom_id` / 定理 `inv_hom_id`
-
-English:
-theorem inv_hom_id
-  statement: inv P ≫ hom P = 𝟙 _
-  proof: by
-  dsimp [hom, inv]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  rw [actRight_one]; rw [Iso.inv_hom_id]
-
-中文:
-定理 inv_hom_id
-  结论: inv P ≫ hom P = 𝟙 _
-  证明: by
-  dsimp [hom, inv]
-  slice_lhs 3 4 => rw [coequalizer.π_desc]
-  rw [actRight_one]; rw [Iso.inv_hom_id]
-
-Depends on / 依赖: Iso.inv_hom_id, actRight_one, coequalizer, inv_hom_id, slice_lhs
+/-
+**Bimod.RightUnitorBimod.inv_hom_id** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.RightUnitor
+Bimod`。
+形式化陈述：inv_hom_id : inv P ≫ hom P = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Bimod.actRight_one`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁,
+ u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon
+ C} (sel…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
 -/
 theorem inv_hom_id : inv P ≫ hom P = 𝟙 _ := by
   dsimp [hom, inv]
   slice_lhs 3 4 => rw [coequalizer.π_desc]
-  rw [actRight_one]; rw [Iso.inv_hom_id]
+  rw [actRight_one, Iso.inv_hom_id]
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_left_act_hom'` / 定理 `hom_left_act_hom'`
-
-English:
-theorem hom_left_act_hom'
-  proof: by
-  dsimp; dsimp [hom, TensorBimod.actLeft, regular]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
-  slice_lhs 2 3 => rw [middle_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  rw [Iso.inv_hom_id_assoc]
-
-中文:
-定理 hom_left_act_hom'
-  证明: by
-  dsimp; dsimp [hom, TensorBimod.actLeft, regular]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
-  slice_lhs 2 3 => rw [middle_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.actLeft, actLeft, cancel_epi, coequalizer, inv_hom_id_assoc, middle_assoc, regular, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp
+/-
+**Bimod.RightUnitorBimod.hom_left_act_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.Righ
+tUnitorBimod`。
+形式化陈述：hom_left_act_hom' : (P.tensorBimod (regular S)).actLeft ≫ hom P = (R.X ◁ h
+om P) ≫ P.actLeft
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `id_tensor_π_preserves_coequalizer_inv_colimMap_desc`：id_tensor_π_preserv
+es_coequalizer_inv_colimMap_desc {X Y Z X' Y' Z' : C} (f g : X ⟶ Y) (f' g' : X' 
+⟶ Y') (p : Z otimes X ⟶ X') (q : Z otimes…
+· 使用定理 `Bimod.middle_assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁,
+ u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon
+ C} (sel…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 theorem hom_left_act_hom' :
     (P.tensorBimod (regular S)).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft := by
@@ -2085,32 +1929,46 @@ theorem hom_left_act_hom' :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hom_right_act_hom'` / 定理 `hom_right_act_hom'`
-
-English:
-theorem hom_right_act_hom'
-  proof: by
-  dsimp; dsimp [hom, TensorBimod.actRight, regular]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
-  slice_lhs 2 3 => rw [right_assoc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  rw [Iso.hom_inv_id_assoc]
-
-中文:
-定理 hom_right_act_hom'
-  证明: by
-  dsimp; dsimp [hom, TensorBimod.actRight, regular]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
-  slice_lhs 2 3 => rw [right_assoc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  rw [Iso.hom_inv_id_assoc]
-
-Depends on / 依赖: Iso.hom_inv_id_assoc, TensorBimod, TensorBimod.actRight, actRight, cancel_epi, coequalizer, comp_whiskerRight, hom_inv_id_assoc, regular, right_assoc, slice_lhs, slice_rhs, tensorRight
+/-
+**Bimod.RightUnitorBimod.hom_right_act_hom'** 是 Mathlib 中的一个定理，位于命名空间 `Bimod.Rig
+htUnitorBimod`。
+形式化陈述：hom_right_act_hom' : (P.tensorBimod (regular S)).actRight ≫ hom P = (hom P
+ ▷ S.X) ≫ P.actRight
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_colimMap_desc`：π_tensor_id_preserv
+es_coequalizer_inv_colimMap_desc {X Y Z X' Y' Z' : C} (f g : X ⟶ Y) (f' g' : X' 
+⟶ Y') (p : X otimes Z ⟶ X') (q : Y otimes…
+· 使用定理 `Bimod.right_assoc`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, 
+u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory.Mon 
+C} (sel…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 theorem hom_right_act_hom' :
     (P.tensorBimod (regular S)).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight := by
@@ -2124,33 +1982,30 @@ theorem hom_right_act_hom' :
 
 end RightUnitorBimod
 
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
-variable [forall X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorLeft X)]
+variable [∀ X : C, PreservesColimitsOfSize.{0, 0} (tensorRight X)]
 
-/--
-Definition of `associatorBimod` / `associatorBimod` 的定义
+/-- The associator as a bimodule isomorphism. -/
+/-
+**Bimod.associatorBimod** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：associatorBimod {W X Y Z : Mon C} (L : Bimod W X) (M : Bimod X Y) (N : Bim
+od Y Z) : (L.tensorBimod M).tensorBimod N ≅ L.tensorBimod (M.tensorBimod N)
+参数：L : Bimod W X；M : Bimod X Y；N : Bimod Y Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bimod.AssociatorBimod.hom_inv_id`：hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.inv_hom_id`：inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((P.tensorB
+imod Q).tensorBimod L).actLeft ≫ hom P Q L = (R.X ◁ hom P Q L) ≫ (P.tensorBimod 
+(Q.tensorBimod L)).actLeft
+· 使用定理 `Bimod.AssociatorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((P.tenso
+rBimod Q).tensorBimod L).actRight ≫ hom P Q L = (hom P Q L ▷ U.X) ≫ (P.tensorBim
+od (Q.tensorBimod L)).actRight
 
-English:
-definition associatorBimod
-  signature: {W X Y Z : Mon C} (L : Bimod W X) (M : Bimod X Y)
-  body: isoOfIso
-    { hom := AssociatorBimod.hom L M N
-      inv := AssociatorBimod.inv L M N
-      hom_inv_id := AssociatorBimod.hom_inv_id L M N
-      inv_hom_id := AssociatorBimod.inv_hom_id L M N } (AssociatorBimod.hom_left_act_hom' L M N)
-    (AssociatorBimod.hom_right_act_hom' L M N)
-
-中文:
-定义 associatorBimod
-  签名: {W X Y Z : 幺半群 C} (L : 双模 W X) (M : 双模 X Y)
-  定义体: isoOfIso
-    { hom := AssociatorBimod.hom L M N
-      inv := AssociatorBimod.inv L M N
-      hom_inv_id := AssociatorBimod.hom_inv_id L M N
-      inv_hom_id := AssociatorBimod.inv_hom_id L M N } (AssociatorBimod.hom_left_act_hom' L M N)
-    (AssociatorBimod.hom_right_act_hom' L M N)
-
-Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.hom_inv_id, AssociatorBimod.hom_left_act_hom, AssociatorBimod.hom_right_act_hom, AssociatorBimod.inv, AssociatorBimod.inv_hom_id, hom_inv_id, hom_left_act_hom, hom_right_act_hom, inv_hom_id, isoOfIso
+--- 原说明 ---
+The associator as a bimodule isomorphism.
 -/
 noncomputable def associatorBimod {W X Y Z : Mon C} (L : Bimod W X) (M : Bimod X Y)
     (N : Bimod Y Z) : (L.tensorBimod M).tensorBimod N ≅ L.tensorBimod (M.tensorBimod N) :=
@@ -2161,30 +2016,23 @@ noncomputable def associatorBimod {W X Y Z : Mon C} (L : Bimod W X) (M : Bimod X
       inv_hom_id := AssociatorBimod.inv_hom_id L M N } (AssociatorBimod.hom_left_act_hom' L M N)
     (AssociatorBimod.hom_right_act_hom' L M N)
 
-/--
-Definition of `leftUnitorBimod` / `leftUnitorBimod` 的定义
+/-- The left unitor as a bimodule isomorphism. -/
+/-
+**Bimod.leftUnitorBimod** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：leftUnitorBimod {X Y : Mon C} (M : Bimod X Y) : (regular X).tensorBimod M 
+≅ M
+参数：M : Bimod X Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bimod.LeftUnitorBimod.hom_inv_id`：hom_inv_id : hom P ≫ inv P = 𝟙 _
+· 使用定理 `Bimod.LeftUnitorBimod.inv_hom_id`：inv_hom_id : inv P ≫ hom P = 𝟙 _
+· 使用定理 `Bimod.LeftUnitorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((regular R
+).tensorBimod P).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft
+· 使用定理 `Bimod.LeftUnitorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((regular
+ R).tensorBimod P).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight
 
-English:
-definition leftUnitorBimod
-  signature: {X Y : Mon C} (M : Bimod X Y)
-  body: isoOfIso
-    { hom := LeftUnitorBimod.hom M
-      inv := LeftUnitorBimod.inv M
-      hom_inv_id := LeftUnitorBimod.hom_inv_id M
-      inv_hom_id := LeftUnitorBimod.inv_hom_id M } (LeftUnitorBimod.hom_left_act_hom' M)
-    (LeftUnitorBimod.hom_right_act_hom' M)
-
-中文:
-定义 leftUnitorBimod
-  签名: {X Y : 幺半群 C} (M : 双模 X Y)
-  定义体: isoOfIso
-    { hom := LeftUnitorBimod.hom M
-      inv := LeftUnitorBimod.inv M
-      hom_inv_id := LeftUnitorBimod.hom_inv_id M
-      inv_hom_id := LeftUnitorBimod.inv_hom_id M } (LeftUnitorBimod.hom_left_act_hom' M)
-    (LeftUnitorBimod.hom_right_act_hom' M)
-
-Depends on / 依赖: LeftUnitorBimod, LeftUnitorBimod.hom, LeftUnitorBimod.hom_inv_id, LeftUnitorBimod.hom_left_act_hom, LeftUnitorBimod.hom_right_act_hom, LeftUnitorBimod.inv, LeftUnitorBimod.inv_hom_id, hom_inv_id, hom_left_act_hom, hom_right_act_hom, inv_hom_id, isoOfIso
+--- 原说明 ---
+The left unitor as a bimodule isomorphism.
 -/
 noncomputable def leftUnitorBimod {X Y : Mon C} (M : Bimod X Y) : (regular X).tensorBimod M ≅ M :=
   isoOfIso
@@ -2194,30 +2042,23 @@ noncomputable def leftUnitorBimod {X Y : Mon C} (M : Bimod X Y) : (regular X).te
       inv_hom_id := LeftUnitorBimod.inv_hom_id M } (LeftUnitorBimod.hom_left_act_hom' M)
     (LeftUnitorBimod.hom_right_act_hom' M)
 
-/--
-Definition of `rightUnitorBimod` / `rightUnitorBimod` 的定义
+/-- The right unitor as a bimodule isomorphism. -/
+/-
+**Bimod.rightUnitorBimod** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：rightUnitorBimod {X Y : Mon C} (M : Bimod X Y) : M.tensorBimod (regular Y)
+ ≅ M
+参数：M : Bimod X Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bimod.RightUnitorBimod.hom_inv_id`：hom_inv_id : hom P ≫ inv P = 𝟙 _
+· 使用定理 `Bimod.RightUnitorBimod.inv_hom_id`：inv_hom_id : inv P ≫ hom P = 𝟙 _
+· 使用定理 `Bimod.RightUnitorBimod.hom_left_act_hom'`：hom_left_act_hom' : (P.tensorB
+imod (regular S)).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft
+· 使用定理 `Bimod.RightUnitorBimod.hom_right_act_hom'`：hom_right_act_hom' : (P.tenso
+rBimod (regular S)).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight
 
-English:
-definition rightUnitorBimod
-  signature: {X Y : Mon C} (M : Bimod X Y)
-  body: isoOfIso
-    { hom := RightUnitorBimod.hom M
-      inv := RightUnitorBimod.inv M
-      hom_inv_id := RightUnitorBimod.hom_inv_id M
-      inv_hom_id := RightUnitorBimod.inv_hom_id M } (RightUnitorBimod.hom_left_act_hom' M)
-    (RightUnitorBimod.hom_right_act_hom' M)
-
-中文:
-定义 rightUnitorBimod
-  签名: {X Y : 幺半群 C} (M : 双模 X Y)
-  定义体: isoOfIso
-    { hom := RightUnitorBimod.hom M
-      inv := RightUnitorBimod.inv M
-      hom_inv_id := RightUnitorBimod.hom_inv_id M
-      inv_hom_id := RightUnitorBimod.inv_hom_id M } (RightUnitorBimod.hom_left_act_hom' M)
-    (RightUnitorBimod.hom_right_act_hom' M)
-
-Depends on / 依赖: RightUnitorBimod, RightUnitorBimod.hom, RightUnitorBimod.hom_inv_id, RightUnitorBimod.hom_left_act_hom, RightUnitorBimod.hom_right_act_hom, RightUnitorBimod.inv, RightUnitorBimod.inv_hom_id, hom_inv_id, hom_left_act_hom, hom_right_act_hom, inv_hom_id, isoOfIso
+--- 原说明 ---
+The right unitor as a bimodule isomorphism.
 -/
 noncomputable def rightUnitorBimod {X Y : Mon C} (M : Bimod X Y) : M.tensorBimod (regular Y) ≅ M :=
   isoOfIso
@@ -2229,26 +2070,39 @@ noncomputable def rightUnitorBimod {X Y : Mon C} (M : Bimod X Y) : M.tensorBimod
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `whiskerLeft_id_bimod` / 定理 `whiskerLeft_id_bimod`
-
-English:
-theorem whiskerLeft_id_bimod
-  given: {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z}
-  proof: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp [TensorBimod.X]
-
-中文:
-定理 whiskerLeft_id_bimod
-  条件: {X Y Z : 幺半群 C} {M : 双模 X Y} {N : 双模 Y Z}
-  证明: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp [TensorBimod.X]
-
-Depends on / 依赖: Limits, Limits.coequalizer.hom_ext, TensorBimod, TensorBimod.X, coequalizer, hom_ext
+/-
+**Bimod.whiskerLeft_id_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：whiskerLeft_id_bimod {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z} : whi
+skerLeft M (𝟙 N) = 𝟙 (M.tensorBimod N)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_id`：∀ {C : Type u} {𝒞 : Cate
+goryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y : 
+C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom.congr_simp`：∀ {C : Type u} {X Y : 
+C} [inst : CategoryTheory.Category.{v, u} C] {X' Y' : C} (f g : X ⟶ Y) (f' g' : 
+X' ⟶ Y')   (p p_1 : X ⟶ X') (e_p : p =…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_id_bimod {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z} :
     whiskerLeft M (𝟙 N) = 𝟙 (M.tensorBimod N) := by
@@ -2258,26 +2112,41 @@ theorem whiskerLeft_id_bimod {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z} :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `id_whiskerRight_bimod` / 定理 `id_whiskerRight_bimod`
-
-English:
-theorem id_whiskerRight_bimod
-  given: {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z}
-  proof: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp [TensorBimod.X]
-
-中文:
-定理 id_whiskerRight_bimod
-  条件: {X Y Z : 幺半群 C} {M : 双模 X Y} {N : 双模 Y Z}
-  证明: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp [TensorBimod.X]
-
-Depends on / 依赖: Limits, Limits.coequalizer.hom_ext, TensorBimod, TensorBimod.X, coequalizer, full_constantSheaf, hom_ext
+/-
+**Bimod.id_whiskerRight_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：id_whiskerRight_bimod {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z} : wh
+iskerRight (𝟙 M) N = 𝟙 (M.tensorBimod N)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Limits.parallelPairHom.congr_simp`：∀ {C : Type u} {X Y : 
+C} [inst : CategoryTheory.Category.{v, u} C] {X' Y' : C} (f g : X ⟶ Y) (f' g' : 
+X' ⟶ Y')   (p p_1 : X ⟶ X') (e_p : p =…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem id_whiskerRight_bimod {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z} :
     whiskerRight (𝟙 M) N = 𝟙 (M.tensorBimod N) := by
@@ -2286,26 +2155,49 @@ theorem id_whiskerRight_bimod {X Y Z : Mon C} {M : Bimod X Y} {N : Bimod Y Z} :
   simp [TensorBimod.X]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `whiskerLeft_comp_bimod` / 定理 `whiskerLeft_comp_bimod`
-
-English:
-theorem whiskerLeft_comp_bimod
-  statement: {X Y Z : Mon C} (M : Bimod X Y) {N P Q : Bimod Y Z} (f : N ⟶ P)
-  proof: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp
-
-中文:
-定理 whiskerLeft_comp_bimod
-  结论: {X Y Z : 幺半群 C} (M : 双模 X Y) {N P Q : 双模 Y Z} (f : N ⟶ P)
-  证明: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp
-
-Depends on / 依赖: Limits, Limits.coequalizer.hom_ext, coequalizer, faithful_constantSheaf, hom_ext
+/-
+**Bimod.whiskerLeft_comp_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：whiskerLeft_comp_bimod {X Y Z : Mon C} (M : Bimod X Y) {N P Q : Bimod Y Z}
+ (f : N ⟶ P) (g : P ⟶ Q) : whiskerLeft M (f ≫ g) = whiskerLeft M f ≫ whiskerLeft
+ M g
+参数：M : Bimod X Y；f : N ⟶ P；g : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Bimod.whiskerLeft_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{
+v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   [inst_2 : CategoryTheo
+ry.Limits.H…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom.congr_simp`：∀ {C : Type u} {X Y : 
+C} [inst : CategoryTheory.Category.{v, u} C] {X' Y' : C} (f g : X ⟶ Y) (f' g' : 
+X' ⟶ Y')   (p p_1 : X ⟶ X') (e_p : p =…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap_assoc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_comp_bimod {X Y Z : Mon C} (M : Bimod X Y) {N P Q : Bimod Y Z} (f : N ⟶ P)
     (g : P ⟶ Q) : whiskerLeft M (f ≫ g) = whiskerLeft M f ≫ whiskerLeft M g := by
@@ -2315,72 +2207,68 @@ theorem whiskerLeft_comp_bimod {X Y Z : Mon C} (M : Bimod X Y) {N P Q : Bimod Y 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `id_whiskerLeft_bimod` / 定理 `id_whiskerLeft_bimod`
-
-English:
-theorem id_whiskerLeft_bimod
-  given: {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N)
-  proof: by
-  dsimp [tensorHom, regular, leftUnitorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [LeftUnitorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [LeftUnitorBimod.inv]
-  slice_rhs 1 2 => rw [Hom.left_act_hom]
-  slice_rhs 2 3 => rw [leftUnitor_inv_naturality]
-  slice_rhs 3 4 => rw [whisker_exchange]
-  slice_rhs 4 4 => rw [← Iso.inv_hom_id_assoc (α_ X.X X.X N.X) (X.X ◁ N.actLeft)]
-  slice_rhs 5 7 => rw [← Category.assoc, ← coequalizer.condition]
-  slice_rhs 3 4 => rw [associator_inv_naturality_left]
-  slice_rhs 4 5 => rw [← comp_whiskerRight, MonObj.one_mul]
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization would help. The original proof was:
-  ```
-  have : (λ_ (X.X ⊗ N.X)).inv ≫ (α_ (𝟙_ C) X.X N.X).inv ≫ ((λ_ X.X).hom ▷ N.X) = 𝟙 _ := by
-    monoidal
-  grind
-  ```
-  -/
-  simp
-
-中文:
-定理 id_whiskerLeft_bimod
-  条件: {X Y : 幺半群 C} {M N : 双模 X Y} (f : M ⟶ N)
-  证明: by
-  dsimp [tensorHom, regular, leftUnitorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [LeftUnitorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [LeftUnitorBimod.inv]
-  slice_rhs 1 2 => rw [Hom.left_act_hom]
-  slice_rhs 2 3 => rw [leftUnitor_inv_naturality]
-  slice_rhs 3 4 => rw [whisker_exchange]
-  slice_rhs 4 4 => rw [← Iso.inv_hom_id_assoc (α_ X.X X.X N.X) (X.X ◁ N.actLeft)]
-  slice_rhs 5 7 => rw [← Category.assoc, ← coequalizer.condition]
-  slice_rhs 3 4 => rw [associator_inv_naturality_left]
-  slice_rhs 4 5 => rw [← comp_whiskerRight, MonObj.one_mul]
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
-  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization would help. The original proof was:
-  ```
-  have : (λ_ (X.X ⊗ N.X)).inv ≫ (α_ (𝟙_ C) X.X N.X).inv ≫ ((λ_ X.X).hom ▷ N.X) = 𝟙 _ := by
-    monoidal
-  grind
-  ```
-  -/
-  simp
-
-Depends on / 依赖: Category, Category.assoc, Hom.left_act_hom, Iso.inv_hom_id_assoc, LeftUnitorBimod, LeftUnitorBimod.hom, LeftUnitorBimod.inv, N.actLeft, actLeft, coequalizer, coequalizer.con, coequalizer.hom_ext, hom_ext, inv_hom_id_assoc, leftUnitorBimod, leftUnitor_inv_naturality, left_act_hom, parallelPairHom_app_one, regular, slice_lhs
+/-
+**Bimod.id_whiskerLeft_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：id_whiskerLeft_bimod {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N) : whisker
+Left (regular X) f = (leftUnitorBimod M).hom ≫ f ≫ (leftUnitorBimod N).inv
+参数：f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `Bimod.LeftUnitorBimod.hom_inv_id`：hom_inv_id : hom P ≫ inv P = 𝟙 _
+· 使用定理 `Bimod.LeftUnitorBimod.inv_hom_id`：inv_hom_id : inv P ≫ hom P = 𝟙 _
+· 使用定理 `Bimod.LeftUnitorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((regular R
+).tensorBimod P).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft
+· 使用定理 `Bimod.LeftUnitorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((regular
+ R).tensorBimod P).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Bimod.Hom.left_act_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Category.
+{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheory
+.Mon C} {M N…
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_inv_naturality`：leftUnitor_in
+v_naturality {X Y : C} (f : X ⟶ Y) : f ≫ (fun_ Y).inv = (fun_ X).inv ≫ _ ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_left`：associat
+or_inv_naturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) ≫ (α
+_ X' Y Z).inv = (α_ X Y Z).inv ≫ f ▷ Y ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.MonObj.one_mul`：∀ {C : Type u₁} {inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} (X : C)   [self 
+: CategoryTheory.Mo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_whiskerRight`：leftUnitor_whis
+kerRight (X Y : C) : (fun_ X).hom ▷ Y = (α_ (𝟙_ C) X Y).hom ≫ (fun_ (X otimes Y)
+).hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem id_whiskerLeft_bimod {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N) :
     whiskerLeft (regular X) f = (leftUnitorBimod M).hom ≫ f ≫ (leftUnitorBimod N).inv := by
@@ -2413,62 +2301,83 @@ theorem id_whiskerLeft_bimod {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comp_whiskerLeft_bimod` / 定理 `comp_whiskerLeft_bimod`
-
-English:
-theorem comp_whiskerLeft_bimod
-  statement: {W X Y Z : Mon C} (M : Bimod W X) (N : Bimod X Y)
-  proof: by
-  dsimp [tensorHom, tensorBimod, associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [TensorBimod.X, AssociatorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux, AssociatorBimod.inv]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.invAux]
-  slice_rhs 2 2 => rw [whiskerLeft_comp]
-  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_rhs 2 3 => rw [associator_inv_naturality_right]
-  slice_rhs 1 3 => rw [Iso.hom_inv_id_assoc]
-  slice_lhs 1 2 => rw [← whisker_exchange]
-  rfl
-
-中文:
-定理 comp_whiskerLeft_bimod
-  结论: {W X Y Z : 幺半群 C} (M : 双模 W X) (N : 双模 X Y)
-  证明: by
-  dsimp [tensorHom, tensorBimod, associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [TensorBimod.X, AssociatorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux, AssociatorBimod.inv]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.invAux]
-  slice_rhs 2 2 => rw [whiskerLeft_comp]
-  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_rhs 2 3 => rw [associator_inv_naturality_right]
-  slice_rhs 1 3 => rw [Iso.hom_inv_id_assoc]
-  slice_lhs 1 2 => rw [← whisker_exchange]
-  rfl
-
-Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, AssociatorBimod.inv, Functor, Functor.flip_obj_map, TensorBimod, TensorBimod.X, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, curriedTensor_map_app, flip_obj_map, homAux, hom_ext, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorBimod
+/-
+**Bimod.comp_whiskerLeft_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：comp_whiskerLeft_bimod {W X Y Z : Mon C} (M : Bimod W X) (N : Bimod X Y) {
+P P' : Bimod Y Z} (f : P ⟶ P') : whiskerLeft (M.tensorBimod N) f = (associatorBi
+mod M N P).hom ≫ whiskerLeft M (whiskerLeft N f) ≫ (associatorBimod M N P').inv
+参数：M : Bimod W X；N : Bimod X Y；f : P ⟶ P'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `Bimod.TensorBimod.one_act_left'`：one_act_left' : (η ▷ _) ≫ actLeft P Q =
+ (fun_ _).hom
+· 使用定理 `Bimod.TensorBimod.left_assoc'`：left_assoc' : (μ ▷ _) ≫ actLeft P Q = (α_
+ R.X R.X _).hom ≫ (R.X ◁ actLeft P Q) ≫ actLeft P Q
+· 使用定理 `Bimod.TensorBimod.actRight_one'`：actRight_one' : (_ ◁ η) ≫ actRight P Q 
+= (ρ_ _).hom
+· 使用定理 `Bimod.TensorBimod.right_assoc'`：right_assoc' : (_ ◁ μ) ≫ actRight P Q = 
+(α_ _ T.X T.X).inv ≫ (actRight P Q ▷ T.X) ≫ actRight P Q
+· 使用定理 `Bimod.TensorBimod.middle_assoc'`：middle_assoc' : (actLeft P Q ▷ T.X) ≫ a
+ctRight P Q = (α_ R.X _ T.X).hom ≫ (R.X ◁ actRight P Q) ≫ actLeft P Q
+· 使用定理 `Bimod.AssociatorBimod.hom_inv_id`：hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.inv_hom_id`：inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((P.tensorB
+imod Q).tensorBimod L).actLeft ≫ hom P Q L = (R.X ◁ hom P Q L) ≫ (P.tensorBimod 
+(Q.tensorBimod L)).actLeft
+· 使用定理 `Bimod.AssociatorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((P.tenso
+rBimod Q).tensorBimod L).actRight ≫ hom P Q L = (hom P Q L ▷ U.X) ≫ (P.tensorBim
+od (Q.tensorBimod L)).actRight
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `id_tensor_π_preserves_coequalizer_inv_desc`：id_tensor_π_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W) (wh : (Z ◁ f) ≫ 
+h = (Z ◁ g) ≫ h) : (Z ◁ coequali…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_inv_naturality_right`：associa
+tor_inv_naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : X ◁ Y ◁ f ≫ (α_ X Y
+ Z').inv = (α_ X Y Z).inv ≫ (X otimes Y) ◁ f
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
 -/
 theorem comp_whiskerLeft_bimod {W X Y Z : Mon C} (M : Bimod W X) (N : Bimod X Y)
     {P P' : Bimod Y Z} (f : P ⟶ P') :
@@ -2498,26 +2407,45 @@ theorem comp_whiskerLeft_bimod {W X Y Z : Mon C} (M : Bimod W X) (N : Bimod X Y)
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comp_whiskerRight_bimod` / 定理 `comp_whiskerRight_bimod`
-
-English:
-theorem comp_whiskerRight_bimod
-  statement: {X Y Z : Mon C} {M N P : Bimod X Y} (f : M ⟶ N) (g : N ⟶ P)
-  proof: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp
-
-中文:
-定理 comp_whiskerRight_bimod
-  结论: {X Y Z : 幺半群 C} {M N P : 双模 X Y} (f : M ⟶ N) (g : N ⟶ P)
-  证明: by
-  ext
-  apply Limits.coequalizer.hom_ext
-  simp
-
-Depends on / 依赖: Limits, Limits.coequalizer.hom_ext, coequalizer, hom_ext
+/-
+**Bimod.comp_whiskerRight_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：comp_whiskerRight_bimod {X Y Z : Mon C} {M N P : Bimod X Y} (f : M ⟶ N) (g
+ : N ⟶ P) (Q : Bimod Y Z) : whiskerRight (f ≫ g) Q = whiskerRight f Q ≫ whiskerR
+ight g Q
+参数：f : M ⟶ N；g : N ⟶ P；Q : Bimod Y Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Bimod.whiskerRight_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Category.
+{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   [inst_2 : CategoryThe
+ory.Limits.H…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom.congr_simp`：∀ {C : Type u} {X Y : 
+C} [inst : CategoryTheory.Category.{v, u} C] {X' Y' : C} (f g : X ⟶ Y) (f' g' : 
+X' ⟶ Y')   (p p_1 : X ⟶ X') (e_p : p =…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap_assoc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_whiskerRight_bimod {X Y Z : Mon C} {M N P : Bimod X Y} (f : M ⟶ N) (g : N ⟶ P)
     (Q : Bimod Y Z) : whiskerRight (f ≫ g) Q = whiskerRight f Q ≫ whiskerRight g Q := by
@@ -2527,50 +2455,71 @@ theorem comp_whiskerRight_bimod {X Y Z : Mon C} {M N P : Bimod X Y} (f : M ⟶ N
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `whiskerRight_id_bimod` / 定理 `whiskerRight_id_bimod`
-
-English:
-theorem whiskerRight_id_bimod
-  given: {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N)
-  proof: by
-  dsimp [tensorHom, regular, rightUnitorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [RightUnitorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [RightUnitorBimod.inv]
-  slice_rhs 1 2 => rw [Hom.right_act_hom]
-  slice_rhs 2 3 => rw [rightUnitor_inv_naturality]
-  slice_rhs 3 4 => rw [← whisker_exchange]
-  slice_rhs 4 5 => rw [coequalizer.condition]
-  slice_rhs 3 4 => rw [associator_naturality_right]
-  slice_rhs 4 5 => rw [← whiskerLeft_comp, MonObj.mul_one]
-  simp
-
-中文:
-定理 whiskerRight_id_bimod
-  条件: {X Y : 幺半群 C} {M N : 双模 X Y} (f : M ⟶ N)
-  证明: by
-  dsimp [tensorHom, regular, rightUnitorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [RightUnitorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [RightUnitorBimod.inv]
-  slice_rhs 1 2 => rw [Hom.right_act_hom]
-  slice_rhs 2 3 => rw [rightUnitor_inv_naturality]
-  slice_rhs 3 4 => rw [← whisker_exchange]
-  slice_rhs 4 5 => rw [coequalizer.condition]
-  slice_rhs 3 4 => rw [associator_naturality_right]
-  slice_rhs 4 5 => rw [← whiskerLeft_comp, MonObj.mul_one]
-  simp
-
-Depends on / 依赖: Hom.right_act_hom, RightUnitorBimod, RightUnitorBimod.hom, RightUnitorBimod.inv, associator_naturality_right, coequalizer, coequalizer.condition, coequalizer.hom_ext, condition, hom_ext, parallelPairHom_app_one, regular, rightUnitorBimod, rightUnitor_inv_naturality, right_act_hom, slice_lhs, slice_rhs, tensorHom, whiskerLeft_, whisker_exchange
+/-
+**Bimod.whiskerRight_id_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：whiskerRight_id_bimod {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N) : whiske
+rRight f (regular Y) = (rightUnitorBimod M).hom ≫ f ≫ (rightUnitorBimod N).inv
+参数：f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `Bimod.RightUnitorBimod.hom_inv_id`：hom_inv_id : hom P ≫ inv P = 𝟙 _
+· 使用定理 `Bimod.RightUnitorBimod.inv_hom_id`：inv_hom_id : inv P ≫ hom P = 𝟙 _
+· 使用定理 `Bimod.RightUnitorBimod.hom_left_act_hom'`：hom_left_act_hom' : (P.tensorB
+imod (regular S)).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft
+· 使用定理 `Bimod.RightUnitorBimod.hom_right_act_hom'`：hom_right_act_hom' : (P.tenso
+rBimod (regular S)).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Bimod.Hom.right_act_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Category
+.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C]   {A B : CategoryTheor
+y.Mon C} {M N…
+· 使用定理 `CategoryTheory.MonoidalCategory.rightUnitor_inv_naturality`：rightUnitor_
+inv_naturality {X X' : C} (f : X ⟶ X') : f ≫ (ρ_ X').inv = (ρ_ X).inv ≫ f ▷ _
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_right`：associator_
+naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f ≫ (α_ X Y 
+Z').hom = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonObj.mul_one`：∀ {C : Type u₁} {inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} (X : C)   [self 
+: CategoryTheory.Mo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_rightUnitor`：whiskerLeft_rig
+htUnitor (X Y : C) : X ◁ (ρ_ Y).hom = (α_ X Y (𝟙_ C)).inv ≫ (ρ_ (X otimes Y)).ho
+m
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerRight_id_bimod {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N) :
     whiskerRight f (regular Y) = (rightUnitorBimod M).hom ≫ f ≫ (rightUnitorBimod N).inv := by
@@ -2592,62 +2541,84 @@ theorem whiskerRight_id_bimod {X Y : Mon C} {M N : Bimod X Y} (f : M ⟶ N) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `whiskerRight_comp_bimod` / 定理 `whiskerRight_comp_bimod`
-
-English:
-theorem whiskerRight_comp_bimod
-  statement: {W X Y Z : Mon C} {M M' : Bimod W X} (f : M ⟶ M') (N : Bimod X Y)
-  proof: by
-  dsimp [tensorHom, tensorBimod, associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [TensorBimod.X, AssociatorBimod.inv]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.invAux, AssociatorBimod.hom]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  simp only [curriedTensor_obj_map]
-  slice_rhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 2 3 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  slice_rhs 2 2 => rw [comp_whiskerRight]
-  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 2 3 => rw [associator_naturality_left]
-  slice_rhs 1 3 => rw [Iso.inv_hom_id_assoc]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  rfl
-
-中文:
-定理 whiskerRight_comp_bimod
-  结论: {W X Y Z : 幺半群 C} {M M' : 双模 W X} (f : M ⟶ M') (N : 双模 X Y)
-  证明: by
-  dsimp [tensorHom, tensorBimod, associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [TensorBimod.X, AssociatorBimod.inv]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.invAux, AssociatorBimod.hom]
-  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
-  simp only [curriedTensor_obj_map]
-  slice_rhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 2 3 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  slice_rhs 2 2 => rw [comp_whiskerRight]
-  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 2 3 => rw [associator_naturality_left]
-  slice_rhs 1 3 => rw [Iso.inv_hom_id_assoc]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  rfl
-
-Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.inv, AssociatorBimod.invAux, TensorBimod, TensorBimod.X, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, curriedTensor_obj_map, hom_ext, invAux, parallelPairHom_app_o, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorBimod, tensorHom, tensorLeft
+/-
+**Bimod.whiskerRight_comp_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：whiskerRight_comp_bimod {W X Y Z : Mon C} {M M' : Bimod W X} (f : M ⟶ M') 
+(N : Bimod X Y) (P : Bimod Y Z) : whiskerRight f (N.tensorBimod P) = (associator
+Bimod M N P).inv ≫ whiskerRight (whiskerRight f N) P ≫ (associatorBimod M' N P).
+hom
+参数：f : M ⟶ M'；N : Bimod X Y；P : Bimod Y Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `Bimod.TensorBimod.one_act_left'`：one_act_left' : (η ▷ _) ≫ actLeft P Q =
+ (fun_ _).hom
+· 使用定理 `Bimod.TensorBimod.left_assoc'`：left_assoc' : (μ ▷ _) ≫ actLeft P Q = (α_
+ R.X R.X _).hom ≫ (R.X ◁ actLeft P Q) ≫ actLeft P Q
+· 使用定理 `Bimod.TensorBimod.actRight_one'`：actRight_one' : (_ ◁ η) ≫ actRight P Q 
+= (ρ_ _).hom
+· 使用定理 `Bimod.TensorBimod.right_assoc'`：right_assoc' : (_ ◁ μ) ≫ actRight P Q = 
+(α_ _ T.X T.X).inv ≫ (actRight P Q ▷ T.X) ≫ actRight P Q
+· 使用定理 `Bimod.TensorBimod.middle_assoc'`：middle_assoc' : (actLeft P Q ▷ T.X) ≫ a
+ctRight P Q = (α_ R.X _ T.X).hom ≫ (R.X ◁ actRight P Q) ≫ actLeft P Q
+· 使用定理 `Bimod.AssociatorBimod.hom_inv_id`：hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.inv_hom_id`：inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((P.tensorB
+imod Q).tensorBimod L).actLeft ≫ hom P Q L = (R.X ◁ hom P Q L) ≫ (P.tensorBimod 
+(Q.tensorBimod L)).actLeft
+· 使用定理 `Bimod.AssociatorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((P.tenso
+rBimod Q).tensorBimod L).actRight ≫ hom P Q L = (hom P Q L ▷ U.X) ≫ (P.tensorBim
+od (Q.tensorBimod L)).actRight
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `id_tensor_π_preserves_coequalizer_inv_desc`：id_tensor_π_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W) (wh : (Z ◁ f) ≫ 
+h = (Z ◁ g) ≫ h) : (Z ◁ coequali…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_left`：associator_n
+aturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ Y ▷ Z ≫ (α_ X' Y Z).hom =
+ (α_ X Y Z).hom ≫ f ▷ (Y otimes Z)
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
 -/
 theorem whiskerRight_comp_bimod {W X Y Z : Mon C} {M M' : Bimod W X} (f : M ⟶ M') (N : Bimod X Y)
     (P : Bimod Y Z) :
@@ -2678,60 +2649,84 @@ theorem whiskerRight_comp_bimod {W X Y Z : Mon C} {M M' : Bimod W X} (f : M ⟶ 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `whisker_assoc_bimod` / 定理 `whisker_assoc_bimod`
-
-English:
-theorem whisker_assoc_bimod
-  statement: {W X Y Z : Mon C} (M : Bimod W X) {N N' : Bimod X Y} (f : N ⟶ N')
-  proof: by
-  dsimp [tensorHom, tensorBimod, associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [AssociatorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
-  dsimp [AssociatorBimod.inv]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.invAux]
-  slice_rhs 2 2 => rw [whiskerLeft_comp]
-  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  simp
-
-中文:
-定理 whisker_assoc_bimod
-  结论: {W X Y Z : 幺半群 C} (M : 双模 W X) {N N' : 双模 X Y} (f : N ⟶ N')
-  证明: by
-  dsimp [tensorHom, tensorBimod, associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [AssociatorBimod.hom]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
-  dsimp [AssociatorBimod.inv]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.invAux]
-  slice_rhs 2 2 => rw [whiskerLeft_comp]
-  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  simp
-
-Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, Functor, Functor.flip_obj_map, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, comp_whiskerRight, curriedTensor_map_app, flip_obj_map, homAux, hom_ext, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorBimod, tensorHom, tensorRight
+/-
+**Bimod.whisker_assoc_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：whisker_assoc_bimod {W X Y Z : Mon C} (M : Bimod W X) {N N' : Bimod X Y} (
+f : N ⟶ N') (P : Bimod Y Z) : whiskerRight (whiskerLeft M f) P = (associatorBimo
+d M N P).hom ≫ whiskerLeft M (whiskerRight f P) ≫ (associatorBimod M N' P).inv
+参数：M : Bimod W X；f : N ⟶ N'；P : Bimod Y Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `Bimod.TensorBimod.one_act_left'`：one_act_left' : (η ▷ _) ≫ actLeft P Q =
+ (fun_ _).hom
+· 使用定理 `Bimod.TensorBimod.left_assoc'`：left_assoc' : (μ ▷ _) ≫ actLeft P Q = (α_
+ R.X R.X _).hom ≫ (R.X ◁ actLeft P Q) ≫ actLeft P Q
+· 使用定理 `Bimod.TensorBimod.actRight_one'`：actRight_one' : (_ ◁ η) ≫ actRight P Q 
+= (ρ_ _).hom
+· 使用定理 `Bimod.TensorBimod.right_assoc'`：right_assoc' : (_ ◁ μ) ≫ actRight P Q = 
+(α_ _ T.X T.X).inv ≫ (actRight P Q ▷ T.X) ≫ actRight P Q
+· 使用定理 `Bimod.TensorBimod.middle_assoc'`：middle_assoc' : (actLeft P Q ▷ T.X) ≫ a
+ctRight P Q = (α_ R.X _ T.X).hom ≫ (R.X ◁ actRight P Q) ≫ actLeft P Q
+· 使用定理 `Bimod.AssociatorBimod.hom_inv_id`：hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.inv_hom_id`：inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((P.tensorB
+imod Q).tensorBimod L).actLeft ≫ hom P Q L = (R.X ◁ hom P Q L) ≫ (P.tensorBimod 
+(Q.tensorBimod L)).actLeft
+· 使用定理 `Bimod.AssociatorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((P.tenso
+rBimod Q).tensorBimod L).actRight ≫ hom P Q L = (hom P Q L ▷ U.X) ≫ (P.tensorBim
+od (Q.tensorBimod L)).actRight
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `id_tensor_π_preserves_coequalizer_inv_desc`：id_tensor_π_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Z otimes Y ⟶ W) (wh : (Z ◁ f) ≫ 
+h = (Z ◁ g) ≫ h) : (Z ◁ coequali…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc`：whisker_assoc (X : C) {Y 
+Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z = (α_ X Y Z).hom ≫ X ◁ f ▷ Z ≫ (α_ X 
+Y' Z).inv
+（共 31 条，此处仅展示前 30 条）
 -/
 theorem whisker_assoc_bimod {W X Y Z : Mon C} (M : Bimod W X) {N N' : Bimod X Y} (f : N ⟶ N')
     (P : Bimod Y Z) :
@@ -2761,34 +2756,47 @@ theorem whisker_assoc_bimod {W X Y Z : Mon C} (M : Bimod W X) {N N' : Bimod X Y}
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `whisker_exchange_bimod` / 定理 `whisker_exchange_bimod`
-
-English:
-theorem whisker_exchange_bimod
-  statement: {X Y Z : Mon C} {M N : Bimod X Y} {P Q : Bimod Y Z} (f : M ⟶ N)
-  proof: by
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 2 3 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  simp
-
-中文:
-定理 whisker_exchange_bimod
-  结论: {X Y Z : 幺半群 C} {M N : 双模 X Y} {P Q : 双模 Y Z} (f : M ⟶ N)
-  证明: by
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 2 3 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 1 2 => rw [whisker_exchange]
-  simp
-
-Depends on / 依赖: coequalizer, coequalizer.hom_ext, hom_ext, parallelPairHom_app_one, slice_lhs, whisker_exchange
+/-
+**Bimod.whisker_exchange_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：whisker_exchange_bimod {X Y Z : Mon C} {M N : Bimod X Y} {P Q : Bimod Y Z}
+ (f : M ⟶ N) (g : P ⟶ Q) : whiskerLeft M g ≫ whiskerRight f Q = whiskerRight f P
+ ≫ whiskerLeft N g
+参数：f : M ⟶ N；g : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Limits.parallelPairHom.congr_simp`：∀ {C : Type u} {X Y : 
+C} [inst : CategoryTheory.Category.{v, u} C] {X' Y' : C} (f g : X ⟶ Y) (f' g' : 
+X' ⟶ Y')   (p p_1 : X ⟶ X') (e_p : p =…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap_assoc`：∀ {J : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u
+} C]   {F G : CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whisker_exchange_bimod {X Y Z : Mon C} {M N : Bimod X Y} {P Q : Bimod Y Z} (f : M ⟶ N)
     (g : P ⟶ Q) : whiskerLeft M g ≫ whiskerRight f Q =
@@ -2803,80 +2811,90 @@ theorem whisker_exchange_bimod {X Y Z : Mon C} {M N : Bimod X Y} {P Q : Bimod Y 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `pentagon_bimod` / 定理 `pentagon_bimod`
-
-English:
-theorem pentagon_bimod
-  statement: {V W X Y Z : Mon C} (M : Bimod V W) (N : Bimod W X) (P : Bimod X Y)
-  proof: by
-  dsimp [associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  dsimp only [AssociatorBimod.hom]
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 2 3 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 2 =>
-    rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  dsimp only [TensorBimod.X]
-  slice_lhs 2 3 => rw [associator_naturality_middle]
-  slice_lhs 5 6 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 4 5 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  slice_lhs 3 4 =>
-    rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  slice_rhs 1 2 => rw [associator_naturality_left]
-  slice_rhs 2 3 => rw [← whisker_exchange]
-  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 2 3 => rw [associator_naturality_right]
-  monoidal
-
-中文:
-定理 pentagon_bimod
-  结论: {V W X Y Z : 幺半群 C} (M : 双模 V W) (N : 双模 W X) (P : 双模 X Y)
-  证明: by
-  dsimp [associatorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  dsimp only [AssociatorBimod.hom]
-  slice_lhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 2 3 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 3 4 => rw [coequalizer.π_desc]
-  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp
-  slice_lhs 1 2 =>
-    rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
-  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  dsimp only [TensorBimod.X]
-  slice_lhs 2 3 => rw [associator_naturality_middle]
-  slice_lhs 5 6 => rw [ι_colimMap, parallelPairHom_app_one]
-  slice_lhs 4 5 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  slice_lhs 3 4 =>
-    rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
-  slice_rhs 1 2 => rw [associator_naturality_left]
-  slice_rhs 2 3 => rw [← whisker_exchange]
-  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_rhs 2 3 => rw [associator_naturality_right]
-  monoidal
-
-Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, comp_whiskerRight, homAux, hom_ext, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorRight
+/-
+**Bimod.pentagon_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：pentagon_bimod {V W X Y Z : Mon C} (M : Bimod V W) (N : Bimod W X) (P : Bi
+mod X Y) (Q : Bimod Y Z) : whiskerRight (associatorBimod M N P).hom Q ≫ (associa
+torBimod M (N.tensorBimod P) Q).hom ≫ whiskerLeft M (associatorBimod N P Q).hom 
+= (associatorBimod (M.tensorBimod N) P Q).hom ≫ (associatorBimod M N (P.tensorBi
+mod Q)).hom
+参数：M : Bimod V W；N : Bimod W X；P : Bimod X Y；Q : Bimod Y Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `Bimod.AssociatorBimod.hom_inv_id`：hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.inv_hom_id`：inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((P.tensorB
+imod Q).tensorBimod L).actLeft ≫ hom P Q L = (R.X ◁ hom P Q L) ≫ (P.tensorBimod 
+(Q.tensorBimod L)).actLeft
+· 使用定理 `Bimod.AssociatorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((P.tenso
+rBimod Q).tensorBimod L).actRight ≫ hom P Q L = (hom P Q L ▷ U.X) ≫ (P.tensorBim
+od (Q.tensorBimod L)).actRight
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_middle`：associator
+_naturality_middle (X : C) {Y Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z ≫ (α_ X
+ Y' Z).hom = (α_ X Y Z).hom ≫ X ◁ f ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_left`：associator_n
+aturality_left {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ Y ▷ Z ≫ (α_ X' Y Z).hom =
+ (α_ X Y Z).hom ≫ f ▷ (Y otimes Z)
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.associator_naturality_right`：associator_
+naturality_right (X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f ≫ (α_ X Y 
+Z').hom = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+（共 42 条，此处仅展示前 30 条）
 -/
 theorem pentagon_bimod {V W X Y Z : Mon C} (M : Bimod V W) (N : Bimod W X) (P : Bimod X Y)
     (Q : Bimod Y Z) :
@@ -2902,14 +2920,16 @@ theorem pentagon_bimod {V W X Y Z : Mon C} (M : Bimod V W) (N : Bimod W X) (P : 
   refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
   dsimp
   slice_lhs 1 2 =>
-    rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+    rw [← comp_whiskerRight, π_tensor_id_preserves_coequalizer_inv_desc, comp_whiskerRight,
+      comp_whiskerRight]
   slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
   dsimp only [TensorBimod.X]
   slice_lhs 2 3 => rw [associator_naturality_middle]
   slice_lhs 5 6 => rw [ι_colimMap, parallelPairHom_app_one]
   slice_lhs 4 5 => rw [← whiskerLeft_comp, coequalizer.π_desc]
   slice_lhs 3 4 =>
-    rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+    rw [← whiskerLeft_comp, π_tensor_id_preserves_coequalizer_inv_desc,
+      whiskerLeft_comp, whiskerLeft_comp]
   slice_rhs 1 2 => rw [associator_naturality_left]
   slice_rhs 2 3 => rw [← whisker_exchange]
   slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
@@ -2918,56 +2938,80 @@ theorem pentagon_bimod {V W X Y Z : Mon C} (M : Bimod V W) (N : Bimod W X) (P : 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `triangle_bimod` / 定理 `triangle_bimod`
-
-English:
-theorem triangle_bimod
-  given: {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z)
-  proof: by
-  dsimp [associatorBimod, leftUnitorBimod, rightUnitorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  dsimp [AssociatorBimod.hom]
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  slice_rhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [RightUnitorBimod.hom]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [regular]
-  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [LeftUnitorBimod.hom]
-  slice_lhs 2 3 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [coequalizer.condition]
-  simp only [Category.assoc]
-
-中文:
-定理 triangle_bimod
-  条件: {X Y Z : 幺半群 C} (M : 双模 X Y) (N : 双模 Y Z)
-  证明: by
-  dsimp [associatorBimod, leftUnitorBimod, rightUnitorBimod]
-  ext
-  apply coequalizer.hom_ext
-  dsimp
-  dsimp [AssociatorBimod.hom]
-  slice_lhs 1 2 => rw [coequalizer.π_desc]
-  dsimp [AssociatorBimod.homAux]
-  slice_rhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [RightUnitorBimod.hom]
-  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
-  dsimp [regular]
-  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [LeftUnitorBimod.hom]
-  slice_lhs 2 3 => rw [← whiskerLeft_comp, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [coequalizer.condition]
-  simp only [Category.assoc]
-
-Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, RightUnitorBimod, RightUnitorBimod.hom, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, homAux, hom_ext, leftUnitorBimod, parallelPairHom_app_one, regular, rightUnitorBimod, slice_lhs, slice_rhs, tensorRight
+/-
+**Bimod.triangle_bimod** 是 Mathlib 中的一个定理，位于命名空间 `Bimod`。
+形式化陈述：triangle_bimod {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z) : (associat
+orBimod M (regular Y) N).hom ≫ whiskerLeft M (leftUnitorBimod N).hom = whiskerRi
+ght (rightUnitorBimod M).hom N
+参数：M : Bimod X Y；N : Bimod Y Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Bimod.hom_ext`：hom_ext {M N : Bimod A B} (f g : M ⟶ N) (h : f.hom = g.ho
+m) : f = g
+· 使用定理 `Bimod.AssociatorBimod.hom_inv_id`：hom_inv_id : hom P Q L ≫ inv P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.inv_hom_id`：inv_hom_id : inv P Q L ≫ hom P Q L = 𝟙
+ _
+· 使用定理 `Bimod.AssociatorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((P.tensorB
+imod Q).tensorBimod L).actLeft ≫ hom P Q L = (R.X ◁ hom P Q L) ≫ (P.tensorBimod 
+(Q.tensorBimod L)).actLeft
+· 使用定理 `Bimod.AssociatorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((P.tenso
+rBimod Q).tensorBimod L).actRight ≫ hom P Q L = (hom P Q L ▷ U.X) ≫ (P.tensorBim
+od (Q.tensorBimod L)).actRight
+· 使用定理 `Bimod.LeftUnitorBimod.hom_inv_id`：hom_inv_id : hom P ≫ inv P = 𝟙 _
+· 使用定理 `Bimod.LeftUnitorBimod.inv_hom_id`：inv_hom_id : inv P ≫ hom P = 𝟙 _
+· 使用定理 `Bimod.LeftUnitorBimod.hom_left_act_hom'`：hom_left_act_hom' : ((regular R
+).tensorBimod P).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft
+· 使用定理 `Bimod.LeftUnitorBimod.hom_right_act_hom'`：hom_right_act_hom' : ((regular
+ R).tensorBimod P).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight
+· 使用定理 `Bimod.RightUnitorBimod.hom_inv_id`：hom_inv_id : hom P ≫ inv P = 𝟙 _
+· 使用定理 `Bimod.RightUnitorBimod.inv_hom_id`：inv_hom_id : inv P ≫ hom P = 𝟙 _
+· 使用定理 `Bimod.RightUnitorBimod.hom_left_act_hom'`：hom_left_act_hom' : (P.tensorB
+imod (regular S)).actLeft ≫ hom P = (R.X ◁ hom P) ≫ P.actLeft
+· 使用定理 `Bimod.RightUnitorBimod.hom_right_act_hom'`：hom_right_act_hom' : (P.tenso
+rBimod (regular S)).actRight ≫ hom P = (hom P ▷ S.X) ≫ P.actRight
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.π_desc`：∀ {C : Type u} {X Y : C} [inst
+ : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Li
+mits.HasCoequalizer f g] {W : …
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.parallelPairHom_app_one`：parallelPairHom_app_one {
+X' Y' : C} (f g : X ⟶ Y) (f' g' : X' ⟶ Y') (p : X ⟶ X') (q : Y ⟶ Y') (wf : f ≫ q
+ = p ≫ f') (wg : g ≫ q = p ≫ g') : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `π_tensor_id_preserves_coequalizer_inv_desc`：π_tensor_id_preserves_coequa
+lizer_inv_desc {W X Y Z : C} (f g : X ⟶ Y) (h : Y otimes Z ⟶ W) (wh : (f ▷ Z) ≫ 
+h = (g ▷ Z) ≫ h) : (coequalizer.…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
+（共 32 条，此处仅展示前 30 条）
 -/
 theorem triangle_bimod {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z) :
     (associatorBimod M (regular Y) N).hom ≫ whiskerLeft M (leftUnitorBimod N).hom =
@@ -2993,58 +3037,49 @@ theorem triangle_bimod {X Y Z : Mon C} (M : Bimod X Y) (N : Bimod Y Z) :
 
 /-- The bicategory of algebras (monoids) and bimodules, all internal to some monoidal category. -/
 @[instance_reducible]
-/--
-Definition of `monBicategory` / `monBicategory` 的定义
+/-
+**Bimod.monBicategory** 是 Mathlib 中的一个定义，位于命名空间 `Bimod`。
+形式化陈述：monBicategory : Bicategory (Mon C) where Hom X Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bimod.whiskerLeft_id_bimod`：whiskerLeft_id_bimod {X Y Z : Mon C} {M : Bi
+mod X Y} {N : Bimod Y Z} : whiskerLeft M (𝟙 N) = 𝟙 (M.tensorBimod N)
+· 使用定理 `Bimod.whiskerLeft_comp_bimod`：whiskerLeft_comp_bimod {X Y Z : Mon C} (M 
+: Bimod X Y) {N P Q : Bimod Y Z} (f : N ⟶ P) (g : P ⟶ Q) : whiskerLeft M (f ≫ g)
+ = whiskerLeft M f…
+· 使用定理 `Bimod.id_whiskerLeft_bimod`：id_whiskerLeft_bimod {X Y : Mon C} {M N : Bi
+mod X Y} (f : M ⟶ N) : whiskerLeft (regular X) f = (leftUnitorBimod M).hom ≫ f ≫
+ (leftUnitorBimo…
+· 使用定理 `Bimod.comp_whiskerLeft_bimod`：comp_whiskerLeft_bimod {W X Y Z : Mon C} (
+M : Bimod W X) (N : Bimod X Y) {P P' : Bimod Y Z} (f : P ⟶ P') : whiskerLeft (M.
+tensorBimod N) f =…
+· 使用定理 `Bimod.id_whiskerRight_bimod`：id_whiskerRight_bimod {X Y Z : Mon C} {M : 
+Bimod X Y} {N : Bimod Y Z} : whiskerRight (𝟙 M) N = 𝟙 (M.tensorBimod N)
+· 使用定理 `Bimod.comp_whiskerRight_bimod`：comp_whiskerRight_bimod {X Y Z : Mon C} {
+M N P : Bimod X Y} (f : M ⟶ N) (g : N ⟶ P) (Q : Bimod Y Z) : whiskerRight (f ≫ g
+) Q = whiskerRight …
+· 使用定理 `Bimod.whiskerRight_id_bimod`：whiskerRight_id_bimod {X Y : Mon C} {M N : 
+Bimod X Y} (f : M ⟶ N) : whiskerRight f (regular Y) = (rightUnitorBimod M).hom ≫
+ f ≫ (rightUnitor…
+· 使用定理 `Bimod.whiskerRight_comp_bimod`：whiskerRight_comp_bimod {W X Y Z : Mon C}
+ {M M' : Bimod W X} (f : M ⟶ M') (N : Bimod X Y) (P : Bimod Y Z) : whiskerRight 
+f (N.tensorBimod P)…
+· 使用定理 `Bimod.whisker_assoc_bimod`：whisker_assoc_bimod {W X Y Z : Mon C} (M : Bi
+mod W X) {N N' : Bimod X Y} (f : N ⟶ N') (P : Bimod Y Z) : whiskerRight (whisker
+Left M f) P = (…
+· 使用定理 `Bimod.whisker_exchange_bimod`：whisker_exchange_bimod {X Y Z : Mon C} {M 
+N : Bimod X Y} {P Q : Bimod Y Z} (f : M ⟶ N) (g : P ⟶ Q) : whiskerLeft M g ≫ whi
+skerRight f Q = wh…
+· 使用定理 `Bimod.pentagon_bimod`：pentagon_bimod {V W X Y Z : Mon C} (M : Bimod V W)
+ (N : Bimod W X) (P : Bimod X Y) (Q : Bimod Y Z) : whiskerRight (associatorBimod
+ M N P).ho…
+· 使用定理 `Bimod.triangle_bimod`：triangle_bimod {X Y Z : Mon C} (M : Bimod X Y) (N 
+: Bimod Y Z) : (associatorBimod M (regular Y) N).hom ≫ whiskerLeft M (leftUnitor
+Bimod N).h…
 
-English:
-definition monBicategory
-  signature: : Bicategory (Mon C) where
-  body: Bimod X Y
-  homCategory X Y := (inferInstance : Category (Bimod X Y))
-  id X := regular X
-  comp M N := tensorBimod M N
-  whiskerLeft L _ _ f := whiskerLeft L f
-  whiskerRight f N := whiskerRight f N
-  associator := associatorBimod
-  leftUnitor := leftUnitorBimod
-  rightUnitor := rightUnitorBimod
-  whiskerLeft_id _ _ := whiskerLeft_id_bimod
-  whiskerLeft_comp M _ _ _ f g := whiskerLeft_comp_bimod M f g
-  id_whiskerLeft := id_whiskerLeft_bimod
-  comp_whiskerLeft M N _ _ f := comp_whiskerLeft_bimod M N f
-  id_whiskerRight _ _ := id_whiskerRight_bimod
-  comp_whiskerRight f g Q := comp_whiskerRight_bimod f g Q
-  whiskerRight_id := whiskerRight_id_bimod
-  whiskerRight_comp := whiskerRight_comp_bimod
-  whisker_assoc M _ _ f P := whisker_assoc_bimod M f P
-  whisker_exchange := whisker_exchange_bimod
-  pentagon := pentagon_bimod
-  triangle := triangle_bimod
-
-中文:
-定义 monBicategory
-  签名: : 双范畴 (幺半群 C) where
-  定义体: Bimod X Y
-  homCategory X Y := (inferInstance : Category (Bimod X Y))
-  id X := regular X
-  comp M N := tensorBimod M N
-  whiskerLeft L _ _ f := whiskerLeft L f
-  whiskerRight f N := whiskerRight f N
-  associator := associatorBimod
-  leftUnitor := leftUnitorBimod
-  rightUnitor := rightUnitorBimod
-  whiskerLeft_id _ _ := whiskerLeft_id_bimod
-  whiskerLeft_comp M _ _ _ f g := whiskerLeft_comp_bimod M f g
-  id_whiskerLeft := id_whiskerLeft_bimod
-  comp_whiskerLeft M N _ _ f := comp_whiskerLeft_bimod M N f
-  id_whiskerRight _ _ := id_whiskerRight_bimod
-  comp_whiskerRight f g Q := comp_whiskerRight_bimod f g Q
-  whiskerRight_id := whiskerRight_id_bimod
-  whiskerRight_comp := whiskerRight_comp_bimod
-  whisker_assoc M _ _ f P := whisker_assoc_bimod M f P
-  whisker_exchange := whisker_exchange_bimod
-  pentagon := pentagon_bimod
-  triangle := triangle_bimod
+--- 原说明 ---
+The bicategory of algebras (monoids) and bimodules, all internal to some monoida
+l category.
 -/
 noncomputable def monBicategory : Bicategory (Mon C) where
   Hom X Y := Bimod X Y
@@ -3070,3 +3105,4 @@ noncomputable def monBicategory : Bicategory (Mon C) where
   triangle := triangle_bimod
 
 end Bimod
+

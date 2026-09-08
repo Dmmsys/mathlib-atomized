@@ -21,139 +21,88 @@ public section
 
 namespace Nat
 
+/-! ### Instances -/
 
-/--
-Instance `instIsOrderedAddMonoid` / 实例 `instIsOrderedAddMonoid`
+/-
+**Nat.instIsOrderedAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instIsOrderedAddMonoid : IsOrderedAddMonoid Nat where add_le_add_left
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.add_le_add_right`：∀ {n m : ℕ}, n ≤ m → ∀ (k : ℕ), n + k ≤ m + k
 
-English:
-instance instIsOrderedAddMonoid
-  signature: : IsOrderedAddMonoid Nat where
-  body: @Nat.add_le_add_right
-
-中文:
-实例 instIsOrderedAddMonoid
-  签名: : 是OrderedAdd幺半群 自然数 where
-  定义体: @Nat.add_le_add_right
-
-Depends on / 依赖: Nat.add_le_add_right, add_le_add_right, nsmul_le_nsmul_left
+--- 原说明 ---
+### Instances
 -/
-instance instIsOrderedAddMonoid : IsOrderedAddMonoid Nat where
+instance instIsOrderedAddMonoid : IsOrderedAddMonoid ℕ where
   add_le_add_left := @Nat.add_le_add_right
-
-/--
-Instance `instIsOrderedCancelAddMonoid` / 实例 `instIsOrderedCancelAddMonoid`
-
-English:
-instance instIsOrderedCancelAddMonoid
-  signature: : IsOrderedCancelAddMonoid Nat where
-  body: @Nat.add_le_add_right
-  le_of_add_le_add_left := @Nat.le_of_add_le_add_left
-
-中文:
-实例 instIsOrderedCancelAddMonoid
-  签名: : 是OrderedCancelAdd幺半群 自然数 where
-  定义体: @Nat.add_le_add_right
-  le_of_add_le_add_left := @Nat.le_of_add_le_add_left
-
-Depends on / 依赖: Nat.add_le_add_right, add_le_add_right, hn.ne, nsmul_lt_nsmul_right
+/-
+**Nat.instIsOrderedCancelAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instIsOrderedCancelAddMonoid : IsOrderedCancelAddMonoid Nat where add_le_a
+dd_left
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.add_le_add_right`：∀ {n m : ℕ}, n ≤ m → ∀ (k : ℕ), n + k ≤ m + k
+· 使用定理 `Nat.le_of_add_le_add_left`：∀ {a b c : ℕ}, a + b ≤ a + c → b ≤ c
 -/
-instance instIsOrderedCancelAddMonoid : IsOrderedCancelAddMonoid Nat where
+instance instIsOrderedCancelAddMonoid : IsOrderedCancelAddMonoid ℕ where
   add_le_add_left := @Nat.add_le_add_right
   le_of_add_le_add_left := @Nat.le_of_add_le_add_left
-
-/--
-Instance `instCanonicallyOrderedAdd` / 实例 `instCanonicallyOrderedAdd`
-
-English:
-instance instCanonicallyOrderedAdd
-  signature: : CanonicallyOrderedAdd Nat where
-  body: Nat.le_add_left
-  le_self_add := Nat.le_add_right
-  exists_add_of_le := Nat.exists_eq_add_of_le
-
-中文:
-实例 instCanonicallyOrderedAdd
-  签名: : 典范有序加法 自然数 where
-  定义体: Nat.le_add_left
-  le_self_add := Nat.le_add_right
-  exists_add_of_le := Nat.exists_eq_add_of_le
-
-Depends on / 依赖: Nat.le_add_left, le_add_left, nsmul_lt_nsmul_left
+/-
+**Nat.instCanonicallyOrderedAdd** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instCanonicallyOrderedAdd : CanonicallyOrderedAdd Nat where le_add_self
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = m + k
+· 使用定理 `Nat.le_add_left`：∀ (n m : ℕ), n ≤ m + n
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
 -/
-instance instCanonicallyOrderedAdd : CanonicallyOrderedAdd Nat where
+instance instCanonicallyOrderedAdd : CanonicallyOrderedAdd ℕ where
   le_add_self := Nat.le_add_left
   le_self_add := Nat.le_add_right
   exists_add_of_le := Nat.exists_eq_add_of_le
-
-/--
-Instance `instOrderedSub` / 实例 `instOrderedSub`
-
-English:
-instance instOrderedSub
-  signature: : OrderedSub Nat
-  body: by
-  refine ⟨fun m n k => ?_⟩
-  induction n generalizing k with
-  | zero => simp
-  | succ n ih => simp only [sub_succ, pred_le_iff, ih, succ_add, add_succ]
-
-中文:
-实例 instOrderedSub
-  签名: : OrderedSub 自然数
-  定义体: by
-  refine ⟨fun m n k => ?_⟩
-  induction n generalizing k with
-  | zero => simp
-  | succ n ih => simp only [sub_succ, pred_le_iff, ih, succ_add, add_succ]
-
-Depends on / 依赖: add_succ, generalizing, pred_le_iff, sub_succ, succ_add, zsmul_lt_zsmul_right
+/-
+**Nat.instOrderedSub** 是 Mathlib 中的一个实例，位于命名空间 `Nat`。
+形式化陈述：instOrderedSub : OrderedSub Nat
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.succ_add`：∀ (n m : ℕ), n.succ + m = (n + m).succ
 -/
-instance instOrderedSub : OrderedSub Nat := by
-  refine ⟨fun m n k => ?_⟩
+instance instOrderedSub : OrderedSub ℕ := by
+  refine ⟨fun m n k ↦ ?_⟩
   induction n generalizing k with
   | zero => simp
   | succ n ih => simp only [sub_succ, pred_le_iff, ih, succ_add, add_succ]
 
 /-! ### Miscellaneous lemmas -/
 
-variable {α : Type*} {n : Nat} {f : α -> Nat}
+variable {α : Type*} {n : ℕ} {f : α → ℕ}
 
-/--
-lemma `pow_left_strictMono` / 引理 `pow_left_strictMono`
+/-- See also `pow_left_strictMonoOn₀`. -/
+/-
+**Nat.pow_left_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n : ℕ}, n ≠ 0 → StrictMono fun x => x ^ n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.pow_lt_pow_left`：∀ {a b n : ℕ}, a < b → n ≠ 0 → a ^ n < b ^ n
 
-English:
-lemma pow_left_strictMono
-  given: (hn : n != 0)
-  statement: StrictMono (· ^ n : Nat -> Nat)
-  proof: fun _ _ h => Nat.pow_lt_pow_left h hn
-
-中文:
-引理 pow_left_strictMono
-  条件: (hn : n != 0)
-  结论: 严格递增 (· ^ n : 自然数 -> 自然数)
-  证明: fun _ _ h => Nat.pow_lt_pow_left h hn
-
-Depends on / 依赖: zsmul_lt_zsmul_left
+--- 原说明 ---
+See also `pow_left_strictMonoOn₀`.
 -/
-protected lemma pow_left_strictMono (hn : n != 0) : StrictMono (· ^ n : Nat -> Nat) :=
-  fun _ _ h => Nat.pow_lt_pow_left h hn
-
-/--
-lemma `_root_.StrictMono.nat_pow` / 引理 `_root_.StrictMono.nat_pow`
-
-English:
-lemma _root_.StrictMono.nat_pow
-  given: [Preorder α] (hn : n != 0) (hf : StrictMono f)
-  proof: (Nat.pow_left_strictMono hn).comp hf
-
-中文:
-引理 _root_.严格递增.nat_pow
-  条件: [预序 α] (hn : n != 0) (hf : 严格递增 f)
-  证明: (Nat.pow_left_strictMono hn).comp hf
-
-Depends on / 依赖: Nat.pow_left_strictMono, pow_left_strictMono
+protected lemma pow_left_strictMono (hn : n ≠ 0) : StrictMono (· ^ n : ℕ → ℕ) :=
+  fun _ _ h ↦ Nat.pow_lt_pow_left h hn
+/-
+**Nat._root_.StrictMono.nat_pow** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.StrictMono.nat_pow [Preorder α] (hn : n != 0) (hf : StrictMono f) :
+lemma _root_.StrictMono.nat_pow [Preorder α] (hn : n ≠ 0) (hf : StrictMono f) :
     StrictMono (f · ^ n) := (Nat.pow_left_strictMono hn).comp hf
 
 end Nat
+

@@ -67,333 +67,239 @@ open Structure Fin
 
 namespace Term
 
-/--
-Definition of `realize` / `realize` 的定义
+/-- A term `t` with variables indexed by `α` can be evaluated by giving a value to each variable. -/
+/-
+**FirstOrder.Language.Term.realize** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder.Languag
+e.Term`。
+形式化陈述：{L : FirstOrder.Language} → {M : Type w} → [L.Structure M] → {α : Type u'}
+ → (α → M) → L.Term α → M
+参数：α → M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition realize
-  signature: (v : α -> M)
-
-中文:
-定义 realize
-  签名: (v : α -> M)
+--- 原说明 ---
+A term `t` with variables indexed by `α` can be evaluated by giving a value to e
+ach variable.
 -/
-def realize (v : α -> M) : forall _t : L.Term α, M
+def realize (v : α → M) : ∀ _t : L.Term α, M
   | var k => v k
   | func f ts => funMap f fun i => (ts i).realize v
 
 @[simp]
-/--
-theorem `realize_var` / 定理 `realize_var`
-
-English:
-theorem realize_var
-  given: (v : α -> M) (k)
-  statement: realize v (var k : L.Term α) = v k
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 realize_var
-  条件: (v : α -> M) (k)
-  结论: realize v (var k : L.项 α) = v k
-  证明: rfl
-
-@[simp]
+/-
+**FirstOrder.Language.Term.realize_var** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lan
+guage.Term`。
+形式化陈述：realize_var (v : α -> M) (k) : realize v (var k : L.Term α) = v k
+参数：v : α -> M；k。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem realize_var (v : α -> M) (k) : realize v (var k : L.Term α) = v k := rfl
+theorem realize_var (v : α → M) (k) : realize v (var k : L.Term α) = v k := rfl
 
 @[simp]
-/--
-theorem `realize_func` / 定理 `realize_func`
-
-English:
-theorem realize_func
-  given: (v : α -> M) {n} (f : L.Functions n) (ts)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 realize_func
-  条件: (v : α -> M) {n} (f : L.函数 n) (ts)
-  证明: rfl
-
-@[simp]
+/-
+**FirstOrder.Language.Term.realize_func** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.La
+nguage.Term`。
+形式化陈述：realize_func (v : α -> M) {n} (f : L.Functions n) (ts) : realize v (func f
+ ts : L.Term α) = funMap f fun i => (ts i).realize v
+参数：v : α -> M；f : L.Functions n；ts。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem realize_func (v : α -> M) {n} (f : L.Functions n) (ts) :
+theorem realize_func (v : α → M) {n} (f : L.Functions n) (ts) :
     realize v (func f ts : L.Term α) = funMap f fun i => (ts i).realize v := rfl
 
 @[simp]
-/--
-theorem `realize_function_term` / 定理 `realize_function_term`
-
-English:
-theorem realize_function_term
-  given: {n} (v : Fin n -> M) (f : L.Functions n)
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-定理 realize_function_term
-  条件: {n} (v : 有限集 n -> M) (f : L.函数 n)
-  证明: by
-  rfl
-
-@[simp]
+/-
+**FirstOrder.Language.Term.realize_function_term** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.Term`。
+形式化陈述：realize_function_term {n} (v : Fin n -> M) (f : L.Functions n) : f.term.re
+alize v = funMap f v
+参数：v : Fin n -> M；f : L.Functions n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem realize_function_term {n} (v : Fin n -> M) (f : L.Functions n) :
+theorem realize_function_term {n} (v : Fin n → M) (f : L.Functions n) :
     f.term.realize v = funMap f v := by
   rfl
 
 @[simp]
-/--
-theorem `realize_relabel` / 定理 `realize_relabel`
-
-English:
-theorem realize_relabel
-  given: {t : L.Term α} {g : α -> β} {v : β -> M}
-  proof: by
-  induction t with
-  | var => rfl
-  | func f ts ih => simp [ih]
-
-@[simp]
-
-中文:
-定理 realize_relabel
-  条件: {t : L.项 α} {g : α -> β} {v : β -> M}
-  证明: by
-  induction t with
-  | var => rfl
-  | func f ts ih => simp [ih]
-
-@[simp]
+/-
+**FirstOrder.Language.Term.realize_relabel** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder
+.Language.Term`。
+形式化陈述：realize_relabel {t : L.Term α} {g : α -> β} {v : β -> M} : (t.relabel g).r
+ealize v = t.realize (v ∘ g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_relabel {t : L.Term α} {g : α -> β} {v : β -> M} :
+theorem realize_relabel {t : L.Term α} {g : α → β} {v : β → M} :
     (t.relabel g).realize v = t.realize (v ∘ g) := by
   induction t with
   | var => rfl
   | func f ts ih => simp [ih]
 
 @[simp]
-/--
-theorem `realize_liftAt` / 定理 `realize_liftAt`
-
-English:
-theorem realize_liftAt
-  given: {n n' m : Nat} {t : L.Term (α oplus (Fin n))} {v : α oplus (Fin (n + n')) -> M}
-  proof: realize_relabel
-
-@[simp]
-
-中文:
-定理 realize_liftAt
-  条件: {n n' m : 自然数} {t : L.项 (α oplus (有限集 n))} {v : α oplus (有限集 (n + n')) -> M}
-  证明: realize_relabel
-
-@[simp]
-
-Depends on / 依赖: realize_relabel
+/-
+**FirstOrder.Language.Term.realize_liftAt** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Term`。
+形式化陈述：realize_liftAt {n n' m : Nat} {t : L.Term (α oplus (Fin n))} {v : α oplus 
+(Fin (n + n')) -> M} : (t.liftAt n' m).realize v = t.realize (v ∘ Sum.map id fun
+ i : Fin _ => if ↑i < m then Fin.castAdd n' i else Fin.addNat i n')
+参数：α oplus (Fin n)；Fin (n + n')。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
 -/
-theorem realize_liftAt {n n' m : Nat} {t : L.Term (α oplus (Fin n))} {v : α oplus (Fin (n + n')) -> M} :
+theorem realize_liftAt {n n' m : ℕ} {t : L.Term (α ⊕ (Fin n))} {v : α ⊕ (Fin (n + n')) → M} :
     (t.liftAt n' m).realize v =
       t.realize (v ∘ Sum.map id fun i : Fin _ =>
         if ↑i < m then Fin.castAdd n' i else Fin.addNat i n') :=
   realize_relabel
 
 @[simp]
-/--
-theorem `realize_constants` / 定理 `realize_constants`
-
-English:
-theorem realize_constants
-  given: {c : L.Constants} {v : α -> M}
-  statement: c.term.realize v = c
-  proof: funMap_eq_coe_constants
-
-@[simp]
-
-中文:
-定理 realize_constants
-  条件: {c : L.Constants} {v : α -> M}
-  结论: c.term.realize v = c
-  证明: funMap_eq_coe_constants
-
-@[simp]
-
-Depends on / 依赖: funMap_eq_coe_constants
+/-
+**FirstOrder.Language.Term.realize_constants** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrd
+er.Language.Term`。
+形式化陈述：realize_constants {c : L.Constants} {v : α -> M} : c.term.realize v = c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.funMap_eq_coe_constants`：funMap_eq_coe_constants {c 
+: L.Constants} {x : Fin 0 -> M} : funMap c x = c
 -/
-theorem realize_constants {c : L.Constants} {v : α -> M} : c.term.realize v = c :=
+theorem realize_constants {c : L.Constants} {v : α → M} : c.term.realize v = c :=
   funMap_eq_coe_constants
 
 @[simp]
-/--
-theorem `realize_functions_apply₁` / 定理 `realize_functions_apply₁`
-
-English:
-theorem realize_functions_apply₁
-  given: {f : L.Functions 1} {t : L.Term α} {v : α -> M}
-  proof: by
-  rw [Functions.apply₁]; rw [Term.realize]
-  refine congr rfl (funext fun i => ?_)
-  simp only [Matrix.cons_val_fin_one]
-
-@[simp]
-
-中文:
-定理 realize_functions_apply₁
-  条件: {f : L.函数 1} {t : L.项 α} {v : α -> M}
-  证明: by
-  rw [Functions.apply₁]; rw [Term.realize]
-  refine congr rfl (funext fun i => ?_)
-  simp only [Matrix.cons_val_fin_one]
-
-@[simp]
-
-Depends on / 依赖: Functions, Functions.apply, Matrix, Matrix.cons_val_fin_one, Term.realize, cons_val_fin_one, realize
+/-
+**FirstOrder.Language.Term.realize_functions_apply** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Term`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem realize_functions_apply₁ {f : L.Functions 1} {t : L.Term α} {v : α -> M} :
+theorem realize_functions_apply₁ {f : L.Functions 1} {t : L.Term α} {v : α → M} :
     (f.apply₁ t).realize v = funMap f ![t.realize v] := by
-  rw [Functions.apply₁]; rw [Term.realize]
+  rw [Functions.apply₁, Term.realize]
   refine congr rfl (funext fun i => ?_)
   simp only [Matrix.cons_val_fin_one]
 
 @[simp]
-/--
-theorem `realize_functions_apply₂` / 定理 `realize_functions_apply₂`
-
-English:
-theorem realize_functions_apply₂
-  given: {f : L.Functions 2} {t₁ t₂ : L.Term α} {v : α -> M}
-  proof: by
-  rw [Functions.apply₂]; rw [Term.realize]
-  refine congr rfl (funext (Fin.cases ?_ ?_))
-  · simp only [Matrix.cons_val_zero]
-  · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
-
-中文:
-定理 realize_functions_apply₂
-  条件: {f : L.函数 2} {t₁ t₂ : L.项 α} {v : α -> M}
-  证明: by
-  rw [Functions.apply₂]; rw [Term.realize]
-  refine congr rfl (funext (Fin.cases ?_ ?_))
-  · simp only [Matrix.cons_val_zero]
-  · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
-
-Depends on / 依赖: Fin.cases, Functions, Functions.apply, Matrix, Matrix.cons_val_fin_one, Matrix.cons_val_succ, Matrix.cons_val_zero, Term.realize, cons_val_fin_one, cons_val_succ, cons_val_zero, forall_const, realize
+/-
+**FirstOrder.Language.Term.realize_functions_apply** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Term`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem realize_functions_apply₂ {f : L.Functions 2} {t₁ t₂ : L.Term α} {v : α -> M} :
+theorem realize_functions_apply₂ {f : L.Functions 2} {t₁ t₂ : L.Term α} {v : α → M} :
     (f.apply₂ t₁ t₂).realize v = funMap f ![t₁.realize v, t₂.realize v] := by
-  rw [Functions.apply₂]; rw [Term.realize]
+  rw [Functions.apply₂, Term.realize]
   refine congr rfl (funext (Fin.cases ?_ ?_))
   · simp only [Matrix.cons_val_zero]
   · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
-
-/--
-theorem `realize_con` / 定理 `realize_con`
-
-English:
-theorem realize_con
-  given: {A : Set M} {a : A} {v : α -> M}
-  statement: (L.con a).term.realize v = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 realize_con
-  条件: {A : 集合 M} {a : A} {v : α -> M}
-  结论: (L.con a).term.realize v = a
-  证明: rfl
-
-@[simp]
+/-
+**FirstOrder.Language.Term.realize_con** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lan
+guage.Term`。
+形式化陈述：realize_con {A : Set M} {a : A} {v : α -> M} : (L.con a).term.realize v = 
+a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem realize_con {A : Set M} {a : A} {v : α -> M} : (L.con a).term.realize v = a :=
+theorem realize_con {A : Set M} {a : A} {v : α → M} : (L.con a).term.realize v = a :=
   rfl
 
 @[simp]
-/--
-theorem `realize_subst` / 定理 `realize_subst`
-
-English:
-theorem realize_subst
-  given: {t : L.Term α} {tf : α -> L.Term β} {v : β -> M}
-  proof: by
-  induction t with
-  | var => rfl
-  | func _ _ ih => simp [ih]
-
-中文:
-定理 realize_subst
-  条件: {t : L.项 α} {tf : α -> L.项 β} {v : β -> M}
-  证明: by
-  induction t with
-  | var => rfl
-  | func _ _ ih => simp [ih]
+/-
+**FirstOrder.Language.Term.realize_subst** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.L
+anguage.Term`。
+形式化陈述：realize_subst {t : L.Term α} {tf : α -> L.Term β} {v : β -> M} : (t.subst 
+tf).realize v = t.realize fun a => (tf a).realize v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_subst {t : L.Term α} {tf : α -> L.Term β} {v : β -> M} :
+theorem realize_subst {t : L.Term α} {tf : α → L.Term β} {v : β → M} :
     (t.subst tf).realize v = t.realize fun a => (tf a).realize v := by
   induction t with
   | var => rfl
   | func _ _ ih => simp [ih]
-
-/--
-theorem `realize_substFunc` / 定理 `realize_substFunc`
-
-English:
-theorem realize_substFunc
-  statement: [L'.Structure M] {c : {n : Nat} -> L.Functions n -> L'.Term (Fin n)}
-  proof: by
-  induction x with
-  | var => simp
-  | func f ts ih => simp [← ih, ← hc]
-
-中文:
-定理 realize_substFunc
-  结论: [L'.结构 M] {c : {n : 自然数} -> L.函数 n -> L'.项 (有限集 n)}
-  证明: by
-  induction x with
-  | var => simp
-  | func f ts ih => simp [← ih, ← hc]
+/-
+**FirstOrder.Language.Term.realize_substFunc** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrd
+er.Language.Term`。
+形式化陈述：realize_substFunc [L'.Structure M] {c : {n : Nat} -> L.Functions n -> L'.T
+erm (Fin n)} (hc : forall {n : Nat} (g) (y : Fin n -> M), g.term.realize y = (c 
+g).realize y) (v : β -> M) (x : L.Term β) : (x.substFunc c).realize v = x.realiz
+e v
+参数：Fin n；hc : forall {n : Nat} (g) (y : Fin n -> M), g.term.realize y = (c g).re
+alize y；v : β -> M；x : L.Term β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_subst`：realize_subst {t : L.Term α} {tf
+ : α -> L.Term β} {v : β -> M} : (t.subst tf).realize v = t.realize fun a => (tf
+ a).realize v
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Term.realize_function_term`：realize_function_term {n
+} (v : Fin n -> M) (f : L.Functions n) : f.term.realize v = funMap f v
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem realize_substFunc [L'.Structure M] {c : {n : Nat} -> L.Functions n -> L'.Term (Fin n)}
-    (hc : forall {n : Nat} (g) (y : Fin n -> M), g.term.realize y = (c g).realize y)
-    (v : β -> M) (x : L.Term β) :
+theorem realize_substFunc [L'.Structure M] {c : {n : ℕ} → L.Functions n → L'.Term (Fin n)}
+    (hc : ∀ {n : ℕ} (g) (y : Fin n → M), g.term.realize y = (c g).realize y)
+    (v : β → M) (x : L.Term β) :
     (x.substFunc c).realize v = x.realize v := by
   induction x with
   | var => simp
   | func f ts ih => simp [← ih, ← hc]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `realize_restrictVar` / 定理 `realize_restrictVar`
-
-English:
-theorem realize_restrictVar
-  statement: [DecidableEq α] {t : L.Term α} {f : t.varFinset -> β}
-  proof: by
-  induction t with
-  | var => simp [restrictVar, hv']
-  | func _ _ ih =>
-    exact congr rfl (funext fun i => ih i ((by simp [Function.comp_apply, hv'])))
-
-中文:
-定理 realize_restrictVar
-  结论: [DecidableEq α] {t : L.项 α} {f : t.varFinset -> β}
-  证明: by
-  induction t with
-  | var => simp [restrictVar, hv']
-  | func _ _ ih =>
-    exact congr rfl (funext fun i => ih i ((by simp [Function.comp_apply, hv'])))
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, restrictVar
+/-
+**FirstOrder.Language.Term.realize_restrictVar** 是 Mathlib 中的一个定理，位于命名空间 `FirstO
+rder.Language.Term`。
+形式化陈述：realize_restrictVar [DecidableEq α] {t : L.Term α} {f : t.varFinset -> β} 
+{v : β -> M} (v' : α -> M) (hv' : forall a, v (f a) = v' a) : (t.restrictVar f).
+realize v = t.realize v'
+参数：v' : α -> M；hv' : forall a, v (f a) = v' a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.mem_singleton_self`：mem_singleton_self (a : α) : a in ({a} : Fins
+et α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem realize_restrictVar [DecidableEq α] {t : L.Term α} {f : t.varFinset -> β}
-    {v : β -> M} (v' : α -> M) (hv' : forall a, v (f a) = v' a) :
+theorem realize_restrictVar [DecidableEq α] {t : L.Term α} {f : t.varFinset → β}
+    {v : β → M} (v' : α → M) (hv' : ∀ a, v (f a) = v' a) :
     (t.restrictVar f).realize v = t.realize v' := by
   induction t with
   | var => simp [restrictVar, hv']
@@ -403,52 +309,66 @@ theorem realize_restrictVar [DecidableEq α] {t : L.Term α} {f : t.varFinset ->
 /-- A special case of `realize_restrictVar`, included because we can add the `simp` attribute
 to it -/
 @[simp]
-/--
-theorem `realize_restrictVar'` / 定理 `realize_restrictVar'`
+/-
+**FirstOrder.Language.Term.realize_restrictVar'** 是 Mathlib 中的一个定理，位于命名空间 `First
+Order.Language.Term`。
+形式化陈述：realize_restrictVar' [DecidableEq α] {t : L.Term α} {s : Set α} (h : ↑t.va
+rFinset subseteq s) {v : α -> M} : (t.restrictVar (Set.inclusion h)).realize (v 
+∘ (↑)) = t.realize v
+参数：h : ↑t.varFinset subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Term.realize_restrictVar`：realize_restrictVar [Decid
+ableEq α] {t : L.Term α} {f : t.varFinset -> β} {v : β -> M} (v' : α -> M) (hv' 
+: forall a, v (f a) = v' a) : (t.r…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem realize_restrictVar'
-  statement: [DecidableEq α] {t : L.Term α} {s : Set α} (h : ↑t.varFinset subseteq s)
-  proof: realize_restrictVar _ (by simp)
-
-中文:
-定理 realize_restrictVar'
-  结论: [DecidableEq α] {t : L.项 α} {s : 集合 α} (h : ↑t.varFinset subseteq s)
-  证明: realize_restrictVar _ (by simp)
-
-Depends on / 依赖: realize_restrictVar
+--- 原说明 ---
+A special case of `realize_restrictVar`, included because we can add the `simp` 
+attribute
+to it
 -/
-theorem realize_restrictVar' [DecidableEq α] {t : L.Term α} {s : Set α} (h : ↑t.varFinset subseteq s)
-    {v : α -> M} : (t.restrictVar (Set.inclusion h)).realize (v ∘ (↑)) = t.realize v :=
+theorem realize_restrictVar' [DecidableEq α] {t : L.Term α} {s : Set α} (h : ↑t.varFinset ⊆ s)
+    {v : α → M} : (t.restrictVar (Set.inclusion h)).realize (v ∘ (↑)) = t.realize v :=
   realize_restrictVar _ (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `realize_restrictVarLeft` / 定理 `realize_restrictVarLeft`
-
-English:
-theorem realize_restrictVarLeft
-  statement: [DecidableEq α] {γ : Type*} {t : L.Term (α oplus γ)}
-  proof: by
-  induction t with
-  | var a => cases a <;> simp [restrictVarLeft, hxs']
-  | func _ _ ih =>
-    exact congr rfl (funext fun i => ih i (by simp [hxs']))
-
-中文:
-定理 realize_restrictVarLeft
-  结论: [DecidableEq α] {γ : 类型} {t : L.项 (α oplus γ)}
-  证明: by
-  induction t with
-  | var a => cases a <;> simp [restrictVarLeft, hxs']
-  | func _ _ ih =>
-    exact congr rfl (funext fun i => ih i (by simp [hxs']))
-
-Depends on / 依赖: restrictVarLeft
+/-
+**FirstOrder.Language.Term.realize_restrictVarLeft** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Term`。
+形式化陈述：realize_restrictVarLeft [DecidableEq α] {γ : Type*} {t : L.Term (α oplus γ
+)} {f : t.varFinsetLeft -> β} {xs : β oplus γ -> M} (xs' : α -> M) (hxs' : foral
+l a, xs (Sum.inl (f a)) = xs' a) : (t.restrictVarLeft f).realize xs = t.realize 
+(Sum.elim xs' (xs ∘ Sum.inr))
+参数：α oplus γ；xs' : α -> M；hxs' : forall a, xs (Sum.inl (f a)) = xs' a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.mem_singleton_self`：mem_singleton_self (a : α) : a in ({a} : Fins
+et α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem realize_restrictVarLeft [DecidableEq α] {γ : Type*} {t : L.Term (α oplus γ)}
-    {f : t.varFinsetLeft -> β}
-    {xs : β oplus γ -> M} (xs' : α -> M) (hxs' : forall a, xs (Sum.inl (f a)) = xs' a) :
+theorem realize_restrictVarLeft [DecidableEq α] {γ : Type*} {t : L.Term (α ⊕ γ)}
+    {f : t.varFinsetLeft → β}
+    {xs : β ⊕ γ → M} (xs' : α → M) (hxs' : ∀ a, xs (Sum.inl (f a)) = xs' a) :
     (t.restrictVarLeft f).realize xs = t.realize (Sum.elim xs' (xs ∘ Sum.inr)) := by
   induction t with
   | var a => cases a <;> simp [restrictVarLeft, hxs']
@@ -458,76 +378,74 @@ theorem realize_restrictVarLeft [DecidableEq α] {γ : Type*} {t : L.Term (α op
 /-- A special case of `realize_restrictVarLeft`, included because we can add the `simp` attribute
 to it -/
 @[simp]
-/--
-theorem `realize_restrictVarLeft'` / 定理 `realize_restrictVarLeft'`
+/-
+**FirstOrder.Language.Term.realize_restrictVarLeft'** 是 Mathlib 中的一个定理，位于命名空间 `F
+irstOrder.Language.Term`。
+形式化陈述：realize_restrictVarLeft' [DecidableEq α] {γ : Type*} {t : L.Term (α oplus 
+γ)} {s : Set α} (h : ↑t.varFinsetLeft subseteq s) {v : α -> M} {xs : γ -> M} : (
+t.restrictVarLeft (Set.inclusion h)).realize (Sum.elim (v ∘ (↑)) xs) = t.realize
+ (Sum.elim v xs)
+参数：α oplus γ；h : ↑t.varFinsetLeft subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Term.realize_restrictVarLeft`：realize_restrictVarLef
+t [DecidableEq α] {γ : Type*} {t : L.Term (α oplus γ)} {f : t.varFinsetLeft -> β
+} {xs : β oplus γ -> M} (xs' : α -> M)…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem realize_restrictVarLeft'
-  statement: [DecidableEq α] {γ : Type*} {t : L.Term (α oplus γ)} {s : Set α}
-  proof: realize_restrictVarLeft _ (by simp)
-
-中文:
-定理 realize_restrictVarLeft'
-  结论: [DecidableEq α] {γ : 类型} {t : L.项 (α oplus γ)} {s : 集合 α}
-  证明: realize_restrictVarLeft _ (by simp)
-
-Depends on / 依赖: realize_restrictVarLeft
+--- 原说明 ---
+A special case of `realize_restrictVarLeft`, included because we can add the `si
+mp` attribute
+to it
 -/
-theorem realize_restrictVarLeft' [DecidableEq α] {γ : Type*} {t : L.Term (α oplus γ)} {s : Set α}
-    (h : ↑t.varFinsetLeft subseteq s) {v : α -> M} {xs : γ -> M} :
+theorem realize_restrictVarLeft' [DecidableEq α] {γ : Type*} {t : L.Term (α ⊕ γ)} {s : Set α}
+    (h : ↑t.varFinsetLeft ⊆ s) {v : α → M} {xs : γ → M} :
     (t.restrictVarLeft (Set.inclusion h)).realize (Sum.elim (v ∘ (↑)) xs) =
       t.realize (Sum.elim v xs) :=
   realize_restrictVarLeft _ (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `realize_constantsToVars` / 定理 `realize_constantsToVars`
-
-English:
-theorem realize_constantsToVars
-  statement: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
-  proof: by
-  induction t with
-  | var => simp
-  | @func n f ts ih =>
-    cases n
-    · cases f
-      · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
-        -- Porting note: below lemma does not work with simp for some reason
-        rw [withConstants_funMap_sumInl]
-      · simp only [realize, constantsToVars, Sum.elim_inl, funMap_eq_coe_constants]
-        rfl
-    · obtain - | f := f
-      · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
-        -- Porting note: below lemma does not work with simp for some reason
-        rw [withConstants_funMap_sumInl]
-      · exact isEmptyElim f
-
-中文:
-定理 realize_constantsToVars
-  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
-  证明: by
-  induction t with
-  | var => simp
-  | @func n f ts ih =>
-    cases n
-    · cases f
-      · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
-        -- Porting note: below lemma does not work with simp for some reason
-        rw [withConstants_funMap_sumInl]
-      · simp only [realize, constantsToVars, Sum.elim_inl, funMap_eq_coe_constants]
-        rfl
-    · obtain - | f := f
-      · simp only [realize, ih, constantsOn, constantsOnFunc, constantsToVars]
-        -- Porting note: below lemma does not work with simp for some reason
-        rw [withConstants_funMap_sumInl]
-      · exact isEmptyElim f
-
-Depends on / 依赖: constantsOn, constantsOnFunc, constantsToVars, realize
+/-
+**FirstOrder.Language.Term.realize_constantsToVars** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Term`。
+形式化陈述：realize_constantsToVars [L[[α]].Structure M] [(lhomWithConstants L α).IsEx
+pansionOn M] {t : L[[α]].Term β} {v : β -> M} : t.constantsToVars.realize (Sum.e
+lim (fun a => ↑(L.con a)) v) = t.realize v
+参数：lhomWithConstants L α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `FirstOrder.Language.Term.realize.eq_2`：∀ {L : FirstOrder.Language} {M : 
+Type w} [inst : L.Structure M] {α : Type u'} (v : α → M) (l : ℕ) (f : L.Function
+s l)   (ts : Fin l → L.Term…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.withConstants_funMap_sumInl`：withConstants_funMap_su
+mInl [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M] {n} {f : L.F
+unctions n} {x : Fin n -> M} : @funMa…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `FirstOrder.Language.Term.realize.eq_1`：∀ {L : FirstOrder.Language} {M : 
+Type w} [inst : L.Structure M] {α : Type u'} (v : α → M) (k : α),   FirstOrder.L
+anguage.Term.realize v (Fir…
+· 使用定理 `FirstOrder.Language.funMap_eq_coe_constants`：funMap_eq_coe_constants {c 
+: L.Constants} {x : Fin 0 -> M} : funMap c x = c
 -/
 theorem realize_constantsToVars [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
-    {t : L[[α]].Term β} {v : β -> M} :
+    {t : L[[α]].Term β} {v : β → M} :
     t.constantsToVars.realize (Sum.elim (fun a => ↑(L.con a)) v) = t.realize v := by
   induction t with
   | var => simp
@@ -547,35 +465,35 @@ theorem realize_constantsToVars [L[[α]].Structure M] [(lhomWithConstants L α).
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `realize_varsToConstants` / 定理 `realize_varsToConstants`
-
-English:
-theorem realize_varsToConstants
-  statement: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
-  proof: by
-  induction t with
-  | var ab => rcases ab with a | b <;> simp [Language.con]
-  | func f ts ih =>
-    simp only [realize, constantsOn, constantsOnFunc, ih, varsToConstants]
-    -- Porting note: below lemma does not work with simp for some reason
-    rw [withConstants_funMap_sumInl]
-
-中文:
-定理 realize_varsToConstants
-  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
-  证明: by
-  induction t with
-  | var ab => rcases ab with a | b <;> simp [Language.con]
-  | func f ts ih =>
-    simp only [realize, constantsOn, constantsOnFunc, ih, varsToConstants]
-    -- Porting note: below lemma does not work with simp for some reason
-    rw [withConstants_funMap_sumInl]
-
-Depends on / 依赖: Language, Language.con, constantsOn, constantsOnFunc, realize, varsToConstants
+/-
+**FirstOrder.Language.Term.realize_varsToConstants** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Term`。
+形式化陈述：realize_varsToConstants [L[[α]].Structure M] [(lhomWithConstants L α).IsEx
+pansionOn M] {t : L.Term (α oplus β)} {v : β -> M} : t.varsToConstants.realize v
+ = t.realize (Sum.elim (fun a => ↑(L.con a)) v)
+参数：lhomWithConstants L α；α oplus β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_constants`：realize_constants {c : L.Con
+stants} {v : α -> M} : c.term.realize v = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `FirstOrder.Language.Term.realize.eq_2`：∀ {L : FirstOrder.Language} {M : 
+Type w} [inst : L.Structure M] {α : Type u'} (v : α → M) (l : ℕ) (f : L.Function
+s l)   (ts : Fin l → L.Term…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.withConstants_funMap_sumInl`：withConstants_funMap_su
+mInl [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M] {n} {f : L.F
+unctions n} {x : Fin n -> M} : @funMa…
 -/
 theorem realize_varsToConstants [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
-    {t : L.Term (α oplus β)} {v : β -> M} :
+    {t : L.Term (α ⊕ β)} {v : β → M} :
     t.varsToConstants.realize v = t.realize (Sum.elim (fun a => ↑(L.con a)) v) := by
   induction t with
   | var ab => rcases ab with a | b <;> simp [Language.con]
@@ -583,35 +501,46 @@ theorem realize_varsToConstants [L[[α]].Structure M] [(lhomWithConstants L α).
     simp only [realize, constantsOn, constantsOnFunc, ih, varsToConstants]
     -- Porting note: below lemma does not work with simp for some reason
     rw [withConstants_funMap_sumInl]
-
-/--
-theorem `realize_constantsVarsEquivLeft` / 定理 `realize_constantsVarsEquivLeft`
-
-English:
-theorem realize_constantsVarsEquivLeft
-  statement: [L[[α]].Structure M]
-  proof: by
-  simp only [constantsVarsEquivLeft, realize_relabel, Equiv.coe_trans, Function.comp_apply,
-    constantsVarsEquiv_apply, relabelEquiv_symm_apply]
-  refine _root_.trans ?_ realize_constantsToVars
-  congr 1; funext x -- Note: was previously rcongr x
-  rcases x with (a | (b | i)) <;> simp
-
-中文:
-定理 realize_constantsVarsEquivLeft
-  结论: [L[[α]].结构 M]
-  证明: by
-  simp only [constantsVarsEquivLeft, realize_relabel, Equiv.coe_trans, Function.comp_apply,
-    constantsVarsEquiv_apply, relabelEquiv_symm_apply]
-  refine _root_.trans ?_ realize_constantsToVars
-  congr 1; funext x -- Note: was previously rcongr x
-  rcases x with (a | (b | i)) <;> simp
-
-Depends on / 依赖: Equiv.coe_trans, Function, Function.comp_apply, _root_, _root_.trans, coe_trans, comp_apply, constantsVarsEquivLeft, constantsVarsEquiv_apply, previously, rcongr, realize_constantsToVars, realize_relabel, relabelEquiv_symm_apply
+/-
+**FirstOrder.Language.Term.realize_constantsVarsEquivLeft** 是 Mathlib 中的一个定理，位于命
+名空间 `FirstOrder.Language.Term`。
+形式化陈述：realize_constantsVarsEquivLeft [L[[α]].Structure M] [(lhomWithConstants L 
+α).IsExpansionOn M] {n} {t : L[[α]].Term (β oplus (Fin n))} {v : β -> M} {xs : F
+in n -> M} : (constantsVarsEquivLeft t).realize (Sum.elim (Sum.elim (fun a => ↑(
+L.con a)) v) xs) = t.realize (Sum.elim v xs)
+参数：lhomWithConstants L α；β oplus (Fin n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `FirstOrder.Language.Term.constantsVarsEquiv_apply`：∀ {L : FirstOrder.Lan
+guage} {α : Type u'} {γ : Type u_1} (a : (L.withConstants γ).Term α),   FirstOrd
+er.Language.Term.constantsVarsEquiv a =…
+· 使用定理 `FirstOrder.Language.Term.relabelEquiv_symm_apply`：∀ {L : FirstOrder.Lang
+uage} {α : Type u'} {β : Type v'} (g : α ≃ β) (a : L.Term β),   (FirstOrder.Lang
+uage.Term.relabelEquiv g).symm a = Fir…
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `FirstOrder.Language.Term.realize_constantsToVars`：realize_constantsToVar
+s [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M] {t : L[[α]].Ter
+m β} {v : β -> M} : t.constantsToVars.…
 -/
 theorem realize_constantsVarsEquivLeft [L[[α]].Structure M]
-    [(lhomWithConstants L α).IsExpansionOn M] {n} {t : L[[α]].Term (β oplus (Fin n))} {v : β -> M}
-    {xs : Fin n -> M} :
+    [(lhomWithConstants L α).IsExpansionOn M] {n} {t : L[[α]].Term (β ⊕ (Fin n))} {v : β → M}
+    {xs : Fin n → M} :
     (constantsVarsEquivLeft t).realize (Sum.elim (Sum.elim (fun a => ↑(L.con a)) v) xs) =
       t.realize (Sum.elim v xs) := by
   simp only [constantsVarsEquivLeft, realize_relabel, Equiv.coe_trans, Function.comp_apply,
@@ -625,29 +554,32 @@ end Term
 namespace LHom
 
 @[simp]
-/--
-theorem `realize_onTerm` / 定理 `realize_onTerm`
-
-English:
-theorem realize_onTerm
-  statement: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (t : L.Term α)
-  proof: by
-  induction t with
-  | var => rfl
-  | func f ts ih => simp only [Term.realize, LHom.onTerm, LHom.map_onFunction, ih]
-
-中文:
-定理 realize_onTerm
-  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] (t : L.项 α)
-  证明: by
-  induction t with
-  | var => rfl
-  | func f ts ih => simp only [Term.realize, LHom.onTerm, LHom.map_onFunction, ih]
-
-Depends on / 依赖: LHom.map_onFunction, LHom.onTerm, Term.realize, map_onFunction, onTerm, realize
+/-
+**FirstOrder.Language.LHom.realize_onTerm** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.LHom`。
+形式化陈述：realize_onTerm [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (t : L.
+Term α) (v : α -> M) : (φ.onTerm t).realize v = t.realize v
+参数：φ : L ->ᴸ L'；t : L.Term α；v : α -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize.eq_2`：∀ {L : FirstOrder.Language} {M : 
+Type w} [inst : L.Structure M] {α : Type u'} (v : α → M) (l : ℕ) (f : L.Function
+s l)   (ts : Fin l → L.Term…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.LHom.map_onFunction`：map_onFunction {M : Type*} [L.S
+tructure M] [L'.Structure M] [ϕ.IsExpansionOn M] {n} (f : L.Functions n) (x : Fi
+n n -> M) : funMap (ϕ.onFunct…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realize_onTerm [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (t : L.Term α)
-    (v : α -> M) : (φ.onTerm t).realize v = t.realize v := by
+theorem realize_onTerm [L'.Structure M] (φ : L →ᴸ L') [φ.IsExpansionOn M] (t : L.Term α)
+    (v : α → M) : (φ.onTerm t).realize v = t.realize v := by
   induction t with
   | var => rfl
   | func f ts ih => simp only [Term.realize, LHom.onTerm, LHom.map_onFunction, ih]
@@ -655,35 +587,35 @@ theorem realize_onTerm [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (
 end LHom
 
 @[simp]
-/--
-theorem `HomClass.realize_term` / 定理 `HomClass.realize_term`
-
-English:
-theorem HomClass.realize_term
-  statement: {F : Type*} [FunLike F M N] [HomClass L F M N]
-  proof: by
-  induction t
-  · rfl
-  · rw [Term.realize, Term.realize, HomClass.map_fun]
-    refine congr rfl ?_
-    ext x
-    simp [*]
-
-中文:
-定理 态射类.realize_term
-  结论: {F : 类型} [函数状 F M N] [态射类 L F M N]
-  证明: by
-  induction t
-  · rfl
-  · rw [Term.realize, Term.realize, HomClass.map_fun]
-    refine congr rfl ?_
-    ext x
-    simp [*]
-
-Depends on / 依赖: HomClass, HomClass.map_fun, Term.realize, map_fun, realize
+/-
+**FirstOrder.Language.HomClass.realize_term** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrde
+r.Language.HomClass`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type w} {N : Type u_1} [inst : L.Structur
+e M] [inst_1 : L.Structure N] {α : Type u'}   {F : Type u_4} [inst_2 : FunLike F
+ M N] [L.HomClass F M N] (g : F) {t : L.Term α} {v : α → M},   FirstOrder.Langua
+ge.Term.realize (⇑g ∘ v) t = g (FirstOrder.Language.Term.realize v t)
+参数：g : F；⇑g ∘ v；FirstOrder.Language.Term.realize v t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize.eq_2`：∀ {L : FirstOrder.Language} {M : 
+Type w} [inst : L.Structure M] {α : Type u'} (v : α → M) (l : ℕ) (f : L.Function
+s l)   (ts : Fin l → L.Term…
+· 使用定理 `FirstOrder.Language.HomClass.map_fun`：∀ {L : outParam FirstOrder.Languag
+e} {F : Type u_3} {M : outParam (Type u_4)} {N : outParam (Type u_5)}   {inst : 
+FunLike F M N} {inst_1 : L…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem HomClass.realize_term {F : Type*} [FunLike F M N] [HomClass L F M N]
-    (g : F) {t : L.Term α} {v : α -> M} :
+    (g : F) {t : L.Term α} {v : α → M} :
     t.realize (g ∘ v) = g (t.realize v) := by
   induction t
   · rfl
@@ -692,390 +624,289 @@ theorem HomClass.realize_term {F : Type*} [FunLike F M N] [HomClass L F M N]
     ext x
     simp [*]
 
-variable {n : Nat}
+variable {n : ℕ}
 
 namespace BoundedFormula
 
 open Term
 
-/--
-Definition of `Realize` / `Realize` 的定义
+/-- A bounded formula can be evaluated as true or false by giving values to each free and bound
+variable. -/
+/-
+**FirstOrder.Language.BoundedFormula.Realize** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrd
+er.Language.BoundedFormula`。
+形式化陈述：{L : FirstOrder.Language} →   {M : Type w} → [L.Structure M] → {α : Type u
+'} → {l : ℕ} → L.BoundedFormula α l → (α → M) → (Fin l → M) → Prop
+参数：α → M；Fin l → M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Realize
-  signature: : forall {l} (_f : L.BoundedFormula α l) (_v : α -> M) (_xs : Fin l -> M), Prop
-
-中文:
-定义 实数ize
-  签名: : 对任意 {l} (_f : L.BoundedFormula α l) (_v : α -> M) (_xs : 有限集 l -> M), 命题
-
-Depends on / 依赖: atTop_isCountablyGenerated_of_archimedean
+--- 原说明 ---
+A bounded formula can be evaluated as true or false by giving values to each fre
+e and bound
+variable.
 -/
-def Realize : forall {l} (_f : L.BoundedFormula α l) (_v : α -> M) (_xs : Fin l -> M), Prop
+def Realize : ∀ {l} (_f : L.BoundedFormula α l) (_v : α → M) (_xs : Fin l → M), Prop
   | _, falsum, _v, _xs => False
   | _, equal t₁ t₂, v, xs => t₁.realize (Sum.elim v xs) = t₂.realize (Sum.elim v xs)
   | _, rel R ts, v, xs => RelMap R fun i => (ts i).realize (Sum.elim v xs)
-  | _, imp f₁ f₂, v, xs => Realize f₁ v xs -> Realize f₂ v xs
-  | _, all f, v, xs => forall x : M, Realize f v (snoc xs x)
+  | _, imp f₁ f₂, v, xs => Realize f₁ v xs → Realize f₂ v xs
+  | _, all f, v, xs => ∀ x : M, Realize f v (snoc xs x)
 
-variable {l : Nat} {φ ψ : L.BoundedFormula α l} {θ : L.BoundedFormula α l.succ}
-variable {v : α -> M} {xs : Fin l -> M}
-
-@[simp]
-/--
-theorem `realize_bot` / 定理 `realize_bot`
-
-English:
-theorem realize_bot
-  statement: (⊥ : L.BoundedFormula α l).Realize v xs ↔ False
-  proof: Iff.rfl
+variable {l : ℕ} {φ ψ : L.BoundedFormula α l} {θ : L.BoundedFormula α l.succ}
+variable {v : α → M} {xs : Fin l → M}
 
 @[simp]
-
-中文:
-定理 realize_bot
-  结论: (⊥ : L.BoundedFormula α l).实数ize v xs ↔ 假
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl, atBot_isCountablyGenerated_of_archimedean
+/-
+**FirstOrder.Language.BoundedFormula.realize_bot** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_bot : (⊥ : L.BoundedFormula α l).Realize v xs ↔ False
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_bot : (⊥ : L.BoundedFormula α l).Realize v xs ↔ False :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `realize_not` / 定理 `realize_not`
-
-English:
-theorem realize_not
-  statement: φ.not.Realize v xs ↔ ¬φ.Realize v xs
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 realize_not
-  结论: φ.not.实数ize v xs ↔ ¬φ.实数ize v xs
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.BoundedFormula.realize_not** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_not : φ.not.Realize v xs ↔ ¬φ.Realize v xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_not : φ.not.Realize v xs ↔ ¬φ.Realize v xs :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `realize_bdEqual` / 定理 `realize_bdEqual`
-
-English:
-theorem realize_bdEqual
-  given: (t₁ t₂ : L.Term (α oplus (Fin l)))
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 realize_bdEqual
-  条件: (t₁ t₂ : L.项 (α oplus (有限集 l)))
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.BoundedFormula.realize_bdEqual** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_bdEqual (t₁ t₂ : L.Term (α oplus (Fin l))) : (t₁.bdEqual t₂).Reali
+ze v xs ↔ t₁.realize (Sum.elim v xs) = t₂.realize (Sum.elim v xs)
+参数：t₁ t₂ : L.Term (α oplus (Fin l))。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem realize_bdEqual (t₁ t₂ : L.Term (α oplus (Fin l))) :
+theorem realize_bdEqual (t₁ t₂ : L.Term (α ⊕ (Fin l))) :
     (t₁.bdEqual t₂).Realize v xs ↔ t₁.realize (Sum.elim v xs) = t₂.realize (Sum.elim v xs) :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `realize_top` / 定理 `realize_top`
-
-English:
-theorem realize_top
-  statement: (⊤ : L.BoundedFormula α l).Realize v xs ↔ True
-  proof: by simp [Top.top]
-
-@[simp]
-
-中文:
-定理 realize_top
-  结论: (⊤ : L.BoundedFormula α l).实数ize v xs ↔ 真
-  证明: by simp [Top.top]
-
-@[simp]
-
-Depends on / 依赖: Top.top
+/-
+**FirstOrder.Language.BoundedFormula.realize_top** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_top : (⊤ : L.BoundedFormula α l).Realize v xs ↔ True
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem realize_top : (⊤ : L.BoundedFormula α l).Realize v xs ↔ True := by simp [Top.top]
 
 @[simp]
-/--
-theorem `realize_inf` / 定理 `realize_inf`
-
-English:
-theorem realize_inf
-  statement: (φ ⊓ ψ).Realize v xs ↔ φ.Realize v xs ∧ ψ.Realize v xs
-  proof: by
-  simp [Realize, Min.min]
-
-@[simp]
-
-中文:
-定理 realize_inf
-  结论: (φ ⊓ ψ).实数ize v xs ↔ φ.实数ize v xs ∧ ψ.实数ize v xs
-  证明: by
-  simp [Realize, Min.min]
-
-@[simp]
-
-Depends on / 依赖: Min.min, Realize
+/-
+**FirstOrder.Language.BoundedFormula.realize_inf** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_inf : (φ ⊓ ψ).Realize v xs ↔ φ.Realize v xs ∧ ψ.Realize v xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem realize_inf : (φ ⊓ ψ).Realize v xs ↔ φ.Realize v xs ∧ ψ.Realize v xs := by
   simp [Realize, Min.min]
 
 @[simp]
-/--
-theorem `realize_foldr_inf` / 定理 `realize_foldr_inf`
-
-English:
-theorem realize_foldr_inf
-  given: (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin n -> M)
-  proof: by
+/-
+**FirstOrder.Language.BoundedFormula.realize_foldr_inf** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_foldr_inf (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin
+ n -> M) : (l.foldr (· ⊓ ·) ⊤).Realize v xs ↔ forall φ in l, BoundedFormula.Real
+ize φ v xs
+参数：l : List (L.BoundedFormula α n)；v : α -> M；xs : Fin n -> M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem realize_foldr_inf (l : List (L.BoundedFormula α n)) (v : α → M) (xs : Fin n → M) :
+    (l.foldr (· ⊓ ·) ⊤).Realize v xs ↔ ∀ φ ∈ l, BoundedFormula.Realize φ v xs := by
   induction l with
   | nil => simp
   | cons φ l ih => simp [ih]
 
 @[simp]
-
-中文:
-定理 realize_foldr_inf
-  条件: (l : 列表 (L.BoundedFormula α n)) (v : α -> M) (xs : 有限集 n -> M)
-  证明: by
-  induction l with
-  | nil => simp
-  | cons φ l ih => simp [ih]
-
-@[simp]
+/-
+**FirstOrder.Language.BoundedFormula.realize_imp** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_imp : (φ.imp ψ).Realize v xs ↔ φ.Realize v xs -> ψ.Realize v xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_foldr_inf (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin n -> M) :
-    (l.foldr (· ⊓ ·) ⊤).Realize v xs ↔ forall φ in l, BoundedFormula.Realize φ v xs := by
-  induction l with
-  | nil => simp
-  | cons φ l ih => simp [ih]
-
-@[simp]
-/--
-theorem `realize_imp` / 定理 `realize_imp`
-
-English:
-theorem realize_imp
-  statement: (φ.imp ψ).Realize v xs ↔ φ.Realize v xs -> ψ.Realize v xs
-  proof: by
+theorem realize_imp : (φ.imp ψ).Realize v xs ↔ φ.Realize v xs → ψ.Realize v xs := by
   simp only [Realize]
 
-中文:
-定理 realize_imp
-  结论: (φ.imp ψ).实数ize v xs ↔ φ.实数ize v xs -> ψ.实数ize v xs
-  证明: by
-  simp only [Realize]
+/-- List.foldr on BoundedFormula.imp gives a big "And" of input conditions. -/
+/-
+**FirstOrder.Language.BoundedFormula.realize_foldr_imp** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_foldr_imp {k : Nat} (l : List (L.BoundedFormula α k)) (f : L.Bound
+edFormula α k) : forall (v : α -> M) xs, (l.foldr BoundedFormula.imp f).Realize 
+v xs = ((forall i in l, i.Realize v xs) -> f.Realize v xs)
+参数：l : List (L.BoundedFormula α k)；f : L.BoundedFormula α k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
 
-Depends on / 依赖: Realize
+--- 原说明 ---
+List.foldr on BoundedFormula.imp gives a big "And" of input conditions.
 -/
-theorem realize_imp : (φ.imp ψ).Realize v xs ↔ φ.Realize v xs -> ψ.Realize v xs := by
-  simp only [Realize]
-
-/--
-theorem `realize_foldr_imp` / 定理 `realize_foldr_imp`
-
-English:
-theorem realize_foldr_imp
-  statement: {k : Nat} (l : List (L.BoundedFormula α k))
-  proof: by
-  intro v xs
-  induction l
-  next => simp
-  next f' _ _ => by_cases f'.Realize v xs <;> simp [*]
-
-@[simp]
-
-中文:
-定理 realize_foldr_imp
-  结论: {k : 自然数} (l : 列表 (L.BoundedFormula α k))
-  证明: by
-  intro v xs
-  induction l
-  next => simp
-  next f' _ _ => by_cases f'.Realize v xs <;> simp [*]
-
-@[simp]
-
-Depends on / 依赖: Realize
--/
-theorem realize_foldr_imp {k : Nat} (l : List (L.BoundedFormula α k))
+theorem realize_foldr_imp {k : ℕ} (l : List (L.BoundedFormula α k))
     (f : L.BoundedFormula α k) :
-    forall (v : α -> M) xs,
+    ∀ (v : α → M) xs,
       (l.foldr BoundedFormula.imp f).Realize v xs =
-      ((forall i in l, i.Realize v xs) -> f.Realize v xs) := by
+      ((∀ i ∈ l, i.Realize v xs) → f.Realize v xs) := by
   intro v xs
   induction l
   next => simp
   next f' _ _ => by_cases f'.Realize v xs <;> simp [*]
 
 @[simp]
-/--
-theorem `realize_rel` / 定理 `realize_rel`
-
-English:
-theorem realize_rel
-  given: {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term _}
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 realize_rel
-  条件: {k : 自然数} {R : L.关系 k} {ts : 有限集 k -> L.项 _}
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.BoundedFormula.realize_rel** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term _} : (R.bo
+undedFormula ts).Realize v xs ↔ RelMap R fun i => (ts i).realize (Sum.elim v xs)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term _} :
+theorem realize_rel {k : ℕ} {R : L.Relations k} {ts : Fin k → L.Term _} :
     (R.boundedFormula ts).Realize v xs ↔ RelMap R fun i => (ts i).realize (Sum.elim v xs) :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `realize_rel₁` / 定理 `realize_rel₁`
-
-English:
-theorem realize_rel₁
-  given: {R : L.Relations 1} {t : L.Term _}
-  proof: by
-  rw [Relations.boundedFormula₁]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext fun _ => ?_)
-  simp only [Matrix.cons_val_fin_one]
-
-@[simp]
-
-中文:
-定理 realize_rel₁
-  条件: {R : L.关系 1} {t : L.项 _}
-  证明: by
-  rw [Relations.boundedFormula₁]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext fun _ => ?_)
-  simp only [Matrix.cons_val_fin_one]
-
-@[simp]
-
-Depends on / 依赖: Matrix, Matrix.cons_val_fin_one, Relations, Relations.boundedFormula, cons_val_fin_one, iff_eq_eq, realize_rel
+/-
+**FirstOrder.Language.BoundedFormula.realize_rel** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term _} : (R.bo
+undedFormula ts).Realize v xs ↔ RelMap R fun i => (ts i).realize (Sum.elim v xs)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_rel₁ {R : L.Relations 1} {t : L.Term _} :
     (R.boundedFormula₁ t).Realize v xs ↔ RelMap R ![t.realize (Sum.elim v xs)] := by
-  rw [Relations.boundedFormula₁]; rw [realize_rel]; rw [iff_eq_eq]
+  rw [Relations.boundedFormula₁, realize_rel, iff_eq_eq]
   refine congr rfl (funext fun _ => ?_)
   simp only [Matrix.cons_val_fin_one]
 
 @[simp]
-/--
-theorem `realize_rel₂` / 定理 `realize_rel₂`
-
-English:
-theorem realize_rel₂
-  given: {R : L.Relations 2} {t₁ t₂ : L.Term _}
-  proof: by
-  rw [Relations.boundedFormula₂]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext (Fin.cases ?_ ?_))
-  · simp only [Matrix.cons_val_zero]
-  · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
-
-@[simp]
-
-中文:
-定理 realize_rel₂
-  条件: {R : L.关系 2} {t₁ t₂ : L.项 _}
-  证明: by
-  rw [Relations.boundedFormula₂]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext (Fin.cases ?_ ?_))
-  · simp only [Matrix.cons_val_zero]
-  · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
-
-@[simp]
-
-Depends on / 依赖: Fin.cases, Matrix, Matrix.cons_val_fin_one, Matrix.cons_val_succ, Matrix.cons_val_zero, Relations, Relations.boundedFormula, cons_val_fin_one, cons_val_succ, cons_val_zero, forall_const, iff_eq_eq, realize_rel
+/-
+**FirstOrder.Language.BoundedFormula.realize_rel** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term _} : (R.bo
+undedFormula ts).Realize v xs ↔ RelMap R fun i => (ts i).realize (Sum.elim v xs)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_rel₂ {R : L.Relations 2} {t₁ t₂ : L.Term _} :
     (R.boundedFormula₂ t₁ t₂).Realize v xs ↔
       RelMap R ![t₁.realize (Sum.elim v xs), t₂.realize (Sum.elim v xs)] := by
-  rw [Relations.boundedFormula₂]; rw [realize_rel]; rw [iff_eq_eq]
+  rw [Relations.boundedFormula₂, realize_rel, iff_eq_eq]
   refine congr rfl (funext (Fin.cases ?_ ?_))
   · simp only [Matrix.cons_val_zero]
   · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
 
 @[simp]
-/--
-theorem `realize_sup` / 定理 `realize_sup`
-
-English:
-theorem realize_sup
-  statement: (φ ⊔ ψ).Realize v xs ↔ φ.Realize v xs ∨ ψ.Realize v xs
-  proof: by
-  simp only [max]
-  tauto
-
-@[simp]
-
-中文:
-定理 realize_sup
-  结论: (φ ⊔ ψ).实数ize v xs ↔ φ.实数ize v xs ∨ ψ.实数ize v xs
-  证明: by
-  simp only [max]
-  tauto
-
-@[simp]
+/-
+**FirstOrder.Language.BoundedFormula.realize_sup** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_sup : (φ ⊔ ψ).Realize v xs ↔ φ.Realize v xs ∨ ψ.Realize v xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
 -/
 theorem realize_sup : (φ ⊔ ψ).Realize v xs ↔ φ.Realize v xs ∨ ψ.Realize v xs := by
   simp only [max]
   tauto
 
 @[simp]
-/--
-theorem `realize_foldr_sup` / 定理 `realize_foldr_sup`
-
-English:
-theorem realize_foldr_sup
-  given: (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin n -> M)
-  proof: by
-  induction l with
-  | nil => simp
-  | cons φ l ih =>
-    simp_rw [List.foldr_cons, realize_sup, ih, List.mem_cons, or_and_right, exists_or,
-      exists_eq_left]
-
-@[simp]
-
-中文:
-定理 realize_foldr_sup
-  条件: (l : 列表 (L.BoundedFormula α n)) (v : α -> M) (xs : 有限集 n -> M)
-  证明: by
-  induction l with
-  | nil => simp
-  | cons φ l ih =>
-    simp_rw [List.foldr_cons, realize_sup, ih, List.mem_cons, or_and_right, exists_or,
-      exists_eq_left]
-
-@[simp]
-
-Depends on / 依赖: List.foldr_cons, List.mem_cons, exists_eq_left, exists_or, foldr_cons, mem_cons, or_and_right, realize_sup, simp_rw
+/-
+**FirstOrder.Language.BoundedFormula.realize_foldr_sup** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_foldr_sup (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin
+ n -> M) : (l.foldr (· ⊔ ·) ⊥).Realize v xs ↔ exists φ in l, BoundedFormula.Real
+ize φ v xs
+参数：l : List (L.BoundedFormula α n)；v : α -> M；xs : Fin n -> M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_foldr_sup (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin n -> M) :
-    (l.foldr (· ⊔ ·) ⊥).Realize v xs ↔ exists φ in l, BoundedFormula.Realize φ v xs := by
+theorem realize_foldr_sup (l : List (L.BoundedFormula α n)) (v : α → M) (xs : Fin n → M) :
+    (l.foldr (· ⊔ ·) ⊥).Realize v xs ↔ ∃ φ ∈ l, BoundedFormula.Realize φ v xs := by
   induction l with
   | nil => simp
   | cons φ l ih =>
@@ -1083,136 +914,142 @@ theorem realize_foldr_sup (l : List (L.BoundedFormula α n)) (v : α -> M) (xs :
       exists_eq_left]
 
 @[simp]
-/--
-theorem `realize_all` / 定理 `realize_all`
-
-English:
-theorem realize_all
-  statement: (all θ).Realize v xs ↔ forall a : M, θ.Realize v (Fin.snoc xs a)
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 realize_all
-  结论: (all θ).实数ize v xs ↔ 对任意 a : M, θ.实数ize v (有限集.snoc xs a)
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.BoundedFormula.realize_all** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_all : (all θ).Realize v xs ↔ forall a : M, θ.Realize v (Fin.snoc x
+s a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem realize_all : (all θ).Realize v xs ↔ forall a : M, θ.Realize v (Fin.snoc xs a) :=
+theorem realize_all : (all θ).Realize v xs ↔ ∀ a : M, θ.Realize v (Fin.snoc xs a) :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `realize_ex` / 定理 `realize_ex`
-
-English:
-theorem realize_ex
-  statement: θ.ex.Realize v xs ↔ exists a : M, θ.Realize v (Fin.snoc xs a)
-  proof: by
-  rw [BoundedFormula.ex]; rw [realize_not]; rw [realize_all]; rw [not_forall]
-  simp_rw [realize_not, Classical.not_not]
-
-@[simp]
-
-中文:
-定理 realize_ex
-  结论: θ.ex.实数ize v xs ↔ 存在 a : M, θ.实数ize v (有限集.snoc xs a)
-  证明: by
-  rw [BoundedFormula.ex]; rw [realize_not]; rw [realize_all]; rw [not_forall]
-  simp_rw [realize_not, Classical.not_not]
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.ex, Classical, Classical.not_not, not_forall, not_not, realize_all, realize_not, simp_rw
+/-
+**FirstOrder.Language.BoundedFormula.realize_ex** 是 Mathlib 中的一个定理，位于命名空间 `First
+Order.Language.BoundedFormula`。
+形式化陈述：realize_ex : θ.ex.Realize v xs ↔ exists a : M, θ.Realize v (Fin.snoc xs a)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.ex.eq_1`：∀ {L : FirstOrder.Language} 
+{α : Type u'} {n : ℕ} (φ : L.BoundedFormula α (n + 1)), φ.ex = φ.not.all.not
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_not`：realize_not : φ.not.Real
+ize v xs ↔ ¬φ.Realize v xs
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_all`：realize_all : (all θ).Re
+alize v xs ↔ forall a : M, θ.Realize v (Fin.snoc xs a)
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_ex : θ.ex.Realize v xs ↔ exists a : M, θ.Realize v (Fin.snoc xs a) := by
-  rw [BoundedFormula.ex]; rw [realize_not]; rw [realize_all]; rw [not_forall]
+theorem realize_ex : θ.ex.Realize v xs ↔ ∃ a : M, θ.Realize v (Fin.snoc xs a) := by
+  rw [BoundedFormula.ex, realize_not, realize_all, not_forall]
   simp_rw [realize_not, Classical.not_not]
 
 @[simp]
-/--
-theorem `realize_iff` / 定理 `realize_iff`
-
-English:
-theorem realize_iff
-  statement: (φ.iff ψ).Realize v xs ↔ (φ.Realize v xs ↔ ψ.Realize v xs)
-  proof: by
-  simp only [BoundedFormula.iff, realize_inf, realize_imp, ← iff_def]
-
-中文:
-定理 realize_iff
-  结论: (φ.iff ψ).实数ize v xs ↔ (φ.实数ize v xs ↔ ψ.实数ize v xs)
-  证明: by
-  simp only [BoundedFormula.iff, realize_inf, realize_imp, ← iff_def]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.iff, iff_def, realize_imp, realize_inf
+/-
+**FirstOrder.Language.BoundedFormula.realize_iff** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_iff : (φ.iff ψ).Realize v xs ↔ (φ.Realize v xs ↔ ψ.Realize v xs)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem realize_iff : (φ.iff ψ).Realize v xs ↔ (φ.Realize v xs ↔ ψ.Realize v xs) := by
   simp only [BoundedFormula.iff, realize_inf, realize_imp, ← iff_def]
-
-/--
-theorem `realize_castLE_of_eq` / 定理 `realize_castLE_of_eq`
-
-English:
-theorem realize_castLE_of_eq
-  statement: {m n : Nat} (h : m = n) {h' : m <= n} {φ : L.BoundedFormula α m}
-  proof: by
-  subst h
-  simp only [castLE_rfl, cast_refl, Function.comp_id]
-
-中文:
-定理 realize_castLE_of_eq
-  结论: {m n : 自然数} (h : m = n) {h' : m <= n} {φ : L.BoundedFormula α m}
-  证明: by
-  subst h
-  simp only [castLE_rfl, cast_refl, Function.comp_id]
-
-Depends on / 依赖: Function, Function.comp_id, castLE_rfl, cast_refl, comp_id
+/-
+**FirstOrder.Language.BoundedFormula.realize_castLE_of_eq** 是 Mathlib 中的一个定理，位于命
+名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_castLE_of_eq {m n : Nat} (h : m = n) {h' : m <= n} {φ : L.BoundedF
+ormula α m} {v : α -> M} {xs : Fin n -> M} : (φ.castLE h').Realize v xs ↔ φ.Real
+ize v (xs ∘ Fin.cast h)
+参数：h : m = n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FirstOrder.Language.BoundedFormula.castLE_rfl`：castLE_rfl {n} (h : n <= 
+n) (φ : L.BoundedFormula α n) : φ.castLE h = φ
+· 使用定理 `Fin.cast_refl`：∀ (n : ℕ) (h : n = n), Fin.cast h = id
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_castLE_of_eq {m n : Nat} (h : m = n) {h' : m <= n} {φ : L.BoundedFormula α m}
-    {v : α -> M} {xs : Fin n -> M} : (φ.castLE h').Realize v xs ↔ φ.Realize v (xs ∘ Fin.cast h) := by
+theorem realize_castLE_of_eq {m n : ℕ} (h : m = n) {h' : m ≤ n} {φ : L.BoundedFormula α m}
+    {v : α → M} {xs : Fin n → M} : (φ.castLE h').Realize v xs ↔ φ.Realize v (xs ∘ Fin.cast h) := by
   subst h
   simp only [castLE_rfl, cast_refl, Function.comp_id]
-
-/--
-theorem `realize_mapTermRel_id` / 定理 `realize_mapTermRel_id`
-
-English:
-theorem realize_mapTermRel_id
-  statement: [L'.Structure M]
-  proof: by
-  induction φ with
-  | falsum => rfl
-  | equal => simp [mapTermRel, Realize, h1]
-  | rel => simp [mapTermRel, Realize, h1, h2]
-  | imp _ _ ih1 ih2 => simp [mapTermRel, Realize, ih1, ih2]
-  | all _ ih => simp only [mapTermRel, Realize, ih, id]
-
-中文:
-定理 realize_mapTermRel_id
-  结论: [L'.结构 M]
-  证明: by
-  induction φ with
-  | falsum => rfl
-  | equal => simp [mapTermRel, Realize, h1]
-  | rel => simp [mapTermRel, Realize, h1, h2]
-  | imp _ _ ih1 ih2 => simp [mapTermRel, Realize, ih1, ih2]
-  | all _ ih => simp only [mapTermRel, Realize, ih, id]
-
-Depends on / 依赖: Realize, falsum, mapTermRel
+/-
+**FirstOrder.Language.BoundedFormula.realize_mapTermRel_id** 是 Mathlib 中的一个定理，位于
+命名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_mapTermRel_id [L'.Structure M] {ft : forall n, L.Term (α oplus (Fi
+n n)) -> L'.Term (β oplus (Fin n))} {fr : forall n, L.Relations n -> L'.Relation
+s n} {n} {φ : L.BoundedFormula α n} {v : α -> M} {v' : β -> M} {xs : Fin n -> M}
+ (h1 : forall (n) (t : L.Term (α oplus (Fin n))) (xs : Fin n -> M), (ft n t).rea
+lize (Sum.elim v' xs) = t.realize (Sum.elim v xs)) (h2 : forall (n) (R : L.Relat
+ions n) (x : Fin n -> M), RelMap (fr n R) x = RelMap R x) : (φ.mapTermRel ft fr 
+fun _ => id).Realize v' xs
+参数：α oplus (Fin n)；β oplus (Fin n)；h1 : forall (n) (t : L.Term (α oplus (Fin n))
+) (xs : Fin n -> M), (ft n t).realize (Sum.elim v' xs) = t.realize (Sum.elim v x
+s)；h2 : forall (n) (R : L.Relations n) (x : Fin n -> M), RelMap (fr n R) x = Rel
+Map R x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_2`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (t₁ t₂ : L.Term (α ⊕…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_3`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (l : ℕ) (R : L.Relat…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_5`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (f : L.BoundedFormul…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 theorem realize_mapTermRel_id [L'.Structure M]
-    {ft : forall n, L.Term (α oplus (Fin n)) -> L'.Term (β oplus (Fin n))}
-    {fr : forall n, L.Relations n -> L'.Relations n} {n} {φ : L.BoundedFormula α n} {v : α -> M}
-    {v' : β -> M} {xs : Fin n -> M}
+    {ft : ∀ n, L.Term (α ⊕ (Fin n)) → L'.Term (β ⊕ (Fin n))}
+    {fr : ∀ n, L.Relations n → L'.Relations n} {n} {φ : L.BoundedFormula α n} {v : α → M}
+    {v' : β → M} {xs : Fin n → M}
     (h1 :
-      forall (n) (t : L.Term (α oplus (Fin n))) (xs : Fin n -> M),
+      ∀ (n) (t : L.Term (α ⊕ (Fin n))) (xs : Fin n → M),
         (ft n t).realize (Sum.elim v' xs) = t.realize (Sum.elim v xs))
-    (h2 : forall (n) (R : L.Relations n) (x : Fin n -> M), RelMap (fr n R) x = RelMap R x) :
+    (h2 : ∀ (n) (R : L.Relations n) (x : Fin n → M), RelMap (fr n R) x = RelMap R x) :
     (φ.mapTermRel ft fr fun _ => id).Realize v' xs ↔ φ.Realize v xs := by
   induction φ with
   | falsum => rfl
@@ -1220,47 +1057,62 @@ theorem realize_mapTermRel_id [L'.Structure M]
   | rel => simp [mapTermRel, Realize, h1, h2]
   | imp _ _ ih1 ih2 => simp [mapTermRel, Realize, ih1, ih2]
   | all _ ih => simp only [mapTermRel, Realize, ih, id]
-
-/--
-theorem `realize_mapTermRel_add_castLe` / 定理 `realize_mapTermRel_add_castLe`
-
-English:
-theorem realize_mapTermRel_add_castLe
-  statement: [L'.Structure M] {k : Nat}
-  proof: by
-  induction φ with
-  | falsum => rfl
-  | equal => simp [mapTermRel, Realize, h1]
-  | rel => simp [mapTermRel, Realize, h1, h2]
-  | imp _ _ ih1 ih2 => simp [mapTermRel, Realize, ih1, ih2]
-  | all _ ih => simp [mapTermRel, Realize, ih, hv]
-
-@[simp]
-
-中文:
-定理 realize_mapTermRel_add_castLe
-  结论: [L'.结构 M] {k : 自然数}
-  证明: by
-  induction φ with
-  | falsum => rfl
-  | equal => simp [mapTermRel, Realize, h1]
-  | rel => simp [mapTermRel, Realize, h1, h2]
-  | imp _ _ ih1 ih2 => simp [mapTermRel, Realize, ih1, ih2]
-  | all _ ih => simp [mapTermRel, Realize, ih, hv]
-
-@[simp]
-
-Depends on / 依赖: Realize, falsum, mapTermRel
+/-
+**FirstOrder.Language.BoundedFormula.realize_mapTermRel_add_castLe** 是 Mathlib 中
+的一个定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_mapTermRel_add_castLe [L'.Structure M] {k : Nat} {ft : forall n, L
+.Term (α oplus (Fin n)) -> L'.Term (β oplus (Fin (k + n)))} {fr : forall n, L.Re
+lations n -> L'.Relations n} {n} {φ : L.BoundedFormula α n} (v : forall {n}, (Fi
+n (k + n) -> M) -> α -> M) {v' : β -> M} (xs : Fin (k + n) -> M) (h1 : forall (n
+) (t : L.Term (α oplus (Fin n))) (xs' : Fin (k + n) -> M), (ft n t).realize (Sum
+.elim v' xs') = t.realize (Sum.elim (v xs') (xs' ∘ Fin.natAdd _))) (h2 : forall 
+(n) (R : L.Relations n) (x
+参数：α oplus (Fin n)；β oplus (Fin (k + n))；v : forall {n}, (Fin (k + n) -> M) -> α
+ -> M；xs : Fin (k + n) -> M；h1 : forall (n) (t : L.Term (α oplus (Fin n))) (xs' 
+: Fin (k + n) -> M), (ft n t).realize (Sum.elim v' xs') = t.realize (Sum.elim (v
+ xs') (xs' ∘ Fin.natAdd _))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_2`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (t₁ t₂ : L.Term (α ⊕…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_3`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (l : ℕ) (R : L.Relat…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `FirstOrder.Language.BoundedFormula.castLE_rfl`：castLE_rfl {n} (h : n <= 
+n) (φ : L.BoundedFormula α n) : φ.castLE h = φ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Fin.snoc_comp_natAdd`：snoc_comp_natAdd {n m : Nat} {α : Sort*} (f : Fin 
+(m + n) -> α) (a : α) : (snoc f a : Fin _ -> α) ∘ (natAdd m : Fin (n + 1) -> Fin
+ (m + n + …
 -/
-theorem realize_mapTermRel_add_castLe [L'.Structure M] {k : Nat}
-    {ft : forall n, L.Term (α oplus (Fin n)) -> L'.Term (β oplus (Fin (k + n)))}
-    {fr : forall n, L.Relations n -> L'.Relations n} {n} {φ : L.BoundedFormula α n}
-    (v : forall {n}, (Fin (k + n) -> M) -> α -> M) {v' : β -> M} (xs : Fin (k + n) -> M)
+theorem realize_mapTermRel_add_castLe [L'.Structure M] {k : ℕ}
+    {ft : ∀ n, L.Term (α ⊕ (Fin n)) → L'.Term (β ⊕ (Fin (k + n)))}
+    {fr : ∀ n, L.Relations n → L'.Relations n} {n} {φ : L.BoundedFormula α n}
+    (v : ∀ {n}, (Fin (k + n) → M) → α → M) {v' : β → M} (xs : Fin (k + n) → M)
     (h1 :
-      forall (n) (t : L.Term (α oplus (Fin n))) (xs' : Fin (k + n) -> M),
+      ∀ (n) (t : L.Term (α ⊕ (Fin n))) (xs' : Fin (k + n) → M),
         (ft n t).realize (Sum.elim v' xs') = t.realize (Sum.elim (v xs') (xs' ∘ Fin.natAdd _)))
-    (h2 : forall (n) (R : L.Relations n) (x : Fin n -> M), RelMap (fr n R) x = RelMap R x)
-    (hv : forall (n) (xs : Fin (k + n) -> M) (x : M), @v (n + 1) (snoc xs x : Fin _ -> M) = v xs) :
+    (h2 : ∀ (n) (R : L.Relations n) (x : Fin n → M), RelMap (fr n R) x = RelMap R x)
+    (hv : ∀ (n) (xs : Fin (k + n) → M) (x : M), @v (n + 1) (snoc xs x : Fin _ → M) = v xs) :
     (φ.mapTermRel ft fr fun _ => castLE (add_assoc _ _ _).symm.le).Realize v' xs ↔
       φ.Realize (v xs) (xs ∘ Fin.natAdd _) := by
   induction φ with
@@ -1271,80 +1123,116 @@ theorem realize_mapTermRel_add_castLe [L'.Structure M] {k : Nat}
   | all _ ih => simp [mapTermRel, Realize, ih, hv]
 
 @[simp]
-/--
-theorem `realize_relabel` / 定理 `realize_relabel`
-
-English:
-theorem realize_relabel
-  statement: {m n : Nat} {φ : L.BoundedFormula α n} {g : α -> β oplus (Fin m)} {v : β -> M}
-  proof: by
-  apply realize_mapTermRel_add_castLe <;> simp
-
-中文:
-定理 realize_relabel
-  结论: {m n : 自然数} {φ : L.BoundedFormula α n} {g : α -> β oplus (有限集 m)} {v : β -> M}
-  证明: by
-  apply realize_mapTermRel_add_castLe <;> simp
-
-Depends on / 依赖: realize_mapTermRel_add_castLe
+/-
+**FirstOrder.Language.BoundedFormula.realize_relabel** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_relabel {m n : Nat} {φ : L.BoundedFormula α n} {g : α -> β oplus (
+Fin m)} {v : β -> M} {xs : Fin (m + n) -> M} : (φ.relabel g).Realize v xs ↔ φ.Re
+alize (Sum.elim v (xs ∘ Fin.castAdd n) ∘ g) (xs ∘ Fin.natAdd m)
+参数：Fin m；m + n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_mapTermRel_add_castLe`：realiz
+e_mapTermRel_add_castLe [L'.Structure M] {k : Nat} {ft : forall n, L.Term (α opl
+us (Fin n)) -> L'.Term (β oplus (Fin (k + n)))} {fr : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用定理 `FirstOrder.Language.BoundedFormula.sumElim_comp_relabelAux`：sumElim_comp
+_relabelAux {m : Nat} {g : α -> β oplus (Fin n)} {v : β -> M} {xs : Fin (n + m) 
+-> M} : Sum.elim v xs ∘ relabelAux g m = Sum.eli…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Fin.snoc_comp_castAdd`：snoc_comp_castAdd {n m : Nat} {α : Sort*} (f : Fi
+n (n + m) -> α) (a : α) : (snoc f a : Fin _ -> α) ∘ castAdd (m + 1) = f ∘ castAd
+d m
 -/
-theorem realize_relabel {m n : Nat} {φ : L.BoundedFormula α n} {g : α -> β oplus (Fin m)} {v : β -> M}
-    {xs : Fin (m + n) -> M} :
+theorem realize_relabel {m n : ℕ} {φ : L.BoundedFormula α n} {g : α → β ⊕ (Fin m)} {v : β → M}
+    {xs : Fin (m + n) → M} :
     (φ.relabel g).Realize v xs ↔
       φ.Realize (Sum.elim v (xs ∘ Fin.castAdd n) ∘ g) (xs ∘ Fin.natAdd m) := by
   apply realize_mapTermRel_add_castLe <;> simp
-
-/--
-theorem `realize_liftAt` / 定理 `realize_liftAt`
-
-English:
-theorem realize_liftAt
-  statement: {n n' m : Nat} {φ : L.BoundedFormula α n} {v : α -> M} {xs : Fin (n + n') -> M}
-  proof: by
-  rw [liftAt]
-  induction φ with
-  | falsum => simp [mapTermRel, Realize]
-  | equal => simp [mapTermRel, Realize, Sum.elim_comp_map]
-  | rel => simp [mapTermRel, Realize, Sum.elim_comp_map]
-  | imp _ _ ih1 ih2 => simp only [mapTermRel, Realize, ih1 hmn, ih2 hmn]
-  | @all k _ ih3 =>
-    have h : k + 1 + n' = k + n' + 1 := by rw [add_assoc, add_comm 1 n', ← add_assoc]
-    simp only [mapTermRel, Realize, realize_castLE_of_eq h, ih3 (hmn.trans k.le_succ)]
-    refine forall_congr' fun x => iff_eq_eq.mpr (congr rfl (funext (Fin.lastCases ?_ fun i => ?_)))
-    · simp only [Function.comp_apply, val_last, snoc_last]
-      refine (congr rfl (Fin.ext ?_)).trans (snoc_last _ _)
-      split_ifs <;> dsimp; lia
-    · simp only [Function.comp_apply, Fin.snoc_castSucc]
-      refine (congr rfl (Fin.ext ?_)).trans (snoc_castSucc _ _ _)
-      simp only [val_castSucc, val_cast]
-      split_ifs <;> simp
-
-中文:
-定理 realize_liftAt
-  结论: {n n' m : 自然数} {φ : L.BoundedFormula α n} {v : α -> M} {xs : 有限集 (n + n') -> M}
-  证明: by
-  rw [liftAt]
-  induction φ with
-  | falsum => simp [mapTermRel, Realize]
-  | equal => simp [mapTermRel, Realize, Sum.elim_comp_map]
-  | rel => simp [mapTermRel, Realize, Sum.elim_comp_map]
-  | imp _ _ ih1 ih2 => simp only [mapTermRel, Realize, ih1 hmn, ih2 hmn]
-  | @all k _ ih3 =>
-    have h : k + 1 + n' = k + n' + 1 := by rw [add_assoc, add_comm 1 n', ← add_assoc]
-    simp only [mapTermRel, Realize, realize_castLE_of_eq h, ih3 (hmn.trans k.le_succ)]
-    refine forall_congr' fun x => iff_eq_eq.mpr (congr rfl (funext (Fin.lastCases ?_ fun i => ?_)))
-    · simp only [Function.comp_apply, val_last, snoc_last]
-      refine (congr rfl (Fin.ext ?_)).trans (snoc_last _ _)
-      split_ifs <;> dsimp; lia
-    · simp only [Function.comp_apply, Fin.snoc_castSucc]
-      refine (congr rfl (Fin.ext ?_)).trans (snoc_castSucc _ _ _)
-      simp only [val_castSucc, val_cast]
-      split_ifs <;> simp
-
-Depends on / 依赖: Realize, Sum.elim_comp_map, add_assoc, add_comm, elim_comp_map, falsum, forall_congr, hmn.trans, iff_eq_eq, iff_eq_eq.mpr, k.le_succ, le_succ, liftAt, mapTermRel, realize_castLE_of_eq
+/-
+**FirstOrder.Language.BoundedFormula.realize_liftAt** 是 Mathlib 中的一个定理，位于命名空间 `F
+irstOrder.Language.BoundedFormula`。
+形式化陈述：realize_liftAt {n n' m : Nat} {φ : L.BoundedFormula α n} {v : α -> M} {xs 
+: Fin (n + n') -> M} (hmn : m <= n) : (φ.liftAt n' m).Realize v xs ↔ φ.Realize v
+ (xs ∘ fun i => if ↑i < m then Fin.castAdd n' i else Fin.addNat i n')
+参数：n + n'；hmn : m <= n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.liftAt.eq_1`：∀ {L : FirstOrder.Langua
+ge} {α : Type u'} {x : ℕ} (n' m : ℕ) (φ : L.BoundedFormula α x),   FirstOrder.La
+nguage.BoundedFormula.liftAt n' m φ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_1`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M),   FirstOrder.Language…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_2`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (t₁ t₂ : L.Term (α ⊕…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `FirstOrder.Language.Term.realize_liftAt`：realize_liftAt {n n' m : Nat} {
+t : L.Term (α oplus (Fin n))} {v : α oplus (Fin (n + n')) -> M} : (t.liftAt n' m
+).realize v = t.realize (v ∘ …
+· 使用定理 `Sum.elim_comp_map`：∀ {α : Type u_1} {β : Type u_2} {ε : Sort u_3} {γ : T
+ype u_4} {δ : Type u_5} {f₁ : α → β} {f₂ : β → ε} {g₁ : γ → δ}   {g₂ : δ → ε}, S
+um.elim…
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_3`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (l : ℕ) (R : L.Relat…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_4`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (f₁ f₂ : L.BoundedFo…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_5`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (f : L.BoundedFormul…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_castLE_of_eq`：realize_castLE_
+of_eq {m n : Nat} (h : m = n) {h' : m <= n} {φ : L.BoundedFormula α m} {v : α ->
+ M} {xs : Fin n -> M} : (φ.castLE h').Realize…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用引理 `iff_eq_eq`：iff_eq_eq {a b : Prop} : (a ↔ b) = (a = b)
+· 使用定理 `Fin.snoc_last`：snoc_last : snoc p x (last n) = x
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `Fin.cast.congr_simp`：∀ {n m : ℕ} (eq : n = m) (i i_1 : Fin n), i = i_1 →
+ Fin.cast eq i = Fin.cast eq i_1
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+（共 32 条，此处仅展示前 30 条）
 -/
-theorem realize_liftAt {n n' m : Nat} {φ : L.BoundedFormula α n} {v : α -> M} {xs : Fin (n + n') -> M}
-    (hmn : m <= n) :
+theorem realize_liftAt {n n' m : ℕ} {φ : L.BoundedFormula α n} {v : α → M} {xs : Fin (n + n') → M}
+    (hmn : m ≤ n) :
     (φ.liftAt n' m).Realize v xs ↔
       φ.Realize v (xs ∘ fun i => if ↑i < m then Fin.castAdd n' i else Fin.addNat i n') := by
   rw [liftAt]
@@ -1364,97 +1252,96 @@ theorem realize_liftAt {n n' m : Nat} {φ : L.BoundedFormula α n} {v : α -> M}
       refine (congr rfl (Fin.ext ?_)).trans (snoc_castSucc _ _ _)
       simp only [val_castSucc, val_cast]
       split_ifs <;> simp
-
-/--
-theorem `realize_liftAt_one` / 定理 `realize_liftAt_one`
-
-English:
-theorem realize_liftAt_one
-  statement: {n m : Nat} {φ : L.BoundedFormula α n} {v : α -> M} {xs : Fin (n + 1) -> M}
-  proof: by
-  simp [realize_liftAt, hmn, castSucc]
-
-@[simp]
-
-中文:
-定理 realize_liftAt_one
-  结论: {n m : 自然数} {φ : L.BoundedFormula α n} {v : α -> M} {xs : 有限集 (n + 1) -> M}
-  证明: by
-  simp [realize_liftAt, hmn, castSucc]
-
-@[simp]
-
-Depends on / 依赖: castSucc, realize_liftAt
+/-
+**FirstOrder.Language.BoundedFormula.realize_liftAt_one** 是 Mathlib 中的一个定理，位于命名空
+间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_liftAt_one {n m : Nat} {φ : L.BoundedFormula α n} {v : α -> M} {xs
+ : Fin (n + 1) -> M} (hmn : m <= n) : (φ.liftAt 1 m).Realize v xs ↔ φ.Realize v 
+(xs ∘ fun i => if ↑i < m then castSucc i else i.succ)
+参数：n + 1；hmn : m <= n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_liftAt_one {n m : Nat} {φ : L.BoundedFormula α n} {v : α -> M} {xs : Fin (n + 1) -> M}
-    (hmn : m <= n) :
+theorem realize_liftAt_one {n m : ℕ} {φ : L.BoundedFormula α n} {v : α → M} {xs : Fin (n + 1) → M}
+    (hmn : m ≤ n) :
     (φ.liftAt 1 m).Realize v xs ↔
       φ.Realize v (xs ∘ fun i => if ↑i < m then castSucc i else i.succ) := by
   simp [realize_liftAt, hmn, castSucc]
 
 @[simp]
-/--
-theorem `realize_liftAt_one_self` / 定理 `realize_liftAt_one_self`
-
-English:
-theorem realize_liftAt_one_self
-  statement: {n : Nat} {φ : L.BoundedFormula α n} {v : α -> M}
-  proof: by
-  rw [realize_liftAt_one (refl n)]; rw [iff_eq_eq]
-  refine congr rfl (congr rfl (funext fun i => ?_))
-  rw [if_pos i.is_lt]
-
-@[simp]
-
-中文:
-定理 realize_liftAt_one_self
-  结论: {n : 自然数} {φ : L.BoundedFormula α n} {v : α -> M}
-  证明: by
-  rw [realize_liftAt_one (refl n)]; rw [iff_eq_eq]
-  refine congr rfl (congr rfl (funext fun i => ?_))
-  rw [if_pos i.is_lt]
-
-@[simp]
-
-Depends on / 依赖: i.is_lt, if_pos, iff_eq_eq, is_lt, realize_liftAt_one
+/-
+**FirstOrder.Language.BoundedFormula.realize_liftAt_one_self** 是 Mathlib 中的一个定理，
+位于命名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_liftAt_one_self {n : Nat} {φ : L.BoundedFormula α n} {v : α -> M} 
+{xs : Fin (n + 1) -> M} : (φ.liftAt 1 n).Realize v xs ↔ φ.Realize v (xs ∘ castSu
+cc)
+参数：n + 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_liftAt_one`：realize_liftAt_on
+e {n m : Nat} {φ : L.BoundedFormula α n} {v : α -> M} {xs : Fin (n + 1) -> M} (h
+mn : m <= n) : (φ.liftAt 1 m).Realize v xs …
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用引理 `iff_eq_eq`：iff_eq_eq {a b : Prop} : (a ↔ b) = (a = b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Fin.is_lt`：∀ {n : ℕ} (a : Fin n), ↑a < n
 -/
-theorem realize_liftAt_one_self {n : Nat} {φ : L.BoundedFormula α n} {v : α -> M}
-    {xs : Fin (n + 1) -> M} : (φ.liftAt 1 n).Realize v xs ↔ φ.Realize v (xs ∘ castSucc) := by
-  rw [realize_liftAt_one (refl n)]; rw [iff_eq_eq]
+theorem realize_liftAt_one_self {n : ℕ} {φ : L.BoundedFormula α n} {v : α → M}
+    {xs : Fin (n + 1) → M} : (φ.liftAt 1 n).Realize v xs ↔ φ.Realize v (xs ∘ castSucc) := by
+  rw [realize_liftAt_one (refl n), iff_eq_eq]
   refine congr rfl (congr rfl (funext fun i => ?_))
   rw [if_pos i.is_lt]
 
 @[simp]
-/--
-theorem `realize_subst` / 定理 `realize_subst`
-
-English:
-theorem realize_subst
-  given: {φ : L.BoundedFormula α n} {tf : α -> L.Term β} {v : β -> M} {xs : Fin n -> M}
-  proof: realize_mapTermRel_id
-    (fun n t x => by
-      rw [Term.realize_subst]
-      rcongr a
-      cases a
-      · simp only [Sum.elim_inl, Function.comp_apply, Term.realize_relabel, Sum.elim_comp_inl]
-      · rfl)
-    (by simp)
-
-中文:
-定理 realize_subst
-  条件: {φ : L.BoundedFormula α n} {tf : α -> L.项 β} {v : β -> M} {xs : 有限集 n -> M}
-  证明: realize_mapTermRel_id
-    (fun n t x => by
-      rw [Term.realize_subst]
-      rcongr a
-      cases a
-      · simp only [Sum.elim_inl, Function.comp_apply, Term.realize_relabel, Sum.elim_comp_inl]
-      · rfl)
-    (by simp)
-
-Depends on / 依赖: Function, Function.comp_apply, Sum.elim_comp_inl, Sum.elim_inl, Term.realize_relabel, Term.realize_subst, comp_apply, elim_comp_inl, elim_inl, rcongr, realize_mapTermRel_id, realize_relabel, realize_subst
+/-
+**FirstOrder.Language.BoundedFormula.realize_subst** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.BoundedFormula`。
+形式化陈述：realize_subst {φ : L.BoundedFormula α n} {tf : α -> L.Term β} {v : β -> M}
+ {xs : Fin n -> M} : (φ.subst tf).Realize v xs ↔ φ.Realize (fun a => (tf a).real
+ize v) xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_mapTermRel_id`：realize_mapTer
+mRel_id [L'.Structure M] {ft : forall n, L.Term (α oplus (Fin n)) -> L'.Term (β 
+oplus (Fin n))} {fr : forall n, L.Relations n …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Term.realize_subst`：realize_subst {t : L.Term α} {tf
+ : α -> L.Term β} {v : β -> M} : (t.subst tf).realize v = t.realize fun a => (tf
+ a).realize v
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem realize_subst {φ : L.BoundedFormula α n} {tf : α -> L.Term β} {v : β -> M} {xs : Fin n -> M} :
+theorem realize_subst {φ : L.BoundedFormula α n} {tf : α → L.Term β} {v : β → M} {xs : Fin n → M} :
     (φ.subst tf).Realize v xs ↔ φ.Realize (fun a => (tf a).realize v) xs :=
   realize_mapTermRel_id
     (fun n t x => by
@@ -1466,60 +1353,54 @@ theorem realize_subst {φ : L.BoundedFormula α n} {tf : α -> L.Term β} {v : �
     (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `realize_restrictFreeVar` / 定理 `realize_restrictFreeVar`
-
-English:
-theorem realize_restrictFreeVar
-  statement: [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α n}
-  proof: by
-  induction φ with
-  | falsum => rfl
-  | equal =>
-    simp only [Realize, restrictFreeVar]
-    rw [realize_restrictVarLeft v' (by simp [hv']), realize_restrictVarLeft v' (by simp [hv'])]
-    simp
-  | rel =>
-    simp only [Realize, restrictFreeVar]
-    congr!
-    rw [realize_restrictVarLeft v' (by simp [hv'])]
-    simp
-  | imp _ _ ih1 ih2 =>
-    simp only [Realize, restrictFreeVar]
-    rw [ih1]; rw [ih2] <;> simp [hv']
-  | all _ ih3 =>
-    simp only [restrictFreeVar, Realize]
-    refine forall_congr' (fun _ => ?_)
-    rw [ih3]; simp [hv']
-
-中文:
-定理 realize_restrictFreeVar
-  结论: [DecidableEq α] {n : 自然数} {φ : L.BoundedFormula α n}
-  证明: by
-  induction φ with
-  | falsum => rfl
-  | equal =>
-    simp only [Realize, restrictFreeVar]
-    rw [realize_restrictVarLeft v' (by simp [hv']), realize_restrictVarLeft v' (by simp [hv'])]
-    simp
-  | rel =>
-    simp only [Realize, restrictFreeVar]
-    congr!
-    rw [realize_restrictVarLeft v' (by simp [hv'])]
-    simp
-  | imp _ _ ih1 ih2 =>
-    simp only [Realize, restrictFreeVar]
-    rw [ih1]; rw [ih2] <;> simp [hv']
-  | all _ ih3 =>
-    simp only [restrictFreeVar, Realize]
-    refine forall_congr' (fun _ => ?_)
-    rw [ih3]; simp [hv']
-
-Depends on / 依赖: Realize, falsum, forall_congr, realize_restrictVarLeft, restrictFreeVar
+/-
+**FirstOrder.Language.BoundedFormula.realize_restrictFreeVar** 是 Mathlib 中的一个定理，
+位于命名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_restrictFreeVar [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α 
+n} {f : φ.freeVarFinset -> β} {v : β -> M} {xs : Fin n -> M} (v' : α -> M) (hv' 
+: forall a, v (f a) = v' a) : (φ.restrictFreeVar f).Realize v xs ↔ φ.Realize v' 
+xs
+参数：v' : α -> M；hv' : forall a, v (f a) = v' a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_2`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (t₁ t₂ : L.Term (α ⊕…
+· 使用定理 `FirstOrder.Language.Term.realize_restrictVarLeft`：realize_restrictVarLef
+t [DecidableEq α] {γ : Type*} {t : L.Term (α oplus γ)} {f : t.varFinsetLeft -> β
+} {xs : β oplus γ -> M} (xs' : α -> M)…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_3`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (l : ℕ) (R : L.Relat…
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_4`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (f₁ f₂ : L.BoundedFo…
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_5`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (f : L.BoundedFormul…
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
 -/
-theorem realize_restrictFreeVar [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α n}
-    {f : φ.freeVarFinset -> β} {v : β -> M} {xs : Fin n -> M}
-    (v' : α -> M) (hv' : forall a, v (f a) = v' a) :
+theorem realize_restrictFreeVar [DecidableEq α] {n : ℕ} {φ : L.BoundedFormula α n}
+    {f : φ.freeVarFinset → β} {v : β → M} {xs : Fin n → M}
+    (v' : α → M) (hv' : ∀ a, v (f a) = v' a) :
     (φ.restrictFreeVar f).Realize v xs ↔ φ.Realize v' xs := by
   induction φ with
   | falsum => rfl
@@ -1534,7 +1415,7 @@ theorem realize_restrictFreeVar [DecidableEq α] {n : Nat} {φ : L.BoundedFormul
     simp
   | imp _ _ ih1 ih2 =>
     simp only [Realize, restrictFreeVar]
-    rw [ih1]; rw [ih2] <;> simp [hv']
+    rw [ih1, ih2] <;> simp [hv']
   | all _ ih3 =>
     simp only [restrictFreeVar, Realize]
     refine forall_congr' (fun _ => ?_)
@@ -1543,65 +1424,66 @@ theorem realize_restrictFreeVar [DecidableEq α] {n : Nat} {φ : L.BoundedFormul
 /-- A special case of `realize_restrictFreeVar`, included because we can add the `simp` attribute
 to it -/
 @[simp]
-/--
-theorem `realize_restrictFreeVar'` / 定理 `realize_restrictFreeVar'`
+/-
+**FirstOrder.Language.BoundedFormula.realize_restrictFreeVar'** 是 Mathlib 中的一个定理
+，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_restrictFreeVar' [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α
+ n} {s : Set α} (h : ↑φ.freeVarFinset subseteq s) {v : α -> M} {xs : Fin n -> M}
+ : (φ.restrictFreeVar (Set.inclusion h)).Realize (v ∘ (↑)) xs ↔ φ.Realize v xs
+参数：h : ↑φ.freeVarFinset subseteq s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_restrictFreeVar`：realize_rest
+rictFreeVar [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α n} {f : φ.freeVarF
+inset -> β} {v : β -> M} {xs : Fin n -> M} (v' :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem realize_restrictFreeVar'
-  statement: [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α n} {s : Set α}
-  proof: realize_restrictFreeVar _ (by simp)
-
-中文:
-定理 realize_restrictFreeVar'
-  结论: [DecidableEq α] {n : 自然数} {φ : L.BoundedFormula α n} {s : 集合 α}
-  证明: realize_restrictFreeVar _ (by simp)
-
-Depends on / 依赖: realize_restrictFreeVar
+--- 原说明 ---
+A special case of `realize_restrictFreeVar`, included because we can add the `si
+mp` attribute
+to it
 -/
-theorem realize_restrictFreeVar' [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α n} {s : Set α}
-    (h : ↑φ.freeVarFinset subseteq s) {v : α -> M} {xs : Fin n -> M} :
+theorem realize_restrictFreeVar' [DecidableEq α] {n : ℕ} {φ : L.BoundedFormula α n} {s : Set α}
+    (h : ↑φ.freeVarFinset ⊆ s) {v : α → M} {xs : Fin n → M} :
     (φ.restrictFreeVar (Set.inclusion h)).Realize (v ∘ (↑)) xs ↔ φ.Realize v xs :=
   realize_restrictFreeVar _ (by simp)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `realize_constantsVarsEquiv` / 定理 `realize_constantsVarsEquiv`
-
-English:
-theorem realize_constantsVarsEquiv
-  statement: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
-  proof: by
-  refine realize_mapTermRel_id (fun n t xs => realize_constantsVarsEquivLeft) fun n R xs => ?_
-  -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-  erw [← (lhomWithConstants L α).map_onRelation
-      (Equiv.sumEmpty (L.Relations n) ((constantsOn α).Relations n) R) xs]
-  rcongr
-  obtain - | R := R
-  · simp
-  · exact isEmptyElim R
-
-@[simp]
-
-中文:
-定理 realize_constantsVarsEquiv
-  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
-  证明: by
-  refine realize_mapTermRel_id (fun n t xs => realize_constantsVarsEquivLeft) fun n R xs => ?_
-  -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-  erw [← (lhomWithConstants L α).map_onRelation
-      (Equiv.sumEmpty (L.Relations n) ((constantsOn α).Relations n) R) xs]
-  rcongr
-  obtain - | R := R
-  · simp
-  · exact isEmptyElim R
-
-@[simp]
-
-Depends on / 依赖: realize_constantsVarsEquivLeft, realize_mapTermRel_id
+/-
+**FirstOrder.Language.BoundedFormula.realize_constantsVarsEquiv** 是 Mathlib 中的一个
+定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_constantsVarsEquiv [L[[α]].Structure M] [(lhomWithConstants L α).I
+sExpansionOn M] {n} {φ : L[[α]].BoundedFormula β n} {v : β -> M} {xs : Fin n -> 
+M} : (constantsVarsEquiv φ).Realize (Sum.elim (fun a => ↑(L.con a)) v) xs ↔ φ.Re
+alize v xs
+参数：lhomWithConstants L α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_mapTermRel_id`：realize_mapTer
+mRel_id [L'.Structure M] {ft : forall n, L.Term (α oplus (Fin n)) -> L'.Term (β 
+oplus (Fin n))} {fr : forall n, L.Relations n …
+· 使用定理 `FirstOrder.Language.instIsAlgebraicConstantsOn`：∀ (α : Type u_1), (First
+Order.Language.constantsOn α).IsAlgebraic
+· 使用定理 `FirstOrder.Language.Term.realize_constantsVarsEquivLeft`：realize_constan
+tsVarsEquivLeft [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M] {
+n} {t : L[[α]].Term (β oplus (Fin n))} {v : β…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.LHom.map_onRelation`：map_onRelation {M : Type*} [L.S
+tructure M] [L'.Structure M] [ϕ.IsExpansionOn M] {n} (R : L.Relations n) (x : Fi
+n n -> M) : RelMap (ϕ.onRelat…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem realize_constantsVarsEquiv [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
-    {n} {φ : L[[α]].BoundedFormula β n} {v : β -> M} {xs : Fin n -> M} :
+    {n} {φ : L[[α]].BoundedFormula β n} {v : β → M} {xs : Fin n → M} :
     (constantsVarsEquiv φ).Realize (Sum.elim (fun a => ↑(L.con a)) v) xs ↔ φ.Realize v xs := by
   refine realize_mapTermRel_id (fun n t xs => realize_constantsVarsEquivLeft) fun n R xs => ?_
   -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
@@ -1613,33 +1495,37 @@ theorem realize_constantsVarsEquiv [L[[α]].Structure M] [(lhomWithConstants L �
   · exact isEmptyElim R
 
 @[simp]
-/--
-theorem `realize_relabelEquiv` / 定理 `realize_relabelEquiv`
-
-English:
-theorem realize_relabelEquiv
-  statement: {g : α ≃ β} {k} {φ : L.BoundedFormula α k} {v : β -> M}
-  proof: by
-  simp only [relabelEquiv, mapTermRelEquiv_apply, Equiv.coe_refl]
-  refine realize_mapTermRel_id (fun n t xs => ?_) fun _ _ _ => rfl
-  simp only [relabelEquiv_apply, Term.realize_relabel]
-  refine congr (congr rfl ?_) rfl
-  ext (i | i) <;> rfl
-
-中文:
-定理 realize_relabelEquiv
-  结论: {g : α ≃ β} {k} {φ : L.BoundedFormula α k} {v : β -> M}
-  证明: by
-  simp only [relabelEquiv, mapTermRelEquiv_apply, Equiv.coe_refl]
-  refine realize_mapTermRel_id (fun n t xs => ?_) fun _ _ _ => rfl
-  simp only [relabelEquiv_apply, Term.realize_relabel]
-  refine congr (congr rfl ?_) rfl
-  ext (i | i) <;> rfl
-
-Depends on / 依赖: Equiv.coe_refl, Term.realize_relabel, coe_refl, mapTermRelEquiv_apply, realize_mapTermRel_id, realize_relabel, relabelEquiv, relabelEquiv_apply
+/-
+**FirstOrder.Language.BoundedFormula.realize_relabelEquiv** 是 Mathlib 中的一个定理，位于命
+名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_relabelEquiv {g : α ≃ β} {k} {φ : L.BoundedFormula α k} {v : β -> 
+M} {xs : Fin k -> M} : (relabelEquiv g φ).Realize v xs ↔ φ.Realize (v ∘ g) xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.mapTermRelEquiv_apply`：∀ {L : FirstOr
+der.Language} {L' : FirstOrder.Language} {α : Type u'} {β : Type v'}   (ft : (n 
+: ℕ) → L.Term (α ⊕ Fin n) ≃ L'.Term (β ⊕ Fin n…
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_mapTermRel_id`：realize_mapTer
+mRel_id [L'.Structure M] {ft : forall n, L.Term (α oplus (Fin n)) -> L'.Term (β 
+oplus (Fin n))} {fr : forall n, L.Relations n …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `FirstOrder.Language.Term.relabelEquiv_apply`：∀ {L : FirstOrder.Language}
+ {α : Type u'} {β : Type v'} (g : α ≃ β) (a : L.Term α),   (FirstOrder.Language.
+Term.relabelEquiv g) a = FirstOrd…
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem realize_relabelEquiv {g : α ≃ β} {k} {φ : L.BoundedFormula α k} {v : β -> M}
-    {xs : Fin k -> M} : (relabelEquiv g φ).Realize v xs ↔ φ.Realize (v ∘ g) xs := by
+theorem realize_relabelEquiv {g : α ≃ β} {k} {φ : L.BoundedFormula α k} {v : β → M}
+    {xs : Fin k → M} : (relabelEquiv g φ).Realize v xs ↔ φ.Realize (v ∘ g) xs := by
   simp only [relabelEquiv, mapTermRelEquiv_apply, Equiv.coe_refl]
   refine realize_mapTermRel_id (fun n t xs => ?_) fun _ _ _ => rfl
   simp only [relabelEquiv_apply, Term.realize_relabel]
@@ -1647,24 +1533,27 @@ theorem realize_relabelEquiv {g : α ≃ β} {k} {φ : L.BoundedFormula α k} {v
   ext (i | i) <;> rfl
 
 variable [Nonempty M]
-
-/--
-theorem `realize_all_liftAt_one_self` / 定理 `realize_all_liftAt_one_self`
-
-English:
-theorem realize_all_liftAt_one_self
-  statement: {n : Nat} {φ : L.BoundedFormula α n} {v : α -> M}
-  proof: by
-  simp
-
-中文:
-定理 realize_all_liftAt_one_self
-  结论: {n : 自然数} {φ : L.BoundedFormula α n} {v : α -> M}
-  证明: by
-  simp
+/-
+**FirstOrder.Language.BoundedFormula.realize_all_liftAt_one_self** 是 Mathlib 中的一
+个定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_all_liftAt_one_self {n : Nat} {φ : L.BoundedFormula α n} {v : α ->
+ M} {xs : Fin n -> M} : (φ.liftAt 1 n).all.Realize v xs ↔ φ.Realize v xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Fin.snoc_comp_castSucc`：snoc_comp_castSucc {α : Sort*} {a : α} {f : Fin 
+n -> α} : (snoc f a : Fin (n + 1) -> α) ∘ castSucc = f
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_all_liftAt_one_self {n : Nat} {φ : L.BoundedFormula α n} {v : α -> M}
-    {xs : Fin n -> M} : (φ.liftAt 1 n).all.Realize v xs ↔ φ.Realize v xs := by
+theorem realize_all_liftAt_one_self {n : ℕ} {φ : L.BoundedFormula α n} {v : α → M}
+    {xs : Fin n → M} : (φ.liftAt 1 n).all.Realize v xs ↔ φ.Realize v xs := by
   simp
 
 end BoundedFormula
@@ -1674,41 +1563,40 @@ namespace LHom
 open BoundedFormula
 
 @[simp]
-/--
-theorem `realize_onBoundedFormula` / 定理 `realize_onBoundedFormula`
-
-English:
-theorem realize_onBoundedFormula
-  statement: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] {n : Nat}
-  proof: by
-  induction ψ with
-  | falsum => rfl
-  | equal => simp only [onBoundedFormula, realize_bdEqual, realize_onTerm]; rfl
-  | rel =>
-    simp only [onBoundedFormula, realize_rel, LHom.map_onRelation,
-      Function.comp_apply, realize_onTerm]
-    rfl
-  | imp _ _ ih1 ih2 => simp only [onBoundedFormula, ih1, ih2, realize_imp]
-  | all _ ih3 => simp only [onBoundedFormula, ih3, realize_all]
-
-中文:
-定理 realize_onBoundedFormula
-  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] {n : 自然数}
-  证明: by
-  induction ψ with
-  | falsum => rfl
-  | equal => simp only [onBoundedFormula, realize_bdEqual, realize_onTerm]; rfl
-  | rel =>
-    simp only [onBoundedFormula, realize_rel, LHom.map_onRelation,
-      Function.comp_apply, realize_onTerm]
-    rfl
-  | imp _ _ ih1 ih2 => simp only [onBoundedFormula, ih1, ih2, realize_imp]
-  | all _ ih3 => simp only [onBoundedFormula, ih3, realize_all]
-
-Depends on / 依赖: Function, Function.comp_apply, LHom.map_onRelation, comp_apply, falsum, map_onRelation, onBoundedFormula, realize_all, realize_bdEqual, realize_imp, realize_onTerm, realize_rel
+/-
+**FirstOrder.Language.LHom.realize_onBoundedFormula** 是 Mathlib 中的一个定理，位于命名空间 `F
+irstOrder.Language.LHom`。
+形式化陈述：realize_onBoundedFormula [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn 
+M] {n : Nat} (ψ : L.BoundedFormula α n) {v : α -> M} {xs : Fin n -> M} : (φ.onBo
+undedFormula ψ).Realize v xs ↔ ψ.Realize v xs
+参数：φ : L ->ᴸ L'；ψ : L.BoundedFormula α n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `FirstOrder.Language.LHom.realize_onTerm`：realize_onTerm [L'.Structure M]
+ (φ : L ->ᴸ L') [φ.IsExpansionOn M] (t : L.Term α) (v : α -> M) : (φ.onTerm t).r
+ealize v = t.realize v
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.LHom.map_onRelation`：map_onRelation {M : Type*} [L.S
+tructure M] [L'.Structure M] [ϕ.IsExpansionOn M] {n} (R : L.Relations n) (x : Fi
+n n -> M) : RelMap (ϕ.onRelat…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-theorem realize_onBoundedFormula [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] {n : Nat}
-    (ψ : L.BoundedFormula α n) {v : α -> M} {xs : Fin n -> M} :
+theorem realize_onBoundedFormula [L'.Structure M] (φ : L →ᴸ L') [φ.IsExpansionOn M] {n : ℕ}
+    (ψ : L.BoundedFormula α n) {v : α → M} {xs : Fin n → M} :
     (φ.onBoundedFormula ψ).Realize v xs ↔ ψ.Realize v xs := by
   induction ψ with
   | falsum => rfl
@@ -1725,441 +1613,365 @@ end LHom
 namespace Formula
 
 /-- A formula can be evaluated as true or false by giving values to each free variable. -/
-nonrec def Realize (φ : L.Formula α) (v : α -> M) : Prop :=
+nonrec def Realize (φ : L.Formula α) (v : α → M) : Prop :=
   φ.Realize v default
 
-variable {φ ψ : L.Formula α} {v : α -> M}
+variable {φ ψ : L.Formula α} {v : α → M}
 
 @[simp]
-/--
-theorem `realize_not` / 定理 `realize_not`
-
-English:
-theorem realize_not
-  statement: φ.not.Realize v ↔ ¬φ.Realize v
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 realize_not
-  结论: φ.not.实数ize v ↔ ¬φ.实数ize v
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.Formula.realize_not** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_not : φ.not.Realize v ↔ ¬φ.Realize v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_not : φ.not.Realize v ↔ ¬φ.Realize v :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `realize_bot` / 定理 `realize_bot`
-
-English:
-theorem realize_bot
-  statement: (⊥ : L.Formula α).Realize v ↔ False
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 realize_bot
-  结论: (⊥ : L.公式 α).实数ize v ↔ 假
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.Formula.realize_bot** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_bot : (⊥ : L.Formula α).Realize v ↔ False
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_bot : (⊥ : L.Formula α).Realize v ↔ False :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `realize_top` / 定理 `realize_top`
-
-English:
-theorem realize_top
-  statement: (⊤ : L.Formula α).Realize v ↔ True
-  proof: BoundedFormula.realize_top
-
-@[simp]
-
-中文:
-定理 realize_top
-  结论: (⊤ : L.公式 α).实数ize v ↔ 真
-  证明: BoundedFormula.realize_top
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_top, realize_top
+/-
+**FirstOrder.Language.Formula.realize_top** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_top : (⊤ : L.Formula α).Realize v ↔ True
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_top`：realize_top : (⊤ : L.Bou
+ndedFormula α l).Realize v xs ↔ True
 -/
 theorem realize_top : (⊤ : L.Formula α).Realize v ↔ True :=
   BoundedFormula.realize_top
 
 @[simp]
-/--
-theorem `realize_inf` / 定理 `realize_inf`
-
-English:
-theorem realize_inf
-  statement: (φ ⊓ ψ).Realize v ↔ φ.Realize v ∧ ψ.Realize v
-  proof: BoundedFormula.realize_inf
-
-@[simp]
-
-中文:
-定理 realize_inf
-  结论: (φ ⊓ ψ).实数ize v ↔ φ.实数ize v ∧ ψ.实数ize v
-  证明: BoundedFormula.realize_inf
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_inf, realize_inf
+/-
+**FirstOrder.Language.Formula.realize_inf** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_inf : (φ ⊓ ψ).Realize v ↔ φ.Realize v ∧ ψ.Realize v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_inf`：realize_inf : (φ ⊓ ψ).Re
+alize v xs ↔ φ.Realize v xs ∧ ψ.Realize v xs
 -/
 theorem realize_inf : (φ ⊓ ψ).Realize v ↔ φ.Realize v ∧ ψ.Realize v :=
   BoundedFormula.realize_inf
 
 @[simp]
-/--
-theorem `realize_imp` / 定理 `realize_imp`
-
-English:
-theorem realize_imp
-  statement: (φ.imp ψ).Realize v ↔ φ.Realize v -> ψ.Realize v
-  proof: BoundedFormula.realize_imp
-
-@[simp]
-
-中文:
-定理 realize_imp
-  结论: (φ.imp ψ).实数ize v ↔ φ.实数ize v -> ψ.实数ize v
-  证明: BoundedFormula.realize_imp
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_imp, realize_imp
+/-
+**FirstOrder.Language.Formula.realize_imp** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_imp : (φ.imp ψ).Realize v ↔ φ.Realize v -> ψ.Realize v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_imp`：realize_imp : (φ.imp ψ).
+Realize v xs ↔ φ.Realize v xs -> ψ.Realize v xs
 -/
-theorem realize_imp : (φ.imp ψ).Realize v ↔ φ.Realize v -> ψ.Realize v :=
+theorem realize_imp : (φ.imp ψ).Realize v ↔ φ.Realize v → ψ.Realize v :=
   BoundedFormula.realize_imp
 
 @[simp]
-/--
-theorem `realize_rel` / 定理 `realize_rel`
-
-English:
-theorem realize_rel
-  given: {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term α}
-  proof: BoundedFormula.realize_rel.trans (by simp)
-
-@[simp]
-
-中文:
-定理 realize_rel
-  条件: {k : 自然数} {R : L.关系 k} {ts : 有限集 k -> L.项 α}
-  证明: BoundedFormula.realize_rel.trans (by simp)
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_rel.trans, realize_rel
+/-
+**FirstOrder.Language.Formula.realize_rel** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term α} : (R.fo
+rmula ts).Realize v ↔ RelMap R fun i => (ts i).realize v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel`：realize_rel {k : Nat} {R
+ : L.Relations k} {ts : Fin k -> L.Term _} : (R.boundedFormula ts).Realize v xs 
+↔ RelMap R fun i => (ts i).realize (…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term α} :
+theorem realize_rel {k : ℕ} {R : L.Relations k} {ts : Fin k → L.Term α} :
     (R.formula ts).Realize v ↔ RelMap R fun i => (ts i).realize v :=
   BoundedFormula.realize_rel.trans (by simp)
 
 @[simp]
-/--
-theorem `realize_rel₁` / 定理 `realize_rel₁`
-
-English:
-theorem realize_rel₁
-  given: {R : L.Relations 1} {t : L.Term _}
-  proof: by
-  rw [Relations.formula₁]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext fun _ => ?_)
-  simp only [Matrix.cons_val_fin_one]
-
-@[simp]
-
-中文:
-定理 realize_rel₁
-  条件: {R : L.关系 1} {t : L.项 _}
-  证明: by
-  rw [Relations.formula₁]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext fun _ => ?_)
-  simp only [Matrix.cons_val_fin_one]
-
-@[simp]
-
-Depends on / 依赖: Matrix, Matrix.cons_val_fin_one, Relations, Relations.formula, cons_val_fin_one, iff_eq_eq, realize_rel
+/-
+**FirstOrder.Language.Formula.realize_rel** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term α} : (R.fo
+rmula ts).Realize v ↔ RelMap R fun i => (ts i).realize v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel`：realize_rel {k : Nat} {R
+ : L.Relations k} {ts : Fin k -> L.Term _} : (R.boundedFormula ts).Realize v xs 
+↔ RelMap R fun i => (ts i).realize (…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem realize_rel₁ {R : L.Relations 1} {t : L.Term _} :
     (R.formula₁ t).Realize v ↔ RelMap R ![t.realize v] := by
-  rw [Relations.formula₁]; rw [realize_rel]; rw [iff_eq_eq]
+  rw [Relations.formula₁, realize_rel, iff_eq_eq]
   refine congr rfl (funext fun _ => ?_)
   simp only [Matrix.cons_val_fin_one]
 
 @[simp]
-/--
-theorem `realize_rel₂` / 定理 `realize_rel₂`
-
-English:
-theorem realize_rel₂
-  given: {R : L.Relations 2} {t₁ t₂ : L.Term _}
-  proof: by
-  rw [Relations.formula₂]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext (Fin.cases ?_ ?_))
-  · simp only [Matrix.cons_val_zero]
-  · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
-
-@[simp]
-
-中文:
-定理 realize_rel₂
-  条件: {R : L.关系 2} {t₁ t₂ : L.项 _}
-  证明: by
-  rw [Relations.formula₂]; rw [realize_rel]; rw [iff_eq_eq]
-  refine congr rfl (funext (Fin.cases ?_ ?_))
-  · simp only [Matrix.cons_val_zero]
-  · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
-
-@[simp]
-
-Depends on / 依赖: Fin.cases, Matrix, Matrix.cons_val_fin_one, Matrix.cons_val_succ, Matrix.cons_val_zero, Relations, Relations.formula, cons_val_fin_one, cons_val_succ, cons_val_zero, forall_const, iff_eq_eq, realize_rel
+/-
+**FirstOrder.Language.Formula.realize_rel** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_rel {k : Nat} {R : L.Relations k} {ts : Fin k -> L.Term α} : (R.fo
+rmula ts).Realize v ↔ RelMap R fun i => (ts i).realize v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel`：realize_rel {k : Nat} {R
+ : L.Relations k} {ts : Fin k -> L.Term _} : (R.boundedFormula ts).Realize v xs 
+↔ RelMap R fun i => (ts i).realize (…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem realize_rel₂ {R : L.Relations 2} {t₁ t₂ : L.Term _} :
     (R.formula₂ t₁ t₂).Realize v ↔ RelMap R ![t₁.realize v, t₂.realize v] := by
-  rw [Relations.formula₂]; rw [realize_rel]; rw [iff_eq_eq]
+  rw [Relations.formula₂, realize_rel, iff_eq_eq]
   refine congr rfl (funext (Fin.cases ?_ ?_))
   · simp only [Matrix.cons_val_zero]
   · simp only [Matrix.cons_val_succ, Matrix.cons_val_fin_one, forall_const]
 
 @[simp]
-/--
-theorem `realize_sup` / 定理 `realize_sup`
-
-English:
-theorem realize_sup
-  statement: (φ ⊔ ψ).Realize v ↔ φ.Realize v ∨ ψ.Realize v
-  proof: BoundedFormula.realize_sup
-
-@[simp]
-
-中文:
-定理 realize_sup
-  结论: (φ ⊔ ψ).实数ize v ↔ φ.实数ize v ∨ ψ.实数ize v
-  证明: BoundedFormula.realize_sup
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_sup, realize_sup
+/-
+**FirstOrder.Language.Formula.realize_sup** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_sup : (φ ⊔ ψ).Realize v ↔ φ.Realize v ∨ ψ.Realize v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_sup`：realize_sup : (φ ⊔ ψ).Re
+alize v xs ↔ φ.Realize v xs ∨ ψ.Realize v xs
 -/
 theorem realize_sup : (φ ⊔ ψ).Realize v ↔ φ.Realize v ∨ ψ.Realize v :=
   BoundedFormula.realize_sup
 
 @[simp]
-/--
-theorem `realize_iff` / 定理 `realize_iff`
-
-English:
-theorem realize_iff
-  statement: (φ.iff ψ).Realize v ↔ (φ.Realize v ↔ ψ.Realize v)
-  proof: BoundedFormula.realize_iff
-
-@[simp]
-
-中文:
-定理 realize_iff
-  结论: (φ.iff ψ).实数ize v ↔ (φ.实数ize v ↔ ψ.实数ize v)
-  证明: BoundedFormula.realize_iff
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_iff, realize_iff
+/-
+**FirstOrder.Language.Formula.realize_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.Formula`。
+形式化陈述：realize_iff : (φ.iff ψ).Realize v ↔ (φ.Realize v ↔ ψ.Realize v)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_iff`：realize_iff : (φ.iff ψ).
+Realize v xs ↔ (φ.Realize v xs ↔ ψ.Realize v xs)
 -/
 theorem realize_iff : (φ.iff ψ).Realize v ↔ (φ.Realize v ↔ ψ.Realize v) :=
   BoundedFormula.realize_iff
 
 @[simp]
-/--
-theorem `realize_relabel` / 定理 `realize_relabel`
-
-English:
-theorem realize_relabel
-  given: {φ : L.Formula α} {g : α -> β} {v : β -> M}
-  proof: by
-  rw [Realize]; rw [Realize]; rw [relabel]; rw [BoundedFormula.realize_relabel]; rw [iff_eq_eq]; rw [Fin.castAdd_zero]
-  exact congr rfl (funext finZeroElim)
-
-中文:
-定理 realize_relabel
-  条件: {φ : L.公式 α} {g : α -> β} {v : β -> M}
-  证明: by
-  rw [Realize]; rw [Realize]; rw [relabel]; rw [BoundedFormula.realize_relabel]; rw [iff_eq_eq]; rw [Fin.castAdd_zero]
-  exact congr rfl (funext finZeroElim)
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_relabel, Fin.castAdd_zero, Realize, castAdd_zero, finZeroElim, iff_eq_eq, realize_relabel, relabel
+/-
+**FirstOrder.Language.Formula.realize_relabel** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Formula`。
+形式化陈述：realize_relabel {φ : L.Formula α} {g : α -> β} {v : β -> M} : (φ.relabel g
+).Realize v ↔ φ.Realize (v ∘ g)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Formula.Realize.eq_1`：∀ {L : FirstOrder.Language} {M
+ : Type w} [inst : L.Structure M] {α : Type u'} (φ : L.Formula α) (v : α → M),  
+ φ.Realize v = FirstOrder.Lang…
+· 使用定理 `FirstOrder.Language.Formula.relabel.eq_1`：∀ {L : FirstOrder.Language} {α
+ : Type u'} {β : Type v'} (g : α → β),   FirstOrder.Language.Formula.relabel g =
+ FirstOrder.Language.BoundedFo…
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_relabel`：realize_relabel {m n
+ : Nat} {φ : L.BoundedFormula α n} {g : α -> β oplus (Fin m)} {v : β -> M} {xs :
+ Fin (m + n) -> M} : (φ.relabel g).Reali…
+· 使用引理 `iff_eq_eq`：iff_eq_eq {a b : Prop} : (a ↔ b) = (a = b)
+· 使用定理 `Fin.castAdd_zero`：∀ {n : ℕ}, Fin.castAdd 0 = Fin.cast ⋯
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem realize_relabel {φ : L.Formula α} {g : α -> β} {v : β -> M} :
+theorem realize_relabel {φ : L.Formula α} {g : α → β} {v : β → M} :
     (φ.relabel g).Realize v ↔ φ.Realize (v ∘ g) := by
-  rw [Realize]; rw [Realize]; rw [relabel]; rw [BoundedFormula.realize_relabel]; rw [iff_eq_eq]; rw [Fin.castAdd_zero]
+  rw [Realize, Realize, relabel, BoundedFormula.realize_relabel, iff_eq_eq, Fin.castAdd_zero]
   exact congr rfl (funext finZeroElim)
-
-/--
-theorem `realize_relabel_sumInr` / 定理 `realize_relabel_sumInr`
-
-English:
-theorem realize_relabel_sumInr
-  given: (φ : L.Formula (Fin n)) {v : Empty -> M} {x : Fin n -> M}
-  proof: by
-  rw [BoundedFormula.realize_relabel]; rw [Formula.Realize]; rw [Sum.elim_comp_inr]; rw [Fin.castAdd_zero]; rw [cast_refl]; rw [Function.comp_id]; rw [Subsingleton.elim (x ∘ (natAdd n : Fin 0 -> Fin n)) default]
-
-@[simp]
-
-中文:
-定理 realize_relabel_sumInr
-  条件: (φ : L.公式 (有限集 n)) {v : 空 -> M} {x : 有限集 n -> M}
-  证明: by
-  rw [BoundedFormula.realize_relabel]; rw [Formula.Realize]; rw [Sum.elim_comp_inr]; rw [Fin.castAdd_zero]; rw [cast_refl]; rw [Function.comp_id]; rw [Subsingleton.elim (x ∘ (natAdd n : Fin 0 -> Fin n)) default]
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_relabel, Fin.castAdd_zero, Formula, Formula.Realize, Function, Function.comp_id, Realize, Subsingleton, Subsingleton.elim, Sum.elim_comp_inr, castAdd_zero, cast_refl, comp_id, elim_comp_inr, natAdd, realize_relabel
+/-
+**FirstOrder.Language.Formula.realize_relabel_sumInr** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.Formula`。
+形式化陈述：realize_relabel_sumInr (φ : L.Formula (Fin n)) {v : Empty -> M} {x : Fin n
+ -> M} : (BoundedFormula.relabel Sum.inr φ).Realize v x ↔ φ.Realize x
+参数：φ : L.Formula (Fin n)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_relabel`：realize_relabel {m n
+ : Nat} {φ : L.BoundedFormula α n} {g : α -> β oplus (Fin m)} {v : β -> M} {xs :
+ Fin (m + n) -> M} : (φ.relabel g).Reali…
+· 使用定理 `FirstOrder.Language.Formula.Realize.eq_1`：∀ {L : FirstOrder.Language} {M
+ : Type w} [inst : L.Structure M] {α : Type u'} (φ : L.Formula α) (v : α → M),  
+ φ.Realize v = FirstOrder.Lang…
+· 使用定理 `Sum.elim_comp_inr`：∀ {α : Type u_1} {γ : Sort u_2} {β : Type u_3} (f : α
+ → γ) (g : β → γ), Sum.elim f g ∘ Sum.inr = g
+· 使用定理 `Fin.castAdd_zero`：∀ {n : ℕ}, Fin.castAdd 0 = Fin.cast ⋯
+· 使用定理 `Fin.cast_refl`：∀ (n : ℕ) (h : n = n), Fin.cast h = id
+· 使用定理 `Function.comp_id`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β), f ∘ id = 
+f
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem realize_relabel_sumInr (φ : L.Formula (Fin n)) {v : Empty -> M} {x : Fin n -> M} :
+theorem realize_relabel_sumInr (φ : L.Formula (Fin n)) {v : Empty → M} {x : Fin n → M} :
     (BoundedFormula.relabel Sum.inr φ).Realize v x ↔ φ.Realize x := by
-  rw [BoundedFormula.realize_relabel]; rw [Formula.Realize]; rw [Sum.elim_comp_inr]; rw [Fin.castAdd_zero]; rw [cast_refl]; rw [Function.comp_id]; rw [Subsingleton.elim (x ∘ (natAdd n : Fin 0 -> Fin n)) default]
+  rw [BoundedFormula.realize_relabel, Formula.Realize, Sum.elim_comp_inr, Fin.castAdd_zero,
+    cast_refl, Function.comp_id,
+    Subsingleton.elim (x ∘ (natAdd n : Fin 0 → Fin n)) default]
 
 @[simp]
-/--
-theorem `realize_equal` / 定理 `realize_equal`
-
-English:
-theorem realize_equal
-  given: {t₁ t₂ : L.Term α} {x : α -> M}
-  proof: by simp [Term.equal, Realize]
-
-@[simp]
-
-中文:
-定理 realize_equal
-  条件: {t₁ t₂ : L.项 α} {x : α -> M}
-  证明: by simp [Term.equal, Realize]
-
-@[simp]
-
-Depends on / 依赖: Realize, Term.equal
+/-
+**FirstOrder.Language.Formula.realize_equal** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrde
+r.Language.Formula`。
+形式化陈述：realize_equal {t₁ t₂ : L.Term α} {x : α -> M} : (t₁.equal t₂).Realize x ↔ 
+t₁.realize x = t₂.realize x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `FirstOrder.Language.Term.realize_relabel`：realize_relabel {t : L.Term α}
+ {g : α -> β} {v : β -> M} : (t.relabel g).realize v = t.realize (v ∘ g)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_equal {t₁ t₂ : L.Term α} {x : α -> M} :
+theorem realize_equal {t₁ t₂ : L.Term α} {x : α → M} :
     (t₁.equal t₂).Realize x ↔ t₁.realize x = t₂.realize x := by simp [Term.equal, Realize]
 
 @[simp]
-/--
-theorem `realize_graph` / 定理 `realize_graph`
-
-English:
-theorem realize_graph
-  given: {f : L.Functions n} {x : Fin n -> M} {y : M}
-  proof: by
-  simp only [Formula.graph, Term.realize, realize_equal, Fin.cons_zero, Fin.cons_succ]
-  rw [eq_comm]
-
-中文:
-定理 realize_graph
-  条件: {f : L.函数 n} {x : 有限集 n -> M} {y : M}
-  证明: by
-  simp only [Formula.graph, Term.realize, realize_equal, Fin.cons_zero, Fin.cons_succ]
-  rw [eq_comm]
-
-Depends on / 依赖: Fin.cons_succ, Fin.cons_zero, Formula, Formula.graph, Term.realize, cons_succ, cons_zero, eq_comm, realize, realize_equal
+/-
+**FirstOrder.Language.Formula.realize_graph** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrde
+r.Language.Formula`。
+形式化陈述：realize_graph {f : L.Functions n} {x : Fin n -> M} {y : M} : (Formula.grap
+h f).Realize (Fin.cons y x : _ -> M) ↔ funMap f x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Fin.cons_zero`：cons_zero : cons x p 0 = x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.cons_succ`：cons_succ : cons x p i.succ = p i
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem realize_graph {f : L.Functions n} {x : Fin n -> M} {y : M} :
-    (Formula.graph f).Realize (Fin.cons y x : _ -> M) ↔ funMap f x = y := by
+theorem realize_graph {f : L.Functions n} {x : Fin n → M} {y : M} :
+    (Formula.graph f).Realize (Fin.cons y x : _ → M) ↔ funMap f x = y := by
   simp only [Formula.graph, Term.realize, realize_equal, Fin.cons_zero, Fin.cons_succ]
   rw [eq_comm]
-
-/--
-theorem `boundedFormula_realize_eq_realize` / 定理 `boundedFormula_realize_eq_realize`
-
-English:
-theorem boundedFormula_realize_eq_realize
-  given: (φ : L.Formula α) (x : α -> M) (y : Fin 0 -> M)
-  proof: by
-  rw [Formula.Realize]; rw [iff_iff_eq]
-  congr
-  ext i; exact Fin.elim0 i
-
-中文:
-定理 boundedFormula_realize_eq_realize
-  条件: (φ : L.公式 α) (x : α -> M) (y : 有限集 0 -> M)
-  证明: by
-  rw [Formula.Realize]; rw [iff_iff_eq]
-  congr
-  ext i; exact Fin.elim0 i
-
-Depends on / 依赖: Fin.elim0, Formula, Formula.Realize, Realize, iff_iff_eq
+/-
+**FirstOrder.Language.Formula.boundedFormula_realize_eq_realize** 是 Mathlib 中的一个
+定理，位于命名空间 `FirstOrder.Language.Formula`。
+形式化陈述：boundedFormula_realize_eq_realize (φ : L.Formula α) (x : α -> M) (y : Fin 
+0 -> M) : BoundedFormula.Realize φ x y ↔ φ.Realize x
+参数：φ : L.Formula α；x : α -> M；y : Fin 0 -> M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Formula.Realize.eq_1`：∀ {L : FirstOrder.Language} {M
+ : Type w} [inst : L.Structure M] {α : Type u'} (φ : L.Formula α) (v : α → M),  
+ φ.Realize v = FirstOrder.Lang…
+· 使用定理 `iff_iff_eq`：∀ {a b : Prop}, (a ↔ b) ↔ a = b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem boundedFormula_realize_eq_realize (φ : L.Formula α) (x : α -> M) (y : Fin 0 -> M) :
+theorem boundedFormula_realize_eq_realize (φ : L.Formula α) (x : α → M) (y : Fin 0 → M) :
     BoundedFormula.Realize φ x y ↔ φ.Realize x := by
-  rw [Formula.Realize]; rw [iff_iff_eq]
+  rw [Formula.Realize, iff_iff_eq]
   congr
   ext i; exact Fin.elim0 i
 
 end Formula
 
 @[simp]
-/--
-theorem `LHom.realize_onFormula` / 定理 `LHom.realize_onFormula`
-
-English:
-theorem LHom.realize_onFormula
-  statement: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (ψ : L.Formula α)
-  proof: φ.realize_onBoundedFormula ψ
-
-@[simp]
-
-中文:
-定理 L态射.realize_onFormula
-  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] (ψ : L.公式 α)
-  证明: φ.realize_onBoundedFormula ψ
-
-@[simp]
-
-Depends on / 依赖: realize_onBoundedFormula
+/-
+**FirstOrder.Language.LHom.realize_onFormula** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrd
+er.Language.LHom`。
+形式化陈述：∀ {L : FirstOrder.Language} {L' : FirstOrder.Language} {M : Type w} [inst 
+: L.Structure M] {α : Type u'}   [inst_1 : L'.Structure M] (φ : L →ᴸ L') [φ.IsEx
+pansionOn M] (ψ : L.Formula α) {v : α → M},   (φ.onFormula ψ).Realize v ↔ ψ.Real
+ize v
+参数：φ : L →ᴸ L'；ψ : L.Formula α；φ.onFormula ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.LHom.realize_onBoundedFormula`：realize_onBoundedForm
+ula [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] {n : Nat} (ψ : L.Bounded
+Formula α n) {v : α -> M} {xs : Fin n -…
 -/
-theorem LHom.realize_onFormula [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (ψ : L.Formula α)
-    {v : α -> M} : (φ.onFormula ψ).Realize v ↔ ψ.Realize v :=
+theorem LHom.realize_onFormula [L'.Structure M] (φ : L →ᴸ L') [φ.IsExpansionOn M] (ψ : L.Formula α)
+    {v : α → M} : (φ.onFormula ψ).Realize v ↔ ψ.Realize v :=
   φ.realize_onBoundedFormula ψ
 
 @[simp]
-/--
-theorem `LHom.setOfPred_realize_onFormula` / 定理 `LHom.setOfPred_realize_onFormula`
-
-English:
-theorem LHom.setOfPred_realize_onFormula
-  statement: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M]
-  proof: by
-  ext
-  simp
-
-@[deprecated (since := "2026-07-09")]
-alias LHom.setOf_realize_onFormula := LHom.setOfPred_realize_onFormula
-
-中文:
-定理 L态射.setOfPred_realize_onFormula
-  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M]
-  证明: by
-  ext
-  simp
-
-@[deprecated (since := "2026-07-09")]
-alias LHom.setOf_realize_onFormula := LHom.setOfPred_realize_onFormula
+/-
+**FirstOrder.Language.LHom.setOfPred_realize_onFormula** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.LHom`。
+形式化陈述：∀ {L : FirstOrder.Language} {L' : FirstOrder.Language} {M : Type w} [inst 
+: L.Structure M] {α : Type u'}   [inst_1 : L'.Structure M] (φ : L →ᴸ L') [φ.IsEx
+pansionOn M] (ψ : L.Formula α),   Set.ofPred (φ.onFormula ψ).Realize = Set.ofPre
+d ψ.Realize
+参数：φ : L →ᴸ L'；ψ : L.Formula α；φ.onFormula ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem LHom.setOfPred_realize_onFormula [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M]
+theorem LHom.setOfPred_realize_onFormula [L'.Structure M] (φ : L →ᴸ L') [φ.IsExpansionOn M]
     (ψ : L.Formula α) :
-    (Set.ofPred (φ.onFormula ψ).Realize : Set (α -> M)) = Set.ofPred ψ.Realize := by
+    (Set.ofPred (φ.onFormula ψ).Realize : Set (α → M)) = Set.ofPred ψ.Realize := by
   ext
   simp
 
@@ -2170,7 +1982,7 @@ variable (M)
 
 /-- A sentence can be evaluated as true or false in a structure. -/
 nonrec def Sentence.Realize (φ : L.Sentence) : Prop :=
-  φ.Realize (default : _ -> M)
+  φ.Realize (default : _ → M)
 
 -- input using \|= or \vDash, but not using \models
 @[inherit_doc Sentence.Realize]
@@ -2181,158 +1993,87 @@ namespace Sentence
 variable {φ ψ : L.Sentence}
 
 @[simp]
-/--
-theorem `realize_not` / 定理 `realize_not`
-
-English:
-theorem realize_not
-  statement: M ⊨ φ.not ↔ ¬M ⊨ φ
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 realize_not
-  结论: M ⊨ φ.not ↔ ¬M ⊨ φ
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.Sentence.realize_not** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder
+.Language.Sentence`。
+形式化陈述：realize_not : M ⊨ φ.not ↔ ¬M ⊨ φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_not : M ⊨ φ.not ↔ ¬M ⊨ φ :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `not_realize_bot` / 定理 `not_realize_bot`
-
-English:
-theorem not_realize_bot
-  statement: ¬(M ⊨ (⊥ : L.Sentence))
-  proof: False.elim
-
-@[simp]
-
-中文:
-定理 not_realize_bot
-  结论: ¬(M ⊨ (⊥ : L.Sentence))
-  证明: False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim
+/-
+**FirstOrder.Language.Sentence.not_realize_bot** 是 Mathlib 中的一个定理，位于命名空间 `FirstO
+rder.Language.Sentence`。
+形式化陈述：not_realize_bot : ¬(M ⊨ (⊥ : L.Sentence))
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem not_realize_bot : ¬(M ⊨ (⊥ : L.Sentence)) :=
   False.elim
 
 @[simp]
-/--
-theorem `realize_top` / 定理 `realize_top`
-
-English:
-theorem realize_top
-  statement: M ⊨ (⊤ : L.Sentence)
-  proof: False.elim
-
-@[simp]
-
-中文:
-定理 realize_top
-  结论: M ⊨ (⊤ : L.Sentence)
-  证明: False.elim
-
-@[simp]
-
-Depends on / 依赖: False.elim
+/-
+**FirstOrder.Language.Sentence.realize_top** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder
+.Language.Sentence`。
+形式化陈述：realize_top : M ⊨ (⊤ : L.Sentence)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem realize_top : M ⊨ (⊤ : L.Sentence) :=
   False.elim
 
 @[simp]
-/--
-theorem `realize_inf` / 定理 `realize_inf`
-
-English:
-theorem realize_inf
-  statement: M ⊨ φ ⊓ ψ ↔ M ⊨ φ ∧ M ⊨ ψ
-  proof: Formula.realize_inf
-
-@[simp]
-
-中文:
-定理 realize_inf
-  结论: M ⊨ φ ⊓ ψ ↔ M ⊨ φ ∧ M ⊨ ψ
-  证明: Formula.realize_inf
-
-@[simp]
-
-Depends on / 依赖: Formula, Formula.realize_inf, realize_inf
+/-
+**FirstOrder.Language.Sentence.realize_inf** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder
+.Language.Sentence`。
+形式化陈述：realize_inf : M ⊨ φ ⊓ ψ ↔ M ⊨ φ ∧ M ⊨ ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Formula.realize_inf`：realize_inf : (φ ⊓ ψ).Realize v
+ ↔ φ.Realize v ∧ ψ.Realize v
 -/
 theorem realize_inf : M ⊨ φ ⊓ ψ ↔ M ⊨ φ ∧ M ⊨ ψ :=
   Formula.realize_inf
 
 @[simp]
-/--
-theorem `realize_sup` / 定理 `realize_sup`
-
-English:
-theorem realize_sup
-  statement: M ⊨ φ ⊔ ψ ↔ M ⊨ φ ∨ M ⊨ ψ
-  proof: Formula.realize_sup
-
-@[simp]
-
-中文:
-定理 realize_sup
-  结论: M ⊨ φ ⊔ ψ ↔ M ⊨ φ ∨ M ⊨ ψ
-  证明: Formula.realize_sup
-
-@[simp]
-
-Depends on / 依赖: Formula, Formula.realize_sup, realize_sup
+/-
+**FirstOrder.Language.Sentence.realize_sup** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder
+.Language.Sentence`。
+形式化陈述：realize_sup : M ⊨ φ ⊔ ψ ↔ M ⊨ φ ∨ M ⊨ ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Formula.realize_sup`：realize_sup : (φ ⊔ ψ).Realize v
+ ↔ φ.Realize v ∨ ψ.Realize v
 -/
 theorem realize_sup : M ⊨ φ ⊔ ψ ↔ M ⊨ φ ∨ M ⊨ ψ :=
   Formula.realize_sup
 
 @[simp]
-/--
-theorem `realize_imp` / 定理 `realize_imp`
-
-English:
-theorem realize_imp
-  statement: M ⊨ φ.imp ψ ↔ M ⊨ φ -> M ⊨ ψ
-  proof: Formula.realize_imp
-
-@[simp]
-
-中文:
-定理 realize_imp
-  结论: M ⊨ φ.imp ψ ↔ M ⊨ φ -> M ⊨ ψ
-  证明: Formula.realize_imp
-
-@[simp]
-
-Depends on / 依赖: Formula, Formula.realize_imp, realize_imp
+/-
+**FirstOrder.Language.Sentence.realize_imp** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder
+.Language.Sentence`。
+形式化陈述：realize_imp : M ⊨ φ.imp ψ ↔ M ⊨ φ -> M ⊨ ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Formula.realize_imp`：realize_imp : (φ.imp ψ).Realize
+ v ↔ φ.Realize v -> ψ.Realize v
 -/
-theorem realize_imp : M ⊨ φ.imp ψ ↔ M ⊨ φ -> M ⊨ ψ :=
+theorem realize_imp : M ⊨ φ.imp ψ ↔ M ⊨ φ → M ⊨ ψ :=
   Formula.realize_imp
 
 @[simp]
-/--
-theorem `realize_iff` / 定理 `realize_iff`
-
-English:
-theorem realize_iff
-  statement: M ⊨ φ.iff ψ ↔ (M ⊨ φ ↔ M ⊨ ψ)
-  proof: Formula.realize_iff
-
-中文:
-定理 realize_iff
-  结论: M ⊨ φ.iff ψ ↔ (M ⊨ φ ↔ M ⊨ ψ)
-  证明: Formula.realize_iff
-
-Depends on / 依赖: Formula, Formula.realize_iff, realize_iff
+/-
+**FirstOrder.Language.Sentence.realize_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder
+.Language.Sentence`。
+形式化陈述：realize_iff : M ⊨ φ.iff ψ ↔ (M ⊨ φ ↔ M ⊨ ψ)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Formula.realize_iff`：realize_iff : (φ.iff ψ).Realize
+ v ↔ (φ.Realize v ↔ ψ.Realize v)
 -/
 theorem realize_iff : M ⊨ φ.iff ψ ↔ (M ⊨ φ ↔ M ⊨ ψ) :=
   Formula.realize_iff
@@ -2342,38 +2083,33 @@ end Sentence
 namespace Formula
 
 @[simp]
-/--
-theorem `realize_equivSentence_symm_con` / 定理 `realize_equivSentence_symm_con`
-
-English:
-theorem realize_equivSentence_symm_con
-  statement: [L[[α]].Structure M]
-  proof: by
-  simp only [equivSentence, _root_.Equiv.symm_symm, Equiv.coe_trans, Realize,
-    BoundedFormula.realize_relabelEquiv, Function.comp]
-  refine _root_.trans ?_ BoundedFormula.realize_constantsVarsEquiv
-  rw [iff_iff_eq]
-  congr 1 with (_ | a)
-  · simp
-  · cases a
-
-@[simp]
-
-中文:
-定理 realize_equivSentence_symm_con
-  结论: [L[[α]].结构 M]
-  证明: by
-  simp only [equivSentence, _root_.Equiv.symm_symm, Equiv.coe_trans, Realize,
-    BoundedFormula.realize_relabelEquiv, Function.comp]
-  refine _root_.trans ?_ BoundedFormula.realize_constantsVarsEquiv
-  rw [iff_iff_eq]
-  congr 1 with (_ | a)
-  · simp
-  · cases a
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_constantsVarsEquiv, BoundedFormula.realize_relabelEquiv, Equiv.coe_trans, Function, Function.comp, Realize, _root_, _root_.Equiv.symm_symm, _root_.trans, coe_trans, equivSentence, iff_iff_eq, realize_constantsVarsEquiv, realize_relabelEquiv, symm_symm
+/-
+**FirstOrder.Language.Formula.realize_equivSentence_symm_con** 是 Mathlib 中的一个定理，
+位于命名空间 `FirstOrder.Language.Formula`。
+形式化陈述：realize_equivSentence_symm_con [L[[α]].Structure M] [(L.lhomWithConstants 
+α).IsExpansionOn M] (φ : L[[α]].Sentence) : ((equivSentence.symm φ).Realize fun 
+a => (L.con a : M)) ↔ φ.Realize M
+参数：L.lhomWithConstants α；φ : L[[α]].Sentence。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `iff_iff_eq`：∀ {a b : Prop}, (a ↔ b) ↔ a = b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_constantsVarsEquiv`：realize_c
+onstantsVarsEquiv [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
+ {n} {φ : L[[α]].BoundedFormula β n} {v : β -> M} {…
 -/
 theorem realize_equivSentence_symm_con [L[[α]].Structure M]
     [(L.lhomWithConstants α).IsExpansionOn M] (φ : L[[α]].Sentence) :
@@ -2387,45 +2123,43 @@ theorem realize_equivSentence_symm_con [L[[α]].Structure M]
   · cases a
 
 @[simp]
-/--
-theorem `realize_equivSentence` / 定理 `realize_equivSentence`
-
-English:
-theorem realize_equivSentence
-  statement: [L[[α]].Structure M] [(L.lhomWithConstants α).IsExpansionOn M]
-  proof: by
-  rw [← realize_equivSentence_symm_con M (equivSentence φ)]; rw [_root_.Equiv.symm_apply_apply]
-
-中文:
-定理 realize_equivSentence
-  结论: [L[[α]].结构 M] [(L.lhomWithConstants α).是ExpansionOn M]
-  证明: by
-  rw [← realize_equivSentence_symm_con M (equivSentence φ)]; rw [_root_.Equiv.symm_apply_apply]
-
-Depends on / 依赖: _root_, _root_.Equiv.symm_apply_apply, equivSentence, realize_equivSentence_symm_con, symm_apply_apply
+/-
+**FirstOrder.Language.Formula.realize_equivSentence** 是 Mathlib 中的一个定理，位于命名空间 `F
+irstOrder.Language.Formula`。
+形式化陈述：realize_equivSentence [L[[α]].Structure M] [(L.lhomWithConstants α).IsExpa
+nsionOn M] (φ : L.Formula α) : (equivSentence φ).Realize M ↔ φ.Realize fun a => 
+(L.con a : M)
+参数：L.lhomWithConstants α；φ : L.Formula α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Formula.realize_equivSentence_symm_con`：realize_equi
+vSentence_symm_con [L[[α]].Structure M] [(L.lhomWithConstants α).IsExpansionOn M
+] (φ : L[[α]].Sentence) : ((equivSentence.symm φ…
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_equivSentence [L[[α]].Structure M] [(L.lhomWithConstants α).IsExpansionOn M]
     (φ : L.Formula α) : (equivSentence φ).Realize M ↔ φ.Realize fun a => (L.con a : M) := by
-  rw [← realize_equivSentence_symm_con M (equivSentence φ)]; rw [_root_.Equiv.symm_apply_apply]
-
-/--
-theorem `realize_equivSentence_symm` / 定理 `realize_equivSentence_symm`
-
-English:
-theorem realize_equivSentence_symm
-  given: (φ : L[[α]].Sentence) (v : α -> M)
-  proof: letI := constantsOn.structure v
-  realize_equivSentence_symm_con M φ
-
-中文:
-定理 realize_equivSentence_symm
-  条件: (φ : L[[α]].Sentence) (v : α -> M)
-  证明: letI := constantsOn.structure v
-  realize_equivSentence_symm_con M φ
-
-Depends on / 依赖: constantsOn, constantsOn.structure, realize_equivSentence_symm_con, structure
+  rw [← realize_equivSentence_symm_con M (equivSentence φ), _root_.Equiv.symm_apply_apply]
+/-
+**FirstOrder.Language.Formula.realize_equivSentence_symm** 是 Mathlib 中的一个定理，位于命名
+空间 `FirstOrder.Language.Formula`。
+形式化陈述：realize_equivSentence_symm (φ : L[[α]].Sentence) (v : α -> M) : (equivSent
+ence.symm φ).Realize v ↔ @Sentence.Realize _ M (@Language.withConstantsStructure
+ L M _ α (constantsOn.structure v)) φ
+参数：φ : L[[α]].Sentence；v : α -> M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Formula.realize_equivSentence_symm_con`：realize_equi
+vSentence_symm_con [L[[α]].Structure M] [(L.lhomWithConstants α).IsExpansionOn M
+] (φ : L[[α]].Sentence) : ((equivSentence.symm φ…
 -/
-theorem realize_equivSentence_symm (φ : L[[α]].Sentence) (v : α -> M) :
+theorem realize_equivSentence_symm (φ : L[[α]].Sentence) (v : α → M) :
     (equivSentence.symm φ).Realize v ↔
       @Sentence.Realize _ M (@Language.withConstantsStructure L M _ α (constantsOn.structure v))
         φ :=
@@ -2435,67 +2169,51 @@ theorem realize_equivSentence_symm (φ : L[[α]].Sentence) (v : α -> M) :
 end Formula
 
 @[simp]
-/--
-theorem `LHom.realize_onSentence` / 定理 `LHom.realize_onSentence`
-
-English:
-theorem LHom.realize_onSentence
-  statement: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M]
-  proof: φ.realize_onFormula ψ
-
-中文:
-定理 L态射.realize_onSentence
-  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M]
-  证明: φ.realize_onFormula ψ
-
-Depends on / 依赖: realize_onFormula
+/-
+**FirstOrder.Language.LHom.realize_onSentence** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.LHom`。
+形式化陈述：∀ {L : FirstOrder.Language} {L' : FirstOrder.Language} (M : Type w) [inst 
+: L.Structure M] [inst_1 : L'.Structure M]   (φ : L →ᴸ L') [φ.IsExpansionOn M] (
+ψ : L.Sentence), M ⊨ φ.onSentence ψ ↔ M ⊨ ψ
+参数：M : Type w；φ : L →ᴸ L'；ψ : L.Sentence。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.LHom.realize_onFormula`：∀ {L : FirstOrder.Language} 
+{L' : FirstOrder.Language} {M : Type w} [inst : L.Structure M] {α : Type u'}   [
+inst_1 : L'.Structure M] (φ : L …
 -/
-theorem LHom.realize_onSentence [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M]
+theorem LHom.realize_onSentence [L'.Structure M] (φ : L →ᴸ L') [φ.IsExpansionOn M]
     (ψ : L.Sentence) : M ⊨ φ.onSentence ψ ↔ M ⊨ ψ :=
   φ.realize_onFormula ψ
 
 variable (L)
 
-/--
-Definition of `completeTheory` / `completeTheory` 的定义
+/-- The complete theory of a structure `M` is the set of all sentences `M` satisfies. -/
+/-
+**FirstOrder.Language.completeTheory** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrder.Langu
+age`。
+形式化陈述：completeTheory : L.Theory
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition completeTheory
-  signature: : L.Theory
-  body: { φ | M ⊨ φ }
-
-中文:
-定义 completeTheory
-  签名: : L.Theory
-  定义体: { φ | M ⊨ φ }
+--- 原说明 ---
+The complete theory of a structure `M` is the set of all sentences `M` satisfies
+.
 -/
 def completeTheory : L.Theory :=
   { φ | M ⊨ φ }
 
 variable (N)
 
-/--
-Definition of `ElementarilyEquivalent` / `ElementarilyEquivalent` 的定义
+/-- Two structures are elementarily equivalent when they satisfy the same sentences. -/
+/-
+**FirstOrder.Language.ElementarilyEquivalent** 是 Mathlib 中的一个定义，位于命名空间 `FirstOrd
+er.Language`。
+形式化陈述：ElementarilyEquivalent : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ElementarilyEquivalent
-  signature: : Prop
-  body: L.completeTheory M = L.completeTheory N
-
-@[inherit_doc FirstOrder.Language.ElementarilyEquivalent]
-scoped[FirstOrder]
-  notation:25 A " ≅[" L "] " B:50 => FirstOrder.Language.ElementarilyEquivalent L A B
-
-中文:
-定义 ElementarilyEquivalent
-  签名: : 命题
-  定义体: L.completeTheory M = L.completeTheory N
-
-@[inherit_doc FirstOrder.Language.ElementarilyEquivalent]
-scoped[FirstOrder]
-  notation:25 A " ≅[" L "] " B:50 => FirstOrder.Language.ElementarilyEquivalent L A B
-
-Depends on / 依赖: L.completeTheory, completeTheory
+--- 原说明 ---
+Two structures are elementarily equivalent when they satisfy the same sentences.
 -/
 def ElementarilyEquivalent : Prop :=
   L.completeTheory M = L.completeTheory N
@@ -2507,65 +2225,50 @@ scoped[FirstOrder]
 variable {L} {M} {N}
 
 @[simp]
-/--
-theorem `mem_completeTheory` / 定理 `mem_completeTheory`
-
-English:
-theorem mem_completeTheory
-  given: {φ : Sentence L}
-  statement: φ in L.completeTheory M ↔ M ⊨ φ
-  proof: Iff.rfl
-
-中文:
-定理 mem_completeTheory
-  条件: {φ : Sentence L}
-  结论: φ in L.completeTheory M ↔ M ⊨ φ
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**FirstOrder.Language.mem_completeTheory** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.L
+anguage`。
+形式化陈述：mem_completeTheory {φ : Sentence L} : φ in L.completeTheory M ↔ M ⊨ φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_completeTheory {φ : Sentence L} : φ in L.completeTheory M ↔ M ⊨ φ :=
+theorem mem_completeTheory {φ : Sentence L} : φ ∈ L.completeTheory M ↔ M ⊨ φ :=
   Iff.rfl
-
-/--
-theorem `elementarilyEquivalent_iff` / 定理 `elementarilyEquivalent_iff`
-
-English:
-theorem elementarilyEquivalent_iff
-  statement: M ≅[L] N ↔ forall φ : L.Sentence, M ⊨ φ ↔ N ⊨ φ
-  proof: by
-  simp only [ElementarilyEquivalent, Set.ext_iff, completeTheory, Set.mem_ofPred_eq]
-
-中文:
-定理 elementarilyEquivalent_iff
-  结论: M ≅[L] N ↔ 对任意 φ : L.Sentence, M ⊨ φ ↔ N ⊨ φ
-  证明: by
-  simp only [ElementarilyEquivalent, Set.ext_iff, completeTheory, Set.mem_ofPred_eq]
-
-Depends on / 依赖: ElementarilyEquivalent, Set.ext_iff, Set.mem_ofPred_eq, completeTheory, ext_iff, mem_ofPred_eq
+/-
+**FirstOrder.Language.elementarilyEquivalent_iff** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language`。
+形式化陈述：elementarilyEquivalent_iff : M ≅[L] N ↔ forall φ : L.Sentence, M ⊨ φ ↔ N ⊨
+ φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem elementarilyEquivalent_iff : M ≅[L] N ↔ forall φ : L.Sentence, M ⊨ φ ↔ N ⊨ φ := by
+theorem elementarilyEquivalent_iff : M ≅[L] N ↔ ∀ φ : L.Sentence, M ⊨ φ ↔ N ⊨ φ := by
   simp only [ElementarilyEquivalent, Set.ext_iff, completeTheory, Set.mem_ofPred_eq]
 
 variable (M)
 
-/--
-Definition of `Theory.Model` / `Theory.Model` 的定义
+/-- A model of a theory is a structure in which every sentence is realized as true. -/
+/-
+**FirstOrder.Language.Theory.Model** 是 Mathlib 中的一个归纳类型，位于命名空间 `FirstOrder.Langu
+age.Theory`。
+形式化陈述：{L : FirstOrder.Language} → (M : Type w) → [L.Structure M] → L.Theory → Pr
+op
+参数：M : Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Theory.Model
-  parameters: (T : L.Theory)
-  axioms and operations (1):
-    - realize_of_mem : forall φ in T, M ⊨ φ
-
-中文:
-类 Theory.Model
-  参数: (T : L.Theory)
-  公理与运算 (1 个):
-    - realize_of_mem : 对任意 φ in T, M ⊨ φ
+--- 原说明 ---
+A model of a theory is a structure in which every sentence is realized as true.
 -/
 class Theory.Model (T : L.Theory) : Prop where
-  realize_of_mem : forall φ in T, M ⊨ φ
+  realize_of_mem : ∀ φ ∈ T, M ⊨ φ
 
 -- input using \|= or \vDash, but not using \models
 @[inherit_doc Theory.Model]
@@ -2574,288 +2277,223 @@ infixl:51 " ⊨ " => Theory.Model
 variable {M} (T : L.Theory)
 
 @[simp default - 10]
-/--
-theorem `Theory.model_iff` / 定理 `Theory.model_iff`
-
-English:
-theorem Theory.model_iff
-  statement: M ⊨ T ↔ forall φ in T, M ⊨ φ
-  proof: ⟨fun h => h.realize_of_mem, fun h => ⟨h⟩⟩
-
-中文:
-定理 Theory.model_iff
-  结论: M ⊨ T ↔ 对任意 φ in T, M ⊨ φ
-  证明: ⟨fun h => h.realize_of_mem, fun h => ⟨h⟩⟩
-
-Depends on / 依赖: h.realize_of_mem, realize_of_mem
+/-
+**FirstOrder.Language.Theory.model_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Lan
+guage.Theory`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type w} [inst : L.Structure M] (T : L.The
+ory), M ⊨ T ↔ ∀ φ ∈ T, M ⊨ φ
+参数：T : L.Theory。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.Model.realize_of_mem`：∀ {L : FirstOrder.Langu
+age} {M : Type w} {inst : L.Structure M} {T : L.Theory} [self : M ⊨ T], ∀ φ ∈ T,
+ M ⊨ φ
 -/
-theorem Theory.model_iff : M ⊨ T ↔ forall φ in T, M ⊨ φ :=
+theorem Theory.model_iff : M ⊨ T ↔ ∀ φ ∈ T, M ⊨ φ :=
   ⟨fun h => h.realize_of_mem, fun h => ⟨h⟩⟩
-
-/--
-theorem `Theory.realize_sentence_of_mem` / 定理 `Theory.realize_sentence_of_mem`
-
-English:
-theorem Theory.realize_sentence_of_mem
-  given: [M ⊨ T] {φ : L.Sentence} (h : φ in T)
-  statement: M ⊨ φ
-  proof: Theory.Model.realize_of_mem φ h
-
-@[simp]
-
-中文:
-定理 Theory.realize_sentence_of_mem
-  条件: [M ⊨ T] {φ : L.Sentence} (h : φ in T)
-  结论: M ⊨ φ
-  证明: Theory.Model.realize_of_mem φ h
-
-@[simp]
-
-Depends on / 依赖: Theory, Theory.Model.realize_of_mem, realize_of_mem
+/-
+**FirstOrder.Language.Theory.realize_sentence_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.Theory`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type w} [inst : L.Structure M] (T : L.The
+ory) [M ⊨ T] {φ : L.Sentence}, φ ∈ T → M ⊨ φ
+参数：T : L.Theory。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.Model.realize_of_mem`：∀ {L : FirstOrder.Langu
+age} {M : Type w} {inst : L.Structure M} {T : L.Theory} [self : M ⊨ T], ∀ φ ∈ T,
+ M ⊨ φ
 -/
-theorem Theory.realize_sentence_of_mem [M ⊨ T] {φ : L.Sentence} (h : φ in T) : M ⊨ φ :=
+theorem Theory.realize_sentence_of_mem [M ⊨ T] {φ : L.Sentence} (h : φ ∈ T) : M ⊨ φ :=
   Theory.Model.realize_of_mem φ h
 
 @[simp]
-/--
-theorem `LHom.onTheory_model` / 定理 `LHom.onTheory_model`
-
-English:
-theorem LHom.onTheory_model
-  given: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (T : L.Theory)
-  proof: by simp [Theory.model_iff, LHom.onTheory]
-
-中文:
-定理 L态射.onTheory_model
-  条件: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] (T : L.Theory)
-  证明: by simp [Theory.model_iff, LHom.onTheory]
-
-Depends on / 依赖: LHom.onTheory, Theory, Theory.model_iff, model_iff, onTheory
+/-
+**FirstOrder.Language.LHom.onTheory_model** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language.LHom`。
+形式化陈述：∀ {L : FirstOrder.Language} {L' : FirstOrder.Language} {M : Type w} [inst 
+: L.Structure M] [inst_1 : L'.Structure M]   (φ : L →ᴸ L') [φ.IsExpansionOn M] (
+T : L.Theory), M ⊨ φ.onTheory T ↔ M ⊨ T
+参数：φ : L →ᴸ L'；T : L.Theory。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem LHom.onTheory_model [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (T : L.Theory) :
+theorem LHom.onTheory_model [L'.Structure M] (φ : L →ᴸ L') [φ.IsExpansionOn M] (T : L.Theory) :
     M ⊨ φ.onTheory T ↔ M ⊨ T := by simp [Theory.model_iff, LHom.onTheory]
 
 variable {T}
-
-/--
-Instance `model_empty` / 实例 `model_empty`
-
-English:
-instance model_empty
-  signature: : M ⊨ (∅ : L.Theory)
-  body: ⟨fun φ hφ => (Set.notMem_empty φ hφ).elim⟩
-
-中文:
-实例 model_empty
-  签名: : M ⊨ (∅ : L.Theory)
-  定义体: ⟨fun φ hφ => (Set.notMem_empty φ hφ).elim⟩
-
-Depends on / 依赖: Set.notMem_empty, notMem_empty
+/-
+**FirstOrder.Language.model_empty** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Language
+`。
+形式化陈述：model_empty : M ⊨ (∅ : L.Theory)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.notMem_empty`：notMem_empty (x : α) : x ∉ (∅ : Set α)
 -/
 instance model_empty : M ⊨ (∅ : L.Theory) :=
   ⟨fun φ hφ => (Set.notMem_empty φ hφ).elim⟩
 
 namespace Theory
 
-/--
-theorem `Model.mono` / 定理 `Model.mono`
-
-English:
-theorem Model.mono
-  given: {T' : L.Theory} (_h : M ⊨ T') (hs : T subseteq T')
-  statement: M ⊨ T
-  proof: ⟨fun _φ hφ => T'.realize_sentence_of_mem (hs hφ)⟩
-
-中文:
-定理 Model.mono
-  条件: {T' : L.Theory} (_h : M ⊨ T') (hs : T subseteq T')
-  结论: M ⊨ T
-  证明: ⟨fun _φ hφ => T'.realize_sentence_of_mem (hs hφ)⟩
-
-Depends on / 依赖: realize_sentence_of_mem
+/-
+**FirstOrder.Language.Theory.Model.mono** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.La
+nguage.Theory.Model`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type w} [inst : L.Structure M] {T T' : L.
+Theory}, M ⊨ T' → T ⊆ T' → M ⊨ T
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.realize_sentence_of_mem`：∀ {L : FirstOrder.La
+nguage} {M : Type w} [inst : L.Structure M] (T : L.Theory) [M ⊨ T] {φ : L.Senten
+ce}, φ ∈ T → M ⊨ φ
 -/
-theorem Model.mono {T' : L.Theory} (_h : M ⊨ T') (hs : T subseteq T') : M ⊨ T :=
+theorem Model.mono {T' : L.Theory} (_h : M ⊨ T') (hs : T ⊆ T') : M ⊨ T :=
   ⟨fun _φ hφ => T'.realize_sentence_of_mem (hs hφ)⟩
-
-/--
-theorem `Model.union` / 定理 `Model.union`
-
-English:
-theorem Model.union
-  given: {T' : L.Theory} (h : M ⊨ T) (h' : M ⊨ T')
-  statement: M ⊨ T union T'
-  proof: by
-  simp only [model_iff, Set.mem_union] at *
-  exact fun φ hφ => hφ.elim (h _) (h' _)
-
-@[simp]
-
-中文:
-定理 Model.union
-  条件: {T' : L.Theory} (h : M ⊨ T) (h' : M ⊨ T')
-  结论: M ⊨ T union T'
-  证明: by
-  simp only [model_iff, Set.mem_union] at *
-  exact fun φ hφ => hφ.elim (h _) (h' _)
-
-@[simp]
-
-Depends on / 依赖: Set.mem_union, mem_union, model_iff
+/-
+**FirstOrder.Language.Theory.Model.union** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.L
+anguage.Theory.Model`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type w} [inst : L.Structure M] {T T' : L.
+Theory}, M ⊨ T → M ⊨ T' → M ⊨ T ∪ T'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
-theorem Model.union {T' : L.Theory} (h : M ⊨ T) (h' : M ⊨ T') : M ⊨ T union T' := by
+theorem Model.union {T' : L.Theory} (h : M ⊨ T) (h' : M ⊨ T') : M ⊨ T ∪ T' := by
   simp only [model_iff, Set.mem_union] at *
   exact fun φ hφ => hφ.elim (h _) (h' _)
 
 @[simp]
-/--
-theorem `model_union_iff` / 定理 `model_union_iff`
-
-English:
-theorem model_union_iff
-  given: {T' : L.Theory}
-  statement: M ⊨ T union T' ↔ M ⊨ T ∧ M ⊨ T'
-  proof: ⟨fun h => ⟨h.mono Set.subset_union_left, h.mono Set.subset_union_right⟩, fun h =>
-    h.1.union h.2⟩
-
-@[simp]
-
-中文:
-定理 model_union_iff
-  条件: {T' : L.Theory}
-  结论: M ⊨ T union T' ↔ M ⊨ T ∧ M ⊨ T'
-  证明: ⟨fun h => ⟨h.mono Set.subset_union_left, h.mono Set.subset_union_right⟩, fun h =>
-    h.1.union h.2⟩
-
-@[simp]
-
-Depends on / 依赖: Set.subset_union_left, Set.subset_union_right, h.mono, subset_union_left, subset_union_right
+/-
+**FirstOrder.Language.Theory.model_union_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrd
+er.Language.Theory`。
+形式化陈述：model_union_iff {T' : L.Theory} : M ⊨ T union T' ↔ M ⊨ T ∧ M ⊨ T'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.Model.mono`：∀ {L : FirstOrder.Language} {M : 
+Type w} [inst : L.Structure M] {T T' : L.Theory}, M ⊨ T' → T ⊆ T' → M ⊨ T
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
+· 使用定理 `FirstOrder.Language.Theory.Model.union`：∀ {L : FirstOrder.Language} {M :
+ Type w} [inst : L.Structure M] {T T' : L.Theory}, M ⊨ T → M ⊨ T' → M ⊨ T ∪ T'
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem model_union_iff {T' : L.Theory} : M ⊨ T union T' ↔ M ⊨ T ∧ M ⊨ T' :=
+theorem model_union_iff {T' : L.Theory} : M ⊨ T ∪ T' ↔ M ⊨ T ∧ M ⊨ T' :=
   ⟨fun h => ⟨h.mono Set.subset_union_left, h.mono Set.subset_union_right⟩, fun h =>
     h.1.union h.2⟩
 
 @[simp]
-/--
-theorem `model_singleton_iff` / 定理 `model_singleton_iff`
-
-English:
-theorem model_singleton_iff
-  given: {φ : L.Sentence}
-  statement: M ⊨ ({φ} : L.Theory) ↔ M ⊨ φ
-  proof: by simp
-
-中文:
-定理 model_singleton_iff
-  条件: {φ : L.Sentence}
-  结论: M ⊨ ({φ} : L.Theory) ↔ M ⊨ φ
-  证明: by simp
+/-
+**FirstOrder.Language.Theory.model_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.Theory`。
+形式化陈述：model_singleton_iff {φ : L.Sentence} : M ⊨ ({φ} : L.Theory) ↔ M ⊨ φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem model_singleton_iff {φ : L.Sentence} : M ⊨ ({φ} : L.Theory) ↔ M ⊨ φ := by simp
-
-/--
-theorem `model_insert_iff` / 定理 `model_insert_iff`
-
-English:
-theorem model_insert_iff
-  given: {φ : L.Sentence}
-  statement: M ⊨ insert φ T ↔ M ⊨ φ ∧ M ⊨ T
-  proof: by
-  rw [Set.insert_eq]; rw [model_union_iff]; rw [model_singleton_iff]
-
-中文:
-定理 model_insert_iff
-  条件: {φ : L.Sentence}
-  结论: M ⊨ insert φ T ↔ M ⊨ φ ∧ M ⊨ T
-  证明: by
-  rw [Set.insert_eq]; rw [model_union_iff]; rw [model_singleton_iff]
-
-Depends on / 依赖: Set.insert_eq, insert_eq, model_singleton_iff, model_union_iff
+/-
+**FirstOrder.Language.Theory.model_insert_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Theory`。
+形式化陈述：model_insert_iff {φ : L.Sentence} : M ⊨ insert φ T ↔ M ⊨ φ ∧ M ⊨ T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.insert_eq`：insert_eq (x : α) (s : Set α) : insert x s = ({x} : Set α
+) union s
+· 使用定理 `FirstOrder.Language.Theory.model_union_iff`：model_union_iff {T' : L.Theo
+ry} : M ⊨ T union T' ↔ M ⊨ T ∧ M ⊨ T'
+· 使用定理 `FirstOrder.Language.Theory.model_singleton_iff`：model_singleton_iff {φ :
+ L.Sentence} : M ⊨ ({φ} : L.Theory) ↔ M ⊨ φ
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem model_insert_iff {φ : L.Sentence} : M ⊨ insert φ T ↔ M ⊨ φ ∧ M ⊨ T := by
-  rw [Set.insert_eq]; rw [model_union_iff]; rw [model_singleton_iff]
-
-/--
-theorem `model_iff_subset_completeTheory` / 定理 `model_iff_subset_completeTheory`
-
-English:
-theorem model_iff_subset_completeTheory
-  statement: M ⊨ T ↔ T subseteq L.completeTheory M
-  proof: T.model_iff
-
-中文:
-定理 model_iff_subset_completeTheory
-  结论: M ⊨ T ↔ T subseteq L.completeTheory M
-  证明: T.model_iff
-
-Depends on / 依赖: T.model_iff, model_iff
+  rw [Set.insert_eq, model_union_iff, model_singleton_iff]
+/-
+**FirstOrder.Language.Theory.model_iff_subset_completeTheory** 是 Mathlib 中的一个定理，
+位于命名空间 `FirstOrder.Language.Theory`。
+形式化陈述：model_iff_subset_completeTheory : M ⊨ T ↔ T subseteq L.completeTheory M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Theory.model_iff`：∀ {L : FirstOrder.Language} {M : T
+ype w} [inst : L.Structure M] (T : L.Theory), M ⊨ T ↔ ∀ φ ∈ T, M ⊨ φ
 -/
-theorem model_iff_subset_completeTheory : M ⊨ T ↔ T subseteq L.completeTheory M :=
+theorem model_iff_subset_completeTheory : M ⊨ T ↔ T ⊆ L.completeTheory M :=
   T.model_iff
-
-/--
-theorem `completeTheory.subset` / 定理 `completeTheory.subset`
-
-English:
-theorem completeTheory.subset
-  given: [MT : M ⊨ T]
-  statement: T subseteq L.completeTheory M
-  proof: model_iff_subset_completeTheory.1 MT
-
-中文:
-定理 completeTheory.subset
-  条件: [MT : M ⊨ T]
-  结论: T subseteq L.completeTheory M
-  证明: model_iff_subset_completeTheory.1 MT
-
-Depends on / 依赖: model_iff_subset_completeTheory
+/-
+**FirstOrder.Language.Theory.completeTheory.subset** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Theory.completeTheory`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type w} [inst : L.Structure M] {T : L.The
+ory} [MT : M ⊨ T], T ⊆ L.completeTheory M
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.Theory.model_iff_subset_completeTheory`：model_iff_su
+bset_completeTheory : M ⊨ T ↔ T subseteq L.completeTheory M
 -/
-theorem completeTheory.subset [MT : M ⊨ T] : T subseteq L.completeTheory M :=
+theorem completeTheory.subset [MT : M ⊨ T] : T ⊆ L.completeTheory M :=
   model_iff_subset_completeTheory.1 MT
 
 end Theory
 
-/--
-Instance `model_completeTheory` / 实例 `model_completeTheory`
-
-English:
-instance model_completeTheory
-  signature: : M ⊨ L.completeTheory M
-  body: Theory.model_iff_subset_completeTheory.2 subset_rfl
-
-中文:
-实例 model_completeTheory
-  签名: : M ⊨ L.completeTheory M
-  定义体: Theory.model_iff_subset_completeTheory.2 subset_rfl
-
-Depends on / 依赖: Theory, Theory.model_iff_subset_completeTheory, model_iff_subset_completeTheory, subset_rfl
+/-
+**FirstOrder.Language.model_completeTheory** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder
+.Language`。
+形式化陈述：model_completeTheory : M ⊨ L.completeTheory M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FirstOrder.Language.Theory.model_iff_subset_completeTheory`：model_iff_su
+bset_completeTheory : M ⊨ T ↔ T subseteq L.completeTheory M
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 -/
 instance model_completeTheory : M ⊨ L.completeTheory M :=
   Theory.model_iff_subset_completeTheory.2 subset_rfl
 
 variable (M N)
-
-/--
-theorem `realize_iff_of_model_completeTheory` / 定理 `realize_iff_of_model_completeTheory`
-
-English:
-theorem realize_iff_of_model_completeTheory
-  given: [N ⊨ L.completeTheory M] (φ : L.Sentence)
-  proof: by
-  refine ⟨fun h => ?_, (L.completeTheory M).realize_sentence_of_mem⟩
-  contrapose h
-  rw [← Sentence.realize_not] at *
-  exact (L.completeTheory M).realize_sentence_of_mem (mem_completeTheory.2 h)
-
-中文:
-定理 realize_iff_of_model_completeTheory
-  条件: [N ⊨ L.completeTheory M] (φ : L.Sentence)
-  证明: by
-  refine ⟨fun h => ?_, (L.completeTheory M).realize_sentence_of_mem⟩
-  contrapose h
-  rw [← Sentence.realize_not] at *
-  exact (L.completeTheory M).realize_sentence_of_mem (mem_completeTheory.2 h)
-
-Depends on / 依赖: L.completeTheory, Sentence, Sentence.realize_not, completeTheory, contrapose, mem_completeTheory, realize_not, realize_sentence_of_mem
+/-
+**FirstOrder.Language.realize_iff_of_model_completeTheory** 是 Mathlib 中的一个定理，位于命
+名空间 `FirstOrder.Language`。
+形式化陈述：realize_iff_of_model_completeTheory [N ⊨ L.completeTheory M] (φ : L.Senten
+ce) : N ⊨ φ ↔ M ⊨ φ
+参数：φ : L.Sentence。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Sentence.realize_not`：realize_not : M ⊨ φ.not ↔ ¬M ⊨
+ φ
+· 使用定理 `FirstOrder.Language.Theory.realize_sentence_of_mem`：∀ {L : FirstOrder.La
+nguage} {M : Type w} [inst : L.Structure M] (T : L.Theory) [M ⊨ T] {φ : L.Senten
+ce}, φ ∈ T → M ⊨ φ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FirstOrder.Language.mem_completeTheory`：mem_completeTheory {φ : Sentence
+ L} : φ in L.completeTheory M ↔ M ⊨ φ
 -/
 theorem realize_iff_of_model_completeTheory [N ⊨ L.completeTheory M] (φ : L.Sentence) :
     N ⊨ φ ↔ M ⊨ φ := by
@@ -2869,37 +2507,24 @@ variable {M N}
 namespace BoundedFormula
 
 @[simp]
-/--
-theorem `realize_alls` / 定理 `realize_alls`
-
-English:
-theorem realize_alls
-  given: {φ : L.BoundedFormula α n} {v : α -> M}
-  proof: by
-  induction n with
-  | zero => exact Unique.forall_iff.symm
-  | succ n ih =>
-    simp only [alls, ih, Realize]
-    exact ⟨fun h xs => Fin.snoc_init_self xs ▸ h _ _, fun h xs x => h (Fin.snoc xs x)⟩
-
-@[simp]
-
-中文:
-定理 realize_alls
-  条件: {φ : L.BoundedFormula α n} {v : α -> M}
-  证明: by
-  induction n with
-  | zero => exact Unique.forall_iff.symm
-  | succ n ih =>
-    simp only [alls, ih, Realize]
-    exact ⟨fun h xs => Fin.snoc_init_self xs ▸ h _ _, fun h xs x => h (Fin.snoc xs x)⟩
-
-@[simp]
-
-Depends on / 依赖: Fin.snoc, Fin.snoc_init_self, Realize, Unique, Unique.forall_iff.symm, forall_iff, snoc_init_self
+/-
+**FirstOrder.Language.BoundedFormula.realize_alls** 是 Mathlib 中的一个定理，位于命名空间 `Fir
+stOrder.Language.BoundedFormula`。
+形式化陈述：realize_alls {φ : L.BoundedFormula α n} {v : α -> M} : φ.alls.Realize v ↔ 
+forall xs : Fin n -> M, φ.Realize v xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Unique.forall_iff`：forall_iff {p : α -> Prop} : (forall a, p a) ↔ p defa
+ult
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.snoc_init_self`：snoc_init_self : snoc (init q) (q (last n)) = q
 -/
-theorem realize_alls {φ : L.BoundedFormula α n} {v : α -> M} :
-    φ.alls.Realize v ↔ forall xs : Fin n -> M, φ.Realize v xs := by
+theorem realize_alls {φ : L.BoundedFormula α n} {v : α → M} :
+    φ.alls.Realize v ↔ ∀ xs : Fin n → M, φ.Realize v xs := by
   induction n with
   | zero => exact Unique.forall_iff.symm
   | succ n ih =>
@@ -2907,47 +2532,27 @@ theorem realize_alls {φ : L.BoundedFormula α n} {v : α -> M} :
     exact ⟨fun h xs => Fin.snoc_init_self xs ▸ h _ _, fun h xs x => h (Fin.snoc xs x)⟩
 
 @[simp]
-/--
-theorem `realize_exs` / 定理 `realize_exs`
-
-English:
-theorem realize_exs
-  given: {φ : L.BoundedFormula α n} {v : α -> M}
-  proof: by
-  induction n with
-  | zero => exact Unique.exists_iff.symm
-  | succ n ih =>
-    simp only [BoundedFormula.exs, ih, realize_ex]
-    constructor
-    · rintro ⟨xs, x, h⟩
-      exact ⟨_, h⟩
-    · rintro ⟨xs, h⟩
-      rw [← Fin.snoc_init_self xs] at h
-      exact ⟨_, _, h⟩
-
-@[simp]
-
-中文:
-定理 realize_exs
-  条件: {φ : L.BoundedFormula α n} {v : α -> M}
-  证明: by
-  induction n with
-  | zero => exact Unique.exists_iff.symm
-  | succ n ih =>
-    simp only [BoundedFormula.exs, ih, realize_ex]
-    constructor
-    · rintro ⟨xs, x, h⟩
-      exact ⟨_, h⟩
-    · rintro ⟨xs, h⟩
-      rw [← Fin.snoc_init_self xs] at h
-      exact ⟨_, _, h⟩
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.exs, Fin.snoc_init_self, Unique, Unique.exists_iff.symm, exists_iff, realize_ex, snoc_init_self
+/-
+**FirstOrder.Language.BoundedFormula.realize_exs** 是 Mathlib 中的一个定理，位于命名空间 `Firs
+tOrder.Language.BoundedFormula`。
+形式化陈述：realize_exs {φ : L.BoundedFormula α n} {v : α -> M} : φ.exs.Realize v ↔ ex
+ists xs : Fin n -> M, φ.Realize v xs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Unique.exists_iff`：exists_iff {p : α -> Prop} : Exists p ↔ p default
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.snoc_init_self`：snoc_init_self : snoc (init q) (q (last n)) = q
 -/
-theorem realize_exs {φ : L.BoundedFormula α n} {v : α -> M} :
-    φ.exs.Realize v ↔ exists xs : Fin n -> M, φ.Realize v xs := by
+theorem realize_exs {φ : L.BoundedFormula α n} {v : α → M} :
+    φ.exs.Realize v ↔ ∃ xs : Fin n → M, φ.Realize v xs := by
   induction n with
   | zero => exact Unique.exists_iff.symm
   | succ n ih =>
@@ -2960,52 +2565,14 @@ theorem realize_exs {φ : L.BoundedFormula α n} {v : α -> M} :
       exact ⟨_, _, h⟩
 
 @[simp]
-/--
-theorem `_root_.FirstOrder.Language.Formula.realize_iAlls` / 定理 `_root_.FirstOrder.Language.Formula.realize_iAlls`
-
-English:
-theorem _root_.FirstOrder.Language.Formula.realize_iAlls
-  proof: by
-  let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin β))
-  rw [Formula.iAlls]
-  simp only [Nat.add_zero, realize_alls, realize_relabel, Function.comp_def,
-    castAdd_zero, Sum.elim_map, id_eq]
-  refine Equiv.forall_congr ?_ ?_
-  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
-      fun _ => by simp [Function.comp_def],
-      fun _ => by simp [Function.comp_def]⟩
-  · intro x
-    rw [Formula.Realize]; rw [iff_iff_eq]
-    congr
-    funext i
-    exact i.elim0
-
-@[simp]
-
-中文:
-定理 _root_.FirstOrder.Language.公式.realize_iAlls
-  证明: by
-  let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin β))
-  rw [Formula.iAlls]
-  simp only [Nat.add_zero, realize_alls, realize_relabel, Function.comp_def,
-    castAdd_zero, Sum.elim_map, id_eq]
-  refine Equiv.forall_congr ?_ ?_
-  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
-      fun _ => by simp [Function.comp_def],
-      fun _ => by simp [Function.comp_def]⟩
-  · intro x
-    rw [Formula.Realize]; rw [iff_iff_eq]
-    congr
-    funext i
-    exact i.elim0
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.choice, Classical.choose_spec, Equiv.forall_congr, Finite, Finite.exists_equiv_fin, Formula, Formula.Realize, Formula.iAlls, Function, Function.comp_def, Nat.add_zero, Realize, Sum.elim_map, add_zero, castAdd_zero, choice, choose_spec, comp_def, e.symm
+/-
+**FirstOrder.Language.BoundedFormula._root_.FirstOrder.Language.Formula.realize_
+iAlls** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.FirstOrder.Language.Formula.realize_iAlls
-    [Finite β] {φ : L.Formula (α oplus β)} {v : α -> M} : (φ.iAlls β).Realize v ↔
-      forall (i : β -> M), φ.Realize (fun a => Sum.elim v i a) := by
+    [Finite β] {φ : L.Formula (α ⊕ β)} {v : α → M} : (φ.iAlls β).Realize v ↔
+      ∀ (i : β → M), φ.Realize (fun a => Sum.elim v i a) := by
   let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin β))
   rw [Formula.iAlls]
   simp only [Nat.add_zero, realize_alls, realize_relabel, Function.comp_def,
@@ -3015,85 +2582,45 @@ theorem _root_.FirstOrder.Language.Formula.realize_iAlls
       fun _ => by simp [Function.comp_def],
       fun _ => by simp [Function.comp_def]⟩
   · intro x
-    rw [Formula.Realize]; rw [iff_iff_eq]
+    rw [Formula.Realize, iff_iff_eq]
     congr
     funext i
     exact i.elim0
 
 @[simp]
-/--
-theorem `realize_iAlls` / 定理 `realize_iAlls`
-
-English:
-theorem realize_iAlls
-  given: [Finite β] {φ : L.Formula (α oplus β)} {v : α -> M} {v' : Fin 0 -> M}
-  proof: by
-  rw [← Formula.realize_iAlls]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
-
-@[simp]
-
-中文:
-定理 realize_iAlls
-  条件: [有限 β] {φ : L.公式 (α oplus β)} {v : α -> M} {v' : 有限集 0 -> M}
-  证明: by
-  rw [← Formula.realize_iAlls]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
-
-@[simp]
-
-Depends on / 依赖: Formula, Formula.realize_iAlls, eq_iff_true_of_subsingleton, iff_iff_eq, realize_iAlls
+/-
+**FirstOrder.Language.BoundedFormula.realize_iAlls** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.BoundedFormula`。
+形式化陈述：realize_iAlls [Finite β] {φ : L.Formula (α oplus β)} {v : α -> M} {v' : Fi
+n 0 -> M} : BoundedFormula.Realize (φ.iAlls β) v v' ↔ forall (i : β -> M), φ.Rea
+lize (fun a => Sum.elim v i a)
+参数：α oplus β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Formula.realize_iAlls`：∀ {L : FirstOrder.Language} {
+M : Type w} [inst : L.Structure M] {α : Type u'} {β : Type v'} [inst_1 : Finite 
+β]   {φ : L.Formula (α ⊕ β)} {v…
+· 使用定理 `iff_iff_eq`：∀ {a b : Prop}, (a ↔ b) ↔ a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem realize_iAlls [Finite β] {φ : L.Formula (α oplus β)} {v : α -> M} {v' : Fin 0 -> M} :
+theorem realize_iAlls [Finite β] {φ : L.Formula (α ⊕ β)} {v : α → M} {v' : Fin 0 → M} :
     BoundedFormula.Realize (φ.iAlls β) v v' ↔
-      forall (i : β -> M), φ.Realize (fun a => Sum.elim v i a) := by
-  rw [← Formula.realize_iAlls]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
+      ∀ (i : β → M), φ.Realize (fun a => Sum.elim v i a) := by
+  rw [← Formula.realize_iAlls, iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
 
 @[simp]
-/--
-theorem `_root_.FirstOrder.Language.Formula.realize_iExs` / 定理 `_root_.FirstOrder.Language.Formula.realize_iExs`
-
-English:
-theorem _root_.FirstOrder.Language.Formula.realize_iExs
-  proof: by
-  let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin γ))
-  rw [Formula.iExs]
-  simp only [Nat.add_zero, realize_exs, realize_relabel, Function.comp_def,
-    castAdd_zero, Sum.elim_map, id_eq]
-  refine Equiv.exists_congr ?_ ?_
-  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
-      fun _ => by simp [Function.comp_def],
-      fun _ => by simp [Function.comp_def]⟩
-  · intro x
-    rw [Formula.Realize]; rw [iff_iff_eq]
-    congr
-    funext i
-    exact i.elim0
-
-@[simp]
-
-中文:
-定理 _root_.FirstOrder.Language.公式.realize_iExs
-  证明: by
-  let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin γ))
-  rw [Formula.iExs]
-  simp only [Nat.add_zero, realize_exs, realize_relabel, Function.comp_def,
-    castAdd_zero, Sum.elim_map, id_eq]
-  refine Equiv.exists_congr ?_ ?_
-  · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm,
-      fun _ => by simp [Function.comp_def],
-      fun _ => by simp [Function.comp_def]⟩
-  · intro x
-    rw [Formula.Realize]; rw [iff_iff_eq]
-    congr
-    funext i
-    exact i.elim0
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.choice, Classical.choose_spec, Equiv.exists_congr, Finite, Finite.exists_equiv_fin, Formula, Formula.Realize, Formula.iExs, Function, Function.comp_def, Nat.add_zero, Realize, Sum.elim_map, add_zero, castAdd_zero, choice, choose_spec, comp_def, e.symm
+/-
+**FirstOrder.Language.BoundedFormula._root_.FirstOrder.Language.Formula.realize_
+iExs** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.FirstOrder.Language.Formula.realize_iExs
-    [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} : (φ.iExs γ).Realize v ↔
-      exists (i : γ -> M), φ.Realize (Sum.elim v i) := by
+    [Finite γ] {φ : L.Formula (α ⊕ γ)} {v : α → M} : (φ.iExs γ).Realize v ↔
+      ∃ (i : γ → M), φ.Realize (Sum.elim v i) := by
   let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin γ))
   rw [Formula.iExs]
   simp only [Nat.add_zero, realize_exs, realize_relabel, Function.comp_def,
@@ -3103,118 +2630,111 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExs
       fun _ => by simp [Function.comp_def],
       fun _ => by simp [Function.comp_def]⟩
   · intro x
-    rw [Formula.Realize]; rw [iff_iff_eq]
+    rw [Formula.Realize, iff_iff_eq]
     congr
     funext i
     exact i.elim0
 
 @[simp]
-/--
-theorem `realize_iExs` / 定理 `realize_iExs`
-
-English:
-theorem realize_iExs
-  given: [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v' : Fin 0 -> M}
-  proof: by
-  rw [← Formula.realize_iExs]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
-
-@[simp]
-
-中文:
-定理 realize_iExs
-  条件: [有限 γ] {φ : L.公式 (α oplus γ)} {v : α -> M} {v' : 有限集 0 -> M}
-  证明: by
-  rw [← Formula.realize_iExs]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
-
-@[simp]
-
-Depends on / 依赖: Formula, Formula.realize_iExs, eq_iff_true_of_subsingleton, iff_iff_eq, realize_iExs
+/-
+**FirstOrder.Language.BoundedFormula.realize_iExs** 是 Mathlib 中的一个定理，位于命名空间 `Fir
+stOrder.Language.BoundedFormula`。
+形式化陈述：realize_iExs [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v' : Fin
+ 0 -> M} : BoundedFormula.Realize (φ.iExs γ) v v' ↔ exists (i : γ -> M), φ.Reali
+ze (Sum.elim v i)
+参数：α oplus γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Formula.realize_iExs`：∀ {L : FirstOrder.Language} {M
+ : Type w} [inst : L.Structure M] {α : Type u'} {γ : Type u_3} [inst_1 : Finite 
+γ]   {φ : L.Formula (α ⊕ γ)} {…
+· 使用定理 `iff_iff_eq`：∀ {a b : Prop}, (a ↔ b) ↔ a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem realize_iExs [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v' : Fin 0 -> M} :
+theorem realize_iExs [Finite γ] {φ : L.Formula (α ⊕ γ)} {v : α → M} {v' : Fin 0 → M} :
     BoundedFormula.Realize (φ.iExs γ) v v' ↔
-      exists (i : γ -> M), φ.Realize (Sum.elim v i) := by
-  rw [← Formula.realize_iExs]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
+      ∃ (i : γ → M), φ.Realize (Sum.elim v i) := by
+  rw [← Formula.realize_iExs, iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
 
 @[simp]
-/--
-theorem `realize_toFormula` / 定理 `realize_toFormula`
-
-English:
-theorem realize_toFormula
-  given: (φ : L.BoundedFormula α n) (v : α oplus (Fin n) -> M)
-  proof: by
-  induction φ with
-  | falsum => rfl
-  | equal => simp [BoundedFormula.Realize]
-  | rel => simp [BoundedFormula.Realize]
-  | imp _ _ ih1 ih2 =>
-    rw [toFormula]; rw [Formula.Realize]; rw [realize_imp]; rw [← Formula.Realize]; rw [ih1]; rw [← Formula.Realize]; rw [ih2]; rw [realize_imp]
-  | all _ ih3 =>
-    rw [toFormula]; rw [Formula.Realize]; rw [realize_all]; rw [realize_all]
-    refine forall_congr' fun a => ?_
-    have h := ih3 (Sum.elim (v ∘ Sum.inl) (snoc (v ∘ Sum.inr) a))
-    simp only [Sum.elim_comp_inl, Sum.elim_comp_inr] at h
-    rw [← h]; rw [realize_relabel]; rw [Formula.Realize]; rw [iff_iff_eq]
-    simp only [Function.comp_def]
-    congr with x
-    · rcases x with _ | x
-      · simp
-      · refine Fin.lastCases ?_ ?_ x
-        · simp [Fin.snoc]
-        · simp only [castSucc, Sum.elim_inr,
-            finSumFinEquiv_symm_apply_castAdd, Sum.map_inl, Sum.elim_inl]
-          rw [← castSucc]
-          simp
-    · exact Fin.elim0 x
-
-@[simp]
-
-中文:
-定理 realize_toFormula
-  条件: (φ : L.BoundedFormula α n) (v : α oplus (有限集 n) -> M)
-  证明: by
-  induction φ with
-  | falsum => rfl
-  | equal => simp [BoundedFormula.Realize]
-  | rel => simp [BoundedFormula.Realize]
-  | imp _ _ ih1 ih2 =>
-    rw [toFormula]; rw [Formula.Realize]; rw [realize_imp]; rw [← Formula.Realize]; rw [ih1]; rw [← Formula.Realize]; rw [ih2]; rw [realize_imp]
-  | all _ ih3 =>
-    rw [toFormula]; rw [Formula.Realize]; rw [realize_all]; rw [realize_all]
-    refine forall_congr' fun a => ?_
-    have h := ih3 (Sum.elim (v ∘ Sum.inl) (snoc (v ∘ Sum.inr) a))
-    simp only [Sum.elim_comp_inl, Sum.elim_comp_inr] at h
-    rw [← h]; rw [realize_relabel]; rw [Formula.Realize]; rw [iff_iff_eq]
-    simp only [Function.comp_def]
-    congr with x
-    · rcases x with _ | x
-      · simp
-      · refine Fin.lastCases ?_ ?_ x
-        · simp [Fin.snoc]
-        · simp only [castSucc, Sum.elim_inr,
-            finSumFinEquiv_symm_apply_castAdd, Sum.map_inl, Sum.elim_inl]
-          rw [← castSucc]
-          simp
-    · exact Fin.elim0 x
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.Realize, Formula, Formula.Realize, Realize, Sum.elim, Sum.elim_, Sum.elim_comp_inl, Sum.inl, Sum.inr, elim_, elim_comp_inl, falsum, forall_congr, realize_all, realize_imp, toFormula
+/-
+**FirstOrder.Language.BoundedFormula.realize_toFormula** 是 Mathlib 中的一个定理，位于命名空间
+ `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_toFormula (φ : L.BoundedFormula α n) (v : α oplus (Fin n) -> M) : 
+φ.toFormula.Realize v ↔ φ.Realize (v ∘ Sum.inl) (v ∘ Sum.inr)
+参数：φ : L.BoundedFormula α n；v : α oplus (Fin n) -> M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Sum.elim_comp_inl_inr`：∀ {α : Type u_1} {β : Type u_2} {γ : Sort u_3} (f
+ : α ⊕ β → γ), Sum.elim (f ∘ Sum.inl) (f ∘ Sum.inr) = f
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.BoundedFormula.toFormula.eq_4`：∀ {L : FirstOrder.Lan
+guage} {α : Type u'} (x : ℕ) (f₁ f₂ : L.BoundedFormula α x),   (f₁.imp f₂).toFor
+mula = FirstOrder.Language.BoundedFormu…
+· 使用定理 `FirstOrder.Language.Formula.Realize.eq_1`：∀ {L : FirstOrder.Language} {M
+ : Type w} [inst : L.Structure M] {α : Type u'} (φ : L.Formula α) (v : α → M),  
+ φ.Realize v = FirstOrder.Lang…
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_imp`：realize_imp : (φ.imp ψ).
+Realize v xs ↔ φ.Realize v xs -> ψ.Realize v xs
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `FirstOrder.Language.BoundedFormula.toFormula.eq_5`：∀ {L : FirstOrder.Lan
+guage} {α : Type u'} (x : ℕ) (f : L.BoundedFormula α (x + 1)),   f.all.toFormula
+ =     (FirstOrder.Language.BoundedForm…
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_all`：realize_all : (all θ).Re
+alize v xs ↔ forall a : M, θ.Realize v (Fin.snoc xs a)
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_relabel`：realize_relabel {m n
+ : Nat} {φ : L.BoundedFormula α n} {g : α -> β oplus (Fin m)} {v : β -> M} {xs :
+ Fin (m + n) -> M} : (φ.relabel g).Reali…
+· 使用定理 `iff_iff_eq`：∀ {a b : Prop}, (a ↔ b) ↔ a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `Fin.val_eq_zero`：∀ (a : Fin 1), ↑a = 0
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `finSumFinEquiv_symm_last`：finSumFinEquiv_symm_last : finSumFinEquiv.symm
+ (Fin.last n) = Sum.inr 0
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `finSumFinEquiv_symm_apply_castAdd`：finSumFinEquiv_symm_apply_castAdd (x 
+: Fin m) : finSumFinEquiv.symm (Fin.castAdd n x) = Sum.inl x
+· 使用定理 `Fin.castSucc.eq_1`：∀ {n : ℕ}, Fin.castSucc = Fin.castAdd 1
+· 使用定理 `Fin.snoc_castSucc`：snoc_castSucc : snoc p x i.castSucc = p i
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem realize_toFormula (φ : L.BoundedFormula α n) (v : α oplus (Fin n) -> M) :
+theorem realize_toFormula (φ : L.BoundedFormula α n) (v : α ⊕ (Fin n) → M) :
     φ.toFormula.Realize v ↔ φ.Realize (v ∘ Sum.inl) (v ∘ Sum.inr) := by
   induction φ with
   | falsum => rfl
   | equal => simp [BoundedFormula.Realize]
   | rel => simp [BoundedFormula.Realize]
   | imp _ _ ih1 ih2 =>
-    rw [toFormula]; rw [Formula.Realize]; rw [realize_imp]; rw [← Formula.Realize]; rw [ih1]; rw [← Formula.Realize]; rw [ih2]; rw [realize_imp]
+    rw [toFormula, Formula.Realize, realize_imp, ← Formula.Realize, ih1, ← Formula.Realize, ih2,
+      realize_imp]
   | all _ ih3 =>
-    rw [toFormula]; rw [Formula.Realize]; rw [realize_all]; rw [realize_all]
+    rw [toFormula, Formula.Realize, realize_all, realize_all]
     refine forall_congr' fun a => ?_
     have h := ih3 (Sum.elim (v ∘ Sum.inl) (snoc (v ∘ Sum.inr) a))
     simp only [Sum.elim_comp_inl, Sum.elim_comp_inr] at h
-    rw [← h]; rw [realize_relabel]; rw [Formula.Realize]; rw [iff_iff_eq]
+    rw [← h, realize_relabel, Formula.Realize, iff_iff_eq]
     simp only [Function.comp_def]
     congr with x
     · rcases x with _ | x
@@ -3228,152 +2748,87 @@ theorem realize_toFormula (φ : L.BoundedFormula α n) (v : α oplus (Fin n) -> 
     · exact Fin.elim0 x
 
 @[simp]
-/--
-theorem `realize_iSup` / 定理 `realize_iSup`
-
-English:
-theorem realize_iSup
-  statement: [Finite β] {f : β -> L.BoundedFormula α n}
-  proof: by
+/-
+**FirstOrder.Language.BoundedFormula.realize_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Fir
+stOrder.Language.BoundedFormula`。
+形式化陈述：realize_iSup [Finite β] {f : β -> L.BoundedFormula α n} {v : α -> M} {v' :
+ Fin n -> M} : (iSup f).Realize v v' ↔ exists b, (f b).Realize v v'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem realize_iSup [Finite β] {f : β → L.BoundedFormula α n}
+    {v : α → M} {v' : Fin n → M} :
+    (iSup f).Realize v v' ↔ ∃ b, (f b).Realize v v' := by
   simp only [iSup, realize_foldr_sup, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
     exists_exists_eq_and]
 
 @[simp]
-
-中文:
-定理 realize_iSup
-  结论: [有限 β] {f : β -> L.BoundedFormula α n}
-  证明: by
-  simp only [iSup, realize_foldr_sup, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
-    exists_exists_eq_and]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.mem_toList, Finset.mem_univ, List.mem_map, exists_exists_eq_and, mem_map, mem_toList, mem_univ, realize_foldr_sup, true_and
+/-
+**FirstOrder.Language.BoundedFormula.realize_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Fir
+stOrder.Language.BoundedFormula`。
+形式化陈述：realize_iInf [Finite β] {f : β -> L.BoundedFormula α n} {v : α -> M} {v' :
+ Fin n -> M} : (iInf f).Realize v v' ↔ forall b, (f b).Realize v v'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem realize_iSup [Finite β] {f : β -> L.BoundedFormula α n}
-    {v : α -> M} {v' : Fin n -> M} :
-    (iSup f).Realize v v' ↔ exists b, (f b).Realize v v' := by
-  simp only [iSup, realize_foldr_sup, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
-    exists_exists_eq_and]
-
-@[simp]
-/--
-theorem `realize_iInf` / 定理 `realize_iInf`
-
-English:
-theorem realize_iInf
-  statement: [Finite β] {f : β -> L.BoundedFormula α n}
-  proof: by
+theorem realize_iInf [Finite β] {f : β → L.BoundedFormula α n}
+    {v : α → M} {v' : Fin n → M} :
+    (iInf f).Realize v v' ↔ ∀ b, (f b).Realize v v' := by
   simp only [iInf, realize_foldr_inf, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
     forall_exists_index, forall_apply_eq_imp_iff]
 
 @[simp]
-
-中文:
-定理 realize_iInf
-  结论: [有限 β] {f : β -> L.BoundedFormula α n}
-  证明: by
-  simp only [iInf, realize_foldr_inf, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
-    forall_exists_index, forall_apply_eq_imp_iff]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.mem_toList, Finset.mem_univ, List.mem_map, forall_apply_eq_imp_iff, forall_exists_index, mem_map, mem_toList, mem_univ, realize_foldr_inf, true_and
+/-
+**FirstOrder.Language.BoundedFormula._root_.FirstOrder.Language.Formula.realize_
+iSup** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem realize_iInf [Finite β] {f : β -> L.BoundedFormula α n}
-    {v : α -> M} {v' : Fin n -> M} :
-    (iInf f).Realize v v' ↔ forall b, (f b).Realize v v' := by
-  simp only [iInf, realize_foldr_inf, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
-    forall_exists_index, forall_apply_eq_imp_iff]
-
-@[simp]
-/--
-theorem `_root_.FirstOrder.Language.Formula.realize_iSup` / 定理 `_root_.FirstOrder.Language.Formula.realize_iSup`
-
-English:
-theorem _root_.FirstOrder.Language.Formula.realize_iSup
-  statement: [Finite β] {f : β -> L.Formula α}
-  proof: by
+theorem _root_.FirstOrder.Language.Formula.realize_iSup [Finite β] {f : β → L.Formula α}
+    {v : α → M} : (Formula.iSup f).Realize v ↔ ∃ b, (f b).Realize v := by
   simp [Formula.iSup, Formula.Realize]
 
 @[simp]
-
-中文:
-定理 _root_.FirstOrder.Language.公式.realize_iSup
-  结论: [有限 β] {f : β -> L.公式 α}
-  证明: by
-  simp [Formula.iSup, Formula.Realize]
-
-@[simp]
-
-Depends on / 依赖: Formula, Formula.Realize, Formula.iSup, Realize
+/-
+**FirstOrder.Language.BoundedFormula._root_.FirstOrder.Language.Formula.realize_
+iInf** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.FirstOrder.Language.Formula.realize_iSup [Finite β] {f : β -> L.Formula α}
-    {v : α -> M} : (Formula.iSup f).Realize v ↔ exists b, (f b).Realize v := by
-  simp [Formula.iSup, Formula.Realize]
-
-@[simp]
-/--
-theorem `_root_.FirstOrder.Language.Formula.realize_iInf` / 定理 `_root_.FirstOrder.Language.Formula.realize_iInf`
-
-English:
-theorem _root_.FirstOrder.Language.Formula.realize_iInf
-  statement: [Finite β] {f : β -> L.Formula α}
-  proof: by
+theorem _root_.FirstOrder.Language.Formula.realize_iInf [Finite β] {f : β → L.Formula α}
+    {v : α → M} : (Formula.iInf f).Realize v ↔ ∀ b, (f b).Realize v := by
   simp [Formula.iInf, Formula.Realize]
-
-中文:
-定理 _root_.FirstOrder.Language.公式.realize_iInf
-  结论: [有限 β] {f : β -> L.公式 α}
-  证明: by
-  simp [Formula.iInf, Formula.Realize]
-
-Depends on / 依赖: Formula, Formula.Realize, Formula.iInf, Realize
--/
-theorem _root_.FirstOrder.Language.Formula.realize_iInf [Finite β] {f : β -> L.Formula α}
-    {v : α -> M} : (Formula.iInf f).Realize v ↔ forall b, (f b).Realize v := by
-  simp [Formula.iInf, Formula.Realize]
-
-/--
-theorem `_root_.FirstOrder.Language.Formula.realize_iExsUnique` / 定理 `_root_.FirstOrder.Language.Formula.realize_iExsUnique`
-
-English:
-theorem _root_.FirstOrder.Language.Formula.realize_iExsUnique
-  statement: [Finite γ]
-  proof: by
-  rw [Formula.iExsUnique]; rw [ExistsUnique]
-  simp only [Formula.realize_iExs, Formula.realize_inf, Formula.realize_iAlls, Formula.realize_imp,
-    Formula.realize_relabel]
-  simp only [Formula.Realize, Function.comp_def, Term.equal, Term.relabel, realize_iInf,
-    realize_bdEqual, Term.realize_var, Sum.elim_inl, Sum.elim_inr, funext_iff]
-  refine exists_congr (fun i => and_congr_right' (forall_congr' (fun y => ?_)))
-  rw [iff_iff_eq]; congr with x
-  cases x <;> simp
-
-@[simp]
-
-中文:
-定理 _root_.FirstOrder.Language.公式.realize_iExsUnique
-  结论: [有限 γ]
-  证明: by
-  rw [Formula.iExsUnique]; rw [ExistsUnique]
-  simp only [Formula.realize_iExs, Formula.realize_inf, Formula.realize_iAlls, Formula.realize_imp,
-    Formula.realize_relabel]
-  simp only [Formula.Realize, Function.comp_def, Term.equal, Term.relabel, realize_iInf,
-    realize_bdEqual, Term.realize_var, Sum.elim_inl, Sum.elim_inr, funext_iff]
-  refine exists_congr (fun i => and_congr_right' (forall_congr' (fun y => ?_)))
-  rw [iff_iff_eq]; congr with x
-  cases x <;> simp
-
-@[simp]
-
-Depends on / 依赖: ExistsUnique, Formula, Formula.Realize, Formula.iExsUnique, Formula.realize_iAlls, Formula.realize_iExs, Formula.realize_imp, Formula.realize_inf, Formula.realize_relabel, Function, Function.comp_def, Realize, Sum.elim_inl, Sum.elim_inr, Term.equal, Term.realize_var, Term.relabel, and_congr_right, comp_def, elim_inl
+/-
+**FirstOrder.Language.BoundedFormula._root_.FirstOrder.Language.Formula.realize_
+iExsUnique** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.BoundedFormula`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.FirstOrder.Language.Formula.realize_iExsUnique [Finite γ]
-    {φ : L.Formula (α oplus γ)} {v : α -> M} : (φ.iExsUnique γ).Realize v ↔
-      exists! (i : γ -> M), φ.Realize (Sum.elim v i) := by
-  rw [Formula.iExsUnique]; rw [ExistsUnique]
+    {φ : L.Formula (α ⊕ γ)} {v : α → M} : (φ.iExsUnique γ).Realize v ↔
+      ∃! (i : γ → M), φ.Realize (Sum.elim v i) := by
+  rw [Formula.iExsUnique, ExistsUnique]
   simp only [Formula.realize_iExs, Formula.realize_inf, Formula.realize_iAlls, Formula.realize_imp,
     Formula.realize_relabel]
   simp only [Formula.Realize, Function.comp_def, Term.equal, Term.relabel, realize_iInf,
@@ -3383,75 +2838,71 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExsUnique [Finite γ]
   cases x <;> simp
 
 @[simp]
-/--
-theorem `realize_iExsUnique` / 定理 `realize_iExsUnique`
-
-English:
-theorem realize_iExsUnique
-  given: [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v' : Fin 0 -> M}
-  proof: by
-  rw [← Formula.realize_iExsUnique]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
-
-中文:
-定理 realize_iExsUnique
-  条件: [有限 γ] {φ : L.公式 (α oplus γ)} {v : α -> M} {v' : 有限集 0 -> M}
-  证明: by
-  rw [← Formula.realize_iExsUnique]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: Formula, Formula.realize_iExsUnique, eq_iff_true_of_subsingleton, iff_iff_eq, realize_iExsUnique
+/-
+**FirstOrder.Language.BoundedFormula.realize_iExsUnique** 是 Mathlib 中的一个定理，位于命名空
+间 `FirstOrder.Language.BoundedFormula`。
+形式化陈述：realize_iExsUnique [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v'
+ : Fin 0 -> M} : BoundedFormula.Realize (φ.iExsUnique γ) v v' ↔ exists! (i : γ -
+> M), φ.Realize (Sum.elim v i)
+参数：α oplus γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.Formula.realize_iExsUnique`：∀ {L : FirstOrder.Langua
+ge} {M : Type w} [inst : L.Structure M] {α : Type u'} {γ : Type u_3} [inst_1 : F
+inite γ]   {φ : L.Formula (α ⊕ γ)} {…
+· 使用定理 `iff_iff_eq`：∀ {a b : Prop}, (a ↔ b) ↔ a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-theorem realize_iExsUnique [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v' : Fin 0 -> M} :
+theorem realize_iExsUnique [Finite γ] {φ : L.Formula (α ⊕ γ)} {v : α → M} {v' : Fin 0 → M} :
     BoundedFormula.Realize (φ.iExsUnique γ) v v' ↔
-      exists! (i : γ -> M), φ.Realize (Sum.elim v i) := by
-  rw [← Formula.realize_iExsUnique]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
+      ∃! (i : γ → M), φ.Realize (Sum.elim v i) := by
+  rw [← Formula.realize_iExsUnique, iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
 
 end BoundedFormula
 
 namespace Formula
 
 @[simp]
-/--
-theorem `realize_exClosure` / 定理 `realize_exClosure`
-
-English:
-theorem realize_exClosure
-  given: [DecidableEq α] (φ : L.Formula α)
-  proof: by
-  simp [Sentence.Realize, Formula.exClosure, Formula.realize_iExs]
-
-中文:
-定理 realize_exClosure
-  条件: [DecidableEq α] (φ : L.公式 α)
-  证明: by
-  simp [Sentence.Realize, Formula.exClosure, Formula.realize_iExs]
-
-Depends on / 依赖: Countable, Formula, Formula.exClosure, Formula.realize_iExs, Preorder, Realize, Sentence, Sentence.Realize, atTop.isCountablyGenerated, exClosure, isCountablyGenerated, realize_iExs
+/-
+**FirstOrder.Language.Formula.realize_exClosure** 是 Mathlib 中的一个定理，位于命名空间 `First
+Order.Language.Formula`。
+形式化陈述：realize_exClosure [DecidableEq α] (φ : L.Formula α) : φ.exClosure.Realize 
+M ↔ exists v : φ.freeVarFinset -> M, Formula.Realize (φ.restrictFreeVar id) v
+参数：φ : L.Formula α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem realize_exClosure [DecidableEq α] (φ : L.Formula α) :
     φ.exClosure.Realize M ↔
-      exists v : φ.freeVarFinset -> M, Formula.Realize (φ.restrictFreeVar id) v := by
+      ∃ v : φ.freeVarFinset → M, Formula.Realize (φ.restrictFreeVar id) v := by
   simp [Sentence.Realize, Formula.exClosure, Formula.realize_iExs]
-
-/--
-theorem `realize_exClosure_of_realize_equivSentence` / 定理 `realize_exClosure_of_realize_equivSentence`
-
-English:
-theorem realize_exClosure_of_realize_equivSentence
-  statement: [DecidableEq α] [L[[α]].Structure M]
-  proof: by
-  rw [Formula.realize_exClosure]
-  exists fun a => (L.con (a : α) : M)
-  simpa [Formula.Realize, BoundedFormula.realize_restrictFreeVar] using h
-
-中文:
-定理 realize_exClosure_of_realize_equivSentence
-  结论: [DecidableEq α] [L[[α]].结构 M]
-  证明: by
-  rw [Formula.realize_exClosure]
-  exists fun a => (L.con (a : α) : M)
-  simpa [Formula.Realize, BoundedFormula.realize_restrictFreeVar] using h
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_restrictFreeVar, Countable, Formula, Formula.Realize, Formula.realize_exClosure, L.con, Preorder, Realize, atBot.isCountablyGenerated, isCountablyGenerated, realize_exClosure, realize_restrictFreeVar
+/-
+**FirstOrder.Language.Formula.realize_exClosure_of_realize_equivSentence** 是 Mat
+hlib 中的一个定理，位于命名空间 `FirstOrder.Language.Formula`。
+形式化陈述：realize_exClosure_of_realize_equivSentence [DecidableEq α] [L[[α]].Structu
+re M] [(L.lhomWithConstants α).IsExpansionOn M] {φ : L.Formula α} (h : (Formula.
+equivSentence φ).Realize M) : φ.exClosure.Realize M
+参数：L.lhomWithConstants α；h : (Formula.equivSentence φ).Realize M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Formula.realize_exClosure`：realize_exClosure [Decida
+bleEq α] (φ : L.Formula α) : φ.exClosure.Realize M ↔ exists v : φ.freeVarFinset 
+-> M, Formula.Realize (φ.restrictFr…
 -/
 theorem realize_exClosure_of_realize_equivSentence [DecidableEq α] [L[[α]].Structure M]
     [(L.lhomWithConstants α).IsExpansionOn M] {φ : L.Formula α}
@@ -3459,53 +2910,35 @@ theorem realize_exClosure_of_realize_equivSentence [DecidableEq α] [L[[α]].Str
   rw [Formula.realize_exClosure]
   exists fun a => (L.con (a : α) : M)
   simpa [Formula.Realize, BoundedFormula.realize_restrictFreeVar] using h
-
-/--
-theorem `exists_realize_equivSentence_iff_realize_exClosure` / 定理 `exists_realize_equivSentence_iff_realize_exClosure`
-
-English:
-theorem exists_realize_equivSentence_iff_realize_exClosure
-  proof: by
-  constructor
-  · rintro ⟨v, hv⟩
-    exact (Formula.realize_exClosure φ).mpr ⟨fun a => v a,
-      (BoundedFormula.realize_restrictFreeVar (φ := φ) (f := id) (v := fun a => v a) (v' := v)
-        (fun _ => rfl)).2
-        (by simpa [Formula.Realize]
-          using (realize_equivSentence_symm M (Formula.equivSentence φ) v).2 hv)⟩
-  · intro h
-    obtain ⟨v, hv⟩ := (Formula.realize_exClosure φ).1 h
-    let v' := fun a => if hmem : a in φ.freeVarFinset
-      then v ⟨a, hmem⟩ else Classical.choice inferInstance
-    exists v'
-    refine (Formula.realize_equivSentence_symm M (Formula.equivSentence φ) v').mp ?_
-    simpa [Equiv.symm_apply_apply, Formula.Realize] using
-      (BoundedFormula.realize_restrictFreeVar v' (by grind)).1 hv
-
-中文:
-定理 存在_realize_equivSentence_iff_realize_exClosure
-  证明: by
-  constructor
-  · rintro ⟨v, hv⟩
-    exact (Formula.realize_exClosure φ).mpr ⟨fun a => v a,
-      (BoundedFormula.realize_restrictFreeVar (φ := φ) (f := id) (v := fun a => v a) (v' := v)
-        (fun _ => rfl)).2
-        (by simpa [Formula.Realize]
-          using (realize_equivSentence_symm M (Formula.equivSentence φ) v).2 hv)⟩
-  · intro h
-    obtain ⟨v, hv⟩ := (Formula.realize_exClosure φ).1 h
-    let v' := fun a => if hmem : a in φ.freeVarFinset
-      then v ⟨a, hmem⟩ else Classical.choice inferInstance
-    exists v'
-    refine (Formula.realize_equivSentence_symm M (Formula.equivSentence φ) v').mp ?_
-    simpa [Equiv.symm_apply_apply, Formula.Realize] using
-      (BoundedFormula.realize_restrictFreeVar v' (by grind)).1 hv
-
-Depends on / 依赖: constantsOn, constantsOn.structure, structure
+/-
+**FirstOrder.Language.Formula.exists_realize_equivSentence_iff_realize_exClosure
+** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.Language.Formula`。
+形式化陈述：exists_realize_equivSentence_iff_realize_exClosure [DecidableEq α] [Nonemp
+ty M] {φ : L.Formula α} : (exists v : α -> M, letI
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FirstOrder.Language.Formula.realize_exClosure`：realize_exClosure [Decida
+bleEq α] (φ : L.Formula α) : φ.exClosure.Realize M ↔ exists v : φ.freeVarFinset 
+-> M, Formula.Realize (φ.restrictFr…
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_restrictFreeVar`：realize_rest
+rictFreeVar [DecidableEq α] {n : Nat} {φ : L.BoundedFormula α n} {f : φ.freeVarF
+inset -> β} {v : β -> M} {xs : Fin n -> M} (v' :…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `FirstOrder.Language.Formula.realize_equivSentence_symm`：realize_equivSen
+tence_symm (φ : L[[α]].Sentence) (v : α -> M) : (equivSentence.symm φ).Realize v
+ ↔ @Sentence.Realize _ M (@Language.withCons…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem exists_realize_equivSentence_iff_realize_exClosure
     [DecidableEq α] [Nonempty M] {φ : L.Formula α} :
-    (exists v : α -> M,
+    (∃ v : α → M,
       letI := (constantsOn.structure v);
       (Formula.equivSentence φ).Realize M) ↔ (φ.exClosure.Realize M) := by
   constructor
@@ -3517,7 +2950,7 @@ theorem exists_realize_equivSentence_iff_realize_exClosure
           using (realize_equivSentence_symm M (Formula.equivSentence φ) v).2 hv)⟩
   · intro h
     obtain ⟨v, hv⟩ := (Formula.realize_exClosure φ).1 h
-    let v' := fun a => if hmem : a in φ.freeVarFinset
+    let v' := fun a => if hmem : a ∈ φ.freeVarFinset
       then v ⟨a, hmem⟩ else Classical.choice inferInstance
     exists v'
     refine (Formula.realize_equivSentence_symm M (Formula.equivSentence φ) v').mp ?_
@@ -3531,67 +2964,53 @@ namespace StrongHomClass
 variable {F : Type*} [EquivLike F M N] [StrongHomClass L F M N] (g : F)
 
 @[simp]
-/--
-theorem `realize_boundedFormula` / 定理 `realize_boundedFormula`
-
-English:
-theorem realize_boundedFormula
-  statement: (φ : L.BoundedFormula α n) {v : α -> M}
-  proof: by
-  induction φ with
-  | falsum => rfl
-  | equal =>
-    simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term,
-      EmbeddingLike.apply_eq_iff_eq g]
-  | rel =>
-    simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
-    exact StrongHomClass.map_rel g _ _
-  | imp _ _ ih1 ih2 => rw [BoundedFormula.Realize, ih1, ih2, BoundedFormula.Realize]
-  | all _ ih3 =>
-    rw [BoundedFormula.Realize]; rw [BoundedFormula.Realize]
-    constructor
-    · intro h a
-      have h' := h (g a)
-      rw [← Fin.comp_snoc]; rw [ih3] at h'
-      exact h'
-    · intro h a
-      have h' := h (EquivLike.inv g a)
-      rw [← ih3]; rw [Fin.comp_snoc]; rw [EquivLike.apply_inv_apply g] at h'
-      exact h'
-
-@[simp]
-
-中文:
-定理 realize_boundedFormula
-  结论: (φ : L.BoundedFormula α n) {v : α -> M}
-  证明: by
-  induction φ with
-  | falsum => rfl
-  | equal =>
-    simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term,
-      EmbeddingLike.apply_eq_iff_eq g]
-  | rel =>
-    simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
-    exact StrongHomClass.map_rel g _ _
-  | imp _ _ ih1 ih2 => rw [BoundedFormula.Realize, ih1, ih2, BoundedFormula.Realize]
-  | all _ ih3 =>
-    rw [BoundedFormula.Realize]; rw [BoundedFormula.Realize]
-    constructor
-    · intro h a
-      have h' := h (g a)
-      rw [← Fin.comp_snoc]; rw [ih3] at h'
-      exact h'
-    · intro h a
-      have h' := h (EquivLike.inv g a)
-      rw [← ih3]; rw [Fin.comp_snoc]; rw [EquivLike.apply_inv_apply g] at h'
-      exact h'
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.Realize, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Fin.comp_snoc, HomClass, HomClass.realize_term, Realize, StrongHomClass, StrongHomClass.map_rel, Sum.comp_elim, apply_eq_iff_eq, comp_elim, comp_snoc, falsum, map_rel, realize_term
+/-
+**FirstOrder.Language.StrongHomClass.realize_boundedFormula** 是 Mathlib 中的一个定理，位
+于命名空间 `FirstOrder.Language.StrongHomClass`。
+形式化陈述：realize_boundedFormula (φ : L.BoundedFormula α n) {v : α -> M} {xs : Fin n
+ -> M} : φ.Realize (g ∘ v) (g ∘ xs) ↔ φ.Realize v xs
+参数：φ : L.BoundedFormula α n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `FirstOrder.Language.HomClass.realize_term`：∀ {L : FirstOrder.Language} {
+M : Type w} {N : Type u_1} [inst : L.Structure M] [inst_1 : L.Structure N] {α : 
+Type u'}   {F : Type u_4} [inst…
+· 使用定理 `FirstOrder.Language.StrongHomClass.homClass`：∀ {L : FirstOrder.Language}
+ {M : Type w} {N : Type w'} [inst : L.Structure M] [inst_1 : L.Structure N] {F :
+ Type u_3}   [inst_2 : FunLike F …
+· 使用定理 `EmbeddingLike.apply_eq_iff_eq`：apply_eq_iff_eq (f : F) {x y : α} : f x =
+ f y ↔ x = y
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.StrongHomClass.map_rel`：∀ {L : outParam FirstOrder.L
+anguage} {F : Type u_3} {M : outParam (Type u_4)} {N : outParam (Type u_5)}   {i
+nst : FunLike F M N} {inst_1 : L…
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_4`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (f₁ f₂ : L.BoundedFo…
+· 使用定理 `FirstOrder.Language.BoundedFormula.Realize.eq_5`：∀ {L : FirstOrder.Langu
+age} {M : Type w} [inst : L.Structure M] {α : Type u'} (x : ℕ) (x_1 : α → M) (x_
+2 : Fin x → M)   (f : L.BoundedFormul…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.comp_snoc`：comp_snoc {α : Sort*} {β : Sort*} (g : α -> β) (q : Fin n
+ -> α) (y : α) : g ∘ snoc q y = snoc (g ∘ q) (g y)
+· 使用定理 `EquivLike.apply_inv_apply`：apply_inv_apply (e : E) (b : β) : e (inv e b)
+ = b
 -/
-theorem realize_boundedFormula (φ : L.BoundedFormula α n) {v : α -> M}
-    {xs : Fin n -> M} : φ.Realize (g ∘ v) (g ∘ xs) ↔ φ.Realize v xs := by
+theorem realize_boundedFormula (φ : L.BoundedFormula α n) {v : α → M}
+    {xs : Fin n → M} : φ.Realize (g ∘ v) (g ∘ xs) ↔ φ.Realize v xs := by
   induction φ with
   | falsum => rfl
   | equal =>
@@ -3602,101 +3021,91 @@ theorem realize_boundedFormula (φ : L.BoundedFormula α n) {v : α -> M}
     exact StrongHomClass.map_rel g _ _
   | imp _ _ ih1 ih2 => rw [BoundedFormula.Realize, ih1, ih2, BoundedFormula.Realize]
   | all _ ih3 =>
-    rw [BoundedFormula.Realize]; rw [BoundedFormula.Realize]
+    rw [BoundedFormula.Realize, BoundedFormula.Realize]
     constructor
     · intro h a
       have h' := h (g a)
-      rw [← Fin.comp_snoc]; rw [ih3] at h'
+      rw [← Fin.comp_snoc, ih3] at h'
       exact h'
     · intro h a
       have h' := h (EquivLike.inv g a)
-      rw [← ih3]; rw [Fin.comp_snoc]; rw [EquivLike.apply_inv_apply g] at h'
+      rw [← ih3, Fin.comp_snoc, EquivLike.apply_inv_apply g] at h'
       exact h'
 
 @[simp]
-/--
-theorem `realize_formula` / 定理 `realize_formula`
-
-English:
-theorem realize_formula
-  given: (φ : L.Formula α) {v : α -> M}
-  proof: by
-  rw [Formula.Realize]; rw [Formula.Realize]; rw [← realize_boundedFormula g φ]; rw [iff_eq_eq]; rw [Unique.eq_default (g ∘ default)]
-
-include g
-
-中文:
-定理 realize_formula
-  条件: (φ : L.公式 α) {v : α -> M}
-  证明: by
-  rw [Formula.Realize]; rw [Formula.Realize]; rw [← realize_boundedFormula g φ]; rw [iff_eq_eq]; rw [Unique.eq_default (g ∘ default)]
-
-include g
-
-Depends on / 依赖: Formula, Formula.Realize, Realize, Unique, Unique.eq_default, eq_default, iff_eq_eq, realize_boundedFormula
+/-
+**FirstOrder.Language.StrongHomClass.realize_formula** 是 Mathlib 中的一个定理，位于命名空间 `
+FirstOrder.Language.StrongHomClass`。
+形式化陈述：realize_formula (φ : L.Formula α) {v : α -> M} : φ.Realize (g ∘ v) ↔ φ.Rea
+lize v
+参数：φ : L.Formula α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Formula.Realize.eq_1`：∀ {L : FirstOrder.Language} {M
+ : Type w} [inst : L.Structure M] {α : Type u'} (φ : L.Formula α) (v : α → M),  
+ φ.Realize v = FirstOrder.Lang…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.StrongHomClass.realize_boundedFormula`：realize_bound
+edFormula (φ : L.BoundedFormula α n) {v : α -> M} {xs : Fin n -> M} : φ.Realize 
+(g ∘ v) (g ∘ xs) ↔ φ.Realize v xs
+· 使用引理 `iff_eq_eq`：iff_eq_eq {a b : Prop} : (a ↔ b) = (a = b)
+· 使用定理 `Unique.eq_default`：eq_default (a : α) : a = default
 -/
-theorem realize_formula (φ : L.Formula α) {v : α -> M} :
+theorem realize_formula (φ : L.Formula α) {v : α → M} :
     φ.Realize (g ∘ v) ↔ φ.Realize v := by
-  rw [Formula.Realize]; rw [Formula.Realize]; rw [← realize_boundedFormula g φ]; rw [iff_eq_eq]; rw [Unique.eq_default (g ∘ default)]
+  rw [Formula.Realize, Formula.Realize, ← realize_boundedFormula g φ, iff_eq_eq,
+    Unique.eq_default (g ∘ default)]
 
 include g
-
-/--
-theorem `realize_sentence` / 定理 `realize_sentence`
-
-English:
-theorem realize_sentence
-  given: (φ : L.Sentence)
-  statement: M ⊨ φ ↔ N ⊨ φ
-  proof: by
-  rw [Sentence.Realize]; rw [Sentence.Realize]; rw [← realize_formula g]; rw [Unique.eq_default (g ∘ default)]
-
-中文:
-定理 realize_sentence
-  条件: (φ : L.Sentence)
-  结论: M ⊨ φ ↔ N ⊨ φ
-  证明: by
-  rw [Sentence.Realize]; rw [Sentence.Realize]; rw [← realize_formula g]; rw [Unique.eq_default (g ∘ default)]
-
-Depends on / 依赖: Realize, Sentence, Sentence.Realize, Unique, Unique.eq_default, eq_default, realize_formula
+/-
+**FirstOrder.Language.StrongHomClass.realize_sentence** 是 Mathlib 中的一个定理，位于命名空间 
+`FirstOrder.Language.StrongHomClass`。
+形式化陈述：realize_sentence (φ : L.Sentence) : M ⊨ φ ↔ N ⊨ φ
+参数：φ : L.Sentence。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Sentence.Realize.eq_1`：∀ {L : FirstOrder.Language} (
+M : Type w) [inst : L.Structure M] (φ : L.Sentence),   M ⊨ φ = FirstOrder.Langua
+ge.Formula.Realize φ default
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FirstOrder.Language.StrongHomClass.realize_formula`：realize_formula (φ :
+ L.Formula α) {v : α -> M} : φ.Realize (g ∘ v) ↔ φ.Realize v
+· 使用定理 `Unique.eq_default`：eq_default (a : α) : a = default
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_sentence (φ : L.Sentence) : M ⊨ φ ↔ N ⊨ φ := by
-  rw [Sentence.Realize]; rw [Sentence.Realize]; rw [← realize_formula g]; rw [Unique.eq_default (g ∘ default)]
-
-/--
-theorem `theory_model` / 定理 `theory_model`
-
-English:
-theorem theory_model
-  given: [M ⊨ T]
-  statement: N ⊨ T
-  proof: ⟨fun φ hφ => (realize_sentence g φ).1 (Theory.realize_sentence_of_mem T hφ)⟩
-
-中文:
-定理 theory_model
-  条件: [M ⊨ T]
-  结论: N ⊨ T
-  证明: ⟨fun φ hφ => (realize_sentence g φ).1 (Theory.realize_sentence_of_mem T hφ)⟩
-
-Depends on / 依赖: Theory, Theory.realize_sentence_of_mem, realize_sentence, realize_sentence_of_mem
+  rw [Sentence.Realize, Sentence.Realize, ← realize_formula g,
+    Unique.eq_default (g ∘ default)]
+/-
+**FirstOrder.Language.StrongHomClass.theory_model** 是 Mathlib 中的一个定理，位于命名空间 `Fir
+stOrder.Language.StrongHomClass`。
+形式化陈述：theory_model [M ⊨ T] : N ⊨ T
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.StrongHomClass.realize_sentence`：realize_sentence (φ
+ : L.Sentence) : M ⊨ φ ↔ N ⊨ φ
+· 使用定理 `FirstOrder.Language.Theory.realize_sentence_of_mem`：∀ {L : FirstOrder.La
+nguage} {M : Type w} [inst : L.Structure M] (T : L.Theory) [M ⊨ T] {φ : L.Senten
+ce}, φ ∈ T → M ⊨ φ
 -/
 theorem theory_model [M ⊨ T] : N ⊨ T :=
   ⟨fun φ hφ => (realize_sentence g φ).1 (Theory.realize_sentence_of_mem T hφ)⟩
-
-/--
-theorem `elementarilyEquivalent` / 定理 `elementarilyEquivalent`
-
-English:
-theorem elementarilyEquivalent
-  statement: M ≅[L] N
-  proof: elementarilyEquivalent_iff.2 (realize_sentence g)
-
-中文:
-定理 elementarilyEquivalent
-  结论: M ≅[L] N
-  证明: elementarilyEquivalent_iff.2 (realize_sentence g)
-
-Depends on / 依赖: elementarilyEquivalent_iff, realize_sentence
+/-
+**FirstOrder.Language.StrongHomClass.elementarilyEquivalent** 是 Mathlib 中的一个定理，位
+于命名空间 `FirstOrder.Language.StrongHomClass`。
+形式化陈述：elementarilyEquivalent : M ≅[L] N
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FirstOrder.Language.elementarilyEquivalent_iff`：elementarilyEquivalent_i
+ff : M ≅[L] N ↔ forall φ : L.Sentence, M ⊨ φ ↔ N ⊨ φ
+· 使用定理 `FirstOrder.Language.StrongHomClass.realize_sentence`：realize_sentence (φ
+ : L.Sentence) : M ⊨ φ ↔ N ⊨ φ
 -/
 theorem elementarilyEquivalent : M ≅[L] N :=
   elementarilyEquivalent_iff.2 (realize_sentence g)
@@ -3710,167 +3119,145 @@ open BoundedFormula
 variable {r : L.Relations 2}
 
 @[simp]
-/--
-theorem `realize_reflexive` / 定理 `realize_reflexive`
-
-English:
-theorem realize_reflexive
-  statement: M ⊨ r.reflexive ↔ Std.Refl fun x y : M => RelMap r ![x, y]
-  proof: by
-  rw [refl_def]
-  exact forall_congr' fun _ => realize_rel₂
-
-@[simp]
-
-中文:
-定理 realize_reflexive
-  结论: M ⊨ r.reflexive ↔ Std.Refl fun x y : M => RelMap r ![x, y]
-  证明: by
-  rw [refl_def]
-  exact forall_congr' fun _ => realize_rel₂
-
-@[simp]
-
-Depends on / 依赖: forall_congr, refl_def
+/-
+**FirstOrder.Language.Relations.realize_reflexive** 是 Mathlib 中的一个定理，位于命名空间 `Fir
+stOrder.Language.Relations`。
+形式化陈述：realize_reflexive : M ⊨ r.reflexive ↔ Std.Refl fun x y : M => RelMap r ![x
+, y]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `refl_def`：refl_def : Std.Refl r ↔ forall ⦃a⦄, r a a
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel₂`：realize_rel₂ {R : L.Rel
+ations 2} {t₁ t₂ : L.Term _} : (R.boundedFormula₂ t₁ t₂).Realize v xs ↔ RelMap R
+ ![t₁.realize (Sum.elim v xs), t₂.rea…
 -/
 theorem realize_reflexive : M ⊨ r.reflexive ↔ Std.Refl fun x y : M => RelMap r ![x, y] := by
   rw [refl_def]
-  exact forall_congr' fun _ => realize_rel₂
+  exact forall_congr' fun _ ↦ realize_rel₂
 
 @[simp]
-/--
-theorem `realize_irreflexive` / 定理 `realize_irreflexive`
-
-English:
-theorem realize_irreflexive
-  statement: M ⊨ r.irreflexive ↔ Std.Irrefl fun x y : M => RelMap r ![x, y]
-  proof: by
-  rw [irrefl_def]
-  exact forall_congr' fun _ => not_congr realize_rel₂
-
-@[simp]
-
-中文:
-定理 realize_irreflexive
-  结论: M ⊨ r.irreflexive ↔ Std.Irrefl fun x y : M => RelMap r ![x, y]
-  证明: by
-  rw [irrefl_def]
-  exact forall_congr' fun _ => not_congr realize_rel₂
-
-@[simp]
-
-Depends on / 依赖: forall_congr, irrefl_def, not_congr
+/-
+**FirstOrder.Language.Relations.realize_irreflexive** 是 Mathlib 中的一个定理，位于命名空间 `F
+irstOrder.Language.Relations`。
+形式化陈述：realize_irreflexive : M ⊨ r.irreflexive ↔ Std.Irrefl fun x y : M => RelMap
+ r ![x, y]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `irrefl_def`：irrefl_def : Std.Irrefl r ↔ forall ⦃a⦄, ¬r a a
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel₂`：realize_rel₂ {R : L.Rel
+ations 2} {t₁ t₂ : L.Term _} : (R.boundedFormula₂ t₁ t₂).Realize v xs ↔ RelMap R
+ ![t₁.realize (Sum.elim v xs), t₂.rea…
 -/
 theorem realize_irreflexive : M ⊨ r.irreflexive ↔ Std.Irrefl fun x y : M => RelMap r ![x, y] := by
   rw [irrefl_def]
-  exact forall_congr' fun _ => not_congr realize_rel₂
+  exact forall_congr' fun _ ↦ not_congr realize_rel₂
 
 @[simp]
-/--
-theorem `realize_symmetric` / 定理 `realize_symmetric`
-
-English:
-theorem realize_symmetric
-  statement: M ⊨ r.symmetric ↔ Std.Symm fun x y : M => RelMap r ![x, y]
-  proof: by
-  rw [symm_def]
-  exact forall₂_congr fun _ _ => imp_congr realize_rel₂ realize_rel₂
-
-@[simp]
-
-中文:
-定理 realize_symmetric
-  结论: M ⊨ r.symmetric ↔ Std.Symm fun x y : M => RelMap r ![x, y]
-  证明: by
-  rw [symm_def]
-  exact forall₂_congr fun _ _ => imp_congr realize_rel₂ realize_rel₂
-
-@[simp]
-
-Depends on / 依赖: imp_congr, symm_def
+/-
+**FirstOrder.Language.Relations.realize_symmetric** 是 Mathlib 中的一个定理，位于命名空间 `Fir
+stOrder.Language.Relations`。
+形式化陈述：realize_symmetric : M ⊨ r.symmetric ↔ Std.Symm fun x y : M => RelMap r ![x
+, y]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `symm_def`：symm_def : Std.Symm r ↔ forall ⦃a b⦄, r a b -> r b a
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `imp_congr`：∀ {a b c d : Prop}, (a ↔ c) → (b ↔ d) → (a → b ↔ c → d)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel₂`：realize_rel₂ {R : L.Rel
+ations 2} {t₁ t₂ : L.Term _} : (R.boundedFormula₂ t₁ t₂).Realize v xs ↔ RelMap R
+ ![t₁.realize (Sum.elim v xs), t₂.rea…
 -/
 theorem realize_symmetric : M ⊨ r.symmetric ↔ Std.Symm fun x y : M => RelMap r ![x, y] := by
   rw [symm_def]
-  exact forall₂_congr fun _ _ => imp_congr realize_rel₂ realize_rel₂
+  exact forall₂_congr fun _ _ ↦ imp_congr realize_rel₂ realize_rel₂
 
 @[simp]
-/--
-theorem `realize_antisymmetric` / 定理 `realize_antisymmetric`
-
-English:
-theorem realize_antisymmetric
-  proof: by
-  rw [antisymm_def]
-exact forall₂_congr fun _ _ => imp_congr realize_rel₂ imp_congr realize_rel₂ .rfl
-
-@[simp]
-
-中文:
-定理 realize_antisymmetric
-  证明: by
-  rw [antisymm_def]
-exact forall₂_congr fun _ _ => imp_congr realize_rel₂ imp_congr realize_rel₂ .rfl
-
-@[simp]
-
-Depends on / 依赖: antisymm_def, imp_congr
+/-
+**FirstOrder.Language.Relations.realize_antisymmetric** 是 Mathlib 中的一个定理，位于命名空间 
+`FirstOrder.Language.Relations`。
+形式化陈述：realize_antisymmetric : M ⊨ r.antisymmetric ↔ Std.Antisymm fun x y : M => 
+RelMap r ![x, y]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `antisymm_def`：antisymm_def : Std.Antisymm r ↔ forall ⦃a b⦄, r a b -> r b
+ a -> a = b
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `imp_congr`：∀ {a b c d : Prop}, (a ↔ c) → (b ↔ d) → (a → b ↔ c → d)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel₂`：realize_rel₂ {R : L.Rel
+ations 2} {t₁ t₂ : L.Term _} : (R.boundedFormula₂ t₁ t₂).Realize v xs ↔ RelMap R
+ ![t₁.realize (Sum.elim v xs), t₂.rea…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem realize_antisymmetric :
     M ⊨ r.antisymmetric ↔ Std.Antisymm fun x y : M => RelMap r ![x, y] := by
   rw [antisymm_def]
-exact forall₂_congr fun _ _ => imp_congr realize_rel₂ imp_congr realize_rel₂ .rfl
+  exact forall₂_congr fun _ _ ↦ imp_congr realize_rel₂ <| imp_congr realize_rel₂ .rfl
 
 @[simp]
-/--
-theorem `realize_transitive` / 定理 `realize_transitive`
-
-English:
-theorem realize_transitive
-  statement: M ⊨ r.transitive ↔ IsTrans M fun x y => RelMap r ![x, y]
-  proof: by
-  rw [isTrans_def]
-exact forall₃_congr fun _ _ _ => imp_congr realize_rel₂ imp_congr realize_rel₂ realize_rel₂
-
-@[simp]
-
-中文:
-定理 realize_transitive
-  结论: M ⊨ r.transitive ↔ 是Trans M fun x y => RelMap r ![x, y]
-  证明: by
-  rw [isTrans_def]
-exact forall₃_congr fun _ _ _ => imp_congr realize_rel₂ imp_congr realize_rel₂ realize_rel₂
-
-@[simp]
-
-Depends on / 依赖: imp_congr, isTrans_def
+/-
+**FirstOrder.Language.Relations.realize_transitive** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+rstOrder.Language.Relations`。
+形式化陈述：realize_transitive : M ⊨ r.transitive ↔ IsTrans M fun x y => RelMap r ![x,
+ y]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `isTrans_def`：isTrans_def {α : Sort*} {r : α -> α -> Prop} : IsTrans α r 
+↔ forall ⦃a b c⦄, r a b -> r b c -> r a c
+· 使用定理 `forall₃_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → 
+Sort u_3} {p q : (a : α) → (b : β a) → γ a b → Prop},   (∀ (a : α) (b : β a) (c 
+: γ…
+· 使用定理 `imp_congr`：∀ {a b c d : Prop}, (a ↔ c) → (b ↔ d) → (a → b ↔ c → d)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel₂`：realize_rel₂ {R : L.Rel
+ations 2} {t₁ t₂ : L.Term _} : (R.boundedFormula₂ t₁ t₂).Realize v xs ↔ RelMap R
+ ![t₁.realize (Sum.elim v xs), t₂.rea…
 -/
-theorem realize_transitive : M ⊨ r.transitive ↔ IsTrans M fun x y => RelMap r ![x, y] := by
+theorem realize_transitive : M ⊨ r.transitive ↔ IsTrans M fun x y ↦ RelMap r ![x, y] := by
   rw [isTrans_def]
-exact forall₃_congr fun _ _ _ => imp_congr realize_rel₂ imp_congr realize_rel₂ realize_rel₂
+  exact forall₃_congr fun _ _ _ ↦ imp_congr realize_rel₂ <| imp_congr realize_rel₂ realize_rel₂
 
 @[simp]
-/--
-theorem `realize_total` / 定理 `realize_total`
-
-English:
-theorem realize_total
-  statement: M ⊨ r.total ↔ Std.Total fun x y : M => RelMap r ![x, y]
-  proof: by
-  rw [total_def]
-exact forall₂_congr fun _ _ => realize_sup.trans or_congr realize_rel₂ realize_rel₂
-
-中文:
-定理 realize_total
-  结论: M ⊨ r.total ↔ Std.全 fun x y : M => RelMap r ![x, y]
-  证明: by
-  rw [total_def]
-exact forall₂_congr fun _ _ => realize_sup.trans or_congr realize_rel₂ realize_rel₂
-
-Depends on / 依赖: or_congr, realize_sup, realize_sup.trans, total_def
+/-
+**FirstOrder.Language.Relations.realize_total** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Relations`。
+形式化陈述：realize_total : M ⊨ r.total ↔ Std.Total fun x y : M => RelMap r ![x, y]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `total_def`：total_def : Std.Total r ↔ forall ⦃a b⦄, r a b ∨ r b a
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_sup`：realize_sup : (φ ⊔ ψ).Re
+alize v xs ↔ φ.Realize v xs ∨ ψ.Realize v xs
+· 使用定理 `or_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∨ b ↔ c ∨ d)
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_rel₂`：realize_rel₂ {R : L.Rel
+ations 2} {t₁ t₂ : L.Term _} : (R.boundedFormula₂ t₁ t₂).Realize v xs ↔ RelMap R
+ ![t₁.realize (Sum.elim v xs), t₂.rea…
 -/
-theorem realize_total : M ⊨ r.total ↔ Std.Total fun x y : M => RelMap r ![x, y] := by
+theorem realize_total : M ⊨ r.total ↔ Std.Total fun x y : M ↦ RelMap r ![x, y] := by
   rw [total_def]
-exact forall₂_congr fun _ _ => realize_sup.trans or_congr realize_rel₂ realize_rel₂
+  exact forall₂_congr fun _ _ ↦ realize_sup.trans <| or_congr realize_rel₂ realize_rel₂
 
 end Relations
 
@@ -3878,51 +3265,55 @@ section Cardinality
 
 variable (L)
 @[simp]
-/--
-theorem `Sentence.realize_cardGe` / 定理 `Sentence.realize_cardGe`
-
-English:
-theorem Sentence.realize_cardGe
-  given: (n)
-  statement: M ⊨ Sentence.cardGe L n ↔ ↑n <= #M
-  proof: by
-  rw [← lift_mk_fin]; rw [← lift_le.{0}]; rw [lift_lift]; rw [lift_mk_le]; rw [Sentence.cardGe]; rw [Sentence.Realize]; rw [BoundedFormula.realize_exs]
-  simp_rw [BoundedFormula.realize_foldr_inf]
-  simp only [Function.comp_apply, List.mem_map, Prod.exists, Ne, List.mem_product,
-    List.mem_finRange, forall_exists_index, and_imp, List.mem_filter, true_and]
-  refine ⟨?_, fun xs => ⟨xs.some, ?_⟩⟩
-  · rintro ⟨xs, h⟩
-    refine ⟨⟨xs, fun i j ij => ?_⟩⟩
-    contrapose! ij
-    exact h _ i j (by simpa using ij) rfl
-  · rintro _ i j ij rfl
-    simpa using ij
-
-@[simp]
-
-中文:
-定理 Sentence.realize_cardGe
-  条件: (n)
-  结论: M ⊨ Sentence.cardGe L n ↔ ↑n <= #M
-  证明: by
-  rw [← lift_mk_fin]; rw [← lift_le.{0}]; rw [lift_lift]; rw [lift_mk_le]; rw [Sentence.cardGe]; rw [Sentence.Realize]; rw [BoundedFormula.realize_exs]
-  simp_rw [BoundedFormula.realize_foldr_inf]
-  simp only [Function.comp_apply, List.mem_map, Prod.exists, Ne, List.mem_product,
-    List.mem_finRange, forall_exists_index, and_imp, List.mem_filter, true_and]
-  refine ⟨?_, fun xs => ⟨xs.some, ?_⟩⟩
-  · rintro ⟨xs, h⟩
-    refine ⟨⟨xs, fun i j ij => ?_⟩⟩
-    contrapose! ij
-    exact h _ i j (by simpa using ij) rfl
-  · rintro _ i j ij rfl
-    simpa using ij
-
-@[simp]
-
-Depends on / 依赖: BoundedFormula, BoundedFormula.realize_exs, BoundedFormula.realize_foldr_inf, Function, Function.comp_apply, List.mem_filter, List.mem_finRange, List.mem_map, List.mem_product, Prod.exists, Realize, Sentence, Sentence.Realize, Sentence.cardGe, and_imp, cardGe, comp_apply, contrapose, forall_exists_index, lift_le
+/-
+**FirstOrder.Language.Sentence.realize_cardGe** 是 Mathlib 中的一个定理，位于命名空间 `FirstOr
+der.Language.Sentence`。
+形式化陈述：∀ (L : FirstOrder.Language) {M : Type w} [inst : L.Structure M] (n : ℕ),  
+ M ⊨ FirstOrder.Language.Sentence.cardGe L n ↔ ↑n ≤ Cardinal.mk M
+参数：L : FirstOrder.Language；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_mk_fin`：lift_mk_fin (n : Nat) : lift #(Fin n) = n
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `Cardinal.lift_mk_le`：lift_mk_le {α : Type v} {β : Type w} : lift.{max u 
+w} #α <= lift.{max u v} #β ↔ Nonempty (α ↪ β)
+· 使用定理 `FirstOrder.Language.Sentence.cardGe.eq_1`：∀ (L : FirstOrder.Language) (n
+ : ℕ),   FirstOrder.Language.Sentence.cardGe L n =     (List.foldr (fun x1 x2 =>
+ x1 ⊓ x2) ⊤         (List.map …
+· 使用定理 `FirstOrder.Language.Sentence.Realize.eq_1`：∀ {L : FirstOrder.Language} (
+M : Type w) [inst : L.Structure M] (φ : L.Sentence),   M ⊨ φ = FirstOrder.Langua
+ge.Formula.Realize φ default
+· 使用定理 `FirstOrder.Language.BoundedFormula.realize_exs`：realize_exs {φ : L.Bound
+edFormula α n} {v : α -> M} : φ.exs.Realize v ↔ exists xs : Fin n -> M, φ.Realiz
+e v xs
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `decide_not`：∀ {p : Prop} [g : Decidable p] [h : Decidable ¬p], (decide ¬
+p) = !decide p
+· 使用定理 `Bool.not_true`：(!true) = false
+· 使用定理 `Function.instEmbeddingLikeEmbedding`：∀ {α : Sort u} {β : Sort v}, Embedd
+ingLike (α ↪ β) α β
 -/
-theorem Sentence.realize_cardGe (n) : M ⊨ Sentence.cardGe L n ↔ ↑n <= #M := by
-  rw [← lift_mk_fin]; rw [← lift_le.{0}]; rw [lift_lift]; rw [lift_mk_le]; rw [Sentence.cardGe]; rw [Sentence.Realize]; rw [BoundedFormula.realize_exs]
+theorem Sentence.realize_cardGe (n) : M ⊨ Sentence.cardGe L n ↔ ↑n ≤ #M := by
+  rw [← lift_mk_fin, ← lift_le.{0}, lift_lift, lift_mk_le, Sentence.cardGe, Sentence.Realize,
+    BoundedFormula.realize_exs]
   simp_rw [BoundedFormula.realize_foldr_inf]
   simp only [Function.comp_apply, List.mem_map, Prod.exists, Ne, List.mem_product,
     List.mem_finRange, forall_exists_index, and_imp, List.mem_filter, true_and]
@@ -3935,126 +3326,97 @@ theorem Sentence.realize_cardGe (n) : M ⊨ Sentence.cardGe L n ↔ ↑n <= #M :
     simpa using ij
 
 @[simp]
-/--
-theorem `model_infiniteTheory_iff` / 定理 `model_infiniteTheory_iff`
-
-English:
-theorem model_infiniteTheory_iff
-  statement: M ⊨ L.infiniteTheory ↔ Infinite M
-  proof: by
-  simp [infiniteTheory, infinite_iff, aleph0_le]
-
-中文:
-定理 model_infiniteTheory_iff
-  结论: M ⊨ L.infiniteTheory ↔ 无限 M
-  证明: by
-  simp [infiniteTheory, infinite_iff, aleph0_le]
-
-Depends on / 依赖: aleph0_le, infiniteTheory, infinite_iff
+/-
+**FirstOrder.Language.model_infiniteTheory_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstO
+rder.Language`。
+形式化陈述：model_infiniteTheory_iff : M ⊨ L.infiniteTheory ↔ Infinite M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem model_infiniteTheory_iff : M ⊨ L.infiniteTheory ↔ Infinite M := by
   simp [infiniteTheory, infinite_iff, aleph0_le]
-
-/--
-Instance `model_infiniteTheory` / 实例 `model_infiniteTheory`
-
-English:
-instance model_infiniteTheory
-  signature: [h : Infinite M]
-  body: L.model_infiniteTheory_iff.2 h
-
-@[simp]
-
-中文:
-实例 model_infiniteTheory
-  签名: [h : 无限 M]
-  定义体: L.model_infiniteTheory_iff.2 h
-
-@[simp]
-
-Depends on / 依赖: L.model_infiniteTheory_iff, model_infiniteTheory_iff
+/-
+**FirstOrder.Language.model_infiniteTheory** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder
+.Language`。
+形式化陈述：model_infiniteTheory [h : Infinite M] : M ⊨ L.infiniteTheory
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FirstOrder.Language.model_infiniteTheory_iff`：model_infiniteTheory_iff :
+ M ⊨ L.infiniteTheory ↔ Infinite M
 -/
 instance model_infiniteTheory [h : Infinite M] : M ⊨ L.infiniteTheory :=
   L.model_infiniteTheory_iff.2 h
 
 @[simp]
-/--
-theorem `model_nonemptyTheory_iff` / 定理 `model_nonemptyTheory_iff`
-
-English:
-theorem model_nonemptyTheory_iff
-  statement: M ⊨ L.nonemptyTheory ↔ Nonempty M
-  proof: by
-  simp only [nonemptyTheory, Theory.model_iff, Set.mem_singleton_iff, forall_eq,
-    Sentence.realize_cardGe, Nat.cast_one, Cardinal.one_le_iff_ne_zero, mk_ne_zero_iff]
-
-中文:
-定理 model_nonemptyTheory_iff
-  结论: M ⊨ L.nonemptyTheory ↔ 非空 M
-  证明: by
-  simp only [nonemptyTheory, Theory.model_iff, Set.mem_singleton_iff, forall_eq,
-    Sentence.realize_cardGe, Nat.cast_one, Cardinal.one_le_iff_ne_zero, mk_ne_zero_iff]
-
-Depends on / 依赖: Cardinal, Cardinal.one_le_iff_ne_zero, Nat.cast_one, Sentence, Sentence.realize_cardGe, Set.mem_singleton_iff, Theory, Theory.model_iff, cast_one, forall_eq, mem_singleton_iff, mk_ne_zero_iff, model_iff, nonemptyTheory, one_le_iff_ne_zero, realize_cardGe
+/-
+**FirstOrder.Language.model_nonemptyTheory_iff** 是 Mathlib 中的一个定理，位于命名空间 `FirstO
+rder.Language`。
+形式化陈述：model_nonemptyTheory_iff : M ⊨ L.nonemptyTheory ↔ Nonempty M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem model_nonemptyTheory_iff : M ⊨ L.nonemptyTheory ↔ Nonempty M := by
   simp only [nonemptyTheory, Theory.model_iff, Set.mem_singleton_iff, forall_eq,
     Sentence.realize_cardGe, Nat.cast_one, Cardinal.one_le_iff_ne_zero, mk_ne_zero_iff]
-
-/--
-Instance `model_nonempty` / 实例 `model_nonempty`
-
-English:
-instance model_nonempty
-  signature: [h : Nonempty M]
-  body: L.model_nonemptyTheory_iff.2 h
-
-中文:
-实例 model_nonempty
-  签名: [h : 非空 M]
-  定义体: L.model_nonemptyTheory_iff.2 h
-
-Depends on / 依赖: L.model_nonemptyTheory_iff, model_nonemptyTheory_iff
+/-
+**FirstOrder.Language.model_nonempty** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.Langu
+age`。
+形式化陈述：model_nonempty [h : Nonempty M] : M ⊨ L.nonemptyTheory
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FirstOrder.Language.model_nonemptyTheory_iff`：model_nonemptyTheory_iff :
+ M ⊨ L.nonemptyTheory ↔ Nonempty M
 -/
 instance model_nonempty [h : Nonempty M] : M ⊨ L.nonemptyTheory :=
   L.model_nonemptyTheory_iff.2 h
-
-/--
-theorem `model_distinctConstantsTheory` / 定理 `model_distinctConstantsTheory`
-
-English:
-theorem model_distinctConstantsTheory
-  given: {M : Type w} [L[[α]].Structure M] (s : Set α)
-  proof: by
-  simp only [distinctConstantsTheory, Theory.model_iff, Set.mem_image,
-    Prod.exists, forall_exists_index, and_imp]
-  refine ⟨fun h a as b bs ab => ?_, ?_⟩
-  · contrapose! ab
-    have h' := h _ a b ⟨⟨as, bs⟩, ab⟩ rfl
-    simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal,
-      Term.realize_constants] at h'
-    exact h'
-  · rintro h φ a b ⟨⟨as, bs⟩, ab⟩ rfl
-    simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal, Term.realize_constants]
-    exact fun contra => ab (h as bs contra)
-
-中文:
-定理 model_distinctConstantsTheory
-  条件: {M : 类型 w} [L[[α]].结构 M] (s : 集合 α)
-  证明: by
-  simp only [distinctConstantsTheory, Theory.model_iff, Set.mem_image,
-    Prod.exists, forall_exists_index, and_imp]
-  refine ⟨fun h a as b bs ab => ?_, ?_⟩
-  · contrapose! ab
-    have h' := h _ a b ⟨⟨as, bs⟩, ab⟩ rfl
-    simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal,
-      Term.realize_constants] at h'
-    exact h'
-  · rintro h φ a b ⟨⟨as, bs⟩, ab⟩ rfl
-    simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal, Term.realize_constants]
-    exact fun contra => ab (h as bs contra)
-
-Depends on / 依赖: Formula, Formula.realize_equal, Formula.realize_not, Prod.exists, Realize, Sentence, Sentence.Realize, Set.mem_image, Term.realize_constants, Theory, Theory.model_iff, and_imp, contra, contrapose, distinctConstantsTheory, forall_exists_index, mem_image, model_iff, realize_constants, realize_equal
+/-
+**FirstOrder.Language.model_distinctConstantsTheory** 是 Mathlib 中的一个定理，位于命名空间 `F
+irstOrder.Language`。
+形式化陈述：model_distinctConstantsTheory {M : Type w} [L[[α]].Structure M] (s : Set α
+) : M ⊨ L.distinctConstantsTheory s ↔ Set.InjOn (fun i : α => (L.con i : M)) s
+参数：s : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `FirstOrder.Language.Term.realize_constants`：realize_constants {c : L.Con
+stants} {v : α -> M} : c.term.realize v = c
 -/
 theorem model_distinctConstantsTheory {M : Type w} [L[[α]].Structure M] (s : Set α) :
     M ⊨ L.distinctConstantsTheory s ↔ Set.InjOn (fun i : α => (L.con i : M)) s := by
@@ -4069,24 +3431,27 @@ theorem model_distinctConstantsTheory {M : Type w} [L[[α]].Structure M] (s : Se
   · rintro h φ a b ⟨⟨as, bs⟩, ab⟩ rfl
     simp only [Sentence.Realize, Formula.realize_not, Formula.realize_equal, Term.realize_constants]
     exact fun contra => ab (h as bs contra)
-
-/--
-theorem `card_le_of_model_distinctConstantsTheory` / 定理 `card_le_of_model_distinctConstantsTheory`
-
-English:
-theorem card_le_of_model_distinctConstantsTheory
-  statement: (s : Set α) (M : Type w) [L[[α]].Structure M]
-  proof: lift_mk_le'.2 ⟨⟨_, Set.injOn_iff_injective.1 ((L.model_distinctConstantsTheory s).1 h)⟩⟩
-
-中文:
-定理 card_le_of_model_distinctConstantsTheory
-  结论: (s : 集合 α) (M : 类型 w) [L[[α]].结构 M]
-  证明: lift_mk_le'.2 ⟨⟨_, Set.injOn_iff_injective.1 ((L.model_distinctConstantsTheory s).1 h)⟩⟩
-
-Depends on / 依赖: L.model_distinctConstantsTheory, Set.injOn_iff_injective, injOn_iff_injective, lift_mk_le, model_distinctConstantsTheory
+/-
+**FirstOrder.Language.card_le_of_model_distinctConstantsTheory** 是 Mathlib 中的一个定
+理，位于命名空间 `FirstOrder.Language`。
+形式化陈述：card_le_of_model_distinctConstantsTheory (s : Set α) (M : Type w) [L[[α]].
+Structure M] [h : M ⊨ L.distinctConstantsTheory s] : Cardinal.lift.{w} #s <= Car
+dinal.lift.{u'} #M
+参数：s : Set α；M : Type w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_mk_le'`：lift_mk_le' {α : Type u} {β : Type v} : lift.{v} #
+α <= lift.{u} #β ↔ Nonempty (α ↪ β)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.injOn_iff_injective`：injOn_iff_injective : InjOn f s ↔ Injective (s.
+domRestrict f)
+· 使用定理 `FirstOrder.Language.model_distinctConstantsTheory`：model_distinctConstan
+tsTheory {M : Type w} [L[[α]].Structure M] (s : Set α) : M ⊨ L.distinctConstants
+Theory s ↔ Set.InjOn (fun i : α => (L.c…
 -/
 theorem card_le_of_model_distinctConstantsTheory (s : Set α) (M : Type w) [L[[α]].Structure M]
-    [h : M ⊨ L.distinctConstantsTheory s] : Cardinal.lift.{w} #s <= Cardinal.lift.{u'} #M :=
+    [h : M ⊨ L.distinctConstantsTheory s] : Cardinal.lift.{w} #s ≤ Cardinal.lift.{u'} #M :=
   lift_mk_le'.2 ⟨⟨_, Set.injOn_iff_injective.1 ((L.model_distinctConstantsTheory s).1 h)⟩⟩
 
 end Cardinality
@@ -4101,162 +3466,115 @@ nonrec theorem symm (h : M ≅[L] N) : N ≅[L] M :=
 nonrec theorem trans (MN : M ≅[L] N) (NP : N ≅[L] P) : M ≅[L] P :=
   MN.trans NP
 
-/--
-theorem `completeTheory_eq` / 定理 `completeTheory_eq`
-
-English:
-theorem completeTheory_eq
-  given: (h : M ≅[L] N)
-  statement: L.completeTheory M = L.completeTheory N
-  proof: h
-
-中文:
-定理 completeTheory_eq
-  条件: (h : M ≅[L] N)
-  结论: L.completeTheory M = L.completeTheory N
-  证明: h
+/-
+**FirstOrder.Language.ElementarilyEquivalent.completeTheory_eq** 是 Mathlib 中的一个定
+理，位于命名空间 `FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：completeTheory_eq (h : M ≅[L] N) : L.completeTheory M = L.completeTheory N
+参数：h : M ≅[L] N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem completeTheory_eq (h : M ≅[L] N) : L.completeTheory M = L.completeTheory N :=
   h
-
-/--
-theorem `realize_sentence` / 定理 `realize_sentence`
-
-English:
-theorem realize_sentence
-  given: (h : M ≅[L] N) (φ : L.Sentence)
-  statement: M ⊨ φ ↔ N ⊨ φ
-  proof: (elementarilyEquivalent_iff.1 h) φ
-
-中文:
-定理 realize_sentence
-  条件: (h : M ≅[L] N) (φ : L.Sentence)
-  结论: M ⊨ φ ↔ N ⊨ φ
-  证明: (elementarilyEquivalent_iff.1 h) φ
-
-Depends on / 依赖: elementarilyEquivalent_iff
+/-
+**FirstOrder.Language.ElementarilyEquivalent.realize_sentence** 是 Mathlib 中的一个定理
+，位于命名空间 `FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：realize_sentence (h : M ≅[L] N) (φ : L.Sentence) : M ⊨ φ ↔ N ⊨ φ
+参数：h : M ≅[L] N；φ : L.Sentence。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.elementarilyEquivalent_iff`：elementarilyEquivalent_i
+ff : M ≅[L] N ↔ forall φ : L.Sentence, M ⊨ φ ↔ N ⊨ φ
 -/
 theorem realize_sentence (h : M ≅[L] N) (φ : L.Sentence) : M ⊨ φ ↔ N ⊨ φ :=
   (elementarilyEquivalent_iff.1 h) φ
-
-/--
-theorem `theory_model_iff` / 定理 `theory_model_iff`
-
-English:
-theorem theory_model_iff
-  given: (h : M ≅[L] N)
-  statement: M ⊨ T ↔ N ⊨ T
-  proof: by
-  rw [Theory.model_iff_subset_completeTheory]; rw [Theory.model_iff_subset_completeTheory]; rw [h.completeTheory_eq]
-
-中文:
-定理 theory_model_iff
-  条件: (h : M ≅[L] N)
-  结论: M ⊨ T ↔ N ⊨ T
-  证明: by
-  rw [Theory.model_iff_subset_completeTheory]; rw [Theory.model_iff_subset_completeTheory]; rw [h.completeTheory_eq]
-
-Depends on / 依赖: Theory, Theory.model_iff_subset_completeTheory, completeTheory_eq, h.completeTheory_eq, model_iff_subset_completeTheory
+/-
+**FirstOrder.Language.ElementarilyEquivalent.theory_model_iff** 是 Mathlib 中的一个定理
+，位于命名空间 `FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：theory_model_iff (h : M ≅[L] N) : M ⊨ T ↔ N ⊨ T
+参数：h : M ≅[L] N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FirstOrder.Language.Theory.model_iff_subset_completeTheory`：model_iff_su
+bset_completeTheory : M ⊨ T ↔ T subseteq L.completeTheory M
+· 使用定理 `FirstOrder.Language.ElementarilyEquivalent.completeTheory_eq`：completeTh
+eory_eq (h : M ≅[L] N) : L.completeTheory M = L.completeTheory N
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem theory_model_iff (h : M ≅[L] N) : M ⊨ T ↔ N ⊨ T := by
-  rw [Theory.model_iff_subset_completeTheory]; rw [Theory.model_iff_subset_completeTheory]; rw [h.completeTheory_eq]
-
-/--
-theorem `theory_model` / 定理 `theory_model`
-
-English:
-theorem theory_model
-  given: [MT : M ⊨ T] (h : M ≅[L] N)
-  statement: N ⊨ T
-  proof: h.theory_model_iff.1 MT
-
-中文:
-定理 theory_model
-  条件: [MT : M ⊨ T] (h : M ≅[L] N)
-  结论: N ⊨ T
-  证明: h.theory_model_iff.1 MT
-
-Depends on / 依赖: h.theory_model_iff, theory_model_iff
+  rw [Theory.model_iff_subset_completeTheory, Theory.model_iff_subset_completeTheory,
+    h.completeTheory_eq]
+/-
+**FirstOrder.Language.ElementarilyEquivalent.theory_model** 是 Mathlib 中的一个定理，位于命
+名空间 `FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：theory_model [MT : M ⊨ T] (h : M ≅[L] N) : N ⊨ T
+参数：h : M ≅[L] N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.ElementarilyEquivalent.theory_model_iff`：theory_mode
+l_iff (h : M ≅[L] N) : M ⊨ T ↔ N ⊨ T
 -/
 theorem theory_model [MT : M ⊨ T] (h : M ≅[L] N) : N ⊨ T :=
   h.theory_model_iff.1 MT
-
-/--
-theorem `nonempty_iff` / 定理 `nonempty_iff`
-
-English:
-theorem nonempty_iff
-  given: (h : M ≅[L] N)
-  statement: Nonempty M ↔ Nonempty N
-  proof: (model_nonemptyTheory_iff L).symm.trans (h.theory_model_iff.trans (model_nonemptyTheory_iff L))
-
-中文:
-定理 nonempty_iff
-  条件: (h : M ≅[L] N)
-  结论: 非空 M ↔ 非空 N
-  证明: (model_nonemptyTheory_iff L).symm.trans (h.theory_model_iff.trans (model_nonemptyTheory_iff L))
-
-Depends on / 依赖: h.theory_model_iff.trans, model_nonemptyTheory_iff, symm.trans, theory_model_iff
+/-
+**FirstOrder.Language.ElementarilyEquivalent.nonempty_iff** 是 Mathlib 中的一个定理，位于命
+名空间 `FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：nonempty_iff (h : M ≅[L] N) : Nonempty M ↔ Nonempty N
+参数：h : M ≅[L] N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `FirstOrder.Language.model_nonemptyTheory_iff`：model_nonemptyTheory_iff :
+ M ⊨ L.nonemptyTheory ↔ Nonempty M
+· 使用定理 `FirstOrder.Language.ElementarilyEquivalent.theory_model_iff`：theory_mode
+l_iff (h : M ≅[L] N) : M ⊨ T ↔ N ⊨ T
 -/
 theorem nonempty_iff (h : M ≅[L] N) : Nonempty M ↔ Nonempty N :=
   (model_nonemptyTheory_iff L).symm.trans (h.theory_model_iff.trans (model_nonemptyTheory_iff L))
-
-/--
-theorem `nonempty` / 定理 `nonempty`
-
-English:
-theorem nonempty
-  given: [Mn : Nonempty M] (h : M ≅[L] N)
-  statement: Nonempty N
-  proof: h.nonempty_iff.1 Mn
-
-中文:
-定理 nonempty
-  条件: [Mn : 非空 M] (h : M ≅[L] N)
-  结论: 非空 N
-  证明: h.nonempty_iff.1 Mn
-
-Depends on / 依赖: h.nonempty_iff, nonempty_iff
+/-
+**FirstOrder.Language.ElementarilyEquivalent.nonempty** 是 Mathlib 中的一个定理，位于命名空间 
+`FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：nonempty [Mn : Nonempty M] (h : M ≅[L] N) : Nonempty N
+参数：h : M ≅[L] N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.ElementarilyEquivalent.nonempty_iff`：nonempty_iff (h
+ : M ≅[L] N) : Nonempty M ↔ Nonempty N
 -/
 theorem nonempty [Mn : Nonempty M] (h : M ≅[L] N) : Nonempty N :=
   h.nonempty_iff.1 Mn
-
-/--
-theorem `infinite_iff` / 定理 `infinite_iff`
-
-English:
-theorem infinite_iff
-  given: (h : M ≅[L] N)
-  statement: Infinite M ↔ Infinite N
-  proof: (model_infiniteTheory_iff L).symm.trans (h.theory_model_iff.trans (model_infiniteTheory_iff L))
-
-中文:
-定理 infinite_iff
-  条件: (h : M ≅[L] N)
-  结论: 无限 M ↔ 无限 N
-  证明: (model_infiniteTheory_iff L).symm.trans (h.theory_model_iff.trans (model_infiniteTheory_iff L))
-
-Depends on / 依赖: h.theory_model_iff.trans, model_infiniteTheory_iff, symm.trans, theory_model_iff
+/-
+**FirstOrder.Language.ElementarilyEquivalent.infinite_iff** 是 Mathlib 中的一个定理，位于命
+名空间 `FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：infinite_iff (h : M ≅[L] N) : Infinite M ↔ Infinite N
+参数：h : M ≅[L] N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `FirstOrder.Language.model_infiniteTheory_iff`：model_infiniteTheory_iff :
+ M ⊨ L.infiniteTheory ↔ Infinite M
+· 使用定理 `FirstOrder.Language.ElementarilyEquivalent.theory_model_iff`：theory_mode
+l_iff (h : M ≅[L] N) : M ⊨ T ↔ N ⊨ T
 -/
 theorem infinite_iff (h : M ≅[L] N) : Infinite M ↔ Infinite N :=
   (model_infiniteTheory_iff L).symm.trans (h.theory_model_iff.trans (model_infiniteTheory_iff L))
-
-/--
-theorem `infinite` / 定理 `infinite`
-
-English:
-theorem infinite
-  given: [Mi : Infinite M] (h : M ≅[L] N)
-  statement: Infinite N
-  proof: h.infinite_iff.1 Mi
-
-中文:
-定理 infinite
-  条件: [Mi : 无限 M] (h : M ≅[L] N)
-  结论: 无限 N
-  证明: h.infinite_iff.1 Mi
-
-Depends on / 依赖: h.infinite_iff, infinite_iff
+/-
+**FirstOrder.Language.ElementarilyEquivalent.infinite** 是 Mathlib 中的一个定理，位于命名空间 
+`FirstOrder.Language.ElementarilyEquivalent`。
+形式化陈述：infinite [Mi : Infinite M] (h : M ≅[L] N) : Infinite N
+参数：h : M ≅[L] N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FirstOrder.Language.ElementarilyEquivalent.infinite_iff`：infinite_iff (h
+ : M ≅[L] N) : Infinite M ↔ Infinite N
 -/
 theorem infinite [Mi : Infinite M] (h : M ≅[L] N) : Infinite N :=
   h.infinite_iff.1 Mi
@@ -4266,3 +3584,4 @@ end ElementarilyEquivalent
 end Language
 
 end FirstOrder
+

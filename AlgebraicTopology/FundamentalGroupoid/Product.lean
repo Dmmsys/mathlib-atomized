@@ -40,42 +40,39 @@ universe u v
 
 section Pi
 
-variable {I : Type u} (X : I -> TopCat.{u})
+variable {I : Type u} (X : I → TopCat.{u})
 
-/--
-Definition of `proj` / `proj` 的定义
-
-English:
-definition proj
-  signature: (i : I)
-  body: πₘ (TopCat.ofHom ⟨_, continuous_apply i⟩)
-
-中文:
-定义 proj
-  签名: (i : I)
-  定义体: πₘ (TopCat.ofHom ⟨_, continuous_apply i⟩)
-
-Depends on / 依赖: TopCat, TopCat.ofHom, continuous_apply
+/-- The projection map Π i, X i → X i induces a map π(Π i, X i) ⟶ π(X i).
 -/
-def proj (i : I) : πₓ (TopCat.of (forall i, X i)) ⥤ πₓ (X i) :=
+/-
+**FundamentalGroupoidFunctor.proj** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGroupoid
+Functor`。
+形式化陈述：proj (i : I) : πₓ (TopCat.of (forall i, X i)) ⥤ πₓ (X i)
+参数：i : I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The projection map Π i, X i → X i induces a map π(Π i, X i) ⟶ π(X i).
+-/
+def proj (i : I) : πₓ (TopCat.of (∀ i, X i)) ⥤ πₓ (X i) :=
   πₘ (TopCat.ofHom ⟨_, continuous_apply i⟩)
 
 /-- The projection map is precisely `Path.Homotopic.proj` interpreted as a functor -/
 @[simp]
-/--
-theorem `proj_map` / 定理 `proj_map`
+/-
+**FundamentalGroupoidFunctor.proj_map** 是 Mathlib 中的一个定理，位于命名空间 `FundamentalGrou
+poidFunctor`。
+形式化陈述：proj_map (i : I) (x₀ x₁ : πₓ (TopCat.of (forall i, X i))) (p : x₀ ⟶ x₁) : 
+(proj X i).map p = @Path.Homotopic.proj _ _ _ _ _ i p
+参数：i : I；x₀ x₁ : πₓ (TopCat.of (forall i, X i))；p : x₀ ⟶ x₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem proj_map
-  given: (i : I) (x₀ x₁ : πₓ (TopCat.of (forall i, X i))) (p : x₀ ⟶ x₁)
-  proof: rfl
-
-中文:
-定理 proj_map
-  条件: (i : I) (x₀ x₁ : πₓ (顶元素范畴.of (对任意 i, X i))) (p : x₀ ⟶ x₁)
-  证明: rfl
+--- 原说明 ---
+The projection map is precisely `Path.Homotopic.proj` interpreted as a functor
 -/
-theorem proj_map (i : I) (x₀ x₁ : πₓ (TopCat.of (forall i, X i))) (p : x₀ ⟶ x₁) :
+theorem proj_map (i : I) (x₀ x₁ : πₓ (TopCat.of (∀ i, X i))) (p : x₀ ⟶ x₁) :
     (proj X i).map p = @Path.Homotopic.proj _ _ _ _ _ i p :=
   rfl
 
@@ -83,32 +80,20 @@ theorem proj_map (i : I) (x₀ x₁ : πₓ (TopCat.of (forall i, X i))) (p : x�
 groupoid of the pi product. This is actually an isomorphism (see `piIso`)
 -/
 @[simps]
-/--
-Definition of `piToPiTop` / `piToPiTop` 的定义
+/-
+**FundamentalGroupoidFunctor.piToPiTop** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGro
+upoidFunctor`。
+形式化陈述：piToPiTop : (forall i, πₓ (X i)) ⥤ πₓ (TopCat.of (forall i, X i)) where ob
+j g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piToPiTop
-  signature: : (forall i, πₓ (X i)) ⥤ πₓ (TopCat.of (forall i, X i)) where
-  body: ⟨fun i => (g i).as⟩
-  map p := Path.Homotopic.pi p
-  map_id x := by
-    change (Path.Homotopic.pi fun i => Path.Homotopic.Quotient.mk _) = _
-    simp only [Path.Homotopic.pi_lift]
-    rfl
-  map_comp f g := (Path.Homotopic.comp_pi_eq_pi_comp f g).symm
-
-中文:
-定义 piToPiTop
-  签名: : (对任意 i, πₓ (X i)) ⥤ πₓ (顶元素范畴.of (对任意 i, X i)) where
-  定义体: ⟨fun i => (g i).as⟩
-  map p := Path.Homotopic.pi p
-  map_id x := by
-    change (Path.Homotopic.pi fun i => Path.Homotopic.Quotient.mk _) = _
-    simp only [Path.Homotopic.pi_lift]
-    rfl
-  map_comp f g := (Path.Homotopic.comp_pi_eq_pi_comp f g).symm
+--- 原说明 ---
+The map taking the pi product of a family of fundamental groupoids to the fundam
+ental
+groupoid of the pi product. This is actually an isomorphism (see `piIso`)
 -/
-def piToPiTop : (forall i, πₓ (X i)) ⥤ πₓ (TopCat.of (forall i, X i)) where
+def piToPiTop : (∀ i, πₓ (X i)) ⥤ πₓ (TopCat.of (∀ i, X i)) where
   obj g := ⟨fun i => (g i).as⟩
   map p := Path.Homotopic.pi p
   map_id x := by
@@ -122,50 +107,20 @@ set_option backward.isDefEq.respectTransparency false in
 of the induced projections. This shows that `fundamentalGroupoidFunctor` preserves products.
 -/
 @[simps]
-/--
-Definition of `piIso` / `piIso` 的定义
+/-
+**FundamentalGroupoidFunctor.piIso** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGroupoi
+dFunctor`。
+形式化陈述：piIso : CategoryTheory.Grpd.of (forall i : I, πₓ (X i)) ≅ πₓ (TopCat.of (f
+orall i, X i)) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piIso
-  signature: : CategoryTheory.Grpd.of (forall i : I, πₓ (X i)) ≅ πₓ (TopCat.of (forall i, X i)) where
-  body: piToPiTop X
-  inv := CategoryTheory.Functor.pi' (proj X)
-  hom_inv_id := by
-    change piToPiTop X ⋙ CategoryTheory.Functor.pi' (proj X) = 𝟭 _
-    apply CategoryTheory.Functor.ext ?_ ?_
-    · intros; rfl
-    · intros; ext; simp
-  inv_hom_id := by
-    change CategoryTheory.Functor.pi' (proj X) ⋙ piToPiTop X = 𝟭 _
-    apply CategoryTheory.Functor.ext
-    · intro _ _ f
-      suffices Path.Homotopic.pi ((CategoryTheory.Functor.pi' (proj X)).map f) = f by simpa
-      change Path.Homotopic.pi (fun i => (CategoryTheory.Functor.pi' (proj X)).map f i) = _
-      simp
-    · intros; rfl
-
-中文:
-定义 piIso
-  签名: : 范畴论.Grpd.of (对任意 i : I, πₓ (X i)) ≅ πₓ (顶元素范畴.of (对任意 i, X i)) where
-  定义体: piToPiTop X
-  inv := CategoryTheory.Functor.pi' (proj X)
-  hom_inv_id := by
-    change piToPiTop X ⋙ CategoryTheory.Functor.pi' (proj X) = 𝟭 _
-    apply CategoryTheory.Functor.ext ?_ ?_
-    · intros; rfl
-    · intros; ext; simp
-  inv_hom_id := by
-    change CategoryTheory.Functor.pi' (proj X) ⋙ piToPiTop X = 𝟭 _
-    apply CategoryTheory.Functor.ext
-    · intro _ _ f
-      suffices Path.Homotopic.pi ((CategoryTheory.Functor.pi' (proj X)).map f) = f by simpa
-      change Path.Homotopic.pi (fun i => (CategoryTheory.Functor.pi' (proj X)).map f i) = _
-      simp
-    · intros; rfl
-
-Depends on / 依赖: piToPiTop
+--- 原说明 ---
+Shows `piToPiTop` is an isomorphism, whose inverse is precisely the pi product
+of the induced projections. This shows that `fundamentalGroupoidFunctor` preserv
+es products.
 -/
-def piIso : CategoryTheory.Grpd.of (forall i : I, πₓ (X i)) ≅ πₓ (TopCat.of (forall i, X i)) where
+def piIso : CategoryTheory.Grpd.of (∀ i : I, πₓ (X i)) ≅ πₓ (TopCat.of (∀ i, X i)) where
   hom := piToPiTop X
   inv := CategoryTheory.Functor.pi' (proj X)
   hom_inv_id := by
@@ -186,105 +141,76 @@ section Preserves
 
 open CategoryTheory
 
-/--
-Definition of `coneDiscreteComp` / `coneDiscreteComp` 的定义
+/-- Equivalence between the categories of cones over the objects `π Xᵢ` written in two ways -/
+/-
+**FundamentalGroupoidFunctor.coneDiscreteComp** 是 Mathlib 中的一个定义，位于命名空间 `Fundame
+ntalGroupoidFunctor`。
+形式化陈述：coneDiscreteComp : Limits.Cone (Discrete.functor X ⋙ π) ≌ Limits.Cone (Dis
+crete.functor fun i => πₓ (X i))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coneDiscreteComp
-  signature: :
-  body: Limits.Cone.postcomposeEquivalence (Discrete.compNatIsoDiscrete X π)
-
-中文:
-定义 coneDiscreteComp
-  签名: :
-  定义体: Limits.Cone.postcomposeEquivalence (Discrete.compNatIsoDiscrete X π)
-
-Depends on / 依赖: Discrete, Discrete.compNatIsoDiscrete, Limits, Limits.Cone.postcomposeEquivalence, compNatIsoDiscrete, postcomposeEquivalence
+--- 原说明 ---
+Equivalence between the categories of cones over the objects `π Xᵢ` written in t
+wo ways
 -/
 def coneDiscreteComp :
     Limits.Cone (Discrete.functor X ⋙ π) ≌ Limits.Cone (Discrete.functor fun i => πₓ (X i)) :=
   Limits.Cone.postcomposeEquivalence (Discrete.compNatIsoDiscrete X π)
-
-/--
-theorem `coneDiscreteComp_obj_mapCone` / 定理 `coneDiscreteComp_obj_mapCone`
-
-English:
-theorem coneDiscreteComp_obj_mapCone
-  proof: rfl
-
-中文:
-定理 coneDiscreteComp_obj_mapCone
-  证明: rfl
+/-
+**FundamentalGroupoidFunctor.coneDiscreteComp_obj_mapCone** 是 Mathlib 中的一个定理，位于命
+名空间 `FundamentalGroupoidFunctor`。
+形式化陈述：coneDiscreteComp_obj_mapCone : (coneDiscreteComp X).functor.obj (Functor.m
+apCone π (TopCat.piFan X)) = Limits.Fan.mk (πₓ (TopCat.of (forall i, X i))) (pro
+j X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coneDiscreteComp_obj_mapCone :
     (coneDiscreteComp X).functor.obj (Functor.mapCone π (TopCat.piFan X)) =
-      Limits.Fan.mk (πₓ (TopCat.of (forall i, X i))) (proj X) :=
+      Limits.Fan.mk (πₓ (TopCat.of (∀ i, X i))) (proj X) :=
   rfl
 
-/--
-Definition of `piTopToPiCone` / `piTopToPiCone` 的定义
+/-- This is `piIso.inv` as a cone morphism (in fact, isomorphism) -/
+/-
+**FundamentalGroupoidFunctor.piTopToPiCone** 是 Mathlib 中的一个定义，位于命名空间 `Fundamenta
+lGroupoidFunctor`。
+形式化陈述：piTopToPiCone : Limits.Fan.mk (πₓ (TopCat.of (forall i, X i))) (proj X) ⟶ 
+Grpd.piLimitFan fun i : I => πₓ (X i) where hom
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piTopToPiCone
-  signature: :
-  body: CategoryTheory.Functor.pi' (proj X)
-
-中文:
-定义 piTopToPiCone
-  签名: :
-  定义体: CategoryTheory.Functor.pi' (proj X)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.pi, Functor
+--- 原说明 ---
+This is `piIso.inv` as a cone morphism (in fact, isomorphism)
 -/
 def piTopToPiCone :
-    Limits.Fan.mk (πₓ (TopCat.of (forall i, X i))) (proj X) ⟶ Grpd.piLimitFan fun i : I => πₓ (X i) where
+    Limits.Fan.mk (πₓ (TopCat.of (∀ i, X i))) (proj X) ⟶ Grpd.piLimitFan fun i : I => πₓ (X i) where
   hom := CategoryTheory.Functor.pi' (proj X)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (piTopToPiCone X)
-  body: haveI : IsIso (piTopToPiCone X).hom := (inferInstance : IsIso (piIso X).inv)
-  Limits.Cone.cone_iso_of_hom_iso (piTopToPiCone X)
-
-中文:
-实例 :
-  签名: 是同构 (piTopToPiCone X)
-  定义体: haveI : IsIso (piTopToPiCone X).hom := (inferInstance : IsIso (piIso X).inv)
-  Limits.Cone.cone_iso_of_hom_iso (piTopToPiCone X)
-
-Depends on / 依赖: Limits, Limits.Cone.cone_iso_of_hom_iso, cone_iso_of_hom_iso, piTopToPiCone
+/-
+**FundamentalGroupoidFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `FundamentalGroupoidFunc
+tor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (piTopToPiCone X) :=
   haveI : IsIso (piTopToPiCone X).hom := (inferInstance : IsIso (piIso X).inv)
   Limits.Cone.cone_iso_of_hom_iso (piTopToPiCone X)
 
-/--
-lemma `preservesProduct` / 引理 `preservesProduct`
+/-- The fundamental groupoid functor preserves products -/
+/-
+**FundamentalGroupoidFunctor.preservesProduct** 是 Mathlib 中的一个引理，位于命名空间 `Fundame
+ntalGroupoidFunctor`。
+形式化陈述：preservesProduct : Limits.PreservesLimit (Discrete.functor X) π
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `FundamentalGroupoidFunctor.instIsIsoFanGrpdObjTopCatFundamentalGroupoidF
+unctorPiTopToPiCone`：∀ {I : Type u} (X : I → TopCat), CategoryTheory.IsIso (Fund
+amentalGroupoidFunctor.piTopToPiCone X)
 
-English:
-lemma preservesProduct
-  statement: Limits.PreservesLimit (Discrete.functor X) π
-  proof: by
-  apply Limits.preservesLimit_of_preserves_limit_cone (TopCat.piFanIsLimit X)
-  apply (Limits.IsLimit.ofConeEquiv (coneDiscreteComp X)).toFun
-  simp only [coneDiscreteComp_obj_mapCone]
-  apply Limits.IsLimit.ofIsoLimit _ (asIso (piTopToPiCone X)).symm
-  exact Grpd.piLimitFanIsLimit _
-
-中文:
-引理 preservesProduct
-  结论: Limits.保持极限 (离散.functor X) π
-  证明: by
-  apply Limits.preservesLimit_of_preserves_limit_cone (TopCat.piFanIsLimit X)
-  apply (Limits.IsLimit.ofConeEquiv (coneDiscreteComp X)).toFun
-  simp only [coneDiscreteComp_obj_mapCone]
-  apply Limits.IsLimit.ofIsoLimit _ (asIso (piTopToPiCone X)).symm
-  exact Grpd.piLimitFanIsLimit _
-
-Depends on / 依赖: Grpd.piLimitFanIsLimit, IsLimit, Limits, Limits.IsLimit.ofConeEquiv, Limits.IsLimit.ofIsoLimit, Limits.preservesLimit_of_preserves_limit_cone, TopCat, TopCat.piFanIsLimit, coneDiscreteComp, coneDiscreteComp_obj_mapCone, ofConeEquiv, ofIsoLimit, piFanIsLimit, piLimitFanIsLimit, piTopToPiCone, preservesLimit_of_preserves_limit_cone
+--- 原说明 ---
+The fundamental groupoid functor preserves products
 -/
 lemma preservesProduct : Limits.PreservesLimit (Discrete.functor X) π := by
   apply Limits.preservesLimit_of_preserves_limit_cone (TopCat.piFanIsLimit X)
@@ -301,81 +227,57 @@ section Prod
 
 variable (A : TopCat.{u}) (B : TopCat.{v})
 
-/--
-Definition of `projLeft` / `projLeft` 的定义
+/-- The induced map of the left projection map X × Y → X -/
+/-
+**FundamentalGroupoidFunctor.projLeft** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGrou
+poidFunctor`。
+形式化陈述：projLeft : πₓ (TopCat.of (A × B)) ⥤ πₓ A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition projLeft
-  signature: : πₓ (TopCat.of (A × B)) ⥤ πₓ A
-  body: FundamentalGroupoid.map .fst
-
-中文:
-定义 projLeft
-  签名: : πₓ (顶元素范畴.of (A × B)) ⥤ πₓ A
-  定义体: FundamentalGroupoid.map .fst
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.map
+--- 原说明 ---
+The induced map of the left projection map X × Y → X
 -/
 def projLeft : πₓ (TopCat.of (A × B)) ⥤ πₓ A :=
   FundamentalGroupoid.map .fst
 
-/--
-Definition of `projRight` / `projRight` 的定义
+/-- The induced map of the right projection map X × Y → Y -/
+/-
+**FundamentalGroupoidFunctor.projRight** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGro
+upoidFunctor`。
+形式化陈述：projRight : πₓ (TopCat.of (A × B)) ⥤ πₓ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition projRight
-  signature: : πₓ (TopCat.of (A × B)) ⥤ πₓ B
-  body: FundamentalGroupoid.map .snd
-
-@[simp]
-
-中文:
-定义 projRight
-  签名: : πₓ (顶元素范畴.of (A × B)) ⥤ πₓ B
-  定义体: FundamentalGroupoid.map .snd
-
-@[simp]
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.map
+--- 原说明 ---
+The induced map of the right projection map X × Y → Y
 -/
 def projRight : πₓ (TopCat.of (A × B)) ⥤ πₓ B :=
   FundamentalGroupoid.map .snd
 
 @[simp]
-/--
-theorem `projLeft_map` / 定理 `projLeft_map`
-
-English:
-theorem projLeft_map
-  given: (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 projLeft_map
-  条件: (x₀ x₁ : πₓ (顶元素范畴.of (A × B))) (p : x₀ ⟶ x₁)
-  证明: rfl
-
-@[simp]
+/-
+**FundamentalGroupoidFunctor.projLeft_map** 是 Mathlib 中的一个定理，位于命名空间 `Fundamental
+GroupoidFunctor`。
+形式化陈述：projLeft_map (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁) : (projLeft A 
+B).map p = Path.Homotopic.projLeft p
+参数：x₀ x₁ : πₓ (TopCat.of (A × B))；p : x₀ ⟶ x₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem projLeft_map (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁) :
     (projLeft A B).map p = Path.Homotopic.projLeft p :=
   rfl
 
 @[simp]
-/--
-theorem `projRight_map` / 定理 `projRight_map`
-
-English:
-theorem projRight_map
-  given: (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁)
-  proof: rfl
-
-中文:
-定理 projRight_map
-  条件: (x₀ x₁ : πₓ (顶元素范畴.of (A × B))) (p : x₀ ⟶ x₁)
-  证明: rfl
+/-
+**FundamentalGroupoidFunctor.projRight_map** 是 Mathlib 中的一个定理，位于命名空间 `Fundamenta
+lGroupoidFunctor`。
+形式化陈述：projRight_map (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁) : (projRight 
+A B).map p = Path.Homotopic.projRight p
+参数：x₀ x₁ : πₓ (TopCat.of (A × B))；p : x₀ ⟶ x₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem projRight_map (x₀ x₁ : πₓ (TopCat.of (A × B))) (p : x₀ ⟶ x₁) :
     (projRight A B).map p = Path.Homotopic.projRight p :=
@@ -386,42 +288,17 @@ The map taking the product of two fundamental groupoids to the fundamental group
 of the two topological spaces. This is in fact an isomorphism (see `prodIso`).
 -/
 @[simps obj]
-/--
-Definition of `prodToProdTop` / `prodToProdTop` 的定义
+/-
+**FundamentalGroupoidFunctor.prodToProdTop** 是 Mathlib 中的一个定义，位于命名空间 `Fundamenta
+lGroupoidFunctor`。
+形式化陈述：prodToProdTop : πₓ A × πₓ B ⥤ πₓ (TopCat.of (A × B)) where obj g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodToProdTop
-  signature: : πₓ A × πₓ B ⥤ πₓ (TopCat.of (A × B)) where
-  body: ⟨g.fst.as, g.snd.as⟩
-  map {x y} p :=
-    match x, y, p with
-    | (_, _), (_, _), (p₀, p₁) => @Path.Homotopic.prod _ _ (_) (_) _ _ _ _ p₀ p₁
-  map_id := by
-    rintro ⟨x₀, x₁⟩
-    simp only
-    rfl
-  map_comp {x y z} f g :=
-    match x, y, z, f, g with
-    | (_, _), (_, _), (_, _), (f₀, f₁), (g₀, g₁) =>
-      (Path.Homotopic.comp_prod_eq_prod_comp f₀ f₁ g₀ g₁).symm
-
-中文:
-定义 prodToProdTop
-  签名: : πₓ A × πₓ B ⥤ πₓ (顶元素范畴.of (A × B)) where
-  定义体: ⟨g.fst.as, g.snd.as⟩
-  map {x y} p :=
-    match x, y, p with
-    | (_, _), (_, _), (p₀, p₁) => @Path.Homotopic.prod _ _ (_) (_) _ _ _ _ p₀ p₁
-  map_id := by
-    rintro ⟨x₀, x₁⟩
-    simp only
-    rfl
-  map_comp {x y z} f g :=
-    match x, y, z, f, g with
-    | (_, _), (_, _), (_, _), (f₀, f₁), (g₀, g₁) =>
-      (Path.Homotopic.comp_prod_eq_prod_comp f₀ f₁ g₀ g₁).symm
-
-Depends on / 依赖: g.fst.as, g.snd.as
+--- 原说明 ---
+The map taking the product of two fundamental groupoids to the fundamental group
+oid of the product
+of the two topological spaces. This is in fact an isomorphism (see `prodIso`).
 -/
 def prodToProdTop : πₓ A × πₓ B ⥤ πₓ (TopCat.of (A × B)) where
   obj g := ⟨g.fst.as, g.snd.as⟩
@@ -436,19 +313,14 @@ def prodToProdTop : πₓ A × πₓ B ⥤ πₓ (TopCat.of (A × B)) where
     match x, y, z, f, g with
     | (_, _), (_, _), (_, _), (f₀, f₁), (g₀, g₁) =>
       (Path.Homotopic.comp_prod_eq_prod_comp f₀ f₁ g₀ g₁).symm
-
-/--
-theorem `prodToProdTop_map` / 定理 `prodToProdTop_map`
-
-English:
-theorem prodToProdTop_map
-  given: {x₀ x₁ : πₓ A} {y₀ y₁ : πₓ B} (p₀ : x₀ ⟶ x₁) (p₁ : y₀ ⟶ y₁)
-  proof: rfl
-
-中文:
-定理 prodToProdTop_map
-  条件: {x₀ x₁ : πₓ A} {y₀ y₁ : πₓ B} (p₀ : x₀ ⟶ x₁) (p₁ : y₀ ⟶ y₁)
-  证明: rfl
+/-
+**FundamentalGroupoidFunctor.prodToProdTop_map** 是 Mathlib 中的一个定理，位于命名空间 `Fundam
+entalGroupoidFunctor`。
+形式化陈述：prodToProdTop_map {x₀ x₁ : πₓ A} {y₀ y₁ : πₓ B} (p₀ : x₀ ⟶ x₁) (p₁ : y₀ ⟶ 
+y₁) : (prodToProdTop A B).map (X
+参数：p₀ : x₀ ⟶ x₁；p₁ : y₀ ⟶ y₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prodToProdTop_map {x₀ x₁ : πₓ A} {y₀ y₁ : πₓ B} (p₀ : x₀ ⟶ x₁) (p₁ : y₀ ⟶ y₁) :
     (prodToProdTop A B).map (X := (x₀, y₀)) (Y := (x₁, y₁)) (p₀, p₁) =
@@ -460,50 +332,17 @@ set_option backward.isDefEq.respectTransparency false in
 of the induced left and right projections.
 -/
 @[simps]
-/--
-Definition of `prodIso` / `prodIso` 的定义
+/-
+**FundamentalGroupoidFunctor.prodIso** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGroup
+oidFunctor`。
+形式化陈述：prodIso : CategoryTheory.Grpd.of (πₓ A × πₓ B) ≅ πₓ (TopCat.of (A × B)) wh
+ere hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodIso
-  signature: : CategoryTheory.Grpd.of (πₓ A × πₓ B) ≅ πₓ (TopCat.of (A × B)) where
-  body: prodToProdTop A B
-  inv := (projLeft A B).prod' (projRight A B)
-  hom_inv_id := by
-    change prodToProdTop A B ⋙ (projLeft A B).prod' (projRight A B) = 𝟭 _
-    apply CategoryTheory.Functor.hext; · intros; ext <;> simp <;> rfl
-    rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ ⟨f₀, f₁⟩
-    have : Path.Homotopic.projLeft ((prodToProdTop A B).map (f₀, f₁)) = f₀ ∧
-      Path.Homotopic.projRight ((prodToProdTop A B).map (f₀, f₁)) = f₁ :=
-        And.intro (Path.Homotopic.projLeft_prod f₀ f₁) (Path.Homotopic.projRight_prod f₀ f₁)
-    cat_disch
-  inv_hom_id := by
-    change (projLeft A B).prod' (projRight A B) ⋙ prodToProdTop A B = 𝟭 _
-    apply CategoryTheory.Functor.hext
-    · intros; apply FundamentalGroupoid.ext; apply Prod.ext <;> simp <;> rfl
-    rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ f
-    simpa [-Path.Homotopic.prod_projLeft_projRight] using! Path.Homotopic.prod_projLeft_projRight f
-
-中文:
-定义 prodIso
-  签名: : 范畴论.Grpd.of (πₓ A × πₓ B) ≅ πₓ (顶元素范畴.of (A × B)) where
-  定义体: prodToProdTop A B
-  inv := (projLeft A B).prod' (projRight A B)
-  hom_inv_id := by
-    change prodToProdTop A B ⋙ (projLeft A B).prod' (projRight A B) = 𝟭 _
-    apply CategoryTheory.Functor.hext; · intros; ext <;> simp <;> rfl
-    rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ ⟨f₀, f₁⟩
-    have : Path.Homotopic.projLeft ((prodToProdTop A B).map (f₀, f₁)) = f₀ ∧
-      Path.Homotopic.projRight ((prodToProdTop A B).map (f₀, f₁)) = f₁ :=
-        And.intro (Path.Homotopic.projLeft_prod f₀ f₁) (Path.Homotopic.projRight_prod f₀ f₁)
-    cat_disch
-  inv_hom_id := by
-    change (projLeft A B).prod' (projRight A B) ⋙ prodToProdTop A B = 𝟭 _
-    apply CategoryTheory.Functor.hext
-    · intros; apply FundamentalGroupoid.ext; apply Prod.ext <;> simp <;> rfl
-    rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ f
-    simpa [-Path.Homotopic.prod_projLeft_projRight] using! Path.Homotopic.prod_projLeft_projRight f
-
-Depends on / 依赖: prodToProdTop
+--- 原说明 ---
+Shows `prodToProdTop` is an isomorphism, whose inverse is precisely the product
+of the induced left and right projections.
 -/
 def prodIso : CategoryTheory.Grpd.of (πₓ A × πₓ B) ≅ πₓ (TopCat.of (A × B)) where
   hom := prodToProdTop A B
@@ -526,3 +365,4 @@ def prodIso : CategoryTheory.Grpd.of (πₓ A × πₓ B) ≅ πₓ (TopCat.of (
 end Prod
 
 end FundamentalGroupoidFunctor
+

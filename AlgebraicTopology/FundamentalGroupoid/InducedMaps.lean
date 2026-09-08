@@ -32,40 +32,82 @@ open FundamentalGroupoid CategoryTheory FundamentalGroupoidFunctor
 open scoped FundamentalGroupoid unitInterval
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Path.Homotopic.map_trans_evalAt` / 定理 `Path.Homotopic.map_trans_evalAt`
+/-- Let `F` be a homotopy between two continuous maps `f g : C(X, Y)`.
+Given a path `p : Path x₁ x₂` in the domain, consider the following two paths in the codomain.
+One path goes along the image of `p` under `f`, then along the trajectory of `x₂` under `F`.
+The other path goes along the trajectory of `x₁` under `F`, then along the image of `p` under `g`.
 
-English:
-theorem Path.Homotopic.map_trans_evalAt
-  statement: {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-  proof: by
-  /- Let `G` be the continuous map on the unit square sending `(t, s)` to `F(t, p(s))`.
-  Then our homotopy is the image under `G` of a homotopy
-  between the two paths from `(0, 0)` to `(1, 1)` along the sides of the square. -/
-  set G : C(I × I, Y) := F.toContinuousMap.comp (.prodMap (.id _) p)
-  set p₁ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans (.refl _) .id) (.trans .id (.refl _))
-  set p₂ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans .id (.refl _)) (.trans (.refl _) .id)
-  set Fsq : p₁.Homotopy p₂ :=
-    Path.Homotopic.prodHomotopy (.trans (.reflTrans _) (.symm <| .transRefl _))
-      (.trans (.transRefl _) (.symm <| .reflTrans _))
-  refine ⟨((Fsq.map G).pathCast ?H0 ?H1).cast ?hp ?hq⟩
-  all_goals aesop (add simp Path.trans_apply)
+These two paths are homotopic. -/
+/-
+**Path.Homotopic.map_trans_evalAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Path.Homotopic.map_trans_evalAt {X Y : Type*} [TopologicalSpace X] [Topolo
+gicalSpace Y] {f g : C(X, Y)} (F : f.Homotopy g) {x₁ x₂ : X} (p : Path x₁ x₂) : 
+((p.map (map_continuous f)).trans (F.evalAt x₂)).Homotopic ((F.evalAt x₁).trans 
+(p.map (map_continuous g)))
+参数：X, Y；F : f.Homotopy g；p : Path x₁ x₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.prodMap_apply`：∀ {α₁ : Type u_5} {α₂ : Type u_6} {β₁ : Typ
+e u_7} {β₂ : Type u_8} [inst : TopologicalSpace α₁]   [inst_1 : TopologicalSpace
+ α₂] [inst_2 : To…
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
+· 使用定理 `ContinuousMap.Homotopy.apply_zero`：apply_zero (F : Homotopy f₀ f₁) (x : 
+X) : F (0, x) = f₀ x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
+· 使用定理 `ContinuousMap.Homotopy.apply_one`：apply_one (F : Homotopy f₀ f₁) (x : X)
+ : F (1, x) = f₁ x
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `unitInterval.two_mul_sub_one_mem_iff`：two_mul_sub_one_mem_iff {t : Real}
+ : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `unitInterval.mul_pos_mem_iff`：mul_pos_mem_iff {a t : Real} (ha : 0 < a) 
+: a * t in I ↔ t in Set.Icc (0 : Real) (1 / a)
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+（共 41 条，此处仅展示前 30 条）
 
-中文:
-定理 道路.同伦.map_trans_evalAt
-  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
-  证明: by
-  /- Let `G` be the continuous map on the unit square sending `(t, s)` to `F(t, p(s))`.
-  Then our homotopy is the image under `G` of a homotopy
-  between the two paths from `(0, 0)` to `(1, 1)` along the sides of the square. -/
-  set G : C(I × I, Y) := F.toContinuousMap.comp (.prodMap (.id _) p)
-  set p₁ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans (.refl _) .id) (.trans .id (.refl _))
-  set p₂ : Path ((0, 0) : I × I) (1, 1) := .prod (.trans .id (.refl _)) (.trans (.refl _) .id)
-  set Fsq : p₁.Homotopy p₂ :=
-    Path.Homotopic.prodHomotopy (.trans (.reflTrans _) (.symm <| .transRefl _))
-      (.trans (.transRefl _) (.symm <| .reflTrans _))
-  refine ⟨((Fsq.map G).pathCast ?H0 ?H1).cast ?hp ?hq⟩
-  all_goals aesop (add simp Path.trans_apply)
+--- 原说明 ---
+Let `F` be a homotopy between two continuous maps `f g : C(X, Y)`.
+Given a path `p : Path x₁ x₂` in the domain, consider the following two paths in
+ the codomain.
+One path goes along the image of `p` under `f`, then along the trajectory of `x₂
+` under `F`.
+The other path goes along the trajectory of `x₁` under `F`, then along the image
+ of `p` under `g`.
+
+These two paths are homotopic.
 -/
 theorem Path.Homotopic.map_trans_evalAt {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
     {f g : C(X, Y)} (F : f.Homotopy g) {x₁ x₂ : X} (p : Path x₁ x₂) :
@@ -93,34 +135,21 @@ variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
 
 set_option backward.isDefEq.respectTransparency false in
 set_option pp.proofs.withType true in
-/--
-Definition of `homotopicMapsNatIso` / `homotopicMapsNatIso` 的定义
+/-- Given a homotopy H : f ∼ g, we have an associated natural isomorphism between the induced
+functors `map f` and `map g` on fundamental groupoids. -/
+/-
+**FundamentalGroupoidFunctor.homotopicMapsNatIso** 是 Mathlib 中的一个定义，位于命名空间 `Fund
+amentalGroupoidFunctor`。
+形式化陈述：homotopicMapsNatIso (H : ContinuousMap.Homotopy f g) : map f ⟶ map g where
+ app x
+参数：H : ContinuousMap.Homotopy f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homotopicMapsNatIso
-  signature: (H : ContinuousMap.Homotopy f g)
-  body: ⟦H.evalAt x.as⟧
-  naturality := by
-    rintro ⟨x⟩ ⟨y⟩ p
-    rcases Path.Homotopic.Quotient.mk_surjective p with ⟨p, rfl⟩
-    simp only [map_map, Path.Homotopic.Quotient.mk''_eq_mk, comp_eq,
-      ← Path.Homotopic.Quotient.mk_map, ← Path.Homotopic.Quotient.mk_trans]
-    rw [Path.Homotopic.Quotient.eq]
-    exact .map_trans_evalAt _ _
-
-中文:
-定义 homotopicMaps自然数Iso
-  签名: (H : 连续映射.同伦 f g)
-  定义体: ⟦H.evalAt x.as⟧
-  naturality := by
-    rintro ⟨x⟩ ⟨y⟩ p
-    rcases Path.Homotopic.Quotient.mk_surjective p with ⟨p, rfl⟩
-    simp only [map_map, Path.Homotopic.Quotient.mk''_eq_mk, comp_eq,
-      ← Path.Homotopic.Quotient.mk_map, ← Path.Homotopic.Quotient.mk_trans]
-    rw [Path.Homotopic.Quotient.eq]
-    exact .map_trans_evalAt _ _
-
-Depends on / 依赖: H.evalAt, evalAt, x.as
+--- 原说明 ---
+Given a homotopy H : f ∼ g, we have an associated natural isomorphism between th
+e induced
+functors `map f` and `map g` on fundamental groupoids.
 -/
 def homotopicMapsNatIso (H : ContinuousMap.Homotopy f g) : map f ⟶ map g where
   app x := ⟦H.evalAt x.as⟧
@@ -131,36 +160,34 @@ def homotopicMapsNatIso (H : ContinuousMap.Homotopy f g) : map f ⟶ map g where
       ← Path.Homotopic.Quotient.mk_map, ← Path.Homotopic.Quotient.mk_trans]
     rw [Path.Homotopic.Quotient.eq]
     exact .map_trans_evalAt _ _
-
+/-
+**FundamentalGroupoidFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `FundamentalGroupoidFunc
+tor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (H : ContinuousMap.Homotopy f g) : IsIso (homotopicMapsNatIso H) :=
   NatIso.isIso_of_isIso_app _
 
 open scoped ContinuousMap
 
-/--
-Definition of `equivOfHomotopyEquiv` / `equivOfHomotopyEquiv` 的定义
+/-- Homotopy equivalent topological spaces have equivalent fundamental groupoids. -/
+/-
+**FundamentalGroupoidFunctor.equivOfHomotopyEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Fun
+damentalGroupoidFunctor`。
+形式化陈述：equivOfHomotopyEquiv {X Y : Type*} [TopologicalSpace X] [TopologicalSpace 
+Y] (hequiv : X ≃ₕ Y) : πₓ (.of X) ≌ πₓ (.of Y)
+参数：hequiv : X ≃ₕ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.HomotopyEquiv.left_inv`：∀ {X : Type u} {Y : Type v} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : ContinuousMap.Homo
+topyEquiv X Y), (self.invF…
+· 使用定理 `ContinuousMap.HomotopyEquiv.right_inv`：∀ {X : Type u} {Y : Type v} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   (self : ContinuousMap.Hom
+otopyEquiv X Y), (self.toFu…
 
-English:
-definition equivOfHomotopyEquiv
-  signature: {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] (hequiv : X ≃ₕ Y)
-  body: by
-  apply CategoryTheory.Equivalence.mk (map hequiv.toFun) (map hequiv.invFun)
-  · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
-      using (asIso (homotopicMapsNatIso hequiv.left_inv.some)).symm
-  · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
-      using asIso (homotopicMapsNatIso hequiv.right_inv.some)
-
-中文:
-定义 equivOfHomotopyEquiv
-  签名: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y] (hequiv : X ≃ₕ Y)
-  定义体: by
-  apply CategoryTheory.Equivalence.mk (map hequiv.toFun) (map hequiv.invFun)
-  · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
-      using (asIso (homotopicMapsNatIso hequiv.left_inv.some)).symm
-  · simpa only [FundamentalGroupoid.map_id, FundamentalGroupoid.map_comp]
-      using asIso (homotopicMapsNatIso hequiv.right_inv.some)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Equivalence.mk, Equivalence, FundamentalGroupoid, FundamentalGroupoid.map_comp, FundamentalGroupoid.map_id, hequiv, hequiv.invFun, hequiv.left_inv.some, hequiv.right_inv.some, hequiv.toFun, homotopicMapsNatIso, invFun, left_inv, map_comp, map_id, right_inv
+--- 原说明 ---
+Homotopy equivalent topological spaces have equivalent fundamental groupoids.
 -/
 def equivOfHomotopyEquiv {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] (hequiv : X ≃ₕ Y) :
     πₓ (.of X) ≌ πₓ (.of Y) := by
@@ -189,66 +216,46 @@ then deprecate the rest of them.
 
 namespace unitInterval
 
-/--
-Definition of `path01` / `path01` 的定义
+/-- The path 0 ⟶ 1 in `I` -/
+/-
+**unitInterval.path01** 是 Mathlib 中的一个定义，位于命名空间 `unitInterval`。
+形式化陈述：path01 : Path (0 : I) 1 where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition path01
-  signature: : Path (0 : I) 1 where
-  body: id
-  source' := rfl
-  target' := rfl
-
-中文:
-定义 path01
-  签名: : 道路 (0 : I) 1 where
-  定义体: id
-  source' := rfl
-  target' := rfl
+--- 原说明 ---
+The path 0 ⟶ 1 in `I`
 -/
 def path01 : Path (0 : I) 1 where
   toFun := id
   source' := rfl
   target' := rfl
 
-/--
-Definition of `upath01` / `upath01` 的定义
+/-- The path 0 ⟶ 1 in `ULift I` -/
+/-
+**unitInterval.upath01** 是 Mathlib 中的一个定义，位于命名空间 `unitInterval`。
+形式化陈述：upath01 : Path (ULift.up 0 : ULift.{u} I) (ULift.up 1) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition upath01
-  signature: : Path (ULift.up 0 : ULift.{u} I) (ULift.up 1) where
-  body: ULift.up
-  source' := rfl
-  target' := rfl
-
-中文:
-定义 upath01
-  签名: : 道路 (类型层提升.up 0 : 类型层提升.{u} I) (类型层提升.up 1) where
-  定义体: ULift.up
-  source' := rfl
-  target' := rfl
-
-Depends on / 依赖: ULift.up
+--- 原说明 ---
+The path 0 ⟶ 1 in `ULift I`
 -/
 def upath01 : Path (ULift.up 0 : ULift.{u} I) (ULift.up 1) where
   toFun := ULift.up
   source' := rfl
   target' := rfl
 
-/--
-Definition of `uhpath01` / `uhpath01` 的定义
+/-- The homotopy path class of 0 → 1 in `ULift I` -/
+/-
+**unitInterval.uhpath01** 是 Mathlib 中的一个定义，位于命名空间 `unitInterval`。
+形式化陈述：uhpath01 : @fromTop (TopCat.of <| ULift.{u} I) (ULift.up (0 : I)) ⟶ fromTo
+p (ULift.up 1)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uhpath01
-  signature: : @fromTop (TopCat.of <| ULift.{u} I) (ULift.up (0 : I)) ⟶ fromTop (ULift.up 1)
-  body: ⟦upath01⟧
-
-中文:
-定义 uhpath01
-  签名: : @fromTop (顶元素范畴.of <| 类型层提升.{u} I) (类型层提升.up (0 : I)) ⟶ fromTop (类型层提升.up 1)
-  定义体: ⟦upath01⟧
-
-Depends on / 依赖: upath01
+--- 原说明 ---
+The homotopy path class of 0 → 1 in `ULift I`
 -/
 def uhpath01 : @fromTop (TopCat.of <| ULift.{u} I) (ULift.up (0 : I)) ⟶ fromTop (ULift.up 1) :=
   ⟦upath01⟧
@@ -261,66 +268,58 @@ open unitInterval (uhpath01)
 
 section Casts
 
-/--
-Definition of `hcast` / `hcast` 的定义
+/-- Abbreviation for `eqToHom` that accepts points in a topological space -/
+/-
+**ContinuousMap.Homotopy.hcast** 是 Mathlib 中的一个缩写定义，位于命名空间 `ContinuousMap.Homoto
+py`。
+形式化陈述：hcast {X : TopCat.{u}} {x₀ x₁ : X} (hx : x₀ = x₁) : fromTop x₀ ⟶ fromTop x
+₁
+参数：hx : x₀ = x₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation hcast
-  signature: {X : TopCat.{u}} {x₀ x₁ : X} (hx : x₀ = x₁)
-  body: eqToHom FundamentalGroupoid.ext hx
-
-@[simp]
-
-中文:
-缩写 hcast
-  签名: {X : 顶元素范畴.{u}} {x₀ x₁ : X} (hx : x₀ = x₁)
-  定义体: eqToHom FundamentalGroupoid.ext hx
-
-@[simp]
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.ext, eqToHom
+--- 原说明 ---
+Abbreviation for `eqToHom` that accepts points in a topological space
 -/
 abbrev hcast {X : TopCat.{u}} {x₀ x₁ : X} (hx : x₀ = x₁) : fromTop x₀ ⟶ fromTop x₁ :=
-eqToHom FundamentalGroupoid.ext hx
+  eqToHom <| FundamentalGroupoid.ext hx
 
 @[simp]
-/--
-theorem `hcast_def` / 定理 `hcast_def`
-
-English:
-theorem hcast_def
-  given: {X : TopCat.{u}} {x₀ x₁ : X} (hx₀ : x₀ = x₁)
-  proof: rfl
-
-中文:
-定理 hcast_def
-  条件: {X : 顶元素范畴.{u}} {x₀ x₁ : X} (hx₀ : x₀ = x₁)
-  证明: rfl
+/-
+**ContinuousMap.Homotopy.hcast_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap.Homo
+topy`。
+形式化陈述：hcast_def {X : TopCat.{u}} {x₀ x₁ : X} (hx₀ : x₀ = x₁) : hcast hx₀ = eqToH
+om (FundamentalGroupoid.ext hx₀)
+参数：hx₀ : x₀ = x₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hcast_def {X : TopCat.{u}} {x₀ x₁ : X} (hx₀ : x₀ = x₁) :
     hcast hx₀ = eqToHom (FundamentalGroupoid.ext hx₀) :=
   rfl
 
 variable {X₁ X₂ Y : TopCat.{u}} {f : C(X₁, Y)} {g : C(X₂, Y)} {x₀ x₁ : X₁} {x₂ x₃ : X₂}
-  {p : Path x₀ x₁} {q : Path x₂ x₃} (hfg : forall t, f (p t) = g (q t))
+  {p : Path x₀ x₁} {q : Path x₂ x₃} (hfg : ∀ t, f (p t) = g (q t))
 include hfg
 
-/--
-theorem `heq_path_of_eq_image` / 定理 `heq_path_of_eq_image`
+/-- If `f(p(t) = g(q(t))` for two paths `p` and `q`, then the induced path homotopy classes
+`f(p)` and `g(p)` are the same as well, despite having a priori different types -/
+/-
+**ContinuousMap.Homotopy.heq_path_of_eq_image** 是 Mathlib 中的一个定理，位于命名空间 `Continu
+ousMap.Homotopy`。
+形式化陈述：heq_path_of_eq_image : (πₘ (TopCat.ofHom f)).map ⟦p⟧ ≍ (πₘ (TopCat.ofHom g
+)).map ⟦q⟧
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.Homotopic.hpath_hext`：hpath_hext {p₁ : Path x₀ x₁} {p₂ : Path x₂ x₃
+} (hp : forall t, p₁ t = p₂ t) : HEq (α
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 
-English:
-theorem heq_path_of_eq_image
-  proof: by
-  apply Path.Homotopic.hpath_hext
-  exact hfg
-
-中文:
-定理 heq_path_of_eq_image
-  证明: by
-  apply Path.Homotopic.hpath_hext
-  exact hfg
-
-Depends on / 依赖: Homotopic, Path.Homotopic.hpath_hext, hpath_hext
+--- 原说明 ---
+If `f(p(t) = g(q(t))` for two paths `p` and `q`, then the induced path homotopy 
+classes
+`f(p)` and `g(p)` are the same as well, despite having a priori different types
 -/
 theorem heq_path_of_eq_image :
     (πₘ (TopCat.ofHom f)).map ⟦p⟧ ≍ (πₘ (TopCat.ofHom g)).map ⟦q⟧ := by
@@ -328,62 +327,49 @@ theorem heq_path_of_eq_image :
   exact hfg
 
 set_option backward.privateInPublic true in
-/--
-theorem `start_path` / 定理 `start_path`
-
-English:
-theorem start_path
-  statement: f x₀ = g x₂
-  proof: by convert! hfg 0 <;> simp only [Path.source]
-
-中文:
-定理 start_path
-  结论: f x₀ = g x₂
-  证明: by convert! hfg 0 <;> simp only [Path.source]
+/-
+**ContinuousMap.Homotopy.start_path** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap.Hom
+otopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem start_path : f x₀ = g x₂ := by convert! hfg 0 <;> simp only [Path.source]
 
 set_option backward.privateInPublic true in
-/--
-theorem `end_path` / 定理 `end_path`
-
-English:
-theorem end_path
-  statement: f x₁ = g x₃
-  proof: by convert! hfg 1 <;> simp only [Path.target]
-
-中文:
-定理 end_path
-  结论: f x₁ = g x₃
-  证明: by convert! hfg 1 <;> simp only [Path.target]
+/-
+**ContinuousMap.Homotopy.end_path** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap.Homot
+opy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem end_path : f x₁ = g x₃ := by convert! hfg 1 <;> simp only [Path.target]
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `eq_path_of_eq_image` / 定理 `eq_path_of_eq_image`
-
-English:
-theorem eq_path_of_eq_image
-  proof: by
-  rw [conj_eqToHom_iff_heq
-    ((πₘ (TopCat.ofHom f)).map ⟦p⟧) ((πₘ (TopCat.ofHom g)).map ⟦q⟧)
-    (FundamentalGroupoid.ext <| start_path hfg)
-    (FundamentalGroupoid.ext <| end_path hfg)]
-  exact heq_path_of_eq_image hfg
-
-中文:
-定理 eq_path_of_eq_image
-  证明: by
-  rw [conj_eqToHom_iff_heq
-    ((πₘ (TopCat.ofHom f)).map ⟦p⟧) ((πₘ (TopCat.ofHom g)).map ⟦q⟧)
-    (FundamentalGroupoid.ext <| start_path hfg)
-    (FundamentalGroupoid.ext <| end_path hfg)]
-  exact heq_path_of_eq_image hfg
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.ext, TopCat, TopCat.ofHom, conj_eqToHom_iff_heq, end_path, heq_path_of_eq_image, start_path
+/-
+**ContinuousMap.Homotopy.eq_path_of_eq_image** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usMap.Homotopy`。
+形式化陈述：eq_path_of_eq_image : (πₘ (TopCat.ofHom f)).map ⟦p⟧ = hcast (start_path hf
+g) ≫ (πₘ (TopCat.ofHom g)).map ⟦q⟧ ≫ hcast (end_path hfg).symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.AlgebraicTopology.FundamentalGroupoid.InducedMaps.0.Con
+tinuousMap.Homotopy.start_path`：∀ {X₁ X₂ Y : TopCat} {f : C(↑X₁, ↑Y)} {g : C(↑X₂
+, ↑Y)} {x₀ x₁ : ↑X₁} {x₂ x₃ : ↑X₂} {p : Path x₀ x₁} {q : Path x₂ x₃},   (∀ (t : 
+↑unitInterva…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.AlgebraicTopology.FundamentalGroupoid.InducedMaps.0.Con
+tinuousMap.Homotopy.end_path`：∀ {X₁ X₂ Y : TopCat} {f : C(↑X₁, ↑Y)} {g : C(↑X₂, 
+↑Y)} {x₀ x₁ : ↑X₁} {x₂ x₃ : ↑X₂} {p : Path x₀ x₁} {q : Path x₂ x₃},   (∀ (t : ↑u
+nitInterva…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FundamentalGroupoid.ext`：∀ {X : Type u_3} {x y : FundamentalGroupoid X},
+ x.as = y.as → x = y
+· 使用定理 `CategoryTheory.conj_eqToHom_iff_heq`：conj_eqToHom_iff_heq {W X Y Z : C} 
+(f : W ⟶ X) (g : Y ⟶ Z) (h : W = Y) (h' : X = Z) : f = eqToHom h ≫ g ≫ eqToHom h
+'.symm ↔ f ≍ g
+· 使用定理 `ContinuousMap.Homotopy.heq_path_of_eq_image`：heq_path_of_eq_image : (πₘ 
+(TopCat.ofHom f)).map ⟦p⟧ ≍ (πₘ (TopCat.ofHom g)).map ⟦q⟧
 -/
 theorem eq_path_of_eq_image :
     (πₘ (TopCat.ofHom f)).map ⟦p⟧ =
@@ -406,9 +392,9 @@ These definitions set up the following diagram, for each path `p`:
 ```
             f(p)
         *--------*
-        | \ |
-    H₀ | \ d | H₁
-        | \ |
+        | \      |
+    H₀  |   \ d  |  H₁
+        |     \  |
         *--------*
             g(p)
 ```
@@ -425,122 +411,112 @@ many of the paths do not have defeq starting/ending points, so we end up needing
 -/
 
 
-/--
-Definition of `uliftMap` / `uliftMap` 的定义
+/-- Interpret a homotopy `H : C(I × X, Y)` as a map `C(ULift I × X, Y)` -/
+/-
+**ContinuousMap.Homotopy.uliftMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap.Homot
+opy`。
+形式化陈述：uliftMap : C(TopCat.of (ULift.{u} I × X), Y)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftMap
-  signature: : C(TopCat.of (ULift.{u} I × X), Y)
-  body: ⟨fun x => H (x.1.down, x.2),
-    H.continuous.comp ((continuous_uliftDown.comp continuous_fst).prodMk continuous_snd)⟩
-
-中文:
-定义 uliftMap
-  签名: : C(顶元素范畴.of (类型层提升.{u} I × X), Y)
-  定义体: ⟨fun x => H (x.1.down, x.2),
-    H.continuous.comp ((continuous_uliftDown.comp continuous_fst).prodMk continuous_snd)⟩
-
-Depends on / 依赖: H.continuous.comp, continuous, continuous_fst, continuous_snd, continuous_uliftDown, continuous_uliftDown.comp, prodMk
+--- 原说明 ---
+Interpret a homotopy `H : C(I × X, Y)` as a map `C(ULift I × X, Y)`
 -/
 def uliftMap : C(TopCat.of (ULift.{u} I × X), Y) :=
   ⟨fun x => H (x.1.down, x.2),
     H.continuous.comp ((continuous_uliftDown.comp continuous_fst).prodMk continuous_snd)⟩
-
-/--
-theorem `ulift_apply` / 定理 `ulift_apply`
-
-English:
-theorem ulift_apply
-  given: (i : ULift.{u} I) (x : X)
-  statement: H.uliftMap (i, x) = H (i.down, x)
-  proof: rfl
-
-中文:
-定理 ulift_apply
-  条件: (i : 类型层提升.{u} I) (x : X)
-  结论: H.uliftMap (i, x) = H (i.down, x)
-  证明: rfl
+/-
+**ContinuousMap.Homotopy.ulift_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap.Ho
+motopy`。
+形式化陈述：ulift_apply (i : ULift.{u} I) (x : X) : H.uliftMap (i, x) = H (i.down, x)
+参数：i : ULift.{u} I；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ulift_apply (i : ULift.{u} I) (x : X) : H.uliftMap (i, x) = H (i.down, x) :=
   rfl
 
-/--
-Definition of `prodToProdTopI` / `prodToProdTopI` 的定义
+/-- An abbreviation for `prodToProdTop`, with some types already in place to help the
+typechecker. In particular, the first path should be on the ulifted unit interval. -/
+/-
+**ContinuousMap.Homotopy.prodToProdTopI** 是 Mathlib 中的一个缩写定义，位于命名空间 `ContinuousM
+ap.Homotopy`。
+形式化陈述：prodToProdTopI {a₁ a₂ : TopCat.of (ULift I)} {b₁ b₂ : X} (p₁ : fromTop a₁ 
+⟶ fromTop a₂) (p₂ : fromTop b₁ ⟶ fromTop b₂)
+参数：ULift I；p₁ : fromTop a₁ ⟶ fromTop a₂；p₂ : fromTop b₁ ⟶ fromTop b₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation prodToProdTopI
-  signature: {a₁ a₂ : TopCat.of (ULift I)} {b₁ b₂ : X} (p₁ : fromTop a₁ ⟶ fromTop a₂)
-  body: (prodToProdTop (TopCat.of <| ULift I) X).map (X := (⟨a₁⟩, ⟨b₁⟩)) (Y := (⟨a₂⟩, ⟨b₂⟩)) (p₁, p₂)
-
-中文:
-缩写 prodToProdTopI
-  签名: {a₁ a₂ : 顶元素范畴.of (类型层提升 I)} {b₁ b₂ : X} (p₁ : fromTop a₁ ⟶ fromTop a₂)
-  定义体: (prodToProdTop (TopCat.of <| ULift I) X).map (X := (⟨a₁⟩, ⟨b₁⟩)) (Y := (⟨a₂⟩, ⟨b₂⟩)) (p₁, p₂)
-
-Depends on / 依赖: TopCat, TopCat.of, prodToProdTop
+--- 原说明 ---
+An abbreviation for `prodToProdTop`, with some types already in place to help th
+e
+typechecker. In particular, the first path should be on the ulifted unit interva
+l.
 -/
 abbrev prodToProdTopI {a₁ a₂ : TopCat.of (ULift I)} {b₁ b₂ : X} (p₁ : fromTop a₁ ⟶ fromTop a₂)
     (p₂ : fromTop b₁ ⟶ fromTop b₂) :=
   (prodToProdTop (TopCat.of <| ULift I) X).map (X := (⟨a₁⟩, ⟨b₁⟩)) (Y := (⟨a₂⟩, ⟨b₂⟩)) (p₁, p₂)
 
-/--
-Definition of `diagonalPath` / `diagonalPath` 的定义
+/-- The diagonal path `d` of a homotopy `H` on a path `p` -/
+/-
+**ContinuousMap.Homotopy.diagonalPath** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap.H
+omotopy`。
+形式化陈述：diagonalPath : fromTop (H (0, x₀)) ⟶ fromTop (H (1, x₁))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagonalPath
-  signature: : fromTop (H (0, x₀)) ⟶ fromTop (H (1, x₁))
-  body: (πₘ (TopCat.ofHom H.uliftMap)).map (prodToProdTopI uhpath01 p)
-
-中文:
-定义 diagonalPath
-  签名: : fromTop (H (0, x₀)) ⟶ fromTop (H (1, x₁))
-  定义体: (πₘ (TopCat.ofHom H.uliftMap)).map (prodToProdTopI uhpath01 p)
-
-Depends on / 依赖: H.uliftMap, TopCat, TopCat.ofHom, prodToProdTopI, uhpath01, uliftMap
+--- 原说明 ---
+The diagonal path `d` of a homotopy `H` on a path `p`
 -/
 def diagonalPath : fromTop (H (0, x₀)) ⟶ fromTop (H (1, x₁)) :=
   (πₘ (TopCat.ofHom H.uliftMap)).map (prodToProdTopI uhpath01 p)
 
-/--
-Definition of `diagonalPath'` / `diagonalPath'` 的定义
+/-- The diagonal path, but starting from `f x₀` and going to `g x₁` -/
+/-
+**ContinuousMap.Homotopy.diagonalPath'** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap.
+Homotopy`。
+形式化陈述：diagonalPath' : fromTop (f x₀) ⟶ fromTop (g x₁)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagonalPath'
-  signature: : fromTop (f x₀) ⟶ fromTop (g x₁)
-  body: hcast (H.apply_zero x₀).symm ≫ H.diagonalPath p ≫ hcast (H.apply_one x₁)
-
-中文:
-定义 diagonalPath'
-  签名: : fromTop (f x₀) ⟶ fromTop (g x₁)
-  定义体: hcast (H.apply_zero x₀).symm ≫ H.diagonalPath p ≫ hcast (H.apply_one x₁)
-
-Depends on / 依赖: H.apply_one, H.apply_zero, H.diagonalPath, apply_one, apply_zero, diagonalPath
+--- 原说明 ---
+The diagonal path, but starting from `f x₀` and going to `g x₁`
 -/
 def diagonalPath' : fromTop (f x₀) ⟶ fromTop (g x₁) :=
   hcast (H.apply_zero x₀).symm ≫ H.diagonalPath p ≫ hcast (H.apply_one x₁)
 
-/--
-theorem `apply_zero_path` / 定理 `apply_zero_path`
+/-- Proof that `f(p) = H(0 ⟶ 0, p)`, with the appropriate casts -/
+/-
+**ContinuousMap.Homotopy.apply_zero_path** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMa
+p.Homotopy`。
+形式化陈述：apply_zero_path : (πₘ (TopCat.ofHom f)).map p = hcast (H.apply_zero x₀).sy
+mm ≫ (πₘ (TopCat.ofHom H.uliftMap)).map (prodToProdTopI (𝟙 (@fromTop (TopCat.of 
+_) (ULift.up 0))) p) ≫ hcast (H.apply_zero x₁)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousMap.Homotopy.apply_zero`：apply_zero (F : Homotopy f₀ f₁) (x : 
+X) : F (0, x) = f₀ x
+· 使用定理 `ContinuousMap.Homotopy.eq_path_of_eq_image`：eq_path_of_eq_image : (πₘ (T
+opCat.ofHom f)).map ⟦p⟧ = hcast (start_path hfg) ≫ (πₘ (TopCat.ofHom g)).map ⟦q⟧
+ ≫ hcast (end_path hfg).symm
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.prod_coe`：prod_coe (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂) : ⇑(γ₁.prod 
+γ₂) = fun t => (γ₁ t, γ₂ t)
+· 使用定理 `ContinuousMap.Homotopy.ulift_apply`：ulift_apply (i : ULift.{u} I) (x : X
+) : H.uliftMap (i, x) = H (i.down, x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Path.refl_apply`：∀ {X : Type u_1} [inst : TopologicalSpace X] (x : X) (x
+_1 : ↑unitInterval), (Path.refl x) x_1 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem apply_zero_path
-  statement: (πₘ (TopCat.ofHom f)).map p = hcast (H.apply_zero x₀).symm ≫
-  proof: Quotient.inductionOn p fun p' => by
-    apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
-    intros
-    rw [Path.prod_coe]; rw [ulift_apply H]
-    simp
-
-中文:
-定理 apply_zero_path
-  结论: (πₘ (顶元素范畴.ofHom f)).map p = hcast (H.apply_zero x₀).symm ≫
-  证明: Quotient.inductionOn p fun p' => by
-    apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
-    intros
-    rw [Path.prod_coe]; rw [ulift_apply H]
-    simp
-
-Depends on / 依赖: H.uliftMap, Path.prod_coe, Path.refl, Quotient, Quotient.inductionOn, ULift.up, eq_path_of_eq_image, inductionOn, intros, prod_coe, uliftMap, ulift_apply
+--- 原说明 ---
+Proof that `f(p) = H(0 ⟶ 0, p)`, with the appropriate casts
 -/
 theorem apply_zero_path : (πₘ (TopCat.ofHom f)).map p = hcast (H.apply_zero x₀).symm ≫
     (πₘ (TopCat.ofHom H.uliftMap)).map
@@ -549,31 +525,42 @@ theorem apply_zero_path : (πₘ (TopCat.ofHom f)).map p = hcast (H.apply_zero x
   Quotient.inductionOn p fun p' => by
     apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
     intros
-    rw [Path.prod_coe]; rw [ulift_apply H]
+    rw [Path.prod_coe, ulift_apply H]
     simp
 
-/--
-theorem `apply_one_path` / 定理 `apply_one_path`
+/-- Proof that `g(p) = H(1 ⟶ 1, p)`, with the appropriate casts -/
+/-
+**ContinuousMap.Homotopy.apply_one_path** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap
+.Homotopy`。
+形式化陈述：apply_one_path : (πₘ (TopCat.ofHom g)).map p = hcast (H.apply_one x₀).symm
+ ≫ (πₘ (TopCat.ofHom H.uliftMap)).map (prodToProdTopI (𝟙 (@fromTop (TopCat.of _)
+ (ULift.up 1))) p) ≫ hcast (H.apply_one x₁)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousMap.Homotopy.apply_one`：apply_one (F : Homotopy f₀ f₁) (x : X)
+ : F (1, x) = f₁ x
+· 使用定理 `ContinuousMap.Homotopy.eq_path_of_eq_image`：eq_path_of_eq_image : (πₘ (T
+opCat.ofHom f)).map ⟦p⟧ = hcast (start_path hfg) ≫ (πₘ (TopCat.ofHom g)).map ⟦q⟧
+ ≫ hcast (end_path hfg).symm
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.prod_coe`：prod_coe (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂) : ⇑(γ₁.prod 
+γ₂) = fun t => (γ₁ t, γ₂ t)
+· 使用定理 `ContinuousMap.Homotopy.ulift_apply`：ulift_apply (i : ULift.{u} I) (x : X
+) : H.uliftMap (i, x) = H (i.down, x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Path.refl_apply`：∀ {X : Type u_1} [inst : TopologicalSpace X] (x : X) (x
+_1 : ↑unitInterval), (Path.refl x) x_1 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem apply_one_path
-  statement: (πₘ (TopCat.ofHom g)).map p = hcast (H.apply_one x₀).symm ≫
-  proof: Quotient.inductionOn p fun p' => by
-    apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
-    intros
-    rw [Path.prod_coe]; rw [ulift_apply H]
-    simp
-
-中文:
-定理 apply_one_path
-  结论: (πₘ (顶元素范畴.ofHom g)).map p = hcast (H.apply_one x₀).symm ≫
-  证明: Quotient.inductionOn p fun p' => by
-    apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
-    intros
-    rw [Path.prod_coe]; rw [ulift_apply H]
-    simp
-
-Depends on / 依赖: H.uliftMap, Path.prod_coe, Path.refl, Quotient, Quotient.inductionOn, ULift.up, eq_path_of_eq_image, inductionOn, intros, prod_coe, uliftMap, ulift_apply
+--- 原说明 ---
+Proof that `g(p) = H(1 ⟶ 1, p)`, with the appropriate casts
 -/
 theorem apply_one_path : (πₘ (TopCat.ofHom g)).map p = hcast (H.apply_one x₀).symm ≫
     (πₘ (TopCat.ofHom H.uliftMap)).map
@@ -582,36 +569,38 @@ theorem apply_one_path : (πₘ (TopCat.ofHom g)).map p = hcast (H.apply_one x�
   Quotient.inductionOn p fun p' => by
     apply @eq_path_of_eq_image _ _ _ _ H.uliftMap _ _ _ _ _ ((Path.refl (ULift.up _)).prod p')
     intros
-    rw [Path.prod_coe]; rw [ulift_apply H]
+    rw [Path.prod_coe, ulift_apply H]
     simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `evalAt_eq` / 定理 `evalAt_eq`
+/-- Proof that `H.evalAt x = H(0 ⟶ 1, x ⟶ x)`, with the appropriate casts -/
+/-
+**ContinuousMap.Homotopy.evalAt_eq** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap.Homo
+topy`。
+形式化陈述：evalAt_eq (x : X) : ⟦H.evalAt x⟧ = hcast (H.apply_zero x).symm ≫ (πₘ (TopC
+at.ofHom H.uliftMap)).map (prodToProdTopI uhpath01 (𝟙 (fromTop x))) ≫ hcast (H.a
+pply_one x).symm.symm
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousMap.Homotopy.apply_zero`：apply_zero (F : Homotopy f₀ f₁) (x : 
+X) : F (0, x) = f₀ x
+· 使用定理 `ContinuousMap.Homotopy.apply_one`：apply_one (F : Homotopy f₀ f₁) (x : X)
+ : F (1, x) = f₁ x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FundamentalGroupoid.ext`：∀ {X : Type u_3} {x y : FundamentalGroupoid X},
+ x.as = y.as → x = y
+· 使用定理 `CategoryTheory.conj_eqToHom_iff_heq`：conj_eqToHom_iff_heq {W X Y Z : C} 
+(f : W ⟶ X) (g : Y ⟶ Z) (h : W = Y) (h' : X = Z) : f = eqToHom h ≫ g ≫ eqToHom h
+'.symm ↔ f ≍ g
+· 使用定理 `Path.Homotopic.hpath_hext`：hpath_hext {p₁ : Path x₀ x₁} {p₂ : Path x₂ x₃
+} (hp : forall t, p₁ t = p₂ t) : HEq (α
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 
-English:
-theorem evalAt_eq
-  given: (x : X)
-  statement: ⟦H.evalAt x⟧ = hcast (H.apply_zero x).symm ≫
-  proof: by
-  dsimp only [prodToProdTopI, uhpath01, hcast]
-  refine (@conj_eqToHom_iff_heq (πₓ Y) _ _ _ _ _ _ _ _
-    (FundamentalGroupoid.ext <| H.apply_one x).symm).mpr ?_
-  simp only [map_eq]
-  apply Path.Homotopic.hpath_hext; intro; rfl
-
-中文:
-定理 evalAt_eq
-  条件: (x : X)
-  结论: ⟦H.evalAt x⟧ = hcast (H.apply_zero x).symm ≫
-  证明: by
-  dsimp only [prodToProdTopI, uhpath01, hcast]
-  refine (@conj_eqToHom_iff_heq (πₓ Y) _ _ _ _ _ _ _ _
-    (FundamentalGroupoid.ext <| H.apply_one x).symm).mpr ?_
-  simp only [map_eq]
-  apply Path.Homotopic.hpath_hext; intro; rfl
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.ext, H.apply_one, Homotopic, Path.Homotopic.hpath_hext, apply_one, conj_eqToHom_iff_heq, hpath_hext, map_eq, prodToProdTopI, uhpath01
+--- 原说明 ---
+Proof that `H.evalAt x = H(0 ⟶ 1, x ⟶ x)`, with the appropriate casts
 -/
 theorem evalAt_eq (x : X) : ⟦H.evalAt x⟧ = hcast (H.apply_zero x).symm ≫
     (πₘ (TopCat.ofHom H.uliftMap)).map (prodToProdTopI uhpath01 (𝟙 (fromTop x))) ≫
@@ -624,45 +613,51 @@ theorem evalAt_eq (x : X) : ⟦H.evalAt x⟧ = hcast (H.apply_zero x).symm ≫
 
 set_option backward.isDefEq.respectTransparency false in
 -- Finally, we show `d = f(p) ≫ H₁ = H₀ ≫ g(p)`
-/--
-theorem `eq_diag_path` / 定理 `eq_diag_path`
-
-English:
-theorem eq_diag_path
-  statement: (πₘ (TopCat.ofHom f)).map p ≫ ⟦H.evalAt x₁⟧ = H.diagonalPath' p ∧
-  proof: by
-  rw [H.apply_zero_path]; rw [H.apply_one_path]; rw [H.evalAt_eq]
-  erw [H.evalAt_eq]
-  dsimp only [prodToProdTopI]
-  constructor
-  · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
-    slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
-    rfl
-  · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
-    slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
-    rfl
-
-中文:
-定理 eq_diag_path
-  结论: (πₘ (顶元素范畴.ofHom f)).map p ≫ ⟦H.evalAt x₁⟧ = H.diagonalPath' p ∧
-  证明: by
-  rw [H.apply_zero_path]; rw [H.apply_one_path]; rw [H.evalAt_eq]
-  erw [H.evalAt_eq]
-  dsimp only [prodToProdTopI]
-  constructor
-  · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
-    slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
-    rfl
-  · slice_lhs 2 4 => rw [eqToHom_trans, eqToHom_refl] -- Porting note: this ↓ `simp` didn't do this
-    slice_lhs 2 4 => simp [← CategoryTheory.Functor.map_comp]
-    rfl
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_comp, Functor, H.apply_one_path, H.apply_zero_path, H.evalAt_eq, Porting, apply_one_path, apply_zero_path, eqToHom_refl, eqToHom_trans, evalAt_eq, map_comp, prodToProdTopI, slice_lhs
+/-
+**ContinuousMap.Homotopy.eq_diag_path** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap.H
+omotopy`。
+形式化陈述：eq_diag_path : (πₘ (TopCat.ofHom f)).map p ≫ ⟦H.evalAt x₁⟧ = H.diagonalPat
+h' p ∧ (⟦H.evalAt x₀⟧ ≫ (πₘ (TopCat.ofHom g)).map p : fromTop (f x₀) ⟶ fromTop (
+g x₁)) = H.diagonalPath' p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousMap.Homotopy.apply_zero`：apply_zero (F : Homotopy f₀ f₁) (x : 
+X) : F (0, x) = f₀ x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.Homotopy.apply_zero_path`：apply_zero_path : (πₘ (TopCat.of
+Hom f)).map p = hcast (H.apply_zero x₀).symm ≫ (πₘ (TopCat.ofHom H.uliftMap)).ma
+p (prodToProdTopI (𝟙 (@fromT…
+· 使用定理 `ContinuousMap.Homotopy.apply_one`：apply_one (F : Homotopy f₀ f₁) (x : X)
+ : F (1, x) = f₁ x
+· 使用定理 `ContinuousMap.Homotopy.apply_one_path`：apply_one_path : (πₘ (TopCat.ofHo
+m g)).map p = hcast (H.apply_one x₀).symm ≫ (πₘ (TopCat.ofHom H.uliftMap)).map (
+prodToProdTopI (𝟙 (@fromTop…
+· 使用定理 `ContinuousMap.Homotopy.evalAt_eq`：evalAt_eq (x : X) : ⟦H.evalAt x⟧ = hca
+st (H.apply_zero x).symm ≫ (πₘ (TopCat.ofHom H.uliftMap)).map (prodToProdTopI uh
+path01 (𝟙 (fromTop x))…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem eq_diag_path : (πₘ (TopCat.ofHom f)).map p ≫ ⟦H.evalAt x₁⟧ = H.diagonalPath' p ∧
     (⟦H.evalAt x₀⟧ ≫ (πₘ (TopCat.ofHom g)).map p :
     fromTop (f x₀) ⟶ fromTop (g x₁)) = H.diagonalPath' p := by
-  rw [H.apply_zero_path]; rw [H.apply_one_path]; rw [H.evalAt_eq]
+  rw [H.apply_zero_path, H.apply_one_path, H.evalAt_eq]
   erw [H.evalAt_eq]
   dsimp only [prodToProdTopI]
   constructor
@@ -674,3 +669,4 @@ theorem eq_diag_path : (πₘ (TopCat.ofHom f)).map p ≫ ⟦H.evalAt x₁⟧ = 
     rfl
 
 end ContinuousMap.Homotopy
+

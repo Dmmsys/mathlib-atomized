@@ -40,8 +40,8 @@ public lemma isTopologicalBasis_range_typesWith :
   exists_subset_inter := by
     intro t₁ ⟨φ, ht₁⟩ t₂ ⟨ψ, ht₂⟩ x hx
     refine ⟨T.typesWith (φ ⊓ ψ), ⟨φ ⊓ ψ, rfl⟩, ?_⟩
-    rw [typesWith_inf]; rw [ht₁]; rw [ht₂]
-    exact ⟨hx, fun _ => id⟩
+    rw [typesWith_inf, ht₁, ht₂]
+    exact ⟨hx, fun _ ↦ id⟩
   sUnion_eq := by
     rw [← Set.univ_subset_iff]
     exact Set.subset_sUnion_of_mem ⟨_, typesWith_top⟩
@@ -70,84 +70,25 @@ public instance : TotallySeparatedSpace (CompleteType T α) := by
     refine ⟨T.typesWith ∼φ, isClopen_typesWith _, h, ?_⟩
     rwa [mem_compl_iff, mem_typesWith_iff, not_mem_iff, ← hφ, not_not, ← not_mem_iff]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompactSpace (T.CompleteType α)
-  body: by
-  constructor
-  rw [isCompact_iff_ultrafilter_le_nhds]
-  intros F _
-  refine ⟨⟨{φ | T.typesWith φ in F}, ?_, ?_⟩, ?_⟩
-  · intro φ x
-    exact F.mem_of_superset Filter.univ_mem (fun p _ => p.subset x)
-  · rw [Theory.IsMaximal, Theory.isSatisfiable_iff_isFinitelySatisfiable]
-    refine ⟨?_, ?_⟩
-    · rw[Theory.IsFinitelySatisfiable]
-      intro x hx
-      have : forall φ in x, T.typesWith φ in F.toFilter := by intro φ hφ; exact hx hφ
-      rw [← Filter.biInter_finset_mem x] at this
-      obtain ⟨T, T_inter⟩ := F.neBot.nonempty_of_mem this
-      have subset : (x : Set _) subseteq T.toTheory := by rwa [Set.mem_iInter₂] at T_inter
-      exact T.isMaximal.1.mono subset
-    · intro φ
-      simp only [mem_ofPred_eq, typesWith_not]
-      exact Ultrafilter.mem_or_compl_mem F (T.typesWith φ)
-  · refine ⟨mem_univ _, ?_⟩
-    · rw [nhds_generateFrom]
-      apply le_iInf₂
-      rintro _ ⟨hφ, φ, rfl⟩
-      rw [Filter.le_principal_iff]
-      exact hφ
-
-中文:
-实例 :
-  签名: 紧空间 (T.余mpleteType α)
-  定义体: by
-  constructor
-  rw [isCompact_iff_ultrafilter_le_nhds]
-  intros F _
-  refine ⟨⟨{φ | T.typesWith φ in F}, ?_, ?_⟩, ?_⟩
-  · intro φ x
-    exact F.mem_of_superset Filter.univ_mem (fun p _ => p.subset x)
-  · rw [Theory.IsMaximal, Theory.isSatisfiable_iff_isFinitelySatisfiable]
-    refine ⟨?_, ?_⟩
-    · rw[Theory.IsFinitelySatisfiable]
-      intro x hx
-      have : forall φ in x, T.typesWith φ in F.toFilter := by intro φ hφ; exact hx hφ
-      rw [← Filter.biInter_finset_mem x] at this
-      obtain ⟨T, T_inter⟩ := F.neBot.nonempty_of_mem this
-      have subset : (x : Set _) subseteq T.toTheory := by rwa [Set.mem_iInter₂] at T_inter
-      exact T.isMaximal.1.mono subset
-    · intro φ
-      simp only [mem_ofPred_eq, typesWith_not]
-      exact Ultrafilter.mem_or_compl_mem F (T.typesWith φ)
-  · refine ⟨mem_univ _, ?_⟩
-    · rw [nhds_generateFrom]
-      apply le_iInf₂
-      rintro _ ⟨hφ, φ, rfl⟩
-      rw [Filter.le_principal_iff]
-      exact hφ
-
-Depends on / 依赖: F.mem_of_superset, F.neBot.nonempty_of_mem, F.toFilter, Filter, Filter.biInter_finset_mem, Filter.univ_mem, IsFinitelySatisfiable, IsMaximal, T.typesWith, T_inter, Theory, Theory.IsFinitelySatisfiable, Theory.IsMaximal, Theory.isSatisfiable_iff_isFinitelySatisfiable, biInter_finset_mem, intros, isCompact_iff_ultrafilter_le_nhds, isSatisfiable_iff_isFinitelySatisfiable, mem_of_superset, nonempty_of_mem
+/-
+**CompleteType.** 是 Mathlib 中的一个实例，位于命名空间 `CompleteType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompactSpace (T.CompleteType α) := by
   constructor
   rw [isCompact_iff_ultrafilter_le_nhds]
   intros F _
-  refine ⟨⟨{φ | T.typesWith φ in F}, ?_, ?_⟩, ?_⟩
+  refine ⟨⟨{φ | T.typesWith φ ∈ F}, ?_, ?_⟩, ?_⟩
   · intro φ x
-    exact F.mem_of_superset Filter.univ_mem (fun p _ => p.subset x)
+    exact F.mem_of_superset Filter.univ_mem (fun p _ ↦ p.subset x)
   · rw [Theory.IsMaximal, Theory.isSatisfiable_iff_isFinitelySatisfiable]
     refine ⟨?_, ?_⟩
     · rw[Theory.IsFinitelySatisfiable]
       intro x hx
-      have : forall φ in x, T.typesWith φ in F.toFilter := by intro φ hφ; exact hx hφ
+      have : ∀ φ ∈ x, T.typesWith φ ∈ F.toFilter := by intro φ hφ; exact hx hφ
       rw [← Filter.biInter_finset_mem x] at this
       obtain ⟨T, T_inter⟩ := F.neBot.nonempty_of_mem this
-      have subset : (x : Set _) subseteq T.toTheory := by rwa [Set.mem_iInter₂] at T_inter
+      have subset : (x : Set _) ⊆ T.toTheory := by rwa [Set.mem_iInter₂] at T_inter
       exact T.isMaximal.1.mono subset
     · intro φ
       simp only [mem_ofPred_eq, typesWith_not]
@@ -158,22 +99,11 @@ instance : CompactSpace (T.CompleteType α) := by
       rintro _ ⟨hφ, φ, rfl⟩
       rw [Filter.le_principal_iff]
       exact hφ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BaireSpace (T.CompleteType α)
-  body: BaireSpace.of_t2Space_locallyCompactSpace
-
-中文:
-实例 :
-  签名: Baire空间 (T.余mpleteType α)
-  定义体: BaireSpace.of_t2Space_locallyCompactSpace
-
-Depends on / 依赖: BaireSpace, BaireSpace.of_t2Space_locallyCompactSpace, of_t2Space_locallyCompactSpace
+/-
+**CompleteType.** 是 Mathlib 中的一个实例，位于命名空间 `CompleteType`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BaireSpace (T.CompleteType α) := BaireSpace.of_t2Space_locallyCompactSpace
 
 end CompleteType
+

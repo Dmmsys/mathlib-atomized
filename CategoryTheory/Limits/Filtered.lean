@@ -35,36 +35,37 @@ section NonemptyLimit
 
 open CategoryTheory.Limits Opposite
 
-/--
-theorem `IsFiltered.iff_nonempty_limit` / 定理 `IsFiltered.iff_nonempty_limit`
+/-- `C` is filtered if and only if for every functor `F : J ⥤ C` from a finite category there is
+    some `X : C` such that `lim Hom(F·, X)` is nonempty.
 
-English:
-theorem IsFiltered.iff_nonempty_limit
-  statement: IsFiltered C ↔
-  proof: by
-  rw [IsFiltered.iff_cocone_nonempty.{v}]
-  refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
-  · obtain ⟨c⟩ := h F
-    exact ⟨c.pt, ⟨(limitCompYonedaIsoCocone F c.pt).inv c.ι⟩⟩
-  · obtain ⟨pt, ⟨ι⟩⟩ := h F
-    exact ⟨⟨pt, (limitCompYonedaIsoCocone F pt).hom ι⟩⟩
+    Lemma 3.1.2 of [Kashiwara2006] -/
+/-
+**CategoryTheory.IsFiltered.iff_nonempty_limit** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.IsFiltered`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C],   CategoryTheory
+.IsFiltered C ↔     ∀ {J : Type v} [inst_1 : CategoryTheory.SmallCategory J] [Ca
+tegoryTheory.FinCategory J]       (F : CategoryTheory.Functor J C),       ∃ X, N
+onempty (CategoryTheory.Limits.limit (F.op.comp (CategoryTheory.yoneda.obj X)))
+参数：F : CategoryTheory.Functor J C；CategoryTheory.Limits.limit (F.op.comp (Catego
+ryTheory.yoneda.obj X))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsFiltered.iff_cocone_nonempty`：iff_cocone_nonempty : IsF
+iltered C ↔ forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), N
+onempty (Cocone F)
 
-中文:
-定理 是Filtered.iff_nonempty_limit
-  结论: 是Filtered C ↔
-  证明: by
-  rw [IsFiltered.iff_cocone_nonempty.{v}]
-  refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
-  · obtain ⟨c⟩ := h F
-    exact ⟨c.pt, ⟨(limitCompYonedaIsoCocone F c.pt).inv c.ι⟩⟩
-  · obtain ⟨pt, ⟨ι⟩⟩ := h F
-    exact ⟨⟨pt, (limitCompYonedaIsoCocone F pt).hom ι⟩⟩
+--- 原说明 ---
+`C` is filtered if and only if for every functor `F : J ⥤ C` from a finite categ
+ory there is
+    some `X : C` such that `lim Hom(F·, X)` is nonempty.
 
-Depends on / 依赖: IsFiltered, IsFiltered.iff_cocone_nonempty, c.pt, iff_cocone_nonempty, limitCompYonedaIsoCocone
+    Lemma 3.1.2 of [Kashiwara2006]
 -/
 theorem IsFiltered.iff_nonempty_limit : IsFiltered C ↔
-    forall {J : Type v} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
-      exists (X : C), Nonempty (limit (F.op ⋙ yoneda.obj X)) := by
+    ∀ {J : Type v} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
+      ∃ (X : C), Nonempty (limit (F.op ⋙ yoneda.obj X)) := by
   rw [IsFiltered.iff_cocone_nonempty.{v}]
   refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
   · obtain ⟨c⟩ := h F
@@ -72,36 +73,34 @@ theorem IsFiltered.iff_nonempty_limit : IsFiltered C ↔
   · obtain ⟨pt, ⟨ι⟩⟩ := h F
     exact ⟨⟨pt, (limitCompYonedaIsoCocone F pt).hom ι⟩⟩
 
-/--
-theorem `IsCofiltered.iff_nonempty_limit` / 定理 `IsCofiltered.iff_nonempty_limit`
+/-- `C` is cofiltered if and only if for every functor `F : J ⥤ C` from a finite category there is
+    some `X : C` such that `lim Hom(X, F·)` is nonempty. -/
+/-
+**CategoryTheory.IsCofiltered.iff_nonempty_limit** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.IsCofiltered`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C],   CategoryTheory
+.IsCofiltered C ↔     ∀ {J : Type v} [inst_1 : CategoryTheory.SmallCategory J] [
+CategoryTheory.FinCategory J]       (F : CategoryTheory.Functor J C),       ∃ X,
+ Nonempty (CategoryTheory.Limits.limit (F.comp (CategoryTheory.coyoneda.obj (Opp
+osite.op X))))
+参数：F : CategoryTheory.Functor J C；CategoryTheory.Limits.limit (F.comp (CategoryT
+heory.coyoneda.obj (Opposite.op X)))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsCofiltered.iff_cone_nonempty`：iff_cone_nonempty : IsCof
+iltered C ↔ forall {J : Type w} [SmallCategory J] [FinCategory J] (F : J ⥤ C), N
+onempty (Cone F)
 
-English:
-theorem IsCofiltered.iff_nonempty_limit
-  statement: IsCofiltered C ↔
-  proof: by
-  rw [IsCofiltered.iff_cone_nonempty.{v}]
-  refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
-  · obtain ⟨c⟩ := h F
-    exact ⟨c.pt, ⟨(limitCompCoyonedaIsoCone F c.pt).inv c.π⟩⟩
-  · obtain ⟨pt, ⟨π⟩⟩ := h F
-    exact ⟨⟨pt, (limitCompCoyonedaIsoCone F pt).hom π⟩⟩
-
-中文:
-定理 是余filtered.iff_nonempty_limit
-  结论: 是余filtered C ↔
-  证明: by
-  rw [IsCofiltered.iff_cone_nonempty.{v}]
-  refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
-  · obtain ⟨c⟩ := h F
-    exact ⟨c.pt, ⟨(limitCompCoyonedaIsoCone F c.pt).inv c.π⟩⟩
-  · obtain ⟨pt, ⟨π⟩⟩ := h F
-    exact ⟨⟨pt, (limitCompCoyonedaIsoCone F pt).hom π⟩⟩
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.iff_cone_nonempty, c.pt, iff_cone_nonempty, limitCompCoyonedaIsoCone
+--- 原说明 ---
+`C` is cofiltered if and only if for every functor `F : J ⥤ C` from a finite cat
+egory there is
+    some `X : C` such that `lim Hom(X, F·)` is nonempty.
 -/
 theorem IsCofiltered.iff_nonempty_limit : IsCofiltered C ↔
-    forall {J : Type v} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
-      exists (X : C), Nonempty (limit (F ⋙ coyoneda.obj (op X))) := by
+    ∀ {J : Type v} [SmallCategory J] [FinCategory J] (F : J ⥤ C),
+      ∃ (X : C), Nonempty (limit (F ⋙ coyoneda.obj (op X))) := by
   rw [IsCofiltered.iff_cone_nonempty.{v}]
   refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
   · obtain ⟨c⟩ := h F
@@ -123,116 +122,106 @@ variable (C)
 -- `HasCofilteredLimitsOfSize` and `HasFilteredColimitsOfSize` would default to universe
 -- output parameters. See Note [universe output parameters and typeclass caching].
 @[univ_out_params, pp_with_univ]
-/--
-Definition of `HasCofilteredLimitsOfSize` / `HasCofilteredLimitsOfSize` 的定义
-
-English:
-class HasCofilteredLimitsOfSize
-  parameters: : Prop where
-  axioms and operations (1):
-    - HasLimitsOfShape : forall (I : Type w) [Category.{w'} I] [IsCofiltered I], HasLimitsOfShape I C
-
-中文:
-类 有余filteredLimitsOfSize
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - HasLimitsOfShape : 对任意 (I : 类型 w) [范畴.{w'} I] [是余filtered I], 有形状极限 I C
+/-
+**CategoryTheory.Limits.HasCofilteredLimitsOfSize** 是 Mathlib 中的一个归纳类型，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class HasCofilteredLimitsOfSize : Prop where
   /-- For all filtered types of size `w`, we have limits -/
-  HasLimitsOfShape : forall (I : Type w) [Category.{w'} I] [IsCofiltered I], HasLimitsOfShape I C
+  HasLimitsOfShape : ∀ (I : Type w) [Category.{w'} I] [IsCofiltered I], HasLimitsOfShape I C
 
 /-- Class for having all filtered colimits of a given size. -/
 @[univ_out_params, pp_with_univ]
-/--
-Definition of `HasFilteredColimitsOfSize` / `HasFilteredColimitsOfSize` 的定义
+/-
+**CategoryTheory.Limits.HasFilteredColimitsOfSize** 是 Mathlib 中的一个归纳类型，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasFilteredColimitsOfSize
-  parameters: : Prop where
-  axioms and operations (1):
-    - HasColimitsOfShape : forall (I : Type w) [Category.{w'} I] [IsFiltered I], HasColimitsOfShape I C
-
-中文:
-类 有FilteredColimitsOfSize
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - HasColimitsOfShape : 对任意 (I : 类型 w) [范畴.{w'} I] [是Filtered I], 有形状余极限 I C
+--- 原说明 ---
+Class for having all filtered colimits of a given size.
 -/
 class HasFilteredColimitsOfSize : Prop where
   /-- For all filtered types of a size `w`, we have colimits -/
-  HasColimitsOfShape : forall (I : Type w) [Category.{w'} I] [IsFiltered I], HasColimitsOfShape I C
+  HasColimitsOfShape : ∀ (I : Type w) [Category.{w'} I] [IsFiltered I], HasColimitsOfShape I C
 
-/--
-Definition of `HasCofilteredLimits` / `HasCofilteredLimits` 的定义
+/-- Class for having cofiltered limits. -/
+/-
+**CategoryTheory.Limits.HasCofilteredLimits** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：HasCofilteredLimits
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasCofilteredLimits
-  body: HasCofilteredLimitsOfSize.{v, v} C
-
-中文:
-缩写 HasCofilteredLimits
-  定义体: HasCofilteredLimitsOfSize.{v, v} C
-
-Depends on / 依赖: HasCofilteredLimitsOfSize
+--- 原说明 ---
+Class for having cofiltered limits.
 -/
 abbrev HasCofilteredLimits := HasCofilteredLimitsOfSize.{v, v} C
 
-/--
-Definition of `HasFilteredColimits` / `HasFilteredColimits` 的定义
+/-- Class for having filtered colimits. -/
+/-
+**CategoryTheory.Limits.HasFilteredColimits** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：HasFilteredColimits
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasFilteredColimits
-  body: HasFilteredColimitsOfSize.{v, v} C
-
-中文:
-缩写 HasFilteredColimits
-  定义体: HasFilteredColimitsOfSize.{v, v} C
-
-Depends on / 依赖: HasFilteredColimitsOfSize
+--- 原说明 ---
+Class for having filtered colimits.
 -/
 abbrev HasFilteredColimits := HasFilteredColimitsOfSize.{v, v} C
 
 end
 
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasFilteredColimitsOfSize_of_hasColimitsOfSize
     [HasColimitsOfSize.{w', w} C] : HasFilteredColimitsOfSize.{w', w} C where
   HasColimitsOfShape _ _ _ := inferInstance
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasCofilteredLimitsOfSize_of_hasLimitsOfSize
     [HasLimitsOfSize.{w', w} C] : HasCofilteredLimitsOfSize.{w', w} C where
   HasLimitsOfShape _ _ _ := inferInstance
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasLimitsOfShape_of_has_cofiltered_limits
     [HasCofilteredLimitsOfSize.{w', w} C] (I : Type w) [Category.{w'} I] [IsCofiltered I] :
     HasLimitsOfShape I C :=
   HasCofilteredLimitsOfSize.HasLimitsOfShape _
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasColimitsOfShape_of_has_filtered_colimits
     [HasFilteredColimitsOfSize.{w', w} C] (I : Type w) [Category.{w'} I] [IsFiltered I] :
     HasColimitsOfShape I C :=
   HasFilteredColimitsOfSize.HasColimitsOfShape _
-
-/--
-lemma `hasCofilteredLimitsOfSize_of_univLE` / 引理 `hasCofilteredLimitsOfSize_of_univLE`
-
-English:
-lemma hasCofilteredLimitsOfSize_of_univLE
-  statement: [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}]
-  proof: haveI := IsCofiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J))
-    hasLimitsOfShape_of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J)).symm
-
-中文:
-引理 hasCofilteredLimitsOfSize_of_univLE
-  结论: [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}]
-  证明: haveI := IsCofiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J))
-    hasLimitsOfShape_of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J)).symm
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.of_equivalence, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, equivalence, hasLimitsOfShape_of_equivalence, of_equivalence
+/-
+**CategoryTheory.Limits.hasCofilteredLimitsOfSize_of_univLE** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasCofilteredLimitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}] [H
+asCofilteredLimitsOfSize.{w₂', w₂} C] : HasCofilteredLimitsOfSize.{w', w} C wher
+e HasLimitsOfShape J
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_has_cofiltered_limits`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C]   [CategoryTheory.Limits.HasCo
+filteredLimitsOfSize.{w', w, v, u} C] (I : Type w)   …
+· 使用定理 `CategoryTheory.IsCofiltered.of_equivalence`：of_equivalence (h : C ≌ D) :
+ IsCofiltered D
 -/
 lemma hasCofilteredLimitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}]
     [HasCofilteredLimitsOfSize.{w₂', w₂} C] :
@@ -242,46 +231,39 @@ lemma hasCofilteredLimitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}
       Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J))
     hasLimitsOfShape_of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
       Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J)).symm
-
-/--
-lemma `hasCofilteredLimitsOfSize_shrink` / 引理 `hasCofilteredLimitsOfSize_shrink`
-
-English:
-lemma hasCofilteredLimitsOfSize_shrink
-  given: [HasCofilteredLimitsOfSize.{max w' w₂', max w w₂} C]
-  proof: hasCofilteredLimitsOfSize_of_univLE.{w', w, max w' w₂', max w w₂}
-
-中文:
-引理 hasCofilteredLimitsOfSize_shrink
-  条件: [有余filteredLimitsOfSize.{最大值 w' w₂', 最大值 w w₂} C]
-  证明: hasCofilteredLimitsOfSize_of_univLE.{w', w, max w' w₂', max w w₂}
-
-Depends on / 依赖: hasCofilteredLimitsOfSize_of_univLE
+/-
+**CategoryTheory.Limits.hasCofilteredLimitsOfSize_shrink** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：hasCofilteredLimitsOfSize_shrink [HasCofilteredLimitsOfSize.{max w' w₂', m
+ax w w₂} C] : HasCofilteredLimitsOfSize.{w', w} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.hasCofilteredLimitsOfSize_of_univLE`：hasCofiltered
+LimitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}] [HasCofilteredLimitsO
+fSize.{w₂', w₂} C] : HasCofilteredLimitsOfSize.…
 -/
 lemma hasCofilteredLimitsOfSize_shrink [HasCofilteredLimitsOfSize.{max w' w₂', max w w₂} C] :
     HasCofilteredLimitsOfSize.{w', w} C :=
   hasCofilteredLimitsOfSize_of_univLE.{w', w, max w' w₂', max w w₂}
-
-/--
-lemma `hasFilteredColimitsOfSize_of_univLE` / 引理 `hasFilteredColimitsOfSize_of_univLE`
-
-English:
-lemma hasFilteredColimitsOfSize_of_univLE
-  statement: [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}]
-  proof: haveI := IsFiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J))
-    hasColimitsOfShape_of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J)).symm
-
-中文:
-引理 hasFilteredColimitsOfSize_of_univLE
-  结论: [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}]
-  证明: haveI := IsFiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J))
-    hasColimitsOfShape_of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
-      Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J)).symm
-
-Depends on / 依赖: IsFiltered, IsFiltered.of_equivalence, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, equivalence, hasColimitsOfShape_of_equivalence, of_equivalence
+/-
+**CategoryTheory.Limits.hasFilteredColimitsOfSize_of_univLE** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Limits`。
+形式化陈述：hasFilteredColimitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}] [H
+asFilteredColimitsOfSize.{w₂', w₂} C] : HasFilteredColimitsOfSize.{w', w} C wher
+e HasColimitsOfShape J
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_has_filtered_colimits`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C]   [CategoryTheory.Limits.Has
+FilteredColimitsOfSize.{w', w, v, u} C] (I : Type w)   …
+· 使用定理 `CategoryTheory.IsFiltered.of_equivalence`：of_equivalence (h : C ≌ D) : I
+sFiltered D
 -/
 lemma hasFilteredColimitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}]
     [HasFilteredColimitsOfSize.{w₂', w₂} C] :
@@ -291,21 +273,16 @@ lemma hasFilteredColimitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}
       Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J))
     hasColimitsOfShape_of_equivalence ((ShrinkHoms.equivalence.{w₂'} J).trans <|
       Shrink.equivalence.{w₂, w₂'} (ShrinkHoms.{w} J)).symm
-
-/--
-lemma `hasFilteredColimitsOfSize_shrink` / 引理 `hasFilteredColimitsOfSize_shrink`
-
-English:
-lemma hasFilteredColimitsOfSize_shrink
-  given: [HasFilteredColimitsOfSize.{max w' w₂', max w w₂} C]
-  proof: hasFilteredColimitsOfSize_of_univLE.{w', w, max w' w₂', max w w₂}
-
-中文:
-引理 hasFilteredColimitsOfSize_shrink
-  条件: [有FilteredColimitsOfSize.{最大值 w' w₂', 最大值 w w₂} C]
-  证明: hasFilteredColimitsOfSize_of_univLE.{w', w, max w' w₂', max w w₂}
-
-Depends on / 依赖: hasFilteredColimitsOfSize_of_univLE
+/-
+**CategoryTheory.Limits.hasFilteredColimitsOfSize_shrink** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：hasFilteredColimitsOfSize_shrink [HasFilteredColimitsOfSize.{max w' w₂', m
+ax w w₂} C] : HasFilteredColimitsOfSize.{w', w} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.hasFilteredColimitsOfSize_of_univLE`：hasFilteredCo
+limitsOfSize_of_univLE [UnivLE.{w, w₂}] [UnivLE.{w', w₂'}] [HasFilteredColimitsO
+fSize.{w₂', w₂} C] : HasFilteredColimitsOfSize.…
 -/
 lemma hasFilteredColimitsOfSize_shrink [HasFilteredColimitsOfSize.{max w' w₂', max w w₂} C] :
     HasFilteredColimitsOfSize.{w', w} C :=
@@ -314,3 +291,4 @@ lemma hasFilteredColimitsOfSize_shrink [HasFilteredColimitsOfSize.{max w' w₂',
 end Limits
 
 end CategoryTheory
+

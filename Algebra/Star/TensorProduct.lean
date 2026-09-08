@@ -25,121 +25,51 @@ variable {R A B : Type*}
 
 open scoped TensorProduct
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Star (A otimes[R] B)
-  body: congr (starLinearEquiv R) (starLinearEquiv R) x
-
-@[simp]
-
-中文:
-实例 :
-  签名: 对合 (A otimes[R] B)
-  定义体: congr (starLinearEquiv R) (starLinearEquiv R) x
-
-@[simp]
-
-Depends on / 依赖: starLinearEquiv
+/-
+**TensorProduct.** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Star (A otimes[R] B) where
+instance : Star (A ⊗[R] B) where
   star x := congr (starLinearEquiv R) (starLinearEquiv R) x
 
 @[simp]
-/--
-theorem `star_tmul` / 定理 `star_tmul`
-
-English:
-theorem star_tmul
-  given: (x : A) (y : B)
-  statement: star (x otimesₜ[R] y) = star x otimesₜ[R] star y
-  proof: rfl
-
-中文:
-定理 star_tmul
-  条件: (x : A) (y : B)
-  结论: star (x otimesₜ[R] y) = star x otimesₜ[R] star y
-  证明: rfl
+/-
+**TensorProduct.star_tmul** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：star_tmul (x : A) (y : B) : star (x otimesₜ[R] y) = star x otimesₜ[R] star
+ y
+参数：x : A；y : B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_tmul (x : A) (y : B) : star (x otimesₜ[R] y) = star x otimesₜ[R] star y := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InvolutiveStar (A otimes[R] B)
-  body: by
-    simp_rw [star]
-    rw [congr_congr]
-    convert! congr($congr_refl_refl x) <;> ext <;> simp
-
-中文:
-实例 :
-  签名: InvolutiveStar (A otimes[R] B)
-  定义体: by
-    simp_rw [star]
-    rw [congr_congr]
-    convert! congr($congr_refl_refl x) <;> ext <;> simp
-
-Depends on / 依赖: congr_congr, congr_refl_refl, convert, simp_rw
+theorem star_tmul (x : A) (y : B) : star (x ⊗ₜ[R] y) = star x ⊗ₜ[R] star y := rfl
+/-
+**TensorProduct.** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : InvolutiveStar (A otimes[R] B) where
+noncomputable instance : InvolutiveStar (A ⊗[R] B) where
   star_involutive x := by
     simp_rw [star]
     rw [congr_congr]
     convert! congr($congr_refl_refl x) <;> ext <;> simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarAddMonoid (A otimes[R] B)
-  body: map_add _
-
-中文:
-实例 :
-  签名: StarAdd幺半群 (A otimes[R] B)
-  定义体: map_add _
-
-Depends on / 依赖: map_add
+/-
+**TensorProduct.** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : StarAddMonoid (A otimes[R] B) where
+noncomputable instance : StarAddMonoid (A ⊗[R] B) where
   star_add := map_add _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarModule R (A otimes[R] B)
-  body: map_smulₛₗ _
-
-中文:
-实例 :
-  签名: 对合模 R (A otimes[R] B)
-  定义体: map_smulₛₗ _
+/-
+**TensorProduct.** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarModule R (A otimes[R] B) where
+instance : StarModule R (A ⊗[R] B) where
   star_smul := map_smulₛₗ _
-
-/--
-theorem `_root_.starLinearEquiv_tensor` / 定理 `_root_.starLinearEquiv_tensor`
-
-English:
-theorem _root_.starLinearEquiv_tensor
-  proof: rfl
-
-中文:
-定理 _root_.starLinearEquiv_tensor
-  证明: rfl
-
-Depends on / 依赖: otimes, starLinearEquiv
+/-
+**TensorProduct._root_.starLinearEquiv_tensor** 是 Mathlib 中的一个定理，位于命名空间 `TensorP
+roduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.starLinearEquiv_tensor :
-    starLinearEquiv R (A := A otimes[R] B) = congr (starLinearEquiv R) (starLinearEquiv R) := rfl
+    starLinearEquiv R (A := A ⊗[R] B) = congr (starLinearEquiv R) (starLinearEquiv R) := rfl
 
 end TensorProduct
+

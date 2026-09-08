@@ -47,83 +47,76 @@ public section
 
 variable {α : Type*}
 
-/--
-Definition of `OrderedSub` / `OrderedSub` 的定义
+/-- `OrderedSub α` means that `α` has a subtraction characterized by `a - b ≤ c ↔ a ≤ c + b`.
+In other words, `a - b` is the least `c` such that `a ≤ b + c`.
 
-English:
-class OrderedSub
-  parameters: (α : Type*) [LE α] [Add α] [Sub α]
-  axioms and operations (1):
-    - tsub_le_iff_right : forall a b c : α, a - b <= c ↔ a <= c + b
+This is satisfied both by the subtraction in additive ordered groups and by truncated subtraction
+in canonically ordered monoids on many specific types.
+-/
+/-
+**OrderedSub** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_2) → [LE α] → [Add α] → [Sub α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 OrderedSub
-  参数: (α : 类型) [LE α] [加法 α] [减法 α]
-  公理与运算 (1 个):
-    - tsub_le_iff_right : 对任意 a b c : α, a - b <= c ↔ a <= c + b
+--- 原说明 ---
+`OrderedSub α` means that `α` has a subtraction characterized by `a - b ≤ c ↔ a 
+≤ c + b`.
+In other words, `a - b` is the least `c` such that `a ≤ b + c`.
+
+This is satisfied both by the subtraction in additive ordered groups and by trun
+cated subtraction
+in canonically ordered monoids on many specific types.
 -/
 class OrderedSub (α : Type*) [LE α] [Add α] [Sub α] : Prop where
   /-- `a - b` provides a lower bound on `c` such that `a ≤ c + b`. -/
-  tsub_le_iff_right : forall a b c : α, a - b <= c ↔ a <= c + b
+  tsub_le_iff_right : ∀ a b c : α, a - b ≤ c ↔ a ≤ c + b
 
 section Add
 
 @[simp]
-/--
-theorem `tsub_le_iff_right` / 定理 `tsub_le_iff_right`
-
-English:
-theorem tsub_le_iff_right
-  given: [LE α] [Add α] [Sub α] [OrderedSub α] {a b c : α}
-  proof: OrderedSub.tsub_le_iff_right a b c
-
-中文:
-定理 tsub_le_iff_right
-  条件: [LE α] [加法 α] [减法 α] [OrderedSub α] {a b c : α}
-  证明: OrderedSub.tsub_le_iff_right a b c
-
-Depends on / 依赖: OrderedSub, OrderedSub.tsub_le_iff_right, tsub_le_iff_right
+/-
+**tsub_le_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub α] {a b c : α} : a - 
+b <= c ↔ a <= c + b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderedSub.tsub_le_iff_right`：∀ {α : Type u_2} {inst : LE α} {inst_1 : A
+dd α} {inst_2 : Sub α} [self : OrderedSub α] (a b c : α),   a - b ≤ c ↔ a ≤ c + 
+b
 -/
 theorem tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub α] {a b c : α} :
-    a - b <= c ↔ a <= c + b :=
+    a - b ≤ c ↔ a ≤ c + b :=
   OrderedSub.tsub_le_iff_right a b c
 
 variable [Preorder α] [Add α] [Sub α] [OrderedSub α] {a b : α}
 
-/--
-theorem `add_tsub_le_right` / 定理 `add_tsub_le_right`
+/-- See `add_tsub_cancel_right` for the equality if `AddLeftReflectLE α`. -/
+/-
+**add_tsub_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_le_right : a + b - b <= a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem add_tsub_le_right
-  statement: a + b - b <= a
-  proof: tsub_le_iff_right.mpr le_rfl
-
-中文:
-定理 add_tsub_le_right
-  结论: a + b - b <= a
-  证明: tsub_le_iff_right.mpr le_rfl
-
-Depends on / 依赖: le_rfl, tsub_le_iff_right, tsub_le_iff_right.mpr
+--- 原说明 ---
+See `add_tsub_cancel_right` for the equality if `AddLeftReflectLE α`.
 -/
-theorem add_tsub_le_right : a + b - b <= a :=
+theorem add_tsub_le_right : a + b - b ≤ a :=
   tsub_le_iff_right.mpr le_rfl
-
-/--
-theorem `le_tsub_add` / 定理 `le_tsub_add`
-
-English:
-theorem le_tsub_add
-  statement: b <= b - a + a
-  proof: tsub_le_iff_right.mp le_rfl
-
-中文:
-定理 le_tsub_add
-  结论: b <= b - a + a
-  证明: tsub_le_iff_right.mp le_rfl
-
-Depends on / 依赖: le_rfl, tsub_le_iff_right, tsub_le_iff_right.mp
+/-
+**le_tsub_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_tsub_add : b <= b - a + a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem le_tsub_add : b <= b - a + a :=
+theorem le_tsub_add : b ≤ b - a + a :=
   tsub_le_iff_right.mp le_rfl
 
 end Add
@@ -143,397 +136,381 @@ variable [AddCommSemigroup α] [Sub α] [OrderedSub α] {a b c d : α}
 
 -- TODO: Most results can be generalized to `[Add α] [IsAddCommutative α]`
 
-/--
-theorem `tsub_le_iff_left` / 定理 `tsub_le_iff_left`
-
-English:
-theorem tsub_le_iff_left
-  statement: a - b <= c ↔ a <= b + c
-  proof: by rw [tsub_le_iff_right, add_comm]
-
-中文:
-定理 tsub_le_iff_left
-  结论: a - b <= c ↔ a <= b + c
-  证明: by rw [tsub_le_iff_right, add_comm]
-
-Depends on / 依赖: add_comm, tsub_le_iff_right
+/-
+**tsub_le_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem tsub_le_iff_left : a - b <= c ↔ a <= b + c := by rw [tsub_le_iff_right, add_comm]
-
-/--
-theorem `le_add_tsub` / 定理 `le_add_tsub`
-
-English:
-theorem le_add_tsub
-  statement: a <= b + (a - b)
-  proof: tsub_le_iff_left.mp le_rfl
-
-中文:
-定理 le_add_tsub
-  结论: a <= b + (a - b)
-  证明: tsub_le_iff_left.mp le_rfl
-
-Depends on / 依赖: le_rfl, tsub_le_iff_left, tsub_le_iff_left.mp
+theorem tsub_le_iff_left : a - b ≤ c ↔ a ≤ b + c := by rw [tsub_le_iff_right, add_comm]
+/-
+**le_add_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_add_tsub : a <= b + (a - b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem le_add_tsub : a <= b + (a - b) :=
+theorem le_add_tsub : a ≤ b + (a - b) :=
   tsub_le_iff_left.mp le_rfl
 
-/--
-theorem `add_tsub_le_left` / 定理 `add_tsub_le_left`
+/-- See `add_tsub_cancel_left` for the equality if `AddLeftReflectLE α`. -/
+/-
+**add_tsub_le_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_le_left : a + b - a <= b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem add_tsub_le_left
-  statement: a + b - a <= b
-  proof: tsub_le_iff_left.mpr le_rfl
-
-中文:
-定理 add_tsub_le_left
-  结论: a + b - a <= b
-  证明: tsub_le_iff_left.mpr le_rfl
-
-Depends on / 依赖: le_rfl, tsub_le_iff_left, tsub_le_iff_left.mpr
+--- 原说明 ---
+See `add_tsub_cancel_left` for the equality if `AddLeftReflectLE α`.
 -/
-theorem add_tsub_le_left : a + b - a <= b :=
+theorem add_tsub_le_left : a + b - a ≤ b :=
   tsub_le_iff_left.mpr le_rfl
-
-/--
-theorem `tsub_le_tsub_right` / 定理 `tsub_le_tsub_right`
-
-English:
-theorem tsub_le_tsub_right
-  given: (h : a <= b) (c : α)
-  statement: a - c <= b - c
-  proof: tsub_le_iff_left.mpr h.trans le_add_tsub
-
-中文:
-定理 tsub_le_tsub_right
-  条件: (h : a <= b) (c : α)
-  结论: a - c <= b - c
-  证明: tsub_le_iff_left.mpr h.trans le_add_tsub
-
-Depends on / 依赖: h.trans, le_add_tsub, tsub_le_iff_left, tsub_le_iff_left.mpr
+/-
+**tsub_le_tsub_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_le_tsub_right (h : a <= b) (c : α) : a - c <= b - c
+参数：h : a <= b；c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 -/
-theorem tsub_le_tsub_right (h : a <= b) (c : α) : a - c <= b - c :=
-tsub_le_iff_left.mpr h.trans le_add_tsub
-
-/--
-theorem `tsub_le_iff_tsub_le` / 定理 `tsub_le_iff_tsub_le`
-
-English:
-theorem tsub_le_iff_tsub_le
-  statement: a - b <= c ↔ a - c <= b
-  proof: by rw [tsub_le_iff_left, tsub_le_iff_right]
-
-中文:
-定理 tsub_le_iff_tsub_le
-  结论: a - b <= c ↔ a - c <= b
-  证明: by rw [tsub_le_iff_left, tsub_le_iff_right]
-
-Depends on / 依赖: tsub_le_iff_left, tsub_le_iff_right
+theorem tsub_le_tsub_right (h : a ≤ b) (c : α) : a - c ≤ b - c :=
+  tsub_le_iff_left.mpr <| h.trans le_add_tsub
+/-
+**tsub_le_iff_tsub_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_le_iff_tsub_le : a - b <= c ↔ a - c <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem tsub_le_iff_tsub_le : a - b <= c ↔ a - c <= b := by rw [tsub_le_iff_left, tsub_le_iff_right]
+theorem tsub_le_iff_tsub_le : a - b ≤ c ↔ a - c ≤ b := by rw [tsub_le_iff_left, tsub_le_iff_right]
 
-/--
-theorem `tsub_tsub_le` / 定理 `tsub_tsub_le`
+/-- See `tsub_tsub_cancel_of_le` for the equality. -/
+/-
+**tsub_tsub_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_tsub_le : b - (b - a) <= a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 
-English:
-theorem tsub_tsub_le
-  statement: b - (b - a) <= a
-  proof: tsub_le_iff_right.mpr le_add_tsub
-
-中文:
-定理 tsub_tsub_le
-  结论: b - (b - a) <= a
-  证明: tsub_le_iff_right.mpr le_add_tsub
-
-Depends on / 依赖: le_add_tsub, tsub_le_iff_right, tsub_le_iff_right.mpr
+--- 原说明 ---
+See `tsub_tsub_cancel_of_le` for the equality.
 -/
-theorem tsub_tsub_le : b - (b - a) <= a :=
+theorem tsub_tsub_le : b - (b - a) ≤ a :=
   tsub_le_iff_right.mpr le_add_tsub
 
 section Cov
 
 variable [AddLeftMono α]
 
-/--
-theorem `tsub_le_tsub_left` / 定理 `tsub_le_tsub_left`
-
-English:
-theorem tsub_le_tsub_left
-  given: (h : a <= b) (c : α)
-  statement: c - b <= c - a
-  proof: by
-  grw [tsub_le_iff_left, ← h, ← le_add_tsub]
-
-中文:
-定理 tsub_le_tsub_left
-  条件: (h : a <= b) (c : α)
-  结论: c - b <= c - a
-  证明: by
-  grw [tsub_le_iff_left, ← h, ← le_add_tsub]
-
-Depends on / 依赖: le_add_tsub, tsub_le_iff_left
+/-
+**tsub_le_tsub_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_le_tsub_left (h : a <= b) (c : α) : c - b <= c - a
+参数：h : a <= b；c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 -/
-theorem tsub_le_tsub_left (h : a <= b) (c : α) : c - b <= c - a := by
+theorem tsub_le_tsub_left (h : a ≤ b) (c : α) : c - b ≤ c - a := by
   grw [tsub_le_iff_left, ← h, ← le_add_tsub]
-
-/--
-theorem `tsub_le_tsub` / 定理 `tsub_le_tsub`
-
-English:
-theorem tsub_le_tsub
-  given: (hab : a <= b) (hcd : c <= d)
-  statement: a - d <= b - c
-  proof: (tsub_le_tsub_right hab _).trans tsub_le_tsub_left hcd _
-
-中文:
-定理 tsub_le_tsub
-  条件: (hab : a <= b) (hcd : c <= d)
-  结论: a - d <= b - c
-  证明: (tsub_le_tsub_right hab _).trans tsub_le_tsub_left hcd _
+/-
+**tsub_le_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCommSemigroup α] [inst_2
+ : Sub α] [OrderedSub α] {a b c d : α}   [AddLeftMono α], a ≤ b → c ≤ d → a - d 
+≤ b - c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `tsub_le_tsub_right`：tsub_le_tsub_right (h : a <= b) (c : α) : a - c <= b
+ - c
+· 使用定理 `tsub_le_tsub_left`：tsub_le_tsub_left (h : a <= b) (c : α) : c - b <= c -
+ a
 -/
-@[gcongr] theorem tsub_le_tsub (hab : a <= b) (hcd : c <= d) : a - d <= b - c :=
-(tsub_le_tsub_right hab _).trans tsub_le_tsub_left hcd _
-
-/--
-theorem `antitone_const_tsub` / 定理 `antitone_const_tsub`
-
-English:
-theorem antitone_const_tsub
-  statement: Antitone fun x => c - x
-  proof: fun _ _ hxy => tsub_le_tsub rfl.le hxy
-
-中文:
-定理 antitone_const_tsub
-  结论: 递减 fun x => c - x
-  证明: fun _ _ hxy => tsub_le_tsub rfl.le hxy
-
-Depends on / 依赖: rfl.le, tsub_le_tsub
+@[gcongr] theorem tsub_le_tsub (hab : a ≤ b) (hcd : c ≤ d) : a - d ≤ b - c :=
+  (tsub_le_tsub_right hab _).trans <| tsub_le_tsub_left hcd _
+/-
+**antitone_const_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：antitone_const_tsub : Antitone fun x => c - x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsub_le_tsub`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCommSemi
+group α] [inst_2 : Sub α] [OrderedSub α] {a b c d : α}   [AddLeftMono α], a ≤ b 
+→ …
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
 theorem antitone_const_tsub : Antitone fun x => c - x := fun _ _ hxy => tsub_le_tsub rfl.le hxy
 
-/--
-theorem `add_tsub_le_assoc` / 定理 `add_tsub_le_assoc`
+/-- See `add_tsub_assoc_of_le` for the equality. -/
+/-
+**add_tsub_le_assoc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_le_assoc : a + b - c <= a + (b - c)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 
-English:
-theorem add_tsub_le_assoc
-  statement: a + b - c <= a + (b - c)
-  proof: by
+--- 原说明 ---
+See `add_tsub_assoc_of_le` for the equality.
+-/
+theorem add_tsub_le_assoc : a + b - c ≤ a + (b - c) := by
   grw [tsub_le_iff_left, add_left_comm, ← le_add_tsub]
 
-中文:
-定理 add_tsub_le_assoc
-  结论: a + b - c <= a + (b - c)
-  证明: by
-  grw [tsub_le_iff_left, add_left_comm, ← le_add_tsub]
+/-- See `tsub_add_eq_add_tsub` for the equality. -/
+/-
+**add_tsub_le_tsub_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_le_tsub_add : a + b - c <= a - c + b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_tsub_le_assoc`：add_tsub_le_assoc : a + b - c <= a + (b - c)
 
-Depends on / 依赖: add_left_comm, le_add_tsub, tsub_le_iff_left
+--- 原说明 ---
+See `tsub_add_eq_add_tsub` for the equality.
 -/
-theorem add_tsub_le_assoc : a + b - c <= a + (b - c) := by
-  grw [tsub_le_iff_left, add_left_comm, ← le_add_tsub]
-
-/--
-theorem `add_tsub_le_tsub_add` / 定理 `add_tsub_le_tsub_add`
-
-English:
-theorem add_tsub_le_tsub_add
-  statement: a + b - c <= a - c + b
-  proof: by
-  rw [add_comm]; rw [add_comm _ b]
+theorem add_tsub_le_tsub_add : a + b - c ≤ a - c + b := by
+  rw [add_comm, add_comm _ b]
   exact add_tsub_le_assoc
-
-中文:
-定理 add_tsub_le_tsub_add
-  结论: a + b - c <= a - c + b
-  证明: by
-  rw [add_comm]; rw [add_comm _ b]
-  exact add_tsub_le_assoc
-
-Depends on / 依赖: add_comm, add_tsub_le_assoc
+/-
+**add_le_add_add_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_le_add_add_tsub : a + b <= a + c + (b - c)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 -/
-theorem add_tsub_le_tsub_add : a + b - c <= a - c + b := by
-  rw [add_comm]; rw [add_comm _ b]
-  exact add_tsub_le_assoc
-
-/--
-theorem `add_le_add_add_tsub` / 定理 `add_le_add_add_tsub`
-
-English:
-theorem add_le_add_add_tsub
-  statement: a + b <= a + c + (b - c)
-  proof: by grw [add_assoc, ← le_add_tsub]
-
-中文:
-定理 add_le_add_add_tsub
-  结论: a + b <= a + c + (b - c)
-  证明: by grw [add_assoc, ← le_add_tsub]
-
-Depends on / 依赖: add_assoc, le_add_tsub
+theorem add_le_add_add_tsub : a + b ≤ a + c + (b - c) := by grw [add_assoc, ← le_add_tsub]
+/-
+**le_tsub_add_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_tsub_add_add : a + b <= a - c + (b + c)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_le_add_add_tsub`：add_le_add_add_tsub : a + b <= a + c + (b - c)
 -/
-theorem add_le_add_add_tsub : a + b <= a + c + (b - c) := by grw [add_assoc, ← le_add_tsub]
-
-/--
-theorem `le_tsub_add_add` / 定理 `le_tsub_add_add`
-
-English:
-theorem le_tsub_add_add
-  statement: a + b <= a - c + (b + c)
-  proof: by
-  rw [add_comm a]; rw [add_comm (a - c)]
+theorem le_tsub_add_add : a + b ≤ a - c + (b + c) := by
+  rw [add_comm a, add_comm (a - c)]
   exact add_le_add_add_tsub
-
-中文:
-定理 le_tsub_add_add
-  结论: a + b <= a - c + (b + c)
-  证明: by
-  rw [add_comm a]; rw [add_comm (a - c)]
-  exact add_le_add_add_tsub
-
-Depends on / 依赖: add_comm, add_le_add_add_tsub
+/-
+**tsub_le_tsub_add_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_le_tsub_add_tsub : a - c <= a - b + (b - c)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 -/
-theorem le_tsub_add_add : a + b <= a - c + (b + c) := by
-  rw [add_comm a]; rw [add_comm (a - c)]
-  exact add_le_add_add_tsub
-
-/--
-theorem `tsub_le_tsub_add_tsub` / 定理 `tsub_le_tsub_add_tsub`
-
-English:
-theorem tsub_le_tsub_add_tsub
-  statement: a - c <= a - b + (b - c)
-  proof: by
+theorem tsub_le_tsub_add_tsub : a - c ≤ a - b + (b - c) := by
   grw [tsub_le_iff_left, ← add_assoc, add_right_comm, ← le_add_tsub, ← le_add_tsub]
-
-中文:
-定理 tsub_le_tsub_add_tsub
-  结论: a - c <= a - b + (b - c)
-  证明: by
-  grw [tsub_le_iff_left, ← add_assoc, add_right_comm, ← le_add_tsub, ← le_add_tsub]
-
-Depends on / 依赖: add_assoc, add_right_comm, le_add_tsub, tsub_le_iff_left
+/-
+**tsub_tsub_tsub_le_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_tsub_tsub_le_tsub : c - a - (c - b) <= b - a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
+· 使用定理 `le_tsub_add`：le_tsub_add : b <= b - a + a
 -/
-theorem tsub_le_tsub_add_tsub : a - c <= a - b + (b - c) := by
-  grw [tsub_le_iff_left, ← add_assoc, add_right_comm, ← le_add_tsub, ← le_add_tsub]
-
-/--
-theorem `tsub_tsub_tsub_le_tsub` / 定理 `tsub_tsub_tsub_le_tsub`
-
-English:
-theorem tsub_tsub_tsub_le_tsub
-  statement: c - a - (c - b) <= b - a
-  proof: by
+theorem tsub_tsub_tsub_le_tsub : c - a - (c - b) ≤ b - a := by
   grw [tsub_le_iff_left, tsub_le_iff_left, add_left_comm, ← le_add_tsub, ← le_tsub_add]
-
-中文:
-定理 tsub_tsub_tsub_le_tsub
-  结论: c - a - (c - b) <= b - a
-  证明: by
-  grw [tsub_le_iff_left, tsub_le_iff_left, add_left_comm, ← le_add_tsub, ← le_tsub_add]
-
-Depends on / 依赖: add_left_comm, le_add_tsub, le_tsub_add, tsub_le_iff_left
+/-
+**tsub_tsub_le_tsub_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_tsub_le_tsub_add {a b c : α} : a - (b - c) <= a - b + c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用定理 `le_tsub_add`：le_tsub_add : b <= b - a + a
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
 -/
-theorem tsub_tsub_tsub_le_tsub : c - a - (c - b) <= b - a := by
-  grw [tsub_le_iff_left, tsub_le_iff_left, add_left_comm, ← le_add_tsub, ← le_tsub_add]
-
-/--
-theorem `tsub_tsub_le_tsub_add` / 定理 `tsub_tsub_le_tsub_add`
-
-English:
-theorem tsub_tsub_le_tsub_add
-  given: {a b c : α}
-  statement: a - (b - c) <= a - b + c
-  proof: tsub_le_iff_right.2
+theorem tsub_tsub_le_tsub_add {a b c : α} : a - (b - c) ≤ a - b + c :=
+  tsub_le_iff_right.2 <|
     calc
-      a <= a - b + b := le_tsub_add
-      _ <= a - b + (c + (b - c)) := by grw [← le_add_tsub]
+      a ≤ a - b + b := le_tsub_add
+      _ ≤ a - b + (c + (b - c)) := by grw [← le_add_tsub]
       _ = a - b + c + (b - c) := (add_assoc _ _ _).symm
 
-中文:
-定理 tsub_tsub_le_tsub_add
-  条件: {a b c : α}
-  结论: a - (b - c) <= a - b + c
-  证明: tsub_le_iff_right.2
-    calc
-      a <= a - b + b := le_tsub_add
-      _ <= a - b + (c + (b - c)) := by grw [← le_add_tsub]
-      _ = a - b + c + (b - c) := (add_assoc _ _ _).symm
+/-- See `tsub_add_tsub_comm` for the equality. -/
+/-
+**add_tsub_add_le_tsub_add_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_add_le_tsub_add_tsub : a + b - (c + d) <= a - c + (b - d)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `tsub_le_tsub_right`：tsub_le_tsub_right (h : a <= b) (c : α) : a - c <= b
+ - c
+· 使用定理 `add_tsub_le_assoc`：add_tsub_le_assoc : a + b - c <= a + (b - c)
 
-Depends on / 依赖: add_assoc, le_add_tsub, le_tsub_add, tsub_le_iff_right
+--- 原说明 ---
+See `tsub_add_tsub_comm` for the equality.
 -/
-theorem tsub_tsub_le_tsub_add {a b c : α} : a - (b - c) <= a - b + c :=
-tsub_le_iff_right.2
-    calc
-      a <= a - b + b := le_tsub_add
-      _ <= a - b + (c + (b - c)) := by grw [← le_add_tsub]
-      _ = a - b + c + (b - c) := (add_assoc _ _ _).symm
-
-/--
-theorem `add_tsub_add_le_tsub_add_tsub` / 定理 `add_tsub_add_le_tsub_add_tsub`
-
-English:
-theorem add_tsub_add_le_tsub_add_tsub
-  statement: a + b - (c + d) <= a - c + (b - d)
-  proof: by
-  rw [add_comm c]; rw [tsub_le_iff_left]; rw [add_assoc]; rw [← tsub_le_iff_left]; rw [← tsub_le_iff_left]
+theorem add_tsub_add_le_tsub_add_tsub : a + b - (c + d) ≤ a - c + (b - d) := by
+  rw [add_comm c, tsub_le_iff_left, add_assoc, ← tsub_le_iff_left, ← tsub_le_iff_left]
   refine (tsub_le_tsub_right add_tsub_le_assoc c).trans ?_
-  rw [add_comm a]; rw [add_comm (a - c)]
+  rw [add_comm a, add_comm (a - c)]
   exact add_tsub_le_assoc
 
-中文:
-定理 add_tsub_add_le_tsub_add_tsub
-  结论: a + b - (c + d) <= a - c + (b - d)
-  证明: by
-  rw [add_comm c]; rw [tsub_le_iff_left]; rw [add_assoc]; rw [← tsub_le_iff_left]; rw [← tsub_le_iff_left]
-  refine (tsub_le_tsub_right add_tsub_le_assoc c).trans ?_
-  rw [add_comm a]; rw [add_comm (a - c)]
-  exact add_tsub_le_assoc
+/-- See `add_tsub_add_eq_tsub_left` for the equality. -/
+/-
+**add_tsub_add_le_tsub_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_add_le_tsub_left : a + b - (a + c) <= b - c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 
-Depends on / 依赖: add_assoc, add_comm, add_tsub_le_assoc, tsub_le_iff_left, tsub_le_tsub_right
+--- 原说明 ---
+See `add_tsub_add_eq_tsub_left` for the equality.
 -/
-theorem add_tsub_add_le_tsub_add_tsub : a + b - (c + d) <= a - c + (b - d) := by
-  rw [add_comm c]; rw [tsub_le_iff_left]; rw [add_assoc]; rw [← tsub_le_iff_left]; rw [← tsub_le_iff_left]
-  refine (tsub_le_tsub_right add_tsub_le_assoc c).trans ?_
-  rw [add_comm a]; rw [add_comm (a - c)]
-  exact add_tsub_le_assoc
-
-/--
-theorem `add_tsub_add_le_tsub_left` / 定理 `add_tsub_add_le_tsub_left`
-
-English:
-theorem add_tsub_add_le_tsub_left
-  statement: a + b - (a + c) <= b - c
-  proof: by
+theorem add_tsub_add_le_tsub_left : a + b - (a + c) ≤ b - c := by
   grw [tsub_le_iff_left, add_assoc, ← le_add_tsub]
 
-中文:
-定理 add_tsub_add_le_tsub_left
-  结论: a + b - (a + c) <= b - c
-  证明: by
-  grw [tsub_le_iff_left, add_assoc, ← le_add_tsub]
+/-- See `add_tsub_add_eq_tsub_right` for the equality. -/
+/-
+**add_tsub_add_le_tsub_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_add_le_tsub_right : a + c - (b + c) <= a - b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 
-Depends on / 依赖: add_assoc, le_add_tsub, tsub_le_iff_left
+--- 原说明 ---
+See `add_tsub_add_eq_tsub_right` for the equality.
 -/
-theorem add_tsub_add_le_tsub_left : a + b - (a + c) <= b - c := by
-  grw [tsub_le_iff_left, add_assoc, ← le_add_tsub]
-
-/--
-theorem `add_tsub_add_le_tsub_right` / 定理 `add_tsub_add_le_tsub_right`
-
-English:
-theorem add_tsub_add_le_tsub_right
-  statement: a + c - (b + c) <= a - b
-  proof: by
-  grw [tsub_le_iff_left, add_right_comm, ← le_add_tsub]
-
-中文:
-定理 add_tsub_add_le_tsub_right
-  结论: a + c - (b + c) <= a - b
-  证明: by
-  grw [tsub_le_iff_left, add_right_comm, ← le_add_tsub]
-
-Depends on / 依赖: add_right_comm, le_add_tsub, tsub_le_iff_left
--/
-theorem add_tsub_add_le_tsub_right : a + c - (b + c) <= a - b := by
+theorem add_tsub_add_le_tsub_right : a + c - (b + c) ≤ a - b := by
   grw [tsub_le_iff_left, add_right_comm, ← le_add_tsub]
 
 end Cov
@@ -543,82 +520,62 @@ end Cov
 
 namespace AddLECancellable
 
-/--
-theorem `le_add_tsub_swap` / 定理 `le_add_tsub_swap`
-
-English:
-theorem le_add_tsub_swap
-  given: (hb : AddLECancellable b)
-  statement: a <= b + a - b
-  proof: hb le_add_tsub
-
-中文:
-定理 le_add_tsub_swap
-  条件: (hb : AddLECancellable b)
-  结论: a <= b + a - b
-  证明: hb le_add_tsub
+/-
+**AddLECancellable.le_add_tsub_swap** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancellable`
+。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCommSemigroup α] [inst_2
+ : Sub α] [OrderedSub α] {a b : α},   AddLECancellable b → a ≤ b + a - b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 -/
-protected theorem le_add_tsub_swap (hb : AddLECancellable b) : a <= b + a - b :=
+protected theorem le_add_tsub_swap (hb : AddLECancellable b) : a ≤ b + a - b :=
   hb le_add_tsub
-
-/--
-theorem `le_add_tsub` / 定理 `le_add_tsub`
-
-English:
-theorem le_add_tsub
-  given: (hb : AddLECancellable b)
-  statement: a <= a + b - b
-  proof: by
+/-
+**AddLECancellable.le_add_tsub** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancellable`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCommSemigroup α] [inst_2
+ : Sub α] [OrderedSub α] {a b : α},   AddLECancellable b → a ≤ a + b - b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `AddLECancellable.le_add_tsub_swap`：∀ {α : Type u_1} [inst : Preorder α] 
+[inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α},   AddLE
+Cancellable b → a ≤ b +…
+-/
+protected theorem le_add_tsub (hb : AddLECancellable b) : a ≤ a + b - b := by
   rw [add_comm]
   exact hb.le_add_tsub_swap
-
-中文:
-定理 le_add_tsub
-  条件: (hb : AddLECancellable b)
-  结论: a <= a + b - b
-  证明: by
-  rw [add_comm]
-  exact hb.le_add_tsub_swap
+/-
+**AddLECancellable.le_tsub_of_add_le_left** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancel
+lable`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCommSemigroup α] [inst_2
+ : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable a → a + b ≤ c → b ≤ c -
+ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_add_tsub`：le_add_tsub : a <= b + (a - b)
 -/
-protected theorem le_add_tsub (hb : AddLECancellable b) : a <= a + b - b := by
-  rw [add_comm]
-  exact hb.le_add_tsub_swap
-
-/--
-theorem `le_tsub_of_add_le_left` / 定理 `le_tsub_of_add_le_left`
-
-English:
-theorem le_tsub_of_add_le_left
-  given: (ha : AddLECancellable a) (h : a + b <= c)
-  statement: b <= c - a
-  proof: ha h.trans le_add_tsub
-
-中文:
-定理 le_tsub_of_add_le_left
-  条件: (ha : AddLECancellable a) (h : a + b <= c)
-  结论: b <= c - a
-  证明: ha h.trans le_add_tsub
+protected theorem le_tsub_of_add_le_left (ha : AddLECancellable a) (h : a + b ≤ c) : b ≤ c - a :=
+  ha <| h.trans le_add_tsub
+/-
+**AddLECancellable.le_tsub_of_add_le_right** 是 Mathlib 中的一个定理，位于命名空间 `AddLECance
+llable`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCommSemigroup α] [inst_2
+ : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable b → a + b ≤ c → a ≤ c -
+ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.le_tsub_of_add_le_left`：∀ {α : Type u_1} [inst : Preord
+er α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α},
+   AddLECancellable a → a + b…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
-protected theorem le_tsub_of_add_le_left (ha : AddLECancellable a) (h : a + b <= c) : b <= c - a :=
-ha h.trans le_add_tsub
-
-/--
-theorem `le_tsub_of_add_le_right` / 定理 `le_tsub_of_add_le_right`
-
-English:
-theorem le_tsub_of_add_le_right
-  given: (hb : AddLECancellable b) (h : a + b <= c)
-  statement: a <= c - b
-  proof: hb.le_tsub_of_add_le_left by rwa [add_comm]
-
-中文:
-定理 le_tsub_of_add_le_right
-  条件: (hb : AddLECancellable b) (h : a + b <= c)
-  结论: a <= c - b
-  证明: hb.le_tsub_of_add_le_left by rwa [add_comm]
--/
-protected theorem le_tsub_of_add_le_right (hb : AddLECancellable b) (h : a + b <= c) : a <= c - b :=
-hb.le_tsub_of_add_le_left by rwa [add_comm]
+protected theorem le_tsub_of_add_le_right (hb : AddLECancellable b) (h : a + b ≤ c) : a ≤ c - b :=
+  hb.le_tsub_of_add_le_left <| by rwa [add_comm]
 
 end AddLECancellable
 
@@ -629,80 +586,59 @@ section Contra
 
 variable [AddLeftReflectLE α]
 
-/--
-theorem `le_add_tsub_swap` / 定理 `le_add_tsub_swap`
-
-English:
-theorem le_add_tsub_swap
-  statement: a <= b + a - b
-  proof: Contravariant.AddLECancellable.le_add_tsub_swap
-
-中文:
-定理 le_add_tsub_swap
-  结论: a <= b + a - b
-  证明: Contravariant.AddLECancellable.le_add_tsub_swap
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.le_add_tsub_swap, le_add_tsub_swap
+/-
+**le_add_tsub_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_add_tsub_swap : a <= b + a - b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.le_add_tsub_swap`：∀ {α : Type u_1} [inst : Preorder α] 
+[inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α},   AddLE
+Cancellable b → a ≤ b +…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
-theorem le_add_tsub_swap : a <= b + a - b :=
+theorem le_add_tsub_swap : a ≤ b + a - b :=
   Contravariant.AddLECancellable.le_add_tsub_swap
-
-/--
-theorem `le_add_tsub'` / 定理 `le_add_tsub'`
-
-English:
-theorem le_add_tsub'
-  statement: a <= a + b - b
-  proof: Contravariant.AddLECancellable.le_add_tsub
-
-中文:
-定理 le_add_tsub'
-  结论: a <= a + b - b
-  证明: Contravariant.AddLECancellable.le_add_tsub
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.le_add_tsub, le_add_tsub
+/-
+**le_add_tsub'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_add_tsub' : a <= a + b - b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.le_add_tsub`：∀ {α : Type u_1} [inst : Preorder α] [inst
+_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α},   AddLECance
+llable b → a ≤ a +…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
-theorem le_add_tsub' : a <= a + b - b :=
+theorem le_add_tsub' : a ≤ a + b - b :=
   Contravariant.AddLECancellable.le_add_tsub
-
-/--
-theorem `le_tsub_of_add_le_left` / 定理 `le_tsub_of_add_le_left`
-
-English:
-theorem le_tsub_of_add_le_left
-  given: (h : a + b <= c)
-  statement: b <= c - a
-  proof: Contravariant.AddLECancellable.le_tsub_of_add_le_left h
-
-中文:
-定理 le_tsub_of_add_le_left
-  条件: (h : a + b <= c)
-  结论: b <= c - a
-  证明: Contravariant.AddLECancellable.le_tsub_of_add_le_left h
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.le_tsub_of_add_le_left, le_tsub_of_add_le_left
+/-
+**le_tsub_of_add_le_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_tsub_of_add_le_left (h : a + b <= c) : b <= c - a
+参数：h : a + b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.le_tsub_of_add_le_left`：∀ {α : Type u_1} [inst : Preord
+er α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α},
+   AddLECancellable a → a + b…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
-theorem le_tsub_of_add_le_left (h : a + b <= c) : b <= c - a :=
+theorem le_tsub_of_add_le_left (h : a + b ≤ c) : b ≤ c - a :=
   Contravariant.AddLECancellable.le_tsub_of_add_le_left h
-
-/--
-theorem `le_tsub_of_add_le_right` / 定理 `le_tsub_of_add_le_right`
-
-English:
-theorem le_tsub_of_add_le_right
-  given: (h : a + b <= c)
-  statement: a <= c - b
-  proof: Contravariant.AddLECancellable.le_tsub_of_add_le_right h
-
-中文:
-定理 le_tsub_of_add_le_right
-  条件: (h : a + b <= c)
-  结论: a <= c - b
-  证明: Contravariant.AddLECancellable.le_tsub_of_add_le_right h
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.le_tsub_of_add_le_right, le_tsub_of_add_le_right
+/-
+**le_tsub_of_add_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_tsub_of_add_le_right (h : a + b <= c) : a <= c - b
+参数：h : a + b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.le_tsub_of_add_le_right`：∀ {α : Type u_1} [inst : Preor
+der α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}
+,   AddLECancellable b → a + b…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
-theorem le_tsub_of_add_le_right (h : a + b <= c) : a <= c - b :=
+theorem le_tsub_of_add_le_right (h : a + b ≤ c) : a ≤ c - b :=
   Contravariant.AddLECancellable.le_tsub_of_add_le_right h
 
 end Contra
@@ -711,26 +647,18 @@ end AddCommSemigroup
 
 variable [AddCommMonoid α] [Sub α] [OrderedSub α] {a b : α}
 
-/--
-theorem `tsub_nonpos` / 定理 `tsub_nonpos`
-
-English:
-theorem tsub_nonpos
-  statement: a - b <= 0 ↔ a <= b
-  proof: by rw [tsub_le_iff_left, add_zero]
-
-alias ⟨_, tsub_nonpos_of_le⟩ := tsub_nonpos
-
-中文:
-定理 tsub_nonpos
-  结论: a - b <= 0 ↔ a <= b
-  证明: by rw [tsub_le_iff_left, add_zero]
-
-alias ⟨_, tsub_nonpos_of_le⟩ := tsub_nonpos
-
-Depends on / 依赖: add_zero, tsub_le_iff_left
+/-
+**tsub_nonpos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_nonpos : a - b <= 0 ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem tsub_nonpos : a - b <= 0 ↔ a <= b := by rw [tsub_le_iff_left, add_zero]
+theorem tsub_nonpos : a - b ≤ 0 ↔ a ≤ b := by rw [tsub_le_iff_left, add_zero]
 
 alias ⟨_, tsub_nonpos_of_le⟩ := tsub_nonpos
 
@@ -741,357 +669,346 @@ end Preorder
 
 variable [PartialOrder α] [AddCommSemigroup α] [Sub α] [OrderedSub α] {a b c d : α}
 
-/--
-theorem `tsub_tsub` / 定理 `tsub_tsub`
-
-English:
-theorem tsub_tsub
-  given: (b a c : α)
-  statement: b - a - c = b - (a + c)
-  proof: by
-  apply le_antisymm
-  · rw [tsub_le_iff_left, tsub_le_iff_left, ← add_assoc, ← tsub_le_iff_left]
-  · rw [tsub_le_iff_left, add_assoc, ← tsub_le_iff_left, ← tsub_le_iff_left]
-
-中文:
-定理 tsub_tsub
-  条件: (b a c : α)
-  结论: b - a - c = b - (a + c)
-  证明: by
-  apply le_antisymm
-  · rw [tsub_le_iff_left, tsub_le_iff_left, ← add_assoc, ← tsub_le_iff_left]
-  · rw [tsub_le_iff_left, add_assoc, ← tsub_le_iff_left, ← tsub_le_iff_left]
-
-Depends on / 依赖: add_assoc, le_antisymm, tsub_le_iff_left
+/-
+**tsub_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_tsub (b a c : α) : b - a - c = b - (a + c)
+参数：b a c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 theorem tsub_tsub (b a c : α) : b - a - c = b - (a + c) := by
   apply le_antisymm
   · rw [tsub_le_iff_left, tsub_le_iff_left, ← add_assoc, ← tsub_le_iff_left]
   · rw [tsub_le_iff_left, add_assoc, ← tsub_le_iff_left, ← tsub_le_iff_left]
-
-/--
-theorem `tsub_add_eq_tsub_tsub` / 定理 `tsub_add_eq_tsub_tsub`
-
-English:
-theorem tsub_add_eq_tsub_tsub
-  given: (a b c : α)
-  statement: a - (b + c) = a - b - c
-  proof: (tsub_tsub _ _ _).symm
-
-中文:
-定理 tsub_add_eq_tsub_tsub
-  条件: (a b c : α)
-  结论: a - (b + c) = a - b - c
-  证明: (tsub_tsub _ _ _).symm
-
-Depends on / 依赖: tsub_tsub
+/-
+**tsub_add_eq_tsub_tsub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_add_eq_tsub_tsub (a b c : α) : a - (b + c) = a - b - c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_tsub`：tsub_tsub (b a c : α) : b - a - c = b - (a + c)
 -/
 theorem tsub_add_eq_tsub_tsub (a b c : α) : a - (b + c) = a - b - c :=
   (tsub_tsub _ _ _).symm
-
-/--
-theorem `tsub_add_eq_tsub_tsub_swap` / 定理 `tsub_add_eq_tsub_tsub_swap`
-
-English:
-theorem tsub_add_eq_tsub_tsub_swap
-  given: (a b c : α)
-  statement: a - (b + c) = a - c - b
-  proof: by
-  rw [add_comm]
-  apply tsub_add_eq_tsub_tsub
-
-中文:
-定理 tsub_add_eq_tsub_tsub_swap
-  条件: (a b c : α)
-  结论: a - (b + c) = a - c - b
-  证明: by
-  rw [add_comm]
-  apply tsub_add_eq_tsub_tsub
-
-Depends on / 依赖: add_comm, tsub_add_eq_tsub_tsub
+/-
+**tsub_add_eq_tsub_tsub_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_add_eq_tsub_tsub_swap (a b c : α) : a - (b + c) = a - c - b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `tsub_add_eq_tsub_tsub`：tsub_add_eq_tsub_tsub (a b c : α) : a - (b + c) =
+ a - b - c
 -/
 theorem tsub_add_eq_tsub_tsub_swap (a b c : α) : a - (b + c) = a - c - b := by
   rw [add_comm]
   apply tsub_add_eq_tsub_tsub
-
-/--
-theorem `tsub_right_comm` / 定理 `tsub_right_comm`
-
-English:
-theorem tsub_right_comm
-  statement: a - b - c = a - c - b
-  proof: by
-  rw [← tsub_add_eq_tsub_tsub]; rw [tsub_add_eq_tsub_tsub_swap]
-
-中文:
-定理 tsub_right_comm
-  结论: a - b - c = a - c - b
-  证明: by
-  rw [← tsub_add_eq_tsub_tsub]; rw [tsub_add_eq_tsub_tsub_swap]
-
-Depends on / 依赖: tsub_add_eq_tsub_tsub, tsub_add_eq_tsub_tsub_swap
+/-
+**tsub_right_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_right_comm : a - b - c = a - c - b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_add_eq_tsub_tsub`：tsub_add_eq_tsub_tsub (a b c : α) : a - (b + c) =
+ a - b - c
+· 使用定理 `tsub_add_eq_tsub_tsub_swap`：tsub_add_eq_tsub_tsub_swap (a b c : α) : a -
+ (b + c) = a - c - b
 -/
 theorem tsub_right_comm : a - b - c = a - c - b := by
-  rw [← tsub_add_eq_tsub_tsub]; rw [tsub_add_eq_tsub_tsub_swap]
+  rw [← tsub_add_eq_tsub_tsub, tsub_add_eq_tsub_tsub_swap]
 
 /-! ### Lemmas that assume that an element is `AddLECancellable`. -/
 
 
 namespace AddLECancellable
 
-/--
-theorem `tsub_eq_of_eq_add` / 定理 `tsub_eq_of_eq_add`
+/-- See `AddLECancellable.tsub_eq_of_eq_add'` for a version assuming that `a = c + b` itself is
+cancellable rather than `b`. -/
+/-
+**AddLECancellable.tsub_eq_of_eq_add** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancellable
+`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable b → a = c + b → a -
+ b = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddLECancellable.le_add_tsub`：∀ {α : Type u_1} [inst : Preorder α] [inst
+_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α},   AddLECance
+llable b → a ≤ a +…
 
-English:
-theorem tsub_eq_of_eq_add
-  given: (hb : AddLECancellable b) (h : a = c + b)
-  statement: a - b = c
-  proof: le_antisymm (tsub_le_iff_right.mpr h.le) by
-    rw [h]
-    exact hb.le_add_tsub
-
-中文:
-定理 tsub_eq_of_eq_add
-  条件: (hb : AddLECancellable b) (h : a = c + b)
-  结论: a - b = c
-  证明: le_antisymm (tsub_le_iff_right.mpr h.le) by
-    rw [h]
-    exact hb.le_add_tsub
+--- 原说明 ---
+See `AddLECancellable.tsub_eq_of_eq_add'` for a version assuming that `a = c + b
+` itself is
+cancellable rather than `b`.
 -/
 protected theorem tsub_eq_of_eq_add (hb : AddLECancellable b) (h : a = c + b) : a - b = c :=
-le_antisymm (tsub_le_iff_right.mpr h.le) by
+  le_antisymm (tsub_le_iff_right.mpr h.le) <| by
     rw [h]
     exact hb.le_add_tsub
 
-/--
-lemma `tsub_eq_of_eq_add'` / 引理 `tsub_eq_of_eq_add'`
+/-- Weaker version of `AddLECancellable.tsub_eq_of_eq_add` assuming that `a = c + b` itself is
+cancellable rather than `b`. -/
+/-
+**AddLECancellable.tsub_eq_of_eq_add'** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancellabl
+e`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α}   [AddLeftMono α], AddLECancellable a →
+ a = c + b → a - b = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable b → a…
+· 使用定理 `AddLECancellable.of_add_right`：∀ {α : Type u_1} [inst : LE α] [inst_1 : 
+AddSemigroup α] [AddLeftMono α] {a b : α},   AddLECancellable (a + b) → AddLECan
+cellable b
 
-English:
-lemma tsub_eq_of_eq_add'
-  statement: [AddLeftMono α] (ha : AddLECancellable a)
-  proof: (h ▸ ha).of_add_right.tsub_eq_of_eq_add h
-
-中文:
-引理 tsub_eq_of_eq_add'
-  结论: [AddLeftMono α] (ha : AddLECancellable a)
-  证明: (h ▸ ha).of_add_right.tsub_eq_of_eq_add h
+--- 原说明 ---
+Weaker version of `AddLECancellable.tsub_eq_of_eq_add` assuming that `a = c + b`
+ itself is
+cancellable rather than `b`.
 -/
 protected lemma tsub_eq_of_eq_add' [AddLeftMono α] (ha : AddLECancellable a)
     (h : a = c + b) : a - b = c := (h ▸ ha).of_add_right.tsub_eq_of_eq_add h
 
-/--
-theorem `eq_tsub_of_add_eq` / 定理 `eq_tsub_of_add_eq`
+/-- See `AddLECancellable.eq_tsub_of_add_eq'` for a version assuming that `b = a + c` itself is
+cancellable rather than `c`. -/
+/-
+**AddLECancellable.eq_tsub_of_add_eq** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancellable
+`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable c → a + c = b → a =
+ b - c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable b → a…
 
-English:
-theorem eq_tsub_of_add_eq
-  given: (hc : AddLECancellable c) (h : a + c = b)
-  statement: a = b - c
-  proof: (hc.tsub_eq_of_eq_add h.symm).symm
-
-中文:
-定理 eq_tsub_of_add_eq
-  条件: (hc : AddLECancellable c) (h : a + c = b)
-  结论: a = b - c
-  证明: (hc.tsub_eq_of_eq_add h.symm).symm
+--- 原说明 ---
+See `AddLECancellable.eq_tsub_of_add_eq'` for a version assuming that `b = a + c
+` itself is
+cancellable rather than `c`.
 -/
 protected theorem eq_tsub_of_add_eq (hc : AddLECancellable c) (h : a + c = b) : a = b - c :=
   (hc.tsub_eq_of_eq_add h.symm).symm
 
-/--
-lemma `eq_tsub_of_add_eq'` / 引理 `eq_tsub_of_add_eq'`
+/-- Weaker version of `AddLECancellable.eq_tsub_of_add_eq` assuming that `b = a + c` itself is
+cancellable rather than `c`. -/
+/-
+**AddLECancellable.eq_tsub_of_add_eq'** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancellabl
+e`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α}   [AddLeftMono α], AddLECancellable b →
+ a + c = b → a = b - c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add'`：∀ {α : Type u_1} [inst : PartialOrd
+er α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α} 
+  [AddLeftMono α], AddLEC…
 
-English:
-lemma eq_tsub_of_add_eq'
-  statement: [AddLeftMono α] (hb : AddLECancellable b)
-  proof: (hb.tsub_eq_of_eq_add' h.symm).symm
-
-中文:
-引理 eq_tsub_of_add_eq'
-  结论: [AddLeftMono α] (hb : AddLECancellable b)
-  证明: (hb.tsub_eq_of_eq_add' h.symm).symm
+--- 原说明 ---
+Weaker version of `AddLECancellable.eq_tsub_of_add_eq` assuming that `b = a + c`
+ itself is
+cancellable rather than `c`.
 -/
 protected lemma eq_tsub_of_add_eq' [AddLeftMono α] (hb : AddLECancellable b)
     (h : a + c = b) : a = b - c := (hb.tsub_eq_of_eq_add' h.symm).symm
 
-/--
-theorem `tsub_eq_of_eq_add_rev` / 定理 `tsub_eq_of_eq_add_rev`
+/-- See `AddLECancellable.tsub_eq_of_eq_add_rev'` for a version assuming that `a = b + c` itself is
+cancellable rather than `b`. -/
+/-
+**AddLECancellable.tsub_eq_of_eq_add_rev** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancell
+able`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable b → a = b + c → a -
+ b = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable b → a…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 
-English:
-theorem tsub_eq_of_eq_add_rev
-  given: (hb : AddLECancellable b) (h : a = b + c)
-  statement: a - b = c
-  proof: hb.tsub_eq_of_eq_add by rw [add_comm, h]
-
-中文:
-定理 tsub_eq_of_eq_add_rev
-  条件: (hb : AddLECancellable b) (h : a = b + c)
-  结论: a - b = c
-  证明: hb.tsub_eq_of_eq_add by rw [add_comm, h]
+--- 原说明 ---
+See `AddLECancellable.tsub_eq_of_eq_add_rev'` for a version assuming that `a = b
+ + c` itself is
+cancellable rather than `b`.
 -/
 protected theorem tsub_eq_of_eq_add_rev (hb : AddLECancellable b) (h : a = b + c) : a - b = c :=
-hb.tsub_eq_of_eq_add by rw [add_comm, h]
+  hb.tsub_eq_of_eq_add <| by rw [add_comm, h]
 
-/--
-lemma `tsub_eq_of_eq_add_rev'` / 引理 `tsub_eq_of_eq_add_rev'`
+/-- Weaker version of `AddLECancellable.tsub_eq_of_eq_add_rev` assuming that `a = b + c` itself is
+cancellable rather than `b`. -/
+/-
+**AddLECancellable.tsub_eq_of_eq_add_rev'** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancel
+lable`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α}   [AddLeftMono α], AddLECancellable a →
+ a = b + c → a - b = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add'`：∀ {α : Type u_1} [inst : PartialOrd
+er α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α} 
+  [AddLeftMono α], AddLEC…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 
-English:
-lemma tsub_eq_of_eq_add_rev'
-  statement: [AddLeftMono α]
-  proof: ha.tsub_eq_of_eq_add' by rw [add_comm, h]
-
-@[simp]
-
-中文:
-引理 tsub_eq_of_eq_add_rev'
-  结论: [AddLeftMono α]
-  证明: ha.tsub_eq_of_eq_add' by rw [add_comm, h]
-
-@[simp]
+--- 原说明 ---
+Weaker version of `AddLECancellable.tsub_eq_of_eq_add_rev` assuming that `a = b 
++ c` itself is
+cancellable rather than `b`.
 -/
 protected lemma tsub_eq_of_eq_add_rev' [AddLeftMono α]
     (ha : AddLECancellable a) (h : a = b + c) : a - b = c :=
-ha.tsub_eq_of_eq_add' by rw [add_comm, h]
+  ha.tsub_eq_of_eq_add' <| by rw [add_comm, h]
 
 @[simp]
-/--
-theorem `add_tsub_cancel_right` / 定理 `add_tsub_cancel_right`
-
-English:
-theorem add_tsub_cancel_right
-  given: (hb : AddLECancellable b)
-  statement: a + b - b = a
-  proof: hb.tsub_eq_of_eq_add by rw [add_comm]
-
-@[simp]
-
-中文:
-定理 add_tsub_cancel_right
-  条件: (hb : AddLECancellable b)
-  结论: a + b - b = a
-  证明: hb.tsub_eq_of_eq_add by rw [add_comm]
-
-@[simp]
+/-
+**AddLECancellable.add_tsub_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancell
+able`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b : α},   AddLECancellable b → a + b - b = a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable b → a…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 protected theorem add_tsub_cancel_right (hb : AddLECancellable b) : a + b - b = a :=
-hb.tsub_eq_of_eq_add by rw [add_comm]
+  hb.tsub_eq_of_eq_add <| by rw [add_comm]
 
 @[simp]
-/--
-theorem `add_tsub_cancel_left` / 定理 `add_tsub_cancel_left`
-
-English:
-theorem add_tsub_cancel_left
-  given: (ha : AddLECancellable a)
-  statement: a + b - a = b
-  proof: ha.tsub_eq_of_eq_add add_comm a b
-
-中文:
-定理 add_tsub_cancel_left
-  条件: (ha : AddLECancellable a)
-  结论: a + b - a = b
-  证明: ha.tsub_eq_of_eq_add add_comm a b
+/-
+**AddLECancellable.add_tsub_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancella
+ble`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b : α},   AddLECancellable a → a + b - a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable b → a…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 protected theorem add_tsub_cancel_left (ha : AddLECancellable a) : a + b - a = b :=
-ha.tsub_eq_of_eq_add add_comm a b
-
-/--
-theorem `lt_add_of_tsub_lt_left` / 定理 `lt_add_of_tsub_lt_left`
-
-English:
-theorem lt_add_of_tsub_lt_left
-  given: (hb : AddLECancellable b) (h : a - b < c)
-  statement: a < b + c
-  proof: by
-  rw [lt_iff_le_and_ne]; rw [← tsub_le_iff_left]
-  refine ⟨h.le, ?_⟩
-  rintro rfl
-  simp [hb] at h
-
-中文:
-定理 lt_add_of_tsub_lt_left
-  条件: (hb : AddLECancellable b) (h : a - b < c)
-  结论: a < b + c
-  证明: by
-  rw [lt_iff_le_and_ne]; rw [← tsub_le_iff_left]
-  refine ⟨h.le, ?_⟩
-  rintro rfl
-  simp [hb] at h
+  ha.tsub_eq_of_eq_add <| add_comm a b
+/-
+**AddLECancellable.lt_add_of_tsub_lt_left** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancel
+lable`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable b → a - b < c → a <
+ b + c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AddLECancellable.add_tsub_cancel_left`：∀ {α : Type u_1} [inst : PartialO
+rder α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α},
+   AddLECancellable a → a +…
 -/
 protected theorem lt_add_of_tsub_lt_left (hb : AddLECancellable b) (h : a - b < c) : a < b + c := by
-  rw [lt_iff_le_and_ne]; rw [← tsub_le_iff_left]
+  rw [lt_iff_le_and_ne, ← tsub_le_iff_left]
   refine ⟨h.le, ?_⟩
   rintro rfl
   simp [hb] at h
-
-/--
-theorem `lt_add_of_tsub_lt_right` / 定理 `lt_add_of_tsub_lt_right`
-
-English:
-theorem lt_add_of_tsub_lt_right
-  given: (hc : AddLECancellable c) (h : a - c < b)
-  proof: by
-  rw [lt_iff_le_and_ne]; rw [← tsub_le_iff_right]
-  refine ⟨h.le, ?_⟩
-  rintro rfl
-  simp [hc] at h
-
-中文:
-定理 lt_add_of_tsub_lt_right
-  条件: (hc : AddLECancellable c) (h : a - c < b)
-  证明: by
-  rw [lt_iff_le_and_ne]; rw [← tsub_le_iff_right]
-  refine ⟨h.le, ?_⟩
-  rintro rfl
-  simp [hc] at h
+/-
+**AddLECancellable.lt_add_of_tsub_lt_right** 是 Mathlib 中的一个定理，位于命名空间 `AddLECance
+llable`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable c → a - c < b → a <
+ b + c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AddLECancellable.add_tsub_cancel_right`：∀ {α : Type u_1} [inst : Partial
+Order α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α}
+,   AddLECancellable b → a +…
 -/
 protected theorem lt_add_of_tsub_lt_right (hc : AddLECancellable c) (h : a - c < b) :
     a < b + c := by
-  rw [lt_iff_le_and_ne]; rw [← tsub_le_iff_right]
+  rw [lt_iff_le_and_ne, ← tsub_le_iff_right]
   refine ⟨h.le, ?_⟩
   rintro rfl
   simp [hc] at h
-
-/--
-theorem `lt_tsub_of_add_lt_right` / 定理 `lt_tsub_of_add_lt_right`
-
-English:
-theorem lt_tsub_of_add_lt_right
-  given: (hc : AddLECancellable c) (h : a + c < b)
-  statement: a < b - c
-  proof: (hc.le_tsub_of_add_le_right h.le).lt_of_ne by
-    rintro rfl
-    exact h.not_ge le_tsub_add
-
-中文:
-定理 lt_tsub_of_add_lt_right
-  条件: (hc : AddLECancellable c) (h : a + c < b)
-  结论: a < b - c
-  证明: (hc.le_tsub_of_add_le_right h.le).lt_of_ne by
-    rintro rfl
-    exact h.not_ge le_tsub_add
+/-
+**AddLECancellable.lt_tsub_of_add_lt_right** 是 Mathlib 中的一个定理，位于命名空间 `AddLECance
+llable`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable c → a + c < b → a <
+ b - c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `AddLECancellable.le_tsub_of_add_le_right`：∀ {α : Type u_1} [inst : Preor
+der α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}
+,   AddLECancellable b → a + b…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `le_tsub_add`：le_tsub_add : b <= b - a + a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 protected theorem lt_tsub_of_add_lt_right (hc : AddLECancellable c) (h : a + c < b) : a < b - c :=
-(hc.le_tsub_of_add_le_right h.le).lt_of_ne by
+  (hc.le_tsub_of_add_le_right h.le).lt_of_ne <| by
     rintro rfl
     exact h.not_ge le_tsub_add
-
-/--
-theorem `lt_tsub_of_add_lt_left` / 定理 `lt_tsub_of_add_lt_left`
-
-English:
-theorem lt_tsub_of_add_lt_left
-  given: (ha : AddLECancellable a) (h : a + c < b)
-  statement: c < b - a
-  proof: ha.lt_tsub_of_add_lt_right by rwa [add_comm]
-
-中文:
-定理 lt_tsub_of_add_lt_left
-  条件: (ha : AddLECancellable a) (h : a + c < b)
-  结论: c < b - a
-  证明: ha.lt_tsub_of_add_lt_right by rwa [add_comm]
+/-
+**AddLECancellable.lt_tsub_of_add_lt_left** 是 Mathlib 中的一个定理，位于命名空间 `AddLECancel
+lable`。
+形式化陈述：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : AddCommSemigroup α] [in
+st_2 : Sub α] [OrderedSub α] {a b c : α},   AddLECancellable a → a + c < b → c <
+ b - a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.lt_tsub_of_add_lt_right`：∀ {α : Type u_1} [inst : Parti
+alOrder α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c 
+: α},   AddLECancellable c → a…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 protected theorem lt_tsub_of_add_lt_left (ha : AddLECancellable a) (h : a + c < b) : c < b - a :=
-ha.lt_tsub_of_add_lt_right by rwa [add_comm]
+  ha.lt_tsub_of_add_lt_right <| by rwa [add_comm]
 
 end AddLECancellable
 
@@ -1102,218 +1019,161 @@ section Contra
 
 variable [AddLeftReflectLE α]
 
-/--
-theorem `tsub_eq_of_eq_add` / 定理 `tsub_eq_of_eq_add`
-
-English:
-theorem tsub_eq_of_eq_add
-  given: (h : a = c + b)
-  statement: a - b = c
-  proof: Contravariant.AddLECancellable.tsub_eq_of_eq_add h
-
-中文:
-定理 tsub_eq_of_eq_add
-  条件: (h : a = c + b)
-  结论: a - b = c
-  证明: Contravariant.AddLECancellable.tsub_eq_of_eq_add h
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.tsub_eq_of_eq_add, tsub_eq_of_eq_add
+/-
+**tsub_eq_of_eq_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_eq_of_eq_add (h : a = c + b) : a - b = c
+参数：h : a = c + b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable b → a…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
 theorem tsub_eq_of_eq_add (h : a = c + b) : a - b = c :=
   Contravariant.AddLECancellable.tsub_eq_of_eq_add h
-
-/--
-theorem `eq_tsub_of_add_eq` / 定理 `eq_tsub_of_add_eq`
-
-English:
-theorem eq_tsub_of_add_eq
-  given: (h : a + c = b)
-  statement: a = b - c
-  proof: Contravariant.AddLECancellable.eq_tsub_of_add_eq h
-
-中文:
-定理 eq_tsub_of_add_eq
-  条件: (h : a + c = b)
-  结论: a = b - c
-  证明: Contravariant.AddLECancellable.eq_tsub_of_add_eq h
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.eq_tsub_of_add_eq, eq_tsub_of_add_eq
+/-
+**eq_tsub_of_add_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_tsub_of_add_eq (h : a + c = b) : a = b - c
+参数：h : a + c = b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.eq_tsub_of_add_eq`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable c → a…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
 theorem eq_tsub_of_add_eq (h : a + c = b) : a = b - c :=
   Contravariant.AddLECancellable.eq_tsub_of_add_eq h
-
-/--
-theorem `tsub_eq_of_eq_add_rev` / 定理 `tsub_eq_of_eq_add_rev`
-
-English:
-theorem tsub_eq_of_eq_add_rev
-  given: (h : a = b + c)
-  statement: a - b = c
-  proof: Contravariant.AddLECancellable.tsub_eq_of_eq_add_rev h
-
-@[simp]
-
-中文:
-定理 tsub_eq_of_eq_add_rev
-  条件: (h : a = b + c)
-  结论: a - b = c
-  证明: Contravariant.AddLECancellable.tsub_eq_of_eq_add_rev h
-
-@[simp]
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.tsub_eq_of_eq_add_rev, tsub_eq_of_eq_add_rev
+/-
+**tsub_eq_of_eq_add_rev** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_eq_of_eq_add_rev (h : a = b + c) : a - b = c
+参数：h : a = b + c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add_rev`：∀ {α : Type u_1} [inst : Partial
+Order α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : 
+α},   AddLECancellable b → a…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
 theorem tsub_eq_of_eq_add_rev (h : a = b + c) : a - b = c :=
   Contravariant.AddLECancellable.tsub_eq_of_eq_add_rev h
 
 @[simp]
-/--
-theorem `add_tsub_cancel_right` / 定理 `add_tsub_cancel_right`
-
-English:
-theorem add_tsub_cancel_right
-  given: (a b : α)
-  statement: a + b - b = a
-  proof: Contravariant.AddLECancellable.add_tsub_cancel_right
-
-@[simp]
-
-中文:
-定理 add_tsub_cancel_right
-  条件: (a b : α)
-  结论: a + b - b = a
-  证明: Contravariant.AddLECancellable.add_tsub_cancel_right
-
-@[simp]
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.add_tsub_cancel_right, add_tsub_cancel_right
+/-
+**add_tsub_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_cancel_right (a b : α) : a + b - b = a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.add_tsub_cancel_right`：∀ {α : Type u_1} [inst : Partial
+Order α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α}
+,   AddLECancellable b → a +…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
 theorem add_tsub_cancel_right (a b : α) : a + b - b = a :=
   Contravariant.AddLECancellable.add_tsub_cancel_right
 
 @[simp]
-/--
-theorem `add_tsub_cancel_left` / 定理 `add_tsub_cancel_left`
-
-English:
-theorem add_tsub_cancel_left
-  given: (a b : α)
-  statement: a + b - a = b
-  proof: Contravariant.AddLECancellable.add_tsub_cancel_left
-
-中文:
-定理 add_tsub_cancel_left
-  条件: (a b : α)
-  结论: a + b - a = b
-  证明: Contravariant.AddLECancellable.add_tsub_cancel_left
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.add_tsub_cancel_left, add_tsub_cancel_left
+/-
+**add_tsub_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_cancel_left (a b : α) : a + b - a = b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.add_tsub_cancel_left`：∀ {α : Type u_1} [inst : PartialO
+rder α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b : α},
+   AddLECancellable a → a +…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
 theorem add_tsub_cancel_left (a b : α) : a + b - a = b :=
   Contravariant.AddLECancellable.add_tsub_cancel_left
 
-/--
-theorem `tsub_eq_tsub_of_add_eq_add` / 定理 `tsub_eq_tsub_of_add_eq_add`
+/-- A more general version of the reverse direction of `sub_eq_sub_iff_add_eq_add` -/
+/-
+**tsub_eq_tsub_of_add_eq_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_eq_tsub_of_add_eq_add (h : a + d = c + b) : a - b = c - d
+参数：h : a + d = c + b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `tsub_right_comm`：tsub_right_comm : a - b - c = a - c - b
 
-English:
-theorem tsub_eq_tsub_of_add_eq_add
-  given: (h : a + d = c + b)
-  statement: a - b = c - d
-  proof: by
-  calc a - b = a + d - d - b := by rw [add_tsub_cancel_right]
-           _ = c + b - b - d := by rw [h, tsub_right_comm]
-           _ = c - d := by rw [add_tsub_cancel_right]
-
-中文:
-定理 tsub_eq_tsub_of_add_eq_add
-  条件: (h : a + d = c + b)
-  结论: a - b = c - d
-  证明: by
-  calc a - b = a + d - d - b := by rw [add_tsub_cancel_right]
-           _ = c + b - b - d := by rw [h, tsub_right_comm]
-           _ = c - d := by rw [add_tsub_cancel_right]
-
-Depends on / 依赖: add_tsub_cancel_right, tsub_right_comm
+--- 原说明 ---
+A more general version of the reverse direction of `sub_eq_sub_iff_add_eq_add`
 -/
 theorem tsub_eq_tsub_of_add_eq_add (h : a + d = c + b) : a - b = c - d := by
   calc a - b = a + d - d - b := by rw [add_tsub_cancel_right]
            _ = c + b - b - d := by rw [h, tsub_right_comm]
            _ = c - d := by rw [add_tsub_cancel_right]
-
-/--
-theorem `lt_add_of_tsub_lt_left` / 定理 `lt_add_of_tsub_lt_left`
-
-English:
-theorem lt_add_of_tsub_lt_left
-  given: (h : a - b < c)
-  statement: a < b + c
-  proof: Contravariant.AddLECancellable.lt_add_of_tsub_lt_left h
-
-中文:
-定理 lt_add_of_tsub_lt_left
-  条件: (h : a - b < c)
-  结论: a < b + c
-  证明: Contravariant.AddLECancellable.lt_add_of_tsub_lt_left h
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.lt_add_of_tsub_lt_left, lt_add_of_tsub_lt_left
+/-
+**lt_add_of_tsub_lt_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_add_of_tsub_lt_left (h : a - b < c) : a < b + c
+参数：h : a - b < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.lt_add_of_tsub_lt_left`：∀ {α : Type u_1} [inst : Partia
+lOrder α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c :
+ α},   AddLECancellable b → a…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
 theorem lt_add_of_tsub_lt_left (h : a - b < c) : a < b + c :=
   Contravariant.AddLECancellable.lt_add_of_tsub_lt_left h
-
-/--
-theorem `lt_add_of_tsub_lt_right` / 定理 `lt_add_of_tsub_lt_right`
-
-English:
-theorem lt_add_of_tsub_lt_right
-  given: (h : a - c < b)
-  statement: a < b + c
-  proof: Contravariant.AddLECancellable.lt_add_of_tsub_lt_right h
-
-中文:
-定理 lt_add_of_tsub_lt_right
-  条件: (h : a - c < b)
-  结论: a < b + c
-  证明: Contravariant.AddLECancellable.lt_add_of_tsub_lt_right h
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.lt_add_of_tsub_lt_right, lt_add_of_tsub_lt_right
+/-
+**lt_add_of_tsub_lt_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_add_of_tsub_lt_right (h : a - c < b) : a < b + c
+参数：h : a - c < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.lt_add_of_tsub_lt_right`：∀ {α : Type u_1} [inst : Parti
+alOrder α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c 
+: α},   AddLECancellable c → a…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
 theorem lt_add_of_tsub_lt_right (h : a - c < b) : a < b + c :=
   Contravariant.AddLECancellable.lt_add_of_tsub_lt_right h
 
-/--
-theorem `lt_tsub_of_add_lt_left` / 定理 `lt_tsub_of_add_lt_left`
+/-- This lemma (and some of its corollaries) also holds for `ENNReal`, but this proof doesn't work
+for it. Maybe we should add this lemma as field to `OrderedSub`? -/
+/-
+**lt_tsub_of_add_lt_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_tsub_of_add_lt_left : a + c < b -> c < b - a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.lt_tsub_of_add_lt_left`：∀ {α : Type u_1} [inst : Partia
+lOrder α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c :
+ α},   AddLECancellable a → a…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 
-English:
-theorem lt_tsub_of_add_lt_left
-  statement: a + c < b -> c < b - a
-  proof: Contravariant.AddLECancellable.lt_tsub_of_add_lt_left
-
-中文:
-定理 lt_tsub_of_add_lt_left
-  结论: a + c < b -> c < b - a
-  证明: Contravariant.AddLECancellable.lt_tsub_of_add_lt_left
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.lt_tsub_of_add_lt_left, lt_tsub_of_add_lt_left
+--- 原说明 ---
+This lemma (and some of its corollaries) also holds for `ENNReal`, but this proo
+f doesn't work
+for it. Maybe we should add this lemma as field to `OrderedSub`?
 -/
-theorem lt_tsub_of_add_lt_left : a + c < b -> c < b - a :=
+theorem lt_tsub_of_add_lt_left : a + c < b → c < b - a :=
   Contravariant.AddLECancellable.lt_tsub_of_add_lt_left
-
-/--
-theorem `lt_tsub_of_add_lt_right` / 定理 `lt_tsub_of_add_lt_right`
-
-English:
-theorem lt_tsub_of_add_lt_right
-  statement: a + c < b -> a < b - c
-  proof: Contravariant.AddLECancellable.lt_tsub_of_add_lt_right
-
-中文:
-定理 lt_tsub_of_add_lt_right
-  结论: a + c < b -> a < b - c
-  证明: Contravariant.AddLECancellable.lt_tsub_of_add_lt_right
-
-Depends on / 依赖: AddLECancellable, Contravariant, Contravariant.AddLECancellable.lt_tsub_of_add_lt_right, lt_tsub_of_add_lt_right
+/-
+**lt_tsub_of_add_lt_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_tsub_of_add_lt_right : a + c < b -> a < b - c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.lt_tsub_of_add_lt_right`：∀ {α : Type u_1} [inst : Parti
+alOrder α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c 
+: α},   AddLECancellable c → a…
+· 使用定理 `Contravariant.AddLECancellable`：∀ {α : Type u_1} [inst : Add α] [inst_1 
+: LE α] [AddLeftReflectLE α] {a : α}, AddLECancellable a
 -/
-theorem lt_tsub_of_add_lt_right : a + c < b -> a < b - c :=
+theorem lt_tsub_of_add_lt_right : a + c < b → a < b - c :=
   Contravariant.AddLECancellable.lt_tsub_of_add_lt_right
 
 end Contra
@@ -1322,58 +1182,49 @@ section Both
 
 variable [AddLeftMono α] [AddLeftReflectLE α]
 
-/--
-theorem `add_tsub_add_eq_tsub_right` / 定理 `add_tsub_add_eq_tsub_right`
-
-English:
-theorem add_tsub_add_eq_tsub_right
-  given: (a c b : α)
-  statement: a + c - (b + c) = a - b
-  proof: by
-  refine add_tsub_add_le_tsub_right.antisymm (tsub_le_iff_right.2 <| ?_)
-  apply le_of_add_le_add_right
-  rw [add_assoc]
-  exact le_tsub_add
-
-中文:
-定理 add_tsub_add_eq_tsub_right
-  条件: (a c b : α)
-  结论: a + c - (b + c) = a - b
-  证明: by
-  refine add_tsub_add_le_tsub_right.antisymm (tsub_le_iff_right.2 <| ?_)
-  apply le_of_add_le_add_right
-  rw [add_assoc]
-  exact le_tsub_add
-
-Depends on / 依赖: add_assoc, add_tsub_add_le_tsub_right, add_tsub_add_le_tsub_right.antisymm, antisymm, le_of_add_le_add_right, le_tsub_add, tsub_le_iff_right
+/-
+**add_tsub_add_eq_tsub_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_add_eq_tsub_right (a c b : α) : a + c - (b + c) = a - b
+参数：a c b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `add_tsub_add_le_tsub_right`：add_tsub_add_le_tsub_right : a + c - (b + c)
+ <= a - b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
+· 使用定理 `le_of_add_le_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] 
+[AddRightReflectLE α] {a b c : α}, b + a ≤ c + a → b ≤ c
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `le_tsub_add`：le_tsub_add : b <= b - a + a
 -/
 theorem add_tsub_add_eq_tsub_right (a c b : α) : a + c - (b + c) = a - b := by
   refine add_tsub_add_le_tsub_right.antisymm (tsub_le_iff_right.2 <| ?_)
   apply le_of_add_le_add_right
   rw [add_assoc]
   exact le_tsub_add
-
-/--
-theorem `add_tsub_add_eq_tsub_left` / 定理 `add_tsub_add_eq_tsub_left`
-
-English:
-theorem add_tsub_add_eq_tsub_left
-  given: (a b c : α)
-  statement: a + b - (a + c) = b - c
-  proof: by
-  rw [add_comm a b]; rw [add_comm a c]; rw [add_tsub_add_eq_tsub_right]
-
-中文:
-定理 add_tsub_add_eq_tsub_left
-  条件: (a b c : α)
-  结论: a + b - (a + c) = b - c
-  证明: by
-  rw [add_comm a b]; rw [add_comm a c]; rw [add_tsub_add_eq_tsub_right]
-
-Depends on / 依赖: add_comm, add_tsub_add_eq_tsub_right
+/-
+**add_tsub_add_eq_tsub_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_tsub_add_eq_tsub_left (a b c : α) : a + b - (a + c) = b - c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_tsub_add_eq_tsub_right`：add_tsub_add_eq_tsub_right (a c b : α) : a +
+ c - (b + c) = a - b
 -/
 theorem add_tsub_add_eq_tsub_left (a b c : α) : a + b - (a + c) = b - c := by
-  rw [add_comm a b]; rw [add_comm a c]; rw [add_tsub_add_eq_tsub_right]
+  rw [add_comm a b, add_comm a c, add_tsub_add_eq_tsub_right]
 
 end Both
 
@@ -1386,76 +1237,65 @@ section LinearOrder
 
 variable {a b c : α} [LinearOrder α] [AddCommSemigroup α] [Sub α] [OrderedSub α]
 
-/--
-theorem `lt_of_tsub_lt_tsub_right` / 定理 `lt_of_tsub_lt_tsub_right`
+/-- See `lt_of_tsub_lt_tsub_right_of_le` for a weaker statement in a partial order. -/
+/-
+**lt_of_tsub_lt_tsub_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_of_tsub_lt_tsub_right (h : a - c < b - c) : a < b
+参数：h : a - c < b - c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_imp_lt_of_le_imp_le`：lt_imp_lt_of_le_imp_le {β} [LinearOrder α] [Preo
+rder β] {a b : α} {c d : β} (H : a <= b -> c <= d) (h : d < c) : b < a
+· 使用定理 `tsub_le_tsub_right`：tsub_le_tsub_right (h : a <= b) (c : α) : a - c <= b
+ - c
 
-English:
-theorem lt_of_tsub_lt_tsub_right
-  given: (h : a - c < b - c)
-  statement: a < b
-  proof: lt_imp_lt_of_le_imp_le (fun h => tsub_le_tsub_right h c) h
-
-中文:
-定理 lt_of_tsub_lt_tsub_right
-  条件: (h : a - c < b - c)
-  结论: a < b
-  证明: lt_imp_lt_of_le_imp_le (fun h => tsub_le_tsub_right h c) h
-
-Depends on / 依赖: lt_imp_lt_of_le_imp_le, tsub_le_tsub_right
+--- 原说明 ---
+See `lt_of_tsub_lt_tsub_right_of_le` for a weaker statement in a partial order.
 -/
 theorem lt_of_tsub_lt_tsub_right (h : a - c < b - c) : a < b :=
   lt_imp_lt_of_le_imp_le (fun h => tsub_le_tsub_right h c) h
 
-/--
-theorem `lt_tsub_iff_right` / 定理 `lt_tsub_iff_right`
+/-- See `lt_tsub_iff_right_of_le` for a weaker statement in a partial order. -/
+/-
+**lt_tsub_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_tsub_iff_right : a < b - c ↔ a + c < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `tsub_le_iff_right`：tsub_le_iff_right [LE α] [Add α] [Sub α] [OrderedSub 
+α] {a b c : α} : a - b <= c ↔ a <= c + b
 
-English:
-theorem lt_tsub_iff_right
-  statement: a < b - c ↔ a + c < b
-  proof: lt_iff_lt_of_le_iff_le tsub_le_iff_right
-
-中文:
-定理 lt_tsub_iff_right
-  结论: a < b - c ↔ a + c < b
-  证明: lt_iff_lt_of_le_iff_le tsub_le_iff_right
-
-Depends on / 依赖: lt_iff_lt_of_le_iff_le, tsub_le_iff_right
+--- 原说明 ---
+See `lt_tsub_iff_right_of_le` for a weaker statement in a partial order.
 -/
 theorem lt_tsub_iff_right : a < b - c ↔ a + c < b :=
   lt_iff_lt_of_le_iff_le tsub_le_iff_right
 
-/--
-theorem `lt_tsub_iff_left` / 定理 `lt_tsub_iff_left`
+/-- See `lt_tsub_iff_left_of_le` for a weaker statement in a partial order. -/
+/-
+**lt_tsub_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_tsub_iff_left : a < b - c ↔ c + a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `tsub_le_iff_left`：tsub_le_iff_left : a - b <= c ↔ a <= b + c
 
-English:
-theorem lt_tsub_iff_left
-  statement: a < b - c ↔ c + a < b
-  proof: lt_iff_lt_of_le_iff_le tsub_le_iff_left
-
-中文:
-定理 lt_tsub_iff_left
-  结论: a < b - c ↔ c + a < b
-  证明: lt_iff_lt_of_le_iff_le tsub_le_iff_left
-
-Depends on / 依赖: lt_iff_lt_of_le_iff_le, tsub_le_iff_left
+--- 原说明 ---
+See `lt_tsub_iff_left_of_le` for a weaker statement in a partial order.
 -/
 theorem lt_tsub_iff_left : a < b - c ↔ c + a < b :=
   lt_iff_lt_of_le_iff_le tsub_le_iff_left
-
-/--
-theorem `lt_tsub_comm` / 定理 `lt_tsub_comm`
-
-English:
-theorem lt_tsub_comm
-  statement: a < b - c ↔ c < b - a
-  proof: lt_tsub_iff_left.trans lt_tsub_iff_right.symm
-
-中文:
-定理 lt_tsub_comm
-  结论: a < b - c ↔ c < b - a
-  证明: lt_tsub_iff_left.trans lt_tsub_iff_right.symm
-
-Depends on / 依赖: lt_tsub_iff_left, lt_tsub_iff_left.trans, lt_tsub_iff_right, lt_tsub_iff_right.symm
+/-
+**lt_tsub_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_tsub_comm : a < b - c ↔ c < b - a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `lt_tsub_iff_left`：lt_tsub_iff_left : a < b - c ↔ c + a < b
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `lt_tsub_iff_right`：lt_tsub_iff_right : a < b - c ↔ a + c < b
 -/
 theorem lt_tsub_comm : a < b - c ↔ c < b - a :=
   lt_tsub_iff_left.trans lt_tsub_iff_right.symm
@@ -1464,22 +1304,20 @@ section Cov
 
 variable [AddLeftMono α]
 
-/--
-theorem `lt_of_tsub_lt_tsub_left` / 定理 `lt_of_tsub_lt_tsub_left`
+/-- See `lt_of_tsub_lt_tsub_left_of_le` for a weaker statement in a partial order. -/
+/-
+**lt_of_tsub_lt_tsub_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_of_tsub_lt_tsub_left (h : a - b < a - c) : c < b
+参数：h : a - b < a - c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_imp_lt_of_le_imp_le`：lt_imp_lt_of_le_imp_le {β} [LinearOrder α] [Preo
+rder β] {a b : α} {c d : β} (H : a <= b -> c <= d) (h : d < c) : b < a
+· 使用定理 `tsub_le_tsub_left`：tsub_le_tsub_left (h : a <= b) (c : α) : c - b <= c -
+ a
 
-English:
-theorem lt_of_tsub_lt_tsub_left
-  given: (h : a - b < a - c)
-  statement: c < b
-  proof: lt_imp_lt_of_le_imp_le (fun h => tsub_le_tsub_left h a) h
-
-中文:
-定理 lt_of_tsub_lt_tsub_left
-  条件: (h : a - b < a - c)
-  结论: c < b
-  证明: lt_imp_lt_of_le_imp_le (fun h => tsub_le_tsub_left h a) h
-
-Depends on / 依赖: lt_imp_lt_of_le_imp_le, tsub_le_tsub_left
+--- 原说明 ---
+See `lt_of_tsub_lt_tsub_left_of_le` for a weaker statement in a partial order.
 -/
 theorem lt_of_tsub_lt_tsub_left (h : a - b < a - c) : c < b :=
   lt_imp_lt_of_le_imp_le (fun h => tsub_le_tsub_left h a) h
@@ -1493,24 +1331,22 @@ section OrderedAddCommMonoid
 variable [PartialOrder α] [AddCommMonoid α] [Sub α] [OrderedSub α]
 
 @[simp]
-/--
-theorem `tsub_zero` / 定理 `tsub_zero`
-
-English:
-theorem tsub_zero
-  given: (a : α)
-  statement: a - 0 = a
-  proof: AddLECancellable.tsub_eq_of_eq_add addLECancellable_zero (add_zero _).symm
-
-中文:
-定理 tsub_zero
-  条件: (a : α)
-  结论: a - 0 = a
-  证明: AddLECancellable.tsub_eq_of_eq_add addLECancellable_zero (add_zero _).symm
-
-Depends on / 依赖: AddLECancellable, AddLECancellable.tsub_eq_of_eq_add, addLECancellable_zero, add_zero, tsub_eq_of_eq_add
+/-
+**tsub_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsub_zero (a : α) : a - 0 = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddLECancellable.tsub_eq_of_eq_add`：∀ {α : Type u_1} [inst : PartialOrde
+r α] [inst_1 : AddCommSemigroup α] [inst_2 : Sub α] [OrderedSub α] {a b c : α}, 
+  AddLECancellable b → a…
+· 使用定理 `addLECancellable_zero`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 
+: LE α], AddLECancellable 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem tsub_zero (a : α) : a - 0 = a :=
   AddLECancellable.tsub_eq_of_eq_add addLECancellable_zero (add_zero _).symm
 
 end OrderedAddCommMonoid
+

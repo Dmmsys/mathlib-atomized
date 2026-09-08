@@ -35,10 +35,10 @@ public section
 
 variable {𝕜 E F : Type*} [RCLike 𝕜]
 variable [NormedAddCommGroup E] [NormedAddCommGroup F]
-variable [InnerProductSpace 𝕜 E] [InnerProductSpace Real F]
+variable [InnerProductSpace 𝕜 E] [InnerProductSpace ℝ F]
 
 local notation "⟪" x ", " y "⟫" => inner 𝕜 x y
-local notation "absR" => @abs Real _ _
+local notation "absR" => @abs ℝ _ _
 
 open Topology Finsupp Submodule RCLike Real Filter InnerProductSpace
 open LinearMap (ker range)
@@ -54,77 +54,113 @@ open Module
 variable [FiniteDimensional 𝕜 K]
 
 @[simp]
-/--
-theorem `topologicalClosure_eq_self` / 定理 `topologicalClosure_eq_self`
-
-English:
-theorem topologicalClosure_eq_self
-  statement: K.topologicalClosure = K
-  proof: K.closed_of_finiteDimensional.submodule_topologicalClosure_eq
-
-@[simp]
-
-中文:
-定理 topologicalClosure_eq_self
-  结论: K.topologicalClosure = K
-  证明: K.closed_of_finiteDimensional.submodule_topologicalClosure_eq
-
-@[simp]
-
-Depends on / 依赖: K.closed_of_finiteDimensional.submodule_topologicalClosure_eq, closed_of_finiteDimensional, submodule_topologicalClosure_eq
+/-
+**Submodule.topologicalClosure_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：topologicalClosure_eq_self : K.topologicalClosure = K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.submodule_topologicalClosure_eq`：IsClosed.submodule_topological
+Closure_eq {s : Submodule R M} (hs : IsClosed (s : Set M)) : s.topologicalClosur
+e = s
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Submodule.closed_of_finiteDimensional`：Submodule.closed_of_finiteDimensi
+onal [T2Space E] (s : Submodule 𝕜 E) [FiniteDimensional 𝕜 s] : IsClosed (s : Set
+ E)
+· 使用定理 `RCLike.toCompleteSpace`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K
+], CompleteSpace K
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
 theorem topologicalClosure_eq_self : K.topologicalClosure = K :=
   K.closed_of_finiteDimensional.submodule_topologicalClosure_eq
 
 @[simp]
-/--
-theorem `det_reflection` / 定理 `det_reflection`
-
-English:
-theorem det_reflection
-  statement: LinearMap.det K.reflection.toLinearMap = (-1) ^ finrank 𝕜 Kᗮ
-  proof: by
-  by_cases hK : FiniteDimensional 𝕜 Kᗮ
-  swap
-  · rw [finrank_of_infinite_dimensional hK, pow_zero, LinearMap.det_eq_one_of_finrank_eq_zero]
-    exact finrank_of_infinite_dimensional fun h => hK (h.finiteDimensional_submodule _)
-  let e := K.prodEquivOfIsCompl _ K.isCompl_orthogonal
-  let b := (finBasis 𝕜 K).prod (finBasis 𝕜 Kᗮ)
-  have : LinearMap.toMatrix b b (e.symm ∘ₗ K.reflection.toLinearMap ∘ₗ e.symm.symm) =
-      Matrix.fromBlocks 1 0 0 (-1) := by
-    ext (_ | _) (_ | _) <;>
-    simp [LinearMap.toMatrix_apply, b, Matrix.one_apply, Finsupp.single_apply, e, eq_comm,
-      reflection_mem_subspace_eq_self, reflection_mem_subspace_orthogonalComplement_eq_neg]
-  rw [← LinearMap.det_conj _ e.symm]; rw [← LinearMap.det_toMatrix b]; rw [this]; rw [Matrix.det_fromBlocks_zero₂₁]; rw [Matrix.det_one]; rw [one_mul]; rw [Matrix.det_neg]; rw [Fintype.card_fin]; rw [Matrix.det_one]; rw [mul_one]
-
-@[simp]
-
-中文:
-定理 det_reflection
-  结论: 线性映射.det K.reflection.toLinearMap = (-1) ^ finrank 𝕜 Kᗮ
-  证明: by
-  by_cases hK : FiniteDimensional 𝕜 Kᗮ
-  swap
-  · rw [finrank_of_infinite_dimensional hK, pow_zero, LinearMap.det_eq_one_of_finrank_eq_zero]
-    exact finrank_of_infinite_dimensional fun h => hK (h.finiteDimensional_submodule _)
-  let e := K.prodEquivOfIsCompl _ K.isCompl_orthogonal
-  let b := (finBasis 𝕜 K).prod (finBasis 𝕜 Kᗮ)
-  have : LinearMap.toMatrix b b (e.symm ∘ₗ K.reflection.toLinearMap ∘ₗ e.symm.symm) =
-      Matrix.fromBlocks 1 0 0 (-1) := by
-    ext (_ | _) (_ | _) <;>
-    simp [LinearMap.toMatrix_apply, b, Matrix.one_apply, Finsupp.single_apply, e, eq_comm,
-      reflection_mem_subspace_eq_self, reflection_mem_subspace_orthogonalComplement_eq_neg]
-  rw [← LinearMap.det_conj _ e.symm]; rw [← LinearMap.det_toMatrix b]; rw [this]; rw [Matrix.det_fromBlocks_zero₂₁]; rw [Matrix.det_one]; rw [one_mul]; rw [Matrix.det_neg]; rw [Fintype.card_fin]; rw [Matrix.det_one]; rw [mul_one]
-
-@[simp]
-
-Depends on / 依赖: FiniteDimensional, K.isCompl_orthogonal, K.prodEquivOfIsCompl, K.reflection.toLinearMap, LinearMap, LinearMap.det_eq_one_of_finrank_eq_zero, LinearMap.toMatrix, LinearMap.toMatrix_apply, Matrix, Matrix.fromBlocks, det_eq_one_of_finrank_eq_zero, e.symm, e.symm.symm, finBasis, finiteDimensional_submodule, finrank_of_infinite_dimensional, fromBlocks, h.finiteDimensional_submodule, isCompl_orthogonal, pow_zero
+/-
+**Submodule.det_reflection** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：det_reflection : LinearMap.det K.reflection.toLinearMap = (-1) ^ finrank 𝕜
+ Kᗮ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `Submodule.isCompl_orthogonal`：isCompl_orthogonal [K.HasOrthogonalProject
+ion] : IsCompl K Kᗮ where disjoint
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Finite.instSum`：∀ {α : Type u_1} {β : Type u_2} [Finite α] [Finite β], F
+inite (α ⊕ β)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `Submodule.toLinearMap_prodEquivOfIsCompl_symm`：toLinearMap_prodEquivOfIs
+Compl_symm (hpq : IsCompl p q) : (p.prodEquivOfIsCompl q hpq).symm.toLinearMap =
+ (p.projectionOnto q hpq).prod (q.p…
+· 使用定理 `LinearMap.toMatrix_apply`：LinearMap.toMatrix_apply (f : M₁ ->ₗ[R] M₂) (i
+ : m) (j : n) : LinearMap.toMatrix v₁ v₂ f i j = v₂.repr (f (v₁ j)) i
+· 使用定理 `Module.Basis.prod_apply`：prod_apply (i) : b.prod b' i = Sum.elim (Linear
+Map.inl R M M' ∘ b) (LinearMap.inr R M M' ∘ b') i
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Submodule.reflection_mem_subspace_eq_self`：reflection_mem_subspace_eq_se
+lf {x : E} (hx : x in K) : K.reflection x = x
+· 使用定理 `LinearMap.prod_apply`：∀ {R : Type u} {M : Type v} {M₂ : Type w} {M₃ : Ty
+pe y} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M
+₂] [inst_3…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `Module.Basis.repr_self`：repr_self : b.repr (b i) = Finsupp.single i 1
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 52 条，此处仅展示前 30 条）
 -/
 theorem det_reflection : LinearMap.det K.reflection.toLinearMap = (-1) ^ finrank 𝕜 Kᗮ := by
   by_cases hK : FiniteDimensional 𝕜 Kᗮ
   swap
   · rw [finrank_of_infinite_dimensional hK, pow_zero, LinearMap.det_eq_one_of_finrank_eq_zero]
-    exact finrank_of_infinite_dimensional fun h => hK (h.finiteDimensional_submodule _)
+    exact finrank_of_infinite_dimensional fun h ↦ hK (h.finiteDimensional_submodule _)
   let e := K.prodEquivOfIsCompl _ K.isCompl_orthogonal
   let b := (finBasis 𝕜 K).prod (finBasis 𝕜 Kᗮ)
   have : LinearMap.toMatrix b b (e.symm ∘ₗ K.reflection.toLinearMap ∘ₗ e.symm.symm) =
@@ -132,33 +168,36 @@ theorem det_reflection : LinearMap.det K.reflection.toLinearMap = (-1) ^ finrank
     ext (_ | _) (_ | _) <;>
     simp [LinearMap.toMatrix_apply, b, Matrix.one_apply, Finsupp.single_apply, e, eq_comm,
       reflection_mem_subspace_eq_self, reflection_mem_subspace_orthogonalComplement_eq_neg]
-  rw [← LinearMap.det_conj _ e.symm]; rw [← LinearMap.det_toMatrix b]; rw [this]; rw [Matrix.det_fromBlocks_zero₂₁]; rw [Matrix.det_one]; rw [one_mul]; rw [Matrix.det_neg]; rw [Fintype.card_fin]; rw [Matrix.det_one]; rw [mul_one]
+  rw [← LinearMap.det_conj _ e.symm, ← LinearMap.det_toMatrix b, this, Matrix.det_fromBlocks_zero₂₁,
+    Matrix.det_one, one_mul, Matrix.det_neg, Fintype.card_fin, Matrix.det_one, mul_one]
 
 @[simp]
-/--
-theorem `linearEquiv_det_reflection` / 定理 `linearEquiv_det_reflection`
-
-English:
-theorem linearEquiv_det_reflection
-  statement: K.reflection.det = (-1) ^ finrank 𝕜 Kᗮ
-  proof: by
-  ext
-  rw [LinearEquiv.coe_det]; rw [Units.val_pow_eq_pow_val]
-  exact K.det_reflection
-
-中文:
-定理 linearEquiv_det_reflection
-  结论: K.reflection.det = (-1) ^ finrank 𝕜 Kᗮ
-  证明: by
-  ext
-  rw [LinearEquiv.coe_det]; rw [Units.val_pow_eq_pow_val]
-  exact K.det_reflection
-
-Depends on / 依赖: K.det_reflection, LinearEquiv, LinearEquiv.coe_det, Units.val_pow_eq_pow_val, coe_det, det_reflection, val_pow_eq_pow_val
+/-
+**Submodule.linearEquiv_det_reflection** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：linearEquiv_det_reflection : K.reflection.det = (-1) ^ finrank 𝕜 Kᗮ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ext`：ext {u v : αˣ} (huv : u.val = v.val) : u = v
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.coe_det`：coe_det (f : M ≃ₗ[R] M) : ↑(LinearEquiv.det f) = Li
+nearMap.det (f : M ->ₗ[R] M)
+· 使用引理 `Units.val_pow_eq_pow_val`：val_pow_eq_pow_val (n : Nat) : ↑(a ^ n) = (a ^
+ n : α)
+· 使用定理 `Submodule.det_reflection`：det_reflection : LinearMap.det K.reflection.to
+LinearMap = (-1) ^ finrank 𝕜 Kᗮ
 -/
 theorem linearEquiv_det_reflection : K.reflection.det = (-1) ^ finrank 𝕜 Kᗮ := by
   ext
-  rw [LinearEquiv.coe_det]; rw [Units.val_pow_eq_pow_val]
+  rw [LinearEquiv.coe_det, Units.val_pow_eq_pow_val]
   exact K.det_reflection
 
 end FiniteDimensional
@@ -167,170 +206,258 @@ variable {K}
 
 open Module
 
-/--
-theorem `finrank_add_inf_finrank_orthogonal` / 定理 `finrank_add_inf_finrank_orthogonal`
+/-- Given a finite-dimensional subspace `K₂`, and a subspace `K₁`
+contained in it, the dimensions of `K₁` and the intersection of its
+orthogonal subspace with `K₂` add to that of `K₂`. -/
+/-
+**Submodule.finrank_add_inf_finrank_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submod
+ule`。
+形式化陈述：finrank_add_inf_finrank_orthogonal {K₁ K₂ : Submodule 𝕜 E} [FiniteDimensio
+nal 𝕜 K₂] (h : K₁ <= K₂) : finrank 𝕜 K₁ + finrank 𝕜 (K₁ᗮ ⊓ K₂ : Submodule 𝕜 E) =
+ finrank 𝕜 K₂
+参数：h : K₁ <= K₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.finiteDimensional_of_le`：finiteDimensional_of_le {S₁ S₂ : Subm
+odule K V} [FiniteDimensional K S₂] (h : S₁ <= S₂) : FiniteDimensional K S₁
+· 使用定理 `Submodule.finrank_sup_add_finrank_inf_eq`：finrank_sup_add_finrank_inf_eq
+ (s t : Submodule K V) [FiniteDimensional K s] [FiniteDimensional K t] : finrank
+ K ↑(s ⊔ t) + finrank K ↑(s ⊓ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection`：sup_orthogonal_
+inf_of_hasOrthogonalProjection {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂) [K₁.HasOrt
+hogonalProjection] : K₁ ⊔ K₁ᗮ ⊓ K₂ = K₂
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `finrank_bot`：finrank_bot : finrank R (⊥ : Submodule R M) = 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `bot_inf_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderBo
+t α] (a : α), ⊥ ⊓ a = ⊥
+· 使用定理 `Disjoint.eq_bot`：Disjoint.eq_bot : Disjoint a b -> a ⊓ b = ⊥
+· 使用定理 `Submodule.orthogonal_disjoint`：orthogonal_disjoint : Disjoint K Kᗮ
+· 使用定理 `inf_assoc`：∀ {α : Type u} [inst : SemilatticeInf α] (a b c : α), a ⊓ b ⊓
+ c = a ⊓ (b ⊓ c)
 
-English:
-theorem finrank_add_inf_finrank_orthogonal
-  statement: {K₁ K₂ : Submodule 𝕜 E}
-  proof: by
-  have : FiniteDimensional 𝕜 K₁ := Submodule.finiteDimensional_of_le h
-  have hd := Submodule.finrank_sup_add_finrank_inf_eq K₁ (K₁ᗮ ⊓ K₂)
-  rw [← inf_assoc]; rw [(Submodule.orthogonal_disjoint K₁).eq_bot]; rw [bot_inf_eq]; rw [finrank_bot]; rw [Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection h] at hd
-  rw [add_zero] at hd
-  exact hd.symm
-
-中文:
-定理 finrank_add_inf_finrank_orthogonal
-  结论: {K₁ K₂ : 子模 𝕜 E}
-  证明: by
-  have : FiniteDimensional 𝕜 K₁ := Submodule.finiteDimensional_of_le h
-  have hd := Submodule.finrank_sup_add_finrank_inf_eq K₁ (K₁ᗮ ⊓ K₂)
-  rw [← inf_assoc]; rw [(Submodule.orthogonal_disjoint K₁).eq_bot]; rw [bot_inf_eq]; rw [finrank_bot]; rw [Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection h] at hd
-  rw [add_zero] at hd
-  exact hd.symm
-
-Depends on / 依赖: FiniteDimensional, Submodule, Submodule.finiteDimensional_of_le, Submodule.finrank_sup_add_finrank_inf_eq, Submodule.orthogonal_disjoint, Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection, add_zero, bot_inf_eq, eq_bot, finiteDimensional_of_le, finrank_bot, finrank_sup_add_finrank_inf_eq, hd.symm, inf_assoc, orthogonal_disjoint, sup_orthogonal_inf_of_hasOrthogonalProjection
+--- 原说明 ---
+Given a finite-dimensional subspace `K₂`, and a subspace `K₁`
+contained in it, the dimensions of `K₁` and the intersection of its
+orthogonal subspace with `K₂` add to that of `K₂`.
 -/
 theorem finrank_add_inf_finrank_orthogonal {K₁ K₂ : Submodule 𝕜 E}
-    [FiniteDimensional 𝕜 K₂] (h : K₁ <= K₂) :
+    [FiniteDimensional 𝕜 K₂] (h : K₁ ≤ K₂) :
     finrank 𝕜 K₁ + finrank 𝕜 (K₁ᗮ ⊓ K₂ : Submodule 𝕜 E) = finrank 𝕜 K₂ := by
   have : FiniteDimensional 𝕜 K₁ := Submodule.finiteDimensional_of_le h
   have hd := Submodule.finrank_sup_add_finrank_inf_eq K₁ (K₁ᗮ ⊓ K₂)
-  rw [← inf_assoc]; rw [(Submodule.orthogonal_disjoint K₁).eq_bot]; rw [bot_inf_eq]; rw [finrank_bot]; rw [Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection h] at hd
+  rw [← inf_assoc, (Submodule.orthogonal_disjoint K₁).eq_bot, bot_inf_eq, finrank_bot,
+    Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection h] at hd
   rw [add_zero] at hd
   exact hd.symm
 
-/--
-theorem `finrank_add_inf_finrank_orthogonal'` / 定理 `finrank_add_inf_finrank_orthogonal'`
+/-- Given a finite-dimensional subspace `K₂`, and a subspace `K₁`
+contained in it, the dimensions of `K₁` and the intersection of its
+orthogonal subspace with `K₂` add to that of `K₂`. -/
+/-
+**Submodule.finrank_add_inf_finrank_orthogonal'** 是 Mathlib 中的一个定理，位于命名空间 `Submo
+dule`。
+形式化陈述：finrank_add_inf_finrank_orthogonal' {K₁ K₂ : Submodule 𝕜 E} [FiniteDimensi
+onal 𝕜 K₂] (h : K₁ <= K₂) {n : Nat} (h_dim : finrank 𝕜 K₁ + n = finrank 𝕜 K₂) : 
+finrank 𝕜 (K₁ᗮ ⊓ K₂ : Submodule 𝕜 E) = n
+参数：h : K₁ <= K₂；h_dim : finrank 𝕜 K₁ + n = finrank 𝕜 K₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_right_inj`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] (a : 
+G) {b c : G}, a + b = a + c ↔ b = c
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.finrank_add_inf_finrank_orthogonal`：finrank_add_inf_finrank_or
+thogonal {K₁ K₂ : Submodule 𝕜 E} [FiniteDimensional 𝕜 K₂] (h : K₁ <= K₂) : finra
+nk 𝕜 K₁ + finrank 𝕜 (K₁ᗮ ⊓ K₂ : Su…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem finrank_add_inf_finrank_orthogonal'
-  statement: {K₁ K₂ : Submodule 𝕜 E}
-  proof: by
-  rw [← add_right_inj (finrank 𝕜 K₁)]
-  simp [Submodule.finrank_add_inf_finrank_orthogonal h, h_dim]
-
-中文:
-定理 finrank_add_inf_finrank_orthogonal'
-  结论: {K₁ K₂ : 子模 𝕜 E}
-  证明: by
-  rw [← add_right_inj (finrank 𝕜 K₁)]
-  simp [Submodule.finrank_add_inf_finrank_orthogonal h, h_dim]
-
-Depends on / 依赖: Submodule, Submodule.finrank_add_inf_finrank_orthogonal, add_right_inj, finrank, finrank_add_inf_finrank_orthogonal, h_dim
+--- 原说明 ---
+Given a finite-dimensional subspace `K₂`, and a subspace `K₁`
+contained in it, the dimensions of `K₁` and the intersection of its
+orthogonal subspace with `K₂` add to that of `K₂`.
 -/
 theorem finrank_add_inf_finrank_orthogonal' {K₁ K₂ : Submodule 𝕜 E}
-    [FiniteDimensional 𝕜 K₂] (h : K₁ <= K₂) {n : Nat} (h_dim : finrank 𝕜 K₁ + n = finrank 𝕜 K₂) :
+    [FiniteDimensional 𝕜 K₂] (h : K₁ ≤ K₂) {n : ℕ} (h_dim : finrank 𝕜 K₁ + n = finrank 𝕜 K₂) :
     finrank 𝕜 (K₁ᗮ ⊓ K₂ : Submodule 𝕜 E) = n := by
   rw [← add_right_inj (finrank 𝕜 K₁)]
   simp [Submodule.finrank_add_inf_finrank_orthogonal h, h_dim]
 
-/--
-theorem `finrank_add_finrank_orthogonal` / 定理 `finrank_add_finrank_orthogonal`
+/-- Given a finite-dimensional space `E` and subspace `K`, the dimensions of `K` and `Kᗮ` add to
+that of `E`. -/
+/-
+**Submodule.finrank_add_finrank_orthogonal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`
+。
+形式化陈述：finrank_add_finrank_orthogonal [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E)
+ : finrank 𝕜 K + finrank 𝕜 Kᗮ = finrank 𝕜 E
+参数：K : Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_top_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderTo
+p α] (a : α), a ⊓ ⊤ = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `finrank_top`：finrank_top : finrank R (⊤ : Submodule R M) = finrank R M
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Submodule.finrank_add_inf_finrank_orthogonal`：finrank_add_inf_finrank_or
+thogonal {K₁ K₂ : Submodule 𝕜 E} [FiniteDimensional 𝕜 K₂] (h : K₁ <= K₂) : finra
+nk 𝕜 K₁ + finrank 𝕜 (K₁ᗮ ⊓ K₂ : Su…
+· 使用定理 `le_top`：le_top : a <= ⊤
 
-English:
-theorem finrank_add_finrank_orthogonal
-  given: [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E)
-  proof: by
-  convert! Submodule.finrank_add_inf_finrank_orthogonal (le_top : K <= ⊤) using 1
-  · rw [inf_top_eq]
-  · simp
-
-中文:
-定理 finrank_add_finrank_orthogonal
-  条件: [有限维 𝕜 E] (K : 子模 𝕜 E)
-  证明: by
-  convert! Submodule.finrank_add_inf_finrank_orthogonal (le_top : K <= ⊤) using 1
-  · rw [inf_top_eq]
-  · simp
-
-Depends on / 依赖: Submodule, Submodule.finrank_add_inf_finrank_orthogonal, convert, finrank_add_inf_finrank_orthogonal, inf_top_eq, le_top
+--- 原说明 ---
+Given a finite-dimensional space `E` and subspace `K`, the dimensions of `K` and
+ `Kᗮ` add to
+that of `E`.
 -/
 theorem finrank_add_finrank_orthogonal [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E) :
     finrank 𝕜 K + finrank 𝕜 Kᗮ = finrank 𝕜 E := by
-  convert! Submodule.finrank_add_inf_finrank_orthogonal (le_top : K <= ⊤) using 1
+  convert! Submodule.finrank_add_inf_finrank_orthogonal (le_top : K ≤ ⊤) using 1
   · rw [inf_top_eq]
   · simp
 
-/--
-theorem `finrank_add_finrank_orthogonal'` / 定理 `finrank_add_finrank_orthogonal'`
+/-- Given a finite-dimensional space `E` and subspace `K`, the dimensions of `K` and `Kᗮ` add to
+that of `E`. -/
+/-
+**Submodule.finrank_add_finrank_orthogonal'** 是 Mathlib 中的一个定理，位于命名空间 `Submodule
+`。
+形式化陈述：finrank_add_finrank_orthogonal' [FiniteDimensional 𝕜 E] {K : Submodule 𝕜 E
+} {n : Nat} (h_dim : finrank 𝕜 K + n = finrank 𝕜 E) : finrank 𝕜 Kᗮ = n
+参数：h_dim : finrank 𝕜 K + n = finrank 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_right_inj`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] (a : 
+G) {b c : G}, a + b = a + c ↔ b = c
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.finrank_add_finrank_orthogonal`：finrank_add_finrank_orthogonal
+ [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E) : finrank 𝕜 K + finrank 𝕜 Kᗮ = finr
+ank 𝕜 E
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem finrank_add_finrank_orthogonal'
-  statement: [FiniteDimensional 𝕜 E] {K : Submodule 𝕜 E}
-  proof: by
-  rw [← add_right_inj (finrank 𝕜 K)]
-  simp [Submodule.finrank_add_finrank_orthogonal, h_dim]
-
-中文:
-定理 finrank_add_finrank_orthogonal'
-  结论: [有限维 𝕜 E] {K : 子模 𝕜 E}
-  证明: by
-  rw [← add_right_inj (finrank 𝕜 K)]
-  simp [Submodule.finrank_add_finrank_orthogonal, h_dim]
-
-Depends on / 依赖: Submodule, Submodule.finrank_add_finrank_orthogonal, add_right_inj, finrank, finrank_add_finrank_orthogonal, h_dim
+--- 原说明 ---
+Given a finite-dimensional space `E` and subspace `K`, the dimensions of `K` and
+ `Kᗮ` add to
+that of `E`.
 -/
 theorem finrank_add_finrank_orthogonal' [FiniteDimensional 𝕜 E] {K : Submodule 𝕜 E}
-    {n : Nat} (h_dim : finrank 𝕜 K + n = finrank 𝕜 E) : finrank 𝕜 Kᗮ = n := by
+    {n : ℕ} (h_dim : finrank 𝕜 K + n = finrank 𝕜 E) : finrank 𝕜 Kᗮ = n := by
   rw [← add_right_inj (finrank 𝕜 K)]
   simp [Submodule.finrank_add_finrank_orthogonal, h_dim]
 
-/--
-theorem `finrank_orthogonal_span_singleton` / 定理 `finrank_orthogonal_span_singleton`
+/-- In a finite-dimensional inner product space, the dimension of the orthogonal complement of the
+span of a nonzero vector is one less than the dimension of the space. -/
+/-
+**Submodule.finrank_orthogonal_span_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：finrank_orthogonal_span_singleton {n : Nat} [_i : Fact (finrank 𝕜 E = n + 
+1)] {v : E} (hv : v != 0) : finrank 𝕜 (𝕜 ∙ v)ᗮ = n
+参数：finrank 𝕜 E = n + 1；hv : v != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.of_fact_finrank_eq_succ`：of_fact_finrank_eq_succ (n : 
+Nat) [hn : Fact (finrank K V = n + 1)] : FiniteDimensional K V
+· 使用定理 `Submodule.finrank_add_finrank_orthogonal'`：finrank_add_finrank_orthogona
+l' [FiniteDimensional 𝕜 E] {K : Submodule 𝕜 E} {n : Nat} (h_dim : finrank 𝕜 K + 
+n = finrank 𝕜 E) : finrank 𝕜 Kᗮ…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `finrank_span_singleton`：finrank_span_singleton {v : V} (hv : v != 0) : f
+inrank K (K ∙ v) = 1
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Fact.elim`：Fact.elim {p : Prop} (h : Fact p) : p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem finrank_orthogonal_span_singleton
-  statement: {n : Nat} [_i : Fact (finrank 𝕜 E = n + 1)] {v : E}
-  proof: by
-  have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ n
-exact finrank_add_finrank_orthogonal' by
-    simp [finrank_span_singleton hv, _i.elim, add_comm]
-
-中文:
-定理 finrank_orthogonal_span_singleton
-  结论: {n : 自然数} [_i : Fact (finrank 𝕜 E = n + 1)] {v : E}
-  证明: by
-  have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ n
-exact finrank_add_finrank_orthogonal' by
-    simp [finrank_span_singleton hv, _i.elim, add_comm]
-
-Depends on / 依赖: FiniteDimensional, _i.elim, add_comm, finrank_add_finrank_orthogonal, finrank_span_singleton, of_fact_finrank_eq_succ
+--- 原说明 ---
+In a finite-dimensional inner product space, the dimension of the orthogonal com
+plement of the
+span of a nonzero vector is one less than the dimension of the space.
 -/
-theorem finrank_orthogonal_span_singleton {n : Nat} [_i : Fact (finrank 𝕜 E = n + 1)] {v : E}
-    (hv : v != 0) : finrank 𝕜 (𝕜 ∙ v)ᗮ = n := by
+theorem finrank_orthogonal_span_singleton {n : ℕ} [_i : Fact (finrank 𝕜 E = n + 1)] {v : E}
+    (hv : v ≠ 0) : finrank 𝕜 (𝕜 ∙ v)ᗮ = n := by
   have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ n
-exact finrank_add_finrank_orthogonal' by
+  exact finrank_add_finrank_orthogonal' <| by
     simp [finrank_span_singleton hv, _i.elim, add_comm]
 
-/--
-theorem `mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero` / 定理 `mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero`
+/-- If a nonzero vector `w` and a vector `u` are both orthogonal to the same nonzero vector `v`
+in a two-dimensional inner product space, then `u` lies in the span of `w`. -/
+/-
+**Submodule.mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero** 是 Mathlib 中的一
+个定理，位于命名空间 `Submodule`。
+形式化陈述：mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero [Fact (finrank 𝕜 E = 
+2)] {u v w : E} (hv : v != 0) (hw : w != 0) (huv : ⟪v, u⟫_𝕜 = 0) (hwv : ⟪v, w⟫_𝕜
+ = 0) : u in 𝕜 ∙ w
+参数：finrank 𝕜 E = 2；hv : v != 0；hw : w != 0；huv : ⟪v, u⟫_𝕜 = 0；hwv : ⟪v, w⟫_𝕜 = 0
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteDimensional.of_fact_finrank_eq_succ`：of_fact_finrank_eq_succ (n : 
+Nat) [hn : Fact (finrank K V = n + 1)] : FiniteDimensional K V
+· 使用定理 `eq_span_singleton_of_mem_of_finrank_eq_one`：eq_span_singleton_of_mem_of_
+finrank_eq_one {S : Submodule K V} {w : V} (hS : finrank K S = 1) (hw : w in S) 
+(hw0 : w != 0) : S = K ∙ w
+· 使用定理 `Submodule.finrank_orthogonal_span_singleton`：finrank_orthogonal_span_sin
+gleton {n : Nat} [_i : Fact (finrank 𝕜 E = n + 1)] {v : E} (hv : v != 0) : finra
+nk 𝕜 (𝕜 ∙ v)ᗮ = n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.mem_orthogonal_singleton_iff_inner_right`：mem_orthogonal_singl
+eton_iff_inner_right {u v : E} : v in (𝕜 ∙ u)ᗮ ↔ ⟪u, v⟫ = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero
-  proof: by
-  have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ 1
-  suffices heq : (𝕜 ∙ v)ᗮ = 𝕜 ∙ w by rwa [← heq, mem_orthogonal_singleton_iff_inner_right]
-  exact eq_span_singleton_of_mem_of_finrank_eq_one
-    (finrank_orthogonal_span_singleton (n := 1) hv)
-    (mem_orthogonal_singleton_iff_inner_right.mpr hwv) hw
-
-中文:
-定理 mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero
-  证明: by
-  have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ 1
-  suffices heq : (𝕜 ∙ v)ᗮ = 𝕜 ∙ w by rwa [← heq, mem_orthogonal_singleton_iff_inner_right]
-  exact eq_span_singleton_of_mem_of_finrank_eq_one
-    (finrank_orthogonal_span_singleton (n := 1) hv)
-    (mem_orthogonal_singleton_iff_inner_right.mpr hwv) hw
-
-Depends on / 依赖: FiniteDimensional, eq_span_singleton_of_mem_of_finrank_eq_one, finrank_orthogonal_span_singleton, mem_orthogonal_singleton_iff_inner_right, mem_orthogonal_singleton_iff_inner_right.mpr, of_fact_finrank_eq_succ
+--- 原说明 ---
+If a nonzero vector `w` and a vector `u` are both orthogonal to the same nonzero
+ vector `v`
+in a two-dimensional inner product space, then `u` lies in the span of `w`.
 -/
 theorem mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero
-    [Fact (finrank 𝕜 E = 2)] {u v w : E} (hv : v != 0) (hw : w != 0)
+    [Fact (finrank 𝕜 E = 2)] {u v w : E} (hv : v ≠ 0) (hw : w ≠ 0)
     (huv : ⟪v, u⟫_𝕜 = 0) (hwv : ⟪v, w⟫_𝕜 = 0) :
-    u in 𝕜 ∙ w := by
+    u ∈ 𝕜 ∙ w := by
   have : FiniteDimensional 𝕜 E := .of_fact_finrank_eq_succ 1
   suffices heq : (𝕜 ∙ v)ᗮ = 𝕜 ∙ w by rwa [← heq, mem_orthogonal_singleton_iff_inner_right]
   exact eq_span_singleton_of_mem_of_finrank_eq_one
@@ -341,168 +468,97 @@ end Submodule
 
 open Module Submodule
 
-/--
-theorem `LinearIsometryEquiv.reflections_generate_dim_aux` / 定理 `LinearIsometryEquiv.reflections_generate_dim_aux`
+/-- An element `φ` of the orthogonal group of `F` can be factored as a product of reflections, and
+specifically at most as many reflections as the dimension of the complement of the fixed subspace
+of `φ`. -/
+/-
+**LinearIsometryEquiv.reflections_generate_dim_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearIsometryEquiv.reflections_generate_dim_aux [FiniteDimensional Real F
+] {n : Nat} (φ : F ≃ₗᵢ[Real] F) (hn : finrank Real (ContinuousLinearMap.id Real 
+F - φ).kerᗮ <= n) : exists l : List F, l.length <= n ∧ φ = (l.map fun v => (Real
+ ∙ v)ᗮ.reflection).prod
+参数：φ : F ≃ₗᵢ[Real] F；hn : finrank Real (ContinuousLinearMap.id Real F - φ).kerᗮ 
+<= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Submodule.instHasOrthogonalProjectionOrthogonal`：∀ {𝕜 : Type u_1} {E : T
+ype u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProduc
+tSpace 𝕜 E]   (K : Submodule 𝕜 E) [K.…
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.orthogonal_eq_bot_iff`：orthogonal_eq_bot_iff [K.HasOrthogonalP
+rojection] : Kᗮ = ⊥ ↔ K = ⊤
+· 使用定理 `FiniteDimensional.proper_real`：∀ (E : Type u) [inst : NormedAddCommGroup
+ E] [inst_1 : NormedSpace ℝ E] [FiniteDimensional ℝ E], ProperSpace E
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Submodule.finrank_eq_zero`：Submodule.finrank_eq_zero [StrongRankConditio
+n R] {S : Submodule R M} [Module.Finite R S] : finrank R S = 0 ↔ S = ⊥
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `le_zero_iff`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_1 : 
+Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearIsometryEquiv.ext`：ext {e e' : E ≃ₛₗᵢ[σ₁₂] E₂} (h : forall x, e x 
+= e' x) : e = e'
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.ker_eq_top`：ker_eq_top {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊤ ↔ f = 
+0
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `Module.nontrivial_of_finrank_pos`：Module.nontrivial_of_finrank_pos (h : 
+0 < finrank R M) : Nontrivial M
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用定理 `LinearIsometryEquiv.inner_map_map`：LinearIsometryEquiv.inner_map_map (f 
+: E ≃ₗᵢ[𝕜] E') (x y : E) : ⟪f x, f y⟫ = ⟪x, y⟫
+（共 51 条，此处仅展示前 30 条）
 
-English:
-theorem LinearIsometryEquiv.reflections_generate_dim_aux
-  statement: [FiniteDimensional Real F] {n : Nat}
-  proof: by
-  -- We prove this by strong induction on `n`, the dimension of the orthogonal complement of the
-  -- fixed subspace of the endomorphism `φ`
-  induction n generalizing φ with
-  | zero => -- Base case: `n = 0`, the fixed subspace is the whole space, so `φ = id`
-    refine ⟨[], rfl.le, show φ = 1 from ?_⟩
-    have : (ContinuousLinearMap.id Real F - φ).ker = ⊤ := by
-      rwa [le_zero_iff, finrank_eq_zero, orthogonal_eq_bot_iff] at hn
-    symm
-    ext x
-    have := LinearMap.congr_fun (LinearMap.ker_eq_top.mp this) x
-    simpa only [sub_eq_zero, ContinuousLinearMap.toLinearMap_sub, LinearMap.sub_apply,
-      LinearMap.zero_apply] using! this
-  | succ n IH =>
-    -- Inductive step. Let `W` be the fixed subspace of `φ`. We suppose its complement to have
-    -- dimension at most n + 1.
-    let W := (ContinuousLinearMap.id Real F - φ).ker
-    have hW : forall w in W, φ w = w := fun w hw => (sub_eq_zero.mp hw).symm
-    by_cases hn' : finrank Real Wᗮ <= n
-    · obtain ⟨V, hV₁, hV₂⟩ := IH φ hn'
-      exact ⟨V, hV₁.trans n.le_succ, hV₂⟩
-    -- Take a nonzero element `v` of the orthogonal complement of `W`.
-    have : Nontrivial Wᗮ := nontrivial_of_finrank_pos (by lia : 0 < finrank Real Wᗮ)
-    obtain ⟨v, hv⟩ := exists_ne (0 : Wᗮ)
-    have hφv : φ v in Wᗮ := by
-      intro w hw
-      rw [← hW w hw]; rw [LinearIsometryEquiv.inner_map_map]
-      exact v.prop w hw
-    have hv' : (v : F) ∉ W := by
-      intro h
-      exact hv ((mem_left_iff_eq_zero_of_disjoint W.orthogonal_disjoint).mp h)
-    -- Let `ρ` be the reflection in `v - φ v`; this is designed to swap `v` and `φ v`
-    let x : F := v - φ v
-    let ρ := (Real ∙ x)ᗮ.reflection
-    -- Notation: Let `V` be the fixed subspace of `φ.trans ρ`
-    let V := (ContinuousLinearMap.id Real F - φ.trans ρ).ker
-    have hV : forall w, ρ (φ w) = w -> w in V := by
-      intro w hw
-      change w - ρ (φ w) = 0
-      rw [sub_eq_zero]; rw [hw]
-    -- Everything fixed by `φ` is fixed by `φ.trans ρ`
-    have H₂V : W <= V := by
-      intro w hw
-      apply hV
-      rw [hW w hw]
-      refine reflection_mem_subspace_eq_self ?_
-      rw [mem_orthogonal_singleton_iff_inner_left]
-      exact Submodule.sub_mem _ v.prop hφv _ hw
-    -- `v` is also fixed by `φ.trans ρ`
-    have H₁V : (v : F) in V := by
-      apply hV
-      have : ρ v = φ v := reflection_sub (φ.norm_map v).symm
-      rw [← this]
-      exact reflection_reflection _ _
-    -- By dimension-counting, the complement of the fixed subspace of `φ.trans ρ` has dimension at
-    -- most `n`
-    have : finrank Real Vᗮ <= n := by
-      change finrank Real Wᗮ <= n + 1 at hn
-      have : finrank Real W + 1 <= finrank Real V :=
-        finrank_lt_finrank_of_lt ((SetLike.lt_iff_le_and_exists (B := F)).2 ⟨H₂V, v, H₁V, hv'⟩)
-      have : finrank Real V + finrank Real Vᗮ = finrank Real F := V.finrank_add_finrank_orthogonal
-      have : finrank Real W + finrank Real Wᗮ = finrank Real F := W.finrank_add_finrank_orthogonal
-      lia
-    -- So apply the inductive hypothesis to `φ.trans ρ`
-    obtain ⟨l, hl, hφl⟩ := IH (ρ * φ) this
-    -- Prepend `ρ` to the factorization into reflections obtained for `φ.trans ρ`; this gives a
-    -- factorization into reflections for `φ`.
-    refine ⟨x::l, Nat.succ_le_succ hl, ?_⟩
-    rw [List.map_cons]; rw [List.prod_cons]
-    have := congr_arg (ρ * ·) hφl
-    rwa [← mul_assoc, reflection_mul_reflection, one_mul] at this
-
-中文:
-定理 线性等距等价.reflections_generate_dim_aux
-  结论: [有限维 实数 F] {n : 自然数}
-  证明: by
-  -- We prove this by strong induction on `n`, the dimension of the orthogonal complement of the
-  -- fixed subspace of the endomorphism `φ`
-  induction n generalizing φ with
-  | zero => -- Base case: `n = 0`, the fixed subspace is the whole space, so `φ = id`
-    refine ⟨[], rfl.le, show φ = 1 from ?_⟩
-    have : (ContinuousLinearMap.id Real F - φ).ker = ⊤ := by
-      rwa [le_zero_iff, finrank_eq_zero, orthogonal_eq_bot_iff] at hn
-    symm
-    ext x
-    have := LinearMap.congr_fun (LinearMap.ker_eq_top.mp this) x
-    simpa only [sub_eq_zero, ContinuousLinearMap.toLinearMap_sub, LinearMap.sub_apply,
-      LinearMap.zero_apply] using! this
-  | succ n IH =>
-    -- Inductive step. Let `W` be the fixed subspace of `φ`. We suppose its complement to have
-    -- dimension at most n + 1.
-    let W := (ContinuousLinearMap.id Real F - φ).ker
-    have hW : forall w in W, φ w = w := fun w hw => (sub_eq_zero.mp hw).symm
-    by_cases hn' : finrank Real Wᗮ <= n
-    · obtain ⟨V, hV₁, hV₂⟩ := IH φ hn'
-      exact ⟨V, hV₁.trans n.le_succ, hV₂⟩
-    -- Take a nonzero element `v` of the orthogonal complement of `W`.
-    have : Nontrivial Wᗮ := nontrivial_of_finrank_pos (by lia : 0 < finrank Real Wᗮ)
-    obtain ⟨v, hv⟩ := exists_ne (0 : Wᗮ)
-    have hφv : φ v in Wᗮ := by
-      intro w hw
-      rw [← hW w hw]; rw [LinearIsometryEquiv.inner_map_map]
-      exact v.prop w hw
-    have hv' : (v : F) ∉ W := by
-      intro h
-      exact hv ((mem_left_iff_eq_zero_of_disjoint W.orthogonal_disjoint).mp h)
-    -- Let `ρ` be the reflection in `v - φ v`; this is designed to swap `v` and `φ v`
-    let x : F := v - φ v
-    let ρ := (Real ∙ x)ᗮ.reflection
-    -- Notation: Let `V` be the fixed subspace of `φ.trans ρ`
-    let V := (ContinuousLinearMap.id Real F - φ.trans ρ).ker
-    have hV : forall w, ρ (φ w) = w -> w in V := by
-      intro w hw
-      change w - ρ (φ w) = 0
-      rw [sub_eq_zero]; rw [hw]
-    -- Everything fixed by `φ` is fixed by `φ.trans ρ`
-    have H₂V : W <= V := by
-      intro w hw
-      apply hV
-      rw [hW w hw]
-      refine reflection_mem_subspace_eq_self ?_
-      rw [mem_orthogonal_singleton_iff_inner_left]
-      exact Submodule.sub_mem _ v.prop hφv _ hw
-    -- `v` is also fixed by `φ.trans ρ`
-    have H₁V : (v : F) in V := by
-      apply hV
-      have : ρ v = φ v := reflection_sub (φ.norm_map v).symm
-      rw [← this]
-      exact reflection_reflection _ _
-    -- By dimension-counting, the complement of the fixed subspace of `φ.trans ρ` has dimension at
-    -- most `n`
-    have : finrank Real Vᗮ <= n := by
-      change finrank Real Wᗮ <= n + 1 at hn
-      have : finrank Real W + 1 <= finrank Real V :=
-        finrank_lt_finrank_of_lt ((SetLike.lt_iff_le_and_exists (B := F)).2 ⟨H₂V, v, H₁V, hv'⟩)
-      have : finrank Real V + finrank Real Vᗮ = finrank Real F := V.finrank_add_finrank_orthogonal
-      have : finrank Real W + finrank Real Wᗮ = finrank Real F := W.finrank_add_finrank_orthogonal
-      lia
-    -- So apply the inductive hypothesis to `φ.trans ρ`
-    obtain ⟨l, hl, hφl⟩ := IH (ρ * φ) this
-    -- Prepend `ρ` to the factorization into reflections obtained for `φ.trans ρ`; this gives a
-    -- factorization into reflections for `φ`.
-    refine ⟨x::l, Nat.succ_le_succ hl, ?_⟩
-    rw [List.map_cons]; rw [List.prod_cons]
-    have := congr_arg (ρ * ·) hφl
-    rwa [← mul_assoc, reflection_mul_reflection, one_mul] at this
+--- 原说明 ---
+An element `φ` of the orthogonal group of `F` can be factored as a product of re
+flections, and
+specifically at most as many reflections as the dimension of the complement of t
+he fixed subspace
+of `φ`.
 -/
-theorem LinearIsometryEquiv.reflections_generate_dim_aux [FiniteDimensional Real F] {n : Nat}
-    (φ : F ≃ₗᵢ[Real] F) (hn : finrank Real (ContinuousLinearMap.id Real F - φ).kerᗮ <= n) :
-    exists l : List F, l.length <= n ∧ φ = (l.map fun v => (Real ∙ v)ᗮ.reflection).prod := by
+theorem LinearIsometryEquiv.reflections_generate_dim_aux [FiniteDimensional ℝ F] {n : ℕ}
+    (φ : F ≃ₗᵢ[ℝ] F) (hn : finrank ℝ (ContinuousLinearMap.id ℝ F - φ).kerᗮ ≤ n) :
+    ∃ l : List F, l.length ≤ n ∧ φ = (l.map fun v => (ℝ ∙ v)ᗮ.reflection).prod := by
   -- We prove this by strong induction on `n`, the dimension of the orthogonal complement of the
   -- fixed subspace of the endomorphism `φ`
   induction n generalizing φ with
   | zero => -- Base case: `n = 0`, the fixed subspace is the whole space, so `φ = id`
     refine ⟨[], rfl.le, show φ = 1 from ?_⟩
-    have : (ContinuousLinearMap.id Real F - φ).ker = ⊤ := by
+    have : (ContinuousLinearMap.id ℝ F - φ).ker = ⊤ := by
       rwa [le_zero_iff, finrank_eq_zero, orthogonal_eq_bot_iff] at hn
     symm
     ext x
@@ -510,34 +566,34 @@ theorem LinearIsometryEquiv.reflections_generate_dim_aux [FiniteDimensional Real
     simpa only [sub_eq_zero, ContinuousLinearMap.toLinearMap_sub, LinearMap.sub_apply,
       LinearMap.zero_apply] using! this
   | succ n IH =>
-    -- Inductive step. Let `W` be the fixed subspace of `φ`. We suppose its complement to have
+    -- Inductive step.  Let `W` be the fixed subspace of `φ`.  We suppose its complement to have
     -- dimension at most n + 1.
-    let W := (ContinuousLinearMap.id Real F - φ).ker
-    have hW : forall w in W, φ w = w := fun w hw => (sub_eq_zero.mp hw).symm
-    by_cases hn' : finrank Real Wᗮ <= n
+    let W := (ContinuousLinearMap.id ℝ F - φ).ker
+    have hW : ∀ w ∈ W, φ w = w := fun w hw => (sub_eq_zero.mp hw).symm
+    by_cases hn' : finrank ℝ Wᗮ ≤ n
     · obtain ⟨V, hV₁, hV₂⟩ := IH φ hn'
       exact ⟨V, hV₁.trans n.le_succ, hV₂⟩
     -- Take a nonzero element `v` of the orthogonal complement of `W`.
-    have : Nontrivial Wᗮ := nontrivial_of_finrank_pos (by lia : 0 < finrank Real Wᗮ)
+    have : Nontrivial Wᗮ := nontrivial_of_finrank_pos (by lia : 0 < finrank ℝ Wᗮ)
     obtain ⟨v, hv⟩ := exists_ne (0 : Wᗮ)
-    have hφv : φ v in Wᗮ := by
+    have hφv : φ v ∈ Wᗮ := by
       intro w hw
-      rw [← hW w hw]; rw [LinearIsometryEquiv.inner_map_map]
+      rw [← hW w hw, LinearIsometryEquiv.inner_map_map]
       exact v.prop w hw
     have hv' : (v : F) ∉ W := by
       intro h
       exact hv ((mem_left_iff_eq_zero_of_disjoint W.orthogonal_disjoint).mp h)
     -- Let `ρ` be the reflection in `v - φ v`; this is designed to swap `v` and `φ v`
     let x : F := v - φ v
-    let ρ := (Real ∙ x)ᗮ.reflection
+    let ρ := (ℝ ∙ x)ᗮ.reflection
     -- Notation: Let `V` be the fixed subspace of `φ.trans ρ`
-    let V := (ContinuousLinearMap.id Real F - φ.trans ρ).ker
-    have hV : forall w, ρ (φ w) = w -> w in V := by
+    let V := (ContinuousLinearMap.id ℝ F - φ.trans ρ).ker
+    have hV : ∀ w, ρ (φ w) = w → w ∈ V := by
       intro w hw
       change w - ρ (φ w) = 0
-      rw [sub_eq_zero]; rw [hw]
+      rw [sub_eq_zero, hw]
     -- Everything fixed by `φ` is fixed by `φ.trans ρ`
-    have H₂V : W <= V := by
+    have H₂V : W ≤ V := by
       intro w hw
       apply hV
       rw [hW w hw]
@@ -545,82 +601,115 @@ theorem LinearIsometryEquiv.reflections_generate_dim_aux [FiniteDimensional Real
       rw [mem_orthogonal_singleton_iff_inner_left]
       exact Submodule.sub_mem _ v.prop hφv _ hw
     -- `v` is also fixed by `φ.trans ρ`
-    have H₁V : (v : F) in V := by
+    have H₁V : (v : F) ∈ V := by
       apply hV
       have : ρ v = φ v := reflection_sub (φ.norm_map v).symm
       rw [← this]
       exact reflection_reflection _ _
     -- By dimension-counting, the complement of the fixed subspace of `φ.trans ρ` has dimension at
     -- most `n`
-    have : finrank Real Vᗮ <= n := by
-      change finrank Real Wᗮ <= n + 1 at hn
-      have : finrank Real W + 1 <= finrank Real V :=
+    have : finrank ℝ Vᗮ ≤ n := by
+      change finrank ℝ Wᗮ ≤ n + 1 at hn
+      have : finrank ℝ W + 1 ≤ finrank ℝ V :=
         finrank_lt_finrank_of_lt ((SetLike.lt_iff_le_and_exists (B := F)).2 ⟨H₂V, v, H₁V, hv'⟩)
-      have : finrank Real V + finrank Real Vᗮ = finrank Real F := V.finrank_add_finrank_orthogonal
-      have : finrank Real W + finrank Real Wᗮ = finrank Real F := W.finrank_add_finrank_orthogonal
+      have : finrank ℝ V + finrank ℝ Vᗮ = finrank ℝ F := V.finrank_add_finrank_orthogonal
+      have : finrank ℝ W + finrank ℝ Wᗮ = finrank ℝ F := W.finrank_add_finrank_orthogonal
       lia
     -- So apply the inductive hypothesis to `φ.trans ρ`
     obtain ⟨l, hl, hφl⟩ := IH (ρ * φ) this
     -- Prepend `ρ` to the factorization into reflections obtained for `φ.trans ρ`; this gives a
     -- factorization into reflections for `φ`.
     refine ⟨x::l, Nat.succ_le_succ hl, ?_⟩
-    rw [List.map_cons]; rw [List.prod_cons]
+    rw [List.map_cons, List.prod_cons]
     have := congr_arg (ρ * ·) hφl
     rwa [← mul_assoc, reflection_mul_reflection, one_mul] at this
 
-/--
-theorem `LinearIsometryEquiv.reflections_generate_dim` / 定理 `LinearIsometryEquiv.reflections_generate_dim`
+/-- The orthogonal group of `F` is generated by reflections; specifically each element `φ` of the
+orthogonal group is a product of at most as many reflections as the dimension of `F`.
 
-English:
-theorem LinearIsometryEquiv.reflections_generate_dim
-  given: [FiniteDimensional Real F] (φ : F ≃ₗᵢ[Real] F)
-  proof: let ⟨l, hl₁, hl₂⟩ := φ.reflections_generate_dim_aux le_rfl
-  ⟨l, hl₁.trans (finrank_le _), hl₂⟩
+Special case of the **Cartan–Dieudonné theorem**. -/
+/-
+**LinearIsometryEquiv.reflections_generate_dim** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearIsometryEquiv.reflections_generate_dim [FiniteDimensional Real F] (φ
+ : F ≃ₗᵢ[Real] F) : exists l : List F, l.length <= finrank Real F ∧ φ = (l.map f
+un v => reflection (Real ∙ v)ᗮ).prod
+参数：φ : F ≃ₗᵢ[Real] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Submodule.instHasOrthogonalProjectionOrthogonal`：∀ {𝕜 : Type u_1} {E : T
+ype u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProduc
+tSpace 𝕜 E]   (K : Submodule 𝕜 E) [K.…
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `LinearIsometryEquiv.reflections_generate_dim_aux`：LinearIsometryEquiv.re
+flections_generate_dim_aux [FiniteDimensional Real F] {n : Nat} (φ : F ≃ₗᵢ[Real]
+ F) (hn : finrank Real (ContinuousLine…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Submodule.finrank_le`：Submodule.finrank_le [Module.Finite R M] (s : Subm
+odule R M) : finrank R s <= finrank R M
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
 
-中文:
-定理 线性等距等价.reflections_generate_dim
-  条件: [有限维 实数 F] (φ : F ≃ₗᵢ[实数] F)
-  证明: let ⟨l, hl₁, hl₂⟩ := φ.reflections_generate_dim_aux le_rfl
-  ⟨l, hl₁.trans (finrank_le _), hl₂⟩
+--- 原说明 ---
+The orthogonal group of `F` is generated by reflections; specifically each eleme
+nt `φ` of the
+orthogonal group is a product of at most as many reflections as the dimension of
+ `F`.
 
-Depends on / 依赖: finrank_le, le_rfl, reflections_generate_dim_aux
+Special case of the **Cartan–Dieudonné theorem**.
 -/
-theorem LinearIsometryEquiv.reflections_generate_dim [FiniteDimensional Real F] (φ : F ≃ₗᵢ[Real] F) :
-    exists l : List F, l.length <= finrank Real F ∧ φ = (l.map fun v => reflection (Real ∙ v)ᗮ).prod :=
+theorem LinearIsometryEquiv.reflections_generate_dim [FiniteDimensional ℝ F] (φ : F ≃ₗᵢ[ℝ] F) :
+    ∃ l : List F, l.length ≤ finrank ℝ F ∧ φ = (l.map fun v => reflection (ℝ ∙ v)ᗮ).prod :=
   let ⟨l, hl₁, hl₂⟩ := φ.reflections_generate_dim_aux le_rfl
   ⟨l, hl₁.trans (finrank_le _), hl₂⟩
 
-/--
-theorem `LinearIsometryEquiv.reflections_generate` / 定理 `LinearIsometryEquiv.reflections_generate`
+/-- The orthogonal group of `F` is generated by reflections. -/
+/-
+**LinearIsometryEquiv.reflections_generate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearIsometryEquiv.reflections_generate [FiniteDimensional Real F] : Subg
+roup.closure (Set.range fun v : F => reflection (Real ∙ v)ᗮ) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.instHasOrthogonalProjectionOrthogonal`：∀ {𝕜 : Type u_1} {E : T
+ype u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProduc
+tSpace 𝕜 E]   (K : Submodule 𝕜 E) [K.…
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.eq_top_iff'`：eq_top_iff' : H = ⊤ ↔ forall x : G, x in H
+· 使用定理 `LinearIsometryEquiv.reflections_generate_dim`：LinearIsometryEquiv.reflec
+tions_generate_dim [FiniteDimensional Real F] (φ : F ≃ₗᵢ[Real] F) : exists l : L
+ist F, l.length <= finrank Real F …
+· 使用定理 `Subgroup.list_prod_mem`：∀ {G : Type u_1} [inst : Group G] (K : Subgroup 
+G) {l : List G}, (∀ x ∈ l, x ∈ K) → l.prod ∈ K
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.mem_map`：∀ {α : Type u_1} {β : Type u_2} {b : β} {f : α → β} {l : L
+ist α}, b ∈ List.map f l ↔ ∃ a ∈ l, f a = b
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem LinearIsometryEquiv.reflections_generate
-  given: [FiniteDimensional Real F]
-  proof: by
-  rw [Subgroup.eq_top_iff']
-  intro φ
-  rcases φ.reflections_generate_dim with ⟨l, _, rfl⟩
-  apply (Subgroup.closure _).list_prod_mem
-  intro x hx
-  rcases List.mem_map.mp hx with ⟨a, _, hax⟩
-  exact Subgroup.subset_closure ⟨a, hax⟩
-
-中文:
-定理 线性等距等价.reflections_generate
-  条件: [有限维 实数 F]
-  证明: by
-  rw [Subgroup.eq_top_iff']
-  intro φ
-  rcases φ.reflections_generate_dim with ⟨l, _, rfl⟩
-  apply (Subgroup.closure _).list_prod_mem
-  intro x hx
-  rcases List.mem_map.mp hx with ⟨a, _, hax⟩
-  exact Subgroup.subset_closure ⟨a, hax⟩
-
-Depends on / 依赖: List.mem_map.mp, Subgroup, Subgroup.closure, Subgroup.eq_top_iff, Subgroup.subset_closure, closure, eq_top_iff, list_prod_mem, mem_map, reflections_generate_dim, subset_closure
+--- 原说明 ---
+The orthogonal group of `F` is generated by reflections.
 -/
-theorem LinearIsometryEquiv.reflections_generate [FiniteDimensional Real F] :
-    Subgroup.closure (Set.range fun v : F => reflection (Real ∙ v)ᗮ) = ⊤ := by
+theorem LinearIsometryEquiv.reflections_generate [FiniteDimensional ℝ F] :
+    Subgroup.closure (Set.range fun v : F => reflection (ℝ ∙ v)ᗮ) = ⊤ := by
   rw [Subgroup.eq_top_iff']
   intro φ
   rcases φ.reflections_generate_dim with ⟨l, _, rfl⟩
@@ -635,107 +724,174 @@ open Submodule
 
 variable {ι : Type*}
 
-/--
-theorem `OrthogonalFamily.isInternal_iff_of_isComplete` / 定理 `OrthogonalFamily.isInternal_iff_of_isComplete`
+/-- An orthogonal family of subspaces of `E` satisfies `DirectSum.IsInternal` (that is,
+they provide an internal direct sum decomposition of `E`) if and only if their span has trivial
+orthogonal complement. -/
+/-
+**OrthogonalFamily.isInternal_iff_of_isComplete** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OrthogonalFamily.isInternal_iff_of_isComplete [DecidableEq ι] {V : ι -> Su
+bmodule 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (
+hc : IsComplete (↑(iSup V) : Set E)) : DirectSum.IsInternal V ↔ (iSup V)ᗮ = ⊥
+参数：hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ；hc : IsComple
+te (↑(iSup V) : Set E)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsComplete.completeSpace_coe`：∀ {α : Type u} [inst : UniformSpace α] {s 
+: Set α}, IsComplete s → CompleteSpace ↑s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `OrthogonalFamily.independent`：OrthogonalFamily.independent {V : ι -> Sub
+module 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) : 
+iSupIndep V
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem OrthogonalFamily.isInternal_iff_of_isComplete
-  statement: [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
-  proof: by
-  have : CompleteSpace (↥(iSup V)) := hc.completeSpace_coe
-  simp only [DirectSum.isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, hV.independent,
-    true_and, orthogonal_eq_bot_iff]
-
-中文:
-定理 OrthogonalFamily.is整数ernal_iff_of_isComplete
-  结论: [DecidableEq ι] {V : ι -> 子模 𝕜 E}
-  证明: by
-  have : CompleteSpace (↥(iSup V)) := hc.completeSpace_coe
-  simp only [DirectSum.isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, hV.independent,
-    true_and, orthogonal_eq_bot_iff]
-
-Depends on / 依赖: CompleteSpace, DirectSum, DirectSum.isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, completeSpace_coe, hV.independent, hc.completeSpace_coe, independent, isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, orthogonal_eq_bot_iff, true_and
+--- 原说明 ---
+An orthogonal family of subspaces of `E` satisfies `DirectSum.IsInternal` (that 
+is,
+they provide an internal direct sum decomposition of `E`) if and only if their s
+pan has trivial
+orthogonal complement.
 -/
-theorem OrthogonalFamily.isInternal_iff_of_isComplete [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
+theorem OrthogonalFamily.isInternal_iff_of_isComplete [DecidableEq ι] {V : ι → Submodule 𝕜 E}
     (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ)
     (hc : IsComplete (↑(iSup V) : Set E)) : DirectSum.IsInternal V ↔ (iSup V)ᗮ = ⊥ := by
   have : CompleteSpace (↥(iSup V)) := hc.completeSpace_coe
   simp only [DirectSum.isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, hV.independent,
     true_and, orthogonal_eq_bot_iff]
 
-/--
-theorem `OrthogonalFamily.isInternal_iff` / 定理 `OrthogonalFamily.isInternal_iff`
+/-- An orthogonal family of subspaces of `E` satisfies `DirectSum.IsInternal` (that is,
+they provide an internal direct sum decomposition of `E`) if and only if their span has trivial
+orthogonal complement. -/
+/-
+**OrthogonalFamily.isInternal_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OrthogonalFamily.isInternal_iff [DecidableEq ι] [FiniteDimensional 𝕜 E] {V
+ : ι -> Submodule 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).su
+btypeₗᵢ) : DirectSum.IsInternal V ↔ (iSup V)ᗮ = ⊥
+参数：hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrthogonalFamily.isInternal_iff_of_isComplete`：OrthogonalFamily.isIntern
+al_iff_of_isComplete [DecidableEq ι] {V : ι -> Submodule 𝕜 E} (hV : OrthogonalFa
+mily 𝕜 (fun i => V i) fun i => (V i…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `completeSpace_coe_iff_isComplete`：completeSpace_coe_iff_isComplete {s : 
+Set α} : CompleteSpace s ↔ IsComplete s
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.proper_rclike`：proper_rclike [FiniteDimensional K E] :
+ ProperSpace E
 
-English:
-theorem OrthogonalFamily.isInternal_iff
-  statement: [DecidableEq ι] [FiniteDimensional 𝕜 E]
-  proof: haveI := FiniteDimensional.proper_rclike 𝕜 (↥(iSup V))
-  hV.isInternal_iff_of_isComplete (completeSpace_coe_iff_isComplete.mp inferInstance)
-
-中文:
-定理 OrthogonalFamily.is整数ernal_iff
-  结论: [DecidableEq ι] [有限维 𝕜 E]
-  证明: haveI := FiniteDimensional.proper_rclike 𝕜 (↥(iSup V))
-  hV.isInternal_iff_of_isComplete (completeSpace_coe_iff_isComplete.mp inferInstance)
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.proper_rclike, completeSpace_coe_iff_isComplete, completeSpace_coe_iff_isComplete.mp, hV.isInternal_iff_of_isComplete, isInternal_iff_of_isComplete, proper_rclike
+--- 原说明 ---
+An orthogonal family of subspaces of `E` satisfies `DirectSum.IsInternal` (that 
+is,
+they provide an internal direct sum decomposition of `E`) if and only if their s
+pan has trivial
+orthogonal complement.
 -/
 theorem OrthogonalFamily.isInternal_iff [DecidableEq ι] [FiniteDimensional 𝕜 E]
-    {V : ι -> Submodule 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) :
+    {V : ι → Submodule 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) :
     DirectSum.IsInternal V ↔ (iSup V)ᗮ = ⊥ :=
   haveI := FiniteDimensional.proper_rclike 𝕜 (↥(iSup V))
   hV.isInternal_iff_of_isComplete (completeSpace_coe_iff_isComplete.mp inferInstance)
 
 open DirectSum
 
-/--
-theorem `OrthogonalFamily.sum_projection_of_mem_iSup` / 定理 `OrthogonalFamily.sum_projection_of_mem_iSup`
+/-- If `x` lies within an orthogonal family `v`, it can be expressed as a sum of projections. -/
+/-
+**OrthogonalFamily.sum_projection_of_mem_iSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OrthogonalFamily.sum_projection_of_mem_iSup [Fintype ι] {V : ι -> Submodul
+e 𝕜 E} [forall i, CompleteSpace (V i)] (hV : OrthogonalFamily 𝕜 (fun i => V i) f
+un i => (V i).subtypeₗᵢ) (x : E) (hx : x in iSup V) : (∑ i, (V i).starProjection
+ x) = x
+参数：V i；hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ；x : E；hx 
+: x in iSup V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.iSup_induction'`：iSup_induction' {ι : Sort*} (p : ι -> Submodu
+le R M) {motive : forall x, (x in ⨆ i, p i) -> Prop} (mem : forall (i) (x) (hx :
+ x in p i), mot…
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_eq_single_of_mem`：∀ {ι : Type u_1} {M : Type u_4} [inst : Add
+CommMonoid M] {s : Finset ι} {f : ι → M},   ∀ a ∈ s, (∀ b ∈ s, b ≠ a → f b = 0) 
+→ ∑ x ∈ s, f x = …
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.starProjection_apply`：starProjection_apply (U : Submodule 𝕜 E)
+ [U.HasOrthogonalProjection] (v : E) : U.starProjection v = U.orthogonalProjecti
+onOnto v
+· 使用定理 `Submodule.orthogonalProjectionOnto_apply_of_mem_orthogonal`：orthogonalPr
+ojectionOnto_apply_of_mem_orthogonal [K.HasOrthogonalProjection] {v : E} (hv : v
+ in Kᗮ) : K.orthogonalProjectionOnto v = 0
+· 使用定理 `OrthogonalFamily.isOrtho`：OrthogonalFamily.isOrtho {ι} {V : ι -> Submodu
+le 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i j :
+ ι} (hij : i !…
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Submodule.coe_zero`：coe_zero : ((0 : p) : M) = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.starProjection_eq_self_iff`：starProjection_eq_self_iff {v : E}
+ : K.starProjection v = v ↔ v in K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
 
-English:
-theorem OrthogonalFamily.sum_projection_of_mem_iSup
-  statement: [Fintype ι] {V : ι -> Submodule 𝕜 E}
-  proof: by
-  induction hx using iSup_induction' with
-  | mem i x hx =>
-    refine
-      (Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hij => ?_).trans
-        (starProjection_eq_self_iff.mpr hx)
-    rw [starProjection_apply]; rw [orthogonalProjectionOnto_apply_of_mem_orthogonal]; rw [Submodule.coe_zero]
-    exact hV.isOrtho hij.symm hx
-  | zero =>
-    simp_rw [map_zero, Finset.sum_const_zero]
-  | add x y _ _ hx hy =>
-    simp_rw [map_add, Finset.sum_add_distrib]
-    exact congr_arg₂ (· + ·) hx hy
-
-中文:
-定理 OrthogonalFamily.sum_projection_of_mem_iSup
-  结论: [有限类型 ι] {V : ι -> 子模 𝕜 E}
-  证明: by
-  induction hx using iSup_induction' with
-  | mem i x hx =>
-    refine
-      (Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hij => ?_).trans
-        (starProjection_eq_self_iff.mpr hx)
-    rw [starProjection_apply]; rw [orthogonalProjectionOnto_apply_of_mem_orthogonal]; rw [Submodule.coe_zero]
-    exact hV.isOrtho hij.symm hx
-  | zero =>
-    simp_rw [map_zero, Finset.sum_const_zero]
-  | add x y _ _ hx hy =>
-    simp_rw [map_add, Finset.sum_add_distrib]
-    exact congr_arg₂ (· + ·) hx hy
-
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_add_distrib, Finset.sum_const_zero, Finset.sum_eq_single_of_mem, Submodule, Submodule.coe_zero, coe_zero, hV.isOrtho, hij.symm, iSup_induction, isOrtho, map_add, map_zero, mem_univ, orthogonalProjectionOnto_apply_of_mem_orthogonal, simp_rw, starProjection_apply, starProjection_eq_self_iff, starProjection_eq_self_iff.mpr
+--- 原说明 ---
+If `x` lies within an orthogonal family `v`, it can be expressed as a sum of pro
+jections.
 -/
-theorem OrthogonalFamily.sum_projection_of_mem_iSup [Fintype ι] {V : ι -> Submodule 𝕜 E}
-    [forall i, CompleteSpace (V i)] (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ)
-    (x : E) (hx : x in iSup V) : (∑ i, (V i).starProjection x) = x := by
+theorem OrthogonalFamily.sum_projection_of_mem_iSup [Fintype ι] {V : ι → Submodule 𝕜 E}
+    [∀ i, CompleteSpace (V i)] (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ)
+    (x : E) (hx : x ∈ iSup V) : (∑ i, (V i).starProjection x) = x := by
   induction hx using iSup_induction' with
   | mem i x hx =>
     refine
       (Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hij => ?_).trans
         (starProjection_eq_self_iff.mpr hx)
-    rw [starProjection_apply]; rw [orthogonalProjectionOnto_apply_of_mem_orthogonal]; rw [Submodule.coe_zero]
+    rw [starProjection_apply, orthogonalProjectionOnto_apply_of_mem_orthogonal, Submodule.coe_zero]
     exact hV.isOrtho hij.symm hx
   | zero =>
     simp_rw [map_zero, Finset.sum_const_zero]
@@ -744,48 +900,88 @@ theorem OrthogonalFamily.sum_projection_of_mem_iSup [Fintype ι] {V : ι -> Subm
     exact congr_arg₂ (· + ·) hx hy
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `OrthogonalFamily.projection_directSum_coeAddHom` / 定理 `OrthogonalFamily.projection_directSum_coeAddHom`
+/-- If a family of submodules is orthogonal, then the `orthogonalProjection` on a direct sum
+is just the coefficient of that direct sum. -/
+/-
+**OrthogonalFamily.projection_directSum_coeAddHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OrthogonalFamily.projection_directSum_coeAddHom [DecidableEq ι] {V : ι -> 
+Submodule 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ)
+ (x : ⨁ i, V i) (i : ι) [CompleteSpace (V i)] : (V i).orthogonalProjectionOnto (
+DirectSum.coeAddMonoidHom V x) = x i
+参数：hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ；x : ⨁ i, V i；
+i : ι；V i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.induction_on`：∀ {ι : Type v} {β : ι → Type w} [inst : (i : ι) 
+→ AddCommMonoid (β i)] [inst_1 : DecidableEq ι]   {motive : (DirectSum ι fun i =
+> β i) → Pro…
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `DirectSum.coeAddMonoidHom_of`：coeAddMonoidHom_of {M S : Type*} [Decidabl
+eEq ι] [AddCommMonoid M] [SetLike S M] [AddSubmonoidClass S M] (A : ι -> S) (i :
+ ι) (x : A i) : Di…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `DFinsupp.singleAddHom_apply`：∀ {ι : Type u} (β : ι → Type v) [inst : Dec
+idableEq ι] [inst_1 : (i : ι) → AddZeroClass (β i)] (i : ι) (b : β i),   (DFinsu
+pp.singleAddHom β…
+· 使用定理 `Decidable.eq_or_ne`：Decidable.eq_or_ne {α : Sort*} (x y : α) [Decidable 
+(x = y)] : x = y ∨ x != y
+· 使用定理 `Submodule.orthogonalProjectionOnto_mem_subspace_eq_self`：orthogonalProje
+ctionOnto_mem_subspace_eq_self (v : K) : K.orthogonalProjectionOnto v = v
+· 使用定理 `DFinsupp.single_eq_same`：single_eq_same {i b} : (single i b : Π₀ i, β i)
+ i = b
+· 使用定理 `Submodule.orthogonalProjectionOnto_apply_of_mem_orthogonal`：orthogonalPr
+ojectionOnto_apply_of_mem_orthogonal [K.HasOrthogonalProjection] {v : E} (hv : v
+ in Kᗮ) : K.orthogonalProjectionOnto v = 0
+· 使用定理 `OrthogonalFamily.isOrtho`：OrthogonalFamily.isOrtho {ι} {V : ι -> Submodu
+le 𝕜 E} (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) {i j :
+ ι} (hij : i !…
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `DFinsupp.single_eq_of_ne`：single_eq_of_ne {i i' b} (h : i' != i) : (sing
+le i b : Π₀ i, β i) i' = 0
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
 
-English:
-theorem OrthogonalFamily.projection_directSum_coeAddHom
-  statement: [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
-  proof: by
-  induction x using DirectSum.induction_on with
-  | zero => simp
-  | of j x =>
-    simp_rw [DirectSum.coeAddMonoidHom_of, DirectSum.of,
-      -- Need to unfold `DirectSum` to see through the defeq abuse.
-      DirectSum, DFinsupp.singleAddHom_apply]
-    obtain rfl | hij := Decidable.eq_or_ne i j
-    · rw [orthogonalProjectionOnto_mem_subspace_eq_self, DFinsupp.single_eq_same]
-    · rw [orthogonalProjectionOnto_apply_of_mem_orthogonal, DFinsupp.single_eq_of_ne hij]
-      exact hV.isOrtho hij.symm x.prop
-  | add x y hx hy =>
-    simp_rw [map_add]
-    exact congr_arg₂ (· + ·) hx hy
-
-中文:
-定理 OrthogonalFamily.projection_directSum_coeAddHom
-  结论: [DecidableEq ι] {V : ι -> 子模 𝕜 E}
-  证明: by
-  induction x using DirectSum.induction_on with
-  | zero => simp
-  | of j x =>
-    simp_rw [DirectSum.coeAddMonoidHom_of, DirectSum.of,
-      -- Need to unfold `DirectSum` to see through the defeq abuse.
-      DirectSum, DFinsupp.singleAddHom_apply]
-    obtain rfl | hij := Decidable.eq_or_ne i j
-    · rw [orthogonalProjectionOnto_mem_subspace_eq_self, DFinsupp.single_eq_same]
-    · rw [orthogonalProjectionOnto_apply_of_mem_orthogonal, DFinsupp.single_eq_of_ne hij]
-      exact hV.isOrtho hij.symm x.prop
-  | add x y hx hy =>
-    simp_rw [map_add]
-    exact congr_arg₂ (· + ·) hx hy
-
-Depends on / 依赖: DirectSum, DirectSum.coeAddMonoidHom_of, DirectSum.induction_on, DirectSum.of, coeAddMonoidHom_of, induction_on, simp_rw
+--- 原说明 ---
+If a family of submodules is orthogonal, then the `orthogonalProjection` on a di
+rect sum
+is just the coefficient of that direct sum.
 -/
-theorem OrthogonalFamily.projection_directSum_coeAddHom [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
+theorem OrthogonalFamily.projection_directSum_coeAddHom [DecidableEq ι] {V : ι → Submodule 𝕜 E}
     (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ) (x : ⨁ i, V i) (i : ι)
     [CompleteSpace (V i)] :
     (V i).orthogonalProjectionOnto (DirectSum.coeAddMonoidHom V x) = x i := by
@@ -804,54 +1000,42 @@ theorem OrthogonalFamily.projection_directSum_coeAddHom [DecidableEq ι] {V : ι
     exact congr_arg₂ (· + ·) hx hy
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `OrthogonalFamily.decomposition` / `OrthogonalFamily.decomposition` 的定义
+/-- If a family of submodules is orthogonal and they span the whole space, then the orthogonal
+projection provides a means to decompose the space into its submodules.
 
-English:
-abbreviation OrthogonalFamily.decomposition
-  body: DFinsupp.equivFunOnFintype.symm fun i => (V i).orthogonalProjectionOnto x
-  left_inv x := by
-    dsimp only
-    let := fun i => Classical.decEq (V i)
-    rw [DirectSum.coeAddMonoidHom]; rw [DirectSum.toAddMonoid]; rw [DFinsupp.liftAddHom_apply]
-    -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-    erw [DFinsupp.sumAddHom_apply]; rw [DFinsupp.sum_eq_sum_fintype]
-    · simp_rw [Equiv.apply_symm_apply, AddSubmonoidClass.coe_subtype]
-      exact hV.sum_projection_of_mem_iSup _ ((h.ge :) Submodule.mem_top)
-    · intro i
-      exact map_zero _
-  right_inv x := by
-    dsimp only
-    simp_rw [hV.projection_directSum_coeAddHom, DFinsupp.equivFunOnFintype_symm_coe]
+The projection function is `decompose V x i = (V i).orthogonalProjection x`.
 
-中文:
-缩写 OrthogonalFamily.decomposition
-  定义体: DFinsupp.equivFunOnFintype.symm fun i => (V i).orthogonalProjectionOnto x
-  left_inv x := by
-    dsimp only
-    let := fun i => Classical.decEq (V i)
-    rw [DirectSum.coeAddMonoidHom]; rw [DirectSum.toAddMonoid]; rw [DFinsupp.liftAddHom_apply]
-    -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
-    erw [DFinsupp.sumAddHom_apply]; rw [DFinsupp.sum_eq_sum_fintype]
-    · simp_rw [Equiv.apply_symm_apply, AddSubmonoidClass.coe_subtype]
-      exact hV.sum_projection_of_mem_iSup _ ((h.ge :) Submodule.mem_top)
-    · intro i
-      exact map_zero _
-  right_inv x := by
-    dsimp only
-    simp_rw [hV.projection_directSum_coeAddHom, DFinsupp.equivFunOnFintype_symm_coe]
+See note [reducible non-instances]. -/
+/-
+**OrthogonalFamily.decomposition** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：OrthogonalFamily.decomposition [DecidableEq ι] [Fintype ι] {V : ι -> Submo
+dule 𝕜 E} [forall i, CompleteSpace (V i)] (hV : OrthogonalFamily 𝕜 (fun i => V i
+) fun i => (V i).subtypeₗᵢ) (h : iSup V = ⊤) : DirectSum.Decomposition V where d
+ecompose' x
+参数：V i；hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ；h : iSup 
+V = ⊤。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-Depends on / 依赖: DFinsupp, DFinsupp.equivFunOnFintype.symm, equivFunOnFintype, orthogonalProjectionOnto
+--- 原说明 ---
+If a family of submodules is orthogonal and they span the whole space, then the 
+orthogonal
+projection provides a means to decompose the space into its submodules.
+
+The projection function is `decompose V x i = (V i).orthogonalProjection x`.
+
+See note [reducible non-instances].
 -/
 noncomputable abbrev OrthogonalFamily.decomposition
-    [DecidableEq ι] [Fintype ι] {V : ι -> Submodule 𝕜 E}
-    [forall i, CompleteSpace (V i)] (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ)
+    [DecidableEq ι] [Fintype ι] {V : ι → Submodule 𝕜 E}
+    [∀ i, CompleteSpace (V i)] (hV : OrthogonalFamily 𝕜 (fun i => V i) fun i => (V i).subtypeₗᵢ)
     (h : iSup V = ⊤) : DirectSum.Decomposition V where
   decompose' x := DFinsupp.equivFunOnFintype.symm fun i => (V i).orthogonalProjectionOnto x
   left_inv x := by
     dsimp only
     let := fun i => Classical.decEq (V i)
-    rw [DirectSum.coeAddMonoidHom]; rw [DirectSum.toAddMonoid]; rw [DFinsupp.liftAddHom_apply]
+    rw [DirectSum.coeAddMonoidHom, DirectSum.toAddMonoid, DFinsupp.liftAddHom_apply]
     -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
     erw [DFinsupp.sumAddHom_apply]; rw [DFinsupp.sum_eq_sum_fintype]
     · simp_rw [Equiv.apply_symm_apply, AddSubmonoidClass.coe_subtype]
@@ -870,131 +1054,78 @@ variable {v : Set E}
 
 open Module Submodule Set
 
-/--
-theorem `maximal_orthonormal_iff_orthogonalComplement_eq_bot` / 定理 `maximal_orthonormal_iff_orthogonalComplement_eq_bot`
+/-- An orthonormal set in an `InnerProductSpace` is maximal, if and only if the orthogonal
+complement of its span is empty. -/
+/-
+**maximal_orthonormal_iff_orthogonalComplement_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：maximal_orthonormal_iff_orthogonalComplement_eq_bot (hv : Orthonormal 𝕜 ((
+↑) : v -> E)) : (forall u ⊇ v, Orthonormal 𝕜 ((↑) : u -> E) -> u = v) ↔ (span 𝕜 
+v)ᗮ = ⊥
+参数：hv : Orthonormal 𝕜 ((↑) : v -> E)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.eq_bot_iff`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R
+] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M),
+ p = ⊥ ↔ ∀…
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_smul_inv_norm`：norm_smul_inv_norm {x : E} (hx : x != 0) : ‖(‖x‖⁻¹ :
+ 𝕜) • x‖ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Submodule.smul_mem'`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [in
+st_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (self : Submodule R M) (c
+ : R) {x …
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Submodule.inf_orthogonal_eq_bot`：inf_orthogonal_eq_bot : K ⊓ Kᗮ = ⊥
+· 使用定理 `Orthonormal.ne_zero`：Orthonormal.ne_zero {v : ι -> E} (hv : Orthonormal 
+𝕜 v) (i : ι) : v i != 0
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
+· 使用定理 `Set.eq_or_mem_of_mem_insert`：eq_or_mem_of_mem_insert {x a : α} {s : Set 
+α} : x in insert a s -> x = a ∨ x in s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `inner_eq_zero_symm`：inner_eq_zero_symm {x y : E} : ⟪x, y⟫ = 0 ↔ ⟪y, x⟫ =
+ 0
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Set.ne_insert_of_notMem`：ne_insert_of_notMem {s : Set α} (t : Set α) {a 
+: α} : a ∉ s -> s != insert a t
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Not.imp_symm`：Not.imp_symm : (¬a -> b) -> ¬b -> a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.mem_span_image_iff_linearCombination`：mem_span_image_iff_linearC
+ombination {s : Set α} {x : M} : x in span R (v '' s) ↔ exists l in supported R 
+R s, linearCombination R v l = x
+· 使用定理 `Subtype.image_preimage_coe`：image_preimage_coe (s t : Set α) : ((↑) : s 
+-> α) '' ((↑) : s -> α) ⁻¹' t = s inter t
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem maximal_orthonormal_iff_orthogonalComplement_eq_bot
-  given: (hv : Orthonormal 𝕜 ((↑) : v -> E))
-  proof: by
-  rw [Submodule.eq_bot_iff]
-  constructor
-  · contrapose!
-    -- ** direction 1: nonempty orthogonal complement implies nonmaximal
-    rintro ⟨x, hx', hx⟩
-    -- take a nonzero vector and normalize it
-    let e := (‖x‖⁻¹ : 𝕜) • x
-    have he : ‖e‖ = 1 := by simp [e, norm_smul_inv_norm hx]
-    have he' : e in (span 𝕜 v)ᗮ := smul_mem' _ _ hx'
-    have he'' : e ∉ v := by
-      intro hev
-      have : e = 0 := by
-        have : e in span 𝕜 v ⊓ (span 𝕜 v)ᗮ := ⟨subset_span hev, he'⟩
-        simpa [(span 𝕜 v).inf_orthogonal_eq_bot] using this
-      have : e != 0 := hv.ne_zero ⟨e, hev⟩
-      contradiction
-    -- put this together with `v` to provide a candidate orthonormal basis for the whole space
-    refine ⟨insert e v, v.subset_insert e, ⟨?_, ?_⟩, (ne_insert_of_notMem v he'').symm⟩
-    · -- show that the elements of `insert e v` have unit length
-      rintro ⟨a, ha'⟩
-      rcases eq_or_mem_of_mem_insert ha' with ha | ha
-      · simp [ha, he]
-      · exact hv.1 ⟨a, ha⟩
-    · -- show that the elements of `insert e v` are orthogonal
-      have h_end : forall a in v, ⟪a, e⟫ = 0 := by
-        intro a ha
-        exact he' a (Submodule.subset_span ha)
-      rintro ⟨a, ha'⟩
-      rcases eq_or_mem_of_mem_insert ha' with ha | ha
-      · rintro ⟨b, hb'⟩ hab'
-        have hb : b in v := by grind
-        rw [inner_eq_zero_symm]
-        simpa [ha] using h_end b hb
-      rintro ⟨b, hb'⟩ hab'
-      rcases eq_or_mem_of_mem_insert hb' with hb | hb
-      · simpa [hb] using h_end a ha
-      have : (⟨a, ha⟩ : v) != ⟨b, hb⟩ := by
-        intro hab''
-        apply hab'
-        simpa using hab''
-      exact hv.2 this
-  · -- ** direction 2: empty orthogonal complement implies maximal
-    simp only [Subset.antisymm_iff]
-    rintro h u (huv : v subseteq u) hu
-    refine ⟨?_, huv⟩
-    intro x hxu
-    refine ((mt (h x)) (hu.ne_zero ⟨x, hxu⟩)).imp_symm ?_
-    intro hxv y hy
-    have hxv' : (⟨x, hxu⟩ : u) ∉ ((↑) ⁻¹' v : Set u) := by simp [hxv]
-    obtain ⟨l, hl, rfl⟩ :
-      exists l in supported 𝕜 𝕜 ((↑) ⁻¹' v : Set u), (linearCombination 𝕜 ((↑) : u -> E)) l = y := by
-      rw [← Finsupp.mem_span_image_iff_linearCombination]
-      simp [huv, inter_eq_self_of_subset_right, hy]
-    exact hu.inner_finsupp_eq_zero hxv' hl
-
-中文:
-定理 maximal_orthonormal_iff_orthogonalComplement_eq_bot
-  条件: (hv : Orthonormal 𝕜 ((↑) : v -> E))
-  证明: by
-  rw [Submodule.eq_bot_iff]
-  constructor
-  · contrapose!
-    -- ** direction 1: nonempty orthogonal complement implies nonmaximal
-    rintro ⟨x, hx', hx⟩
-    -- take a nonzero vector and normalize it
-    let e := (‖x‖⁻¹ : 𝕜) • x
-    have he : ‖e‖ = 1 := by simp [e, norm_smul_inv_norm hx]
-    have he' : e in (span 𝕜 v)ᗮ := smul_mem' _ _ hx'
-    have he'' : e ∉ v := by
-      intro hev
-      have : e = 0 := by
-        have : e in span 𝕜 v ⊓ (span 𝕜 v)ᗮ := ⟨subset_span hev, he'⟩
-        simpa [(span 𝕜 v).inf_orthogonal_eq_bot] using this
-      have : e != 0 := hv.ne_zero ⟨e, hev⟩
-      contradiction
-    -- put this together with `v` to provide a candidate orthonormal basis for the whole space
-    refine ⟨insert e v, v.subset_insert e, ⟨?_, ?_⟩, (ne_insert_of_notMem v he'').symm⟩
-    · -- show that the elements of `insert e v` have unit length
-      rintro ⟨a, ha'⟩
-      rcases eq_or_mem_of_mem_insert ha' with ha | ha
-      · simp [ha, he]
-      · exact hv.1 ⟨a, ha⟩
-    · -- show that the elements of `insert e v` are orthogonal
-      have h_end : forall a in v, ⟪a, e⟫ = 0 := by
-        intro a ha
-        exact he' a (Submodule.subset_span ha)
-      rintro ⟨a, ha'⟩
-      rcases eq_or_mem_of_mem_insert ha' with ha | ha
-      · rintro ⟨b, hb'⟩ hab'
-        have hb : b in v := by grind
-        rw [inner_eq_zero_symm]
-        simpa [ha] using h_end b hb
-      rintro ⟨b, hb'⟩ hab'
-      rcases eq_or_mem_of_mem_insert hb' with hb | hb
-      · simpa [hb] using h_end a ha
-      have : (⟨a, ha⟩ : v) != ⟨b, hb⟩ := by
-        intro hab''
-        apply hab'
-        simpa using hab''
-      exact hv.2 this
-  · -- ** direction 2: empty orthogonal complement implies maximal
-    simp only [Subset.antisymm_iff]
-    rintro h u (huv : v subseteq u) hu
-    refine ⟨?_, huv⟩
-    intro x hxu
-    refine ((mt (h x)) (hu.ne_zero ⟨x, hxu⟩)).imp_symm ?_
-    intro hxv y hy
-    have hxv' : (⟨x, hxu⟩ : u) ∉ ((↑) ⁻¹' v : Set u) := by simp [hxv]
-    obtain ⟨l, hl, rfl⟩ :
-      exists l in supported 𝕜 𝕜 ((↑) ⁻¹' v : Set u), (linearCombination 𝕜 ((↑) : u -> E)) l = y := by
-      rw [← Finsupp.mem_span_image_iff_linearCombination]
-      simp [huv, inter_eq_self_of_subset_right, hy]
-    exact hu.inner_finsupp_eq_zero hxv' hl
-
-Depends on / 依赖: Submodule, Submodule.eq_bot_iff, contrapose, eq_bot_iff
+--- 原说明 ---
+An orthonormal set in an `InnerProductSpace` is maximal, if and only if the orth
+ogonal
+complement of its span is empty.
 -/
-theorem maximal_orthonormal_iff_orthogonalComplement_eq_bot (hv : Orthonormal 𝕜 ((↑) : v -> E)) :
-    (forall u ⊇ v, Orthonormal 𝕜 ((↑) : u -> E) -> u = v) ↔ (span 𝕜 v)ᗮ = ⊥ := by
+theorem maximal_orthonormal_iff_orthogonalComplement_eq_bot (hv : Orthonormal 𝕜 ((↑) : v → E)) :
+    (∀ u ⊇ v, Orthonormal 𝕜 ((↑) : u → E) → u = v) ↔ (span 𝕜 v)ᗮ = ⊥ := by
   rw [Submodule.eq_bot_iff]
   constructor
   · contrapose!
@@ -1003,13 +1134,13 @@ theorem maximal_orthonormal_iff_orthogonalComplement_eq_bot (hv : Orthonormal �
     -- take a nonzero vector and normalize it
     let e := (‖x‖⁻¹ : 𝕜) • x
     have he : ‖e‖ = 1 := by simp [e, norm_smul_inv_norm hx]
-    have he' : e in (span 𝕜 v)ᗮ := smul_mem' _ _ hx'
+    have he' : e ∈ (span 𝕜 v)ᗮ := smul_mem' _ _ hx'
     have he'' : e ∉ v := by
       intro hev
       have : e = 0 := by
-        have : e in span 𝕜 v ⊓ (span 𝕜 v)ᗮ := ⟨subset_span hev, he'⟩
+        have : e ∈ span 𝕜 v ⊓ (span 𝕜 v)ᗮ := ⟨subset_span hev, he'⟩
         simpa [(span 𝕜 v).inf_orthogonal_eq_bot] using this
-      have : e != 0 := hv.ne_zero ⟨e, hev⟩
+      have : e ≠ 0 := hv.ne_zero ⟨e, hev⟩
       contradiction
     -- put this together with `v` to provide a candidate orthonormal basis for the whole space
     refine ⟨insert e v, v.subset_insert e, ⟨?_, ?_⟩, (ne_insert_of_notMem v he'').symm⟩
@@ -1019,79 +1150,97 @@ theorem maximal_orthonormal_iff_orthogonalComplement_eq_bot (hv : Orthonormal �
       · simp [ha, he]
       · exact hv.1 ⟨a, ha⟩
     · -- show that the elements of `insert e v` are orthogonal
-      have h_end : forall a in v, ⟪a, e⟫ = 0 := by
+      have h_end : ∀ a ∈ v, ⟪a, e⟫ = 0 := by
         intro a ha
         exact he' a (Submodule.subset_span ha)
       rintro ⟨a, ha'⟩
       rcases eq_or_mem_of_mem_insert ha' with ha | ha
       · rintro ⟨b, hb'⟩ hab'
-        have hb : b in v := by grind
+        have hb : b ∈ v := by grind
         rw [inner_eq_zero_symm]
         simpa [ha] using h_end b hb
       rintro ⟨b, hb'⟩ hab'
       rcases eq_or_mem_of_mem_insert hb' with hb | hb
       · simpa [hb] using h_end a ha
-      have : (⟨a, ha⟩ : v) != ⟨b, hb⟩ := by
+      have : (⟨a, ha⟩ : v) ≠ ⟨b, hb⟩ := by
         intro hab''
         apply hab'
         simpa using hab''
       exact hv.2 this
   · -- ** direction 2: empty orthogonal complement implies maximal
     simp only [Subset.antisymm_iff]
-    rintro h u (huv : v subseteq u) hu
+    rintro h u (huv : v ⊆ u) hu
     refine ⟨?_, huv⟩
     intro x hxu
     refine ((mt (h x)) (hu.ne_zero ⟨x, hxu⟩)).imp_symm ?_
     intro hxv y hy
     have hxv' : (⟨x, hxu⟩ : u) ∉ ((↑) ⁻¹' v : Set u) := by simp [hxv]
     obtain ⟨l, hl, rfl⟩ :
-      exists l in supported 𝕜 𝕜 ((↑) ⁻¹' v : Set u), (linearCombination 𝕜 ((↑) : u -> E)) l = y := by
+      ∃ l ∈ supported 𝕜 𝕜 ((↑) ⁻¹' v : Set u), (linearCombination 𝕜 ((↑) : u → E)) l = y := by
       rw [← Finsupp.mem_span_image_iff_linearCombination]
       simp [huv, inter_eq_self_of_subset_right, hy]
     exact hu.inner_finsupp_eq_zero hxv' hl
 
 variable [FiniteDimensional 𝕜 E]
 
-/--
-theorem `maximal_orthonormal_iff_basis_of_finiteDimensional` / 定理 `maximal_orthonormal_iff_basis_of_finiteDimensional`
+/-- An orthonormal set in a finite-dimensional `InnerProductSpace` is maximal, if and only if it
+is a basis. -/
+/-
+**maximal_orthonormal_iff_basis_of_finiteDimensional** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：maximal_orthonormal_iff_basis_of_finiteDimensional (hv : Orthonormal 𝕜 ((↑
+) : v -> E)) : (forall u ⊇ v, Orthonormal 𝕜 ((↑) : u -> E) -> u = v) ↔ exists b 
+: Basis v 𝕜 E, ⇑b = ((↑) : v -> E)
+参数：hv : Orthonormal 𝕜 ((↑) : v -> E)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `maximal_orthonormal_iff_orthogonalComplement_eq_bot`：maximal_orthonormal
+_iff_orthogonalComplement_eq_bot (hv : Orthonormal 𝕜 ((↑) : v -> E)) : (forall u
+ ⊇ v, Orthonormal 𝕜 ((↑) : u -> E) -> u =…
+· 使用定理 `Submodule.orthogonal_eq_bot_iff`：orthogonal_eq_bot_iff [K.HasOrthogonalP
+rojection] : Kᗮ = ⊥ ↔ K = ⊤
+· 使用定理 `Submodule.HasOrthogonalProjection.ofCompleteSpace`：∀ {𝕜 : Type u_1} {E :
+ Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProd
+uctSpace 𝕜 E]   (K : Submodule 𝕜 E) [Co…
+· 使用定理 `complete_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [ProperS
+pace α], CompleteSpace α
+· 使用定理 `FiniteDimensional.RCLike.properSpace_submodule`：∀ (K : Type u_1) {E : Ty
+pe u_2} [inst : RCLike K] [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace 
+K E]   (S : Submodule K E) [FiniteDi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Orthonormal.linearIndependent`：Orthonormal.linearIndependent {v : ι -> E
+} (hv : Orthonormal 𝕜 v) : LinearIndependent 𝕜 v
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Module.Basis.coe_mk`：coe_mk : ⇑(Basis.mk hli hsp) = v
+· 使用定理 `Module.Basis.span_eq`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_5} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (b : 
+Module.Bas…
 
-English:
-theorem maximal_orthonormal_iff_basis_of_finiteDimensional
-  given: (hv : Orthonormal 𝕜 ((↑) : v -> E))
-  proof: by
-  rw [maximal_orthonormal_iff_orthogonalComplement_eq_bot hv]
-  rw [Submodule.orthogonal_eq_bot_iff]
-  have hv_coe : range ((↑) : v -> E) = v := by simp
-  constructor
-  · refine fun h => ⟨Basis.mk hv.linearIndependent _, Basis.coe_mk _ ?_⟩
-    convert! h.ge
-  · rintro ⟨h, coe_h⟩
-    rw [← h.span_eq]; rw [coe_h]; rw [hv_coe]
-
-中文:
-定理 maximal_orthonormal_iff_basis_of_finiteDimensional
-  条件: (hv : Orthonormal 𝕜 ((↑) : v -> E))
-  证明: by
-  rw [maximal_orthonormal_iff_orthogonalComplement_eq_bot hv]
-  rw [Submodule.orthogonal_eq_bot_iff]
-  have hv_coe : range ((↑) : v -> E) = v := by simp
-  constructor
-  · refine fun h => ⟨Basis.mk hv.linearIndependent _, Basis.coe_mk _ ?_⟩
-    convert! h.ge
-  · rintro ⟨h, coe_h⟩
-    rw [← h.span_eq]; rw [coe_h]; rw [hv_coe]
-
-Depends on / 依赖: Basis.coe_mk, Basis.mk, Submodule, Submodule.orthogonal_eq_bot_iff, coe_h, coe_mk, convert, h.ge, h.span_eq, hv.linearIndependent, hv_coe, linearIndependent, maximal_orthonormal_iff_orthogonalComplement_eq_bot, orthogonal_eq_bot_iff, span_eq
+--- 原说明 ---
+An orthonormal set in a finite-dimensional `InnerProductSpace` is maximal, if an
+d only if it
+is a basis.
 -/
-theorem maximal_orthonormal_iff_basis_of_finiteDimensional (hv : Orthonormal 𝕜 ((↑) : v -> E)) :
-    (forall u ⊇ v, Orthonormal 𝕜 ((↑) : u -> E) -> u = v) ↔ exists b : Basis v 𝕜 E, ⇑b = ((↑) : v -> E) := by
+theorem maximal_orthonormal_iff_basis_of_finiteDimensional (hv : Orthonormal 𝕜 ((↑) : v → E)) :
+    (∀ u ⊇ v, Orthonormal 𝕜 ((↑) : u → E) → u = v) ↔ ∃ b : Basis v 𝕜 E, ⇑b = ((↑) : v → E) := by
   rw [maximal_orthonormal_iff_orthogonalComplement_eq_bot hv]
   rw [Submodule.orthogonal_eq_bot_iff]
-  have hv_coe : range ((↑) : v -> E) = v := by simp
+  have hv_coe : range ((↑) : v → E) = v := by simp
   constructor
   · refine fun h => ⟨Basis.mk hv.linearIndependent _, Basis.coe_mk _ ?_⟩
     convert! h.ge
   · rintro ⟨h, coe_h⟩
-    rw [← h.span_eq]; rw [coe_h]; rw [hv_coe]
+    rw [← h.span_eq, coe_h, hv_coe]
 
 end OrthonormalBasis
+

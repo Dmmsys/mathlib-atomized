@@ -36,230 +36,257 @@ namespace Matrix
 section Semiring
 variable [Semiring α]
 
-/--
-theorem `invOf_mul_cancel_left` / 定理 `invOf_mul_cancel_left`
+/-- A copy of `invOf_mul_cancel_left` for rectangular matrices. -/
+/-
+**Matrix.invOf_mul_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   (A : Matrix n n α) (B : Matrix n m α) [
+inst_3 : Invertible A], ⅟A * (A * B) = B
+参数：A : Matrix n n α；B : Matrix n m α；A * B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `invOf_mul_self`：invOf_mul_self [Mul α] [One α] (a : α) [Invertible a] : 
+⅟a * a = 1
+· 使用定理 `Matrix.one_mul`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype m] [inst_2 : DecidableEq m]   (M : Matrix m n
+ α),…
 
-English:
-theorem invOf_mul_cancel_left
-  given: (A : Matrix n n α) (B : Matrix n m α) [Invertible A]
-  proof: by rw [← Matrix.mul_assoc, invOf_mul_self, Matrix.one_mul]
-
-中文:
-定理 invOf_mul_cancel_left
-  条件: (A : 矩阵 n n α) (B : 矩阵 n m α) [可逆 A]
-  证明: by rw [← Matrix.mul_assoc, invOf_mul_self, Matrix.one_mul]
+--- 原说明 ---
+A copy of `invOf_mul_cancel_left` for rectangular matrices.
 -/
 protected theorem invOf_mul_cancel_left (A : Matrix n n α) (B : Matrix n m α) [Invertible A] :
     ⅟A * (A * B) = B := by rw [← Matrix.mul_assoc, invOf_mul_self, Matrix.one_mul]
 
-/--
-theorem `mul_invOf_cancel_left` / 定理 `mul_invOf_cancel_left`
+/-- A copy of `mul_invOf_cancel_left` for rectangular matrices. -/
+/-
+**Matrix.mul_invOf_cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   (A : Matrix n n α) (B : Matrix n m α) [
+inst_3 : Invertible A], A * (⅟A * B) = B
+参数：A : Matrix n n α；B : Matrix n m α；⅟A * B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `mul_invOf_self`：mul_invOf_self [Mul α] [One α] (a : α) [Invertible a] : 
+a * ⅟a = 1
+· 使用定理 `Matrix.one_mul`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype m] [inst_2 : DecidableEq m]   (M : Matrix m n
+ α),…
 
-English:
-theorem mul_invOf_cancel_left
-  given: (A : Matrix n n α) (B : Matrix n m α) [Invertible A]
-  proof: by rw [← Matrix.mul_assoc, mul_invOf_self, Matrix.one_mul]
-
-中文:
-定理 mul_invOf_cancel_left
-  条件: (A : 矩阵 n n α) (B : 矩阵 n m α) [可逆 A]
-  证明: by rw [← Matrix.mul_assoc, mul_invOf_self, Matrix.one_mul]
+--- 原说明 ---
+A copy of `mul_invOf_cancel_left` for rectangular matrices.
 -/
 protected theorem mul_invOf_cancel_left (A : Matrix n n α) (B : Matrix n m α) [Invertible A] :
     A * (⅟A * B) = B := by rw [← Matrix.mul_assoc, mul_invOf_self, Matrix.one_mul]
 
-/--
-theorem `invOf_mul_cancel_right` / 定理 `invOf_mul_cancel_right`
+/-- A copy of `invOf_mul_cancel_right` for rectangular matrices. -/
+/-
+**Matrix.invOf_mul_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   (A : Matrix m n α) (B : Matrix n n α) [
+inst_3 : Invertible B], A * ⅟B * B = A
+参数：A : Matrix m n α；B : Matrix n n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `invOf_mul_self`：invOf_mul_self [Mul α] [One α] (a : α) [Invertible a] : 
+⅟a * a = 1
+· 使用定理 `Matrix.mul_one`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype n] [inst_2 : DecidableEq n]   (M : Matrix m n
+ α),…
 
-English:
-theorem invOf_mul_cancel_right
-  given: (A : Matrix m n α) (B : Matrix n n α) [Invertible B]
-  proof: by rw [Matrix.mul_assoc, invOf_mul_self, Matrix.mul_one]
-
-中文:
-定理 invOf_mul_cancel_right
-  条件: (A : 矩阵 m n α) (B : 矩阵 n n α) [可逆 B]
-  证明: by rw [Matrix.mul_assoc, invOf_mul_self, Matrix.mul_one]
+--- 原说明 ---
+A copy of `invOf_mul_cancel_right` for rectangular matrices.
 -/
 protected theorem invOf_mul_cancel_right (A : Matrix m n α) (B : Matrix n n α) [Invertible B] :
     A * ⅟B * B = A := by rw [Matrix.mul_assoc, invOf_mul_self, Matrix.mul_one]
 
-/--
-theorem `mul_invOf_cancel_right` / 定理 `mul_invOf_cancel_right`
+/-- A copy of `mul_invOf_cancel_right` for rectangular matrices. -/
+/-
+**Matrix.mul_invOf_cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   (A : Matrix m n α) (B : Matrix n n α) [
+inst_3 : Invertible B], A * B * ⅟B = A
+参数：A : Matrix m n α；B : Matrix n n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `mul_invOf_self`：mul_invOf_self [Mul α] [One α] (a : α) [Invertible a] : 
+a * ⅟a = 1
+· 使用定理 `Matrix.mul_one`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype n] [inst_2 : DecidableEq n]   (M : Matrix m n
+ α),…
 
-English:
-theorem mul_invOf_cancel_right
-  given: (A : Matrix m n α) (B : Matrix n n α) [Invertible B]
-  proof: by rw [Matrix.mul_assoc, mul_invOf_self, Matrix.mul_one]
-
-中文:
-定理 mul_invOf_cancel_right
-  条件: (A : 矩阵 m n α) (B : 矩阵 n n α) [可逆 B]
-  证明: by rw [Matrix.mul_assoc, mul_invOf_self, Matrix.mul_one]
+--- 原说明 ---
+A copy of `mul_invOf_cancel_right` for rectangular matrices.
 -/
 protected theorem mul_invOf_cancel_right (A : Matrix m n α) (B : Matrix n n α) [Invertible B] :
     A * B * ⅟B = A := by rw [Matrix.mul_assoc, mul_invOf_self, Matrix.mul_one]
 
-/--
-theorem `invOf_mul_eq_iff_eq_mul_left` / 定理 `invOf_mul_eq_iff_eq_mul_left`
+/-- A copy oy of `invOf_mul_eq_iff_eq_mul_left` for rectangular matrices. -/
+/-
+**Matrix.invOf_mul_eq_iff_eq_mul_left** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   {A B : Matrix n m α} {C : Matrix n n α}
+ [inst_3 : Invertible C], ⅟C * A = B ↔ A = C * B
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mul_invOf_cancel_left`：∀ {m : Type u_1} {n : Type u_2} {α : Type 
+u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   (A : Ma
+trix n n α) (B : M…
+· 使用定理 `Matrix.invOf_mul_cancel_left`：∀ {m : Type u_1} {n : Type u_2} {α : Type 
+u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   (A : Ma
+trix n n α) (B : M…
 
-English:
-theorem invOf_mul_eq_iff_eq_mul_left
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← h, Matrix.mul_invOf_cancel_left]
-  · rw [h, Matrix.invOf_mul_cancel_left]
-
-中文:
-定理 invOf_mul_eq_iff_eq_mul_left
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← h, Matrix.mul_invOf_cancel_left]
-  · rw [h, Matrix.invOf_mul_cancel_left]
+--- 原说明 ---
+A copy oy of `invOf_mul_eq_iff_eq_mul_left` for rectangular matrices.
 -/
 protected theorem invOf_mul_eq_iff_eq_mul_left
     {A B : Matrix n m α} {C : Matrix n n α} [Invertible C] :
     ⅟C * A = B ↔ A = C * B := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · rw [← h, Matrix.mul_invOf_cancel_left]
   · rw [h, Matrix.invOf_mul_cancel_left]
 
-/--
-theorem `mul_left_eq_iff_eq_invOf_mul` / 定理 `mul_left_eq_iff_eq_invOf_mul`
+/-- A copy oy of `mul_left_eq_iff_eq_invOf_mul` for rectangular matrices. -/
+/-
+**Matrix.mul_left_eq_iff_eq_invOf_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   {A B : Matrix n m α} {C : Matrix n n α}
+ [inst_3 : Invertible C], C * A = B ↔ A = ⅟C * B
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.invOf_mul_eq_iff_eq_mul_left`：∀ {m : Type u_1} {n : Type u_2} {α 
+: Type u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   
+{A B : Matrix n m α} {C :…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mul_left_eq_iff_eq_invOf_mul
-  proof: by
-  rw [eq_comm]; rw [← Matrix.invOf_mul_eq_iff_eq_mul_left]; rw [eq_comm]
-
-中文:
-定理 mul_left_eq_iff_eq_invOf_mul
-  证明: by
-  rw [eq_comm]; rw [← Matrix.invOf_mul_eq_iff_eq_mul_left]; rw [eq_comm]
+--- 原说明 ---
+A copy oy of `mul_left_eq_iff_eq_invOf_mul` for rectangular matrices.
 -/
 protected theorem mul_left_eq_iff_eq_invOf_mul
     {A B : Matrix n m α} {C : Matrix n n α} [Invertible C] :
     C * A = B ↔ A = ⅟C * B := by
-  rw [eq_comm]; rw [← Matrix.invOf_mul_eq_iff_eq_mul_left]; rw [eq_comm]
+  rw [eq_comm, ← Matrix.invOf_mul_eq_iff_eq_mul_left, eq_comm]
 
-/--
-theorem `mul_invOf_eq_iff_eq_mul_right` / 定理 `mul_invOf_eq_iff_eq_mul_right`
+/-- A copy oy of `mul_invOf_eq_iff_eq_mul_right` for rectangular matrices. -/
+/-
+**Matrix.mul_invOf_eq_iff_eq_mul_right** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   {A B : Matrix m n α} {C : Matrix n n α}
+ [inst_3 : Invertible C], A * ⅟C = B ↔ A = B * C
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.invOf_mul_cancel_right`：∀ {m : Type u_1} {n : Type u_2} {α : Type
+ u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   (A : M
+atrix m n α) (B : M…
+· 使用定理 `Matrix.mul_invOf_cancel_right`：∀ {m : Type u_1} {n : Type u_2} {α : Type
+ u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   (A : M
+atrix m n α) (B : M…
 
-English:
-theorem mul_invOf_eq_iff_eq_mul_right
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← h, Matrix.invOf_mul_cancel_right]
-  · rw [h, Matrix.mul_invOf_cancel_right]
-
-中文:
-定理 mul_invOf_eq_iff_eq_mul_right
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← h, Matrix.invOf_mul_cancel_right]
-  · rw [h, Matrix.mul_invOf_cancel_right]
+--- 原说明 ---
+A copy oy of `mul_invOf_eq_iff_eq_mul_right` for rectangular matrices.
 -/
 protected theorem mul_invOf_eq_iff_eq_mul_right
     {A B : Matrix m n α} {C : Matrix n n α} [Invertible C] :
     A * ⅟C = B ↔ A = B * C := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · rw [← h, Matrix.invOf_mul_cancel_right]
   · rw [h, Matrix.mul_invOf_cancel_right]
 
-/--
-theorem `mul_right_eq_iff_eq_mul_invOf` / 定理 `mul_right_eq_iff_eq_mul_invOf`
+/-- A copy oy of `mul_right_eq_iff_eq_mul_invOf` for rectangular matrices. -/
+/-
+**Matrix.mul_right_eq_iff_eq_mul_invOf** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_1} {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 
+: DecidableEq n] [inst_2 : Semiring α]   {A B : Matrix m n α} {C : Matrix n n α}
+ [inst_3 : Invertible C], A * C = B ↔ A = B * ⅟C
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mul_invOf_eq_iff_eq_mul_right`：∀ {m : Type u_1} {n : Type u_2} {α
+ : Type u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]  
+ {A B : Matrix m n α} {C :…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mul_right_eq_iff_eq_mul_invOf
-  proof: by
-  rw [eq_comm]; rw [← Matrix.mul_invOf_eq_iff_eq_mul_right]; rw [eq_comm]
-
-中文:
-定理 mul_right_eq_iff_eq_mul_invOf
-  证明: by
-  rw [eq_comm]; rw [← Matrix.mul_invOf_eq_iff_eq_mul_right]; rw [eq_comm]
+--- 原说明 ---
+A copy oy of `mul_right_eq_iff_eq_mul_invOf` for rectangular matrices.
 -/
 protected theorem mul_right_eq_iff_eq_mul_invOf
     {A B : Matrix m n α} {C : Matrix n n α} [Invertible C] :
     A * C = B ↔ A = B * ⅟C := by
-  rw [eq_comm]; rw [← Matrix.mul_invOf_eq_iff_eq_mul_right]; rw [eq_comm]
+  rw [eq_comm, ← Matrix.mul_invOf_eq_iff_eq_mul_right, eq_comm]
 
 section ConjTranspose
 variable [StarRing α] (A : Matrix n n α)
 
-/--
-Instance `invertibleConjTranspose` / 实例 `invertibleConjTranspose`
+/-- The conjugate transpose of an invertible matrix is invertible. -/
+/-
+**Matrix.invertibleConjTranspose** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：invertibleConjTranspose [Invertible A] : Invertible Aᴴ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance invertibleConjTranspose
-  signature: [Invertible A]
-  body: Invertible.star _
-
-中文:
-实例 invertibleConjTranspose
-  签名: [可逆 A]
-  定义体: Invertible.star _
-
-Depends on / 依赖: Invertible, Invertible.star
+--- 原说明 ---
+The conjugate transpose of an invertible matrix is invertible.
 -/
 instance invertibleConjTranspose [Invertible A] : Invertible Aᴴ := Invertible.star _
-
-/--
-lemma `conjTranspose_invOf` / 引理 `conjTranspose_invOf`
-
-English:
-lemma conjTranspose_invOf
-  given: [Invertible A] [Invertible Aᴴ]
-  statement: (⅟A)ᴴ = ⅟(Aᴴ)
-  proof: star_invOf _
-
-中文:
-引理 conjTranspose_invOf
-  条件: [可逆 A] [可逆 Aᴴ]
-  结论: (⅟A)ᴴ = ⅟(Aᴴ)
-  证明: star_invOf _
-
-Depends on / 依赖: star_invOf
+/-
+**Matrix.conjTranspose_invOf** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：conjTranspose_invOf [Invertible A] [Invertible Aᴴ] : (⅟A)ᴴ = ⅟(Aᴴ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_invOf`：star_invOf {R : Type*} [Monoid R] [StarMul R] (r : R) [Inver
+tible r] [Invertible (star r)] : star (⅟r) = ⅟(star r)
 -/
 lemma conjTranspose_invOf [Invertible A] [Invertible Aᴴ] : (⅟A)ᴴ = ⅟(Aᴴ) := star_invOf _
 
 /-- A matrix is invertible if the conjugate transpose is invertible. -/
 @[implicit_reducible]
-/--
-Definition of `invertibleOfInvertibleConjTranspose` / `invertibleOfInvertibleConjTranspose` 的定义
+/-
+**Matrix.invertibleOfInvertibleConjTranspose** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：invertibleOfInvertibleConjTranspose [Invertible Aᴴ] : Invertible A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invertibleOfInvertibleConjTranspose
-  signature: [Invertible Aᴴ]
-  body: by
-  rw [← conjTranspose_conjTranspose A]; rw [← star_eq_conjTranspose]
-  infer_instance
-
-中文:
-定义 invertibleOfInvertibleConjTranspose
-  签名: [可逆 Aᴴ]
-  定义体: by
-  rw [← conjTranspose_conjTranspose A]; rw [← star_eq_conjTranspose]
-  infer_instance
-
-Depends on / 依赖: conjTranspose_conjTranspose, infer_instance, star_eq_conjTranspose
+--- 原说明 ---
+A matrix is invertible if the conjugate transpose is invertible.
 -/
 def invertibleOfInvertibleConjTranspose [Invertible Aᴴ] : Invertible A := by
-  rw [← conjTranspose_conjTranspose A]; rw [← star_eq_conjTranspose]
+  rw [← conjTranspose_conjTranspose A, ← star_eq_conjTranspose]
   infer_instance
-
-/--
-lemma `isUnit_conjTranspose` / 引理 `isUnit_conjTranspose`
-
-English:
-lemma isUnit_conjTranspose
-  statement: IsUnit Aᴴ ↔ IsUnit A
-  proof: isUnit_star
-
-中文:
-引理 isUnit_conjTranspose
-  结论: 是单位 Aᴴ ↔ 是单位 A
-  证明: isUnit_star
+/-
+**Matrix.isUnit_conjTranspose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 : DecidableEq n
+] [inst_2 : Semiring α] [inst_3 : StarRing α]   (A : Matrix n n α), IsUnit A.con
+jTranspose ↔ IsUnit A
+参数：A : Matrix n n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isUnit_star`：isUnit_star [Monoid R] [StarMul R] {a : R} : IsUnit (star a
+) ↔ IsUnit a
 -/
 @[simp] lemma isUnit_conjTranspose : IsUnit Aᴴ ↔ IsUnit A := isUnit_star
 
@@ -271,48 +298,29 @@ section CommSemiring
 
 variable [CommSemiring α] (A : Matrix n n α)
 
-/--
-Instance `invertibleTranspose` / 实例 `invertibleTranspose`
+/-- The transpose of an invertible matrix is invertible. -/
+/-
+**Matrix.invertibleTranspose** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：invertibleTranspose [Invertible A] : Invertible Aᵀ where invOf
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance invertibleTranspose
-  signature: [Invertible A]
-  body: (⅟A)ᵀ
-  invOf_mul_self := by rw [← transpose_mul, mul_invOf_self, transpose_one]
-  mul_invOf_self := by rw [← transpose_mul, invOf_mul_self, transpose_one]
-
-中文:
-实例 invertibleTranspose
-  签名: [可逆 A]
-  定义体: (⅟A)ᵀ
-  invOf_mul_self := by rw [← transpose_mul, mul_invOf_self, transpose_one]
-  mul_invOf_self := by rw [← transpose_mul, invOf_mul_self, transpose_one]
+--- 原说明 ---
+The transpose of an invertible matrix is invertible.
 -/
 instance invertibleTranspose [Invertible A] : Invertible Aᵀ where
   invOf := (⅟A)ᵀ
   invOf_mul_self := by rw [← transpose_mul, mul_invOf_self, transpose_one]
   mul_invOf_self := by rw [← transpose_mul, invOf_mul_self, transpose_one]
-
-/--
-lemma `transpose_invOf` / 引理 `transpose_invOf`
-
-English:
-lemma transpose_invOf
-  given: [Invertible A] [Invertible Aᵀ]
-  statement: (⅟A)ᵀ = ⅟(Aᵀ)
-  proof: by
-  let := invertibleTranspose A
-  convert! (rfl : _ = ⅟(Aᵀ))
-
-中文:
-引理 transpose_invOf
-  条件: [可逆 A] [可逆 Aᵀ]
-  结论: (⅟A)ᵀ = ⅟(Aᵀ)
-  证明: by
-  let := invertibleTranspose A
-  convert! (rfl : _ = ⅟(Aᵀ))
-
-Depends on / 依赖: convert, invertibleTranspose
+/-
+**Matrix.transpose_invOf** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：transpose_invOf [Invertible A] [Invertible Aᵀ] : (⅟A)ᵀ = ⅟(Aᵀ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Invertible.congr`：Invertible.congr [Invertible a] [Invertible b] (h : a 
+= b) : ⅟a = ⅟b
 -/
 lemma transpose_invOf [Invertible A] [Invertible Aᵀ] : (⅟A)ᵀ = ⅟(Aᵀ) := by
   let := invertibleTranspose A
@@ -320,22 +328,14 @@ lemma transpose_invOf [Invertible A] [Invertible Aᵀ] : (⅟A)ᵀ = ⅟(Aᵀ) :
 
 /-- `Aᵀ` is invertible when `A` is. -/
 @[implicit_reducible]
-/--
-Definition of `invertibleOfInvertibleTranspose` / `invertibleOfInvertibleTranspose` 的定义
+/-
+**Matrix.invertibleOfInvertibleTranspose** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：invertibleOfInvertibleTranspose [Invertible Aᵀ] : Invertible A where invOf
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invertibleOfInvertibleTranspose
-  signature: [Invertible Aᵀ]
-  body: (⅟(Aᵀ))ᵀ
-  invOf_mul_self := by rw [← transpose_one, ← mul_invOf_self Aᵀ, transpose_mul, transpose_transpose]
-  mul_invOf_self := by rw [← transpose_one, ← invOf_mul_self Aᵀ, transpose_mul, transpose_transpose]
-
-中文:
-定义 invertibleOfInvertibleTranspose
-  签名: [可逆 Aᵀ]
-  定义体: (⅟(Aᵀ))ᵀ
-  invOf_mul_self := by rw [← transpose_one, ← mul_invOf_self Aᵀ, transpose_mul, transpose_transpose]
-  mul_invOf_self := by rw [← transpose_one, ← invOf_mul_self Aᵀ, transpose_mul, transpose_transpose]
+--- 原说明 ---
+`Aᵀ` is invertible when `A` is.
 -/
 def invertibleOfInvertibleTranspose [Invertible Aᵀ] : Invertible A where
   invOf := (⅟(Aᵀ))ᵀ
@@ -345,49 +345,38 @@ def invertibleOfInvertibleTranspose [Invertible Aᵀ] : Invertible A where
 /-- Together `Matrix.invertibleTranspose` and `Matrix.invertibleOfInvertibleTranspose` form an
 equivalence, although both sides of the equiv are subsingleton anyway. -/
 @[simps]
-/--
-Definition of `transposeInvertibleEquivInvertible` / `transposeInvertibleEquivInvertible` 的定义
+/-
+**Matrix.transposeInvertibleEquivInvertible** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：transposeInvertibleEquivInvertible : Invertible Aᵀ ≃ Invertible A where to
+Fun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transposeInvertibleEquivInvertible
-  signature: : Invertible Aᵀ ≃ Invertible A where
-  body: @invertibleOfInvertibleTranspose _ _ _ _ _ _
-  invFun := @invertibleTranspose _ _ _ _ _ _
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 transposeInvertibleEquivInvertible
-  签名: : 可逆 Aᵀ ≃ 可逆 A where
-  定义体: @invertibleOfInvertibleTranspose _ _ _ _ _ _
-  invFun := @invertibleTranspose _ _ _ _ _ _
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: invertibleOfInvertibleTranspose
+--- 原说明 ---
+Together `Matrix.invertibleTranspose` and `Matrix.invertibleOfInvertibleTranspos
+e` form an
+equivalence, although both sides of the equiv are subsingleton anyway.
 -/
 def transposeInvertibleEquivInvertible : Invertible Aᵀ ≃ Invertible A where
   toFun := @invertibleOfInvertibleTranspose _ _ _ _ _ _
   invFun := @invertibleTranspose _ _ _ _ _ _
   left_inv _ := Subsingleton.elim _ _
   right_inv _ := Subsingleton.elim _ _
-
-/--
-lemma `isUnit_transpose` / 引理 `isUnit_transpose`
-
-English:
-lemma isUnit_transpose
-  statement: IsUnit Aᵀ ↔ IsUnit A
-  proof: by
-  simp only [← nonempty_invertible_iff_isUnit,
-    (transposeInvertibleEquivInvertible A).nonempty_congr]
-
-中文:
-引理 isUnit_transpose
-  结论: 是单位 Aᵀ ↔ 是单位 A
-  证明: by
-  simp only [← nonempty_invertible_iff_isUnit,
-    (transposeInvertibleEquivInvertible A).nonempty_congr]
+/-
+**Matrix.isUnit_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {n : Type u_2} {α : Type u_3} [inst : Fintype n] [inst_1 : DecidableEq n
+] [inst_2 : CommSemiring α]   (A : Matrix n n α), IsUnit A.transpose ↔ IsUnit A
+参数：A : Matrix n n α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma isUnit_transpose : IsUnit Aᵀ ↔ IsUnit A := by
   simp only [← nonempty_invertible_iff_isUnit,
@@ -405,48 +394,56 @@ variable [Fintype m] [DecidableEq m] [Ring α]
 
 -- No spaces around multiplication signs for better clarity
 set_option linter.style.whitespace false in
-/--
-lemma `add_mul_mul_invOf_mul_eq_one` / 引理 `add_mul_mul_invOf_mul_eq_one`
-
-English:
-lemma add_mul_mul_invOf_mul_eq_one
-  proof: by
-  calc
-    (A + U*C*V)*(⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)
-    _ = A*⅟A - A*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A - U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A := by
-      simp_rw [add_sub_assoc, add_mul, mul_sub, Matrix.mul_assoc]
-    _ = (1 + U*C*V*⅟A) - (U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) := by
-      rw [mul_invOf_self]; rw [Matrix.one_mul]
-      abel
-    _ = 1 + U*C*V*⅟A - (U + U*C*V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
-      rw [sub_right_inj]; rw [Matrix.add_mul]; rw [Matrix.add_mul]; rw [Matrix.add_mul]
-    _ = 1 + U*C*V*⅟A - U*C*(⅟C + V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
-      congr
-      simp only [Matrix.mul_add, Matrix.mul_invOf_cancel_right, ← Matrix.mul_assoc]
-    _ = 1 := by
-      rw [Matrix.mul_invOf_cancel_right]
-      abel
-
-中文:
-引理 add_mul_mul_invOf_mul_eq_one
-  证明: by
-  calc
-    (A + U*C*V)*(⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)
-    _ = A*⅟A - A*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A - U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A := by
-      simp_rw [add_sub_assoc, add_mul, mul_sub, Matrix.mul_assoc]
-    _ = (1 + U*C*V*⅟A) - (U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) := by
-      rw [mul_invOf_self]; rw [Matrix.one_mul]
-      abel
-    _ = 1 + U*C*V*⅟A - (U + U*C*V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
-      rw [sub_right_inj]; rw [Matrix.add_mul]; rw [Matrix.add_mul]; rw [Matrix.add_mul]
-    _ = 1 + U*C*V*⅟A - U*C*(⅟C + V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
-      congr
-      simp only [Matrix.mul_add, Matrix.mul_invOf_cancel_right, ← Matrix.mul_assoc]
-    _ = 1 := by
-      rw [Matrix.mul_invOf_cancel_right]
-      abel
-
-Depends on / 依赖: Matrix, Matrix.add_mul, Matrix.mul_assoc, Matrix.one_mul, add_mul, add_sub_assoc, mul_assoc, mul_invOf_self, mul_sub, one_mul, simp_rw, sub_right_inj
+/-
+**Matrix.add_mul_mul_invOf_mul_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：add_mul_mul_invOf_mul_eq_one : (A + U*C*V)*(⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)
+ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_assoc`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b c : G), a +
+ b - c = a + (b - c)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_invOf_self`：mul_invOf_self [Mul α] [One α] (a : α) [Invertible a] : 
+a * ⅟a = 1
+· 使用定理 `Matrix.one_mul`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype m] [inst_2 : DecidableEq m]   (M : Matrix m n
+ α),…
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Invertible.0.Matrix.add_mul_mul_in
+vOf_mul_eq_one._abel_1_1`：∀ {m : Type u_3} {n : Type u_1} {α : Type u_2} [inst :
+ Fintype n] [inst_1 : DecidableEq n] [inst_2 : Fintype m]   [inst_3 : DecidableE
+q m] […
+· 使用定理 `sub_right_inj`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a - b =
+ a - c ↔ b = c
+· 使用定理 `Matrix.add_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l 
+m α)…
+· 使用定理 `Matrix.mul_add`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n 
+α) (…
+· 使用定理 `Matrix.mul_invOf_cancel_right`：∀ {m : Type u_1} {n : Type u_2} {α : Type
+ u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   (A : M
+atrix m n α) (B : M…
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Invertible.0.Matrix.add_mul_mul_in
+vOf_mul_eq_one._abel_1_3`：∀ {m : Type u_3} {n : Type u_1} {α : Type u_2} [inst :
+ Fintype n] [inst_1 : DecidableEq n] [inst_2 : Fintype m]   [inst_3 : Ring α] (A
+ : Mat…
 -/
 lemma add_mul_mul_invOf_mul_eq_one :
     (A + U*C*V)*(⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) = 1 := by
@@ -455,10 +452,10 @@ lemma add_mul_mul_invOf_mul_eq_one :
     _ = A*⅟A - A*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A - U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A := by
       simp_rw [add_sub_assoc, add_mul, mul_sub, Matrix.mul_assoc]
     _ = (1 + U*C*V*⅟A) - (U*⅟(⅟C + V*⅟A*U)*V*⅟A + U*C*V*⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) := by
-      rw [mul_invOf_self]; rw [Matrix.one_mul]
+      rw [mul_invOf_self, Matrix.one_mul]
       abel
     _ = 1 + U*C*V*⅟A - (U + U*C*V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
-      rw [sub_right_inj]; rw [Matrix.add_mul]; rw [Matrix.add_mul]; rw [Matrix.add_mul]
+      rw [sub_right_inj, Matrix.add_mul, Matrix.add_mul, Matrix.add_mul]
     _ = 1 + U*C*V*⅟A - U*C*(⅟C + V*⅟A*U)*⅟(⅟C + V*⅟A*U)*V*⅟A := by
       congr
       simp only [Matrix.mul_add, Matrix.mul_invOf_cancel_right, ← Matrix.mul_assoc]
@@ -468,50 +465,57 @@ lemma add_mul_mul_invOf_mul_eq_one :
 
 -- No spaces around multiplication signs for better clarity
 set_option linter.style.whitespace false in
-/--
-lemma `add_mul_mul_invOf_mul_eq_one'` / 引理 `add_mul_mul_invOf_mul_eq_one'`
+/-- Like `add_mul_mul_invOf_mul_eq_one`, but with multiplication reversed. -/
+/-
+**Matrix.add_mul_mul_invOf_mul_eq_one'** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：add_mul_mul_invOf_mul_eq_one' : (⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)*(A + U*C*V
+) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_assoc`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b c : G), a +
+ b - c = a + (b - c)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `invOf_mul_self`：invOf_mul_self [Mul α] [One α] (a : α) [Invertible a] : 
+⅟a * a = 1
+· 使用定理 `Matrix.invOf_mul_cancel_right`：∀ {m : Type u_1} {n : Type u_2} {α : Type
+ u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   (A : M
+atrix m n α) (B : M…
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Invertible.0.Matrix.add_mul_mul_in
+vOf_mul_eq_one'._abel_1_1`：∀ {m : Type u_3} {n : Type u_1} {α : Type u_2} [inst 
+: Fintype n] [inst_1 : DecidableEq n] [inst_2 : Fintype m]   [inst_3 : Decidable
+Eq m] […
+· 使用定理 `sub_right_inj`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a - b =
+ a - c ↔ b = c
+· 使用定理 `Matrix.mul_add`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n 
+α) (…
+· 使用定理 `Matrix.add_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l 
+m α)…
+· 使用定理 `_private.Mathlib.LinearAlgebra.Matrix.Invertible.0.Matrix.add_mul_mul_in
+vOf_mul_eq_one'._abel_1_3`：∀ {m : Type u_3} {n : Type u_1} {α : Type u_2} [inst 
+: Fintype n] [inst_1 : DecidableEq n] [inst_2 : Fintype m]   [inst_3 : Ring α] (
+A : Mat…
 
-English:
-lemma add_mul_mul_invOf_mul_eq_one'
-  proof: by
-  calc
-    (⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)*(A + U*C*V)
-    _ = ⅟A*A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*A + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V := by
-      simp_rw [add_sub_assoc, _root_.mul_add, _root_.sub_mul, Matrix.mul_assoc]
-    _ = (1 + ⅟A*U*C*V) - (⅟A*U*⅟(⅟C + V*⅟A*U)*V + ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V) := by
-      rw [invOf_mul_self]; rw [Matrix.invOf_mul_cancel_right]
-      abel
-    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(V + V*⅟A*U*C*V) := by
-      rw [sub_right_inj]; rw [Matrix.mul_add]
-      simp_rw [Matrix.mul_assoc]
-    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(⅟C + V*⅟A*U)*C*V := by
-      simp only [Matrix.mul_add, Matrix.add_mul, ← Matrix.mul_assoc,
-        Matrix.invOf_mul_cancel_right]
-    _ = 1 := by
-      rw [Matrix.invOf_mul_cancel_right]
-      abel
-
-中文:
-引理 add_mul_mul_invOf_mul_eq_one'
-  证明: by
-  calc
-    (⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)*(A + U*C*V)
-    _ = ⅟A*A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*A + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V := by
-      simp_rw [add_sub_assoc, _root_.mul_add, _root_.sub_mul, Matrix.mul_assoc]
-    _ = (1 + ⅟A*U*C*V) - (⅟A*U*⅟(⅟C + V*⅟A*U)*V + ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V) := by
-      rw [invOf_mul_self]; rw [Matrix.invOf_mul_cancel_right]
-      abel
-    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(V + V*⅟A*U*C*V) := by
-      rw [sub_right_inj]; rw [Matrix.mul_add]
-      simp_rw [Matrix.mul_assoc]
-    _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(⅟C + V*⅟A*U)*C*V := by
-      simp only [Matrix.mul_add, Matrix.add_mul, ← Matrix.mul_assoc,
-        Matrix.invOf_mul_cancel_right]
-    _ = 1 := by
-      rw [Matrix.invOf_mul_cancel_right]
-      abel
-
-Depends on / 依赖: Matrix, Matrix.invOf_mul_cancel_right, Matrix.mul_add, Matrix.mul_assoc, _root_, _root_.mul_add, _root_.sub_mul, add_sub_assoc, invOf_mul_cancel_right, invOf_mul_self, mul_add, mul_assoc, simp_rw, sub_mul, sub_right_inj
+--- 原说明 ---
+Like `add_mul_mul_invOf_mul_eq_one`, but with multiplication reversed.
 -/
 lemma add_mul_mul_invOf_mul_eq_one' :
     (⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)*(A + U*C*V) = 1 := by
@@ -520,10 +524,10 @@ lemma add_mul_mul_invOf_mul_eq_one' :
     _ = ⅟A*A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*A + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V := by
       simp_rw [add_sub_assoc, _root_.mul_add, _root_.sub_mul, Matrix.mul_assoc]
     _ = (1 + ⅟A*U*C*V) - (⅟A*U*⅟(⅟C + V*⅟A*U)*V + ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A*U*C*V) := by
-      rw [invOf_mul_self]; rw [Matrix.invOf_mul_cancel_right]
+      rw [invOf_mul_self, Matrix.invOf_mul_cancel_right]
       abel
     _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(V + V*⅟A*U*C*V) := by
-      rw [sub_right_inj]; rw [Matrix.mul_add]
+      rw [sub_right_inj, Matrix.mul_add]
       simp_rw [Matrix.mul_assoc]
     _ = 1 + ⅟A*U*C*V - ⅟A*U*⅟(⅟C + V*⅟A*U)*(⅟C + V*⅟A*U)*C*V := by
       simp only [Matrix.mul_add, Matrix.add_mul, ← Matrix.mul_assoc,
@@ -534,46 +538,44 @@ lemma add_mul_mul_invOf_mul_eq_one' :
 
 /-- If matrices `A`, `C`, and `C⁻¹ + V * A⁻¹ * U` are invertible, then so is `A + U * C * V`. -/
 @[implicit_reducible]
-/--
-Definition of `invertibleAddMulMul` / `invertibleAddMulMul` 的定义
+/-
+**Matrix.invertibleAddMulMul** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：invertibleAddMulMul : Invertible (A + U * C * V) where invOf
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Matrix.add_mul_mul_invOf_mul_eq_one'`：add_mul_mul_invOf_mul_eq_one' : (⅟
+A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A)*(A + U*C*V) = 1
+· 使用引理 `Matrix.add_mul_mul_invOf_mul_eq_one`：add_mul_mul_invOf_mul_eq_one : (A +
+ U*C*V)*(⅟A - ⅟A*U*⅟(⅟C + V*⅟A*U)*V*⅟A) = 1
 
-English:
-definition invertibleAddMulMul
-  signature: : Invertible (A + U * C * V) where
-  body: ⅟A - ⅟A * U * ⅟(⅟C + V * ⅟A * U) * V * ⅟A
-  invOf_mul_self := add_mul_mul_invOf_mul_eq_one' _ _ _ _
-  mul_invOf_self := add_mul_mul_invOf_mul_eq_one _ _ _ _
-
-中文:
-定义 invertibleAddMulMul
-  签名: : 可逆 (A + U * C * V) where
-  定义体: ⅟A - ⅟A * U * ⅟(⅟C + V * ⅟A * U) * V * ⅟A
-  invOf_mul_self := add_mul_mul_invOf_mul_eq_one' _ _ _ _
-  mul_invOf_self := add_mul_mul_invOf_mul_eq_one _ _ _ _
+--- 原说明 ---
+If matrices `A`, `C`, and `C⁻¹ + V * A⁻¹ * U` are invertible, then so is `A + U 
+* C * V`.
 -/
 def invertibleAddMulMul : Invertible (A + U * C * V) where
   invOf := ⅟A - ⅟A * U * ⅟(⅟C + V * ⅟A * U) * V * ⅟A
   invOf_mul_self := add_mul_mul_invOf_mul_eq_one' _ _ _ _
   mul_invOf_self := add_mul_mul_invOf_mul_eq_one _ _ _ _
 
-/--
-theorem `invOf_add_mul_mul` / 定理 `invOf_add_mul_mul`
+/-- The **Woodbury Identity** (`⅟` version).
 
-English:
-theorem invOf_add_mul_mul
-  given: [Invertible (A + U * C * V)]
-  proof: by
-  let := invertibleAddMulMul A U C V
-  convert! (rfl : ⅟(A + U * C * V) = _)
+See `Matrix.invOf_add_mul_mul'` for the Binomial Inverse Theorem. -/
+/-
+**Matrix.invOf_add_mul_mul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：invOf_add_mul_mul [Invertible (A + U * C * V)] : ⅟(A + U * C * V) = ⅟A - ⅟
+A * U * ⅟(⅟C + V * ⅟A * U) * V * ⅟A
+参数：A + U * C * V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Invertible.congr`：Invertible.congr [Invertible a] [Invertible b] (h : a 
+= b) : ⅟a = ⅟b
 
-中文:
-定理 invOf_add_mul_mul
-  条件: [可逆 (A + U * C * V)]
-  证明: by
-  let := invertibleAddMulMul A U C V
-  convert! (rfl : ⅟(A + U * C * V) = _)
+--- 原说明 ---
+The **Woodbury Identity** (`⅟` version).
 
-Depends on / 依赖: convert, invertibleAddMulMul
+See `Matrix.invOf_add_mul_mul'` for the Binomial Inverse Theorem.
 -/
 theorem invOf_add_mul_mul [Invertible (A + U * C * V)] :
     ⅟(A + U * C * V) = ⅟A - ⅟A * U * ⅟(⅟C + V * ⅟A * U) * V * ⅟A := by
@@ -588,125 +590,162 @@ variable [Fintype m] [DecidableEq m] [Ring α]
     (A : Matrix n n α) (U : Matrix n m α) (C : Matrix m m α) (V : Matrix m n α)
     [Invertible A] [Invertible (C + C * V * ⅟A * U * C)]
 
-/--
-lemma `add_mul_mul_mul_invOf_eq_one` / 引理 `add_mul_mul_mul_invOf_eq_one`
-
-English:
-lemma add_mul_mul_mul_invOf_eq_one
-  proof: by
-  simp only [Matrix.mul_sub, Matrix.add_mul, mul_invOf_self']
-  rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
-  simp only [← Matrix.mul_assoc, mul_invOf_self', Matrix.one_mul]
-  simp only [← Matrix.add_mul]
-  congr
-  rw [← Matrix.mul_right_eq_iff_eq_mul_invOf]
-  simp only [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
-
-中文:
-引理 add_mul_mul_mul_invOf_eq_one
-  证明: by
-  simp only [Matrix.mul_sub, Matrix.add_mul, mul_invOf_self']
-  rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
-  simp only [← Matrix.mul_assoc, mul_invOf_self', Matrix.one_mul]
-  simp only [← Matrix.add_mul]
-  congr
-  rw [← Matrix.mul_right_eq_iff_eq_mul_invOf]
-  simp only [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
-
-Depends on / 依赖: Matrix, Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, Matrix.mul_right_eq_iff_eq_mul_invOf, Matrix.mul_sub, Matrix.one_mul, add_eq_left, add_mul, add_sub_assoc, mul_add, mul_assoc, mul_invOf_self, mul_right_eq_iff_eq_mul_invOf, mul_sub, one_mul, sub_eq_zero
+/-
+**Matrix.add_mul_mul_mul_invOf_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：add_mul_mul_mul_invOf_eq_one : (A + U * C * V) * (⅟A - ⅟A * U * C * ⅟(C + 
+C * V * ⅟A * U * C) * C * V * ⅟A) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.mul_sub`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocRing α] [inst_1 : Fintype n]   (M : Matrix m n α) (
+N N'…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.add_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l 
+m α)…
+· 使用定理 `mul_invOf_self'`：mul_invOf_self' [Mul α] [One α] (a : α) {_ : Invertible
+ a} : a * ⅟a = 1
+· 使用定理 `add_sub_assoc`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b c : G), a +
+ b - c = a + (b - c)
+· 使用定理 `add_eq_left`：∀ {M : Type u_4} [inst : AddMonoid M] [IsLeftCancelAdd M] {
+a b : M}, a + b = a ↔ b = 0
+· 使用定理 `Matrix.instIsLeftCancelAdd`：∀ {m : Type u_2} {n : Type u_3} {α : Type v}
+ [inst : Add α] [IsLeftCancelAdd α], IsLeftCancelAdd (Matrix m n α)
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Matrix.one_mul`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype m] [inst_2 : DecidableEq m]   (M : Matrix m n
+ α),…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.mul_right_eq_iff_eq_mul_invOf`：∀ {m : Type u_1} {n : Type u_2} {α
+ : Type u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]  
+ {A B : Matrix m n α} {C :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `Matrix.mul_add`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n 
+α) (…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma add_mul_mul_mul_invOf_eq_one :
     (A + U * C * V) * (⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A) = 1 := by
   simp only [Matrix.mul_sub, Matrix.add_mul, mul_invOf_self']
-  rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
+  rw [add_sub_assoc, add_eq_left, sub_eq_zero]
   simp only [← Matrix.mul_assoc, mul_invOf_self', Matrix.one_mul]
   simp only [← Matrix.add_mul]
   congr
   rw [← Matrix.mul_right_eq_iff_eq_mul_invOf]
   simp only [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc]
-
-/--
-lemma `add_mul_mul_mul_invOf_eq_one'` / 引理 `add_mul_mul_mul_invOf_eq_one'`
-
-English:
-lemma add_mul_mul_mul_invOf_eq_one'
-  proof: by
-  simp only [Matrix.mul_add, Matrix.sub_mul, invOf_mul_self']
-  rw [sub_add]; rw [sub_eq_self]; rw [sub_eq_zero]
-  simp only [Matrix.mul_assoc, ← Matrix.mul_sub]
-  congr
-  rw [eq_sub_iff_add_eq]; rw [← Matrix.mul_add]
-  rw [Matrix.invOf_mul_eq_iff_eq_mul_left]
-  simp only [Matrix.add_mul, invOf_mul_self', Matrix.mul_one, add_right_inj]
-  simp only [Matrix.mul_assoc]
-
-中文:
-引理 add_mul_mul_mul_invOf_eq_one'
-  证明: by
-  simp only [Matrix.mul_add, Matrix.sub_mul, invOf_mul_self']
-  rw [sub_add]; rw [sub_eq_self]; rw [sub_eq_zero]
-  simp only [Matrix.mul_assoc, ← Matrix.mul_sub]
-  congr
-  rw [eq_sub_iff_add_eq]; rw [← Matrix.mul_add]
-  rw [Matrix.invOf_mul_eq_iff_eq_mul_left]
-  simp only [Matrix.add_mul, invOf_mul_self', Matrix.mul_one, add_right_inj]
-  simp only [Matrix.mul_assoc]
-
-Depends on / 依赖: Matrix, Matrix.add_mul, Matrix.invOf_mul_eq_iff_eq_mul_left, Matrix.mul_add, Matrix.mul_assoc, Matrix.mul_one, Matrix.mul_sub, Matrix.sub_mul, add_mul, add_right_inj, eq_sub_iff_add_eq, invOf_mul_eq_iff_eq_mul_left, invOf_mul_self, mul_add, mul_assoc, mul_one, mul_sub, sub_add, sub_eq_self, sub_eq_zero
+/-
+**Matrix.add_mul_mul_mul_invOf_eq_one'** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：add_mul_mul_mul_invOf_eq_one' : (⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * 
+C) * C * V * ⅟A) * (A + U * C * V) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Matrix.mul_add`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype n]   (L : Matrix m n 
+α) (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.sub_mul`：∀ {m : Type u_2} {n : Type u_3} {o : Type u_4} {α : Type
+ v} [inst : NonUnitalNonAssocRing α] [inst_1 : Fintype n]   (M M' : Matrix m n α
+) (N…
+· 使用定理 `invOf_mul_self'`：invOf_mul_self' [Mul α] [One α] (a : α) {_ : Invertible
+ a} : ⅟a * a = 1
+· 使用定理 `sub_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b + c = a - (b - c)
+· 使用定理 `sub_eq_self`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = a ↔
+ b = 0
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Matrix.mul_assoc`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {o : Ty
+pe u_4} {α : Type v} [inst : NonUnitalSemiring α]   [inst_1 : Fintype m] [inst_2
+ : Fin…
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.invOf_mul_eq_iff_eq_mul_left`：∀ {m : Type u_1} {n : Type u_2} {α 
+: Type u_3} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : Semiring α]   
+{A B : Matrix n m α} {C :…
+· 使用定理 `Matrix.mul_one`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Non
+AssocSemiring α] [inst_1 : Fintype n] [inst_2 : DecidableEq n]   (M : Matrix m n
+ α),…
+· 使用定理 `Matrix.add_mul`：∀ {l : Type u_1} {m : Type u_2} {n : Type u_3} {α : Type
+ v} [inst : NonUnitalNonAssocSemiring α] [inst_1 : Fintype m]   (L M : Matrix l 
+m α)…
+· 使用定理 `Matrix.instIsLeftCancelAdd`：∀ {m : Type u_2} {n : Type u_3} {α : Type v}
+ [inst : Add α] [IsLeftCancelAdd α], IsLeftCancelAdd (Matrix m n α)
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma add_mul_mul_mul_invOf_eq_one' :
     (⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A) * (A + U * C * V) = 1 := by
   simp only [Matrix.mul_add, Matrix.sub_mul, invOf_mul_self']
-  rw [sub_add]; rw [sub_eq_self]; rw [sub_eq_zero]
+  rw [sub_add, sub_eq_self, sub_eq_zero]
   simp only [Matrix.mul_assoc, ← Matrix.mul_sub]
   congr
-  rw [eq_sub_iff_add_eq]; rw [← Matrix.mul_add]
+  rw [eq_sub_iff_add_eq, ← Matrix.mul_add]
   rw [Matrix.invOf_mul_eq_iff_eq_mul_left]
   simp only [Matrix.add_mul, invOf_mul_self', Matrix.mul_one, add_right_inj]
   simp only [Matrix.mul_assoc]
 
 /-- If matrices `A` and `C + C * V * A⁻¹ * U * C` are invertible, then so is `A + U * C * V`. -/
 @[implicit_reducible]
-/--
-Definition of `invertibleAddMulMul'` / `invertibleAddMulMul'` 的定义
+/-
+**Matrix.invertibleAddMulMul'** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：invertibleAddMulMul' : Invertible (A + U * C * V) where invOf
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Matrix.add_mul_mul_mul_invOf_eq_one'`：add_mul_mul_mul_invOf_eq_one' : (⅟
+A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A) * (A + U * C * V) = 1
+· 使用引理 `Matrix.add_mul_mul_mul_invOf_eq_one`：add_mul_mul_mul_invOf_eq_one : (A +
+ U * C * V) * (⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A) = 1
 
-English:
-definition invertibleAddMulMul'
-  signature: : Invertible (A + U * C * V) where
-  body: ⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A
-  invOf_mul_self := add_mul_mul_mul_invOf_eq_one' A U C V
-  mul_invOf_self := add_mul_mul_mul_invOf_eq_one A U C V
-
-中文:
-定义 invertibleAddMulMul'
-  签名: : 可逆 (A + U * C * V) where
-  定义体: ⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A
-  invOf_mul_self := add_mul_mul_mul_invOf_eq_one' A U C V
-  mul_invOf_self := add_mul_mul_mul_invOf_eq_one A U C V
+--- 原说明 ---
+If matrices `A` and `C + C * V * A⁻¹ * U * C` are invertible, then so is `A + U 
+* C * V`.
 -/
 def invertibleAddMulMul' : Invertible (A + U * C * V) where
   invOf := ⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A
   invOf_mul_self := add_mul_mul_mul_invOf_eq_one' A U C V
   mul_invOf_self := add_mul_mul_mul_invOf_eq_one A U C V
 
-/--
-theorem `invOf_add_mul_mul'` / 定理 `invOf_add_mul_mul'`
+/-- The **Binomial Inverse Theorem** (`⅟` version).
 
-English:
-theorem invOf_add_mul_mul'
-  given: [Invertible (A + U * C * V)]
-  proof: by
-  let := invertibleAddMulMul' A U C V
-  convert! (rfl : ⅟(A + U * C * V) = _)
+See `Matrix.invOf_add_mul_mul` for the Woodbury identity. -/
+/-
+**Matrix.invOf_add_mul_mul'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：invOf_add_mul_mul' [Invertible (A + U * C * V)] : ⅟(A + U * C * V) = ⅟A - 
+⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A
+参数：A + U * C * V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Invertible.congr`：Invertible.congr [Invertible a] [Invertible b] (h : a 
+= b) : ⅟a = ⅟b
 
-中文:
-定理 invOf_add_mul_mul'
-  条件: [可逆 (A + U * C * V)]
-  证明: by
-  let := invertibleAddMulMul' A U C V
-  convert! (rfl : ⅟(A + U * C * V) = _)
+--- 原说明 ---
+The **Binomial Inverse Theorem** (`⅟` version).
 
-Depends on / 依赖: convert, invertibleAddMulMul
+See `Matrix.invOf_add_mul_mul` for the Woodbury identity.
 -/
 theorem invOf_add_mul_mul' [Invertible (A + U * C * V)] :
     ⅟(A + U * C * V) = ⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A := by
@@ -718,3 +757,4 @@ end BinomialInverseTheorem
 end Ring
 
 end Matrix
+

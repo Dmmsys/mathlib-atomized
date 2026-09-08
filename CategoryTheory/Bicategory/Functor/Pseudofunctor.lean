@@ -44,61 +44,70 @@ universe w₁ w₂ w₃ v₁ v₂ v₃ u₁ u₂ u₃
 variable {B : Type u₁} [Bicategory.{w₁, v₁} B] {C : Type u₂} [Bicategory.{w₂, v₂} C]
 variable {D : Type u₃} [Bicategory.{w₃, v₃} D]
 
-/--
-Definition of `Pseudofunctor` / `Pseudofunctor` 的定义
+/-- A pseudofunctor `F` between bicategories `B` and `C` consists of a function between objects
+`F.obj`, a function between 1-morphisms `F.map`, and a function between 2-morphisms `F.map₂`.
 
-English:
-structure Pseudofunctor
-  parameters: (B : Type u₁) [Bicategory.{w₁, v₁} B] (C : Type u₂)
-  extends: PrelaxFunctor B C
-  axioms and operations (7):
-    - mapId((a : B)) : map (𝟙 a) ≅ 𝟙 (obj a)
-    - mapComp({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : map (f ≫ g) ≅ map f ≫ map g
-    - map₂_whisker_left : forall {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h), map₂ (f ◁ η) = (mapComp f g).hom ≫ map f ◁ map₂ η ≫ (mapComp f h).inv  [default: by cat_disch]
-    - map₂_whisker_right : forall {a b c : B} {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c), map₂ (η ▷ h) = (mapComp f h).hom ≫ map₂ η ▷ map h ≫ (mapComp g h).inv  [default: by cat_disch]
-    - map₂_associator : forall {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d), map₂ (α_ f g h).hom = (mapComp (f ≫ g) h).hom ≫ (mapComp f g).hom ▷ map h ≫ (α_ (map f) (map g) (map h)).hom ≫ map f ◁ (mapComp g h).inv ≫ (mapComp f (g ≫ h)).inv  [default: by cat_disch]
-    - map₂_left_unitor : forall {a b : B} (f : a ⟶ b), map₂ (fun_ f).hom = (mapComp (𝟙 a) f).hom ≫ (mapId a).hom ▷ map f ≫ (fun_ (map f)).hom  [default: by cat_disch]
-    - map₂_right_unitor : forall {a b : B} (f : a ⟶ b), map₂ (ρ_ f).hom = (mapComp f (𝟙 b)).hom ≫ map f ◁ (mapId b).hom ≫ (ρ_ (map f)).hom  [default: by cat_disch]
+Unlike functors between categories, `F.map` does not need to strictly commute with composition,
+and does not need to strictly preserve the identity. Instead, there are specified 2-isomorphisms
+`F.map (𝟙 a) ≅ 𝟙 (F.obj a)` and `F.map (f ≫ g) ≅ F.map f ≫ F.map g`.
 
-中文:
-结构 Pseudofunctor
-  参数: (B : 类型u₁) [双范畴.{w₁, v₁} B] (C : 类型u₂)
-  继承: 预松弛函子 B C
-  公理与运算 (7 个):
-    - mapId((a : B)) : map (𝟙 a) ≅ 𝟙 (obj a)
-    - mapComp({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : map (f ≫ g) ≅ map f ≫ map g
-    - map₂_whisker_left : 对任意 {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h), map₂ (f ◁ η) = (mapComp f g).hom ≫ map f ◁ map₂ η ≫ (mapComp f h).inv  [默认: by cat_disch]
-    - map₂_whisker_right : 对任意 {a b c : B} {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c), map₂ (η ▷ h) = (mapComp f h).hom ≫ map₂ η ▷ map h ≫ (mapComp g h).inv  [默认: by cat_disch]
-    - map₂_associator : 对任意 {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d), map₂ (α_ f g h).hom = (mapComp (f ≫ g) h).hom ≫ (mapComp f g).hom ▷ map h ≫ (α_ (map f) (map g) (map h)).hom ≫ map f ◁ (mapComp g h).inv ≫ (mapComp f (g ≫ h)).inv  [默认: by cat_disch]
-    - map₂_left_unitor : 对任意 {a b : B} (f : a ⟶ b), map₂ (fun_ f).hom = (mapComp (𝟙 a) f).hom ≫ (mapId a).hom ▷ map f ≫ (fun_ (map f)).hom  [默认: by cat_disch]
-    - map₂_right_unitor : 对任意 {a b : B} (f : a ⟶ b), map₂ (ρ_ f).hom = (mapComp f (𝟙 b)).hom ≫ map f ◁ (mapId b).hom ≫ (ρ_ (map f)).hom  [默认: by cat_disch]
+`F.map₂` strictly commutes with compositions and preserves the identity. It also preserves the
+associator, the left unitor, and the right unitor modulo some adjustments of domains and codomains
+of 2-morphisms.
+-/
+/-
+**CategoryTheory.Pseudofunctor** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：Pseudofunctor (B : Type u₁) [Bicategory.{w₁, v₁} B] (C : Type u₂) [Bicateg
+ory.{w₂, v₂} C] extends PrelaxFunctor B C where mapId (a : B) : map (𝟙 a) ≅ 𝟙 (o
+bj a) mapComp {a b c : B} (f : a ⟶ b) (g : b ⟶ c) : map (f ≫ g) ≅ map f ≫ map g 
+map₂_whisker_left : forall {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h), ma
+p₂ (f ◁ η) = (mapComp f g).hom ≫ map f ◁ map₂ η ≫ (mapComp f h).inv
+参数：B : Type u₁；C : Type u₂；a : B。
+继承自：PrelaxFunctor B C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: cat_disch, fun_, mapComp
+--- 原说明 ---
+A pseudofunctor `F` between bicategories `B` and `C` consists of a function betw
+een objects
+`F.obj`, a function between 1-morphisms `F.map`, and a function between 2-morphi
+sms `F.map₂`.
+
+Unlike functors between categories, `F.map` does not need to strictly commute wi
+th composition,
+and does not need to strictly preserve the identity. Instead, there are specifie
+d 2-isomorphisms
+`F.map (𝟙 a) ≅ 𝟙 (F.obj a)` and `F.map (f ≫ g) ≅ F.map f ≫ F.map g`.
+
+`F.map₂` strictly commutes with compositions and preserves the identity. It also
+ preserves the
+associator, the left unitor, and the right unitor modulo some adjustments of dom
+ains and codomains
+of 2-morphisms.
 -/
 structure Pseudofunctor (B : Type u₁) [Bicategory.{w₁, v₁} B] (C : Type u₂)
     [Bicategory.{w₂, v₂} C] extends PrelaxFunctor B C where
   mapId (a : B) : map (𝟙 a) ≅ 𝟙 (obj a)
   mapComp {a b c : B} (f : a ⟶ b) (g : b ⟶ c) : map (f ≫ g) ≅ map f ≫ map g
   map₂_whisker_left :
-    forall {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h),
+    ∀ {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h),
       map₂ (f ◁ η) = (mapComp f g).hom ≫ map f ◁ map₂ η ≫ (mapComp f h).inv := by
     cat_disch
   map₂_whisker_right :
-    forall {a b c : B} {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c),
+    ∀ {a b c : B} {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c),
       map₂ (η ▷ h) = (mapComp f h).hom ≫ map₂ η ▷ map h ≫ (mapComp g h).inv := by
     cat_disch
   map₂_associator :
-    forall {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d),
+    ∀ {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d),
       map₂ (α_ f g h).hom = (mapComp (f ≫ g) h).hom ≫ (mapComp f g).hom ▷ map h ≫
       (α_ (map f) (map g) (map h)).hom ≫ map f ◁ (mapComp g h).inv ≫
       (mapComp f (g ≫ h)).inv := by
     cat_disch
   map₂_left_unitor :
-    forall {a b : B} (f : a ⟶ b),
-      map₂ (fun_ f).hom = (mapComp (𝟙 a) f).hom ≫ (mapId a).hom ▷ map f ≫ (fun_ (map f)).hom := by
+    ∀ {a b : B} (f : a ⟶ b),
+      map₂ (λ_ f).hom = (mapComp (𝟙 a) f).hom ≫ (mapId a).hom ▷ map f ≫ (λ_ (map f)).hom := by
     cat_disch
   map₂_right_unitor :
-    forall {a b : B} (f : a ⟶ b),
+    ∀ {a b : B} (f : a ⟶ b),
       map₂ (ρ_ f).hom = (mapComp f (𝟙 b)).hom ≫ map f ◁ (mapId b).hom ≫ (ρ_ (map f)).hom := by
     cat_disch
 
@@ -136,104 +145,58 @@ variable (F : B ⥤ᵖ C)
 
 /-- The oplax functor associated with a pseudofunctor. -/
 @[simps]
-/--
-Definition of `toOplax` / `toOplax` 的定义
+/-
+**CategoryTheory.Pseudofunctor.toOplax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Pseudofunctor`。
+形式化陈述：toOplax : B ⥤ᵒᵖᴸ C where toPrelaxFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toOplax
-  signature: : B ⥤ᵒᵖᴸ C where
-  body: F.toPrelaxFunctor
-  mapId := fun a => (F.mapId a).hom
-  mapComp := fun f g => (F.mapComp f g).hom
-
-中文:
-定义 toOplax
-  签名: : B ⥤ᵒᵖᴸ C where
-  定义体: F.toPrelaxFunctor
-  mapId := fun a => (F.mapId a).hom
-  mapComp := fun f g => (F.mapComp f g).hom
-
-Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
+--- 原说明 ---
+The oplax functor associated with a pseudofunctor.
 -/
 def toOplax : B ⥤ᵒᵖᴸ C where
   toPrelaxFunctor := F.toPrelaxFunctor
   mapId := fun a => (F.mapId a).hom
   mapComp := fun f g => (F.mapComp f g).hom
-
-/--
-Instance `hasCoeToOplax` / 实例 `hasCoeToOplax`
-
-English:
-instance hasCoeToOplax
-  signature: : Coe (B ⥤ᵖ C) (B ⥤ᵒᵖᴸ C)
-  body: ⟨toOplax⟩
-
-中文:
-实例 hasCoeToOplax
-  签名: : Coe (B ⥤ᵖ C) (B ⥤ᵒᵖᴸ C)
-  定义体: ⟨toOplax⟩
-
-Depends on / 依赖: toOplax
+/-
+**CategoryTheory.Pseudofunctor.hasCoeToOplax** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Pseudofunctor`。
+形式化陈述：hasCoeToOplax : Coe (B ⥤ᵖ C) (B ⥤ᵒᵖᴸ C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasCoeToOplax : Coe (B ⥤ᵖ C) (B ⥤ᵒᵖᴸ C) :=
   ⟨toOplax⟩
 
 /-- The lax functor associated with a pseudofunctor. -/
 @[simps]
-/--
-Definition of `toLax` / `toLax` 的定义
+/-
+**CategoryTheory.Pseudofunctor.toLax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.P
+seudofunctor`。
+形式化陈述：toLax : B ⥤ᴸ C where toPrelaxFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLax
-  signature: : B ⥤ᴸ C where
-  body: F.toPrelaxFunctor
-  mapId := fun a => (F.mapId a).inv
-  mapComp := fun f g => (F.mapComp f g).inv
-  map₂_leftUnitor f := by
-    rw [← F.map₂Iso_inv]; rw [eq_inv_comp]; rw [comp_inv_eq]
-    simp
-  map₂_rightUnitor f := by
-    rw [← F.map₂Iso_inv]; rw [eq_inv_comp]; rw [comp_inv_eq]
-    simp
-
-中文:
-定义 toLax
-  签名: : B ⥤ᴸ C where
-  定义体: F.toPrelaxFunctor
-  mapId := fun a => (F.mapId a).inv
-  mapComp := fun f g => (F.mapComp f g).inv
-  map₂_leftUnitor f := by
-    rw [← F.map₂Iso_inv]; rw [eq_inv_comp]; rw [comp_inv_eq]
-    simp
-  map₂_rightUnitor f := by
-    rw [← F.map₂Iso_inv]; rw [eq_inv_comp]; rw [comp_inv_eq]
-    simp
-
-Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
+--- 原说明 ---
+The lax functor associated with a pseudofunctor.
 -/
 def toLax : B ⥤ᴸ C where
   toPrelaxFunctor := F.toPrelaxFunctor
   mapId := fun a => (F.mapId a).inv
   mapComp := fun f g => (F.mapComp f g).inv
   map₂_leftUnitor f := by
-    rw [← F.map₂Iso_inv]; rw [eq_inv_comp]; rw [comp_inv_eq]
+    rw [← F.map₂Iso_inv, eq_inv_comp, comp_inv_eq]
     simp
   map₂_rightUnitor f := by
-    rw [← F.map₂Iso_inv]; rw [eq_inv_comp]; rw [comp_inv_eq]
+    rw [← F.map₂Iso_inv, eq_inv_comp, comp_inv_eq]
     simp
-
-/--
-Instance `hasCoeToLax` / 实例 `hasCoeToLax`
-
-English:
-instance hasCoeToLax
-  signature: : Coe (B ⥤ᵖ C) (B ⥤ᴸ C)
-  body: ⟨toLax⟩
-
-中文:
-实例 hasCoeToLax
-  签名: : Coe (B ⥤ᵖ C) (B ⥤ᴸ C)
-  定义体: ⟨toLax⟩
+/-
+**CategoryTheory.Pseudofunctor.hasCoeToLax** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pseudofunctor`。
+形式化陈述：hasCoeToLax : Coe (B ⥤ᵖ C) (B ⥤ᴸ C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasCoeToLax : Coe (B ⥤ᵖ C) (B ⥤ᴸ C) :=
   ⟨toLax⟩
@@ -242,42 +205,25 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The identity pseudofunctor. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.Pseudofunctor.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Pseu
+dofunctor`。
+形式化陈述：id (B : Type u₁) [Bicategory.{w₁, v₁} B] : B ⥤ᵖ B where toPrelaxFunctor
+参数：B : Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (B : Type u₁) [Bicategory.{w₁, v₁} B]
-  body: PrelaxFunctor.id B
-  mapId := fun a => Iso.refl (𝟙 a)
-  mapComp := fun f g => Iso.refl (f ≫ g)
-
-中文:
-定义 id
-  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B]
-  定义体: PrelaxFunctor.id B
-  mapId := fun a => Iso.refl (𝟙 a)
-  mapComp := fun f g => Iso.refl (f ≫ g)
-
-Depends on / 依赖: PrelaxFunctor, PrelaxFunctor.id
+--- 原说明 ---
+The identity pseudofunctor.
 -/
 def id (B : Type u₁) [Bicategory.{w₁, v₁} B] : B ⥤ᵖ B where
   toPrelaxFunctor := PrelaxFunctor.id B
   mapId := fun a => Iso.refl (𝟙 a)
   mapComp := fun f g => Iso.refl (f ≫ g)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (B ⥤ᵖ B)
-  body: ⟨id B⟩
-
-中文:
-实例 :
-  签名: 可居 (B ⥤ᵖ B)
-  定义体: ⟨id B⟩
+/-
+**CategoryTheory.Pseudofunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pseudo
+functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (B ⥤ᵖ B) :=
   ⟨id B⟩
@@ -286,24 +232,16 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- Composition of pseudofunctors. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.Pseudofunctor.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ps
+eudofunctor`。
+形式化陈述：comp (F : B ⥤ᵖ C) (G : C ⥤ᵖ D) : B ⥤ᵖ D where toPrelaxFunctor
+参数：F : B ⥤ᵖ C；G : C ⥤ᵖ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (F : B ⥤ᵖ C) (G : C ⥤ᵖ D)
-  body: F.toPrelaxFunctor.comp G.toPrelaxFunctor
-  mapId := fun a => G.map₂Iso (F.mapId a) ≪≫ G.mapId (F.obj a)
-  mapComp := fun f g => (G.map₂Iso (F.mapComp f g)) ≪≫ G.mapComp (F.map f) (F.map g)
-
-中文:
-定义 comp
-  签名: (F : B ⥤ᵖ C) (G : C ⥤ᵖ D)
-  定义体: F.toPrelaxFunctor.comp G.toPrelaxFunctor
-  mapId := fun a => G.map₂Iso (F.mapId a) ≪≫ G.mapId (F.obj a)
-  mapComp := fun f g => (G.map₂Iso (F.mapComp f g)) ≪≫ G.mapComp (F.map f) (F.map g)
-
-Depends on / 依赖: F.toPrelaxFunctor.comp, G.toPrelaxFunctor, toPrelaxFunctor
+--- 原说明 ---
+Composition of pseudofunctors.
 -/
 def comp (F : B ⥤ᵖ C) (G : C ⥤ᵖ D) : B ⥤ᵖ D where
   toPrelaxFunctor := F.toPrelaxFunctor.comp G.toPrelaxFunctor
@@ -315,24 +253,19 @@ section
 variable (F : B ⥤ᵖ C) {a b : B}
 
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_assoc_right_hom` / 引理 `mapComp_assoc_right_hom`
-
-English:
-lemma mapComp_assoc_right_hom
-  given: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  proof: F.toOplax.mapComp_assoc_right _ _ _
-
-@[to_app (attr := reassoc)]
-
-中文:
-引理 mapComp_assoc_right_hom
-  条件: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  证明: F.toOplax.mapComp_assoc_right _ _ _
-
-@[to_app (attr := reassoc)]
-
-Depends on / 依赖: F.toOplax.mapComp_assoc_right, mapComp_assoc_right, toOplax
+/-
+**CategoryTheory.Pseudofunctor.mapComp_assoc_right_hom** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_assoc_right_hom {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : (F
+.mapComp f (g ≫ h)).hom ≫ F.map f ◁ (F.mapComp g h).hom = F.map₂ (α_ f g h).inv 
+≫ (F.mapComp (f ≫ g) h).hom ≫ (F.mapComp f g).hom ▷ F.map h ≫ (α_ (F.map f) (F.m
+ap g) (F.map h)).hom
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.OplaxFunctor.mapComp_assoc_right`：mapComp_assoc_right {a 
+b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : F.mapComp f (g ≫ h) ≫ F.map f ◁
+ F.mapComp g h = F.map₂ (α_ f g h).in…
 -/
 lemma mapComp_assoc_right_hom {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
     (F.mapComp f (g ≫ h)).hom ≫ F.map f ◁ (F.mapComp g h).hom = F.map₂ (α_ f g h).inv ≫
@@ -341,24 +274,19 @@ lemma mapComp_assoc_right_hom {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d
   F.toOplax.mapComp_assoc_right _ _ _
 
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_assoc_left_hom` / 引理 `mapComp_assoc_left_hom`
-
-English:
-lemma mapComp_assoc_left_hom
-  given: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  proof: F.toOplax.mapComp_assoc_left _ _ _
-
-@[to_app (attr := reassoc)]
-
-中文:
-引理 mapComp_assoc_left_hom
-  条件: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  证明: F.toOplax.mapComp_assoc_left _ _ _
-
-@[to_app (attr := reassoc)]
-
-Depends on / 依赖: F.toOplax.mapComp_assoc_left, mapComp_assoc_left, toOplax
+/-
+**CategoryTheory.Pseudofunctor.mapComp_assoc_left_hom** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_assoc_left_hom {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : (F.
+mapComp (f ≫ g) h).hom ≫ (F.mapComp f g).hom ▷ F.map h = F.map₂ (α_ f g h).hom ≫
+ (F.mapComp f (g ≫ h)).hom ≫ F.map f ◁ (F.mapComp g h).hom ≫ (α_ (F.map f) (F.ma
+p g) (F.map h)).inv
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.OplaxFunctor.mapComp_assoc_left`：mapComp_assoc_left {a b 
+c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : F.mapComp (f ≫ g) h ≫ F.mapComp f
+ g ▷ F.map h = F.map₂ (α_ f g h).hom…
 -/
 lemma mapComp_assoc_left_hom {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
     (F.mapComp (f ≫ g) h).hom ≫ (F.mapComp f g).hom ▷ F.map h =
@@ -367,24 +295,19 @@ lemma mapComp_assoc_left_hom {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
   F.toOplax.mapComp_assoc_left _ _ _
 
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_assoc_right_inv` / 引理 `mapComp_assoc_right_inv`
-
-English:
-lemma mapComp_assoc_right_inv
-  given: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  proof: F.toLax.mapComp_assoc_right _ _ _
-
-@[to_app (attr := reassoc)]
-
-中文:
-引理 mapComp_assoc_right_inv
-  条件: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  证明: F.toLax.mapComp_assoc_right _ _ _
-
-@[to_app (attr := reassoc)]
-
-Depends on / 依赖: F.toLax.mapComp_assoc_right, mapComp_assoc_right
+/-
+**CategoryTheory.Pseudofunctor.mapComp_assoc_right_inv** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_assoc_right_inv {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : F.
+map f ◁ (F.mapComp g h).inv ≫ (F.mapComp f (g ≫ h)).inv = (α_ (F.map f) (F.map g
+) (F.map h)).inv ≫ (F.mapComp f g).inv ▷ F.map h ≫ (F.mapComp (f ≫ g) h).inv ≫ F
+.map₂ (α_ f g h).hom
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LaxFunctor.mapComp_assoc_right`：mapComp_assoc_right {a b 
+c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : F.map f ◁ F.mapComp g h ≫ F.mapCo
+mp f (g ≫ h) = (α_ (F.map f) (F.map…
 -/
 lemma mapComp_assoc_right_inv {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
     F.map f ◁ (F.mapComp g h).inv ≫ (F.mapComp f (g ≫ h)).inv =
@@ -393,24 +316,19 @@ lemma mapComp_assoc_right_inv {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d
   F.toLax.mapComp_assoc_right _ _ _
 
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_assoc_left_inv` / 引理 `mapComp_assoc_left_inv`
-
-English:
-lemma mapComp_assoc_left_inv
-  given: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  proof: F.toLax.mapComp_assoc_left _ _ _
-
-#adaptation_note
-
-中文:
-引理 mapComp_assoc_left_inv
-  条件: {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-  证明: F.toLax.mapComp_assoc_left _ _ _
-
-#adaptation_note
-
-Depends on / 依赖: F.toLax.mapComp_assoc_left, mapComp_assoc_left
+/-
+**CategoryTheory.Pseudofunctor.mapComp_assoc_left_inv** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_assoc_left_inv {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : (F.
+mapComp f g).inv ▷ F.map h ≫ (F.mapComp (f ≫ g) h).inv = (α_ (F.map f) (F.map g)
+ (F.map h)).hom ≫ F.map f ◁ (F.mapComp g h).inv ≫ (F.mapComp f (g ≫ h)).inv ≫ F.
+map₂ (α_ f g h).inv
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LaxFunctor.mapComp_assoc_left`：mapComp_assoc_left {a b c 
+d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : F.mapComp f g ▷ F.map h ≫ F.mapComp
+ (f ≫ g) h = (α_ (F.map f) (F.map …
 -/
 lemma mapComp_assoc_left_inv {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) :
     (F.mapComp f g).inv ▷ F.map h ≫ (F.mapComp (f ≫ g) h).inv =
@@ -422,265 +340,334 @@ lemma mapComp_assoc_left_inv {c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_id_left_hom` / 引理 `mapComp_id_left_hom`
+/-
+**CategoryTheory.Pseudofunctor.mapComp_id_left_hom** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_id_left_hom (f : a ⟶ b) : (F.mapComp (𝟙 a) f).hom = F.map₂ (fun_ f
+).hom ≫ (fun_ (F.map f)).inv ≫ (F.mapId a).inv ▷ F.map f
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Pseudofunctor.map₂_left_unitor`：∀ {B : Type u₁} [inst : C
+ategoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]
+   (self : CategoryTheory.Pseudofun…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Bicategory.hom_inv_whiskerRight`：hom_inv_whiskerRight {f 
+g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.hom ▷ h ≫ η.inv ▷ h = 𝟙 (f ≫ h)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mapComp_id_left_hom
-  given: (f : a ⟶ b)
-  statement: (F.mapComp (𝟙 a) f).hom =
-  proof: by
-  simp
-
-中文:
-引理 mapComp_id_left_hom
-  条件: (f : a ⟶ b)
-  结论: (F.mapComp (𝟙 a) f).hom =
-  证明: by
-  simp
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma mapComp_id_left_hom (f : a ⟶ b) : (F.mapComp (𝟙 a) f).hom =
-    F.map₂ (fun_ f).hom ≫ (fun_ (F.map f)).inv ≫ (F.mapId a).inv ▷ F.map f := by
+    F.map₂ (λ_ f).hom ≫ (λ_ (F.map f)).inv ≫ (F.mapId a).inv ▷ F.map f := by
   simp
-
-/--
-lemma `mapComp_id_left` / 引理 `mapComp_id_left`
-
-English:
-lemma mapComp_id_left
-  given: (f : a ⟶ b)
-  statement: (F.mapComp (𝟙 a) f) = F.map₂Iso (fun_ f) ≪≫
-  proof: Iso.ext F.mapComp_id_left_hom f
-
-#adaptation_note
-
-中文:
-引理 mapComp_id_left
-  条件: (f : a ⟶ b)
-  结论: (F.mapComp (𝟙 a) f) = F.map₂Iso (fun_ f) ≪≫
-  证明: Iso.ext F.mapComp_id_left_hom f
-
-#adaptation_note
-
-Depends on / 依赖: F.mapComp_id_left_hom, Iso.ext, mapComp_id_left_hom
+/-
+**CategoryTheory.Pseudofunctor.mapComp_id_left** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Pseudofunctor`。
+形式化陈述：mapComp_id_left (f : a ⟶ b) : (F.mapComp (𝟙 a) f) = F.map₂Iso (fun_ f) ≪≫ 
+(fun_ (F.map f)).symm ≪≫ (whiskerRightIso (F.mapId a) (F.map f)).symm
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp_id_left_hom`：mapComp_id_left_hom (f
+ : a ⟶ b) : (F.mapComp (𝟙 a) f).hom = F.map₂ (fun_ f).hom ≫ (fun_ (F.map f)).inv
+ ≫ (F.mapId a).inv ▷ F.map f
 -/
-lemma mapComp_id_left (f : a ⟶ b) : (F.mapComp (𝟙 a) f) = F.map₂Iso (fun_ f) ≪≫
-    (fun_ (F.map f)).symm ≪≫ (whiskerRightIso (F.mapId a) (F.map f)).symm :=
-Iso.ext F.mapComp_id_left_hom f
+lemma mapComp_id_left (f : a ⟶ b) : (F.mapComp (𝟙 a) f) = F.map₂Iso (λ_ f) ≪≫
+    (λ_ (F.map f)).symm ≪≫ (whiskerRightIso (F.mapId a) (F.map f)).symm :=
+  Iso.ext <| F.mapComp_id_left_hom f
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_id_left_inv` / 引理 `mapComp_id_left_inv`
+/-
+**CategoryTheory.Pseudofunctor.mapComp_id_left_inv** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_id_left_inv (f : a ⟶ b) : (F.mapComp (𝟙 a) f).inv = (F.mapId a).ho
+m ▷ F.map f ≫ (fun_ (F.map f)).hom ≫ F.map₂ (fun_ f).inv
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp_id_left`：mapComp_id_left (f : a ⟶ b
+) : (F.mapComp (𝟙 a) f) = F.map₂Iso (fun_ f) ≪≫ (fun_ (F.map f)).symm ≪≫ (whiske
+rRightIso (F.mapId a) (F.map f)).s…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRightIso_hom`：∀ {B : Type u} [inst : Ca
+tegoryTheory.Bicategory B] {a b c : B} {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c),   
+(CategoryTheory.Bicategory.whiskerR…
+· 使用定理 `CategoryTheory.PrelaxFunctor.mapFunctor_map`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]  
+ (F : CategoryTheory.PrelaxFuncto…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mapComp_id_left_inv
-  given: (f : a ⟶ b)
-  statement: (F.mapComp (𝟙 a) f).inv =
-  proof: by
-  simp [mapComp_id_left]
-
-中文:
-引理 mapComp_id_left_inv
-  条件: (f : a ⟶ b)
-  结论: (F.mapComp (𝟙 a) f).inv =
-  证明: by
-  simp [mapComp_id_left]
-
-Depends on / 依赖: mapComp_id_left
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma mapComp_id_left_inv (f : a ⟶ b) : (F.mapComp (𝟙 a) f).inv =
-    (F.mapId a).hom ▷ F.map f ≫ (fun_ (F.map f)).hom ≫ F.map₂ (fun_ f).inv := by
+    (F.mapId a).hom ▷ F.map f ≫ (λ_ (F.map f)).hom ≫ F.map₂ (λ_ f).inv := by
   simp [mapComp_id_left]
-
-/--
-lemma `whiskerRightIso_mapId` / 引理 `whiskerRightIso_mapId`
-
-English:
-lemma whiskerRightIso_mapId
-  given: (f : a ⟶ b)
-  statement: whiskerRightIso (F.mapId a) (F.map f) =
-  proof: by
-  simp [mapComp_id_left]
-
-#adaptation_note
-
-中文:
-引理 whiskerRightIso_mapId
-  条件: (f : a ⟶ b)
-  结论: whiskerRightIso (F.mapId a) (F.map f) =
-  证明: by
-  simp [mapComp_id_left]
-
-#adaptation_note
-
-Depends on / 依赖: mapComp_id_left
+/-
+**CategoryTheory.Pseudofunctor.whiskerRightIso_mapId** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Pseudofunctor`。
+形式化陈述：whiskerRightIso_mapId (f : a ⟶ b) : whiskerRightIso (F.mapId a) (F.map f) 
+= (F.mapComp (𝟙 a) f).symm ≪≫ F.map₂Iso (fun_ f) ≪≫ (fun_ (F.map f)).symm
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp_id_left`：mapComp_id_left (f : a ⟶ b
+) : (F.mapComp (𝟙 a) f) = F.map₂Iso (fun_ f) ≪≫ (fun_ (F.map f)).symm ≪≫ (whiske
+rRightIso (F.mapId a) (F.map f)).s…
+· 使用定理 `CategoryTheory.Iso.trans_assoc`：trans_assoc {Z' : C} (α : X ≅ Y) (β : Y 
+≅ Z) (γ : Z ≅ Z') : (α ≪≫ β) ≪≫ γ = α ≪≫ β ≪≫ γ
+· 使用定理 `CategoryTheory.Iso.symm_self_id_assoc`：symm_self_id_assoc (α : X ≅ Y) (β
+ : Y ≅ Z) : α.symm ≪≫ α ≪≫ β = β
+· 使用定理 `CategoryTheory.Iso.self_symm_id`：self_symm_id (α : X ≅ Y) : α ≪≫ α.symm 
+= Iso.refl X
+· 使用定理 `CategoryTheory.Iso.trans_refl`：trans_refl (α : X ≅ Y) : α ≪≫ Iso.refl Y 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma whiskerRightIso_mapId (f : a ⟶ b) : whiskerRightIso (F.mapId a) (F.map f) =
-    (F.mapComp (𝟙 a) f).symm ≪≫ F.map₂Iso (fun_ f) ≪≫ (fun_ (F.map f)).symm := by
+    (F.mapComp (𝟙 a) f).symm ≪≫ F.map₂Iso (λ_ f) ≪≫ (λ_ (F.map f)).symm := by
   simp [mapComp_id_left]
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `whiskerRight_mapId_hom` / 引理 `whiskerRight_mapId_hom`
+/-
+**CategoryTheory.Pseudofunctor.whiskerRight_mapId_hom** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pseudofunctor`。
+形式化陈述：whiskerRight_mapId_hom (f : a ⟶ b) : (F.mapId a).hom ▷ F.map f = (F.mapCom
+p (𝟙 a) f).inv ≫ F.map₂ (fun_ f).hom ≫ (fun_ (F.map f)).inv
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Pseudofunctor.map₂_left_unitor`：∀ {B : Type u₁} [inst : C
+ategoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]
+   (self : CategoryTheory.Pseudofun…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma whiskerRight_mapId_hom
-  given: (f : a ⟶ b)
-  statement: (F.mapId a).hom ▷ F.map f =
-  proof: by
-  simp
-
-#adaptation_note
-
-中文:
-引理 whiskerRight_mapId_hom
-  条件: (f : a ⟶ b)
-  结论: (F.mapId a).hom ▷ F.map f =
-  证明: by
-  simp
-
-#adaptation_note
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma whiskerRight_mapId_hom (f : a ⟶ b) : (F.mapId a).hom ▷ F.map f =
-    (F.mapComp (𝟙 a) f).inv ≫ F.map₂ (fun_ f).hom ≫ (fun_ (F.map f)).inv := by
+    (F.mapComp (𝟙 a) f).inv ≫ F.map₂ (λ_ f).hom ≫ (λ_ (F.map f)).inv := by
   simp
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `whiskerRight_mapId_inv` / 引理 `whiskerRight_mapId_inv`
+/-
+**CategoryTheory.Pseudofunctor.whiskerRight_mapId_inv** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pseudofunctor`。
+形式化陈述：whiskerRight_mapId_inv (f : a ⟶ b) : (F.mapId a).inv ▷ F.map f = (fun_ (F.
+map f)).hom ≫ F.map₂ (fun_ f).inv ≫ (F.mapComp (𝟙 a) f).hom
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRightIso_inv`：∀ {B : Type u} [inst : Ca
+tegoryTheory.Bicategory B] {a b c : B} {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c),   
+(CategoryTheory.Bicategory.whiskerR…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.PrelaxFunctor.mapFunctor_map`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]  
+ (F : CategoryTheory.PrelaxFuncto…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Pseudofunctor.whiskerRightIso_mapId`：whiskerRightIso_mapI
+d (f : a ⟶ b) : whiskerRightIso (F.mapId a) (F.map f) = (F.mapComp (𝟙 a) f).symm
+ ≪≫ F.map₂Iso (fun_ f) ≪≫ (fun_ (F.map f…
 
-English:
-lemma whiskerRight_mapId_inv
-  given: (f : a ⟶ b)
-  statement: (F.mapId a).inv ▷ F.map f =
-  proof: by
-  simpa using congrArg (·.inv) (F.whiskerRightIso_mapId f)
-
-#adaptation_note
-
-中文:
-引理 whiskerRight_mapId_inv
-  条件: (f : a ⟶ b)
-  结论: (F.mapId a).inv ▷ F.map f =
-  证明: by
-  simpa using congrArg (·.inv) (F.whiskerRightIso_mapId f)
-
-#adaptation_note
-
-Depends on / 依赖: F.whiskerRightIso_mapId, whiskerRightIso_mapId
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma whiskerRight_mapId_inv (f : a ⟶ b) : (F.mapId a).inv ▷ F.map f =
-    (fun_ (F.map f)).hom ≫ F.map₂ (fun_ f).inv ≫ (F.mapComp (𝟙 a) f).hom := by
+    (λ_ (F.map f)).hom ≫ F.map₂ (λ_ f).inv ≫ (F.mapComp (𝟙 a) f).hom := by
   simpa using congrArg (·.inv) (F.whiskerRightIso_mapId f)
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_id_right_hom` / 引理 `mapComp_id_right_hom`
+/-
+**CategoryTheory.Pseudofunctor.mapComp_id_right_hom** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_id_right_hom (f : a ⟶ b) : (F.mapComp f (𝟙 b)).hom = F.map₂ (ρ_ f)
+.hom ≫ (ρ_ (F.map f)).inv ≫ F.map f ◁ (F.mapId b).inv
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Pseudofunctor.map₂_right_unitor`：∀ {B : Type u₁} [inst : 
+CategoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C
+]   (self : CategoryTheory.Pseudofun…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_hom_inv`：whiskerLeft_hom_inv (f : 
+a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) : f ◁ η.hom ≫ f ◁ η.inv = 𝟙 (f ≫ g)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mapComp_id_right_hom
-  given: (f : a ⟶ b)
-  statement: (F.mapComp f (𝟙 b)).hom =
-  proof: by
-  simp
-
-中文:
-引理 mapComp_id_right_hom
-  条件: (f : a ⟶ b)
-  结论: (F.mapComp f (𝟙 b)).hom =
-  证明: by
-  simp
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma mapComp_id_right_hom (f : a ⟶ b) : (F.mapComp f (𝟙 b)).hom =
     F.map₂ (ρ_ f).hom ≫ (ρ_ (F.map f)).inv ≫ F.map f ◁ (F.mapId b).inv := by
   simp
-
-/--
-lemma `mapComp_id_right` / 引理 `mapComp_id_right`
-
-English:
-lemma mapComp_id_right
-  given: (f : a ⟶ b)
-  statement: (F.mapComp f (𝟙 b)) = F.map₂Iso (ρ_ f) ≪≫
-  proof: Iso.ext F.mapComp_id_right_hom f
-
-#adaptation_note
-
-中文:
-引理 mapComp_id_right
-  条件: (f : a ⟶ b)
-  结论: (F.mapComp f (𝟙 b)) = F.map₂Iso (ρ_ f) ≪≫
-  证明: Iso.ext F.mapComp_id_right_hom f
-
-#adaptation_note
-
-Depends on / 依赖: F.mapComp_id_right_hom, Iso.ext, mapComp_id_right_hom
+/-
+**CategoryTheory.Pseudofunctor.mapComp_id_right** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Pseudofunctor`。
+形式化陈述：mapComp_id_right (f : a ⟶ b) : (F.mapComp f (𝟙 b)) = F.map₂Iso (ρ_ f) ≪≫ (
+ρ_ (F.map f)).symm ≪≫ (whiskerLeftIso (F.map f) (F.mapId b)).symm
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp_id_right_hom`：mapComp_id_right_hom 
+(f : a ⟶ b) : (F.mapComp f (𝟙 b)).hom = F.map₂ (ρ_ f).hom ≫ (ρ_ (F.map f)).inv ≫
+ F.map f ◁ (F.mapId b).inv
 -/
 lemma mapComp_id_right (f : a ⟶ b) : (F.mapComp f (𝟙 b)) = F.map₂Iso (ρ_ f) ≪≫
     (ρ_ (F.map f)).symm ≪≫ (whiskerLeftIso (F.map f) (F.mapId b)).symm :=
-Iso.ext F.mapComp_id_right_hom f
+  Iso.ext <| F.mapComp_id_right_hom f
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `mapComp_id_right_inv` / 引理 `mapComp_id_right_inv`
+/-
+**CategoryTheory.Pseudofunctor.mapComp_id_right_inv** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Pseudofunctor`。
+形式化陈述：mapComp_id_right_inv (f : a ⟶ b) : (F.mapComp f (𝟙 b)).inv = F.map f ◁ (F.
+mapId b).hom ≫ (ρ_ (F.map f)).hom ≫ F.map₂ (ρ_ f).inv
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp_id_right`：mapComp_id_right (f : a ⟶
+ b) : (F.mapComp f (𝟙 b)) = F.map₂Iso (ρ_ f) ≪≫ (ρ_ (F.map f)).symm ≪≫ (whiskerL
+eftIso (F.map f) (F.mapId b)).symm
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeftIso_hom`：∀ {B : Type u} [inst : Cat
+egoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h),   (
+CategoryTheory.Bicategory.whiskerL…
+· 使用定理 `CategoryTheory.PrelaxFunctor.mapFunctor_map`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]  
+ (F : CategoryTheory.PrelaxFuncto…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma mapComp_id_right_inv
-  given: (f : a ⟶ b)
-  statement: (F.mapComp f (𝟙 b)).inv =
-  proof: by
-  simp [mapComp_id_right]
-
-中文:
-引理 mapComp_id_right_inv
-  条件: (f : a ⟶ b)
-  结论: (F.mapComp f (𝟙 b)).inv =
-  证明: by
-  simp [mapComp_id_right]
-
-Depends on / 依赖: mapComp_id_right
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma mapComp_id_right_inv (f : a ⟶ b) : (F.mapComp f (𝟙 b)).inv =
     F.map f ◁ (F.mapId b).hom ≫ (ρ_ (F.map f)).hom ≫ F.map₂ (ρ_ f).inv := by
   simp [mapComp_id_right]
-
-/--
-lemma `whiskerLeftIso_mapId` / 引理 `whiskerLeftIso_mapId`
-
-English:
-lemma whiskerLeftIso_mapId
-  given: (f : a ⟶ b)
-  statement: whiskerLeftIso (F.map f) (F.mapId b) =
-  proof: by
-  simp [mapComp_id_right]
-
-#adaptation_note
-
-中文:
-引理 whiskerLeftIso_mapId
-  条件: (f : a ⟶ b)
-  结论: whiskerLeftIso (F.map f) (F.mapId b) =
-  证明: by
-  simp [mapComp_id_right]
-
-#adaptation_note
-
-Depends on / 依赖: mapComp_id_right
+/-
+**CategoryTheory.Pseudofunctor.whiskerLeftIso_mapId** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Pseudofunctor`。
+形式化陈述：whiskerLeftIso_mapId (f : a ⟶ b) : whiskerLeftIso (F.map f) (F.mapId b) = 
+(F.mapComp f (𝟙 b)).symm ≪≫ F.map₂Iso (ρ_ f) ≪≫ (ρ_ (F.map f)).symm
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp_id_right`：mapComp_id_right (f : a ⟶
+ b) : (F.mapComp f (𝟙 b)) = F.map₂Iso (ρ_ f) ≪≫ (ρ_ (F.map f)).symm ≪≫ (whiskerL
+eftIso (F.map f) (F.mapId b)).symm
+· 使用定理 `CategoryTheory.Iso.trans_assoc`：trans_assoc {Z' : C} (α : X ≅ Y) (β : Y 
+≅ Z) (γ : Z ≅ Z') : (α ≪≫ β) ≪≫ γ = α ≪≫ β ≪≫ γ
+· 使用定理 `CategoryTheory.Iso.symm_self_id_assoc`：symm_self_id_assoc (α : X ≅ Y) (β
+ : Y ≅ Z) : α.symm ≪≫ α ≪≫ β = β
+· 使用定理 `CategoryTheory.Iso.self_symm_id`：self_symm_id (α : X ≅ Y) : α ≪≫ α.symm 
+= Iso.refl X
+· 使用定理 `CategoryTheory.Iso.trans_refl`：trans_refl (α : X ≅ Y) : α ≪≫ Iso.refl Y 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma whiskerLeftIso_mapId (f : a ⟶ b) : whiskerLeftIso (F.map f) (F.mapId b) =
     (F.mapComp f (𝟙 b)).symm ≪≫ F.map₂Iso (ρ_ f) ≪≫ (ρ_ (F.map f)).symm := by
@@ -690,26 +677,39 @@ lemma whiskerLeftIso_mapId (f : a ⟶ b) : whiskerLeftIso (F.map f) (F.mapId b) 
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `whiskerLeft_mapId_hom` / 引理 `whiskerLeft_mapId_hom`
+/-
+**CategoryTheory.Pseudofunctor.whiskerLeft_mapId_hom** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Pseudofunctor`。
+形式化陈述：whiskerLeft_mapId_hom (f : a ⟶ b) : F.map f ◁ (F.mapId b).hom = (F.mapComp
+ f (𝟙 b)).inv ≫ F.map₂ (ρ_ f).hom ≫ (ρ_ (F.map f)).inv
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Pseudofunctor.map₂_right_unitor`：∀ {B : Type u₁} [inst : 
+CategoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C
+]   (self : CategoryTheory.Pseudofun…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma whiskerLeft_mapId_hom
-  given: (f : a ⟶ b)
-  statement: F.map f ◁ (F.mapId b).hom =
-  proof: by
-  simp
-
-#adaptation_note
-
-中文:
-引理 whiskerLeft_mapId_hom
-  条件: (f : a ⟶ b)
-  结论: F.map f ◁ (F.mapId b).hom =
-  证明: by
-  simp
-
-#adaptation_note
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma whiskerLeft_mapId_hom (f : a ⟶ b) : F.map f ◁ (F.mapId b).hom =
     (F.mapComp f (𝟙 b)).inv ≫ F.map₂ (ρ_ f).hom ≫ (ρ_ (F.map f)).inv := by
@@ -719,126 +719,126 @@ lemma whiskerLeft_mapId_hom (f : a ⟶ b) : F.map f ◁ (F.mapId b).hom =
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[to_app (attr := reassoc)]
-/--
-lemma `whiskerLeft_mapId_inv` / 引理 `whiskerLeft_mapId_inv`
+/-
+**CategoryTheory.Pseudofunctor.whiskerLeft_mapId_inv** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Pseudofunctor`。
+形式化陈述：whiskerLeft_mapId_inv (f : a ⟶ b) : F.map f ◁ (F.mapId b).inv = (ρ_ (F.map
+ f)).hom ≫ F.map₂ (ρ_ f).inv ≫ (F.mapComp f (𝟙 b)).hom
+参数：f : a ⟶ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeftIso_inv`：∀ {B : Type u} [inst : Cat
+egoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h),   (
+CategoryTheory.Bicategory.whiskerL…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.PrelaxFunctor.mapFunctor_map`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]  
+ (F : CategoryTheory.PrelaxFuncto…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Pseudofunctor.whiskerLeftIso_mapId`：whiskerLeftIso_mapId 
+(f : a ⟶ b) : whiskerLeftIso (F.map f) (F.mapId b) = (F.mapComp f (𝟙 b)).symm ≪≫
+ F.map₂Iso (ρ_ f) ≪≫ (ρ_ (F.map f)).sym…
 
-English:
-lemma whiskerLeft_mapId_inv
-  given: (f : a ⟶ b)
-  statement: F.map f ◁ (F.mapId b).inv =
-  proof: by
-  simpa using congrArg (·.inv) (F.whiskerLeftIso_mapId f)
-
-中文:
-引理 whiskerLeft_mapId_inv
-  条件: (f : a ⟶ b)
-  结论: F.map f ◁ (F.mapId b).inv =
-  证明: by
-  simpa using congrArg (·.inv) (F.whiskerLeftIso_mapId f)
-
-Depends on / 依赖: F.whiskerLeftIso_mapId, whiskerLeftIso_mapId
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 lemma whiskerLeft_mapId_inv (f : a ⟶ b) : F.map f ◁ (F.mapId b).inv =
     (ρ_ (F.map f)).hom ≫ F.map₂ (ρ_ f).inv ≫ (F.mapComp f (𝟙 b)).hom := by
   simpa using congrArg (·.inv) (F.whiskerLeftIso_mapId f)
 
-/--
-Definition of `mapId'` / `mapId'` 的定义
+/-- More flexible variant of `mapId`. (See the file `Bicategory.Functor.Strict`
+for applications to strict bicategories.) -/
+/-
+**CategoryTheory.Pseudofunctor.mapId'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Pseudofunctor`。
+形式化陈述：mapId'_hom_naturality : (F.map f).toFunctor.map a ≫ (F.mapId' f hf).hom.to
+NatTrans.app Y = (F.mapId' f hf).hom.toNatTrans.app X ≫ a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapId'
-  signature: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  body: F.map₂Iso (eqToIso (by rw [hf])) ≪≫ F.mapId _
-
-中文:
-定义 mapId'
-  签名: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  定义体: F.map₂Iso (eqToIso (by rw [hf])) ≪≫ F.mapId _
+--- 原说明 ---
+More flexible variant of `mapId`. (See the file `Bicategory.Functor.Strict`
+for applications to strict bicategories.)
 -/
 def mapId' {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch) :
     F.map f ≅ 𝟙 (F.obj b) :=
   F.map₂Iso (eqToIso (by rw [hf])) ≪≫ F.mapId _
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mapId'_eq_mapId` / 引理 `mapId'_eq_mapId`
-
-English:
-lemma mapId'_eq_mapId
-  given: (b : B)
-  proof: by
-  simp [mapId']
-
-@[simp]
-
-中文:
-引理 mapId'_eq_mapId
-  条件: (b : B)
-  证明: by
-  simp [mapId']
-
-@[simp]
+/-
+**CategoryTheory.Pseudofunctor.mapId'_eq_mapId** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Pseudofunctor`。
+形式化陈述：∀ {B : Type u₁} [inst : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1
+ : CategoryTheory.Bicategory C]   (F : CategoryTheory.Pseudofunctor B C) (b : B)
+, F.mapId' (CategoryTheory.CategoryStruct.id b) ⋯ = F.mapId b
+参数：F : CategoryTheory.Pseudofunctor B C；b : B；CategoryTheory.CategoryStruct.id b
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.Pseudofunctor.mapId'`：mapId'_hom_naturality : (F.map f).t
+oFunctor.map a ≫ (F.mapId' f hf).hom.toNatTrans.app Y = (F.mapId' f hf).hom.toNa
+tTrans.app X ≫ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.mapIso_refl`：mapIso_refl (F : C ⥤ D) (X : C) : F.
+mapIso (Iso.refl X) = Iso.refl (F.obj X)
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapId'_eq_mapId (b : B) :
     F.mapId' (𝟙 b) rfl = F.mapId b := by
   simp [mapId']
 
 @[simp]
-/--
-lemma `toLax_mapId'` / 引理 `toLax_mapId'`
-
-English:
-lemma toLax_mapId'
-  given: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLax_mapId'
-  条件: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: F.mapId, F.toLax.mapId, cat_disch
+/-
+**CategoryTheory.Pseudofunctor.toLax_mapId'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Pseudofunctor`。
+形式化陈述：toLax_mapId' {b : B} (f : b ⟶ b) (hf : f = 𝟙 b
+参数：f : b ⟶ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLax_mapId' {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch) :
     F.toLax.mapId' f hf = (F.mapId' f hf).inv :=
   rfl
 
 @[simp]
-/--
-lemma `toOplax_mapId'` / 引理 `toOplax_mapId'`
-
-English:
-lemma toOplax_mapId'
-  given: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  proof: rfl
-
-中文:
-引理 toOplax_mapId'
-  条件: {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch)
-  证明: rfl
-
-Depends on / 依赖: F.mapId, F.toOplax.mapId, cat_disch, toOplax
+/-
+**CategoryTheory.Pseudofunctor.toOplax_mapId'** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pseudofunctor`。
+形式化陈述：toOplax_mapId' {b : B} (f : b ⟶ b) (hf : f = 𝟙 b
+参数：f : b ⟶ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toOplax_mapId' {b : B} (f : b ⟶ b) (hf : f = 𝟙 b := by cat_disch) :
     F.toOplax.mapId' f hf = (F.mapId' f hf).hom :=
   rfl
 
-/--
-Definition of `mapComp'` / `mapComp'` 的定义
+/-- More flexible variant of `mapComp`. (See `Bicategory.Functor.Strict`
+for applications to strict bicategories.) -/
+/-
+**CategoryTheory.Pseudofunctor.mapComp'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Pseudofunctor`。
+形式化陈述：mapComp'_hom_naturality : (F.map fg).toFunctor.map a ≫ (F.mapComp' f g fg 
+hfg).hom.toNatTrans.app Y = (F.mapComp' f g fg hfg).hom.toNatTrans.app X ≫ (F.ma
+p g).toFunctor.map ((F.map f).toFunctor.map a)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapComp'
-  signature: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  body: F.map₂Iso (eqToIso (by rw [h])) ≪≫ F.mapComp f g
-
-中文:
-定义 mapComp'
-  签名: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  定义体: F.map₂Iso (eqToIso (by rw [h])) ≪≫ F.mapComp f g
+--- 原说明 ---
+More flexible variant of `mapComp`. (See `Bicategory.Functor.Strict`
+for applications to strict bicategories.)
 -/
 def mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
     (h : f ≫ g = fg := by cat_disch) :
@@ -846,48 +846,43 @@ def mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : 
   F.map₂Iso (eqToIso (by rw [h])) ≪≫ F.mapComp f g
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mapComp'_eq_mapComp` / 引理 `mapComp'_eq_mapComp`
-
-English:
-lemma mapComp'_eq_mapComp
-  given: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂)
-  proof: by
-  simp [mapComp']
-
-@[simp]
-
-中文:
-引理 mapComp'_eq_mapComp
-  条件: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂)
-  证明: by
-  simp [mapComp']
-
-@[simp]
+/-
+**CategoryTheory.Pseudofunctor.mapComp'_eq_mapComp** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Pseudofunctor`。
+形式化陈述：∀ {B : Type u₁} [inst : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1
+ : CategoryTheory.Bicategory C]   (F : CategoryTheory.Pseudofunctor B C) {b₀ b₁ 
+b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂),   F.mapComp' f g (CategoryTheory.CategorySt
+ruct.comp f g) ⋯ = F.mapComp f g
+参数：F : CategoryTheory.Pseudofunctor B C；f : b₀ ⟶ b₁；g : b₁ ⟶ b₂；CategoryTheory.C
+ategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.Pseudofunctor.mapComp'`：mapComp'_hom_naturality : (F.map 
+fg).toFunctor.map a ≫ (F.mapComp' f g fg hfg).hom.toNatTrans.app Y = (F.mapComp'
+ f g fg hfg).hom.toNatTrans…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.mapIso_refl`：mapIso_refl (F : C ⥤ D) (X : C) : F.
+mapIso (Iso.refl X) = Iso.refl (F.obj X)
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mapComp'_eq_mapComp {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) :
     F.mapComp' f g _ rfl = F.mapComp f g := by
   simp [mapComp']
 
 @[simp]
-/--
-lemma `toLax_mapComp'` / 引理 `toLax_mapComp'`
-
-English:
-lemma toLax_mapComp'
-  statement: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLax_mapComp'
-  结论: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: F.mapComp, F.toLax.mapComp, cat_disch, mapComp
+/-
+**CategoryTheory.Pseudofunctor.toLax_mapComp'** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Pseudofunctor`。
+形式化陈述：toLax_mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂) (
+h : f ≫ g = fg
+参数：f : b₀ ⟶ b₁；g : b₁ ⟶ b₂；fg : b₀ ⟶ b₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLax_mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
     (h : f ≫ g = fg := by cat_disch) :
@@ -895,20 +890,13 @@ lemma toLax_mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂
   rfl
 
 @[simp]
-/--
-lemma `toOplax_mapComp'` / 引理 `toOplax_mapComp'`
-
-English:
-lemma toOplax_mapComp'
-  statement: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  proof: rfl
-
-中文:
-引理 toOplax_mapComp'
-  结论: {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
-  证明: rfl
-
-Depends on / 依赖: F.mapComp, F.toOplax.mapComp, cat_disch, mapComp, toOplax
+/-
+**CategoryTheory.Pseudofunctor.toOplax_mapComp'** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Pseudofunctor`。
+形式化陈述：toOplax_mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
+ (h : f ≫ g = fg
+参数：f : b₀ ⟶ b₁；g : b₁ ⟶ b₂；fg : b₀ ⟶ b₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toOplax_mapComp' {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (fg : b₀ ⟶ b₂)
     (h : f ≫ g = fg := by cat_disch) :
@@ -919,187 +907,113 @@ end
 
 /-- Construct a pseudofunctor from an oplax functor whose `mapId` and `mapComp` are isomorphisms. -/
 @[simps]
-/--
-Definition of `mkOfOplax` / `mkOfOplax` 的定义
+/-
+**CategoryTheory.Pseudofunctor.mkOfOplax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Pseudofunctor`。
+形式化陈述：mkOfOplax (F : B ⥤ᵒᵖᴸ C) (F' : F.PseudoCore) : B ⥤ᵖ C where toPrelaxFuncto
+r
+参数：F : B ⥤ᵒᵖᴸ C；F' : F.PseudoCore。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfOplax
-  signature: (F : B ⥤ᵒᵖᴸ C) (F' : F.PseudoCore)
-  body: F.toPrelaxFunctor
-  mapId := F'.mapIdIso
-  mapComp := F'.mapCompIso
-  map₂_whisker_left := fun f g h η => by
-    rw [F'.mapCompIso_hom f g]; rw [← F.mapComp_naturality_right_assoc]; rw [← F'.mapCompIso_hom f h]; rw [hom_inv_id]; rw [comp_id]
-  map₂_whisker_right := fun η h => by
-    rw [F'.mapCompIso_hom _ h]; rw [← F.mapComp_naturality_left_assoc]; rw [← F'.mapCompIso_hom _ h]; rw [hom_inv_id]; rw [comp_id]
-  map₂_associator := fun f g h => by
-    rw [F'.mapCompIso_hom (f ≫ g) h]; rw [F'.mapCompIso_hom f g]; rw [← F.map₂_associator_assoc]; rw [←
-      F'.mapCompIso_hom f (g ≫ h)]; rw [← F'.mapCompIso_hom g h]; rw [whiskerLeft_hom_inv_assoc]; rw [hom_inv_id]; rw [comp_id]
-
-中文:
-定义 mkOfOplax
-  签名: (F : B ⥤ᵒᵖᴸ C) (F' : F.PseudoCore)
-  定义体: F.toPrelaxFunctor
-  mapId := F'.mapIdIso
-  mapComp := F'.mapCompIso
-  map₂_whisker_left := fun f g h η => by
-    rw [F'.mapCompIso_hom f g]; rw [← F.mapComp_naturality_right_assoc]; rw [← F'.mapCompIso_hom f h]; rw [hom_inv_id]; rw [comp_id]
-  map₂_whisker_right := fun η h => by
-    rw [F'.mapCompIso_hom _ h]; rw [← F.mapComp_naturality_left_assoc]; rw [← F'.mapCompIso_hom _ h]; rw [hom_inv_id]; rw [comp_id]
-  map₂_associator := fun f g h => by
-    rw [F'.mapCompIso_hom (f ≫ g) h]; rw [F'.mapCompIso_hom f g]; rw [← F.map₂_associator_assoc]; rw [←
-      F'.mapCompIso_hom f (g ≫ h)]; rw [← F'.mapCompIso_hom g h]; rw [whiskerLeft_hom_inv_assoc]; rw [hom_inv_id]; rw [comp_id]
-
-Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
+--- 原说明 ---
+Construct a pseudofunctor from an oplax functor whose `mapId` and `mapComp` are 
+isomorphisms.
 -/
 def mkOfOplax (F : B ⥤ᵒᵖᴸ C) (F' : F.PseudoCore) : B ⥤ᵖ C where
   toPrelaxFunctor := F.toPrelaxFunctor
   mapId := F'.mapIdIso
   mapComp := F'.mapCompIso
   map₂_whisker_left := fun f g h η => by
-    rw [F'.mapCompIso_hom f g]; rw [← F.mapComp_naturality_right_assoc]; rw [← F'.mapCompIso_hom f h]; rw [hom_inv_id]; rw [comp_id]
+    rw [F'.mapCompIso_hom f g, ← F.mapComp_naturality_right_assoc, ← F'.mapCompIso_hom f h,
+      hom_inv_id, comp_id]
   map₂_whisker_right := fun η h => by
-    rw [F'.mapCompIso_hom _ h]; rw [← F.mapComp_naturality_left_assoc]; rw [← F'.mapCompIso_hom _ h]; rw [hom_inv_id]; rw [comp_id]
+    rw [F'.mapCompIso_hom _ h, ← F.mapComp_naturality_left_assoc, ← F'.mapCompIso_hom _ h,
+      hom_inv_id, comp_id]
   map₂_associator := fun f g h => by
-    rw [F'.mapCompIso_hom (f ≫ g) h]; rw [F'.mapCompIso_hom f g]; rw [← F.map₂_associator_assoc]; rw [←
-      F'.mapCompIso_hom f (g ≫ h)]; rw [← F'.mapCompIso_hom g h]; rw [whiskerLeft_hom_inv_assoc]; rw [hom_inv_id]; rw [comp_id]
+    rw [F'.mapCompIso_hom (f ≫ g) h, F'.mapCompIso_hom f g, ← F.map₂_associator_assoc, ←
+      F'.mapCompIso_hom f (g ≫ h), ← F'.mapCompIso_hom g h, whiskerLeft_hom_inv_assoc,
+      hom_inv_id, comp_id]
 
 /-- Construct a pseudofunctor from an oplax functor whose `mapId` and `mapComp` are isomorphisms. -/
 @[simps!]
-/--
-Definition of `mkOfOplax'` / `mkOfOplax'` 的定义
+/-
+**CategoryTheory.Pseudofunctor.mkOfOplax'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Pseudofunctor`。
+形式化陈述：mkOfOplax' (F : B ⥤ᵒᵖᴸ C) [forall a, IsIso (F.mapId a)] [forall {a b c} (f
+ : a ⟶ b) (g : b ⟶ c), IsIso (F.mapComp f g)] : B ⥤ᵖ C where toPrelaxFunctor
+参数：F : B ⥤ᵒᵖᴸ C；F.mapId a；f : a ⟶ b；g : b ⟶ c；F.mapComp f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfOplax'
-  signature: (F : B ⥤ᵒᵖᴸ C) [forall a, IsIso (F.mapId a)]
-  body: F.toPrelaxFunctor
-  mapId := fun a => asIso (F.mapId a)
-  mapComp := fun f g => asIso (F.mapComp f g)
-  map₂_whisker_left := fun f g h η => by
-    dsimp
-    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_right]
-  map₂_whisker_right := fun η h => by
-    dsimp
-    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_left]
-  map₂_associator := fun f g h => by
-    dsimp
-    simp only [← assoc]
-    rw [IsIso.eq_comp_inv]; rw [← Bicategory.inv_whiskerLeft]; rw [IsIso.eq_comp_inv]
-    simp only [assoc, F.map₂_associator]
-
-中文:
-定义 mkOfOplax'
-  签名: (F : B ⥤ᵒᵖᴸ C) [对任意 a, 是同构 (F.mapId a)]
-  定义体: F.toPrelaxFunctor
-  mapId := fun a => asIso (F.mapId a)
-  mapComp := fun f g => asIso (F.mapComp f g)
-  map₂_whisker_left := fun f g h η => by
-    dsimp
-    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_right]
-  map₂_whisker_right := fun η h => by
-    dsimp
-    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_left]
-  map₂_associator := fun f g h => by
-    dsimp
-    simp only [← assoc]
-    rw [IsIso.eq_comp_inv]; rw [← Bicategory.inv_whiskerLeft]; rw [IsIso.eq_comp_inv]
-    simp only [assoc, F.map₂_associator]
-
-Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
+--- 原说明 ---
+Construct a pseudofunctor from an oplax functor whose `mapId` and `mapComp` are 
+isomorphisms.
 -/
-noncomputable def mkOfOplax' (F : B ⥤ᵒᵖᴸ C) [forall a, IsIso (F.mapId a)]
-    [forall {a b c} (f : a ⟶ b) (g : b ⟶ c), IsIso (F.mapComp f g)] : B ⥤ᵖ C where
+noncomputable def mkOfOplax' (F : B ⥤ᵒᵖᴸ C) [∀ a, IsIso (F.mapId a)]
+    [∀ {a b c} (f : a ⟶ b) (g : b ⟶ c), IsIso (F.mapComp f g)] : B ⥤ᵖ C where
   toPrelaxFunctor := F.toPrelaxFunctor
   mapId := fun a => asIso (F.mapId a)
   mapComp := fun f g => asIso (F.mapComp f g)
   map₂_whisker_left := fun f g h η => by
     dsimp
-    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_right]
+    rw [← assoc, IsIso.eq_comp_inv, F.mapComp_naturality_right]
   map₂_whisker_right := fun η h => by
     dsimp
-    rw [← assoc]; rw [IsIso.eq_comp_inv]; rw [F.mapComp_naturality_left]
+    rw [← assoc, IsIso.eq_comp_inv, F.mapComp_naturality_left]
   map₂_associator := fun f g h => by
     dsimp
     simp only [← assoc]
-    rw [IsIso.eq_comp_inv]; rw [← Bicategory.inv_whiskerLeft]; rw [IsIso.eq_comp_inv]
+    rw [IsIso.eq_comp_inv, ← Bicategory.inv_whiskerLeft, IsIso.eq_comp_inv]
     simp only [assoc, F.map₂_associator]
 
 /-- Construct a pseudofunctor from a lax functor whose `mapId` and `mapComp` are isomorphisms. -/
 @[simps]
-/--
-Definition of `mkOfLax` / `mkOfLax` 的定义
+/-
+**CategoryTheory.Pseudofunctor.mkOfLax** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Pseudofunctor`。
+形式化陈述：mkOfLax (F : B ⥤ᴸ C) (F' : F.PseudoCore) : B ⥤ᵖ C where toPrelaxFunctor
+参数：F : B ⥤ᴸ C；F' : F.PseudoCore。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfLax
-  signature: (F : B ⥤ᴸ C) (F' : F.PseudoCore)
-  body: F.toPrelaxFunctor
-  mapId := F'.mapIdIso
-  mapComp := F'.mapCompIso
-  map₂_whisker_left f g h η := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_right]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
-  map₂_whisker_right η h := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_left]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
-  map₂_associator {a b c d} f g h := by
-    rw [F'.mapCompIso_inv]; rw [F'.mapCompIso_inv]; rw [← inv_comp_eq]; rw [← IsIso.inv_comp_eq]
-    simp
-  map₂_left_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
-  map₂_right_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
-
-中文:
-定义 mkOfLax
-  签名: (F : B ⥤ᴸ C) (F' : F.PseudoCore)
-  定义体: F.toPrelaxFunctor
-  mapId := F'.mapIdIso
-  mapComp := F'.mapCompIso
-  map₂_whisker_left f g h η := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_right]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
-  map₂_whisker_right η h := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_left]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
-  map₂_associator {a b c d} f g h := by
-    rw [F'.mapCompIso_inv]; rw [F'.mapCompIso_inv]; rw [← inv_comp_eq]; rw [← IsIso.inv_comp_eq]
-    simp
-  map₂_left_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
-  map₂_right_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
-
-Depends on / 依赖: F.toPrelaxFunctor, toPrelaxFunctor
+--- 原说明 ---
+Construct a pseudofunctor from a lax functor whose `mapId` and `mapComp` are iso
+morphisms.
 -/
 def mkOfLax (F : B ⥤ᴸ C) (F' : F.PseudoCore) : B ⥤ᵖ C where
   toPrelaxFunctor := F.toPrelaxFunctor
   mapId := F'.mapIdIso
   mapComp := F'.mapCompIso
   map₂_whisker_left f g h η := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_right]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
+    rw [F'.mapCompIso_inv, ← LaxFunctor.mapComp_naturality_right, ← F'.mapCompIso_inv,
+      hom_inv_id_assoc]
   map₂_whisker_right η h := by
-    rw [F'.mapCompIso_inv]; rw [← LaxFunctor.mapComp_naturality_left]; rw [← F'.mapCompIso_inv]; rw [hom_inv_id_assoc]
+    rw [F'.mapCompIso_inv, ← LaxFunctor.mapComp_naturality_left, ← F'.mapCompIso_inv,
+      hom_inv_id_assoc]
   map₂_associator {a b c d} f g h := by
-    rw [F'.mapCompIso_inv]; rw [F'.mapCompIso_inv]; rw [← inv_comp_eq]; rw [← IsIso.inv_comp_eq]
+    rw [F'.mapCompIso_inv, F'.mapCompIso_inv, ← inv_comp_eq, ← IsIso.inv_comp_eq]
     simp
   map₂_left_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
   map₂_right_unitor {a b} f := by rw [← IsIso.inv_eq_inv, ← F.map₂_inv]; simp
 
 /-- Construct a pseudofunctor from a lax functor whose `mapId` and `mapComp` are isomorphisms. -/
 @[simps!]
-/--
-Definition of `mkOfLax'` / `mkOfLax'` 的定义
+/-
+**CategoryTheory.Pseudofunctor.mkOfLax'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Pseudofunctor`。
+形式化陈述：mkOfLax' (F : B ⥤ᴸ C) [forall a, IsIso (F.mapId a)] [forall {a b c} (f : a
+ ⟶ b) (g : b ⟶ c), IsIso (F.mapComp f g)] : B ⥤ᵖ C
+参数：F : B ⥤ᴸ C；F.mapId a；f : a ⟶ b；g : b ⟶ c；F.mapComp f g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfLax'
-  signature: (F : B ⥤ᴸ C) [forall a, IsIso (F.mapId a)]
-  body: mkOfLax F
-  { mapIdIso := fun a => (asIso (F.mapId a)).symm
-    mapCompIso := fun f g => (asIso (F.mapComp f g)).symm }
-
-中文:
-定义 mkOfLax'
-  签名: (F : B ⥤ᴸ C) [对任意 a, 是同构 (F.mapId a)]
-  定义体: mkOfLax F
-  { mapIdIso := fun a => (asIso (F.mapId a)).symm
-    mapCompIso := fun f g => (asIso (F.mapComp f g)).symm }
-
-Depends on / 依赖: F.mapComp, F.mapId, mapComp, mapCompIso, mapIdIso, mkOfLax
+--- 原说明 ---
+Construct a pseudofunctor from a lax functor whose `mapId` and `mapComp` are iso
+morphisms.
 -/
-noncomputable def mkOfLax' (F : B ⥤ᴸ C) [forall a, IsIso (F.mapId a)]
-    [forall {a b c} (f : a ⟶ b) (g : b ⟶ c), IsIso (F.mapComp f g)] : B ⥤ᵖ C :=
+noncomputable def mkOfLax' (F : B ⥤ᴸ C) [∀ a, IsIso (F.mapId a)]
+    [∀ {a b c} (f : a ⟶ b) (g : b ⟶ c), IsIso (F.mapComp f g)] : B ⥤ᵖ C :=
   mkOfLax F
   { mapIdIso := fun a => (asIso (F.mapId a)).symm
     mapCompIso := fun f g => (asIso (F.mapComp f g)).symm }
@@ -1109,3 +1023,4 @@ end
 end Pseudofunctor
 
 end CategoryTheory
+

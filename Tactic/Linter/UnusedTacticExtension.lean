@@ -8,7 +8,7 @@ module
 
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 public import Lean.Exception
 
 /-!
@@ -34,21 +34,38 @@ public initialize allowedUnusedTacticExt :
   }
 
 /--
-Definition of `addAllowedUnusedTactic` / `addAllowedUnusedTactic` 的定义
+`addAllowedUnusedTactic stxNodes` takes as input a `HashSet` of `SyntaxNodeKind`s and extends the
+`allowedUnusedTacticExt` environment extension with its content.
 
-English:
-definition addAllowedUnusedTactic
-  signature: {m : Type -> Type} [Monad m] [MonadEnv m]
-  body: stxNodes.foldM (init := ()) fun _ d => modifyEnv (allowedUnusedTacticExt.addEntry · d)
+These are tactics that the unused tactic linter will ignore, since they are expected to not change
+the tactic state.
 
-中文:
-定义 addAllowedUnusedTactic
-  签名: {m : 类型 -> 类型} [单子 m] [MonadEnv m]
-  定义体: stxNodes.foldM (init := ()) fun _ d => modifyEnv (allowedUnusedTacticExt.addEntry · d)
-
-Depends on / 依赖: addEntry, allowedUnusedTacticExt, allowedUnusedTacticExt.addEntry, modifyEnv, stxNodes, stxNodes.foldM
+See the `#allow_unused_tactic! ids` command for dynamically extending the extension as a user-facing
+command.
 -/
-def addAllowedUnusedTactic {m : Type -> Type} [Monad m] [MonadEnv m]
+/-
+**Mathlib.Linter.UnusedTactic.addAllowedUnusedTactic** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Linter.UnusedTactic`。
+形式化陈述：addAllowedUnusedTactic {m : Type -> Type} [Monad m] [MonadEnv m] (stxNodes
+ : Std.HashSet SyntaxNodeKind) : m Unit
+参数：stxNodes : Std.HashSet SyntaxNodeKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`addAllowedUnusedTactic stxNodes` takes as input a `HashSet` of `SyntaxNodeKind`
+s and extends the
+`allowedUnusedTacticExt` environment extension with its content.
+
+These are tactics that the unused tactic linter will ignore, since they are expe
+cted to not change
+the tactic state.
+
+See the `#allow_unused_tactic! ids` command for dynamically extending the extens
+ion as a user-facing
+command.
+-/
+def addAllowedUnusedTactic {m : Type → Type} [Monad m] [MonadEnv m]
     (stxNodes : Std.HashSet SyntaxNodeKind) :
     m Unit :=
   stxNodes.foldM (init := ()) fun _ d => modifyEnv (allowedUnusedTacticExt.addEntry · d)
@@ -57,7 +74,7 @@ def addAllowedUnusedTactic {m : Type -> Type} [Monad m] [MonadEnv m]
 This can be increased dynamically, using `#allow_unused_tactic`.
 -/
 public initialize allowedRef : IO.Ref (Std.HashSet SyntaxNodeKind) ←
-IO.mkRef .ofArray #[
+  IO.mkRef <| .ofArray #[
     `Mathlib.Tactic.Says.says,
     `Batteries.Tactic.«tacticOn_goal-_=>_»,
     `by,
@@ -74,7 +91,7 @@ IO.mkRef .ofArray #[
     `change?,
     `«tactic#adaptation_note_»,
     `tacticSleep_heartbeats_,
-    `Mathlib.Tactic.«tacticRename_bvar_->__»,
+    `Mathlib.Tactic.«tacticRename_bvar_→__»,
     ``Lean.Parser.Tactic.Conv.skip
   ]
 
@@ -90,7 +107,7 @@ For instance, you can allow the `done` and `skip` tactics using
 #allow_unused_tactic Lean.Parser.Tactic.done Lean.Parser.Tactic.skip
 ```
 
-This change is file-local. If you want a *persistent* change, then use the `!`-flag:
+This change is file-local.  If you want a *persistent* change, then use the `!`-flag:
 the command `#allow_unused_tactic! ids` makes the change the linter continues to ignore these
 tactics also in files importing a file where this command is issued.
 
@@ -125,3 +142,4 @@ elab "#show_kind " t:tactic : command => do
   Lean.logInfoAt t m!"The `SyntaxNodeKind` is '{stx.raw.getKind}'."
 
 end Mathlib.Linter.UnusedTactic
+

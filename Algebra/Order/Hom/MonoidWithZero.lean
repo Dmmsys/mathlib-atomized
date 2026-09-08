@@ -41,30 +41,38 @@ section MonoidWithZero
 
 variable [Preorder α] [Preorder β] [MulZeroOneClass α] [MulZeroOneClass β]
 
-/--
-Definition of `OrderMonoidWithZeroHom` / `OrderMonoidWithZeroHom` 的定义
+/-- `OrderMonoidWithZeroHom α β` is the type of functions `α → β` that preserve
+the `MonoidWithZero` structure.
 
-English:
-structure OrderMonoidWithZeroHom
-  parameters: (α β : Type*) [Preorder α] [Preorder β] [MulZeroOneClass α]
-  extends: α ->*₀ β
-  axioms and operations (1):
-    - monotone' : Monotone toFun
+`OrderMonoidWithZeroHom` is also used for group homomorphisms.
 
-中文:
-结构 带零Order幺半群态射
-  参数: (α β : 类型) [预序 α] [预序 β] [乘零幺类 α]
-  继承: α ->*₀ β
-  公理与运算 (1 个):
-    - monotone' : 递增 toFun
+When possible, instead of parametrizing results over `(f : α →+ β)`,
+you should parameterize over
+`(F : Type*) [FunLike F M N] [MonoidWithZeroHomClass F M N] [OrderHomClass F M N] (f : F)`. -/
+/-
+**OrderMonoidWithZeroHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_6) →   (β : Type u_7) → [Preorder α] → [Preorder β] → [MulZero
+OneClass α] → [MulZeroOneClass β] → Type (max u_6 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`OrderMonoidWithZeroHom α β` is the type of functions `α → β` that preserve
+the `MonoidWithZero` structure.
+
+`OrderMonoidWithZeroHom` is also used for group homomorphisms.
+
+When possible, instead of parametrizing results over `(f : α →+ β)`,
+you should parameterize over
+`(F : Type*) [FunLike F M N] [MonoidWithZeroHomClass F M N] [OrderHomClass F M N
+] (f : F)`.
 -/
 structure OrderMonoidWithZeroHom (α β : Type*) [Preorder α] [Preorder β] [MulZeroOneClass α]
-  [MulZeroOneClass β] extends α ->*₀ β where
+  [MulZeroOneClass β] extends α →*₀ β where
   /-- An `OrderMonoidWithZeroHom` is a monotone function. -/
   monotone' : Monotone toFun
 
 /-- Infix notation for `OrderMonoidWithZeroHom`. -/
-infixr:25 " ->*₀o " => OrderMonoidWithZeroHom
+infixr:25 " →*₀o " => OrderMonoidWithZeroHom
 
 section
 
@@ -79,45 +87,41 @@ TODO: Following [#mathlib4 > Mathlib's morphism hierarchy]
 mathlib4/topic/Mathlib.27s.20morphism.20hierarchy/with/554383157),
 rename this to `OrderMonoidWithZeroHom.ofClass` and remove `@[coe]` tag. -/
 @[coe]
-/--
-Definition of `OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom` / `OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom` 的定义
+/-
+**OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间
+ ``。
+形式化陈述：OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom [OrderHomClass F α β]
+ [MonoidWithZeroHomClass F α β] (f : F) : α ->*₀o β
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderHomClass.monotone`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} [
+inst : Preorder α] [inst_1 : Preorder β] [inst_2 : FunLike F α β]   [OrderHomCla
+ss F α β] (f…
 
-English:
-definition OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom
-  signature: [OrderHomClass F α β]
-  body: { (.ofClass f : α ->*₀ β) with monotone' := OrderHomClass.monotone f }
-
-中文:
-定义 OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom
-  签名: [序态射类 F α β]
-  定义体: { (.ofClass f : α ->*₀ β) with monotone' := OrderHomClass.monotone f }
-
-Depends on / 依赖: OrderHomClass, OrderHomClass.monotone, monotone, ofClass
+--- 原说明 ---
+Turn an element of a type `F`
+satisfying `OrderHomClass F α β` and `MonoidWithZeroHomClass F α β`
+into an actual `OrderMonoidWithZeroHom`.
+This is declared as the default coercion from `F` to `α →+*₀o β`.
+TODO: Following [#mathlib4 > Mathlib's morphism hierarchy]
+(https://leanprover.zulipchat.com/#narrow/channel/287929-
+mathlib4/topic/Mathlib.27s.20morphism.20hierarchy/with/554383157),
+rename this to `OrderMonoidWithZeroHom.ofClass` and remove `@[coe]` tag.
 -/
 def OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom [OrderHomClass F α β]
-    [MonoidWithZeroHomClass F α β] (f : F) : α ->*₀o β :=
-{ (.ofClass f : α ->*₀ β) with monotone' := OrderHomClass.monotone f }
+    [MonoidWithZeroHomClass F α β] (f : F) : α →*₀o β :=
+{ (.ofClass f : α →*₀ β) with monotone' := OrderHomClass.monotone f }
 
 end
 
 variable [FunLike F α β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OrderHomClass
-  signature: F α β] [MonoidWithZeroHomClass F α β] : CoeTC F (α ->*₀o β)
-  body: ⟨OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom⟩
-
-中文:
-实例 [序态射类
-  签名: F α β] [带零幺半群态射类 F α β] : CoeTC F (α ->*₀o β)
-  定义体: ⟨OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom⟩
-
-Depends on / 依赖: OrderMonoidWithZeroHomClass, OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom, toOrderMonoidWithZeroHom
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [OrderHomClass F α β] [MonoidWithZeroHomClass F α β] : CoeTC F (α ->*₀o β) :=
+instance [OrderHomClass F α β] [MonoidWithZeroHomClass F α β] : CoeTC F (α →*₀o β) :=
   ⟨OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom⟩
 
 end MonoidWithZero
@@ -127,598 +131,412 @@ namespace OrderMonoidWithZeroHom
 section Preorder
 
 variable [Preorder α] [Preorder β] [Preorder γ] [Preorder δ] [MulZeroOneClass α] [MulZeroOneClass β]
-  [MulZeroOneClass γ] [MulZeroOneClass δ] {f g : α ->*₀o β}
+  [MulZeroOneClass γ] [MulZeroOneClass δ] {f g : α →*₀o β}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (α ->*₀o β) α β
-  body: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨⟨_, _⟩⟩, _⟩ := f
-    obtain ⟨⟨⟨_, _⟩⟩, _⟩ := g
-    congr
-
-initialize_simps_projections OrderMonoidWithZeroHom (toFun -> apply, -toMonoidWithZeroHom)
-
-中文:
-实例 :
-  签名: 函数状 (α ->*₀o β) α β
-  定义体: f.toFun
-  coe_injective f g h := by
-    obtain ⟨⟨⟨_, _⟩⟩, _⟩ := f
-    obtain ⟨⟨⟨_, _⟩⟩, _⟩ := g
-    congr
-
-initialize_simps_projections OrderMonoidWithZeroHom (toFun -> apply, -toMonoidWithZeroHom)
-
-Depends on / 依赖: f.toFun
+/-
+**OrderMonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `OrderMonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (α ->*₀o β) α β where
+instance : FunLike (α →*₀o β) α β where
   coe f := f.toFun
   coe_injective f g h := by
     obtain ⟨⟨⟨_, _⟩⟩, _⟩ := f
     obtain ⟨⟨⟨_, _⟩⟩, _⟩ := g
     congr
 
-initialize_simps_projections OrderMonoidWithZeroHom (toFun -> apply, -toMonoidWithZeroHom)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidWithZeroHomClass (α ->*₀o β) α β
-  body: f.map_mul'
-  map_one f := f.map_one'
-  map_zero f := f.map_zero'
-
-中文:
-实例 :
-  签名: 带零幺半群态射类 (α ->*₀o β) α β
-  定义体: f.map_mul'
-  map_one f := f.map_one'
-  map_zero f := f.map_zero'
-
-Depends on / 依赖: f.map_mul, map_mul
+initialize_simps_projections OrderMonoidWithZeroHom (toFun → apply, -toMonoidWithZeroHom)
+/-
+**OrderMonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `OrderMonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MonoidWithZeroHomClass (α ->*₀o β) α β where
+instance : MonoidWithZeroHomClass (α →*₀o β) α β where
   map_mul f := f.map_mul'
   map_one f := f.map_one'
   map_zero f := f.map_zero'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderHomClass (α ->*₀o β) α β
-  body: f.monotone' h
-
-中文:
-实例 :
-  签名: 序态射类 (α ->*₀o β) α β
-  定义体: f.monotone' h
-
-Depends on / 依赖: f.monotone, monotone
+/-
+**OrderMonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `OrderMonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : OrderHomClass (α ->*₀o β) α β where
+instance : OrderHomClass (α →*₀o β) α β where
   map_rel f _ _ h := f.monotone' h
 
 -- Other lemmas should be accessed through the `FunLike` API
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**OrderMonoidWithZeroHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroHom`。
+形式化陈述：ext (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (h : forall a, f a = g a) : f = g :=
+theorem ext (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
-
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  given: (f : α ->*₀o β)
-  statement: f.toFun = (f : α -> β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFun_eq_coe
-  条件: (f : α ->*₀o β)
-  结论: f.toFun = (f : α -> β)
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWith
+ZeroHom`。
+形式化陈述：toFun_eq_coe (f : α ->*₀o β) : f.toFun = (f : α -> β)
+参数：f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toFun_eq_coe (f : α ->*₀o β) : f.toFun = (f : α -> β) :=
+theorem toFun_eq_coe (f : α →*₀o β) : f.toFun = (f : α → β) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : α ->*₀ β) (h)
-  statement: (OrderMonoidWithZeroHom.mk f h : α -> β) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (f : α ->*₀ β) (h)
-  结论: (带零Order幺半群态射.mk f h : α -> β) = f
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroHo
+m`。
+形式化陈述：coe_mk (f : α ->*₀ β) (h) : (OrderMonoidWithZeroHom.mk f h : α -> β) = f
+参数：f : α ->*₀ β；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : α ->*₀ β) (h) : (OrderMonoidWithZeroHom.mk f h : α -> β) = f :=
+theorem coe_mk (f : α →*₀ β) (h) : (OrderMonoidWithZeroHom.mk f h : α → β) = f :=
   rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (f : α ->*₀o β) (h)
-  statement: OrderMonoidWithZeroHom.mk (.ofClass f) h = f
-  proof: rfl
-
-中文:
-定理 mk_coe
-  条件: (f : α ->*₀o β) (h)
-  结论: 带零Order幺半群态射.mk (.ofClass f) h = f
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroHo
+m`。
+形式化陈述：mk_coe (f : α ->*₀o β) (h) : OrderMonoidWithZeroHom.mk (.ofClass f) h = f
+参数：f : α ->*₀o β；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem mk_coe (f : α ->*₀o β) (h) : OrderMonoidWithZeroHom.mk (.ofClass f) h = f := rfl
+theorem mk_coe (f : α →*₀o β) (h) : OrderMonoidWithZeroHom.mk (.ofClass f) h = f := rfl
 
-/--
-Definition of `toOrderMonoidHom` / `toOrderMonoidHom` 的定义
+/-- Reinterpret an ordered monoid with zero homomorphism as an order monoid homomorphism. -/
+/-
+**OrderMonoidWithZeroHom.toOrderMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoid
+WithZeroHom`。
+形式化陈述：toOrderMonoidHom (f : α ->*₀o β) : α ->*o β
+参数：f : α ->*₀o β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.monotone'`：∀ {α : Type u_6} {β : Type u_7} [inst 
+: Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α]   [inst_3 : Mul
+ZeroOneClass β] (self …
 
-English:
-definition toOrderMonoidHom
-  signature: (f : α ->*₀o β)
-  body: { f with }
-
-@[simp]
-
-中文:
-定义 toOrderMonoidHom
-  签名: (f : α ->*₀o β)
-  定义体: { f with }
-
-@[simp]
+--- 原说明 ---
+Reinterpret an ordered monoid with zero homomorphism as an order monoid homomorp
+hism.
 -/
-def toOrderMonoidHom (f : α ->*₀o β) : α ->*o β :=
+def toOrderMonoidHom (f : α →*₀o β) : α →*o β :=
   { f with }
 
 @[simp]
-/--
-theorem `coe_monoidWithZeroHom` / 定理 `coe_monoidWithZeroHom`
-
-English:
-theorem coe_monoidWithZeroHom
-  given: (f : α ->*₀o β)
-  statement: ⇑(.ofClass f : α ->*₀ β) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_monoidWithZeroHom
-  条件: (f : α ->*₀o β)
-  结论: ⇑(.ofClass f : α ->*₀ β) = f
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.coe_monoidWithZeroHom** 是 Mathlib 中的一个定理，位于命名空间 `OrderM
+onoidWithZeroHom`。
+形式化陈述：coe_monoidWithZeroHom (f : α ->*₀o β) : ⇑(.ofClass f : α ->*₀ β) = f
+参数：f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem coe_monoidWithZeroHom (f : α ->*₀o β) : ⇑(.ofClass f : α ->*₀ β) = f :=
+theorem coe_monoidWithZeroHom (f : α →*₀o β) : ⇑(.ofClass f : α →*₀ β) = f :=
   rfl
 
 @[simp]
-/--
-theorem `coe_orderMonoidHom` / 定理 `coe_orderMonoidHom`
-
-English:
-theorem coe_orderMonoidHom
-  given: (f : α ->*₀o β)
-  statement: ⇑(f : α ->*o β) = f
-  proof: rfl
-
-中文:
-定理 coe_orderMonoidHom
-  条件: (f : α ->*₀o β)
-  结论: ⇑(f : α ->*o β) = f
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.coe_orderMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `OrderMono
+idWithZeroHom`。
+形式化陈述：coe_orderMonoidHom (f : α ->*₀o β) : ⇑(f : α ->*o β) = f
+参数：f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instOrderHomClass`：∀ {α : Type u_2} {β : Type u_3
+} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α]   [inst
+_3 : MulZeroOneClass β], Order…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem coe_orderMonoidHom (f : α ->*₀o β) : ⇑(f : α ->*o β) = f :=
+theorem coe_orderMonoidHom (f : α →*₀o β) : ⇑(f : α →*o β) = f :=
   rfl
-
-/--
-theorem `toOrderMonoidHom_injective` / 定理 `toOrderMonoidHom_injective`
-
-English:
-theorem toOrderMonoidHom_injective
-  statement: Injective (toOrderMonoidHom : _ -> α ->*o β)
-  proof: fun f g h =>
-ext by convert! DFunLike.ext_iff.1 h using 0
-
-中文:
-定理 toOrderMonoidHom_injective
-  结论: 单射 (toOrderMonoidHom : _ -> α ->*o β)
-  证明: fun f g h =>
-ext by convert! DFunLike.ext_iff.1 h using 0
+/-
+**OrderMonoidWithZeroHom.toOrderMonoidHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `O
+rderMonoidWithZeroHom`。
+形式化陈述：toOrderMonoidHom_injective : Injective (toOrderMonoidHom : _ -> α ->*o β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.ext`：ext (h : forall a, f a = g a) : f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-theorem toOrderMonoidHom_injective : Injective (toOrderMonoidHom : _ -> α ->*o β) := fun f g h =>
-ext by convert! DFunLike.ext_iff.1 h using 0
-
-/--
-theorem `toMonoidWithZeroHom_injective` / 定理 `toMonoidWithZeroHom_injective`
-
-English:
-theorem toMonoidWithZeroHom_injective
-  statement: Injective (toMonoidWithZeroHom : _ -> α ->*₀ β)
-  proof: fun f g h => ext by convert! DFunLike.ext_iff.1 h using 0
-
-中文:
-定理 toMonoidWithZeroHom_injective
-  结论: 单射 (toMonoidWithZeroHom : _ -> α ->*₀ β)
-  证明: fun f g h => ext by convert! DFunLike.ext_iff.1 h using 0
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, convert, ext_iff
+theorem toOrderMonoidHom_injective : Injective (toOrderMonoidHom : _ → α →*o β) := fun f g h =>
+  ext <| by convert! DFunLike.ext_iff.1 h using 0
+/-
+**OrderMonoidWithZeroHom.toMonoidWithZeroHom_injective** 是 Mathlib 中的一个定理，位于命名空间
+ `OrderMonoidWithZeroHom`。
+形式化陈述：toMonoidWithZeroHom_injective : Injective (toMonoidWithZeroHom : _ -> α ->
+*₀ β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.ext`：ext (h : forall a, f a = g a) : f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-theorem toMonoidWithZeroHom_injective : Injective (toMonoidWithZeroHom : _ -> α ->*₀ β) :=
-fun f g h => ext by convert! DFunLike.ext_iff.1 h using 0
+theorem toMonoidWithZeroHom_injective : Injective (toMonoidWithZeroHom : _ → α →*₀ β) :=
+  fun f g h => ext <| by convert! DFunLike.ext_iff.1 h using 0
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of an `OrderMonoidWithZeroHom` with a new `toFun` equal to the old one. Useful to fix
+definitional equalities. -/
+/-
+**OrderMonoidWithZeroHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidWithZeroHom`
+。
+形式化陈述：{α : Type u_2} →   {β : Type u_3} →     [inst : Preorder α] →       [inst_
+1 : Preorder β] →         [inst_2 : MulZeroOneClass α] → [inst_3 : MulZeroOneCla
+ss β] → (f : α →*₀o β) → (f' : α → β) → f' = ⇑f → α →*o β
+参数：f : α →*₀o β；f' : α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : α ->*₀o β) (f' : α -> β) (h : f' = f)
-  body: { f.toOrderMonoidHom.copy f' h, f.toMonoidWithZeroHom.copy f' h with toFun := f' }
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : α ->*₀o β) (f' : α -> β) (h : f' = f)
-  定义体: { f.toOrderMonoidHom.copy f' h, f.toMonoidWithZeroHom.copy f' h with toFun := f' }
-
-@[simp]
+--- 原说明 ---
+Copy of an `OrderMonoidWithZeroHom` with a new `toFun` equal to the old one. Use
+ful to fix
+definitional equalities.
 -/
-protected def copy (f : α ->*₀o β) (f' : α -> β) (h : f' = f) : α ->*o β :=
+protected def copy (f : α →*₀o β) (f' : α → β) (h : f' = f) : α →*o β :=
   { f.toOrderMonoidHom.copy f' h, f.toMonoidWithZeroHom.copy f' h with toFun := f' }
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : α ->*₀o β) (f' : α -> β) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : α ->*₀o β) (f' : α -> β) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZero
+Hom`。
+形式化陈述：coe_copy (f : α ->*₀o β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f'
+参数：f : α ->*₀o β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : α ->*₀o β) (f' : α -> β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : α →*₀o β) (f' : α → β) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : α ->*₀o β) (f' : α -> β) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : α ->*₀o β) (f' : α -> β) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**OrderMonoidWithZeroHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroH
+om`。
+形式化陈述：copy_eq (f : α ->*₀o β) (f' : α -> β) (h : f' = f) : f.copy f' h = f
+参数：f : α ->*₀o β；f' : α -> β；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
+· 使用定理 `OrderMonoidWithZeroHom.instOrderHomClass`：∀ {α : Type u_2} {β : Type u_3
+} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α]   [inst
+_3 : MulZeroOneClass β], Order…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem copy_eq (f : α ->*₀o β) (f' : α -> β) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : α →*₀o β) (f' : α → β) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity map as an ordered monoid with zero homomorphism. -/
+/-
+**OrderMonoidWithZeroHom.id** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidWithZeroHom`。
+形式化陈述：(α : Type u_2) → [inst : Preorder α] → [inst_1 : MulZeroOneClass α] → α →*
+₀o α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderHom.monotone'`：∀ {α : Type u_6} {β : Type u_7} [inst : Preorder α] 
+[inst_1 : Preorder β] (self : α →o β), Monotone self.toFun
 
-English:
-definition id
-  signature: : α ->*₀o α
-  body: { MonoidWithZeroHom.id α, OrderHom.id with }
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : α ->*₀o α
-  定义体: { MonoidWithZeroHom.id α, OrderHom.id with }
-
-@[simp, norm_cast]
+--- 原说明 ---
+The identity map as an ordered monoid with zero homomorphism.
 -/
-protected def id : α ->*₀o α :=
+protected def id : α →*₀o α :=
   { MonoidWithZeroHom.id α, OrderHom.id with }
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(OrderMonoidWithZeroHom.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(带零Order幺半群态射.id α) = id
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroHo
+m`。
+形式化陈述：coe_id : ⇑(OrderMonoidWithZeroHom.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(OrderMonoidWithZeroHom.id α) = id :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (α ->*₀o α)
-  body: ⟨OrderMonoidWithZeroHom.id α⟩
-
-中文:
-实例 :
-  签名: 可居 (α ->*₀o α)
-  定义体: ⟨OrderMonoidWithZeroHom.id α⟩
-
-Depends on / 依赖: OrderMonoidWithZeroHom, OrderMonoidWithZeroHom.id
+/-
+**OrderMonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `OrderMonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited (α ->*₀o α) :=
+instance : Inhabited (α →*₀o α) :=
   ⟨OrderMonoidWithZeroHom.id α⟩
 
 variable {α}
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of `OrderMonoidWithZeroHom`s as an `OrderMonoidWithZeroHom`. -/
+/-
+**OrderMonoidWithZeroHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `OrderMonoidWithZeroHom`
+。
+形式化陈述：comp (f : β ->*₀o γ) (g : α ->*₀o β) : α ->*₀o γ
+参数：f : β ->*₀o γ；g : α ->*₀o β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
+· 使用定理 `OrderMonoidWithZeroHom.instOrderHomClass`：∀ {α : Type u_2} {β : Type u_3
+} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α]   [inst
+_3 : MulZeroOneClass β], Order…
 
-English:
-definition comp
-  signature: (f : β ->*₀o γ) (g : α ->*₀o β)
-  body: { (.ofClass f : β ->*₀ γ).comp (.ofClass g), f.toOrderMonoidHom.comp (g : α ->*o β) with }
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : β ->*₀o γ) (g : α ->*₀o β)
-  定义体: { (.ofClass f : β ->*₀ γ).comp (.ofClass g), f.toOrderMonoidHom.comp (g : α ->*o β) with }
-
-@[simp]
-
-Depends on / 依赖: f.toOrderMonoidHom.comp, ofClass, toOrderMonoidHom
+--- 原说明 ---
+Composition of `OrderMonoidWithZeroHom`s as an `OrderMonoidWithZeroHom`.
 -/
-def comp (f : β ->*₀o γ) (g : α ->*₀o β) : α ->*₀o γ :=
-  { (.ofClass f : β ->*₀ γ).comp (.ofClass g), f.toOrderMonoidHom.comp (g : α ->*o β) with }
+def comp (f : β →*₀o γ) (g : α →*₀o β) : α →*₀o γ :=
+  { (.ofClass f : β →*₀ γ).comp (.ofClass g), f.toOrderMonoidHom.comp (g : α →*o β) with }
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : β ->*₀o γ) (g : α ->*₀o β)
-  statement: (f.comp g : α -> γ) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : β ->*₀o γ) (g : α ->*₀o β)
-  结论: (f.comp g : α -> γ) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZero
+Hom`。
+形式化陈述：coe_comp (f : β ->*₀o γ) (g : α ->*₀o β) : (f.comp g : α -> γ) = f ∘ g
+参数：f : β ->*₀o γ；g : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (f : β ->*₀o γ) (g : α ->*₀o β) : (f.comp g : α -> γ) = f ∘ g :=
+theorem coe_comp (f : β →*₀o γ) (g : α →*₀o β) : (f.comp g : α → γ) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : β ->*₀o γ) (g : α ->*₀o β) (a : α)
-  statement: (f.comp g) a = f (g a)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  条件: (f : β ->*₀o γ) (g : α ->*₀o β) (a : α)
-  结论: (f.comp g) a = f (g a)
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZe
+roHom`。
+形式化陈述：comp_apply (f : β ->*₀o γ) (g : α ->*₀o β) (a : α) : (f.comp g) a = f (g a
+)
+参数：f : β ->*₀o γ；g : α ->*₀o β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (f : β ->*₀o γ) (g : α ->*₀o β) (a : α) : (f.comp g) a = f (g a) :=
+theorem comp_apply (f : β →*₀o γ) (g : α →*₀o β) (a : α) : (f.comp g) a = f (g a) :=
   rfl
-
-/--
-theorem `ofClass_comp_monoidWithZeroHom` / 定理 `ofClass_comp_monoidWithZeroHom`
-
-English:
-theorem ofClass_comp_monoidWithZeroHom
-  given: (f : β ->*₀o γ) (g : α ->*₀o β)
-  proof: rfl
-
-中文:
-定理 ofClass_comp_monoidWithZeroHom
-  条件: (f : β ->*₀o γ) (g : α ->*₀o β)
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.ofClass_comp_monoidWithZeroHom** 是 Mathlib 中的一个定理，位于命名空
+间 `OrderMonoidWithZeroHom`。
+形式化陈述：ofClass_comp_monoidWithZeroHom (f : β ->*₀o γ) (g : α ->*₀o β) : .ofClass 
+(f.comp g) = (.ofClass f : β ->*₀ γ).comp (.ofClass g)
+参数：f : β ->*₀o γ；g : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem ofClass_comp_monoidWithZeroHom (f : β ->*₀o γ) (g : α ->*₀o β) :
-    .ofClass (f.comp g) = (.ofClass f : β ->*₀ γ).comp (.ofClass g) :=
+theorem ofClass_comp_monoidWithZeroHom (f : β →*₀o γ) (g : α →*₀o β) :
+    .ofClass (f.comp g) = (.ofClass f : β →*₀ γ).comp (.ofClass g) :=
   rfl
-
-/--
-theorem `coe_comp_orderMonoidHom` / 定理 `coe_comp_orderMonoidHom`
-
-English:
-theorem coe_comp_orderMonoidHom
-  given: (f : β ->*₀o γ) (g : α ->*₀o β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp_orderMonoidHom
-  条件: (f : β ->*₀o γ) (g : α ->*₀o β)
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.coe_comp_orderMonoidHom** 是 Mathlib 中的一个定理，位于命名空间 `Orde
+rMonoidWithZeroHom`。
+形式化陈述：coe_comp_orderMonoidHom (f : β ->*₀o γ) (g : α ->*₀o β) : (f.comp g : α ->
+*o γ) = (f : β ->*o γ).comp g
+参数：f : β ->*₀o γ；g : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instOrderHomClass`：∀ {α : Type u_2} {β : Type u_3
+} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α]   [inst
+_3 : MulZeroOneClass β], Order…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem coe_comp_orderMonoidHom (f : β ->*₀o γ) (g : α ->*₀o β) :
-    (f.comp g : α ->*o γ) = (f : β ->*o γ).comp g :=
+theorem coe_comp_orderMonoidHom (f : β →*₀o γ) (g : α →*₀o β) :
+    (f.comp g : α →*o γ) = (f : β →*o γ).comp g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : γ ->*₀o δ) (g : β ->*₀o γ) (h : α ->*₀o β)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : γ ->*₀o δ) (g : β ->*₀o γ) (h : α ->*₀o β)
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZe
+roHom`。
+形式化陈述：comp_assoc (f : γ ->*₀o δ) (g : β ->*₀o γ) (h : α ->*₀o β) : (f.comp g).co
+mp h = f.comp (g.comp h)
+参数：f : γ ->*₀o δ；g : β ->*₀o γ；h : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc (f : γ ->*₀o δ) (g : β ->*₀o γ) (h : α ->*₀o β) :
+theorem comp_assoc (f : γ →*₀o δ) (g : β →*₀o γ) (h : α →*₀o β) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : α ->*₀o β)
-  statement: f.comp (OrderMonoidWithZeroHom.id α) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : α ->*₀o β)
-  结论: f.comp (带零Order幺半群态射.id α) = f
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroH
+om`。
+形式化陈述：comp_id (f : α ->*₀o β) : f.comp (OrderMonoidWithZeroHom.id α) = f
+参数：f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_id (f : α ->*₀o β) : f.comp (OrderMonoidWithZeroHom.id α) = f := rfl
+theorem comp_id (f : α →*₀o β) : f.comp (OrderMonoidWithZeroHom.id α) = f := rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : α ->*₀o β)
-  statement: (OrderMonoidWithZeroHom.id β).comp f = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : α ->*₀o β)
-  结论: (带零Order幺半群态射.id β).comp f = f
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroH
+om`。
+形式化陈述：id_comp (f : α ->*₀o β) : (OrderMonoidWithZeroHom.id β).comp f = f
+参数：f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem id_comp (f : α ->*₀o β) : (OrderMonoidWithZeroHom.id β).comp f = f := rfl
+theorem id_comp (f : α →*₀o β) : (OrderMonoidWithZeroHom.id β).comp f = f := rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  given: {g₁ g₂ : β ->*₀o γ} {f : α ->*₀o β} (hf : Function.Surjective f)
-  proof: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun _ => by congr⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  条件: {g₁ g₂ : β ->*₀o γ} {f : α ->*₀o β} (hf : 函数.满射 f)
-  证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun _ => by congr⟩
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, hf.forall
+/-
+**OrderMonoidWithZeroHom.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWith
+ZeroHom`。
+形式化陈述：cancel_right {g₁ g₂ : β ->*₀o γ} {f : α ->*₀o β} (hf : Function.Surjective
+ f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Function.Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.ext`：ext (h : forall a, f a = g a) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
 -/
-theorem cancel_right {g₁ g₂ : β ->*₀o γ} {f : α ->*₀o β} (hf : Function.Surjective f) :
+theorem cancel_right {g₁ g₂ : β →*₀o γ} {f : α →*₀o β} (hf : Function.Surjective f) :
     g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun _ => by congr⟩
+  ⟨fun h => ext <| hf.forall.2 <| DFunLike.ext_iff.1 h, fun _ => by congr⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: {g : β ->*₀o γ} {f₁ f₂ : α ->*₀o β} (hg : Function.Injective g)
-  proof: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: {g : β ->*₀o γ} {f₁ f₂ : α ->*₀o β} (hg : 函数.单射 g)
-  证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: comp_apply, congr_arg
+/-
+**OrderMonoidWithZeroHom.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZ
+eroHom`。
+形式化陈述：cancel_left {g : β ->*₀o γ} {f₁ f₂ : α ->*₀o β} (hg : Function.Injective g
+) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Function.Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.ext`：ext (h : forall a, f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderMonoidWithZeroHom.comp_apply`：comp_apply (f : β ->*₀o γ) (g : α ->*
+₀o β) (a : α) : (f.comp g) a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem cancel_left {g : β ->*₀o γ} {f₁ f₂ : α ->*₀o β} (hg : Function.Injective g) :
+theorem cancel_left {g : β →*₀o γ} {f₁ f₂ : α →*₀o β} (hg : Function.Injective g) :
     g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+  ⟨fun h => ext fun a => hg <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 end Preorder
 
@@ -727,109 +545,77 @@ section Mul
 variable [LinearOrderedCommMonoidWithZero α] [LinearOrderedCommMonoidWithZero β]
   [LinearOrderedCommMonoidWithZero γ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- For two ordered monoid morphisms `f` and `g`, their product is the ordered monoid morphism
+sending `a` to `f a * g a`. -/
+/-
+**OrderMonoidWithZeroHom.** 是 Mathlib 中的一个实例，位于命名空间 `OrderMonoidWithZeroHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Mul (α ->*₀o β)
-  body: ⟨ fun f g => {(.ofClass f : α ->*₀ β) * (.ofClass g : α ->*₀ β) with
+--- 原说明 ---
+For two ordered monoid morphisms `f` and `g`, their product is the ordered monoi
+d morphism
+sending `a` to `f a * g a`.
+-/
+instance : Mul (α →*₀o β) :=
+  ⟨ fun f g => {(.ofClass f : α →*₀ β) * (.ofClass g : α →*₀ β) with
       monotone' := f.monotone'.mul' g.monotone'} ⟩
 
 @[simp]
-
-中文:
-实例 :
-  签名: 乘法 (α ->*₀o β)
-  定义体: ⟨ fun f g => {(.ofClass f : α ->*₀ β) * (.ofClass g : α ->*₀ β) with
-      monotone' := f.monotone'.mul' g.monotone'} ⟩
-
-@[simp]
-
-Depends on / 依赖: f.monotone, g.monotone, monotone, ofClass
+/-
+**OrderMonoidWithZeroHom.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZeroH
+om`。
+形式化陈述：coe_mul (f g : α ->*₀o β) : ⇑(f * g) = f * g
+参数：f g : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Mul (α ->*₀o β) :=
-  ⟨ fun f g => {(.ofClass f : α ->*₀ β) * (.ofClass g : α ->*₀ β) with
-      monotone' := f.monotone'.mul' g.monotone'} ⟩
-
-@[simp]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (f g : α ->*₀o β)
-  statement: ⇑(f * g) = f * g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mul
-  条件: (f g : α ->*₀o β)
-  结论: ⇑(f * g) = f * g
-  证明: rfl
-
-@[simp]
--/
-theorem coe_mul (f g : α ->*₀o β) : ⇑(f * g) = f * g :=
+theorem coe_mul (f g : α →*₀o β) : ⇑(f * g) = f * g :=
   rfl
 
 @[simp]
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: (f g : α ->*₀o β) (a : α)
-  statement: (f * g) a = f a * g a
-  proof: rfl
-
-中文:
-定理 mul_apply
-  条件: (f g : α ->*₀o β) (a : α)
-  结论: (f * g) a = f a * g a
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZer
+oHom`。
+形式化陈述：mul_apply (f g : α ->*₀o β) (a : α) : (f * g) a = f a * g a
+参数：f g : α ->*₀o β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_apply (f g : α ->*₀o β) (a : α) : (f * g) a = f a * g a :=
+theorem mul_apply (f g : α →*₀o β) (a : α) : (f * g) a = f a * g a :=
   rfl
-
-/--
-theorem `mul_comp` / 定理 `mul_comp`
-
-English:
-theorem mul_comp
-  given: (g₁ g₂ : β ->*₀o γ) (f : α ->*₀o β)
-  statement: (g₁ * g₂).comp f = g₁.comp f * g₂.comp f
-  proof: rfl
-
-中文:
-定理 mul_comp
-  条件: (g₁ g₂ : β ->*₀o γ) (f : α ->*₀o β)
-  结论: (g₁ * g₂).comp f = g₁.comp f * g₂.comp f
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.mul_comp** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZero
+Hom`。
+形式化陈述：mul_comp (g₁ g₂ : β ->*₀o γ) (f : α ->*₀o β) : (g₁ * g₂).comp f = g₁.comp 
+f * g₂.comp f
+参数：g₁ g₂ : β ->*₀o γ；f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_comp (g₁ g₂ : β ->*₀o γ) (f : α ->*₀o β) : (g₁ * g₂).comp f = g₁.comp f * g₂.comp f :=
+theorem mul_comp (g₁ g₂ : β →*₀o γ) (f : α →*₀o β) : (g₁ * g₂).comp f = g₁.comp f * g₂.comp f :=
   rfl
-
-/--
-theorem `comp_mul` / 定理 `comp_mul`
-
-English:
-theorem comp_mul
-  given: (g : β ->*₀o γ) (f₁ f₂ : α ->*₀o β)
-  statement: g.comp (f₁ * f₂) = g.comp f₁ * g.comp f₂
-  proof: ext fun _ => map_mul g _ _
-
-中文:
-定理 comp_mul
-  条件: (g : β ->*₀o γ) (f₁ f₂ : α ->*₀o β)
-  结论: g.comp (f₁ * f₂) = g.comp f₁ * g.comp f₂
-  证明: ext fun _ => map_mul g _ _
-
-Depends on / 依赖: map_mul
+/-
+**OrderMonoidWithZeroHom.comp_mul** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZero
+Hom`。
+形式化陈述：comp_mul (g : β ->*₀o γ) (f₁ f₂ : α ->*₀o β) : g.comp (f₁ * f₂) = g.comp f
+₁ * g.comp f₂
+参数：g : β ->*₀o γ；f₁ f₂ : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.ext`：ext (h : forall a, f a = g a) : f = g
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem comp_mul (g : β ->*₀o γ) (f₁ f₂ : α ->*₀o β) : g.comp (f₁ * f₂) = g.comp f₁ * g.comp f₂ :=
+theorem comp_mul (g : β →*₀o γ) (f₁ f₂ : α →*₀o β) : g.comp (f₁ * f₂) = g.comp f₁ * g.comp f₂ :=
   ext fun _ => map_mul g _ _
 
 end Mul
@@ -840,115 +626,85 @@ variable {hα : Preorder α} {hα' : MulZeroOneClass α} {hβ : Preorder β} {h�
   {hγ : Preorder γ} {hγ' : MulZeroOneClass γ}
 
 @[simp]
-/--
-theorem `toMonoidWithZeroHom_eq_ofClass` / 定理 `toMonoidWithZeroHom_eq_ofClass`
-
-English:
-theorem toMonoidWithZeroHom_eq_ofClass
-  given: (f : α ->*₀o β)
-  statement: f.toMonoidWithZeroHom = .ofClass f
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-定理 toMonoidWithZeroHom_eq_ofClass
-  条件: (f : α ->*₀o β)
-  结论: f.toMonoidWithZeroHom = .ofClass f
-  证明: by
-  rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.toMonoidWithZeroHom_eq_ofClass** 是 Mathlib 中的一个定理，位于命名空
+间 `OrderMonoidWithZeroHom`。
+形式化陈述：toMonoidWithZeroHom_eq_ofClass (f : α ->*₀o β) : f.toMonoidWithZeroHom = .
+ofClass f
+参数：f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toMonoidWithZeroHom_eq_ofClass (f : α ->*₀o β) : f.toMonoidWithZeroHom = .ofClass f := by
+theorem toMonoidWithZeroHom_eq_ofClass (f : α →*₀o β) : f.toMonoidWithZeroHom = .ofClass f := by
   rfl
 
 @[simp]
-/--
-theorem `ofClass_mk` / 定理 `ofClass_mk`
-
-English:
-theorem ofClass_mk
-  given: (f : α ->*₀ β) (hf : Monotone f)
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-定理 ofClass_mk
-  条件: (f : α ->*₀ β) (hf : 递增 f)
-  证明: by
-  rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.ofClass_mk** 是 Mathlib 中的一个定理，位于命名空间 `OrderMonoidWithZe
+roHom`。
+形式化陈述：ofClass_mk (f : α ->*₀ β) (hf : Monotone f) : .ofClass (OrderMonoidWithZer
+oHom.mk f hf) = f
+参数：f : α ->*₀ β；hf : Monotone f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-theorem ofClass_mk (f : α ->*₀ β) (hf : Monotone f) :
+theorem ofClass_mk (f : α →*₀ β) (hf : Monotone f) :
     .ofClass (OrderMonoidWithZeroHom.mk f hf) = f := by
   rfl
 
 @[simp]
-/--
-lemma `ofClass_comp` / 引理 `ofClass_comp`
-
-English:
-lemma ofClass_comp
-  given: (f : β ->*₀o γ) (g : α ->*₀o β)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofClass_comp
-  条件: (f : β ->*₀o γ) (g : α ->*₀o β)
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.ofClass_comp** 是 Mathlib 中的一个引理，位于命名空间 `OrderMonoidWith
+ZeroHom`。
+形式化陈述：ofClass_comp (f : β ->*₀o γ) (g : α ->*₀o β) : .ofClass (f.comp g) = (.ofC
+lass f : β ->*₀ γ).comp (.ofClass g)
+参数：f : β ->*₀o γ；g : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-lemma ofClass_comp (f : β ->*₀o γ) (g : α ->*₀o β) :
-    .ofClass (f.comp g) = (.ofClass f : β ->*₀ γ).comp (.ofClass g) :=
+lemma ofClass_comp (f : β →*₀o γ) (g : α →*₀o β) :
+    .ofClass (f.comp g) = (.ofClass f : β →*₀ γ).comp (.ofClass g) :=
   rfl
 
 @[simp]
-/--
-theorem `toOrderMonoidHom_eq_coe` / 定理 `toOrderMonoidHom_eq_coe`
-
-English:
-theorem toOrderMonoidHom_eq_coe
-  given: (f : α ->*₀o β)
-  statement: f.toOrderMonoidHom = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toOrderMonoidHom_eq_coe
-  条件: (f : α ->*₀o β)
-  结论: f.toOrderMonoidHom = f
-  证明: rfl
-
-@[simp]
+/-
+**OrderMonoidWithZeroHom.toOrderMonoidHom_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Orde
+rMonoidWithZeroHom`。
+形式化陈述：toOrderMonoidHom_eq_coe (f : α ->*₀o β) : f.toOrderMonoidHom = f
+参数：f : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOrderMonoidHom_eq_coe (f : α ->*₀o β) : f.toOrderMonoidHom = f :=
+theorem toOrderMonoidHom_eq_coe (f : α →*₀o β) : f.toOrderMonoidHom = f :=
   rfl
 
 @[simp]
-/--
-lemma `toOrderMonoidHom_comp` / 引理 `toOrderMonoidHom_comp`
-
-English:
-lemma toOrderMonoidHom_comp
-  given: (f : β ->*₀o γ) (g : α ->*₀o β)
-  proof: rfl
-
-中文:
-引理 toOrderMonoidHom_comp
-  条件: (f : β ->*₀o γ) (g : α ->*₀o β)
-  证明: rfl
+/-
+**OrderMonoidWithZeroHom.toOrderMonoidHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `OrderM
+onoidWithZeroHom`。
+形式化陈述：toOrderMonoidHom_comp (f : β ->*₀o γ) (g : α ->*₀o β) : (f.comp g : α ->*o
+ γ) = (f : β ->*o γ).comp g
+参数：f : β ->*₀o γ；g : α ->*₀o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderMonoidWithZeroHom.instOrderHomClass`：∀ {α : Type u_2} {β : Type u_3
+} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α]   [inst
+_3 : MulZeroOneClass β], Order…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `OrderMonoidWithZeroHom.instMonoidWithZeroHomClass`：∀ {α : Type u_2} {β :
+ Type u_3} [inst : Preorder α] [inst_1 : Preorder β] [inst_2 : MulZeroOneClass α
+]   [inst_3 : MulZeroOneClass β], Monoi…
 -/
-lemma toOrderMonoidHom_comp (f : β ->*₀o γ) (g : α ->*₀o β) :
-    (f.comp g : α ->*o γ) = (f : β ->*o γ).comp g :=
+lemma toOrderMonoidHom_comp (f : β →*₀o γ) (g : α →*₀o β) :
+    (f.comp g : α →*o γ) = (f : β →*o γ).comp g :=
   rfl
 
 end LinearOrderedCommMonoidWithZero
@@ -958,22 +714,15 @@ end OrderMonoidWithZeroHom
 set_option backward.isDefEq.respectTransparency false in
 /-- Any ordered group is isomorphic to the units of itself adjoined with `0`. -/
 @[simps! -isSimp]
-/--
-Definition of `OrderMonoidIso.unitsWithZero` / `OrderMonoidIso.unitsWithZero` 的定义
+/-
+**OrderMonoidIso.unitsWithZero** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderMonoidIso.unitsWithZero {α : Type*} [Group α] [Preorder α] : (WithZer
+o α)ˣ ≃*o α where toMulEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderMonoidIso.unitsWithZero
-  signature: {α : Type*} [Group α] [Preorder α]
-  body: WithZero.unitsWithZeroEquiv
-  map_le_map_iff' {a b} := by simp [WithZero.unitsWithZeroEquiv]
-
-中文:
-定义 OrderMonoidIso.unitsWithZero
-  签名: {α : 类型} [群 α] [预序 α]
-  定义体: WithZero.unitsWithZeroEquiv
-  map_le_map_iff' {a b} := by simp [WithZero.unitsWithZeroEquiv]
-
-Depends on / 依赖: WithZero, WithZero.unitsWithZeroEquiv, unitsWithZeroEquiv
+--- 原说明 ---
+Any ordered group is isomorphic to the units of itself adjoined with `0`.
 -/
 def OrderMonoidIso.unitsWithZero {α : Type*} [Group α] [Preorder α] : (WithZero α)ˣ ≃*o α where
   toMulEquiv := WithZero.unitsWithZeroEquiv
@@ -981,60 +730,41 @@ def OrderMonoidIso.unitsWithZero {α : Type*} [Group α] [Preorder α] : (WithZe
 
 /-- A version of `Equiv.optionCongr` for `WithZero` on `OrderMonoidIso`. -/
 @[simps!]
-/--
-Definition of `OrderMonoidIso.withZero` / `OrderMonoidIso.withZero` 的定义
+/-
+**OrderMonoidIso.withZero** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderMonoidIso.withZero {G H : Type*} [Group G] [PartialOrder G] [Group H]
+ [PartialOrder H] : (G ≃*o H) ≃ (WithZero G ≃*o WithZero H) where toFun e
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition OrderMonoidIso.withZero
-  signature: {G H : Type*}
-  body: ⟨e.toMulEquiv.withZero, fun {a b} => by cases a <;> cases b <;> simp⟩
-  invFun e := ⟨MulEquiv.withZero.symm e, fun {a b} => by simp⟩
-  left_inv _ := by ext; simp
-  right_inv _ := by ext x; cases x <;> simp
-
-中文:
-定义 OrderMonoidIso.withZero
-  签名: {G H : 类型}
-  定义体: ⟨e.toMulEquiv.withZero, fun {a b} => by cases a <;> cases b <;> simp⟩
-  invFun e := ⟨MulEquiv.withZero.symm e, fun {a b} => by simp⟩
-  left_inv _ := by ext; simp
-  right_inv _ := by ext x; cases x <;> simp
-
-Depends on / 依赖: e.toMulEquiv.withZero, toMulEquiv, withZero
+--- 原说明 ---
+A version of `Equiv.optionCongr` for `WithZero` on `OrderMonoidIso`.
 -/
 def OrderMonoidIso.withZero {G H : Type*}
     [Group G] [PartialOrder G] [Group H] [PartialOrder H] :
     (G ≃*o H) ≃ (WithZero G ≃*o WithZero H) where
-  toFun e := ⟨e.toMulEquiv.withZero, fun {a b} => by cases a <;> cases b <;> simp⟩
-  invFun e := ⟨MulEquiv.withZero.symm e, fun {a b} => by simp⟩
+  toFun e := ⟨e.toMulEquiv.withZero, fun {a b} ↦ by cases a <;> cases b <;> simp⟩
+  invFun e := ⟨MulEquiv.withZero.symm e, fun {a b} ↦ by simp⟩
   left_inv _ := by ext; simp
   right_inv _ := by ext x; cases x <;> simp
 
 /-- Any linearly ordered group with zero is isomorphic to adjoining `0` to the units of itself. -/
 @[simps!]
-/--
-Definition of `OrderMonoidIso.withZeroUnits` / `OrderMonoidIso.withZeroUnits` 的定义
+/-
+**OrderMonoidIso.withZeroUnits** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderMonoidIso.withZeroUnits {α : Type*} [LinearOrderedCommGroupWithZero α
+] [DecidablePred (fun a : α => a = 0)] : WithZero αˣ ≃*o α where toMulEquiv
+参数：fun a : α => a = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderMonoidIso.withZeroUnits
-  signature: {α : Type*} [LinearOrderedCommGroupWithZero α]
-  body: WithZero.withZeroUnitsEquiv
-  map_le_map_iff' {a b} := by
-    cases a <;> cases b <;>
-    simp
-
-中文:
-定义 OrderMonoidIso.withZeroUnits
-  签名: {α : 类型} [带零LinearOrderedComm群 α]
-  定义体: WithZero.withZeroUnitsEquiv
-  map_le_map_iff' {a b} := by
-    cases a <;> cases b <;>
-    simp
-
-Depends on / 依赖: WithZero, WithZero.withZeroUnitsEquiv, withZeroUnitsEquiv
+--- 原说明 ---
+Any linearly ordered group with zero is isomorphic to adjoining `0` to the units
+ of itself.
 -/
 def OrderMonoidIso.withZeroUnits {α : Type*} [LinearOrderedCommGroupWithZero α]
-    [DecidablePred (fun a : α => a = 0)] :
+    [DecidablePred (fun a : α ↦ a = 0)] :
     WithZero αˣ ≃*o α where
   toMulEquiv := WithZero.withZeroUnitsEquiv
   map_le_map_iff' {a b} := by

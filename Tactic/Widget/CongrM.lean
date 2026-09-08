@@ -24,40 +24,18 @@ open Lean Meta Server ProofWidgets
 
 /-- Return the link text and inserted text above and below of the congrm widget. -/
 @[nolint unusedArguments]
-/--
-Definition of `makeCongrMString` / `makeCongrMString` 的定义
+/-
+**makeCongrMString** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：makeCongrMString (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr
+) (_ : SelectInsertParams) : MetaM (String × String × Option (String.Pos.Raw × S
+tring.Pos.Raw))
+参数：pos : Array Lean.SubExpr.GoalsLocation；goalType : Expr；_ : SelectInsertParams
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition makeCongrMString
-  signature: (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr)
-  body: do
-  let subexprPos := getGoalLocations pos
-  unless goalType.isAppOf ``Eq || goalType.isAppOf ``Iff do
-    throwError "The goal must be an equality or iff."
-  let mut goalTypeWithMetaVars := goalType
-  for pos in subexprPos do
-    goalTypeWithMetaVars ← insertMetaVar goalTypeWithMetaVars pos
-
-  let side := if subexprPos[0]!.toArray[0]! = 0 then 1 else 2
-  let sideExpr := goalTypeWithMetaVars.getAppArgs[side]!
-  let res := "congrm " ++ (toString (← Meta.ppExpr sideExpr)).renameMetaVar
-  return (res, res, none)
-
-中文:
-定义 makeCongrMString
-  签名: (pos : 数组 Lean.SubExpr.GoalsLocation) (goalType : Expr)
-  定义体: do
-  let subexprPos := getGoalLocations pos
-  unless goalType.isAppOf ``Eq || goalType.isAppOf ``Iff do
-    throwError "The goal must be an equality or iff."
-  let mut goalTypeWithMetaVars := goalType
-  for pos in subexprPos do
-    goalTypeWithMetaVars ← insertMetaVar goalTypeWithMetaVars pos
-
-  let side := if subexprPos[0]!.toArray[0]! = 0 then 1 else 2
-  let sideExpr := goalTypeWithMetaVars.getAppArgs[side]!
-  let res := "congrm " ++ (toString (← Meta.ppExpr sideExpr)).renameMetaVar
-  return (res, res, none)
+--- 原说明 ---
+Return the link text and inserted text above and below of the congrm widget.
 -/
 def makeCongrMString (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr)
     (_ : SelectInsertParams) :
@@ -76,22 +54,13 @@ def makeCongrMString (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr)
 
 /-- Rpc function for the congrm widget. -/
 @[server_rpc_method]
-/--
-Definition of `CongrMSelectionPanel.rpc` / `CongrMSelectionPanel.rpc` 的定义
+/-
+**CongrMSelectionPanel.rpc** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CongrMSelectionPanel.rpc
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrMSelectionPanel.rpc
-  body: mkSelectionPanelRPC makeCongrMString
-  "Use shift-click to select sub-expressions in the goal that should become holes in congrm."
-  "CongrM 🔍️"
-
-中文:
-定义 CongrMSelectionPanel.rpc
-  定义体: mkSelectionPanelRPC makeCongrMString
-  "Use shift-click to select sub-expressions in the goal that should become holes in congrm."
-  "CongrM 🔍️"
-
-Depends on / 依赖: makeCongrMString, mkSelectionPanelRPC
+--- 原说明 ---
+Rpc function for the congrm widget.
 -/
 def CongrMSelectionPanel.rpc := mkSelectionPanelRPC makeCongrMString
   "Use shift-click to select sub-expressions in the goal that should become holes in congrm."
@@ -99,20 +68,14 @@ def CongrMSelectionPanel.rpc := mkSelectionPanelRPC makeCongrMString
 
 /-- The congrm widget. -/
 @[widget_module]
-/--
-Definition of `CongrMSelectionPanel` / `CongrMSelectionPanel` 的定义
+/-
+**CongrMSelectionPanel** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CongrMSelectionPanel : Component SelectInsertParams
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CongrMSelectionPanel
-  signature: : Component SelectInsertParams
-  body: mk_rpc_widget% CongrMSelectionPanel.rpc
-
-中文:
-定义 CongrMSelectionPanel
-  签名: : Component SelectInsertParams
-  定义体: mk_rpc_widget% CongrMSelectionPanel.rpc
-
-Depends on / 依赖: CongrMSelectionPanel, CongrMSelectionPanel.rpc, mk_rpc_widget
+--- 原说明 ---
+The congrm widget.
 -/
 def CongrMSelectionPanel : Component SelectInsertParams :=
   mk_rpc_widget% CongrMSelectionPanel.rpc
@@ -124,3 +87,4 @@ elab stx:"congrm?" : tactic => do
   let some replaceRange := (← getFileMap).lspRangeOfStx? stx | return
   Widget.savePanelWidgetInfo CongrMSelectionPanel.javascriptHash
     (pure <| json% { replaceRange: $(replaceRange) }) stx
+

@@ -5,7 +5,7 @@ Authors: Adam Topaz
 -/
 module
 
-public import Mathlib.Algebra.MvPolynomial.Basic -- shake: keep (tactic dependency)
+public import Mathlib.Algebra.MvPolynomial.Basic  -- shake: keep (tactic dependency)
 
 /-!
 The command `name_poly_vars` names variables in
@@ -47,40 +47,14 @@ name_poly_vars X, Y, Z over R
 syntax (name := namePolyVarsOver) "name_poly_vars" (ppSpace ident),+ " over " term : command
 
 @[command_elab namePolyVarsOver, inherit_doc namePolyVarsOver]
-/--
-Definition of `elabNameVariablesOver` / `elabNameVariablesOver` 的定义
-
-English:
-definition elabNameVariablesOver
-  signature: : CommandElab
-  body: vars.getElems
-  let size := vars.size
-  let sizeStx : TSyntax `term := quote size
-  for h : idx in [:size] do
-    let var := vars[idx]
-    let var := quote s!"{var.getId}"
-    let idx : TSyntax `term ← `(($(quote idx) : Fin $sizeStx))
-    let cmd ← `(command|local notation3 $var:str =>
-MvPolynomial.X (R := $R) (σ := Fin $sizeStx) idx)
-    elabCommand cmd
-| _ => throwUnsupportedSyntax
-
-中文:
-定义 elabNameVariablesOver
-  签名: : CommandElab
-  定义体: vars.getElems
-  let size := vars.size
-  let sizeStx : TSyntax `term := quote size
-  for h : idx in [:size] do
-    let var := vars[idx]
-    let var := quote s!"{var.getId}"
-    let idx : TSyntax `term ← `(($(quote idx) : Fin $sizeStx))
-    let cmd ← `(command|local notation3 $var:str =>
-MvPolynomial.X (R := $R) (σ := Fin $sizeStx) idx)
-    elabCommand cmd
-| _ => throwUnsupportedSyntax
-
-Depends on / 依赖: getElems, vars.getElems
+/-
+**Mathlib.Tactic.elabNameVariablesOver** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+`。
+形式化陈述：elabNameVariablesOver : CommandElab | `(command|name_poly_vars $vars:ident
+,* over $R:term) => do let vars
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 -/
 def elabNameVariablesOver : CommandElab
 | `(command|name_poly_vars $vars:ident,* over $R:term) => do
@@ -92,8 +66,9 @@ def elabNameVariablesOver : CommandElab
     let var := quote s!"{var.getId}"
     let idx : TSyntax `term ← `(($(quote idx) : Fin $sizeStx))
     let cmd ← `(command|local notation3 $var:str =>
-MvPolynomial.X (R := $R) (σ := Fin $sizeStx) idx)
+      MvPolynomial.X (R := $R) (σ := Fin $sizeStx) $idx)
     elabCommand cmd
 | _ => throwUnsupportedSyntax
 
 end Mathlib.Tactic
+

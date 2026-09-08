@@ -25,34 +25,19 @@ submodules induced by a morphism `f : res φ X ⟶ Y`.
 
 universe w u v
 
-/--
-Definition of `TopRep` / `TopRep` 的定义
+/-- The category of topological representations of a monoid `G` over a topological ring `k`, and
+their morphisms. -/
+/-
+**TopRep** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(k : Type u) → (G : Type v) → [Ring k] → [TopologicalSpace k] → [Monoid G]
+ → Type (max (max u v) (w + 1))
+参数：max u v；w + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TopRep
-  parameters: (k : Type u) (G : Type v) [Ring k] [TopologicalSpace k] [Monoid G]
-  axioms and operations (8):
-    - private(mk) : :
-    - V : Type w
-    - [hV1 : AddCommGroup V]
-    - [hV2 : Module k V]
-    - [hV3 : TopologicalSpace V]
-    - [hV4 : IsTopologicalAddGroup V]
-    - [hV5 : ContinuousSMul k V]
-    - ρ : ContRepresentation k G V
-
-中文:
-结构 TopRep
-  参数: (k : 类型u) (G : 类型v) [环 k] [拓扑空间 k] [幺半群 G]
-  公理与运算 (8 个):
-    - private(mk) : :
-    - V : 类型 w
-    - [hV1 : 加法交换群 V]
-    - [hV2 : 模 k V]
-    - [hV3 : 拓扑空间 V]
-    - [hV4 : 是拓扑加群 V]
-    - [hV5 : 连续标量乘法 k V]
-    - ρ : 余ntRepresentation k G V
+--- 原说明 ---
+The category of topological representations of a monoid `G` over a topological r
+ing `k`, and
+their morphisms.
 -/
 structure TopRep (k : Type u) (G : Type v) [Ring k] [TopologicalSpace k] [Monoid G] where
   private mk ::
@@ -80,20 +65,9 @@ attribute [instance] hV1 hV2 hV3 hV4 hV5
 
 initialize_simps_projections TopRep (-hV1, -hV2)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (TopRep k G) (Type w)
-  body: ⟨TopRep.V⟩
-
-中文:
-实例 :
-  签名: CoeSort (TopRep k G) (类型 w)
-  定义体: ⟨TopRep.V⟩
-
-Depends on / 依赖: TopRep, TopRep.V
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (TopRep k G) (Type w) := ⟨TopRep.V⟩
 
@@ -102,101 +76,62 @@ attribute [coe] V
 variable (ρ) in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `of` / `of` 的定义
+/-- The object in the category of topological representations associated to a type equipped with a
+continuous representation. This is the preferred way to construct a term of `TopRep k G`. -/
+/-
+**TopRep.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+形式化陈述：of : TopRep k G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: : TopRep k G
-  body: ⟨X, ρ⟩
-
-中文:
-缩写 of
-  签名: : TopRep k G
-  定义体: ⟨X, ρ⟩
+--- 原说明 ---
+The object in the category of topological representations associated to a type e
+quipped with a
+continuous representation. This is the preferred way to construct a term of `Top
+Rep k G`.
 -/
 abbrev of : TopRep k G := ⟨X, ρ⟩
 
 variable (X ρ) in
-/--
-lemma `of_V` / 引理 `of_V`
-
-English:
-lemma of_V
-  statement: (of ρ).V = X
-  proof: by with_reducible rfl
-
-中文:
-引理 of_V
-  结论: (of ρ).V = X
-  证明: by with_reducible rfl
-
-Depends on / 依赖: with_reducible
+/-
+**TopRep.of_V** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：of_V : (of ρ).V = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_V : (of ρ).V = X := by with_reducible rfl
 
 variable (X ρ) in
-/--
-lemma `of_ρ` / 引理 `of_ρ`
-
-English:
-lemma of_ρ
-  statement: (of ρ).ρ = ρ
-  proof: by with_reducible rfl
-
-中文:
-引理 of_ρ
-  结论: (of ρ).ρ = ρ
-  证明: by with_reducible rfl
-
-Depends on / 依赖: with_reducible
+/-
+**TopRep.of_** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_ρ : (of ρ).ρ = ρ := by with_reducible rfl
 
 /-- The type of morphisms in `TopRep k G`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**TopRep.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `TopRep`。
+形式化陈述：{k : Type u} →   {G : Type v} →     [inst : TopologicalSpace k] → [inst_1 
+: Ring k] → [inst_2 : Monoid G] → TopRep k G → TopRep k G → Type (max u_1 u_2)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (A B : TopRep k G)
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A.ρ ->ⁱL B.ρ
-
-中文:
-结构 态射
-  参数: (A B : TopRep k G)
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A.ρ ->ⁱL B.ρ
+--- 原说明 ---
+The type of morphisms in `TopRep k G`.
 -/
 structure Hom (A B : TopRep k G) where
   private mk ::
   /-- The underlying `G`-equivariant linear map. -/
-  hom' : A.ρ ->ⁱL B.ρ
+  hom' : A.ρ →ⁱL B.ρ
 
 variable (A B C : TopRep.{w} k G)
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (TopRep.{w} k G)
-  body: Hom A B
-  id A := ⟨.id (π₁ := A.ρ)⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 (TopRep.{w} k G)
-  定义体: Hom A B
-  id A := ⟨.id (π₁ := A.ρ)⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (TopRep.{w} k G) where
   Hom A B := Hom A B
@@ -205,385 +140,305 @@ instance : Category (TopRep.{w} k G) where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory (TopRep.{w} k G) (fun A B => A.ρ ->ⁱL B.ρ)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 (TopRep.{w} k G) (fun A B => A.ρ ->ⁱL B.ρ)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory (TopRep.{w} k G) (fun A B => A.ρ ->ⁱL B.ρ) where
+instance : ConcreteCategory (TopRep.{w} k G) (fun A B ↦ A.ρ →ⁱL B.ρ) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
 variable {A B} in
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `TopRep` back into an `IntertwiningMap`. -/
+/-
+**TopRep.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `TopRep.Hom`。
+形式化陈述：{k : Type u} →   {G : Type v} →     [inst : TopologicalSpace k] →       [i
+nst_1 : Ring k] → [inst_2 : Monoid G] → {A B : TopRep k G} → A.Hom B → ContInter
+twiningMap A.ρ B.ρ
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 
-English:
-abbreviation Hom.hom
-  signature: (f : Hom A B)
-  body: ConcreteCategory.hom (C := TopRep k G) f
-
-中文:
-缩写 态射.hom
-  签名: (f : 态射 A B)
-  定义体: ConcreteCategory.hom (C := TopRep k G) f
+--- 原说明 ---
+Turn a morphism in `TopRep` back into an `IntertwiningMap`.
 -/
 abbrev Hom.hom (f : Hom A B) := ConcreteCategory.hom (C := TopRep k G) f
 
 variable {A B} in
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck an `IntertwiningMap` as a morphism in `TopRep`. -/
+/-
+**TopRep.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+形式化陈述：ofHom (f : ρ ->ⁱL σ) : of ρ ⟶ of σ
+参数：f : ρ ->ⁱL σ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 
-English:
-abbreviation ofHom
-  signature: (f : ρ ->ⁱL σ)
-  body: ConcreteCategory.ofHom (C := TopRep.{w} k G) f
-
-中文:
-缩写 ofHom
-  签名: (f : ρ ->ⁱL σ)
-  定义体: ConcreteCategory.ofHom (C := TopRep.{w} k G) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, TopRep
+--- 原说明 ---
+Typecheck an `IntertwiningMap` as a morphism in `TopRep`.
 -/
-abbrev ofHom (f : ρ ->ⁱL σ) : of ρ ⟶ of σ :=
+abbrev ofHom (f : ρ →ⁱL σ) : of ρ ⟶ of σ :=
   ConcreteCategory.ofHom (C := TopRep.{w} k G) f
-
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: (f : ρ ->ⁱL σ)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-中文:
-引理 hom_ofHom
-  条件: (f : ρ ->ⁱL σ)
-  结论: (ofHom f).hom = f
-  证明: rfl
+/-
+**TopRep.hom_ofHom** 是 Mathlib 中的一个定理，位于命名空间 `TopRep`。
+形式化陈述：∀ {k : Type u} {G : Type v} {X Y : Type w} [inst : TopologicalSpace k] [in
+st_1 : Ring k] [inst_2 : Monoid G]   [inst_3 : AddCommGroup X] [inst_4 : _root_.
+Module k X] [inst_5 : TopologicalSpace X]   [inst_6 : IsTopologicalAddGroup X] [
+inst_7 : ContinuousSMul k X] [inst_8 : AddCommGroup Y]   [inst_9 : _root_.Module
+ k Y] [inst_10 : TopologicalSpace Y] [inst_11 : IsTopologicalAddGroup Y]   [inst
+_12 : ContinuousSMul k Y] {ρ : ContRepresentation k G X} {σ : ContRepresentation
+ k G Y}   (f : ContIntertwiningMap ρ σ), TopRep.Hom.hom (TopRep.ofHom f) = f
+参数：f : ContIntertwiningMap ρ σ；TopRep.ofHom f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
-@[simp] lemma hom_ofHom (f : ρ ->ⁱL σ) : (ofHom f).hom = f := rfl
-
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: (f : A ⟶ B)
-  statement: ofHom f.hom = f
-  proof: rfl
-
-中文:
-引理 ofHom_hom
-  条件: (f : A ⟶ B)
-  结论: ofHom f.hom = f
-  证明: rfl
+@[simp] lemma hom_ofHom (f : ρ →ⁱL σ) : (ofHom f).hom = f := rfl
+/-
+**TopRep.ofHom_hom** 是 Mathlib 中的一个定理，位于命名空间 `TopRep`。
+形式化陈述：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] [inst_1 : Ring k] 
+[inst_2 : Monoid G] (A B : TopRep k G)   (f : A ⟶ B), TopRep.ofHom (TopRep.Hom.h
+om f) = f
+参数：A B : TopRep k G；f : A ⟶ B；TopRep.Hom.hom f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `TopRep.hV5`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   ContinuousSMul k ↑self
 -/
 @[simp] lemma ofHom_hom (f : A ⟶ B) : ofHom f.hom = f := rfl
 
 variable {A B} in
-/--
-Definition of `Hom.toTopModuleCatHom` / `Hom.toTopModuleCatHom` 的定义
+/-- The morphism of topological modules underlying a morphism in `TopRep k G`. -/
+/-
+**TopRep.Hom.toTopModuleCatHom** 是 Mathlib 中的一个定义，位于命名空间 `TopRep.Hom`。
+形式化陈述：{k : Type u} →   {G : Type v} →     [inst : TopologicalSpace k] →       [i
+nst_1 : Ring k] →         [inst_2 : Monoid G] → {A B : TopRep k G} → A.Hom B → (
+TopModuleCat.of k ↑A ⟶ TopModuleCat.of k ↑B)
+参数：TopModuleCat.of k ↑A ⟶ TopModuleCat.of k ↑B。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV5`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   ContinuousSMul k ↑self
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 
-English:
-abbreviation Hom.toTopModuleCatHom
-  signature: (f : Hom A B)
-  body: TopModuleCat.ofHom f.hom.toContinuousLinearMap
-
-中文:
-缩写 态射.toTopModuleCatHom
-  签名: (f : 态射 A B)
-  定义体: TopModuleCat.ofHom f.hom.toContinuousLinearMap
-
-Depends on / 依赖: TopModuleCat, TopModuleCat.ofHom, f.hom.toContinuousLinearMap, toContinuousLinearMap
+--- 原说明 ---
+The morphism of topological modules underlying a morphism in `TopRep k G`.
 -/
 abbrev Hom.toTopModuleCatHom (f : Hom A B) :
     TopModuleCat.of k A ⟶ TopModuleCat.of k B :=
   TopModuleCat.ofHom f.hom.toContinuousLinearMap
 
-/--
-lemma `hom_id` / 引理 `hom_id`
+/-
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
+-/
+/-
+**TopRep.hom_id** 是 Mathlib 中的一个定理，位于命名空间 `TopRep`。
+形式化陈述：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] [inst_1 : Ring k] 
+[inst_2 : Monoid G] (A : TopRep k G),   TopRep.Hom.hom (CategoryTheory.CategoryS
+truct.id A) = ContIntertwiningMap.id
+参数：A : TopRep k G；CategoryTheory.CategoryStruct.id A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 
-English:
-lemma hom_id
-  statement: (𝟙 A : A ⟶ A).hom = .id (π₁ := A.ρ)
-  proof: rfl
-
-中文:
-引理 hom_id
-  结论: (𝟙 A : A ⟶ A).hom = .id (π₁ := A.ρ)
-  证明: rfl
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
 @[simp] lemma hom_id : (𝟙 A : A ⟶ A).hom = .id (π₁ := A.ρ) := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**TopRep.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：id_apply (a : A) : (𝟙 A : A ⟶ A) a = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 
-English:
-lemma id_apply
-  given: (a : A)
-  statement: (𝟙 A : A ⟶ A) a = a
-  proof: rfl
-
-中文:
-引理 id_apply
-  条件: (a : A)
-  结论: (𝟙 A : A ⟶ A) a = a
-  证明: rfl
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (a : A) : (𝟙 A : A ⟶ A) a = a := rfl
-
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: (f : A ⟶ B) (g : B ⟶ C)
-  statement: (f ≫ g).hom = g.hom.comp f.hom
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: (f : A ⟶ B) (g : B ⟶ C)
-  结论: (f ≫ g).hom = g.hom.comp f.hom
-  证明: rfl
+/-
+**TopRep.hom_comp** 是 Mathlib 中的一个定理，位于命名空间 `TopRep`。
+形式化陈述：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] [inst_1 : Ring k] 
+[inst_2 : Monoid G] (A B C : TopRep k G)   (f : A ⟶ B) (g : B ⟶ C),   TopRep.Hom
+.hom (CategoryTheory.CategoryStruct.comp f g) = (TopRep.Hom.hom g).comp (TopRep.
+Hom.hom f)
+参数：A B C : TopRep k G；f : A ⟶ B；g : B ⟶ C；CategoryTheory.CategoryStruct.comp f g
+；TopRep.Hom.hom g；TopRep.Hom.hom f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
 @[simp] lemma hom_comp (f : A ⟶ B) (g : B ⟶ C) : (f ≫ g).hom = g.hom.comp f.hom := rfl
 
 /- Provided for rewriting. -/
 variable {A B C} in
-/--
-lemma `comp_apply` / 引理 `comp_apply`
-
-English:
-lemma comp_apply
-  given: (f : A ⟶ B) (g : B ⟶ C) (a : A)
-  statement: (f ≫ g) a = g (f a)
-  proof: rfl
-
-中文:
-引理 comp_apply
-  条件: (f : A ⟶ B) (g : B ⟶ C) (a : A)
-  结论: (f ≫ g) a = g (f a)
-  证明: rfl
+/-
+**TopRep.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：comp_apply (f : A ⟶ B) (g : B ⟶ C) (a : A) : (f ≫ g) a = g (f a)
+参数：f : A ⟶ B；g : B ⟶ C；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
 lemma comp_apply (f : A ⟶ B) (g : B ⟶ C) (a : A) : (f ≫ g) a = g (f a) := rfl
 
 variable {A B} in
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {f g : A ⟶ B} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-中文:
-引理 hom_ext
-  条件: {f g : A ⟶ B} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
+/-
+**TopRep.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `TopRep`。
+形式化陈述：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] [inst_1 : Ring k] 
+[inst_2 : Monoid G] {A B : TopRep k G}   {f g : A ⟶ B}, TopRep.Hom.hom f = TopRe
+p.Hom.hom g → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `TopRep.Hom.ext`：∀ {k : Type u} {G : Type v} {inst : TopologicalSpace k} 
+{inst_1 : Ring k} {inst_2 : Monoid G} {A : TopRep k G}   {B : TopRep k G} {x y :
+ A.H…
 -/
 @[ext] lemma hom_ext {f g : A ⟶ B} (hf : f.hom = g.hom) : f = g := Hom.ext hf
 
 variable {A B} in
-/--
-lemma `hom_comm_apply` / 引理 `hom_comm_apply`
-
-English:
-lemma hom_comm_apply
-  given: (f : A ⟶ B) (g : G) (a : A)
-  statement: f.hom (A.ρ g a) = B.ρ g (f.hom a)
-  proof: by
-  simpa using! congr($(f.hom.2 g) a)
-
-中文:
-引理 hom_comm_apply
-  条件: (f : A ⟶ B) (g : G) (a : A)
-  结论: f.hom (A.ρ g a) = B.ρ g (f.hom a)
-  证明: by
-  simpa using! congr($(f.hom.2 g) a)
-
-Depends on / 依赖: f.hom
+/-
+**TopRep.hom_comm_apply** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：hom_comm_apply (f : A ⟶ B) (g : G) (a : A) : f.hom (A.ρ g a) = B.ρ g (f.ho
+m a)
+参数：f : A ⟶ B；g : G；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContIntertwiningMap.isIntertwining'`：∀ {R : Type u_1} {G : Type u_2} {V 
+: Type u_3} {W : Type u_4} [inst : Monoid G] [inst_1 : Ring R]   [inst_2 : AddCo
+mmGroup V] [inst_3 : Topo…
 -/
 lemma hom_comm_apply (f : A ⟶ B) (g : G) (a : A) : f.hom (A.ρ g a) = B.ρ g (f.hom a) := by
   simpa using! congr($(f.hom.2 g) a)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (A ⟶ B)
-  body: fast_instance% ConcreteCategory.homEquiv.addCommGroup
-
-中文:
-实例 :
-  签名: 加法交换群 (A ⟶ B)
-  定义体: fast_instance% ConcreteCategory.homEquiv.addCommGroup
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.homEquiv.addCommGroup, addCommGroup, fast_instance, homEquiv
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (A ⟶ B) := fast_instance% ConcreteCategory.homEquiv.addCommGroup
-
-/--
-lemma `hom_zero` / 引理 `hom_zero`
-
-English:
-lemma hom_zero
-  statement: (0 : A ⟶ B).hom = 0
-  proof: rfl
-
-中文:
-引理 hom_zero
-  结论: (0 : A ⟶ B).hom = 0
-  证明: rfl
+/-
+**TopRep.hom_zero** 是 Mathlib 中的一个定理，位于命名空间 `TopRep`。
+形式化陈述：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] [inst_1 : Ring k] 
+[inst_2 : Monoid G] (A B : TopRep k G),   TopRep.Hom.hom 0 = 0
+参数：A B : TopRep k G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
 @[simp] lemma hom_zero : (0 : A ⟶ B).hom = 0 := rfl
-
-/--
-lemma `hom_add` / 引理 `hom_add`
-
-English:
-lemma hom_add
-  given: (f g : A ⟶ B)
-  statement: (f + g).hom = f.hom + g.hom
-  proof: rfl
-
-中文:
-引理 hom_add
-  条件: (f g : A ⟶ B)
-  结论: (f + g).hom = f.hom + g.hom
-  证明: rfl
+/-
+**TopRep.hom_add** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：hom_add (f g : A ⟶ B) : (f + g).hom = f.hom + g.hom
+参数：f g : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
 lemma hom_add (f g : A ⟶ B) : (f + g).hom = f.hom + g.hom := rfl
-
-/--
-lemma `hom_sub` / 引理 `hom_sub`
-
-English:
-lemma hom_sub
-  given: (f g : A ⟶ B)
-  statement: (f - g).hom = f.hom - g.hom
-  proof: rfl
-
-中文:
-引理 hom_sub
-  条件: (f g : A ⟶ B)
-  结论: (f - g).hom = f.hom - g.hom
-  证明: rfl
+/-
+**TopRep.hom_sub** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：hom_sub (f g : A ⟶ B) : (f - g).hom = f.hom - g.hom
+参数：f g : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
 lemma hom_sub (f g : A ⟶ B) : (f - g).hom = f.hom - g.hom := rfl
-
-/--
-lemma `ofHom_add` / 引理 `ofHom_add`
-
-English:
-lemma ofHom_add
-  given: (f g : ρ ->ⁱL σ)
-  statement: ofHom (f + g) = ofHom f + ofHom g
-  proof: rfl
-
-中文:
-引理 ofHom_add
-  条件: (f g : ρ ->ⁱL σ)
-  结论: ofHom (f + g) = ofHom f + ofHom g
-  证明: rfl
+/-
+**TopRep.ofHom_add** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：ofHom_add (f g : ρ ->ⁱL σ) : ofHom (f + g) = ofHom f + ofHom g
+参数：f g : ρ ->ⁱL σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_add (f g : ρ ->ⁱL σ) : ofHom (f + g) = ofHom f + ofHom g := rfl
-
-/--
-lemma `ofHom_sub` / 引理 `ofHom_sub`
-
-English:
-lemma ofHom_sub
-  given: (f g : ρ ->ⁱL σ)
-  statement: ofHom (f - g) = ofHom f - ofHom g
-  proof: rfl
-
-中文:
-引理 ofHom_sub
-  条件: (f g : ρ ->ⁱL σ)
-  结论: ofHom (f - g) = ofHom f - ofHom g
-  证明: rfl
+lemma ofHom_add (f g : ρ →ⁱL σ) : ofHom (f + g) = ofHom f + ofHom g := rfl
+/-
+**TopRep.ofHom_sub** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：ofHom_sub (f g : ρ ->ⁱL σ) : ofHom (f - g) = ofHom f - ofHom g
+参数：f g : ρ ->ⁱL σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_sub (f g : ρ ->ⁱL σ) : ofHom (f - g) = ofHom f - ofHom g := rfl
-
-/--
-lemma `comp_add'` / 引理 `comp_add'`
-
-English:
-lemma comp_add'
-  given: (f : A ⟶ B) (g h : B ⟶ C)
-  statement: f ≫ (g + h) = f ≫ g + f ≫ h
-  proof: by
-  ext : 1; simp [hom_add, ContIntertwiningMap.add_comp]
-
-中文:
-引理 comp_add'
-  条件: (f : A ⟶ B) (g h : B ⟶ C)
-  结论: f ≫ (g + h) = f ≫ g + f ≫ h
-  证明: by
-  ext : 1; simp [hom_add, ContIntertwiningMap.add_comp]
-
-Depends on / 依赖: ContIntertwiningMap, ContIntertwiningMap.add_comp, add_comp, hom_add
+lemma ofHom_sub (f g : ρ →ⁱL σ) : ofHom (f - g) = ofHom f - ofHom g := rfl
+/-
+**TopRep.comp_add'** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：comp_add' (f : A ⟶ B) (g h : B ⟶ C) : f ≫ (g + h) = f ≫ g + f ≫ h
+参数：f : A ⟶ B；g h : B ⟶ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hom_ext`：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] 
+[inst_1 : Ring k] [inst_2 : Monoid G] {A B : TopRep k G}   {f g : A ⟶ B}, TopRep
+.Hom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContIntertwiningMap.add_comp`：add_comp (f g : π₂ ->ⁱL π₃) (h : π₁ ->ⁱL π
+₂) : (f + g).comp h = f.comp h + g.comp h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_add' (f : A ⟶ B) (g h : B ⟶ C) : f ≫ (g + h) = f ≫ g + f ≫ h := by
   ext : 1; simp [hom_add, ContIntertwiningMap.add_comp]
-
-/--
-lemma `add_comp'` / 引理 `add_comp'`
-
-English:
-lemma add_comp'
-  given: (f g : A ⟶ B) (h : B ⟶ C)
-  statement: (f + g) ≫ h = f ≫ h + g ≫ h
-  proof: by
-  ext : 1; simp [hom_add, ContIntertwiningMap.comp_add]
-
-中文:
-引理 add_comp'
-  条件: (f g : A ⟶ B) (h : B ⟶ C)
-  结论: (f + g) ≫ h = f ≫ h + g ≫ h
-  证明: by
-  ext : 1; simp [hom_add, ContIntertwiningMap.comp_add]
-
-Depends on / 依赖: ContIntertwiningMap, ContIntertwiningMap.comp_add, comp_add, hom_add
+/-
+**TopRep.add_comp'** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：add_comp' (f g : A ⟶ B) (h : B ⟶ C) : (f + g) ≫ h = f ≫ h + g ≫ h
+参数：f g : A ⟶ B；h : B ⟶ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hom_ext`：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] 
+[inst_1 : Ring k] [inst_2 : Monoid G] {A B : TopRep k G}   {f g : A ⟶ B}, TopRep
+.Hom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContIntertwiningMap.comp_add`：comp_add (f : π₂ ->ⁱL π₃) (g h : π₁ ->ⁱL π
+₂) : f.comp (g + h) = f.comp g + f.comp h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma add_comp' (f g : A ⟶ B) (h : B ⟶ C) : (f + g) ≫ h = f ≫ h + g ≫ h := by
   ext : 1; simp [hom_add, ContIntertwiningMap.comp_add]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive (TopRep k G)
-  body: inferInstance
-  add_comp := TopRep.add_comp'
-  comp_add := TopRep.comp_add'
-
-中文:
-实例 :
-  签名: 预加性 (TopRep k G)
-  定义体: inferInstance
-  add_comp := TopRep.add_comp'
-  comp_add := TopRep.comp_add'
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive (TopRep k G) where
   homGroup := inferInstance
@@ -598,119 +453,135 @@ variable {k : Type u} {G : Type v} {X Y : Type w} [TopologicalSpace k] [CommRing
   [IsTopologicalAddGroup Y] [ContinuousSMul k Y] {ρ : ContRepresentation k G X}
   {σ : ContRepresentation k G Y} {A B C : TopRep k G}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module k (A ⟶ B)
-  body: fast_instance% ConcreteCategory.homEquiv.module k
-
-中文:
-实例 :
-  签名: 模 k (A ⟶ B)
-  定义体: fast_instance% ConcreteCategory.homEquiv.module k
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.homEquiv.module, fast_instance, homEquiv, module
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module k (A ⟶ B) := fast_instance% ConcreteCategory.homEquiv.module k
-
-/--
-lemma `hom_smul` / 引理 `hom_smul`
-
-English:
-lemma hom_smul
-  given: (r : k) (f : A ⟶ B)
-  statement: (r • f).hom = r • f.hom
-  proof: rfl
-
-中文:
-引理 hom_smul
-  条件: (r : k) (f : A ⟶ B)
-  结论: (r • f).hom = r • f.hom
-  证明: rfl
+/-
+**TopRep.hom_smul** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：hom_smul (r : k) (f : A ⟶ B) : (r • f).hom = r • f.hom
+参数：r : k；f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
 lemma hom_smul (r : k) (f : A ⟶ B) : (r • f).hom = r • f.hom := rfl
-
-/--
-lemma `ofHom_smul` / 引理 `ofHom_smul`
-
-English:
-lemma ofHom_smul
-  given: (r : k) (f : ρ ->ⁱL σ)
-  statement: ofHom (r • f) = r • ofHom f
-  proof: rfl
-
-中文:
-引理 ofHom_smul
-  条件: (r : k) (f : ρ ->ⁱL σ)
-  结论: ofHom (r • f) = r • ofHom f
-  证明: rfl
+/-
+**TopRep.ofHom_smul** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：ofHom_smul (r : k) (f : ρ ->ⁱL σ) : ofHom (r • f) = r • ofHom f
+参数：r : k；f : ρ ->ⁱL σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
 -/
-lemma ofHom_smul (r : k) (f : ρ ->ⁱL σ) : ofHom (r • f) = r • ofHom f := rfl
+lemma ofHom_smul (r : k) (f : ρ →ⁱL σ) : ofHom (r • f) = r • ofHom f := rfl
 
 variable (A B C) in
-/--
-lemma `smul_comp'` / 引理 `smul_comp'`
-
-English:
-lemma smul_comp'
-  given: (r : k) (f : A ⟶ B) (g : B ⟶ C)
-  statement: (r • f) ≫ g = r • (f ≫ g)
-  proof: by
-  ext; simp [hom_smul, ContIntertwiningMap.comp_smul]
-
-中文:
-引理 smul_comp'
-  条件: (r : k) (f : A ⟶ B) (g : B ⟶ C)
-  结论: (r • f) ≫ g = r • (f ≫ g)
-  证明: by
-  ext; simp [hom_smul, ContIntertwiningMap.comp_smul]
-
-Depends on / 依赖: ContIntertwiningMap, ContIntertwiningMap.comp_smul, Nonempty, StrongNormalizationMonoid, comp_smul, hom_smul
+/-
+**TopRep.smul_comp'** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：smul_comp' (r : k) (f : A ⟶ B) (g : B ⟶ C) : (r • f) ≫ g = r • (f ≫ g)
+参数：r : k；f : A ⟶ B；g : B ⟶ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hom_ext`：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] 
+[inst_1 : Ring k] [inst_2 : Monoid G] {A B : TopRep k G}   {f g : A ⟶ B}, TopRep
+.Hom…
+· 使用引理 `ContIntertwiningMap.ext`：ext {π₁ : ContRepresentation R G V} {π₂ : ContR
+epresentation R G W} {f g : π₁ ->ⁱL π₂} (h : f.toContinuousLinearMap = g.toConti
+nuousLinearMa…
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `TopRep.hV5`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   ContinuousSMul k ↑self
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用引理 `ContIntertwiningMap.comp_smul`：comp_smul {S : Type*} [Monoid S] [Distrib
+MulAction S U] [SMulCommClass R S U] [ContinuousConstSMul S U] [LinearMap.Compat
+ibleSMul U U S R] […
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `ContinuousLinearMap.instIsSMulApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smul_comp' (r : k) (f : A ⟶ B) (g : B ⟶ C) : (r • f) ≫ g = r • (f ≫ g) := by
   ext; simp [hom_smul, ContIntertwiningMap.comp_smul]
 
 variable (A B C) in
-/--
-lemma `comp_smul'` / 引理 `comp_smul'`
-
-English:
-lemma comp_smul'
-  given: (f : A ⟶ B) (r : k) (g : B ⟶ C)
-  statement: f ≫ (r • g) = r • (f ≫ g)
-  proof: by
-  ext; simp [hom_smul, ContIntertwiningMap.smul_comp]
-
-中文:
-引理 comp_smul'
-  条件: (f : A ⟶ B) (r : k) (g : B ⟶ C)
-  结论: f ≫ (r • g) = r • (f ≫ g)
-  证明: by
-  ext; simp [hom_smul, ContIntertwiningMap.smul_comp]
-
-Depends on / 依赖: ContIntertwiningMap, ContIntertwiningMap.smul_comp, hom_smul, smul_comp
+/-
+**TopRep.comp_smul'** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：comp_smul' (f : A ⟶ B) (r : k) (g : B ⟶ C) : f ≫ (r • g) = r • (f ≫ g)
+参数：f : A ⟶ B；r : k；g : B ⟶ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hom_ext`：∀ {k : Type u} {G : Type v} [inst : TopologicalSpace k] 
+[inst_1 : Ring k] [inst_2 : Monoid G] {A B : TopRep k G}   {f g : A ⟶ B}, TopRep
+.Hom…
+· 使用引理 `ContIntertwiningMap.ext`：ext {π₁ : ContRepresentation R G V} {π₂ : ContR
+epresentation R G W} {f g : π₁ ->ⁱL π₂} (h : f.toContinuousLinearMap = g.toConti
+nuousLinearMa…
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `TopRep.hV5`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   ContinuousSMul k ↑self
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用引理 `ContIntertwiningMap.smul_comp`：smul_comp {S : Type*} [Monoid S] [Distrib
+MulAction S U] [SMulCommClass R S U] [ContinuousConstSMul S U] [LinearMap.Compat
+ibleSMul U U S R] (…
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `ContinuousLinearMap.instIsSMulApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_smul' (f : A ⟶ B) (r : k) (g : B ⟶ C) : f ≫ (r • g) = r • (f ≫ g) := by
   ext; simp [hom_smul, ContIntertwiningMap.smul_comp]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryTheory.Linear k (TopRep k G)
-  body: inferInstance
-  smul_comp := smul_comp'
-  comp_smul := comp_smul'
-
-中文:
-实例 :
-  签名: 范畴论.线性 k (TopRep k G)
-  定义体: inferInstance
-  smul_comp := smul_comp'
-  comp_smul := comp_smul'
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryTheory.Linear k (TopRep k G) where
   homModule := inferInstance
@@ -722,152 +593,111 @@ end Linear
 section equivAction
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `toActionTopModFunc` / `toActionTopModFunc` 的定义
+/-- The functor sending a topological representation to the corresponding object in
+`Action (TopModuleCat k) G`. -/
+/-
+**TopRep.toActionTopModFunc** 是 Mathlib 中的一个定义，位于命名空间 `TopRep`。
+形式化陈述：toActionTopModFunc : TopRep k G ⥤ Action (TopModuleCat k) G where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV5`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   ContinuousSMul k ↑self
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 
-English:
-definition toActionTopModFunc
-  signature: : TopRep k G ⥤ Action (TopModuleCat k) G where
-  body: ⟨.of k X.V, (TopModuleCat.endRingEquiv (.of k X.V)).symm.toMonoidHom.comp X.ρ⟩
-  map f := ⟨f.toTopModuleCatHom, fun g => by ext1; simp [TopModuleCat.endRingEquiv, f.hom.2 g]⟩
-
-中文:
-定义 toActionTopModFunc
-  签名: : TopRep k G ⥤ 作用 (顶元素模范畴 k) G where
-  定义体: ⟨.of k X.V, (TopModuleCat.endRingEquiv (.of k X.V)).symm.toMonoidHom.comp X.ρ⟩
-  map f := ⟨f.toTopModuleCatHom, fun g => by ext1; simp [TopModuleCat.endRingEquiv, f.hom.2 g]⟩
-
-Depends on / 依赖: TopModuleCat, TopModuleCat.endRingEquiv, endRingEquiv, symm.toMonoidHom.comp, toMonoidHom
+--- 原说明 ---
+The functor sending a topological representation to the corresponding object in
+`Action (TopModuleCat k) G`.
 -/
 def toActionTopModFunc : TopRep k G ⥤ Action (TopModuleCat k) G where
   obj X := ⟨.of k X.V, (TopModuleCat.endRingEquiv (.of k X.V)).symm.toMonoidHom.comp X.ρ⟩
   map f := ⟨f.toTopModuleCatHom, fun g => by ext1; simp [TopModuleCat.endRingEquiv, f.hom.2 g]⟩
 
-/--
-Definition of `fromActionTopModFunc` / `fromActionTopModFunc` 的定义
+/-- The functor sending an object in `Action (TopModuleCat k) G` to the corresponding topological
+representation. -/
+/-
+**TopRep.fromActionTopModFunc** 是 Mathlib 中的一个定义，位于命名空间 `TopRep`。
+形式化陈述：fromActionTopModFunc : Action (TopModuleCat.{w} k) G ⥤ TopRep k G where ob
+j X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromActionTopModFunc
-  signature: : Action (TopModuleCat.{w} k) G ⥤ TopRep k G where
-  body: .of .ofMonoidHom (TopModuleCat.endRingEquiv X.V).toMonoidHom.comp X.ρ
-  map {X Y} f := ofHom ⟨f.hom.hom, fun g => by
-    simpa [← toMonoidHom_apply] using congr(TopModuleCat.Hom.hom $(f.comm g))⟩
-
-中文:
-定义 fromActionTopModFunc
-  签名: : 作用 (顶元素模范畴.{w} k) G ⥤ TopRep k G where
-  定义体: .of .ofMonoidHom (TopModuleCat.endRingEquiv X.V).toMonoidHom.comp X.ρ
-  map {X Y} f := ofHom ⟨f.hom.hom, fun g => by
-    simpa [← toMonoidHom_apply] using congr(TopModuleCat.Hom.hom $(f.comm g))⟩
-
-Depends on / 依赖: TopModuleCat, TopModuleCat.endRingEquiv, endRingEquiv, ofMonoidHom, toMonoidHom, toMonoidHom.comp
+--- 原说明 ---
+The functor sending an object in `Action (TopModuleCat k) G` to the correspondin
+g topological
+representation.
 -/
 def fromActionTopModFunc : Action (TopModuleCat.{w} k) G ⥤ TopRep k G where
-obj X := .of .ofMonoidHom (TopModuleCat.endRingEquiv X.V).toMonoidHom.comp X.ρ
-  map {X Y} f := ofHom ⟨f.hom.hom, fun g => by
+  obj X := .of <| .ofMonoidHom <| (TopModuleCat.endRingEquiv X.V).toMonoidHom.comp X.ρ
+  map {X Y} f := ofHom ⟨f.hom.hom, fun g ↦ by
     simpa [← toMonoidHom_apply] using congr(TopModuleCat.Hom.hom $(f.comm g))⟩
 
-/--
-Definition of `toActionFromAction` / `toActionFromAction` 的定义
+/-- The unit isomorphism of the equivalence `TopRepIsoActionTop`. -/
+/-
+**TopRep.toActionFromAction** 是 Mathlib 中的一个定义，位于命名空间 `TopRep`。
+形式化陈述：toActionFromAction (X : TopRep.{w} k G) : fromActionTopModFunc.obj (toActi
+onTopModFunc.obj X) ≅ X where hom
+参数：X : TopRep.{w} k G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
+· 使用定理 `TopRep.hV5`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   ContinuousSMul k ↑self
 
-English:
-definition toActionFromAction
-  signature: (X : TopRep.{w} k G)
-  body: ofHom ⟨ContinuousLinearMap.id k X.V, fun _ => rfl⟩
-  inv := ofHom ⟨ContinuousLinearMap.id k X.V, fun _ => rfl⟩
-
-中文:
-定义 toActionFromAction
-  签名: (X : TopRep.{w} k G)
-  定义体: ofHom ⟨ContinuousLinearMap.id k X.V, fun _ => rfl⟩
-  inv := ofHom ⟨ContinuousLinearMap.id k X.V, fun _ => rfl⟩
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id
+--- 原说明 ---
+The unit isomorphism of the equivalence `TopRepIsoActionTop`.
 -/
 def toActionFromAction (X : TopRep.{w} k G) :
     fromActionTopModFunc.obj (toActionTopModFunc.obj X) ≅ X where
-  hom := ofHom ⟨ContinuousLinearMap.id k X.V, fun _ => rfl⟩
-  inv := ofHom ⟨ContinuousLinearMap.id k X.V, fun _ => rfl⟩
+  hom := ofHom ⟨ContinuousLinearMap.id k X.V, fun _ ↦ rfl⟩
+  inv := ofHom ⟨ContinuousLinearMap.id k X.V, fun _ ↦ rfl⟩
 
-/--
-Definition of `fromActionToAction` / `fromActionToAction` 的定义
+/-- The counit isomorphism of the equivalence `TopRepIsoActionTop`. -/
+/-
+**TopRep.fromActionToAction** 是 Mathlib 中的一个定义，位于命名空间 `TopRep`。
+形式化陈述：fromActionToAction (X : Action (TopModuleCat.{w} k) G) : toActionTopModFun
+c.obj (fromActionTopModFunc.obj X) ≅ X where hom
+参数：X : Action (TopModuleCat.{w} k) G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromActionToAction
-  signature: (X : Action (TopModuleCat.{w} k) G)
-  body: ⟨𝟙 _, fun _ => rfl⟩
-  inv := ⟨𝟙 _, fun _ => rfl⟩
-
-中文:
-定义 fromActionToAction
-  签名: (X : 作用 (顶元素模范畴.{w} k) G)
-  定义体: ⟨𝟙 _, fun _ => rfl⟩
-  inv := ⟨𝟙 _, fun _ => rfl⟩
+--- 原说明 ---
+The counit isomorphism of the equivalence `TopRepIsoActionTop`.
 -/
 def fromActionToAction (X : Action (TopModuleCat.{w} k) G) :
     toActionTopModFunc.obj (fromActionTopModFunc.obj X) ≅ X where
-  hom := ⟨𝟙 _, fun _ => rfl⟩
-  inv := ⟨𝟙 _, fun _ => rfl⟩
+  hom := ⟨𝟙 _, fun _ ↦ rfl⟩
+  inv := ⟨𝟙 _, fun _ ↦ rfl⟩
 
-/--
-Definition of `TopRepEquivActionTop` / `TopRepEquivActionTop` 的定义
+/-- The equivalence of categories between `TopRep k G` and `Action (TopModuleCat k) G`. -/
+/-
+**TopRep.TopRepEquivActionTop** 是 Mathlib 中的一个定义，位于命名空间 `TopRep`。
+形式化陈述：TopRepEquivActionTop : TopRep.{w} k G ≌ Action (TopModuleCat.{w} k) G wher
+e functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TopRepEquivActionTop
-  signature: : TopRep.{w} k G ≌ Action (TopModuleCat.{w} k) G where
-  body: toActionTopModFunc
-  inverse := fromActionTopModFunc
-  unitIso := NatIso.ofComponents toActionFromAction
-  counitIso := NatIso.ofComponents fromActionToAction
-
-中文:
-定义 TopRepEquivActionTop
-  签名: : TopRep.{w} k G ≌ 作用 (顶元素模范畴.{w} k) G where
-  定义体: toActionTopModFunc
-  inverse := fromActionTopModFunc
-  unitIso := NatIso.ofComponents toActionFromAction
-  counitIso := NatIso.ofComponents fromActionToAction
-
-Depends on / 依赖: toActionTopModFunc
+--- 原说明 ---
+The equivalence of categories between `TopRep k G` and `Action (TopModuleCat k) 
+G`.
 -/
 def TopRepEquivActionTop : TopRep.{w} k G ≌ Action (TopModuleCat.{w} k) G where
   functor := toActionTopModFunc
   inverse := fromActionTopModFunc
   unitIso := NatIso.ofComponents toActionFromAction
   counitIso := NatIso.ofComponents fromActionToAction
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toActionTopModFunc (k := k) (G := G)).IsEquivalence
-  body: TopRepEquivActionTop (k := k) (G := G).isEquivalence_functor
-
-中文:
-实例 :
-  签名: (toActionTopModFunc (k := k) (G := G)).是等价
-  定义体: TopRepEquivActionTop (k := k) (G := G).isEquivalence_functor
-
-Depends on / 依赖: IsEquivalence
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toActionTopModFunc (k := k) (G := G)).IsEquivalence :=
   TopRepEquivActionTop (k := k) (G := G).isEquivalence_functor
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (fromActionTopModFunc (k := k) (G := G)).IsEquivalence
-  body: TopRepEquivActionTop (k := k) (G := G).isEquivalence_inverse
-
-中文:
-实例 :
-  签名: (fromActionTopModFunc (k := k) (G := G)).是等价
-  定义体: TopRepEquivActionTop (k := k) (G := G).isEquivalence_inverse
-
-Depends on / 依赖: IsEquivalence
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (fromActionTopModFunc (k := k) (G := G)).IsEquivalence :=
   TopRepEquivActionTop (k := k) (G := G).isEquivalence_inverse
@@ -876,240 +706,185 @@ end equivAction
 
 variable {G : Type v} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
 
-/--
-Definition of `invariants` / `invariants` 的定义
+/-- The `G`-invariant topologicalsubmodule of a topological representation. -/
+/-
+**TopRep.invariants** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+形式化陈述：invariants (X : TopRep k G) : TopModuleCat k
+参数：X : TopRep k G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation invariants
-  signature: (X : TopRep k G)
-  body: .of k X.ρ.invariants
-
-中文:
-缩写 invariants
-  签名: (X : TopRep k G)
-  定义体: .of k X.ρ.invariants
-
-Depends on / 依赖: invariants
+--- 原说明 ---
+The `G`-invariant topologicalsubmodule of a topological representation.
 -/
 abbrev invariants (X : TopRep k G) : TopModuleCat k := .of k X.ρ.invariants
 
 variable (k G) in
-/--
-Definition of `invariantsFunctor` / `invariantsFunctor` 的定义
+/-- The functor taking an `R`-linear `G`-representation to its `G`-invariant submodule. -/
+/-
+**TopRep.invariantsFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+形式化陈述：invariantsFunctor : TopRep k G ⥤ TopModuleCat k where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation invariantsFunctor
-  signature: : TopRep k G ⥤ TopModuleCat k where
-  body: .of k A.ρ.invariants
-  map f := TopModuleCat.ofHom f.hom.mapInvariants
-
-中文:
-缩写 invariantsFunctor
-  签名: : TopRep k G ⥤ 顶元素模范畴 k where
-  定义体: .of k A.ρ.invariants
-  map f := TopModuleCat.ofHom f.hom.mapInvariants
-
-Depends on / 依赖: invariants
+--- 原说明 ---
+The functor taking an `R`-linear `G`-representation to its `G`-invariant submodu
+le.
 -/
 abbrev invariantsFunctor : TopRep k G ⥤ TopModuleCat k where
   obj A := .of k A.ρ.invariants
   map f := TopModuleCat.ofHom f.hom.mapInvariants
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (invariantsFunctor k G).Additive
-
-中文:
-实例 :
-  签名: (invariantsFunctor k G).加性
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (invariantsFunctor k G).Additive where
-
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {k : Type u} [CommRing k] [TopologicalSpace k] : (invariantsFunctor k G).Linear k where
 
-/--
-Definition of `coind₁` / `coind₁` 的定义
+/-- The top rep induced by the coinduced representation. -/
+/-
+**TopRep.coind** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coind₁
-  signature: (A : TopRep k G)
-  body: of A.ρ.coind₁
-
-中文:
-缩写 coind₁
-  签名: (A : TopRep k G)
-  定义体: of A.ρ.coind₁
+--- 原说明 ---
+The top rep induced by the coinduced representation.
 -/
 abbrev coind₁ (A : TopRep k G) : TopRep k G := of A.ρ.coind₁
 
 variable (k G) in
-/--
-Definition of `coind₁Functor` / `coind₁Functor` 的定义
+/-- The functor taking a representation `rep` to the representation `C(G, rep)`.
+The `G` action is defined by `g • f := x ↦ g • f (g⁻¹ * x)`. -/
+/-
+**TopRep.coind** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coind₁Functor
-  signature: : TopRep k G ⥤ TopRep k G where
-  body: coind₁
-map φ := ofHom ContRepresentation.coind₁Map φ.hom
-
-中文:
-缩写 coind₁Functor
-  签名: : TopRep k G ⥤ TopRep k G where
-  定义体: coind₁
-map φ := ofHom ContRepresentation.coind₁Map φ.hom
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, iff_comp_injective
+--- 原说明 ---
+The functor taking a representation `rep` to the representation `C(G, rep)`.
+The `G` action is defined by `g • f := x ↦ g • f (g⁻¹ * x)`.
 -/
 abbrev coind₁Functor : TopRep k G ⥤ TopRep k G where
   obj := coind₁
-map φ := ofHom ContRepresentation.coind₁Map φ.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (TopRep.coind₁Functor k G).Additive
-
-中文:
-实例 :
-  签名: (TopRep.coind₁Functor k G).加性
+  map φ := ofHom <| ContRepresentation.coind₁Map φ.hom
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (TopRep.coind₁Functor k G).Additive where
-
+/-
+**TopRep.** 是 Mathlib 中的一个实例，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {k : Type u} [CommRing k] [TopologicalSpace k] : (coind₁Functor k G).Linear k where
 
 /-- The constant function `rep ⟶ C(G, rep)` as a natural transformation. -/
 @[implicit_reducible, simps]
-/--
-Definition of `coind₁ι` / `coind₁ι` 的定义
+/-
+**TopRep.coind** 是 Mathlib 中的一个定义，位于命名空间 `TopRep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coind₁ι
-  signature: : 𝟭 (TopRep k G) ⟶ coind₁Functor k G where
-  body: ofHom rep.ρ.coind₁ι
-
-中文:
-定义 coind₁ι
-  签名: : 𝟭 (TopRep k G) ⟶ coind₁Functor k G where
-  定义体: ofHom rep.ρ.coind₁ι
+--- 原说明 ---
+The constant function `rep ⟶ C(G, rep)` as a natural transformation.
 -/
 def coind₁ι : 𝟭 (TopRep k G) ⟶ coind₁Functor k G where
   app rep := ofHom rep.ρ.coind₁ι
 
-/--
-Definition of `res` / `res` 的定义
+/-- The restriction of a topological representation along a monoid homomorphism. -/
+/-
+**TopRep.res** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+形式化陈述：res {H : Type*} [Monoid H] (φ : H ->* G) (A : TopRep k G) : TopRep k H
+参数：φ : H ->* G；A : TopRep k G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation res
-  signature: {H : Type*} [Monoid H] (φ : H ->* G) (A : TopRep k G)
-  body: of (A.ρ.restrict φ)
-
-中文:
-缩写 res
-  签名: {H : 类型} [幺半群 H] (φ : H ->* G) (A : TopRep k G)
-  定义体: of (A.ρ.restrict φ)
-
-Depends on / 依赖: restrict
+--- 原说明 ---
+The restriction of a topological representation along a monoid homomorphism.
 -/
-abbrev res {H : Type*} [Monoid H] (φ : H ->* G) (A : TopRep k G) : TopRep k H := of (A.ρ.restrict φ)
+abbrev res {H : Type*} [Monoid H] (φ : H →* G) (A : TopRep k G) : TopRep k H := of (A.ρ.restrict φ)
 
-/--
-Definition of `resFunctor` / `resFunctor` 的定义
+/-- The functor taking a topological `G`-representation to a topological `H`-representation
+along a monoid homomorphism `φ : H →* G`. -/
+/-
+**TopRep.resFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopRep`。
+形式化陈述：resFunctor {H : Type*} [Monoid H] (φ : H ->* G) : TopRep k G ⥤ TopRep k H 
+where obj
+参数：φ : H ->* G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation resFunctor
-  signature: {H : Type*} [Monoid H] (φ : H ->* G)
-  body: res φ
-map f := ofHom f.hom.restrict φ
-
-中文:
-缩写 resFunctor
-  签名: {H : 类型} [幺半群 H] (φ : H ->* G)
-  定义体: res φ
-map f := ofHom f.hom.restrict φ
+--- 原说明 ---
+The functor taking a topological `G`-representation to a topological `H`-represe
+ntation
+along a monoid homomorphism `φ : H →* G`.
 -/
-abbrev resFunctor {H : Type*} [Monoid H] (φ : H ->* G) :
+abbrev resFunctor {H : Type*} [Monoid H] (φ : H →* G) :
     TopRep k G ⥤ TopRep k H where
   obj := res φ
-map f := ofHom f.hom.restrict φ
+  map f := ofHom <| f.hom.restrict φ
 
 section invariantsResMap
 
 variable {G H : Type*} [Group G]
 
 @[simp]
-/--
-lemma `resFunctor_map_hom` / 引理 `resFunctor_map_hom`
-
-English:
-lemma resFunctor_map_hom
-  given: [Monoid H] (φ : H ->* G) {A B : TopRep k G} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 resFunctor_map_hom
-  条件: [幺半群 H] (φ : H ->* G) {A B : TopRep k G} (f : A ⟶ B)
-  证明: rfl
+/-
+**TopRep.resFunctor_map_hom** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：resFunctor_map_hom [Monoid H] (φ : H ->* G) {A B : TopRep k G} (f : A ⟶ B)
+ : ((resFunctor φ).map f).hom = f.hom.restrict φ
+参数：φ : H ->* G；f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopRep.hV4`：∀ {k : Type u} {G : Type v} [inst : Ring k] [inst_1 : Topolo
+gicalSpace k] [inst_2 : Monoid G] (self : TopRep k G),   IsTopologicalAddGroup ↑
+…
 -/
-lemma resFunctor_map_hom [Monoid H] (φ : H ->* G) {A B : TopRep k G} (f : A ⟶ B) :
+lemma resFunctor_map_hom [Monoid H] (φ : H →* G) {A B : TopRep k G} (f : A ⟶ B) :
     ((resFunctor φ).map f).hom = f.hom.restrict φ := rfl
 
 variable [Group H]
 
-/--
-Definition of `invariantsResMap` / `invariantsResMap` 的定义
+/-- The morphism between invariant submodules induced by a morphism `res φ X ⟶ Y` of
+topological `H`-representations, where `φ : H →* G` is a group homomorphism. -/
+/-
+**TopRep.invariantsResMap** 是 Mathlib 中的一个定义，位于命名空间 `TopRep`。
+形式化陈述：invariantsResMap (φ : H ->* G) {X : TopRep k G} {Y : TopRep k H} (f : res 
+φ X ⟶ Y) : X.invariants ⟶ Y.invariants
+参数：φ : H ->* G；f : res φ X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invariantsResMap
-  signature: (φ : H ->* G) {X : TopRep k G} {Y : TopRep k H} (f : res φ X ⟶ Y)
-  body: TopModuleCat.ofHom (f.hom.mapInvariantsOfRes φ)
-
-中文:
-定义 invariantsResMap
-  签名: (φ : H ->* G) {X : TopRep k G} {Y : TopRep k H} (f : res φ X ⟶ Y)
-  定义体: TopModuleCat.ofHom (f.hom.mapInvariantsOfRes φ)
-
-Depends on / 依赖: TopModuleCat, TopModuleCat.ofHom, f.hom.mapInvariantsOfRes, mapInvariantsOfRes
+--- 原说明 ---
+The morphism between invariant submodules induced by a morphism `res φ X ⟶ Y` of
+topological `H`-representations, where `φ : H →* G` is a group homomorphism.
 -/
-def invariantsResMap (φ : H ->* G) {X : TopRep k G} {Y : TopRep k H} (f : res φ X ⟶ Y) :
+def invariantsResMap (φ : H →* G) {X : TopRep k G} {Y : TopRep k H} (f : res φ X ⟶ Y) :
     X.invariants ⟶ Y.invariants :=
   TopModuleCat.ofHom (f.hom.mapInvariantsOfRes φ)
-
-/--
-lemma `invariantsResMap_comp` / 引理 `invariantsResMap_comp`
-
-English:
-lemma invariantsResMap_comp
-  statement: {X : TopRep k G} {Y Y' : TopRep k H} (φ : H ->* G)
-  proof: rfl
-
-中文:
-引理 invariantsResMap_comp
-  结论: {X : TopRep k G} {Y Y' : TopRep k H} (φ : H ->* G)
-  证明: rfl
+/-
+**TopRep.invariantsResMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：invariantsResMap_comp {X : TopRep k G} {Y Y' : TopRep k H} (φ : H ->* G) (
+f : res φ X ⟶ Y) (g : Y ⟶ Y') : invariantsResMap φ (f ≫ g) = invariantsResMap φ 
+f ≫ (invariantsFunctor k H).map g
+参数：φ : H ->* G；f : res φ X ⟶ Y；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma invariantsResMap_comp {X : TopRep k G} {Y Y' : TopRep k H} (φ : H ->* G)
+lemma invariantsResMap_comp {X : TopRep k G} {Y Y' : TopRep k H} (φ : H →* G)
     (f : res φ X ⟶ Y) (g : Y ⟶ Y') :
     invariantsResMap φ (f ≫ g) = invariantsResMap φ f ≫ (invariantsFunctor k H).map g := rfl
-
-/--
-lemma `invariantsResMap_map_comp` / 引理 `invariantsResMap_map_comp`
-
-English:
-lemma invariantsResMap_map_comp
-  statement: {X X' : TopRep k G} {Y : TopRep k H} (φ : H ->* G)
-  proof: rfl
-
-中文:
-引理 invariantsResMap_map_comp
-  结论: {X X' : TopRep k G} {Y : TopRep k H} (φ : H ->* G)
-  证明: rfl
+/-
+**TopRep.invariantsResMap_map_comp** 是 Mathlib 中的一个引理，位于命名空间 `TopRep`。
+形式化陈述：invariantsResMap_map_comp {X X' : TopRep k G} {Y : TopRep k H} (φ : H ->* 
+G) (f : X ⟶ X') (g : res φ X' ⟶ Y) : invariantsResMap φ ((resFunctor φ).map f ≫ 
+g) = (invariantsFunctor k G).map f ≫ invariantsResMap φ g
+参数：φ : H ->* G；f : X ⟶ X'；g : res φ X' ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma invariantsResMap_map_comp {X X' : TopRep k G} {Y : TopRep k H} (φ : H ->* G)
+lemma invariantsResMap_map_comp {X X' : TopRep k G} {Y : TopRep k H} (φ : H →* G)
     (f : X ⟶ X') (g : res φ X' ⟶ Y) :
     invariantsResMap φ ((resFunctor φ).map f ≫ g) =
       (invariantsFunctor k G).map f ≫ invariantsResMap φ g := rfl
@@ -1117,3 +892,4 @@ lemma invariantsResMap_map_comp {X X' : TopRep k G} {Y : TopRep k H} (φ : H ->*
 end invariantsResMap
 
 end TopRep
+

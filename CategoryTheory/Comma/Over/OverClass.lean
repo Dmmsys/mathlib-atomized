@@ -38,21 +38,16 @@ variable {C : Type u} [Category.{v} C]
 variable {X Y Z : C} (f : X ⟶ Y) (S S' : C)
 
 /--
-Definition of `OverClass` / `OverClass` 的定义
+`OverClass X S` is the typeclass containing the data of a structure morphism `X ↘ S : X ⟶ S`.
+-/
+/-
+**CategoryTheory.OverClass** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} → [CategoryTheory.Category.{v, u} C] → C → C → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class OverClass
-  parameters: (X S : C)
-  axioms and operations (2):
-    - ofHom : :
-    - hom : X ⟶ S
-
-中文:
-类 Over类
-  参数: (X S : C)
-  公理与运算 (2 个):
-    - ofHom : :
-    - hom : X ⟶ S
+--- 原说明 ---
+`OverClass X S` is the typeclass containing the data of a structure morphism `X 
+↘ S : X ⟶ S`.
 -/
 class OverClass (X S : C) : Type v where
   ofHom ::
@@ -60,310 +55,207 @@ class OverClass (X S : C) : Type v where
   hom : X ⟶ S
 
 /--
-Definition of `over` / `over` 的定义
+The structure morphism `X ↘ S : X ⟶ S` given `OverClass X S`.
+The instance argument is an `optParam` instead so that it appears in the discrimination tree.
+-/
+/-
+**CategoryTheory.over** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：over (X S : C) (_ : OverClass X S
+参数：X S : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition over
-  signature: (X S : C) (_ : OverClass X S := by infer_instance)
-  body: OverClass.hom
-
-中文:
-定义 over
-  签名: (X S : C) (_ : Over类 X S := by infer_instance)
-  定义体: OverClass.hom
-
-Depends on / 依赖: OverClass, OverClass.hom, infer_instance
+--- 原说明 ---
+The structure morphism `X ↘ S : X ⟶ S` given `OverClass X S`.
+The instance argument is an `optParam` instead so that it appears in the discrim
+ination tree.
 -/
 def over (X S : C) (_ : OverClass X S := by infer_instance) : X ⟶ S := OverClass.hom
 
 /-- The structure morphism `X ↘ S : X ⟶ S` given `OverClass X S`. -/
 notation:90 X:90 " ↘ " S:90 => CategoryTheory.over X S inferInstance
 
-/--
-Definition of `OverClass.Simps.over` / `OverClass.Simps.over` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**CategoryTheory.OverClass.Simps.over** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+OverClass.Simps`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → (X S : C) → [Ca
+tegoryTheory.OverClass X S] → X ⟶ S
+参数：X S : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OverClass.Simps.over
-  signature: (X S : C) [OverClass X S]
-  body: X ↘ S
-
-initialize_simps_projections OverClass (hom -> over)
-
-中文:
-定义 Over类.Simps.over
-  签名: (X S : C) [Over类 X S]
-  定义体: X ↘ S
-
-initialize_simps_projections OverClass (hom -> over)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def OverClass.Simps.over (X S : C) [OverClass X S] : X ⟶ S := X ↘ S
 
-initialize_simps_projections OverClass (hom -> over)
+initialize_simps_projections OverClass (hom → over)
 
 /--
-Definition of `CanonicallyOverClass` / `CanonicallyOverClass` 的定义
+`X.CanonicallyOverClass S` is the typeclass containing the data of a
+structure morphism `X ↘ S : X ⟶ S`,
+and that `S` is (uniquely) inferable from the structure of `X`.
+-/
+/-
+**CategoryTheory.CanonicallyOverClass** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：{C : Type u} → [CategoryTheory.Category.{v, u} C] → C → semiOutParam C → T
+ype v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CanonicallyOverClass
-  parameters: (X : C) (S : semiOutParam C)
-  extends: OverClass X S
-  (no additional axioms)
-
-中文:
-类 CanonicallyOver类
-  参数: (X : C) (S : semiOutParam C)
-  继承: Over类 X S
-  (无附加公理)
+--- 原说明 ---
+`X.CanonicallyOverClass S` is the typeclass containing the data of a
+structure morphism `X ↘ S : X ⟶ S`,
+and that `S` is (uniquely) inferable from the structure of `X`.
 -/
 class CanonicallyOverClass (X : C) (S : semiOutParam C) extends OverClass X S where
 
-/--
-Definition of `CanonicallyOverClass.Simps.over` / `CanonicallyOverClass.Simps.over` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**CategoryTheory.CanonicallyOverClass.Simps.over** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.CanonicallyOverClass.Simps`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → (X S : C) → [Ca
+tegoryTheory.CanonicallyOverClass X S] → X ⟶ S
+参数：X S : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CanonicallyOverClass.Simps.over
-  signature: (X S : C) [CanonicallyOverClass X S]
-  body: X ↘ S
-
-initialize_simps_projections CanonicallyOverClass (hom -> over)
-
-@[simps]
-
-中文:
-定义 CanonicallyOver类.Simps.over
-  签名: (X S : C) [CanonicallyOver类 X S]
-  定义体: X ↘ S
-
-initialize_simps_projections CanonicallyOverClass (hom -> over)
-
-@[simps]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def CanonicallyOverClass.Simps.over (X S : C) [CanonicallyOverClass X S] : X ⟶ S := X ↘ S
 
-initialize_simps_projections CanonicallyOverClass (hom -> over)
+initialize_simps_projections CanonicallyOverClass (hom → over)
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OverClass X X
-  body: ⟨𝟙 _⟩
-
-中文:
-实例 :
-  签名: Over类 X X
-  定义体: ⟨𝟙 _⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OverClass X X := ⟨𝟙 _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (S ↘ S)
-  body: inferInstanceAs (IsIso (𝟙 S))
-
-中文:
-实例 :
-  签名: 是同构 (S ↘ S)
-  定义体: inferInstanceAs (IsIso (𝟙 S))
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (S ↘ S) := inferInstanceAs (IsIso (𝟙 S))
 
 namespace CanonicallyOverClass
 -- This cannot be a simp lemma because it loops with `comp_over`.
 @[simps -isSimp]
+/-
+**CategoryTheory.CanonicallyOverClass.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.CanonicallyOverClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) [CanonicallyOverClass X Y] [OverClass Y S] : OverClass X S :=
   ⟨X ↘ Y ≫ Y ↘ S⟩
 end CanonicallyOverClass
 
-/--
-Definition of `HomIsOver` / `HomIsOver` 的定义
+/-- Given `OverClass X S` and `OverClass Y S` and `f : X ⟶ Y`,
+`HomIsOver f S` is the typeclass asserting `f` commutes with the structure morphisms. -/
+/-
+**CategoryTheory.HomIsOver** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：HomIsOver (f : X ⟶ Y) (S : C) [OverClass X S] [OverClass Y S] : Prop where
+ comp_over : f ≫ Y ↘ S = X ↘ S
+参数：f : X ⟶ Y；S : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HomIsOver
-  parameters: (f : X ⟶ Y) (S : C) [OverClass X S] [OverClass Y S]
-  axioms and operations (1):
-    - comp_over : f ≫ Y ↘ S = X ↘ S  [default: by aesop]
-
-中文:
-类 HomIsOver
-  参数: (f : X ⟶ Y) (S : C) [Over类 X S] [Over类 Y S]
-  公理与运算 (1 个):
-    - comp_over : f ≫ Y ↘ S = X ↘ S  [默认: by aesop]
+--- 原说明 ---
+Given `OverClass X S` and `OverClass Y S` and `f : X ⟶ Y`,
+`HomIsOver f S` is the typeclass asserting `f` commutes with the structure morph
+isms.
 -/
 class HomIsOver (f : X ⟶ Y) (S : C) [OverClass X S] [OverClass Y S] : Prop where
   comp_over : f ≫ Y ↘ S = X ↘ S := by aesop
 
 @[reassoc (attr := simp)]
-/--
-lemma `comp_over` / 引理 `comp_over`
-
-English:
-lemma comp_over
-  given: [OverClass X S] [OverClass Y S] [HomIsOver f S]
-  proof: HomIsOver.comp_over
-
-中文:
-引理 comp_over
-  条件: [Over类 X S] [Over类 Y S] [HomIsOver f S]
-  证明: HomIsOver.comp_over
-
-Depends on / 依赖: HomIsOver, HomIsOver.comp_over, comp_over
+/-
+**CategoryTheory.comp_over** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：comp_over [OverClass X S] [OverClass Y S] [HomIsOver f S] : f ≫ Y ↘ S = X 
+↘ S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.HomIsOver.comp_over`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} {X Y : C} {f : X ⟶ Y} {S : C}   {inst_1 : CategoryTheory.Ov
+erClass X S} {inst_2 : C…
 -/
 lemma comp_over [OverClass X S] [OverClass Y S] [HomIsOver f S] :
     f ≫ Y ↘ S = X ↘ S :=
   HomIsOver.comp_over
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OverClass
-  signature: X S] : HomIsOver (𝟙 X) S where
-
-中文:
-实例 [Over类
-  签名: X S] : HomIsOver (𝟙 X) S where
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [OverClass X S] : HomIsOver (𝟙 X) S where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OverClass
-  signature: X S] [OverClass Y S] [OverClass Z S]
-
-中文:
-实例 [Over类
-  签名: X S] [Over类 Y S] [Over类 Z S]
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [OverClass X S] [OverClass Y S] [OverClass Z S]
     (f : X ⟶ Y) (g : Y ⟶ Z) [HomIsOver f S] [HomIsOver g S] :
     HomIsOver (f ≫ g) S where
 
-/--
-Definition of `IsOverTower` / `IsOverTower` 的定义
+/-- `IsOverTower X Y S` is the typeclass asserting that the structure morphisms
+`X ↘ Y`, `Y ↘ S`, and `X ↘ S` commute. -/
+/-
+**CategoryTheory.IsOverTower** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：IsOverTower (X Y S : C) [OverClass X S] [OverClass Y S] [OverClass X Y]
+参数：X Y S : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsOverTower
-  signature: (X Y S : C) [OverClass X S] [OverClass Y S] [OverClass X Y]
-  body: HomIsOver (X ↘ Y) S
-
-中文:
-缩写 IsOverTower
-  签名: (X Y S : C) [Over类 X S] [Over类 Y S] [Over类 X Y]
-  定义体: HomIsOver (X ↘ Y) S
-
-Depends on / 依赖: HomIsOver
+--- 原说明 ---
+`IsOverTower X Y S` is the typeclass asserting that the structure morphisms
+`X ↘ Y`, `Y ↘ S`, and `X ↘ S` commute.
 -/
 abbrev IsOverTower (X Y S : C) [OverClass X S] [OverClass Y S] [OverClass X Y] :=
   HomIsOver (X ↘ Y) S
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OverClass
-  signature: X S] : IsOverTower X X S where
-
-中文:
-实例 [Over类
-  签名: X S] : IsOverTower X X S where
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [OverClass X S] : IsOverTower X X S where
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OverClass
-  signature: X S] : IsOverTower X S S where
-
-中文:
-实例 [Over类
-  签名: X S] : IsOverTower X S S where
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [OverClass X S] : IsOverTower X S S where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CanonicallyOverClass
-  signature: X Y] [OverClass Y S] : IsOverTower X Y S
-  body: ⟨rfl⟩
-
-中文:
-实例 [CanonicallyOver类
-  签名: X Y] [Over类 Y S] : IsOverTower X Y S
-  定义体: ⟨rfl⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CanonicallyOverClass X Y] [OverClass Y S] : IsOverTower X Y S :=
   ⟨rfl⟩
-
-/--
-lemma `homIsOver_of_isOverTower` / 引理 `homIsOver_of_isOverTower`
-
-English:
-lemma homIsOver_of_isOverTower
-  statement: [OverClass X S] [OverClass X S'] [OverClass Y S]
-  proof: by
-  constructor
-  rw [← comp_over (Y ↘ S)]; rw [comp_over_assoc f]; rw [comp_over]
-
-中文:
-引理 homIsOver_of_isOverTower
-  结论: [Over类 X S] [Over类 X S'] [Over类 Y S]
-  证明: by
-  constructor
-  rw [← comp_over (Y ↘ S)]; rw [comp_over_assoc f]; rw [comp_over]
-
-Depends on / 依赖: comp_over, comp_over_assoc
+/-
+**CategoryTheory.homIsOver_of_isOverTower** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：homIsOver_of_isOverTower [OverClass X S] [OverClass X S'] [OverClass Y S] 
+[OverClass Y S'] [OverClass S S'] [IsOverTower X S S'] [IsOverTower Y S S'] [Hom
+IsOver f S] : HomIsOver f S'
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.comp_over`：comp_over [OverClass X S] [OverClass Y S] [Hom
+IsOver f S] : f ≫ Y ↘ S = X ↘ S
+· 使用定理 `CategoryTheory.comp_over_assoc`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] {X Y : C} (f : X ⟶ Y) (S : C)   [inst_1 : CategoryTheory.OverCl
+ass X S] [inst_2 : C…
 -/
 lemma homIsOver_of_isOverTower [OverClass X S] [OverClass X S'] [OverClass Y S]
     [OverClass Y S'] [OverClass S S']
     [IsOverTower X S S'] [IsOverTower Y S S'] [HomIsOver f S] : HomIsOver f S' := by
   constructor
-  rw [← comp_over (Y ↘ S)]; rw [comp_over_assoc f]; rw [comp_over]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CanonicallyOverClass
-  signature: X S]
-  body: homIsOver_of_isOverTower f S S'
-
-中文:
-实例 [CanonicallyOver类
-  签名: X S]
-  定义体: homIsOver_of_isOverTower f S S'
-
-Depends on / 依赖: homIsOver_of_isOverTower
+  rw [← comp_over (Y ↘ S), comp_over_assoc f, comp_over]
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CanonicallyOverClass X S]
     [OverClass X S'] [OverClass Y S] [OverClass Y S'] [OverClass S S']
     [IsOverTower X S S'] [IsOverTower Y S S'] [HomIsOver f S] : HomIsOver f S' :=
   homIsOver_of_isOverTower f S S'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [OverClass
-  signature: X S]
-  body: homIsOver_of_isOverTower f S S'
-
-中文:
-实例 [Over类
-  签名: X S]
-  定义体: homIsOver_of_isOverTower f S S'
-
-Depends on / 依赖: homIsOver_of_isOverTower
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [OverClass X S]
     [OverClass X S'] [CanonicallyOverClass Y S] [OverClass Y S'] [OverClass S S']
@@ -373,67 +265,56 @@ instance [OverClass X S]
 variable (X) in
 /-- Bundle `X` with an `OverClass X S` instance into `Over S`. -/
 @[simps! hom left]
-/--
-Definition of `OverClass.asOver` / `OverClass.asOver` 的定义
+/-
+**CategoryTheory.OverClass.asOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Over
+Class`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → (X S : C) → [
+CategoryTheory.OverClass X S] → CategoryTheory.Over S
+参数：X S : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OverClass.asOver
-  signature: [OverClass X S]
-  body: Over.mk (X ↘ S)
-
-中文:
-定义 Over类.asOver
-  签名: [Over类 X S]
-  定义体: Over.mk (X ↘ S)
-
-Depends on / 依赖: Over.mk
+--- 原说明 ---
+Bundle `X` with an `OverClass X S` instance into `Over S`.
 -/
 def OverClass.asOver [OverClass X S] : Over S := Over.mk (X ↘ S)
 
 /-- Bundle a morphism `f : X ⟶ Y` with `HomIsOver f S` into a morphism in `Over S`. -/
 @[simps! left]
-/--
-Definition of `OverClass.asOverHom` / `OverClass.asOverHom` 的定义
+/-
+**CategoryTheory.OverClass.asOverHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.O
+verClass`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (S : C) →         [inst_1 : CategoryTheory.OverClass X S] →           [
+inst_2 : CategoryTheory.OverClass Y S] →             (f : X ⟶ Y) →              
+ [CategoryTheory.HomIsOver f S] → CategoryTheory.OverClass.asOver X S ⟶ Category
+Theory.OverClass.asOver Y S
+参数：S : C；f : X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.comp_over`：comp_over [OverClass X S] [OverClass Y S] [Hom
+IsOver f S] : f ≫ Y ↘ S = X ↘ S
 
-English:
-definition OverClass.asOverHom
-  signature: [OverClass X S] [OverClass Y S] (f : X ⟶ Y) [HomIsOver f S]
-  body: Over.homMk f (comp_over f S)
-
-@[simps]
-
-中文:
-定义 Over类.asOverHom
-  签名: [Over类 X S] [Over类 Y S] (f : X ⟶ Y) [HomIsOver f S]
-  定义体: Over.homMk f (comp_over f S)
-
-@[simps]
-
-Depends on / 依赖: Over.homMk, comp_over
+--- 原说明 ---
+Bundle a morphism `f : X ⟶ Y` with `HomIsOver f S` into a morphism in `Over S`.
 -/
 def OverClass.asOverHom [OverClass X S] [OverClass Y S] (f : X ⟶ Y) [HomIsOver f S] :
     OverClass.asOver X S ⟶ OverClass.asOver Y S :=
   Over.homMk f (comp_over f S)
 
 @[simps]
-/--
-Instance `OverClass.fromOver` / 实例 `OverClass.fromOver`
-
-English:
-instance OverClass.fromOver
-  signature: {S : C} (X : Over S)
-  body: X.hom
-
-中文:
-实例 Over类.fromOver
-  签名: {S : C} (X : Over S)
-  定义体: X.hom
-
-Depends on / 依赖: X.hom
+/-
+**CategoryTheory.OverClass.fromOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ov
+erClass`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → {S : C} → (X 
+: CategoryTheory.Over S) → CategoryTheory.OverClass X.left S
+参数：X : CategoryTheory.Over S。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance OverClass.fromOver {S : C} (X : Over S) : OverClass X.left S where
   hom := X.hom
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : C} {X Y : Over S} (f : X ⟶ Y) : HomIsOver f.left S where
   comp_over := Over.w f
 
@@ -441,64 +322,113 @@ variable [OverClass X S] [OverClass Y S] [OverClass Z S]
 
 namespace OverClass
 
+/-
+**CategoryTheory.OverClass.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.OverClass`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) [IsIso f] [HomIsOver f S] : IsIso (asOverHom S f) :=
   have : IsIso ((Over.forget S).map (asOverHom S f)) := ‹_›
   isIso_of_reflects_iso _ (Over.forget _)
 
 attribute [local simp] Iso.inv_comp_eq in
+/-
+**CategoryTheory.OverClass.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.OverClass`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {e : X ≅ Y} [HomIsOver e.hom S] : HomIsOver e.inv S where
 
 set_option linter.style.whitespace false in -- linter false positive
 attribute [local simp ←] Iso.eq_inv_comp in
+/-
+**CategoryTheory.OverClass.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.OverClass`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {e : X ≅ Y} [HomIsOver e.inv S] : HomIsOver e.hom S where
-
+/-
+**CategoryTheory.OverClass.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.OverClass`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {f : X ⟶ Y} [IsIso f] [HomIsOver f S] : HomIsOver (asIso f).hom S where
+/-
+**CategoryTheory.OverClass.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.OverClass`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {f : X ⟶ Y} [IsIso f] [HomIsOver f S] : HomIsOver (asIso f).inv S where
+/-
+**CategoryTheory.OverClass.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.OverClass`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {f : X ⟶ Y} [IsIso f] [HomIsOver f S] : HomIsOver (inv f) S where
-
-/--
-lemma `asOverHom_id` / 引理 `asOverHom_id`
-
-English:
-lemma asOverHom_id
-  statement: asOverHom S (𝟙 X) = 𝟙 (asOver X S)
-  proof: rfl
-
-中文:
-引理 asOverHom_id
-  结论: asOverHom S (𝟙 X) = 𝟙 (asOver X S)
-  证明: rfl
+/-
+**CategoryTheory.OverClass.asOverHom_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.OverClass`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X : C} (S : C) [
+inst_1 : CategoryTheory.OverClass X S],   CategoryTheory.OverClass.asOverHom S (
+CategoryTheory.CategoryStruct.id X) =     CategoryTheory.CategoryStruct.id (Cate
+goryTheory.OverClass.asOver X S)
+参数：S : C；CategoryTheory.CategoryStruct.id X；CategoryTheory.OverClass.asOver X S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instHomIsOverId`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] {X : C} (S : C) [inst_1 : CategoryTheory.OverClass X S],   Cate
+goryTheory.HomIsOver…
 -/
 @[simp] lemma asOverHom_id : asOverHom S (𝟙 X) = 𝟙 (asOver X S) := rfl
-
-/--
-lemma `asOverHom_comp` / 引理 `asOverHom_comp`
-
-English:
-lemma asOverHom_comp
-  given: (f : X ⟶ Y) (g : Y ⟶ Z) [HomIsOver f S] [HomIsOver g S]
-  proof: rfl
-
-中文:
-引理 asOverHom_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [HomIsOver f S] [HomIsOver g S]
-  证明: rfl
+/-
+**CategoryTheory.OverClass.asOverHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.OverClass`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y Z : C} (S : 
+C) [inst_1 : CategoryTheory.OverClass X S]   [inst_2 : CategoryTheory.OverClass 
+Y S] [inst_3 : CategoryTheory.OverClass Z S] (f : X ⟶ Y) (g : Y ⟶ Z)   [inst_4 :
+ CategoryTheory.HomIsOver f S] [inst_5 : CategoryTheory.HomIsOver g S],   Catego
+ryTheory.OverClass.asOverHom S (CategoryTheory.CategoryStruct.comp f g) =     Ca
+tegoryTheory.CategoryStruct.comp (CategoryTheory.OverClass.asOverHom S f) (Categ
+oryTheory.OverClass.asOverHom S g)
+参数：S : C；f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；CategoryTheo
+ry.OverClass.asOverHom S f；CategoryTheory.OverClass.asOverHom S g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instHomIsOverComp`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (S : C) [inst_1 : CategoryTheory.OverClass X S]  
+ [inst_2 : CategoryThe…
 -/
 @[simp, reassoc] lemma asOverHom_comp (f : X ⟶ Y) (g : Y ⟶ Z) [HomIsOver f S] [HomIsOver g S] :
     asOverHom S (f ≫ g) = asOverHom S f ≫ asOverHom S g := rfl
-
-/--
-lemma `asOverHom_inv` / 引理 `asOverHom_inv`
-
-English:
-lemma asOverHom_inv
-  given: (f : X ⟶ Y) [IsIso f] [HomIsOver f S]
-  proof: by simp [← hom_comp_eq_id, ← asOverHom_comp]
-
-中文:
-引理 asOverHom_inv
-  条件: (f : X ⟶ Y) [是同构 f] [HomIsOver f S]
-  证明: by simp [← hom_comp_eq_id, ← asOverHom_comp]
+/-
+**CategoryTheory.OverClass.asOverHom_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.OverClass`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (S : C)
+ [inst_1 : CategoryTheory.OverClass X S]   [inst_2 : CategoryTheory.OverClass Y 
+S] (f : X ⟶ Y) [inst_3 : CategoryTheory.IsIso f]   [inst_4 : CategoryTheory.HomI
+sOver f S],   CategoryTheory.OverClass.asOverHom S (CategoryTheory.inv f) =     
+CategoryTheory.inv (CategoryTheory.OverClass.asOverHom S f)
+参数：S : C；f : X ⟶ Y；CategoryTheory.inv f；CategoryTheory.OverClass.asOverHom S f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.OverClass.instHomIsOverInv`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {X Y : C} (S : C) [inst_1 : CategoryTheory.OverClass
+ X S]   [inst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.OverClass.instIsIsoOverAsOverHom`：∀ {C : Type u} [inst : 
+CategoryTheory.Category.{v, u} C] {X Y : C} (S : C) [inst_1 : CategoryTheory.Ove
+rClass X S]   [inst_2 : CategoryTheor…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.OverClass.asOverHom.congr_simp`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {X Y : C} (S : C) [inst_1 : CategoryTheory.OverC
+lass X S]   [inst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.instHomIsOverComp`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y Z : C} (S : C) [inst_1 : CategoryTheory.OverClass X S]  
+ [inst_2 : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma asOverHom_inv (f : X ⟶ Y) [IsIso f] [HomIsOver f S] :
     asOverHom S (inv f) = inv (asOverHom S f) := by simp [← hom_comp_eq_id, ← asOverHom_comp]
@@ -508,25 +438,26 @@ end OverClass
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Reinterpret an isomorphism over an object `S` into an isomorphism in the category over `S`. -/
 @[simps]
-/--
-Definition of `Iso.asOver` / `Iso.asOver` 的定义
+/-
+**CategoryTheory.Iso.asOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (S : C) →         [inst_1 : CategoryTheory.OverClass X S] →           [
+inst_2 : CategoryTheory.OverClass Y S] →             (e : X ≅ Y) →              
+ [CategoryTheory.HomIsOver e.hom S] →                 CategoryTheory.OverClass.a
+sOver X S ≅ CategoryTheory.OverClass.asOver Y S
+参数：S : C；e : X ≅ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.OverClass.instHomIsOverInvOfHom`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X Y : C} (S : C) [inst_1 : CategoryTheory.Over
+Class X S]   [inst_2 : CategoryTheor…
 
-English:
-definition Iso.asOver
-  signature: (e : X ≅ Y) [HomIsOver e.hom S]
-  body: OverClass.asOverHom S e.hom
-  inv := OverClass.asOverHom S e.inv
-
-中文:
-定义 同构.asOver
-  签名: (e : X ≅ Y) [HomIsOver e.hom S]
-  定义体: OverClass.asOverHom S e.hom
-  inv := OverClass.asOverHom S e.inv
-
-Depends on / 依赖: OverClass, OverClass.asOverHom, asOverHom, e.hom
+--- 原说明 ---
+Reinterpret an isomorphism over an object `S` into an isomorphism in the categor
+y over `S`.
 -/
 def Iso.asOver (e : X ≅ Y) [HomIsOver e.hom S] : OverClass.asOver X S ≅ OverClass.asOver Y S where
   hom := OverClass.asOverHom S e.hom
   inv := OverClass.asOverHom S e.inv
 
 end CategoryTheory
+

@@ -72,53 +72,56 @@ open Limits Localization Opposite
 variable {C : Type u} [Category.{v} C] (W : MorphismProperty C)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `MorphismProperty.isClosedUnderColimitsOfShape_isLocal` / 引理 `MorphismProperty.isClosedUnderColimitsOfShape_isLocal`
-
-English:
-lemma MorphismProperty.isClosedUnderColimitsOfShape_isLocal
-  proof: fun Z ⟨p⟩ X Y f hf => by
-    obtain ⟨_, _⟩ := hW f hf
-    refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
-    · obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₁
-      obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₂
-      dsimp at h ⊢
-      obtain ⟨j₃, u, v, huv⟩ :=
-        IsCardinalPresentable.exists_eq_of_isColimit κ p.isColimit (f ≫ g₁) (f ≫ g₂)
-          (by simpa)
-      simp only [Category.assoc] at huv
-      rw [← p.w u]; rw [← p.w v]; rw [reassoc_of% ((p.prop_diag_obj j₃ _ hf).1 huv)]
-    · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g
-      obtain ⟨g, rfl⟩ := (p.prop_diag_obj j _ hf).2 g
-      exact ⟨g ≫ p.ι.app j, by simp⟩
-
-中文:
-引理 MorphismProperty.isClosedUnderColimitsOfShape_isLocal
-  证明: fun Z ⟨p⟩ X Y f hf => by
-    obtain ⟨_, _⟩ := hW f hf
-    refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
-    · obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₁
-      obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₂
-      dsimp at h ⊢
-      obtain ⟨j₃, u, v, huv⟩ :=
-        IsCardinalPresentable.exists_eq_of_isColimit κ p.isColimit (f ≫ g₁) (f ≫ g₂)
-          (by simpa)
-      simp only [Category.assoc] at huv
-      rw [← p.w u]; rw [← p.w v]; rw [reassoc_of% ((p.prop_diag_obj j₃ _ hf).1 huv)]
-    · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g
-      obtain ⟨g, rfl⟩ := (p.prop_diag_obj j _ hf).2 g
-      exact ⟨g ≫ p.ι.app j, by simp⟩
-
-Depends on / 依赖: Category, Category.assoc, IsCardinalPresentable, IsCardinalPresentable.exists_eq_of_isColimit, IsCardinalPresentable.exists_hom_of_isColimit, exists_eq_of_isColimit, exists_hom_of_isColimit, isColimit, p.isColimit, p.prop_diag_obj, prop_diag_obj, reassoc_of
+/-
+**CategoryTheory.MorphismProperty.isClosedUnderColimitsOfShape_isLocal** 是 Mathl
+ib 中的一个定理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (W : CategoryTheo
+ry.MorphismProperty C) (J : Type u')   [inst_1 : CategoryTheory.Category.{v', u'
+} J] [CategoryTheory.EssentiallySmall.{w, v', u'} J] (κ : Cardinal.{w})   [inst_
+3 : Fact κ.IsRegular] [CategoryTheory.IsCardinalFiltered J κ],   (∀ ⦃X Y : C⦄ (f
+ : X ⟶ Y), W f → CategoryTheory.IsCardinalPresentable X κ ∧ CategoryTheory.IsCar
+dinalPresentable Y κ) →     W.isLocal.IsClosedUnderColimitsOfShape J
+参数：W : CategoryTheory.MorphismProperty C；J : Type u'；κ : Cardinal.{w}；∀ ⦃X Y : C
+⦄ (f : X ⟶ Y), W f → CategoryTheory.IsCardinalPresentable X κ ∧ CategoryTheory.I
+sCardinalPresentable Y κ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCardinalPresentable.exists_hom_of_isColimit`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (κ : Cardinal.{w}) [in
+st_1 : Fact κ.IsRegular]   {J : Type u_1} [inst_2 …
+· 使用定理 `CategoryTheory.IsCardinalPresentable.exists_eq_of_isColimit`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (κ : Cardinal.{w}) [ins
+t_1 : Fact κ.IsRegular]   {J : Type u_1} [inst_2 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Limits.ColimitPresentation.w`：w (pres : ColimitPresentati
+on J X) {i j : J} (f : i ⟶ j) : pres.diag.map f ≫ pres.ι.app j = pres.ι.app i
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma MorphismProperty.isClosedUnderColimitsOfShape_isLocal
     (J : Type u') [Category.{v'} J] [EssentiallySmall.{w} J]
     (κ : Cardinal.{w}) [Fact κ.IsRegular] [IsCardinalFiltered J κ]
-    (hW : forall ⦃X Y : C⦄ (f : X ⟶ Y), W f -> IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ) :
+    (hW : ∀ ⦃X Y : C⦄ (f : X ⟶ Y), W f → IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ) :
     W.isLocal.IsClosedUnderColimitsOfShape J where
-  colimitsOfShape_le := fun Z ⟨p⟩ X Y f hf => by
+  colimitsOfShape_le := fun Z ⟨p⟩ X Y f hf ↦ by
     obtain ⟨_, _⟩ := hW f hf
-    refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
+    refine ⟨fun g₁ g₂ h ↦ ?_, fun g ↦ ?_⟩
     · obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₁
       obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₂
       dsimp at h ⊢
@@ -126,34 +129,19 @@ lemma MorphismProperty.isClosedUnderColimitsOfShape_isLocal
         IsCardinalPresentable.exists_eq_of_isColimit κ p.isColimit (f ≫ g₁) (f ≫ g₂)
           (by simpa)
       simp only [Category.assoc] at huv
-      rw [← p.w u]; rw [← p.w v]; rw [reassoc_of% ((p.prop_diag_obj j₃ _ hf).1 huv)]
+      rw [← p.w u, ← p.w v, reassoc_of% ((p.prop_diag_obj j₃ _ hf).1 huv)]
     · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g
       obtain ⟨g, rfl⟩ := (p.prop_diag_obj j _ hf).2 g
       exact ⟨g ≫ p.ι.app j, by simp⟩
-
-/--
-lemma `MorphismProperty.isCardinalAccessible_ι_isLocal` / 引理 `MorphismProperty.isCardinalAccessible_ι_isLocal`
-
-English:
-lemma MorphismProperty.isCardinalAccessible_ι_isLocal
-  proof: by
-    have := W.isClosedUnderColimitsOfShape_isLocal J κ hW
-    have := HasCardinalFilteredColimits.hasColimitsOfShape C κ J
-    infer_instance
-
-中文:
-引理 MorphismProperty.isCardinalAccessible_ι_isLocal
-  证明: by
-    have := W.isClosedUnderColimitsOfShape_isLocal J κ hW
-    have := HasCardinalFilteredColimits.hasColimitsOfShape C κ J
-    infer_instance
-
-Depends on / 依赖: HasCardinalFilteredColimits, HasCardinalFilteredColimits.hasColimitsOfShape, W.isClosedUnderColimitsOfShape_isLocal, hasColimitsOfShape, infer_instance, isClosedUnderColimitsOfShape_isLocal
+/-
+**CategoryTheory.MorphismProperty.isCardinalAccessible_** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma MorphismProperty.isCardinalAccessible_ι_isLocal
     (κ : Cardinal.{w}) [Fact κ.IsRegular]
     [HasCardinalFilteredColimits C κ]
-    (hW : forall ⦃X Y : C⦄ (f : X ⟶ Y), W f -> IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ) :
+    (hW : ∀ ⦃X Y : C⦄ (f : X ⟶ Y), W f → IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ) :
     W.isLocal.ι.IsCardinalAccessible κ where
   preservesColimitOfShape J _ _ := by
     have := W.isClosedUnderColimitsOfShape_isLocal J κ hW
@@ -164,61 +152,33 @@ namespace OrthogonalReflection
 
 variable (Z : C)
 
-/--
-Definition of `D₁` / `D₁` 的定义
+/-- Given `W : MorphismProperty C` and `Z : C`, this is the index type
+parametrising the data of a morphism `f : X ⟶ Y` satisfying `W`
+and a morphism `X ⟶ Z`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition D₁
-  signature: : Type _
-  body: Σ (f : W.toSet), f.1.left ⟶ Z
-
-中文:
-定义 D₁
-  签名: : 类型 _
-  定义体: Σ (f : W.toSet), f.1.left ⟶ Z
-
-Depends on / 依赖: W.toSet
+--- 原说明 ---
+Given `W : MorphismProperty C` and `Z : C`, this is the index type
+parametrising the data of a morphism `f : X ⟶ Y` satisfying `W`
+and a morphism `X ⟶ Z`.
 -/
 def D₁ : Type _ := Σ (f : W.toSet), f.1.left ⟶ Z
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MorphismProperty.IsSmall.{w}
-  signature: W] [LocallySmall.{w} C] :
-  body: by
-  dsimp [D₁]
-  infer_instance
-
-中文:
-实例 [MorphismProperty.是Small.{w}
-  签名: W] [LocallySmall.{w} C] :
-  定义体: by
-  dsimp [D₁]
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.OrthogonalReflection.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MorphismProperty.IsSmall.{w} W] [LocallySmall.{w} C] :
     Small.{w} (D₁ (W := W) (Z := Z)) := by
   dsimp [D₁]
   infer_instance
-
-/--
-lemma `D₁.hasCoproductsOfShape` / 引理 `D₁.hasCoproductsOfShape`
-
-English:
-lemma D₁.hasCoproductsOfShape
-  statement: [MorphismProperty.IsSmall.{w} W]
-  proof: hasColimitsOfShape_of_equivalence
-    (Discrete.equivalence (equivShrink.{w} _).symm)
-
-中文:
-引理 D₁.hasCoproductsOfShape
-  结论: [MorphismProperty.是Small.{w} W]
-  证明: hasColimitsOfShape_of_equivalence
-    (Discrete.equivalence (equivShrink.{w} _).symm)
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma D₁.hasCoproductsOfShape [MorphismProperty.IsSmall.{w} W]
     [LocallySmall.{w} C] [HasCoproducts.{w} C] :
@@ -227,34 +187,30 @@ lemma D₁.hasCoproductsOfShape [MorphismProperty.IsSmall.{w} W]
     (Discrete.equivalence (equivShrink.{w} _).symm)
 
 variable {W Z} in
-/--
-Definition of `D₁.obj₁` / `D₁.obj₁` 的定义
+/-- If `d : D₁ W Z` corresponds to the data of `f : X ⟶ Y` satisfying `W` and
+of a morphism `X ⟶ Z`, this is the object `X`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition D₁.obj₁
-  signature: (d : D₁ W Z)
-  body: d.1.1.left
-
-中文:
-定义 D₁.obj₁
-  签名: (d : D₁ W Z)
-  定义体: d.1.1.left
+--- 原说明 ---
+If `d : D₁ W Z` corresponds to the data of `f : X ⟶ Y` satisfying `W` and
+of a morphism `X ⟶ Z`, this is the object `X`.
 -/
 def D₁.obj₁ (d : D₁ W Z) : C := d.1.1.left
 
 variable {W Z} in
-/--
-Definition of `D₁.obj₂` / `D₁.obj₂` 的定义
+/-- If `d : D₁ W Z` corresponds to the data of `f : X ⟶ Y` satisfying `W` and
+of a morphism `X ⟶ Z`, this is the object `Y`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition D₁.obj₂
-  signature: (d : D₁ W Z)
-  body: d.1.1.right
-
-中文:
-定义 D₁.obj₂
-  签名: (d : D₁ W Z)
-  定义体: d.1.1.right
+--- 原说明 ---
+If `d : D₁ W Z` corresponds to the data of `f : X ⟶ Y` satisfying `W` and
+of a morphism `X ⟶ Z`, this is the object `Y`.
 -/
 def D₁.obj₂ (d : D₁ W Z) : C := d.1.1.right
 
@@ -262,35 +218,31 @@ section
 
 variable [HasCoproduct (D₁.obj₁ (W := W) (Z := Z))]
 
-/--
-Definition of `D₁.l` / `D₁.l` 的定义
+/-- Considering all diagrams consisting of a morphism `f : X ⟶ Y` satisfying `W`
+and of a morphism `d : X ⟶ Z`, this is the morphism from the coproduct of
+all these `X` objects to `Z` given by these morphisms `d`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation D₁.l
-  signature: : ∐ (obj₁ (W := W) (Z := Z)) ⟶ Z
-  body: Sigma.desc (fun d => d.2)
-
-中文:
-缩写 D₁.l
-  签名: : ∐ (obj₁ (W := W) (Z := Z)) ⟶ Z
-  定义体: Sigma.desc (fun d => d.2)
+--- 原说明 ---
+Considering all diagrams consisting of a morphism `f : X ⟶ Y` satisfying `W`
+and of a morphism `d : X ⟶ Z`, this is the morphism from the coproduct of
+all these `X` objects to `Z` given by these morphisms `d`.
 -/
 noncomputable abbrev D₁.l : ∐ (obj₁ (W := W) (Z := Z)) ⟶ Z :=
-  Sigma.desc (fun d => d.2)
+  Sigma.desc (fun d ↦ d.2)
 
 variable {W Z} in
-/--
-Definition of `D₁.ιLeft` / `D₁.ιLeft` 的定义
+/-- The inclusion of a summand in `∐ obj₁`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation D₁.ιLeft
-  signature: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  body: Sigma.ι (obj₁ (W := W) (Z := Z)) ⟨⟨Arrow.mk f, hf⟩, g⟩
-
-中文:
-缩写 D₁.ιLeft
-  签名: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  定义体: Sigma.ι (obj₁ (W := W) (Z := Z)) ⟨⟨Arrow.mk f, hf⟩, g⟩
+--- 原说明 ---
+The inclusion of a summand in `∐ obj₁`.
 -/
 noncomputable abbrev D₁.ιLeft {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) :
     X ⟶ ∐ obj₁ (W := W) (Z := Z) :=
@@ -298,18 +250,10 @@ noncomputable abbrev D₁.ιLeft {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z
 
 variable {W Z} in
 @[reassoc]
-/--
-lemma `D₁.ιLeft_comp_l` / 引理 `D₁.ιLeft_comp_l`
-
-English:
-lemma D₁.ιLeft_comp_l
-  given: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  proof: Sigma.ι_desc _ _
-
-中文:
-引理 D₁.ιLeft_comp_l
-  条件: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  证明: Sigma.ι_desc _ _
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma D₁.ιLeft_comp_l {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) :
     D₁.ιLeft f hf g ≫ D₁.l W Z = g :=
@@ -317,35 +261,30 @@ lemma D₁.ιLeft_comp_l {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) :
 
 variable [HasCoproduct (D₁.obj₂ (W := W) (Z := Z))]
 
-/--
-Definition of `D₁.t` / `D₁.t` 的定义
+/-- The coproduct of all the morphisms `f` indexed by all diagrams
+consisting of a morphism `f : X ⟶ Y` satisfying `W` and of a morphism `d : X ⟶ Z`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation D₁.t
-  signature: : ∐ (obj₁ (W := W) (Z := Z)) ⟶ ∐ (obj₂ (W := W) (Z := Z))
-  body: Limits.Sigma.map (fun d => d.1.1.hom)
-
-中文:
-缩写 D₁.t
-  签名: : ∐ (obj₁ (W := W) (Z := Z)) ⟶ ∐ (obj₂ (W := W) (Z := Z))
-  定义体: Limits.Sigma.map (fun d => d.1.1.hom)
+--- 原说明 ---
+The coproduct of all the morphisms `f` indexed by all diagrams
+consisting of a morphism `f : X ⟶ Y` satisfying `W` and of a morphism `d : X ⟶ Z
+`.
 -/
 noncomputable abbrev D₁.t : ∐ (obj₁ (W := W) (Z := Z)) ⟶ ∐ (obj₂ (W := W) (Z := Z)) :=
-  Limits.Sigma.map (fun d => d.1.1.hom)
+  Limits.Sigma.map (fun d ↦ d.1.1.hom)
 
 variable {W Z} in
-/--
-Definition of `D₁.ιRight` / `D₁.ιRight` 的定义
+/-- The inclusion of a summand in `∐ obj₂`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation D₁.ιRight
-  signature: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  body: Sigma.ι (obj₂ (W := W) (Z := Z)) ⟨⟨Arrow.mk f, hf⟩, g⟩
-
-中文:
-缩写 D₁.ιRight
-  签名: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  定义体: Sigma.ι (obj₂ (W := W) (Z := Z)) ⟨⟨Arrow.mk f, hf⟩, g⟩
+--- 原说明 ---
+The inclusion of a summand in `∐ obj₂`.
 -/
 noncomputable abbrev D₁.ιRight {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) :
     Y ⟶ ∐ (obj₂ (W := W) (Z := Z)) :=
@@ -354,20 +293,10 @@ noncomputable abbrev D₁.ιRight {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ 
 set_option backward.isDefEq.respectTransparency false in -- Needed below
 variable {W Z} in
 @[reassoc]
-/--
-lemma `D₁.ι_comp_t` / 引理 `D₁.ι_comp_t`
-
-English:
-lemma D₁.ι_comp_t
-  given: (d : D₁ W Z)
-  proof: by
-  apply ι_colimMap
-
-中文:
-引理 D₁.ι_comp_t
-  条件: (d : D₁ W Z)
-  证明: by
-  apply ι_colimMap
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma D₁.ι_comp_t (d : D₁ W Z) :
     Sigma.ι _ d ≫ D₁.t W Z = d.1.1.hom ≫ Sigma.ι obj₂ d := by
@@ -375,20 +304,10 @@ lemma D₁.ι_comp_t (d : D₁ W Z) :
 
 variable {W Z} in
 @[reassoc]
-/--
-lemma `D₁.ιLeft_comp_t` / 引理 `D₁.ιLeft_comp_t`
-
-English:
-lemma D₁.ιLeft_comp_t
-  given: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  proof: by
-  apply ι_colimMap
-
-中文:
-引理 D₁.ιLeft_comp_t
-  条件: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  证明: by
-  apply ι_colimMap
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma D₁.ιLeft_comp_t {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) :
     D₁.ιLeft f hf g ≫ D₁.t W Z = f ≫ D₁.ιRight f hf g := by
@@ -396,54 +315,64 @@ lemma D₁.ιLeft_comp_t {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) :
 
 variable [HasPushouts C]
 
-/--
-Definition of `step` / `step` 的定义
+/-- The intermediate object in the definition of the morphism `toSucc W Z : Z ⟶ succ W Z`.
+It is the pushout of the following square:
+```lean
+∐ D₁.obj₁ ⟶ ∐ D₁.obj₂
+   |           |
+   v           v
+   Z      ⟶   step W Z
+```
+where the coproduct is taken over all the diagram consisting of a morphism `f : X ⟶ Y`
+satisfying `W` and a morphism `X ⟶ Z`. The top map is the coproduct of all of these `f`.
+-/
+/-
+**CategoryTheory.OrthogonalReflection.step** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.OrthogonalReflection`。
+形式化陈述：step
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation step
-  body: pushout (D₁.t W Z) (D₁.l W Z)
-
-中文:
-缩写 step
-  定义体: pushout (D₁.t W Z) (D₁.l W Z)
-
-Depends on / 依赖: pushout
+--- 原说明 ---
+The intermediate object in the definition of the morphism `toSucc W Z : Z ⟶ succ
+ W Z`.
+It is the pushout of the following square:
+```lean
+∐ D₁.obj₁ ⟶ ∐ D₁.obj₂
+   |           |
+   v           v
+   Z      ⟶   step W Z
+```
+where the coproduct is taken over all the diagram consisting of a morphism `f : 
+X ⟶ Y`
+satisfying `W` and a morphism `X ⟶ Z`. The top map is the coproduct of all of th
+ese `f`.
 -/
 noncomputable abbrev step := pushout (D₁.t W Z) (D₁.l W Z)
 
-/--
-Definition of `toStep` / `toStep` 的定义
+/-- The canonical map from `Z` to the pushout of `D₁.t W Z` and `D₁.l W Z`. -/
+/-
+**CategoryTheory.OrthogonalReflection.toStep** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.OrthogonalReflection`。
+形式化陈述：toStep : Z ⟶ step W Z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toStep
-  signature: : Z ⟶ step W Z
-  body: pushout.inr _ _
-
-中文:
-缩写 toStep
-  签名: : Z ⟶ step W Z
-  定义体: pushout.inr _ _
-
-Depends on / 依赖: pushout, pushout.inr
+--- 原说明 ---
+The canonical map from `Z` to the pushout of `D₁.t W Z` and `D₁.l W Z`.
 -/
 noncomputable abbrev toStep : Z ⟶ step W Z := pushout.inr _ _
 
-/--
-Definition of `D₂` / `D₂` 的定义
+/-- The index type parametrising the data of two morphisms `g₁ g₂ : Y ⟶ step W Z`, and
+a map `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`. -/
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition D₂
-  signature: : Type _
-  body: Σ (f : W.toSet),
-    { pq : (f.1.right ⟶ step W Z) × (f.1.right ⟶ step W Z) // f.1.hom ≫ pq.1 = f.1.hom ≫ pq.2 }
-
-中文:
-定义 D₂
-  签名: : 类型 _
-  定义体: Σ (f : W.toSet),
-    { pq : (f.1.right ⟶ step W Z) × (f.1.right ⟶ step W Z) // f.1.hom ≫ pq.1 = f.1.hom ≫ pq.2 }
-
-Depends on / 依赖: W.toSet
+--- 原说明 ---
+The index type parametrising the data of two morphisms `g₁ g₂ : Y ⟶ step W Z`, a
+nd
+a map `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`.
 -/
 def D₂ : Type _ :=
   Σ (f : W.toSet),
@@ -452,24 +381,15 @@ def D₂ : Type _ :=
 /-- The shape of the multicoequalizer of all pairs of morphisms `g₁ g₂ : Y ⟶ step W Z` with
 a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`. -/
 @[simps]
-/--
-Definition of `D₂.multispanShape` / `D₂.multispanShape` 的定义
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition D₂.multispanShape
-  signature: : MultispanShape where
-  body: D₂ W Z
-  R := Unit
-  fst _ := .unit
-  snd _ := .unit
-
-中文:
-定义 D₂.multispanShape
-  签名: : MultispanShape where
-  定义体: D₂ W Z
-  R := Unit
-  fst _ := .unit
-  snd _ := .unit
+--- 原说明 ---
+The shape of the multicoequalizer of all pairs of morphisms `g₁ g₂ : Y ⟶ step W 
+Z` with
+a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`.
 -/
 def D₂.multispanShape : MultispanShape where
   L := D₂ W Z
@@ -481,62 +401,28 @@ section
 
 variable [MorphismProperty.IsSmall.{w} W] [LocallySmall.{w} C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Small.{w} (D₂ (W := W) (Z := Z))
-  body: by
-  dsimp [D₂]
-  infer_instance
-
-中文:
-实例 :
-  签名: Small.{w} (D₂ (W := W) (Z := Z))
-  定义体: by
-  dsimp [D₂]
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.OrthogonalReflection.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Small.{w} (D₂ (W := W) (Z := Z)) := by
   dsimp [D₂]
   infer_instance
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Small.{w} (D₂.multispanShape W Z).L
-  body: by dsimp; infer_instance
-
-中文:
-实例 :
-  签名: Small.{w} (D₂.multispanShape W Z).L
-  定义体: by dsimp; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.OrthogonalReflection.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Small.{w} (D₂.multispanShape W Z).L := by dsimp; infer_instance
 
 attribute [local instance] essentiallySmall_of_small_of_locallySmall in
-/--
-lemma `D₂.hasColimitsOfShape` / 引理 `D₂.hasColimitsOfShape`
-
-English:
-lemma D₂.hasColimitsOfShape
-  given: [HasColimitsOfSize.{w, w} C]
-  proof: hasColimitsOfShape_of_equivalence (equivSmallModel.{w} _).symm
-
-中文:
-引理 D₂.hasColimitsOfShape
-  条件: [有余limitsOfSize.{w, w} C]
-  证明: hasColimitsOfShape_of_equivalence (equivSmallModel.{w} _).symm
-
-Depends on / 依赖: equivSmallModel, hasColimitsOfShape_of_equivalence
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma D₂.hasColimitsOfShape [HasColimitsOfSize.{w, w} C] :
     HasColimitsOfShape (WalkingMultispan (multispanShape W Z)) C :=
@@ -547,24 +433,15 @@ end
 /-- The diagram of the multicoequalizer of all pair of morphisms `g₁ g₂ : Y ⟶ step W Z` with
 a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`. -/
 @[simps]
-/--
-Definition of `D₂.multispanIndex` / `D₂.multispanIndex` 的定义
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition D₂.multispanIndex
-  signature: : MultispanIndex (multispanShape W Z) C where
-  body: d.1.1.right
-  right _ := step W Z
-  fst d := d.2.1.1
-  snd d := d.2.1.2
-
-中文:
-定义 D₂.multispanIndex
-  签名: : MultispanIndex (multispanShape W Z) C where
-  定义体: d.1.1.right
-  right _ := step W Z
-  fst d := d.2.1.1
-  snd d := d.2.1.2
+--- 原说明 ---
+The diagram of the multicoequalizer of all pair of morphisms `g₁ g₂ : Y ⟶ step W
+ Z` with
+a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`.
 -/
 noncomputable def D₂.multispanIndex : MultispanIndex (multispanShape W Z) C where
   left d := d.1.1.right
@@ -574,57 +451,44 @@ noncomputable def D₂.multispanIndex : MultispanIndex (multispanShape W Z) C wh
 
 variable [HasMulticoequalizer (D₂.multispanIndex W Z)]
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- The object `succ W Z` is the multicoequalizer of all pairs of morphisms
+`g₁ g₂ : Y ⟶ step W Z` with a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`. -/
+/-
+**CategoryTheory.OrthogonalReflection.succ** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.OrthogonalReflection`。
+形式化陈述：succ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation succ
-  body: multicoequalizer (D₂.multispanIndex W Z)
-
-中文:
-缩写 succ
-  定义体: multicoequalizer (D₂.multispanIndex W Z)
-
-Depends on / 依赖: multicoequalizer, multispanIndex
+--- 原说明 ---
+The object `succ W Z` is the multicoequalizer of all pairs of morphisms
+`g₁ g₂ : Y ⟶ step W Z` with a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫
+ g₂`.
 -/
 noncomputable abbrev succ := multicoequalizer (D₂.multispanIndex W Z)
 
-/--
-Definition of `fromStep` / `fromStep` 的定义
+/-- The projection from `Z` to the multicoequalizer of all morphisms `g₁ g₂ : Y ⟶ step W Z` with
+a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`. -/
+/-
+**CategoryTheory.OrthogonalReflection.fromStep** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.OrthogonalReflection`。
+形式化陈述：fromStep : step W Z ⟶ succ W Z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fromStep
-  signature: : step W Z ⟶ succ W Z
-  body: Multicoequalizer.π (D₂.multispanIndex W Z) .unit
-
-中文:
-缩写 fromStep
-  签名: : step W Z ⟶ succ W Z
-  定义体: Multicoequalizer.π (D₂.multispanIndex W Z) .unit
-
-Depends on / 依赖: Multicoequalizer, multispanIndex
+--- 原说明 ---
+The projection from `Z` to the multicoequalizer of all morphisms `g₁ g₂ : Y ⟶ st
+ep W Z` with
+a `f : X ⟶ Y` satisfying `W` such that `f ≫ g₁ = f ≫ g₂`.
 -/
 noncomputable abbrev fromStep : step W Z ⟶ succ W Z :=
   Multicoequalizer.π (D₂.multispanIndex W Z) .unit
 
 variable {W Z} in
 @[reassoc]
-/--
-lemma `D₂.condition` / 引理 `D₂.condition`
-
-English:
-lemma D₂.condition
-  statement: {X Y : C} (f : X ⟶ Y) (hf : W f)
-  proof: Multicoequalizer.condition (D₂.multispanIndex W Z)
-    ⟨⟨Arrow.mk f, hf⟩, ⟨g₁, g₂⟩, h⟩
-
-中文:
-引理 D₂.condition
-  结论: {X Y : C} (f : X ⟶ Y) (hf : W f)
-  证明: Multicoequalizer.condition (D₂.multispanIndex W Z)
-    ⟨⟨Arrow.mk f, hf⟩, ⟨g₁, g₂⟩, h⟩
-
-Depends on / 依赖: Arrow.mk, Multicoequalizer, Multicoequalizer.condition, condition, multispanIndex
+/-
+**CategoryTheory.OrthogonalReflection.D** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma D₂.condition {X Y : C} (f : X ⟶ Y) (hf : W f)
     {g₁ g₂ : Y ⟶ step W Z} (h : f ≫ g₁ = f ≫ g₂) :
@@ -632,42 +496,47 @@ lemma D₂.condition {X Y : C} (f : X ⟶ Y) (hf : W f)
   Multicoequalizer.condition (D₂.multispanIndex W Z)
     ⟨⟨Arrow.mk f, hf⟩, ⟨g₁, g₂⟩, h⟩
 
-/--
-Definition of `toSucc` / `toSucc` 的定义
+/-- The morphism `Z ⟶ succ W Z`. -/
+/-
+**CategoryTheory.OrthogonalReflection.toSucc** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.OrthogonalReflection`。
+形式化陈述：toSucc : Z ⟶ succ W Z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toSucc
-  signature: : Z ⟶ succ W Z
-  body: toStep W Z ≫ fromStep W Z
-
-中文:
-缩写 toSucc
-  签名: : Z ⟶ succ W Z
-  定义体: toStep W Z ≫ fromStep W Z
-
-Depends on / 依赖: fromStep, toStep
+--- 原说明 ---
+The morphism `Z ⟶ succ W Z`.
 -/
 noncomputable abbrev toSucc : Z ⟶ succ W Z := toStep W Z ≫ fromStep W Z
 
 variable {W Z} in
-/--
-lemma `toSucc_injectivity` / 引理 `toSucc_injectivity`
-
-English:
-lemma toSucc_injectivity
-  statement: {X Y : C} (f : X ⟶ Y) (hf : W f)
-  proof: by
-  simpa using D₂.condition f hf (g₁ := g₁ ≫ toStep W Z) (g₂ := g₂ ≫ toStep W Z)
-    (by simp [reassoc_of% hg])
-
-中文:
-引理 toSucc_injectivity
-  结论: {X Y : C} (f : X ⟶ Y) (hf : W f)
-  证明: by
-  simpa using D₂.condition f hf (g₁ := g₁ ≫ toStep W Z) (g₂ := g₂ ≫ toStep W Z)
-    (by simp [reassoc_of% hg])
-
-Depends on / 依赖: condition, reassoc_of, toStep
+/-
+**CategoryTheory.OrthogonalReflection.toSucc_injectivity** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：toSucc_injectivity {X Y : C} (f : X ⟶ Y) (hf : W f) (g₁ g₂ : Y ⟶ Z) (hg : 
+f ≫ g₁ = f ≫ g₂) : g₁ ≫ toSucc W Z = g₂ ≫ toSucc W Z
+参数：f : X ⟶ Y；hf : W f；g₁ g₂ : Y ⟶ Z；hg : f ≫ g₁ = f ≫ g₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.OrthogonalReflection.D₂.condition`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {W : CategoryTheory.MorphismProperty C} {Z : 
+C}   [inst_1 : CategoryTheory.Limits.H…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toSucc_injectivity {X Y : C} (f : X ⟶ Y) (hf : W f)
     (g₁ g₂ : Y ⟶ Z) (hg : f ≫ g₁ = f ≫ g₂) :
@@ -677,68 +546,88 @@ lemma toSucc_injectivity {X Y : C} (f : X ⟶ Y) (hf : W f)
 
 set_option backward.isDefEq.respectTransparency false in
 variable {W Z} in
-/--
-lemma `toSucc_surjectivity` / 引理 `toSucc_surjectivity`
-
-English:
-lemma toSucc_surjectivity
-  given: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  proof: ⟨D₁.ιRight f hf g ≫ pushout.inl _ _ ≫ fromStep W Z, by
-    simp [← D₁.ιLeft_comp_t_assoc, pushout.condition_assoc]⟩
-
-中文:
-引理 toSucc_surjectivity
-  条件: {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z)
-  证明: ⟨D₁.ιRight f hf g ≫ pushout.inl _ _ ≫ fromStep W Z, by
-    simp [← D₁.ιLeft_comp_t_assoc, pushout.condition_assoc]⟩
-
-Depends on / 依赖: condition_assoc, fromStep, pushout, pushout.condition_assoc, pushout.inl
+/-
+**CategoryTheory.OrthogonalReflection.toSucc_surjectivity** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：toSucc_surjectivity {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) : exists 
+(g' : Y ⟶ succ W Z), f ≫ g' = g ≫ toSucc W Z
+参数：f : X ⟶ Y；hf : W f；g : X ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.pushout.condition_assoc`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : 
+CategoryTheory.Limits.HasPushout f …
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc_assoc`：∀ {J : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{
+v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toSucc_surjectivity {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) :
-    exists (g' : Y ⟶ succ W Z), f ≫ g' = g ≫ toSucc W Z :=
+    ∃ (g' : Y ⟶ succ W Z), f ≫ g' = g ≫ toSucc W Z :=
   ⟨D₁.ιRight f hf g ≫ pushout.inl _ _ ≫ fromStep W Z, by
     simp [← D₁.ιLeft_comp_t_assoc, pushout.condition_assoc]⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isLocal_isLocal_toSucc` / 引理 `isLocal_isLocal_toSucc`
-
-English:
-lemma isLocal_isLocal_toSucc
-  proof: by
-  refine fun T hT => ⟨fun φ₁ φ₂ h => ?_, fun g => ?_⟩
-  · ext ⟨⟩
-    simp only [Category.assoc] at h
-    dsimp
-    ext d
-    · apply (hT d.1.1.hom d.1.2).1
-      simp only [← D₁.ι_comp_t_assoc, pushout.condition_assoc, h]
-    · exact h
-  · choose f hf using fun (d : D₁ W Z) => (hT d.1.1.hom d.1.2).2 (d.2 ≫ g)
-    exact ⟨Multicoequalizer.desc _ _ (fun ⟨⟩ => pushout.desc (Sigma.desc f) g)
-      (fun d => (hT d.1.1.hom d.1.2).1 (by simp [reassoc_of% d.2.2])), by simp⟩
-
-中文:
-引理 isLocal_isLocal_toSucc
-  证明: by
-  refine fun T hT => ⟨fun φ₁ φ₂ h => ?_, fun g => ?_⟩
-  · ext ⟨⟩
-    simp only [Category.assoc] at h
-    dsimp
-    ext d
-    · apply (hT d.1.1.hom d.1.2).1
-      simp only [← D₁.ι_comp_t_assoc, pushout.condition_assoc, h]
-    · exact h
-  · choose f hf using fun (d : D₁ W Z) => (hT d.1.1.hom d.1.2).2 (d.2 ≫ g)
-    exact ⟨Multicoequalizer.desc _ _ (fun ⟨⟩ => pushout.desc (Sigma.desc f) g)
-      (fun d => (hT d.1.1.hom d.1.2).1 (by simp [reassoc_of% d.2.2])), by simp⟩
-
-Depends on / 依赖: Category, Category.assoc, Multicoequalizer, Multicoequalizer.desc, Sigma.desc, condition_assoc, pushout, pushout.condition_assoc, pushout.desc, reassoc_of
+/-
+**CategoryTheory.OrthogonalReflection.isLocal_isLocal_toSucc** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：isLocal_isLocal_toSucc : W.isLocal.isLocal (toSucc W Z)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Multicoequalizer.hom_ext`：hom_ext {W : C} (i j : m
+ulticoequalizer I ⟶ W) (h : forall b, Multicoequalizer.π I b ≫ i = Multicoequali
+zer.π I b ≫ j) : i = j
+· 使用定理 `CategoryTheory.Limits.pushout.hom_ext`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Category
+Theory.Limits.HasPushout f …
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.pushout.condition_assoc`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : 
+CategoryTheory.Limits.HasPushout f …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map_assoc`：∀ {β : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.
+Limits.HasCoproduct f] [inst_…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc_assoc`：∀ {J : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{
+v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma isLocal_isLocal_toSucc :
     W.isLocal.isLocal (toSucc W Z) := by
-  refine fun T hT => ⟨fun φ₁ φ₂ h => ?_, fun g => ?_⟩
+  refine fun T hT ↦ ⟨fun φ₁ φ₂ h ↦ ?_, fun g ↦ ?_⟩
   · ext ⟨⟩
     simp only [Category.assoc] at h
     dsimp
@@ -746,69 +635,92 @@ lemma isLocal_isLocal_toSucc :
     · apply (hT d.1.1.hom d.1.2).1
       simp only [← D₁.ι_comp_t_assoc, pushout.condition_assoc, h]
     · exact h
-  · choose f hf using fun (d : D₁ W Z) => (hT d.1.1.hom d.1.2).2 (d.2 ≫ g)
-    exact ⟨Multicoequalizer.desc _ _ (fun ⟨⟩ => pushout.desc (Sigma.desc f) g)
-      (fun d => (hT d.1.1.hom d.1.2).1 (by simp [reassoc_of% d.2.2])), by simp⟩
+  · choose f hf using fun (d : D₁ W Z) ↦ (hT d.1.1.hom d.1.2).2 (d.2 ≫ g)
+    exact ⟨Multicoequalizer.desc _ _ (fun ⟨⟩ ↦ pushout.desc (Sigma.desc f) g)
+      (fun d ↦ (hT d.1.1.hom d.1.2).1 (by simp [reassoc_of% d.2.2])), by simp⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isIso_toSucc_iff` / 引理 `isIso_toSucc_iff`
-
-English:
-lemma isIso_toSucc_iff
-  proof: by
-  refine ⟨fun _ X Y f hf => ?_, fun hZ => ?_⟩
-  · refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
-    · simpa [← cancel_mono (toSucc W Z)] using
-        D₂.condition f hf (g₁ := g₁ ≫ toStep W Z) (g₂ := g₂ ≫ toStep W Z)
-          (by simp [reassoc_of% h])
-    · have hZ := IsIso.hom_inv_id (toSucc W Z)
-      simp only [Category.assoc] at hZ
-      exact ⟨D₁.ιRight f hf g ≫ pushout.inl _ _ ≫ fromStep W Z ≫ inv (toSucc W Z),
-        by simp [← D₁.ιLeft_comp_t_assoc, pushout.condition_assoc, hZ]⟩
-  · obtain ⟨f, hf⟩ := (isLocal_isLocal_toSucc W Z _ hZ).2 (𝟙 _)
-    dsimp at hf
-    refine ⟨f, hf, ?_⟩
-    ext ⟨⟩
-    dsimp
-    ext d
-    · simp only [Category.assoc] at hf
-      simp only [Category.comp_id, ← Category.assoc]
-      refine D₂.condition _ d.1.2 ?_
-      rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition_assoc]; rw [reassoc_of% hf]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition]
-    · simp [reassoc_of% hf]
-
-中文:
-引理 isIso_toSucc_iff
-  证明: by
-  refine ⟨fun _ X Y f hf => ?_, fun hZ => ?_⟩
-  · refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
-    · simpa [← cancel_mono (toSucc W Z)] using
-        D₂.condition f hf (g₁ := g₁ ≫ toStep W Z) (g₂ := g₂ ≫ toStep W Z)
-          (by simp [reassoc_of% h])
-    · have hZ := IsIso.hom_inv_id (toSucc W Z)
-      simp only [Category.assoc] at hZ
-      exact ⟨D₁.ιRight f hf g ≫ pushout.inl _ _ ≫ fromStep W Z ≫ inv (toSucc W Z),
-        by simp [← D₁.ιLeft_comp_t_assoc, pushout.condition_assoc, hZ]⟩
-  · obtain ⟨f, hf⟩ := (isLocal_isLocal_toSucc W Z _ hZ).2 (𝟙 _)
-    dsimp at hf
-    refine ⟨f, hf, ?_⟩
-    ext ⟨⟩
-    dsimp
-    ext d
-    · simp only [Category.assoc] at hf
-      simp only [Category.comp_id, ← Category.assoc]
-      refine D₂.condition _ d.1.2 ?_
-      rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition_assoc]; rw [reassoc_of% hf]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition]
-    · simp [reassoc_of% hf]
-
-Depends on / 依赖: Category, Category.assoc, IsIso.hom_inv_id, cancel_mono, condition, condition_assoc, fromStep, hom_inv_id, isLocal_isLocal_toSucc, pushout, pushout.condition_assoc, pushout.inl, reassoc_of, toStep, toSucc
+/-
+**CategoryTheory.OrthogonalReflection.isIso_toSucc_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.OrthogonalReflection`。
+形式化陈述：isIso_toSucc_iff : IsIso (toSucc W Z) ↔ W.isLocal Z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.OrthogonalReflection.D₂.condition`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {W : CategoryTheory.MorphismProperty C} {Z : 
+C}   [inst_1 : CategoryTheory.Limits.H…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Limits.pushout.condition_assoc`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : 
+CategoryTheory.Limits.HasPushout f …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `CategoryTheory.OrthogonalReflection.isLocal_isLocal_toSucc`：isLocal_isLo
+cal_toSucc : W.isLocal.isLocal (toSucc W Z)
+· 使用定理 `CategoryTheory.Limits.Multicoequalizer.hom_ext`：hom_ext {W : C} (i j : m
+ulticoequalizer I ⟶ W) (h : forall b, Multicoequalizer.π I b ≫ i = Multicoequali
+zer.π I b ≫ j) : i = j
+· 使用定理 `CategoryTheory.Limits.pushout.hom_ext`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Category
+Theory.Limits.HasPushout f …
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `CategoryTheory.OrthogonalReflection.D₁.ι_comp_t_assoc`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] {W : CategoryTheory.MorphismProperty C} 
+{Z : C}   [inst_1 : CategoryTheory.Limits.H…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.pushout.condition`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Catego
+ryTheory.Limits.HasPushout f …
 -/
 lemma isIso_toSucc_iff :
     IsIso (toSucc W Z) ↔ W.isLocal Z := by
-  refine ⟨fun _ X Y f hf => ?_, fun hZ => ?_⟩
-  · refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
+  refine ⟨fun _ X Y f hf ↦ ?_, fun hZ ↦ ?_⟩
+  · refine ⟨fun g₁ g₂ h ↦ ?_, fun g ↦ ?_⟩
     · simpa [← cancel_mono (toSucc W Z)] using
         D₂.condition f hf (g₁ := g₁ ≫ toStep W Z) (g₂ := g₂ ≫ toStep W Z)
           (by simp [reassoc_of% h])
@@ -825,7 +737,9 @@ lemma isIso_toSucc_iff :
     · simp only [Category.assoc] at hf
       simp only [Category.comp_id, ← Category.assoc]
       refine D₂.condition _ d.1.2 ?_
-      rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition_assoc]; rw [reassoc_of% hf]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition]
+      rw [Category.assoc, Category.assoc, Category.assoc,
+        ← D₁.ι_comp_t_assoc, pushout.condition_assoc, reassoc_of% hf,
+        ← D₁.ι_comp_t_assoc, pushout.condition]
     · simp [reassoc_of% hf]
 
 end
@@ -833,26 +747,21 @@ end
 open SmallObject
 
 variable [HasPushouts C]
-  [forall Z, HasCoproduct (D₁.obj₁ (W := W) (Z := Z))]
-  [forall Z, HasCoproduct (D₁.obj₂ (W := W) (Z := Z))]
-  [forall Z, HasMulticoequalizer (D₂.multispanIndex W Z)]
+  [∀ Z, HasCoproduct (D₁.obj₁ (W := W) (Z := Z))]
+  [∀ Z, HasCoproduct (D₁.obj₂ (W := W) (Z := Z))]
+  [∀ Z, HasMulticoequalizer (D₂.multispanIndex W Z)]
 
-/--
-Definition of `succStruct` / `succStruct` 的定义
+/-- The successor structure of the orthogonal-reflection construction. -/
+/-
+**CategoryTheory.OrthogonalReflection.succStruct** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.OrthogonalReflection`。
+形式化陈述：succStruct (Z₀ : C) : SuccStruct C where X₀
+参数：Z₀ : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succStruct
-  signature: (Z₀ : C)
-  body: Z₀
-  succ Z := succ W Z
-  toSucc Z := toSucc W Z
-
-中文:
-定义 succStruct
-  签名: (Z₀ : C)
-  定义体: Z₀
-  succ Z := succ W Z
-  toSucc Z := toSucc W Z
+--- 原说明 ---
+The successor structure of the orthogonal-reflection construction.
 -/
 noncomputable def succStruct (Z₀ : C) : SuccStruct C where
   X₀ := Z₀
@@ -862,59 +771,48 @@ noncomputable def succStruct (Z₀ : C) : SuccStruct C where
 variable (κ : Cardinal.{w}) [OrderBot κ.ord.ToType]
   [HasIterationOfShape κ.ord.ToType C]
 
-/--
-Definition of `reflectionObj` / `reflectionObj` 的定义
+/-- The transfinite iteration of `succStruct W Z` to the power `κ.ord.ToType`. -/
+/-
+**CategoryTheory.OrthogonalReflection.reflectionObj** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.OrthogonalReflection`。
+形式化陈述：reflectionObj : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reflectionObj
-  signature: : C
-  body: (succStruct W Z).iteration κ.ord.ToType
-
-中文:
-定义 reflectionObj
-  签名: : C
-  定义体: (succStruct W Z).iteration κ.ord.ToType
-
-Depends on / 依赖: ToType, iteration, ord.ToType, succStruct
+--- 原说明 ---
+The transfinite iteration of `succStruct W Z` to the power `κ.ord.ToType`.
 -/
 noncomputable def reflectionObj : C := (succStruct W Z).iteration κ.ord.ToType
 
-/--
-Definition of `reflection` / `reflection` 的定义
+/-- The map which shall exhibit `reflectionObj W Z κ` as the image of `Z` by
+the left adjoint of the inclusion of `W.isLocal`, see `corepresentableBy`. -/
+/-
+**CategoryTheory.OrthogonalReflection.reflection** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.OrthogonalReflection`。
+形式化陈述：reflection : Z ⟶ reflectionObj W Z κ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reflection
-  signature: : Z ⟶ reflectionObj W Z κ
-  body: (succStruct W Z).ιIteration κ.ord.ToType
-
-中文:
-定义 reflection
-  签名: : Z ⟶ reflectionObj W Z κ
-  定义体: (succStruct W Z).ιIteration κ.ord.ToType
-
-Depends on / 依赖: ToType, ord.ToType, succStruct
+--- 原说明 ---
+The map which shall exhibit `reflectionObj W Z κ` as the image of `Z` by
+the left adjoint of the inclusion of `W.isLocal`, see `corepresentableBy`.
 -/
 noncomputable def reflection : Z ⟶ reflectionObj W Z κ :=
   (succStruct W Z).ιIteration κ.ord.ToType
 
-/--
-Definition of `transfiniteCompositionOfShapeReflection` / `transfiniteCompositionOfShapeReflection` 的定义
+/-- The morphism `reflection W Z κ : Z ⟶ reflectionObj W Z κ` is a transfinite
+compositions of morphisms in `LeftBousfield.W W.isLocal`. -/
+/-
+**CategoryTheory.OrthogonalReflection.transfiniteCompositionOfShapeReflection** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：transfiniteCompositionOfShapeReflection : W.isLocal.isLocal.TransfiniteCom
+positionOfShape κ.ord.ToType (reflection W Z κ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transfiniteCompositionOfShapeReflection
-  signature: :
-  body: ((succStruct W Z).transfiniteCompositionOfShapeιIteration κ.ord.ToType).ofLE (by
-    rintro Z₀ _ _ ⟨_⟩
-    exact isLocal_isLocal_toSucc W Z₀)
-
-中文:
-定义 transfiniteCompositionOfShapeReflection
-  签名: :
-  定义体: ((succStruct W Z).transfiniteCompositionOfShapeιIteration κ.ord.ToType).ofLE (by
-    rintro Z₀ _ _ ⟨_⟩
-    exact isLocal_isLocal_toSucc W Z₀)
-
-Depends on / 依赖: ToType, isLocal_isLocal_toSucc, ord.ToType, succStruct
+--- 原说明 ---
+The morphism `reflection W Z κ : Z ⟶ reflectionObj W Z κ` is a transfinite
+compositions of morphisms in `LeftBousfield.W W.isLocal`.
 -/
 noncomputable def transfiniteCompositionOfShapeReflection :
     W.isLocal.isLocal.TransfiniteCompositionOfShape κ.ord.ToType
@@ -923,20 +821,18 @@ noncomputable def transfiniteCompositionOfShapeReflection :
     rintro Z₀ _ _ ⟨_⟩
     exact isLocal_isLocal_toSucc W Z₀)
 
-/--
-Definition of `iteration` / `iteration` 的定义
+/-- The functor `κ.ord.ToType ⥤ C` that is the diagram of the
+transfinite composition `transfiniteCompositionOfShapeReflection`. -/
+/-
+**CategoryTheory.OrthogonalReflection.iteration** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cat
+egoryTheory.OrthogonalReflection`。
+形式化陈述：iteration : κ.ord.ToType ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation iteration
-  signature: : κ.ord.ToType ⥤ C
-  body: (transfiniteCompositionOfShapeReflection W Z κ).F
-
-中文:
-缩写 iteration
-  签名: : κ.ord.ToType ⥤ C
-  定义体: (transfiniteCompositionOfShapeReflection W Z κ).F
-
-Depends on / 依赖: transfiniteCompositionOfShapeReflection
+--- 原说明 ---
+The functor `κ.ord.ToType ⥤ C` that is the diagram of the
+transfinite composition `transfiniteCompositionOfShapeReflection`.
 -/
 noncomputable abbrev iteration : κ.ord.ToType ⥤ C :=
   (transfiniteCompositionOfShapeReflection W Z κ).F
@@ -945,28 +841,20 @@ section
 
 variable [Fact κ.IsRegular]
 
-/--
-Definition of `iterationObjSuccIso` / `iterationObjSuccIso` 的定义
+/-- `(iteration W Z κ).obj (Order.succ j)` identifies to the image of
+`(iteration W Z κ).obj j` by `succ`. -/
+/-
+**CategoryTheory.OrthogonalReflection.iterationObjSuccIso** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：iterationObjSuccIso (j : κ.ord.ToType) : (iteration W Z κ).obj (Order.succ
+ j) ≅ succ W ((iteration W Z κ).obj j)
+参数：j : κ.ord.ToType。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iterationObjSuccIso
-  signature: (j : κ.ord.ToType)
-  body: (succStruct W Z).iterationFunctorObjSuccIso j (by
-      have := Cardinal.noMaxOrder (Fact.elim inferInstance : κ.IsRegular).aleph0_le
-      exact not_isMax j)
-
-@[reassoc]
-
-中文:
-定义 iterationObjSuccIso
-  签名: (j : κ.ord.ToType)
-  定义体: (succStruct W Z).iterationFunctorObjSuccIso j (by
-      have := Cardinal.noMaxOrder (Fact.elim inferInstance : κ.IsRegular).aleph0_le
-      exact not_isMax j)
-
-@[reassoc]
-
-Depends on / 依赖: Cardinal, Cardinal.noMaxOrder, Fact.elim, IsRegular, aleph0_le, iterationFunctorObjSuccIso, noMaxOrder, not_isMax, succStruct
+--- 原说明 ---
+`(iteration W Z κ).obj (Order.succ j)` identifies to the image of
+`(iteration W Z κ).obj j` by `succ`.
 -/
 noncomputable def iterationObjSuccIso (j : κ.ord.ToType) :
   (iteration W Z κ).obj (Order.succ j) ≅ succ W ((iteration W Z κ).obj j) :=
@@ -975,20 +863,17 @@ noncomputable def iterationObjSuccIso (j : κ.ord.ToType) :
       exact not_isMax j)
 
 @[reassoc]
-/--
-lemma `iteration_map_succ` / 引理 `iteration_map_succ`
-
-English:
-lemma iteration_map_succ
-  given: (j : κ.ord.ToType)
-  proof: (succStruct W Z).iterationFunctor_map_succ _ _
-
-中文:
-引理 iteration_map_succ
-  条件: (j : κ.ord.ToType)
-  证明: (succStruct W Z).iterationFunctor_map_succ _ _
-
-Depends on / 依赖: iterationFunctor_map_succ, succStruct
+/-
+**CategoryTheory.OrthogonalReflection.iteration_map_succ** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：iteration_map_succ (j : κ.ord.ToType) : (iteration W Z κ).map (homOfLE (Or
+der.le_succ j)) = toSucc W _ ≫ (iterationObjSuccIso W Z κ j).inv
+参数：j : κ.ord.ToType。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.SuccStruct.iterationFunctor_map_succ`：iterati
+onFunctor_map_succ (j : J) (hj : ¬ IsMax j) : (Φ.iterationFunctor J).map (homOfL
+E (Order.le_succ j)) = Φ.toSucc _ ≫ (Φ.iterationFunct…
 -/
 lemma iteration_map_succ (j : κ.ord.ToType) :
     (iteration W Z κ).map (homOfLE (Order.le_succ j)) =
@@ -996,22 +881,37 @@ lemma iteration_map_succ (j : κ.ord.ToType) :
   (succStruct W Z).iterationFunctor_map_succ _ _
 
 variable {κ W Z} in
-/--
-lemma `iteration_map_succ_injectivity` / 引理 `iteration_map_succ_injectivity`
-
-English:
-lemma iteration_map_succ_injectivity
-  statement: {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType}
-  proof: by
-  simp [iteration_map_succ, reassoc_of% (toSucc_injectivity f hf _ _ hg)]
-
-中文:
-引理 iteration_map_succ_injectivity
-  结论: {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType}
-  证明: by
-  simp [iteration_map_succ, reassoc_of% (toSucc_injectivity f hf _ _ hg)]
-
-Depends on / 依赖: iteration_map_succ, reassoc_of, toSucc_injectivity
+/-
+**CategoryTheory.OrthogonalReflection.iteration_map_succ_injectivity** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：iteration_map_succ_injectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord
+.ToType} (g₁ g₂ : Y ⟶ (iteration W Z κ).obj j) (hg : f ≫ g₁ = f ≫ g₂) : g₁ ≫ (it
+eration W Z κ).map (homOfLE (Order.le_succ j)) = g₂ ≫ (iteration W Z κ).map (hom
+OfLE (Order.le_succ j))
+参数：f : X ⟶ Y；hf : W f；g₁ g₂ : Y ⟶ (iteration W Z κ).obj j；hg : f ≫ g₁ = f ≫ g₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.OrthogonalReflection.iteration_map_succ`：iteration_map_su
+cc (j : κ.ord.ToType) : (iteration W Z κ).map (homOfLE (Order.le_succ j)) = toSu
+cc W _ ≫ (iterationObjSuccIso W Z κ j).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用引理 `CategoryTheory.OrthogonalReflection.toSucc_injectivity`：toSucc_injectivi
+ty {X Y : C} (f : X ⟶ Y) (hf : W f) (g₁ g₂ : Y ⟶ Z) (hg : f ≫ g₁ = f ≫ g₂) : g₁ 
+≫ toSucc W Z = g₂ ≫ toSucc W Z
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma iteration_map_succ_injectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType}
     (g₁ g₂ : Y ⟶ (iteration W Z κ).obj j) (hg : f ≫ g₁ = f ≫ g₂) :
@@ -1020,30 +920,43 @@ lemma iteration_map_succ_injectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.
   simp [iteration_map_succ, reassoc_of% (toSucc_injectivity f hf _ _ hg)]
 
 variable {κ W Z} in
-/--
-lemma `iteration_map_succ_surjectivity` / 引理 `iteration_map_succ_surjectivity`
-
-English:
-lemma iteration_map_succ_surjectivity
-  statement: {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType}
-  proof: by
-  simp only [iteration_map_succ]
-  obtain ⟨g', hg'⟩ := toSucc_surjectivity f hf g
-  exact ⟨g' ≫ (iterationObjSuccIso W Z κ j).inv, by simp [reassoc_of% hg']⟩
-
-中文:
-引理 iteration_map_succ_surjectivity
-  结论: {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType}
-  证明: by
-  simp only [iteration_map_succ]
-  obtain ⟨g', hg'⟩ := toSucc_surjectivity f hf g
-  exact ⟨g' ≫ (iterationObjSuccIso W Z κ j).inv, by simp [reassoc_of% hg']⟩
-
-Depends on / 依赖: iterationObjSuccIso, iteration_map_succ, reassoc_of, toSucc_surjectivity
+/-
+**CategoryTheory.OrthogonalReflection.iteration_map_succ_surjectivity** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：iteration_map_succ_surjectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.or
+d.ToType} (g : X ⟶ (iteration W Z κ).obj j) : exists (g' : Y ⟶ (iteration W Z κ)
+.obj (Order.succ j)), f ≫ g' = g ≫ (iteration W Z κ).map (homOfLE (Order.le_succ
+ j))
+参数：f : X ⟶ Y；hf : W f；g : X ⟶ (iteration W Z κ).obj j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.OrthogonalReflection.iteration_map_succ`：iteration_map_su
+cc (j : κ.ord.ToType) : (iteration W Z κ).map (homOfLE (Order.le_succ j)) = toSu
+cc W _ ≫ (iterationObjSuccIso W Z κ j).inv
+· 使用引理 `CategoryTheory.OrthogonalReflection.toSucc_surjectivity`：toSucc_surjecti
+vity {X Y : C} (f : X ⟶ Y) (hf : W f) (g : X ⟶ Z) : exists (g' : Y ⟶ succ W Z), 
+f ≫ g' = g ≫ toSucc W Z
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma iteration_map_succ_surjectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType}
     (g : X ⟶ (iteration W Z κ).obj j) :
-    exists (g' : Y ⟶ (iteration W Z κ).obj (Order.succ j)),
+    ∃ (g' : Y ⟶ (iteration W Z κ).obj (Order.succ j)),
       f ≫ g' = g ≫ (iteration W Z κ).map (homOfLE (Order.le_succ j)) := by
   simp only [iteration_map_succ]
   obtain ⟨g', hg'⟩ := toSucc_surjectivity f hf g
@@ -1051,20 +964,18 @@ lemma iteration_map_succ_surjectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ
 
 end
 
-/--
-lemma `isLocal_isLocal_reflection` / 引理 `isLocal_isLocal_reflection`
-
-English:
-lemma isLocal_isLocal_reflection
-  proof: W.isLocal.isLocal.transfiniteCompositionsOfShape_le κ.ord.ToType _
-    ⟨transfiniteCompositionOfShapeReflection W Z κ⟩
-
-中文:
-引理 isLocal_isLocal_reflection
-  证明: W.isLocal.isLocal.transfiniteCompositionsOfShape_le κ.ord.ToType _
-    ⟨transfiniteCompositionOfShapeReflection W Z κ⟩
-
-Depends on / 依赖: ToType, W.isLocal.isLocal.transfiniteCompositionsOfShape_le, isLocal, ord.ToType, transfiniteCompositionOfShapeReflection, transfiniteCompositionsOfShape_le
+/-
+**CategoryTheory.OrthogonalReflection.isLocal_isLocal_reflection** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：isLocal_isLocal_reflection : W.isLocal.isLocal (reflection W Z κ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.transfiniteCompositionsOfShape_le`：trans
+finiteCompositionsOfShape_le [W.IsStableUnderTransfiniteCompositionOfShape J] : 
+W.transfiniteCompositionsOfShape J <= W
+· 使用定理 `CategoryTheory.ObjectProperty.instIsStableUnderTransfiniteCompositionOfS
+hapeIsLocal`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : Categ
+oryTheory.ObjectProperty C) (J : Type w)   [inst_1 : LinearOrder J] [inst…
 -/
 lemma isLocal_isLocal_reflection :
      W.isLocal.isLocal (reflection W Z κ) :=
@@ -1072,81 +983,76 @@ lemma isLocal_isLocal_reflection :
     ⟨transfiniteCompositionOfShapeReflection W Z κ⟩
 
 variable {W} {κ} [Fact κ.IsRegular]
-  (hW : forall ⦃X Y : C⦄ (f : X ⟶ Y), W f -> IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ)
+  (hW : ∀ ⦃X Y : C⦄ (f : X ⟶ Y), W f → IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ)
 
 include hW
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isLocal_reflectionObj` / 引理 `isLocal_reflectionObj`
-
-English:
-lemma isLocal_reflectionObj
-  proof: by
-  let H := transfiniteCompositionOfShapeReflection W Z κ
-  intro X Y f hf
-  obtain ⟨_, _⟩ := hW f hf
-  refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
-  · obtain ⟨j, g₁, g₂, rfl, rfl⟩ :
-      exists (j : κ.ord.ToType) (g₁' g₂' : Y ⟶ H.F.obj j), g₁' ≫ H.incl.app j = g₁ ∧
-        g₂' ≫ H.incl.app j = g₂ := by
-      obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₁
-      obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₂
-      exact ⟨max j₁ j₂, g₁ ≫ H.F.map (homOfLE (le_max_left _ _)),
-        g₂ ≫ H.F.map (homOfLE (le_max_right _ _)), by simp⟩
-    dsimp at h
-    obtain ⟨k, u, hk⟩ := IsCardinalPresentable.exists_eq_of_isColimit' κ H.isColimit
-      (f ≫ g₁) (f ≫ g₂) (by simpa)
-    have hg := iteration_map_succ_injectivity f hf
-      (g₁ ≫ H.F.map u) (g₂ ≫ H.F.map u) (by simpa using hk)
-    simp only [homOfLE_leOfHom, Category.assoc] at hg
-    have := H.incl.naturality (u ≫ homOfLE (Order.le_succ k))
-    simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id] at this
-    simp only [← this, Functor.map_comp, Category.assoc]
-    rw [reassoc_of% hg]
-  · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g
-    obtain ⟨g', hg'⟩ := iteration_map_succ_surjectivity f hf g
-    exact ⟨g' ≫ H.incl.app (Order.succ j), by simp [reassoc_of% hg']⟩
-
-中文:
-引理 isLocal_reflectionObj
-  证明: by
-  let H := transfiniteCompositionOfShapeReflection W Z κ
-  intro X Y f hf
-  obtain ⟨_, _⟩ := hW f hf
-  refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
-  · obtain ⟨j, g₁, g₂, rfl, rfl⟩ :
-      exists (j : κ.ord.ToType) (g₁' g₂' : Y ⟶ H.F.obj j), g₁' ≫ H.incl.app j = g₁ ∧
-        g₂' ≫ H.incl.app j = g₂ := by
-      obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₁
-      obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₂
-      exact ⟨max j₁ j₂, g₁ ≫ H.F.map (homOfLE (le_max_left _ _)),
-        g₂ ≫ H.F.map (homOfLE (le_max_right _ _)), by simp⟩
-    dsimp at h
-    obtain ⟨k, u, hk⟩ := IsCardinalPresentable.exists_eq_of_isColimit' κ H.isColimit
-      (f ≫ g₁) (f ≫ g₂) (by simpa)
-    have hg := iteration_map_succ_injectivity f hf
-      (g₁ ≫ H.F.map u) (g₂ ≫ H.F.map u) (by simpa using hk)
-    simp only [homOfLE_leOfHom, Category.assoc] at hg
-    have := H.incl.naturality (u ≫ homOfLE (Order.le_succ k))
-    simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id] at this
-    simp only [← this, Functor.map_comp, Category.assoc]
-    rw [reassoc_of% hg]
-  · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g
-    obtain ⟨g', hg'⟩ := iteration_map_succ_surjectivity f hf g
-    exact ⟨g' ≫ H.incl.app (Order.succ j), by simp [reassoc_of% hg']⟩
-
-Depends on / 依赖: H.F.map, H.F.obj, H.incl.app, H.isColimit, IsCardinalPresentable, IsCardinalPresentable.exists_hom_of_isColimit, ToType, exists_hom_of_isColimit, homOfLE, isColimit, le_ma, ord.ToType, transfiniteCompositionOfShapeReflection
+/-
+**CategoryTheory.OrthogonalReflection.isLocal_reflectionObj** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：isLocal_reflectionObj : W.isLocal (reflectionObj W Z κ)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsCardinalPresentable.exists_hom_of_isColimit`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (κ : Cardinal.{w}) [in
+st_1 : Fact κ.IsRegular]   {J : Type u_1} [inst_2 …
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.locallySmall_of_thin`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] [Quiver.IsThin C], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.instIsCardinalFilteredToTypeOrd`：∀ (κ : Cardinal.{w}) [hκ
+ : Fact κ.IsRegular], CategoryTheory.IsCardinalFiltered κ.ord.ToType κ
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `CategoryTheory.IsCardinalPresentable.exists_eq_of_isColimit'`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (κ : Cardinal.{w}) [in
+st_1 : Fact κ.IsRegular]   {J : Type u_1} [inst_2 …
+· 使用定理 `Order.le_succ`：le_succ : forall a : α, a <= succ a
+· 使用引理 `CategoryTheory.OrthogonalReflection.iteration_map_succ_injectivity`：iter
+ation_map_succ_injectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType} (
+g₁ g₂ : Y ⟶ (iteration W Z κ).obj j) (hg : f ≫ g₁ = f ≫ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用引理 `CategoryTheory.OrthogonalReflection.iteration_map_succ_surjectivity`：ite
+ration_map_succ_surjectivity {X Y : C} (f : X ⟶ Y) (hf : W f) {j : κ.ord.ToType}
+ (g : X ⟶ (iteration W Z κ).obj j) : exists (g' : Y ⟶ (it…
 -/
 lemma isLocal_reflectionObj :
     W.isLocal (reflectionObj W Z κ) := by
   let H := transfiniteCompositionOfShapeReflection W Z κ
   intro X Y f hf
   obtain ⟨_, _⟩ := hW f hf
-  refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
+  refine ⟨fun g₁ g₂ h ↦ ?_, fun g ↦ ?_⟩
   · obtain ⟨j, g₁, g₂, rfl, rfl⟩ :
-      exists (j : κ.ord.ToType) (g₁' g₂' : Y ⟶ H.F.obj j), g₁' ≫ H.incl.app j = g₁ ∧
+      ∃ (j : κ.ord.ToType) (g₁' g₂' : Y ⟶ H.F.obj j), g₁' ≫ H.incl.app j = g₁ ∧
         g₂' ≫ H.incl.app j = g₂ := by
       obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₁
       obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₂
@@ -1167,22 +1073,24 @@ lemma isLocal_reflectionObj :
     exact ⟨g' ≫ H.incl.app (Order.succ j), by simp [reassoc_of% hg']⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `corepresentableBy` / `corepresentableBy` 的定义
+/-- The morphism `reflection W Z κ : Z ⟶ reflectionObj W Z κ` exhibits `reflectionObj W Z κ`
+as the image of `Z` by the left adjoint of the inclusion `W.isLocal.ι`. -/
+/-
+**CategoryTheory.OrthogonalReflection.corepresentableBy** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.OrthogonalReflection`。
+形式化陈述：corepresentableBy : (W.isLocal.ι ⋙ coyoneda.obj (op Z)).CorepresentableBy 
+⟨_, isLocal_reflectionObj Z hW⟩ where homEquiv {A}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.OrthogonalReflection.isLocal_reflectionObj`：isLocal_refle
+ctionObj : W.isLocal (reflectionObj W Z κ)
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition corepresentableBy
-  signature: :
-  body: (ObjectProperty.fullyFaithfulι _).homEquiv.trans
-      (Equiv.ofBijective _ (isLocal_isLocal_reflection W Z κ _ A.2))
-
-中文:
-定义 corepresentableBy
-  签名: :
-  定义体: (ObjectProperty.fullyFaithfulι _).homEquiv.trans
-      (Equiv.ofBijective _ (isLocal_isLocal_reflection W Z κ _ A.2))
-
-Depends on / 依赖: A.biUnion, Equiv.ofBijective, FinsetCoe, FinsetCoe.fintype, ObjectProperty, ObjectProperty.fullyFaithful, R.image, SetRel, SetRel.image, biUnion, fintype, homEquiv, homEquiv.trans, isLocal_isLocal_reflection, ofBijective, toFinset
+--- 原说明 ---
+The morphism `reflection W Z κ : Z ⟶ reflectionObj W Z κ` exhibits `reflectionOb
+j W Z κ`
+as the image of `Z` by the left adjoint of the inclusion `W.isLocal.ι`.
 -/
 noncomputable def corepresentableBy :
   (W.isLocal.ι ⋙ coyoneda.obj (op Z)).CorepresentableBy
@@ -1192,25 +1100,10 @@ noncomputable def corepresentableBy :
       (Equiv.ofBijective _ (isLocal_isLocal_reflection W Z κ _ A.2))
 
 variable (W κ)
-
-/--
-lemma `isRightAdjoint_ι` / 引理 `isRightAdjoint_ι`
-
-English:
-lemma isRightAdjoint_ι
-  proof: by
-  rw [Functor.isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top]
-  ext Z
-  simpa using! (corepresentableBy Z hW).isCorepresentable
-
-中文:
-引理 isRightAdjoint_ι
-  证明: by
-  rw [Functor.isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top]
-  ext Z
-  simpa using! (corepresentableBy Z hW).isCorepresentable
-
-Depends on / 依赖: Functor, Functor.isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top, corepresentableBy, isCorepresentable, isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top
+/-
+**CategoryTheory.OrthogonalReflection.isRightAdjoint_** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.OrthogonalReflection`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isRightAdjoint_ι :
     W.isLocal.ι.IsRightAdjoint := by
@@ -1223,33 +1116,15 @@ end OrthogonalReflection
 namespace MorphismProperty
 
 open OrthogonalReflection in
-/--
-lemma `isRightAdjoint_ι_isLocal` / 引理 `isRightAdjoint_ι_isLocal`
-
-English:
-lemma isRightAdjoint_ι_isLocal
-  proof: by
-  have : Nonempty κ.ord.ToType := by simpa using Cardinal.IsRegular.ne_zero Fact.out
-  have := WellFoundedLT.toOrderBot κ.ord.ToType
-  have := D₁.hasCoproductsOfShape.{w} W
-  have := D₂.hasColimitsOfShape.{w} W
-  exact isRightAdjoint_ι W κ hW
-
-中文:
-引理 isRightAdjoint_ι_isLocal
-  证明: by
-  have : Nonempty κ.ord.ToType := by simpa using Cardinal.IsRegular.ne_zero Fact.out
-  have := WellFoundedLT.toOrderBot κ.ord.ToType
-  have := D₁.hasCoproductsOfShape.{w} W
-  have := D₂.hasColimitsOfShape.{w} W
-  exact isRightAdjoint_ι W κ hW
-
-Depends on / 依赖: Cardinal, Cardinal.IsRegular.ne_zero, Fact.out, IsRegular, Nonempty, ToType, WellFoundedLT, WellFoundedLT.toOrderBot, hasColimitsOfShape, hasCoproductsOfShape, ne_zero, ord.ToType, toOrderBot
+/-
+**CategoryTheory.MorphismProperty.isRightAdjoint_** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.MorphismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isRightAdjoint_ι_isLocal
     (κ : Cardinal.{w}) [Fact κ.IsRegular]
     [MorphismProperty.IsSmall.{w} W] [LocallySmall.{w} C]
-    (hW : forall ⦃X Y : C⦄ (f : X ⟶ Y), W f -> IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ)
+    (hW : ∀ ⦃X Y : C⦄ (f : X ⟶ Y), W f → IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ)
     [HasColimitsOfSize.{w, w} C] :
     W.isLocal.ι.IsRightAdjoint := by
   have : Nonempty κ.ord.ToType := by simpa using Cardinal.IsRegular.ne_zero Fact.out
@@ -1257,30 +1132,46 @@ lemma isRightAdjoint_ι_isLocal
   have := D₁.hasCoproductsOfShape.{w} W
   have := D₂.hasColimitsOfShape.{w} W
   exact isRightAdjoint_ι W κ hW
-
-/--
-lemma `isLocallyPresentable_isLocal` / 引理 `isLocallyPresentable_isLocal`
-
-English:
-lemma isLocallyPresentable_isLocal
-  proof: by
-    have := isRightAdjoint_ι_isLocal W κ hW
-    have := MorphismProperty.isCardinalAccessible_ι_isLocal W κ hW
-    exact (Adjunction.ofIsRightAdjoint W.isLocal.ι).isCardinalLocallyPresentable κ
-
-中文:
-引理 isLocallyPresentable_isLocal
-  证明: by
-    have := isRightAdjoint_ι_isLocal W κ hW
-    have := MorphismProperty.isCardinalAccessible_ι_isLocal W κ hW
-    exact (Adjunction.ofIsRightAdjoint W.isLocal.ι).isCardinalLocallyPresentable κ
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, MorphismProperty, MorphismProperty.isCardinalAccessible_, W.isLocal, isCardinalLocallyPresentable, isLocal, ofIsRightAdjoint
+/-
+**CategoryTheory.MorphismProperty.isLocallyPresentable_isLocal** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：isLocallyPresentable_isLocal (κ : Cardinal.{w}) [Fact κ.IsRegular] [IsCard
+inalLocallyPresentable C κ] [MorphismProperty.IsSmall.{w} W] (hW : forall ⦃X Y :
+ C⦄ (f : X ⟶ Y), W f -> IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ) :
+ IsCardinalLocallyPresentable W.isLocal.FullSubcategory κ
+参数：κ : Cardinal.{w}；hW : forall ⦃X Y : C⦄ (f : X ⟶ Y), W f -> IsCardinalPresenta
+ble X κ ∧ IsCardinalPresentable Y κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.isRightAdjoint_ι_isLocal`：isRightAdjoint
+_ι_isLocal (κ : Cardinal.{w}) [Fact κ.IsRegular] [MorphismProperty.IsSmall.{w} W
+] [LocallySmall.{w} C] (hW : forall ⦃X Y : C⦄ …
+· 使用定理 `CategoryTheory.HasCardinalFilteredGenerator.toLocallySmall`：∀ {C : Type 
+u} {hC : CategoryTheory.Category.{v, u} C} (κ : Cardinal.{w}) {hκ : Fact κ.IsReg
+ular}   [self : CategoryTheory.HasCardinalFilter…
+· 使用定理 `CategoryTheory.IsCardinalAccessibleCategory.toHasCardinalFilteredGenerat
+or`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {κ : Cardinal.{w}} 
+{inst_1 : Fact κ.IsRegular}   [self : CategoryTheory.IsCardinalA…
+· 使用定理 `CategoryTheory.instIsCardinalAccessibleCategoryOfIsCardinalLocallyPresen
+table`：∀ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] (κ : Cardinal.{w
+}) [inst_1 : Fact κ.IsRegular]   [CategoryTheory.IsCardinalLocallyP…
+· 使用定理 `CategoryTheory.IsCardinalLocallyPresentable.toHasColimitsOfSize`：∀ {C : 
+Type u} {inst : CategoryTheory.Category.{v, u} C} (κ : Cardinal.{w}) {inst_1 : F
+act κ.IsRegular}   [self : CategoryTheory.IsCardinalL…
+· 使用定理 `CategoryTheory.MorphismProperty.isCardinalAccessible_ι_isLocal`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C] (W : CategoryTheory.MorphismPro
+perty C) (κ : Cardinal.{w})   [inst_1 : Fact κ.IsReg…
+· 使用定理 `CategoryTheory.IsCardinalAccessibleCategory.toHasCardinalFilteredColimit
+s`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {κ : Cardinal.{w}} {
+inst_1 : Fact κ.IsRegular}   [self : CategoryTheory.IsCardinalA…
+· 使用引理 `CategoryTheory.Adjunction.isCardinalLocallyPresentable`：isCardinalLocall
+yPresentable [IsCardinalLocallyPresentable C κ] [G.IsCardinalAccessible κ] [G.Fu
+ll] [G.Faithful] : IsCardinalLocallyPresenta…
 -/
 lemma isLocallyPresentable_isLocal
     (κ : Cardinal.{w}) [Fact κ.IsRegular] [IsCardinalLocallyPresentable C κ]
     [MorphismProperty.IsSmall.{w} W]
-    (hW : forall ⦃X Y : C⦄ (f : X ⟶ Y), W f -> IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ) :
+    (hW : ∀ ⦃X Y : C⦄ (f : X ⟶ Y), W f → IsCardinalPresentable X κ ∧ IsCardinalPresentable Y κ) :
   IsCardinalLocallyPresentable W.isLocal.FullSubcategory κ := by
     have := isRightAdjoint_ι_isLocal W κ hW
     have := MorphismProperty.isCardinalAccessible_ι_isLocal W κ hW
@@ -1289,3 +1180,4 @@ lemma isLocallyPresentable_isLocal
 end MorphismProperty
 
 end CategoryTheory
+

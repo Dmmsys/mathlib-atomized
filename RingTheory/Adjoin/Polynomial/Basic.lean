@@ -31,7 +31,7 @@ namespace Algebra
 
 universe u v w z
 
-variable {R : Type u} {S : Type v} {T : Type w} {A : Type z} {A' B : Type*} {a b : R} {n : Nat}
+variable {R : Type u} {S : Type v} {T : Type w} {A : Type z} {A' B : Type*} {a b : R} {n : ℕ}
 
 section aeval
 
@@ -42,28 +42,9 @@ variable [Algebra R A] [Algebra R B]
 variable {p q : R[X]} (x : A)
 
 @[simp]
-/--
-theorem `_root_.Polynomial.adjoin_X` / 定理 `_root_.Polynomial.adjoin_X`
-
-English:
-theorem _root_.Polynomial.adjoin_X
-  statement: adjoin R ({X} : Set R[X]) = ⊤
-  proof: by
-  refine top_unique fun p _hp => ?_
-  set S := adjoin R ({X} : Set R[X])
-  rw [← sum_monomial_eq p]; simp only [← smul_X_eq_monomial]
-  exact S.sum_mem fun n _hn => S.smul_mem (S.pow_mem (subset_adjoin rfl) _) _
-
-中文:
-定理 _root_.多项式.adjoin_X
-  结论: adjoin R ({X} : 集合 R[X]) = ⊤
-  证明: by
-  refine top_unique fun p _hp => ?_
-  set S := adjoin R ({X} : Set R[X])
-  rw [← sum_monomial_eq p]; simp only [← smul_X_eq_monomial]
-  exact S.sum_mem fun n _hn => S.smul_mem (S.pow_mem (subset_adjoin rfl) _) _
-
-Depends on / 依赖: S.pow_mem, S.smul_mem, S.sum_mem, adjoin, pow_mem, smul_X_eq_monomial, smul_mem, subset_adjoin, sum_mem, sum_monomial_eq, top_unique
+/-
+**Algebra._root_.Polynomial.adjoin_X** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Polynomial.adjoin_X : adjoin R ({X} : Set R[X]) = ⊤ := by
   refine top_unique fun p _hp => ?_
@@ -72,106 +53,79 @@ theorem _root_.Polynomial.adjoin_X : adjoin R ({X} : Set R[X]) = ⊤ := by
   exact S.sum_mem fun n _hn => S.smul_mem (S.pow_mem (subset_adjoin rfl) _) _
 
 variable (R)
-/--
-theorem `adjoin_singleton_eq_range_aeval` / 定理 `adjoin_singleton_eq_range_aeval`
-
-English:
-theorem adjoin_singleton_eq_range_aeval
-  given: (x : A)
-  proof: by
-  rw [← Algebra.map_top]; rw [← adjoin_X]; rw [AlgHom.map_adjoin]; rw [Set.image_singleton]; rw [aeval_X]
-
-@[simp]
-
-中文:
-定理 adjoin_singleton_eq_range_aeval
-  条件: (x : A)
-  证明: by
-  rw [← Algebra.map_top]; rw [← adjoin_X]; rw [AlgHom.map_adjoin]; rw [Set.image_singleton]; rw [aeval_X]
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.map_top, Set.image_singleton, adjoin_X, aeval_X, image_singleton, map_adjoin, map_top
+/-
+**Algebra.adjoin_singleton_eq_range_aeval** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：adjoin_singleton_eq_range_aeval (x : A) : adjoin R {x} = (aeval x).range
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.map_top`：map_top (f : A ->ₐ[R] B) : (⊤ : Subalgebra R A).map f =
+ f.range
+· 使用定理 `Polynomial.adjoin_X`：∀ {R : Type u} [inst : CommSemiring R], R[Polynomia
+l.X] = ⊤
+· 使用定理 `AlgHom.map_adjoin`：map_adjoin (φ : A ->ₐ[R] B) (s : Set A) : (adjoin R s
+).map φ = adjoin R (φ '' s)
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
 -/
 theorem adjoin_singleton_eq_range_aeval (x : A) :
     adjoin R {x} = (aeval x).range := by
-  rw [← Algebra.map_top]; rw [← adjoin_X]; rw [AlgHom.map_adjoin]; rw [Set.image_singleton]; rw [aeval_X]
+  rw [← Algebra.map_top, ← adjoin_X, AlgHom.map_adjoin, Set.image_singleton, aeval_X]
 
 @[simp]
-/--
-theorem `_root_.Polynomial.aeval_mem_adjoin_singleton` / 定理 `_root_.Polynomial.aeval_mem_adjoin_singleton`
-
-English:
-theorem _root_.Polynomial.aeval_mem_adjoin_singleton
-  statement: aeval x p in adjoin R {x}
-  proof: by
-  simp [adjoin_singleton_eq_range_aeval]
-
-中文:
-定理 _root_.多项式.aeval_mem_adjoin_singleton
-  结论: aeval x p in adjoin R {x}
-  证明: by
-  simp [adjoin_singleton_eq_range_aeval]
-
-Depends on / 依赖: adjoin_singleton_eq_range_aeval
+/-
+**Algebra._root_.Polynomial.aeval_mem_adjoin_singleton** 是 Mathlib 中的一个定理，位于命名空间
+ `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Polynomial.aeval_mem_adjoin_singleton : aeval x p in adjoin R {x} := by
+theorem _root_.Polynomial.aeval_mem_adjoin_singleton : aeval x p ∈ adjoin R {x} := by
   simp [adjoin_singleton_eq_range_aeval]
-
+/-
+**Algebra.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A B : Type*} [CommSemiring A] [Semiring B] [Algebra A B] (x : B) (p : Polynomial A) :
     CoeDep B (p.aeval x) (Algebra.adjoin A {x}) where
   coe := ⟨p.aeval x, aeval_mem_adjoin_singleton A x⟩
-
-/--
-theorem `adjoin_mem_exists_aeval` / 定理 `adjoin_mem_exists_aeval`
-
-English:
-theorem adjoin_mem_exists_aeval
-  given: {a : A} (h : a in R[x])
-  proof: by
-  rw [Algebra.adjoin_singleton_eq_range_aeval] at h
-  simp_all
-
-中文:
-定理 adjoin_mem_存在_aeval
-  条件: {a : A} (h : a in R[x])
-  证明: by
-  rw [Algebra.adjoin_singleton_eq_range_aeval] at h
-  simp_all
-
-Depends on / 依赖: Algebra, Algebra.adjoin_singleton_eq_range_aeval, adjoin_singleton_eq_range_aeval
+/-
+**Algebra.adjoin_mem_exists_aeval** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：adjoin_mem_exists_aeval {a : A} (h : a in R[x]) : exists p : R[X], aeval x
+ p = a
+参数：h : a in R[x]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.adjoin_singleton_eq_range_aeval`：adjoin_singleton_eq_range_aeval
+ (x : A) : adjoin R {x} = (aeval x).range
 -/
-theorem adjoin_mem_exists_aeval {a : A} (h : a in R[x]) :
-    exists p : R[X], aeval x p = a := by
+theorem adjoin_mem_exists_aeval {a : A} (h : a ∈ R[x]) :
+    ∃ p : R[X], aeval x p = a := by
   rw [Algebra.adjoin_singleton_eq_range_aeval] at h
   simp_all
-
-/--
-theorem `adjoin_eq_exists_aeval` / 定理 `adjoin_eq_exists_aeval`
-
-English:
-theorem adjoin_eq_exists_aeval
-  given: (a : R[x])
-  proof: by
-  have : (a : A) in R[x] := by simp
-  set y := (a : A) with h
-  rw [Algebra.adjoin_singleton_eq_range_aeval] at this
-  simp_all
-
-中文:
-定理 adjoin_eq_存在_aeval
-  条件: (a : R[x])
-  证明: by
-  have : (a : A) in R[x] := by simp
-  set y := (a : A) with h
-  rw [Algebra.adjoin_singleton_eq_range_aeval] at this
-  simp_all
-
-Depends on / 依赖: Algebra, Algebra.adjoin_singleton_eq_range_aeval, adjoin_singleton_eq_range_aeval
+/-
+**Algebra.adjoin_eq_exists_aeval** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：adjoin_eq_exists_aeval (a : R[x]) : exists p : R[X], aeval x p = a
+参数：a : R[x]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Algebra.adjoin_singleton_eq_range_aeval`：adjoin_singleton_eq_range_aeval
+ (x : A) : adjoin R {x} = (aeval x).range
 -/
 theorem adjoin_eq_exists_aeval (a : R[x]) :
-    exists p : R[X], aeval x p = a := by
-  have : (a : A) in R[x] := by simp
+    ∃ p : R[X], aeval x p = a := by
+  have : (a : A) ∈ R[x] := by simp
   set y := (a : A) with h
   rw [Algebra.adjoin_singleton_eq_range_aeval] at this
   simp_all
@@ -180,75 +134,52 @@ theorem adjoin_eq_exists_aeval (a : R[x]) :
 Proving a fact about `a : adjoin R {x}` is the same as proving it for
 `aeval x p` where `p`is an arbitrary polynomial. -/
 @[elab_as_elim]
-/--
-theorem `adjoin_singleton_induction` / 定理 `adjoin_singleton_induction`
+/-
+**Algebra.adjoin_singleton_induction** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：adjoin_singleton_induction {M : (adjoin R {x}) -> Prop} (a : adjoin R {x})
+ (f : forall (p : Polynomial R), M (aeval x p : adjoin R {x})) : M a
+参数：adjoin R {x}；a : adjoin R {x}；f : forall (p : Polynomial R), M (aeval x p : a
+djoin R {x})。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.aeval_mem_adjoin_singleton`：∀ (R : Type u) {A : Type z} [inst
+ : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A] {p : Polynomial 
+R}   (x : A), (Polynomial.a…
+· 使用定理 `Algebra.adjoin_eq_exists_aeval`：adjoin_eq_exists_aeval (a : R[x]) : exis
+ts p : R[X], aeval x p = a
 
-English:
-theorem adjoin_singleton_induction
-  statement: {M : (adjoin R {x}) -> Prop}
-  proof: by
-  obtain ⟨p, hp⟩ := Algebra.adjoin_eq_exists_aeval _ x a
-  grind
-
-中文:
-定理 adjoin_singleton_induction
-  结论: {M : (adjoin R {x}) -> 命题}
-  证明: by
-  obtain ⟨p, hp⟩ := Algebra.adjoin_eq_exists_aeval _ x a
-  grind
-
-Depends on / 依赖: Algebra, Algebra.adjoin_eq_exists_aeval, adjoin_eq_exists_aeval
+--- 原说明 ---
+Proving a fact about `a : adjoin R {x}` is the same as proving it for
+`aeval x p` where `p`is an arbitrary polynomial.
 -/
-theorem adjoin_singleton_induction {M : (adjoin R {x}) -> Prop}
-    (a : adjoin R {x}) (f : forall (p : Polynomial R), M (aeval x p : adjoin R {x})) : M a := by
+theorem adjoin_singleton_induction {M : (adjoin R {x}) → Prop}
+    (a : adjoin R {x}) (f : ∀ (p : Polynomial R), M (aeval x p : adjoin R {x})) : M a := by
   obtain ⟨p, hp⟩ := Algebra.adjoin_eq_exists_aeval _ x a
   grind
-
-/--
-Instance `instCommSemiringAdjoinSingleton` / 实例 `instCommSemiringAdjoinSingleton`
-
-English:
-instance instCommSemiringAdjoinSingleton
-  signature: :
-  body: fun ⟨p, hp⟩ ⟨q, hq⟩ => by
-      obtain ⟨p', rfl⟩ := Algebra.adjoin_singleton_eq_range_aeval R x ▸ hp
-      obtain ⟨q', rfl⟩ := Algebra.adjoin_singleton_eq_range_aeval R x ▸ hq
-      simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe, MulMemClass.mk_mul_mk, ← map_mul,
-        mul_comm p' q']
-
-中文:
-实例 instCommSemiringAdjoinSingleton
-  签名: :
-  定义体: fun ⟨p, hp⟩ ⟨q, hq⟩ => by
-      obtain ⟨p', rfl⟩ := Algebra.adjoin_singleton_eq_range_aeval R x ▸ hp
-      obtain ⟨q', rfl⟩ := Algebra.adjoin_singleton_eq_range_aeval R x ▸ hq
-      simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe, MulMemClass.mk_mul_mk, ← map_mul,
-        mul_comm p' q']
-
-Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Algebra, Algebra.adjoin_singleton_eq_range_aeval, MulMemClass, MulMemClass.mk_mul_mk, RingHom, RingHom.coe_coe, adjoin_singleton_eq_range_aeval, coe_coe, map_mul, mk_mul_mk, mul_comm, toRingHom_eq_coe
+/-
+**Algebra.instCommSemiringAdjoinSingleton** 是 Mathlib 中的一个实例，位于命名空间 `Algebra`。
+形式化陈述：instCommSemiringAdjoinSingleton : CommSemiring adjoin R {x} where mul_comm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemiringAdjoinSingleton :
-CommSemiring adjoin R {x} where
-  mul_comm := fun ⟨p, hp⟩ ⟨q, hq⟩ => by
+    CommSemiring <| adjoin R {x} where
+  mul_comm := fun ⟨p, hp⟩ ⟨q, hq⟩ ↦ by
       obtain ⟨p', rfl⟩ := Algebra.adjoin_singleton_eq_range_aeval R x ▸ hp
       obtain ⟨q', rfl⟩ := Algebra.adjoin_singleton_eq_range_aeval R x ▸ hq
       simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_coe, MulMemClass.mk_mul_mk, ← map_mul,
         mul_comm p' q']
-
-/--
-Instance `instCommRingAdjoinSingleton` / 实例 `instCommRingAdjoinSingleton`
-
-English:
-instance instCommRingAdjoinSingleton
-  signature: {R A : Type*} [CommRing R] [Ring A] [Algebra R A] (x : A)
-
-中文:
-实例 instCommRingAdjoinSingleton
-  签名: {R A : 类型} [交换环 R] [环 A] [代数 R A] (x : A)
+/-
+**Algebra.instCommRingAdjoinSingleton** 是 Mathlib 中的一个定义，位于命名空间 `Algebra`。
+形式化陈述：{R : Type u_3} →   {A : Type u_4} → [inst : CommRing R] → [inst_1 : Ring A
+] → [inst_2 : Algebra R A] → (x : A) → CommRing ↥R[x]
+参数：x : A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommRingAdjoinSingleton {R A : Type*} [CommRing R] [Ring A] [Algebra R A] (x : A) :
-CommRing R[x] where
+    CommRing <| R[x] where
 
 end aeval
 
 end Algebra
+

@@ -40,7 +40,7 @@ open CategoryTheory Category Limits Preadditive
 universe v u
 
 variable {C : Type u} [Category.{v} C] [Preadditive C] {R : Type*} [Ring R] [Linear R C]
-  {K L M : CochainComplex C Int} {n : Int}
+  {K L M : CochainComplex C ℤ} {n : ℤ}
 
 namespace CochainComplex.HomComplex
 
@@ -48,101 +48,80 @@ namespace Cochain
 
 variable (γ γ₁ γ₂ : Cochain K L n)
 
-/--
-Definition of `rightShift` / `rightShift` 的定义
+/-- The map `Cochain K L n → Cochain K (L⟦a⟧) n'` when `n' + a = n`. -/
+/-
+**CochainComplex.HomComplex.Cochain.rightShift** 是 Mathlib 中的一个定义，位于命名空间 `Cochai
+nComplex.HomComplex.Cochain`。
+形式化陈述：rightShift (a n' : Int) (hn' : n' + a = n) : Cochain K (L⟦a⟧) n'
+参数：a n' : Int；hn' : n' + a = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightShift
-  signature: (a n' : Int) (hn' : n' + a = n)
-  body: Cochain.mk (fun p q hpq => γ.v p (p + n) rfl ≫
-    (L.shiftFunctorObjXIso a q (p + n) (by lia)).inv)
-
-中文:
-定义 rightShift
-  签名: (a n' : 整数) (hn' : n' + a = n)
-  定义体: Cochain.mk (fun p q hpq => γ.v p (p + n) rfl ≫
-    (L.shiftFunctorObjXIso a q (p + n) (by lia)).inv)
-
-Depends on / 依赖: Cochain, Cochain.mk, L.shiftFunctorObjXIso, shiftFunctorObjXIso
+--- 原说明 ---
+The map `Cochain K L n → Cochain K (L⟦a⟧) n'` when `n' + a = n`.
 -/
-def rightShift (a n' : Int) (hn' : n' + a = n) : Cochain K (L⟦a⟧) n' :=
+def rightShift (a n' : ℤ) (hn' : n' + a = n) : Cochain K (L⟦a⟧) n' :=
   Cochain.mk (fun p q hpq => γ.v p (p + n) rfl ≫
     (L.shiftFunctorObjXIso a q (p + n) (by lia)).inv)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `rightShift_v` / 引理 `rightShift_v`
-
-English:
-lemma rightShift_v
-  statement: (a n' : Int) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q)
-  proof: by
-  subst hp'
-  dsimp only [rightShift]
-  simp only [mk_v]
-
-中文:
-引理 rightShift_v
-  结论: (a n' : 整数) (hn' : n' + a = n) (p q : 整数) (hpq : p + n' = q)
-  证明: by
-  subst hp'
-  dsimp only [rightShift]
-  simp only [mk_v]
-
-Depends on / 依赖: mk_v, rightShift
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_v** 是 Mathlib 中的一个引理，位于命名空间 `Coch
+ainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_v (a n' : Int) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q
+) (p' : Int) (hp' : p + n = p') : (γ.rightShift a n' hn').v p q hpq = γ.v p p' h
+p' ≫ (L.shiftFunctorObjXIso a q p' (by rw [← hp', ← hpq, ← hn', add_assoc])).inv
+参数：a n' : Int；hn' : n' + a = n；p q : Int；hpq : p + n' = q；p' : Int；hp' : p + n =
+ p'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rightShift_v (a n' : Int) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q)
-    (p' : Int) (hp' : p + n = p') :
+lemma rightShift_v (a n' : ℤ) (hn' : n' + a = n) (p q : ℤ) (hpq : p + n' = q)
+    (p' : ℤ) (hp' : p + n = p') :
     (γ.rightShift a n' hn').v p q hpq = γ.v p p' hp' ≫
       (L.shiftFunctorObjXIso a q p' (by rw [← hp', ← hpq, ← hn', add_assoc])).inv := by
   subst hp'
   dsimp only [rightShift]
   simp only [mk_v]
 
-/--
-Definition of `leftShift` / `leftShift` 的定义
+/-- The map `Cochain K L n → Cochain (K⟦a⟧) L n'` when `n + a = n'`. -/
+/-
+**CochainComplex.HomComplex.Cochain.leftShift** 是 Mathlib 中的一个定义，位于命名空间 `Cochain
+Complex.HomComplex.Cochain`。
+形式化陈述：leftShift (a n' : Int) (hn' : n + a = n') : Cochain (K⟦a⟧) L n'
+参数：a n' : Int；hn' : n + a = n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftShift
-  signature: (a n' : Int) (hn' : n + a = n')
-  body: Cochain.mk (fun p q hpq => (a * n' + ((a * (a - 1)) / 2)).negOnePow •
-    (K.shiftFunctorObjXIso a p (p + a) rfl).hom ≫ γ.v (p + a) q (by lia))
-
-中文:
-定义 leftShift
-  签名: (a n' : 整数) (hn' : n + a = n')
-  定义体: Cochain.mk (fun p q hpq => (a * n' + ((a * (a - 1)) / 2)).negOnePow •
-    (K.shiftFunctorObjXIso a p (p + a) rfl).hom ≫ γ.v (p + a) q (by lia))
-
-Depends on / 依赖: Cochain, Cochain.mk, K.shiftFunctorObjXIso, negOnePow, shiftFunctorObjXIso
+--- 原说明 ---
+The map `Cochain K L n → Cochain (K⟦a⟧) L n'` when `n + a = n'`.
 -/
-def leftShift (a n' : Int) (hn' : n + a = n') : Cochain (K⟦a⟧) L n' :=
+def leftShift (a n' : ℤ) (hn' : n + a = n') : Cochain (K⟦a⟧) L n' :=
   Cochain.mk (fun p q hpq => (a * n' + ((a * (a - 1)) / 2)).negOnePow •
     (K.shiftFunctorObjXIso a p (p + a) rfl).hom ≫ γ.v (p + a) q (by lia))
-
-/--
-lemma `leftShift_v` / 引理 `leftShift_v`
-
-English:
-lemma leftShift_v
-  statement: (a n' : Int) (hn' : n + a = n') (p q : Int) (hpq : p + n' = q)
-  proof: by
-  obtain rfl : p' = p + a := by lia
-  dsimp only [leftShift]
-  simp only [mk_v]
-
-中文:
-引理 leftShift_v
-  结论: (a n' : 整数) (hn' : n + a = n') (p q : 整数) (hpq : p + n' = q)
-  证明: by
-  obtain rfl : p' = p + a := by lia
-  dsimp only [leftShift]
-  simp only [mk_v]
-
-Depends on / 依赖: leftShift, mk_v
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_v** 是 Mathlib 中的一个引理，位于命名空间 `Cocha
+inComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_v (a n' : Int) (hn' : n + a = n') (p q : Int) (hpq : p + n' = q)
+ (p' : Int) (hp' : p' + n = q) : (γ.leftShift a n' hn').v p q hpq = (a * n' + ((
+a * (a - 1)) / 2)).negOnePow • (K.shiftFunctorObjXIso a p p' (by rw [← add_left_
+inj n, hp', add_assoc, add_comm a, hn', hpq])).hom ≫ γ.v p' q hp'
+参数：a n' : Int；hn' : n + a = n'；p q : Int；hpq : p + n' = q；p' : Int；hp' : p' + n 
+= q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma leftShift_v (a n' : Int) (hn' : n + a = n') (p q : Int) (hpq : p + n' = q)
-    (p' : Int) (hp' : p' + n = q) :
+lemma leftShift_v (a n' : ℤ) (hn' : n + a = n') (p q : ℤ) (hpq : p + n' = q)
+    (p' : ℤ) (hp' : p' + n = q) :
     (γ.leftShift a n' hn').v p q hpq = (a * n' + ((a * (a - 1)) / 2)).negOnePow •
       (K.shiftFunctorObjXIso a p p'
         (by rw [← add_left_inj n, hp', add_assoc, add_comm a, hn', hpq])).hom ≫ γ.v p' q hp' := by
@@ -150,142 +129,117 @@ lemma leftShift_v (a n' : Int) (hn' : n + a = n') (p q : Int) (hpq : p + n' = q)
   dsimp only [leftShift]
   simp only [mk_v]
 
-/--
-Definition of `rightUnshift` / `rightUnshift` 的定义
+/-- The map `Cochain K (L⟦a⟧) n' → Cochain K L n` when `n' + a = n`. -/
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift** 是 Mathlib 中的一个定义，位于命名空间 `Coch
+ainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a
+ = n) : Cochain K L n
+参数：γ : Cochain K (L⟦a⟧) n'；n : Int；hn : n' + a = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnshift
-  signature: {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-  body: Cochain.mk (fun p q hpq => γ.v p (p + n') rfl ≫
-    (L.shiftFunctorObjXIso a (p + n') q (by rw [← hpq, add_assoc, hn])).hom)
-
-中文:
-定义 rightUnshift
-  签名: {n' a : 整数} (γ : Cochain K (L⟦a⟧) n') (n : 整数) (hn : n' + a = n)
-  定义体: Cochain.mk (fun p q hpq => γ.v p (p + n') rfl ≫
-    (L.shiftFunctorObjXIso a (p + n') q (by rw [← hpq, add_assoc, hn])).hom)
-
-Depends on / 依赖: Cochain, Cochain.mk, L.shiftFunctorObjXIso, add_assoc, shiftFunctorObjXIso
+--- 原说明 ---
+The map `Cochain K (L⟦a⟧) n' → Cochain K L n` when `n' + a = n`.
 -/
-def rightUnshift {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) :
+def rightUnshift {n' a : ℤ} (γ : Cochain K (L⟦a⟧) n') (n : ℤ) (hn : n' + a = n) :
     Cochain K L n :=
   Cochain.mk (fun p q hpq => γ.v p (p + n') rfl ≫
     (L.shiftFunctorObjXIso a (p + n') q (by rw [← hpq, add_assoc, hn])).hom)
-
-/--
-lemma `rightUnshift_v` / 引理 `rightUnshift_v`
-
-English:
-lemma rightUnshift_v
-  statement: {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-  proof: by
-  subst hp'
-  dsimp only [rightUnshift]
-  simp only [mk_v]
-
-中文:
-引理 rightUnshift_v
-  结论: {n' a : 整数} (γ : Cochain K (L⟦a⟧) n') (n : 整数) (hn : n' + a = n)
-  证明: by
-  subst hp'
-  dsimp only [rightUnshift]
-  simp only [mk_v]
-
-Depends on / 依赖: mk_v, rightUnshift
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_v** 是 Mathlib 中的一个引理，位于命名空间 `Co
+chainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_v {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' +
+ a = n) (p q : Int) (hpq : p + n = q) (p' : Int) (hp' : p + n' = p') : (γ.rightU
+nshift n hn).v p q hpq = γ.v p p' hp' ≫ (L.shiftFunctorObjXIso a p' q (by rw [← 
+hpq, ← hn, ← add_assoc, hp'])).hom
+参数：γ : Cochain K (L⟦a⟧) n'；n : Int；hn : n' + a = n；p q : Int；hpq : p + n = q；p' 
+: Int；hp' : p + n' = p'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rightUnshift_v {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-    (p q : Int) (hpq : p + n = q) (p' : Int) (hp' : p + n' = p') :
+lemma rightUnshift_v {n' a : ℤ} (γ : Cochain K (L⟦a⟧) n') (n : ℤ) (hn : n' + a = n)
+    (p q : ℤ) (hpq : p + n = q) (p' : ℤ) (hp' : p + n' = p') :
     (γ.rightUnshift n hn).v p q hpq = γ.v p p' hp' ≫
       (L.shiftFunctorObjXIso a p' q (by rw [← hpq, ← hn, ← add_assoc, hp'])).hom := by
   subst hp'
   dsimp only [rightUnshift]
   simp only [mk_v]
 
-/--
-Definition of `leftUnshift` / `leftUnshift` 的定义
+/-- The map `Cochain (K⟦a⟧) L n' → Cochain K L n` when `n + a = n'`. -/
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift** 是 Mathlib 中的一个定义，位于命名空间 `Cocha
+inComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a =
+ n') : Cochain K L n
+参数：γ : Cochain (K⟦a⟧) L n'；n : Int；hn : n + a = n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnshift
-  signature: {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-  body: Cochain.mk (fun p q hpq => (a * n' + ((a * (a - 1)) / 2)).negOnePow •
-    (K.shiftFunctorObjXIso a (p - a) p (by lia)).inv ≫ γ.v (p - a) q (by lia))
-
-中文:
-定义 leftUnshift
-  签名: {n' a : 整数} (γ : Cochain (K⟦a⟧) L n') (n : 整数) (hn : n + a = n')
-  定义体: Cochain.mk (fun p q hpq => (a * n' + ((a * (a - 1)) / 2)).negOnePow •
-    (K.shiftFunctorObjXIso a (p - a) p (by lia)).inv ≫ γ.v (p - a) q (by lia))
-
-Depends on / 依赖: Cochain, Cochain.mk, K.shiftFunctorObjXIso, negOnePow, shiftFunctorObjXIso
+--- 原说明 ---
+The map `Cochain (K⟦a⟧) L n' → Cochain K L n` when `n + a = n'`.
 -/
-def leftUnshift {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') :
+def leftUnshift {n' a : ℤ} (γ : Cochain (K⟦a⟧) L n') (n : ℤ) (hn : n + a = n') :
     Cochain K L n :=
   Cochain.mk (fun p q hpq => (a * n' + ((a * (a - 1)) / 2)).negOnePow •
     (K.shiftFunctorObjXIso a (p - a) p (by lia)).inv ≫ γ.v (p - a) q (by lia))
-
-/--
-lemma `leftUnshift_v` / 引理 `leftUnshift_v`
-
-English:
-lemma leftUnshift_v
-  statement: {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-  proof: by
-  obtain rfl : p' = p - a := by lia
-  rfl
-
-中文:
-引理 leftUnshift_v
-  结论: {n' a : 整数} (γ : Cochain (K⟦a⟧) L n') (n : 整数) (hn : n + a = n')
-  证明: by
-  obtain rfl : p' = p - a := by lia
-  rfl
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift_v** 是 Mathlib 中的一个引理，位于命名空间 `Coc
+hainComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift_v {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a
+ = n') (p q : Int) (hpq : p + n = q) (p' : Int) (hp' : p' + n' = q) : (γ.leftUns
+hift n hn).v p q hpq = (a * n' + ((a * (a - 1)) / 2)).negOnePow • (K.shiftFuncto
+rObjXIso a p' p (by lia)).inv ≫ γ.v p' q (by lia)
+参数：γ : Cochain (K⟦a⟧) L n'；n : Int；hn : n + a = n'；p q : Int；hpq : p + n = q；p' 
+: Int；hp' : p' + n' = q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma leftUnshift_v {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-    (p q : Int) (hpq : p + n = q) (p' : Int) (hp' : p' + n' = q) :
+lemma leftUnshift_v {n' a : ℤ} (γ : Cochain (K⟦a⟧) L n') (n : ℤ) (hn : n + a = n')
+    (p q : ℤ) (hpq : p + n = q) (p' : ℤ) (hp' : p' + n' = q) :
     (γ.leftUnshift n hn).v p q hpq = (a * n' + ((a * (a - 1)) / 2)).negOnePow •
       (K.shiftFunctorObjXIso a p' p (by lia)).inv ≫ γ.v p' q (by lia) := by
   obtain rfl : p' = p - a := by lia
   rfl
 
-/--
-Definition of `shift` / `shift` 的定义
+/-- The map `Cochain K L n → Cochain (K⟦a⟧) (L⟦a⟧) n`. -/
+/-
+**CochainComplex.HomComplex.Cochain.shift** 是 Mathlib 中的一个定义，位于命名空间 `CochainComp
+lex.HomComplex.Cochain`。
+形式化陈述：shift (a : Int) : Cochain (K⟦a⟧) (L⟦a⟧) n
+参数：a : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shift
-  signature: (a : Int)
-  body: Cochain.mk (fun p q hpq => (K.shiftFunctorObjXIso a p _ rfl).hom ≫
-    γ.v (p + a) (q + a) (by lia) ≫ (L.shiftFunctorObjXIso a q _ rfl).inv)
-
-中文:
-定义 shift
-  签名: (a : 整数)
-  定义体: Cochain.mk (fun p q hpq => (K.shiftFunctorObjXIso a p _ rfl).hom ≫
-    γ.v (p + a) (q + a) (by lia) ≫ (L.shiftFunctorObjXIso a q _ rfl).inv)
-
-Depends on / 依赖: Cochain, Cochain.mk, K.shiftFunctorObjXIso, L.shiftFunctorObjXIso, shiftFunctorObjXIso
+--- 原说明 ---
+The map `Cochain K L n → Cochain (K⟦a⟧) (L⟦a⟧) n`.
 -/
-def shift (a : Int) : Cochain (K⟦a⟧) (L⟦a⟧) n :=
+def shift (a : ℤ) : Cochain (K⟦a⟧) (L⟦a⟧) n :=
   Cochain.mk (fun p q hpq => (K.shiftFunctorObjXIso a p _ rfl).hom ≫
     γ.v (p + a) (q + a) (by lia) ≫ (L.shiftFunctorObjXIso a q _ rfl).inv)
-
-/--
-lemma `shift_v` / 引理 `shift_v`
-
-English:
-lemma shift_v
-  statement: (a : Int) (p q : Int) (hpq : p + n = q) (p' q' : Int)
-  proof: by
-  subst hp' hq'
-  rfl
-
-中文:
-引理 shift_v
-  结论: (a : 整数) (p q : 整数) (hpq : p + n = q) (p' q' : 整数)
-  证明: by
-  subst hp' hq'
-  rfl
+/-
+**CochainComplex.HomComplex.Cochain.shift_v** 是 Mathlib 中的一个引理，位于命名空间 `CochainCo
+mplex.HomComplex.Cochain`。
+形式化陈述：shift_v (a : Int) (p q : Int) (hpq : p + n = q) (p' q' : Int) (hp' : p' = 
+p + a) (hq' : q' = q + a) : (γ.shift a).v p q hpq = (K.shiftFunctorObjXIso a p p
+' hp').hom ≫ γ.v p' q' (by rw [hp', hq', ← hpq, add_assoc, add_comm a, add_assoc
+]) ≫ (L.shiftFunctorObjXIso a q q' hq').inv
+参数：a : Int；p q : Int；hpq : p + n = q；p' q' : Int；hp' : p' = p + a；hq' : q' = q +
+ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma shift_v (a : Int) (p q : Int) (hpq : p + n = q) (p' q' : Int)
+lemma shift_v (a : ℤ) (p q : ℤ) (hpq : p + n = q) (p' q' : ℤ)
     (hp' : p' = p + a) (hq' : q' = q + a) :
     (γ.shift a).v p q hpq = (K.shiftFunctorObjXIso a p p' hp').hom ≫
       γ.v p' q' (by rw [hp', hq', ← hpq, add_assoc, add_comm a, add_assoc]) ≫
@@ -295,56 +249,76 @@ lemma shift_v (a : Int) (p q : Int) (hpq : p + n = q) (p' q' : Int)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shift_v'` / 引理 `shift_v'`
-
-English:
-lemma shift_v'
-  given: (a : Int) (p q : Int) (hpq : p + n = q)
-  proof: by
-  simp only [shift_v γ a p q hpq _ _ rfl rfl, shiftFunctor_obj_X, shiftFunctorObjXIso,
-    HomologicalComplex.XIsoOfEq_rfl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
-
-中文:
-引理 shift_v'
-  条件: (a : 整数) (p q : 整数) (hpq : p + n = q)
-  证明: by
-  simp only [shift_v γ a p q hpq _ _ rfl rfl, shiftFunctor_obj_X, shiftFunctorObjXIso,
-    HomologicalComplex.XIsoOfEq_rfl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.XIsoOfEq_rfl, Iso.refl_hom, Iso.refl_inv, XIsoOfEq_rfl, comp_id, id_comp, refl_hom, refl_inv, shiftFunctorObjXIso, shiftFunctor_obj_X, shift_v
+/-
+**CochainComplex.HomComplex.Cochain.shift_v'** 是 Mathlib 中的一个引理，位于命名空间 `CochainC
+omplex.HomComplex.Cochain`。
+形式化陈述：shift_v' (a : Int) (p q : Int) (hpq : p + n = q) : (γ.shift a).v p q hpq =
+ γ.v (p + a) (q + a) (by lia)
+参数：a : Int；p q : Int；hpq : p + n = q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.shift_v`：shift_v (a : Int) (p q : Int)
+ (hpq : p + n = q) (p' q' : Int) (hp' : p' = p + a) (hq' : q' = q + a) : (γ.shif
+t a).v p q hpq = (K.shiftFuncto…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma shift_v' (a : Int) (p q : Int) (hpq : p + n = q) :
+lemma shift_v' (a : ℤ) (p q : ℤ) (hpq : p + n = q) :
     (γ.shift a).v p q hpq = γ.v (p + a) (q + a) (by lia) := by
   simp only [shift_v γ a p q hpq _ _ rfl rfl, shiftFunctor_obj_X, shiftFunctorObjXIso,
     HomologicalComplex.XIsoOfEq_rfl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `rightUnshift_rightShift` / 引理 `rightUnshift_rightShift`
-
-English:
-lemma rightUnshift_rightShift
-  given: (a n' : Int) (hn' : n' + a = n)
-  proof: by
-  ext p q hpq
-  simp only [rightUnshift_v _ n hn' p q hpq (p + n') rfl,
-    γ.rightShift_v _ _ hn' p (p + n') rfl q hpq,
-    shiftFunctorObjXIso, assoc, Iso.inv_hom_id, comp_id]
-
-中文:
-引理 rightUnshift_rightShift
-  条件: (a n' : 整数) (hn' : n' + a = n)
-  证明: by
-  ext p q hpq
-  simp only [rightUnshift_v _ n hn' p q hpq (p + n') rfl,
-    γ.rightShift_v _ _ hn' p (p + n') rfl q hpq,
-    shiftFunctorObjXIso, assoc, Iso.inv_hom_id, comp_id]
-
-Depends on / 依赖: Iso.inv_hom_id, comp_id, inv_hom_id, rightShift_v, rightUnshift_v, shiftFunctorObjXIso
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_rightShift** 是 Mathlib 中的一个引理，位
+于命名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_rightShift (a n' : Int) (hn' : n' + a = n) : (γ.rightShift a 
+n' hn').rightUnshift n hn' = γ
+参数：a n' : Int；hn' : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightUnshift_v`：rightUnshift_v {n' a :
+ Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (p q : Int) (hpq : p
+ + n = q) (p' : Int) (hp' : p + n' = p…
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_v`：rightShift_v (a n' : Int
+) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p + n = p'
+) : (γ.rightShift a n' hn').v p q hp…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rightUnshift_rightShift (a n' : Int) (hn' : n' + a = n) :
+lemma rightUnshift_rightShift (a n' : ℤ) (hn' : n' + a = n) :
     (γ.rightShift a n' hn').rightUnshift n hn' = γ := by
   ext p q hpq
   simp only [rightUnshift_v _ n hn' p q hpq (p + n') rfl,
@@ -353,34 +327,42 @@ lemma rightUnshift_rightShift (a n' : Int) (hn' : n' + a = n) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `rightShift_rightUnshift` / 引理 `rightShift_rightUnshift`
-
-English:
-lemma rightShift_rightUnshift
-  given: {a n' : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn' : n' + a = n)
-  proof: by
-  ext p q hpq
-  simp only [(γ.rightUnshift n hn').rightShift_v a n' hn' p q hpq (p + n) rfl,
-    γ.rightUnshift_v n hn' p (p + n) rfl q hpq,
-    shiftFunctorObjXIso, assoc, Iso.hom_inv_id, comp_id]
-
-@[simp]
-
-中文:
-引理 rightShift_rightUnshift
-  条件: {a n' : 整数} (γ : Cochain K (L⟦a⟧) n') (n : 整数) (hn' : n' + a = n)
-  证明: by
-  ext p q hpq
-  simp only [(γ.rightUnshift n hn').rightShift_v a n' hn' p q hpq (p + n) rfl,
-    γ.rightUnshift_v n hn' p (p + n) rfl q hpq,
-    shiftFunctorObjXIso, assoc, Iso.hom_inv_id, comp_id]
-
-@[simp]
-
-Depends on / 依赖: Iso.hom_inv_id, comp_id, hom_inv_id, rightShift_v, rightUnshift, rightUnshift_v, shiftFunctorObjXIso
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_rightUnshift** 是 Mathlib 中的一个引理，位
+于命名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_rightUnshift {a n' : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (
+hn' : n' + a = n) : (γ.rightUnshift n hn').rightShift a n' hn' = γ
+参数：γ : Cochain K (L⟦a⟧) n'；n : Int；hn' : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_v`：rightShift_v (a n' : Int
+) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p + n = p'
+) : (γ.rightShift a n' hn').v p q hp…
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightUnshift_v`：rightUnshift_v {n' a :
+ Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (p q : Int) (hpq : p
+ + n = q) (p' : Int) (hp' : p + n' = p…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rightShift_rightUnshift {a n' : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn' : n' + a = n) :
+lemma rightShift_rightUnshift {a n' : ℤ} (γ : Cochain K (L⟦a⟧) n') (n : ℤ) (hn' : n' + a = n) :
     (γ.rightUnshift n hn').rightShift a n' hn' = γ := by
   ext p q hpq
   simp only [(γ.rightUnshift n hn').rightShift_v a n' hn' p q hpq (p + n) rfl,
@@ -388,83 +370,108 @@ lemma rightShift_rightUnshift {a n' : Int} (γ : Cochain K (L⟦a⟧) n') (n : I
     shiftFunctorObjXIso, assoc, Iso.hom_inv_id, comp_id]
 
 @[simp]
-/--
-lemma `leftUnshift_leftShift` / 引理 `leftUnshift_leftShift`
-
-English:
-lemma leftUnshift_leftShift
-  given: (a n' : Int) (hn' : n + a = n')
-  proof: by
-  ext p q hpq
-  rw [(γ.leftShift a n' hn').leftUnshift_v n hn' p q hpq (q - n') (by lia)]; rw [γ.leftShift_v a n' hn' (q - n') q (by lia) p hpq]; rw [Linear.comp_units_smul]; rw [Iso.inv_hom_id_assoc]; rw [smul_smul]; rw [Int.units_mul_self]; rw [one_smul]
-
-@[simp]
-
-中文:
-引理 leftUnshift_leftShift
-  条件: (a n' : 整数) (hn' : n + a = n')
-  证明: by
-  ext p q hpq
-  rw [(γ.leftShift a n' hn').leftUnshift_v n hn' p q hpq (q - n') (by lia)]; rw [γ.leftShift_v a n' hn' (q - n') q (by lia) p hpq]; rw [Linear.comp_units_smul]; rw [Iso.inv_hom_id_assoc]; rw [smul_smul]; rw [Int.units_mul_self]; rw [one_smul]
-
-@[simp]
-
-Depends on / 依赖: Int.units_mul_self, Iso.inv_hom_id_assoc, Linear, Linear.comp_units_smul, comp_units_smul, inv_hom_id_assoc, leftShift, leftShift_v, leftUnshift_v, one_smul, smul_smul, units_mul_self
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift_leftShift** 是 Mathlib 中的一个引理，位于命
+名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift_leftShift (a n' : Int) (hn' : n + a = n') : (γ.leftShift a n' 
+hn').leftUnshift n hn' = γ
+参数：a n' : Int；hn' : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftUnshift_v`：leftUnshift_v {n' a : I
+nt} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') (p q : Int) (hpq : p +
+ n = q) (p' : Int) (hp' : p' + n' = q…
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_v`：leftShift_v (a n' : Int) 
+(hn' : n + a = n') (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p' + n = q) 
+: (γ.leftShift a n' hn').v p q hpq …
+· 使用引理 `CategoryTheory.Linear.comp_units_smul`：comp_units_smul {X Y Z : C} (f : 
+X ⟶ Y) (r : Rˣ) (g : Y ⟶ Z) : f ≫ (r • g) = r • f ≫ g
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Int.units_mul_self`：units_mul_self (u : Intˣ) : u * u = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-lemma leftUnshift_leftShift (a n' : Int) (hn' : n + a = n') :
+lemma leftUnshift_leftShift (a n' : ℤ) (hn' : n + a = n') :
     (γ.leftShift a n' hn').leftUnshift n hn' = γ := by
   ext p q hpq
-  rw [(γ.leftShift a n' hn').leftUnshift_v n hn' p q hpq (q - n') (by lia)]; rw [γ.leftShift_v a n' hn' (q - n') q (by lia) p hpq]; rw [Linear.comp_units_smul]; rw [Iso.inv_hom_id_assoc]; rw [smul_smul]; rw [Int.units_mul_self]; rw [one_smul]
+  rw [(γ.leftShift a n' hn').leftUnshift_v n hn' p q hpq (q - n') (by lia),
+    γ.leftShift_v a n' hn' (q - n') q (by lia) p hpq, Linear.comp_units_smul,
+    Iso.inv_hom_id_assoc, smul_smul, Int.units_mul_self, one_smul]
 
 @[simp]
-/--
-lemma `leftShift_leftUnshift` / 引理 `leftShift_leftUnshift`
-
-English:
-lemma leftShift_leftUnshift
-  given: {a n' : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn' : n + a = n')
-  proof: by
-  ext p q hpq
-  rw [(γ.leftUnshift n hn').leftShift_v a n' hn' p q hpq (q - n) (by lia)]; rw [γ.leftUnshift_v n hn' (q - n) q (by lia) p hpq]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [Iso.hom_inv_id_assoc]; rw [Int.units_mul_self]; rw [one_smul]
-
-中文:
-引理 leftShift_leftUnshift
-  条件: {a n' : 整数} (γ : Cochain (K⟦a⟧) L n') (n : 整数) (hn' : n + a = n')
-  证明: by
-  ext p q hpq
-  rw [(γ.leftUnshift n hn').leftShift_v a n' hn' p q hpq (q - n) (by lia)]; rw [γ.leftUnshift_v n hn' (q - n) q (by lia) p hpq]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [Iso.hom_inv_id_assoc]; rw [Int.units_mul_self]; rw [one_smul]
-
-Depends on / 依赖: Int.units_mul_self, Iso.hom_inv_id_assoc, Linear, Linear.comp_units_smul, comp_units_smul, hom_inv_id_assoc, leftShift_v, leftUnshift, leftUnshift_v, one_smul, smul_smul, units_mul_self
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_leftUnshift** 是 Mathlib 中的一个引理，位于命
+名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_leftUnshift {a n' : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn
+' : n + a = n') : (γ.leftUnshift n hn').leftShift a n' hn' = γ
+参数：γ : Cochain (K⟦a⟧) L n'；n : Int；hn' : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_v`：leftShift_v (a n' : Int) 
+(hn' : n + a = n') (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p' + n = q) 
+: (γ.leftShift a n' hn').v p q hpq …
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftUnshift_v`：leftUnshift_v {n' a : I
+nt} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') (p q : Int) (hpq : p +
+ n = q) (p' : Int) (hp' : p' + n' = q…
+· 使用引理 `CategoryTheory.Linear.comp_units_smul`：comp_units_smul {X Y Z : C} (f : 
+X ⟶ Y) (r : Rˣ) (g : Y ⟶ Z) : f ≫ (r • g) = r • f ≫ g
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Int.units_mul_self`：units_mul_self (u : Intˣ) : u * u = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-lemma leftShift_leftUnshift {a n' : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn' : n + a = n') :
+lemma leftShift_leftUnshift {a n' : ℤ} (γ : Cochain (K⟦a⟧) L n') (n : ℤ) (hn' : n + a = n') :
     (γ.leftUnshift n hn').leftShift a n' hn' = γ := by
   ext p q hpq
-  rw [(γ.leftUnshift n hn').leftShift_v a n' hn' p q hpq (q - n) (by lia)]; rw [γ.leftUnshift_v n hn' (q - n) q (by lia) p hpq]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [Iso.hom_inv_id_assoc]; rw [Int.units_mul_self]; rw [one_smul]
+  rw [(γ.leftUnshift n hn').leftShift_v a n' hn' p q hpq (q - n) (by lia),
+    γ.leftUnshift_v n hn' (q - n) q (by lia) p hpq, Linear.comp_units_smul, smul_smul,
+    Iso.hom_inv_id_assoc, Int.units_mul_self, one_smul]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `rightShift_add` / 引理 `rightShift_add`
-
-English:
-lemma rightShift_add
-  given: (a n' : Int) (hn' : n' + a = n)
-  proof: by
-  ext p q hpq
-  dsimp
-  simp only [rightShift_v _ a n' hn' p q hpq _ rfl, add_v, add_comp]
-
-中文:
-引理 rightShift_add
-  条件: (a n' : 整数) (hn' : n' + a = n)
-  证明: by
-  ext p q hpq
-  dsimp
-  simp only [rightShift_v _ a n' hn' p q hpq _ rfl, add_v, add_comp]
-
-Depends on / 依赖: add_comp, add_v, rightShift_v
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_add** 是 Mathlib 中的一个引理，位于命名空间 `Co
+chainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_add (a n' : Int) (hn' : n' + a = n) : (γ₁ + γ₂).rightShift a n'
+ hn' = γ₁.rightShift a n' hn' + γ₂.rightShift a n' hn'
+参数：a n' : Int；hn' : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_v`：rightShift_v (a n' : Int
+) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p + n = p'
+) : (γ.rightShift a n' hn').v p q hp…
+· 使用定理 `CategoryTheory.Preadditive.add_comp`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C)   (f f' 
+: P ⟶ Q) (g : Q ⟶ R),   C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rightShift_add (a n' : Int) (hn' : n' + a = n) :
+lemma rightShift_add (a n' : ℤ) (hn' : n' + a = n) :
     (γ₁ + γ₂).rightShift a n' hn' = γ₁.rightShift a n' hn' + γ₂.rightShift a n' hn' := by
   ext p q hpq
   dsimp
@@ -472,28 +479,34 @@ lemma rightShift_add (a n' : Int) (hn' : n' + a = n) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `leftShift_add` / 引理 `leftShift_add`
-
-English:
-lemma leftShift_add
-  given: (a n' : Int) (hn' : n + a = n')
-  proof: by
-  ext p q hpq
-  dsimp
-  simp only [leftShift_v _ a n' hn' p q hpq (p + a) (by lia), add_v, comp_add, smul_add]
-
-中文:
-引理 leftShift_add
-  条件: (a n' : 整数) (hn' : n + a = n')
-  证明: by
-  ext p q hpq
-  dsimp
-  simp only [leftShift_v _ a n' hn' p q hpq (p + a) (by lia), add_v, comp_add, smul_add]
-
-Depends on / 依赖: add_v, comp_add, leftShift_v, smul_add
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_add** 是 Mathlib 中的一个引理，位于命名空间 `Coc
+hainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_add (a n' : Int) (hn' : n + a = n') : (γ₁ + γ₂).leftShift a n' h
+n' = γ₁.leftShift a n' hn' + γ₂.leftShift a n' hn'
+参数：a n' : Int；hn' : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_v`：leftShift_v (a n' : Int) 
+(hn' : n + a = n') (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p' + n = q) 
+: (γ.leftShift a n' hn').v p q hpq …
+· 使用定理 `CategoryTheory.Preadditive.comp_add`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C) (f : P ⟶
+ Q)   (g g' : Q ⟶ R),   C…
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma leftShift_add (a n' : Int) (hn' : n + a = n') :
+lemma leftShift_add (a n' : ℤ) (hn' : n + a = n') :
     (γ₁ + γ₂).leftShift a n' hn' = γ₁.leftShift a n' hn' + γ₂.leftShift a n' hn' := by
   ext p q hpq
   dsimp
@@ -501,28 +514,28 @@ lemma leftShift_add (a n' : Int) (hn' : n + a = n') :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `shift_add` / 引理 `shift_add`
-
-English:
-lemma shift_add
-  given: (a : Int)
-  proof: by
-  ext p q hpq
-  dsimp
-  simp only [shift_v', add_v]
-
-中文:
-引理 shift_add
-  条件: (a : 整数)
-  证明: by
-  ext p q hpq
-  dsimp
-  simp only [shift_v', add_v]
-
-Depends on / 依赖: add_v, shift_v
+/-
+**CochainComplex.HomComplex.Cochain.shift_add** 是 Mathlib 中的一个引理，位于命名空间 `Cochain
+Complex.HomComplex.Cochain`。
+形式化陈述：shift_add (a : Int) : (γ₁ + γ₂).shift a = γ₁.shift a + γ₂.shift a
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.shift_v'`：shift_v' (a : Int) (p q : In
+t) (hpq : p + n = q) : (γ.shift a).v p q hpq = γ.v (p + a) (q + a) (by lia)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma shift_add (a : Int) :
+lemma shift_add (a : ℤ) :
     (γ₁ + γ₂).shift a = γ₁.shift a + γ₂.shift a := by
   ext p q hpq
   dsimp
@@ -532,30 +545,19 @@ variable (K L)
 
 /-- The additive equivalence `Cochain K L n ≃+ Cochain K L⟦a⟧ n'` when `n' + a = n`. -/
 @[simps]
-/--
-Definition of `rightShiftAddEquiv` / `rightShiftAddEquiv` 的定义
+/-
+**CochainComplex.HomComplex.Cochain.rightShiftAddEquiv** 是 Mathlib 中的一个定义，位于命名空间
+ `CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightShiftAddEquiv (n a n' : Int) (hn' : n' + a = n) : Cochain K L n ≃+ Co
+chain K (L⟦a⟧) n' where toFun γ
+参数：n a n' : Int；hn' : n' + a = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightShiftAddEquiv
-  signature: (n a n' : Int) (hn' : n' + a = n)
-  body: γ.rightShift a n' hn'
-  invFun γ := γ.rightUnshift n hn'
-  left_inv γ := by simp only [rightUnshift_rightShift]
-  right_inv γ := by simp only [rightShift_rightUnshift]
-  map_add' γ γ' := by simp only [rightShift_add]
-
-中文:
-定义 rightShiftAddEquiv
-  签名: (n a n' : 整数) (hn' : n' + a = n)
-  定义体: γ.rightShift a n' hn'
-  invFun γ := γ.rightUnshift n hn'
-  left_inv γ := by simp only [rightUnshift_rightShift]
-  right_inv γ := by simp only [rightShift_rightUnshift]
-  map_add' γ γ' := by simp only [rightShift_add]
-
-Depends on / 依赖: rightShift
+--- 原说明 ---
+The additive equivalence `Cochain K L n ≃+ Cochain K L⟦a⟧ n'` when `n' + a = n`.
 -/
-def rightShiftAddEquiv (n a n' : Int) (hn' : n' + a = n) :
+def rightShiftAddEquiv (n a n' : ℤ) (hn' : n' + a = n) :
     Cochain K L n ≃+ Cochain K (L⟦a⟧) n' where
   toFun γ := γ.rightShift a n' hn'
   invFun γ := γ.rightUnshift n hn'
@@ -565,30 +567,20 @@ def rightShiftAddEquiv (n a n' : Int) (hn' : n' + a = n) :
 
 /-- The additive equivalence `Cochain K L n ≃+ Cochain (K⟦a⟧) L n'` when `n + a = n'`. -/
 @[simps]
-/--
-Definition of `leftShiftAddEquiv` / `leftShiftAddEquiv` 的定义
+/-
+**CochainComplex.HomComplex.Cochain.leftShiftAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+`CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftShiftAddEquiv (n a n' : Int) (hn' : n + a = n') : Cochain K L n ≃+ Coc
+hain (K⟦a⟧) L n' where toFun γ
+参数：n a n' : Int；hn' : n + a = n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftShiftAddEquiv
-  signature: (n a n' : Int) (hn' : n + a = n')
-  body: γ.leftShift a n' hn'
-  invFun γ := γ.leftUnshift n hn'
-  left_inv γ := by simp only [leftUnshift_leftShift]
-  right_inv γ := by simp only [leftShift_leftUnshift]
-  map_add' γ γ' := by simp only [leftShift_add]
-
-中文:
-定义 leftShiftAddEquiv
-  签名: (n a n' : 整数) (hn' : n + a = n')
-  定义体: γ.leftShift a n' hn'
-  invFun γ := γ.leftUnshift n hn'
-  left_inv γ := by simp only [leftUnshift_leftShift]
-  right_inv γ := by simp only [leftShift_leftUnshift]
-  map_add' γ γ' := by simp only [leftShift_add]
-
-Depends on / 依赖: leftShift
+--- 原说明 ---
+The additive equivalence `Cochain K L n ≃+ Cochain (K⟦a⟧) L n'` when `n + a = n'
+`.
 -/
-def leftShiftAddEquiv (n a n' : Int) (hn' : n + a = n') :
+def leftShiftAddEquiv (n a n' : ℤ) (hn' : n + a = n') :
     Cochain K L n ≃+ Cochain (K⟦a⟧) L n' where
   toFun γ := γ.leftShift a n' hn'
   invFun γ := γ.leftUnshift n hn'
@@ -598,163 +590,149 @@ def leftShiftAddEquiv (n a n' : Int) (hn' : n + a = n') :
 
 /-- The additive map `Cochain K L n →+ Cochain (K⟦a⟧) (L⟦a⟧) n`. -/
 @[simps!]
-/--
-Definition of `shiftAddHom` / `shiftAddHom` 的定义
+/-
+**CochainComplex.HomComplex.Cochain.shiftAddHom** 是 Mathlib 中的一个定义，位于命名空间 `Cocha
+inComplex.HomComplex.Cochain`。
+形式化陈述：shiftAddHom (n a : Int) : Cochain K L n ->+ Cochain (K⟦a⟧) (L⟦a⟧) n
+参数：n a : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftAddHom
-  signature: (n a : Int)
-  body: AddMonoidHom.mk' (fun γ => γ.shift a) (by intros; simp only [shift_add])
-
-中文:
-定义 shiftAddHom
-  签名: (n a : 整数)
-  定义体: AddMonoidHom.mk' (fun γ => γ.shift a) (by intros; simp only [shift_add])
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, intros, shift_add
+--- 原说明 ---
+The additive map `Cochain K L n →+ Cochain (K⟦a⟧) (L⟦a⟧) n`.
 -/
-def shiftAddHom (n a : Int) : Cochain K L n ->+ Cochain (K⟦a⟧) (L⟦a⟧) n :=
+def shiftAddHom (n a : ℤ) : Cochain K L n →+ Cochain (K⟦a⟧) (L⟦a⟧) n :=
   AddMonoidHom.mk' (fun γ => γ.shift a) (by intros; simp only [shift_add])
 
 variable (n)
 
 @[simp]
-/--
-lemma `rightShift_zero` / 引理 `rightShift_zero`
-
-English:
-lemma rightShift_zero
-  given: (a n' : Int) (hn' : n' + a = n)
-  proof: by
-  change rightShiftAddEquiv K L n a n' hn' 0 = 0
-  apply map_zero
-
-@[simp]
-
-中文:
-引理 rightShift_zero
-  条件: (a n' : 整数) (hn' : n' + a = n)
-  证明: by
-  change rightShiftAddEquiv K L n a n' hn' 0 = 0
-  apply map_zero
-
-@[simp]
-
-Depends on / 依赖: map_zero, rightShiftAddEquiv
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_zero** 是 Mathlib 中的一个引理，位于命名空间 `C
+ochainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_zero (a n' : Int) (hn' : n' + a = n) : (0 : Cochain K L n).righ
+tShift a n' hn' = 0
+参数：a n' : Int；hn' : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma rightShift_zero (a n' : Int) (hn' : n' + a = n) :
+lemma rightShift_zero (a n' : ℤ) (hn' : n' + a = n) :
     (0 : Cochain K L n).rightShift a n' hn' = 0 := by
   change rightShiftAddEquiv K L n a n' hn' 0 = 0
   apply map_zero
 
 @[simp]
-/--
-lemma `rightUnshift_zero` / 引理 `rightUnshift_zero`
-
-English:
-lemma rightUnshift_zero
-  given: (a n' : Int) (hn' : n' + a = n)
-  proof: by
-  change (rightShiftAddEquiv K L n a n' hn').symm 0 = 0
-  apply map_zero
-
-@[simp]
-
-中文:
-引理 rightUnshift_zero
-  条件: (a n' : 整数) (hn' : n' + a = n)
-  证明: by
-  change (rightShiftAddEquiv K L n a n' hn').symm 0 = 0
-  apply map_zero
-
-@[simp]
-
-Depends on / 依赖: map_zero, rightShiftAddEquiv
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_zero** 是 Mathlib 中的一个引理，位于命名空间 
+`CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_zero (a n' : Int) (hn' : n' + a = n) : (0 : Cochain K (L⟦a⟧) 
+n').rightUnshift n hn' = 0
+参数：a n' : Int；hn' : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma rightUnshift_zero (a n' : Int) (hn' : n' + a = n) :
+lemma rightUnshift_zero (a n' : ℤ) (hn' : n' + a = n) :
     (0 : Cochain K (L⟦a⟧) n').rightUnshift n hn' = 0 := by
   change (rightShiftAddEquiv K L n a n' hn').symm 0 = 0
   apply map_zero
 
 @[simp]
-/--
-lemma `leftShift_zero` / 引理 `leftShift_zero`
-
-English:
-lemma leftShift_zero
-  given: (a n' : Int) (hn' : n + a = n')
-  proof: by
-  change leftShiftAddEquiv K L n a n' hn' 0 = 0
-  apply map_zero
-
-@[simp]
-
-中文:
-引理 leftShift_zero
-  条件: (a n' : 整数) (hn' : n + a = n')
-  证明: by
-  change leftShiftAddEquiv K L n a n' hn' 0 = 0
-  apply map_zero
-
-@[simp]
-
-Depends on / 依赖: leftShiftAddEquiv, map_zero
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_zero** 是 Mathlib 中的一个引理，位于命名空间 `Co
+chainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_zero (a n' : Int) (hn' : n + a = n') : (0 : Cochain K L n).leftS
+hift a n' hn' = 0
+参数：a n' : Int；hn' : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma leftShift_zero (a n' : Int) (hn' : n + a = n') :
+lemma leftShift_zero (a n' : ℤ) (hn' : n + a = n') :
     (0 : Cochain K L n).leftShift a n' hn' = 0 := by
   change leftShiftAddEquiv K L n a n' hn' 0 = 0
   apply map_zero
 
 @[simp]
-/--
-lemma `leftUnshift_zero` / 引理 `leftUnshift_zero`
-
-English:
-lemma leftUnshift_zero
-  given: (a n' : Int) (hn' : n + a = n')
-  proof: by
-  change (leftShiftAddEquiv K L n a n' hn').symm 0 = 0
-  apply map_zero
-
-@[simp]
-
-中文:
-引理 leftUnshift_zero
-  条件: (a n' : 整数) (hn' : n + a = n')
-  证明: by
-  change (leftShiftAddEquiv K L n a n' hn').symm 0 = 0
-  apply map_zero
-
-@[simp]
-
-Depends on / 依赖: leftShiftAddEquiv, map_zero
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift_zero** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift_zero (a n' : Int) (hn' : n + a = n') : (0 : Cochain (K⟦a⟧) L n
+').leftUnshift n hn' = 0
+参数：a n' : Int；hn' : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma leftUnshift_zero (a n' : Int) (hn' : n + a = n') :
+lemma leftUnshift_zero (a n' : ℤ) (hn' : n + a = n') :
     (0 : Cochain (K⟦a⟧) L n').leftUnshift n hn' = 0 := by
   change (leftShiftAddEquiv K L n a n' hn').symm 0 = 0
   apply map_zero
 
 @[simp]
-/--
-lemma `shift_zero` / 引理 `shift_zero`
-
-English:
-lemma shift_zero
-  given: (a : Int)
-  proof: by
-  change shiftAddHom K L n a 0 = 0
-  apply map_zero
-
-中文:
-引理 shift_zero
-  条件: (a : 整数)
-  证明: by
-  change shiftAddHom K L n a 0 = 0
-  apply map_zero
-
-Depends on / 依赖: map_zero, shiftAddHom
+/-
+**CochainComplex.HomComplex.Cochain.shift_zero** 是 Mathlib 中的一个引理，位于命名空间 `Cochai
+nComplex.HomComplex.Cochain`。
+形式化陈述：shift_zero (a : Int) : (0 : Cochain K L n).shift a = 0
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-lemma shift_zero (a : Int) :
+lemma shift_zero (a : ℤ) :
     (0 : Cochain K L n).shift a = 0 := by
   change shiftAddHom K L n a 0 = 0
   apply map_zero
@@ -762,228 +740,206 @@ lemma shift_zero (a : Int) :
 variable {K L n}
 
 @[simp]
-/--
-lemma `rightShift_neg` / 引理 `rightShift_neg`
-
-English:
-lemma rightShift_neg
-  given: (a n' : Int) (hn' : n' + a = n)
-  proof: by
-  change rightShiftAddEquiv K L n a n' hn' (-γ) = _
-  apply map_neg
-
-@[simp]
-
-中文:
-引理 rightShift_neg
-  条件: (a n' : 整数) (hn' : n' + a = n)
-  证明: by
-  change rightShiftAddEquiv K L n a n' hn' (-γ) = _
-  apply map_neg
-
-@[simp]
-
-Depends on / 依赖: map_neg, rightShiftAddEquiv
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_neg** 是 Mathlib 中的一个引理，位于命名空间 `Co
+chainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_neg (a n' : Int) (hn' : n' + a = n) : (-γ).rightShift a n' hn' 
+= -γ.rightShift a n' hn'
+参数：a n' : Int；hn' : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma rightShift_neg (a n' : Int) (hn' : n' + a = n) :
+lemma rightShift_neg (a n' : ℤ) (hn' : n' + a = n) :
     (-γ).rightShift a n' hn' = -γ.rightShift a n' hn' := by
   change rightShiftAddEquiv K L n a n' hn' (-γ) = _
   apply map_neg
 
 @[simp]
-/--
-lemma `rightUnshift_neg` / 引理 `rightUnshift_neg`
-
-English:
-lemma rightUnshift_neg
-  given: {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-  proof: by
-  change (rightShiftAddEquiv K L n a n' hn).symm (-γ) = _
-  apply map_neg
-
-@[simp]
-
-中文:
-引理 rightUnshift_neg
-  条件: {n' a : 整数} (γ : Cochain K (L⟦a⟧) n') (n : 整数) (hn : n' + a = n)
-  证明: by
-  change (rightShiftAddEquiv K L n a n' hn).symm (-γ) = _
-  apply map_neg
-
-@[simp]
-
-Depends on / 依赖: map_neg, rightShiftAddEquiv
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_neg** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_neg {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n'
+ + a = n) : (-γ).rightUnshift n hn = -γ.rightUnshift n hn
+参数：γ : Cochain K (L⟦a⟧) n'；n : Int；hn : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma rightUnshift_neg {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) :
+lemma rightUnshift_neg {n' a : ℤ} (γ : Cochain K (L⟦a⟧) n') (n : ℤ) (hn : n' + a = n) :
     (-γ).rightUnshift n hn = -γ.rightUnshift n hn := by
   change (rightShiftAddEquiv K L n a n' hn).symm (-γ) = _
   apply map_neg
 
 @[simp]
-/--
-lemma `leftShift_neg` / 引理 `leftShift_neg`
-
-English:
-lemma leftShift_neg
-  given: (a n' : Int) (hn' : n + a = n')
-  proof: by
-  change leftShiftAddEquiv K L n a n' hn' (-γ) = _
-  apply map_neg
-
-@[simp]
-
-中文:
-引理 leftShift_neg
-  条件: (a n' : 整数) (hn' : n + a = n')
-  证明: by
-  change leftShiftAddEquiv K L n a n' hn' (-γ) = _
-  apply map_neg
-
-@[simp]
-
-Depends on / 依赖: leftShiftAddEquiv, map_neg
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_neg** 是 Mathlib 中的一个引理，位于命名空间 `Coc
+hainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_neg (a n' : Int) (hn' : n + a = n') : (-γ).leftShift a n' hn' = 
+-γ.leftShift a n' hn'
+参数：a n' : Int；hn' : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma leftShift_neg (a n' : Int) (hn' : n + a = n') :
+lemma leftShift_neg (a n' : ℤ) (hn' : n + a = n') :
     (-γ).leftShift a n' hn' = -γ.leftShift a n' hn' := by
   change leftShiftAddEquiv K L n a n' hn' (-γ) = _
   apply map_neg
 
 @[simp]
-/--
-lemma `leftUnshift_neg` / 引理 `leftUnshift_neg`
-
-English:
-lemma leftUnshift_neg
-  given: {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-  proof: by
-  change (leftShiftAddEquiv K L n a n' hn).symm (-γ) = _
-  apply map_neg
-
-@[simp]
-
-中文:
-引理 leftUnshift_neg
-  条件: {n' a : 整数} (γ : Cochain (K⟦a⟧) L n') (n : 整数) (hn : n + a = n')
-  证明: by
-  change (leftShiftAddEquiv K L n a n' hn).symm (-γ) = _
-  apply map_neg
-
-@[simp]
-
-Depends on / 依赖: leftShiftAddEquiv, map_neg
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift_neg** 是 Mathlib 中的一个引理，位于命名空间 `C
+ochainComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift_neg {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n +
+ a = n') : (-γ).leftUnshift n hn = -γ.leftUnshift n hn
+参数：γ : Cochain (K⟦a⟧) L n'；n : Int；hn : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma leftUnshift_neg {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') :
+lemma leftUnshift_neg {n' a : ℤ} (γ : Cochain (K⟦a⟧) L n') (n : ℤ) (hn : n + a = n') :
     (-γ).leftUnshift n hn = -γ.leftUnshift n hn := by
   change (leftShiftAddEquiv K L n a n' hn).symm (-γ) = _
   apply map_neg
 
 @[simp]
-/--
-lemma `shift_neg` / 引理 `shift_neg`
-
-English:
-lemma shift_neg
-  given: (a : Int)
-  proof: by
-  change shiftAddHom K L n a (-γ) = _
-  apply map_neg
-
-@[simp]
-
-中文:
-引理 shift_neg
-  条件: (a : 整数)
-  证明: by
-  change shiftAddHom K L n a (-γ) = _
-  apply map_neg
-
-@[simp]
-
-Depends on / 依赖: map_neg, shiftAddHom
+/-
+**CochainComplex.HomComplex.Cochain.shift_neg** 是 Mathlib 中的一个引理，位于命名空间 `Cochain
+Complex.HomComplex.Cochain`。
+形式化陈述：shift_neg (a : Int) : (-γ).shift a = -γ.shift a
+参数：a : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-lemma shift_neg (a : Int) :
+lemma shift_neg (a : ℤ) :
     (-γ).shift a = -γ.shift a := by
   change shiftAddHom K L n a (-γ) = _
   apply map_neg
 
 @[simp]
-/--
-lemma `rightUnshift_add` / 引理 `rightUnshift_add`
-
-English:
-lemma rightUnshift_add
-  given: {n' a : Int} (γ₁ γ₂ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-  proof: by
-  change (rightShiftAddEquiv K L n a n' hn).symm (γ₁ + γ₂) = _
-  apply map_add
-
-@[simp]
-
-中文:
-引理 rightUnshift_add
-  条件: {n' a : 整数} (γ₁ γ₂ : Cochain K (L⟦a⟧) n') (n : 整数) (hn : n' + a = n)
-  证明: by
-  change (rightShiftAddEquiv K L n a n' hn).symm (γ₁ + γ₂) = _
-  apply map_add
-
-@[simp]
-
-Depends on / 依赖: map_add, rightShiftAddEquiv
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_add** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_add {n' a : Int} (γ₁ γ₂ : Cochain K (L⟦a⟧) n') (n : Int) (hn 
+: n' + a = n) : (γ₁ + γ₂).rightUnshift n hn = γ₁.rightUnshift n hn + γ₂.rightUns
+hift n hn
+参数：γ₁ γ₂ : Cochain K (L⟦a⟧) n'；n : Int；hn : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma rightUnshift_add {n' a : Int} (γ₁ γ₂ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) :
+lemma rightUnshift_add {n' a : ℤ} (γ₁ γ₂ : Cochain K (L⟦a⟧) n') (n : ℤ) (hn : n' + a = n) :
     (γ₁ + γ₂).rightUnshift n hn = γ₁.rightUnshift n hn + γ₂.rightUnshift n hn := by
   change (rightShiftAddEquiv K L n a n' hn).symm (γ₁ + γ₂) = _
   apply map_add
 
 @[simp]
-/--
-lemma `leftUnshift_add` / 引理 `leftUnshift_add`
-
-English:
-lemma leftUnshift_add
-  given: {n' a : Int} (γ₁ γ₂ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-  proof: by
-  change (leftShiftAddEquiv K L n a n' hn).symm (γ₁ + γ₂) = _
-  apply map_add
-
-中文:
-引理 leftUnshift_add
-  条件: {n' a : 整数} (γ₁ γ₂ : Cochain (K⟦a⟧) L n') (n : 整数) (hn : n + a = n')
-  证明: by
-  change (leftShiftAddEquiv K L n a n' hn).symm (γ₁ + γ₂) = _
-  apply map_add
-
-Depends on / 依赖: leftShiftAddEquiv, map_add
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift_add** 是 Mathlib 中的一个引理，位于命名空间 `C
+ochainComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift_add {n' a : Int} (γ₁ γ₂ : Cochain (K⟦a⟧) L n') (n : Int) (hn :
+ n + a = n') : (γ₁ + γ₂).leftUnshift n hn = γ₁.leftUnshift n hn + γ₂.leftUnshift
+ n hn
+参数：γ₁ γ₂ : Cochain (K⟦a⟧) L n'；n : Int；hn : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-lemma leftUnshift_add {n' a : Int} (γ₁ γ₂ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') :
+lemma leftUnshift_add {n' a : ℤ} (γ₁ γ₂ : Cochain (K⟦a⟧) L n') (n : ℤ) (hn : n + a = n') :
     (γ₁ + γ₂).leftUnshift n hn = γ₁.leftUnshift n hn + γ₂.leftUnshift n hn := by
   change (leftShiftAddEquiv K L n a n' hn).symm (γ₁ + γ₂) = _
   apply map_add
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `rightShift_smul` / 引理 `rightShift_smul`
-
-English:
-lemma rightShift_smul
-  given: (a n' : Int) (hn' : n' + a = n) (x : R)
-  proof: by
-  ext p q hpq
-  dsimp
-  simp only [rightShift_v _ a n' hn' p q hpq _ rfl, smul_v, Linear.smul_comp]
-
-中文:
-引理 rightShift_smul
-  条件: (a n' : 整数) (hn' : n' + a = n) (x : R)
-  证明: by
-  ext p q hpq
-  dsimp
-  simp only [rightShift_v _ a n' hn' p q hpq _ rfl, smul_v, Linear.smul_comp]
-
-Depends on / 依赖: Linear, Linear.smul_comp, rightShift_v, smul_comp, smul_v
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_smul** 是 Mathlib 中的一个引理，位于命名空间 `C
+ochainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_smul (a n' : Int) (hn' : n' + a = n) (x : R) : (x • γ).rightShi
+ft a n' hn' = x • γ.rightShift a n' hn'
+参数：a n' : Int；hn' : n' + a = n；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_v`：rightShift_v (a n' : Int
+) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p + n = p'
+) : (γ.rightShift a n' hn').v p q hp…
+· 使用定理 `CategoryTheory.Linear.smul_comp`：∀ {R : Type w} {inst : Semiring R} {C :
+ Type u} {inst_1 : CategoryTheory.Category.{v, u} C}   {inst_2 : CategoryTheory.
+Preadditive C} [self …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rightShift_smul (a n' : Int) (hn' : n' + a = n) (x : R) :
+lemma rightShift_smul (a n' : ℤ) (hn' : n' + a = n) (x : R) :
     (x • γ).rightShift a n' hn' = x • γ.rightShift a n' hn' := by
   ext p q hpq
   dsimp
@@ -991,30 +947,36 @@ lemma rightShift_smul (a n' : Int) (hn' : n' + a = n) (x : R) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `leftShift_smul` / 引理 `leftShift_smul`
-
-English:
-lemma leftShift_smul
-  given: (a n' : Int) (hn' : n + a = n') (x : R)
-  proof: by
-  ext p q hpq
-  dsimp
-  simp only [leftShift_v _ a n' hn' p q hpq (p + a) (by lia), smul_v, Linear.comp_smul,
-    smul_comm x]
-
-中文:
-引理 leftShift_smul
-  条件: (a n' : 整数) (hn' : n + a = n') (x : R)
-  证明: by
-  ext p q hpq
-  dsimp
-  simp only [leftShift_v _ a n' hn' p q hpq (p + a) (by lia), smul_v, Linear.comp_smul,
-    smul_comm x]
-
-Depends on / 依赖: Linear, Linear.comp_smul, comp_smul, leftShift_v, smul_comm, smul_v
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_smul** 是 Mathlib 中的一个引理，位于命名空间 `Co
+chainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_smul (a n' : Int) (hn' : n + a = n') (x : R) : (x • γ).leftShift
+ a n' hn' = x • γ.leftShift a n' hn'
+参数：a n' : Int；hn' : n + a = n'；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_v`：leftShift_v (a n' : Int) 
+(hn' : n + a = n') (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p' + n = q) 
+: (γ.leftShift a n' hn').v p q hpq …
+· 使用定理 `CategoryTheory.Linear.comp_smul`：∀ {R : Type w} {inst : Semiring R} {C :
+ Type u} {inst_1 : CategoryTheory.Category.{v, u} C}   {inst_2 : CategoryTheory.
+Preadditive C} [self …
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma leftShift_smul (a n' : Int) (hn' : n + a = n') (x : R) :
+lemma leftShift_smul (a n' : ℤ) (hn' : n + a = n') (x : R) :
     (x • γ).leftShift a n' hn' = x • γ.leftShift a n' hn' := by
   ext p q hpq
   dsimp
@@ -1023,28 +985,28 @@ lemma leftShift_smul (a n' : Int) (hn' : n + a = n') (x : R) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `shift_smul` / 引理 `shift_smul`
-
-English:
-lemma shift_smul
-  given: (a : Int) (x : R)
-  proof: by
-  ext p q hpq
-  dsimp
-  simp only [shift_v', smul_v]
-
-中文:
-引理 shift_smul
-  条件: (a : 整数) (x : R)
-  证明: by
-  ext p q hpq
-  dsimp
-  simp only [shift_v', smul_v]
-
-Depends on / 依赖: shift_v, smul_v
+/-
+**CochainComplex.HomComplex.Cochain.shift_smul** 是 Mathlib 中的一个引理，位于命名空间 `Cochai
+nComplex.HomComplex.Cochain`。
+形式化陈述：shift_smul (a : Int) (x : R) : (x • γ).shift a = x • (γ.shift a)
+参数：a : Int；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.shift_v'`：shift_v' (a : Int) (p q : In
+t) (hpq : p + n = q) : (γ.shift a).v p q hpq = γ.v (p + a) (q + a) (by lia)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma shift_smul (a : Int) (x : R) :
+lemma shift_smul (a : ℤ) (x : R) :
     (x • γ).shift a = x • (γ.shift a) := by
   ext p q hpq
   dsimp
@@ -1056,24 +1018,21 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The linear equivalence `Cochain K L n ≃+ Cochain K L⟦a⟧ n'` when `n' + a = n` and
 the category is `R`-linear. -/
 @[simps!]
-/--
-Definition of `rightShiftLinearEquiv` / `rightShiftLinearEquiv` 的定义
+/-
+**CochainComplex.HomComplex.Cochain.rightShiftLinearEquiv** 是 Mathlib 中的一个定义，位于命
+名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightShiftLinearEquiv (n a n' : Int) (hn' : n' + a = n) : Cochain K L n ≃ₗ
+[R] Cochain K (L⟦a⟧) n'
+参数：n a n' : Int；hn' : n' + a = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightShiftLinearEquiv
-  signature: (n a n' : Int) (hn' : n' + a = n)
-  body: (rightShiftAddEquiv K L n a n' hn').toLinearEquiv
-    (fun x γ => by dsimp; simp only [rightShift_smul])
-
-中文:
-定义 rightShiftLinearEquiv
-  签名: (n a n' : 整数) (hn' : n' + a = n)
-  定义体: (rightShiftAddEquiv K L n a n' hn').toLinearEquiv
-    (fun x γ => by dsimp; simp only [rightShift_smul])
-
-Depends on / 依赖: rightShiftAddEquiv, rightShift_smul, toLinearEquiv
+--- 原说明 ---
+The linear equivalence `Cochain K L n ≃+ Cochain K L⟦a⟧ n'` when `n' + a = n` an
+d
+the category is `R`-linear.
 -/
-def rightShiftLinearEquiv (n a n' : Int) (hn' : n' + a = n) :
+def rightShiftLinearEquiv (n a n' : ℤ) (hn' : n' + a = n) :
     Cochain K L n ≃ₗ[R] Cochain K (L⟦a⟧) n' :=
   (rightShiftAddEquiv K L n a n' hn').toLinearEquiv
     (fun x γ => by dsimp; simp only [rightShift_smul])
@@ -1082,24 +1041,21 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The additive equivalence `Cochain K L n ≃+ Cochain (K⟦a⟧) L n'` when `n + a = n'` and
 the category is `R`-linear. -/
 @[simps!]
-/--
-Definition of `leftShiftLinearEquiv` / `leftShiftLinearEquiv` 的定义
+/-
+**CochainComplex.HomComplex.Cochain.leftShiftLinearEquiv** 是 Mathlib 中的一个定义，位于命名
+空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftShiftLinearEquiv (n a n' : Int) (hn : n + a = n') : Cochain K L n ≃ₗ[R
+] Cochain (K⟦a⟧) L n'
+参数：n a n' : Int；hn : n + a = n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftShiftLinearEquiv
-  signature: (n a n' : Int) (hn : n + a = n')
-  body: (leftShiftAddEquiv K L n a n' hn).toLinearEquiv
-    (fun x γ => by dsimp; simp only [leftShift_smul])
-
-中文:
-定义 leftShiftLinearEquiv
-  签名: (n a n' : 整数) (hn : n + a = n')
-  定义体: (leftShiftAddEquiv K L n a n' hn).toLinearEquiv
-    (fun x γ => by dsimp; simp only [leftShift_smul])
-
-Depends on / 依赖: leftShiftAddEquiv, leftShift_smul, toLinearEquiv
+--- 原说明 ---
+The additive equivalence `Cochain K L n ≃+ Cochain (K⟦a⟧) L n'` when `n + a = n'
+` and
+the category is `R`-linear.
 -/
-def leftShiftLinearEquiv (n a n' : Int) (hn : n + a = n') :
+def leftShiftLinearEquiv (n a n' : ℤ) (hn : n + a = n') :
     Cochain K L n ≃ₗ[R] Cochain (K⟦a⟧) L n' :=
   (leftShiftAddEquiv K L n a n' hn).toLinearEquiv
     (fun x γ => by dsimp; simp only [leftShift_smul])
@@ -1107,286 +1063,267 @@ def leftShiftLinearEquiv (n a n' : Int) (hn : n + a = n') :
 set_option backward.defeqAttrib.useBackward true in
 /-- The linear map `Cochain K L n ≃+ Cochain (K⟦a⟧) (L⟦a⟧) n` when the category is `R`-linear. -/
 @[simps!]
-/--
-Definition of `shiftLinearMap` / `shiftLinearMap` 的定义
+/-
+**CochainComplex.HomComplex.Cochain.shiftLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `Co
+chainComplex.HomComplex.Cochain`。
+形式化陈述：shiftLinearMap (n a : Int) : Cochain K L n ->ₗ[R] Cochain (K⟦a⟧) (L⟦a⟧) n 
+where toAddHom
+参数：n a : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftLinearMap
-  signature: (n a : Int)
-  body: shiftAddHom K L n a
-  map_smul' _ _ := by dsimp; simp only [shift_smul]
-
-中文:
-定义 shiftLinearMap
-  签名: (n a : 整数)
-  定义体: shiftAddHom K L n a
-  map_smul' _ _ := by dsimp; simp only [shift_smul]
-
-Depends on / 依赖: shiftAddHom
+--- 原说明 ---
+The linear map `Cochain K L n ≃+ Cochain (K⟦a⟧) (L⟦a⟧) n` when the category is `
+R`-linear.
 -/
-def shiftLinearMap (n a : Int) :
-    Cochain K L n ->ₗ[R] Cochain (K⟦a⟧) (L⟦a⟧) n where
+def shiftLinearMap (n a : ℤ) :
+    Cochain K L n →ₗ[R] Cochain (K⟦a⟧) (L⟦a⟧) n where
   toAddHom := shiftAddHom K L n a
   map_smul' _ _ := by dsimp; simp only [shift_smul]
 
 variable {K L R}
 
 @[simp]
-/--
-lemma `rightShift_units_smul` / 引理 `rightShift_units_smul`
-
-English:
-lemma rightShift_units_smul
-  given: (a n' : Int) (hn' : n' + a = n) (x : Rˣ)
-  proof: by
-  apply rightShift_smul
-
-@[simp]
-
-中文:
-引理 rightShift_units_smul
-  条件: (a n' : 整数) (hn' : n' + a = n) (x : Rˣ)
-  证明: by
-  apply rightShift_smul
-
-@[simp]
-
-Depends on / 依赖: rightShift_smul
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_units_smul** 是 Mathlib 中的一个引理，位于命
+名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_units_smul (a n' : Int) (hn' : n' + a = n) (x : Rˣ) : (x • γ).r
+ightShift a n' hn' = x • γ.rightShift a n' hn'
+参数：a n' : Int；hn' : n' + a = n；x : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_smul`：rightShift_smul (a n'
+ : Int) (hn' : n' + a = n) (x : R) : (x • γ).rightShift a n' hn' = x • γ.rightSh
+ift a n' hn'
 -/
-lemma rightShift_units_smul (a n' : Int) (hn' : n' + a = n) (x : Rˣ) :
+lemma rightShift_units_smul (a n' : ℤ) (hn' : n' + a = n) (x : Rˣ) :
     (x • γ).rightShift a n' hn' = x • γ.rightShift a n' hn' := by
   apply rightShift_smul
 
 @[simp]
-/--
-lemma `leftShift_units_smul` / 引理 `leftShift_units_smul`
-
-English:
-lemma leftShift_units_smul
-  given: (a n' : Int) (hn' : n + a = n') (x : Rˣ)
-  proof: by
-  apply leftShift_smul
-
-中文:
-引理 leftShift_units_smul
-  条件: (a n' : 整数) (hn' : n + a = n') (x : Rˣ)
-  证明: by
-  apply leftShift_smul
-
-Depends on / 依赖: leftShift_smul
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_units_smul** 是 Mathlib 中的一个引理，位于命名
+空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_units_smul (a n' : Int) (hn' : n + a = n') (x : Rˣ) : (x • γ).le
+ftShift a n' hn' = x • γ.leftShift a n' hn'
+参数：a n' : Int；hn' : n + a = n'；x : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_smul`：leftShift_smul (a n' :
+ Int) (hn' : n + a = n') (x : R) : (x • γ).leftShift a n' hn' = x • γ.leftShift 
+a n' hn'
 -/
-lemma leftShift_units_smul (a n' : Int) (hn' : n + a = n') (x : Rˣ) :
+lemma leftShift_units_smul (a n' : ℤ) (hn' : n + a = n') (x : Rˣ) :
     (x • γ).leftShift a n' hn' = x • γ.leftShift a n' hn' := by
   apply leftShift_smul
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `shift_units_smul` / 引理 `shift_units_smul`
-
-English:
-lemma shift_units_smul
-  given: (a : Int) (x : Rˣ)
-  proof: by
-  ext p q hpq
-  dsimp
-  simp only [shift_v', units_smul_v]
-
-@[simp]
-
-中文:
-引理 shift_units_smul
-  条件: (a : 整数) (x : Rˣ)
-  证明: by
-  ext p q hpq
-  dsimp
-  simp only [shift_v', units_smul_v]
-
-@[simp]
-
-Depends on / 依赖: shift_v, units_smul_v
+/-
+**CochainComplex.HomComplex.Cochain.shift_units_smul** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.HomComplex.Cochain`。
+形式化陈述：shift_units_smul (a : Int) (x : Rˣ) : (x • γ).shift a = x • (γ.shift a)
+参数：a : Int；x : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.shift_v'`：shift_v' (a : Int) (p q : In
+t) (hpq : p + n = q) : (γ.shift a).v p q hpq = γ.v (p + a) (q + a) (by lia)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma shift_units_smul (a : Int) (x : Rˣ) :
+lemma shift_units_smul (a : ℤ) (x : Rˣ) :
     (x • γ).shift a = x • (γ.shift a) := by
   ext p q hpq
   dsimp
   simp only [shift_v', units_smul_v]
 
 @[simp]
-/--
-lemma `rightUnshift_smul` / 引理 `rightUnshift_smul`
-
-English:
-lemma rightUnshift_smul
-  given: {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (x : R)
-  proof: by
-  change (rightShiftLinearEquiv R K L n a n' hn).symm (x • γ) = _
-  apply map_smul
-
-@[simp]
-
-中文:
-引理 rightUnshift_smul
-  条件: {n' a : 整数} (γ : Cochain K (L⟦a⟧) n') (n : 整数) (hn : n' + a = n) (x : R)
-  证明: by
-  change (rightShiftLinearEquiv R K L n a n' hn).symm (x • γ) = _
-  apply map_smul
-
-@[simp]
-
-Depends on / 依赖: map_smul, rightShiftLinearEquiv
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_smul** 是 Mathlib 中的一个引理，位于命名空间 
+`CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_smul {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n
+' + a = n) (x : R) : (x • γ).rightUnshift n hn = x • γ.rightUnshift n hn
+参数：γ : Cochain K (L⟦a⟧) n'；n : Int；hn : n' + a = n；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
-lemma rightUnshift_smul {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (x : R) :
+lemma rightUnshift_smul {n' a : ℤ} (γ : Cochain K (L⟦a⟧) n') (n : ℤ) (hn : n' + a = n) (x : R) :
     (x • γ).rightUnshift n hn = x • γ.rightUnshift n hn := by
   change (rightShiftLinearEquiv R K L n a n' hn).symm (x • γ) = _
   apply map_smul
 
 @[simp]
-/--
-lemma `rightUnshift_units_smul` / 引理 `rightUnshift_units_smul`
-
-English:
-lemma rightUnshift_units_smul
-  statement: {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int)
-  proof: by
-  apply rightUnshift_smul
-
-@[simp]
-
-中文:
-引理 rightUnshift_units_smul
-  结论: {n' a : 整数} (γ : Cochain K (L⟦a⟧) n') (n : 整数)
-  证明: by
-  apply rightUnshift_smul
-
-@[simp]
-
-Depends on / 依赖: rightUnshift_smul
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_units_smul** 是 Mathlib 中的一个引理，位
+于命名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_units_smul {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (
+hn : n' + a = n) (x : Rˣ) : (x • γ).rightUnshift n hn = x • γ.rightUnshift n hn
+参数：γ : Cochain K (L⟦a⟧) n'；n : Int；hn : n' + a = n；x : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightUnshift_smul`：rightUnshift_smul {
+n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (x : R) : (x •
+ γ).rightUnshift n hn = x • γ.rightUnshif…
 -/
-lemma rightUnshift_units_smul {n' a : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int)
+lemma rightUnshift_units_smul {n' a : ℤ} (γ : Cochain K (L⟦a⟧) n') (n : ℤ)
     (hn : n' + a = n) (x : Rˣ) :
     (x • γ).rightUnshift n hn = x • γ.rightUnshift n hn := by
   apply rightUnshift_smul
 
 @[simp]
-/--
-lemma `leftUnshift_smul` / 引理 `leftUnshift_smul`
-
-English:
-lemma leftUnshift_smul
-  given: {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') (x : R)
-  proof: by
-  change (leftShiftLinearEquiv R K L n a n' hn).symm (x • γ) = _
-  apply map_smul
-
-@[simp]
-
-中文:
-引理 leftUnshift_smul
-  条件: {n' a : 整数} (γ : Cochain (K⟦a⟧) L n') (n : 整数) (hn : n + a = n') (x : R)
-  证明: by
-  change (leftShiftLinearEquiv R K L n a n' hn).symm (x • γ) = _
-  apply map_smul
-
-@[simp]
-
-Depends on / 依赖: leftShiftLinearEquiv, map_smul
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift_smul** 是 Mathlib 中的一个引理，位于命名空间 `
+CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift_smul {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n 
++ a = n') (x : R) : (x • γ).leftUnshift n hn = x • γ.leftUnshift n hn
+参数：γ : Cochain (K⟦a⟧) L n'；n : Int；hn : n + a = n'；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
-lemma leftUnshift_smul {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') (x : R) :
+lemma leftUnshift_smul {n' a : ℤ} (γ : Cochain (K⟦a⟧) L n') (n : ℤ) (hn : n + a = n') (x : R) :
     (x • γ).leftUnshift n hn = x • γ.leftUnshift n hn := by
   change (leftShiftLinearEquiv R K L n a n' hn).symm (x • γ) = _
   apply map_smul
 
 @[simp]
-/--
-lemma `leftUnshift_units_smul` / 引理 `leftUnshift_units_smul`
-
-English:
-lemma leftUnshift_units_smul
-  statement: {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int)
-  proof: by
-  apply leftUnshift_smul
-
-中文:
-引理 leftUnshift_units_smul
-  结论: {n' a : 整数} (γ : Cochain (K⟦a⟧) L n') (n : 整数)
-  证明: by
-  apply leftUnshift_smul
-
-Depends on / 依赖: leftUnshift_smul
+/-
+**CochainComplex.HomComplex.Cochain.leftUnshift_units_smul** 是 Mathlib 中的一个引理，位于
+命名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftUnshift_units_smul {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (h
+n : n + a = n') (x : Rˣ) : (x • γ).leftUnshift n hn = x • γ.leftUnshift n hn
+参数：γ : Cochain (K⟦a⟧) L n'；n : Int；hn : n + a = n'；x : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftUnshift_smul`：leftUnshift_smul {n'
+ a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n') (x : R) : (x • γ
+).leftUnshift n hn = x • γ.leftUnshift n…
 -/
-lemma leftUnshift_units_smul {n' a : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int)
+lemma leftUnshift_units_smul {n' a : ℤ} (γ : Cochain (K⟦a⟧) L n') (n : ℤ)
     (hn : n + a = n') (x : Rˣ) :
     (x • γ).leftUnshift n hn = x • γ.leftUnshift n hn := by
   apply leftUnshift_smul
-
-/--
-lemma `rightUnshift_comp` / 引理 `rightUnshift_comp`
-
-English:
-lemma rightUnshift_comp
-  statement: {m : Int} {a : Int} (γ' : Cochain L (M⟦a⟧) m) {nm : Int} (hnm : n + m = nm)
-  proof: by
-  ext p q hpq
-  rw [(γ.comp γ' hnm).rightUnshift_v nm' hnm' p q hpq (p + n + m) (by lia)]; rw [γ.comp_v γ' hnm p (p + n) (p + n + m) rfl rfl]; rw [comp_v _ _ (show n + m' = nm' by lia) p (p + n) q (by lia) (by lia)]; rw [γ'.rightUnshift_v m' hm' (p + n) q (by lia) (p + n + m) rfl]; rw [assoc]
-
-中文:
-引理 rightUnshift_comp
-  结论: {m : 整数} {a : 整数} (γ' : Cochain L (M⟦a⟧) m) {nm : 整数} (hnm : n + m = nm)
-  证明: by
-  ext p q hpq
-  rw [(γ.comp γ' hnm).rightUnshift_v nm' hnm' p q hpq (p + n + m) (by lia)]; rw [γ.comp_v γ' hnm p (p + n) (p + n + m) rfl rfl]; rw [comp_v _ _ (show n + m' = nm' by lia) p (p + n) q (by lia) (by lia)]; rw [γ'.rightUnshift_v m' hm' (p + n) q (by lia) (p + n + m) rfl]; rw [assoc]
-
-Depends on / 依赖: comp_v, rightUnshift_v
+/-
+**CochainComplex.HomComplex.Cochain.rightUnshift_comp** 是 Mathlib 中的一个引理，位于命名空间 
+`CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightUnshift_comp {m : Int} {a : Int} (γ' : Cochain L (M⟦a⟧) m) {nm : Int}
+ (hnm : n + m = nm) (nm' : Int) (hnm' : nm + a = nm') (m' : Int) (hm' : m + a = 
+m') : (γ.comp γ' hnm).rightUnshift nm' hnm' = γ.comp (γ'.rightUnshift m' hm') (b
+y lia)
+参数：γ' : Cochain L (M⟦a⟧) m；hnm : n + m = nm；nm' : Int；hnm' : nm + a = nm'；m' : I
+nt；hm' : m + a = m'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightUnshift_v`：rightUnshift_v {n' a :
+ Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (p q : Int) (hpq : p
+ + n = q) (p' : Int) (hp' : p + n' = p…
+· 使用引理 `CochainComplex.HomComplex.Cochain.comp_v`：comp_v {n₁ n₂ n₁₂ : Int} (z₁ :
+ Cochain F G n₁) (z₂ : Cochain G K n₂) (h : n₁ + n₂ = n₁₂) (p₁ p₂ p₃ : Int) (h₁ 
+: p₁ + n₁ = p₂) (h₂ : p₂ + n₂ …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 -/
-lemma rightUnshift_comp {m : Int} {a : Int} (γ' : Cochain L (M⟦a⟧) m) {nm : Int} (hnm : n + m = nm)
-    (nm' : Int) (hnm' : nm + a = nm') (m' : Int) (hm' : m + a = m') :
+lemma rightUnshift_comp {m : ℤ} {a : ℤ} (γ' : Cochain L (M⟦a⟧) m) {nm : ℤ} (hnm : n + m = nm)
+    (nm' : ℤ) (hnm' : nm + a = nm') (m' : ℤ) (hm' : m + a = m') :
     (γ.comp γ' hnm).rightUnshift nm' hnm' =
       γ.comp (γ'.rightUnshift m' hm') (by lia) := by
   ext p q hpq
-  rw [(γ.comp γ' hnm).rightUnshift_v nm' hnm' p q hpq (p + n + m) (by lia)]; rw [γ.comp_v γ' hnm p (p + n) (p + n + m) rfl rfl]; rw [comp_v _ _ (show n + m' = nm' by lia) p (p + n) q (by lia) (by lia)]; rw [γ'.rightUnshift_v m' hm' (p + n) q (by lia) (p + n + m) rfl]; rw [assoc]
+  rw [(γ.comp γ' hnm).rightUnshift_v nm' hnm' p q hpq (p + n + m) (by lia),
+    γ.comp_v γ' hnm p (p + n) (p + n + m) rfl rfl,
+    comp_v _ _ (show n + m' = nm' by lia) p (p + n) q (by lia) (by lia),
+    γ'.rightUnshift_v m' hm' (p + n) q (by lia) (p + n + m) rfl, assoc]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `leftShift_comp` / 引理 `leftShift_comp`
-
-English:
-lemma leftShift_comp
-  statement: (a n' : Int) (hn' : n + a = n') {m t t' : Int} (γ' : Cochain L M m)
-  proof: by
-  ext p q hpq
-  have h' : n' + m = t' := by lia
-  dsimp
-  simp only [Cochain.comp_v _ _ h' p (p + n') q rfl (by lia),
-    γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia),
-    (γ.comp γ' h).leftShift_v a t' (by lia) p q hpq (p + a) (by lia),
-    smul_smul, Linear.units_smul_comp, assoc, Int.negOnePow_add, ← mul_assoc, ← h',
-    comp_v _ _ h (p + a) (p + n') q (by lia) (by lia)]
-  congr 2
-  rw [add_comm n']; rw [mul_add]; rw [Int.negOnePow_add]
-
-@[simp]
-
-中文:
-引理 leftShift_comp
-  结论: (a n' : 整数) (hn' : n + a = n') {m t t' : 整数} (γ' : Cochain L M m)
-  证明: by
-  ext p q hpq
-  have h' : n' + m = t' := by lia
-  dsimp
-  simp only [Cochain.comp_v _ _ h' p (p + n') q rfl (by lia),
-    γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia),
-    (γ.comp γ' h).leftShift_v a t' (by lia) p q hpq (p + a) (by lia),
-    smul_smul, Linear.units_smul_comp, assoc, Int.negOnePow_add, ← mul_assoc, ← h',
-    comp_v _ _ h (p + a) (p + n') q (by lia) (by lia)]
-  congr 2
-  rw [add_comm n']; rw [mul_add]; rw [Int.negOnePow_add]
-
-@[simp]
-
-Depends on / 依赖: Cochain, Cochain.comp_v, Int.negOnePow_add, Linear, Linear.units_smul_comp, add_comm, comp_v, leftShift_v, mul_add, mul_assoc, negOnePow_add, smul_smul, units_smul_comp
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_comp** 是 Mathlib 中的一个引理，位于命名空间 `Co
+chainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_comp (a n' : Int) (hn' : n + a = n') {m t t' : Int} (γ' : Cochai
+n L M m) (h : n + m = t) (ht' : t + a = t') : (γ.comp γ' h).leftShift a t' ht' =
+ (a * m).negOnePow • (γ.leftShift a n' hn').comp γ' (by rw [← ht', ← h, ← hn', a
+dd_assoc, add_comm a, add_assoc])
+参数：a n' : Int；hn' : n + a = n'；γ' : Cochain L M m；h : n + m = t；ht' : t + a = t'
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_v`：leftShift_v (a n' : Int) 
+(hn' : n + a = n') (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p' + n = q) 
+: (γ.leftShift a n' hn').v p q hpq …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Int.negOnePow_add`：negOnePow_add (n₁ n₂ : Int) : (n₁ + n₂).negOnePow = n
+₁.negOnePow * n₂.negOnePow
+· 使用引理 `CochainComplex.HomComplex.Cochain.comp_v`：comp_v {n₁ n₂ n₁₂ : Int} (z₁ :
+ Cochain F G n₁) (z₂ : Cochain G K n₂) (h : n₁ + n₂ = n₁₂) (p₁ p₂ p₃ : Int) (h₁ 
+: p₁ + n₁ = p₂) (h₂ : p₂ + n₂ …
+· 使用引理 `CategoryTheory.Linear.units_smul_comp`：units_smul_comp {X Y Z : C} (r : 
+Rˣ) (f : X ⟶ Y) (g : Y ⟶ Z) : (r • f) ≫ g = r • f ≫ g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 -/
-lemma leftShift_comp (a n' : Int) (hn' : n + a = n') {m t t' : Int} (γ' : Cochain L M m)
+lemma leftShift_comp (a n' : ℤ) (hn' : n + a = n') {m t t' : ℤ} (γ' : Cochain L M m)
     (h : n + m = t) (ht' : t + a = t') :
     (γ.comp γ' h).leftShift a t' ht' = (a * m).negOnePow • (γ.leftShift a n' hn').comp γ'
       (by rw [← ht', ← h, ← hn', add_assoc, add_comm a, add_assoc]) := by
@@ -1399,80 +1336,53 @@ lemma leftShift_comp (a n' : Int) (hn' : n + a = n') {m t t' : Int} (γ' : Cocha
     smul_smul, Linear.units_smul_comp, assoc, Int.negOnePow_add, ← mul_assoc, ← h',
     comp_v _ _ h (p + a) (p + n') q (by lia) (by lia)]
   congr 2
-  rw [add_comm n']; rw [mul_add]; rw [Int.negOnePow_add]
+  rw [add_comm n', mul_add, Int.negOnePow_add]
 
 @[simp]
-/--
-lemma `leftShift_comp_zero_cochain` / 引理 `leftShift_comp_zero_cochain`
-
-English:
-lemma leftShift_comp_zero_cochain
-  given: (a n' : Int) (hn' : n + a = n') (γ' : Cochain L M 0)
-  proof: by
-  rw [leftShift_comp γ a n' hn' γ' (add_zero _) hn']; rw [mul_zero]; rw [Int.negOnePow_zero]; rw [one_smul]
-
-中文:
-引理 leftShift_comp_zero_cochain
-  条件: (a n' : 整数) (hn' : n + a = n') (γ' : Cochain L M 0)
-  证明: by
-  rw [leftShift_comp γ a n' hn' γ' (add_zero _) hn']; rw [mul_zero]; rw [Int.negOnePow_zero]; rw [one_smul]
-
-Depends on / 依赖: Int.negOnePow_zero, add_zero, leftShift_comp, mul_zero, negOnePow_zero, one_smul
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_comp_zero_cochain** 是 Mathlib 中的一个
+引理，位于命名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_comp_zero_cochain (a n' : Int) (hn' : n + a = n') (γ' : Cochain 
+L M 0) : (γ.comp γ' (add_zero n)).leftShift a n' hn' = (γ.leftShift a n' hn').co
+mp γ' (add_zero n')
+参数：a n' : Int；hn' : n + a = n'；γ' : Cochain L M 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_comp`：leftShift_comp (a n' :
+ Int) (hn' : n + a = n') {m t t' : Int} (γ' : Cochain L M m) (h : n + m = t) (ht
+' : t + a = t') : (γ.comp γ' h).leftSh…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用引理 `Int.negOnePow_zero`：negOnePow_zero : negOnePow 0 = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
-lemma leftShift_comp_zero_cochain (a n' : Int) (hn' : n + a = n') (γ' : Cochain L M 0) :
+lemma leftShift_comp_zero_cochain (a n' : ℤ) (hn' : n + a = n') (γ' : Cochain L M 0) :
     (γ.comp γ' (add_zero n)).leftShift a n' hn' =
       (γ.leftShift a n' hn').comp γ' (add_zero n') := by
-  rw [leftShift_comp γ a n' hn' γ' (add_zero _) hn']; rw [mul_zero]; rw [Int.negOnePow_zero]; rw [one_smul]
+  rw [leftShift_comp γ a n' hn' γ' (add_zero _) hn', mul_zero, Int.negOnePow_zero, one_smul]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `δ_rightShift` / 引理 `δ_rightShift`
-
-English:
-lemma δ_rightShift
-  given: (a n' m' : Int) (hn' : n' + a = n) (m : Int) (hm' : m' + a = m)
-  proof: by
-  by_cases hnm : n + 1 = m
-  · have hnm' : n' + 1 = m' := by lia
-    ext p q hpq
-    dsimp
-    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl]; rw [δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.rightShift_v a n' hn' p (p + n') rfl (p + n) rfl]; rw [γ.rightShift_v a n' hn' (p + 1) q _ (p + m) (by lia)]
-    simp only [shiftFunctorObjXIso, shiftFunctor_obj_d',
-      Linear.comp_units_smul, assoc, HomologicalComplex.XIsoOfEq_inv_comp_d,
-      add_comp, HomologicalComplex.d_comp_XIsoOfEq_inv, Linear.units_smul_comp, smul_add,
-      add_right_inj, smul_smul]
-    simp only [← hm', add_comm m', Int.negOnePow_add, ← mul_assoc,
-      Int.units_mul_self, one_mul]
-  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
-    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [rightShift_zero]; rw [smul_zero]
-
-中文:
-引理 δ_rightShift
-  条件: (a n' m' : 整数) (hn' : n' + a = n) (m : 整数) (hm' : m' + a = m)
-  证明: by
-  by_cases hnm : n + 1 = m
-  · have hnm' : n' + 1 = m' := by lia
-    ext p q hpq
-    dsimp
-    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl]; rw [δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.rightShift_v a n' hn' p (p + n') rfl (p + n) rfl]; rw [γ.rightShift_v a n' hn' (p + 1) q _ (p + m) (by lia)]
-    simp only [shiftFunctorObjXIso, shiftFunctor_obj_d',
-      Linear.comp_units_smul, assoc, HomologicalComplex.XIsoOfEq_inv_comp_d,
-      add_comp, HomologicalComplex.d_comp_XIsoOfEq_inv, Linear.units_smul_comp, smul_add,
-      add_right_inj, smul_smul]
-    simp only [← hm', add_comm m', Int.negOnePow_add, ← mul_assoc,
-      Int.units_mul_self, one_mul]
-  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
-    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [rightShift_zero]; rw [smul_zero]
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.XIsoOfEq_inv_comp_d, Linear, Linear.comp_units_smul, XIsoOfEq_inv_comp_d, comp_units_smul, rightShift_v, shiftFunctorObjXIso, shiftFunctor_obj_d
+/-
+**CochainComplex.HomComplex.Cochain.** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.H
+omComplex.Cochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_rightShift (a n' m' : Int) (hn' : n' + a = n) (m : Int) (hm' : m' + a = m) :
+lemma δ_rightShift (a n' m' : ℤ) (hn' : n' + a = n) (m : ℤ) (hm' : m' + a = m) :
     δ n' m' (γ.rightShift a n' hn') = a.negOnePow • (δ n m γ).rightShift a m' hm' := by
   by_cases hnm : n + 1 = m
   · have hnm' : n' + 1 = m' := by lia
     ext p q hpq
     dsimp
-    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl]; rw [δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.rightShift_v a n' hn' p (p + n') rfl (p + n) rfl]; rw [γ.rightShift_v a n' hn' (p + 1) q _ (p + m) (by lia)]
+    rw [(δ n m γ).rightShift_v a m' hm' p q hpq _ rfl,
+      δ_v n m hnm _ p (p + m) rfl (p + n) (p + 1) (by lia) rfl,
+      δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl,
+      γ.rightShift_v a n' hn' p (p + n') rfl (p + n) rfl,
+      γ.rightShift_v a n' hn' (p + 1) q _ (p + m) (by lia)]
     simp only [shiftFunctorObjXIso, shiftFunctor_obj_d',
       Linear.comp_units_smul, assoc, HomologicalComplex.XIsoOfEq_inv_comp_d,
       add_comp, HomologicalComplex.d_comp_XIsoOfEq_inv, Linear.units_smul_comp, smul_add,
@@ -1480,35 +1390,17 @@ lemma δ_rightShift (a n' m' : Int) (hn' : n' + a = n) (m : Int) (hm' : m' + a =
     simp only [← hm', add_comm m', Int.negOnePow_add, ← mul_assoc,
       Int.units_mul_self, one_mul]
   · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
-    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [rightShift_zero]; rw [smul_zero]
+    rw [δ_shape _ _ hnm', δ_shape _ _ hnm, rightShift_zero, smul_zero]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `δ_rightUnshift` / 引理 `δ_rightUnshift`
-
-English:
-lemma δ_rightUnshift
-  statement: {a n' : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-  proof: by
-  obtain ⟨γ', rfl⟩ := (rightShiftAddEquiv K L n a n' hn).surjective γ
-  dsimp
-  simp only [rightUnshift_rightShift, γ'.δ_rightShift a n' m' hn m hm', rightUnshift_units_smul,
-    smul_smul, Int.units_mul_self, one_smul]
-
-中文:
-引理 δ_rightUnshift
-  结论: {a n' : 整数} (γ : Cochain K (L⟦a⟧) n') (n : 整数) (hn : n' + a = n)
-  证明: by
-  obtain ⟨γ', rfl⟩ := (rightShiftAddEquiv K L n a n' hn).surjective γ
-  dsimp
-  simp only [rightUnshift_rightShift, γ'.δ_rightShift a n' m' hn m hm', rightUnshift_units_smul,
-    smul_smul, Int.units_mul_self, one_smul]
-
-Depends on / 依赖: Int.units_mul_self, one_smul, rightShiftAddEquiv, rightUnshift_rightShift, rightUnshift_units_smul, smul_smul, surjective, units_mul_self
+/-
+**CochainComplex.HomComplex.Cochain.** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.H
+omComplex.Cochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_rightUnshift {a n' : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-    (m m' : Int) (hm' : m' + a = m) :
+lemma δ_rightUnshift {a n' : ℤ} (γ : Cochain K (L⟦a⟧) n') (n : ℤ) (hn : n' + a = n)
+    (m m' : ℤ) (hm' : m' + a = m) :
     δ n m (γ.rightUnshift n hn) = a.negOnePow • (δ n' m' γ).rightUnshift m hm' := by
   obtain ⟨γ', rfl⟩ := (rightShiftAddEquiv K L n a n' hn).surjective γ
   dsimp
@@ -1517,60 +1409,22 @@ lemma δ_rightUnshift {a n' : Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn 
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `δ_leftShift` / 引理 `δ_leftShift`
-
-English:
-lemma δ_leftShift
-  given: (a n' m' : Int) (hn' : n + a = n') (m : Int) (hm' : m + a = m')
-  proof: by
-  by_cases hnm : n + 1 = m
-  · have hnm' : n' + 1 = m' := by lia
-    ext p q hpq
-    dsimp
-    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia)]; rw [δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia)]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia)]; rw [γ.leftShift_v a n' hn' (p + 1) q (by lia) (p + 1 + a) (by lia)]
-    simp only [shiftFunctor_obj_X, shiftFunctorObjXIso, HomologicalComplex.XIsoOfEq_rfl,
-      Iso.refl_hom, id_comp, Linear.units_smul_comp, shiftFunctor_obj_d',
-      Linear.comp_units_smul, smul_add, smul_smul]
-    congr 2
-    · rw [← hnm', add_comm n', mul_add, mul_one]
-      simp only [Int.negOnePow_add, ← mul_assoc, Int.units_mul_self, one_mul]
-    · simp only [← Int.negOnePow_add, ← hn', ← hm', ← hnm]
-      congr 1
-      linarith
-  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
-    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [leftShift_zero]; rw [smul_zero]
-
-中文:
-引理 δ_leftShift
-  条件: (a n' m' : 整数) (hn' : n + a = n') (m : 整数) (hm' : m + a = m')
-  证明: by
-  by_cases hnm : n + 1 = m
-  · have hnm' : n' + 1 = m' := by lia
-    ext p q hpq
-    dsimp
-    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia)]; rw [δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia)]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia)]; rw [γ.leftShift_v a n' hn' (p + 1) q (by lia) (p + 1 + a) (by lia)]
-    simp only [shiftFunctor_obj_X, shiftFunctorObjXIso, HomologicalComplex.XIsoOfEq_rfl,
-      Iso.refl_hom, id_comp, Linear.units_smul_comp, shiftFunctor_obj_d',
-      Linear.comp_units_smul, smul_add, smul_smul]
-    congr 2
-    · rw [← hnm', add_comm n', mul_add, mul_one]
-      simp only [Int.negOnePow_add, ← mul_assoc, Int.units_mul_self, one_mul]
-    · simp only [← Int.negOnePow_add, ← hn', ← hm', ← hnm]
-      congr 1
-      linarith
-  · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
-    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [leftShift_zero]; rw [smul_zero]
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.XIsoOfEq_rfl, XIsoOfEq_rfl, leftShift_v, shiftFunctorObjXIso, shiftFunctor_obj_X
+/-
+**CochainComplex.HomComplex.Cochain.** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.H
+omComplex.Cochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_leftShift (a n' m' : Int) (hn' : n + a = n') (m : Int) (hm' : m + a = m') :
+lemma δ_leftShift (a n' m' : ℤ) (hn' : n + a = n') (m : ℤ) (hm' : m + a = m') :
     δ n' m' (γ.leftShift a n' hn') = a.negOnePow • (δ n m γ).leftShift a m' hm' := by
   by_cases hnm : n + 1 = m
   · have hnm' : n' + 1 = m' := by lia
     ext p q hpq
     dsimp
-    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia)]; rw [δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia)]; rw [δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl]; rw [γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia)]; rw [γ.leftShift_v a n' hn' (p + 1) q (by lia) (p + 1 + a) (by lia)]
+    rw [(δ n m γ).leftShift_v a m' hm' p q hpq (p + a) (by lia),
+      δ_v n m hnm _ (p + a) q (by lia) (p + n') (p + 1 + a) (by lia) (by lia),
+      δ_v n' m' hnm' _ p q hpq (p + n') (p + 1) (by lia) rfl,
+      γ.leftShift_v a n' hn' p (p + n') rfl (p + a) (by lia),
+      γ.leftShift_v a n' hn' (p + 1) q (by lia) (p + 1 + a) (by lia)]
     simp only [shiftFunctor_obj_X, shiftFunctorObjXIso, HomologicalComplex.XIsoOfEq_rfl,
       Iso.refl_hom, id_comp, Linear.units_smul_comp, shiftFunctor_obj_d',
       Linear.comp_units_smul, smul_add, smul_smul]
@@ -1581,35 +1435,17 @@ lemma δ_leftShift (a n' m' : Int) (hn' : n + a = n') (m : Int) (hm' : m + a = m
       congr 1
       linarith
   · have hnm' : ¬ n' + 1 = m' := fun _ => hnm (by lia)
-    rw [δ_shape _ _ hnm']; rw [δ_shape _ _ hnm]; rw [leftShift_zero]; rw [smul_zero]
+    rw [δ_shape _ _ hnm', δ_shape _ _ hnm, leftShift_zero, smul_zero]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `δ_leftUnshift` / 引理 `δ_leftUnshift`
-
-English:
-lemma δ_leftUnshift
-  statement: {a n' : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-  proof: by
-  obtain ⟨γ', rfl⟩ := (leftShiftAddEquiv K L n a n' hn).surjective γ
-  dsimp
-  simp only [leftUnshift_leftShift, γ'.δ_leftShift a n' m' hn m hm', leftUnshift_units_smul,
-    smul_smul, Int.units_mul_self, one_smul]
-
-中文:
-引理 δ_leftUnshift
-  结论: {a n' : 整数} (γ : Cochain (K⟦a⟧) L n') (n : 整数) (hn : n + a = n')
-  证明: by
-  obtain ⟨γ', rfl⟩ := (leftShiftAddEquiv K L n a n' hn).surjective γ
-  dsimp
-  simp only [leftUnshift_leftShift, γ'.δ_leftShift a n' m' hn m hm', leftUnshift_units_smul,
-    smul_smul, Int.units_mul_self, one_smul]
-
-Depends on / 依赖: Int.units_mul_self, leftShiftAddEquiv, leftUnshift_leftShift, leftUnshift_units_smul, one_smul, smul_smul, surjective, units_mul_self
+/-
+**CochainComplex.HomComplex.Cochain.** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.H
+omComplex.Cochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_leftUnshift {a n' : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-    (m m' : Int) (hm' : m + a = m') :
+lemma δ_leftUnshift {a n' : ℤ} (γ : Cochain (K⟦a⟧) L n') (n : ℤ) (hn : n + a = n')
+    (m m' : ℤ) (hm' : m + a = m') :
     δ n m (γ.leftUnshift n hn) = a.negOnePow • (δ n' m' γ).leftUnshift m hm' := by
   obtain ⟨γ', rfl⟩ := (leftShiftAddEquiv K L n a n' hn).surjective γ
   dsimp
@@ -1618,42 +1454,12 @@ lemma δ_leftUnshift {a n' : Int} (γ : Cochain (K⟦a⟧) L n') (n : Int) (hn :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `δ_shift` / 引理 `δ_shift`
-
-English:
-lemma δ_shift
-  given: (a m : Int)
-  proof: by
-  by_cases hnm : n + 1 = m
-  · ext p q hpq
-    dsimp
-    simp only [shift_v', shiftFunctor_obj_d',
-      δ_v n m hnm _ p q hpq (q - 1) (p + 1) rfl rfl,
-      δ_v n m hnm _ (p + a) (q + a) (by lia) (q - 1 + a) (p + 1 + a)
-        (by lia) (by lia),
-      smul_add, Linear.units_smul_comp, Linear.comp_units_smul, add_right_inj]
-    rw [smul_comm]
-  · rw [δ_shape _ _ hnm, δ_shape _ _ hnm, shift_zero, smul_zero]
-
-中文:
-引理 δ_shift
-  条件: (a m : 整数)
-  证明: by
-  by_cases hnm : n + 1 = m
-  · ext p q hpq
-    dsimp
-    simp only [shift_v', shiftFunctor_obj_d',
-      δ_v n m hnm _ p q hpq (q - 1) (p + 1) rfl rfl,
-      δ_v n m hnm _ (p + a) (q + a) (by lia) (q - 1 + a) (p + 1 + a)
-        (by lia) (by lia),
-      smul_add, Linear.units_smul_comp, Linear.comp_units_smul, add_right_inj]
-    rw [smul_comm]
-  · rw [δ_shape _ _ hnm, δ_shape _ _ hnm, shift_zero, smul_zero]
-
-Depends on / 依赖: Linear, Linear.comp_units_smul, Linear.units_smul_comp, add_right_inj, comp_units_smul, shiftFunctor_obj_d, shift_v, shift_zero, smul_add, smul_comm, smul_zero, units_smul_comp
+/-
+**CochainComplex.HomComplex.Cochain.** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.H
+omComplex.Cochain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_shift (a m : Int) :
+lemma δ_shift (a m : ℤ) :
     δ n m (γ.shift a) = a.negOnePow • (δ n m γ).shift a := by
   by_cases hnm : n + 1 = m
   · ext p q hpq
@@ -1668,96 +1474,138 @@ lemma δ_shift (a m : Int) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `leftShift_rightShift` / 引理 `leftShift_rightShift`
-
-English:
-lemma leftShift_rightShift
-  given: (a n' : Int) (hn' : n' + a = n)
-  proof: by
-  ext p q hpq
-  simp only [leftShift_v _ a n hn' p q hpq (p + a) (by lia),
-    rightShift_v _ a n' hn' (p + a) q (by lia) (q + a) (by lia), units_smul_v, shift_v']
-  dsimp
-  rw [id_comp]; rw [comp_id]
-
-中文:
-引理 leftShift_rightShift
-  条件: (a n' : 整数) (hn' : n' + a = n)
-  证明: by
-  ext p q hpq
-  simp only [leftShift_v _ a n hn' p q hpq (p + a) (by lia),
-    rightShift_v _ a n' hn' (p + a) q (by lia) (q + a) (by lia), units_smul_v, shift_v']
-  dsimp
-  rw [id_comp]; rw [comp_id]
-
-Depends on / 依赖: comp_id, id_comp, leftShift_v, rightShift_v, shift_v, units_smul_v
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_rightShift** 是 Mathlib 中的一个引理，位于命名
+空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_rightShift (a n' : Int) (hn' : n' + a = n) : (γ.rightShift a n' 
+hn').leftShift a n hn' = (a * n + (a * (a - 1)) / 2).negOnePow • γ.shift a
+参数：a n' : Int；hn' : n' + a = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_v`：leftShift_v (a n' : Int) 
+(hn' : n + a = n') (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p' + n = q) 
+: (γ.leftShift a n' hn').v p q hpq …
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_v`：rightShift_v (a n' : Int
+) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p + n = p'
+) : (γ.rightShift a n' hn').v p q hp…
+· 使用引理 `CochainComplex.HomComplex.Cochain.shift_v'`：shift_v' (a : Int) (p q : In
+t) (hpq : p + n = q) : (γ.shift a).v p q hpq = γ.v (p + a) (q + a) (by lia)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma leftShift_rightShift (a n' : Int) (hn' : n' + a = n) :
+lemma leftShift_rightShift (a n' : ℤ) (hn' : n' + a = n) :
     (γ.rightShift a n' hn').leftShift a n hn' =
       (a * n + (a * (a - 1)) / 2).negOnePow • γ.shift a := by
   ext p q hpq
   simp only [leftShift_v _ a n hn' p q hpq (p + a) (by lia),
     rightShift_v _ a n' hn' (p + a) q (by lia) (q + a) (by lia), units_smul_v, shift_v']
   dsimp
-  rw [id_comp]; rw [comp_id]
+  rw [id_comp, comp_id]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `rightShift_leftShift` / 引理 `rightShift_leftShift`
-
-English:
-lemma rightShift_leftShift
-  given: (a n' : Int) (hn' : n + a = n')
-  proof: by
-  ext p q hpq
-  simp only [rightShift_v _ a n hn' p q hpq (q + a) (by lia),
-    leftShift_v _ a n' hn' p (q + a) (by lia) (p + a) (by lia), units_smul_v, shift_v']
-  dsimp
-  rw [id_comp]; rw [comp_id]
-
-中文:
-引理 rightShift_leftShift
-  条件: (a n' : 整数) (hn' : n + a = n')
-  证明: by
-  ext p q hpq
-  simp only [rightShift_v _ a n hn' p q hpq (q + a) (by lia),
-    leftShift_v _ a n' hn' p (q + a) (by lia) (p + a) (by lia), units_smul_v, shift_v']
-  dsimp
-  rw [id_comp]; rw [comp_id]
-
-Depends on / 依赖: comp_id, id_comp, leftShift_v, rightShift_v, shift_v, units_smul_v
+/-
+**CochainComplex.HomComplex.Cochain.rightShift_leftShift** 是 Mathlib 中的一个引理，位于命名
+空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：rightShift_leftShift (a n' : Int) (hn' : n + a = n') : (γ.leftShift a n' h
+n').rightShift a n hn' = (a * n' + (a * (a - 1)) / 2).negOnePow • γ.shift a
+参数：a n' : Int；hn' : n + a = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_v`：rightShift_v (a n' : Int
+) (hn' : n' + a = n) (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p + n = p'
+) : (γ.rightShift a n' hn').v p q hp…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_v`：leftShift_v (a n' : Int) 
+(hn' : n + a = n') (p q : Int) (hpq : p + n' = q) (p' : Int) (hp' : p' + n = q) 
+: (γ.leftShift a n' hn').v p q hpq …
+· 使用引理 `CochainComplex.HomComplex.Cochain.shift_v'`：shift_v' (a : Int) (p q : In
+t) (hpq : p + n = q) : (γ.shift a).v p q hpq = γ.v (p + a) (q + a) (by lia)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma rightShift_leftShift (a n' : Int) (hn' : n + a = n') :
+lemma rightShift_leftShift (a n' : ℤ) (hn' : n + a = n') :
     (γ.leftShift a n' hn').rightShift a n hn' =
       (a * n' + (a * (a - 1)) / 2).negOnePow • γ.shift a := by
   ext p q hpq
   simp only [rightShift_v _ a n hn' p q hpq (q + a) (by lia),
     leftShift_v _ a n' hn' p (q + a) (by lia) (p + a) (by lia), units_smul_v, shift_v']
   dsimp
-  rw [id_comp]; rw [comp_id]
+  rw [id_comp, comp_id]
 
-/--
-lemma `leftShift_rightShift_eq_negOnePow_rightShift_leftShift` / 引理 `leftShift_rightShift_eq_negOnePow_rightShift_leftShift`
+/-- The left and right shift of cochains commute only up to a sign. -/
+/-
+**CochainComplex.HomComplex.Cochain.leftShift_rightShift_eq_negOnePow_rightShift
+_leftShift** 是 Mathlib 中的一个引理，位于命名空间 `CochainComplex.HomComplex.Cochain`。
+形式化陈述：leftShift_rightShift_eq_negOnePow_rightShift_leftShift (a n' n'' : Int) (h
+n' : n' + a = n) (hn'' : n + a = n'') : (γ.rightShift a n' hn').leftShift a n hn
+' = a.negOnePow • (γ.leftShift a n'' hn'').rightShift a n hn''
+参数：a n' n'' : Int；hn' : n' + a = n；hn'' : n + a = n''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.leftShift_rightShift`：leftShift_rightS
+hift (a n' : Int) (hn' : n' + a = n) : (γ.rightShift a n' hn').leftShift a n hn'
+ = (a * n + (a * (a - 1)) / 2).negOnePow • γ…
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightShift_leftShift`：rightShift_leftS
+hift (a n' : Int) (hn' : n + a = n') : (γ.leftShift a n' hn').rightShift a n hn'
+ = (a * n' + (a * (a - 1)) / 2).negOnePow • …
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用引理 `Int.negOnePow_add`：negOnePow_add (n₁ n₂ : Int) : (n₁ + n₂).negOnePow = n
+₁.negOnePow * n₂.negOnePow
+· 使用引理 `Int.negOnePow_mul_self`：negOnePow_mul_self (n : Int) : (n * n).negOnePow
+ = n.negOnePow
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Int.units_mul_self`：units_mul_self (u : Intˣ) : u * u = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 
-English:
-lemma leftShift_rightShift_eq_negOnePow_rightShift_leftShift
-  proof: by
-  rw [leftShift_rightShift]; rw [rightShift_leftShift]; rw [smul_smul]; rw [← hn'']; rw [add_comm n a]; rw [mul_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_mul_self]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
-
-中文:
-引理 leftShift_rightShift_eq_negOnePow_rightShift_leftShift
-  证明: by
-  rw [leftShift_rightShift]; rw [rightShift_leftShift]; rw [smul_smul]; rw [← hn'']; rw [add_comm n a]; rw [mul_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_mul_self]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
-
-Depends on / 依赖: Int.negOnePow_add, Int.negOnePow_mul_self, Int.units_mul_self, add_comm, leftShift_rightShift, mul_add, mul_assoc, negOnePow_add, negOnePow_mul_self, one_mul, rightShift_leftShift, smul_smul, units_mul_self
+--- 原说明 ---
+The left and right shift of cochains commute only up to a sign.
 -/
 lemma leftShift_rightShift_eq_negOnePow_rightShift_leftShift
-    (a n' n'' : Int) (hn' : n' + a = n) (hn'' : n + a = n'') :
+    (a n' n'' : ℤ) (hn' : n' + a = n) (hn'' : n + a = n'') :
     (γ.rightShift a n' hn').leftShift a n hn' =
       a.negOnePow • (γ.leftShift a n'' hn'').rightShift a n hn'' := by
-  rw [leftShift_rightShift]; rw [rightShift_leftShift]; rw [smul_smul]; rw [← hn'']; rw [add_comm n a]; rw [mul_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_add]; rw [Int.negOnePow_mul_self]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Int.units_mul_self]; rw [one_mul]
+  rw [leftShift_rightShift, rightShift_leftShift, smul_smul, ← hn'', add_comm n a, mul_add,
+    Int.negOnePow_add, Int.negOnePow_add, Int.negOnePow_add, Int.negOnePow_mul_self,
+    ← mul_assoc, ← mul_assoc, Int.units_mul_self, one_mul]
 
 end Cochain
 
@@ -1765,26 +1613,19 @@ namespace Cocycle
 
 /-- The map `Cocycle K L n → Cocycle K (L⟦a⟧) n'` when `n' + a = n`. -/
 @[simps!]
-/--
-Definition of `rightShift` / `rightShift` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.rightShift** 是 Mathlib 中的一个定义，位于命名空间 `Cochai
+nComplex.HomComplex.Cocycle`。
+形式化陈述：rightShift (γ : Cocycle K L n) (a n' : Int) (hn' : n' + a = n) : Cocycle K
+ (L⟦a⟧) n'
+参数：γ : Cocycle K L n；a n' : Int；hn' : n' + a = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightShift
-  signature: (γ : Cocycle K L n) (a n' : Int) (hn' : n' + a = n)
-  body: Cocycle.mk (γ.1.rightShift a n' hn') _ rfl (by
-    simp only [Cochain.δ_rightShift _ a n' (n' + 1) hn' (n + 1) (by lia),
-      δ_eq_zero, Cochain.rightShift_zero, smul_zero])
-
-中文:
-定义 rightShift
-  签名: (γ : Cocycle K L n) (a n' : 整数) (hn' : n' + a = n)
-  定义体: Cocycle.mk (γ.1.rightShift a n' hn') _ rfl (by
-    simp only [Cochain.δ_rightShift _ a n' (n' + 1) hn' (n + 1) (by lia),
-      δ_eq_zero, Cochain.rightShift_zero, smul_zero])
-
-Depends on / 依赖: Cochain, Cochain.rightShift_zero, Cocycle, Cocycle.mk, rightShift, rightShift_zero, smul_zero
+--- 原说明 ---
+The map `Cocycle K L n → Cocycle K (L⟦a⟧) n'` when `n' + a = n`.
 -/
-def rightShift (γ : Cocycle K L n) (a n' : Int) (hn' : n' + a = n) :
+def rightShift (γ : Cocycle K L n) (a n' : ℤ) (hn' : n' + a = n) :
     Cocycle K (L⟦a⟧) n' :=
   Cocycle.mk (γ.1.rightShift a n' hn') _ rfl (by
     simp only [Cochain.δ_rightShift _ a n' (n' + 1) hn' (n + 1) (by lia),
@@ -1792,50 +1633,39 @@ def rightShift (γ : Cocycle K L n) (a n' : Int) (hn' : n' + a = n) :
 
 /-- The map `Cocycle K (L⟦a⟧) n' → Cocycle K L n` when `n' + a = n`. -/
 @[simps!]
-/--
-Definition of `rightUnshift` / `rightUnshift` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.rightUnshift** 是 Mathlib 中的一个定义，位于命名空间 `Coch
+ainComplex.HomComplex.Cocycle`。
+形式化陈述：rightUnshift {n' a : Int} (γ : Cocycle K (L⟦a⟧) n') (n : Int) (hn : n' + a
+ = n) : Cocycle K L n
+参数：γ : Cocycle K (L⟦a⟧) n'；n : Int；hn : n' + a = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnshift
-  signature: {n' a : Int} (γ : Cocycle K (L⟦a⟧) n') (n : Int) (hn : n' + a = n)
-  body: Cocycle.mk (γ.1.rightUnshift n hn) _ rfl (by
-    rw [Cochain.δ_rightUnshift _ n hn (n + 1) (n + 1 - a) (by lia)]; rw [δ_eq_zero]; rw [Cochain.rightUnshift_zero]; rw [smul_zero])
-
-中文:
-定义 rightUnshift
-  签名: {n' a : 整数} (γ : Cocycle K (L⟦a⟧) n') (n : 整数) (hn : n' + a = n)
-  定义体: Cocycle.mk (γ.1.rightUnshift n hn) _ rfl (by
-    rw [Cochain.δ_rightUnshift _ n hn (n + 1) (n + 1 - a) (by lia)]; rw [δ_eq_zero]; rw [Cochain.rightUnshift_zero]; rw [smul_zero])
-
-Depends on / 依赖: Cochain, Cochain.rightUnshift_zero, Cocycle, Cocycle.mk, rightUnshift, rightUnshift_zero, smul_zero
+--- 原说明 ---
+The map `Cocycle K (L⟦a⟧) n' → Cocycle K L n` when `n' + a = n`.
 -/
-def rightUnshift {n' a : Int} (γ : Cocycle K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) :
+def rightUnshift {n' a : ℤ} (γ : Cocycle K (L⟦a⟧) n') (n : ℤ) (hn : n' + a = n) :
     Cocycle K L n :=
   Cocycle.mk (γ.1.rightUnshift n hn) _ rfl (by
-    rw [Cochain.δ_rightUnshift _ n hn (n + 1) (n + 1 - a) (by lia)]; rw [δ_eq_zero]; rw [Cochain.rightUnshift_zero]; rw [smul_zero])
+    rw [Cochain.δ_rightUnshift _ n hn (n + 1) (n + 1 - a) (by lia),
+      δ_eq_zero, Cochain.rightUnshift_zero, smul_zero])
 
 /-- The map `Cocycle K L n → Cocycle (K⟦a⟧) L n'` when `n + a = n'`. -/
 @[simps!]
-/--
-Definition of `leftShift` / `leftShift` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.leftShift** 是 Mathlib 中的一个定义，位于命名空间 `Cochain
+Complex.HomComplex.Cocycle`。
+形式化陈述：leftShift (γ : Cocycle K L n) (a n' : Int) (hn' : n + a = n') : Cocycle (K
+⟦a⟧) L n'
+参数：γ : Cocycle K L n；a n' : Int；hn' : n + a = n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftShift
-  signature: (γ : Cocycle K L n) (a n' : Int) (hn' : n + a = n')
-  body: Cocycle.mk (γ.1.leftShift a n' hn') _ rfl (by
-    simp only [Cochain.δ_leftShift _ a n' (n' + 1) hn' (n + 1) (by lia),
-      δ_eq_zero, Cochain.leftShift_zero, smul_zero])
-
-中文:
-定义 leftShift
-  签名: (γ : Cocycle K L n) (a n' : 整数) (hn' : n + a = n')
-  定义体: Cocycle.mk (γ.1.leftShift a n' hn') _ rfl (by
-    simp only [Cochain.δ_leftShift _ a n' (n' + 1) hn' (n + 1) (by lia),
-      δ_eq_zero, Cochain.leftShift_zero, smul_zero])
-
-Depends on / 依赖: Cochain, Cochain.leftShift_zero, Cocycle, Cocycle.mk, leftShift, leftShift_zero, smul_zero
+--- 原说明 ---
+The map `Cocycle K L n → Cocycle (K⟦a⟧) L n'` when `n + a = n'`.
 -/
-def leftShift (γ : Cocycle K L n) (a n' : Int) (hn' : n + a = n') :
+def leftShift (γ : Cocycle K L n) (a n' : ℤ) (hn' : n + a = n') :
     Cocycle (K⟦a⟧) L n' :=
   Cocycle.mk (γ.1.leftShift a n' hn') _ rfl (by
     simp only [Cochain.δ_leftShift _ a n' (n' + 1) hn' (n + 1) (by lia),
@@ -1843,78 +1673,57 @@ def leftShift (γ : Cocycle K L n) (a n' : Int) (hn' : n + a = n') :
 
 /-- The map `Cocycle (K⟦a⟧) L n' → Cocycle K L n` when `n + a = n'`. -/
 @[simps!]
-/--
-Definition of `leftUnshift` / `leftUnshift` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.leftUnshift** 是 Mathlib 中的一个定义，位于命名空间 `Cocha
+inComplex.HomComplex.Cocycle`。
+形式化陈述：leftUnshift {n' a : Int} (γ : Cocycle (K⟦a⟧) L n') (n : Int) (hn : n + a =
+ n') : Cocycle K L n
+参数：γ : Cocycle (K⟦a⟧) L n'；n : Int；hn : n + a = n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnshift
-  signature: {n' a : Int} (γ : Cocycle (K⟦a⟧) L n') (n : Int) (hn : n + a = n')
-  body: Cocycle.mk (γ.1.leftUnshift n hn) _ rfl (by
-    rw [Cochain.δ_leftUnshift _ n hn (n + 1) (n + 1 + a) rfl]; rw [δ_eq_zero]; rw [Cochain.leftUnshift_zero]; rw [smul_zero])
-
-中文:
-定义 leftUnshift
-  签名: {n' a : 整数} (γ : Cocycle (K⟦a⟧) L n') (n : 整数) (hn : n + a = n')
-  定义体: Cocycle.mk (γ.1.leftUnshift n hn) _ rfl (by
-    rw [Cochain.δ_leftUnshift _ n hn (n + 1) (n + 1 + a) rfl]; rw [δ_eq_zero]; rw [Cochain.leftUnshift_zero]; rw [smul_zero])
-
-Depends on / 依赖: Cochain, Cochain.leftUnshift_zero, Cocycle, Cocycle.mk, leftUnshift, leftUnshift_zero, smul_zero
+--- 原说明 ---
+The map `Cocycle (K⟦a⟧) L n' → Cocycle K L n` when `n + a = n'`.
 -/
-def leftUnshift {n' a : Int} (γ : Cocycle (K⟦a⟧) L n') (n : Int) (hn : n + a = n') :
+def leftUnshift {n' a : ℤ} (γ : Cocycle (K⟦a⟧) L n') (n : ℤ) (hn : n + a = n') :
     Cocycle K L n :=
   Cocycle.mk (γ.1.leftUnshift n hn) _ rfl (by
-    rw [Cochain.δ_leftUnshift _ n hn (n + 1) (n + 1 + a) rfl]; rw [δ_eq_zero]; rw [Cochain.leftUnshift_zero]; rw [smul_zero])
+    rw [Cochain.δ_leftUnshift _ n hn (n + 1) (n + 1 + a) rfl,
+      δ_eq_zero, Cochain.leftUnshift_zero, smul_zero])
 
 /-- The map `Cocycle K L n → Cocycle (K⟦a⟧) (L⟦a⟧) n`. -/
 @[simps!]
-/--
-Definition of `shift` / `shift` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.shift** 是 Mathlib 中的一个定义，位于命名空间 `CochainComp
+lex.HomComplex.Cocycle`。
+形式化陈述：shift (γ : Cocycle K L n) (a : Int) : Cocycle (K⟦a⟧) (L⟦a⟧) n
+参数：γ : Cocycle K L n；a : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shift
-  signature: (γ : Cocycle K L n) (a : Int)
-  body: Cocycle.mk (γ.1.shift a) _ rfl
-    (by simp only [Cochain.δ_shift, δ_eq_zero, Cochain.shift_zero, smul_zero])
-
-中文:
-定义 shift
-  签名: (γ : Cocycle K L n) (a : 整数)
-  定义体: Cocycle.mk (γ.1.shift a) _ rfl
-    (by simp only [Cochain.δ_shift, δ_eq_zero, Cochain.shift_zero, smul_zero])
-
-Depends on / 依赖: Cochain, Cochain.shift_zero, Cocycle, Cocycle.mk, shift_zero, smul_zero
+--- 原说明 ---
+The map `Cocycle K L n → Cocycle (K⟦a⟧) (L⟦a⟧) n`.
 -/
-def shift (γ : Cocycle K L n) (a : Int) :
+def shift (γ : Cocycle K L n) (a : ℤ) :
     Cocycle (K⟦a⟧) (L⟦a⟧) n :=
   Cocycle.mk (γ.1.shift a) _ rfl
     (by simp only [Cochain.δ_shift, δ_eq_zero, Cochain.shift_zero, smul_zero])
 
 /-- The additive equivalence `Cocycle K L n ≃+ Cocycle K L⟦a⟧ n'` when `n' + a = n`. -/
 @[simps]
-/--
-Definition of `rightShiftAddEquiv` / `rightShiftAddEquiv` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.rightShiftAddEquiv** 是 Mathlib 中的一个定义，位于命名空间
+ `CochainComplex.HomComplex.Cocycle`。
+形式化陈述：rightShiftAddEquiv (n a n' : Int) (hn' : n' + a = n) : Cocycle K L n ≃+ Co
+cycle K (L⟦a⟧) n' where toFun γ
+参数：n a n' : Int；hn' : n' + a = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightShiftAddEquiv
-  signature: (n a n' : Int) (hn' : n' + a = n)
-  body: γ.rightShift a n' hn'
-  invFun γ := γ.rightUnshift n hn'
-  left_inv γ := by cat_disch
-  right_inv γ := by cat_disch
-  map_add' γ γ' := by cat_disch
-
-中文:
-定义 rightShiftAddEquiv
-  签名: (n a n' : 整数) (hn' : n' + a = n)
-  定义体: γ.rightShift a n' hn'
-  invFun γ := γ.rightUnshift n hn'
-  left_inv γ := by cat_disch
-  right_inv γ := by cat_disch
-  map_add' γ γ' := by cat_disch
-
-Depends on / 依赖: rightShift
+--- 原说明 ---
+The additive equivalence `Cocycle K L n ≃+ Cocycle K L⟦a⟧ n'` when `n' + a = n`.
 -/
-def rightShiftAddEquiv (n a n' : Int) (hn' : n' + a = n) :
+def rightShiftAddEquiv (n a n' : ℤ) (hn' : n' + a = n) :
     Cocycle K L n ≃+ Cocycle K (L⟦a⟧) n' where
   toFun γ := γ.rightShift a n' hn'
   invFun γ := γ.rightUnshift n hn'
@@ -1924,138 +1733,226 @@ def rightShiftAddEquiv (n a n' : Int) (hn' : n' + a = n) :
 
 /-- The additive equivalence `K ⟶ L⟦n⟧ ≃+ Cocycle K L n`. -/
 @[simps! -isSimp apply symm_apply]
-/--
-Definition of `equivHomShift` / `equivHomShift` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.equivHomShift** 是 Mathlib 中的一个定义，位于命名空间 `Coc
+hainComplex.HomComplex.Cocycle`。
+形式化陈述：equivHomShift : (K ⟶ L⟦n⟧) ≃+ Cocycle K L n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivHomShift
-  signature: :
-  body: (equivHom _ _).trans (rightShiftAddEquiv _ _ _ (zero_add n)).symm
-
-中文:
-定义 equivHomShift
-  签名: :
-  定义体: (equivHom _ _).trans (rightShiftAddEquiv _ _ _ (zero_add n)).symm
-
-Depends on / 依赖: equivHom, rightShiftAddEquiv, zero_add
+--- 原说明 ---
+The additive equivalence `K ⟶ L⟦n⟧ ≃+ Cocycle K L n`.
 -/
 def equivHomShift :
     (K ⟶ L⟦n⟧) ≃+ Cocycle K L n :=
   (equivHom _ _).trans (rightShiftAddEquiv _ _ _ (zero_add n)).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `equivHomShift_comp` / 引理 `equivHomShift_comp`
-
-English:
-lemma equivHomShift_comp
-  statement: {K' : CochainComplex C Int}
-  proof: by
-  ext p q hpq
-  simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]
-
-中文:
-引理 equivHomShift_comp
-  结论: {K' : 上链复形 C 整数}
-  证明: by
-  ext p q hpq
-  simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]
-
-Depends on / 依赖: Cochain, Cochain.rightUnshift_v, add_zero, equivHomShift_apply, rightUnshift_v
+/-
+**CochainComplex.HomComplex.Cocycle.equivHomShift_comp** 是 Mathlib 中的一个引理，位于命名空间
+ `CochainComplex.HomComplex.Cocycle`。
+形式化陈述：equivHomShift_comp {K' : CochainComplex C Int} (g : K' ⟶ K) (f : K ⟶ L⟦n⟧)
+ : equivHomShift (g ≫ f) = Cocycle.precomp (equivHomShift f) g
+参数：g : K' ⟶ K；f : K ⟶ L⟦n⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.HomComplex.Cocycle.ext`：ext {z₁ z₂ : Cocycle F G n} (h : 
+(z₁ : Cochain F G n) = z₂) : z₁ = z₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `CochainComplex.HomComplex.Cochain.v.congr_simp`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {F G 
+: CochainComplex C ℤ} {n : ℤ} (γ γ_1…
+· 使用定理 `CochainComplex.HomComplex.Cocycle.equivHomShift_apply`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C] 
+  {K L : CochainComplex C ℤ} {n : ℤ} (a : K…
+· 使用定理 `CochainComplex.HomComplex.Cocycle.rightUnshift_coe`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {
+K L : CochainComplex C ℤ} {n' a : ℤ}   (…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CochainComplex.HomComplex.Cocycle.ofHom_coe`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {F G : C
+ochainComplex C ℤ} (φ : F ⟶ G),  …
+· 使用引理 `CochainComplex.HomComplex.Cochain.ofHom_comp`：ofHom_comp (f : F ⟶ G) (g 
+: G ⟶ K) : ofHom (f ≫ g) = (ofHom f).comp (ofHom g) (zero_add 0)
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightUnshift_v`：rightUnshift_v {n' a :
+ Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (p q : Int) (hpq : p
+ + n = q) (p' : Int) (hp' : p + n' = p…
+· 使用引理 `CochainComplex.HomComplex.Cochain.comp_zero_cochain_v`：comp_zero_cochain
+_v (z₁ : Cochain F G n) (z₂ : Cochain G K 0) (p q : Int) (hpq : p + n = q) : (z₁
+.comp z₂ (add_zero n)).v p q hpq = z₁.v p q…
+· 使用引理 `CochainComplex.HomComplex.Cochain.ofHom_v`：ofHom_v (φ : F ⟶ G) (p : Int)
+ : (ofHom φ).v p p (add_zero p) = φ.f p
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CochainComplex.HomComplex.Cocycle.precomp_coe`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {F G K
+ : CochainComplex C ℤ} {n : ℤ} (z :…
+· 使用引理 `CochainComplex.HomComplex.Cochain.zero_cochain_comp_v`：zero_cochain_comp
+_v (z₁ : Cochain F G 0) (z₂ : Cochain G K n) (p q : Int) (hpq : p + n = q) : (z₁
+.comp z₂ (zero_add n)).v p q hpq = z₁.v p p…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma equivHomShift_comp {K' : CochainComplex C Int}
+lemma equivHomShift_comp {K' : CochainComplex C ℤ}
     (g : K' ⟶ K) (f : K ⟶ L⟦n⟧) :
     equivHomShift (g ≫ f) = Cocycle.precomp (equivHomShift f) g := by
   ext p q hpq
   simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]
-
-/--
-lemma `equivHomShift_symm_precomp` / 引理 `equivHomShift_symm_precomp`
-
-English:
-lemma equivHomShift_symm_precomp
-  proof: equivHomShift.injective (by simp [equivHomShift_comp])
-
-中文:
-引理 equivHomShift_symm_precomp
-  证明: equivHomShift.injective (by simp [equivHomShift_comp])
-
-Depends on / 依赖: equivHomShift, equivHomShift.injective, equivHomShift_comp, injective
+/-
+**CochainComplex.HomComplex.Cocycle.equivHomShift_symm_precomp** 是 Mathlib 中的一个引
+理，位于命名空间 `CochainComplex.HomComplex.Cocycle`。
+形式化陈述：equivHomShift_symm_precomp (z : Cocycle K L n) {K' : CochainComplex C Int}
+ (g : K' ⟶ K) : equivHomShift.symm (z.precomp g) = g ≫ equivHomShift.symm z
+参数：z : Cocycle K L n；g : K' ⟶ K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用引理 `CochainComplex.HomComplex.Cocycle.equivHomShift_comp`：equivHomShift_comp
+ {K' : CochainComplex C Int} (g : K' ⟶ K) (f : K ⟶ L⟦n⟧) : equivHomShift (g ≫ f)
+ = Cocycle.precomp (equivHomShift f) g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivHomShift_symm_precomp
-    (z : Cocycle K L n) {K' : CochainComplex C Int} (g : K' ⟶ K) :
+    (z : Cocycle K L n) {K' : CochainComplex C ℤ} (g : K' ⟶ K) :
     equivHomShift.symm (z.precomp g) = g ≫ equivHomShift.symm z :=
   equivHomShift.injective (by simp [equivHomShift_comp])
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `equivHomShift_comp_shift` / 引理 `equivHomShift_comp_shift`
-
-English:
-lemma equivHomShift_comp_shift
-  given: (f : K ⟶ L⟦n⟧) {L' : CochainComplex C Int} (g : L ⟶ L')
-  proof: by
-  ext p q rfl
-  simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]
-
-中文:
-引理 equivHomShift_comp_shift
-  条件: (f : K ⟶ L⟦n⟧) {L' : 上链复形 C 整数} (g : L ⟶ L')
-  证明: by
-  ext p q rfl
-  simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]
-
-Depends on / 依赖: Cochain, Cochain.rightUnshift_v, add_zero, equivHomShift_apply, rightUnshift_v
+/-
+**CochainComplex.HomComplex.Cocycle.equivHomShift_comp_shift** 是 Mathlib 中的一个引理，
+位于命名空间 `CochainComplex.HomComplex.Cocycle`。
+形式化陈述：equivHomShift_comp_shift (f : K ⟶ L⟦n⟧) {L' : CochainComplex C Int} (g : L
+ ⟶ L') : equivHomShift (f ≫ g⟦n⟧') = Cocycle.postcomp (equivHomShift f) g
+参数：f : K ⟶ L⟦n⟧；g : L ⟶ L'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用引理 `CochainComplex.HomComplex.Cocycle.ext`：ext {z₁ z₂ : Cocycle F G n} (h : 
+(z₁ : Cochain F G n) = z₂) : z₁ = z₂
+· 使用引理 `CochainComplex.HomComplex.Cochain.ext`：ext (z₁ z₂ : Cochain F G n) (h : 
+forall (p q hpq), z₁.v p q hpq = z₂.v p q hpq) : z₁ = z₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `CochainComplex.HomComplex.Cochain.v.congr_simp`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {F G 
+: CochainComplex C ℤ} {n : ℤ} (γ γ_1…
+· 使用定理 `CochainComplex.HomComplex.Cocycle.equivHomShift_apply`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C] 
+  {K L : CochainComplex C ℤ} {n : ℤ} (a : K…
+· 使用定理 `CochainComplex.HomComplex.Cocycle.rightUnshift_coe`：∀ {C : Type u} [inst
+ : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {
+K L : CochainComplex C ℤ} {n' a : ℤ}   (…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CochainComplex.HomComplex.Cocycle.ofHom_coe`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {F G : C
+ochainComplex C ℤ} (φ : F ⟶ G),  …
+· 使用引理 `CochainComplex.HomComplex.Cochain.ofHom_comp`：ofHom_comp (f : F ⟶ G) (g 
+: G ⟶ K) : ofHom (f ≫ g) = (ofHom f).comp (ofHom g) (zero_add 0)
+· 使用引理 `CochainComplex.HomComplex.Cochain.rightUnshift_v`：rightUnshift_v {n' a :
+ Int} (γ : Cochain K (L⟦a⟧) n') (n : Int) (hn : n' + a = n) (p q : Int) (hpq : p
+ + n = q) (p' : Int) (hp' : p + n' = p…
+· 使用引理 `CochainComplex.HomComplex.Cochain.comp_zero_cochain_v`：comp_zero_cochain
+_v (z₁ : Cochain F G n) (z₂ : Cochain G K 0) (p q : Int) (hpq : p + n = q) : (z₁
+.comp z₂ (add_zero n)).v p q hpq = z₁.v p q…
+· 使用引理 `CochainComplex.HomComplex.Cochain.ofHom_v`：ofHom_v (φ : F ⟶ G) (p : Int)
+ : (ofHom φ).v p p (add_zero p) = φ.f p
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CochainComplex.HomComplex.Cocycle.postcomp_coe`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C]   {F G 
+K : CochainComplex C ℤ} {n : ℤ} (z :…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma equivHomShift_comp_shift (f : K ⟶ L⟦n⟧) {L' : CochainComplex C Int} (g : L ⟶ L') :
+lemma equivHomShift_comp_shift (f : K ⟶ L⟦n⟧) {L' : CochainComplex C ℤ} (g : L ⟶ L') :
     equivHomShift (f ≫ g⟦n⟧') = Cocycle.postcomp (equivHomShift f) g := by
   ext p q rfl
   simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]
-
-/--
-lemma `equivHomShift_symm_postcomp` / 引理 `equivHomShift_symm_postcomp`
-
-English:
-lemma equivHomShift_symm_postcomp
-  proof: equivHomShift.injective (by simp [equivHomShift_comp_shift])
-
-中文:
-引理 equivHomShift_symm_postcomp
-  证明: equivHomShift.injective (by simp [equivHomShift_comp_shift])
-
-Depends on / 依赖: equivHomShift, equivHomShift.injective, equivHomShift_comp_shift, injective
+/-
+**CochainComplex.HomComplex.Cocycle.equivHomShift_symm_postcomp** 是 Mathlib 中的一个
+引理，位于命名空间 `CochainComplex.HomComplex.Cocycle`。
+形式化陈述：equivHomShift_symm_postcomp (z : Cocycle K L n) {L' : CochainComplex C Int
+} (g : L ⟶ L') : equivHomShift.symm (z.postcomp g) = equivHomShift.symm z ≫ g⟦n⟧
+'
+参数：z : Cocycle K L n；g : L ⟶ L'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `AddEquiv.injective`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M] [inst
+_1 : Add N] (e : M ≃+ N), Function.Injective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddEquiv.apply_symm_apply`：∀ {M : Type u_4} {N : Type u_5} [inst : Add M
+] [inst_1 : Add N] (e : M ≃+ N) (y : N), e (e.symm y) = y
+· 使用引理 `CochainComplex.HomComplex.Cocycle.equivHomShift_comp_shift`：equivHomShif
+t_comp_shift (f : K ⟶ L⟦n⟧) {L' : CochainComplex C Int} (g : L ⟶ L') : equivHomS
+hift (f ≫ g⟦n⟧') = Cocycle.postcomp (equivHomShi…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equivHomShift_symm_postcomp
-    (z : Cocycle K L n) {L' : CochainComplex C Int} (g : L ⟶ L') :
+    (z : Cocycle K L n) {L' : CochainComplex C ℤ} (g : L ⟶ L') :
     equivHomShift.symm (z.postcomp g) = equivHomShift.symm z ≫ g⟦n⟧' :=
   equivHomShift.injective (by simp [equivHomShift_comp_shift])
 
 /-- The additive equivalence `Cocycle K L n ≃+ Cocycle K⟦a⟧ L n'` when `n + a = n'`. -/
 @[simps]
-/--
-Definition of `leftShiftAddEquiv` / `leftShiftAddEquiv` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.leftShiftAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+`CochainComplex.HomComplex.Cocycle`。
+形式化陈述：leftShiftAddEquiv (n a n' : Int) (hn' : n + a = n') : Cocycle K L n ≃+ Coc
+ycle (K⟦a⟧) L n' where toFun γ
+参数：n a n' : Int；hn' : n + a = n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftShiftAddEquiv
-  signature: (n a n' : Int) (hn' : n + a = n')
-  body: γ.leftShift a n' hn'
-  invFun γ := γ.leftUnshift n hn'
-  left_inv γ := by cat_disch
-  right_inv γ := by cat_disch
-  map_add' γ γ' := by cat_disch
-
-中文:
-定义 leftShiftAddEquiv
-  签名: (n a n' : 整数) (hn' : n + a = n')
-  定义体: γ.leftShift a n' hn'
-  invFun γ := γ.leftUnshift n hn'
-  left_inv γ := by cat_disch
-  right_inv γ := by cat_disch
-  map_add' γ γ' := by cat_disch
-
-Depends on / 依赖: leftShift
+--- 原说明 ---
+The additive equivalence `Cocycle K L n ≃+ Cocycle K⟦a⟧ L n'` when `n + a = n'`.
 -/
-def leftShiftAddEquiv (n a n' : Int) (hn' : n + a = n') :
+def leftShiftAddEquiv (n a n' : ℤ) (hn' : n + a = n') :
     Cocycle K L n ≃+ Cocycle (K⟦a⟧) L n' where
   toFun γ := γ.leftShift a n' hn'
   invFun γ := γ.leftUnshift n hn'
@@ -2065,25 +1962,22 @@ def leftShiftAddEquiv (n a n' : Int) (hn' : n + a = n') :
 
 /-- The additive equivalence `(K⟦n⟧) ⟶ L ≃+ Cocycle K L m` when `m + n = 0`. -/
 @[simps! -isSimp apply symm_apply]
-/--
-Definition of `equivHomShift'` / `equivHomShift'` 的定义
+/-
+**CochainComplex.HomComplex.Cocycle.equivHomShift'** 是 Mathlib 中的一个定义，位于命名空间 `Co
+chainComplex.HomComplex.Cocycle`。
+形式化陈述：equivHomShift' (n m : Int) (h : m + n = 0) : ((K⟦n⟧) ⟶ L) ≃+ Cocycle K L m
+参数：n m : Int；h : m + n = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivHomShift'
-  signature: (n m : Int) (h : m + n = 0)
-  body: (equivHom _ _).trans (leftShiftAddEquiv _ _ _ h).symm
-
-中文:
-定义 equivHomShift'
-  签名: (n m : 整数) (h : m + n = 0)
-  定义体: (equivHom _ _).trans (leftShiftAddEquiv _ _ _ h).symm
-
-Depends on / 依赖: equivHom, leftShiftAddEquiv
+--- 原说明 ---
+The additive equivalence `(K⟦n⟧) ⟶ L ≃+ Cocycle K L m` when `m + n = 0`.
 -/
-def equivHomShift' (n m : Int) (h : m + n = 0) :
+def equivHomShift' (n m : ℤ) (h : m + n = 0) :
     ((K⟦n⟧) ⟶ L) ≃+ Cocycle K L m :=
   (equivHom _ _).trans (leftShiftAddEquiv _ _ _ h).symm
 
 end Cocycle
 
 end CochainComplex.HomComplex
+

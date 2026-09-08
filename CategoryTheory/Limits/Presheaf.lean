@@ -75,20 +75,22 @@ Under the existence of a suitable pointwise left Kan extension, it is shown in
 Defined as in [MM92], Chapter I, Section 5, Theorem 2.
 -/
 @[simps! obj_map map_app]
-/--
-Definition of `restrictedULiftYoneda` / `restrictedULiftYoneda` 的定义
+/-
+**CategoryTheory.Presheaf.restrictedULiftYoneda** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Presheaf`。
+形式化陈述：restrictedULiftYoneda : ℰ ⥤ Cᵒᵖ ⥤ Type max w v₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictedULiftYoneda
-  signature: : ℰ ⥤ Cᵒᵖ ⥤ Type max w v₂
-  body: uliftYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ _).obj A.op
+--- 原说明 ---
+Given a functor `A : C ⥤ ℰ` (with `Category.{v₂} ℰ`) and an auxiliary universe `
+w`,
+this is the functor `ℰ ⥤ Cᵒᵖ ⥤ Type max w v₂` which sends `(E : ℰ) (c : Cᵒᵖ)`
+to the homset `A.obj C ⟶ E` (considered in the higher universe `max w v₂`).
+Under the existence of a suitable pointwise left Kan extension, it is shown in
+`uliftYonedaAdjunction` that this functor has a left adjoint.
 
-中文:
-定义 restrictedULiftYoneda
-  签名: : ℰ ⥤ Cᵒᵖ ⥤ 类型 最大值 w v₂
-  定义体: uliftYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ _).obj A.op
-
-Depends on / 依赖: A.op, Functor, Functor.whiskeringLeft, uliftYoneda, whiskeringLeft
+Defined as in [MM92], Chapter I, Section 5, Theorem 2.
 -/
 def restrictedULiftYoneda : ℰ ⥤ Cᵒᵖ ⥤ Type max w v₂ :=
     uliftYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ _).obj A.op
@@ -96,26 +98,32 @@ def restrictedULiftYoneda : ℰ ⥤ Cᵒᵖ ⥤ Type max w v₂ :=
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `map_comp_uliftYonedaEquiv_down` / 引理 `map_comp_uliftYonedaEquiv_down`
-
-English:
-lemma map_comp_uliftYonedaEquiv_down
-  statement: (E : ℰ) {X Y : C} (f : X ⟶ Y)
-  proof: by
-  have := (g.naturality_apply f.op) (ULift.up (𝟙 Y))
-  dsimp [uliftYonedaEquiv, uliftYoneda] at this ⊢
-  cat_disch
-
-中文:
-引理 map_comp_uliftYonedaEquiv_down
-  结论: (E : ℰ) {X Y : C} (f : X ⟶ Y)
-  证明: by
-  have := (g.naturality_apply f.op) (ULift.up (𝟙 Y))
-  dsimp [uliftYonedaEquiv, uliftYoneda] at this ⊢
-  cat_disch
-
-Depends on / 依赖: ULift.up, cat_disch, f.op, g.naturality_apply, naturality_apply, uliftYoneda, uliftYonedaEquiv
+/-
+**CategoryTheory.Presheaf.map_comp_uliftYonedaEquiv_down** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Presheaf`。
+形式化陈述：map_comp_uliftYonedaEquiv_down (E : ℰ) {X Y : C} (f : X ⟶ Y) (g : uliftYon
+eda.{max w v₂}.obj Y ⟶ (restrictedULiftYoneda.{max w v₁} A).obj E) : A.map f ≫ (
+uliftYonedaEquiv g).down = (uliftYonedaEquiv (uliftYoneda.map f ≫ g)).down
+参数：E : ℰ；f : X ⟶ Y；g : uliftYoneda.{max w v₂}.obj Y ⟶ (restrictedULiftYoneda.{ma
+x w v₁} A).obj E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_comp_uliftYonedaEquiv_down (E : ℰ) {X Y : C} (f : X ⟶ Y)
     (g : uliftYoneda.{max w v₂}.obj Y ⟶ (restrictedULiftYoneda.{max w v₁} A).obj E) :
@@ -127,89 +135,28 @@ lemma map_comp_uliftYonedaEquiv_down (E : ℰ) {X Y : C} (f : X ⟶ Y)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `restrictedULiftYonedaHomEquiv'` / `restrictedULiftYonedaHomEquiv'` 的定义
+/-- Auxiliary definition for `restrictedULiftYonedaHomEquiv`. -/
+/-
+**CategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv'** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Presheaf`。
+形式化陈述：restrictedULiftYonedaHomEquiv' (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ) : (Cos
+tructuredArrow.proj uliftYoneda.{max w v₂} P ⋙ A ⟶ (Functor.const (CostructuredA
+rrow uliftYoneda.{max w v₂} P)).obj E) ≃ (P ⟶ (restrictedULiftYoneda.{max w v₁} 
+A).obj E) where toFun f
+参数：P : Cᵒᵖ ⥤ Type max w v₁ v₂；E : ℰ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition restrictedULiftYonedaHomEquiv'
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ)
-  body: { app _ := ↾fun x => ULift.up
-        (f.app (CostructuredArrow.mk (uliftYonedaEquiv.symm x)))
-      naturality _ _ g := by
-        ext x
-        let φ : CostructuredArrow.mk (uliftYonedaEquiv.{max w v₂}.symm (P.map g x)) ⟶
-          CostructuredArrow.mk (uliftYonedaEquiv.symm x) :=
-            CostructuredArrow.homMk g.unop (by
-              dsimp
-              rw [uliftYonedaEquiv_symm_map])
-        dsimp
-        congr 1
-        simpa using! (f.naturality φ).symm }
-  invFun g :=
-    { app y := (uliftYonedaEquiv.{max w v₂} (y.hom ≫ g)).down
-      naturality y y' f := by
-        dsimp
-        rw [comp_id]; rw [← CostructuredArrow.w f]; rw [assoc]; rw [map_comp_uliftYonedaEquiv_down] }
-  left_inv f := by
-    ext X
-    let e : CostructuredArrow.mk
-      (uliftYonedaEquiv.{max w v₂}.symm (X.hom.app (op X.left) ⟨𝟙 X.left⟩)) ≅ X :=
-        CostructuredArrow.isoMk (Iso.refl _) (by
-          ext Y x
-          dsimp
-          simp [← NatTrans.naturality_apply])
-    simpa [e] using! f.naturality e.inv
-  right_inv g := by
-    ext X x
-    apply ULift.down_injective
-    simp [uliftYonedaEquiv]
-
-@[reassoc]
-
-中文:
-定义 restrictedULiftYonedaHomEquiv'
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) (E : ℰ)
-  定义体: { app _ := ↾fun x => ULift.up
-        (f.app (CostructuredArrow.mk (uliftYonedaEquiv.symm x)))
-      naturality _ _ g := by
-        ext x
-        let φ : CostructuredArrow.mk (uliftYonedaEquiv.{max w v₂}.symm (P.map g x)) ⟶
-          CostructuredArrow.mk (uliftYonedaEquiv.symm x) :=
-            CostructuredArrow.homMk g.unop (by
-              dsimp
-              rw [uliftYonedaEquiv_symm_map])
-        dsimp
-        congr 1
-        simpa using! (f.naturality φ).symm }
-  invFun g :=
-    { app y := (uliftYonedaEquiv.{max w v₂} (y.hom ≫ g)).down
-      naturality y y' f := by
-        dsimp
-        rw [comp_id]; rw [← CostructuredArrow.w f]; rw [assoc]; rw [map_comp_uliftYonedaEquiv_down] }
-  left_inv f := by
-    ext X
-    let e : CostructuredArrow.mk
-      (uliftYonedaEquiv.{max w v₂}.symm (X.hom.app (op X.left) ⟨𝟙 X.left⟩)) ≅ X :=
-        CostructuredArrow.isoMk (Iso.refl _) (by
-          ext Y x
-          dsimp
-          simp [← NatTrans.naturality_apply])
-    simpa [e] using! f.naturality e.inv
-  right_inv g := by
-    ext X x
-    apply ULift.down_injective
-    simp [uliftYonedaEquiv]
-
-@[reassoc]
-
-Depends on / 依赖: Costructured, CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, P.map, ULift.up, comp_id, f.app, f.naturality, g.unop, invFun, naturality, uliftYonedaEquiv, uliftYonedaEquiv.symm, uliftYonedaEquiv_symm_map, y.hom
+--- 原说明 ---
+Auxiliary definition for `restrictedULiftYonedaHomEquiv`.
 -/
 def restrictedULiftYonedaHomEquiv' (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ) :
     (CostructuredArrow.proj uliftYoneda.{max w v₂} P ⋙ A ⟶
       (Functor.const (CostructuredArrow uliftYoneda.{max w v₂} P)).obj E) ≃
       (P ⟶ (restrictedULiftYoneda.{max w v₁} A).obj E) where
   toFun f :=
-    { app _ := ↾fun x => ULift.up
+    { app _ := ↾fun x ↦ ULift.up
         (f.app (CostructuredArrow.mk (uliftYonedaEquiv.symm x)))
       naturality _ _ g := by
         ext x
@@ -225,7 +172,7 @@ def restrictedULiftYonedaHomEquiv' (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : �
     { app y := (uliftYonedaEquiv.{max w v₂} (y.hom ≫ g)).down
       naturality y y' f := by
         dsimp
-        rw [comp_id]; rw [← CostructuredArrow.w f]; rw [assoc]; rw [map_comp_uliftYonedaEquiv_down] }
+        rw [comp_id, ← CostructuredArrow.w f, assoc, map_comp_uliftYonedaEquiv_down] }
   left_inv f := by
     ext X
     let e : CostructuredArrow.mk
@@ -241,24 +188,28 @@ def restrictedULiftYonedaHomEquiv' (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : �
     simp [uliftYonedaEquiv]
 
 @[reassoc]
-/--
-lemma `restrictedULiftYonedaHomEquiv'_symm_naturality_right` / 引理 `restrictedULiftYonedaHomEquiv'_symm_naturality_right`
-
-English:
-lemma restrictedULiftYonedaHomEquiv'_symm_naturality_right
-  statement: (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
-  proof: by
-  rfl
-
-@[reassoc]
-
-中文:
-引理 restrictedULiftYonedaHomEquiv'_symm_naturality_right
-  结论: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂)
-  证明: by
-  rfl
-
-@[reassoc]
+/-
+**CategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv'_symm_naturality_right**
+ 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {ℰ : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} ℰ]   (A : CategoryTheory.Functor C ℰ)
+ (P : CategoryTheory.Functor Cᵒᵖ (Type (max w v₁ v₂))) {E E' : ℰ} (g : E ⟶ E')  
+ (f : P ⟶ (CategoryTheory.Presheaf.restrictedULiftYoneda A).obj E),   (CategoryT
+heory.Presheaf.restrictedULiftYonedaHomEquiv' A P E').symm       (CategoryTheory
+.CategoryStruct.comp f ((CategoryTheory.Presheaf.restrictedULiftYoneda A).map g)
+) =     CategoryTheory.CategoryStruct.comp ((CategoryTheory.Presheaf.restrictedU
+LiftYonedaHomEquiv' A P E).symm f)       ((CategoryTheory.Functor.const         
+    (CategoryTheory.CostructuredArrow CategoryTheory.uliftYoneda.{max w v₂, v₁, 
+u₁} P)).map         g)
+参数：A : CategoryTheory.Functor C ℰ；P : CategoryTheory.Functor Cᵒᵖ (Type (max w v₁
+ v₂))；g : E ⟶ E'；f : P ⟶ (CategoryTheory.Presheaf.restrictedULiftYoneda A).obj E
+；CategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv' A P E'；CategoryTheory.Ca
+tegoryStruct.comp f ((CategoryTheory.Presheaf.restrictedULiftYoneda A).map g)；(C
+ategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv' A P E).symm f；(CategoryThe
+ory.Functor.const             (CategoryTheory.CostructuredArrow CategoryTheory.u
+liftYoneda.{max w v₂, v₁, u₁} P)).map         g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma restrictedULiftYonedaHomEquiv'_symm_naturality_right (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
     {E E' : ℰ} (g : E ⟶ E') (f : P ⟶ (restrictedULiftYoneda.{max w v₁} A).obj E) :
@@ -267,16 +218,26 @@ lemma restrictedULiftYonedaHomEquiv'_symm_naturality_right (P : Cᵒᵖ ⥤ Type
   rfl
 
 @[reassoc]
-/--
-lemma `restrictedULiftYonedaHomEquiv'_symm_app_naturality_left` / 引理 `restrictedULiftYonedaHomEquiv'_symm_app_naturality_left`
-
-English:
-lemma restrictedULiftYonedaHomEquiv'_symm_app_naturality_left
-  proof: rfl
-
-中文:
-引理 restrictedULiftYonedaHomEquiv'_symm_app_naturality_left
-  证明: rfl
+/-
+**CategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv'_symm_app_naturality_lef
+t** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {ℰ : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} ℰ]   (A : CategoryTheory.Functor C ℰ)
+ {P Q : CategoryTheory.Functor Cᵒᵖ (Type (max w v₁ v₂))} (f : P ⟶ Q) (E : ℰ)   (
+g : Q ⟶ (CategoryTheory.Presheaf.restrictedULiftYoneda A).obj E)   (p : Category
+Theory.CostructuredArrow CategoryTheory.uliftYoneda.{max w v₂, v₁, u₁} P),   ((C
+ategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv' A P E).symm (CategoryTheor
+y.CategoryStruct.comp f g)).app p =     ((CategoryTheory.Presheaf.restrictedULif
+tYonedaHomEquiv' A Q E).symm g).app       ((CategoryTheory.CostructuredArrow.map
+ f).obj p)
+参数：A : CategoryTheory.Functor C ℰ；Type (max w v₁ v₂)；f : P ⟶ Q；E : ℰ；g : Q ⟶ (Ca
+tegoryTheory.Presheaf.restrictedULiftYoneda A).obj E；p : CategoryTheory.Costruct
+uredArrow CategoryTheory.uliftYoneda.{max w v₂, v₁, u₁} P；(CategoryTheory.Preshe
+af.restrictedULiftYonedaHomEquiv' A P E).symm (CategoryTheory.CategoryStruct.com
+p f g)；(CategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv' A Q E).symm g；(Ca
+tegoryTheory.CostructuredArrow.map f).obj p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma restrictedULiftYonedaHomEquiv'_symm_app_naturality_left
     {P Q : Cᵒᵖ ⥤ Type max w v₁ v₂} (f : P ⟶ Q) (E : ℰ)
@@ -291,6 +252,10 @@ section
 
 variable (P : ℰᵒᵖ ⥤ Type max w v₁ v₂)
 
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [HasColimitsOfSize.{v₁, max u₁ v₁ v₂ w} ℰ] :
     (uliftYoneda.{max w v₂}).HasPointwiseLeftKanExtension A := by
   infer_instance
@@ -301,22 +266,20 @@ variable {A}
 variable (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ)
   (α : A ⟶ uliftYoneda.{max w v₂} ⋙ L) [L.IsLeftKanExtension α]
 
-/--
-Definition of `restrictedULiftYonedaHomEquiv` / `restrictedULiftYonedaHomEquiv` 的定义
+/-- Auxiliary definition for `uliftYonedaAdjunction`. -/
+/-
+**CategoryTheory.Presheaf.restrictedULiftYonedaHomEquiv** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Presheaf`。
+形式化陈述：restrictedULiftYonedaHomEquiv (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ) : (L.ob
+j P ⟶ E) ≃ (P ⟶ (restrictedULiftYoneda.{max w v₁} A).obj E)
+参数：P : Cᵒᵖ ⥤ Type max w v₁ v₂；E : ℰ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition restrictedULiftYonedaHomEquiv
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ)
-  body: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension _ α P).homEquiv.trans
-    (restrictedULiftYonedaHomEquiv' A P E)
-
-中文:
-定义 restrictedULiftYonedaHomEquiv
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) (E : ℰ)
-  定义体: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension _ α P).homEquiv.trans
-    (restrictedULiftYonedaHomEquiv' A P E)
-
-Depends on / 依赖: Functor, Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension, homEquiv, homEquiv.trans, isPointwiseLeftKanExtensionOfIsLeftKanExtension, restrictedULiftYonedaHomEquiv
+--- 原说明 ---
+Auxiliary definition for `uliftYonedaAdjunction`.
 -/
 noncomputable def restrictedULiftYonedaHomEquiv (P : Cᵒᵖ ⥤ Type max w v₁ v₂) (E : ℰ) :
     (L.obj P ⟶ E) ≃ (P ⟶ (restrictedULiftYoneda.{max w v₁} A).obj E) :=
@@ -325,64 +288,21 @@ noncomputable def restrictedULiftYonedaHomEquiv (P : Cᵒᵖ ⥤ Type max w v₁
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `uliftYonedaAdjunction` / `uliftYonedaAdjunction` 的定义
+/-- If `L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ` is a pointwise left Kan extension
+of a functor `A : C ⥤ ℰ` along the Yoneda embedding,
+then `L` is a left adjoint of `restrictedULiftYoneda A : ℰ ⥤ Cᵒᵖ ⥤ Type max w v₁ v₂` -/
+/-
+**CategoryTheory.Presheaf.uliftYonedaAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Presheaf`。
+形式化陈述：uliftYonedaAdjunction : L ⊣ restrictedULiftYoneda.{max w v₁} A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftYonedaAdjunction
-  signature: : L ⊣ restrictedULiftYoneda.{max w v₁} A
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := restrictedULiftYonedaHomEquiv L α
-      homEquiv_naturality_left_symm {P Q X} f g := by
-        apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
-        intro p
-        have hfg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
-          L α P).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A P X).symm (f ≫ g)) p
-        have hg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
-          L α Q).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A Q X).symm g)
-            ((CostructuredArrow.map f).obj p)
-        dsimp at hfg hg
-        dsimp [restrictedULiftYonedaHomEquiv]
-        simp only [assoc, hfg, ← L.map_comp_assoc, hg,
-          restrictedULiftYonedaHomEquiv'_symm_app_naturality_left]
-      homEquiv_naturality_right {P X Y} f g := by
-        have := @IsColimit.homEquiv_symm_naturality (h :=
-          Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P)
-        dsimp at this
-        apply (restrictedULiftYonedaHomEquiv L α P Y).symm.injective
-        apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
-        intro
-        simp [restrictedULiftYonedaHomEquiv,
-          restrictedULiftYonedaHomEquiv'_symm_naturality_right, this] }
-
-中文:
-定义 uliftYonedaAdjunction
-  签名: : L ⊣ restrictedULiftYoneda.{最大值 w v₁} A
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := restrictedULiftYonedaHomEquiv L α
-      homEquiv_naturality_left_symm {P Q X} f g := by
-        apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
-        intro p
-        have hfg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
-          L α P).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A P X).symm (f ≫ g)) p
-        have hg := (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension
-          L α Q).comp_homEquiv_symm ((restrictedULiftYonedaHomEquiv' A Q X).symm g)
-            ((CostructuredArrow.map f).obj p)
-        dsimp at hfg hg
-        dsimp [restrictedULiftYonedaHomEquiv]
-        simp only [assoc, hfg, ← L.map_comp_assoc, hg,
-          restrictedULiftYonedaHomEquiv'_symm_app_naturality_left]
-      homEquiv_naturality_right {P X Y} f g := by
-        have := @IsColimit.homEquiv_symm_naturality (h :=
-          Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P)
-        dsimp at this
-        apply (restrictedULiftYonedaHomEquiv L α P Y).symm.injective
-        apply (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α P).hom_ext
-        intro
-        simp [restrictedULiftYonedaHomEquiv,
-          restrictedULiftYonedaHomEquiv'_symm_naturality_right, this] }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Functor, Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension, comp_homEquiv_symm, homEquiv, homEquiv_naturality_left_symm, hom_ext, isPointwiseLeftKanExtensionOfIsLeftKanExtension, mkOfHomEquiv, restrictedULiftYonedaHomEquiv
+--- 原说明 ---
+If `L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ` is a pointwise left Kan extension
+of a functor `A : C ⥤ ℰ` along the Yoneda embedding,
+then `L` is a left adjoint of `restrictedULiftYoneda A : ℰ ⥤ Cᵒᵖ ⥤ Type max w v₁
+ v₂`
 -/
 noncomputable def uliftYonedaAdjunction : L ⊣ restrictedULiftYoneda.{max w v₁} A :=
   Adjunction.mkOfHomEquiv
@@ -412,24 +332,40 @@ noncomputable def uliftYonedaAdjunction : L ⊣ restrictedULiftYoneda.{max w v�
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `uliftYonedaAdjunction_homEquiv_app` / 引理 `uliftYonedaAdjunction_homEquiv_app`
-
-English:
-lemma uliftYonedaAdjunction_homEquiv_app
-  statement: {P : Cᵒᵖ ⥤ Type max w v₁ v₂}
-  proof: by
-  simp [uliftYonedaAdjunction, restrictedULiftYonedaHomEquiv,
-    restrictedULiftYonedaHomEquiv', IsColimit.homEquiv]
-
-中文:
-引理 uliftYonedaAdjunction_homEquiv_app
-  结论: {P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂}
-  证明: by
-  simp [uliftYonedaAdjunction, restrictedULiftYonedaHomEquiv,
-    restrictedULiftYonedaHomEquiv', IsColimit.homEquiv]
-
-Depends on / 依赖: IsColimit, IsColimit.homEquiv, homEquiv, restrictedULiftYonedaHomEquiv, uliftYonedaAdjunction
+/-
+**CategoryTheory.Presheaf.uliftYonedaAdjunction_homEquiv_app** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：uliftYonedaAdjunction_homEquiv_app {P : Cᵒᵖ ⥤ Type max w v₁ v₂} {Y : ℰ} (f
+ : L.obj P ⟶ Y) {Z : Cᵒᵖ} (z : P.obj Z) : ((uliftYonedaAdjunction.{w} L α).homEq
+uiv P Y f).app Z z = ULift.up (α.app Z.unop ≫ L.map (uliftYonedaEquiv.symm z) ≫ 
+f)
+参数：f : L.obj P ⟶ Y；z : P.obj Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用引理 `CategoryTheory.Adjunction.mkOfHomEquiv_homEquiv`：mkOfHomEquiv_homEquiv (
+adj : CoreHomEquiv F G) : (mkOfHomEquiv adj).homEquiv = adj.homEquiv
+· 使用定理 `CategoryTheory.NatTrans.mk.congr_simp`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftYonedaAdjunction_homEquiv_app {P : Cᵒᵖ ⥤ Type max w v₁ v₂}
     {Y : ℰ} (f : L.obj P ⟶ Y) {Z : Cᵒᵖ} (z : P.obj Z) :
@@ -441,30 +377,40 @@ lemma uliftYonedaAdjunction_homEquiv_app {P : Cᵒᵖ ⥤ Type max w v₁ v₂}
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `uliftYonedaAdjunction_unit_app_app` / 引理 `uliftYonedaAdjunction_unit_app_app`
-
-English:
-lemma uliftYonedaAdjunction_unit_app_app
-  statement: (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
-  proof: by
-  have h₁ := (uliftYonedaAdjunction.{w} L α).homEquiv_unit P _ (𝟙 _)
-  simp only [Functor.comp_obj, Functor.map_id, comp_id] at h₁
-  simp [← h₁]
-
-include α in
-
-中文:
-引理 uliftYonedaAdjunction_unit_app_app
-  结论: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂)
-  证明: by
-  have h₁ := (uliftYonedaAdjunction.{w} L α).homEquiv_unit P _ (𝟙 _)
-  simp only [Functor.comp_obj, Functor.map_id, comp_id] at h₁
-  simp [← h₁]
-
-include α in
-
-Depends on / 依赖: Functor, Functor.comp_obj, Functor.map_id, comp_id, comp_obj, homEquiv_unit, map_id, uliftYonedaAdjunction
+/-
+**CategoryTheory.Presheaf.uliftYonedaAdjunction_unit_app_app** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：uliftYonedaAdjunction_unit_app_app (P : Cᵒᵖ ⥤ Type max w v₁ v₂) {Z : Cᵒᵖ} 
+(z : P.obj Z) : dsimp% ((uliftYonedaAdjunction.{w} L α).unit.app P).app Z z = UL
+ift.up (α.app Z.unop ≫ L.map (uliftYonedaEquiv.symm z))
+参数：P : Cᵒᵖ ⥤ Type max w v₁ v₂；z : P.obj Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_unit`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.Presheaf.uliftYonedaAdjunction_homEquiv_app`：uliftYonedaA
+djunction_homEquiv_app {P : Cᵒᵖ ⥤ Type max w v₁ v₂} {Y : ℰ} (f : L.obj P ⟶ Y) {Z
+ : Cᵒᵖ} (z : P.obj Z) : ((uliftYonedaAdjunction.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma uliftYonedaAdjunction_unit_app_app (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
     {Z : Cᵒᵖ} (z : P.obj Z) :
@@ -475,94 +421,88 @@ lemma uliftYonedaAdjunction_unit_app_app (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
   simp [← h₁]
 
 include α in
-/--
-lemma `preservesColimitsOfSize_of_isLeftKanExtension` / 引理 `preservesColimitsOfSize_of_isLeftKanExtension`
+/-- Any left Kan extension along the Yoneda embedding preserves colimits. -/
+/-
+**CategoryTheory.Presheaf.preservesColimitsOfSize_of_isLeftKanExtension** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：preservesColimitsOfSize_of_isLeftKanExtension : PreservesColimitsOfSize.{v
+₃, u₃} L
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.leftAdjoint_preservesColimits`：leftAdjoint_pre
+servesColimits : PreservesColimitsOfSize.{v, u} F where preservesColimitsOfShape
 
-English:
-lemma preservesColimitsOfSize_of_isLeftKanExtension
-  proof: (uliftYonedaAdjunction L α).leftAdjoint_preservesColimits
-
-中文:
-引理 preservesColimitsOfSize_of_isLeftKanExtension
-  证明: (uliftYonedaAdjunction L α).leftAdjoint_preservesColimits
-
-Depends on / 依赖: leftAdjoint_preservesColimits, uliftYonedaAdjunction
+--- 原说明 ---
+Any left Kan extension along the Yoneda embedding preserves colimits.
 -/
 lemma preservesColimitsOfSize_of_isLeftKanExtension :
     PreservesColimitsOfSize.{v₃, u₃} L :=
   (uliftYonedaAdjunction L α).leftAdjoint_preservesColimits
-
-/--
-lemma `isIso_of_isLeftKanExtension` / 引理 `isIso_of_isLeftKanExtension`
-
-English:
-lemma isIso_of_isLeftKanExtension
-  statement: IsIso α
-  proof: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension _ α).isIso_hom
-
-中文:
-引理 isIso_of_isLeftKanExtension
-  结论: 是同构 α
-  证明: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension _ α).isIso_hom
-
-Depends on / 依赖: Functor, Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension, isIso_hom, isPointwiseLeftKanExtensionOfIsLeftKanExtension
+/-
+**CategoryTheory.Presheaf.isIso_of_isLeftKanExtension** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Presheaf`。
+形式化陈述：isIso_of_isLeftKanExtension : IsIso α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension.isIso_h
+om`：∀ {C : Type u_1} {D : Type u_2} {H : Type u_4} [inst : CategoryTheory.Catego
+ry.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.ULiftYoneda.instFullFunctorOppositeTypeUliftYoneda`：∀ (C 
+: Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C], CategoryTheory.uliftYone
+da.{w, v₁, u₁}.Full
+· 使用定理 `CategoryTheory.ULiftYoneda.instFaithfulFunctorOppositeTypeUliftYoneda`：∀
+ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C], CategoryTheory.ulift
+Yoneda.{w, v₁, u₁}.Faithful
 -/
 lemma isIso_of_isLeftKanExtension : IsIso α :=
   (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension _ α).isIso_hom
 
 variable (A)
 
-/--
-Instance `preservesColimitsOfSize_leftKanExtension` / 实例 `preservesColimitsOfSize_leftKanExtension`
+/-- See Property 2 of https://ncatlab.org/nlab/show/Yoneda+extension#properties. -/
+/-
+**CategoryTheory.Presheaf.preservesColimitsOfSize_leftKanExtension** 是 Mathlib 中
+的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：preservesColimitsOfSize_leftKanExtension : PreservesColimitsOfSize.{v₃, u₃
+} (uliftYoneda.{max w v₂}.leftKanExtension A)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.leftAdjoint_preservesColimits`：leftAdjoint_pre
+servesColimits : PreservesColimitsOfSize.{v, u} F where preservesColimitsOfShape
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.instIsLeftKanExtensionLeftKanExtensionLeftKanExte
+nsionUnit`：∀ {C : Type u_1} {H : Type u_3} {D : Type u_4} [inst : CategoryTheory
+.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_3, u_3} …
 
-English:
-instance preservesColimitsOfSize_leftKanExtension
-  signature: :
-  body: (uliftYonedaAdjunction _ (uliftYoneda.leftKanExtensionUnit A)).leftAdjoint_preservesColimits
-
-中文:
-实例 preservesColimitsOfSize_leftKanExtension
-  签名: :
-  定义体: (uliftYonedaAdjunction _ (uliftYoneda.leftKanExtensionUnit A)).leftAdjoint_preservesColimits
-
-Depends on / 依赖: leftAdjoint_preservesColimits, leftKanExtensionUnit, uliftYoneda, uliftYoneda.leftKanExtensionUnit, uliftYonedaAdjunction
+--- 原说明 ---
+See Property 2 of https://ncatlab.org/nlab/show/Yoneda+extension#properties.
 -/
 instance preservesColimitsOfSize_leftKanExtension :
     PreservesColimitsOfSize.{v₃, u₃} (uliftYoneda.{max w v₂}.leftKanExtension A) :=
   (uliftYonedaAdjunction _ (uliftYoneda.leftKanExtensionUnit A)).leftAdjoint_preservesColimits
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (uliftYoneda.{max w v₂}.leftKanExtensionUnit A)
-  body: isIso_of_isLeftKanExtension _ (uliftYoneda.leftKanExtensionUnit A)
-
-中文:
-实例 :
-  签名: 是同构 (uliftYoneda.{最大值 w v₂}.leftKanExtensionUnit A)
-  定义体: isIso_of_isLeftKanExtension _ (uliftYoneda.leftKanExtensionUnit A)
-
-Depends on / 依赖: isIso_of_isLeftKanExtension, leftKanExtensionUnit, uliftYoneda, uliftYoneda.leftKanExtensionUnit
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (uliftYoneda.{max w v₂}.leftKanExtensionUnit A) :=
   isIso_of_isLeftKanExtension _ (uliftYoneda.leftKanExtensionUnit A)
 
-/--
-Definition of `isExtensionAlongULiftYoneda` / `isExtensionAlongULiftYoneda` 的定义
+/-- A pointwise left Kan extension along the Yoneda embedding is an extension. -/
+/-
+**CategoryTheory.Presheaf.isExtensionAlongULiftYoneda** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Presheaf`。
+形式化陈述：isExtensionAlongULiftYoneda : uliftYoneda.{max w v₂} ⋙ uliftYoneda.leftKan
+Extension A ≅ A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presheaf.instIsIsoFunctorLeftKanExtensionUnitOppositeType
+UliftYoneda`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {ℰ : Ty
+pe u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} ℰ]   (A : CategoryTheor…
 
-English:
-definition isExtensionAlongULiftYoneda
-  signature: :
-  body: (asIso (uliftYoneda.leftKanExtensionUnit A)).symm
-
-中文:
-定义 isExtensionAlongULiftYoneda
-  签名: :
-  定义体: (asIso (uliftYoneda.leftKanExtensionUnit A)).symm
-
-Depends on / 依赖: leftKanExtensionUnit, uliftYoneda, uliftYoneda.leftKanExtensionUnit
+--- 原说明 ---
+A pointwise left Kan extension along the Yoneda embedding is an extension.
 -/
 noncomputable def isExtensionAlongULiftYoneda :
     uliftYoneda.{max w v₂} ⋙ uliftYoneda.leftKanExtension A ≅ A :=
@@ -576,20 +516,21 @@ presheaf represented by `X`. The definition `coconeOfRepresentable`
 gives a cocone for this functor which is a colimit and has point `P`.
 -/
 @[simps! obj map]
-/--
-Definition of `functorToRepresentables` / `functorToRepresentables` 的定义
+/-
+**CategoryTheory.Presheaf.functorToRepresentables** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Presheaf`。
+形式化陈述：functorToRepresentables (P : Cᵒᵖ ⥤ Type max w v₁) : P.Elementsᵒᵖ ⥤ Cᵒᵖ ⥤ T
+ype max w v₁
+参数：P : Cᵒᵖ ⥤ Type max w v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorToRepresentables
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁)
-  body: (CategoryOfElements.π P).leftOp ⋙ uliftYoneda.{w}
-
-中文:
-定义 functorToRepresentables
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
-  定义体: (CategoryOfElements.π P).leftOp ⋙ uliftYoneda.{w}
-
-Depends on / 依赖: CategoryOfElements, leftOp, uliftYoneda
+--- 原说明 ---
+Given `P : Cᵒᵖ ⥤ Type max w v₁`, this is the functor from the opposite category
+of the category of elements of `X` which sends an element in `P.obj (op X)` to t
+he
+presheaf represented by `X`. The definition `coconeOfRepresentable`
+gives a cocone for this functor which is a colimit and has point `P`.
 -/
 def functorToRepresentables (P : Cᵒᵖ ⥤ Type max w v₁) :
     P.Elementsᵒᵖ ⥤ Cᵒᵖ ⥤ Type max w v₁ :=
@@ -604,28 +545,24 @@ presheaf `P` as a colimit of representables.
 The construction of [MM92], Chapter I, Section 5, Corollary 3.
 -/
 @[simps]
-/--
-Definition of `coconeOfRepresentable` / `coconeOfRepresentable` 的定义
+/-
+**CategoryTheory.Presheaf.coconeOfRepresentable** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Presheaf`。
+形式化陈述：coconeOfRepresentable (P : Cᵒᵖ ⥤ Type max w v₁) : Cocone (functorToReprese
+ntables P) where pt
+参数：P : Cᵒᵖ ⥤ Type max w v₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition coconeOfRepresentable
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁)
-  body: P
-  ι :=
-    { app x := uliftYonedaEquiv.symm x.unop.2
-      naturality {x₁ x₂} f := by
-        dsimp
-        rw [comp_id]; rw [← uliftYonedaEquiv_symm_map]; rw [f.unop.2] }
+--- 原说明 ---
+This is a cocone with point `P` for the functor `functorToRepresentables P`. It 
+is shown in
+`colimitOfRepresentable P` that this cocone is a colimit: that is, we have exhib
+ited an arbitrary
+presheaf `P` as a colimit of representables.
 
-中文:
-定义 coconeOfRepresentable
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
-  定义体: P
-  ι :=
-    { app x := uliftYonedaEquiv.symm x.unop.2
-      naturality {x₁ x₂} f := by
-        dsimp
-        rw [comp_id]; rw [← uliftYonedaEquiv_symm_map]; rw [f.unop.2] }
+The construction of [MM92], Chapter I, Section 5, Corollary 3.
 -/
 def coconeOfRepresentable (P : Cᵒᵖ ⥤ Type max w v₁) :
     Cocone (functorToRepresentables P) where
@@ -634,26 +571,46 @@ def coconeOfRepresentable (P : Cᵒᵖ ⥤ Type max w v₁) :
     { app x := uliftYonedaEquiv.symm x.unop.2
       naturality {x₁ x₂} f := by
         dsimp
-        rw [comp_id]; rw [← uliftYonedaEquiv_symm_map]; rw [f.unop.2] }
+        rw [comp_id, ← uliftYonedaEquiv_symm_map, f.unop.2] }
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coconeOfRepresentable_naturality` / 定理 `coconeOfRepresentable_naturality`
+/-- The legs of the cocone `coconeOfRepresentable` are natural in the choice of presheaf. -/
+/-
+**CategoryTheory.Presheaf.coconeOfRepresentable_naturality** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：coconeOfRepresentable_naturality {P₁ P₂ : Cᵒᵖ ⥤ Type max w v₁} (α : P₁ ⟶ P
+₂) (j : P₁.Elementsᵒᵖ) : (coconeOfRepresentable P₁).ι.app j ≫ α = (coconeOfRepre
+sentable P₂).ι.app ((CategoryOfElements.map α).op.obj j)
+参数：α : P₁ ⟶ P₂；j : P₁.Elementsᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem coconeOfRepresentable_naturality
-  proof: by
-  ext T f
-  simp [uliftYonedaEquiv]
-
-中文:
-定理 coconeOfRepresentable_naturality
-  证明: by
-  ext T f
-  simp [uliftYonedaEquiv]
-
-Depends on / 依赖: uliftYonedaEquiv
+--- 原说明 ---
+The legs of the cocone `coconeOfRepresentable` are natural in the choice of pres
+heaf.
 -/
 theorem coconeOfRepresentable_naturality
     {P₁ P₂ : Cᵒᵖ ⥤ Type max w v₁} (α : P₁ ⟶ P₂) (j : P₁.Elementsᵒᵖ) :
@@ -664,82 +621,41 @@ theorem coconeOfRepresentable_naturality
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `colimitOfRepresentable` / `colimitOfRepresentable` 的定义
+/-- The cocone with point `P` given by `coconeOfRepresentable` is a colimit:
+that is, we have exhibited an arbitrary presheaf `P` as a colimit of representables.
 
-English:
-definition colimitOfRepresentable
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁)
-  body: { app X := ↾fun x => uliftYonedaEquiv
-        (s.ι.app (Opposite.op (Functor.elementsMk P X x)))
-      naturality X Y f := by
-        ext x
-        have := s.w (Quiver.Hom.op (CategoryOfElements.homMk (P.elementsMk X x)
-          (P.elementsMk Y (P.map f x)) f rfl))
-        dsimp at this x ⊢
-        rw [← this]; rw [uliftYonedaEquiv_comp]
-        dsimp
-        rw [uliftYonedaEquiv_apply]; rw [uliftYonedaEquiv_apply]; rw [← NatTrans.naturality_apply]
-        simp [uliftYoneda] }
-  fac s j := by
-    ext X x
-    let φ : j.unop ⟶ (Functor.elementsMk P _
-      ((uliftYonedaEquiv.symm (unop j).snd).app X x)) := ⟨x.down.op, rfl⟩
-    have := s.w φ.op
-    dsimp [φ] at this x ⊢
-    rw [← this]; rw [uliftYonedaEquiv_apply]
-    simp [uliftYoneda]
-  uniq s m hm := by
-    ext X x
-    simp only [functorToRepresentables_obj, coconeOfRepresentable_pt, Functor.const_obj_obj,
-      coconeOfRepresentable_ι_app, Functor.leftOp_obj, CategoryOfElements.π_obj, op_unop,
-      TypeCat.Fun.toFun_apply, hom_ofHom, TypeCat.Fun.coe_mk] at hm ⊢
-    rw [← hm]; rw [uliftYonedaEquiv_comp]; rw [Equiv.apply_symm_apply]
+The result of [MM92], Chapter I, Section 5, Corollary 3.
+-/
+/-
+**CategoryTheory.Presheaf.colimitOfRepresentable** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Presheaf`。
+形式化陈述：colimitOfRepresentable (P : Cᵒᵖ ⥤ Type max w v₁) : IsColimit (coconeOfRepr
+esentable P) where desc s
+参数：P : Cᵒᵖ ⥤ Type max w v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 colimitOfRepresentable
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
-  定义体: { app X := ↾fun x => uliftYonedaEquiv
-        (s.ι.app (Opposite.op (Functor.elementsMk P X x)))
-      naturality X Y f := by
-        ext x
-        have := s.w (Quiver.Hom.op (CategoryOfElements.homMk (P.elementsMk X x)
-          (P.elementsMk Y (P.map f x)) f rfl))
-        dsimp at this x ⊢
-        rw [← this]; rw [uliftYonedaEquiv_comp]
-        dsimp
-        rw [uliftYonedaEquiv_apply]; rw [uliftYonedaEquiv_apply]; rw [← NatTrans.naturality_apply]
-        simp [uliftYoneda] }
-  fac s j := by
-    ext X x
-    let φ : j.unop ⟶ (Functor.elementsMk P _
-      ((uliftYonedaEquiv.symm (unop j).snd).app X x)) := ⟨x.down.op, rfl⟩
-    have := s.w φ.op
-    dsimp [φ] at this x ⊢
-    rw [← this]; rw [uliftYonedaEquiv_apply]
-    simp [uliftYoneda]
-  uniq s m hm := by
-    ext X x
-    simp only [functorToRepresentables_obj, coconeOfRepresentable_pt, Functor.const_obj_obj,
-      coconeOfRepresentable_ι_app, Functor.leftOp_obj, CategoryOfElements.π_obj, op_unop,
-      TypeCat.Fun.toFun_apply, hom_ofHom, TypeCat.Fun.coe_mk] at hm ⊢
-    rw [← hm]; rw [uliftYonedaEquiv_comp]; rw [Equiv.apply_symm_apply]
+--- 原说明 ---
+The cocone with point `P` given by `coconeOfRepresentable` is a colimit:
+that is, we have exhibited an arbitrary presheaf `P` as a colimit of representab
+les.
 
-Depends on / 依赖: CategoryOfElements, CategoryOfElements.homMk, Functor, Functor.elementsMk, NatTrans, NatTrans.naturality_apply, Opposite, Opposite.op, P.elementsMk, P.map, Quiver, Quiver.Hom.op, elementsMk, j.unop, naturality, naturality_apply, uliftYoneda, uliftYonedaEquiv, uliftYonedaEquiv.symm, uliftYonedaEquiv_apply
+The result of [MM92], Chapter I, Section 5, Corollary 3.
 -/
 def colimitOfRepresentable (P : Cᵒᵖ ⥤ Type max w v₁) :
     IsColimit (coconeOfRepresentable P) where
   desc s :=
-    { app X := ↾fun x => uliftYonedaEquiv
+    { app X := ↾fun x ↦ uliftYonedaEquiv
         (s.ι.app (Opposite.op (Functor.elementsMk P X x)))
       naturality X Y f := by
         ext x
         have := s.w (Quiver.Hom.op (CategoryOfElements.homMk (P.elementsMk X x)
           (P.elementsMk Y (P.map f x)) f rfl))
         dsimp at this x ⊢
-        rw [← this]; rw [uliftYonedaEquiv_comp]
+        rw [← this, uliftYonedaEquiv_comp]
         dsimp
-        rw [uliftYonedaEquiv_apply]; rw [uliftYonedaEquiv_apply]; rw [← NatTrans.naturality_apply]
+        rw [uliftYonedaEquiv_apply, uliftYonedaEquiv_apply,
+          ← NatTrans.naturality_apply]
         simp [uliftYoneda] }
   fac s j := by
     ext X x
@@ -747,17 +663,20 @@ def colimitOfRepresentable (P : Cᵒᵖ ⥤ Type max w v₁) :
       ((uliftYonedaEquiv.symm (unop j).snd).app X x)) := ⟨x.down.op, rfl⟩
     have := s.w φ.op
     dsimp [φ] at this x ⊢
-    rw [← this]; rw [uliftYonedaEquiv_apply]
+    rw [← this, uliftYonedaEquiv_apply]
     simp [uliftYoneda]
   uniq s m hm := by
     ext X x
     simp only [functorToRepresentables_obj, coconeOfRepresentable_pt, Functor.const_obj_obj,
       coconeOfRepresentable_ι_app, Functor.leftOp_obj, CategoryOfElements.π_obj, op_unop,
       TypeCat.Fun.toFun_apply, hom_ofHom, TypeCat.Fun.coe_mk] at hm ⊢
-    rw [← hm]; rw [uliftYonedaEquiv_comp]; rw [Equiv.apply_symm_apply]
+    rw [← hm, uliftYonedaEquiv_comp, Equiv.apply_symm_apply]
 
 variable {A : C ⥤ ℰ}
-
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [HasColimitsOfSize.{v₁, max w u₁ v₁ v₂} ℰ] :
     uliftYoneda.{max w v₂}.HasPointwiseLeftKanExtension A := by
   infer_instance
@@ -768,78 +687,76 @@ section
 
 variable (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ) (α : A ⟶ uliftYoneda.{max w v₂} ⋙ L)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [L.IsLeftKanExtension
-  signature: α] : IsIso α
-  body: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α).isIso_hom
-
-中文:
-实例 [L.是LeftKanExtension
-  签名: α] : 是同构 α
-  定义体: (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α).isIso_hom
-
-Depends on / 依赖: Functor, Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension, isIso_hom, isPointwiseLeftKanExtensionOfIsLeftKanExtension
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [L.IsLeftKanExtension α] : IsIso α :=
   (Functor.isPointwiseLeftKanExtensionOfIsLeftKanExtension L α).isIso_hom
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isLeftKanExtension_along_uliftYoneda_iff` / 引理 `isLeftKanExtension_along_uliftYoneda_iff`
-
-English:
-lemma isLeftKanExtension_along_uliftYoneda_iff
-  proof: by
-  constructor
-  · intro
-    exact ⟨inferInstance, preservesColimits_of_natIso (Functor.leftKanExtensionUnique _
-      (uliftYoneda.{max w v₂}.leftKanExtensionUnit A) _ α)⟩
-  · rintro ⟨_, _⟩
-    apply Functor.LeftExtension.IsPointwiseLeftKanExtension.isLeftKanExtension
-      (E := Functor.LeftExtension.mk _ α)
-    intro P
-    dsimp [Functor.LeftExtension.IsPointwiseLeftKanExtensionAt]
-    apply IsColimit.ofWhiskerEquivalence
-      (CategoryOfElements.costructuredArrowULiftYonedaEquivalence _)
-    let e : (CategoryOfElements.costructuredArrowULiftYonedaEquivalence P).functor ⋙
-      CostructuredArrow.proj uliftYoneda.{max w v₂} P ⋙ A ≅
-        functorToRepresentables.{max w v₂} P ⋙ L :=
-      Functor.isoWhiskerLeft _ (Functor.isoWhiskerLeft _ (asIso α)) ≪≫
-        Functor.isoWhiskerLeft _ (Functor.associator _ _ _).symm ≪≫
-        (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight (Iso.refl _) L
-    refine (IsColimit.precomposeHomEquiv e.symm _).1 ?_
-    exact IsColimit.ofIsoColimit (isColimitOfPreserves L (colimitOfRepresentable.{max w v₂} P))
-      (Cocone.ext (Iso.refl _))
-
-中文:
-引理 isLeftKanExtension_along_uliftYoneda_iff
-  证明: by
-  constructor
-  · intro
-    exact ⟨inferInstance, preservesColimits_of_natIso (Functor.leftKanExtensionUnique _
-      (uliftYoneda.{max w v₂}.leftKanExtensionUnit A) _ α)⟩
-  · rintro ⟨_, _⟩
-    apply Functor.LeftExtension.IsPointwiseLeftKanExtension.isLeftKanExtension
-      (E := Functor.LeftExtension.mk _ α)
-    intro P
-    dsimp [Functor.LeftExtension.IsPointwiseLeftKanExtensionAt]
-    apply IsColimit.ofWhiskerEquivalence
-      (CategoryOfElements.costructuredArrowULiftYonedaEquivalence _)
-    let e : (CategoryOfElements.costructuredArrowULiftYonedaEquivalence P).functor ⋙
-      CostructuredArrow.proj uliftYoneda.{max w v₂} P ⋙ A ≅
-        functorToRepresentables.{max w v₂} P ⋙ L :=
-      Functor.isoWhiskerLeft _ (Functor.isoWhiskerLeft _ (asIso α)) ≪≫
-        Functor.isoWhiskerLeft _ (Functor.associator _ _ _).symm ≪≫
-        (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight (Iso.refl _) L
-    refine (IsColimit.precomposeHomEquiv e.symm _).1 ?_
-    exact IsColimit.ofIsoColimit (isColimitOfPreserves L (colimitOfRepresentable.{max w v₂} P))
-      (Cocone.ext (Iso.refl _))
-
-Depends on / 依赖: CategoryOfElements, CategoryOfElements.costructuredArro, CategoryOfElements.costructuredArrowULiftYonedaEquivalence, Functor, Functor.LeftExtension.IsPointwiseLeftKanExtension.isLeftKanExtension, Functor.LeftExtension.IsPointwiseLeftKanExtensionAt, Functor.LeftExtension.mk, Functor.leftKanExtensionUnique, IsColimit, IsColimit.ofWhiskerEquivalence, IsPointwiseLeftKanExtension, IsPointwiseLeftKanExtensionAt, LeftExtension, costructuredArro, costructuredArrowULiftYonedaEquivalence, isLeftKanExtension, leftKanExtensionUnique, leftKanExtensionUnit, ofWhiskerEquivalence, preservesColimits_of_natIso
+/-
+**CategoryTheory.Presheaf.isLeftKanExtension_along_uliftYoneda_iff** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：isLeftKanExtension_along_uliftYoneda_iff : L.IsLeftKanExtension α ↔ (IsIso
+ α ∧ PreservesColimitsOfSize.{v₁, max w u₁ v₁ v₂} L)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presheaf.instIsIsoFunctorOfIsLeftKanExtensionOppositeType
+`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {ℰ : Type u₂} [ins
+t_1 : CategoryTheory.Category.{v₂, u₂} ℰ]   {A : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesColimits_of_natIso`：preservesColimits_of_
+natIso {F G : C ⥤ D} (h : F ≅ G) [PreservesColimitsOfSize.{w, w'} F] : Preserves
+ColimitsOfSize.{w, w'} G where preserve…
+· 使用定理 `CategoryTheory.Functor.instHasLeftKanExtension`：∀ {C : Type u_1} {D : Ty
+pe u_2} {H : Type u_4} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.instIsLeftKanExtensionLeftKanExtensionLeftKanExte
+nsionUnit`：∀ {C : Type u_1} {H : Type u_3} {D : Type u_4} [inst : CategoryTheory
+.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_3, u_3} …
+· 使用定理 `CategoryTheory.Functor.LeftExtension.IsPointwiseLeftKanExtension.isLeftK
+anExtension`：∀ {C : Type u_1} {D : Type u_2} {H : Type u_4} [inst : CategoryTheo
+ry.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.whiskerRight_id'`：whiskerRight_id' {G : C ⥤ D} (F
+ : D ⥤ E) : whiskerRight (𝟙 G) F = 𝟙 (G.comp F)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.whiskerLeft_twice`：whiskerLeft_twice (F : B ⥤ C) 
+(G : C ⥤ D) {H K : D ⥤ E} (α : H ⟶ K) : whiskerLeft F (whiskerLeft G α) = (Funct
+or.associator _ _ _).inv ≫ whi…
+· 使用定理 `CategoryTheory.NatIso.isIso_app_of_isIso`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.NatIso.isIso_inv_app`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : Y ⟶ Z), CategoryT…
 -/
 lemma isLeftKanExtension_along_uliftYoneda_iff :
     L.IsLeftKanExtension α ↔
@@ -864,23 +781,25 @@ lemma isLeftKanExtension_along_uliftYoneda_iff :
     refine (IsColimit.precomposeHomEquiv e.symm _).1 ?_
     exact IsColimit.ofIsoColimit (isColimitOfPreserves L (colimitOfRepresentable.{max w v₂} P))
       (Cocone.ext (Iso.refl _))
-
-/--
-lemma `isLeftKanExtension_of_preservesColimits` / 引理 `isLeftKanExtension_of_preservesColimits`
-
-English:
-lemma isLeftKanExtension_of_preservesColimits
-  proof: by
-  rw [isLeftKanExtension_along_uliftYoneda_iff]
-  exact ⟨inferInstance, ⟨inferInstance⟩⟩
-
-中文:
-引理 isLeftKanExtension_of_preservesColimits
-  证明: by
-  rw [isLeftKanExtension_along_uliftYoneda_iff]
-  exact ⟨inferInstance, ⟨inferInstance⟩⟩
-
-Depends on / 依赖: isLeftKanExtension_along_uliftYoneda_iff
+/-
+**CategoryTheory.Presheaf.isLeftKanExtension_of_preservesColimits** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：isLeftKanExtension_of_preservesColimits (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ)
+ (e : A ≅ uliftYoneda.{max w v₂} ⋙ L) [PreservesColimitsOfSize.{v₁, max w u₁ v₁ 
+v₂} L] : L.IsLeftKanExtension e.hom
+参数：L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ；e : A ≅ uliftYoneda.{max w v₂} ⋙ L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Presheaf.isLeftKanExtension_along_uliftYoneda_iff`：isLeft
+KanExtension_along_uliftYoneda_iff : L.IsLeftKanExtension α ↔ (IsIso α ∧ Preserv
+esColimitsOfSize.{v₁, max w u₁ v₁ v₂} L)
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfSize.preservesColimitsOfShape`：
+∀ {C : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_
+1 : CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 lemma isLeftKanExtension_of_preservesColimits
     (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ) (e : A ≅ uliftYoneda.{max w v₂} ⋙ L)
@@ -891,22 +810,31 @@ lemma isLeftKanExtension_of_preservesColimits
 
 end
 
-/--
-Definition of `uniqueExtensionAlongULiftYoneda` / `uniqueExtensionAlongULiftYoneda` 的定义
+/-- Show that `uliftYoneda.leftKanExtension A` is the unique colimit-preserving
+functor which extends `A` to the presheaf category.
 
-English:
-definition uniqueExtensionAlongULiftYoneda
-  signature: (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ)
-  body: have := isLeftKanExtension_of_preservesColimits L e
-  Functor.leftKanExtensionUnique _ e.hom _ (uliftYoneda.leftKanExtensionUnit A)
+The second part of [MM92], Chapter I, Section 5, Corollary 4.
+See Property 3 of https://ncatlab.org/nlab/show/Yoneda+extension#properties.
+-/
+/-
+**CategoryTheory.Presheaf.uniqueExtensionAlongULiftYoneda** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Presheaf`。
+形式化陈述：uniqueExtensionAlongULiftYoneda (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ) (e : A 
+≅ uliftYoneda.{max w v₂} ⋙ L) [PreservesColimitsOfSize.{v₁, max w u₁ v₁ v₂} L] :
+ L ≅ uliftYoneda.{max w v₂}.leftKanExtension A
+参数：L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ；e : A ≅ uliftYoneda.{max w v₂} ⋙ L。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Presheaf.isLeftKanExtension_of_preservesColimits`：isLeftK
+anExtension_of_preservesColimits (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ) (e : A ≅ uli
+ftYoneda.{max w v₂} ⋙ L) [PreservesColimitsOfSize.{v₁…
 
-中文:
-定义 uniqueExtensionAlongULiftYoneda
-  签名: (L : (Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) ⥤ ℰ)
-  定义体: have := isLeftKanExtension_of_preservesColimits L e
-  Functor.leftKanExtensionUnique _ e.hom _ (uliftYoneda.leftKanExtensionUnit A)
+--- 原说明 ---
+Show that `uliftYoneda.leftKanExtension A` is the unique colimit-preserving
+functor which extends `A` to the presheaf category.
 
-Depends on / 依赖: Functor, Functor.leftKanExtensionUnique, e.hom, isLeftKanExtension_of_preservesColimits, leftKanExtensionUnique, leftKanExtensionUnit, uliftYoneda, uliftYoneda.leftKanExtensionUnit
+The second part of [MM92], Chapter I, Section 5, Corollary 4.
+See Property 3 of https://ncatlab.org/nlab/show/Yoneda+extension#properties.
 -/
 noncomputable def uniqueExtensionAlongULiftYoneda (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ)
     (e : A ≅ uliftYoneda.{max w v₂} ⋙ L)
@@ -914,30 +842,50 @@ noncomputable def uniqueExtensionAlongULiftYoneda (L : (Cᵒᵖ ⥤ Type max w v
     L ≅ uliftYoneda.{max w v₂}.leftKanExtension A :=
   have := isLeftKanExtension_of_preservesColimits L e
   Functor.leftKanExtensionUnique _ e.hom _ (uliftYoneda.leftKanExtensionUnit A)
-
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (L : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ ℰ) [PreservesColimitsOfSize.{v₁, max w u₁ v₁ v₂} L]
     [uliftYoneda.{max w v₂}.HasPointwiseLeftKanExtension (uliftYoneda.{max w v₂} ⋙ L)] :
     L.IsLeftKanExtension (𝟙 _ : uliftYoneda.{max w v₂} ⋙ L ⟶ _) :=
   isLeftKanExtension_of_preservesColimits _ (Iso.refl _)
 
-/--
-lemma `isLeftAdjoint_of_preservesColimits` / 引理 `isLeftAdjoint_of_preservesColimits`
+/-- If `L` preserves colimits and `ℰ` has them, then it is a left adjoint. Note this is a (partial)
+converse to `leftAdjointPreservesColimits`.
+-/
+/-
+**CategoryTheory.Presheaf.isLeftAdjoint_of_preservesColimits** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：isLeftAdjoint_of_preservesColimits (L : (C ⥤ Type max w v₁ v₂) ⥤ ℰ) [Prese
+rvesColimitsOfSize.{v₁, max w u₁ v₁ v₂} L] [uliftYoneda.{max w v₂}.HasPointwiseL
+eftKanExtension (uliftYoneda.{max w v₂} ⋙ (opOpEquivalence C).congrLeft.functor.
+comp L)] : L.IsLeftAdjoint
+参数：L : (C ⥤ Type max w v₁ v₂) ⥤ ℰ；uliftYoneda.{max w v₂} ⋙ (opOpEquivalence C).c
+ongrLeft.functor.comp L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presheaf.instIsLeftKanExtensionFunctorOppositeTypeIdCompU
+liftYonedaOfPreservesColimitsOfSizeOfHasPointwiseLeftKanExtension`：∀ {C : Type u
+₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {ℰ : Type u₂} [inst_1 : CategoryT
+heory.Category.{v₂, u₂} ℰ]   (L : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.comp_preservesColimits`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {E : Type u₃} [ℰ :…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 
-English:
-lemma isLeftAdjoint_of_preservesColimits
-  statement: (L : (C ⥤ Type max w v₁ v₂) ⥤ ℰ)
-  proof: ⟨_, ⟨((opOpEquivalence C).congrLeft.symm.toAdjunction.comp
-    (uliftYonedaAdjunction _ (𝟙 _))).ofNatIsoLeft
-      ((opOpEquivalence C).congrLeft.invFunIdAssoc L)⟩⟩
-
-中文:
-引理 isLeftAdjoint_of_preservesColimits
-  结论: (L : (C ⥤ 类型 最大值 w v₁ v₂) ⥤ ℰ)
-  证明: ⟨_, ⟨((opOpEquivalence C).congrLeft.symm.toAdjunction.comp
-    (uliftYonedaAdjunction _ (𝟙 _))).ofNatIsoLeft
-      ((opOpEquivalence C).congrLeft.invFunIdAssoc L)⟩⟩
-
-Depends on / 依赖: congrLeft, congrLeft.invFunIdAssoc, congrLeft.symm.toAdjunction.comp, invFunIdAssoc, ofNatIsoLeft, opOpEquivalence, toAdjunction, uliftYonedaAdjunction
+--- 原说明 ---
+If `L` preserves colimits and `ℰ` has them, then it is a left adjoint. Note this
+ is a (partial)
+converse to `leftAdjointPreservesColimits`.
 -/
 lemma isLeftAdjoint_of_preservesColimits (L : (C ⥤ Type max w v₁ v₂) ⥤ ℰ)
     [PreservesColimitsOfSize.{v₁, max w u₁ v₁ v₂} L]
@@ -954,6 +902,10 @@ variable {D : Type u₂} [Category.{v₁} D] (F : C ⥤ D)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) (Y : F.op.LeftExtension (yoneda.obj X)) :
     Unique (Functor.LeftExtension.mk _ (yonedaMap F X) ⟶ Y) where
   default := StructuredArrow.homMk
@@ -968,6 +920,14 @@ instance (X : C) (Y : F.op.LeftExtension (yoneda.obj X)) :
 
 /-- Given `F : C ⥤ D` and `X : C`, `yoneda.obj (F.obj X) : Dᵒᵖ ⥤ Type _` is the
 left Kan extension of `yoneda.obj X : Cᵒᵖ ⥤ Type _` along `F.op`. -/
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given `F : C ⥤ D` and `X : C`, `yoneda.obj (F.obj X) : Dᵒᵖ ⥤ Type _` is the
+left Kan extension of `yoneda.obj X : Cᵒᵖ ⥤ Type _` along `F.op`.
+-/
 instance (X : C) : (yoneda.obj (F.obj X)).IsLeftKanExtension (yonedaMap F X) :=
   ⟨⟨Limits.IsInitial.ofUnique _⟩⟩
 
@@ -979,13 +939,17 @@ variable {D : Type u₂} [Category.{v₂} D] (F : C ⥤ D)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) (Y : F.op.LeftExtension (uliftYoneda.{max w v₂}.obj X)) :
     Unique (Functor.LeftExtension.mk _ (uliftYonedaMap.{w} F X) ⟶ Y) where
   default := StructuredArrow.homMk
     (uliftYonedaEquiv.symm (uliftYonedaEquiv (F := F.op ⋙ Y.right) Y.hom)) (by
       ext Z ⟨f⟩
       simpa [uliftYonedaEquiv, uliftYoneda] using
-        ConcreteCategory.congr_hom (CC := fun X => X) (Y.hom.naturality f.op).symm (ULift.up (𝟙 _)))
+        ConcreteCategory.congr_hom (CC := fun X ↦ X) (Y.hom.naturality f.op).symm (ULift.up (𝟙 _)))
   uniq φ := by
     ext : 1
     apply uliftYonedaEquiv.injective
@@ -993,65 +957,39 @@ instance (X : C) (Y : F.op.LeftExtension (uliftYoneda.{max w v₂}.obj X)) :
 
 /-- Given `F : C ⥤ D` and `X : C`, `uliftYoneda.obj (F.obj X) : Dᵒᵖ ⥤ Type max w v₁ v₂` is the
 left Kan extension of `uliftYoneda.obj X : Cᵒᵖ ⥤ Type max w v₁ v₂` along `F.op`. -/
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given `F : C ⥤ D` and `X : C`, `uliftYoneda.obj (F.obj X) : Dᵒᵖ ⥤ Type max w v₁ 
+v₂` is the
+left Kan extension of `uliftYoneda.obj X : Cᵒᵖ ⥤ Type max w v₁ v₂` along `F.op`.
+-/
 instance (X : C) : (uliftYoneda.{max w v₁}.obj (F.obj X)).IsLeftKanExtension
     (uliftYonedaMap.{w} F X) :=
   ⟨⟨Limits.IsInitial.ofUnique _⟩⟩
 
 section
-variable [forall (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
+variable [∀ (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `compULiftYonedaIsoULiftYonedaCompLan` / `compULiftYonedaIsoULiftYonedaCompLan` 的定义
+/-- `F ⋙ uliftYoneda` is naturally isomorphic to `uliftYoneda ⋙ F.op.lan`. -/
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：compULiftYonedaIsoULiftYonedaCompLan : F ⋙ uliftYoneda.{max w v₁} ≅ uliftY
+oneda.{max w v₂} ⋙ F.op.lan
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presheaf.instIsLeftKanExtensionOppositeObjFunctorTypeUlif
+tYonedaUliftYonedaMap`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} 
+C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTh
+eor…
 
-English:
-definition compULiftYonedaIsoULiftYonedaCompLan
-  signature: :
-  body: NatIso.ofComponents (fun X => Functor.leftKanExtensionUnique _
-    (uliftYonedaMap.{w} F X) (F.op.lan.obj _) (F.op.lanUnit.app (uliftYoneda.obj X)))
-    (fun {X Y} f => by
-      apply uliftYonedaEquiv.injective
-      have eq₁ := ConcreteCategory.congr_hom
-        ((uliftYoneda.{max w v₁}.obj (F.obj Y)).descOfIsLeftKanExtension_fac_app
-        (uliftYonedaMap F Y) (F.op.lan.obj (uliftYoneda.obj Y))
-          (F.op.lanUnit.app (uliftYoneda.obj Y)) _) ⟨f⟩
-      have eq₂ := ConcreteCategory.congr_hom
-        (((uliftYoneda.{max w v₁}.obj (F.obj X)).descOfIsLeftKanExtension_fac_app
-        (uliftYonedaMap F X) (F.op.lan.obj (uliftYoneda.obj X))
-          (F.op.lanUnit.app (uliftYoneda.obj X))) _) ⟨𝟙 _⟩
-      have eq₃ := ConcreteCategory.congr_hom (congr_app (F.op.lanUnit.naturality
-        (uliftYoneda.{max w v₂}.map f)) _) ⟨𝟙 _⟩
-      dsimp [uliftYoneda, uliftYonedaMap, uliftYonedaEquiv,
-        Functor.leftKanExtensionUnique] at eq₁ eq₂ eq₃ ⊢
-      simp only [Functor.map_id] at eq₂
-      simp only [id_comp] at eq₃
-      simp [eq₁, eq₂, eq₃])
-
-中文:
-定义 compULiftYonedaIsoULiftYonedaCompLan
-  签名: :
-  定义体: NatIso.ofComponents (fun X => Functor.leftKanExtensionUnique _
-    (uliftYonedaMap.{w} F X) (F.op.lan.obj _) (F.op.lanUnit.app (uliftYoneda.obj X)))
-    (fun {X Y} f => by
-      apply uliftYonedaEquiv.injective
-      have eq₁ := ConcreteCategory.congr_hom
-        ((uliftYoneda.{max w v₁}.obj (F.obj Y)).descOfIsLeftKanExtension_fac_app
-        (uliftYonedaMap F Y) (F.op.lan.obj (uliftYoneda.obj Y))
-          (F.op.lanUnit.app (uliftYoneda.obj Y)) _) ⟨f⟩
-      have eq₂ := ConcreteCategory.congr_hom
-        (((uliftYoneda.{max w v₁}.obj (F.obj X)).descOfIsLeftKanExtension_fac_app
-        (uliftYonedaMap F X) (F.op.lan.obj (uliftYoneda.obj X))
-          (F.op.lanUnit.app (uliftYoneda.obj X))) _) ⟨𝟙 _⟩
-      have eq₃ := ConcreteCategory.congr_hom (congr_app (F.op.lanUnit.naturality
-        (uliftYoneda.{max w v₂}.map f)) _) ⟨𝟙 _⟩
-      dsimp [uliftYoneda, uliftYonedaMap, uliftYonedaEquiv,
-        Functor.leftKanExtensionUnique] at eq₁ eq₂ eq₃ ⊢
-      simp only [Functor.map_id] at eq₂
-      simp only [id_comp] at eq₃
-      simp [eq₁, eq₂, eq₃])
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.obj, F.op.lan.obj, F.op.lanUnit.app, Functor, Functor.leftKanExtensionUnique, NatIso, NatIso.ofComponents, congr_hom, descOfIsL, descOfIsLeftKanExtension_fac_app, injective, lanUnit, leftKanExtensionUnique, ofComponents, uliftYoneda, uliftYoneda.obj, uliftYonedaEquiv, uliftYonedaEquiv.injective
+--- 原说明 ---
+`F ⋙ uliftYoneda` is naturally isomorphic to `uliftYoneda ⋙ F.op.lan`.
 -/
 noncomputable def compULiftYonedaIsoULiftYonedaCompLan :
     F ⋙ uliftYoneda.{max w v₁} ≅ uliftYoneda.{max w v₂} ⋙ F.op.lan :=
@@ -1077,30 +1015,40 @@ noncomputable def compULiftYonedaIsoULiftYonedaCompLan :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id` / 引理 `compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id`
-
-English:
-lemma compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id
-  given: (X : C)
-  proof: (ConcreteCategory.congr_hom (CC := fun X => X) (Functor.descOfIsLeftKanExtension_fac_app _
-    (F.op.lanUnit.app ((uliftYoneda.{max w v₂}).obj X)) _
-    (uliftYonedaMap.{w} F X) (op X)) (ULift.up (𝟙 X))).trans (by simp [uliftYonedaMap])
-
-中文:
-引理 compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id
-  条件: (X : C)
-  证明: (ConcreteCategory.congr_hom (CC := fun X => X) (Functor.descOfIsLeftKanExtension_fac_app _
-    (F.op.lanUnit.app ((uliftYoneda.{max w v₂}).obj X)) _
-    (uliftYonedaMap.{w} F X) (op X)) (ULift.up (𝟙 X))).trans (by simp [uliftYonedaMap])
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.op.lanUnit.app, Functor, Functor.descOfIsLeftKanExtension_fac_app, ULift.up, congr_hom, descOfIsLeftKanExtension_fac_app, lanUnit, uliftYoneda, uliftYonedaMap
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply
+_eq_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id (X : C) : dsi
+mp% ((compULiftYonedaIsoULiftYonedaCompLan.{w} F).inv.app X).app (op (F.obj X)) 
+((F.op.lanUnit.app ((uliftYoneda.{max w v₂}).obj X)).app (op X) (ULift.up (𝟙 X))
+) = ULift.up (𝟙 (F.obj X))
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.instIsLeftKanExtensionObjLanAppLanUnit`：∀ {C : Ty
+pe u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} D] (L : Categor…
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用引理 `CategoryTheory.Functor.descOfIsLeftKanExtension_fac_app`：descOfIsLeftKan
+Extension_fac_app (G : D ⥤ H) (β : F ⟶ L ⋙ G) (X : C) : α.app X ≫ (F'.descOfIsLe
+ftKanExtension α G β).app (L.obj X) = β.app X
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id (X : C) :
     dsimp% ((compULiftYonedaIsoULiftYonedaCompLan.{w} F).inv.app X).app (op (F.obj X))
           ((F.op.lanUnit.app ((uliftYoneda.{max w v₂}).obj X)).app (op X)
         (ULift.up (𝟙 X))) = ULift.up (𝟙 (F.obj X)) :=
-        (ConcreteCategory.congr_hom (CC := fun X => X) (Functor.descOfIsLeftKanExtension_fac_app _
+        (ConcreteCategory.congr_hom (CC := fun X ↦ X) (Functor.descOfIsLeftKanExtension_fac_app _
     (F.op.lanUnit.app ((uliftYoneda.{max w v₂}).obj X)) _
     (uliftYonedaMap.{w} F X) (op X)) (ULift.up (𝟙 X))).trans (by simp [uliftYonedaMap])
 
@@ -1115,24 +1063,20 @@ section
 variable {X : C} {G : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂}
   (φ : F ⋙ uliftYoneda.{max w v₁} ⟶ uliftYoneda.{max w v₂} ⋙ G)
 
-/--
-Definition of `coconeApp` / `coconeApp` 的定义
+/-- Auxiliary definition for `presheafHom`. -/
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.coconeApp** 是 Mat
+hlib 中的一个定义，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan
+`。
+形式化陈述：coconeApp {P : Cᵒᵖ ⥤ Type max w v₁ v₂} (x : P.Elements) : uliftYoneda.{max
+ w v₂}.obj x.1.unop ⟶ F.op ⋙ G.obj P
+参数：x : P.Elements。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition coconeApp
-  signature: {P : Cᵒᵖ ⥤ Type max w v₁ v₂} (x : P.Elements)
-  body: uliftYonedaEquiv.symm
-    ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).app _
-      ((φ.app x.1.unop).app _ (ULift.up (𝟙 _))))
-
-中文:
-定义 coconeApp
-  签名: {P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂} (x : P.Elements)
-  定义体: uliftYonedaEquiv.symm
-    ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).app _
-      ((φ.app x.1.unop).app _ (ULift.up (𝟙 _))))
-
-Depends on / 依赖: G.map, ULift.up, uliftYonedaEquiv, uliftYonedaEquiv.symm
+--- 原说明 ---
+Auxiliary definition for `presheafHom`.
 -/
 def coconeApp {P : Cᵒᵖ ⥤ Type max w v₁ v₂} (x : P.Elements) :
     uliftYoneda.{max w v₂}.obj x.1.unop ⟶ F.op ⋙ G.obj P :=
@@ -1143,54 +1087,56 @@ def coconeApp {P : Cᵒᵖ ⥤ Type max w v₁ v₂} (x : P.Elements) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `coconeApp_naturality` / 引理 `coconeApp_naturality`
-
-English:
-lemma coconeApp_naturality
-  given: {P : Cᵒᵖ ⥤ Type max w v₁ v₂} {x y : P.Elements} (f : x ⟶ y)
-  proof: by
-  have eq₁ : uliftYoneda.map f.1.unop ≫ uliftYonedaEquiv.symm x.2 =
-      uliftYonedaEquiv.{max w v₂}.symm y.2 :=
-    uliftYonedaEquiv.injective
-      (by simpa only [Equiv.apply_symm_apply, ← uliftYonedaEquiv_naturality] using f.2)
-  have eq₂ := ConcreteCategory.congr_hom ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).naturality
-    (F.map f.1.unop).op) ((φ.app x.1.unop).app _ (ULift.up (𝟙 _)))
-  have eq₃ := ConcreteCategory.congr_hom (CC := fun X => X)
-    (congr_app (φ.naturality f.1.unop) _) (ULift.up (𝟙 _))
-  have eq₄ := ConcreteCategory.congr_hom ((φ.app x.1.unop).naturality (F.map f.1.unop).op)
-  dsimp at eq₂ eq₃ eq₄
-  apply uliftYonedaEquiv.{max w v₂}.injective
-  dsimp only [coconeApp]
-  rw [Equiv.apply_symm_apply]; rw [← uliftYonedaEquiv_naturality]; rw [Equiv.apply_symm_apply]
-  simp only [op_unop, Functor.comp_obj, Functor.op_obj, Functor.comp_map, Functor.op_map,
-    uliftYoneda_obj_obj, yoneda_obj_obj, ← eq₃, ← eq₄, ← eq₂, ← eq₁, Functor.map_comp,
-    NatTrans.comp_app, comp_apply]
-  simp [uliftYoneda]
-
-中文:
-引理 coconeApp_naturality
-  条件: {P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂} {x y : P.Elements} (f : x ⟶ y)
-  证明: by
-  have eq₁ : uliftYoneda.map f.1.unop ≫ uliftYonedaEquiv.symm x.2 =
-      uliftYonedaEquiv.{max w v₂}.symm y.2 :=
-    uliftYonedaEquiv.injective
-      (by simpa only [Equiv.apply_symm_apply, ← uliftYonedaEquiv_naturality] using f.2)
-  have eq₂ := ConcreteCategory.congr_hom ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).naturality
-    (F.map f.1.unop).op) ((φ.app x.1.unop).app _ (ULift.up (𝟙 _)))
-  have eq₃ := ConcreteCategory.congr_hom (CC := fun X => X)
-    (congr_app (φ.naturality f.1.unop) _) (ULift.up (𝟙 _))
-  have eq₄ := ConcreteCategory.congr_hom ((φ.app x.1.unop).naturality (F.map f.1.unop).op)
-  dsimp at eq₂ eq₃ eq₄
-  apply uliftYonedaEquiv.{max w v₂}.injective
-  dsimp only [coconeApp]
-  rw [Equiv.apply_symm_apply]; rw [← uliftYonedaEquiv_naturality]; rw [Equiv.apply_symm_apply]
-  simp only [op_unop, Functor.comp_obj, Functor.op_obj, Functor.comp_map, Functor.op_map,
-    uliftYoneda_obj_obj, yoneda_obj_obj, ← eq₃, ← eq₄, ← eq₂, ← eq₁, Functor.map_comp,
-    NatTrans.comp_app, comp_apply]
-  simp [uliftYoneda]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Equiv.apply_symm_apply, F.map, G.map, ULift.up, apply_symm_apply, congr_app, congr_hom, injective, naturality, uliftYoneda, uliftYoneda.map, uliftYonedaEquiv, uliftYonedaEquiv.injective, uliftYonedaEquiv.symm, uliftYonedaEquiv_naturality
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.coconeApp_natural
+ity** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYo
+nedaCompLan`。
+形式化陈述：coconeApp_naturality {P : Cᵒᵖ ⥤ Type max w v₁ v₂} {x y : P.Elements} (f : 
+x ⟶ y) : uliftYoneda.map f.1.unop ≫ coconeApp.{w} φ x = coconeApp φ y
+参数：f : x ⟶ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.uliftYonedaEquiv_naturality`：uliftYonedaEquiv_naturality 
+{X Y : Cᵒᵖ} {F : Cᵒᵖ ⥤ Type (max w v₁)} (f : uliftYoneda.{w}.obj (unop X) ⟶ F) (
+g : X ⟶ Y) : F.map g (uliftYoned…
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coconeApp_naturality {P : Cᵒᵖ ⥤ Type max w v₁ v₂} {x y : P.Elements} (f : x ⟶ y) :
     uliftYoneda.map f.1.unop ≫ coconeApp.{w} φ x = coconeApp φ y := by
@@ -1200,62 +1146,50 @@ lemma coconeApp_naturality {P : Cᵒᵖ ⥤ Type max w v₁ v₂} {x y : P.Eleme
       (by simpa only [Equiv.apply_symm_apply, ← uliftYonedaEquiv_naturality] using f.2)
   have eq₂ := ConcreteCategory.congr_hom ((G.map (uliftYonedaEquiv.{max w v₂}.symm x.2)).naturality
     (F.map f.1.unop).op) ((φ.app x.1.unop).app _ (ULift.up (𝟙 _)))
-  have eq₃ := ConcreteCategory.congr_hom (CC := fun X => X)
+  have eq₃ := ConcreteCategory.congr_hom (CC := fun X ↦ X)
     (congr_app (φ.naturality f.1.unop) _) (ULift.up (𝟙 _))
   have eq₄ := ConcreteCategory.congr_hom ((φ.app x.1.unop).naturality (F.map f.1.unop).op)
   dsimp at eq₂ eq₃ eq₄
   apply uliftYonedaEquiv.{max w v₂}.injective
   dsimp only [coconeApp]
-  rw [Equiv.apply_symm_apply]; rw [← uliftYonedaEquiv_naturality]; rw [Equiv.apply_symm_apply]
+  rw [Equiv.apply_symm_apply, ← uliftYonedaEquiv_naturality, Equiv.apply_symm_apply]
   simp only [op_unop, Functor.comp_obj, Functor.op_obj, Functor.comp_map, Functor.op_map,
     uliftYoneda_obj_obj, yoneda_obj_obj, ← eq₃, ← eq₄, ← eq₂, ← eq₁, Functor.map_comp,
     NatTrans.comp_app, comp_apply]
   simp [uliftYoneda]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `presheafHom` / `presheafHom` 的定义
+/-- Given functors `F : C ⥤ D` and
+`G : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ (Dᵒᵖ ⥤ Type max w v₁ v₂)`,
+and a natural transformation `φ : F ⋙ uliftYoneda ⟶ uliftYoneda ⋙ G`, this is the
+(natural) morphism `P ⟶ F.op ⋙ G.obj P` for all `P : Cᵒᵖ ⥤ Type max w v₁ v₂` that is
+determined by `φ`. -/
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.presheafHom** 是 M
+athlib 中的一个定义，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompL
+an`。
+形式化陈述：presheafHom (P : Cᵒᵖ ⥤ Type max w v₁ v₂) : P ⟶ F.op ⋙ G.obj P
+参数：P : Cᵒᵖ ⥤ Type max w v₁ v₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presheafHom
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
-  body: (colimitOfRepresentable P).desc
-    (Cocone.mk _ { app x := coconeApp.{w} φ x.unop })
-
-中文:
-定义 presheafHom
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂)
-  定义体: (colimitOfRepresentable P).desc
-    (Cocone.mk _ { app x := coconeApp.{w} φ x.unop })
-
-Depends on / 依赖: Cocone, Cocone.mk, coconeApp, colimitOfRepresentable, x.unop
+--- 原说明 ---
+Given functors `F : C ⥤ D` and
+`G : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ (Dᵒᵖ ⥤ Type max w v₁ v₂)`,
+and a natural transformation `φ : F ⋙ uliftYoneda ⟶ uliftYoneda ⋙ G`, this is th
+e
+(natural) morphism `P ⟶ F.op ⋙ G.obj P` for all `P : Cᵒᵖ ⥤ Type max w v₁ v₂` tha
+t is
+determined by `φ`.
 -/
 def presheafHom (P : Cᵒᵖ ⥤ Type max w v₁ v₂) : P ⟶ F.op ⋙ G.obj P :=
   (colimitOfRepresentable P).desc
     (Cocone.mk _ { app x := coconeApp.{w} φ x.unop })
-
-/--
-lemma `uliftYonedaEquiv_ι_presheafHom` / 引理 `uliftYonedaEquiv_ι_presheafHom`
-
-English:
-lemma uliftYonedaEquiv_ι_presheafHom
-  statement: (P : Cᵒᵖ ⥤ Type max w v₁ v₂) {X : C}
-  proof: by
-  obtain ⟨x, rfl⟩ := uliftYonedaEquiv.symm.surjective f
-  erw [(colimitOfRepresentable P).fac _ (Opposite.op (P.elementsMk _ x))]
-  dsimp only [coconeApp]
-  apply Equiv.apply_symm_apply
-
-中文:
-引理 uliftYonedaEquiv_ι_presheafHom
-  结论: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂) {X : C}
-  证明: by
-  obtain ⟨x, rfl⟩ := uliftYonedaEquiv.symm.surjective f
-  erw [(colimitOfRepresentable P).fac _ (Opposite.op (P.elementsMk _ x))]
-  dsimp only [coconeApp]
-  apply Equiv.apply_symm_apply
-
-Depends on / 依赖: Equiv.apply_symm_apply, Opposite, Opposite.op, P.elementsMk, apply_symm_apply, coconeApp, colimitOfRepresentable, elementsMk, surjective, uliftYonedaEquiv, uliftYonedaEquiv.symm.surjective
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.uliftYonedaEquiv_
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYoned
+aCompLan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma uliftYonedaEquiv_ι_presheafHom (P : Cᵒᵖ ⥤ Type max w v₁ v₂) {X : C}
     (f : uliftYoneda.{max w v₂}.obj X ⟶ P) :
@@ -1265,23 +1199,38 @@ lemma uliftYonedaEquiv_ι_presheafHom (P : Cᵒᵖ ⥤ Type max w v₁ v₂) {X 
   erw [(colimitOfRepresentable P).fac _ (Opposite.op (P.elementsMk _ x))]
   dsimp only [coconeApp]
   apply Equiv.apply_symm_apply
-
-/--
-lemma `uliftYonedaEquiv_presheafHom_uliftYoneda_obj` / 引理 `uliftYonedaEquiv_presheafHom_uliftYoneda_obj`
-
-English:
-lemma uliftYonedaEquiv_presheafHom_uliftYoneda_obj
-  given: (X : C)
-  proof: by
-  simpa using! uliftYonedaEquiv_ι_presheafHom.{w} φ (uliftYoneda.obj X) (𝟙 _)
-
-中文:
-引理 uliftYonedaEquiv_presheafHom_uliftYoneda_obj
-  条件: (X : C)
-  证明: by
-  simpa using! uliftYonedaEquiv_ι_presheafHom.{w} φ (uliftYoneda.obj X) (𝟙 _)
-
-Depends on / 依赖: uliftYoneda, uliftYoneda.obj
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.uliftYonedaEquiv_
+presheafHom_uliftYoneda_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf.c
+ompULiftYonedaIsoULiftYonedaCompLan`。
+形式化陈述：uliftYonedaEquiv_presheafHom_uliftYoneda_obj (X : C) : uliftYonedaEquiv.{m
+ax w v₂} (presheafHom.{w} φ (uliftYoneda.{max w v₂}.obj X)) = ((φ.app X).app (F.
+op.obj (Opposite.op X)) (ULift.up (𝟙 _)))
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用引理 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.uliftYoneda
+Equiv_ι_presheafHom`：uliftYonedaEquiv_ι_presheafHom (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
+ {X : C} (f : uliftYoneda.{max w v₂}.obj X ⟶ P) : uliftYonedaEquiv (f ≫ presheaf
+H…
 -/
 lemma uliftYonedaEquiv_presheafHom_uliftYoneda_obj (X : C) :
     uliftYonedaEquiv.{max w v₂} (presheafHom.{w} φ (uliftYoneda.{max w v₂}.obj X)) =
@@ -1291,58 +1240,70 @@ lemma uliftYonedaEquiv_presheafHom_uliftYoneda_obj (X : C) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `presheafHom_naturality` / 引理 `presheafHom_naturality`
-
-English:
-lemma presheafHom_naturality
-  given: {P Q : Cᵒᵖ ⥤ Type max w v₁ v₂} (f : P ⟶ Q)
-  proof: hom_ext_uliftYoneda.{max w v₂} (fun X p => uliftYonedaEquiv.injective (by
-    rw [← assoc p f]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [← assoc]; rw [uliftYonedaEquiv_comp]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [Functor.map_comp]
-    dsimp))
-
-中文:
-引理 presheafHom_naturality
-  条件: {P Q : Cᵒᵖ ⥤ 类型 最大值 w v₁ v₂} (f : P ⟶ Q)
-  证明: hom_ext_uliftYoneda.{max w v₂} (fun X p => uliftYonedaEquiv.injective (by
-    rw [← assoc p f]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [← assoc]; rw [uliftYonedaEquiv_comp]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [Functor.map_comp]
-    dsimp))
-
-Depends on / 依赖: Functor, Functor.map_comp, hom_ext_uliftYoneda, injective, map_comp, uliftYonedaEquiv, uliftYonedaEquiv.injective, uliftYonedaEquiv_comp
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.presheafHom_natur
+ality** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULift
+YonedaCompLan`。
+形式化陈述：presheafHom_naturality {P Q : Cᵒᵖ ⥤ Type max w v₁ v₂} (f : P ⟶ Q) : preshe
+afHom.{w} φ P ≫ Functor.whiskerLeft F.op (G.map f) = f ≫ presheafHom φ Q
+参数：f : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.hom_ext_uliftYoneda`：hom_ext_uliftYoneda {P Q : Cᵒᵖ ⥤ Typ
+e (max w v₁)} {f g : P ⟶ Q} (h : forall (X : C) (p : uliftYoneda.{w}.obj X ⟶ P),
+ p ≫ f = p ≫ g) : f = g
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.uliftYoneda
+Equiv_ι_presheafHom`：uliftYonedaEquiv_ι_presheafHom (P : Cᵒᵖ ⥤ Type max w v₁ v₂)
+ {X : C} (f : uliftYoneda.{max w v₂}.obj X ⟶ P) : uliftYonedaEquiv (f ≫ presheaf
+H…
+· 使用引理 `CategoryTheory.uliftYonedaEquiv_comp`：uliftYonedaEquiv_comp {X : C} {F G
+ : Cᵒᵖ ⥤ Type (max w v₁)} (α : uliftYoneda.{w}.obj X ⟶ F) (β : F ⟶ G) : uliftYon
+edaEquiv.{w} (α ≫ β) = β.a…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 lemma presheafHom_naturality {P Q : Cᵒᵖ ⥤ Type max w v₁ v₂} (f : P ⟶ Q) :
     presheafHom.{w} φ P ≫ Functor.whiskerLeft F.op (G.map f) = f ≫ presheafHom φ Q :=
-  hom_ext_uliftYoneda.{max w v₂} (fun X p => uliftYonedaEquiv.injective (by
-    rw [← assoc p f]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [← assoc]; rw [uliftYonedaEquiv_comp]; rw [uliftYonedaEquiv_ι_presheafHom]; rw [Functor.map_comp]
+  hom_ext_uliftYoneda.{max w v₂} (fun X p ↦ uliftYonedaEquiv.injective (by
+    rw [← assoc p f, uliftYonedaEquiv_ι_presheafHom, ← assoc,
+      uliftYonedaEquiv_comp, uliftYonedaEquiv_ι_presheafHom,
+      Functor.map_comp]
     dsimp))
 
-variable [forall (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
+variable [∀ (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `natTrans` / `natTrans` 的定义
+/-- Given functors `F : C ⥤ D` and `G : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ (Dᵒᵖ ⥤ Type max w v₁ v₂)`,
+and a natural transformation `φ : F ⋙ uliftYoneda ⟶ uliftYoneda ⋙ G`, this is
+the canonical natural transformation `F.op.lan ⟶ G`, which is part of the
+fact that `F.op.lan : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂`
+is the left Kan extension of `F ⋙ uliftYoneda : C ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂`
+along `uliftYoneda : C ⥤ Cᵒᵖ ⥤ Type max w v₁ v₂`. -/
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.natTrans** 是 Math
+lib 中的一个定义，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan`
+。
+形式化陈述：natTrans : F.op.lan ⟶ G where app P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natTrans
-  signature: : F.op.lan ⟶ G where
-  body: (F.op.lan.obj P).descOfIsLeftKanExtension (F.op.lanUnit.app P) _ (presheafHom φ P)
-  naturality {P Q} f := by
-    apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
-    have eq := F.op.lanUnit.naturality f
-    dsimp at eq ⊢
-    rw [Functor.descOfIsLeftKanExtension_fac_assoc]; rw [← reassoc_of% eq]; rw [Functor.descOfIsLeftKanExtension_fac]; rw [presheafHom_naturality]
-
-中文:
-定义 natTrans
-  签名: : F.op.lan ⟶ G where
-  定义体: (F.op.lan.obj P).descOfIsLeftKanExtension (F.op.lanUnit.app P) _ (presheafHom φ P)
-  naturality {P Q} f := by
-    apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
-    have eq := F.op.lanUnit.naturality f
-    dsimp at eq ⊢
-    rw [Functor.descOfIsLeftKanExtension_fac_assoc]; rw [← reassoc_of% eq]; rw [Functor.descOfIsLeftKanExtension_fac]; rw [presheafHom_naturality]
-
-Depends on / 依赖: F.op.lan.obj, F.op.lanUnit.app, descOfIsLeftKanExtension, lanUnit, presheafHom
+--- 原说明 ---
+Given functors `F : C ⥤ D` and `G : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ (Dᵒᵖ ⥤ Type max w
+ v₁ v₂)`,
+and a natural transformation `φ : F ⋙ uliftYoneda ⟶ uliftYoneda ⋙ G`, this is
+the canonical natural transformation `F.op.lan ⟶ G`, which is part of the
+fact that `F.op.lan : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂`
+is the left Kan extension of `F ⋙ uliftYoneda : C ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂`
+along `uliftYoneda : C ⥤ Cᵒᵖ ⥤ Type max w v₁ v₂`.
 -/
 noncomputable def natTrans : F.op.lan ⟶ G where
   app P := (F.op.lan.obj P).descOfIsLeftKanExtension (F.op.lanUnit.app P) _ (presheafHom φ P)
@@ -1350,34 +1311,41 @@ noncomputable def natTrans : F.op.lan ⟶ G where
     apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
     have eq := F.op.lanUnit.naturality f
     dsimp at eq ⊢
-    rw [Functor.descOfIsLeftKanExtension_fac_assoc]; rw [← reassoc_of% eq]; rw [Functor.descOfIsLeftKanExtension_fac]; rw [presheafHom_naturality]
-
-/--
-lemma `natTrans_app_uliftYoneda_obj` / 引理 `natTrans_app_uliftYoneda_obj`
-
-English:
-lemma natTrans_app_uliftYoneda_obj
-  given: (X : C)
-  proof: by
-  dsimp [natTrans]
-  apply (F.op.lan.obj (uliftYoneda.obj X)).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app _)
-  rw [Functor.descOfIsLeftKanExtension_fac]
-  apply uliftYonedaEquiv.injective
-  rw [uliftYonedaEquiv_presheafHom_uliftYoneda_obj]
-  exact _root_.congr_arg _ (compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id F X).symm
-
-中文:
-引理 natTrans_app_uliftYoneda_obj
-  条件: (X : C)
-  证明: by
-  dsimp [natTrans]
-  apply (F.op.lan.obj (uliftYoneda.obj X)).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app _)
-  rw [Functor.descOfIsLeftKanExtension_fac]
-  apply uliftYonedaEquiv.injective
-  rw [uliftYonedaEquiv_presheafHom_uliftYoneda_obj]
-  exact _root_.congr_arg _ (compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id F X).symm
-
-Depends on / 依赖: F.op.lan.obj, F.op.lanUnit.app, Functor, Functor.descOfIsLeftKanExtension_fac, _root_, _root_.congr_arg, compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id, congr_arg, descOfIsLeftKanExtension_fac, hom_ext_of_isLeftKanExtension, injective, lanUnit, natTrans, uliftYoneda, uliftYoneda.obj, uliftYonedaEquiv, uliftYonedaEquiv.injective, uliftYonedaEquiv_presheafHom_uliftYoneda_obj
+    rw [Functor.descOfIsLeftKanExtension_fac_assoc, ← reassoc_of% eq,
+      Functor.descOfIsLeftKanExtension_fac, presheafHom_naturality]
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.natTrans_app_ulif
+tYoneda_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIs
+oULiftYonedaCompLan`。
+形式化陈述：natTrans_app_uliftYoneda_obj (X : C) : (natTrans.{w} φ).app (uliftYoneda.{
+max w v₂}.obj X) = (compULiftYonedaIsoULiftYonedaCompLan.{w} F).inv.app X ≫ φ.ap
+p X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.hom_ext_of_isLeftKanExtension`：hom_ext_of_isLeftK
+anExtension {G : D ⥤ H} (γ₁ γ₂ : F' ⟶ G) (hγ : α ≫ whiskerLeft L γ₁ = α ≫ whiske
+rLeft L γ₂) : γ₁ = γ₂
+· 使用定理 `CategoryTheory.Functor.instIsLeftKanExtensionObjLanAppLanUnit`：∀ {C : Ty
+pe u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} D] (L : Categor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.descOfIsLeftKanExtension_fac`：descOfIsLeftKanExte
+nsion_fac (G : D ⥤ H) (β : F ⟶ L ⋙ G) : α ≫ whiskerLeft L (F'.descOfIsLeftKanExt
+ension α G β) = β
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用引理 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.uliftYoneda
+Equiv_presheafHom_uliftYoneda_obj`：uliftYonedaEquiv_presheafHom_uliftYoneda_obj 
+(X : C) : uliftYonedaEquiv.{max w v₂} (presheafHom.{w} φ (uliftYoneda.{max w v₂}
+.obj X)) = ((φ.…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan_inv_app_app
+_apply_eq_id`：compULiftYonedaIsoULiftYonedaCompLan_inv_app_app_apply_eq_id (X : 
+C) : dsimp% ((compULiftYonedaIsoULiftYonedaCompLan.{w} F).inv.app X).app (…
 -/
 lemma natTrans_app_uliftYoneda_obj (X : C) :
     (natTrans.{w} φ).app (uliftYoneda.{max w v₂}.obj X) =
@@ -1391,27 +1359,32 @@ lemma natTrans_app_uliftYoneda_obj (X : C) :
 
 end
 
-variable [forall (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
+variable [∀ (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `extensionHom` / `extensionHom` 的定义
+/-- Given a functor `F : C ⥤ D`, this definition is part of the verification that
+`Functor.LeftExtension.mk F.op.lan (compULiftYonedaIsoULiftYonedaCompLan F).hom`
+is universal, i.e. that  `F.op.lan : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂`
+is the left Kan extension of `F ⋙ uliftYoneda : C ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂`
+along `uliftYoneda : C ⥤ Cᵒᵖ ⥤ Type max w v₁ v₂`. -/
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.extensionHom** 是 
+Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaComp
+Lan`。
+形式化陈述：extensionHom (Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{m
+ax w v₁})) : Functor.LeftExtension.mk F.op.lan (compULiftYonedaIsoULiftYonedaCom
+pLan.{w} F).hom ⟶ Φ
+参数：Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{max w v₁})。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extensionHom
-  body: StructuredArrow.homMk (natTrans Φ.hom) (by
-    ext X : 2
-    dsimp
-    rw [natTrans_app_uliftYoneda_obj]; rw [Iso.hom_inv_id_app_assoc])
-
-中文:
-定义 extensionHom
-  定义体: StructuredArrow.homMk (natTrans Φ.hom) (by
-    ext X : 2
-    dsimp
-    rw [natTrans_app_uliftYoneda_obj]; rw [Iso.hom_inv_id_app_assoc])
-
-Depends on / 依赖: Iso.hom_inv_id_app_assoc, StructuredArrow, StructuredArrow.homMk, hom_inv_id_app_assoc, natTrans, natTrans_app_uliftYoneda_obj
+--- 原说明 ---
+Given a functor `F : C ⥤ D`, this definition is part of the verification that
+`Functor.LeftExtension.mk F.op.lan (compULiftYonedaIsoULiftYonedaCompLan F).hom`
+is universal, i.e. that  `F.op.lan : (Cᵒᵖ ⥤ Type max w v₁ v₂) ⥤ Dᵒᵖ ⥤ Type max w
+ v₁ v₂`
+is the left Kan extension of `F ⋙ uliftYoneda : C ⥤ Dᵒᵖ ⥤ Type max w v₁ v₂`
+along `uliftYoneda : C ⥤ Cᵒᵖ ⥤ Type max w v₁ v₂`.
 -/
 noncomputable def extensionHom
     (Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{max w v₁})) :
@@ -1419,57 +1392,76 @@ noncomputable def extensionHom
   StructuredArrow.homMk (natTrans Φ.hom) (by
     ext X : 2
     dsimp
-    rw [natTrans_app_uliftYoneda_obj]; rw [Iso.hom_inv_id_app_assoc])
+    rw [natTrans_app_uliftYoneda_obj, Iso.hom_inv_id_app_assoc])
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{max w v₁})}
-  proof: by
-  ext P : 3
-  apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
-  apply (colimitOfRepresentable.{max w v₂} P).hom_ext
-  intro x
-  have eq := F.op.lanUnit.naturality (uliftYonedaEquiv.{max w v₂}.symm x.unop.2)
-  have eq₁ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w f) x.unop.1.unop)
-    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
-  have eq₂ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w g) x.unop.1.unop)
-    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
-  dsimp at eq₁ eq₂ eq ⊢
-  simp only [reassoc_of% eq, ← Functor.whiskerLeft_comp]
-  congr 2
-  simp only [← cancel_epi ((compULiftYonedaIsoULiftYonedaCompLan F).hom.app x.unop.1.unop),
-    NatTrans.naturality]
-  apply uliftYonedaEquiv.injective
-  simp [eq₁, eq₂, uliftYonedaEquiv_apply]
-
-中文:
-引理 hom_ext
-  结论: {Φ : uliftYoneda.{最大值 w v₂}.LeftExtension (F ⋙ uliftYoneda.{最大值 w v₁})}
-  证明: by
-  ext P : 3
-  apply (F.op.lan.obj P).hom_ext_of_isLeftKanExtension (F.op.lanUnit.app P)
-  apply (colimitOfRepresentable.{max w v₂} P).hom_ext
-  intro x
-  have eq := F.op.lanUnit.naturality (uliftYonedaEquiv.{max w v₂}.symm x.unop.2)
-  have eq₁ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w f) x.unop.1.unop)
-    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
-  have eq₂ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w g) x.unop.1.unop)
-    (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
-  dsimp at eq₁ eq₂ eq ⊢
-  simp only [reassoc_of% eq, ← Functor.whiskerLeft_comp]
-  congr 2
-  simp only [← cancel_epi ((compULiftYonedaIsoULiftYonedaCompLan F).hom.app x.unop.1.unop),
-    NatTrans.naturality]
-  apply uliftYonedaEquiv.injective
-  simp [eq₁, eq₂, uliftYonedaEquiv_apply]
-
-Depends on / 依赖: F.op.lan.obj, F.op.lanUnit.app, F.op.lanUnit.naturality, F.op.obj, StructuredArrow, StructuredArrow.w, ULift.up, colimitOfRepresentable, congr_app, congr_hom, hom_ext, hom_ext_of_isLeftKanExtension, lanUnit, naturality, uliftYonedaEquiv, x.unop
+/-
+**CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan.hom_ext** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.Presheaf.compULiftYonedaIsoULiftYonedaCompLan`。
+形式化陈述：hom_ext {Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{max w 
+v₁})} (f g : Functor.LeftExtension.mk F.op.lan (compULiftYonedaIsoULiftYonedaCom
+pLan F).hom ⟶ Φ) : f = g
+参数：F ⋙ uliftYoneda.{max w v₁}；f g : Functor.LeftExtension.mk F.op.lan (compULift
+YonedaIsoULiftYonedaCompLan F).hom ⟶ Φ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.StructuredArrow.hom_ext`：hom_ext {X Y : StructuredArrow S
+ T} (f g : X ⟶ Y) (h : f.right = g.right) : f = g
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `CategoryTheory.Functor.hom_ext_of_isLeftKanExtension`：hom_ext_of_isLeftK
+anExtension {G : D ⥤ H} (γ₁ γ₂ : F' ⟶ G) (hγ : α ≫ whiskerLeft L γ₁ = α ≫ whiske
+rLeft L γ₂) : γ₁ = γ₂
+· 使用定理 `CategoryTheory.Functor.instIsLeftKanExtensionObjLanAppLanUnit`：∀ {C : Ty
+pe u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} D] (L : Categor…
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用定理 `CategoryTheory.StructuredArrow.w`：w : X.hom ≫ T.map f.right = Y.hom
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.NatIso.hom_app_isIso`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   {F G : CategoryThe…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_ext {Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{max w v₁})}
     (f g : Functor.LeftExtension.mk F.op.lan (compULiftYonedaIsoULiftYonedaCompLan F).hom ⟶ Φ) :
@@ -1479,9 +1471,9 @@ lemma hom_ext {Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{m
   apply (colimitOfRepresentable.{max w v₂} P).hom_ext
   intro x
   have eq := F.op.lanUnit.naturality (uliftYonedaEquiv.{max w v₂}.symm x.unop.2)
-  have eq₁ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w f) x.unop.1.unop)
+  have eq₁ := congr_hom (CC := fun X ↦ X) (congr_app (congr_app (StructuredArrow.w f) x.unop.1.unop)
     (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
-  have eq₂ := congr_hom (CC := fun X => X) (congr_app (congr_app (StructuredArrow.w g) x.unop.1.unop)
+  have eq₂ := congr_hom (CC := fun X ↦ X) (congr_app (congr_app (StructuredArrow.w g) x.unop.1.unop)
     (F.op.obj x.unop.1)) (ULift.up (𝟙 _))
   dsimp at eq₁ eq₂ eq ⊢
   simp only [reassoc_of% eq, ← Functor.whiskerLeft_comp]
@@ -1493,8 +1485,12 @@ lemma hom_ext {Φ : uliftYoneda.{max w v₂}.LeftExtension (F ⋙ uliftYoneda.{m
 
 end compULiftYonedaIsoULiftYonedaCompLan
 
-variable [forall (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
+variable [∀ (P : Cᵒᵖ ⥤ Type max w v₁ v₂), F.op.HasLeftKanExtension P]
 
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (Φ : StructuredArrow (F ⋙ uliftYoneda.{max w v₁})
     ((Functor.whiskeringLeft C (Cᵒᵖ ⥤ Type max w v₁ v₂)
       (Dᵒᵖ ⥤ Type max w v₁ v₂)).obj uliftYoneda.{max w v₂})) :
@@ -1503,20 +1499,16 @@ noncomputable instance (Φ : StructuredArrow (F ⋙ uliftYoneda.{max w v₁})
   default := compULiftYonedaIsoULiftYonedaCompLan.extensionHom Φ
   uniq _ := compULiftYonedaIsoULiftYonedaCompLan.hom_ext _ _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Given a functor `F : C ⥤ D`, `F.op.lan : (Cᵒᵖ ⥤ Type v₁) ⥤ Dᵒᵖ ⥤ Type v₁` is the
+left Kan extension of `F ⋙ yoneda : C ⥤ Dᵒᵖ ⥤ Type v₁` along `yoneda : C ⥤ Cᵒᵖ ⥤ Type v₁`. -/
+/-
+**CategoryTheory.Presheaf.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Presheaf`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: F.op.lan.IsLeftKanExtension (compULiftYonedaIsoULiftYonedaCompLan.{w} F).hom
-  body: ⟨⟨Limits.IsInitial.ofUnique _⟩⟩
-
-中文:
-实例 :
-  签名: F.op.lan.是LeftKanExtension (compULiftYonedaIsoULiftYonedaCompLan.{w} F).hom
-  定义体: ⟨⟨Limits.IsInitial.ofUnique _⟩⟩
-
-Depends on / 依赖: IsInitial, Limits, Limits.IsInitial.ofUnique, ofUnique
+--- 原说明 ---
+Given a functor `F : C ⥤ D`, `F.op.lan : (Cᵒᵖ ⥤ Type v₁) ⥤ Dᵒᵖ ⥤ Type v₁` is the
+left Kan extension of `F ⋙ yoneda : C ⥤ Dᵒᵖ ⥤ Type v₁` along `yoneda : C ⥤ Cᵒᵖ ⥤
+ Type v₁`.
 -/
 instance : F.op.lan.IsLeftKanExtension (compULiftYonedaIsoULiftYonedaCompLan.{w} F).hom :=
   ⟨⟨Limits.IsInitial.ofUnique _⟩⟩
@@ -1531,44 +1523,53 @@ set_option backward.defeqAttrib.useBackward true in
     natural transformation. (In this version, we allow the presheaf `P` to have values in
     a larger universe.) -/
 @[simps]
-/--
-Definition of `tautologicalCocone'` / `tautologicalCocone'` 的定义
+/-
+**CategoryTheory.Presheaf.tautologicalCocone'** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Presheaf`。
+形式化陈述：tautologicalCocone' (P : Cᵒᵖ ⥤ Type max w v₁) : Cocone (CostructuredArrow.
+proj uliftYoneda.{w} P ⋙ uliftYoneda.{w}) where pt
+参数：P : Cᵒᵖ ⥤ Type max w v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tautologicalCocone'
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁)
-  body: P
-  ι := { app X := X.hom }
-
-中文:
-定义 tautologicalCocone'
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
-  定义体: P
-  ι := { app X := X.hom }
+--- 原说明 ---
+For a presheaf `P`, consider the forgetful functor from the category of represen
+table
+    presheaves over `P` to the category of presheaves. There is a tautological c
+ocone over this
+    functor whose leg for a natural transformation `V ⟶ P` with `V` representabl
+e is just that
+    natural transformation. (In this version, we allow the presheaf `P` to have 
+values in
+    a larger universe.)
 -/
 def tautologicalCocone' (P : Cᵒᵖ ⥤ Type max w v₁) :
     Cocone (CostructuredArrow.proj uliftYoneda.{w} P ⋙ uliftYoneda.{w}) where
   pt := P
   ι := { app X := X.hom }
 
-/--
-Definition of `isColimitTautologicalCocone'` / `isColimitTautologicalCocone'` 的定义
+/-- The tautological cocone with point `P` is a colimit cocone, exhibiting `P` as a colimit of
+    representables. (In this version, we allow the presheaf `P` to have values in
+    a larger universe.)
 
-English:
-definition isColimitTautologicalCocone'
-  signature: (P : Cᵒᵖ ⥤ Type max w v₁)
-  body: (IsColimit.whiskerEquivalenceEquiv
-    (CategoryOfElements.costructuredArrowULiftYonedaEquivalence.{w} P)).2
-      (colimitOfRepresentable.{w} P)
+    Proposition 2.6.3(i) in [Kashiwara2006] -/
+/-
+**CategoryTheory.Presheaf.isColimitTautologicalCocone'** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Presheaf`。
+形式化陈述：isColimitTautologicalCocone' (P : Cᵒᵖ ⥤ Type max w v₁) : IsColimit (tautol
+ogicalCocone'.{w} P)
+参数：P : Cᵒᵖ ⥤ Type max w v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isColimitTautologicalCocone'
-  签名: (P : Cᵒᵖ ⥤ 类型 最大值 w v₁)
-  定义体: (IsColimit.whiskerEquivalenceEquiv
-    (CategoryOfElements.costructuredArrowULiftYonedaEquivalence.{w} P)).2
-      (colimitOfRepresentable.{w} P)
+--- 原说明 ---
+The tautological cocone with point `P` is a colimit cocone, exhibiting `P` as a 
+colimit of
+    representables. (In this version, we allow the presheaf `P` to have values i
+n
+    a larger universe.)
 
-Depends on / 依赖: CategoryOfElements, CategoryOfElements.costructuredArrowULiftYonedaEquivalence, IsColimit, IsColimit.whiskerEquivalenceEquiv, colimitOfRepresentable, costructuredArrowULiftYonedaEquivalence, whiskerEquivalenceEquiv
+    Proposition 2.6.3(i) in [Kashiwara2006]
 -/
 def isColimitTautologicalCocone' (P : Cᵒᵖ ⥤ Type max w v₁) :
     IsColimit (tautologicalCocone'.{w} P) :=
@@ -1584,59 +1585,55 @@ set_option backward.defeqAttrib.useBackward true in
     functor whose leg for a natural transformation `V ⟶ P` with `V` representable is just that
     natural transformation. -/
 @[simps]
-/--
-Definition of `tautologicalCocone` / `tautologicalCocone` 的定义
+/-
+**CategoryTheory.Presheaf.tautologicalCocone** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Presheaf`。
+形式化陈述：tautologicalCocone (P : Cᵒᵖ ⥤ Type v₁) : Cocone (CostructuredArrow.proj yo
+neda P ⋙ yoneda) where pt
+参数：P : Cᵒᵖ ⥤ Type v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tautologicalCocone
-  signature: (P : Cᵒᵖ ⥤ Type v₁)
-  body: P
-  ι := { app X := X.hom }
-
-中文:
-定义 tautologicalCocone
-  签名: (P : Cᵒᵖ ⥤ 类型v₁)
-  定义体: P
-  ι := { app X := X.hom }
+--- 原说明 ---
+For a presheaf `P`, consider the forgetful functor from the category of represen
+table
+    presheaves over `P` to the category of presheaves. There is a tautological c
+ocone over this
+    functor whose leg for a natural transformation `V ⟶ P` with `V` representabl
+e is just that
+    natural transformation.
 -/
 def tautologicalCocone (P : Cᵒᵖ ⥤ Type v₁) :
     Cocone (CostructuredArrow.proj yoneda P ⋙ yoneda) where
   pt := P
   ι := { app X := X.hom }
 
-/--
-Definition of `isColimitTautologicalCocone` / `isColimitTautologicalCocone` 的定义
+/-- The tautological cocone with point `P` is a colimit cocone, exhibiting `P` as a colimit of
+    representables.
 
-English:
-definition isColimitTautologicalCocone
-  signature: (P : Cᵒᵖ ⥤ Type v₁)
-  body: let e : functorToRepresentables.{v₁} P ≅
-    ((CategoryOfElements.costructuredArrowYonedaEquivalence P).functor ⋙
-      CostructuredArrow.proj yoneda P ⋙ yoneda) :=
-    NatIso.ofComponents (fun e => NatIso.ofComponents (fun X => Equiv.ulift.toIso))
-  (IsColimit.whiskerEquivalenceEquiv
-    (CategoryOfElements.costructuredArrowYonedaEquivalence P)).2
-      ((IsColimit.precomposeHomEquiv e _).1 (colimitOfRepresentable.{v₁} P))
+    Proposition 2.6.3(i) in [Kashiwara2006] -/
+/-
+**CategoryTheory.Presheaf.isColimitTautologicalCocone** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Presheaf`。
+形式化陈述：isColimitTautologicalCocone (P : Cᵒᵖ ⥤ Type v₁) : IsColimit (tautologicalC
+ocone P)
+参数：P : Cᵒᵖ ⥤ Type v₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 isColimitTautologicalCocone
-  签名: (P : Cᵒᵖ ⥤ 类型v₁)
-  定义体: let e : functorToRepresentables.{v₁} P ≅
-    ((CategoryOfElements.costructuredArrowYonedaEquivalence P).functor ⋙
-      CostructuredArrow.proj yoneda P ⋙ yoneda) :=
-    NatIso.ofComponents (fun e => NatIso.ofComponents (fun X => Equiv.ulift.toIso))
-  (IsColimit.whiskerEquivalenceEquiv
-    (CategoryOfElements.costructuredArrowYonedaEquivalence P)).2
-      ((IsColimit.precomposeHomEquiv e _).1 (colimitOfRepresentable.{v₁} P))
+--- 原说明 ---
+The tautological cocone with point `P` is a colimit cocone, exhibiting `P` as a 
+colimit of
+    representables.
 
-Depends on / 依赖: CategoryOfElements, CategoryOfElements.costructuredArrowYonedaEquivalence, CostructuredArrow, CostructuredArrow.proj, Equiv.ulift.toIso, IsColimit, IsColimit.precomposeHomEquiv, IsColimit.whiskerEquivalenceEquiv, NatIso, NatIso.ofComponents, colimitOfRepresentable, costructuredArrowYonedaEquivalence, functor, functorToRepresentables, ofComponents, precomposeHomEquiv, whiskerEquivalenceEquiv, yoneda
+    Proposition 2.6.3(i) in [Kashiwara2006]
 -/
 def isColimitTautologicalCocone (P : Cᵒᵖ ⥤ Type v₁) :
     IsColimit (tautologicalCocone P) :=
   let e : functorToRepresentables.{v₁} P ≅
     ((CategoryOfElements.costructuredArrowYonedaEquivalence P).functor ⋙
       CostructuredArrow.proj yoneda P ⋙ yoneda) :=
-    NatIso.ofComponents (fun e => NatIso.ofComponents (fun X => Equiv.ulift.toIso))
+    NatIso.ofComponents (fun e ↦ NatIso.ofComponents (fun X ↦ Equiv.ulift.toIso))
   (IsColimit.whiskerEquivalenceEquiv
     (CategoryOfElements.costructuredArrowYonedaEquivalence P)).2
       ((IsColimit.precomposeHomEquiv e _).1 (colimitOfRepresentable.{v₁} P))
@@ -1645,48 +1642,64 @@ variable {I : Type v₁} [SmallCategory I] (F : I ⥤ C)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `final_toCostructuredArrow_comp_pre` / 定理 `final_toCostructuredArrow_comp_pre`
+/-- Given a functor `F : I ⥤ C`, a cocone `c` on `F ⋙ yoneda : I ⥤ Cᵒᵖ ⥤ Type v₁` induces a
+    functor `I ⥤ CostructuredArrow yoneda c.pt` which maps `i : I` to the leg
+    `yoneda.obj (F.obj i) ⟶ c.pt`. If `c` is a colimit cocone, then that functor is
+    final.
 
-English:
-theorem final_toCostructuredArrow_comp_pre
-  given: {c : Cocone (F ⋙ yoneda)} (hc : IsColimit c)
-  proof: by
-  apply Functor.final_of_isTerminal_colimit_comp_yoneda
-  suffices IsTerminal (colimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
-      CostructuredArrow.toOver yoneda c.pt)) by
-    apply IsTerminal.isTerminalOfObj (overEquivPresheafCostructuredArrow c.pt).inverse
-    apply IsTerminal.ofIso this
-    refine ?_ ≪≫ (preservesColimitIso (overEquivPresheafCostructuredArrow c.pt).inverse _).symm
-    apply HasColimit.isoOfNatIso
-    exact Functor.isoWhiskerLeft _
-      (CostructuredArrow.toOverCompOverEquivPresheafCostructuredArrow c.pt).isoCompInverse
-  apply IsTerminal.ofIso Over.mkIdTerminal
-  let isc : IsColimit ((Over.forget _).mapCocone _) := isColimitOfPreserves _
-    (colimit.isColimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
-      CostructuredArrow.toOver yoneda c.pt))
-  exact Over.isoMk (hc.coconePointUniqueUpToIso isc) (hc.hom_ext fun i => by simp)
+    Proposition 2.6.3(ii) in [Kashiwara2006] -/
+/-
+**CategoryTheory.Presheaf.final_toCostructuredArrow_comp_pre** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Presheaf`。
+形式化陈述：final_toCostructuredArrow_comp_pre {c : Cocone (F ⋙ yoneda)} (hc : IsColim
+it c) : Functor.Final (c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.
+pt)
+参数：F ⋙ yoneda；hc : IsColimit c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.final_of_isTerminal_colimit_comp_yoneda`：final_of
+_isTerminal_colimit_comp_yoneda (h : IsTerminal (colimit (F ⋙ yoneda))) : Final 
+F
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.preservesColimit_of_createsColimit_and_hasColimit`：∀ {C :
+ Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom_assoc`
+：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst
+_1 : CategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CreatesLimit.toReflectsLimit`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `CategoryTheory.Limits.instHasColimitCompOfPreservesColimit`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Category
+Theory.Category.{v₂, u₂} D]   {J : Type w} [inst…
 
-中文:
-定理 final_toCostructuredArrow_comp_pre
-  条件: {c : 余锥 (F ⋙ yoneda)} (hc : 是余极限 c)
-  证明: by
-  apply Functor.final_of_isTerminal_colimit_comp_yoneda
-  suffices IsTerminal (colimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
-      CostructuredArrow.toOver yoneda c.pt)) by
-    apply IsTerminal.isTerminalOfObj (overEquivPresheafCostructuredArrow c.pt).inverse
-    apply IsTerminal.ofIso this
-    refine ?_ ≪≫ (preservesColimitIso (overEquivPresheafCostructuredArrow c.pt).inverse _).symm
-    apply HasColimit.isoOfNatIso
-    exact Functor.isoWhiskerLeft _
-      (CostructuredArrow.toOverCompOverEquivPresheafCostructuredArrow c.pt).isoCompInverse
-  apply IsTerminal.ofIso Over.mkIdTerminal
-  let isc : IsColimit ((Over.forget _).mapCocone _) := isColimitOfPreserves _
-    (colimit.isColimit ((c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) ⋙
-      CostructuredArrow.toOver yoneda c.pt))
-  exact Over.isoMk (hc.coconePointUniqueUpToIso isc) (hc.hom_ext fun i => by simp)
+--- 原说明 ---
+Given a functor `F : I ⥤ C`, a cocone `c` on `F ⋙ yoneda : I ⥤ Cᵒᵖ ⥤ Type v₁` in
+duces a
+    functor `I ⥤ CostructuredArrow yoneda c.pt` which maps `i : I` to the leg
+    `yoneda.obj (F.obj i) ⟶ c.pt`. If `c` is a colimit cocone, then that functor
+ is
+    final.
 
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, CostructuredArrow.toOver, CostructuredArrow.toOverCompOverEquivPreshe, Functor, Functor.final_of_isTerminal_colimit_comp_yoneda, Functor.isoWhiskerLeft, HasColimit, HasColimit.isoOfNatIso, IsTerminal, IsTerminal.isTerminalOfObj, IsTerminal.ofIso, c.pt, c.toCostructuredArrow, colimit, final_of_isTerminal_colimit_comp_yoneda, inverse, isTerminalOfObj, isoOfNatIso, isoWhiskerLeft
+    Proposition 2.6.3(ii) in [Kashiwara2006]
 -/
 theorem final_toCostructuredArrow_comp_pre {c : Cocone (F ⋙ yoneda)} (hc : IsColimit c) :
     Functor.Final (c.toCostructuredArrow ⋙ CostructuredArrow.pre F yoneda c.pt) := by
@@ -1717,35 +1730,20 @@ set_option backward.isDefEq.respectTransparency false in
 this is the colimit cocone which identifies `F.obj X` to the colimit of
 `(CategoryOfElements.π F).op ⋙ shrinkYoneda.obj X`. -/
 @[simps]
-/--
-Definition of `coconeπOpCompShrinkYonedaObj` / `coconeπOpCompShrinkYonedaObj` 的定义
+/-
+**CategoryTheory.Functor.Elements.cocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeπOpCompShrinkYonedaObj
-  signature: (X : C)
-  body: F.obj X
-  ι.app u := ↾fun t => F.map (shrinkYonedaObjObjEquiv t) u.unop.snd
-  ι.naturality u₁ u₂ g := by
-    ext f
-    obtain ⟨f, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective f
-    simp [shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
-
-中文:
-定义 coconeπOpCompShrinkYonedaObj
-  签名: (X : C)
-  定义体: F.obj X
-  ι.app u := ↾fun t => F.map (shrinkYonedaObjObjEquiv t) u.unop.snd
-  ι.naturality u₁ u₂ g := by
-    ext f
-    obtain ⟨f, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective f
-    simp [shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+If `F : C ⥤ Type w` and `C` is locally `w`-small, then for any `X : C`,
+this is the colimit cocone which identifies `F.obj X` to the colimit of
+`(CategoryOfElements.π F).op ⋙ shrinkYoneda.obj X`.
 -/
 noncomputable def coconeπOpCompShrinkYonedaObj (X : C) :
     Cocone ((CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj X) where
   pt := F.obj X
-  ι.app u := ↾fun t => F.map (shrinkYonedaObjObjEquiv t) u.unop.snd
+  ι.app u := ↾fun t ↦ F.map (shrinkYonedaObjObjEquiv t) u.unop.snd
   ι.naturality u₁ u₂ g := by
     ext f
     obtain ⟨f, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective f
@@ -1753,63 +1751,23 @@ noncomputable def coconeπOpCompShrinkYonedaObj (X : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isColimitCoconeπOpCompShrinkYonedaObj` / `isColimitCoconeπOpCompShrinkYonedaObj` 的定义
+/-- If `F : C ⥤ Type w` and `C` is locally `w`-small, then for any `X : C`,
+`F.obj X` identifies to the colimit of
+`(CategoryOfElements.π F).op ⋙ shrinkYoneda.obj X`. -/
+/-
+**CategoryTheory.Functor.Elements.isColimitCocone** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCoconeπOpCompShrinkYonedaObj
-  signature: (X : C)
-  body: by
-  refine Nonempty.some ((Types.isColimit_iff_coconeTypesIsColimit _).2
-    ⟨?_, fun x => ?_⟩)
-  · let G := (CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj X
-    let c := G.coconeTypesEquiv.symm (coconeπOpCompShrinkYonedaObj F X)
-    have (u : G.ColimitType) (x : F.obj X) (h : G.descColimitType c u = x) :
-        G.ιColimitType (op (elementsMk _ _ x))
-          (shrinkYonedaObjObjEquiv.symm (𝟙 X)) = u := by
-      obtain ⟨⟨u⟩, v, rfl⟩ := Functor.ιColimitType_jointly_surjective _ u
-      obtain ⟨v, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective v
-      dsimp [c] at v h
-      simp only [Equiv.apply_symm_apply] at h
-      rw [← G.ιColimitType_map (show u ⟶ F.elementsMk _ x from ⟨v]; rw [h⟩).op]
-      simp [G, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
-    intro u₁ u₂ hu
-    generalize hx₁ : G.descColimitType c u₁ = x
-    have hx₂ : G.descColimitType c u₂ = x := by rw [← hx₁]; exact hu.symm
-    rw [← this _ _ hx₁]; rw [← this _ _ hx₂]
-  · exact ⟨Functor.ιColimitType _ (op (elementsMk _ _ x))
-      (shrinkYonedaObjObjEquiv.symm (𝟙 X)), by simp⟩
-
-中文:
-定义 isColimitCoconeπOpCompShrinkYonedaObj
-  签名: (X : C)
-  定义体: by
-  refine Nonempty.some ((Types.isColimit_iff_coconeTypesIsColimit _).2
-    ⟨?_, fun x => ?_⟩)
-  · let G := (CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj X
-    let c := G.coconeTypesEquiv.symm (coconeπOpCompShrinkYonedaObj F X)
-    have (u : G.ColimitType) (x : F.obj X) (h : G.descColimitType c u = x) :
-        G.ιColimitType (op (elementsMk _ _ x))
-          (shrinkYonedaObjObjEquiv.symm (𝟙 X)) = u := by
-      obtain ⟨⟨u⟩, v, rfl⟩ := Functor.ιColimitType_jointly_surjective _ u
-      obtain ⟨v, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective v
-      dsimp [c] at v h
-      simp only [Equiv.apply_symm_apply] at h
-      rw [← G.ιColimitType_map (show u ⟶ F.elementsMk _ x from ⟨v]; rw [h⟩).op]
-      simp [G, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
-    intro u₁ u₂ hu
-    generalize hx₁ : G.descColimitType c u₁ = x
-    have hx₂ : G.descColimitType c u₂ = x := by rw [← hx₁]; exact hu.symm
-    rw [← this _ _ hx₁]; rw [← this _ _ hx₂]
-  · exact ⟨Functor.ιColimitType _ (op (elementsMk _ _ x))
-      (shrinkYonedaObjObjEquiv.symm (𝟙 X)), by simp⟩
-
-Depends on / 依赖: CategoryOfElements, ColimitType, F.obj, Functor, G.ColimitType, G.coconeTypesEquiv.symm, G.descColimitType, Nonempty, Nonempty.some, Types.isColimit_iff_coconeTypesIsColimit, coconeTypesEquiv, descColimitType, elementsMk, isColimit_iff_coconeTypesIsColimit, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, shrinkYonedaObjObjEquiv.symm.su
+--- 原说明 ---
+If `F : C ⥤ Type w` and `C` is locally `w`-small, then for any `X : C`,
+`F.obj X` identifies to the colimit of
+`(CategoryOfElements.π F).op ⋙ shrinkYoneda.obj X`.
 -/
 noncomputable def isColimitCoconeπOpCompShrinkYonedaObj (X : C) :
     IsColimit (coconeπOpCompShrinkYonedaObj F X) := by
   refine Nonempty.some ((Types.isColimit_iff_coconeTypesIsColimit _).2
-    ⟨?_, fun x => ?_⟩)
+    ⟨?_, fun x ↦ ?_⟩)
   · let G := (CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj X
     let c := G.coconeTypesEquiv.symm (coconeπOpCompShrinkYonedaObj F X)
     have (u : G.ColimitType) (x : F.obj X) (h : G.descColimitType c u = x) :
@@ -1819,36 +1777,22 @@ noncomputable def isColimitCoconeπOpCompShrinkYonedaObj (X : C) :
       obtain ⟨v, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective v
       dsimp [c] at v h
       simp only [Equiv.apply_symm_apply] at h
-      rw [← G.ιColimitType_map (show u ⟶ F.elementsMk _ x from ⟨v]; rw [h⟩).op]
+      rw [← G.ιColimitType_map (show u ⟶ F.elementsMk _ x from ⟨v, h⟩).op]
       simp [G, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
     intro u₁ u₂ hu
     generalize hx₁ : G.descColimitType c u₁ = x
     have hx₂ : G.descColimitType c u₂ = x := by rw [← hx₁]; exact hu.symm
-    rw [← this _ _ hx₁]; rw [← this _ _ hx₂]
+    rw [← this _ _ hx₁, ← this _ _ hx₂]
   · exact ⟨Functor.ιColimitType _ (op (elementsMk _ _ x))
       (shrinkYonedaObjObjEquiv.symm (𝟙 X)), by simp⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `shrinkYoneda_map_app_coconeπOpCompShrinkYonedaObj_ι_app` / 引理 `shrinkYoneda_map_app_coconeπOpCompShrinkYonedaObj_ι_app`
-
-English:
-lemma shrinkYoneda_map_app_coconeπOpCompShrinkYonedaObj_ι_app
-  proof: by
-  ext g
-  obtain ⟨g, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective g
-  simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}]
-
-中文:
-引理 shrinkYoneda_map_app_coconeπOpCompShrinkYonedaObj_ι_app
-  证明: by
-  ext g
-  obtain ⟨g, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective g
-  simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}]
-
-Depends on / 依赖: shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm.surjective, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm, surjective
+/-
+**CategoryTheory.Functor.Elements.shrinkYoneda_map_app_cocone** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Functor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma shrinkYoneda_map_app_coconeπOpCompShrinkYonedaObj_ι_app
     {X₁ X₂ : C} (f : X₁ ⟶ X₂) (u : F.Elements) :
@@ -1861,38 +1805,16 @@ lemma shrinkYoneda_map_app_coconeπOpCompShrinkYonedaObj_ι_app
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `coconeπOpCompShrinkYonedaFlip` / `coconeπOpCompShrinkYonedaFlip` 的定义
+/-- If `C` is a locally `w`-small category, this is a (colimit) cocone
+expressing `F : C ⥤ Type w` as a colimit of corepresentable functors. -/
+/-
+**CategoryTheory.Functor.Elements.cocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coconeπOpCompShrinkYonedaFlip
-  signature: :
-  body: F
-  ι.app u :=
-    { app X := (coconeπOpCompShrinkYonedaObj F X).ι.app u
-      naturality {X Y} f := by
-        ext x
-        obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective x
-        simp }
-  ι.naturality u v g := by
-    ext X x
-    obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective x
-    simp [← shrinkYonedaObjObjEquiv_symm_comp.{w}]
-
-中文:
-定义 coconeπOpCompShrinkYonedaFlip
-  签名: :
-  定义体: F
-  ι.app u :=
-    { app X := (coconeπOpCompShrinkYonedaObj F X).ι.app u
-      naturality {X Y} f := by
-        ext x
-        obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective x
-        simp }
-  ι.naturality u v g := by
-    ext X x
-    obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective x
-    simp [← shrinkYonedaObjObjEquiv_symm_comp.{w}]
+--- 原说明 ---
+If `C` is a locally `w`-small category, this is a (colimit) cocone
+expressing `F : C ⥤ Type w` as a colimit of corepresentable functors.
 -/
 noncomputable def coconeπOpCompShrinkYonedaFlip :
     Cocone ((CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.flip) where
@@ -1908,20 +1830,17 @@ noncomputable def coconeπOpCompShrinkYonedaFlip :
     obtain ⟨x, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective x
     simp [← shrinkYonedaObjObjEquiv_symm_comp.{w}]
 
-/--
-Definition of `isColimitCoconeπOpCompShrinkYonedaFlip` / `isColimitCoconeπOpCompShrinkYonedaFlip` 的定义
+/-- If `F : C ⥤ Type w` and `C` is locally `w`-small, then `F` identifies to the colimit
+of `(CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.flip`. -/
+/-
+**CategoryTheory.Functor.Elements.isColimitCocone** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCoconeπOpCompShrinkYonedaFlip
-  signature: :
-  body: evaluationJointlyReflectsColimits _ (isColimitCoconeπOpCompShrinkYonedaObj F)
-
-中文:
-定义 isColimitCoconeπOpCompShrinkYonedaFlip
-  签名: :
-  定义体: evaluationJointlyReflectsColimits _ (isColimitCoconeπOpCompShrinkYonedaObj F)
-
-Depends on / 依赖: evaluationJointlyReflectsColimits, isIso_hom
+--- 原说明 ---
+If `F : C ⥤ Type w` and `C` is locally `w`-small, then `F` identifies to the col
+imit
+of `(CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.flip`.
 -/
 noncomputable def isColimitCoconeπOpCompShrinkYonedaFlip :
     IsColimit (coconeπOpCompShrinkYonedaFlip F) :=
@@ -1929,60 +1848,34 @@ noncomputable def isColimitCoconeπOpCompShrinkYonedaFlip :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `shrinkYonedaCompWhiskeringLeftObjπCompColimIso` / `shrinkYonedaCompWhiskeringLeftObjπCompColimIso` 的定义
+/-- If `F : C ⥤ Type w` and `C` is locally `w`-small, then `F` identifies to the composition
+`shrinkYoneda ⋙ (Functor.whiskeringLeft _ _ _).obj (CategoryOfElements.π F).op ⋙ colim`. -/
+/-
+**CategoryTheory.Functor.Elements.shrinkYonedaCompWhiskeringLeftObj** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.Functor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shrinkYonedaCompWhiskeringLeftObjπCompColimIso
-  body: NatIso.ofComponents (fun X =>
-    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
-      (isColimitCoconeπOpCompShrinkYonedaObj F X)) (fun {X₁ X₂} f => colimit.hom_ext (by
-        cat_disch))
-
-中文:
-定义 shrinkYonedaCompWhiskeringLeftObjπCompColimIso
-  定义体: NatIso.ofComponents (fun X =>
-    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
-      (isColimitCoconeπOpCompShrinkYonedaObj F X)) (fun {X₁ X₂} f => colimit.hom_ext (by
-        cat_disch))
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, NatIso, NatIso.ofComponents, cat_disch, coconePointUniqueUpToIso, colimit, colimit.hom_ext, colimit.isColimit, hom_ext, isColimit, isIso_inv, ofComponents
+--- 原说明 ---
+If `F : C ⥤ Type w` and `C` is locally `w`-small, then `F` identifies to the com
+position
+`shrinkYoneda ⋙ (Functor.whiskeringLeft _ _ _).obj (CategoryOfElements.π F).op ⋙
+ colim`.
 -/
 noncomputable def shrinkYonedaCompWhiskeringLeftObjπCompColimIso
     [HasColimitsOfShape F.Elementsᵒᵖ (Type w)] :
     shrinkYoneda.{w} ⋙
       (Functor.whiskeringLeft _ _ _).obj (CategoryOfElements.π F).op ⋙ colim ≅ F :=
-  NatIso.ofComponents (fun X =>
+  NatIso.ofComponents (fun X ↦
     IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
-      (isColimitCoconeπOpCompShrinkYonedaObj F X)) (fun {X₁ X₂} f => colimit.hom_ext (by
+      (isColimitCoconeπOpCompShrinkYonedaObj F X)) (fun {X₁ X₂} f ↦ colimit.hom_ext (by
         cat_disch))
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply` / 引理 `shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply`
-
-English:
-lemma shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply
-  proof: by
-  have :
-      (coconeπOpCompShrinkYonedaObj F u.fst).ι.app (op u) ≫
-        (shrinkYonedaCompWhiskeringLeftObjπCompColimIso F).inv.app u.fst =
-      colimit.ι ((CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj u.fst) (op u) :=
-    IsColimit.comp_coconePointUniqueUpToIso_inv (colimit.isColimit _) _ (op u)
-  simpa using ConcreteCategory.congr_hom this (shrinkYonedaObjObjEquiv.symm (𝟙 _))
-
-中文:
-引理 shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply
-  证明: by
-  have :
-      (coconeπOpCompShrinkYonedaObj F u.fst).ι.app (op u) ≫
-        (shrinkYonedaCompWhiskeringLeftObjπCompColimIso F).inv.app u.fst =
-      colimit.ι ((CategoryOfElements.π F).op ⋙ shrinkYoneda.{w}.obj u.fst) (op u) :=
-    IsColimit.comp_coconePointUniqueUpToIso_inv (colimit.isColimit _) _ (op u)
-  simpa using ConcreteCategory.congr_hom this (shrinkYonedaObjObjEquiv.symm (𝟙 _))
-
-Depends on / 依赖: CategoryOfElements, ConcreteCategory, ConcreteCategory.congr_hom, IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, colimit, colimit.isColimit, comp_coconePointUniqueUpToIso_inv, congr_hom, inv.app, isColimit, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, u.fst
+/-
+**CategoryTheory.Functor.Elements.shrinkYonedaCompWhiskeringLeftObj** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.Functor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply
     [HasColimitsOfShape F.Elementsᵒᵖ (Type w)] (u : F.Elements) :
@@ -1998,41 +1891,40 @@ lemma shrinkYonedaCompWhiskeringLeftObjπCompColimIso_inv_app_apply
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isInitialElementsMkShrinkYonedaObjObjEquivId` / `isInitialElementsMkShrinkYonedaObjObjEquivId` 的定义
+/-- The object of the category of elements `shrinkYoneda.{w}.flip.obj (op X)`
+corresponding to the identity of `X` is initial. -/
+/-
+**CategoryTheory.Functor.Elements.isInitialElementsMkShrinkYonedaObjObjEquivId**
+ 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor.Elements`。
+形式化陈述：isInitialElementsMkShrinkYonedaObjObjEquivId (X : C) : IsInitial (Functor.
+elementsMk (shrinkYoneda.{w}.flip.obj (op X)) X (shrinkYonedaObjObjEquiv.symm (𝟙
+ X)))
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isInitialElementsMkShrinkYonedaObjObjEquivId
-  signature: (X : C)
-  body: IsInitial.ofUniqueHom (fun u => ⟨shrinkYonedaObjObjEquiv.{w} u.2, by
-    simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}]⟩) (by
-    rintro u ⟨m, hm⟩
-    ext
-    simp [← hm, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}])
-
-中文:
-定义 isInitialElementsMkShrinkYonedaObjObjEquivId
-  签名: (X : C)
-  定义体: IsInitial.ofUniqueHom (fun u => ⟨shrinkYonedaObjObjEquiv.{w} u.2, by
-    simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}]⟩) (by
-    rintro u ⟨m, hm⟩
-    ext
-    simp [← hm, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}])
-
-Depends on / 依赖: IsInitial, IsInitial.ofUniqueHom, ofUniqueHom, shrinkYonedaObjObjEquiv, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm
+--- 原说明 ---
+The object of the category of elements `shrinkYoneda.{w}.flip.obj (op X)`
+corresponding to the identity of `X` is initial.
 -/
 noncomputable def isInitialElementsMkShrinkYonedaObjObjEquivId (X : C) :
     IsInitial (Functor.elementsMk (shrinkYoneda.{w}.flip.obj (op X)) X
       (shrinkYonedaObjObjEquiv.symm (𝟙 X))) :=
-  IsInitial.ofUniqueHom (fun u => ⟨shrinkYonedaObjObjEquiv.{w} u.2, by
+  IsInitial.ofUniqueHom (fun u ↦ ⟨shrinkYonedaObjObjEquiv.{w} u.2, by
     simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}]⟩) (by
     rintro u ⟨m, hm⟩
     ext
     simp [← hm, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}])
-
+/-
+**CategoryTheory.Functor.Elements.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Fun
+ctor.Elements`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : HasInitial (shrinkYoneda.{w}.flip.obj (op X)).Elements :=
   (isInitialElementsMkShrinkYonedaObjObjEquivId X).hasInitial
 
 end Functor.Elements
 
 end CategoryTheory
+

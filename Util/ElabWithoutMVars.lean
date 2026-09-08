@@ -16,28 +16,17 @@ public meta section
 
 open Lean Elab Tactic
 
-/--
-Definition of `elabTermWithoutNewMVars` / `elabTermWithoutNewMVars` 的定义
+/-- Elaborates a term with `errToSorry = false` and ensuring it has no metavariables. -/
+/-
+**elabTermWithoutNewMVars** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：elabTermWithoutNewMVars (tactic : Name) (t : Term) : TacticM Expr
+参数：tactic : Name；t : Term。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabTermWithoutNewMVars
-  signature: (tactic : Name) (t : Term)
-  body: Term.withoutErrToSorry do
-  let (e, mvars) ← elabTermWithHoles t none tactic
-  unless mvars.isEmpty do
-    throwErrorAt t "Argument passed to {tactic} has metavariables:{indentD e}"
-  return e
-
-中文:
-定义 elabTermWithoutNewMVars
-  签名: (tactic : Name) (t : 项)
-  定义体: Term.withoutErrToSorry do
-  let (e, mvars) ← elabTermWithHoles t none tactic
-  unless mvars.isEmpty do
-    throwErrorAt t "Argument passed to {tactic} has metavariables:{indentD e}"
-  return e
-
-Depends on / 依赖: Term.withoutErrToSorry, withoutErrToSorry
+--- 原说明 ---
+Elaborates a term with `errToSorry = false` and ensuring it has no metavariables
+.
 -/
 def elabTermWithoutNewMVars (tactic : Name) (t : Term) : TacticM Expr := Term.withoutErrToSorry do
   let (e, mvars) ← elabTermWithHoles t none tactic

@@ -33,74 +33,26 @@ variable (A B C G H : Type*) [Monoid A] [Monoid B] [Monoid C] [CommGroup G] [Gro
 
 noncomputable section
 
-/--
-Definition of `PontryaginDual` / `PontryaginDual` 的定义
+/-- The Pontryagin dual of `A` is the group of continuous homomorphism `A → Circle`. -/
+/-
+**PontryaginDual** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PontryaginDual
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PontryaginDual
-  body: A ->ₜ* Circle
-deriving TopologicalSpace
-
-中文:
-定义 PontryaginDual
-  定义体: A ->ₜ* Circle
-deriving TopologicalSpace
-
-Depends on / 依赖: Circle
+--- 原说明 ---
+The Pontryagin dual of `A` is the group of continuous homomorphism `A → Circle`.
 -/
 def PontryaginDual :=
-  A ->ₜ* Circle
+  A →ₜ* Circle
 deriving TopologicalSpace
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LocallyCompactSpace
-  signature: H] : LocallyCompactSpace (PontryaginDual H)
-  body: by
-  let Vn : Nat -> Set Circle := fun n => Circle.centeredArc (π / 2 ^ (n + 1))
-  have hVn : forall n x, x in Vn n ↔ |Complex.arg x| < π / 2 ^ (n + 1) :=
-    fun n x => Circle.mem_centeredArc (z := x)
-      (div_le_self pi_nonneg (one_le_pow₀ one_le_two))
-  refine ContinuousMonoidHom.locallyCompactSpace_of_hasBasis Vn ?_ ?_
-  · intro n x h1 h2
-    rw [hVn] at h1 h2 ⊢
-    rwa [Circle.coe_mul, Complex.arg_mul x.coe_ne_zero x.coe_ne_zero,
-      ← two_mul, abs_mul, abs_two, ← lt_div_iff₀' two_pos, div_div, ← pow_succ] at h2
-    apply Set.Ioo_subset_Ioc_self
-    rw [← two_mul]; rw [Set.mem_Ioo]; rw [← abs_lt]; rw [abs_mul]; rw [abs_two]; rw [← lt_div_iff₀' two_pos]
-    refine h1.trans_le ?_
-    gcongr
-    exact le_self_pow₀ one_le_two n.succ_ne_zero
-  · simpa [Vn] using Circle.hasBasis_centeredArc_div_two_pow
-
-中文:
-实例 [局部紧空间
-  签名: H] : 局部紧空间 (PontryaginDual H)
-  定义体: by
-  let Vn : Nat -> Set Circle := fun n => Circle.centeredArc (π / 2 ^ (n + 1))
-  have hVn : forall n x, x in Vn n ↔ |Complex.arg x| < π / 2 ^ (n + 1) :=
-    fun n x => Circle.mem_centeredArc (z := x)
-      (div_le_self pi_nonneg (one_le_pow₀ one_le_two))
-  refine ContinuousMonoidHom.locallyCompactSpace_of_hasBasis Vn ?_ ?_
-  · intro n x h1 h2
-    rw [hVn] at h1 h2 ⊢
-    rwa [Circle.coe_mul, Complex.arg_mul x.coe_ne_zero x.coe_ne_zero,
-      ← two_mul, abs_mul, abs_two, ← lt_div_iff₀' two_pos, div_div, ← pow_succ] at h2
-    apply Set.Ioo_subset_Ioc_self
-    rw [← two_mul]; rw [Set.mem_Ioo]; rw [← abs_lt]; rw [abs_mul]; rw [abs_two]; rw [← lt_div_iff₀' two_pos]
-    refine h1.trans_le ?_
-    gcongr
-    exact le_self_pow₀ one_le_two n.succ_ne_zero
-  · simpa [Vn] using Circle.hasBasis_centeredArc_div_two_pow
-
-Depends on / 依赖: Circle, Circle.centeredArc, Circle.coe_mul, Circle.mem_centeredArc, Complex.arg, Complex.arg_mul, ContinuousMonoidHom, ContinuousMonoidHom.locallyCompactSpace_of_hasBasis, abs_mul, abs_two, arg_mul, centeredArc, coe_mul, coe_ne_zero, div_div, div_le_self, locallyCompactSpace_of_hasBasis, mem_centeredArc, one_le_two, pi_nonneg
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LocallyCompactSpace H] : LocallyCompactSpace (PontryaginDual H) := by
-  let Vn : Nat -> Set Circle := fun n => Circle.centeredArc (π / 2 ^ (n + 1))
-  have hVn : forall n x, x in Vn n ↔ |Complex.arg x| < π / 2 ^ (n + 1) :=
-    fun n x => Circle.mem_centeredArc (z := x)
+  let Vn : ℕ → Set Circle := fun n ↦ Circle.centeredArc (π / 2 ^ (n + 1))
+  have hVn : ∀ n x, x ∈ Vn n ↔ |Complex.arg x| < π / 2 ^ (n + 1) :=
+    fun n x ↦ Circle.mem_centeredArc (z := x)
       (div_le_self pi_nonneg (one_le_pow₀ one_le_two))
   refine ContinuousMonoidHom.locallyCompactSpace_of_hasBasis Vn ?_ ?_
   · intro n x h1 h2
@@ -108,7 +60,7 @@ instance [LocallyCompactSpace H] : LocallyCompactSpace (PontryaginDual H) := by
     rwa [Circle.coe_mul, Complex.arg_mul x.coe_ne_zero x.coe_ne_zero,
       ← two_mul, abs_mul, abs_two, ← lt_div_iff₀' two_pos, div_div, ← pow_succ] at h2
     apply Set.Ioo_subset_Ioc_self
-    rw [← two_mul]; rw [Set.mem_Ioo]; rw [← abs_lt]; rw [abs_mul]; rw [abs_two]; rw [← lt_div_iff₀' two_pos]
+    rw [← two_mul, Set.mem_Ioo, ← abs_lt, abs_mul, abs_two, ← lt_div_iff₀' two_pos]
     refine h1.trans_le ?_
     gcongr
     exact le_self_pow₀ one_le_two n.succ_ne_zero
@@ -120,85 +72,37 @@ namespace PontryaginDual
 
 open ContinuousMonoidHom
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommGroup (PontryaginDual A)
-  body: inferInstanceAs (CommGroup (A ->ₜ* Circle))
-
-deriving instance
-  T2Space, IsTopologicalGroup,
-  Inhabited, FunLike, ContinuousMapClass, MonoidHomClass,
-  [DiscreteTopology A] -> CompactSpace _
-for PontryaginDual A
-
-@[ext]
-
-中文:
-实例 :
-  签名: 交换群 (PontryaginDual A)
-  定义体: inferInstanceAs (CommGroup (A ->ₜ* Circle))
-
-deriving instance
-  T2Space, IsTopologicalGroup,
-  Inhabited, FunLike, ContinuousMapClass, MonoidHomClass,
-  [DiscreteTopology A] -> CompactSpace _
-for PontryaginDual A
-
-@[ext]
-
-Depends on / 依赖: Circle, CommGroup
+/-
+**PontryaginDual.** 是 Mathlib 中的一个实例，位于命名空间 `PontryaginDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommGroup (PontryaginDual A) := inferInstanceAs (CommGroup (A ->ₜ* Circle))
+instance : CommGroup (PontryaginDual A) := inferInstanceAs (CommGroup (A →ₜ* Circle))
 
 deriving instance
   T2Space, IsTopologicalGroup,
   Inhabited, FunLike, ContinuousMapClass, MonoidHomClass,
-  [DiscreteTopology A] -> CompactSpace _
+  [DiscreteTopology A] → CompactSpace _
 for PontryaginDual A
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {ψ φ : PontryaginDual A} (h : forall a, ψ a = φ a)
-  statement: ψ = φ
-  proof: DFunLike.ext _ _ h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {ψ φ : PontryaginDual A} (h : 对任意 a, ψ a = φ a)
-  结论: ψ = φ
-  证明: DFunLike.ext _ _ h
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**PontryaginDual.ext** 是 Mathlib 中的一个定理，位于命名空间 `PontryaginDual`。
+形式化陈述：ext {ψ φ : PontryaginDual A} (h : forall a, ψ a = φ a) : ψ = φ
+参数：h : forall a, ψ a = φ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {ψ φ : PontryaginDual A} (h : forall a, ψ a = φ a) : ψ = φ :=
+theorem ext {ψ φ : PontryaginDual A} (h : ∀ a, ψ a = φ a) : ψ = φ :=
   DFunLike.ext _ _ h
 
 @[simp]
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (a : A)
-  statement: (1 : PontryaginDual A) a = 1
-  proof: rfl
-
-中文:
-定理 one_apply
-  条件: (a : A)
-  结论: (1 : PontryaginDual A) a = 1
-  证明: rfl
+/-
+**PontryaginDual.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `PontryaginDual`。
+形式化陈述：one_apply (a : A) : (1 : PontryaginDual A) a = 1
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_apply (a : A) : (1 : PontryaginDual A) a = 1 :=
   rfl
@@ -206,52 +110,13 @@ theorem one_apply (a : A) : (1 : PontryaginDual A) a = 1 :=
 /-- A discrete monoid has compact Pontryagin dual. -/
 add_decl_doc instLocallyCompactSpacePontryaginDual
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A compact monoid has discrete Pontryagin dual. -/
+/-
+**PontryaginDual.** 是 Mathlib 中的一个实例，位于命名空间 `PontryaginDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [CompactSpace
-  signature: A] : DiscreteTopology (PontryaginDual A)
-  body: by
-  let V : Set (PontryaginDual A) := {ψ | Set.MapsTo ψ Set.univ (Circle.centeredArc (π / 2))}
-  have hVopen : IsOpen V := by
-    dsimp only [V]
-    exact isOpen_induced (ContinuousMap.isOpen_setOfPred_mapsTo isCompact_univ
-      (Circle.isOpen_centeredArc (π / 2)))
-  have hVeq : V = ({1} : Set (PontryaginDual A)) := by
-    ext ψ
-    rw [Set.mem_singleton_iff]
-    refine ⟨fun hψ => ?_, ?_⟩
-    · ext1 a
-      refine Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two fun n hn => ?_
-      simpa using hψ (Set.mem_univ (a ^ n))
-    · rintro rfl _ _
-      rw [Circle.mem_centeredArc (by linarith [pi_pos])]
-      simp [pi_pos]
-  exact discreteTopology_of_isOpen_singleton_one (by simpa [hVeq] using hVopen)
-
-中文:
-实例 [紧空间
-  签名: A] : 离散拓扑 (PontryaginDual A)
-  定义体: by
-  let V : Set (PontryaginDual A) := {ψ | Set.MapsTo ψ Set.univ (Circle.centeredArc (π / 2))}
-  have hVopen : IsOpen V := by
-    dsimp only [V]
-    exact isOpen_induced (ContinuousMap.isOpen_setOfPred_mapsTo isCompact_univ
-      (Circle.isOpen_centeredArc (π / 2)))
-  have hVeq : V = ({1} : Set (PontryaginDual A)) := by
-    ext ψ
-    rw [Set.mem_singleton_iff]
-    refine ⟨fun hψ => ?_, ?_⟩
-    · ext1 a
-      refine Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two fun n hn => ?_
-      simpa using hψ (Set.mem_univ (a ^ n))
-    · rintro rfl _ _
-      rw [Circle.mem_centeredArc (by linarith [pi_pos])]
-      simp [pi_pos]
-  exact discreteTopology_of_isOpen_singleton_one (by simpa [hVeq] using hVopen)
-
-Depends on / 依赖: Circle, Circle.centeredArc, Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two, Circle.isOpen_centeredArc, ContinuousMap, ContinuousMap.isOpen_setOfPred_mapsTo, IsOpen, MapsTo, PontryaginDual, Set.MapsTo, Set.mem_singleton_iff, Set.mem_univ, Set.univ, centeredArc, eq_one_of_forall_pow_mem_centeredArc_pi_div_two, hVopen, isCompact_univ, isOpen_centeredArc, isOpen_induced, isOpen_setOfPred_mapsTo
+--- 原说明 ---
+A compact monoid has discrete Pontryagin dual.
 -/
 instance [CompactSpace A] : DiscreteTopology (PontryaginDual A) := by
   let V : Set (PontryaginDual A) := {ψ | Set.MapsTo ψ Set.univ (Circle.centeredArc (π / 2))}
@@ -262,177 +127,123 @@ instance [CompactSpace A] : DiscreteTopology (PontryaginDual A) := by
   have hVeq : V = ({1} : Set (PontryaginDual A)) := by
     ext ψ
     rw [Set.mem_singleton_iff]
-    refine ⟨fun hψ => ?_, ?_⟩
+    refine ⟨fun hψ ↦ ?_, ?_⟩
     · ext1 a
-      refine Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two fun n hn => ?_
+      refine Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two fun n hn ↦ ?_
       simpa using hψ (Set.mem_univ (a ^ n))
     · rintro rfl _ _
       rw [Circle.mem_centeredArc (by linarith [pi_pos])]
       simp [pi_pos]
   exact discreteTopology_of_isOpen_singleton_one (by simpa [hVeq] using hVopen)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DiscreteTopology
-  signature: A] [CompactSpace A] : Finite (PontryaginDual A)
-  body: finite_of_compact_of_discrete
-
-中文:
-实例 [离散拓扑
-  签名: A] [紧空间 A] : 有限 (PontryaginDual A)
-  定义体: finite_of_compact_of_discrete
-
-Depends on / 依赖: finite_of_compact_of_discrete
+/-
+**PontryaginDual.** 是 Mathlib 中的一个实例，位于命名空间 `PontryaginDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DiscreteTopology A] [CompactSpace A] : Finite (PontryaginDual A) :=
   finite_of_compact_of_discrete
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DiscreteTopology
-  signature: A] [CompactSpace A] : Fintype (PontryaginDual A)
-  body: .ofFinite _
-
-中文:
-实例 [离散拓扑
-  签名: A] [紧空间 A] : 有限类型 (PontryaginDual A)
-  定义体: .ofFinite _
-
-Depends on / 依赖: ofFinite
+/-
+**PontryaginDual.** 是 Mathlib 中的一个实例，位于命名空间 `PontryaginDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [DiscreteTopology A] [CompactSpace A] : Fintype (PontryaginDual A) :=
   .ofFinite _
 
-/--
-Definition of `map` / `map` 的定义
+/-- `PontryaginDual` is a contravariant functor. -/
+/-
+**PontryaginDual.map** 是 Mathlib 中的一个定义，位于命名空间 `PontryaginDual`。
+形式化陈述：map (f : A ->ₜ* B) : (PontryaginDual B) ->ₜ* (PontryaginDual A)
+参数：f : A ->ₜ* B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Circle.instIsTopologicalGroup`：IsTopologicalGroup Circle
 
-English:
-definition map
-  signature: (f : A ->ₜ* B)
-  body: f.compLeft Circle
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : A ->ₜ* B)
-  定义体: f.compLeft Circle
-
-@[simp]
-
-Depends on / 依赖: Circle, compLeft, f.compLeft
+--- 原说明 ---
+`PontryaginDual` is a contravariant functor.
 -/
-def map (f : A ->ₜ* B) :
-    (PontryaginDual B) ->ₜ* (PontryaginDual A) :=
+def map (f : A →ₜ* B) :
+    (PontryaginDual B) →ₜ* (PontryaginDual A) :=
   f.compLeft Circle
 
 @[simp]
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: (f : A ->ₜ* B) (x : PontryaginDual B) (y : A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_apply
-  条件: (f : A ->ₜ* B) (x : PontryaginDual B) (y : A)
-  证明: rfl
-
-@[simp]
+/-
+**PontryaginDual.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `PontryaginDual`。
+形式化陈述：map_apply (f : A ->ₜ* B) (x : PontryaginDual B) (y : A) : map f x y = x (f
+ y)
+参数：f : A ->ₜ* B；x : PontryaginDual B；y : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply (f : A ->ₜ* B) (x : PontryaginDual B) (y : A) :
+theorem map_apply (f : A →ₜ* B) (x : PontryaginDual B) (y : A) :
     map f x y = x (f y) :=
   rfl
 
 @[simp]
-/--
-theorem `map_one` / 定理 `map_one`
-
-English:
-theorem map_one
-  statement: map (1 : A ->ₜ* B) = 1
-  proof: ContinuousMonoidHom.ext fun x => PontryaginDual.ext fun _y => OneHomClass.map_one x
-
-@[simp]
-
-中文:
-定理 map_one
-  结论: map (1 : A ->ₜ* B) = 1
-  证明: ContinuousMonoidHom.ext fun x => PontryaginDual.ext fun _y => OneHomClass.map_one x
-
-@[simp]
-
-Depends on / 依赖: ContinuousMonoidHom, ContinuousMonoidHom.ext, OneHomClass, OneHomClass.map_one, PontryaginDual, PontryaginDual.ext, map_one
+/-
+**PontryaginDual.map_one** 是 Mathlib 中的一个定理，位于命名空间 `PontryaginDual`。
+形式化陈述：map_one : map (1 : A ->ₜ* B) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMonoidHom.ext`：ext {f g : A ->ₜ* B} (h : forall x, f x = g x) 
+: f = g
+· 使用定理 `PontryaginDual.ext`：ext {ψ φ : PontryaginDual A} (h : forall a, ψ a = φ 
+a) : ψ = φ
+· 使用定理 `OneHomClass.map_one`：∀ {F : Type u_10} {M : outParam (Type u_11)} {N : o
+utParam (Type u_12)} {inst : One M} {inst_1 : One N}   {inst_2 : FunLike F M N} 
+[self : O…
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `PontryaginDual.instMonoidHomClassCircle`：∀ {A : Type u_1} [inst : Monoid
+ A] [inst_1 : TopologicalSpace A], MonoidHomClass (PontryaginDual A) A Circle
 -/
-theorem map_one : map (1 : A ->ₜ* B) = 1 :=
+theorem map_one : map (1 : A →ₜ* B) = 1 :=
   ContinuousMonoidHom.ext fun x => PontryaginDual.ext fun _y => OneHomClass.map_one x
 
 @[simp]
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (g : B ->ₜ* C) (f : A ->ₜ* B)
-  proof: ContinuousMonoidHom.ext fun _x => PontryaginDual.ext fun _y => rfl
-
-@[simp]
-nonrec theorem map_mul (f g : A ->ₜ* G) : map (f * g) = map f * map g :=
-  ContinuousMonoidHom.ext fun x => PontryaginDual.ext fun y => map_mul x (f y) (g y)
-
-中文:
-定理 map_comp
-  条件: (g : B ->ₜ* C) (f : A ->ₜ* B)
-  证明: ContinuousMonoidHom.ext fun _x => PontryaginDual.ext fun _y => rfl
-
-@[simp]
-nonrec theorem map_mul (f g : A ->ₜ* G) : map (f * g) = map f * map g :=
-  ContinuousMonoidHom.ext fun x => PontryaginDual.ext fun y => map_mul x (f y) (g y)
-
-Depends on / 依赖: ContinuousMonoidHom, ContinuousMonoidHom.ext, PontryaginDual, PontryaginDual.ext
+/-
+**PontryaginDual.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `PontryaginDual`。
+形式化陈述：map_comp (g : B ->ₜ* C) (f : A ->ₜ* B) : map (comp g f) = ContinuousMonoid
+Hom.comp (map f) (map g)
+参数：g : B ->ₜ* C；f : A ->ₜ* B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMonoidHom.ext`：ext {f g : A ->ₜ* B} (h : forall x, f x = g x) 
+: f = g
+· 使用定理 `PontryaginDual.ext`：ext {ψ φ : PontryaginDual A} (h : forall a, ψ a = φ 
+a) : ψ = φ
 -/
-theorem map_comp (g : B ->ₜ* C) (f : A ->ₜ* B) :
+theorem map_comp (g : B →ₜ* C) (f : A →ₜ* B) :
     map (comp g f) = ContinuousMonoidHom.comp (map f) (map g) :=
   ContinuousMonoidHom.ext fun _x => PontryaginDual.ext fun _y => rfl
 
 @[simp]
-nonrec theorem map_mul (f g : A ->ₜ* G) : map (f * g) = map f * map g :=
+nonrec theorem map_mul (f g : A →ₜ* G) : map (f * g) = map f * map g :=
   ContinuousMonoidHom.ext fun x => PontryaginDual.ext fun y => map_mul x (f y) (g y)
 
 variable (A B C G)
 
-/--
-Definition of `mapHom` / `mapHom` 的定义
+/-- `ContinuousMonoidHom.dual` as a `ContinuousMonoidHom`. -/
+/-
+**PontryaginDual.mapHom** 是 Mathlib 中的一个定义，位于命名空间 `PontryaginDual`。
+形式化陈述：mapHom [LocallyCompactSpace G] : (A ->ₜ* G) ->ₜ* ((PontryaginDual G) ->ₜ* 
+(PontryaginDual A)) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PontryaginDual.instIsTopologicalGroup`：∀ {A : Type u_1} [inst : Monoid A
+] [inst_1 : TopologicalSpace A], IsTopologicalGroup (PontryaginDual A)
+· 使用定理 `PontryaginDual.map_mul`：∀ {A : Type u_1} {G : Type u_4} [inst : Monoid A
+] [inst_1 : CommGroup G] [inst_2 : TopologicalSpace A]   [inst_3 : TopologicalSp
+ace G] [inst…
 
-English:
-definition mapHom
-  signature: [LocallyCompactSpace G]
-  body: map
-  map_one' := map_one
-  map_mul' := map_mul
-  continuous_toFun := continuous_of_continuous_uncurry _ continuous_comp
-
-中文:
-定义 mapHom
-  签名: [局部紧空间 G]
-  定义体: map
-  map_one' := map_one
-  map_mul' := map_mul
-  continuous_toFun := continuous_of_continuous_uncurry _ continuous_comp
+--- 原说明 ---
+`ContinuousMonoidHom.dual` as a `ContinuousMonoidHom`.
 -/
 def mapHom [LocallyCompactSpace G] :
-    (A ->ₜ* G) ->ₜ* ((PontryaginDual G) ->ₜ* (PontryaginDual A)) where
+    (A →ₜ* G) →ₜ* ((PontryaginDual G) →ₜ* (PontryaginDual A)) where
   toFun := map
   map_one' := map_one
   map_mul' := map_mul
   continuous_toFun := continuous_of_continuous_uncurry _ continuous_comp
 
 end PontryaginDual
+

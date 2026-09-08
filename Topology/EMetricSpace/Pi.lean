@@ -30,163 +30,121 @@ section Pi
 
 open Finset
 
-variable {X : β -> Type*} [Fintype β]
+variable {X : β → Type*} [Fintype β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: b, EDist (X b)] : EDist (forall b, X b) where
-  body: Finset.sup univ fun b => edist (f b) (g b)
-
-中文:
-实例 [对任意
-  签名: b, EDist (X b)] : EDist (对任意 b, X b) where
-  定义体: Finset.sup univ fun b => edist (f b) (g b)
-
-Depends on / 依赖: Finset, Finset.sup
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall b, EDist (X b)] : EDist (forall b, X b) where
+instance [∀ b, EDist (X b)] : EDist (∀ b, X b) where
   edist f g := Finset.sup univ fun b => edist (f b) (g b)
-
-/--
-theorem `edist_pi_def` / 定理 `edist_pi_def`
-
-English:
-theorem edist_pi_def
-  given: [forall b, EDist (X b)] (f g : forall b, X b)
-  proof: rfl
-
-中文:
-定理 edist_pi_def
-  条件: [对任意 b, EDist (X b)] (f g : 对任意 b, X b)
-  证明: rfl
+/-
+**edist_pi_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_pi_def [forall b, EDist (X b)] (f g : forall b, X b) : edist f g = F
+inset.sup univ fun b => edist (f b) (g b)
+参数：X b；f g : forall b, X b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem edist_pi_def [forall b, EDist (X b)] (f g : forall b, X b) :
+theorem edist_pi_def [∀ b, EDist (X b)] (f g : ∀ b, X b) :
     edist f g = Finset.sup univ fun b => edist (f b) (g b) :=
   rfl
-
-/--
-theorem `edist_le_pi_edist` / 定理 `edist_le_pi_edist`
-
-English:
-theorem edist_le_pi_edist
-  given: [forall b, EDist (X b)] (f g : forall b, X b) (b : β)
-  proof: le_sup (f := fun b => edist (f b) (g b)) (Finset.mem_univ b)
-
-中文:
-定理 edist_le_pi_edist
-  条件: [对任意 b, EDist (X b)] (f g : 对任意 b, X b) (b : β)
-  证明: le_sup (f := fun b => edist (f b) (g b)) (Finset.mem_univ b)
-
-Depends on / 依赖: Finset, Finset.mem_univ, le_sup, mem_univ
+/-
+**edist_le_pi_edist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_le_pi_edist [forall b, EDist (X b)] (f g : forall b, X b) (b : β) : 
+edist (f b) (g b) <= edist f g
+参数：X b；f g : forall b, X b；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
-theorem edist_le_pi_edist [forall b, EDist (X b)] (f g : forall b, X b) (b : β) :
-    edist (f b) (g b) <= edist f g :=
+theorem edist_le_pi_edist [∀ b, EDist (X b)] (f g : ∀ b, X b) (b : β) :
+    edist (f b) (g b) ≤ edist f g :=
   le_sup (f := fun b => edist (f b) (g b)) (Finset.mem_univ b)
-
-/--
-theorem `edist_pi_le_iff` / 定理 `edist_pi_le_iff`
-
-English:
-theorem edist_pi_le_iff
-  given: [forall b, EDist (X b)] {f g : forall b, X b} {d : Real>=0∞}
-  proof: Finset.sup_le_iff.trans by simp only [Finset.mem_univ, forall_const]
-
-中文:
-定理 edist_pi_le_iff
-  条件: [对任意 b, EDist (X b)] {f g : 对任意 b, X b} {d : 实数>=0∞}
-  证明: Finset.sup_le_iff.trans by simp only [Finset.mem_univ, forall_const]
-
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.sup_le_iff.trans, forall_const, mem_univ, sup_le_iff
+/-
+**edist_pi_le_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_pi_le_iff [forall b, EDist (X b)] {f g : forall b, X b} {d : Real>=0
+∞} : edist f g <= d ↔ forall b, edist (f b) (g b) <= d
+参数：X b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Finset.sup_le_iff`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] [inst_1 : OrderBot α] {s : Finset β} {f : β → α} {a : α},   s.sup f ≤ a ↔ ∀
+ b ∈ s,…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem edist_pi_le_iff [forall b, EDist (X b)] {f g : forall b, X b} {d : Real>=0∞} :
-    edist f g <= d ↔ forall b, edist (f b) (g b) <= d :=
-Finset.sup_le_iff.trans by simp only [Finset.mem_univ, forall_const]
-
-/--
-theorem `edist_pi_const_le` / 定理 `edist_pi_const_le`
-
-English:
-theorem edist_pi_const_le
-  given: (a b : α)
-  statement: (edist (fun _ : β => a) fun _ => b) <= edist a b
-  proof: edist_pi_le_iff.2 fun _ => le_rfl
-
-@[simp]
-
-中文:
-定理 edist_pi_const_le
-  条件: (a b : α)
-  结论: (edist (fun _ : β => a) fun _ => b) <= edist a b
-  证明: edist_pi_le_iff.2 fun _ => le_rfl
-
-@[simp]
-
-Depends on / 依赖: edist_pi_le_iff, le_rfl
+theorem edist_pi_le_iff [∀ b, EDist (X b)] {f g : ∀ b, X b} {d : ℝ≥0∞} :
+    edist f g ≤ d ↔ ∀ b, edist (f b) (g b) ≤ d :=
+  Finset.sup_le_iff.trans <| by simp only [Finset.mem_univ, forall_const]
+/-
+**edist_pi_const_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_pi_const_le (a b : α) : (edist (fun _ : β => a) fun _ => b) <= edist
+ a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `edist_pi_le_iff`：edist_pi_le_iff [forall b, EDist (X b)] {f g : forall b
+, X b} {d : Real>=0∞} : edist f g <= d ↔ forall b, edist (f b) (g b) <= d
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem edist_pi_const_le (a b : α) : (edist (fun _ : β => a) fun _ => b) <= edist a b :=
+theorem edist_pi_const_le (a b : α) : (edist (fun _ : β => a) fun _ => b) ≤ edist a b :=
   edist_pi_le_iff.2 fun _ => le_rfl
 
 @[simp]
-/--
-theorem `edist_pi_const` / 定理 `edist_pi_const`
-
-English:
-theorem edist_pi_const
-  given: [Nonempty β] (a b : α)
-  statement: (edist (fun _ : β => a) fun _ => b) = edist a b
-  proof: Finset.sup_const univ_nonempty (edist a b)
-
-中文:
-定理 edist_pi_const
-  条件: [非空 β] (a b : α)
-  结论: (edist (fun _ : β => a) fun _ => b) = edist a b
-  证明: Finset.sup_const univ_nonempty (edist a b)
-
-Depends on / 依赖: Finset, Finset.sup_const, sup_const, univ_nonempty
+/-
+**edist_pi_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：edist_pi_const [Nonempty β] (a b : α) : (edist (fun _ : β => a) fun _ => b
+) = edist a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sup_const`：sup_const {s : Finset β} (h : s.Nonempty) (c : α) : (s
+.sup fun _ => c) = c
+· 使用定理 `Finset.univ_nonempty`：univ_nonempty [Nonempty α] : (univ : Finset α).Non
+empty
 -/
 theorem edist_pi_const [Nonempty β] (a b : α) : (edist (fun _ : β => a) fun _ => b) = edist a b :=
   Finset.sup_const univ_nonempty (edist a b)
 
-/--
-Instance `pseudoEMetricSpacePi` / 实例 `pseudoEMetricSpacePi`
+/-- The product of a finite number of pseudoemetric spaces, with the max distance, is still
+a pseudoemetric space.
+This construction would also work for infinite products, but it would not give rise
+to the product topology. Hence, we only formalize it in the good situation of finitely many
+spaces. -/
+/-
+**pseudoEMetricSpacePi** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：pseudoEMetricSpacePi [forall b, PseudoEMetricSpace (X b)] : PseudoEMetricS
+pace (forall b, X b) where edist_self f
+参数：X b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance pseudoEMetricSpacePi
-  signature: [forall b, PseudoEMetricSpace (X b)]
-  body: bot_unique Finset.sup_le by simp
-  edist_comm f g := by simp [edist_pi_def, edist_comm]
-  edist_triangle _ g _ := edist_pi_le_iff.2 fun b => le_trans (edist_triangle _ (g b) _)
-    (add_le_add (edist_le_pi_edist _ _ _) (edist_le_pi_edist _ _ _))
-  toUniformSpace := Pi.uniformSpace _
-  uniformity_edist := by
-    simp only [Pi.uniformity, PseudoEMetricSpace.uniformity_edist, comap_iInf, gt_iff_lt,
-      preimage_ofPred_eq, comap_principal, edist_pi_def]
-    rw [iInf_comm]; congr; funext ε
-    rw [iInf_comm]; congr; funext εpos
-    simp [ofPred_forall, εpos]
-
-中文:
-实例 pseudoEMetricSpacePi
-  签名: [对任意 b, PseudoEMetric空间 (X b)]
-  定义体: bot_unique Finset.sup_le by simp
-  edist_comm f g := by simp [edist_pi_def, edist_comm]
-  edist_triangle _ g _ := edist_pi_le_iff.2 fun b => le_trans (edist_triangle _ (g b) _)
-    (add_le_add (edist_le_pi_edist _ _ _) (edist_le_pi_edist _ _ _))
-  toUniformSpace := Pi.uniformSpace _
-  uniformity_edist := by
-    simp only [Pi.uniformity, PseudoEMetricSpace.uniformity_edist, comap_iInf, gt_iff_lt,
-      preimage_ofPred_eq, comap_principal, edist_pi_def]
-    rw [iInf_comm]; congr; funext ε
-    rw [iInf_comm]; congr; funext εpos
-    simp [ofPred_forall, εpos]
-
-Depends on / 依赖: Finset, Finset.sup_le, bot_unique, sup_le
+--- 原说明 ---
+The product of a finite number of pseudoemetric spaces, with the max distance, i
+s still
+a pseudoemetric space.
+This construction would also work for infinite products, but it would not give r
+ise
+to the product topology. Hence, we only formalize it in the good situation of fi
+nitely many
+spaces.
 -/
-instance pseudoEMetricSpacePi [forall b, PseudoEMetricSpace (X b)] : PseudoEMetricSpace (forall b, X b) where
-edist_self f := bot_unique Finset.sup_le by simp
+instance pseudoEMetricSpacePi [∀ b, PseudoEMetricSpace (X b)] : PseudoEMetricSpace (∀ b, X b) where
+  edist_self f := bot_unique <| Finset.sup_le <| by simp
   edist_comm f g := by simp [edist_pi_def, edist_comm]
   edist_triangle _ g _ := edist_pi_le_iff.2 fun b => le_trans (edist_triangle _ (g b) _)
     (add_le_add (edist_le_pi_edist _ _ _) (edist_le_pi_edist _ _ _))
@@ -206,24 +164,33 @@ section Pi
 
 open Finset
 
-variable {X : β -> Type*} [Fintype β]
+variable {X : β → Type*} [Fintype β]
 
-/--
-Instance `emetricSpacePi` / 实例 `emetricSpacePi`
+/-- The product of a finite number of emetric spaces, with the max distance, is still
+an emetric space.
+This construction would also work for infinite products, but it would not give rise
+to the product topology. Hence, we only formalize it in the good situation of finitely many
+spaces. -/
+/-
+**emetricSpacePi** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：emetricSpacePi [forall b, EMetricSpace (X b)] : EMetricSpace (forall b, X 
+b)
+参数：X b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance emetricSpacePi
-  signature: [forall b, EMetricSpace (X b)]
-  body: .ofT0PseudoEMetricSpace _
-
-中文:
-实例 emetricSpacePi
-  签名: [对任意 b, 广义度量空间 (X b)]
-  定义体: .ofT0PseudoEMetricSpace _
-
-Depends on / 依赖: ofT0PseudoEMetricSpace
+--- 原说明 ---
+The product of a finite number of emetric spaces, with the max distance, is stil
+l
+an emetric space.
+This construction would also work for infinite products, but it would not give r
+ise
+to the product topology. Hence, we only formalize it in the good situation of fi
+nitely many
+spaces.
 -/
-instance emetricSpacePi [forall b, EMetricSpace (X b)] : EMetricSpace (forall b, X b) :=
+instance emetricSpacePi [∀ b, EMetricSpace (X b)] : EMetricSpace (∀ b, X b) :=
   .ofT0PseudoEMetricSpace _
 
 end Pi
+

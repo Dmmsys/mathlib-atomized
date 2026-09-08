@@ -19,166 +19,148 @@ variable {α : Type*}
 
 open Function
 
-/--
-lemma `lt_add_one` / 引理 `lt_add_one`
-
-English:
-lemma lt_add_one
-  statement: [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α]
-  proof: lt_add_of_pos_right _ zero_lt_one
-
-中文:
-引理 lt_add_one
-  结论: [幺 α] [加法零类 α] [偏序 α] [ZeroLEOne类 α]
-  证明: lt_add_of_pos_right _ zero_lt_one
-
-Depends on / 依赖: lt_add_of_pos_right, zero_lt_one
+/-
+**lt_add_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α] [N
+eZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+参数：1 : α；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_add_of_pos_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : 
+LT α] [AddLeftStrictMono α] (a : α) {b : α}, 0 < b → a < a + b
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
 -/
 lemma lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α]
     [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1 :=
   lt_add_of_pos_right _ zero_lt_one
-
-/--
-lemma `lt_one_add` / 引理 `lt_one_add`
-
-English:
-lemma lt_one_add
-  statement: [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α]
-  proof: lt_add_of_pos_left _ zero_lt_one
-
-中文:
-引理 lt_one_add
-  结论: [幺 α] [加法零类 α] [偏序 α] [ZeroLEOne类 α]
-  证明: lt_add_of_pos_left _ zero_lt_one
-
-Depends on / 依赖: lt_add_of_pos_left, zero_lt_one
+/-
+**lt_one_add** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：lt_one_add [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α] [N
+eZero (1 : α)] [AddRightStrictMono α] (a : α) : a < 1 + a
+参数：1 : α；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_add_of_pos_left`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : L
+T α] [AddRightStrictMono α] (a : α) {b : α}, 0 < b → a < b + a
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
 -/
 lemma lt_one_add [One α] [AddZeroClass α] [PartialOrder α] [ZeroLEOneClass α]
     [NeZero (1 : α)] [AddRightStrictMono α] (a : α) : a < 1 + a :=
   lt_add_of_pos_left _ zero_lt_one
 
 variable [AddMonoidWithOne α]
-
-/--
-lemma `zero_le_two` / 引理 `zero_le_two`
-
-English:
-lemma zero_le_two
-  given: [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
-  proof: by
-  rw [← one_add_one_eq_two]
-  exact add_nonneg zero_le_one zero_le_one
-
-中文:
-引理 zero_le_two
-  条件: [预序 α] [ZeroLEOne类 α] [AddLeftMono α]
-  证明: by
-  rw [← one_add_one_eq_two]
-  exact add_nonneg zero_le_one zero_le_one
-
-Depends on / 依赖: add_nonneg, one_add_one_eq_two, zero_le_one
+/-
+**zero_le_two** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：zero_le_two [Preorder α] [ZeroLEOneClass α] [AddLeftMono α] : (0 : α) <= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 -/
 lemma zero_le_two [Preorder α] [ZeroLEOneClass α] [AddLeftMono α] :
-    (0 : α) <= 2 := by
+    (0 : α) ≤ 2 := by
   rw [← one_add_one_eq_two]
   exact add_nonneg zero_le_one zero_le_one
-
-/--
-lemma `zero_le_three` / 引理 `zero_le_three`
-
-English:
-lemma zero_le_three
-  given: [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
-  proof: by
-  rw [← two_add_one_eq_three]
-  exact add_nonneg zero_le_two zero_le_one
-
-中文:
-引理 zero_le_three
-  条件: [预序 α] [ZeroLEOne类 α] [AddLeftMono α]
-  证明: by
-  rw [← two_add_one_eq_three]
-  exact add_nonneg zero_le_two zero_le_one
-
-Depends on / 依赖: add_nonneg, two_add_one_eq_three, zero_le_one, zero_le_two
+/-
+**zero_le_three** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：zero_le_three [Preorder α] [ZeroLEOneClass α] [AddLeftMono α] : (0 : α) <=
+ 3
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_add_one_eq_three`：two_add_one_eq_three [AddMonoidWithOne R] : 2 + 1 
+= (3 : R)
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用引理 `zero_le_two`：zero_le_two [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
+ : (0 : α) <= 2
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 -/
 lemma zero_le_three [Preorder α] [ZeroLEOneClass α] [AddLeftMono α] :
-    (0 : α) <= 3 := by
+    (0 : α) ≤ 3 := by
   rw [← two_add_one_eq_three]
   exact add_nonneg zero_le_two zero_le_one
-
-/--
-lemma `zero_le_four` / 引理 `zero_le_four`
-
-English:
-lemma zero_le_four
-  given: [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
-  proof: by
-  rw [← three_add_one_eq_four]
-  exact add_nonneg zero_le_three zero_le_one
-
-中文:
-引理 zero_le_four
-  条件: [预序 α] [ZeroLEOne类 α] [AddLeftMono α]
-  证明: by
-  rw [← three_add_one_eq_four]
-  exact add_nonneg zero_le_three zero_le_one
-
-Depends on / 依赖: add_nonneg, three_add_one_eq_four, zero_le_one, zero_le_three
+/-
+**zero_le_four** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：zero_le_four [Preorder α] [ZeroLEOneClass α] [AddLeftMono α] : (0 : α) <= 
+4
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `three_add_one_eq_four`：three_add_one_eq_four [AddMonoidWithOne R] : 3 + 
+1 = (4 : R)
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用引理 `zero_le_three`：zero_le_three [Preorder α] [ZeroLEOneClass α] [AddLeftMon
+o α] : (0 : α) <= 3
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 -/
 lemma zero_le_four [Preorder α] [ZeroLEOneClass α] [AddLeftMono α] :
-    (0 : α) <= 4 := by
+    (0 : α) ≤ 4 := by
   rw [← three_add_one_eq_four]
   exact add_nonneg zero_le_three zero_le_one
-
-/--
-lemma `one_le_two` / 引理 `one_le_two`
-
-English:
-lemma one_le_two
-  given: [LE α] [ZeroLEOneClass α] [AddLeftMono α]
-  proof: calc (1 : α) = 1 + 0 := (add_zero 1).symm
-     _ <= 1 + 1 := by gcongr; exact zero_le_one
-     _ = 2 := one_add_one_eq_two
-
-中文:
-引理 one_le_two
-  条件: [LE α] [ZeroLEOne类 α] [AddLeftMono α]
-  证明: calc (1 : α) = 1 + 0 := (add_zero 1).symm
-     _ <= 1 + 1 := by gcongr; exact zero_le_one
-     _ = 2 := one_add_one_eq_two
-
-Depends on / 依赖: add_zero, one_add_one_eq_two, zero_le_one
+/-
+**one_le_two** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_le_two [LE α] [ZeroLEOneClass α] [AddLeftMono α] : (1 : α) <= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `add_le_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [AddLe
+ftMono α] {b c : α}, b ≤ c → ∀ (a : α), a + b ≤ a + c
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
 -/
 lemma one_le_two [LE α] [ZeroLEOneClass α] [AddLeftMono α] :
-    (1 : α) <= 2 :=
+    (1 : α) ≤ 2 :=
   calc (1 : α) = 1 + 0 := (add_zero 1).symm
-     _ <= 1 + 1 := by gcongr; exact zero_le_one
+     _ ≤ 1 + 1 := by gcongr; exact zero_le_one
      _ = 2 := one_add_one_eq_two
-
-/--
-lemma `one_le_two'` / 引理 `one_le_two'`
-
-English:
-lemma one_le_two'
-  given: [LE α] [ZeroLEOneClass α] [AddRightMono α]
-  proof: calc (1 : α) = 0 + 1 := (zero_add 1).symm
-     _ <= 1 + 1 := by gcongr; exact zero_le_one
-     _ = 2 := one_add_one_eq_two
-
-中文:
-引理 one_le_two'
-  条件: [LE α] [ZeroLEOne类 α] [AddRightMono α]
-  证明: calc (1 : α) = 0 + 1 := (zero_add 1).symm
-     _ <= 1 + 1 := by gcongr; exact zero_le_one
-     _ = 2 := one_add_one_eq_two
-
-Depends on / 依赖: one_add_one_eq_two, zero_add, zero_le_one
+/-
+**one_le_two'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_le_two' [LE α] [ZeroLEOneClass α] [AddRightMono α] : (1 : α) <= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
 -/
 lemma one_le_two' [LE α] [ZeroLEOneClass α] [AddRightMono α] :
-    (1 : α) <= 2 :=
+    (1 : α) ≤ 2 :=
   calc (1 : α) = 0 + 1 := (zero_add 1).symm
-     _ <= 1 + 1 := by gcongr; exact zero_le_one
+     _ ≤ 1 + 1 := by gcongr; exact zero_le_one
      _ = 2 := one_add_one_eq_two
 
 section
@@ -187,58 +169,75 @@ variable [PartialOrder α] [ZeroLEOneClass α] [NeZero (1 : α)]
 section
 variable [AddLeftMono α]
 
-/--
-lemma `zero_lt_two` / 引理 `zero_lt_two`
+/-- See `zero_lt_two'` for a version with the type explicit. -/
+/-
+**zero_lt_two** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : PartialOrder α] [Ze
+roLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用引理 `one_le_two`：one_le_two [LE α] [ZeroLEOneClass α] [AddLeftMono α] : (1 : 
+α) <= 2
 
-English:
-lemma zero_lt_two
-  statement: (0 : α) < 2
-  proof: zero_lt_one.trans_le one_le_two
-
-中文:
-引理 zero_lt_two
-  结论: (0 : α) < 2
-  证明: zero_lt_one.trans_le one_le_two
+--- 原说明 ---
+See `zero_lt_two'` for a version with the type explicit.
 -/
 @[simp] lemma zero_lt_two : (0 : α) < 2 := zero_lt_one.trans_le one_le_two
 
-/--
-lemma `zero_lt_three` / 引理 `zero_lt_three`
+/-- See `zero_lt_three'` for a version with the type explicit. -/
+/-
+**zero_lt_three** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : PartialOrder α] [Ze
+roLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 3
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_add_one_eq_three`：two_add_one_eq_three [AddMonoidWithOne R] : 2 + 1 
+= (3 : R)
+· 使用定理 `lt_add_of_lt_of_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : Preorder α] [AddLeftMono α] {a b c : α}, b < c → 0 ≤ a → b < c + a
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 
-English:
-lemma zero_lt_three
-  statement: (0 : α) < 3
-  proof: by
-  rw [← two_add_one_eq_three]
-  exact lt_add_of_lt_of_nonneg zero_lt_two zero_le_one
-
-中文:
-引理 zero_lt_three
-  结论: (0 : α) < 3
-  证明: by
-  rw [← two_add_one_eq_three]
-  exact lt_add_of_lt_of_nonneg zero_lt_two zero_le_one
+--- 原说明 ---
+See `zero_lt_three'` for a version with the type explicit.
 -/
 @[simp] lemma zero_lt_three : (0 : α) < 3 := by
   rw [← two_add_one_eq_three]
   exact lt_add_of_lt_of_nonneg zero_lt_two zero_le_one
 
-/--
-lemma `zero_lt_four` / 引理 `zero_lt_four`
+/-- See `zero_lt_four'` for a version with the type explicit. -/
+/-
+**zero_lt_four** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : PartialOrder α] [Ze
+roLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 4
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `three_add_one_eq_four`：three_add_one_eq_four [AddMonoidWithOne R] : 3 + 
+1 = (4 : R)
+· 使用定理 `lt_add_of_lt_of_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : Preorder α] [AddLeftMono α] {a b c : α}, b < c → 0 ≤ a → b < c + a
+· 使用定理 `zero_lt_three`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Pa
+rtialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 3
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 
-English:
-lemma zero_lt_four
-  statement: (0 : α) < 4
-  proof: by
-  rw [← three_add_one_eq_four]
-  exact lt_add_of_lt_of_nonneg zero_lt_three zero_le_one
-
-中文:
-引理 zero_lt_four
-  结论: (0 : α) < 4
-  证明: by
-  rw [← three_add_one_eq_four]
-  exact lt_add_of_lt_of_nonneg zero_lt_three zero_le_one
+--- 原说明 ---
+See `zero_lt_four'` for a version with the type explicit.
 -/
 @[simp] lemma zero_lt_four : (0 : α) < 4 := by
   rw [← three_add_one_eq_four]
@@ -246,128 +245,100 @@ lemma zero_lt_four
 
 variable (α)
 
-/--
-lemma `zero_lt_two'` / 引理 `zero_lt_two'`
+/-- See `zero_lt_two` for a version with the type implicit. -/
+/-
+**zero_lt_two'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：zero_lt_two' : (0 : α) < 2
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
 
-English:
-lemma zero_lt_two'
-  statement: (0 : α) < 2
-  proof: zero_lt_two
-
-中文:
-引理 zero_lt_two'
-  结论: (0 : α) < 2
-  证明: zero_lt_two
-
-Depends on / 依赖: zero_lt_two
+--- 原说明 ---
+See `zero_lt_two` for a version with the type implicit.
 -/
 lemma zero_lt_two' : (0 : α) < 2 := zero_lt_two
 
-/--
-lemma `zero_lt_three'` / 引理 `zero_lt_three'`
+/-- See `zero_lt_three` for a version with the type implicit. -/
+/-
+**zero_lt_three'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：zero_lt_three' : (0 : α) < 3
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_lt_three`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Pa
+rtialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 3
 
-English:
-lemma zero_lt_three'
-  statement: (0 : α) < 3
-  proof: zero_lt_three
-
-中文:
-引理 zero_lt_three'
-  结论: (0 : α) < 3
-  证明: zero_lt_three
-
-Depends on / 依赖: zero_lt_three
+--- 原说明 ---
+See `zero_lt_three` for a version with the type implicit.
 -/
 lemma zero_lt_three' : (0 : α) < 3 := zero_lt_three
 
-/--
-lemma `zero_lt_four'` / 引理 `zero_lt_four'`
+/-- See `zero_lt_four` for a version with the type implicit. -/
+/-
+**zero_lt_four'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：zero_lt_four' : (0 : α) < 4
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_lt_four`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Par
+tialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 4
 
-English:
-lemma zero_lt_four'
-  statement: (0 : α) < 4
-  proof: zero_lt_four
-
-中文:
-引理 zero_lt_four'
-  结论: (0 : α) < 4
-  证明: zero_lt_four
-
-Depends on / 依赖: zero_lt_four
+--- 原说明 ---
+See `zero_lt_four` for a version with the type implicit.
 -/
 lemma zero_lt_four' : (0 : α) < 4 := zero_lt_four
-
-/--
-Instance `ZeroLEOneClass.neZero.two` / 实例 `ZeroLEOneClass.neZero.two`
-
-English:
-instance ZeroLEOneClass.neZero.two
-  signature: : NeZero (2 : α)
-  body: ⟨zero_lt_two.ne'⟩
-
-中文:
-实例 ZeroLEOne类.neZero.two
-  签名: : NeZero (2 : α)
-  定义体: ⟨zero_lt_two.ne'⟩
-
-Depends on / 依赖: zero_lt_two, zero_lt_two.ne
+/-
+**ZeroLEOneClass.neZero.two** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ZeroLEOneClass.neZero.two : NeZero (2 : α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
 -/
 instance ZeroLEOneClass.neZero.two : NeZero (2 : α) := ⟨zero_lt_two.ne'⟩
-/--
-Instance `ZeroLEOneClass.neZero.three` / 实例 `ZeroLEOneClass.neZero.three`
-
-English:
-instance ZeroLEOneClass.neZero.three
-  signature: : NeZero (3 : α)
-  body: ⟨zero_lt_three.ne'⟩
-
-中文:
-实例 ZeroLEOne类.neZero.three
-  签名: : NeZero (3 : α)
-  定义体: ⟨zero_lt_three.ne'⟩
-
-Depends on / 依赖: zero_lt_three, zero_lt_three.ne
+/-
+**ZeroLEOneClass.neZero.three** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ZeroLEOneClass.neZero.three : NeZero (3 : α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `zero_lt_three`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Pa
+rtialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 3
 -/
 instance ZeroLEOneClass.neZero.three : NeZero (3 : α) := ⟨zero_lt_three.ne'⟩
-/--
-Instance `ZeroLEOneClass.neZero.four` / 实例 `ZeroLEOneClass.neZero.four`
-
-English:
-instance ZeroLEOneClass.neZero.four
-  signature: : NeZero (4 : α)
-  body: ⟨zero_lt_four.ne'⟩
-
-中文:
-实例 ZeroLEOne类.neZero.four
-  签名: : NeZero (4 : α)
-  定义体: ⟨zero_lt_four.ne'⟩
-
-Depends on / 依赖: zero_lt_four, zero_lt_four.ne
+/-
+**ZeroLEOneClass.neZero.four** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ZeroLEOneClass.neZero.four : NeZero (4 : α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `zero_lt_four`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Par
+tialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 4
 -/
 instance ZeroLEOneClass.neZero.four : NeZero (4 : α) := ⟨zero_lt_four.ne'⟩
 
 end
 
-/--
-lemma `one_lt_two` / 引理 `one_lt_two`
-
-English:
-lemma one_lt_two
-  given: [AddLeftStrictMono α]
-  statement: (1 : α) < 2
-  proof: by
-  rw [← one_add_one_eq_two]
-  exact lt_add_one _
-
-中文:
-引理 one_lt_two
-  条件: [AddLeftStrictMono α]
-  结论: (1 : α) < 2
-  证明: by
-  rw [← one_add_one_eq_two]
-  exact lt_add_one _
-
-Depends on / 依赖: lt_add_one, one_add_one_eq_two
+/-
+**one_lt_two** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_lt_two [AddLeftStrictMono α] : (1 : α) < 2
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
 -/
 lemma one_lt_two [AddLeftStrictMono α] : (1 : α) < 2 := by
   rw [← one_add_one_eq_two]
@@ -380,3 +351,4 @@ alias two_pos := zero_lt_two
 alias three_pos := zero_lt_three
 
 alias four_pos := zero_lt_four
+

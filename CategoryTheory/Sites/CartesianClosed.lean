@@ -25,24 +25,9 @@ open CategoryTheory Presheaf
 
 variable {C : Type*} [Category* C] (J : GrothendieckTopology C) (A : Type*) [Category* A]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasSheafify
-  signature: J A] [CartesianMonoidalCategory A] [MonoidalClosed (Cᵒᵖ ⥤ A)] :
-  body: cartesianClosedOfReflective' (sheafToPresheaf _ _) {
-    obj F := ⟨F.obj, (isSheaf_of_iso_iff F.2.choose_spec.some).1 F.2.choose.property⟩
-    map f := ⟨f.hom⟩ } (Iso.refl _)
-
-中文:
-实例 [有Sheafify
-  签名: J A] [CartesianMonoidal范畴 A] [幺半群闭 (Cᵒᵖ ⥤ A)] :
-  定义体: cartesianClosedOfReflective' (sheafToPresheaf _ _) {
-    obj F := ⟨F.obj, (isSheaf_of_iso_iff F.2.choose_spec.some).1 F.2.choose.property⟩
-    map f := ⟨f.hom⟩ } (Iso.refl _)
-
-Depends on / 依赖: F.obj, Iso.refl, cartesianClosedOfReflective, choose.property, choose_spec, choose_spec.some, f.hom, isSheaf_of_iso_iff, property, sheafToPresheaf
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasSheafify J A] [CartesianMonoidalCategory A] [MonoidalClosed (Cᵒᵖ ⥤ A)] :
     MonoidalClosed (Sheaf J A) :=

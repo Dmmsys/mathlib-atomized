@@ -30,44 +30,19 @@ variable {𝕜 𝔸 E : Type*}
 
 section NormedRing
 variable [NontriviallyNormedField 𝕜] [NormedRing 𝔸] [NormedAddCommGroup E]
-variable [NormedAlgebra 𝕜 𝔸] [NormedSpace 𝕜 E] {f : E -> 𝔸} {f' : E ->L[𝕜] 𝔸} {x : E} {s : Set E}
+variable [NormedAlgebra 𝕜 𝔸] [NormedSpace 𝕜 E] {f : E → 𝔸} {f' : E →L[𝕜] 𝔸} {x : E} {s : Set E}
 
 open scoped RightActions
 
-/--
-theorem `aux` / 定理 `aux`
-
-English:
-theorem aux
-  given: (f : E -> 𝔸) (f' : E ->L[𝕜] 𝔸) (x : E) (n : Nat)
-  proof: by
-  rw [Finset.sum_range_succ _ (n + 1)]; rw [Finset.smul_sum]
-  simp only [Nat.pred_eq_sub_one, add_tsub_cancel_right, tsub_self, pow_zero, one_smul]
-  simp_rw [smul_comm (_ : 𝔸) (_ : 𝔸ᵐᵒᵖ), smul_smul, ← pow_succ']
-  congr! 5 with x hx
-  simp only [Finset.mem_range, Nat.lt_succ_iff] at hx
-  rw [tsub_add_eq_add_tsub hx]
-
-@[to_fun]
-
-中文:
-定理 aux
-  条件: (f : E -> 𝔸) (f' : E ->L[𝕜] 𝔸) (x : E) (n : 自然数)
-  证明: by
-  rw [Finset.sum_range_succ _ (n + 1)]; rw [Finset.smul_sum]
-  simp only [Nat.pred_eq_sub_one, add_tsub_cancel_right, tsub_self, pow_zero, one_smul]
-  simp_rw [smul_comm (_ : 𝔸) (_ : 𝔸ᵐᵒᵖ), smul_smul, ← pow_succ']
-  congr! 5 with x hx
-  simp only [Finset.mem_range, Nat.lt_succ_iff] at hx
-  rw [tsub_add_eq_add_tsub hx]
-
-@[to_fun]
+/-
+**aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem aux (f : E -> 𝔸) (f' : E ->L[𝕜] 𝔸) (x : E) (n : Nat) :
-    f x •> ∑ i in Finset.range (n + 1), f x ^ ((n + 1).pred - i) •> f' <• f x ^ i
+private theorem aux (f : E → 𝔸) (f' : E →L[𝕜] 𝔸) (x : E) (n : ℕ) :
+    f x •> ∑ i ∈ Finset.range (n + 1), f x ^ ((n + 1).pred - i) •> f' <• f x ^ i
       + f' <• (f x ^ (n + 1)) =
-    ∑ i in Finset.range (n + 1 + 1), f x ^ ((n + 1 + 1).pred - i) •> f' <• f x ^ i := by
-  rw [Finset.sum_range_succ _ (n + 1)]; rw [Finset.smul_sum]
+    ∑ i ∈ Finset.range (n + 1 + 1), f x ^ ((n + 1 + 1).pred - i) •> f' <• f x ^ i := by
+  rw [Finset.sum_range_succ _ (n + 1), Finset.smul_sum]
   simp only [Nat.pred_eq_sub_one, add_tsub_cancel_right, tsub_self, pow_zero, one_smul]
   simp_rw [smul_comm (_ : 𝔸) (_ : 𝔸ᵐᵒᵖ), smul_smul, ← pow_succ']
   congr! 5 with x hx
@@ -75,709 +50,894 @@ private theorem aux (f : E -> 𝔸) (f' : E ->L[𝕜] 𝔸) (x : E) (n : Nat) :
   rw [tsub_add_eq_add_tsub hx]
 
 @[to_fun]
-/--
-theorem `HasStrictFDerivAt.pow'` / 定理 `HasStrictFDerivAt.pow'`
-
-English:
-theorem HasStrictFDerivAt.pow'
-  given: (h : HasStrictFDerivAt f f' x) (n : Nat)
-  proof: match n with
-  | 0 => by simpa using! hasStrictFDerivAt_const 1 x
-  | 1 => by simpa using h
-  | n + 1 + 1 => by
-    have := h.mul' (h.pow' (n + 1))
-    simp_rw [pow_succ' _ (n + 1)]
-refine this.congr_fderiv aux _ _ _ _
-
-中文:
-定理 HasStrictFDerivAt.pow'
-  条件: (h : HasStrictFDerivAt f f' x) (n : 自然数)
-  证明: match n with
-  | 0 => by simpa using! hasStrictFDerivAt_const 1 x
-  | 1 => by simpa using h
-  | n + 1 + 1 => by
-    have := h.mul' (h.pow' (n + 1))
-    simp_rw [pow_succ' _ (n + 1)]
-refine this.congr_fderiv aux _ _ _ _
-
-Depends on / 依赖: congr_fderiv, h.mul, h.pow, hasStrictFDerivAt_const, pow_succ, simp_rw, this.congr_fderiv
+/-
+**HasStrictFDerivAt.pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.pow' (h : HasStrictFDerivAt f f' x) (n : Nat) : HasStric
+tFDerivAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) x
+参数：h : HasStrictFDerivAt f f' x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem HasStrictFDerivAt.pow' (h : HasStrictFDerivAt f f' x) (n : Nat) :
+theorem HasStrictFDerivAt.pow' (h : HasStrictFDerivAt f f' x) (n : ℕ) :
     HasStrictFDerivAt (f ^ n)
-      (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) x :=
+      (∑ i ∈ Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) x :=
   match n with
   | 0 => by simpa using! hasStrictFDerivAt_const 1 x
   | 1 => by simpa using h
   | n + 1 + 1 => by
     have := h.mul' (h.pow' (n + 1))
     simp_rw [pow_succ' _ (n + 1)]
-refine this.congr_fderiv aux _ _ _ _
-
-/--
-theorem `hasStrictFDerivAt_pow'` / 定理 `hasStrictFDerivAt_pow'`
-
-English:
-theorem hasStrictFDerivAt_pow'
-  given: (n : Nat) {x : 𝔸}
-  proof: .pow' n hasStrictFDerivAt_id _
-
-@[to_fun]
-
-中文:
-定理 hasStrictFDerivAt_pow'
-  条件: (n : 自然数) {x : 𝔸}
-  证明: .pow' n hasStrictFDerivAt_id _
-
-@[to_fun]
+    refine this.congr_fderiv <| aux _ _ _ _
+/-
+**hasStrictFDerivAt_pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasStrictFDerivAt_pow' (n : Nat) {x : 𝔸} : HasStrictFDerivAt (𝕜
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictFDerivAt.pow'`：HasStrictFDerivAt.pow' (h : HasStrictFDerivAt f 
+f' x) (n : Nat) : HasStrictFDerivAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pre
+d - i) •> f'…
+· 使用定理 `hasStrictFDerivAt_id`：hasStrictFDerivAt_id (x : E) : HasStrictFDerivAt i
+d (.id 𝕜 E) x
 -/
-theorem hasStrictFDerivAt_pow' (n : Nat) {x : 𝔸} :
-    HasStrictFDerivAt (𝕜 := 𝕜) (fun x => x ^ n)
-      (∑ i in Finset.range n, x ^ (n.pred - i) •> ContinuousLinearMap.id 𝕜 _ <• x ^ i) x :=
-.pow' n hasStrictFDerivAt_id _
+theorem hasStrictFDerivAt_pow' (n : ℕ) {x : 𝔸} :
+    HasStrictFDerivAt (𝕜 := 𝕜) (fun x ↦ x ^ n)
+      (∑ i ∈ Finset.range n, x ^ (n.pred - i) •> ContinuousLinearMap.id 𝕜 _ <• x ^ i) x :=
+  hasStrictFDerivAt_id _ |>.pow' n
 
 @[to_fun]
-/--
-theorem `HasFDerivWithinAt.pow'` / 定理 `HasFDerivWithinAt.pow'`
-
-English:
-theorem HasFDerivWithinAt.pow'
-  given: (h : HasFDerivWithinAt f f' s x) (n : Nat)
-  proof: match n with
-  | 0 => by simpa using! hasFDerivWithinAt_const 1 x s
-  | 1 => by simpa using h
-  | n + 1 + 1 => by
-    have := h.mul' (h.pow' (n + 1))
-    simp_rw [pow_succ' _ (n + 1)]
-exact this.congr_fderiv aux _ _ _ _
-
-中文:
-定理 HasFDerivWithinAt.pow'
-  条件: (h : HasFDerivWithinAt f f' s x) (n : 自然数)
-  证明: match n with
-  | 0 => by simpa using! hasFDerivWithinAt_const 1 x s
-  | 1 => by simpa using h
-  | n + 1 + 1 => by
-    have := h.mul' (h.pow' (n + 1))
-    simp_rw [pow_succ' _ (n + 1)]
-exact this.congr_fderiv aux _ _ _ _
-
-Depends on / 依赖: congr_fderiv, h.mul, h.pow, hasFDerivWithinAt_const, pow_succ, simp_rw, this.congr_fderiv
+/-
+**HasFDerivWithinAt.pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.pow' (h : HasFDerivWithinAt f f' s x) (n : Nat) : HasFDe
+rivWithinAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i)
+ s x
+参数：h : HasFDerivWithinAt f f' s x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem HasFDerivWithinAt.pow' (h : HasFDerivWithinAt f f' s x) (n : Nat) :
+theorem HasFDerivWithinAt.pow' (h : HasFDerivWithinAt f f' s x) (n : ℕ) :
     HasFDerivWithinAt (f ^ n)
-      (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) s x :=
+      (∑ i ∈ Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) s x :=
   match n with
   | 0 => by simpa using! hasFDerivWithinAt_const 1 x s
   | 1 => by simpa using h
   | n + 1 + 1 => by
     have := h.mul' (h.pow' (n + 1))
     simp_rw [pow_succ' _ (n + 1)]
-exact this.congr_fderiv aux _ _ _ _
-
-/--
-theorem `hasFDerivWithinAt_pow'` / 定理 `hasFDerivWithinAt_pow'`
-
-English:
-theorem hasFDerivWithinAt_pow'
-  given: (n : Nat) {x : 𝔸} {s : Set 𝔸}
-  proof: .pow' n hasFDerivWithinAt_id _ _
-
-@[to_fun]
-
-中文:
-定理 hasFDerivWithinAt_pow'
-  条件: (n : 自然数) {x : 𝔸} {s : 集合 𝔸}
-  证明: .pow' n hasFDerivWithinAt_id _ _
-
-@[to_fun]
+    exact this.congr_fderiv <| aux _ _ _ _
+/-
+**hasFDerivWithinAt_pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivWithinAt_pow' (n : Nat) {x : 𝔸} {s : Set 𝔸} : HasFDerivWithinAt (
+𝕜
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.pow'`：HasFDerivWithinAt.pow' (h : HasFDerivWithinAt f 
+f' s x) (n : Nat) : HasFDerivWithinAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.p
+red - i) •> …
+· 使用定理 `hasFDerivWithinAt_id`：hasFDerivWithinAt_id (x : E) (s : Set E) : HasFDer
+ivWithinAt id (.id 𝕜 E) s x
 -/
-theorem hasFDerivWithinAt_pow' (n : Nat) {x : 𝔸} {s : Set 𝔸} :
-    HasFDerivWithinAt (𝕜 := 𝕜) (fun x => x ^ n)
-      (∑ i in Finset.range n, x ^ (n.pred - i) •> ContinuousLinearMap.id 𝕜 _ <• x ^ i) s x :=
-.pow' n hasFDerivWithinAt_id _ _
+theorem hasFDerivWithinAt_pow' (n : ℕ) {x : 𝔸} {s : Set 𝔸} :
+    HasFDerivWithinAt (𝕜 := 𝕜) (fun x ↦ x ^ n)
+      (∑ i ∈ Finset.range n, x ^ (n.pred - i) •> ContinuousLinearMap.id 𝕜 _ <• x ^ i) s x :=
+  hasFDerivWithinAt_id _ _ |>.pow' n
 
 @[to_fun]
-/--
-theorem `HasFDerivAt.pow'` / 定理 `HasFDerivAt.pow'`
-
-English:
-theorem HasFDerivAt.pow'
-  given: (h : HasFDerivAt f f' x) (n : Nat)
-  proof: match n with
-  | 0 => by simpa using! hasFDerivAt_const 1 x
-  | 1 => by simpa using h
-  | n + 1 + 1 => by
-    have := h.mul' (h.pow' (n + 1))
-    simp_rw [pow_succ' _ (n + 1)]
-exact this.congr_fderiv aux _ _ _ _
-
-中文:
-定理 在点处Fréchet可导.pow'
-  条件: (h : 在点处Fréchet可导 f f' x) (n : 自然数)
-  证明: match n with
-  | 0 => by simpa using! hasFDerivAt_const 1 x
-  | 1 => by simpa using h
-  | n + 1 + 1 => by
-    have := h.mul' (h.pow' (n + 1))
-    simp_rw [pow_succ' _ (n + 1)]
-exact this.congr_fderiv aux _ _ _ _
-
-Depends on / 依赖: congr_fderiv, h.mul, h.pow, hasFDerivAt_const, pow_succ, simp_rw, this.congr_fderiv
+/-
+**HasFDerivAt.pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.pow' (h : HasFDerivAt f f' x) (n : Nat) : HasFDerivAt (f ^ n) 
+(∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) x
+参数：h : HasFDerivAt f f' x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem HasFDerivAt.pow' (h : HasFDerivAt f f' x) (n : Nat) :
-    HasFDerivAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) x :=
+theorem HasFDerivAt.pow' (h : HasFDerivAt f f' x) (n : ℕ) :
+    HasFDerivAt (f ^ n) (∑ i ∈ Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i) x :=
   match n with
   | 0 => by simpa using! hasFDerivAt_const 1 x
   | 1 => by simpa using h
   | n + 1 + 1 => by
     have := h.mul' (h.pow' (n + 1))
     simp_rw [pow_succ' _ (n + 1)]
-exact this.congr_fderiv aux _ _ _ _
-
-/--
-theorem `hasFDerivAt_pow'` / 定理 `hasFDerivAt_pow'`
-
-English:
-theorem hasFDerivAt_pow'
-  given: (n : Nat) {x : 𝔸}
-  proof: .pow' n hasFDerivAt_id _
-
-@[fun_prop]
-
-中文:
-定理 hasFDerivAt_pow'
-  条件: (n : 自然数) {x : 𝔸}
-  证明: .pow' n hasFDerivAt_id _
-
-@[fun_prop]
+    exact this.congr_fderiv <| aux _ _ _ _
+/-
+**hasFDerivAt_pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivAt_pow' (n : Nat) {x : 𝔸} : HasFDerivAt (𝕜
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.pow'`：HasFDerivAt.pow' (h : HasFDerivAt f f' x) (n : Nat) : 
+HasFDerivAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i)
+ x
+· 使用定理 `hasFDerivAt_id`：hasFDerivAt_id (x : E) : HasFDerivAt id (.id 𝕜 E) x
 -/
-theorem hasFDerivAt_pow' (n : Nat) {x : 𝔸} :
-    HasFDerivAt (𝕜 := 𝕜) (fun x => x ^ n)
-      (∑ i in Finset.range n, x ^ (n.pred - i) •> ContinuousLinearMap.id 𝕜 _ <• x ^ i) x :=
-.pow' n hasFDerivAt_id _
+theorem hasFDerivAt_pow' (n : ℕ) {x : 𝔸} :
+    HasFDerivAt (𝕜 := 𝕜) (fun x ↦ x ^ n)
+      (∑ i ∈ Finset.range n, x ^ (n.pred - i) •> ContinuousLinearMap.id 𝕜 _ <• x ^ i) x :=
+  hasFDerivAt_id _ |>.pow' n
 
 @[fun_prop]
-/--
-theorem `DifferentiableWithinAt.fun_pow` / 定理 `DifferentiableWithinAt.fun_pow`
-
-English:
-theorem DifferentiableWithinAt.fun_pow
-  given: (hf : DifferentiableWithinAt 𝕜 f s x) (n : Nat)
-  proof: let ⟨_, hf'⟩ := hf; ⟨_, hf'.pow' n⟩
-
-@[fun_prop]
-
-中文:
-定理 DifferentiableWithinAt.fun_pow
-  条件: (hf : DifferentiableWithinAt 𝕜 f s x) (n : 自然数)
-  证明: let ⟨_, hf'⟩ := hf; ⟨_, hf'.pow' n⟩
-
-@[fun_prop]
+/-
+**DifferentiableWithinAt.fun_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.fun_pow (hf : DifferentiableWithinAt 𝕜 f s x) (n : 
+Nat) : DifferentiableWithinAt 𝕜 (fun x => f x ^ n) s x
+参数：hf : DifferentiableWithinAt 𝕜 f s x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `HasFDerivWithinAt.pow'`：HasFDerivWithinAt.pow' (h : HasFDerivWithinAt f 
+f' s x) (n : Nat) : HasFDerivWithinAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.p
+red - i) •> …
 -/
-theorem DifferentiableWithinAt.fun_pow (hf : DifferentiableWithinAt 𝕜 f s x) (n : Nat) :
+theorem DifferentiableWithinAt.fun_pow (hf : DifferentiableWithinAt 𝕜 f s x) (n : ℕ) :
     DifferentiableWithinAt 𝕜 (fun x => f x ^ n) s x :=
   let ⟨_, hf'⟩ := hf; ⟨_, hf'.pow' n⟩
 
 @[fun_prop]
-/--
-theorem `DifferentiableWithinAt.pow` / 定理 `DifferentiableWithinAt.pow`
-
-English:
-theorem DifferentiableWithinAt.pow
-  given: (hf : DifferentiableWithinAt 𝕜 f s x)
-  proof: hf.fun_pow
-
-中文:
-定理 DifferentiableWithinAt.pow
-  条件: (hf : DifferentiableWithinAt 𝕜 f s x)
-  证明: hf.fun_pow
-
-Depends on / 依赖: fun_pow, hf.fun_pow
+/-
+**DifferentiableWithinAt.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.pow (hf : DifferentiableWithinAt 𝕜 f s x) : forall 
+n : Nat, DifferentiableWithinAt 𝕜 (f ^ n) s x
+参数：hf : DifferentiableWithinAt 𝕜 f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.fun_pow`：DifferentiableWithinAt.fun_pow (hf : Dif
+ferentiableWithinAt 𝕜 f s x) (n : Nat) : DifferentiableWithinAt 𝕜 (fun x => f x 
+^ n) s x
 -/
 theorem DifferentiableWithinAt.pow (hf : DifferentiableWithinAt 𝕜 f s x) :
-    forall n : Nat, DifferentiableWithinAt 𝕜 (f ^ n) s x :=
+    ∀ n : ℕ, DifferentiableWithinAt 𝕜 (f ^ n) s x :=
   hf.fun_pow
-
-/--
-theorem `differentiableWithinAt_pow` / 定理 `differentiableWithinAt_pow`
-
-English:
-theorem differentiableWithinAt_pow
-  given: (n : Nat) {x : 𝔸} {s : Set 𝔸}
-  proof: differentiableWithinAt_id.pow _
-
-@[to_fun (attr := simp, fun_prop)]
-
-中文:
-定理 differentiableWithinAt_pow
-  条件: (n : 自然数) {x : 𝔸} {s : 集合 𝔸}
-  证明: differentiableWithinAt_id.pow _
-
-@[to_fun (attr := simp, fun_prop)]
-
-Depends on / 依赖: differentiableWithinAt_id, differentiableWithinAt_id.pow
+/-
+**differentiableWithinAt_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableWithinAt_pow (n : Nat) {x : 𝔸} {s : Set 𝔸} : DifferentiableW
+ithinAt 𝕜 (fun x : 𝔸 => x ^ n) s x
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.pow`：DifferentiableWithinAt.pow (hf : Differentia
+bleWithinAt 𝕜 f s x) : forall n : Nat, DifferentiableWithinAt 𝕜 (f ^ n) s x
+· 使用定理 `differentiableWithinAt_id`：differentiableWithinAt_id : DifferentiableWit
+hinAt 𝕜 id s x
 -/
-theorem differentiableWithinAt_pow (n : Nat) {x : 𝔸} {s : Set 𝔸} :
+theorem differentiableWithinAt_pow (n : ℕ) {x : 𝔸} {s : Set 𝔸} :
     DifferentiableWithinAt 𝕜 (fun x : 𝔸 => x ^ n) s x :=
   differentiableWithinAt_id.pow _
 
 @[to_fun (attr := simp, fun_prop)]
-/--
-theorem `DifferentiableAt.pow` / 定理 `DifferentiableAt.pow`
-
-English:
-theorem DifferentiableAt.pow
-  given: (hf : DifferentiableAt 𝕜 f x) (n : Nat)
-  proof: differentiableWithinAt_univ.mp hf.differentiableWithinAt.pow n
-
-中文:
-定理 DifferentiableAt.pow
-  条件: (hf : DifferentiableAt 𝕜 f x) (n : 自然数)
-  证明: differentiableWithinAt_univ.mp hf.differentiableWithinAt.pow n
-
-Depends on / 依赖: differentiableWithinAt, differentiableWithinAt_univ, differentiableWithinAt_univ.mp, hf.differentiableWithinAt.pow
+/-
+**DifferentiableAt.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.pow (hf : DifferentiableAt 𝕜 f x) (n : Nat) : Differentia
+bleAt 𝕜 (f ^ n) x
+参数：hf : DifferentiableAt 𝕜 f x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `differentiableWithinAt_univ`：differentiableWithinAt_univ : Differentiabl
+eWithinAt 𝕜 f univ x ↔ DifferentiableAt 𝕜 f x
+· 使用定理 `DifferentiableWithinAt.pow`：DifferentiableWithinAt.pow (hf : Differentia
+bleWithinAt 𝕜 f s x) : forall n : Nat, DifferentiableWithinAt 𝕜 (f ^ n) s x
+· 使用定理 `DifferentiableAt.differentiableWithinAt`：DifferentiableAt.differentiable
+WithinAt (h : DifferentiableAt 𝕜 f x) : DifferentiableWithinAt 𝕜 f s x
 -/
-theorem DifferentiableAt.pow (hf : DifferentiableAt 𝕜 f x) (n : Nat) :
+theorem DifferentiableAt.pow (hf : DifferentiableAt 𝕜 f x) (n : ℕ) :
     DifferentiableAt 𝕜 (f ^ n) x :=
-differentiableWithinAt_univ.mp hf.differentiableWithinAt.pow n
-
-/--
-theorem `differentiableAt_pow` / 定理 `differentiableAt_pow`
-
-English:
-theorem differentiableAt_pow
-  given: (n : Nat) {x : 𝔸}
-  statement: DifferentiableAt 𝕜 (fun x : 𝔸 => x ^ n) x
-  proof: differentiableAt_id.pow _
-
-@[to_fun (attr := fun_prop)]
-
-中文:
-定理 differentiableAt_pow
-  条件: (n : 自然数) {x : 𝔸}
-  结论: DifferentiableAt 𝕜 (fun x : 𝔸 => x ^ n) x
-  证明: differentiableAt_id.pow _
-
-@[to_fun (attr := fun_prop)]
-
-Depends on / 依赖: differentiableAt_id, differentiableAt_id.pow
+    differentiableWithinAt_univ.mp <| hf.differentiableWithinAt.pow n
+/-
+**differentiableAt_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableAt_pow (n : Nat) {x : 𝔸} : DifferentiableAt 𝕜 (fun x : 𝔸 => 
+x ^ n) x
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.pow`：DifferentiableAt.pow (hf : DifferentiableAt 𝕜 f x)
+ (n : Nat) : DifferentiableAt 𝕜 (f ^ n) x
+· 使用定理 `differentiableAt_id`：differentiableAt_id : DifferentiableAt 𝕜 id x
 -/
-theorem differentiableAt_pow (n : Nat) {x : 𝔸} : DifferentiableAt 𝕜 (fun x : 𝔸 => x ^ n) x :=
+theorem differentiableAt_pow (n : ℕ) {x : 𝔸} : DifferentiableAt 𝕜 (fun x : 𝔸 => x ^ n) x :=
   differentiableAt_id.pow _
 
 @[to_fun (attr := fun_prop)]
-/--
-theorem `DifferentiableOn.pow` / 定理 `DifferentiableOn.pow`
-
-English:
-theorem DifferentiableOn.pow
-  given: (hf : DifferentiableOn 𝕜 f s) (n : Nat)
-  proof: fun x h => (hf x h).pow n
-
-中文:
-定理 DifferentiableOn.pow
-  条件: (hf : DifferentiableOn 𝕜 f s) (n : 自然数)
-  证明: fun x h => (hf x h).pow n
+/-
+**DifferentiableOn.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.pow (hf : DifferentiableOn 𝕜 f s) (n : Nat) : Differentia
+bleOn 𝕜 (f ^ n) s
+参数：hf : DifferentiableOn 𝕜 f s；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.pow`：DifferentiableWithinAt.pow (hf : Differentia
+bleWithinAt 𝕜 f s x) : forall n : Nat, DifferentiableWithinAt 𝕜 (f ^ n) s x
 -/
-theorem DifferentiableOn.pow (hf : DifferentiableOn 𝕜 f s) (n : Nat) :
+theorem DifferentiableOn.pow (hf : DifferentiableOn 𝕜 f s) (n : ℕ) :
     DifferentiableOn 𝕜 (f ^ n) s := fun x h => (hf x h).pow n
-
-/--
-theorem `differentiableOn_pow` / 定理 `differentiableOn_pow`
-
-English:
-theorem differentiableOn_pow
-  given: (n : Nat) {s : Set 𝔸}
-  statement: DifferentiableOn 𝕜 (fun x : 𝔸 => x ^ n) s
-  proof: differentiableOn_id.pow n
-
-@[to_fun (attr := simp, fun_prop)]
-
-中文:
-定理 differentiableOn_pow
-  条件: (n : 自然数) {s : 集合 𝔸}
-  结论: DifferentiableOn 𝕜 (fun x : 𝔸 => x ^ n) s
-  证明: differentiableOn_id.pow n
-
-@[to_fun (attr := simp, fun_prop)]
-
-Depends on / 依赖: differentiableOn_id, differentiableOn_id.pow
+/-
+**differentiableOn_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableOn_pow (n : Nat) {s : Set 𝔸} : DifferentiableOn 𝕜 (fun x : 𝔸
+ => x ^ n) s
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableOn.pow`：DifferentiableOn.pow (hf : DifferentiableOn 𝕜 f s)
+ (n : Nat) : DifferentiableOn 𝕜 (f ^ n) s
+· 使用定理 `differentiableOn_id`：differentiableOn_id : DifferentiableOn 𝕜 id s
 -/
-theorem differentiableOn_pow (n : Nat) {s : Set 𝔸} : DifferentiableOn 𝕜 (fun x : 𝔸 => x ^ n) s :=
+theorem differentiableOn_pow (n : ℕ) {s : Set 𝔸} : DifferentiableOn 𝕜 (fun x : 𝔸 => x ^ n) s :=
   differentiableOn_id.pow n
 
 @[to_fun (attr := simp, fun_prop)]
-/--
-theorem `Differentiable.pow` / 定理 `Differentiable.pow`
-
-English:
-theorem Differentiable.pow
-  given: (hf : Differentiable 𝕜 f) (n : Nat)
-  statement: Differentiable 𝕜 (f ^ n)
-  proof: fun x => (hf x).pow n
-
-中文:
-定理 可微.pow
-  条件: (hf : 可微 𝕜 f) (n : 自然数)
-  结论: 可微 𝕜 (f ^ n)
-  证明: fun x => (hf x).pow n
+/-
+**Differentiable.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Differentiable.pow (hf : Differentiable 𝕜 f) (n : Nat) : Differentiable 𝕜 
+(f ^ n)
+参数：hf : Differentiable 𝕜 f；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.pow`：DifferentiableAt.pow (hf : DifferentiableAt 𝕜 f x)
+ (n : Nat) : DifferentiableAt 𝕜 (f ^ n) x
 -/
-theorem Differentiable.pow (hf : Differentiable 𝕜 f) (n : Nat) : Differentiable 𝕜 (f ^ n) :=
+theorem Differentiable.pow (hf : Differentiable 𝕜 f) (n : ℕ) : Differentiable 𝕜 (f ^ n) :=
   fun x => (hf x).pow n
-
-/--
-theorem `differentiable_pow` / 定理 `differentiable_pow`
-
-English:
-theorem differentiable_pow
-  given: (n : Nat)
-  statement: Differentiable 𝕜 fun x : 𝔸 => x ^ n
-  proof: differentiable_id.pow _
-
-@[to_fun fderiv_fun_pow']
-
-中文:
-定理 differentiable_pow
-  条件: (n : 自然数)
-  结论: 可微 𝕜 fun x : 𝔸 => x ^ n
-  证明: differentiable_id.pow _
-
-@[to_fun fderiv_fun_pow']
-
-Depends on / 依赖: differentiable_id, differentiable_id.pow
+/-
+**differentiable_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiable_pow (n : Nat) : Differentiable 𝕜 fun x : 𝔸 => x ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Differentiable.pow`：Differentiable.pow (hf : Differentiable 𝕜 f) (n : Na
+t) : Differentiable 𝕜 (f ^ n)
+· 使用定理 `differentiable_id`：differentiable_id : Differentiable 𝕜 (id : E -> E)
 -/
-theorem differentiable_pow (n : Nat) : Differentiable 𝕜 fun x : 𝔸 => x ^ n :=
+theorem differentiable_pow (n : ℕ) : Differentiable 𝕜 fun x : 𝔸 => x ^ n :=
   differentiable_id.pow _
 
 @[to_fun fderiv_fun_pow']
-/--
-theorem `fderiv_pow'` / 定理 `fderiv_pow'`
-
-English:
-theorem fderiv_pow'
-  given: (n : Nat) (hf : DifferentiableAt 𝕜 f x)
-  proof: .fderiv hf.hasFDerivAt.pow' n
-
-中文:
-定理 fderiv_pow'
-  条件: (n : 自然数) (hf : DifferentiableAt 𝕜 f x)
-  证明: .fderiv hf.hasFDerivAt.pow' n
-
-Depends on / 依赖: fderiv, hasFDerivAt, hf.hasFDerivAt.pow
+/-
+**fderiv_pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_pow' (n : Nat) (hf : DifferentiableAt 𝕜 f x) : fderiv 𝕜 (f ^ n) x =
+ (∑ i in Finset.range n, f x ^ (n.pred - i) •> fderiv 𝕜 f x <• f x ^ i)
+参数：n : Nat；hf : DifferentiableAt 𝕜 f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivAt.pow'`：HasFDerivAt.pow' (h : HasFDerivAt f f' x) (n : Nat) : 
+HasFDerivAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i)
+ x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem fderiv_pow' (n : Nat) (hf : DifferentiableAt 𝕜 f x) :
+theorem fderiv_pow' (n : ℕ) (hf : DifferentiableAt 𝕜 f x) :
     fderiv 𝕜 (f ^ n) x
-      = (∑ i in Finset.range n, f x ^ (n.pred - i) •> fderiv 𝕜 f x <• f x ^ i) :=
-.fderiv hf.hasFDerivAt.pow' n
-
-/--
-theorem `fderiv_pow_ring'` / 定理 `fderiv_pow_ring'`
-
-English:
-theorem fderiv_pow_ring'
-  given: {x : 𝔸} (n : Nat)
-  proof: by
-  rw [fderiv_fun_pow' n differentiableAt_fun_id]; rw [fderiv_fun_id]
-
-@[to_fun fderivWithin_fun_pow']
-
-中文:
-定理 fderiv_pow_ring'
-  条件: {x : 𝔸} (n : 自然数)
-  证明: by
-  rw [fderiv_fun_pow' n differentiableAt_fun_id]; rw [fderiv_fun_id]
-
-@[to_fun fderivWithin_fun_pow']
-
-Depends on / 依赖: differentiableAt_fun_id, fderiv_fun_id, fderiv_fun_pow
+      = (∑ i ∈ Finset.range n, f x ^ (n.pred - i) •> fderiv 𝕜 f x <• f x ^ i) :=
+  hf.hasFDerivAt.pow' n |>.fderiv
+/-
+**fderiv_pow_ring'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_pow_ring' {x : 𝔸} (n : Nat) : fderiv 𝕜 (fun x : 𝔸 => x ^ n) x = (∑ 
+i in Finset.range n, x ^ (n.pred - i) •> .id _ _ <• x ^ i)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fderiv_fun_pow'`：∀ {𝕜 : Type u_1} {𝔸 : Type u_2} {E : Type u_3} [inst : 
+NontriviallyNormedField 𝕜] [inst_1 : NormedRing 𝔸]   [inst_2 : NormedAddCommGrou
+p E] …
+· 使用定理 `differentiableAt_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [in
+st_3 : Topolo…
+· 使用定理 `fderiv_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : 
+Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 : Top
+olo…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
-theorem fderiv_pow_ring' {x : 𝔸} (n : Nat) :
-    fderiv 𝕜 (fun x : 𝔸 => x ^ n) x
-      = (∑ i in Finset.range n, x ^ (n.pred - i) •> .id _ _ <• x ^ i) := by
-  rw [fderiv_fun_pow' n differentiableAt_fun_id]; rw [fderiv_fun_id]
+theorem fderiv_pow_ring' {x : 𝔸} (n : ℕ) :
+    fderiv 𝕜 (fun x : 𝔸 ↦ x ^ n) x
+      = (∑ i ∈ Finset.range n, x ^ (n.pred - i) •> .id _ _ <• x ^ i) := by
+  rw [fderiv_fun_pow' n differentiableAt_fun_id, fderiv_fun_id]
 
 @[to_fun fderivWithin_fun_pow']
-/--
-theorem `fderivWithin_pow'` / 定理 `fderivWithin_pow'`
-
-English:
-theorem fderivWithin_pow'
-  statement: (hxs : UniqueDiffWithinAt 𝕜 s x)
-  proof: .fderivWithin hxs hf.hasFDerivWithinAt.pow' n
-
-中文:
-定理 fderivWithin_pow'
-  结论: (hxs : UniqueDiffWithinAt 𝕜 s x)
-  证明: .fderivWithin hxs hf.hasFDerivWithinAt.pow' n
-
-Depends on / 依赖: fderivWithin, hasFDerivWithinAt, hf.hasFDerivWithinAt.pow
+/-
+**fderivWithin_pow'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_pow' (hxs : UniqueDiffWithinAt 𝕜 s x) (n : Nat) (hf : Differe
+ntiableWithinAt 𝕜 f s x) : fderivWithin 𝕜 (f ^ n) s x = (∑ i in Finset.range n, 
+f x ^ (n.pred - i) •> fderivWithin 𝕜 f s x <• f x ^ i)
+参数：hxs : UniqueDiffWithinAt 𝕜 s x；n : Nat；hf : DifferentiableWithinAt 𝕜 f s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivWithinAt.pow'`：HasFDerivWithinAt.pow' (h : HasFDerivWithinAt f 
+f' s x) (n : Nat) : HasFDerivWithinAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.p
+red - i) •> …
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
 theorem fderivWithin_pow' (hxs : UniqueDiffWithinAt 𝕜 s x)
-    (n : Nat) (hf : DifferentiableWithinAt 𝕜 f s x) :
+    (n : ℕ) (hf : DifferentiableWithinAt 𝕜 f s x) :
     fderivWithin 𝕜 (f ^ n) s x
-      = (∑ i in Finset.range n, f x ^ (n.pred - i) •> fderivWithin 𝕜 f s x <• f x ^ i) :=
-.fderivWithin hxs hf.hasFDerivWithinAt.pow' n
-
-/--
-theorem `fderivWithin_pow_ring'` / 定理 `fderivWithin_pow_ring'`
-
-English:
-theorem fderivWithin_pow_ring'
-  given: {s : Set 𝔸} {x : 𝔸} (n : Nat) (hxs : UniqueDiffWithinAt 𝕜 s x)
-  proof: by
-  rw [fderivWithin_fun_pow' hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
-
-中文:
-定理 fderivWithin_pow_ring'
-  条件: {s : 集合 𝔸} {x : 𝔸} (n : 自然数) (hxs : UniqueDiffWithinAt 𝕜 s x)
-  证明: by
-  rw [fderivWithin_fun_pow' hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
-
-Depends on / 依赖: differentiableAt_fun_id, differentiableAt_fun_id.differentiableWithinAt, differentiableWithinAt, fderivWithin_fun_id, fderivWithin_fun_pow
+      = (∑ i ∈ Finset.range n, f x ^ (n.pred - i) •> fderivWithin 𝕜 f s x <• f x ^ i) :=
+  hf.hasFDerivWithinAt.pow' n |>.fderivWithin hxs
+/-
+**fderivWithin_pow_ring'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_pow_ring' {s : Set 𝔸} {x : 𝔸} (n : Nat) (hxs : UniqueDiffWith
+inAt 𝕜 s x) : fderivWithin 𝕜 (fun x : 𝔸 => x ^ n) s x = (∑ i in Finset.range n, 
+x ^ (n.pred - i) •> .id _ _ <• x ^ i)
+参数：n : Nat；hxs : UniqueDiffWithinAt 𝕜 s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fderivWithin_fun_pow'`：∀ {𝕜 : Type u_1} {𝔸 : Type u_2} {E : Type u_3} [i
+nst : NontriviallyNormedField 𝕜] [inst_1 : NormedRing 𝔸]   [inst_2 : NormedAddCo
+mmGroup E] …
+· 使用定理 `DifferentiableAt.differentiableWithinAt`：DifferentiableAt.differentiable
+WithinAt (h : DifferentiableAt 𝕜 f x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `differentiableAt_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [in
+st_3 : Topolo…
+· 使用定理 `fderivWithin_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜]
+ {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3
+ : Topolo…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
-theorem fderivWithin_pow_ring' {s : Set 𝔸} {x : 𝔸} (n : Nat) (hxs : UniqueDiffWithinAt 𝕜 s x) :
-    fderivWithin 𝕜 (fun x : 𝔸 => x ^ n) s x
-      = (∑ i in Finset.range n, x ^ (n.pred - i) •> .id _ _ <• x ^ i) := by
-  rw [fderivWithin_fun_pow' hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
+theorem fderivWithin_pow_ring' {s : Set 𝔸} {x : 𝔸} (n : ℕ) (hxs : UniqueDiffWithinAt 𝕜 s x) :
+    fderivWithin 𝕜 (fun x : 𝔸 ↦ x ^ n) s x
+      = (∑ i ∈ Finset.range n, x ^ (n.pred - i) •> .id _ _ <• x ^ i) := by
+  rw [fderivWithin_fun_pow' hxs n differentiableAt_fun_id.differentiableWithinAt,
+    fderivWithin_fun_id hxs]
 
 end NormedRing
 
 section NormedCommRing
 variable [NontriviallyNormedField 𝕜] [NormedCommRing 𝔸] [NormedAddCommGroup E]
-variable [NormedAlgebra 𝕜 𝔸] [NormedSpace 𝕜 E] {f : E -> 𝔸} {f' : E ->L[𝕜] 𝔸} {x : E} {s : Set E}
+variable [NormedAlgebra 𝕜 𝔸] [NormedSpace 𝕜 E] {f : E → 𝔸} {f' : E →L[𝕜] 𝔸} {x : E} {s : Set E}
 
-/--
-theorem `aux_sum_eq_pow` / 定理 `aux_sum_eq_pow`
-
-English:
-theorem aux_sum_eq_pow
-  given: (n : Nat)
-  proof: by
-  simp_rw [op_smul_eq_smul, smul_smul, ← pow_add, ← Finset.sum_smul]
-  rw [Finset.sum_eq_card_nsmul]; rw [Finset.card_range]; rw [smul_assoc]
-  intro a ha
-  congr
-  exact add_tsub_cancel_of_le (Nat.le_pred_of_lt <| Finset.mem_range.1 ha)
-
-中文:
-定理 aux_sum_eq_pow
-  条件: (n : 自然数)
-  证明: by
-  simp_rw [op_smul_eq_smul, smul_smul, ← pow_add, ← Finset.sum_smul]
-  rw [Finset.sum_eq_card_nsmul]; rw [Finset.card_range]; rw [smul_assoc]
-  intro a ha
-  congr
-  exact add_tsub_cancel_of_le (Nat.le_pred_of_lt <| Finset.mem_range.1 ha)
+/-
+**aux_sum_eq_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem aux_sum_eq_pow (n : Nat) :
-    ∑ i in Finset.range n, MulOpposite.op (f x ^ i) • f x ^ (n.pred - i) • f' =
+private theorem aux_sum_eq_pow (n : ℕ) :
+    ∑ i ∈ Finset.range n, MulOpposite.op (f x ^ i) • f x ^ (n.pred - i) • f' =
       (n • f x ^ (n - 1)) • f' := by
   simp_rw [op_smul_eq_smul, smul_smul, ← pow_add, ← Finset.sum_smul]
-  rw [Finset.sum_eq_card_nsmul]; rw [Finset.card_range]; rw [smul_assoc]
+  rw [Finset.sum_eq_card_nsmul, Finset.card_range, smul_assoc]
   intro a ha
   congr
   exact add_tsub_cancel_of_le (Nat.le_pred_of_lt <| Finset.mem_range.1 ha)
-
-/--
-theorem `HasStrictFDerivAt.pow` / 定理 `HasStrictFDerivAt.pow`
-
-English:
-theorem HasStrictFDerivAt.pow
-  given: (h : HasStrictFDerivAt f f' x) (n : Nat)
-  proof: .congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-中文:
-定理 HasStrictFDerivAt.pow
-  条件: (h : HasStrictFDerivAt f f' x) (n : 自然数)
-  证明: .congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-Depends on / 依赖: aux_sum_eq_pow, congr_fderiv, h.pow
+/-
+**HasStrictFDerivAt.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.pow (h : HasStrictFDerivAt f f' x) (n : Nat) : HasStrict
+FDerivAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') x
+参数：h : HasStrictFDerivAt f f' x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictFDerivAt.congr_fderiv`：HasStrictFDerivAt.congr_fderiv (h : HasS
+trictFDerivAt f f' x) (h' : f' = g') : HasStrictFDerivAt f g' x
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `HasStrictFDerivAt.pow'`：HasStrictFDerivAt.pow' (h : HasStrictFDerivAt f 
+f' x) (n : Nat) : HasStrictFDerivAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pre
+d - i) •> f'…
+· 使用定理 `_private.Mathlib.Analysis.Calculus.FDeriv.Pow.0.aux_sum_eq_pow`：∀ {𝕜 : T
+ype u_1} {𝔸 : Type u_2} {E : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_
+1 : NormedCommRing 𝔸]   [inst_2 : NormedAddCommGroup…
 -/
-theorem HasStrictFDerivAt.pow (h : HasStrictFDerivAt f f' x) (n : Nat) :
-    HasStrictFDerivAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') x :=
-.congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-/--
-theorem `hasStrictFDerivAt_pow` / 定理 `hasStrictFDerivAt_pow`
-
-English:
-theorem hasStrictFDerivAt_pow
-  given: (n : Nat) {x : 𝔸}
-  proof: .pow n hasStrictFDerivAt_id _
-
-中文:
-定理 hasStrictFDerivAt_pow
-  条件: (n : 自然数) {x : 𝔸}
-  证明: .pow n hasStrictFDerivAt_id _
+theorem HasStrictFDerivAt.pow (h : HasStrictFDerivAt f f' x) (n : ℕ) :
+    HasStrictFDerivAt (fun x ↦ f x ^ n) ((n • f x ^ (n - 1)) • f') x :=
+  h.pow' n |>.congr_fderiv <| aux_sum_eq_pow _
+/-
+**hasStrictFDerivAt_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasStrictFDerivAt_pow (n : Nat) {x : 𝔸} : HasStrictFDerivAt (𝕜
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictFDerivAt.pow`：HasStrictFDerivAt.pow (h : HasStrictFDerivAt f f'
+ x) (n : Nat) : HasStrictFDerivAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') 
+x
+· 使用定理 `hasStrictFDerivAt_id`：hasStrictFDerivAt_id (x : E) : HasStrictFDerivAt i
+d (.id 𝕜 E) x
 -/
-theorem hasStrictFDerivAt_pow (n : Nat) {x : 𝔸} :
+theorem hasStrictFDerivAt_pow (n : ℕ) {x : 𝔸} :
     HasStrictFDerivAt (𝕜 := 𝕜)
-      (fun x : 𝔸 => x ^ n) ((n • x ^ (n - 1)) • ContinuousLinearMap.id 𝕜 𝔸) x :=
-.pow n hasStrictFDerivAt_id _
-
-/--
-theorem `HasFDerivWithinAt.pow` / 定理 `HasFDerivWithinAt.pow`
-
-English:
-theorem HasFDerivWithinAt.pow
-  given: (h : HasFDerivWithinAt f f' s x) (n : Nat)
-  proof: .congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-中文:
-定理 HasFDerivWithinAt.pow
-  条件: (h : HasFDerivWithinAt f f' s x) (n : 自然数)
-  证明: .congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-Depends on / 依赖: aux_sum_eq_pow, congr_fderiv, h.pow
+      (fun x : 𝔸 ↦ x ^ n) ((n • x ^ (n - 1)) • ContinuousLinearMap.id 𝕜 𝔸) x :=
+  hasStrictFDerivAt_id _ |>.pow n
+/-
+**HasFDerivWithinAt.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.pow (h : HasFDerivWithinAt f f' s x) (n : Nat) : HasFDer
+ivWithinAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') s x
+参数：h : HasFDerivWithinAt f f' s x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.congr_fderiv`：HasFDerivWithinAt.congr_fderiv (h : HasF
+DerivWithinAt f f' s x) (h' : f' = g') : HasFDerivWithinAt f g' s x
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `HasFDerivWithinAt.pow'`：HasFDerivWithinAt.pow' (h : HasFDerivWithinAt f 
+f' s x) (n : Nat) : HasFDerivWithinAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.p
+red - i) •> …
+· 使用定理 `_private.Mathlib.Analysis.Calculus.FDeriv.Pow.0.aux_sum_eq_pow`：∀ {𝕜 : T
+ype u_1} {𝔸 : Type u_2} {E : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_
+1 : NormedCommRing 𝔸]   [inst_2 : NormedAddCommGroup…
 -/
-theorem HasFDerivWithinAt.pow (h : HasFDerivWithinAt f f' s x) (n : Nat) :
-    HasFDerivWithinAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') s x :=
-.congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-/--
-theorem `hasFDerivWithinAt_pow` / 定理 `hasFDerivWithinAt_pow`
-
-English:
-theorem hasFDerivWithinAt_pow
-  given: (n : Nat) {x : 𝔸} {s : Set 𝔸}
-  proof: .pow n hasFDerivWithinAt_id _ _
-
-中文:
-定理 hasFDerivWithinAt_pow
-  条件: (n : 自然数) {x : 𝔸} {s : 集合 𝔸}
-  证明: .pow n hasFDerivWithinAt_id _ _
+theorem HasFDerivWithinAt.pow (h : HasFDerivWithinAt f f' s x) (n : ℕ) :
+    HasFDerivWithinAt (fun x ↦ f x ^ n) ((n • f x ^ (n - 1)) • f') s x :=
+  h.pow' n |>.congr_fderiv <| aux_sum_eq_pow _
+/-
+**hasFDerivWithinAt_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivWithinAt_pow (n : Nat) {x : 𝔸} {s : Set 𝔸} : HasFDerivWithinAt (𝕜
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.pow`：HasFDerivWithinAt.pow (h : HasFDerivWithinAt f f'
+ s x) (n : Nat) : HasFDerivWithinAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f'
+) s x
+· 使用定理 `hasFDerivWithinAt_id`：hasFDerivWithinAt_id (x : E) (s : Set E) : HasFDer
+ivWithinAt id (.id 𝕜 E) s x
 -/
-theorem hasFDerivWithinAt_pow (n : Nat) {x : 𝔸} {s : Set 𝔸} :
+theorem hasFDerivWithinAt_pow (n : ℕ) {x : 𝔸} {s : Set 𝔸} :
     HasFDerivWithinAt (𝕜 := 𝕜)
-      (fun x : 𝔸 => x ^ n) ((n • x ^ (n - 1)) • ContinuousLinearMap.id 𝕜 𝔸) s x :=
-.pow n hasFDerivWithinAt_id _ _
-
-/--
-theorem `HasFDerivAt.pow` / 定理 `HasFDerivAt.pow`
-
-English:
-theorem HasFDerivAt.pow
-  given: (h : HasFDerivAt f f' x) (n : Nat)
-  proof: .congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-中文:
-定理 在点处Fréchet可导.pow
-  条件: (h : 在点处Fréchet可导 f f' x) (n : 自然数)
-  证明: .congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-Depends on / 依赖: aux_sum_eq_pow, congr_fderiv, h.pow
+      (fun x : 𝔸 ↦ x ^ n) ((n • x ^ (n - 1)) • ContinuousLinearMap.id 𝕜 𝔸) s x :=
+  hasFDerivWithinAt_id _ _ |>.pow n
+/-
+**HasFDerivAt.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.pow (h : HasFDerivAt f f' x) (n : Nat) : HasFDerivAt (fun x =>
+ f x ^ n) ((n • f x ^ (n - 1)) • f') x
+参数：h : HasFDerivAt f f' x；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.congr_fderiv`：HasFDerivAt.congr_fderiv (h : HasFDerivAt f f'
+ x) (h' : f' = g') : HasFDerivAt f g' x
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `HasFDerivAt.pow'`：HasFDerivAt.pow' (h : HasFDerivAt f f' x) (n : Nat) : 
+HasFDerivAt (f ^ n) (∑ i in Finset.range n, f x ^ (n.pred - i) •> f' <• f x ^ i)
+ x
+· 使用定理 `_private.Mathlib.Analysis.Calculus.FDeriv.Pow.0.aux_sum_eq_pow`：∀ {𝕜 : T
+ype u_1} {𝔸 : Type u_2} {E : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_
+1 : NormedCommRing 𝔸]   [inst_2 : NormedAddCommGroup…
 -/
-theorem HasFDerivAt.pow (h : HasFDerivAt f f' x) (n : Nat) :
-    HasFDerivAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') x :=
-.congr_fderiv aux_sum_eq_pow _ h.pow' n
-
-/--
-theorem `hasFDerivAt_pow` / 定理 `hasFDerivAt_pow`
-
-English:
-theorem hasFDerivAt_pow
-  given: (n : Nat) {x : 𝔸}
-  proof: .pow n hasFDerivAt_id _
-
-@[to_fun fderiv_fun_pow]
-
-中文:
-定理 hasFDerivAt_pow
-  条件: (n : 自然数) {x : 𝔸}
-  证明: .pow n hasFDerivAt_id _
-
-@[to_fun fderiv_fun_pow]
+theorem HasFDerivAt.pow (h : HasFDerivAt f f' x) (n : ℕ) :
+    HasFDerivAt (fun x ↦ f x ^ n) ((n • f x ^ (n - 1)) • f') x :=
+  h.pow' n |>.congr_fderiv <| aux_sum_eq_pow _
+/-
+**hasFDerivAt_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFDerivAt_pow (n : Nat) {x : 𝔸} : HasFDerivAt (𝕜
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.pow`：HasFDerivAt.pow (h : HasFDerivAt f f' x) (n : Nat) : Ha
+sFDerivAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') x
+· 使用定理 `hasFDerivAt_id`：hasFDerivAt_id (x : E) : HasFDerivAt id (.id 𝕜 E) x
 -/
-theorem hasFDerivAt_pow (n : Nat) {x : 𝔸} :
+theorem hasFDerivAt_pow (n : ℕ) {x : 𝔸} :
     HasFDerivAt (𝕜 := 𝕜)
-      (fun x : 𝔸 => x ^ n) ((n • x ^ (n - 1)) • ContinuousLinearMap.id 𝕜 𝔸) x :=
-.pow n hasFDerivAt_id _
+      (fun x : 𝔸 ↦ x ^ n) ((n • x ^ (n - 1)) • ContinuousLinearMap.id 𝕜 𝔸) x :=
+  hasFDerivAt_id _ |>.pow n
 
 @[to_fun fderiv_fun_pow]
-/--
-theorem `fderiv_pow` / 定理 `fderiv_pow`
-
-English:
-theorem fderiv_pow
-  given: (n : Nat) (hf : DifferentiableAt 𝕜 f x)
-  proof: .fderiv hf.hasFDerivAt.pow n
-
-中文:
-定理 fderiv_pow
-  条件: (n : 自然数) (hf : DifferentiableAt 𝕜 f x)
-  证明: .fderiv hf.hasFDerivAt.pow n
-
-Depends on / 依赖: fderiv, hasFDerivAt, hf.hasFDerivAt.pow
+/-
+**fderiv_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_pow (n : Nat) (hf : DifferentiableAt 𝕜 f x) : fderiv 𝕜 (f ^ n) x = 
+(n • f x ^ (n - 1)) • fderiv 𝕜 f x
+参数：n : Nat；hf : DifferentiableAt 𝕜 f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivAt.pow`：HasFDerivAt.pow (h : HasFDerivAt f f' x) (n : Nat) : Ha
+sFDerivAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem fderiv_pow (n : Nat) (hf : DifferentiableAt 𝕜 f x) :
+theorem fderiv_pow (n : ℕ) (hf : DifferentiableAt 𝕜 f x) :
     fderiv 𝕜 (f ^ n) x = (n • f x ^ (n - 1)) • fderiv 𝕜 f x :=
-.fderiv hf.hasFDerivAt.pow n
-
-/--
-theorem `fderiv_pow_ring` / 定理 `fderiv_pow_ring`
-
-English:
-theorem fderiv_pow_ring
-  given: {x : 𝔸} (n : Nat)
-  proof: by
-  rw [fderiv_fun_pow n differentiableAt_fun_id]; rw [fderiv_fun_id]
-
-@[to_fun fderivWithin_fun_pow]
-
-中文:
-定理 fderiv_pow_ring
-  条件: {x : 𝔸} (n : 自然数)
-  证明: by
-  rw [fderiv_fun_pow n differentiableAt_fun_id]; rw [fderiv_fun_id]
-
-@[to_fun fderivWithin_fun_pow]
-
-Depends on / 依赖: differentiableAt_fun_id, fderiv_fun_id, fderiv_fun_pow
+  hf.hasFDerivAt.pow n |>.fderiv
+/-
+**fderiv_pow_ring** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_pow_ring {x : 𝔸} (n : Nat) : fderiv 𝕜 (fun x : 𝔸 => x ^ n) x = (n •
+ x ^ (n - 1)) • .id _ _
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fderiv_fun_pow`：∀ {𝕜 : Type u_1} {𝔸 : Type u_2} {E : Type u_3} [inst : N
+ontriviallyNormedField 𝕜] [inst_1 : NormedCommRing 𝔸]   [inst_2 : NormedAddCommG
+roup…
+· 使用定理 `differentiableAt_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [in
+st_3 : Topolo…
+· 使用定理 `fderiv_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : 
+Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 : Top
+olo…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
-theorem fderiv_pow_ring {x : 𝔸} (n : Nat) :
-    fderiv 𝕜 (fun x : 𝔸 => x ^ n) x = (n • x ^ (n - 1)) • .id _ _ := by
-  rw [fderiv_fun_pow n differentiableAt_fun_id]; rw [fderiv_fun_id]
+theorem fderiv_pow_ring {x : 𝔸} (n : ℕ) :
+    fderiv 𝕜 (fun x : 𝔸 ↦ x ^ n) x = (n • x ^ (n - 1)) • .id _ _ := by
+  rw [fderiv_fun_pow n differentiableAt_fun_id, fderiv_fun_id]
 
 @[to_fun fderivWithin_fun_pow]
-/--
-theorem `fderivWithin_pow` / 定理 `fderivWithin_pow`
-
-English:
-theorem fderivWithin_pow
-  statement: (hxs : UniqueDiffWithinAt 𝕜 s x)
-  proof: .fderivWithin hxs hf.hasFDerivWithinAt.pow n
-
-中文:
-定理 fderivWithin_pow
-  结论: (hxs : UniqueDiffWithinAt 𝕜 s x)
-  证明: .fderivWithin hxs hf.hasFDerivWithinAt.pow n
-
-Depends on / 依赖: fderivWithin, hasFDerivWithinAt, hf.hasFDerivWithinAt.pow
+/-
+**fderivWithin_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_pow (hxs : UniqueDiffWithinAt 𝕜 s x) (n : Nat) (hf : Differen
+tiableWithinAt 𝕜 f s x) : fderivWithin 𝕜 (f ^ n) s x = (n • f x ^ (n - 1)) • fde
+rivWithin 𝕜 f s x
+参数：hxs : UniqueDiffWithinAt 𝕜 s x；n : Nat；hf : DifferentiableWithinAt 𝕜 f s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivWithinAt.pow`：HasFDerivWithinAt.pow (h : HasFDerivWithinAt f f'
+ s x) (n : Nat) : HasFDerivWithinAt (fun x => f x ^ n) ((n • f x ^ (n - 1)) • f'
+) s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
 theorem fderivWithin_pow (hxs : UniqueDiffWithinAt 𝕜 s x)
-    (n : Nat) (hf : DifferentiableWithinAt 𝕜 f s x) :
+    (n : ℕ) (hf : DifferentiableWithinAt 𝕜 f s x) :
     fderivWithin 𝕜 (f ^ n) s x = (n • f x ^ (n - 1)) • fderivWithin 𝕜 f s x :=
-.fderivWithin hxs hf.hasFDerivWithinAt.pow n
-
-/--
-theorem `fderivWithin_pow_ring` / 定理 `fderivWithin_pow_ring`
-
-English:
-theorem fderivWithin_pow_ring
-  given: {s : Set 𝔸} {x : 𝔸} (n : Nat) (hxs : UniqueDiffWithinAt 𝕜 s x)
-  proof: by
-  rw [fderivWithin_fun_pow hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
-
-中文:
-定理 fderivWithin_pow_ring
-  条件: {s : 集合 𝔸} {x : 𝔸} (n : 自然数) (hxs : UniqueDiffWithinAt 𝕜 s x)
-  证明: by
-  rw [fderivWithin_fun_pow hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
-
-Depends on / 依赖: differentiableAt_fun_id, differentiableAt_fun_id.differentiableWithinAt, differentiableWithinAt, fderivWithin_fun_id, fderivWithin_fun_pow
+  hf.hasFDerivWithinAt.pow n |>.fderivWithin hxs
+/-
+**fderivWithin_pow_ring** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_pow_ring {s : Set 𝔸} {x : 𝔸} (n : Nat) (hxs : UniqueDiffWithi
+nAt 𝕜 s x) : fderivWithin 𝕜 (fun x : 𝔸 => x ^ n) s x = (n • x ^ (n - 1)) • .id _
+ _
+参数：n : Nat；hxs : UniqueDiffWithinAt 𝕜 s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fderivWithin_fun_pow`：∀ {𝕜 : Type u_1} {𝔸 : Type u_2} {E : Type u_3} [in
+st : NontriviallyNormedField 𝕜] [inst_1 : NormedCommRing 𝔸]   [inst_2 : NormedAd
+dCommGroup…
+· 使用定理 `DifferentiableAt.differentiableWithinAt`：DifferentiableAt.differentiable
+WithinAt (h : DifferentiableAt 𝕜 f x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `differentiableAt_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [in
+st_3 : Topolo…
+· 使用定理 `fderivWithin_fun_id`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜]
+ {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3
+ : Topolo…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
-theorem fderivWithin_pow_ring {s : Set 𝔸} {x : 𝔸} (n : Nat) (hxs : UniqueDiffWithinAt 𝕜 s x) :
-    fderivWithin 𝕜 (fun x : 𝔸 => x ^ n) s x = (n • x ^ (n - 1)) • .id _ _ := by
-  rw [fderivWithin_fun_pow hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
+theorem fderivWithin_pow_ring {s : Set 𝔸} {x : 𝔸} (n : ℕ) (hxs : UniqueDiffWithinAt 𝕜 s x) :
+    fderivWithin 𝕜 (fun x : 𝔸 ↦ x ^ n) s x = (n • x ^ (n - 1)) • .id _ _ := by
+  rw [fderivWithin_fun_pow hxs n differentiableAt_fun_id.differentiableWithinAt,
+    fderivWithin_fun_id hxs]
 
 end NormedCommRing
+

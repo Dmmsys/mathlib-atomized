@@ -42,553 +42,542 @@ morphism of schemes is a constructible set (and this is *not* true at the level 
 open Set TopologicalSpace Topology
 open scoped Set.Notation
 
-variable {ι : Sort*} {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f : X -> Y}
+variable {ι : Sort*} {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f : X → Y}
   {s t U : Set X} {a : X}
 
 /-! ### retrocompact sets -/
 
 /-- A retrocompact set is a set whose intersection with every compact open is compact. -/
 @[stacks 005A]
-/--
-Definition of `IsRetrocompact` / `IsRetrocompact` 的定义
+/-
+**IsRetrocompact** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsRetrocompact (s : Set X) : Prop
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRetrocompact
-  signature: (s : Set X)
-  body: forall ⦃U⦄, IsCompact U -> IsOpen U -> IsCompact (s inter U)
-
-中文:
-定义 IsRetrocompact
-  签名: (s : 集合 X)
-  定义体: forall ⦃U⦄, IsCompact U -> IsOpen U -> IsCompact (s inter U)
-
-Depends on / 依赖: IsCompact, IsOpen
+--- 原说明 ---
+A retrocompact set is a set whose intersection with every compact open is compac
+t.
 -/
-def IsRetrocompact (s : Set X) : Prop := forall ⦃U⦄, IsCompact U -> IsOpen U -> IsCompact (s inter U)
-
-/--
-lemma `IsRetrocompact.empty` / 引理 `IsRetrocompact.empty`
-
-English:
-lemma IsRetrocompact.empty
-  statement: IsRetrocompact (∅ : Set X)
-  proof: by simp [IsRetrocompact]
-
-中文:
-引理 IsRetrocompact.empty
-  结论: IsRetrocompact (∅ : 集合 X)
-  证明: by simp [IsRetrocompact]
+def IsRetrocompact (s : Set X) : Prop := ∀ ⦃U⦄, IsCompact U → IsOpen U → IsCompact (s ∩ U)
+/-
+**IsRetrocompact.empty** 是 Mathlib 中的一个定理，位于命名空间 `IsRetrocompact`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRetrocompact ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.empty_inter`：empty_inter (a : Set α) : ∅ inter a = ∅
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[simp] lemma IsRetrocompact.empty : IsRetrocompact (∅ : Set X) := by simp [IsRetrocompact]
-/--
-lemma `IsRetrocompact.univ` / 引理 `IsRetrocompact.univ`
-
-English:
-lemma IsRetrocompact.univ
-  statement: IsRetrocompact (univ : Set X)
-  proof: by
-  simp +contextual [IsRetrocompact]
-
-中文:
-引理 IsRetrocompact.univ
-  结论: IsRetrocompact (univ : 集合 X)
-  证明: by
-  simp +contextual [IsRetrocompact]
+/-
+**IsRetrocompact.univ** 是 Mathlib 中的一个定理，位于命名空间 `IsRetrocompact`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRetrocompact Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[simp] lemma IsRetrocompact.univ : IsRetrocompact (univ : Set X) := by
   simp +contextual [IsRetrocompact]
-
-/--
-lemma `IsRetrocompact.singleton` / 引理 `IsRetrocompact.singleton`
-
-English:
-lemma IsRetrocompact.singleton
-  statement: IsRetrocompact {a}
-  proof: fun _ _ _ => Subsingleton.singleton_inter.isCompact
-
-中文:
-引理 IsRetrocompact.singleton
-  结论: IsRetrocompact {a}
-  证明: fun _ _ _ => Subsingleton.singleton_inter.isCompact
+/-
+**IsRetrocompact.singleton** 是 Mathlib 中的一个定理，位于命名空间 `IsRetrocompact`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {a : X}, IsRetrocompact {a}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subsingleton.isCompact`：Set.Subsingleton.isCompact (hs : s.Subsingle
+ton) : IsCompact s
+· 使用定理 `Set.Subsingleton.singleton_inter`：∀ {α : Type u} {a : α} {s : Set α}, ({
+a} ∩ s).Subsingleton
 -/
 @[simp] lemma IsRetrocompact.singleton : IsRetrocompact {a} :=
-  fun _ _ _ => Subsingleton.singleton_inter.isCompact
-
-/--
-lemma `IsRetrocompact.union` / 引理 `IsRetrocompact.union`
-
-English:
-lemma IsRetrocompact.union
-  given: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  proof: fun _U hUcomp hUopen => union_inter_distrib_right .. ▸ (hs hUcomp hUopen).union (ht hUcomp hUopen)
-
-中文:
-引理 IsRetrocompact.union
-  条件: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  证明: fun _U hUcomp hUopen => union_inter_distrib_right .. ▸ (hs hUcomp hUopen).union (ht hUcomp hUopen)
-
-Depends on / 依赖: hUcomp, hUopen, union_inter_distrib_right
+  fun _ _ _ ↦ Subsingleton.singleton_inter.isCompact
+/-
+**IsRetrocompact.union** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.union (hs : IsRetrocompact s) (ht : IsRetrocompact t) : IsR
+etrocompact (s union t : Set X)
+参数：hs : IsRetrocompact s；ht : IsRetrocompact t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.union`：IsCompact.union (hs : IsCompact s) (ht : IsCompact t) :
+ IsCompact (s union t)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.union_inter_distrib_right`：union_inter_distrib_right (s t u : Set α)
+ : (s union t) inter u = s inter u union t inter u
 -/
 lemma IsRetrocompact.union (hs : IsRetrocompact s) (ht : IsRetrocompact t) :
-    IsRetrocompact (s union t : Set X) :=
-  fun _U hUcomp hUopen => union_inter_distrib_right .. ▸ (hs hUcomp hUopen).union (ht hUcomp hUopen)
-
-/--
-lemma `supClosed_isRetrocompact` / 引理 `supClosed_isRetrocompact`
-
-English:
-lemma supClosed_isRetrocompact
-  statement: SupClosed {s : Set X | IsRetrocompact s}
-  proof: fun _s hs _t ht => hs.union ht
-
-中文:
-引理 supClosed_isRetrocompact
-  结论: SupClosed {s : 集合 X | IsRetrocompact s}
-  证明: fun _s hs _t ht => hs.union ht
+    IsRetrocompact (s ∪ t : Set X) :=
+  fun _U hUcomp hUopen ↦ union_inter_distrib_right .. ▸ (hs hUcomp hUopen).union (ht hUcomp hUopen)
+/-
+**supClosed_isRetrocompact** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma supClosed_isRetrocompact : SupClosed {s : Set X | IsRetrocompact s} :=
-  fun _s hs _t ht => hs.union ht
-
-/--
-lemma `IsRetrocompact.finsetSup` / 引理 `IsRetrocompact.finsetSup`
-
-English:
-lemma IsRetrocompact.finsetSup
-  statement: {ι : Type*} {s : Finset ι} {t : ι -> Set X}
-  proof: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons i s ih hi =>
-    rw [Finset.sup_cons]
-exact (ht _ <| by simp).union hi Finset.forall_of_forall_cons ht
-
-中文:
-引理 IsRetrocompact.finsetSup
-  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> 集合 X}
-  证明: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons i s ih hi =>
-    rw [Finset.sup_cons]
-exact (ht _ <| by simp).union hi Finset.forall_of_forall_cons ht
-
-Depends on / 依赖: Finset, Finset.cons_induction, Finset.forall_of_forall_cons, Finset.sup_cons, cons_induction, forall_of_forall_cons, sup_cons
+  fun _s hs _t ht ↦ hs.union ht
+/-
+**IsRetrocompact.finsetSup** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.finsetSup {ι : Type*} {s : Finset ι} {t : ι -> Set X} (ht :
+ forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.sup t)
+参数：ht : forall i in s, IsRetrocompact (t i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `Finset.sup_cons`：sup_cons {b : β} (h : b ∉ s) : (cons b s h).sup f = f b
+ ⊔ s.sup f
+· 使用引理 `IsRetrocompact.union`：IsRetrocompact.union (hs : IsRetrocompact s) (ht :
+ IsRetrocompact t) : IsRetrocompact (s union t : Set X)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Finset.forall_of_forall_cons`：forall_of_forall_cons {p : α -> Prop} {h :
+ a ∉ s} (H : forall x, x in cons a s h -> p x) (x) (h : x in s) : p x
 -/
-lemma IsRetrocompact.finsetSup {ι : Type*} {s : Finset ι} {t : ι -> Set X}
-    (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.sup t) := by
+lemma IsRetrocompact.finsetSup {ι : Type*} {s : Finset ι} {t : ι → Set X}
+    (ht : ∀ i ∈ s, IsRetrocompact (t i)) : IsRetrocompact (s.sup t) := by
   induction s using Finset.cons_induction with
   | empty => simp
   | cons i s ih hi =>
     rw [Finset.sup_cons]
-exact (ht _ <| by simp).union hi Finset.forall_of_forall_cons ht
+    exact (ht _ <| by simp).union <| hi <| Finset.forall_of_forall_cons ht
 
 set_option linter.docPrime false in
-/--
-lemma `IsRetrocompact.finsetSup'` / 引理 `IsRetrocompact.finsetSup'`
-
-English:
-lemma IsRetrocompact.finsetSup'
-  statement: {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
-  proof: by
-  rw [Finset.sup'_eq_sup]; exact .finsetSup ht
-
-中文:
-引理 IsRetrocompact.finsetSup'
-  结论: {ι : 类型} {s : 有限集 ι} {hs} {t : ι -> 集合 X}
-  证明: by
-  rw [Finset.sup'_eq_sup]; exact .finsetSup ht
-
-Depends on / 依赖: Finset, Finset.sup, _eq_sup, finsetSup
+/-
+**IsRetrocompact.finsetSup'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.finsetSup' {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
+ (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.sup' hs t)
+参数：ht : forall i in s, IsRetrocompact (t i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup'_eq_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeS
+up α] [inst_1 : OrderBot α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.sup
+' H f = …
+· 使用引理 `IsRetrocompact.finsetSup`：IsRetrocompact.finsetSup {ι : Type*} {s : Fins
+et ι} {t : ι -> Set X} (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompa
+ct (s.sup t)
 -/
-lemma IsRetrocompact.finsetSup' {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
-    (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.sup' hs t) := by
+lemma IsRetrocompact.finsetSup' {ι : Type*} {s : Finset ι} {hs} {t : ι → Set X}
+    (ht : ∀ i ∈ s, IsRetrocompact (t i)) : IsRetrocompact (s.sup' hs t) := by
   rw [Finset.sup'_eq_sup]; exact .finsetSup ht
-
-/--
-lemma `IsRetrocompact.iUnion` / 引理 `IsRetrocompact.iUnion`
-
-English:
-lemma IsRetrocompact.iUnion
-  given: [Finite ι] {f : ι -> Set X} (hf : forall i, IsRetrocompact (f i))
-  proof: supClosed_isRetrocompact.iSup_mem .empty hf
-
-中文:
-引理 IsRetrocompact.iUnion
-  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsRetrocompact (f i))
-  证明: supClosed_isRetrocompact.iSup_mem .empty hf
-
-Depends on / 依赖: iSup_mem, supClosed_isRetrocompact, supClosed_isRetrocompact.iSup_mem
+/-
+**IsRetrocompact.iUnion** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.iUnion [Finite ι] {f : ι -> Set X} (hf : forall i, IsRetroc
+ompact (f i)) : IsRetrocompact (⋃ i, f i)
+参数：hf : forall i, IsRetrocompact (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.iSup_mem`：SupClosed.iSup_mem [Finite ι] (hs : SupClosed s) (hb
+ot : ⊥ in s) (hf : forall i, f i in s) : ⨆ i, f i in s
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.supClosed_isRetrocompact`：∀ {X
+ : Type u_2} [inst : TopologicalSpace X], SupClosed {s | IsRetrocompact s}
+· 使用定理 `IsRetrocompact.empty`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRe
+trocompact ∅
 -/
-lemma IsRetrocompact.iUnion [Finite ι] {f : ι -> Set X} (hf : forall i, IsRetrocompact (f i)) :
+lemma IsRetrocompact.iUnion [Finite ι] {f : ι → Set X} (hf : ∀ i, IsRetrocompact (f i)) :
     IsRetrocompact (⋃ i, f i) := supClosed_isRetrocompact.iSup_mem .empty hf
-
-/--
-lemma `IsRetrocompact.sUnion` / 引理 `IsRetrocompact.sUnion`
-
-English:
-lemma IsRetrocompact.sUnion
-  given: {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsRetrocompact s)
-  proof: supClosed_isRetrocompact.sSup_mem hS .empty hS'
-
-中文:
-引理 IsRetrocompact.集合并集
-  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsRetrocompact s)
-  证明: supClosed_isRetrocompact.sSup_mem hS .empty hS'
-
-Depends on / 依赖: sSup_mem, supClosed_isRetrocompact, supClosed_isRetrocompact.sSup_mem
+/-
+**IsRetrocompact.sUnion** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.sUnion {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in
+ S, IsRetrocompact s) : IsRetrocompact (⋃₀ S)
+参数：Set X；hS : S.Finite；hS' : forall s in S, IsRetrocompact s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.sSup_mem`：SupClosed.sSup_mem (hs : SupClosed s) (ht : t.Finite
+) (hbot : ⊥ in s) (hts : t subseteq s) : sSup t in s
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.supClosed_isRetrocompact`：∀ {X
+ : Type u_2} [inst : TopologicalSpace X], SupClosed {s | IsRetrocompact s}
+· 使用定理 `IsRetrocompact.empty`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRe
+trocompact ∅
 -/
-lemma IsRetrocompact.sUnion {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsRetrocompact s) :
+lemma IsRetrocompact.sUnion {S : Set (Set X)} (hS : S.Finite) (hS' : ∀ s ∈ S, IsRetrocompact s) :
     IsRetrocompact (⋃₀ S) := supClosed_isRetrocompact.sSup_mem hS .empty hS'
-
-/--
-lemma `IsRetrocompact.biUnion` / 引理 `IsRetrocompact.biUnion`
-
-English:
-lemma IsRetrocompact.biUnion
-  statement: {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-  proof: supClosed_isRetrocompact.biSup_mem ht .empty hf
-
-中文:
-引理 IsRetrocompact.biUnion
-  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
-  证明: supClosed_isRetrocompact.biSup_mem ht .empty hf
-
-Depends on / 依赖: biSup_mem, supClosed_isRetrocompact, supClosed_isRetrocompact.biSup_mem
+/-
+**IsRetrocompact.biUnion** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.biUnion {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Fi
+nite) (hf : forall i in t, IsRetrocompact (f i)) : IsRetrocompact (⋃ i in t, f i
+)
+参数：ht : t.Finite；hf : forall i in t, IsRetrocompact (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.biSup_mem`：SupClosed.biSup_mem {ι : Type*} {t : Set ι} {f : ι 
+-> α} (hs : SupClosed s) (ht : t.Finite) (hbot : ⊥ in s) (hf : forall i in t, f 
+i in s) :…
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.supClosed_isRetrocompact`：∀ {X
+ : Type u_2} [inst : TopologicalSpace X], SupClosed {s | IsRetrocompact s}
+· 使用定理 `IsRetrocompact.empty`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRe
+trocompact ∅
 -/
-lemma IsRetrocompact.biUnion {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-    (hf : forall i in t, IsRetrocompact (f i)) : IsRetrocompact (⋃ i in t, f i) :=
+lemma IsRetrocompact.biUnion {ι : Type*} {f : ι → Set X} {t : Set ι} (ht : t.Finite)
+    (hf : ∀ i ∈ t, IsRetrocompact (f i)) : IsRetrocompact (⋃ i ∈ t, f i) :=
   supClosed_isRetrocompact.biSup_mem ht .empty hf
 
 section T2Space
 variable [T2Space X]
 
-/--
-lemma `IsRetrocompact.inter` / 引理 `IsRetrocompact.inter`
-
-English:
-lemma IsRetrocompact.inter
-  given: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  proof: fun _U hUcomp hUopen => inter_inter_distrib_right .. ▸ (hs hUcomp hUopen).inter (ht hUcomp hUopen)
-
-中文:
-引理 IsRetrocompact.inter
-  条件: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  证明: fun _U hUcomp hUopen => inter_inter_distrib_right .. ▸ (hs hUcomp hUopen).inter (ht hUcomp hUopen)
-
-Depends on / 依赖: hUcomp, hUopen, inter_inter_distrib_right
+/-
+**IsRetrocompact.inter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.inter (hs : IsRetrocompact s) (ht : IsRetrocompact t) : IsR
+etrocompact (s inter t : Set X)
+参数：hs : IsRetrocompact s；ht : IsRetrocompact t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.inter`：IsCompact.inter [T2Space X] {s t : Set X} (hs : IsCompa
+ct s) (ht : IsCompact t) : IsCompact (s inter t)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_inter_distrib_right`：inter_inter_distrib_right (s t u : Set α)
+ : s inter t inter u = s inter u inter (t inter u)
 -/
 lemma IsRetrocompact.inter (hs : IsRetrocompact s) (ht : IsRetrocompact t) :
-    IsRetrocompact (s inter t : Set X) :=
-  fun _U hUcomp hUopen => inter_inter_distrib_right .. ▸ (hs hUcomp hUopen).inter (ht hUcomp hUopen)
-
-/--
-lemma `infClosed_isRetrocompact` / 引理 `infClosed_isRetrocompact`
-
-English:
-lemma infClosed_isRetrocompact
-  statement: InfClosed {s : Set X | IsRetrocompact s}
-  proof: fun _s hs _t ht => hs.inter ht
-
-中文:
-引理 infClosed_isRetrocompact
-  结论: InfClosed {s : 集合 X | IsRetrocompact s}
-  证明: fun _s hs _t ht => hs.inter ht
+    IsRetrocompact (s ∩ t : Set X) :=
+  fun _U hUcomp hUopen ↦ inter_inter_distrib_right .. ▸ (hs hUcomp hUopen).inter (ht hUcomp hUopen)
+/-
+**infClosed_isRetrocompact** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma infClosed_isRetrocompact : InfClosed {s : Set X | IsRetrocompact s} :=
-  fun _s hs _t ht => hs.inter ht
-
-/--
-lemma `IsRetrocompact.finsetInf` / 引理 `IsRetrocompact.finsetInf`
-
-English:
-lemma IsRetrocompact.finsetInf
-  statement: {ι : Type*} {s : Finset ι} {t : ι -> Set X}
-  proof: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons i s ih hi =>
-    rw [Finset.inf_cons]
-exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
-
-中文:
-引理 IsRetrocompact.finsetInf
-  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> 集合 X}
-  证明: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons i s ih hi =>
-    rw [Finset.inf_cons]
-exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
-
-Depends on / 依赖: Finset, Finset.cons_induction, Finset.forall_of_forall_cons, Finset.inf_cons, cons_induction, forall_of_forall_cons, inf_cons
+  fun _s hs _t ht ↦ hs.inter ht
+/-
+**IsRetrocompact.finsetInf** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.finsetInf {ι : Type*} {s : Finset ι} {t : ι -> Set X} (ht :
+ forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.inf t)
+参数：ht : forall i in s, IsRetrocompact (t i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inf_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf
+ α] [inst_1 : OrderTop α] {f : β → α}, ∅.inf f = ⊤
+· 使用定理 `Finset.inf_cons`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf 
+α] [inst_1 : OrderTop α] {s : Finset β} {f : β → α} {b : β}   (h : b ∉ s), (Fins
+et.co…
+· 使用引理 `IsRetrocompact.inter`：IsRetrocompact.inter (hs : IsRetrocompact s) (ht :
+ IsRetrocompact t) : IsRetrocompact (s inter t : Set X)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Finset.forall_of_forall_cons`：forall_of_forall_cons {p : α -> Prop} {h :
+ a ∉ s} (H : forall x, x in cons a s h -> p x) (x) (h : x in s) : p x
 -/
-lemma IsRetrocompact.finsetInf {ι : Type*} {s : Finset ι} {t : ι -> Set X}
-    (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.inf t) := by
+lemma IsRetrocompact.finsetInf {ι : Type*} {s : Finset ι} {t : ι → Set X}
+    (ht : ∀ i ∈ s, IsRetrocompact (t i)) : IsRetrocompact (s.inf t) := by
   induction s using Finset.cons_induction with
   | empty => simp
   | cons i s ih hi =>
     rw [Finset.inf_cons]
-exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
+    exact (ht _ <| by simp).inter <| hi <| Finset.forall_of_forall_cons ht
 
 set_option linter.docPrime false in
-/--
-lemma `IsRetrocompact.finsetInf'` / 引理 `IsRetrocompact.finsetInf'`
-
-English:
-lemma IsRetrocompact.finsetInf'
-  statement: {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
-  proof: by
-  rw [Finset.inf'_eq_inf]; exact .finsetInf ht
-
-中文:
-引理 IsRetrocompact.finsetInf'
-  结论: {ι : 类型} {s : 有限集 ι} {hs} {t : ι -> 集合 X}
-  证明: by
-  rw [Finset.inf'_eq_inf]; exact .finsetInf ht
-
-Depends on / 依赖: Finset, Finset.inf, _eq_inf, finsetInf
+/-
+**IsRetrocompact.finsetInf'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.finsetInf' {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
+ (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.inf' hs t)
+参数：ht : forall i in s, IsRetrocompact (t i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inf'_eq_inf`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeI
+nf α] [inst_1 : OrderTop α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.inf
+' H f = …
+· 使用引理 `IsRetrocompact.finsetInf`：IsRetrocompact.finsetInf {ι : Type*} {s : Fins
+et ι} {t : ι -> Set X} (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompa
+ct (s.inf t)
 -/
-lemma IsRetrocompact.finsetInf' {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
-    (ht : forall i in s, IsRetrocompact (t i)) : IsRetrocompact (s.inf' hs t) := by
+lemma IsRetrocompact.finsetInf' {ι : Type*} {s : Finset ι} {hs} {t : ι → Set X}
+    (ht : ∀ i ∈ s, IsRetrocompact (t i)) : IsRetrocompact (s.inf' hs t) := by
   rw [Finset.inf'_eq_inf]; exact .finsetInf ht
-
-/--
-lemma `IsRetrocompact.iInter` / 引理 `IsRetrocompact.iInter`
-
-English:
-lemma IsRetrocompact.iInter
-  given: [Finite ι] {f : ι -> Set X} (hf : forall i, IsRetrocompact (f i))
-  proof: infClosed_isRetrocompact.iInf_mem .univ hf
-
-中文:
-引理 IsRetrocompact.i整数er
-  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsRetrocompact (f i))
-  证明: infClosed_isRetrocompact.iInf_mem .univ hf
-
-Depends on / 依赖: iInf_mem, infClosed_isRetrocompact, infClosed_isRetrocompact.iInf_mem
+/-
+**IsRetrocompact.iInter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.iInter [Finite ι] {f : ι -> Set X} (hf : forall i, IsRetroc
+ompact (f i)) : IsRetrocompact (⋂ i, f i)
+参数：hf : forall i, IsRetrocompact (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.iInf_mem`：∀ {ι : Sort u_1} {α : Type u_3} [inst : CompleteLatt
+ice α] {f : ι → α} {s : Set α} [Finite ι],   InfClosed s → ⊤ ∈ s → (∀ (i : ι), f
+ i ∈ s) …
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.infClosed_isRetrocompact`：∀ {X
+ : Type u_2} [inst : TopologicalSpace X] [T2Space X], InfClosed {s | IsRetrocomp
+act s}
+· 使用定理 `IsRetrocompact.univ`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRet
+rocompact Set.univ
 -/
-lemma IsRetrocompact.iInter [Finite ι] {f : ι -> Set X} (hf : forall i, IsRetrocompact (f i)) :
+lemma IsRetrocompact.iInter [Finite ι] {f : ι → Set X} (hf : ∀ i, IsRetrocompact (f i)) :
     IsRetrocompact (⋂ i, f i) := infClosed_isRetrocompact.iInf_mem .univ hf
-
-/--
-lemma `IsRetrocompact.sInter` / 引理 `IsRetrocompact.sInter`
-
-English:
-lemma IsRetrocompact.sInter
-  given: {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsRetrocompact s)
-  proof: infClosed_isRetrocompact.sInf_mem hS .univ hS'
-
-中文:
-引理 IsRetrocompact.集合交集
-  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsRetrocompact s)
-  证明: infClosed_isRetrocompact.sInf_mem hS .univ hS'
-
-Depends on / 依赖: infClosed_isRetrocompact, infClosed_isRetrocompact.sInf_mem, sInf_mem
+/-
+**IsRetrocompact.sInter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.sInter {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in
+ S, IsRetrocompact s) : IsRetrocompact (⋂₀ S)
+参数：Set X；hS : S.Finite；hS' : forall s in S, IsRetrocompact s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.sInf_mem`：∀ {α : Type u_3} [inst : CompleteLattice α] {s t : S
+et α}, InfClosed s → t.Finite → ⊤ ∈ s → t ⊆ s → sInf t ∈ s
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.infClosed_isRetrocompact`：∀ {X
+ : Type u_2} [inst : TopologicalSpace X] [T2Space X], InfClosed {s | IsRetrocomp
+act s}
+· 使用定理 `IsRetrocompact.univ`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRet
+rocompact Set.univ
 -/
-lemma IsRetrocompact.sInter {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsRetrocompact s) :
+lemma IsRetrocompact.sInter {S : Set (Set X)} (hS : S.Finite) (hS' : ∀ s ∈ S, IsRetrocompact s) :
     IsRetrocompact (⋂₀ S) := infClosed_isRetrocompact.sInf_mem hS .univ hS'
-
-/--
-lemma `IsRetrocompact.biInter` / 引理 `IsRetrocompact.biInter`
-
-English:
-lemma IsRetrocompact.biInter
-  statement: {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-  proof: infClosed_isRetrocompact.biInf_mem ht .univ hf
-
-中文:
-引理 IsRetrocompact.bi整数er
-  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
-  证明: infClosed_isRetrocompact.biInf_mem ht .univ hf
-
-Depends on / 依赖: biInf_mem, infClosed_isRetrocompact, infClosed_isRetrocompact.biInf_mem
+/-
+**IsRetrocompact.biInter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.biInter {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Fi
+nite) (hf : forall i in t, IsRetrocompact (f i)) : IsRetrocompact (⋂ i in t, f i
+)
+参数：ht : t.Finite；hf : forall i in t, IsRetrocompact (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.biInf_mem`：∀ {α : Type u_3} [inst : CompleteLattice α] {s : Se
+t α} {ι : Type u_5} {t : Set ι} {f : ι → α},   InfClosed s → t.Finite → ⊤ ∈ s → 
+(∀ i ∈ t,…
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.infClosed_isRetrocompact`：∀ {X
+ : Type u_2} [inst : TopologicalSpace X] [T2Space X], InfClosed {s | IsRetrocomp
+act s}
+· 使用定理 `IsRetrocompact.univ`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRet
+rocompact Set.univ
 -/
-lemma IsRetrocompact.biInter {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-    (hf : forall i in t, IsRetrocompact (f i)) : IsRetrocompact (⋂ i in t, f i) :=
+lemma IsRetrocompact.biInter {ι : Type*} {f : ι → Set X} {t : Set ι} (ht : t.Finite)
+    (hf : ∀ i ∈ t, IsRetrocompact (f i)) : IsRetrocompact (⋂ i ∈ t, f i) :=
   infClosed_isRetrocompact.biInf_mem ht .univ hf
 
 end T2Space
 
-/--
-lemma `IsRetrocompact.inter_isOpen` / 引理 `IsRetrocompact.inter_isOpen`
-
-English:
-lemma IsRetrocompact.inter_isOpen
-  statement: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  proof: fun _U hUcomp hUopen => inter_assoc .. ▸ hs (ht hUcomp hUopen) (htopen.inter hUopen)
-
-中文:
-引理 IsRetrocompact.inter_isOpen
-  结论: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  证明: fun _U hUcomp hUopen => inter_assoc .. ▸ hs (ht hUcomp hUopen) (htopen.inter hUopen)
-
-Depends on / 依赖: hUcomp, hUopen, htopen, htopen.inter, inter_assoc
+/-
+**IsRetrocompact.inter_isOpen** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.inter_isOpen (hs : IsRetrocompact s) (ht : IsRetrocompact t
+) (htopen : IsOpen t) : IsRetrocompact (s inter t : Set X)
+参数：hs : IsRetrocompact s；ht : IsRetrocompact t；htopen : IsOpen t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_assoc`：inter_assoc (a b c : Set α) : a inter b inter c = a int
+er (b inter c)
 -/
 lemma IsRetrocompact.inter_isOpen (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-    (htopen : IsOpen t) : IsRetrocompact (s inter t : Set X) :=
-  fun _U hUcomp hUopen => inter_assoc .. ▸ hs (ht hUcomp hUopen) (htopen.inter hUopen)
-
-/--
-lemma `IsRetrocompact.isOpen_inter` / 引理 `IsRetrocompact.isOpen_inter`
-
-English:
-lemma IsRetrocompact.isOpen_inter
-  statement: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  proof: inter_comm .. ▸ ht.inter_isOpen hs hsopen
-
-中文:
-引理 IsRetrocompact.isOpen_inter
-  结论: (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-  证明: inter_comm .. ▸ ht.inter_isOpen hs hsopen
-
-Depends on / 依赖: hsopen, ht.inter_isOpen, inter_comm, inter_isOpen
+    (htopen : IsOpen t) : IsRetrocompact (s ∩ t : Set X) :=
+  fun _U hUcomp hUopen ↦ inter_assoc .. ▸ hs (ht hUcomp hUopen) (htopen.inter hUopen)
+/-
+**IsRetrocompact.isOpen_inter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.isOpen_inter (hs : IsRetrocompact s) (ht : IsRetrocompact t
+) (hsopen : IsOpen s) : IsRetrocompact (s inter t : Set X)
+参数：hs : IsRetrocompact s；ht : IsRetrocompact t；hsopen : IsOpen s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsRetrocompact.inter_isOpen`：IsRetrocompact.inter_isOpen (hs : IsRetroco
+mpact s) (ht : IsRetrocompact t) (htopen : IsOpen t) : IsRetrocompact (s inter t
+ : Set X)
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
 lemma IsRetrocompact.isOpen_inter (hs : IsRetrocompact s) (ht : IsRetrocompact t)
-    (hsopen : IsOpen s) : IsRetrocompact (s inter t : Set X) :=
+    (hsopen : IsOpen s) : IsRetrocompact (s ∩ t : Set X) :=
   inter_comm .. ▸ ht.inter_isOpen hs hsopen
-
-/--
-lemma `IsRetrocompact_iff_isSpectralMap_subtypeVal` / 引理 `IsRetrocompact_iff_isSpectralMap_subtypeVal`
-
-English:
-lemma IsRetrocompact_iff_isSpectralMap_subtypeVal
-  proof: by
-  refine ⟨fun hs => ⟨continuous_subtype_val, fun t htopen htcomp => ?_⟩, fun hs t htcomp htopen => ?_⟩
-  · rw [IsEmbedding.subtypeVal.isCompact_iff, image_preimage_eq_inter_range,
-      Subtype.range_coe_subtype, ofPred_mem_eq, inter_comm]
-    exact hs htcomp htopen
-  · simpa using (hs.isCompact_preimage_of_isOpen htopen htcomp).image continuous_subtype_val
-
-@[stacks 005B]
-
-中文:
-引理 IsRetrocompact_iff_isSpectralMap_subtypeVal
-  证明: by
-  refine ⟨fun hs => ⟨continuous_subtype_val, fun t htopen htcomp => ?_⟩, fun hs t htcomp htopen => ?_⟩
-  · rw [IsEmbedding.subtypeVal.isCompact_iff, image_preimage_eq_inter_range,
-      Subtype.range_coe_subtype, ofPred_mem_eq, inter_comm]
-    exact hs htcomp htopen
-  · simpa using (hs.isCompact_preimage_of_isOpen htopen htcomp).image continuous_subtype_val
-
-@[stacks 005B]
-
-Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isCompact_iff, Subtype, Subtype.range_coe_subtype, continuous_subtype_val, hs.isCompact_preimage_of_isOpen, htcomp, htopen, image_preimage_eq_inter_range, inter_comm, isCompact_iff, isCompact_preimage_of_isOpen, ofPred_mem_eq, range_coe_subtype, subtypeVal
+/-
+**IsRetrocompact_iff_isSpectralMap_subtypeVal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact_iff_isSpectralMap_subtypeVal : IsRetrocompact s ↔ IsSpectra
+lMap (Subtype.val : s -> X)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Topology.IsEmbedding.isCompact_iff`：Topology.IsEmbedding.isCompact_iff {
+f : X -> Y} (hf : IsEmbedding f) : IsCompact s ↔ IsCompact (f '' s)
+· 使用引理 `Topology.IsEmbedding.subtypeVal`：Topology.IsEmbedding.subtypeVal : IsEmb
+edding ((↑) : Subtype p -> X)
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `Set.ofPred_mem_eq`：∀ {α : Type u} {s : Set α}, {x | x ∈ s} = s
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `Subtype.image_preimage_coe`：image_preimage_coe (s t : Set α) : ((↑) : s 
+-> α) '' ((↑) : s -> α) ⁻¹' t = s inter t
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `IsSpectralMap.isCompact_preimage_of_isOpen`：∀ {α : Type u_2} {β : Type u
+_3} [inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β},   IsS
+pectralMap f → ∀ ⦃s : Set β⦄, Is…
 -/
 lemma IsRetrocompact_iff_isSpectralMap_subtypeVal :
-    IsRetrocompact s ↔ IsSpectralMap (Subtype.val : s -> X) := by
-  refine ⟨fun hs => ⟨continuous_subtype_val, fun t htopen htcomp => ?_⟩, fun hs t htcomp htopen => ?_⟩
+    IsRetrocompact s ↔ IsSpectralMap (Subtype.val : s → X) := by
+  refine ⟨fun hs ↦ ⟨continuous_subtype_val, fun t htopen htcomp ↦ ?_⟩, fun hs t htcomp htopen ↦ ?_⟩
   · rw [IsEmbedding.subtypeVal.isCompact_iff, image_preimage_eq_inter_range,
       Subtype.range_coe_subtype, ofPred_mem_eq, inter_comm]
     exact hs htcomp htopen
   · simpa using (hs.isCompact_preimage_of_isOpen htopen htcomp).image continuous_subtype_val
 
 @[stacks 005B]
-/--
-lemma `IsRetrocompact.image_of_isEmbedding` / 引理 `IsRetrocompact.image_of_isEmbedding`
-
-English:
-lemma IsRetrocompact.image_of_isEmbedding
-  statement: (hs : IsRetrocompact s) (hfemb : IsEmbedding f)
-  proof: by
-  rintro U hUcomp hUopen
-  rw [← image_inter_preimage]; rw [← hfemb.isCompact_iff]
-refine hs ?_ hUopen.preimage hfemb.continuous
-  rw [hfemb.isCompact_iff]; rw [image_preimage_eq_inter_range]; rw [inter_comm]
-  exact hfcomp hUcomp hUopen
-
-@[stacks 005J "Extracted from the proof"]
-
-中文:
-引理 IsRetrocompact.image_of_isEmbedding
-  结论: (hs : IsRetrocompact s) (hfemb : 是嵌入 f)
-  证明: by
-  rintro U hUcomp hUopen
-  rw [← image_inter_preimage]; rw [← hfemb.isCompact_iff]
-refine hs ?_ hUopen.preimage hfemb.continuous
-  rw [hfemb.isCompact_iff]; rw [image_preimage_eq_inter_range]; rw [inter_comm]
-  exact hfcomp hUcomp hUopen
-
-@[stacks 005J "Extracted from the proof"]
-
-Depends on / 依赖: continuous, hUcomp, hUopen, hUopen.preimage, hfcomp, hfemb.continuous, hfemb.isCompact_iff, image_inter_preimage, image_preimage_eq_inter_range, inter_comm, isCompact_iff, preimage
+/-
+**IsRetrocompact.image_of_isEmbedding** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.image_of_isEmbedding (hs : IsRetrocompact s) (hfemb : IsEmb
+edding f) (hfcomp : IsRetrocompact (range f)) : IsRetrocompact (f '' s)
+参数：hs : IsRetrocompact s；hfemb : IsEmbedding f；hfcomp : IsRetrocompact (range f)
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_inter_preimage`：image_inter_preimage (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (s inter f ⁻¹' t) = f '' s inter t
+· 使用定理 `Topology.IsEmbedding.isCompact_iff`：Topology.IsEmbedding.isCompact_iff {
+f : X -> Y} (hf : IsEmbedding f) : IsCompact s ↔ IsCompact (f '' s)
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
 -/
 lemma IsRetrocompact.image_of_isEmbedding (hs : IsRetrocompact s) (hfemb : IsEmbedding f)
     (hfcomp : IsRetrocompact (range f)) : IsRetrocompact (f '' s) := by
   rintro U hUcomp hUopen
-  rw [← image_inter_preimage]; rw [← hfemb.isCompact_iff]
-refine hs ?_ hUopen.preimage hfemb.continuous
-  rw [hfemb.isCompact_iff]; rw [image_preimage_eq_inter_range]; rw [inter_comm]
+  rw [← image_inter_preimage, ← hfemb.isCompact_iff]
+  refine hs ?_ <| hUopen.preimage hfemb.continuous
+  rw [hfemb.isCompact_iff, image_preimage_eq_inter_range, inter_comm]
   exact hfcomp hUcomp hUopen
 
 @[stacks 005J "Extracted from the proof"]
-/--
-lemma `IsRetrocompact.preimage_of_isOpenEmbedding` / 引理 `IsRetrocompact.preimage_of_isOpenEmbedding`
-
-English:
-lemma IsRetrocompact.preimage_of_isOpenEmbedding
-  statement: {s : Set Y} (hf : IsOpenEmbedding f)
-  proof: by
-  rintro U hUcomp hUopen
-  rw [hf.isCompact_iff]; rw [image_preimage_inter]
-exact hs (hUcomp.image hf.continuous) hf.isOpenMap _ hUopen
-
-@[stacks 09YE "Extracted from the proof"]
-
-中文:
-引理 IsRetrocompact.preimage_of_isOpenEmbedding
-  结论: {s : 集合 Y} (hf : 是开嵌入 f)
-  证明: by
-  rintro U hUcomp hUopen
-  rw [hf.isCompact_iff]; rw [image_preimage_inter]
-exact hs (hUcomp.image hf.continuous) hf.isOpenMap _ hUopen
-
-@[stacks 09YE "Extracted from the proof"]
-
-Depends on / 依赖: continuous, hUcomp, hUcomp.image, hUopen, hf.continuous, hf.isCompact_iff, hf.isOpenMap, image_preimage_inter, isCompact_iff, isOpenMap
+/-
+**IsRetrocompact.preimage_of_isOpenEmbedding** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.preimage_of_isOpenEmbedding {s : Set Y} (hf : IsOpenEmbeddi
+ng f) (hs : IsRetrocompact s) : IsRetrocompact (f ⁻¹' s)
+参数：hf : IsOpenEmbedding f；hs : IsRetrocompact s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Topology.IsEmbedding.isCompact_iff`：Topology.IsEmbedding.isCompact_iff {
+f : X -> Y} (hf : IsEmbedding f) : IsCompact s ↔ IsCompact (f '' s)
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+· 使用定理 `Set.image_preimage_inter`：image_preimage_inter (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (f ⁻¹' t inter s) = t inter f '' s
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `Topology.IsOpenEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f 
+: X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.I
+sOpenEmbedding f → Contin…
+· 使用定理 `Topology.IsOpenEmbedding.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} {f :
+ X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.Is
+OpenEmbedding f → IsOpen…
 -/
 lemma IsRetrocompact.preimage_of_isOpenEmbedding {s : Set Y} (hf : IsOpenEmbedding f)
     (hs : IsRetrocompact s) : IsRetrocompact (f ⁻¹' s) := by
   rintro U hUcomp hUopen
-  rw [hf.isCompact_iff]; rw [image_preimage_inter]
-exact hs (hUcomp.image hf.continuous) hf.isOpenMap _ hUopen
+  rw [hf.isCompact_iff, image_preimage_inter]
+  exact hs (hUcomp.image hf.continuous) <| hf.isOpenMap _ hUopen
 
 @[stacks 09YE "Extracted from the proof"]
-/--
-lemma `IsRetrocompact.preimage_of_isClosedEmbedding` / 引理 `IsRetrocompact.preimage_of_isClosedEmbedding`
-
-English:
-lemma IsRetrocompact.preimage_of_isClosedEmbedding
-  statement: {s : Set Y} (hf : IsClosedEmbedding f)
-  proof: by
-  rintro U hUcomp hUopen
-  have hfUopen : IsOpen (f '' U union (range f)ᶜ) := by
-    simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
-      using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-  have hfUcomp : IsCompact (f '' U union (range f)ᶜ) := (hUcomp.image hf.continuous).union hf'
-  simpa [inter_union_distrib_left, inter_left_comm, inter_eq_right.2 (image_subset_range ..),
-    hf.isCompact_iff, image_preimage_inter] using (hs hfUcomp hfUopen).inter_left hf.isClosed_range
-
-中文:
-引理 IsRetrocompact.preimage_of_isClosedEmbedding
-  结论: {s : 集合 Y} (hf : 是闭嵌入 f)
-  证明: by
-  rintro U hUcomp hUopen
-  have hfUopen : IsOpen (f '' U union (range f)ᶜ) := by
-    simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
-      using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-  have hfUcomp : IsCompact (f '' U union (range f)ᶜ) := (hUcomp.image hf.continuous).union hf'
-  simpa [inter_union_distrib_left, inter_left_comm, inter_eq_right.2 (image_subset_range ..),
-    hf.isCompact_iff, image_preimage_inter] using (hs hfUcomp hfUopen).inter_left hf.isClosed_range
-
-Depends on / 依赖: IsCompact, IsOpen, compl_inter, continuous, hUcomp, hUcomp.image, hUopen, hUopen.isClosed_compl, hf.continuous, hf.injective, hf.isClosedMap, hf.isClosed_range, hf.isCompact_iff, hfUcomp, hfUopen, image_preimage_inter, image_subset_range, injective, inter_eq_right, inter_left
+/-
+**IsRetrocompact.preimage_of_isClosedEmbedding** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsRetrocompact.preimage_of_isClosedEmbedding {s : Set Y} (hf : IsClosedEmb
+edding f) (hf' : IsCompact (range f)ᶜ) (hs : IsRetrocompact s) : IsRetrocompact 
+(f ⁻¹' s)
+参数：hf : IsClosedEmbedding f；hf' : IsCompact (range f)ᶜ；hs : IsRetrocompact s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.range_sdiff_image`：range_sdiff_image {f : α -> β} (hf : Injective f)
+ (s : Set α) : range f \ f '' s = f '' sᶜ
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsClosedEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2
+} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.Is
+ClosedEmbedding f → Topology.I…
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.compl_inter`：compl_inter (s t : Set α) : (s inter t)ᶜ = sᶜ union tᶜ
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
+· 使用定理 `IsClosed.isOpen_compl`：∀ {X : Type u} {inst : TopologicalSpace X} {s : S
+et X} [self : IsClosed s], IsOpen sᶜ
+· 使用定理 `Topology.IsClosedEmbedding.isClosedMap`：∀ {X : Type u_1} {Y : Type u_2} 
+{f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topolog
+y.IsClosedEmbedding f → IsCl…
+· 使用定理 `IsOpen.isClosed_compl`：∀ {X : Type u} [inst : TopologicalSpace X] {s : S
+et X}, IsOpen s → IsClosed sᶜ
+· 使用定理 `IsCompact.union`：IsCompact.union (hs : IsCompact s) (ht : IsCompact t) :
+ IsCompact (s union t)
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `Topology.IsClosedEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {
+f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology
+.IsClosedEmbedding f → Cont…
+· 使用定理 `Topology.IsEmbedding.isCompact_iff`：Topology.IsEmbedding.isCompact_iff {
+f : X -> Y} (hf : IsEmbedding f) : IsCompact s ↔ IsCompact (f '' s)
+· 使用定理 `Set.image_preimage_inter`：image_preimage_inter (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (f ⁻¹' t inter s) = t inter f '' s
+· 使用定理 `Set.inter_union_distrib_left`：inter_union_distrib_left (s t u : Set α) :
+ s inter (t union u) = s inter t union s inter u
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.inter_left_comm`：inter_left_comm (s₁ s₂ s₃ : Set α) : s₁ inter (s₂ i
+nter s₃) = s₂ inter (s₁ inter s₃)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_right`：∀ {α : Type u} {s t : Set α}, s ∩ t = t ↔ t ⊆ s
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
+· 使用定理 `Set.inter_compl_self`：inter_compl_self (s : Set α) : s inter sᶜ = ∅
+· 使用定理 `Set.inter_empty`：inter_empty (a : Set α) : a inter ∅ = ∅
+· 使用定理 `Set.union_empty`：union_empty (a : Set α) : a union ∅ = a
+· 使用定理 `IsCompact.inter_left`：IsCompact.inter_left (ht : IsCompact t) (hs : IsCl
+osed s) : IsCompact (s inter t)
+· 使用定理 `Topology.IsClosedEmbedding.isClosed_range`：∀ {X : Type u_1} {Y : Type u_
+2} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.I
+sClosedEmbedding f → IsClosed (…
 -/
 lemma IsRetrocompact.preimage_of_isClosedEmbedding {s : Set Y} (hf : IsClosedEmbedding f)
     (hf' : IsCompact (range f)ᶜ) (hs : IsRetrocompact s) : IsRetrocompact (f ⁻¹' s) := by
   rintro U hUcomp hUopen
-  have hfUopen : IsOpen (f '' U union (range f)ᶜ) := by
+  have hfUopen : IsOpen (f '' U ∪ (range f)ᶜ) := by
     simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
       using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-  have hfUcomp : IsCompact (f '' U union (range f)ᶜ) := (hUcomp.image hf.continuous).union hf'
+  have hfUcomp : IsCompact (f '' U ∪ (range f)ᶜ) := (hUcomp.image hf.continuous).union hf'
   simpa [inter_union_distrib_left, inter_left_comm, inter_eq_right.2 (image_subset_range ..),
     hf.isCompact_iff, image_preimage_inter] using (hs hfUcomp hfUopen).inter_left hf.isClosed_range
 
@@ -596,282 +585,192 @@ lemma IsRetrocompact.preimage_of_isClosedEmbedding {s : Set Y} (hf : IsClosedEmb
 
 namespace Topology
 
-/--
-Definition of `IsConstructible` / `IsConstructible` 的定义
+/-- A constructible set is a set that can be written as the
+finite union/finite intersection/complement of open retrocompact sets.
 
-English:
-definition IsConstructible
-  signature: (s : Set X)
-  body: s in BooleanSubalgebra.closure {U | IsOpen U ∧ IsRetrocompact U}
+In other words, constructible sets form the Boolean subalgebra generated by open retrocompact sets.
+-/
+/-
+**Topology.IsConstructible** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：IsConstructible (s : Set X) : Prop
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A constructible set is a set that can be written as the
+finite union/finite intersection/complement of open retrocompact sets.
 
-中文:
-定义 IsConstructible
-  签名: (s : 集合 X)
-  定义体: s in BooleanSubalgebra.closure {U | IsOpen U ∧ IsRetrocompact U}
-
-@[simp]
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.closure, IsOpen, IsRetrocompact, closure
+In other words, constructible sets form the Boolean subalgebra generated by open
+ retrocompact sets.
 -/
 def IsConstructible (s : Set X) : Prop :=
-  s in BooleanSubalgebra.closure {U | IsOpen U ∧ IsRetrocompact U}
+  s ∈ BooleanSubalgebra.closure {U | IsOpen U ∧ IsRetrocompact U}
 
 @[simp]
-/--
-lemma `IsConstructible.empty` / 引理 `IsConstructible.empty`
-
-English:
-lemma IsConstructible.empty
-  statement: IsConstructible (∅ : Set X)
-  proof: BooleanSubalgebra.bot_mem
-
-@[simp]
-
-中文:
-引理 IsConstructible.empty
-  结论: IsConstructible (∅ : 集合 X)
-  证明: BooleanSubalgebra.bot_mem
-
-@[simp]
+/-
+**Topology.IsConstructible.empty** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruct
+ible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], Topology.IsConstructible ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.bot_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊥ ∈ L
 -/
 protected lemma IsConstructible.empty : IsConstructible (∅ : Set X) := BooleanSubalgebra.bot_mem
 
 @[simp]
-/--
-lemma `IsConstructible.univ` / 引理 `IsConstructible.univ`
-
-English:
-lemma IsConstructible.univ
-  statement: IsConstructible (univ : Set X)
-  proof: BooleanSubalgebra.top_mem
-
-中文:
-引理 IsConstructible.univ
-  结论: IsConstructible (univ : 集合 X)
-  证明: BooleanSubalgebra.top_mem
+/-
+**Topology.IsConstructible.univ** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstructi
+ble`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], Topology.IsConstructible Set
+.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.top_mem`：∀ {α : Type u_2} [inst : BooleanAlgebra α] {L
+ : BooleanSubalgebra α}, ⊤ ∈ L
 -/
 protected lemma IsConstructible.univ : IsConstructible (univ : Set X) := BooleanSubalgebra.top_mem
-
-/--
-lemma `IsConstructible.union` / 引理 `IsConstructible.union`
-
-English:
-lemma IsConstructible.union
-  statement: IsConstructible s -> IsConstructible t -> IsConstructible (s union t)
-  proof: BooleanSubalgebra.sup_mem
-
-中文:
-引理 IsConstructible.union
-  结论: IsConstructible s -> IsConstructible t -> IsConstructible (s union t)
-  证明: BooleanSubalgebra.sup_mem
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.sup_mem, sup_mem
+/-
+**Topology.IsConstructible.union** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruct
+ible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X},   Topology.IsC
+onstructible s → Topology.IsConstructible t → Topology.IsConstructible (s ∪ t)
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.sup_mem`：sup_mem (ha : a in L) (hb : b in L) : a ⊔ b i
+n L
 -/
-lemma IsConstructible.union : IsConstructible s -> IsConstructible t -> IsConstructible (s union t) :=
+lemma IsConstructible.union : IsConstructible s → IsConstructible t → IsConstructible (s ∪ t) :=
   BooleanSubalgebra.sup_mem
-
-/--
-lemma `IsConstructible.inter` / 引理 `IsConstructible.inter`
-
-English:
-lemma IsConstructible.inter
-  statement: IsConstructible s -> IsConstructible t -> IsConstructible (s inter t)
-  proof: BooleanSubalgebra.inf_mem
-
-中文:
-引理 IsConstructible.inter
-  结论: IsConstructible s -> IsConstructible t -> IsConstructible (s inter t)
-  证明: BooleanSubalgebra.inf_mem
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.inf_mem, inf_mem
+/-
+**Topology.IsConstructible.inter** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruct
+ible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X},   Topology.IsC
+onstructible s → Topology.IsConstructible t → Topology.IsConstructible (s ∩ t)
+参数：s ∩ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.inf_mem`：inf_mem (ha : a in L) (hb : b in L) : a ⊓ b i
+n L
 -/
-lemma IsConstructible.inter : IsConstructible s -> IsConstructible t -> IsConstructible (s inter t) :=
+lemma IsConstructible.inter : IsConstructible s → IsConstructible t → IsConstructible (s ∩ t) :=
   BooleanSubalgebra.inf_mem
-
-/--
-lemma `IsConstructible.sdiff` / 引理 `IsConstructible.sdiff`
-
-English:
-lemma IsConstructible.sdiff
-  statement: IsConstructible s -> IsConstructible t -> IsConstructible (s \ t)
-  proof: BooleanSubalgebra.sdiff_mem
-
-中文:
-引理 IsConstructible.sdiff
-  结论: IsConstructible s -> IsConstructible t -> IsConstructible (s \ t)
-  证明: BooleanSubalgebra.sdiff_mem
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.sdiff_mem, sdiff_mem
+/-
+**Topology.IsConstructible.sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruct
+ible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X},   Topology.IsC
+onstructible s → Topology.IsConstructible t → Topology.IsConstructible (s \ t)
+参数：s \ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.sdiff_mem`：sdiff_mem (ha : a in L) (hb : b in L) : a \
+ b in L
 -/
-lemma IsConstructible.sdiff : IsConstructible s -> IsConstructible t -> IsConstructible (s \ t) :=
+lemma IsConstructible.sdiff : IsConstructible s → IsConstructible t → IsConstructible (s \ t) :=
   BooleanSubalgebra.sdiff_mem
-
-/--
-lemma `IsConstructible.himp` / 引理 `IsConstructible.himp`
-
-English:
-lemma IsConstructible.himp
-  statement: IsConstructible s -> IsConstructible t -> IsConstructible (s ⇨ t)
-  proof: BooleanSubalgebra.himp_mem
-
-中文:
-引理 IsConstructible.himp
-  结论: IsConstructible s -> IsConstructible t -> IsConstructible (s ⇨ t)
-  证明: BooleanSubalgebra.himp_mem
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.himp_mem, himp_mem
+/-
+**Topology.IsConstructible.himp** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstructi
+ble`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X},   Topology.IsC
+onstructible s → Topology.IsConstructible t → Topology.IsConstructible (s ⇨ t)
+参数：s ⇨ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.himp_mem`：himp_mem (ha : a in L) (hb : b in L) : a ⇨ b
+ in L
 -/
-lemma IsConstructible.himp : IsConstructible s -> IsConstructible t -> IsConstructible (s ⇨ t) :=
+lemma IsConstructible.himp : IsConstructible s → IsConstructible t → IsConstructible (s ⇨ t) :=
   BooleanSubalgebra.himp_mem
-
-/--
-lemma `isConstructible_compl` / 引理 `isConstructible_compl`
-
-English:
-lemma isConstructible_compl
-  statement: IsConstructible sᶜ ↔ IsConstructible s
-  proof: BooleanSubalgebra.compl_mem_iff
-
-alias ⟨IsConstructible.of_compl, IsConstructible.compl⟩ := isConstructible_compl
-
-中文:
-引理 isConstructible_compl
-  结论: IsConstructible sᶜ ↔ IsConstructible s
-  证明: BooleanSubalgebra.compl_mem_iff
-
-alias ⟨IsConstructible.of_compl, IsConstructible.compl⟩ := isConstructible_compl
+/-
+**Topology.isConstructible_compl** 是 Mathlib 中的一个定理，位于命名空间 `Topology`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X}, Topology.IsConst
+ructible sᶜ ↔ Topology.IsConstructible s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanSubalgebra.compl_mem_iff`：∀ {α : Type u_2} [inst : BooleanAlgebra
+ α] {L : BooleanSubalgebra α} {a : α}, aᶜ ∈ L ↔ a ∈ L
 -/
 @[simp] lemma isConstructible_compl : IsConstructible sᶜ ↔ IsConstructible s :=
   BooleanSubalgebra.compl_mem_iff
 
 alias ⟨IsConstructible.of_compl, IsConstructible.compl⟩ := isConstructible_compl
-
-/--
-lemma `IsConstructible.iUnion` / 引理 `IsConstructible.iUnion`
-
-English:
-lemma IsConstructible.iUnion
-  given: [Finite ι] {f : ι -> Set X} (hf : forall i, IsConstructible (f i))
-  proof: BooleanSubalgebra.iSup_mem hf
-
-中文:
-引理 IsConstructible.iUnion
-  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsConstructible (f i))
-  证明: BooleanSubalgebra.iSup_mem hf
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.iSup_mem, iSup_mem
+/-
+**Topology.IsConstructible.iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruc
+tible`。
+形式化陈述：∀ {ι : Sort u_1} {X : Type u_2} [inst : TopologicalSpace X] [Finite ι] {f 
+: ι → Set X},   (∀ (i : ι), Topology.IsConstructible (f i)) → Topology.IsConstru
+ctible (⋃ i, f i)
+参数：∀ (i : ι), Topology.IsConstructible (f i)；⋃ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.iSup_mem`：iSup_mem [Finite ι] (hf : forall i, f i in L
+) : ⨆ i, f i in L
 -/
-lemma IsConstructible.iUnion [Finite ι] {f : ι -> Set X} (hf : forall i, IsConstructible (f i)) :
+lemma IsConstructible.iUnion [Finite ι] {f : ι → Set X} (hf : ∀ i, IsConstructible (f i)) :
     IsConstructible (⋃ i, f i) := BooleanSubalgebra.iSup_mem hf
-
-/--
-lemma `IsConstructible.iInter` / 引理 `IsConstructible.iInter`
-
-English:
-lemma IsConstructible.iInter
-  given: [Finite ι] {f : ι -> Set X} (hf : forall i, IsConstructible (f i))
-  proof: BooleanSubalgebra.iInf_mem hf
-
-中文:
-引理 IsConstructible.i整数er
-  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsConstructible (f i))
-  证明: BooleanSubalgebra.iInf_mem hf
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.iInf_mem, iInf_mem
+/-
+**Topology.IsConstructible.iInter** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruc
+tible`。
+形式化陈述：∀ {ι : Sort u_1} {X : Type u_2} [inst : TopologicalSpace X] [Finite ι] {f 
+: ι → Set X},   (∀ (i : ι), Topology.IsConstructible (f i)) → Topology.IsConstru
+ctible (⋂ i, f i)
+参数：∀ (i : ι), Topology.IsConstructible (f i)；⋂ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.iInf_mem`：iInf_mem [Finite ι] (hf : forall i, f i in L
+) : ⨅ i, f i in L
 -/
-lemma IsConstructible.iInter [Finite ι] {f : ι -> Set X} (hf : forall i, IsConstructible (f i)) :
+lemma IsConstructible.iInter [Finite ι] {f : ι → Set X} (hf : ∀ i, IsConstructible (f i)) :
     IsConstructible (⋂ i, f i) := BooleanSubalgebra.iInf_mem hf
-
-/--
-lemma `IsConstructible.sUnion` / 引理 `IsConstructible.sUnion`
-
-English:
-lemma IsConstructible.sUnion
-  given: {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsConstructible s)
-  proof: BooleanSubalgebra.sSup_mem hS hS'
-
-中文:
-引理 IsConstructible.集合并集
-  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsConstructible s)
-  证明: BooleanSubalgebra.sSup_mem hS hS'
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.sSup_mem, sSup_mem
+/-
+**Topology.IsConstructible.sUnion** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruc
+tible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {S : Set (Set X)},   S.Finite
+ → (∀ s ∈ S, Topology.IsConstructible s) → Topology.IsConstructible (⋃₀ S)
+参数：Set X；∀ s ∈ S, Topology.IsConstructible s；⋃₀ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.sSup_mem`：sSup_mem (hs : s.Finite) (hsL : s subseteq L
+) : sSup s in L
 -/
-lemma IsConstructible.sUnion {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsConstructible s) :
+lemma IsConstructible.sUnion {S : Set (Set X)} (hS : S.Finite) (hS' : ∀ s ∈ S, IsConstructible s) :
     IsConstructible (⋃₀ S) := BooleanSubalgebra.sSup_mem hS hS'
-
-/--
-lemma `IsConstructible.sInter` / 引理 `IsConstructible.sInter`
-
-English:
-lemma IsConstructible.sInter
-  given: {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsConstructible s)
-  proof: BooleanSubalgebra.sInf_mem hS hS'
-
-中文:
-引理 IsConstructible.集合交集
-  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsConstructible s)
-  证明: BooleanSubalgebra.sInf_mem hS hS'
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.sInf_mem, sInf_mem
+/-
+**Topology.IsConstructible.sInter** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstruc
+tible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {S : Set (Set X)},   S.Finite
+ → (∀ s ∈ S, Topology.IsConstructible s) → Topology.IsConstructible (⋂₀ S)
+参数：Set X；∀ s ∈ S, Topology.IsConstructible s；⋂₀ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.sInf_mem`：sInf_mem (hs : s.Finite) (hsL : s subseteq L
+) : sInf s in L
 -/
-lemma IsConstructible.sInter {S : Set (Set X)} (hS : S.Finite) (hS' : forall s in S, IsConstructible s) :
+lemma IsConstructible.sInter {S : Set (Set X)} (hS : S.Finite) (hS' : ∀ s ∈ S, IsConstructible s) :
     IsConstructible (⋂₀ S) := BooleanSubalgebra.sInf_mem hS hS'
-
-/--
-lemma `IsConstructible.biUnion` / 引理 `IsConstructible.biUnion`
-
-English:
-lemma IsConstructible.biUnion
-  statement: {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-  proof: BooleanSubalgebra.biSup_mem ht hf
-
-中文:
-引理 IsConstructible.biUnion
-  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
-  证明: BooleanSubalgebra.biSup_mem ht hf
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.biSup_mem, biSup_mem
+/-
+**Topology.IsConstructible.biUnion** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstru
+ctible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {ι : Type u_4} {f : ι → Set X
+} {t : Set ι},   t.Finite → (∀ i ∈ t, Topology.IsConstructible (f i)) → Topology
+.IsConstructible (⋃ i ∈ t, f i)
+参数：∀ i ∈ t, Topology.IsConstructible (f i)；⋃ i ∈ t, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.biSup_mem`：biSup_mem {ι : Type*} {t : Set ι} {f : ι ->
+ α} (ht : t.Finite) (hf : forall i in t, f i in L) : ⨆ i in t, f i in L
 -/
-lemma IsConstructible.biUnion {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-    (hf : forall i in t, IsConstructible (f i)) : IsConstructible (⋃ i in t, f i) :=
+lemma IsConstructible.biUnion {ι : Type*} {f : ι → Set X} {t : Set ι} (ht : t.Finite)
+    (hf : ∀ i ∈ t, IsConstructible (f i)) : IsConstructible (⋃ i ∈ t, f i) :=
   BooleanSubalgebra.biSup_mem ht hf
-
-/--
-lemma `IsConstructible.biInter` / 引理 `IsConstructible.biInter`
-
-English:
-lemma IsConstructible.biInter
-  statement: {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-  proof: BooleanSubalgebra.biInf_mem ht hf
-
-中文:
-引理 IsConstructible.bi整数er
-  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
-  证明: BooleanSubalgebra.biInf_mem ht hf
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.biInf_mem, biInf_mem
+/-
+**Topology.IsConstructible.biInter** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstru
+ctible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {ι : Type u_4} {f : ι → Set X
+} {t : Set ι},   t.Finite → (∀ i ∈ t, Topology.IsConstructible (f i)) → Topology
+.IsConstructible (⋂ i ∈ t, f i)
+参数：∀ i ∈ t, Topology.IsConstructible (f i)；⋂ i ∈ t, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.biInf_mem`：biInf_mem {ι : Type*} {t : Set ι} {f : ι ->
+ α} (ht : t.Finite) (hf : forall i in t, f i in L) : ⨅ i in t, f i in L
 -/
-lemma IsConstructible.biInter {ι : Type*} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
-    (hf : forall i in t, IsConstructible (f i)) : IsConstructible (⋂ i in t, f i) :=
+lemma IsConstructible.biInter {ι : Type*} {f : ι → Set X} {t : Set ι} (ht : t.Finite)
+    (hf : ∀ i ∈ t, IsConstructible (f i)) : IsConstructible (⋂ i ∈ t, f i) :=
   BooleanSubalgebra.biInf_mem ht hf
-
-/--
-lemma `_root_.IsRetrocompact.isConstructible` / 引理 `_root_.IsRetrocompact.isConstructible`
-
-English:
-lemma _root_.IsRetrocompact.isConstructible
-  given: (hUopen : IsOpen U) (hUcomp : IsRetrocompact U)
-  proof: BooleanSubalgebra.subset_closure ⟨hUopen, hUcomp⟩
-
-中文:
-引理 _root_.IsRetrocompact.isConstructible
-  条件: (hUopen : 是开集 U) (hUcomp : IsRetrocompact U)
-  证明: BooleanSubalgebra.subset_closure ⟨hUopen, hUcomp⟩
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.subset_closure, hUcomp, hUopen, subset_closure
+/-
+**Topology._root_.IsRetrocompact.isConstructible** 是 Mathlib 中的一个引理，位于命名空间 `Topo
+logy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsRetrocompact.isConstructible (hUopen : IsOpen U) (hUcomp : IsRetrocompact U) :
     IsConstructible U := BooleanSubalgebra.subset_closure ⟨hUopen, hUcomp⟩
@@ -879,36 +778,46 @@ lemma _root_.IsRetrocompact.isConstructible (hUopen : IsOpen U) (hUcomp : IsRetr
 /-- An induction principle for constructible sets. If `p` holds for all open retrocompact
 sets, and is preserved under union and complement, then `p` holds for all constructible sets. -/
 @[elab_as_elim]
-/--
-lemma `IsConstructible.empty_union_induction` / 引理 `IsConstructible.empty_union_induction`
+/-
+**Topology.IsConstructible.empty_union_induction** 是 Mathlib 中的一个定理，位于命名空间 `Topo
+logy.IsConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {p : (s : Set X) → Topology.I
+sConstructible s → Prop},   (∀ (U : Set X) (hUopen : IsOpen U) (hUcomp : IsRetro
+compact U), p U ⋯) →     (∀ (s : Set X) (hs : Topology.IsConstructible s) (t : S
+et X) (ht : Topology.IsConstructible t),         p s hs → p t ht → p (s ∪ t) ⋯) 
+→       (∀ (s : Set X) (hs : Topology.IsConstructible s), p s hs → p sᶜ ⋯) →    
+     ∀ {s : Set X} (hs : Topology.IsConstructible s), p s hs
+参数：s : Set X；∀ (U : Set X) (hUopen : IsOpen U) (hUcomp : IsRetrocompact U), p U 
+⋯；∀ (s : Set X) (hs : Topology.IsConstructible s) (t : Set X) (ht : Topology.IsC
+onstructible t),         p s hs → p t ht → p (s ∪ t) ⋯；∀ (s : Set X) (hs : Topol
+ogy.IsConstructible s), p s hs → p sᶜ ⋯；hs : Topology.IsConstructible s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Topology.IsConstructible.union`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `Topology.IsConstructible.compl`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s : Set X}, Topology.IsConstructible s → Topology.IsConstructible sᶜ
+· 使用引理 `BooleanSubalgebra.closure_bot_sup_induction`：closure_bot_sup_induction {
+p : forall g in closure s, Prop} (mem : forall x hx, p x (subset_closure hx)) (b
+ot : p ⊥ bot_mem) (sup : forall x…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `isOpen_empty`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen ∅
+· 使用定理 `IsRetrocompact.empty`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRe
+trocompact ∅
 
-English:
-lemma IsConstructible.empty_union_induction
-  statement: {p : forall s : Set X, IsConstructible s -> Prop}
-  proof: by
-  induction hs using BooleanSubalgebra.closure_bot_sup_induction with
-  | mem U hU => exact open_retrocompact _ hU.1 hU.2
-  | bot => exact open_retrocompact _ isOpen_empty .empty
-  | sup s hs t ht hs' ht' => exact union _ _ _ _ hs' ht'
-  | compl s hs hs' => exact compl _ _ hs'
-
-中文:
-引理 IsConstructible.empty_union_induction
-  结论: {p : 对任意 s : 集合 X, IsConstructible s -> 命题}
-  证明: by
-  induction hs using BooleanSubalgebra.closure_bot_sup_induction with
-  | mem U hU => exact open_retrocompact _ hU.1 hU.2
-  | bot => exact open_retrocompact _ isOpen_empty .empty
-  | sup s hs t ht hs' ht' => exact union _ _ _ _ hs' ht'
-  | compl s hs hs' => exact compl _ _ hs'
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.closure_bot_sup_induction, closure_bot_sup_induction, isOpen_empty, open_retrocompact
+--- 原说明 ---
+An induction principle for constructible sets. If `p` holds for all open retroco
+mpact
+sets, and is preserved under union and complement, then `p` holds for all constr
+uctible sets.
 -/
-lemma IsConstructible.empty_union_induction {p : forall s : Set X, IsConstructible s -> Prop}
-    (open_retrocompact : forall U (hUopen : IsOpen U) (hUcomp : IsRetrocompact U),
+lemma IsConstructible.empty_union_induction {p : ∀ s : Set X, IsConstructible s → Prop}
+    (open_retrocompact : ∀ U (hUopen : IsOpen U) (hUcomp : IsRetrocompact U),
       p U (BooleanSubalgebra.subset_closure ⟨hUopen, hUcomp⟩))
-    (union : forall s hs t ht, p s hs -> p t ht -> p (s union t) (hs.union ht))
-    (compl : forall s hs, p s hs -> p sᶜ hs.compl) {s} (hs : IsConstructible s) : p s hs := by
+    (union : ∀ s hs t ht, p s hs → p t ht → p (s ∪ t) (hs.union ht))
+    (compl : ∀ s hs, p s hs → p sᶜ hs.compl) {s} (hs : IsConstructible s) : p s hs := by
   induction hs using BooleanSubalgebra.closure_bot_sup_induction with
   | mem U hU => exact open_retrocompact _ hU.1 hU.2
   | bot => exact open_retrocompact _ isOpen_empty .empty
@@ -918,133 +827,147 @@ lemma IsConstructible.empty_union_induction {p : forall s : Set X, IsConstructib
 /-- If `f` is continuous and is such that preimages of open retrocompact sets are retrocompact,
 then preimages of constructible sets are constructible. -/
 @[stacks 005I]
-/--
-lemma `IsConstructible.preimage` / 引理 `IsConstructible.preimage`
+/-
+**Topology.IsConstructible.preimage** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsConstr
+uctible`。
+形式化陈述：∀ {X : Type u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y} {s : Set Y},   Continuous f →     (∀ (s : Set Y), Is
+Open s → IsRetrocompact s → IsRetrocompact (f ⁻¹' s)) →       Topology.IsConstru
+ctible s → Topology.IsConstructible (f ⁻¹' s)
+参数：∀ (s : Set Y), IsOpen s → IsRetrocompact s → IsRetrocompact (f ⁻¹' s)；f ⁻¹' s
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.empty_union_induction`：∀ {X : Type u_2} [inst :
+ TopologicalSpace X] {p : (s : Set X) → Topology.IsConstructible s → Prop},   (∀
+ (U : Set X) (hUopen : IsOpen U) (hU…
+· 使用定理 `IsRetrocompact.isConstructible`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {U : Set X}, IsOpen U → IsRetrocompact U → Topology.IsConstructible U
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_union`：preimage_union {s t : Set β} : f ⁻¹' (s union t) = f
+ ⁻¹' s union f ⁻¹' t
+· 使用定理 `Topology.IsConstructible.union`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `Set.preimage_compl`：preimage_compl {s : Set β} : f ⁻¹' sᶜ = (f ⁻¹' s)ᶜ
+· 使用定理 `Topology.IsConstructible.compl`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s : Set X}, Topology.IsConstructible s → Topology.IsConstructible sᶜ
 
-English:
-lemma IsConstructible.preimage
-  statement: {s : Set Y} (hfcont : Continuous f)
-  proof: by
-  induction hs using IsConstructible.empty_union_induction with
-  | open_retrocompact U hUopen hUcomp =>
-exact (hf _ hUopen hUcomp).isConstructible hUopen.preimage hfcont
-  | union s hs t ht hs' ht' => rw [preimage_union]; exact hs'.union ht'
-  | compl s hs hs' => rw [preimage_compl]; exact hs'.compl
-
-@[stacks 005J]
-
-中文:
-引理 IsConstructible.原像
-  结论: {s : 集合 Y} (hfcont : 连续 f)
-  证明: by
-  induction hs using IsConstructible.empty_union_induction with
-  | open_retrocompact U hUopen hUcomp =>
-exact (hf _ hUopen hUcomp).isConstructible hUopen.preimage hfcont
-  | union s hs t ht hs' ht' => rw [preimage_union]; exact hs'.union ht'
-  | compl s hs hs' => rw [preimage_compl]; exact hs'.compl
-
-@[stacks 005J]
-
-Depends on / 依赖: IsConstructible, IsConstructible.empty_union_induction, empty_union_induction, hUcomp, hUopen, hUopen.preimage, hfcont, isConstructible, open_retrocompact, preimage, preimage_compl, preimage_union
+--- 原说明 ---
+If `f` is continuous and is such that preimages of open retrocompact sets are re
+trocompact,
+then preimages of constructible sets are constructible.
 -/
 lemma IsConstructible.preimage {s : Set Y} (hfcont : Continuous f)
-    (hf : forall s, IsOpen s -> IsRetrocompact s -> IsRetrocompact (f ⁻¹' s)) (hs : IsConstructible s) :
+    (hf : ∀ s, IsOpen s → IsRetrocompact s → IsRetrocompact (f ⁻¹' s)) (hs : IsConstructible s) :
     IsConstructible (f ⁻¹' s) := by
   induction hs using IsConstructible.empty_union_induction with
   | open_retrocompact U hUopen hUcomp =>
-exact (hf _ hUopen hUcomp).isConstructible hUopen.preimage hfcont
+    exact (hf _ hUopen hUcomp).isConstructible <| hUopen.preimage hfcont
   | union s hs t ht hs' ht' => rw [preimage_union]; exact hs'.union ht'
   | compl s hs hs' => rw [preimage_compl]; exact hs'.compl
 
 @[stacks 005J]
-/--
-lemma `IsConstructible.preimage_of_isOpenEmbedding` / 引理 `IsConstructible.preimage_of_isOpenEmbedding`
-
-English:
-lemma IsConstructible.preimage_of_isOpenEmbedding
-  statement: {s : Set Y} (hf : IsOpenEmbedding f)
-  proof: hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isOpenEmbedding hf
-
-@[stacks 09YE]
-
-中文:
-引理 IsConstructible.preimage_of_isOpenEmbedding
-  结论: {s : 集合 Y} (hf : 是开嵌入 f)
-  证明: hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isOpenEmbedding hf
-
-@[stacks 09YE]
-
-Depends on / 依赖: continuous, hf.continuous, hs.preimage, ht.preimage_of_isOpenEmbedding, preimage, preimage_of_isOpenEmbedding
+/-
+**Topology.IsConstructible.preimage_of_isOpenEmbedding** 是 Mathlib 中的一个定理，位于命名空间
+ `Topology.IsConstructible`。
+形式化陈述：∀ {X : Type u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y} {s : Set Y},   Topology.IsOpenEmbedding f → Topology
+.IsConstructible s → Topology.IsConstructible (f ⁻¹' s)
+参数：f ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.preimage`：∀ {X : Type u_2} {Y : Type u_3} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set Y},   
+Continuous f →     (∀ (…
+· 使用定理 `Topology.IsOpenEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f 
+: X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.I
+sOpenEmbedding f → Contin…
+· 使用引理 `IsRetrocompact.preimage_of_isOpenEmbedding`：IsRetrocompact.preimage_of_i
+sOpenEmbedding {s : Set Y} (hf : IsOpenEmbedding f) (hs : IsRetrocompact s) : Is
+Retrocompact (f ⁻¹' s)
 -/
 lemma IsConstructible.preimage_of_isOpenEmbedding {s : Set Y} (hf : IsOpenEmbedding f)
     (hs : IsConstructible s) : IsConstructible (f ⁻¹' s) :=
-  hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isOpenEmbedding hf
+  hs.preimage hf.continuous fun _t _ ht ↦ ht.preimage_of_isOpenEmbedding hf
 
 @[stacks 09YE]
-/--
-lemma `IsConstructible.preimage_of_isClosedEmbedding` / 引理 `IsConstructible.preimage_of_isClosedEmbedding`
-
-English:
-lemma IsConstructible.preimage_of_isClosedEmbedding
-  statement: {s : Set Y} (hf : IsClosedEmbedding f)
-  proof: hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isClosedEmbedding hf hf'
-
-@[stacks 09YD]
-
-中文:
-引理 IsConstructible.preimage_of_isClosedEmbedding
-  结论: {s : 集合 Y} (hf : 是闭嵌入 f)
-  证明: hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isClosedEmbedding hf hf'
-
-@[stacks 09YD]
-
-Depends on / 依赖: continuous, hf.continuous, hs.preimage, ht.preimage_of_isClosedEmbedding, preimage, preimage_of_isClosedEmbedding
+/-
+**Topology.IsConstructible.preimage_of_isClosedEmbedding** 是 Mathlib 中的一个定理，位于命名
+空间 `Topology.IsConstructible`。
+形式化陈述：∀ {X : Type u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y} {s : Set Y},   Topology.IsClosedEmbedding f →     Is
+Compact (Set.range f)ᶜ → Topology.IsConstructible s → Topology.IsConstructible (
+f ⁻¹' s)
+参数：Set.range f；f ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.preimage`：∀ {X : Type u_2} {Y : Type u_3} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set Y},   
+Continuous f →     (∀ (…
+· 使用定理 `Topology.IsClosedEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {
+f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology
+.IsClosedEmbedding f → Cont…
+· 使用引理 `IsRetrocompact.preimage_of_isClosedEmbedding`：IsRetrocompact.preimage_of
+_isClosedEmbedding {s : Set Y} (hf : IsClosedEmbedding f) (hf' : IsCompact (rang
+e f)ᶜ) (hs : IsRetrocompact s) : I…
 -/
 lemma IsConstructible.preimage_of_isClosedEmbedding {s : Set Y} (hf : IsClosedEmbedding f)
     (hf' : IsCompact (range f)ᶜ) (hs : IsConstructible s) : IsConstructible (f ⁻¹' s) :=
-  hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isClosedEmbedding hf hf'
+  hs.preimage hf.continuous fun _t _ ht ↦ ht.preimage_of_isClosedEmbedding hf hf'
 
 @[stacks 09YD]
-/--
-lemma `IsConstructible.image_of_isOpenEmbedding` / 引理 `IsConstructible.image_of_isOpenEmbedding`
-
-English:
-lemma IsConstructible.image_of_isOpenEmbedding
-  statement: (hfopen : IsOpenEmbedding f)
-  proof: by
-  induction hs using IsConstructible.empty_union_induction with
-  | open_retrocompact U hUopen hUcomp =>
-exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
-      hfopen.isOpenMap _ hUopen
-  | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
-  | compl s hs hs' =>
-    rw [← range_sdiff_image hfopen.injective]
-    exact (hfcomp.isConstructible hfopen.isOpen_range).sdiff hs'
-
-@[stacks 09YG]
-
-中文:
-引理 IsConstructible.image_of_isOpenEmbedding
-  结论: (hfopen : 是开嵌入 f)
-  证明: by
-  induction hs using IsConstructible.empty_union_induction with
-  | open_retrocompact U hUopen hUcomp =>
-exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
-      hfopen.isOpenMap _ hUopen
-  | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
-  | compl s hs hs' =>
-    rw [← range_sdiff_image hfopen.injective]
-    exact (hfcomp.isConstructible hfopen.isOpen_range).sdiff hs'
-
-@[stacks 09YG]
-
-Depends on / 依赖: IsConstructible, IsConstructible.empty_union_induction, empty_union_induction, hUcomp, hUcomp.image_of_isEmbedding, hUopen, hfcomp, hfcomp.isConstructible, hfopen, hfopen.injective, hfopen.isEmbedding, hfopen.isOpenMap, hfopen.isOpen_range, image_of_isEmbedding, image_union, injective, isConstructible, isEmbedding, isOpenMap, isOpen_range
+/-
+**Topology.IsConstructible.image_of_isOpenEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `T
+opology.IsConstructible`。
+形式化陈述：∀ {X : Type u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y} {s : Set X},   Topology.IsOpenEmbedding f →     IsRe
+trocompact (Set.range f) → Topology.IsConstructible s → Topology.IsConstructible
+ (f '' s)
+参数：Set.range f；f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.empty_union_induction`：∀ {X : Type u_2} [inst :
+ TopologicalSpace X] {p : (s : Set X) → Topology.IsConstructible s → Prop},   (∀
+ (U : Set X) (hUopen : IsOpen U) (hU…
+· 使用定理 `IsRetrocompact.isConstructible`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {U : Set X}, IsOpen U → IsRetrocompact U → Topology.IsConstructible U
+· 使用定理 `Topology.IsOpenEmbedding.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} {f :
+ X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.Is
+OpenEmbedding f → IsOpen…
+· 使用引理 `IsRetrocompact.image_of_isEmbedding`：IsRetrocompact.image_of_isEmbedding
+ (hs : IsRetrocompact s) (hfemb : IsEmbedding f) (hfcomp : IsRetrocompact (range
+ f)) : IsRetrocompact (f …
+· 使用定理 `Topology.IsOpenEmbedding.isEmbedding`：∀ {X : Type u_1} {Y : Type u_2} {f
+ : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.
+IsOpenEmbedding f → Topolo…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `Topology.IsConstructible.union`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.range_sdiff_image`：range_sdiff_image {f : α -> β} (hf : Injective f)
+ (s : Set α) : range f \ f '' s = f '' sᶜ
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+· 使用定理 `Topology.IsConstructible.sdiff`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `Topology.IsOpenEmbedding.isOpen_range`：∀ {X : Type u_1} {Y : Type u_2} [
+tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOpe
+nEmbedding f → IsOpen (Set.…
 -/
 lemma IsConstructible.image_of_isOpenEmbedding (hfopen : IsOpenEmbedding f)
     (hfcomp : IsRetrocompact (range f)) (hs : IsConstructible s) : IsConstructible (f '' s) := by
   induction hs using IsConstructible.empty_union_induction with
   | open_retrocompact U hUopen hUcomp =>
-exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
+    exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible <|
       hfopen.isOpenMap _ hUopen
   | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
   | compl s hs hs' =>
@@ -1052,140 +975,133 @@ exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
     exact (hfcomp.isConstructible hfopen.isOpen_range).sdiff hs'
 
 @[stacks 09YG]
-/--
-lemma `IsConstructible.image_of_isClosedEmbedding` / 引理 `IsConstructible.image_of_isClosedEmbedding`
-
-English:
-lemma IsConstructible.image_of_isClosedEmbedding
-  statement: (hf : IsClosedEmbedding f)
-  proof: by
-  induction hs using IsConstructible.empty_union_induction with
-  | open_retrocompact U hUopen hUcomp =>
-    have hfU : IsOpen (f '' U union (range f)ᶜ) := by
-      simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
-        using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-    suffices h : IsRetrocompact (f '' U union (range f)ᶜ) by
-      simpa [union_inter_distrib_right, inter_eq_left.2 (image_subset_range ..)]
-        using (h.isConstructible hfU).sdiff (hfcomp.isConstructible hf.isClosed_range.isOpen_compl)
-    rintro V hVcomp hVopen
-    rw [union_inter_distrib_right]; rw [← image_inter_preimage]
-    exact ((hUcomp (hf.isCompact_preimage hVcomp) (hVopen.preimage hf.continuous)).image
-      hf.continuous).union <| hfcomp hVcomp hVopen
-  | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
-  | compl s hs hs' =>
-    rw [← range_sdiff_image hf.injective]
-    exact (hfcomp.isConstructible hf.isClosed_range.isOpen_compl).of_compl.sdiff hs'
-
-中文:
-引理 IsConstructible.image_of_isClosedEmbedding
-  结论: (hf : 是闭嵌入 f)
-  证明: by
-  induction hs using IsConstructible.empty_union_induction with
-  | open_retrocompact U hUopen hUcomp =>
-    have hfU : IsOpen (f '' U union (range f)ᶜ) := by
-      simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
-        using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-    suffices h : IsRetrocompact (f '' U union (range f)ᶜ) by
-      simpa [union_inter_distrib_right, inter_eq_left.2 (image_subset_range ..)]
-        using (h.isConstructible hfU).sdiff (hfcomp.isConstructible hf.isClosed_range.isOpen_compl)
-    rintro V hVcomp hVopen
-    rw [union_inter_distrib_right]; rw [← image_inter_preimage]
-    exact ((hUcomp (hf.isCompact_preimage hVcomp) (hVopen.preimage hf.continuous)).image
-      hf.continuous).union <| hfcomp hVcomp hVopen
-  | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
-  | compl s hs hs' =>
-    rw [← range_sdiff_image hf.injective]
-    exact (hfcomp.isConstructible hf.isClosed_range.isOpen_compl).of_compl.sdiff hs'
-
-Depends on / 依赖: IsConstructible, IsConstructible.empty_union_induction, IsOpen, IsRetrocompact, compl_inter, empty_union_induction, h.isConstructible, hUcomp, hUopen, hUopen.isClosed_compl, hf.injective, hf.isClosedMap, hf.isClosed_range, hfcomp, hfcomp.isConstructible, image_subset_range, injective, inter_eq_left, isClosedMap, isClosed_compl
+/-
+**Topology.IsConstructible.image_of_isClosedEmbedding** 是 Mathlib 中的一个定理，位于命名空间 
+`Topology.IsConstructible`。
+形式化陈述：∀ {X : Type u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y} {s : Set X},   Topology.IsClosedEmbedding f →     Is
+Retrocompact (Set.range f)ᶜ → Topology.IsConstructible s → Topology.IsConstructi
+ble (f '' s)
+参数：Set.range f；f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.empty_union_induction`：∀ {X : Type u_2} [inst :
+ TopologicalSpace X] {p : (s : Set X) → Topology.IsConstructible s → Prop},   (∀
+ (U : Set X) (hUopen : IsOpen U) (hU…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.range_sdiff_image`：range_sdiff_image {f : α -> β} (hf : Injective f)
+ (s : Set α) : range f \ f '' s = f '' sᶜ
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsClosedEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2
+} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.Is
+ClosedEmbedding f → Topology.I…
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.compl_inter`：compl_inter (s t : Set α) : (s inter t)ᶜ = sᶜ union tᶜ
+· 使用定理 `compl_compl`：compl_compl (x : α) : xᶜᶜ = x
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
+· 使用定理 `IsClosed.isOpen_compl`：∀ {X : Type u} {inst : TopologicalSpace X} {s : S
+et X} [self : IsClosed s], IsOpen sᶜ
+· 使用定理 `Topology.IsClosedEmbedding.isClosedMap`：∀ {X : Type u_1} {Y : Type u_2} 
+{f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topolog
+y.IsClosedEmbedding f → IsCl…
+· 使用定理 `IsOpen.isClosed_compl`：∀ {X : Type u} [inst : TopologicalSpace X] {s : S
+et X}, IsOpen s → IsClosed sᶜ
+· 使用定理 `Set.union_inter_distrib_right`：union_inter_distrib_right (s t u : Set α)
+ : (s union t) inter u = s inter u union t inter u
+· 使用定理 `Set.image_inter_preimage`：image_inter_preimage (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (s inter f ⁻¹' t) = f '' s inter t
+· 使用定理 `IsCompact.union`：IsCompact.union (hs : IsCompact s) (ht : IsCompact t) :
+ IsCompact (s union t)
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `Topology.IsClosedEmbedding.isCompact_preimage`：Topology.IsClosedEmbeddin
+g.isCompact_preimage (hf : IsClosedEmbedding f) {K : Set Y} (hK : IsCompact K) :
+ IsCompact (f ⁻¹' K)
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `Topology.IsClosedEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {
+f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology
+.IsClosedEmbedding f → Cont…
+· 使用定理 `sdiff_compl`：sdiff_compl : x \ yᶜ = x ⊓ y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
+· 使用定理 `Set.compl_inter_self`：compl_inter_self (s : Set α) : sᶜ inter s = ∅
+· 使用定理 `Set.union_empty`：union_empty (a : Set α) : a union ∅ = a
+· 使用定理 `Topology.IsConstructible.sdiff`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `IsRetrocompact.isConstructible`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {U : Set X}, IsOpen U → IsRetrocompact U → Topology.IsConstructible U
+（共 34 条，此处仅展示前 30 条）
 -/
 lemma IsConstructible.image_of_isClosedEmbedding (hf : IsClosedEmbedding f)
     (hfcomp : IsRetrocompact (range f)ᶜ) (hs : IsConstructible s) : IsConstructible (f '' s) := by
   induction hs using IsConstructible.empty_union_induction with
   | open_retrocompact U hUopen hUcomp =>
-    have hfU : IsOpen (f '' U union (range f)ᶜ) := by
+    have hfU : IsOpen (f '' U ∪ (range f)ᶜ) := by
       simpa [← range_sdiff_image hf.injective, sdiff_eq, compl_inter, union_comm]
         using (hf.isClosedMap _ hUopen.isClosed_compl).isOpen_compl
-    suffices h : IsRetrocompact (f '' U union (range f)ᶜ) by
+    suffices h : IsRetrocompact (f '' U ∪ (range f)ᶜ) by
       simpa [union_inter_distrib_right, inter_eq_left.2 (image_subset_range ..)]
         using (h.isConstructible hfU).sdiff (hfcomp.isConstructible hf.isClosed_range.isOpen_compl)
     rintro V hVcomp hVopen
-    rw [union_inter_distrib_right]; rw [← image_inter_preimage]
+    rw [union_inter_distrib_right, ← image_inter_preimage]
     exact ((hUcomp (hf.isCompact_preimage hVcomp) (hVopen.preimage hf.continuous)).image
       hf.continuous).union <| hfcomp hVcomp hVopen
   | union s hs t ht hs' ht' => rw [image_union]; exact hs'.union ht'
   | compl s hs hs' =>
     rw [← range_sdiff_image hf.injective]
     exact (hfcomp.isConstructible hf.isClosed_range.isOpen_compl).of_compl.sdiff hs'
-
-/--
-lemma `isConstructible_preimage_iff_of_isOpenEmbedding` / 引理 `isConstructible_preimage_iff_of_isOpenEmbedding`
-
-English:
-lemma isConstructible_preimage_iff_of_isOpenEmbedding
-  statement: {s : Set Y} (hf : IsOpenEmbedding f)
-  proof: by simpa [image_preimage_eq_range_inter, inter_eq_right.2 hsf]
-    using hs.image_of_isOpenEmbedding hf hfcomp
-  mpr := .preimage_of_isOpenEmbedding hf
-
-中文:
-引理 isConstructible_preimage_iff_of_isOpenEmbedding
-  结论: {s : 集合 Y} (hf : 是开嵌入 f)
-  证明: by simpa [image_preimage_eq_range_inter, inter_eq_right.2 hsf]
-    using hs.image_of_isOpenEmbedding hf hfcomp
-  mpr := .preimage_of_isOpenEmbedding hf
-
-Depends on / 依赖: hfcomp, hs.image_of_isOpenEmbedding, image_of_isOpenEmbedding, image_preimage_eq_range_inter, inter_eq_right, preimage_of_isOpenEmbedding
+/-
+**Topology.isConstructible_preimage_iff_of_isOpenEmbedding** 是 Mathlib 中的一个引理，位于
+命名空间 `Topology`。
+形式化陈述：isConstructible_preimage_iff_of_isOpenEmbedding {s : Set Y} (hf : IsOpenEm
+bedding f) (hfcomp : IsRetrocompact (range f)) (hsf : s subseteq range f) : IsCo
+nstructible (f ⁻¹' s) ↔ IsConstructible s where mp hs
+参数：hf : IsOpenEmbedding f；hfcomp : IsRetrocompact (range f)；hsf : s subseteq ran
+ge f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_preimage_eq_range_inter`：image_preimage_eq_range_inter {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = range f inter t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_right`：∀ {α : Type u} {s t : Set α}, s ∩ t = t ↔ t ⊆ s
+· 使用定理 `Topology.IsConstructible.image_of_isOpenEmbedding`：∀ {X : Type u_2} {Y :
+ Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y}
+ {s : Set X},   Topology.IsOpenEmbeddin…
+· 使用定理 `Topology.IsConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type u_2} {
+Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X →
+ Y} {s : Set Y},   Topology.IsOpenEmbeddin…
 -/
 lemma isConstructible_preimage_iff_of_isOpenEmbedding {s : Set Y} (hf : IsOpenEmbedding f)
-    (hfcomp : IsRetrocompact (range f)) (hsf : s subseteq range f) :
+    (hfcomp : IsRetrocompact (range f)) (hsf : s ⊆ range f) :
     IsConstructible (f ⁻¹' s) ↔ IsConstructible s where
   mp hs := by simpa [image_preimage_eq_range_inter, inter_eq_right.2 hsf]
     using hs.image_of_isOpenEmbedding hf hfcomp
   mpr := .preimage_of_isOpenEmbedding hf
-
-/--
-lemma `_root_.QuasiSeparatedSpace.of_isOpenCover` / 引理 `_root_.QuasiSeparatedSpace.of_isOpenCover`
-
-English:
-lemma _root_.QuasiSeparatedSpace.of_isOpenCover
-  statement: {ι : Type*} {U : ι -> Opens X} (hU : IsOpenCover U)
-  proof: by
-    obtain ⟨t, ht⟩ := hc₁.elim_finite_subcover _ (fun i => (U i).2) (by simp [hU.iSup_set_eq_univ])
-    convert!
-      t.isCompact_biUnion fun i _ =>
-        h₂ i _ _ Set.inter_subset_left ((U i).2.inter ho₁) (h₁ i hc₁ ho₁) Set.inter_subset_left
-          ((U i).2.inter ho₂) (h₁ i hc₂ ho₂)
-    apply subset_antisymm
-    · rintro x ⟨hx₁, hx₂⟩
-      obtain ⟨i, hi, hxi⟩ := Set.mem_iUnion₂.mp (ht hx₁)
-      exact Set.mem_iUnion₂.mpr ⟨i, hi, by simpa [*]⟩
-    · aesop (add simp Set.subset_def)
-
-中文:
-引理 _root_.拟分离空间.of_isOpenCover
-  结论: {ι : 类型} {U : ι -> Opens X} (hU : IsOpenCover U)
-  证明: by
-    obtain ⟨t, ht⟩ := hc₁.elim_finite_subcover _ (fun i => (U i).2) (by simp [hU.iSup_set_eq_univ])
-    convert!
-      t.isCompact_biUnion fun i _ =>
-        h₂ i _ _ Set.inter_subset_left ((U i).2.inter ho₁) (h₁ i hc₁ ho₁) Set.inter_subset_left
-          ((U i).2.inter ho₂) (h₁ i hc₂ ho₂)
-    apply subset_antisymm
-    · rintro x ⟨hx₁, hx₂⟩
-      obtain ⟨i, hi, hxi⟩ := Set.mem_iUnion₂.mp (ht hx₁)
-      exact Set.mem_iUnion₂.mpr ⟨i, hi, by simpa [*]⟩
-    · aesop (add simp Set.subset_def)
-
-Depends on / 依赖: IsQuasiSeparated
+/-
+**Topology._root_.QuasiSeparatedSpace.of_isOpenCover** 是 Mathlib 中的一个引理，位于命名空间 `
+Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.QuasiSeparatedSpace.of_isOpenCover {ι : Type*} {U : ι -> Opens X} (hU : IsOpenCover U)
-    (h₁ : forall i, IsRetrocompact (X := X) (U i)) (h₂ : forall i, IsQuasiSeparated (α := X) (U i)) :
+lemma _root_.QuasiSeparatedSpace.of_isOpenCover {ι : Type*} {U : ι → Opens X} (hU : IsOpenCover U)
+    (h₁ : ∀ i, IsRetrocompact (X := X) (U i)) (h₂ : ∀ i, IsQuasiSeparated (α := X) (U i)) :
     QuasiSeparatedSpace X where
   inter_isCompact V₁ V₂ ho₁ hc₁ ho₂ hc₂ := by
-    obtain ⟨t, ht⟩ := hc₁.elim_finite_subcover _ (fun i => (U i).2) (by simp [hU.iSup_set_eq_univ])
+    obtain ⟨t, ht⟩ := hc₁.elim_finite_subcover _ (fun i ↦ (U i).2) (by simp [hU.iSup_set_eq_univ])
     convert!
-      t.isCompact_biUnion fun i _ =>
+      t.isCompact_biUnion fun i _ ↦
         h₂ i _ _ Set.inter_subset_left ((U i).2.inter ho₁) (h₁ i hc₁ ho₁) Set.inter_subset_left
           ((U i).2.inter ho₂) (h₁ i hc₂ ho₂)
     apply subset_antisymm
@@ -1196,27 +1112,12 @@ lemma _root_.QuasiSeparatedSpace.of_isOpenCover {ι : Type*} {U : ι -> Opens X}
 
 section CompactSpace
 
-variable [CompactSpace X] {P : forall s : Set X, IsConstructible s -> Prop} {B : Set (Set X)}
-  {b : ι -> Set X}
+variable [CompactSpace X] {P : ∀ s : Set X, IsConstructible s → Prop} {B : Set (Set X)}
+  {b : ι → Set X}
 
-/--
-lemma `_root_.IsRetrocompact.isCompact` / 引理 `_root_.IsRetrocompact.isCompact`
-
-English:
-lemma _root_.IsRetrocompact.isCompact
-  given: (hs : IsRetrocompact s)
-  statement: IsCompact s
-  proof: by
-  simpa using hs CompactSpace.isCompact_univ
-
-中文:
-引理 _root_.IsRetrocompact.isCompact
-  条件: (hs : IsRetrocompact s)
-  结论: 是紧集 s
-  证明: by
-  simpa using hs CompactSpace.isCompact_univ
-
-Depends on / 依赖: CompactSpace, CompactSpace.isCompact_univ, isCompact_univ
+/-
+**Topology._root_.IsRetrocompact.isCompact** 是 Mathlib 中的一个引理，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsRetrocompact.isCompact (hs : IsRetrocompact s) : IsCompact s := by
   simpa using hs CompactSpace.isCompact_univ
@@ -1224,148 +1125,124 @@ lemma _root_.IsRetrocompact.isCompact (hs : IsRetrocompact s) : IsCompact s := b
 variable [QuasiSeparatedSpace X]
 
 omit [CompactSpace X] in
-/--
-lemma `_root_.IsCompact.isRetrocompact` / 引理 `_root_.IsCompact.isRetrocompact`
-
-English:
-lemma _root_.IsCompact.isRetrocompact
-  given: (hU' : IsCompact U) (hU : IsOpen U)
-  statement: IsRetrocompact U
-  proof: fun _ hV' hV => hU'.inter_of_isOpen hV' hU hV
-
-omit [CompactSpace X] in
-
-中文:
-引理 _root_.是紧集.isRetrocompact
-  条件: (hU' : 是紧集 U) (hU : 是开集 U)
-  结论: IsRetrocompact U
-  证明: fun _ hV' hV => hU'.inter_of_isOpen hV' hU hV
-
-omit [CompactSpace X] in
-
-Depends on / 依赖: inter_of_isOpen
+/-
+**Topology._root_.IsCompact.isRetrocompact** 是 Mathlib 中的一个引理，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsCompact.isRetrocompact (hU' : IsCompact U) (hU : IsOpen U) : IsRetrocompact U :=
-  fun _ hV' hV => hU'.inter_of_isOpen hV' hU hV
+  fun _ hV' hV ↦ hU'.inter_of_isOpen hV' hU hV
 
 omit [CompactSpace X] in
-/--
-lemma `_root_.IsCompact.isConstructible` / 引理 `_root_.IsCompact.isConstructible`
-
-English:
-lemma _root_.IsCompact.isConstructible
-  given: (hU' : IsCompact U) (hU : IsOpen U)
-  statement: IsConstructible U
-  proof: (hU'.isRetrocompact hU).isConstructible hU
-
-@[stacks 0069 "Iff form of (2). Note that Stacks doesn't define quasi-separated spaces."]
-
-中文:
-引理 _root_.是紧集.isConstructible
-  条件: (hU' : 是紧集 U) (hU : 是开集 U)
-  结论: IsConstructible U
-  证明: (hU'.isRetrocompact hU).isConstructible hU
-
-@[stacks 0069 "Iff form of (2). Note that Stacks doesn't define quasi-separated spaces."]
-
-Depends on / 依赖: isConstructible, isRetrocompact
+/-
+**Topology._root_.IsCompact.isConstructible** 是 Mathlib 中的一个引理，位于命名空间 `Topology`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsCompact.isConstructible (hU' : IsCompact U) (hU : IsOpen U) : IsConstructible U :=
   (hU'.isRetrocompact hU).isConstructible hU
 
 @[stacks 0069 "Iff form of (2). Note that Stacks doesn't define quasi-separated spaces."]
-/--
-lemma `_root_.QuasiSeparatedSpace.isRetrocompact_iff_isCompact` / 引理 `_root_.QuasiSeparatedSpace.isRetrocompact_iff_isCompact`
-
-English:
-lemma _root_.QuasiSeparatedSpace.isRetrocompact_iff_isCompact
-  proof: ⟨IsRetrocompact.isCompact, (IsCompact.isRetrocompact · hU)⟩
-
-@[elab_as_elim]
-
-中文:
-引理 _root_.拟分离空间.isRetrocompact_iff_isCompact
-  证明: ⟨IsRetrocompact.isCompact, (IsCompact.isRetrocompact · hU)⟩
-
-@[elab_as_elim]
-
-Depends on / 依赖: IsCompact, IsCompact.isRetrocompact, IsRetrocompact, IsRetrocompact.isCompact, isCompact, isRetrocompact
+/-
+**Topology._root_.QuasiSeparatedSpace.isRetrocompact_iff_isCompact** 是 Mathlib 中
+的一个引理，位于命名空间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.QuasiSeparatedSpace.isRetrocompact_iff_isCompact
     (hU : IsOpen U) : IsRetrocompact U ↔ IsCompact U :=
   ⟨IsRetrocompact.isCompact, (IsCompact.isRetrocompact · hU)⟩
 
 @[elab_as_elim]
-/--
-lemma `IsConstructible.induction_of_isTopologicalBasis` / 引理 `IsConstructible.induction_of_isTopologicalBasis`
-
-English:
-lemma IsConstructible.induction_of_isTopologicalBasis
-  statement: {ι : Type*} [Nonempty ι] (b : ι -> Set X)
-  proof: by
-  induction s, hs using BooleanSubalgebra.closure_sdiff_sup_induction with
-  | isSublattice =>
-    exact ⟨fun s hs t ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩,
-      fun s hs t ht => ⟨hs.1.inter ht.1, hs.2.inter_isOpen ht.2 ht.1⟩⟩
-  | bot_mem => exact ⟨isOpen_empty, .empty⟩
-  | top_mem => exact ⟨isOpen_univ, .univ⟩
-  | sdiff U hU V hV =>
-    have := isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis _ basis isCompact_basis
-    obtain ⟨s, hs, rfl⟩ := (this _).1 ⟨hU.2.isCompact, hU.1⟩
-    obtain ⟨t, ht, rfl⟩ := (this _).1 ⟨hV.2.isCompact, hV.1⟩
-    simp_rw [iUnion_sdiff]
-    induction s, hs using Set.Finite.induction_on with
-    | empty => simpa using sdiff (Classical.arbitrary _) {Classical.arbitrary _}
-    | @insert i s hi hs ih =>
-      simp_rw [biUnion_insert]
-      exact union _ _ _
-        (.biUnion hs fun i _ => ((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff
- .biUnion ht fun j _ => (isCompact_basis _).isConstructible (basis.isOpen ⟨_, rfl⟩))
-        (sdiff _ _ ht)
-        (ih ⟨isOpen_biUnion fun _ _ => basis.isOpen ⟨_, rfl⟩, .biUnion hs
-          fun i _ => (isCompact_basis _).isRetrocompact (basis.isOpen ⟨i, rfl⟩)⟩)
-  | sup s _ t _ hs' ht' => exact union _ _ _ _ hs' ht'
-
-中文:
-引理 IsConstructible.induction_of_isTopologicalBasis
-  结论: {ι : 类型} [非空 ι] (b : ι -> 集合 X)
-  证明: by
-  induction s, hs using BooleanSubalgebra.closure_sdiff_sup_induction with
-  | isSublattice =>
-    exact ⟨fun s hs t ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩,
-      fun s hs t ht => ⟨hs.1.inter ht.1, hs.2.inter_isOpen ht.2 ht.1⟩⟩
-  | bot_mem => exact ⟨isOpen_empty, .empty⟩
-  | top_mem => exact ⟨isOpen_univ, .univ⟩
-  | sdiff U hU V hV =>
-    have := isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis _ basis isCompact_basis
-    obtain ⟨s, hs, rfl⟩ := (this _).1 ⟨hU.2.isCompact, hU.1⟩
-    obtain ⟨t, ht, rfl⟩ := (this _).1 ⟨hV.2.isCompact, hV.1⟩
-    simp_rw [iUnion_sdiff]
-    induction s, hs using Set.Finite.induction_on with
-    | empty => simpa using sdiff (Classical.arbitrary _) {Classical.arbitrary _}
-    | @insert i s hi hs ih =>
-      simp_rw [biUnion_insert]
-      exact union _ _ _
-        (.biUnion hs fun i _ => ((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff
- .biUnion ht fun j _ => (isCompact_basis _).isConstructible (basis.isOpen ⟨_, rfl⟩))
-        (sdiff _ _ ht)
-        (ih ⟨isOpen_biUnion fun _ _ => basis.isOpen ⟨_, rfl⟩, .biUnion hs
-          fun i _ => (isCompact_basis _).isRetrocompact (basis.isOpen ⟨i, rfl⟩)⟩)
-  | sup s _ t _ hs' ht' => exact union _ _ _ _ hs' ht'
-
-Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.closure_sdiff_sup_induction, bot_mem, closure_sdiff_sup_induction, inter_isOpen, isCompact, isCompact_basis, isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis, isOpen_empty, isOpen_univ, isSublattice, top_mem
+/-
+**Topology.IsConstructible.induction_of_isTopologicalBasis** 是 Mathlib 中的一个定理，位于
+命名空间 `Topology.IsConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] [CompactSpace X] {P : (s : Se
+t X) → Topology.IsConstructible s → Prop}   [inst_2 : QuasiSeparatedSpace X] {ι 
+: Type u_4} [Nonempty ι] (b : ι → Set X)   (basis : TopologicalSpace.IsTopologic
+alBasis (Set.range b)) (isCompact_basis : ∀ (i : ι), IsCompact (b i)),   (∀ (i :
+ ι) (s : Set ι) (hs : s.Finite), P (b i \ ⋃ j ∈ s, b j) ⋯) →     (∀ (s : Set X) 
+(hs : Topology.IsConstructible s) (t : Set X) (ht : Topology.IsConstructible t),
+         P s hs → P t ht → P (s ∪ t) ⋯) →       ∀ (s : Set X) (hs : Topology.IsC
+onstructible s), P s hs
+参数：s : Set X；b : ι → Set X；basis : TopologicalSpace.IsTopologicalBasis (Set.rang
+e b)；isCompact_basis : ∀ (i : ι), IsCompact (b i)；∀ (i : ι) (s : Set ι) (hs : s.
+Finite), P (b i \ ⋃ j ∈ s, b j) ⋯；∀ (s : Set X) (hs : Topology.IsConstructible s
+) (t : Set X) (ht : Topology.IsConstructible t),         P s hs → P t ht → P (s 
+∪ t) ⋯；s : Set X；hs : Topology.IsConstructible s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.sdiff`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `IsCompact.isConstructible`：∀ {X : Type u_2} [inst : TopologicalSpace X] 
+{U : Set X} [QuasiSeparatedSpace X],   IsCompact U → IsOpen U → Topology.IsConst
+ructible U
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.isOpen`：∀ {α : Type u} [t : Topologi
+calSpace α] {s : Set α} {b : Set (Set α)},   TopologicalSpace.IsTopologicalBasis
+ b → s ∈ b → IsOpen s
+· 使用定理 `Topology.IsConstructible.biUnion`：∀ {X : Type u_2} [inst : TopologicalSp
+ace X] {ι : Type u_4} {f : ι → Set X} {t : Set ι},   t.Finite → (∀ i ∈ t, Topolo
+gy.IsConstructible (f …
+· 使用定理 `Topology.IsConstructible.union`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `BooleanSubalgebra.closure_sdiff_sup_induction`：∀ {α : Type u_2} [inst : 
+BooleanAlgebra α] {s : Set α},   IsSublattice s →     ⊥ ∈ s →       ⊤ ∈ s →     
+    ∀ {p : (g : α) → g ∈ BooleanSub…
+· 使用定理 `IsOpen.union`：IsOpen.union (h₁ : IsOpen s₁) (h₂ : IsOpen s₂) : IsOpen (s
+₁ union s₂)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `IsRetrocompact.union`：IsRetrocompact.union (hs : IsRetrocompact s) (ht :
+ IsRetrocompact t) : IsRetrocompact (s union t : Set X)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用引理 `IsRetrocompact.inter_isOpen`：IsRetrocompact.inter_isOpen (hs : IsRetroco
+mpact s) (ht : IsRetrocompact t) (htopen : IsOpen t) : IsRetrocompact (s inter t
+ : Set X)
+· 使用定理 `isOpen_empty`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen ∅
+· 使用定理 `IsRetrocompact.empty`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRe
+trocompact ∅
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+· 使用定理 `IsRetrocompact.univ`：∀ {X : Type u_2} [inst : TopologicalSpace X], IsRet
+rocompact Set.univ
+· 使用定理 `isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis`：isCompact_ope
+n_iff_eq_finite_iUnion_of_isTopologicalBasis (b : ι -> Set X) (hb : IsTopologica
+lBasis (Set.range b)) (hb' : forall i, IsCompac…
+· 使用引理 `BooleanSubalgebra.sdiff_mem`：sdiff_mem (ha : a in L) (hb : b in L) : a \
+ b in L
+· 使用引理 `BooleanSubalgebra.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsRetrocompact.isCompact`：∀ {X : Type u_2} [inst : TopologicalSpace X] {
+s : Set X} [CompactSpace X], IsRetrocompact s → IsCompact s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.iUnion_sdiff`：iUnion_sdiff (s : Set β) (t : ι -> Set β) : (⋃ i, t i)
+ \ s = ⋃ i, t i \ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.Finite.induction_on`：∀ {α : Type u} {motive : (s : Set α) → s.Finite
+ → Prop} (s : Set α) (hs : s.Finite),   motive ∅ ⋯ → (∀ {a : α} {s : Set α}, a ∉
+ s → ∀ (hs : …
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_of_empty`：iUnion_of_empty [IsEmpty ι] (s : ι -> Set α) : ⋃ i,
+ s i = ∅
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+（共 40 条，此处仅展示前 30 条）
 -/
-lemma IsConstructible.induction_of_isTopologicalBasis {ι : Type*} [Nonempty ι] (b : ι -> Set X)
-    (basis : IsTopologicalBasis (range b)) (isCompact_basis : forall i, IsCompact (b i))
-    (sdiff : forall i s (hs : Set.Finite s), P (b i \ ⋃ j in s, b j)
-      (((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff <| .biUnion hs fun _ _ =>
+lemma IsConstructible.induction_of_isTopologicalBasis {ι : Type*} [Nonempty ι] (b : ι → Set X)
+    (basis : IsTopologicalBasis (range b)) (isCompact_basis : ∀ i, IsCompact (b i))
+    (sdiff : ∀ i s (hs : Set.Finite s), P (b i \ ⋃ j ∈ s, b j)
+      (((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff <| .biUnion hs fun _ _ ↦
         ((isCompact_basis _).isConstructible (basis.isOpen ⟨_, rfl⟩))))
-    (union : forall s hs t ht, P s hs -> P t ht -> P (s union t) (hs.union ht))
+    (union : ∀ s hs t ht, P s hs → P t ht → P (s ∪ t) (hs.union ht))
     (s : Set X) (hs : IsConstructible s) : P s hs := by
   induction s, hs using BooleanSubalgebra.closure_sdiff_sup_induction with
   | isSublattice =>
-    exact ⟨fun s hs t ht => ⟨hs.1.union ht.1, hs.2.union ht.2⟩,
-      fun s hs t ht => ⟨hs.1.inter ht.1, hs.2.inter_isOpen ht.2 ht.1⟩⟩
+    exact ⟨fun s hs t ht ↦ ⟨hs.1.union ht.1, hs.2.union ht.2⟩,
+      fun s hs t ht ↦ ⟨hs.1.inter ht.1, hs.2.inter_isOpen ht.2 ht.1⟩⟩
   | bot_mem => exact ⟨isOpen_empty, .empty⟩
   | top_mem => exact ⟨isOpen_univ, .univ⟩
   | sdiff U hU V hV =>
@@ -1378,11 +1255,11 @@ lemma IsConstructible.induction_of_isTopologicalBasis {ι : Type*} [Nonempty ι]
     | @insert i s hi hs ih =>
       simp_rw [biUnion_insert]
       exact union _ _ _
-        (.biUnion hs fun i _ => ((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff
- .biUnion ht fun j _ => (isCompact_basis _).isConstructible (basis.isOpen ⟨_, rfl⟩))
+        (.biUnion hs fun i _ ↦ ((isCompact_basis _).isConstructible (basis.isOpen ⟨i, rfl⟩)).sdiff
+          <| .biUnion ht fun j _ ↦ (isCompact_basis _).isConstructible (basis.isOpen ⟨_, rfl⟩))
         (sdiff _ _ ht)
-        (ih ⟨isOpen_biUnion fun _ _ => basis.isOpen ⟨_, rfl⟩, .biUnion hs
-          fun i _ => (isCompact_basis _).isRetrocompact (basis.isOpen ⟨i, rfl⟩)⟩)
+        (ih ⟨isOpen_biUnion fun  _ _ ↦ basis.isOpen ⟨_, rfl⟩, .biUnion hs
+          fun i _ ↦ (isCompact_basis _).isRetrocompact (basis.isOpen ⟨i, rfl⟩)⟩)
   | sup s _ t _ hs' ht' => exact union _ _ _ _ hs' ht'
 
 end CompactSpace
@@ -1392,389 +1269,360 @@ end CompactSpace
 /-- A set in a topological space is locally constructible, if every point has a neighborhood on
 which the set is constructible. -/
 @[stacks 005G]
-/--
-Definition of `IsLocallyConstructible` / `IsLocallyConstructible` 的定义
+/-
+**Topology.IsLocallyConstructible** 是 Mathlib 中的一个定义，位于命名空间 `Topology`。
+形式化陈述：IsLocallyConstructible (s : Set X) : Prop
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLocallyConstructible
-  signature: (s : Set X)
-  body: forall x, exists U in 𝓝 x, IsOpen U ∧ IsConstructible (U ↓inter s)
-
-中文:
-定义 IsLocallyConstructible
-  签名: (s : 集合 X)
-  定义体: forall x, exists U in 𝓝 x, IsOpen U ∧ IsConstructible (U ↓inter s)
-
-Depends on / 依赖: IsConstructible, IsOpen
+--- 原说明 ---
+A set in a topological space is locally constructible, if every point has a neig
+hborhood on
+which the set is constructible.
 -/
-def IsLocallyConstructible (s : Set X) : Prop := forall x, exists U in 𝓝 x, IsOpen U ∧ IsConstructible (U ↓inter s)
-
-/--
-lemma `IsConstructible.isLocallyConstructible` / 引理 `IsConstructible.isLocallyConstructible`
-
-English:
-lemma IsConstructible.isLocallyConstructible
-  given: (hs : IsConstructible s)
-  statement: IsLocallyConstructible s
-  proof: fun _ => ⟨univ, by simp, by simp,
-    (isConstructible_preimage_iff_of_isOpenEmbedding isOpen_univ.isOpenEmbedding_subtypeVal
-      (by simp) (by simp)).2 hs⟩
-
-中文:
-引理 IsConstructible.isLocallyConstructible
-  条件: (hs : IsConstructible s)
-  结论: IsLocallyConstructible s
-  证明: fun _ => ⟨univ, by simp, by simp,
-    (isConstructible_preimage_iff_of_isOpenEmbedding isOpen_univ.isOpenEmbedding_subtypeVal
-      (by simp) (by simp)).2 hs⟩
-
-Depends on / 依赖: isConstructible_preimage_iff_of_isOpenEmbedding, isOpenEmbedding_subtypeVal, isOpen_univ, isOpen_univ.isOpenEmbedding_subtypeVal
+def IsLocallyConstructible (s : Set X) : Prop := ∀ x, ∃ U ∈ 𝓝 x, IsOpen U ∧ IsConstructible (U ↓∩ s)
+/-
+**Topology.IsConstructible.isLocallyConstructible** 是 Mathlib 中的一个定理，位于命名空间 `Top
+ology.IsConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X}, Topology.IsConst
+ructible s → Topology.IsLocallyConstructible s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Topology.isConstructible_preimage_iff_of_isOpenEmbedding`：isConstructibl
+e_preimage_iff_of_isOpenEmbedding {s : Set Y} (hf : IsOpenEmbedding f) (hfcomp :
+ IsRetrocompact (range f)) (hsf : s subseteq r…
+· 使用定理 `IsOpen.isOpenEmbedding_subtypeVal`：IsOpen.isOpenEmbedding_subtypeVal {s 
+: Set X} (hs : IsOpen s) : IsOpenEmbedding ((↑) : s -> X)
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma IsConstructible.isLocallyConstructible (hs : IsConstructible s) : IsLocallyConstructible s :=
-  fun _ => ⟨univ, by simp, by simp,
+  fun _ ↦ ⟨univ, by simp, by simp,
     (isConstructible_preimage_iff_of_isOpenEmbedding isOpen_univ.isOpenEmbedding_subtypeVal
       (by simp) (by simp)).2 hs⟩
-
-/--
-lemma `_root_.IsRetrocompact.isLocallyConstructible` / 引理 `_root_.IsRetrocompact.isLocallyConstructible`
-
-English:
-lemma _root_.IsRetrocompact.isLocallyConstructible
-  given: (hUopen : IsOpen U) (hUcomp : IsRetrocompact U)
-  proof: (hUcomp.isConstructible hUopen).isLocallyConstructible
-
-中文:
-引理 _root_.IsRetrocompact.isLocallyConstructible
-  条件: (hUopen : 是开集 U) (hUcomp : IsRetrocompact U)
-  证明: (hUcomp.isConstructible hUopen).isLocallyConstructible
-
-Depends on / 依赖: hUcomp, hUcomp.isConstructible, hUopen, isConstructible, isLocallyConstructible
+/-
+**Topology._root_.IsRetrocompact.isLocallyConstructible** 是 Mathlib 中的一个引理，位于命名空
+间 `Topology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsRetrocompact.isLocallyConstructible (hUopen : IsOpen U) (hUcomp : IsRetrocompact U) :
     IsLocallyConstructible U := (hUcomp.isConstructible hUopen).isLocallyConstructible
-
-/--
-lemma `IsLocallyConstructible.empty` / 引理 `IsLocallyConstructible.empty`
-
-English:
-lemma IsLocallyConstructible.empty
-  statement: IsLocallyConstructible (∅ : Set X)
-  proof: IsConstructible.empty.isLocallyConstructible
-
-中文:
-引理 IsLocallyConstructible.empty
-  结论: IsLocallyConstructible (∅ : 集合 X)
-  证明: IsConstructible.empty.isLocallyConstructible
+/-
+**Topology.IsLocallyConstructible.empty** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsLo
+callyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], Topology.IsLocallyConstructi
+ble ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.isLocallyConstructible`：∀ {X : Type u_2} [inst 
+: TopologicalSpace X] {s : Set X}, Topology.IsConstructible s → Topology.IsLocal
+lyConstructible s
+· 使用定理 `Topology.IsConstructible.empty`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X], Topology.IsConstructible ∅
 -/
 @[simp] protected lemma IsLocallyConstructible.empty : IsLocallyConstructible (∅ : Set X) :=
   IsConstructible.empty.isLocallyConstructible
-
-/--
-lemma `IsLocallyConstructible.univ` / 引理 `IsLocallyConstructible.univ`
-
-English:
-lemma IsLocallyConstructible.univ
-  statement: IsLocallyConstructible (univ : Set X)
-  proof: IsConstructible.univ.isLocallyConstructible
-
-中文:
-引理 IsLocallyConstructible.univ
-  结论: IsLocallyConstructible (univ : 集合 X)
-  证明: IsConstructible.univ.isLocallyConstructible
+/-
+**Topology.IsLocallyConstructible.univ** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsLoc
+allyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X], Topology.IsLocallyConstructi
+ble Set.univ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.isLocallyConstructible`：∀ {X : Type u_2} [inst 
+: TopologicalSpace X] {s : Set X}, Topology.IsConstructible s → Topology.IsLocal
+lyConstructible s
+· 使用定理 `Topology.IsConstructible.univ`：∀ {X : Type u_2} [inst : TopologicalSpace
+ X], Topology.IsConstructible Set.univ
 -/
 @[simp] protected lemma IsLocallyConstructible.univ : IsLocallyConstructible (univ : Set X) :=
   IsConstructible.univ.isLocallyConstructible
-
-/--
-lemma `IsLocallyConstructible.inter` / 引理 `IsLocallyConstructible.inter`
-
-English:
-lemma IsLocallyConstructible.inter
-  given: (hs : IsLocallyConstructible s) (ht : IsLocallyConstructible t)
-  proof: by
-  rintro x
-  obtain ⟨U, hxU, hU, hsU⟩ := hs x
-  obtain ⟨V, hxV, hV, htV⟩ := ht x
-  refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
-  change IsConstructible
-    (inclusion inter_subset_left ⁻¹' (U ↓inter s) inter inclusion inter_subset_right ⁻¹' (V ↓inter t))
-  exact .inter (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-
-中文:
-引理 IsLocallyConstructible.inter
-  条件: (hs : IsLocallyConstructible s) (ht : IsLocallyConstructible t)
-  证明: by
-  rintro x
-  obtain ⟨U, hxU, hU, hsU⟩ := hs x
-  obtain ⟨V, hxV, hV, htV⟩ := ht x
-  refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
-  change IsConstructible
-    (inclusion inter_subset_left ⁻¹' (U ↓inter s) inter inclusion inter_subset_right ⁻¹' (V ↓inter t))
-  exact .inter (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-
-Depends on / 依赖: Filter, Filter.inter_mem, IsConstructible, continuous_subtype_val, hU.inter, hsU.preimage_of_isOpenEmbedding, htV.preimage_of_isOpenEmbedding, inclusion, inter_mem, inter_subset_left, inter_subset_right, preimage, preimage_of_isOpenEmbedding
+/-
+**Topology.IsLocallyConstructible.inter** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsLo
+callyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X},   Topology.IsL
+ocallyConstructible s → Topology.IsLocallyConstructible t → Topology.IsLocallyCo
+nstructible (s ∩ t)
+参数：s ∩ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用定理 `Topology.IsConstructible.inter`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Topology.IsConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type u_2} {
+Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X →
+ Y} {s : Set Y},   Topology.IsOpenEmbeddin…
+· 使用定理 `Topology.IsOpenEmbedding.inclusion`：∀ {X : Type u} [inst : TopologicalSp
+ace X] {s t : Set X} (hst : s ⊆ t),   IsOpen (Subtype.val ⁻¹' s) → Topology.IsOp
+enEmbedding (Set.inclusi…
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
 -/
 lemma IsLocallyConstructible.inter (hs : IsLocallyConstructible s) (ht : IsLocallyConstructible t) :
-    IsLocallyConstructible (s inter t) := by
+    IsLocallyConstructible (s ∩ t) := by
   rintro x
   obtain ⟨U, hxU, hU, hsU⟩ := hs x
   obtain ⟨V, hxV, hV, htV⟩ := ht x
-  refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
+  refine ⟨U ∩ V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
   change IsConstructible
-    (inclusion inter_subset_left ⁻¹' (U ↓inter s) inter inclusion inter_subset_right ⁻¹' (V ↓inter t))
+    (inclusion inter_subset_left ⁻¹' (U ↓∩ s) ∩ inclusion inter_subset_right ⁻¹' (V ↓∩ t))
   exact .inter (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
+      .preimage continuous_subtype_val <| hU.inter hV)
     (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-
-/--
-lemma `IsLocallyConstructible.finsetInf` / 引理 `IsLocallyConstructible.finsetInf`
-
-English:
-lemma IsLocallyConstructible.finsetInf
-  statement: {ι : Type*} {s : Finset ι} {t : ι -> Set X}
-  proof: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons i s ih hi =>
-    rw [Finset.inf_cons]
-exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
-
-中文:
-引理 IsLocallyConstructible.finsetInf
-  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> 集合 X}
-  证明: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons i s ih hi =>
-    rw [Finset.inf_cons]
-exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
-
-Depends on / 依赖: Finset, Finset.cons_induction, Finset.forall_of_forall_cons, Finset.inf_cons, cons_induction, forall_of_forall_cons, inf_cons
+      .preimage continuous_subtype_val <| hU.inter hV)
+/-
+**Topology.IsLocallyConstructible.finsetInf** 是 Mathlib 中的一个定理，位于命名空间 `Topology.
+IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {ι : Type u_4} {s : Finset ι}
+ {t : ι → Set X},   (∀ i ∈ s, Topology.IsLocallyConstructible (t i)) → Topology.
+IsLocallyConstructible (s.inf t)
+参数：∀ i ∈ s, Topology.IsLocallyConstructible (t i)；s.inf t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inf_empty`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf
+ α] [inst_1 : OrderTop α] {f : β → α}, ∅.inf f = ⊤
+· 使用定理 `Finset.inf_cons`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf 
+α] [inst_1 : OrderTop α] {s : Finset β} {f : β → α} {b : β}   (h : b ∉ s), (Fins
+et.co…
+· 使用定理 `Topology.IsLocallyConstructible.inter`：∀ {X : Type u_2} [inst : Topologi
+calSpace X] {s t : Set X},   Topology.IsLocallyConstructible s → Topology.IsLoca
+llyConstructible t → Topolo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Finset.forall_of_forall_cons`：forall_of_forall_cons {p : α -> Prop} {h :
+ a ∉ s} (H : forall x, x in cons a s h -> p x) (x) (h : x in s) : p x
 -/
-lemma IsLocallyConstructible.finsetInf {ι : Type*} {s : Finset ι} {t : ι -> Set X}
-    (ht : forall i in s, IsLocallyConstructible (t i)) : IsLocallyConstructible (s.inf t) := by
+lemma IsLocallyConstructible.finsetInf {ι : Type*} {s : Finset ι} {t : ι → Set X}
+    (ht : ∀ i ∈ s, IsLocallyConstructible (t i)) : IsLocallyConstructible (s.inf t) := by
   induction s using Finset.cons_induction with
   | empty => simp
   | cons i s ih hi =>
     rw [Finset.inf_cons]
-exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
+    exact (ht _ <| by simp).inter <| hi <| Finset.forall_of_forall_cons ht
 
 set_option linter.docPrime false in
-/--
-lemma `IsLocallyConstructible.finsetInf'` / 引理 `IsLocallyConstructible.finsetInf'`
-
-English:
-lemma IsLocallyConstructible.finsetInf'
-  statement: {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
-  proof: by
-  rw [Finset.inf'_eq_inf]; exact .finsetInf ht
-
-中文:
-引理 IsLocallyConstructible.finsetInf'
-  结论: {ι : 类型} {s : 有限集 ι} {hs} {t : ι -> 集合 X}
-  证明: by
-  rw [Finset.inf'_eq_inf]; exact .finsetInf ht
-
-Depends on / 依赖: Finset, Finset.inf, _eq_inf, finsetInf
+/-
+**Topology.IsLocallyConstructible.finsetInf'** 是 Mathlib 中的一个定理，位于命名空间 `Topology
+.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {ι : Type u_4} {s : Finset ι}
+ {hs : s.Nonempty} {t : ι → Set X},   (∀ i ∈ s, Topology.IsLocallyConstructible 
+(t i)) → Topology.IsLocallyConstructible (s.inf' hs t)
+参数：∀ i ∈ s, Topology.IsLocallyConstructible (t i)；s.inf' hs t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inf'_eq_inf`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeI
+nf α] [inst_1 : OrderTop α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.inf
+' H f = …
+· 使用定理 `Topology.IsLocallyConstructible.finsetInf`：∀ {X : Type u_2} [inst : Topo
+logicalSpace X] {ι : Type u_4} {s : Finset ι} {t : ι → Set X},   (∀ i ∈ s, Topol
+ogy.IsLocallyConstructible (t i…
 -/
-lemma IsLocallyConstructible.finsetInf' {ι : Type*} {s : Finset ι} {hs} {t : ι -> Set X}
-    (ht : forall i in s, IsLocallyConstructible (t i)) : IsLocallyConstructible (s.inf' hs t) := by
+lemma IsLocallyConstructible.finsetInf' {ι : Type*} {s : Finset ι} {hs} {t : ι → Set X}
+    (ht : ∀ i ∈ s, IsLocallyConstructible (t i)) : IsLocallyConstructible (s.inf' hs t) := by
   rw [Finset.inf'_eq_inf]; exact .finsetInf ht
-
-/--
-lemma `infClosed_isLocallyConstructible` / 引理 `infClosed_isLocallyConstructible`
-
-English:
-lemma infClosed_isLocallyConstructible
-  statement: InfClosed {s : Set X | IsLocallyConstructible s}
-  proof: fun _s hs _t ht => hs.inter ht
-
-中文:
-引理 infClosed_isLocallyConstructible
-  结论: InfClosed {s : 集合 X | IsLocallyConstructible s}
-  证明: fun _s hs _t ht => hs.inter ht
+/-
+**Topology.infClosed_isLocallyConstructible** 是 Mathlib 中的一个引理，位于命名空间 `Topology`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma infClosed_isLocallyConstructible : InfClosed {s : Set X | IsLocallyConstructible s} :=
-  fun _s hs _t ht => hs.inter ht
-
-/--
-lemma `IsLocallyConstructible.iInter` / 引理 `IsLocallyConstructible.iInter`
-
-English:
-lemma IsLocallyConstructible.iInter
-  statement: [Finite ι] {f : ι -> Set X}
-  proof: infClosed_isLocallyConstructible.iInf_mem .univ hf
-
-中文:
-引理 IsLocallyConstructible.i整数er
-  结论: [有限 ι] {f : ι -> 集合 X}
-  证明: infClosed_isLocallyConstructible.iInf_mem .univ hf
-
-Depends on / 依赖: iInf_mem, infClosed_isLocallyConstructible, infClosed_isLocallyConstructible.iInf_mem
+  fun _s hs _t ht ↦ hs.inter ht
+/-
+**Topology.IsLocallyConstructible.iInter** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsL
+ocallyConstructible`。
+形式化陈述：∀ {ι : Sort u_1} {X : Type u_2} [inst : TopologicalSpace X] [Finite ι] {f 
+: ι → Set X},   (∀ (i : ι), Topology.IsLocallyConstructible (f i)) → Topology.Is
+LocallyConstructible (⋂ i, f i)
+参数：∀ (i : ι), Topology.IsLocallyConstructible (f i)；⋂ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.iInf_mem`：∀ {ι : Sort u_1} {α : Type u_3} [inst : CompleteLatt
+ice α] {f : ι → α} {s : Set α} [Finite ι],   InfClosed s → ⊤ ∈ s → (∀ (i : ι), f
+ i ∈ s) …
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.Topology.infClosed_isLocallyCo
+nstructible`：∀ {X : Type u_2} [inst : TopologicalSpace X], InfClosed {s | Topolo
+gy.IsLocallyConstructible s}
+· 使用定理 `Topology.IsLocallyConstructible.univ`：∀ {X : Type u_2} [inst : Topologic
+alSpace X], Topology.IsLocallyConstructible Set.univ
 -/
-lemma IsLocallyConstructible.iInter [Finite ι] {f : ι -> Set X}
-    (hf : forall i, IsLocallyConstructible (f i)) : IsLocallyConstructible (⋂ i, f i) :=
+lemma IsLocallyConstructible.iInter [Finite ι] {f : ι → Set X}
+    (hf : ∀ i, IsLocallyConstructible (f i)) : IsLocallyConstructible (⋂ i, f i) :=
   infClosed_isLocallyConstructible.iInf_mem .univ hf
-
-/--
-lemma `IsLocallyConstructible.sInter` / 引理 `IsLocallyConstructible.sInter`
-
-English:
-lemma IsLocallyConstructible.sInter
-  statement: {S : Set (Set X)} (hS : S.Finite)
-  proof: infClosed_isLocallyConstructible.sInf_mem hS .univ hS'
-
-中文:
-引理 IsLocallyConstructible.集合交集
-  结论: {S : 集合 (集合 X)} (hS : S.有限)
-  证明: infClosed_isLocallyConstructible.sInf_mem hS .univ hS'
-
-Depends on / 依赖: infClosed_isLocallyConstructible, infClosed_isLocallyConstructible.sInf_mem, sInf_mem
+/-
+**Topology.IsLocallyConstructible.sInter** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsL
+ocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {S : Set (Set X)},   S.Finite
+ → (∀ s ∈ S, Topology.IsLocallyConstructible s) → Topology.IsLocallyConstructibl
+e (⋂₀ S)
+参数：Set X；∀ s ∈ S, Topology.IsLocallyConstructible s；⋂₀ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfClosed.sInf_mem`：∀ {α : Type u_3} [inst : CompleteLattice α] {s t : S
+et α}, InfClosed s → t.Finite → ⊤ ∈ s → t ⊆ s → sInf t ∈ s
+· 使用定理 `_private.Mathlib.Topology.Constructible.0.Topology.infClosed_isLocallyCo
+nstructible`：∀ {X : Type u_2} [inst : TopologicalSpace X], InfClosed {s | Topolo
+gy.IsLocallyConstructible s}
+· 使用定理 `Topology.IsLocallyConstructible.univ`：∀ {X : Type u_2} [inst : Topologic
+alSpace X], Topology.IsLocallyConstructible Set.univ
 -/
 lemma IsLocallyConstructible.sInter {S : Set (Set X)} (hS : S.Finite)
-    (hS' : forall s in S, IsLocallyConstructible s) : IsLocallyConstructible (⋂₀ S) :=
+    (hS' : ∀ s ∈ S, IsLocallyConstructible s) : IsLocallyConstructible (⋂₀ S) :=
   infClosed_isLocallyConstructible.sInf_mem hS .univ hS'
-
-/--
-lemma `IsLocallyConstructible.union` / 引理 `IsLocallyConstructible.union`
-
-English:
-lemma IsLocallyConstructible.union
-  given: (hs : IsLocallyConstructible s) (ht : IsLocallyConstructible t)
-  proof: by
-  rintro x
-  obtain ⟨U, hxU, hU, hsU⟩ := hs x
-  obtain ⟨V, hxV, hV, htV⟩ := ht x
-  refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
-  have : (U inter V) ↓inter (s union t) =
-      inclusion inter_subset_left ⁻¹' (U ↓inter s) union inclusion inter_subset_right ⁻¹' (V ↓inter t) := by
-    ext; simp
-  rw [this]
-  exact .union (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-
-中文:
-引理 IsLocallyConstructible.union
-  条件: (hs : IsLocallyConstructible s) (ht : IsLocallyConstructible t)
-  证明: by
-  rintro x
-  obtain ⟨U, hxU, hU, hsU⟩ := hs x
-  obtain ⟨V, hxV, hV, htV⟩ := ht x
-  refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
-  have : (U inter V) ↓inter (s union t) =
-      inclusion inter_subset_left ⁻¹' (U ↓inter s) union inclusion inter_subset_right ⁻¹' (V ↓inter t) := by
-    ext; simp
-  rw [this]
-  exact .union (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-    (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-
-Depends on / 依赖: Filter, Filter.inter_mem, continuous_subtype_val, hU.inter, hsU.preimage_of_isOpenEmbedding, htV.preimage_of_isOpenEmbedding, inclusion, inter_mem, inter_subset_left, inter_subset_right, preimage, preimage_of_isOpenEmbedding
+/-
+**Topology.IsLocallyConstructible.union** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsLo
+callyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X},   Topology.IsL
+ocallyConstructible s → Topology.IsLocallyConstructible t → Topology.IsLocallyCo
+nstructible (s ∪ t)
+参数：s ∪ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Topology.IsConstructible.union`：∀ {X : Type u_2} [inst : TopologicalSpac
+e X] {s t : Set X},   Topology.IsConstructible s → Topology.IsConstructible t → 
+Topology.IsConstruct…
+· 使用定理 `Topology.IsConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type u_2} {
+Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X →
+ Y} {s : Set Y},   Topology.IsOpenEmbeddin…
+· 使用定理 `Topology.IsOpenEmbedding.inclusion`：∀ {X : Type u} [inst : TopologicalSp
+ace X] {s t : Set X} (hst : s ⊆ t),   IsOpen (Subtype.val ⁻¹' s) → Topology.IsOp
+enEmbedding (Set.inclusi…
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
 -/
 lemma IsLocallyConstructible.union (hs : IsLocallyConstructible s) (ht : IsLocallyConstructible t) :
-    IsLocallyConstructible (s union t) := by
+    IsLocallyConstructible (s ∪ t) := by
   rintro x
   obtain ⟨U, hxU, hU, hsU⟩ := hs x
   obtain ⟨V, hxV, hV, htV⟩ := ht x
-  refine ⟨U inter V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
-  have : (U inter V) ↓inter (s union t) =
-      inclusion inter_subset_left ⁻¹' (U ↓inter s) union inclusion inter_subset_right ⁻¹' (V ↓inter t) := by
+  refine ⟨U ∩ V, Filter.inter_mem hxU hxV, hU.inter hV, ?_⟩
+  have : (U ∩ V) ↓∩ (s ∪ t) =
+      inclusion inter_subset_left ⁻¹' (U ↓∩ s) ∪ inclusion inter_subset_right ⁻¹' (V ↓∩ t) := by
     ext; simp
   rw [this]
   exact .union (hsU.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
+      .preimage continuous_subtype_val <| hU.inter hV)
     (htV.preimage_of_isOpenEmbedding <| .inclusion _ <|
-.preimage continuous_subtype_val hU.inter hV)
-
-/--
-lemma `IsLocallyConstructible.iUnion` / 引理 `IsLocallyConstructible.iUnion`
-
-English:
-lemma IsLocallyConstructible.iUnion
-  statement: [Finite ι] {f : ι -> Set X}
-  proof: SupClosed.iSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) .empty hf
-
-中文:
-引理 IsLocallyConstructible.iUnion
-  结论: [有限 ι] {f : ι -> 集合 X}
-  证明: SupClosed.iSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) .empty hf
-
-Depends on / 依赖: IsLocallyConstructible, SupClosed, SupClosed.iSup_mem, iSup_mem
+      .preimage continuous_subtype_val <| hU.inter hV)
+/-
+**Topology.IsLocallyConstructible.iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsL
+ocallyConstructible`。
+形式化陈述：∀ {ι : Sort u_1} {X : Type u_2} [inst : TopologicalSpace X] [Finite ι] {f 
+: ι → Set X},   (∀ (i : ι), Topology.IsLocallyConstructible (f i)) → Topology.Is
+LocallyConstructible (⋃ i, f i)
+参数：∀ (i : ι), Topology.IsLocallyConstructible (f i)；⋃ i, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.iSup_mem`：SupClosed.iSup_mem [Finite ι] (hs : SupClosed s) (hb
+ot : ⊥ in s) (hf : forall i, f i in s) : ⨆ i, f i in s
+· 使用定理 `Topology.IsLocallyConstructible.union`：∀ {X : Type u_2} [inst : Topologi
+calSpace X] {s t : Set X},   Topology.IsLocallyConstructible s → Topology.IsLoca
+llyConstructible t → Topolo…
+· 使用定理 `Topology.IsLocallyConstructible.empty`：∀ {X : Type u_2} [inst : Topologi
+calSpace X], Topology.IsLocallyConstructible ∅
 -/
-lemma IsLocallyConstructible.iUnion [Finite ι] {f : ι -> Set X}
-    (hf : forall i, IsLocallyConstructible (f i)) : IsLocallyConstructible (⋃ i, f i) :=
-  SupClosed.iSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) .empty hf
-
-/--
-lemma `IsLocallyConstructible.biUnion` / 引理 `IsLocallyConstructible.biUnion`
-
-English:
-lemma IsLocallyConstructible.biUnion
-  statement: {ι : Type*} {f : ι -> Set X} {s : Set ι} (hs : s.Finite)
-  proof: SupClosed.biSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hs .empty hf
-
-中文:
-引理 IsLocallyConstructible.biUnion
-  结论: {ι : 类型} {f : ι -> 集合 X} {s : 集合 ι} (hs : s.有限)
-  证明: SupClosed.biSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hs .empty hf
-
-Depends on / 依赖: IsLocallyConstructible, SupClosed, SupClosed.biSup_mem, biSup_mem
+lemma IsLocallyConstructible.iUnion [Finite ι] {f : ι → Set X}
+    (hf : ∀ i, IsLocallyConstructible (f i)) : IsLocallyConstructible (⋃ i, f i) :=
+  SupClosed.iSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ ↦ h₁.union) .empty hf
+/-
+**Topology.IsLocallyConstructible.biUnion** 是 Mathlib 中的一个定理，位于命名空间 `Topology.Is
+LocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {ι : Type u_4} {f : ι → Set X
+} {s : Set ι},   s.Finite → (∀ i ∈ s, Topology.IsLocallyConstructible (f i)) → T
+opology.IsLocallyConstructible (⋃ i ∈ s, f i)
+参数：∀ i ∈ s, Topology.IsLocallyConstructible (f i)；⋃ i ∈ s, f i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.biSup_mem`：SupClosed.biSup_mem {ι : Type*} {t : Set ι} {f : ι 
+-> α} (hs : SupClosed s) (ht : t.Finite) (hbot : ⊥ in s) (hf : forall i in t, f 
+i in s) :…
+· 使用定理 `Topology.IsLocallyConstructible.union`：∀ {X : Type u_2} [inst : Topologi
+calSpace X] {s t : Set X},   Topology.IsLocallyConstructible s → Topology.IsLoca
+llyConstructible t → Topolo…
+· 使用定理 `Topology.IsLocallyConstructible.empty`：∀ {X : Type u_2} [inst : Topologi
+calSpace X], Topology.IsLocallyConstructible ∅
 -/
-lemma IsLocallyConstructible.biUnion {ι : Type*} {f : ι -> Set X} {s : Set ι} (hs : s.Finite)
-    (hf : forall i in s, IsLocallyConstructible (f i)) : IsLocallyConstructible (⋃ i in s, f i) :=
-  SupClosed.biSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hs .empty hf
-
-/--
-lemma `IsLocallyConstructible.sUnion` / 引理 `IsLocallyConstructible.sUnion`
-
-English:
-lemma IsLocallyConstructible.sUnion
-  statement: {S : Set (Set X)} (hS : S.Finite)
-  proof: SupClosed.sSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hS .empty hS'
-
-中文:
-引理 IsLocallyConstructible.集合并集
-  结论: {S : 集合 (集合 X)} (hS : S.有限)
-  证明: SupClosed.sSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hS .empty hS'
-
-Depends on / 依赖: IsLocallyConstructible, SupClosed, SupClosed.sSup_mem, sSup_mem
+lemma IsLocallyConstructible.biUnion {ι : Type*} {f : ι → Set X} {s : Set ι} (hs : s.Finite)
+    (hf : ∀ i ∈ s, IsLocallyConstructible (f i)) : IsLocallyConstructible (⋃ i ∈ s, f i) :=
+  SupClosed.biSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ ↦ h₁.union) hs .empty hf
+/-
+**Topology.IsLocallyConstructible.sUnion** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsL
+ocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {S : Set (Set X)},   S.Finite
+ → (∀ s ∈ S, Topology.IsLocallyConstructible s) → Topology.IsLocallyConstructibl
+e (⋃₀ S)
+参数：Set X；∀ s ∈ S, Topology.IsLocallyConstructible s；⋃₀ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SupClosed.sSup_mem`：SupClosed.sSup_mem (hs : SupClosed s) (ht : t.Finite
+) (hbot : ⊥ in s) (hts : t subseteq s) : sSup t in s
+· 使用定理 `Topology.IsLocallyConstructible.union`：∀ {X : Type u_2} [inst : Topologi
+calSpace X] {s t : Set X},   Topology.IsLocallyConstructible s → Topology.IsLoca
+llyConstructible t → Topolo…
+· 使用定理 `Topology.IsLocallyConstructible.empty`：∀ {X : Type u_2} [inst : Topologi
+calSpace X], Topology.IsLocallyConstructible ∅
 -/
 lemma IsLocallyConstructible.sUnion {S : Set (Set X)} (hS : S.Finite)
-    (hS' : forall s in S, IsLocallyConstructible s) : IsLocallyConstructible (⋃₀ S) :=
-  SupClosed.sSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hS .empty hS'
-
-/--
-lemma `IsLocallyConstructible.preimage_of_isOpenEmbedding` / 引理 `IsLocallyConstructible.preimage_of_isOpenEmbedding`
-
-English:
-lemma IsLocallyConstructible.preimage_of_isOpenEmbedding
-  statement: {s : Set Y}
-  proof: by
-  intro x
-  obtain ⟨U, hxU, hU, H⟩ := hs (f x)
-  exact ⟨f ⁻¹' U, hf.continuous.continuousAt.preimage_mem_nhds hxU, hU.preimage hf.continuous,
-    (H.preimage_of_isOpenEmbedding (hf.restrictPreimage _) :)⟩
-
-中文:
-引理 IsLocallyConstructible.preimage_of_isOpenEmbedding
-  结论: {s : 集合 Y}
-  证明: by
-  intro x
-  obtain ⟨U, hxU, hU, H⟩ := hs (f x)
-  exact ⟨f ⁻¹' U, hf.continuous.continuousAt.preimage_mem_nhds hxU, hU.preimage hf.continuous,
-    (H.preimage_of_isOpenEmbedding (hf.restrictPreimage _) :)⟩
-
-Depends on / 依赖: H.preimage_of_isOpenEmbedding, continuous, continuousAt, hU.preimage, hf.continuous, hf.continuous.continuousAt.preimage_mem_nhds, hf.restrictPreimage, preimage, preimage_mem_nhds, preimage_of_isOpenEmbedding, restrictPreimage
+    (hS' : ∀ s ∈ S, IsLocallyConstructible s) : IsLocallyConstructible (⋃₀ S) :=
+  SupClosed.sSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ ↦ h₁.union) hS .empty hS'
+/-
+**Topology.IsLocallyConstructible.preimage_of_isOpenEmbedding** 是 Mathlib 中的一个定理
+，位于命名空间 `Topology.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y} {s : Set Y},   Topology.IsLocallyConstructible s → T
+opology.IsOpenEmbedding f → Topology.IsLocallyConstructible (f ⁻¹' s)
+参数：f ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.preimage_mem_nhds`：ContinuousAt.preimage_mem_nhds {t : Set 
+Y} (h : ContinuousAt f x) (ht : t in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `Topology.IsOpenEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f 
+: X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.I
+sOpenEmbedding f → Contin…
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `Topology.IsConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type u_2} {
+Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X →
+ Y} {s : Set Y},   Topology.IsOpenEmbeddin…
+· 使用定理 `Topology.IsOpenEmbedding.restrictPreimage`：∀ {α : Type u_1} {β : Type u_
+2} [inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} (s : Se
+t β),   Topology.IsOpenEmbeddin…
 -/
 lemma IsLocallyConstructible.preimage_of_isOpenEmbedding {s : Set Y}
     (hs : IsLocallyConstructible s) (hf : IsOpenEmbedding f) :
@@ -1783,157 +1631,212 @@ lemma IsLocallyConstructible.preimage_of_isOpenEmbedding {s : Set Y}
   obtain ⟨U, hxU, hU, H⟩ := hs (f x)
   exact ⟨f ⁻¹' U, hf.continuous.continuousAt.preimage_mem_nhds hxU, hU.preimage hf.continuous,
     (H.preimage_of_isOpenEmbedding (hf.restrictPreimage _) :)⟩
-
-/--
-lemma `IsLocallyConstructible.isConstructible_of_subset_of_isCompact` / 引理 `IsLocallyConstructible.isConstructible_of_subset_of_isCompact`
-
-English:
-lemma IsLocallyConstructible.isConstructible_of_subset_of_isCompact
-  proof: by
-  have (x : _) : exists U, IsOpen U ∧ IsCompact U ∧ x in U ∧ IsConstructible (U inter s) :=
-    have ⟨U, hxU, hU, hUs⟩ := hs x
-    have ⟨V, ⟨hV₁, hV₂⟩, hxV, hVU⟩ := PrespectralSpace.isTopologicalBasis.mem_nhds_iff.mp hxU
-    have : IsConstructible (V ↓inter s) :=
-      (hUs.preimage_of_isOpenEmbedding (IsOpenEmbedding.id.restrict hVU hV₁) :)
-    have : IsConstructible (V inter s) := by
-      have := this.image_of_isOpenEmbedding hV₁.isOpenEmbedding_subtypeVal
-        (by simpa using hV₂.isRetrocompact hV₁)
-      rwa [Subtype.image_preimage_coe] at this
-    ⟨V, hV₁, hV₂, hxV, this⟩
-  choose U hU hU' hxU hUs using this
-  obtain ⟨σ, hσ, htσ⟩ := ht.elim_nhds_subcover U (fun x _ => (hU x).mem_nhds (hxU x))
-  convert! IsConstructible.biUnion σ.finite_toSet (fun x _ => hUs x)
-  apply subset_antisymm
-  · rw [← Set.iUnion₂_inter, Set.subset_inter_iff]
-    exact ⟨hst.trans htσ, subset_rfl⟩
-  · exact Set.iUnion₂_subset fun _ _ => Set.inter_subset_right
-
-中文:
-引理 IsLocallyConstructible.isConstructible_of_subset_of_isCompact
-  证明: by
-  have (x : _) : exists U, IsOpen U ∧ IsCompact U ∧ x in U ∧ IsConstructible (U inter s) :=
-    have ⟨U, hxU, hU, hUs⟩ := hs x
-    have ⟨V, ⟨hV₁, hV₂⟩, hxV, hVU⟩ := PrespectralSpace.isTopologicalBasis.mem_nhds_iff.mp hxU
-    have : IsConstructible (V ↓inter s) :=
-      (hUs.preimage_of_isOpenEmbedding (IsOpenEmbedding.id.restrict hVU hV₁) :)
-    have : IsConstructible (V inter s) := by
-      have := this.image_of_isOpenEmbedding hV₁.isOpenEmbedding_subtypeVal
-        (by simpa using hV₂.isRetrocompact hV₁)
-      rwa [Subtype.image_preimage_coe] at this
-    ⟨V, hV₁, hV₂, hxV, this⟩
-  choose U hU hU' hxU hUs using this
-  obtain ⟨σ, hσ, htσ⟩ := ht.elim_nhds_subcover U (fun x _ => (hU x).mem_nhds (hxU x))
-  convert! IsConstructible.biUnion σ.finite_toSet (fun x _ => hUs x)
-  apply subset_antisymm
-  · rw [← Set.iUnion₂_inter, Set.subset_inter_iff]
-    exact ⟨hst.trans htσ, subset_rfl⟩
-  · exact Set.iUnion₂_subset fun _ _ => Set.inter_subset_right
-
-Depends on / 依赖: IsCompact, IsConstructible, IsOpen, IsOpenEmbedding, IsOpenEmbedding.id.restrict, PrespectralSpace, PrespectralSpace.isTopologicalBasis.mem_nhds_iff.mp, Subtype, Subtype.image_prei, hUs.preimage_of_isOpenEmbedding, image_of_isOpenEmbedding, image_prei, isOpenEmbedding_subtypeVal, isRetrocompact, isTopologicalBasis, mem_nhds_iff, preimage_of_isOpenEmbedding, restrict, this.image_of_isOpenEmbedding
+/-
+**Topology.IsLocallyConstructible.isConstructible_of_subset_of_isCompact** 是 Mat
+hlib 中的一个定理，位于命名空间 `Topology.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X} [PrespectralSpa
+ce X] [QuasiSeparatedSpace X],   Topology.IsLocallyConstructible s → s ⊆ t → IsC
+ompact t → Topology.IsConstructible s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.mem_nhds_iff`：∀ {α : Type u} [t : To
+pologicalSpace α] {a : α} {s : Set α} {b : Set (Set α)},   TopologicalSpace.IsTo
+pologicalBasis b → (s ∈ nhds a ↔ ∃ t ∈…
+· 使用定理 `PrespectralSpace.isTopologicalBasis`：∀ {X : Type u_3} {inst : Topologica
+lSpace X} [self : PrespectralSpace X],   TopologicalSpace.IsTopologicalBasis {U 
+| IsOpen U ∧ IsCompact U}
+· 使用定理 `Topology.IsConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type u_2} {
+Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X →
+ Y} {s : Set Y},   Topology.IsOpenEmbeddin…
+· 使用引理 `Topology.IsOpenEmbedding.restrict`：Topology.IsOpenEmbedding.restrict {f 
+: X -> Y} (hf : IsOpenEmbedding f) {s : Set X} {t : Set Y} (H : s.MapsTo f t) (h
+s : IsOpen s) : IsOpenE…
+· 使用定理 `Topology.IsOpenEmbedding.id`：∀ {X : Type u_1} [inst : TopologicalSpace X
+], Topology.IsOpenEmbedding id
+· 使用定理 `Topology.IsConstructible.image_of_isOpenEmbedding`：∀ {X : Type u_2} {Y :
+ Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y}
+ {s : Set X},   Topology.IsOpenEmbeddin…
+· 使用定理 `IsOpen.isOpenEmbedding_subtypeVal`：IsOpen.isOpenEmbedding_subtypeVal {s 
+: Set X} (hs : IsOpen s) : IsOpenEmbedding ((↑) : s -> X)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `IsCompact.isRetrocompact`：∀ {X : Type u_2} [inst : TopologicalSpace X] {
+U : Set X} [QuasiSeparatedSpace X],   IsCompact U → IsOpen U → IsRetrocompact U
+· 使用定理 `Subtype.image_preimage_coe`：image_preimage_coe (s t : Set α) : ((↑) : s 
+-> α) '' ((↑) : s -> α) ⁻¹' t = s inter t
+· 使用定理 `IsCompact.elim_nhds_subcover`：IsCompact.elim_nhds_subcover (hs : IsCompa
+ct s) (U : X -> Set X) (hU : forall x in s, U x in 𝓝 x) : exists t : Finset X, (
+forall x in t, x i…
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Set.iUnion₂_inter`：iUnion₂_inter (s : forall i, κ i -> Set α) (t : Set α
+) : (⋃ (i) (j), s i j) inter t = ⋃ (i) (j), s i j inter t
+· 使用定理 `Set.subset_inter_iff`：subset_inter_iff {s t r : Set α} : r subseteq s in
+ter t ↔ r subseteq s ∧ r subseteq t
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
+· 使用定理 `Set.iUnion₂_subset`：iUnion₂_subset {s : forall i, κ i -> Set α} {t : Set
+ α} (h : forall i j, s i j subseteq t) : ⋃ (i) (j), s i j subseteq t
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Topology.IsConstructible.biUnion`：∀ {X : Type u_2} [inst : TopologicalSp
+ace X] {ι : Type u_4} {f : ι → Set X} {t : Set ι},   t.Finite → (∀ i ∈ t, Topolo
+gy.IsConstructible (f …
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma IsLocallyConstructible.isConstructible_of_subset_of_isCompact
     [PrespectralSpace X] [QuasiSeparatedSpace X]
-    (hs : IsLocallyConstructible s) (hst : s subseteq t) (ht : IsCompact t) :
+    (hs : IsLocallyConstructible s) (hst : s ⊆ t) (ht : IsCompact t) :
     IsConstructible s := by
-  have (x : _) : exists U, IsOpen U ∧ IsCompact U ∧ x in U ∧ IsConstructible (U inter s) :=
+  have (x : _) : ∃ U, IsOpen U ∧ IsCompact U ∧ x ∈ U ∧ IsConstructible (U ∩ s) :=
     have ⟨U, hxU, hU, hUs⟩ := hs x
     have ⟨V, ⟨hV₁, hV₂⟩, hxV, hVU⟩ := PrespectralSpace.isTopologicalBasis.mem_nhds_iff.mp hxU
-    have : IsConstructible (V ↓inter s) :=
+    have : IsConstructible (V ↓∩ s) :=
       (hUs.preimage_of_isOpenEmbedding (IsOpenEmbedding.id.restrict hVU hV₁) :)
-    have : IsConstructible (V inter s) := by
+    have : IsConstructible (V ∩ s) := by
       have := this.image_of_isOpenEmbedding hV₁.isOpenEmbedding_subtypeVal
         (by simpa using hV₂.isRetrocompact hV₁)
       rwa [Subtype.image_preimage_coe] at this
     ⟨V, hV₁, hV₂, hxV, this⟩
   choose U hU hU' hxU hUs using this
-  obtain ⟨σ, hσ, htσ⟩ := ht.elim_nhds_subcover U (fun x _ => (hU x).mem_nhds (hxU x))
-  convert! IsConstructible.biUnion σ.finite_toSet (fun x _ => hUs x)
+  obtain ⟨σ, hσ, htσ⟩ := ht.elim_nhds_subcover U (fun x _ ↦ (hU x).mem_nhds (hxU x))
+  convert! IsConstructible.biUnion σ.finite_toSet (fun x _ ↦ hUs x)
   apply subset_antisymm
   · rw [← Set.iUnion₂_inter, Set.subset_inter_iff]
     exact ⟨hst.trans htσ, subset_rfl⟩
-  · exact Set.iUnion₂_subset fun _ _ => Set.inter_subset_right
-
-/--
-lemma `IsLocallyConstructible.isConstructible` / 引理 `IsLocallyConstructible.isConstructible`
-
-English:
-lemma IsLocallyConstructible.isConstructible
-  proof: hs.isConstructible_of_subset_of_isCompact s.subset_univ isCompact_univ
-
-中文:
-引理 IsLocallyConstructible.isConstructible
-  证明: hs.isConstructible_of_subset_of_isCompact s.subset_univ isCompact_univ
-
-Depends on / 依赖: hs.isConstructible_of_subset_of_isCompact, isCompact_univ, isConstructible_of_subset_of_isCompact, s.subset_univ, subset_univ
+  · exact Set.iUnion₂_subset fun _ _ ↦ Set.inter_subset_right
+/-
+**Topology.IsLocallyConstructible.isConstructible** 是 Mathlib 中的一个定理，位于命名空间 `Top
+ology.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X} [PrespectralSpace
+ X] [QuasiSeparatedSpace X] [CompactSpace X],   Topology.IsLocallyConstructible 
+s → Topology.IsConstructible s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsLocallyConstructible.isConstructible_of_subset_of_isCompact`：
+∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X} [PrespectralSpace X] 
+[QuasiSeparatedSpace X],   Topology.IsLocallyConstructible s…
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `isCompact_univ`：isCompact_univ [h : CompactSpace X] : IsCompact (univ : 
+Set X)
 -/
 lemma IsLocallyConstructible.isConstructible
     [PrespectralSpace X] [QuasiSeparatedSpace X] [CompactSpace X]
     (hs : IsLocallyConstructible s) :
     IsConstructible s :=
   hs.isConstructible_of_subset_of_isCompact s.subset_univ isCompact_univ
-
-/--
-lemma `IsLocallyConstructible.inter_of_isOpen_isCompact` / 引理 `IsLocallyConstructible.inter_of_isOpen_isCompact`
-
-English:
-lemma IsLocallyConstructible.inter_of_isOpen_isCompact
-  proof: (hs.inter (ht'.isConstructible ht).isLocallyConstructible).isConstructible_of_subset_of_isCompact
-    Set.inter_subset_right ht'
-
-中文:
-引理 IsLocallyConstructible.inter_of_isOpen_isCompact
-  证明: (hs.inter (ht'.isConstructible ht).isLocallyConstructible).isConstructible_of_subset_of_isCompact
-    Set.inter_subset_right ht'
-
-Depends on / 依赖: Set.inter_subset_right, hs.inter, inter_subset_right, isConstructible, isConstructible_of_subset_of_isCompact, isLocallyConstructible
+/-
+**Topology.IsLocallyConstructible.inter_of_isOpen_isCompact** 是 Mathlib 中的一个定理，位
+于命名空间 `Topology.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X} [PrespectralSpa
+ce X] [QuasiSeparatedSpace X],   Topology.IsLocallyConstructible s → IsOpen t → 
+IsCompact t → Topology.IsConstructible (s ∩ t)
+参数：s ∩ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsLocallyConstructible.isConstructible_of_subset_of_isCompact`：
+∀ {X : Type u_2} [inst : TopologicalSpace X] {s t : Set X} [PrespectralSpace X] 
+[QuasiSeparatedSpace X],   Topology.IsLocallyConstructible s…
+· 使用定理 `Topology.IsLocallyConstructible.inter`：∀ {X : Type u_2} [inst : Topologi
+calSpace X] {s t : Set X},   Topology.IsLocallyConstructible s → Topology.IsLoca
+llyConstructible t → Topolo…
+· 使用定理 `Topology.IsConstructible.isLocallyConstructible`：∀ {X : Type u_2} [inst 
+: TopologicalSpace X] {s : Set X}, Topology.IsConstructible s → Topology.IsLocal
+lyConstructible s
+· 使用定理 `IsCompact.isConstructible`：∀ {X : Type u_2} [inst : TopologicalSpace X] 
+{U : Set X} [QuasiSeparatedSpace X],   IsCompact U → IsOpen U → Topology.IsConst
+ructible U
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
 lemma IsLocallyConstructible.inter_of_isOpen_isCompact
     [PrespectralSpace X] [QuasiSeparatedSpace X]
     (hs : IsLocallyConstructible s) (ht : IsOpen t) (ht' : IsCompact t) :
-    IsConstructible (s inter t) :=
+    IsConstructible (s ∩ t) :=
   (hs.inter (ht'.isConstructible ht).isLocallyConstructible).isConstructible_of_subset_of_isCompact
     Set.inter_subset_right ht'
 
-variable {ι : Type*} {U : ι -> Opens X}
+variable {ι : Type*} {U : ι → Opens X}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `IsLocallyConstructible.of_isOpenCover` / 引理 `IsLocallyConstructible.of_isOpenCover`
-
-English:
-lemma IsLocallyConstructible.of_isOpenCover
-  proof: by
-  intro x
-  have ⟨i, hi⟩ := hU.exists_mem x
-  have ⟨V, hVx, hV, hV'⟩ := H i ⟨x, hi⟩
-  refine ⟨_, (U i).2.isOpenEmbedding_subtypeVal.image_mem_nhds.mpr hVx,
-      (U i).2.isOpenMap_subtype_val _ hV, ?_⟩
-  let e : V ≃ₜ Subtype.val '' V :=
-    (Equiv.Set.image _ V Subtype.val_injective).toHomeomorphOfIsInducing
-      ((U i).2.isOpenEmbedding_subtypeVal.restrict (by simp [MapsTo]) hV).isInducing
-  convert! hV'.preimage_of_isOpenEmbedding e.symm.isOpenEmbedding
-  ext ⟨_, x, hx, rfl⟩
-  simp [e, Equiv.toHomeomorphOfIsInducing]
-
-中文:
-引理 IsLocallyConstructible.of_isOpenCover
-  证明: by
-  intro x
-  have ⟨i, hi⟩ := hU.exists_mem x
-  have ⟨V, hVx, hV, hV'⟩ := H i ⟨x, hi⟩
-  refine ⟨_, (U i).2.isOpenEmbedding_subtypeVal.image_mem_nhds.mpr hVx,
-      (U i).2.isOpenMap_subtype_val _ hV, ?_⟩
-  let e : V ≃ₜ Subtype.val '' V :=
-    (Equiv.Set.image _ V Subtype.val_injective).toHomeomorphOfIsInducing
-      ((U i).2.isOpenEmbedding_subtypeVal.restrict (by simp [MapsTo]) hV).isInducing
-  convert! hV'.preimage_of_isOpenEmbedding e.symm.isOpenEmbedding
-  ext ⟨_, x, hx, rfl⟩
-  simp [e, Equiv.toHomeomorphOfIsInducing]
-
-Depends on / 依赖: Equiv.Set.image, Equiv.toHomeomorphOfIsInducing, MapsTo, Subtype, Subtype.val, Subtype.val_injective, convert, e.symm.isOpenEmbedding, exists_mem, hU.exists_mem, image_mem_nhds, isInducing, isOpenEmbedding, isOpenEmbedding_subtypeVal, isOpenEmbedding_subtypeVal.image_mem_nhds.mpr, isOpenEmbedding_subtypeVal.restrict, isOpenMap_subtype_val, preimage_of_isOpenEmbedding, restrict, toHomeomorphOfIsInducing
+/-
+**Topology.IsLocallyConstructible.of_isOpenCover** 是 Mathlib 中的一个定理，位于命名空间 `Topo
+logy.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X} {ι : Type u_4} {U
+ : ι → TopologicalSpace.Opens X},   TopologicalSpace.IsOpenCover U →     (∀ (i :
+ ι), Topology.IsLocallyConstructible (Subtype.val ⁻¹' s)) → Topology.IsLocallyCo
+nstructible s
+参数：∀ (i : ι), Topology.IsLocallyConstructible (Subtype.val ⁻¹' s)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TopologicalSpace.IsOpenCover.exists_mem`：exists_mem (hu : IsOpenCover u)
+ (a : X) : exists i, a in u i
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Topology.IsOpenEmbedding.image_mem_nhds`：∀ {X : Type u_1} {Y : Type u_2}
+ [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topolo
+gy.IsOpenEmbedding f → ∀ {s :…
+· 使用定理 `IsOpen.isOpenEmbedding_subtypeVal`：IsOpen.isOpenEmbedding_subtypeVal {s 
+: Set X} (hs : IsOpen s) : IsOpenEmbedding ((↑) : s -> X)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `IsOpen.isOpenMap_subtype_val`：IsOpen.isOpenMap_subtype_val {s : Set X} (
+hs : IsOpen s) : IsOpenMap ((↑) : s -> X)
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Topology.IsOpenEmbedding.isInducing`：∀ {X : Type u_1} {Y : Type u_2} {f 
+: X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.I
+sOpenEmbedding f → Topolo…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用引理 `Topology.IsOpenEmbedding.restrict`：Topology.IsOpenEmbedding.restrict {f 
+: X -> Y} (hf : IsOpenEmbedding f) {s : Set X} {t : Set Y} (H : s.MapsTo f t) (h
+s : IsOpen s) : IsOpenE…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.toHomeomorphOfIsInducing.eq_1`：∀ {X : Type u_1} {Y : Type u_2} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] (f : X ≃ Y)   (hf : Topol
+ogy.IsInducing ⇑f),   f.t…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.Injective.mem_set_image`：∀ {α : Type u_1} {β : Type u_2} {f : α
+ → β}, Function.Injective f → ∀ {s : Set α} {a : α}, f a ∈ f '' s ↔ a ∈ s
+· 使用定理 `Equiv.Set.image_symm_apply`：∀ {α : Type u_3} {β : Type u_4} (f : α → β) 
+(s : Set α) (H : Function.Injective f) (x : α) (h : f x ∈ f '' s),   (Equiv.Set.
+image f s H).sym…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Topology.IsConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type u_2} {
+Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X →
+ Y} {s : Set Y},   Topology.IsOpenEmbeddin…
+（共 31 条，此处仅展示前 30 条）
 -/
 lemma IsLocallyConstructible.of_isOpenCover
-    (hU : IsOpenCover U) (H : forall i, IsLocallyConstructible ((U i : Set X) ↓inter s)) :
+    (hU : IsOpenCover U) (H : ∀ i, IsLocallyConstructible ((U i : Set X) ↓∩ s)) :
     IsLocallyConstructible s := by
   intro x
   have ⟨i, hi⟩ := hU.exists_mem x
@@ -1947,71 +1850,99 @@ lemma IsLocallyConstructible.of_isOpenCover
   ext ⟨_, x, hx, rfl⟩
   simp [e, Equiv.toHomeomorphOfIsInducing]
 
-/--
-lemma `IsLocallyConstructible.of_isOpenCover'` / 引理 `IsLocallyConstructible.of_isOpenCover'`
+/-- A variant that requires constructible in the ambient space.
+This is as strong as the unprimed version only when the open cover consists of retrocompact sets. -/
+/-
+**Topology.IsLocallyConstructible.of_isOpenCover'** 是 Mathlib 中的一个定理，位于命名空间 `Top
+ology.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X} {ι : Type u_4} {U
+ : ι → TopologicalSpace.Opens X},   TopologicalSpace.IsOpenCover U →     (∀ (i :
+ ι), Topology.IsLocallyConstructible (s ∩ ↑(U i))) → Topology.IsLocallyConstruct
+ible s
+参数：∀ (i : ι), Topology.IsLocallyConstructible (s ∩ ↑(U i))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsLocallyConstructible.of_isOpenCover`：∀ {X : Type u_2} [inst :
+ TopologicalSpace X] {s : Set X} {ι : Type u_4} {U : ι → TopologicalSpace.Opens 
+X},   TopologicalSpace.IsOpenCover U…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.preimage_coe_inter_self`：preimage_coe_inter_self (s t : Set α) :
+ ((↑) : s -> α) ⁻¹' (t inter s) = ((↑) : s -> α) ⁻¹' t
+· 使用定理 `Topology.IsLocallyConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type
+ u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {
+f : X → Y} {s : Set Y},   Topology.IsLocallyConst…
+· 使用定理 `IsOpen.isOpenEmbedding_subtypeVal`：IsOpen.isOpenEmbedding_subtypeVal {s 
+: Set X} (hs : IsOpen s) : IsOpenEmbedding ((↑) : s -> X)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
 
-English:
-lemma IsLocallyConstructible.of_isOpenCover'
-  proof: .of_isOpenCover hU fun i => by
-    rw [← Subtype.preimage_coe_inter_self]
-    exact (H i).preimage_of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal
-
-中文:
-引理 IsLocallyConstructible.of_isOpenCover'
-  证明: .of_isOpenCover hU fun i => by
-    rw [← Subtype.preimage_coe_inter_self]
-    exact (H i).preimage_of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal
-
-Depends on / 依赖: Subtype, Subtype.preimage_coe_inter_self, isOpenEmbedding_subtypeVal, of_isOpenCover, preimage_coe_inter_self, preimage_of_isOpenEmbedding
+--- 原说明 ---
+A variant that requires constructible in the ambient space.
+This is as strong as the unprimed version only when the open cover consists of r
+etrocompact sets.
 -/
 lemma IsLocallyConstructible.of_isOpenCover'
-    (hU : IsOpenCover U) (H : forall i, IsLocallyConstructible (s inter U i)) :
+    (hU : IsOpenCover U) (H : ∀ i, IsLocallyConstructible (s ∩ U i)) :
     IsLocallyConstructible s :=
-  .of_isOpenCover hU fun i => by
+  .of_isOpenCover hU fun i ↦ by
     rw [← Subtype.preimage_coe_inter_self]
     exact (H i).preimage_of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal
-
-/--
-lemma `IsLocallyConstructible.iff_of_isOpenCover` / 引理 `IsLocallyConstructible.iff_of_isOpenCover`
-
-English:
-lemma IsLocallyConstructible.iff_of_isOpenCover
-  proof: ⟨fun H i => H.preimage_of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal,
-    fun H => .of_isOpenCover hU H⟩
-
-中文:
-引理 IsLocallyConstructible.iff_of_isOpenCover
-  证明: ⟨fun H i => H.preimage_of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal,
-    fun H => .of_isOpenCover hU H⟩
-
-Depends on / 依赖: H.preimage_of_isOpenEmbedding, isOpenEmbedding_subtypeVal, of_isOpenCover, preimage_of_isOpenEmbedding
+/-
+**Topology.IsLocallyConstructible.iff_of_isOpenCover** 是 Mathlib 中的一个定理，位于命名空间 `
+Topology.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X} {ι : Type u_4} {U
+ : ι → TopologicalSpace.Opens X},   TopologicalSpace.IsOpenCover U →     (Topolo
+gy.IsLocallyConstructible s ↔ ∀ (i : ι), Topology.IsLocallyConstructible (Subtyp
+e.val ⁻¹' s))
+参数：Topology.IsLocallyConstructible s ↔ ∀ (i : ι), Topology.IsLocallyConstructibl
+e (Subtype.val ⁻¹' s)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsLocallyConstructible.preimage_of_isOpenEmbedding`：∀ {X : Type
+ u_2} {Y : Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {
+f : X → Y} {s : Set Y},   Topology.IsLocallyConst…
+· 使用定理 `IsOpen.isOpenEmbedding_subtypeVal`：IsOpen.isOpenEmbedding_subtypeVal {s 
+: Set X} (hs : IsOpen s) : IsOpenEmbedding ((↑) : s -> X)
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `Topology.IsLocallyConstructible.of_isOpenCover`：∀ {X : Type u_2} [inst :
+ TopologicalSpace X] {s : Set X} {ι : Type u_4} {U : ι → TopologicalSpace.Opens 
+X},   TopologicalSpace.IsOpenCover U…
 -/
 lemma IsLocallyConstructible.iff_of_isOpenCover
     (hU : IsOpenCover U) :
-    IsLocallyConstructible s ↔ forall i, IsLocallyConstructible ((U i : Set X) ↓inter s) :=
-  ⟨fun H i => H.preimage_of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal,
-    fun H => .of_isOpenCover hU H⟩
-
-/--
-lemma `IsLocallyConstructible.iff_isConstructible_of_isOpenCover` / 引理 `IsLocallyConstructible.iff_isConstructible_of_isOpenCover`
-
-English:
-lemma IsLocallyConstructible.iff_isConstructible_of_isOpenCover
-  proof: ⟨fun H i => H.inter_of_isOpen_isCompact (U i).2 (hU' i),
-    fun H => .of_isOpenCover' hU fun i => (H i).isLocallyConstructible⟩
-
-中文:
-引理 IsLocallyConstructible.iff_isConstructible_of_isOpenCover
-  证明: ⟨fun H i => H.inter_of_isOpen_isCompact (U i).2 (hU' i),
-    fun H => .of_isOpenCover' hU fun i => (H i).isLocallyConstructible⟩
-
-Depends on / 依赖: H.inter_of_isOpen_isCompact, inter_of_isOpen_isCompact, isLocallyConstructible, of_isOpenCover
+    IsLocallyConstructible s ↔ ∀ i, IsLocallyConstructible ((U i : Set X) ↓∩ s) :=
+  ⟨fun H i ↦ H.preimage_of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal,
+    fun H ↦ .of_isOpenCover hU H⟩
+/-
+**Topology.IsLocallyConstructible.iff_isConstructible_of_isOpenCover** 是 Mathlib
+ 中的一个定理，位于命名空间 `Topology.IsLocallyConstructible`。
+形式化陈述：∀ {X : Type u_2} [inst : TopologicalSpace X] {s : Set X} {ι : Type u_4} {U
+ : ι → TopologicalSpace.Opens X}   [PrespectralSpace X] [QuasiSeparatedSpace X],
+   TopologicalSpace.IsOpenCover U →     (∀ (i : ι), IsCompact ↑(U i)) →       (T
+opology.IsLocallyConstructible s ↔ ∀ (i : ι), Topology.IsConstructible (s ∩ ↑(U 
+i)))
+参数：∀ (i : ι), IsCompact ↑(U i)；Topology.IsLocallyConstructible s ↔ ∀ (i : ι), To
+pology.IsConstructible (s ∩ ↑(U i))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsLocallyConstructible.inter_of_isOpen_isCompact`：∀ {X : Type u
+_2} [inst : TopologicalSpace X] {s t : Set X} [PrespectralSpace X] [QuasiSeparat
+edSpace X],   Topology.IsLocallyConstructible s…
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `Topology.IsLocallyConstructible.of_isOpenCover'`：∀ {X : Type u_2} [inst 
+: TopologicalSpace X] {s : Set X} {ι : Type u_4} {U : ι → TopologicalSpace.Opens
+ X},   TopologicalSpace.IsOpenCover U…
+· 使用定理 `Topology.IsConstructible.isLocallyConstructible`：∀ {X : Type u_2} [inst 
+: TopologicalSpace X] {s : Set X}, Topology.IsConstructible s → Topology.IsLocal
+lyConstructible s
 -/
 lemma IsLocallyConstructible.iff_isConstructible_of_isOpenCover
     [PrespectralSpace X] [QuasiSeparatedSpace X]
-    (hU : IsOpenCover U) (hU' : forall i, IsCompact (U i : Set X)) :
-    IsLocallyConstructible s ↔ forall i, IsConstructible (s inter U i) :=
-  ⟨fun H i => H.inter_of_isOpen_isCompact (U i).2 (hU' i),
-    fun H => .of_isOpenCover' hU fun i => (H i).isLocallyConstructible⟩
+    (hU : IsOpenCover U) (hU' : ∀ i, IsCompact (U i : Set X)) :
+    IsLocallyConstructible s ↔ ∀ i, IsConstructible (s ∩ U i) :=
+  ⟨fun H i ↦ H.inter_of_isOpen_isCompact (U i).2 (hU' i),
+    fun H ↦ .of_isOpenCover' hU fun i ↦ (H i).isLocallyConstructible⟩
 
 end Topology
+

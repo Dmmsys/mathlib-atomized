@@ -25,48 +25,35 @@ variable {α M : Type*} [One M]
 
 /-- The function `f` has finite multiplicative support. -/
 @[to_additive (attr := fun_prop) /-- The function `f` has finite support. -/]
-/--
-Definition of `HasFiniteMulSupport` / `HasFiniteMulSupport` 的定义
+/-
+**Function.HasFiniteMulSupport** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：HasFiniteMulSupport (f : α -> M) : Prop
+参数：f : α -> M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasFiniteMulSupport
-  signature: (f : α -> M)
-  body: f.mulSupport.Finite
-
-@[to_additive (attr := fun_prop)]
-
-中文:
-定义 HasFiniteMulSupport
-  签名: (f : α -> M)
-  定义体: f.mulSupport.Finite
-
-@[to_additive (attr := fun_prop)]
-
-Depends on / 依赖: Finite, f.mulSupport.Finite, mulSupport
+--- 原说明 ---
+The function `f` has finite multiplicative support.
 -/
-def HasFiniteMulSupport (f : α -> M) : Prop := f.mulSupport.Finite
+def HasFiniteMulSupport (f : α → M) : Prop := f.mulSupport.Finite
 
 @[to_additive (attr := fun_prop)]
-/--
-lemma `hasFiniteMulSupport_one` / 引理 `hasFiniteMulSupport_one`
-
-English:
-lemma hasFiniteMulSupport_one
-  statement: HasFiniteMulSupport fun _ : α => (1 : M)
-  proof: by
-  simp [HasFiniteMulSupport]
-
-中文:
-引理 hasFiniteMulSupport_one
-  结论: HasFiniteMulSupport fun _ : α => (1 : M)
-  证明: by
-  simp [HasFiniteMulSupport]
-
-Depends on / 依赖: HasFiniteMulSupport
+/-
+**Function.hasFiniteMulSupport_one** 是 Mathlib 中的一个引理，位于命名空间 `Function`。
+形式化陈述：hasFiniteMulSupport_one : HasFiniteMulSupport fun _ : α => (1 : M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Function.mulSupport_fun_one`：mulSupport_fun_one : mulSupport (fun _ => 1
+ : ι -> M) = ∅
 -/
-lemma hasFiniteMulSupport_one : HasFiniteMulSupport fun _ : α => (1 : M) := by
+lemma hasFiniteMulSupport_one : HasFiniteMulSupport fun _ : α ↦ (1 : M) := by
   simp [HasFiniteMulSupport]
 
 end Function
 
 end
+

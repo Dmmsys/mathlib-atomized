@@ -23,42 +23,21 @@ assert_not_exists Field Module
 namespace Equiv
 variable {α β : Type*} (e : α ≃ β)
 
-/--
-Definition of `ringEquiv` / `ringEquiv` 的定义
+/-- An equivalence `e : α ≃ β` gives a ring equivalence `α ≃+* β`
+where the ring structure on `α` is
+the one obtained by transporting a ring structure on `β` back along `e`.
+-/
+/-
+**Equiv.ringEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：ringEquiv (e : α ≃ β) [Add β] [Mul β] : by let add
+参数：e : α ≃ β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringEquiv
-  signature: (e : α ≃ β) [Add β] [Mul β]
-  body: Equiv.add e
-    let mul := Equiv.mul e
-    exact α ≃+* β := by
-  intros
-  exact
-    { e with
-      map_add' := fun x y => by
-        simp [add_def]
-      map_mul' := fun x y => by
-        simp [mul_def] }
-
-@[simp]
-
-中文:
-定义 ringEquiv
-  签名: (e : α ≃ β) [加法 β] [乘法 β]
-  定义体: Equiv.add e
-    let mul := Equiv.mul e
-    exact α ≃+* β := by
-  intros
-  exact
-    { e with
-      map_add' := fun x y => by
-        simp [add_def]
-      map_mul' := fun x y => by
-        simp [mul_def] }
-
-@[simp]
-
-Depends on / 依赖: Equiv.add
+--- 原说明 ---
+An equivalence `e : α ≃ β` gives a ring equivalence `α ≃+* β`
+where the ring structure on `α` is
+the one obtained by transporting a ring structure on `β` back along `e`.
 -/
 def ringEquiv (e : α ≃ β) [Add β] [Mul β] : by
     let add := Equiv.add e
@@ -73,131 +52,75 @@ def ringEquiv (e : α ≃ β) [Add β] [Mul β] : by
         simp [mul_def] }
 
 @[simp]
-/--
-lemma `ringEquiv_apply` / 引理 `ringEquiv_apply`
-
-English:
-lemma ringEquiv_apply
-  given: (e : α ≃ β) [Add β] [Mul β] (a : α)
-  statement: ringEquiv e a = e a
-  proof: rfl
-
-中文:
-引理 ringEquiv_apply
-  条件: (e : α ≃ β) [加法 β] [乘法 β] (a : α)
-  结论: ringEquiv e a = e a
-  证明: rfl
+/-
+**Equiv.ringEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：ringEquiv_apply (e : α ≃ β) [Add β] [Mul β] (a : α) : ringEquiv e a = e a
+参数：e : α ≃ β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ringEquiv_apply (e : α ≃ β) [Add β] [Mul β] (a : α) : ringEquiv e a = e a := rfl
-
-/--
-lemma `ringEquiv_symm_apply` / 引理 `ringEquiv_symm_apply`
-
-English:
-lemma ringEquiv_symm_apply
-  given: (e : α ≃ β) [Add β] [Mul β] (b : β)
-  statement: by
-  proof: Equiv.add e
-    letI := Equiv.mul e
-    exact (ringEquiv e).symm b = e.symm b := rfl
-
-中文:
-引理 ringEquiv_symm_apply
-  条件: (e : α ≃ β) [加法 β] [乘法 β] (b : β)
-  结论: by
-  证明: Equiv.add e
-    letI := Equiv.mul e
-    exact (ringEquiv e).symm b = e.symm b := rfl
-
-Depends on / 依赖: Equiv.add
+/-
+**Equiv.ringEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Equiv`。
+形式化陈述：ringEquiv_symm_apply (e : α ≃ β) [Add β] [Mul β] (b : β) : by letI
+参数：e : α ≃ β；b : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ringEquiv_symm_apply (e : α ≃ β) [Add β] [Mul β] (b : β) : by
     letI := Equiv.add e
     letI := Equiv.mul e
     exact (ringEquiv e).symm b = e.symm b := rfl
 
-/--
-Definition of `nonUnitalNonAssocSemiring` / `nonUnitalNonAssocSemiring` 的定义
+/-- Transfer `NonUnitalNonAssocSemiring` across an `Equiv` -/
+/-
+**Equiv.nonUnitalNonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonUnitalNonAssocSemiring β] → 
+NonUnitalNonAssocSemiring α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonUnitalNonAssocSemiring
-  signature: [NonUnitalNonAssocSemiring β]
-  body: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let nsmul := e.smul Nat
-  apply e.injective.nonUnitalNonAssocSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonUnitalNonAssocSemiring
-  签名: [非幺非结合半环 β]
-  定义体: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let nsmul := e.smul Nat
-  apply e.injective.nonUnitalNonAssocSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-Depends on / 依赖: Finite, IsCompactOpenCovered, Set.iUnion_sigma, Set.iUnion_subtype, Set.image_iUnion, Set.image_image, hU.isCompactOpenCovered, iUnion_sigma, iUnion_subtype, image_iUnion, image_image, isCompactOpenCovered, isCompactOpenCovered_of_isCompact, of_finite
+--- 原说明 ---
+Transfer `NonUnitalNonAssocSemiring` across an `Equiv`
 -/
 protected abbrev nonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring β] :
     NonUnitalNonAssocSemiring α := by
   let zero := e.zero
   let add := e.add
   let mul := e.mul
-  let nsmul := e.smul Nat
+  let nsmul := e.smul ℕ
   apply e.injective.nonUnitalNonAssocSemiring _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `nonUnitalSemiring` / `nonUnitalSemiring` 的定义
+/-- Transfer `NonUnitalSemiring` across an `Equiv` -/
+/-
+**Equiv.nonUnitalSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonUnitalSemiring β] → NonUnita
+lSemiring α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonUnitalSemiring
-  signature: [NonUnitalSemiring β]
-  body: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let nsmul := e.smul Nat
-  apply e.injective.nonUnitalSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonUnitalSemiring
-  签名: [非幺半环 β]
-  定义体: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let nsmul := e.smul Nat
-  apply e.injective.nonUnitalSemiring _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `NonUnitalSemiring` across an `Equiv`
 -/
 protected abbrev nonUnitalSemiring [NonUnitalSemiring β] : NonUnitalSemiring α := by
   let zero := e.zero
   let add := e.add
   let mul := e.mul
-  let nsmul := e.smul Nat
+  let nsmul := e.smul ℕ
   apply e.injective.nonUnitalSemiring _ <;> intros <;> exact e.apply_symm_apply _
 
 -- See note [instance transfer via equivalence]
-/--
-Definition of `addMonoidWithOne` / `addMonoidWithOne` 的定义
+/-- Transfer `AddMonoidWithOne` across an `Equiv` -/
+/-
+**Equiv.addMonoidWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [AddMonoidWithOne β] → AddMonoid
+WithOne α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation addMonoidWithOne
-  signature: [AddMonoidWithOne β]
-  body: { e.addMonoid, e.one with
-    natCast := fun n => e.invFun n
-    natCast_zero := e.injective (by simp [zero_def])
-    natCast_succ := fun n => e.injective (by simp [add_def, one_def]) }
-
-中文:
-缩写 addMonoidWithOne
-  签名: [加法带幺幺半群 β]
-  定义体: { e.addMonoid, e.one with
-    natCast := fun n => e.invFun n
-    natCast_zero := e.injective (by simp [zero_def])
-    natCast_succ := fun n => e.injective (by simp [add_def, one_def]) }
+--- 原说明 ---
+Transfer `AddMonoidWithOne` across an `Equiv`
 -/
 protected abbrev addMonoidWithOne [AddMonoidWithOne β] : AddMonoidWithOne α :=
   { e.addMonoid, e.one with
@@ -205,28 +128,17 @@ protected abbrev addMonoidWithOne [AddMonoidWithOne β] : AddMonoidWithOne α :=
     natCast_zero := e.injective (by simp [zero_def])
     natCast_succ := fun n => e.injective (by simp [add_def, one_def]) }
 
-/--
-Definition of `addGroupWithOne` / `addGroupWithOne` 的定义
+/-- Transfer `AddGroupWithOne` across an `Equiv` -/
+/-
+**Equiv.addGroupWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [AddGroupWithOne β] → AddGroupWi
+thOne α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroup.neg_add_cancel`：∀ {A : Type u} [self : AddGroup A] (a : A), -a 
++ a = 0
 
-English:
-abbreviation addGroupWithOne
-  signature: [AddGroupWithOne β]
-  body: { e.addMonoidWithOne,
-    e.addGroup with
-    intCast := fun n => e.invFun n
-    intCast_ofNat := fun n => by simp only [Int.cast_natCast]; rfl
-    intCast_negSucc := fun _ =>
-congr_arg e.invFun (Int.cast_negSucc _).trans congr_arg _ (e.apply_symm_apply _).symm }
-
-中文:
-缩写 addGroupWithOne
-  签名: [加法带幺群 β]
-  定义体: { e.addMonoidWithOne,
-    e.addGroup with
-    intCast := fun n => e.invFun n
-    intCast_ofNat := fun n => by simp only [Int.cast_natCast]; rfl
-    intCast_negSucc := fun _ =>
-congr_arg e.invFun (Int.cast_negSucc _).trans congr_arg _ (e.apply_symm_apply _).symm }
+--- 原说明 ---
+Transfer `AddGroupWithOne` across an `Equiv`
 -/
 protected abbrev addGroupWithOne [AddGroupWithOne β] : AddGroupWithOne α :=
   { e.addMonoidWithOne,
@@ -234,150 +146,90 @@ protected abbrev addGroupWithOne [AddGroupWithOne β] : AddGroupWithOne α :=
     intCast := fun n => e.invFun n
     intCast_ofNat := fun n => by simp only [Int.cast_natCast]; rfl
     intCast_negSucc := fun _ =>
-congr_arg e.invFun (Int.cast_negSucc _).trans congr_arg _ (e.apply_symm_apply _).symm }
+      congr_arg e.invFun <| (Int.cast_negSucc _).trans <| congr_arg _ (e.apply_symm_apply _).symm }
 
-/--
-Definition of `nonAssocSemiring` / `nonAssocSemiring` 的定义
+/-- Transfer `NonAssocSemiring` across an `Equiv` -/
+/-
+**Equiv.nonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonAssocSemiring β] → NonAssocS
+emiring α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonAssocSemiring
-  signature: [NonAssocSemiring β]
-  body: by
-  let mul := e.mul
-  let add_monoid_with_one := e.addMonoidWithOne
-  apply e.injective.nonAssocSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonAssocSemiring
-  签名: [非结合半环 β]
-  定义体: by
-  let mul := e.mul
-  let add_monoid_with_one := e.addMonoidWithOne
-  apply e.injective.nonAssocSemiring _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `NonAssocSemiring` across an `Equiv`
 -/
 protected abbrev nonAssocSemiring [NonAssocSemiring β] : NonAssocSemiring α := by
   let mul := e.mul
   let add_monoid_with_one := e.addMonoidWithOne
   apply e.injective.nonAssocSemiring _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `semiring` / `semiring` 的定义
+/-- Transfer `Semiring` across an `Equiv` -/
+/-
+**Equiv.semiring** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Semiring β] → Semiring α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation semiring
-  signature: [Semiring β]
-  body: by
-  let mul := e.mul
-  let add_monoid_with_one := e.addMonoidWithOne
-  let npow := e.pow Nat
-  apply e.injective.semiring _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 semiring
-  签名: [半环 β]
-  定义体: by
-  let mul := e.mul
-  let add_monoid_with_one := e.addMonoidWithOne
-  let npow := e.pow Nat
-  apply e.injective.semiring _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `Semiring` across an `Equiv`
 -/
 protected abbrev semiring [Semiring β] : Semiring α := by
   let mul := e.mul
   let add_monoid_with_one := e.addMonoidWithOne
-  let npow := e.pow Nat
+  let npow := e.pow ℕ
   apply e.injective.semiring _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `nonUnitalCommSemiring` / `nonUnitalCommSemiring` 的定义
+/-- Transfer `NonUnitalCommSemiring` across an `Equiv` -/
+/-
+**Equiv.nonUnitalCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonUnitalCommSemiring β] → NonU
+nitalCommSemiring α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonUnitalCommSemiring
-  signature: [NonUnitalCommSemiring β]
-  body: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let nsmul := e.smul Nat
-  apply e.injective.nonUnitalCommSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonUnitalCommSemiring
-  签名: [非幺交换半环 β]
-  定义体: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let nsmul := e.smul Nat
-  apply e.injective.nonUnitalCommSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-Depends on / 依赖: toPreZeroHypercover
+--- 原说明 ---
+Transfer `NonUnitalCommSemiring` across an `Equiv`
 -/
 protected abbrev nonUnitalCommSemiring [NonUnitalCommSemiring β] : NonUnitalCommSemiring α := by
   let zero := e.zero
   let add := e.add
   let mul := e.mul
-  let nsmul := e.smul Nat
+  let nsmul := e.smul ℕ
   apply e.injective.nonUnitalCommSemiring _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `commSemiring` / `commSemiring` 的定义
+/-- Transfer `CommSemiring` across an `Equiv` -/
+/-
+**Equiv.commSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [CommSemiring β] → CommSemiring 
+α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation commSemiring
-  signature: [CommSemiring β]
-  body: by
-  let mul := e.mul
-  let add_monoid_with_one := e.addMonoidWithOne
-  let npow := e.pow Nat
-  apply e.injective.commSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 commSemiring
-  签名: [交换半环 β]
-  定义体: by
-  let mul := e.mul
-  let add_monoid_with_one := e.addMonoidWithOne
-  let npow := e.pow Nat
-  apply e.injective.commSemiring _ <;> intros <;> exact e.apply_symm_apply _
-
-Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.sumInl, of_hom, sumInl
+--- 原说明 ---
+Transfer `CommSemiring` across an `Equiv`
 -/
 protected abbrev commSemiring [CommSemiring β] : CommSemiring α := by
   let mul := e.mul
   let add_monoid_with_one := e.addMonoidWithOne
-  let npow := e.pow Nat
+  let npow := e.pow ℕ
   apply e.injective.commSemiring _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `nonUnitalNonAssocRing` / `nonUnitalNonAssocRing` 的定义
+/-- Transfer `NonUnitalNonAssocRing` across an `Equiv` -/
+/-
+**Equiv.nonUnitalNonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonUnitalNonAssocRing β] → NonU
+nitalNonAssocRing α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonUnitalNonAssocRing
-  signature: [NonUnitalNonAssocRing β]
-  body: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let neg := e.Neg
-  let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
-  apply e.injective.nonUnitalNonAssocRing _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonUnitalNonAssocRing
-  签名: [非幺非结合环 β]
-  定义体: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let neg := e.Neg
-  let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
-  apply e.injective.nonUnitalNonAssocRing _ <;> intros <;> exact e.apply_symm_apply _
-
-Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.sumInr, of_hom, sumInr
+--- 原说明 ---
+Transfer `NonUnitalNonAssocRing` across an `Equiv`
 -/
 protected abbrev nonUnitalNonAssocRing [NonUnitalNonAssocRing β] : NonUnitalNonAssocRing α := by
   let zero := e.zero
@@ -385,38 +237,21 @@ protected abbrev nonUnitalNonAssocRing [NonUnitalNonAssocRing β] : NonUnitalNon
   let mul := e.mul
   let neg := e.Neg
   let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
+  let nsmul := e.smul ℕ
+  let zsmul := e.smul ℤ
   apply e.injective.nonUnitalNonAssocRing _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `nonUnitalRing` / `nonUnitalRing` 的定义
+/-- Transfer `NonUnitalRing` across an `Equiv` -/
+/-
+**Equiv.nonUnitalRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonUnitalRing β] → NonUnitalRin
+g α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonUnitalRing
-  signature: [NonUnitalRing β]
-  body: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let neg := e.Neg
-  let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
-  apply e.injective.nonUnitalRing _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonUnitalRing
-  签名: [非幺环 β]
-  定义体: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let neg := e.Neg
-  let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
-  apply e.injective.nonUnitalRing _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `NonUnitalRing` across an `Equiv`
 -/
 protected abbrev nonUnitalRing [NonUnitalRing β] : NonUnitalRing α := by
   let zero := e.zero
@@ -424,91 +259,55 @@ protected abbrev nonUnitalRing [NonUnitalRing β] : NonUnitalRing α := by
   let mul := e.mul
   let neg := e.Neg
   let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
+  let nsmul := e.smul ℕ
+  let zsmul := e.smul ℤ
   apply e.injective.nonUnitalRing _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `nonAssocRing` / `nonAssocRing` 的定义
+/-- Transfer `NonAssocRing` across an `Equiv` -/
+/-
+**Equiv.nonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonAssocRing β] → NonAssocRing 
+α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonAssocRing
-  signature: [NonAssocRing β]
-  body: by
-  let add_group_with_one := e.addGroupWithOne
-  let mul := e.mul
-  apply e.injective.nonAssocRing _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonAssocRing
-  签名: [非结合环 β]
-  定义体: by
-  let add_group_with_one := e.addGroupWithOne
-  let mul := e.mul
-  apply e.injective.nonAssocRing _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `NonAssocRing` across an `Equiv`
 -/
 protected abbrev nonAssocRing [NonAssocRing β] : NonAssocRing α := by
   let add_group_with_one := e.addGroupWithOne
   let mul := e.mul
   apply e.injective.nonAssocRing _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `ring` / `ring` 的定义
+/-- Transfer `Ring` across an `Equiv` -/
+/-
+**Equiv.ring** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Ring β] → Ring α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation ring
-  signature: [Ring β]
-  body: by
-  let mul := e.mul
-  let add_group_with_one := e.addGroupWithOne
-  let npow := e.pow Nat
-  apply e.injective.ring _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 ring
-  签名: [环 β]
-  定义体: by
-  let mul := e.mul
-  let add_group_with_one := e.addGroupWithOne
-  let npow := e.pow Nat
-  apply e.injective.ring _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `Ring` across an `Equiv`
 -/
 protected abbrev ring [Ring β] : Ring α := by
   let mul := e.mul
   let add_group_with_one := e.addGroupWithOne
-  let npow := e.pow Nat
+  let npow := e.pow ℕ
   apply e.injective.ring _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `nonUnitalCommRing` / `nonUnitalCommRing` 的定义
+/-- Transfer `NonUnitalCommRing` across an `Equiv` -/
+/-
+**Equiv.nonUnitalCommRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NonUnitalCommRing β] → NonUnita
+lCommRing α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation nonUnitalCommRing
-  signature: [NonUnitalCommRing β]
-  body: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let neg := e.Neg
-  let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
-  apply e.injective.nonUnitalCommRing _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 nonUnitalCommRing
-  签名: [非幺交换环 β]
-  定义体: by
-  let zero := e.zero
-  let add := e.add
-  let mul := e.mul
-  let neg := e.Neg
-  let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
-  apply e.injective.nonUnitalCommRing _ <;> intros <;> exact e.apply_symm_apply _
-
-Depends on / 依赖: H.choose, H.choose_spec.choose_spec.choose, H.choose_spec.choose_spec.choose_spec.left, H.choose_spec.choose_spec.choose_spec.right, choose_spec, exists_isAffineOpen_of_isCompact, hU.isCompact, isCompact, of_finite
+--- 原说明 ---
+Transfer `NonUnitalCommRing` across an `Equiv`
 -/
 protected abbrev nonUnitalCommRing [NonUnitalCommRing β] : NonUnitalCommRing α := by
   let zero := e.zero
@@ -516,53 +315,51 @@ protected abbrev nonUnitalCommRing [NonUnitalCommRing β] : NonUnitalCommRing α
   let mul := e.mul
   let neg := e.Neg
   let sub := e.sub
-  let nsmul := e.smul Nat
-  let zsmul := e.smul Int
+  let nsmul := e.smul ℕ
+  let zsmul := e.smul ℤ
   apply e.injective.nonUnitalCommRing _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `commRing` / `commRing` 的定义
+/-- Transfer `CommRing` across an `Equiv` -/
+/-
+**Equiv.commRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [CommRing β] → CommRing α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation commRing
-  signature: [CommRing β]
-  body: by
-  let mul := e.mul
-  let add_group_with_one := e.addGroupWithOne
-  let npow := e.pow Nat
-  apply e.injective.commRing _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 commRing
-  签名: [交换环 β]
-  定义体: by
-  let mul := e.mul
-  let add_group_with_one := e.addGroupWithOne
-  let npow := e.pow Nat
-  apply e.injective.commRing _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `CommRing` across an `Equiv`
 -/
 protected abbrev commRing [CommRing β] : CommRing α := by
   let mul := e.mul
   let add_group_with_one := e.addGroupWithOne
-  let npow := e.pow Nat
+  let npow := e.pow ℕ
   apply e.injective.commRing _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-lemma `isDomain` / 引理 `isDomain`
+/-- Transfer `IsDomain` across an `Equiv` -/
+/-
+**Equiv.isDomain** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Semiring β] [IsDomain β] (e : α ≃ 
+β), IsDomain α
+参数：e : α ≃ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isDomain`：∀ {α : Type u_1} {β : Type u_2} [inst : Sem
+iring α] [IsDomain α] [inst_2 : Semiring β] {F : Type u_3}   [inst_3 : FunLike F
+ β α] [MonoidWith…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-lemma isDomain
-  given: [Semiring β] [IsDomain β] (e : α ≃ β)
-  proof: e.semiring
-    IsDomain α :=
-  letI := e.semiring; e.injective.isDomain e.ringEquiv
-
-中文:
-引理 isDomain
-  条件: [半环 β] [是整环 β] (e : α ≃ β)
-  证明: e.semiring
-    IsDomain α :=
-  letI := e.semiring; e.injective.isDomain e.ringEquiv
+--- 原说明 ---
+Transfer `IsDomain` across an `Equiv`
 -/
 protected lemma isDomain [Semiring β] [IsDomain β] (e : α ≃ β) :
     letI := e.semiring
@@ -570,3 +367,4 @@ protected lemma isDomain [Semiring β] [IsDomain β] (e : α ≃ β) :
   letI := e.semiring; e.injective.isDomain e.ringEquiv
 
 end Equiv
+

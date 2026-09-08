@@ -39,25 +39,23 @@ section
 open Lean Elab Tactic Meta
 
 /--
-Definition of `List.findDefeq` / `List.findDefeq` 的定义
+`findDefeq red m e` looks for a key in `m` that is defeq to `e` (up to transparency `red`),
+and returns the value associated with this key if it exists.
+Otherwise, it fails.
+-/
+/-
+**List.findDefeq** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：List.findDefeq {v : Type} (red : TransparencyMode) (m : List (Expr × v)) (
+e : Expr) : MetaM v
+参数：red : TransparencyMode；m : List (Expr × v)；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition List.findDefeq
-  signature: {v : Type} (red : TransparencyMode) (m : List (Expr × v)) (e : Expr)
-  body: do
-  if let some (_, n) ← m.findM? fun ⟨e', _⟩ => withTransparency red (isDefEq e e') then
-    return n
-  else
-    failure
-
-中文:
-定义 列表.findDefeq
-  签名: {v : 类型} (red : TransparencyMode) (m : 列表 (Expr × v)) (e : Expr)
-  定义体: do
-  if let some (_, n) ← m.findM? fun ⟨e', _⟩ => withTransparency red (isDefEq e e') then
-    return n
-  else
-    failure
+--- 原说明 ---
+`findDefeq red m e` looks for a key in `m` that is defeq to `e` (up to transpare
+ncy `red`),
+and returns the value associated with this key if it exists.
+Otherwise, it fails.
 -/
 def List.findDefeq {v : Type} (red : TransparencyMode) (m : List (Expr × v)) (e : Expr) :
     MetaM v := do
@@ -72,187 +70,128 @@ We introduce a local instance allowing addition of `TreeMap`s,
 removing any keys with value zero.
 We don't need to prove anything about this addition, as it is only used in meta code.
 -/
-local instance {α β : Type*} {c : α -> α -> Ordering} [Add β] [Zero β] [DecidableEq β] :
+local instance {α β : Type*} {c : α → α → Ordering} [Add β] [Zero β] [DecidableEq β] :
     Add (TreeMap α β c) where
-  add := fun f g => (f.mergeWith (fun _ b b' => b + b') g).filter (fun _ b => b != 0)
+  add := fun f g => (f.mergeWith (fun _ b b' => b + b') g).filter (fun _ b => b ≠ 0)
 
 namespace Mathlib.Tactic.Linarith
 
 /-! ### Parsing datatypes -/
 
-/--
-Definition of `Monom` / `Monom` 的定义
+/-- Variables (represented by natural numbers) map to their power. -/
+/-
+**Mathlib.Tactic.Linarith.Monom** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.Lina
+rith`。
+形式化陈述：Monom : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Monom
-  signature: : Type
-  body: TreeMap Nat Nat
-
-中文:
-缩写 Monom
-  签名: : 类型
-  定义体: TreeMap Nat Nat
-
-Depends on / 依赖: TreeMap
+--- 原说明 ---
+Variables (represented by natural numbers) map to their power.
 -/
-abbrev Monom : Type := TreeMap Nat Nat
+abbrev Monom : Type := TreeMap ℕ ℕ
 
-/--
-Definition of `Monom.one` / `Monom.one` 的定义
+/-- `1` is represented by the empty monomial, the product of no variables. -/
+/-
+**Mathlib.Tactic.Linarith.Monom.one** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Li
+narith.Monom`。
+形式化陈述：Mathlib.Tactic.Linarith.Monom
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Monom.one
-  signature: : Monom
-  body: TreeMap.empty
-
-中文:
-定义 Monom.one
-  签名: : Monom
-  定义体: TreeMap.empty
-
-Depends on / 依赖: TreeMap, TreeMap.empty
+--- 原说明 ---
+`1` is represented by the empty monomial, the product of no variables.
 -/
 def Monom.one : Monom := TreeMap.empty
 
-/--
-Definition of `Monom.lt` / `Monom.lt` 的定义
+/-- Compare monomials by first comparing their keys and then their powers. -/
+/-
+**Mathlib.Tactic.Linarith.Monom.lt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lin
+arith.Monom`。
+形式化陈述：Mathlib.Tactic.Linarith.Monom → Mathlib.Tactic.Linarith.Monom → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Monom.lt
-  signature: : Monom -> Monom -> Bool
-  body: fun a b =>
-    ((a.keys : List Nat) < b.keys) ||
-      (((a.keys : List Nat) = b.keys) && ((a.values : List Nat) < b.values))
-
-中文:
-定义 Monom.lt
-  签名: : Monom -> Monom -> 布尔值
-  定义体: fun a b =>
-    ((a.keys : List Nat) < b.keys) ||
-      (((a.keys : List Nat) = b.keys) && ((a.values : List Nat) < b.values))
-
-Depends on / 依赖: a.keys, a.values, b.keys, b.values, values
+--- 原说明 ---
+Compare monomials by first comparing their keys and then their powers.
 -/
-def Monom.lt : Monom -> Monom -> Bool :=
+def Monom.lt : Monom → Monom → Bool :=
   fun a b =>
-    ((a.keys : List Nat) < b.keys) ||
-      (((a.keys : List Nat) = b.keys) && ((a.values : List Nat) < b.values))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Ord Monom
-  body: if x.lt y then .lt else if x == y then .eq else .gt
-
-中文:
-实例 :
-  签名: 序 Monom
-  定义体: if x.lt y then .lt else if x == y then .eq else .gt
-
-Depends on / 依赖: x.lt
+    ((a.keys : List ℕ) < b.keys) ||
+      (((a.keys : List ℕ) = b.keys) && ((a.values : List ℕ) < b.values))
+/-
+**Mathlib.Tactic.Linarith.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Linarith`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Ord Monom where
   compare x y := if x.lt y then .lt else if x == y then .eq else .gt
 
-/--
-Definition of `Sum` / `Sum` 的定义
+/-- Linear combinations of monomials are represented by mapping monomials to coefficients. -/
+/-
+**Mathlib.Tactic.Linarith.Sum** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.Linari
+th`。
+形式化陈述：Sum : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Sum
-  signature: : Type
-  body: TreeMap Monom Int
-
-中文:
-缩写 和
-  签名: : 类型
-  定义体: TreeMap Monom Int
-
-Depends on / 依赖: TreeMap
+--- 原说明 ---
+Linear combinations of monomials are represented by mapping monomials to coeffic
+ients.
 -/
-abbrev Sum : Type := TreeMap Monom Int
+abbrev Sum : Type := TreeMap Monom ℤ
 
-/--
-Definition of `Sum.one` / `Sum.one` 的定义
+/-- `1` is represented as the singleton sum of the monomial `Monom.one` with coefficient 1. -/
+/-
+**Mathlib.Tactic.Linarith.Sum.one** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lina
+rith.Sum`。
+形式化陈述：Mathlib.Tactic.Linarith.Sum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sum.one
-  signature: : Sum
-  body: TreeMap.empty.insert Monom.one 1
-
-中文:
-定义 和.one
-  签名: : 和
-  定义体: TreeMap.empty.insert Monom.one 1
-
-Depends on / 依赖: Monom.one, TreeMap, TreeMap.empty.insert, insert
+--- 原说明 ---
+`1` is represented as the singleton sum of the monomial `Monom.one` with coeffic
+ient 1.
 -/
 def Sum.one : Sum := TreeMap.empty.insert Monom.one 1
 
-/--
-Definition of `Sum.scaleByMonom` / `Sum.scaleByMonom` 的定义
+/-- `Sum.scaleByMonom s m` multiplies every monomial in `s` by `m`. -/
+/-
+**Mathlib.Tactic.Linarith.Sum.scaleByMonom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Linarith.Sum`。
+形式化陈述：Mathlib.Tactic.Linarith.Sum → Mathlib.Tactic.Linarith.Monom → Mathlib.Tact
+ic.Linarith.Sum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sum.scaleByMonom
-  signature: (s : Sum) (m : Monom)
-  body: s.foldr (fun m' coeff sm => sm.insert (m + m') coeff) TreeMap.empty
-
-中文:
-定义 和.scaleByMonom
-  签名: (s : 和) (m : Monom)
-  定义体: s.foldr (fun m' coeff sm => sm.insert (m + m') coeff) TreeMap.empty
-
-Depends on / 依赖: TreeMap, TreeMap.empty, insert, s.foldr, sm.insert
+--- 原说明 ---
+`Sum.scaleByMonom s m` multiplies every monomial in `s` by `m`.
 -/
 def Sum.scaleByMonom (s : Sum) (m : Monom) : Sum :=
   s.foldr (fun m' coeff sm => sm.insert (m + m') coeff) TreeMap.empty
 
-/--
-Definition of `Sum.mul` / `Sum.mul` 的定义
+/-- `sum.mul s1 s2` distributes the multiplication of two sums. -/
+/-
+**Mathlib.Tactic.Linarith.Sum.mul** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lina
+rith.Sum`。
+形式化陈述：Mathlib.Tactic.Linarith.Sum → Mathlib.Tactic.Linarith.Sum → Mathlib.Tactic
+.Linarith.Sum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sum.mul
-  signature: (s1 s2 : Sum)
-  body: s1.foldr (fun mn coeff sm => sm + ((s2.scaleByMonom mn).map (fun _ v => v * coeff)))
-    TreeMap.empty
-
-中文:
-定义 和.mul
-  签名: (s1 s2 : 和)
-  定义体: s1.foldr (fun mn coeff sm => sm + ((s2.scaleByMonom mn).map (fun _ v => v * coeff)))
-    TreeMap.empty
-
-Depends on / 依赖: TreeMap, TreeMap.empty, s1.foldr, s2.scaleByMonom, scaleByMonom
+--- 原说明 ---
+`sum.mul s1 s2` distributes the multiplication of two sums.
 -/
 def Sum.mul (s1 s2 : Sum) : Sum :=
   s1.foldr (fun mn coeff sm => sm + ((s2.scaleByMonom mn).map (fun _ v => v * coeff)))
     TreeMap.empty
 
-/--
-Definition of `Sum.pow` / `Sum.pow` 的定义
+/-- The `n`th power of `s : Sum` is the `n`-fold product of `s`, with `s.pow 0 = Sum.one`. -/
+/-
+**Mathlib.Tactic.Linarith.Sum.pow** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.L
+inarith.Sum`。
+形式化陈述：Mathlib.Tactic.Linarith.Sum → ℕ → Mathlib.Tactic.Linarith.Sum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sum.pow
-  signature: (s : Sum)
-  body: n >>> 1
-    let a := s.pow m
-    if n &&& 1 = 0 then
-      a.mul a
-    else
-.mul s a.mul a
-
-中文:
-定义 和.pow
-  签名: (s : 和)
-  定义体: n >>> 1
-    let a := s.pow m
-    if n &&& 1 = 0 then
-      a.mul a
-    else
-.mul s a.mul a
+--- 原说明 ---
+The `n`th power of `s : Sum` is the `n`-fold product of `s`, with `s.pow 0 = Sum
+.one`.
 -/
-partial def Sum.pow (s : Sum) : Nat -> Sum
+partial def Sum.pow (s : Sum) : ℕ → Sum
   | 0 => Sum.one
   | 1 => s
   | n =>
@@ -261,77 +200,65 @@ partial def Sum.pow (s : Sum) : Nat -> Sum
     if n &&& 1 = 0 then
       a.mul a
     else
-.mul s a.mul a
+      a.mul a |>.mul s
 
-/--
-Definition of `SumOfMonom` / `SumOfMonom` 的定义
+/-- `SumOfMonom m` lifts `m` to a sum with coefficient `1`. -/
+/-
+**Mathlib.Tactic.Linarith.SumOfMonom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.L
+inarith`。
+形式化陈述：SumOfMonom (m : Monom) : Sum
+参数：m : Monom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SumOfMonom
-  signature: (m : Monom)
-  body: TreeMap.empty.insert m 1
-
-中文:
-定义 SumOfMonom
-  签名: (m : Monom)
-  定义体: TreeMap.empty.insert m 1
-
-Depends on / 依赖: TreeMap, TreeMap.empty.insert, insert
+--- 原说明 ---
+`SumOfMonom m` lifts `m` to a sum with coefficient `1`.
 -/
 def SumOfMonom (m : Monom) : Sum :=
   TreeMap.empty.insert m 1
 
-/--
-Definition of `one` / `one` 的定义
+/-- The unit monomial `one` is represented by the empty TreeMap. -/
+/-
+**Mathlib.Tactic.Linarith.one** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Linarith
+`。
+形式化陈述：one : Monom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition one
-  signature: : Monom
-  body: TreeMap.empty
-
-中文:
-定义 one
-  签名: : Monom
-  定义体: TreeMap.empty
-
-Depends on / 依赖: TreeMap, TreeMap.empty
+--- 原说明 ---
+The unit monomial `one` is represented by the empty TreeMap.
 -/
 def one : Monom := TreeMap.empty
 
-/--
-Definition of `scalar` / `scalar` 的定义
+/-- A scalar `z` is represented by a `Sum` with coefficient `z` and monomial `one` -/
+/-
+**Mathlib.Tactic.Linarith.scalar** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Linar
+ith`。
+形式化陈述：scalar (z : Int) : Sum
+参数：z : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition scalar
-  signature: (z : Int)
-  body: TreeMap.empty.insert one z
-
-中文:
-定义 scalar
-  签名: (z : 整数)
-  定义体: TreeMap.empty.insert one z
-
-Depends on / 依赖: TreeMap, TreeMap.empty.insert, insert
+--- 原说明 ---
+A scalar `z` is represented by a `Sum` with coefficient `z` and monomial `one`
 -/
-def scalar (z : Int) : Sum :=
+def scalar (z : ℤ) : Sum :=
   TreeMap.empty.insert one z
 
-/--
-Definition of `var` / `var` 的定义
+/-- A single variable `n` is represented by a sum with coefficient `1` and monomial `n`. -/
+/-
+**Mathlib.Tactic.Linarith.var** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Linarith
+`。
+形式化陈述：var (n : Nat) : Sum
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition var
-  signature: (n : Nat)
-  body: TreeMap.empty.insert (TreeMap.empty.insert n 1) 1
-
-中文:
-定义 var
-  签名: (n : 自然数)
-  定义体: TreeMap.empty.insert (TreeMap.empty.insert n 1) 1
-
-Depends on / 依赖: TreeMap, TreeMap.empty.insert, insert
+--- 原说明 ---
+A single variable `n` is represented by a sum with coefficient `1` and monomial 
+`n`.
 -/
-def var (n : Nat) : Sum :=
+def var (n : ℕ) : Sum :=
   TreeMap.empty.insert (TreeMap.empty.insert n 1) 1
 
 
@@ -339,45 +266,39 @@ def var (n : Nat) : Sum :=
 
 open Lean Elab Tactic Meta
 
+/--
+`ExprMap` is used to record atomic expressions which have been seen while processing inequality
+expressions.
+-/
 -- The natural number is just the index in the list,
 -- and we could reimplement to just use `List Expr` if desired.
-/--
-Definition of `ExprMap` / `ExprMap` 的定义
-
-English:
-abbreviation ExprMap
-  body: List (Expr × Nat)
-
-中文:
-缩写 ExprMap
-  定义体: List (Expr × Nat)
+/-
+**Mathlib.Tactic.Linarith.ExprMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.Li
+narith`。
+形式化陈述：ExprMap
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev ExprMap := List (Expr × Nat)
+abbrev ExprMap := List (Expr × ℕ)
 
 /--
-Definition of `linearFormOfAtom` / `linearFormOfAtom` 的定义
+`linearFormOfAtom red map e` is the atomic case for `linear_form_of_expr`.
+If `e` appears with index `k` in `map`, it returns the singleton sum `var k`.
+Otherwise it updates `map`, adding `e` with index `n`, and returns the singleton sum `var n`.
+-/
+/-
+**Mathlib.Tactic.Linarith.linearFormOfAtom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Linarith`。
+形式化陈述：linearFormOfAtom (red : TransparencyMode) (m : ExprMap) (e : Expr) : MetaM
+ (ExprMap × Sum)
+参数：red : TransparencyMode；m : ExprMap；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearFormOfAtom
-  signature: (red : TransparencyMode) (m : ExprMap) (e : Expr)
-  body: do
-  try
-    let k ← m.findDefeq red e
-    return (m, var k)
-  catch _ =>
-    let n := m.length + 1
-    return ((e, n)::m, var n)
-
-中文:
-定义 linearFormOfAtom
-  签名: (red : TransparencyMode) (m : ExprMap) (e : Expr)
-  定义体: do
-  try
-    let k ← m.findDefeq red e
-    return (m, var k)
-  catch _ =>
-    let n := m.length + 1
-    return ((e, n)::m, var n)
+--- 原说明 ---
+`linearFormOfAtom red map e` is the atomic case for `linear_form_of_expr`.
+If `e` appears with index `k` in `map`, it returns the singleton sum `var k`.
+Otherwise it updates `map`, adding `e` with index `n`, and returns the singleton
+ sum `var n`.
 -/
 def linearFormOfAtom (red : TransparencyMode) (m : ExprMap) (e : Expr) : MetaM (ExprMap × Sum) := do
   try
@@ -387,75 +308,36 @@ def linearFormOfAtom (red : TransparencyMode) (m : ExprMap) (e : Expr) : MetaM (
     let n := m.length + 1
     return ((e, n)::m, var n)
 
-
 /--
-Definition of `linearFormOfExpr` / `linearFormOfExpr` 的定义
+`linearFormOfExpr red map e` computes the linear form of `e`.
 
-English:
-definition linearFormOfExpr
-  signature: (red : TransparencyMode) (m : ExprMap) (e : Expr)
-  body: do
-  let e ← whnfR e
-  match e.numeral? with
-  | some 0 => return ⟨m, TreeMap.empty⟩
-  | some (n + 1) => return ⟨m, scalar (n + 1)⟩
-  | none =>
-  match e.getAppFnArgs with
-  | (``HMul.hMul, #[_, _, _, _, e1, e2]) => do
-    let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormOfExpr red m1 e2
-    return (m2, comp1.mul comp2)
-  | (``HAdd.hAdd, #[_, _, _, _, e1, e2]) => do
-    let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormOfExpr red m1 e2
-    return (m2, comp1 + comp2)
-  | (``HSub.hSub, #[_, _, _, _, e1, e2]) => do
-    let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormOfExpr red m1 e2
-    return (m2, comp1 + comp2.map (fun _ v => -v))
-  | (``Neg.neg, #[_, _, e]) => do
-    let (m1, comp) ← linearFormOfExpr red m e
-    return (m1, comp.map (fun _ v => -v))
-  | (``HPow.hPow, #[_, _, _, _, a, n]) => do
-    match n.numeral? with
-    | some n => do
-      let (m1, comp) ← linearFormOfExpr red m a
-      return (m1, comp.pow n)
-    | none => linearFormOfAtom red m e
-  | _ => linearFormOfAtom red m e
+`map` is a lookup map from atomic expressions to variable numbers.
+If a new atomic expression is encountered, it is added to the map with a new number.
+It matches atomic expressions up to reducibility given by `red`.
 
-中文:
-定义 linearFormOfExpr
-  签名: (red : TransparencyMode) (m : ExprMap) (e : Expr)
-  定义体: do
-  let e ← whnfR e
-  match e.numeral? with
-  | some 0 => return ⟨m, TreeMap.empty⟩
-  | some (n + 1) => return ⟨m, scalar (n + 1)⟩
-  | none =>
-  match e.getAppFnArgs with
-  | (``HMul.hMul, #[_, _, _, _, e1, e2]) => do
-    let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormOfExpr red m1 e2
-    return (m2, comp1.mul comp2)
-  | (``HAdd.hAdd, #[_, _, _, _, e1, e2]) => do
-    let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormOfExpr red m1 e2
-    return (m2, comp1 + comp2)
-  | (``HSub.hSub, #[_, _, _, _, e1, e2]) => do
-    let (m1, comp1) ← linearFormOfExpr red m e1
-    let (m2, comp2) ← linearFormOfExpr red m1 e2
-    return (m2, comp1 + comp2.map (fun _ v => -v))
-  | (``Neg.neg, #[_, _, e]) => do
-    let (m1, comp) ← linearFormOfExpr red m e
-    return (m1, comp.map (fun _ v => -v))
-  | (``HPow.hPow, #[_, _, _, _, a, n]) => do
-    match n.numeral? with
-    | some n => do
-      let (m1, comp) ← linearFormOfExpr red m a
-      return (m1, comp.pow n)
-    | none => linearFormOfAtom red m e
-  | _ => linearFormOfAtom red m e
+Because it matches up to definitional equality, this function must be in the `MetaM` monad,
+and forces some functions that call it into `MetaM` as well.
+-/
+
+/-
+**Mathlib.Tactic.Linarith.linearFormOfExpr** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib
+.Tactic.Linarith`。
+形式化陈述：Meta.TransparencyMode →   Mathlib.Tactic.Linarith.ExprMap → Expr → MetaM (
+Mathlib.Tactic.Linarith.ExprMap × Mathlib.Tactic.Linarith.Sum)
+参数：Mathlib.Tactic.Linarith.ExprMap × Mathlib.Tactic.Linarith.Sum。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`linearFormOfExpr red map e` computes the linear form of `e`.
+
+`map` is a lookup map from atomic expressions to variable numbers.
+If a new atomic expression is encountered, it is added to the map with a new num
+ber.
+It matches atomic expressions up to reducibility given by `red`.
+
+Because it matches up to definitional equality, this function must be in the `Me
+taM` monad,
+and forces some functions that call it into `MetaM` as well.
 -/
 partial def linearFormOfExpr (red : TransparencyMode) (m : ExprMap) (e : Expr) :
     MetaM (ExprMap × Sum) := do
@@ -489,34 +371,33 @@ partial def linearFormOfExpr (red : TransparencyMode) (m : ExprMap) (e : Expr) :
   | _ => linearFormOfAtom red m e
 
 /--
-Definition of `elimMonom` / `elimMonom` 的定义
+`elimMonom s map` eliminates the monomial level of the `Sum` `s`.
 
-English:
-definition elimMonom
-  signature: (s : Sum) (m : TreeMap Monom Nat)
-  body: s.foldr (fun mn coeff ⟨map, out⟩ =>
-    match map[mn]? with
-    | some n => ⟨map, out.insert n coeff⟩
-    | none =>
-      let n := map.size
-      ⟨map.insert mn n, out.insert n coeff⟩)
-    (m, TreeMap.empty)
-
-中文:
-定义 elimMonom
-  签名: (s : 和) (m : TreeMap Monom 自然数)
-  定义体: s.foldr (fun mn coeff ⟨map, out⟩ =>
-    match map[mn]? with
-    | some n => ⟨map, out.insert n coeff⟩
-    | none =>
-      let n := map.size
-      ⟨map.insert mn n, out.insert n coeff⟩)
-    (m, TreeMap.empty)
-
-Depends on / 依赖: TreeMap, TreeMap.empty, insert, map.insert, map.size, out.insert, s.foldr
+`map` is a lookup map from monomials to variable numbers.
+The output `TreeMap ℕ ℤ` has the same structure as `s : Sum`,
+but each monomial key is replaced with its index according to `map`.
+If any new monomials are encountered, they are assigned variable numbers and `map` is updated.
 -/
-def elimMonom (s : Sum) (m : TreeMap Monom Nat) : TreeMap Monom Nat × TreeMap Nat Int :=
-  s.foldr (fun mn coeff ⟨map, out⟩ =>
+/-
+**Mathlib.Tactic.Linarith.elimMonom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Li
+narith`。
+形式化陈述：elimMonom (s : Sum) (m : TreeMap Monom Nat) : TreeMap Monom Nat × TreeMap 
+Nat Int
+参数：s : Sum；m : TreeMap Monom Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`elimMonom s map` eliminates the monomial level of the `Sum` `s`.
+
+`map` is a lookup map from monomials to variable numbers.
+The output `TreeMap ℕ ℤ` has the same structure as `s : Sum`,
+but each monomial key is replaced with its index according to `map`.
+If any new monomials are encountered, they are assigned variable numbers and `ma
+p` is updated.
+-/
+def elimMonom (s : Sum) (m : TreeMap Monom ℕ) : TreeMap Monom ℕ × TreeMap ℕ ℤ :=
+  s.foldr (fun mn coeff ⟨map, out⟩ ↦
     match map[mn]? with
     | some n => ⟨map, out.insert n coeff⟩
     | none =>
@@ -525,30 +406,33 @@ def elimMonom (s : Sum) (m : TreeMap Monom Nat) : TreeMap Monom Nat × TreeMap N
     (m, TreeMap.empty)
 
 /--
-Definition of `toComp` / `toComp` 的定义
+`toComp red e e_map monom_map` converts an expression of the form `t < 0`, `t ≤ 0`, or `t = 0`
+into a `comp` object.
 
-English:
-definition toComp
-  signature: (red : TransparencyMode) (e : Expr) (e_map : ExprMap) (monom_map : TreeMap Monom Nat)
-  body: do
-  let (iq, e) ← parseCompAndExpr e
-  let (m', comp') ← linearFormOfExpr red e_map e
-  let ⟨nm, mm'⟩ := elimMonom comp' monom_map
-  -- Note: we use `.reverse` as `Linexp.get` assumes the monomial are in descending order
-  return ⟨⟨iq, mm'.toList.reverse⟩, m', nm⟩
-
-中文:
-定义 toComp
-  签名: (red : TransparencyMode) (e : Expr) (e_map : ExprMap) (monom_map : TreeMap Monom 自然数)
-  定义体: do
-  let (iq, e) ← parseCompAndExpr e
-  let (m', comp') ← linearFormOfExpr red e_map e
-  let ⟨nm, mm'⟩ := elimMonom comp' monom_map
-  -- Note: we use `.reverse` as `Linexp.get` assumes the monomial are in descending order
-  return ⟨⟨iq, mm'.toList.reverse⟩, m', nm⟩
+`e_map` maps atomic expressions to indices; `monom_map` maps monomials to indices.
+Both of these are updated during processing and returned.
 -/
-def toComp (red : TransparencyMode) (e : Expr) (e_map : ExprMap) (monom_map : TreeMap Monom Nat) :
-    MetaM (Comp × ExprMap × TreeMap Monom Nat) := do
+/-
+**Mathlib.Tactic.Linarith.toComp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Linar
+ith`。
+形式化陈述：toComp (red : TransparencyMode) (e : Expr) (e_map : ExprMap) (monom_map : 
+TreeMap Monom Nat) : MetaM (Comp × ExprMap × TreeMap Monom Nat)
+参数：red : TransparencyMode；e : Expr；e_map : ExprMap；monom_map : TreeMap Monom Nat
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`toComp red e e_map monom_map` converts an expression of the form `t < 0`, `t ≤ 
+0`, or `t = 0`
+into a `comp` object.
+
+`e_map` maps atomic expressions to indices; `monom_map` maps monomials to indice
+s.
+Both of these are updated during processing and returned.
+-/
+def toComp (red : TransparencyMode) (e : Expr) (e_map : ExprMap) (monom_map : TreeMap Monom ℕ) :
+    MetaM (Comp × ExprMap × TreeMap Monom ℕ) := do
   let (iq, e) ← parseCompAndExpr e
   let (m', comp') ← linearFormOfExpr red e_map e
   let ⟨nm, mm'⟩ := elimMonom comp' monom_map
@@ -556,50 +440,64 @@ def toComp (red : TransparencyMode) (e : Expr) (e_map : ExprMap) (monom_map : Tr
   return ⟨⟨iq, mm'.toList.reverse⟩, m', nm⟩
 
 /--
-Definition of `toCompFold` / `toCompFold` 的定义
-
-English:
-definition toCompFold
-  signature: (red : TransparencyMode)
-
-中文:
-定义 toCompFold
-  签名: (red : TransparencyMode)
+`toCompFold red e_map exprs monom_map` folds `toComp` over `exprs`,
+updating `e_map` and `monom_map` as it goes.
 -/
-def toCompFold (red : TransparencyMode) : ExprMap -> List Expr -> TreeMap Monom Nat ->
-    MetaM (List Comp × ExprMap × TreeMap Monom Nat)
-| m, [], mm => return ([], m, mm)
+/-
+**Mathlib.Tactic.Linarith.toCompFold** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.L
+inarith`。
+形式化陈述：Meta.TransparencyMode →   Mathlib.Tactic.Linarith.ExprMap →     List Expr 
+→       Std.TreeMap Mathlib.Tactic.Linarith.Monom ℕ compare →         MetaM     
+      (List Mathlib.Tactic.Linarith.Comp ×             Mathlib.Tactic.Linarith.E
+xprMap × Std.TreeMap Mathlib.Tactic.Linarith.Monom ℕ compare)
+参数：List Mathlib.Tactic.Linarith.Comp ×             Mathlib.Tactic.Linarith.ExprM
+ap × Std.TreeMap Mathlib.Tactic.Linarith.Monom ℕ compare。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`toCompFold red e_map exprs monom_map` folds `toComp` over `exprs`,
+updating `e_map` and `monom_map` as it goes.
+-/
+def toCompFold (red : TransparencyMode) : ExprMap → List Expr → TreeMap Monom ℕ →
+    MetaM (List Comp × ExprMap × TreeMap Monom ℕ)
+| m, [],     mm => return ([], m, mm)
 | m, (h::t), mm => do
     let (c, m', mm') ← toComp red h m mm
     let (l, mp, mm') ← toCompFold red m' t mm'
     return (c::l, mp, mm')
 
 /--
-Definition of `linearFormsAndMaxVar` / `linearFormsAndMaxVar` 的定义
+`linearFormsAndMaxVar red pfs` is the main interface for computing the linear forms of a list
+of expressions. Given a list `pfs` of proofs of comparisons, it produces a list `c` of `Comp`s of
+the same length, such that `c[i]` represents the linear form of the type of `pfs[i]`.
 
-English:
-definition linearFormsAndMaxVar
-  signature: (red : TransparencyMode) (pfs : List Expr)
-  body: do
-  let pftps ← (pfs.mapM inferType)
-  let (l, _, map) ← toCompFold red [] pftps TreeMap.empty
-  trace[linarith.detail] "monomial map: {map.toList.map fun ⟨k,v⟩ => (k.toList, v)}"
-  return (l, map.size - 1)
+It also returns the largest variable index that appears in comparisons in `c`.
+-/
+/-
+**Mathlib.Tactic.Linarith.linearFormsAndMaxVar** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Linarith`。
+形式化陈述：linearFormsAndMaxVar (red : TransparencyMode) (pfs : List Expr) : MetaM (L
+ist Comp × Nat)
+参数：red : TransparencyMode；pfs : List Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 linearFormsAndMaxVar
-  签名: (red : TransparencyMode) (pfs : 列表 Expr)
-  定义体: do
-  let pftps ← (pfs.mapM inferType)
-  let (l, _, map) ← toCompFold red [] pftps TreeMap.empty
-  trace[linarith.detail] "monomial map: {map.toList.map fun ⟨k,v⟩ => (k.toList, v)}"
-  return (l, map.size - 1)
+--- 原说明 ---
+`linearFormsAndMaxVar red pfs` is the main interface for computing the linear fo
+rms of a list
+of expressions. Given a list `pfs` of proofs of comparisons, it produces a list 
+`c` of `Comp`s of
+the same length, such that `c[i]` represents the linear form of the type of `pfs
+[i]`.
+
+It also returns the largest variable index that appears in comparisons in `c`.
 -/
 def linearFormsAndMaxVar (red : TransparencyMode) (pfs : List Expr) :
-    MetaM (List Comp × Nat) := do
+    MetaM (List Comp × ℕ) := do
   let pftps ← (pfs.mapM inferType)
   let (l, _, map) ← toCompFold red [] pftps TreeMap.empty
   trace[linarith.detail] "monomial map: {map.toList.map fun ⟨k,v⟩ => (k.toList, v)}"
   return (l, map.size - 1)
 
 end Mathlib.Tactic.Linarith
+

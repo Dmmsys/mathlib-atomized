@@ -51,7 +51,7 @@ variable [SeminormedAddCommGroup E] [SeminormedAddCommGroup F] [SeminormedAddCom
 
 variable [NontriviallyNormedField 𝕜] [NontriviallyNormedField 𝕜₂] [NontriviallyNormedField 𝕜₃]
   [NormedSpace 𝕜 E] [NormedSpace 𝕜₂ F] [NormedSpace 𝕜 Fₗ] [NormedSpace 𝕜₃ G]
-  {σ₁₂ : 𝕜 ->+* 𝕜₂} {σ₂₃ : 𝕜₂ ->+* 𝕜₃} {σ₁₃ : 𝕜 ->+* 𝕜₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
+  {σ₁₂ : 𝕜 →+* 𝕜₂} {σ₂₃ : 𝕜₂ →+* 𝕜₃} {σ₁₃ : 𝕜 →+* 𝕜₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃]
 
 variable [FunLike 𝓕 E F]
 
@@ -59,296 +59,355 @@ section
 
 variable [SemilinearMapClass 𝓕 σ₁₂ E F]
 
-/--
-theorem `ball_zero_subset_range_iff_surjective` / 定理 `ball_zero_subset_range_iff_surjective`
-
-English:
-theorem ball_zero_subset_range_iff_surjective
-  statement: [RingHomSurjective σ₁₂] {f : 𝓕} {r : Real}
-  proof: .subset_range_iff_surjective (f := (f : E ->ₛₗ[σ₁₂] F)) absorbent_ball (by simpa)
-
-中文:
-定理 ball_zero_subset_range_iff_surjective
-  结论: [RingHomSurjective σ₁₂] {f : 𝓕} {r : 实数}
-  证明: .subset_range_iff_surjective (f := (f : E ->ₛₗ[σ₁₂] F)) absorbent_ball (by simpa)
-
-Depends on / 依赖: absorbent_ball, subset_range_iff_surjective
+/-
+**ball_zero_subset_range_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ball_zero_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} {r :
+ Real} (hr : 0 < r) : ball 0 r subseteq Set.range f ↔ (⇑f).Surjective
+参数：hr : 0 < r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Absorbent.subset_range_iff_surjective`：Absorbent.subset_range_iff_surjec
+tive [RingHomSurjective σ] {f : F ->ₛₗ[σ] E} {s : Set E} (hs_abs : Absorbent 𝕜 s
+) : s subseteq f.range ↔ (⇑…
+· 使用定理 `absorbent_ball`：absorbent_ball (hx : ‖x‖ < r) : Absorbent 𝕜 (Metric.ball
+ x r)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
 -/
-theorem ball_zero_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} {r : Real}
-    (hr : 0 < r) : ball 0 r subseteq Set.range f ↔ (⇑f).Surjective :=
-.subset_range_iff_surjective (f := (f : E ->ₛₗ[σ₁₂] F)) absorbent_ball (by simpa)
-
-/--
-theorem `ball_subset_range_iff_surjective` / 定理 `ball_subset_range_iff_surjective`
-
-English:
-theorem ball_subset_range_iff_surjective
-  statement: [RingHomSurjective σ₁₂] {f : 𝓕} {x : F} {r : Real}
-  proof: by
-  refine ⟨fun h => ?_, by simp_all⟩
-  rw [← ball_zero_subset_range_iff_surjective hr]; rw [← LinearMap.coe_coe]
+theorem ball_zero_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} {r : ℝ}
+    (hr : 0 < r) : ball 0 r ⊆ Set.range f ↔ (⇑f).Surjective :=
+  absorbent_ball (by simpa) |>.subset_range_iff_surjective (f := (f : E →ₛₗ[σ₁₂] F))
+/-
+**ball_subset_range_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ball_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} {x : F} {
+r : Real} (hr : 0 < r) : ball x r subseteq Set.range f ↔ (⇑f).Surjective
+参数：hr : 0 < r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ball_zero_subset_range_iff_surjective`：ball_zero_subset_range_iff_surjec
+tive [RingHomSurjective σ₁₂] {f : 𝓕} {r : Real} (hr : 0 < r) : ball 0 r subseteq
+ Set.range f ↔ (⇑f).Surject…
+· 使用引理 `LinearMap.coe_coe`：coe_coe {F : Type*} [FunLike F M M₃] [SemilinearMapCl
+ass F σ M M₃] {f : F} : ⇑(f : M ->ₛₗ[σ] M₃) = f
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Submodule.add_mem_iff_left`：∀ {R : Type u} {M : Type v} [inst : Ring R] 
+[inst_1 : AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {
+x y : M}, y ∈ p …
+· 使用定理 `Metric.mem_ball_self`：mem_ball_self (h : 0 < ε) : x in ball x ε
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_add_self_left`：∀ {E : Type u_2} [inst : SeminormedAddCommGroup E] (
+a b : E), dist (b + a) a = ‖b‖
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dist_zero_right`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E),
+ dist a 0 = ‖a‖
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+-/
+theorem ball_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} {x : F} {r : ℝ}
+    (hr : 0 < r) : ball x r ⊆ Set.range f ↔ (⇑f).Surjective := by
+  refine ⟨fun h ↦ ?_, by simp_all⟩
+  rw [← ball_zero_subset_range_iff_surjective hr, ← LinearMap.coe_coe]
   simp_rw [← LinearMap.coe_range, Set.subset_def, SetLike.mem_coe] at h ⊢
   intro _ _
-  rw [← Submodule.add_mem_iff_left (f : E ->ₛₗ[σ₁₂] F).range (h _ <| mem_ball_self hr)]
+  rw [← Submodule.add_mem_iff_left (f : E →ₛₗ[σ₁₂] F).range (h _ <| mem_ball_self hr)]
   apply h
   simp_all
-
-中文:
-定理 ball_subset_range_iff_surjective
-  结论: [RingHomSurjective σ₁₂] {f : 𝓕} {x : F} {r : 实数}
-  证明: by
-  refine ⟨fun h => ?_, by simp_all⟩
-  rw [← ball_zero_subset_range_iff_surjective hr]; rw [← LinearMap.coe_coe]
-  simp_rw [← LinearMap.coe_range, Set.subset_def, SetLike.mem_coe] at h ⊢
-  intro _ _
-  rw [← Submodule.add_mem_iff_left (f : E ->ₛₗ[σ₁₂] F).range (h _ <| mem_ball_self hr)]
-  apply h
-  simp_all
-
-Depends on / 依赖: LinearMap, LinearMap.coe_coe, LinearMap.coe_range, Set.subset_def, SetLike, SetLike.mem_coe, Submodule, Submodule.add_mem_iff_left, add_mem_iff_left, ball_zero_subset_range_iff_surjective, coe_coe, coe_range, mem_ball_self, mem_coe, simp_rw, subset_def
+/-
+**closedBall_subset_range_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：closedBall_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} (x 
+: F) {r : Real} (hr : 0 < r) : closedBall (x : F) r subseteq Set.range f ↔ (⇑f).
+Surjective
+参数：x : F；hr : 0 < r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ball_subset_range_iff_surjective`：ball_subset_range_iff_surjective [Ring
+HomSurjective σ₁₂] {f : 𝓕} {x : F} {r : Real} (hr : 0 < r) : ball x r subseteq S
+et.range f ↔ (⇑f).Surj…
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Metric.ball_subset_closedBall`：ball_subset_closedBall : ball x ε subsete
+q closedBall x ε
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem ball_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} {x : F} {r : Real}
-    (hr : 0 < r) : ball x r subseteq Set.range f ↔ (⇑f).Surjective := by
-  refine ⟨fun h => ?_, by simp_all⟩
-  rw [← ball_zero_subset_range_iff_surjective hr]; rw [← LinearMap.coe_coe]
-  simp_rw [← LinearMap.coe_range, Set.subset_def, SetLike.mem_coe] at h ⊢
-  intro _ _
-  rw [← Submodule.add_mem_iff_left (f : E ->ₛₗ[σ₁₂] F).range (h _ <| mem_ball_self hr)]
-  apply h
-  simp_all
-
-/--
-theorem `closedBall_subset_range_iff_surjective` / 定理 `closedBall_subset_range_iff_surjective`
-
-English:
-theorem closedBall_subset_range_iff_surjective
-  statement: [RingHomSurjective σ₁₂] {f : 𝓕} (x : F) {r : Real}
-  proof: ⟨fun h => (ball_subset_range_iff_surjective hr).mp subset_trans ball_subset_closedBall h,
+theorem closedBall_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} (x : F) {r : ℝ}
+    (hr : 0 < r) : closedBall (x : F) r ⊆ Set.range f ↔ (⇑f).Surjective :=
+  ⟨fun h ↦ (ball_subset_range_iff_surjective hr).mp <| subset_trans ball_subset_closedBall h,
     by simp_all⟩
 
-中文:
-定理 closedBall_subset_range_iff_surjective
-  结论: [RingHomSurjective σ₁₂] {f : 𝓕} (x : F) {r : 实数}
-  证明: ⟨fun h => (ball_subset_range_iff_surjective hr).mp subset_trans ball_subset_closedBall h,
-    by simp_all⟩
-
-Depends on / 依赖: ball_subset_closedBall, ball_subset_range_iff_surjective, subset_trans
+variable {F' 𝓕' : Type*} [NormedAddCommGroup F'] [NormedSpace ℝ F'] [Nontrivial F']
+  {τ : 𝕜 →+* ℝ} [FunLike 𝓕' E F'] [SemilinearMapClass 𝓕' τ E F']
+/-
+**sphere_subset_range_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sphere_subset_range_iff_surjective [RingHomSurjective τ] {f : 𝓕'} {x : F'}
+ {r : Real} (hr : 0 < r) : sphere x r subseteq Set.range f ↔ (⇑f).Surjective
+参数：hr : 0 < r。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `closedBall_subset_range_iff_surjective`：closedBall_subset_range_iff_surj
+ective [RingHomSurjective σ₁₂] {f : 𝓕} (x : F) {r : Real} (hr : 0 < r) : closedB
+all (x : F) r subseteq Set.r…
+· 使用定理 `convexHull_sphere_eq_closedBall`：convexHull_sphere_eq_closedBall {F : Ty
+pe*} [NormedAddCommGroup F] [NormedSpace Real F] [Nontrivial F] (x : F) {r : Rea
+l} (hr : 0 <= r) : co…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `convexHull_mono`：convexHull_mono (hst : s subseteq t) : convexHull 𝕜 s s
+ubseteq convexHull 𝕜 t
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `convexHull_eq_self`：convexHull_eq_self : convexHull 𝕜 s = s ↔ Convex 𝕜 s
+· 使用定理 `Submodule.Convex.semilinear_range`：∀ {𝕜 : Type u_1} {E : Type u_2} [inst
+ : Semiring 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [inst_3 : 
+_root_.Module 𝕜 E] {𝕜' …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem closedBall_subset_range_iff_surjective [RingHomSurjective σ₁₂] {f : 𝓕} (x : F) {r : Real}
-    (hr : 0 < r) : closedBall (x : F) r subseteq Set.range f ↔ (⇑f).Surjective :=
-⟨fun h => (ball_subset_range_iff_surjective hr).mp subset_trans ball_subset_closedBall h,
-    by simp_all⟩
-
-variable {F' 𝓕' : Type*} [NormedAddCommGroup F'] [NormedSpace Real F'] [Nontrivial F']
-  {τ : 𝕜 ->+* Real} [FunLike 𝓕' E F'] [SemilinearMapClass 𝓕' τ E F']
-
-/--
-theorem `sphere_subset_range_iff_surjective` / 定理 `sphere_subset_range_iff_surjective`
-
-English:
-theorem sphere_subset_range_iff_surjective
-  statement: [RingHomSurjective τ] {f : 𝓕'} {x : F'} {r : Real}
-  proof: by
-  refine ⟨fun h => ?_, by simp_all⟩
+theorem sphere_subset_range_iff_surjective [RingHomSurjective τ] {f : 𝓕'} {x : F'} {r : ℝ}
+    (hr : 0 < r) : sphere x r ⊆ Set.range f ↔ (⇑f).Surjective := by
+  refine ⟨fun h ↦ ?_, by simp_all⟩
   grw [← (closedBall_subset_range_iff_surjective x hr), ← convexHull_sphere_eq_closedBall x hr.le,
-    convexHull_mono h, (convexHull_eq_self (𝕜 := Real) (s := Set.range ↑f)).mpr]
-  exact Submodule.Convex.semilinear_range (E := F') (F' := E) (σ := τ) f
-
-中文:
-定理 sphere_subset_range_iff_surjective
-  结论: [RingHomSurjective τ] {f : 𝓕'} {x : F'} {r : 实数}
-  证明: by
-  refine ⟨fun h => ?_, by simp_all⟩
-  grw [← (closedBall_subset_range_iff_surjective x hr), ← convexHull_sphere_eq_closedBall x hr.le,
-    convexHull_mono h, (convexHull_eq_self (𝕜 := Real) (s := Set.range ↑f)).mpr]
-  exact Submodule.Convex.semilinear_range (E := F') (F' := E) (σ := τ) f
-
-Depends on / 依赖: Convex, Set.range, Submodule, Submodule.Convex.semilinear_range, closedBall_subset_range_iff_surjective, convexHull_eq_self, convexHull_mono, convexHull_sphere_eq_closedBall, hr.le, semilinear_range
--/
-theorem sphere_subset_range_iff_surjective [RingHomSurjective τ] {f : 𝓕'} {x : F'} {r : Real}
-    (hr : 0 < r) : sphere x r subseteq Set.range f ↔ (⇑f).Surjective := by
-  refine ⟨fun h => ?_, by simp_all⟩
-  grw [← (closedBall_subset_range_iff_surjective x hr), ← convexHull_sphere_eq_closedBall x hr.le,
-    convexHull_mono h, (convexHull_eq_self (𝕜 := Real) (s := Set.range ↑f)).mpr]
+    convexHull_mono h, (convexHull_eq_self (𝕜 := ℝ) (s := Set.range ↑f)).mpr]
   exact Submodule.Convex.semilinear_range (E := F') (F' := E) (σ := τ) f
 
 end
 
-/--
-theorem `norm_image_of_norm_eq_zero` / 定理 `norm_image_of_norm_eq_zero`
+/-- If `‖x‖ = 0` and `f` is continuous then `‖f x‖ = 0`. -/
+/-
+**norm_image_of_norm_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_image_of_norm_eq_zero [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Co
+ntinuous f) {x : E} (hx : ‖x‖ = 0) : ‖f x‖ = 0
+参数：f : 𝓕；hf : Continuous f；hx : ‖x‖ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mem_closure_zero_iff_norm`：∀ {E : Type u_4} [inst : SeminormedAddGroup E
+] {x : E}, x ∈ closure {0} ↔ ‖x‖ = 0
+· 使用定理 `specializes_iff_mem_closure`：specializes_iff_mem_closure : x ⤳ y ↔ y in 
+closure ({x} : Set X)
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Specializes.map`：Specializes.map (h : x ⤳ y) (hf : Continuous f) : f x ⤳
+ f y
 
-English:
-theorem norm_image_of_norm_eq_zero
-  statement: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f)
-  proof: by
-  rw [← mem_closure_zero_iff_norm]; rw [← specializes_iff_mem_closure]; rw [← map_zero f] at *
-  exact hx.map hf
-
-中文:
-定理 norm_image_of_norm_eq_zero
-  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕) (hf : 连续 f)
-  证明: by
-  rw [← mem_closure_zero_iff_norm]; rw [← specializes_iff_mem_closure]; rw [← map_zero f] at *
-  exact hx.map hf
-
-Depends on / 依赖: hx.map, map_zero, mem_closure_zero_iff_norm, specializes_iff_mem_closure
+--- 原说明 ---
+If `‖x‖ = 0` and `f` is continuous then `‖f x‖ = 0`.
 -/
 theorem norm_image_of_norm_eq_zero [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f)
     {x : E} (hx : ‖x‖ = 0) : ‖f x‖ = 0 := by
-  rw [← mem_closure_zero_iff_norm]; rw [← specializes_iff_mem_closure]; rw [← map_zero f] at *
+  rw [← mem_closure_zero_iff_norm, ← specializes_iff_mem_closure, ← map_zero f] at *
   exact hx.map hf
 
 section
 
 variable [RingHomIsometric σ₁₂]
 
-/--
-theorem `SemilinearMapClass.bound_of_shell_semi_normed` / 定理 `SemilinearMapClass.bound_of_shell_semi_normed`
-
-English:
-theorem SemilinearMapClass.bound_of_shell_semi_normed
-  statement: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-  proof: (normSeminorm 𝕜 E).bound_of_shell ((normSeminorm 𝕜₂ F).comp ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩)
-    ε_pos hc hf hx
-
-中文:
-定理 半线性映射类.bound_of_shell_semi_normed
-  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
-  证明: (normSeminorm 𝕜 E).bound_of_shell ((normSeminorm 𝕜₂ F).comp ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩)
-    ε_pos hc hf hx
-
-Depends on / 依赖: bound_of_shell, map_add, normSeminorm
+/-
+**SemilinearMapClass.bound_of_shell_semi_normed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SemilinearMapClass.bound_of_shell_semi_normed [SemilinearMapClass 𝓕 σ₁₂ E 
+F] (f : 𝓕) {ε C : Real} (ε_pos : 0 < ε) {c : 𝕜} (hc : 1 < ‖c‖) (hf : forall x, ε
+ / ‖c‖ <= ‖x‖ -> ‖x‖ < ε -> ‖f x‖ <= C * ‖x‖) {x : E} (hx : ‖x‖ != 0) : ‖f x‖ <=
+ C * ‖x‖
+参数：f : 𝓕；ε_pos : 0 < ε；hc : 1 < ‖c‖；hf : forall x, ε / ‖c‖ <= ‖x‖ -> ‖x‖ < ε -> 
+‖f x‖ <= C * ‖x‖；hx : ‖x‖ != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Seminorm.bound_of_shell`：bound_of_shell (p q : Seminorm 𝕜 E) {ε C : Real
+} (ε_pos : 0 < ε) {c : 𝕜} (hc : 1 < ‖c‖) (hf : forall x, ε / ‖c‖ <= p x -> p x <
+ ε -> q x <= …
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
 -/
 theorem SemilinearMapClass.bound_of_shell_semi_normed [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-    {ε C : Real} (ε_pos : 0 < ε) {c : 𝕜} (hc : 1 < ‖c‖)
-    (hf : forall x, ε / ‖c‖ <= ‖x‖ -> ‖x‖ < ε -> ‖f x‖ <= C * ‖x‖) {x : E} (hx : ‖x‖ != 0) :
-    ‖f x‖ <= C * ‖x‖ :=
+    {ε C : ℝ} (ε_pos : 0 < ε) {c : 𝕜} (hc : 1 < ‖c‖)
+    (hf : ∀ x, ε / ‖c‖ ≤ ‖x‖ → ‖x‖ < ε → ‖f x‖ ≤ C * ‖x‖) {x : E} (hx : ‖x‖ ≠ 0) :
+    ‖f x‖ ≤ C * ‖x‖ :=
   (normSeminorm 𝕜 E).bound_of_shell ((normSeminorm 𝕜₂ F).comp ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩)
     ε_pos hc hf hx
 
-/--
-theorem `SemilinearMapClass.bound_of_continuous` / 定理 `SemilinearMapClass.bound_of_continuous`
+/-- A continuous linear map between seminormed spaces is bounded when the field is nontrivially
+normed. The continuity ensures boundedness on a ball of some radius `ε`. The nontriviality of the
+norm is then used to rescale any element into an element of norm in `[ε/C, ε]`, whose image has a
+controlled norm. The norm control for the original element follows by rescaling. -/
+/-
+**SemilinearMapClass.bound_of_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SemilinearMapClass.bound_of_continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f :
+ 𝓕) (hf : Continuous f) : exists C, 0 < C ∧ forall x : E, ‖f x‖ <= C * ‖x‖
+参数：f : 𝓕；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `MulActionSemiHomClass.map_smulₛₗ`：∀ {F : Type u_8} {M : outParam (Type u
+_9)} {N : outParam (Type u_10)} {φ : outParam (M → N)} {X : outParam (Type u_11)
+}   {Y : outParam (Typ…
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用引理 `Seminorm.bound_of_continuous_normedSpace`：bound_of_continuous_normedSpac
+e (q : Seminorm 𝕜 F) (hq : Continuous q) : exists C, 0 < C ∧ (forall x : F, q x 
+<= C * ‖x‖)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `continuous_norm`：∀ {E : Type u_4} [inst : SeminormedAddGroup E], Continu
+ous fun a => ‖a‖
 
-English:
-theorem SemilinearMapClass.bound_of_continuous
-  statement: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-  proof: let φ : E ->ₛₗ[σ₁₂] F := ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩
-  ((normSeminorm 𝕜₂ F).comp φ).bound_of_continuous_normedSpace (continuous_norm.comp hf)
-
-中文:
-定理 半线性映射类.bound_of_continuous
-  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
-  证明: let φ : E ->ₛₗ[σ₁₂] F := ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩
-  ((normSeminorm 𝕜₂ F).comp φ).bound_of_continuous_normedSpace (continuous_norm.comp hf)
-
-Depends on / 依赖: bound_of_continuous_normedSpace, continuous_norm, continuous_norm.comp, map_add, normSeminorm
+--- 原说明 ---
+A continuous linear map between seminormed spaces is bounded when the field is n
+ontrivially
+normed. The continuity ensures boundedness on a ball of some radius `ε`. The non
+triviality of the
+norm is then used to rescale any element into an element of norm in `[ε/C, ε]`, 
+whose image has a
+controlled norm. The norm control for the original element follows by rescaling.
 -/
 theorem SemilinearMapClass.bound_of_continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-    (hf : Continuous f) : exists C, 0 < C ∧ forall x : E, ‖f x‖ <= C * ‖x‖ :=
-  let φ : E ->ₛₗ[σ₁₂] F := ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩
+    (hf : Continuous f) : ∃ C, 0 < C ∧ ∀ x : E, ‖f x‖ ≤ C * ‖x‖ :=
+  let φ : E →ₛₗ[σ₁₂] F := ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩
   ((normSeminorm 𝕜₂ F).comp φ).bound_of_continuous_normedSpace (continuous_norm.comp hf)
-
-/--
-theorem `SemilinearMapClass.nnbound_of_continuous` / 定理 `SemilinearMapClass.nnbound_of_continuous`
-
-English:
-theorem SemilinearMapClass.nnbound_of_continuous
-  statement: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-  proof: let ⟨c, hc, hcf⟩ := SemilinearMapClass.bound_of_continuous f hf; ⟨⟨c, hc.le⟩, hc, hcf⟩
-
-中文:
-定理 半线性映射类.nnbound_of_continuous
-  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
-  证明: let ⟨c, hc, hcf⟩ := SemilinearMapClass.bound_of_continuous f hf; ⟨⟨c, hc.le⟩, hc, hcf⟩
-
-Depends on / 依赖: SemilinearMapClass, SemilinearMapClass.bound_of_continuous, bound_of_continuous, hc.le
+/-
+**SemilinearMapClass.nnbound_of_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SemilinearMapClass.nnbound_of_continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f
+ : 𝓕) (hf : Continuous f) : exists C : Real>=0, 0 < C ∧ forall x : E, ‖f x‖₊ <= 
+C * ‖x‖₊
+参数：f : 𝓕；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearMapClass.bound_of_continuous`：SemilinearMapClass.bound_of_cont
+inuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f) : exists C, 0 
+< C ∧ forall x : E, ‖f x‖ <=…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem SemilinearMapClass.nnbound_of_continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-    (hf : Continuous f) : exists C : Real>=0, 0 < C ∧ forall x : E, ‖f x‖₊ <= C * ‖x‖₊ :=
+    (hf : Continuous f) : ∃ C : ℝ≥0, 0 < C ∧ ∀ x : E, ‖f x‖₊ ≤ C * ‖x‖₊ :=
   let ⟨c, hc, hcf⟩ := SemilinearMapClass.bound_of_continuous f hf; ⟨⟨c, hc.le⟩, hc, hcf⟩
-
-/--
-theorem `SemilinearMapClass.ebound_of_continuous` / 定理 `SemilinearMapClass.ebound_of_continuous`
-
-English:
-theorem SemilinearMapClass.ebound_of_continuous
-  statement: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-  proof: let ⟨c, hc, hcf⟩ := SemilinearMapClass.nnbound_of_continuous f hf
-⟨c, hc, fun x => ENNReal.coe_mono hcf x⟩
-
-中文:
-定理 半线性映射类.ebound_of_continuous
-  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
-  证明: let ⟨c, hc, hcf⟩ := SemilinearMapClass.nnbound_of_continuous f hf
-⟨c, hc, fun x => ENNReal.coe_mono hcf x⟩
-
-Depends on / 依赖: ENNReal, ENNReal.coe_mono, SemilinearMapClass, SemilinearMapClass.nnbound_of_continuous, coe_mono, nnbound_of_continuous
+/-
+**SemilinearMapClass.ebound_of_continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SemilinearMapClass.ebound_of_continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f 
+: 𝓕) (hf : Continuous f) : exists C : Real>=0, 0 < C ∧ forall x : E, ‖f x‖ₑ <= C
+ * ‖x‖ₑ
+参数：f : 𝓕；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearMapClass.nnbound_of_continuous`：SemilinearMapClass.nnbound_of_
+continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f) : exists C
+ : Real>=0, 0 < C ∧ forall x :…
+· 使用定理 `ENNReal.coe_mono`：coe_mono : Monotone ofNNReal
 -/
 theorem SemilinearMapClass.ebound_of_continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
-    (hf : Continuous f) : exists C : Real>=0, 0 < C ∧ forall x : E, ‖f x‖ₑ <= C * ‖x‖ₑ :=
+    (hf : Continuous f) : ∃ C : ℝ≥0, 0 < C ∧ ∀ x : E, ‖f x‖ₑ ≤ C * ‖x‖ₑ :=
   let ⟨c, hc, hcf⟩ := SemilinearMapClass.nnbound_of_continuous f hf
-⟨c, hc, fun x => ENNReal.coe_mono hcf x⟩
+  ⟨c, hc, fun x => ENNReal.coe_mono <| hcf x⟩
 
 end
 
 namespace ContinuousLinearMap
 
-/--
-theorem `bound` / 定理 `bound`
-
-English:
-theorem bound
-  given: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  statement: exists C, 0 < C ∧ forall x : E, ‖f x‖ <= C * ‖x‖
-  proof: SemilinearMapClass.bound_of_continuous f f.2
-
-中文:
-定理 bound
-  条件: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  结论: 存在 C, 0 < C ∧ 对任意 x : E, ‖f x‖ <= C * ‖x‖
-  证明: SemilinearMapClass.bound_of_continuous f f.2
-
-Depends on / 依赖: SemilinearMapClass, SemilinearMapClass.bound_of_continuous, bound_of_continuous
+/-
+**ContinuousLinearMap.bound** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：bound [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) : exists C, 0 < C ∧ foral
+l x : E, ‖f x‖ <= C * ‖x‖
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearMapClass.bound_of_continuous`：SemilinearMapClass.bound_of_cont
+inuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f) : exists C, 0 
+< C ∧ forall x : E, ‖f x‖ <=…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
 -/
-theorem bound [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) : exists C, 0 < C ∧ forall x : E, ‖f x‖ <= C * ‖x‖ :=
+theorem bound [RingHomIsometric σ₁₂] (f : E →SL[σ₁₂] F) : ∃ C, 0 < C ∧ ∀ x : E, ‖f x‖ ≤ C * ‖x‖ :=
   SemilinearMapClass.bound_of_continuous f f.2
-
-/--
-theorem `nnbound` / 定理 `nnbound`
-
-English:
-theorem nnbound
-  given: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  proof: SemilinearMapClass.nnbound_of_continuous f f.2
-
-中文:
-定理 nnbound
-  条件: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  证明: SemilinearMapClass.nnbound_of_continuous f f.2
-
-Depends on / 依赖: SemilinearMapClass, SemilinearMapClass.nnbound_of_continuous, nnbound_of_continuous
+/-
+**ContinuousLinearMap.nnbound** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：nnbound [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) : exists C : Real>=0, 0
+ < C ∧ forall x : E, ‖f x‖₊ <= C * ‖x‖₊
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearMapClass.nnbound_of_continuous`：SemilinearMapClass.nnbound_of_
+continuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f) : exists C
+ : Real>=0, 0 < C ∧ forall x :…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
 -/
-theorem nnbound [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) :
-    exists C : Real>=0, 0 < C ∧ forall x : E, ‖f x‖₊ <= C * ‖x‖₊ :=
+theorem nnbound [RingHomIsometric σ₁₂] (f : E →SL[σ₁₂] F) :
+    ∃ C : ℝ≥0, 0 < C ∧ ∀ x : E, ‖f x‖₊ ≤ C * ‖x‖₊ :=
   SemilinearMapClass.nnbound_of_continuous f f.2
-
-/--
-theorem `ebound` / 定理 `ebound`
-
-English:
-theorem ebound
-  given: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  proof: SemilinearMapClass.ebound_of_continuous f f.2
-
-中文:
-定理 ebound
-  条件: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  证明: SemilinearMapClass.ebound_of_continuous f f.2
-
-Depends on / 依赖: SemilinearMapClass, SemilinearMapClass.ebound_of_continuous, ebound_of_continuous
+/-
+**ContinuousLinearMap.ebound** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：ebound [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) : exists C : Real>=0, 0 
+< C ∧ forall x : E, ‖f x‖ₑ <= C * ‖x‖ₑ
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearMapClass.ebound_of_continuous`：SemilinearMapClass.ebound_of_co
+ntinuous [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f) : exists C :
+ Real>=0, 0 < C ∧ forall x : …
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
 -/
-theorem ebound [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) :
-    exists C : Real>=0, 0 < C ∧ forall x : E, ‖f x‖ₑ <= C * ‖x‖ₑ :=
+theorem ebound [RingHomIsometric σ₁₂] (f : E →SL[σ₁₂] F) :
+    ∃ C : ℝ≥0, 0 < C ∧ ∀ x : E, ‖f x‖ₑ ≤ C * ‖x‖ₑ :=
   SemilinearMapClass.ebound_of_continuous f f.2
 
 section
@@ -357,61 +416,38 @@ open Filter
 
 variable (𝕜 E)
 
-/--
-Definition of `_root_.LinearIsometry.toSpanSingleton` / `_root_.LinearIsometry.toSpanSingleton` 的定义
+/-- Given a unit-length element `x` of a normed space `E` over a field `𝕜`, the natural linear
+isometry map from `𝕜` to `E` by taking multiples of `x`. -/
+/-
+**ContinuousLinearMap._root_.LinearIsometry.toSpanSingleton** 是 Mathlib 中的一个定义，位
+于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearIsometry.toSpanSingleton
-  signature: {v : E} (hv : ‖v‖ = 1)
-  body: { LinearMap.toSpanSingleton 𝕜 E v with norm_map' := fun x => by simp [norm_smul, hv] }
-
-中文:
-定义 _root_.线性等距.toSpanSingleton
-  签名: {v : E} (hv : ‖v‖ = 1)
-  定义体: { LinearMap.toSpanSingleton 𝕜 E v with norm_map' := fun x => by simp [norm_smul, hv] }
-
-Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton, norm_map, norm_smul, toSpanSingleton
+--- 原说明 ---
+Given a unit-length element `x` of a normed space `E` over a field `𝕜`, the natu
+ral linear
+isometry map from `𝕜` to `E` by taking multiples of `x`.
 -/
-def _root_.LinearIsometry.toSpanSingleton {v : E} (hv : ‖v‖ = 1) : 𝕜 ->ₗᵢ[𝕜] E :=
+def _root_.LinearIsometry.toSpanSingleton {v : E} (hv : ‖v‖ = 1) : 𝕜 →ₗᵢ[𝕜] E :=
   { LinearMap.toSpanSingleton 𝕜 E v with norm_map' := fun x => by simp [norm_smul, hv] }
 
 variable {𝕜 E}
 
 @[simp]
-/--
-theorem `_root_.LinearIsometry.toSpanSingleton_apply` / 定理 `_root_.LinearIsometry.toSpanSingleton_apply`
-
-English:
-theorem _root_.LinearIsometry.toSpanSingleton_apply
-  given: {v : E} (hv : ‖v‖ = 1) (a : 𝕜)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 _root_.线性等距.toSpanSingleton_apply
-  条件: {v : E} (hv : ‖v‖ = 1) (a : 𝕜)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap._root_.LinearIsometry.toSpanSingleton_apply** 是 Mathlib 中的
+一个定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearIsometry.toSpanSingleton_apply {v : E} (hv : ‖v‖ = 1) (a : 𝕜) :
     LinearIsometry.toSpanSingleton 𝕜 E hv a = a • v :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.LinearIsometry.coe_toSpanSingleton` / 定理 `_root_.LinearIsometry.coe_toSpanSingleton`
-
-English:
-theorem _root_.LinearIsometry.coe_toSpanSingleton
-  given: {v : E} (hv : ‖v‖ = 1)
-  proof: rfl
-
-中文:
-定理 _root_.线性等距.coe_toSpanSingleton
-  条件: {v : E} (hv : ‖v‖ = 1)
-  证明: rfl
+/-
+**ContinuousLinearMap._root_.LinearIsometry.coe_toSpanSingleton** 是 Mathlib 中的一个
+定理，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearIsometry.coe_toSpanSingleton {v : E} (hv : ‖v‖ = 1) :
     (LinearIsometry.toSpanSingleton 𝕜 E hv).toLinearMap = LinearMap.toSpanSingleton 𝕜 E v :=
@@ -423,470 +459,475 @@ section OpNorm
 
 open Set Real
 
-/--
-Definition of `opNorm` / `opNorm` 的定义
+/-- The operator norm of a continuous linear map is the inf of all its bounds. -/
+/-
+**ContinuousLinearMap.opNorm** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：opNorm (f : E ->SL[σ₁₂] F)
+参数：f : E ->SL[σ₁₂] F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opNorm
-  signature: (f : E ->SL[σ₁₂] F)
-  body: sInf { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
-
-中文:
-定义 opNorm
-  签名: (f : E ->SL[σ₁₂] F)
-  定义体: sInf { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
+--- 原说明 ---
+The operator norm of a continuous linear map is the inf of all its bounds.
 -/
-def opNorm (f : E ->SL[σ₁₂] F) :=
-  sInf { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
-
-/--
-Instance `hasOpNorm` / 实例 `hasOpNorm`
-
-English:
-instance hasOpNorm
-  signature: : Norm (E ->SL[σ₁₂] F)
-  body: ⟨opNorm⟩
-
-中文:
-实例 hasOpNorm
-  签名: : 范数 (E ->SL[σ₁₂] F)
-  定义体: ⟨opNorm⟩
-
-Depends on / 依赖: opNorm
+def opNorm (f : E →SL[σ₁₂] F) :=
+  sInf { c | 0 ≤ c ∧ ∀ x, ‖f x‖ ≤ c * ‖x‖ }
+/-
+**ContinuousLinearMap.hasOpNorm** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：hasOpNorm : Norm (E ->SL[σ₁₂] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance hasOpNorm : Norm (E ->SL[σ₁₂] F) :=
+instance hasOpNorm : Norm (E →SL[σ₁₂] F) :=
   ⟨opNorm⟩
-
-/--
-theorem `norm_def` / 定理 `norm_def`
-
-English:
-theorem norm_def
-  given: (f : E ->SL[σ₁₂] F)
-  statement: ‖f‖ = sInf { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
-  proof: rfl
-
-中文:
-定理 norm_def
-  条件: (f : E ->SL[σ₁₂] F)
-  结论: ‖f‖ = sInf { c | 0 <= c ∧ 对任意 x, ‖f x‖ <= c * ‖x‖ }
-  证明: rfl
+/-
+**ContinuousLinearMap.norm_def** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：norm_def (f : E ->SL[σ₁₂] F) : ‖f‖ = sInf { c | 0 <= c ∧ forall x, ‖f x‖ <
+= c * ‖x‖ }
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem norm_def (f : E ->SL[σ₁₂] F) : ‖f‖ = sInf { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ } :=
+theorem norm_def (f : E →SL[σ₁₂] F) : ‖f‖ = sInf { c | 0 ≤ c ∧ ∀ x, ‖f x‖ ≤ c * ‖x‖ } :=
   rfl
 
 -- So that invocations of `le_csInf` make sense: we show that the set of
 -- bounds is nonempty and bounded below.
-/--
-theorem `bounds_nonempty` / 定理 `bounds_nonempty`
-
-English:
-theorem bounds_nonempty
-  given: [RingHomIsometric σ₁₂] {f : E ->SL[σ₁₂] F}
-  proof: let ⟨M, hMp, hMb⟩ := f.bound
-  ⟨M, le_of_lt hMp, hMb⟩
-
-中文:
-定理 bounds_nonempty
-  条件: [RingHomIsometric σ₁₂] {f : E ->SL[σ₁₂] F}
-  证明: let ⟨M, hMp, hMb⟩ := f.bound
-  ⟨M, le_of_lt hMp, hMb⟩
-
-Depends on / 依赖: f.bound, le_of_lt
+/-
+**ContinuousLinearMap.bounds_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：bounds_nonempty [RingHomIsometric σ₁₂] {f : E ->SL[σ₁₂] F} : exists c, c i
+n { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.bound`：bound [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂]
+ F) : exists C, 0 < C ∧ forall x : E, ‖f x‖ <= C * ‖x‖
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-theorem bounds_nonempty [RingHomIsometric σ₁₂] {f : E ->SL[σ₁₂] F} :
-    exists c, c in { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ } :=
+theorem bounds_nonempty [RingHomIsometric σ₁₂] {f : E →SL[σ₁₂] F} :
+    ∃ c, c ∈ { c | 0 ≤ c ∧ ∀ x, ‖f x‖ ≤ c * ‖x‖ } :=
   let ⟨M, hMp, hMb⟩ := f.bound
   ⟨M, le_of_lt hMp, hMb⟩
-
-/--
-theorem `bounds_bddBelow` / 定理 `bounds_bddBelow`
-
-English:
-theorem bounds_bddBelow
-  given: {f : E ->SL[σ₁₂] F}
-  statement: BddBelow { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
-  proof: ⟨0, fun _ ⟨hn, _⟩ => hn⟩
-
-中文:
-定理 bounds_bddBelow
-  条件: {f : E ->SL[σ₁₂] F}
-  结论: BddBelow { c | 0 <= c ∧ 对任意 x, ‖f x‖ <= c * ‖x‖ }
-  证明: ⟨0, fun _ ⟨hn, _⟩ => hn⟩
+/-
+**ContinuousLinearMap.bounds_bddBelow** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：bounds_bddBelow {f : E ->SL[σ₁₂] F} : BddBelow { c | 0 <= c ∧ forall x, ‖f
+ x‖ <= c * ‖x‖ }
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bounds_bddBelow {f : E ->SL[σ₁₂] F} : BddBelow { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ } :=
+theorem bounds_bddBelow {f : E →SL[σ₁₂] F} : BddBelow { c | 0 ≤ c ∧ ∀ x, ‖f x‖ ≤ c * ‖x‖ } :=
   ⟨0, fun _ ⟨hn, _⟩ => hn⟩
-
-/--
-theorem `isLeast_opNorm` / 定理 `isLeast_opNorm`
-
-English:
-theorem isLeast_opNorm
-  given: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  proof: by
-  refine IsClosed.isLeast_csInf ?_ bounds_nonempty bounds_bddBelow
-  simp only [ofPred_and, ofPred_forall]
-refine isClosed_Ici.inter isClosed_iInter fun _ => isClosed_le ?_ ?_ <;> fun_prop
-
-中文:
-定理 isLeast_opNorm
-  条件: [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
-  证明: by
-  refine IsClosed.isLeast_csInf ?_ bounds_nonempty bounds_bddBelow
-  simp only [ofPred_and, ofPred_forall]
-refine isClosed_Ici.inter isClosed_iInter fun _ => isClosed_le ?_ ?_ <;> fun_prop
-
-Depends on / 依赖: IsClosed, IsClosed.isLeast_csInf, bounds_bddBelow, bounds_nonempty, fun_prop, isClosed_Ici, isClosed_Ici.inter, isClosed_iInter, isClosed_le, isLeast_csInf, ofPred_and, ofPred_forall
+/-
+**ContinuousLinearMap.isLeast_opNorm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：isLeast_opNorm [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) : IsLeast {c | 0
+ <= c ∧ forall x, ‖f x‖ <= c * ‖x‖} ‖f‖
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.isLeast_csInf`：IsClosed.isLeast_csInf {s : Set α} (hc : IsClose
+d s) (hs : s.Nonempty) (B : BddBelow s) : IsLeast s (sInf s)
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.ofPred_forall`：ofPred_forall (p : ι -> β -> Prop) : { x | forall i, 
+p i x } = ⋂ i, { x | p i x }
+· 使用定理 `IsClosed.inter`：IsClosed.inter (h₁ : IsClosed s₁) (h₂ : IsClosed s₂) : I
+sClosed (s₁ inter s₂)
+· 使用定理 `isClosed_Ici`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Preor
+der α] [ClosedIciTopology α] {a : α}, IsClosed (Set.Ici a)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `isClosed_iInter`：isClosed_iInter {f : ι -> Set X} (h : forall i, IsClose
+d (f i)) : IsClosed (⋂ i, f i)
+· 使用定理 `isClosed_le`：isClosed_le [TopologicalSpace β] {f g : β -> α} (hf : Conti
+nuous f) (hg : Continuous g) : IsClosed { b | f b <= g b }
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_mul_const`：continuous_mul_const (m : M) : Continuous (· * m)
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `ContinuousLinearMap.bounds_nonempty`：bounds_nonempty [RingHomIsometric σ
+₁₂] {f : E ->SL[σ₁₂] F} : exists c, c in { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖
+x‖ }
+· 使用定理 `ContinuousLinearMap.bounds_bddBelow`：bounds_bddBelow {f : E ->SL[σ₁₂] F}
+ : BddBelow { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
 -/
-theorem isLeast_opNorm [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F) :
-    IsLeast {c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖} ‖f‖ := by
+theorem isLeast_opNorm [RingHomIsometric σ₁₂] (f : E →SL[σ₁₂] F) :
+    IsLeast {c | 0 ≤ c ∧ ∀ x, ‖f x‖ ≤ c * ‖x‖} ‖f‖ := by
   refine IsClosed.isLeast_csInf ?_ bounds_nonempty bounds_bddBelow
   simp only [ofPred_and, ofPred_forall]
-refine isClosed_Ici.inter isClosed_iInter fun _ => isClosed_le ?_ ?_ <;> fun_prop
+  refine isClosed_Ici.inter <| isClosed_iInter fun _ ↦ isClosed_le ?_ ?_ <;> fun_prop
 
-/--
-theorem `opNorm_le_bound` / 定理 `opNorm_le_bound`
+/-- If one controls the norm of every `A x`, then one controls the norm of `A`. -/
+/-
+**ContinuousLinearMap.opNorm_le_bound** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：opNorm_le_bound (f : E ->SL[σ₁₂] F) {M : Real} (hMp : 0 <= M) (hM : forall
+ x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+参数：f : E ->SL[σ₁₂] F；hMp : 0 <= M；hM : forall x, ‖f x‖ <= M * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csInf_le`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s : 
+Set α} {a : α}, BddBelow s → a ∈ s → sInf s ≤ a
+· 使用定理 `ContinuousLinearMap.bounds_bddBelow`：bounds_bddBelow {f : E ->SL[σ₁₂] F}
+ : BddBelow { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
 
-English:
-theorem opNorm_le_bound
-  given: (f : E ->SL[σ₁₂] F) {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖)
-  proof: csInf_le bounds_bddBelow ⟨hMp, hM⟩
-
-中文:
-定理 opNorm_le_bound
-  条件: (f : E ->SL[σ₁₂] F) {M : 实数} (hMp : 0 <= M) (hM : 对任意 x, ‖f x‖ <= M * ‖x‖)
-  证明: csInf_le bounds_bddBelow ⟨hMp, hM⟩
-
-Depends on / 依赖: bounds_bddBelow, csInf_le
+--- 原说明 ---
+If one controls the norm of every `A x`, then one controls the norm of `A`.
 -/
-theorem opNorm_le_bound (f : E ->SL[σ₁₂] F) {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) :
-    ‖f‖ <= M :=
+theorem opNorm_le_bound (f : E →SL[σ₁₂] F) {M : ℝ} (hMp : 0 ≤ M) (hM : ∀ x, ‖f x‖ ≤ M * ‖x‖) :
+    ‖f‖ ≤ M :=
   csInf_le bounds_bddBelow ⟨hMp, hM⟩
 
-/--
-theorem `opNorm_le_bound'` / 定理 `opNorm_le_bound'`
+/-- If one controls the norm of every `A x`, `‖x‖ ≠ 0`, then one controls the norm of `A`. -/
+/-
+**ContinuousLinearMap.opNorm_le_bound'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：opNorm_le_bound' (f : E ->SL[σ₁₂] F) {M : Real} (hMp : 0 <= M) (hM : foral
+l x, ‖x‖ != 0 -> ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+参数：f : E ->SL[σ₁₂] F；hMp : 0 <= M；hM : forall x, ‖x‖ != 0 -> ‖f x‖ <= M * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `ne_or_eq`：ne_or_eq {α : Sort*} (x y : α) : x != y ∨ x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_image_of_norm_eq_zero`：norm_image_of_norm_eq_zero [SemilinearMapCla
+ss 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f) {x : E} (hx : ‖x‖ = 0) : ‖f x‖ = 0
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 
-English:
-theorem opNorm_le_bound'
-  statement: (f : E ->SL[σ₁₂] F) {M : Real} (hMp : 0 <= M)
-  proof: opNorm_le_bound f hMp fun x =>
-    (ne_or_eq ‖x‖ 0).elim (hM x) fun h => by
-      simp only [h, mul_zero, norm_image_of_norm_eq_zero f f.2 h, le_refl]
-
-中文:
-定理 opNorm_le_bound'
-  结论: (f : E ->SL[σ₁₂] F) {M : 实数} (hMp : 0 <= M)
-  证明: opNorm_le_bound f hMp fun x =>
-    (ne_or_eq ‖x‖ 0).elim (hM x) fun h => by
-      simp only [h, mul_zero, norm_image_of_norm_eq_zero f f.2 h, le_refl]
-
-Depends on / 依赖: le_refl, mul_zero, ne_or_eq, norm_image_of_norm_eq_zero, opNorm_le_bound
+--- 原说明 ---
+If one controls the norm of every `A x`, `‖x‖ ≠ 0`, then one controls the norm o
+f `A`.
 -/
-theorem opNorm_le_bound' (f : E ->SL[σ₁₂] F) {M : Real} (hMp : 0 <= M)
-    (hM : forall x, ‖x‖ != 0 -> ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M :=
+theorem opNorm_le_bound' (f : E →SL[σ₁₂] F) {M : ℝ} (hMp : 0 ≤ M)
+    (hM : ∀ x, ‖x‖ ≠ 0 → ‖f x‖ ≤ M * ‖x‖) : ‖f‖ ≤ M :=
   opNorm_le_bound f hMp fun x =>
     (ne_or_eq ‖x‖ 0).elim (hM x) fun h => by
       simp only [h, mul_zero, norm_image_of_norm_eq_zero f f.2 h, le_refl]
-
-/--
-theorem `opNorm_eq_of_bounds` / 定理 `opNorm_eq_of_bounds`
-
-English:
-theorem opNorm_eq_of_bounds
-  statement: {φ : E ->SL[σ₁₂] F} {M : Real} (M_nonneg : 0 <= M)
-  proof: le_antisymm (φ.opNorm_le_bound M_nonneg h_above)
-    ((le_csInf_iff ContinuousLinearMap.bounds_bddBelow ⟨M, M_nonneg, h_above⟩).mpr
-      fun N ⟨N_nonneg, hN⟩ => h_below N N_nonneg hN)
-
-中文:
-定理 opNorm_eq_of_bounds
-  结论: {φ : E ->SL[σ₁₂] F} {M : 实数} (M_nonneg : 0 <= M)
-  证明: le_antisymm (φ.opNorm_le_bound M_nonneg h_above)
-    ((le_csInf_iff ContinuousLinearMap.bounds_bddBelow ⟨M, M_nonneg, h_above⟩).mpr
-      fun N ⟨N_nonneg, hN⟩ => h_below N N_nonneg hN)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.bounds_bddBelow, M_nonneg, N_nonneg, bounds_bddBelow, h_above, h_below, le_antisymm, le_csInf_iff, opNorm_le_bound
+/-
+**ContinuousLinearMap.opNorm_eq_of_bounds** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：opNorm_eq_of_bounds {φ : E ->SL[σ₁₂] F} {M : Real} (M_nonneg : 0 <= M) (h_
+above : forall x, ‖φ x‖ <= M * ‖x‖) (h_below : forall N >= 0, (forall x, ‖φ x‖ <
+= N * ‖x‖) -> M <= N) : ‖φ‖ = M
+参数：M_nonneg : 0 <= M；h_above : forall x, ‖φ x‖ <= M * ‖x‖；h_below : forall N >= 
+0, (forall x, ‖φ x‖ <= N * ‖x‖) -> M <= N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_csInf_iff`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {
+s : Set α} {a : α},   BddBelow s → s.Nonempty → (a ≤ sInf s ↔ ∀ b ∈ s, a ≤ b)
+· 使用定理 `ContinuousLinearMap.bounds_bddBelow`：bounds_bddBelow {f : E ->SL[σ₁₂] F}
+ : BddBelow { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
 -/
-theorem opNorm_eq_of_bounds {φ : E ->SL[σ₁₂] F} {M : Real} (M_nonneg : 0 <= M)
-    (h_above : forall x, ‖φ x‖ <= M * ‖x‖) (h_below : forall N >= 0, (forall x, ‖φ x‖ <= N * ‖x‖) -> M <= N) :
+theorem opNorm_eq_of_bounds {φ : E →SL[σ₁₂] F} {M : ℝ} (M_nonneg : 0 ≤ M)
+    (h_above : ∀ x, ‖φ x‖ ≤ M * ‖x‖) (h_below : ∀ N ≥ 0, (∀ x, ‖φ x‖ ≤ N * ‖x‖) → M ≤ N) :
     ‖φ‖ = M :=
   le_antisymm (φ.opNorm_le_bound M_nonneg h_above)
     ((le_csInf_iff ContinuousLinearMap.bounds_bddBelow ⟨M, M_nonneg, h_above⟩).mpr
       fun N ⟨N_nonneg, hN⟩ => h_below N N_nonneg hN)
-
-/--
-theorem `opNorm_neg` / 定理 `opNorm_neg`
-
-English:
-theorem opNorm_neg
-  given: (f : E ->SL[σ₁₂] F)
-  statement: ‖-f‖ = ‖f‖
-  proof: by simp only [norm_def, neg_apply, norm_neg]
-
-中文:
-定理 opNorm_neg
-  条件: (f : E ->SL[σ₁₂] F)
-  结论: ‖-f‖ = ‖f‖
-  证明: by simp only [norm_def, neg_apply, norm_neg]
-
-Depends on / 依赖: neg_apply, norm_def, norm_neg
+/-
+**ContinuousLinearMap.opNorm_neg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：opNorm_neg (f : E ->SL[σ₁₂] F) : ‖-f‖ = ‖f‖
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `neg_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Neg β}   {inst_2 : Neg F} [self : IsNe…
+· 使用定理 `ContinuousLinearMap.instIsNegApply`：∀ {R : Type u_1} [inst : Ring R] {R₂
+ : Type u_2} [inst_1 : Ring R₂] {M : Type u_4} [inst_2 : TopologicalSpace M]   [
+inst_3 : AddCommGroup M]…
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem opNorm_neg (f : E ->SL[σ₁₂] F) : ‖-f‖ = ‖f‖ := by simp only [norm_def, neg_apply, norm_neg]
-
-/--
-theorem `opNorm_nonneg` / 定理 `opNorm_nonneg`
-
-English:
-theorem opNorm_nonneg
-  given: (f : E ->SL[σ₁₂] F)
-  statement: 0 <= ‖f‖
-  proof: Real.sInf_nonneg fun _ => And.left
-
-中文:
-定理 opNorm_nonneg
-  条件: (f : E ->SL[σ₁₂] F)
-  结论: 0 <= ‖f‖
-  证明: Real.sInf_nonneg fun _ => And.left
-
-Depends on / 依赖: And.left, Real.sInf_nonneg, sInf_nonneg
+theorem opNorm_neg (f : E →SL[σ₁₂] F) : ‖-f‖ = ‖f‖ := by simp only [norm_def, neg_apply, norm_neg]
+/-
+**ContinuousLinearMap.opNorm_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：opNorm_nonneg (f : E ->SL[σ₁₂] F) : 0 <= ‖f‖
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.sInf_nonneg`：sInf_nonneg (hs : forall x in s, 0 <= x) : 0 <= sInf s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem opNorm_nonneg (f : E ->SL[σ₁₂] F) : 0 <= ‖f‖ :=
-  Real.sInf_nonneg fun _ => And.left
+theorem opNorm_nonneg (f : E →SL[σ₁₂] F) : 0 ≤ ‖f‖ :=
+  Real.sInf_nonneg fun _ ↦ And.left
 
-/--
-theorem `opNorm_zero` / 定理 `opNorm_zero`
+/-- The norm of the `0` operator is `0`. -/
+/-
+**ContinuousLinearMap.opNorm_zero** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap
+`。
+形式化陈述：opNorm_zero : ‖(0 : E ->SL[σ₁₂] F)‖ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `ContinuousLinearMap.opNorm_nonneg`：opNorm_nonneg (f : E ->SL[σ₁₂] F) : 0
+ <= ‖f‖
 
-English:
-theorem opNorm_zero
-  statement: ‖(0 : E ->SL[σ₁₂] F)‖ = 0
-  proof: le_antisymm (opNorm_le_bound _ le_rfl fun _ => by simp) (opNorm_nonneg _)
-
-中文:
-定理 opNorm_zero
-  结论: ‖(0 : E ->SL[σ₁₂] F)‖ = 0
-  证明: le_antisymm (opNorm_le_bound _ le_rfl fun _ => by simp) (opNorm_nonneg _)
-
-Depends on / 依赖: le_antisymm, le_rfl, opNorm_le_bound, opNorm_nonneg
+--- 原说明 ---
+The norm of the `0` operator is `0`.
 -/
-theorem opNorm_zero : ‖(0 : E ->SL[σ₁₂] F)‖ = 0 :=
-  le_antisymm (opNorm_le_bound _ le_rfl fun _ => by simp) (opNorm_nonneg _)
+theorem opNorm_zero : ‖(0 : E →SL[σ₁₂] F)‖ = 0 :=
+  le_antisymm (opNorm_le_bound _ le_rfl fun _ ↦ by simp) (opNorm_nonneg _)
 
-/--
-theorem `norm_id_le` / 定理 `norm_id_le`
+/-- The norm of the identity is at most `1`. It is in fact `1`, except when the space is trivial
+where it is `0`. It means that one cannot do better than an inequality in general. -/
+/-
+**ContinuousLinearMap.norm_id_le** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`
+。
+形式化陈述：norm_id_le : ‖ContinuousLinearMap.id 𝕜 E‖ <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 
-English:
-theorem norm_id_le
-  statement: ‖ContinuousLinearMap.id 𝕜 E‖ <= 1
-  proof: opNorm_le_bound _ zero_le_one fun x => by simp
-
-中文:
-定理 norm_id_le
-  结论: ‖连续线性映射.id 𝕜 E‖ <= 1
-  证明: opNorm_le_bound _ zero_le_one fun x => by simp
-
-Depends on / 依赖: opNorm_le_bound, zero_le_one
+--- 原说明 ---
+The norm of the identity is at most `1`. It is in fact `1`, except when the spac
+e is trivial
+where it is `0`. It means that one cannot do better than an inequality in genera
+l.
 -/
-theorem norm_id_le : ‖ContinuousLinearMap.id 𝕜 E‖ <= 1 :=
+theorem norm_id_le : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 :=
   opNorm_le_bound _ zero_le_one fun x => by simp
 
 section
 
-variable [RingHomIsometric σ₁₂] [RingHomIsometric σ₂₃] (f g : E ->SL[σ₁₂] F) (h : F ->SL[σ₂₃] G)
+variable [RingHomIsometric σ₁₂] [RingHomIsometric σ₂₃] (f g : E →SL[σ₁₂] F) (h : F →SL[σ₂₃] G)
   (x : E)
 
-/--
-theorem `le_opNorm` / 定理 `le_opNorm`
+/-- The fundamental property of the operator norm: `‖f x‖ ≤ ‖f‖ * ‖x‖`. -/
+/-
+**ContinuousLinearMap.le_opNorm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `ContinuousLinearMap.isLeast_opNorm`：isLeast_opNorm [RingHomIsometric σ₁₂
+] (f : E ->SL[σ₁₂] F) : IsLeast {c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖} ‖f‖
 
-English:
-theorem le_opNorm
-  statement: ‖f x‖ <= ‖f‖ * ‖x‖
-  proof: (isLeast_opNorm f).1.2 x
-
-中文:
-定理 le_opNorm
-  结论: ‖f x‖ <= ‖f‖ * ‖x‖
-  证明: (isLeast_opNorm f).1.2 x
-
-Depends on / 依赖: isLeast_opNorm
+--- 原说明 ---
+The fundamental property of the operator norm: `‖f x‖ ≤ ‖f‖ * ‖x‖`.
 -/
-theorem le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖ := (isLeast_opNorm f).1.2 x
-
-/--
-theorem `dist_le_opNorm` / 定理 `dist_le_opNorm`
-
-English:
-theorem dist_le_opNorm
-  given: (x y : E)
-  statement: dist (f x) (f y) <= ‖f‖ * dist x y
-  proof: by
+theorem le_opNorm : ‖f x‖ ≤ ‖f‖ * ‖x‖ := (isLeast_opNorm f).1.2 x
+/-
+**ContinuousLinearMap.dist_le_opNorm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：dist_le_opNorm (x y : E) : dist (f x) (f y) <= ‖f‖ * dist x y
+参数：x y : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
+-/
+theorem dist_le_opNorm (x y : E) : dist (f x) (f y) ≤ ‖f‖ * dist x y := by
   simp_rw [dist_eq_norm, ← map_sub, f.le_opNorm]
-
-中文:
-定理 dist_le_opNorm
-  条件: (x y : E)
-  结论: dist (f x) (f y) <= ‖f‖ * dist x y
-  证明: by
-  simp_rw [dist_eq_norm, ← map_sub, f.le_opNorm]
-
-Depends on / 依赖: dist_eq_norm, f.le_opNorm, le_opNorm, map_sub, simp_rw
+/-
+**ContinuousLinearMap.le_of_opNorm_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Continuou
+sLinearMap`。
+形式化陈述：le_of_opNorm_le_of_le {x} {a b : Real} (hf : ‖f‖ <= a) (hx : ‖x‖ <= b) : ‖
+f x‖ <= a * b
+参数：hf : ‖f‖ <= a；hx : ‖x‖ <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
+· 使用定理 `mul_le_mul`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : Zero α] [inst_2 : 
+Preorder α] {a b c d : α} [PosMulMono α] [MulPosMono α],   a ≤ b → c ≤ d → 0 ≤ c
+…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `ContinuousLinearMap.opNorm_nonneg`：opNorm_nonneg (f : E ->SL[σ₁₂] F) : 0
+ <= ‖f‖
 -/
-theorem dist_le_opNorm (x y : E) : dist (f x) (f y) <= ‖f‖ * dist x y := by
-  simp_rw [dist_eq_norm, ← map_sub, f.le_opNorm]
-
-/--
-theorem `le_of_opNorm_le_of_le` / 定理 `le_of_opNorm_le_of_le`
-
-English:
-theorem le_of_opNorm_le_of_le
-  given: {x} {a b : Real} (hf : ‖f‖ <= a) (hx : ‖x‖ <= b)
-  proof: (f.le_opNorm x).trans by gcongr; exact (opNorm_nonneg f).trans hf
-
-中文:
-定理 le_of_opNorm_le_of_le
-  条件: {x} {a b : 实数} (hf : ‖f‖ <= a) (hx : ‖x‖ <= b)
-  证明: (f.le_opNorm x).trans by gcongr; exact (opNorm_nonneg f).trans hf
-
-Depends on / 依赖: f.le_opNorm, le_opNorm, opNorm_nonneg
+theorem le_of_opNorm_le_of_le {x} {a b : ℝ} (hf : ‖f‖ ≤ a) (hx : ‖x‖ ≤ b) :
+    ‖f x‖ ≤ a * b :=
+  (f.le_opNorm x).trans <| by gcongr; exact (opNorm_nonneg f).trans hf
+/-
+**ContinuousLinearMap.le_opNorm_of_le** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：le_opNorm_of_le {c : Real} {x} (h : ‖x‖ <= c) : ‖f x‖ <= ‖f‖ * c
+参数：h : ‖x‖ <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.le_of_opNorm_le_of_le`：le_of_opNorm_le_of_le {x} {a 
+b : Real} (hf : ‖f‖ <= a) (hx : ‖x‖ <= b) : ‖f x‖ <= a * b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem le_of_opNorm_le_of_le {x} {a b : Real} (hf : ‖f‖ <= a) (hx : ‖x‖ <= b) :
-    ‖f x‖ <= a * b :=
-(f.le_opNorm x).trans by gcongr; exact (opNorm_nonneg f).trans hf
-
-/--
-theorem `le_opNorm_of_le` / 定理 `le_opNorm_of_le`
-
-English:
-theorem le_opNorm_of_le
-  given: {c : Real} {x} (h : ‖x‖ <= c)
-  statement: ‖f x‖ <= ‖f‖ * c
-  proof: f.le_of_opNorm_le_of_le le_rfl h
-
-中文:
-定理 le_opNorm_of_le
-  条件: {c : 实数} {x} (h : ‖x‖ <= c)
-  结论: ‖f x‖ <= ‖f‖ * c
-  证明: f.le_of_opNorm_le_of_le le_rfl h
-
-Depends on / 依赖: f.le_of_opNorm_le_of_le, le_of_opNorm_le_of_le, le_rfl
--/
-theorem le_opNorm_of_le {c : Real} {x} (h : ‖x‖ <= c) : ‖f x‖ <= ‖f‖ * c :=
+theorem le_opNorm_of_le {c : ℝ} {x} (h : ‖x‖ ≤ c) : ‖f x‖ ≤ ‖f‖ * c :=
   f.le_of_opNorm_le_of_le le_rfl h
-
-/--
-theorem `le_of_opNorm_le` / 定理 `le_of_opNorm_le`
-
-English:
-theorem le_of_opNorm_le
-  given: {c : Real} (h : ‖f‖ <= c) (x : E)
-  statement: ‖f x‖ <= c * ‖x‖
-  proof: f.le_of_opNorm_le_of_le h le_rfl
-
-中文:
-定理 le_of_opNorm_le
-  条件: {c : 实数} (h : ‖f‖ <= c) (x : E)
-  结论: ‖f x‖ <= c * ‖x‖
-  证明: f.le_of_opNorm_le_of_le h le_rfl
-
-Depends on / 依赖: f.le_of_opNorm_le_of_le, le_of_opNorm_le_of_le, le_rfl
+/-
+**ContinuousLinearMap.le_of_opNorm_le** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：le_of_opNorm_le {c : Real} (h : ‖f‖ <= c) (x : E) : ‖f x‖ <= c * ‖x‖
+参数：h : ‖f‖ <= c；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.le_of_opNorm_le_of_le`：le_of_opNorm_le_of_le {x} {a 
+b : Real} (hf : ‖f‖ <= a) (hx : ‖x‖ <= b) : ‖f x‖ <= a * b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem le_of_opNorm_le {c : Real} (h : ‖f‖ <= c) (x : E) : ‖f x‖ <= c * ‖x‖ :=
+theorem le_of_opNorm_le {c : ℝ} (h : ‖f‖ ≤ c) (x : E) : ‖f x‖ ≤ c * ‖x‖ :=
   f.le_of_opNorm_le_of_le h le_rfl
-
-/--
-theorem `opNorm_le_iff` / 定理 `opNorm_le_iff`
-
-English:
-theorem opNorm_le_iff
-  given: {f : E ->SL[σ₁₂] F} {M : Real} (hMp : 0 <= M)
-  proof: ⟨f.le_of_opNorm_le, opNorm_le_bound f hMp⟩
-
-中文:
-定理 opNorm_le_iff
-  条件: {f : E ->SL[σ₁₂] F} {M : 实数} (hMp : 0 <= M)
-  证明: ⟨f.le_of_opNorm_le, opNorm_le_bound f hMp⟩
-
-Depends on / 依赖: f.le_of_opNorm_le, le_of_opNorm_le, opNorm_le_bound
+/-
+**ContinuousLinearMap.opNorm_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：opNorm_le_iff {f : E ->SL[σ₁₂] F} {M : Real} (hMp : 0 <= M) : ‖f‖ <= M ↔ f
+orall x, ‖f x‖ <= M * ‖x‖
+参数：hMp : 0 <= M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.le_of_opNorm_le`：le_of_opNorm_le {c : Real} (h : ‖f‖
+ <= c) (x : E) : ‖f x‖ <= c * ‖x‖
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
 -/
-theorem opNorm_le_iff {f : E ->SL[σ₁₂] F} {M : Real} (hMp : 0 <= M) :
-    ‖f‖ <= M ↔ forall x, ‖f x‖ <= M * ‖x‖ :=
+theorem opNorm_le_iff {f : E →SL[σ₁₂] F} {M : ℝ} (hMp : 0 ≤ M) :
+    ‖f‖ ≤ M ↔ ∀ x, ‖f x‖ ≤ M * ‖x‖ :=
   ⟨f.le_of_opNorm_le, opNorm_le_bound f hMp⟩
-
-/--
-theorem `ratio_le_opNorm` / 定理 `ratio_le_opNorm`
-
-English:
-theorem ratio_le_opNorm
-  statement: ‖f x‖ / ‖x‖ <= ‖f‖
-  proof: div_le_of_le_mul₀ (norm_nonneg _) f.opNorm_nonneg (le_opNorm _ _)
-
-中文:
-定理 ratio_le_opNorm
-  结论: ‖f x‖ / ‖x‖ <= ‖f‖
-  证明: div_le_of_le_mul₀ (norm_nonneg _) f.opNorm_nonneg (le_opNorm _ _)
-
-Depends on / 依赖: f.opNorm_nonneg, le_opNorm, norm_nonneg, opNorm_nonneg
+/-
+**ContinuousLinearMap.ratio_le_opNorm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：ratio_le_opNorm : ‖f x‖ / ‖x‖ <= ‖f‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `div_le_of_le_mul₀`：div_le_of_le_mul₀ (hb : 0 <= b) (hc : 0 <= c) (h : a 
+<= c * b) : a / b <= c
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `ContinuousLinearMap.opNorm_nonneg`：opNorm_nonneg (f : E ->SL[σ₁₂] F) : 0
+ <= ‖f‖
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
 -/
-theorem ratio_le_opNorm : ‖f x‖ / ‖x‖ <= ‖f‖ :=
+theorem ratio_le_opNorm : ‖f x‖ / ‖x‖ ≤ ‖f‖ :=
   div_le_of_le_mul₀ (norm_nonneg _) f.opNorm_nonneg (le_opNorm _ _)
 
-/--
-theorem `unit_le_opNorm` / 定理 `unit_le_opNorm`
+/-- The image of the unit ball under a continuous linear map is bounded. -/
+/-
+**ContinuousLinearMap.unit_le_opNorm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：unit_le_opNorm : ‖x‖ <= 1 -> ‖f x‖ <= ‖f‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.le_opNorm_of_le`：le_opNorm_of_le {c : Real} {x} (h :
+ ‖x‖ <= c) : ‖f x‖ <= ‖f‖ * c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 
-English:
-theorem unit_le_opNorm
-  statement: ‖x‖ <= 1 -> ‖f x‖ <= ‖f‖
-  proof: mul_one ‖f‖ ▸ f.le_opNorm_of_le
-
-中文:
-定理 unit_le_opNorm
-  结论: ‖x‖ <= 1 -> ‖f x‖ <= ‖f‖
-  证明: mul_one ‖f‖ ▸ f.le_opNorm_of_le
-
-Depends on / 依赖: f.le_opNorm_of_le, le_opNorm_of_le, mul_one
+--- 原说明 ---
+The image of the unit ball under a continuous linear map is bounded.
 -/
-theorem unit_le_opNorm : ‖x‖ <= 1 -> ‖f x‖ <= ‖f‖ :=
+theorem unit_le_opNorm : ‖x‖ ≤ 1 → ‖f x‖ ≤ ‖f‖ :=
   mul_one ‖f‖ ▸ f.le_opNorm_of_le
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LocallyBoundedMapClass (E ->SL[σ₁₂] F) E F
-  body: by
-    intro ℓ
-    rw [Bornology.comap_cobounded_le_iff]
-    intro s hs
-    obtain ⟨M, hM⟩ := hs.exists_norm_le
-    rw [isBounded_iff_forall_norm_le]
-    use ‖ℓ‖ * M
-    intro y hy
-    obtain ⟨σ, hσ⟩ := (mem_image _ _ _).1 hy
-    calc ‖y‖
-      _ <= ‖ℓ σ‖ := by rw [hσ.2]
-      _ <= ‖ℓ‖ * ‖σ‖ := ContinuousLinearMap.le_opNorm ℓ σ
-      _ <= ‖ℓ‖ * M := mul_le_mul (by rfl) (hM σ hσ.1) (norm_nonneg σ) (opNorm_nonneg ℓ)
-
-中文:
-实例 :
-  签名: LocallyBounded映射类 (E ->SL[σ₁₂] F) E F
-  定义体: by
-    intro ℓ
-    rw [Bornology.comap_cobounded_le_iff]
-    intro s hs
-    obtain ⟨M, hM⟩ := hs.exists_norm_le
-    rw [isBounded_iff_forall_norm_le]
-    use ‖ℓ‖ * M
-    intro y hy
-    obtain ⟨σ, hσ⟩ := (mem_image _ _ _).1 hy
-    calc ‖y‖
-      _ <= ‖ℓ σ‖ := by rw [hσ.2]
-      _ <= ‖ℓ‖ * ‖σ‖ := ContinuousLinearMap.le_opNorm ℓ σ
-      _ <= ‖ℓ‖ * M := mul_le_mul (by rfl) (hM σ hσ.1) (norm_nonneg σ) (opNorm_nonneg ℓ)
-
-Depends on / 依赖: Bornology, Bornology.comap_cobounded_le_iff, ContinuousLinearMap, ContinuousLinearMap.le_opNorm, comap_cobounded_le_iff, exists_norm_le, hs.exists_norm_le, isBounded_iff_forall_norm_le, le_opNorm, mem_image, mul_le_mul, norm_nonneg, opNorm_nonneg
+Continuous linear maps are locally bounded. In other words, they map bounded sets to bounded sets.
 -/
-instance : LocallyBoundedMapClass (E ->SL[σ₁₂] F) E F where
+/-
+**ContinuousLinearMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Continuous linear maps are locally bounded. In other words, they map bounded set
+s to bounded sets.
+-/
+instance : LocallyBoundedMapClass (E →SL[σ₁₂] F) E F where
   comap_cobounded_le := by
     intro ℓ
     rw [Bornology.comap_cobounded_le_iff]
@@ -897,85 +938,120 @@ instance : LocallyBoundedMapClass (E ->SL[σ₁₂] F) E F where
     intro y hy
     obtain ⟨σ, hσ⟩ := (mem_image _ _ _).1 hy
     calc ‖y‖
-      _ <= ‖ℓ σ‖ := by rw [hσ.2]
-      _ <= ‖ℓ‖ * ‖σ‖ := ContinuousLinearMap.le_opNorm ℓ σ
-      _ <= ‖ℓ‖ * M := mul_le_mul (by rfl) (hM σ hσ.1) (norm_nonneg σ) (opNorm_nonneg ℓ)
-
-/--
-theorem `opNorm_le_of_shell` / 定理 `opNorm_le_of_shell`
-
-English:
-theorem opNorm_le_of_shell
-  statement: {f : E ->SL[σ₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜}
-  proof: f.opNorm_le_bound' hC fun _ hx => SemilinearMapClass.bound_of_shell_semi_normed f ε_pos hc hf hx
-
-中文:
-定理 opNorm_le_of_shell
-  结论: {f : E ->SL[σ₁₂] F} {ε C : 实数} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜}
-  证明: f.opNorm_le_bound' hC fun _ hx => SemilinearMapClass.bound_of_shell_semi_normed f ε_pos hc hf hx
-
-Depends on / 依赖: SemilinearMapClass, SemilinearMapClass.bound_of_shell_semi_normed, bound_of_shell_semi_normed, f.opNorm_le_bound, opNorm_le_bound
+      _ ≤ ‖ℓ σ‖ := by rw [hσ.2]
+      _ ≤ ‖ℓ‖ * ‖σ‖ := ContinuousLinearMap.le_opNorm ℓ σ
+      _ ≤ ‖ℓ‖ * M := mul_le_mul (by rfl) (hM σ hσ.1) (norm_nonneg σ) (opNorm_nonneg ℓ)
+/-
+**ContinuousLinearMap.opNorm_le_of_shell** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLi
+nearMap`。
+形式化陈述：opNorm_le_of_shell {f : E ->SL[σ₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC : 
+0 <= C) {c : 𝕜} (hc : 1 < ‖c‖) (hf : forall x, ε / ‖c‖ <= ‖x‖ -> ‖x‖ < ε -> ‖f x
+‖ <= C * ‖x‖) : ‖f‖ <= C
+参数：ε_pos : 0 < ε；hC : 0 <= C；hc : 1 < ‖c‖；hf : forall x, ε / ‖c‖ <= ‖x‖ -> ‖x‖ <
+ ε -> ‖f x‖ <= C * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound'`：opNorm_le_bound' (f : E ->SL[σ₁₂] 
+F) {M : Real} (hMp : 0 <= M) (hM : forall x, ‖x‖ != 0 -> ‖f x‖ <= M * ‖x‖) : ‖f‖
+ <= M
+· 使用定理 `SemilinearMapClass.bound_of_shell_semi_normed`：SemilinearMapClass.bound_
+of_shell_semi_normed [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) {ε C : Real} (ε_pos 
+: 0 < ε) {c : 𝕜} (hc : 1 < ‖c‖) (hf…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
 -/
-theorem opNorm_le_of_shell {f : E ->SL[σ₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜}
-    (hc : 1 < ‖c‖) (hf : forall x, ε / ‖c‖ <= ‖x‖ -> ‖x‖ < ε -> ‖f x‖ <= C * ‖x‖) : ‖f‖ <= C :=
+theorem opNorm_le_of_shell {f : E →SL[σ₁₂] F} {ε C : ℝ} (ε_pos : 0 < ε) (hC : 0 ≤ C) {c : 𝕜}
+    (hc : 1 < ‖c‖) (hf : ∀ x, ε / ‖c‖ ≤ ‖x‖ → ‖x‖ < ε → ‖f x‖ ≤ C * ‖x‖) : ‖f‖ ≤ C :=
   f.opNorm_le_bound' hC fun _ hx => SemilinearMapClass.bound_of_shell_semi_normed f ε_pos hc hf hx
-
-/--
-theorem `opNorm_le_of_ball` / 定理 `opNorm_le_of_ball`
-
-English:
-theorem opNorm_le_of_ball
-  statement: {f : E ->SL[σ₁₂] F} {ε : Real} {C : Real} (ε_pos : 0 < ε) (hC : 0 <= C)
-  proof: by
-  rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
-  refine opNorm_le_of_shell ε_pos hC hc fun x _ hx => hf x ?_
-  rwa [ball_zero_eq]
-
-中文:
-定理 opNorm_le_of_ball
-  结论: {f : E ->SL[σ₁₂] F} {ε : 实数} {C : 实数} (ε_pos : 0 < ε) (hC : 0 <= C)
-  证明: by
-  rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
-  refine opNorm_le_of_shell ε_pos hC hc fun x _ hx => hf x ?_
-  rwa [ball_zero_eq]
-
-Depends on / 依赖: NormedField, NormedField.exists_one_lt_norm, ball_zero_eq, exists_one_lt_norm, opNorm_le_of_shell
+/-
+**ContinuousLinearMap.opNorm_le_of_ball** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLin
+earMap`。
+形式化陈述：opNorm_le_of_ball {f : E ->SL[σ₁₂] F} {ε : Real} {C : Real} (ε_pos : 0 < ε
+) (hC : 0 <= C) (hf : forall x in ball (0 : E) ε, ‖f x‖ <= C * ‖x‖) : ‖f‖ <= C
+参数：ε_pos : 0 < ε；hC : 0 <= C；hf : forall x in ball (0 : E) ε, ‖f x‖ <= C * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedField.exists_one_lt_norm`：exists_one_lt_norm : exists x : α, 1 < ‖
+x‖
+· 使用定理 `ContinuousLinearMap.opNorm_le_of_shell`：opNorm_le_of_shell {f : E ->SL[σ
+₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜} (hc : 1 < ‖c‖) (hf : f
+orall x, ε / ‖c‖ <= ‖x‖ -> ‖…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ball_zero_eq`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (r : ℝ), Me
+tric.ball 0 r = {x | ‖x‖ < r}
 -/
-theorem opNorm_le_of_ball {f : E ->SL[σ₁₂] F} {ε : Real} {C : Real} (ε_pos : 0 < ε) (hC : 0 <= C)
-    (hf : forall x in ball (0 : E) ε, ‖f x‖ <= C * ‖x‖) : ‖f‖ <= C := by
+theorem opNorm_le_of_ball {f : E →SL[σ₁₂] F} {ε : ℝ} {C : ℝ} (ε_pos : 0 < ε) (hC : 0 ≤ C)
+    (hf : ∀ x ∈ ball (0 : E) ε, ‖f x‖ ≤ C * ‖x‖) : ‖f‖ ≤ C := by
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
   refine opNorm_le_of_shell ε_pos hC hc fun x _ hx => hf x ?_
   rwa [ball_zero_eq]
-
-/--
-theorem `opNorm_le_of_nhds_zero` / 定理 `opNorm_le_of_nhds_zero`
-
-English:
-theorem opNorm_le_of_nhds_zero
-  statement: {f : E ->SL[σ₁₂] F} {C : Real} (hC : 0 <= C)
-  proof: let ⟨_, ε0, hε⟩ := Metric.eventually_nhds_iff_ball.1 hf
-  opNorm_le_of_ball ε0 hC hε
-
-中文:
-定理 opNorm_le_of_nhds_zero
-  结论: {f : E ->SL[σ₁₂] F} {C : 实数} (hC : 0 <= C)
-  证明: let ⟨_, ε0, hε⟩ := Metric.eventually_nhds_iff_ball.1 hf
-  opNorm_le_of_ball ε0 hC hε
-
-Depends on / 依赖: Metric, Metric.eventually_nhds_iff_ball, eventually_nhds_iff_ball, opNorm_le_of_ball
+/-
+**ContinuousLinearMap.opNorm_le_of_nhds_zero** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap`。
+形式化陈述：opNorm_le_of_nhds_zero {f : E ->SL[σ₁₂] F} {C : Real} (hC : 0 <= C) (hf : 
+forallᶠ x in 𝓝 (0 : E), ‖f x‖ <= C * ‖x‖) : ‖f‖ <= C
+参数：hC : 0 <= C；hf : forallᶠ x in 𝓝 (0 : E), ‖f x‖ <= C * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.eventually_nhds_iff_ball`：eventually_nhds_iff_ball {p : α -> Prop
+} : (forallᶠ y in 𝓝 x, p y) ↔ exists ε > 0, forall y in ball x ε, p y
+· 使用定理 `ContinuousLinearMap.opNorm_le_of_ball`：opNorm_le_of_ball {f : E ->SL[σ₁₂
+] F} {ε : Real} {C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) (hf : forall x in ball 
+(0 : E) ε, ‖f x‖ <= C * ‖x‖…
 -/
-theorem opNorm_le_of_nhds_zero {f : E ->SL[σ₁₂] F} {C : Real} (hC : 0 <= C)
-    (hf : forallᶠ x in 𝓝 (0 : E), ‖f x‖ <= C * ‖x‖) : ‖f‖ <= C :=
+theorem opNorm_le_of_nhds_zero {f : E →SL[σ₁₂] F} {C : ℝ} (hC : 0 ≤ C)
+    (hf : ∀ᶠ x in 𝓝 (0 : E), ‖f x‖ ≤ C * ‖x‖) : ‖f‖ ≤ C :=
   let ⟨_, ε0, hε⟩ := Metric.eventually_nhds_iff_ball.1 hf
   opNorm_le_of_ball ε0 hC hε
-
-/--
-theorem `opNorm_le_of_shell'` / 定理 `opNorm_le_of_shell'`
-
-English:
-theorem opNorm_le_of_shell'
-  statement: {f : E ->SL[σ₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜}
-  proof: by
+/-
+**ContinuousLinearMap.opNorm_le_of_shell'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：opNorm_le_of_shell' {f : E ->SL[σ₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC :
+ 0 <= C) {c : 𝕜} (hc : ‖c‖ < 1) (hf : forall x, ε * ‖c‖ <= ‖x‖ -> ‖x‖ < ε -> ‖f 
+x‖ <= C * ‖x‖) : ‖f‖ <= C
+参数：ε_pos : 0 < ε；hC : 0 <= C；hc : ‖c‖ < 1；hf : forall x, ε * ‖c‖ <= ‖x‖ -> ‖x‖ <
+ ε -> ‖f x‖ <= C * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_of_ball`：opNorm_le_of_ball {f : E ->SL[σ₁₂
+] F} {ε : Real} {C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) (hf : forall x in ball 
+(0 : E) ε, ‖f x‖ <= C * ‖x‖…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `ball_zero_eq`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (r : ℝ), Me
+tric.ball 0 r = {x | ‖x‖ < r}
+· 使用定理 `ContinuousLinearMap.opNorm_le_of_shell`：opNorm_le_of_shell {f : E ->SL[σ
+₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜} (hc : 1 < ‖c‖) (hf : f
+orall x, ε / ‖c‖ <= ‖x‖ -> ‖…
+· 使用引理 `inv_lt_one₀`：inv_lt_one₀ (ha : 0 < a) : a⁻¹ < 1 ↔ 1 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `norm_pos_iff`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, 0 < ‖a
+‖ ↔ a ≠ 0
+· 使用定理 `inv_ne_zero`：inv_ne_zero (h : a != 0) : a⁻¹ != 0
+· 使用定理 `norm_inv`：norm_inv (a : α) : ‖a⁻¹‖ = ‖a‖⁻¹
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+-/
+theorem opNorm_le_of_shell' {f : E →SL[σ₁₂] F} {ε C : ℝ} (ε_pos : 0 < ε) (hC : 0 ≤ C) {c : 𝕜}
+    (hc : ‖c‖ < 1) (hf : ∀ x, ε * ‖c‖ ≤ ‖x‖ → ‖x‖ < ε → ‖f x‖ ≤ C * ‖x‖) : ‖f‖ ≤ C := by
   by_cases h0 : c = 0
   · refine opNorm_le_of_ball ε_pos hC fun x hx => hf x ?_ ?_
     · simp [h0]
@@ -984,467 +1060,501 @@ theorem opNorm_le_of_shell'
     refine opNorm_le_of_shell ε_pos hC hc ?_
     rwa [norm_inv, div_eq_mul_inv, inv_inv]
 
-中文:
-定理 opNorm_le_of_shell'
-  结论: {f : E ->SL[σ₁₂] F} {ε C : 实数} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜}
-  证明: by
-  by_cases h0 : c = 0
-  · refine opNorm_le_of_ball ε_pos hC fun x hx => hf x ?_ ?_
-    · simp [h0]
-    · rwa [ball_zero_eq] at hx
-  · rw [← inv_inv c, norm_inv, inv_lt_one₀ (norm_pos_iff.2 <| inv_ne_zero h0)] at hc
-    refine opNorm_le_of_shell ε_pos hC hc ?_
-    rwa [norm_inv, div_eq_mul_inv, inv_inv]
+/-- For a continuous real linear map `f`, if one controls the norm of every `f x`, `‖x‖ = 1`, then
+one controls the norm of `f`. -/
+/-
+**ContinuousLinearMap.opNorm_le_of_unit_norm** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usLinearMap`。
+形式化陈述：opNorm_le_of_unit_norm [NormedAlgebra Real 𝕜] {f : E ->SL[σ₁₂] F} {C : Rea
+l} (hC : 0 <= C) (hf : forall x, ‖x‖ = 1 -> ‖f x‖ <= C) : ‖f‖ <= C
+参数：hC : 0 <= C；hf : forall x, ‖x‖ = 1 -> ‖f x‖ <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound'`：opNorm_le_bound' (f : E ->SL[σ₁₂] 
+F) {M : Real} (hMp : 0 <= M) (hM : forall x, ‖x‖ != 0 -> ‖f x‖ <= M * ‖x‖) : ‖f‖
+ <= M
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_inv₀`：map_inv₀ : f a⁻¹ = (f a)⁻¹
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
+· 使用定理 `norm_inv`：norm_inv (a : α) : ‖a⁻¹‖ = ‖a‖⁻¹
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ContinuousLinearMap.map_smulₛₗ`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
+· 使用定理 `RingHomIsometric.norm_map`：∀ {R₁ : Type u_5} {R₂ : Type u_6} {inst : Sem
+iring R₁} {inst_1 : Semiring R₂} {inst_2 : Norm R₁} {inst_3 : Norm R₂}   {σ : R₁
+ →+* R₂} [self …
+· 使用引理 `div_le_iff₀`：div_le_iff₀ (hc : 0 < c) : b / c <= a ↔ b <= a * c
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `LE.le.lt_of_ne'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≠ b → b < a
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
 
-Depends on / 依赖: ball_zero_eq, div_eq_mul_inv, inv_inv, inv_ne_zero, norm_inv, norm_pos_iff, opNorm_le_of_ball, opNorm_le_of_shell
+--- 原说明 ---
+For a continuous real linear map `f`, if one controls the norm of every `f x`, `
+‖x‖ = 1`, then
+one controls the norm of `f`.
 -/
-theorem opNorm_le_of_shell' {f : E ->SL[σ₁₂] F} {ε C : Real} (ε_pos : 0 < ε) (hC : 0 <= C) {c : 𝕜}
-    (hc : ‖c‖ < 1) (hf : forall x, ε * ‖c‖ <= ‖x‖ -> ‖x‖ < ε -> ‖f x‖ <= C * ‖x‖) : ‖f‖ <= C := by
-  by_cases h0 : c = 0
-  · refine opNorm_le_of_ball ε_pos hC fun x hx => hf x ?_ ?_
-    · simp [h0]
-    · rwa [ball_zero_eq] at hx
-  · rw [← inv_inv c, norm_inv, inv_lt_one₀ (norm_pos_iff.2 <| inv_ne_zero h0)] at hc
-    refine opNorm_le_of_shell ε_pos hC hc ?_
-    rwa [norm_inv, div_eq_mul_inv, inv_inv]
-
-/--
-theorem `opNorm_le_of_unit_norm` / 定理 `opNorm_le_of_unit_norm`
-
-English:
-theorem opNorm_le_of_unit_norm
-  statement: [NormedAlgebra Real 𝕜] {f : E ->SL[σ₁₂] F} {C : Real}
-  proof: by
+theorem opNorm_le_of_unit_norm [NormedAlgebra ℝ 𝕜] {f : E →SL[σ₁₂] F} {C : ℝ}
+    (hC : 0 ≤ C) (hf : ∀ x, ‖x‖ = 1 → ‖f x‖ ≤ C) : ‖f‖ ≤ C := by
   refine opNorm_le_bound' f hC fun x hx => ?_
   have H₁ : ‖algebraMap _ 𝕜 ‖x‖⁻¹ • x‖ = 1 := by simp [norm_smul, inv_mul_cancel₀ hx]
-  have H₂ : ‖x‖⁻¹ * ‖f x‖ <= C := by simpa [norm_smul] using hf _ H₁
+  have H₂ : ‖x‖⁻¹ * ‖f x‖ ≤ C := by simpa [norm_smul] using hf _ H₁
   rwa [← div_eq_inv_mul, div_le_iff₀] at H₂
   exact (norm_nonneg x).lt_of_ne' hx
 
-中文:
-定理 opNorm_le_of_unit_norm
-  结论: [赋范代数 实数 𝕜] {f : E ->SL[σ₁₂] F} {C : 实数}
-  证明: by
-  refine opNorm_le_bound' f hC fun x hx => ?_
-  have H₁ : ‖algebraMap _ 𝕜 ‖x‖⁻¹ • x‖ = 1 := by simp [norm_smul, inv_mul_cancel₀ hx]
-  have H₂ : ‖x‖⁻¹ * ‖f x‖ <= C := by simpa [norm_smul] using hf _ H₁
-  rwa [← div_eq_inv_mul, div_le_iff₀] at H₂
-  exact (norm_nonneg x).lt_of_ne' hx
+/-- The operator norm satisfies the triangle inequality. -/
+/-
+**ContinuousLinearMap.opNorm_add_le** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：opNorm_add_le : ‖f + g‖ <= ‖f‖ + ‖g‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ContinuousLinearMap.opNorm_nonneg`：opNorm_nonneg (f : E ->SL[σ₁₂] F) : 0
+ <= ‖f‖
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `norm_add_le_of_le`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] {a₁ a₂
+ : E} {r₁ r₂ : ℝ}, ‖a₁‖ ≤ r₁ → ‖a₂‖ ≤ r₂ → ‖a₁ + a₂‖ ≤ r₁ + r₂
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
 
-Depends on / 依赖: algebraMap, div_eq_inv_mul, lt_of_ne, norm_nonneg, norm_smul, opNorm_le_bound
+--- 原说明 ---
+The operator norm satisfies the triangle inequality.
 -/
-theorem opNorm_le_of_unit_norm [NormedAlgebra Real 𝕜] {f : E ->SL[σ₁₂] F} {C : Real}
-    (hC : 0 <= C) (hf : forall x, ‖x‖ = 1 -> ‖f x‖ <= C) : ‖f‖ <= C := by
-  refine opNorm_le_bound' f hC fun x hx => ?_
-  have H₁ : ‖algebraMap _ 𝕜 ‖x‖⁻¹ • x‖ = 1 := by simp [norm_smul, inv_mul_cancel₀ hx]
-  have H₂ : ‖x‖⁻¹ * ‖f x‖ <= C := by simpa [norm_smul] using hf _ H₁
-  rwa [← div_eq_inv_mul, div_le_iff₀] at H₂
-  exact (norm_nonneg x).lt_of_ne' hx
-
-/--
-theorem `opNorm_add_le` / 定理 `opNorm_add_le`
-
-English:
-theorem opNorm_add_le
-  statement: ‖f + g‖ <= ‖f‖ + ‖g‖
-  proof: (f + g).opNorm_le_bound (add_nonneg f.opNorm_nonneg g.opNorm_nonneg) fun x =>
-    (norm_add_le_of_le (f.le_opNorm x) (g.le_opNorm x)).trans_eq (add_mul _ _ _).symm
-
-中文:
-定理 opNorm_add_le
-  结论: ‖f + g‖ <= ‖f‖ + ‖g‖
-  证明: (f + g).opNorm_le_bound (add_nonneg f.opNorm_nonneg g.opNorm_nonneg) fun x =>
-    (norm_add_le_of_le (f.le_opNorm x) (g.le_opNorm x)).trans_eq (add_mul _ _ _).symm
-
-Depends on / 依赖: add_mul, add_nonneg, f.le_opNorm, f.opNorm_nonneg, g.le_opNorm, g.opNorm_nonneg, le_opNorm, norm_add_le_of_le, opNorm_le_bound, opNorm_nonneg, trans_eq
--/
-theorem opNorm_add_le : ‖f + g‖ <= ‖f‖ + ‖g‖ :=
+theorem opNorm_add_le : ‖f + g‖ ≤ ‖f‖ + ‖g‖ :=
   (f + g).opNorm_le_bound (add_nonneg f.opNorm_nonneg g.opNorm_nonneg) fun x =>
     (norm_add_le_of_le (f.le_opNorm x) (g.le_opNorm x)).trans_eq (add_mul _ _ _).symm
 
 /-- If a normed space is (topologically) non-trivial, then the norm of the identity equals `1`. -/
 @[simp]
-/--
-theorem `norm_id` / 定理 `norm_id`
+/-
+**ContinuousLinearMap.norm_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：norm_id [NontrivialTopology E] : ‖ContinuousLinearMap.id 𝕜 E‖ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `ContinuousLinearMap.norm_id_le`：norm_id_le : ‖ContinuousLinearMap.id 𝕜 E
+‖ <= 1
+· 使用定理 `exists_norm_ne_zero`：∀ (E : Type u_5) [inst : SeminormedAddGroup E] [Non
+trivialTopology E], ∃ x, ‖x‖ ≠ 0
+· 使用定理 `ContinuousLinearMap.ratio_le_opNorm`：ratio_le_opNorm : ‖f x‖ / ‖x‖ <= ‖f
+‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_self`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 → 
+a / a = 1
+· 使用定理 `ContinuousLinearMap.id_apply`：id_apply (x : M₁) : ContinuousLinearMap.id
+ R₁ M₁ x = x
 
-English:
-theorem norm_id
-  given: [NontrivialTopology E]
-  statement: ‖ContinuousLinearMap.id 𝕜 E‖ = 1
-  proof: le_antisymm norm_id_le by
-    let ⟨x, hx⟩ := exists_norm_ne_zero E
-    have := (ContinuousLinearMap.id 𝕜 E).ratio_le_opNorm x
-    rwa [id_apply, div_self hx] at this
-
-中文:
-定理 norm_id
-  条件: [非平凡拓扑 E]
-  结论: ‖连续线性映射.id 𝕜 E‖ = 1
-  证明: le_antisymm norm_id_le by
-    let ⟨x, hx⟩ := exists_norm_ne_zero E
-    have := (ContinuousLinearMap.id 𝕜 E).ratio_le_opNorm x
-    rwa [id_apply, div_self hx] at this
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, div_self, exists_norm_ne_zero, id_apply, le_antisymm, norm_id_le, ratio_le_opNorm
+--- 原说明 ---
+If a normed space is (topologically) non-trivial, then the norm of the identity 
+equals `1`.
 -/
 theorem norm_id [NontrivialTopology E] : ‖ContinuousLinearMap.id 𝕜 E‖ = 1 :=
-le_antisymm norm_id_le by
+  le_antisymm norm_id_le <| by
     let ⟨x, hx⟩ := exists_norm_ne_zero E
     have := (ContinuousLinearMap.id 𝕜 E).ratio_le_opNorm x
     rwa [id_apply, div_self hx] at this
-
-/--
-Instance `normOneClass` / 实例 `normOneClass`
-
-English:
-instance normOneClass
-  signature: [NontrivialTopology E]
-  body: ⟨norm_id⟩
-
-中文:
-实例 normOneClass
-  签名: [非平凡拓扑 E]
-  定义体: ⟨norm_id⟩
-
-Depends on / 依赖: norm_id
+/-
+**ContinuousLinearMap.normOneClass** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearMa
+p`。
+形式化陈述：normOneClass [NontrivialTopology E] : NormOneClass (E ->L[𝕜] E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.norm_id`：norm_id [NontrivialTopology E] : ‖Continuou
+sLinearMap.id 𝕜 E‖ = 1
 -/
-instance normOneClass [NontrivialTopology E] : NormOneClass (E ->L[𝕜] E) :=
+instance normOneClass [NontrivialTopology E] : NormOneClass (E →L[𝕜] E) :=
   ⟨norm_id⟩
-
-/--
-theorem `opNorm_smul_le` / 定理 `opNorm_smul_le`
-
-English:
-theorem opNorm_smul_le
-  statement: {𝕜' : Type*} [DistribSMul 𝕜' F] [SMulCommClass 𝕜₂ 𝕜' F]
-  proof: (c • f).opNorm_le_bound (mul_nonneg (norm_nonneg _) (opNorm_nonneg _)) fun _ => by
-    grw [smul_apply, norm_smul_le, mul_assoc, le_opNorm]
-
-中文:
-定理 opNorm_smul_le
-  结论: {𝕜' : 类型} [分配标量乘法 𝕜' F] [标量交换类 𝕜₂ 𝕜' F]
-  证明: (c • f).opNorm_le_bound (mul_nonneg (norm_nonneg _) (opNorm_nonneg _)) fun _ => by
-    grw [smul_apply, norm_smul_le, mul_assoc, le_opNorm]
-
-Depends on / 依赖: le_opNorm, mul_assoc, mul_nonneg, norm_nonneg, norm_smul_le, opNorm_le_bound, opNorm_nonneg, smul_apply
+/-
+**ContinuousLinearMap.opNorm_smul_le** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：opNorm_smul_le {𝕜' : Type*} [DistribSMul 𝕜' F] [SMulCommClass 𝕜₂ 𝕜' F] [Se
+minormedAddCommGroup 𝕜'] [IsBoundedSMul 𝕜' F] (c : 𝕜') (f : E ->SL[σ₁₂] F) : ‖c 
+• f‖ <= ‖c‖ * ‖f‖
+参数：c : 𝕜'；f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `ContinuousLinearMap.opNorm_nonneg`：opNorm_nonneg (f : E ->SL[σ₁₂] F) : 0
+ <= ‖f‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `ContinuousLinearMap.instIsSMulApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `norm_smul_le`：norm_smul_le (r : α) (x : β) : ‖r • x‖ <= ‖r‖ * ‖x‖
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
 -/
 theorem opNorm_smul_le {𝕜' : Type*} [DistribSMul 𝕜' F] [SMulCommClass 𝕜₂ 𝕜' F]
     [SeminormedAddCommGroup 𝕜'] [IsBoundedSMul 𝕜' F]
-    (c : 𝕜') (f : E ->SL[σ₁₂] F) : ‖c • f‖ <= ‖c‖ * ‖f‖ :=
+    (c : 𝕜') (f : E →SL[σ₁₂] F) : ‖c • f‖ ≤ ‖c‖ * ‖f‖ :=
   (c • f).opNorm_le_bound (mul_nonneg (norm_nonneg _) (opNorm_nonneg _)) fun _ => by
     grw [smul_apply, norm_smul_le, mul_assoc, le_opNorm]
-
-/--
-theorem `opNorm_le_iff_lipschitz` / 定理 `opNorm_le_iff_lipschitz`
-
-English:
-theorem opNorm_le_iff_lipschitz
-  given: {f : E ->SL[σ₁₂] F} {K : Real>=0}
-  proof: ⟨fun h => by simpa using AddMonoidHomClass.lipschitz_of_bound f K le_of_opNorm_le f h,
-fun hf => f.opNorm_le_bound K.2 hf.norm_le_mul (map_zero f)⟩
-
-alias ⟨lipschitzWith_of_opNorm_le, opNorm_le_of_lipschitz⟩ := opNorm_le_iff_lipschitz
-
-中文:
-定理 opNorm_le_iff_lipschitz
-  条件: {f : E ->SL[σ₁₂] F} {K : 实数>=0}
-  证明: ⟨fun h => by simpa using AddMonoidHomClass.lipschitz_of_bound f K le_of_opNorm_le f h,
-fun hf => f.opNorm_le_bound K.2 hf.norm_le_mul (map_zero f)⟩
-
-alias ⟨lipschitzWith_of_opNorm_le, opNorm_le_of_lipschitz⟩ := opNorm_le_iff_lipschitz
-
-Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.lipschitz_of_bound, f.opNorm_le_bound, hf.norm_le_mul, le_of_opNorm_le, lipschitz_of_bound, map_zero, norm_le_mul, opNorm_le_bound
+/-
+**ContinuousLinearMap.opNorm_le_iff_lipschitz** 是 Mathlib 中的一个定理，位于命名空间 `Continu
+ousLinearMap`。
+形式化陈述：opNorm_le_iff_lipschitz {f : E ->SL[σ₁₂] F} {K : Real>=0} : ‖f‖ <= K ↔ Lip
+schitzWith K f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
+· 使用定理 `AddMonoidHomClass.lipschitz_of_bound`：∀ {𝓕 : Type u_1} {E : Type u_2} {F
+ : Type u_3} [inst : SeminormedAddGroup E] [inst_1 : SeminormedAddGroup F]   [in
+st_2 : FunLike 𝓕 E F] [Add…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `ContinuousLinearMap.le_of_opNorm_le`：le_of_opNorm_le {c : Real} (h : ‖f‖
+ <= c) (x : E) : ‖f x‖ <= c * ‖x‖
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `LipschitzWith.norm_le_mul`：∀ {E : Type u_2} {F : Type u_3} [inst : Semin
+ormedAddGroup E] [inst_1 : SeminormedAddGroup F] {f : E → F} {K : NNReal},   Lip
+schitzWith K f …
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
 -/
-theorem opNorm_le_iff_lipschitz {f : E ->SL[σ₁₂] F} {K : Real>=0} :
-    ‖f‖ <= K ↔ LipschitzWith K f :=
-⟨fun h => by simpa using AddMonoidHomClass.lipschitz_of_bound f K le_of_opNorm_le f h,
-fun hf => f.opNorm_le_bound K.2 hf.norm_le_mul (map_zero f)⟩
+theorem opNorm_le_iff_lipschitz {f : E →SL[σ₁₂] F} {K : ℝ≥0} :
+    ‖f‖ ≤ K ↔ LipschitzWith K f :=
+  ⟨fun h ↦ by simpa using AddMonoidHomClass.lipschitz_of_bound f K <| le_of_opNorm_le f h,
+    fun hf ↦ f.opNorm_le_bound K.2 <| hf.norm_le_mul (map_zero f)⟩
 
 alias ⟨lipschitzWith_of_opNorm_le, opNorm_le_of_lipschitz⟩ := opNorm_le_iff_lipschitz
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Operator seminorm on the space of continuous (semi)linear maps, as `Seminorm`.
 
-English:
-definition noncomputable
-  signature: def seminorm
-  body: .ofSMulLE norm opNorm_zero opNorm_add_le opNorm_smul_le
+We use this seminorm to define a `SeminormedGroup` structure on `E →SL[σ] F`,
+but we have to override the projection `UniformSpace`
+so that it is definitionally equal to the one coming from the topologies on `E` and `F`. -/
+/-
+**ContinuousLinearMap.seminorm** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：{𝕜 : Type u_1} →   {𝕜₂ : Type u_2} →     {E : Type u_4} →       {F : Type 
+u_5} →         [inst : SeminormedAddCommGroup E] →           [inst_1 : Seminorme
+dAddCommGroup F] →             [inst_2 : NontriviallyNormedField 𝕜] →           
+    [inst_3 : NontriviallyNormedField 𝕜₂] →                 [inst_4 : NormedSpac
+e 𝕜 E] →                   [inst_5 : NormedSpace 𝕜₂ F] → {σ₁₂ : 𝕜 →+* 𝕜₂} → [Rin
+gHomIsometric σ₁₂] → Seminorm 𝕜₂ (E →SL[σ₁₂] F)
+参数：E →SL[σ₁₂] F。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousLinearMap.opNorm_zero`：opNorm_zero : ‖(0 : E ->SL[σ₁₂] F)‖ = 0
+· 使用定理 `ContinuousLinearMap.opNorm_add_le`：opNorm_add_le : ‖f + g‖ <= ‖f‖ + ‖g‖
 
-中文:
-定义 noncomputable
-  签名: def seminorm
-  定义体: .ofSMulLE norm opNorm_zero opNorm_add_le opNorm_smul_le
+--- 原说明 ---
+Operator seminorm on the space of continuous (semi)linear maps, as `Seminorm`.
+
+We use this seminorm to define a `SeminormedGroup` structure on `E →SL[σ] F`,
+but we have to override the projection `UniformSpace`
+so that it is definitionally equal to the one coming from the topologies on `E` 
+and `F`.
 -/
-protected noncomputable def seminorm : Seminorm 𝕜₂ (E ->SL[σ₁₂] F) :=
+protected noncomputable def seminorm : Seminorm 𝕜₂ (E →SL[σ₁₂] F) :=
   .ofSMulLE norm opNorm_zero opNorm_add_le opNorm_smul_le
 
 set_option backward.privateInPublic true in
-/--
-lemma `uniformity_eq_seminorm` / 引理 `uniformity_eq_seminorm`
-
-English:
-lemma uniformity_eq_seminorm
-  proof: by
-  have A (f : (E ->SL[σ₁₂] F) × (E ->SL[σ₁₂] F)) : ‖-f.1 + f.2‖ = ‖f.1 - f.2‖ := by
-    rw [← opNorm_neg]; rw [neg_add]; rw [neg_neg]; rw [sub_eq_add_neg]
-  simp only [A]
-.uniformity_eq_of_hasBasis refine ContinuousLinearMap.seminorm (σ₁₂ := σ₁₂) (E := E) (F := F)
-    (ContinuousLinearMap.hasBasis_nhds_zero_of_basis Metric.nhds_basis_closedBall)
-    ?_ fun (s, r) ⟨hs, hr⟩ => ?_
-  · rcases NormedField.exists_lt_norm 𝕜 1 with ⟨c, hc⟩
-    refine ⟨‖c‖, ContinuousLinearMap.hasBasis_nhds_zero.mem_iff.2
-      ⟨(closedBall 0 1, closedBall 0 1), ?_⟩⟩
-    suffices forall f : E ->SL[σ₁₂] F, (forall x, ‖x‖ <= 1 -> ‖f x‖ <= 1) -> ‖f‖ <= ‖c‖ by
-      simpa [NormedSpace.isVonNBounded_closedBall, closedBall_mem_nhds, subset_def] using! this
-    intro f hf
-    refine opNorm_le_of_shell (f := f) one_pos (norm_nonneg c) hc fun x hcx hx => ?_
-    exact (hf x hx.le).trans ((div_le_iff₀' <| one_pos.trans hc).1 hcx)
-  · rcases (NormedSpace.isVonNBounded_iff' _).1 hs with ⟨ε, hε⟩
-    rcases exists_pos_mul_lt hr ε with ⟨δ, hδ₀, hδ⟩
-    refine ⟨δ, hδ₀, fun f hf x hx => ?_⟩
-    simp only [Seminorm.mem_ball_zero, mem_closedBall_zero_iff] at hf ⊢
-    rw [mul_comm] at hδ
-    exact le_trans (le_of_opNorm_le_of_le _ hf.le (hε _ hx)) hδ.le
-
-中文:
-引理 uniformity_eq_seminorm
-  证明: by
-  have A (f : (E ->SL[σ₁₂] F) × (E ->SL[σ₁₂] F)) : ‖-f.1 + f.2‖ = ‖f.1 - f.2‖ := by
-    rw [← opNorm_neg]; rw [neg_add]; rw [neg_neg]; rw [sub_eq_add_neg]
-  simp only [A]
-.uniformity_eq_of_hasBasis refine ContinuousLinearMap.seminorm (σ₁₂ := σ₁₂) (E := E) (F := F)
-    (ContinuousLinearMap.hasBasis_nhds_zero_of_basis Metric.nhds_basis_closedBall)
-    ?_ fun (s, r) ⟨hs, hr⟩ => ?_
-  · rcases NormedField.exists_lt_norm 𝕜 1 with ⟨c, hc⟩
-    refine ⟨‖c‖, ContinuousLinearMap.hasBasis_nhds_zero.mem_iff.2
-      ⟨(closedBall 0 1, closedBall 0 1), ?_⟩⟩
-    suffices forall f : E ->SL[σ₁₂] F, (forall x, ‖x‖ <= 1 -> ‖f x‖ <= 1) -> ‖f‖ <= ‖c‖ by
-      simpa [NormedSpace.isVonNBounded_closedBall, closedBall_mem_nhds, subset_def] using! this
-    intro f hf
-    refine opNorm_le_of_shell (f := f) one_pos (norm_nonneg c) hc fun x hcx hx => ?_
-    exact (hf x hx.le).trans ((div_le_iff₀' <| one_pos.trans hc).1 hcx)
-  · rcases (NormedSpace.isVonNBounded_iff' _).1 hs with ⟨ε, hε⟩
-    rcases exists_pos_mul_lt hr ε with ⟨δ, hδ₀, hδ⟩
-    refine ⟨δ, hδ₀, fun f hf x hx => ?_⟩
-    simp only [Seminorm.mem_ball_zero, mem_closedBall_zero_iff] at hf ⊢
-    rw [mul_comm] at hδ
-    exact le_trans (le_of_opNorm_le_of_le _ hf.le (hε _ hx)) hδ.le
+/-
+**ContinuousLinearMap.uniformity_eq_seminorm** 是 Mathlib 中的一个引理，位于命名空间 `Continuo
+usLinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma uniformity_eq_seminorm :
-    𝓤 (E ->SL[σ₁₂] F) = ⨅ r > 0, 𝓟 {f | ‖-f.1 + f.2‖ < r} := by
-  have A (f : (E ->SL[σ₁₂] F) × (E ->SL[σ₁₂] F)) : ‖-f.1 + f.2‖ = ‖f.1 - f.2‖ := by
-    rw [← opNorm_neg]; rw [neg_add]; rw [neg_neg]; rw [sub_eq_add_neg]
+    𝓤 (E →SL[σ₁₂] F) = ⨅ r > 0, 𝓟 {f | ‖-f.1 + f.2‖ < r} := by
+  have A (f : (E →SL[σ₁₂] F) × (E →SL[σ₁₂] F)) : ‖-f.1 + f.2‖ = ‖f.1 - f.2‖ := by
+    rw [← opNorm_neg, neg_add, neg_neg, sub_eq_add_neg]
   simp only [A]
-.uniformity_eq_of_hasBasis refine ContinuousLinearMap.seminorm (σ₁₂ := σ₁₂) (E := E) (F := F)
+  refine ContinuousLinearMap.seminorm (σ₁₂ := σ₁₂) (E := E) (F := F) |>.uniformity_eq_of_hasBasis
     (ContinuousLinearMap.hasBasis_nhds_zero_of_basis Metric.nhds_basis_closedBall)
-    ?_ fun (s, r) ⟨hs, hr⟩ => ?_
+    ?_ fun (s, r) ⟨hs, hr⟩ ↦ ?_
   · rcases NormedField.exists_lt_norm 𝕜 1 with ⟨c, hc⟩
     refine ⟨‖c‖, ContinuousLinearMap.hasBasis_nhds_zero.mem_iff.2
       ⟨(closedBall 0 1, closedBall 0 1), ?_⟩⟩
-    suffices forall f : E ->SL[σ₁₂] F, (forall x, ‖x‖ <= 1 -> ‖f x‖ <= 1) -> ‖f‖ <= ‖c‖ by
+    suffices ∀ f : E →SL[σ₁₂] F, (∀ x, ‖x‖ ≤ 1 → ‖f x‖ ≤ 1) → ‖f‖ ≤ ‖c‖ by
       simpa [NormedSpace.isVonNBounded_closedBall, closedBall_mem_nhds, subset_def] using! this
     intro f hf
-    refine opNorm_le_of_shell (f := f) one_pos (norm_nonneg c) hc fun x hcx hx => ?_
+    refine opNorm_le_of_shell (f := f) one_pos (norm_nonneg c) hc fun x hcx hx ↦ ?_
     exact (hf x hx.le).trans ((div_le_iff₀' <| one_pos.trans hc).1 hcx)
   · rcases (NormedSpace.isVonNBounded_iff' _).1 hs with ⟨ε, hε⟩
     rcases exists_pos_mul_lt hr ε with ⟨δ, hδ₀, hδ⟩
-    refine ⟨δ, hδ₀, fun f hf x hx => ?_⟩
+    refine ⟨δ, hδ₀, fun f hf x hx ↦ ?_⟩
     simp only [Seminorm.mem_ball_zero, mem_closedBall_zero_iff] at hf ⊢
     rw [mul_comm] at hδ
     exact le_trans (le_of_opNorm_le_of_le _ hf.le (hε _ hx)) hδ.le
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `toPseudoMetricSpace` / 实例 `toPseudoMetricSpace`
-
-English:
-instance toPseudoMetricSpace
-  signature: : PseudoMetricSpace (E ->SL[σ₁₂] F)
-  body: .replaceUniformity
-  ContinuousLinearMap.seminorm.toSeminormedAddCommGroup.toPseudoMetricSpace uniformity_eq_seminorm
-
-中文:
-实例 toPseudoMetricSpace
-  签名: : 伪度量空间 (E ->SL[σ₁₂] F)
-  定义体: .replaceUniformity
-  ContinuousLinearMap.seminorm.toSeminormedAddCommGroup.toPseudoMetricSpace uniformity_eq_seminorm
-
-Depends on / 依赖: replaceUniformity
+/-
+**ContinuousLinearMap.toPseudoMetricSpace** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：toPseudoMetricSpace : PseudoMetricSpace (E ->SL[σ₁₂] F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `_private.Mathlib.Analysis.Normed.Operator.Basic.0.ContinuousLinearMap.un
+iformity_eq_seminorm`：∀ {𝕜 : Type u_1} {𝕜₂ : Type u_2} {E : Type u_4} {F : Type 
+u_5} [inst : SeminormedAddCommGroup E]   [inst_1 : SeminormedAddCommGroup F] [in
+st…
 -/
-instance toPseudoMetricSpace : PseudoMetricSpace (E ->SL[σ₁₂] F) := .replaceUniformity
+instance toPseudoMetricSpace : PseudoMetricSpace (E →SL[σ₁₂] F) := .replaceUniformity
   ContinuousLinearMap.seminorm.toSeminormedAddCommGroup.toPseudoMetricSpace uniformity_eq_seminorm
 
-/--
-Instance `toSeminormedAddCommGroup` / 实例 `toSeminormedAddCommGroup`
+/-- Continuous linear maps themselves form a seminormed space with respect to the operator norm. -/
+/-
+**ContinuousLinearMap.toSeminormedAddCommGroup** 是 Mathlib 中的一个定义，位于命名空间 `Contin
+uousLinearMap`。
+形式化陈述：{𝕜 : Type u_1} →   {𝕜₂ : Type u_2} →     {E : Type u_4} →       {F : Type 
+u_5} →         [inst : SeminormedAddCommGroup E] →           [inst_1 : Seminorme
+dAddCommGroup F] →             [inst_2 : NontriviallyNormedField 𝕜] →           
+    [inst_3 : NontriviallyNormedField 𝕜₂] →                 [inst_4 : NormedSpac
+e 𝕜 E] →                   [inst_5 : NormedSpace 𝕜₂ F] →                     {σ₁
+₂ : 𝕜 →+* 𝕜₂} → [RingHomIsometric σ₁₂] → SeminormedAddCommGroup (E →SL[σ₁₂] F)
+参数：E →SL[σ₁₂] F。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 
-English:
-instance toSeminormedAddCommGroup
-  signature: : SeminormedAddCommGroup (E ->SL[σ₁₂] F) where
-
-中文:
-实例 toSeminormedAddCommGroup
-  签名: : SeminormedAddComm群 (E ->SL[σ₁₂] F) where
+--- 原说明 ---
+Continuous linear maps themselves form a seminormed space with respect to the op
+erator norm.
 -/
-instance toSeminormedAddCommGroup : SeminormedAddCommGroup (E ->SL[σ₁₂] F) where
+instance toSeminormedAddCommGroup : SeminormedAddCommGroup (E →SL[σ₁₂] F) where
 
 /-- If a normed space is (topologically) non-trivial, then the norm of the identity equals `1`. -/
 @[simp]
-/--
-theorem `nnnorm_id` / 定理 `nnnorm_id`
+/-
+**ContinuousLinearMap.nnnorm_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinearMap`。
+形式化陈述：nnnorm_id [NontrivialTopology E] : ‖ContinuousLinearMap.id 𝕜 E‖₊ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `ContinuousLinearMap.norm_id`：norm_id [NontrivialTopology E] : ‖Continuou
+sLinearMap.id 𝕜 E‖ = 1
 
-English:
-theorem nnnorm_id
-  given: [NontrivialTopology E]
-  statement: ‖ContinuousLinearMap.id 𝕜 E‖₊ = 1
-  proof: NNReal.eq norm_id
-
-中文:
-定理 nnnorm_id
-  条件: [非平凡拓扑 E]
-  结论: ‖连续线性映射.id 𝕜 E‖₊ = 1
-  证明: NNReal.eq norm_id
-
-Depends on / 依赖: NNReal, NNReal.eq, norm_id
+--- 原说明 ---
+If a normed space is (topologically) non-trivial, then the norm of the identity 
+equals `1`.
 -/
 theorem nnnorm_id [NontrivialTopology E] : ‖ContinuousLinearMap.id 𝕜 E‖₊ = 1 :=
   NNReal.eq norm_id
-
-/--
-Instance `toNormedSpace` / 实例 `toNormedSpace`
-
-English:
-instance toNormedSpace
-  signature: {𝕜' : Type*} [NormedField 𝕜'] [NormedSpace 𝕜' F] [SMulCommClass 𝕜₂ 𝕜' F]
-  body: ⟨opNorm_smul_le⟩
-
-中文:
-实例 toNormedSpace
-  签名: {𝕜' : 类型} [赋范域 𝕜'] [赋范空间 𝕜' F] [标量交换类 𝕜₂ 𝕜' F]
-  定义体: ⟨opNorm_smul_le⟩
-
-Depends on / 依赖: opNorm_smul_le
+/-
+**ContinuousLinearMap.toNormedSpace** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinearM
+ap`。
+形式化陈述：toNormedSpace {𝕜' : Type*} [NormedField 𝕜'] [NormedSpace 𝕜' F] [SMulCommCl
+ass 𝕜₂ 𝕜' F] : NormedSpace 𝕜' (E ->SL[σ₁₂] F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance toNormedSpace {𝕜' : Type*} [NormedField 𝕜'] [NormedSpace 𝕜' F] [SMulCommClass 𝕜₂ 𝕜' F] :
-    NormedSpace 𝕜' (E ->SL[σ₁₂] F) :=
+    NormedSpace 𝕜' (E →SL[σ₁₂] F) :=
   ⟨opNorm_smul_le⟩
 
-/--
-theorem `opNorm_comp_le` / 定理 `opNorm_comp_le`
+/-- The operator norm is submultiplicative. -/
+/-
+**ContinuousLinearMap.opNorm_comp_le** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：opNorm_comp_le (f : E ->SL[σ₁₂] F) : ‖h.comp f‖ <= ‖h‖ * ‖f‖
+参数：f : E ->SL[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csInf_le`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s : 
+Set α} {a : α}, BddBelow s → a ∈ s → sInf s ≤ a
+· 使用定理 `ContinuousLinearMap.bounds_bddBelow`：bounds_bddBelow {f : E ->SL[σ₁₂] F}
+ : BddBelow { c | 0 <= c ∧ forall x, ‖f x‖ <= c * ‖x‖ }
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `ContinuousLinearMap.le_opNorm_of_le`：le_opNorm_of_le {c : Real} {x} (h :
+ ‖x‖ <= c) : ‖f x‖ <= ‖f‖ * c
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
 
-English:
-theorem opNorm_comp_le
-  given: (f : E ->SL[σ₁₂] F)
-  statement: ‖h.comp f‖ <= ‖h‖ * ‖f‖
-  proof: csInf_le bounds_bddBelow ⟨by positivity, fun x => by
-    rw [mul_assoc]
-    exact h.le_opNorm_of_le (f.le_opNorm x)⟩
-
-中文:
-定理 opNorm_comp_le
-  条件: (f : E ->SL[σ₁₂] F)
-  结论: ‖h.comp f‖ <= ‖h‖ * ‖f‖
-  证明: csInf_le bounds_bddBelow ⟨by positivity, fun x => by
-    rw [mul_assoc]
-    exact h.le_opNorm_of_le (f.le_opNorm x)⟩
-
-Depends on / 依赖: bounds_bddBelow, csInf_le, f.le_opNorm, h.le_opNorm_of_le, le_opNorm, le_opNorm_of_le, mul_assoc
+--- 原说明 ---
+The operator norm is submultiplicative.
 -/
-theorem opNorm_comp_le (f : E ->SL[σ₁₂] F) : ‖h.comp f‖ <= ‖h‖ * ‖f‖ :=
+theorem opNorm_comp_le (f : E →SL[σ₁₂] F) : ‖h.comp f‖ ≤ ‖h‖ * ‖f‖ :=
   csInf_le bounds_bddBelow ⟨by positivity, fun x => by
     rw [mul_assoc]
     exact h.le_opNorm_of_le (f.le_opNorm x)⟩
 
-/--
-Instance `toSeminormedRing` / 实例 `toSeminormedRing`
+/-- Continuous linear maps form a seminormed ring with respect to the operator norm. -/
+/-
+**ContinuousLinearMap.toSeminormedRing** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：toSeminormedRing : SeminormedRing (E ->L[𝕜] E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 
-English:
-instance toSeminormedRing
-  signature: : SeminormedRing (E ->L[𝕜] E)
-  body: { toSeminormedAddCommGroup, ring with norm_mul_le := opNorm_comp_le }
-
-中文:
-实例 toSeminormedRing
-  签名: : Seminormed环 (E ->L[𝕜] E)
-  定义体: { toSeminormedAddCommGroup, ring with norm_mul_le := opNorm_comp_le }
-
-Depends on / 依赖: norm_mul_le, opNorm_comp_le, toSeminormedAddCommGroup
+--- 原说明 ---
+Continuous linear maps form a seminormed ring with respect to the operator norm.
 -/
-instance toSeminormedRing : SeminormedRing (E ->L[𝕜] E) :=
+instance toSeminormedRing : SeminormedRing (E →L[𝕜] E) :=
   { toSeminormedAddCommGroup, ring with norm_mul_le := opNorm_comp_le }
 
-/--
-Instance `toNormedAlgebra` / 实例 `toNormedAlgebra`
+/-- For a normed space `E`, continuous linear endomorphisms form a normed algebra with
+respect to the operator norm. -/
+/-
+**ContinuousLinearMap.toNormedAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousLinea
+rMap`。
+形式化陈述：toNormedAlgebra : NormedAlgebra 𝕜 (E ->L[𝕜] E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 
-English:
-instance toNormedAlgebra
-  signature: : NormedAlgebra 𝕜 (E ->L[𝕜] E)
-  body: { toNormedSpace, algebra with }
-
-中文:
-实例 toNormedAlgebra
-  签名: : 赋范代数 𝕜 (E ->L[𝕜] E)
-  定义体: { toNormedSpace, algebra with }
-
-Depends on / 依赖: algebra, toNormedSpace
+--- 原说明 ---
+For a normed space `E`, continuous linear endomorphisms form a normed algebra wi
+th
+respect to the operator norm.
 -/
-instance toNormedAlgebra : NormedAlgebra 𝕜 (E ->L[𝕜] E) := { toNormedSpace, algebra with }
+instance toNormedAlgebra : NormedAlgebra 𝕜 (E →L[𝕜] E) := { toNormedSpace, algebra with }
 
 end
 
-variable [RingHomIsometric σ₁₂] (f : E ->SL[σ₁₂] F)
+variable [RingHomIsometric σ₁₂] (f : E →SL[σ₁₂] F)
 
 @[simp, nontriviality]
-/--
-theorem `opNorm_subsingleton` / 定理 `opNorm_subsingleton`
-
-English:
-theorem opNorm_subsingleton
-  given: [Subsingleton E]
-  statement: ‖f‖ = 0
-  proof: norm_of_subsingleton f
-
-中文:
-定理 opNorm_subsingleton
-  条件: [子单例 E]
-  结论: ‖f‖ = 0
-  证明: norm_of_subsingleton f
-
-Depends on / 依赖: norm_of_subsingleton
+/-
+**ContinuousLinearMap.opNorm_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousL
+inearMap`。
+形式化陈述：opNorm_subsingleton [Subsingleton E] : ‖f‖ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_of_subsingleton`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] [Su
+bsingleton E] (a : E), ‖a‖ = 0
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem opNorm_subsingleton [Subsingleton E] : ‖f‖ = 0 := norm_of_subsingleton f
 
 variable {f} in
-/--
-theorem `homothety_norm` / 定理 `homothety_norm`
-
-English:
-theorem homothety_norm
-  statement: [NontrivialTopology E] (f : E ->SL[σ₁₂] F) {a : Real}
-  proof: by
-  obtain ⟨x, hx⟩ := exists_norm_ne_zero E
-  replace hx : 0 < ‖x‖ := lt_of_le_of_ne' (norm_nonneg _) hx
-  have ha : 0 <= a := by simpa only [hf, hx, mul_nonneg_iff_of_pos_right] using norm_nonneg (f x)
-  apply le_antisymm (f.opNorm_le_bound ha fun y => le_of_eq (hf y))
-  simpa only [hf, hx, mul_le_mul_iff_left₀] using f.le_opNorm x
-
-中文:
-定理 homothety_norm
-  结论: [非平凡拓扑 E] (f : E ->SL[σ₁₂] F) {a : 实数}
-  证明: by
-  obtain ⟨x, hx⟩ := exists_norm_ne_zero E
-  replace hx : 0 < ‖x‖ := lt_of_le_of_ne' (norm_nonneg _) hx
-  have ha : 0 <= a := by simpa only [hf, hx, mul_nonneg_iff_of_pos_right] using norm_nonneg (f x)
-  apply le_antisymm (f.opNorm_le_bound ha fun y => le_of_eq (hf y))
-  simpa only [hf, hx, mul_le_mul_iff_left₀] using f.le_opNorm x
-
-Depends on / 依赖: exists_norm_ne_zero, f.le_opNorm, f.opNorm_le_bound, le_antisymm, le_of_eq, le_opNorm, lt_of_le_of_ne, mul_nonneg_iff_of_pos_right, norm_nonneg, opNorm_le_bound, replace
+/-
+**ContinuousLinearMap.homothety_norm** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousLinear
+Map`。
+形式化陈述：homothety_norm [NontrivialTopology E] (f : E ->SL[σ₁₂] F) {a : Real} (hf :
+ forall x, ‖f x‖ = a * ‖x‖) : ‖f‖ = a
+参数：f : E ->SL[σ₁₂] F；hf : forall x, ‖f x‖ = a * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_norm_ne_zero`：∀ (E : Type u_5) [inst : SeminormedAddGroup E] [Non
+trivialTopology E], ∃ x, ‖x‖ ≠ 0
+· 使用定理 `lt_of_le_of_ne'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≠ b → b < a
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
 -/
-theorem homothety_norm [NontrivialTopology E] (f : E ->SL[σ₁₂] F) {a : Real}
-    (hf : forall x, ‖f x‖ = a * ‖x‖) : ‖f‖ = a := by
+theorem homothety_norm [NontrivialTopology E] (f : E →SL[σ₁₂] F) {a : ℝ}
+    (hf : ∀ x, ‖f x‖ = a * ‖x‖) : ‖f‖ = a := by
   obtain ⟨x, hx⟩ := exists_norm_ne_zero E
   replace hx : 0 < ‖x‖ := lt_of_le_of_ne' (norm_nonneg _) hx
-  have ha : 0 <= a := by simpa only [hf, hx, mul_nonneg_iff_of_pos_right] using norm_nonneg (f x)
+  have ha : 0 ≤ a := by simpa only [hf, hx, mul_nonneg_iff_of_pos_right] using norm_nonneg (f x)
   apply le_antisymm (f.opNorm_le_bound ha fun y => le_of_eq (hf y))
   simpa only [hf, hx, mul_le_mul_iff_left₀] using f.le_opNorm x
 
@@ -1457,26 +1567,24 @@ variable [NormedSpace 𝕜' E] [IsScalarTower 𝕜' 𝕜 E]
 variable [NormedSpace 𝕜' Fₗ] [IsScalarTower 𝕜' 𝕜 Fₗ]
 
 @[simp]
-/--
-theorem `norm_restrictScalars` / 定理 `norm_restrictScalars`
-
-English:
-theorem norm_restrictScalars
-  given: (f : E ->L[𝕜] Fₗ)
-  statement: ‖f.restrictScalars 𝕜'‖ = ‖f‖
-  proof: le_antisymm (opNorm_le_bound _ (norm_nonneg _) fun x => f.le_opNorm x)
-    (opNorm_le_bound _ (norm_nonneg _) fun x => f.le_opNorm x)
-
-中文:
-定理 norm_restrictScalars
-  条件: (f : E ->L[𝕜] Fₗ)
-  结论: ‖f.restrictScalars 𝕜'‖ = ‖f‖
-  证明: le_antisymm (opNorm_le_bound _ (norm_nonneg _) fun x => f.le_opNorm x)
-    (opNorm_le_bound _ (norm_nonneg _) fun x => f.le_opNorm x)
-
-Depends on / 依赖: f.le_opNorm, le_antisymm, le_opNorm, norm_nonneg, opNorm_le_bound
+/-
+**ContinuousLinearMap.norm_restrictScalars** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+LinearMap`。
+形式化陈述：norm_restrictScalars (f : E ->L[𝕜] Fₗ) : ‖f.restrictScalars 𝕜'‖ = ‖f‖
+参数：f : E ->L[𝕜] Fₗ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `ContinuousLinearMap.le_opNorm`：le_opNorm : ‖f x‖ <= ‖f‖ * ‖x‖
 -/
-theorem norm_restrictScalars (f : E ->L[𝕜] Fₗ) : ‖f.restrictScalars 𝕜'‖ = ‖f‖ :=
+theorem norm_restrictScalars (f : E →L[𝕜] Fₗ) : ‖f.restrictScalars 𝕜'‖ = ‖f‖ :=
   le_antisymm (opNorm_le_bound _ (norm_nonneg _) fun x => f.le_opNorm x)
     (opNorm_le_bound _ (norm_nonneg _) fun x => f.le_opNorm x)
 
@@ -1484,57 +1592,49 @@ variable (𝕜 E Fₗ 𝕜') (𝕜'' : Type*) [Ring 𝕜'']
 variable [Module 𝕜'' Fₗ] [ContinuousConstSMul 𝕜'' Fₗ]
   [SMulCommClass 𝕜 𝕜'' Fₗ] [SMulCommClass 𝕜' 𝕜'' Fₗ]
 
-/--
-Definition of `restrictScalarsIsometry` / `restrictScalarsIsometry` 的定义
+/-- `ContinuousLinearMap.restrictScalars` as a `LinearIsometry`. -/
+/-
+**ContinuousLinearMap.restrictScalarsIsometry** 是 Mathlib 中的一个定义，位于命名空间 `Continu
+ousLinearMap`。
+形式化陈述：restrictScalarsIsometry : (E ->L[𝕜] Fₗ) ->ₗᵢ[𝕜''] E ->L[𝕜'] Fₗ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.norm_restrictScalars`：norm_restrictScalars (f : E ->
+L[𝕜] Fₗ) : ‖f.restrictScalars 𝕜'‖ = ‖f‖
 
-English:
-definition restrictScalarsIsometry
-  signature: : (E ->L[𝕜] Fₗ) ->ₗᵢ[𝕜''] E ->L[𝕜'] Fₗ
-  body: ⟨restrictScalarsₗ 𝕜 E Fₗ 𝕜' 𝕜'', norm_restrictScalars⟩
-
-中文:
-定义 restrictScalarsIsometry
-  签名: : (E ->L[𝕜] Fₗ) ->ₗᵢ[𝕜''] E ->L[𝕜'] Fₗ
-  定义体: ⟨restrictScalarsₗ 𝕜 E Fₗ 𝕜' 𝕜'', norm_restrictScalars⟩
-
-Depends on / 依赖: norm_restrictScalars
+--- 原说明 ---
+`ContinuousLinearMap.restrictScalars` as a `LinearIsometry`.
 -/
-def restrictScalarsIsometry : (E ->L[𝕜] Fₗ) ->ₗᵢ[𝕜''] E ->L[𝕜'] Fₗ :=
+def restrictScalarsIsometry : (E →L[𝕜] Fₗ) →ₗᵢ[𝕜''] E →L[𝕜'] Fₗ :=
   ⟨restrictScalarsₗ 𝕜 E Fₗ 𝕜' 𝕜'', norm_restrictScalars⟩
 
 variable {𝕜''}
 
 @[simp]
-/--
-theorem `coe_restrictScalarsIsometry` / 定理 `coe_restrictScalarsIsometry`
-
-English:
-theorem coe_restrictScalarsIsometry
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_restrictScalarsIsometry
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousLinearMap.coe_restrictScalarsIsometry** 是 Mathlib 中的一个定理，位于命名空间 `Con
+tinuousLinearMap`。
+形式化陈述：coe_restrictScalarsIsometry : ⇑(restrictScalarsIsometry 𝕜 E Fₗ 𝕜' 𝕜'') = r
+estrictScalars 𝕜'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 theorem coe_restrictScalarsIsometry :
     ⇑(restrictScalarsIsometry 𝕜 E Fₗ 𝕜' 𝕜'') = restrictScalars 𝕜' :=
   rfl
 
 @[simp]
-/--
-theorem `restrictScalarsIsometry_toLinearMap` / 定理 `restrictScalarsIsometry_toLinearMap`
-
-English:
-theorem restrictScalarsIsometry_toLinearMap
-  proof: rfl
-
-中文:
-定理 restrictScalarsIsometry_toLinearMap
-  证明: rfl
+/-
+**ContinuousLinearMap.restrictScalarsIsometry_toLinearMap** 是 Mathlib 中的一个定理，位于命
+名空间 `ContinuousLinearMap`。
+形式化陈述：restrictScalarsIsometry_toLinearMap : (restrictScalarsIsometry 𝕜 E Fₗ 𝕜' 𝕜
+'').toLinearMap = restrictScalarsₗ 𝕜 E Fₗ 𝕜' 𝕜''
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 -/
 theorem restrictScalarsIsometry_toLinearMap :
     (restrictScalarsIsometry 𝕜 E Fₗ 𝕜' 𝕜'').toLinearMap = restrictScalarsₗ 𝕜 E Fₗ 𝕜' 𝕜'' :=
@@ -1542,145 +1642,185 @@ theorem restrictScalarsIsometry_toLinearMap :
 
 end RestrictScalars
 
-/--
-lemma `norm_pi_le_of_le` / 引理 `norm_pi_le_of_le`
-
-English:
-lemma norm_pi_le_of_le
-  statement: {ι : Type*} [Fintype ι]
-  proof: by
-  refine opNorm_le_bound _ hC (fun x => ?_)
-  refine (pi_norm_le_iff_of_nonneg (by positivity)).mpr (fun i => ?_)
-  exact (L i).le_of_opNorm_le (hL i) _
-
-中文:
-引理 norm_pi_le_of_le
-  结论: {ι : 类型} [有限类型 ι]
-  证明: by
-  refine opNorm_le_bound _ hC (fun x => ?_)
-  refine (pi_norm_le_iff_of_nonneg (by positivity)).mpr (fun i => ?_)
-  exact (L i).le_of_opNorm_le (hL i) _
-
-Depends on / 依赖: le_of_opNorm_le, opNorm_le_bound, pi_norm_le_iff_of_nonneg
+/-
+**ContinuousLinearMap.norm_pi_le_of_le** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：norm_pi_le_of_le {ι : Type*} [Fintype ι] {M : ι -> Type*} [forall i, Semin
+ormedAddCommGroup (M i)] [forall i, NormedSpace 𝕜 (M i)] {C : Real} {L : (i : ι)
+ -> (E ->L[𝕜] M i)} (hL : forall i, ‖L i‖ <= C) (hC : 0 <= C) : ‖pi L‖ <= C
+参数：M i；M i；i : ι；E ->L[𝕜] M i；hL : forall i, ‖L i‖ <= C；hC : 0 <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pi_norm_le_iff_of_nonneg`：∀ {ι : Type u_1} {G : ι → Type u_4} [inst : Fi
+ntype ι] [inst_1 : (i : ι) → SeminormedAddGroup (G i)] {x : (i : ι) → G i}   {r 
+: ℝ}, 0 ≤ r → …
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `ContinuousLinearMap.le_of_opNorm_le`：le_of_opNorm_le {c : Real} (h : ‖f‖
+ <= c) (x : E) : ‖f x‖ <= c * ‖x‖
 -/
 lemma norm_pi_le_of_le {ι : Type*} [Fintype ι]
-    {M : ι -> Type*} [forall i, SeminormedAddCommGroup (M i)] [forall i, NormedSpace 𝕜 (M i)] {C : Real}
-    {L : (i : ι) -> (E ->L[𝕜] M i)} (hL : forall i, ‖L i‖ <= C) (hC : 0 <= C) :
-    ‖pi L‖ <= C := by
-  refine opNorm_le_bound _ hC (fun x => ?_)
-  refine (pi_norm_le_iff_of_nonneg (by positivity)).mpr (fun i => ?_)
+    {M : ι → Type*} [∀ i, SeminormedAddCommGroup (M i)] [∀ i, NormedSpace 𝕜 (M i)] {C : ℝ}
+    {L : (i : ι) → (E →L[𝕜] M i)} (hL : ∀ i, ‖L i‖ ≤ C) (hC : 0 ≤ C) :
+    ‖pi L‖ ≤ C := by
+  refine opNorm_le_bound _ hC (fun x ↦ ?_)
+  refine (pi_norm_le_iff_of_nonneg (by positivity)).mpr (fun i ↦ ?_)
   exact (L i).le_of_opNorm_le (hL i) _
-
-/--
-lemma `norm_postcomp_le` / 引理 `norm_postcomp_le`
-
-English:
-lemma norm_postcomp_le
-  statement: [RingHomIsometric σ₁₂] [RingHomIsometric σ₁₃] [RingHomIsometric σ₂₃]
-  proof: .opNorm_le_bound (by positivity) opNorm_comp_le L L.postcomp (σ := σ₁₂) E
-
-中文:
-引理 norm_postcomp_le
-  结论: [RingHomIsometric σ₁₂] [RingHomIsometric σ₁₃] [RingHomIsometric σ₂₃]
-  证明: .opNorm_le_bound (by positivity) opNorm_comp_le L L.postcomp (σ := σ₁₂) E
+/-
+**ContinuousLinearMap.norm_postcomp_le** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousLine
+arMap`。
+形式化陈述：norm_postcomp_le [RingHomIsometric σ₁₂] [RingHomIsometric σ₁₃] [RingHomIso
+metric σ₂₃] (L : F ->SL[σ₂₃] G) : ‖L.postcomp (σ
+参数：L : F ->SL[σ₂₃] G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `ContinuousLinearMap.opNorm_comp_le`：opNorm_comp_le (f : E ->SL[σ₁₂] F) :
+ ‖h.comp f‖ <= ‖h‖ * ‖f‖
 -/
 lemma norm_postcomp_le [RingHomIsometric σ₁₂] [RingHomIsometric σ₁₃] [RingHomIsometric σ₂₃]
-    (L : F ->SL[σ₂₃] G) : ‖L.postcomp (σ := σ₁₂) E‖ <= ‖L‖ :=
-.opNorm_le_bound (by positivity) opNorm_comp_le L L.postcomp (σ := σ₁₂) E
+    (L : F →SL[σ₂₃] G) : ‖L.postcomp (σ := σ₁₂) E‖ ≤ ‖L‖ :=
+  L.postcomp (σ := σ₁₂) E |>.opNorm_le_bound (by positivity) <| opNorm_comp_le L
 
 end ContinuousLinearMap
 
 namespace LinearMap
 
-/--
-theorem `mkContinuous_norm_le` / 定理 `mkContinuous_norm_le`
+/-- If a continuous linear map is constructed from a linear map via the constructor `mkContinuous`,
+then its norm is bounded by the bound given to the constructor if it is nonnegative. -/
+/-
+**LinearMap.mkContinuous_norm_le** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：mkContinuous_norm_le (f : E ->ₛₗ[σ₁₂] F) {C : Real} (hC : 0 <= C) (h : for
+all x, ‖f x‖ <= C * ‖x‖) : ‖f.mkContinuous C h‖ <= C
+参数：f : E ->ₛₗ[σ₁₂] F；hC : 0 <= C；h : forall x, ‖f x‖ <= C * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
 
-English:
-theorem mkContinuous_norm_le
-  given: (f : E ->ₛₗ[σ₁₂] F) {C : Real} (hC : 0 <= C) (h : forall x, ‖f x‖ <= C * ‖x‖)
-  proof: ContinuousLinearMap.opNorm_le_bound _ hC h
-
-中文:
-定理 mkContinuous_norm_le
-  条件: (f : E ->ₛₗ[σ₁₂] F) {C : 实数} (hC : 0 <= C) (h : 对任意 x, ‖f x‖ <= C * ‖x‖)
-  证明: ContinuousLinearMap.opNorm_le_bound _ hC h
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_le_bound, opNorm_le_bound
+--- 原说明 ---
+If a continuous linear map is constructed from a linear map via the constructor 
+`mkContinuous`,
+then its norm is bounded by the bound given to the constructor if it is nonnegat
+ive.
 -/
-theorem mkContinuous_norm_le (f : E ->ₛₗ[σ₁₂] F) {C : Real} (hC : 0 <= C) (h : forall x, ‖f x‖ <= C * ‖x‖) :
-    ‖f.mkContinuous C h‖ <= C :=
+theorem mkContinuous_norm_le (f : E →ₛₗ[σ₁₂] F) {C : ℝ} (hC : 0 ≤ C) (h : ∀ x, ‖f x‖ ≤ C * ‖x‖) :
+    ‖f.mkContinuous C h‖ ≤ C :=
   ContinuousLinearMap.opNorm_le_bound _ hC h
 
-/--
-theorem `mkContinuous_norm_le'` / 定理 `mkContinuous_norm_le'`
+/-- If a continuous linear map is constructed from a linear map via the constructor `mkContinuous`,
+then its norm is bounded by the bound or zero if bound is negative. -/
+/-
+**LinearMap.mkContinuous_norm_le'** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：mkContinuous_norm_le' (f : E ->ₛₗ[σ₁₂] F) {C : Real} (h : forall x, ‖f x‖ 
+<= C * ‖x‖) : ‖f.mkContinuous C h‖ <= max C 0
+参数：f : E ->ₛₗ[σ₁₂] F；h : forall x, ‖f x‖ <= C * ‖x‖。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 
-English:
-theorem mkContinuous_norm_le'
-  given: (f : E ->ₛₗ[σ₁₂] F) {C : Real} (h : forall x, ‖f x‖ <= C * ‖x‖)
-  proof: ContinuousLinearMap.opNorm_le_bound _ (le_max_right _ _) fun x => (h x).trans by
-    gcongr; apply le_max_left
-
-中文:
-定理 mkContinuous_norm_le'
-  条件: (f : E ->ₛₗ[σ₁₂] F) {C : 实数} (h : 对任意 x, ‖f x‖ <= C * ‖x‖)
-  证明: ContinuousLinearMap.opNorm_le_bound _ (le_max_right _ _) fun x => (h x).trans by
-    gcongr; apply le_max_left
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_le_bound, le_max_left, le_max_right, opNorm_le_bound
+--- 原说明 ---
+If a continuous linear map is constructed from a linear map via the constructor 
+`mkContinuous`,
+then its norm is bounded by the bound or zero if bound is negative.
 -/
-theorem mkContinuous_norm_le' (f : E ->ₛₗ[σ₁₂] F) {C : Real} (h : forall x, ‖f x‖ <= C * ‖x‖) :
-    ‖f.mkContinuous C h‖ <= max C 0 :=
-ContinuousLinearMap.opNorm_le_bound _ (le_max_right _ _) fun x => (h x).trans by
+theorem mkContinuous_norm_le' (f : E →ₛₗ[σ₁₂] F) {C : ℝ} (h : ∀ x, ‖f x‖ ≤ C * ‖x‖) :
+    ‖f.mkContinuous C h‖ ≤ max C 0 :=
+  ContinuousLinearMap.opNorm_le_bound _ (le_max_right _ _) fun x => (h x).trans <| by
     gcongr; apply le_max_left
 
 end LinearMap
 
 namespace LinearIsometry
 
-/--
-theorem `norm_toContinuousLinearMap_le` / 定理 `norm_toContinuousLinearMap_le`
-
-English:
-theorem norm_toContinuousLinearMap_le
-  given: (f : E ->ₛₗᵢ[σ₁₂] F)
-  statement: ‖f.toContinuousLinearMap‖ <= 1
-  proof: f.toContinuousLinearMap.opNorm_le_bound zero_le_one fun x => by simp
-
-中文:
-定理 norm_toContinuousLinearMap_le
-  条件: (f : E ->ₛₗᵢ[σ₁₂] F)
-  结论: ‖f.toContinuousLinearMap‖ <= 1
-  证明: f.toContinuousLinearMap.opNorm_le_bound zero_le_one fun x => by simp
-
-Depends on / 依赖: f.toContinuousLinearMap.opNorm_le_bound, opNorm_le_bound, toContinuousLinearMap, zero_le_one
+/-
+**LinearIsometry.norm_toContinuousLinearMap_le** 是 Mathlib 中的一个定理，位于命名空间 `Linear
+Isometry`。
+形式化陈述：norm_toContinuousLinearMap_le (f : E ->ₛₗᵢ[σ₁₂] F) : ‖f.toContinuousLinear
+Map‖ <= 1
+参数：f : E ->ₛₗᵢ[σ₁₂] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.opNorm_le_bound`：opNorm_le_bound (f : E ->SL[σ₁₂] F)
+ {M : Real} (hMp : 0 <= M) (hM : forall x, ‖f x‖ <= M * ‖x‖) : ‖f‖ <= M
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_map`：∀ {𝓕 : Type u_1} {E : Type u_2} {F : Type u_3} [inst : Seminor
+medAddGroup E] [inst_1 : SeminormedAddGroup F]   [inst_2 : FunLike 𝓕 E F] [Iso…
+· 使用定理 `SemilinearIsometryClass.toIsometryClass`：∀ {R : Type u_1} {R₂ : Type u_2
+} {E : Type u_5} {E₂ : Type u_6} {𝓕 : Type u_10} [inst : Semiring R]   [inst_1 :
+ Semiring R₂] {σ₁₂ : R →+* R₂…
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem norm_toContinuousLinearMap_le (f : E ->ₛₗᵢ[σ₁₂] F) : ‖f.toContinuousLinearMap‖ <= 1 :=
+theorem norm_toContinuousLinearMap_le (f : E →ₛₗᵢ[σ₁₂] F) : ‖f.toContinuousLinearMap‖ ≤ 1 :=
   f.toContinuousLinearMap.opNorm_le_bound zero_le_one fun x => by simp
 
 end LinearIsometry
 
 namespace Submodule
 
-/--
-theorem `norm_subtypeL_le` / 定理 `norm_subtypeL_le`
-
-English:
-theorem norm_subtypeL_le
-  given: (K : Submodule 𝕜 E)
-  statement: ‖K.subtypeL‖ <= 1
-  proof: K.subtypeₗᵢ.norm_toContinuousLinearMap_le
-
-中文:
-定理 norm_subtypeL_le
-  条件: (K : 子模 𝕜 E)
-  结论: ‖K.subtypeL‖ <= 1
-  证明: K.subtypeₗᵢ.norm_toContinuousLinearMap_le
-
-Depends on / 依赖: K.subtype, norm_toContinuousLinearMap_le
+/-
+**Submodule.norm_subtypeL_le** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：norm_subtypeL_le (K : Submodule 𝕜 E) : ‖K.subtypeL‖ <= 1
+参数：K : Submodule 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIsometry.norm_toContinuousLinearMap_le`：norm_toContinuousLinearMap
+_le (f : E ->ₛₗᵢ[σ₁₂] F) : ‖f.toContinuousLinearMap‖ <= 1
 -/
-theorem norm_subtypeL_le (K : Submodule 𝕜 E) : ‖K.subtypeL‖ <= 1 :=
+theorem norm_subtypeL_le (K : Submodule 𝕜 E) : ‖K.subtypeL‖ ≤ 1 :=
   K.subtypeₗᵢ.norm_toContinuousLinearMap_le
 
 end Submodule
 
 end SemiNormed
+

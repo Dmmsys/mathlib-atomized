@@ -20,7 +20,7 @@ as a linear map in the 0th variable taking values in the alternating maps in `n`
 
 variable {R : Type*} {M M₂ N N₂ : Type*} [CommSemiring R] [AddCommMonoid M]
   [AddCommMonoid M₂] [AddCommMonoid N] [AddCommMonoid N₂] [Module R M] [Module R M₂]
-  [Module R N] [Module R N₂] {n : Nat}
+  [Module R N] [Module R N₂] {n : ℕ}
 
 namespace AlternatingMap
 
@@ -31,34 +31,26 @@ It can be thought of as a map $Hom(\bigwedge^{n+1} M, N) \to Hom(M, Hom(\bigwedg
 This is `MultilinearMap.curryLeft` for `AlternatingMap`. See also
 `AlternatingMap.curryLeftLinearMap`. -/
 @[simps apply_toMultilinearMap]
-/--
-Definition of `curryLeft` / `curryLeft` 的定义
+/-
+**AlternatingMap.curryLeft** 是 Mathlib 中的一个定义，位于命名空间 `AlternatingMap`。
+形式化陈述：curryLeft (f : M [⋀^Fin n.succ]->ₗ[R] N) : M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N wh
+ere toFun m
+参数：f : M [⋀^Fin n.succ]->ₗ[R] N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curryLeft
-  signature: (f : M [⋀^Fin n.succ]->ₗ[R] N)
-  body: { f.toMultilinearMap.curryLeft m with
-      map_eq_zero_of_eq' v i j hv hij :=
-        f.map_eq_zero_of_eq _ (by simpa) ((Fin.succ_injective _).ne hij) }
-  map_add' _ _ := ext fun _ => f.map_vecCons_add _ _ _
-  map_smul' _ _ := ext fun _ => f.map_vecCons_smul _ _ _
+--- 原说明 ---
+Given an alternating map `f` in `n+1` variables, split the first variable to obt
+ain
+a linear map into alternating maps in `n` variables, given by `x ↦ (m ↦ f (Matri
+x.vecCons x m))`.
+It can be thought of as a map $Hom(\bigwedge^{n+1} M, N) \to Hom(M, Hom(\bigwedg
+e^n M, N))$.
 
-@[simp]
-
-中文:
-定义 curryLeft
-  签名: (f : M [⋀^有限集 n.succ]->ₗ[R] N)
-  定义体: { f.toMultilinearMap.curryLeft m with
-      map_eq_zero_of_eq' v i j hv hij :=
-        f.map_eq_zero_of_eq _ (by simpa) ((Fin.succ_injective _).ne hij) }
-  map_add' _ _ := ext fun _ => f.map_vecCons_add _ _ _
-  map_smul' _ _ := ext fun _ => f.map_vecCons_smul _ _ _
-
-@[simp]
-
-Depends on / 依赖: Fin.succ_injective, curryLeft, f.map_eq_zero_of_eq, f.map_vecCons_add, f.map_vecCons_smul, f.toMultilinearMap.curryLeft, map_add, map_eq_zero_of_eq, map_smul, map_vecCons_add, map_vecCons_smul, succ_injective, toMultilinearMap
+This is `MultilinearMap.curryLeft` for `AlternatingMap`. See also
+`AlternatingMap.curryLeftLinearMap`.
 -/
-def curryLeft (f : M [⋀^Fin n.succ]->ₗ[R] N) : M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N where
+def curryLeft (f : M [⋀^Fin n.succ]→ₗ[R] N) : M →ₗ[R] M [⋀^Fin n]→ₗ[R] N where
   toFun m :=
     { f.toMultilinearMap.curryLeft m with
       map_eq_zero_of_eq' v i j hv hij :=
@@ -67,182 +59,161 @@ def curryLeft (f : M [⋀^Fin n.succ]->ₗ[R] N) : M ->ₗ[R] M [⋀^Fin n]->ₗ
   map_smul' _ _ := ext fun _ => f.map_vecCons_smul _ _ _
 
 @[simp]
-/--
-theorem `curryLeft_apply_apply` / 定理 `curryLeft_apply_apply`
-
-English:
-theorem curryLeft_apply_apply
-  given: (f : M [⋀^Fin n.succ]->ₗ[R] N) (x : M) (v : Fin n -> M)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_apply_apply
-  条件: (f : M [⋀^有限集 n.succ]->ₗ[R] N) (x : M) (v : 有限集 n -> M)
-  证明: rfl
-
-@[simp]
+/-
+**AlternatingMap.curryLeft_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlternatingMap
+`。
+形式化陈述：curryLeft_apply_apply (f : M [⋀^Fin n.succ]->ₗ[R] N) (x : M) (v : Fin n ->
+ M) : curryLeft f x v = f (Matrix.vecCons x v)
+参数：f : M [⋀^Fin n.succ]->ₗ[R] N；x : M；v : Fin n -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem curryLeft_apply_apply (f : M [⋀^Fin n.succ]->ₗ[R] N) (x : M) (v : Fin n -> M) :
+theorem curryLeft_apply_apply (f : M [⋀^Fin n.succ]→ₗ[R] N) (x : M) (v : Fin n → M) :
     curryLeft f x v = f (Matrix.vecCons x v) :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_zero` / 定理 `curryLeft_zero`
-
-English:
-theorem curryLeft_zero
-  statement: curryLeft (0 : M [⋀^Fin n.succ]->ₗ[R] N) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_zero
-  结论: curryLeft (0 : M [⋀^有限集 n.succ]->ₗ[R] N) = 0
-  证明: rfl
-
-@[simp]
+/-
+**AlternatingMap.curryLeft_zero** 是 Mathlib 中的一个定理，位于命名空间 `AlternatingMap`。
+形式化陈述：curryLeft_zero : curryLeft (0 : M [⋀^Fin n.succ]->ₗ[R] N) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem curryLeft_zero : curryLeft (0 : M [⋀^Fin n.succ]->ₗ[R] N) = 0 :=
+theorem curryLeft_zero : curryLeft (0 : M [⋀^Fin n.succ]→ₗ[R] N) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_add` / 定理 `curryLeft_add`
-
-English:
-theorem curryLeft_add
-  given: (f g : M [⋀^Fin n.succ]->ₗ[R] N)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_add
-  条件: (f g : M [⋀^有限集 n.succ]->ₗ[R] N)
-  证明: rfl
-
-@[simp]
+/-
+**AlternatingMap.curryLeft_add** 是 Mathlib 中的一个定理，位于命名空间 `AlternatingMap`。
+形式化陈述：curryLeft_add (f g : M [⋀^Fin n.succ]->ₗ[R] N) : curryLeft (f + g) = curry
+Left f + curryLeft g
+参数：f g : M [⋀^Fin n.succ]->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem curryLeft_add (f g : M [⋀^Fin n.succ]->ₗ[R] N) :
+theorem curryLeft_add (f g : M [⋀^Fin n.succ]→ₗ[R] N) :
     curryLeft (f + g) = curryLeft f + curryLeft g :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_smul` / 定理 `curryLeft_smul`
-
-English:
-theorem curryLeft_smul
-  given: (r : R) (f : M [⋀^Fin n.succ]->ₗ[R] N)
-  proof: rfl
-
-中文:
-定理 curryLeft_smul
-  条件: (r : R) (f : M [⋀^有限集 n.succ]->ₗ[R] N)
-  证明: rfl
+/-
+**AlternatingMap.curryLeft_smul** 是 Mathlib 中的一个定理，位于命名空间 `AlternatingMap`。
+形式化陈述：curryLeft_smul (r : R) (f : M [⋀^Fin n.succ]->ₗ[R] N) : curryLeft (r • f) 
+= r • curryLeft f
+参数：r : R；f : M [⋀^Fin n.succ]->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem curryLeft_smul (r : R) (f : M [⋀^Fin n.succ]->ₗ[R] N) :
+theorem curryLeft_smul (r : R) (f : M [⋀^Fin n.succ]→ₗ[R] N) :
     curryLeft (r • f) = r • curryLeft f :=
   rfl
 
 /-- `AlternatingMap.curryLeft` as a `LinearMap`. This is a separate definition as dot notation
 does not work for this version. -/
 @[simps]
-/--
-Definition of `curryLeftLinearMap` / `curryLeftLinearMap` 的定义
+/-
+**AlternatingMap.curryLeftLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `AlternatingMap`。
+形式化陈述：curryLeftLinearMap : (M [⋀^Fin n.succ]->ₗ[R] N) ->ₗ[R] M ->ₗ[R] M [⋀^Fin n
+]->ₗ[R] N where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlternatingMap.curryLeft_add`：curryLeft_add (f g : M [⋀^Fin n.succ]->ₗ[R
+] N) : curryLeft (f + g) = curryLeft f + curryLeft g
+· 使用定理 `AlternatingMap.curryLeft_smul`：curryLeft_smul (r : R) (f : M [⋀^Fin n.su
+cc]->ₗ[R] N) : curryLeft (r • f) = r • curryLeft f
 
-English:
-definition curryLeftLinearMap
-  signature: :
-  body: f.curryLeft
-  map_add' := curryLeft_add
-  map_smul' := curryLeft_smul
-
-中文:
-定义 curryLeftLinearMap
-  签名: :
-  定义体: f.curryLeft
-  map_add' := curryLeft_add
-  map_smul' := curryLeft_smul
-
-Depends on / 依赖: curryLeft, f.curryLeft
+--- 原说明 ---
+`AlternatingMap.curryLeft` as a `LinearMap`. This is a separate definition as do
+t notation
+does not work for this version.
 -/
 def curryLeftLinearMap :
-    (M [⋀^Fin n.succ]->ₗ[R] N) ->ₗ[R] M ->ₗ[R] M [⋀^Fin n]->ₗ[R] N where
+    (M [⋀^Fin n.succ]→ₗ[R] N) →ₗ[R] M →ₗ[R] M [⋀^Fin n]→ₗ[R] N where
   toFun f := f.curryLeft
   map_add' := curryLeft_add
   map_smul' := curryLeft_smul
 
 /-- Currying with the same element twice gives the zero map. -/
 @[simp]
-/--
-theorem `curryLeft_same` / 定理 `curryLeft_same`
+/-
+**AlternatingMap.curryLeft_same** 是 Mathlib 中的一个定理，位于命名空间 `AlternatingMap`。
+形式化陈述：curryLeft_same (f : M [⋀^Fin n.succ.succ]->ₗ[R] N) (m : M) : (f.curryLeft 
+m).curryLeft m = 0
+参数：f : M [⋀^Fin n.succ.succ]->ₗ[R] N；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
+· 使用定理 `AlternatingMap.map_eq_zero_of_eq`：map_eq_zero_of_eq (v : ι -> M) {i j : 
+ι} (h : v i = v j) (hij : i != j) : f v = 0
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.cons_zero`：cons_zero : cons x p 0 = x
+· 使用定理 `Fin.cons_one`：cons_one {α : Fin (n + 2) -> Sort*} (x : α 0) (p : forall 
+i : Fin n.succ, α i.succ) : cons x p 1 = p 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Fin.zero_ne_one`：∀ {n : ℕ}, 0 ≠ 1
 
-English:
-theorem curryLeft_same
-  given: (f : M [⋀^Fin n.succ.succ]->ₗ[R] N) (m : M)
-  proof: ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
-
-@[simp]
-
-中文:
-定理 curryLeft_same
-  条件: (f : M [⋀^有限集 n.succ.succ]->ₗ[R] N) (m : M)
-  证明: ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
-
-@[simp]
-
-Depends on / 依赖: Fin.zero_ne_one, f.map_eq_zero_of_eq, map_eq_zero_of_eq, zero_ne_one
+--- 原说明 ---
+Currying with the same element twice gives the zero map.
 -/
-theorem curryLeft_same (f : M [⋀^Fin n.succ.succ]->ₗ[R] N) (m : M) :
+theorem curryLeft_same (f : M [⋀^Fin n.succ.succ]→ₗ[R] N) (m : M) :
     (f.curryLeft m).curryLeft m = 0 :=
   ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
 
 @[simp]
-/--
-theorem `curryLeft_compAlternatingMap` / 定理 `curryLeft_compAlternatingMap`
-
-English:
-theorem curryLeft_compAlternatingMap
-  statement: (g : N ->ₗ[R] N₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 curryLeft_compAlternatingMap
-  结论: (g : N ->ₗ[R] N₂)
-  证明: rfl
-
-@[simp]
+/-
+**AlternatingMap.curryLeft_compAlternatingMap** 是 Mathlib 中的一个定理，位于命名空间 `Alterna
+tingMap`。
+形式化陈述：curryLeft_compAlternatingMap (g : N ->ₗ[R] N₂) (f : M [⋀^Fin n.succ]->ₗ[R]
+ N) (m : M) : (g.compAlternatingMap f).curryLeft m = g.compAlternatingMap (f.cur
+ryLeft m)
+参数：g : N ->ₗ[R] N₂；f : M [⋀^Fin n.succ]->ₗ[R] N；m : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem curryLeft_compAlternatingMap (g : N ->ₗ[R] N₂)
-    (f : M [⋀^Fin n.succ]->ₗ[R] N) (m : M) :
+theorem curryLeft_compAlternatingMap (g : N →ₗ[R] N₂)
+    (f : M [⋀^Fin n.succ]→ₗ[R] N) (m : M) :
     (g.compAlternatingMap f).curryLeft m = g.compAlternatingMap (f.curryLeft m) :=
   rfl
 
 @[simp]
-/--
-theorem `curryLeft_compLinearMap` / 定理 `curryLeft_compLinearMap`
-
-English:
-theorem curryLeft_compLinearMap
-  given: (g : M₂ ->ₗ[R] M) (f : M [⋀^Fin n.succ]->ₗ[R] N) (m : M₂)
-  proof: ext fun v => congr_arg f funext fun i => by cases i using Fin.cases <;> simp
-
-中文:
-定理 curryLeft_compLinearMap
-  条件: (g : M₂ ->ₗ[R] M) (f : M [⋀^有限集 n.succ]->ₗ[R] N) (m : M₂)
-  证明: ext fun v => congr_arg f funext fun i => by cases i using Fin.cases <;> simp
-
-Depends on / 依赖: Fin.cases, congr_arg
+/-
+**AlternatingMap.curryLeft_compLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `AlternatingM
+ap`。
+形式化陈述：curryLeft_compLinearMap (g : M₂ ->ₗ[R] M) (f : M [⋀^Fin n.succ]->ₗ[R] N) (
+m : M₂) : (f.compLinearMap g).curryLeft m = (f.curryLeft (g m)).compLinearMap g
+参数：g : M₂ ->ₗ[R] M；f : M [⋀^Fin n.succ]->ₗ[R] N；m : M₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlternatingMap.ext`：ext {f f' : M [⋀^ι]->ₗ[R] N} (H : forall x, f x = f'
+ x) : f = f'
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.cons_zero`：cons_zero : cons x p 0 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.cons_succ`：cons_succ : cons x p i.succ = p i
 -/
-theorem curryLeft_compLinearMap (g : M₂ ->ₗ[R] M) (f : M [⋀^Fin n.succ]->ₗ[R] N) (m : M₂) :
+theorem curryLeft_compLinearMap (g : M₂ →ₗ[R] M) (f : M [⋀^Fin n.succ]→ₗ[R] N) (m : M₂) :
     (f.compLinearMap g).curryLeft m = (f.curryLeft (g m)).compLinearMap g :=
-ext fun v => congr_arg f funext fun i => by cases i using Fin.cases <;> simp
+  ext fun v ↦ congr_arg f <| funext fun i ↦ by cases i using Fin.cases <;> simp
 
 end AlternatingMap
+

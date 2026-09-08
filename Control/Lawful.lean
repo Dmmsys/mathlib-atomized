@@ -19,40 +19,35 @@ namespace StateT
 
 section
 
-variable {σ : Type u} {m : Type u -> Type v} {α β : Type u}
+variable {σ : Type u} {m : Type u → Type v} {α β : Type u}
 
-/--
-lemma `map_const` / 引理 `map_const`
+/-- A copy of `LawfulFunctor.map_const` for `StateT` that holds even if `m` is not lawful. -/
+/-
+**StateT.map_const** 是 Mathlib 中的一个定理，位于命名空间 `StateT`。
+形式化陈述：∀ {σ : Type u} {m : Type u → Type v} {α β : Type u} [inst : Monad m], Func
+tor.mapConst = Functor.map ∘ Function.const β
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma map_const
-  given: [Monad m]
-  proof: rfl
-
-中文:
-引理 map_const
-  条件: [单子 m]
-  证明: rfl
+--- 原说明 ---
+A copy of `LawfulFunctor.map_const` for `StateT` that holds even if `m` is not l
+awful.
 -/
 protected lemma map_const [Monad m] :
-    (Functor.mapConst : α -> StateT σ m β -> StateT σ m α) = Functor.map ∘ Function.const β :=
+    (Functor.mapConst : α → StateT σ m β → StateT σ m α) = Functor.map ∘ Function.const β :=
   rfl
-
-/--
-lemma `run_mapConst` / 引理 `run_mapConst`
-
-English:
-lemma run_mapConst
-  given: [Monad m] [LawfulMonad m] (x : StateT σ m α) (y : β) (st : σ)
-  proof: run_map _ _ _
-
-中文:
-引理 run_mapConst
-  条件: [单子 m] [合法单子 m] (x : StateT σ m α) (y : β) (st : σ)
-  证明: run_map _ _ _
+/-
+**StateT.run_mapConst** 是 Mathlib 中的一个定理，位于命名空间 `StateT`。
+形式化陈述：∀ {σ : Type u} {m : Type u → Type v} {α β : Type u} [inst : Monad m] [Lawf
+ulMonad m] (x : StateT σ m α) (y : β)   (st : σ), (Functor.mapConst y x).run st 
+= Prod.map (Function.const α y) id <$> x.run st
+参数：x : StateT σ m α；y : β；st : σ；Functor.mapConst y x；Function.const α y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StateT.run_map`：∀ {m : Type u → Type u_1} {α β σ : Type u} [inst : Monad
+ m] [LawfulMonad m] (f : α → β) (x : StateT σ m α) (s : σ),   (f <$> x).run s = 
+(fun…
 -/
 @[simp] lemma run_mapConst [Monad m] [LawfulMonad m] (x : StateT σ m α) (y : β) (st : σ) :
-(Functor.mapConst y x).run st = Prod.map (Function.const α y) id < > x.run st := run_map _ _ _
+    (Functor.mapConst y x).run st = Prod.map (Function.const α y) id <$> x.run st := run_map _ _ _
 
 end
 
@@ -60,26 +55,22 @@ end StateT
 
 namespace ExceptT
 
-variable {α ε : Type u} {m : Type u -> Type v} (x : ExceptT ε m α)
+variable {α ε : Type u} {m : Type u → Type v} (x : ExceptT ε m α)
 
 attribute [simp] run_bind
 
 @[simp]
-/--
-theorem `run_monadLift` / 定理 `run_monadLift`
-
-English:
-theorem run_monadLift
-  given: {n} [Monad m] [MonadLiftT n m] (x : n α)
-  proof: rfl
-
-中文:
-定理 run_monadLift
-  条件: {n} [单子 m] [MonadLiftT n m] (x : n α)
-  证明: rfl
+/-
+**ExceptT.run_monadLift** 是 Mathlib 中的一个定理，位于命名空间 `ExceptT`。
+形式化陈述：run_monadLift {n} [Monad m] [MonadLiftT n m] (x : n α) : (monadLift x : Ex
+ceptT ε m α).run = Except.ok < > (monadLift x : m α)
+参数：x : n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem run_monadLift {n} [Monad m] [MonadLiftT n m] (x : n α) :
-(monadLift x : ExceptT ε m α).run = Except.ok < > (monadLift x : m α) :=
+    (monadLift x : ExceptT ε m α).run = Except.ok <$> (monadLift x : m α) :=
   rfl
 
 end ExceptT
+

@@ -29,7 +29,7 @@ namespace Polynomial
 
 universe u v w y
 
-variable {R : Type u} {S : Type v} {T : Type w} {ι : Type y} {a b : R} {m n : Nat}
+variable {R : Type u} {S : Type v} {T : Type w} {ι : Type y} {a b : R} {m n : ℕ}
 
 section Semiring
 
@@ -38,37 +38,21 @@ variable [Semiring R] {p q r : R[X]}
 section
 
 variable [Semiring S]
-variable (f : R ->+* S) (x : S)
+variable (f : R →+* S) (x : S)
 
 @[simp]
-/--
-theorem `eval₂_smul` / 定理 `eval₂_smul`
-
-English:
-theorem eval₂_smul
-  given: (g : R ->+* S) (p : R[X]) (x : S) {s : R}
-  proof: by
-  have A : p.natDegree < p.natDegree.succ := Nat.lt_succ_self _
-  have B : (s • p).natDegree < p.natDegree.succ := (natDegree_smul_le _ _).trans_lt A
-  rw [eval₂_eq_sum]; rw [eval₂_eq_sum]; rw [sum_over_range' _ _ _ A]; rw [sum_over_range' _ _ _ B] <;>
-    simp [mul_sum, mul_assoc]
-
-中文:
-定理 eval₂_smul
-  条件: (g : R ->+* S) (p : R[X]) (x : S) {s : R}
-  证明: by
-  have A : p.natDegree < p.natDegree.succ := Nat.lt_succ_self _
-  have B : (s • p).natDegree < p.natDegree.succ := (natDegree_smul_le _ _).trans_lt A
-  rw [eval₂_eq_sum]; rw [eval₂_eq_sum]; rw [sum_over_range' _ _ _ A]; rw [sum_over_range' _ _ _ B] <;>
-    simp [mul_sum, mul_assoc]
-
-Depends on / 依赖: Nat.lt_succ_self, lt_succ_self, mul_assoc, mul_sum, natDegree, natDegree_smul_le, p.natDegree, p.natDegree.succ, sum_over_range, trans_lt
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_smul (g : R ->+* S) (p : R[X]) (x : S) {s : R} :
+theorem eval₂_smul (g : R →+* S) (p : R[X]) (x : S) {s : R} :
     eval₂ g x (s • p) = g s * eval₂ g x p := by
   have A : p.natDegree < p.natDegree.succ := Nat.lt_succ_self _
   have B : (s • p).natDegree < p.natDegree.succ := (natDegree_smul_le _ _).trans_lt A
-  rw [eval₂_eq_sum]; rw [eval₂_eq_sum]; rw [sum_over_range' _ _ _ A]; rw [sum_over_range' _ _ _ B] <;>
+  rw [eval₂_eq_sum, eval₂_eq_sum, sum_over_range' _ _ _ A, sum_over_range' _ _ _ B] <;>
     simp [mul_sum, mul_assoc]
 
 end
@@ -78,49 +62,45 @@ section Eval
 variable {x : R}
 
 @[simp]
-/--
-theorem `eval_smul` / 定理 `eval_smul`
-
-English:
-theorem eval_smul
-  statement: [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p : R[X])
-  proof: by
-  rw [← smul_one_smul R s p]; rw [eval]; rw [eval₂_smul]; rw [RingHom.id_apply]; rw [smul_one_mul]; rw [eval₂_id]
-
-中文:
-定理 eval_smul
-  结论: [SMulZero类 S R] [标量塔 S R R] (s : S) (p : R[X])
-  证明: by
-  rw [← smul_one_smul R s p]; rw [eval]; rw [eval₂_smul]; rw [RingHom.id_apply]; rw [smul_one_mul]; rw [eval₂_id]
-
-Depends on / 依赖: RingHom, RingHom.id_apply, id_apply, smul_one_mul, smul_one_smul
+/-
+**Polynomial.eval_smul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：eval_smul [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p : R[X]) (x 
+: R) : (s • p).eval x = s • p.eval x
+参数：s : S；p : R[X]；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_one_smul`：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N 
+α] [SMul M α] [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
+· 使用定理 `Polynomial.eval.eq_1`：∀ {R : Type u} [inst : Semiring R] (x : R) (p : Po
+lynomial R), Polynomial.eval x p = Polynomial.eval₂ (RingHom.id R) x p
+· 使用定理 `Polynomial.eval₂_smul`：eval₂_smul (g : R ->+* S) (p : R[X]) (x : S) {s :
+ R} : eval₂ g x (s • p) = g s * eval₂ g x p
+· 使用定理 `RingHom.id_apply`：id_apply (x : α) : RingHom.id α x = x
+· 使用引理 `smul_one_mul`：smul_one_mul {M N} [MulOneClass N] [SMul M N] [IsScalarTow
+er M N N] (x : M) (y : N) : x • (1 : N) * y = x • y
+· 使用定理 `Polynomial.eval₂_id`：eval₂_id : eval₂ (RingHom.id _) x p = p.eval x
 -/
 theorem eval_smul [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p : R[X])
     (x : R) : (s • p).eval x = s • p.eval x := by
-  rw [← smul_one_smul R s p]; rw [eval]; rw [eval₂_smul]; rw [RingHom.id_apply]; rw [smul_one_mul]; rw [eval₂_id]
+  rw [← smul_one_smul R s p, eval, eval₂_smul, RingHom.id_apply, smul_one_mul, eval₂_id]
 
 /-- `Polynomial.eval` as linear map -/
 @[simps]
-/--
-Definition of `leval` / `leval` 的定义
+/-
+**Polynomial.leval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：leval {R : Type*} [Semiring R] (r : R) : R[X] ->ₗ[R] R where toFun f
+参数：r : R。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval_add`：eval_add : (p + q).eval x = p.eval x + q.eval x
 
-English:
-definition leval
-  signature: {R : Type*} [Semiring R] (r : R)
-  body: f.eval r
-  map_add' _f _g := eval_add
-  map_smul' c f := eval_smul c f r
-
-中文:
-定义 leval
-  签名: {R : 类型} [半环 R] (r : R)
-  定义体: f.eval r
-  map_add' _f _g := eval_add
-  map_smul' c f := eval_smul c f r
-
-Depends on / 依赖: f.eval
+--- 原说明 ---
+`Polynomial.eval` as linear map
 -/
-def leval {R : Type*} [Semiring R] (r : R) : R[X] ->ₗ[R] R where
+def leval {R : Type*} [Semiring R] (r : R) : R[X] →ₗ[R] R where
   toFun f := f.eval r
   map_add' _f _g := eval_add
   map_smul' c f := eval_smul c f r
@@ -130,57 +110,63 @@ end Eval
 section Comp
 
 @[simp]
-/--
-theorem `smul_comp` / 定理 `smul_comp`
-
-English:
-theorem smul_comp
-  given: [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p q : R[X])
-  proof: by
-  rw [← smul_one_smul R s p]; rw [comp]; rw [comp]; rw [eval₂_smul]; rw [← smul_eq_C_mul]; rw [smul_assoc]; rw [one_smul]
-
-中文:
-定理 smul_comp
-  条件: [SMulZero类 S R] [标量塔 S R R] (s : S) (p q : R[X])
-  证明: by
-  rw [← smul_one_smul R s p]; rw [comp]; rw [comp]; rw [eval₂_smul]; rw [← smul_eq_C_mul]; rw [smul_assoc]; rw [one_smul]
-
-Depends on / 依赖: one_smul, smul_assoc, smul_eq_C_mul, smul_one_smul
+/-
+**Polynomial.smul_comp** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：smul_comp [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p q : R[X]) :
+ (s • p).comp q = s • p.comp q
+参数：s : S；p q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_one_smul`：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N 
+α] [SMul M α] [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
+· 使用定理 `Polynomial.comp.eq_1`：∀ {R : Type u} [inst : Semiring R] (p q : Polynomi
+al R), p.comp q = Polynomial.eval₂ Polynomial.C q p
+· 使用定理 `Polynomial.eval₂_smul`：eval₂_smul (g : R ->+* S) (p : R[X]) (x : S) {s :
+ R} : eval₂ g x (s • p) = g s * eval₂ g x p
+· 使用定理 `Polynomial.smul_eq_C_mul`：smul_eq_C_mul (a : R) : a • p = C a * p
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 theorem smul_comp [SMulZeroClass S R] [IsScalarTower S R R] (s : S) (p q : R[X]) :
     (s • p).comp q = s • p.comp q := by
-  rw [← smul_one_smul R s p]; rw [comp]; rw [comp]; rw [eval₂_smul]; rw [← smul_eq_C_mul]; rw [smul_assoc]; rw [one_smul]
+  rw [← smul_one_smul R s p, comp, comp, eval₂_smul, ← smul_eq_C_mul, smul_assoc, one_smul]
 
 end Comp
 
 section Map
 
 variable [Semiring S]
-variable (f : R ->+* S)
+variable (f : R →+* S)
 
 @[simp]
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: (r : R)
-  statement: (r • p).map f = f r • p.map f
-  proof: by
-  rw [map]; rw [eval₂_smul]; rw [RingHom.comp_apply]; rw [C_mul']
-
-中文:
-定理 map_smul
-  条件: (r : R)
-  结论: (r • p).map f = f r • p.map f
-  证明: by
-  rw [map]; rw [eval₂_smul]; rw [RingHom.comp_apply]; rw [C_mul']
+/-
+**Polynomial.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p : Polynomial R} [inst_1
+ : Semiring S] (f : R →+* S) (r : R),   Polynomial.map f (r • p) = f r • Polynom
+ial.map f p
+参数：f : R →+* S；r : R；r • p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map.eq_1`：∀ {R : Type u} {S : Type v} [inst : Semiring R] [in
+st_1 : Semiring S] (f : R →+* S),   Polynomial.map f = Polynomial.eval₂ (Polynom
+ial.C.com…
+· 使用定理 `Polynomial.eval₂_smul`：eval₂_smul (g : R ->+* S) (p : R[X]) (x : S) {s :
+ R} : eval₂ g x (s • p) = g s * eval₂ g x p
+· 使用定理 `RingHom.comp_apply`：comp_apply (hnp : β ->+* γ) (hmn : α ->+* β) (x : α)
+ : (hnp.comp hmn : α -> γ) x = hnp (hmn x)
+· 使用定理 `Polynomial.C_mul'`：C_mul' (a : R) (f : R[X]) : C a * f = a • f
 -/
 protected theorem map_smul (r : R) : (r • p).map f = f r • p.map f := by
-  rw [map]; rw [eval₂_smul]; rw [RingHom.comp_apply]; rw [C_mul']
+  rw [map, eval₂_smul, RingHom.comp_apply, C_mul']
 
 end Map
 
 end Semiring
 
 end Polynomial
+

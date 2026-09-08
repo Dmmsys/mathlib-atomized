@@ -27,46 +27,14 @@ namespace CategoryTheory.Monoidal
 
 variable {C D : Type*} [Groupoid C] [Category* D] [MonoidalCategory D]
 
-/--
-Instance `functorHasRightDual` / 实例 `functorHasRightDual`
-
-English:
-instance functorHasRightDual
-  signature: [RightRigidCategory D] (F : C ⥤ D)
-  body: { obj := fun X => (F.obj X)ᘁ
-      map := fun f => (F.map (inv f))ᘁ
-      map_comp := fun f g => by simp [comp_rightAdjointMate] }
-  exact :=
-    { evaluation' :=
-        { app := fun _ => ε_ _ _
-          naturality := fun X Y f => by
-            dsimp
-            rw [Category.comp_id]; rw [Functor.map_inv]; rw [← id_tensor_comp_tensor_id]; rw [Category.assoc]; rw [id_tensorHom]; rw [tensorHom_id]; rw [rightAdjointMate_comp_evaluation]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [IsIso.hom_inv_id]; rw [MonoidalCategory.whiskerLeft_id]; rw [Category.id_comp] }
-      coevaluation' :=
-        { app := fun _ => η_ _ _
-          naturality := fun X Y f => by
-            dsimp
-            rw [Functor.map_inv]; rw [Category.id_comp]; rw [← id_tensor_comp_tensor_id]; rw [id_tensorHom]; rw [tensorHom_id]; rw [← Category.assoc]; rw [coevaluation_comp_rightAdjointMate]; rw [Category.assoc]; rw [← comp_whiskerRight]; rw [IsIso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.comp_id] } }
-
-中文:
-实例 functorHasRightDual
-  签名: [RightRigid范畴 D] (F : C ⥤ D)
-  定义体: { obj := fun X => (F.obj X)ᘁ
-      map := fun f => (F.map (inv f))ᘁ
-      map_comp := fun f g => by simp [comp_rightAdjointMate] }
-  exact :=
-    { evaluation' :=
-        { app := fun _ => ε_ _ _
-          naturality := fun X Y f => by
-            dsimp
-            rw [Category.comp_id]; rw [Functor.map_inv]; rw [← id_tensor_comp_tensor_id]; rw [Category.assoc]; rw [id_tensorHom]; rw [tensorHom_id]; rw [rightAdjointMate_comp_evaluation]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [IsIso.hom_inv_id]; rw [MonoidalCategory.whiskerLeft_id]; rw [Category.id_comp] }
-      coevaluation' :=
-        { app := fun _ => η_ _ _
-          naturality := fun X Y f => by
-            dsimp
-            rw [Functor.map_inv]; rw [Category.id_comp]; rw [← id_tensor_comp_tensor_id]; rw [id_tensorHom]; rw [tensorHom_id]; rw [← Category.assoc]; rw [coevaluation_comp_rightAdjointMate]; rw [Category.assoc]; rw [← comp_whiskerRight]; rw [IsIso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.comp_id] } }
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, F.map, F.obj, Functor, Functor.map_inv, IsIso.hom_inv_id, MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerLeft_id, comp_id, comp_rightAdjointMate, evaluation, hom_inv_id, id_tensorHom, id_tensor_comp_tensor_id, map_comp, map_inv, naturality
+/-
+**CategoryTheory.Monoidal.functorHasRightDual** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Monoidal`。
+形式化陈述：functorHasRightDual [RightRigidCategory D] (F : C ⥤ D) : HasRightDual F wh
+ere rightDual
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance functorHasRightDual [RightRigidCategory D] (F : C ⥤ D) : HasRightDual F where
   rightDual :=
@@ -78,62 +46,37 @@ instance functorHasRightDual [RightRigidCategory D] (F : C ⥤ D) : HasRightDual
         { app := fun _ => ε_ _ _
           naturality := fun X Y f => by
             dsimp
-            rw [Category.comp_id]; rw [Functor.map_inv]; rw [← id_tensor_comp_tensor_id]; rw [Category.assoc]; rw [id_tensorHom]; rw [tensorHom_id]; rw [rightAdjointMate_comp_evaluation]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [IsIso.hom_inv_id]; rw [MonoidalCategory.whiskerLeft_id]; rw [Category.id_comp] }
+            rw [Category.comp_id, Functor.map_inv, ← id_tensor_comp_tensor_id, Category.assoc,
+              id_tensorHom, tensorHom_id,
+              rightAdjointMate_comp_evaluation, ← MonoidalCategory.whiskerLeft_comp_assoc,
+              IsIso.hom_inv_id, MonoidalCategory.whiskerLeft_id, Category.id_comp] }
       coevaluation' :=
         { app := fun _ => η_ _ _
           naturality := fun X Y f => by
             dsimp
-            rw [Functor.map_inv]; rw [Category.id_comp]; rw [← id_tensor_comp_tensor_id]; rw [id_tensorHom]; rw [tensorHom_id]; rw [← Category.assoc]; rw [coevaluation_comp_rightAdjointMate]; rw [Category.assoc]; rw [← comp_whiskerRight]; rw [IsIso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.comp_id] } }
-
-/--
-Instance `rightRigidFunctorCategory` / 实例 `rightRigidFunctorCategory`
-
-English:
-instance rightRigidFunctorCategory
-  signature: [RightRigidCategory D]
-
-中文:
-实例 rightRigidFunctorCategory
-  签名: [RightRigid范畴 D]
+            rw [Functor.map_inv, Category.id_comp, ← id_tensor_comp_tensor_id,
+              id_tensorHom, tensorHom_id, ← Category.assoc,
+              coevaluation_comp_rightAdjointMate, Category.assoc, ← comp_whiskerRight,
+              IsIso.inv_hom_id, id_whiskerRight, Category.comp_id] } }
+/-
+**CategoryTheory.Monoidal.rightRigidFunctorCategory** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Monoidal`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Groupoid C]
+ →       [inst_1 : CategoryTheory.Category.{v_1, u_2} D] →         [inst_2 : Cat
+egoryTheory.MonoidalCategory D] →           [CategoryTheory.RightRigidCategory D
+] → CategoryTheory.RightRigidCategory (CategoryTheory.Functor C D)
+参数：CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance rightRigidFunctorCategory [RightRigidCategory D] : RightRigidCategory (C ⥤ D) where
-
-/--
-Instance `functorHasLeftDual` / 实例 `functorHasLeftDual`
-
-English:
-instance functorHasLeftDual
-  signature: [LeftRigidCategory D] (F : C ⥤ D)
-  body: { obj := fun X => ᘁ(F.obj X)
-      map := fun f => ᘁ(F.map (inv f))
-      map_comp := fun f g => by simp [comp_leftAdjointMate] }
-  exact :=
-    { evaluation' :=
-        { app := fun _ => ε_ _ _
-          naturality := fun X Y f => by
-            simp [tensorHom_def, leftAdjointMate_comp_evaluation] }
-      coevaluation' :=
-        { app := fun _ => η_ _ _
-          naturality := fun X Y f => by
-            simp [tensorHom_def, coevaluation_comp_leftAdjointMate_assoc] } }
-
-中文:
-实例 functorHasLeftDual
-  签名: [LeftRigid范畴 D] (F : C ⥤ D)
-  定义体: { obj := fun X => ᘁ(F.obj X)
-      map := fun f => ᘁ(F.map (inv f))
-      map_comp := fun f g => by simp [comp_leftAdjointMate] }
-  exact :=
-    { evaluation' :=
-        { app := fun _ => ε_ _ _
-          naturality := fun X Y f => by
-            simp [tensorHom_def, leftAdjointMate_comp_evaluation] }
-      coevaluation' :=
-        { app := fun _ => η_ _ _
-          naturality := fun X Y f => by
-            simp [tensorHom_def, coevaluation_comp_leftAdjointMate_assoc] } }
-
-Depends on / 依赖: F.map, F.obj, coevaluation, coevaluation_comp_leftAdjointMate_assoc, comp_leftAdjointMate, evaluation, leftAdjointMate_comp_evaluation, map_comp, naturality, tensorHom_def
+/-
+**CategoryTheory.Monoidal.functorHasLeftDual** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Monoidal`。
+形式化陈述：functorHasLeftDual [LeftRigidCategory D] (F : C ⥤ D) : HasLeftDual F where
+ leftDual
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance functorHasLeftDual [LeftRigidCategory D] (F : C ⥤ D) : HasLeftDual F where
   leftDual :=
@@ -149,31 +92,28 @@ instance functorHasLeftDual [LeftRigidCategory D] (F : C ⥤ D) : HasLeftDual F 
         { app := fun _ => η_ _ _
           naturality := fun X Y f => by
             simp [tensorHom_def, coevaluation_comp_leftAdjointMate_assoc] } }
-
-/--
-Instance `leftRigidFunctorCategory` / 实例 `leftRigidFunctorCategory`
-
-English:
-instance leftRigidFunctorCategory
-  signature: [LeftRigidCategory D]
-
-中文:
-实例 leftRigidFunctorCategory
-  签名: [LeftRigid范畴 D]
+/-
+**CategoryTheory.Monoidal.leftRigidFunctorCategory** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Monoidal`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Groupoid C]
+ →       [inst_1 : CategoryTheory.Category.{v_1, u_2} D] →         [inst_2 : Cat
+egoryTheory.MonoidalCategory D] →           [CategoryTheory.LeftRigidCategory D]
+ → CategoryTheory.LeftRigidCategory (CategoryTheory.Functor C D)
+参数：CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance leftRigidFunctorCategory [LeftRigidCategory D] : LeftRigidCategory (C ⥤ D) where
-
-/--
-Instance `rigidFunctorCategory` / 实例 `rigidFunctorCategory`
-
-English:
-instance rigidFunctorCategory
-  signature: [RigidCategory D]
-
-中文:
-实例 rigidFunctorCategory
-  签名: [Rigid范畴 D]
+/-
+**CategoryTheory.Monoidal.rigidFunctorCategory** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Monoidal`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Groupoid C]
+ →       [inst_1 : CategoryTheory.Category.{v_1, u_2} D] →         [inst_2 : Cat
+egoryTheory.MonoidalCategory D] →           [CategoryTheory.RigidCategory D] → C
+ategoryTheory.RigidCategory (CategoryTheory.Functor C D)
+参数：CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance rigidFunctorCategory [RigidCategory D] : RigidCategory (C ⥤ D) where
 
 end CategoryTheory.Monoidal
+

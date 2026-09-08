@@ -21,92 +21,61 @@ open MeasureTheory
 
 namespace Preorder
 
-variable {α : Type*} [Preorder α] {X : α -> Type*} [forall a, MeasurableSpace (X a)]
+variable {α : Type*} [Preorder α] {X : α → Type*} [∀ a, MeasurableSpace (X a)]
 
 @[fun_prop]
-/--
-theorem `measurable_restrictLe` / 定理 `measurable_restrictLe`
-
-English:
-theorem measurable_restrictLe
-  given: (a : α)
-  statement: Measurable (restrictLe (π := X) a)
-  proof: Set.measurable_restrict _
-
-@[fun_prop]
-
-中文:
-定理 measurable_restrictLe
-  条件: (a : α)
-  结论: 可测 (restrictLe (π := X) a)
-  证明: Set.measurable_restrict _
-
-@[fun_prop]
+/-
+**Preorder.measurable_restrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：measurable_restrictLe (a : α) : Measurable (restrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.measurable_restrict`：Set.measurable_restrict (s : Set δ) : Measurabl
+e (s.domRestrict (π
 -/
 theorem measurable_restrictLe (a : α) : Measurable (restrictLe (π := X) a) :=
     Set.measurable_restrict _
 
 @[fun_prop]
-/--
-theorem `measurable_restrictLe₂` / 定理 `measurable_restrictLe₂`
-
-English:
-theorem measurable_restrictLe₂
-  given: {a b : α} (hab : a <= b)
-  statement: Measurable (restrictLe₂ (π := X) hab)
-  proof: Set.measurable_restrict₂ _
-
-中文:
-定理 measurable_restrictLe₂
-  条件: {a b : α} (hab : a <= b)
-  结论: 可测 (restrictLe₂ (π := X) hab)
-  证明: Set.measurable_restrict₂ _
+/-
+**Preorder.measurable_restrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：measurable_restrictLe (a : α) : Measurable (restrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.measurable_restrict`：Set.measurable_restrict (s : Set δ) : Measurabl
+e (s.domRestrict (π
 -/
-theorem measurable_restrictLe₂ {a b : α} (hab : a <= b) : Measurable (restrictLe₂ (π := X) hab) :=
+theorem measurable_restrictLe₂ {a b : α} (hab : a ≤ b) : Measurable (restrictLe₂ (π := X) hab) :=
   Set.measurable_restrict₂ _
 
 variable [LocallyFiniteOrderBot α]
 
 @[fun_prop]
-/--
-theorem `measurable_frestrictLe` / 定理 `measurable_frestrictLe`
-
-English:
-theorem measurable_frestrictLe
-  given: (a : α)
-  statement: Measurable (frestrictLe (π := X) a)
-  proof: Finset.measurable_restrict _
-
-@[fun_prop]
-
-中文:
-定理 measurable_frestrictLe
-  条件: (a : α)
-  结论: 可测 (frestrictLe (π := X) a)
-  证明: Finset.measurable_restrict _
-
-@[fun_prop]
+/-
+**Preorder.measurable_frestrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：measurable_frestrictLe (a : α) : Measurable (frestrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
 -/
 theorem measurable_frestrictLe (a : α) : Measurable (frestrictLe (π := X) a) :=
   Finset.measurable_restrict _
 
 @[fun_prop]
-/--
-theorem `measurable_frestrictLe₂` / 定理 `measurable_frestrictLe₂`
-
-English:
-theorem measurable_frestrictLe₂
-  given: {a b : α} (hab : a <= b)
-  statement: Measurable (frestrictLe₂ (π := X) hab)
-  proof: Finset.measurable_restrict₂ _
-
-中文:
-定理 measurable_frestrictLe₂
-  条件: {a b : α} (hab : a <= b)
-  结论: 可测 (frestrictLe₂ (π := X) hab)
-  证明: Finset.measurable_restrict₂ _
+/-
+**Preorder.measurable_frestrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：measurable_frestrictLe (a : α) : Measurable (frestrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
 -/
-theorem measurable_frestrictLe₂ {a b : α} (hab : a <= b) : Measurable (frestrictLe₂ (π := X) hab) :=
+theorem measurable_frestrictLe₂ {a b : α} (hab : a ≤ b) : Measurable (frestrictLe₂ (π := X) hab) :=
   Finset.measurable_restrict₂ _
 
 end Preorder
+

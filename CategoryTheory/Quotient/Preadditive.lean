@@ -27,38 +27,24 @@ variable {C : Type _} [Category* C] [Preadditive C] (r : HomRel C) [Congruence r
 
 namespace Preadditive
 
-/--
-Definition of `add` / `add` 的定义
+/-- The addition on the morphisms in the category `Quotient r` when `r` is compatible
+with the addition. -/
+/-
+**CategoryTheory.Quotient.Preadditive.add** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Quotient.Preadditive`。
+形式化陈述：add (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g
+₂), r (f₁ + g₁) (f₂ + g₂)) {X Y : Quotient r} (f g : X ⟶ Y) : X ⟶ Y
+参数：hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f
+₁ + g₁) (f₂ + g₂)；f g : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition add
-  signature: (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
-  body: Quot.liftOn₂ f g (fun a b => Quot.mk _ (a + b))
-    (fun f g₁ g₂ h₁₂ => by
-      simp only [HomRel.compClosure_iff_self] at h₁₂
-      erw [functor_map_eq_iff]
-      exact hr _ _ _ _ (Congruence.equivalence.refl f) h₁₂)
-    (fun f₁ f₂ g h₁₂ => by
-      simp only [HomRel.compClosure_iff_self] at h₁₂
-      erw [functor_map_eq_iff]
-      exact hr _ _ _ _ h₁₂ (Congruence.equivalence.refl g))
-
-中文:
-定义 add
-  签名: (hr : 对任意 ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
-  定义体: Quot.liftOn₂ f g (fun a b => Quot.mk _ (a + b))
-    (fun f g₁ g₂ h₁₂ => by
-      simp only [HomRel.compClosure_iff_self] at h₁₂
-      erw [functor_map_eq_iff]
-      exact hr _ _ _ _ (Congruence.equivalence.refl f) h₁₂)
-    (fun f₁ f₂ g h₁₂ => by
-      simp only [HomRel.compClosure_iff_self] at h₁₂
-      erw [functor_map_eq_iff]
-      exact hr _ _ _ _ h₁₂ (Congruence.equivalence.refl g))
-
-Depends on / 依赖: Congruence, Congruence.equivalence.refl, HomRel, HomRel.compClosure_iff_self, Quot.liftOn, Quot.mk, compClosure_iff_self, equivalence, functor_map_eq_iff
+--- 原说明 ---
+The addition on the morphisms in the category `Quotient r` when `r` is compatibl
+e
+with the addition.
 -/
-def add (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
+def add (hr : ∀ ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
     {X Y : Quotient r} (f g : X ⟶ Y) : X ⟶ Y :=
   Quot.liftOn₂ f g (fun a b => Quot.mk _ (a + b))
     (fun f g₁ g₂ h₁₂ => by
@@ -70,34 +56,24 @@ def add (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f
       erw [functor_map_eq_iff]
       exact hr _ _ _ _ h₁₂ (Congruence.equivalence.refl g))
 
-/--
-Definition of `neg` / `neg` 的定义
+/-- The negation on the morphisms in the category `Quotient r` when `r` is compatible
+with the addition. -/
+/-
+**CategoryTheory.Quotient.Preadditive.neg** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Quotient.Preadditive`。
+形式化陈述：neg (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g
+₂), r (f₁ + g₁) (f₂ + g₂)) {X Y : Quotient r} (f : X ⟶ Y) : X ⟶ Y
+参数：hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f
+₁ + g₁) (f₂ + g₂)；f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition neg
-  signature: (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
-  body: Quot.liftOn f (fun a => Quot.mk _ (-a))
-    (fun f g => by
-      intro hfg
-      simp only [HomRel.compClosure_iff_self] at hfg
-      erw [functor_map_eq_iff]
-      apply Congruence.equivalence.symm
-      convert! hr f g _ _ hfg (Congruence.equivalence.refl (-f - g)) using 1 <;> abel)
-
-中文:
-定义 neg
-  签名: (hr : 对任意 ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
-  定义体: Quot.liftOn f (fun a => Quot.mk _ (-a))
-    (fun f g => by
-      intro hfg
-      simp only [HomRel.compClosure_iff_self] at hfg
-      erw [functor_map_eq_iff]
-      apply Congruence.equivalence.symm
-      convert! hr f g _ _ hfg (Congruence.equivalence.refl (-f - g)) using 1 <;> abel)
-
-Depends on / 依赖: Congruence, Congruence.equivalence.refl, Congruence.equivalence.symm, HomRel, HomRel.compClosure_iff_self, Quot.liftOn, Quot.mk, compClosure_iff_self, convert, equivalence, functor_map_eq_iff, liftOn
+--- 原说明 ---
+The negation on the morphisms in the category `Quotient r` when `r` is compatibl
+e
+with the addition.
 -/
-def neg (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
+def neg (hr : ∀ ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂))
     {X Y : Quotient r} (f : X ⟶ Y) : X ⟶ Y :=
   Quot.liftOn f (fun a => Quot.mk _ (-a))
     (fun f g => by
@@ -112,59 +88,22 @@ end Preadditive
 /-- The preadditive structure on the category `Quotient r` when `r` is compatible
 with the addition. -/
 @[instance_reducible]
-/--
-Definition of `preadditive` / `preadditive` 的定义
+/-
+**CategoryTheory.Quotient.preadditive** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Quotient`。
+形式化陈述：preadditive (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ 
+: r g₁ g₂), r (f₁ + g₁) (f₂ + g₂)) : Preadditive (Quotient r) where homGroup P Q
+参数：hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f
+₁ + g₁) (f₂ + g₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preadditive
-  body: let iZ : Zero (P ⟶ Q) :=
-      { zero := Quot.mk _ 0 }
-    let iA : Add (P ⟶ Q) :=
-      { add := Preadditive.add r hr }
-    let iN : Neg (P ⟶ Q) :=
-      { neg := Preadditive.neg r hr }
-    { add_assoc := by rintro ⟨_⟩ ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_assoc _ _ _)
-      zero_add := by rintro ⟨_⟩; exact congr_arg (functor r).map (zero_add _)
-      add_zero := by rintro ⟨_⟩; exact congr_arg (functor r).map (add_zero _)
-      add_comm := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_comm _ _)
-      neg_add_cancel := by rintro ⟨_⟩; exact congr_arg (functor r).map (neg_add_cancel _)
-      -- todo: use a better defeq
-      nsmul := nsmulRec
-      zsmul := zsmulRec }
-  add_comp := by
-    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
-    exact congr_arg (functor r).map (by apply Preadditive.add_comp)
-  comp_add := by
-    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
-    exact congr_arg (functor r).map (by apply Preadditive.comp_add)
-
-中文:
-定义 preadditive
-  定义体: let iZ : Zero (P ⟶ Q) :=
-      { zero := Quot.mk _ 0 }
-    let iA : Add (P ⟶ Q) :=
-      { add := Preadditive.add r hr }
-    let iN : Neg (P ⟶ Q) :=
-      { neg := Preadditive.neg r hr }
-    { add_assoc := by rintro ⟨_⟩ ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_assoc _ _ _)
-      zero_add := by rintro ⟨_⟩; exact congr_arg (functor r).map (zero_add _)
-      add_zero := by rintro ⟨_⟩; exact congr_arg (functor r).map (add_zero _)
-      add_comm := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_comm _ _)
-      neg_add_cancel := by rintro ⟨_⟩; exact congr_arg (functor r).map (neg_add_cancel _)
-      -- todo: use a better defeq
-      nsmul := nsmulRec
-      zsmul := zsmulRec }
-  add_comp := by
-    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
-    exact congr_arg (functor r).map (by apply Preadditive.add_comp)
-  comp_add := by
-    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
-    exact congr_arg (functor r).map (by apply Preadditive.comp_add)
-
-Depends on / 依赖: Preadditive, Preadditive.add, Preadditive.neg, Quot.mk, add_assoc, add_comm, add_zero, congr_arg, functor, neg_add_cancel, zero_add
+--- 原说明 ---
+The preadditive structure on the category `Quotient r` when `r` is compatible
+with the addition.
 -/
 def preadditive
-    (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂)) :
+    (hr : ∀ ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂)) :
     Preadditive (Quotient r) where
   homGroup P Q :=
     let iZ : Zero (P ⟶ Q) :=
@@ -187,28 +126,18 @@ def preadditive
   comp_add := by
     rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
     exact congr_arg (functor r).map (by apply Preadditive.comp_add)
-
-/--
-lemma `functor_additive` / 引理 `functor_additive`
-
-English:
-lemma functor_additive
-  proof: preadditive r hr
-    (functor r).Additive :=
-  letI := preadditive r hr
-  { map_add := rfl }
-
-中文:
-引理 functor_additive
-  证明: preadditive r hr
-    (functor r).Additive :=
-  letI := preadditive r hr
-  { map_add := rfl }
-
-Depends on / 依赖: preadditive
+/-
+**CategoryTheory.Quotient.functor_additive** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Quotient`。
+形式化陈述：functor_additive (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂
+) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂)) : letI
+参数：hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f
+₁ + g₁) (f₂ + g₂)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma functor_additive
-    (hr : forall ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂)) :
+    (hr : ∀ ⦃X Y : C⦄ (f₁ f₂ g₁ g₂ : X ⟶ Y) (_ : r f₁ f₂) (_ : r g₁ g₂), r (f₁ + g₁) (f₂ + g₂)) :
     letI := preadditive r hr
     (functor r).Additive :=
   letI := preadditive r hr
@@ -217,3 +146,4 @@ lemma functor_additive
 end Quotient
 
 end CategoryTheory
+

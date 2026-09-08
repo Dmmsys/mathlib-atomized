@@ -47,131 +47,132 @@ section partialLeftAdjoint
 
 variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D] (F : D ⥤ C)
 
-/--
-Definition of `leftAdjointObjIsDefined` / `leftAdjointObjIsDefined` 的定义
+/-- Given a functor `F : D ⥤ C`, this is a predicate on objects `X : C` corresponding
+to the domain of definition of the (partial) left adjoint of `F`. -/
+/-
+**CategoryTheory.Functor.leftAdjointObjIsDefined** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：leftAdjointObjIsDefined : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftAdjointObjIsDefined
-  signature: : ObjectProperty C
-  body: fun X => IsCorepresentable (F ⋙ coyoneda.obj (op X))
-
-中文:
-定义 leftAdjointObjIsDefined
-  签名: : ObjectProperty C
-  定义体: fun X => IsCorepresentable (F ⋙ coyoneda.obj (op X))
-
-Depends on / 依赖: IsCorepresentable, coyoneda, coyoneda.obj
+--- 原说明 ---
+Given a functor `F : D ⥤ C`, this is a predicate on objects `X : C` correspondin
+g
+to the domain of definition of the (partial) left adjoint of `F`.
 -/
 def leftAdjointObjIsDefined : ObjectProperty C :=
-  fun X => IsCorepresentable (F ⋙ coyoneda.obj (op X))
-
-/--
-lemma `leftAdjointObjIsDefined_iff` / 引理 `leftAdjointObjIsDefined_iff`
-
-English:
-lemma leftAdjointObjIsDefined_iff
-  given: (X : C)
-  proof: by rfl
-
-中文:
-引理 leftAdjointObjIsDefined_iff
-  条件: (X : C)
-  证明: by rfl
+  fun X ↦ IsCorepresentable (F ⋙ coyoneda.obj (op X))
+/-
+**CategoryTheory.Functor.leftAdjointObjIsDefined_iff** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：leftAdjointObjIsDefined_iff (X : C) : F.leftAdjointObjIsDefined X ↔ IsCore
+presentable (F ⋙ coyoneda.obj (op X))
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma leftAdjointObjIsDefined_iff (X : C) :
     F.leftAdjointObjIsDefined X ↔ IsCorepresentable (F ⋙ coyoneda.obj (op X)) := by rfl
 
 variable {F} in
-/--
-lemma `leftAdjointObjIsDefined_of_adjunction` / 引理 `leftAdjointObjIsDefined_of_adjunction`
-
-English:
-lemma leftAdjointObjIsDefined_of_adjunction
-  given: {G : C ⥤ D} (adj : G ⊣ F) (X : C)
-  proof: (adj.corepresentableBy X).isCorepresentable
-
-中文:
-引理 leftAdjointObjIsDefined_of_adjunction
-  条件: {G : C ⥤ D} (adj : G ⊣ F) (X : C)
-  证明: (adj.corepresentableBy X).isCorepresentable
-
-Depends on / 依赖: adj.corepresentableBy, corepresentableBy, isCorepresentable
+/-
+**CategoryTheory.Functor.leftAdjointObjIsDefined_of_adjunction** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：leftAdjointObjIsDefined_of_adjunction {G : C ⥤ D} (adj : G ⊣ F) (X : C) : 
+F.leftAdjointObjIsDefined X
+参数：adj : G ⊣ F；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.isCorepresentable`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (T
+ype v)} {X : C}   (e : F.CorepresentableBy X), F…
 -/
 lemma leftAdjointObjIsDefined_of_adjunction {G : C ⥤ D} (adj : G ⊣ F) (X : C) :
     F.leftAdjointObjIsDefined X :=
   (adj.corepresentableBy X).isCorepresentable
 
-/--
-Definition of `PartialLeftAdjointSource` / `PartialLeftAdjointSource` 的定义
+/-- The full subcategory where `F.partialLeftAdjoint` shall be defined. -/
+/-
+**CategoryTheory.Functor.PartialLeftAdjointSource** 是 Mathlib 中的一个缩写定义，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：PartialLeftAdjointSource
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PartialLeftAdjointSource
-  body: F.leftAdjointObjIsDefined.FullSubcategory
-
-中文:
-缩写 PartialLeftAdjointSource
-  定义体: F.leftAdjointObjIsDefined.FullSubcategory
-
-Depends on / 依赖: F.leftAdjointObjIsDefined.FullSubcategory, FullSubcategory, leftAdjointObjIsDefined
+--- 原说明 ---
+The full subcategory where `F.partialLeftAdjoint` shall be defined.
 -/
 abbrev PartialLeftAdjointSource := F.leftAdjointObjIsDefined.FullSubcategory
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : F.PartialLeftAdjointSource) :
     IsCorepresentable (F ⋙ coyoneda.obj (op X.obj)) := X.property
 
-/--
-Definition of `partialLeftAdjointObj` / `partialLeftAdjointObj` 的定义
+/-- Given `F : D ⥤ C`, this is `F.partialLeftAdjoint` on objects: it sends
+`X : C` such that `F.leftAdjointObjIsDefined X` holds to an object of `D`
+which represents the functor `F ⋙ coyoneda.obj (op X.obj)`. -/
+/-
+**CategoryTheory.Functor.partialLeftAdjointObj** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：partialLeftAdjointObj (X : F.PartialLeftAdjointSource) : D
+参数：X : F.PartialLeftAdjointSource。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instIsCorepresentableCompObjOppositeTypeCoyonedaO
+pObjLeftAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁
+, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Cate
+goryTheor…
 
-English:
-definition partialLeftAdjointObj
-  signature: (X : F.PartialLeftAdjointSource)
-  body: (F ⋙ coyoneda.obj (op X.obj)).coreprX
-
-中文:
-定义 partialLeftAdjointObj
-  签名: (X : F.PartialLeftAdjointSource)
-  定义体: (F ⋙ coyoneda.obj (op X.obj)).coreprX
-
-Depends on / 依赖: X.obj, coreprX, coyoneda, coyoneda.obj
+--- 原说明 ---
+Given `F : D ⥤ C`, this is `F.partialLeftAdjoint` on objects: it sends
+`X : C` such that `F.leftAdjointObjIsDefined X` holds to an object of `D`
+which represents the functor `F ⋙ coyoneda.obj (op X.obj)`.
 -/
 noncomputable def partialLeftAdjointObj (X : F.PartialLeftAdjointSource) : D :=
   (F ⋙ coyoneda.obj (op X.obj)).coreprX
 
-/--
-Definition of `partialLeftAdjointHomEquiv` / `partialLeftAdjointHomEquiv` 的定义
+/-- Given `F : D ⥤ C`, this is the canonical bijection
+`(F.partialLeftAdjointObj X ⟶ Y) ≃ (X.obj ⟶ F.obj Y)`
+for all `X : F.PartialLeftAdjointSource` and `Y : D`. -/
+/-
+**CategoryTheory.Functor.partialLeftAdjointHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：partialLeftAdjointHomEquiv {X : F.PartialLeftAdjointSource} {Y : D} : (F.p
+artialLeftAdjointObj X ⟶ Y) ≃ (X.obj ⟶ F.obj Y)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instIsCorepresentableCompObjOppositeTypeCoyonedaO
+pObjLeftAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁
+, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Cate
+goryTheor…
 
-English:
-definition partialLeftAdjointHomEquiv
-  signature: {X : F.PartialLeftAdjointSource} {Y : D}
-  body: (F ⋙ coyoneda.obj (op X.obj)).corepresentableBy.homEquiv
-
-中文:
-定义 partialLeftAdjointHomEquiv
-  签名: {X : F.PartialLeftAdjointSource} {Y : D}
-  定义体: (F ⋙ coyoneda.obj (op X.obj)).corepresentableBy.homEquiv
-
-Depends on / 依赖: X.obj, corepresentableBy, corepresentableBy.homEquiv, coyoneda, coyoneda.obj, homEquiv
+--- 原说明 ---
+Given `F : D ⥤ C`, this is the canonical bijection
+`(F.partialLeftAdjointObj X ⟶ Y) ≃ (X.obj ⟶ F.obj Y)`
+for all `X : F.PartialLeftAdjointSource` and `Y : D`.
 -/
 noncomputable def partialLeftAdjointHomEquiv {X : F.PartialLeftAdjointSource} {Y : D} :
     (F.partialLeftAdjointObj X ⟶ Y) ≃ (X.obj ⟶ F.obj Y) :=
   (F ⋙ coyoneda.obj (op X.obj)).corepresentableBy.homEquiv
-
-/--
-lemma `partialLeftAdjointHomEquiv_comp` / 引理 `partialLeftAdjointHomEquiv_comp`
-
-English:
-lemma partialLeftAdjointHomEquiv_comp
-  statement: {X : F.PartialLeftAdjointSource} {Y Y' : D}
-  proof: by
-  apply CorepresentableBy.homEquiv_comp
-
-中文:
-引理 partialLeftAdjointHomEquiv_comp
-  结论: {X : F.PartialLeftAdjointSource} {Y Y' : D}
-  证明: by
-  apply CorepresentableBy.homEquiv_comp
-
-Depends on / 依赖: CorepresentableBy, CorepresentableBy.homEquiv_comp, homEquiv_comp
+/-
+**CategoryTheory.Functor.partialLeftAdjointHomEquiv_comp** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Functor`。
+形式化陈述：partialLeftAdjointHomEquiv_comp {X : F.PartialLeftAdjointSource} {Y Y' : D
+} (f : F.partialLeftAdjointObj X ⟶ Y) (g : Y ⟶ Y') : F.partialLeftAdjointHomEqui
+v (f ≫ g) = F.partialLeftAdjointHomEquiv f ≫ F.map g
+参数：f : F.partialLeftAdjointObj X ⟶ Y；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_comp`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type 
+v)} {X : C}   (self : F.CorepresentableBy X)…
+· 使用定理 `CategoryTheory.Functor.instIsCorepresentableCompObjOppositeTypeCoyonedaO
+pObjLeftAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁
+, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Cate
+goryTheor…
 -/
 lemma partialLeftAdjointHomEquiv_comp {X : F.PartialLeftAdjointSource} {Y Y' : D}
     (f : F.partialLeftAdjointObj X ⟶ Y) (g : Y ⟶ Y') :
@@ -179,99 +180,98 @@ lemma partialLeftAdjointHomEquiv_comp {X : F.PartialLeftAdjointSource} {Y Y' : D
       F.partialLeftAdjointHomEquiv f ≫ F.map g := by
   apply CorepresentableBy.homEquiv_comp
 
-/--
-Definition of `partialLeftAdjointMap` / `partialLeftAdjointMap` 的定义
+/-- Given `F : D ⥤ C`, this is `F.partialLeftAdjoint` on morphisms. -/
+/-
+**CategoryTheory.Functor.partialLeftAdjointMap** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：partialLeftAdjointMap {X Y : F.PartialLeftAdjointSource} (f : X ⟶ Y) : F.p
+artialLeftAdjointObj X ⟶ F.partialLeftAdjointObj Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition partialLeftAdjointMap
-  signature: {X Y : F.PartialLeftAdjointSource}
-  body: F.partialLeftAdjointHomEquiv.symm (f.hom ≫ F.partialLeftAdjointHomEquiv (𝟙 _))
-
-@[simp]
-
-中文:
-定义 partialLeftAdjointMap
-  签名: {X Y : F.PartialLeftAdjointSource}
-  定义体: F.partialLeftAdjointHomEquiv.symm (f.hom ≫ F.partialLeftAdjointHomEquiv (𝟙 _))
-
-@[simp]
-
-Depends on / 依赖: F.partialLeftAdjointHomEquiv, F.partialLeftAdjointHomEquiv.symm, f.hom, partialLeftAdjointHomEquiv
+--- 原说明 ---
+Given `F : D ⥤ C`, this is `F.partialLeftAdjoint` on morphisms.
 -/
 noncomputable def partialLeftAdjointMap {X Y : F.PartialLeftAdjointSource}
     (f : X ⟶ Y) : F.partialLeftAdjointObj X ⟶ F.partialLeftAdjointObj Y :=
     F.partialLeftAdjointHomEquiv.symm (f.hom ≫ F.partialLeftAdjointHomEquiv (𝟙 _))
 
 @[simp]
-/--
-lemma `partialLeftAdjointHomEquiv_map` / 引理 `partialLeftAdjointHomEquiv_map`
-
-English:
-lemma partialLeftAdjointHomEquiv_map
-  statement: {X Y : F.PartialLeftAdjointSource}
-  proof: by
-  simp [partialLeftAdjointMap]
-
-中文:
-引理 partialLeftAdjointHomEquiv_map
-  结论: {X Y : F.PartialLeftAdjointSource}
-  证明: by
-  simp [partialLeftAdjointMap]
-
-Depends on / 依赖: partialLeftAdjointMap
+/-
+**CategoryTheory.Functor.partialLeftAdjointHomEquiv_map** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Functor`。
+形式化陈述：partialLeftAdjointHomEquiv_map {X Y : F.PartialLeftAdjointSource} (f : X ⟶
+ Y) : F.partialLeftAdjointHomEquiv (F.partialLeftAdjointMap f) = f.hom ≫ F.parti
+alLeftAdjointHomEquiv (𝟙 _)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma partialLeftAdjointHomEquiv_map {X Y : F.PartialLeftAdjointSource}
     (f : X ⟶ Y) :
     F.partialLeftAdjointHomEquiv (F.partialLeftAdjointMap f) =
       f.hom ≫ F.partialLeftAdjointHomEquiv (𝟙 _) := by
   simp [partialLeftAdjointMap]
-
-/--
-lemma `partialLeftAdjointHomEquiv_map_comp` / 引理 `partialLeftAdjointHomEquiv_map_comp`
-
-English:
-lemma partialLeftAdjointHomEquiv_map_comp
-  statement: {X X' : F.PartialLeftAdjointSource} {Y : D}
-  proof: by
-  rw [partialLeftAdjointHomEquiv_comp]; rw [partialLeftAdjointHomEquiv_map]; rw [assoc]; rw [← partialLeftAdjointHomEquiv_comp]; rw [id_comp]
-
-@[reassoc]
-
-中文:
-引理 partialLeftAdjointHomEquiv_map_comp
-  结论: {X X' : F.PartialLeftAdjointSource} {Y : D}
-  证明: by
-  rw [partialLeftAdjointHomEquiv_comp]; rw [partialLeftAdjointHomEquiv_map]; rw [assoc]; rw [← partialLeftAdjointHomEquiv_comp]; rw [id_comp]
-
-@[reassoc]
-
-Depends on / 依赖: id_comp, partialLeftAdjointHomEquiv_comp, partialLeftAdjointHomEquiv_map
+/-
+**CategoryTheory.Functor.partialLeftAdjointHomEquiv_map_comp** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：partialLeftAdjointHomEquiv_map_comp {X X' : F.PartialLeftAdjointSource} {Y
+ : D} (f : X ⟶ X') (g : F.partialLeftAdjointObj X' ⟶ Y) : F.partialLeftAdjointHo
+mEquiv (F.partialLeftAdjointMap f ≫ g) = f.hom ≫ F.partialLeftAdjointHomEquiv g
+参数：f : X ⟶ X'；g : F.partialLeftAdjointObj X' ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.partialLeftAdjointHomEquiv_comp`：partialLeftAdjoi
+ntHomEquiv_comp {X : F.PartialLeftAdjointSource} {Y Y' : D} (f : F.partialLeftAd
+jointObj X ⟶ Y) (g : Y ⟶ Y') : F.partialLeft…
+· 使用引理 `CategoryTheory.Functor.partialLeftAdjointHomEquiv_map`：partialLeftAdjoin
+tHomEquiv_map {X Y : F.PartialLeftAdjointSource} (f : X ⟶ Y) : F.partialLeftAdjo
+intHomEquiv (F.partialLeftAdjointMap f) = f…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma partialLeftAdjointHomEquiv_map_comp {X X' : F.PartialLeftAdjointSource} {Y : D}
     (f : X ⟶ X') (g : F.partialLeftAdjointObj X' ⟶ Y) :
     F.partialLeftAdjointHomEquiv (F.partialLeftAdjointMap f ≫ g) =
       f.hom ≫ F.partialLeftAdjointHomEquiv g := by
-  rw [partialLeftAdjointHomEquiv_comp]; rw [partialLeftAdjointHomEquiv_map]; rw [assoc]; rw [← partialLeftAdjointHomEquiv_comp]; rw [id_comp]
+  rw [partialLeftAdjointHomEquiv_comp, partialLeftAdjointHomEquiv_map, assoc,
+    ← partialLeftAdjointHomEquiv_comp, id_comp]
 
 @[reassoc]
-/--
-lemma `partialLeftAdjointHomEquiv_symm_comp` / 引理 `partialLeftAdjointHomEquiv_symm_comp`
-
-English:
-lemma partialLeftAdjointHomEquiv_symm_comp
-  statement: {X : F.PartialLeftAdjointSource} {Y Y' : D}
-  proof: CorepresentableBy.homEquiv_symm_comp ..
-
-@[reassoc]
-
-中文:
-引理 partialLeftAdjointHomEquiv_symm_comp
-  结论: {X : F.PartialLeftAdjointSource} {Y Y' : D}
-  证明: CorepresentableBy.homEquiv_symm_comp ..
-
-@[reassoc]
-
-Depends on / 依赖: CorepresentableBy, CorepresentableBy.homEquiv_symm_comp, homEquiv_symm_comp
+/-
+**CategoryTheory.Functor.partialLeftAdjointHomEquiv_symm_comp** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：partialLeftAdjointHomEquiv_symm_comp {X : F.PartialLeftAdjointSource} {Y Y
+' : D} (f : X.obj ⟶ F.obj Y) (g : Y ⟶ Y') : F.partialLeftAdjointHomEquiv.symm f 
+≫ g = F.partialLeftAdjointHomEquiv.symm (f ≫ F.map g)
+参数：f : X.obj ⟶ F.obj Y；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_symm_comp`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (
+Type v)} {X : C}   (e : F.CorepresentableBy X) {Y…
+· 使用定理 `CategoryTheory.Functor.instIsCorepresentableCompObjOppositeTypeCoyonedaO
+pObjLeftAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁
+, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Cate
+goryTheor…
 -/
 lemma partialLeftAdjointHomEquiv_symm_comp {X : F.PartialLeftAdjointSource} {Y Y' : D}
     (f : X.obj ⟶ F.obj Y) (g : Y ⟶ Y') :
@@ -279,59 +279,55 @@ lemma partialLeftAdjointHomEquiv_symm_comp {X : F.PartialLeftAdjointSource} {Y Y
   CorepresentableBy.homEquiv_symm_comp ..
 
 @[reassoc]
-/--
-lemma `partialLeftAdjointHomEquiv_comp_symm` / 引理 `partialLeftAdjointHomEquiv_comp_symm`
-
-English:
-lemma partialLeftAdjointHomEquiv_comp_symm
-  statement: {X X' : F.PartialLeftAdjointSource} {Y : D}
-  proof: by
-  rw [Equiv.eq_symm_apply]; rw [partialLeftAdjointHomEquiv_comp]; rw [partialLeftAdjointHomEquiv_map]; rw [assoc]; rw [← partialLeftAdjointHomEquiv_comp]; rw [id_comp]; rw [Equiv.apply_symm_apply]
-
-中文:
-引理 partialLeftAdjointHomEquiv_comp_symm
-  结论: {X X' : F.PartialLeftAdjointSource} {Y : D}
-  证明: by
-  rw [Equiv.eq_symm_apply]; rw [partialLeftAdjointHomEquiv_comp]; rw [partialLeftAdjointHomEquiv_map]; rw [assoc]; rw [← partialLeftAdjointHomEquiv_comp]; rw [id_comp]; rw [Equiv.apply_symm_apply]
-
-Depends on / 依赖: Equiv.apply_symm_apply, Equiv.eq_symm_apply, apply_symm_apply, eq_symm_apply, id_comp, partialLeftAdjointHomEquiv_comp, partialLeftAdjointHomEquiv_map
+/-
+**CategoryTheory.Functor.partialLeftAdjointHomEquiv_comp_symm** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：partialLeftAdjointHomEquiv_comp_symm {X X' : F.PartialLeftAdjointSource} {
+Y : D} (f : X'.obj ⟶ F.obj Y) (g : X ⟶ X') : F.partialLeftAdjointMap g ≫ F.parti
+alLeftAdjointHomEquiv.symm f = F.partialLeftAdjointHomEquiv.symm (g.hom ≫ f)
+参数：f : X'.obj ⟶ F.obj Y；g : X ⟶ X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用引理 `CategoryTheory.Functor.partialLeftAdjointHomEquiv_comp`：partialLeftAdjoi
+ntHomEquiv_comp {X : F.PartialLeftAdjointSource} {Y Y' : D} (f : F.partialLeftAd
+jointObj X ⟶ Y) (g : Y ⟶ Y') : F.partialLeft…
+· 使用引理 `CategoryTheory.Functor.partialLeftAdjointHomEquiv_map`：partialLeftAdjoin
+tHomEquiv_map {X Y : F.PartialLeftAdjointSource} (f : X ⟶ Y) : F.partialLeftAdjo
+intHomEquiv (F.partialLeftAdjointMap f) = f…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 lemma partialLeftAdjointHomEquiv_comp_symm {X X' : F.PartialLeftAdjointSource} {Y : D}
     (f : X'.obj ⟶ F.obj Y) (g : X ⟶ X') :
     F.partialLeftAdjointMap g ≫ F.partialLeftAdjointHomEquiv.symm f =
     F.partialLeftAdjointHomEquiv.symm (g.hom ≫ f) := by
-  rw [Equiv.eq_symm_apply]; rw [partialLeftAdjointHomEquiv_comp]; rw [partialLeftAdjointHomEquiv_map]; rw [assoc]; rw [← partialLeftAdjointHomEquiv_comp]; rw [id_comp]; rw [Equiv.apply_symm_apply]
+  rw [Equiv.eq_symm_apply, partialLeftAdjointHomEquiv_comp, partialLeftAdjointHomEquiv_map,
+    assoc, ← partialLeftAdjointHomEquiv_comp, id_comp, Equiv.apply_symm_apply]
 
 /-- Given `F : D ⥤ C`, this is the partial adjoint functor `F.PartialLeftAdjointSource ⥤ D`. -/
 @[simps]
-/--
-Definition of `partialLeftAdjoint` / `partialLeftAdjoint` 的定义
+/-
+**CategoryTheory.Functor.partialLeftAdjoint** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：partialLeftAdjoint : F.PartialLeftAdjointSource ⥤ D where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partialLeftAdjoint
-  signature: : F.PartialLeftAdjointSource ⥤ D where
-  body: F.partialLeftAdjointObj
-  map := F.partialLeftAdjointMap
-  map_id X := by
-    apply F.partialLeftAdjointHomEquiv.injective
-    simp [partialLeftAdjointHomEquiv_map]
-  map_comp {X Y Z} f g := by
-    apply F.partialLeftAdjointHomEquiv.injective
-    simp [partialLeftAdjointHomEquiv_comp, ← F.partialLeftAdjointHomEquiv_comp]
-
-中文:
-定义 partialLeftAdjoint
-  签名: : F.PartialLeftAdjointSource ⥤ D where
-  定义体: F.partialLeftAdjointObj
-  map := F.partialLeftAdjointMap
-  map_id X := by
-    apply F.partialLeftAdjointHomEquiv.injective
-    simp [partialLeftAdjointHomEquiv_map]
-  map_comp {X Y Z} f g := by
-    apply F.partialLeftAdjointHomEquiv.injective
-    simp [partialLeftAdjointHomEquiv_comp, ← F.partialLeftAdjointHomEquiv_comp]
-
-Depends on / 依赖: F.partialLeftAdjointObj, partialLeftAdjointObj
+--- 原说明 ---
+Given `F : D ⥤ C`, this is the partial adjoint functor `F.PartialLeftAdjointSour
+ce ⥤ D`.
 -/
 noncomputable def partialLeftAdjoint : F.PartialLeftAdjointSource ⥤ D where
   obj := F.partialLeftAdjointObj
@@ -344,119 +340,76 @@ noncomputable def partialLeftAdjoint : F.PartialLeftAdjointSource ⥤ D where
     simp [partialLeftAdjointHomEquiv_comp, ← F.partialLeftAdjointHomEquiv_comp]
 
 variable {F}
-
-/--
-lemma `isRightAdjoint_of_leftAdjointObjIsDefined_eq_top` / 引理 `isRightAdjoint_of_leftAdjointObjIsDefined_eq_top`
-
-English:
-lemma isRightAdjoint_of_leftAdjointObjIsDefined_eq_top
-  proof: by
-  replace h : forall X, IsCorepresentable (F ⋙ coyoneda.obj (op X)) := fun X => by
-    simp only [← leftAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
-  exact (Adjunction.adjunctionOfEquivLeft
-    (fun X Y => (F ⋙ coyoneda.obj (op X)).corepresentableBy.homEquiv)
-    (fun X Y Y' g f => by apply CorepresentableBy.homEquiv_comp)).isRightAdjoint
-
-中文:
-引理 isRightAdjoint_of_leftAdjointObjIsDefined_eq_top
-  证明: by
-  replace h : forall X, IsCorepresentable (F ⋙ coyoneda.obj (op X)) := fun X => by
-    simp only [← leftAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
-  exact (Adjunction.adjunctionOfEquivLeft
-    (fun X Y => (F ⋙ coyoneda.obj (op X)).corepresentableBy.homEquiv)
-    (fun X Y Y' g f => by apply CorepresentableBy.homEquiv_comp)).isRightAdjoint
-
-Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivLeft, CorepresentableBy, CorepresentableBy.homEquiv_comp, IsCorepresentable, Pi.top_apply, Prop.top_eq_true, adjunctionOfEquivLeft, corepresentableBy, corepresentableBy.homEquiv, coyoneda, coyoneda.obj, homEquiv, homEquiv_comp, isRightAdjoint, leftAdjointObjIsDefined_iff, replace, top_apply, top_eq_true
+/-
+**CategoryTheory.Functor.isRightAdjoint_of_leftAdjointObjIsDefined_eq_top** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：isRightAdjoint_of_leftAdjointObjIsDefined_eq_top (h : F.leftAdjointObjIsDe
+fined = ⊤) : F.IsRightAdjoint
+参数：h : F.leftAdjointObjIsDefined = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Adjunction.isRightAdjoint`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.homEquiv_comp`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (Type 
+v)} {X : C}   (self : F.CorepresentableBy X)…
 -/
 lemma isRightAdjoint_of_leftAdjointObjIsDefined_eq_top
     (h : F.leftAdjointObjIsDefined = ⊤) : F.IsRightAdjoint := by
-  replace h : forall X, IsCorepresentable (F ⋙ coyoneda.obj (op X)) := fun X => by
+  replace h : ∀ X, IsCorepresentable (F ⋙ coyoneda.obj (op X)) := fun X ↦ by
     simp only [← leftAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
   exact (Adjunction.adjunctionOfEquivLeft
-    (fun X Y => (F ⋙ coyoneda.obj (op X)).corepresentableBy.homEquiv)
-    (fun X Y Y' g f => by apply CorepresentableBy.homEquiv_comp)).isRightAdjoint
+    (fun X Y ↦ (F ⋙ coyoneda.obj (op X)).corepresentableBy.homEquiv)
+    (fun X Y Y' g f ↦ by apply CorepresentableBy.homEquiv_comp)).isRightAdjoint
 
 variable (F) in
-/--
-lemma `isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top` / 引理 `isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top`
-
-English:
-lemma isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top
-  proof: by
-  refine ⟨fun h => ?_, isRightAdjoint_of_leftAdjointObjIsDefined_eq_top⟩
-  ext X
-  simpa only [Pi.top_apply, Prop.top_eq_true, iff_true]
-    using leftAdjointObjIsDefined_of_adjunction (Adjunction.ofIsRightAdjoint F) X
-
-中文:
-引理 isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top
-  证明: by
-  refine ⟨fun h => ?_, isRightAdjoint_of_leftAdjointObjIsDefined_eq_top⟩
-  ext X
-  simpa only [Pi.top_apply, Prop.top_eq_true, iff_true]
-    using leftAdjointObjIsDefined_of_adjunction (Adjunction.ofIsRightAdjoint F) X
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, Pi.top_apply, Prop.top_eq_true, iff_true, isRightAdjoint_of_leftAdjointObjIsDefined_eq_top, leftAdjointObjIsDefined_of_adjunction, ofIsRightAdjoint, top_apply, top_eq_true
+/-
+**CategoryTheory.Functor.isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top : F.IsRightAdjoint ↔ F.l
+eftAdjointObjIsDefined = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用引理 `CategoryTheory.Functor.leftAdjointObjIsDefined_of_adjunction`：leftAdjoin
+tObjIsDefined_of_adjunction {G : C ⥤ D} (adj : G ⊣ F) (X : C) : F.leftAdjointObj
+IsDefined X
+· 使用引理 `CategoryTheory.Functor.isRightAdjoint_of_leftAdjointObjIsDefined_eq_top`
+：isRightAdjoint_of_leftAdjointObjIsDefined_eq_top (h : F.leftAdjointObjIsDefined
+ = ⊤) : F.IsRightAdjoint
 -/
 lemma isRightAdjoint_iff_leftAdjointObjIsDefined_eq_top :
     F.IsRightAdjoint ↔ F.leftAdjointObjIsDefined = ⊤ := by
-  refine ⟨fun h => ?_, isRightAdjoint_of_leftAdjointObjIsDefined_eq_top⟩
+  refine ⟨fun h ↦ ?_, isRightAdjoint_of_leftAdjointObjIsDefined_eq_top⟩
   ext X
   simpa only [Pi.top_apply, Prop.top_eq_true, iff_true]
     using leftAdjointObjIsDefined_of_adjunction (Adjunction.ofIsRightAdjoint F) X
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `corepresentableByCompCoyonedaObjOfIsColimit` / `corepresentableByCompCoyonedaObjOfIsColimit` 的定义
+/-- Auxiliary definition for `leftAdjointObjIsDefined_of_isColimit`. -/
+/-
+**CategoryTheory.Functor.corepresentableByCompCoyonedaObjOfIsColimit** 是 Mathlib
+ 中的一个定义，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：corepresentableByCompCoyonedaObjOfIsColimit {J : Type*} [Category* J] {R :
+ J ⥤ F.PartialLeftAdjointSource} {c : Cocone (R ⋙ ObjectProperty.ι _)} (hc : IsC
+olimit c) {c' : Cocone (R ⋙ F.partialLeftAdjoint)} (hc' : IsColimit c') : (F ⋙ c
+oyoneda.obj (op c.pt)).CorepresentableBy c'.pt where homEquiv {Y}
+参数：R ⋙ ObjectProperty.ι _；hc : IsColimit c；R ⋙ F.partialLeftAdjoint；hc' : IsColi
+mit c'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition corepresentableByCompCoyonedaObjOfIsColimit
-  signature: {J : Type*} [Category* J]
-  body: { toFun := fun f => hc.desc (Cocone.mk _
-        { app := fun j => F.partialLeftAdjointHomEquiv (c'.ι.app j ≫ f)
-          naturality := fun j j' φ => by
-            dsimp
-            rw [comp_id]; rw [← c'.w φ]; rw [← partialLeftAdjointHomEquiv_map_comp]; rw [assoc]
-            dsimp })
-      invFun := fun g => hc'.desc (Cocone.mk _
-        { app := fun j => F.partialLeftAdjointHomEquiv.symm (c.ι.app j ≫ g)
-          naturality := fun j j' φ => by
-            apply F.partialLeftAdjointHomEquiv.injective
-            have := c.w φ
-            dsimp at this ⊢
-            rw [comp_id]; rw [Equiv.apply_symm_apply]; rw [partialLeftAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [reassoc_of% this] })
-      left_inv := fun f => hc'.hom_ext (fun j => by simp)
-      right_inv := fun g => hc.hom_ext (fun j => by simp) }
-  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
-    dsimp
-    simp only [IsColimit.fac, IsColimit.fac_assoc, partialLeftAdjointHomEquiv_comp,
-      F.map_comp, assoc])
-
-中文:
-定义 corepresentableByCompCoyonedaObjOfIsColimit
-  签名: {J : 类型} [范畴* J]
-  定义体: { toFun := fun f => hc.desc (Cocone.mk _
-        { app := fun j => F.partialLeftAdjointHomEquiv (c'.ι.app j ≫ f)
-          naturality := fun j j' φ => by
-            dsimp
-            rw [comp_id]; rw [← c'.w φ]; rw [← partialLeftAdjointHomEquiv_map_comp]; rw [assoc]
-            dsimp })
-      invFun := fun g => hc'.desc (Cocone.mk _
-        { app := fun j => F.partialLeftAdjointHomEquiv.symm (c.ι.app j ≫ g)
-          naturality := fun j j' φ => by
-            apply F.partialLeftAdjointHomEquiv.injective
-            have := c.w φ
-            dsimp at this ⊢
-            rw [comp_id]; rw [Equiv.apply_symm_apply]; rw [partialLeftAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [reassoc_of% this] })
-      left_inv := fun f => hc'.hom_ext (fun j => by simp)
-      right_inv := fun g => hc.hom_ext (fun j => by simp) }
-  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
-    dsimp
-    simp only [IsColimit.fac, IsColimit.fac_assoc, partialLeftAdjointHomEquiv_comp,
-      F.map_comp, assoc])
-
-Depends on / 依赖: Cocone, Cocone.mk, Equiv.apply_symm_apply, F.partialLeftAdjointHomEquiv, F.partialLeftAdjointHomEquiv.injective, F.partialLeftAdjointHomEquiv.symm, apply_symm_apply, comp_id, hc.desc, injective, invFun, naturality, partialLeftAdjointHomEquiv, partialLeftAdjointHomEquiv_map_comp
+--- 原说明 ---
+Auxiliary definition for `leftAdjointObjIsDefined_of_isColimit`.
 -/
 noncomputable def corepresentableByCompCoyonedaObjOfIsColimit {J : Type*} [Category* J]
     {R : J ⥤ F.PartialLeftAdjointSource}
@@ -464,68 +417,64 @@ noncomputable def corepresentableByCompCoyonedaObjOfIsColimit {J : Type*} [Categ
     {c' : Cocone (R ⋙ F.partialLeftAdjoint)} (hc' : IsColimit c') :
     (F ⋙ coyoneda.obj (op c.pt)).CorepresentableBy c'.pt where
   homEquiv {Y} :=
-    { toFun := fun f => hc.desc (Cocone.mk _
-        { app := fun j => F.partialLeftAdjointHomEquiv (c'.ι.app j ≫ f)
-          naturality := fun j j' φ => by
+    { toFun := fun f ↦ hc.desc (Cocone.mk _
+        { app := fun j ↦ F.partialLeftAdjointHomEquiv (c'.ι.app j ≫ f)
+          naturality := fun j j' φ ↦ by
             dsimp
-            rw [comp_id]; rw [← c'.w φ]; rw [← partialLeftAdjointHomEquiv_map_comp]; rw [assoc]
+            rw [comp_id, ← c'.w φ, ← partialLeftAdjointHomEquiv_map_comp, assoc]
             dsimp })
-      invFun := fun g => hc'.desc (Cocone.mk _
-        { app := fun j => F.partialLeftAdjointHomEquiv.symm (c.ι.app j ≫ g)
-          naturality := fun j j' φ => by
+      invFun := fun g ↦ hc'.desc (Cocone.mk _
+        { app := fun j ↦ F.partialLeftAdjointHomEquiv.symm (c.ι.app j ≫ g)
+          naturality := fun j j' φ ↦ by
             apply F.partialLeftAdjointHomEquiv.injective
             have := c.w φ
             dsimp at this ⊢
-            rw [comp_id]; rw [Equiv.apply_symm_apply]; rw [partialLeftAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [reassoc_of% this] })
-      left_inv := fun f => hc'.hom_ext (fun j => by simp)
-      right_inv := fun g => hc.hom_ext (fun j => by simp) }
-  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
+            rw [comp_id, Equiv.apply_symm_apply, partialLeftAdjointHomEquiv_map_comp,
+              Equiv.apply_symm_apply, reassoc_of% this] })
+      left_inv := fun f ↦ hc'.hom_ext (fun j ↦ by simp)
+      right_inv := fun g ↦ hc.hom_ext (fun j ↦ by simp) }
+  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j ↦ by
     dsimp
     simp only [IsColimit.fac, IsColimit.fac_assoc, partialLeftAdjointHomEquiv_comp,
       F.map_comp, assoc])
-
-/--
-lemma `leftAdjointObjIsDefined_of_isColimit` / 引理 `leftAdjointObjIsDefined_of_isColimit`
-
-English:
-lemma leftAdjointObjIsDefined_of_isColimit
-  statement: {J : Type*} [Category* J] {R : J ⥤ C} {c : Cocone R}
-  proof: (corepresentableByCompCoyonedaObjOfIsColimit
-    (R := ObjectProperty.lift _ R h) hc (colimit.isColimit _)).isCorepresentable
-
-中文:
-引理 leftAdjointObjIsDefined_of_isColimit
-  结论: {J : 类型} [范畴* J] {R : J ⥤ C} {c : 余锥 R}
-  证明: (corepresentableByCompCoyonedaObjOfIsColimit
-    (R := ObjectProperty.lift _ R h) hc (colimit.isColimit _)).isCorepresentable
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.lift, colimit, colimit.isColimit, corepresentableByCompCoyonedaObjOfIsColimit, isColimit, isCorepresentable
+/-
+**CategoryTheory.Functor.leftAdjointObjIsDefined_of_isColimit** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：leftAdjointObjIsDefined_of_isColimit {J : Type*} [Category* J] {R : J ⥤ C}
+ {c : Cocone R} (hc : IsColimit c) [HasColimitsOfShape J D] (h : forall (j : J),
+ F.leftAdjointObjIsDefined (R.obj j)) : F.leftAdjointObjIsDefined c.pt
+参数：hc : IsColimit c；h : forall (j : J), F.leftAdjointObjIsDefined (R.obj j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.CorepresentableBy.isCorepresentable`：∀ {C : Type 
+u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor C (T
+ype v)} {X : C}   (e : F.CorepresentableBy X), F…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 lemma leftAdjointObjIsDefined_of_isColimit {J : Type*} [Category* J] {R : J ⥤ C} {c : Cocone R}
     (hc : IsColimit c) [HasColimitsOfShape J D]
-    (h : forall (j : J), F.leftAdjointObjIsDefined (R.obj j)) :
+    (h : ∀ (j : J), F.leftAdjointObjIsDefined (R.obj j)) :
     F.leftAdjointObjIsDefined c.pt :=
   (corepresentableByCompCoyonedaObjOfIsColimit
     (R := ObjectProperty.lift _ R h) hc (colimit.isColimit _)).isCorepresentable
-
-/--
-lemma `leftAdjointObjIsDefined_colimit` / 引理 `leftAdjointObjIsDefined_colimit`
-
-English:
-lemma leftAdjointObjIsDefined_colimit
-  statement: {J : Type*} [Category* J] (R : J ⥤ C)
-  proof: leftAdjointObjIsDefined_of_isColimit (colimit.isColimit R) h
-
-中文:
-引理 leftAdjointObjIsDefined_colimit
-  结论: {J : 类型} [范畴* J] (R : J ⥤ C)
-  证明: leftAdjointObjIsDefined_of_isColimit (colimit.isColimit R) h
-
-Depends on / 依赖: colimit, colimit.isColimit, isColimit, leftAdjointObjIsDefined_of_isColimit
+/-
+**CategoryTheory.Functor.leftAdjointObjIsDefined_colimit** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Functor`。
+形式化陈述：leftAdjointObjIsDefined_colimit {J : Type*} [Category* J] (R : J ⥤ C) [Has
+Colimit R] [HasColimitsOfShape J D] (h : forall (j : J), F.leftAdjointObjIsDefin
+ed (R.obj j)) : F.leftAdjointObjIsDefined (colimit R)
+参数：R : J ⥤ C；h : forall (j : J), F.leftAdjointObjIsDefined (R.obj j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.leftAdjointObjIsDefined_of_isColimit`：leftAdjoint
+ObjIsDefined_of_isColimit {J : Type*} [Category* J] {R : J ⥤ C} {c : Cocone R} (
+hc : IsColimit c) [HasColimitsOfShape J D] (h : f…
 -/
 lemma leftAdjointObjIsDefined_colimit {J : Type*} [Category* J] (R : J ⥤ C)
     [HasColimit R] [HasColimitsOfShape J D]
-    (h : forall (j : J), F.leftAdjointObjIsDefined (R.obj j)) :
+    (h : ∀ (j : J), F.leftAdjointObjIsDefined (R.obj j)) :
     F.leftAdjointObjIsDefined (colimit R) :=
   leftAdjointObjIsDefined_of_isColimit (colimit.isColimit R) h
 
@@ -535,129 +484,132 @@ section partialRightAdjoint
 
 variable {C : Type u₁} [Category.{v₁} C] {D : Type u₂} [Category.{v₂} D] (F : C ⥤ D)
 
-/--
-Definition of `rightAdjointObjIsDefined` / `rightAdjointObjIsDefined` 的定义
+/-- Given a functor `F : C ⥤ D`, this is a predicate on objects `X : D` corresponding
+to the domain of definition of the (partial) right adjoint of `F`. -/
+/-
+**CategoryTheory.Functor.rightAdjointObjIsDefined** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：rightAdjointObjIsDefined : ObjectProperty D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightAdjointObjIsDefined
-  signature: : ObjectProperty D
-  body: fun Y => IsRepresentable (F.op ⋙ yoneda.obj Y)
-
-中文:
-定义 rightAdjointObjIsDefined
-  签名: : ObjectProperty D
-  定义体: fun Y => IsRepresentable (F.op ⋙ yoneda.obj Y)
-
-Depends on / 依赖: F.op, IsRepresentable, yoneda, yoneda.obj
+--- 原说明 ---
+Given a functor `F : C ⥤ D`, this is a predicate on objects `X : D` correspondin
+g
+to the domain of definition of the (partial) right adjoint of `F`.
 -/
 def rightAdjointObjIsDefined : ObjectProperty D :=
-  fun Y => IsRepresentable (F.op ⋙ yoneda.obj Y)
-
-/--
-lemma `rightAdjointObjIsDefined_iff` / 引理 `rightAdjointObjIsDefined_iff`
-
-English:
-lemma rightAdjointObjIsDefined_iff
-  given: (Y : D)
-  proof: by rfl
-
-中文:
-引理 rightAdjointObjIsDefined_iff
-  条件: (Y : D)
-  证明: by rfl
+  fun Y ↦ IsRepresentable (F.op ⋙ yoneda.obj Y)
+/-
+**CategoryTheory.Functor.rightAdjointObjIsDefined_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Functor`。
+形式化陈述：rightAdjointObjIsDefined_iff (Y : D) : F.rightAdjointObjIsDefined Y ↔ IsRe
+presentable (F.op ⋙ yoneda.obj Y)
+参数：Y : D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma rightAdjointObjIsDefined_iff (Y : D) :
     F.rightAdjointObjIsDefined Y ↔ IsRepresentable (F.op ⋙ yoneda.obj Y) := by rfl
 
 variable {F} in
-/--
-lemma `rightAdjointObjIsDefined_of_adjunction` / 引理 `rightAdjointObjIsDefined_of_adjunction`
-
-English:
-lemma rightAdjointObjIsDefined_of_adjunction
-  given: {G : D ⥤ C} (adj : F ⊣ G) (Y : D)
-  proof: (adj.representableBy Y).isRepresentable
-
-中文:
-引理 rightAdjointObjIsDefined_of_adjunction
-  条件: {G : D ⥤ C} (adj : F ⊣ G) (Y : D)
-  证明: (adj.representableBy Y).isRepresentable
-
-Depends on / 依赖: adj.representableBy, isRepresentable, representableBy
+/-
+**CategoryTheory.Functor.rightAdjointObjIsDefined_of_adjunction** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：rightAdjointObjIsDefined_of_adjunction {G : D ⥤ C} (adj : F ⊣ G) (Y : D) :
+ F.rightAdjointObjIsDefined Y
+参数：adj : F ⊣ G；Y : D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.isRepresentable`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Typ
+e v)} {Y : C}   (e : F.RepresentableBy Y), F…
 -/
 lemma rightAdjointObjIsDefined_of_adjunction {G : D ⥤ C} (adj : F ⊣ G) (Y : D) :
     F.rightAdjointObjIsDefined Y :=
   (adj.representableBy Y).isRepresentable
 
-/--
-Definition of `PartialRightAdjointSource` / `PartialRightAdjointSource` 的定义
+/-- The full subcategory where `F.partialRightAdjoint` shall be defined. -/
+/-
+**CategoryTheory.Functor.PartialRightAdjointSource** 是 Mathlib 中的一个缩写定义，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：PartialRightAdjointSource
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PartialRightAdjointSource
-  body: F.rightAdjointObjIsDefined.FullSubcategory
-
-中文:
-缩写 PartialRightAdjointSource
-  定义体: F.rightAdjointObjIsDefined.FullSubcategory
-
-Depends on / 依赖: F.rightAdjointObjIsDefined.FullSubcategory, FullSubcategory, rightAdjointObjIsDefined
+--- 原说明 ---
+The full subcategory where `F.partialRightAdjoint` shall be defined.
 -/
 abbrev PartialRightAdjointSource := F.rightAdjointObjIsDefined.FullSubcategory
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (Y : F.PartialRightAdjointSource) :
     IsRepresentable (F.op ⋙ yoneda.obj Y.obj) := Y.property
 
-/--
-Definition of `partialRightAdjointObj` / `partialRightAdjointObj` 的定义
+/-- Given `F : C ⥤ D`, this is `F.partialRightAdjoint` on objects: it sends
+`X : D` such that `F.rightAdjointObjIsDefined X` holds to an object of `C`
+which represents the functor `F.op ⋙ yoneda.obj X.obj`. -/
+/-
+**CategoryTheory.Functor.partialRightAdjointObj** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：partialRightAdjointObj (Y : F.PartialRightAdjointSource) : C
+参数：Y : F.PartialRightAdjointSource。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instIsRepresentableCompOppositeOpObjTypeYonedaObj
+RightAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u
+₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Categor
+yTheor…
 
-English:
-definition partialRightAdjointObj
-  signature: (Y : F.PartialRightAdjointSource)
-  body: (F.op ⋙ yoneda.obj Y.obj).reprX
-
-中文:
-定义 partialRightAdjointObj
-  签名: (Y : F.PartialRightAdjointSource)
-  定义体: (F.op ⋙ yoneda.obj Y.obj).reprX
-
-Depends on / 依赖: F.op, Y.obj, yoneda, yoneda.obj
+--- 原说明 ---
+Given `F : C ⥤ D`, this is `F.partialRightAdjoint` on objects: it sends
+`X : D` such that `F.rightAdjointObjIsDefined X` holds to an object of `C`
+which represents the functor `F.op ⋙ yoneda.obj X.obj`.
 -/
 noncomputable def partialRightAdjointObj (Y : F.PartialRightAdjointSource) : C :=
   (F.op ⋙ yoneda.obj Y.obj).reprX
 
-/--
-Definition of `partialRightAdjointHomEquiv` / `partialRightAdjointHomEquiv` 的定义
+/-- Given `F : C ⥤ D`, this is the canonical bijection
+`(X ⟶ F.partialRightAdjointObj Y) ≃ (F.obj X ⟶ Y.obj)`
+for all `X : C` and `Y : F.PartialRightAdjointSource`. -/
+/-
+**CategoryTheory.Functor.partialRightAdjointHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：partialRightAdjointHomEquiv {X : C} {Y : F.PartialRightAdjointSource} : (X
+ ⟶ F.partialRightAdjointObj Y) ≃ (F.obj X ⟶ Y.obj)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.instIsRepresentableCompOppositeOpObjTypeYonedaObj
+RightAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u
+₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Categor
+yTheor…
 
-English:
-definition partialRightAdjointHomEquiv
-  signature: {X : C} {Y : F.PartialRightAdjointSource}
-  body: (F.op ⋙ yoneda.obj Y.obj).representableBy.homEquiv
-
-中文:
-定义 partialRightAdjointHomEquiv
-  签名: {X : C} {Y : F.PartialRightAdjointSource}
-  定义体: (F.op ⋙ yoneda.obj Y.obj).representableBy.homEquiv
-
-Depends on / 依赖: F.op, Y.obj, homEquiv, representableBy, representableBy.homEquiv, yoneda, yoneda.obj
+--- 原说明 ---
+Given `F : C ⥤ D`, this is the canonical bijection
+`(X ⟶ F.partialRightAdjointObj Y) ≃ (F.obj X ⟶ Y.obj)`
+for all `X : C` and `Y : F.PartialRightAdjointSource`.
 -/
 noncomputable def partialRightAdjointHomEquiv {X : C} {Y : F.PartialRightAdjointSource} :
     (X ⟶ F.partialRightAdjointObj Y) ≃ (F.obj X ⟶ Y.obj) :=
   (F.op ⋙ yoneda.obj Y.obj).representableBy.homEquiv
-
-/--
-lemma `partialRightAdjointHomEquiv_comp` / 引理 `partialRightAdjointHomEquiv_comp`
-
-English:
-lemma partialRightAdjointHomEquiv_comp
-  statement: {X X' : C} {Y : F.PartialRightAdjointSource}
-  proof: RepresentableBy.homEquiv_comp ..
-
-中文:
-引理 partialRightAdjointHomEquiv_comp
-  结论: {X X' : C} {Y : F.PartialRightAdjointSource}
-  证明: RepresentableBy.homEquiv_comp ..
-
-Depends on / 依赖: RepresentableBy, RepresentableBy.homEquiv_comp, homEquiv_comp
+/-
+**CategoryTheory.Functor.partialRightAdjointHomEquiv_comp** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Functor`。
+形式化陈述：partialRightAdjointHomEquiv_comp {X X' : C} {Y : F.PartialRightAdjointSour
+ce} (f : X' ⟶ F.partialRightAdjointObj Y) (g : X ⟶ X') : F.partialRightAdjointHo
+mEquiv (g ≫ f) = F.map g ≫ F.partialRightAdjointHomEquiv f
+参数：f : X' ⟶ F.partialRightAdjointObj Y；g : X ⟶ X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.homEquiv_comp`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Type 
+v)} {Y : C}   (self : F.RepresentableBy Y)…
+· 使用定理 `CategoryTheory.Functor.instIsRepresentableCompOppositeOpObjTypeYonedaObj
+RightAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u
+₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Categor
+yTheor…
 -/
 lemma partialRightAdjointHomEquiv_comp {X X' : C} {Y : F.PartialRightAdjointSource}
     (f : X' ⟶ F.partialRightAdjointObj Y) (g : X ⟶ X') :
@@ -665,99 +617,99 @@ lemma partialRightAdjointHomEquiv_comp {X X' : C} {Y : F.PartialRightAdjointSour
       F.map g ≫ F.partialRightAdjointHomEquiv f :=
   RepresentableBy.homEquiv_comp ..
 
-/--
-Definition of `partialRightAdjointMap` / `partialRightAdjointMap` 的定义
+/-- Given `F : C ⥤ D`, this is `F.partialRightAdjoint` on morphisms. -/
+/-
+**CategoryTheory.Functor.partialRightAdjointMap** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：partialRightAdjointMap {X Y : F.PartialRightAdjointSource} (f : X ⟶ Y) : F
+.partialRightAdjointObj X ⟶ F.partialRightAdjointObj Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition partialRightAdjointMap
-  signature: {X Y : F.PartialRightAdjointSource}
-  body: F.partialRightAdjointHomEquiv.symm (F.partialRightAdjointHomEquiv (𝟙 _) ≫ f.hom)
-
-@[simp]
-
-中文:
-定义 partialRightAdjointMap
-  签名: {X Y : F.PartialRightAdjointSource}
-  定义体: F.partialRightAdjointHomEquiv.symm (F.partialRightAdjointHomEquiv (𝟙 _) ≫ f.hom)
-
-@[simp]
-
-Depends on / 依赖: F.partialRightAdjointHomEquiv, F.partialRightAdjointHomEquiv.symm, f.hom, partialRightAdjointHomEquiv
+--- 原说明 ---
+Given `F : C ⥤ D`, this is `F.partialRightAdjoint` on morphisms.
 -/
 noncomputable def partialRightAdjointMap {X Y : F.PartialRightAdjointSource}
     (f : X ⟶ Y) : F.partialRightAdjointObj X ⟶ F.partialRightAdjointObj Y :=
     F.partialRightAdjointHomEquiv.symm (F.partialRightAdjointHomEquiv (𝟙 _) ≫ f.hom)
 
 @[simp]
-/--
-lemma `partialRightAdjointHomEquiv_map` / 引理 `partialRightAdjointHomEquiv_map`
-
-English:
-lemma partialRightAdjointHomEquiv_map
-  statement: {X Y : F.PartialRightAdjointSource}
-  proof: by
-  simp [partialRightAdjointMap]
-
-中文:
-引理 partialRightAdjointHomEquiv_map
-  结论: {X Y : F.PartialRightAdjointSource}
-  证明: by
-  simp [partialRightAdjointMap]
-
-Depends on / 依赖: partialRightAdjointMap
+/-
+**CategoryTheory.Functor.partialRightAdjointHomEquiv_map** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Functor`。
+形式化陈述：partialRightAdjointHomEquiv_map {X Y : F.PartialRightAdjointSource} (f : X
+ ⟶ Y) : F.partialRightAdjointHomEquiv (F.partialRightAdjointMap f) = F.partialRi
+ghtAdjointHomEquiv (𝟙 _) ≫ f.hom
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma partialRightAdjointHomEquiv_map {X Y : F.PartialRightAdjointSource}
     (f : X ⟶ Y) :
     F.partialRightAdjointHomEquiv (F.partialRightAdjointMap f) =
       F.partialRightAdjointHomEquiv (𝟙 _) ≫ f.hom := by
   simp [partialRightAdjointMap]
-
-/--
-lemma `partialRightAdjointHomEquiv_map_comp` / 引理 `partialRightAdjointHomEquiv_map_comp`
-
-English:
-lemma partialRightAdjointHomEquiv_map_comp
-  statement: {X : C} {Y Y' : F.PartialRightAdjointSource}
-  proof: by
-  rw [partialRightAdjointHomEquiv_comp]; rw [partialRightAdjointHomEquiv_map]; rw [← assoc]; rw [← partialRightAdjointHomEquiv_comp]; rw [comp_id]
-
-@[reassoc]
-
-中文:
-引理 partialRightAdjointHomEquiv_map_comp
-  结论: {X : C} {Y Y' : F.PartialRightAdjointSource}
-  证明: by
-  rw [partialRightAdjointHomEquiv_comp]; rw [partialRightAdjointHomEquiv_map]; rw [← assoc]; rw [← partialRightAdjointHomEquiv_comp]; rw [comp_id]
-
-@[reassoc]
-
-Depends on / 依赖: comp_id, partialRightAdjointHomEquiv_comp, partialRightAdjointHomEquiv_map
+/-
+**CategoryTheory.Functor.partialRightAdjointHomEquiv_map_comp** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：partialRightAdjointHomEquiv_map_comp {X : C} {Y Y' : F.PartialRightAdjoint
+Source} (f : X ⟶ F.partialRightAdjointObj Y) (g : Y ⟶ Y') : F.partialRightAdjoin
+tHomEquiv (f ≫ F.partialRightAdjointMap g) = F.partialRightAdjointHomEquiv f ≫ g
+.hom
+参数：f : X ⟶ F.partialRightAdjointObj Y；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.partialRightAdjointHomEquiv_comp`：partialRightAdj
+ointHomEquiv_comp {X X' : C} {Y : F.PartialRightAdjointSource} (f : X' ⟶ F.parti
+alRightAdjointObj Y) (g : X ⟶ X') : F.partial…
+· 使用引理 `CategoryTheory.Functor.partialRightAdjointHomEquiv_map`：partialRightAdjo
+intHomEquiv_map {X Y : F.PartialRightAdjointSource} (f : X ⟶ Y) : F.partialRight
+AdjointHomEquiv (F.partialRightAdjointMap f)…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma partialRightAdjointHomEquiv_map_comp {X : C} {Y Y' : F.PartialRightAdjointSource}
     (f : X ⟶ F.partialRightAdjointObj Y) (g : Y ⟶ Y') :
     F.partialRightAdjointHomEquiv (f ≫ F.partialRightAdjointMap g) =
       F.partialRightAdjointHomEquiv f ≫ g.hom := by
-  rw [partialRightAdjointHomEquiv_comp]; rw [partialRightAdjointHomEquiv_map]; rw [← assoc]; rw [← partialRightAdjointHomEquiv_comp]; rw [comp_id]
+  rw [partialRightAdjointHomEquiv_comp, partialRightAdjointHomEquiv_map,
+    ← assoc, ← partialRightAdjointHomEquiv_comp, comp_id]
 
 @[reassoc]
-/--
-lemma `partialRightAdjointHomEquiv_comp_symm` / 引理 `partialRightAdjointHomEquiv_comp_symm`
-
-English:
-lemma partialRightAdjointHomEquiv_comp_symm
-  statement: {X X' : C} {Y : F.PartialRightAdjointSource}
-  proof: RepresentableBy.comp_homEquiv_symm ..
-
-@[reassoc]
-
-中文:
-引理 partialRightAdjointHomEquiv_comp_symm
-  结论: {X X' : C} {Y : F.PartialRightAdjointSource}
-  证明: RepresentableBy.comp_homEquiv_symm ..
-
-@[reassoc]
-
-Depends on / 依赖: RepresentableBy, RepresentableBy.comp_homEquiv_symm, comp_homEquiv_symm
+/-
+**CategoryTheory.Functor.partialRightAdjointHomEquiv_comp_symm** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：partialRightAdjointHomEquiv_comp_symm {X X' : C} {Y : F.PartialRightAdjoin
+tSource} (f : F.obj X' ⟶ Y.obj) (g : X ⟶ X') : g ≫ F.partialRightAdjointHomEquiv
+.symm f = F.partialRightAdjointHomEquiv.symm (F.map g ≫ f)
+参数：f : F.obj X' ⟶ Y.obj；g : X ⟶ X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.comp_homEquiv_symm`：∀ {C : Type u
+₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (
+Type v)} {Y : C}   (e : F.RepresentableBy Y) {X…
+· 使用定理 `CategoryTheory.Functor.instIsRepresentableCompOppositeOpObjTypeYonedaObj
+RightAdjointObjIsDefined`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u
+₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : Categor
+yTheor…
 -/
 lemma partialRightAdjointHomEquiv_comp_symm {X X' : C} {Y : F.PartialRightAdjointSource}
     (f : F.obj X' ⟶ Y.obj) (g : X ⟶ X') :
@@ -766,22 +718,28 @@ lemma partialRightAdjointHomEquiv_comp_symm {X X' : C} {Y : F.PartialRightAdjoin
   RepresentableBy.comp_homEquiv_symm ..
 
 @[reassoc]
-/--
-lemma `partialRightAdjointHomEquiv_symm_comp` / 引理 `partialRightAdjointHomEquiv_symm_comp`
-
-English:
-lemma partialRightAdjointHomEquiv_symm_comp
-  statement: {X : C} {Y Y' : F.PartialRightAdjointSource}
-  proof: by
-  simp [Equiv.eq_symm_apply, partialRightAdjointHomEquiv_map_comp]
-
-中文:
-引理 partialRightAdjointHomEquiv_symm_comp
-  结论: {X : C} {Y Y' : F.PartialRightAdjointSource}
-  证明: by
-  simp [Equiv.eq_symm_apply, partialRightAdjointHomEquiv_map_comp]
-
-Depends on / 依赖: Equiv.eq_symm_apply, eq_symm_apply, partialRightAdjointHomEquiv_map_comp
+/-
+**CategoryTheory.Functor.partialRightAdjointHomEquiv_symm_comp** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：partialRightAdjointHomEquiv_symm_comp {X : C} {Y Y' : F.PartialRightAdjoin
+tSource} (f : F.obj X ⟶ Y.obj) (g : Y ⟶ Y') : F.partialRightAdjointHomEquiv.symm
+ f ≫ F.partialRightAdjointMap g = F.partialRightAdjointHomEquiv.symm (f ≫ g.hom)
+参数：f : F.obj X ⟶ Y.obj；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.partialRightAdjointHomEquiv_map_comp`：partialRigh
+tAdjointHomEquiv_map_comp {X : C} {Y Y' : F.PartialRightAdjointSource} (f : X ⟶ 
+F.partialRightAdjointObj Y) (g : Y ⟶ Y') : F.part…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma partialRightAdjointHomEquiv_symm_comp {X : C} {Y Y' : F.PartialRightAdjointSource}
     (f : F.obj X ⟶ Y.obj) (g : Y ⟶ Y') :
@@ -791,34 +749,16 @@ lemma partialRightAdjointHomEquiv_symm_comp {X : C} {Y Y' : F.PartialRightAdjoin
 
 /-- Given `F : C ⥤ D`, this is the partial adjoint functor `F.PartialRightAdjointSource ⥤ C`. -/
 @[simps]
-/--
-Definition of `partialRightAdjoint` / `partialRightAdjoint` 的定义
+/-
+**CategoryTheory.Functor.partialRightAdjoint** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：partialRightAdjoint : F.PartialRightAdjointSource ⥤ C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partialRightAdjoint
-  signature: : F.PartialRightAdjointSource ⥤ C where
-  body: F.partialRightAdjointObj
-  map := F.partialRightAdjointMap
-  map_id X := by
-    apply F.partialRightAdjointHomEquiv.injective
-    simp [partialRightAdjointHomEquiv_map]
-  map_comp {X Y Z} f g := by
-    apply F.partialRightAdjointHomEquiv.injective
-    simp [partialRightAdjointHomEquiv_comp, ← assoc, ← F.partialRightAdjointHomEquiv_comp]
-
-中文:
-定义 partialRightAdjoint
-  签名: : F.PartialRightAdjointSource ⥤ C where
-  定义体: F.partialRightAdjointObj
-  map := F.partialRightAdjointMap
-  map_id X := by
-    apply F.partialRightAdjointHomEquiv.injective
-    simp [partialRightAdjointHomEquiv_map]
-  map_comp {X Y Z} f g := by
-    apply F.partialRightAdjointHomEquiv.injective
-    simp [partialRightAdjointHomEquiv_comp, ← assoc, ← F.partialRightAdjointHomEquiv_comp]
-
-Depends on / 依赖: F.partialRightAdjointObj, partialRightAdjointObj
+--- 原说明 ---
+Given `F : C ⥤ D`, this is the partial adjoint functor `F.PartialRightAdjointSou
+rce ⥤ C`.
 -/
 noncomputable def partialRightAdjoint : F.PartialRightAdjointSource ⥤ C where
   obj := F.partialRightAdjointObj
@@ -831,117 +771,77 @@ noncomputable def partialRightAdjoint : F.PartialRightAdjointSource ⥤ C where
     simp [partialRightAdjointHomEquiv_comp, ← assoc, ← F.partialRightAdjointHomEquiv_comp]
 
 variable {F}
-
-/--
-lemma `isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top` / 引理 `isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top`
-
-English:
-lemma isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top
-  proof: by
-  replace h : forall X, IsRepresentable (F.op ⋙ yoneda.obj X) := fun X => by
-    simp only [← rightAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
-  exact (Adjunction.adjunctionOfEquivRight
-    (fun X Y => (F.op ⋙ yoneda.obj Y).representableBy.homEquiv.symm)
-    (fun X Y Y' g f => (RepresentableBy.comp_homEquiv_symm ..).symm)).isLeftAdjoint
-
-中文:
-引理 isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top
-  证明: by
-  replace h : forall X, IsRepresentable (F.op ⋙ yoneda.obj X) := fun X => by
-    simp only [← rightAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
-  exact (Adjunction.adjunctionOfEquivRight
-    (fun X Y => (F.op ⋙ yoneda.obj Y).representableBy.homEquiv.symm)
-    (fun X Y Y' g f => (RepresentableBy.comp_homEquiv_symm ..).symm)).isLeftAdjoint
-
-Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivRight, F.op, IsRepresentable, Pi.top_apply, Prop.top_eq_true, RepresentableBy, RepresentableBy.comp_homEquiv_symm, adjunctionOfEquivRight, comp_homEquiv_symm, homEquiv, isLeftAdjoint, replace, representableBy, representableBy.homEquiv.symm, rightAdjointObjIsDefined_iff, top_apply, top_eq_true, yoneda, yoneda.obj
+/-
+**CategoryTheory.Functor.isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top (h : F.rightAdjointObjIsD
+efined = ⊤) : F.IsLeftAdjoint
+参数：h : F.rightAdjointObjIsDefined = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Adjunction.isLeftAdjoint`：isLeftAdjoint (adj : F ⊣ G) : F
+.IsLeftAdjoint
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.comp_homEquiv_symm`：∀ {C : Type u
+₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (
+Type v)} {Y : C}   (e : F.RepresentableBy Y) {X…
 -/
 lemma isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top
     (h : F.rightAdjointObjIsDefined = ⊤) : F.IsLeftAdjoint := by
-  replace h : forall X, IsRepresentable (F.op ⋙ yoneda.obj X) := fun X => by
+  replace h : ∀ X, IsRepresentable (F.op ⋙ yoneda.obj X) := fun X ↦ by
     simp only [← rightAdjointObjIsDefined_iff, h, Pi.top_apply, Prop.top_eq_true]
   exact (Adjunction.adjunctionOfEquivRight
-    (fun X Y => (F.op ⋙ yoneda.obj Y).representableBy.homEquiv.symm)
-    (fun X Y Y' g f => (RepresentableBy.comp_homEquiv_symm ..).symm)).isLeftAdjoint
+    (fun X Y ↦ (F.op ⋙ yoneda.obj Y).representableBy.homEquiv.symm)
+    (fun X Y Y' g f ↦ (RepresentableBy.comp_homEquiv_symm ..).symm)).isLeftAdjoint
 
 variable (F) in
-/--
-lemma `isLeftAdjoint_iff_rightAdjointObjIsDefined_eq_top` / 引理 `isLeftAdjoint_iff_rightAdjointObjIsDefined_eq_top`
-
-English:
-lemma isLeftAdjoint_iff_rightAdjointObjIsDefined_eq_top
-  proof: by
-  refine ⟨fun h => ?_, isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top⟩
-  ext X
-  simpa only [Pi.top_apply, Prop.top_eq_true, iff_true]
-    using rightAdjointObjIsDefined_of_adjunction (Adjunction.ofIsLeftAdjoint F) X
-
-中文:
-引理 isLeftAdjoint_iff_rightAdjointObjIsDefined_eq_top
-  证明: by
-  refine ⟨fun h => ?_, isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top⟩
-  ext X
-  simpa only [Pi.top_apply, Prop.top_eq_true, iff_true]
-    using rightAdjointObjIsDefined_of_adjunction (Adjunction.ofIsLeftAdjoint F) X
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, Pi.top_apply, Prop.top_eq_true, iff_true, isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top, ofIsLeftAdjoint, rightAdjointObjIsDefined_of_adjunction, top_apply, top_eq_true
+/-
+**CategoryTheory.Functor.isLeftAdjoint_iff_rightAdjointObjIsDefined_eq_top** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：isLeftAdjoint_iff_rightAdjointObjIsDefined_eq_top : F.IsLeftAdjoint ↔ F.ri
+ghtAdjointObjIsDefined = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用引理 `CategoryTheory.Functor.rightAdjointObjIsDefined_of_adjunction`：rightAdjo
+intObjIsDefined_of_adjunction {G : D ⥤ C} (adj : F ⊣ G) (Y : D) : F.rightAdjoint
+ObjIsDefined Y
+· 使用引理 `CategoryTheory.Functor.isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top`
+：isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top (h : F.rightAdjointObjIsDefine
+d = ⊤) : F.IsLeftAdjoint
 -/
 lemma isLeftAdjoint_iff_rightAdjointObjIsDefined_eq_top :
     F.IsLeftAdjoint ↔ F.rightAdjointObjIsDefined = ⊤ := by
-  refine ⟨fun h => ?_, isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top⟩
+  refine ⟨fun h ↦ ?_, isLeftAdjoint_of_rightAdjointObjIsDefined_eq_top⟩
   ext X
   simpa only [Pi.top_apply, Prop.top_eq_true, iff_true]
     using rightAdjointObjIsDefined_of_adjunction (Adjunction.ofIsLeftAdjoint F) X
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `representableByCompYonedaObjOfIsLimit` / `representableByCompYonedaObjOfIsLimit` 的定义
+/-- Auxiliary definition for `rightAdjointObjIsDefined_of_isLimit`. -/
+/-
+**CategoryTheory.Functor.representableByCompYonedaObjOfIsLimit** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：representableByCompYonedaObjOfIsLimit {J : Type*} [Category* J] {R : J ⥤ F
+.PartialRightAdjointSource} {c : Cone (R ⋙ ObjectProperty.ι _)} (hc : IsLimit c)
+ {c' : Cone (R ⋙ F.partialRightAdjoint)} (hc' : IsLimit c') : (F.op ⋙ yoneda.obj
+ c.pt).RepresentableBy c'.pt where homEquiv {Y}
+参数：R ⋙ ObjectProperty.ι _；hc : IsLimit c；R ⋙ F.partialRightAdjoint；hc' : IsLimit
+ c'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition representableByCompYonedaObjOfIsLimit
-  signature: {J : Type*} [Category* J]
-  body: { toFun := fun f => hc.lift (Cone.mk _
-        { app := fun j => F.partialRightAdjointHomEquiv (f ≫ c'.π.app j)
-          naturality := fun j j' φ => by
-            dsimp
-            rw [id_comp]; rw [← c'.w φ]; rw [← partialRightAdjointHomEquiv_map_comp]; rw [← assoc]
-            dsimp })
-      invFun := fun g => hc'.lift (Cone.mk _
-        { app := fun j => F.partialRightAdjointHomEquiv.symm (g ≫ c.π.app j)
-          naturality := fun j j' φ => by
-            apply F.partialRightAdjointHomEquiv.injective
-            have := c.w φ
-            dsimp at this ⊢
-            rw [id_comp]; rw [Equiv.apply_symm_apply]; rw [partialRightAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [assoc]; rw [this] })
-      left_inv := fun f => hc'.hom_ext (fun j => by simp)
-      right_inv := fun g => hc.hom_ext (fun j => by simp) }
-  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
-    dsimp
-    simp only [IsLimit.fac, partialRightAdjointHomEquiv_comp, assoc])
-
-中文:
-定义 representableByCompYonedaObjOfIsLimit
-  签名: {J : 类型} [范畴* J]
-  定义体: { toFun := fun f => hc.lift (Cone.mk _
-        { app := fun j => F.partialRightAdjointHomEquiv (f ≫ c'.π.app j)
-          naturality := fun j j' φ => by
-            dsimp
-            rw [id_comp]; rw [← c'.w φ]; rw [← partialRightAdjointHomEquiv_map_comp]; rw [← assoc]
-            dsimp })
-      invFun := fun g => hc'.lift (Cone.mk _
-        { app := fun j => F.partialRightAdjointHomEquiv.symm (g ≫ c.π.app j)
-          naturality := fun j j' φ => by
-            apply F.partialRightAdjointHomEquiv.injective
-            have := c.w φ
-            dsimp at this ⊢
-            rw [id_comp]; rw [Equiv.apply_symm_apply]; rw [partialRightAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [assoc]; rw [this] })
-      left_inv := fun f => hc'.hom_ext (fun j => by simp)
-      right_inv := fun g => hc.hom_ext (fun j => by simp) }
-  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
-    dsimp
-    simp only [IsLimit.fac, partialRightAdjointHomEquiv_comp, assoc])
-
-Depends on / 依赖: Cone.mk, Equiv.apply_symm_apply, F.partialRightAdjointHomEquiv, F.partialRightAdjointHomEquiv.injective, F.partialRightAdjointHomEquiv.symm, apply_symm_apply, hc.lift, id_comp, injective, invFun, naturality, partialRightAdjointHomEquiv, partialRightAdjointHomEquiv_map_comp
+--- 原说明 ---
+Auxiliary definition for `rightAdjointObjIsDefined_of_isLimit`.
 -/
 noncomputable def representableByCompYonedaObjOfIsLimit {J : Type*} [Category* J]
     {R : J ⥤ F.PartialRightAdjointSource}
@@ -949,67 +849,64 @@ noncomputable def representableByCompYonedaObjOfIsLimit {J : Type*} [Category* J
     {c' : Cone (R ⋙ F.partialRightAdjoint)} (hc' : IsLimit c') :
     (F.op ⋙ yoneda.obj c.pt).RepresentableBy c'.pt where
   homEquiv {Y} :=
-    { toFun := fun f => hc.lift (Cone.mk _
-        { app := fun j => F.partialRightAdjointHomEquiv (f ≫ c'.π.app j)
-          naturality := fun j j' φ => by
+    { toFun := fun f ↦ hc.lift (Cone.mk _
+        { app := fun j ↦ F.partialRightAdjointHomEquiv (f ≫ c'.π.app j)
+          naturality := fun j j' φ ↦ by
             dsimp
-            rw [id_comp]; rw [← c'.w φ]; rw [← partialRightAdjointHomEquiv_map_comp]; rw [← assoc]
+            rw [id_comp, ← c'.w φ, ← partialRightAdjointHomEquiv_map_comp,
+              ← assoc]
             dsimp })
-      invFun := fun g => hc'.lift (Cone.mk _
-        { app := fun j => F.partialRightAdjointHomEquiv.symm (g ≫ c.π.app j)
-          naturality := fun j j' φ => by
+      invFun := fun g ↦ hc'.lift (Cone.mk _
+        { app := fun j ↦ F.partialRightAdjointHomEquiv.symm (g ≫ c.π.app j)
+          naturality := fun j j' φ ↦ by
             apply F.partialRightAdjointHomEquiv.injective
             have := c.w φ
             dsimp at this ⊢
-            rw [id_comp]; rw [Equiv.apply_symm_apply]; rw [partialRightAdjointHomEquiv_map_comp]; rw [Equiv.apply_symm_apply]; rw [assoc]; rw [this] })
-      left_inv := fun f => hc'.hom_ext (fun j => by simp)
-      right_inv := fun g => hc.hom_ext (fun j => by simp) }
-  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j => by
+            rw [id_comp, Equiv.apply_symm_apply, partialRightAdjointHomEquiv_map_comp,
+              Equiv.apply_symm_apply, assoc, this] })
+      left_inv := fun f ↦ hc'.hom_ext (fun j ↦ by simp)
+      right_inv := fun g ↦ hc.hom_ext (fun j ↦ by simp) }
+  homEquiv_comp {Y Y'} g f := hc.hom_ext (fun j ↦ by
     dsimp
     simp only [IsLimit.fac, partialRightAdjointHomEquiv_comp, assoc])
-
-/--
-lemma `rightAdjointObjIsDefined_of_isLimit` / 引理 `rightAdjointObjIsDefined_of_isLimit`
-
-English:
-lemma rightAdjointObjIsDefined_of_isLimit
-  statement: {J : Type*} [Category* J] {R : J ⥤ D} {c : Cone R}
-  proof: (representableByCompYonedaObjOfIsLimit
-    (R := ObjectProperty.lift _ R h) hc (limit.isLimit _)).isRepresentable
-
-中文:
-引理 rightAdjointObjIsDefined_of_isLimit
-  结论: {J : 类型} [范畴* J] {R : J ⥤ D} {c : 锥 R}
-  证明: (representableByCompYonedaObjOfIsLimit
-    (R := ObjectProperty.lift _ R h) hc (limit.isLimit _)).isRepresentable
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.lift, isLimit, isRepresentable, limit.isLimit, representableByCompYonedaObjOfIsLimit
+/-
+**CategoryTheory.Functor.rightAdjointObjIsDefined_of_isLimit** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：rightAdjointObjIsDefined_of_isLimit {J : Type*} [Category* J] {R : J ⥤ D} 
+{c : Cone R} (hc : IsLimit c) [HasLimitsOfShape J C] (h : forall (j : J), F.righ
+tAdjointObjIsDefined (R.obj j)) : F.rightAdjointObjIsDefined c.pt
+参数：hc : IsLimit c；h : forall (j : J), F.rightAdjointObjIsDefined (R.obj j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.RepresentableBy.isRepresentable`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {F : CategoryTheory.Functor Cᵒᵖ (Typ
+e v)} {Y : C}   (e : F.RepresentableBy Y), F…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 lemma rightAdjointObjIsDefined_of_isLimit {J : Type*} [Category* J] {R : J ⥤ D} {c : Cone R}
     (hc : IsLimit c) [HasLimitsOfShape J C]
-    (h : forall (j : J), F.rightAdjointObjIsDefined (R.obj j)) :
+    (h : ∀ (j : J), F.rightAdjointObjIsDefined (R.obj j)) :
     F.rightAdjointObjIsDefined c.pt :=
   (representableByCompYonedaObjOfIsLimit
     (R := ObjectProperty.lift _ R h) hc (limit.isLimit _)).isRepresentable
-
-/--
-lemma `rightAdjointObjIsDefined_limit` / 引理 `rightAdjointObjIsDefined_limit`
-
-English:
-lemma rightAdjointObjIsDefined_limit
-  statement: {J : Type*} [Category* J] (R : J ⥤ D)
-  proof: rightAdjointObjIsDefined_of_isLimit (limit.isLimit R) h
-
-中文:
-引理 rightAdjointObjIsDefined_limit
-  结论: {J : 类型} [范畴* J] (R : J ⥤ D)
-  证明: rightAdjointObjIsDefined_of_isLimit (limit.isLimit R) h
-
-Depends on / 依赖: isLimit, limit.isLimit, rightAdjointObjIsDefined_of_isLimit
+/-
+**CategoryTheory.Functor.rightAdjointObjIsDefined_limit** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Functor`。
+形式化陈述：rightAdjointObjIsDefined_limit {J : Type*} [Category* J] (R : J ⥤ D) [HasL
+imit R] [HasLimitsOfShape J C] (h : forall (j : J), F.rightAdjointObjIsDefined (
+R.obj j)) : F.rightAdjointObjIsDefined (limit R)
+参数：R : J ⥤ D；h : forall (j : J), F.rightAdjointObjIsDefined (R.obj j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.rightAdjointObjIsDefined_of_isLimit`：rightAdjoint
+ObjIsDefined_of_isLimit {J : Type*} [Category* J] {R : J ⥤ D} {c : Cone R} (hc :
+ IsLimit c) [HasLimitsOfShape J C] (h : forall (…
 -/
 lemma rightAdjointObjIsDefined_limit {J : Type*} [Category* J] (R : J ⥤ D)
     [HasLimit R] [HasLimitsOfShape J C]
-    (h : forall (j : J), F.rightAdjointObjIsDefined (R.obj j)) :
+    (h : ∀ (j : J), F.rightAdjointObjIsDefined (R.obj j)) :
     F.rightAdjointObjIsDefined (limit R) :=
   rightAdjointObjIsDefined_of_isLimit (limit.isLimit R) h
 
@@ -1018,3 +915,4 @@ end partialRightAdjoint
 end Functor
 
 end CategoryTheory
+

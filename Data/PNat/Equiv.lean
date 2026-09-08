@@ -16,28 +16,16 @@ public import Mathlib.Logic.Equiv.Defs
 
 /-- An equivalence between `ℕ+` and `ℕ` given by `PNat.natPred` and `Nat.succPNat`. -/
 @[simps -fullyApplied]
-/--
-Definition of `_root_.Equiv.pnatEquivNat` / `_root_.Equiv.pnatEquivNat` 的定义
+/-
+**_root_.Equiv.pnatEquivNat** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：_root_.Equiv.pnatEquivNat : Nat+ ≃ Nat where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Equiv.pnatEquivNat
-  signature: : Nat+ ≃ Nat where
-  body: PNat.natPred
-  invFun := Nat.succPNat
-  left_inv := PNat.succPNat_natPred
-  right_inv := Nat.natPred_succPNat
-
-中文:
-定义 _root_.等价.pnatEquiv自然数
-  签名: : 自然数+ ≃ 自然数 where
-  定义体: PNat.natPred
-  invFun := Nat.succPNat
-  left_inv := PNat.succPNat_natPred
-  right_inv := Nat.natPred_succPNat
-
-Depends on / 依赖: PNat.natPred, natPred
+--- 原说明 ---
+An equivalence between `ℕ+` and `ℕ` given by `PNat.natPred` and `Nat.succPNat`.
 -/
-def _root_.Equiv.pnatEquivNat : Nat+ ≃ Nat where
+def _root_.Equiv.pnatEquivNat : ℕ+ ≃ ℕ where
   toFun := PNat.natPred
   invFun := Nat.succPNat
   left_inv := PNat.succPNat_natPred

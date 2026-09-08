@@ -28,358 +28,186 @@ universe u u₁ u₂
 variable {R : Type u}
 namespace ULift
 
-/--
-Instance `mulZeroClass` / 实例 `mulZeroClass`
-
-English:
-instance mulZeroClass
-  signature: {M₀ : Type*} [MulZeroClass M₀]
-  body: (Equiv.ulift).injective (by simp)
-  mul_zero _ := (Equiv.ulift).injective (by simp)
-
-中文:
-实例 mulZeroClass
-  签名: {M₀ : 类型} [乘零类 M₀]
-  定义体: (Equiv.ulift).injective (by simp)
-  mul_zero _ := (Equiv.ulift).injective (by simp)
-
-Depends on / 依赖: Equiv.ulift, injective
+/-
+**ULift.mulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulZeroClass {M₀ : Type*} [MulZeroClass M₀] : MulZeroClass (ULift M₀) wher
+e zero_mul _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulZeroClass {M₀ : Type*} [MulZeroClass M₀] : MulZeroClass (ULift M₀) where
   zero_mul _ := (Equiv.ulift).injective (by simp)
   mul_zero _ := (Equiv.ulift).injective (by simp)
-
-/--
-Instance `distrib` / 实例 `distrib`
-
-English:
-instance distrib
-  signature: [Distrib R]
-  body: (Equiv.ulift).injective (by simp [left_distrib])
-  right_distrib _ _ _ := (Equiv.ulift).injective (by simp [right_distrib])
-
-中文:
-实例 distrib
-  签名: [Distrib R]
-  定义体: (Equiv.ulift).injective (by simp [left_distrib])
-  right_distrib _ _ _ := (Equiv.ulift).injective (by simp [right_distrib])
-
-Depends on / 依赖: Equiv.ulift, injective, left_distrib
+/-
+**ULift.distrib** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：distrib [Distrib R] : Distrib (ULift R) where left_distrib _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distrib [Distrib R] : Distrib (ULift R) where
   left_distrib _ _ _ := (Equiv.ulift).injective (by simp [left_distrib])
   right_distrib _ _ _ := (Equiv.ulift).injective (by simp [right_distrib])
-
-/--
-Instance `instNatCast` / 实例 `instNatCast`
-
-English:
-instance instNatCast
-  signature: [NatCast R]
-  body: ⟨(up ·)⟩
-
-中文:
-实例 inst自然数Cast
-  签名: [自然数嵌入 R]
-  定义体: ⟨(up ·)⟩
+/-
+**ULift.instNatCast** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：instNatCast [NatCast R] : NatCast (ULift R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNatCast [NatCast R] : NatCast (ULift R) := ⟨(up ·)⟩
-/--
-Instance `instIntCast` / 实例 `instIntCast`
-
-English:
-instance instIntCast
-  signature: [IntCast R]
-  body: ⟨(up ·)⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 inst整数Cast
-  签名: [整数嵌入 R]
-  定义体: ⟨(up ·)⟩
-
-@[simp, norm_cast]
+/-
+**ULift.instIntCast** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：instIntCast [IntCast R] : IntCast (ULift R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIntCast [IntCast R] : IntCast (ULift R) := ⟨(up ·)⟩
 
 @[simp, norm_cast]
-/--
-theorem `up_natCast` / 定理 `up_natCast`
-
-English:
-theorem up_natCast
-  given: [NatCast R] (n : Nat)
-  statement: up (n : R) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 up_natCast
-  条件: [自然数嵌入 R] (n : 自然数)
-  结论: up (n : R) = n
-  证明: rfl
-
-@[simp]
+/-
+**ULift.up_natCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：up_natCast [NatCast R] (n : Nat) : up (n : R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem up_natCast [NatCast R] (n : Nat) : up (n : R) = n :=
+theorem up_natCast [NatCast R] (n : ℕ) : up (n : R) = n :=
   rfl
 
 @[simp]
-/--
-theorem `up_ofNat` / 定理 `up_ofNat`
-
-English:
-theorem up_ofNat
-  given: [NatCast R] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 up_of自然数
-  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ULift.up_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：up_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] : up (ofNat(n) : R) = ofNat(
+n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem up_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
+theorem up_ofNat [NatCast R] (n : ℕ) [n.AtLeastTwo] :
     up (ofNat(n) : R) = ofNat(n) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `up_intCast` / 定理 `up_intCast`
-
-English:
-theorem up_intCast
-  given: [IntCast R] (n : Int)
-  statement: up (n : R) = n
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 up_intCast
-  条件: [整数嵌入 R] (n : 整数)
-  结论: up (n : R) = n
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ULift.up_intCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：up_intCast [IntCast R] (n : Int) : up (n : R) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem up_intCast [IntCast R] (n : Int) : up (n : R) = n :=
+theorem up_intCast [IntCast R] (n : ℤ) : up (n : R) = n :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `down_natCast` / 定理 `down_natCast`
-
-English:
-theorem down_natCast
-  given: [NatCast R] (n : Nat)
-  statement: down (n : ULift R) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 down_natCast
-  条件: [自然数嵌入 R] (n : 自然数)
-  结论: down (n : 类型层提升 R) = n
-  证明: rfl
-
-@[simp]
+/-
+**ULift.down_natCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：down_natCast [NatCast R] (n : Nat) : down (n : ULift R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem down_natCast [NatCast R] (n : Nat) : down (n : ULift R) = n :=
+theorem down_natCast [NatCast R] (n : ℕ) : down (n : ULift R) = n :=
   rfl
 
 @[simp]
-/--
-theorem `down_ofNat` / 定理 `down_ofNat`
-
-English:
-theorem down_ofNat
-  given: [NatCast R] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 down_of自然数
-  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**ULift.down_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：down_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] : down (ofNat(n) : ULift R
+) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem down_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
+theorem down_ofNat [NatCast R] (n : ℕ) [n.AtLeastTwo] :
     down (ofNat(n) : ULift R) = ofNat(n) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `down_intCast` / 定理 `down_intCast`
-
-English:
-theorem down_intCast
-  given: [IntCast R] (n : Int)
-  statement: down (n : ULift R) = n
-  proof: rfl
-
-中文:
-定理 down_intCast
-  条件: [整数嵌入 R] (n : 整数)
-  结论: down (n : 类型层提升 R) = n
-  证明: rfl
+/-
+**ULift.down_intCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：down_intCast [IntCast R] (n : Int) : down (n : ULift R) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem down_intCast [IntCast R] (n : Int) : down (n : ULift R) = n :=
+theorem down_intCast [IntCast R] (n : ℤ) : down (n : ULift R) = n :=
   rfl
-
-/--
-Instance `addMonoidWithOne` / 实例 `addMonoidWithOne`
-
-English:
-instance addMonoidWithOne
-  signature: [AddMonoidWithOne R]
-  body: congr_arg ULift.up Nat.cast_zero
-  natCast_succ _ := congr_arg ULift.up (Nat.cast_succ _)
-
-中文:
-实例 addMonoidWithOne
-  签名: [加法带幺幺半群 R]
-  定义体: congr_arg ULift.up Nat.cast_zero
-  natCast_succ _ := congr_arg ULift.up (Nat.cast_succ _)
-
-Depends on / 依赖: Nat.cast_zero, ULift.up, cast_zero, congr_arg
+/-
+**ULift.addMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：addMonoidWithOne [AddMonoidWithOne R] : AddMonoidWithOne (ULift R) where n
+atCast_zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addMonoidWithOne [AddMonoidWithOne R] : AddMonoidWithOne (ULift R) where
   natCast_zero := congr_arg ULift.up Nat.cast_zero
   natCast_succ _ := congr_arg ULift.up (Nat.cast_succ _)
-
-/--
-Instance `addCommMonoidWithOne` / 实例 `addCommMonoidWithOne`
-
-English:
-instance addCommMonoidWithOne
-  signature: [AddCommMonoidWithOne R]
-
-中文:
-实例 addCommMonoidWithOne
-  签名: [加法交换带幺幺半群 R]
+/-
+**ULift.addCommMonoidWithOne** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [AddCommMonoidWithOne R] → AddCommMonoidWithOne (ULift.{u_1
+, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommMonoidWithOne [AddCommMonoidWithOne R] : AddCommMonoidWithOne (ULift R) where
-
-/--
-Instance `addGroupWithOne` / 实例 `addGroupWithOne`
-
-English:
-instance addGroupWithOne
-  signature: [AddGroupWithOne R]
-  body: congr_arg ULift.up (Int.cast_natCast _)
-  intCast_negSucc _ := congr_arg ULift.up (Int.cast_negSucc _)
-
-中文:
-实例 addGroupWithOne
-  签名: [加法带幺群 R]
-  定义体: congr_arg ULift.up (Int.cast_natCast _)
-  intCast_negSucc _ := congr_arg ULift.up (Int.cast_negSucc _)
-
-Depends on / 依赖: Int.cast_natCast, ULift.up, cast_natCast, congr_arg
+/-
+**ULift.addGroupWithOne** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：addGroupWithOne [AddGroupWithOne R] : AddGroupWithOne (ULift R) where intC
+ast_ofNat _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addGroupWithOne [AddGroupWithOne R] : AddGroupWithOne (ULift R) where
   intCast_ofNat _ := congr_arg ULift.up (Int.cast_natCast _)
   intCast_negSucc _ := congr_arg ULift.up (Int.cast_negSucc _)
-
-/--
-Instance `addCommGroupWithOne` / 实例 `addCommGroupWithOne`
-
-English:
-instance addCommGroupWithOne
-  signature: [AddCommGroupWithOne R]
-
-中文:
-实例 addCommGroupWithOne
-  签名: [加法交换带幺群 R]
+/-
+**ULift.addCommGroupWithOne** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [AddCommGroupWithOne R] → AddCommGroupWithOne (ULift.{u_1, 
+u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommGroupWithOne [AddCommGroupWithOne R] : AddCommGroupWithOne (ULift R) where
-
-/--
-Instance `nonUnitalNonAssocSemiring` / 实例 `nonUnitalNonAssocSemiring`
-
-English:
-instance nonUnitalNonAssocSemiring
-  signature: [NonUnitalNonAssocSemiring R]
-
-中文:
-实例 nonUnitalNonAssocSemiring
-  签名: [非幺非结合半环 R]
+/-
+**ULift.nonUnitalNonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonUnitalNonAssocSemiring R] → NonUnitalNonAssocSemiring (
+ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] :
     NonUnitalNonAssocSemiring (ULift R) where
-
-/--
-Instance `nonAssocSemiring` / 实例 `nonAssocSemiring`
-
-English:
-instance nonAssocSemiring
-  signature: [NonAssocSemiring R]
-
-中文:
-实例 nonAssocSemiring
-  签名: [非结合半环 R]
+/-
+**ULift.nonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonAssocSemiring R] → NonAssocSemiring (ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonAssocSemiring [NonAssocSemiring R] : NonAssocSemiring (ULift R) where
-
-/--
-Instance `nonUnitalSemiring` / 实例 `nonUnitalSemiring`
-
-English:
-instance nonUnitalSemiring
-  signature: [NonUnitalSemiring R]
-
-中文:
-实例 nonUnitalSemiring
-  签名: [非幺半环 R]
+/-
+**ULift.nonUnitalSemiring** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonUnitalSemiring R] → NonUnitalSemiring (ULift.{u_1, u} R
+)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonUnitalSemiring [NonUnitalSemiring R] : NonUnitalSemiring (ULift R) where
-
-/--
-Instance `semiring` / 实例 `semiring`
-
-English:
-instance semiring
-  signature: [Semiring R]
-
-中文:
-实例 semiring
-  签名: [半环 R]
+/-
+**ULift.semiring** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [Semiring R] → Semiring (ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance semiring [Semiring R] : Semiring (ULift R) where
 
-/--
-Definition of `ringEquiv` / `ringEquiv` 的定义
+/-- The ring equivalence between `ULift R` and `R`. -/
+/-
+**ULift.ringEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：ringEquiv [NonUnitalNonAssocSemiring R] : ULift R ≃+* R where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringEquiv
-  signature: [NonUnitalNonAssocSemiring R]
-  body: ULift.down
-  invFun := ULift.up
-  map_mul' _ _ := rfl
-  map_add' _ _ := rfl
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-中文:
-定义 ringEquiv
-  签名: [非幺非结合半环 R]
-  定义体: ULift.down
-  invFun := ULift.up
-  map_mul' _ _ := rfl
-  map_add' _ _ := rfl
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-Depends on / 依赖: ULift.down
+--- 原说明 ---
+The ring equivalence between `ULift R` and `R`.
 -/
 def ringEquiv [NonUnitalNonAssocSemiring R] : ULift R ≃+* R where
   toFun := ULift.down
@@ -388,110 +216,63 @@ def ringEquiv [NonUnitalNonAssocSemiring R] : ULift R ≃+* R where
   map_add' _ _ := rfl
   left_inv _ := rfl
   right_inv _ := rfl
-
-/--
-Instance `nonUnitalCommSemiring` / 实例 `nonUnitalCommSemiring`
-
-English:
-instance nonUnitalCommSemiring
-  signature: [NonUnitalCommSemiring R]
-
-中文:
-实例 nonUnitalCommSemiring
-  签名: [非幺交换半环 R]
+/-
+**ULift.nonUnitalCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonUnitalCommSemiring R] → NonUnitalCommSemiring (ULift.{u
+_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonUnitalCommSemiring [NonUnitalCommSemiring R] : NonUnitalCommSemiring (ULift R) where
-
-/--
-Instance `commSemiring` / 实例 `commSemiring`
-
-English:
-instance commSemiring
-  signature: [CommSemiring R]
-
-中文:
-实例 commSemiring
-  签名: [交换半环 R]
+/-
+**ULift.commSemiring** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [CommSemiring R] → CommSemiring (ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commSemiring [CommSemiring R] : CommSemiring (ULift R) where
-
-/--
-Instance `nonUnitalNonAssocRing` / 实例 `nonUnitalNonAssocRing`
-
-English:
-instance nonUnitalNonAssocRing
-  signature: [NonUnitalNonAssocRing R]
-
-中文:
-实例 nonUnitalNonAssocRing
-  签名: [非幺非结合环 R]
+/-
+**ULift.nonUnitalNonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonUnitalNonAssocRing R] → NonUnitalNonAssocRing (ULift.{u
+_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonUnitalNonAssocRing [NonUnitalNonAssocRing R] : NonUnitalNonAssocRing (ULift R) where
-
-/--
-Instance `nonUnitalRing` / 实例 `nonUnitalRing`
-
-English:
-instance nonUnitalRing
-  signature: [NonUnitalRing R]
-
-中文:
-实例 nonUnitalRing
-  签名: [非幺环 R]
+/-
+**ULift.nonUnitalRing** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonUnitalRing R] → NonUnitalRing (ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonUnitalRing [NonUnitalRing R] : NonUnitalRing (ULift R) where
-
-/--
-Instance `nonAssocRing` / 实例 `nonAssocRing`
-
-English:
-instance nonAssocRing
-  signature: [NonAssocRing R]
-
-中文:
-实例 nonAssocRing
-  签名: [非结合环 R]
+/-
+**ULift.nonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonAssocRing R] → NonAssocRing (ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonAssocRing [NonAssocRing R] : NonAssocRing (ULift R) where
-
-/--
-Instance `ring` / 实例 `ring`
-
-English:
-instance ring
-  signature: [Ring R]
-
-中文:
-实例 ring
-  签名: [环 R]
+/-
+**ULift.ring** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [Ring R] → Ring (ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ring [Ring R] : Ring (ULift R) where
-
-/--
-Instance `nonUnitalCommRing` / 实例 `nonUnitalCommRing`
-
-English:
-instance nonUnitalCommRing
-  signature: [NonUnitalCommRing R]
-
-中文:
-实例 nonUnitalCommRing
-  签名: [非幺交换环 R]
-
-Depends on / 依赖: h1.out.pow, h2.out.pow, isElliptic_iff
+/-
+**ULift.nonUnitalCommRing** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [NonUnitalCommRing R] → NonUnitalCommRing (ULift.{u_1, u} R
+)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonUnitalCommRing [NonUnitalCommRing R] : NonUnitalCommRing (ULift R) where
-
-/--
-Instance `commRing` / 实例 `commRing`
-
-English:
-instance commRing
-  signature: [CommRing R]
-
-中文:
-实例 commRing
-  签名: [交换环 R]
+/-
+**ULift.commRing** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：{R : Type u} → [CommRing R] → CommRing (ULift.{u_1, u} R)
+参数：ULift.{u_1, u} R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance commRing [CommRing R] : CommRing (ULift R) where
 
@@ -503,79 +284,52 @@ variable {R S : Type*} [CommRing R] [CommRing S]
 
 /-- `ULift` is functorial for ring homomorphisms. -/
 @[pp_with_univ]
-/--
-Definition of `RingHom.ulift` / `RingHom.ulift` 的定义
+/-
+**RingHom.ulift** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingHom.ulift (f : R ->+* S) : ULift.{u₁} R ->+* ULift.{u₂} S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RingHom.ulift
-  signature: (f : R ->+* S)
-  body: RingHom.comp ULift.ringEquiv.symm.toRingHom (f.comp ULift.ringEquiv.toRingHom)
-
-中文:
-定义 环态射.ulift
-  签名: (f : R ->+* S)
-  定义体: RingHom.comp ULift.ringEquiv.symm.toRingHom (f.comp ULift.ringEquiv.toRingHom)
-
-Depends on / 依赖: RingHom, RingHom.comp, ULift.ringEquiv.symm.toRingHom, ULift.ringEquiv.toRingHom, f.comp, ringEquiv, toRingHom
+--- 原说明 ---
+`ULift` is functorial for ring homomorphisms.
 -/
-def RingHom.ulift (f : R ->+* S) : ULift.{u₁} R ->+* ULift.{u₂} S :=
+def RingHom.ulift (f : R →+* S) : ULift.{u₁} R →+* ULift.{u₂} S :=
   RingHom.comp ULift.ringEquiv.symm.toRingHom (f.comp ULift.ringEquiv.toRingHom)
-
-/--
-lemma `RingHom.ulift_apply` / 引理 `RingHom.ulift_apply`
-
-English:
-lemma RingHom.ulift_apply
-  given: (f : R ->+* S) (x : ULift.{u₁} R)
-  statement: f.ulift x = ⟨f x.down⟩
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 环态射.ulift_apply
-  条件: (f : R ->+* S) (x : 类型层提升.{u₁} R)
-  结论: f.ulift x = ⟨f x.down⟩
-  证明: rfl
-
-@[simp]
+/-
+**RingHom.ulift_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：RingHom.ulift_apply (f : R ->+* S) (x : ULift.{u₁} R) : f.ulift x = ⟨f x.d
+own⟩
+参数：f : R ->+* S；x : ULift.{u₁} R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma RingHom.ulift_apply (f : R ->+* S) (x : ULift.{u₁} R) : f.ulift x = ⟨f x.down⟩ :=
+lemma RingHom.ulift_apply (f : R →+* S) (x : ULift.{u₁} R) : f.ulift x = ⟨f x.down⟩ :=
   rfl
 
 @[simp]
-/--
-lemma `RingHom.down_ulift_apply` / 引理 `RingHom.down_ulift_apply`
-
-English:
-lemma RingHom.down_ulift_apply
-  given: (f : R ->+* S) (x : ULift.{u₁} R)
-  proof: rfl
-
-中文:
-引理 环态射.down_ulift_apply
-  条件: (f : R ->+* S) (x : 类型层提升.{u₁} R)
-  证明: rfl
+/-
+**RingHom.down_ulift_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：RingHom.down_ulift_apply (f : R ->+* S) (x : ULift.{u₁} R) : (f.ulift x).d
+own = f x.down
+参数：f : R ->+* S；x : ULift.{u₁} R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma RingHom.down_ulift_apply (f : R ->+* S) (x : ULift.{u₁} R) :
+lemma RingHom.down_ulift_apply (f : R →+* S) (x : ULift.{u₁} R) :
     (f.ulift x).down = f x.down :=
   rfl
-
-/--
-lemma `RingHom.comp_ulift_eq` / 引理 `RingHom.comp_ulift_eq`
-
-English:
-lemma RingHom.comp_ulift_eq
-  given: (f : R ->+* S)
-  proof: rfl
-
-中文:
-引理 环态射.comp_ulift_eq
-  条件: (f : R ->+* S)
-  证明: rfl
+/-
+**RingHom.comp_ulift_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：RingHom.comp_ulift_eq (f : R ->+* S) : ULift.ringEquiv.toRingHom.comp ((ul
+ift.{u₁, u₂} f).comp ULift.ringEquiv.symm.toRingHom) = f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma RingHom.comp_ulift_eq (f : R ->+* S) :
+lemma RingHom.comp_ulift_eq (f : R →+* S) :
     ULift.ringEquiv.toRingHom.comp ((ulift.{u₁, u₂} f).comp ULift.ringEquiv.symm.toRingHom) = f :=
   rfl
 
 end RingHom
+

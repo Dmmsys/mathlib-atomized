@@ -25,617 +25,443 @@ variable {α β : Type*} [DecidableEq α]
 /-! ### dedup -/
 
 
-/--
-Definition of `dedup` / `dedup` 的定义
+/-- `dedup s` removes duplicates from `s`, yielding a `nodup` multiset. -/
+/-
+**Multiset.dedup** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：dedup (s : Multiset α) : Multiset α
+参数：s : Multiset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dedup
-  signature: (s : Multiset α)
-  body: Quot.liftOn s (fun l => (l.dedup : Multiset α)) fun _ _ p => Quot.sound p.dedup
-
-@[simp]
-
-中文:
-定义 dedup
-  签名: (s : Multiset α)
-  定义体: Quot.liftOn s (fun l => (l.dedup : Multiset α)) fun _ _ p => Quot.sound p.dedup
-
-@[simp]
-
-Depends on / 依赖: Multiset, Quot.liftOn, Quot.sound, Unique, Unique.mk, l.dedup, liftOn, p.dedup
+--- 原说明 ---
+`dedup s` removes duplicates from `s`, yielding a `nodup` multiset.
 -/
 def dedup (s : Multiset α) : Multiset α :=
   Quot.liftOn s (fun l => (l.dedup : Multiset α)) fun _ _ p => Quot.sound p.dedup
 
 @[simp]
-/--
-theorem `coe_dedup` / 定理 `coe_dedup`
-
-English:
-theorem coe_dedup
-  given: (l : List α)
-  statement: @dedup α _ l = l.dedup
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_dedup
-  条件: (l : 列表 α)
-  结论: @dedup α _ l = l.dedup
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.coe_dedup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_dedup (l : List α) : @dedup α _ l = l.dedup
+参数：l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_dedup (l : List α) : @dedup α _ l = l.dedup :=
   rfl
 
 @[simp]
-/--
-theorem `dedup_zero` / 定理 `dedup_zero`
-
-English:
-theorem dedup_zero
-  statement: @dedup α _ 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dedup_zero
-  结论: @dedup α _ 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.dedup_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_zero : @dedup α _ 0 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem dedup_zero : @dedup α _ 0 = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `mem_dedup` / 定理 `mem_dedup`
-
-English:
-theorem mem_dedup
-  given: {a : α} {s : Multiset α}
-  statement: a in dedup s ↔ a in s
-  proof: Quot.induction_on s fun _ => List.mem_dedup
-
-@[simp]
-
-中文:
-定理 mem_dedup
-  条件: {a : α} {s : Multiset α}
-  结论: a in dedup s ↔ a in s
-  证明: Quot.induction_on s fun _ => List.mem_dedup
-
-@[simp]
-
-Depends on / 依赖: List.mem_dedup, Quot.induction_on, induction_on, mem_dedup, n.succ_ne_zero, nontrivial, replicate_right_injective, succ_ne_zero
+/-
+**Multiset.mem_dedup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_dedup {a : α} {s : Multiset α} : a in dedup s ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.mem_dedup`：mem_dedup {a : α} {l : List α} : a in dedup l ↔ a in l
 -/
-theorem mem_dedup {a : α} {s : Multiset α} : a in dedup s ↔ a in s :=
+theorem mem_dedup {a : α} {s : Multiset α} : a ∈ dedup s ↔ a ∈ s :=
   Quot.induction_on s fun _ => List.mem_dedup
 
 @[simp]
-/--
-theorem `dedup_cons_of_mem` / 定理 `dedup_cons_of_mem`
-
-English:
-theorem dedup_cons_of_mem
-  given: {a : α} {s : Multiset α}
-  statement: a in s -> dedup (a ::ₘ s) = dedup s
-  proof: Quot.induction_on s fun _ m => @congr_arg _ _ _ _ ofList List.dedup_cons_of_mem m
+/-
+**Multiset.dedup_cons_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_cons_of_mem {a : α} {s : Multiset α} : a in s -> dedup (a ::ₘ s) = d
+edup s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.dedup_cons_of_mem`：dedup_cons_of_mem {a : α} {l : List α} (h : a in
+ l) : dedup (a :: l) = dedup l
+-/
+theorem dedup_cons_of_mem {a : α} {s : Multiset α} : a ∈ s → dedup (a ::ₘ s) = dedup s :=
+  Quot.induction_on s fun _ m => @congr_arg _ _ _ _ ofList <| List.dedup_cons_of_mem m
 
 @[simp]
-
-中文:
-定理 dedup_cons_of_mem
-  条件: {a : α} {s : Multiset α}
-  结论: a in s -> dedup (a ::ₘ s) = dedup s
-  证明: Quot.induction_on s fun _ m => @congr_arg _ _ _ _ ofList List.dedup_cons_of_mem m
-
-@[simp]
-
-Depends on / 依赖: List.dedup_cons_of_mem, Quot.induction_on, congr_arg, dedup_cons_of_mem, induction_on, ofList
+/-
+**Multiset.dedup_cons_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_cons_of_notMem {a : α} {s : Multiset α} : a ∉ s -> dedup (a ::ₘ s) =
+ a ::ₘ dedup s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.dedup_cons_of_notMem`：dedup_cons_of_notMem {a : α} {l : List α} (h 
+: a ∉ l) : dedup (a :: l) = a :: dedup l
 -/
-theorem dedup_cons_of_mem {a : α} {s : Multiset α} : a in s -> dedup (a ::ₘ s) = dedup s :=
-Quot.induction_on s fun _ m => @congr_arg _ _ _ _ ofList List.dedup_cons_of_mem m
-
-@[simp]
-/--
-theorem `dedup_cons_of_notMem` / 定理 `dedup_cons_of_notMem`
-
-English:
-theorem dedup_cons_of_notMem
-  given: {a : α} {s : Multiset α}
-  statement: a ∉ s -> dedup (a ::ₘ s) = a ::ₘ dedup s
-  proof: Quot.induction_on s fun _ m => congr_arg ofList List.dedup_cons_of_notMem m
-
-中文:
-定理 dedup_cons_of_notMem
-  条件: {a : α} {s : Multiset α}
-  结论: a ∉ s -> dedup (a ::ₘ s) = a ::ₘ dedup s
-  证明: Quot.induction_on s fun _ m => congr_arg ofList List.dedup_cons_of_notMem m
-
-Depends on / 依赖: List.dedup_cons_of_notMem, Quot.induction_on, congr_arg, dedup_cons_of_notMem, induction_on, ofList
+theorem dedup_cons_of_notMem {a : α} {s : Multiset α} : a ∉ s → dedup (a ::ₘ s) = a ::ₘ dedup s :=
+  Quot.induction_on s fun _ m => congr_arg ofList <| List.dedup_cons_of_notMem m
+/-
+**Multiset.dedup_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_le (s : Multiset α) : dedup s <= s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.Sublist.subperm`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Sublist l₂ →
+ l₁.Subperm l₂
+· 使用定理 `List.dedup_sublist`：dedup_sublist : forall l : List α, dedup l <+ l
 -/
-theorem dedup_cons_of_notMem {a : α} {s : Multiset α} : a ∉ s -> dedup (a ::ₘ s) = a ::ₘ dedup s :=
-Quot.induction_on s fun _ m => congr_arg ofList List.dedup_cons_of_notMem m
-
-/--
-theorem `dedup_le` / 定理 `dedup_le`
-
-English:
-theorem dedup_le
-  given: (s : Multiset α)
-  statement: dedup s <= s
-  proof: Quot.induction_on s fun _ => (dedup_sublist _).subperm
-
-中文:
-定理 dedup_le
-  条件: (s : Multiset α)
-  结论: dedup s <= s
-  证明: Quot.induction_on s fun _ => (dedup_sublist _).subperm
-
-Depends on / 依赖: Quot.induction_on, dedup_sublist, induction_on, subperm
--/
-theorem dedup_le (s : Multiset α) : dedup s <= s :=
+theorem dedup_le (s : Multiset α) : dedup s ≤ s :=
   Quot.induction_on s fun _ => (dedup_sublist _).subperm
-
-/--
-theorem `dedup_subset` / 定理 `dedup_subset`
-
-English:
-theorem dedup_subset
-  given: (s : Multiset α)
-  statement: dedup s subseteq s
-  proof: subset_of_le dedup_le _
-
-中文:
-定理 dedup_subset
-  条件: (s : Multiset α)
-  结论: dedup s subseteq s
-  证明: subset_of_le dedup_le _
-
-Depends on / 依赖: dedup_le, subset_of_le
+/-
+**Multiset.dedup_subset** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_subset (s : Multiset α) : dedup s subseteq s
+参数：s : Multiset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.subset_of_le`：subset_of_le : s <= t -> s subseteq t
+· 使用定理 `Multiset.dedup_le`：dedup_le (s : Multiset α) : dedup s <= s
 -/
-theorem dedup_subset (s : Multiset α) : dedup s subseteq s :=
-subset_of_le dedup_le _
-
-/--
-theorem `subset_dedup` / 定理 `subset_dedup`
-
-English:
-theorem subset_dedup
-  given: (s : Multiset α)
-  statement: s subseteq dedup s
-  proof: fun _ => mem_dedup.2
-
-@[simp]
-
-中文:
-定理 subset_dedup
-  条件: (s : Multiset α)
-  结论: s subseteq dedup s
-  证明: fun _ => mem_dedup.2
-
-@[simp]
-
-Depends on / 依赖: mem_dedup
+theorem dedup_subset (s : Multiset α) : dedup s ⊆ s :=
+  subset_of_le <| dedup_le _
+/-
+**Multiset.subset_dedup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：subset_dedup (s : Multiset α) : s subseteq dedup s
+参数：s : Multiset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.mem_dedup`：mem_dedup {a : α} {s : Multiset α} : a in dedup s ↔ 
+a in s
 -/
-theorem subset_dedup (s : Multiset α) : s subseteq dedup s := fun _ => mem_dedup.2
+theorem subset_dedup (s : Multiset α) : s ⊆ dedup s := fun _ => mem_dedup.2
 
 @[simp]
-/--
-theorem `dedup_subset'` / 定理 `dedup_subset'`
-
-English:
-theorem dedup_subset'
-  given: {s t : Multiset α}
-  statement: dedup s subseteq t ↔ s subseteq t
-  proof: ⟨Subset.trans (subset_dedup _), Subset.trans (dedup_subset _)⟩
-
-@[simp]
-
-中文:
-定理 dedup_subset'
-  条件: {s t : Multiset α}
-  结论: dedup s subseteq t ↔ s subseteq t
-  证明: ⟨Subset.trans (subset_dedup _), Subset.trans (dedup_subset _)⟩
-
-@[simp]
-
-Depends on / 依赖: Subset, Subset.trans, dedup_subset, subset_dedup
+/-
+**Multiset.dedup_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_subset' {s t : Multiset α} : dedup s subseteq t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Subset.trans`：∀ {α : Type u_1} {s t u : Multiset α}, s ⊆ t → t 
+⊆ u → s ⊆ u
+· 使用定理 `Multiset.subset_dedup`：subset_dedup (s : Multiset α) : s subseteq dedup 
+s
+· 使用定理 `Multiset.dedup_subset`：dedup_subset (s : Multiset α) : dedup s subseteq 
+s
 -/
-theorem dedup_subset' {s t : Multiset α} : dedup s subseteq t ↔ s subseteq t :=
+theorem dedup_subset' {s t : Multiset α} : dedup s ⊆ t ↔ s ⊆ t :=
   ⟨Subset.trans (subset_dedup _), Subset.trans (dedup_subset _)⟩
 
 @[simp]
-/--
-theorem `subset_dedup'` / 定理 `subset_dedup'`
-
-English:
-theorem subset_dedup'
-  given: {s t : Multiset α}
-  statement: s subseteq dedup t ↔ s subseteq t
-  proof: ⟨fun h => Subset.trans h (dedup_subset _), fun h => Subset.trans h (subset_dedup _)⟩
-
-@[simp]
-
-中文:
-定理 subset_dedup'
-  条件: {s t : Multiset α}
-  结论: s subseteq dedup t ↔ s subseteq t
-  证明: ⟨fun h => Subset.trans h (dedup_subset _), fun h => Subset.trans h (subset_dedup _)⟩
-
-@[simp]
-
-Depends on / 依赖: Subset, Subset.trans, dedup_subset, subset_dedup
+/-
+**Multiset.subset_dedup'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：subset_dedup' {s t : Multiset α} : s subseteq dedup t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Subset.trans`：∀ {α : Type u_1} {s t u : Multiset α}, s ⊆ t → t 
+⊆ u → s ⊆ u
+· 使用定理 `Multiset.dedup_subset`：dedup_subset (s : Multiset α) : dedup s subseteq 
+s
+· 使用定理 `Multiset.subset_dedup`：subset_dedup (s : Multiset α) : s subseteq dedup 
+s
 -/
-theorem subset_dedup' {s t : Multiset α} : s subseteq dedup t ↔ s subseteq t :=
+theorem subset_dedup' {s t : Multiset α} : s ⊆ dedup t ↔ s ⊆ t :=
   ⟨fun h => Subset.trans h (dedup_subset _), fun h => Subset.trans h (subset_dedup _)⟩
 
 @[simp]
-/--
-theorem `nodup_dedup` / 定理 `nodup_dedup`
-
-English:
-theorem nodup_dedup
-  given: (s : Multiset α)
-  statement: Nodup (dedup s)
-  proof: Quot.induction_on s List.nodup_dedup
-
-中文:
-定理 nodup_dedup
-  条件: (s : Multiset α)
-  结论: Nodup (dedup s)
-  证明: Quot.induction_on s List.nodup_dedup
-
-Depends on / 依赖: List.nodup_dedup, Quot.induction_on, induction_on, nodup_dedup
+/-
+**Multiset.nodup_dedup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_dedup (s : Multiset α) : Nodup (dedup s)
+参数：s : Multiset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.nodup_dedup`：nodup_dedup : forall l : List α, Nodup (dedup l)
 -/
 theorem nodup_dedup (s : Multiset α) : Nodup (dedup s) :=
   Quot.induction_on s List.nodup_dedup
-
-/--
-theorem `dedup_eq_self` / 定理 `dedup_eq_self`
-
-English:
-theorem dedup_eq_self
-  given: {s : Multiset α}
-  statement: dedup s = s ↔ Nodup s
-  proof: ⟨fun e => e ▸ nodup_dedup s, Quot.induction_on s fun _ h => congr_arg ofList h.dedup⟩
-
-alias ⟨_, Nodup.dedup⟩ := dedup_eq_self
-
-中文:
-定理 dedup_eq_self
-  条件: {s : Multiset α}
-  结论: dedup s = s ↔ Nodup s
-  证明: ⟨fun e => e ▸ nodup_dedup s, Quot.induction_on s fun _ h => congr_arg ofList h.dedup⟩
-
-alias ⟨_, Nodup.dedup⟩ := dedup_eq_self
-
-Depends on / 依赖: Quot.induction_on, congr_arg, h.dedup, induction_on, nodup_dedup, ofList
+/-
+**Multiset.dedup_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_eq_self {s : Multiset α} : dedup s = s ↔ Nodup s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.nodup_dedup`：nodup_dedup (s : Multiset α) : Nodup (dedup s)
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {l : List α}, 
+l.Nodup → l.dedup = l
 -/
 theorem dedup_eq_self {s : Multiset α} : dedup s = s ↔ Nodup s :=
   ⟨fun e => e ▸ nodup_dedup s, Quot.induction_on s fun _ h => congr_arg ofList h.dedup⟩
 
 alias ⟨_, Nodup.dedup⟩ := dedup_eq_self
-
-/--
-theorem `count_dedup` / 定理 `count_dedup`
-
-English:
-theorem count_dedup
-  given: (m : Multiset α) (a : α)
-  statement: m.dedup.count a = if a in m then 1 else 0
-  proof: Quot.induction_on m fun _ => by
-    simp only [quot_mk_to_coe'', coe_dedup, mem_coe, coe_count]
-    apply List.count_dedup _ _
-
-@[simp]
-
-中文:
-定理 count_dedup
-  条件: (m : Multiset α) (a : α)
-  结论: m.dedup.count a = if a in m then 1 else 0
-  证明: Quot.induction_on m fun _ => by
-    simp only [quot_mk_to_coe'', coe_dedup, mem_coe, coe_count]
-    apply List.count_dedup _ _
-
-@[simp]
-
-Depends on / 依赖: List.count_dedup, Quot.induction_on, coe_count, coe_dedup, count_dedup, induction_on, mem_coe, quot_mk_to_coe
+/-
+**Multiset.count_dedup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：count_dedup (m : Multiset α) (a : α) : m.dedup.count a = if a in m then 1 
+else 0
+参数：m : Multiset α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.coe_count`：coe_count (a : α) (l : List α) : count a (ofList l) 
+= l.count a
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用定理 `List.count_dedup`：count_dedup (l : List α) (a : α) : l.dedup.count a = i
+f a in l then 1 else 0
 -/
-theorem count_dedup (m : Multiset α) (a : α) : m.dedup.count a = if a in m then 1 else 0 :=
+theorem count_dedup (m : Multiset α) (a : α) : m.dedup.count a = if a ∈ m then 1 else 0 :=
   Quot.induction_on m fun _ => by
     simp only [quot_mk_to_coe'', coe_dedup, mem_coe, coe_count]
     apply List.count_dedup _ _
 
 @[simp]
-/--
-theorem `dedup_idem` / 定理 `dedup_idem`
-
-English:
-theorem dedup_idem
-  given: {m : Multiset α}
-  statement: m.dedup.dedup = m.dedup
-  proof: Quot.induction_on m fun _ => @congr_arg _ _ _ _ ofList List.dedup_idem
-
-中文:
-定理 dedup_idem
-  条件: {m : Multiset α}
-  结论: m.dedup.dedup = m.dedup
-  证明: Quot.induction_on m fun _ => @congr_arg _ _ _ _ ofList List.dedup_idem
-
-Depends on / 依赖: List.dedup_idem, Quot.induction_on, congr_arg, dedup_idem, induction_on, ofList
+/-
+**Multiset.dedup_idem** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_idem {m : Multiset α} : m.dedup.dedup = m.dedup
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.dedup_idem`：dedup_idem {l : List α} : dedup (dedup l) = dedup l
 -/
 theorem dedup_idem {m : Multiset α} : m.dedup.dedup = m.dedup :=
   Quot.induction_on m fun _ => @congr_arg _ _ _ _ ofList List.dedup_idem
-
-/--
-theorem `dedup_eq_zero` / 定理 `dedup_eq_zero`
-
-English:
-theorem dedup_eq_zero
-  given: {s : Multiset α}
-  statement: dedup s = 0 ↔ s = 0
-  proof: ⟨fun h => eq_zero_of_subset_zero h ▸ subset_dedup _, fun h => h.symm ▸ dedup_zero⟩
-
-@[simp]
-
-中文:
-定理 dedup_eq_zero
-  条件: {s : Multiset α}
-  结论: dedup s = 0 ↔ s = 0
-  证明: ⟨fun h => eq_zero_of_subset_zero h ▸ subset_dedup _, fun h => h.symm ▸ dedup_zero⟩
-
-@[simp]
-
-Depends on / 依赖: dedup_zero, eq_zero_of_subset_zero, h.symm, subset_dedup
+/-
+**Multiset.dedup_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_eq_zero {s : Multiset α} : dedup s = 0 ↔ s = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.eq_zero_of_subset_zero`：eq_zero_of_subset_zero {s : Multiset α}
+ (h : s subseteq 0) : s = 0
+· 使用定理 `Multiset.subset_dedup`：subset_dedup (s : Multiset α) : s subseteq dedup 
+s
+· 使用定理 `Multiset.dedup_zero`：dedup_zero : @dedup α _ 0 = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem dedup_eq_zero {s : Multiset α} : dedup s = 0 ↔ s = 0 :=
-⟨fun h => eq_zero_of_subset_zero h ▸ subset_dedup _, fun h => h.symm ▸ dedup_zero⟩
+  ⟨fun h => eq_zero_of_subset_zero <| h ▸ subset_dedup _, fun h => h.symm ▸ dedup_zero⟩
 
 @[simp]
-/--
-theorem `dedup_singleton` / 定理 `dedup_singleton`
-
-English:
-theorem dedup_singleton
-  given: {a : α}
-  statement: dedup ({a} : Multiset α) = {a}
-  proof: (nodup_singleton _).dedup
-
-中文:
-定理 dedup_singleton
-  条件: {a : α}
-  结论: dedup ({a} : Multiset α) = {a}
-  证明: (nodup_singleton _).dedup
-
-Depends on / 依赖: nodup_singleton
+/-
+**Multiset.dedup_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_singleton {a : α} : dedup ({a} : Multiset α) = {a}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Nodup.dedup`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Multi
+set α}, s.Nodup → s.dedup = s
+· 使用定理 `Multiset.nodup_singleton`：nodup_singleton : forall a : α, Nodup ({a} : M
+ultiset α)
 -/
 theorem dedup_singleton {a : α} : dedup ({a} : Multiset α) = {a} :=
   (nodup_singleton _).dedup
-
-/--
-theorem `le_dedup` / 定理 `le_dedup`
-
-English:
-theorem le_dedup
-  given: {s t : Multiset α}
-  statement: s <= dedup t ↔ s <= t ∧ Nodup s
-  proof: ⟨fun h => ⟨le_trans h (dedup_le _), nodup_of_le h (nodup_dedup _)⟩,
-fun ⟨l, d⟩ => (le_iff_subset d).2 Subset.trans (subset_of_le l) (subset_dedup _)⟩
-
-中文:
-定理 le_dedup
-  条件: {s t : Multiset α}
-  结论: s <= dedup t ↔ s <= t ∧ Nodup s
-  证明: ⟨fun h => ⟨le_trans h (dedup_le _), nodup_of_le h (nodup_dedup _)⟩,
-fun ⟨l, d⟩ => (le_iff_subset d).2 Subset.trans (subset_of_le l) (subset_dedup _)⟩
-
-Depends on / 依赖: Subset, Subset.trans, dedup_le, le_iff_subset, le_trans, nodup_dedup, nodup_of_le, subset_dedup, subset_of_le
+/-
+**Multiset.le_dedup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：le_dedup {s t : Multiset α} : s <= dedup t ↔ s <= t ∧ Nodup s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Multiset.dedup_le`：dedup_le (s : Multiset α) : dedup s <= s
+· 使用定理 `Multiset.nodup_of_le`：nodup_of_le {s t : Multiset α} (h : s <= t) : Nodu
+p t -> Nodup s
+· 使用定理 `Multiset.nodup_dedup`：nodup_dedup (s : Multiset α) : Nodup (dedup s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.le_iff_subset`：le_iff_subset {s t : Multiset α} : Nodup s -> (s
+ <= t ↔ s subseteq t)
+· 使用定理 `Multiset.Subset.trans`：∀ {α : Type u_1} {s t u : Multiset α}, s ⊆ t → t 
+⊆ u → s ⊆ u
+· 使用定理 `Multiset.subset_of_le`：subset_of_le : s <= t -> s subseteq t
+· 使用定理 `Multiset.subset_dedup`：subset_dedup (s : Multiset α) : s subseteq dedup 
+s
 -/
-theorem le_dedup {s t : Multiset α} : s <= dedup t ↔ s <= t ∧ Nodup s :=
+theorem le_dedup {s t : Multiset α} : s ≤ dedup t ↔ s ≤ t ∧ Nodup s :=
   ⟨fun h => ⟨le_trans h (dedup_le _), nodup_of_le h (nodup_dedup _)⟩,
-fun ⟨l, d⟩ => (le_iff_subset d).2 Subset.trans (subset_of_le l) (subset_dedup _)⟩
-
-/--
-theorem `le_dedup_self` / 定理 `le_dedup_self`
-
-English:
-theorem le_dedup_self
-  given: {s : Multiset α}
-  statement: s <= dedup s ↔ Nodup s
-  proof: by
-  rw [le_dedup]; rw [and_iff_right le_rfl]
-
-中文:
-定理 le_dedup_self
-  条件: {s : Multiset α}
-  结论: s <= dedup s ↔ Nodup s
-  证明: by
-  rw [le_dedup]; rw [and_iff_right le_rfl]
-
-Depends on / 依赖: and_iff_right, le_dedup, le_rfl
+   fun ⟨l, d⟩ => (le_iff_subset d).2 <| Subset.trans (subset_of_le l) (subset_dedup _)⟩
+/-
+**Multiset.le_dedup_self** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：le_dedup_self {s : Multiset α} : s <= dedup s ↔ Nodup s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.le_dedup`：le_dedup {s t : Multiset α} : s <= dedup t ↔ s <= t ∧
+ Nodup s
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_dedup_self {s : Multiset α} : s <= dedup s ↔ Nodup s := by
-  rw [le_dedup]; rw [and_iff_right le_rfl]
-
-/--
-theorem `dedup_ext` / 定理 `dedup_ext`
-
-English:
-theorem dedup_ext
-  given: {s t : Multiset α}
-  statement: dedup s = dedup t ↔ forall a, a in s ↔ a in t
-  proof: by
-  simp [Nodup.ext]
-
-中文:
-定理 dedup_ext
-  条件: {s t : Multiset α}
-  结论: dedup s = dedup t ↔ 对任意 a, a in s ↔ a in t
-  证明: by
-  simp [Nodup.ext]
-
-Depends on / 依赖: Nodup.ext
+theorem le_dedup_self {s : Multiset α} : s ≤ dedup s ↔ Nodup s := by
+  rw [le_dedup, and_iff_right le_rfl]
+/-
+**Multiset.dedup_ext** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_ext {s t : Multiset α} : dedup s = dedup t ↔ forall a, a in s ↔ a in
+ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem dedup_ext {s t : Multiset α} : dedup s = dedup t ↔ forall a, a in s ↔ a in t := by
+theorem dedup_ext {s t : Multiset α} : dedup s = dedup t ↔ ∀ a, a ∈ s ↔ a ∈ t := by
   simp [Nodup.ext]
-
-/--
-theorem `dedup_map_of_injective` / 定理 `dedup_map_of_injective`
-
-English:
-theorem dedup_map_of_injective
-  statement: [DecidableEq β] {f : α -> β} (hf : Function.Injective f)
-  proof: Quot.induction_on s fun l => by simp [List.dedup_map_of_injective hf l]
-
-中文:
-定理 dedup_map_of_injective
-  结论: [DecidableEq β] {f : α -> β} (hf : 函数.单射 f)
-  证明: Quot.induction_on s fun l => by simp [List.dedup_map_of_injective hf l]
-
-Depends on / 依赖: List.dedup_map_of_injective, Quot.induction_on, dedup_map_of_injective, induction_on
+/-
+**Multiset.dedup_map_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_map_of_injective [DecidableEq β] {f : α -> β} (hf : Function.Injecti
+ve f) (s : Multiset α) : (s.map f).dedup = s.dedup.map f
+参数：hf : Function.Injective f；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.dedup_map_of_injective`：dedup_map_of_injective [DecidableEq β] {f :
+ α -> β} (hf : Function.Injective f) (xs : List α) : (xs.map f).dedup = xs.dedup
+.map f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dedup_map_of_injective [DecidableEq β] {f : α -> β} (hf : Function.Injective f)
+theorem dedup_map_of_injective [DecidableEq β] {f : α → β} (hf : Function.Injective f)
     (s : Multiset α) :
     (s.map f).dedup = s.dedup.map f :=
   Quot.induction_on s fun l => by simp [List.dedup_map_of_injective hf l]
-
-/--
-theorem `dedup_map_dedup_eq` / 定理 `dedup_map_dedup_eq`
-
-English:
-theorem dedup_map_dedup_eq
-  given: [DecidableEq β] (f : α -> β) (s : Multiset α)
-  proof: by
-  simp [dedup_ext]
-
-中文:
-定理 dedup_map_dedup_eq
-  条件: [DecidableEq β] (f : α -> β) (s : Multiset α)
-  证明: by
-  simp [dedup_ext]
-
-Depends on / 依赖: dedup_ext
+/-
+**Multiset.dedup_map_dedup_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：dedup_map_dedup_eq [DecidableEq β] (f : α -> β) (s : Multiset α) : dedup (
+map f (dedup s)) = dedup (map f s)
+参数：f : α -> β；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem dedup_map_dedup_eq [DecidableEq β] (f : α -> β) (s : Multiset α) :
+theorem dedup_map_dedup_eq [DecidableEq β] (f : α → β) (s : Multiset α) :
     dedup (map f (dedup s)) = dedup (map f s) := by
   simp [dedup_ext]
-
-/--
-theorem `Nodup.le_dedup_iff_le` / 定理 `Nodup.le_dedup_iff_le`
-
-English:
-theorem Nodup.le_dedup_iff_le
-  given: {s t : Multiset α} (hno : s.Nodup)
-  statement: s <= t.dedup ↔ s <= t
-  proof: by
-  simp [le_dedup, hno]
-
-中文:
-定理 Nodup.le_dedup_iff_le
-  条件: {s t : Multiset α} (hno : s.Nodup)
-  结论: s <= t.dedup ↔ s <= t
-  证明: by
-  simp [le_dedup, hno]
-
-Depends on / 依赖: le_dedup
+/-
+**Multiset.Nodup.le_dedup_iff_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Nodup`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Multiset α}, s.Nodup → (s ≤
+ t.dedup ↔ s ≤ t)
+参数：s ≤ t.dedup ↔ s ≤ t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Nodup.le_dedup_iff_le {s t : Multiset α} (hno : s.Nodup) : s <= t.dedup ↔ s <= t := by
+theorem Nodup.le_dedup_iff_le {s t : Multiset α} (hno : s.Nodup) : s ≤ t.dedup ↔ s ≤ t := by
   simp [le_dedup, hno]
-
-/--
-theorem `Subset.dedup_add_right` / 定理 `Subset.dedup_add_right`
-
-English:
-theorem Subset.dedup_add_right
-  given: {s t : Multiset α} (h : s subseteq t)
-  proof: by
-  induction s, t using Quot.induction_on₂
-exact congr_arg ((↑) : List α -> Multiset α) List.Subset.dedup_append_right h
-
-中文:
-定理 子集.dedup_add_right
-  条件: {s t : Multiset α} (h : s subseteq t)
-  证明: by
-  induction s, t using Quot.induction_on₂
-exact congr_arg ((↑) : List α -> Multiset α) List.Subset.dedup_append_right h
-
-Depends on / 依赖: List.Subset.dedup_append_right, Multiset, Quot.induction_on, Subset, congr_arg, dedup_append_right
+/-
+**Multiset.Subset.dedup_add_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Subset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Multiset α}, s ⊆ t → (s + t
+).dedup = t.dedup
+参数：s + t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on₂`：∀ {α : Sort u_1} {β : Sort u_2} {r : α → α → Prop} {
+s : β → β → Prop} {δ : Quot r → Quot s → Prop} (q₁ : Quot r)   (q₂ : Quot s), (∀
+ (a : α)…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.Subset.dedup_append_right`：∀ {α : Type u_1} [inst : DecidableEq α] 
+{xs ys : List α}, xs ⊆ ys → (xs ++ ys).dedup = ys.dedup
 -/
-theorem Subset.dedup_add_right {s t : Multiset α} (h : s subseteq t) :
+theorem Subset.dedup_add_right {s t : Multiset α} (h : s ⊆ t) :
     dedup (s + t) = dedup t := by
   induction s, t using Quot.induction_on₂
-exact congr_arg ((↑) : List α -> Multiset α) List.Subset.dedup_append_right h
-
-/--
-theorem `Subset.dedup_add_left` / 定理 `Subset.dedup_add_left`
-
-English:
-theorem Subset.dedup_add_left
-  given: {s t : Multiset α} (h : t subseteq s)
-  proof: by
-  rw [s.add_comm]; rw [Subset.dedup_add_right h]
-
-中文:
-定理 子集.dedup_add_left
-  条件: {s t : Multiset α} (h : t subseteq s)
-  证明: by
-  rw [s.add_comm]; rw [Subset.dedup_add_right h]
-
-Depends on / 依赖: Subset, Subset.dedup_add_right, add_comm, dedup_add_right, s.add_comm
+  exact congr_arg ((↑) : List α → Multiset α) <| List.Subset.dedup_append_right h
+/-
+**Multiset.Subset.dedup_add_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Subset`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Multiset α}, t ⊆ s → (s + t
+).dedup = s.dedup
+参数：s + t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.add_comm`：∀ {α : Type u_1} (s t : Multiset α), s + t = t + s
+· 使用定理 `Multiset.Subset.dedup_add_right`：∀ {α : Type u_1} [inst : DecidableEq α]
+ {s t : Multiset α}, s ⊆ t → (s + t).dedup = t.dedup
 -/
-theorem Subset.dedup_add_left {s t : Multiset α} (h : t subseteq s) :
+theorem Subset.dedup_add_left {s t : Multiset α} (h : t ⊆ s) :
     dedup (s + t) = dedup s := by
-  rw [s.add_comm]; rw [Subset.dedup_add_right h]
-
-/--
-theorem `Disjoint.dedup_add` / 定理 `Disjoint.dedup_add`
-
-English:
-theorem Disjoint.dedup_add
-  given: {s t : Multiset α} (h : Disjoint s t)
-  proof: by
-  induction s, t using Quot.induction_on₂
-exact congr_arg ((↑) : List α -> Multiset α) List.Disjoint.dedup_append (by simpa using h)
-
-中文:
-定理 Disjoint.dedup_add
-  条件: {s t : Multiset α} (h : Disjoint s t)
-  证明: by
-  induction s, t using Quot.induction_on₂
-exact congr_arg ((↑) : List α -> Multiset α) List.Disjoint.dedup_append (by simpa using h)
-
-Depends on / 依赖: Disjoint, List.Disjoint.dedup_append, Multiset, Quot.induction_on, congr_arg, dedup_append
+  rw [s.add_comm, Subset.dedup_add_right h]
+/-
+**Multiset.Disjoint.dedup_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Disjoint`。
+形式化陈述：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Multiset α}, Disjoint s t →
+ (s + t).dedup = s.dedup + t.dedup
+参数：s + t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on₂`：∀ {α : Sort u_1} {β : Sort u_2} {r : α → α → Prop} {
+s : β → β → Prop} {δ : Quot r → Quot s → Prop} (q₁ : Quot r)   (q₂ : Quot s), (∀
+ (a : α)…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.Disjoint.dedup_append`：∀ {α : Type u_1} [inst : DecidableEq α] {xs 
+ys : List α}, xs.Disjoint ys → (xs ++ ys).dedup = xs.dedup ++ ys.dedup
 -/
 theorem Disjoint.dedup_add {s t : Multiset α} (h : Disjoint s t) :
     dedup (s + t) = dedup s + dedup t := by
   induction s, t using Quot.induction_on₂
-exact congr_arg ((↑) : List α -> Multiset α) List.Disjoint.dedup_append (by simpa using h)
+  exact congr_arg ((↑) : List α → Multiset α) <| List.Disjoint.dedup_append (by simpa using h)
 
-/--
-theorem `_root_.List.Subset.dedup_append_left` / 定理 `_root_.List.Subset.dedup_append_left`
+/-- Note that the stronger `List.Subset.dedup_append_right` is proved earlier. -/
+/-
+**Multiset._root_.List.Subset.dedup_append_left** 是 Mathlib 中的一个定理，位于命名空间 `Multi
+set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.List.Subset.dedup_append_left
-  given: {s t : List α} (h : t subseteq s)
-  proof: by
-  rw [← coe_eq_coe]; rw [← coe_dedup]; rw [← coe_add]; rw [Subset.dedup_add_left h]; rw [coe_dedup]
-
-中文:
-定理 _root_.列表.子集.dedup_append_left
-  条件: {s t : 列表 α} (h : t subseteq s)
-  证明: by
-  rw [← coe_eq_coe]; rw [← coe_dedup]; rw [← coe_add]; rw [Subset.dedup_add_left h]; rw [coe_dedup]
-
-Depends on / 依赖: Subset, Subset.dedup_add_left, coe_add, coe_dedup, coe_eq_coe, dedup_add_left
+--- 原说明 ---
+Note that the stronger `List.Subset.dedup_append_right` is proved earlier.
 -/
-theorem _root_.List.Subset.dedup_append_left {s t : List α} (h : t subseteq s) :
+theorem _root_.List.Subset.dedup_append_left {s t : List α} (h : t ⊆ s) :
     List.dedup (s ++ t) ~ List.dedup s := by
-  rw [← coe_eq_coe]; rw [← coe_dedup]; rw [← coe_add]; rw [Subset.dedup_add_left h]; rw [coe_dedup]
+  rw [← coe_eq_coe, ← coe_dedup, ← coe_add, Subset.dedup_add_left h, coe_dedup]
 
 end Multiset
+

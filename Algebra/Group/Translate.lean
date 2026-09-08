@@ -35,354 +35,295 @@ open scoped Pointwise
 
 variable {ι α β M G H : Type*} [AddCommGroup G]
 
-/--
-Definition of `translate` / `translate` 的定义
+/-- Translation of a function in a group by an element of that group.
+`τ a f` is defined as `x ↦ f (x - a)`. -/
+/-
+**translate** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：translate (a : G) (f : G -> α) : G -> α
+参数：a : G；f : G -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition translate
-  signature: (a : G) (f : G -> α)
-  body: fun x => f (x - a)
-
-@[inherit_doc] scoped[translate] notation "τ " => translate
-
-中文:
-定义 translate
-  签名: (a : G) (f : G -> α)
-  定义体: fun x => f (x - a)
-
-@[inherit_doc] scoped[translate] notation "τ " => translate
+--- 原说明 ---
+Translation of a function in a group by an element of that group.
+`τ a f` is defined as `x ↦ f (x - a)`.
 -/
-def translate (a : G) (f : G -> α) : G -> α := fun x => f (x - a)
+def translate (a : G) (f : G → α) : G → α := fun x ↦ f (x - a)
 
 @[inherit_doc] scoped[translate] notation "τ " => translate
 
 open scoped translate
-
-/--
-lemma `translate_apply` / 引理 `translate_apply`
-
-English:
-lemma translate_apply
-  given: (a : G) (f : G -> α) (x : G)
-  statement: τ a f x = f (x - a)
-  proof: rfl
-
-中文:
-引理 translate_apply
-  条件: (a : G) (f : G -> α) (x : G)
-  结论: τ a f x = f (x - a)
-  证明: rfl
+/-
+**translate_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {G : Type u_5} [inst : AddCommGroup G] (a : G) (f : G → α
+) (x : G), translate a f x = f (x - a)
+参数：a : G；f : G → α；x : G；x - a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma translate_apply (a : G) (f : G -> α) (x : G) : τ a f x = f (x - a) := rfl
-/--
-lemma `translate_zero` / 引理 `translate_zero`
-
-English:
-lemma translate_zero
-  given: (f : G -> α)
-  statement: τ 0 f = f
-  proof: by ext; simp
-
-中文:
-引理 translate_zero
-  条件: (f : G -> α)
-  结论: τ 0 f = f
-  证明: by ext; simp
+@[simp] lemma translate_apply (a : G) (f : G → α) (x : G) : τ a f x = f (x - a) := rfl
+/-
+**translate_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {G : Type u_5} [inst : AddCommGroup G] (f : G → α), trans
+late 0 f = f
+参数：f : G → α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma translate_zero (f : G -> α) : τ 0 f = f := by ext; simp
-
-/--
-lemma `translate_translate` / 引理 `translate_translate`
-
-English:
-lemma translate_translate
-  given: (a b : G) (f : G -> α)
-  statement: τ a (τ b f) = τ (a + b) f
-  proof: by
+@[simp] lemma translate_zero (f : G → α) : τ 0 f = f := by ext; simp
+/-
+**translate_translate** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_translate (a b : G) (f : G -> α) : τ a (τ b f) = τ (a + b) f
+参数：a b : G；f : G -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma translate_translate (a b : G) (f : G → α) : τ a (τ b f) = τ (a + b) f := by
   ext; simp [sub_sub]
-
-中文:
-引理 translate_translate
-  条件: (a b : G) (f : G -> α)
-  结论: τ a (τ b f) = τ (a + b) f
-  证明: by
-  ext; simp [sub_sub]
-
-Depends on / 依赖: sub_sub
+/-
+**translate_add** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_add (a b : G) (f : G -> α) : τ (a + b) f = τ a (τ b f)
+参数：a b : G；f : G -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma translate_translate (a b : G) (f : G -> α) : τ a (τ b f) = τ (a + b) f := by
-  ext; simp [sub_sub]
+lemma translate_add (a b : G) (f : G → α) : τ (a + b) f = τ a (τ b f) := by ext; simp [sub_sub]
 
-/--
-lemma `translate_add` / 引理 `translate_add`
+/-- See `translate_add` -/
+/-
+**translate_add'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_add' (a b : G) (f : G -> α) : τ (a + b) f = τ b (τ a f)
+参数：a b : G；f : G -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `translate_add`：translate_add (a b : G) (f : G -> α) : τ (a + b) f = τ a 
+(τ b f)
 
-English:
-lemma translate_add
-  given: (a b : G) (f : G -> α)
-  statement: τ (a + b) f = τ a (τ b f)
-  proof: by ext; simp [sub_sub]
-
-中文:
-引理 translate_add
-  条件: (a b : G) (f : G -> α)
-  结论: τ (a + b) f = τ a (τ b f)
-  证明: by ext; simp [sub_sub]
-
-Depends on / 依赖: sub_sub
+--- 原说明 ---
+See `translate_add`
 -/
-lemma translate_add (a b : G) (f : G -> α) : τ (a + b) f = τ a (τ b f) := by ext; simp [sub_sub]
-
-/--
-lemma `translate_add'` / 引理 `translate_add'`
-
-English:
-lemma translate_add'
-  given: (a b : G) (f : G -> α)
-  statement: τ (a + b) f = τ b (τ a f)
-  proof: by
-  rw [add_comm]; rw [translate_add]
-
-中文:
-引理 translate_add'
-  条件: (a b : G) (f : G -> α)
-  结论: τ (a + b) f = τ b (τ a f)
-  证明: by
-  rw [add_comm]; rw [translate_add]
-
-Depends on / 依赖: add_comm, translate_add
+lemma translate_add' (a b : G) (f : G → α) : τ (a + b) f = τ b (τ a f) := by
+  rw [add_comm, translate_add]
+/-
+**translate_comm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_comm (a b : G) (f : G -> α) : τ a (τ b f) = τ b (τ a f)
+参数：a b : G；f : G -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `translate_add`：translate_add (a b : G) (f : G -> α) : τ (a + b) f = τ a 
+(τ b f)
+· 使用引理 `translate_add'`：translate_add' (a b : G) (f : G -> α) : τ (a + b) f = τ 
+b (τ a f)
 -/
-lemma translate_add' (a b : G) (f : G -> α) : τ (a + b) f = τ b (τ a f) := by
-  rw [add_comm]; rw [translate_add]
-
-/--
-lemma `translate_comm` / 引理 `translate_comm`
-
-English:
-lemma translate_comm
-  given: (a b : G) (f : G -> α)
-  statement: τ a (τ b f) = τ b (τ a f)
-  proof: by
-  rw [← translate_add]; rw [translate_add']
-
-中文:
-引理 translate_comm
-  条件: (a b : G) (f : G -> α)
-  结论: τ a (τ b f) = τ b (τ a f)
-  证明: by
-  rw [← translate_add]; rw [translate_add']
-
-Depends on / 依赖: translate_add
--/
-lemma translate_comm (a b : G) (f : G -> α) : τ a (τ b f) = τ b (τ a f) := by
-  rw [← translate_add]; rw [translate_add']
+lemma translate_comm (a b : G) (f : G → α) : τ a (τ b f) = τ b (τ a f) := by
+  rw [← translate_add, translate_add']
 
 -- We make `simp` push the `τ` outside
-/--
-lemma `comp_translate` / 引理 `comp_translate`
-
-English:
-lemma comp_translate
-  given: (a : G) (f : G -> α) (g : α -> β)
-  statement: g ∘ τ a f = τ a (g ∘ f)
-  proof: rfl
-
-中文:
-引理 comp_translate
-  条件: (a : G) (f : G -> α) (g : α -> β)
-  结论: g ∘ τ a f = τ a (g ∘ f)
-  证明: rfl
+/-
+**comp_translate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {β : Type u_3} {G : Type u_5} [inst : AddCommGroup G] (a 
+: G) (f : G → α) (g : α → β),   g ∘ translate a f = translate a (g ∘ f)
+参数：a : G；f : G → α；g : α → β；g ∘ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma comp_translate (a : G) (f : G -> α) (g : α -> β) : g ∘ τ a f = τ a (g ∘ f) := rfl
-
-/--
-lemma `translate_eq_domAddActMk_vadd` / 引理 `translate_eq_domAddActMk_vadd`
-
-English:
-lemma translate_eq_domAddActMk_vadd
-  given: (a : G) (f : G -> α)
-  statement: τ a f = DomAddAct.mk (-a) +ᵥ f
-  proof: by
+@[simp] lemma comp_translate (a : G) (f : G → α) (g : α → β) : g ∘ τ a f = τ a (g ∘ f) := rfl
+/-
+**translate_eq_domAddActMk_vadd** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_eq_domAddActMk_vadd (a : G) (f : G -> α) : τ a f = DomAddAct.mk 
+(-a) +ᵥ f
+参数：a : G；f : G -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma translate_eq_domAddActMk_vadd (a : G) (f : G → α) : τ a f = DomAddAct.mk (-a) +ᵥ f := by
   ext; simp [DomAddAct.vadd_apply, sub_eq_neg_add]
 
 @[simp]
-
-中文:
-引理 translate_eq_domAddActMk_vadd
-  条件: (a : G) (f : G -> α)
-  结论: τ a f = DomAddAct.mk (-a) +ᵥ f
-  证明: by
-  ext; simp [DomAddAct.vadd_apply, sub_eq_neg_add]
-
-@[simp]
-
-Depends on / 依赖: DomAddAct, DomAddAct.vadd_apply, sub_eq_neg_add, vadd_apply
+/-
+**translate_smul_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_smul_right [SMul H α] (a : G) (f : G -> α) (c : H) : τ a (c • f)
+ = c • τ a f
+参数：a : G；f : G -> α；c : H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma translate_eq_domAddActMk_vadd (a : G) (f : G -> α) : τ a f = DomAddAct.mk (-a) +ᵥ f := by
-  ext; simp [DomAddAct.vadd_apply, sub_eq_neg_add]
-
-@[simp]
-/--
-lemma `translate_smul_right` / 引理 `translate_smul_right`
-
-English:
-lemma translate_smul_right
-  given: [SMul H α] (a : G) (f : G -> α) (c : H)
-  statement: τ a (c • f) = c • τ a f
-  proof: rfl
-
-中文:
-引理 translate_smul_right
-  条件: [标量乘法 H α] (a : G) (f : G -> α) (c : H)
-  结论: τ a (c • f) = c • τ a f
-  证明: rfl
+lemma translate_smul_right [SMul H α] (a : G) (f : G → α) (c : H) : τ a (c • f) = c • τ a f := rfl
+/-
+**translate_zero_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_2} {G : Type u_5} [inst : AddCommGroup G] [inst_1 : Zero α] 
+(a : G), translate a 0 = 0
+参数：a : G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma translate_smul_right [SMul H α] (a : G) (f : G -> α) (c : H) : τ a (c • f) = c • τ a f := rfl
-
-/--
-lemma `translate_zero_right` / 引理 `translate_zero_right`
-
-English:
-lemma translate_zero_right
-  given: [Zero α] (a : G)
-  statement: τ a (0 : G -> α) = 0
-  proof: rfl
-
-中文:
-引理 translate_zero_right
-  条件: [零 α] (a : G)
-  结论: τ a (0 : G -> α) = 0
-  证明: rfl
+@[simp] lemma translate_zero_right [Zero α] (a : G) : τ a (0 : G → α) = 0 := rfl
+/-
+**translate_add_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_add_right [Add α] (a : G) (f g : G -> α) : τ a (f + g) = τ a f +
+ τ a g
+参数：a : G；f g : G -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma translate_zero_right [Zero α] (a : G) : τ a (0 : G -> α) = 0 := rfl
-/--
-lemma `translate_add_right` / 引理 `translate_add_right`
-
-English:
-lemma translate_add_right
-  given: [Add α] (a : G) (f g : G -> α)
-  statement: τ a (f + g) = τ a f + τ a g
-  proof: rfl
-
-中文:
-引理 translate_add_right
-  条件: [加法 α] (a : G) (f g : G -> α)
-  结论: τ a (f + g) = τ a f + τ a g
-  证明: rfl
+lemma translate_add_right [Add α] (a : G) (f g : G → α) : τ a (f + g) = τ a f + τ a g := rfl
+/-
+**translate_sub_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_sub_right [Sub α] (a : G) (f g : G -> α) : τ a (f - g) = τ a f -
+ τ a g
+参数：a : G；f g : G -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma translate_add_right [Add α] (a : G) (f g : G -> α) : τ a (f + g) = τ a f + τ a g := rfl
-/--
-lemma `translate_sub_right` / 引理 `translate_sub_right`
-
-English:
-lemma translate_sub_right
-  given: [Sub α] (a : G) (f g : G -> α)
-  statement: τ a (f - g) = τ a f - τ a g
-  proof: rfl
-
-中文:
-引理 translate_sub_right
-  条件: [减法 α] (a : G) (f g : G -> α)
-  结论: τ a (f - g) = τ a f - τ a g
-  证明: rfl
+lemma translate_sub_right [Sub α] (a : G) (f g : G → α) : τ a (f - g) = τ a f - τ a g := rfl
+/-
+**translate_neg_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_neg_right [Neg α] (a : G) (f : G -> α) : τ a (-f) = -τ a f
+参数：a : G；f : G -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma translate_sub_right [Sub α] (a : G) (f g : G -> α) : τ a (f - g) = τ a f - τ a g := rfl
-/--
-lemma `translate_neg_right` / 引理 `translate_neg_right`
-
-English:
-lemma translate_neg_right
-  given: [Neg α] (a : G) (f : G -> α)
-  statement: τ a (-f) = -τ a f
-  proof: rfl
-
-中文:
-引理 translate_neg_right
-  条件: [取负 α] (a : G) (f : G -> α)
-  结论: τ a (-f) = -τ a f
-  证明: rfl
--/
-lemma translate_neg_right [Neg α] (a : G) (f : G -> α) : τ a (-f) = -τ a f := rfl
+lemma translate_neg_right [Neg α] (a : G) (f : G → α) : τ a (-f) = -τ a f := rfl
 
 section AddCommMonoid
 variable [AddCommMonoid M]
 
-/--
-lemma `translate_sum_right` / 引理 `translate_sum_right`
-
-English:
-lemma translate_sum_right
-  given: (a : G) (f : ι -> G -> M) (s : Finset ι)
-  proof: by ext; simp
-
-中文:
-引理 translate_sum_right
-  条件: (a : G) (f : ι -> G -> M) (s : 有限集 ι)
-  证明: by ext; simp
+/-
+**translate_sum_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_sum_right (a : G) (f : ι -> G -> M) (s : Finset ι) : τ a (∑ i in
+ s, f i) = ∑ i in s, τ a (f i)
+参数：a : G；f : ι -> G -> M；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma translate_sum_right (a : G) (f : ι -> G -> M) (s : Finset ι) :
-    τ a (∑ i in s, f i) = ∑ i in s, τ a (f i) := by ext; simp
-
-/--
-lemma `sum_translate` / 引理 `sum_translate`
-
-English:
-lemma sum_translate
-  given: [Fintype G] (a : G) (f : G -> M)
-  statement: ∑ b, τ a f b = ∑ b, f b
-  proof: Fintype.sum_equiv (Equiv.subRight _) _ _ fun _ => rfl
-
-中文:
-引理 sum_translate
-  条件: [有限类型 G] (a : G) (f : G -> M)
-  结论: ∑ b, τ a f b = ∑ b, f b
-  证明: Fintype.sum_equiv (Equiv.subRight _) _ _ fun _ => rfl
-
-Depends on / 依赖: Equiv.subRight, Fintype, Fintype.sum_equiv, subRight, sum_equiv
+lemma translate_sum_right (a : G) (f : ι → G → M) (s : Finset ι) :
+    τ a (∑ i ∈ s, f i) = ∑ i ∈ s, τ a (f i) := by ext; simp
+/-
+**sum_translate** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sum_translate [Fintype G] (a : G) (f : G -> M) : ∑ b, τ a f b = ∑ b, f b
+参数：a : G；f : G -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.sum_equiv`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst 
+: Fintype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (f : 
+ι → M) …
 -/
-lemma sum_translate [Fintype G] (a : G) (f : G -> M) : ∑ b, τ a f b = ∑ b, f b :=
-  Fintype.sum_equiv (Equiv.subRight _) _ _ fun _ => rfl
+lemma sum_translate [Fintype G] (a : G) (f : G → M) : ∑ b, τ a f b = ∑ b, f b :=
+  Fintype.sum_equiv (Equiv.subRight _) _ _ fun _ ↦ rfl
 
 end AddCommMonoid
 
 section AddCommGroup
 variable [AddCommGroup H]
 
-/--
-lemma `support_translate` / 引理 `support_translate`
-
-English:
-lemma support_translate
-  given: (a : G) (f : G -> H)
-  statement: support (τ a f) = a +ᵥ support f
-  proof: by
-  ext; simp [mem_vadd_set_iff_neg_vadd_mem, sub_eq_neg_add]
-
-中文:
-引理 support_translate
-  条件: (a : G) (f : G -> H)
-  结论: support (τ a f) = a +ᵥ support f
-  证明: by
-  ext; simp [mem_vadd_set_iff_neg_vadd_mem, sub_eq_neg_add]
+/-
+**support_translate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_5} {H : Type u_6} [inst : AddCommGroup G] [inst_1 : AddCommG
+roup H] (a : G) (f : G → H),   Function.support (translate a f) = a +ᵥ Function.
+support f
+参数：a : G；f : G → H；translate a f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma support_translate (a : G) (f : G -> H) : support (τ a f) = a +ᵥ support f := by
+@[simp] lemma support_translate (a : G) (f : G → H) : support (τ a f) = a +ᵥ support f := by
   ext; simp [mem_vadd_set_iff_neg_vadd_mem, sub_eq_neg_add]
 
 end AddCommGroup
 
 variable [CommMonoid M]
 
-/--
-lemma `translate_prod_right` / 引理 `translate_prod_right`
-
-English:
-lemma translate_prod_right
-  given: (a : G) (f : ι -> G -> M) (s : Finset ι)
-  proof: by ext; simp
-
-中文:
-引理 translate_prod_right
-  条件: (a : G) (f : ι -> G -> M) (s : 有限集 ι)
-  证明: by ext; simp
+/-
+**translate_prod_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：translate_prod_right (a : G) (f : ι -> G -> M) (s : Finset ι) : τ a (∏ i i
+n s, f i) = ∏ i in s, τ a (f i)
+参数：a : G；f : ι -> G -> M；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_apply`：Finset.prod_apply {α : Type*} {M : α -> Type*} [foral
+l a, CommMonoid (M a)] (a : α) (s : Finset ι) (g : ι -> forall a, M a) : (∏ c in
+ s, g c…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma translate_prod_right (a : G) (f : ι -> G -> M) (s : Finset ι) :
-    τ a (∏ i in s, f i) = ∏ i in s, τ a (f i) := by ext; simp
+lemma translate_prod_right (a : G) (f : ι → G → M) (s : Finset ι) :
+    τ a (∏ i ∈ s, f i) = ∏ i ∈ s, τ a (f i) := by ext; simp

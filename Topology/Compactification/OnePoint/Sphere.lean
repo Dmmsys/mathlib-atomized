@@ -20,72 +20,58 @@ open Function Metric Module Set Submodule
 
 noncomputable section
 
-/--
-Definition of `onePointHyperplaneHomeoUnitSphere` / `onePointHyperplaneHomeoUnitSphere` 的定义
+/-- A homeomorphism from the one-point compactification of a hyperplane in Euclidean space to the
+sphere. -/
+/-
+**onePointHyperplaneHomeoUnitSphere** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：onePointHyperplaneHomeoUnitSphere {E : Type*} [NormedAddCommGroup E] [Inne
+rProductSpace Real E] [FiniteDimensional Real E] {v : E} (hv : ‖v‖ = 1) : OnePoi
+nt (Real ∙ v)ᗮ ≃ₜ sphere (0 : E) 1
+参数：hv : ‖v‖ = 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition onePointHyperplaneHomeoUnitSphere
-  body: OnePoint.equivOfIsEmbeddingOfRangeEq _ _
-    (isOpenEmbedding_stereographic_symm hv).toIsEmbedding (range_stereographic_symm hv)
-
-中文:
-定义 onePointHyperplaneHomeoUnitSphere
-  定义体: OnePoint.equivOfIsEmbeddingOfRangeEq _ _
-    (isOpenEmbedding_stereographic_symm hv).toIsEmbedding (range_stereographic_symm hv)
-
-Depends on / 依赖: OnePoint, OnePoint.equivOfIsEmbeddingOfRangeEq, equivOfIsEmbeddingOfRangeEq, isOpenEmbedding_stereographic_symm, range_stereographic_symm, toIsEmbedding
+--- 原说明 ---
+A homeomorphism from the one-point compactification of a hyperplane in Euclidean
+ space to the
+sphere.
 -/
 def onePointHyperplaneHomeoUnitSphere
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace Real E] [FiniteDimensional Real E]
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
     {v : E} (hv : ‖v‖ = 1) :
-    OnePoint (Real ∙ v)ᗮ ≃ₜ sphere (0 : E) 1 :=
+    OnePoint (ℝ ∙ v)ᗮ ≃ₜ sphere (0 : E) 1 :=
   OnePoint.equivOfIsEmbeddingOfRangeEq _ _
     (isOpenEmbedding_stereographic_symm hv).toIsEmbedding (range_stereographic_symm hv)
 
-/--
-Definition of `onePointEquivSphereOfFinrankEq` / `onePointEquivSphereOfFinrankEq` 的定义
+/-- A homeomorphism from the one-point compactification of a finite-dimensional real vector space to
+the sphere. -/
+/-
+**onePointEquivSphereOfFinrankEq** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：onePointEquivSphereOfFinrankEq {ι V : Type*} [Fintype ι] [AddCommGroup V] 
+[Module Real V] [FiniteDimensional Real V] [TopologicalSpace V] [IsTopologicalAd
+dGroup V] [ContinuousSMul Real V] [T2Space V] (h : finrank Real V + 1 = Fintype.
+card ι) : OnePoint V ≃ₜ sphere (0 : EuclideanSpace Real ι) 1
+参数：h : finrank Real V + 1 = Fintype.card ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `fact_one_le_two_ennreal`：Fact (1 ≤ 2)
 
-English:
-definition onePointEquivSphereOfFinrankEq
-  signature: {ι V : Type*} [Fintype ι]
-  body: by
-  classical
-have : Nonempty ι := Fintype.card_pos_iff.mp by lia
-  let v : EuclideanSpace Real ι := .single (Classical.arbitrary ι) 1
-  have hv : ‖v‖ = 1 := by simp [v]
-  have hv₀ : v != 0 := fun contra => by simp [contra] at hv
-  have : Fact (finrank Real (EuclideanSpace Real ι) = finrank Real V + 1) := ⟨by simp [h]⟩
-  have hV : finrank Real V = finrank Real (Real ∙ v)ᗮ := (finrank_orthogonal_span_singleton hv₀).symm
-  letI e : V ≃ₜ (Real ∙ v)ᗮ := (FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq hV).some
-exact e.onePointCongr.trans onePointHyperplaneHomeoUnitSphere hv
-
-中文:
-定义 onePointEquivSphereOfFinrankEq
-  签名: {ι V : 类型} [有限类型 ι]
-  定义体: by
-  classical
-have : Nonempty ι := Fintype.card_pos_iff.mp by lia
-  let v : EuclideanSpace Real ι := .single (Classical.arbitrary ι) 1
-  have hv : ‖v‖ = 1 := by simp [v]
-  have hv₀ : v != 0 := fun contra => by simp [contra] at hv
-  have : Fact (finrank Real (EuclideanSpace Real ι) = finrank Real V + 1) := ⟨by simp [h]⟩
-  have hV : finrank Real V = finrank Real (Real ∙ v)ᗮ := (finrank_orthogonal_span_singleton hv₀).symm
-  letI e : V ≃ₜ (Real ∙ v)ᗮ := (FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq hV).some
-exact e.onePointCongr.trans onePointHyperplaneHomeoUnitSphere hv
-
-Depends on / 依赖: Classical, Classical.arbitrary, EuclideanSpace, FiniteDimensional, FiniteDimensional.nonempty_continuousLinearEquiv_of_finran, Fintype, Fintype.card_pos_iff.mp, Nonempty, arbitrary, card_pos_iff, classical, contra, finrank, finrank_orthogonal_span_singleton, nonempty_continuousLinearEquiv_of_finran, single
+--- 原说明 ---
+A homeomorphism from the one-point compactification of a finite-dimensional real
+ vector space to
+the sphere.
 -/
 def onePointEquivSphereOfFinrankEq {ι V : Type*} [Fintype ι]
-    [AddCommGroup V] [Module Real V] [FiniteDimensional Real V]
-    [TopologicalSpace V] [IsTopologicalAddGroup V] [ContinuousSMul Real V] [T2Space V]
-    (h : finrank Real V + 1 = Fintype.card ι) :
-    OnePoint V ≃ₜ sphere (0 : EuclideanSpace Real ι) 1 := by
+    [AddCommGroup V] [Module ℝ V] [FiniteDimensional ℝ V]
+    [TopologicalSpace V] [IsTopologicalAddGroup V] [ContinuousSMul ℝ V] [T2Space V]
+    (h : finrank ℝ V + 1 = Fintype.card ι) :
+    OnePoint V ≃ₜ sphere (0 : EuclideanSpace ℝ ι) 1 := by
   classical
-have : Nonempty ι := Fintype.card_pos_iff.mp by lia
-  let v : EuclideanSpace Real ι := .single (Classical.arbitrary ι) 1
+  have : Nonempty ι := Fintype.card_pos_iff.mp <| by lia
+  let v : EuclideanSpace ℝ ι := .single (Classical.arbitrary ι) 1
   have hv : ‖v‖ = 1 := by simp [v]
-  have hv₀ : v != 0 := fun contra => by simp [contra] at hv
-  have : Fact (finrank Real (EuclideanSpace Real ι) = finrank Real V + 1) := ⟨by simp [h]⟩
-  have hV : finrank Real V = finrank Real (Real ∙ v)ᗮ := (finrank_orthogonal_span_singleton hv₀).symm
-  letI e : V ≃ₜ (Real ∙ v)ᗮ := (FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq hV).some
-exact e.onePointCongr.trans onePointHyperplaneHomeoUnitSphere hv
+  have hv₀ : v ≠ 0 := fun contra ↦ by simp [contra] at hv
+  have : Fact (finrank ℝ (EuclideanSpace ℝ ι) = finrank ℝ V + 1) := ⟨by simp [h]⟩
+  have hV : finrank ℝ V = finrank ℝ (ℝ ∙ v)ᗮ := (finrank_orthogonal_span_singleton hv₀).symm
+  letI e : V ≃ₜ (ℝ ∙ v)ᗮ := (FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq hV).some
+  exact e.onePointCongr.trans <| onePointHyperplaneHomeoUnitSphere hv

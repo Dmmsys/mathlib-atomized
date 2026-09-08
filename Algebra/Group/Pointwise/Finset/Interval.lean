@@ -38,74 +38,78 @@ variable [Mul α] [Preorder α] [DecidableEq α]
 variable [MulLeftMono α] [MulRightMono α]
 
 @[to_additive Icc_add_Icc_subset]
-/--
-theorem `Icc_mul_Icc_subset'` / 定理 `Icc_mul_Icc_subset'`
-
-English:
-theorem Icc_mul_Icc_subset'
-  given: [LocallyFiniteOrder α] (a b c d : α)
-  proof: Finset.coe_subset.mp by simpa using Set.Icc_mul_Icc_subset' _ _ _ _
-
-@[to_additive Iic_add_Iic_subset]
-
-中文:
-定理 Icc_mul_Icc_subset'
-  条件: [局部有限序 α] (a b c d : α)
-  证明: Finset.coe_subset.mp by simpa using Set.Icc_mul_Icc_subset' _ _ _ _
-
-@[to_additive Iic_add_Iic_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Icc_mul_Icc_subset, Set.Icc_mul_Icc_subset, coe_subset
+/-
+**Finset.Icc_mul_Icc_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Icc_mul_Icc_subset' [LocallyFiniteOrder α] (a b c d : α) : Icc a b * Icc c
+ d subseteq Icc (a * c) (b * d)
+参数：a b c d : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Set.Icc_mul_Icc_subset'`：Icc_mul_Icc_subset' (a b c d : α) : Icc a b * I
+cc c d subseteq Icc (a * c) (b * d)
 -/
 theorem Icc_mul_Icc_subset' [LocallyFiniteOrder α] (a b c d : α) :
-    Icc a b * Icc c d subseteq Icc (a * c) (b * d) :=
-Finset.coe_subset.mp by simpa using Set.Icc_mul_Icc_subset' _ _ _ _
+    Icc a b * Icc c d ⊆ Icc (a * c) (b * d) :=
+  Finset.coe_subset.mp <| by simpa using Set.Icc_mul_Icc_subset' _ _ _ _
 
 @[to_additive Iic_add_Iic_subset]
-/--
-theorem `Iic_mul_Iic_subset'` / 定理 `Iic_mul_Iic_subset'`
-
-English:
-theorem Iic_mul_Iic_subset'
-  given: [LocallyFiniteOrderBot α] (a b : α)
-  statement: Iic a * Iic b subseteq Iic (a * b)
-  proof: Finset.coe_subset.mp by simpa using Set.Iic_mul_Iic_subset' _ _
-
-@[to_additive Ici_add_Ici_subset]
-
-中文:
-定理 Iic_mul_Iic_subset'
-  条件: [LocallyFiniteOrderBot α] (a b : α)
-  结论: 左无界右闭区间 a * 左无界右闭区间 b subseteq 左无界右闭区间 (a * b)
-  证明: Finset.coe_subset.mp by simpa using Set.Iic_mul_Iic_subset' _ _
-
-@[to_additive Ici_add_Ici_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Iic_mul_Iic_subset, Set.Iic_mul_Iic_subset, coe_subset
+/-
+**Finset.Iic_mul_Iic_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Iic_mul_Iic_subset' [LocallyFiniteOrderBot α] (a b : α) : Iic a * Iic b su
+bseteq Iic (a * b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
+· 使用定理 `Set.Iic_mul_Iic_subset'`：Iic_mul_Iic_subset' (a b : α) : Iic a * Iic b s
+ubseteq Iic (a * b)
 -/
-theorem Iic_mul_Iic_subset' [LocallyFiniteOrderBot α] (a b : α) : Iic a * Iic b subseteq Iic (a * b) :=
-Finset.coe_subset.mp by simpa using Set.Iic_mul_Iic_subset' _ _
+theorem Iic_mul_Iic_subset' [LocallyFiniteOrderBot α] (a b : α) : Iic a * Iic b ⊆ Iic (a * b) :=
+  Finset.coe_subset.mp <| by simpa using Set.Iic_mul_Iic_subset' _ _
 
 @[to_additive Ici_add_Ici_subset]
-/--
-theorem `Ici_mul_Ici_subset'` / 定理 `Ici_mul_Ici_subset'`
-
-English:
-theorem Ici_mul_Ici_subset'
-  given: [LocallyFiniteOrderTop α] (a b : α)
-  statement: Ici a * Ici b subseteq Ici (a * b)
-  proof: Finset.coe_subset.mp by simpa using Set.Ici_mul_Ici_subset' _ _
-
-中文:
-定理 Ici_mul_Ici_subset'
-  条件: [LocallyFiniteOrderTop α] (a b : α)
-  结论: 左闭右无界区间 a * 左闭右无界区间 b subseteq 左闭右无界区间 (a * b)
-  证明: Finset.coe_subset.mp by simpa using Set.Ici_mul_Ici_subset' _ _
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Ici_mul_Ici_subset, Set.Ici_mul_Ici_subset, coe_subset
+/-
+**Finset.Ici_mul_Ici_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Ici_mul_Ici_subset' [LocallyFiniteOrderTop α] (a b : α) : Ici a * Ici b su
+bseteq Ici (a * b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Ici`：coe_Ici (a : α) : (Ici a : Set α) = Set.Ici a
+· 使用定理 `Set.Ici_mul_Ici_subset'`：Ici_mul_Ici_subset' (a b : α) : Ici a * Ici b s
+ubseteq Ici (a * b)
 -/
-theorem Ici_mul_Ici_subset' [LocallyFiniteOrderTop α] (a b : α) : Ici a * Ici b subseteq Ici (a * b) :=
-Finset.coe_subset.mp by simpa using Set.Ici_mul_Ici_subset' _ _
+theorem Ici_mul_Ici_subset' [LocallyFiniteOrderTop α] (a b : α) : Ici a * Ici b ⊆ Ici (a * b) :=
+  Finset.coe_subset.mp <| by simpa using Set.Ici_mul_Ici_subset' _ _
 
 end ContravariantLE
 
@@ -115,197 +119,218 @@ variable [Mul α] [PartialOrder α] [DecidableEq α]
 variable [MulLeftStrictMono α] [MulRightStrictMono α]
 
 @[to_additive Icc_add_Ico_subset]
-/--
-theorem `Icc_mul_Ico_subset'` / 定理 `Icc_mul_Ico_subset'`
-
-English:
-theorem Icc_mul_Ico_subset'
-  given: [LocallyFiniteOrder α] (a b c d : α)
-  proof: Finset.coe_subset.mp by simpa using Set.Icc_mul_Ico_subset' _ _ _ _
-
-@[to_additive Ico_add_Icc_subset]
-
-中文:
-定理 Icc_mul_Ico_subset'
-  条件: [局部有限序 α] (a b c d : α)
-  证明: Finset.coe_subset.mp by simpa using Set.Icc_mul_Ico_subset' _ _ _ _
-
-@[to_additive Ico_add_Icc_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Icc_mul_Ico_subset, Set.Icc_mul_Ico_subset, coe_subset
+/-
+**Finset.Icc_mul_Ico_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Icc_mul_Ico_subset' [LocallyFiniteOrder α] (a b c d : α) : Icc a b * Ico c
+ d subseteq Ico (a * c) (b * d)
+参数：a b c d : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Set.Icc_mul_Ico_subset'`：Icc_mul_Ico_subset' (a b c d : α) : Icc a b * I
+co c d subseteq Ico (a * c) (b * d)
 -/
 theorem Icc_mul_Ico_subset' [LocallyFiniteOrder α] (a b c d : α) :
-    Icc a b * Ico c d subseteq Ico (a * c) (b * d) :=
-Finset.coe_subset.mp by simpa using Set.Icc_mul_Ico_subset' _ _ _ _
+    Icc a b * Ico c d ⊆ Ico (a * c) (b * d) :=
+  Finset.coe_subset.mp <| by simpa using Set.Icc_mul_Ico_subset' _ _ _ _
 
 @[to_additive Ico_add_Icc_subset]
-/--
-theorem `Ico_mul_Icc_subset'` / 定理 `Ico_mul_Icc_subset'`
-
-English:
-theorem Ico_mul_Icc_subset'
-  given: [LocallyFiniteOrder α] (a b c d : α)
-  proof: Finset.coe_subset.mp by simpa using Set.Ico_mul_Icc_subset' _ _ _ _
-
-@[to_additive Ioc_add_Ico_subset]
-
-中文:
-定理 Ico_mul_Icc_subset'
-  条件: [局部有限序 α] (a b c d : α)
-  证明: Finset.coe_subset.mp by simpa using Set.Ico_mul_Icc_subset' _ _ _ _
-
-@[to_additive Ioc_add_Ico_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Ico_mul_Icc_subset, Set.Ico_mul_Icc_subset, coe_subset
+/-
+**Finset.Ico_mul_Icc_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Ico_mul_Icc_subset' [LocallyFiniteOrder α] (a b c d : α) : Ico a b * Icc c
+ d subseteq Ico (a * c) (b * d)
+参数：a b c d : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Set.Ico_mul_Icc_subset'`：Ico_mul_Icc_subset' (a b c d : α) : Ico a b * I
+cc c d subseteq Ico (a * c) (b * d)
 -/
 theorem Ico_mul_Icc_subset' [LocallyFiniteOrder α] (a b c d : α) :
-    Ico a b * Icc c d subseteq Ico (a * c) (b * d) :=
-Finset.coe_subset.mp by simpa using Set.Ico_mul_Icc_subset' _ _ _ _
+    Ico a b * Icc c d ⊆ Ico (a * c) (b * d) :=
+  Finset.coe_subset.mp <| by simpa using Set.Ico_mul_Icc_subset' _ _ _ _
 
 @[to_additive Ioc_add_Ico_subset]
-/--
-theorem `Ioc_mul_Ico_subset'` / 定理 `Ioc_mul_Ico_subset'`
-
-English:
-theorem Ioc_mul_Ico_subset'
-  given: [LocallyFiniteOrder α] (a b c d : α)
-  proof: Finset.coe_subset.mp by simpa using Set.Ioc_mul_Ico_subset' _ _ _ _
-
-@[to_additive Ico_add_Ioc_subset]
-
-中文:
-定理 Ioc_mul_Ico_subset'
-  条件: [局部有限序 α] (a b c d : α)
-  证明: Finset.coe_subset.mp by simpa using Set.Ioc_mul_Ico_subset' _ _ _ _
-
-@[to_additive Ico_add_Ioc_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Ioc_mul_Ico_subset, Set.Ioc_mul_Ico_subset, coe_subset
+/-
+**Finset.Ioc_mul_Ico_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Ioc_mul_Ico_subset' [LocallyFiniteOrder α] (a b c d : α) : Ioc a b * Ico c
+ d subseteq Ioo (a * c) (b * d)
+参数：a b c d : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Set.Ioc_mul_Ico_subset'`：Ioc_mul_Ico_subset' (a b c d : α) : Ioc a b * I
+co c d subseteq Ioo (a * c) (b * d)
 -/
 theorem Ioc_mul_Ico_subset' [LocallyFiniteOrder α] (a b c d : α) :
-    Ioc a b * Ico c d subseteq Ioo (a * c) (b * d) :=
-Finset.coe_subset.mp by simpa using Set.Ioc_mul_Ico_subset' _ _ _ _
+    Ioc a b * Ico c d ⊆ Ioo (a * c) (b * d) :=
+  Finset.coe_subset.mp <| by simpa using Set.Ioc_mul_Ico_subset' _ _ _ _
 
 @[to_additive Ico_add_Ioc_subset]
-/--
-theorem `Ico_mul_Ioc_subset'` / 定理 `Ico_mul_Ioc_subset'`
-
-English:
-theorem Ico_mul_Ioc_subset'
-  given: [LocallyFiniteOrder α] (a b c d : α)
-  proof: Finset.coe_subset.mp by simpa using Set.Ico_mul_Ioc_subset' _ _ _ _
-
-@[to_additive Iic_add_Iio_subset]
-
-中文:
-定理 Ico_mul_Ioc_subset'
-  条件: [局部有限序 α] (a b c d : α)
-  证明: Finset.coe_subset.mp by simpa using Set.Ico_mul_Ioc_subset' _ _ _ _
-
-@[to_additive Iic_add_Iio_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Ico_mul_Ioc_subset, Set.Ico_mul_Ioc_subset, coe_subset
+/-
+**Finset.Ico_mul_Ioc_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Ico_mul_Ioc_subset' [LocallyFiniteOrder α] (a b c d : α) : Ico a b * Ioc c
+ d subseteq Ioo (a * c) (b * d)
+参数：a b c d : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Set.Ico_mul_Ioc_subset'`：Ico_mul_Ioc_subset' (a b c d : α) : Ico a b * I
+oc c d subseteq Ioo (a * c) (b * d)
 -/
 theorem Ico_mul_Ioc_subset' [LocallyFiniteOrder α] (a b c d : α) :
-    Ico a b * Ioc c d subseteq Ioo (a * c) (b * d) :=
-Finset.coe_subset.mp by simpa using Set.Ico_mul_Ioc_subset' _ _ _ _
+    Ico a b * Ioc c d ⊆ Ioo (a * c) (b * d) :=
+  Finset.coe_subset.mp <| by simpa using Set.Ico_mul_Ioc_subset' _ _ _ _
 
 @[to_additive Iic_add_Iio_subset]
-/--
-theorem `Iic_mul_Iio_subset'` / 定理 `Iic_mul_Iio_subset'`
-
-English:
-theorem Iic_mul_Iio_subset'
-  given: [LocallyFiniteOrderBot α] (a b : α)
-  statement: Iic a * Iio b subseteq Iio (a * b)
-  proof: Finset.coe_subset.mp by simpa using Set.Iic_mul_Iio_subset' _ _
+/-
+**Finset.Iic_mul_Iio_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Iic_mul_Iio_subset' [LocallyFiniteOrderBot α] (a b : α) : Iic a * Iio b su
+bseteq Iio (a * b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
+· 使用定理 `Finset.coe_Iio`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iio a) = Set.Iio a
+· 使用定理 `Set.Iic_mul_Iio_subset'`：Iic_mul_Iio_subset' (a b : α) : Iic a * Iio b s
+ubseteq Iio (a * b)
+-/
+theorem Iic_mul_Iio_subset' [LocallyFiniteOrderBot α] (a b : α) : Iic a * Iio b ⊆ Iio (a * b) :=
+  Finset.coe_subset.mp <| by simpa using Set.Iic_mul_Iio_subset' _ _
 
 @[to_additive Iio_add_Iic_subset]
-
-中文:
-定理 Iic_mul_Iio_subset'
-  条件: [LocallyFiniteOrderBot α] (a b : α)
-  结论: 左无界右闭区间 a * 左无界右开区间 b subseteq 左无界右开区间 (a * b)
-  证明: Finset.coe_subset.mp by simpa using Set.Iic_mul_Iio_subset' _ _
-
-@[to_additive Iio_add_Iic_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Iic_mul_Iio_subset, Set.Iic_mul_Iio_subset, coe_subset
+/-
+**Finset.Iio_mul_Iic_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Iio_mul_Iic_subset' [LocallyFiniteOrderBot α] (a b : α) : Iio a * Iic b su
+bseteq Iio (a * b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Iio`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iio a) = Set.Iio a
+· 使用定理 `Finset.coe_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] (a : α), ↑(Finset.Iic a) = Set.Iic a
+· 使用定理 `Set.Iio_mul_Iic_subset'`：Iio_mul_Iic_subset' (a b : α) : Iio a * Iic b s
+ubseteq Iio (a * b)
 -/
-theorem Iic_mul_Iio_subset' [LocallyFiniteOrderBot α] (a b : α) : Iic a * Iio b subseteq Iio (a * b) :=
-Finset.coe_subset.mp by simpa using Set.Iic_mul_Iio_subset' _ _
-
-@[to_additive Iio_add_Iic_subset]
-/--
-theorem `Iio_mul_Iic_subset'` / 定理 `Iio_mul_Iic_subset'`
-
-English:
-theorem Iio_mul_Iic_subset'
-  given: [LocallyFiniteOrderBot α] (a b : α)
-  statement: Iio a * Iic b subseteq Iio (a * b)
-  proof: Finset.coe_subset.mp by simpa using Set.Iio_mul_Iic_subset' _ _
+theorem Iio_mul_Iic_subset' [LocallyFiniteOrderBot α] (a b : α) : Iio a * Iic b ⊆ Iio (a * b) :=
+  Finset.coe_subset.mp <| by simpa using Set.Iio_mul_Iic_subset' _ _
 
 @[to_additive Ioi_add_Ici_subset]
-
-中文:
-定理 Iio_mul_Iic_subset'
-  条件: [LocallyFiniteOrderBot α] (a b : α)
-  结论: 左无界右开区间 a * 左无界右闭区间 b subseteq 左无界右开区间 (a * b)
-  证明: Finset.coe_subset.mp by simpa using Set.Iio_mul_Iic_subset' _ _
-
-@[to_additive Ioi_add_Ici_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Iio_mul_Iic_subset, Set.Iio_mul_Iic_subset, coe_subset
+/-
+**Finset.Ioi_mul_Ici_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Ioi_mul_Ici_subset' [LocallyFiniteOrderTop α] (a b : α) : Ioi a * Ici b su
+bseteq Ioi (a * b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Ioi`：coe_Ioi (a : α) : (Ioi a : Set α) = Set.Ioi a
+· 使用定理 `Finset.coe_Ici`：coe_Ici (a : α) : (Ici a : Set α) = Set.Ici a
+· 使用定理 `Set.Ioi_mul_Ici_subset'`：Ioi_mul_Ici_subset' (a b : α) : Ioi a * Ici b s
+ubseteq Ioi (a * b)
 -/
-theorem Iio_mul_Iic_subset' [LocallyFiniteOrderBot α] (a b : α) : Iio a * Iic b subseteq Iio (a * b) :=
-Finset.coe_subset.mp by simpa using Set.Iio_mul_Iic_subset' _ _
-
-@[to_additive Ioi_add_Ici_subset]
-/--
-theorem `Ioi_mul_Ici_subset'` / 定理 `Ioi_mul_Ici_subset'`
-
-English:
-theorem Ioi_mul_Ici_subset'
-  given: [LocallyFiniteOrderTop α] (a b : α)
-  statement: Ioi a * Ici b subseteq Ioi (a * b)
-  proof: Finset.coe_subset.mp by simpa using Set.Ioi_mul_Ici_subset' _ _
+theorem Ioi_mul_Ici_subset' [LocallyFiniteOrderTop α] (a b : α) : Ioi a * Ici b ⊆ Ioi (a * b) :=
+  Finset.coe_subset.mp <| by simpa using Set.Ioi_mul_Ici_subset' _ _
 
 @[to_additive Ici_add_Ioi_subset]
-
-中文:
-定理 Ioi_mul_Ici_subset'
-  条件: [LocallyFiniteOrderTop α] (a b : α)
-  结论: 左开右无界区间 a * 左闭右无界区间 b subseteq 左开右无界区间 (a * b)
-  证明: Finset.coe_subset.mp by simpa using Set.Ioi_mul_Ici_subset' _ _
-
-@[to_additive Ici_add_Ioi_subset]
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Ioi_mul_Ici_subset, Set.Ioi_mul_Ici_subset, coe_subset
+/-
+**Finset.Ici_mul_Ioi_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：Ici_mul_Ioi_subset' [LocallyFiniteOrderTop α] (a b : α) : Ici a * Ioi b su
+bseteq Ioi (a * b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_mul`：coe_mul (s t : Finset α) : (↑(s * t) : Set α) = ↑s * ↑t
+· 使用定理 `Finset.coe_Ici`：coe_Ici (a : α) : (Ici a : Set α) = Set.Ici a
+· 使用定理 `Finset.coe_Ioi`：coe_Ioi (a : α) : (Ioi a : Set α) = Set.Ioi a
+· 使用定理 `Set.Ici_mul_Ioi_subset'`：Ici_mul_Ioi_subset' (a b : α) : Ici a * Ioi b s
+ubseteq Ioi (a * b)
 -/
-theorem Ioi_mul_Ici_subset' [LocallyFiniteOrderTop α] (a b : α) : Ioi a * Ici b subseteq Ioi (a * b) :=
-Finset.coe_subset.mp by simpa using Set.Ioi_mul_Ici_subset' _ _
-
-@[to_additive Ici_add_Ioi_subset]
-/--
-theorem `Ici_mul_Ioi_subset'` / 定理 `Ici_mul_Ioi_subset'`
-
-English:
-theorem Ici_mul_Ioi_subset'
-  given: [LocallyFiniteOrderTop α] (a b : α)
-  statement: Ici a * Ioi b subseteq Ioi (a * b)
-  proof: Finset.coe_subset.mp by simpa using Set.Ici_mul_Ioi_subset' _ _
-
-中文:
-定理 Ici_mul_Ioi_subset'
-  条件: [LocallyFiniteOrderTop α] (a b : α)
-  结论: 左闭右无界区间 a * 左开右无界区间 b subseteq 左开右无界区间 (a * b)
-  证明: Finset.coe_subset.mp by simpa using Set.Ici_mul_Ioi_subset' _ _
-
-Depends on / 依赖: Finset, Finset.coe_subset.mp, Ici_mul_Ioi_subset, Set.Ici_mul_Ioi_subset, coe_subset
--/
-theorem Ici_mul_Ioi_subset' [LocallyFiniteOrderTop α] (a b : α) : Ici a * Ioi b subseteq Ioi (a * b) :=
-Finset.coe_subset.mp by simpa using Set.Ici_mul_Ioi_subset' _ _
+theorem Ici_mul_Ioi_subset' [LocallyFiniteOrderTop α] (a b : α) : Ici a * Ioi b ⊆ Ioi (a * b) :=
+  Finset.coe_subset.mp <| by simpa using Set.Ici_mul_Ioi_subset' _ _
 
 end ContravariantLT
 
 end Finset
+

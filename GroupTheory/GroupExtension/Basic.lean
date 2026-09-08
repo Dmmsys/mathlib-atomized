@@ -28,62 +28,56 @@ variable {E : Type*} [Group E] (S : GroupExtension N E G)
 
 /-- The isomorphism `E ⧸ S.rightHom.ker ≃* G` induced by `S.rightHom` -/
 @[to_additive /-- The isomorphism `E ⧸ S.rightHom.ker ≃+ G` induced by `S.rightHom` -/]
-/--
-Definition of `quotientKerRightHomEquivRight` / `quotientKerRightHomEquivRight` 的定义
+/-
+**GroupExtension.quotientKerRightHomEquivRight** 是 Mathlib 中的一个定义，位于命名空间 `GroupE
+xtension`。
+形式化陈述：quotientKerRightHomEquivRight : E ⧸ S.rightHom.ker ≃* G
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.rightHom_surjective`：∀ {N : Type u_1} {E : Type u_2} {G :
+ Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self : Grou
+pExtension N E G), Funct…
 
-English:
-definition quotientKerRightHomEquivRight
-  signature: : E ⧸ S.rightHom.ker ≃* G
-  body: QuotientGroup.quotientKerEquivOfSurjective S.rightHom S.rightHom_surjective
-
-中文:
-定义 quotientKerRightHomEquivRight
-  签名: : E ⧸ S.rightHom.ker ≃* G
-  定义体: QuotientGroup.quotientKerEquivOfSurjective S.rightHom S.rightHom_surjective
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.quotientKerEquivOfSurjective, S.rightHom, S.rightHom_surjective, quotientKerEquivOfSurjective, rightHom, rightHom_surjective
+--- 原说明 ---
+The isomorphism `E ⧸ S.rightHom.ker ≃* G` induced by `S.rightHom`
 -/
 noncomputable def quotientKerRightHomEquivRight : E ⧸ S.rightHom.ker ≃* G :=
   QuotientGroup.quotientKerEquivOfSurjective S.rightHom S.rightHom_surjective
 
 /-- The isomorphism `E ⧸ S.inl.range ≃* G` induced by `S.rightHom` -/
 @[to_additive /-- The isomorphism `E ⧸ S.inl.range ≃+ G` induced by `S.rightHom` -/]
-/--
-Definition of `quotientRangeInlEquivRight` / `quotientRangeInlEquivRight` 的定义
+/-
+**GroupExtension.quotientRangeInlEquivRight** 是 Mathlib 中的一个定义，位于命名空间 `GroupExte
+nsion`。
+形式化陈述：quotientRangeInlEquivRight : E ⧸ S.inl.range ≃* G
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.rightHom_surjective`：∀ {N : Type u_1} {E : Type u_2} {G :
+ Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self : Grou
+pExtension N E G), Funct…
+· 使用定理 `GroupExtension.range_inl_eq_ker_rightHom`：∀ {N : Type u_1} {E : Type u_2
+} {G : Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self 
+: GroupExtension N E G), self.…
 
-English:
-definition quotientRangeInlEquivRight
-  signature: : E ⧸ S.inl.range ≃* G
-  body: QuotientGroup.liftEquiv _ S.rightHom_surjective S.range_inl_eq_ker_rightHom
-
-中文:
-定义 quotientRangeInlEquivRight
-  签名: : E ⧸ S.inl.range ≃* G
-  定义体: QuotientGroup.liftEquiv _ S.rightHom_surjective S.range_inl_eq_ker_rightHom
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.liftEquiv, S.range_inl_eq_ker_rightHom, S.rightHom_surjective, liftEquiv, range_inl_eq_ker_rightHom, rightHom_surjective
+--- 原说明 ---
+The isomorphism `E ⧸ S.inl.range ≃* G` induced by `S.rightHom`
 -/
 noncomputable def quotientRangeInlEquivRight : E ⧸ S.inl.range ≃* G :=
   QuotientGroup.liftEquiv _ S.rightHom_surjective S.range_inl_eq_ker_rightHom
 
 /-- An arbitrarily chosen section -/
 @[to_additive surjInvRightHom /-- An arbitrarily chosen section -/]
-/--
-Definition of `surjInvRightHom` / `surjInvRightHom` 的定义
+/-
+**GroupExtension.surjInvRightHom** 是 Mathlib 中的一个定义，位于命名空间 `GroupExtension`。
+形式化陈述：surjInvRightHom : S.Section where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.rightHom_surjective`：∀ {N : Type u_1} {E : Type u_2} {G :
+ Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self : Grou
+pExtension N E G), Funct…
 
-English:
-definition surjInvRightHom
-  signature: : S.Section where
-  body: Function.surjInv S.rightHom_surjective
-  rightInverse_rightHom := Function.surjInv_eq S.rightHom_surjective
-
-中文:
-定义 surjInvRightHom
-  签名: : S.截面 where
-  定义体: Function.surjInv S.rightHom_surjective
-  rightInverse_rightHom := Function.surjInv_eq S.rightHom_surjective
-
-Depends on / 依赖: Function, Function.surjInv, S.rightHom_surjective, rightHom_surjective, surjInv
+--- 原说明 ---
+An arbitrarily chosen section
 -/
 noncomputable def surjInvRightHom : S.Section where
   toFun := Function.surjInv S.rightHom_surjective
@@ -96,264 +90,243 @@ variable {E' : Type*} [Group E'] {S' : GroupExtension N E' G} (σ σ' : S.Sectio
   (equiv : S.Equiv S')
 
 @[to_additive]
-/--
-theorem `mul_inv_mem_range_inl` / 定理 `mul_inv_mem_range_inl`
-
-English:
-theorem mul_inv_mem_range_inl
-  statement: σ g * (σ' g)⁻¹ in S.inl.range
-  proof: by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    mul_inv_cancel]
-
-@[to_additive]
-
-中文:
-定理 mul_inv_mem_range_inl
-  结论: σ g * (σ' g)⁻¹ in S.inl.range
-  证明: by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    mul_inv_cancel]
-
-@[to_additive]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, S.range_inl_eq_ker_rightHom, map_inv, map_mul, mem_ker, mul_inv_cancel, range_inl_eq_ker_rightHom, rightHom_section
+/-
+**GroupExtension.Section.mul_inv_mem_range_inl** 是 Mathlib 中的一个定理，位于命名空间 `GroupE
+xtension.Section`。
+形式化陈述：mul_inv_mem_range_inl : σ g * (σ' g)⁻¹ in S.inl.range
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GroupExtension.range_inl_eq_ker_rightHom`：∀ {N : Type u_1} {E : Type u_2
+} {G : Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self 
+: GroupExtension N E G), self.…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `GroupExtension.Section.rightHom_section`：rightHom_section (g : G) : S.ri
+ghtHom (σ g) = g
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mul_inv_mem_range_inl : σ g * (σ' g)⁻¹ in S.inl.range := by
+theorem mul_inv_mem_range_inl : σ g * (σ' g)⁻¹ ∈ S.inl.range := by
   simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
     mul_inv_cancel]
 
 @[to_additive]
-/--
-theorem `inv_mul_mem_range_inl` / 定理 `inv_mul_mem_range_inl`
-
-English:
-theorem inv_mul_mem_range_inl
-  statement: (σ g)⁻¹ * σ' g in S.inl.range
-  proof: by
+/-
+**GroupExtension.Section.inv_mul_mem_range_inl** 是 Mathlib 中的一个定理，位于命名空间 `GroupE
+xtension.Section`。
+形式化陈述：inv_mul_mem_range_inl : (σ g)⁻¹ * σ' g in S.inl.range
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GroupExtension.range_inl_eq_ker_rightHom`：∀ {N : Type u_1} {E : Type u_2
+} {G : Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self 
+: GroupExtension N E G), self.…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `GroupExtension.Section.rightHom_section`：rightHom_section (g : G) : S.ri
+ghtHom (σ g) = g
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem inv_mul_mem_range_inl : (σ g)⁻¹ * σ' g ∈ S.inl.range := by
   simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
     inv_mul_cancel]
 
 @[to_additive]
-
-中文:
-定理 inv_mul_mem_range_inl
-  结论: (σ g)⁻¹ * σ' g in S.inl.range
-  证明: by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    inv_mul_cancel]
-
-@[to_additive]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, S.range_inl_eq_ker_rightHom, inv_mul_cancel, map_inv, map_mul, mem_ker, range_inl_eq_ker_rightHom, rightHom_section
+/-
+**GroupExtension.Section.exists_eq_inl_mul** 是 Mathlib 中的一个定理，位于命名空间 `GroupExten
+sion.Section`。
+形式化陈述：exists_eq_inl_mul : exists n : N, σ g = S.inl n * σ' g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.Section.mul_inv_mem_range_inl`：mul_inv_mem_range_inl : σ 
+g * (σ' g)⁻¹ in S.inl.range
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_mul_cancel_right`：inv_mul_cancel_right (a b : G) : a * b⁻¹ * b = a
 -/
-theorem inv_mul_mem_range_inl : (σ g)⁻¹ * σ' g in S.inl.range := by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    inv_mul_cancel]
-
-@[to_additive]
-/--
-theorem `exists_eq_inl_mul` / 定理 `exists_eq_inl_mul`
-
-English:
-theorem exists_eq_inl_mul
-  statement: exists n : N, σ g = S.inl n * σ' g
-  proof: by
+theorem exists_eq_inl_mul : ∃ n : N, σ g = S.inl n * σ' g := by
   obtain ⟨n, hn⟩ := mul_inv_mem_range_inl σ σ' g
   exact ⟨n, by rw [hn, inv_mul_cancel_right]⟩
 
 @[to_additive]
-
-中文:
-定理 存在_eq_inl_mul
-  结论: 存在 n : N, σ g = S.inl n * σ' g
-  证明: by
-  obtain ⟨n, hn⟩ := mul_inv_mem_range_inl σ σ' g
-  exact ⟨n, by rw [hn, inv_mul_cancel_right]⟩
-
-@[to_additive]
-
-Depends on / 依赖: inv_mul_cancel_right, mul_inv_mem_range_inl
+/-
+**GroupExtension.Section.exists_eq_mul_inl** 是 Mathlib 中的一个定理，位于命名空间 `GroupExten
+sion.Section`。
+形式化陈述：exists_eq_mul_inl : exists n : N, σ g = σ' g * S.inl n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.Section.inv_mul_mem_range_inl`：inv_mul_mem_range_inl : (σ
+ g)⁻¹ * σ' g in S.inl.range
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
 -/
-theorem exists_eq_inl_mul : exists n : N, σ g = S.inl n * σ' g := by
-  obtain ⟨n, hn⟩ := mul_inv_mem_range_inl σ σ' g
-  exact ⟨n, by rw [hn, inv_mul_cancel_right]⟩
-
-@[to_additive]
-/--
-theorem `exists_eq_mul_inl` / 定理 `exists_eq_mul_inl`
-
-English:
-theorem exists_eq_mul_inl
-  statement: exists n : N, σ g = σ' g * S.inl n
-  proof: by
+theorem exists_eq_mul_inl : ∃ n : N, σ g = σ' g * S.inl n := by
   obtain ⟨n, hn⟩ := inv_mul_mem_range_inl σ' σ g
   exact ⟨n, by rw [hn, mul_inv_cancel_left]⟩
 
 @[to_additive]
-
-中文:
-定理 存在_eq_mul_inl
-  结论: 存在 n : N, σ g = σ' g * S.inl n
-  证明: by
-  obtain ⟨n, hn⟩ := inv_mul_mem_range_inl σ' σ g
-  exact ⟨n, by rw [hn, mul_inv_cancel_left]⟩
-
-@[to_additive]
-
-Depends on / 依赖: inv_mul_mem_range_inl, mul_inv_cancel_left
+/-
+**GroupExtension.Section.mul_mul_mul_inv_mem_range_inl** 是 Mathlib 中的一个定理，位于命名空间
+ `GroupExtension.Section`。
+形式化陈述：mul_mul_mul_inv_mem_range_inl : σ g₁ * σ g₂ * (σ (g₁ * g₂))⁻¹ in S.inl.ran
+ge
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GroupExtension.range_inl_eq_ker_rightHom`：∀ {N : Type u_1} {E : Type u_2
+} {G : Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self 
+: GroupExtension N E G), self.…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `GroupExtension.Section.rightHom_section`：rightHom_section (g : G) : S.ri
+ghtHom (σ g) = g
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem exists_eq_mul_inl : exists n : N, σ g = σ' g * S.inl n := by
-  obtain ⟨n, hn⟩ := inv_mul_mem_range_inl σ' σ g
-  exact ⟨n, by rw [hn, mul_inv_cancel_left]⟩
-
-@[to_additive]
-/--
-theorem `mul_mul_mul_inv_mem_range_inl` / 定理 `mul_mul_mul_inv_mem_range_inl`
-
-English:
-theorem mul_mul_mul_inv_mem_range_inl
-  statement: σ g₁ * σ g₂ * (σ (g₁ * g₂))⁻¹ in S.inl.range
-  proof: by
+theorem mul_mul_mul_inv_mem_range_inl : σ g₁ * σ g₂ * (σ (g₁ * g₂))⁻¹ ∈ S.inl.range := by
   simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
     mul_inv_cancel]
 
 @[to_additive]
-
-中文:
-定理 mul_mul_mul_inv_mem_range_inl
-  结论: σ g₁ * σ g₂ * (σ (g₁ * g₂))⁻¹ in S.inl.range
-  证明: by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    mul_inv_cancel]
-
-@[to_additive]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, S.range_inl_eq_ker_rightHom, map_inv, map_mul, mem_ker, mul_inv_cancel, range_inl_eq_ker_rightHom, rightHom_section
+/-
+**GroupExtension.Section.mul_inv_mul_mul_mem_range_inl** 是 Mathlib 中的一个定理，位于命名空间
+ `GroupExtension.Section`。
+形式化陈述：mul_inv_mul_mul_mem_range_inl : (σ (g₁ * g₂))⁻¹ * σ g₁ * σ g₂ in S.inl.ran
+ge
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GroupExtension.range_inl_eq_ker_rightHom`：∀ {N : Type u_1} {E : Type u_2
+} {G : Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self 
+: GroupExtension N E G), self.…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `GroupExtension.Section.rightHom_section`：rightHom_section (g : G) : S.ri
+ghtHom (σ g) = g
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mul_mul_mul_inv_mem_range_inl : σ g₁ * σ g₂ * (σ (g₁ * g₂))⁻¹ in S.inl.range := by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    mul_inv_cancel]
-
-@[to_additive]
-/--
-theorem `mul_inv_mul_mul_mem_range_inl` / 定理 `mul_inv_mul_mul_mem_range_inl`
-
-English:
-theorem mul_inv_mul_mul_mem_range_inl
-  statement: (σ (g₁ * g₂))⁻¹ * σ g₁ * σ g₂ in S.inl.range
-  proof: by
+theorem mul_inv_mul_mul_mem_range_inl : (σ (g₁ * g₂))⁻¹ * σ g₁ * σ g₂ ∈ S.inl.range := by
   simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
     mul_assoc, inv_mul_cancel]
 
 @[to_additive]
-
-中文:
-定理 mul_inv_mul_mul_mem_range_inl
-  结论: (σ (g₁ * g₂))⁻¹ * σ g₁ * σ g₂ in S.inl.range
-  证明: by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    mul_assoc, inv_mul_cancel]
-
-@[to_additive]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, S.range_inl_eq_ker_rightHom, inv_mul_cancel, map_inv, map_mul, mem_ker, mul_assoc, range_inl_eq_ker_rightHom, rightHom_section
+/-
+**GroupExtension.Section.exists_mul_eq_inl_mul_mul** 是 Mathlib 中的一个定理，位于命名空间 `Gr
+oupExtension.Section`。
+形式化陈述：exists_mul_eq_inl_mul_mul : exists n : N, σ (g₁ * g₂) = S.inl n * σ g₁ * σ
+ g₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.Section.mul_mul_mul_inv_mem_range_inl`：mul_mul_mul_inv_me
+m_range_inl : σ g₁ * σ g₂ * (σ (g₁ * g₂))⁻¹ in S.inl.range
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `eq_inv_mul_iff_mul_eq`：eq_inv_mul_iff_mul_eq : a = b⁻¹ * c ↔ b * a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_mul_inv_iff_mul_eq`：eq_mul_inv_iff_mul_eq : a = b * c⁻¹ ↔ a * c = b
 -/
-theorem mul_inv_mul_mul_mem_range_inl : (σ (g₁ * g₂))⁻¹ * σ g₁ * σ g₂ in S.inl.range := by
-  simp only [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, rightHom_section,
-    mul_assoc, inv_mul_cancel]
-
-@[to_additive]
-/--
-theorem `exists_mul_eq_inl_mul_mul` / 定理 `exists_mul_eq_inl_mul_mul`
-
-English:
-theorem exists_mul_eq_inl_mul_mul
-  statement: exists n : N, σ (g₁ * g₂) = S.inl n * σ g₁ * σ g₂
-  proof: by
+theorem exists_mul_eq_inl_mul_mul : ∃ n : N, σ (g₁ * g₂) = S.inl n * σ g₁ * σ g₂ := by
   obtain ⟨n, hn⟩ := mul_mul_mul_inv_mem_range_inl σ g₁ g₂
   use n⁻¹
-  rw [mul_assoc]; rw [map_inv]; rw [eq_inv_mul_iff_mul_eq]; rw [← eq_mul_inv_iff_mul_eq]; rw [hn]
+  rw [mul_assoc, map_inv, eq_inv_mul_iff_mul_eq, ← eq_mul_inv_iff_mul_eq, hn]
 
 @[to_additive]
-
-中文:
-定理 存在_mul_eq_inl_mul_mul
-  结论: 存在 n : N, σ (g₁ * g₂) = S.inl n * σ g₁ * σ g₂
-  证明: by
-  obtain ⟨n, hn⟩ := mul_mul_mul_inv_mem_range_inl σ g₁ g₂
-  use n⁻¹
-  rw [mul_assoc]; rw [map_inv]; rw [eq_inv_mul_iff_mul_eq]; rw [← eq_mul_inv_iff_mul_eq]; rw [hn]
-
-@[to_additive]
-
-Depends on / 依赖: eq_inv_mul_iff_mul_eq, eq_mul_inv_iff_mul_eq, map_inv, mul_assoc, mul_mul_mul_inv_mem_range_inl
+/-
+**GroupExtension.Section.exists_mul_eq_mul_mul_inl** 是 Mathlib 中的一个定理，位于命名空间 `Gr
+oupExtension.Section`。
+形式化陈述：exists_mul_eq_mul_mul_inl : exists n : N, σ (g₁ * g₂) = σ g₁ * σ g₂ * S.in
+l n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.Section.mul_inv_mul_mul_mem_range_inl`：mul_inv_mul_mul_me
+m_range_inl : (σ (g₁ * g₂))⁻¹ * σ g₁ * σ g₂ in S.inl.range
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `eq_mul_inv_iff_mul_eq`：eq_mul_inv_iff_mul_eq : a = b * c⁻¹ ↔ a * c = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_inv_mul_iff_mul_eq`：eq_inv_mul_iff_mul_eq : a = b⁻¹ * c ↔ b * a = c
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem exists_mul_eq_inl_mul_mul : exists n : N, σ (g₁ * g₂) = S.inl n * σ g₁ * σ g₂ := by
-  obtain ⟨n, hn⟩ := mul_mul_mul_inv_mem_range_inl σ g₁ g₂
-  use n⁻¹
-  rw [mul_assoc]; rw [map_inv]; rw [eq_inv_mul_iff_mul_eq]; rw [← eq_mul_inv_iff_mul_eq]; rw [hn]
-
-@[to_additive]
-/--
-theorem `exists_mul_eq_mul_mul_inl` / 定理 `exists_mul_eq_mul_mul_inl`
-
-English:
-theorem exists_mul_eq_mul_mul_inl
-  statement: exists n : N, σ (g₁ * g₂) = σ g₁ * σ g₂ * S.inl n
-  proof: by
+theorem exists_mul_eq_mul_mul_inl : ∃ n : N, σ (g₁ * g₂) = σ g₁ * σ g₂ * S.inl n := by
   obtain ⟨n, hn⟩ := mul_inv_mul_mul_mem_range_inl σ g₁ g₂
   use n⁻¹
-  rw [map_inv]; rw [eq_mul_inv_iff_mul_eq]; rw [← eq_inv_mul_iff_mul_eq]; rw [← mul_assoc]; rw [hn]
+  rw [map_inv, eq_mul_inv_iff_mul_eq, ← eq_inv_mul_iff_mul_eq, ← mul_assoc, hn]
 
-initialize_simps_projections AddGroupExtension.Section (toFun -> apply)
-initialize_simps_projections Section (toFun -> apply)
-
-中文:
-定理 存在_mul_eq_mul_mul_inl
-  结论: 存在 n : N, σ (g₁ * g₂) = σ g₁ * σ g₂ * S.inl n
-  证明: by
-  obtain ⟨n, hn⟩ := mul_inv_mul_mul_mem_range_inl σ g₁ g₂
-  use n⁻¹
-  rw [map_inv]; rw [eq_mul_inv_iff_mul_eq]; rw [← eq_inv_mul_iff_mul_eq]; rw [← mul_assoc]; rw [hn]
-
-initialize_simps_projections AddGroupExtension.Section (toFun -> apply)
-initialize_simps_projections Section (toFun -> apply)
-
-Depends on / 依赖: eq_inv_mul_iff_mul_eq, eq_mul_inv_iff_mul_eq, map_inv, mul_assoc, mul_inv_mul_mul_mem_range_inl
--/
-theorem exists_mul_eq_mul_mul_inl : exists n : N, σ (g₁ * g₂) = σ g₁ * σ g₂ * S.inl n := by
-  obtain ⟨n, hn⟩ := mul_inv_mul_mul_mem_range_inl σ g₁ g₂
-  use n⁻¹
-  rw [map_inv]; rw [eq_mul_inv_iff_mul_eq]; rw [← eq_inv_mul_iff_mul_eq]; rw [← mul_assoc]; rw [hn]
-
-initialize_simps_projections AddGroupExtension.Section (toFun -> apply)
-initialize_simps_projections Section (toFun -> apply)
+initialize_simps_projections AddGroupExtension.Section (toFun → apply)
+initialize_simps_projections Section (toFun → apply)
 
 /-- The composition of an isomorphism between equivalent group extensions and a section -/
 @[to_additive (attr := simps!)
 /-- The composition of an isomorphism between equivalent additive group extensions and a section -/]
-/--
-Definition of `equivComp` / `equivComp` 的定义
-
-English:
-definition equivComp
-  signature: : S'.Section where
-  body: equiv ∘ σ
-  rightInverse_rightHom g := by
-    rw [Function.comp_apply]; rw [equiv.rightHom_map]; rw [rightHom_section]
-
-中文:
-定义 equivComp
-  签名: : S'.截面 where
-  定义体: equiv ∘ σ
-  rightInverse_rightHom g := by
-    rw [Function.comp_apply]; rw [equiv.rightHom_map]; rw [rightHom_section]
+/-
+**GroupExtension.Section.equivComp** 是 Mathlib 中的一个定义，位于命名空间 `GroupExtension.Sec
+tion`。
+形式化陈述：equivComp : S'.Section where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def equivComp : S'.Section where
   toFun := equiv ∘ σ
   rightInverse_rightHom g := by
-    rw [Function.comp_apply]; rw [equiv.rightHom_map]; rw [rightHom_section]
+    rw [Function.comp_apply, equiv.rightHom_map, rightHom_section]
 
 end Section
 
@@ -367,56 +340,20 @@ homomorphism is necessarily an isomorphism. -/
 @[to_additive
 /-- An equivalence of additive group extensions from a homomorphism making a commuting diagram.
 Such a homomorphism is necessarily an isomorphism. -/]
-/--
-Definition of `ofMonoidHom` / `ofMonoidHom` 的定义
-
-English:
-definition ofMonoidHom
-  signature: (f : E ->* E') (comp_inl : f.comp S.inl = S'.inl)
-  body: f
-  invFun e' :=
-    let e := Function.surjInv S.rightHom_surjective (S'.rightHom e')
-    e * S.inl (Function.invFun S'.inl ((f e)⁻¹ * e'))
-  left_inv e := by
-    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, ← map_inv, ← map_mul]
-    obtain ⟨n, hn⟩ :
-        (Function.surjInv S.rightHom_surjective (S'.rightHom (f e)))⁻¹ * e in S.inl.range := by
-      rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
-      simpa only [Function.surjInv_eq] using inv_mul_cancel (S.rightHom e)
-    rw [← eq_inv_mul_iff_mul_eq]; rw [← hn]; rw [← MonoidHom.comp_apply]; rw [comp_inl]; rw [Function.leftInverse_invFun S'.inl_injective]
-  right_inv e' := by
-    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, map_mul]
-    rw [← eq_inv_mul_iff_mul_eq]; rw [← MonoidHom.comp_apply]; rw [comp_inl]
-    apply Function.invFun_eq
-    rw [← MonoidHom.mem_range]; rw [S'.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
-    simpa only [Function.surjInv_eq] using inv_mul_cancel (S'.rightHom e')
-  inl_comm := congrArg DFunLike.coe comp_inl
-  rightHom_comm := congrArg DFunLike.coe rightHom_comp
-
-中文:
-定义 ofMonoidHom
-  签名: (f : E ->* E') (comp_inl : f.comp S.inl = S'.inl)
-  定义体: f
-  invFun e' :=
-    let e := Function.surjInv S.rightHom_surjective (S'.rightHom e')
-    e * S.inl (Function.invFun S'.inl ((f e)⁻¹ * e'))
-  left_inv e := by
-    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, ← map_inv, ← map_mul]
-    obtain ⟨n, hn⟩ :
-        (Function.surjInv S.rightHom_surjective (S'.rightHom (f e)))⁻¹ * e in S.inl.range := by
-      rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
-      simpa only [Function.surjInv_eq] using inv_mul_cancel (S.rightHom e)
-    rw [← eq_inv_mul_iff_mul_eq]; rw [← hn]; rw [← MonoidHom.comp_apply]; rw [comp_inl]; rw [Function.leftInverse_invFun S'.inl_injective]
-  right_inv e' := by
-    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, map_mul]
-    rw [← eq_inv_mul_iff_mul_eq]; rw [← MonoidHom.comp_apply]; rw [comp_inl]
-    apply Function.invFun_eq
-    rw [← MonoidHom.mem_range]; rw [S'.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
-    simpa only [Function.surjInv_eq] using inv_mul_cancel (S'.rightHom e')
-  inl_comm := congrArg DFunLike.coe comp_inl
-  rightHom_comm := congrArg DFunLike.coe rightHom_comp
+/-
+**GroupExtension.Equiv.ofMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `GroupExtension.Equ
+iv`。
+形式化陈述：ofMonoidHom (f : E ->* E') (comp_inl : f.comp S.inl = S'.inl) (rightHom_co
+mp : S'.rightHom.comp f = S.rightHom) : S.Equiv S' where __
+参数：f : E ->* E'；comp_inl : f.comp S.inl = S'.inl；rightHom_comp : S'.rightHom.com
+p f = S.rightHom。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.rightHom_surjective`：∀ {N : Type u_1} {E : Type u_2} {G :
+ Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (self : Grou
+pExtension N E G), Funct…
 -/
-noncomputable def ofMonoidHom (f : E ->* E') (comp_inl : f.comp S.inl = S'.inl)
+noncomputable def ofMonoidHom (f : E →* E') (comp_inl : f.comp S.inl = S'.inl)
     (rightHom_comp : S'.rightHom.comp f = S.rightHom) : S.Equiv S' where
   __ := f
   invFun e' :=
@@ -425,15 +362,18 @@ noncomputable def ofMonoidHom (f : E ->* E') (comp_inl : f.comp S.inl = S'.inl)
   left_inv e := by
     simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, ← map_inv, ← map_mul]
     obtain ⟨n, hn⟩ :
-        (Function.surjInv S.rightHom_surjective (S'.rightHom (f e)))⁻¹ * e in S.inl.range := by
-      rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
+        (Function.surjInv S.rightHom_surjective (S'.rightHom (f e)))⁻¹ * e ∈ S.inl.range := by
+      rw [S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv, ← MonoidHom.comp_apply,
+        rightHom_comp]
       simpa only [Function.surjInv_eq] using inv_mul_cancel (S.rightHom e)
-    rw [← eq_inv_mul_iff_mul_eq]; rw [← hn]; rw [← MonoidHom.comp_apply]; rw [comp_inl]; rw [Function.leftInverse_invFun S'.inl_injective]
+    rw [← eq_inv_mul_iff_mul_eq, ← hn, ← MonoidHom.comp_apply, comp_inl,
+      Function.leftInverse_invFun S'.inl_injective]
   right_inv e' := by
     simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, map_mul]
-    rw [← eq_inv_mul_iff_mul_eq]; rw [← MonoidHom.comp_apply]; rw [comp_inl]
+    rw [← eq_inv_mul_iff_mul_eq, ← MonoidHom.comp_apply, comp_inl]
     apply Function.invFun_eq
-    rw [← MonoidHom.mem_range]; rw [S'.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [← MonoidHom.comp_apply]; rw [rightHom_comp]
+    rw [← MonoidHom.mem_range, S'.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv,
+      ← MonoidHom.comp_apply, rightHom_comp]
     simpa only [Function.surjInv_eq] using inv_mul_cancel (S'.rightHom e')
   inl_comm := congrArg DFunLike.coe comp_inl
   rightHom_comm := congrArg DFunLike.coe rightHom_comp
@@ -445,91 +385,49 @@ namespace Splitting
 variable {S}
 variable (s : S.Splitting)
 
-/--
-Definition of `conjAct` / `conjAct` 的定义
+/-- `G` acts on `N` by conjugation. -/
+/-
+**GroupExtension.Splitting.conjAct** 是 Mathlib 中的一个定义，位于命名空间 `GroupExtension.Spl
+itting`。
+形式化陈述：conjAct : G ->* MulAut N
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupExtension.Splitting.instMonoidHomClass`：∀ {N : Type u_1} {E : Type 
+u_2} {G : Type u_3} [inst : Group N] [inst_1 : Group E] [inst_2 : Group G]   (S 
+: GroupExtension N E G), MonoidHo…
 
-English:
-definition conjAct
-  signature: : G ->* MulAut N
-  body: S.conjAct.comp s
-
-中文:
-定义 conjAct
-  签名: : G ->* MulAut N
-  定义体: S.conjAct.comp s
-
-Depends on / 依赖: S.conjAct.comp, conjAct
+--- 原说明 ---
+`G` acts on `N` by conjugation.
 -/
-noncomputable def conjAct : G ->* MulAut N := S.conjAct.comp s
+noncomputable def conjAct : G →* MulAut N := S.conjAct.comp s
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `semidirectProductToGroupExtensionEquiv` / `semidirectProductToGroupExtensionEquiv` 的定义
+/-- A split group extension is equivalent to the extension associated to a semidirect product. -/
+/-
+**GroupExtension.Splitting.semidirectProductToGroupExtensionEquiv** 是 Mathlib 中的
+一个定义，位于命名空间 `GroupExtension.Splitting`。
+形式化陈述：semidirectProductToGroupExtensionEquiv : (SemidirectProduct.toGroupExtensi
+on s.conjAct).Equiv S where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition semidirectProductToGroupExtensionEquiv
-  signature: :
-  body: fun ⟨n, g⟩ => S.inl n * s g
-  invFun := fun e => ⟨Function.invFun S.inl (e * (s (S.rightHom e))⁻¹), S.rightHom e⟩
-  left_inv := fun ⟨n, g⟩ => by
-    simp only [map_mul, rightHom_inl, rightHom_splitting, one_mul, mul_inv_cancel_right,
-      Function.leftInverse_invFun S.inl_injective n]
-  right_inv := fun e => by
-    simp only [← eq_mul_inv_iff_mul_eq]
-    apply Function.invFun_eq
-    rw [← MonoidHom.mem_range]; rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [rightHom_splitting]; rw [mul_inv_cancel]
-  map_mul' := fun ⟨n₁, g₁⟩ ⟨n₂, g₂⟩ => by
-    simp only [conjAct, MonoidHom.comp_apply, map_mul, inl_conjAct_comm, MonoidHom.coe_coe]
-    group
-  inl_comm := by
-    ext n
-    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
-      Equiv.coe_fn_mk, SemidirectProduct.left_inl, SemidirectProduct.right_inl, map_one, mul_one]
-  rightHom_comm := by
-    ext ⟨n, g⟩
-    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
-      Equiv.coe_fn_mk, map_mul, rightHom_inl, one_mul, rightHom_splitting,
-      SemidirectProduct.rightHom_eq_right]
-
-中文:
-定义 semidirectProductToGroupExtensionEquiv
-  签名: :
-  定义体: fun ⟨n, g⟩ => S.inl n * s g
-  invFun := fun e => ⟨Function.invFun S.inl (e * (s (S.rightHom e))⁻¹), S.rightHom e⟩
-  left_inv := fun ⟨n, g⟩ => by
-    simp only [map_mul, rightHom_inl, rightHom_splitting, one_mul, mul_inv_cancel_right,
-      Function.leftInverse_invFun S.inl_injective n]
-  right_inv := fun e => by
-    simp only [← eq_mul_inv_iff_mul_eq]
-    apply Function.invFun_eq
-    rw [← MonoidHom.mem_range]; rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [rightHom_splitting]; rw [mul_inv_cancel]
-  map_mul' := fun ⟨n₁, g₁⟩ ⟨n₂, g₂⟩ => by
-    simp only [conjAct, MonoidHom.comp_apply, map_mul, inl_conjAct_comm, MonoidHom.coe_coe]
-    group
-  inl_comm := by
-    ext n
-    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
-      Equiv.coe_fn_mk, SemidirectProduct.left_inl, SemidirectProduct.right_inl, map_one, mul_one]
-  rightHom_comm := by
-    ext ⟨n, g⟩
-    simp only [SemidirectProduct.toGroupExtension, Function.comp_apply, MulEquiv.coe_mk,
-      Equiv.coe_fn_mk, map_mul, rightHom_inl, one_mul, rightHom_splitting,
-      SemidirectProduct.rightHom_eq_right]
-
-Depends on / 依赖: S.inl
+--- 原说明 ---
+A split group extension is equivalent to the extension associated to a semidirec
+t product.
 -/
 noncomputable def semidirectProductToGroupExtensionEquiv :
     (SemidirectProduct.toGroupExtension s.conjAct).Equiv S where
-  toFun := fun ⟨n, g⟩ => S.inl n * s g
-  invFun := fun e => ⟨Function.invFun S.inl (e * (s (S.rightHom e))⁻¹), S.rightHom e⟩
-  left_inv := fun ⟨n, g⟩ => by
+  toFun := fun ⟨n, g⟩ ↦ S.inl n * s g
+  invFun := fun e ↦ ⟨Function.invFun S.inl (e * (s (S.rightHom e))⁻¹), S.rightHom e⟩
+  left_inv := fun ⟨n, g⟩ ↦ by
     simp only [map_mul, rightHom_inl, rightHom_splitting, one_mul, mul_inv_cancel_right,
       Function.leftInverse_invFun S.inl_injective n]
-  right_inv := fun e => by
+  right_inv := fun e ↦ by
     simp only [← eq_mul_inv_iff_mul_eq]
     apply Function.invFun_eq
-    rw [← MonoidHom.mem_range]; rw [S.range_inl_eq_ker_rightHom]; rw [MonoidHom.mem_ker]; rw [map_mul]; rw [map_inv]; rw [rightHom_splitting]; rw [mul_inv_cancel]
-  map_mul' := fun ⟨n₁, g₁⟩ ⟨n₂, g₂⟩ => by
+    rw [← MonoidHom.mem_range, S.range_inl_eq_ker_rightHom, MonoidHom.mem_ker, map_mul, map_inv,
+      rightHom_splitting, mul_inv_cancel]
+  map_mul' := fun ⟨n₁, g₁⟩ ⟨n₂, g₂⟩ ↦ by
     simp only [conjAct, MonoidHom.comp_apply, map_mul, inl_conjAct_comm, MonoidHom.coe_coe]
     group
   inl_comm := by
@@ -542,20 +440,16 @@ noncomputable def semidirectProductToGroupExtensionEquiv :
       Equiv.coe_fn_mk, map_mul, rightHom_inl, one_mul, rightHom_splitting,
       SemidirectProduct.rightHom_eq_right]
 
-/--
-Definition of `semidirectProductMulEquiv` / `semidirectProductMulEquiv` 的定义
+/-- The group associated to a split extension is isomorphic to a semidirect product. -/
+/-
+**GroupExtension.Splitting.semidirectProductMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+GroupExtension.Splitting`。
+形式化陈述：semidirectProductMulEquiv : N ⋊[s.conjAct] G ≃* E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition semidirectProductMulEquiv
-  signature: : N ⋊[s.conjAct] G ≃* E
-  body: s.semidirectProductToGroupExtensionEquiv.toMulEquiv
-
-中文:
-定义 semidirectProductMulEquiv
-  签名: : N ⋊[s.conjAct] G ≃* E
-  定义体: s.semidirectProductToGroupExtensionEquiv.toMulEquiv
-
-Depends on / 依赖: s.semidirectProductToGroupExtensionEquiv.toMulEquiv, semidirectProductToGroupExtensionEquiv, toMulEquiv
+--- 原说明 ---
+The group associated to a split extension is isomorphic to a semidirect product.
 -/
 noncomputable def semidirectProductMulEquiv : N ⋊[s.conjAct] G ≃* E :=
   s.semidirectProductToGroupExtensionEquiv.toMulEquiv
@@ -566,48 +460,72 @@ namespace IsConj
 
 /-- `N`-conjugacy is reflexive. -/
 @[to_additive /-- `N`-conjugacy is reflexive. -/]
-/--
-theorem `refl` / 定理 `refl`
+/-
+**GroupExtension.IsConj.refl** 是 Mathlib 中的一个定理，位于命名空间 `GroupExtension.IsConj`。
+形式化陈述：refl (s : S.Splitting) : S.IsConj s s
+参数：s : S.Splitting。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem refl
-  given: (s : S.Splitting)
-  statement: S.IsConj s s
-  proof: ⟨1, by simp only [map_one, inv_one, one_mul, mul_one]⟩
-
-中文:
-定理 refl
-  条件: (s : S.Splitting)
-  结论: S.IsConj s s
-  证明: ⟨1, by simp only [map_one, inv_one, one_mul, mul_one]⟩
-
-Depends on / 依赖: inv_one, map_one, mul_one, one_mul
+--- 原说明 ---
+`N`-conjugacy is reflexive.
 -/
 theorem refl (s : S.Splitting) : S.IsConj s s :=
   ⟨1, by simp only [map_one, inv_one, one_mul, mul_one]⟩
 
 /-- `N`-conjugacy is symmetric. -/
 @[to_additive /-- `N`-conjugacy is symmetric. -/]
-/--
-theorem `symm` / 定理 `symm`
+/-
+**GroupExtension.IsConj.symm** 是 Mathlib 中的一个定理，位于命名空间 `GroupExtension.IsConj`。
+形式化陈述：symm {s₁ s₂ : S.Splitting} (h : S.IsConj s₁ s₂) : S.IsConj s₂ s₁
+参数：h : S.IsConj s₁ s₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `zpow_zero`：∀ {G : Type u_1} [inst : DivInvMonoid G] (a : G), a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Int.mul_neg`：∀ (a b : ℤ), a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用引理 `zpow_one`：zpow_one (a : G) : a ^ (1 : Int) = a
+· 使用定理 `Mathlib.Tactic.Group._zpow_trick_one'`：_zpow_trick_one' {G : Type*} [Gro
+up G] (a b : G) (n : Int) : a * b ^ n * b = a * b ^ (n + 1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem symm
-  given: {s₁ s₂ : S.Splitting} (h : S.IsConj s₁ s₂)
-  statement: S.IsConj s₂ s₁
-  proof: by
-  obtain ⟨n, hn⟩ := h
-  exact ⟨n⁻¹, by simp only [hn, map_inv]; group⟩
-
-中文:
-定理 symm
-  条件: {s₁ s₂ : S.Splitting} (h : S.IsConj s₁ s₂)
-  结论: S.IsConj s₂ s₁
-  证明: by
-  obtain ⟨n, hn⟩ := h
-  exact ⟨n⁻¹, by simp only [hn, map_inv]; group⟩
-
-Depends on / 依赖: map_inv
+--- 原说明 ---
+`N`-conjugacy is symmetric.
 -/
 theorem symm {s₁ s₂ : S.Splitting} (h : S.IsConj s₁ s₂) : S.IsConj s₂ s₁ := by
   obtain ⟨n, hn⟩ := h
@@ -615,26 +533,36 @@ theorem symm {s₁ s₂ : S.Splitting} (h : S.IsConj s₁ s₂) : S.IsConj s₂ 
 
 /-- `N`-conjugacy is transitive. -/
 @[to_additive /-- `N`-conjugacy is transitive. -/]
-/--
-theorem `trans` / 定理 `trans`
+/-
+**GroupExtension.IsConj.trans** 是 Mathlib 中的一个定理，位于命名空间 `GroupExtension.IsConj`。
+形式化陈述：trans {s₁ s₂ s₃ : S.Splitting} (h₁ : S.IsConj s₁ s₂) (h₂ : S.IsConj s₂ s₃)
+ : S.IsConj s₁ s₃
+参数：h₁ : S.IsConj s₁ s₂；h₂ : S.IsConj s₂ s₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `mul_zpow_neg_one`：mul_zpow_neg_one (a b : α) : (a * b) ^ (-1 : Int) = b 
+^ (-1 : Int) * a ^ (-1 : Int)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem trans
-  given: {s₁ s₂ s₃ : S.Splitting} (h₁ : S.IsConj s₁ s₂) (h₂ : S.IsConj s₂ s₃)
-  proof: by
-  obtain ⟨n₁, hn₁⟩ := h₁
-  obtain ⟨n₂, hn₂⟩ := h₂
-  exact ⟨n₁ * n₂, by simp only [hn₁, hn₂, map_mul]; group⟩
-
-中文:
-定理 trans
-  条件: {s₁ s₂ s₃ : S.Splitting} (h₁ : S.IsConj s₁ s₂) (h₂ : S.IsConj s₂ s₃)
-  证明: by
-  obtain ⟨n₁, hn₁⟩ := h₁
-  obtain ⟨n₂, hn₂⟩ := h₂
-  exact ⟨n₁ * n₂, by simp only [hn₁, hn₂, map_mul]; group⟩
-
-Depends on / 依赖: map_mul
+--- 原说明 ---
+`N`-conjugacy is transitive.
 -/
 theorem trans {s₁ s₂ s₃ : S.Splitting} (h₁ : S.IsConj s₁ s₂) (h₂ : S.IsConj s₂ s₃) :
     S.IsConj s₁ s₃ := by
@@ -644,28 +572,15 @@ theorem trans {s₁ s₂ s₃ : S.Splitting} (h₁ : S.IsConj s₁ s₂) (h₂ :
 
 /-- The setoid of splittings with `N`-conjugacy -/
 @[to_additive /-- The setoid of splittings with `N`-conjugacy -/]
-/--
-Definition of `setoid` / `setoid` 的定义
+/-
+**GroupExtension.IsConj.setoid** 是 Mathlib 中的一个定义，位于命名空间 `GroupExtension.IsConj`
+。
+形式化陈述：setoid : Setoid S.Splitting where r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setoid
-  signature: : Setoid S.Splitting where
-  body: S.IsConj
-  iseqv :=
-  { refl := refl S
-    symm := symm S
-    trans := trans S }
-
-中文:
-定义 setoid
-  签名: : 集合等价关系 S.Splitting where
-  定义体: S.IsConj
-  iseqv :=
-  { refl := refl S
-    symm := symm S
-    trans := trans S }
-
-Depends on / 依赖: IsConj, S.IsConj
+--- 原说明 ---
+The setoid of splittings with `N`-conjugacy
 -/
 def setoid : Setoid S.Splitting where
   r := S.IsConj
@@ -678,47 +593,41 @@ end IsConj
 
 /-- The `N`-conjugacy classes of splittings -/
 @[to_additive /-- The `N`-conjugacy classes of splittings -/]
-/--
-Definition of `ConjClasses` / `ConjClasses` 的定义
+/-
+**GroupExtension.ConjClasses** 是 Mathlib 中的一个定义，位于命名空间 `GroupExtension`。
+形式化陈述：ConjClasses
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ConjClasses
-  body: Quotient IsConj.setoid S
-
-中文:
-定义 ConjClasses
-  定义体: Quotient IsConj.setoid S
-
-Depends on / 依赖: IsConj, IsConj.setoid, Quotient, setoid
+--- 原说明 ---
+The `N`-conjugacy classes of splittings
 -/
-def ConjClasses := Quotient IsConj.setoid S
+def ConjClasses := Quotient <| IsConj.setoid S
 
 end GroupExtension
 
 namespace SemidirectProduct
 
-variable {φ : G ->* MulAut N} (s : (toGroupExtension φ).Splitting)
+variable {φ : G →* MulAut N} (s : (toGroupExtension φ).Splitting)
 
-/--
-theorem `right_splitting` / 定理 `right_splitting`
-
-English:
-theorem right_splitting
-  given: (g : G)
-  statement: (s g).right = g
-  proof: by
-  rw [← rightHom_eq_right]; rw [← toGroupExtension_rightHom]; rw [s.rightHom_splitting]
-
-中文:
-定理 right_splitting
-  条件: (g : G)
-  结论: (s g).right = g
-  证明: by
-  rw [← rightHom_eq_right]; rw [← toGroupExtension_rightHom]; rw [s.rightHom_splitting]
-
-Depends on / 依赖: rightHom_eq_right, rightHom_splitting, s.rightHom_splitting, toGroupExtension_rightHom
+/-
+**SemidirectProduct.right_splitting** 是 Mathlib 中的一个定理，位于命名空间 `SemidirectProduct
+`。
+形式化陈述：right_splitting (g : G) : (s g).right = g
+参数：g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SemidirectProduct.rightHom_eq_right`：rightHom_eq_right : (rightHom : N ⋊
+[φ] G -> G) = right
+· 使用定理 `SemidirectProduct.toGroupExtension_rightHom`：toGroupExtension_rightHom :
+ (toGroupExtension φ).rightHom = SemidirectProduct.rightHom
+· 使用定理 `GroupExtension.Splitting.rightHom_splitting`：rightHom_splitting (g : G) 
+: S.rightHom (s g) = g
 -/
 theorem right_splitting (g : G) : (s g).right = g := by
-  rw [← rightHom_eq_right]; rw [← toGroupExtension_rightHom]; rw [s.rightHom_splitting]
+  rw [← rightHom_eq_right, ← toGroupExtension_rightHom, s.rightHom_splitting]
 
 end SemidirectProduct
+

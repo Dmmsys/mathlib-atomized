@@ -24,29 +24,20 @@ This file collects some basic results involving rings and the `Fin` type
 
 /-- The product over `Fin 2` of some rings is just the Cartesian product of these rings. -/
 @[simps]
-/--
-Definition of `RingEquiv.piFinTwo` / `RingEquiv.piFinTwo` 的定义
+/-
+**RingEquiv.piFinTwo** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingEquiv.piFinTwo (R : Fin 2 -> Type*) [forall i, Semiring (R i)] : (fora
+ll i : Fin 2, R i) ≃+* R 0 × R 1
+参数：R : Fin 2 -> Type*；R i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RingEquiv.piFinTwo
-  signature: (R : Fin 2 -> Type*) [forall i, Semiring (R i)]
-  body: { piFinTwoEquiv R with
-    toFun := piFinTwoEquiv R
-    map_add' := fun _ _ => rfl
-    map_mul' := fun _ _ => rfl }
-
-中文:
-定义 环等价.piFinTwo
-  签名: (R : 有限集 2 -> 类型) [对任意 i, 半环 (R i)]
-  定义体: { piFinTwoEquiv R with
-    toFun := piFinTwoEquiv R
-    map_add' := fun _ _ => rfl
-    map_mul' := fun _ _ => rfl }
-
-Depends on / 依赖: map_add, map_mul, piFinTwoEquiv
+--- 原说明 ---
+The product over `Fin 2` of some rings is just the Cartesian product of these ri
+ngs.
 -/
-def RingEquiv.piFinTwo (R : Fin 2 -> Type*) [forall i, Semiring (R i)] :
-    (forall i : Fin 2, R i) ≃+* R 0 × R 1 :=
+def RingEquiv.piFinTwo (R : Fin 2 → Type*) [∀ i, Semiring (R i)] :
+    (∀ i : Fin 2, R i) ≃+* R 0 × R 1 :=
   { piFinTwoEquiv R with
     toFun := piFinTwoEquiv R
     map_add' := fun _ _ => rfl

@@ -41,28 +41,26 @@ section leftAction
 
 open MonoidalLeftAction
 
-/--
-Definition of `LaxLeftLinear` / `LaxLeftLinear` 的定义
+/-- `F.LaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`μₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`. -/
+/-
+**CategoryTheory.Functor.LaxLeftLinear** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：LaxLeftLinear (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C] 
+[MonoidalLeftAction C D] [MonoidalLeftAction C D'] where /-- The "μₗ" morphism. 
+-/ μₗ (F) (c : C) (d : D) : c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d) μₗ_naturality_left (F)
+ {c c' : C} (f : c ⟶ c') (d : D) : f ⊵ₗ F.obj d ≫ μₗ c' d = μₗ c d ≫ F.map (f ⊵ₗ
+ d)
+参数：F : D ⥤ D'；C : Type*；F；c : C；d : D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LaxLeftLinear
-  axioms and operations (5):
-    - μₗ((F) (c : C) (d : D)) : c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)
-    - μₗ_naturality_left((F) {c c' : C} (f : c ⟶ c') (d : D)) : f ⊵ₗ F.obj d ≫ μₗ c' d = μₗ c d ≫ F.map (f ⊵ₗ d)  [default: by cat_disch]
-    - μₗ_naturality_right((F) (c : C) {d d' : D} (f : d ⟶ d')) : c ⊴ₗ F.map f ≫ μₗ c d' = μₗ c d ≫ F.map (c ⊴ₗ f)  [default: by cat_disch]
-    - μₗ_associativity((F) (c c' : C) (d : D)) : μₗ (c otimes c') d ≫ F.map (αₗ _ _ _).hom = (αₗ c c' (F.obj d)).hom ≫ c ⊴ₗ μₗ c' d ≫ μₗ c (c' ⊙ₗ d)  [default: by cat_disch]
-    - μₗ_unitality((F) (d : D)) : (funₗ (F.obj d)).hom = μₗ (𝟙_ C) d ≫ F.map (funₗ d).hom  [default: by cat_disch]
-
-中文:
-类 松弛左线性
-  公理与运算 (5 个):
-    - μₗ((F) (c : C) (d : D)) : c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)
-    - μₗ_naturality_left((F) {c c' : C} (f : c ⟶ c') (d : D)) : f ⊵ₗ F.obj d ≫ μₗ c' d = μₗ c d ≫ F.map (f ⊵ₗ d)  [默认: by cat_disch]
-    - μₗ_naturality_right((F) (c : C) {d d' : D} (f : d ⟶ d')) : c ⊴ₗ F.map f ≫ μₗ c d' = μₗ c d ≫ F.map (c ⊴ₗ f)  [默认: by cat_disch]
-    - μₗ_associativity((F) (c c' : C) (d : D)) : μₗ (c otimes c') d ≫ F.map (αₗ _ _ _).hom = (αₗ c c' (F.obj d)).hom ≫ c ⊴ₗ μₗ c' d ≫ μₗ c (c' ⊙ₗ d)  [默认: by cat_disch]
-    - μₗ_unitality((F) (d : D)) : (funₗ (F.obj d)).hom = μₗ (𝟙_ C) d ≫ F.map (funₗ d).hom  [默认: by cat_disch]
-
-Depends on / 依赖: F.map, F.obj, cat_disch, otimes
+--- 原说明 ---
+`F.LaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`μₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`.
 -/
 class LaxLeftLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -74,11 +72,11 @@ class LaxLeftLinear
   μₗ_naturality_right (F) (c : C) {d d' : D} (f : d ⟶ d') :
     c ⊴ₗ F.map f ≫ μₗ c d' = μₗ c d ≫ F.map (c ⊴ₗ f) := by cat_disch
   μₗ_associativity (F) (c c' : C) (d : D) :
-    μₗ (c otimes c') d ≫ F.map (αₗ _ _ _).hom =
+    μₗ (c ⊗ c') d ≫ F.map (αₗ _ _ _).hom =
     (αₗ c c' (F.obj d)).hom ≫ c ⊴ₗ μₗ c' d ≫
       μₗ c (c' ⊙ₗ d) := by cat_disch
   μₗ_unitality (F) (d : D) :
-    (funₗ (F.obj d)).hom = μₗ (𝟙_ C) d ≫ F.map (funₗ d).hom := by cat_disch
+    (λₗ (F.obj d)).hom = μₗ (𝟙_ C) d ≫ F.map (λₗ d).hom := by cat_disch
 
 namespace LaxLeftLinear
 
@@ -95,96 +93,54 @@ variable
   [F.LaxLeftLinear C]
 
 @[reassoc (attr := simp)]
-/--
-lemma `μₗ_associativity_inv` / 引理 `μₗ_associativity_inv`
-
-English:
-lemma μₗ_associativity_inv
-  given: (c c' : C) (d : D)
-  proof: by
-  simpa [-μₗ_associativity, -μₗ_associativity_assoc] using
-    (αₗ _ _ _).inv ≫=
-      (μₗ_associativity F c c' d).symm =≫
-      F.map (αₗ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 μₗ_associativity_inv
-  条件: (c c' : C) (d : D)
-  证明: by
-  simpa [-μₗ_associativity, -μₗ_associativity_assoc] using
-    (αₗ _ _ _).inv ≫=
-      (μₗ_associativity F c c' d).symm =≫
-      F.map (αₗ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map
+/-
+**CategoryTheory.Functor.LaxLeftLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.LaxLeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μₗ_associativity_inv (c c' : C) (d : D) :
     c ⊴ₗ μₗ F c' d ≫ μₗ F c (c' ⊙ₗ d) ≫ F.map (αₗ _ _ _).inv =
-    (αₗ c c' (F.obj d)).inv ≫ μₗ F (c otimes c') d := by
+    (αₗ c c' (F.obj d)).inv ≫ μₗ F (c ⊗ c') d := by
   simpa [-μₗ_associativity, -μₗ_associativity_assoc] using
     (αₗ _ _ _).inv ≫=
       (μₗ_associativity F c c' d).symm =≫
       F.map (αₗ _ _ _).inv
 
 @[reassoc (attr := simp)]
-/--
-lemma `μₗ_unitality_inv` / 引理 `μₗ_unitality_inv`
-
-English:
-lemma μₗ_unitality_inv
-  given: (d : D)
-  proof: by
-  simpa [-μₗ_unitality] using
-    (funₗ[C] (F.obj d)).inv ≫=
-      (μₗ_unitality F d).symm =≫
-      F.map (funₗ[C] d).inv
-
-中文:
-引理 μₗ_unitality_inv
-  条件: (d : D)
-  证明: by
-  simpa [-μₗ_unitality] using
-    (funₗ[C] (F.obj d)).inv ≫=
-      (μₗ_unitality F d).symm =≫
-      F.map (funₗ[C] d).inv
-
-Depends on / 依赖: F.map, F.obj
+/-
+**CategoryTheory.Functor.LaxLeftLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor.LaxLeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μₗ_unitality_inv (d : D) :
-     (funₗ (F.obj d)).inv ≫ μₗ F (𝟙_ C) d = F.map (funₗ d).inv := by
+     (λₗ (F.obj d)).inv ≫ μₗ F (𝟙_ C) d = F.map (λₗ d).inv := by
   simpa [-μₗ_unitality] using
-    (funₗ[C] (F.obj d)).inv ≫=
+    (λₗ[C] (F.obj d)).inv ≫=
       (μₗ_unitality F d).symm =≫
-      F.map (funₗ[C] d).inv
+      F.map (λₗ[C] d).inv
 
 end LaxLeftLinear
 
-/--
-Definition of `OplaxLeftLinear` / `OplaxLeftLinear` 的定义
+/-- `F.OplaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`δₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`. -/
+/-
+**CategoryTheory.Functor.OplaxLeftLinear** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：OplaxLeftLinear (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C
+] [MonoidalLeftAction C D] [MonoidalLeftAction C D'] where /-- The oplax lineato
+r morphism. -/ δₗ (F) (c : C) (d : D) : F.obj (c ⊙ₗ d) ⟶ c ⊙ₗ F.obj d δₗ_natural
+ity_left (F) {c c' : C} (f : c ⟶ c') (d : D) : F.map (f ⊵ₗ d) ≫ δₗ c' d = δₗ c d
+ ≫ f ⊵ₗ F.obj d
+参数：F : D ⥤ D'；C : Type*；F；c : C；d : D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class OplaxLeftLinear
-  axioms and operations (5):
-    - δₗ((F) (c : C) (d : D)) : F.obj (c ⊙ₗ d) ⟶ c ⊙ₗ F.obj d
-    - δₗ_naturality_left((F) {c c' : C} (f : c ⟶ c') (d : D)) : F.map (f ⊵ₗ d) ≫ δₗ c' d = δₗ c d ≫ f ⊵ₗ F.obj d  [default: by cat_disch]
-    - δₗ_naturality_right((F) (c : C) {d d' : D} (f : d ⟶ d')) : F.map (c ⊴ₗ f) ≫ δₗ c d' = δₗ c d ≫ c ⊴ₗ F.map f  [default: by cat_disch]
-    - δₗ_associativity((F) (c c' : C) (d : D)) : δₗ (c otimes c') d ≫ (αₗ _ _ _).hom = F.map (αₗ _ _ _).hom ≫ δₗ c (c' ⊙ₗ d) ≫ c ⊴ₗ δₗ c' d  [default: by cat_disch]
-    - δₗ_unitality_inv((F) (d : D)) : (funₗ (F.obj d)).inv = F.map (funₗ d).inv ≫ δₗ (𝟙_ C) d  [default: by cat_disch]
-
-中文:
-类 反松弛左线性
-  公理与运算 (5 个):
-    - δₗ((F) (c : C) (d : D)) : F.obj (c ⊙ₗ d) ⟶ c ⊙ₗ F.obj d
-    - δₗ_naturality_left((F) {c c' : C} (f : c ⟶ c') (d : D)) : F.map (f ⊵ₗ d) ≫ δₗ c' d = δₗ c d ≫ f ⊵ₗ F.obj d  [默认: by cat_disch]
-    - δₗ_naturality_right((F) (c : C) {d d' : D} (f : d ⟶ d')) : F.map (c ⊴ₗ f) ≫ δₗ c d' = δₗ c d ≫ c ⊴ₗ F.map f  [默认: by cat_disch]
-    - δₗ_associativity((F) (c c' : C) (d : D)) : δₗ (c otimes c') d ≫ (αₗ _ _ _).hom = F.map (αₗ _ _ _).hom ≫ δₗ c (c' ⊙ₗ d) ≫ c ⊴ₗ δₗ c' d  [默认: by cat_disch]
-    - δₗ_unitality_inv((F) (d : D)) : (funₗ (F.obj d)).inv = F.map (funₗ d).inv ≫ δₗ (𝟙_ C) d  [默认: by cat_disch]
-
-Depends on / 依赖: F.map, F.obj, cat_disch, otimes
+--- 原说明 ---
+`F.OplaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`δₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`.
 -/
 class OplaxLeftLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -198,12 +154,12 @@ class OplaxLeftLinear
     F.map (c ⊴ₗ f) ≫ δₗ c d' =
     δₗ c d ≫ c ⊴ₗ F.map f := by cat_disch
   δₗ_associativity (F) (c c' : C) (d : D) :
-    δₗ (c otimes c') d ≫ (αₗ _ _ _).hom =
+    δₗ (c ⊗ c') d ≫ (αₗ _ _ _).hom =
     F.map (αₗ _ _ _).hom ≫ δₗ c (c' ⊙ₗ d) ≫
       c ⊴ₗ δₗ c' d := by cat_disch
   δₗ_unitality_inv (F) (d : D) :
-    (funₗ (F.obj d)).inv =
-    F.map (funₗ d).inv ≫ δₗ (𝟙_ C) d := by cat_disch
+    (λₗ (F.obj d)).inv =
+    F.map (λₗ d).inv ≫ δₗ (𝟙_ C) d := by cat_disch
 
 namespace OplaxLeftLinear
 
@@ -220,89 +176,53 @@ variable
   [F.OplaxLeftLinear C]
 
 @[reassoc (attr := simp)]
-/--
-lemma `δₗ_associativity_inv` / 引理 `δₗ_associativity_inv`
-
-English:
-lemma δₗ_associativity_inv
-  given: (c c' : C) (d : D)
-  proof: by
-  simpa [-δₗ_associativity, -δₗ_associativity_assoc] using
-    F.map (αₗ _ _ _).inv ≫=
-      (δₗ_associativity F c c' d).symm =≫
-      (αₗ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 δₗ_associativity_inv
-  条件: (c c' : C) (d : D)
-  证明: by
-  simpa [-δₗ_associativity, -δₗ_associativity_assoc] using
-    F.map (αₗ _ _ _).inv ≫=
-      (δₗ_associativity F c c' d).symm =≫
-      (αₗ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map
+/-
+**CategoryTheory.Functor.OplaxLeftLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Functor.OplaxLeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δₗ_associativity_inv (c c' : C) (d : D) :
     δₗ F c (c' ⊙ₗ d) ≫
       c ⊴ₗ δₗ F c' d ≫ (αₗ _ _ _).inv =
-    F.map (αₗ _ _ _).inv ≫ δₗ F (c otimes c' : C) d := by
+    F.map (αₗ _ _ _).inv ≫ δₗ F (c ⊗ c' : C) d := by
   simpa [-δₗ_associativity, -δₗ_associativity_assoc] using
     F.map (αₗ _ _ _).inv ≫=
       (δₗ_associativity F c c' d).symm =≫
       (αₗ _ _ _).inv
 
 @[reassoc (attr := simp)]
-/--
-lemma `δₗ_unitality_hom` / 引理 `δₗ_unitality_hom`
-
-English:
-lemma δₗ_unitality_hom
-  given: (d : D)
-  proof: by
-  simpa [-δₗ_unitality_inv] using
-    F.map (funₗ[C] d).hom ≫=
-      (δₗ_unitality_inv F d).symm =≫
-      (funₗ[C] (F.obj d)).hom
-
-中文:
-引理 δₗ_unitality_hom
-  条件: (d : D)
-  证明: by
-  simpa [-δₗ_unitality_inv] using
-    F.map (funₗ[C] d).hom ≫=
-      (δₗ_unitality_inv F d).symm =≫
-      (funₗ[C] (F.obj d)).hom
-
-Depends on / 依赖: F.map, F.obj
+/-
+**CategoryTheory.Functor.OplaxLeftLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Functor.OplaxLeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δₗ_unitality_hom (d : D) :
-    δₗ F (𝟙_ C) d ≫ (funₗ (F.obj d)).hom = F.map (funₗ d).hom := by
+    δₗ F (𝟙_ C) d ≫ (λₗ (F.obj d)).hom = F.map (λₗ d).hom := by
   simpa [-δₗ_unitality_inv] using
-    F.map (funₗ[C] d).hom ≫=
+    F.map (λₗ[C] d).hom ≫=
       (δₗ_unitality_inv F d).symm =≫
-      (funₗ[C] (F.obj d)).hom
+      (λₗ[C] (F.obj d)).hom
 
 end OplaxLeftLinear
 
-/--
-Definition of `LeftLinear` / `LeftLinear` 的定义
+/-- `F.LeftLinear C` asserts that `F` is both lax and oplax left-linear,
+in a compatible way, i.e that `μₗ` is inverse to `δₗ`. -/
+/-
+**CategoryTheory.Functor.LeftLinear** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：{D : Type u_1} →   {D' : Type u_2} →     [inst : CategoryTheory.Category.{
+v_1, u_1} D] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D'] →         
+CategoryTheory.Functor D D' →           (C : Type u_3) →             [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} C] →               [inst_3 : CategoryTheory.Mo
+noidalCategory C] →                 [CategoryTheory.MonoidalCategory.MonoidalLef
+tAction C D] →                   [CategoryTheory.MonoidalCategory.MonoidalLeftAc
+tion C D'] → Type (max (max u_1 u_3) v_2)
+参数：C : Type u_3；max (max u_1 u_3) v_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LeftLinear
-  axioms and operations (2):
-    - μₗ_comp_δₗ((F) (c : C) (d : D)) : LaxLeftLinear.μₗ F c d ≫ OplaxLeftLinear.δₗ F c d = 𝟙 _
-    - δₗ_comp_μₗ((F) (c : C) (d : D)) : OplaxLeftLinear.δₗ F c d ≫ LaxLeftLinear.μₗ F c d = 𝟙 _
-
-中文:
-类 左线性
-  公理与运算 (2 个):
-    - μₗ_comp_δₗ((F) (c : C) (d : D)) : 松弛左线性.μₗ F c d ≫ 反松弛左线性.δₗ F c d = 𝟙 _
-    - δₗ_comp_μₗ((F) (c : C) (d : D)) : 反松弛左线性.δₗ F c d ≫ 松弛左线性.μₗ F c d = 𝟙 _
+--- 原说明 ---
+`F.LeftLinear C` asserts that `F` is both lax and oplax left-linear,
+in a compatible way, i.e that `μₗ` is inverse to `δₗ`.
 -/
 class LeftLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -325,106 +245,52 @@ variable
 attribute [reassoc (attr := simp)] μₗ_comp_δₗ
 attribute [reassoc (attr := simp)] δₗ_comp_μₗ
 
-/--
-Definition of `μₗIso` / `μₗIso` 的定义
+/-- A shorthand to bundle the μₗ as an isomorphism -/
+/-
+**CategoryTheory.Functor.LeftLinear.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.Functor.LeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation μₗIso
-  signature: (c : C) (d : D)
-  body: LaxLeftLinear.μₗ F c d
-  inv := OplaxLeftLinear.δₗ F c d
-
-中文:
-缩写 μₗIso
-  签名: (c : C) (d : D)
-  定义体: LaxLeftLinear.μₗ F c d
-  inv := OplaxLeftLinear.δₗ F c d
-
-Depends on / 依赖: LaxLeftLinear
+--- 原说明 ---
+A shorthand to bundle the μₗ as an isomorphism
 -/
 abbrev μₗIso (c : C) (d : D) : c ⊙ₗ F.obj d ≅ F.obj (c ⊙ₗ d) where
   hom := LaxLeftLinear.μₗ F c d
   inv := OplaxLeftLinear.δₗ F c d
 
 variable (c : C) (d : D)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (μₗ F c d)
-  body: Iso.isIso_hom (μₗIso F c d)
-
-中文:
-实例 :
-  签名: 是同构 (μₗ F c d)
-  定义体: Iso.isIso_hom (μₗIso F c d)
-
-Depends on / 依赖: Iso.isIso_hom, isIso_hom
+/-
+**CategoryTheory.Functor.LeftLinear.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.F
+unctor.LeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (μₗ F c d) := Iso.isIso_hom (μₗIso F c d)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (δₗ F c d)
-  body: Iso.isIso_inv (μₗIso F c d)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是同构 (δₗ F c d)
-  定义体: Iso.isIso_inv (μₗIso F c d)
-
-@[simp]
-
-Depends on / 依赖: Iso.isIso_inv, isIso_inv
+/-
+**CategoryTheory.Functor.LeftLinear.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.F
+unctor.LeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (δₗ F c d) := Iso.isIso_inv (μₗIso F c d)
 
 @[simp]
-/--
-lemma `inv_μₗ` / 引理 `inv_μₗ`
-
-English:
-lemma inv_μₗ
-  proof: Eq.symm IsIso.eq_inv_of_hom_inv_id μₗ_comp_δₗ F c d
-
-@[simp]
-
-中文:
-引理 inv_μₗ
-  证明: Eq.symm IsIso.eq_inv_of_hom_inv_id μₗ_comp_δₗ F c d
-
-@[simp]
-
-Depends on / 依赖: Eq.symm, IsIso.eq_inv_of_hom_inv_id, eq_inv_of_hom_inv_id
+/-
+**CategoryTheory.Functor.LeftLinear.inv_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Functor.LeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_μₗ :
     CategoryTheory.inv (μₗ F c d) = δₗ F c d :=
-Eq.symm IsIso.eq_inv_of_hom_inv_id μₗ_comp_δₗ F c d
+  Eq.symm <| IsIso.eq_inv_of_hom_inv_id <| μₗ_comp_δₗ F c d
 
 @[simp]
-/--
-lemma `inv_δₗ` / 引理 `inv_δₗ`
-
-English:
-lemma inv_δₗ
-  proof: Eq.symm IsIso.eq_inv_of_hom_inv_id δₗ_comp_μₗ F c d
-
-中文:
-引理 inv_δₗ
-  证明: Eq.symm IsIso.eq_inv_of_hom_inv_id δₗ_comp_μₗ F c d
-
-Depends on / 依赖: Eq.symm, IsIso.eq_inv_of_hom_inv_id, eq_inv_of_hom_inv_id
+/-
+**CategoryTheory.Functor.LeftLinear.inv_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Functor.LeftLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_δₗ :
     CategoryTheory.inv (δₗ F c d) = μₗ F c d :=
-Eq.symm IsIso.eq_inv_of_hom_inv_id δₗ_comp_μₗ F c d
+  Eq.symm <| IsIso.eq_inv_of_hom_inv_id <| δₗ_comp_μₗ F c d
 
 end LeftLinear
 
@@ -434,28 +300,26 @@ section rightAction
 
 open MonoidalRightAction
 
-/--
-Definition of `LaxRightLinear` / `LaxRightLinear` 的定义
+/-- `F.LaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`μₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`. -/
+/-
+**CategoryTheory.Functor.LaxRightLinear** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：LaxRightLinear (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
+ [MonoidalRightAction C D] [MonoidalRightAction C D'] where /-- The "μᵣ" morphis
+m. -/ μᵣ (F) (d : D) (c : C) : F.obj d ⊙ᵣ c ⟶ F.obj (d ⊙ᵣ c) μᵣ_naturality_right
+ (F) (d : D) {c c' : C} (f : c ⟶ c') : F.obj d ⊴ᵣ f ≫ μᵣ d c' = μᵣ d c ≫ F.map (
+d ⊴ᵣ f)
+参数：F : D ⥤ D'；C : Type*；F；d : D；c : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LaxRightLinear
-  axioms and operations (5):
-    - μᵣ((F) (d : D) (c : C)) : F.obj d ⊙ᵣ c ⟶ F.obj (d ⊙ᵣ c)
-    - μᵣ_naturality_right((F) (d : D) {c c' : C} (f : c ⟶ c')) : F.obj d ⊴ᵣ f ≫ μᵣ d c' = μᵣ d c ≫ F.map (d ⊴ᵣ f)  [default: by cat_disch]
-    - μᵣ_naturality_left((F) {d d' : D} (f : d ⟶ d') (c : C)) : F.map f ⊵ᵣ c ≫ μᵣ d' c = μᵣ d c ≫ F.map (f ⊵ᵣ c)  [default: by cat_disch]
-    - μᵣ_associativity((F) (d : D) (c c' : C)) : μᵣ d (c otimes c') ≫ F.map (αᵣ _ _ _).hom = (αᵣ (F.obj d) c c').hom ≫ (μᵣ d c) ⊵ᵣ c' ≫ μᵣ (d ⊙ᵣ c) c'  [default: by cat_disch]
-    - μᵣ_unitality((F) (d : D)) : (ρᵣ (F.obj d)).hom = μᵣ d (𝟙_ C) ≫ F.map (ρᵣ d).hom  [default: by cat_disch]
-
-中文:
-类 松弛右线性
-  公理与运算 (5 个):
-    - μᵣ((F) (d : D) (c : C)) : F.obj d ⊙ᵣ c ⟶ F.obj (d ⊙ᵣ c)
-    - μᵣ_naturality_right((F) (d : D) {c c' : C} (f : c ⟶ c')) : F.obj d ⊴ᵣ f ≫ μᵣ d c' = μᵣ d c ≫ F.map (d ⊴ᵣ f)  [默认: by cat_disch]
-    - μᵣ_naturality_left((F) {d d' : D} (f : d ⟶ d') (c : C)) : F.map f ⊵ᵣ c ≫ μᵣ d' c = μᵣ d c ≫ F.map (f ⊵ᵣ c)  [默认: by cat_disch]
-    - μᵣ_associativity((F) (d : D) (c c' : C)) : μᵣ d (c otimes c') ≫ F.map (αᵣ _ _ _).hom = (αᵣ (F.obj d) c c').hom ≫ (μᵣ d c) ⊵ᵣ c' ≫ μᵣ (d ⊙ᵣ c) c'  [默认: by cat_disch]
-    - μᵣ_unitality((F) (d : D)) : (ρᵣ (F.obj d)).hom = μᵣ d (𝟙_ C) ≫ F.map (ρᵣ d).hom  [默认: by cat_disch]
-
-Depends on / 依赖: F.map, F.obj, cat_disch, otimes
+--- 原说明 ---
+`F.LaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`μₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`.
 -/
 class LaxRightLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -467,7 +331,7 @@ class LaxRightLinear
   μᵣ_naturality_left (F) {d d' : D} (f : d ⟶ d') (c : C) :
     F.map f ⊵ᵣ c ≫ μᵣ d' c = μᵣ d c ≫ F.map (f ⊵ᵣ c) := by cat_disch
   μᵣ_associativity (F) (d : D) (c c' : C) :
-    μᵣ d (c otimes c') ≫ F.map (αᵣ _ _ _).hom =
+    μᵣ d (c ⊗ c') ≫ F.map (αᵣ _ _ _).hom =
     (αᵣ (F.obj d) c c').hom ≫ (μᵣ d c) ⊵ᵣ c' ≫
       μᵣ (d ⊙ᵣ c) c' := by cat_disch
   μᵣ_unitality (F) (d : D) :
@@ -488,64 +352,24 @@ variable
   [F.LaxRightLinear C]
 
 @[reassoc (attr := simp)]
-/--
-lemma `μᵣ_associativity_inv` / 引理 `μᵣ_associativity_inv`
-
-English:
-lemma μᵣ_associativity_inv
-  given: (d : D) (c c' : C)
-  proof: by
-  simpa [-μᵣ_associativity, -μᵣ_associativity_assoc] using
-    (αᵣ _ _ _).inv ≫=
-      (μᵣ_associativity F d c c').symm =≫
-      F.map (αᵣ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 μᵣ_associativity_inv
-  条件: (d : D) (c c' : C)
-  证明: by
-  simpa [-μᵣ_associativity, -μᵣ_associativity_assoc] using
-    (αᵣ _ _ _).inv ≫=
-      (μᵣ_associativity F d c c').symm =≫
-      F.map (αᵣ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map
+/-
+**CategoryTheory.Functor.LaxRightLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Functor.LaxRightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μᵣ_associativity_inv (d : D) (c c' : C) :
     μᵣ F d c ⊵ᵣ c' ≫ μᵣ F (d ⊙ᵣ c) c' ≫ F.map (αᵣ _ _ _).inv =
-    (αᵣ (F.obj d) c c').inv ≫ μᵣ F d (c otimes c') := by
+    (αᵣ (F.obj d) c c').inv ≫ μᵣ F d (c ⊗ c') := by
   simpa [-μᵣ_associativity, -μᵣ_associativity_assoc] using
     (αᵣ _ _ _).inv ≫=
       (μᵣ_associativity F d c c').symm =≫
       F.map (αᵣ _ _ _).inv
 
 @[reassoc (attr := simp)]
-/--
-lemma `μᵣ_unitality_inv` / 引理 `μᵣ_unitality_inv`
-
-English:
-lemma μᵣ_unitality_inv
-  given: (d : D)
-  proof: by
-  simpa [-μᵣ_unitality] using
-    (ρᵣ[C] (F.obj d)).inv ≫=
-      (μᵣ_unitality F d).symm =≫
-      F.map (ρᵣ[C] d).inv
-
-中文:
-引理 μᵣ_unitality_inv
-  条件: (d : D)
-  证明: by
-  simpa [-μᵣ_unitality] using
-    (ρᵣ[C] (F.obj d)).inv ≫=
-      (μᵣ_unitality F d).symm =≫
-      F.map (ρᵣ[C] d).inv
-
-Depends on / 依赖: F.map, F.obj
+/-
+**CategoryTheory.Functor.LaxRightLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Functor.LaxRightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μᵣ_unitality_inv (d : D) :
      (ρᵣ (F.obj d)).inv ≫ μᵣ F d (𝟙_ C) = F.map (ρᵣ d).inv := by
@@ -556,28 +380,26 @@ lemma μᵣ_unitality_inv (d : D) :
 
 end LaxRightLinear
 
-/--
-Definition of `OplaxRightLinear` / `OplaxRightLinear` 的定义
+/-- `F.OplaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`δₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`. -/
+/-
+**CategoryTheory.Functor.OplaxRightLinear** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：OplaxRightLinear (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory 
+C] [MonoidalRightAction C D] [MonoidalRightAction C D'] where /-- The oplax line
+ator morphism. -/ δᵣ (F) (d : D) (c : C) : F.obj (d ⊙ᵣ c) ⟶ (F.obj d) ⊙ᵣ c δᵣ_na
+turality_right (F) (d : D) {c c' : C} (f : c ⟶ c') : F.map (d ⊴ᵣ f) ≫ δᵣ d c' = 
+δᵣ d c ≫ F.obj d ⊴ᵣ f
+参数：F : D ⥤ D'；C : Type*；F；d : D；c : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class OplaxRightLinear
-  axioms and operations (5):
-    - δᵣ((F) (d : D) (c : C)) : F.obj (d ⊙ᵣ c) ⟶ (F.obj d) ⊙ᵣ c
-    - δᵣ_naturality_right((F) (d : D) {c c' : C} (f : c ⟶ c')) : F.map (d ⊴ᵣ f) ≫ δᵣ d c' = δᵣ d c ≫ F.obj d ⊴ᵣ f  [default: by cat_disch]
-    - δᵣ_naturality_left((F) {d d' : D} (f : d ⟶ d') (c : C)) : F.map (f ⊵ᵣ c) ≫ δᵣ d' c = δᵣ d c ≫ F.map f ⊵ᵣ c  [default: by cat_disch]
-    - δᵣ_associativity((F) (d : D) (c c' : C)) : δᵣ d (c otimes c') ≫ (αᵣ _ _ _).hom = F.map (αᵣ _ _ _).hom ≫ δᵣ (d ⊙ᵣ c) c' ≫ δᵣ d c ⊵ᵣ c'  [default: by cat_disch]
-    - δᵣ_unitality_inv((F) (d : D)) : (ρᵣ (F.obj d)).inv = F.map (ρᵣ d).inv ≫ δᵣ d (𝟙_ C)  [default: by cat_disch]
-
-中文:
-类 反松弛右线性
-  公理与运算 (5 个):
-    - δᵣ((F) (d : D) (c : C)) : F.obj (d ⊙ᵣ c) ⟶ (F.obj d) ⊙ᵣ c
-    - δᵣ_naturality_right((F) (d : D) {c c' : C} (f : c ⟶ c')) : F.map (d ⊴ᵣ f) ≫ δᵣ d c' = δᵣ d c ≫ F.obj d ⊴ᵣ f  [默认: by cat_disch]
-    - δᵣ_naturality_left((F) {d d' : D} (f : d ⟶ d') (c : C)) : F.map (f ⊵ᵣ c) ≫ δᵣ d' c = δᵣ d c ≫ F.map f ⊵ᵣ c  [默认: by cat_disch]
-    - δᵣ_associativity((F) (d : D) (c c' : C)) : δᵣ d (c otimes c') ≫ (αᵣ _ _ _).hom = F.map (αᵣ _ _ _).hom ≫ δᵣ (d ⊙ᵣ c) c' ≫ δᵣ d c ⊵ᵣ c'  [默认: by cat_disch]
-    - δᵣ_unitality_inv((F) (d : D)) : (ρᵣ (F.obj d)).inv = F.map (ρᵣ d).inv ≫ δᵣ d (𝟙_ C)  [默认: by cat_disch]
-
-Depends on / 依赖: F.map, F.obj, cat_disch, otimes
+--- 原说明 ---
+`F.OplaxLinear C` equips `F : D ⥤ D'` with a family of morphisms
+`δₗ F : ∀ (c : C) (d : D), c ⊙ₗ F.obj d ⟶ F.obj (c ⊙ₗ d)`
+that is natural in each variable and coherent with respect to left actions
+of `C` on `D` and `D'`.
 -/
 class OplaxRightLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -591,7 +413,7 @@ class OplaxRightLinear
     F.map (f ⊵ᵣ c) ≫ δᵣ d' c =
     δᵣ d c ≫ F.map f ⊵ᵣ c := by cat_disch
   δᵣ_associativity (F) (d : D) (c c' : C) :
-    δᵣ d (c otimes c') ≫ (αᵣ _ _ _).hom =
+    δᵣ d (c ⊗ c') ≫ (αᵣ _ _ _).hom =
     F.map (αᵣ _ _ _).hom ≫ δᵣ (d ⊙ᵣ c) c' ≫
       δᵣ d c ⊵ᵣ c' := by cat_disch
   δᵣ_unitality_inv (F) (d : D) :
@@ -613,65 +435,25 @@ variable
   [F.OplaxRightLinear C]
 
 @[reassoc (attr := simp)]
-/--
-lemma `δᵣ_associativity_inv` / 引理 `δᵣ_associativity_inv`
-
-English:
-lemma δᵣ_associativity_inv
-  given: (d : D) (c c' : C)
-  proof: by
-  simpa [-δᵣ_associativity, -δᵣ_associativity_assoc] using
-    F.map (αᵣ _ _ _).inv ≫=
-      (δᵣ_associativity F d c c').symm =≫
-      (αᵣ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 δᵣ_associativity_inv
-  条件: (d : D) (c c' : C)
-  证明: by
-  simpa [-δᵣ_associativity, -δᵣ_associativity_assoc] using
-    F.map (αᵣ _ _ _).inv ≫=
-      (δᵣ_associativity F d c c').symm =≫
-      (αᵣ _ _ _).inv
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map
+/-
+**CategoryTheory.Functor.OplaxRightLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Functor.OplaxRightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δᵣ_associativity_inv (d : D) (c c' : C) :
     δᵣ F (d ⊙ᵣ c) c' ≫
       δᵣ F d c ⊵ᵣ c' ≫ (αᵣ _ _ _).inv =
-    F.map (αᵣ _ _ _).inv ≫ δᵣ F d (c otimes c' : C) := by
+    F.map (αᵣ _ _ _).inv ≫ δᵣ F d (c ⊗ c' : C) := by
   simpa [-δᵣ_associativity, -δᵣ_associativity_assoc] using
     F.map (αᵣ _ _ _).inv ≫=
       (δᵣ_associativity F d c c').symm =≫
       (αᵣ _ _ _).inv
 
 @[reassoc (attr := simp)]
-/--
-lemma `δᵣ_unitality_hom` / 引理 `δᵣ_unitality_hom`
-
-English:
-lemma δᵣ_unitality_hom
-  given: (d : D)
-  proof: by
-  simpa [-δᵣ_unitality_inv] using
-    F.map (ρᵣ[C] d).hom ≫=
-      (δᵣ_unitality_inv F d).symm =≫
-      (ρᵣ[C] (F.obj d)).hom
-
-中文:
-引理 δᵣ_unitality_hom
-  条件: (d : D)
-  证明: by
-  simpa [-δᵣ_unitality_inv] using
-    F.map (ρᵣ[C] d).hom ≫=
-      (δᵣ_unitality_inv F d).symm =≫
-      (ρᵣ[C] (F.obj d)).hom
-
-Depends on / 依赖: F.map, F.obj
+/-
+**CategoryTheory.Functor.OplaxRightLinear.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Functor.OplaxRightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δᵣ_unitality_hom (d : D) :
     δᵣ F d (𝟙_ C) ≫ (ρᵣ (F.obj d)).hom = F.map (ρᵣ d).hom := by
@@ -682,20 +464,24 @@ lemma δᵣ_unitality_hom (d : D) :
 
 end OplaxRightLinear
 
-/--
-Definition of `RightLinear` / `RightLinear` 的定义
+/-- `F.RightLinear C` asserts that `F` is both lax and oplax left-linear,
+in a compatible way, i.e that `μᵣ` is inverse to `δᵣ`. -/
+/-
+**CategoryTheory.Functor.RightLinear** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：{D : Type u_1} →   {D' : Type u_2} →     [inst : CategoryTheory.Category.{
+v_1, u_1} D] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D'] →         
+CategoryTheory.Functor D D' →           (C : Type u_3) →             [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} C] →               [inst_3 : CategoryTheory.Mo
+noidalCategory C] →                 [CategoryTheory.MonoidalCategory.MonoidalRig
+htAction C D] →                   [CategoryTheory.MonoidalCategory.MonoidalRight
+Action C D'] → Type (max (max u_1 u_3) v_2)
+参数：C : Type u_3；max (max u_1 u_3) v_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RightLinear
-  axioms and operations (2):
-    - μᵣ_comp_δᵣ((F) (d : D) (c : C)) : LaxRightLinear.μᵣ F d c ≫ OplaxRightLinear.δᵣ F d c = 𝟙 _
-    - δᵣ_comp_μᵣ((F) (d : D) (c : C)) : OplaxRightLinear.δᵣ F d c ≫ LaxRightLinear.μᵣ F d c = 𝟙 _
-
-中文:
-类 右线性
-  公理与运算 (2 个):
-    - μᵣ_comp_δᵣ((F) (d : D) (c : C)) : 松弛右线性.μᵣ F d c ≫ 反松弛右线性.δᵣ F d c = 𝟙 _
-    - δᵣ_comp_μᵣ((F) (d : D) (c : C)) : 反松弛右线性.δᵣ F d c ≫ 松弛右线性.μᵣ F d c = 𝟙 _
+--- 原说明 ---
+`F.RightLinear C` asserts that `F` is both lax and oplax left-linear,
+in a compatible way, i.e that `μᵣ` is inverse to `δᵣ`.
 -/
 class RightLinear
     (F : D ⥤ D') (C : Type*) [Category* C] [MonoidalCategory C]
@@ -718,109 +504,56 @@ variable
 attribute [reassoc (attr := simp)] μᵣ_comp_δᵣ
 attribute [reassoc (attr := simp)] δᵣ_comp_μᵣ
 
-/--
-Definition of `μᵣIso` / `μᵣIso` 的定义
+/-- A shorthand to bundle the μᵣ as an isomorphism -/
+/-
+**CategoryTheory.Functor.RightLinear.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.Functor.RightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation μᵣIso
-  signature: (d : D) (c : C)
-  body: LaxRightLinear.μᵣ F d c
-  inv := OplaxRightLinear.δᵣ F d c
-
-中文:
-缩写 μᵣIso
-  签名: (d : D) (c : C)
-  定义体: LaxRightLinear.μᵣ F d c
-  inv := OplaxRightLinear.δᵣ F d c
-
-Depends on / 依赖: LaxRightLinear
+--- 原说明 ---
+A shorthand to bundle the μᵣ as an isomorphism
 -/
 abbrev μᵣIso (d : D) (c : C) : F.obj d ⊙ᵣ c ≅ F.obj (d ⊙ᵣ c) where
   hom := LaxRightLinear.μᵣ F d c
   inv := OplaxRightLinear.δᵣ F d c
 
 variable (c : C) (d : D)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (μᵣ F d c)
-  body: Iso.isIso_hom (μᵣIso F d c)
-
-中文:
-实例 :
-  签名: 是同构 (μᵣ F d c)
-  定义体: Iso.isIso_hom (μᵣIso F d c)
-
-Depends on / 依赖: Iso.isIso_hom, isIso_hom
+/-
+**CategoryTheory.Functor.RightLinear.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Functor.RightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (μᵣ F d c) := Iso.isIso_hom (μᵣIso F d c)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (δᵣ F d c)
-  body: Iso.isIso_inv (μᵣIso F d c)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是同构 (δᵣ F d c)
-  定义体: Iso.isIso_inv (μᵣIso F d c)
-
-@[simp]
-
-Depends on / 依赖: Iso.isIso_inv, isIso_inv
+/-
+**CategoryTheory.Functor.RightLinear.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Functor.RightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (δᵣ F d c) := Iso.isIso_inv (μᵣIso F d c)
 
 @[simp]
-/--
-lemma `inv_μᵣ` / 引理 `inv_μᵣ`
-
-English:
-lemma inv_μᵣ
-  proof: Eq.symm IsIso.eq_inv_of_hom_inv_id μᵣ_comp_δᵣ F d c
-
-@[simp]
-
-中文:
-引理 inv_μᵣ
-  证明: Eq.symm IsIso.eq_inv_of_hom_inv_id μᵣ_comp_δᵣ F d c
-
-@[simp]
-
-Depends on / 依赖: Eq.symm, IsIso.eq_inv_of_hom_inv_id, eq_inv_of_hom_inv_id
+/-
+**CategoryTheory.Functor.RightLinear.inv_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Functor.RightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_μᵣ :
     CategoryTheory.inv (μᵣ F d c) = δᵣ F d c :=
-Eq.symm IsIso.eq_inv_of_hom_inv_id μᵣ_comp_δᵣ F d c
+  Eq.symm <| IsIso.eq_inv_of_hom_inv_id <| μᵣ_comp_δᵣ F d c
 
 @[simp]
-/--
-lemma `inv_δᵣ` / 引理 `inv_δᵣ`
-
-English:
-lemma inv_δᵣ
-  proof: Eq.symm IsIso.eq_inv_of_hom_inv_id δᵣ_comp_μᵣ F d c
-
-中文:
-引理 inv_δᵣ
-  证明: Eq.symm IsIso.eq_inv_of_hom_inv_id δᵣ_comp_μᵣ F d c
-
-Depends on / 依赖: Eq.symm, IsIso.eq_inv_of_hom_inv_id, eq_inv_of_hom_inv_id
+/-
+**CategoryTheory.Functor.RightLinear.inv_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Functor.RightLinear`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_δᵣ :
     CategoryTheory.inv (δᵣ F d c) = μᵣ F d c :=
-Eq.symm IsIso.eq_inv_of_hom_inv_id δᵣ_comp_μᵣ F d c
+  Eq.symm <| IsIso.eq_inv_of_hom_inv_id <| δᵣ_comp_μᵣ F d c
 
 end RightLinear
 
 end rightAction
 
 end CategoryTheory.Functor
+

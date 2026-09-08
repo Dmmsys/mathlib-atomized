@@ -82,136 +82,113 @@ variable (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M]
 
 /-- The torsion ideal of `x`, containing all `a` such that `a • x = 0`. -/
 @[simps!]
-/--
-Definition of `torsionOf` / `torsionOf` 的定义
+/-
+**Ideal.torsionOf** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：torsionOf (x : M) : Ideal R
+参数：x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition torsionOf
-  signature: (x : M)
-  body: (LinearMap.toSpanSingleton R M x).ker
-
-@[simp]
-
-中文:
-定义 torsionOf
-  签名: (x : M)
-  定义体: (LinearMap.toSpanSingleton R M x).ker
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton, toSpanSingleton
+--- 原说明 ---
+The torsion ideal of `x`, containing all `a` such that `a • x = 0`.
 -/
 def torsionOf (x : M) : Ideal R :=
   (LinearMap.toSpanSingleton R M x).ker
 
 @[simp]
-/--
-theorem `torsionOf_zero` / 定理 `torsionOf_zero`
-
-English:
-theorem torsionOf_zero
-  statement: torsionOf R M (0 : M) = ⊤
-  proof: by simp [torsionOf]
-
-中文:
-定理 torsionOf_zero
-  结论: torsionOf R M (0 : M) = ⊤
-  证明: by simp [torsionOf]
-
-Depends on / 依赖: torsionOf
+/-
+**Ideal.torsionOf_zero** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：torsionOf_zero : torsionOf R M (0 : M) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.toSpanSingleton_zero`：toSpanSingleton_zero : toSpanSingleton R
+ M 0 = 0
+· 使用定理 `LinearMap.ker_zero`：ker_zero : ker (0 : M ->ₛₗ[τ₁₂] M₂) = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem torsionOf_zero : torsionOf R M (0 : M) = ⊤ := by simp [torsionOf]
 
 variable {R M}
 
 @[simp]
-/--
-theorem `mem_torsionOf_iff` / 定理 `mem_torsionOf_iff`
-
-English:
-theorem mem_torsionOf_iff
-  given: (x : M) (a : R)
-  statement: a in torsionOf R M x ↔ a • x = 0
-  proof: Iff.rfl
-
-中文:
-定理 mem_torsionOf_iff
-  条件: (x : M) (a : R)
-  结论: a in torsionOf R M x ↔ a • x = 0
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Ideal.mem_torsionOf_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：mem_torsionOf_iff (x : M) (a : R) : a in torsionOf R M x ↔ a • x = 0
+参数：x : M；a : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_torsionOf_iff (x : M) (a : R) : a in torsionOf R M x ↔ a • x = 0 :=
+theorem mem_torsionOf_iff (x : M) (a : R) : a ∈ torsionOf R M x ↔ a • x = 0 :=
   Iff.rfl
 
 variable (R)
 
 @[simp]
-/--
-theorem `torsionOf_eq_top_iff` / 定理 `torsionOf_eq_top_iff`
-
-English:
-theorem torsionOf_eq_top_iff
-  given: (m : M)
-  statement: torsionOf R M m = ⊤ ↔ m = 0
-  proof: by
-  refine ⟨fun h => ?_, fun h => by simp [h]⟩
-  rw [← one_smul R m]; rw [← mem_torsionOf_iff m (1 : R)]; rw [h]
-  exact Submodule.mem_top
-
-@[simp]
-
-中文:
-定理 torsionOf_eq_top_iff
-  条件: (m : M)
-  结论: torsionOf R M m = ⊤ ↔ m = 0
-  证明: by
-  refine ⟨fun h => ?_, fun h => by simp [h]⟩
-  rw [← one_smul R m]; rw [← mem_torsionOf_iff m (1 : R)]; rw [h]
-  exact Submodule.mem_top
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.mem_top, mem_top, mem_torsionOf_iff, one_smul
+/-
+**Ideal.torsionOf_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：torsionOf_eq_top_iff (m : M) : torsionOf R M m = ⊤ ↔ m = 0
+参数：m : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Ideal.mem_torsionOf_iff`：mem_torsionOf_iff (x : M) (a : R) : a in torsio
+nOf R M x ↔ a • x = 0
+· 使用定理 `Submodule.mem_top`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [
+inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {x : M},   x ∈ ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Ideal.torsionOf_zero`：torsionOf_zero : torsionOf R M (0 : M) = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem torsionOf_eq_top_iff (m : M) : torsionOf R M m = ⊤ ↔ m = 0 := by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
-  rw [← one_smul R m]; rw [← mem_torsionOf_iff m (1 : R)]; rw [h]
+  rw [← one_smul R m, ← mem_torsionOf_iff m (1 : R), h]
   exact Submodule.mem_top
 
 @[simp]
-/--
-theorem `torsionOf_eq_bot_iff_of_noZeroSMulDivisors` / 定理 `torsionOf_eq_bot_iff_of_noZeroSMulDivisors`
-
-English:
-theorem torsionOf_eq_bot_iff_of_noZeroSMulDivisors
-  given: [IsDomain R] [Module.IsTorsionFree R M] (m : M)
-  proof: by
-  refine ⟨fun h contra => ?_, fun h => (Submodule.eq_bot_iff _).mpr fun r hr => ?_⟩
-  · rw [contra, torsionOf_zero] at h
-    exact bot_ne_top.symm h
-  · rw [mem_torsionOf_iff, smul_eq_zero] at hr
-    tauto
-
-@[simp]
-
-中文:
-定理 torsionOf_eq_bot_iff_of_noZeroSMulDivisors
-  条件: [是整环 R] [模.是无挠 R M] (m : M)
-  证明: by
-  refine ⟨fun h contra => ?_, fun h => (Submodule.eq_bot_iff _).mpr fun r hr => ?_⟩
-  · rw [contra, torsionOf_zero] at h
-    exact bot_ne_top.symm h
-  · rw [mem_torsionOf_iff, smul_eq_zero] at hr
-    tauto
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.eq_bot_iff, bot_ne_top, bot_ne_top.symm, contra, eq_bot_iff, mem_torsionOf_iff, smul_eq_zero, torsionOf_zero
+/-
+**Ideal.torsionOf_eq_bot_iff_of_noZeroSMulDivisors** 是 Mathlib 中的一个定理，位于命名空间 `Id
+eal`。
+形式化陈述：torsionOf_eq_bot_iff_of_noZeroSMulDivisors [IsDomain R] [Module.IsTorsionF
+ree R M] (m : M) : torsionOf R M m = ⊥ ↔ m != 0
+参数：m : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `bot_ne_top`：bot_ne_top : (⊥ : α) != ⊤
+· 使用定理 `Ideal.instNontrivial`：∀ {α : Type u} [inst : Semiring α] [Nontrivial α],
+ Nontrivial (Ideal α)
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.torsionOf_zero`：torsionOf_zero : torsionOf R M (0 : M) = ⊤
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.eq_bot_iff`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R
+] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M),
+ p = ⊥ ↔ ∀…
+· 使用定理 `smul_eq_zero`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [inst_
+1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {r : R}   {m : M} [Module.IsTo
+rs…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Ideal.mem_torsionOf_iff`：mem_torsionOf_iff (x : M) (a : R) : a in torsio
+nOf R M x ↔ a • x = 0
 -/
 theorem torsionOf_eq_bot_iff_of_noZeroSMulDivisors [IsDomain R] [Module.IsTorsionFree R M] (m : M) :
-    torsionOf R M m = ⊥ ↔ m != 0 := by
+    torsionOf R M m = ⊥ ↔ m ≠ 0 := by
   refine ⟨fun h contra => ?_, fun h => (Submodule.eq_bot_iff _).mpr fun r hr => ?_⟩
   · rw [contra, torsionOf_zero] at h
     exact bot_ne_top.symm h
@@ -219,98 +196,99 @@ theorem torsionOf_eq_bot_iff_of_noZeroSMulDivisors [IsDomain R] [Module.IsTorsio
     tauto
 
 @[simp]
-/--
-theorem `annihilator_span_singleton_eq_torsionOf` / 定理 `annihilator_span_singleton_eq_torsionOf`
-
-English:
-theorem annihilator_span_singleton_eq_torsionOf
-  proof: by
-  simpa [torsionOf] using Submodule.annihilator_span_singleton x
-
-中文:
-定理 annihilator_span_singleton_eq_torsionOf
-  证明: by
-  simpa [torsionOf] using Submodule.annihilator_span_singleton x
-
-Depends on / 依赖: Submodule, Submodule.annihilator_span_singleton, annihilator_span_singleton, torsionOf
+/-
+**Ideal.annihilator_span_singleton_eq_torsionOf** 是 Mathlib 中的一个定理，位于命名空间 `Ideal
+`。
+形式化陈述：annihilator_span_singleton_eq_torsionOf {R M : Type*} [CommSemiring R] [Ad
+dCommMonoid M] [Module R M] (x : M) : (R ∙ x).annihilator = torsionOf R M x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.annihilator_span_singleton`：annihilator_span_singleton (g : M)
+ : (Submodule.span R {g}).annihilator = ker (toSpanSingleton R M g)
 -/
 theorem annihilator_span_singleton_eq_torsionOf
     {R M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] (x : M) :
     (R ∙ x).annihilator = torsionOf R M x := by
   simpa [torsionOf] using Submodule.annihilator_span_singleton x
 
-/--
-theorem `_root_.Module.annihilator_eq_iInf_torsionOf` / 定理 `_root_.Module.annihilator_eq_iInf_torsionOf`
+/-- The annihilator of a module is the intersection of the torsion ideals of its elements. -/
+/-
+**Ideal._root_.Module.annihilator_eq_iInf_torsionOf** 是 Mathlib 中的一个定理，位于命名空间 `I
+deal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Module.annihilator_eq_iInf_torsionOf
-  proof: by
-  ext r
-  simp [Module.mem_annihilator]
-
-中文:
-定理 _root_.模.annihilator_eq_iInf_torsionOf
-  证明: by
-  ext r
-  simp [Module.mem_annihilator]
-
-Depends on / 依赖: Module, Module.mem_annihilator, mem_annihilator
+--- 原说明 ---
+The annihilator of a module is the intersection of the torsion ideals of its ele
+ments.
 -/
 theorem _root_.Module.annihilator_eq_iInf_torsionOf :
     Module.annihilator R M = ⨅ x : M, torsionOf R M x := by
   ext r
   simp [Module.mem_annihilator]
 
-/--
-theorem `iSupIndep.linearIndependent'` / 定理 `iSupIndep.linearIndependent'`
+/-- See also `iSupIndep.linearIndependent` which provides the same conclusion
+but requires the stronger hypothesis `Module.IsTorsionFree R M`. -/
+/-
+**Ideal.iSupIndep.linearIndependent'** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.iSupIndep`
+。
+形式化陈述：∀ {ι : Type u_3} {R : Type u_4} {M : Type u_5} {v : ι → M} [inst : Ring R]
+ [inst_1 : AddCommGroup M]   [inst_2 : _root_.Module R M],   (iSupIndep fun i =>
+ R ∙ v i) → (∀ (i : ι), Ideal.torsionOf R M (v i) = ⊥) → LinearIndependent R v
+参数：iSupIndep fun i => R ∙ v i；∀ (i : ι), Ideal.torsionOf R M (v i) = ⊥。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `linearIndependent_iff_eq_zero_of_smul_mem_span`：linearIndependent_iff_eq
+_zero_of_smul_mem_span : LinearIndependent R v ↔ forall (i : ι) (a : R), a • v i
+ in span R (v '' (univ \ {i})) -> a …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `iSupIndep_def`：iSupIndep_def : iSupIndep t ↔ forall i, Disjoint (t i) (⨆
+ (j) (_ : j != i), t j)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iSup_subtype'`：iSup_subtype' {p : ι -> Prop} {f : forall i, p i -> α} : 
+⨆ (i) (h), f i h = ⨆ x : Subtype p, f x x.property
+· 使用定理 `Submodule.span_range_eq_iSup`：span_range_eq_iSup {ι : Sort*} {v : ι -> M
+} : span R (range v) = ⨆ i, R ∙ v i
+· 使用定理 `Submodule.mem_inf`：mem_inf {p q : Submodule R M} {x : M} : x in p ⊓ q ↔ 
+x in p ∧ x in q
+· 使用定理 `Submodule.mem_span_singleton`：mem_span_singleton {y : M} : x in R ∙ y ↔ 
+exists a : R, a • y = x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Submodule.mem_bot`：mem_bot {x : M} : x in (⊥ : Submodule R M) ↔ x = 0
 
-English:
-theorem iSupIndep.linearIndependent'
-  statement: {ι R M : Type*} {v : ι -> M} [Ring R]
-  proof: by
-  refine linearIndependent_iff_eq_zero_of_smul_mem_span.mpr fun i r hi => ?_
-  replace hv := iSupIndep_def.mp hv i
-  simp only [iSup_subtype', ← Submodule.span_range_eq_iSup (ι := Subtype _), disjoint_iff] at hv
-  have : r • v i in (⊥ : Submodule R M) := by
-    rw [← hv]; rw [Submodule.mem_inf]
-    refine ⟨Submodule.mem_span_singleton.mpr ⟨r, rfl⟩, ?_⟩
-    convert! hi
-    ext
-    simp
-  rw [← Submodule.mem_bot R]; rw [← h_ne_zero i]
-  simpa using this
-
-中文:
-定理 iSupIndep.linearIndependent'
-  结论: {ι R M : 类型} {v : ι -> M} [环 R]
-  证明: by
-  refine linearIndependent_iff_eq_zero_of_smul_mem_span.mpr fun i r hi => ?_
-  replace hv := iSupIndep_def.mp hv i
-  simp only [iSup_subtype', ← Submodule.span_range_eq_iSup (ι := Subtype _), disjoint_iff] at hv
-  have : r • v i in (⊥ : Submodule R M) := by
-    rw [← hv]; rw [Submodule.mem_inf]
-    refine ⟨Submodule.mem_span_singleton.mpr ⟨r, rfl⟩, ?_⟩
-    convert! hi
-    ext
-    simp
-  rw [← Submodule.mem_bot R]; rw [← h_ne_zero i]
-  simpa using this
-
-Depends on / 依赖: Submodule, Submodule.mem_bot, Submodule.mem_inf, Submodule.mem_span_singleton.mpr, Submodule.span_range_eq_iSup, Subtype, convert, disjoint_iff, h_ne_zero, iSupIndep_def, iSupIndep_def.mp, iSup_subtype, linearIndependent_iff_eq_zero_of_smul_mem_span, linearIndependent_iff_eq_zero_of_smul_mem_span.mpr, mem_bot, mem_inf, mem_span_singleton, replace, span_range_eq_iSup
+--- 原说明 ---
+See also `iSupIndep.linearIndependent` which provides the same conclusion
+but requires the stronger hypothesis `Module.IsTorsionFree R M`.
 -/
-theorem iSupIndep.linearIndependent' {ι R M : Type*} {v : ι -> M} [Ring R]
+theorem iSupIndep.linearIndependent' {ι R M : Type*} {v : ι → M} [Ring R]
     [AddCommGroup M] [Module R M] (hv : iSupIndep fun i => R ∙ v i)
-    (h_ne_zero : forall i, Ideal.torsionOf R M (v i) = ⊥) : LinearIndependent R v := by
+    (h_ne_zero : ∀ i, Ideal.torsionOf R M (v i) = ⊥) : LinearIndependent R v := by
   refine linearIndependent_iff_eq_zero_of_smul_mem_span.mpr fun i r hi => ?_
   replace hv := iSupIndep_def.mp hv i
   simp only [iSup_subtype', ← Submodule.span_range_eq_iSup (ι := Subtype _), disjoint_iff] at hv
-  have : r • v i in (⊥ : Submodule R M) := by
-    rw [← hv]; rw [Submodule.mem_inf]
+  have : r • v i ∈ (⊥ : Submodule R M) := by
+    rw [← hv, Submodule.mem_inf]
     refine ⟨Submodule.mem_span_singleton.mpr ⟨r, rfl⟩, ?_⟩
     convert! hi
     ext
     simp
-  rw [← Submodule.mem_bot R]; rw [← h_ne_zero i]
+  rw [← Submodule.mem_bot R, ← h_ne_zero i]
   simpa using this
 
 end TorsionOf
@@ -319,42 +297,35 @@ section
 
 variable (R M : Type*) [Ring R] [AddCommGroup M] [Module R M]
 
-/--
-Definition of `quotTorsionOfEquivSpanSingleton` / `quotTorsionOfEquivSpanSingleton` 的定义
+/-- The span of `x` in `M` is isomorphic to `R` quotiented by the torsion ideal of `x`. -/
+/-
+**Ideal.quotTorsionOfEquivSpanSingleton** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：quotTorsionOfEquivSpanSingleton (x : M) : (R ⧸ torsionOf R M x) ≃ₗ[R] R ∙ 
+x
+参数：x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotTorsionOfEquivSpanSingleton
-  signature: (x : M)
-  body: (LinearMap.toSpanSingleton R M x).quotKerEquivRange.trans
-    LinearEquiv.ofEq _ _ (LinearMap.span_singleton_eq_range R M x).symm
-
-中文:
-定义 quotTorsionOfEquivSpanSingleton
-  签名: (x : M)
-  定义体: (LinearMap.toSpanSingleton R M x).quotKerEquivRange.trans
-    LinearEquiv.ofEq _ _ (LinearMap.span_singleton_eq_range R M x).symm
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofEq, LinearMap, LinearMap.span_singleton_eq_range, LinearMap.toSpanSingleton, quotKerEquivRange, quotKerEquivRange.trans, span_singleton_eq_range, toSpanSingleton
+--- 原说明 ---
+The span of `x` in `M` is isomorphic to `R` quotiented by the torsion ideal of `
+x`.
 -/
 noncomputable def quotTorsionOfEquivSpanSingleton (x : M) : (R ⧸ torsionOf R M x) ≃ₗ[R] R ∙ x :=
-(LinearMap.toSpanSingleton R M x).quotKerEquivRange.trans
+  (LinearMap.toSpanSingleton R M x).quotKerEquivRange.trans <|
     LinearEquiv.ofEq _ _ (LinearMap.span_singleton_eq_range R M x).symm
 
 variable {R M}
 
 @[simp]
-/--
-theorem `quotTorsionOfEquivSpanSingleton_apply_mk` / 定理 `quotTorsionOfEquivSpanSingleton_apply_mk`
-
-English:
-theorem quotTorsionOfEquivSpanSingleton_apply_mk
-  given: (x : M) (a : R)
-  proof: rfl
-
-中文:
-定理 quotTorsionOfEquivSpanSingleton_apply_mk
-  条件: (x : M) (a : R)
-  证明: rfl
+/-
+**Ideal.quotTorsionOfEquivSpanSingleton_apply_mk** 是 Mathlib 中的一个定理，位于命名空间 `Idea
+l`。
+形式化陈述：quotTorsionOfEquivSpanSingleton_apply_mk (x : M) (a : R) : quotTorsionOfEq
+uivSpanSingleton R M x (Submodule.Quotient.mk a) = a • ⟨x, Submodule.mem_span_si
+ngleton_self x⟩
+参数：x : M；a : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotTorsionOfEquivSpanSingleton_apply_mk (x : M) (a : R) :
     quotTorsionOfEquivSpanSingleton R M x (Submodule.Quotient.mk a) =
@@ -377,40 +348,33 @@ variable (R M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M]
 /-- The `a`-torsion submodule for `a` in `R`, containing all elements `x` of `M` such that
   `a • x = 0`. -/
 @[simps!]
-/--
-Definition of `torsionBy` / `torsionBy` 的定义
+/-
+**Submodule.torsionBy** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：torsionBy (a : R) : Submodule R M
+参数：a : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition torsionBy
-  signature: (a : R)
-  body: (DistribSMul.toLinearMap R M a).ker
-
-中文:
-定义 torsionBy
-  签名: (a : R)
-  定义体: (DistribSMul.toLinearMap R M a).ker
-
-Depends on / 依赖: DistribSMul, DistribSMul.toLinearMap, toLinearMap
+--- 原说明 ---
+The `a`-torsion submodule for `a` in `R`, containing all elements `x` of `M` suc
+h that
+  `a • x = 0`.
 -/
 def torsionBy (a : R) : Submodule R M :=
   (DistribSMul.toLinearMap R M a).ker
 
 /-- The submodule containing all elements `x` of `M` such that `a • x = 0` for all `a` in `s`. -/
 @[simps!]
-/--
-Definition of `torsionBySet` / `torsionBySet` 的定义
+/-
+**Submodule.torsionBySet** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：torsionBySet (s : Set R) : Submodule R M
+参数：s : Set R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition torsionBySet
-  signature: (s : Set R)
-  body: sInf (torsionBy R M '' s)
-
-中文:
-定义 torsionBySet
-  签名: (s : 集合 R)
-  定义体: sInf (torsionBy R M '' s)
-
-Depends on / 依赖: torsionBy
+--- 原说明 ---
+The submodule containing all elements `x` of `M` such that `a • x = 0` for all `
+a` in `s`.
 -/
 def torsionBySet (s : Set R) : Submodule R M :=
   sInf (torsionBy R M '' s)
@@ -418,53 +382,40 @@ def torsionBySet (s : Set R) : Submodule R M :=
 /-- The `S`-torsion submodule, containing all elements `x` of `M` such that `a • x = 0` for some
 `a` in `S`. -/
 @[simps!]
-/--
-Definition of `torsion'` / `torsion'` 的定义
+/-
+**Submodule.torsion'** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：torsion' (S : Type*) [CommMonoid S] [DistribMulAction S M] [SMulCommClass 
+S R M] : Submodule R M where carrier
+参数：S : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition torsion'
-  signature: (S : Type*) [CommMonoid S] [DistribMulAction S M] [SMulCommClass S R M]
-  body: { x | exists a : S, a • x = 0 }
-  add_mem' := by
-    intro x y ⟨a,hx⟩ ⟨b,hy⟩
-    use b * a
-    rw [smul_add]; rw [mul_smul]; rw [mul_comm]; rw [mul_smul]; rw [hx]; rw [hy]; rw [smul_zero]; rw [smul_zero]; rw [add_zero]
-  zero_mem' := ⟨1, smul_zero 1⟩
-  smul_mem' := fun a x ⟨b, h⟩ => ⟨b, by rw [smul_comm, h, smul_zero]⟩
-
-中文:
-定义 torsion'
-  签名: (S : 类型) [交换幺半群 S] [分配乘法作用 S M] [标量交换类 S R M]
-  定义体: { x | exists a : S, a • x = 0 }
-  add_mem' := by
-    intro x y ⟨a,hx⟩ ⟨b,hy⟩
-    use b * a
-    rw [smul_add]; rw [mul_smul]; rw [mul_comm]; rw [mul_smul]; rw [hx]; rw [hy]; rw [smul_zero]; rw [smul_zero]; rw [add_zero]
-  zero_mem' := ⟨1, smul_zero 1⟩
-  smul_mem' := fun a x ⟨b, h⟩ => ⟨b, by rw [smul_comm, h, smul_zero]⟩
+--- 原说明 ---
+The `S`-torsion submodule, containing all elements `x` of `M` such that `a • x =
+ 0` for some
+`a` in `S`.
 -/
 def torsion' (S : Type*) [CommMonoid S] [DistribMulAction S M] [SMulCommClass S R M] :
     Submodule R M where
-  carrier := { x | exists a : S, a • x = 0 }
+  carrier := { x | ∃ a : S, a • x = 0 }
   add_mem' := by
     intro x y ⟨a,hx⟩ ⟨b,hy⟩
     use b * a
-    rw [smul_add]; rw [mul_smul]; rw [mul_comm]; rw [mul_smul]; rw [hx]; rw [hy]; rw [smul_zero]; rw [smul_zero]; rw [add_zero]
+    rw [smul_add, mul_smul, mul_comm, mul_smul, hx, hy, smul_zero, smul_zero, add_zero]
   zero_mem' := ⟨1, smul_zero 1⟩
   smul_mem' := fun a x ⟨b, h⟩ => ⟨b, by rw [smul_comm, h, smul_zero]⟩
 
-/--
-Definition of `torsion` / `torsion` 的定义
+/-- The torsion submodule, containing all elements `x` of `M` such that `a • x = 0` for some
+  non-zero-divisor `a` in `R`. -/
+/-
+**Submodule.torsion** 是 Mathlib 中的一个缩写定义，位于命名空间 `Submodule`。
+形式化陈述：torsion
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation torsion
-  body: torsion' R M R⁰
-
-中文:
-缩写 torsion
-  定义体: torsion' R M R⁰
-
-Depends on / 依赖: torsion
+--- 原说明 ---
+The torsion submodule, containing all elements `x` of `M` such that `a • x = 0` 
+for some
+  non-zero-divisor `a` in `R`.
 -/
 abbrev torsion :=
   torsion' R M R⁰
@@ -475,149 +426,128 @@ namespace Module
 
 variable (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Definition of `IsTorsionBy` / `IsTorsionBy` 的定义
+/-- An `a`-torsion module is a module where every element is `a`-torsion. -/
+/-
+**Module.IsTorsionBy** 是 Mathlib 中的一个缩写定义，位于命名空间 `Module`。
+形式化陈述：IsTorsionBy (a : R)
+参数：a : R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTorsionBy
-  signature: (a : R)
-  body: forall ⦃x : M⦄, a • x = 0
-
-中文:
-缩写 IsTorsionBy
-  签名: (a : R)
-  定义体: forall ⦃x : M⦄, a • x = 0
+--- 原说明 ---
+An `a`-torsion module is a module where every element is `a`-torsion.
 -/
 abbrev IsTorsionBy (a : R) :=
-  forall ⦃x : M⦄, a • x = 0
+  ∀ ⦃x : M⦄, a • x = 0
 
-/--
-Definition of `IsTorsionBySet` / `IsTorsionBySet` 的定义
+/-- A module where every element is `a`-torsion for all `a` in `s`. -/
+/-
+**Module.IsTorsionBySet** 是 Mathlib 中的一个缩写定义，位于命名空间 `Module`。
+形式化陈述：IsTorsionBySet (s : Set R)
+参数：s : Set R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTorsionBySet
-  signature: (s : Set R)
-  body: forall ⦃x : M⦄ ⦃a : s⦄, (a : R) • x = 0
-
-中文:
-缩写 IsTorsionBySet
-  签名: (s : 集合 R)
-  定义体: forall ⦃x : M⦄ ⦃a : s⦄, (a : R) • x = 0
+--- 原说明 ---
+A module where every element is `a`-torsion for all `a` in `s`.
 -/
 abbrev IsTorsionBySet (s : Set R) :=
-  forall ⦃x : M⦄ ⦃a : s⦄, (a : R) • x = 0
+  ∀ ⦃x : M⦄ ⦃a : s⦄, (a : R) • x = 0
 
-/--
-Definition of `IsTorsion'` / `IsTorsion'` 的定义
+/-- An `S`-torsion module is a module where every element is `a`-torsion for some `a` in `S`. -/
+/-
+**Module.IsTorsion'** 是 Mathlib 中的一个缩写定义，位于命名空间 `Module`。
+形式化陈述：IsTorsion' (S : Type*) [SMul S M]
+参数：S : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTorsion'
-  signature: (S : Type*) [SMul S M]
-  body: forall ⦃x : M⦄, exists a : S, a • x = 0
-
-中文:
-缩写 是挠'
-  签名: (S : 类型) [标量乘法 S M]
-  定义体: forall ⦃x : M⦄, exists a : S, a • x = 0
+--- 原说明 ---
+An `S`-torsion module is a module where every element is `a`-torsion for some `a
+` in `S`.
 -/
 abbrev IsTorsion' (S : Type*) [SMul S M] :=
-  forall ⦃x : M⦄, exists a : S, a • x = 0
+  ∀ ⦃x : M⦄, ∃ a : S, a • x = 0
 
-/--
-Definition of `IsTorsion` / `IsTorsion` 的定义
+/-- A torsion module is a module where every element is `a`-torsion for some non-zero-divisor `a`.
+-/
+/-
+**Module.IsTorsion** 是 Mathlib 中的一个缩写定义，位于命名空间 `Module`。
+形式化陈述：IsTorsion
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTorsion
-  body: forall ⦃x : M⦄, exists a : R⁰, a • x = 0
-
-中文:
-缩写 是挠
-  定义体: forall ⦃x : M⦄, exists a : R⁰, a • x = 0
+--- 原说明 ---
+A torsion module is a module where every element is `a`-torsion for some non-zer
+o-divisor `a`.
 -/
 abbrev IsTorsion :=
-  forall ⦃x : M⦄, exists a : R⁰, a • x = 0
-
-/--
-theorem `isTorsionBySet_annihilator` / 定理 `isTorsionBySet_annihilator`
-
-English:
-theorem isTorsionBySet_annihilator
-  statement: IsTorsionBySet R M (annihilator R M)
-  proof: fun _ r => Module.mem_annihilator.mp r.2 _
-
-中文:
-定理 isTorsionBySet_annihilator
-  结论: IsTorsionBySet R M (annihilator R M)
-  证明: fun _ r => Module.mem_annihilator.mp r.2 _
-
-Depends on / 依赖: Module, Module.mem_annihilator.mp, mem_annihilator
+  ∀ ⦃x : M⦄, ∃ a : R⁰, a • x = 0
+/-
+**Module.isTorsionBySet_annihilator** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBySet_annihilator : IsTorsionBySet R M (annihilator R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.mem_annihilator`：Module.mem_annihilator {r} : r in Module.annihil
+ator R M ↔ forall m : M, r • m = 0
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem isTorsionBySet_annihilator : IsTorsionBySet R M (annihilator R M) :=
-  fun _ r => Module.mem_annihilator.mp r.2 _
-
-/--
-theorem `isTorsionBy_iff_mem_annihilator` / 定理 `isTorsionBy_iff_mem_annihilator`
-
-English:
-theorem isTorsionBy_iff_mem_annihilator
-  given: {a : R}
-  proof: by
-  rw [IsTorsionBy]; rw [mem_annihilator]
-
-中文:
-定理 isTorsionBy_iff_mem_annihilator
-  条件: {a : R}
-  证明: by
-  rw [IsTorsionBy]; rw [mem_annihilator]
-
-Depends on / 依赖: IsTorsionBy, mem_annihilator
+  fun _ r ↦ Module.mem_annihilator.mp r.2 _
+/-
+**Module.isTorsionBy_iff_mem_annihilator** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBy_iff_mem_annihilator {a : R} : IsTorsionBy R M a ↔ a in annihil
+ator R M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.IsTorsionBy.eq_1`：∀ (R : Type u_1) (M : Type u_2) [inst : Semirin
+g R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] (a : R),   Module.I
+sTorsionBy R …
+· 使用定理 `Module.mem_annihilator`：Module.mem_annihilator {r} : r in Module.annihil
+ator R M ↔ forall m : M, r • m = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isTorsionBy_iff_mem_annihilator {a : R} :
-    IsTorsionBy R M a ↔ a in annihilator R M := by
-  rw [IsTorsionBy]; rw [mem_annihilator]
-
-/--
-theorem `isTorsionBySet_iff_subset_annihilator` / 定理 `isTorsionBySet_iff_subset_annihilator`
-
-English:
-theorem isTorsionBySet_iff_subset_annihilator
-  given: {s : Set R}
-  proof: by
-  simp_rw [IsTorsionBySet, Set.subset_def, SetLike.mem_coe, mem_annihilator]
-  rw [forall_comm]; rw [SetCoe.forall]
-
-中文:
-定理 isTorsionBySet_iff_subset_annihilator
-  条件: {s : 集合 R}
-  证明: by
-  simp_rw [IsTorsionBySet, Set.subset_def, SetLike.mem_coe, mem_annihilator]
-  rw [forall_comm]; rw [SetCoe.forall]
-
-Depends on / 依赖: IsTorsionBySet, Set.subset_def, SetCoe, SetCoe.forall, SetLike, SetLike.mem_coe, forall_comm, mem_annihilator, mem_coe, simp_rw, subset_def
+    IsTorsionBy R M a ↔ a ∈ annihilator R M := by
+  rw [IsTorsionBy, mem_annihilator]
+/-
+**Module.isTorsionBySet_iff_subset_annihilator** 是 Mathlib 中的一个定理，位于命名空间 `Module
+`。
+形式化陈述：isTorsionBySet_iff_subset_annihilator {s : Set R} : IsTorsionBySet R M s ↔
+ s subseteq annihilator R M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
+· 使用定理 `SetCoe.forall`：SetCoe.forall {s : Set α} {p : s -> Prop} : (forall x : s
+, p x) ↔ forall (x) (h : x in s), p ⟨x, h⟩
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isTorsionBySet_iff_subset_annihilator {s : Set R} :
-    IsTorsionBySet R M s ↔ s subseteq annihilator R M := by
+    IsTorsionBySet R M s ↔ s ⊆ annihilator R M := by
   simp_rw [IsTorsionBySet, Set.subset_def, SetLike.mem_coe, mem_annihilator]
-  rw [forall_comm]; rw [SetCoe.forall]
+  rw [forall_comm, SetCoe.forall]
 
 end Module
 
 end Defs
 
-/--
-lemma `isSMulRegular_iff_torsionBy_eq_bot` / 引理 `isSMulRegular_iff_torsionBy_eq_bot`
-
-English:
-lemma isSMulRegular_iff_torsionBy_eq_bot
-  statement: {R} (M : Type*)
-  proof: (DistribSMul.toLinearMap R M r).ker_eq_bot.symm
-
-中文:
-引理 isSMulRegular_iff_torsionBy_eq_bot
-  结论: {R} (M : 类型)
-  证明: (DistribSMul.toLinearMap R M r).ker_eq_bot.symm
-
-Depends on / 依赖: DistribSMul, DistribSMul.toLinearMap, ker_eq_bot, ker_eq_bot.symm, toLinearMap
+/-
+**isSMulRegular_iff_torsionBy_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isSMulRegular_iff_torsionBy_eq_bot {R} (M : Type*) [CommRing R] [AddCommGr
+oup M] [Module R M] (r : R) : IsSMulRegular M r ↔ Submodule.torsionBy R M r = ⊥
+参数：M : Type*；r : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
 -/
 lemma isSMulRegular_iff_torsionBy_eq_bot {R} (M : Type*)
     [CommRing R] [AddCommGroup M] [Module R M] (r : R) :
@@ -633,334 +563,250 @@ namespace Submodule
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] (s : Set R) (a : R)
 
 @[simp]
-/--
-theorem `smul_torsionBy` / 定理 `smul_torsionBy`
-
-English:
-theorem smul_torsionBy
-  given: (x : torsionBy R M a)
-  statement: a • x = 0
-  proof: Subtype.ext x.prop
-
-@[simp]
-
-中文:
-定理 smul_torsionBy
-  条件: (x : torsionBy R M a)
-  结论: a • x = 0
-  证明: Subtype.ext x.prop
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, x.prop
+/-
+**Submodule.smul_torsionBy** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：smul_torsionBy (x : torsionBy R M a) : a • x = 0
+参数：x : torsionBy R M a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem smul_torsionBy (x : torsionBy R M a) : a • x = 0 :=
   Subtype.ext x.prop
 
 @[simp]
-/--
-theorem `smul_coe_torsionBy` / 定理 `smul_coe_torsionBy`
-
-English:
-theorem smul_coe_torsionBy
-  given: (x : torsionBy R M a)
-  statement: a • (x : M) = 0
-  proof: x.prop
-
-@[simp]
-
-中文:
-定理 smul_coe_torsionBy
-  条件: (x : torsionBy R M a)
-  结论: a • (x : M) = 0
-  证明: x.prop
-
-@[simp]
-
-Depends on / 依赖: x.prop
+/-
+**Submodule.smul_coe_torsionBy** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：smul_coe_torsionBy (x : torsionBy R M a) : a • (x : M) = 0
+参数：x : torsionBy R M a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem smul_coe_torsionBy (x : torsionBy R M a) : a • (x : M) = 0 :=
   x.prop
 
 @[simp]
-/--
-theorem `mem_torsionBy_iff` / 定理 `mem_torsionBy_iff`
-
-English:
-theorem mem_torsionBy_iff
-  given: (x : M)
-  statement: x in torsionBy R M a ↔ a • x = 0
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_torsionBy_iff
-  条件: (x : M)
-  结论: x in torsionBy R M a ↔ a • x = 0
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submodule.mem_torsionBy_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mem_torsionBy_iff (x : M) : x in torsionBy R M a ↔ a • x = 0
+参数：x : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_torsionBy_iff (x : M) : x in torsionBy R M a ↔ a • x = 0 :=
+theorem mem_torsionBy_iff (x : M) : x ∈ torsionBy R M a ↔ a • x = 0 :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_torsionBySet_iff` / 定理 `mem_torsionBySet_iff`
-
-English:
-theorem mem_torsionBySet_iff
-  given: (x : M)
-  statement: x in torsionBySet R M s ↔ forall a : s, (a : R) • x = 0
-  proof: by
-  refine ⟨fun h ⟨a, ha⟩ => mem_sInf.mp h _ (Set.mem_image_of_mem _ ha), fun h => mem_sInf.mpr ?_⟩
-  rintro _ ⟨a, ha, rfl⟩; exact h ⟨a, ha⟩
-
-@[simp]
-
-中文:
-定理 mem_torsionBySet_iff
-  条件: (x : M)
-  结论: x in torsionBySet R M s ↔ 对任意 a : s, (a : R) • x = 0
-  证明: by
-  refine ⟨fun h ⟨a, ha⟩ => mem_sInf.mp h _ (Set.mem_image_of_mem _ ha), fun h => mem_sInf.mpr ?_⟩
-  rintro _ ⟨a, ha, rfl⟩; exact h ⟨a, ha⟩
-
-@[simp]
-
-Depends on / 依赖: Set.mem_image_of_mem, mem_image_of_mem, mem_sInf, mem_sInf.mp, mem_sInf.mpr
+/-
+**Submodule.mem_torsionBySet_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mem_torsionBySet_iff (x : M) : x in torsionBySet R M s ↔ forall a : s, (a 
+: R) • x = 0
+参数：x : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_sInf`：mem_sInf {S : Set (Submodule R M)} {x : M} : x in sI
+nf S ↔ forall p in S, x in p
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem mem_torsionBySet_iff (x : M) : x in torsionBySet R M s ↔ forall a : s, (a : R) • x = 0 := by
+theorem mem_torsionBySet_iff (x : M) : x ∈ torsionBySet R M s ↔ ∀ a : s, (a : R) • x = 0 := by
   refine ⟨fun h ⟨a, ha⟩ => mem_sInf.mp h _ (Set.mem_image_of_mem _ ha), fun h => mem_sInf.mpr ?_⟩
   rintro _ ⟨a, ha, rfl⟩; exact h ⟨a, ha⟩
 
 @[simp]
-/--
-theorem `torsionBySet_singleton_eq` / 定理 `torsionBySet_singleton_eq`
-
-English:
-theorem torsionBySet_singleton_eq
-  statement: torsionBySet R M {a} = torsionBy R M a
-  proof: by
-  ext x
-  simp only [mem_torsionBySet_iff, SetCoe.forall, Set.mem_singleton_iff, forall_eq,
-    mem_torsionBy_iff]
-
-中文:
-定理 torsionBySet_singleton_eq
-  结论: torsionBySet R M {a} = torsionBy R M a
-  证明: by
-  ext x
-  simp only [mem_torsionBySet_iff, SetCoe.forall, Set.mem_singleton_iff, forall_eq,
-    mem_torsionBy_iff]
-
-Depends on / 依赖: Set.mem_singleton_iff, SetCoe, SetCoe.forall, forall_eq, mem_singleton_iff, mem_torsionBySet_iff, mem_torsionBy_iff
+/-
+**Submodule.torsionBySet_singleton_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBySet_singleton_eq : torsionBySet R M {a} = torsionBy R M a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem torsionBySet_singleton_eq : torsionBySet R M {a} = torsionBy R M a := by
   ext x
   simp only [mem_torsionBySet_iff, SetCoe.forall, Set.mem_singleton_iff, forall_eq,
     mem_torsionBy_iff]
-
-/--
-theorem `torsionBySet_le_torsionBySet_of_subset` / 定理 `torsionBySet_le_torsionBySet_of_subset`
-
-English:
-theorem torsionBySet_le_torsionBySet_of_subset
-  given: {s t : Set R} (st : s subseteq t)
-  proof: sInf_le_sInf fun _ ⟨a, ha, h⟩ => ⟨a, st ha, h⟩
-
-中文:
-定理 torsionBySet_le_torsionBySet_of_subset
-  条件: {s t : 集合 R} (st : s subseteq t)
-  证明: sInf_le_sInf fun _ ⟨a, ha, h⟩ => ⟨a, st ha, h⟩
-
-Depends on / 依赖: sInf_le_sInf
+/-
+**Submodule.torsionBySet_le_torsionBySet_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Su
+bmodule`。
+形式化陈述：torsionBySet_le_torsionBySet_of_subset {s t : Set R} (st : s subseteq t) :
+ torsionBySet R M t <= torsionBySet R M s
+参数：st : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sInf_le_sInf`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s t : 
+Set α}, s ⊆ t → sInf t ≤ sInf s
 -/
-theorem torsionBySet_le_torsionBySet_of_subset {s t : Set R} (st : s subseteq t) :
-    torsionBySet R M t <= torsionBySet R M s :=
+theorem torsionBySet_le_torsionBySet_of_subset {s t : Set R} (st : s ⊆ t) :
+    torsionBySet R M t ≤ torsionBySet R M s :=
   sInf_le_sInf fun _ ⟨a, ha, h⟩ => ⟨a, st ha, h⟩
-
-/--
-theorem `torsionBySet_le_torsionBySet_pow` / 定理 `torsionBySet_le_torsionBySet_pow`
-
-English:
-theorem torsionBySet_le_torsionBySet_pow
-  given: (i j : Nat) (h : i <= j) (I : Ideal R)
-  proof: torsionBySet_le_torsionBySet_of_subset (Ideal.pow_le_pow_right h)
-
-中文:
-定理 torsionBySet_le_torsionBySet_pow
-  条件: (i j : 自然数) (h : i <= j) (I : 理想 R)
-  证明: torsionBySet_le_torsionBySet_of_subset (Ideal.pow_le_pow_right h)
-
-Depends on / 依赖: Ideal.pow_le_pow_right, pow_le_pow_right, torsionBySet_le_torsionBySet_of_subset
+/-
+**Submodule.torsionBySet_le_torsionBySet_pow** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：torsionBySet_le_torsionBySet_pow (i j : Nat) (h : i <= j) (I : Ideal R) : 
+torsionBySet R M ↑(I ^ i) <= torsionBySet R M ↑(I ^ j)
+参数：i j : Nat；h : i <= j；I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.torsionBySet_le_torsionBySet_of_subset`：torsionBySet_le_torsio
+nBySet_of_subset {s t : Set R} (st : s subseteq t) : torsionBySet R M t <= torsi
+onBySet R M s
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.pow_le_pow_right`：pow_le_pow_right {m n : Nat} (h : m <= n) : I ^ 
+n <= I ^ m
 -/
-theorem torsionBySet_le_torsionBySet_pow (i j : Nat) (h : i <= j) (I : Ideal R) :
-    torsionBySet R M ↑(I ^ i) <= torsionBySet R M ↑(I ^ j) :=
+theorem torsionBySet_le_torsionBySet_pow (i j : ℕ) (h : i ≤ j) (I : Ideal R) :
+    torsionBySet R M ↑(I ^ i) ≤ torsionBySet R M ↑(I ^ j) :=
   torsionBySet_le_torsionBySet_of_subset (Ideal.pow_le_pow_right h)
 
-/--
-theorem `torsionBySet_eq_torsionBySet_span` / 定理 `torsionBySet_eq_torsionBySet_span`
+/-- Torsion by a set is torsion by the ideal generated by it. -/
+/-
+**Submodule.torsionBySet_eq_torsionBySet_span** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：torsionBySet_eq_torsionBySet_span : torsionBySet R M s = torsionBySet R M 
+(Ideal.span s)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_torsionBySet_iff`：mem_torsionBySet_iff (x : M) : x in tors
+ionBySet R M s ↔ forall a : s, (a : R) • x = 0
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `Submodule.torsionBySet_le_torsionBySet_of_subset`：torsionBySet_le_torsio
+nBySet_of_subset {s t : Set R} (st : s subseteq t) : torsionBySet R M t <= torsi
+onBySet R M s
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
 
-English:
-theorem torsionBySet_eq_torsionBySet_span
-  proof: by
-  refine le_antisymm (fun x hx => ?_) (torsionBySet_le_torsionBySet_of_subset subset_span)
-  rw [mem_torsionBySet_iff] at hx ⊢
-  suffices Ideal.span s <= Ideal.torsionOf R M x by
-    rintro ⟨a, ha⟩
-    exact this ha
-  rw [Ideal.span_le]
-  exact fun a ha => hx ⟨a, ha⟩
-
-中文:
-定理 torsionBySet_eq_torsionBySet_span
-  证明: by
-  refine le_antisymm (fun x hx => ?_) (torsionBySet_le_torsionBySet_of_subset subset_span)
-  rw [mem_torsionBySet_iff] at hx ⊢
-  suffices Ideal.span s <= Ideal.torsionOf R M x by
-    rintro ⟨a, ha⟩
-    exact this ha
-  rw [Ideal.span_le]
-  exact fun a ha => hx ⟨a, ha⟩
-
-Depends on / 依赖: Ideal.span, Ideal.span_le, Ideal.torsionOf, le_antisymm, mem_torsionBySet_iff, span_le, subset_span, torsionBySet_le_torsionBySet_of_subset, torsionOf
+--- 原说明 ---
+Torsion by a set is torsion by the ideal generated by it.
 -/
 theorem torsionBySet_eq_torsionBySet_span :
     torsionBySet R M s = torsionBySet R M (Ideal.span s) := by
   refine le_antisymm (fun x hx => ?_) (torsionBySet_le_torsionBySet_of_subset subset_span)
   rw [mem_torsionBySet_iff] at hx ⊢
-  suffices Ideal.span s <= Ideal.torsionOf R M x by
+  suffices Ideal.span s ≤ Ideal.torsionOf R M x by
     rintro ⟨a, ha⟩
     exact this ha
   rw [Ideal.span_le]
   exact fun a ha => hx ⟨a, ha⟩
-
-/--
-theorem `torsionBySet_span_singleton_eq` / 定理 `torsionBySet_span_singleton_eq`
-
-English:
-theorem torsionBySet_span_singleton_eq
-  statement: torsionBySet R M (R ∙ a) = torsionBy R M a
-  proof: (torsionBySet_eq_torsionBySet_span _).symm.trans torsionBySet_singleton_eq _
-
-@[simp]
-
-中文:
-定理 torsionBySet_span_singleton_eq
-  结论: torsionBySet R M (R ∙ a) = torsionBy R M a
-  证明: (torsionBySet_eq_torsionBySet_span _).symm.trans torsionBySet_singleton_eq _
-
-@[simp]
-
-Depends on / 依赖: symm.trans, torsionBySet_eq_torsionBySet_span, torsionBySet_singleton_eq
+/-
+**Submodule.torsionBySet_span_singleton_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`
+。
+形式化陈述：torsionBySet_span_singleton_eq : torsionBySet R M (R ∙ a) = torsionBy R M 
+a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.torsionBySet_eq_torsionBySet_span`：torsionBySet_eq_torsionBySe
+t_span : torsionBySet R M s = torsionBySet R M (Ideal.span s)
+· 使用定理 `Submodule.torsionBySet_singleton_eq`：torsionBySet_singleton_eq : torsion
+BySet R M {a} = torsionBy R M a
 -/
 theorem torsionBySet_span_singleton_eq : torsionBySet R M (R ∙ a) = torsionBy R M a :=
-(torsionBySet_eq_torsionBySet_span _).symm.trans torsionBySet_singleton_eq _
+  (torsionBySet_eq_torsionBySet_span _).symm.trans <| torsionBySet_singleton_eq _
 
 @[simp]
-/--
-theorem `torsionBySet_ideal_span_singleton_eq` / 定理 `torsionBySet_ideal_span_singleton_eq`
-
-English:
-theorem torsionBySet_ideal_span_singleton_eq
-  proof: torsionBySet_span_singleton_eq a
-
-中文:
-定理 torsionBySet_ideal_span_singleton_eq
-  证明: torsionBySet_span_singleton_eq a
-
-Depends on / 依赖: torsionBySet_span_singleton_eq
+/-
+**Submodule.torsionBySet_ideal_span_singleton_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subm
+odule`。
+形式化陈述：torsionBySet_ideal_span_singleton_eq : torsionBySet R M (Ideal.span {a}) =
+ torsionBy R M a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.torsionBySet_span_singleton_eq`：torsionBySet_span_singleton_eq
+ : torsionBySet R M (R ∙ a) = torsionBy R M a
 -/
 theorem torsionBySet_ideal_span_singleton_eq :
     torsionBySet R M (Ideal.span {a}) = torsionBy R M a :=
   torsionBySet_span_singleton_eq a
-
-/--
-theorem `torsionBy_le_torsionBy_of_dvd` / 定理 `torsionBy_le_torsionBy_of_dvd`
-
-English:
-theorem torsionBy_le_torsionBy_of_dvd
-  given: (a b : R) (dvd : a ∣ b)
-  proof: by
-  rw [← torsionBySet_span_singleton_eq]; rw [← torsionBySet_singleton_eq]
-  apply torsionBySet_le_torsionBySet_of_subset
-  rintro c (rfl : c = b); exact Ideal.mem_span_singleton.mpr dvd
-
-@[simp]
-
-中文:
-定理 torsionBy_le_torsionBy_of_dvd
-  条件: (a b : R) (dvd : a ∣ b)
-  证明: by
-  rw [← torsionBySet_span_singleton_eq]; rw [← torsionBySet_singleton_eq]
-  apply torsionBySet_le_torsionBySet_of_subset
-  rintro c (rfl : c = b); exact Ideal.mem_span_singleton.mpr dvd
-
-@[simp]
-
-Depends on / 依赖: Ideal.mem_span_singleton.mpr, mem_span_singleton, torsionBySet_le_torsionBySet_of_subset, torsionBySet_singleton_eq, torsionBySet_span_singleton_eq
+/-
+**Submodule.torsionBy_le_torsionBy_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBy_le_torsionBy_of_dvd (a b : R) (dvd : a ∣ b) : torsionBy R M a <=
+ torsionBy R M b
+参数：a b : R；dvd : a ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.torsionBySet_span_singleton_eq`：torsionBySet_span_singleton_eq
+ : torsionBySet R M (R ∙ a) = torsionBy R M a
+· 使用定理 `Submodule.torsionBySet_singleton_eq`：torsionBySet_singleton_eq : torsion
+BySet R M {a} = torsionBy R M a
+· 使用定理 `Submodule.torsionBySet_le_torsionBySet_of_subset`：torsionBySet_le_torsio
+nBySet_of_subset {s t : Set R} (st : s subseteq t) : torsionBySet R M t <= torsi
+onBySet R M s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
 -/
 theorem torsionBy_le_torsionBy_of_dvd (a b : R) (dvd : a ∣ b) :
-    torsionBy R M a <= torsionBy R M b := by
-  rw [← torsionBySet_span_singleton_eq]; rw [← torsionBySet_singleton_eq]
+    torsionBy R M a ≤ torsionBy R M b := by
+  rw [← torsionBySet_span_singleton_eq, ← torsionBySet_singleton_eq]
   apply torsionBySet_le_torsionBySet_of_subset
   rintro c (rfl : c = b); exact Ideal.mem_span_singleton.mpr dvd
 
 @[simp]
-/--
-theorem `torsionBy_one` / 定理 `torsionBy_one`
-
-English:
-theorem torsionBy_one
-  statement: torsionBy R M 1 = ⊥
-  proof: eq_bot_iff.mpr fun _ h => by
-    rw [mem_torsionBy_iff]; rw [one_smul] at h
-    exact h
-
-@[simp]
-
-中文:
-定理 torsionBy_one
-  结论: torsionBy R M 1 = ⊥
-  证明: eq_bot_iff.mpr fun _ h => by
-    rw [mem_torsionBy_iff]; rw [one_smul] at h
-    exact h
-
-@[simp]
-
-Depends on / 依赖: eq_bot_iff, eq_bot_iff.mpr, mem_torsionBy_iff, one_smul
+/-
+**Submodule.torsionBy_one** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBy_one : torsionBy R M 1 = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Submodule.mem_torsionBy_iff`：mem_torsionBy_iff (x : M) : x in torsionBy 
+R M a ↔ a • x = 0
 -/
 theorem torsionBy_one : torsionBy R M 1 = ⊥ :=
   eq_bot_iff.mpr fun _ h => by
-    rw [mem_torsionBy_iff]; rw [one_smul] at h
+    rw [mem_torsionBy_iff, one_smul] at h
     exact h
 
 @[simp]
-/--
-theorem `torsionBySet_univ` / 定理 `torsionBySet_univ`
-
-English:
-theorem torsionBySet_univ
-  statement: torsionBySet R M Set.univ = ⊥
-  proof: by
-  rw [eq_bot_iff]; rw [← torsionBy_one]; rw [← torsionBySet_singleton_eq]
-  exact torsionBySet_le_torsionBySet_of_subset fun _ _ => trivial
-
-中文:
-定理 torsionBySet_univ
-  结论: torsionBySet R M 集合.univ = ⊥
-  证明: by
-  rw [eq_bot_iff]; rw [← torsionBy_one]; rw [← torsionBySet_singleton_eq]
-  exact torsionBySet_le_torsionBySet_of_subset fun _ _ => trivial
-
-Depends on / 依赖: eq_bot_iff, torsionBySet_le_torsionBySet_of_subset, torsionBySet_singleton_eq, torsionBy_one
+/-
+**Submodule.torsionBySet_univ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBySet_univ : torsionBySet R M Set.univ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.torsionBy_one`：torsionBy_one : torsionBy R M 1 = ⊥
+· 使用定理 `Submodule.torsionBySet_singleton_eq`：torsionBySet_singleton_eq : torsion
+BySet R M {a} = torsionBy R M a
+· 使用定理 `Submodule.torsionBySet_le_torsionBySet_of_subset`：torsionBySet_le_torsio
+nBySet_of_subset {s t : Set R} (st : s subseteq t) : torsionBySet R M t <= torsi
+onBySet R M s
+· 使用定理 `trivial`：True
 -/
 theorem torsionBySet_univ : torsionBySet R M Set.univ = ⊥ := by
-  rw [eq_bot_iff]; rw [← torsionBy_one]; rw [← torsionBySet_singleton_eq]
+  rw [eq_bot_iff, ← torsionBy_one, ← torsionBySet_singleton_eq]
   exact torsionBySet_le_torsionBySet_of_subset fun _ _ => trivial
 
 end Submodule
@@ -971,87 +817,63 @@ namespace Module
 
 variable [Semiring R] [AddCommMonoid M] [Module R M] (s : Set R) (a : R)
 
-/--
-theorem `isTorsionBySet_of_subset` / 定理 `isTorsionBySet_of_subset`
-
-English:
-theorem isTorsionBySet_of_subset
-  statement: {s t : Set R} (h : s subseteq t)
-  proof: fun m r => @ht m ⟨r, h r.2⟩
-
-@[simp]
-
-中文:
-定理 isTorsionBySet_of_subset
-  结论: {s t : 集合 R} (h : s subseteq t)
-  证明: fun m r => @ht m ⟨r, h r.2⟩
-
-@[simp]
+/-
+**Module.isTorsionBySet_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBySet_of_subset {s t : Set R} (h : s subseteq t) (ht : IsTorsionB
+ySet R M t) : IsTorsionBySet R M s
+参数：h : s subseteq t；ht : IsTorsionBySet R M t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem isTorsionBySet_of_subset {s t : Set R} (h : s subseteq t)
+theorem isTorsionBySet_of_subset {s t : Set R} (h : s ⊆ t)
     (ht : IsTorsionBySet R M t) : IsTorsionBySet R M s :=
-  fun m r => @ht m ⟨r, h r.2⟩
+  fun m r ↦ @ht m ⟨r, h r.2⟩
 
 @[simp]
-/--
-theorem `isTorsionBySet_singleton_iff` / 定理 `isTorsionBySet_singleton_iff`
-
-English:
-theorem isTorsionBySet_singleton_iff
-  statement: IsTorsionBySet R M {a} ↔ IsTorsionBy R M a
-  proof: by
-  refine ⟨fun h x => @h _ ⟨_, Set.mem_singleton _⟩, fun h x => ?_⟩
-  rintro ⟨b, rfl : b = a⟩; exact @h _
-
-中文:
-定理 isTorsionBySet_singleton_iff
-  结论: IsTorsionBySet R M {a} ↔ IsTorsionBy R M a
-  证明: by
-  refine ⟨fun h x => @h _ ⟨_, Set.mem_singleton _⟩, fun h x => ?_⟩
-  rintro ⟨b, rfl : b = a⟩; exact @h _
-
-Depends on / 依赖: Set.mem_singleton, mem_singleton
+/-
+**Module.isTorsionBySet_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBySet_singleton_iff : IsTorsionBySet R M {a} ↔ IsTorsionBy R M a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
 theorem isTorsionBySet_singleton_iff : IsTorsionBySet R M {a} ↔ IsTorsionBy R M a := by
   refine ⟨fun h x => @h _ ⟨_, Set.mem_singleton _⟩, fun h x => ?_⟩
   rintro ⟨b, rfl : b = a⟩; exact @h _
-
-/--
-theorem `isTorsionBySet_iff_is_torsion_by_span` / 定理 `isTorsionBySet_iff_is_torsion_by_span`
-
-English:
-theorem isTorsionBySet_iff_is_torsion_by_span
-  proof: by
-  simpa only [isTorsionBySet_iff_subset_annihilator] using! Ideal.span_le.symm
-
-中文:
-定理 isTorsionBySet_iff_is_torsion_by_span
-  证明: by
-  simpa only [isTorsionBySet_iff_subset_annihilator] using! Ideal.span_le.symm
-
-Depends on / 依赖: Ideal.span_le.symm, isTorsionBySet_iff_subset_annihilator, span_le
+/-
+**Module.isTorsionBySet_iff_is_torsion_by_span** 是 Mathlib 中的一个定理，位于命名空间 `Module
+`。
+形式化陈述：isTorsionBySet_iff_is_torsion_by_span : IsTorsionBySet R M s ↔ IsTorsionBy
+Set R M (Ideal.span s)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
 -/
 theorem isTorsionBySet_iff_is_torsion_by_span :
     IsTorsionBySet R M s ↔ IsTorsionBySet R M (Ideal.span s) := by
   simpa only [isTorsionBySet_iff_subset_annihilator] using! Ideal.span_le.symm
-
-/--
-theorem `isTorsionBySet_span_singleton_iff` / 定理 `isTorsionBySet_span_singleton_iff`
-
-English:
-theorem isTorsionBySet_span_singleton_iff
-  statement: IsTorsionBySet R M (R ∙ a) ↔ IsTorsionBy R M a
-  proof: (isTorsionBySet_iff_is_torsion_by_span _).symm.trans isTorsionBySet_singleton_iff _
-
-中文:
-定理 isTorsionBySet_span_singleton_iff
-  结论: IsTorsionBySet R M (R ∙ a) ↔ IsTorsionBy R M a
-  证明: (isTorsionBySet_iff_is_torsion_by_span _).symm.trans isTorsionBySet_singleton_iff _
-
-Depends on / 依赖: isTorsionBySet_iff_is_torsion_by_span, isTorsionBySet_singleton_iff, symm.trans
+/-
+**Module.isTorsionBySet_span_singleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBySet_span_singleton_iff : IsTorsionBySet R M (R ∙ a) ↔ IsTorsion
+By R M a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Module.isTorsionBySet_iff_is_torsion_by_span`：isTorsionBySet_iff_is_tors
+ion_by_span : IsTorsionBySet R M s ↔ IsTorsionBySet R M (Ideal.span s)
+· 使用定理 `Module.isTorsionBySet_singleton_iff`：isTorsionBySet_singleton_iff : IsTo
+rsionBySet R M {a} ↔ IsTorsionBy R M a
 -/
 theorem isTorsionBySet_span_singleton_iff : IsTorsionBySet R M (R ∙ a) ↔ IsTorsionBy R M a :=
-(isTorsionBySet_iff_is_torsion_by_span _).symm.trans isTorsionBySet_singleton_iff _
+  (isTorsionBySet_iff_is_torsion_by_span _).symm.trans <| isTorsionBySet_singleton_iff _
 
 end Module
 
@@ -1059,84 +881,83 @@ namespace Module
 
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] (s : Set R) (a : R)
 
-/--
-theorem `isTorsionBySet_iff_torsionBySet_eq_top` / 定理 `isTorsionBySet_iff_torsionBySet_eq_top`
-
-English:
-theorem isTorsionBySet_iff_torsionBySet_eq_top
-  proof: ⟨fun h => eq_top_iff.mpr fun _ _ => (mem_torsionBySet_iff _ _).mpr @h _, fun h x => by
-    rw [← mem_torsionBySet_iff]; rw [h]
-    trivial⟩
-
-中文:
-定理 isTorsionBySet_iff_torsionBySet_eq_top
-  证明: ⟨fun h => eq_top_iff.mpr fun _ _ => (mem_torsionBySet_iff _ _).mpr @h _, fun h x => by
-    rw [← mem_torsionBySet_iff]; rw [h]
-    trivial⟩
-
-Depends on / 依赖: eq_top_iff, eq_top_iff.mpr, mem_torsionBySet_iff
+/-
+**Module.isTorsionBySet_iff_torsionBySet_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Modul
+e`。
+形式化陈述：isTorsionBySet_iff_torsionBySet_eq_top : IsTorsionBySet R M s ↔ torsionByS
+et R M s = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Submodule.mem_torsionBySet_iff`：mem_torsionBySet_iff (x : M) : x in tors
+ionBySet R M s ↔ forall a : s, (a : R) • x = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isTorsionBySet_iff_torsionBySet_eq_top :
     IsTorsionBySet R M s ↔ torsionBySet R M s = ⊤ :=
-⟨fun h => eq_top_iff.mpr fun _ _ => (mem_torsionBySet_iff _ _).mpr @h _, fun h x => by
-    rw [← mem_torsionBySet_iff]; rw [h]
+  ⟨fun h => eq_top_iff.mpr fun _ _ => (mem_torsionBySet_iff _ _).mpr <| @h _, fun h x => by
+    rw [← mem_torsionBySet_iff, h]
     trivial⟩
 
-/--
-theorem `isTorsionBy_iff_torsionBy_eq_top` / 定理 `isTorsionBy_iff_torsionBy_eq_top`
+/-- An `a`-torsion module is a module whose `a`-torsion submodule is the full space. -/
+/-
+**Module.isTorsionBy_iff_torsionBy_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBy_iff_torsionBy_eq_top : IsTorsionBy R M a ↔ torsionBy R M a = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.torsionBySet_singleton_eq`：torsionBySet_singleton_eq : torsion
+BySet R M {a} = torsionBy R M a
+· 使用定理 `Module.isTorsionBySet_singleton_iff`：isTorsionBySet_singleton_iff : IsTo
+rsionBySet R M {a} ↔ IsTorsionBy R M a
+· 使用定理 `Module.isTorsionBySet_iff_torsionBySet_eq_top`：isTorsionBySet_iff_torsio
+nBySet_eq_top : IsTorsionBySet R M s ↔ torsionBySet R M s = ⊤
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem isTorsionBy_iff_torsionBy_eq_top
-  statement: IsTorsionBy R M a ↔ torsionBy R M a = ⊤
-  proof: by
-  rw [← torsionBySet_singleton_eq]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_torsionBySet_eq_top]
-
-中文:
-定理 isTorsionBy_iff_torsionBy_eq_top
-  结论: IsTorsionBy R M a ↔ torsionBy R M a = ⊤
-  证明: by
-  rw [← torsionBySet_singleton_eq]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_torsionBySet_eq_top]
-
-Depends on / 依赖: isTorsionBySet_iff_torsionBySet_eq_top, isTorsionBySet_singleton_iff, torsionBySet_singleton_eq
+--- 原说明 ---
+An `a`-torsion module is a module whose `a`-torsion submodule is the full space.
 -/
 theorem isTorsionBy_iff_torsionBy_eq_top : IsTorsionBy R M a ↔ torsionBy R M a = ⊤ := by
-  rw [← torsionBySet_singleton_eq]; rw [← isTorsionBySet_singleton_iff]; rw [isTorsionBySet_iff_torsionBySet_eq_top]
-
-/--
-theorem `isTorsionBySet_iff_subseteq_ker_lsmul` / 定理 `isTorsionBySet_iff_subseteq_ker_lsmul`
-
-English:
-theorem isTorsionBySet_iff_subseteq_ker_lsmul
-  proof: LinearMap.mem_ker.mpr LinearMap.ext fun x => @h x ⟨r, hr⟩
-  mpr | h, x, ⟨_, hr⟩ => DFunLike.congr_fun (LinearMap.mem_ker.mp (h hr)) x
-
-中文:
-定理 isTorsionBySet_iff_subseteq_ker_lsmul
-  证明: LinearMap.mem_ker.mpr LinearMap.ext fun x => @h x ⟨r, hr⟩
-  mpr | h, x, ⟨_, hr⟩ => DFunLike.congr_fun (LinearMap.mem_ker.mp (h hr)) x
-
-Depends on / 依赖: LinearMap, LinearMap.ext, LinearMap.mem_ker.mpr, mem_ker
+  rw [← torsionBySet_singleton_eq, ← isTorsionBySet_singleton_iff,
+    isTorsionBySet_iff_torsionBySet_eq_top]
+/-
+**Module.isTorsionBySet_iff_subseteq_ker_lsmul** 是 Mathlib 中的一个定理，位于命名空间 `Module
+`。
+形式化陈述：isTorsionBySet_iff_subseteq_ker_lsmul : IsTorsionBySet R M s ↔ s subseteq 
+LinearMap.ker (LinearMap.lsmul R M) where mp h r hr
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.mem_ker`：mem_ker {f : M ->ₛₗ[τ₁₂] M₂} {y} : y in ker f ↔ f y =
+ 0
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem isTorsionBySet_iff_subseteq_ker_lsmul :
-    IsTorsionBySet R M s ↔ s subseteq LinearMap.ker (LinearMap.lsmul R M) where
-mp h r hr := LinearMap.mem_ker.mpr LinearMap.ext fun x => @h x ⟨r, hr⟩
+    IsTorsionBySet R M s ↔ s ⊆ LinearMap.ker (LinearMap.lsmul R M) where
+  mp h r hr := LinearMap.mem_ker.mpr <| LinearMap.ext fun x => @h x ⟨r, hr⟩
   mpr | h, x, ⟨_, hr⟩ => DFunLike.congr_fun (LinearMap.mem_ker.mp (h hr)) x
-
-/--
-theorem `isTorsionBy_iff_mem_ker_lsmul` / 定理 `isTorsionBy_iff_mem_ker_lsmul`
-
-English:
-theorem isTorsionBy_iff_mem_ker_lsmul
-  proof: Iff.symm LinearMap.ext_iff
-
-中文:
-定理 isTorsionBy_iff_mem_ker_lsmul
-  证明: Iff.symm LinearMap.ext_iff
-
-Depends on / 依赖: Iff.symm, LinearMap, LinearMap.ext_iff, ext_iff
+/-
+**Module.isTorsionBy_iff_mem_ker_lsmul** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBy_iff_mem_ker_lsmul : IsTorsionBy R M a ↔ a in LinearMap.ker (Li
+nearMap.lsmul R M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LinearMap.ext_iff`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ : 
+Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M
+] [inst…
 -/
 theorem isTorsionBy_iff_mem_ker_lsmul :
-    IsTorsionBy R M a ↔ a in LinearMap.ker (LinearMap.lsmul R M) :=
+    IsTorsionBy R M a ↔ a ∈ LinearMap.ker (LinearMap.lsmul R M) :=
   Iff.symm LinearMap.ext_iff
 
 end Module
@@ -1147,145 +968,127 @@ open Module
 
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] (s : Set R) (a : R)
 
-/--
-theorem `torsionBySet_isTorsionBySet` / 定理 `torsionBySet_isTorsionBySet`
-
-English:
-theorem torsionBySet_isTorsionBySet
-  statement: IsTorsionBySet R (torsionBySet R M s) s
-  proof: fun ⟨_, hx⟩ a => Subtype.ext (mem_torsionBySet_iff _ _).mp hx a
-
-中文:
-定理 torsionBySet_isTorsionBySet
-  结论: IsTorsionBySet R (torsionBySet R M s) s
-  证明: fun ⟨_, hx⟩ a => Subtype.ext (mem_torsionBySet_iff _ _).mp hx a
-
-Depends on / 依赖: Subtype, Subtype.ext, mem_torsionBySet_iff
+/-
+**Submodule.torsionBySet_isTorsionBySet** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBySet_isTorsionBySet : IsTorsionBySet R (torsionBySet R M s) s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_torsionBySet_iff`：mem_torsionBySet_iff (x : M) : x in tors
+ionBySet R M s ↔ forall a : s, (a : R) • x = 0
 -/
 theorem torsionBySet_isTorsionBySet : IsTorsionBySet R (torsionBySet R M s) s :=
-fun ⟨_, hx⟩ a => Subtype.ext (mem_torsionBySet_iff _ _).mp hx a
+  fun ⟨_, hx⟩ a => Subtype.ext <| (mem_torsionBySet_iff _ _).mp hx a
 
-/--
-theorem `torsionBy_isTorsionBy` / 定理 `torsionBy_isTorsionBy`
+/-- The `a`-torsion submodule is an `a`-torsion module. -/
+/-
+**Submodule.torsionBy_isTorsionBy** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBy_isTorsionBy : IsTorsionBy R (torsionBy R M a) a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.smul_torsionBy`：smul_torsionBy (x : torsionBy R M a) : a • x =
+ 0
 
-English:
-theorem torsionBy_isTorsionBy
-  statement: IsTorsionBy R (torsionBy R M a) a
-  proof: smul_torsionBy a
-
-中文:
-定理 torsionBy_isTorsionBy
-  结论: IsTorsionBy R (torsionBy R M a) a
-  证明: smul_torsionBy a
-
-Depends on / 依赖: smul_torsionBy
+--- 原说明 ---
+The `a`-torsion submodule is an `a`-torsion module.
 -/
 theorem torsionBy_isTorsionBy : IsTorsionBy R (torsionBy R M a) a := smul_torsionBy a
-
-/--
-theorem `torsionBy_isTorsion_nonZeroDivisor` / 定理 `torsionBy_isTorsion_nonZeroDivisor`
-
-English:
-theorem torsionBy_isTorsion_nonZeroDivisor
-  given: (ha : a in nonZeroDivisors R)
-  proof: (⟨⟨a, ha⟩, smul_torsionBy _ ·⟩)
-
-中文:
-定理 torsionBy_isTorsion_nonZeroDivisor
-  条件: (ha : a in nonZeroDivisors R)
-  证明: (⟨⟨a, ha⟩, smul_torsionBy _ ·⟩)
-
-Depends on / 依赖: smul_torsionBy
+/-
+**Submodule.torsionBy_isTorsion_nonZeroDivisor** 是 Mathlib 中的一个定理，位于命名空间 `Submod
+ule`。
+形式化陈述：torsionBy_isTorsion_nonZeroDivisor (ha : a in nonZeroDivisors R) : IsTorsi
+on R (torsionBy R M a)
+参数：ha : a in nonZeroDivisors R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.smul_torsionBy`：smul_torsionBy (x : torsionBy R M a) : a • x =
+ 0
 -/
-theorem torsionBy_isTorsion_nonZeroDivisor (ha : a in nonZeroDivisors R) :
+theorem torsionBy_isTorsion_nonZeroDivisor (ha : a ∈ nonZeroDivisors R) :
     IsTorsion R (torsionBy R M a) :=
   (⟨⟨a, ha⟩, smul_torsionBy _ ·⟩)
-
-/--
-theorem `torsionBySet_ideal_isTorsion_of_noZeroDivisors` / 定理 `torsionBySet_ideal_isTorsion_of_noZeroDivisors`
-
-English:
-theorem torsionBySet_ideal_isTorsion_of_noZeroDivisors
-  statement: [NoZeroDivisors R] [Nontrivial R]
-  proof: by
-  aesop (add norm Submodule.eq_bot_iff)
-
-@[simp]
-
-中文:
-定理 torsionBySet_ideal_isTorsion_of_noZeroDivisors
-  结论: [无零因子 R] [非平凡 R]
-  证明: by
-  aesop (add norm Submodule.eq_bot_iff)
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.eq_bot_iff, eq_bot_iff
+/-
+**Submodule.torsionBySet_ideal_isTorsion_of_noZeroDivisors** 是 Mathlib 中的一个定理，位于
+命名空间 `Submodule`。
+形式化陈述：torsionBySet_ideal_isTorsion_of_noZeroDivisors [NoZeroDivisors R] [Nontriv
+ial R] {I : Ideal R} (hbot : I != ⊥) : IsTorsion R (torsionBySet R M I)
+参数：hbot : I != ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
+· 使用引理 `smul_one_smul`：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N 
+α] [SMul M α] [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem torsionBySet_ideal_isTorsion_of_noZeroDivisors [NoZeroDivisors R] [Nontrivial R]
-    {I : Ideal R} (hbot : I != ⊥) : IsTorsion R (torsionBySet R M I) := by
+    {I : Ideal R} (hbot : I ≠ ⊥) : IsTorsion R (torsionBySet R M I) := by
   aesop (add norm Submodule.eq_bot_iff)
 
 @[simp]
-/--
-theorem `torsionBy_torsionBy_eq_top` / 定理 `torsionBy_torsionBy_eq_top`
-
-English:
-theorem torsionBy_torsionBy_eq_top
-  statement: torsionBy R (torsionBy R M a) a = ⊤
-  proof: (isTorsionBy_iff_torsionBy_eq_top a).mp torsionBy_isTorsionBy a
-
-@[simp]
-
-中文:
-定理 torsionBy_torsionBy_eq_top
-  结论: torsionBy R (torsionBy R M a) a = ⊤
-  证明: (isTorsionBy_iff_torsionBy_eq_top a).mp torsionBy_isTorsionBy a
-
-@[simp]
-
-Depends on / 依赖: isTorsionBy_iff_torsionBy_eq_top, torsionBy_isTorsionBy
+/-
+**Submodule.torsionBy_torsionBy_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBy_torsionBy_eq_top : torsionBy R (torsionBy R M a) a = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.isTorsionBy_iff_torsionBy_eq_top`：isTorsionBy_iff_torsionBy_eq_to
+p : IsTorsionBy R M a ↔ torsionBy R M a = ⊤
+· 使用定理 `Submodule.torsionBy_isTorsionBy`：torsionBy_isTorsionBy : IsTorsionBy R (
+torsionBy R M a) a
 -/
 theorem torsionBy_torsionBy_eq_top : torsionBy R (torsionBy R M a) a = ⊤ :=
-(isTorsionBy_iff_torsionBy_eq_top a).mp torsionBy_isTorsionBy a
+  (isTorsionBy_iff_torsionBy_eq_top a).mp <| torsionBy_isTorsionBy a
 
 @[simp]
-/--
-theorem `torsionBySet_torsionBySet_eq_top` / 定理 `torsionBySet_torsionBySet_eq_top`
-
-English:
-theorem torsionBySet_torsionBySet_eq_top
-  statement: torsionBySet R (torsionBySet R M s) s = ⊤
-  proof: (isTorsionBySet_iff_torsionBySet_eq_top s).mp torsionBySet_isTorsionBySet s
-
-中文:
-定理 torsionBySet_torsionBySet_eq_top
-  结论: torsionBySet R (torsionBySet R M s) s = ⊤
-  证明: (isTorsionBySet_iff_torsionBySet_eq_top s).mp torsionBySet_isTorsionBySet s
-
-Depends on / 依赖: isTorsionBySet_iff_torsionBySet_eq_top, torsionBySet_isTorsionBySet
+/-
+**Submodule.torsionBySet_torsionBySet_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：torsionBySet_torsionBySet_eq_top : torsionBySet R (torsionBySet R M s) s =
+ ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.isTorsionBySet_iff_torsionBySet_eq_top`：isTorsionBySet_iff_torsio
+nBySet_eq_top : IsTorsionBySet R M s ↔ torsionBySet R M s = ⊤
+· 使用定理 `Submodule.torsionBySet_isTorsionBySet`：torsionBySet_isTorsionBySet : IsT
+orsionBySet R (torsionBySet R M s) s
 -/
 theorem torsionBySet_torsionBySet_eq_top : torsionBySet R (torsionBySet R M s) s = ⊤ :=
-(isTorsionBySet_iff_torsionBySet_eq_top s).mp torsionBySet_isTorsionBySet s
+  (isTorsionBySet_iff_torsionBySet_eq_top s).mp <| torsionBySet_isTorsionBySet s
 
 variable (R M)
-
-/--
-theorem `torsion_gc` / 定理 `torsion_gc`
-
-English:
-theorem torsion_gc
-  proof: fun _ _ =>
-  ⟨fun h x hx => (mem_torsionBySet_iff _ _).mpr fun ⟨_, ha⟩ => mem_annihilator.mp (h ha) x hx,
-    fun h a ha => mem_annihilator.mpr fun _ hx => (mem_torsionBySet_iff _ _).mp (h hx) ⟨a, ha⟩⟩
-
-中文:
-定理 torsion_gc
-  证明: fun _ _ =>
-  ⟨fun h x hx => (mem_torsionBySet_iff _ _).mpr fun ⟨_, ha⟩ => mem_annihilator.mp (h ha) x hx,
-    fun h a ha => mem_annihilator.mpr fun _ hx => (mem_torsionBySet_iff _ _).mp (h hx) ⟨a, ha⟩⟩
-
-Depends on / 依赖: mem_annihilator, mem_annihilator.mp, mem_annihilator.mpr, mem_torsionBySet_iff
+/-
+**Submodule.torsion_gc** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsion_gc : @GaloisConnection (Submodule R M) (Ideal R)ᵒᵈ _ _ annihilator
+ fun I => torsionBySet R M ↑(OrderDual.ofDual I)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.mem_torsionBySet_iff`：mem_torsionBySet_iff (x : M) : x in tors
+ionBySet R M s ↔ forall a : s, (a : R) • x = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_annihilator`：mem_annihilator {r} : r in N.annihilator ↔ fo
+rall n in N, r • n = (0 : M)
 -/
 theorem torsion_gc :
     @GaloisConnection (Submodule R M) (Ideal R)ᵒᵈ _ _ annihilator fun I =>
@@ -1298,84 +1101,72 @@ variable {R M}
 
 section Coprime
 
-variable {ι : Type*} {p : ι -> Ideal R} {S : Finset ι}
+variable {ι : Type*} {p : ι → Ideal R} {S : Finset ι}
 
-/--
-theorem `iSup_torsionBySet_ideal_eq_torsionBySet_iInf` / 定理 `iSup_torsionBySet_ideal_eq_torsionBySet_iInf`
-
-English:
-theorem iSup_torsionBySet_ideal_eq_torsionBySet_iInf
-  proof: by
-  rcases S.eq_empty_or_nonempty with h | h
-  · simp [h]
-  apply le_antisymm
-  · apply iSup_le _
-    intro i
-    apply iSup_le _
-    intro is
-    apply torsionBySet_le_torsionBySet_of_subset
-    exact (iInf_le (fun i => ⨅ _ : i in S, p i) i).trans (iInf_le _ is)
-  · intro x hx
-    rw [mem_iSup_finset_iff_exists_sum]
-    obtain ⟨μ, hμ⟩ :=
-      (mem_iSup_finset_iff_exists_sum _ _).mp
-        ((Ideal.eq_top_iff_one _).mp <| (Ideal.iSup_iInf_eq_top_iff_pairwise h _).mpr hp)
-    refine ⟨fun i => ⟨(μ i : R) • x, ?_⟩, ?_⟩
-    · rw [mem_torsionBySet_iff] at hx ⊢
-      rintro ⟨a, ha⟩
-      rw [smul_smul]
-      suffices a * μ i in ⨅ i in S, p i from hx ⟨_, this⟩
-      rw [mem_iInf]
-      intro j
-      rw [mem_iInf]
-      intro hj
-      by_cases ij : j = i
-      · rw [ij]
-        exact Ideal.mul_mem_right _ _ ha
-      · have := coe_mem (μ i)
-        simp only [mem_iInf] at this
-        exact Ideal.mul_mem_left _ _ (this j hj ij)
-    · rw [← Finset.sum_smul, hμ, one_smul]
-
-中文:
-定理 iSup_torsionBySet_ideal_eq_torsionBySet_iInf
-  证明: by
-  rcases S.eq_empty_or_nonempty with h | h
-  · simp [h]
-  apply le_antisymm
-  · apply iSup_le _
-    intro i
-    apply iSup_le _
-    intro is
-    apply torsionBySet_le_torsionBySet_of_subset
-    exact (iInf_le (fun i => ⨅ _ : i in S, p i) i).trans (iInf_le _ is)
-  · intro x hx
-    rw [mem_iSup_finset_iff_exists_sum]
-    obtain ⟨μ, hμ⟩ :=
-      (mem_iSup_finset_iff_exists_sum _ _).mp
-        ((Ideal.eq_top_iff_one _).mp <| (Ideal.iSup_iInf_eq_top_iff_pairwise h _).mpr hp)
-    refine ⟨fun i => ⟨(μ i : R) • x, ?_⟩, ?_⟩
-    · rw [mem_torsionBySet_iff] at hx ⊢
-      rintro ⟨a, ha⟩
-      rw [smul_smul]
-      suffices a * μ i in ⨅ i in S, p i from hx ⟨_, this⟩
-      rw [mem_iInf]
-      intro j
-      rw [mem_iInf]
-      intro hj
-      by_cases ij : j = i
-      · rw [ij]
-        exact Ideal.mul_mem_right _ _ ha
-      · have := coe_mem (μ i)
-        simp only [mem_iInf] at this
-        exact Ideal.mul_mem_left _ _ (this j hj ij)
-    · rw [← Finset.sum_smul, hμ, one_smul]
-
-Depends on / 依赖: Ideal.eq_top_iff_one, Ideal.iSup_iInf_eq_top_iff_pairwise, S.eq_empty_or_nonempty, eq_empty_or_nonempty, eq_top_iff_one, iInf_le, iSup_iInf_eq_top_iff_pairwise, iSup_le, le_antisymm, mem_iSup_finset_iff_exists_sum, mem_torsionBySet_iff, torsionBySet_le_torsionBySet_of_subset
+/-
+**Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf** 是 Mathlib 中的一个定理，位于命名
+空间 `Submodule`。
+形式化陈述：iSup_torsionBySet_ideal_eq_torsionBySet_iInf (hp : (S : Set ι).Pairwise fu
+n i j => p i ⊔ p j = ⊤) : ⨆ i in S, torsionBySet R M (p i) = torsionBySet R M ↑(
+⨅ i in S, p i)
+参数：hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iSup_bot`：iSup_bot : (⨆ _ : ι, ⊥ : α) = ⊥
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `iInf_neg`：∀ {α : Type u_1} [inst : CompleteLattice α] {p : Prop} {f : p 
+→ α}, ¬p → ⨅ (h : p), f h = ⊤
+· 使用定理 `iInf_top`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α], ⨅ 
+x, ⊤ = ⊤
+· 使用定理 `Submodule.torsionBySet_univ`：torsionBySet_univ : torsionBySet R M Set.un
+iv = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `Submodule.torsionBySet_le_torsionBySet_of_subset`：torsionBySet_le_torsio
+nBySet_of_subset {s t : Set R} (st : s subseteq t) : torsionBySet R M t <= torsi
+onBySet R M s
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `iInf_le`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α] (f :
+ ι → α) (i : ι), iInf f ≤ f i
+· 使用定理 `Submodule.mem_iSup_finset_iff_exists_sum`：mem_iSup_finset_iff_exists_sum
+ {s : Finset ι} (p : ι -> Submodule R N) (a : N) : (a in ⨆ i in s, p i) ↔ exists
+ μ : forall i, p i, (∑ i in s,…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.eq_top_iff_one`：eq_top_iff_one : I = ⊤ ↔ (1 : α) in I
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.iSup_iInf_eq_top_iff_pairwise`：iSup_iInf_eq_top_iff_pairwise {t : 
+Finset ι} (h : t.Nonempty) (I : ι -> Ideal R) : (⨆ i in t, ⨅ (j) (_ : j in t) (_
+ : j != i), I j) = ⊤ ↔ (t…
+· 使用定理 `Submodule.mem_torsionBySet_iff`：mem_torsionBySet_iff (x : M) : x in tors
+ionBySet R M s ↔ forall a : s, (a : R) • x = 0
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Submodule.mem_iInf`：mem_iInf {ι} (p : ι -> Submodule R M) {x} : x in ⨅ i
+, p i ↔ forall i, x in p i
+（共 39 条，此处仅展示前 30 条）
 -/
 theorem iSup_torsionBySet_ideal_eq_torsionBySet_iInf
     (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤) :
-    ⨆ i in S, torsionBySet R M (p i) = torsionBySet R M ↑(⨅ i in S, p i) := by
+    ⨆ i ∈ S, torsionBySet R M (p i) = torsionBySet R M ↑(⨅ i ∈ S, p i) := by
   rcases S.eq_empty_or_nonempty with h | h
   · simp [h]
   apply le_antisymm
@@ -1384,7 +1175,7 @@ theorem iSup_torsionBySet_ideal_eq_torsionBySet_iInf
     apply iSup_le _
     intro is
     apply torsionBySet_le_torsionBySet_of_subset
-    exact (iInf_le (fun i => ⨅ _ : i in S, p i) i).trans (iInf_le _ is)
+    exact (iInf_le (fun i => ⨅ _ : i ∈ S, p i) i).trans (iInf_le _ is)
   · intro x hx
     rw [mem_iSup_finset_iff_exists_sum]
     obtain ⟨μ, hμ⟩ :=
@@ -1394,7 +1185,7 @@ theorem iSup_torsionBySet_ideal_eq_torsionBySet_iInf
     · rw [mem_torsionBySet_iff] at hx ⊢
       rintro ⟨a, ha⟩
       rw [smul_smul]
-      suffices a * μ i in ⨅ i in S, p i from hx ⟨_, this⟩
+      suffices a * μ i ∈ ⨅ i ∈ S, p i from hx ⟨_, this⟩
       rw [mem_iInf]
       intro j
       rw [mem_iInf]
@@ -1406,39 +1197,71 @@ theorem iSup_torsionBySet_ideal_eq_torsionBySet_iInf
         simp only [mem_iInf] at this
         exact Ideal.mul_mem_left _ _ (this j hj ij)
     · rw [← Finset.sum_smul, hμ, one_smul]
-
-/--
-theorem `sup_torsionBySet_ideal_eq_torsionBySet_inf` / 定理 `sup_torsionBySet_ideal_eq_torsionBySet_inf`
-
-English:
-theorem sup_torsionBySet_ideal_eq_torsionBySet_inf
-  given: (P Q : Ideal R) {hc : P ⊔ Q = ⊤}
-  proof: by
-  let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
-  have heq := Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf
-    (p := map) (M := M) (S := ⊤) ?_
-  · have : ⨆ i, ⨆ (_ : i = 0 ∨ i = 1), torsionBySet R M ↑(map i) =
-        torsionBySet R M ↑(map 0) ⊔ torsionBySet R M ↑(map 1) := iSup_pair
-    simpa [Finset.top_eq_univ, Fin.univ_succ, Fin.isValue, coe_iInf, this] using heq
-  · simp_all [Set.pairwise_pair, Fin.univ_succ, map, sup_comm]
-
-中文:
-定理 sup_torsionBySet_ideal_eq_torsionBySet_inf
-  条件: (P Q : 理想 R) {hc : P ⊔ Q = ⊤}
-  证明: by
-  let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
-  have heq := Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf
-    (p := map) (M := M) (S := ⊤) ?_
-  · have : ⨆ i, ⨆ (_ : i = 0 ∨ i = 1), torsionBySet R M ↑(map i) =
-        torsionBySet R M ↑(map 0) ⊔ torsionBySet R M ↑(map 1) := iSup_pair
-    simpa [Finset.top_eq_univ, Fin.univ_succ, Fin.isValue, coe_iInf, this] using heq
-  · simp_all [Set.pairwise_pair, Fin.univ_succ, map, sup_comm]
-
-Depends on / 依赖: Fin.isValue, Fin.univ_succ, Finset, Finset.top_eq_univ, Set.pairwise_pair, Submodule, Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf, coe_iInf, iSup_pair, iSup_torsionBySet_ideal_eq_torsionBySet_iInf, isValue, pairwise_pair, sup_comm, top_eq_univ, torsionBySet, univ_succ
+/-
+**Submodule.sup_torsionBySet_ideal_eq_torsionBySet_inf** 是 Mathlib 中的一个定理，位于命名空间
+ `Submodule`。
+形式化陈述：sup_torsionBySet_ideal_eq_torsionBySet_inf (P Q : Ideal R) {hc : P ⊔ Q = ⊤
+} : torsionBySet R M ↑(P) ⊔ torsionBySet R M ↑(Q) = torsionBySet R M ↑(P ⊓ Q)
+参数：P Q : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf`：iSup_torsionBySe
+t_ideal_eq_torsionBySet_iInf (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤
+) : ⨆ i in S, torsionBySet R M (p i) = torsi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Fin.succ_injective`：succ_injective (n : Nat) : Injective (@Fin.succ n)
+· 使用定理 `Fin.univ_succ`：Fin.univ_succ (n : Nat) : (univ : Finset (Fin (n + 1))) =
+ Finset.cons 0 (univ.map ⟨Fin.succ, Fin.succ_injective _⟩) (by simp [map_eq_imag
+e])
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Finset.map_singleton`：map_singleton (f : α ↪ β) (a : α) : map f {a} = {f
+ a}
+· 使用定理 `Finset.cons.congr_simp`：∀ {α : Type u_1} (a a_1 : α) (e_a : a = a_1) (s 
+s_1 : Finset α) (e_s : s = s_1) (h : a ∉ s),   Finset.cons a s h = Finset.cons a
+_1 s_1 ⋯
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Fin.instNeZeroHAddNatOfNat_mathlib_1`：∀ (n : ℕ) [NeZero n], NeZero 1
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iSup_pair`：iSup_pair {f : β -> α} {a b : β} : ⨆ x in ({a, b} : Set β), f
+ x = f a ⊔ f b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Submodule.coe_iInf`：coe_iInf {ι} (p : ι -> Submodule R M) : (↑(⨅ i, p i)
+ : Set M) = ⋂ i, ↑(p i)
+· 使用定理 `Set.iInter_iInter_eq_or_left`：iInter_iInter_eq_or_left {b : β} {p : β ->
+ Prop} {s : forall x : β, x = b ∨ p x -> Set α} : ⋂ (x) (h), s x h = s b (Or.inl
+ rfl) inter ⋂ (x) …
+· 使用定理 `Set.iInter_iInter_eq_left`：iInter_iInter_eq_left {b : β} {s : forall x :
+ β, x = b -> Set α} : ⋂ (x) (h : x = b), s x h = s b rfl
 -/
 theorem sup_torsionBySet_ideal_eq_torsionBySet_inf (P Q : Ideal R) {hc : P ⊔ Q = ⊤} :
     torsionBySet R M ↑(P) ⊔ torsionBySet R M ↑(Q) = torsionBySet R M ↑(P ⊓ Q) := by
-  let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
+  let map : Fin 2 → Ideal R | 0 => P | 1 => Q
   have heq := Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf
     (p := map) (M := M) (S := ⊤) ?_
   · have : ⨆ i, ⨆ (_ : i = 0 ∨ i = 1), torsionBySet R M ↑(map i) =
@@ -1447,114 +1270,134 @@ theorem sup_torsionBySet_ideal_eq_torsionBySet_inf (P Q : Ideal R) {hc : P ⊔ Q
   · simp_all [Set.pairwise_pair, Fin.univ_succ, map, sup_comm]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `supIndep_torsionBySet_ideal` / 定理 `supIndep_torsionBySet_ideal`
-
-English:
-theorem supIndep_torsionBySet_ideal
-  given: (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤)
-  proof: fun T hT i hi hiT => by
-  rw [disjoint_iff]; rw [Finset.sup_eq_iSup]; rw [iSup_torsionBySet_ideal_eq_torsionBySet_iInf fun i hi j hj ij => hp (hT hi) (hT hj) ij]
-  have := GaloisConnection.u_inf
-    (b₁ := OrderDual.toDual (p i)) (b₂ := OrderDual.toDual (⨅ i in T, p i)) (torsion_gc R M)
-  dsimp at this ⊢
-  rw [← this]; rw [Ideal.sup_iInf_eq_top]; rw [top_coe]; rw [torsionBySet_univ]
-  intro j hj; apply hp hi (hT hj); rintro rfl; exact hiT hj
-
-中文:
-定理 supIndep_torsionBySet_ideal
-  条件: (hp : (S : 集合 ι).两两 fun i j => p i ⊔ p j = ⊤)
-  证明: fun T hT i hi hiT => by
-  rw [disjoint_iff]; rw [Finset.sup_eq_iSup]; rw [iSup_torsionBySet_ideal_eq_torsionBySet_iInf fun i hi j hj ij => hp (hT hi) (hT hj) ij]
-  have := GaloisConnection.u_inf
-    (b₁ := OrderDual.toDual (p i)) (b₂ := OrderDual.toDual (⨅ i in T, p i)) (torsion_gc R M)
-  dsimp at this ⊢
-  rw [← this]; rw [Ideal.sup_iInf_eq_top]; rw [top_coe]; rw [torsionBySet_univ]
-  intro j hj; apply hp hi (hT hj); rintro rfl; exact hiT hj
-
-Depends on / 依赖: Finset, Finset.sup_eq_iSup, GaloisConnection, GaloisConnection.u_inf, Ideal.sup_iInf_eq_top, OrderDual, OrderDual.toDual, disjoint_iff, iSup_torsionBySet_ideal_eq_torsionBySet_iInf, sup_eq_iSup, sup_iInf_eq_top, toDual, top_coe, torsionBySet_univ, torsion_gc, u_inf
+/-
+**Submodule.supIndep_torsionBySet_ideal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：supIndep_torsionBySet_ideal (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p 
+j = ⊤) : S.SupIndep fun i => torsionBySet R M p i
+参数：hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_iff`：disjoint_iff : Disjoint a b ↔ a ⊓ b = ⊥
+· 使用定理 `Finset.sup_eq_iSup`：sup_eq_iSup [CompleteLattice β] (s : Finset α) (f : 
+α -> β) : s.sup f = ⨆ a in s, f a
+· 使用定理 `Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf`：iSup_torsionBySe
+t_ideal_eq_torsionBySet_iInf (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤
+) : ⨆ i in S, torsionBySet R M (p i) = torsi…
+· 使用定理 `GaloisConnection.u_inf`：∀ {β : Type u} {α : Type v} {b₁ b₂ : β} [inst : 
+SemilatticeInf β] [inst_1 : SemilatticeInf α] {u : β → α} {l : α → β},   GaloisC
+onnection l …
+· 使用定理 `Submodule.torsion_gc`：torsion_gc : @GaloisConnection (Submodule R M) (Id
+eal R)ᵒᵈ _ _ annihilator fun I => torsionBySet R M ↑(OrderDual.ofDual I)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.sup_iInf_eq_top`：sup_iInf_eq_top {s : Finset ι} {J : ι -> Ideal R}
+ [forall i, (J i).IsTwoSided] (h : forall i, i in s -> I ⊔ J i = ⊤) : (I ⊔ ⨅ i i
+n s, J i) =…
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Submodule.top_coe`：top_coe : ((⊤ : Submodule R M) : Set M) = Set.univ
+· 使用定理 `Submodule.torsionBySet_univ`：torsionBySet_univ : torsionBySet R M Set.un
+iv = ⊥
 -/
 theorem supIndep_torsionBySet_ideal (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤) :
-S.SupIndep fun i => torsionBySet R M p i :=
+    S.SupIndep fun i => torsionBySet R M <| p i :=
   fun T hT i hi hiT => by
-  rw [disjoint_iff]; rw [Finset.sup_eq_iSup]; rw [iSup_torsionBySet_ideal_eq_torsionBySet_iInf fun i hi j hj ij => hp (hT hi) (hT hj) ij]
+  rw [disjoint_iff, Finset.sup_eq_iSup,
+    iSup_torsionBySet_ideal_eq_torsionBySet_iInf fun i hi j hj ij => hp (hT hi) (hT hj) ij]
   have := GaloisConnection.u_inf
-    (b₁ := OrderDual.toDual (p i)) (b₂ := OrderDual.toDual (⨅ i in T, p i)) (torsion_gc R M)
+    (b₁ := OrderDual.toDual (p i)) (b₂ := OrderDual.toDual (⨅ i ∈ T, p i)) (torsion_gc R M)
   dsimp at this ⊢
-  rw [← this]; rw [Ideal.sup_iInf_eq_top]; rw [top_coe]; rw [torsionBySet_univ]
+  rw [← this, Ideal.sup_iInf_eq_top, top_coe, torsionBySet_univ]
   intro j hj; apply hp hi (hT hj); rintro rfl; exact hiT hj
-
-/--
-theorem `disjoint_torsionBySet_ideal` / 定理 `disjoint_torsionBySet_ideal`
-
-English:
-theorem disjoint_torsionBySet_ideal
-  given: {P Q : Ideal R} (hc : P ⊔ Q = ⊤)
-  proof: by
-  let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
-  have heq := Submodule.supIndep_torsionBySet_ideal (p := map) (M := M) (S := ⊤) ?_
-  · simpa [Finset.top_eq_univ, Fin.isValue, map] using heq
-  · aesop (add norm [Fin.univ_succ, Set.pairwise_pair, map, sup_comm])
-
-中文:
-定理 disjoint_torsionBySet_ideal
-  条件: {P Q : 理想 R} (hc : P ⊔ Q = ⊤)
-  证明: by
-  let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
-  have heq := Submodule.supIndep_torsionBySet_ideal (p := map) (M := M) (S := ⊤) ?_
-  · simpa [Finset.top_eq_univ, Fin.isValue, map] using heq
-  · aesop (add norm [Fin.univ_succ, Set.pairwise_pair, map, sup_comm])
-
-Depends on / 依赖: Fin.isValue, Fin.univ_succ, Finset, Finset.top_eq_univ, Set.pairwise_pair, Submodule, Submodule.supIndep_torsionBySet_ideal, isValue, pairwise_pair, supIndep_torsionBySet_ideal, sup_comm, top_eq_univ, univ_succ
+/-
+**Submodule.disjoint_torsionBySet_ideal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：disjoint_torsionBySet_ideal {P Q : Ideal R} (hc : P ⊔ Q = ⊤) : Disjoint (t
+orsionBySet R M ↑(P)) (torsionBySet R M ↑(Q))
+参数：hc : P ⊔ Q = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.supIndep_torsionBySet_ideal`：supIndep_torsionBySet_ideal (hp :
+ (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤) : S.SupIndep fun i => torsionByS
+et R M p i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Fin.succ_injective`：succ_injective (n : Nat) : Injective (@Fin.succ n)
+· 使用定理 `Fin.univ_succ`：Fin.univ_succ (n : Nat) : (univ : Finset (Fin (n + 1))) =
+ Finset.cons 0 (univ.map ⟨Fin.succ, Fin.succ_injective _⟩) (by simp [map_eq_imag
+e])
+· 使用定理 `Finset.univ_unique`：univ_unique [Unique α] : (univ : Finset α) = {defaul
+t}
+· 使用定理 `Finset.map_singleton`：map_singleton (f : α ↪ β) (a : α) : map f {a} = {f
+ a}
+· 使用定理 `Finset.cons.congr_simp`：∀ {α : Type u_1} (a a_1 : α) (e_a : a = a_1) (s 
+s_1 : Finset α) (e_s : s = s_1) (h : a ∉ s),   Finset.cons a s h = Finset.cons a
+_1 s_1 ⋯
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Fin.instNeZeroHAddNatOfNat_mathlib_1`：∀ (n : ℕ) [NeZero n], NeZero 1
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem disjoint_torsionBySet_ideal {P Q : Ideal R} (hc : P ⊔ Q = ⊤) :
     Disjoint (torsionBySet R M ↑(P)) (torsionBySet R M ↑(Q)) := by
-  let map : Fin 2 -> Ideal R | 0 => P | 1 => Q
+  let map : Fin 2 → Ideal R | 0 => P | 1 => Q
   have heq := Submodule.supIndep_torsionBySet_ideal (p := map) (M := M) (S := ⊤) ?_
   · simpa [Finset.top_eq_univ, Fin.isValue, map] using heq
   · aesop (add norm [Fin.univ_succ, Set.pairwise_pair, map, sup_comm])
 
-variable {q : ι -> R}
+variable {q : ι → R}
 
 open scoped Function -- required for scoped `on` notation
-
-/--
-theorem `iSup_torsionBy_eq_torsionBy_prod` / 定理 `iSup_torsionBy_eq_torsionBy_prod`
-
-English:
-theorem iSup_torsionBy_eq_torsionBy_prod
-  given: (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
-  proof: by
-  rw [← torsionBySet_span_singleton_eq]; rw [Ideal.submodule_span_eq]; rw [←
-    Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf]; rw [←
-    iSup_torsionBySet_ideal_eq_torsionBySet_iInf]
-  · congr
-    ext : 1
-    congr
-    ext : 1
-    exact (torsionBySet_span_singleton_eq _).symm
-  exact fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime _ _).mpr (hq hi hj ij)
-
-中文:
-定理 iSup_torsionBy_eq_torsionBy_prod
-  条件: (hq : (S : 集合 ι).两两 <| (IsCoprime on q))
-  证明: by
-  rw [← torsionBySet_span_singleton_eq]; rw [Ideal.submodule_span_eq]; rw [←
-    Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf]; rw [←
-    iSup_torsionBySet_ideal_eq_torsionBySet_iInf]
-  · congr
-    ext : 1
-    congr
-    ext : 1
-    exact (torsionBySet_span_singleton_eq _).symm
-  exact fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime _ _).mpr (hq hi hj ij)
-
-Depends on / 依赖: Finset, Finset.inf_eq_iInf, Ideal.finset_inf_span_singleton, Ideal.submodule_span_eq, Ideal.sup_eq_top_iff_isCoprime, finset_inf_span_singleton, iSup_torsionBySet_ideal_eq_torsionBySet_iInf, inf_eq_iInf, submodule_span_eq, sup_eq_top_iff_isCoprime, torsionBySet_span_singleton_eq
+/-
+**Submodule.iSup_torsionBy_eq_torsionBy_prod** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：iSup_torsionBy_eq_torsionBy_prod (hq : (S : Set ι).Pairwise <| (IsCoprime 
+on q)) : ⨆ i in S, torsionBy R M (q i) = torsionBy R M (∏ i in S, q i)
+参数：hq : (S : Set ι).Pairwise <| (IsCoprime on q)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.torsionBySet_span_singleton_eq`：torsionBySet_span_singleton_eq
+ : torsionBySet R M (R ∙ a) = torsionBy R M a
+· 使用定理 `Ideal.submodule_span_eq`：submodule_span_eq {s : Set α} : Submodule.span 
+α s = Ideal.span s
+· 使用定理 `Ideal.finset_inf_span_singleton`：finset_inf_span_singleton {ι : Type*} (
+s : Finset ι) (I : ι -> R) (hI : Set.Pairwise (↑s) (IsCoprime on I)) : (s.inf fu
+n i => Ideal.span ({I…
+· 使用定理 `Finset.inf_eq_iInf`：∀ {α : Type u_2} {β : Type u_3} [inst : CompleteLatt
+ice β] (s : Finset α) (f : α → β), s.inf f = ⨅ a ∈ s, f a
+· 使用定理 `Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf`：iSup_torsionBySe
+t_ideal_eq_torsionBySet_iInf (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤
+) : ⨆ i in S, torsionBySet R M (p i) = torsi…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.sup_eq_top_iff_isCoprime`：sup_eq_top_iff_isCoprime {R : Type*} [Co
+mmSemiring R] (x y : R) : span ({x} : Set R) ⊔ span {y} = ⊤ ↔ IsCoprime x y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem iSup_torsionBy_eq_torsionBy_prod (hq : (S : Set ι).Pairwise <| (IsCoprime on q)) :
-    ⨆ i in S, torsionBy R M (q i) = torsionBy R M (∏ i in S, q i) := by
-  rw [← torsionBySet_span_singleton_eq]; rw [Ideal.submodule_span_eq]; rw [←
-    Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf]; rw [←
+    ⨆ i ∈ S, torsionBy R M (q i) = torsionBy R M (∏ i ∈ S, q i) := by
+  rw [← torsionBySet_span_singleton_eq, Ideal.submodule_span_eq, ←
+    Ideal.finset_inf_span_singleton _ _ hq, Finset.inf_eq_iInf, ←
     iSup_torsionBySet_ideal_eq_torsionBySet_iInf]
   · congr
     ext : 1
@@ -1562,35 +1405,31 @@ theorem iSup_torsionBy_eq_torsionBy_prod (hq : (S : Set ι).Pairwise <| (IsCopri
     ext : 1
     exact (torsionBySet_span_singleton_eq _).symm
   exact fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime _ _).mpr (hq hi hj ij)
-
-/--
-theorem `supIndep_torsionBy` / 定理 `supIndep_torsionBy`
-
-English:
-theorem supIndep_torsionBy
-  given: (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
-  proof: by
-  convert!
-    supIndep_torsionBySet_ideal (M := M) fun i hi j hj ij =>
-(Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr hq hi hj ij
-  exact (torsionBySet_span_singleton_eq (R := R) (M := M) _).symm
-
-中文:
-定理 supIndep_torsionBy
-  条件: (hq : (S : 集合 ι).两两 <| (IsCoprime on q))
-  证明: by
-  convert!
-    supIndep_torsionBySet_ideal (M := M) fun i hi j hj ij =>
-(Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr hq hi hj ij
-  exact (torsionBySet_span_singleton_eq (R := R) (M := M) _).symm
-
-Depends on / 依赖: Ideal.sup_eq_top_iff_isCoprime, convert, supIndep_torsionBySet_ideal, sup_eq_top_iff_isCoprime, torsionBySet_span_singleton_eq
+/-
+**Submodule.supIndep_torsionBy** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：supIndep_torsionBy (hq : (S : Set ι).Pairwise <| (IsCoprime on q)) : S.Sup
+Indep fun i => torsionBy R M q i
+参数：hq : (S : Set ι).Pairwise <| (IsCoprime on q)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submodule.torsionBySet_span_singleton_eq`：torsionBySet_span_singleton_eq
+ : torsionBySet R M (R ∙ a) = torsionBy R M a
+· 使用定理 `Submodule.supIndep_torsionBySet_ideal`：supIndep_torsionBySet_ideal (hp :
+ (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤) : S.SupIndep fun i => torsionByS
+et R M p i
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.sup_eq_top_iff_isCoprime`：sup_eq_top_iff_isCoprime {R : Type*} [Co
+mmSemiring R] (x y : R) : span ({x} : Set R) ⊔ span {y} = ⊤ ↔ IsCoprime x y
 -/
 theorem supIndep_torsionBy (hq : (S : Set ι).Pairwise <| (IsCoprime on q)) :
-S.SupIndep fun i => torsionBy R M q i := by
+    S.SupIndep fun i => torsionBy R M <| q i := by
   convert!
     supIndep_torsionBySet_ideal (M := M) fun i hi j hj ij =>
-(Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr hq hi hj ij
+      (Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr <| hq hi hj ij
   exact (torsionBySet_span_singleton_eq (R := R) (M := M) _).symm
 
 end Coprime
@@ -1606,78 +1445,99 @@ namespace Submodule
 variable [CommRing R] [AddCommGroup M] [Module R M]
 variable {ι : Type*} [DecidableEq ι] {S : Finset ι}
 
-/--
-theorem `torsionBySet_isInternal` / 定理 `torsionBySet_isInternal`
+/-- If the `p i` are pairwise coprime, a `⨅ i, p i`-torsion module is the internal direct sum of
+its `p i`-torsion submodules. -/
+/-
+**Submodule.torsionBySet_isInternal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBySet_isInternal {p : ι -> Ideal R} (hp : (S : Set ι).Pairwise fun 
+i j => p i ⊔ p j = ⊤) (hM : Module.IsTorsionBySet R M (⨅ i in S, p i : Ideal R))
+ : DirectSum.IsInternal fun i : S => torsionBySet R M p i
+参数：hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤；hM : Module.IsTorsionBySet
+ R M (⨅ i in S, p i : Ideal R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top`：isInternal_s
+ubmodule_of_iSupIndep_of_iSup_eq_top {A : ι -> Submodule R M} (hi : iSupIndep A)
+ (hs : iSup A = ⊤) : IsInternal A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `iSupIndep_comp_coe_iff_supIndep`：iSupIndep_comp_coe_iff_supIndep {s : Fi
+nset ι} {f : ι -> α} : iSupIndep (f ∘ ((↑) : s -> ι)) ↔ s.SupIndep f
+· 使用定理 `Submodule.supIndep_torsionBySet_ideal`：supIndep_torsionBySet_ideal (hp :
+ (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤) : S.SupIndep fun i => torsionByS
+et R M p i
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iSup_subtype''`：iSup_subtype'' {ι} (s : Set ι) (f : ι -> α) : ⨆ i : s, f
+ i = ⨆ (t : ι) (_ : t in s), f t
+· 使用定理 `Submodule.iSup_torsionBySet_ideal_eq_torsionBySet_iInf`：iSup_torsionBySe
+t_ideal_eq_torsionBySet_iInf (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤
+) : ⨆ i in S, torsionBySet R M (p i) = torsi…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.isTorsionBySet_iff_torsionBySet_eq_top`：isTorsionBySet_iff_torsio
+nBySet_eq_top : IsTorsionBySet R M s ↔ torsionBySet R M s = ⊤
 
-English:
-theorem torsionBySet_isInternal
-  statement: {p : ι -> Ideal R}
-  proof: DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
-    (iSupIndep_comp_coe_iff_supIndep.mpr <| supIndep_torsionBySet_ideal hp)
-    (by
-      apply (iSup_subtype'' ↑S fun i => torsionBySet R M <| p i).trans
-      -- Porting note: times out if we change apply below to <|
-apply (iSup_torsionBySet_ideal_eq_torsionBySet_iInf hp).trans
-        (Module.isTorsionBySet_iff_torsionBySet_eq_top _).mp hM)
-
-中文:
-定理 torsionBySet_is整数ernal
-  结论: {p : ι -> 理想 R}
-  证明: DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
-    (iSupIndep_comp_coe_iff_supIndep.mpr <| supIndep_torsionBySet_ideal hp)
-    (by
-      apply (iSup_subtype'' ↑S fun i => torsionBySet R M <| p i).trans
-      -- Porting note: times out if we change apply below to <|
-apply (iSup_torsionBySet_ideal_eq_torsionBySet_iInf hp).trans
-        (Module.isTorsionBySet_iff_torsionBySet_eq_top _).mp hM)
-
-Depends on / 依赖: DirectSum, DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top, iSupIndep_comp_coe_iff_supIndep, iSupIndep_comp_coe_iff_supIndep.mpr, iSup_subtype, isInternal_submodule_of_iSupIndep_of_iSup_eq_top, supIndep_torsionBySet_ideal, torsionBySet
+--- 原说明 ---
+If the `p i` are pairwise coprime, a `⨅ i, p i`-torsion module is the internal d
+irect sum of
+its `p i`-torsion submodules.
 -/
-theorem torsionBySet_isInternal {p : ι -> Ideal R}
+theorem torsionBySet_isInternal {p : ι → Ideal R}
     (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤)
-    (hM : Module.IsTorsionBySet R M (⨅ i in S, p i : Ideal R)) :
-DirectSum.IsInternal fun i : S => torsionBySet R M p i :=
+    (hM : Module.IsTorsionBySet R M (⨅ i ∈ S, p i : Ideal R)) :
+    DirectSum.IsInternal fun i : S => torsionBySet R M <| p i :=
   DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
     (iSupIndep_comp_coe_iff_supIndep.mpr <| supIndep_torsionBySet_ideal hp)
     (by
       apply (iSup_subtype'' ↑S fun i => torsionBySet R M <| p i).trans
       -- Porting note: times out if we change apply below to <|
-apply (iSup_torsionBySet_ideal_eq_torsionBySet_iInf hp).trans
+      apply (iSup_torsionBySet_ideal_eq_torsionBySet_iInf hp).trans <|
         (Module.isTorsionBySet_iff_torsionBySet_eq_top _).mp hM)
 
 open scoped Function in -- required for scoped `on` notation
-/--
-theorem `torsionBy_isInternal` / 定理 `torsionBy_isInternal`
+/-- If the `q i` are pairwise coprime, a `∏ i, q i`-torsion module is the internal direct sum of
+its `q i`-torsion submodules. -/
+/-
+**Submodule.torsionBy_isInternal** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsionBy_isInternal {q : ι -> R} (hq : (S : Set ι).Pairwise <| (IsCoprime
+ on q)) (hM : Module.IsTorsionBy R M <| ∏ i in S, q i) : DirectSum.IsInternal fu
+n i : S => torsionBy R M q i
+参数：hq : (S : Set ι).Pairwise <| (IsCoprime on q)；hM : Module.IsTorsionBy R M <| 
+∏ i in S, q i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submodule.torsionBySet_span_singleton_eq`：torsionBySet_span_singleton_eq
+ : torsionBySet R M (R ∙ a) = torsionBy R M a
+· 使用定理 `Submodule.torsionBySet_isInternal`：torsionBySet_isInternal {p : ι -> Ide
+al R} (hp : (S : Set ι).Pairwise fun i j => p i ⊔ p j = ⊤) (hM : Module.IsTorsio
+nBySet R M (⨅ i in S, p…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.sup_eq_top_iff_isCoprime`：sup_eq_top_iff_isCoprime {R : Type*} [Co
+mmSemiring R] (x y : R) : span ({x} : Set R) ⊔ span {y} = ⊤ ↔ IsCoprime x y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.inf_eq_iInf`：∀ {α : Type u_2} {β : Type u_3} [inst : CompleteLatt
+ice β] (s : Finset α) (f : α → β), s.inf f = ⨅ a ∈ s, f a
+· 使用定理 `Ideal.finset_inf_span_singleton`：finset_inf_span_singleton {ι : Type*} (
+s : Finset ι) (I : ι -> R) (hI : Set.Pairwise (↑s) (IsCoprime on I)) : (s.inf fu
+n i => Ideal.span ({I…
+· 使用定理 `Ideal.submodule_span_eq`：submodule_span_eq {s : Set α} : Submodule.span 
+α s = Ideal.span s
+· 使用定理 `Module.isTorsionBySet_span_singleton_iff`：isTorsionBySet_span_singleton_
+iff : IsTorsionBySet R M (R ∙ a) ↔ IsTorsionBy R M a
 
-English:
-theorem torsionBy_isInternal
-  statement: {q : ι -> R} (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
-  proof: by
-  rw [← Module.isTorsionBySet_span_singleton_iff]; rw [Ideal.submodule_span_eq]; rw [←
-    Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf] at hM
-  convert!
-    torsionBySet_isInternal
-      (fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr <| hq hi hj ij) hM
-  exact (torsionBySet_span_singleton_eq _ (R := R) (M := M)).symm
-
-中文:
-定理 torsionBy_is整数ernal
-  结论: {q : ι -> R} (hq : (S : 集合 ι).两两 <| (IsCoprime on q))
-  证明: by
-  rw [← Module.isTorsionBySet_span_singleton_iff]; rw [Ideal.submodule_span_eq]; rw [←
-    Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf] at hM
-  convert!
-    torsionBySet_isInternal
-      (fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr <| hq hi hj ij) hM
-  exact (torsionBySet_span_singleton_eq _ (R := R) (M := M)).symm
-
-Depends on / 依赖: Finset, Finset.inf_eq_iInf, Ideal.finset_inf_span_singleton, Ideal.submodule_span_eq, Ideal.sup_eq_top_iff_isCoprime, Module, Module.isTorsionBySet_span_singleton_iff, convert, finset_inf_span_singleton, inf_eq_iInf, isTorsionBySet_span_singleton_iff, submodule_span_eq, sup_eq_top_iff_isCoprime, torsionBySet_isInternal, torsionBySet_span_singleton_eq
+--- 原说明 ---
+If the `q i` are pairwise coprime, a `∏ i, q i`-torsion module is the internal d
+irect sum of
+its `q i`-torsion submodules.
 -/
-theorem torsionBy_isInternal {q : ι -> R} (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
-    (hM : Module.IsTorsionBy R M <| ∏ i in S, q i) :
-DirectSum.IsInternal fun i : S => torsionBy R M q i := by
-  rw [← Module.isTorsionBySet_span_singleton_iff]; rw [Ideal.submodule_span_eq]; rw [←
-    Ideal.finset_inf_span_singleton _ _ hq]; rw [Finset.inf_eq_iInf] at hM
+theorem torsionBy_isInternal {q : ι → R} (hq : (S : Set ι).Pairwise <| (IsCoprime on q))
+    (hM : Module.IsTorsionBy R M <| ∏ i ∈ S, q i) :
+    DirectSum.IsInternal fun i : S => torsionBy R M <| q i := by
+  rw [← Module.isTorsionBySet_span_singleton_iff, Ideal.submodule_span_eq, ←
+    Ideal.finset_inf_span_singleton _ _ hq, Finset.inf_eq_iInf] at hM
   convert!
     torsionBySet_isInternal
       (fun i hi j hj ij => (Ideal.sup_eq_top_iff_isCoprime (q i) _).mpr <| hq hi hj ij) hM
@@ -1692,41 +1552,33 @@ variable {I : Ideal R} {r : R}
 
 /-- can't be an instance because `hM` can't be inferred -/
 @[instance_reducible]
-/--
-Definition of `IsTorsionBySet.hasSMul` / `IsTorsionBySet.hasSMul` 的定义
+/-
+**Module.IsTorsionBySet.hasSMul** 是 Mathlib 中的一个定义，位于命名空间 `Module.IsTorsionBySet
+`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     [inst : Ring R] →       [inst_1 : 
+AddCommGroup M] →         [inst_2 : _root_.Module R M] → {I : Ideal R} → Module.
+IsTorsionBySet R M ↑I → SMul (R ⧸ I) M
+参数：R ⧸ I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTorsionBySet.hasSMul
-  signature: (hM : IsTorsionBySet R M I)
-  body: QuotientAddGroup.lift I.toAddSubgroup (smulAddHom R M)
-    (by rwa [isTorsionBySet_iff_subset_annihilator] at hM) b
-
-中文:
-定义 IsTorsionBySet.hasSMul
-  签名: (hM : IsTorsionBySet R M I)
-  定义体: QuotientAddGroup.lift I.toAddSubgroup (smulAddHom R M)
-    (by rwa [isTorsionBySet_iff_subset_annihilator] at hM) b
-
-Depends on / 依赖: I.toAddSubgroup, QuotientAddGroup, QuotientAddGroup.lift, smulAddHom, toAddSubgroup
+--- 原说明 ---
+can't be an instance because `hM` can't be inferred
 -/
 def IsTorsionBySet.hasSMul (hM : IsTorsionBySet R M I) : SMul (R ⧸ I) M where
   smul b := QuotientAddGroup.lift I.toAddSubgroup (smulAddHom R M)
     (by rwa [isTorsionBySet_iff_subset_annihilator] at hM) b
 
-/--
-Definition of `IsTorsionBy.hasSMul` / `IsTorsionBy.hasSMul` 的定义
+/-- can't be an instance because `hM` can't be inferred -/
+/-
+**Module.IsTorsionBy.hasSMul** 是 Mathlib 中的一个定义，位于命名空间 `Module.IsTorsionBy`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     [inst : Ring R] →       [inst_1 : 
+AddCommGroup M] →         [inst_2 : _root_.Module R M] → {r : R} → Module.IsTors
+ionBy R M r → SMul (R ⧸ Ideal.span {r}) M
+参数：R ⧸ Ideal.span {r}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTorsionBy.hasSMul
-  signature: (hM : IsTorsionBy R M r)
-  body: Module.IsTorsionBySet.hasSMul ?_
-
-中文:
-缩写 IsTorsionBy.hasSMul
-  签名: (hM : IsTorsionBy R M r)
-  定义体: Module.IsTorsionBySet.hasSMul ?_
-
-Depends on / 依赖: IsTorsionBySet, Module, Module.IsTorsionBySet.hasSMul, hasSMul
+--- 原说明 ---
+can't be an instance because `hM` can't be inferred
 -/
 abbrev IsTorsionBy.hasSMul (hM : IsTorsionBy R M r) : SMul (R ⧸ Ideal.span {r}) M :=
   Module.IsTorsionBySet.hasSMul ?_
@@ -1734,28 +1586,14 @@ where finally
   rwa [← isTorsionBySet_span_singleton_iff r] at hM
 
 @[simp]
-/--
-theorem `IsTorsionBySet.mk_smul` / 定理 `IsTorsionBySet.mk_smul`
-
-English:
-theorem IsTorsionBySet.mk_smul
-  given: [I.IsTwoSided] (hM : IsTorsionBySet R M I) (b : R) (x : M)
-  proof: hM.hasSMul
-    Ideal.Quotient.mk I b • x = b • x :=
-  rfl
-
-@[simp]
-
-中文:
-定理 IsTorsionBySet.mk_smul
-  条件: [I.是TwoSided] (hM : IsTorsionBySet R M I) (b : R) (x : M)
-  证明: hM.hasSMul
-    Ideal.Quotient.mk I b • x = b • x :=
-  rfl
-
-@[simp]
-
-Depends on / 依赖: hM.hasSMul, hasSMul
+/-
+**Module.IsTorsionBySet.mk_smul** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsTorsionBySet
+`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] {I : Ideal R}   [inst_3 : I.IsTwoSided] (hM : Modul
+e.IsTorsionBySet R M ↑I) (b : R) (x : M), (Ideal.Quotient.mk I) b • x = b • x
+参数：hM : Module.IsTorsionBySet R M ↑I；b : R；x : M；Ideal.Quotient.mk I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsTorsionBySet.mk_smul [I.IsTwoSided] (hM : IsTorsionBySet R M I) (b : R) (x : M) :
     haveI := hM.hasSMul
@@ -1763,24 +1601,15 @@ theorem IsTorsionBySet.mk_smul [I.IsTwoSided] (hM : IsTorsionBySet R M I) (b : R
   rfl
 
 @[simp]
-/--
-theorem `IsTorsionBy.mk_smul` / 定理 `IsTorsionBy.mk_smul`
-
-English:
-theorem IsTorsionBy.mk_smul
-  given: [(Ideal.span {r}).IsTwoSided] (hM : IsTorsionBy R M r) (b : R) (x : M)
-  proof: hM.hasSMul
-    Ideal.Quotient.mk (Ideal.span {r}) b • x = b • x :=
-  rfl
-
-中文:
-定理 IsTorsionBy.mk_smul
-  条件: [(理想.span {r}).是TwoSided] (hM : IsTorsionBy R M r) (b : R) (x : M)
-  证明: hM.hasSMul
-    Ideal.Quotient.mk (Ideal.span {r}) b • x = b • x :=
-  rfl
-
-Depends on / 依赖: hM.hasSMul, hasSMul
+/-
+**Module.IsTorsionBy.mk_smul** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsTorsionBy`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] {r : R}   [inst_3 : (Ideal.span {r}).IsTwoSided] (h
+M : Module.IsTorsionBy R M r) (b : R) (x : M),   (Ideal.Quotient.mk (Ideal.span 
+{r})) b • x = b • x
+参数：Ideal.span {r}；hM : Module.IsTorsionBy R M r；b : R；x : M；Ideal.Quotient.mk (I
+deal.span {r})。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsTorsionBy.mk_smul [(Ideal.span {r}).IsTwoSided] (hM : IsTorsionBy R M r) (b : R) (x : M) :
     haveI := hM.hasSMul
@@ -1789,40 +1618,34 @@ theorem IsTorsionBy.mk_smul [(Ideal.span {r}).IsTwoSided] (hM : IsTorsionBy R M 
 
 /-- An `(R ⧸ I)`-module is an `R`-module which `IsTorsionBySet R M I`. -/
 @[instance_reducible]
-/--
-Definition of `IsTorsionBySet.module` / `IsTorsionBySet.module` 的定义
+/-
+**Module.IsTorsionBySet.module** 是 Mathlib 中的一个定义，位于命名空间 `Module.IsTorsionBySet`
+。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     [inst : Ring R] →       [inst_1 : 
+AddCommGroup M] →         [inst_2 : _root_.Module R M] →           {I : Ideal R}
+ → [inst_3 : I.IsTwoSided] → Module.IsTorsionBySet R M ↑I → _root_.Module (R ⧸ I
+) M
+参数：R ⧸ I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTorsionBySet.module
-  signature: [I.IsTwoSided] (hM : IsTorsionBySet R M I)
-  body: letI := hM.hasSMul; fast_instance% I.mkQ_surjective.moduleLeft _ (IsTorsionBySet.mk_smul hM)
-
-中文:
-定义 IsTorsionBySet.module
-  签名: [I.是TwoSided] (hM : IsTorsionBySet R M I)
-  定义体: letI := hM.hasSMul; fast_instance% I.mkQ_surjective.moduleLeft _ (IsTorsionBySet.mk_smul hM)
-
-Depends on / 依赖: I.mkQ_surjective.moduleLeft, IsTorsionBySet, IsTorsionBySet.mk_smul, fast_instance, hM.hasSMul, hasSMul, mkQ_surjective, mk_smul, moduleLeft
+--- 原说明 ---
+An `(R ⧸ I)`-module is an `R`-module which `IsTorsionBySet R M I`.
 -/
 def IsTorsionBySet.module [I.IsTwoSided] (hM : IsTorsionBySet R M I) : Module (R ⧸ I) M :=
   letI := hM.hasSMul; fast_instance% I.mkQ_surjective.moduleLeft _ (IsTorsionBySet.mk_smul hM)
-
-/--
-Instance `IsTorsionBySet.isScalarTower` / 实例 `IsTorsionBySet.isScalarTower`
-
-English:
-instance IsTorsionBySet.isScalarTower
-  signature: (hM : IsTorsionBySet R M I)
-  body: -- Porting note: still needed to be fed the Module R / I M instance
-  @IsScalarTower.mk S (R ⧸ I) M _ hM.hasSMul _
-    (fun b d x => Quotient.inductionOn' d fun c => (smul_assoc b c x :))
-
-中文:
-实例 IsTorsionBySet.isScalarTower
-  签名: (hM : IsTorsionBySet R M I)
-  定义体: -- Porting note: still needed to be fed the Module R / I M instance
-  @IsScalarTower.mk S (R ⧸ I) M _ hM.hasSMul _
-    (fun b d x => Quotient.inductionOn' d fun c => (smul_assoc b c x :))
+/-
+**Module.IsTorsionBySet.isScalarTower** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsTorsio
+nBySet`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] {I : Ideal R}   (hM : Module.IsTorsionBySet R M ↑I)
+ {S : Type u_3} [inst_3 : SMul S R] [inst_4 : SMul S M] [IsScalarTower S R M]   
+[inst_6 : IsScalarTower S R R], IsScalarTower S (R ⧸ I) M
+参数：hM : Module.IsTorsionBySet R M ↑I；R ⧸ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance IsTorsionBySet.isScalarTower (hM : IsTorsionBySet R M I)
     {S : Type*} [SMul S R] [SMul S M] [IsScalarTower S R M] [IsScalarTower S R R] :
@@ -1831,56 +1654,47 @@ instance IsTorsionBySet.isScalarTower (hM : IsTorsionBySet R M I)
   @IsScalarTower.mk S (R ⧸ I) M _ hM.hasSMul _
     (fun b d x => Quotient.inductionOn' d fun c => (smul_assoc b c x :))
 
-/--
-Definition of `IsTorsionBySet.semilinearMap` / `IsTorsionBySet.semilinearMap` 的定义
+/-- If an `R`-module `M` is annihilated by a two-sided ideal `I`, then the identity is a semilinear
+map from the `R`-module `M` to the `R ⧸ I`-module `M`. -/
+/-
+**Module.IsTorsionBySet.semilinearMap** 是 Mathlib 中的一个定义，位于命名空间 `Module.IsTorsio
+nBySet`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     [inst : Ring R] →       [inst_1 : 
+AddCommGroup M] →         [inst_2 : _root_.Module R M] →           {I : Ideal R}
+ →             [inst_3 : I.IsTwoSided] →               (hM : Module.IsTorsionByS
+et R M ↑I) →                 have x := hM.module;                 M →ₛₗ[Ideal.Qu
+otient.mk I] M
+参数：hM : Module.IsTorsionBySet R M ↑I。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTorsionBySet.semilinearMap
-  signature: [I.IsTwoSided] (hM : IsTorsionBySet R M I)
-  body: hM.module; M ->ₛₗ[Ideal.Quotient.mk I] M :=
-  let _ := hM.module
-  { toFun := id
-    map_add' := fun _ _ => rfl
-    map_smul' := fun _ _ => rfl }
-
-中文:
-定义 IsTorsionBySet.semilinearMap
-  签名: [I.是TwoSided] (hM : IsTorsionBySet R M I)
-  定义体: hM.module; M ->ₛₗ[Ideal.Quotient.mk I] M :=
-  let _ := hM.module
-  { toFun := id
-    map_add' := fun _ _ => rfl
-    map_smul' := fun _ _ => rfl }
-
-Depends on / 依赖: Ideal.Quotient.mk, Quotient, hM.module, module
+--- 原说明 ---
+If an `R`-module `M` is annihilated by a two-sided ideal `I`, then the identity 
+is a semilinear
+map from the `R`-module `M` to the `R ⧸ I`-module `M`.
 -/
 def IsTorsionBySet.semilinearMap [I.IsTwoSided] (hM : IsTorsionBySet R M I) :
-    let _ := hM.module; M ->ₛₗ[Ideal.Quotient.mk I] M :=
+    let _ := hM.module; M →ₛₗ[Ideal.Quotient.mk I] M :=
   let _ := hM.module
   { toFun := id
-    map_add' := fun _ _ => rfl
-    map_smul' := fun _ _ => rfl }
-
-/--
-theorem `IsTorsionBySet.isSemisimpleModule_iff` / 定理 `IsTorsionBySet.isSemisimpleModule_iff`
-
-English:
-theorem IsTorsionBySet.isSemisimpleModule_iff
-  statement: [I.IsTwoSided]
-  proof: hM.module
-    IsSemisimpleModule (R ⧸ I) M ↔ IsSemisimpleModule R M :=
-  letI := hM.module
-  (hM.semilinearMap.isSemisimpleModule_iff_of_bijective Function.bijective_id).symm
-
-中文:
-定理 IsTorsionBySet.isSemisimpleModule_iff
-  结论: [I.是TwoSided]
-  证明: hM.module
-    IsSemisimpleModule (R ⧸ I) M ↔ IsSemisimpleModule R M :=
-  letI := hM.module
-  (hM.semilinearMap.isSemisimpleModule_iff_of_bijective Function.bijective_id).symm
-
-Depends on / 依赖: hM.module, module
+    map_add' := fun _ _ ↦ rfl
+    map_smul' := fun _ _ ↦ rfl }
+/-
+**Module.IsTorsionBySet.isSemisimpleModule_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module
+.IsTorsionBySet`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] {I : Ideal R}   [inst_3 : I.IsTwoSided] (hM : Modul
+e.IsTorsionBySet R M ↑I), IsSemisimpleModule (R ⧸ I) M ↔ IsSemisimpleModule R M
+参数：hM : Module.IsTorsionBySet R M ↑I；R ⧸ I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LinearMap.isSemisimpleModule_iff_of_bijective`：∀ {R : Type u_2} {S : Typ
+e u_3} [inst : Ring R] [inst_1 : Ring S] {M' : Type u_6} [inst_2 : AddCommGroup 
+M']   [inst_3 : _root_.Module R M']…
+· 使用定理 `Ideal.Quotient.instRingHomSurjectiveQuotientMk`：∀ {R : Type u} [inst : R
+ing R] {I : Ideal R} [inst_1 : I.IsTwoSided], RingHomSurjective (Ideal.Quotient.
+mk I)
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 -/
 theorem IsTorsionBySet.isSemisimpleModule_iff [I.IsTwoSided]
     (hM : Module.IsTorsionBySet R M I) : letI := hM.module
@@ -1888,20 +1702,18 @@ theorem IsTorsionBySet.isSemisimpleModule_iff [I.IsTwoSided]
   letI := hM.module
   (hM.semilinearMap.isSemisimpleModule_iff_of_bijective Function.bijective_id).symm
 
-/--
-Definition of `IsTorsionBy.module` / `IsTorsionBy.module` 的定义
+/-- An `(R ⧸ Ideal.span {r})`-module is an `R`-module for which `IsTorsionBy R M r`. -/
+/-
+**Module.IsTorsionBy.module** 是 Mathlib 中的一个定义，位于命名空间 `Module.IsTorsionBy`。
+形式化陈述：{R : Type u_1} →   {M : Type u_2} →     [inst : Ring R] →       [inst_1 : 
+AddCommGroup M] →         [inst_2 : _root_.Module R M] →           {r : R} → [h 
+: (Ideal.span {r}).IsTwoSided] → Module.IsTorsionBy R M r → _root_.Module (R ⧸ I
+deal.span {r}) M
+参数：Ideal.span {r}；R ⧸ Ideal.span {r}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsTorsionBy.module
-  signature: [h : (Ideal.span {r}).IsTwoSided] (hM : IsTorsionBy R M r)
-  body: IsTorsionBySet.module ?_
-
-中文:
-缩写 IsTorsionBy.module
-  签名: [h : (理想.span {r}).是TwoSided] (hM : IsTorsionBy R M r)
-  定义体: IsTorsionBySet.module ?_
-
-Depends on / 依赖: IsTorsionBySet, IsTorsionBySet.module, module
+--- 原说明 ---
+An `(R ⧸ Ideal.span {r})`-module is an `R`-module for which `IsTorsionBy R M r`.
 -/
 abbrev IsTorsionBy.module [h : (Ideal.span {r}).IsTwoSided] (hM : IsTorsionBy R M r) :
     Module (R ⧸ Ideal.span {r}) M :=
@@ -1912,104 +1724,98 @@ where finally
 /-- Any module is also a module over the quotient of the ring by the annihilator.
 Not an instance because it causes synthesis failures / timeouts. -/
 @[instance_reducible]
-/--
-Definition of `quotientAnnihilator` / `quotientAnnihilator` 的定义
+/-
+**Module.quotientAnnihilator** 是 Mathlib 中的一个定义，位于命名空间 `Module`。
+形式化陈述：quotientAnnihilator : Module (R ⧸ Module.annihilator R M) M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotientAnnihilator
-  signature: : Module (R ⧸ Module.annihilator R M) M
-  body: (isTorsionBySet_annihilator R M).module
-
-中文:
-定义 quotientAnnihilator
-  签名: : 模 (R ⧸ 模.annihilator R M) M
-  定义体: (isTorsionBySet_annihilator R M).module
-
-Depends on / 依赖: isTorsionBySet_annihilator, module
+--- 原说明 ---
+Any module is also a module over the quotient of the ring by the annihilator.
+Not an instance because it causes synthesis failures / timeouts.
 -/
 def quotientAnnihilator : Module (R ⧸ Module.annihilator R M) M :=
   (isTorsionBySet_annihilator R M).module
-
-/--
-theorem `isTorsionBy_quotient_iff` / 定理 `isTorsionBy_quotient_iff`
-
-English:
-theorem isTorsionBy_quotient_iff
-  given: (N : Submodule R M) (r : R)
-  proof: Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
-    Submodule.Quotient.mk_eq_zero N
-
-中文:
-定理 isTorsionBy_quotient_iff
-  条件: (N : 子模 R M) (r : R)
-  证明: Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
-    Submodule.Quotient.mk_eq_zero N
-
-Depends on / 依赖: Iff.trans, N.mkQ_surjective.forall, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, forall_congr, mkQ_surjective, mk_eq_zero
+/-
+**Module.isTorsionBy_quotient_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBy_quotient_iff (N : Submodule R M) (r : R) : IsTorsionBy R (M ⧸ 
+N) r ↔ forall x, r • x in N
+参数：N : Submodule R M；r : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Submodule.mkQ_surjective`：mkQ_surjective : Function.Surjective p.mkQ
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
 -/
 theorem isTorsionBy_quotient_iff (N : Submodule R M) (r : R) :
-    IsTorsionBy R (M ⧸ N) r ↔ forall x, r • x in N :=
-Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
+    IsTorsionBy R (M ⧸ N) r ↔ ∀ x, r • x ∈ N :=
+  Iff.trans N.mkQ_surjective.forall <| forall_congr' fun _ =>
     Submodule.Quotient.mk_eq_zero N
-
-/--
-theorem `IsTorsionBy.quotient` / 定理 `IsTorsionBy.quotient`
-
-English:
-theorem IsTorsionBy.quotient
-  statement: (N : Submodule R M) {r : R}
-  proof: (isTorsionBy_quotient_iff N r).mpr fun x => @h x ▸ N.zero_mem
-
-中文:
-定理 IsTorsionBy.quotient
-  结论: (N : 子模 R M) {r : R}
-  证明: (isTorsionBy_quotient_iff N r).mpr fun x => @h x ▸ N.zero_mem
-
-Depends on / 依赖: N.zero_mem, isTorsionBy_quotient_iff, zero_mem
+/-
+**Module.IsTorsionBy.quotient** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsTorsionBy`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   (N : Submodule R M) {r : R}, Module.IsTorsionBy R
+ M r → Module.IsTorsionBy R (M ⧸ N) r
+参数：N : Submodule R M；M ⧸ N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.isTorsionBy_quotient_iff`：isTorsionBy_quotient_iff (N : Submodule
+ R M) (r : R) : IsTorsionBy R (M ⧸ N) r ↔ forall x, r • x in N
+· 使用定理 `Submodule.zero_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [ins
+t_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M), 0 ∈
+ p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem IsTorsionBy.quotient (N : Submodule R M) {r : R}
     (h : IsTorsionBy R M r) : IsTorsionBy R (M ⧸ N) r :=
   (isTorsionBy_quotient_iff N r).mpr fun x => @h x ▸ N.zero_mem
-
-/--
-theorem `isTorsionBySet_quotient_iff` / 定理 `isTorsionBySet_quotient_iff`
-
-English:
-theorem isTorsionBySet_quotient_iff
-  given: (N : Submodule R M) (s : Set R)
-  proof: Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
-Iff.trans Subtype.forall forall₂_congr fun _ _ =>
-      Submodule.Quotient.mk_eq_zero N
-
-中文:
-定理 isTorsionBySet_quotient_iff
-  条件: (N : 子模 R M) (s : 集合 R)
-  证明: Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
-Iff.trans Subtype.forall forall₂_congr fun _ _ =>
-      Submodule.Quotient.mk_eq_zero N
-
-Depends on / 依赖: Iff.trans, N.mkQ_surjective.forall, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Subtype, Subtype.forall, forall_congr, mkQ_surjective, mk_eq_zero
+/-
+**Module.isTorsionBySet_quotient_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：isTorsionBySet_quotient_iff (N : Submodule R M) (s : Set R) : IsTorsionByS
+et R (M ⧸ N) s ↔ forall x, forall r in s, r • x in N
+参数：N : Submodule R M；s : Set R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Submodule.mkQ_surjective`：mkQ_surjective : Function.Surjective p.mkQ
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Subtype.forall`：∀ {α : Sort u} {p : α → Prop} {q : { a // p a } → Prop},
+ (∀ (x : { a // p a }), q x) ↔ ∀ (a : α) (b : p a), q ⟨a, b⟩
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
 -/
 theorem isTorsionBySet_quotient_iff (N : Submodule R M) (s : Set R) :
-    IsTorsionBySet R (M ⧸ N) s ↔ forall x, forall r in s, r • x in N :=
-Iff.trans N.mkQ_surjective.forall forall_congr' fun _ =>
-Iff.trans Subtype.forall forall₂_congr fun _ _ =>
+    IsTorsionBySet R (M ⧸ N) s ↔ ∀ x, ∀ r ∈ s, r • x ∈ N :=
+  Iff.trans N.mkQ_surjective.forall <| forall_congr' fun _ =>
+    Iff.trans Subtype.forall <| forall₂_congr fun _ _ =>
       Submodule.Quotient.mk_eq_zero N
-
-/--
-theorem `IsTorsionBySet.quotient` / 定理 `IsTorsionBySet.quotient`
-
-English:
-theorem IsTorsionBySet.quotient
-  statement: (N : Submodule R M) {s}
-  proof: (isTorsionBySet_quotient_iff N s).mpr fun x r h' => @h x ⟨r, h'⟩ ▸ N.zero_mem
-
-中文:
-定理 IsTorsionBySet.quotient
-  结论: (N : 子模 R M) {s}
-  证明: (isTorsionBySet_quotient_iff N s).mpr fun x r h' => @h x ⟨r, h'⟩ ▸ N.zero_mem
-
-Depends on / 依赖: N.zero_mem, isTorsionBySet_quotient_iff, zero_mem
+/-
+**Module.IsTorsionBySet.quotient** 是 Mathlib 中的一个定理，位于命名空间 `Module.IsTorsionBySe
+t`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M]   (N : Submodule R M) {s : Set R}, Module.IsTorsion
+BySet R M s → Module.IsTorsionBySet R (M ⧸ N) s
+参数：N : Submodule R M；M ⧸ N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.isTorsionBySet_quotient_iff`：isTorsionBySet_quotient_iff (N : Sub
+module R M) (s : Set R) : IsTorsionBySet R (M ⧸ N) s ↔ forall x, forall r in s, 
+r • x in N
+· 使用定理 `Submodule.zero_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [ins
+t_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M), 0 ∈
+ p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem IsTorsionBySet.quotient (N : Submodule R M) {s}
     (h : IsTorsionBySet R M s) : IsTorsionBySet R (M ⧸ N) s :=
@@ -2019,76 +1825,55 @@ variable (M I) (s : Set R) (r : R)
 
 open scoped Pointwise
 open Submodule
-
-/--
-lemma `isTorsionBySet_quotient_set_smul` / 引理 `isTorsionBySet_quotient_set_smul`
-
-English:
-lemma isTorsionBySet_quotient_set_smul
-  proof: (isTorsionBySet_quotient_iff _ _).mpr fun _ _ h =>
-    mem_set_smul_of_mem_mem h mem_top
-
-中文:
-引理 isTorsionBySet_quotient_set_smul
-  证明: (isTorsionBySet_quotient_iff _ _).mpr fun _ _ h =>
-    mem_set_smul_of_mem_mem h mem_top
-
-Depends on / 依赖: isTorsionBySet_quotient_iff, mem_set_smul_of_mem_mem, mem_top
+/-
+**Module.isTorsionBySet_quotient_set_smul** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：isTorsionBySet_quotient_set_smul : IsTorsionBySet R (M ⧸ s • (⊤ : Submodul
+e R M)) s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.isTorsionBySet_quotient_iff`：isTorsionBySet_quotient_iff (N : Sub
+module R M) (s : Set R) : IsTorsionBySet R (M ⧸ N) s ↔ forall x, forall r in s, 
+r • x in N
+· 使用引理 `Submodule.mem_set_smul_of_mem_mem`：mem_set_smul_of_mem_mem {r : S} {m : 
+M} (mem1 : r in s) (mem2 : m in N) : r • m in s • N
+· 使用定理 `Submodule.mem_top`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [
+inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {x : M},   x ∈ ⊤
 -/
 lemma isTorsionBySet_quotient_set_smul :
     IsTorsionBySet R (M ⧸ s • (⊤ : Submodule R M)) s :=
   (isTorsionBySet_quotient_iff _ _).mpr fun _ _ h =>
     mem_set_smul_of_mem_mem h mem_top
-
-/--
-lemma `isTorsionBySet_quotient_ideal_smul` / 引理 `isTorsionBySet_quotient_ideal_smul`
-
-English:
-lemma isTorsionBySet_quotient_ideal_smul
-  proof: (isTorsionBySet_quotient_iff _ _).mpr fun _ _ h => smul_mem_smul h ⟨⟩
-
-中文:
-引理 isTorsionBySet_quotient_ideal_smul
-  证明: (isTorsionBySet_quotient_iff _ _).mpr fun _ _ h => smul_mem_smul h ⟨⟩
-
-Depends on / 依赖: isTorsionBySet_quotient_iff, smul_mem_smul
+/-
+**Module.isTorsionBySet_quotient_ideal_smul** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：isTorsionBySet_quotient_ideal_smul : IsTorsionBySet R (M ⧸ I • (⊤ : Submod
+ule R M)) I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.isTorsionBySet_quotient_iff`：isTorsionBySet_quotient_iff (N : Sub
+module R M) (s : Set R) : IsTorsionBySet R (M ⧸ N) s ↔ forall x, forall r in s, 
+r • x in N
+· 使用定理 `Submodule.smul_mem_smul`：smul_mem_smul {r} {n} (hr : r in I) (hn : n in 
+N) : r • n in I • N
 -/
 lemma isTorsionBySet_quotient_ideal_smul :
     IsTorsionBySet R (M ⧸ I • (⊤ : Submodule R M)) I :=
   (isTorsionBySet_quotient_iff _ _).mpr fun _ _ h => smul_mem_smul h ⟨⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [I.IsTwoSided]
-  signature: : Module (R ⧸ I) (M ⧸ I • (⊤ : Submodule R M))
-  body: (isTorsionBySet_quotient_ideal_smul M I).module
-
-中文:
-实例 [I.是TwoSided]
-  签名: : 模 (R ⧸ I) (M ⧸ I • (⊤ : 子模 R M))
-  定义体: (isTorsionBySet_quotient_ideal_smul M I).module
-
-Depends on / 依赖: isTorsionBySet_quotient_ideal_smul, module
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [I.IsTwoSided] : Module (R ⧸ I) (M ⧸ I • (⊤ : Submodule R M)) :=
   (isTorsionBySet_quotient_ideal_smul M I).module
-
-/--
-lemma `Quotient.mk_smul_mk` / 引理 `Quotient.mk_smul_mk`
-
-English:
-lemma Quotient.mk_smul_mk
-  given: [I.IsTwoSided] (r : R) (m : M)
-  proof: rfl
-
-中文:
-引理 商.mk_smul_mk
-  条件: [I.是TwoSided] (r : R) (m : M)
-  证明: rfl
-
-Depends on / 依赖: Submodule
+/-
+**Module.Quotient.mk_smul_mk** 是 Mathlib 中的一个定理，位于命名空间 `Module.Quotient`。
+形式化陈述：∀ {R : Type u_1} (M : Type u_2) [inst : Ring R] [inst_1 : AddCommGroup M] 
+[inst_2 : _root_.Module R M] (I : Ideal R)   [inst_3 : I.IsTwoSided] (r : R) (m 
+: M),   (Ideal.Quotient.mk I) r • Submodule.Quotient.mk m = Submodule.Quotient.m
+k (r • m)
+参数：M : Type u_2；I : Ideal R；r : R；m : M；Ideal.Quotient.mk I；r • m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Quotient.mk_smul_mk [I.IsTwoSided] (r : R) (m : M) :
     Ideal.Quotient.mk I r •
@@ -2104,58 +1889,31 @@ variable (M) [CommRing R] [AddCommGroup M] [Module R M] (s : Set R) (r : R)
 
 open scoped Pointwise
 
-/--
-lemma `isTorsionBy_quotient_element_smul` / 引理 `isTorsionBy_quotient_element_smul`
-
-English:
-lemma isTorsionBy_quotient_element_smul
-  proof: (isTorsionBy_quotient_iff _ _).mpr (Submodule.smul_mem_pointwise_smul · r ⊤ ⟨⟩)
-
-中文:
-引理 isTorsionBy_quotient_element_smul
-  证明: (isTorsionBy_quotient_iff _ _).mpr (Submodule.smul_mem_pointwise_smul · r ⊤ ⟨⟩)
-
-Depends on / 依赖: Submodule, Submodule.smul_mem_pointwise_smul, isTorsionBy_quotient_iff, smul_mem_pointwise_smul
+/-
+**Module.isTorsionBy_quotient_element_smul** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：isTorsionBy_quotient_element_smul : IsTorsionBy R (M ⧸ r • (⊤ : Submodule 
+R M)) r
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.isTorsionBy_quotient_iff`：isTorsionBy_quotient_iff (N : Submodule
+ R M) (r : R) : IsTorsionBy R (M ⧸ N) r ↔ forall x, r • x in N
+· 使用定理 `Submodule.smul_mem_pointwise_smul`：smul_mem_pointwise_smul (m : M) (a : 
+α) (S : Submodule R M) : m in S -> a • m in a • S
 -/
 lemma isTorsionBy_quotient_element_smul :
     IsTorsionBy R (M ⧸ r • (⊤ : Submodule R M)) r :=
   (isTorsionBy_quotient_iff _ _).mpr (Submodule.smul_mem_pointwise_smul · r ⊤ ⟨⟩)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module (R ⧸ Ideal.span s) (M ⧸ s • (⊤ : Submodule R M))
-  body: ((isTorsionBySet_iff_is_torsion_by_span s).mp
-    (isTorsionBySet_quotient_set_smul M s)).module
-
-中文:
-实例 :
-  签名: 模 (R ⧸ 理想.span s) (M ⧸ s • (⊤ : 子模 R M))
-  定义体: ((isTorsionBySet_iff_is_torsion_by_span s).mp
-    (isTorsionBySet_quotient_set_smul M s)).module
-
-Depends on / 依赖: isTorsionBySet_iff_is_torsion_by_span, isTorsionBySet_quotient_set_smul, module
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module (R ⧸ Ideal.span s) (M ⧸ s • (⊤ : Submodule R M)) :=
   ((isTorsionBySet_iff_is_torsion_by_span s).mp
     (isTorsionBySet_quotient_set_smul M s)).module
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module (R ⧸ Ideal.span {r}) (M ⧸ r • (⊤ : Submodule R M))
-  body: (isTorsionBy_quotient_element_smul M r).module
-
-中文:
-实例 :
-  签名: 模 (R ⧸ 理想.span {r}) (M ⧸ r • (⊤ : 子模 R M))
-  定义体: (isTorsionBy_quotient_element_smul M r).module
-
-Depends on / 依赖: isTorsionBy_quotient_element_smul, module
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module (R ⧸ Ideal.span {r}) (M ⧸ r • (⊤ : Submodule R M)) :=
   (isTorsionBy_quotient_element_smul M r).module
@@ -2166,135 +1924,123 @@ namespace Submodule
 
 variable [CommRing R] [AddCommGroup M] [Module R M]
 
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (I : Ideal R) : Module (R ⧸ I) (torsionBySet R M I) :=
   -- Porting note: times out without the (R := R)
-Module.IsTorsionBySet.module torsionBySet_isTorsionBySet (R := R) I
+  Module.IsTorsionBySet.module <| torsionBySet_isTorsionBySet (R := R) I
 
 @[simp]
-/--
-theorem `torsionBySet.mk_smul` / 定理 `torsionBySet.mk_smul`
-
-English:
-theorem torsionBySet.mk_smul
-  given: (I : Ideal R) (b : R) (x : torsionBySet R M I)
-  proof: rfl
-
-中文:
-定理 torsionBySet.mk_smul
-  条件: (I : 理想 R) (b : R) (x : torsionBySet R M I)
-  证明: rfl
+/-
+**Submodule.torsionBySet.mk_smul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.torsionByS
+et`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M] (I : Ideal R)   (b : R) (x : ↥(Submodule.torsio
+nBySet R M ↑I)), (Ideal.Quotient.mk I) b • x = b • x
+参数：I : Ideal R；b : R；x : ↥(Submodule.torsionBySet R M ↑I)；Ideal.Quotient.mk I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 -/
 theorem torsionBySet.mk_smul (I : Ideal R) (b : R) (x : torsionBySet R M I) :
     Ideal.Quotient.mk I b • x = b • x :=
   rfl
-
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (I : Ideal R) {S : Type*} [SMul S R] [SMul S M] [IsScalarTower S R M]
     [IsScalarTower S R R] : IsScalarTower S (R ⧸ I) (torsionBySet R M I) :=
   inferInstance
 
-/--
-Instance `instModuleQuotientTorsionBy` / 实例 `instModuleQuotientTorsionBy`
+/-- The `a`-torsion submodule as an `(R ⧸ R ∙ a)`-module. -/
+/-
+**Submodule.instModuleQuotientTorsionBy** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：instModuleQuotientTorsionBy (a : R) : Module (R ⧸ R ∙ a) (torsionBy R M a)
+参数：a : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instModuleQuotientTorsionBy
-  signature: (a : R)
-  body: Module.IsTorsionBySet.module
-(Module.isTorsionBySet_span_singleton_iff a).mpr torsionBy_isTorsionBy a
-
-中文:
-实例 instModuleQuotientTorsionBy
-  签名: (a : R)
-  定义体: Module.IsTorsionBySet.module
-(Module.isTorsionBySet_span_singleton_iff a).mpr torsionBy_isTorsionBy a
-
-Depends on / 依赖: IsTorsionBySet, Module, Module.IsTorsionBySet.module, Module.isTorsionBySet_span_singleton_iff, isTorsionBySet_span_singleton_iff, module, torsionBy_isTorsionBy
+--- 原说明 ---
+The `a`-torsion submodule as an `(R ⧸ R ∙ a)`-module.
 -/
 instance instModuleQuotientTorsionBy (a : R) : Module (R ⧸ R ∙ a) (torsionBy R M a) :=
-Module.IsTorsionBySet.module
-(Module.isTorsionBySet_span_singleton_iff a).mpr torsionBy_isTorsionBy a
-
+  Module.IsTorsionBySet.module <|
+    (Module.isTorsionBySet_span_singleton_iff a).mpr <| torsionBy_isTorsionBy a
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (a : R) : Module (R ⧸ Ideal.span {a}) (torsionBy R M a) :=
-inferInstanceAs Module (R ⧸ R ∙ a) (torsionBy R M a)
+  inferInstanceAs <| Module (R ⧸ R ∙ a) (torsionBy R M a)
 
 @[simp]
-/--
-theorem `torsionBy.mk_ideal_smul` / 定理 `torsionBy.mk_ideal_smul`
-
-English:
-theorem torsionBy.mk_ideal_smul
-  given: (a b : R) (x : torsionBy R M a)
-  proof: rfl
-
-中文:
-定理 torsionBy.mk_ideal_smul
-  条件: (a b : R) (x : torsionBy R M a)
-  证明: rfl
+/-
+**Submodule.torsionBy.mk_ideal_smul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.torsion
+By`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M] (a b : R)   (x : ↥(Submodule.torsionBy R M a)),
+ (Ideal.Quotient.mk (Ideal.span {a})) b • x = b • x
+参数：a b : R；x : ↥(Submodule.torsionBy R M a)；Ideal.Quotient.mk (Ideal.span {a})。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 -/
 theorem torsionBy.mk_ideal_smul (a b : R) (x : torsionBy R M a) :
     (Ideal.Quotient.mk (Ideal.span {a})) b • x = b • x :=
   rfl
-
-/--
-theorem `torsionBy.mk_smul` / 定理 `torsionBy.mk_smul`
-
-English:
-theorem torsionBy.mk_smul
-  given: (a b : R) (x : torsionBy R M a)
-  proof: rfl
-
-中文:
-定理 torsionBy.mk_smul
-  条件: (a b : R) (x : torsionBy R M a)
-  证明: rfl
+/-
+**Submodule.torsionBy.mk_smul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.torsionBy`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M] (a b : R)   (x : ↥(Submodule.torsionBy R M a)),
+ (Ideal.Quotient.mk (R ∙ a)) b • x = b • x
+参数：a b : R；x : ↥(Submodule.torsionBy R M a)；Ideal.Quotient.mk (R ∙ a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 -/
 theorem torsionBy.mk_smul (a b : R) (x : torsionBy R M a) :
     Ideal.Quotient.mk (R ∙ a) b • x = b • x :=
   rfl
-
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (a : R) {S : Type*} [SMul S R] [SMul S M] [IsScalarTower S R M] [IsScalarTower S R R] :
     IsScalarTower S (R ⧸ R ∙ a) (torsionBy R M a) :=
   inferInstance
 
-/--
-Definition of `submodule_torsionBy_orderIso` / `submodule_torsionBy_orderIso` 的定义
+/-- Given an `R`-module `M` and an element `a` in `R`, submodules of the `a`-torsion submodule of
+`M` do not depend on whether we take scalars to be `R` or `R ⧸ R ∙ a`. -/
+/-
+**Submodule.submodule_torsionBy_orderIso** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：submodule_torsionBy_orderIso (a : R) : Submodule (R ⧸ R ∙ a) (torsionBy R 
+M a) ≃o Submodule R (torsionBy R M a)
+参数：a : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition submodule_torsionBy_orderIso
-  signature: (a : R)
-  body: { restrictScalarsEmbedding R (R ⧸ R ∙ a) (torsionBy R M a) with
-    invFun := fun p =>
-      { carrier := p
-        add_mem' := add_mem
-        zero_mem' := p.zero_mem
-        smul_mem' := by rintro ⟨b⟩; exact p.smul_mem b }
-    left_inv := by intro; ext; simp [restrictScalarsEmbedding]
-    right_inv := by intro; ext; simp [restrictScalarsEmbedding] }
-
-中文:
-定义 submodule_torsionBy_orderIso
-  签名: (a : R)
-  定义体: { restrictScalarsEmbedding R (R ⧸ R ∙ a) (torsionBy R M a) with
-    invFun := fun p =>
-      { carrier := p
-        add_mem' := add_mem
-        zero_mem' := p.zero_mem
-        smul_mem' := by rintro ⟨b⟩; exact p.smul_mem b }
-    left_inv := by intro; ext; simp [restrictScalarsEmbedding]
-    right_inv := by intro; ext; simp [restrictScalarsEmbedding] }
-
-Depends on / 依赖: add_mem, carrier, invFun, left_inv, p.smul_mem, p.zero_mem, restrictScalarsEmbedding, right_inv, smul_mem, torsionBy, zero_mem
+--- 原说明 ---
+Given an `R`-module `M` and an element `a` in `R`, submodules of the `a`-torsion
+ submodule of
+`M` do not depend on whether we take scalars to be `R` or `R ⧸ R ∙ a`.
 -/
 def submodule_torsionBy_orderIso (a : R) :
     Submodule (R ⧸ R ∙ a) (torsionBy R M a) ≃o Submodule R (torsionBy R M a) :=
   { restrictScalarsEmbedding R (R ⧸ R ∙ a) (torsionBy R M a) with
-    invFun := fun p =>
+    invFun := fun p ↦
       { carrier := p
         add_mem' := add_mem
         zero_mem' := p.zero_mem
         smul_mem' := by rintro ⟨b⟩; exact p.smul_mem b }
     left_inv := by intro; ext; simp [restrictScalarsEmbedding]
     right_inv := by intro; ext; simp [restrictScalarsEmbedding] }
-
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Type*) [AddCommGroup M] [Module R M] [Module.Finite R M] (I : Ideal R) :
     Module.Finite (R ⧸ I) (M ⧸ I • (⊤ : Submodule R M)) :=
   Module.Finite.of_restrictScalars_finite R _ _
@@ -2313,75 +2059,33 @@ variable [CommSemiring R] [AddCommMonoid M] [Module R M]
 variable (S : Type*) [CommMonoid S] [DistribMulAction S M] [SMulCommClass S R M]
 
 @[simp]
-/--
-theorem `mem_torsion'_iff` / 定理 `mem_torsion'_iff`
-
-English:
-theorem mem_torsion'_iff
-  given: (x : M)
-  statement: x in torsion' R M S ↔ exists a : S, a • x = 0
-  proof: Iff.rfl
-
-中文:
-定理 mem_torsion'_iff
-  条件: (x : M)
-  结论: x in torsion' R M S ↔ 存在 a : S, a • x = 0
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submodule.mem_torsion'_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid M] [inst_2 : _root_.Module R M]   (S : Type u_3) [inst_3 : CommMonoid S] [
+inst_4 : DistribMulAction S M] [inst_5 : SMulCommClass S R M] (x : M),   x ∈ Sub
+module.torsion' R M S ↔ ∃ a, a • x = 0
+参数：S : Type u_3；x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_torsion'_iff (x : M) : x in torsion' R M S ↔ exists a : S, a • x = 0 :=
+theorem mem_torsion'_iff (x : M) : x ∈ torsion' R M S ↔ ∃ a : S, a • x = 0 :=
   Iff.rfl
-
-/--
-theorem `mem_torsion_iff` / 定理 `mem_torsion_iff`
-
-English:
-theorem mem_torsion_iff
-  given: (x : M)
-  statement: x in torsion R M ↔ exists a : R⁰, a • x = 0
-  proof: Iff.rfl
-
-@[simps]
-
-中文:
-定理 mem_torsion_iff
-  条件: (x : M)
-  结论: x in torsion R M ↔ 存在 a : R⁰, a • x = 0
-  证明: Iff.rfl
-
-@[simps]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Submodule.mem_torsion_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mem_torsion_iff (x : M) : x in torsion R M ↔ exists a : R⁰, a • x = 0
+参数：x : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_torsion_iff (x : M) : x in torsion R M ↔ exists a : R⁰, a • x = 0 :=
+theorem mem_torsion_iff (x : M) : x ∈ torsion R M ↔ ∃ a : R⁰, a • x = 0 :=
   Iff.rfl
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul S (torsion' R M S)
-  body: ⟨fun s x =>
-    ⟨s • (x : M), by
-      obtain ⟨x, a, h⟩ := x
-      use a
-      dsimp
-      rw [smul_comm]; rw [h]; rw [smul_zero]⟩⟩
-
-中文:
-实例 :
-  签名: 标量乘法 S (torsion' R M S)
-  定义体: ⟨fun s x =>
-    ⟨s • (x : M), by
-      obtain ⟨x, a, h⟩ := x
-      use a
-      dsimp
-      rw [smul_comm]; rw [h]; rw [smul_zero]⟩⟩
-
-Depends on / 依赖: smul_comm, smul_zero
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul S (torsion' R M S) :=
   ⟨fun s x =>
@@ -2389,139 +2093,118 @@ instance : SMul S (torsion' R M S) :=
       obtain ⟨x, a, h⟩ := x
       use a
       dsimp
-      rw [smul_comm]; rw [h]; rw [smul_zero]⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DistribMulAction S (torsion' R M S)
-  body: Subtype.coe_injective.distribMulAction (torsion' R M S).subtype.toAddMonoidHom fun (_ : S) _ =>
-    rfl
-
-中文:
-实例 :
-  签名: 分配乘法作用 S (torsion' R M S)
-  定义体: Subtype.coe_injective.distribMulAction (torsion' R M S).subtype.toAddMonoidHom fun (_ : S) _ =>
-    rfl
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.distribMulAction, coe_injective, distribMulAction, subtype, subtype.toAddMonoidHom, toAddMonoidHom, torsion
+      rw [smul_comm, h, smul_zero]⟩⟩
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DistribMulAction S (torsion' R M S) :=
   Subtype.coe_injective.distribMulAction (torsion' R M S).subtype.toAddMonoidHom fun (_ : S) _ =>
     rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulCommClass S R (torsion' R M S)
-  body: ⟨fun _ _ _ => Subtype.ext smul_comm _ _ _⟩
-
-中文:
-实例 :
-  签名: 标量交换类 S R (torsion' R M S)
-  定义体: ⟨fun _ _ _ => Subtype.ext smul_comm _ _ _⟩
-
-Depends on / 依赖: Subtype, Subtype.ext, smul_comm
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulCommClass S R (torsion' R M S) :=
-⟨fun _ _ _ => Subtype.ext smul_comm _ _ _⟩
+  ⟨fun _ _ _ => Subtype.ext <| smul_comm _ _ _⟩
 
-/--
-theorem `isTorsion'_iff_torsion'_eq_top` / 定理 `isTorsion'_iff_torsion'_eq_top`
+/-- An `S`-torsion module is a module whose `S`-torsion submodule is the full space. -/
+/-
+**Submodule.isTorsion'_iff_torsion'_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`
+。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid M] [inst_2 : _root_.Module R M]   (S : Type u_3) [inst_3 : CommMonoid S] [
+inst_4 : DistribMulAction S M] [inst_5 : SMulCommClass S R M],   Module.IsTorsio
+n' M S ↔ Submodule.torsion' R M S = ⊤
+参数：S : Type u_3。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mem_torsion'_iff`：∀ {R : Type u_1} {M : Type u_2} [inst : Comm
+Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (S : Type 
+u_3) [inst_3 : C…
 
-English:
-theorem isTorsion'_iff_torsion'_eq_top
-  statement: IsTorsion' M S ↔ torsion' R M S = ⊤
-  proof: ⟨fun h => eq_top_iff.mpr fun _ _ => @h _, fun h x => by
-    rw [← @mem_torsion'_iff R]; rw [h]
-    trivial⟩
-
-中文:
-定理 isTorsion'_iff_torsion'_eq_top
-  结论: 是挠' M S ↔ torsion' R M S = ⊤
-  证明: ⟨fun h => eq_top_iff.mpr fun _ _ => @h _, fun h x => by
-    rw [← @mem_torsion'_iff R]; rw [h]
-    trivial⟩
-
-Depends on / 依赖: _iff, eq_top_iff, eq_top_iff.mpr, mem_torsion
+--- 原说明 ---
+An `S`-torsion module is a module whose `S`-torsion submodule is the full space.
 -/
 theorem isTorsion'_iff_torsion'_eq_top : IsTorsion' M S ↔ torsion' R M S = ⊤ :=
   ⟨fun h => eq_top_iff.mpr fun _ _ => @h _, fun h x => by
-    rw [← @mem_torsion'_iff R]; rw [h]
+    rw [← @mem_torsion'_iff R, h]
     trivial⟩
 
-/--
-theorem `torsion'_isTorsion'` / 定理 `torsion'_isTorsion'`
+/-- The `S`-torsion submodule is an `S`-torsion module. -/
+/-
+**Submodule.torsion'_isTorsion'** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid M] [inst_2 : _root_.Module R M]   (S : Type u_3) [inst_3 : CommMonoid S] [
+inst_4 : DistribMulAction S M] [inst_5 : SMulCommClass S R M],   Module.IsTorsio
+n' (↥(Submodule.torsion' R M S)) S
+参数：S : Type u_3；↥(Submodule.torsion' R M S)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 
-English:
-theorem torsion'_isTorsion'
-  statement: IsTorsion' (torsion' R M S) S
-  proof: fun ⟨_, ⟨a, h⟩⟩ => ⟨a, Subtype.ext h⟩
-
-@[simp]
-
-中文:
-定理 torsion'_isTorsion'
-  结论: 是挠' (torsion' R M S) S
-  证明: fun ⟨_, ⟨a, h⟩⟩ => ⟨a, Subtype.ext h⟩
-
-@[simp]
+--- 原说明 ---
+The `S`-torsion submodule is an `S`-torsion module.
 -/
 theorem torsion'_isTorsion' : IsTorsion' (torsion' R M S) S := fun ⟨_, ⟨a, h⟩⟩ => ⟨a, Subtype.ext h⟩
 
 @[simp]
-/--
-theorem `torsion'_torsion'_eq_top` / 定理 `torsion'_torsion'_eq_top`
-
-English:
-theorem torsion'_torsion'_eq_top
-  statement: torsion' R (torsion' R M S) S = ⊤
-  proof: (isTorsion'_iff_torsion'_eq_top S).mp torsion'_isTorsion' S
-
-中文:
-定理 torsion'_torsion'_eq_top
-  结论: torsion' R (torsion' R M S) S = ⊤
-  证明: (isTorsion'_iff_torsion'_eq_top S).mp torsion'_isTorsion' S
+/-
+**Submodule.torsion'_torsion'_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid M] [inst_2 : _root_.Module R M]   (S : Type u_3) [inst_3 : CommMonoid S] [
+inst_4 : DistribMulAction S M] [inst_5 : SMulCommClass S R M],   Submodule.torsi
+on' R (↥(Submodule.torsion' R M S)) S = ⊤
+参数：S : Type u_3；↥(Submodule.torsion' R M S)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.instSMulCommClassSubtypeMemTorsion'`：∀ {R : Type u_1} {M : Typ
+e u_2} [inst : CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Modul
+e R M]   (S : Type u_3) [inst_3 : C…
+· 使用定理 `Submodule.isTorsion'_iff_torsion'_eq_top`：∀ {R : Type u_1} {M : Type u_2
+} [inst : CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M
+]   (S : Type u_3) [inst_3 : C…
+· 使用定理 `Submodule.torsion'_isTorsion'`：∀ {R : Type u_1} {M : Type u_2} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (S : Ty
+pe u_3) [inst_3 : C…
 -/
 theorem torsion'_torsion'_eq_top : torsion' R (torsion' R M S) S = ⊤ :=
-(isTorsion'_iff_torsion'_eq_top S).mp torsion'_isTorsion' S
+  (isTorsion'_iff_torsion'_eq_top S).mp <| torsion'_isTorsion' S
 
-/--
-theorem `torsion_torsion_eq_top` / 定理 `torsion_torsion_eq_top`
+/-- The torsion submodule of the torsion submodule (viewed as a module) is the full
+torsion module. -/
+/-
+**Submodule.torsion_torsion_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsion_torsion_eq_top : torsion R (torsion R M) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.torsion'_torsion'_eq_top`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (S
+ : Type u_3) [inst_3 : C…
 
-English:
-theorem torsion_torsion_eq_top
-  statement: torsion R (torsion R M) = ⊤
-  proof: torsion'_torsion'_eq_top R⁰
-
-中文:
-定理 torsion_torsion_eq_top
-  结论: torsion R (torsion R M) = ⊤
-  证明: torsion'_torsion'_eq_top R⁰
-
-Depends on / 依赖: _eq_top, _torsion, torsion
+--- 原说明 ---
+The torsion submodule of the torsion submodule (viewed as a module) is the full
+torsion module.
 -/
 theorem torsion_torsion_eq_top : torsion R (torsion R M) = ⊤ :=
   torsion'_torsion'_eq_top R⁰
 
-/--
-theorem `torsion_isTorsion` / 定理 `torsion_isTorsion`
+/-- The torsion submodule is always a torsion module. -/
+/-
+**Submodule.torsion_isTorsion** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：torsion_isTorsion : Module.IsTorsion R (torsion R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.torsion'_isTorsion'`：∀ {R : Type u_1} {M : Type u_2} [inst : C
+ommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (S : Ty
+pe u_3) [inst_3 : C…
 
-English:
-theorem torsion_isTorsion
-  statement: Module.IsTorsion R (torsion R M)
-  proof: torsion'_isTorsion' R⁰
-
-中文:
-定理 torsion_isTorsion
-  结论: 模.是挠 R (torsion R M)
-  证明: torsion'_isTorsion' R⁰
-
-Depends on / 依赖: _isTorsion, torsion
+--- 原说明 ---
+The torsion submodule is always a torsion module.
 -/
 theorem torsion_isTorsion : Module.IsTorsion R (torsion R M) :=
   torsion'_isTorsion' R⁰
@@ -2534,120 +2217,104 @@ variable [CommSemiring R] [AddCommMonoid M] [Module R M]
 
 variable (R M)
 
-/--
-theorem `_root_.Module.isTorsionBySet_annihilator_top` / 定理 `_root_.Module.isTorsionBySet_annihilator_top`
-
-English:
-theorem _root_.Module.isTorsionBySet_annihilator_top
-  proof: fun x ha =>
-  mem_annihilator.mp ha.prop x mem_top
-
-中文:
-定理 _root_.模.isTorsionBySet_annihilator_top
-  证明: fun x ha =>
-  mem_annihilator.mp ha.prop x mem_top
+/-
+**Submodule._root_.Module.isTorsionBySet_annihilator_top** 是 Mathlib 中的一个定理，位于命名
+空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Module.isTorsionBySet_annihilator_top :
     Module.IsTorsionBySet R M (⊤ : Submodule R M).annihilator := fun x ha =>
   mem_annihilator.mp ha.prop x mem_top
 
 variable {R M}
-
-/--
-theorem `_root_.Submodule.annihilator_top_inter_nonZeroDivisors` / 定理 `_root_.Submodule.annihilator_top_inter_nonZeroDivisors`
-
-English:
-theorem _root_.Submodule.annihilator_top_inter_nonZeroDivisors
-  statement: [Module.Finite R M]
-  proof: by
-  obtain ⟨S, hS⟩ := ‹Module.Finite R M›.fg_top
-  refine ⟨_, ?_, (∏ x in S, (@hM x).choose : R⁰).prop⟩
-  rw [Submonoid.coe_finsetProd]; rw [SetLike.mem_coe]; rw [← hS]; rw [mem_annihilator_span]
-  intro n
-  let := Classical.decEq M
-  rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Submonoid.smul_def]; rw [(@hM n).choose_spec]; rw [smul_zero]
-
-中文:
-定理 _root_.子模.annihilator_top_inter_nonZeroDivisors
-  结论: [模.有限 R M]
-  证明: by
-  obtain ⟨S, hS⟩ := ‹Module.Finite R M›.fg_top
-  refine ⟨_, ?_, (∏ x in S, (@hM x).choose : R⁰).prop⟩
-  rw [Submonoid.coe_finsetProd]; rw [SetLike.mem_coe]; rw [← hS]; rw [mem_annihilator_span]
-  intro n
-  let := Classical.decEq M
-  rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Submonoid.smul_def]; rw [(@hM n).choose_spec]; rw [smul_zero]
-
-Depends on / 依赖: Classical, Classical.decEq, Finite, Finset, Finset.prod_erase_mul, Module, Module.Finite, SetLike, SetLike.mem_coe, Submonoid, Submonoid.coe_finsetProd, Submonoid.smul_def, choose_spec, coe_finsetProd, fg_top, mem_annihilator_span, mem_coe, mul_smul, n.prop, prod_erase_mul
+/-
+**Submodule._root_.Submodule.annihilator_top_inter_nonZeroDivisors** 是 Mathlib 中
+的一个定理，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Submodule.annihilator_top_inter_nonZeroDivisors [Module.Finite R M]
-    (hM : Module.IsTorsion R M) : ((⊤ : Submodule R M).annihilator inter R⁰ : Set R).Nonempty := by
+    (hM : Module.IsTorsion R M) : ((⊤ : Submodule R M).annihilator ∩ R⁰ : Set R).Nonempty := by
   obtain ⟨S, hS⟩ := ‹Module.Finite R M›.fg_top
-  refine ⟨_, ?_, (∏ x in S, (@hM x).choose : R⁰).prop⟩
-  rw [Submonoid.coe_finsetProd]; rw [SetLike.mem_coe]; rw [← hS]; rw [mem_annihilator_span]
+  refine ⟨_, ?_, (∏ x ∈ S, (@hM x).choose : R⁰).prop⟩
+  rw [Submonoid.coe_finsetProd, SetLike.mem_coe, ← hS, mem_annihilator_span]
   intro n
   let := Classical.decEq M
-  rw [← Finset.prod_erase_mul _ _ n.prop]; rw [mul_smul]; rw [← Submonoid.smul_def]; rw [(@hM n).choose_spec]; rw [smul_zero]
+  rw [← Finset.prod_erase_mul _ _ n.prop, mul_smul, ← Submonoid.smul_def, (@hM n).choose_spec,
+    smul_zero]
 
 variable [NoZeroDivisors R] [Nontrivial R]
-
-/--
-theorem `coe_torsion_eq_annihilator_ne_bot` / 定理 `coe_torsion_eq_annihilator_ne_bot`
-
-English:
-theorem coe_torsion_eq_annihilator_ne_bot
-  proof: by
-  ext x; simp_rw [Submodule.ne_bot_iff, mem_annihilator, mem_span_singleton]
-  exact
-    ⟨fun ⟨a, hax⟩ =>
-      ⟨a, fun _ ⟨b, hb⟩ => by rw [← hb, smul_comm, ← Submonoid.smul_def, hax, smul_zero],
-        nonZeroDivisors.coe_ne_zero _⟩,
-      fun ⟨a, hax, ha⟩ => ⟨⟨_, mem_nonZeroDivisors_of_ne_zero ha⟩, hax x ⟨1, one_smul _ _⟩⟩⟩
-
-中文:
-定理 coe_torsion_eq_annihilator_ne_bot
-  证明: by
-  ext x; simp_rw [Submodule.ne_bot_iff, mem_annihilator, mem_span_singleton]
-  exact
-    ⟨fun ⟨a, hax⟩ =>
-      ⟨a, fun _ ⟨b, hb⟩ => by rw [← hb, smul_comm, ← Submonoid.smul_def, hax, smul_zero],
-        nonZeroDivisors.coe_ne_zero _⟩,
-      fun ⟨a, hax, ha⟩ => ⟨⟨_, mem_nonZeroDivisors_of_ne_zero ha⟩, hax x ⟨1, one_smul _ _⟩⟩⟩
-
-Depends on / 依赖: Submodule, Submodule.ne_bot_iff, Submonoid, Submonoid.smul_def, coe_ne_zero, mem_annihilator, mem_nonZeroDivisors_of_ne_zero, mem_span_singleton, ne_bot_iff, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, one_smul, simp_rw, smul_comm, smul_def, smul_zero
+/-
+**Submodule.coe_torsion_eq_annihilator_ne_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：coe_torsion_eq_annihilator_ne_bot : (torsion R M : Set M) = { x : M | (R ∙
+ x).annihilator != ⊥ }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `Submonoid.smul_def`：∀ {M' : Type u_1} {α : Type u_2} [inst : MulOneClass
+ M'] [inst_1 : SMul M' α] {S : Submonoid M'} (g : ↥S) (a : α),   g • a = ↑g • a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `nonZeroDivisors.coe_ne_zero`：nonZeroDivisors.coe_ne_zero (x : M₀⁰) : (x 
+: M₀) != 0
+· 使用定理 `mem_nonZeroDivisors_of_ne_zero`：mem_nonZeroDivisors_of_ne_zero (hx : x !
+= 0) : x in M₀⁰
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 theorem coe_torsion_eq_annihilator_ne_bot :
-    (torsion R M : Set M) = { x : M | (R ∙ x).annihilator != ⊥ } := by
+    (torsion R M : Set M) = { x : M | (R ∙ x).annihilator ≠ ⊥ } := by
   ext x; simp_rw [Submodule.ne_bot_iff, mem_annihilator, mem_span_singleton]
   exact
     ⟨fun ⟨a, hax⟩ =>
       ⟨a, fun _ ⟨b, hb⟩ => by rw [← hb, smul_comm, ← Submonoid.smul_def, hax, smul_zero],
         nonZeroDivisors.coe_ne_zero _⟩,
       fun ⟨a, hax, ha⟩ => ⟨⟨_, mem_nonZeroDivisors_of_ne_zero ha⟩, hax x ⟨1, one_smul _ _⟩⟩⟩
-
-/--
-lemma `torsion_int` / 引理 `torsion_int`
-
-English:
-lemma torsion_int
-  given: {G} [AddCommGroup G]
-  proof: by
-  ext x
-  refine ((isOfFinAddOrder_iff_zsmul_eq_zero (x := x)).trans ?_).symm
-  simp [mem_nonZeroDivisors_iff_ne_zero]
-
-中文:
-引理 torsion_int
-  条件: {G} [加法交换群 G]
-  证明: by
-  ext x
-  refine ((isOfFinAddOrder_iff_zsmul_eq_zero (x := x)).trans ?_).symm
-  simp [mem_nonZeroDivisors_iff_ne_zero]
-
-Depends on / 依赖: isOfFinAddOrder_iff_zsmul_eq_zero, mem_nonZeroDivisors_iff_ne_zero
+/-
+**Submodule.torsion_int** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：torsion_int {G} [AddCommGroup G] : (torsion Int G).toAddSubgroup = AddComm
+Group.torsion G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.ext`：∀ {G : Type u_1} [inst : AddGroup G] {H K : AddSubgroup
+ G}, (∀ (x : G), x ∈ H ↔ x ∈ K) → H = K
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `isOfFinAddOrder_iff_zsmul_eq_zero`：∀ {G : Type u_6} [inst : SubtractionM
+onoid G] {x : G}, IsOfFinAddOrder x ↔ ∃ n, n ≠ 0 ∧ n • x = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.neg_mem`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst_1 :
+ AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x : M}, x
+ ∈ p → …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma torsion_int {G} [AddCommGroup G] :
-    (torsion Int G).toAddSubgroup = AddCommGroup.torsion G := by
+    (torsion ℤ G).toAddSubgroup = AddCommGroup.torsion G := by
   ext x
   refine ((isOfFinAddOrder_iff_zsmul_eq_zero (x := x)).trans ?_).symm
   simp [mem_nonZeroDivisors_iff_ne_zero]
@@ -2657,24 +2324,46 @@ end CommSemiring
 section CommRing
 variable [CommRing R] [IsDomain R] [AddCommGroup M] [Module R M]
 
-/--
-lemma `isTorsionFree_iff_torsion_eq_bot` / 引理 `isTorsionFree_iff_torsion_eq_bot`
+/-- A module over a domain is torsion-free iff its torsion submodule is trivial. -/
+/-
+**Submodule.isTorsionFree_iff_torsion_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 `Submodul
+e`。
+形式化陈述：isTorsionFree_iff_torsion_eq_bot : IsTorsionFree R M ↔ torsion R M = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `AddSubsemigroup.mk.congr_simp`：∀ {M : Type u_3} [inst : Add M] (carrier 
+carrier_1 : Set M) (e_carrier : carrier = carrier_1)   (add_mem' : ∀ {a b : M}, 
+a ∈ carrier → b ∈ c…
+· 使用定理 `AddSubmonoid.mk.congr_simp`：∀ {M : Type u_3} [inst : AddZeroClass M] (to
+AddSubsemigroup toAddSubsemigroup_1 : AddSubsemigroup M)   (e_toAddSubsemigroup 
+: toAddSubsemigr…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.mk.congr_simp`：∀ {R : Type u} {M : Type v} [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (toAddSubmonoid toAdd
+Submonoid_1 :…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 
-English:
-lemma isTorsionFree_iff_torsion_eq_bot
-  statement: IsTorsionFree R M ↔ torsion R M = ⊥
-  proof: by
-  simp [torsion, torsion', subset_antisymm_iff, exists_ne, isTorsionFree_iff_smul_eq_zero]
-  grind
-
-中文:
-引理 isTorsionFree_iff_torsion_eq_bot
-  结论: 是无挠 R M ↔ torsion R M = ⊥
-  证明: by
-  simp [torsion, torsion', subset_antisymm_iff, exists_ne, isTorsionFree_iff_smul_eq_zero]
-  grind
-
-Depends on / 依赖: exists_ne, isTorsionFree_iff_smul_eq_zero, subset_antisymm_iff, torsion
+--- 原说明 ---
+A module over a domain is torsion-free iff its torsion submodule is trivial.
 -/
 lemma isTorsionFree_iff_torsion_eq_bot : IsTorsionFree R M ↔ torsion R M = ⊥ := by
   simp [torsion, torsion', subset_antisymm_iff, exists_ne, isTorsionFree_iff_smul_eq_zero]
@@ -2689,53 +2378,60 @@ variable [CommRing R] [AddCommGroup M] [Module R M]
 
 /-- Quotienting by the torsion submodule gives a torsion-free module. -/
 @[simp]
-/--
-theorem `torsion_eq_bot` / 定理 `torsion_eq_bot`
+/-
+**Submodule.QuotientTorsion.torsion_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.
+QuotientTorsion`。
+形式化陈述：torsion_eq_bot : torsion R (M ⧸ torsion R M) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_bot`：mem_bot {x : M} : x in (⊥ : Submodule R M) ↔ x = 0
+· 使用定理 `Submodule.Quotient.mk''_eq_mk`：∀ {R : Type u_1} {M : Type u_2} [inst : R
+ing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {p : Submodule R
+ M} (x : M), Quotie…
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.Quotient.mk_smul`：mk_smul (r : S) (x : M) : (mk (r • x) : M ⧸ 
+p) = r • mk x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
 
-English:
-theorem torsion_eq_bot
-  statement: torsion R (M ⧸ torsion R M) = ⊥
-  proof: eq_bot_iff.mpr fun z =>
-    Quotient.inductionOn' z fun x ⟨a, hax⟩ => by
-      rw [Quotient.mk''_eq_mk]; rw [← Quotient.mk_smul]; rw [Quotient.mk_eq_zero] at hax
-      rw [mem_bot]; rw [Quotient.mk''_eq_mk]; rw [Quotient.mk_eq_zero]
-      obtain ⟨b, h⟩ := hax
-      exact ⟨b * a, (mul_smul _ _ _).trans h⟩
-
-中文:
-定理 torsion_eq_bot
-  结论: torsion R (M ⧸ torsion R M) = ⊥
-  证明: eq_bot_iff.mpr fun z =>
-    Quotient.inductionOn' z fun x ⟨a, hax⟩ => by
-      rw [Quotient.mk''_eq_mk]; rw [← Quotient.mk_smul]; rw [Quotient.mk_eq_zero] at hax
-      rw [mem_bot]; rw [Quotient.mk''_eq_mk]; rw [Quotient.mk_eq_zero]
-      obtain ⟨b, h⟩ := hax
-      exact ⟨b * a, (mul_smul _ _ _).trans h⟩
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.mk, Quotient.mk_eq_zero, Quotient.mk_smul, _eq_mk, eq_bot_iff, eq_bot_iff.mpr, inductionOn, mem_bot, mk_eq_zero, mk_smul, mul_smul
+--- 原说明 ---
+Quotienting by the torsion submodule gives a torsion-free module.
 -/
 theorem torsion_eq_bot : torsion R (M ⧸ torsion R M) = ⊥ :=
   eq_bot_iff.mpr fun z =>
     Quotient.inductionOn' z fun x ⟨a, hax⟩ => by
-      rw [Quotient.mk''_eq_mk]; rw [← Quotient.mk_smul]; rw [Quotient.mk_eq_zero] at hax
-      rw [mem_bot]; rw [Quotient.mk''_eq_mk]; rw [Quotient.mk_eq_zero]
+      rw [Quotient.mk''_eq_mk, ← Quotient.mk_smul, Quotient.mk_eq_zero] at hax
+      rw [mem_bot, Quotient.mk''_eq_mk, Quotient.mk_eq_zero]
       obtain ⟨b, h⟩ := hax
       exact ⟨b * a, (mul_smul _ _ _).trans h⟩
-
-/--
-Instance `instIsTorsionFree` / 实例 `instIsTorsionFree`
-
-English:
-instance instIsTorsionFree
-  signature: [IsDomain R]
-  body: isTorsionFree_iff_torsion_eq_bot.mpr torsion_eq_bot
-
-中文:
-实例 instIsTorsionFree
-  签名: [是整环 R]
-  定义体: isTorsionFree_iff_torsion_eq_bot.mpr torsion_eq_bot
-
-Depends on / 依赖: isTorsionFree_iff_torsion_eq_bot, isTorsionFree_iff_torsion_eq_bot.mpr, torsion_eq_bot
+/-
+**Submodule.QuotientTorsion.instIsTorsionFree** 是 Mathlib 中的一个实例，位于命名空间 `Submodu
+le.QuotientTorsion`。
+形式化陈述：instIsTorsionFree [IsDomain R] : Module.IsTorsionFree R (M ⧸ torsion R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Submodule.isTorsionFree_iff_torsion_eq_bot`：isTorsionFree_iff_torsion_eq
+_bot : IsTorsionFree R M ↔ torsion R M = ⊥
+· 使用定理 `Submodule.QuotientTorsion.torsion_eq_bot`：torsion_eq_bot : torsion R (M 
+⧸ torsion R M) = ⊥
 -/
 instance instIsTorsionFree [IsDomain R] : Module.IsTorsionFree R (M ⧸ torsion R M) :=
   isTorsionFree_iff_torsion_eq_bot.mpr torsion_eq_bot
@@ -2750,41 +2446,18 @@ section
 
 variable [Monoid R] [AddCommMonoid M] [DistribMulAction R M]
 
-/--
-theorem `isTorsion'_powers_iff` / 定理 `isTorsion'_powers_iff`
-
-English:
-theorem isTorsion'_powers_iff
-  given: (p : R)
-  proof: by
-  constructor
-  · intro h x
-    let ⟨⟨a, ⟨n, hn⟩⟩, hx⟩ := @h x
-    dsimp at hn
-    use n
-    rw [hn]
-    apply hx
-  · intro h x
-    let ⟨n, hn⟩ := h x
-    exact ⟨⟨_, ⟨n, rfl⟩⟩, hn⟩
-
-中文:
-定理 isTorsion'_powers_iff
-  条件: (p : R)
-  证明: by
-  constructor
-  · intro h x
-    let ⟨⟨a, ⟨n, hn⟩⟩, hx⟩ := @h x
-    dsimp at hn
-    use n
-    rw [hn]
-    apply hx
-  · intro h x
-    let ⟨n, hn⟩ := h x
-    exact ⟨⟨_, ⟨n, rfl⟩⟩, hn⟩
+/-
+**Submodule.isTorsion'_powers_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Monoid R] [inst_1 : AddCommMonoid 
+M] [inst_2 : DistribMulAction R M] (p : R),   Module.IsTorsion' M ↥(Submonoid.po
+wers p) ↔ ∀ (x : M), ∃ n, p ^ n • x = 0
+参数：p : R；Submonoid.powers p；x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem isTorsion'_powers_iff (p : R) :
-    IsTorsion' M (Submonoid.powers p) ↔ forall x : M, exists n : Nat, p ^ n • x = 0 := by
+    IsTorsion' M (Submonoid.powers p) ↔ ∀ x : M, ∃ n : ℕ, p ^ n • x = 0 := by
   constructor
   · intro h x
     let ⟨⟨a, ⟨n, hn⟩⟩, hx⟩ := @h x
@@ -2796,101 +2469,101 @@ theorem isTorsion'_powers_iff (p : R) :
     let ⟨n, hn⟩ := h x
     exact ⟨⟨_, ⟨n, rfl⟩⟩, hn⟩
 
-/--
-Definition of `pOrder` / `pOrder` 的定义
+/-- In a `p ^ ∞`-torsion module (that is, a module where all elements are cancelled by scalar
+multiplication by some power of `p`), the smallest `n` such that `p ^ n • x = 0`. -/
+/-
+**Submodule.pOrder** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：pOrder {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M) [forall n
+ : Nat, Decidable (p ^ n • x = 0)]
+参数：hM : IsTorsion' M <| Submonoid.powers p；x : M；p ^ n • x = 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pOrder
-  signature: {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M)
-  body: Nat.find (isTorsion'_powers_iff p).mp hM x
-
-@[simp]
-
-中文:
-定义 pOrder
-  签名: {p : R} (hM : 是挠' M <| 子幺半群.powers p) (x : M)
-  定义体: Nat.find (isTorsion'_powers_iff p).mp hM x
-
-@[simp]
-
-Depends on / 依赖: Nat.find, _powers_iff, isTorsion
+--- 原说明 ---
+In a `p ^ ∞`-torsion module (that is, a module where all elements are cancelled 
+by scalar
+multiplication by some power of `p`), the smallest `n` such that `p ^ n • x = 0`
+.
 -/
 def pOrder {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M)
-    [forall n : Nat, Decidable (p ^ n • x = 0)] :=
-Nat.find (isTorsion'_powers_iff p).mp hM x
+    [∀ n : ℕ, Decidable (p ^ n • x = 0)] :=
+  Nat.find <| (isTorsion'_powers_iff p).mp hM x
 
 @[simp]
-/--
-theorem `pow_pOrder_smul` / 定理 `pow_pOrder_smul`
-
-English:
-theorem pow_pOrder_smul
-  statement: {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M)
-  proof: Nat.find_spec (isTorsion'_powers_iff p).mp hM x
-
-中文:
-定理 pow_pOrder_smul
-  结论: {p : R} (hM : 是挠' M <| 子幺半群.powers p) (x : M)
-  证明: Nat.find_spec (isTorsion'_powers_iff p).mp hM x
-
-Depends on / 依赖: Nat.find_spec, _powers_iff, find_spec, isTorsion
+/-
+**Submodule.pow_pOrder_smul** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：pow_pOrder_smul {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M) 
+[forall n : Nat, Decidable (p ^ n • x = 0)] : p ^ pOrder hM x • x = 0
+参数：hM : IsTorsion' M <| Submonoid.powers p；x : M；p ^ n • x = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.find_spec`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n),
+ p (Nat.find H)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.isTorsion'_powers_iff`：∀ {R : Type u_1} {M : Type u_2} [inst :
+ Monoid R] [inst_1 : AddCommMonoid M] [inst_2 : DistribMulAction R M] (p : R),  
+ Module.IsTorsion' M …
 -/
 theorem pow_pOrder_smul {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (x : M)
-    [forall n : Nat, Decidable (p ^ n • x = 0)] : p ^ pOrder hM x • x = 0 :=
-Nat.find_spec (isTorsion'_powers_iff p).mp hM x
+    [∀ n : ℕ, Decidable (p ^ n • x = 0)] : p ^ pOrder hM x • x = 0 :=
+  Nat.find_spec <| (isTorsion'_powers_iff p).mp hM x
 
 end
 
-variable [CommSemiring R] [AddCommMonoid M] [Module R M] [forall x : M, Decidable (x = 0)]
+variable [CommSemiring R] [AddCommMonoid M] [Module R M] [∀ x : M, Decidable (x = 0)]
 
-/--
-theorem `exists_isTorsionBy` / 定理 `exists_isTorsionBy`
-
-English:
-theorem exists_isTorsionBy
-  statement: {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (d : Nat) (hd : d != 0)
-  proof: by
-  let oj := List.argmax (fun i => pOrder hM <| s i) (List.finRange d)
-  have hoj : oj.isSome :=
-    Option.ne_none_iff_isSome.mp fun eq_none =>
-hd List.finRange_eq_nil_iff.mp List.argmax_eq_none.mp eq_none
-  use Option.get _ hoj
-  rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs]; rw [Submodule.span_le]; rw [Set.range_subset_iff]
-  intro i; change (p ^ pOrder hM (s (Option.get oj hoj))) • s i = 0
-  have : pOrder hM (s i) <= pOrder hM (s <| Option.get _ hoj) :=
-    List.le_of_mem_argmax (List.mem_finRange i) (Option.get_mem hoj)
-  rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [pow_pOrder_smul]; rw [smul_zero]
-
-中文:
-定理 存在_isTorsionBy
-  结论: {p : R} (hM : 是挠' M <| 子幺半群.powers p) (d : 自然数) (hd : d != 0)
-  证明: by
-  let oj := List.argmax (fun i => pOrder hM <| s i) (List.finRange d)
-  have hoj : oj.isSome :=
-    Option.ne_none_iff_isSome.mp fun eq_none =>
-hd List.finRange_eq_nil_iff.mp List.argmax_eq_none.mp eq_none
-  use Option.get _ hoj
-  rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs]; rw [Submodule.span_le]; rw [Set.range_subset_iff]
-  intro i; change (p ^ pOrder hM (s (Option.get oj hoj))) • s i = 0
-  have : pOrder hM (s i) <= pOrder hM (s <| Option.get _ hoj) :=
-    List.le_of_mem_argmax (List.mem_finRange i) (Option.get_mem hoj)
-  rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [pow_pOrder_smul]; rw [smul_zero]
-
-Depends on / 依赖: List.argmax, List.argmax_eq_none.mp, List.finRange, List.finRange_eq_nil_iff.mp, List.le_of_mem_argmax, List.mem_, Option.get, Option.ne_none_iff_isSome.mp, Set.range_subset_iff, Submodule, Submodule.span_le, argmax, argmax_eq_none, eq_none, eq_top_iff, finRange, finRange_eq_nil_iff, isSome, isTorsionBy_iff_torsionBy_eq_top, le_of_mem_argmax
+/-
+**Submodule.exists_isTorsionBy** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：exists_isTorsionBy {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (d : 
+Nat) (hd : d != 0) (s : Fin d -> M) (hs : span R (Set.range s) = ⊤) : exists j :
+ Fin d, Module.IsTorsionBy R M (p ^ pOrder hM (s j))
+参数：hM : IsTorsion' M <| Submonoid.powers p；d : Nat；hd : d != 0；s : Fin d -> M；hs
+ : span R (Set.range s) = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Option.ne_none_iff_isSome`：∀ {α : Type u_1} {o : Option α}, o ≠ none ↔ o
+.isSome = true
+· 使用定理 `List.finRange_eq_nil_iff`：∀ {n : ℕ}, List.finRange n = [] ↔ n = 0
+· 使用定理 `List.argmax_eq_none`：argmax_eq_none : l.argmax f = none ↔ l = []
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.isTorsionBy_iff_torsionBy_eq_top`：isTorsionBy_iff_torsionBy_eq_to
+p : IsTorsionBy R M a ↔ torsionBy R M a = ⊤
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `List.le_of_mem_argmax`：le_of_mem_argmax : a in l -> m in argmax f l -> f
+ a <= f m
+· 使用定理 `List.mem_finRange`：∀ {n : ℕ} (x : Fin n), x ∈ List.finRange n
+· 使用定理 `Option.get_mem`：∀ {α : Type u_1} {o : Option α} (h : o.isSome = true), o
+.get h ∈ o
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `Submodule.pow_pOrder_smul`：pow_pOrder_smul {p : R} (hM : IsTorsion' M <|
+ Submonoid.powers p) (x : M) [forall n : Nat, Decidable (p ^ n • x = 0)] : p ^ p
+Order hM x • x …
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
-theorem exists_isTorsionBy {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (d : Nat) (hd : d != 0)
-    (s : Fin d -> M) (hs : span R (Set.range s) = ⊤) :
-    exists j : Fin d, Module.IsTorsionBy R M (p ^ pOrder hM (s j)) := by
+theorem exists_isTorsionBy {p : R} (hM : IsTorsion' M <| Submonoid.powers p) (d : ℕ) (hd : d ≠ 0)
+    (s : Fin d → M) (hs : span R (Set.range s) = ⊤) :
+    ∃ j : Fin d, Module.IsTorsionBy R M (p ^ pOrder hM (s j)) := by
   let oj := List.argmax (fun i => pOrder hM <| s i) (List.finRange d)
   have hoj : oj.isSome :=
     Option.ne_none_iff_isSome.mp fun eq_none =>
-hd List.finRange_eq_nil_iff.mp List.argmax_eq_none.mp eq_none
+      hd <| List.finRange_eq_nil_iff.mp <| List.argmax_eq_none.mp eq_none
   use Option.get _ hoj
-  rw [isTorsionBy_iff_torsionBy_eq_top]; rw [eq_top_iff]; rw [← hs]; rw [Submodule.span_le]; rw [Set.range_subset_iff]
+  rw [isTorsionBy_iff_torsionBy_eq_top, eq_top_iff, ← hs, Submodule.span_le,
+    Set.range_subset_iff]
   intro i; change (p ^ pOrder hM (s (Option.get oj hoj))) • s i = 0
-  have : pOrder hM (s i) <= pOrder hM (s <| Option.get _ hoj) :=
+  have : pOrder hM (s i) ≤ pOrder hM (s <| Option.get _ hoj) :=
     List.le_of_mem_argmax (List.mem_finRange i) (Option.get_mem hoj)
-  rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [pow_pOrder_smul]; rw [smul_zero]
+  rw [← Nat.sub_add_cancel this, pow_add, mul_smul, pow_pOrder_smul, smul_zero]
 
 end PTorsion
 
@@ -2902,141 +2575,133 @@ open Submodule
 
 universe w
 
-/--
-theorem `torsionBy_eq_span_singleton` / 定理 `torsionBy_eq_span_singleton`
-
-English:
-theorem torsionBy_eq_span_singleton
-  given: {R : Type w} [CommRing R] (a b : R) (ha : a in R⁰)
-  proof: by
-  ext x; rw [mem_torsionBy_iff, Submodule.mem_span_singleton]
-  obtain ⟨x, rfl⟩ := mk_surjective x; constructor <;> intro h
-  · rw [← mk_eq_mk, ← Quotient.mk_smul, Quotient.mk_eq_zero, Submodule.mem_span_singleton] at h
-    obtain ⟨c, h⟩ := h
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_assoc]; rw [mul_cancel_left_mem_nonZeroDivisors ha]; rw [mul_comm] at h
-    use c
-    rw [← h]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [smul_eq_mul]; rw [mk_eq_mk]
-  · obtain ⟨c, h⟩ := h
-    rw [← h]; rw [smul_comm]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [(Quotient.mk_eq_zero _).mpr mem_span_singleton_self _]; rw [smul_zero]
-
-中文:
-定理 torsionBy_eq_span_singleton
-  条件: {R : 类型 w} [交换环 R] (a b : R) (ha : a in R⁰)
-  证明: by
-  ext x; rw [mem_torsionBy_iff, Submodule.mem_span_singleton]
-  obtain ⟨x, rfl⟩ := mk_surjective x; constructor <;> intro h
-  · rw [← mk_eq_mk, ← Quotient.mk_smul, Quotient.mk_eq_zero, Submodule.mem_span_singleton] at h
-    obtain ⟨c, h⟩ := h
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_assoc]; rw [mul_cancel_left_mem_nonZeroDivisors ha]; rw [mul_comm] at h
-    use c
-    rw [← h]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [smul_eq_mul]; rw [mk_eq_mk]
-  · obtain ⟨c, h⟩ := h
-    rw [← h]; rw [smul_comm]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [(Quotient.mk_eq_zero _).mpr mem_span_singleton_self _]; rw [smul_zero]
-
-Depends on / 依赖: Quotient, Quotient.mk_eq_zero, Quotient.mk_smul, Submodule, Submodule.mem_span_singleton, mem_span_singleton, mem_torsionBy_iff, mk_eq_mk, mk_eq_zero, mk_smul, mk_surjective, mul_assoc, mul_cancel_left_mem_nonZeroDivisors, mul_comm, smul_com, smul_eq_mul
+/-
+**Ideal.Quotient.torsionBy_eq_span_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.Qu
+otient`。
+形式化陈述：torsionBy_eq_span_singleton {R : Type w} [CommRing R] (a b : R) (ha : a in
+ R⁰) : torsionBy R (R ⧸ R ∙ a * b) a = R ∙ mk (R ∙ a * b) b
+参数：a b : R；ha : a in R⁰。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.mem_torsionBy_iff`：mem_torsionBy_iff (x : M) : x in torsionBy 
+R M a ↔ a • x = 0
+· 使用定理 `Submodule.mem_span_singleton`：mem_span_singleton {y : M} : x in R ∙ y ↔ 
+exists a : R, a • y = x
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.Quotient.mk_smul`：mk_smul (r : S) (x : M) : (mk (r • x) : M ⧸ 
+p) = r • mk x
+· 使用定理 `Ideal.Quotient.mk_eq_mk`：mk_eq_mk (x : R) : (Submodule.Quotient.mk x : R
+ ⧸ I) = mk I x
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用引理 `mul_cancel_left_mem_nonZeroDivisors`：mul_cancel_left_mem_nonZeroDivisors
+ (hr : r in R⁰) : r * x = r * y ↔ x = y
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.mem_span_singleton_self`：mem_span_singleton_self (x : α) : x in sp
+an ({x} : Set α)
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
-theorem torsionBy_eq_span_singleton {R : Type w} [CommRing R] (a b : R) (ha : a in R⁰) :
+theorem torsionBy_eq_span_singleton {R : Type w} [CommRing R] (a b : R) (ha : a ∈ R⁰) :
     torsionBy R (R ⧸ R ∙ a * b) a = R ∙ mk (R ∙ a * b) b := by
   ext x; rw [mem_torsionBy_iff, Submodule.mem_span_singleton]
   obtain ⟨x, rfl⟩ := mk_surjective x; constructor <;> intro h
   · rw [← mk_eq_mk, ← Quotient.mk_smul, Quotient.mk_eq_zero, Submodule.mem_span_singleton] at h
     obtain ⟨c, h⟩ := h
-    rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_assoc]; rw [mul_cancel_left_mem_nonZeroDivisors ha]; rw [mul_comm] at h
+    rw [smul_eq_mul, smul_eq_mul, mul_comm, mul_assoc, mul_cancel_left_mem_nonZeroDivisors ha,
+      mul_comm] at h
     use c
-    rw [← h]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [smul_eq_mul]; rw [mk_eq_mk]
+    rw [← h, ← mk_eq_mk, ← Quotient.mk_smul, smul_eq_mul, mk_eq_mk]
   · obtain ⟨c, h⟩ := h
-    rw [← h]; rw [smul_comm]; rw [← mk_eq_mk]; rw [← Quotient.mk_smul]; rw [(Quotient.mk_eq_zero _).mpr mem_span_singleton_self _]; rw [smul_zero]
+    rw [← h, smul_comm, ← mk_eq_mk, ← Quotient.mk_smul,
+      (Quotient.mk_eq_zero _).mpr <| mem_span_singleton_self _, smul_zero]
 
 end Ideal.Quotient
 
-/--
-theorem `isAddTorsion_iff_isTorsion_nat` / 定理 `isAddTorsion_iff_isTorsion_nat`
-
-English:
-theorem isAddTorsion_iff_isTorsion_nat
-  given: [AddCommMonoid M]
-  proof: by
-  refine ⟨fun h x => ?_, fun h x => ?_⟩
-  · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
-exact ⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt h0⟩, hn⟩
-  · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
-    obtain ⟨n, hn⟩ := @h x
-    exact ⟨n, Nat.pos_of_ne_zero (nonZeroDivisors.coe_ne_zero _), hn⟩
-
-@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_nat :=
-  isAddTorsion_iff_isTorsion_nat
-
-中文:
-定理 isAddTorsion_iff_isTorsion_nat
-  条件: [加法交换幺半群 M]
-  证明: by
-  refine ⟨fun h x => ?_, fun h x => ?_⟩
-  · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
-exact ⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt h0⟩, hn⟩
-  · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
-    obtain ⟨n, hn⟩ := @h x
-    exact ⟨n, Nat.pos_of_ne_zero (nonZeroDivisors.coe_ne_zero _), hn⟩
-
-@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_nat :=
-  isAddTorsion_iff_isTorsion_nat
-
-Depends on / 依赖: Nat.pos_of_ne_zero, coe_ne_zero, exists_nsmul_eq_zero, isOfFinAddOrder_iff_nsmul_eq_zero, mem_nonZeroDivisors_of_ne_zero, ne_of_gt, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, pos_of_ne_zero
+/-
+**isAddTorsion_iff_isTorsion_nat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isAddTorsion_iff_isTorsion_nat [AddCommMonoid M] : IsAddTorsion M ↔ Module
+.IsTorsion Nat M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOfFinAddOrder.exists_nsmul_eq_zero`：∀ {G : Type u_1} [inst : AddMonoid
+ G] {x : G}, IsOfFinAddOrder x → ∃ n, 0 < n ∧ n • x = 0
+· 使用定理 `mem_nonZeroDivisors_of_ne_zero`：mem_nonZeroDivisors_of_ne_zero (hx : x !
+= 0) : x in M₀⁰
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isOfFinAddOrder_iff_nsmul_eq_zero`：∀ {G : Type u_1} [inst : AddMonoid G]
+ {x : G}, IsOfFinAddOrder x ↔ ∃ n, 0 < n ∧ n • x = 0
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `nonZeroDivisors.coe_ne_zero`：nonZeroDivisors.coe_ne_zero (x : M₀⁰) : (x 
+: M₀) != 0
 -/
 theorem isAddTorsion_iff_isTorsion_nat [AddCommMonoid M] :
-    IsAddTorsion M ↔ Module.IsTorsion Nat M := by
+    IsAddTorsion M ↔ Module.IsTorsion ℕ M := by
   refine ⟨fun h x => ?_, fun h x => ?_⟩
   · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
-exact ⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt h0⟩, hn⟩
+    exact ⟨⟨n, mem_nonZeroDivisors_of_ne_zero <| ne_of_gt h0⟩, hn⟩
   · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
     obtain ⟨n, hn⟩ := @h x
     exact ⟨n, Nat.pos_of_ne_zero (nonZeroDivisors.coe_ne_zero _), hn⟩
 
 @[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_nat :=
   isAddTorsion_iff_isTorsion_nat
-
-/--
-theorem `isAddTorsion_iff_isTorsion_int` / 定理 `isAddTorsion_iff_isTorsion_int`
-
-English:
-theorem isAddTorsion_iff_isTorsion_int
-  given: [AddCommGroup M]
-  proof: by
-  refine ⟨fun h x => ?_, fun h x => ?_⟩
-  · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
-    exact
-⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt Int.natCast_pos.mpr h0⟩,
-        (natCast_zsmul _ _).trans hn⟩
-  · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
-    obtain ⟨n, hn⟩ := @h x
-    exact ⟨_, Int.natAbs_pos.2 (nonZeroDivisors.coe_ne_zero n), natAbs_nsmul_eq_zero.2 hn⟩
-
-@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_int :=
-  isAddTorsion_iff_isTorsion_int
-
-中文:
-定理 isAddTorsion_iff_isTorsion_int
-  条件: [加法交换群 M]
-  证明: by
-  refine ⟨fun h x => ?_, fun h x => ?_⟩
-  · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
-    exact
-⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt Int.natCast_pos.mpr h0⟩,
-        (natCast_zsmul _ _).trans hn⟩
-  · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
-    obtain ⟨n, hn⟩ := @h x
-    exact ⟨_, Int.natAbs_pos.2 (nonZeroDivisors.coe_ne_zero n), natAbs_nsmul_eq_zero.2 hn⟩
-
-@[deprecated (since := "2026-07-01")] alias AddMonoid.isTorsion_iff_isTorsion_int :=
-  isAddTorsion_iff_isTorsion_int
-
-Depends on / 依赖: Int.natAbs_pos, Int.natCast_pos.mpr, coe_ne_zero, exists_nsmul_eq_zero, isOfFinAddOrder_iff_nsmul_eq_zero, mem_nonZeroDivisors_of_ne_zero, natAbs_nsmul_eq_zero, natAbs_pos, natCast_pos, natCast_zsmul, ne_of_gt, nonZeroDivisors, nonZeroDivisors.coe_ne_zero
+/-
+**isAddTorsion_iff_isTorsion_int** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isAddTorsion_iff_isTorsion_int [AddCommGroup M] : IsAddTorsion M ↔ Module.
+IsTorsion Int M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOfFinAddOrder.exists_nsmul_eq_zero`：∀ {G : Type u_1} [inst : AddMonoid
+ G] {x : G}, IsOfFinAddOrder x → ∃ n, 0 < n ∧ n • x = 0
+· 使用定理 `mem_nonZeroDivisors_of_ne_zero`：mem_nonZeroDivisors_of_ne_zero (hx : x !
+= 0) : x in M₀⁰
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natCast_pos`：∀ {n : ℕ}, 0 < ↑n ↔ 0 < n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isOfFinAddOrder_iff_nsmul_eq_zero`：∀ {G : Type u_1} [inst : AddMonoid G]
+ {x : G}, IsOfFinAddOrder x ↔ ∃ n, 0 < n ∧ n • x = 0
+· 使用定理 `Int.natAbs_pos`：∀ {a : ℤ}, 0 < a.natAbs ↔ a ≠ 0
+· 使用定理 `nonZeroDivisors.coe_ne_zero`：nonZeroDivisors.coe_ne_zero (x : M₀⁰) : (x 
+: M₀) != 0
+· 使用定理 `natAbs_nsmul_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a : G} {n : 
+ℤ}, n.natAbs • a = 0 ↔ n • a = 0
 -/
 theorem isAddTorsion_iff_isTorsion_int [AddCommGroup M] :
-    IsAddTorsion M ↔ Module.IsTorsion Int M := by
+    IsAddTorsion M ↔ Module.IsTorsion ℤ M := by
   refine ⟨fun h x => ?_, fun h x => ?_⟩
   · obtain ⟨n, h0, hn⟩ := (h x).exists_nsmul_eq_zero
     exact
-⟨⟨n, mem_nonZeroDivisors_of_ne_zero ne_of_gt Int.natCast_pos.mpr h0⟩,
+      ⟨⟨n, mem_nonZeroDivisors_of_ne_zero <| ne_of_gt <| Int.natCast_pos.mpr h0⟩,
         (natCast_zsmul _ _).trans hn⟩
   · rw [isOfFinAddOrder_iff_nsmul_eq_zero]
     obtain ⟨n, hn⟩ := @h x
@@ -3047,37 +2712,21 @@ theorem isAddTorsion_iff_isTorsion_int [AddCommGroup M] :
 
 namespace AddSubgroup
 
-variable (A : Type*) [AddCommGroup A] (n : Int)
+variable (A : Type*) [AddCommGroup A] (n : ℤ)
 
 /-- The additive `n`-torsion subgroup for an integer `n`, denoted as `A[n]`. -/
 @[reducible]
-/--
-Definition of `torsionBy` / `torsionBy` 的定义
+/-
+**AddSubgroup.torsionBy** 是 Mathlib 中的一个定义，位于命名空间 `AddSubgroup`。
+形式化陈述：torsionBy : AddSubgroup A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition torsionBy
-  signature: : AddSubgroup A
-  body: (Submodule.torsionBy Int A n).toAddSubgroup
-
-@[inherit_doc torsionBy]
-scoped syntax:max (name := torsionByStx) (priority := high) term noWs "[" term "]" : term
-
-macro_rules | `($A[$n]) => `(torsionBy $A $n)
-
-中文:
-定义 torsionBy
-  签名: : 加法子群 A
-  定义体: (Submodule.torsionBy Int A n).toAddSubgroup
-
-@[inherit_doc torsionBy]
-scoped syntax:max (name := torsionByStx) (priority := high) term noWs "[" term "]" : term
-
-macro_rules | `($A[$n]) => `(torsionBy $A $n)
-
-Depends on / 依赖: Submodule, Submodule.torsionBy, toAddSubgroup, torsionBy
+--- 原说明 ---
+The additive `n`-torsion subgroup for an integer `n`, denoted as `A[n]`.
 -/
 def torsionBy : AddSubgroup A :=
-  (Submodule.torsionBy Int A n).toAddSubgroup
+  (Submodule.torsionBy ℤ A n).toAddSubgroup
 
 @[inherit_doc torsionBy]
 scoped syntax:max (name := torsionByStx) (priority := high) term noWs "[" term "]" : term
@@ -3090,123 +2739,108 @@ meta def torsionByUnexpander : Lean.PrettyPrinter.Unexpander
   | `($_ $A $n) => `($A[$n])
   | _ => throw ()
 
-/--
-lemma `torsionBy.neg` / 引理 `torsionBy.neg`
-
-English:
-lemma torsionBy.neg
-  statement: A[-n] = A[n]
-  proof: by
-  ext a
-  simp
-
-中文:
-引理 torsionBy.neg
-  结论: A[-n] = A[n]
-  证明: by
-  ext a
-  simp
+/-
+**AddSubgroup.torsionBy.neg** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup.torsionBy`。
+形式化陈述：∀ (A : Type u_3) [inst : AddCommGroup A] (n : ℤ), AddSubgroup.torsionBy A 
+(-n) = AddSubgroup.torsionBy A n
+参数：A : Type u_3；n : ℤ；-n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.ext`：∀ {G : Type u_1} [inst : AddGroup G] {H K : AddSubgroup
+ G}, (∀ (x : G), x ∈ H ↔ x ∈ K) → H = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.neg_mem`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst_1 :
+ AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x : M}, x
+ ∈ p → …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma torsionBy.neg : A[-n] = A[n] := by
   ext a
   simp
 
-variable {A} {n : Nat}
+variable {A} {n : ℕ}
 
 @[simp]
-/--
-lemma `torsionBy.nsmul` / 引理 `torsionBy.nsmul`
-
-English:
-lemma torsionBy.nsmul
-  given: (x : A[n])
-  statement: n • x = 0
-  proof: Nat.cast_smul_eq_nsmul Int n x ▸ Submodule.smul_torsionBy ..
-
-中文:
-引理 torsionBy.nsmul
-  条件: (x : A[n])
-  结论: n • x = 0
-  证明: Nat.cast_smul_eq_nsmul Int n x ▸ Submodule.smul_torsionBy ..
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, Submodule, Submodule.smul_torsionBy, cast_smul_eq_nsmul, smul_torsionBy
+/-
+**AddSubgroup.torsionBy.nsmul** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup.torsionBy`。
+形式化陈述：∀ {A : Type u_3} [inst : AddCommGroup A] {n : ℕ} (x : ↥(AddSubgroup.torsio
+nBy A ↑n)), n • x = 0
+参数：x : ↥(AddSubgroup.torsionBy A ↑n)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.smul_torsionBy`：smul_torsionBy (x : torsionBy R M a) : a • x =
+ 0
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
 -/
 lemma torsionBy.nsmul (x : A[n]) : n • x = 0 :=
-  Nat.cast_smul_eq_nsmul Int n x ▸ Submodule.smul_torsionBy ..
-
-/--
-lemma `torsionBy.nsmul_iff` / 引理 `torsionBy.nsmul_iff`
-
-English:
-lemma torsionBy.nsmul_iff
-  given: {x : A}
-  proof: Nat.cast_smul_eq_nsmul Int n x ▸ Submodule.mem_torsionBy_iff ..
-
-中文:
-引理 torsionBy.nsmul_iff
-  条件: {x : A}
-  证明: Nat.cast_smul_eq_nsmul Int n x ▸ Submodule.mem_torsionBy_iff ..
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, Submodule, Submodule.mem_torsionBy_iff, cast_smul_eq_nsmul, mem_torsionBy_iff
+  Nat.cast_smul_eq_nsmul ℤ n x ▸ Submodule.smul_torsionBy ..
+/-
+**AddSubgroup.torsionBy.nsmul_iff** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup.torsion
+By`。
+形式化陈述：∀ {A : Type u_3} [inst : AddCommGroup A] {n : ℕ} {x : A}, x ∈ AddSubgroup.
+torsionBy A ↑n ↔ n • x = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.mem_torsionBy_iff`：mem_torsionBy_iff (x : M) : x in torsionBy 
+R M a ↔ a • x = 0
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
 -/
 lemma torsionBy.nsmul_iff {x : A} :
-    x in A[n] ↔ n • x = 0 :=
-  Nat.cast_smul_eq_nsmul Int n x ▸ Submodule.mem_torsionBy_iff ..
-
-/--
-lemma `torsionBy.mod_self_nsmul` / 引理 `torsionBy.mod_self_nsmul`
-
-English:
-lemma torsionBy.mod_self_nsmul
-  given: (s : Nat) (x : A[n])
-  proof: nsmul_eq_mod_nsmul s (torsionBy.nsmul x)
-
-中文:
-引理 torsionBy.mod_self_nsmul
-  条件: (s : 自然数) (x : A[n])
-  证明: nsmul_eq_mod_nsmul s (torsionBy.nsmul x)
-
-Depends on / 依赖: nsmul_eq_mod_nsmul, torsionBy, torsionBy.nsmul
+    x ∈ A[n] ↔ n • x = 0 :=
+  Nat.cast_smul_eq_nsmul ℤ n x ▸ Submodule.mem_torsionBy_iff ..
+/-
+**AddSubgroup.torsionBy.mod_self_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup.to
+rsionBy`。
+形式化陈述：∀ {A : Type u_3} [inst : AddCommGroup A] {n : ℕ} (s : ℕ) (x : ↥(AddSubgrou
+p.torsionBy A ↑n)), s • x = (s % n) • x
+参数：s : ℕ；x : ↥(AddSubgroup.torsionBy A ↑n)；s % n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nsmul_eq_mod_nsmul`：∀ {M : Type u_4} [inst : AddMonoid M] {a : M} {n : ℕ
+} (m : ℕ), n • a = 0 → m • a = (m % n) • a
+· 使用定理 `AddSubgroup.torsionBy.nsmul`：∀ {A : Type u_3} [inst : AddCommGroup A] {n
+ : ℕ} (x : ↥(AddSubgroup.torsionBy A ↑n)), n • x = 0
 -/
-lemma torsionBy.mod_self_nsmul (s : Nat) (x : A[n]) :
+lemma torsionBy.mod_self_nsmul (s : ℕ) (x : A[n]) :
     s • x = (s % n) • x :=
   nsmul_eq_mod_nsmul s (torsionBy.nsmul x)
-
-/--
-lemma `torsionBy.mod_self_nsmul'` / 引理 `torsionBy.mod_self_nsmul'`
-
-English:
-lemma torsionBy.mod_self_nsmul'
-  given: (s : Nat) {x : A} (h : x in A[n])
-  proof: nsmul_eq_mod_nsmul s (torsionBy.nsmul_iff.mp h)
-
-中文:
-引理 torsionBy.mod_self_nsmul'
-  条件: (s : 自然数) {x : A} (h : x in A[n])
-  证明: nsmul_eq_mod_nsmul s (torsionBy.nsmul_iff.mp h)
-
-Depends on / 依赖: nsmul_eq_mod_nsmul, nsmul_iff, torsionBy, torsionBy.nsmul_iff.mp
+/-
+**AddSubgroup.torsionBy.mod_self_nsmul'** 是 Mathlib 中的一个定理，位于命名空间 `AddSubgroup.t
+orsionBy`。
+形式化陈述：∀ {A : Type u_3} [inst : AddCommGroup A] {n : ℕ} (s : ℕ) {x : A}, x ∈ AddS
+ubgroup.torsionBy A ↑n → s • x = (s % n) • x
+参数：s : ℕ；s % n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nsmul_eq_mod_nsmul`：∀ {M : Type u_4} [inst : AddMonoid M] {a : M} {n : ℕ
+} (m : ℕ), n • a = 0 → m • a = (m % n) • a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AddSubgroup.torsionBy.nsmul_iff`：∀ {A : Type u_3} [inst : AddCommGroup A
+] {n : ℕ} {x : A}, x ∈ AddSubgroup.torsionBy A ↑n ↔ n • x = 0
 -/
-lemma torsionBy.mod_self_nsmul' (s : Nat) {x : A} (h : x in A[n]) :
+lemma torsionBy.mod_self_nsmul' (s : ℕ) {x : A} (h : x ∈ A[n]) :
     s • x = (s % n) • x :=
   nsmul_eq_mod_nsmul s (torsionBy.nsmul_iff.mp h)
 
 /-- For a natural number `n`, the `n`-torsion subgroup of `A` is a `ZMod n` module. -/
 @[instance_reducible]
-/--
-Definition of `torsionBy.zmodModule` / `torsionBy.zmodModule` 的定义
+/-
+**AddSubgroup.torsionBy.zmodModule** 是 Mathlib 中的一个定义，位于命名空间 `AddSubgroup.torsio
+nBy`。
+形式化陈述：{A : Type u_3} → [inst : AddCommGroup A] → {n : ℕ} → _root_.Module (ZMod n
+) ↥(AddSubgroup.torsionBy A ↑n)
+参数：ZMod n；AddSubgroup.torsionBy A ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.torsionBy.nsmul`：∀ {A : Type u_3} [inst : AddCommGroup A] {n
+ : ℕ} (x : ↥(AddSubgroup.torsionBy A ↑n)), n • x = 0
 
-English:
-definition torsionBy.zmodModule
-  signature: : Module (ZMod n) A[n]
-  body: AddCommGroup.zmodModule torsionBy.nsmul
-
-中文:
-定义 torsionBy.zmodModule
-  签名: : 模 (ZMod n) A[n]
-  定义体: AddCommGroup.zmodModule torsionBy.nsmul
-
-Depends on / 依赖: AddCommGroup, AddCommGroup.zmodModule, torsionBy, torsionBy.nsmul, zmodModule
+--- 原说明 ---
+For a natural number `n`, the `n`-torsion subgroup of `A` is a `ZMod n` module.
 -/
 def torsionBy.zmodModule : Module (ZMod n) A[n] :=
   AddCommGroup.zmodModule torsionBy.nsmul
@@ -3216,64 +2850,85 @@ end AddSubgroup
 section InfiniteRange
 
 @[simp]
-/--
-lemma `infinite_range_add_smul_iff` / 引理 `infinite_range_add_smul_iff`
-
-English:
-lemma infinite_range_add_smul_iff
-  statement: [Ring R] [IsDomain R] [Infinite R] [AddCommGroup M] [Module R M]
-  proof: by
-  refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
-  rw [add_right_inj] at hrs
-  exact smul_left_injective _ h hrs
-
-@[simp]
-
-中文:
-引理 infinite_range_add_smul_iff
-  结论: [环 R] [是整环 R] [无限 R] [加法交换群 M] [模 R M]
-  证明: by
-  refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
-  rw [add_right_inj] at hrs
-  exact smul_left_injective _ h hrs
-
-@[simp]
-
-Depends on / 依赖: Set.infinite_range_of_injective, add_right_inj, infinite_range_of_injective, smul_left_injective
+/-
+**infinite_range_add_smul_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：infinite_range_add_smul_iff [Ring R] [IsDomain R] [Infinite R] [AddCommGro
+up M] [Module R M] [IsTorsionFree R M] (x y : M) : (Set.range <| fun r : R => x 
++ r • y).Infinite ↔ y != 0
+参数：x y : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Set.range_const`：range_const : forall [Nonempty ι] {c : α}, (range fun _
+ : ι => c) = {c}
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.infinite_range_of_injective`：infinite_range_of_injective [Infinite α
+] {f : α -> β} (hi : Injective f) : (range f).Infinite
+· 使用引理 `smul_left_injective`：smul_left_injective (hm : m != 0) : ((· • m) : R ->
+ M).Injective
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `add_right_inj`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] (a : 
+G) {b c : G}, a + b = a + c ↔ b = c
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
 lemma infinite_range_add_smul_iff [Ring R] [IsDomain R] [Infinite R] [AddCommGroup M] [Module R M]
     [IsTorsionFree R M] (x y : M) :
-    (Set.range <| fun r : R => x + r • y).Infinite ↔ y != 0 := by
-  refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
+    (Set.range <| fun r : R ↦ x + r • y).Infinite ↔ y ≠ 0 := by
+  refine ⟨fun h hy ↦ by simp [hy] at h, fun h ↦ Set.infinite_range_of_injective fun r s hrs ↦ ?_⟩
   rw [add_right_inj] at hrs
   exact smul_left_injective _ h hrs
 
 @[simp]
-/--
-lemma `infinite_range_add_nsmul_iff` / 引理 `infinite_range_add_nsmul_iff`
-
-English:
-lemma infinite_range_add_nsmul_iff
-  given: [AddCommGroup M] [IsAddTorsionFree M] (x y : M)
-  proof: by
-  refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
-  rw [add_right_inj]; rw [← natCast_zsmul]; rw [← natCast_zsmul] at hrs
-  simpa using smul_left_injective _ h hrs
-
-中文:
-引理 infinite_range_add_nsmul_iff
-  条件: [加法交换群 M] [是加法无挠 M] (x y : M)
-  证明: by
-  refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
-  rw [add_right_inj]; rw [← natCast_zsmul]; rw [← natCast_zsmul] at hrs
-  simpa using smul_left_injective _ h hrs
-
-Depends on / 依赖: Set.infinite_range_of_injective, add_right_inj, infinite_range_of_injective, natCast_zsmul, smul_left_injective
+/-
+**infinite_range_add_nsmul_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：infinite_range_add_nsmul_iff [AddCommGroup M] [IsAddTorsionFree M] (x y : 
+M) : (Set.range <| fun n : Nat => x + n • y).Infinite ↔ y != 0
+参数：x y : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `nsmul_zero`：∀ {M : Type u_2} [inst : AddMonoid M] (n : ℕ), n • 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Set.range_const`：range_const : forall [Nonempty ι] {c : α}, (range fun _
+ : ι => c) = {c}
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.infinite_range_of_injective`：infinite_range_of_injective [Infinite α
+] {f : α -> β} (hi : Injective f) : (range f).Infinite
+· 使用定理 `instInfiniteNat`：Infinite ℕ
+· 使用引理 `smul_left_injective`：smul_left_injective (hm : m != 0) : ((· • m) : R ->
+ M).Injective
+· 使用定理 `Int.instIsCancelMulZero`：IsCancelMulZero ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `add_right_inj`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] (a : 
+G) {b c : G}, a + b = a + c ↔ b = c
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
 lemma infinite_range_add_nsmul_iff [AddCommGroup M] [IsAddTorsionFree M] (x y : M) :
-    (Set.range <| fun n : Nat => x + n • y).Infinite ↔ y != 0 := by
-  refine ⟨fun h hy => by simp [hy] at h, fun h => Set.infinite_range_of_injective fun r s hrs => ?_⟩
-  rw [add_right_inj]; rw [← natCast_zsmul]; rw [← natCast_zsmul] at hrs
+    (Set.range <| fun n : ℕ ↦ x + n • y).Infinite ↔ y ≠ 0 := by
+  refine ⟨fun h hy ↦ by simp [hy] at h, fun h ↦ Set.infinite_range_of_injective fun r s hrs ↦ ?_⟩
+  rw [add_right_inj, ← natCast_zsmul, ← natCast_zsmul] at hrs
   simpa using smul_left_injective _ h hrs
 
 end InfiniteRange
+

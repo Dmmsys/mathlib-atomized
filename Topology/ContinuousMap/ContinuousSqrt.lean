@@ -22,77 +22,40 @@ open scoped NNReal
 open scoped ComplexOrder in
 open RCLike in
 noncomputable
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) instContinuousSqrtRCLike {𝕜 : Type*} [RCLike 𝕜] :
     ContinuousSqrt 𝕜 where
-  sqrt := ((↑) ∘ (√·) ∘ re ∘ (fun z => z.2 - z.1))
+  sqrt := ((↑) ∘ (√·) ∘ re ∘ (fun z ↦ z.2 - z.1))
   continuousOn_sqrt := by fun_prop
   sqrt_nonneg _ _ := by simp
   sqrt_mul_sqrt x hx := by
     simp only [Function.comp_apply]
     rw [← sub_nonneg] at hx
-.right obtain hx' := nonneg_iff.mp hx
-    rw [← conj_eq_iff_im]; rw [conj_eq_iff_re] at hx'
-    rw [← ofReal_mul]; rw [Real.mul_self_sqrt]; rw [hx']; rw [add_sub_cancel]
-.left simpa using nonneg_iff.mp hx
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousSqrt Real
-  body: instContinuousSqrtRCLike (𝕜 := Real)
-
-中文:
-实例 :
-  签名: 余ntinuousSqrt 实数
-  定义体: instContinuousSqrtRCLike (𝕜 := Real)
-
-Depends on / 依赖: instContinuousSqrtRCLike
+    obtain hx' := nonneg_iff.mp hx |>.right
+    rw [← conj_eq_iff_im, conj_eq_iff_re] at hx'
+    rw [← ofReal_mul, Real.mul_self_sqrt, hx', add_sub_cancel]
+    simpa using nonneg_iff.mp hx |>.left
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : ContinuousSqrt Real := instContinuousSqrtRCLike (𝕜 := Real)
+noncomputable instance : ContinuousSqrt ℝ := instContinuousSqrtRCLike (𝕜 := ℝ)
 
 open ComplexOrder in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousSqrt Complex
-  body: instContinuousSqrtRCLike (𝕜 := Complex)
-
-中文:
-实例 :
-  签名: 余ntinuousSqrt 复形
-  定义体: instContinuousSqrtRCLike (𝕜 := Complex)
-
-Depends on / 依赖: instContinuousSqrtRCLike
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : ContinuousSqrt Complex := instContinuousSqrtRCLike (𝕜 := Complex)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousSqrt Real>=0
-  body: NNReal.sqrt ∘ (fun x => x.2 - x.1)
-  continuousOn_sqrt := by fun_prop
-  sqrt_nonneg := by simp
-sqrt_mul_sqrt := by simpa using fun _ _ h => Eq.symm add_tsub_cancel_of_le h
-
-中文:
-实例 :
-  签名: 余ntinuousSqrt 实数>=0
-  定义体: NNReal.sqrt ∘ (fun x => x.2 - x.1)
-  continuousOn_sqrt := by fun_prop
-  sqrt_nonneg := by simp
-sqrt_mul_sqrt := by simpa using fun _ _ h => Eq.symm add_tsub_cancel_of_le h
-
-Depends on / 依赖: NNReal, NNReal.sqrt
+noncomputable instance : ContinuousSqrt ℂ := instContinuousSqrtRCLike (𝕜 := ℂ)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : ContinuousSqrt Real>=0 where
-  sqrt := NNReal.sqrt ∘ (fun x => x.2 - x.1)
+noncomputable instance : ContinuousSqrt ℝ≥0 where
+  sqrt := NNReal.sqrt ∘ (fun x ↦ x.2 - x.1)
   continuousOn_sqrt := by fun_prop
   sqrt_nonneg := by simp
-sqrt_mul_sqrt := by simpa using fun _ _ h => Eq.symm add_tsub_cancel_of_le h
+  sqrt_mul_sqrt := by simpa using fun _ _ h ↦ Eq.symm <| add_tsub_cancel_of_le h

@@ -33,236 +33,189 @@ namespace CategoryTheory.Limits
 -- Porting note: `aesop cases` does not work on type synonyms like `WidePullbackShape`
 -- attribute [local aesop safe cases] WidePullbackShape WalkingPair
 
-/--
-Definition of `WalkingCospan` / `WalkingCospan` 的定义
+/-- The type of objects for the diagram indexing a pullback, defined as a special case of
+`WidePullbackShape`. -/
+/-
+**CategoryTheory.Limits.WalkingCospan** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：WalkingCospan : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingCospan
-  signature: : Type
-  body: WidePullbackShape WalkingPair
-
-中文:
-缩写 WalkingCospan
-  签名: : 类型
-  定义体: WidePullbackShape WalkingPair
-
-Depends on / 依赖: F.map, W.of_postcomp, WalkingPair, WidePullbackShape, of_postcomp
+--- 原说明 ---
+The type of objects for the diagram indexing a pullback, defined as a special ca
+se of
+`WidePullbackShape`.
 -/
 abbrev WalkingCospan : Type :=
   WidePullbackShape WalkingPair
 
 /-- The left point of the walking cospan. -/
 @[match_pattern]
-/--
-Definition of `WalkingCospan.left` / `WalkingCospan.left` 的定义
+/-
+**CategoryTheory.Limits.WalkingCospan.left** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.WalkingCospan`。
+形式化陈述：CategoryTheory.Limits.WalkingCospan
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingCospan.left
-  signature: : WalkingCospan
-  body: some WalkingPair.left
-
-中文:
-缩写 WalkingCospan.left
-  签名: : WalkingCospan
-  定义体: some WalkingPair.left
-
-Depends on / 依赖: WalkingPair, WalkingPair.left
+--- 原说明 ---
+The left point of the walking cospan.
 -/
 abbrev WalkingCospan.left : WalkingCospan :=
   some WalkingPair.left
 
 /-- The right point of the walking cospan. -/
 @[match_pattern]
-/--
-Definition of `WalkingCospan.right` / `WalkingCospan.right` 的定义
+/-
+**CategoryTheory.Limits.WalkingCospan.right** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.WalkingCospan`。
+形式化陈述：CategoryTheory.Limits.WalkingCospan
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingCospan.right
-  signature: : WalkingCospan
-  body: some WalkingPair.right
-
-中文:
-缩写 WalkingCospan.right
-  签名: : WalkingCospan
-  定义体: some WalkingPair.right
-
-Depends on / 依赖: WalkingPair, WalkingPair.right
+--- 原说明 ---
+The right point of the walking cospan.
 -/
 abbrev WalkingCospan.right : WalkingCospan :=
   some WalkingPair.right
 
 /-- The central point of the walking cospan. -/
 @[match_pattern]
-/--
-Definition of `WalkingCospan.one` / `WalkingCospan.one` 的定义
+/-
+**CategoryTheory.Limits.WalkingCospan.one** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits.WalkingCospan`。
+形式化陈述：CategoryTheory.Limits.WalkingCospan
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingCospan.one
-  signature: : WalkingCospan
-  body: none
-
-中文:
-缩写 WalkingCospan.one
-  签名: : WalkingCospan
-  定义体: none
+--- 原说明 ---
+The central point of the walking cospan.
 -/
 abbrev WalkingCospan.one : WalkingCospan :=
   none
 
-/--
-Definition of `WalkingSpan` / `WalkingSpan` 的定义
+/-- The type of objects for the diagram indexing a pushout, defined as a special case of
+`WidePushoutShape`.
+-/
+/-
+**CategoryTheory.Limits.WalkingSpan** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：WalkingSpan : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingSpan
-  signature: : Type
-  body: WidePushoutShape WalkingPair
-
-中文:
-缩写 WalkingSpan
-  签名: : 类型
-  定义体: WidePushoutShape WalkingPair
-
-Depends on / 依赖: WalkingPair, WidePushoutShape
+--- 原说明 ---
+The type of objects for the diagram indexing a pushout, defined as a special cas
+e of
+`WidePushoutShape`.
 -/
 abbrev WalkingSpan : Type :=
   WidePushoutShape WalkingPair
 
 /-- The left point of the walking span. -/
 @[match_pattern]
-/--
-Definition of `WalkingSpan.left` / `WalkingSpan.left` 的定义
+/-
+**CategoryTheory.Limits.WalkingSpan.left** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.WalkingSpan`。
+形式化陈述：CategoryTheory.Limits.WalkingSpan
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingSpan.left
-  signature: : WalkingSpan
-  body: some WalkingPair.left
-
-中文:
-缩写 WalkingSpan.left
-  签名: : WalkingSpan
-  定义体: some WalkingPair.left
-
-Depends on / 依赖: WalkingPair, WalkingPair.left
+--- 原说明 ---
+The left point of the walking span.
 -/
 abbrev WalkingSpan.left : WalkingSpan :=
   some WalkingPair.left
 
 /-- The right point of the walking span. -/
 @[match_pattern]
-/--
-Definition of `WalkingSpan.right` / `WalkingSpan.right` 的定义
+/-
+**CategoryTheory.Limits.WalkingSpan.right** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits.WalkingSpan`。
+形式化陈述：CategoryTheory.Limits.WalkingSpan
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingSpan.right
-  signature: : WalkingSpan
-  body: some WalkingPair.right
-
-中文:
-缩写 WalkingSpan.right
-  签名: : WalkingSpan
-  定义体: some WalkingPair.right
-
-Depends on / 依赖: WalkingPair, WalkingPair.right
+--- 原说明 ---
+The right point of the walking span.
 -/
 abbrev WalkingSpan.right : WalkingSpan :=
   some WalkingPair.right
 
 /-- The central point of the walking span. -/
 @[match_pattern]
-/--
-Definition of `WalkingSpan.zero` / `WalkingSpan.zero` 的定义
+/-
+**CategoryTheory.Limits.WalkingSpan.zero** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.WalkingSpan`。
+形式化陈述：CategoryTheory.Limits.WalkingSpan
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingSpan.zero
-  signature: : WalkingSpan
-  body: none
-
-中文:
-缩写 WalkingSpan.zero
-  签名: : WalkingSpan
-  定义体: none
+--- 原说明 ---
+The central point of the walking span.
 -/
 abbrev WalkingSpan.zero : WalkingSpan :=
   none
 
 namespace WalkingCospan
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- The type of arrows for the diagram indexing a pullback. -/
+/-
+**CategoryTheory.Limits.WalkingCospan.Hom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.Limits.WalkingCospan`。
+形式化陈述：Hom : WalkingCospan -> WalkingCospan -> Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom
-  signature: : WalkingCospan -> WalkingCospan -> Type
-  body: WidePullbackShape.Hom
-
-中文:
-缩写 态射
-  签名: : WalkingCospan -> WalkingCospan -> 类型
-  定义体: WidePullbackShape.Hom
-
-Depends on / 依赖: WidePullbackShape, WidePullbackShape.Hom
+--- 原说明 ---
+The type of arrows for the diagram indexing a pullback.
 -/
-abbrev Hom : WalkingCospan -> WalkingCospan -> Type :=
+abbrev Hom : WalkingCospan → WalkingCospan → Type :=
   WidePullbackShape.Hom
 
 /-- The left arrow of the walking cospan. -/
 @[match_pattern]
-/--
-Definition of `Hom.inl` / `Hom.inl` 的定义
+/-
+**CategoryTheory.Limits.WalkingCospan.Hom.inl** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.WalkingCospan.Hom`。
+形式化陈述：CategoryTheory.Limits.WalkingCospan.left ⟶ CategoryTheory.Limits.WalkingCo
+span.one
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.inl
-  signature: : left ⟶ one
-  body: WidePullbackShape.Hom.term _
-
-中文:
-缩写 态射.inl
-  签名: : left ⟶ one
-  定义体: WidePullbackShape.Hom.term _
-
-Depends on / 依赖: WidePullbackShape, WidePullbackShape.Hom.term
+--- 原说明 ---
+The left arrow of the walking cospan.
 -/
 abbrev Hom.inl : left ⟶ one :=
   WidePullbackShape.Hom.term _
 
 /-- The right arrow of the walking cospan. -/
 @[match_pattern]
-/--
-Definition of `Hom.inr` / `Hom.inr` 的定义
+/-
+**CategoryTheory.Limits.WalkingCospan.Hom.inr** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.WalkingCospan.Hom`。
+形式化陈述：CategoryTheory.Limits.WalkingCospan.right ⟶ CategoryTheory.Limits.WalkingC
+ospan.one
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.inr
-  signature: : right ⟶ one
-  body: WidePullbackShape.Hom.term _
-
-中文:
-缩写 态射.inr
-  签名: : right ⟶ one
-  定义体: WidePullbackShape.Hom.term _
-
-Depends on / 依赖: WidePullbackShape, WidePullbackShape.Hom.term
+--- 原说明 ---
+The right arrow of the walking cospan.
 -/
 abbrev Hom.inr : right ⟶ one :=
   WidePullbackShape.Hom.term _
 
 /-- The identity arrows of the walking cospan. -/
 @[match_pattern]
-/--
-Definition of `Hom.id` / `Hom.id` 的定义
+/-
+**CategoryTheory.Limits.WalkingCospan.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.WalkingCospan.Hom`。
+形式化陈述：(X : CategoryTheory.Limits.WalkingCospan) → X ⟶ X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.id
-  signature: (X : WalkingCospan)
-  body: WidePullbackShape.Hom.id X
-
-中文:
-缩写 态射.id
-  签名: (X : WalkingCospan)
-  定义体: WidePullbackShape.Hom.id X
+--- 原说明 ---
+The identity arrows of the walking cospan.
 -/
 abbrev Hom.id (X : WalkingCospan) : X ⟶ X :=
   WidePullbackShape.Hom.id X
-
+/-
+**CategoryTheory.Limits.WalkingCospan.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.Limits.WalkingCospan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : WalkingCospan) : Subsingleton (X ⟶ Y) := by
   constructor; intros; simp [eq_iff_true_of_subsingleton]
 
@@ -270,82 +223,68 @@ end WalkingCospan
 
 namespace WalkingSpan
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- The type of arrows for the diagram indexing a pushout. -/
+/-
+**CategoryTheory.Limits.WalkingSpan.Hom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.Limits.WalkingSpan`。
+形式化陈述：Hom : WalkingSpan -> WalkingSpan -> Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom
-  signature: : WalkingSpan -> WalkingSpan -> Type
-  body: WidePushoutShape.Hom
-
-中文:
-缩写 态射
-  签名: : WalkingSpan -> WalkingSpan -> 类型
-  定义体: WidePushoutShape.Hom
-
-Depends on / 依赖: WidePushoutShape, WidePushoutShape.Hom
+--- 原说明 ---
+The type of arrows for the diagram indexing a pushout.
 -/
-abbrev Hom : WalkingSpan -> WalkingSpan -> Type :=
+abbrev Hom : WalkingSpan → WalkingSpan → Type :=
   WidePushoutShape.Hom
 
 /-- The left arrow of the walking span. -/
 @[match_pattern]
-/--
-Definition of `Hom.fst` / `Hom.fst` 的定义
+/-
+**CategoryTheory.Limits.WalkingSpan.Hom.fst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.WalkingSpan.Hom`。
+形式化陈述：CategoryTheory.Limits.WalkingSpan.zero ⟶ CategoryTheory.Limits.WalkingSpan
+.left
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.fst
-  signature: : zero ⟶ left
-  body: WidePushoutShape.Hom.init _
-
-中文:
-缩写 态射.fst
-  签名: : zero ⟶ left
-  定义体: WidePushoutShape.Hom.init _
-
-Depends on / 依赖: WidePushoutShape, WidePushoutShape.Hom.init
+--- 原说明 ---
+The left arrow of the walking span.
 -/
 abbrev Hom.fst : zero ⟶ left :=
   WidePushoutShape.Hom.init _
 
 /-- The right arrow of the walking span. -/
 @[match_pattern]
-/--
-Definition of `Hom.snd` / `Hom.snd` 的定义
+/-
+**CategoryTheory.Limits.WalkingSpan.Hom.snd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits.WalkingSpan.Hom`。
+形式化陈述：CategoryTheory.Limits.WalkingSpan.zero ⟶ CategoryTheory.Limits.WalkingSpan
+.right
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.snd
-  signature: : zero ⟶ right
-  body: WidePushoutShape.Hom.init _
-
-中文:
-缩写 态射.snd
-  签名: : zero ⟶ right
-  定义体: WidePushoutShape.Hom.init _
-
-Depends on / 依赖: WidePushoutShape, WidePushoutShape.Hom.init
+--- 原说明 ---
+The right arrow of the walking span.
 -/
 abbrev Hom.snd : zero ⟶ right :=
   WidePushoutShape.Hom.init _
 
 /-- The identity arrows of the walking span. -/
 @[match_pattern]
-/--
-Definition of `Hom.id` / `Hom.id` 的定义
+/-
+**CategoryTheory.Limits.WalkingSpan.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.WalkingSpan.Hom`。
+形式化陈述：(X : CategoryTheory.Limits.WalkingSpan) → X ⟶ X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.id
-  signature: (X : WalkingSpan)
-  body: WidePushoutShape.Hom.id X
-
-中文:
-缩写 态射.id
-  签名: (X : WalkingSpan)
-  定义体: WidePushoutShape.Hom.id X
+--- 原说明 ---
+The identity arrows of the walking span.
 -/
 abbrev Hom.id (X : WalkingSpan) : X ⟶ X :=
   WidePushoutShape.Hom.id X
-
+/-
+**CategoryTheory.Limits.WalkingSpan.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.L
+imits.WalkingSpan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : WalkingSpan) : Subsingleton (X ⟶ Y) := by
   constructor; intro a b; simp [eq_iff_true_of_subsingleton]
 
@@ -356,42 +295,28 @@ open WalkingSpan.Hom WalkingCospan.Hom WidePullbackShape.Hom WidePushoutShape.Ho
 variable {C : Type u} [Category.{v} C]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `WalkingCospan.ext` / `WalkingCospan.ext` 的定义
+/-- To construct an isomorphism of cones over the walking cospan,
+it suffices to construct an isomorphism
+of the cone points and check it commutes with the legs to `left` and `right`. -/
+/-
+**CategoryTheory.Limits.WalkingCospan.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits.WalkingCospan`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F : Cate
+goryTheory.Functor CategoryTheory.Limits.WalkingCospan C} →       {s t : Categor
+yTheory.Limits.Cone F} →         (i : s.pt ≅ t.pt) →           s.π.app CategoryT
+heory.Limits.WalkingCospan.left =               CategoryTheory.CategoryStruct.co
+mp i.hom (t.π.app CategoryTheory.Limits.WalkingCospan.left) →             s.π.ap
+p CategoryTheory.Limits.WalkingCospan.right =                 CategoryTheory.Cat
+egoryStruct.comp i.hom (t.π.app CategoryTheory.Limits.WalkingCospan.right) →    
+           (s ≅ t)
+参数：i : s.pt ≅ t.pt；t.π.app CategoryTheory.Limits.WalkingCospan.left；t.π.app Cate
+goryTheory.Limits.WalkingCospan.right；s ≅ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WalkingCospan.ext
-  signature: {F : WalkingCospan ⥤ C} {s t : Cone F} (i : s.pt ≅ t.pt)
-  body: by
-  apply Cone.ext i _
-  rintro (⟨⟩ | ⟨⟨⟩⟩)
-  · have h₁ := s.π.naturality WalkingCospan.Hom.inl
-    dsimp at h₁
-    simp only [Category.id_comp] at h₁
-    have h₂ := t.π.naturality WalkingCospan.Hom.inl
-    dsimp at h₂
-    simp only [Category.id_comp] at h₂
-    simp_rw [h₂, ← Category.assoc, ← w₁, ← h₁]
-  · exact w₁
-  · exact w₂
-
-中文:
-定义 WalkingCospan.ext
-  签名: {F : WalkingCospan ⥤ C} {s t : 锥 F} (i : s.pt ≅ t.pt)
-  定义体: by
-  apply Cone.ext i _
-  rintro (⟨⟩ | ⟨⟨⟩⟩)
-  · have h₁ := s.π.naturality WalkingCospan.Hom.inl
-    dsimp at h₁
-    simp only [Category.id_comp] at h₁
-    have h₂ := t.π.naturality WalkingCospan.Hom.inl
-    dsimp at h₂
-    simp only [Category.id_comp] at h₂
-    simp_rw [h₂, ← Category.assoc, ← w₁, ← h₁]
-  · exact w₁
-  · exact w₂
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, Cone.ext, WalkingCospan, WalkingCospan.Hom.inl, id_comp, naturality, simp_rw
+--- 原说明 ---
+To construct an isomorphism of cones over the walking cospan,
+it suffices to construct an isomorphism
+of the cone points and check it commutes with the legs to `left` and `right`.
 -/
 def WalkingCospan.ext {F : WalkingCospan ⥤ C} {s t : Cone F} (i : s.pt ≅ t.pt)
     (w₁ : s.π.app WalkingCospan.left = i.hom ≫ t.π.app WalkingCospan.left)
@@ -410,42 +335,29 @@ def WalkingCospan.ext {F : WalkingCospan ⥤ C} {s t : Cone F} (i : s.pt ≅ t.p
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `WalkingSpan.ext` / `WalkingSpan.ext` 的定义
+/-- To construct an isomorphism of cocones over the walking span,
+it suffices to construct an isomorphism
+of the cocone points and check it commutes with the legs from `left` and `right`. -/
+/-
+**CategoryTheory.Limits.WalkingSpan.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.WalkingSpan`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F : Cate
+goryTheory.Functor CategoryTheory.Limits.WalkingSpan C} →       {s t : CategoryT
+heory.Limits.Cocone F} →         (i : s.pt ≅ t.pt) →           CategoryTheory.Ca
+tegoryStruct.comp (s.ι.app CategoryTheory.Limits.WalkingCospan.left) i.hom =    
+           t.ι.app CategoryTheory.Limits.WalkingCospan.left →             Catego
+ryTheory.CategoryStruct.comp (s.ι.app CategoryTheory.Limits.WalkingCospan.right)
+ i.hom =                 t.ι.app CategoryTheory.Limits.WalkingCospan.right →    
+           (s ≅ t)
+参数：i : s.pt ≅ t.pt；s.ι.app CategoryTheory.Limits.WalkingCospan.left；s.ι.app Cate
+goryTheory.Limits.WalkingCospan.right；s ≅ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WalkingSpan.ext
-  signature: {F : WalkingSpan ⥤ C} {s t : Cocone F} (i : s.pt ≅ t.pt)
-  body: by
-  apply Cocone.ext i _
-  rintro (⟨⟩ | ⟨⟨⟩⟩)
-  · have h₁ := s.ι.naturality WalkingSpan.Hom.fst
-    dsimp at h₁
-    simp only [Category.comp_id] at h₁
-    have h₂ := t.ι.naturality WalkingSpan.Hom.fst
-    dsimp at h₂
-    simp only [Category.comp_id] at h₂
-    simp_rw [← h₁, Category.assoc, w₁, h₂]
-  · exact w₁
-  · exact w₂
-
-中文:
-定义 WalkingSpan.ext
-  签名: {F : WalkingSpan ⥤ C} {s t : 余锥 F} (i : s.pt ≅ t.pt)
-  定义体: by
-  apply Cocone.ext i _
-  rintro (⟨⟩ | ⟨⟨⟩⟩)
-  · have h₁ := s.ι.naturality WalkingSpan.Hom.fst
-    dsimp at h₁
-    simp only [Category.comp_id] at h₁
-    have h₂ := t.ι.naturality WalkingSpan.Hom.fst
-    dsimp at h₂
-    simp only [Category.comp_id] at h₂
-    simp_rw [← h₁, Category.assoc, w₁, h₂]
-  · exact w₁
-  · exact w₂
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Cocone, Cocone.ext, WalkingSpan, WalkingSpan.Hom.fst, comp_id, naturality, simp_rw
+--- 原说明 ---
+To construct an isomorphism of cocones over the walking span,
+it suffices to construct an isomorphism
+of the cocone points and check it commutes with the legs from `left` and `right`
+.
 -/
 def WalkingSpan.ext {F : WalkingSpan ⥤ C} {s t : Cocone F} (i : s.pt ≅ t.pt)
     (w₁ : s.ι.app WalkingCospan.left ≫ i.hom = t.ι.app WalkingCospan.left)
@@ -464,22 +376,16 @@ def WalkingSpan.ext {F : WalkingSpan ⥤ C} {s t : Cocone F} (i : s.pt ≅ t.pt)
 
 /-- `cospan f g` is the functor from the walking cospan hitting `f` and `g`. -/
 @[implicit_reducible]
-/--
-Definition of `cospan` / `cospan` 的定义
+/-
+**CategoryTheory.Limits.cospan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`
+。
+形式化陈述：cospan {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : WalkingCospan ⥤ C
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cospan
-  signature: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  body: WidePullbackShape.wideCospan Z (fun j => WalkingPair.casesOn j X Y) fun j =>
-    WalkingPair.casesOn j f g
-
-中文:
-定义 cospan
-  签名: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  定义体: WidePullbackShape.wideCospan Z (fun j => WalkingPair.casesOn j X Y) fun j =>
-    WalkingPair.casesOn j f g
-
-Depends on / 依赖: WalkingPair, WalkingPair.casesOn, WidePullbackShape, WidePullbackShape.wideCospan, casesOn, wideCospan
+--- 原说明 ---
+`cospan f g` is the functor from the walking cospan hitting `f` and `g`.
 -/
 def cospan {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : WalkingCospan ⥤ C :=
   WidePullbackShape.wideCospan Z (fun j => WalkingPair.casesOn j X Y) fun j =>
@@ -487,279 +393,168 @@ def cospan {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : WalkingCospan ⥤ C :=
 
 /-- `span f g` is the functor from the walking span hitting `f` and `g`. -/
 @[implicit_reducible]
-/--
-Definition of `span` / `span` 的定义
+/-
+**CategoryTheory.Limits.span** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：span {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : WalkingSpan ⥤ C
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition span
-  signature: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  body: WidePushoutShape.wideSpan X (fun j => WalkingPair.casesOn j Y Z) fun j =>
-    WalkingPair.casesOn j f g
-
-@[simp]
-
-中文:
-定义 span
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  定义体: WidePushoutShape.wideSpan X (fun j => WalkingPair.casesOn j Y Z) fun j =>
-    WalkingPair.casesOn j f g
-
-@[simp]
-
-Depends on / 依赖: WalkingPair, WalkingPair.casesOn, WidePushoutShape, WidePushoutShape.wideSpan, casesOn, wideSpan
+--- 原说明 ---
+`span f g` is the functor from the walking span hitting `f` and `g`.
 -/
 def span {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : WalkingSpan ⥤ C :=
   WidePushoutShape.wideSpan X (fun j => WalkingPair.casesOn j Y Z) fun j =>
     WalkingPair.casesOn j f g
 
 @[simp]
-/--
-theorem `cospan_left` / 定理 `cospan_left`
-
-English:
-theorem cospan_left
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  statement: (cospan f g).obj WalkingCospan.left = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospan_left
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  结论: (cospan f g).obj WalkingCospan.left = X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospan_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：cospan_left {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).obj Walking
+Cospan.left = X
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospan_left {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).obj WalkingCospan.left = X :=
   rfl
 
 @[simp]
-/--
-theorem `span_left` / 定理 `span_left`
-
-English:
-theorem span_left
-  given: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  statement: (span f g).obj WalkingSpan.left = Y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 span_left
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: (span f g).obj WalkingSpan.left = Y
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.span_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：span_left {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).obj WalkingSpan
+.left = Y
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem span_left {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).obj WalkingSpan.left = Y :=
   rfl
 
 @[simp]
-/--
-theorem `cospan_right` / 定理 `cospan_right`
-
-English:
-theorem cospan_right
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospan_right
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospan_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：cospan_right {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).obj Walkin
+gCospan.right = Y
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospan_right {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) :
     (cospan f g).obj WalkingCospan.right = Y := rfl
 
 @[simp]
-/--
-theorem `span_right` / 定理 `span_right`
-
-English:
-theorem span_right
-  given: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  statement: (span f g).obj WalkingSpan.right = Z
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 span_right
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: (span f g).obj WalkingSpan.right = Z
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.span_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：span_right {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).obj WalkingSpa
+n.right = Z
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem span_right {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).obj WalkingSpan.right = Z :=
   rfl
 
 @[simp]
-/--
-theorem `cospan_one` / 定理 `cospan_one`
-
-English:
-theorem cospan_one
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  statement: (cospan f g).obj WalkingCospan.one = Z
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospan_one
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  结论: (cospan f g).obj WalkingCospan.one = Z
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospan_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：cospan_one {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).obj WalkingC
+ospan.one = Z
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospan_one {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).obj WalkingCospan.one = Z :=
   rfl
 
 @[simp]
-/--
-theorem `span_zero` / 定理 `span_zero`
-
-English:
-theorem span_zero
-  given: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  statement: (span f g).obj WalkingSpan.zero = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 span_zero
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: (span f g).obj WalkingSpan.zero = X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.span_zero** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：span_zero {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).obj WalkingSpan
+.zero = X
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem span_zero {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).obj WalkingSpan.zero = X :=
   rfl
 
 @[simp]
-/--
-theorem `cospan_map_inl` / 定理 `cospan_map_inl`
-
-English:
-theorem cospan_map_inl
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospan_map_inl
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospan_map_inl** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：cospan_map_inl {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).map Walk
+ingCospan.Hom.inl = f
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospan_map_inl {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) :
     (cospan f g).map WalkingCospan.Hom.inl = f := rfl
 
 @[simp]
-/--
-theorem `span_map_fst` / 定理 `span_map_fst`
-
-English:
-theorem span_map_fst
-  given: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  statement: (span f g).map WalkingSpan.Hom.fst = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 span_map_fst
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: (span f g).map WalkingSpan.态射.fst = f
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.span_map_fst** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：span_map_fst {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).map WalkingS
+pan.Hom.fst = f
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem span_map_fst {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).map WalkingSpan.Hom.fst = f :=
   rfl
 
 @[simp]
-/--
-theorem `cospan_map_inr` / 定理 `cospan_map_inr`
-
-English:
-theorem cospan_map_inr
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospan_map_inr
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospan_map_inr** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：cospan_map_inr {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : (cospan f g).map Walk
+ingCospan.Hom.inr = g
+参数：f : X ⟶ Z；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospan_map_inr {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) :
     (cospan f g).map WalkingCospan.Hom.inr = g := rfl
 
 @[simp]
-/--
-theorem `span_map_snd` / 定理 `span_map_snd`
-
-English:
-theorem span_map_snd
-  given: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  statement: (span f g).map WalkingSpan.Hom.snd = g
-  proof: rfl
-
-中文:
-定理 span_map_snd
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  结论: (span f g).map WalkingSpan.态射.snd = g
-  证明: rfl
+/-
+**CategoryTheory.Limits.span_map_snd** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：span_map_snd {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).map WalkingS
+pan.Hom.snd = g
+参数：f : X ⟶ Y；g : X ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem span_map_snd {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : (span f g).map WalkingSpan.Hom.snd = g :=
   rfl
-
-/--
-theorem `cospan_map_id` / 定理 `cospan_map_id`
-
-English:
-theorem cospan_map_id
-  given: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) (w : WalkingCospan)
-  proof: rfl
-
-中文:
-定理 cospan_map_id
-  条件: {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) (w : WalkingCospan)
-  证明: rfl
+/-
+**CategoryTheory.Limits.cospan_map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：cospan_map_id {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) (w : WalkingCospan) : (c
+ospan f g).map (WalkingCospan.Hom.id w) = 𝟙 _
+参数：f : X ⟶ Z；g : Y ⟶ Z；w : WalkingCospan。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospan_map_id {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) (w : WalkingCospan) :
     (cospan f g).map (WalkingCospan.Hom.id w) = 𝟙 _ := rfl
-
-/--
-theorem `span_map_id` / 定理 `span_map_id`
-
-English:
-theorem span_map_id
-  given: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (w : WalkingSpan)
-  proof: rfl
-
-中文:
-定理 span_map_id
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (w : WalkingSpan)
-  证明: rfl
+/-
+**CategoryTheory.Limits.span_map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：span_map_id {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (w : WalkingSpan) : (span 
+f g).map (WalkingSpan.Hom.id w) = 𝟙 _
+参数：f : X ⟶ Y；g : X ⟶ Z；w : WalkingSpan。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem span_map_id {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (w : WalkingSpan) :
     (span f g).map (WalkingSpan.Hom.id w) = 𝟙 _ := rfl
@@ -767,24 +562,18 @@ theorem span_map_id {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (w : WalkingSpan) :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Every diagram indexing a pullback is naturally isomorphic (actually, equal) to a `cospan` -/
 @[simps (rhsMd := default)]
-/--
-Definition of `diagramIsoCospan` / `diagramIsoCospan` 的定义
+/-
+**CategoryTheory.Limits.diagramIsoCospan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：diagramIsoCospan (F : WalkingCospan ⥤ C) : F ≅ cospan (F.map inl) (F.map i
+nr)
+参数：F : WalkingCospan ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagramIsoCospan
-  signature: (F : WalkingCospan ⥤ C)
-  body: NatIso.ofComponents
-  (fun j => eqToIso (by rcases j with (⟨⟩ | ⟨⟨⟩⟩) <;> rfl))
-  (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-中文:
-定义 diagramIsoCospan
-  签名: (F : WalkingCospan ⥤ C)
-  定义体: NatIso.ofComponents
-  (fun j => eqToIso (by rcases j with (⟨⟩ | ⟨⟨⟩⟩) <;> rfl))
-  (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, eqToIso, ofComponents
+--- 原说明 ---
+Every diagram indexing a pullback is naturally isomorphic (actually, equal) to a
+ `cospan`
 -/
 def diagramIsoCospan (F : WalkingCospan ⥤ C) : F ≅ cospan (F.map inl) (F.map inr) :=
   NatIso.ofComponents
@@ -794,24 +583,17 @@ def diagramIsoCospan (F : WalkingCospan ⥤ C) : F ≅ cospan (F.map inl) (F.map
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Every diagram indexing a pushout is naturally isomorphic (actually, equal) to a `span` -/
 @[simps (rhsMd := default)]
-/--
-Definition of `diagramIsoSpan` / `diagramIsoSpan` 的定义
+/-
+**CategoryTheory.Limits.diagramIsoSpan** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：diagramIsoSpan (F : WalkingSpan ⥤ C) : F ≅ span (F.map fst) (F.map snd)
+参数：F : WalkingSpan ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diagramIsoSpan
-  signature: (F : WalkingSpan ⥤ C)
-  body: NatIso.ofComponents
-  (fun j => eqToIso (by rcases j with (⟨⟩ | ⟨⟨⟩⟩) <;> rfl))
-  (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-中文:
-定义 diagramIsoSpan
-  签名: (F : WalkingSpan ⥤ C)
-  定义体: NatIso.ofComponents
-  (fun j => eqToIso (by rcases j with (⟨⟩ | ⟨⟨⟩⟩) <;> rfl))
-  (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, eqToIso, ofComponents
+--- 原说明 ---
+Every diagram indexing a pushout is naturally isomorphic (actually, equal) to a 
+`span`
 -/
 def diagramIsoSpan (F : WalkingSpan ⥤ C) : F ≅ span (F.map fst) (F.map snd) :=
   NatIso.ofComponents
@@ -822,22 +604,18 @@ variable {D : Type u₂} [Category.{v₂} D]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `cospanCompIso` / `cospanCompIso` 的定义
+/-- A functor applied to a cospan is a cospan. -/
+/-
+**CategoryTheory.Limits.cospanCompIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：cospanCompIso (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) : cospan f g
+ ⋙ F ≅ cospan (F.map f) (F.map g)
+参数：F : C ⥤ D；f : X ⟶ Z；g : Y ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cospanCompIso
-  signature: (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  body: NatIso.ofComponents (by rintro (⟨⟩ | ⟨⟨⟩⟩) <;> exact Iso.refl _)
-    (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-中文:
-定义 cospanCompIso
-  签名: (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
-  定义体: NatIso.ofComponents (by rintro (⟨⟩ | ⟨⟨⟩⟩) <;> exact Iso.refl _)
-    (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+A functor applied to a cospan is a cospan.
 -/
 def cospanCompIso (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) :
     cospan f g ⋙ F ≅ cospan (F.map f) (F.map g) :=
@@ -849,183 +627,106 @@ section
 variable (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
 
 @[simp]
-/--
-theorem `cospanCompIso_app_left` / 定理 `cospanCompIso_app_left`
-
-English:
-theorem cospanCompIso_app_left
-  statement: (cospanCompIso F f g).app WalkingCospan.left = Iso.refl _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_app_left
-  结论: (cospanCompIso F f g).app WalkingCospan.left = 同构.refl _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：cospanCompIso_app_left : (cospanCompIso F f g).app WalkingCospan.left = Is
+o.refl _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_app_left : (cospanCompIso F f g).app WalkingCospan.left = Iso.refl _ := rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_app_right` / 定理 `cospanCompIso_app_right`
-
-English:
-theorem cospanCompIso_app_right
-  statement: (cospanCompIso F f g).app WalkingCospan.right = Iso.refl _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_app_right
-  结论: (cospanCompIso F f g).app WalkingCospan.right = 同构.refl _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：cospanCompIso_app_right : (cospanCompIso F f g).app WalkingCospan.right = 
+Iso.refl _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_app_right : (cospanCompIso F f g).app WalkingCospan.right = Iso.refl _ :=
   rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_app_one` / 定理 `cospanCompIso_app_one`
-
-English:
-theorem cospanCompIso_app_one
-  statement: (cospanCompIso F f g).app WalkingCospan.one = Iso.refl _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_app_one
-  结论: (cospanCompIso F f g).app WalkingCospan.one = 同构.refl _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_app_one** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：cospanCompIso_app_one : (cospanCompIso F f g).app WalkingCospan.one = Iso.
+refl _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_app_one : (cospanCompIso F f g).app WalkingCospan.one = Iso.refl _ := rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_hom_app_left` / 定理 `cospanCompIso_hom_app_left`
-
-English:
-theorem cospanCompIso_hom_app_left
-  statement: (cospanCompIso F f g).hom.app WalkingCospan.left = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_hom_app_left
-  结论: (cospanCompIso F f g).hom.app WalkingCospan.left = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_hom_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：cospanCompIso_hom_app_left : (cospanCompIso F f g).hom.app WalkingCospan.l
+eft = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_hom_app_left : (cospanCompIso F f g).hom.app WalkingCospan.left = 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_hom_app_right` / 定理 `cospanCompIso_hom_app_right`
-
-English:
-theorem cospanCompIso_hom_app_right
-  statement: (cospanCompIso F f g).hom.app WalkingCospan.right = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_hom_app_right
-  结论: (cospanCompIso F f g).hom.app WalkingCospan.right = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_hom_app_right** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：cospanCompIso_hom_app_right : (cospanCompIso F f g).hom.app WalkingCospan.
+right = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_hom_app_right : (cospanCompIso F f g).hom.app WalkingCospan.right = 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_hom_app_one` / 定理 `cospanCompIso_hom_app_one`
-
-English:
-theorem cospanCompIso_hom_app_one
-  statement: (cospanCompIso F f g).hom.app WalkingCospan.one = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_hom_app_one
-  结论: (cospanCompIso F f g).hom.app WalkingCospan.one = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_hom_app_one** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：cospanCompIso_hom_app_one : (cospanCompIso F f g).hom.app WalkingCospan.on
+e = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_hom_app_one : (cospanCompIso F f g).hom.app WalkingCospan.one = 𝟙 _ := rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_inv_app_left` / 定理 `cospanCompIso_inv_app_left`
-
-English:
-theorem cospanCompIso_inv_app_left
-  statement: (cospanCompIso F f g).inv.app WalkingCospan.left = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_inv_app_left
-  结论: (cospanCompIso F f g).inv.app WalkingCospan.left = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_inv_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：cospanCompIso_inv_app_left : (cospanCompIso F f g).inv.app WalkingCospan.l
+eft = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_inv_app_left : (cospanCompIso F f g).inv.app WalkingCospan.left = 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_inv_app_right` / 定理 `cospanCompIso_inv_app_right`
-
-English:
-theorem cospanCompIso_inv_app_right
-  statement: (cospanCompIso F f g).inv.app WalkingCospan.right = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanCompIso_inv_app_right
-  结论: (cospanCompIso F f g).inv.app WalkingCospan.right = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanCompIso_inv_app_right** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：cospanCompIso_inv_app_right : (cospanCompIso F f g).inv.app WalkingCospan.
+right = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_inv_app_right : (cospanCompIso F f g).inv.app WalkingCospan.right = 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `cospanCompIso_inv_app_one` / 定理 `cospanCompIso_inv_app_one`
-
-English:
-theorem cospanCompIso_inv_app_one
-  statement: (cospanCompIso F f g).inv.app WalkingCospan.one = 𝟙 _
-  proof: rfl
-
-中文:
-定理 cospanCompIso_inv_app_one
-  结论: (cospanCompIso F f g).inv.app WalkingCospan.one = 𝟙 _
-  证明: rfl
+/-
+**CategoryTheory.Limits.cospanCompIso_inv_app_one** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：cospanCompIso_inv_app_one : (cospanCompIso F f g).inv.app WalkingCospan.on
+e = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanCompIso_inv_app_one : (cospanCompIso F f g).inv.app WalkingCospan.one = 𝟙 _ := rfl
 
@@ -1033,22 +734,18 @@ end
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `spanCompIso` / `spanCompIso` 的定义
+/-- A functor applied to a span is a span. -/
+/-
+**CategoryTheory.Limits.spanCompIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：spanCompIso (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) : span f g ⋙ F
+ ≅ span (F.map f) (F.map g)
+参数：F : C ⥤ D；f : X ⟶ Y；g : X ⟶ Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanCompIso
-  signature: (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  body: NatIso.ofComponents (by rintro (⟨⟩ | ⟨⟨⟩⟩) <;> exact Iso.refl _)
-    (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-中文:
-定义 spanCompIso
-  签名: (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
-  定义体: NatIso.ofComponents (by rintro (⟨⟩ | ⟨⟨⟩⟩) <;> exact Iso.refl _)
-    (by rintro (⟨⟩ | ⟨⟨⟩⟩) (⟨⟩ | ⟨⟨⟩⟩) f <;> cases f <;> simp)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+A functor applied to a span is a span.
 -/
 def spanCompIso (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) :
     span f g ⋙ F ≅ span (F.map f) (F.map g) :=
@@ -1060,178 +757,101 @@ section
 variable (F : C ⥤ D) {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
 
 @[simp]
-/--
-theorem `spanCompIso_app_left` / 定理 `spanCompIso_app_left`
-
-English:
-theorem spanCompIso_app_left
-  statement: (spanCompIso F f g).app WalkingSpan.left = Iso.refl _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_app_left
-  结论: (spanCompIso F f g).app WalkingSpan.left = 同构.refl _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：spanCompIso_app_left : (spanCompIso F f g).app WalkingSpan.left = Iso.refl
+ _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_app_left : (spanCompIso F f g).app WalkingSpan.left = Iso.refl _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_app_right` / 定理 `spanCompIso_app_right`
-
-English:
-theorem spanCompIso_app_right
-  statement: (spanCompIso F f g).app WalkingSpan.right = Iso.refl _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_app_right
-  结论: (spanCompIso F f g).app WalkingSpan.right = 同构.refl _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：spanCompIso_app_right : (spanCompIso F f g).app WalkingSpan.right = Iso.re
+fl _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_app_right : (spanCompIso F f g).app WalkingSpan.right = Iso.refl _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_app_zero` / 定理 `spanCompIso_app_zero`
-
-English:
-theorem spanCompIso_app_zero
-  statement: (spanCompIso F f g).app WalkingSpan.zero = Iso.refl _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_app_zero
-  结论: (spanCompIso F f g).app WalkingSpan.zero = 同构.refl _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_app_zero** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：spanCompIso_app_zero : (spanCompIso F f g).app WalkingSpan.zero = Iso.refl
+ _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_app_zero : (spanCompIso F f g).app WalkingSpan.zero = Iso.refl _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_hom_app_left` / 定理 `spanCompIso_hom_app_left`
-
-English:
-theorem spanCompIso_hom_app_left
-  statement: (spanCompIso F f g).hom.app WalkingSpan.left = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_hom_app_left
-  结论: (spanCompIso F f g).hom.app WalkingSpan.left = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_hom_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：spanCompIso_hom_app_left : (spanCompIso F f g).hom.app WalkingSpan.left = 
+𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_hom_app_left : (spanCompIso F f g).hom.app WalkingSpan.left = 𝟙 _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_hom_app_right` / 定理 `spanCompIso_hom_app_right`
-
-English:
-theorem spanCompIso_hom_app_right
-  statement: (spanCompIso F f g).hom.app WalkingSpan.right = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_hom_app_right
-  结论: (spanCompIso F f g).hom.app WalkingSpan.right = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_hom_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：spanCompIso_hom_app_right : (spanCompIso F f g).hom.app WalkingSpan.right 
+= 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_hom_app_right : (spanCompIso F f g).hom.app WalkingSpan.right = 𝟙 _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_hom_app_zero` / 定理 `spanCompIso_hom_app_zero`
-
-English:
-theorem spanCompIso_hom_app_zero
-  statement: (spanCompIso F f g).hom.app WalkingSpan.zero = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_hom_app_zero
-  结论: (spanCompIso F f g).hom.app WalkingSpan.zero = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_hom_app_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：spanCompIso_hom_app_zero : (spanCompIso F f g).hom.app WalkingSpan.zero = 
+𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_hom_app_zero : (spanCompIso F f g).hom.app WalkingSpan.zero = 𝟙 _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_inv_app_left` / 定理 `spanCompIso_inv_app_left`
-
-English:
-theorem spanCompIso_inv_app_left
-  statement: (spanCompIso F f g).inv.app WalkingSpan.left = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_inv_app_left
-  结论: (spanCompIso F f g).inv.app WalkingSpan.left = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_inv_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：spanCompIso_inv_app_left : (spanCompIso F f g).inv.app WalkingSpan.left = 
+𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_inv_app_left : (spanCompIso F f g).inv.app WalkingSpan.left = 𝟙 _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_inv_app_right` / 定理 `spanCompIso_inv_app_right`
-
-English:
-theorem spanCompIso_inv_app_right
-  statement: (spanCompIso F f g).inv.app WalkingSpan.right = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanCompIso_inv_app_right
-  结论: (spanCompIso F f g).inv.app WalkingSpan.right = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanCompIso_inv_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：spanCompIso_inv_app_right : (spanCompIso F f g).inv.app WalkingSpan.right 
+= 𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_inv_app_right : (spanCompIso F f g).inv.app WalkingSpan.right = 𝟙 _ := rfl
 
 @[simp]
-/--
-theorem `spanCompIso_inv_app_zero` / 定理 `spanCompIso_inv_app_zero`
-
-English:
-theorem spanCompIso_inv_app_zero
-  statement: (spanCompIso F f g).inv.app WalkingSpan.zero = 𝟙 _
-  proof: rfl
-
-中文:
-定理 spanCompIso_inv_app_zero
-  结论: (spanCompIso F f g).inv.app WalkingSpan.zero = 𝟙 _
-  证明: rfl
+/-
+**CategoryTheory.Limits.spanCompIso_inv_app_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：spanCompIso_inv_app_zero : (spanCompIso F f g).inv.app WalkingSpan.zero = 
+𝟙 _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanCompIso_inv_app_zero : (spanCompIso F f g).inv.app WalkingSpan.zero = 𝟙 _ := rfl
 
@@ -1246,22 +866,18 @@ section
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Constructor for natural transformations between cospans. -/
 @[simps]
-/--
-Definition of `cospanHomMk` / `cospanHomMk` 的定义
+/-
+**CategoryTheory.Limits.cospanHomMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：cospanHomMk {F G : WalkingCospan ⥤ C} (z : F.obj .one ⟶ G.obj .one) (l : F
+.obj .left ⟶ G.obj .left) (r : F.obj .right ⟶ G.obj .right) (hl : F.map inl ≫ z 
+= l ≫ G.map inl
+参数：z : F.obj .one ⟶ G.obj .one；l : F.obj .left ⟶ G.obj .left；r : F.obj .right ⟶ 
+G.obj .right。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cospanHomMk
-  signature: {F G : WalkingCospan ⥤ C}
-  body: by rintro (_ | _ | _); exacts [z, l, r]
-  naturality := by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch
-
-中文:
-定义 cospanHomMk
-  签名: {F G : WalkingCospan ⥤ C}
-  定义体: by rintro (_ | _ | _); exacts [z, l, r]
-  naturality := by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch
-
-Depends on / 依赖: F.map, G.map, all_goals, cat_disch, exacts, naturality
+--- 原说明 ---
+Constructor for natural transformations between cospans.
 -/
 def cospanHomMk {F G : WalkingCospan ⥤ C}
     (z : F.obj .one ⟶ G.obj .one) (l : F.obj .left ⟶ G.obj .left)
@@ -1274,22 +890,18 @@ def cospanHomMk {F G : WalkingCospan ⥤ C}
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Constructor for natural isomorphisms between cospans. -/
 @[simps!]
-/--
-Definition of `cospanIsoMk` / `cospanIsoMk` 的定义
+/-
+**CategoryTheory.Limits.cospanIsoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：cospanIsoMk {F G : WalkingCospan ⥤ C} (z : F.obj .one ≅ G.obj .one) (l : F
+.obj .left ≅ G.obj .left) (r : F.obj .right ≅ G.obj .right) (hl : F.map inl ≫ z.
+hom = l.hom ≫ G.map inl
+参数：z : F.obj .one ≅ G.obj .one；l : F.obj .left ≅ G.obj .left；r : F.obj .right ≅ 
+G.obj .right。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cospanIsoMk
-  signature: {F G : WalkingCospan ⥤ C}
-  body: NatIso.ofComponents (by rintro (_ | _ | _); exacts [z, l, r])
-    (by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch)
-
-中文:
-定义 cospanIsoMk
-  签名: {F G : WalkingCospan ⥤ C}
-  定义体: NatIso.ofComponents (by rintro (_ | _ | _); exacts [z, l, r])
-    (by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch)
-
-Depends on / 依赖: F.map, G.map, NatIso, NatIso.ofComponents, all_goals, cat_disch, exacts, ofComponents, r.hom, z.hom
+--- 原说明 ---
+Constructor for natural isomorphisms between cospans.
 -/
 def cospanIsoMk {F G : WalkingCospan ⥤ C}
     (z : F.obj .one ≅ G.obj .one) (l : F.obj .left ≅ G.obj .left)
@@ -1301,20 +913,18 @@ def cospanIsoMk {F G : WalkingCospan ⥤ C}
 
 variable {f : X ⟶ Z} {g : Y ⟶ Z} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'}
 
-/--
-Definition of `cospanExt` / `cospanExt` 的定义
+/-- Construct an isomorphism of cospans from components. -/
+/-
+**CategoryTheory.Limits.cospanExt** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：cospanExt (wf : iX.hom ≫ f' = f ≫ iZ.hom) (wg : iY.hom ≫ g' = g ≫ iZ.hom) 
+: cospan f g ≅ cospan f' g'
+参数：wf : iX.hom ≫ f' = f ≫ iZ.hom；wg : iY.hom ≫ g' = g ≫ iZ.hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cospanExt
-  signature: (wf : iX.hom ≫ f' = f ≫ iZ.hom) (wg : iY.hom ≫ g' = g ≫ iZ.hom)
-  body: cospanIsoMk iZ iX iY
-
-中文:
-定义 cospanExt
-  签名: (wf : iX.hom ≫ f' = f ≫ iZ.hom) (wg : iY.hom ≫ g' = g ≫ iZ.hom)
-  定义体: cospanIsoMk iZ iX iY
-
-Depends on / 依赖: cospanIsoMk
+--- 原说明 ---
+Construct an isomorphism of cospans from components.
 -/
 def cospanExt (wf : iX.hom ≫ f' = f ≫ iZ.hom) (wg : iY.hom ≫ g' = g ≫ iZ.hom) :
     cospan f g ≅ cospan f' g' :=
@@ -1323,179 +933,105 @@ def cospanExt (wf : iX.hom ≫ f' = f ≫ iZ.hom) (wg : iY.hom ≫ g' = g ≫ iZ
 variable (wf : iX.hom ≫ f' = f ≫ iZ.hom) (wg : iY.hom ≫ g' = g ≫ iZ.hom)
 
 @[simp]
-/--
-theorem `cospanExt_app_left` / 定理 `cospanExt_app_left`
-
-English:
-theorem cospanExt_app_left
-  statement: (cospanExt iX iY iZ wf wg).app WalkingCospan.left = iX
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_app_left
-  结论: (cospanExt iX iY iZ wf wg).app WalkingCospan.left = iX
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanExt_app_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：cospanExt_app_left : (cospanExt iX iY iZ wf wg).app WalkingCospan.left = i
+X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_app_left : (cospanExt iX iY iZ wf wg).app WalkingCospan.left = iX := rfl
 
 @[simp]
-/--
-theorem `cospanExt_app_right` / 定理 `cospanExt_app_right`
-
-English:
-theorem cospanExt_app_right
-  statement: (cospanExt iX iY iZ wf wg).app WalkingCospan.right = iY
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_app_right
-  结论: (cospanExt iX iY iZ wf wg).app WalkingCospan.right = iY
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanExt_app_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：cospanExt_app_right : (cospanExt iX iY iZ wf wg).app WalkingCospan.right =
+ iY
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_app_right : (cospanExt iX iY iZ wf wg).app WalkingCospan.right = iY := rfl
 
 @[simp]
-/--
-theorem `cospanExt_app_one` / 定理 `cospanExt_app_one`
-
-English:
-theorem cospanExt_app_one
-  statement: (cospanExt iX iY iZ wf wg).app WalkingCospan.one = iZ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_app_one
-  结论: (cospanExt iX iY iZ wf wg).app WalkingCospan.one = iZ
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanExt_app_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：cospanExt_app_one : (cospanExt iX iY iZ wf wg).app WalkingCospan.one = iZ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_app_one : (cospanExt iX iY iZ wf wg).app WalkingCospan.one = iZ := rfl
 
 @[simp]
-/--
-theorem `cospanExt_hom_app_left` / 定理 `cospanExt_hom_app_left`
-
-English:
-theorem cospanExt_hom_app_left
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_hom_app_left
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanExt_hom_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：cospanExt_hom_app_left : (cospanExt iX iY iZ wf wg).hom.app WalkingCospan.
+left = iX.hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_hom_app_left :
     (cospanExt iX iY iZ wf wg).hom.app WalkingCospan.left = iX.hom := rfl
 
 @[simp]
-/--
-theorem `cospanExt_hom_app_right` / 定理 `cospanExt_hom_app_right`
-
-English:
-theorem cospanExt_hom_app_right
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_hom_app_right
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanExt_hom_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：cospanExt_hom_app_right : (cospanExt iX iY iZ wf wg).hom.app WalkingCospan
+.right = iY.hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_hom_app_right :
     (cospanExt iX iY iZ wf wg).hom.app WalkingCospan.right = iY.hom := rfl
 
 @[simp]
-/--
-theorem `cospanExt_hom_app_one` / 定理 `cospanExt_hom_app_one`
-
-English:
-theorem cospanExt_hom_app_one
-  statement: (cospanExt iX iY iZ wf wg).hom.app WalkingCospan.one = iZ.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_hom_app_one
-  结论: (cospanExt iX iY iZ wf wg).hom.app WalkingCospan.one = iZ.hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanExt_hom_app_one** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：cospanExt_hom_app_one : (cospanExt iX iY iZ wf wg).hom.app WalkingCospan.o
+ne = iZ.hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_hom_app_one : (cospanExt iX iY iZ wf wg).hom.app WalkingCospan.one = iZ.hom := rfl
 
 @[simp]
-/--
-theorem `cospanExt_inv_app_left` / 定理 `cospanExt_inv_app_left`
-
-English:
-theorem cospanExt_inv_app_left
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_inv_app_left
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: F.map, factorizationData, ofIsEquivalence
+/-
+**CategoryTheory.Limits.cospanExt_inv_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：cospanExt_inv_app_left : (cospanExt iX iY iZ wf wg).inv.app WalkingCospan.
+left = iX.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_inv_app_left :
     (cospanExt iX iY iZ wf wg).inv.app WalkingCospan.left = iX.inv := rfl
 
 @[simp]
-/--
-theorem `cospanExt_inv_app_right` / 定理 `cospanExt_inv_app_right`
-
-English:
-theorem cospanExt_inv_app_right
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cospanExt_inv_app_right
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.cospanExt_inv_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：cospanExt_inv_app_right : (cospanExt iX iY iZ wf wg).inv.app WalkingCospan
+.right = iY.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_inv_app_right :
     (cospanExt iX iY iZ wf wg).inv.app WalkingCospan.right = iY.inv :=
   rfl
 
 @[simp]
-/--
-theorem `cospanExt_inv_app_one` / 定理 `cospanExt_inv_app_one`
-
-English:
-theorem cospanExt_inv_app_one
-  statement: (cospanExt iX iY iZ wf wg).inv.app WalkingCospan.one = iZ.inv
-  proof: by
-  rfl
-
-中文:
-定理 cospanExt_inv_app_one
-  结论: (cospanExt iX iY iZ wf wg).inv.app WalkingCospan.one = iZ.inv
-  证明: by
-  rfl
+/-
+**CategoryTheory.Limits.cospanExt_inv_app_one** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：cospanExt_inv_app_one : (cospanExt iX iY iZ wf wg).inv.app WalkingCospan.o
+ne = iZ.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cospanExt_inv_app_one : (cospanExt iX iY iZ wf wg).inv.app WalkingCospan.one = iZ.inv := by
   rfl
@@ -1507,22 +1043,18 @@ section
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Constructor for natural transformations between spans. -/
 @[simps]
-/--
-Definition of `spanHomMk` / `spanHomMk` 的定义
+/-
+**CategoryTheory.Limits.spanHomMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：spanHomMk {F G : WalkingSpan ⥤ C} (z : F.obj .zero ⟶ G.obj .zero) (l : F.o
+bj .left ⟶ G.obj .left) (r : F.obj .right ⟶ G.obj .right) (hl : F.map fst ≫ l = 
+z ≫ G.map fst
+参数：z : F.obj .zero ⟶ G.obj .zero；l : F.obj .left ⟶ G.obj .left；r : F.obj .right 
+⟶ G.obj .right。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanHomMk
-  signature: {F G : WalkingSpan ⥤ C}
-  body: by rintro (_ | _ | _); exacts [z, l, r]
-  naturality := by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch
-
-中文:
-定义 spanHomMk
-  签名: {F G : WalkingSpan ⥤ C}
-  定义体: by rintro (_ | _ | _); exacts [z, l, r]
-  naturality := by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch
-
-Depends on / 依赖: F.map, G.map, all_goals, cat_disch, exacts, naturality
+--- 原说明 ---
+Constructor for natural transformations between spans.
 -/
 def spanHomMk {F G : WalkingSpan ⥤ C}
     (z : F.obj .zero ⟶ G.obj .zero) (l : F.obj .left ⟶ G.obj .left)
@@ -1535,22 +1067,18 @@ def spanHomMk {F G : WalkingSpan ⥤ C}
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Constructor for natural isomorphisms between spans. -/
 @[simps!]
-/--
-Definition of `spanIsoMk` / `spanIsoMk` 的定义
+/-
+**CategoryTheory.Limits.spanIsoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：spanIsoMk {F G : WalkingSpan ⥤ C} (z : F.obj .zero ≅ G.obj .zero) (l : F.o
+bj .left ≅ G.obj .left) (r : F.obj .right ≅ G.obj .right) (hl : F.map fst ≫ l.ho
+m = z.hom ≫ G.map fst
+参数：z : F.obj .zero ≅ G.obj .zero；l : F.obj .left ≅ G.obj .left；r : F.obj .right 
+≅ G.obj .right。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanIsoMk
-  signature: {F G : WalkingSpan ⥤ C}
-  body: NatIso.ofComponents (by rintro (_ | _ | _); exacts [z, l, r])
-    (by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch)
-
-中文:
-定义 spanIsoMk
-  签名: {F G : WalkingSpan ⥤ C}
-  定义体: NatIso.ofComponents (by rintro (_ | _ | _); exacts [z, l, r])
-    (by rintro (_ | _ | _) (_ | _ | _) (_ | _); all_goals cat_disch)
-
-Depends on / 依赖: F.map, G.map, NatIso, NatIso.ofComponents, all_goals, cat_disch, exacts, ofComponents, r.hom, z.hom
+--- 原说明 ---
+Constructor for natural isomorphisms between spans.
 -/
 def spanIsoMk {F G : WalkingSpan ⥤ C}
     (z : F.obj .zero ≅ G.obj .zero) (l : F.obj .left ≅ G.obj .left)
@@ -1562,20 +1090,18 @@ def spanIsoMk {F G : WalkingSpan ⥤ C}
 
 variable {f : X ⟶ Y} {g : X ⟶ Z} {f' : X' ⟶ Y'} {g' : X' ⟶ Z'}
 
-/--
-Definition of `spanExt` / `spanExt` 的定义
+/-- Construct an isomorphism of spans from components. -/
+/-
+**CategoryTheory.Limits.spanExt** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits
+`。
+形式化陈述：spanExt (wf : iX.hom ≫ f' = f ≫ iY.hom) (wg : iX.hom ≫ g' = g ≫ iZ.hom) : 
+span f g ≅ span f' g'
+参数：wf : iX.hom ≫ f' = f ≫ iY.hom；wg : iX.hom ≫ g' = g ≫ iZ.hom。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition spanExt
-  signature: (wf : iX.hom ≫ f' = f ≫ iY.hom) (wg : iX.hom ≫ g' = g ≫ iZ.hom)
-  body: spanIsoMk iX iY iZ
-
-中文:
-定义 spanExt
-  签名: (wf : iX.hom ≫ f' = f ≫ iY.hom) (wg : iX.hom ≫ g' = g ≫ iZ.hom)
-  定义体: spanIsoMk iX iY iZ
-
-Depends on / 依赖: spanIsoMk
+--- 原说明 ---
+Construct an isomorphism of spans from components.
 -/
 def spanExt (wf : iX.hom ≫ f' = f ≫ iY.hom) (wg : iX.hom ≫ g' = g ≫ iZ.hom) :
     span f g ≅ span f' g' :=
@@ -1584,184 +1110,98 @@ def spanExt (wf : iX.hom ≫ f' = f ≫ iY.hom) (wg : iX.hom ≫ g' = g ≫ iZ.h
 variable (wf : iX.hom ≫ f' = f ≫ iY.hom) (wg : iX.hom ≫ g' = g ≫ iZ.hom)
 
 @[simp]
-/--
-theorem `spanExt_app_left` / 定理 `spanExt_app_left`
-
-English:
-theorem spanExt_app_left
-  statement: (spanExt iX iY iZ wf wg).app WalkingSpan.left = iY
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_app_left
-  结论: (spanExt iX iY iZ wf wg).app WalkingSpan.left = iY
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: W.functorCategory, W.inverseImage, W.transfiniteCompositionsOfShape_le, evaluation, functorCategory, hf.ofLE, inverseImage, transfiniteCompositionsOfShape_le
+/-
+**CategoryTheory.Limits.spanExt_app_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：spanExt_app_left : (spanExt iX iY iZ wf wg).app WalkingSpan.left = iY
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_app_left : (spanExt iX iY iZ wf wg).app WalkingSpan.left = iY := rfl
 
 @[simp]
-/--
-theorem `spanExt_app_right` / 定理 `spanExt_app_right`
-
-English:
-theorem spanExt_app_right
-  statement: (spanExt iX iY iZ wf wg).app WalkingSpan.right = iZ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_app_right
-  结论: (spanExt iX iY iZ wf wg).app WalkingSpan.right = iZ
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanExt_app_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：spanExt_app_right : (spanExt iX iY iZ wf wg).app WalkingSpan.right = iZ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_app_right : (spanExt iX iY iZ wf wg).app WalkingSpan.right = iZ := rfl
 
 @[simp]
-/--
-theorem `spanExt_app_one` / 定理 `spanExt_app_one`
-
-English:
-theorem spanExt_app_one
-  statement: (spanExt iX iY iZ wf wg).app WalkingSpan.zero = iX
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_app_one
-  结论: (spanExt iX iY iZ wf wg).app WalkingSpan.zero = iX
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanExt_app_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：spanExt_app_one : (spanExt iX iY iZ wf wg).app WalkingSpan.zero = iX
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_app_one : (spanExt iX iY iZ wf wg).app WalkingSpan.zero = iX := rfl
 
 @[simp]
-/--
-theorem `spanExt_hom_app_left` / 定理 `spanExt_hom_app_left`
-
-English:
-theorem spanExt_hom_app_left
-  statement: (spanExt iX iY iZ wf wg).hom.app WalkingSpan.left = iY.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_hom_app_left
-  结论: (spanExt iX iY iZ wf wg).hom.app WalkingSpan.left = iY.hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanExt_hom_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：spanExt_hom_app_left : (spanExt iX iY iZ wf wg).hom.app WalkingSpan.left =
+ iY.hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_hom_app_left : (spanExt iX iY iZ wf wg).hom.app WalkingSpan.left = iY.hom := rfl
 
 @[simp]
-/--
-theorem `spanExt_hom_app_right` / 定理 `spanExt_hom_app_right`
-
-English:
-theorem spanExt_hom_app_right
-  statement: (spanExt iX iY iZ wf wg).hom.app WalkingSpan.right = iZ.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_hom_app_right
-  结论: (spanExt iX iY iZ wf wg).hom.app WalkingSpan.right = iZ.hom
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: functorCategory_monomorphisms, infer_instance
+/-
+**CategoryTheory.Limits.spanExt_hom_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：spanExt_hom_app_right : (spanExt iX iY iZ wf wg).hom.app WalkingSpan.right
+ = iZ.hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_hom_app_right : (spanExt iX iY iZ wf wg).hom.app WalkingSpan.right = iZ.hom := rfl
 
 @[simp]
-/--
-theorem `spanExt_hom_app_zero` / 定理 `spanExt_hom_app_zero`
-
-English:
-theorem spanExt_hom_app_zero
-  statement: (spanExt iX iY iZ wf wg).hom.app WalkingSpan.zero = iX.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_hom_app_zero
-  结论: (spanExt iX iY iZ wf wg).hom.app WalkingSpan.zero = iX.hom
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: functorCategory_monomorphisms, infer_instance
+/-
+**CategoryTheory.Limits.spanExt_hom_app_zero** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：spanExt_hom_app_zero : (spanExt iX iY iZ wf wg).hom.app WalkingSpan.zero =
+ iX.hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_hom_app_zero : (spanExt iX iY iZ wf wg).hom.app WalkingSpan.zero = iX.hom := rfl
 
 @[simp]
-/--
-theorem `spanExt_inv_app_left` / 定理 `spanExt_inv_app_left`
-
-English:
-theorem spanExt_inv_app_left
-  statement: (spanExt iX iY iZ wf wg).inv.app WalkingSpan.left = iY.inv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_inv_app_left
-  结论: (spanExt iX iY iZ wf wg).inv.app WalkingSpan.left = iY.inv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanExt_inv_app_left** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：spanExt_inv_app_left : (spanExt iX iY iZ wf wg).inv.app WalkingSpan.left =
+ iY.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_inv_app_left : (spanExt iX iY iZ wf wg).inv.app WalkingSpan.left = iY.inv := rfl
 
 @[simp]
-/--
-theorem `spanExt_inv_app_right` / 定理 `spanExt_inv_app_right`
-
-English:
-theorem spanExt_inv_app_right
-  statement: (spanExt iX iY iZ wf wg).inv.app WalkingSpan.right = iZ.inv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 spanExt_inv_app_right
-  结论: (spanExt iX iY iZ wf wg).inv.app WalkingSpan.right = iZ.inv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.spanExt_inv_app_right** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：spanExt_inv_app_right : (spanExt iX iY iZ wf wg).inv.app WalkingSpan.right
+ = iZ.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_inv_app_right : (spanExt iX iY iZ wf wg).inv.app WalkingSpan.right = iZ.inv := rfl
 
 @[simp]
-/--
-theorem `spanExt_inv_app_zero` / 定理 `spanExt_inv_app_zero`
-
-English:
-theorem spanExt_inv_app_zero
-  statement: (spanExt iX iY iZ wf wg).inv.app WalkingSpan.zero = iX.inv
-  proof: rfl
-
-中文:
-定理 spanExt_inv_app_zero
-  结论: (spanExt iX iY iZ wf wg).inv.app WalkingSpan.zero = iX.inv
-  证明: rfl
+/-
+**CategoryTheory.Limits.spanExt_inv_app_zero** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：spanExt_inv_app_zero : (spanExt iX iY iZ wf wg).inv.app WalkingSpan.zero =
+ iX.inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem spanExt_inv_app_zero : (spanExt iX iY iZ wf wg).inv.app WalkingSpan.zero = iX.inv := rfl
 
@@ -1770,3 +1210,4 @@ end
 end
 
 end CategoryTheory.Limits
+

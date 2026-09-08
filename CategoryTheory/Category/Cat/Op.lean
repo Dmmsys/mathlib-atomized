@@ -26,20 +26,14 @@ namespace Cat
 
 /-- The endofunctor `Cat ⥤ Cat` assigning to each category its opposite category. -/
 @[simps]
-/--
-Definition of `opFunctor` / `opFunctor` 的定义
+/-
+**CategoryTheory.Cat.opFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Cat`。
+形式化陈述：opFunctor : Cat.{v₁, u₁} ⥤ Cat.{v₁, u₁} where obj C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opFunctor
-  signature: : Cat.{v₁, u₁} ⥤ Cat.{v₁, u₁} where
-  body: .of Cᵒᵖ
-  map F := F.toFunctor.op.toCatHom
-
-中文:
-定义 opFunctor
-  签名: : Cat.{v₁, u₁} ⥤ Cat.{v₁, u₁} where
-  定义体: .of Cᵒᵖ
-  map F := F.toFunctor.op.toCatHom
+--- 原说明 ---
+The endofunctor `Cat ⥤ Cat` assigning to each category its opposite category.
 -/
 def opFunctor : Cat.{v₁, u₁} ⥤ Cat.{v₁, u₁} where
   obj C := .of Cᵒᵖ
@@ -48,46 +42,33 @@ def opFunctor : Cat.{v₁, u₁} ⥤ Cat.{v₁, u₁} where
 /-- The natural isomorphism between the double application of `Cat.opFunctor` and the
 identity functor on `Cat`. -/
 @[simps!]
-/--
-Definition of `opFunctorInvolutive` / `opFunctorInvolutive` 的定义
+/-
+**CategoryTheory.Cat.opFunctorInvolutive** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Cat`。
+形式化陈述：opFunctorInvolutive : opFunctor.{v₁, u₁} ⋙ opFunctor.{v₁, u₁} ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opFunctorInvolutive
-  signature: : opFunctor.{v₁, u₁} ⋙ opFunctor.{v₁, u₁} ≅ 𝟭 _
-  body: NatIso.ofComponents (fun C => .mk (unopUnop C).toCatHom (opOp C).toCatHom)
-
-中文:
-定义 opFunctorInvolutive
-  签名: : opFunctor.{v₁, u₁} ⋙ opFunctor.{v₁, u₁} ≅ 𝟭 _
-  定义体: NatIso.ofComponents (fun C => .mk (unopUnop C).toCatHom (opOp C).toCatHom)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents, toCatHom, unopUnop
+--- 原说明 ---
+The natural isomorphism between the double application of `Cat.opFunctor` and th
+e
+identity functor on `Cat`.
 -/
 def opFunctorInvolutive : opFunctor.{v₁, u₁} ⋙ opFunctor.{v₁, u₁} ≅ 𝟭 _ :=
   NatIso.ofComponents (fun C => .mk (unopUnop C).toCatHom (opOp C).toCatHom)
 
 /-- The equivalence `Cat ≌ Cat` associating each category with its opposite category. -/
 @[simps]
-/--
-Definition of `opEquivalence` / `opEquivalence` 的定义
+/-
+**CategoryTheory.Cat.opEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Cat
+`。
+形式化陈述：opEquivalence : Cat.{v₁, u₁} ≌ Cat.{v₁, u₁} where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opEquivalence
-  signature: : Cat.{v₁, u₁} ≌ Cat.{v₁, u₁} where
-  body: opFunctor
-  inverse := opFunctor
-  unitIso := NatIso.ofComponents (fun _ => Iso.mk (opOp _).toCatHom (unopUnop _).toCatHom)
-  counitIso := NatIso.ofComponents (fun _ => Iso.mk (unopUnop _).toCatHom (opOp _).toCatHom)
-
-中文:
-定义 opEquivalence
-  签名: : Cat.{v₁, u₁} ≌ Cat.{v₁, u₁} where
-  定义体: opFunctor
-  inverse := opFunctor
-  unitIso := NatIso.ofComponents (fun _ => Iso.mk (opOp _).toCatHom (unopUnop _).toCatHom)
-  counitIso := NatIso.ofComponents (fun _ => Iso.mk (unopUnop _).toCatHom (opOp _).toCatHom)
-
-Depends on / 依赖: opFunctor
+--- 原说明 ---
+The equivalence `Cat ≌ Cat` associating each category with its opposite category
+.
 -/
 def opEquivalence : Cat.{v₁, u₁} ≌ Cat.{v₁, u₁} where
   functor := opFunctor
@@ -98,3 +79,4 @@ def opEquivalence : Cat.{v₁, u₁} ≌ Cat.{v₁, u₁} where
 end Cat
 
 end CategoryTheory
+

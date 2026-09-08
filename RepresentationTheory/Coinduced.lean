@@ -49,7 +49,7 @@ universe t u' u v' v w' w
 
 namespace Representation
 
-variable {k G H : Type*} [Semiring k] [Monoid G] [Monoid H] (φ : G ->* H) {A B : Type*}
+variable {k G H : Type*} [Semiring k] [Monoid G] [Monoid H] (φ : G →* H) {A B : Type*}
   [AddCommMonoid A] [Module k A] [AddCommMonoid B] [Module k B] (σ : Representation k G A)
   (ρ : Representation k G B)
 
@@ -59,54 +59,36 @@ functions `H → A` underlying the coinduction of `ρ` along `φ`, i.e., the fun
 such that `f (φ g * h) = (ρ g) (f h)` for all `g : G` and `h : H`.
 -/
 @[simps]
-/--
-Definition of `coindV` / `coindV` 的定义
+/-
+**Representation.coindV** 是 Mathlib 中的一个定义，位于命名空间 `Representation`。
+形式化陈述：coindV : Submodule k (H -> A) where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindV
-  signature: : Submodule k (H -> A) where
-  body: {f : H -> A | forall (g : G) (h : H), f (φ g * h) = σ g (f h) }
-  add_mem' _ _ _ _ := by simp_all
-  zero_mem' := by simp
-  smul_mem' _ _ _ := by simp_all
-
-@[simp]
-
-中文:
-定义 coindV
-  签名: : 子模 k (H -> A) where
-  定义体: {f : H -> A | forall (g : G) (h : H), f (φ g * h) = σ g (f h) }
-  add_mem' _ _ _ _ := by simp_all
-  zero_mem' := by simp
-  smul_mem' _ _ _ := by simp_all
-
-@[simp]
+--- 原说明 ---
+If `ρ : Representation k G A` and `φ : G →* H` then `coindV φ ρ` is the sub-`k`-
+module of
+functions `H → A` underlying the coinduction of `ρ` along `φ`, i.e., the functio
+ns `f : H → A`
+such that `f (φ g * h) = (ρ g) (f h)` for all `g : G` and `h : H`.
 -/
-def coindV : Submodule k (H -> A) where
-  carrier := {f : H -> A | forall (g : G) (h : H), f (φ g * h) = σ g (f h) }
+def coindV : Submodule k (H → A) where
+  carrier := {f : H → A | ∀ (g : G) (h : H), f (φ g * h) = σ g (f h) }
   add_mem' _ _ _ _ := by simp_all
   zero_mem' := by simp
   smul_mem' _ _ _ := by simp_all
 
 @[simp]
-/--
-lemma `mem_coindV` / 引理 `mem_coindV`
-
-English:
-lemma mem_coindV
-  given: (f : H -> A)
-  statement: f in coindV φ σ ↔ forall (g : G) (h : H), f (φ g * h) = σ g (f h)
-  proof: Iff.rfl
-
-中文:
-引理 mem_coindV
-  条件: (f : H -> A)
-  结论: f in coindV φ σ ↔ 对任意 (g : G) (h : H), f (φ g * h) = σ g (f h)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Representation.mem_coindV** 是 Mathlib 中的一个引理，位于命名空间 `Representation`。
+形式化陈述：mem_coindV (f : H -> A) : f in coindV φ σ ↔ forall (g : G) (h : H), f (φ g
+ * h) = σ g (f h)
+参数：f : H -> A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_coindV (f : H -> A) : f in coindV φ σ ↔ forall (g : G) (h : H), f (φ g * h) = σ g (f h) :=
+lemma mem_coindV (f : H → A) : f ∈ coindV φ σ ↔ ∀ (g : G) (h : H), f (φ g * h) = σ g (f h) :=
   Iff.rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -119,26 +101,23 @@ to the function sending `h₁` to `f (h₁ * h)`.
 See also `Rep.coind` and `Representation.coind'` for variants involving the category `Rep k G`.
 -/
 @[simps]
-/--
-Definition of `coind` / `coind` 的定义
+/-
+**Representation.coind** 是 Mathlib 中的一个定义，位于命名空间 `Representation`。
+形式化陈述：coind : Representation k H (coindV φ ρ) where toFun h
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coind
-  signature: : Representation k H (coindV φ ρ) where
-  body: (LinearMap.funLeft _ _ (· * h)).restrict fun x hx g h₁ => by
-    simpa [mul_assoc] using hx g (h₁ * h)
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp [mul_assoc]
+--- 原说明 ---
+If `ρ : Representation k G A` and `φ : G →* H` then `coind φ ρ` is the represent
+ation
+coinduced by `ρ` along `φ`, defined as the following action of `H` on the submod
+ule `coindV φ ρ`
+of `G`-equivariant functions from `H` to `A`: we let `h : H` send the function `
+f : H → A`
+to the function sending `h₁` to `f (h₁ * h)`.
 
-中文:
-定义 coind
-  签名: : Representation k H (coindV φ ρ) where
-  定义体: (LinearMap.funLeft _ _ (· * h)).restrict fun x hx g h₁ => by
-    simpa [mul_assoc] using hx g (h₁ * h)
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp [mul_assoc]
-
-Depends on / 依赖: LinearMap, LinearMap.funLeft, funLeft, map_mul, map_one, mul_assoc, restrict
+See also `Rep.coind` and `Representation.coind'` for variants involving the cate
+gory `Rep k G`.
 -/
 def coind : Representation k H (coindV φ ρ) where
   toFun h := (LinearMap.funLeft _ _ (· * h)).restrict fun x hx g h₁ => by
@@ -148,72 +127,49 @@ def coind : Representation k H (coindV φ ρ) where
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable {σ ρ} in
-/--
-Definition of `coindMap` / `coindMap` 的定义
+/-- Given a monoid homomorphism `φ : G →* H` and an intertwining map `f : σ ⟶ ρ`, there is a
+  natural intertwining map `coind φ σ ⟶ coind φ ρ` given by postcomposition by `f`. -/
+/-
+**Representation.coindMap** 是 Mathlib 中的一个定义，位于命名空间 `Representation`。
+形式化陈述：coindMap (f : σ.IntertwiningMap ρ) : (coind φ σ).IntertwiningMap (coind φ 
+ρ) where __ : _ ->ₗ[k] _
+参数：f : σ.IntertwiningMap ρ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindMap
-  signature: (f : σ.IntertwiningMap ρ)
-  body: (f.toLinearMap.compLeft H).restrict fun x h => by
-    simp only [mem_coindV, LinearMap.compLeft_apply, Function.comp_apply,
-      IntertwiningMap.toLinearMap_apply] at h ⊢
-    intro g h0
-    simpa [h] using LinearMap.ext_iff.1 (f.2 g) (x h0)
-  isIntertwining' h := by ext; simp
-
-中文:
-定义 coindMap
-  签名: (f : σ.整数ertwining映射 ρ)
-  定义体: (f.toLinearMap.compLeft H).restrict fun x h => by
-    simp only [mem_coindV, LinearMap.compLeft_apply, Function.comp_apply,
-      IntertwiningMap.toLinearMap_apply] at h ⊢
-    intro g h0
-    simpa [h] using LinearMap.ext_iff.1 (f.2 g) (x h0)
-  isIntertwining' h := by ext; simp
-
-Depends on / 依赖: Function, Function.comp_apply, IntertwiningMap, IntertwiningMap.toLinearMap_apply, LinearMap, LinearMap.compLeft_apply, LinearMap.ext_iff, compLeft, compLeft_apply, comp_apply, ext_iff, f.toLinearMap.compLeft, isIntertwining, mem_coindV, restrict, toLinearMap, toLinearMap_apply
+--- 原说明 ---
+Given a monoid homomorphism `φ : G →* H` and an intertwining map `f : σ ⟶ ρ`, th
+ere is a
+  natural intertwining map `coind φ σ ⟶ coind φ ρ` given by postcomposition by `
+f`.
 -/
 def coindMap (f : σ.IntertwiningMap ρ) : (coind φ σ).IntertwiningMap (coind φ ρ) where
-  __ : _ ->ₗ[k] _ := (f.toLinearMap.compLeft H).restrict fun x h => by
+  __ : _ →ₗ[k] _ := (f.toLinearMap.compLeft H).restrict fun x h ↦ by
     simp only [mem_coindV, LinearMap.compLeft_apply, Function.comp_apply,
       IntertwiningMap.toLinearMap_apply] at h ⊢
     intro g h0
     simpa [h] using LinearMap.ext_iff.1 (f.2 g) (x h0)
   isIntertwining' h := by ext; simp
-
-/--
-lemma `coindMap_coe_apply` / 引理 `coindMap_coe_apply`
-
-English:
-lemma coindMap_coe_apply
-  given: (f : σ.IntertwiningMap ρ) (x : coindV φ σ)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coindMap_coe_apply
-  条件: (f : σ.整数ertwining映射 ρ) (x : coindV φ σ)
-  证明: rfl
-
-@[simp]
+/-
+**Representation.coindMap_coe_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representation`。
+形式化陈述：coindMap_coe_apply (f : σ.IntertwiningMap ρ) (x : coindV φ σ) : (coindMap 
+φ f) x = (f.toLinearMap.compLeft H) x
+参数：f : σ.IntertwiningMap ρ；x : coindV φ σ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coindMap_coe_apply (f : σ.IntertwiningMap ρ) (x : coindV φ σ) :
     (coindMap φ f) x = (f.toLinearMap.compLeft H) x := rfl
 
 @[simp]
-/--
-lemma `coindMap_coe_apply_apply` / 引理 `coindMap_coe_apply_apply`
-
-English:
-lemma coindMap_coe_apply_apply
-  given: (f : σ.IntertwiningMap ρ) (x : coindV φ σ) (h : H)
-  proof: rfl
-
-中文:
-引理 coindMap_coe_apply_apply
-  条件: (f : σ.整数ertwining映射 ρ) (x : coindV φ σ) (h : H)
-  证明: rfl
+/-
+**Representation.coindMap_coe_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion`。
+形式化陈述：coindMap_coe_apply_apply (f : σ.IntertwiningMap ρ) (x : coindV φ σ) (h : H
+) : ((coindMap φ f) x).1 h = f (x.1 h)
+参数：f : σ.IntertwiningMap ρ；x : coindV φ σ；h : H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coindMap_coe_apply_apply (f : σ.IntertwiningMap ρ) (x : coindV φ σ) (h : H) :
     ((coindMap φ f) x).1 h = f (x.1 h) := rfl
@@ -225,68 +181,71 @@ namespace Rep
 open CategoryTheory Finsupp
 
 variable {k : Type u} {G : Type v} {H : Type w} [CommRing k] [Monoid G] [Monoid H]
-  (φ : G ->* H) (A : Rep k G)
+  (φ : G →* H) (A : Rep k G)
 
 section Coind
 
 /--
-Definition of `coind` / `coind` 的定义
+If `φ : G →* H` and  `A : Rep k G` then `coind φ A` is the coinduction of `A` along `φ`,
+defined by letting `H` act on the `G`-equivariant functions `H → A` by `(h • f) h₁ := f (h₁ * h)`.
+-/
+/-
+**Rep.coind** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep`。
+形式化陈述：coind : Rep k H
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coind
-  signature: : Rep k H
-  body: Rep.of (Representation.coind φ A.ρ)
-
-中文:
-缩写 coind
-  签名: : Rep k H
-  定义体: Rep.of (Representation.coind φ A.ρ)
-
-Depends on / 依赖: Rep.of, Representation, Representation.coind
+--- 原说明 ---
+If `φ : G →* H` and  `A : Rep k G` then `coind φ A` is the coinduction of `A` al
+ong `φ`,
+defined by letting `H` act on the `G`-equivariant functions `H → A` by `(h • f) 
+h₁ := f (h₁ * h)`.
 -/
 noncomputable abbrev coind : Rep k H := Rep.of (Representation.coind φ A.ρ)
 
-/--
-Definition of `coindMap` / `coindMap` 的定义
+/-- Given a monoid morphism `φ : G →* H` and a morphism of `G`-representations `f : A ⟶ B`, there
+is a natural `H`-representation morphism `coind φ A ⟶ coind φ B`, given by postcomposition by
+`f`. -/
+/-
+**Rep.coindMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep`。
+形式化陈述：coindMap {A B : Rep k G} (f : A ⟶ B) : coind φ A ⟶ coind φ B
+参数：f : A ⟶ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coindMap
-  signature: {A B : Rep k G} (f : A ⟶ B)
-  body: ofHom Representation.coindMap φ f.hom
-
-中文:
-缩写 coindMap
-  签名: {A B : Rep k G} (f : A ⟶ B)
-  定义体: ofHom Representation.coindMap φ f.hom
-
-Depends on / 依赖: I.mul_mem_right, Representation, Representation.coindMap, coindMap, f.hom, mul_mem_right
+--- 原说明 ---
+Given a monoid morphism `φ : G →* H` and a morphism of `G`-representations `f : 
+A ⟶ B`, there
+is a natural `H`-representation morphism `coind φ A ⟶ coind φ B`, given by postc
+omposition by
+`f`.
 -/
 noncomputable abbrev coindMap {A B : Rep k G} (f : A ⟶ B) : coind φ A ⟶ coind φ B :=
-ofHom Representation.coindMap φ f.hom
+  ofHom <| Representation.coindMap φ f.hom
 
 variable (k) in
 /-- Given a monoid homomorphism `φ : G →* H`, this is the functor sending a `G`-representation `A`
 to the coinduced `H`-representation `coind φ A`, with action on maps given by postcomposition. -/
 @[implicit_reducible, simps obj map]
-/--
-Definition of `coindFunctor` / `coindFunctor` 的定义
+/-
+**Rep.coindFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：coindFunctor : Rep.{t} k G ⥤ Rep k H where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindFunctor
-  signature: : Rep.{t} k G ⥤ Rep k H where
-  body: coind φ A
-  map f := coindMap φ f
-
-中文:
-定义 coindFunctor
-  签名: : Rep.{t} k G ⥤ Rep k H where
-  定义体: coind φ A
-  map f := coindMap φ f
+--- 原说明 ---
+Given a monoid homomorphism `φ : G →* H`, this is the functor sending a `G`-repr
+esentation `A`
+to the coinduced `H`-representation `coind φ A`, with action on maps given by po
+stcomposition.
 -/
 noncomputable def coindFunctor : Rep.{t} k G ⥤ Rep k H where
   obj A := coind φ A
   map f := coindMap φ f
-
+/-
+**Rep.** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G : Type v'} [Group G] (S : Subgroup G) :
     (coindFunctor k S.subtype).PreservesEpimorphisms where
   preserves {X Y} f := (epi_iff_surjective _).2 fun y => by
@@ -299,7 +258,7 @@ instance {G : Type v'} [Group G] (S : Subgroup G) :
       Quotient.eq'.2 (QuotientGroup.rightRel_apply.2 (by simp))
     have hγ (s : S) (g : G) : γ (s.1 * g) = s * γ g := by ext; simp [mul_assoc, γ, hmk]
     let x (g : G) : X := X.ρ (γ g) (s (y.1 (i (Quotient.mk' g))))
-refine ⟨⟨x, fun _ _ => ?_⟩, Subtype.ext funext fun g => ?_⟩
+    refine ⟨⟨x, fun _ _ => ?_⟩, Subtype.ext <| funext fun g => ?_⟩
     · simp [x, ← Module.End.mul_apply, ← map_mul, hmk, hγ]
     · simp only [coindFunctor_obj, coindFunctor_map, hom_ofHom,
         Representation.coindMap_coe_apply_apply, hom_comm_apply, x]
@@ -315,38 +274,16 @@ is defined as an `H`-action on `Hom_{k[G]}(k[H], A)`. If `f : k[H] → A` is `G`
 then `(h • f) (r • h₁) := r • f (h₁ * h)`, where `r : k`.
 -/
 @[simps]
-/--
-Definition of `_root_.Representation.coind'` / `_root_.Representation.coind'` 的定义
+/-
+**Rep._root_.Representation.coind'** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Representation.coind'
-  signature: :
-  body: { toFun f := (resFunctor φ).map ((leftRegularHomEquiv (leftRegular k H)).symm.toLinearMap
-      (.single h 1)) ≫ f
-    map_add' _ _ := rfl
-    map_smul' _ _ := rfl }
-  map_one' := by
-    ext
-    simp [homEquiv]
-  map_mul' _ _ := by
-    ext
-    simp [homEquiv, mul_assoc]
-
-中文:
-定义 _root_.Representation.coind'
-  签名: :
-  定义体: { toFun f := (resFunctor φ).map ((leftRegularHomEquiv (leftRegular k H)).symm.toLinearMap
-      (.single h 1)) ≫ f
-    map_add' _ _ := rfl
-    map_smul' _ _ := rfl }
-  map_one' := by
-    ext
-    simp [homEquiv]
-  map_mul' _ _ := by
-    ext
-    simp [homEquiv, mul_assoc]
-
-Depends on / 依赖: homEquiv, leftRegular, leftRegularHomEquiv, map_add, map_mul, map_one, map_smul, mul_assoc, resFunctor, single, symm.toLinearMap, toLinearMap
+--- 原说明 ---
+If `φ : G →* H` and `A : Rep k G` then `coind' φ A`, the coinduction of `A` alon
+g `φ`,
+is defined as an `H`-action on `Hom_{k[G]}(k[H], A)`. If `f : k[H] → A` is `G`-e
+quivariant
+then `(h • f) (r • h₁) := r • f (h₁ * h)`, where `r : k`.
 -/
 noncomputable def _root_.Representation.coind' :
     Representation k H (res φ (leftRegular k H) ⟶ A) where
@@ -363,59 +300,68 @@ noncomputable def _root_.Representation.coind' :
     simp [homEquiv, mul_assoc]
 
 /--
-Definition of `coind'` / `coind'` 的定义
+If `φ : G →* H` and `A : Rep k G` then `coind' φ A`, the coinduction of `A` along `φ`,
+is defined as an `H`-action on `Hom_{k[G]}(k[H], A)`. If `f : k[H] → A` is `G`-equivariant
+then `(h • f) (r • h₁) := r • f (h₁ * h)`, where `r : k`.
+-/
+/-
+**Rep.coind'** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep`。
+形式化陈述：coind' : Rep k H
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coind'
-  signature: : Rep k H
-  body: Rep.of (Representation.coind' φ A)
-
-中文:
-缩写 coind'
-  签名: : Rep k H
-  定义体: Rep.of (Representation.coind' φ A)
-
-Depends on / 依赖: Rep.of, Representation, Representation.coind
+--- 原说明 ---
+If `φ : G →* H` and `A : Rep k G` then `coind' φ A`, the coinduction of `A` alon
+g `φ`,
+is defined as an `H`-action on `Hom_{k[G]}(k[H], A)`. If `f : k[H] → A` is `G`-e
+quivariant
+then `(h • f) (r • h₁) := r • f (h₁ * h)`, where `r : k`.
 -/
 noncomputable abbrev coind' : Rep k H := Rep.of (Representation.coind' φ A)
 
 variable {A} in
 @[ext]
-/--
-lemma `coind'_ext` / 引理 `coind'_ext`
-
-English:
-lemma coind'_ext
-  statement: {f g : coind' φ A} (hfg : forall h, f.hom.toLinearMap (.single h 1) =
-  proof: Rep.hom_ext by ext1; dsimp; ext h; simpa using hfg h
-
-中文:
-引理 coind'_ext
-  结论: {f g : coind' φ A} (hfg : 对任意 h, f.hom.toLinearMap (.single h 1) =
-  证明: Rep.hom_ext by ext1; dsimp; ext h; simpa using hfg h
+/-
+**Rep.coind'_ext** 是 Mathlib 中的一个定理，位于命名空间 `Rep`。
+形式化陈述：∀ {k : Type u} {G : Type v} {H : Type w} [inst : CommRing k] [inst_1 : Mon
+oid G] [inst_2 : Monoid H] (φ : G →* H)   {A : Rep.{max u w, u, v} k G} {f g : ↑
+(Rep.coind' φ A)},   (∀ (h : H),       (Rep.Hom.hom f).toLinearMap (MonoidAlgebr
+a.single h 1) = (Rep.Hom.hom g).toLinearMap (MonoidAlgebra.single h 1)) →     f 
+= g
+参数：φ : G →* H；Rep.coind' φ A；∀ (h : H),       (Rep.Hom.hom f).toLinearMap (Monoi
+dAlgebra.single h 1) = (Rep.Hom.hom g).toLinearMap (MonoidAlgebra.single h 1)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rep.hom_ext`：∀ {k : Type u} {G : Type v} [inst : Semiring k] [inst_1 : M
+onoid G] {A B : Rep.{w, u, v} k G} {f g : A ⟶ B},   Rep.Hom.hom f = Rep.Hom.hom 
+g…
+· 使用引理 `Representation.IntertwiningMap.ext`：ext {f g : IntertwiningMap ρ σ} (h :
+ f.toLinearMap = g.toLinearMap) : f = g
+· 使用引理 `MonoidAlgebra.lhom_ext'`：lhom_ext' {N : Type*} [Semiring R] [AddCommMono
+id N] [Module R N] [Module R S] ⦃f g : S[M] ->ₗ[R] N⦄ (H : forall (x : M), Linea
+rMap.comp f (…
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
 -/
-lemma coind'_ext {f g : coind' φ A} (hfg : forall h, f.hom.toLinearMap (.single h 1) =
+lemma coind'_ext {f g : coind' φ A} (hfg : ∀ h, f.hom.toLinearMap (.single h 1) =
     g.hom.toLinearMap (.single h 1)) : f = g :=
-Rep.hom_ext by ext1; dsimp; ext h; simpa using hfg h
+  Rep.hom_ext <| by ext1; dsimp; ext h; simpa using hfg h
 
-/--
-Definition of `coindMap'` / `coindMap'` 的定义
+/-- Given a monoid morphism `φ : G →* H` and a morphism of `G`-representations `f : A ⟶ B`, there
+is a natural `H`-representation morphism `coind' φ A ⟶ coind' φ B`, given by postcomposition
+by `f`. -/
+/-
+**Rep.coindMap'** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：coindMap' {A B : Rep k G} (f : A ⟶ B) : coind' φ A ⟶ coind' φ B
+参数：f : A ⟶ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindMap'
-  signature: {A B : Rep k G} (f : A ⟶ B)
-  body: Rep.ofHom
-  { __ := Linear.rightComp k _ f
-    isIntertwining' h := by ext; simp }
-
-中文:
-定义 coindMap'
-  签名: {A B : Rep k G} (f : A ⟶ B)
-  定义体: Rep.ofHom
-  { __ := Linear.rightComp k _ f
-    isIntertwining' h := by ext; simp }
-
-Depends on / 依赖: Rep.ofHom
+--- 原说明 ---
+Given a monoid morphism `φ : G →* H` and a morphism of `G`-representations `f : 
+A ⟶ B`, there
+is a natural `H`-representation morphism `coind' φ A ⟶ coind' φ B`, given by pos
+tcomposition
+by `f`.
 -/
 noncomputable def coindMap' {A B : Rep k G} (f : A ⟶ B) : coind' φ A ⟶ coind' φ B := Rep.ofHom
   { __ := Linear.rightComp k _ f
@@ -425,20 +371,17 @@ variable (k) in
 /-- Given a monoid homomorphism `φ : G →* H`, this is the functor sending a `G`-representation `A`
 to the coinduced `H`-representation `coind' φ A`, with action on maps given by postcomposition. -/
 @[implicit_reducible, simps obj map]
-/--
-Definition of `coindFunctor'` / `coindFunctor'` 的定义
+/-
+**Rep.coindFunctor'** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：coindFunctor' : Rep k G ⥤ Rep k H where obj A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindFunctor'
-  signature: : Rep k G ⥤ Rep k H where
-  body: coind' φ A
-  map f := coindMap' φ f
-
-中文:
-定义 coindFunctor'
-  签名: : Rep k G ⥤ Rep k H where
-  定义体: coind' φ A
-  map f := coindMap' φ f
+--- 原说明 ---
+Given a monoid homomorphism `φ : G →* H`, this is the functor sending a `G`-repr
+esentation `A`
+to the coinduced `H`-representation `coind' φ A`, with action on maps given by p
+ostcomposition.
 -/
 noncomputable def coindFunctor' : Rep k G ⥤ Rep k H where
   obj A := coind' φ A
@@ -451,46 +394,27 @@ noncomputable section CoindIso
 such that for all `g : G`, `h : H`, `f (φ g * h) = A.ρ g (f h)`, is `k`-linearly equivalent
 to the `G`-representation morphisms `k[H] ⟶ A`. -/
 @[simps]
-/--
-Definition of `coindVEquiv` / `coindVEquiv` 的定义
+/-
+**Rep.coindVEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：coindVEquiv : A.ρ.coindV φ ≃ₗ[k] (res φ (leftRegular k H) ⟶ A) where toFun
+ f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindVEquiv
-  signature: :
-  body: Rep.ofHom ⟨linearCombination _ f.1 ∘ₗ (MonoidAlgebra.coeffLinearEquiv _).toLinearMap,
-    fun g => by dsimp; ext; simp [f.2 g]⟩
-map_add' _ _ := coind'_ext φ by simp [Rep.add_hom]
-map_smul' _ _ := coind'_ext φ by simp [smul_hom]
-  invFun f := ⟨fun h => f.hom.toLinearMap (.single h 1), fun g h => by
-    simp only [res_obj_V, res_obj_ρ, Representation.IntertwiningMap.toLinearMap_apply]
-    have := by simpa using (hom_comm_apply f g (.single h 1)).symm
-    rw [← this]⟩
-  left_inv x := by simp
-  right_inv x := coind'_ext φ fun _ => by simp
-
-中文:
-定义 coindVEquiv
-  签名: :
-  定义体: Rep.ofHom ⟨linearCombination _ f.1 ∘ₗ (MonoidAlgebra.coeffLinearEquiv _).toLinearMap,
-    fun g => by dsimp; ext; simp [f.2 g]⟩
-map_add' _ _ := coind'_ext φ by simp [Rep.add_hom]
-map_smul' _ _ := coind'_ext φ by simp [smul_hom]
-  invFun f := ⟨fun h => f.hom.toLinearMap (.single h 1), fun g h => by
-    simp only [res_obj_V, res_obj_ρ, Representation.IntertwiningMap.toLinearMap_apply]
-    have := by simpa using (hom_comm_apply f g (.single h 1)).symm
-    rw [← this]⟩
-  left_inv x := by simp
-  right_inv x := coind'_ext φ fun _ => by simp
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.coeffLinearEquiv, Rep.ofHom, coeffLinearEquiv, linearCombination, toLinearMap
+--- 原说明 ---
+If `φ : G →* H` and `A : Rep k G` then the `k`-submodule of functions `f : H → A
+`
+such that for all `g : G`, `h : H`, `f (φ g * h) = A.ρ g (f h)`, is `k`-linearly
+ equivalent
+to the `G`-representation morphisms `k[H] ⟶ A`.
 -/
 noncomputable def coindVEquiv :
     A.ρ.coindV φ ≃ₗ[k] (res φ (leftRegular k H) ⟶ A) where
   toFun f := Rep.ofHom ⟨linearCombination _ f.1 ∘ₗ (MonoidAlgebra.coeffLinearEquiv _).toLinearMap,
-    fun g => by dsimp; ext; simp [f.2 g]⟩
-map_add' _ _ := coind'_ext φ by simp [Rep.add_hom]
-map_smul' _ _ := coind'_ext φ by simp [smul_hom]
-  invFun f := ⟨fun h => f.hom.toLinearMap (.single h 1), fun g h => by
+    fun g ↦ by dsimp; ext; simp [f.2 g]⟩
+  map_add' _ _ := coind'_ext φ <| by simp [Rep.add_hom]
+  map_smul' _ _ := coind'_ext φ <| by simp [smul_hom]
+  invFun f := ⟨fun h ↦ f.hom.toLinearMap (.single h 1), fun g h ↦ by
     simp only [res_obj_V, res_obj_ρ, Representation.IntertwiningMap.toLinearMap_apply]
     have := by simpa using (hom_comm_apply f g (.single h 1)).symm
     rw [← this]⟩
@@ -498,100 +422,79 @@ map_smul' _ _ := coind'_ext φ by simp [smul_hom]
   right_inv x := coind'_ext φ fun _ => by simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `coindIso` / `coindIso` 的定义
+/-- `coind φ A` and `coind' φ A` are isomorphic representations, with the underlying
+`k`-linear equivalence given by `coindVEquiv`. -/
+/-
+**Rep.coindIso** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：coindIso : coind φ A ≅ coind' φ A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindIso
-  signature: : coind φ A ≅ coind' φ A
-  body: Rep.mkIso .mk (coindVEquiv φ A) fun h => by ext; simp [homEquiv]
-
-中文:
-定义 coindIso
-  签名: : coind φ A ≅ coind' φ A
-  定义体: Rep.mkIso .mk (coindVEquiv φ A) fun h => by ext; simp [homEquiv]
-
-Depends on / 依赖: Rep.mkIso, coindVEquiv, homEquiv
+--- 原说明 ---
+`coind φ A` and `coind' φ A` are isomorphic representations, with the underlying
+`k`-linear equivalence given by `coindVEquiv`.
 -/
 noncomputable def coindIso : coind φ A ≅ coind' φ A :=
-Rep.mkIso .mk (coindVEquiv φ A) fun h => by ext; simp [homEquiv]
+  Rep.mkIso <| .mk (coindVEquiv φ A) fun h => by ext; simp [homEquiv]
 
 /-- Given a monoid homomorphism `φ : G →* H`, the coinduction functors `Rep k G ⥤ Rep k H` given by
 `coindFunctor k φ` and `coindFunctor' k φ` are naturally isomorphic, with isomorphism on objects
 given by `coindIso φ`. -/
 @[simps!]
-/--
-Definition of `coindFunctorIso` / `coindFunctorIso` 的定义
+/-
+**Rep.coindFunctorIso** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：coindFunctorIso : coindFunctor k φ ≅ coindFunctor' k φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coindFunctorIso
-  signature: : coindFunctor k φ ≅ coindFunctor' k φ
-  body: NatIso.ofComponents (coindIso φ) fun _ => by
-    ext
-    exact coind'_ext _ fun _ => by simp [coindIso, coindMap']
-
-中文:
-定义 coindFunctorIso
-  签名: : coindFunctor k φ ≅ coindFunctor' k φ
-  定义体: NatIso.ofComponents (coindIso φ) fun _ => by
-    ext
-    exact coind'_ext _ fun _ => by simp [coindIso, coindMap']
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, _ext, coindIso, coindMap, ofComponents
+--- 原说明 ---
+Given a monoid homomorphism `φ : G →* H`, the coinduction functors `Rep k G ⥤ Re
+p k H` given by
+`coindFunctor k φ` and `coindFunctor' k φ` are naturally isomorphic, with isomor
+phism on objects
+given by `coindIso φ`.
 -/
 noncomputable def coindFunctorIso : coindFunctor k φ ≅ coindFunctor' k φ :=
   NatIso.ofComponents (coindIso φ) fun _ => by
     ext
-    exact coind'_ext _ fun _ => by simp [coindIso, coindMap']
+    exact coind'_ext _ fun _ ↦ by simp [coindIso, coindMap']
 
 end CoindIso
 
 noncomputable section Adjunction
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `resCoindToHom` / `resCoindToHom` 的定义
+/-- The morphism induced by the adjunction between `res φ` and `coind φ` sending a morphism
+  `f : res φ B ⟶ A` to the morphism `B ⟶ coind φ A` given by the underlying linear map sending
+  `b : B.V` to the function sending `h : H` to `f ((B.ρ h) b)`. -/
+/-
+**Rep.resCoindToHom** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：resCoindToHom (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A) : B ⟶ (coind φ
+ A)
+参数：B : Rep k H；A : Rep k G；f : res φ B ⟶ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resCoindToHom
-  signature: (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A)
-  body: Rep.ofHom ⟨(LinearMap.pi fun h => f.hom.toLinearMap ∘ₗ
-    Rep.ρ B h).codRestrict _ fun _ _ _ => by simpa using hom_comm_apply f _ _, fun g => by
-    dsimp; ext; simp⟩
-
-@[simp]
-
-中文:
-定义 resCoindToHom
-  签名: (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A)
-  定义体: Rep.ofHom ⟨(LinearMap.pi fun h => f.hom.toLinearMap ∘ₗ
-    Rep.ρ B h).codRestrict _ fun _ _ _ => by simpa using hom_comm_apply f _ _, fun g => by
-    dsimp; ext; simp⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.pi, Rep.ofHom, codRestrict, f.hom.toLinearMap, hom_comm_apply, toLinearMap
+--- 原说明 ---
+The morphism induced by the adjunction between `res φ` and `coind φ` sending a m
+orphism
+  `f : res φ B ⟶ A` to the morphism `B ⟶ coind φ A` given by the underlying line
+ar map sending
+  `b : B.V` to the function sending `h : H` to `f ((B.ρ h) b)`.
 -/
 def resCoindToHom (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A) : B ⟶ (coind φ A) :=
   Rep.ofHom ⟨(LinearMap.pi fun h => f.hom.toLinearMap ∘ₗ
-    Rep.ρ B h).codRestrict _ fun _ _ _ => by simpa using hom_comm_apply f _ _, fun g => by
+    Rep.ρ B h).codRestrict _ fun _ _ _ => by simpa using hom_comm_apply f _ _, fun g ↦ by
     dsimp; ext; simp⟩
 
 @[simp]
-/--
-lemma `resCoindToHom_hom_apply_coe` / 引理 `resCoindToHom_hom_apply_coe`
-
-English:
-lemma resCoindToHom_hom_apply_coe
-  statement: (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A) (c : ↑B.V)
-  proof: rfl
-
-中文:
-引理 resCoindToHom_hom_apply_coe
-  结论: (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A) (c : ↑B.V)
-  证明: rfl
-
-Depends on / 依赖: no_index, resCoindToHom
+/-
+**Rep.resCoindToHom_hom_apply_coe** 是 Mathlib 中的一个引理，位于命名空间 `Rep`。
+形式化陈述：resCoindToHom_hom_apply_coe (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A) 
+(c : ↑B.V) (i : H) : (DFunLike.coe (F
+参数：B : Rep k H；A : Rep k G；f : res φ B ⟶ A；c : ↑B.V；i : H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma resCoindToHom_hom_apply_coe (B : Rep k H) (A : Rep k G) (f : res φ B ⟶ A) (c : ↑B.V)
     (i : H) : (DFunLike.coe (F := no_index (_)) (resCoindToHom φ B A f).hom c).1 i =
@@ -619,48 +522,23 @@ Note `Rep.resCoindHomEquiv.{t, u, v, w}` has the property that
 even with all inputs explicitly given, the first universe cannot be synthesized.
 -/
 @[simps, pp_with_univ]
-/--
-Definition of `resCoindHomEquiv` / `resCoindHomEquiv` 的定义
+/-
+**Rep.resCoindHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Rep`。
+形式化陈述：resCoindHomEquiv (B : Rep.{max w t} k H) (A : Rep.{max w t} k G) : (res φ 
+B ⟶ A) ≃ₗ[k] (B ⟶ coind φ A) where toFun f
+参数：B : Rep.{max w t} k H；A : Rep.{max w t} k G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resCoindHomEquiv
-  signature: (B : Rep.{max w t} k H) (A : Rep.{max w t} k G)
-  body: resCoindToHom φ B A f
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  invFun f := Rep.ofHom ⟨LinearMap.proj 1 ∘ₗ (A.ρ.coindV φ).subtype ∘ₗ f.hom.toLinearMap,
-    fun g => by
-      ext x
-      have := ((f.hom x).2 g 1).symm
-      have := hom_comm_apply f (φ g) x
-      simp_all⟩
-  left_inv x := by ext; simp
-  right_inv z := by ext; simp [resCoindToHom, hom_comm_apply z]
+--- 原说明 ---
+Given a monoid homomorphism `φ : G →* H`, an `H`-representation `B`, and a `G`-r
+epresentation
+`A`, there is a `k`-linear equivalence between the `G`-representation morphisms 
+`res φ B ⟶ A` and
+the `H`-representation morphisms `B ⟶ coind φ A`.
 
-#adaptation_note /-- After https://github.com/leanprover/lean4/pull/12179
-the simpNF linter complains about `@[simps! counit_app_hom_hom unit_app_hom_hom]`,
-but removing it seems to be harmless. -/
-
-中文:
-定义 resCoindHomEquiv
-  签名: (B : Rep.{最大值 w t} k H) (A : Rep.{最大值 w t} k G)
-  定义体: resCoindToHom φ B A f
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-  invFun f := Rep.ofHom ⟨LinearMap.proj 1 ∘ₗ (A.ρ.coindV φ).subtype ∘ₗ f.hom.toLinearMap,
-    fun g => by
-      ext x
-      have := ((f.hom x).2 g 1).symm
-      have := hom_comm_apply f (φ g) x
-      simp_all⟩
-  left_inv x := by ext; simp
-  right_inv z := by ext; simp [resCoindToHom, hom_comm_apply z]
-
-#adaptation_note /-- After https://github.com/leanprover/lean4/pull/12179
-the simpNF linter complains about `@[simps! counit_app_hom_hom unit_app_hom_hom]`,
-but removing it seems to be harmless. -/
-
-Depends on / 依赖: resCoindToHom
+Note `Rep.resCoindHomEquiv.{t, u, v, w}` has the property that
+even with all inputs explicitly given, the first universe cannot be synthesized.
 -/
 def resCoindHomEquiv (B : Rep.{max w t} k H) (A : Rep.{max w t} k G) :
     (res φ B ⟶ A) ≃ₗ[k] (B ⟶ coind φ A) where
@@ -680,69 +558,40 @@ def resCoindHomEquiv (B : Rep.{max w t} k H) (A : Rep.{max w t} k G) :
 the simpNF linter complains about `@[simps! counit_app_hom_hom unit_app_hom_hom]`,
 but removing it seems to be harmless. -/
 variable (k) in
-/--
-Definition of `resCoindAdjunction` / `resCoindAdjunction` 的定义
+/-- Given a monoid homomorphism `φ : G →* H`, the coinduction functor `Rep k G ⥤ Rep k H` is right
+adjoint to the restriction functor along `φ`. -/
+/-
+**Rep.resCoindAdjunction** 是 Mathlib 中的一个缩写定义，位于命名空间 `Rep`。
+形式化陈述：resCoindAdjunction : resFunctor.{max w t} φ ⊣ coindFunctor k φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation resCoindAdjunction
-  signature: : resFunctor.{max w t} φ ⊣ coindFunctor k φ
-  body: Adjunction.mkOfHomEquiv {
-    homEquiv X Y := (resCoindHomEquiv φ X Y).toEquiv
-    homEquiv_naturality_left_symm := by intros; rfl
-    homEquiv_naturality_right := by intros; ext; rfl }
-
-中文:
-缩写 resCoindAdjunction
-  签名: : resFunctor.{最大值 w t} φ ⊣ coindFunctor k φ
-  定义体: Adjunction.mkOfHomEquiv {
-    homEquiv X Y := (resCoindHomEquiv φ X Y).toEquiv
-    homEquiv_naturality_left_symm := by intros; rfl
-    homEquiv_naturality_right := by intros; ext; rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, intros, mkOfHomEquiv, resCoindHomEquiv, toEquiv
+--- 原说明 ---
+Given a monoid homomorphism `φ : G →* H`, the coinduction functor `Rep k G ⥤ Rep
+ k H` is right
+adjoint to the restriction functor along `φ`.
 -/
 noncomputable abbrev resCoindAdjunction : resFunctor.{max w t} φ ⊣ coindFunctor k φ :=
   Adjunction.mkOfHomEquiv {
     homEquiv X Y := (resCoindHomEquiv φ X Y).toEquiv
     homEquiv_naturality_left_symm := by intros; rfl
     homEquiv_naturality_right := by intros; ext; rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (coindFunctor.{max w t} k φ).IsRightAdjoint
-  body: (resCoindAdjunction k φ).isRightAdjoint
-
-中文:
-实例 :
-  签名: (coindFunctor.{最大值 w t} k φ).是右伴随
-  定义体: (resCoindAdjunction k φ).isRightAdjoint
-
-Depends on / 依赖: isRightAdjoint, resCoindAdjunction
+/-
+**Rep.** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (coindFunctor.{max w t} k φ).IsRightAdjoint :=
   (resCoindAdjunction k φ).isRightAdjoint
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (resFunctor.{max w t} (k := k) φ).IsLeftAdjoint
-  body: (resCoindAdjunction k φ).isLeftAdjoint
-
-中文:
-实例 :
-  签名: (resFunctor.{最大值 w t} (k := k) φ).是左伴随
-  定义体: (resCoindAdjunction k φ).isLeftAdjoint
-
-Depends on / 依赖: IsLeftAdjoint
+/-
+**Rep.** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (resFunctor.{max w t} (k := k) φ).IsLeftAdjoint :=
   (resCoindAdjunction k φ).isLeftAdjoint
-
+/-
+**Rep.** 是 Mathlib 中的一个实例，位于命名空间 `Rep`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G : Type w} [Group G] (S : Subgroup G) :
     (resFunctor.{max w t} (k := k) S.subtype).PreservesProjectiveObjects :=
   (resFunctor S.subtype).preservesProjectiveObjects_of_adjunction_of_preservesEpimorphisms
@@ -750,3 +599,4 @@ instance {G : Type w} [Group G] (S : Subgroup G) :
 
 end Adjunction
 end Rep
+

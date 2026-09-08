@@ -24,43 +24,35 @@ variable {α β : Type*}
 
 namespace Equiv
 
-/--
-Definition of `seminormedRing` / `seminormedRing` 的定义
+/-- Transfer a `SeminormedRing` across an `Equiv` -/
+/-
+**Equiv.seminormedRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → [SeminormedRing β] → α ≃ β → SeminormedR
+ing α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation seminormedRing
-  signature: [SeminormedRing β] (e : α ≃ β)
-  body: letI := e.ring
-  .induced α β e.ringEquiv
-
-中文:
-缩写 seminormedRing
-  签名: [Seminormed环 β] (e : α ≃ β)
-  定义体: letI := e.ring
-  .induced α β e.ringEquiv
+--- 原说明 ---
+Transfer a `SeminormedRing` across an `Equiv`
 -/
 protected abbrev seminormedRing [SeminormedRing β] (e : α ≃ β) :
     SeminormedRing α :=
   letI := e.ring
   .induced α β e.ringEquiv
 
-/--
-Definition of `normedRing` / `normedRing` 的定义
+/-- Transfer a `NormedRing` across an `Equiv` -/
+/-
+**Equiv.normedRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → [NormedRing β] → α ≃ β → NormedRing α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation normedRing
-  signature: [NormedRing β] (e : α ≃ β)
-  body: letI := e.ring
-  .induced α β e.ringEquiv e.injective
-
-中文:
-缩写 normedRing
-  签名: [赋范环 β] (e : α ≃ β)
-  定义体: letI := e.ring
-  .induced α β e.ringEquiv e.injective
+--- 原说明 ---
+Transfer a `NormedRing` across an `Equiv`
 -/
 protected abbrev normedRing [NormedRing β] (e : α ≃ β) : NormedRing α :=
   letI := e.ring
   .induced α β e.ringEquiv e.injective
 
 end Equiv
+

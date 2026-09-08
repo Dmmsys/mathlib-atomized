@@ -20,49 +20,36 @@ open Lean Meta Elab
 
 namespace Lean.Expr
 
+/-- List of names removed by the `clean` tactic.
+All of these names must resolve to functions defeq `id`. -/
 -- Note: one could also add `hidden`, but this doesn't arise from type hints.
-/--
-Definition of `cleanConsts` / `cleanConsts` 的定义
-
-English:
-definition cleanConsts
-  signature: : List Name
-  body: [``id]
-
-中文:
-定义 cleanConsts
-  签名: : 列表 Name
-  定义体: [``id]
+/-
+**Lean.Expr.cleanConsts** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：cleanConsts : List Name
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def cleanConsts : List Name :=
   [``id]
 
-/--
-Definition of `clean` / `clean` 的定义
+/-- Clean an expression by eliminating identify functions listed in `cleanConsts`.
+Also eliminates `fun x => x` applications and tautological `let`/`have` bindings. -/
+/-
+**Lean.Expr.clean** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：clean (e : Expr) : Expr
+参数：e : Expr。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Lean.Name.instLawfulBEq`：LawfulBEq Name
 
-English:
-definition clean
-  signature: (e : Expr)
-  body: e.replace fun
-    | .app (.app (.const n _) _) e' => if n in cleanConsts then some e' else none
-    | .app (.lam _ _ (.bvar 0) _) e' => some e'
-    | .letE _ _ v (.bvar 0) _ => some v
-    | _ => none
-
-中文:
-定义 clean
-  签名: (e : Expr)
-  定义体: e.replace fun
-    | .app (.app (.const n _) _) e' => if n in cleanConsts then some e' else none
-    | .app (.lam _ _ (.bvar 0) _) e' => some e'
-    | .letE _ _ v (.bvar 0) _ => some v
-    | _ => none
-
-Depends on / 依赖: cleanConsts, e.replace, replace
+--- 原说明 ---
+Clean an expression by eliminating identify functions listed in `cleanConsts`.
+Also eliminates `fun x => x` applications and tautological `let`/`have` bindings
+.
 -/
 def clean (e : Expr) : Expr :=
   e.replace fun
-    | .app (.app (.const n _) _) e' => if n in cleanConsts then some e' else none
+    | .app (.app (.const n _) _) e' => if n ∈ cleanConsts then some e' else none
     | .app (.lam _ _ (.bvar 0) _) e' => some e'
     | .letE _ _ v (.bvar 0) _ => some v
     | _ => none
@@ -92,35 +79,16 @@ def x' : Id Nat := clean% by dsimp [Id]; exact 1
 syntax (name := cleanStx) "clean% " term : term
 
 @[term_elab cleanStx, inherit_doc cleanStx]
-/--
-Definition of `elabClean` / `elabClean` 的定义
-
-English:
-definition elabClean
-  signature: : Term.TermElab
-  body: fun stx expectedType? =>
-  match stx with
-  | `(clean% $t) => do
-let e ← Term.withSynthesize Term.elabTerm t expectedType?
-    return (← instantiateMVars e).clean
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabClean
-  签名: : 项.TermElab
-  定义体: fun stx expectedType? =>
-  match stx with
-  | `(clean% $t) => do
-let e ← Term.withSynthesize Term.elabTerm t expectedType?
-    return (← instantiateMVars e).clean
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+/-
+**Mathlib.Tactic.elabClean** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：elabClean : Term.TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabClean : Term.TermElab := fun stx expectedType? =>
   match stx with
   | `(clean% $t) => do
-let e ← Term.withSynthesize Term.elabTerm t expectedType?
+    let e ← Term.withSynthesize <| Term.elabTerm t expectedType?
     return (← instantiateMVars e).clean
   | _ => throwUnsupportedSyntax
 
@@ -128,3 +96,4 @@ let e ← Term.withSynthesize Term.elabTerm t expectedType?
 macro "clean " t:term : tactic => `(tactic| exact clean% $t)
 
 end Mathlib.Tactic
+

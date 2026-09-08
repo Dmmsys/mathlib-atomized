@@ -37,45 +37,44 @@ namespace FGModuleCat
 variable {J : Type} [SmallCategory J] [FinCategory J]
 variable {k : Type u} [Ring k]
 
-instance {J : Type} [Finite J] (Z : J -> ModuleCat.{v} k) [forall j, Module.Finite k (Z j)] :
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {J : Type} [Finite J] (Z : J → ModuleCat.{v} k) [∀ j, Module.Finite k (Z j)] :
     Module.Finite k (∏ᶜ fun j => Z j : ModuleCat.{v} k) :=
-  haveI : Module.Finite k (ModuleCat.of k (forall j, Z j)) := by unfold ModuleCat.of; infer_instance
+  haveI : Module.Finite k (ModuleCat.of k (∀ j, Z j)) := by unfold ModuleCat.of; infer_instance
   (Module.Finite.equiv_iff (ModuleCat.piIsoPi Z).toLinearEquiv).mpr inferInstance
 
 variable [IsNoetherianRing k]
 
 /-- Finite limits of finite-dimensional vector spaces are finite dimensional,
 because we can realise them as subobjects of a finite product. -/
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Finite limits of finite-dimensional vector spaces are finite dimensional,
+because we can realise them as subobjects of a finite product.
+-/
 instance (F : J ⥤ FGModuleCat k) :
     Module.Finite k (limit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k) :=
-  haveI : forall j, Module.Finite k ((F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)).obj j) :=
-inferInstanceAs forall j, Module.Finite k (F.obj j)
+  haveI : ∀ j, Module.Finite k ((F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)).obj j) :=
+    inferInstanceAs <| ∀ j, Module.Finite k (F.obj j)
   Module.Finite.of_injective
     (limitSubobjectProduct (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k))).hom
     ((ModuleCat.mono_iff_injective _).1 inferInstance)
 
 /-- The forgetful functor from `FGModuleCat k` to `ModuleCat k` creates all finite limits. -/
 @[instance_reducible]
-/--
-Definition of `forget₂CreatesLimit` / `forget₂CreatesLimit` 的定义
+/-
+**FGModuleCat.forget** 是 Mathlib 中的一个定义，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂CreatesLimit
-  signature: (F : J ⥤ FGModuleCat k)
-  body: createsLimitOfFullyFaithfulOfIso
-    ⟨(limit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k),
-      by rw [ModuleCat.isFG_iff]; infer_instance⟩
-    (Iso.refl _)
-
-中文:
-定义 forget₂CreatesLimit
-  签名: (F : J ⥤ FGModuleCat k)
-  定义体: createsLimitOfFullyFaithfulOfIso
-    ⟨(limit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k),
-      by rw [ModuleCat.isFG_iff]; infer_instance⟩
-    (Iso.refl _)
-
-Depends on / 依赖: FGModuleCat, Iso.refl, ModuleCat, ModuleCat.isFG_iff, createsLimitOfFullyFaithfulOfIso, infer_instance, isFG_iff
+--- 原说明 ---
+The forgetful functor from `FGModuleCat k` to `ModuleCat k` creates all finite l
+imits.
 -/
 def forget₂CreatesLimit (F : J ⥤ FGModuleCat k) :
     CreatesLimit F (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) :=
@@ -83,58 +82,32 @@ def forget₂CreatesLimit (F : J ⥤ FGModuleCat k) :
     ⟨(limit (F ⋙ forget₂ (FGModuleCat k) (ModuleCat.{v} k)) : ModuleCat.{v} k),
       by rw [ModuleCat.isFG_iff]; infer_instance⟩
     (Iso.refl _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimitsOfShape J (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
-  body: forget₂CreatesLimit F
-
-中文:
-实例 :
-  签名: 创造形状极限 J (forget₂ (FGModuleCat k) (模范畴.{v} k))
-  定义体: forget₂CreatesLimit F
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CreatesLimitsOfShape J (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) where
   CreatesLimit {F} := forget₂CreatesLimit F
-
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (J : Type) [SmallCategory J] [FinCategory J] :
     HasLimitsOfShape J (FGModuleCat.{v} k) :=
   hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
     (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteLimits (FGModuleCat.{v} k)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 有有限极限 (FGModuleCat.{v} k)
-  定义体: inferInstance
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteLimits (FGModuleCat.{v} k) where
   out _ _ _ := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteLimits (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 保持FiniteLimits (forget₂ (FGModuleCat k) (模范畴.{v} k))
-  定义体: inferInstance
+/-
+**FGModuleCat.** 是 Mathlib 中的一个实例，位于命名空间 `FGModuleCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteLimits (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) where
   preservesFiniteLimits _ _ _ := inferInstance
 
 end FGModuleCat
+

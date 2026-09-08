@@ -108,24 +108,25 @@ public meta section
 
 open Lean Expr
 
-/--
-Definition of `Lean.Expr.getExprInputs` / `Lean.Expr.getExprInputs` 的定义
+/-- `getExprInputs e` inspects the outermost constructor of `e` and returns the array of all the
+arguments to that constructor that are themselves `Expr`essions. -/
+/-
+**Lean.Expr.getExprInputs** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → Array Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lean.Expr.getExprInputs
-  signature: : Expr -> Array Expr
-
-中文:
-定义 Lean.Expr.getExprInputs
-  签名: : Expr -> 数组 Expr
+--- 原说明 ---
+`getExprInputs e` inspects the outermost constructor of `e` and returns the arra
+y of all the
+arguments to that constructor that are themselves `Expr`essions.
 -/
-def Lean.Expr.getExprInputs : Expr -> Array Expr
-  | app fn arg => #[fn, arg]
-  | lam _ bt bb _ => #[bt, bb]
+def Lean.Expr.getExprInputs : Expr → Array Expr
+  | app fn arg        => #[fn, arg]
+  | lam _ bt bb _     => #[bt, bb]
   | forallE _ bt bb _ => #[bt, bb]
-  | letE _ t v b _ => #[t, v, b]
-  | mdata _ e => #[e]
-  | proj _ _ e => #[e]
+  | letE _ t v b _    => #[t, v, b]
+  | mdata _ e         => #[e]
+  | proj _ _ e        => #[e]
   | _ => #[]
 
 namespace Mathlib.MoveAdd
@@ -148,88 +149,132 @@ In the final ordering,
 * all remaining terms remain in their current relative order.
 -/
 
-/--
-Definition of `uniquify` / `uniquify` 的定义
+/-- `uniquify L` takes a list `L : List α` as input and it returns a list `L' : List (α × ℕ)`.
+The two lists `L` and `L'.map Prod.fst` coincide.
+The second component of each entry `(a, n)` in `L'` is the number of times that `a` appears in `L`
+before the current location.
 
-English:
-definition uniquify
-  signature: : List α -> List (α × Nat)
-  body: uniquify ms
-    (m, 0) :: (lms.map fun (x, n) => if x == m then (x, n + 1) else (x, n))
-
-中文:
-定义 uniquify
-  签名: : 列表 α -> 列表 (α × 自然数)
-  定义体: uniquify ms
-    (m, 0) :: (lms.map fun (x, n) => if x == m then (x, n + 1) else (x, n))
-
-Depends on / 依赖: uniquify
+The resulting list of pairs has no duplicates.
 -/
-def uniquify : List α -> List (α × Nat)
-  | [] => []
+/-
+**Mathlib.MoveAdd.uniquify** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：uniquify : List α -> List (α × Nat) | [] => [] | m::ms => let lms
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`uniquify L` takes a list `L : List α` as input and it returns a list `L' : List
+ (α × ℕ)`.
+The two lists `L` and `L'.map Prod.fst` coincide.
+The second component of each entry `(a, n)` in `L'` is the number of times that 
+`a` appears in `L`
+before the current location.
+
+The resulting list of pairs has no duplicates.
+-/
+def uniquify : List α → List (α × ℕ)
+  | []    => []
   | m::ms =>
     let lms := uniquify ms
     (m, 0) :: (lms.map fun (x, n) => if x == m then (x, n + 1) else (x, n))
 
-/--
-Definition of `weight` / `weight` 的定义
+/-- Return a sorting key so that all `(a, true)`s are in the list's order
+and sorted before all `(a, false)`s, which are also in the list's order.
+Although `weight` does not require this, we use `weight` in the case where the list obtained
+from `L` by only keeping the first component (i.e. `L.map Prod.fst`) has no duplicates.
+The properties that we mention here assume that this is the case.
 
-English:
-definition weight
-  signature: (L : List (α × Bool)) (a : α)
-  body: let l := L.length
-  match L.find? (Prod.fst · == a) with
-    | some (_, b) => if b then - l + (L.idxOf (a, b) : Int) else (L.idxOf (a, b) + 1 : Int)
-    | none => 0
+Thus, `weight L` is a function `α → ℤ` with the following properties:
+* if `(a, true)  ∈ L`, then `weight L a` is strictly negative;
+* if `(a, false) ∈ L`, then `weight L a` is strictly positive;
+* if neither `(a, true)` nor `(a, false)` is in `L`, then `weight L a = 0`.
 
-中文:
-定义 weight
-  签名: (L : 列表 (α × 布尔值)) (a : α)
-  定义体: let l := L.length
-  match L.find? (Prod.fst · == a) with
-    | some (_, b) => if b then - l + (L.idxOf (a, b) : Int) else (L.idxOf (a, b) + 1 : Int)
-    | none => 0
-
-Depends on / 依赖: L.find, L.idxOf, L.length, Prod.fst, length
+Moreover, the function `weight L` is strictly monotone increasing on both
+`{a : α | (a, true) ∈ L}` and `{a : α | (a, false) ∈ L}`,
+in the sense that if `a' = (a, true)` and `b' = (b, true)` are in `L`,
+then `a'` appears before `b'` in `L` if and only if `weight L a < weight L b` and
+similarly for the pairs with second coordinate equal to `false`.
 -/
-def weight (L : List (α × Bool)) (a : α) : Int :=
+/-
+**Mathlib.MoveAdd.weight** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：weight (L : List (α × Bool)) (a : α) : Int
+参数：L : List (α × Bool)；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Return a sorting key so that all `(a, true)`s are in the list's order
+and sorted before all `(a, false)`s, which are also in the list's order.
+Although `weight` does not require this, we use `weight` in the case where the l
+ist obtained
+from `L` by only keeping the first component (i.e. `L.map Prod.fst`) has no dupl
+icates.
+The properties that we mention here assume that this is the case.
+
+Thus, `weight L` is a function `α → ℤ` with the following properties:
+* if `(a, true)  ∈ L`, then `weight L a` is strictly negative;
+* if `(a, false) ∈ L`, then `weight L a` is strictly positive;
+* if neither `(a, true)` nor `(a, false)` is in `L`, then `weight L a = 0`.
+
+Moreover, the function `weight L` is strictly monotone increasing on both
+`{a : α | (a, true) ∈ L}` and `{a : α | (a, false) ∈ L}`,
+in the sense that if `a' = (a, true)` and `b' = (b, true)` are in `L`,
+then `a'` appears before `b'` in `L` if and only if `weight L a < weight L b` an
+d
+similarly for the pairs with second coordinate equal to `false`.
+-/
+def weight (L : List (α × Bool)) (a : α) : ℤ :=
   let l := L.length
   match L.find? (Prod.fst · == a) with
-    | some (_, b) => if b then - l + (L.idxOf (a, b) : Int) else (L.idxOf (a, b) + 1 : Int)
+    | some (_, b) => if b then - l + (L.idxOf (a, b) : ℤ) else (L.idxOf (a, b) + 1 : ℤ)
     | none => 0
 
-/--
-Definition of `reorderUsing` / `reorderUsing` 的定义
+/-- `reorderUsing toReorder instructions` produces a reordering of `toReorder : List α`,
+following the requirements imposed by `instructions : List (α × Bool)`.
 
-English:
-definition reorderUsing
-  signature: (toReorder : List α) (instructions : List (α × Bool))
-  body: let uInstructions :=
-    let (as, as?) := instructions.unzip
-    (uniquify as).zip as?
-  let uToReorder := (uniquify toReorder).toArray
-  let reorder := uToReorder.qsort fun x y =>
-    match uInstructions.find? (Prod.fst · == x), uInstructions.find? (Prod.fst · == y) with
-      | none, none =>
-        (uToReorder.idxOf? x).get! <= (uToReorder.idxOf? y).get!
-      | _, _ => weight uInstructions x <= weight uInstructions y
-  (reorder.map Prod.fst).toList
+These are the requirements:
+* elements of `toReorder` that appear with `true` in `instructions` appear at the
+  *beginning* of the reordered list, in the order in which they appear in `instructions`;
+* similarly, elements of `toReorder` that appear with `false` in `instructions` appear at the
+  *end* of the reordered list, in the order in which they appear in `instructions`;
+* finally, elements of `toReorder` that do not appear in `instructions` appear "in the middle"
+  with the order that they had in `toReorder`.
 
-中文:
-定义 reorderUsing
-  签名: (toReorder : 列表 α) (instructions : 列表 (α × 布尔值))
-  定义体: let uInstructions :=
-    let (as, as?) := instructions.unzip
-    (uniquify as).zip as?
-  let uToReorder := (uniquify toReorder).toArray
-  let reorder := uToReorder.qsort fun x y =>
-    match uInstructions.find? (Prod.fst · == x), uInstructions.find? (Prod.fst · == y) with
-      | none, none =>
-        (uToReorder.idxOf? x).get! <= (uToReorder.idxOf? y).get!
-      | _, _ => weight uInstructions x <= weight uInstructions y
-  (reorder.map Prod.fst).toList
+For example,
+* `reorderUsing [0, 1, 2] [(0, false)] = [1, 2, 0]`,
+* `reorderUsing [0, 1, 2] [(1, true)] = [1, 0, 2]`,
+* `reorderUsing [0, 1, 2] [(1, true), (0, false)] = [1, 2, 0]`.
+-/
+/-
+**Mathlib.MoveAdd.reorderUsing** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：reorderUsing (toReorder : List α) (instructions : List (α × Bool)) : List 
+α
+参数：toReorder : List α；instructions : List (α × Bool)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Prod.fst, instructions, instructions.unzip, reorder, reorder.map, toArray, toList, toReorder, uInstructions, uInstructions.find, uToReorder, uToReorder.idxOf, uToReorder.qsort, uniquify, weight
+--- 原说明 ---
+`reorderUsing toReorder instructions` produces a reordering of `toReorder : List
+ α`,
+following the requirements imposed by `instructions : List (α × Bool)`.
+
+These are the requirements:
+* elements of `toReorder` that appear with `true` in `instructions` appear at th
+e
+  *beginning* of the reordered list, in the order in which they appear in `instr
+uctions`;
+* similarly, elements of `toReorder` that appear with `false` in `instructions` 
+appear at the
+  *end* of the reordered list, in the order in which they appear in `instruction
+s`;
+* finally, elements of `toReorder` that do not appear in `instructions` appear "
+in the middle"
+  with the order that they had in `toReorder`.
+
+For example,
+* `reorderUsing [0, 1, 2] [(0, false)] = [1, 2, 0]`,
+* `reorderUsing [0, 1, 2] [(1, true)] = [1, 0, 2]`,
+* `reorderUsing [0, 1, 2] [(1, true), (0, false)] = [1, 2, 0]`.
 -/
 def reorderUsing (toReorder : List α) (instructions : List (α × Bool)) : List α :=
   let uInstructions :=
@@ -239,28 +284,44 @@ def reorderUsing (toReorder : List α) (instructions : List (α × Bool)) : List
   let reorder := uToReorder.qsort fun x y =>
     match uInstructions.find? (Prod.fst · == x), uInstructions.find? (Prod.fst · == y) with
       | none, none =>
-        (uToReorder.idxOf? x).get! <= (uToReorder.idxOf? y).get!
-      | _, _ => weight uInstructions x <= weight uInstructions y
+        (uToReorder.idxOf? x).get! ≤ (uToReorder.idxOf? y).get!
+      | _, _ => weight uInstructions x ≤ weight uInstructions y
   (reorder.map Prod.fst).toList
 
 end reorder
 
-/--
-Definition of `prepareOp` / `prepareOp` 的定义
+/-- `prepareOp sum` takes an `Expr`ession as input.  It assumes that `sum` is a well-formed
+term representing a repeated application of a binary operation and that the summands are the
+last two arguments passed to the operation.
+It returns the expression consisting of the operation with all its arguments already applied,
+except for the last two.
+This is similar to `Lean.Meta.mkAdd, Lean.Meta.mkMul`, except that the resulting operation is
+primed to work with operands of the same type as the ones already appearing in `sum`.
 
-English:
-definition prepareOp
-  signature: (sum : Expr)
-  body: let opargs := sum.getAppArgs
-  (opargs.toList.take (opargs.size - 2)).foldl (fun x y => Expr.app x y) sum.getAppFn
+This is useful to rearrange the operands.
+-/
+/-
+**Mathlib.MoveAdd.prepareOp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：prepareOp (sum : Expr) : Expr
+参数：sum : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 prepareOp
-  签名: (求和 : Expr)
-  定义体: let opargs := sum.getAppArgs
-  (opargs.toList.take (opargs.size - 2)).foldl (fun x y => Expr.app x y) sum.getAppFn
+--- 原说明 ---
+`prepareOp sum` takes an `Expr`ession as input.  It assumes that `sum` is a well
+-formed
+term representing a repeated application of a binary operation and that the summ
+ands are the
+last two arguments passed to the operation.
+It returns the expression consisting of the operation with all its arguments alr
+eady applied,
+except for the last two.
+This is similar to `Lean.Meta.mkAdd, Lean.Meta.mkMul`, except that the resulting
+ operation is
+primed to work with operands of the same type as the ones already appearing in `
+sum`.
 
-Depends on / 依赖: Expr.app, IsInducing, IsInducing.subtypeVal.r0Space, getAppArgs, getAppFn, opargs, opargs.size, opargs.toList.take, r0Space, subtypeVal, sum.getAppArgs, sum.getAppFn, toList
+This is useful to rearrange the operands.
 -/
 def prepareOp (sum : Expr) : Expr :=
   let opargs := sum.getAppArgs
@@ -274,23 +335,17 @@ Such an expression is the result of `prepareOp`.
 If `exs` is the list `[e₁, e₂, ..., eₙ]` of `Expr`essions, then `sumList prepOp left_assoc? exs`
 returns
 * `prepOp (prepOp( ... prepOp (prepOp e₁ e₂) e₃) ... eₙ)`, if `left_assoc?` is `false`, and
-* `prepOp e₁ (prepOp e₂ (... prepOp (prepOp eₙ₋₁ eₙ))`, if `left_assoc?` is `true`.
+* `prepOp e₁ (prepOp e₂ (... prepOp (prepOp eₙ₋₁  eₙ))`, if `left_assoc?` is `true`.
 -/
 partial
-/--
-Definition of `sumList` / `sumList` 的定义
-
-English:
-definition sumList
-  signature: (prepOp : Expr) (left_assoc? : Bool)
-
-中文:
-定义 sumList
-  签名: (prepOp : Expr) (left_assoc? : 布尔值)
+/-
+**Mathlib.MoveAdd.sumList** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：Expr → Bool → List Expr → Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def sumList (prepOp : Expr) (left_assoc? : Bool) : List Expr -> Expr
-  | [] => default
-  | [a] => a
+def sumList (prepOp : Expr) (left_assoc? : Bool) : List Expr → Expr
+  | []    => default
+  | [a]   => a
   | a::as =>
     if left_assoc? then
       Expr.app (prepOp.app a) (sumList prepOp true as)
@@ -304,60 +359,44 @@ open Meta
 variable (op : Name)
 
 variable (R : Expr) in
-/--
-Definition of `getAddends` / `getAddends` 的定义
+/-- If `sum` is an expression consisting of repeated applications of `op`, then `getAddends`
+returns the Array of those recursively determined arguments whose type is DefEq to `R`. -/
+/-
+**Mathlib.MoveAdd.getAddends** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：Name → Expr → Expr → MetaM (Array Expr)
+参数：Array Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getAddends
-  signature: (sum : Expr)
-  body: do
-  if sum.isAppOf op then
-    let inR ← sum.getAppArgs.filterM fun r => do isDefEq R (← inferType r <|> pure R)
-    let new ← inR.mapM (getAddends ·)
-    return new.foldl Array.append #[]
-  else return #[sum]
-
-中文:
-定义 getAddends
-  签名: (求和 : Expr)
-  定义体: do
-  if sum.isAppOf op then
-    let inR ← sum.getAppArgs.filterM fun r => do isDefEq R (← inferType r <|> pure R)
-    let new ← inR.mapM (getAddends ·)
-    return new.foldl Array.append #[]
-  else return #[sum]
-
-Depends on / 依赖: specializes_pi
+--- 原说明 ---
+If `sum` is an expression consisting of repeated applications of `op`, then `get
+Addends`
+returns the Array of those recursively determined arguments whose type is DefEq 
+to `R`.
 -/
 partial def getAddends (sum : Expr) : MetaM (Array Expr) := do
   if sum.isAppOf op then
     let inR ← sum.getAppArgs.filterM fun r => do isDefEq R (← inferType r <|> pure R)
     let new ← inR.mapM (getAddends ·)
-    return new.foldl Array.append #[]
+    return new.foldl Array.append  #[]
   else return #[sum]
 
-/--
-Definition of `getOps` / `getOps` 的定义
+/-- Recursively compute the Array of `getAddends` Arrays by recursing into the expression `sum`
+looking for instances of the operation `op`.
 
-English:
-definition getOps
-  signature: (sum : Expr)
-  body: do
-  let summands ← getAddends op (← inferType sum <|> return sum) sum
-  let (first, rest) := if summands.size == 1 then (#[], sum.getExprInputs) else
-    (#[(summands, sum)], summands)
-  let rest ← rest.mapM getOps
-  return rest.foldl Array.append first
+Possibly returns duplicates!
+-/
+/-
+**Mathlib.MoveAdd.getOps** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：Name → Expr → MetaM (Array (Array Expr × Expr))
+参数：Array (Array Expr × Expr)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getOps
-  签名: (求和 : Expr)
-  定义体: do
-  let summands ← getAddends op (← inferType sum <|> return sum) sum
-  let (first, rest) := if summands.size == 1 then (#[], sum.getExprInputs) else
-    (#[(summands, sum)], summands)
-  let rest ← rest.mapM getOps
-  return rest.foldl Array.append first
+--- 原说明 ---
+Recursively compute the Array of `getAddends` Arrays by recursing into the expre
+ssion `sum`
+looking for instances of the operation `op`.
+
+Possibly returns duplicates!
 -/
 partial def getOps (sum : Expr) : MetaM (Array ((Array Expr) × Expr)) := do
   let summands ← getAddends op (← inferType sum <|> return sum) sum
@@ -366,34 +405,44 @@ partial def getOps (sum : Expr) : MetaM (Array ((Array Expr) × Expr)) := do
   let rest ← rest.mapM getOps
   return rest.foldl Array.append first
 
-/--
-Definition of `rankSums` / `rankSums` 的定义
+/-- `rankSums op tgt instructions` takes as input
+* the name `op` of a binary operation,
+* an `Expr`ession `tgt`,
+* a list `instructions` of pair `(expression, Boolean)`.
 
-English:
-definition rankSums
-  signature: (tgt : Expr) (instructions : List (Expr × Bool))
-  body: do
-  let sums ← getOps op (← instantiateMVars tgt)
-  let candidates := sums.map fun (addends, sum) => do
-    let reord := reorderUsing addends.toList instructions
-    let left_assoc? := sum.getAppFn.isConstOf `And || sum.getAppFn.isConstOf `Or
-    let resummed := sumList (prepareOp sum) left_assoc? reord
-    if (resummed != sum) then some (sum, resummed) else none
-  return (candidates.toList.reduceOption.toArray.qsort
-    (fun x y : Expr × Expr => (y.1.sizeWithoutSharing <= x.1.sizeWithoutSharing))).toList
+It extracts the maximal subexpressions of `tgt` whose head symbol is `op`
+(i.e. the maximal subexpressions that consist only of applications of the binary operation `op`),
+it rearranges the operands of such subexpressions following the order implied by `instructions`
+(as in `reorderUsing`),
+it returns the list of pairs of expressions `(old_sum, new_sum)`, for which `old_sum ≠ new_sum`
+sorted by decreasing value of `Lean.Expr.size`.
+In particular, a subexpression of an `old_sum` can only appear *after* its over-expression.
+-/
+/-
+**Mathlib.MoveAdd.rankSums** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：rankSums (tgt : Expr) (instructions : List (Expr × Bool)) : MetaM (List (E
+xpr × Expr))
+参数：tgt : Expr；instructions : List (Expr × Bool)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 rankSums
-  签名: (tgt : Expr) (instructions : 列表 (Expr × 布尔值))
-  定义体: do
-  let sums ← getOps op (← instantiateMVars tgt)
-  let candidates := sums.map fun (addends, sum) => do
-    let reord := reorderUsing addends.toList instructions
-    let left_assoc? := sum.getAppFn.isConstOf `And || sum.getAppFn.isConstOf `Or
-    let resummed := sumList (prepareOp sum) left_assoc? reord
-    if (resummed != sum) then some (sum, resummed) else none
-  return (candidates.toList.reduceOption.toArray.qsort
-    (fun x y : Expr × Expr => (y.1.sizeWithoutSharing <= x.1.sizeWithoutSharing))).toList
+--- 原说明 ---
+`rankSums op tgt instructions` takes as input
+* the name `op` of a binary operation,
+* an `Expr`ession `tgt`,
+* a list `instructions` of pair `(expression, Boolean)`.
+
+It extracts the maximal subexpressions of `tgt` whose head symbol is `op`
+(i.e. the maximal subexpressions that consist only of applications of the binary
+ operation `op`),
+it rearranges the operands of such subexpressions following the order implied by
+ `instructions`
+(as in `reorderUsing`),
+it returns the list of pairs of expressions `(old_sum, new_sum)`, for which `old
+_sum ≠ new_sum`
+sorted by decreasing value of `Lean.Expr.size`.
+In particular, a subexpression of an `old_sum` can only appear *after* its over-
+expression.
 -/
 def rankSums (tgt : Expr) (instructions : List (Expr × Bool)) : MetaM (List (Expr × Expr)) := do
   let sums ← getOps op (← instantiateMVars tgt)
@@ -403,36 +452,25 @@ def rankSums (tgt : Expr) (instructions : List (Expr × Bool)) : MetaM (List (Ex
     let resummed := sumList (prepareOp sum) left_assoc? reord
     if (resummed != sum) then some (sum, resummed) else none
   return (candidates.toList.reduceOption.toArray.qsort
-    (fun x y : Expr × Expr => (y.1.sizeWithoutSharing <= x.1.sizeWithoutSharing))).toList
+    (fun x y : Expr × Expr ↦ (y.1.sizeWithoutSharing  ≤ x.1.sizeWithoutSharing))).toList
 
-/--
-Definition of `permuteExpr` / `permuteExpr` 的定义
+/-- `permuteExpr op tgt instructions` takes the same input as `rankSums` and returns the
+expression obtained from `tgt` by replacing all `old_sum`s by the corresponding `new_sum`.
+If there were no required changes, then `permuteExpr` reports this in its second factor. -/
+/-
+**Mathlib.MoveAdd.permuteExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：permuteExpr (tgt : Expr) (instructions : List (Expr × Bool)) : MetaM Expr
+参数：tgt : Expr；instructions : List (Expr × Bool)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition permuteExpr
-  signature: (tgt : Expr) (instructions : List (Expr × Bool))
-  body: do
-  let permInstructions ← rankSums op tgt instructions
-  if permInstructions == [] then throwError "The goal is already in the required form"
-  let mut permTgt := tgt
-  -- We cannot do `Expr.replace` all at once here, we need to follow
-  -- the order of the instructions.
-  for (old, new) in permInstructions do
-    permTgt := permTgt.replace (if · == old then new else none)
-  return permTgt
-
-中文:
-定义 permuteExpr
-  签名: (tgt : Expr) (instructions : 列表 (Expr × 布尔值))
-  定义体: do
-  let permInstructions ← rankSums op tgt instructions
-  if permInstructions == [] then throwError "The goal is already in the required form"
-  let mut permTgt := tgt
-  -- We cannot do `Expr.replace` all at once here, we need to follow
-  -- the order of the instructions.
-  for (old, new) in permInstructions do
-    permTgt := permTgt.replace (if · == old then new else none)
-  return permTgt
+--- 原说明 ---
+`permuteExpr op tgt instructions` takes the same input as `rankSums` and returns
+ the
+expression obtained from `tgt` by replacing all `old_sum`s by the corresponding 
+`new_sum`.
+If there were no required changes, then `permuteExpr` reports this in its second
+ factor.
 -/
 def permuteExpr (tgt : Expr) (instructions : List (Expr × Bool)) : MetaM Expr := do
   let permInstructions ← rankSums op tgt instructions
@@ -458,20 +496,31 @@ Example:
 ```lean
 #eval do
   let L := [mkNatLit 0, (← mkFreshExprMVar (some (mkConst ``Nat))), mkNatLit 0] -- i.e. [0, _, 0]
-  let R := [mkNatLit 0, mkNatLit 0, mkNatLit 1] -- i.e. [0, 1]
+  let R := [mkNatLit 0, mkNatLit 0,                                 mkNatLit 1] -- i.e. [0, 1]
   dbg_trace f!"{(← pairUp L R)}"
-/--
-Definition of `pairUp` / `pairUp` 的定义
-
-English:
-definition pairUp
-  signature: : List (Expr × Bool × Syntax) -> List Expr ->
-
-中文:
-定义 pairUp
-  签名: : 列表 (Expr × 布尔值 × Syntax) -> 列表 Expr ->
+/- output:
+`([0, 0], [0])`
+the output LHS list `[0, 0]` consists of the first `0` and the `MVarId`.
+the output RHS list `[0]` corresponds to the last `0` in `L`.
 -/
-def pairUp : List (Expr × Bool × Syntax) -> List Expr ->
+```
+-/
+/-
+**Mathlib.MoveAdd.pairUp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：List (Expr × Bool × Syntax) → List Expr → MetaM (List (Expr × Bool) × List
+ (Expr × Bool × Syntax))
+参数：Expr × Bool × Syntax；List (Expr × Bool) × List (Expr × Bool × Syntax)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+output:
+`([0, 0], [0])`
+the output LHS list `[0, 0]` consists of the first `0` and the `MVarId`.
+the output RHS list `[0]` corresponds to the last `0` in `L`.
+- /
+```
+-/
+def pairUp : List (Expr × Bool × Syntax) → List Expr →
     MetaM ((List (Expr × Bool)) × List (Expr × Bool × Syntax))
   | (m::ms), l => do
     match ← l.findM? (isDefEq · m.1) with
@@ -480,87 +529,68 @@ def pairUp : List (Expr × Bool × Syntax) -> List Expr ->
                   return ((d, m.2.1)::found, unfound)
   | _, _ => return ([], [])
 
-/--
-Definition of `moveOperSimpCtx` / `moveOperSimpCtx` 的定义
+/-- `moveOperSimpCtx` is the `Simp.Context` for the reordering internal to `move_oper`.
+To support a new binary operation, extend the list in this definition, so that it contains
+enough lemmas to allow `simp` to close a generic permutation goal for the new binary operation.
+-/
+/-
+**Mathlib.MoveAdd.moveOperSimpCtx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：moveOperSimpCtx : MetaM Simp.Context
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition moveOperSimpCtx
-  signature: : MetaM Simp.Context
-  body: do
-  let simpNames := Elab.Tactic.simpOnlyBuiltins ++ [
-    ``add_comm, ``add_assoc, ``add_left_comm, -- for `HAdd.hAdd`
-    ``mul_comm, ``mul_assoc, ``mul_left_comm, -- for `HMul.hMul`
-    ``and_comm, ``and_assoc, ``and_left_comm, -- for `and`
-    ``or_comm, ``or_assoc, ``or_left_comm, -- for `or`
-    ``max_comm, ``max_assoc, ``max_left_comm, -- for `max`
-    ``min_comm, ``min_assoc, ``min_left_comm -- for `min`
-    ]
-  let simpThms ← simpNames.foldlM (·.addConst ·) ({} : SimpTheorems)
-  Simp.mkContext {} (simpTheorems := #[simpThms])
-
-中文:
-定义 moveOperSimpCtx
-  签名: : MetaM Simp.余ntext
-  定义体: do
-  let simpNames := Elab.Tactic.simpOnlyBuiltins ++ [
-    ``add_comm, ``add_assoc, ``add_left_comm, -- for `HAdd.hAdd`
-    ``mul_comm, ``mul_assoc, ``mul_left_comm, -- for `HMul.hMul`
-    ``and_comm, ``and_assoc, ``and_left_comm, -- for `and`
-    ``or_comm, ``or_assoc, ``or_left_comm, -- for `or`
-    ``max_comm, ``max_assoc, ``max_left_comm, -- for `max`
-    ``min_comm, ``min_assoc, ``min_left_comm -- for `min`
-    ]
-  let simpThms ← simpNames.foldlM (·.addConst ·) ({} : SimpTheorems)
-  Simp.mkContext {} (simpTheorems := #[simpThms])
+--- 原说明 ---
+`moveOperSimpCtx` is the `Simp.Context` for the reordering internal to `move_ope
+r`.
+To support a new binary operation, extend the list in this definition, so that i
+t contains
+enough lemmas to allow `simp` to close a generic permutation goal for the new bi
+nary operation.
 -/
 def moveOperSimpCtx : MetaM Simp.Context := do
   let simpNames := Elab.Tactic.simpOnlyBuiltins ++ [
-    ``add_comm, ``add_assoc, ``add_left_comm, -- for `HAdd.hAdd`
-    ``mul_comm, ``mul_assoc, ``mul_left_comm, -- for `HMul.hMul`
-    ``and_comm, ``and_assoc, ``and_left_comm, -- for `and`
-    ``or_comm, ``or_assoc, ``or_left_comm, -- for `or`
-    ``max_comm, ``max_assoc, ``max_left_comm, -- for `max`
-    ``min_comm, ``min_assoc, ``min_left_comm -- for `min`
+    ``add_comm, ``add_assoc, ``add_left_comm,  -- for `HAdd.hAdd`
+    ``mul_comm, ``mul_assoc, ``mul_left_comm,  -- for `HMul.hMul`
+    ``and_comm, ``and_assoc, ``and_left_comm,  -- for `and`
+    ``or_comm,  ``or_assoc,  ``or_left_comm,   -- for `or`
+    ``max_comm, ``max_assoc, ``max_left_comm,  -- for `max`
+    ``min_comm, ``min_assoc, ``min_left_comm   -- for `min`
     ]
   let simpThms ← simpNames.foldlM (·.addConst ·) ({} : SimpTheorems)
   Simp.mkContext {} (simpTheorems := #[simpThms])
 
-/--
-Definition of `reorderAndSimp` / `reorderAndSimp` 的定义
+/-- `reorderAndSimp mv op instr` takes as input an `MVarId`  `mv`, the name `op` of a binary
+operation and a list of "instructions" `instr` that it passes to `permuteExpr`.
 
-English:
-definition reorderAndSimp
-  signature: (mv : MVarId) (instr : List (Expr × Bool))
-  body: mv.withContext do
-  let permExpr ← permuteExpr op (← mv.getType'') instr
-  -- generate the implication `permutedMv → mv = permutedMv → mv`
-  let eqmpr ← mkAppM ``Eq.mpr #[← mkFreshExprMVar (← mkEq (← mv.getType) permExpr)]
-  let twoGoals ← mv.apply eqmpr
-guard (twoGoals.length == 2) >
-    throwError m!"There should only be 2 goals, instead of {twoGoals.length}"
-  -- `permGoal` is the single goal `mv_permuted`, possibly more operations will be permuted later on
-  let permGoal ← twoGoals.filterM fun v => return !(← v.isAssigned)
-  match ← (simpGoal (permGoal[1]!) (← moveOperSimpCtx)) with
-    | (some x, _) => throwError m!"'move_oper' could not solve {indentD x.2}"
-    | (none, _) => return permGoal
+* It creates a version `permuted_mv` of `mv` with subexpressions representing `op`-sums reordered
+  following `instructions`.
+* It produces 2 temporary goals by applying `Eq.mpr` and unifying the resulting meta-variable with
+  `permuted_mv`: `[⊢ mv = permuted_mv, ⊢ permuted_mv]`.
+* It tries to solve the goal `mv = permuted_mv` by a simple-minded `simp` call, using the
+  `op`-analogues of `add_comm, add_assoc, add_left_comm`.
+-/
+/-
+**Mathlib.MoveAdd.reorderAndSimp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：reorderAndSimp (mv : MVarId) (instr : List (Expr × Bool)) : MetaM (List MV
+arId)
+参数：mv : MVarId；instr : List (Expr × Bool)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 reorderAndSimp
-  签名: (mv : MVarId) (instr : 列表 (Expr × 布尔值))
-  定义体: mv.withContext do
-  let permExpr ← permuteExpr op (← mv.getType'') instr
-  -- generate the implication `permutedMv → mv = permutedMv → mv`
-  let eqmpr ← mkAppM ``Eq.mpr #[← mkFreshExprMVar (← mkEq (← mv.getType) permExpr)]
-  let twoGoals ← mv.apply eqmpr
-guard (twoGoals.length == 2) >
-    throwError m!"There should only be 2 goals, instead of {twoGoals.length}"
-  -- `permGoal` is the single goal `mv_permuted`, possibly more operations will be permuted later on
-  let permGoal ← twoGoals.filterM fun v => return !(← v.isAssigned)
-  match ← (simpGoal (permGoal[1]!) (← moveOperSimpCtx)) with
-    | (some x, _) => throwError m!"'move_oper' could not solve {indentD x.2}"
-    | (none, _) => return permGoal
+--- 原说明 ---
+`reorderAndSimp mv op instr` takes as input an `MVarId`  `mv`, the name `op` of 
+a binary
+operation and a list of "instructions" `instr` that it passes to `permuteExpr`.
 
-Depends on / 依赖: mv.withContext, withContext
+* It creates a version `permuted_mv` of `mv` with subexpressions representing `o
+p`-sums reordered
+  following `instructions`.
+* It produces 2 temporary goals by applying `Eq.mpr` and unifying the resulting 
+meta-variable with
+  `permuted_mv`: `[⊢ mv = permuted_mv, ⊢ permuted_mv]`.
+* It tries to solve the goal `mv = permuted_mv` by a simple-minded `simp` call, 
+using the
+  `op`-analogues of `add_comm, add_assoc, add_left_comm`.
 -/
 def reorderAndSimp (mv : MVarId) (instr : List (Expr × Bool)) :
     MetaM (List MVarId) := mv.withContext do
@@ -568,7 +598,7 @@ def reorderAndSimp (mv : MVarId) (instr : List (Expr × Bool)) :
   -- generate the implication `permutedMv → mv = permutedMv → mv`
   let eqmpr ← mkAppM ``Eq.mpr #[← mkFreshExprMVar (← mkEq (← mv.getType) permExpr)]
   let twoGoals ← mv.apply eqmpr
-guard (twoGoals.length == 2) >
+  guard (twoGoals.length == 2) <|>
     throwError m!"There should only be 2 goals, instead of {twoGoals.length}"
   -- `permGoal` is the single goal `mv_permuted`, possibly more operations will be permuted later on
   let permGoal ← twoGoals.filterM fun v => return !(← v.isAssigned)
@@ -576,40 +606,41 @@ guard (twoGoals.length == 2) >
     | (some x, _) => throwError m!"'move_oper' could not solve {indentD x.2}"
     | (none, _) => return permGoal
 
-/--
-Definition of `unifyMovements` / `unifyMovements` 的定义
+/-- `unifyMovements` takes as input
+* an array of `Expr × Bool × Syntax`, as in the output of `parseArrows`,
+* the `Name` `op` of a binary operation,
+* an `Expr`ession `tgt`.
 
-English:
-definition unifyMovements
-  signature: (data : Array (Expr × Bool × Syntax)) (tgt : Expr)
-  body: do
-  let ops ← getOps op tgt
-  let atoms := (ops.map Prod.fst).flatten.toList.filter (!isBVar ·)
-  -- `instr` are the unified user-provided terms, `neverMatched` are non-unified ones
-  let (instr, neverMatched) ← pairUp data.toList atoms
-  let dbgMsg := #[m!"Matching of input variables:\n\
-    * pre-match: {data.map (Prod.snd ∘ Prod.snd)}\n\
-    * post-match: {instr}",
-    m!"\nMaximum number of iterations: {ops.size}"]
-  -- if there are `neverMatched` terms, return the parsed terms and the syntax
-  let errMsg := neverMatched.map fun (t, a, stx) => (if a then m!"← {t}" else m!"{t}", stx)
-  return (instr, errMsg.unzip, dbgMsg)
+It unifies each `Expr`ession appearing as a first factor of the array with the atoms
+for the operation `op` in the expression `tgt`, returning
+* the lists of pairs of a matched subexpression with the corresponding `Bool`ean;
+* a pair of a list of error messages and the corresponding list of Syntax terms where the error
+  should be thrown;
+* an array of debugging messages.
+-/
+/-
+**Mathlib.MoveAdd.unifyMovements** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：unifyMovements (data : Array (Expr × Bool × Syntax)) (tgt : Expr) : MetaM 
+(List (Expr × Bool) × (List MessageData × List Syntax) × Array MessageData)
+参数：data : Array (Expr × Bool × Syntax)；tgt : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 unifyMovements
-  签名: (data : 数组 (Expr × 布尔值 × Syntax)) (tgt : Expr)
-  定义体: do
-  let ops ← getOps op tgt
-  let atoms := (ops.map Prod.fst).flatten.toList.filter (!isBVar ·)
-  -- `instr` are the unified user-provided terms, `neverMatched` are non-unified ones
-  let (instr, neverMatched) ← pairUp data.toList atoms
-  let dbgMsg := #[m!"Matching of input variables:\n\
-    * pre-match: {data.map (Prod.snd ∘ Prod.snd)}\n\
-    * post-match: {instr}",
-    m!"\nMaximum number of iterations: {ops.size}"]
-  -- if there are `neverMatched` terms, return the parsed terms and the syntax
-  let errMsg := neverMatched.map fun (t, a, stx) => (if a then m!"← {t}" else m!"{t}", stx)
-  return (instr, errMsg.unzip, dbgMsg)
+--- 原说明 ---
+`unifyMovements` takes as input
+* an array of `Expr × Bool × Syntax`, as in the output of `parseArrows`,
+* the `Name` `op` of a binary operation,
+* an `Expr`ession `tgt`.
+
+It unifies each `Expr`ession appearing as a first factor of the array with the a
+toms
+for the operation `op` in the expression `tgt`, returning
+* the lists of pairs of a matched subexpression with the corresponding `Bool`ean
+;
+* a pair of a list of error messages and the corresponding list of Syntax terms 
+where the error
+  should be thrown;
+* an array of debugging messages.
 -/
 def unifyMovements (data : Array (Expr × Bool × Syntax)) (tgt : Expr) :
     MetaM (List (Expr × Bool) × (List MessageData × List Syntax) × Array MessageData) := do
@@ -618,7 +649,7 @@ def unifyMovements (data : Array (Expr × Bool × Syntax)) (tgt : Expr) :
   -- `instr` are the unified user-provided terms, `neverMatched` are non-unified ones
   let (instr, neverMatched) ← pairUp data.toList atoms
   let dbgMsg := #[m!"Matching of input variables:\n\
-    * pre-match: {data.map (Prod.snd ∘ Prod.snd)}\n\
+    * pre-match:  {data.map (Prod.snd ∘ Prod.snd)}\n\
     * post-match: {instr}",
     m!"\nMaximum number of iterations: {ops.size}"]
   -- if there are `neverMatched` terms, return the parsed terms and the syntax
@@ -628,24 +659,37 @@ def unifyMovements (data : Array (Expr × Bool × Syntax)) (tgt : Expr) :
 section parsing
 open Elab Parser Tactic
 
-/--
-Definition of `parseArrows` / `parseArrows` 的定义
+/-- `parseArrows` parses an input of the form `[a, ← b, _ * (1 : ℤ)]`, consisting of a list of
+terms, each optionally preceded by the arrow `←`.
+It returns an array of triples consisting of
+* the `Expr`ession corresponding to the parsed term,
+* the `Bool`ean `true` if the arrow is present in front of the term,
+* the underlying `Syntax` of the given term.
 
-English:
-definition parseArrows
-  signature: : TSyntax `Lean.Parser.Tactic.rwRuleSeq -> TermElabM (Array (Expr × Bool × Syntax))
-  body: rstx
-      return (← Term.elabTerm r[1]! none, ! r[0]!.isNone, rstx)
-  | _ => failure
-
-中文:
-定义 parseArrows
-  签名: : TSyntax `Lean.Parser.Tactic.rwRuleSeq -> TermElabM (数组 (Expr × 布尔值 × Syntax))
-  定义体: rstx
-      return (← Term.elabTerm r[1]! none, ! r[0]!.isNone, rstx)
-  | _ => failure
+E.g. convert `[a, ← b, _ * (1 : ℤ)]` to
+``[(a, false, `(a)), (b, true, `(b)), (_ * 1, false, `(_ * 1))]``.
 -/
-def parseArrows : TSyntax `Lean.Parser.Tactic.rwRuleSeq -> TermElabM (Array (Expr × Bool × Syntax))
+/-
+**Mathlib.MoveAdd.parseArrows** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.MoveAdd`。
+形式化陈述：parseArrows : TSyntax `Lean.Parser.Tactic.rwRuleSeq -> TermElabM (Array (E
+xpr × Bool × Syntax)) | `(rwRuleSeq| [$rs,*]) => do rs.getElems.mapM fun rstx =>
+ do let r : Syntax
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`parseArrows` parses an input of the form `[a, ← b, _ * (1 : ℤ)]`, consisting of
+ a list of
+terms, each optionally preceded by the arrow `←`.
+It returns an array of triples consisting of
+* the `Expr`ession corresponding to the parsed term,
+* the `Bool`ean `true` if the arrow is present in front of the term,
+* the underlying `Syntax` of the given term.
+
+E.g. convert `[a, ← b, _ * (1 : ℤ)]` to
+``[(a, false, `(a)), (b, true, `(b)), (_ * 1, false, `(_ * 1))]``.
+-/
+def parseArrows : TSyntax `Lean.Parser.Tactic.rwRuleSeq → TermElabM (Array (Expr × Bool × Syntax))
   | `(rwRuleSeq| [$rs,*]) => do
     rs.getElems.mapM fun rstx => do
       let r : Syntax := rstx
@@ -699,3 +743,4 @@ end parsing
 end MoveAdd
 
 end Mathlib
+

@@ -78,7 +78,7 @@ open Nat
 
 namespace Finset
 
-variable {s : Finset α} {t : Finset β} {f : α -> β} {w : α -> M} {b : M} {n : Nat}
+variable {s : Finset α} {t : Finset β} {f : α → β} {w : α → M} {b : M} {n : ℕ}
 
 /-!
 ### The pigeonhole principles on `Finset`s, pigeons counted by weight
@@ -113,87 +113,171 @@ variable [AddCommMonoid M] [LinearOrder M] [IsOrderedCancelAddMonoid M]
 -/
 
 
-/--
-theorem `exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum` / 定理 `exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is greater than `n • b`, and they are sorted into
+`n` pigeonholes, then for some pigeonhole, the total weight of the pigeons in this pigeonhole is
+greater than `b`. -/
+/-
+**Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum** 是 Mathlib 中的一个定理，位于命名空
+间 `Finset`。
+形式化陈述：exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (hf : forall a in s, f a in
+ t) (hb : #t • b < ∑ x in s, w x) : exists y in t, b < ∑ x in s with f x = y, w 
+x
+参数：hf : forall a in s, f a in t；hb : #t • b < ∑ x in s, w x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_lt_of_sum_lt`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddC
+ommMonoid M] [inst_1 : LinearOrder M] {f g : ι → M} {s : Finset ι}   [AddLeftMon
+o M], ∑ i ∈ s, f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.sum_fiberwise_of_maps_to`：∀ {ι : Type u_1} {κ : Type u_2} {M : Ty
+pe u_4} [inst : AddCommMonoid M] {s : Finset ι} {t : Finset κ}   [inst_1 : Decid
+ableEq κ] {g : ι → κ}…
 
-English:
-theorem exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum
-  statement: (hf : forall a in s, f a in t)
-  proof: exists_lt_of_sum_lt by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
-
-中文:
-定理 存在_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum
-  结论: (hf : 对任意 a in s, f a in t)
-  证明: exists_lt_of_sum_lt by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
-
-Depends on / 依赖: exists_lt_of_sum_lt, sum_const, sum_fiberwise_of_maps_to
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, strict ine
+quality version:
+if the total weight of a finite set of pigeons is greater than `n • b`, and they
+ are sorted into
+`n` pigeonholes, then for some pigeonhole, the total weight of the pigeons in th
+is pigeonhole is
+greater than `b`.
 -/
-theorem exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (hf : forall a in s, f a in t)
-    (hb : #t • b < ∑ x in s, w x) : exists y in t, b < ∑ x in s with f x = y, w x :=
-exists_lt_of_sum_lt by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
+theorem exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (hf : ∀ a ∈ s, f a ∈ t)
+    (hb : #t • b < ∑ x ∈ s, w x) : ∃ y ∈ t, b < ∑ x ∈ s with f x = y, w x :=
+  exists_lt_of_sum_lt <| by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
 
-/--
-theorem `exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul` / 定理 `exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is less than `n • b`, and they are sorted into `n`
+pigeonholes, then for some pigeonhole, the total weight of the pigeons in this pigeonhole is less
+than `b`. -/
+/-
+**Finset.exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul** 是 Mathlib 中的一个定理，位于命名空
+间 `Finset`。
+形式化陈述：exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul (hf : forall a in s, f a in
+ t) (hb : ∑ x in s, w x < #t • b) : exists y in t, ∑ x in s with f x = y, w x < 
+b
+参数：hf : forall a in s, f a in t；hb : ∑ x in s, w x < #t • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum`：exists_lt_sum_fib
+er_of_maps_to_of_nsmul_lt_sum (hf : forall a in s, f a in t) (hb : #t • b < ∑ x 
+in s, w x) : exists y in t, b < ∑ x in s wi…
+· 使用定理 `OrderDual.isOrderedAddCancelMonoid`：∀ {α : Type u} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], IsOrderedCancelAddMonoid
+ αᵒᵈ
 
-English:
-theorem exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul
-  statement: (hf : forall a in s, f a in t)
-  proof: exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (M := Mᵒᵈ) hf hb
-
-中文:
-定理 存在_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul
-  结论: (hf : 对任意 a in s, f a in t)
-  证明: exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (M := Mᵒᵈ) hf hb
-
-Depends on / 依赖: exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, strict ine
+quality version:
+if the total weight of a finite set of pigeons is less than `n • b`, and they ar
+e sorted into `n`
+pigeonholes, then for some pigeonhole, the total weight of the pigeons in this p
+igeonhole is less
+than `b`.
 -/
-theorem exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul (hf : forall a in s, f a in t)
-    (hb : ∑ x in s, w x < #t • b) : exists y in t, ∑ x in s with f x = y, w x < b :=
+theorem exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul (hf : ∀ a ∈ s, f a ∈ t)
+    (hb : ∑ x ∈ s, w x < #t • b) : ∃ y ∈ t, ∑ x ∈ s with f x = y, w x < b :=
   exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (M := Mᵒᵈ) hf hb
 
-/--
-theorem `exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum` / 定理 `exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is greater than `n • b`, they are sorted into some
+pigeonholes, and for all but `n` pigeonholes the total weight of the pigeons there is nonpositive,
+then for at least one of these `n` pigeonholes, the total weight of the pigeons in this pigeonhole
+is greater than `b`. -/
+/-
+**Finset.exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum** 是 Mathlib 中的一
+个定理，位于命名空间 `Finset`。
+形式化陈述：exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum (ht : forall y ∉ t
+, ∑ x in s with f x = y, w x <= 0) (hb : #t • b < ∑ x in s, w x) : exists y in t
+, b < ∑ x in s with f x = y, w x
+参数：ht : forall y ∉ t, ∑ x in s with f x = y, w x <= 0；hb : #t • b < ∑ x in s, w 
+x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_lt_of_sum_lt`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddC
+ommMonoid M] [inst_1 : LinearOrder M] {f g : ι → M} {s : Finset ι}   [AddLeftMon
+o M], ∑ i ∈ s, f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.sum_le_sum_fiberwise_of_sum_fiber_nonpos`：∀ {ι : Type u_1} {N : T
+ype u_5} [inst : AddCommMonoid N] [inst_1 : Preorder N] {s : Finset ι} {ι' : Typ
+e u_9}   [inst_2 : DecidableEq ι'] [A…
 
-English:
-theorem exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
-  proof: exists_lt_of_sum_lt
-    calc
-      ∑ _y in t, b < ∑ x in s, w x := by simpa
-      _ <= ∑ y in t, ∑ x in s with f x = y, w x := sum_le_sum_fiberwise_of_sum_fiber_nonpos ht
-
-中文:
-定理 存在_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
-  证明: exists_lt_of_sum_lt
-    calc
-      ∑ _y in t, b < ∑ x in s, w x := by simpa
-      _ <= ∑ y in t, ∑ x in s with f x = y, w x := sum_le_sum_fiberwise_of_sum_fiber_nonpos ht
-
-Depends on / 依赖: exists_lt_of_sum_lt, sum_le_sum_fiberwise_of_sum_fiber_nonpos
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, strict ine
+quality version:
+if the total weight of a finite set of pigeons is greater than `n • b`, they are
+ sorted into some
+pigeonholes, and for all but `n` pigeonholes the total weight of the pigeons the
+re is nonpositive,
+then for at least one of these `n` pigeonholes, the total weight of the pigeons 
+in this pigeonhole
+is greater than `b`.
 -/
 theorem exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
-    (ht : forall y ∉ t, ∑ x in s with f x = y, w x <= 0)
-    (hb : #t • b < ∑ x in s, w x) : exists y in t, b < ∑ x in s with f x = y, w x :=
-exists_lt_of_sum_lt
+    (ht : ∀ y ∉ t, ∑ x ∈ s with f x = y, w x ≤ 0)
+    (hb : #t • b < ∑ x ∈ s, w x) : ∃ y ∈ t, b < ∑ x ∈ s with f x = y, w x :=
+  exists_lt_of_sum_lt <|
     calc
-      ∑ _y in t, b < ∑ x in s, w x := by simpa
-      _ <= ∑ y in t, ∑ x in s with f x = y, w x := sum_le_sum_fiberwise_of_sum_fiber_nonpos ht
+      ∑ _y ∈ t, b < ∑ x ∈ s, w x := by simpa
+      _ ≤ ∑ y ∈ t, ∑ x ∈ s with f x = y, w x := sum_le_sum_fiberwise_of_sum_fiber_nonpos ht
 
-/--
-theorem `exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul` / 定理 `exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, strict inequality version:
+if the total weight of a finite set of pigeons is less than `n • b`, they are sorted into some
+pigeonholes, and for all but `n` pigeonholes the total weight of the pigeons there is nonnegative,
+then for at least one of these `n` pigeonholes, the total weight of the pigeons in this pigeonhole
+is less than `b`. -/
+/-
+**Finset.exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul** 是 Mathlib 中的一
+个定理，位于命名空间 `Finset`。
+形式化陈述：exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul (ht : forall y ∉ t
+, (0 : M) <= ∑ x in s with f x = y, w x) (hb : ∑ x in s, w x < #t • b) : exists 
+y in t, ∑ x in s with f x = y, w x < b
+参数：ht : forall y ∉ t, (0 : M) <= ∑ x in s with f x = y, w x；hb : ∑ x in s, w x <
+ #t • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum`：exists_l
+t_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum (ht : forall y ∉ t, ∑ x in s wit
+h f x = y, w x <= 0) (hb : #t • b < ∑ x in s, w x) :…
+· 使用定理 `OrderDual.isOrderedAddCancelMonoid`：∀ {α : Type u} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], IsOrderedCancelAddMonoid
+ αᵒᵈ
 
-English:
-theorem exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
-  proof: exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum (M := Mᵒᵈ) ht hb
-
-中文:
-定理 存在_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
-  证明: exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum (M := Mᵒᵈ) ht hb
-
-Depends on / 依赖: exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, strict ine
+quality version:
+if the total weight of a finite set of pigeons is less than `n • b`, they are so
+rted into some
+pigeonholes, and for all but `n` pigeonholes the total weight of the pigeons the
+re is nonnegative,
+then for at least one of these `n` pigeonholes, the total weight of the pigeons 
+in this pigeonhole
+is less than `b`.
 -/
 theorem exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
-    (ht : forall y ∉ t, (0 : M) <= ∑ x in s with f x = y, w x) (hb : ∑ x in s, w x < #t • b) :
-    exists y in t, ∑ x in s with f x = y, w x < b :=
+    (ht : ∀ y ∉ t, (0 : M) ≤ ∑ x ∈ s with f x = y, w x) (hb : ∑ x ∈ s, w x < #t • b) :
+    ∃ y ∈ t, ∑ x ∈ s with f x = y, w x < b :=
   exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum (M := Mᵒᵈ) ht hb
 
 /-!
@@ -201,90 +285,167 @@ theorem exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
 -/
 
 
-/--
-theorem `exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum` / 定理 `exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is greater than or equal to `n • b`, and
+they are sorted into `n > 0` pigeonholes, then for some pigeonhole, the total weight of the pigeons
+in this pigeonhole is greater than or equal to `b`. -/
+/-
+**Finset.exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum** 是 Mathlib 中的一个定理，位于命名空
+间 `Finset`。
+形式化陈述：exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (hf : forall a in s, f a in
+ t) (ht : t.Nonempty) (hb : #t • b <= ∑ x in s, w x) : exists y in t, b <= ∑ x i
+n s with f x = y, w x
+参数：hf : forall a in s, f a in t；ht : t.Nonempty；hb : #t • b <= ∑ x in s, w x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_le_of_sum_le`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddC
+ommMonoid M] [inst_1 : LinearOrder M] {f g : ι → M} {s : Finset ι}   [IsOrderedC
+ancelAddMonoid M…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.sum_fiberwise_of_maps_to`：∀ {ι : Type u_1} {κ : Type u_2} {M : Ty
+pe u_4} [inst : AddCommMonoid M] {s : Finset ι} {t : Finset κ}   [inst_1 : Decid
+ableEq κ] {g : ι → κ}…
 
-English:
-theorem exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum
-  statement: (hf : forall a in s, f a in t) (ht : t.Nonempty)
-  proof: exists_le_of_sum_le ht by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
-
-中文:
-定理 存在_le_sum_fiber_of_maps_to_of_nsmul_le_sum
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
-  证明: exists_le_of_sum_le ht by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
-
-Depends on / 依赖: Equiv.ulift.symm, exists_le_of_sum_le, of_equiv, sum_const, sum_fiberwise_of_maps_to
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, non-strict
+ inequality
+version: if the total weight of a finite set of pigeons is greater than or equal
+ to `n • b`, and
+they are sorted into `n > 0` pigeonholes, then for some pigeonhole, the total we
+ight of the pigeons
+in this pigeonhole is greater than or equal to `b`.
 -/
-theorem exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (hf : forall a in s, f a in t) (ht : t.Nonempty)
-    (hb : #t • b <= ∑ x in s, w x) : exists y in t, b <= ∑ x in s with f x = y, w x :=
-exists_le_of_sum_le ht by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
+theorem exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (hf : ∀ a ∈ s, f a ∈ t) (ht : t.Nonempty)
+    (hb : #t • b ≤ ∑ x ∈ s, w x) : ∃ y ∈ t, b ≤ ∑ x ∈ s with f x = y, w x :=
+  exists_le_of_sum_le ht <| by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
 
-/--
-theorem `exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul` / 定理 `exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is less than or equal to `n • b`, and they
+are sorted into `n > 0` pigeonholes, then for some pigeonhole, the total weight of the pigeons in
+this pigeonhole is less than or equal to `b`. -/
+/-
+**Finset.exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul** 是 Mathlib 中的一个定理，位于命名空
+间 `Finset`。
+形式化陈述：exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul (hf : forall a in s, f a in
+ t) (ht : t.Nonempty) (hb : ∑ x in s, w x <= #t • b) : exists y in t, ∑ x in s w
+ith f x = y, w x <= b
+参数：hf : forall a in s, f a in t；ht : t.Nonempty；hb : ∑ x in s, w x <= #t • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum`：exists_le_sum_fib
+er_of_maps_to_of_nsmul_le_sum (hf : forall a in s, f a in t) (ht : t.Nonempty) (
+hb : #t • b <= ∑ x in s, w x) : exists y in…
+· 使用定理 `OrderDual.isOrderedAddCancelMonoid`：∀ {α : Type u} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], IsOrderedCancelAddMonoid
+ αᵒᵈ
 
-English:
-theorem exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul
-  statement: (hf : forall a in s, f a in t) (ht : t.Nonempty)
-  proof: exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
-
-中文:
-定理 存在_sum_fiber_le_of_maps_to_of_sum_le_nsmul
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
-  证明: exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
-
-Depends on / 依赖: exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, non-strict
+ inequality
+version: if the total weight of a finite set of pigeons is less than or equal to
+ `n • b`, and they
+are sorted into `n > 0` pigeonholes, then for some pigeonhole, the total weight 
+of the pigeons in
+this pigeonhole is less than or equal to `b`.
 -/
-theorem exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul (hf : forall a in s, f a in t) (ht : t.Nonempty)
-    (hb : ∑ x in s, w x <= #t • b) : exists y in t, ∑ x in s with f x = y, w x <= b :=
+theorem exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul (hf : ∀ a ∈ s, f a ∈ t) (ht : t.Nonempty)
+    (hb : ∑ x ∈ s, w x ≤ #t • b) : ∃ y ∈ t, ∑ x ∈ s with f x = y, w x ≤ b :=
   exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
 
-/--
-theorem `exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum` / 定理 `exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is greater than or equal to `n • b`, they
+are sorted into some pigeonholes, and for all but `n > 0` pigeonholes the total weight of the
+pigeons there is nonpositive, then for at least one of these `n` pigeonholes, the total weight of
+the pigeons in this pigeonhole is greater than or equal to `b`. -/
+/-
+**Finset.exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum** 是 Mathlib 中的一
+个定理，位于命名空间 `Finset`。
+形式化陈述：exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum (hf : forall y ∉ t
+, ∑ x in s with f x = y, w x <= 0) (ht : t.Nonempty) (hb : #t • b <= ∑ x in s, w
+ x) : exists y in t, b <= ∑ x in s with f x = y, w x
+参数：hf : forall y ∉ t, ∑ x in s with f x = y, w x <= 0；ht : t.Nonempty；hb : #t • 
+b <= ∑ x in s, w x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_le_of_sum_le`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddC
+ommMonoid M] [inst_1 : LinearOrder M] {f g : ι → M} {s : Finset ι}   [IsOrderedC
+ancelAddMonoid M…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.sum_le_sum_fiberwise_of_sum_fiber_nonpos`：∀ {ι : Type u_1} {N : T
+ype u_5} [inst : AddCommMonoid N] [inst_1 : Preorder N] {s : Finset ι} {ι' : Typ
+e u_9}   [inst_2 : DecidableEq ι'] [A…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
 
-English:
-theorem exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum
-  proof: exists_le_of_sum_le ht
-    calc
-      ∑ _y in t, b <= ∑ x in s, w x := by simpa
-      _ <= ∑ y in t, ∑ x in s with f x = y, w x :=
-        sum_le_sum_fiberwise_of_sum_fiber_nonpos hf
-
-中文:
-定理 存在_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum
-  证明: exists_le_of_sum_le ht
-    calc
-      ∑ _y in t, b <= ∑ x in s, w x := by simpa
-      _ <= ∑ y in t, ∑ x in s with f x = y, w x :=
-        sum_le_sum_fiberwise_of_sum_fiber_nonpos hf
-
-Depends on / 依赖: Infinite, Uncountable, exists_le_of_sum_le, sum_le_sum_fiberwise_of_sum_fiber_nonpos
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, non-strict
+ inequality
+version: if the total weight of a finite set of pigeons is greater than or equal
+ to `n • b`, they
+are sorted into some pigeonholes, and for all but `n > 0` pigeonholes the total 
+weight of the
+pigeons there is nonpositive, then for at least one of these `n` pigeonholes, th
+e total weight of
+the pigeons in this pigeonhole is greater than or equal to `b`.
 -/
 theorem exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum
-    (hf : forall y ∉ t, ∑ x in s with f x = y, w x <= 0) (ht : t.Nonempty)
-    (hb : #t • b <= ∑ x in s, w x) : exists y in t, b <= ∑ x in s with f x = y, w x :=
-exists_le_of_sum_le ht
+    (hf : ∀ y ∉ t, ∑ x ∈ s with f x = y, w x ≤ 0) (ht : t.Nonempty)
+    (hb : #t • b ≤ ∑ x ∈ s, w x) : ∃ y ∈ t, b ≤ ∑ x ∈ s with f x = y, w x :=
+  exists_le_of_sum_le ht <|
     calc
-      ∑ _y in t, b <= ∑ x in s, w x := by simpa
-      _ <= ∑ y in t, ∑ x in s with f x = y, w x :=
+      ∑ _y ∈ t, b ≤ ∑ x ∈ s, w x := by simpa
+      _ ≤ ∑ y ∈ t, ∑ x ∈ s with f x = y, w x :=
         sum_le_sum_fiberwise_of_sum_fiber_nonpos hf
 
-/--
-theorem `exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul` / 定理 `exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul`
+/-- The pigeonhole principle for finitely many pigeons counted by weight, non-strict inequality
+version: if the total weight of a finite set of pigeons is less than or equal to `n • b`, they are
+sorted into some pigeonholes, and for all but `n > 0` pigeonholes the total weight of the pigeons
+there is nonnegative, then for at least one of these `n` pigeonholes, the total weight of the
+pigeons in this pigeonhole is less than or equal to `b`. -/
+/-
+**Finset.exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul** 是 Mathlib 中的一
+个定理，位于命名空间 `Finset`。
+形式化陈述：exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul (hf : forall y ∉ t
+, (0 : M) <= ∑ x in s with f x = y, w x) (ht : t.Nonempty) (hb : ∑ x in s, w x <
+= #t • b) : exists y in t, ∑ x in s with f x = y, w x <= b
+参数：hf : forall y ∉ t, (0 : M) <= ∑ x in s with f x = y, w x；ht : t.Nonempty；hb :
+ ∑ x in s, w x <= #t • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum`：exists_l
+e_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum (hf : forall y ∉ t, ∑ x in s wit
+h f x = y, w x <= 0) (ht : t.Nonempty) (hb : #t • b …
+· 使用定理 `OrderDual.isOrderedAddCancelMonoid`：∀ {α : Type u} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], IsOrderedCancelAddMonoid
+ αᵒᵈ
 
-English:
-theorem exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
-  proof: exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
-
-中文:
-定理 存在_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
-  证明: exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
-
-Depends on / 依赖: Countable, Countable.toSmall, exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum, toSmall
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by weight, non-strict
+ inequality
+version: if the total weight of a finite set of pigeons is less than or equal to
+ `n • b`, they are
+sorted into some pigeonholes, and for all but `n > 0` pigeonholes the total weig
+ht of the pigeons
+there is nonnegative, then for at least one of these `n` pigeonholes, the total 
+weight of the
+pigeons in this pigeonhole is less than or equal to `b`.
 -/
 theorem exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
-    (hf : forall y ∉ t, (0 : M) <= ∑ x in s with f x = y, w x) (ht : t.Nonempty)
-    (hb : ∑ x in s, w x <= #t • b) : exists y in t, ∑ x in s with f x = y, w x <= b :=
+    (hf : ∀ y ∉ t, (0 : M) ≤ ∑ x ∈ s with f x = y, w x) (ht : t.Nonempty)
+    (hb : ∑ x ∈ s, w x ≤ #t • b) : ∃ y ∈ t, ∑ x ∈ s with f x = y, w x ≤ b :=
   exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
 
 end
@@ -309,233 +470,404 @@ So, we prove four theorems: `Finset.exists_lt_card_fiber_of_maps_to_of_mul_lt_ca
 `Finset.exists_card_fiber_lt_of_card_lt_mul`, and `Finset.exists_card_fiber_le_of_card_le_mul`. -/
 
 
-/--
-theorem `exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to` / 定理 `exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at least as many pigeons as the ceiling of the average number of pigeons across all pigeonholes. -/
+/-
+**Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to** 是 Mathlib 中的一个定理，位于命
+名空间 `Finset`。
+形式化陈述：exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to (hf : forall a in s, f a 
+in t) (ht : #t • b < #s) : exists y in t, b < #{x in s | f x = y}
+参数：hf : forall a in s, f a in t；ht : #t • b < #s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.cast_card`：Finset.cast_card [NonAssocSemiring R] (s : Finset α) :
+ (#s : R) = ∑ _ in s, 1
+· 使用定理 `Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum`：exists_lt_sum_fib
+er_of_maps_to_of_nsmul_lt_sum (hf : forall a in s, f a in t) (hb : #t • b < ∑ x 
+in s, w x) : exists y in t, b < ∑ x in s wi…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
 
-English:
-theorem exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to
-  statement: (hf : forall a in s, f a in t)
-  proof: by
-  simp_rw [cast_card] at ht ⊢
-  exact exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum hf ht
-
-中文:
-定理 存在_lt_card_fiber_of_nsmul_lt_card_of_maps_to
-  结论: (hf : 对任意 a in s, f a in t)
-  证明: by
-  simp_rw [cast_card] at ht ⊢
-  exact exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum hf ht
-
-Depends on / 依赖: cast_card, exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum, simp_rw
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: there is a 
+pigeonhole with
+at least as many pigeons as the ceiling of the average number of pigeons across 
+all pigeonholes.
 -/
-theorem exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to (hf : forall a in s, f a in t)
-    (ht : #t • b < #s) : exists y in t, b < #{x in s | f x = y} := by
+theorem exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to (hf : ∀ a ∈ s, f a ∈ t)
+    (ht : #t • b < #s) : ∃ y ∈ t, b < #{x ∈ s | f x = y} := by
   simp_rw [cast_card] at ht ⊢
   exact exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum hf ht
 
-/--
-theorem `exists_lt_card_fiber_of_mul_lt_card_of_maps_to` / 定理 `exists_lt_card_fiber_of_mul_lt_card_of_maps_to`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at least as many pigeons as the ceiling of the average number of pigeons across all pigeonholes.
+("The maximum is at least the mean" specialized to integers.)
 
-English:
-theorem exists_lt_card_fiber_of_mul_lt_card_of_maps_to
-  statement: (hf : forall a in s, f a in t)
-  proof: exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to hf hn
+More formally, given a function between finite sets `s` and `t` and a natural number `n` such that
+`#t * n < #s`, there exists `y ∈ t` such that its preimage in `s` has more than `n`
+elements. -/
+/-
+**Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to** 是 Mathlib 中的一个定理，位于命名空
+间 `Finset`。
+形式化陈述：exists_lt_card_fiber_of_mul_lt_card_of_maps_to (hf : forall a in s, f a in
+ t) (hn : #t * n < #s) : exists y in t, n < #{x in s | f x = y}
+参数：hf : forall a in s, f a in t；hn : #t * n < #s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to`：exists_lt_card_
+fiber_of_nsmul_lt_card_of_maps_to (hf : forall a in s, f a in t) (ht : #t • b < 
+#s) : exists y in t, b < #{x in s | f x = y}
 
-中文:
-定理 存在_lt_card_fiber_of_mul_lt_card_of_maps_to
-  结论: (hf : 对任意 a in s, f a in t)
-  证明: exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to hf hn
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: there is a 
+pigeonhole with
+at least as many pigeons as the ceiling of the average number of pigeons across 
+all pigeonholes.
+("The maximum is at least the mean" specialized to integers.)
 
-Depends on / 依赖: exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to
+More formally, given a function between finite sets `s` and `t` and a natural nu
+mber `n` such that
+`#t * n < #s`, there exists `y ∈ t` such that its preimage in `s` has more than 
+`n`
+elements.
 -/
-theorem exists_lt_card_fiber_of_mul_lt_card_of_maps_to (hf : forall a in s, f a in t)
-    (hn : #t * n < #s) : exists y in t, n < #{x in s | f x = y} :=
+theorem exists_lt_card_fiber_of_mul_lt_card_of_maps_to (hf : ∀ a ∈ s, f a ∈ t)
+    (hn : #t * n < #s) : ∃ y ∈ t, n < #{x ∈ s | f x = y} :=
   exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to hf hn
 
-/--
-theorem `exists_card_fiber_lt_of_card_lt_nsmul` / 定理 `exists_card_fiber_lt_of_card_lt_nsmul`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at most as many pigeons as the floor of the average number of pigeons across all pigeonholes. -/
+/-
+**Finset.exists_card_fiber_lt_of_card_lt_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Finset
+`。
+形式化陈述：exists_card_fiber_lt_of_card_lt_nsmul (ht : #s < #t • b) : exists y in t, 
+#{x in s | f x = y} < b
+参数：ht : #s < #t • b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.cast_card`：Finset.cast_card [NonAssocSemiring R] (s : Finset α) :
+ (#s : R) = ∑ _ in s, 1
+· 使用定理 `Finset.exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul`：exists_s
+um_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul (ht : forall y ∉ t, (0 : M) <= ∑
+ x in s with f x = y, w x) (hb : ∑ x in s, w x < #t …
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Finset.sum_nonneg`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈ s
+, 0 ≤ f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
 
-English:
-theorem exists_card_fiber_lt_of_card_lt_nsmul
-  given: (ht : #s < #t • b)
-  proof: by
-  simp_rw [cast_card] at ht ⊢
-  exact
-    exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
-      (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht
-
-中文:
-定理 存在_card_fiber_lt_of_card_lt_nsmul
-  条件: (ht : #s < #t • b)
-  证明: by
-  simp_rw [cast_card] at ht ⊢
-  exact
-    exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
-      (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht
-
-Depends on / 依赖: cast_card, exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul, simp_rw, sum_nonneg, zero_le_one
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: there is a 
+pigeonhole with
+at most as many pigeons as the floor of the average number of pigeons across all
+ pigeonholes.
 -/
 theorem exists_card_fiber_lt_of_card_lt_nsmul (ht : #s < #t • b) :
-    exists y in t, #{x in s | f x = y} < b := by
+    ∃ y ∈ t, #{x ∈ s | f x = y} < b := by
   simp_rw [cast_card] at ht ⊢
   exact
     exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
       (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht
 
-/--
-theorem `exists_card_fiber_lt_of_card_lt_mul` / 定理 `exists_card_fiber_lt_of_card_lt_mul`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: there is a pigeonhole with
+at most as many pigeons as the floor of the average number of pigeons across all pigeonholes.  ("The
+minimum is at most the mean" specialized to integers.)
 
-English:
-theorem exists_card_fiber_lt_of_card_lt_mul
-  given: (hn : #s < #t * n)
-  statement: exists y in t, #{x in s | f x = y} < n
-  proof: exists_card_fiber_lt_of_card_lt_nsmul hn
+More formally, given a function `f`, a finite sets `s` in its domain, a finite set `t` in its
+codomain, and a natural number `n` such that `#s < #t * n`, there exists `y ∈ t` such that
+its preimage in `s` has less than `n` elements. -/
+/-
+**Finset.exists_card_fiber_lt_of_card_lt_mul** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：exists_card_fiber_lt_of_card_lt_mul (hn : #s < #t * n) : exists y in t, #{
+x in s | f x = y} < n
+参数：hn : #s < #t * n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_card_fiber_lt_of_card_lt_nsmul`：exists_card_fiber_lt_of_ca
+rd_lt_nsmul (ht : #s < #t • b) : exists y in t, #{x in s | f x = y} < b
 
-中文:
-定理 存在_card_fiber_lt_of_card_lt_mul
-  条件: (hn : #s < #t * n)
-  结论: 存在 y in t, #{x in s | f x = y} < n
-  证明: exists_card_fiber_lt_of_card_lt_nsmul hn
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: there is a 
+pigeonhole with
+at most as many pigeons as the floor of the average number of pigeons across all
+ pigeonholes.  ("The
+minimum is at most the mean" specialized to integers.)
 
-Depends on / 依赖: exists_card_fiber_lt_of_card_lt_nsmul
+More formally, given a function `f`, a finite sets `s` in its domain, a finite s
+et `t` in its
+codomain, and a natural number `n` such that `#s < #t * n`, there exists `y ∈ t`
+ such that
+its preimage in `s` has less than `n` elements.
 -/
-theorem exists_card_fiber_lt_of_card_lt_mul (hn : #s < #t * n) : exists y in t, #{x in s | f x = y} < n :=
+theorem exists_card_fiber_lt_of_card_lt_mul (hn : #s < #t * n) : ∃ y ∈ t, #{x ∈ s | f x = y} < n :=
   exists_card_fiber_lt_of_card_lt_nsmul hn
 
-/--
-theorem `exists_le_card_fiber_of_nsmul_le_card_of_maps_to` / 定理 `exists_le_card_fiber_of_nsmul_le_card_of_maps_to`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: given a function between
+finite sets `s` and `t` and a number `b` such that `#t • b ≤ #s`, there exists `y ∈ t` such
+that its preimage in `s` has at least `b` elements.
+See also `Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to` for a stronger statement. -/
+/-
+**Finset.exists_le_card_fiber_of_nsmul_le_card_of_maps_to** 是 Mathlib 中的一个定理，位于命
+名空间 `Finset`。
+形式化陈述：exists_le_card_fiber_of_nsmul_le_card_of_maps_to (hf : forall a in s, f a 
+in t) (ht : t.Nonempty) (hb : #t • b <= #s) : exists y in t, b <= #{x in s | f x
+ = y}
+参数：hf : forall a in s, f a in t；ht : t.Nonempty；hb : #t • b <= #s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.cast_card`：Finset.cast_card [NonAssocSemiring R] (s : Finset α) :
+ (#s : R) = ∑ _ in s, 1
+· 使用定理 `Finset.exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum`：exists_le_sum_fib
+er_of_maps_to_of_nsmul_le_sum (hf : forall a in s, f a in t) (ht : t.Nonempty) (
+hb : #t • b <= ∑ x in s, w x) : exists y in…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
 
-English:
-theorem exists_le_card_fiber_of_nsmul_le_card_of_maps_to
-  statement: (hf : forall a in s, f a in t) (ht : t.Nonempty)
-  proof: by
-  simp_rw [cast_card] at hb ⊢
-  exact exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum hf ht hb
-
-中文:
-定理 存在_le_card_fiber_of_nsmul_le_card_of_maps_to
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
-  证明: by
-  simp_rw [cast_card] at hb ⊢
-  exact exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum hf ht hb
-
-Depends on / 依赖: cast_card, exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum, simp_rw
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: given a fun
+ction between
+finite sets `s` and `t` and a number `b` such that `#t • b ≤ #s`, there exists `
+y ∈ t` such
+that its preimage in `s` has at least `b` elements.
+See also `Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to` for a stronge
+r statement.
 -/
-theorem exists_le_card_fiber_of_nsmul_le_card_of_maps_to (hf : forall a in s, f a in t) (ht : t.Nonempty)
-    (hb : #t • b <= #s) : exists y in t, b <= #{x in s | f x = y} := by
+theorem exists_le_card_fiber_of_nsmul_le_card_of_maps_to (hf : ∀ a ∈ s, f a ∈ t) (ht : t.Nonempty)
+    (hb : #t • b ≤ #s) : ∃ y ∈ t, b ≤ #{x ∈ s | f x = y} := by
   simp_rw [cast_card] at hb ⊢
   exact exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum hf ht hb
 
-/--
-theorem `exists_le_card_fiber_of_mul_le_card_of_maps_to` / 定理 `exists_le_card_fiber_of_mul_le_card_of_maps_to`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: given a function between
+finite sets `s` and `t` and a natural number `b` such that `#t * n ≤ #s`, there exists
+`y ∈ t` such that its preimage in `s` has at least `n` elements. See also
+`Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to` for a stronger statement. -/
+/-
+**Finset.exists_le_card_fiber_of_mul_le_card_of_maps_to** 是 Mathlib 中的一个定理，位于命名空
+间 `Finset`。
+形式化陈述：exists_le_card_fiber_of_mul_le_card_of_maps_to (hf : forall a in s, f a in
+ t) (ht : t.Nonempty) (hn : #t * n <= #s) : exists y in t, n <= #{x in s | f x =
+ y}
+参数：hf : forall a in s, f a in t；ht : t.Nonempty；hn : #t * n <= #s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_le_card_fiber_of_nsmul_le_card_of_maps_to`：exists_le_card_
+fiber_of_nsmul_le_card_of_maps_to (hf : forall a in s, f a in t) (ht : t.Nonempt
+y) (hb : #t • b <= #s) : exists y in t, b <= …
 
-English:
-theorem exists_le_card_fiber_of_mul_le_card_of_maps_to
-  statement: (hf : forall a in s, f a in t) (ht : t.Nonempty)
-  proof: exists_le_card_fiber_of_nsmul_le_card_of_maps_to hf ht hn
-
-中文:
-定理 存在_le_card_fiber_of_mul_le_card_of_maps_to
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
-  证明: exists_le_card_fiber_of_nsmul_le_card_of_maps_to hf ht hn
-
-Depends on / 依赖: exists_le_card_fiber_of_nsmul_le_card_of_maps_to
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: given a fun
+ction between
+finite sets `s` and `t` and a natural number `b` such that `#t * n ≤ #s`, there 
+exists
+`y ∈ t` such that its preimage in `s` has at least `n` elements. See also
+`Finset.exists_lt_card_fiber_of_mul_lt_card_of_maps_to` for a stronger statement
+.
 -/
-theorem exists_le_card_fiber_of_mul_le_card_of_maps_to (hf : forall a in s, f a in t) (ht : t.Nonempty)
-    (hn : #t * n <= #s) : exists y in t, n <= #{x in s | f x = y} :=
+theorem exists_le_card_fiber_of_mul_le_card_of_maps_to (hf : ∀ a ∈ s, f a ∈ t) (ht : t.Nonempty)
+    (hn : #t * n ≤ #s) : ∃ y ∈ t, n ≤ #{x ∈ s | f x = y} :=
   exists_le_card_fiber_of_nsmul_le_card_of_maps_to hf ht hn
 
-/--
-theorem `exists_card_fiber_le_of_card_le_nsmul` / 定理 `exists_card_fiber_le_of_card_le_nsmul`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: given a function `f`, a
+finite sets `s` and `t`, and a number `b` such that `#s ≤ #t • b`, there exists `y ∈ t` such
+that its preimage in `s` has no more than `b` elements.
+See also `Finset.exists_card_fiber_lt_of_card_lt_nsmul` for a stronger statement. -/
+/-
+**Finset.exists_card_fiber_le_of_card_le_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Finset
+`。
+形式化陈述：exists_card_fiber_le_of_card_le_nsmul (ht : t.Nonempty) (hb : #s <= #t • b
+) : exists y in t, #{x in s | f x = y} <= b
+参数：ht : t.Nonempty；hb : #s <= #t • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.cast_card`：Finset.cast_card [NonAssocSemiring R] (s : Finset α) :
+ (#s : R) = ∑ _ in s, 1
+· 使用定理 `Finset.exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul`：exists_s
+um_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul (hf : forall y ∉ t, (0 : M) <= ∑
+ x in s with f x = y, w x) (ht : t.Nonempty) (hb : ∑…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Finset.sum_nonneg`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈ s
+, 0 ≤ f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
 
-English:
-theorem exists_card_fiber_le_of_card_le_nsmul
-  given: (ht : t.Nonempty) (hb : #s <= #t • b)
-  proof: by
-  simp_rw [cast_card] at hb ⊢
-  refine
-    exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
-      (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht hb
-
-中文:
-定理 存在_card_fiber_le_of_card_le_nsmul
-  条件: (ht : t.非空) (hb : #s <= #t • b)
-  证明: by
-  simp_rw [cast_card] at hb ⊢
-  refine
-    exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
-      (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht hb
-
-Depends on / 依赖: cast_card, exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul, simp_rw, sum_nonneg, zero_le_one
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: given a fun
+ction `f`, a
+finite sets `s` and `t`, and a number `b` such that `#s ≤ #t • b`, there exists 
+`y ∈ t` such
+that its preimage in `s` has no more than `b` elements.
+See also `Finset.exists_card_fiber_lt_of_card_lt_nsmul` for a stronger statement
+.
 -/
-theorem exists_card_fiber_le_of_card_le_nsmul (ht : t.Nonempty) (hb : #s <= #t • b) :
-    exists y in t, #{x in s | f x = y} <= b := by
+theorem exists_card_fiber_le_of_card_le_nsmul (ht : t.Nonempty) (hb : #s ≤ #t • b) :
+    ∃ y ∈ t, #{x ∈ s | f x = y} ≤ b := by
   simp_rw [cast_card] at hb ⊢
   refine
     exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
       (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht hb
 
-/--
-theorem `exists_card_fiber_le_of_card_le_mul` / 定理 `exists_card_fiber_le_of_card_le_mul`
+/-- The pigeonhole principle for finitely many pigeons counted by heads: given a function `f`, a
+finite sets `s` in its domain, a finite set `t` in its codomain, and a natural number `n` such that
+`#s ≤ #t * n`, there exists `y ∈ t` such that its preimage in `s` has no more than `n`
+elements. See also `Finset.exists_card_fiber_lt_of_card_lt_mul` for a stronger statement. -/
+/-
+**Finset.exists_card_fiber_le_of_card_le_mul** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：exists_card_fiber_le_of_card_le_mul (ht : t.Nonempty) (hn : #s <= #t * n) 
+: exists y in t, #{x in s | f x = y} <= n
+参数：ht : t.Nonempty；hn : #s <= #t * n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_card_fiber_le_of_card_le_nsmul`：exists_card_fiber_le_of_ca
+rd_le_nsmul (ht : t.Nonempty) (hb : #s <= #t • b) : exists y in t, #{x in s | f 
+x = y} <= b
 
-English:
-theorem exists_card_fiber_le_of_card_le_mul
-  given: (ht : t.Nonempty) (hn : #s <= #t * n)
-  proof: exists_card_fiber_le_of_card_le_nsmul ht hn
-
-中文:
-定理 存在_card_fiber_le_of_card_le_mul
-  条件: (ht : t.非空) (hn : #s <= #t * n)
-  证明: exists_card_fiber_le_of_card_le_nsmul ht hn
-
-Depends on / 依赖: exists_card_fiber_le_of_card_le_nsmul
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons counted by heads: given a fun
+ction `f`, a
+finite sets `s` in its domain, a finite set `t` in its codomain, and a natural n
+umber `n` such that
+`#s ≤ #t * n`, there exists `y ∈ t` such that its preimage in `s` has no more th
+an `n`
+elements. See also `Finset.exists_card_fiber_lt_of_card_lt_mul` for a stronger s
+tatement.
 -/
-theorem exists_card_fiber_le_of_card_le_mul (ht : t.Nonempty) (hn : #s <= #t * n) :
-    exists y in t, #{x in s | f x = y} <= n :=
+theorem exists_card_fiber_le_of_card_le_mul (ht : t.Nonempty) (hn : #s ≤ #t * n) :
+    ∃ y ∈ t, #{x ∈ s | f x = y} ≤ n :=
   exists_card_fiber_le_of_card_le_nsmul ht hn
 
-/--
-lemma `exists_mem_exists_mem_inf'_card_lt` / 引理 `exists_mem_exists_mem_inf'_card_lt`
+/-- A version of the pigeonhole principle for set-valued functions.
 
-English:
-lemma exists_mem_exists_mem_inf'_card_lt
-  statement: [DecidableEq α] [Fintype α] {f : α -> Finset β}
-  proof: by
-  set k := s.inf' h₁ (fun j => #(f j)) with hk
-  contrapose! h₃
-  suffices #s • k <= #(s.biUnion f) • k by simp_all
-  simp only [← Finset.sum_const]
-  calc ∑ j in s, k
-    _ <= ∑ j in s, #(f j) := by gcongr with i hi; exact inf'_le _ hi
-    _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by rw [sum_card_eq_sum_biUnion_card]
-    _ <= ∑ x in s.biUnion f, k := by gcongr; grind
+Given a family of sets `f : α → Finset β` and a choice of indices `s : Finset α`.
+Let `k` denote the minimum cardinality of the `f j`s.
+If the cardinality of the union `s.biUnion f` is less than `s.card`, then
+there exists an element `x ∈ s.biUnion f` which is covered by more than `k` of the sets
+`f j` (i.e., `k < #{j ∈ s | x ∈ f j}`).
 
-中文:
-引理 存在_mem_存在_mem_inf'_card_lt
-  结论: [DecidableEq α] [有限类型 α] {f : α -> 有限集 β}
-  证明: by
-  set k := s.inf' h₁ (fun j => #(f j)) with hk
-  contrapose! h₃
-  suffices #s • k <= #(s.biUnion f) • k by simp_all
-  simp only [← Finset.sum_const]
-  calc ∑ j in s, k
-    _ <= ∑ j in s, #(f j) := by gcongr with i hi; exact inf'_le _ hi
-    _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by rw [sum_card_eq_sum_biUnion_card]
-    _ <= ∑ x in s.biUnion f, k := by gcongr; grind
+This is a double-counting variant of the pigeonhole principle.
+Unlike the classical pigeonhole principle (see
+`Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to`),
+this formulation handles a *set-valued* assignment where elements may belong to
+multiple sets simultaneously. -/
+/-
+**Finset.exists_mem_exists_mem_inf'_card_lt** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : DecidableEq β] {s : Finset α} [inst_1 
+: DecidableEq α] [inst_2 : Fintype α]   {f : α → Finset β} (h₁ : s.Nonempty),   
+(∀ j ∈ s, 0 < (f j).card) →     (s.biUnion f).card < s.card → ∃ a ∈ s, ∃ x ∈ f a
+, (s.inf' h₁ fun j => (f j).card) < {j | j ∈ s ∧ x ∈ f j}.card
+参数：h₁ : s.Nonempty；∀ j ∈ s, 0 < (f j).card；s.biUnion f；s.inf' h₁ fun j => (f j).
+card。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_le_sum`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f g : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈
+ s, f i…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Finset.inf'_le`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeInf α
+] {s : Finset β} (f : β → α) {b : β} (h : b ∈ s),   s.inf' ⋯ f ≤ f b
+· 使用引理 `Finset.sum_card_eq_sum_biUnion_card`：sum_card_eq_sum_biUnion_card [Finty
+pe α] [DecidableEq α] [DecidableEq β] (B : α -> Finset β) (s : Finset α) : ∑ j i
+n s, #(B j) = ∑ x in s.bi…
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-Depends on / 依赖: Finset, Finset.sum_const, biUnion, contrapose, s.biUnion, s.inf, sum_card_eq_sum_biUnion_card, sum_const
+--- 原说明 ---
+A version of the pigeonhole principle for set-valued functions.
+
+Given a family of sets `f : α → Finset β` and a choice of indices `s : Finset α`
+.
+Let `k` denote the minimum cardinality of the `f j`s.
+If the cardinality of the union `s.biUnion f` is less than `s.card`, then
+there exists an element `x ∈ s.biUnion f` which is covered by more than `k` of t
+he sets
+`f j` (i.e., `k < #{j ∈ s | x ∈ f j}`).
+
+This is a double-counting variant of the pigeonhole principle.
+Unlike the classical pigeonhole principle (see
+`Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to`),
+this formulation handles a *set-valued* assignment where elements may belong to
+multiple sets simultaneously.
 -/
-lemma exists_mem_exists_mem_inf'_card_lt [DecidableEq α] [Fintype α] {f : α -> Finset β}
-    (h₁ : s.Nonempty) (h₂ : forall j in s, 0 < #(f j)) (h₃ : #(s.biUnion f) < #s) :
-    exists a in s, exists x in f a, (s.inf' h₁ fun j => #(f j)) < #{j | j in s ∧ x in f j} := by
-  set k := s.inf' h₁ (fun j => #(f j)) with hk
+lemma exists_mem_exists_mem_inf'_card_lt [DecidableEq α] [Fintype α] {f : α → Finset β}
+    (h₁ : s.Nonempty) (h₂ : ∀ j ∈ s, 0 < #(f j)) (h₃ : #(s.biUnion f) < #s) :
+    ∃ a ∈ s, ∃ x ∈ f a, (s.inf' h₁ fun j ↦ #(f j)) < #{j | j ∈ s ∧ x ∈ f j} := by
+  set k := s.inf' h₁ (fun j ↦ #(f j)) with hk
   contrapose! h₃
-  suffices #s • k <= #(s.biUnion f) • k by simp_all
+  suffices #s • k ≤ #(s.biUnion f) • k by simp_all
   simp only [← Finset.sum_const]
-  calc ∑ j in s, k
-    _ <= ∑ j in s, #(f j) := by gcongr with i hi; exact inf'_le _ hi
-    _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by rw [sum_card_eq_sum_biUnion_card]
-    _ <= ∑ x in s.biUnion f, k := by gcongr; grind
+  calc ∑ j ∈ s, k
+    _ ≤ ∑ j ∈ s, #(f j) := by gcongr with i hi; exact inf'_le _ hi
+    _ = ∑ x ∈ s.biUnion f, #{j | j ∈ s ∧ x ∈ f j} := by rw [sum_card_eq_sum_biUnion_card]
+    _ ≤ ∑ x ∈ s.biUnion f, k := by gcongr; grind
 
 end Finset
 
@@ -543,7 +875,7 @@ namespace Fintype
 
 open Finset
 
-variable [Fintype α] [Fintype β] (f : α -> β) {w : α -> M} {b : M} {n : Nat}
+variable [Fintype α] [Fintype β] (f : α → β) {w : α → M} {b : M} {n : ℕ}
 
 section
 
@@ -557,260 +889,377 @@ between `Fintype`s and `s = univ`, `t = univ`. In this case the assumption `∀ 
 holds, so we have four theorems instead of eight. -/
 
 
-/--
-theorem `exists_lt_sum_fiber_of_nsmul_lt_sum` / 定理 `exists_lt_sum_fiber_of_nsmul_lt_sum`
+/-- The pigeonhole principle for finitely many pigeons of different weights, strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it greater than `b` provided that
+the total number of pigeonholes times `b` is less than the total weight of all pigeons. -/
+/-
+**Fintype.exists_lt_sum_fiber_of_nsmul_lt_sum** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_lt_sum_fiber_of_nsmul_lt_sum (hb : card β • b < ∑ x, w x) : exists 
+y, b < ∑ x with f x = y, w x
+参数：hb : card β • b < ∑ x, w x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum`：exists_lt_sum_fib
+er_of_maps_to_of_nsmul_lt_sum (hf : forall a in s, f a in t) (hb : #t • b < ∑ x 
+in s, w x) : exists y in t, b < ∑ x in s wi…
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 
-English:
-theorem exists_lt_sum_fiber_of_nsmul_lt_sum
-  given: (hb : card β • b < ∑ x, w x)
-  proof: let ⟨y, _, hy⟩ := exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (fun _ _ => mem_univ _) hb
-  ⟨y, hy⟩
-
-中文:
-定理 存在_lt_sum_fiber_of_nsmul_lt_sum
-  条件: (hb : card β • b < ∑ x, w x)
-  证明: let ⟨y, _, hy⟩ := exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (fun _ _ => mem_univ _) hb
-  ⟨y, hy⟩
-
-Depends on / 依赖: exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum, mem_univ
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons of different weights, strict 
+inequality
+version: there is a pigeonhole with the total weight of pigeons in it greater th
+an `b` provided that
+the total number of pigeonholes times `b` is less than the total weight of all p
+igeons.
 -/
 theorem exists_lt_sum_fiber_of_nsmul_lt_sum (hb : card β • b < ∑ x, w x) :
-    exists y, b < ∑ x with f x = y, w x :=
+    ∃ y, b < ∑ x with f x = y, w x :=
   let ⟨y, _, hy⟩ := exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (fun _ _ => mem_univ _) hb
   ⟨y, hy⟩
 
-/--
-theorem `exists_le_sum_fiber_of_nsmul_le_sum` / 定理 `exists_le_sum_fiber_of_nsmul_le_sum`
+/-- The pigeonhole principle for finitely many pigeons of different weights, non-strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it greater than or equal to `b`
+provided that the total number of pigeonholes times `b` is less than or equal to the total weight of
+all pigeons. -/
+/-
+**Fintype.exists_le_sum_fiber_of_nsmul_le_sum** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_le_sum_fiber_of_nsmul_le_sum [Nonempty β] (hb : card β • b <= ∑ x, 
+w x) : exists y, b <= ∑ x with f x = y, w x
+参数：hb : card β • b <= ∑ x, w x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum`：exists_le_sum_fib
+er_of_maps_to_of_nsmul_le_sum (hf : forall a in s, f a in t) (ht : t.Nonempty) (
+hb : #t • b <= ∑ x in s, w x) : exists y in…
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Finset.univ_nonempty`：univ_nonempty [Nonempty α] : (univ : Finset α).Non
+empty
 
-English:
-theorem exists_le_sum_fiber_of_nsmul_le_sum
-  given: [Nonempty β] (hb : card β • b <= ∑ x, w x)
-  proof: let ⟨y, _, hy⟩ :=
-    exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (fun _ _ => mem_univ _) univ_nonempty hb
-  ⟨y, hy⟩
-
-中文:
-定理 存在_le_sum_fiber_of_nsmul_le_sum
-  条件: [非空 β] (hb : card β • b <= ∑ x, w x)
-  证明: let ⟨y, _, hy⟩ :=
-    exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (fun _ _ => mem_univ _) univ_nonempty hb
-  ⟨y, hy⟩
-
-Depends on / 依赖: exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum, mem_univ, univ_nonempty
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons of different weights, non-str
+ict inequality
+version: there is a pigeonhole with the total weight of pigeons in it greater th
+an or equal to `b`
+provided that the total number of pigeonholes times `b` is less than or equal to
+ the total weight of
+all pigeons.
 -/
-theorem exists_le_sum_fiber_of_nsmul_le_sum [Nonempty β] (hb : card β • b <= ∑ x, w x) :
-    exists y, b <= ∑ x with f x = y, w x :=
+theorem exists_le_sum_fiber_of_nsmul_le_sum [Nonempty β] (hb : card β • b ≤ ∑ x, w x) :
+    ∃ y, b ≤ ∑ x with f x = y, w x :=
   let ⟨y, _, hy⟩ :=
     exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (fun _ _ => mem_univ _) univ_nonempty hb
   ⟨y, hy⟩
 
-/--
-theorem `exists_sum_fiber_lt_of_sum_lt_nsmul` / 定理 `exists_sum_fiber_lt_of_sum_lt_nsmul`
+/-- The pigeonhole principle for finitely many pigeons of different weights, strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it less than `b` provided that
+the total number of pigeonholes times `b` is greater than the total weight of all pigeons. -/
+/-
+**Fintype.exists_sum_fiber_lt_of_sum_lt_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_sum_fiber_lt_of_sum_lt_nsmul (hb : ∑ x, w x < card β • b) : exists 
+y, ∑ x with f x = y, w x < b
+参数：hb : ∑ x, w x < card β • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.exists_lt_sum_fiber_of_nsmul_lt_sum`：exists_lt_sum_fiber_of_nsmu
+l_lt_sum (hb : card β • b < ∑ x, w x) : exists y, b < ∑ x with f x = y, w x
+· 使用定理 `OrderDual.isOrderedAddCancelMonoid`：∀ {α : Type u} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], IsOrderedCancelAddMonoid
+ αᵒᵈ
 
-English:
-theorem exists_sum_fiber_lt_of_sum_lt_nsmul
-  given: (hb : ∑ x, w x < card β • b)
-  proof: exists_lt_sum_fiber_of_nsmul_lt_sum (M := Mᵒᵈ) _ hb
-
-中文:
-定理 存在_sum_fiber_lt_of_sum_lt_nsmul
-  条件: (hb : ∑ x, w x < card β • b)
-  证明: exists_lt_sum_fiber_of_nsmul_lt_sum (M := Mᵒᵈ) _ hb
-
-Depends on / 依赖: exists_lt_sum_fiber_of_nsmul_lt_sum
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons of different weights, strict 
+inequality
+version: there is a pigeonhole with the total weight of pigeons in it less than 
+`b` provided that
+the total number of pigeonholes times `b` is greater than the total weight of al
+l pigeons.
 -/
 theorem exists_sum_fiber_lt_of_sum_lt_nsmul (hb : ∑ x, w x < card β • b) :
-    exists y, ∑ x with f x = y, w x < b :=
+    ∃ y, ∑ x with f x = y, w x < b :=
   exists_lt_sum_fiber_of_nsmul_lt_sum (M := Mᵒᵈ) _ hb
 
-/--
-theorem `exists_sum_fiber_le_of_sum_le_nsmul` / 定理 `exists_sum_fiber_le_of_sum_le_nsmul`
+/-- The pigeonhole principle for finitely many pigeons of different weights, non-strict inequality
+version: there is a pigeonhole with the total weight of pigeons in it less than or equal to `b`
+provided that the total number of pigeonholes times `b` is greater than or equal to the total weight
+of all pigeons. -/
+/-
+**Fintype.exists_sum_fiber_le_of_sum_le_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_sum_fiber_le_of_sum_le_nsmul [Nonempty β] (hb : ∑ x, w x <= card β 
+• b) : exists y, ∑ x with f x = y, w x <= b
+参数：hb : ∑ x, w x <= card β • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.exists_le_sum_fiber_of_nsmul_le_sum`：exists_le_sum_fiber_of_nsmu
+l_le_sum [Nonempty β] (hb : card β • b <= ∑ x, w x) : exists y, b <= ∑ x with f 
+x = y, w x
+· 使用定理 `OrderDual.isOrderedAddCancelMonoid`：∀ {α : Type u} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], IsOrderedCancelAddMonoid
+ αᵒᵈ
 
-English:
-theorem exists_sum_fiber_le_of_sum_le_nsmul
-  given: [Nonempty β] (hb : ∑ x, w x <= card β • b)
-  proof: exists_le_sum_fiber_of_nsmul_le_sum (M := Mᵒᵈ) _ hb
-
-中文:
-定理 存在_sum_fiber_le_of_sum_le_nsmul
-  条件: [非空 β] (hb : ∑ x, w x <= card β • b)
-  证明: exists_le_sum_fiber_of_nsmul_le_sum (M := Mᵒᵈ) _ hb
-
-Depends on / 依赖: exists_le_sum_fiber_of_nsmul_le_sum
+--- 原说明 ---
+The pigeonhole principle for finitely many pigeons of different weights, non-str
+ict inequality
+version: there is a pigeonhole with the total weight of pigeons in it less than 
+or equal to `b`
+provided that the total number of pigeonholes times `b` is greater than or equal
+ to the total weight
+of all pigeons.
 -/
-theorem exists_sum_fiber_le_of_sum_le_nsmul [Nonempty β] (hb : ∑ x, w x <= card β • b) :
-    exists y, ∑ x with f x = y, w x <= b :=
+theorem exists_sum_fiber_le_of_sum_le_nsmul [Nonempty β] (hb : ∑ x, w x ≤ card β • b) :
+    ∃ y, ∑ x with f x = y, w x ≤ b :=
   exists_le_sum_fiber_of_nsmul_le_sum (M := Mᵒᵈ) _ hb
 
 end
 
 variable [CommSemiring M] [LinearOrder M] [IsStrictOrderedRing M]
 
-/--
-theorem `exists_lt_card_fiber_of_nsmul_lt_card` / 定理 `exists_lt_card_fiber_of_nsmul_lt_card`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes. There is a pigeonhole
+with at least as many pigeons as the ceiling of the average number of pigeons across all
+pigeonholes. -/
+/-
+**Fintype.exists_lt_card_fiber_of_nsmul_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Finty
+pe`。
+形式化陈述：exists_lt_card_fiber_of_nsmul_lt_card (hb : card β • b < card α) : exists 
+y : β, b < #{x | f x = y}
+参数：hb : card β • b < card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to`：exists_lt_card_
+fiber_of_nsmul_lt_card_of_maps_to (hf : forall a in s, f a in t) (ht : #t • b < 
+#s) : exists y in t, b < #{x in s | f x = y}
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 
-English:
-theorem exists_lt_card_fiber_of_nsmul_lt_card
-  given: (hb : card β • b < card α)
-  proof: let ⟨y, _, h⟩ := exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to (fun _ _ => mem_univ _) hb
-  ⟨y, h⟩
-
-中文:
-定理 存在_lt_card_fiber_of_nsmul_lt_card
-  条件: (hb : card β • b < card α)
-  证明: let ⟨y, _, h⟩ := exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to (fun _ _ => mem_univ _) hb
-  ⟨y, h⟩
-
-Depends on / 依赖: exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to, mem_univ
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes. There
+ is a pigeonhole
+with at least as many pigeons as the ceiling of the average number of pigeons ac
+ross all
+pigeonholes.
 -/
 theorem exists_lt_card_fiber_of_nsmul_lt_card (hb : card β • b < card α) :
-    exists y : β, b < #{x | f x = y} :=
+    ∃ y : β, b < #{x | f x = y} :=
   let ⟨y, _, h⟩ := exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to (fun _ _ => mem_univ _) hb
   ⟨y, h⟩
 
-/--
-theorem `exists_lt_card_fiber_of_mul_lt_card` / 定理 `exists_lt_card_fiber_of_mul_lt_card`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes.
+There is a pigeonhole with at least as many pigeons as
+the ceiling of the average number of pigeons across all pigeonholes.
+("The maximum is at least the mean" specialized to integers.)
 
-English:
-theorem exists_lt_card_fiber_of_mul_lt_card
-  given: (hn : card β * n < card α)
-  proof: exists_lt_card_fiber_of_nsmul_lt_card _ hn
+More formally, given a function `f` between finite types `α` and `β` and a number `n` such that
+`card β * n < card α`, there exists an element `y : β` such that its preimage has more than `n`
+elements. -/
+/-
+**Fintype.exists_lt_card_fiber_of_mul_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_lt_card_fiber_of_mul_lt_card (hn : card β * n < card α) : exists y 
+: β, n < #{x | f x = y}
+参数：hn : card β * n < card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.exists_lt_card_fiber_of_nsmul_lt_card`：exists_lt_card_fiber_of_n
+smul_lt_card (hb : card β • b < card α) : exists y : β, b < #{x | f x = y}
 
-中文:
-定理 存在_lt_card_fiber_of_mul_lt_card
-  条件: (hn : card β * n < card α)
-  证明: exists_lt_card_fiber_of_nsmul_lt_card _ hn
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes.
+There is a pigeonhole with at least as many pigeons as
+the ceiling of the average number of pigeons across all pigeonholes.
+("The maximum is at least the mean" specialized to integers.)
 
-Depends on / 依赖: exists_lt_card_fiber_of_nsmul_lt_card
+More formally, given a function `f` between finite types `α` and `β` and a numbe
+r `n` such that
+`card β * n < card α`, there exists an element `y : β` such that its preimage ha
+s more than `n`
+elements.
 -/
 theorem exists_lt_card_fiber_of_mul_lt_card (hn : card β * n < card α) :
-    exists y : β, n < #{x | f x = y} :=
+    ∃ y : β, n < #{x | f x = y} :=
   exists_lt_card_fiber_of_nsmul_lt_card _ hn
 
-/--
-theorem `exists_card_fiber_lt_of_card_lt_nsmul` / 定理 `exists_card_fiber_lt_of_card_lt_nsmul`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes. There is a pigeonhole
+with at most as many pigeons as the floor of the average number of pigeons across all pigeonholes.
+-/
+/-
+**Fintype.exists_card_fiber_lt_of_card_lt_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Finty
+pe`。
+形式化陈述：exists_card_fiber_lt_of_card_lt_nsmul (hb : ↑(card α) < card β • b) : exis
+ts y : β, #{x | f x = y} < b
+参数：hb : ↑(card α) < card β • b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_card_fiber_lt_of_card_lt_nsmul`：exists_card_fiber_lt_of_ca
+rd_lt_nsmul (ht : #s < #t • b) : exists y in t, #{x in s | f x = y} < b
 
-English:
-theorem exists_card_fiber_lt_of_card_lt_nsmul
-  given: (hb : ↑(card α) < card β • b)
-  proof: let ⟨y, _, h⟩ := Finset.exists_card_fiber_lt_of_card_lt_nsmul (f := f) hb
-  ⟨y, h⟩
-
-中文:
-定理 存在_card_fiber_lt_of_card_lt_nsmul
-  条件: (hb : ↑(card α) < card β • b)
-  证明: let ⟨y, _, h⟩ := Finset.exists_card_fiber_lt_of_card_lt_nsmul (f := f) hb
-  ⟨y, h⟩
-
-Depends on / 依赖: Finset, Finset.exists_card_fiber_lt_of_card_lt_nsmul, exists_card_fiber_lt_of_card_lt_nsmul
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes. There
+ is a pigeonhole
+with at most as many pigeons as the floor of the average number of pigeons acros
+s all pigeonholes.
 -/
 theorem exists_card_fiber_lt_of_card_lt_nsmul (hb : ↑(card α) < card β • b) :
-    exists y : β, #{x | f x = y} < b :=
+    ∃ y : β, #{x | f x = y} < b :=
   let ⟨y, _, h⟩ := Finset.exists_card_fiber_lt_of_card_lt_nsmul (f := f) hb
   ⟨y, h⟩
 
-/--
-theorem `exists_card_fiber_lt_of_card_lt_mul` / 定理 `exists_card_fiber_lt_of_card_lt_mul`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes.
+There is a pigeonhole with at most as many pigeons as
+the floor of the average number of pigeons across all pigeonholes.
+("The minimum is at most the mean" specialized to integers.)
 
-English:
-theorem exists_card_fiber_lt_of_card_lt_mul
-  given: (hn : card α < card β * n)
-  proof: exists_card_fiber_lt_of_card_lt_nsmul _ hn
+More formally, given a function `f` between finite types `α` and `β` and a number `n` such that
+`card α < card β * n`, there exists an element `y : β` such that its preimage has less than `n`
+elements. -/
+/-
+**Fintype.exists_card_fiber_lt_of_card_lt_mul** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_card_fiber_lt_of_card_lt_mul (hn : card α < card β * n) : exists y 
+: β, #{x | f x = y} < n
+参数：hn : card α < card β * n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.exists_card_fiber_lt_of_card_lt_nsmul`：exists_card_fiber_lt_of_c
+ard_lt_nsmul (hb : ↑(card α) < card β • b) : exists y : β, #{x | f x = y} < b
 
-中文:
-定理 存在_card_fiber_lt_of_card_lt_mul
-  条件: (hn : card α < card β * n)
-  证明: exists_card_fiber_lt_of_card_lt_nsmul _ hn
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes.
+There is a pigeonhole with at most as many pigeons as
+the floor of the average number of pigeons across all pigeonholes.
+("The minimum is at most the mean" specialized to integers.)
 
-Depends on / 依赖: exists_card_fiber_lt_of_card_lt_nsmul
+More formally, given a function `f` between finite types `α` and `β` and a numbe
+r `n` such that
+`card α < card β * n`, there exists an element `y : β` such that its preimage ha
+s less than `n`
+elements.
 -/
 theorem exists_card_fiber_lt_of_card_lt_mul (hn : card α < card β * n) :
-    exists y : β, #{x | f x = y} < n :=
+    ∃ y : β, #{x | f x = y} < n :=
   exists_card_fiber_lt_of_card_lt_nsmul _ hn
 
-/--
-theorem `exists_le_card_fiber_of_nsmul_le_card` / 定理 `exists_le_card_fiber_of_nsmul_le_card`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function `f`
+between finite types `α` and `β` and a number `b` such that `card β • b ≤ card α`, there exists an
+element `y : β` such that its preimage has at least `b` elements.
+See also `Fintype.exists_lt_card_fiber_of_nsmul_lt_card` for a stronger statement. -/
+/-
+**Fintype.exists_le_card_fiber_of_nsmul_le_card** 是 Mathlib 中的一个定理，位于命名空间 `Finty
+pe`。
+形式化陈述：exists_le_card_fiber_of_nsmul_le_card [Nonempty β] (hb : card β • b <= car
+d α) : exists y : β, b <= #{x | f x = y}
+参数：hb : card β • b <= card α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_le_card_fiber_of_nsmul_le_card_of_maps_to`：exists_le_card_
+fiber_of_nsmul_le_card_of_maps_to (hf : forall a in s, f a in t) (ht : t.Nonempt
+y) (hb : #t • b <= #s) : exists y in t, b <= …
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Finset.univ_nonempty`：univ_nonempty [Nonempty α] : (univ : Finset α).Non
+empty
 
-English:
-theorem exists_le_card_fiber_of_nsmul_le_card
-  given: [Nonempty β] (hb : card β • b <= card α)
-  proof: let ⟨y, _, h⟩ :=
-    exists_le_card_fiber_of_nsmul_le_card_of_maps_to (fun _ _ => mem_univ _) univ_nonempty hb
-  ⟨y, h⟩
-
-中文:
-定理 存在_le_card_fiber_of_nsmul_le_card
-  条件: [非空 β] (hb : card β • b <= card α)
-  证明: let ⟨y, _, h⟩ :=
-    exists_le_card_fiber_of_nsmul_le_card_of_maps_to (fun _ _ => mem_univ _) univ_nonempty hb
-  ⟨y, h⟩
-
-Depends on / 依赖: exists_le_card_fiber_of_nsmul_le_card_of_maps_to, mem_univ, univ_nonempty
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Give
+n a function `f`
+between finite types `α` and `β` and a number `b` such that `card β • b ≤ card α
+`, there exists an
+element `y : β` such that its preimage has at least `b` elements.
+See also `Fintype.exists_lt_card_fiber_of_nsmul_lt_card` for a stronger statemen
+t.
 -/
-theorem exists_le_card_fiber_of_nsmul_le_card [Nonempty β] (hb : card β • b <= card α) :
-    exists y : β, b <= #{x | f x = y} :=
+theorem exists_le_card_fiber_of_nsmul_le_card [Nonempty β] (hb : card β • b ≤ card α) :
+    ∃ y : β, b ≤ #{x | f x = y} :=
   let ⟨y, _, h⟩ :=
     exists_le_card_fiber_of_nsmul_le_card_of_maps_to (fun _ _ => mem_univ _) univ_nonempty hb
   ⟨y, h⟩
 
-/--
-theorem `exists_le_card_fiber_of_mul_le_card` / 定理 `exists_le_card_fiber_of_mul_le_card`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function `f`
+between finite types `α` and `β` and a number `n` such that `card β * n ≤ card α`, there exists an
+element `y : β` such that its preimage has at least `n` elements. See also
+`Fintype.exists_lt_card_fiber_of_mul_lt_card` for a stronger statement. -/
+/-
+**Fintype.exists_le_card_fiber_of_mul_le_card** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_le_card_fiber_of_mul_le_card [Nonempty β] (hn : card β * n <= card 
+α) : exists y : β, n <= #{x | f x = y}
+参数：hn : card β * n <= card α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.exists_le_card_fiber_of_nsmul_le_card`：exists_le_card_fiber_of_n
+smul_le_card [Nonempty β] (hb : card β • b <= card α) : exists y : β, b <= #{x |
+ f x = y}
 
-English:
-theorem exists_le_card_fiber_of_mul_le_card
-  given: [Nonempty β] (hn : card β * n <= card α)
-  proof: exists_le_card_fiber_of_nsmul_le_card _ hn
-
-中文:
-定理 存在_le_card_fiber_of_mul_le_card
-  条件: [非空 β] (hn : card β * n <= card α)
-  证明: exists_le_card_fiber_of_nsmul_le_card _ hn
-
-Depends on / 依赖: exists_le_card_fiber_of_nsmul_le_card
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Give
+n a function `f`
+between finite types `α` and `β` and a number `n` such that `card β * n ≤ card α
+`, there exists an
+element `y : β` such that its preimage has at least `n` elements. See also
+`Fintype.exists_lt_card_fiber_of_mul_lt_card` for a stronger statement.
 -/
-theorem exists_le_card_fiber_of_mul_le_card [Nonempty β] (hn : card β * n <= card α) :
-    exists y : β, n <= #{x | f x = y} :=
+theorem exists_le_card_fiber_of_mul_le_card [Nonempty β] (hn : card β * n ≤ card α) :
+    ∃ y : β, n ≤ #{x | f x = y} :=
   exists_le_card_fiber_of_nsmul_le_card _ hn
 
-/--
-theorem `exists_card_fiber_le_of_card_le_nsmul` / 定理 `exists_card_fiber_le_of_card_le_nsmul`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function `f`
+between finite types `α` and `β` and a number `b` such that `card α ≤ card β • b`, there exists an
+element `y : β` such that its preimage has at most `b` elements.
+See also `Fintype.exists_card_fiber_lt_of_card_lt_nsmul` for a stronger statement. -/
+/-
+**Fintype.exists_card_fiber_le_of_card_le_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Finty
+pe`。
+形式化陈述：exists_card_fiber_le_of_card_le_nsmul [Nonempty β] (hb : ↑(card α) <= card
+ β • b) : exists y : β, #{x | f x = y} <= b
+参数：hb : ↑(card α) <= card β • b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.exists_card_fiber_le_of_card_le_nsmul`：exists_card_fiber_le_of_ca
+rd_le_nsmul (ht : t.Nonempty) (hb : #s <= #t • b) : exists y in t, #{x in s | f 
+x = y} <= b
+· 使用定理 `Finset.univ_nonempty`：univ_nonempty [Nonempty α] : (univ : Finset α).Non
+empty
 
-English:
-theorem exists_card_fiber_le_of_card_le_nsmul
-  given: [Nonempty β] (hb : ↑(card α) <= card β • b)
-  proof: let ⟨y, _, h⟩ := Finset.exists_card_fiber_le_of_card_le_nsmul univ_nonempty hb
-  ⟨y, h⟩
-
-中文:
-定理 存在_card_fiber_le_of_card_le_nsmul
-  条件: [非空 β] (hb : ↑(card α) <= card β • b)
-  证明: let ⟨y, _, h⟩ := Finset.exists_card_fiber_le_of_card_le_nsmul univ_nonempty hb
-  ⟨y, h⟩
-
-Depends on / 依赖: Finset, Finset.exists_card_fiber_le_of_card_le_nsmul, exists_card_fiber_le_of_card_le_nsmul, univ_nonempty
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Give
+n a function `f`
+between finite types `α` and `β` and a number `b` such that `card α ≤ card β • b
+`, there exists an
+element `y : β` such that its preimage has at most `b` elements.
+See also `Fintype.exists_card_fiber_lt_of_card_lt_nsmul` for a stronger statemen
+t.
 -/
-theorem exists_card_fiber_le_of_card_le_nsmul [Nonempty β] (hb : ↑(card α) <= card β • b) :
-    exists y : β, #{x | f x = y} <= b :=
+theorem exists_card_fiber_le_of_card_le_nsmul [Nonempty β] (hb : ↑(card α) ≤ card β • b) :
+    ∃ y : β, #{x | f x = y} ≤ b :=
   let ⟨y, _, h⟩ := Finset.exists_card_fiber_le_of_card_le_nsmul univ_nonempty hb
   ⟨y, h⟩
 
-/--
-theorem `exists_card_fiber_le_of_card_le_mul` / 定理 `exists_card_fiber_le_of_card_le_mul`
+/-- The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Given a function `f`
+between finite types `α` and `β` and a number `n` such that `card α ≤ card β * n`, there exists an
+element `y : β` such that its preimage has at most `n` elements. See also
+`Fintype.exists_card_fiber_lt_of_card_lt_mul` for a stronger statement. -/
+/-
+**Fintype.exists_card_fiber_le_of_card_le_mul** 是 Mathlib 中的一个定理，位于命名空间 `Fintype
+`。
+形式化陈述：exists_card_fiber_le_of_card_le_mul [Nonempty β] (hn : card α <= card β * 
+n) : exists y : β, #{x | f x = y} <= n
+参数：hn : card α <= card β * n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.exists_card_fiber_le_of_card_le_nsmul`：exists_card_fiber_le_of_c
+ard_le_nsmul [Nonempty β] (hb : ↑(card α) <= card β • b) : exists y : β, #{x | f
+ x = y} <= b
 
-English:
-theorem exists_card_fiber_le_of_card_le_mul
-  given: [Nonempty β] (hn : card α <= card β * n)
-  proof: exists_card_fiber_le_of_card_le_nsmul _ hn
-
-中文:
-定理 存在_card_fiber_le_of_card_le_mul
-  条件: [非空 β] (hn : card α <= card β * n)
-  证明: exists_card_fiber_le_of_card_le_nsmul _ hn
-
-Depends on / 依赖: exists_card_fiber_le_of_card_le_nsmul
+--- 原说明 ---
+The strong pigeonhole principle for finitely many pigeons and pigeonholes.  Give
+n a function `f`
+between finite types `α` and `β` and a number `n` such that `card α ≤ card β * n
+`, there exists an
+element `y : β` such that its preimage has at most `n` elements. See also
+`Fintype.exists_card_fiber_lt_of_card_lt_mul` for a stronger statement.
 -/
-theorem exists_card_fiber_le_of_card_le_mul [Nonempty β] (hn : card α <= card β * n) :
-    exists y : β, #{x | f x = y} <= n :=
+theorem exists_card_fiber_le_of_card_le_mul [Nonempty β] (hn : card α ≤ card β * n) :
+    ∃ y : β, #{x | f x = y} ≤ n :=
   exists_card_fiber_le_of_card_le_nsmul _ hn
 
 end Fintype
@@ -819,26 +1268,30 @@ namespace Nat
 
 open Set
 
-/--
-theorem `exists_lt_modEq_of_infinite` / 定理 `exists_lt_modEq_of_infinite`
+/-- If `s` is an infinite set of natural numbers and `k > 0`, then `s` contains two elements `m < n`
+that are equal mod `k`. -/
+/-
+**Nat.exists_lt_modEq_of_infinite** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：exists_lt_modEq_of_infinite {s : Set Nat} (hs : s.Infinite) {k : Nat} (hk 
+: 0 < k) : exists m in s, exists n in s, m < n ∧ m ≡ n [MOD k]
+参数：hs : s.Infinite；hk : 0 < k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Infinite.exists_lt_map_eq_of_mapsTo`：∀ {α : Type u_2} {β : Type u_3}
+ [inst : LinearOrder α] {s : Set α} {t : Set β} {f : α → β},   s.Infinite → Set.
+MapsTo f s t → t.Finite → ∃ x…
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `Set.finite_lt_nat`：finite_lt_nat (n : Nat) : Set.Finite { i | i < n }
 
-English:
-theorem exists_lt_modEq_of_infinite
-  given: {s : Set Nat} (hs : s.Infinite) {k : Nat} (hk : 0 < k)
-  proof: (hs.exists_lt_map_eq_of_mapsTo fun n _ => show n % k in Iio k from Nat.mod_lt n hk)
-    finite_lt_nat k
-
-中文:
-定理 存在_lt_modEq_of_infinite
-  条件: {s : 集合 自然数} (hs : s.无限) {k : 自然数} (hk : 0 < k)
-  证明: (hs.exists_lt_map_eq_of_mapsTo fun n _ => show n % k in Iio k from Nat.mod_lt n hk)
-    finite_lt_nat k
-
-Depends on / 依赖: Nat.mod_lt, exists_lt_map_eq_of_mapsTo, finite_lt_nat, hs.exists_lt_map_eq_of_mapsTo, mod_lt
+--- 原说明 ---
+If `s` is an infinite set of natural numbers and `k > 0`, then `s` contains two 
+elements `m < n`
+that are equal mod `k`.
 -/
-theorem exists_lt_modEq_of_infinite {s : Set Nat} (hs : s.Infinite) {k : Nat} (hk : 0 < k) :
-    exists m in s, exists n in s, m < n ∧ m ≡ n [MOD k] :=
-(hs.exists_lt_map_eq_of_mapsTo fun n _ => show n % k in Iio k from Nat.mod_lt n hk)
+theorem exists_lt_modEq_of_infinite {s : Set ℕ} (hs : s.Infinite) {k : ℕ} (hk : 0 < k) :
+    ∃ m ∈ s, ∃ n ∈ s, m < n ∧ m ≡ n [MOD k] :=
+  (hs.exists_lt_map_eq_of_mapsTo fun n _ => show n % k ∈ Iio k from Nat.mod_lt n hk) <|
     finite_lt_nat k
 
 end Nat
+

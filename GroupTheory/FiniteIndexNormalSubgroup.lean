@@ -22,26 +22,16 @@ section
 
 /-- The type of finite-index normal subgroups of a group. -/
 @[ext]
-/--
-Definition of `FiniteIndexNormalSubgroup` / `FiniteIndexNormalSubgroup` 的定义
+/-
+**FiniteIndexNormalSubgroup** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：FiniteIndexNormalSubgroup (G : Type*) [Group G] extends Subgroup G where i
+sNormal' : toSubgroup.Normal
+参数：G : Type*。
+继承自：Subgroup G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FiniteIndexNormalSubgroup
-  parameters: (G : Type*) [Group G]
-  extends: Subgroup G
-  axioms and operations (2):
-    - isNormal' : toSubgroup.Normal  [default: by infer_instance]
-    - isFiniteIndex' : toSubgroup.FiniteIndex  [default: by infer_instance]
-
-中文:
-结构 FiniteIndexNormal子群
-  参数: (G : 类型) [群 G]
-  继承: 子群 G
-  公理与运算 (2 个):
-    - isNormal' : toSubgroup.正规  [默认: by infer_instance]
-    - isFiniteIndex' : toSubgroup.FiniteIndex  [默认: by infer_instance]
-
-Depends on / 依赖: FiniteIndex, infer_instance, isFiniteIndex, toSubgroup, toSubgroup.FiniteIndex
+--- 原说明 ---
+The type of finite-index normal subgroups of a group.
 -/
 structure FiniteIndexNormalSubgroup (G : Type*) [Group G] extends Subgroup G where
   isNormal' : toSubgroup.Normal := by infer_instance
@@ -49,26 +39,16 @@ structure FiniteIndexNormalSubgroup (G : Type*) [Group G] extends Subgroup G whe
 
 /-- The type of finite-index normal additive subgroups of an additive group. -/
 @[ext]
-/--
-Definition of `FiniteIndexNormalAddSubgroup` / `FiniteIndexNormalAddSubgroup` 的定义
+/-
+**FiniteIndexNormalAddSubgroup** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：FiniteIndexNormalAddSubgroup (G : Type*) [AddGroup G] extends AddSubgroup 
+G where isNormal' : toAddSubgroup.Normal
+参数：G : Type*。
+继承自：AddSubgroup G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FiniteIndexNormalAddSubgroup
-  parameters: (G : Type*) [AddGroup G]
-  extends: AddSubgroup G
-  axioms and operations (2):
-    - isNormal' : toAddSubgroup.Normal  [default: by infer_instance]
-    - isFiniteIndex' : toAddSubgroup.FiniteIndex  [default: by infer_instance]
-
-中文:
-结构 FiniteIndexNormalAdd子群
-  参数: (G : 类型) [加法群 G]
-  继承: 加法子群 G
-  公理与运算 (2 个):
-    - isNormal' : toAddSubgroup.正规  [默认: by infer_instance]
-    - isFiniteIndex' : toAddSubgroup.FiniteIndex  [默认: by infer_instance]
-
-Depends on / 依赖: FiniteIndex, infer_instance, isFiniteIndex, toAddSubgroup, toAddSubgroup.FiniteIndex
+--- 原说明 ---
+The type of finite-index normal additive subgroups of an additive group.
 -/
 structure FiniteIndexNormalAddSubgroup (G : Type*) [AddGroup G] extends AddSubgroup G where
   isNormal' : toAddSubgroup.Normal := by infer_instance
@@ -81,105 +61,50 @@ namespace FiniteIndexNormalSubgroup
 variable {G : Type*} [Group G]
 
 @[to_additive]
-/--
-theorem `toSubgroup_injective` / 定理 `toSubgroup_injective`
-
-English:
-theorem toSubgroup_injective
-  statement: Function.Injective
-  proof: fun A B h => by
-  ext
-  dsimp at h
-  rw [h]
-
-@[to_additive]
-
-中文:
-定理 toSubgroup_injective
-  结论: 函数.单射
-  证明: fun A B h => by
-  ext
-  dsimp at h
-  rw [h]
-
-@[to_additive]
+/-
+**FiniteIndexNormalSubgroup.toSubgroup_injective** 是 Mathlib 中的一个定理，位于命名空间 `Fini
+teIndexNormalSubgroup`。
+形式化陈述：toSubgroup_injective : Function.Injective (fun H => H.toSubgroup : FiniteI
+ndexNormalSubgroup G -> Subgroup G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteIndexNormalSubgroup.ext`：∀ {G : Type u_1} {inst : Group G} {x y : 
+FiniteIndexNormalSubgroup G}, x.carrier = y.carrier → x = y
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toSubgroup_injective : Function.Injective
-    (fun H => H.toSubgroup : FiniteIndexNormalSubgroup G -> Subgroup G) :=
-  fun A B h => by
+    (fun H ↦ H.toSubgroup : FiniteIndexNormalSubgroup G → Subgroup G) :=
+  fun A B h ↦ by
   ext
   dsimp at h
   rw [h]
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (FiniteIndexNormalSubgroup G) G
-  body: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 集合状 (FiniteIndexNormal子群 G) G
-  定义体: U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
-
-@[to_additive]
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (FiniteIndexNormalSubgroup G) G where
   coe U := U.1
-coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
+  coe_injective _ _ h := toSubgroup_injective <| SetLike.ext' h
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (FiniteIndexNormalSubgroup G)
-  body: .ofSetLike (FiniteIndexNormalSubgroup G) G
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 偏序 (FiniteIndexNormal子群 G)
-  定义体: .ofSetLike (FiniteIndexNormalSubgroup G) G
-
-@[to_additive]
-
-Depends on / 依赖: FiniteIndexNormalSubgroup, ofSetLike
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (FiniteIndexNormalSubgroup G) := .ofSetLike (FiniteIndexNormalSubgroup G) G
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SubgroupClass (FiniteIndexNormalSubgroup G) G
-  body: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 子群类 (FiniteIndexNormal子群 G) G
-  定义体: Subsemigroup.mul_mem' _
-  one_mem U := U.one_mem'
-  inv_mem := Subgroup.inv_mem' _
-
-@[to_additive]
-
-Depends on / 依赖: Subsemigroup, Subsemigroup.mul_mem, mul_mem
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SubgroupClass (FiniteIndexNormalSubgroup G) G where
   mul_mem := Subsemigroup.mul_mem' _
@@ -187,143 +112,77 @@ instance : SubgroupClass (FiniteIndexNormalSubgroup G) G where
   inv_mem := Subgroup.inv_mem' _
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (FiniteIndexNormalSubgroup G) (Subgroup G)
-  body: H.toSubgroup
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: Coe (FiniteIndexNormal子群 G) (子群 G)
-  定义体: H.toSubgroup
-
-@[to_additive]
-
-Depends on / 依赖: H.toSubgroup, toSubgroup
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe (FiniteIndexNormalSubgroup G) (Subgroup G) where
   coe H := H.toSubgroup
 
 @[to_additive]
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (H : FiniteIndexNormalSubgroup G) : H.toSubgroup.Normal := H.isNormal'
 
 @[to_additive]
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (H : FiniteIndexNormalSubgroup G) : H.toSubgroup.FiniteIndex := H.isFiniteIndex'
 
 @[to_additive]
-/--
-Instance `instPartialOrderFiniteIndexNormalSubgroup` / 实例 `instPartialOrderFiniteIndexNormalSubgroup`
-
-English:
-instance instPartialOrderFiniteIndexNormalSubgroup
-  signature: : PartialOrder (FiniteIndexNormalSubgroup G)
-  body: inferInstance
-
-@[to_additive]
-
-中文:
-实例 instPartialOrderFiniteIndexNormalSubgroup
-  签名: : 偏序 (FiniteIndexNormal子群 G)
-  定义体: inferInstance
-
-@[to_additive]
+/-
+**FiniteIndexNormalSubgroup.instPartialOrderFiniteIndexNormalSubgroup** 是 Mathli
+b 中的一个实例，位于命名空间 `FiniteIndexNormalSubgroup`。
+形式化陈述：instPartialOrderFiniteIndexNormalSubgroup : PartialOrder (FiniteIndexNorma
+lSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPartialOrderFiniteIndexNormalSubgroup : PartialOrder (FiniteIndexNormalSubgroup G) :=
   inferInstance
 
 @[to_additive]
-/--
-Instance `instInfFiniteIndexNormalSubgroup` / 实例 `instInfFiniteIndexNormalSubgroup`
-
-English:
-instance instInfFiniteIndexNormalSubgroup
-  signature: : Min (FiniteIndexNormalSubgroup G)
-  body: ⟨fun U V => {
-    toSubgroup := U.toSubgroup ⊓ V.toSubgroup
-    isNormal' := Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup
-  }⟩
-
-@[to_additive]
-
-中文:
-实例 instInfFiniteIndexNormalSubgroup
-  签名: : 最小值 (FiniteIndexNormal子群 G)
-  定义体: ⟨fun U V => {
-    toSubgroup := U.toSubgroup ⊓ V.toSubgroup
-    isNormal' := Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup
-  }⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.normal_inf_normal, U.toSubgroup, V.toSubgroup, isNormal, normal_inf_normal, toSubgroup
+/-
+**FiniteIndexNormalSubgroup.instInfFiniteIndexNormalSubgroup** 是 Mathlib 中的一个实例，
+位于命名空间 `FiniteIndexNormalSubgroup`。
+形式化陈述：instInfFiniteIndexNormalSubgroup : Min (FiniteIndexNormalSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInfFiniteIndexNormalSubgroup : Min (FiniteIndexNormalSubgroup G) :=
-  ⟨fun U V => {
+  ⟨fun U V ↦ {
     toSubgroup := U.toSubgroup ⊓ V.toSubgroup
     isNormal' := Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup
   }⟩
 
 @[to_additive]
-/--
-Instance `instSemilatticeInfFiniteIndexNormalSubgroup` / 实例 `instSemilatticeInfFiniteIndexNormalSubgroup`
-
-English:
-instance instSemilatticeInfFiniteIndexNormalSubgroup
-  signature: :
-  body: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 instSemilatticeInfFiniteIndexNormalSubgroup
-  签名: :
-  定义体: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective.semilatticeInf, coe_injective, semilatticeInf
+/-
+**FiniteIndexNormalSubgroup.instSemilatticeInfFiniteIndexNormalSubgroup** 是 Math
+lib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgroup`。
+形式化陈述：instSemilatticeInfFiniteIndexNormalSubgroup : SemilatticeInf (FiniteIndexN
+ormalSubgroup G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemilatticeInfFiniteIndexNormalSubgroup :
     SemilatticeInf (FiniteIndexNormalSubgroup G) :=
-  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
+  SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ ↦ rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (FiniteIndexNormalSubgroup G)
-  body: ⟨fun U V => {
-    toSubgroup := U.toSubgroup ⊔ V.toSubgroup
-    isNormal' := Subgroup.sup_normal U.toSubgroup V.toSubgroup
-    isFiniteIndex' := Subgroup.finiteIndex_of_le
-      (H := U.toSubgroup) (K := U.toSubgroup ⊔ V.toSubgroup) le_sup_left
-  }⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 最大值 (FiniteIndexNormal子群 G)
-  定义体: ⟨fun U V => {
-    toSubgroup := U.toSubgroup ⊔ V.toSubgroup
-    isNormal' := Subgroup.sup_normal U.toSubgroup V.toSubgroup
-    isFiniteIndex' := Subgroup.finiteIndex_of_le
-      (H := U.toSubgroup) (K := U.toSubgroup ⊔ V.toSubgroup) le_sup_left
-  }⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subgroup, Subgroup.finiteIndex_of_le, Subgroup.sup_normal, U.toSubgroup, V.toSubgroup, finiteIndex_of_le, isFiniteIndex, isNormal, le_sup_left, sup_normal, toSubgroup
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (FiniteIndexNormalSubgroup G) :=
-  ⟨fun U V => {
+  ⟨fun U V ↦ {
     toSubgroup := U.toSubgroup ⊔ V.toSubgroup
     isNormal' := Subgroup.sup_normal U.toSubgroup V.toSubgroup
     isFiniteIndex' := Subgroup.finiteIndex_of_le
@@ -331,100 +190,66 @@ instance : Max (FiniteIndexNormalSubgroup G) :=
   }⟩
 
 @[to_additive]
-/--
-Instance `instSemilatticeSupFiniteIndexNormalSubgroup` / 实例 `instSemilatticeSupFiniteIndexNormalSubgroup`
-
-English:
-instance instSemilatticeSupFiniteIndexNormalSubgroup
-  signature: :
-  body: toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 instSemilatticeSupFiniteIndexNormalSubgroup
-  签名: :
-  定义体: toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: semilatticeSup, toSubgroup_injective, toSubgroup_injective.semilatticeSup
+/-
+**FiniteIndexNormalSubgroup.instSemilatticeSupFiniteIndexNormalSubgroup** 是 Math
+lib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgroup`。
+形式化陈述：instSemilatticeSupFiniteIndexNormalSubgroup : SemilatticeSup (FiniteIndexN
+ormalSubgroup G)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteIndexNormalSubgroup.toSubgroup_injective`：toSubgroup_injective : F
+unction.Injective (fun H => H.toSubgroup : FiniteIndexNormalSubgroup G -> Subgro
+up G)
 -/
 instance instSemilatticeSupFiniteIndexNormalSubgroup :
     SemilatticeSup (FiniteIndexNormalSubgroup G) :=
-  toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
+  toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ ↦ rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Lattice (FiniteIndexNormalSubgroup G)
-
-中文:
-实例 :
-  签名: 格 (FiniteIndexNormal子群 G)
+/-
+**FiniteIndexNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `FiniteIndexNormalSubgrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Lattice (FiniteIndexNormalSubgroup G) where
 
 @[to_additive]
-/--
-theorem `mem_toSubgroup_iff` / 定理 `mem_toSubgroup_iff`
-
-English:
-theorem mem_toSubgroup_iff
-  given: {H : FiniteIndexNormalSubgroup G} {g : G}
-  statement: g in H.toSubgroup ↔ g in H
-  proof: .rfl
-
-中文:
-定理 mem_toSubgroup_iff
-  条件: {H : FiniteIndexNormal子群 G} {g : G}
-  结论: g in H.toSubgroup ↔ g in H
-  证明: .rfl
+/-
+**FiniteIndexNormalSubgroup.mem_toSubgroup_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finite
+IndexNormalSubgroup`。
+形式化陈述：mem_toSubgroup_iff {H : FiniteIndexNormalSubgroup G} {g : G} : g in H.toSu
+bgroup ↔ g in H
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toSubgroup_iff {H : FiniteIndexNormalSubgroup G} {g : G} : g in H.toSubgroup ↔ g in H :=
+theorem mem_toSubgroup_iff {H : FiniteIndexNormalSubgroup G} {g : G} : g ∈ H.toSubgroup ↔ g ∈ H :=
   .rfl
 
 /-- Bundle a subgroup with typeclass assumptions of normality and finite index. -/
 @[to_additive
   /-- Bundle an additive subgroup with typeclass assumptions of normality and finite index. -/]
-/--
-Definition of `ofSubgroup` / `ofSubgroup` 的定义
-
-English:
-definition ofSubgroup
-  signature: (H : Subgroup G) [H.Normal] [H.FiniteIndex]
-  body: { toSubgroup := H }
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 ofSubgroup
-  签名: (H : 子群 G) [H.正规] [H.FiniteIndex]
-  定义体: { toSubgroup := H }
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: toSubgroup
+/-
+**FiniteIndexNormalSubgroup.ofSubgroup** 是 Mathlib 中的一个定义，位于命名空间 `FiniteIndexNor
+malSubgroup`。
+形式化陈述：ofSubgroup (H : Subgroup G) [H.Normal] [H.FiniteIndex] : FiniteIndexNormal
+Subgroup G
+参数：H : Subgroup G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofSubgroup (H : Subgroup G) [H.Normal] [H.FiniteIndex] : FiniteIndexNormalSubgroup G :=
   { toSubgroup := H }
 
 @[to_additive (attr := simp)]
-/--
-theorem `toSubgroup_ofSubgroup` / 定理 `toSubgroup_ofSubgroup`
-
-English:
-theorem toSubgroup_ofSubgroup
-  given: (H : Subgroup G) [H.Normal] [H.FiniteIndex]
-  proof: rfl
-
-中文:
-定理 toSubgroup_ofSubgroup
-  条件: (H : 子群 G) [H.正规] [H.FiniteIndex]
-  证明: rfl
+/-
+**FiniteIndexNormalSubgroup.toSubgroup_ofSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `Fin
+iteIndexNormalSubgroup`。
+形式化陈述：toSubgroup_ofSubgroup (H : Subgroup G) [H.Normal] [H.FiniteIndex] : ((ofSu
+bgroup H : FiniteIndexNormalSubgroup G) : Subgroup G) = H
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSubgroup_ofSubgroup (H : Subgroup G) [H.Normal] [H.FiniteIndex] :
     ((ofSubgroup H : FiniteIndexNormalSubgroup G) : Subgroup G) = H :=
@@ -437,129 +262,74 @@ variable {H : Type*} {N : Type*} [Group H] [Group N]
 /-- The preimage of a finite-index normal subgroup under a group homomorphism. -/
 @[to_additive
   /-- The preimage of a finite-index normal additive subgroup under an additive homomorphism. -/]
-/--
-Definition of `comap` / `comap` 的定义
-
-English:
-definition comap
-  signature: (f : G ->* H) (K : FiniteIndexNormalSubgroup H)
-  body: K.toSubgroup.comap f
-  isFiniteIndex' := by
-    let g : G ->* (H ⧸ K.toSubgroup) := (QuotientGroup.mk' K.toSubgroup).comp f
-    have hker : K.toSubgroup.comap f = g.ker := by
-      simpa using MonoidHom.comap_ker (g := QuotientGroup.mk' K.toSubgroup) (f := f)
-    simpa [hker] using (inferInstance : g.ker.FiniteIndex)
-
-@[to_additive (attr := simp)]
-
-中文:
-定义 comap
-  签名: (f : G ->* H) (K : FiniteIndexNormal子群 H)
-  定义体: K.toSubgroup.comap f
-  isFiniteIndex' := by
-    let g : G ->* (H ⧸ K.toSubgroup) := (QuotientGroup.mk' K.toSubgroup).comp f
-    have hker : K.toSubgroup.comap f = g.ker := by
-      simpa using MonoidHom.comap_ker (g := QuotientGroup.mk' K.toSubgroup) (f := f)
-    simpa [hker] using (inferInstance : g.ker.FiniteIndex)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: K.toSubgroup.comap, toSubgroup
+/-
+**FiniteIndexNormalSubgroup.comap** 是 Mathlib 中的一个定义，位于命名空间 `FiniteIndexNormalSu
+bgroup`。
+形式化陈述：comap (f : G ->* H) (K : FiniteIndexNormalSubgroup H) : FiniteIndexNormalS
+ubgroup G where toSubgroup
+参数：f : G ->* H；K : FiniteIndexNormalSubgroup H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def comap (f : G ->* H) (K : FiniteIndexNormalSubgroup H) : FiniteIndexNormalSubgroup G where
+def comap (f : G →* H) (K : FiniteIndexNormalSubgroup H) : FiniteIndexNormalSubgroup G where
   toSubgroup := K.toSubgroup.comap f
   isFiniteIndex' := by
-    let g : G ->* (H ⧸ K.toSubgroup) := (QuotientGroup.mk' K.toSubgroup).comp f
+    let g : G →* (H ⧸ K.toSubgroup) := (QuotientGroup.mk' K.toSubgroup).comp f
     have hker : K.toSubgroup.comap f = g.ker := by
       simpa using MonoidHom.comap_ker (g := QuotientGroup.mk' K.toSubgroup) (f := f)
     simpa [hker] using (inferInstance : g.ker.FiniteIndex)
 
 @[to_additive (attr := simp)]
-/--
-theorem `toSubgroup_comap` / 定理 `toSubgroup_comap`
-
-English:
-theorem toSubgroup_comap
-  given: (f : G ->* H) (K : FiniteIndexNormalSubgroup H)
-  proof: rfl
-
-@[to_additive (attr := gcongr)]
-
-中文:
-定理 toSubgroup_comap
-  条件: (f : G ->* H) (K : FiniteIndexNormal子群 H)
-  证明: rfl
-
-@[to_additive (attr := gcongr)]
+/-
+**FiniteIndexNormalSubgroup.toSubgroup_comap** 是 Mathlib 中的一个定理，位于命名空间 `FiniteIn
+dexNormalSubgroup`。
+形式化陈述：toSubgroup_comap (f : G ->* H) (K : FiniteIndexNormalSubgroup H) : ((comap
+ f K : FiniteIndexNormalSubgroup G) : Subgroup G) = (K : Subgroup H).comap f
+参数：f : G ->* H；K : FiniteIndexNormalSubgroup H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toSubgroup_comap (f : G ->* H) (K : FiniteIndexNormalSubgroup H) :
+theorem toSubgroup_comap (f : G →* H) (K : FiniteIndexNormalSubgroup H) :
     ((comap f K : FiniteIndexNormalSubgroup G) : Subgroup G) = (K : Subgroup H).comap f :=
   rfl
 
 @[to_additive (attr := gcongr)]
-/--
-theorem `comap_mono` / 定理 `comap_mono`
-
-English:
-theorem comap_mono
-  given: (f : G ->* H) {K L : FiniteIndexNormalSubgroup H} (h : K <= L)
-  proof: fun _ hx => h hx
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 comap_mono
-  条件: (f : G ->* H) {K L : FiniteIndexNormal子群 H} (h : K <= L)
-  证明: fun _ hx => h hx
-
-@[to_additive (attr := simp)]
+/-
+**FiniteIndexNormalSubgroup.comap_mono** 是 Mathlib 中的一个定理，位于命名空间 `FiniteIndexNor
+malSubgroup`。
+形式化陈述：comap_mono (f : G ->* H) {K L : FiniteIndexNormalSubgroup H} (h : K <= L) 
+: comap f K <= comap f L
+参数：f : G ->* H；h : K <= L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comap_mono (f : G ->* H) {K L : FiniteIndexNormalSubgroup H} (h : K <= L) :
-    comap f K <= comap f L :=
-  fun _ hx => h hx
+theorem comap_mono (f : G →* H) {K L : FiniteIndexNormalSubgroup H} (h : K ≤ L) :
+    comap f K ≤ comap f L :=
+  fun _ hx ↦ h hx
 
 @[to_additive (attr := simp)]
-/--
-theorem `comap_id` / 定理 `comap_id`
-
-English:
-theorem comap_id
-  given: (K : FiniteIndexNormalSubgroup G)
-  statement: comap (MonoidHom.id G) K = K
-  proof: by
-  rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 comap_id
-  条件: (K : FiniteIndexNormal子群 G)
-  结论: comap (幺半群态射.id G) K = K
-  证明: by
-  rfl
-
-@[to_additive (attr := simp)]
+/-
+**FiniteIndexNormalSubgroup.comap_id** 是 Mathlib 中的一个定理，位于命名空间 `FiniteIndexNorma
+lSubgroup`。
+形式化陈述：comap_id (K : FiniteIndexNormalSubgroup G) : comap (MonoidHom.id G) K = K
+参数：K : FiniteIndexNormalSubgroup G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comap_id (K : FiniteIndexNormalSubgroup G) : comap (MonoidHom.id G) K = K := by
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `comap_comp` / 定理 `comap_comp`
-
-English:
-theorem comap_comp
-  given: (f : G ->* H) (g : H ->* N) (K : FiniteIndexNormalSubgroup N)
-  proof: by
-  rfl
-
-中文:
-定理 comap_comp
-  条件: (f : G ->* H) (g : H ->* N) (K : FiniteIndexNormal子群 N)
-  证明: by
-  rfl
+/-
+**FiniteIndexNormalSubgroup.comap_comp** 是 Mathlib 中的一个定理，位于命名空间 `FiniteIndexNor
+malSubgroup`。
+形式化陈述：comap_comp (f : G ->* H) (g : H ->* N) (K : FiniteIndexNormalSubgroup N) :
+ comap (g.comp f) K = comap f (comap g K)
+参数：f : G ->* H；g : H ->* N；K : FiniteIndexNormalSubgroup N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comap_comp (f : G ->* H) (g : H ->* N) (K : FiniteIndexNormalSubgroup N) :
+theorem comap_comp (f : G →* H) (g : H →* N) (K : FiniteIndexNormalSubgroup N) :
     comap (g.comp f) K = comap f (comap g K) := by
   rfl
 
@@ -568,3 +338,4 @@ end Comap
 end FiniteIndexNormalSubgroup
 
 end
+

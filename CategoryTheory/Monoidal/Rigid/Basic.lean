@@ -72,43 +72,37 @@ namespace CategoryTheory
 
 variable {C : Type u₁} [Category.{v₁} C] [MonoidalCategory C]
 
-/--
-Definition of `ExactPairing` / `ExactPairing` 的定义
+/-- An exact pairing is a pair of objects `X Y : C` which admit
+  a coevaluation and evaluation morphism which fulfill two triangle equalities. -/
+/-
+**CategoryTheory.ExactPairing** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：ExactPairing (X Y : C) where /-- Coevaluation of an exact pairing.  Do not
+ use directly. Use `ExactPairing.coevaluation` instead. -/ coevaluation' : 𝟙_ C 
+⟶ X otimes Y /-- Evaluation of an exact pairing.  Do not use directly. Use `Exac
+tPairing.evaluation` instead. -/ evaluation' : Y otimes X ⟶ 𝟙_ C coevaluation_ev
+aluation' : Y ◁ coevaluation' ≫ (α_ _ _ _).inv ≫ evaluation' ▷ Y = (ρ_ Y).hom ≫ 
+(fun_ Y).inv
+参数：X Y : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ExactPairing
-  parameters: (X Y : C)
-  axioms and operations (4):
-    - coevaluation' : 𝟙_ C ⟶ X otimes Y
-    - evaluation' : Y otimes X ⟶ 𝟙_ C
-    - coevaluation_evaluation' : Y ◁ coevaluation' ≫ (α_ _ _ _).inv ≫ evaluation' ▷ Y = (ρ_ Y).hom ≫ (fun_ Y).inv  [default: by cat_disch]
-    - evaluation_coevaluation' : coevaluation' ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ evaluation' = (fun_ X).hom ≫ (ρ_ X).inv  [default: by cat_disch]
-
-中文:
-类 ExactPairing
-  参数: (X Y : C)
-  公理与运算 (4 个):
-    - coevaluation' : 𝟙_ C ⟶ X otimes Y
-    - evaluation' : Y otimes X ⟶ 𝟙_ C
-    - coevaluation_evaluation' : Y ◁ coevaluation' ≫ (α_ _ _ _).inv ≫ evaluation' ▷ Y = (ρ_ Y).hom ≫ (fun_ Y).inv  [默认: by cat_disch]
-    - evaluation_coevaluation' : coevaluation' ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ evaluation' = (fun_ X).hom ≫ (ρ_ X).inv  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, coevaluation, evaluation, evaluation_coevaluation, fun_
+--- 原说明 ---
+An exact pairing is a pair of objects `X Y : C` which admit
+  a coevaluation and evaluation morphism which fulfill two triangle equalities.
 -/
 class ExactPairing (X Y : C) where
   /-- Coevaluation of an exact pairing.
 
   Do not use directly. Use `ExactPairing.coevaluation` instead. -/
-  coevaluation' : 𝟙_ C ⟶ X otimes Y
+  coevaluation' : 𝟙_ C ⟶ X ⊗ Y
   /-- Evaluation of an exact pairing.
 
   Do not use directly. Use `ExactPairing.evaluation` instead. -/
-  evaluation' : Y otimes X ⟶ 𝟙_ C
+  evaluation' : Y ⊗ X ⟶ 𝟙_ C
   coevaluation_evaluation' :
-    Y ◁ coevaluation' ≫ (α_ _ _ _).inv ≫ evaluation' ▷ Y = (ρ_ Y).hom ≫ (fun_ Y).inv := by
+    Y ◁ coevaluation' ≫ (α_ _ _ _).inv ≫ evaluation' ▷ Y = (ρ_ Y).hom ≫ (λ_ Y).inv := by
     cat_disch
   evaluation_coevaluation' :
-    coevaluation' ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ evaluation' = (fun_ X).hom ≫ (ρ_ X).inv := by
+    coevaluation' ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ evaluation' = (λ_ X).hom ≫ (ρ_ X).inv := by
     cat_disch
 
 namespace ExactPairing
@@ -120,119 +114,113 @@ namespace ExactPairing
 variable (X Y : C)
 variable [ExactPairing X Y]
 
-/--
-Definition of `coevaluation` / `coevaluation` 的定义
+/-- Coevaluation of an exact pairing. -/
+/-
+**CategoryTheory.ExactPairing.coevaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.ExactPairing`。
+形式化陈述：coevaluation : 𝟙_ C ⟶ X otimes Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coevaluation
-  signature: : 𝟙_ C ⟶ X otimes Y
-  body: @coevaluation' _ _ _ X Y _
-
-中文:
-定义 coevaluation
-  签名: : 𝟙_ C ⟶ X otimes Y
-  定义体: @coevaluation' _ _ _ X Y _
-
-Depends on / 依赖: coevaluation
+--- 原说明 ---
+Coevaluation of an exact pairing.
 -/
-def coevaluation : 𝟙_ C ⟶ X otimes Y := @coevaluation' _ _ _ X Y _
+def coevaluation : 𝟙_ C ⟶ X ⊗ Y := @coevaluation' _ _ _ X Y _
 
-/--
-Definition of `evaluation` / `evaluation` 的定义
+/-- Evaluation of an exact pairing. -/
+/-
+**CategoryTheory.ExactPairing.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.ExactPairing`。
+形式化陈述：evaluation : Y otimes X ⟶ 𝟙_ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evaluation
-  signature: : Y otimes X ⟶ 𝟙_ C
-  body: @evaluation' _ _ _ X Y _
-
-@[inherit_doc] notation "η_" => ExactPairing.coevaluation
-@[inherit_doc] notation "ε_" => ExactPairing.evaluation
-
-中文:
-定义 evaluation
-  签名: : Y otimes X ⟶ 𝟙_ C
-  定义体: @evaluation' _ _ _ X Y _
-
-@[inherit_doc] notation "η_" => ExactPairing.coevaluation
-@[inherit_doc] notation "ε_" => ExactPairing.evaluation
-
-Depends on / 依赖: evaluation
+--- 原说明 ---
+Evaluation of an exact pairing.
 -/
-def evaluation : Y otimes X ⟶ 𝟙_ C := @evaluation' _ _ _ X Y _
+def evaluation : Y ⊗ X ⟶ 𝟙_ C := @evaluation' _ _ _ X Y _
 
 @[inherit_doc] notation "η_" => ExactPairing.coevaluation
 @[inherit_doc] notation "ε_" => ExactPairing.evaluation
-
-/--
-lemma `coevaluation_evaluation` / 引理 `coevaluation_evaluation`
-
-English:
-lemma coevaluation_evaluation
-  proof: coevaluation_evaluation'
-
-中文:
-引理 coevaluation_evaluation
-  证明: coevaluation_evaluation'
-
-Depends on / 依赖: coevaluation_evaluation
+/-
+**CategoryTheory.ExactPairing.coevaluation_evaluation** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.ExactPairing`。
+形式化陈述：coevaluation_evaluation : Y ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ ε_ X _ ▷ Y = (ρ_ Y
+).hom ≫ (fun_ Y).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ExactPairing.coevaluation_evaluation'`：∀ {C : Type u₁} {i
+nst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCateg
+ory C} {X Y : C}   [self : CategoryTheory.…
 -/
 lemma coevaluation_evaluation :
-    Y ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ ε_ X _ ▷ Y = (ρ_ Y).hom ≫ (fun_ Y).inv :=
+    Y ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ ε_ X _ ▷ Y = (ρ_ Y).hom ≫ (λ_ Y).inv :=
   coevaluation_evaluation'
-
-/--
-lemma `evaluation_coevaluation` / 引理 `evaluation_coevaluation`
-
-English:
-lemma evaluation_coevaluation
-  proof: evaluation_coevaluation'
-
-中文:
-引理 evaluation_coevaluation
-  证明: evaluation_coevaluation'
-
-Depends on / 依赖: evaluation_coevaluation
+/-
+**CategoryTheory.ExactPairing.evaluation_coevaluation** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.ExactPairing`。
+形式化陈述：evaluation_coevaluation : η_ _ _ ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ ε_ _ Y = (fun_
+ X).hom ≫ (ρ_ X).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ExactPairing.evaluation_coevaluation'`：∀ {C : Type u₁} {i
+nst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCateg
+ory C} {X Y : C}   [self : CategoryTheory.…
 -/
 lemma evaluation_coevaluation :
-    η_ _ _ ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ ε_ _ Y = (fun_ X).hom ≫ (ρ_ X).inv :=
+    η_ _ _ ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ ε_ _ Y = (λ_ X).hom ≫ (ρ_ X).inv :=
   evaluation_coevaluation'
-
-/--
-lemma `coevaluation_evaluation''` / 引理 `coevaluation_evaluation''`
-
-English:
-lemma coevaluation_evaluation''
-  proof: by
-  convert! coevaluation_evaluation X Y <;> simp [monoidalComp]
-
-中文:
-引理 coevaluation_evaluation''
-  证明: by
-  convert! coevaluation_evaluation X Y <;> simp [monoidalComp]
-
-Depends on / 依赖: coevaluation_evaluation, convert, monoidalComp
+/-
+**CategoryTheory.ExactPairing.coevaluation_evaluation''** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ExactPairing`。
+形式化陈述：coevaluation_evaluation'' : Y ◁ η_ X Y otimes≫ ε_ X Y ▷ Y = otimes𝟙.hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MonoidalCategory.whiskerRightIso_refl`：whiskerRightIso_re
+fl (X W : C) : whiskerRightIso (Iso.refl X) W = Iso.refl (X otimes W)
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.ExactPairing.coevaluation_evaluation`：coevaluation_evalua
+tion : Y ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ ε_ X _ ▷ Y = (ρ_ Y).hom ≫ (fun_ Y).inv
 -/
 lemma coevaluation_evaluation'' :
-    Y ◁ η_ X Y otimes≫ ε_ X Y ▷ Y = otimes𝟙.hom := by
+    Y ◁ η_ X Y ⊗≫ ε_ X Y ▷ Y = ⊗𝟙.hom := by
   convert! coevaluation_evaluation X Y <;> simp [monoidalComp]
-
-/--
-lemma `evaluation_coevaluation''` / 引理 `evaluation_coevaluation''`
-
-English:
-lemma evaluation_coevaluation''
-  proof: by
-  convert! evaluation_coevaluation X Y <;> simp [monoidalComp]
-
-中文:
-引理 evaluation_coevaluation''
-  证明: by
-  convert! evaluation_coevaluation X Y <;> simp [monoidalComp]
-
-Depends on / 依赖: convert, evaluation_coevaluation, monoidalComp
+/-
+**CategoryTheory.ExactPairing.evaluation_coevaluation''** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ExactPairing`。
+形式化陈述：evaluation_coevaluation'' : η_ X Y ▷ X otimes≫ X ◁ ε_ X Y = otimes𝟙.hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MonoidalCategory.whiskerRightIso_refl`：whiskerRightIso_re
+fl (X W : C) : whiskerRightIso (Iso.refl X) W = Iso.refl (X otimes W)
+· 使用定理 `CategoryTheory.Iso.trans_refl`：trans_refl (α : X ≅ Y) : α ≪≫ Iso.refl Y 
+= α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Iso.refl_trans`：refl_trans (α : X ≅ Y) : Iso.refl X ≪≫ α 
+= α
+· 使用引理 `CategoryTheory.ExactPairing.evaluation_coevaluation`：evaluation_coevalua
+tion : η_ _ _ ▷ X ≫ (α_ _ _ _).hom ≫ X ◁ ε_ _ Y = (fun_ X).hom ≫ (ρ_ X).inv
 -/
 lemma evaluation_coevaluation'' :
-    η_ X Y ▷ X otimes≫ X ◁ ε_ X Y = otimes𝟙.hom := by
+    η_ X Y ▷ X ⊗≫ X ◁ ε_ X Y = ⊗𝟙.hom := by
   convert! evaluation_coevaluation X Y <;> simp [monoidalComp]
 
 end ExactPairing
@@ -240,24 +228,11 @@ end ExactPairing
 attribute [reassoc (attr := simp)] ExactPairing.coevaluation_evaluation
 attribute [reassoc (attr := simp)] ExactPairing.evaluation_coevaluation
 
-/--
-Instance `exactPairingUnit` / 实例 `exactPairingUnit`
-
-English:
-instance exactPairingUnit
-  signature: : ExactPairing (𝟙_ C) (𝟙_ C) where
-  body: (ρ_ _).inv
-  evaluation' := (ρ_ _).hom
-  coevaluation_evaluation' := by monoidal_coherence
-  evaluation_coevaluation' := by monoidal_coherence
-
-中文:
-实例 exactPairingUnit
-  签名: : ExactPairing (𝟙_ C) (𝟙_ C) where
-  定义体: (ρ_ _).inv
-  evaluation' := (ρ_ _).hom
-  coevaluation_evaluation' := by monoidal_coherence
-  evaluation_coevaluation' := by monoidal_coherence
+/-
+**CategoryTheory.exactPairingUnit** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：exactPairingUnit : ExactPairing (𝟙_ C) (𝟙_ C) where coevaluation'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance exactPairingUnit : ExactPairing (𝟙_ C) (𝟙_ C) where
   coevaluation' := (ρ_ _).inv
@@ -265,342 +240,190 @@ instance exactPairingUnit : ExactPairing (𝟙_ C) (𝟙_ C) where
   coevaluation_evaluation' := by monoidal_coherence
   evaluation_coevaluation' := by monoidal_coherence
 
-/--
-Instance `ExactPairing.tensor` / 实例 `ExactPairing.tensor`
+/-- The tensor product of exact pairings. Given exact pairings `(X₁, Y₁)` and `(X₂, Y₂)`,
+we get an exact pairing `(X₁ ⊗ X₂, Y₂ ⊗ Y₁)`. Note the reversed order in the second factor. -/
+/-
+**CategoryTheory.ExactPairing.tensor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.E
+xactPairing`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.MonoidalCategory C] →       {X₁ X₂ Y₁ Y₂ : C} →         [Cate
+goryTheory.ExactPairing X₁ Y₁] →           [CategoryTheory.ExactPairing X₂ Y₂] →
+             CategoryTheory.ExactPairing (CategoryTheory.MonoidalCategoryStruct.
+tensorObj X₁ X₂)               (CategoryTheory.MonoidalCategoryStruct.tensorObj 
+Y₂ Y₁)
+参数：CategoryTheory.MonoidalCategoryStruct.tensorObj X₁ X₂；CategoryTheory.Monoidal
+CategoryStruct.tensorObj Y₂ Y₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance ExactPairing.tensor
-  signature: {X₁ X₂ Y₁ Y₂ : C} [ExactPairing X₁ Y₁] [ExactPairing X₂ Y₂]
-  body: η_ X₁ Y₁ otimes≫ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫ 𝟙 _
-  evaluation' := 𝟙 _ otimes≫ Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂) otimes≫ ε_ X₂ Y₂
-  coevaluation_evaluation' := by
-    calc
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          (Y₂ otimes Y₁) ◁ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ otimes Y₁) otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
-      -- Group η₂ and ε₁ so they compose with ≫ (both act on the Y₁ ⊗ X₁ factor):
-      --
-      -- Y₂ Y₁ ╭── X₁ ────────────╮
-      -- │ │ │ ╭── X₂ ───╮ │
-      -- │ │ │ │ │ │
-      -- │ ╰──ε₁──╯ │ │ │
-      -- │ │ │ │
-      -- ╰────── ε₂ ──────╯ │ │
-      -- Y₂ Y₁
-      --
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          Y₂ ◁ ((Y₁ otimes X₁) ◁ η_ X₂ Y₂ ≫ ε_ X₁ Y₁ ▷ (X₂ otimes Y₂)) ▷ Y₁ otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
-      -- Slide the η₂ cup past the ε₁ cap (whisker_exchange), separating the
-      -- two zigzags into independent snakes:
-      --
-      -- Y₂ Y₁
-      -- │ │ ╭─X₁──╮
-      -- │ │ │ │
-      -- │ ╰───╯ │ ← snake for (X₁, Y₁)
-      -- │ │
-      -- │ ╭─X₂──╮ │
-      -- │ │ │ │
-      -- ╰──╯ │ │ ← snake for (X₂, Y₂)
-      -- Y₂ Y₁
-      --
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          Y₂ ◁ (ε_ X₁ Y₁ ▷ (𝟙_ C) ≫ (𝟙_ C) ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by
-        rw [whisker_exchange]
-      -- Separate into two snakes and cancel each.
-      _ = 𝟙 _ otimes≫ Y₂ ◁ (Y₁ ◁ η_ X₁ Y₁ otimes≫ ε_ X₁ Y₁ ▷ Y₁) otimes≫
-          (Y₂ ◁ η_ X₂ Y₂ otimes≫ ε_ X₂ Y₂ ▷ Y₂) ▷ Y₁ otimes≫ 𝟙 _ := by monoidal
-      _ = _ := by rw [coevaluation_evaluation'', coevaluation_evaluation'']; monoidal
-  evaluation_coevaluation' := by
-    calc
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          (X₁ ◁ η_ X₂ Y₂) ▷ (Y₁ otimes X₁ otimes X₂) otimes≫
-          (X₁ otimes X₂) ◁ (Y₂ ◁ ε_ X₁ Y₁ ▷ X₂) otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
-      -- Group η₂ and ε₁ so they compose with ≫:
-      --
-      -- ╭── Y₁ ────────────╮ X₁ X₂
-      -- │ ╭── Y₂ ───╮ │ │ │
-      -- │ │ │ │ │ │
-      -- │ │ │ ╰──ε₁───╯ │
-      -- │ │ │ │
-      -- │ │ ╰──────── ε₂ ────╯
-      -- X₁ X₂
-      --
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          X₁ ◁ (η_ X₂ Y₂ ▷ (Y₁ otimes X₁) ≫ (X₂ otimes Y₂) ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
-      -- Slide the ε₁ cap past the η₂ cup (← whisker_exchange), separating the
-      -- two zigzags into independent snakes:
-      --
-      -- X₁ X₂
-      -- ╭──Y₁──╮ │ │
-      -- │ │ │ │
-      -- │ ╰──────╯ │ ← snake for (X₁, Y₁)
-      -- │ │
-      -- │ ╭──Y₂──╮ │
-      -- │ │ │ │
-      -- │ │ ╰───────╯ ← snake for (X₂, Y₂)
-      -- X₁ X₂
-      --
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          X₁ ◁ ((𝟙_ C) ◁ ε_ X₁ Y₁ ≫ η_ X₂ Y₂ ▷ (𝟙_ C)) ▷ X₂ otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by
-        rw [← whisker_exchange]
-      -- Separate into two snakes and cancel each.
-      _ = 𝟙 _ otimes≫ (η_ X₁ Y₁ ▷ X₁ otimes≫ X₁ ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
-          X₁ ◁ (η_ X₂ Y₂ ▷ X₂ otimes≫ X₂ ◁ ε_ X₂ Y₂) otimes≫ 𝟙 _ := by monoidal
-      _ = _ := by rw [evaluation_coevaluation'', evaluation_coevaluation'']; monoidal
-
-中文:
-实例 ExactPairing.tensor
-  签名: {X₁ X₂ Y₁ Y₂ : C} [ExactPairing X₁ Y₁] [ExactPairing X₂ Y₂]
-  定义体: η_ X₁ Y₁ otimes≫ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫ 𝟙 _
-  evaluation' := 𝟙 _ otimes≫ Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂) otimes≫ ε_ X₂ Y₂
-  coevaluation_evaluation' := by
-    calc
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          (Y₂ otimes Y₁) ◁ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ otimes Y₁) otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
-      -- Group η₂ and ε₁ so they compose with ≫ (both act on the Y₁ ⊗ X₁ factor):
-      --
-      -- Y₂ Y₁ ╭── X₁ ────────────╮
-      -- │ │ │ ╭── X₂ ───╮ │
-      -- │ │ │ │ │ │
-      -- │ ╰──ε₁──╯ │ │ │
-      -- │ │ │ │
-      -- ╰────── ε₂ ──────╯ │ │
-      -- Y₂ Y₁
-      --
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          Y₂ ◁ ((Y₁ otimes X₁) ◁ η_ X₂ Y₂ ≫ ε_ X₁ Y₁ ▷ (X₂ otimes Y₂)) ▷ Y₁ otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
-      -- Slide the η₂ cup past the ε₁ cap (whisker_exchange), separating the
-      -- two zigzags into independent snakes:
-      --
-      -- Y₂ Y₁
-      -- │ │ ╭─X₁──╮
-      -- │ │ │ │
-      -- │ ╰───╯ │ ← snake for (X₁, Y₁)
-      -- │ │
-      -- │ ╭─X₂──╮ │
-      -- │ │ │ │
-      -- ╰──╯ │ │ ← snake for (X₂, Y₂)
-      -- Y₂ Y₁
-      --
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          Y₂ ◁ (ε_ X₁ Y₁ ▷ (𝟙_ C) ≫ (𝟙_ C) ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by
-        rw [whisker_exchange]
-      -- Separate into two snakes and cancel each.
-      _ = 𝟙 _ otimes≫ Y₂ ◁ (Y₁ ◁ η_ X₁ Y₁ otimes≫ ε_ X₁ Y₁ ▷ Y₁) otimes≫
-          (Y₂ ◁ η_ X₂ Y₂ otimes≫ ε_ X₂ Y₂ ▷ Y₂) ▷ Y₁ otimes≫ 𝟙 _ := by monoidal
-      _ = _ := by rw [coevaluation_evaluation'', coevaluation_evaluation'']; monoidal
-  evaluation_coevaluation' := by
-    calc
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          (X₁ ◁ η_ X₂ Y₂) ▷ (Y₁ otimes X₁ otimes X₂) otimes≫
-          (X₁ otimes X₂) ◁ (Y₂ ◁ ε_ X₁ Y₁ ▷ X₂) otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
-      -- Group η₂ and ε₁ so they compose with ≫:
-      --
-      -- ╭── Y₁ ────────────╮ X₁ X₂
-      -- │ ╭── Y₂ ───╮ │ │ │
-      -- │ │ │ │ │ │
-      -- │ │ │ ╰──ε₁───╯ │
-      -- │ │ │ │
-      -- │ │ ╰──────── ε₂ ────╯
-      -- X₁ X₂
-      --
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          X₁ ◁ (η_ X₂ Y₂ ▷ (Y₁ otimes X₁) ≫ (X₂ otimes Y₂) ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
-      -- Slide the ε₁ cap past the η₂ cup (← whisker_exchange), separating the
-      -- two zigzags into independent snakes:
-      --
-      -- X₁ X₂
-      -- ╭──Y₁──╮ │ │
-      -- │ │ │ │
-      -- │ ╰──────╯ │ ← snake for (X₁, Y₁)
-      -- │ │
-      -- │ ╭──Y₂──╮ │
-      -- │ │ │ │
-      -- │ │ ╰───────╯ ← snake for (X₂, Y₂)
-      -- X₁ X₂
-      --
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          X₁ ◁ ((𝟙_ C) ◁ ε_ X₁ Y₁ ≫ η_ X₂ Y₂ ▷ (𝟙_ C)) ▷ X₂ otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by
-        rw [← whisker_exchange]
-      -- Separate into two snakes and cancel each.
-      _ = 𝟙 _ otimes≫ (η_ X₁ Y₁ ▷ X₁ otimes≫ X₁ ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
-          X₁ ◁ (η_ X₂ Y₂ ▷ X₂ otimes≫ X₂ ◁ ε_ X₂ Y₂) otimes≫ 𝟙 _ := by monoidal
-      _ = _ := by rw [evaluation_coevaluation'', evaluation_coevaluation'']; monoidal
-
-Depends on / 依赖: otimes
+--- 原说明 ---
+The tensor product of exact pairings. Given exact pairings `(X₁, Y₁)` and `(X₂, 
+Y₂)`,
+we get an exact pairing `(X₁ ⊗ X₂, Y₂ ⊗ Y₁)`. Note the reversed order in the sec
+ond factor.
 -/
 instance ExactPairing.tensor {X₁ X₂ Y₁ Y₂ : C} [ExactPairing X₁ Y₁] [ExactPairing X₂ Y₂] :
-    ExactPairing (X₁ otimes X₂) (Y₂ otimes Y₁) where
-  coevaluation' := η_ X₁ Y₁ otimes≫ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫ 𝟙 _
-  evaluation' := 𝟙 _ otimes≫ Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂) otimes≫ ε_ X₂ Y₂
+    ExactPairing (X₁ ⊗ X₂) (Y₂ ⊗ Y₁) where
+  coevaluation' := η_ X₁ Y₁ ⊗≫ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ ⊗≫ 𝟙 _
+  evaluation' := 𝟙 _ ⊗≫ Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂) ⊗≫ ε_ X₂ Y₂
   coevaluation_evaluation' := by
     calc
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          (Y₂ otimes Y₁) ◁ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ otimes Y₁) otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
+      _ = (Y₂ ⊗ Y₁) ◁ η_ X₁ Y₁ ⊗≫
+          (Y₂ ⊗ Y₁) ◁ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ ⊗≫
+          (Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂)) ▷ (Y₂ ⊗ Y₁) ⊗≫
+          ε_ X₂ Y₂ ▷ (Y₂ ⊗ Y₁) := by monoidal
       -- Group η₂ and ε₁ so they compose with ≫ (both act on the Y₁ ⊗ X₁ factor):
       --
-      -- Y₂ Y₁ ╭── X₁ ────────────╮
-      -- │ │ │ ╭── X₂ ───╮ │
-      -- │ │ │ │ │ │
-      -- │ ╰──ε₁──╯ │ │ │
-      -- │ │ │ │
-      -- ╰────── ε₂ ──────╯ │ │
-      -- Y₂ Y₁
+      --   Y₂  Y₁      ╭── X₁ ────────────╮
+      --   │    │      │    ╭── X₂ ───╮   │
+      --   │    │      │    │         │   │
+      --   │    ╰──ε₁──╯    │         │   │
+      --   │                │         │   │
+      --   ╰────── ε₂ ──────╯         │   │
+      --                              Y₂  Y₁
       --
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          Y₂ ◁ ((Y₁ otimes X₁) ◁ η_ X₂ Y₂ ≫ ε_ X₁ Y₁ ▷ (X₂ otimes Y₂)) ▷ Y₁ otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by monoidal
+      _ = (Y₂ ⊗ Y₁) ◁ η_ X₁ Y₁ ⊗≫
+          Y₂ ◁ ((Y₁ ⊗ X₁) ◁ η_ X₂ Y₂ ≫ ε_ X₁ Y₁ ▷ (X₂ ⊗ Y₂)) ▷ Y₁ ⊗≫
+          ε_ X₂ Y₂ ▷ (Y₂ ⊗ Y₁) := by monoidal
       -- Slide the η₂ cup past the ε₁ cap (whisker_exchange), separating the
       -- two zigzags into independent snakes:
       --
-      -- Y₂ Y₁
-      -- │ │ ╭─X₁──╮
-      -- │ │ │ │
-      -- │ ╰───╯ │ ← snake for (X₁, Y₁)
-      -- │ │
-      -- │ ╭─X₂──╮ │
-      -- │ │ │ │
-      -- ╰──╯ │ │ ← snake for (X₂, Y₂)
-      -- Y₂ Y₁
+      --   Y₂   Y₁
+      --   │    │   ╭─X₁──╮
+      --   │    │   │     │
+      --   │    ╰───╯     │       ← snake for (X₁, Y₁)
+      --   │              │
+      --   │  ╭─X₂──╮     │
+      --   │  │     │     │
+      --   ╰──╯     │     │       ← snake for (X₂, Y₂)
+      --            Y₂    Y₁
       --
-      _ = (Y₂ otimes Y₁) ◁ η_ X₁ Y₁ otimes≫
-          Y₂ ◁ (ε_ X₁ Y₁ ▷ (𝟙_ C) ≫ (𝟙_ C) ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫
-          ε_ X₂ Y₂ ▷ (Y₂ otimes Y₁) := by
+      _ = (Y₂ ⊗ Y₁) ◁ η_ X₁ Y₁ ⊗≫
+          Y₂ ◁ (ε_ X₁ Y₁ ▷ (𝟙_ C) ≫ (𝟙_ C) ◁ η_ X₂ Y₂) ▷ Y₁ ⊗≫
+          ε_ X₂ Y₂ ▷ (Y₂ ⊗ Y₁) := by
         rw [whisker_exchange]
       -- Separate into two snakes and cancel each.
-      _ = 𝟙 _ otimes≫ Y₂ ◁ (Y₁ ◁ η_ X₁ Y₁ otimes≫ ε_ X₁ Y₁ ▷ Y₁) otimes≫
-          (Y₂ ◁ η_ X₂ Y₂ otimes≫ ε_ X₂ Y₂ ▷ Y₂) ▷ Y₁ otimes≫ 𝟙 _ := by monoidal
+      _ = 𝟙 _ ⊗≫ Y₂ ◁ (Y₁ ◁ η_ X₁ Y₁ ⊗≫ ε_ X₁ Y₁ ▷ Y₁) ⊗≫
+          (Y₂ ◁ η_ X₂ Y₂ ⊗≫ ε_ X₂ Y₂ ▷ Y₂) ▷ Y₁ ⊗≫ 𝟙 _ := by monoidal
       _ = _ := by rw [coevaluation_evaluation'', coevaluation_evaluation'']; monoidal
   evaluation_coevaluation' := by
     calc
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          (X₁ ◁ η_ X₂ Y₂) ▷ (Y₁ otimes X₁ otimes X₂) otimes≫
-          (X₁ otimes X₂) ◁ (Y₂ ◁ ε_ X₁ Y₁ ▷ X₂) otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
+      _ = η_ X₁ Y₁ ▷ (X₁ ⊗ X₂) ⊗≫
+          (X₁ ◁ η_ X₂ Y₂) ▷ (Y₁ ⊗ X₁ ⊗ X₂) ⊗≫
+          (X₁ ⊗ X₂) ◁ (Y₂ ◁ ε_ X₁ Y₁ ▷ X₂) ⊗≫
+          (X₁ ⊗ X₂) ◁ ε_ X₂ Y₂ := by monoidal
       -- Group η₂ and ε₁ so they compose with ≫:
       --
-      -- ╭── Y₁ ────────────╮ X₁ X₂
-      -- │ ╭── Y₂ ───╮ │ │ │
-      -- │ │ │ │ │ │
-      -- │ │ │ ╰──ε₁───╯ │
-      -- │ │ │ │
-      -- │ │ ╰──────── ε₂ ────╯
-      -- X₁ X₂
+      --   ╭── Y₁ ────────────╮       X₁   X₂
+      --   │    ╭── Y₂ ───╮   │       │    │
+      --   │    │         │   │       │    │
+      --   │    │         │   ╰──ε₁───╯    │
+      --   │    │         │                │
+      --   │    │         ╰──────── ε₂ ────╯
+      --   X₁   X₂
       --
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          X₁ ◁ (η_ X₂ Y₂ ▷ (Y₁ otimes X₁) ≫ (X₂ otimes Y₂) ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by monoidal
+      _ = η_ X₁ Y₁ ▷ (X₁ ⊗ X₂) ⊗≫
+          X₁ ◁ (η_ X₂ Y₂ ▷ (Y₁ ⊗ X₁) ≫ (X₂ ⊗ Y₂) ◁ ε_ X₁ Y₁) ▷ X₂ ⊗≫
+          (X₁ ⊗ X₂) ◁ ε_ X₂ Y₂ := by monoidal
       -- Slide the ε₁ cap past the η₂ cup (← whisker_exchange), separating the
       -- two zigzags into independent snakes:
       --
-      -- X₁ X₂
-      -- ╭──Y₁──╮ │ │
-      -- │ │ │ │
-      -- │ ╰──────╯ │ ← snake for (X₁, Y₁)
-      -- │ │
-      -- │ ╭──Y₂──╮ │
-      -- │ │ │ │
-      -- │ │ ╰───────╯ ← snake for (X₂, Y₂)
-      -- X₁ X₂
+      --                 X₁   X₂
+      --   ╭──Y₁──╮      │    │
+      --   │      │      │    │
+      --   │      ╰──────╯    │       ← snake for (X₁, Y₁)
+      --   │                  │
+      --   │   ╭──Y₂──╮       │
+      --   │   │      │       │
+      --   │   │      ╰───────╯       ← snake for (X₂, Y₂)
+      --   X₁  X₂
       --
-      _ = η_ X₁ Y₁ ▷ (X₁ otimes X₂) otimes≫
-          X₁ ◁ ((𝟙_ C) ◁ ε_ X₁ Y₁ ≫ η_ X₂ Y₂ ▷ (𝟙_ C)) ▷ X₂ otimes≫
-          (X₁ otimes X₂) ◁ ε_ X₂ Y₂ := by
+      _ = η_ X₁ Y₁ ▷ (X₁ ⊗ X₂) ⊗≫
+          X₁ ◁ ((𝟙_ C) ◁ ε_ X₁ Y₁ ≫ η_ X₂ Y₂ ▷ (𝟙_ C)) ▷ X₂ ⊗≫
+          (X₁ ⊗ X₂) ◁ ε_ X₂ Y₂ := by
         rw [← whisker_exchange]
       -- Separate into two snakes and cancel each.
-      _ = 𝟙 _ otimes≫ (η_ X₁ Y₁ ▷ X₁ otimes≫ X₁ ◁ ε_ X₁ Y₁) ▷ X₂ otimes≫
-          X₁ ◁ (η_ X₂ Y₂ ▷ X₂ otimes≫ X₂ ◁ ε_ X₂ Y₂) otimes≫ 𝟙 _ := by monoidal
+      _ = 𝟙 _ ⊗≫ (η_ X₁ Y₁ ▷ X₁ ⊗≫ X₁ ◁ ε_ X₁ Y₁) ▷ X₂ ⊗≫
+          X₁ ◁ (η_ X₂ Y₂ ▷ X₂ ⊗≫ X₂ ◁ ε_ X₂ Y₂) ⊗≫ 𝟙 _ := by monoidal
       _ = _ := by rw [evaluation_coevaluation'', evaluation_coevaluation'']; monoidal
-
-/--
-lemma `ExactPairing.tensor_coevaluation` / 引理 `ExactPairing.tensor_coevaluation`
-
-English:
-lemma ExactPairing.tensor_coevaluation
-  statement: {X₁ X₂ Y₁ Y₂ : C}
-  proof: rfl
-
-中文:
-引理 ExactPairing.tensor_coevaluation
-  结论: {X₁ X₂ Y₁ Y₂ : C}
-  证明: rfl
+/-
+**CategoryTheory.ExactPairing.tensor_coevaluation** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.ExactPairing`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   {X₁ X₂ Y₁ Y₂ : C} [inst_2 : CategoryTheory.Exac
+tPairing X₁ Y₁] [inst_3 : CategoryTheory.ExactPairing X₂ Y₂],   η_ (CategoryTheo
+ry.MonoidalCategoryStruct.tensorObj X₁ X₂) (CategoryTheory.MonoidalCategoryStruc
+t.tensorObj Y₂ Y₁) =     CategoryTheory.monoidalComp (η_ X₁ Y₁)       (CategoryT
+heory.monoidalComp         (CategoryTheory.MonoidalCategoryStruct.whiskerRight  
+         (CategoryTheory.MonoidalCategoryStruct.whiskerLeft X₁ (η_ X₂ Y₂)) Y₁)  
+       (CategoryTheory.CategoryStruct.id           (CategoryTheory.MonoidalCateg
+oryStruct.tensorObj (CategoryTheory.MonoidalCategoryStruct.tensorObj X₁ X₂)     
+        (CategoryTheory.MonoidalCategoryStruct.tensorObj Y₂ Y₁))))
+参数：CategoryTheory.MonoidalCategoryStruct.tensorObj X₁ X₂；CategoryTheory.Monoidal
+CategoryStruct.tensorObj Y₂ Y₁；η_ X₁ Y₁；CategoryTheory.monoidalComp         (Cat
+egoryTheory.MonoidalCategoryStruct.whiskerRight           (CategoryTheory.Monoid
+alCategoryStruct.whiskerLeft X₁ (η_ X₂ Y₂)) Y₁)         (CategoryTheory.Category
+Struct.id           (CategoryTheory.MonoidalCategoryStruct.tensorObj (CategoryTh
+eory.MonoidalCategoryStruct.tensorObj X₁ X₂)             (CategoryTheory.Monoida
+lCategoryStruct.tensorObj Y₂ Y₁)))。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ExactPairing.tensor_coevaluation {X₁ X₂ Y₁ Y₂ : C}
     [ExactPairing X₁ Y₁] [ExactPairing X₂ Y₂] :
-    η_ (X₁ otimes X₂) (Y₂ otimes Y₁) = η_ X₁ Y₁ otimes≫ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ otimes≫ 𝟙 _ :=
+    η_ (X₁ ⊗ X₂) (Y₂ ⊗ Y₁) = η_ X₁ Y₁ ⊗≫ (X₁ ◁ η_ X₂ Y₂) ▷ Y₁ ⊗≫ 𝟙 _ :=
   rfl
-
-/--
-lemma `ExactPairing.tensor_evaluation` / 引理 `ExactPairing.tensor_evaluation`
-
-English:
-lemma ExactPairing.tensor_evaluation
-  statement: {X₁ X₂ Y₁ Y₂ : C}
-  proof: rfl
-
-中文:
-引理 ExactPairing.tensor_evaluation
-  结论: {X₁ X₂ Y₁ Y₂ : C}
-  证明: rfl
+/-
+**CategoryTheory.ExactPairing.tensor_evaluation** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.ExactPairing`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   {X₁ X₂ Y₁ Y₂ : C} [inst_2 : CategoryTheory.Exac
+tPairing X₁ Y₁] [inst_3 : CategoryTheory.ExactPairing X₂ Y₂],   ε_ (CategoryTheo
+ry.MonoidalCategoryStruct.tensorObj X₁ X₂) (CategoryTheory.MonoidalCategoryStruc
+t.tensorObj Y₂ Y₁) =     CategoryTheory.monoidalComp       (CategoryTheory.Categ
+oryStruct.id         (CategoryTheory.MonoidalCategoryStruct.tensorObj (CategoryT
+heory.MonoidalCategoryStruct.tensorObj Y₂ Y₁)           (CategoryTheory.Monoidal
+CategoryStruct.tensorObj X₁ X₂)))       (CategoryTheory.monoidalComp         (Ca
+tegoryTheory.MonoidalCategoryStruct.whiskerLeft Y₂           (CategoryTheory.Mon
+oidalCategoryStruct.whiskerRight (ε_ X₁ Y₁) X₂))         (ε_ X₂ Y₂))
+参数：CategoryTheory.MonoidalCategoryStruct.tensorObj X₁ X₂；CategoryTheory.Monoidal
+CategoryStruct.tensorObj Y₂ Y₁；CategoryTheory.CategoryStruct.id         (Categor
+yTheory.MonoidalCategoryStruct.tensorObj (CategoryTheory.MonoidalCategoryStruct.
+tensorObj Y₂ Y₁)           (CategoryTheory.MonoidalCategoryStruct.tensorObj X₁ X
+₂))；CategoryTheory.monoidalComp         (CategoryTheory.MonoidalCategoryStruct.w
+hiskerLeft Y₂           (CategoryTheory.MonoidalCategoryStruct.whiskerRight (ε_ 
+X₁ Y₁) X₂))         (ε_ X₂ Y₂)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ExactPairing.tensor_evaluation {X₁ X₂ Y₁ Y₂ : C}
     [ExactPairing X₁ Y₁] [ExactPairing X₂ Y₂] :
-    ε_ (X₁ otimes X₂) (Y₂ otimes Y₁) = 𝟙 _ otimes≫ Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂) otimes≫ ε_ X₂ Y₂ :=
+    ε_ (X₁ ⊗ X₂) (Y₂ ⊗ Y₁) = 𝟙 _ ⊗≫ Y₂ ◁ (ε_ X₁ Y₁ ▷ X₂) ⊗≫ ε_ X₂ Y₂ :=
   rfl
 
-/--
-Definition of `HasRightDual` / `HasRightDual` 的定义
+/-- A class of objects which have a right dual. -/
+/-
+**CategoryTheory.HasRightDual** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → [CategoryThe
+ory.MonoidalCategory C] → C → Type (max u₁ v₁)
+参数：max u₁ v₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasRightDual
-  parameters: (X : C)
-  axioms and operations (2):
-    - rightDual : C
-    - [exact : ExactPairing X rightDual]
-
-中文:
-类 有RightDual
-  参数: (X : C)
-  公理与运算 (2 个):
-    - rightDual : C
-    - [exact : ExactPairing X rightDual]
+--- 原说明 ---
+A class of objects which have a right dual.
 -/
 class HasRightDual (X : C) where
   /-- The right dual of the object `X`. -/
   rightDual : C
   [exact : ExactPairing X rightDual]
 
-/--
-Definition of `HasLeftDual` / `HasLeftDual` 的定义
+/-- A class of objects which have a left dual. -/
+/-
+**CategoryTheory.HasLeftDual** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → [CategoryThe
+ory.MonoidalCategory C] → C → Type (max u₁ v₁)
+参数：max u₁ v₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasLeftDual
-  parameters: (Y : C)
-  axioms and operations (2):
-    - leftDual : C
-    - [exact : ExactPairing leftDual Y]
-
-中文:
-类 有LeftDual
-  参数: (Y : C)
-  公理与运算 (2 个):
-    - leftDual : C
-    - [exact : ExactPairing leftDual Y]
+--- 原说明 ---
+A class of objects which have a left dual.
 -/
 class HasLeftDual (Y : C) where
   /-- The left dual of the object `X`. -/
@@ -619,67 +442,47 @@ e.g. `(ᘁX : C)` where previously just `ᘁX` was enough. -/
 
 @[inherit_doc] prefix:1024 "ᘁ" => leftDual
 @[inherit_doc] postfix:1024 "ᘁ" => rightDual
+/-
+**CategoryTheory.hasRightDualUnit** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：hasRightDualUnit : HasRightDual (𝟙_ C) where rightDual
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Instance `hasRightDualUnit` / 实例 `hasRightDualUnit`
-
-English:
-instance hasRightDualUnit
-  signature: : HasRightDual (𝟙_ C) where
-  body: 𝟙_ C
-
-中文:
-实例 hasRightDualUnit
-  签名: : 有RightDual (𝟙_ C) where
-  定义体: 𝟙_ C
+--- 原说明 ---
+https://github.com/leanprover/lean4/pull/4596
+The overlapping notation for `leftDual` and `leftAdjointMate` become more proble
+matic in
+after https://github.com/leanprover/lean4/pull/4596, and we sometimes have to di
+sambiguate with
+e.g. `(ᘁX : C)` where previously just `ᘁX` was enough.
 -/
 instance hasRightDualUnit : HasRightDual (𝟙_ C) where
   rightDual := 𝟙_ C
-
-/--
-Instance `hasLeftDualUnit` / 实例 `hasLeftDualUnit`
-
-English:
-instance hasLeftDualUnit
-  signature: : HasLeftDual (𝟙_ C) where
-  body: 𝟙_ C
-
-中文:
-实例 hasLeftDualUnit
-  签名: : 有LeftDual (𝟙_ C) where
-  定义体: 𝟙_ C
+/-
+**CategoryTheory.hasLeftDualUnit** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：hasLeftDualUnit : HasLeftDual (𝟙_ C) where leftDual
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasLeftDualUnit : HasLeftDual (𝟙_ C) where
   leftDual := 𝟙_ C
-
-/--
-Instance `hasRightDualLeftDual` / 实例 `hasRightDualLeftDual`
-
-English:
-instance hasRightDualLeftDual
-  signature: {X : C} [HasLeftDual X]
-  body: X
-
-中文:
-实例 hasRightDualLeftDual
-  签名: {X : C} [有LeftDual X]
-  定义体: X
+/-
+**CategoryTheory.hasRightDualLeftDual** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`
+。
+形式化陈述：hasRightDualLeftDual {X : C} [HasLeftDual X] : HasRightDual ᘁX where right
+Dual
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasRightDualLeftDual {X : C} [HasLeftDual X] : HasRightDual ᘁX where
   rightDual := X
-
-/--
-Instance `hasLeftDualRightDual` / 实例 `hasLeftDualRightDual`
-
-English:
-instance hasLeftDualRightDual
-  signature: {X : C} [HasRightDual X]
-  body: X
-
-中文:
-实例 hasLeftDualRightDual
-  签名: {X : C} [有RightDual X]
-  定义体: X
+/-
+**CategoryTheory.hasLeftDualRightDual** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`
+。
+形式化陈述：hasLeftDualRightDual {X : C} [HasRightDual X] : HasLeftDual Xᘁ where leftD
+ual
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasLeftDualRightDual {X : C} [HasRightDual X] : HasLeftDual Xᘁ where
   leftDual := X
@@ -687,308 +490,449 @@ instance hasLeftDualRightDual {X : C} [HasRightDual X] : HasLeftDual Xᘁ where
 /-- The tensor product of two objects with right duals has a right dual,
 given by the tensor product of the duals in the opposite order. -/
 @[implicit_reducible]
-/--
-Definition of `hasRightDualTensor` / `hasRightDualTensor` 的定义
+/-
+**CategoryTheory.hasRightDualTensor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：hasRightDualTensor {X Y : C} [HasRightDual X] [HasRightDual Y] : HasRightD
+ual (X otimes Y) where rightDual
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasRightDualTensor
-  signature: {X Y : C} [HasRightDual X] [HasRightDual Y]
-  body: Yᘁ otimes Xᘁ
-
-中文:
-定义 hasRightDualTensor
-  签名: {X Y : C} [有RightDual X] [有RightDual Y]
-  定义体: Yᘁ otimes Xᘁ
-
-Depends on / 依赖: otimes
+--- 原说明 ---
+The tensor product of two objects with right duals has a right dual,
+given by the tensor product of the duals in the opposite order.
 -/
 def hasRightDualTensor {X Y : C} [HasRightDual X] [HasRightDual Y] :
-    HasRightDual (X otimes Y) where
-  rightDual := Yᘁ otimes Xᘁ
+    HasRightDual (X ⊗ Y) where
+  rightDual := Yᘁ ⊗ Xᘁ
 
 /-- The tensor product of two objects with left duals has a left dual,
 given by the tensor product of the duals in the opposite order. -/
 @[implicit_reducible]
-/--
-Definition of `hasLeftDualTensor` / `hasLeftDualTensor` 的定义
+/-
+**CategoryTheory.hasLeftDualTensor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：hasLeftDualTensor {X Y : C} [HasLeftDual X] [HasLeftDual Y] : HasLeftDual 
+(X otimes Y) where leftDual
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasLeftDualTensor
-  signature: {X Y : C} [HasLeftDual X] [HasLeftDual Y]
-  body: ᘁY otimes ᘁX
-
-@[simp]
-
-中文:
-定义 hasLeftDualTensor
-  签名: {X Y : C} [有LeftDual X] [有LeftDual Y]
-  定义体: ᘁY otimes ᘁX
-
-@[simp]
-
-Depends on / 依赖: otimes
+--- 原说明 ---
+The tensor product of two objects with left duals has a left dual,
+given by the tensor product of the duals in the opposite order.
 -/
 def hasLeftDualTensor {X Y : C} [HasLeftDual X] [HasLeftDual Y] :
-    HasLeftDual (X otimes Y) where
-  leftDual := ᘁY otimes ᘁX
+    HasLeftDual (X ⊗ Y) where
+  leftDual := ᘁY ⊗ ᘁX
 
 @[simp]
-/--
-theorem `leftDual_rightDual` / 定理 `leftDual_rightDual`
-
-English:
-theorem leftDual_rightDual
-  given: {X : C} [HasRightDual X]
-  statement: ᘁXᘁ = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 leftDual_rightDual
-  条件: {X : C} [有RightDual X]
-  结论: ᘁXᘁ = X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.leftDual_rightDual** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：leftDual_rightDual {X : C} [HasRightDual X] : ᘁXᘁ = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem leftDual_rightDual {X : C} [HasRightDual X] : ᘁXᘁ = X :=
   rfl
 
 @[simp]
-/--
-theorem `rightDual_leftDual` / 定理 `rightDual_leftDual`
-
-English:
-theorem rightDual_leftDual
-  given: {X : C} [HasLeftDual X]
-  statement: (ᘁX)ᘁ = X
-  proof: rfl
-
-中文:
-定理 rightDual_leftDual
-  条件: {X : C} [有LeftDual X]
-  结论: (ᘁX)ᘁ = X
-  证明: rfl
+/-
+**CategoryTheory.rightDual_leftDual** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：rightDual_leftDual {X : C} [HasLeftDual X] : (ᘁX)ᘁ = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rightDual_leftDual {X : C} [HasLeftDual X] : (ᘁX)ᘁ = X :=
   rfl
 
-/--
-Definition of `rightAdjointMate` / `rightAdjointMate` 的定义
+/-- The right adjoint mate `fᘁ : Xᘁ ⟶ Yᘁ` of a morphism `f : X ⟶ Y`. -/
+/-
+**CategoryTheory.rightAdjointMate** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：rightAdjointMate {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y) :
+ Yᘁ ⟶ Xᘁ
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightAdjointMate
-  signature: {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y)
-  body: (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ _ ◁ f ▷ _ ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (fun_ _).hom
-
-中文:
-定义 rightAdjointMate
-  签名: {X Y : C} [有RightDual X] [有RightDual Y] (f : X ⟶ Y)
-  定义体: (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ _ ◁ f ▷ _ ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (fun_ _).hom
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+The right adjoint mate `fᘁ : Xᘁ ⟶ Yᘁ` of a morphism `f : X ⟶ Y`.
 -/
 def rightAdjointMate {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y) : Yᘁ ⟶ Xᘁ :=
-  (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ _ ◁ f ▷ _ ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (fun_ _).hom
+  (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ _ ◁ f ▷ _ ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (λ_ _).hom
 
-/--
-Definition of `leftAdjointMate` / `leftAdjointMate` 的定义
+/-- The left adjoint mate `ᘁf : ᘁY ⟶ ᘁX` of a morphism `f : X ⟶ Y`. -/
+/-
+**CategoryTheory.leftAdjointMate** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：leftAdjointMate {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y) : ᘁY
+ ⟶ ᘁX
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftAdjointMate
-  signature: {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y)
-  body: (fun_ _).inv ≫ η_ (ᘁX) X ▷ _ ≫ (_ ◁ f) ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
-
-@[inherit_doc] notation f "ᘁ" => rightAdjointMate f
-@[inherit_doc] notation "ᘁ" f => leftAdjointMate f
-
-@[simp]
-
-中文:
-定义 leftAdjointMate
-  签名: {X Y : C} [有LeftDual X] [有LeftDual Y] (f : X ⟶ Y)
-  定义体: (fun_ _).inv ≫ η_ (ᘁX) X ▷ _ ≫ (_ ◁ f) ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
-
-@[inherit_doc] notation f "ᘁ" => rightAdjointMate f
-@[inherit_doc] notation "ᘁ" f => leftAdjointMate f
-
-@[simp]
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+The left adjoint mate `ᘁf : ᘁY ⟶ ᘁX` of a morphism `f : X ⟶ Y`.
 -/
 def leftAdjointMate {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y) : ᘁY ⟶ ᘁX :=
-  (fun_ _).inv ≫ η_ (ᘁX) X ▷ _ ≫ (_ ◁ f) ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
+  (λ_ _).inv ≫ η_ (ᘁX) X ▷ _ ≫ (_ ◁ f) ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
 
 @[inherit_doc] notation f "ᘁ" => rightAdjointMate f
 @[inherit_doc] notation "ᘁ" f => leftAdjointMate f
 
 @[simp]
-/--
-theorem `rightAdjointMate_id` / 定理 `rightAdjointMate_id`
-
-English:
-theorem rightAdjointMate_id
-  given: {X : C} [HasRightDual X]
-  statement: (𝟙 X)ᘁ = 𝟙 (Xᘁ)
-  proof: by
-  simp [rightAdjointMate]
-
-@[simp]
-
-中文:
-定理 rightAdjointMate_id
-  条件: {X : C} [有RightDual X]
-  结论: (𝟙 X)ᘁ = 𝟙 (Xᘁ)
-  证明: by
-  simp [rightAdjointMate]
-
-@[simp]
-
-Depends on / 依赖: rightAdjointMate
+/-
+**CategoryTheory.rightAdjointMate_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：rightAdjointMate_id {X : C} [HasRightDual X] : (𝟙 X)ᘁ = 𝟙 (Xᘁ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_id`：∀ {C : Type u} {𝒞 : Cate
+goryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y : 
+C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.ExactPairing.coevaluation_evaluation_assoc`：∀ {C : Type u
+₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Monoidal
+Category C] (X Y : C)   [inst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightAdjointMate_id {X : C} [HasRightDual X] : (𝟙 X)ᘁ = 𝟙 (Xᘁ) := by
   simp [rightAdjointMate]
 
 @[simp]
-/--
-theorem `leftAdjointMate_id` / 定理 `leftAdjointMate_id`
-
-English:
-theorem leftAdjointMate_id
-  given: {X : C} [HasLeftDual X]
-  statement: (ᘁ(𝟙 X)) = 𝟙 (ᘁX)
-  proof: by
-  simp [leftAdjointMate]
-
-中文:
-定理 leftAdjointMate_id
-  条件: {X : C} [有LeftDual X]
-  结论: (ᘁ(𝟙 X)) = 𝟙 (ᘁX)
-  证明: by
-  simp [leftAdjointMate]
-
-Depends on / 依赖: leftAdjointMate
+/-
+**CategoryTheory.leftAdjointMate_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：leftAdjointMate_id {X : C} [HasLeftDual X] : (ᘁ(𝟙 X)) = 𝟙 (ᘁX)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_id`：∀ {C : Type u} {𝒞 : Cate
+goryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y : 
+C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.MonoidalCategory.id_whiskerRight`：∀ {C : Type u} {𝒞 : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] (X Y :
+ C),   CategoryTheory.MonoidalCategor…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.ExactPairing.evaluation_coevaluation_assoc`：∀ {C : Type u
+₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Monoidal
+Category C] (X Y : C)   [inst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leftAdjointMate_id {X : C} [HasLeftDual X] : (ᘁ(𝟙 X)) = 𝟙 (ᘁX) := by
   simp [leftAdjointMate]
-
-/--
-theorem `rightAdjointMate_comp` / 定理 `rightAdjointMate_comp`
-
-English:
-theorem rightAdjointMate_comp
-  statement: {X Y Z : C} [HasRightDual X] [HasRightDual Y] {f : X ⟶ Y}
-  proof: calc
-    _ = 𝟙 _ otimes≫ (Yᘁ : C) ◁ η_ X Xᘁ ≫ Yᘁ ◁ f ▷ Xᘁ otimes≫ (ε_ Y Yᘁ ▷ Xᘁ ≫ 𝟙_ C ◁ g) otimes≫ 𝟙 _ := by
-      dsimp only [rightAdjointMate]; monoidal
-    _ = _ := by
-      rw [← whisker_exchange]; rw [tensorHom_def]; monoidal
-
-中文:
-定理 rightAdjointMate_comp
-  结论: {X Y Z : C} [有RightDual X] [有RightDual Y] {f : X ⟶ Y}
-  证明: calc
-    _ = 𝟙 _ otimes≫ (Yᘁ : C) ◁ η_ X Xᘁ ≫ Yᘁ ◁ f ▷ Xᘁ otimes≫ (ε_ Y Yᘁ ▷ Xᘁ ≫ 𝟙_ C ◁ g) otimes≫ 𝟙 _ := by
-      dsimp only [rightAdjointMate]; monoidal
-    _ = _ := by
-      rw [← whisker_exchange]; rw [tensorHom_def]; monoidal
-
-Depends on / 依赖: monoidal, otimes, rightAdjointMate, tensorHom_def, whisker_exchange
+/-
+**CategoryTheory.rightAdjointMate_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：rightAdjointMate_comp {X Y Z : C} [HasRightDual X] [HasRightDual Y] {f : X
+ ⟶ Y} {g : Xᘁ ⟶ Z} : fᘁ ≫ g = (ρ_ (Yᘁ)).inv ≫ _ ◁ η_ X (Xᘁ) ≫ _ ◁ (f otimesₘ g) 
+≫ (α_ (Yᘁ) Y Z).inv ≫ ε_ Y (Yᘁ) ▷ _ ≫ (fun_ Z).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_id`：evalWhiskerLeft_id {f g : C}
+ {η : f ⟶ g} {η₁ : f ⟶ 𝟙_ C otimes g} {η₂ : 𝟙_ C otimes f ⟶ 𝟙_ C otimes g} (e_η₁
+ : η ≫ (fun_ _).inv = η₁) (e_η₂ …
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_rightUnitor`：naturality_rightUnitor {
+p f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (ρ_ f) ≪≫ η_f = normalizeIsoComp η_f (
+ρ_ pf)
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerLeft`：naturality_whiskerLeft {
+p f g h pf pfg : C} {η : g ≅ h} (η_f : p otimes f ≅ pf) (η_fg : pf otimes g ≅ pf
+g) (η_fh : (pf otimes h) ≅ pfg) (ih_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_leftUnitor`：naturality_leftUnitor {p 
+f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (fun_ f) ≪≫ η_f = normalizeIsoComp (ρ_ p
+) η_f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def`：∀ {C : Type u} {𝒞 : Categ
+oryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X₁ Y₁ X
+₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_comp`：evalWhiskerLeft_comp {f g 
+h i : C} {η : h ⟶ i} {η₁ : g otimes h ⟶ g otimes i} {η₂ : f otimes g otimes h ⟶ 
+f otimes g otimes i} {η₃ : f otime…
 -/
 theorem rightAdjointMate_comp {X Y Z : C} [HasRightDual X] [HasRightDual Y] {f : X ⟶ Y}
     {g : Xᘁ ⟶ Z} :
     fᘁ ≫ g =
       (ρ_ (Yᘁ)).inv ≫
-        _ ◁ η_ X (Xᘁ) ≫ _ ◁ (f otimesₘ g) ≫ (α_ (Yᘁ) Y Z).inv ≫ ε_ Y (Yᘁ) ▷ _ ≫ (fun_ Z).hom :=
+        _ ◁ η_ X (Xᘁ) ≫ _ ◁ (f ⊗ₘ g) ≫ (α_ (Yᘁ) Y Z).inv ≫ ε_ Y (Yᘁ) ▷ _ ≫ (λ_ Z).hom :=
   calc
-    _ = 𝟙 _ otimes≫ (Yᘁ : C) ◁ η_ X Xᘁ ≫ Yᘁ ◁ f ▷ Xᘁ otimes≫ (ε_ Y Yᘁ ▷ Xᘁ ≫ 𝟙_ C ◁ g) otimes≫ 𝟙 _ := by
+    _ = 𝟙 _ ⊗≫ (Yᘁ : C) ◁ η_ X Xᘁ ≫ Yᘁ ◁ f ▷ Xᘁ ⊗≫ (ε_ Y Yᘁ ▷ Xᘁ ≫ 𝟙_ C ◁ g) ⊗≫ 𝟙 _ := by
       dsimp only [rightAdjointMate]; monoidal
     _ = _ := by
-      rw [← whisker_exchange]; rw [tensorHom_def]; monoidal
-
-/--
-theorem `leftAdjointMate_comp` / 定理 `leftAdjointMate_comp`
-
-English:
-theorem leftAdjointMate_comp
-  statement: {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] {f : X ⟶ Y}
-  proof: calc
-    _ = 𝟙 _ otimes≫ η_ (ᘁX : C) X ▷ (ᘁY) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) otimes≫ ((ᘁX) ◁ ε_ (ᘁY) Y ≫ g ▷ 𝟙_ C) otimes≫ 𝟙 _ := by
-      dsimp only [leftAdjointMate]; monoidal
-    _ = _ := by
-      rw [whisker_exchange]; rw [tensorHom_def']; monoidal
-
-中文:
-定理 leftAdjointMate_comp
-  结论: {X Y Z : C} [有LeftDual X] [有LeftDual Y] {f : X ⟶ Y}
-  证明: calc
-    _ = 𝟙 _ otimes≫ η_ (ᘁX : C) X ▷ (ᘁY) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) otimes≫ ((ᘁX) ◁ ε_ (ᘁY) Y ≫ g ▷ 𝟙_ C) otimes≫ 𝟙 _ := by
-      dsimp only [leftAdjointMate]; monoidal
-    _ = _ := by
-      rw [whisker_exchange]; rw [tensorHom_def']; monoidal
-
-Depends on / 依赖: leftAdjointMate, monoidal, otimes, tensorHom_def, whisker_exchange
+      rw [← whisker_exchange, tensorHom_def]; monoidal
+/-
+**CategoryTheory.leftAdjointMate_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：leftAdjointMate_comp {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] {f : X ⟶ 
+Y} {g : (ᘁX) ⟶ Z} : (ᘁf) ≫ g = (fun_ _).inv ≫ η_ (ᘁX : C) X ▷ _ ≫ (g otimesₘ f) 
+▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
+参数：ᘁX。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_whisker`：evalWhiskerRight_
+cons_whisker {f g h i j k : C} {α : g ≅ f otimes h} {η : h ⟶ i} {ηs : f otimes i
+ ⟶ j} {η₁ : h otimes k ⟶ i otimes k} {η₂ : …
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_id`：evalWhiskerRight_id {f g : 
+C} {η : f ⟶ g} {η₁ : f ⟶ g otimes 𝟙_ C} {η₂ : f otimes 𝟙_ C ⟶ g otimes 𝟙_ C} (e_
+η₁ : η ≫ (ρ_ _).inv = η₁) (e_η₂ :…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_leftUnitor`：naturality_leftUnitor {p 
+f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (fun_ f) ≪≫ η_f = normalizeIsoComp (ρ_ p
+) η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerLeft`：naturality_whiskerLeft {
+p f g h pf pfg : C} {η : g ≅ h} (η_f : p otimes f ≅ pf) (η_fg : pf otimes g ≅ pf
+g) (η_fh : (pf otimes h) ≅ pfg) (ih_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_rightUnitor`：naturality_rightUnitor {
+p f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (ρ_ f) ≪≫ η_f = normalizeIsoComp η_f (
+ρ_ pf)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def'`：tensorHom_def' {X₁ Y₁ X₂
+ Y₂ : C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂) : f otimesₘ g = X₁ ◁ g ≫ f ▷ Y₂
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_comp`：evalWhiskerRight_comp {f 
+f' g h : C} {η : f ⟶ f'} {η₁ : f otimes g ⟶ f' otimes g} {η₂ : (f otimes g) otim
+es h ⟶ (f' otimes g) otimes h} {η₃ …
 -/
 theorem leftAdjointMate_comp {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] {f : X ⟶ Y}
     {g : (ᘁX) ⟶ Z} :
     (ᘁf) ≫ g =
-      (fun_ _).inv ≫
-        η_ (ᘁX : C) X ▷ _ ≫ (g otimesₘ f) ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom :=
+      (λ_ _).inv ≫
+        η_ (ᘁX : C) X ▷ _ ≫ (g ⊗ₘ f) ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom :=
   calc
-    _ = 𝟙 _ otimes≫ η_ (ᘁX : C) X ▷ (ᘁY) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) otimes≫ ((ᘁX) ◁ ε_ (ᘁY) Y ≫ g ▷ 𝟙_ C) otimes≫ 𝟙 _ := by
+    _ = 𝟙 _ ⊗≫ η_ (ᘁX : C) X ▷ (ᘁY) ⊗≫ (ᘁX) ◁ f ▷ (ᘁY) ⊗≫ ((ᘁX) ◁ ε_ (ᘁY) Y ≫ g ▷ 𝟙_ C) ⊗≫ 𝟙 _ := by
       dsimp only [leftAdjointMate]; monoidal
     _ = _ := by
-      rw [whisker_exchange]; rw [tensorHom_def']; monoidal
+      rw [whisker_exchange, tensorHom_def']; monoidal
 
 /-- The composition of right adjoint mates is the adjoint mate of the composition. -/
 @[reassoc]
-/--
-theorem `comp_rightAdjointMate` / 定理 `comp_rightAdjointMate`
+/-
+**CategoryTheory.comp_rightAdjointMate** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：comp_rightAdjointMate {X Y Z : C} [HasRightDual X] [HasRightDual Y] [HasRi
+ghtDual Z] {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g)ᘁ = gᘁ ≫ fᘁ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.rightAdjointMate_comp`：rightAdjointMate_comp {X Y Z : C} 
+[HasRightDual X] [HasRightDual Y] {f : X ⟶ Y} {g : Xᘁ ⟶ Z} : fᘁ ≫ g = (ρ_ (Yᘁ)).
+inv ≫ _ ◁ η_ X (Xᘁ) ≫ _ ◁ …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def'`：tensorHom_def' {X₁ Y₁ X₂
+ Y₂ : C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂) : f otimesₘ g = X₁ ◁ g ≫ f ▷ Y₂
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_id`：evalWhiskerRight_id {f g : 
+C} {η : f ⟶ g} {η₁ : f ⟶ g otimes 𝟙_ C} {η₂ : f otimes 𝟙_ C ⟶ g otimes 𝟙_ C} (e_
+η₁ : η ≫ (ρ_ _).inv = η₁) (e_η₂ :…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_comp`：evalWhiskerLeft_comp {f g 
+h i : C} {η : h ⟶ i} {η₁ : g otimes h ⟶ g otimes i} {η₂ : f otimes g otimes h ⟶ 
+f otimes g otimes i} {η₃ : f otime…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+（共 40 条，此处仅展示前 30 条）
 
-English:
-theorem comp_rightAdjointMate
-  statement: {X Y Z : C} [HasRightDual X] [HasRightDual Y] [HasRightDual Z]
-  proof: by
-  rw [rightAdjointMate_comp]
-  simp only [rightAdjointMate, comp_whiskerRight]
-  simp only [← Category.assoc]; congr 3; simp only [Category.assoc]
-  simp only [← MonoidalCategory.whiskerLeft_comp]; congr 2
-  symm
-  calc
-    _ = 𝟙 _ otimes≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y otimes Yᘁ) ◁ η_ X Xᘁ) otimes≫ Y ◁ Yᘁ ◁ f ▷ Xᘁ otimes≫
-        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
-      rw [tensorHom_def']; monoidal
-    _ = η_ X Xᘁ otimes≫ (η_ Y Yᘁ ▷ (X otimes Xᘁ) ≫ (Y otimes Yᘁ) ◁ f ▷ Xᘁ) otimes≫
-        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
-      rw [← whisker_exchange]; monoidal
-    _ = η_ X Xᘁ otimes≫ f ▷ Xᘁ otimes≫ (η_ Y Yᘁ ▷ Y otimes≫ Y ◁ ε_ Y Yᘁ) ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
-      rw [← whisker_exchange]; monoidal
-    _ = η_ X Xᘁ ≫ f ▷ Xᘁ ≫ g ▷ Xᘁ := by
-      rw [evaluation_coevaluation'']; monoidal
-
-中文:
-定理 comp_rightAdjointMate
-  结论: {X Y Z : C} [有RightDual X] [有RightDual Y] [有RightDual Z]
-  证明: by
-  rw [rightAdjointMate_comp]
-  simp only [rightAdjointMate, comp_whiskerRight]
-  simp only [← Category.assoc]; congr 3; simp only [Category.assoc]
-  simp only [← MonoidalCategory.whiskerLeft_comp]; congr 2
-  symm
-  calc
-    _ = 𝟙 _ otimes≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y otimes Yᘁ) ◁ η_ X Xᘁ) otimes≫ Y ◁ Yᘁ ◁ f ▷ Xᘁ otimes≫
-        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
-      rw [tensorHom_def']; monoidal
-    _ = η_ X Xᘁ otimes≫ (η_ Y Yᘁ ▷ (X otimes Xᘁ) ≫ (Y otimes Yᘁ) ◁ f ▷ Xᘁ) otimes≫
-        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
-      rw [← whisker_exchange]; monoidal
-    _ = η_ X Xᘁ otimes≫ f ▷ Xᘁ otimes≫ (η_ Y Yᘁ ▷ Y otimes≫ Y ◁ ε_ Y Yᘁ) ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
-      rw [← whisker_exchange]; monoidal
-    _ = η_ X Xᘁ ≫ f ▷ Xᘁ ≫ g ▷ Xᘁ := by
-      rw [evaluation_coevaluation'']; monoidal
-
-Depends on / 依赖: Category, Category.assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp, comp_whiskerRight, monoidal, otimes, rightAdjointMate, rightAdjointMate_comp, tensorHom_def, whiskerLeft_comp
+--- 原说明 ---
+The composition of right adjoint mates is the adjoint mate of the composition.
 -/
 theorem comp_rightAdjointMate {X Y Z : C} [HasRightDual X] [HasRightDual Y] [HasRightDual Z]
     {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g)ᘁ = gᘁ ≫ fᘁ := by
@@ -998,65 +942,104 @@ theorem comp_rightAdjointMate {X Y Z : C} [HasRightDual X] [HasRightDual Y] [Has
   simp only [← MonoidalCategory.whiskerLeft_comp]; congr 2
   symm
   calc
-    _ = 𝟙 _ otimes≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y otimes Yᘁ) ◁ η_ X Xᘁ) otimes≫ Y ◁ Yᘁ ◁ f ▷ Xᘁ otimes≫
-        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+    _ = 𝟙 _ ⊗≫ (η_ Y Yᘁ ▷ 𝟙_ C ≫ (Y ⊗ Yᘁ) ◁ η_ X Xᘁ) ⊗≫ Y ◁ Yᘁ ◁ f ▷ Xᘁ ⊗≫
+        Y ◁ ε_ Y Yᘁ ▷ Xᘁ ⊗≫ g ▷ Xᘁ ⊗≫ 𝟙 _ := by
       rw [tensorHom_def']; monoidal
-    _ = η_ X Xᘁ otimes≫ (η_ Y Yᘁ ▷ (X otimes Xᘁ) ≫ (Y otimes Yᘁ) ◁ f ▷ Xᘁ) otimes≫
-        Y ◁ ε_ Y Yᘁ ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+    _ = η_ X Xᘁ ⊗≫ (η_ Y Yᘁ ▷ (X ⊗ Xᘁ) ≫ (Y ⊗ Yᘁ) ◁ f ▷ Xᘁ) ⊗≫
+        Y ◁ ε_ Y Yᘁ ▷ Xᘁ ⊗≫ g ▷ Xᘁ ⊗≫ 𝟙 _ := by
       rw [← whisker_exchange]; monoidal
-    _ = η_ X Xᘁ otimes≫ f ▷ Xᘁ otimes≫ (η_ Y Yᘁ ▷ Y otimes≫ Y ◁ ε_ Y Yᘁ) ▷ Xᘁ otimes≫ g ▷ Xᘁ otimes≫ 𝟙 _ := by
+    _ = η_ X Xᘁ ⊗≫ f ▷ Xᘁ ⊗≫ (η_ Y Yᘁ ▷ Y ⊗≫ Y ◁ ε_ Y Yᘁ) ▷ Xᘁ ⊗≫ g ▷ Xᘁ ⊗≫ 𝟙 _ := by
       rw [← whisker_exchange]; monoidal
     _ = η_ X Xᘁ ≫ f ▷ Xᘁ ≫ g ▷ Xᘁ := by
       rw [evaluation_coevaluation'']; monoidal
 
 /-- The composition of left adjoint mates is the adjoint mate of the composition. -/
 @[reassoc]
-/--
-theorem `comp_leftAdjointMate` / 定理 `comp_leftAdjointMate`
+/-
+**CategoryTheory.comp_leftAdjointMate** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：comp_leftAdjointMate {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] [HasLeftD
+ual Z] {f : X ⟶ Y} {g : Y ⟶ Z} : (ᘁf ≫ g) = (ᘁg) ≫ ᘁf
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.leftAdjointMate_comp`：leftAdjointMate_comp {X Y Z : C} [H
+asLeftDual X] [HasLeftDual Y] {f : X ⟶ Y} {g : (ᘁX) ⟶ Z} : (ᘁf) ≫ g = (fun_ _).i
+nv ≫ η_ (ᘁX : C) X ▷ _ ≫ …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def`：∀ {C : Type u} {𝒞 : Categ
+oryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X₁ Y₁ X
+₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_whisker`：evalWhiskerRight_
+cons_whisker {f g h i j k : C} {α : g ≅ f otimes h} {η : h ⟶ i} {ηs : f otimes i
+ ⟶ j} {η₁ : h otimes k ⟶ i otimes k} {η₂ : …
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_id`：evalWhiskerLeft_id {f g : C}
+ {η : f ⟶ g} {η₁ : f ⟶ 𝟙_ C otimes g} {η₂ : 𝟙_ C otimes f ⟶ 𝟙_ C otimes g} (e_η₁
+ : η ≫ (fun_ _).inv = η₁) (e_η₂ …
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_comp`：evalWhiskerRight_comp {f 
+f' g h : C} {η : f ⟶ f'} {η₁ : f otimes g ⟶ f' otimes g} {η₂ : (f otimes g) otim
+es h ⟶ (f' otimes g) otimes h} {η₃ …
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+（共 41 条，此处仅展示前 30 条）
 
-English:
-theorem comp_leftAdjointMate
-  statement: {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] [HasLeftDual Z] {f : X ⟶ Y}
-  proof: by
-  rw [leftAdjointMate_comp]
-  simp only [leftAdjointMate, MonoidalCategory.whiskerLeft_comp]
-  simp only [← Category.assoc]; congr 3; simp only [Category.assoc]
-  simp only [← comp_whiskerRight]; congr 2
-  symm
-  calc
-    _ = 𝟙 _ otimes≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) otimes Y)) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) ▷ Y otimes≫
-        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
-      rw [tensorHom_def]; monoidal
-    _ = η_ (ᘁX) X otimes≫ (((ᘁX) otimes X) ◁ η_ (ᘁY) Y ≫ ((ᘁX) ◁ f) ▷ ((ᘁY) otimes Y)) otimes≫
-        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
-      rw [whisker_exchange]; monoidal
-    _ = η_ (ᘁX) X otimes≫ ((ᘁX) ◁ f) otimes≫ (ᘁX) ◁ (Y ◁ η_ (ᘁY) Y otimes≫ ε_ (ᘁY) Y ▷ Y) otimes≫ (ᘁX) ◁ g := by
-      rw [whisker_exchange]; monoidal
-    _ = η_ (ᘁX) X ≫ (ᘁX) ◁ f ≫ (ᘁX) ◁ g := by
-      rw [coevaluation_evaluation'']; monoidal
-
-中文:
-定理 comp_leftAdjointMate
-  结论: {X Y Z : C} [有LeftDual X] [有LeftDual Y] [有LeftDual Z] {f : X ⟶ Y}
-  证明: by
-  rw [leftAdjointMate_comp]
-  simp only [leftAdjointMate, MonoidalCategory.whiskerLeft_comp]
-  simp only [← Category.assoc]; congr 3; simp only [Category.assoc]
-  simp only [← comp_whiskerRight]; congr 2
-  symm
-  calc
-    _ = 𝟙 _ otimes≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) otimes Y)) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) ▷ Y otimes≫
-        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
-      rw [tensorHom_def]; monoidal
-    _ = η_ (ᘁX) X otimes≫ (((ᘁX) otimes X) ◁ η_ (ᘁY) Y ≫ ((ᘁX) ◁ f) ▷ ((ᘁY) otimes Y)) otimes≫
-        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
-      rw [whisker_exchange]; monoidal
-    _ = η_ (ᘁX) X otimes≫ ((ᘁX) ◁ f) otimes≫ (ᘁX) ◁ (Y ◁ η_ (ᘁY) Y otimes≫ ε_ (ᘁY) Y ▷ Y) otimes≫ (ᘁX) ◁ g := by
-      rw [whisker_exchange]; monoidal
-    _ = η_ (ᘁX) X ≫ (ᘁX) ◁ f ≫ (ᘁX) ◁ g := by
-      rw [coevaluation_evaluation'']; monoidal
-
-Depends on / 依赖: Category, Category.assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp, comp_whiskerRight, leftAdjointMate, leftAdjointMate_comp, monoidal, otimes, tensorHom_def, whiskerLeft_comp
+--- 原说明 ---
+The composition of left adjoint mates is the adjoint mate of the composition.
 -/
 theorem comp_leftAdjointMate {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] [HasLeftDual Z] {f : X ⟶ Y}
     {g : Y ⟶ Z} : (ᘁf ≫ g) = (ᘁg) ≫ ᘁf := by
@@ -1066,267 +1049,239 @@ theorem comp_leftAdjointMate {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] [HasLef
   simp only [← comp_whiskerRight]; congr 2
   symm
   calc
-    _ = 𝟙 _ otimes≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) otimes Y)) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) ▷ Y otimes≫
-        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
+    _ = 𝟙 _ ⊗≫ ((𝟙_ C) ◁ η_ (ᘁY) Y ≫ η_ (ᘁX) X ▷ ((ᘁY) ⊗ Y)) ⊗≫ (ᘁX) ◁ f ▷ (ᘁY) ▷ Y ⊗≫
+        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y ⊗≫ (ᘁX) ◁ g := by
       rw [tensorHom_def]; monoidal
-    _ = η_ (ᘁX) X otimes≫ (((ᘁX) otimes X) ◁ η_ (ᘁY) Y ≫ ((ᘁX) ◁ f) ▷ ((ᘁY) otimes Y)) otimes≫
-        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y otimes≫ (ᘁX) ◁ g := by
+    _ = η_ (ᘁX) X ⊗≫ (((ᘁX) ⊗ X) ◁ η_ (ᘁY) Y ≫ ((ᘁX) ◁ f) ▷ ((ᘁY) ⊗ Y)) ⊗≫
+        (ᘁX) ◁ ε_ (ᘁY) Y ▷ Y ⊗≫ (ᘁX) ◁ g := by
       rw [whisker_exchange]; monoidal
-    _ = η_ (ᘁX) X otimes≫ ((ᘁX) ◁ f) otimes≫ (ᘁX) ◁ (Y ◁ η_ (ᘁY) Y otimes≫ ε_ (ᘁY) Y ▷ Y) otimes≫ (ᘁX) ◁ g := by
+    _ = η_ (ᘁX) X ⊗≫ ((ᘁX) ◁ f) ⊗≫ (ᘁX) ◁ (Y ◁ η_ (ᘁY) Y ⊗≫ ε_ (ᘁY) Y ▷ Y) ⊗≫ (ᘁX) ◁ g := by
       rw [whisker_exchange]; monoidal
     _ = η_ (ᘁX) X ≫ (ᘁX) ◁ f ≫ (ᘁX) ◁ g := by
       rw [coevaluation_evaluation'']; monoidal
 
-/--
-Definition of `tensorLeftHomEquiv` / `tensorLeftHomEquiv` 的定义
+/-- Given an exact pairing on `Y Y'`,
+we get a bijection on hom-sets `(Y' ⊗ X ⟶ Z) ≃ (X ⟶ Y ⊗ Z)`
+by "pulling the string on the left" up or down.
 
-English:
-definition tensorLeftHomEquiv
-  signature: (X Y Y' Z : C) [ExactPairing Y Y']
-  body: (fun_ _).inv ≫ η_ _ _ ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ f
-  invFun f := Y' ◁ f ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (fun_ _).hom
-  left_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ Y' ◁ η_ Y Y' ▷ X otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
-        monoidal
-      _ = 𝟙 _ otimes≫ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') ▷ X otimes≫ f := by
-        rw [whisker_exchange]; monoidal
-      _ = f := by
-        rw [coevaluation_evaluation'']; monoidal
-  right_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ (η_ Y Y' ▷ X ≫ (Y otimes Y') ◁ f) otimes≫ Y ◁ ε_ Y Y' ▷ Z otimes≫ 𝟙 _ := by
-        monoidal
-      _ = f otimes≫ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') ▷ Z otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; monoidal
-      _ = f := by
-        rw [evaluation_coevaluation'']; monoidal
+This gives the adjunction `tensorLeftAdjunction Y Y' : tensorLeft Y' ⊣ tensorLeft Y`.
 
-中文:
-定义 tensorLeftHomEquiv
-  签名: (X Y Y' Z : C) [ExactPairing Y Y']
-  定义体: (fun_ _).inv ≫ η_ _ _ ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ f
-  invFun f := Y' ◁ f ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (fun_ _).hom
-  left_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ Y' ◁ η_ Y Y' ▷ X otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
-        monoidal
-      _ = 𝟙 _ otimes≫ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') ▷ X otimes≫ f := by
-        rw [whisker_exchange]; monoidal
-      _ = f := by
-        rw [coevaluation_evaluation'']; monoidal
-  right_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ (η_ Y Y' ▷ X ≫ (Y otimes Y') ◁ f) otimes≫ Y ◁ ε_ Y Y' ▷ Z otimes≫ 𝟙 _ := by
-        monoidal
-      _ = f otimes≫ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') ▷ Z otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; monoidal
-      _ = f := by
-        rw [evaluation_coevaluation'']; monoidal
-
-Depends on / 依赖: fun_
+This adjunction is often referred to as "Frobenius reciprocity" in the
+fusion categories / planar algebras / subfactors literature.
 -/
-def tensorLeftHomEquiv (X Y Y' Z : C) [ExactPairing Y Y'] : (Y' otimes X ⟶ Z) ≃ (X ⟶ Y otimes Z) where
-  toFun f := (fun_ _).inv ≫ η_ _ _ ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ f
-  invFun f := Y' ◁ f ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (fun_ _).hom
-  left_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ Y' ◁ η_ Y Y' ▷ X otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
-        monoidal
-      _ = 𝟙 _ otimes≫ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') ▷ X otimes≫ f := by
-        rw [whisker_exchange]; monoidal
-      _ = f := by
-        rw [coevaluation_evaluation'']; monoidal
-  right_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ (η_ Y Y' ▷ X ≫ (Y otimes Y') ◁ f) otimes≫ Y ◁ ε_ Y Y' ▷ Z otimes≫ 𝟙 _ := by
-        monoidal
-      _ = f otimes≫ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') ▷ Z otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; monoidal
-      _ = f := by
-        rw [evaluation_coevaluation'']; monoidal
+/-
+**CategoryTheory.tensorLeftHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorLeftHomEquiv (X Y Y' Z : C) [ExactPairing Y Y'] : (Y' otimes X ⟶ Z) 
+≃ (X ⟶ Y otimes Z) where toFun f
+参数：X Y Y' Z : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `tensorRightHomEquiv` / `tensorRightHomEquiv` 的定义
+--- 原说明 ---
+Given an exact pairing on `Y Y'`,
+we get a bijection on hom-sets `(Y' ⊗ X ⟶ Z) ≃ (X ⟶ Y ⊗ Z)`
+by "pulling the string on the left" up or down.
 
-English:
-definition tensorRightHomEquiv
-  signature: (X Y Y' Z : C) [ExactPairing Y Y']
-  body: (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ f ▷ _
-  invFun f := f ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
-  left_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ X ◁ η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
-        monoidal
-      _ = 𝟙 _ otimes≫ X ◁ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
-        rw [← whisker_exchange]; monoidal
-      _ = f := by
-        rw [evaluation_coevaluation'']; monoidal
-  right_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ (X ◁ η_ Y Y' ≫ f ▷ (Y otimes Y')) otimes≫ Z ◁ ε_ Y Y' ▷ Y' otimes≫ 𝟙 _ := by
-        monoidal
-      _ = f otimes≫ Z ◁ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; monoidal
-      _ = f := by
-        rw [coevaluation_evaluation'']; monoidal
+This gives the adjunction `tensorLeftAdjunction Y Y' : tensorLeft Y' ⊣ tensorLef
+t Y`.
 
-中文:
-定义 tensorRightHomEquiv
-  签名: (X Y Y' Z : C) [ExactPairing Y Y']
-  定义体: (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ f ▷ _
-  invFun f := f ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
-  left_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ X ◁ η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
-        monoidal
-      _ = 𝟙 _ otimes≫ X ◁ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
-        rw [← whisker_exchange]; monoidal
-      _ = f := by
-        rw [evaluation_coevaluation'']; monoidal
-  right_inv f := by
-    calc
-      _ = 𝟙 _ otimes≫ (X ◁ η_ Y Y' ≫ f ▷ (Y otimes Y')) otimes≫ Z ◁ ε_ Y Y' ▷ Y' otimes≫ 𝟙 _ := by
-        monoidal
-      _ = f otimes≫ Z ◁ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; monoidal
-      _ = f := by
-        rw [coevaluation_evaluation'']; monoidal
+This adjunction is often referred to as "Frobenius reciprocity" in the
+fusion categories / planar algebras / subfactors literature.
 -/
-def tensorRightHomEquiv (X Y Y' Z : C) [ExactPairing Y Y'] : (X otimes Y ⟶ Z) ≃ (X ⟶ Z otimes Y') where
+def tensorLeftHomEquiv (X Y Y' Z : C) [ExactPairing Y Y'] : (Y' ⊗ X ⟶ Z) ≃ (X ⟶ Y ⊗ Z) where
+  toFun f := (λ_ _).inv ≫ η_ _ _ ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ f
+  invFun f := Y' ◁ f ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (λ_ _).hom
+  left_inv f := by
+    calc
+      _ = 𝟙 _ ⊗≫ Y' ◁ η_ Y Y' ▷ X ⊗≫ ((Y' ⊗ Y) ◁ f ≫ ε_ Y Y' ▷ Z) ⊗≫ 𝟙 _ := by
+        monoidal
+      _ = 𝟙 _ ⊗≫ (Y' ◁ η_ Y Y' ⊗≫ ε_ Y Y' ▷ Y') ▷ X ⊗≫ f := by
+        rw [whisker_exchange]; monoidal
+      _ = f := by
+        rw [coevaluation_evaluation'']; monoidal
+  right_inv f := by
+    calc
+      _ = 𝟙 _ ⊗≫ (η_ Y Y' ▷ X ≫ (Y ⊗ Y') ◁ f) ⊗≫ Y ◁ ε_ Y Y' ▷ Z ⊗≫ 𝟙 _ := by
+        monoidal
+      _ = f ⊗≫ (η_ Y Y' ▷ Y ⊗≫ Y ◁ ε_ Y Y') ▷ Z ⊗≫ 𝟙 _ := by
+        rw [← whisker_exchange]; monoidal
+      _ = f := by
+        rw [evaluation_coevaluation'']; monoidal
+
+/-- Given an exact pairing on `Y Y'`,
+we get a bijection on hom-sets `(X ⊗ Y ⟶ Z) ≃ (X ⟶ Z ⊗ Y')`
+by "pulling the string on the right" up or down.
+-/
+/-
+**CategoryTheory.tensorRightHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorRightHomEquiv (X Y Y' Z : C) [ExactPairing Y Y'] : (X otimes Y ⟶ Z) 
+≃ (X ⟶ Z otimes Y') where toFun f
+参数：X Y Y' Z : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given an exact pairing on `Y Y'`,
+we get a bijection on hom-sets `(X ⊗ Y ⟶ Z) ≃ (X ⟶ Z ⊗ Y')`
+by "pulling the string on the right" up or down.
+-/
+def tensorRightHomEquiv (X Y Y' Z : C) [ExactPairing Y Y'] : (X ⊗ Y ⟶ Z) ≃ (X ⟶ Z ⊗ Y') where
   toFun f := (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ (α_ _ _ _).inv ≫ f ▷ _
   invFun f := f ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
   left_inv f := by
     calc
-      _ = 𝟙 _ otimes≫ X ◁ η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ X ◁ η_ Y Y' ▷ Y ⊗≫ (f ▷ (Y' ⊗ Y) ≫ Z ◁ ε_ Y Y') ⊗≫ 𝟙 _ := by
         monoidal
-      _ = 𝟙 _ otimes≫ X ◁ (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
+      _ = 𝟙 _ ⊗≫ X ◁ (η_ Y Y' ▷ Y ⊗≫ Y ◁ ε_ Y Y') ⊗≫ f := by
         rw [← whisker_exchange]; monoidal
       _ = f := by
         rw [evaluation_coevaluation'']; monoidal
   right_inv f := by
     calc
-      _ = 𝟙 _ otimes≫ (X ◁ η_ Y Y' ≫ f ▷ (Y otimes Y')) otimes≫ Z ◁ ε_ Y Y' ▷ Y' otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ (X ◁ η_ Y Y' ≫ f ▷ (Y ⊗ Y')) ⊗≫ Z ◁ ε_ Y Y' ▷ Y' ⊗≫ 𝟙 _ := by
         monoidal
-      _ = f otimes≫ Z ◁ (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ 𝟙 _ := by
+      _ = f ⊗≫ Z ◁ (Y' ◁ η_ Y Y' ⊗≫ ε_ Y Y' ▷ Y') ⊗≫ 𝟙 _ := by
         rw [whisker_exchange]; monoidal
       _ = f := by
         rw [coevaluation_evaluation'']; monoidal
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `tensorLeftHomEquiv_naturality` / 定理 `tensorLeftHomEquiv_naturality`
-
-English:
-theorem tensorLeftHomEquiv_naturality
-  statement: {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : Y' otimes X ⟶ Z)
-  proof: by
-  simp [tensorLeftHomEquiv]
-
-中文:
-定理 tensorLeftHomEquiv_naturality
-  结论: {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : Y' otimes X ⟶ Z)
-  证明: by
-  simp [tensorLeftHomEquiv]
-
-Depends on / 依赖: tensorLeftHomEquiv
+/-
+**CategoryTheory.tensorLeftHomEquiv_naturality** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：tensorLeftHomEquiv_naturality {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : Y
+' otimes X ⟶ Z) (g : Z ⟶ Z') : (tensorLeftHomEquiv X Y Y' Z') (f ≫ g) = (tensorL
+eftHomEquiv X Y Y' Z) f ≫ Y ◁ g
+参数：f : Y' otimes X ⟶ Z；g : Z ⟶ Z'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem tensorLeftHomEquiv_naturality {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : Y' otimes X ⟶ Z)
+theorem tensorLeftHomEquiv_naturality {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : Y' ⊗ X ⟶ Z)
     (g : Z ⟶ Z') :
     (tensorLeftHomEquiv X Y Y' Z') (f ≫ g) = (tensorLeftHomEquiv X Y Y' Z) f ≫ Y ◁ g := by
   simp [tensorLeftHomEquiv]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `tensorLeftHomEquiv_symm_naturality` / 定理 `tensorLeftHomEquiv_symm_naturality`
-
-English:
-theorem tensorLeftHomEquiv_symm_naturality
-  statement: {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X')
-  proof: by
-  simp [tensorLeftHomEquiv]
-
-中文:
-定理 tensorLeftHomEquiv_symm_naturality
-  结论: {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X')
-  证明: by
-  simp [tensorLeftHomEquiv]
-
-Depends on / 依赖: tensorLeftHomEquiv
+/-
+**CategoryTheory.tensorLeftHomEquiv_symm_naturality** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory`。
+形式化陈述：tensorLeftHomEquiv_symm_naturality {X X' Y Y' Z : C} [ExactPairing Y Y'] (
+f : X ⟶ X') (g : X' ⟶ Y otimes Z) : (tensorLeftHomEquiv X Y Y' Z).symm (f ≫ g) =
+ _ ◁ f ≫ (tensorLeftHomEquiv X' Y Y' Z).symm g
+参数：f : X ⟶ X'；g : X' ⟶ Y otimes Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tensorLeftHomEquiv_symm_naturality {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X')
-    (g : X' ⟶ Y otimes Z) :
+    (g : X' ⟶ Y ⊗ Z) :
     (tensorLeftHomEquiv X Y Y' Z).symm (f ≫ g) =
       _ ◁ f ≫ (tensorLeftHomEquiv X' Y Y' Z).symm g := by
   simp [tensorLeftHomEquiv]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `tensorRightHomEquiv_naturality` / 定理 `tensorRightHomEquiv_naturality`
-
-English:
-theorem tensorRightHomEquiv_naturality
-  statement: {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X otimes Y ⟶ Z)
-  proof: by
-  simp [tensorRightHomEquiv]
-
-中文:
-定理 tensorRightHomEquiv_naturality
-  结论: {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X otimes Y ⟶ Z)
-  证明: by
-  simp [tensorRightHomEquiv]
-
-Depends on / 依赖: tensorRightHomEquiv
+/-
+**CategoryTheory.tensorRightHomEquiv_naturality** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：tensorRightHomEquiv_naturality {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : 
+X otimes Y ⟶ Z) (g : Z ⟶ Z') : (tensorRightHomEquiv X Y Y' Z') (f ≫ g) = (tensor
+RightHomEquiv X Y Y' Z) f ≫ g ▷ Y'
+参数：f : X otimes Y ⟶ Z；g : Z ⟶ Z'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem tensorRightHomEquiv_naturality {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X otimes Y ⟶ Z)
+theorem tensorRightHomEquiv_naturality {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⊗ Y ⟶ Z)
     (g : Z ⟶ Z') :
     (tensorRightHomEquiv X Y Y' Z') (f ≫ g) = (tensorRightHomEquiv X Y Y' Z) f ≫ g ▷ Y' := by
   simp [tensorRightHomEquiv]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `tensorRightHomEquiv_symm_naturality` / 定理 `tensorRightHomEquiv_symm_naturality`
-
-English:
-theorem tensorRightHomEquiv_symm_naturality
-  statement: {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X')
-  proof: by
-  simp [tensorRightHomEquiv]
-
-中文:
-定理 tensorRightHomEquiv_symm_naturality
-  结论: {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X')
-  证明: by
-  simp [tensorRightHomEquiv]
-
-Depends on / 依赖: tensorRightHomEquiv
+/-
+**CategoryTheory.tensorRightHomEquiv_symm_naturality** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory`。
+形式化陈述：tensorRightHomEquiv_symm_naturality {X X' Y Y' Z : C} [ExactPairing Y Y'] 
+(f : X ⟶ X') (g : X' ⟶ Z otimes Y') : (tensorRightHomEquiv X Y Y' Z).symm (f ≫ g
+) = f ▷ Y ≫ (tensorRightHomEquiv X' Y Y' Z).symm g
+参数：f : X ⟶ X'；g : X' ⟶ Z otimes Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tensorRightHomEquiv_symm_naturality {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X')
-    (g : X' ⟶ Z otimes Y') :
+    (g : X' ⟶ Z ⊗ Y') :
     (tensorRightHomEquiv X Y Y' Z).symm (f ≫ g) =
       f ▷ Y ≫ (tensorRightHomEquiv X' Y Y' Z).symm g := by
   simp [tensorRightHomEquiv]
 
-/--
-Definition of `tensorLeftAdjunction` / `tensorLeftAdjunction` 的定义
+/-- If `Y Y'` have an exact pairing,
+then the functor `tensorLeft Y'` is left adjoint to `tensorLeft Y`.
+-/
+/-
+**CategoryTheory.tensorLeftAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：tensorLeftAdjunction (Y Y' : C) [ExactPairing Y Y'] : tensorLeft Y' ⊣ tens
+orLeft Y
+参数：Y Y' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.tensorLeftHomEquiv_symm_naturality`：tensorLeftHomEquiv_sy
+mm_naturality {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X') (g : X' ⟶ Y oti
+mes Z) : (tensorLeftHomEquiv X Y Y' Z).…
+· 使用定理 `CategoryTheory.tensorLeftHomEquiv_naturality`：tensorLeftHomEquiv_natural
+ity {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : Y' otimes X ⟶ Z) (g : Z ⟶ Z') : (
+tensorLeftHomEquiv X Y Y' Z') (f ≫…
 
-English:
-definition tensorLeftAdjunction
-  signature: (Y Y' : C) [ExactPairing Y Y']
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Z => tensorLeftHomEquiv X Y Y' Z
-      homEquiv_naturality_left_symm := fun f g => tensorLeftHomEquiv_symm_naturality f g
-      homEquiv_naturality_right := fun f g => tensorLeftHomEquiv_naturality f g }
-
-中文:
-定义 tensorLeftAdjunction
-  签名: (Y Y' : C) [ExactPairing Y Y']
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Z => tensorLeftHomEquiv X Y Y' Z
-      homEquiv_naturality_left_symm := fun f g => tensorLeftHomEquiv_symm_naturality f g
-      homEquiv_naturality_right := fun f g => tensorLeftHomEquiv_naturality f g }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, mkOfHomEquiv, tensorLeftHomEquiv, tensorLeftHomEquiv_naturality, tensorLeftHomEquiv_symm_naturality
+--- 原说明 ---
+If `Y Y'` have an exact pairing,
+then the functor `tensorLeft Y'` is left adjoint to `tensorLeft Y`.
 -/
 def tensorLeftAdjunction (Y Y' : C) [ExactPairing Y Y'] : tensorLeft Y' ⊣ tensorLeft Y :=
   Adjunction.mkOfHomEquiv
@@ -1334,26 +1289,27 @@ def tensorLeftAdjunction (Y Y' : C) [ExactPairing Y Y'] : tensorLeft Y' ⊣ tens
       homEquiv_naturality_left_symm := fun f g => tensorLeftHomEquiv_symm_naturality f g
       homEquiv_naturality_right := fun f g => tensorLeftHomEquiv_naturality f g }
 
-/--
-Definition of `tensorRightAdjunction` / `tensorRightAdjunction` 的定义
+/-- If `Y Y'` have an exact pairing,
+then the functor `tensor_right Y` is left adjoint to `tensor_right Y'`.
+-/
+/-
+**CategoryTheory.tensorRightAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：tensorRightAdjunction (Y Y' : C) [ExactPairing Y Y'] : tensorRight Y ⊣ ten
+sorRight Y'
+参数：Y Y' : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.tensorRightHomEquiv_symm_naturality`：tensorRightHomEquiv_
+symm_naturality {X X' Y Y' Z : C} [ExactPairing Y Y'] (f : X ⟶ X') (g : X' ⟶ Z o
+times Y') : (tensorRightHomEquiv X Y Y' …
+· 使用定理 `CategoryTheory.tensorRightHomEquiv_naturality`：tensorRightHomEquiv_natur
+ality {X Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X otimes Y ⟶ Z) (g : Z ⟶ Z') : 
+(tensorRightHomEquiv X Y Y' Z') (f …
 
-English:
-definition tensorRightAdjunction
-  signature: (Y Y' : C) [ExactPairing Y Y']
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Z => tensorRightHomEquiv X Y Y' Z
-      homEquiv_naturality_left_symm := fun f g => tensorRightHomEquiv_symm_naturality f g
-      homEquiv_naturality_right := fun f g => tensorRightHomEquiv_naturality f g }
-
-中文:
-定义 tensorRightAdjunction
-  签名: (Y Y' : C) [ExactPairing Y Y']
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun X Z => tensorRightHomEquiv X Y Y' Z
-      homEquiv_naturality_left_symm := fun f g => tensorRightHomEquiv_symm_naturality f g
-      homEquiv_naturality_right := fun f g => tensorRightHomEquiv_naturality f g }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, mkOfHomEquiv, tensorRightHomEquiv, tensorRightHomEquiv_naturality, tensorRightHomEquiv_symm_naturality
+--- 原说明 ---
+If `Y Y'` have an exact pairing,
+then the functor `tensor_right Y` is left adjoint to `tensor_right Y'`.
 -/
 def tensorRightAdjunction (Y Y' : C) [ExactPairing Y Y'] : tensorRight Y ⊣ tensorRight Y' :=
   Adjunction.mkOfHomEquiv
@@ -1373,133 +1329,294 @@ convenient to define the internal hom as `Y →ₗ[k] X` rather than `ᘁY ⊗ X
 naturally isomorphic).
 -/
 @[instance_reducible]
-/--
-Definition of `closedOfHasLeftDual` / `closedOfHasLeftDual` 的定义
+/-
+**CategoryTheory.closedOfHasLeftDual** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：closedOfHasLeftDual (Y : C) [HasLeftDual Y] : Closed Y where rightAdj
+参数：Y : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition closedOfHasLeftDual
-  signature: (Y : C) [HasLeftDual Y]
-  body: tensorLeft (ᘁY)
-  adj := tensorLeftAdjunction (ᘁY) Y
-
-中文:
-定义 closedOfHasLeftDual
-  签名: (Y : C) [有LeftDual Y]
-  定义体: tensorLeft (ᘁY)
-  adj := tensorLeftAdjunction (ᘁY) Y
-
-Depends on / 依赖: tensorLeft
+--- 原说明 ---
+If `Y` has a left dual `ᘁY`, then it is a closed object, with the internal hom f
+unctor `Y ⟶[C] -`
+given by left tensoring by `ᘁY`.
+This has to be a definition rather than an instance to avoid diamonds, for examp
+le between
+`category_theory.monoidal_closed.functor_closed` and
+`CategoryTheory.Monoidal.functorHasLeftDual`. Moreover, in concrete applications
+ there is often
+a more useful definition of the internal hom object than `ᘁY ⊗ X`, in which case
+ the closed
+structure shouldn't come from `HasLeftDual` (e.g. in the category `FinVect k`, i
+t is more
+convenient to define the internal hom as `Y →ₗ[k] X` rather than `ᘁY ⊗ X` even t
+hough these are
+naturally isomorphic).
 -/
 def closedOfHasLeftDual (Y : C) [HasLeftDual Y] : Closed Y where
   rightAdj := tensorLeft (ᘁY)
   adj := tensorLeftAdjunction (ᘁY) Y
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `tensorLeftHomEquiv_tensor` / 定理 `tensorLeftHomEquiv_tensor`
+/-- `tensorLeftHomEquiv` commutes with tensoring on the right -/
+/-
+**CategoryTheory.tensorLeftHomEquiv_tensor** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：tensorLeftHomEquiv_tensor {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X 
+⟶ Y otimes Z) (g : X' ⟶ Z') : (tensorLeftHomEquiv (X otimes X') Y Y' (Z otimes Z
+')).symm ((f otimesₘ g) ≫ (α_ _ _ _).hom) = (α_ _ _ _).inv ≫ ((tensorLeftHomEqui
+v X Y Y' Z).symm f otimesₘ g)
+参数：f : X ⟶ Y otimes Z；g : X' ⟶ Z'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_tensor`：whiskerRight_tensor
+ {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) = (α_ X Y Z).inv ≫ f ▷ Y ▷
+ Z ≫ (α_ X' Y Z).hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def'`：tensorHom_def' {X₁ Y₁ X₂
+ Y₂ : C} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂) : f otimesₘ g = X₁ ◁ g ≫ f ▷ Y₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.pentagon_hom_inv_inv_inv_inv_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mo
+noidalCategory C] {W X Y Z Z_1 : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc`：whisker_assoc (X : C) {Y 
+Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z = (α_ X Y Z).hom ≫ X ◁ f ▷ Z ≫ (α_ X 
+Y' Z).inv
+· 使用定理 `CategoryTheory.MonoidalCategory.leftUnitor_whiskerRight`：leftUnitor_whis
+kerRight (X Y : C) : (fun_ X).hom ▷ Y = (α_ (𝟙_ C) X Y).hom ≫ (fun_ (X otimes Y)
+).hom
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem tensorLeftHomEquiv_tensor
-  statement: {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Y otimes Z)
-  proof: by
-  simp [tensorLeftHomEquiv, tensorHom_def']
-
-中文:
-定理 tensorLeftHomEquiv_tensor
-  结论: {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Y otimes Z)
-  证明: by
-  simp [tensorLeftHomEquiv, tensorHom_def']
-
-Depends on / 依赖: tensorHom_def, tensorLeftHomEquiv
+--- 原说明 ---
+`tensorLeftHomEquiv` commutes with tensoring on the right
 -/
-theorem tensorLeftHomEquiv_tensor {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Y otimes Z)
+theorem tensorLeftHomEquiv_tensor {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Y ⊗ Z)
     (g : X' ⟶ Z') :
-    (tensorLeftHomEquiv (X otimes X') Y Y' (Z otimes Z')).symm ((f otimesₘ g) ≫ (α_ _ _ _).hom) =
-      (α_ _ _ _).inv ≫ ((tensorLeftHomEquiv X Y Y' Z).symm f otimesₘ g) := by
+    (tensorLeftHomEquiv (X ⊗ X') Y Y' (Z ⊗ Z')).symm ((f ⊗ₘ g) ≫ (α_ _ _ _).hom) =
+      (α_ _ _ _).inv ≫ ((tensorLeftHomEquiv X Y Y' Z).symm f ⊗ₘ g) := by
   simp [tensorLeftHomEquiv, tensorHom_def']
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `tensorRightHomEquiv_tensor` / 定理 `tensorRightHomEquiv_tensor`
+/-- `tensorRightHomEquiv` commutes with tensoring on the left -/
+/-
+**CategoryTheory.tensorRightHomEquiv_tensor** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：tensorRightHomEquiv_tensor {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X
+ ⟶ Z otimes Y') (g : X' ⟶ Z') : (tensorRightHomEquiv (X' otimes X) Y Y' (Z' otim
+es Z)).symm ((g otimesₘ f) ≫ (α_ _ _ _).inv) = (α_ _ _ _).hom ≫ (g otimesₘ (tens
+orRightHomEquiv X Y Y' Z).symm f)
+参数：f : X ⟶ Z otimes Y'；g : X' ⟶ Z'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.tensor_whiskerLeft`：tensor_whiskerLeft (
+X Y : C) {Z Z' : C} (f : Z ⟶ Z') : (X otimes Y) ◁ f = (α_ X Y Z).hom ≫ X ◁ Y ◁ f
+ ≫ (α_ X Y Z').inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_def`：∀ {C : Type u} {𝒞 : Categ
+oryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCategory C] {X₁ Y₁ X
+₂ Y₂ : C}   (f : X₁ ⟶ Y₁) (g : X₂ ⟶…
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc`：whisker_assoc (X : C) {Y 
+Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z = (α_ X Y Z).hom ≫ X ◁ f ▷ Z ≫ (α_ X 
+Y' Z).inv
+· 使用定理 `CategoryTheory.MonoidalCategory.pentagon_inv_hom_hom_hom_hom_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Mo
+noidalCategory C] {W X Y Z Z_1 : C}   (h :     CategoryT…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerRight_tensor`：whiskerRight_tensor
+ {X X' : C} (f : X ⟶ X') (Y Z : C) : f ▷ (Y otimes Z) = (α_ X Y Z).inv ≫ f ▷ Y ▷
+ Z ≫ (α_ X' Y Z).hom
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_rightUnitor`：whiskerLeft_rig
+htUnitor (X Y : C) : X ◁ (ρ_ Y).hom = (α_ X Y (𝟙_ C)).inv ≫ (ρ_ (X otimes Y)).ho
+m
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem tensorRightHomEquiv_tensor
-  statement: {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Z otimes Y')
-  proof: by
-  simp [tensorRightHomEquiv, tensorHom_def]
-
-中文:
-定理 tensorRightHomEquiv_tensor
-  结论: {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Z otimes Y')
-  证明: by
-  simp [tensorRightHomEquiv, tensorHom_def]
-
-Depends on / 依赖: tensorHom_def, tensorRightHomEquiv
+--- 原说明 ---
+`tensorRightHomEquiv` commutes with tensoring on the left
 -/
-theorem tensorRightHomEquiv_tensor {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Z otimes Y')
+theorem tensorRightHomEquiv_tensor {X X' Y Y' Z Z' : C} [ExactPairing Y Y'] (f : X ⟶ Z ⊗ Y')
     (g : X' ⟶ Z') :
-    (tensorRightHomEquiv (X' otimes X) Y Y' (Z' otimes Z)).symm ((g otimesₘ f) ≫ (α_ _ _ _).inv) =
-      (α_ _ _ _).hom ≫ (g otimesₘ (tensorRightHomEquiv X Y Y' Z).symm f) := by
+    (tensorRightHomEquiv (X' ⊗ X) Y Y' (Z' ⊗ Z)).symm ((g ⊗ₘ f) ≫ (α_ _ _ _).inv) =
+      (α_ _ _ _).hom ≫ (g ⊗ₘ (tensorRightHomEquiv X Y Y' Z).symm f) := by
   simp [tensorRightHomEquiv, tensorHom_def]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft` / 定理 `tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft`
-
-English:
-theorem tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft
-  statement: {Y Y' Z : C} [ExactPairing Y Y']
-  proof: by
-  calc
-    _ = Y' ◁ η_ Y Y' otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
-      dsimp [tensorLeftHomEquiv]; monoidal
-    _ = (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ f := by
-      rw [whisker_exchange]; monoidal
-    _ = _ := by rw [coevaluation_evaluation'']; monoidal
-
-中文:
-定理 tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft
-  结论: {Y Y' Z : C} [ExactPairing Y Y']
-  证明: by
-  calc
-    _ = Y' ◁ η_ Y Y' otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
-      dsimp [tensorLeftHomEquiv]; monoidal
-    _ = (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ f := by
-      rw [whisker_exchange]; monoidal
-    _ = _ := by rw [coevaluation_evaluation'']; monoidal
-
-Depends on / 依赖: coevaluation_evaluation, monoidal, otimes, tensorLeftHomEquiv, whisker_exchange
+/-
+**CategoryTheory.tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft** 是 Mathl
+ib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft {Y Y' Z : C} [ExactP
+airing Y Y'] (f : Y' ⟶ Z) : (tensorLeftHomEquiv _ _ _ _).symm (η_ _ _ ≫ Y ◁ f) =
+ (ρ_ _).hom ≫ f
+参数：f : Y' ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_comp`：evalWhiskerLeft_comp {f g 
+h i : C} {η : h ⟶ i} {η₁ : g otimes h ⟶ g otimes i} {η₂ : f otimes g otimes h ⟶ 
+f otimes g otimes i} {η₃ : f otime…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerLeft`：naturality_whiskerLeft {
+p f g h pf pfg : C} {η : g ≅ h} (η_f : p otimes f ≅ pf) (η_fg : pf otimes g ≅ pf
+g) (η_fh : (pf otimes h) ≅ pfg) (ih_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_leftUnitor`：naturality_leftUnitor {p 
+f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (fun_ f) ≪≫ η_f = normalizeIsoComp (ρ_ p
+) η_f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_id`：evalWhiskerLeft_id {f g : C}
+ {η : f ⟶ g} {η₁ : f ⟶ 𝟙_ C otimes g} {η₂ : 𝟙_ C otimes f ⟶ 𝟙_ C otimes g} (e_η₁
+ : η ≫ (fun_ _).inv = η₁) (e_η₂ …
+· 使用引理 `CategoryTheory.ExactPairing.coevaluation_evaluation''`：coevaluation_eval
+uation'' : Y ◁ η_ X Y otimes≫ ε_ X Y ▷ Y = otimes𝟙.hom
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_rightUnitor`：naturality_rightUnitor {
+p f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (ρ_ f) ≪≫ η_f = normalizeIsoComp η_f (
+ρ_ pf)
 -/
 theorem tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft {Y Y' Z : C} [ExactPairing Y Y']
     (f : Y' ⟶ Z) : (tensorLeftHomEquiv _ _ _ _).symm (η_ _ _ ≫ Y ◁ f) = (ρ_ _).hom ≫ f := by
   calc
-    _ = Y' ◁ η_ Y Y' otimes≫ ((Y' otimes Y) ◁ f ≫ ε_ Y Y' ▷ Z) otimes≫ 𝟙 _ := by
+    _ = Y' ◁ η_ Y Y' ⊗≫ ((Y' ⊗ Y) ◁ f ≫ ε_ Y Y' ▷ Z) ⊗≫ 𝟙 _ := by
       dsimp [tensorLeftHomEquiv]; monoidal
-    _ = (Y' ◁ η_ Y Y' otimes≫ ε_ Y Y' ▷ Y') otimes≫ f := by
+    _ = (Y' ◁ η_ Y Y' ⊗≫ ε_ Y Y' ▷ Y') ⊗≫ f := by
       rw [whisker_exchange]; monoidal
     _ = _ := by rw [coevaluation_evaluation'']; monoidal
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight` / 定理 `tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight`
-
-English:
-theorem tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight
-  statement: {X Y : C} [HasRightDual X]
-  proof: by
-  dsimp [tensorLeftHomEquiv, rightAdjointMate]
-  simp
-
-中文:
-定理 tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight
-  结论: {X Y : C} [有RightDual X]
-  证明: by
-  dsimp [tensorLeftHomEquiv, rightAdjointMate]
-  simp
-
-Depends on / 依赖: rightAdjointMate, tensorLeftHomEquiv
+/-
+**CategoryTheory.tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight {X Y : C} [HasRight
+Dual X] [HasRightDual Y] (f : X ⟶ Y) : (tensorLeftHomEquiv _ _ _ _).symm (η_ _ _
+ ≫ f ▷ (Xᘁ)) = (ρ_ _).hom ≫ fᘁ
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight {X Y : C} [HasRightDual X]
     [HasRightDual Y] (f : X ⟶ Y) :
@@ -1509,136 +1626,280 @@ theorem tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight {X Y : C} [HasRig
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft` / 定理 `tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft`
-
-English:
-theorem tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft
-  statement: {X Y : C} [HasLeftDual X]
-  proof: by
-  dsimp [tensorRightHomEquiv, leftAdjointMate]
-  simp
-
-中文:
-定理 tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft
-  结论: {X Y : C} [有LeftDual X]
-  证明: by
-  dsimp [tensorRightHomEquiv, leftAdjointMate]
-  simp
-
-Depends on / 依赖: leftAdjointMate, tensorRightHomEquiv
+/-
+**CategoryTheory.tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft {X Y : C} [HasLeftD
+ual X] [HasLeftDual Y] (f : X ⟶ Y) : (tensorRightHomEquiv _ (ᘁY) _ _).symm (η_ (
+ᘁX : C) X ≫ (ᘁX : C) ◁ f) = (fun_ _).hom ≫ ᘁf
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc`：whisker_assoc (X : C) {Y 
+Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z = (α_ X Y Z).hom ≫ X ◁ f ▷ Z ≫ (α_ X 
+Y' Z).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft {X Y : C} [HasLeftDual X]
     [HasLeftDual Y] (f : X ⟶ Y) :
-    (tensorRightHomEquiv _ (ᘁY) _ _).symm (η_ (ᘁX : C) X ≫ (ᘁX : C) ◁ f) = (fun_ _).hom ≫ ᘁf := by
+    (tensorRightHomEquiv _ (ᘁY) _ _).symm (η_ (ᘁX : C) X ≫ (ᘁX : C) ◁ f) = (λ_ _).hom ≫ ᘁf := by
   dsimp [tensorRightHomEquiv, leftAdjointMate]
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight` / 定理 `tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight`
-
-English:
-theorem tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight
-  statement: {Y Y' Z : C} [ExactPairing Y Y']
-  proof: calc
-    _ = η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
-      dsimp [tensorRightHomEquiv]; monoidal
-    _ = (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
-      rw [← whisker_exchange]; monoidal
-    _ = _ := by
-      rw [evaluation_coevaluation'']; monoidal
-
-中文:
-定理 tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight
-  结论: {Y Y' Z : C} [ExactPairing Y Y']
-  证明: calc
-    _ = η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
-      dsimp [tensorRightHomEquiv]; monoidal
-    _ = (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
-      rw [← whisker_exchange]; monoidal
-    _ = _ := by
-      rw [evaluation_coevaluation'']; monoidal
-
-Depends on / 依赖: evaluation_coevaluation, monoidal, otimes, tensorRightHomEquiv, whisker_exchange
+/-
+**CategoryTheory.tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight {Y Y' Z : C} [Exac
+tPairing Y Y'] (f : Y ⟶ Z) : (tensorRightHomEquiv _ Y _ _).symm (η_ Y Y' ≫ f ▷ Y
+') = (fun_ _).hom ≫ f
+参数：f : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_comp`：evalWhiskerRight_comp {f 
+f' g h : C} {η : f ⟶ f'} {η₁ : f otimes g ⟶ f' otimes g} {η₂ : (f otimes g) otim
+es h ⟶ (f' otimes g) otimes h} {η₃ …
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerLeft`：naturality_whiskerLeft {
+p f g h pf pfg : C} {η : g ≅ h} (η_f : p otimes f ≅ pf) (η_fg : pf otimes g ≅ pf
+g) (η_fh : (pf otimes h) ≅ pfg) (ih_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_rightUnitor`：naturality_rightUnitor {
+p f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (ρ_ f) ≪≫ η_f = normalizeIsoComp η_f (
+ρ_ pf)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_id`：evalWhiskerRight_id {f g : 
+C} {η : f ⟶ g} {η₁ : f ⟶ g otimes 𝟙_ C} {η₂ : f otimes 𝟙_ C ⟶ g otimes 𝟙_ C} (e_
+η₁ : η ≫ (ρ_ _).inv = η₁) (e_η₂ :…
+· 使用引理 `CategoryTheory.ExactPairing.evaluation_coevaluation''`：evaluation_coeval
+uation'' : η_ X Y ▷ X otimes≫ X ◁ ε_ X Y = otimes𝟙.hom
+（共 31 条，此处仅展示前 30 条）
 -/
 theorem tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight {Y Y' Z : C} [ExactPairing Y Y']
-    (f : Y ⟶ Z) : (tensorRightHomEquiv _ Y _ _).symm (η_ Y Y' ≫ f ▷ Y') = (fun_ _).hom ≫ f :=
+    (f : Y ⟶ Z) : (tensorRightHomEquiv _ Y _ _).symm (η_ Y Y' ≫ f ▷ Y') = (λ_ _).hom ≫ f :=
   calc
-    _ = η_ Y Y' ▷ Y otimes≫ (f ▷ (Y' otimes Y) ≫ Z ◁ ε_ Y Y') otimes≫ 𝟙 _ := by
+    _ = η_ Y Y' ▷ Y ⊗≫ (f ▷ (Y' ⊗ Y) ≫ Z ◁ ε_ Y Y') ⊗≫ 𝟙 _ := by
       dsimp [tensorRightHomEquiv]; monoidal
-    _ = (η_ Y Y' ▷ Y otimes≫ Y ◁ ε_ Y Y') otimes≫ f := by
+    _ = (η_ Y Y' ▷ Y ⊗≫ Y ◁ ε_ Y Y') ⊗≫ f := by
       rw [← whisker_exchange]; monoidal
     _ = _ := by
       rw [evaluation_coevaluation'']; monoidal
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `tensorLeftHomEquiv_whiskerLeft_comp_evaluation` / 定理 `tensorLeftHomEquiv_whiskerLeft_comp_evaluation`
-
-English:
-theorem tensorLeftHomEquiv_whiskerLeft_comp_evaluation
-  given: {Y Z : C} [HasLeftDual Z] (f : Y ⟶ ᘁZ)
-  proof: calc
-    _ = 𝟙 _ otimes≫ (η_ (ᘁZ : C) Z ▷ Y ≫ ((ᘁZ) otimes Z) ◁ f) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z := by
-      dsimp [tensorLeftHomEquiv]; monoidal
-    _ = f otimes≫ (η_ (ᘁZ) Z ▷ (ᘁZ) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z) := by
-      rw [← whisker_exchange]; monoidal
-    _ = _ := by
-      rw [evaluation_coevaluation'']; monoidal
-
-@[simp]
-
-中文:
-定理 tensorLeftHomEquiv_whiskerLeft_comp_evaluation
-  条件: {Y Z : C} [有LeftDual Z] (f : Y ⟶ ᘁZ)
-  证明: calc
-    _ = 𝟙 _ otimes≫ (η_ (ᘁZ : C) Z ▷ Y ≫ ((ᘁZ) otimes Z) ◁ f) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z := by
-      dsimp [tensorLeftHomEquiv]; monoidal
-    _ = f otimes≫ (η_ (ᘁZ) Z ▷ (ᘁZ) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z) := by
-      rw [← whisker_exchange]; monoidal
-    _ = _ := by
-      rw [evaluation_coevaluation'']; monoidal
-
-@[simp]
-
-Depends on / 依赖: evaluation_coevaluation, monoidal, otimes, tensorLeftHomEquiv, whisker_exchange
+/-
+**CategoryTheory.tensorLeftHomEquiv_whiskerLeft_comp_evaluation** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorLeftHomEquiv_whiskerLeft_comp_evaluation {Y Z : C} [HasLeftDual Z] (
+f : Y ⟶ ᘁZ) : (tensorLeftHomEquiv _ _ _ _) (Z ◁ f ≫ ε_ _ _) = f ≫ (ρ_ _).inv
+参数：f : Y ⟶ ᘁZ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_comp`：evalWhiskerLeft_comp {f g 
+h i : C} {η : h ⟶ i} {η₁ : g otimes h ⟶ g otimes i} {η₂ : f otimes g otimes h ⟶ 
+f otimes g otimes i} {η₃ : f otime…
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_leftUnitor`：naturality_leftUnitor {p 
+f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (fun_ f) ≪≫ η_f = normalizeIsoComp (ρ_ p
+) η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerLeft`：naturality_whiskerLeft {
+p f g h pf pfg : C} {η : g ≅ h} (η_f : p otimes f ≅ pf) (η_fg : pf otimes g ≅ pf
+g) (η_fh : (pf otimes h) ≅ pfg) (ih_…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_id`：evalWhiskerLeft_id {f g : C}
+ {η : f ⟶ g} {η₁ : f ⟶ 𝟙_ C otimes g} {η₂ : 𝟙_ C otimes f ⟶ 𝟙_ C otimes g} (e_η₁
+ : η ≫ (fun_ _).inv = η₁) (e_η₂ …
+· 使用引理 `CategoryTheory.ExactPairing.evaluation_coevaluation''`：evaluation_coeval
+uation'' : η_ X Y ▷ X otimes≫ X ◁ ε_ X Y = otimes𝟙.hom
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_rightUnitor`：naturality_rightUnitor {
+p f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (ρ_ f) ≪≫ η_f = normalizeIsoComp η_f (
+ρ_ pf)
 -/
 theorem tensorLeftHomEquiv_whiskerLeft_comp_evaluation {Y Z : C} [HasLeftDual Z] (f : Y ⟶ ᘁZ) :
     (tensorLeftHomEquiv _ _ _ _) (Z ◁ f ≫ ε_ _ _) = f ≫ (ρ_ _).inv :=
   calc
-    _ = 𝟙 _ otimes≫ (η_ (ᘁZ : C) Z ▷ Y ≫ ((ᘁZ) otimes Z) ◁ f) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z := by
+    _ = 𝟙 _ ⊗≫ (η_ (ᘁZ : C) Z ▷ Y ≫ ((ᘁZ) ⊗ Z) ◁ f) ⊗≫ (ᘁZ) ◁ ε_ (ᘁZ) Z := by
       dsimp [tensorLeftHomEquiv]; monoidal
-    _ = f otimes≫ (η_ (ᘁZ) Z ▷ (ᘁZ) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z) := by
+    _ = f ⊗≫ (η_ (ᘁZ) Z ▷ (ᘁZ) ⊗≫ (ᘁZ) ◁ ε_ (ᘁZ) Z) := by
       rw [← whisker_exchange]; monoidal
     _ = _ := by
       rw [evaluation_coevaluation'']; monoidal
 
 @[simp]
-/--
-theorem `tensorLeftHomEquiv_whiskerRight_comp_evaluation` / 定理 `tensorLeftHomEquiv_whiskerRight_comp_evaluation`
-
-English:
-theorem tensorLeftHomEquiv_whiskerRight_comp_evaluation
-  statement: {X Y : C} [HasLeftDual X] [HasLeftDual Y]
-  proof: by
-  dsimp [tensorLeftHomEquiv, leftAdjointMate]
-  simp
-
-@[simp]
-
-中文:
-定理 tensorLeftHomEquiv_whiskerRight_comp_evaluation
-  结论: {X Y : C} [有LeftDual X] [有LeftDual Y]
-  证明: by
-  dsimp [tensorLeftHomEquiv, leftAdjointMate]
-  simp
-
-@[simp]
-
-Depends on / 依赖: leftAdjointMate, tensorLeftHomEquiv
+/-
+**CategoryTheory.tensorLeftHomEquiv_whiskerRight_comp_evaluation** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorLeftHomEquiv_whiskerRight_comp_evaluation {X Y : C} [HasLeftDual X] 
+[HasLeftDual Y] (f : X ⟶ Y) : (tensorLeftHomEquiv _ _ _ _) (f ▷ _ ≫ ε_ _ _) = (ᘁ
+f) ≫ (ρ_ _).inv
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whiskerLeft_comp`：whiskerLeft_comp (W : 
+C) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : W ◁ (f ≫ g) = W ◁ f ≫ W ◁ g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc`：whisker_assoc (X : C) {Y 
+Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z = (α_ X Y Z).hom ≫ X ◁ f ▷ Z ≫ (α_ X 
+Y' Z).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tensorLeftHomEquiv_whiskerRight_comp_evaluation {X Y : C} [HasLeftDual X] [HasLeftDual Y]
     (f : X ⟶ Y) : (tensorLeftHomEquiv _ _ _ _) (f ▷ _ ≫ ε_ _ _) = (ᘁf) ≫ (ρ_ _).inv := by
@@ -1646,93 +1907,172 @@ theorem tensorLeftHomEquiv_whiskerRight_comp_evaluation {X Y : C} [HasLeftDual X
   simp
 
 @[simp]
-/--
-theorem `tensorRightHomEquiv_whiskerLeft_comp_evaluation` / 定理 `tensorRightHomEquiv_whiskerLeft_comp_evaluation`
-
-English:
-theorem tensorRightHomEquiv_whiskerLeft_comp_evaluation
-  statement: {X Y : C} [HasRightDual X] [HasRightDual Y]
-  proof: by
-  dsimp [tensorRightHomEquiv, rightAdjointMate]
-  simp
-
-中文:
-定理 tensorRightHomEquiv_whiskerLeft_comp_evaluation
-  结论: {X Y : C} [有RightDual X] [有RightDual Y]
-  证明: by
-  dsimp [tensorRightHomEquiv, rightAdjointMate]
-  simp
-
-Depends on / 依赖: rightAdjointMate, tensorRightHomEquiv
+/-
+**CategoryTheory.tensorRightHomEquiv_whiskerLeft_comp_evaluation** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorRightHomEquiv_whiskerLeft_comp_evaluation {X Y : C} [HasRightDual X]
+ [HasRightDual Y] (f : X ⟶ Y) : (tensorRightHomEquiv _ _ _ _) ((Yᘁ : C) ◁ f ≫ ε_
+ _ _) = fᘁ ≫ (fun_ _).inv
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.comp_whiskerRight`：comp_whiskerRight {W 
+X Y : C} (f : W ⟶ X) (g : X ⟶ Y) (Z : C) : (f ≫ g) ▷ Z = f ▷ Z ≫ g ▷ Z
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_assoc`：whisker_assoc (X : C) {Y 
+Y' : C} (f : Y ⟶ Y') (Z : C) : (X ◁ f) ▷ Z = (α_ X Y Z).hom ≫ X ◁ f ▷ Z ≫ (α_ X 
+Y' Z).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tensorRightHomEquiv_whiskerLeft_comp_evaluation {X Y : C} [HasRightDual X] [HasRightDual Y]
-    (f : X ⟶ Y) : (tensorRightHomEquiv _ _ _ _) ((Yᘁ : C) ◁ f ≫ ε_ _ _) = fᘁ ≫ (fun_ _).inv := by
+    (f : X ⟶ Y) : (tensorRightHomEquiv _ _ _ _) ((Yᘁ : C) ◁ f ≫ ε_ _ _) = fᘁ ≫ (λ_ _).inv := by
   dsimp [tensorRightHomEquiv, rightAdjointMate]
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `tensorRightHomEquiv_whiskerRight_comp_evaluation` / 定理 `tensorRightHomEquiv_whiskerRight_comp_evaluation`
-
-English:
-theorem tensorRightHomEquiv_whiskerRight_comp_evaluation
-  given: {X Y : C} [HasRightDual X] (f : Y ⟶ Xᘁ)
-  proof: calc
-    _ = 𝟙 _ otimes≫ (Y ◁ η_ X Xᘁ ≫ f ▷ (X otimes Xᘁ)) otimes≫ ε_ X Xᘁ ▷ Xᘁ := by
-      dsimp [tensorRightHomEquiv]; monoidal
-    _ = f otimes≫ (Xᘁ ◁ η_ X Xᘁ otimes≫ ε_ X Xᘁ ▷ Xᘁ) := by
-      rw [whisker_exchange]; monoidal
-    _ = _ := by
-      rw [coevaluation_evaluation'']; monoidal
-
-中文:
-定理 tensorRightHomEquiv_whiskerRight_comp_evaluation
-  条件: {X Y : C} [有RightDual X] (f : Y ⟶ Xᘁ)
-  证明: calc
-    _ = 𝟙 _ otimes≫ (Y ◁ η_ X Xᘁ ≫ f ▷ (X otimes Xᘁ)) otimes≫ ε_ X Xᘁ ▷ Xᘁ := by
-      dsimp [tensorRightHomEquiv]; monoidal
-    _ = f otimes≫ (Xᘁ ◁ η_ X Xᘁ otimes≫ ε_ X Xᘁ ▷ Xᘁ) := by
-      rw [whisker_exchange]; monoidal
-    _ = _ := by
-      rw [coevaluation_evaluation'']; monoidal
-
-Depends on / 依赖: coevaluation_evaluation, monoidal, otimes, tensorRightHomEquiv, whisker_exchange
+/-
+**CategoryTheory.tensorRightHomEquiv_whiskerRight_comp_evaluation** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：tensorRightHomEquiv_whiskerRight_comp_evaluation {X Y : C} [HasRightDual X
+] (f : Y ⟶ Xᘁ) : (tensorRightHomEquiv _ _ _ _) (f ▷ X ≫ ε_ X (Xᘁ)) = f ≫ (fun_ _
+).inv
+参数：f : Y ⟶ Xᘁ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq`：mk_eq {α : Type _} (a b a' b' : α) 
+(ha : a = a') (hb : b = b') (h : a' = b') : a = b
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_comp`：eval_comp {η η' : f ⟶ g} {θ θ' : g ⟶ 
+h} {ι : f ⟶ h} (e_η : η = η') (e_θ : θ = θ') (e_ηθ : η' ≫ θ' = ι) : η ≫ θ = ι
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerLeft`：eval_whiskerLeft {f g h : C} {
+η η' : g ⟶ h} {θ : f otimes g ⟶ f otimes h} (e_η : η = η') (e_θ : f ◁ η' = θ) : 
+f ◁ η = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_of`：eval_of (η : f ⟶ g) : η = (Iso.refl _).
+hom ≫ η ≫ (Iso.refl _).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_of_cons`：evalWhiskerLeft_of_cons
+ {f g h i j : C} (α : g ≅ h) (η : h ⟶ i) {ηs : i ⟶ j} {θ : f otimes i ⟶ f otimes
+ j} (e_θ : f ◁ ηs = θ) : f ◁ (α.hom ≫…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerLeft_nil`：evalWhiskerLeft_nil (f : C)
+ {g h : C} (α : g ≅ h) : (whiskerLeftIso f α).hom = (whiskerLeftIso f α).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_whiskerRight`：eval_whiskerRight {f g h : C}
+ {η η' : f ⟶ g} {θ : f otimes h ⟶ g otimes h} (e_η : η = η') (e_θ : η' ▷ h = θ) 
+: η ▷ h = θ
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_cons_of_of`：evalWhiskerRight_co
+ns_of_of {f g h i j : C} {α : f ≅ g} {η : g ⟶ h} {ηs : h ⟶ i} {ηs₁ : h otimes j 
+⟶ i otimes j} {η₁ : g otimes j ⟶ h otimes…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_nil`：evalWhiskerRight_nil {f g 
+: C} (α : f ≅ g) (h : C) : (whiskerRightIso α h).hom = (whiskerRightIso α h).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRightAux_of`：evalWhiskerRightAux_of {
+f g : C} (η : f ⟶ g) (h : C) : η ▷ h = (Iso.refl _).hom ≫ η ▷ h ≫ (Iso.refl _).h
+om
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_cons`：evalComp_cons {f g h i j : C} (α 
+: f ≅ g) (η : g ⟶ h) {ηs : h ⟶ i} {θ : i ⟶ j} {ι : h ⟶ j} (e_ι : ηs ≫ θ = ι) : (
+α.hom ≫ η ≫ ηs) ≫ θ = α.hom…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_nil`：evalComp_nil_nil {f g h : C} (
+α : f ≅ g) (β : g ≅ h) : (α ≪≫ β).hom = (α ≪≫ β).hom
+· 使用定理 `Mathlib.Tactic.Monoidal.evalComp_nil_cons`：evalComp_nil_cons {f g h i j 
+: C} (α : f ≅ g) (β : g ≅ h) (η : h ⟶ i) (ηs : i ⟶ j) : α.hom ≫ (β.hom ≫ η ≫ ηs)
+ = (α ≪≫ β).hom ≫ η ≫ ηs
+· 使用定理 `Mathlib.Tactic.Monoidal.eval_monoidalComp`：eval_monoidalComp {η η' : f ⟶
+ g} {α : g ≅ h} {θ θ' : h ⟶ i} {αθ : g ⟶ i} {ηαθ : f ⟶ i} (e_η : η = η') (e_θ : 
+θ = θ') (e_αθ : α.hom ≫ θ' = αθ…
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_comp`：evalWhiskerRight_comp {f 
+f' g h : C} {η : f ⟶ f'} {η₁ : f otimes g ⟶ f' otimes g} {η₂ : (f otimes g) otim
+es h ⟶ (f' otimes g) otimes h} {η₃ …
+· 使用定理 `Mathlib.Tactic.BicategoryLike.mk_eq_of_cons`：mk_eq_of_cons {C : Type u} 
+[CategoryStruct.{v} C] {f₁ f₂ f₃ f₄ : C} (α α' : f₁ ⟶ f₂) (η η' : f₂ ⟶ f₃) (ηs η
+s' : f₃ ⟶ f₄) (e_α : α = α') (e_η…
+· 使用定理 `Mathlib.Tactic.Monoidal.mk_eq_of_naturality`：mk_eq_of_naturality {f g f'
+ : C} {η θ : f ⟶ g} {η' θ' : f ≅ g} (η_f : 𝟙_ C otimes f ≅ f') (η_g : 𝟙_ C otime
+s g ≅ f') (η_hom : η'.hom = η) (Θ…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_comp`：naturality_comp {p f g h pf : C
+} {η : f ≅ g} {θ : g ≅ h} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (η_h :
+ p otimes h ≅ pf) (ih_η : p ◁…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_inv`：naturality_inv {p f g pf : C} {η
+ : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf) (ih : p ◁ η ≪≫ η_g = η
+_f) : p ◁ η.symm ≪≫ η_f = η_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_rightUnitor`：naturality_rightUnitor {
+p f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (ρ_ f) ≪≫ η_f = normalizeIsoComp η_f (
+ρ_ pf)
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerLeft`：naturality_whiskerLeft {
+p f g h pf pfg : C} {η : g ≅ h} (η_f : p otimes f ≅ pf) (η_fg : pf otimes g ≅ pf
+g) (η_fh : (pf otimes h) ≅ pfg) (ih_…
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_id`：naturality_id {p f pf : C} (η_f :
+ p otimes f ≅ pf) : p ◁ Iso.refl f ≪≫ η_f = η_f
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_associator`：naturality_associator {p 
+f g h pf pfg pfgh : C} (η_f : p otimes f ≅ pf) (η_g : pf otimes g ≅ pfg) (η_h : 
+pfg otimes h ≅ pfgh) : p ◁ (α_ f g …
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_whiskerRight`：naturality_whiskerRight
+ {p f g h pf pfh : C} {η : f ≅ g} (η_f : p otimes f ≅ pf) (η_g : p otimes g ≅ pf
+) (η_fh : (pf otimes h) ≅ pfh) (ih_η …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MonoidalCategory.whisker_exchange`：whisker_exchange {W X 
+Y Z : C} (f : W ⟶ X) (g : Y ⟶ Z) : W ◁ g ≫ f ▷ Z = f ▷ Y ≫ X ◁ g
+· 使用定理 `Mathlib.Tactic.Monoidal.evalWhiskerRight_id`：evalWhiskerRight_id {f g : 
+C} {η : f ⟶ g} {η₁ : f ⟶ g otimes 𝟙_ C} {η₂ : f otimes 𝟙_ C ⟶ g otimes 𝟙_ C} (e_
+η₁ : η ≫ (ρ_ _).inv = η₁) (e_η₂ :…
+· 使用引理 `CategoryTheory.ExactPairing.coevaluation_evaluation''`：coevaluation_eval
+uation'' : Y ◁ η_ X Y otimes≫ ε_ X Y ▷ Y = otimes𝟙.hom
+· 使用定理 `Mathlib.Tactic.Monoidal.naturality_leftUnitor`：naturality_leftUnitor {p 
+f pf : C} (η_f : p otimes f ≅ pf) : p ◁ (fun_ f) ≪≫ η_f = normalizeIsoComp (ρ_ p
+) η_f
 -/
 theorem tensorRightHomEquiv_whiskerRight_comp_evaluation {X Y : C} [HasRightDual X] (f : Y ⟶ Xᘁ) :
-    (tensorRightHomEquiv _ _ _ _) (f ▷ X ≫ ε_ X (Xᘁ)) = f ≫ (fun_ _).inv :=
+    (tensorRightHomEquiv _ _ _ _) (f ▷ X ≫ ε_ X (Xᘁ)) = f ≫ (λ_ _).inv :=
   calc
-    _ = 𝟙 _ otimes≫ (Y ◁ η_ X Xᘁ ≫ f ▷ (X otimes Xᘁ)) otimes≫ ε_ X Xᘁ ▷ Xᘁ := by
+    _ = 𝟙 _ ⊗≫ (Y ◁ η_ X Xᘁ ≫ f ▷ (X ⊗ Xᘁ)) ⊗≫ ε_ X Xᘁ ▷ Xᘁ := by
       dsimp [tensorRightHomEquiv]; monoidal
-    _ = f otimes≫ (Xᘁ ◁ η_ X Xᘁ otimes≫ ε_ X Xᘁ ▷ Xᘁ) := by
+    _ = f ⊗≫ (Xᘁ ◁ η_ X Xᘁ ⊗≫ ε_ X Xᘁ ▷ Xᘁ) := by
       rw [whisker_exchange]; monoidal
     _ = _ := by
       rw [coevaluation_evaluation'']; monoidal
 
 -- Next four lemmas passing `fᘁ` or `ᘁf` through (co)evaluations.
 @[reassoc]
-/--
-theorem `coevaluation_comp_rightAdjointMate` / 定理 `coevaluation_comp_rightAdjointMate`
-
-English:
-theorem coevaluation_comp_rightAdjointMate
-  given: {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y)
-  proof: by
-  apply_fun (tensorLeftHomEquiv _ Y (Yᘁ) _).symm
-  simp
-
-@[reassoc]
-
-中文:
-定理 coevaluation_comp_rightAdjointMate
-  条件: {X Y : C} [有RightDual X] [有RightDual Y] (f : X ⟶ Y)
-  证明: by
-  apply_fun (tensorLeftHomEquiv _ Y (Yᘁ) _).symm
-  simp
-
-@[reassoc]
-
-Depends on / 依赖: apply_fun, tensorLeftHomEquiv
+/-
+**CategoryTheory.coevaluation_comp_rightAdjointMate** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory`。
+形式化陈述：coevaluation_comp_rightAdjointMate {X Y : C} [HasRightDual X] [HasRightDua
+l Y] (f : X ⟶ Y) : η_ Y (Yᘁ) ≫ _ ◁ (fᘁ) = η_ _ _ ≫ f ▷ _
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.tensorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft`：te
+nsorLeftHomEquiv_symm_coevaluation_comp_whiskerLeft {Y Y' Z : C} [ExactPairing Y
+ Y'] (f : Y' ⟶ Z) : (tensorLeftHomEquiv _ _ _ _).symm (η_ …
+· 使用定理 `CategoryTheory.tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight`：t
+ensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight {X Y : C} [HasRightDual X]
+ [HasRightDual Y] (f : X ⟶ Y) : (tensorLeftHomEquiv _ _ _ _…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coevaluation_comp_rightAdjointMate {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y) :
     η_ Y (Yᘁ) ≫ _ ◁ (fᘁ) = η_ _ _ ≫ f ▷ _ := by
@@ -1740,28 +2080,29 @@ theorem coevaluation_comp_rightAdjointMate {X Y : C} [HasRightDual X] [HasRightD
   simp
 
 @[reassoc]
-/--
-theorem `leftAdjointMate_comp_evaluation` / 定理 `leftAdjointMate_comp_evaluation`
-
-English:
-theorem leftAdjointMate_comp_evaluation
-  given: {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y)
-  proof: by
-  apply_fun tensorLeftHomEquiv _ (ᘁX) X _
-  simp
-
-@[reassoc]
-
-中文:
-定理 leftAdjointMate_comp_evaluation
-  条件: {X Y : C} [有LeftDual X] [有LeftDual Y] (f : X ⟶ Y)
-  证明: by
-  apply_fun tensorLeftHomEquiv _ (ᘁX) X _
-  simp
-
-@[reassoc]
-
-Depends on / 依赖: apply_fun, tensorLeftHomEquiv
+/-
+**CategoryTheory.leftAdjointMate_comp_evaluation** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：leftAdjointMate_comp_evaluation {X Y : C} [HasLeftDual X] [HasLeftDual Y] 
+(f : X ⟶ Y) : X ◁ (ᘁf) ≫ ε_ _ _ = f ▷ _ ≫ ε_ _ _
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.tensorLeftHomEquiv_whiskerLeft_comp_evaluation`：tensorLef
+tHomEquiv_whiskerLeft_comp_evaluation {Y Z : C} [HasLeftDual Z] (f : Y ⟶ ᘁZ) : (
+tensorLeftHomEquiv _ _ _ _) (Z ◁ f ≫ ε_ _ _) = f ≫ …
+· 使用定理 `CategoryTheory.tensorLeftHomEquiv_whiskerRight_comp_evaluation`：tensorLe
+ftHomEquiv_whiskerRight_comp_evaluation {X Y : C} [HasLeftDual X] [HasLeftDual Y
+] (f : X ⟶ Y) : (tensorLeftHomEquiv _ _ _ _) (f ▷ _ …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leftAdjointMate_comp_evaluation {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y) :
     X ◁ (ᘁf) ≫ ε_ _ _ = f ▷ _ ≫ ε_ _ _ := by
@@ -1769,28 +2110,30 @@ theorem leftAdjointMate_comp_evaluation {X Y : C} [HasLeftDual X] [HasLeftDual Y
   simp
 
 @[reassoc]
-/--
-theorem `coevaluation_comp_leftAdjointMate` / 定理 `coevaluation_comp_leftAdjointMate`
-
-English:
-theorem coevaluation_comp_leftAdjointMate
-  given: {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y)
-  proof: by
-  apply_fun (tensorRightHomEquiv _ (ᘁY) Y _).symm
-  simp
-
-@[reassoc]
-
-中文:
-定理 coevaluation_comp_leftAdjointMate
-  条件: {X Y : C} [有LeftDual X] [有LeftDual Y] (f : X ⟶ Y)
-  证明: by
-  apply_fun (tensorRightHomEquiv _ (ᘁY) Y _).symm
-  simp
-
-@[reassoc]
-
-Depends on / 依赖: apply_fun, tensorRightHomEquiv
+/-
+**CategoryTheory.coevaluation_comp_leftAdjointMate** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：coevaluation_comp_leftAdjointMate {X Y : C} [HasLeftDual X] [HasLeftDual Y
+] (f : X ⟶ Y) : η_ (ᘁY) Y ≫ (ᘁf) ▷ Y = η_ (ᘁX) X ≫ (ᘁX) ◁ f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight`：
+tensorRightHomEquiv_symm_coevaluation_comp_whiskerRight {Y Y' Z : C} [ExactPairi
+ng Y Y'] (f : Y ⟶ Z) : (tensorRightHomEquiv _ Y _ _).symm (η…
+· 使用定理 `CategoryTheory.tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft`：t
+ensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft {X Y : C} [HasLeftDual X] 
+[HasLeftDual Y] (f : X ⟶ Y) : (tensorRightHomEquiv _ (ᘁY) _…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coevaluation_comp_leftAdjointMate {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y) :
     η_ (ᘁY) Y ≫ (ᘁf) ▷ Y = η_ (ᘁX) X ≫ (ᘁX) ◁ f := by
@@ -1798,24 +2141,29 @@ theorem coevaluation_comp_leftAdjointMate {X Y : C} [HasLeftDual X] [HasLeftDual
   simp
 
 @[reassoc]
-/--
-theorem `rightAdjointMate_comp_evaluation` / 定理 `rightAdjointMate_comp_evaluation`
-
-English:
-theorem rightAdjointMate_comp_evaluation
-  given: {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y)
-  proof: by
-  apply_fun tensorRightHomEquiv _ X (Xᘁ) _
-  simp
-
-中文:
-定理 rightAdjointMate_comp_evaluation
-  条件: {X Y : C} [有RightDual X] [有RightDual Y] (f : X ⟶ Y)
-  证明: by
-  apply_fun tensorRightHomEquiv _ X (Xᘁ) _
-  simp
-
-Depends on / 依赖: apply_fun, tensorRightHomEquiv
+/-
+**CategoryTheory.rightAdjointMate_comp_evaluation** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：rightAdjointMate_comp_evaluation {X Y : C} [HasRightDual X] [HasRightDual 
+Y] (f : X ⟶ Y) : (fᘁ ▷ X) ≫ ε_ X (Xᘁ) = ((Yᘁ) ◁ f) ≫ ε_ Y (Yᘁ)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.tensorRightHomEquiv_whiskerRight_comp_evaluation`：tensorR
+ightHomEquiv_whiskerRight_comp_evaluation {X Y : C} [HasRightDual X] (f : Y ⟶ Xᘁ
+) : (tensorRightHomEquiv _ _ _ _) (f ▷ X ≫ ε_ X (Xᘁ))…
+· 使用定理 `CategoryTheory.tensorRightHomEquiv_whiskerLeft_comp_evaluation`：tensorRi
+ghtHomEquiv_whiskerLeft_comp_evaluation {X Y : C} [HasRightDual X] [HasRightDual
+ Y] (f : X ⟶ Y) : (tensorRightHomEquiv _ _ _ _) ((Yᘁ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightAdjointMate_comp_evaluation {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y) :
     (fᘁ ▷ X) ≫ ε_ X (Xᘁ) = ((Yᘁ) ◁ f) ≫ ε_ Y (Yᘁ) := by
@@ -1824,91 +2172,40 @@ theorem rightAdjointMate_comp_evaluation {X Y : C} [HasRightDual X] [HasRightDua
 
 /-- Transport an exact pairing across an isomorphism in the first argument. -/
 @[instance_reducible]
-/--
-Definition of `exactPairingCongrLeft` / `exactPairingCongrLeft` 的定义
+/-
+**CategoryTheory.exactPairingCongrLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：exactPairingCongrLeft {X X' Y : C} [ExactPairing X' Y] (i : X ≅ X') : Exac
+tPairing X Y where evaluation'
+参数：i : X ≅ X'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exactPairingCongrLeft
-  signature: {X X' Y : C} [ExactPairing X' Y] (i : X ≅ X')
-  body: Y ◁ i.hom ≫ ε_ _ _
-  coevaluation' := η_ _ _ ≫ i.inv ▷ Y
-  evaluation_coevaluation' :=
-    calc
-      _ = η_ X' Y ▷ X otimes≫ (i.inv ▷ (Y otimes X) ≫ X ◁ (Y ◁ i.hom)) otimes≫ X ◁ ε_ X' Y := by
-        monoidal
-      _ = 𝟙 _ otimes≫ (η_ X' Y ▷ X ≫ (X' otimes Y) ◁ i.hom) otimes≫
-          (i.inv ▷ (Y otimes X') ≫ X ◁ ε_ X' Y) otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ i.hom otimes≫ (η_ X' Y ▷ X' otimes≫ X' ◁ ε_ X' Y) otimes≫ i.inv otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; rw [← whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
-        rw [evaluation_coevaluation'']; monoidal
-      _ = (fun_ X).hom ≫ (ρ_ X).inv := by
-        rw [Iso.hom_inv_id]
-        monoidal
-  coevaluation_evaluation' := by
-    calc
-      _ = Y ◁ η_ X' Y ≫ Y ◁ (i.inv ≫ i.hom) ▷ Y otimes≫ ε_ X' Y ▷ Y := by
-        monoidal
-      _ = Y ◁ η_ X' Y otimes≫ ε_ X' Y ▷ Y := by
-        rw [Iso.inv_hom_id]; monoidal
-      _ = _ := by
-        rw [coevaluation_evaluation'']
-        simp
-
-中文:
-定义 exactPairingCongrLeft
-  签名: {X X' Y : C} [ExactPairing X' Y] (i : X ≅ X')
-  定义体: Y ◁ i.hom ≫ ε_ _ _
-  coevaluation' := η_ _ _ ≫ i.inv ▷ Y
-  evaluation_coevaluation' :=
-    calc
-      _ = η_ X' Y ▷ X otimes≫ (i.inv ▷ (Y otimes X) ≫ X ◁ (Y ◁ i.hom)) otimes≫ X ◁ ε_ X' Y := by
-        monoidal
-      _ = 𝟙 _ otimes≫ (η_ X' Y ▷ X ≫ (X' otimes Y) ◁ i.hom) otimes≫
-          (i.inv ▷ (Y otimes X') ≫ X ◁ ε_ X' Y) otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ i.hom otimes≫ (η_ X' Y ▷ X' otimes≫ X' ◁ ε_ X' Y) otimes≫ i.inv otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; rw [← whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
-        rw [evaluation_coevaluation'']; monoidal
-      _ = (fun_ X).hom ≫ (ρ_ X).inv := by
-        rw [Iso.hom_inv_id]
-        monoidal
-  coevaluation_evaluation' := by
-    calc
-      _ = Y ◁ η_ X' Y ≫ Y ◁ (i.inv ≫ i.hom) ▷ Y otimes≫ ε_ X' Y ▷ Y := by
-        monoidal
-      _ = Y ◁ η_ X' Y otimes≫ ε_ X' Y ▷ Y := by
-        rw [Iso.inv_hom_id]; monoidal
-      _ = _ := by
-        rw [coevaluation_evaluation'']
-        simp
-
-Depends on / 依赖: i.hom
+--- 原说明 ---
+Transport an exact pairing across an isomorphism in the first argument.
 -/
 def exactPairingCongrLeft {X X' Y : C} [ExactPairing X' Y] (i : X ≅ X') : ExactPairing X Y where
   evaluation' := Y ◁ i.hom ≫ ε_ _ _
   coevaluation' := η_ _ _ ≫ i.inv ▷ Y
   evaluation_coevaluation' :=
     calc
-      _ = η_ X' Y ▷ X otimes≫ (i.inv ▷ (Y otimes X) ≫ X ◁ (Y ◁ i.hom)) otimes≫ X ◁ ε_ X' Y := by
+      _ = η_ X' Y ▷ X ⊗≫ (i.inv ▷ (Y ⊗ X) ≫ X ◁ (Y ◁ i.hom)) ⊗≫ X ◁ ε_ X' Y := by
         monoidal
-      _ = 𝟙 _ otimes≫ (η_ X' Y ▷ X ≫ (X' otimes Y) ◁ i.hom) otimes≫
-          (i.inv ▷ (Y otimes X') ≫ X ◁ ε_ X' Y) otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ (η_ X' Y ▷ X ≫ (X' ⊗ Y) ◁ i.hom) ⊗≫
+          (i.inv ▷ (Y ⊗ X') ≫ X ◁ ε_ X' Y) ⊗≫ 𝟙 _ := by
         rw [← whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ i.hom otimes≫ (η_ X' Y ▷ X' otimes≫ X' ◁ ε_ X' Y) otimes≫ i.inv otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; rw [← whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ i.hom ⊗≫ (η_ X' Y ▷ X' ⊗≫ X' ◁ ε_ X' Y) ⊗≫ i.inv ⊗≫ 𝟙 _ := by
+        rw [← whisker_exchange, ← whisker_exchange]; monoidal
+      _ = 𝟙 _ ⊗≫ (i.hom ≫ i.inv) ⊗≫ 𝟙 _ := by
         rw [evaluation_coevaluation'']; monoidal
-      _ = (fun_ X).hom ≫ (ρ_ X).inv := by
+      _ = (λ_ X).hom ≫ (ρ_ X).inv := by
         rw [Iso.hom_inv_id]
         monoidal
   coevaluation_evaluation' := by
     calc
-      _ = Y ◁ η_ X' Y ≫ Y ◁ (i.inv ≫ i.hom) ▷ Y otimes≫ ε_ X' Y ▷ Y := by
+      _ = Y ◁ η_ X' Y ≫ Y ◁ (i.inv ≫ i.hom) ▷ Y ⊗≫ ε_ X' Y ▷ Y := by
         monoidal
-      _ = Y ◁ η_ X' Y otimes≫ ε_ X' Y ▷ Y := by
+      _ = Y ◁ η_ X' Y ⊗≫ ε_ X' Y ▷ Y := by
         rw [Iso.inv_hom_id]; monoidal
       _ = _ := by
         rw [coevaluation_evaluation'']
@@ -1916,339 +2213,227 @@ def exactPairingCongrLeft {X X' Y : C} [ExactPairing X' Y] (i : X ≅ X') : Exac
 
 /-- Transport an exact pairing across an isomorphism in the second argument. -/
 @[instance_reducible]
-/--
-Definition of `exactPairingCongrRight` / `exactPairingCongrRight` 的定义
+/-
+**CategoryTheory.exactPairingCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：exactPairingCongrRight {X Y Y' : C} [ExactPairing X Y'] (i : Y ≅ Y') : Exa
+ctPairing X Y where evaluation'
+参数：i : Y ≅ Y'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exactPairingCongrRight
-  signature: {X Y Y' : C} [ExactPairing X Y'] (i : Y ≅ Y')
-  body: i.hom ▷ X ≫ ε_ _ _
-  coevaluation' := η_ _ _ ≫ X ◁ i.inv
-  evaluation_coevaluation' := by
-    calc
-      _ = η_ X Y' ▷ X otimes≫ X ◁ (i.inv ≫ i.hom) ▷ X ≫ X ◁ ε_ X Y' := by
-        monoidal
-      _ = η_ X Y' ▷ X otimes≫ X ◁ ε_ X Y' := by
-        rw [Iso.inv_hom_id]; monoidal
-      _ = _ := by
-        rw [evaluation_coevaluation'']
-        simp
-  coevaluation_evaluation' :=
-    calc
-      _ = Y ◁ η_ X Y' otimes≫ (Y ◁ (X ◁ i.inv) ≫ i.hom ▷ (X otimes Y)) otimes≫ ε_ X Y' ▷ Y := by
-        monoidal
-      _ = 𝟙 _ otimes≫ (Y ◁ η_ X Y' ≫ i.hom ▷ (X otimes Y')) otimes≫
-          ((Y' otimes X) ◁ i.inv ≫ ε_ X Y' ▷ Y) otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ i.hom otimes≫ (Y' ◁ η_ X Y' otimes≫ ε_ X Y' ▷ Y') otimes≫ i.inv otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; rw [whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
-        rw [coevaluation_evaluation'']; monoidal
-      _ = (ρ_ Y).hom ≫ (fun_ Y).inv := by
-        rw [Iso.hom_inv_id]
-        monoidal
-
-中文:
-定义 exactPairingCongrRight
-  签名: {X Y Y' : C} [ExactPairing X Y'] (i : Y ≅ Y')
-  定义体: i.hom ▷ X ≫ ε_ _ _
-  coevaluation' := η_ _ _ ≫ X ◁ i.inv
-  evaluation_coevaluation' := by
-    calc
-      _ = η_ X Y' ▷ X otimes≫ X ◁ (i.inv ≫ i.hom) ▷ X ≫ X ◁ ε_ X Y' := by
-        monoidal
-      _ = η_ X Y' ▷ X otimes≫ X ◁ ε_ X Y' := by
-        rw [Iso.inv_hom_id]; monoidal
-      _ = _ := by
-        rw [evaluation_coevaluation'']
-        simp
-  coevaluation_evaluation' :=
-    calc
-      _ = Y ◁ η_ X Y' otimes≫ (Y ◁ (X ◁ i.inv) ≫ i.hom ▷ (X otimes Y)) otimes≫ ε_ X Y' ▷ Y := by
-        monoidal
-      _ = 𝟙 _ otimes≫ (Y ◁ η_ X Y' ≫ i.hom ▷ (X otimes Y')) otimes≫
-          ((Y' otimes X) ◁ i.inv ≫ ε_ X Y' ▷ Y) otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ i.hom otimes≫ (Y' ◁ η_ X Y' otimes≫ ε_ X Y' ▷ Y') otimes≫ i.inv otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; rw [whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
-        rw [coevaluation_evaluation'']; monoidal
-      _ = (ρ_ Y).hom ≫ (fun_ Y).inv := by
-        rw [Iso.hom_inv_id]
-        monoidal
-
-Depends on / 依赖: i.hom
+--- 原说明 ---
+Transport an exact pairing across an isomorphism in the second argument.
 -/
 def exactPairingCongrRight {X Y Y' : C} [ExactPairing X Y'] (i : Y ≅ Y') : ExactPairing X Y where
   evaluation' := i.hom ▷ X ≫ ε_ _ _
   coevaluation' := η_ _ _ ≫ X ◁ i.inv
   evaluation_coevaluation' := by
     calc
-      _ = η_ X Y' ▷ X otimes≫ X ◁ (i.inv ≫ i.hom) ▷ X ≫ X ◁ ε_ X Y' := by
+      _ = η_ X Y' ▷ X ⊗≫ X ◁ (i.inv ≫ i.hom) ▷ X ≫ X ◁ ε_ X Y' := by
         monoidal
-      _ = η_ X Y' ▷ X otimes≫ X ◁ ε_ X Y' := by
+      _ = η_ X Y' ▷ X ⊗≫ X ◁ ε_ X Y' := by
         rw [Iso.inv_hom_id]; monoidal
       _ = _ := by
         rw [evaluation_coevaluation'']
         simp
   coevaluation_evaluation' :=
     calc
-      _ = Y ◁ η_ X Y' otimes≫ (Y ◁ (X ◁ i.inv) ≫ i.hom ▷ (X otimes Y)) otimes≫ ε_ X Y' ▷ Y := by
+      _ = Y ◁ η_ X Y' ⊗≫ (Y ◁ (X ◁ i.inv) ≫ i.hom ▷ (X ⊗ Y)) ⊗≫ ε_ X Y' ▷ Y := by
         monoidal
-      _ = 𝟙 _ otimes≫ (Y ◁ η_ X Y' ≫ i.hom ▷ (X otimes Y')) otimes≫
-          ((Y' otimes X) ◁ i.inv ≫ ε_ X Y' ▷ Y) otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ (Y ◁ η_ X Y' ≫ i.hom ▷ (X ⊗ Y')) ⊗≫
+          ((Y' ⊗ X) ◁ i.inv ≫ ε_ X Y' ▷ Y) ⊗≫ 𝟙 _ := by
         rw [whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ i.hom otimes≫ (Y' ◁ η_ X Y' otimes≫ ε_ X Y' ▷ Y') otimes≫ i.inv otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; rw [whisker_exchange]; monoidal
-      _ = 𝟙 _ otimes≫ (i.hom ≫ i.inv) otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ i.hom ⊗≫ (Y' ◁ η_ X Y' ⊗≫ ε_ X Y' ▷ Y') ⊗≫ i.inv ⊗≫ 𝟙 _ := by
+        rw [whisker_exchange, whisker_exchange]; monoidal
+      _ = 𝟙 _ ⊗≫ (i.hom ≫ i.inv) ⊗≫ 𝟙 _ := by
         rw [coevaluation_evaluation'']; monoidal
-      _ = (ρ_ Y).hom ≫ (fun_ Y).inv := by
+      _ = (ρ_ Y).hom ≫ (λ_ Y).inv := by
         rw [Iso.hom_inv_id]
         monoidal
 
 /-- Transport an exact pairing across isomorphisms. -/
 @[instance_reducible]
-/--
-Definition of `exactPairingCongr` / `exactPairingCongr` 的定义
+/-
+**CategoryTheory.exactPairingCongr** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：exactPairingCongr {X X' Y Y' : C} [ExactPairing X' Y'] (i : X ≅ X') (j : Y
+ ≅ Y') : ExactPairing X Y
+参数：i : X ≅ X'；j : Y ≅ Y'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exactPairingCongr
-  signature: {X X' Y Y' : C} [ExactPairing X' Y'] (i : X ≅ X') (j : Y ≅ Y')
-  body: haveI : ExactPairing X' Y := exactPairingCongrRight j
-  exactPairingCongrLeft i
-
-中文:
-定义 exactPairingCongr
-  签名: {X X' Y Y' : C} [ExactPairing X' Y'] (i : X ≅ X') (j : Y ≅ Y')
-  定义体: haveI : ExactPairing X' Y := exactPairingCongrRight j
-  exactPairingCongrLeft i
-
-Depends on / 依赖: ExactPairing, exactPairingCongrLeft, exactPairingCongrRight
+--- 原说明 ---
+Transport an exact pairing across isomorphisms.
 -/
 def exactPairingCongr {X X' Y Y' : C} [ExactPairing X' Y'] (i : X ≅ X') (j : Y ≅ Y') :
     ExactPairing X Y :=
   haveI : ExactPairing X' Y := exactPairingCongrRight j
   exactPairingCongrLeft i
 
-/--
-Definition of `rightDualIso` / `rightDualIso` 的定义
+/-- Right duals are isomorphic. -/
+/-
+**CategoryTheory.rightDualIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：rightDualIso {X Y₁ Y₂ : C} (p₁ : ExactPairing X Y₁) (p₂ : ExactPairing X Y
+₂) : Y₁ ≅ Y₂ where hom
+参数：p₁ : ExactPairing X Y₁；p₂ : ExactPairing X Y₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightDualIso
-  signature: {X Y₁ Y₂ : C} (p₁ : ExactPairing X Y₁) (p₂ : ExactPairing X Y₂)
-  body: @rightAdjointMate C _ _ X X ⟨Y₂⟩ ⟨Y₁⟩ (𝟙 X)
-  inv := @rightAdjointMate C _ _ X X ⟨Y₁⟩ ⟨Y₂⟩ (𝟙 X)
-  hom_inv_id := by
-    -- Make all arguments explicit, because we want to find them by unification not synthesis.
-    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
-    rfl
-  inv_hom_id := by
-    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
-    rfl
-
-中文:
-定义 rightDualIso
-  签名: {X Y₁ Y₂ : C} (p₁ : ExactPairing X Y₁) (p₂ : ExactPairing X Y₂)
-  定义体: @rightAdjointMate C _ _ X X ⟨Y₂⟩ ⟨Y₁⟩ (𝟙 X)
-  inv := @rightAdjointMate C _ _ X X ⟨Y₁⟩ ⟨Y₂⟩ (𝟙 X)
-  hom_inv_id := by
-    -- Make all arguments explicit, because we want to find them by unification not synthesis.
-    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
-    rfl
-  inv_hom_id := by
-    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
-    rfl
-
-Depends on / 依赖: rightAdjointMate
+--- 原说明 ---
+Right duals are isomorphic.
 -/
 def rightDualIso {X Y₁ Y₂ : C} (p₁ : ExactPairing X Y₁) (p₂ : ExactPairing X Y₂) : Y₁ ≅ Y₂ where
   hom := @rightAdjointMate C _ _ X X ⟨Y₂⟩ ⟨Y₁⟩ (𝟙 X)
   inv := @rightAdjointMate C _ _ X X ⟨Y₁⟩ ⟨Y₂⟩ (𝟙 X)
   hom_inv_id := by
     -- Make all arguments explicit, because we want to find them by unification not synthesis.
-    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
+    rw [← @comp_rightAdjointMate, Category.comp_id, @rightAdjointMate_id]
     rfl
   inv_hom_id := by
-    rw [← @comp_rightAdjointMate]; rw [Category.comp_id]; rw [@rightAdjointMate_id]
+    rw [← @comp_rightAdjointMate, Category.comp_id, @rightAdjointMate_id]
     rfl
 
-/--
-Definition of `leftDualIso` / `leftDualIso` 的定义
+/-- Left duals are isomorphic. -/
+/-
+**CategoryTheory.leftDualIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：leftDualIso {X₁ X₂ Y : C} (p₁ : ExactPairing X₁ Y) (p₂ : ExactPairing X₂ Y
+) : X₁ ≅ X₂ where hom
+参数：p₁ : ExactPairing X₁ Y；p₂ : ExactPairing X₂ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftDualIso
-  signature: {X₁ X₂ Y : C} (p₁ : ExactPairing X₁ Y) (p₂ : ExactPairing X₂ Y)
-  body: @leftAdjointMate C _ _ Y Y ⟨X₂⟩ ⟨X₁⟩ (𝟙 Y)
-  inv := @leftAdjointMate C _ _ Y Y ⟨X₁⟩ ⟨X₂⟩ (𝟙 Y)
-  hom_inv_id := by
-    -- Make all arguments explicit, because we want to find them by unification not synthesis.
-    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
-    rfl
-  inv_hom_id := by
-    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
-    rfl
-
-@[simp]
-
-中文:
-定义 leftDualIso
-  签名: {X₁ X₂ Y : C} (p₁ : ExactPairing X₁ Y) (p₂ : ExactPairing X₂ Y)
-  定义体: @leftAdjointMate C _ _ Y Y ⟨X₂⟩ ⟨X₁⟩ (𝟙 Y)
-  inv := @leftAdjointMate C _ _ Y Y ⟨X₁⟩ ⟨X₂⟩ (𝟙 Y)
-  hom_inv_id := by
-    -- Make all arguments explicit, because we want to find them by unification not synthesis.
-    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
-    rfl
-  inv_hom_id := by
-    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
-    rfl
-
-@[simp]
-
-Depends on / 依赖: leftAdjointMate
+--- 原说明 ---
+Left duals are isomorphic.
 -/
 def leftDualIso {X₁ X₂ Y : C} (p₁ : ExactPairing X₁ Y) (p₂ : ExactPairing X₂ Y) : X₁ ≅ X₂ where
   hom := @leftAdjointMate C _ _ Y Y ⟨X₂⟩ ⟨X₁⟩ (𝟙 Y)
   inv := @leftAdjointMate C _ _ Y Y ⟨X₁⟩ ⟨X₂⟩ (𝟙 Y)
   hom_inv_id := by
     -- Make all arguments explicit, because we want to find them by unification not synthesis.
-    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
+    rw [← @comp_leftAdjointMate C, Category.comp_id, @leftAdjointMate_id]
     rfl
   inv_hom_id := by
-    rw [← @comp_leftAdjointMate C]; rw [Category.comp_id]; rw [@leftAdjointMate_id]
+    rw [← @comp_leftAdjointMate C, Category.comp_id, @leftAdjointMate_id]
     rfl
 
 @[simp]
-/--
-theorem `rightDualIso_id` / 定理 `rightDualIso_id`
-
-English:
-theorem rightDualIso_id
-  given: {X Y : C} (p : ExactPairing X Y)
-  statement: rightDualIso p p = Iso.refl Y
-  proof: by
-  ext
-  simp only [rightDualIso, Iso.refl_hom, @rightAdjointMate_id]
-
-@[simp]
-
-中文:
-定理 rightDualIso_id
-  条件: {X Y : C} (p : ExactPairing X Y)
-  结论: rightDualIso p p = 同构.refl Y
-  证明: by
-  ext
-  simp only [rightDualIso, Iso.refl_hom, @rightAdjointMate_id]
-
-@[simp]
-
-Depends on / 依赖: Iso.refl_hom, refl_hom, rightAdjointMate_id, rightDualIso
+/-
+**CategoryTheory.rightDualIso_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：rightDualIso_id {X Y : C} (p : ExactPairing X Y) : rightDualIso p p = Iso.
+refl Y
+参数：p : ExactPairing X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.rightAdjointMate_id`：rightAdjointMate_id {X : C} [HasRigh
+tDual X] : (𝟙 X)ᘁ = 𝟙 (Xᘁ)
+· 使用定理 `CategoryTheory.Iso.mk.congr_simp`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (hom hom_1 : X ⟶ Y) (e_hom : hom = hom_1)   (inv in
+v_1 : Y ⟶ X) (e_inv : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightDualIso_id {X Y : C} (p : ExactPairing X Y) : rightDualIso p p = Iso.refl Y := by
   ext
   simp only [rightDualIso, Iso.refl_hom, @rightAdjointMate_id]
 
 @[simp]
-/--
-theorem `leftDualIso_id` / 定理 `leftDualIso_id`
-
-English:
-theorem leftDualIso_id
-  given: {X Y : C} (p : ExactPairing X Y)
-  statement: leftDualIso p p = Iso.refl X
-  proof: by
-  ext
-  simp only [leftDualIso, Iso.refl_hom, @leftAdjointMate_id]
-
-中文:
-定理 leftDualIso_id
-  条件: {X Y : C} (p : ExactPairing X Y)
-  结论: leftDualIso p p = 同构.refl X
-  证明: by
-  ext
-  simp only [leftDualIso, Iso.refl_hom, @leftAdjointMate_id]
-
-Depends on / 依赖: Iso.refl_hom, leftAdjointMate_id, leftDualIso, refl_hom
+/-
+**CategoryTheory.leftDualIso_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：leftDualIso_id {X Y : C} (p : ExactPairing X Y) : leftDualIso p p = Iso.re
+fl X
+参数：p : ExactPairing X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.leftAdjointMate_id`：leftAdjointMate_id {X : C} [HasLeftDu
+al X] : (ᘁ(𝟙 X)) = 𝟙 (ᘁX)
+· 使用定理 `CategoryTheory.Iso.mk.congr_simp`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (hom hom_1 : X ⟶ Y) (e_hom : hom = hom_1)   (inv in
+v_1 : Y ⟶ X) (e_inv : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leftDualIso_id {X Y : C} (p : ExactPairing X Y) : leftDualIso p p = Iso.refl X := by
   ext
   simp only [leftDualIso, Iso.refl_hom, @leftAdjointMate_id]
 
-/--
-Definition of `rightDualTensorIso` / `rightDualTensorIso` 的定义
+/-- The right dual of a tensor product is isomorphic to the reversed tensor product of
+the right duals. -/
+/-
+**CategoryTheory.rightDualTensorIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：rightDualTensorIso (X Y : C) [HasRightDual X] [HasRightDual Y] [HasRightDu
+al (X otimes Y)] : (X otimes Y)ᘁ ≅ Yᘁ otimes Xᘁ
+参数：X Y : C；X otimes Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightDualTensorIso
-  signature: (X Y : C) [HasRightDual X] [HasRightDual Y]
-  body: rightDualIso HasRightDual.exact ExactPairing.tensor
-
-中文:
-定义 rightDualTensorIso
-  签名: (X Y : C) [有RightDual X] [有RightDual Y]
-  定义体: rightDualIso HasRightDual.exact ExactPairing.tensor
-
-Depends on / 依赖: ExactPairing, ExactPairing.tensor, HasRightDual, HasRightDual.exact, rightDualIso, tensor
+--- 原说明 ---
+The right dual of a tensor product is isomorphic to the reversed tensor product 
+of
+the right duals.
 -/
 def rightDualTensorIso (X Y : C) [HasRightDual X] [HasRightDual Y]
-    [HasRightDual (X otimes Y)] :
-    (X otimes Y)ᘁ ≅ Yᘁ otimes Xᘁ :=
+    [HasRightDual (X ⊗ Y)] :
+    (X ⊗ Y)ᘁ ≅ Yᘁ ⊗ Xᘁ :=
   rightDualIso HasRightDual.exact ExactPairing.tensor
 
-/--
-Definition of `leftDualTensorIso` / `leftDualTensorIso` 的定义
+/-- The left dual of a tensor product is isomorphic to the reversed tensor product of
+the left duals. -/
+/-
+**CategoryTheory.leftDualTensorIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：leftDualTensorIso (X Y : C) [HasLeftDual X] [HasLeftDual Y] [HasLeftDual (
+X otimes Y)] : leftDual (X otimes Y) ≅ leftDual Y otimes leftDual X
+参数：X Y : C；X otimes Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftDualTensorIso
-  signature: (X Y : C) [HasLeftDual X] [HasLeftDual Y]
-  body: leftDualIso HasLeftDual.exact ExactPairing.tensor
-
-中文:
-定义 leftDualTensorIso
-  签名: (X Y : C) [有LeftDual X] [有LeftDual Y]
-  定义体: leftDualIso HasLeftDual.exact ExactPairing.tensor
-
-Depends on / 依赖: ExactPairing, ExactPairing.tensor, HasLeftDual, HasLeftDual.exact, leftDualIso, tensor
+--- 原说明 ---
+The left dual of a tensor product is isomorphic to the reversed tensor product o
+f
+the left duals.
 -/
 def leftDualTensorIso (X Y : C) [HasLeftDual X] [HasLeftDual Y]
-    [HasLeftDual (X otimes Y)] :
-    leftDual (X otimes Y) ≅ leftDual Y otimes leftDual X :=
+    [HasLeftDual (X ⊗ Y)] :
+    leftDual (X ⊗ Y) ≅ leftDual Y ⊗ leftDual X :=
   leftDualIso HasLeftDual.exact ExactPairing.tensor
 
-/--
-Definition of `RightRigidCategory` / `RightRigidCategory` 的定义
+/-- A right rigid monoidal category is one in which every object has a right dual. -/
+/-
+**CategoryTheory.RightRigidCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`
+。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.MonoidalCategory C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RightRigidCategory
-  parameters: (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
-  axioms and operations (1):
-    - [rightDual : forall X : C, HasRightDual X]
-
-中文:
-类 RightRigid范畴
-  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
-  公理与运算 (1 个):
-    - [rightDual : 对任意 X : C, 有RightDual X]
+--- 原说明 ---
+A right rigid monoidal category is one in which every object has a right dual.
 -/
 class RightRigidCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] where
-  [rightDual : forall X : C, HasRightDual X]
+  [rightDual : ∀ X : C, HasRightDual X]
 
-/--
-Definition of `LeftRigidCategory` / `LeftRigidCategory` 的定义
+/-- A left rigid monoidal category is one in which every object has a right dual. -/
+/-
+**CategoryTheory.LeftRigidCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.MonoidalCategory C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LeftRigidCategory
-  parameters: (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
-  axioms and operations (1):
-    - [leftDual : forall X : C, HasLeftDual X]
-
-中文:
-类 LeftRigid范畴
-  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
-  公理与运算 (1 个):
-    - [leftDual : 对任意 X : C, 有LeftDual X]
+--- 原说明 ---
+A left rigid monoidal category is one in which every object has a right dual.
 -/
 class LeftRigidCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] where
-  [leftDual : forall X : C, HasLeftDual X]
+  [leftDual : ∀ X : C, HasLeftDual X]
 
 attribute [instance_reducible, instance 100] RightRigidCategory.rightDual
 attribute [instance_reducible, instance 100] LeftRigidCategory.leftDual
@@ -2262,39 +2447,48 @@ closed structure shouldn't come the rigid structure (e.g. in the category `FinVe
 convenient to define the internal hom as `Y →ₗ[k] X` rather than `ᘁY ⊗ X` even though these are
 naturally isomorphic). -/
 @[instance_reducible]
-/--
-Definition of `monoidalClosedOfLeftRigidCategory` / `monoidalClosedOfLeftRigidCategory` 的定义
+/-
+**CategoryTheory.monoidalClosedOfLeftRigidCategory** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：monoidalClosedOfLeftRigidCategory (C : Type u) [Category.{v} C] [MonoidalC
+ategory.{v} C] [LeftRigidCategory C] : MonoidalClosed C where closed X
+参数：C : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monoidalClosedOfLeftRigidCategory
-  signature: (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
-  body: closedOfHasLeftDual X
-
-中文:
-定义 monoidalClosedOfLeftRigidCategory
-  签名: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
-  定义体: closedOfHasLeftDual X
-
-Depends on / 依赖: closedOfHasLeftDual
+--- 原说明 ---
+Any left rigid category is monoidal closed, with the internal hom `X ⟶[C] Y = ᘁX
+ ⊗ Y`.
+This has to be a definition rather than an instance to avoid diamonds, for examp
+le between
+`category_theory.monoidal_closed.functor_category` and
+`CategoryTheory.Monoidal.leftRigidFunctorCategory`. Moreover, in concrete applic
+ations there is
+often a more useful definition of the internal hom object than `ᘁY ⊗ X`, in whic
+h case the monoidal
+closed structure shouldn't come the rigid structure (e.g. in the category `FinVe
+ct k`, it is more
+convenient to define the internal hom as `Y →ₗ[k] X` rather than `ᘁY ⊗ X` even t
+hough these are
+naturally isomorphic).
 -/
 def monoidalClosedOfLeftRigidCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
     [LeftRigidCategory C] : MonoidalClosed C where
   closed X := closedOfHasLeftDual X
 
-/--
-Definition of `RigidCategory` / `RigidCategory` 的定义
+/-- A rigid monoidal category is a monoidal category which is left rigid and right rigid. -/
+/-
+**CategoryTheory.RigidCategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.MonoidalCategory C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RigidCategory
-  parameters: (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C]
-  (no additional axioms)
-
-中文:
-类 Rigid范畴
-  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
-  (无附加公理)
+--- 原说明 ---
+A rigid monoidal category is a monoidal category which is left rigid and right r
+igid.
 -/
 class RigidCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] extends
     RightRigidCategory C, LeftRigidCategory C
 
 end CategoryTheory
+

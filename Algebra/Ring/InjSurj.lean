@@ -29,1208 +29,1626 @@ public section
 variable {R S : Type*}
 
 namespace Function.Injective
-variable (f : S -> R) (hf : Injective f)
+variable (f : S → R) (hf : Injective f)
 include hf
 
 variable [Add S] [Mul S]
 
-/--
-theorem `leftDistribClass` / 定理 `leftDistribClass`
+/-- Pullback a `LeftDistribClass` instance along an injective function. -/
+/-
+**Function.Injective.leftDistribClass** 是 Mathlib 中的一个定理，位于命名空间 `Function.Inject
+ive`。
+形式化陈述：leftDistribClass [Mul R] [Add R] [LeftDistribClass R] (add : forall x y, f
+ (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y) : LeftDistribCla
+ss S where left_distrib x y z
+参数：add : forall x y, f (x + y) = f x + f y；mul : forall x y, f (x * y) = f x * f
+ y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `left_distrib`：left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c :
+ R) : a * (b + c) = a * b + a * c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem leftDistribClass
-  statement: [Mul R] [Add R] [LeftDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-  proof: hf by simp only [*, left_distrib]
-
-中文:
-定理 leftDistribClass
-  结论: [乘法 R] [加法 R] [LeftDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
-  证明: hf by simp only [*, left_distrib]
-
-Depends on / 依赖: left_distrib
+--- 原说明 ---
+Pullback a `LeftDistribClass` instance along an injective function.
 -/
-theorem leftDistribClass [Mul R] [Add R] [LeftDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) : LeftDistribClass S where
-left_distrib x y z := hf by simp only [*, left_distrib]
+theorem leftDistribClass [Mul R] [Add R] [LeftDistribClass R] (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) : LeftDistribClass S where
+  left_distrib x y z := hf <| by simp only [*, left_distrib]
 
-/--
-theorem `rightDistribClass` / 定理 `rightDistribClass`
+/-- Pullback a `RightDistribClass` instance along an injective function. -/
+/-
+**Function.Injective.rightDistribClass** 是 Mathlib 中的一个定理，位于命名空间 `Function.Injec
+tive`。
+形式化陈述：rightDistribClass [Mul R] [Add R] [RightDistribClass R] (add : forall x y,
+ f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y) : RightDistrib
+Class S where right_distrib x y z
+参数：add : forall x y, f (x + y) = f x + f y；mul : forall x y, f (x * y) = f x * f
+ y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem rightDistribClass
-  statement: [Mul R] [Add R] [RightDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-  proof: hf by simp only [*, right_distrib]
-
-中文:
-定理 rightDistribClass
-  结论: [乘法 R] [加法 R] [RightDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
-  证明: hf by simp only [*, right_distrib]
-
-Depends on / 依赖: right_distrib
+--- 原说明 ---
+Pullback a `RightDistribClass` instance along an injective function.
 -/
-theorem rightDistribClass [Mul R] [Add R] [RightDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) : RightDistribClass S where
-right_distrib x y z := hf by simp only [*, right_distrib]
+theorem rightDistribClass [Mul R] [Add R] [RightDistribClass R] (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) : RightDistribClass S where
+  right_distrib x y z := hf <| by simp only [*, right_distrib]
 
-variable [Zero S] [One S] [Neg S] [Sub S] [SMul Nat S] [SMul Int S]
-  [Pow S Nat] [NatCast S] [IntCast S]
+variable [Zero S] [One S] [Neg S] [Sub S] [SMul ℕ S] [SMul ℤ S]
+  [Pow S ℕ] [NatCast S] [IntCast S]
 
+/-- Pullback a `Distrib` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `distrib` / `distrib` 的定义
-
-English:
-abbreviation distrib
-  signature: [Distrib R] (add : forall x y, f (x + y) = f x + f y)
-  body: hf.leftDistribClass f add mul
-  __ := hf.rightDistribClass f add mul
-
-中文:
-缩写 distrib
-  签名: [Distrib R] (add : 对任意 x y, f (x + y) = f x + f y)
-  定义体: hf.leftDistribClass f add mul
-  __ := hf.rightDistribClass f add mul
+/-
+**Function.Injective.distrib** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Distrib R] →               (∀ (x y : S), f (x + y) = f x + f y) → (∀ (x y :
+ S), f (x * y) = f x * f y) → Distrib S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LeftDistribClass.left_distrib`：∀ {R : Type u_1} {inst : Mul R} {inst_1 :
+ Add R} [self : LeftDistribClass R] (a b c : R), a * (b + c) = a * b + a * c
+· 使用定理 `RightDistribClass.right_distrib`：∀ {R : Type u_1} {inst : Mul R} {inst_1
+ : Add R} [self : RightDistribClass R] (a b c : R), (a + b) * c = a * c + b * c
 -/
-protected abbrev distrib [Distrib R] (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) : Distrib S where
+protected abbrev distrib [Distrib R] (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) : Distrib S where
   __ := hf.leftDistribClass f add mul
   __ := hf.rightDistribClass f add mul
 
+/-- A type endowed with `-` and `*` has distributive negation, if it admits an injective map that
+preserves `-` and `*` to a type which has distributive negation. -/
 -- See note [reducible non-instances]
-/--
-Definition of `hasDistribNeg` / `hasDistribNeg` 的定义
-
-English:
-abbreviation hasDistribNeg
-  signature: (f : S -> R) (hf : Injective f) [Mul R] [HasDistribNeg R]
-  body: { hf.involutiveNeg _ neg, ‹Mul S› with
-neg_mul := fun x y => hf by rw [neg, mul, neg, neg_mul, mul],
-mul_neg := fun x y => hf by rw [neg, mul, neg, mul_neg, mul] }
-
-中文:
-缩写 hasDistribNeg
-  签名: (f : S -> R) (hf : 单射 f) [乘法 R] [有DistribNeg R]
-  定义体: { hf.involutiveNeg _ neg, ‹Mul S› with
-neg_mul := fun x y => hf by rw [neg, mul, neg, neg_mul, mul],
-mul_neg := fun x y => hf by rw [neg, mul, neg, mul_neg, mul] }
+/-
+**Function.Injective.hasDistribNeg** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective
+`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Mul S] →       [inst_1 : N
+eg S] →         (f : S → R) →           Function.Injective f →             [inst
+_2 : Mul R] →               [inst_3 : HasDistribNeg R] →                 (∀ (a :
+ S), f (-a) = -f a) → (∀ (a b : S), f (a * b) = f a * f b) → HasDistribNeg S
+参数：f : S → R；∀ (a : S), f (-a) = -f a；∀ (a b : S), f (a * b) = f a * f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected abbrev hasDistribNeg (f : S -> R) (hf : Injective f) [Mul R] [HasDistribNeg R]
-    (neg : forall a, f (-a) = -f a)
-    (mul : forall a b, f (a * b) = f a * f b) : HasDistribNeg S :=
+protected abbrev hasDistribNeg (f : S → R) (hf : Injective f) [Mul R] [HasDistribNeg R]
+    (neg : ∀ a, f (-a) = -f a)
+    (mul : ∀ a b, f (a * b) = f a * f b) : HasDistribNeg S :=
   { hf.involutiveNeg _ neg, ‹Mul S› with
-neg_mul := fun x y => hf by rw [neg, mul, neg, neg_mul, mul],
-mul_neg := fun x y => hf by rw [neg, mul, neg, mul_neg, mul] }
+    neg_mul := fun x y => hf <| by rw [neg, mul, neg, neg_mul, mul],
+    mul_neg := fun x y => hf <| by rw [neg, mul, neg, mul_neg, mul] }
 
-/--
-Definition of `addMonoidWithOne` / `addMonoidWithOne` 的定义
+/-- A type endowed with `0`, `1` and `+` is an additive monoid with one,
+if it admits an injective map that preserves `0`, `1` and `+` to an additive monoid with one.
+See note [reducible non-instances]. -/
+/-
+**Function.Injective.addMonoidWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.Inject
+ive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Add S] →       [inst_1 : Z
+ero S] →         [inst_2 : One S] →           [inst_3 : SMul ℕ S] →             
+[inst_4 : NatCast S] →               [inst_5 : AddMonoidWithOne R] →            
+     (f : S → R) →                   Function.Injective f →                     
+f 0 = 0 →                       f 1 = 1 →                         (∀ (x y : S), 
+f (x + y) = f x + f y) →                           (∀ (n : ℕ) (x : S), f (n • x)
+ = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → AddMonoidWithOne S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (n : ℕ) (x : S), f (n • x) = n
+ • f x；∀ (n : ℕ), f ↑n = ↑n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation addMonoidWithOne
-  signature: [AddMonoidWithOne R]
-  body: { hf.addMonoid f zero add (swap nsmul) with
-    natCast := Nat.cast,
-    natCast_zero := hf (by rw [natCast, Nat.cast_zero, zero]),
-    natCast_succ := fun n => hf (by rw [natCast, Nat.cast_succ, add, one, natCast]) }
-
-中文:
-缩写 addMonoidWithOne
-  签名: [加法带幺幺半群 R]
-  定义体: { hf.addMonoid f zero add (swap nsmul) with
-    natCast := Nat.cast,
-    natCast_zero := hf (by rw [natCast, Nat.cast_zero, zero]),
-    natCast_succ := fun n => hf (by rw [natCast, Nat.cast_succ, add, one, natCast]) }
+--- 原说明 ---
+A type endowed with `0`, `1` and `+` is an additive monoid with one,
+if it admits an injective map that preserves `0`, `1` and `+` to an additive mon
+oid with one.
+See note [reducible non-instances].
 -/
 protected abbrev addMonoidWithOne [AddMonoidWithOne R]
-    (f : S -> R) (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : AddMonoidWithOne S :=
+    (f : S → R) (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1)
+    (add : ∀ x y, f (x + y) = f x + f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : AddMonoidWithOne S :=
   { hf.addMonoid f zero add (swap nsmul) with
     natCast := Nat.cast,
     natCast_zero := hf (by rw [natCast, Nat.cast_zero, zero]),
     natCast_succ := fun n => hf (by rw [natCast, Nat.cast_succ, add, one, natCast]) }
 
-/--
-Definition of `addCommMonoidWithOne` / `addCommMonoidWithOne` 的定义
+/-- A type endowed with `0`, `1` and `+` is an additive commutative monoid with one, if it admits an
+injective map that preserves `0`, `1` and `+` to an additive commutative monoid with one.
+See note [reducible non-instances]. -/
+/-
+**Function.Injective.addCommMonoidWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.In
+jective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_3} →     [inst : Zero S] →       [inst_1 : 
+One S] →         [inst_2 : Add S] →           [inst_3 : SMul ℕ S] →             
+[inst_4 : NatCast S] →               [inst_5 : AddCommMonoidWithOne R] →        
+         (f : S → R) →                   Function.Injective f →                 
+    f 0 = 0 →                       f 1 = 1 →                         (∀ (x y : 
+S), f (x + y) = f x + f y) →                           (∀ (n : ℕ) (x : S), f (n 
+• x) = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → AddCommMonoidWithOne S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (n : ℕ) (x : S), f (n • x) = n
+ • f x；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommMonoid.add_comm`：∀ {M : Type u} [self : AddCommMonoid M] (a b : M
+), a + b = b + a
 
-English:
-abbreviation addCommMonoidWithOne
-  signature: {S} [Zero S] [One S] [Add S] [SMul Nat S] [NatCast S]
-  body: hf.addMonoidWithOne f zero one add nsmul natCast
-  __ := hf.addCommMonoid _ zero add (swap nsmul)
-
-中文:
-缩写 addCommMonoidWithOne
-  签名: {S} [零 S] [幺 S] [加法 S] [标量乘法 自然数 S] [自然数嵌入 S]
-  定义体: hf.addMonoidWithOne f zero one add nsmul natCast
-  __ := hf.addCommMonoid _ zero add (swap nsmul)
+--- 原说明 ---
+A type endowed with `0`, `1` and `+` is an additive commutative monoid with one,
+ if it admits an
+injective map that preserves `0`, `1` and `+` to an additive commutative monoid 
+with one.
+See note [reducible non-instances].
 -/
-protected abbrev addCommMonoidWithOne {S} [Zero S] [One S] [Add S] [SMul Nat S] [NatCast S]
-    [AddCommMonoidWithOne R] (f : S -> R) (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : AddCommMonoidWithOne S where
+protected abbrev addCommMonoidWithOne {S} [Zero S] [One S] [Add S] [SMul ℕ S] [NatCast S]
+    [AddCommMonoidWithOne R] (f : S → R) (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1)
+    (add : ∀ x y, f (x + y) = f x + f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : AddCommMonoidWithOne S where
   __ := hf.addMonoidWithOne f zero one add nsmul natCast
   __ := hf.addCommMonoid _ zero add (swap nsmul)
 
-/--
-Definition of `addGroupWithOne` / `addGroupWithOne` 的定义
+/-- A type endowed with `0`, `1` and `+` is an additive group with one, if it admits an injective
+map that preserves `0`, `1` and `+` to an additive group with one.  See note
+[reducible non-instances]. -/
+/-
+**Function.Injective.addGroupWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injecti
+ve`。
+形式化陈述：{R : Type u_1} →   {S : Type u_3} →     [inst : Zero S] →       [inst_1 : 
+One S] →         [inst_2 : Add S] →           [inst_3 : SMul ℕ S] →             
+[inst_4 : Neg S] →               [inst_5 : Sub S] →                 [inst_6 : SM
+ul ℤ S] →                   [inst_7 : NatCast S] →                     [inst_8 :
+ IntCast S] →                       [inst_9 : AddGroupWithOne R] →              
+           (f : S → R) →                           Function.Injective f →       
+                      f 0 = 0 →                               f 1 = 1 →         
+                        (∀ (x y : S), f (x + y) = f x + f y) →                  
+                 (∀ (x : S), f (-x) = -f x) →                                   
+  (∀ (x y : S), f (x - y) = f x - f y) →                                       (
+∀ (n : ℕ) (x : S), f (n • x) = n • f x) →                                       
+  (∀ (n : ℤ) (x : S), f (n • x) = n • f x) →                                    
+       (∀ (n : ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → AddGroupWithOne S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x : S), f (-x) = -f x；∀ (x y 
+: S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S), f (n • x) = n • f x；∀ (n : ℤ) (x 
+: S), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidWithOne.natCast_zero`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R], ↑0 = 0
+· 使用定理 `AddMonoidWithOne.natCast_succ`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R] (n : ℕ), ↑(n + 1) = ↑n + 1
+· 使用定理 `AddGroup.neg_add_cancel`：∀ {A : Type u} [self : AddGroup A] (a : A), -a 
++ a = 0
 
-English:
-abbreviation addGroupWithOne
-  signature: {S} [Zero S] [One S] [Add S] [SMul Nat S] [Neg S] [Sub S]
-  body: { hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul),
-    hf.addMonoidWithOne f zero one add nsmul natCast with
-    intCast := Int.cast,
-    intCast_ofNat := fun n => hf (by rw [natCast, intCast, Int.cast_natCast]),
-    intCast_negSucc := fun n => hf (by rw [intCast, neg, natCast, Int.cast_negSucc]) }
-
-中文:
-缩写 addGroupWithOne
-  签名: {S} [零 S] [幺 S] [加法 S] [标量乘法 自然数 S] [取负 S] [减法 S]
-  定义体: { hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul),
-    hf.addMonoidWithOne f zero one add nsmul natCast with
-    intCast := Int.cast,
-    intCast_ofNat := fun n => hf (by rw [natCast, intCast, Int.cast_natCast]),
-    intCast_negSucc := fun n => hf (by rw [intCast, neg, natCast, Int.cast_negSucc]) }
+--- 原说明 ---
+A type endowed with `0`, `1` and `+` is an additive group with one, if it admits
+ an injective
+map that preserves `0`, `1` and `+` to an additive group with one.  See note
+[reducible non-instances].
 -/
-protected abbrev addGroupWithOne {S} [Zero S] [One S] [Add S] [SMul Nat S] [Neg S] [Sub S]
-    [SMul Int S] [NatCast S] [IntCast S] [AddGroupWithOne R] (f : S -> R) (hf : Injective f)
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) (natCast : forall n : Nat, f n = n)
-    (intCast : forall n : Int, f n = n) : AddGroupWithOne S :=
+protected abbrev addGroupWithOne {S} [Zero S] [One S] [Add S] [SMul ℕ S] [Neg S] [Sub S]
+    [SMul ℤ S] [NatCast S] [IntCast S] [AddGroupWithOne R] (f : S → R) (hf : Injective f)
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) (natCast : ∀ n : ℕ, f n = n)
+    (intCast : ∀ n : ℤ, f n = n) : AddGroupWithOne S :=
   { hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul),
     hf.addMonoidWithOne f zero one add nsmul natCast with
     intCast := Int.cast,
     intCast_ofNat := fun n => hf (by rw [natCast, intCast, Int.cast_natCast]),
     intCast_negSucc := fun n => hf (by rw [intCast, neg, natCast, Int.cast_negSucc]) }
 
-/--
-Definition of `addCommGroupWithOne` / `addCommGroupWithOne` 的定义
+/-- A type endowed with `0`, `1` and `+` is an additive commutative group with one, if it admits an
+injective map that preserves `0`, `1` and `+` to an additive commutative group with one.
+See note [reducible non-instances]. -/
+/-
+**Function.Injective.addCommGroupWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.Inj
+ective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_3} →     [inst : Zero S] →       [inst_1 : 
+One S] →         [inst_2 : Add S] →           [inst_3 : SMul ℕ S] →             
+[inst_4 : Neg S] →               [inst_5 : Sub S] →                 [inst_6 : SM
+ul ℤ S] →                   [inst_7 : NatCast S] →                     [inst_8 :
+ IntCast S] →                       [inst_9 : AddCommGroupWithOne R] →          
+               (f : S → R) →                           Function.Injective f →   
+                          f 0 = 0 →                               f 1 = 1 →     
+                            (∀ (x y : S), f (x + y) = f x + f y) →              
+                     (∀ (x : S), f (-x) = -f x) →                               
+      (∀ (x y : S), f (x - y) = f x - f y) →                                    
+   (∀ (n : ℕ) (x : S), f (n • x) = n • f x) →                                   
+      (∀ (n : ℤ) (x : S), f (n • x) = n • f x) →                                
+           (∀ (n : ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → AddCommGroupWithOne
+ S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x : S), f (-x) = -f x；∀ (x y 
+: S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S), f (n • x) = n • f x；∀ (n : ℤ) (x 
+: S), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroupWithOne.sub_eq_add_neg`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a b : R), a - b = a + -b
+· 使用定理 `AddGroupWithOne.zsmul_zero'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+a : R), 0 • a = 0
+· 使用定理 `AddGroupWithOne.zsmul_succ'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+n : ℕ) (a : R), ↑n.succ • a = ↑n • a + a
+· 使用定理 `AddGroupWithOne.zsmul_neg'`：∀ {R : Type u} [self : AddGroupWithOne R] (n
+ : ℕ) (a : R), Int.negSucc n • a = -(↑n.succ • a)
+· 使用定理 `AddGroupWithOne.neg_add_cancel`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a : R), -a + a = 0
+· 使用定理 `AddCommMonoid.add_comm`：∀ {M : Type u} [self : AddCommMonoid M] (a b : M
+), a + b = b + a
+· 使用定理 `AddGroupWithOne.intCast_ofNat`：∀ {R : Type u} [self : AddGroupWithOne R]
+ (n : ℕ), IntCast.intCast ↑n = ↑n
+· 使用定理 `AddGroupWithOne.intCast_negSucc`：∀ {R : Type u} [self : AddGroupWithOne 
+R] (n : ℕ), IntCast.intCast (Int.negSucc n) = -↑(n + 1)
 
-English:
-abbreviation addCommGroupWithOne
-  signature: {S} [Zero S] [One S] [Add S] [SMul Nat S] [Neg S] [Sub S]
-  body: { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
-    hf.addCommMonoid _ zero add (swap nsmul) with }
-
-中文:
-缩写 addCommGroupWithOne
-  签名: {S} [零 S] [幺 S] [加法 S] [标量乘法 自然数 S] [取负 S] [减法 S]
-  定义体: { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
-    hf.addCommMonoid _ zero add (swap nsmul) with }
+--- 原说明 ---
+A type endowed with `0`, `1` and `+` is an additive commutative group with one, 
+if it admits an
+injective map that preserves `0`, `1` and `+` to an additive commutative group w
+ith one.
+See note [reducible non-instances].
 -/
-protected abbrev addCommGroupWithOne {S} [Zero S] [One S] [Add S] [SMul Nat S] [Neg S] [Sub S]
-    [SMul Int S] [NatCast S] [IntCast S] [AddCommGroupWithOne R] (f : S -> R) (hf : Injective f)
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) (natCast : forall n : Nat, f n = n)
-    (intCast : forall n : Int, f n = n) : AddCommGroupWithOne S :=
+protected abbrev addCommGroupWithOne {S} [Zero S] [One S] [Add S] [SMul ℕ S] [Neg S] [Sub S]
+    [SMul ℤ S] [NatCast S] [IntCast S] [AddCommGroupWithOne R] (f : S → R) (hf : Injective f)
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) (natCast : ∀ n : ℕ, f n = n)
+    (intCast : ∀ n : ℤ, f n = n) : AddCommGroupWithOne S :=
   { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
     hf.addCommMonoid _ zero add (swap nsmul) with }
 
+/-- Pullback a `NonUnitalNonAssocSemiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalNonAssocSemiring` / `nonUnitalNonAssocSemiring` 的定义
-
-English:
-abbreviation nonUnitalNonAssocSemiring
-  signature: [NonUnitalNonAssocSemiring R] (zero : f 0 = 0)
-  body: hf.addCommMonoid f zero add (swap nsmul)
-  __ := hf.distrib f add mul
-  __ := hf.mulZeroClass f zero mul
-
-中文:
-缩写 nonUnitalNonAssocSemiring
-  签名: [非幺非结合半环 R] (zero : f 0 = 0)
-  定义体: hf.addCommMonoid f zero add (swap nsmul)
-  __ := hf.distrib f add mul
-  __ := hf.mulZeroClass f zero mul
+/-
+**Function.Injective.nonUnitalNonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Functi
+on.Injective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : Non
+UnitalNonAssocSemiring R] →                   f 0 = 0 →                     (∀ (
+x y : S), f (x + y) = f x + f y) →                       (∀ (x y : S), f (x * y)
+ = f x * f y) →                         (∀ (n : ℕ) (x : S), f (n • x) = n • f x)
+ → NonUnitalNonAssocSemiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Distrib.left_distrib`：∀ {R : Type u_1} [self : Distrib R] (a b c : R), a
+ * (b + c) = a * b + a * c
+· 使用定理 `Distrib.right_distrib`：∀ {R : Type u_1} [self : Distrib R] (a b c : R), 
+(a + b) * c = a * c + b * c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 protected abbrev nonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) : NonUnitalNonAssocSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) : NonUnitalNonAssocSemiring S where
   toAddCommMonoid := hf.addCommMonoid f zero add (swap nsmul)
   __ := hf.distrib f add mul
   __ := hf.mulZeroClass f zero mul
 
+/-- Pullback a `NonUnitalSemiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalSemiring` / `nonUnitalSemiring` 的定义
-
-English:
-abbreviation nonUnitalSemiring
-  signature: [NonUnitalSemiring R]
-  body: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.semigroupWithZero f zero mul
-
-中文:
-缩写 nonUnitalSemiring
-  签名: [非幺半环 R]
-  定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.semigroupWithZero f zero mul
+/-
+**Function.Injective.nonUnitalSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injec
+tive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : Non
+UnitalSemiring R] →                   f 0 = 0 →                     (∀ (x y : S)
+, f (x + y) = f x + f y) →                       (∀ (x y : S), f (x * y) = f x *
+ f y) →                         (∀ (n : ℕ) (x : S), f (n • x) = n • f x) → NonUn
+italSemiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev nonUnitalSemiring [NonUnitalSemiring R]
-    (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) :
+    (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) :
     NonUnitalSemiring S where
   toNonUnitalNonAssocSemiring := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.semigroupWithZero f zero mul
 
+/-- Pullback a `NonAssocSemiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocSemiring` / `nonAssocSemiring` 的定义
-
-English:
-abbreviation nonAssocSemiring
-  signature: [NonAssocSemiring R]
-  body: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.mulZeroOneClass f zero one mul
-  __ := hf.addMonoidWithOne f zero one add nsmul natCast
-
-中文:
-缩写 nonAssocSemiring
-  签名: [非结合半环 R]
-  定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.mulZeroOneClass f zero one mul
-  __ := hf.addMonoidWithOne f zero one add nsmul natCast
+/-
+**Function.Injective.nonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Inject
+ive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : SMul ℕ
+ S] →                   [inst_5 : NatCast S] →                     [inst_6 : Non
+AssocSemiring R] →                       f 0 = 0 →                         f 1 =
+ 1 →                           (∀ (x y : S), f (x + y) = f x + f y) →           
+                  (∀ (x y : S), f (x * y) = f x * f y) →                        
+       (∀ (n : ℕ) (x : S), f (n • x) = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → NonAs
+socSemiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidWithOne.natCast_zero`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R], ↑0 = 0
+· 使用定理 `AddMonoidWithOne.natCast_succ`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R] (n : ℕ), ↑(n + 1) = ↑n + 1
 -/
 protected abbrev nonAssocSemiring [NonAssocSemiring R]
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : NonAssocSemiring S where
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : NonAssocSemiring S where
   toNonUnitalNonAssocSemiring := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.mulZeroOneClass f zero one mul
   __ := hf.addMonoidWithOne f zero one add nsmul natCast
 
+/-- Pullback a `Semiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `semiring` / `semiring` 的定义
-
-English:
-abbreviation semiring
-  signature: [Semiring R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.monoidWithZero f zero one mul npow
-
-中文:
-缩写 semiring
-  签名: [半环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.monoidWithZero f zero one mul npow
+/-
+**Function.Injective.semiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : SMul ℕ
+ S] →                   [inst_5 : Pow S ℕ] →                     [inst_6 : NatCa
+st S] →                       [inst_7 : Semiring R] →                         f 
+0 = 0 →                           f 1 = 1 →                             (∀ (x y 
+: S), f (x + y) = f x + f y) →                               (∀ (x y : S), f (x 
+* y) = f x * f y) →                                 (∀ (n : ℕ) (x : S), f (n • x
+) = n • f x) →                                   (∀ (x : S) (n : ℕ), f (x ^ n) =
+ f x ^ n) → (∀ (n : ℕ), f ↑n = ↑n) → Semiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x；∀ (x : S) (n : ℕ), f (x ^ n) = f x ^ n
+；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSemiring.mul_assoc`：∀ {α : Type u} [self : NonUnitalSemiring α]
+ (a b c : α), a * b * c = a * (b * c)
+· 使用定理 `NonAssocSemiring.one_mul`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), 1 * a = a
+· 使用定理 `NonAssocSemiring.mul_one`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), a * 1 = a
+· 使用定理 `NonAssocSemiring.natCast_zero`：∀ {α : Type u} [self : NonAssocSemiring α
+], ↑0 = 0
+· 使用定理 `NonAssocSemiring.natCast_succ`：∀ {α : Type u} [self : NonAssocSemiring α
+] (n : ℕ), ↑(n + 1) = ↑n + 1
 -/
 protected abbrev semiring [Semiring R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n)
-    (natCast : forall n : Nat, f n = n) : Semiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n)
+    (natCast : ∀ n : ℕ, f n = n) : Semiring S where
   toNonUnitalSemiring := hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.monoidWithZero f zero one mul npow
 
+/-- Pullback a `NonUnitalNonAssocRing` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalNonAssocRing` / `nonUnitalNonAssocRing` 的定义
-
-English:
-abbreviation nonUnitalNonAssocRing
-  signature: [NonUnitalNonAssocRing R] (f : S -> R)
-  body: hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
-  __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-
-中文:
-缩写 nonUnitalNonAssocRing
-  签名: [非幺非结合环 R] (f : S -> R)
-  定义体: hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
-  __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
+/-
+**Function.Injective.nonUnitalNonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.I
+njective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Add S] →       [inst_1 : M
+ul S] →         [inst_2 : Zero S] →           [inst_3 : Neg S] →             [in
+st_4 : Sub S] →               [inst_5 : SMul ℕ S] →                 [inst_6 : SM
+ul ℤ S] →                   [inst_7 : NonUnitalNonAssocRing R] →                
+     (f : S → R) →                       Function.Injective f →                 
+        f 0 = 0 →                           (∀ (x y : S), f (x + y) = f x + f y)
+ →                             (∀ (x y : S), f (x * y) = f x * f y) →           
+                    (∀ (x : S), f (-x) = -f x) →                                
+ (∀ (x y : S), f (x - y) = f x - f y) →                                   (∀ (n 
+: ℕ) (x : S), f (n • x) = n • f x) →                                     (∀ (n :
+ ℤ) (x : S), f (n • x) = n • f x) → NonUnitalNonAssocRing S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalNonAssocSemiring.left_distrib`：∀ {α : Type u} [self : NonUnital
+NonAssocSemiring α] (a b c : α), a * (b + c) = a * b + a * c
+· 使用定理 `NonUnitalNonAssocSemiring.right_distrib`：∀ {α : Type u} [self : NonUnita
+lNonAssocSemiring α] (a b c : α), (a + b) * c = a * c + b * c
+· 使用定理 `NonUnitalNonAssocSemiring.zero_mul`：∀ {α : Type u} [self : NonUnitalNonA
+ssocSemiring α] (a : α), 0 * a = 0
+· 使用定理 `NonUnitalNonAssocSemiring.mul_zero`：∀ {α : Type u} [self : NonUnitalNonA
+ssocSemiring α] (a : α), a * 0 = 0
 -/
-protected abbrev nonUnitalNonAssocRing [NonUnitalNonAssocRing R] (f : S -> R)
-    (hf : Injective f) (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) : NonUnitalNonAssocRing S where
+protected abbrev nonUnitalNonAssocRing [NonUnitalNonAssocRing R] (f : S → R)
+    (hf : Injective f) (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) : NonUnitalNonAssocRing S where
   toAddCommGroup := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
   __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
 
+/-- Pullback a `NonUnitalRing` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalRing` / `nonUnitalRing` 的定义
-
-English:
-abbreviation nonUnitalRing
-  signature: [NonUnitalRing R]
-  body: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalSemiring f zero add mul nsmul
-
-中文:
-缩写 nonUnitalRing
-  签名: [非幺环 R]
-  定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalSemiring f zero add mul nsmul
+/-
+**Function.Injective.nonUnitalRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective
+`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : Neg S] →                 [inst_4 : Sub S]
+ →                   [inst_5 : SMul ℕ S] →                     [inst_6 : SMul ℤ 
+S] →                       [inst_7 : NonUnitalRing R] →                         
+f 0 = 0 →                           (∀ (x y : S), f (x + y) = f x + f y) →      
+                       (∀ (x y : S), f (x * y) = f x * f y) →                   
+            (∀ (x : S), f (-x) = -f x) →                                 (∀ (x y
+ : S), f (x - y) = f x - f y) →                                   (∀ (n : ℕ) (x 
+: S), f (n • x) = n • f x) →                                     (∀ (n : ℤ) (x :
+ S), f (n • x) = n • f x) → NonUnitalRing S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSemiring.mul_assoc`：∀ {α : Type u} [self : NonUnitalSemiring α]
+ (a b c : α), a * b * c = a * (b * c)
 -/
 protected abbrev nonUnitalRing [NonUnitalRing R]
-    (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x) :
+    (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) :
     NonUnitalRing S where
   toNonUnitalNonAssocRing := hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalSemiring f zero add mul nsmul
 
+/-- Pullback a `NonAssocRing` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocRing` / `nonAssocRing` 的定义
-
-English:
-abbreviation nonAssocRing
-  signature: [NonAssocRing R]
-  body: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-
-中文:
-缩写 nonAssocRing
-  签名: [非结合环 R]
-  定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
+/-
+**Function.Injective.nonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`
+。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : Neg S]
+ →                   [inst_5 : Sub S] →                     [inst_6 : SMul ℕ S] 
+→                       [inst_7 : SMul ℤ S] →                         [inst_8 : 
+NatCast S] →                           [inst_9 : IntCast S] →                   
+          [inst_10 : NonAssocRing R] →                               f 0 = 0 →  
+                               f 1 = 1 →                                   (∀ (x
+ y : S), f (x + y) = f x + f y) →                                     (∀ (x y : 
+S), f (x * y) = f x * f y) →                                       (∀ (x : S), f
+ (-x) = -f x) →                                         (∀ (x y : S), f (x - y) 
+= f x - f y) →                                           (∀ (n : ℕ) (x : S), f (
+n • x) = n • f x) →                                             (∀ (n : ℤ) (x : 
+S), f (n • x) = n • f x) →                                               (∀ (n :
+ ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → NonAssocRing S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑
+n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonAssocSemiring.one_mul`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), 1 * a = a
+· 使用定理 `NonAssocSemiring.mul_one`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), a * 1 = a
+· 使用定理 `NonAssocSemiring.natCast_zero`：∀ {α : Type u} [self : NonAssocSemiring α
+], ↑0 = 0
+· 使用定理 `NonAssocSemiring.natCast_succ`：∀ {α : Type u} [self : NonAssocSemiring α
+] (n : ℕ), ↑(n + 1) = ↑n + 1
+· 使用定理 `AddCommGroupWithOne.intCast_ofNat`：∀ {R : Type u} [self : AddCommGroupWi
+thOne R] (n : ℕ), IntCast.intCast ↑n = ↑n
+· 使用定理 `AddCommGroupWithOne.intCast_negSucc`：∀ {R : Type u} [self : AddCommGroup
+WithOne R] (n : ℕ), IntCast.intCast (Int.negSucc n) = -↑(n + 1)
 -/
 protected abbrev nonAssocRing [NonAssocRing R]
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) (natCast : forall n : Nat, f n = n)
-    (intCast : forall n : Int, f n = n) : NonAssocRing S where
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) (natCast : ∀ n : ℕ, f n = n)
+    (intCast : ∀ n : ℤ, f n = n) : NonAssocRing S where
   toNonUnitalNonAssocRing := hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
 
+/-- Pullback a `Ring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `ring` / `ring` 的定义
-
-English:
-abbreviation ring
-  signature: [Ring R] (zero : f 0 = 0)
-  body: hf.semiring f zero one add mul nsmul npow natCast
-  -- zsmul included here explicitly to make sure it's picked correctly by `fast_instance%`.
-  zsmul := fun n x => n • x
-  __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-  __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
-
-中文:
-缩写 ring
-  签名: [环 R] (zero : f 0 = 0)
-  定义体: hf.semiring f zero one add mul nsmul npow natCast
-  -- zsmul included here explicitly to make sure it's picked correctly by `fast_instance%`.
-  zsmul := fun n x => n • x
-  __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-  __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
+/-
+**Function.Injective.ring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : Neg S]
+ →                   [inst_5 : Sub S] →                     [inst_6 : SMul ℕ S] 
+→                       [inst_7 : SMul ℤ S] →                         [inst_8 : 
+Pow S ℕ] →                           [inst_9 : NatCast S] →                     
+        [inst_10 : IntCast S] →                               [inst_11 : Ring R]
+ →                                 f 0 = 0 →                                   f
+ 1 = 1 →                                     (∀ (x y : S), f (x + y) = f x + f y
+) →                                       (∀ (x y : S), f (x * y) = f x * f y) →
+                                         (∀ (x : S), f (-x) = -f x) →           
+                                (∀ (x y : S), f (x - y) = f x - f y) →          
+                                   (∀ (n : ℕ) (x : S), f (n • x) = n • f x) →   
+                                            (∀ (n : ℤ) (x : S), f (n • x) = n • 
+f x) →                                                 (∀ (x : S) (n : ℕ), f (x 
+^ n) = f x ^ n) →                                                   (∀ (n : ℕ), 
+f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → Ring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x；∀ (x : S) (n : ℕ), 
+f (x ^ n) = f x ^ n；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroupWithOne.sub_eq_add_neg`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a b : R), a - b = a + -b
+· 使用定理 `AddGroupWithOne.zsmul_zero'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+a : R), 0 • a = 0
+· 使用定理 `AddGroupWithOne.zsmul_succ'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+n : ℕ) (a : R), ↑n.succ • a = ↑n • a + a
+· 使用定理 `AddGroupWithOne.zsmul_neg'`：∀ {R : Type u} [self : AddGroupWithOne R] (n
+ : ℕ) (a : R), Int.negSucc n • a = -(↑n.succ • a)
+· 使用定理 `AddGroupWithOne.neg_add_cancel`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a : R), -a + a = 0
+· 使用定理 `AddGroupWithOne.intCast_ofNat`：∀ {R : Type u} [self : AddGroupWithOne R]
+ (n : ℕ), IntCast.intCast ↑n = ↑n
+· 使用定理 `AddGroupWithOne.intCast_negSucc`：∀ {R : Type u} [self : AddGroupWithOne 
+R] (n : ℕ), IntCast.intCast (Int.negSucc n) = -↑(n + 1)
 -/
 protected abbrev ring [Ring R] (zero : f 0 = 0)
-    (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x)
-    (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n) (natCast : forall n : Nat, f n = n)
-    (intCast : forall n : Int, f n = n) : Ring S where
+    (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x)
+    (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n) (natCast : ∀ n : ℕ, f n = n)
+    (intCast : ∀ n : ℤ, f n = n) : Ring S where
   toSemiring := hf.semiring f zero one add mul nsmul npow natCast
   -- zsmul included here explicitly to make sure it's picked correctly by `fast_instance%`.
-  zsmul := fun n x => n • x
+  zsmul := fun n x ↦ n • x
   __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
   __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
 
+/-- Pullback a `NonUnitalNonAssocCommSemiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalNonAssocCommSemiring` / `nonUnitalNonAssocCommSemiring` 的定义
-
-English:
-abbreviation nonUnitalNonAssocCommSemiring
-  signature: [NonUnitalNonAssocCommSemiring R]
-  body: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.commMagma f mul
-
-中文:
-缩写 nonUnitalNonAssocCommSemiring
-  签名: [非幺非结合交换半环 R]
-  定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.commMagma f mul
+/-
+**Function.Injective.nonUnitalNonAssocCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Fu
+nction.Injective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : Non
+UnitalNonAssocCommSemiring R] →                   f 0 = 0 →                     
+(∀ (x y : S), f (x + y) = f x + f y) →                       (∀ (x y : S), f (x 
+* y) = f x * f y) →                         (∀ (n : ℕ) (x : S), f (n • x) = n • 
+f x) → NonUnitalNonAssocCommSemiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMagma.mul_comm`：∀ {G : Type u} [self : CommMagma G] (a b : G), a * b
+ = b * a
 -/
 protected abbrev nonUnitalNonAssocCommSemiring [NonUnitalNonAssocCommSemiring R]
-    (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) :
+    (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) :
     NonUnitalNonAssocCommSemiring S where
   toNonUnitalNonAssocSemiring := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.commMagma f mul
 
+/-- Pullback a `NonUnitalCommSemiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalCommSemiring` / `nonUnitalCommSemiring` 的定义
-
-English:
-abbreviation nonUnitalCommSemiring
-  signature: [NonUnitalCommSemiring R] (f : S -> R)
-  body: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.commSemigroup f mul
-
-中文:
-缩写 nonUnitalCommSemiring
-  签名: [非幺交换半环 R] (f : S -> R)
-  定义体: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.commSemigroup f mul
+/-
+**Function.Injective.nonUnitalCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.I
+njective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Add S] →       [inst_1 : M
+ul S] →         [inst_2 : Zero S] →           [inst_3 : SMul ℕ S] →             
+[inst_4 : NonUnitalCommSemiring R] →               (f : S → R) →                
+ Function.Injective f →                   f 0 = 0 →                     (∀ (x y 
+: S), f (x + y) = f x + f y) →                       (∀ (x y : S), f (x * y) = f
+ x * f y) →                         (∀ (n : ℕ) (x : S), f (n • x) = n • f x) → N
+onUnitalCommSemiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommSemigroup.mul_comm`：∀ {G : Type u} [self : CommSemigroup G] (a b : G
+), a * b = b * a
 -/
-protected abbrev nonUnitalCommSemiring [NonUnitalCommSemiring R] (f : S -> R)
-    (hf : Injective f) (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) :
+protected abbrev nonUnitalCommSemiring [NonUnitalCommSemiring R] (f : S → R)
+    (hf : Injective f) (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) :
     NonUnitalCommSemiring S where
   toNonUnitalSemiring := hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.commSemigroup f mul
 
+/-- Pullback a `NonAssocCommSemiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocCommSemiring` / `nonAssocCommSemiring` 的定义
-
-English:
-abbreviation nonAssocCommSemiring
-  signature: [NonAssocCommSemiring R] (f : S -> R)
-  body: hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.commMagma f mul
-
-中文:
-缩写 nonAssocCommSemiring
-  签名: [非结合交换半环 R] (f : S -> R)
-  定义体: hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.commMagma f mul
-
-Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.prodFanIsLimit, Iso.unop_inv, Scheme, Scheme.Spec, Scheme.Spec_map, Spec.map, Spec.map_co, Spec.map_comp, Spec_map, coprod, coprod.inl_desc, coprod.inr_desc, coprodComparison, coprodComparison_inl_assoc, coprodComparison_inr_assoc, coprodSpec, inl_desc
+/-
+**Function.Injective.nonAssocCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.In
+jective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Add S] →       [inst_1 : M
+ul S] →         [inst_2 : Zero S] →           [inst_3 : One S] →             [in
+st_4 : SMul ℕ S] →               [inst_5 : NatCast S] →                 [inst_6 
+: NonAssocCommSemiring R] →                   (f : S → R) →                     
+Function.Injective f →                       f 0 = 0 →                         f
+ 1 = 1 →                           (∀ (x y : S), f (x + y) = f x + f y) →       
+                      (∀ (x y : S), f (x * y) = f x * f y) →                    
+           (∀ (n : ℕ) (x : S), f (n • x) = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → N
+onAssocCommSemiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMagma.mul_comm`：∀ {G : Type u} [self : CommMagma G] (a b : G), a * b
+ = b * a
 -/
-protected abbrev nonAssocCommSemiring [NonAssocCommSemiring R] (f : S -> R)
-    (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : NonAssocCommSemiring S where
+protected abbrev nonAssocCommSemiring [NonAssocCommSemiring R] (f : S → R)
+    (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : NonAssocCommSemiring S where
   toNonAssocSemiring := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.commMagma f mul
 
+/-- Pullback a `CommSemiring` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `commSemiring` / `commSemiring` 的定义
-
-English:
-abbreviation commSemiring
-  signature: [CommSemiring R]
-  body: hf.semiring f zero one add mul nsmul npow natCast
-  __ := hf.commSemigroup f mul
-
-中文:
-缩写 commSemiring
-  签名: [交换半环 R]
-  定义体: hf.semiring f zero one add mul nsmul npow natCast
-  __ := hf.commSemigroup f mul
+/-
+**Function.Injective.commSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`
+。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : SMul ℕ
+ S] →                   [inst_5 : Pow S ℕ] →                     [inst_6 : NatCa
+st S] →                       [inst_7 : CommSemiring R] →                       
+  f 0 = 0 →                           f 1 = 1 →                             (∀ (
+x y : S), f (x + y) = f x + f y) →                               (∀ (x y : S), f
+ (x * y) = f x * f y) →                                 (∀ (n : ℕ) (x : S), f (n
+ • x) = n • f x) →                                   (∀ (x : S) (n : ℕ), f (x ^ 
+n) = f x ^ n) → (∀ (n : ℕ), f ↑n = ↑n) → CommSemiring S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : S), f (n • x) = n • f x；∀ (x : S) (n : ℕ), f (x ^ n) = f x ^ n
+；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommSemigroup.mul_comm`：∀ {G : Type u} [self : CommSemigroup G] (a b : G
+), a * b = b * a
 -/
 protected abbrev commSemiring [CommSemiring R]
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n) (natCast : forall n : Nat, f n = n) :
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n) (natCast : ∀ n : ℕ, f n = n) :
     CommSemiring S where
   toSemiring := hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.commSemigroup f mul
 
+/-- Pullback a `NonUnitalNonAssocCommRing` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalNonAssocCommRing` / `nonUnitalNonAssocCommRing` 的定义
-
-English:
-abbreviation nonUnitalNonAssocCommRing
-  signature: [NonUnitalNonAssocCommRing R] (f : S -> R)
-  body: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
-
-中文:
-缩写 nonUnitalNonAssocCommRing
-  签名: [非幺非结合交换环 R] (f : S -> R)
-  定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
+/-
+**Function.Injective.nonUnitalNonAssocCommRing** 是 Mathlib 中的一个定义，位于命名空间 `Functi
+on.Injective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Add S] →       [inst_1 : M
+ul S] →         [inst_2 : Zero S] →           [inst_3 : Neg S] →             [in
+st_4 : Sub S] →               [inst_5 : SMul ℕ S] →                 [inst_6 : SM
+ul ℤ S] →                   [inst_7 : NonUnitalNonAssocCommRing R] →            
+         (f : S → R) →                       Function.Injective f →             
+            f 0 = 0 →                           (∀ (x y : S), f (x + y) = f x + 
+f y) →                             (∀ (x y : S), f (x * y) = f x * f y) →       
+                        (∀ (x : S), f (-x) = -f x) →                            
+     (∀ (x y : S), f (x - y) = f x - f y) →                                   (∀
+ (n : ℕ) (x : S), f (n • x) = n • f x) →                                     (∀ 
+(n : ℤ) (x : S), f (n • x) = n • f x) → NonUnitalNonAssocCommRing S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalNonAssocCommSemiring.mul_comm`：∀ {α : Type u} [self : NonUnital
+NonAssocCommSemiring α] (a b : α), a * b = b * a
 -/
-protected abbrev nonUnitalNonAssocCommRing [NonUnitalNonAssocCommRing R] (f : S -> R)
-    (hf : Injective f) (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) : NonUnitalNonAssocCommRing S where
+protected abbrev nonUnitalNonAssocCommRing [NonUnitalNonAssocCommRing R] (f : S → R)
+    (hf : Injective f) (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) : NonUnitalNonAssocCommRing S where
   toNonUnitalNonAssocRing := hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
 
+/-- Pullback a `NonUnitalCommRing` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalCommRing` / `nonUnitalCommRing` 的定义
-
-English:
-abbreviation nonUnitalCommRing
-  signature: [NonUnitalCommRing R] (f : S -> R)
-  body: hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
-
-中文:
-缩写 nonUnitalCommRing
-  签名: [非幺交换环 R] (f : S -> R)
-  定义体: hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
-
-Depends on / 依赖: PreservesFiniteCoproducts, PreservesFiniteCoproducts.of_preserves_binary_and_initial, of_preserves_binary_and_initial
+/-
+**Function.Injective.nonUnitalCommRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injec
+tive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Add S] →       [inst_1 : M
+ul S] →         [inst_2 : Zero S] →           [inst_3 : Neg S] →             [in
+st_4 : Sub S] →               [inst_5 : SMul ℕ S] →                 [inst_6 : SM
+ul ℤ S] →                   [inst_7 : NonUnitalCommRing R] →                    
+ (f : S → R) →                       Function.Injective f →                     
+    f 0 = 0 →                           (∀ (x y : S), f (x + y) = f x + f y) →  
+                           (∀ (x y : S), f (x * y) = f x * f y) →               
+                (∀ (x : S), f (-x) = -f x) →                                 (∀ 
+(x y : S), f (x - y) = f x - f y) →                                   (∀ (n : ℕ)
+ (x : S), f (n • x) = n • f x) →                                     (∀ (n : ℤ) 
+(x : S), f (n • x) = n • f x) → NonUnitalCommRing S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalNonAssocCommRing.mul_comm`：∀ {α : Type u} [self : NonUnitalNonA
+ssocCommRing α] (a b : α), a * b = b * a
 -/
-protected abbrev nonUnitalCommRing [NonUnitalCommRing R] (f : S -> R)
-    (hf : Injective f) (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) : NonUnitalCommRing S where
+protected abbrev nonUnitalCommRing [NonUnitalCommRing R] (f : S → R)
+    (hf : Injective f) (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) : NonUnitalCommRing S where
   toNonUnitalRing := hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
 
+/-- Pullback a `NonAssocCommRing` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocCommRing` / `nonAssocCommRing` 的定义
-
-English:
-abbreviation nonAssocCommRing
-  signature: [NonAssocCommRing R] (f : S -> R)
-  body: hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
-  __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
-
-中文:
-缩写 nonAssocCommRing
-  签名: [非结合交换环 R] (f : S -> R)
-  定义体: hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
-  __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
+/-
+**Function.Injective.nonAssocCommRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Inject
+ive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     [inst : Add S] →       [inst_1 : M
+ul S] →         [inst_2 : Zero S] →           [inst_3 : One S] →             [in
+st_4 : Neg S] →               [inst_5 : Sub S] →                 [inst_6 : SMul 
+ℕ S] →                   [inst_7 : SMul ℤ S] →                     [inst_8 : Nat
+Cast S] →                       [inst_9 : IntCast S] →                         [
+inst_10 : NonAssocCommRing R] →                           (f : S → R) →         
+                    Function.Injective f →                               f 0 = 0
+ →                                 f 1 = 1 →                                   (
+∀ (x y : S), f (x + y) = f x + f y) →                                     (∀ (x 
+y : S), f (x * y) = f x * f y) →                                       (∀ (x : S
+), f (-x) = -f x) →                                         (∀ (x y : S), f (x -
+ y) = f x - f y) →                                           (∀ (n : ℕ) (x : S),
+ f (n • x) = n • f x) →                                             (∀ (n : ℤ) (
+x : S), f (n • x) = n • f x) →                                               (∀ 
+(n : ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → NonAssocCommRing S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑
+n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalNonAssocCommRing.mul_comm`：∀ {α : Type u} [self : NonUnitalNonA
+ssocCommRing α] (a b : α), a * b = b * a
 -/
-protected abbrev nonAssocCommRing [NonAssocCommRing R] (f : S -> R)
-    (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) (intCast : forall n : Int, f n = n) : NonAssocCommRing S where
+protected abbrev nonAssocCommRing [NonAssocCommRing R] (f : S → R)
+    (hf : Injective f) (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) (intCast : ∀ n : ℤ, f n = n) : NonAssocCommRing S where
   toNonAssocRing := hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
   __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
 
+/-- Pullback a `CommRing` instance along an injective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `commRing` / `commRing` 的定义
-
-English:
-abbreviation commRing
-  signature: [CommRing R]
-  body: hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
-  __ := hf.commMonoid f one mul npow
-
-中文:
-缩写 commRing
-  签名: [交换环 R]
-  定义体: hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
-  __ := hf.commMonoid f one mul npow
+/-
+**Function.Injective.commRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : S → R) →       Function.Injec
+tive f →         [inst : Add S] →           [inst_1 : Mul S] →             [inst
+_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : Neg S]
+ →                   [inst_5 : Sub S] →                     [inst_6 : SMul ℕ S] 
+→                       [inst_7 : SMul ℤ S] →                         [inst_8 : 
+Pow S ℕ] →                           [inst_9 : NatCast S] →                     
+        [inst_10 : IntCast S] →                               [inst_11 : CommRin
+g R] →                                 f 0 = 0 →                                
+   f 1 = 1 →                                     (∀ (x y : S), f (x + y) = f x +
+ f y) →                                       (∀ (x y : S), f (x * y) = f x * f 
+y) →                                         (∀ (x : S), f (-x) = -f x) →       
+                                    (∀ (x y : S), f (x - y) = f x - f y) →      
+                                       (∀ (n : ℕ) (x : S), f (n • x) = n • f x) 
+→                                               (∀ (n : ℤ) (x : S), f (n • x) = 
+n • f x) →                                                 (∀ (x : S) (n : ℕ), f
+ (x ^ n) = f x ^ n) →                                                   (∀ (n : 
+ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → CommRing S
+参数：f : S → R；∀ (x y : S), f (x + y) = f x + f y；∀ (x y : S), f (x * y) = f x * f
+ y；∀ (x : S), f (-x) = -f x；∀ (x y : S), f (x - y) = f x - f y；∀ (n : ℕ) (x : S)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : S), f (n • x) = n • f x；∀ (x : S) (n : ℕ), 
+f (x ^ n) = f x ^ n；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMonoid.mul_comm`：∀ {M : Type u} [self : CommMonoid M] (a b : M), a *
+ b = b * a
 -/
 protected abbrev commRing [CommRing R]
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n)
-    (natCast : forall n : Nat, f n = n) (intCast : forall n : Int, f n = n) : CommRing S where
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n)
+    (natCast : ∀ n : ℕ, f n = n) (intCast : ∀ n : ℤ, f n = n) : CommRing S where
   toRing := hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
   __ := hf.commMonoid f one mul npow
 
 end Function.Injective
 
 namespace Function.Surjective
-variable (f : R -> S) (hf : Surjective f)
+variable (f : R → S) (hf : Surjective f)
 include hf
 
 variable [Add S] [Mul S]
 
-/--
-theorem `leftDistribClass` / 定理 `leftDistribClass`
+/-- Pushforward a `LeftDistribClass` instance along a surjective function. -/
+/-
+**Function.Surjective.leftDistribClass** 是 Mathlib 中的一个定理，位于命名空间 `Function.Surje
+ctive`。
+形式化陈述：leftDistribClass [Mul R] [Add R] [LeftDistribClass R] (add : forall x y, f
+ (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y) : LeftDistribCla
+ss S where left_distrib
+参数：add : forall x y, f (x + y) = f x + f y；mul : forall x y, f (x * y) = f x * f
+ y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall₃`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}
+,   Function.Surjective f →     ∀ {p : β → β → β → Prop}, (∀ (y₁ y₂ y₃ : β), p y
+₁ y₂ y₃) ↔ ∀ (x₁ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `left_distrib`：left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c :
+ R) : a * (b + c) = a * b + a * c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem leftDistribClass
-  statement: [Mul R] [Add R] [LeftDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-  proof: hf.forall₃.2 fun x y z => by simp only [← add, ← mul, left_distrib]
-
-中文:
-定理 leftDistribClass
-  结论: [乘法 R] [加法 R] [LeftDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
-  证明: hf.forall₃.2 fun x y z => by simp only [← add, ← mul, left_distrib]
-
-Depends on / 依赖: Function, Function.surjective_eval, Function.update, IsLocalization, IsLocalization.Away, IsLocalization.away_of_isIdempotentElem_of_mul, IsOpenImmersion, IsOpenImmersion.of_isLocalization, Pi.evalRingHom, away_of_isIdempotentElem_of_mul, classical, congr_fun, evalRingHom, hf.forall, left_distrib, of_isLocalization, surjective_eval, toAlgebra, update
+--- 原说明 ---
+Pushforward a `LeftDistribClass` instance along a surjective function.
 -/
-theorem leftDistribClass [Mul R] [Add R] [LeftDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) : LeftDistribClass S where
+theorem leftDistribClass [Mul R] [Add R] [LeftDistribClass R] (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) : LeftDistribClass S where
   left_distrib := hf.forall₃.2 fun x y z => by simp only [← add, ← mul, left_distrib]
 
-/--
-theorem `rightDistribClass` / 定理 `rightDistribClass`
+/-- Pushforward a `RightDistribClass` instance along a surjective function. -/
+/-
+**Function.Surjective.rightDistribClass** 是 Mathlib 中的一个定理，位于命名空间 `Function.Surj
+ective`。
+形式化陈述：rightDistribClass [Mul R] [Add R] [RightDistribClass R] (add : forall x y,
+ f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y) : RightDistrib
+Class S where right_distrib
+参数：add : forall x y, f (x + y) = f x + f y；mul : forall x y, f (x * y) = f x * f
+ y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall₃`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}
+,   Function.Surjective f →     ∀ {p : β → β → β → Prop}, (∀ (y₁ y₂ y₃ : β), p y
+₁ y₂ y₃) ↔ ∀ (x₁ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem rightDistribClass
-  statement: [Mul R] [Add R] [RightDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-  proof: hf.forall₃.2 fun x y z => by simp only [← add, ← mul, right_distrib]
-
-中文:
-定理 rightDistribClass
-  结论: [乘法 R] [加法 R] [RightDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
-  证明: hf.forall₃.2 fun x y z => by simp only [← add, ← mul, right_distrib]
-
-Depends on / 依赖: DFinsupp, DFinsupp.single, Ideal.eq_top_iff_one, PrimeSpectrum, PrimeSpectrum.ext_iff.mp, Set.disjoint_iff_forall_ne.mpr, asIdeal, classical, disjoint_iff_forall_ne, eq_top_iff_one, ext_iff, h.symm, hf.forall, isOpenImmersion_sigmaDesc, ne_top, right_distrib, single, x.asIdeal, y.asIdeal
+--- 原说明 ---
+Pushforward a `RightDistribClass` instance along a surjective function.
 -/
-theorem rightDistribClass [Mul R] [Add R] [RightDistribClass R] (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) : RightDistribClass S where
+theorem rightDistribClass [Mul R] [Add R] [RightDistribClass R] (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) : RightDistribClass S where
   right_distrib := hf.forall₃.2 fun x y z => by simp only [← add, ← mul, right_distrib]
 
+/-- Pushforward a `Distrib` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `distrib` / `distrib` 的定义
-
-English:
-abbreviation distrib
-  signature: [Distrib R] (add : forall x y, f (x + y) = f x + f y)
-  body: hf.leftDistribClass f add mul
-  __ := hf.rightDistribClass f add mul
-
-中文:
-缩写 distrib
-  签名: [Distrib R] (add : 对任意 x y, f (x + y) = f x + f y)
-  定义体: hf.leftDistribClass f add mul
-  __ := hf.rightDistribClass f add mul
+/-
+**Function.Surjective.distrib** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Distrib R] →               (∀ (x y : R), f (x + y) = f x + f y) → (∀ (x y 
+: R), f (x * y) = f x * f y) → Distrib S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LeftDistribClass.left_distrib`：∀ {R : Type u_1} {inst : Mul R} {inst_1 :
+ Add R} [self : LeftDistribClass R] (a b c : R), a * (b + c) = a * b + a * c
+· 使用定理 `RightDistribClass.right_distrib`：∀ {R : Type u_1} {inst : Mul R} {inst_1
+ : Add R} [self : RightDistribClass R] (a b c : R), (a + b) * c = a * c + b * c
 -/
-protected abbrev distrib [Distrib R] (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) : Distrib S where
+protected abbrev distrib [Distrib R] (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) : Distrib S where
   __ := hf.leftDistribClass f add mul
   __ := hf.rightDistribClass f add mul
 
-variable [Zero S] [One S] [Neg S] [Sub S] [SMul Nat S] [SMul Int S]
-  [Pow S Nat] [NatCast S] [IntCast S]
+variable [Zero S] [One S] [Neg S] [Sub S] [SMul ℕ S] [SMul ℤ S]
+  [Pow S ℕ] [NatCast S] [IntCast S]
 
+/-- A type endowed with `-` and `*` has distributive negation, if it admits a surjective map that
+preserves `-` and `*` from a type which has distributive negation. -/
 -- See note [reducible non-instances]
-/--
-Definition of `hasDistribNeg` / `hasDistribNeg` 的定义
-
-English:
-abbreviation hasDistribNeg
-  signature: [Mul R] [HasDistribNeg R]
-  body: { hf.involutiveNeg _ neg, ‹Mul S› with
-    neg_mul := hf.forall₂.2 fun x y => by rw [← neg, ← mul, neg_mul, neg, mul]
-    mul_neg := hf.forall₂.2 fun x y => by rw [← neg, ← mul, mul_neg, neg, mul] }
-
-中文:
-缩写 hasDistribNeg
-  签名: [乘法 R] [有DistribNeg R]
-  定义体: { hf.involutiveNeg _ neg, ‹Mul S› with
-    neg_mul := hf.forall₂.2 fun x y => by rw [← neg, ← mul, neg_mul, neg, mul]
-    mul_neg := hf.forall₂.2 fun x y => by rw [← neg, ← mul, mul_neg, neg, mul] }
+/-
+**Function.Surjective.hasDistribNeg** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjecti
+ve`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Mul S] →           [inst_1 : Neg S] →             [ins
+t_2 : Mul R] →               [inst_3 : HasDistribNeg R] →                 (∀ (a 
+: R), f (-a) = -f a) → (∀ (a b : R), f (a * b) = f a * f b) → HasDistribNeg S
+参数：f : R → S；∀ (a : R), f (-a) = -f a；∀ (a b : R), f (a * b) = f a * f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev hasDistribNeg [Mul R] [HasDistribNeg R]
-    (neg : forall a, f (-a) = -f a) (mul : forall a b, f (a * b) = f a * f b) : HasDistribNeg S :=
+    (neg : ∀ a, f (-a) = -f a) (mul : ∀ a b, f (a * b) = f a * f b) : HasDistribNeg S :=
   { hf.involutiveNeg _ neg, ‹Mul S› with
     neg_mul := hf.forall₂.2 fun x y => by rw [← neg, ← mul, neg_mul, neg, mul]
     mul_neg := hf.forall₂.2 fun x y => by rw [← neg, ← mul, mul_neg, neg, mul] }
 
 
-/--
-Definition of `addMonoidWithOne` / `addMonoidWithOne` 的定义
+/-- A type endowed with `0`, `1` and `+` is an additive monoid with one, if it admits a surjective
+map that preserves `0`, `1` and `*` from an additive monoid with one. See note
+[reducible non-instances]. -/
+/-
+**Function.Surjective.addMonoidWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surje
+ctive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Zero S] →             [in
+st_2 : One S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : Na
+tCast S] →                   [inst_5 : AddMonoidWithOne R] →                    
+ f 0 = 0 →                       f 1 = 1 →                         (∀ (x y : R),
+ f (x + y) = f x + f y) →                           (∀ (n : ℕ) (x : R), f (n • x
+) = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → AddMonoidWithOne S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (n : ℕ) (x : R), f (n • x) = n
+ • f x；∀ (n : ℕ), f ↑n = ↑n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation addMonoidWithOne
-  signature: [AddMonoidWithOne R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: { hf.addMonoid f zero add (swap nsmul) with
-    natCast := Nat.cast,
-    natCast_zero := by rw [← natCast, Nat.cast_zero, zero]
-    natCast_succ := fun n => by rw [← natCast, Nat.cast_succ, add, one, natCast] }
-
-中文:
-缩写 addMonoidWithOne
-  签名: [加法带幺幺半群 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: { hf.addMonoid f zero add (swap nsmul) with
-    natCast := Nat.cast,
-    natCast_zero := by rw [← natCast, Nat.cast_zero, zero]
-    natCast_succ := fun n => by rw [← natCast, Nat.cast_succ, add, one, natCast] }
+--- 原说明 ---
+A type endowed with `0`, `1` and `+` is an additive monoid with one, if it admit
+s a surjective
+map that preserves `0`, `1` and `*` from an additive monoid with one. See note
+[reducible non-instances].
 -/
 protected abbrev addMonoidWithOne [AddMonoidWithOne R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : AddMonoidWithOne S :=
+    (add : ∀ x y, f (x + y) = f x + f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : AddMonoidWithOne S :=
   { hf.addMonoid f zero add (swap nsmul) with
     natCast := Nat.cast,
     natCast_zero := by rw [← natCast, Nat.cast_zero, zero]
     natCast_succ := fun n => by rw [← natCast, Nat.cast_succ, add, one, natCast] }
 
-/--
-Definition of `addCommMonoidWithOne` / `addCommMonoidWithOne` 的定义
+/-- A type endowed with `0`, `1` and `+` is an additive monoid with one,
+if it admits a surjective map that preserves `0`, `1` and `*` from an additive monoid with one.
+See note [reducible non-instances]. -/
+/-
+**Function.Surjective.addCommMonoidWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.S
+urjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Zero S] →             [in
+st_2 : One S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : Na
+tCast S] →                   [inst_5 : AddCommMonoidWithOne R] →                
+     f 0 = 0 →                       f 1 = 1 →                         (∀ (x y :
+ R), f (x + y) = f x + f y) →                           (∀ (n : ℕ) (x : R), f (n
+ • x) = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → AddCommMonoidWithOne S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (n : ℕ) (x : R), f (n • x) = n
+ • f x；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommMonoid.add_comm`：∀ {M : Type u} [self : AddCommMonoid M] (a b : M
+), a + b = b + a
 
-English:
-abbreviation addCommMonoidWithOne
-  signature: [AddCommMonoidWithOne R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.addMonoidWithOne f zero one add nsmul natCast
-  __ := hf.addCommMonoid _ zero add (swap nsmul)
-
-中文:
-缩写 addCommMonoidWithOne
-  签名: [加法交换带幺幺半群 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.addMonoidWithOne f zero one add nsmul natCast
-  __ := hf.addCommMonoid _ zero add (swap nsmul)
+--- 原说明 ---
+A type endowed with `0`, `1` and `+` is an additive monoid with one,
+if it admits a surjective map that preserves `0`, `1` and `*` from an additive m
+onoid with one.
+See note [reducible non-instances].
 -/
 protected abbrev addCommMonoidWithOne [AddCommMonoidWithOne R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : AddCommMonoidWithOne S where
+    (add : ∀ x y, f (x + y) = f x + f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : AddCommMonoidWithOne S where
   __ := hf.addMonoidWithOne f zero one add nsmul natCast
   __ := hf.addCommMonoid _ zero add (swap nsmul)
 
-/--
-Definition of `addGroupWithOne` / `addGroupWithOne` 的定义
+/-- A type endowed with `0`, `1`, `+` is an additive group with one,
+if it admits a surjective map that preserves `0`, `1`, and `+` to an additive group with one.
+See note [reducible non-instances]. -/
+/-
+**Function.Surjective.addGroupWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjec
+tive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Zero S] →             [in
+st_2 : One S] →               [inst_3 : Neg S] →                 [inst_4 : Sub S
+] →                   [inst_5 : SMul ℕ S] →                     [inst_6 : SMul ℤ
+ S] →                       [inst_7 : NatCast S] →                         [inst
+_8 : IntCast S] →                           [inst_9 : AddGroupWithOne R] →      
+                       f 0 = 0 →                               f 1 = 1 →        
+                         (∀ (x y : R), f (x + y) = f x + f y) →                 
+                  (∀ (x : R), f (-x) = -f x) →                                  
+   (∀ (x y : R), f (x - y) = f x - f y) →                                       
+(∀ (n : ℕ) (x : R), f (n • x) = n • f x) →                                      
+   (∀ (n : ℤ) (x : R), f (n • x) = n • f x) →                                   
+        (∀ (n : ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → AddGroupWithOne S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x : R), f (-x) = -f x；∀ (x y 
+: R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R), f (n • x) = n • f x；∀ (n : ℤ) (x 
+: R), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroup.neg_add_cancel`：∀ {A : Type u} [self : AddGroup A] (a : A), -a 
++ a = 0
 
-English:
-abbreviation addGroupWithOne
-  signature: [AddGroupWithOne R]
-  body: { hf.addMonoidWithOne f zero one add nsmul natCast,
-    hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul) with
-    intCast := Int.cast,
-    intCast_ofNat := fun n => by rw [← intCast, Int.cast_natCast, natCast],
-    intCast_negSucc := fun n => by
-      rw [← intCast]; rw [Int.cast_negSucc]; rw [neg]; rw [natCast] }
-
-中文:
-缩写 addGroupWithOne
-  签名: [加法带幺群 R]
-  定义体: { hf.addMonoidWithOne f zero one add nsmul natCast,
-    hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul) with
-    intCast := Int.cast,
-    intCast_ofNat := fun n => by rw [← intCast, Int.cast_natCast, natCast],
-    intCast_negSucc := fun n => by
-      rw [← intCast]; rw [Int.cast_negSucc]; rw [neg]; rw [natCast] }
+--- 原说明 ---
+A type endowed with `0`, `1`, `+` is an additive group with one,
+if it admits a surjective map that preserves `0`, `1`, and `+` to an additive gr
+oup with one.
+See note [reducible non-instances].
 -/
 protected abbrev addGroupWithOne [AddGroupWithOne R]
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) (natCast : forall n : Nat, f n = n)
-    (intCast : forall n : Int, f n = n) : AddGroupWithOne S :=
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) (natCast : ∀ n : ℕ, f n = n)
+    (intCast : ∀ n : ℤ, f n = n) : AddGroupWithOne S :=
   { hf.addMonoidWithOne f zero one add nsmul natCast,
     hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul) with
     intCast := Int.cast,
     intCast_ofNat := fun n => by rw [← intCast, Int.cast_natCast, natCast],
     intCast_negSucc := fun n => by
-      rw [← intCast]; rw [Int.cast_negSucc]; rw [neg]; rw [natCast] }
+      rw [← intCast, Int.cast_negSucc, neg, natCast] }
 
-/--
-Definition of `addCommGroupWithOne` / `addCommGroupWithOne` 的定义
+/-- A type endowed with `0`, `1`, `+` is an additive commutative group with one, if it admits a
+surjective map that preserves `0`, `1`, and `+` to an additive commutative group with one.
+See note [reducible non-instances]. -/
+/-
+**Function.Surjective.addCommGroupWithOne** 是 Mathlib 中的一个定义，位于命名空间 `Function.Su
+rjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Zero S] →             [in
+st_2 : One S] →               [inst_3 : Neg S] →                 [inst_4 : Sub S
+] →                   [inst_5 : SMul ℕ S] →                     [inst_6 : SMul ℤ
+ S] →                       [inst_7 : NatCast S] →                         [inst
+_8 : IntCast S] →                           [inst_9 : AddCommGroupWithOne R] →  
+                           f 0 = 0 →                               f 1 = 1 →    
+                             (∀ (x y : R), f (x + y) = f x + f y) →             
+                      (∀ (x : R), f (-x) = -f x) →                              
+       (∀ (x y : R), f (x - y) = f x - f y) →                                   
+    (∀ (n : ℕ) (x : R), f (n • x) = n • f x) →                                  
+       (∀ (n : ℤ) (x : R), f (n • x) = n • f x) →                               
+            (∀ (n : ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → AddCommGroupWithOn
+e S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x : R), f (-x) = -f x；∀ (x y 
+: R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R), f (n • x) = n • f x；∀ (n : ℤ) (x 
+: R), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroupWithOne.sub_eq_add_neg`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a b : R), a - b = a + -b
+· 使用定理 `AddGroupWithOne.zsmul_zero'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+a : R), 0 • a = 0
+· 使用定理 `AddGroupWithOne.zsmul_succ'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+n : ℕ) (a : R), ↑n.succ • a = ↑n • a + a
+· 使用定理 `AddGroupWithOne.zsmul_neg'`：∀ {R : Type u} [self : AddGroupWithOne R] (n
+ : ℕ) (a : R), Int.negSucc n • a = -(↑n.succ • a)
+· 使用定理 `AddGroupWithOne.neg_add_cancel`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a : R), -a + a = 0
+· 使用定理 `AddCommMonoid.add_comm`：∀ {M : Type u} [self : AddCommMonoid M] (a b : M
+), a + b = b + a
+· 使用定理 `AddGroupWithOne.intCast_ofNat`：∀ {R : Type u} [self : AddGroupWithOne R]
+ (n : ℕ), IntCast.intCast ↑n = ↑n
+· 使用定理 `AddGroupWithOne.intCast_negSucc`：∀ {R : Type u} [self : AddGroupWithOne 
+R] (n : ℕ), IntCast.intCast (Int.negSucc n) = -↑(n + 1)
 
-English:
-abbreviation addCommGroupWithOne
-  signature: [AddCommGroupWithOne R]
-  body: { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
-    hf.addCommMonoid _ zero add (swap nsmul) with }
-
-中文:
-缩写 addCommGroupWithOne
-  签名: [加法交换带幺群 R]
-  定义体: { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
-    hf.addCommMonoid _ zero add (swap nsmul) with }
+--- 原说明 ---
+A type endowed with `0`, `1`, `+` is an additive commutative group with one, if 
+it admits a
+surjective map that preserves `0`, `1`, and `+` to an additive commutative group
+ with one.
+See note [reducible non-instances].
 -/
 protected abbrev addCommGroupWithOne [AddCommGroupWithOne R]
-    (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) (natCast : forall n : Nat, f n = n)
-    (intCast : forall n : Int, f n = n) : AddCommGroupWithOne S :=
+    (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) (natCast : ∀ n : ℕ, f n = n)
+    (intCast : ∀ n : ℤ, f n = n) : AddCommGroupWithOne S :=
   { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
     hf.addCommMonoid _ zero add (swap nsmul) with }
 
-/--
-Definition of `nonUnitalNonAssocSemiring` / `nonUnitalNonAssocSemiring` 的定义
+/-- Pushforward a `NonUnitalNonAssocSemiring` instance along a surjective function.
+See note [reducible non-instances]. -/
+/-
+**Function.Surjective.nonUnitalNonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Funct
+ion.Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : No
+nUnitalNonAssocSemiring R] →                   f 0 = 0 →                     (∀ 
+(x y : R), f (x + y) = f x + f y) →                       (∀ (x y : R), f (x * y
+) = f x * f y) →                         (∀ (n : ℕ) (x : R), f (n • x) = n • f x
+) → NonUnitalNonAssocSemiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Distrib.left_distrib`：∀ {R : Type u_1} [self : Distrib R] (a b c : R), a
+ * (b + c) = a * b + a * c
+· 使用定理 `Distrib.right_distrib`：∀ {R : Type u_1} [self : Distrib R] (a b c : R), 
+(a + b) * c = a * c + b * c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 
-English:
-abbreviation nonUnitalNonAssocSemiring
-  signature: [NonUnitalNonAssocSemiring R] (zero : f 0 = 0)
-  body: hf.addCommMonoid f zero add (swap nsmul)
-  __ := hf.distrib f add mul
-  __ := hf.mulZeroClass f zero mul
-
-中文:
-缩写 nonUnitalNonAssocSemiring
-  签名: [非幺非结合半环 R] (zero : f 0 = 0)
-  定义体: hf.addCommMonoid f zero add (swap nsmul)
-  __ := hf.distrib f add mul
-  __ := hf.mulZeroClass f zero mul
-
-Depends on / 依赖: DiscreteTopology, Finite, IsAffine
+--- 原说明 ---
+Pushforward a `NonUnitalNonAssocSemiring` instance along a surjective function.
+See note [reducible non-instances].
 -/
 protected abbrev nonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) : NonUnitalNonAssocSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) : NonUnitalNonAssocSemiring S where
   toAddCommMonoid := hf.addCommMonoid f zero add (swap nsmul)
   __ := hf.distrib f add mul
   __ := hf.mulZeroClass f zero mul
 
+/-- Pushforward a `NonUnitalSemiring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalSemiring` / `nonUnitalSemiring` 的定义
-
-English:
-abbreviation nonUnitalSemiring
-  signature: [NonUnitalSemiring R] (zero : f 0 = 0)
-  body: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.semigroupWithZero f zero mul
-
-中文:
-缩写 nonUnitalSemiring
-  签名: [非幺半环 R] (zero : f 0 = 0)
-  定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.semigroupWithZero f zero mul
-
-Depends on / 依赖: f.isOpenEmbedding.injective, g.isOpenEmbedding.injective, injective, isOpenEmbedding, mono_iff_injective
+/-
+**Function.Surjective.nonUnitalSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surj
+ective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : No
+nUnitalSemiring R] →                   f 0 = 0 →                     (∀ (x y : R
+), f (x + y) = f x + f y) →                       (∀ (x y : R), f (x * y) = f x 
+* f y) →                         (∀ (n : ℕ) (x : R), f (n • x) = n • f x) → NonU
+nitalSemiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev nonUnitalSemiring [NonUnitalSemiring R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) : NonUnitalSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) : NonUnitalSemiring S where
   toNonUnitalNonAssocSemiring := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.semigroupWithZero f zero mul
 
+/-- Pushforward a `NonAssocSemiring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocSemiring` / `nonAssocSemiring` 的定义
-
-English:
-abbreviation nonAssocSemiring
-  signature: [NonAssocSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.mulZeroOneClass f zero one mul
-  __ := hf.addMonoidWithOne f zero one add nsmul natCast
-
-中文:
-缩写 nonAssocSemiring
-  签名: [非结合半环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.mulZeroOneClass f zero one mul
-  __ := hf.addMonoidWithOne f zero one add nsmul natCast
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, WidePushoutShape, WidePushoutShape.hom_id, hom_id, infer_instance, map_id
+/-
+**Function.Surjective.nonAssocSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surje
+ctive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : SMul 
+ℕ S] →                   [inst_5 : NatCast S] →                     [inst_6 : No
+nAssocSemiring R] →                       f 0 = 0 →                         f 1 
+= 1 →                           (∀ (x y : R), f (x + y) = f x + f y) →          
+                   (∀ (x y : R), f (x * y) = f x * f y) →                       
+        (∀ (n : ℕ) (x : R), f (n • x) = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → NonA
+ssocSemiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidWithOne.natCast_zero`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R], ↑0 = 0
+· 使用定理 `AddMonoidWithOne.natCast_succ`：∀ {R : Type u_2} [self : AddMonoidWithOne
+ R] (n : ℕ), ↑(n + 1) = ↑n + 1
 -/
 protected abbrev nonAssocSemiring [NonAssocSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : NonAssocSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : NonAssocSemiring S where
   toNonUnitalNonAssocSemiring := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.mulZeroOneClass f zero one mul
   __ := hf.addMonoidWithOne f zero one add nsmul natCast
 
+/-- Pushforward a `Semiring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `semiring` / `semiring` 的定义
-
-English:
-abbreviation semiring
-  signature: [Semiring R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.monoidWithZero f zero one mul npow
-
-中文:
-缩写 semiring
-  签名: [半环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.monoidWithZero f zero one mul npow
+/-
+**Function.Surjective.semiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : SMul 
+ℕ S] →                   [inst_5 : Pow S ℕ] →                     [inst_6 : NatC
+ast S] →                       [inst_7 : Semiring R] →                         f
+ 0 = 0 →                           f 1 = 1 →                             (∀ (x y
+ : R), f (x + y) = f x + f y) →                               (∀ (x y : R), f (x
+ * y) = f x * f y) →                                 (∀ (n : ℕ) (x : R), f (n • 
+x) = n • f x) →                                   (∀ (x : R) (n : ℕ), f (x ^ n) 
+= f x ^ n) → (∀ (n : ℕ), f ↑n = ↑n) → Semiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x；∀ (x : R) (n : ℕ), f (x ^ n) = f x ^ n
+；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSemiring.mul_assoc`：∀ {α : Type u} [self : NonUnitalSemiring α]
+ (a b c : α), a * b * c = a * (b * c)
+· 使用定理 `NonAssocSemiring.one_mul`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), 1 * a = a
+· 使用定理 `NonAssocSemiring.mul_one`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), a * 1 = a
+· 使用定理 `NonAssocSemiring.natCast_zero`：∀ {α : Type u} [self : NonAssocSemiring α
+], ↑0 = 0
+· 使用定理 `NonAssocSemiring.natCast_succ`：∀ {α : Type u} [self : NonAssocSemiring α
+] (n : ℕ), ↑(n + 1) = ↑n + 1
 -/
 protected abbrev semiring [Semiring R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n) (natCast : forall n : Nat, f n = n) : Semiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n) (natCast : ∀ n : ℕ, f n = n) : Semiring S where
   toNonUnitalSemiring := hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.monoidWithZero f zero one mul npow
 
+/-- Pushforward a `NonUnitalNonAssocRing` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalNonAssocRing` / `nonUnitalNonAssocRing` 的定义
-
-English:
-abbreviation nonUnitalNonAssocRing
-  signature: [NonUnitalNonAssocRing R] (zero : f 0 = 0)
-  body: hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
-  __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-
-中文:
-缩写 nonUnitalNonAssocRing
-  签名: [非幺非结合环 R] (zero : f 0 = 0)
-  定义体: hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
-  __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
+/-
+**Function.Surjective.nonUnitalNonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.
+Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : Neg S] →                 [inst_4 : Sub S
+] →                   [inst_5 : SMul ℕ S] →                     [inst_6 : SMul ℤ
+ S] →                       [inst_7 : NonUnitalNonAssocRing R] →                
+         f 0 = 0 →                           (∀ (x y : R), f (x + y) = f x + f y
+) →                             (∀ (x y : R), f (x * y) = f x * f y) →          
+                     (∀ (x : R), f (-x) = -f x) →                               
+  (∀ (x y : R), f (x - y) = f x - f y) →                                   (∀ (n
+ : ℕ) (x : R), f (n • x) = n • f x) →                                     (∀ (n 
+: ℤ) (x : R), f (n • x) = n • f x) → NonUnitalNonAssocRing S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalNonAssocSemiring.left_distrib`：∀ {α : Type u} [self : NonUnital
+NonAssocSemiring α] (a b c : α), a * (b + c) = a * b + a * c
+· 使用定理 `NonUnitalNonAssocSemiring.right_distrib`：∀ {α : Type u} [self : NonUnita
+lNonAssocSemiring α] (a b c : α), (a + b) * c = a * c + b * c
+· 使用定理 `NonUnitalNonAssocSemiring.zero_mul`：∀ {α : Type u} [self : NonUnitalNonA
+ssocSemiring α] (a : α), 0 * a = 0
+· 使用定理 `NonUnitalNonAssocSemiring.mul_zero`：∀ {α : Type u} [self : NonUnitalNonA
+ssocSemiring α] (a : α), a * 0 = 0
 -/
 protected abbrev nonUnitalNonAssocRing [NonUnitalNonAssocRing R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x) :
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) :
     NonUnitalNonAssocRing S where
   toAddCommGroup := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
   __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
 
+/-- Pushforward a `NonUnitalRing` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalRing` / `nonUnitalRing` 的定义
-
-English:
-abbreviation nonUnitalRing
-  signature: [NonUnitalRing R] (zero : f 0 = 0)
-  body: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalSemiring f zero add mul nsmul
-
-中文:
-缩写 nonUnitalRing
-  签名: [非幺环 R] (zero : f 0 = 0)
-  定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalSemiring f zero add mul nsmul
+/-
+**Function.Surjective.nonUnitalRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjecti
+ve`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : Neg S] →                 [inst_4 : Sub S
+] →                   [inst_5 : SMul ℕ S] →                     [inst_6 : SMul ℤ
+ S] →                       [inst_7 : NonUnitalRing R] →                        
+ f 0 = 0 →                           (∀ (x y : R), f (x + y) = f x + f y) →     
+                        (∀ (x y : R), f (x * y) = f x * f y) →                  
+             (∀ (x : R), f (-x) = -f x) →                                 (∀ (x 
+y : R), f (x - y) = f x - f y) →                                   (∀ (n : ℕ) (x
+ : R), f (n • x) = n • f x) →                                     (∀ (n : ℤ) (x 
+: R), f (n • x) = n • f x) → NonUnitalRing S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSemiring.mul_assoc`：∀ {α : Type u} [self : NonUnitalSemiring α]
+ (a b c : α), a * b * c = a * (b * c)
 -/
 protected abbrev nonUnitalRing [NonUnitalRing R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x) :
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) :
     NonUnitalRing S where
   toNonUnitalNonAssocRing := hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalSemiring f zero add mul nsmul
 
+/-- Pushforward a `NonAssocRing` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocRing` / `nonAssocRing` 的定义
-
-English:
-abbreviation nonAssocRing
-  signature: [NonAssocRing R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-
-中文:
-缩写 nonAssocRing
-  签名: [非结合环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
+/-
+**Function.Surjective.nonAssocRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjectiv
+e`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : Neg S
+] →                   [inst_5 : Sub S] →                     [inst_6 : SMul ℕ S]
+ →                       [inst_7 : SMul ℤ S] →                         [inst_8 :
+ NatCast S] →                           [inst_9 : IntCast S] →                  
+           [inst_10 : NonAssocRing R] →                               f 0 = 0 → 
+                                f 1 = 1 →                                   (∀ (
+x y : R), f (x + y) = f x + f y) →                                     (∀ (x y :
+ R), f (x * y) = f x * f y) →                                       (∀ (x : R), 
+f (-x) = -f x) →                                         (∀ (x y : R), f (x - y)
+ = f x - f y) →                                           (∀ (n : ℕ) (x : R), f 
+(n • x) = n • f x) →                                             (∀ (n : ℤ) (x :
+ R), f (n • x) = n • f x) →                                               (∀ (n 
+: ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → NonAssocRing S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑
+n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonAssocSemiring.one_mul`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), 1 * a = a
+· 使用定理 `NonAssocSemiring.mul_one`：∀ {α : Type u} [self : NonAssocSemiring α] (a 
+: α), a * 1 = a
+· 使用定理 `NonAssocSemiring.natCast_zero`：∀ {α : Type u} [self : NonAssocSemiring α
+], ↑0 = 0
+· 使用定理 `NonAssocSemiring.natCast_succ`：∀ {α : Type u} [self : NonAssocSemiring α
+] (n : ℕ), ↑(n + 1) = ↑n + 1
+· 使用定理 `AddCommGroupWithOne.intCast_ofNat`：∀ {R : Type u} [self : AddCommGroupWi
+thOne R] (n : ℕ), IntCast.intCast ↑n = ↑n
+· 使用定理 `AddCommGroupWithOne.intCast_negSucc`：∀ {R : Type u} [self : AddCommGroup
+WithOne R] (n : ℕ), IntCast.intCast (Int.negSucc n) = -↑(n + 1)
 -/
 protected abbrev nonAssocRing [NonAssocRing R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) (intCast : forall n : Int, f n = n) : NonAssocRing S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) (intCast : ∀ n : ℤ, f n = n) : NonAssocRing S where
   toNonUnitalNonAssocRing := hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
 
+/-- Pushforward a `Ring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `ring` / `ring` 的定义
-
-English:
-abbreviation ring
-  signature: [Ring R] (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-  body: hf.semiring f zero one add mul nsmul npow natCast
-  __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-  __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
-
-中文:
-缩写 ring
-  签名: [环 R] (zero : f 0 = 0) (one : f 1 = 1) (add : 对任意 x y, f (x + y) = f x + f y)
-  定义体: hf.semiring f zero one add mul nsmul npow natCast
-  __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
-  __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
-
-Depends on / 依赖: f.left.isOpenEmbedding.injective, g.left.isOpenEmbedding.injective, injective, isOpenEmbedding, mono_iff_injective
+/-
+**Function.Surjective.ring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : Neg S
+] →                   [inst_5 : Sub S] →                     [inst_6 : SMul ℕ S]
+ →                       [inst_7 : SMul ℤ S] →                         [inst_8 :
+ Pow S ℕ] →                           [inst_9 : NatCast S] →                    
+         [inst_10 : IntCast S] →                               [inst_11 : Ring R
+] →                                 f 0 = 0 →                                   
+f 1 = 1 →                                     (∀ (x y : R), f (x + y) = f x + f 
+y) →                                       (∀ (x y : R), f (x * y) = f x * f y) 
+→                                         (∀ (x : R), f (-x) = -f x) →          
+                                 (∀ (x y : R), f (x - y) = f x - f y) →         
+                                    (∀ (n : ℕ) (x : R), f (n • x) = n • f x) →  
+                                             (∀ (n : ℤ) (x : R), f (n • x) = n •
+ f x) →                                                 (∀ (x : R) (n : ℕ), f (x
+ ^ n) = f x ^ n) →                                                   (∀ (n : ℕ),
+ f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → Ring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x；∀ (x : R) (n : ℕ), 
+f (x ^ n) = f x ^ n；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroupWithOne.sub_eq_add_neg`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a b : R), a - b = a + -b
+· 使用定理 `AddGroupWithOne.zsmul_zero'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+a : R), 0 • a = 0
+· 使用定理 `AddGroupWithOne.zsmul_succ'`：∀ {R : Type u} [self : AddGroupWithOne R] (
+n : ℕ) (a : R), ↑n.succ • a = ↑n • a + a
+· 使用定理 `AddGroupWithOne.zsmul_neg'`：∀ {R : Type u} [self : AddGroupWithOne R] (n
+ : ℕ) (a : R), Int.negSucc n • a = -(↑n.succ • a)
+· 使用定理 `AddGroupWithOne.neg_add_cancel`：∀ {R : Type u} [self : AddGroupWithOne R
+] (a : R), -a + a = 0
+· 使用定理 `AddGroupWithOne.intCast_ofNat`：∀ {R : Type u} [self : AddGroupWithOne R]
+ (n : ℕ), IntCast.intCast ↑n = ↑n
+· 使用定理 `AddGroupWithOne.intCast_negSucc`：∀ {R : Type u} [self : AddGroupWithOne 
+R] (n : ℕ), IntCast.intCast (Int.negSucc n) = -↑(n + 1)
 -/
-protected abbrev ring [Ring R] (zero : f 0 = 0) (one : f 1 = 1) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x)
-    (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n) (natCast : forall n : Nat, f n = n)
-    (intCast : forall n : Int, f n = n) : Ring S where
+protected abbrev ring [Ring R] (zero : f 0 = 0) (one : f 1 = 1) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x)
+    (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n) (natCast : ∀ n : ℕ, f n = n)
+    (intCast : ∀ n : ℤ, f n = n) : Ring S where
   toSemiring := hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
   __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
 
+/-- Pushforward a `NonUnitalNonAssocCommSemiring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalNonAssocCommSemiring` / `nonUnitalNonAssocCommSemiring` 的定义
-
-English:
-abbreviation nonUnitalNonAssocCommSemiring
-  signature: [NonUnitalNonAssocCommSemiring R] (zero : f 0 = 0)
-  body: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.commMagma f mul
-
-中文:
-缩写 nonUnitalNonAssocCommSemiring
-  签名: [非幺非结合交换半环 R] (zero : f 0 = 0)
-  定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
-  __ := hf.commMagma f mul
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, WidePushoutShape, WidePushoutShape.hom_id, hom_id, infer_instance, map_id
+/-
+**Function.Surjective.nonUnitalNonAssocCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `F
+unction.Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : No
+nUnitalNonAssocCommSemiring R] →                   f 0 = 0 →                    
+ (∀ (x y : R), f (x + y) = f x + f y) →                       (∀ (x y : R), f (x
+ * y) = f x * f y) →                         (∀ (n : ℕ) (x : R), f (n • x) = n •
+ f x) → NonUnitalNonAssocCommSemiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMagma.mul_comm`：∀ {G : Type u} [self : CommMagma G] (a b : G), a * b
+ = b * a
 -/
 protected abbrev nonUnitalNonAssocCommSemiring [NonUnitalNonAssocCommSemiring R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) : NonUnitalNonAssocCommSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) : NonUnitalNonAssocCommSemiring S where
   toNonUnitalNonAssocSemiring := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.commMagma f mul
 
+/-- Pushforward a `NonUnitalCommSemiring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalCommSemiring` / `nonUnitalCommSemiring` 的定义
-
-English:
-abbreviation nonUnitalCommSemiring
-  signature: [NonUnitalCommSemiring R] (zero : f 0 = 0)
-  body: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.commSemigroup f mul
-
-中文:
-缩写 nonUnitalCommSemiring
-  签名: [非幺交换半环 R] (zero : f 0 = 0)
-  定义体: hf.nonUnitalSemiring f zero add mul nsmul
-  __ := hf.commSemigroup f mul
+/-
+**Function.Surjective.nonUnitalCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.
+Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : SMul ℕ S] →                 [inst_4 : No
+nUnitalCommSemiring R] →                   f 0 = 0 →                     (∀ (x y
+ : R), f (x + y) = f x + f y) →                       (∀ (x y : R), f (x * y) = 
+f x * f y) →                         (∀ (n : ℕ) (x : R), f (n • x) = n • f x) → 
+NonUnitalCommSemiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommSemigroup.mul_comm`：∀ {G : Type u} [self : CommSemigroup G] (a b : G
+), a * b = b * a
 -/
 protected abbrev nonUnitalCommSemiring [NonUnitalCommSemiring R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) : NonUnitalCommSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) : NonUnitalCommSemiring S where
   toNonUnitalSemiring := hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.commSemigroup f mul
 
+/-- Pushforward a `NonAssocCommSemiring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocCommSemiring` / `nonAssocCommSemiring` 的定义
-
-English:
-abbreviation nonAssocCommSemiring
-  signature: [NonAssocCommSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.commMagma f mul
-
-中文:
-缩写 nonAssocCommSemiring
-  签名: [非结合交换半环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.nonAssocSemiring f zero one add mul nsmul natCast
-  __ := hf.commMagma f mul
+/-
+**Function.Surjective.nonAssocCommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.S
+urjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : SMul 
+ℕ S] →                   [inst_5 : NatCast S] →                     [inst_6 : No
+nAssocCommSemiring R] →                       f 0 = 0 →                         
+f 1 = 1 →                           (∀ (x y : R), f (x + y) = f x + f y) →      
+                       (∀ (x y : R), f (x * y) = f x * f y) →                   
+            (∀ (n : ℕ) (x : R), f (n • x) = n • f x) → (∀ (n : ℕ), f ↑n = ↑n) → 
+NonAssocCommSemiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMagma.mul_comm`：∀ {G : Type u} [self : CommMagma G] (a b : G), a * b
+ = b * a
 -/
 protected abbrev nonAssocCommSemiring [NonAssocCommSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) : NonAssocCommSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) : NonAssocCommSemiring S where
   toNonAssocSemiring := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.commMagma f mul
 
+/-- Pushforward a `CommSemiring` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `commSemiring` / `commSemiring` 的定义
-
-English:
-abbreviation commSemiring
-  signature: [CommSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.semiring f zero one add mul nsmul npow natCast
-  __ := hf.commSemigroup f mul
-
-中文:
-缩写 commSemiring
-  签名: [交换半环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.semiring f zero one add mul nsmul npow natCast
-  __ := hf.commSemigroup f mul
+/-
+**Function.Surjective.commSemiring** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjectiv
+e`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : SMul 
+ℕ S] →                   [inst_5 : Pow S ℕ] →                     [inst_6 : NatC
+ast S] →                       [inst_7 : CommSemiring R] →                      
+   f 0 = 0 →                           f 1 = 1 →                             (∀ 
+(x y : R), f (x + y) = f x + f y) →                               (∀ (x y : R), 
+f (x * y) = f x * f y) →                                 (∀ (n : ℕ) (x : R), f (
+n • x) = n • f x) →                                   (∀ (x : R) (n : ℕ), f (x ^
+ n) = f x ^ n) → (∀ (n : ℕ), f ↑n = ↑n) → CommSemiring S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (n : ℕ) (x : R), f (n • x) = n • f x；∀ (x : R) (n : ℕ), f (x ^ n) = f x ^ n
+；∀ (n : ℕ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommSemigroup.mul_comm`：∀ {G : Type u} [self : CommSemigroup G] (a b : G
+), a * b = b * a
 -/
 protected abbrev commSemiring [CommSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n)
-    (natCast : forall n : Nat, f n = n) : CommSemiring S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n)
+    (natCast : ∀ n : ℕ, f n = n) : CommSemiring S where
   toSemiring := hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.commSemigroup f mul
 
+/-- Pushforward a `NonUnitalNonAssocCommRing` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalNonAssocCommRing` / `nonUnitalNonAssocCommRing` 的定义
-
-English:
-abbreviation nonUnitalNonAssocCommRing
-  signature: [NonUnitalNonAssocCommRing R]
-  body: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
-
-中文:
-缩写 nonUnitalNonAssocCommRing
-  签名: [非幺非结合交换环 R]
-  定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
-
-Depends on / 依赖: CategoryTheory, IsOpenImmersion, MorphismProperty, MorphismProperty.Over.forget, MorphismProperty.Over.forget_comp_forget_map, MorphismProperty.cancel_right_of_respectsIso, Over.forget, cancel_right_of_respectsIso, colimit, e.hom, forget, forget_comp_forget_map, preservesColimitIso
+/-
+**Function.Surjective.nonUnitalNonAssocCommRing** 是 Mathlib 中的一个定义，位于命名空间 `Funct
+ion.Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : Neg S] →                 [inst_4 : Sub S
+] →                   [inst_5 : SMul ℕ S] →                     [inst_6 : SMul ℤ
+ S] →                       [inst_7 : NonUnitalNonAssocCommRing R] →            
+             f 0 = 0 →                           (∀ (x y : R), f (x + y) = f x +
+ f y) →                             (∀ (x y : R), f (x * y) = f x * f y) →      
+                         (∀ (x : R), f (-x) = -f x) →                           
+      (∀ (x y : R), f (x - y) = f x - f y) →                                   (
+∀ (n : ℕ) (x : R), f (n • x) = n • f x) →                                     (∀
+ (n : ℤ) (x : R), f (n • x) = n • f x) → NonUnitalNonAssocCommRing S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalNonAssocCommSemiring.mul_comm`：∀ {α : Type u} [self : NonUnital
+NonAssocCommSemiring α] (a b : α), a * b = b * a
 -/
 protected abbrev nonUnitalNonAssocCommRing [NonUnitalNonAssocCommRing R]
-    (zero : f 0 = 0) (add : forall x y, f (x + y) = f x + f y)
-    (mul : forall x y, f (x * y) = f x * f y) (neg : forall x, f (-x) = -f x)
-    (sub : forall x y, f (x - y) = f x - f y) (nsmul : forall (n : Nat) (x), f (n • x) = n • f x)
-    (zsmul : forall (n : Int) (x), f (n • x) = n • f x) : NonUnitalNonAssocCommRing S where
+    (zero : f 0 = 0) (add : ∀ x y, f (x + y) = f x + f y)
+    (mul : ∀ x y, f (x * y) = f x * f y) (neg : ∀ x, f (-x) = -f x)
+    (sub : ∀ x y, f (x - y) = f x - f y) (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x)
+    (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) : NonUnitalNonAssocCommRing S where
   toNonUnitalNonAssocRing := hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
 
+/-- Pushforward a `NonUnitalCommRing` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonUnitalCommRing` / `nonUnitalCommRing` 的定义
-
-English:
-abbreviation nonUnitalCommRing
-  signature: [NonUnitalCommRing R] (zero : f 0 = 0)
-  body: hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
-
-中文:
-缩写 nonUnitalCommRing
-  签名: [非幺交换环 R] (zero : f 0 = 0)
-  定义体: hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
-  __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
+/-
+**Function.Surjective.nonUnitalCommRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surj
+ective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : Neg S] →                 [inst_4 : Sub S
+] →                   [inst_5 : SMul ℕ S] →                     [inst_6 : SMul ℤ
+ S] →                       [inst_7 : NonUnitalCommRing R] →                    
+     f 0 = 0 →                           (∀ (x y : R), f (x + y) = f x + f y) → 
+                            (∀ (x y : R), f (x * y) = f x * f y) →              
+                 (∀ (x : R), f (-x) = -f x) →                                 (∀
+ (x y : R), f (x - y) = f x - f y) →                                   (∀ (n : ℕ
+) (x : R), f (n • x) = n • f x) →                                     (∀ (n : ℤ)
+ (x : R), f (n • x) = n • f x) → NonUnitalCommRing S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalNonAssocCommRing.mul_comm`：∀ {α : Type u} [self : NonUnitalNonA
+ssocCommRing α] (a b : α), a * b = b * a
 -/
 protected abbrev nonUnitalCommRing [NonUnitalCommRing R] (zero : f 0 = 0)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x) :
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x) :
     NonUnitalCommRing S where
   toNonUnitalRing := hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
 
+/-- Pushforward a `NonAssocCommRing` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `nonAssocCommRing` / `nonAssocCommRing` 的定义
-
-English:
-abbreviation nonAssocCommRing
-  signature: [NonAssocCommRing R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
-  __ := hf.nonAssocCommSemiring f zero one add mul nsmul natCast
-
-中文:
-缩写 nonAssocCommRing
-  签名: [非结合交换环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
-  __ := hf.nonAssocCommSemiring f zero one add mul nsmul natCast
+/-
+**Function.Surjective.nonAssocCommRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surje
+ctive`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : Neg S
+] →                   [inst_5 : Sub S] →                     [inst_6 : SMul ℕ S]
+ →                       [inst_7 : SMul ℤ S] →                         [inst_8 :
+ NatCast S] →                           [inst_9 : IntCast S] →                  
+           [inst_10 : NonAssocCommRing R] →                               f 0 = 
+0 →                                 f 1 = 1 →                                   
+(∀ (x y : R), f (x + y) = f x + f y) →                                     (∀ (x
+ y : R), f (x * y) = f x * f y) →                                       (∀ (x : 
+R), f (-x) = -f x) →                                         (∀ (x y : R), f (x 
+- y) = f x - f y) →                                           (∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x) →                                             (∀ (n : ℤ) 
+(x : R), f (n • x) = n • f x) →                                               (∀
+ (n : ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → NonAssocCommRing S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x；∀ (n : ℕ), f ↑n = ↑
+n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NonAssocCommSemiring.mul_comm`：∀ {α : Type u} [self : NonAssocCommSemiri
+ng α] (a b : α), a * b = b * a
 -/
 protected abbrev nonAssocCommRing [NonAssocCommRing R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x)
-    (natCast : forall n : Nat, f n = n) (intCast : forall n : Int, f n = n) : NonAssocCommRing S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x)
+    (natCast : ∀ n : ℕ, f n = n) (intCast : ∀ n : ℤ, f n = n) : NonAssocCommRing S where
   toNonAssocRing := hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
   __ := hf.nonAssocCommSemiring f zero one add mul nsmul natCast
 
+/-- Pushforward a `CommRing` instance along a surjective function. -/
 -- See note [reducible non-instances]
-/--
-Definition of `commRing` / `commRing` 的定义
-
-English:
-abbreviation commRing
-  signature: [CommRing R] (zero : f 0 = 0) (one : f 1 = 1)
-  body: hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
-  __ := hf.commMonoid f one mul npow
-
-中文:
-缩写 commRing
-  签名: [交换环 R] (zero : f 0 = 0) (one : f 1 = 1)
-  定义体: hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
-  __ := hf.commMonoid f one mul npow
+/-
+**Function.Surjective.commRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjective`。
+形式化陈述：{R : Type u_1} →   {S : Type u_2} →     (f : R → S) →       Function.Surje
+ctive f →         [inst : Add S] →           [inst_1 : Mul S] →             [ins
+t_2 : Zero S] →               [inst_3 : One S] →                 [inst_4 : Neg S
+] →                   [inst_5 : Sub S] →                     [inst_6 : SMul ℕ S]
+ →                       [inst_7 : SMul ℤ S] →                         [inst_8 :
+ Pow S ℕ] →                           [inst_9 : NatCast S] →                    
+         [inst_10 : IntCast S] →                               [inst_11 : CommRi
+ng R] →                                 f 0 = 0 →                               
+    f 1 = 1 →                                     (∀ (x y : R), f (x + y) = f x 
++ f y) →                                       (∀ (x y : R), f (x * y) = f x * f
+ y) →                                         (∀ (x : R), f (-x) = -f x) →      
+                                     (∀ (x y : R), f (x - y) = f x - f y) →     
+                                        (∀ (n : ℕ) (x : R), f (n • x) = n • f x)
+ →                                               (∀ (n : ℤ) (x : R), f (n • x) =
+ n • f x) →                                                 (∀ (x : R) (n : ℕ), 
+f (x ^ n) = f x ^ n) →                                                   (∀ (n :
+ ℕ), f ↑n = ↑n) → (∀ (n : ℤ), f ↑n = ↑n) → CommRing S
+参数：f : R → S；∀ (x y : R), f (x + y) = f x + f y；∀ (x y : R), f (x * y) = f x * f
+ y；∀ (x : R), f (-x) = -f x；∀ (x y : R), f (x - y) = f x - f y；∀ (n : ℕ) (x : R)
+, f (n • x) = n • f x；∀ (n : ℤ) (x : R), f (n • x) = n • f x；∀ (x : R) (n : ℕ), 
+f (x ^ n) = f x ^ n；∀ (n : ℕ), f ↑n = ↑n；∀ (n : ℤ), f ↑n = ↑n。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMonoid.mul_comm`：∀ {M : Type u} [self : CommMonoid M] (a b : M), a *
+ b = b * a
 -/
 protected abbrev commRing [CommRing R] (zero : f 0 = 0) (one : f 1 = 1)
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)
-    (neg : forall x, f (-x) = -f x) (sub : forall x y, f (x - y) = f x - f y)
-    (nsmul : forall (n : Nat) (x), f (n • x) = n • f x) (zsmul : forall (n : Int) (x), f (n • x) = n • f x)
-    (npow : forall (x) (n : Nat), f (x ^ n) = f x ^ n)
-    (natCast : forall n : Nat, f n = n) (intCast : forall n : Int, f n = n) : CommRing S where
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y)
+    (neg : ∀ x, f (-x) = -f x) (sub : ∀ x y, f (x - y) = f x - f y)
+    (nsmul : ∀ (n : ℕ) (x), f (n • x) = n • f x) (zsmul : ∀ (n : ℤ) (x), f (n • x) = n • f x)
+    (npow : ∀ (x) (n : ℕ), f (x ^ n) = f x ^ n)
+    (natCast : ∀ n : ℕ, f n = n) (intCast : ∀ n : ℤ, f n = n) : CommRing S where
   toRing := hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
   __ := hf.commMonoid f one mul npow
 
@@ -1238,20 +1656,15 @@ end Function.Surjective
 
 variable [Mul R] [HasDistribNeg R]
 
-/--
-Instance `AddOpposite.instHasDistribNeg` / 实例 `AddOpposite.instHasDistribNeg`
-
-English:
-instance AddOpposite.instHasDistribNeg
-  signature: : HasDistribNeg Rᵃᵒᵖ
-  body: unop_injective.hasDistribNeg _ unop_neg unop_mul
-
-中文:
-实例 AddOpposite.instHasDistribNeg
-  签名: : 有DistribNeg Rᵃᵒᵖ
-  定义体: unop_injective.hasDistribNeg _ unop_neg unop_mul
-
-Depends on / 依赖: hasDistribNeg, unop_injective, unop_injective.hasDistribNeg, unop_mul, unop_neg
+/-
+**AddOpposite.instHasDistribNeg** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddOpposite.instHasDistribNeg : HasDistribNeg Rᵃᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddOpposite.unop_injective`：∀ {α : Type u_1}, Function.Injective AddOppo
+site.unop
+· 使用定理 `AddOpposite.unop_mul`：∀ {α : Type u_1} [inst : Mul α] (a b : αᵃᵒᵖ), AddO
+pposite.unop (a * b) = AddOpposite.unop a * AddOpposite.unop b
 -/
 instance AddOpposite.instHasDistribNeg : HasDistribNeg Rᵃᵒᵖ :=
   unop_injective.hasDistribNeg _ unop_neg unop_mul

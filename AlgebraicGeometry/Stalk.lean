@@ -34,82 +34,99 @@ variable {X Y : Scheme.{u}} (f : X ⟶ Y) {U V : X.Opens} (hU : IsAffineOpen U) 
 section fromSpecStalk
 
 /--
-Definition of `IsAffineOpen.fromSpecStalk` / `IsAffineOpen.fromSpecStalk` 的定义
+A morphism from `Spec(O_x)` to `X`, which is defined with the help of an affine open
+neighborhood `U` of `x`.
+-/
+/-
+**AlgebraicGeometry.IsAffineOpen.fromSpecStalk** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.IsAffineOpen`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} →   {U : X.Opens} →     AlgebraicGeometry.I
+sAffineOpen U → {x : ↥X} → x ∈ U → (AlgebraicGeometry.Spec (X.presheaf.stalk x) 
+⟶ X)
+参数：AlgebraicGeometry.Spec (X.presheaf.stalk x) ⟶ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsAffineOpen.fromSpecStalk
-  body: Spec.map (X.presheaf.germ _ x hxU) ≫ hU.fromSpec
-
-中文:
-定义 是仿射开集.fromSpecStalk
-  定义体: Spec.map (X.presheaf.germ _ x hxU) ≫ hU.fromSpec
-
-Depends on / 依赖: Spec.map, X.presheaf.germ, fromSpec, hU.fromSpec, presheaf
+--- 原说明 ---
+A morphism from `Spec(O_x)` to `X`, which is defined with the help of an affine 
+open
+neighborhood `U` of `x`.
 -/
 noncomputable def IsAffineOpen.fromSpecStalk
-    {X : Scheme} {U : X.Opens} (hU : IsAffineOpen U) {x : X} (hxU : x in U) :
+    {X : Scheme} {U : X.Opens} (hU : IsAffineOpen U) {x : X} (hxU : x ∈ U) :
     Spec (X.presheaf.stalk x) ⟶ X :=
   Spec.map (X.presheaf.germ _ x hxU) ≫ hU.fromSpec
 
 /--
-theorem `IsAffineOpen.fromSpecStalk_eq` / 定理 `IsAffineOpen.fromSpecStalk_eq`
-
-English:
-theorem IsAffineOpen.fromSpecStalk_eq
-  given: (x : X) (hxU : x in U) (hxV : x in V)
-  proof: by
-  obtain ⟨U', h₁, h₂, h₃ : U' <= U ⊓ V⟩ :=
-    Opens.isBasis_iff_nbhd.mp X.isBasis_affineOpens (show x in U ⊓ V from ⟨hxU, hxV⟩)
-  transitivity fromSpecStalk h₁ h₂
-  · delta fromSpecStalk
-    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
-  · delta fromSpecStalk
-    rw [← hV.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_right).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
-
-中文:
-定理 是仿射开集.fromSpecStalk_eq
-  条件: (x : X) (hxU : x in U) (hxV : x in V)
-  证明: by
-  obtain ⟨U', h₁, h₂, h₃ : U' <= U ⊓ V⟩ :=
-    Opens.isBasis_iff_nbhd.mp X.isBasis_affineOpens (show x in U ⊓ V from ⟨hxU, hxV⟩)
-  transitivity fromSpecStalk h₁ h₂
-  · delta fromSpecStalk
-    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
-  · delta fromSpecStalk
-    rw [← hV.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_right).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
-
-Depends on / 依赖: Opens.isBasis_iff_nbhd.mp, Presheaf, Spec.map_comp_assoc, TopCat, TopCat.Presheaf.germ_res, X.isBasis_affineOpens, fromSpecStalk, germ_res, hU.map_fromSpec, hV.map_fromSpec, homOfLE, inf_le_left, inf_le_right, isBasis_affineOpens, isBasis_iff_nbhd, map_comp_assoc, map_fromSpec, transitivity
+The morphism from `Spec(O_x)` to `X` given by `IsAffineOpen.fromSpec` does not depend on the affine
+open neighborhood of `x` we choose.
 -/
-theorem IsAffineOpen.fromSpecStalk_eq (x : X) (hxU : x in U) (hxV : x in V) :
+/-
+**AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebraicGeometry.IsAffineOpen`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U V : X.Opens} (hU : AlgebraicGeometry.I
+sAffineOpen U)   (hV : AlgebraicGeometry.IsAffineOpen V) (x : ↥X) (hxU : x ∈ U) 
+(hxV : x ∈ V),   hU.fromSpecStalk hxU = hV.fromSpecStalk hxV
+参数：hU : AlgebraicGeometry.IsAffineOpen U；hV : AlgebraicGeometry.IsAffineOpen V；x
+ : ↥X；hxU : x ∈ U；hxV : x ∈ V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TopologicalSpace.Opens.isBasis_iff_nbhd`：isBasis_iff_nbhd {B : Set (Open
+s α)} : IsBasis B ↔ forall {U : Opens α} {x}, x in U -> exists U' in B, x in U' 
+∧ U' <= U
+· 使用定理 `AlgebraicGeometry.Scheme.isBasis_affineOpens`：∀ (X : AlgebraicGeometry.S
+cheme), TopologicalSpace.Opens.IsBasis X.affineOpens
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.map_fromSpec`：map_fromSpec {V : X.Opens} 
+(hV : IsAffineOpen V) (f : op U ⟶ op V) : Spec.map (X.presheaf.map f) ≫ hU.fromS
+pec = hV.fromSpec
+· 使用定理 `AlgebraicGeometry.Spec.map_comp_assoc`：∀ {R S T : CommRingCat} (f : R ⟶ 
+S) (g : S ⟶ T) {Z : AlgebraicGeometry.Scheme} (h : AlgebraicGeometry.Spec R ⟶ Z)
+,   CategoryTheory.Category…
+· 使用定理 `TopCat.Presheaf.germ_res`：germ_res (F : X.Presheaf C) {U V : Opens X} (i
+ : U ⟶ V) (x : X) (hx : x in U) : F.map i.op ≫ F.germ U x hx = F.germ V x (i.le 
+hx)
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+
+--- 原说明 ---
+The morphism from `Spec(O_x)` to `X` given by `IsAffineOpen.fromSpec` does not d
+epend on the affine
+open neighborhood of `x` we choose.
+-/
+theorem IsAffineOpen.fromSpecStalk_eq (x : X) (hxU : x ∈ U) (hxV : x ∈ V) :
     hU.fromSpecStalk hxU = hV.fromSpecStalk hxV := by
-  obtain ⟨U', h₁, h₂, h₃ : U' <= U ⊓ V⟩ :=
-    Opens.isBasis_iff_nbhd.mp X.isBasis_affineOpens (show x in U ⊓ V from ⟨hxU, hxV⟩)
+  obtain ⟨U', h₁, h₂, h₃ : U' ≤ U ⊓ V⟩ :=
+    Opens.isBasis_iff_nbhd.mp X.isBasis_affineOpens (show x ∈ U ⊓ V from ⟨hxU, hxV⟩)
   transitivity fromSpecStalk h₁ h₂
   · delta fromSpecStalk
-    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
+    rw [← hU.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_left).op, ← Spec.map_comp_assoc,
+      TopCat.Presheaf.germ_res]
   · delta fromSpecStalk
-    rw [← hV.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_right).op]; rw [← Spec.map_comp_assoc]; rw [TopCat.Presheaf.germ_res]
+    rw [← hV.map_fromSpec h₁ (homOfLE <| h₃.trans inf_le_right).op, ← Spec.map_comp_assoc,
+      TopCat.Presheaf.germ_res]
 
 /--
-Definition of `Scheme.fromSpecStalk` / `Scheme.fromSpecStalk` 的定义
+If `x` is a point of `X`, this is the canonical morphism from `Spec(O_x)` to `X`.
+-/
+/-
+**AlgebraicGeometry.Scheme.fromSpecStalk** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeo
+metry.Scheme`。
+形式化陈述：(X : AlgebraicGeometry.Scheme) → (x : ↥X) → AlgebraicGeometry.Spec (X.pres
+heaf.stalk x) ⟶ X
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
 
-English:
-definition Scheme.fromSpecStalk
-  signature: (X : Scheme) (x : X)
-  body: (isAffineOpen_opensRange (X.affineCover.f (X.affineCover.idx x))).fromSpecStalk
-    (X.affineCover.covers x)
-
-@[simps over] noncomputable
-
-中文:
-定义 概形.fromSpecStalk
-  签名: (X : 概形) (x : X)
-  定义体: (isAffineOpen_opensRange (X.affineCover.f (X.affineCover.idx x))).fromSpecStalk
-    (X.affineCover.covers x)
-
-@[simps over] noncomputable
-
-Depends on / 依赖: X.affineCover.covers, X.affineCover.f, X.affineCover.idx, affineCover, covers, fromSpecStalk, isAffineOpen_opensRange
+--- 原说明 ---
+If `x` is a point of `X`, this is the canonical morphism from `Spec(O_x)` to `X`
+.
 -/
 noncomputable def Scheme.fromSpecStalk (X : Scheme) (x : X) :
     Spec (X.presheaf.stalk x) ⟶ X :=
@@ -117,61 +134,58 @@ noncomputable def Scheme.fromSpecStalk (X : Scheme) (x : X) :
     (X.affineCover.covers x)
 
 @[simps over] noncomputable
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Scheme.{u}) (x : X) : (Spec (X.presheaf.stalk x)).Over X := ⟨X.fromSpecStalk x⟩
 
 noncomputable
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Scheme.{u}) (x : X) : (Spec (X.presheaf.stalk x)).CanonicallyOver X where
 
 @[simp]
-/--
-theorem `IsAffineOpen.fromSpecStalk_eq_fromSpecStalk` / 定理 `IsAffineOpen.fromSpecStalk_eq_fromSpecStalk`
-
-English:
-theorem IsAffineOpen.fromSpecStalk_eq_fromSpecStalk
-  given: {x : X} (hxU : x in U)
-  proof: fromSpecStalk_eq ..
-
-中文:
-定理 是仿射开集.fromSpecStalk_eq_fromSpecStalk
-  条件: {x : X} (hxU : x in U)
-  证明: fromSpecStalk_eq ..
-
-Depends on / 依赖: fromSpecStalk_eq
+/-
+**AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq_fromSpecStalk** 是 Mathlib 中的一个
+定理，位于命名空间 `AlgebraicGeometry.IsAffineOpen`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsA
+ffineOpen U) {x : ↥X} (hxU : x ∈ U),   hU.fromSpecStalk hxU = X.fromSpecStalk x
+参数：hU : AlgebraicGeometry.IsAffineOpen U；hxU : x ∈ U。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq`：∀ {X : AlgebraicGeometr
+y.Scheme} {U V : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U)   (hV : Algebr
+aicGeometry.IsAffineOpen V) (x : ↥X) …
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
 -/
-theorem IsAffineOpen.fromSpecStalk_eq_fromSpecStalk {x : X} (hxU : x in U) :
+theorem IsAffineOpen.fromSpecStalk_eq_fromSpecStalk {x : X} (hxU : x ∈ U) :
     hU.fromSpecStalk hxU = X.fromSpecStalk x := fromSpecStalk_eq ..
-
-/--
-Instance `IsAffineOpen.fromSpecStalk_isPreimmersion` / 实例 `IsAffineOpen.fromSpecStalk_isPreimmersion`
-
-English:
-instance IsAffineOpen.fromSpecStalk_isPreimmersion
-  signature: {X : Scheme.{u}} {U : Opens X}
-  body: by
-  dsimp [IsAffineOpen.fromSpecStalk]
-  have : IsPreimmersion (Spec.map (X.presheaf.germ U x hx)) :=
-    letI : Algebra Γ(X, U) (X.presheaf.stalk x) := (X.presheaf.germ U x hx).hom.toAlgebra
-    haveI := hU.isLocalization_stalk ⟨x, hx⟩
-    IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.presheaf.stalk x)
-      (hU.primeIdealOf ⟨x, hx⟩).asIdeal.primeCompl
-  apply IsPreimmersion.comp
-
-中文:
-实例 是仿射开集.fromSpecStalk_isPreimmersion
-  签名: {X : 概形.{u}} {U : Opens X}
-  定义体: by
-  dsimp [IsAffineOpen.fromSpecStalk]
-  have : IsPreimmersion (Spec.map (X.presheaf.germ U x hx)) :=
-    letI : Algebra Γ(X, U) (X.presheaf.stalk x) := (X.presheaf.germ U x hx).hom.toAlgebra
-    haveI := hU.isLocalization_stalk ⟨x, hx⟩
-    IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.presheaf.stalk x)
-      (hU.primeIdealOf ⟨x, hx⟩).asIdeal.primeCompl
-  apply IsPreimmersion.comp
-
-Depends on / 依赖: Algebra, IsAffineOpen, IsAffineOpen.fromSpecStalk, IsPreimmersion, IsPreimmersion.comp, IsPreimmersion.of_isLocalization, Spec.map, X.presheaf.germ, X.presheaf.stalk, asIdeal, asIdeal.primeCompl, fromSpecStalk, hU.isLocalization_stalk, hU.primeIdealOf, hom.toAlgebra, isLocalization_stalk, of_isLocalization, presheaf, primeCompl, primeIdealOf
+/-
+**AlgebraicGeometry.IsAffineOpen.fromSpecStalk_isPreimmersion** 是 Mathlib 中的一个定理
+，位于命名空间 `AlgebraicGeometry.IsAffineOpen`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U : TopologicalSpace.Opens ↥X} (hU : Alg
+ebraicGeometry.IsAffineOpen U) (x : ↥X)   (hx : x ∈ U), AlgebraicGeometry.IsPrei
+mmersion (hU.fromSpecStalk hx)
+参数：hU : AlgebraicGeometry.IsAffineOpen U；x : ↥X；hx : x ∈ U；hU.fromSpecStalk hx。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.IsPreimmersion.of_isLocalization`：of_isLocalization {R
+ S : Type u} [CommRing R] (M : Submonoid R) [CommRing S] [Algebra R S] [IsLocali
+zation M S] : IsPreimmersion (Spec.map (…
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.isLocalization_stalk`：isLocalization_stal
+k (x : U) : IsLocalization.AtPrime (X.presheaf.stalk x) (hU.primeIdealOf x).asId
+eal
+· 使用定理 `AlgebraicGeometry.IsPreimmersion.instOfIsOpenImmersion`：∀ {X Y : Algebra
+icGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsOpenImmersion f], AlgebraicG
+eometry.IsPreimmersion f
 -/
 instance IsAffineOpen.fromSpecStalk_isPreimmersion {X : Scheme.{u}} {U : Opens X}
-    (hU : IsAffineOpen U) (x : X) (hx : x in U) : IsPreimmersion (hU.fromSpecStalk hx) := by
+    (hU : IsAffineOpen U) (x : X) (hx : x ∈ U) : IsPreimmersion (hU.fromSpecStalk hx) := by
   dsimp [IsAffineOpen.fromSpecStalk]
   have : IsPreimmersion (Spec.map (X.presheaf.germ U x hx)) :=
     letI : Algebra Γ(X, U) (X.presheaf.stalk x) := (X.presheaf.germ U x hx).hom.toAlgebra
@@ -179,106 +193,146 @@ instance IsAffineOpen.fromSpecStalk_isPreimmersion {X : Scheme.{u}} {U : Opens X
     IsPreimmersion.of_isLocalization (R := Γ(X, U)) (S := X.presheaf.stalk x)
       (hU.primeIdealOf ⟨x, hx⟩).asIdeal.primeCompl
   apply IsPreimmersion.comp
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Scheme.{u}} (x : X) : IsPreimmersion (X.fromSpecStalk x) :=
   IsAffineOpen.fromSpecStalk_isPreimmersion _ _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `IsAffineOpen.fromSpecStalk_closedPoint` / 引理 `IsAffineOpen.fromSpecStalk_closedPoint`
-
-English:
-lemma IsAffineOpen.fromSpecStalk_closedPoint
-  statement: {U : Opens X} (hU : IsAffineOpen U)
-  proof: by
-  rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_apply]
-  rw [← hU.primeIdealOf_eq_map_closedPoint ⟨x]; rw [hxU⟩]; rw [hU.fromSpec_primeIdealOf ⟨x]; rw [hxU⟩]
-
-中文:
-引理 是仿射开集.fromSpecStalk_closedPoint
-  结论: {U : Opens X} (hU : 是仿射开集 U)
-  证明: by
-  rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_apply]
-  rw [← hU.primeIdealOf_eq_map_closedPoint ⟨x]; rw [hxU⟩]; rw [hU.fromSpec_primeIdealOf ⟨x]; rw [hxU⟩]
-
-Depends on / 依赖: IsAffineOpen, IsAffineOpen.fromSpecStalk, Scheme, Scheme.Hom.comp_apply, comp_apply, fromSpecStalk, fromSpec_primeIdealOf, hU.fromSpec_primeIdealOf, hU.primeIdealOf_eq_map_closedPoint, primeIdealOf_eq_map_closedPoint
+/-
+**AlgebraicGeometry.IsAffineOpen.fromSpecStalk_closedPoint** 是 Mathlib 中的一个定理，位于
+命名空间 `AlgebraicGeometry.IsAffineOpen`。
+形式化陈述：∀ {X : AlgebraicGeometry.Scheme} {U : TopologicalSpace.Opens ↥X} (hU : Alg
+ebraicGeometry.IsAffineOpen U) {x : ↥X}   (hxU : x ∈ U), (hU.fromSpecStalk hxU) 
+(IsLocalRing.closedPoint ↑(X.presheaf.stalk x)) = x
+参数：hU : AlgebraicGeometry.IsAffineOpen U；hxU : x ∈ U；hU.fromSpecStalk hxU；IsLoca
+lRing.closedPoint ↑(X.presheaf.stalk x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk.eq_1`：∀ {X : AlgebraicGeome
+try.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x : ↥X} (hxU 
+: x ∈ U),   hU.fromSpecStalk hxU =     …
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_apply`：comp_apply {X Y Z : Scheme} (f 
+: X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.primeIdealOf_eq_map_closedPoint`：primeIde
+alOf_eq_map_closedPoint (x : U) : hU.primeIdealOf x = Spec.map (X.presheaf.germ 
+_ x x.2) (closedPoint _)
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpec_primeIdealOf`：fromSpec_primeIdea
+lOf (x : U) : hU.fromSpec (hU.primeIdealOf x) = x.1
 -/
 lemma IsAffineOpen.fromSpecStalk_closedPoint {U : Opens X} (hU : IsAffineOpen U)
-    {x : X} (hxU : x in U) :
+    {x : X} (hxU : x ∈ U) :
     hU.fromSpecStalk hxU (closedPoint (X.presheaf.stalk x)) = x := by
-  rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_apply]
-  rw [← hU.primeIdealOf_eq_map_closedPoint ⟨x]; rw [hxU⟩]; rw [hU.fromSpec_primeIdealOf ⟨x]; rw [hxU⟩]
+  rw [IsAffineOpen.fromSpecStalk, Scheme.Hom.comp_apply]
+  rw [← hU.primeIdealOf_eq_map_closedPoint ⟨x, hxU⟩, hU.fromSpec_primeIdealOf ⟨x, hxU⟩]
 
 namespace Scheme
 
 @[simp]
-/--
-lemma `fromSpecStalk_closedPoint` / 引理 `fromSpecStalk_closedPoint`
-
-English:
-lemma fromSpecStalk_closedPoint
-  given: {x : X}
-  proof: IsAffineOpen.fromSpecStalk_closedPoint _ _
-
-中文:
-引理 fromSpecStalk_closedPoint
-  条件: {x : X}
-  证明: IsAffineOpen.fromSpecStalk_closedPoint _ _
-
-Depends on / 依赖: IsAffineOpen, IsAffineOpen.fromSpecStalk_closedPoint, fromSpecStalk_closedPoint
+/-
+**AlgebraicGeometry.Scheme.fromSpecStalk_closedPoint** 是 Mathlib 中的一个引理，位于命名空间 `
+AlgebraicGeometry.Scheme`。
+形式化陈述：fromSpecStalk_closedPoint {x : X} : X.fromSpecStalk x (closedPoint (X.pres
+heaf.stalk x)) = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk_closedPoint`：∀ {X : Algebra
+icGeometry.Scheme} {U : TopologicalSpace.Opens ↥X} (hU : AlgebraicGeometry.IsAff
+ineOpen U) {x : ↥X}   (hxU : x ∈ U), (hU.fromS…
+· 使用定理 `AlgebraicGeometry.Scheme.instJointlySurjectivePrecoverage`：∀ {P : Catego
+ryTheory.MorphismProperty AlgebraicGeometry.Scheme},   AlgebraicGeometry.Scheme.
+JointlySurjective (AlgebraicGeometry.Scheme.pre…
 -/
 lemma fromSpecStalk_closedPoint {x : X} :
     X.fromSpecStalk x (closedPoint (X.presheaf.stalk x)) = x :=
   IsAffineOpen.fromSpecStalk_closedPoint _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `fromSpecStalk_app` / 引理 `fromSpecStalk_app`
-
-English:
-lemma fromSpecStalk_app
-  given: {x : X} (hxU : x in U)
-  proof: by
-  obtain ⟨_, ⟨V : X.Opens, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
-    hxU U.2
-  rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_app]; rw [hV.fromSpec_app_of_le _ hVU]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]
-  simp [Category.assoc, ← ΓSpecIso_inv_naturality_assoc]
-
-中文:
-引理 fromSpecStalk_app
-  条件: {x : X} (hxU : x in U)
-  证明: by
-  obtain ⟨_, ⟨V : X.Opens, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
-    hxU U.2
-  rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_app]; rw [hV.fromSpec_app_of_le _ hVU]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]
-  simp [Category.assoc, ← ΓSpecIso_inv_naturality_assoc]
-
-Depends on / 依赖: Category, Category.assoc, IsAffineOpen, IsAffineOpen.fromSpecStalk, Scheme, Scheme.Hom.comp_app, X.Opens, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.germ_res, comp_app, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, fromSpec_app_of_le, germ_res, hV.fromSpecStalk_eq_fromSpecStalk, hV.fromSpec_app_of_le, homOfLE, isBasis_affineOpens, presheaf
+/-
+**AlgebraicGeometry.Scheme.fromSpecStalk_app** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry.Scheme`。
+形式化陈述：fromSpecStalk_app {x : X} (hxU : x in U) : (X.fromSpecStalk x).app U = X.p
+resheaf.germ U x hxU ≫ (ΓSpecIso (X.presheaf.stalk x)).inv ≫ (Spec (X.presheaf.s
+talk x)).presheaf.map (homOfLE le_top).op
+参数：hxU : x in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.exists_subset_of_mem_open`：∀ {α : Ty
+pe u} [t : TopologicalSpace α] {b : Set (Set α)},   TopologicalSpace.IsTopologic
+alBasis b → ∀ {a : α} {u : Set α}, a ∈ u → IsOpen u…
+· 使用定理 `AlgebraicGeometry.Scheme.isBasis_affineOpens`：∀ (X : AlgebraicGeometry.S
+cheme), TopologicalSpace.Opens.IsBasis X.affineOpens
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq_fromSpecStalk`：∀ {X : Al
+gebraicGeometry.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x
+ : ↥X} (hxU : x ∈ U),   hU.fromSpecStalk hxU = X.fr…
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk.eq_1`：∀ {X : AlgebraicGeome
+try.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x : ↥X} (hxU 
+: x ∈ U),   hU.fromSpecStalk hxU =     …
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_app`：comp_app {X Y Z : Scheme} (f : X 
+⟶ Y) (g : Y ⟶ Z) (U) : (f ≫ g).app U = g.app U ≫ f.app _
+· 使用引理 `AlgebraicGeometry.IsAffineOpen.fromSpec_app_of_le`：fromSpec_app_of_le (V
+ : X.Opens) (h : U <= V) : hU.fromSpec.app V = X.presheaf.map (homOfLE h).op ≫ (
+Scheme.ΓSpecIso Γ(X, U)).inv ≫ (Spec _)…
+· 使用定理 `TopCat.Presheaf.germ_res`：germ_res (F : X.Presheaf C) {U V : Opens X} (i
+ : U ⟶ V) (x : X) (hx : x in U) : F.map i.op ≫ F.germ U x hx = F.germ V x (i.le 
+hx)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `TopCat.Presheaf.germ_res'_assoc`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X : TopCat}   
+(F : TopCat.Presheaf …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TopCat.Presheaf.germ_res'`：germ_res' (F : X.Presheaf C) {U V : Opens X} 
+(i : op V ⟶ op U) (x : X) (hx : x in U) : F.map i ≫ F.germ U x hx = F.germ V x (
+i.unop.le hx)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma fromSpecStalk_app {x : X} (hxU : x in U) :
+lemma fromSpecStalk_app {x : X} (hxU : x ∈ U) :
     (X.fromSpecStalk x).app U =
       X.presheaf.germ U x hxU ≫
         (ΓSpecIso (X.presheaf.stalk x)).inv ≫
           (Spec (X.presheaf.stalk x)).presheaf.map (homOfLE le_top).op := by
   obtain ⟨_, ⟨V : X.Opens, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
     hxU U.2
-  rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [Scheme.Hom.comp_app]; rw [hV.fromSpec_app_of_le _ hVU]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]
+  rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV, IsAffineOpen.fromSpecStalk, Scheme.Hom.comp_app,
+    hV.fromSpec_app_of_le _ hVU, ← X.presheaf.germ_res (homOfLE hVU) x hxV]
   simp [Category.assoc, ← ΓSpecIso_inv_naturality_assoc]
-
-/--
-lemma `fromSpecStalk_appTop` / 引理 `fromSpecStalk_appTop`
-
-English:
-lemma fromSpecStalk_appTop
-  given: {x : X}
-  proof: fromSpecStalk_app ..
-
-中文:
-引理 fromSpecStalk_appTop
-  条件: {x : X}
-  证明: fromSpecStalk_app ..
-
-Depends on / 依赖: fromSpecStalk_app
+/-
+**AlgebraicGeometry.Scheme.fromSpecStalk_appTop** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry.Scheme`。
+形式化陈述：fromSpecStalk_appTop {x : X} : (X.fromSpecStalk x).appTop = X.presheaf.ger
+m ⊤ x trivial ≫ (ΓSpecIso (X.presheaf.stalk x)).inv ≫ (Spec (X.presheaf.stalk x)
+).presheaf.map (homOfLE le_top).op
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.fromSpecStalk_app`：fromSpecStalk_app {x : X} (h
+xU : x in U) : (X.fromSpecStalk x).app U = X.presheaf.germ U x hxU ≫ (ΓSpecIso (
+X.presheaf.stalk x)).inv ≫ (Spec…
+· 使用定理 `trivial`：True
 -/
 lemma fromSpecStalk_appTop {x : X} :
     (X.fromSpecStalk x).appTop =
@@ -289,72 +343,111 @@ lemma fromSpecStalk_appTop {x : X} :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `SpecMap_stalkSpecializes_fromSpecStalk` / 引理 `SpecMap_stalkSpecializes_fromSpecStalk`
-
-English:
-lemma SpecMap_stalkSpecializes_fromSpecStalk
-  given: {x y : X} (h : x ⤳ y)
-  proof: by
-  obtain ⟨_, ⟨U, hU, rfl⟩, hyU, -⟩ :=
-    X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ y) isOpen_univ
-  have hxU : x in U := h.mem_open U.2 hyU
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU]; rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpecStalk]; rw [← Category.assoc]; rw [← Spec.map_comp]; rw [TopCat.Presheaf.germ_stalkSpecializes]
-
-中文:
-引理 SpecMap_stalkSpecializes_fromSpecStalk
-  条件: {x y : X} (h : x ⤳ y)
-  证明: by
-  obtain ⟨_, ⟨U, hU, rfl⟩, hyU, -⟩ :=
-    X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ y) isOpen_univ
-  have hxU : x in U := h.mem_open U.2 hyU
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU]; rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpecStalk]; rw [← Category.assoc]; rw [← Spec.map_comp]; rw [TopCat.Presheaf.germ_stalkSpecializes]
-
-Depends on / 依赖: Category, Category.assoc, IsAffineOpen, IsAffineOpen.fromSpecStalk, Presheaf, Set.mem_univ, Spec.map_comp, TopCat, TopCat.Presheaf.germ_stalkSpecializes, X.isBasis_affineOpens.exists_subset_of_mem_open, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, germ_stalkSpecializes, h.mem_open, hU.fromSpecStalk_eq_fromSpecStalk, isBasis_affineOpens, isOpen_univ, map_comp, mem_open
+/-
+**AlgebraicGeometry.Scheme.SpecMap_stalkSpecializes_fromSpecStalk** 是 Mathlib 中的
+一个引理，位于命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：SpecMap_stalkSpecializes_fromSpecStalk {x y : X} (h : x ⤳ y) : Spec.map (X
+.presheaf.stalkSpecializes h) ≫ X.fromSpecStalk y = X.fromSpecStalk x
+参数：h : x ⤳ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.exists_subset_of_mem_open`：∀ {α : Ty
+pe u} [t : TopologicalSpace α] {b : Set (Set α)},   TopologicalSpace.IsTopologic
+alBasis b → ∀ {a : α} {u : Set α}, a ∈ u → IsOpen u…
+· 使用定理 `AlgebraicGeometry.Scheme.isBasis_affineOpens`：∀ (X : AlgebraicGeometry.S
+cheme), TopologicalSpace.Opens.IsBasis X.affineOpens
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+· 使用定理 `Specializes.mem_open`：Specializes.mem_open (h : x ⤳ y) (hs : IsOpen s) (
+hy : y in s) : x in s
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq_fromSpecStalk`：∀ {X : Al
+gebraicGeometry.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x
+ : ↥X} (hxU : x ∈ U),   hU.fromSpecStalk hxU = X.fr…
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk.eq_1`：∀ {X : AlgebraicGeome
+try.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x : ↥X} (hxU 
+: x ∈ U),   hU.fromSpecStalk hxU =     …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Spec.map_comp`：∀ {R S T : CommRingCat} (f : R ⟶ S) (g 
+: S ⟶ T),   AlgebraicGeometry.Spec.map (CategoryTheory.CategoryStruct.comp f g) 
+=     CategoryTheory.…
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `TopCat.Presheaf.germ_stalkSpecializes`：germ_stalkSpecializes (F : X.Pres
+heaf C) {U : Opens X} {y : X} (hy : y in U) {x : X} (h : x ⤳ y) : F.germ U y hy 
+≫ F.stalkSpecializes h = F.…
 -/
 lemma SpecMap_stalkSpecializes_fromSpecStalk {x y : X} (h : x ⤳ y) :
     Spec.map (X.presheaf.stalkSpecializes h) ≫ X.fromSpecStalk y = X.fromSpecStalk x := by
   obtain ⟨_, ⟨U, hU, rfl⟩, hyU, -⟩ :=
     X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ y) isOpen_univ
-  have hxU : x in U := h.mem_open U.2 hyU
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU]; rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpecStalk]; rw [← Category.assoc]; rw [← Spec.map_comp]; rw [TopCat.Presheaf.germ_stalkSpecializes]
-
+  have hxU : x ∈ U := h.mem_open U.2 hyU
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hyU, ← hU.fromSpecStalk_eq_fromSpecStalk hxU,
+    IsAffineOpen.fromSpecStalk, IsAffineOpen.fromSpecStalk, ← Category.assoc, ← Spec.map_comp,
+    TopCat.Presheaf.germ_stalkSpecializes]
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {x y : X} (h : x ⤳ y) : (Spec.map (X.presheaf.stalkSpecializes h)).IsOver X where
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `SpecMap_stalkMap_fromSpecStalk` / 引理 `SpecMap_stalkMap_fromSpecStalk`
-
-English:
-lemma SpecMap_stalkMap_fromSpecStalk
-  given: {x}
-  proof: by
-  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ := Y.isBasis_affineOpens.exists_subset_of_mem_open
-    (Set.mem_univ (f x)) isOpen_univ
-  obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
-    hxU (f ⁻¹ᵁ U).2
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [Scheme.Hom.germ_stalkMap f _ x hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [Spec.map_comp_assoc]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]; rw [Spec.map_comp_assoc]; rw [Category.assoc]; rw [← Spec.map_comp_assoc (f.app _)]; rw [Hom.app_eq_appLE]; rw [Hom.appLE_map]; rw [IsAffineOpen.SpecMap_appLE_fromSpec]
-
-.IsOver Y where instance [X.Over Y] {x} : Spec.map ((X ↘ Y).stalkMap x)
-
-@[stacks 01J7]
-
-中文:
-引理 SpecMap_stalkMap_fromSpecStalk
-  条件: {x}
-  证明: by
-  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ := Y.isBasis_affineOpens.exists_subset_of_mem_open
-    (Set.mem_univ (f x)) isOpen_univ
-  obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
-    hxU (f ⁻¹ᵁ U).2
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [Scheme.Hom.germ_stalkMap f _ x hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [Spec.map_comp_assoc]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]; rw [Spec.map_comp_assoc]; rw [Category.assoc]; rw [← Spec.map_comp_assoc (f.app _)]; rw [Hom.app_eq_appLE]; rw [Hom.appLE_map]; rw [IsAffineOpen.SpecMap_appLE_fromSpec]
-
-.IsOver Y where instance [X.Over Y] {x} : Spec.map ((X ↘ Y).stalkMap x)
-
-@[stacks 01J7]
-
-Depends on / 依赖: IsAffineOpen, IsAffineOpen.fromSpecStalk, Scheme, Scheme.Hom.germ_stalkMap, Set.mem_univ, Spec.map_comp_assoc, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.germ_res, Y.isBasis_affineOpens.exists_subset_of_mem_open, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, germ_res, germ_stalkMap, hU.fromSpecStalk_eq_fromSpecStalk, hV.fromSpecStalk_eq_fromSpecStalk, isBasis_affineOpens, isOpen_univ, map_comp_assoc, mem_univ
+/-
+**AlgebraicGeometry.Scheme.SpecMap_stalkMap_fromSpecStalk** 是 Mathlib 中的一个引理，位于命
+名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：SpecMap_stalkMap_fromSpecStalk {x} : Spec.map (f.stalkMap x) ≫ Y.fromSpecS
+talk _ = X.fromSpecStalk x ≫ f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.exists_subset_of_mem_open`：∀ {α : Ty
+pe u} [t : TopologicalSpace α] {b : Set (Set α)},   TopologicalSpace.IsTopologic
+alBasis b → ∀ {a : α} {u : Set α}, a ∈ u → IsOpen u…
+· 使用定理 `AlgebraicGeometry.Scheme.isBasis_affineOpens`：∀ (X : AlgebraicGeometry.S
+cheme), TopologicalSpace.Opens.IsBasis X.affineOpens
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+· 使用定理 `TopologicalSpace.Opens.is_open'`：∀ {α : Type u_2} [inst : TopologicalSpa
+ce α] (self : TopologicalSpace.Opens α), IsOpen self.carrier
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq_fromSpecStalk`：∀ {X : Al
+gebraicGeometry.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x
+ : ↥X} (hxU : x ∈ U),   hU.fromSpecStalk hxU = X.fr…
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk.eq_1`：∀ {X : AlgebraicGeome
+try.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x : ↥X} (hxU 
+: x ∈ U),   hU.fromSpecStalk hxU =     …
+· 使用定理 `AlgebraicGeometry.Spec.map_comp_assoc`：∀ {R S T : CommRingCat} (f : R ⟶ 
+S) (g : S ⟶ T) {Z : AlgebraicGeometry.Scheme} (h : AlgebraicGeometry.Spec R ⟶ Z)
+,   CategoryTheory.Category…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.germ_stalkMap`：germ_stalkMap (U : Y.Opens) 
+(x : X) (hx : f x in U) : Y.presheaf.germ U (f x) hx ≫ f.stalkMap x = f.app U ≫ 
+X.presheaf.germ (f ⁻¹ᵁ U) x hx
+· 使用定理 `TopCat.Presheaf.germ_res`：germ_res (F : X.Presheaf C) {U V : Opens X} (i
+ : U ⟶ V) (x : X) (hx : x in U) : F.map i.op ≫ F.germ U x hx = F.germ V x (i.le 
+hx)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.app_eq_appLE`：app_eq_appLE {U : Y.Opens} : 
+f.app U = f.appLE U _ le_rfl
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.appLE_map`：appLE_map (e : V <= f ⁻¹ᵁ U) (i 
+: op V ⟶ op V') : f.appLE U V e ≫ X.presheaf.map i = f.appLE U V' (i.unop.le.tra
+ns e)
+· 使用引理 `AlgebraicGeometry.IsAffineOpen.SpecMap_appLE_fromSpec`：SpecMap_appLE_fro
+mSpec (f : X ⟶ Y) {V : X.Opens} {U : Y.Opens} (hU : IsAffineOpen U) (hV : IsAffi
+neOpen V) (i : V <= f ⁻¹ᵁ U) : Spec.map (f.…
 -/
 lemma SpecMap_stalkMap_fromSpecStalk {x} :
     Spec.map (f.stalkMap x) ≫ Y.fromSpecStalk _ = X.fromSpecStalk x ≫ f := by
@@ -362,43 +455,46 @@ lemma SpecMap_stalkMap_fromSpecStalk {x} :
     (Set.mem_univ (f x)) isOpen_univ
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
     hxU (f ⁻¹ᵁ U).2
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [← hV.fromSpecStalk_eq_fromSpecStalk hxV]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [Scheme.Hom.germ_stalkMap f _ x hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [Spec.map_comp_assoc]; rw [← X.presheaf.germ_res (homOfLE hVU) x hxV]; rw [Spec.map_comp_assoc]; rw [Category.assoc]; rw [← Spec.map_comp_assoc (f.app _)]; rw [Hom.app_eq_appLE]; rw [Hom.appLE_map]; rw [IsAffineOpen.SpecMap_appLE_fromSpec]
-
-.IsOver Y where instance [X.Over Y] {x} : Spec.map ((X ↘ Y).stalkMap x)
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU, ← hV.fromSpecStalk_eq_fromSpecStalk hxV,
+    IsAffineOpen.fromSpecStalk, ← Spec.map_comp_assoc, Scheme.Hom.germ_stalkMap f _ x hxU,
+    IsAffineOpen.fromSpecStalk, Spec.map_comp_assoc, ← X.presheaf.germ_res (homOfLE hVU) x hxV,
+    Spec.map_comp_assoc, Category.assoc, ← Spec.map_comp_assoc (f.app _),
+      Hom.app_eq_appLE, Hom.appLE_map, IsAffineOpen.SpecMap_appLE_fromSpec]
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance [X.Over Y] {x} : Spec.map ((X ↘ Y).stalkMap x) |>.IsOver Y where
 
 @[stacks 01J7]
-/--
-lemma `range_fromSpecStalk` / 引理 `range_fromSpecStalk`
-
-English:
-lemma range_fromSpecStalk
-  given: {x : X}
-  proof: by
-  ext y
-  constructor
-  · rintro ⟨y, rfl⟩
-    exact ((IsLocalRing.specializes_closedPoint y).map (X.fromSpecStalk x).continuous).trans
-      (specializes_of_eq fromSpecStalk_closedPoint)
-  · rintro (hy : y ⤳ x)
-    have := fromSpecStalk_closedPoint (x := y)
-    rw [← SpecMap_stalkSpecializes_fromSpecStalk hy] at this
-    exact ⟨_, this⟩
-
-中文:
-引理 range_fromSpecStalk
-  条件: {x : X}
-  证明: by
-  ext y
-  constructor
-  · rintro ⟨y, rfl⟩
-    exact ((IsLocalRing.specializes_closedPoint y).map (X.fromSpecStalk x).continuous).trans
-      (specializes_of_eq fromSpecStalk_closedPoint)
-  · rintro (hy : y ⤳ x)
-    have := fromSpecStalk_closedPoint (x := y)
-    rw [← SpecMap_stalkSpecializes_fromSpecStalk hy] at this
-    exact ⟨_, this⟩
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.specializes_closedPoint, SpecMap_stalkSpecializes_fromSpecStalk, X.fromSpecStalk, continuous, fromSpecStalk, fromSpecStalk_closedPoint, specializes_closedPoint, specializes_of_eq
+/-
+**AlgebraicGeometry.Scheme.range_fromSpecStalk** 是 Mathlib 中的一个引理，位于命名空间 `Algebr
+aicGeometry.Scheme`。
+形式化陈述：range_fromSpecStalk {x : X} : Set.range (X.fromSpecStalk x) = { y | y ⤳ x 
+}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Specializes.trans`：Specializes.trans : x ⤳ y -> y ⤳ z -> x ⤳ z
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `Specializes.map`：Specializes.map (h : x ⤳ y) (hf : Continuous f) : f x ⤳
+ f y
+· 使用定理 `IsLocalRing.specializes_closedPoint`：specializes_closedPoint (x : PrimeS
+pectrum R) : x ⤳ closedPoint R
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.continuous`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y), Continuous ⇑f
+· 使用定理 `specializes_of_eq`：specializes_of_eq (e : x = y) : x ⤳ y
+· 使用引理 `AlgebraicGeometry.Scheme.fromSpecStalk_closedPoint`：fromSpecStalk_closed
+Point {x : X} : X.fromSpecStalk x (closedPoint (X.presheaf.stalk x)) = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.SpecMap_stalkSpecializes_fromSpecStalk`：SpecMap
+_stalkSpecializes_fromSpecStalk {x y : X} (h : x ⤳ y) : Spec.map (X.presheaf.sta
+lkSpecializes h) ≫ X.fromSpecStalk y = X.fromSpecStal…
 -/
 lemma range_fromSpecStalk {x : X} :
     Set.range (X.fromSpecStalk x) = { y | y ⤳ x } := by
@@ -415,115 +511,64 @@ lemma range_fromSpecStalk {x : X} :
 set_option backward.isDefEq.respectTransparency false in
 /-- The canonical map `Spec 𝒪_{X, x} ⟶ U` given `x ∈ U ⊆ X`. -/
 noncomputable
-/--
-Definition of `Opens.fromSpecStalkOfMem` / `Opens.fromSpecStalkOfMem` 的定义
-
-English:
-definition Opens.fromSpecStalkOfMem
-  signature: {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U)
-  body: Spec.map (inv (U.ι.stalkMap ⟨x, hxU⟩)) ≫ U.toScheme.fromSpecStalk ⟨x, hxU⟩
-
-中文:
-定义 Opens.fromSpecStalkOfMem
-  签名: {X : 概形.{u}} (U : X.Opens) (x : X) (hxU : x in U)
-  定义体: Spec.map (inv (U.ι.stalkMap ⟨x, hxU⟩)) ≫ U.toScheme.fromSpecStalk ⟨x, hxU⟩
-
-Depends on / 依赖: Spec.map, U.toScheme.fromSpecStalk, fromSpecStalk, stalkMap, toScheme
+/-
+**AlgebraicGeometry.Scheme.Opens.fromSpecStalkOfMem** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry.Scheme.Opens`。
+形式化陈述：{X : AlgebraicGeometry.Scheme} → (U : X.Opens) → (x : ↥X) → x ∈ U → (Algeb
+raicGeometry.Spec (X.presheaf.stalk x) ⟶ ↑U)
+参数：U : X.Opens；x : ↥X；AlgebraicGeometry.Spec (X.presheaf.stalk x) ⟶ ↑U。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Opens.fromSpecStalkOfMem {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U) :
+def Opens.fromSpecStalkOfMem {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x ∈ U) :
     Spec (X.presheaf.stalk x) ⟶ U :=
   Spec.map (inv (U.ι.stalkMap ⟨x, hxU⟩)) ≫ U.toScheme.fromSpecStalk ⟨x, hxU⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `Opens.fromSpecStalkOfMem_ι` / 引理 `Opens.fromSpecStalkOfMem_ι`
-
-English:
-lemma Opens.fromSpecStalkOfMem_ι
-  given: {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U)
-  proof: by
-  simp only [Opens.fromSpecStalkOfMem, Spec.map_inv, Category.assoc, IsIso.inv_comp_eq]
-  exact (Scheme.SpecMap_stalkMap_fromSpecStalk U.ι (x := ⟨x, hxU⟩)).symm
-
-中文:
-引理 Opens.fromSpecStalkOfMem_ι
-  条件: {X : 概形.{u}} (U : X.Opens) (x : X) (hxU : x in U)
-  证明: by
-  simp only [Opens.fromSpecStalkOfMem, Spec.map_inv, Category.assoc, IsIso.inv_comp_eq]
-  exact (Scheme.SpecMap_stalkMap_fromSpecStalk U.ι (x := ⟨x, hxU⟩)).symm
-
-Depends on / 依赖: Category, Category.assoc, IsIso.inv_comp_eq, Opens.fromSpecStalkOfMem, Scheme, Scheme.SpecMap_stalkMap_fromSpecStalk, Spec.map_inv, SpecMap_stalkMap_fromSpecStalk, fromSpecStalkOfMem, inv_comp_eq, map_inv
+/-
+**AlgebraicGeometry.Scheme.Opens.fromSpecStalkOfMem_** 是 Mathlib 中的一个引理，位于命名空间 `
+AlgebraicGeometry.Scheme`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Opens.fromSpecStalkOfMem_ι {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U) :
+lemma Opens.fromSpecStalkOfMem_ι {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x ∈ U) :
     U.fromSpecStalkOfMem x hxU ≫ U.ι = X.fromSpecStalk x := by
   simp only [Opens.fromSpecStalkOfMem, Spec.map_inv, Category.assoc, IsIso.inv_comp_eq]
   exact (Scheme.SpecMap_stalkMap_fromSpecStalk U.ι (x := ⟨x, hxU⟩)).symm
-
-instance {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U) :
+/-
+**AlgebraicGeometry.Scheme.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry.Scheme`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x ∈ U) :
     (U.fromSpecStalkOfMem x hxU).IsOver X where
 
 @[reassoc]
-/--
-lemma `fromSpecStalk_toSpecΓ` / 引理 `fromSpecStalk_toSpecΓ`
-
-English:
-lemma fromSpecStalk_toSpecΓ
-  given: (X : Scheme.{u}) (x : X)
-  proof: by
-  rw [Scheme.toSpecΓ_naturality]; rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Scheme.fromSpecStalk_appTop]
-  simp
-
-中文:
-引理 fromSpecStalk_toSpecΓ
-  条件: (X : 概形.{u}) (x : X)
-  证明: by
-  rw [Scheme.toSpecΓ_naturality]; rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Scheme.fromSpecStalk_appTop]
-  simp
-
-Depends on / 依赖: Scheme, Scheme.fromSpecStalk_appTop, Scheme.toSpec, Spec.map_comp, fromSpecStalk_appTop, map_comp
+/-
+**AlgebraicGeometry.Scheme.fromSpecStalk_toSpec** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicGeometry.Scheme`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromSpecStalk_toSpecΓ (X : Scheme.{u}) (x : X) :
     X.fromSpecStalk x ≫ X.toSpecΓ = Spec.map (X.presheaf.germ ⊤ x trivial) := by
-  rw [Scheme.toSpecΓ_naturality]; rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Scheme.fromSpecStalk_appTop]
+  rw [Scheme.toSpecΓ_naturality, ← SpecMap_ΓSpecIso_hom, ← Spec.map_comp,
+    Scheme.fromSpecStalk_appTop]
   simp
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `Opens.fromSpecStalkOfMem_toSpecΓ` / 引理 `Opens.fromSpecStalkOfMem_toSpecΓ`
-
-English:
-lemma Opens.fromSpecStalkOfMem_toSpecΓ
-  given: {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U)
-  proof: by
-  rw [fromSpecStalkOfMem]; rw [Opens.toSpecΓ]; rw [Category.assoc]; rw [fromSpecStalk_toSpecΓ_assoc]; rw [← Spec.map_comp]; rw [← Spec.map_comp]
-  congr 1
-  rw [IsIso.comp_inv_eq]; rw [Iso.inv_comp_eq]
-  erw [Hom.germ_stalkMap U.ι U ⟨x, hxU⟩]
-  rw [Opens.ι_app]; rw [Opens.topIso_hom]; rw [← Functor.map_comp_assoc]
-  exact (U.toScheme.presheaf.germ_res (homOfLE le_top) ⟨x, hxU⟩ (U := U.ι ⁻¹ᵁ U) hxU).symm
-
-中文:
-引理 Opens.fromSpecStalkOfMem_toSpecΓ
-  条件: {X : 概形.{u}} (U : X.Opens) (x : X) (hxU : x in U)
-  证明: by
-  rw [fromSpecStalkOfMem]; rw [Opens.toSpecΓ]; rw [Category.assoc]; rw [fromSpecStalk_toSpecΓ_assoc]; rw [← Spec.map_comp]; rw [← Spec.map_comp]
-  congr 1
-  rw [IsIso.comp_inv_eq]; rw [Iso.inv_comp_eq]
-  erw [Hom.germ_stalkMap U.ι U ⟨x, hxU⟩]
-  rw [Opens.ι_app]; rw [Opens.topIso_hom]; rw [← Functor.map_comp_assoc]
-  exact (U.toScheme.presheaf.germ_res (homOfLE le_top) ⟨x, hxU⟩ (U := U.ι ⁻¹ᵁ U) hxU).symm
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp_assoc, Hom.germ_stalkMap, IsIso.comp_inv_eq, Iso.inv_comp_eq, Opens.toSpec, Opens.topIso_hom, Spec.map_comp, U.toScheme.presheaf.germ_res, comp_inv_eq, fromSpecStalkOfMem, germ_res, germ_stalkMap, homOfLE, inv_comp_eq, le_top, map_comp, map_comp_assoc
+/-
+**AlgebraicGeometry.Scheme.Opens.fromSpecStalkOfMem_toSpec** 是 Mathlib 中的一个引理，位于
+命名空间 `AlgebraicGeometry.Scheme`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Opens.fromSpecStalkOfMem_toSpecΓ {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x in U) :
+lemma Opens.fromSpecStalkOfMem_toSpecΓ {X : Scheme.{u}} (U : X.Opens) (x : X) (hxU : x ∈ U) :
     U.fromSpecStalkOfMem x hxU ≫ U.toSpecΓ = Spec.map (X.presheaf.germ U x hxU) := by
-  rw [fromSpecStalkOfMem]; rw [Opens.toSpecΓ]; rw [Category.assoc]; rw [fromSpecStalk_toSpecΓ_assoc]; rw [← Spec.map_comp]; rw [← Spec.map_comp]
+  rw [fromSpecStalkOfMem, Opens.toSpecΓ, Category.assoc, fromSpecStalk_toSpecΓ_assoc,
+    ← Spec.map_comp, ← Spec.map_comp]
   congr 1
-  rw [IsIso.comp_inv_eq]; rw [Iso.inv_comp_eq]
+  rw [IsIso.comp_inv_eq, Iso.inv_comp_eq]
   erw [Hom.germ_stalkMap U.ι U ⟨x, hxU⟩]
-  rw [Opens.ι_app]; rw [Opens.topIso_hom]; rw [← Functor.map_comp_assoc]
+  rw [Opens.ι_app, Opens.topIso_hom, ← Functor.map_comp_assoc]
   exact (U.toScheme.presheaf.germ_res (homOfLE le_top) ⟨x, hxU⟩ (U := U.ι ⁻¹ᵁ U) hxU).symm
 
 end Scheme
@@ -533,47 +578,62 @@ section Spec
 variable (R : CommRingCat) (x)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `Spec.fromSpecStalk_eq` / 引理 `Spec.fromSpecStalk_eq`
-
-English:
-lemma Spec.fromSpecStalk_eq
-  proof: by
-  rw [← (isAffineOpen_top (Spec R)).fromSpecStalk_eq_fromSpecStalk (x := x) trivial]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpec_top]; rw [Scheme.isoSpec_Spec_inv]; rw [← Spec.map_comp]
-
-中文:
-引理 Spec.fromSpecStalk_eq
-  证明: by
-  rw [← (isAffineOpen_top (Spec R)).fromSpecStalk_eq_fromSpecStalk (x := x) trivial]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpec_top]; rw [Scheme.isoSpec_Spec_inv]; rw [← Spec.map_comp]
-
-Depends on / 依赖: IsAffineOpen, IsAffineOpen.fromSpecStalk, IsAffineOpen.fromSpec_top, Scheme, Scheme.isoSpec_Spec_inv, Spec.map_comp, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, fromSpec_top, isAffineOpen_top, isoSpec_Spec_inv, map_comp
+/-
+**AlgebraicGeometry.Spec.fromSpecStalk_eq** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.Spec`。
+形式化陈述：∀ (R : CommRingCat) (x : ↥(AlgebraicGeometry.Spec R)),   (AlgebraicGeometr
+y.Spec R).fromSpecStalk x =     AlgebraicGeometry.Spec.map       (CategoryTheory
+.CategoryStruct.comp (AlgebraicGeometry.Scheme.ΓSpecIso R).inv         ((Algebra
+icGeometry.Spec R).presheaf.germ ⊤ x trivial))
+参数：R : CommRingCat；x : ↥(AlgebraicGeometry.Spec R)；AlgebraicGeometry.Spec R；Cate
+goryTheory.CategoryStruct.comp (AlgebraicGeometry.Scheme.ΓSpecIso R).inv        
+ ((AlgebraicGeometry.Spec R).presheaf.germ ⊤ x trivial)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `AlgebraicGeometry.isAffineOpen_top`：isAffineOpen_top (X : Scheme) [IsAff
+ine X] : IsAffineOpen (⊤ : X.Opens)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq_fromSpecStalk`：∀ {X : Al
+gebraicGeometry.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x
+ : ↥X} (hxU : x ∈ U),   hU.fromSpecStalk hxU = X.fr…
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk.eq_1`：∀ {X : AlgebraicGeome
+try.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x : ↥X} (hxU 
+: x ∈ U),   hU.fromSpecStalk hxU =     …
+· 使用引理 `AlgebraicGeometry.IsAffineOpen.fromSpec_top`：fromSpec_top [IsAffine X] :
+ (isAffineOpen_top X).fromSpec = X.isoSpec.inv
+· 使用定理 `AlgebraicGeometry.Scheme.isoSpec_Spec_inv`：∀ (R : CommRingCat),   (Algeb
+raicGeometry.Spec R).isoSpec.inv = AlgebraicGeometry.Spec.map (AlgebraicGeometry
+.Scheme.ΓSpecIso R).inv
+· 使用定理 `AlgebraicGeometry.Spec.map_comp`：∀ {R S T : CommRingCat} (f : R ⟶ S) (g 
+: S ⟶ T),   AlgebraicGeometry.Spec.map (CategoryTheory.CategoryStruct.comp f g) 
+=     CategoryTheory.…
 -/
 lemma Spec.fromSpecStalk_eq :
     (Spec R).fromSpecStalk x =
       Spec.map ((Scheme.ΓSpecIso R).inv ≫ (Spec R).presheaf.germ ⊤ x trivial) := by
-  rw [← (isAffineOpen_top (Spec R)).fromSpecStalk_eq_fromSpecStalk (x := x) trivial]; rw [IsAffineOpen.fromSpecStalk]; rw [IsAffineOpen.fromSpec_top]; rw [Scheme.isoSpec_Spec_inv]; rw [← Spec.map_comp]
+  rw [← (isAffineOpen_top (Spec R)).fromSpecStalk_eq_fromSpecStalk (x := x) trivial,
+    IsAffineOpen.fromSpecStalk, IsAffineOpen.fromSpec_top, Scheme.isoSpec_Spec_inv,
+    ← Spec.map_comp]
 
 -- This is not a simp lemma to respect the abstraction boundaries
-/--
-lemma `Spec.fromSpecStalk_eq'` / 引理 `Spec.fromSpecStalk_eq'`
+/-- A variant of `Spec.fromSpecStalk_eq` that breaks abstraction boundaries. -/
+/-
+**AlgebraicGeometry.Spec.fromSpecStalk_eq'** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicG
+eometry.Spec`。
+形式化陈述：∀ (R : CommRingCat) (x : ↥(AlgebraicGeometry.Spec R)),   (AlgebraicGeometr
+y.Spec R).fromSpecStalk x =     AlgebraicGeometry.Spec.map (AlgebraicGeometry.St
+ructureSheaf.toStalk (↑R) x)
+参数：R : CommRingCat；x : ↥(AlgebraicGeometry.Spec R)；AlgebraicGeometry.Spec R；Alge
+braicGeometry.StructureSheaf.toStalk (↑R) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.Spec.fromSpecStalk_eq`：∀ (R : CommRingCat) (x : ↥(Alge
+braicGeometry.Spec R)),   (AlgebraicGeometry.Spec R).fromSpecStalk x =     Algeb
+raicGeometry.Spec.map       (…
 
-English:
-lemma Spec.fromSpecStalk_eq'
-  statement: (Spec R).fromSpecStalk x = Spec.map (StructureSheaf.toStalk R _)
-  proof: Spec.fromSpecStalk_eq _ _
-
-@[deprecated (since := "2026-02-05")] alias Scheme.Spec_fromSpecStalk := Spec.fromSpecStalk_eq
-@[deprecated (since := "2026-02-05")] alias Scheme.Spec_fromSpecStalk' := Spec.fromSpecStalk_eq'
-
-中文:
-引理 Spec.fromSpecStalk_eq'
-  结论: (Spec R).fromSpecStalk x = Spec.map (StructureSheaf.toStalk R _)
-  证明: Spec.fromSpecStalk_eq _ _
-
-@[deprecated (since := "2026-02-05")] alias Scheme.Spec_fromSpecStalk := Spec.fromSpecStalk_eq
-@[deprecated (since := "2026-02-05")] alias Scheme.Spec_fromSpecStalk' := Spec.fromSpecStalk_eq'
-
-Depends on / 依赖: Spec.fromSpecStalk_eq, fromSpecStalk_eq
+--- 原说明 ---
+A variant of `Spec.fromSpecStalk_eq` that breaks abstraction boundaries.
 -/
 lemma Spec.fromSpecStalk_eq' : (Spec R).fromSpecStalk x = Spec.map (StructureSheaf.toStalk R _) :=
   Spec.fromSpecStalk_eq _ _
@@ -592,45 +652,33 @@ section stalkClosedPointIso
 /-- For a local ring `(R, 𝔪)`,
 this is the isomorphism between the stalk of `Spec R` at `𝔪` and `R`. -/
 noncomputable
-/--
-Definition of `stalkClosedPointIso` / `stalkClosedPointIso` 的定义
-
-English:
-definition stalkClosedPointIso
-  signature: :
-  body: Spec.stalkIso _ _ ≪≫ (IsLocalization.atUnits R
-      (closedPoint R).asIdeal.primeCompl fun _ => not_not.mp).toRingEquiv.toCommRingCatIso.symm
-
-中文:
-定义 stalkClosedPointIso
-  签名: :
-  定义体: Spec.stalkIso _ _ ≪≫ (IsLocalization.atUnits R
-      (closedPoint R).asIdeal.primeCompl fun _ => not_not.mp).toRingEquiv.toCommRingCatIso.symm
-
-Depends on / 依赖: IsLocalization, IsLocalization.atUnits, Spec.stalkIso, asIdeal, asIdeal.primeCompl, atUnits, closedPoint, not_not, not_not.mp, primeCompl, stalkIso, toCommRingCatIso, toRingEquiv, toRingEquiv.toCommRingCatIso.symm
+/-
+**AlgebraicGeometry.stalkClosedPointIso** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry`。
+形式化陈述：stalkClosedPointIso : (Spec R).presheaf.stalk (closedPoint R) ≅ R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def stalkClosedPointIso :
     (Spec R).presheaf.stalk (closedPoint R) ≅ R :=
   Spec.stalkIso _ _ ≪≫ (IsLocalization.atUnits R
-      (closedPoint R).asIdeal.primeCompl fun _ => not_not.mp).toRingEquiv.toCommRingCatIso.symm
+      (closedPoint R).asIdeal.primeCompl fun _ ↦ not_not.mp).toRingEquiv.toCommRingCatIso.symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `stalkClosedPointIso_inv` / 引理 `stalkClosedPointIso_inv`
-
-English:
-lemma stalkClosedPointIso_inv
-  proof: by
-  ext x
-  exact (StructureSheaf.stalkIso _ _).commutes _
-
-中文:
-引理 stalkClosedPointIso_inv
-  证明: by
-  ext x
-  exact (StructureSheaf.stalkIso _ _).commutes _
-
-Depends on / 依赖: StructureSheaf, StructureSheaf.stalkIso, commutes, stalkIso
+/-
+**AlgebraicGeometry.stalkClosedPointIso_inv** 是 Mathlib 中的一个引理，位于命名空间 `Algebraic
+Geometry`。
+形式化陈述：stalkClosedPointIso_inv : (stalkClosedPointIso R).inv = StructureSheaf.toS
+talk R _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CommRingCat.hom_ext`：hom_ext {R S : CommRingCat} {f g : R ⟶ S} (hf : f.h
+om = g.hom) : f = g
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `AlgEquiv.commutes`：commutes : forall r : R, e (algebraMap R A₁ r) = alge
+braMap R A₂ r
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
 -/
 lemma stalkClosedPointIso_inv :
     (stalkClosedPointIso R).inv = StructureSheaf.toStalk R _ := by
@@ -638,73 +686,65 @@ lemma stalkClosedPointIso_inv :
   exact (StructureSheaf.stalkIso _ _).commutes _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `ΓSpecIso_hom_stalkClosedPointIso_inv` / 引理 `ΓSpecIso_hom_stalkClosedPointIso_inv`
-
-English:
-lemma ΓSpecIso_hom_stalkClosedPointIso_inv
-  proof: by
-  rw [stalkClosedPointIso_inv]; rw [← Iso.eq_inv_comp]
-  rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 ΓSpecIso_hom_stalkClosedPointIso_inv
-  证明: by
-  rw [stalkClosedPointIso_inv]; rw [← Iso.eq_inv_comp]
-  rfl
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.eq_inv_comp, eq_inv_comp, stalkClosedPointIso_inv
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ΓSpecIso_hom_stalkClosedPointIso_inv :
     (Scheme.ΓSpecIso R).hom ≫ (stalkClosedPointIso R).inv =
       (Spec R).presheaf.germ ⊤ (closedPoint _) trivial := by
-  rw [stalkClosedPointIso_inv]; rw [← Iso.eq_inv_comp]
+  rw [stalkClosedPointIso_inv, ← Iso.eq_inv_comp]
   rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `germ_stalkClosedPointIso_hom` / 引理 `germ_stalkClosedPointIso_hom`
-
-English:
-lemma germ_stalkClosedPointIso_hom
-  proof: by
-  rw [← ΓSpecIso_hom_stalkClosedPointIso_inv]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
-
-中文:
-引理 germ_stalkClosedPointIso_hom
-  证明: by
-  rw [← ΓSpecIso_hom_stalkClosedPointIso_inv]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Iso.inv_hom_id, comp_id, inv_hom_id
+/-
+**AlgebraicGeometry.germ_stalkClosedPointIso_hom** 是 Mathlib 中的一个引理，位于命名空间 `Alge
+braicGeometry`。
+形式化陈述：germ_stalkClosedPointIso_hom : (Spec R).presheaf.germ ⊤ (closedPoint _) tr
+ivial ≫ (stalkClosedPointIso R).hom = (Scheme.ΓSpecIso R).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.ΓSpecIso_hom_stalkClosedPointIso_inv`：ΓSpecIso_hom_sta
+lkClosedPointIso_inv : (Scheme.ΓSpecIso R).hom ≫ (stalkClosedPointIso R).inv = (
+Spec R).presheaf.germ ⊤ (closedPoint _) triv…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma germ_stalkClosedPointIso_hom :
     (Spec R).presheaf.germ ⊤ (closedPoint _) trivial ≫ (stalkClosedPointIso R).hom =
       (Scheme.ΓSpecIso R).hom := by
-  rw [← ΓSpecIso_hom_stalkClosedPointIso_inv]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
+  rw [← ΓSpecIso_hom_stalkClosedPointIso_inv, Category.assoc, Iso.inv_hom_id, Category.comp_id]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Spec_stalkClosedPointIso` / 引理 `Spec_stalkClosedPointIso`
-
-English:
-lemma Spec_stalkClosedPointIso
-  proof: by
-  rw [stalkClosedPointIso_inv]; rw [Spec.fromSpecStalk_eq']
-
-中文:
-引理 Spec_stalkClosedPointIso
-  证明: by
-  rw [stalkClosedPointIso_inv]; rw [Spec.fromSpecStalk_eq']
-
-Depends on / 依赖: Spec.fromSpecStalk_eq, fromSpecStalk_eq, stalkClosedPointIso_inv
+/-
+**AlgebraicGeometry.Spec_stalkClosedPointIso** 是 Mathlib 中的一个引理，位于命名空间 `Algebrai
+cGeometry`。
+形式化陈述：Spec_stalkClosedPointIso : Spec.map (stalkClosedPointIso R).inv = (Spec R)
+.fromSpecStalk (closedPoint R)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.stalkClosedPointIso_inv`：stalkClosedPointIso_inv : (st
+alkClosedPointIso R).inv = StructureSheaf.toStalk R _
+· 使用定理 `AlgebraicGeometry.Spec.fromSpecStalk_eq'`：∀ (R : CommRingCat) (x : ↥(Alg
+ebraicGeometry.Spec R)),   (AlgebraicGeometry.Spec R).fromSpecStalk x =     Alge
+braicGeometry.Spec.map (Algebr…
 -/
 lemma Spec_stalkClosedPointIso :
     Spec.map (stalkClosedPointIso R).inv = (Spec R).fromSpecStalk (closedPoint R) := by
-  rw [stalkClosedPointIso_inv]; rw [Spec.fromSpecStalk_eq']
+  rw [stalkClosedPointIso_inv, Spec.fromSpecStalk_eq']
 
 end stalkClosedPointIso
 
@@ -721,279 +761,382 @@ they induce a (local) ring homomorphism `φ : 𝒪_{X, f 𝔪} ⟶ R`.
 This is inverse to `φ ↦ Spec.map φ ≫ X.fromSpecStalk (f 𝔪)`. See `SpecToEquivOfLocalRing`.
 -/
 noncomputable
-/--
-Definition of `stalkClosedPointTo` / `stalkClosedPointTo` 的定义
-
-English:
-definition stalkClosedPointTo
-  signature: :
-  body: f.stalkMap (closedPoint R) ≫ (stalkClosedPointIso R).hom
-
-中文:
-定义 stalkClosedPointTo
-  签名: :
-  定义体: f.stalkMap (closedPoint R) ≫ (stalkClosedPointIso R).hom
-
-Depends on / 依赖: closedPoint, f.stalkMap, stalkClosedPointIso, stalkMap
+/-
+**AlgebraicGeometry.Scheme.stalkClosedPointTo** 是 Mathlib 中的一个定义，位于命名空间 `Algebra
+icGeometry.Scheme`。
+形式化陈述：stalkClosedPointTo : X.presheaf.stalk (f (closedPoint R)) ⟶ R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def stalkClosedPointTo :
     X.presheaf.stalk (f (closedPoint R)) ⟶ R :=
   f.stalkMap (closedPoint R) ≫ (stalkClosedPointIso R).hom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isLocalHom_stalkClosedPointTo` / 实例 `isLocalHom_stalkClosedPointTo`
-
-English:
-instance isLocalHom_stalkClosedPointTo
-  signature: :
-  body: inferInstanceAs IsLocalHom (f.stalkMap (closedPoint R) ≫ (stalkClosedPointIso R).hom).hom
-
-中文:
-实例 isLocalHom_stalkClosedPointTo
-  签名: :
-  定义体: inferInstanceAs IsLocalHom (f.stalkMap (closedPoint R) ≫ (stalkClosedPointIso R).hom).hom
-
-Depends on / 依赖: IsLocalHom, closedPoint, f.stalkMap, stalkClosedPointIso, stalkMap
+/-
+**AlgebraicGeometry.Scheme.isLocalHom_stalkClosedPointTo** 是 Mathlib 中的一个实例，位于命名
+空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：isLocalHom_stalkClosedPointTo : IsLocalHom (stalkClosedPointTo f).hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isLocalHom_stalkClosedPointTo :
     IsLocalHom (stalkClosedPointTo f).hom :=
-inferInstanceAs IsLocalHom (f.stalkMap (closedPoint R) ≫ (stalkClosedPointIso R).hom).hom
+  inferInstanceAs <| IsLocalHom (f.stalkMap (closedPoint R) ≫ (stalkClosedPointIso R).hom).hom
 
-/--
-Instance `isLocalHom_stalkClosedPointTo'` / 实例 `isLocalHom_stalkClosedPointTo'`
+/-- Copy of `isLocalHom_stalkClosedPointTo` which unbundles the comm ring.
 
-English:
-instance isLocalHom_stalkClosedPointTo'
-  signature: {R : Type u} [CommRing R] [IsLocalRing R]
-  body: isLocalHom_stalkClosedPointTo f
+Useful for use in combination with `CommRingCat.of K` for a field `K`.
+-/
+/-
+**AlgebraicGeometry.Scheme.isLocalHom_stalkClosedPointTo'** 是 Mathlib 中的一个实例，位于命
+名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：isLocalHom_stalkClosedPointTo' {R : Type u} [CommRing R] [IsLocalRing R] (
+f : Spec (.of R) ⟶ X) : IsLocalHom (stalkClosedPointTo f).hom
+参数：f : Spec (.of R) ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 isLocalHom_stalkClosedPointTo'
-  签名: {R : 类型u} [交换环 R] [是局部环 R]
-  定义体: isLocalHom_stalkClosedPointTo f
+--- 原说明 ---
+Copy of `isLocalHom_stalkClosedPointTo` which unbundles the comm ring.
 
-Depends on / 依赖: isLocalHom_stalkClosedPointTo
+Useful for use in combination with `CommRingCat.of K` for a field `K`.
 -/
 instance isLocalHom_stalkClosedPointTo' {R : Type u} [CommRing R] [IsLocalRing R]
     (f : Spec (.of R) ⟶ X) :
     IsLocalHom (stalkClosedPointTo f).hom :=
   isLocalHom_stalkClosedPointTo f
-
-/--
-lemma `preimage_eq_top_of_closedPoint_mem` / 引理 `preimage_eq_top_of_closedPoint_mem`
-
-English:
-lemma preimage_eq_top_of_closedPoint_mem
-  proof: IsLocalRing.closed_point_mem_iff.mp hU
-
-中文:
-引理 preimage_eq_top_of_closedPoint_mem
-  证明: IsLocalRing.closed_point_mem_iff.mp hU
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.closed_point_mem_iff.mp, closed_point_mem_iff
+/-
+**AlgebraicGeometry.Scheme.preimage_eq_top_of_closedPoint_mem** 是 Mathlib 中的一个引理
+，位于命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：preimage_eq_top_of_closedPoint_mem {U : Opens X} (hU : f (closedPoint R) i
+n U) : f ⁻¹ᵁ U = ⊤
+参数：hU : f (closedPoint R) in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `IsLocalRing.closed_point_mem_iff`：closed_point_mem_iff {U : TopologicalS
+pace.Opens (PrimeSpectrum R)} : closedPoint R in U ↔ U = ⊤
 -/
 lemma preimage_eq_top_of_closedPoint_mem
-    {U : Opens X} (hU : f (closedPoint R) in U) : f ⁻¹ᵁ U = ⊤ :=
+    {U : Opens X} (hU : f (closedPoint R) ∈ U) : f ⁻¹ᵁ U = ⊤ :=
   IsLocalRing.closed_point_mem_iff.mp hU
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `stalkClosedPointTo_comp` / 引理 `stalkClosedPointTo_comp`
-
-English:
-lemma stalkClosedPointTo_comp
-  given: (g : X ⟶ Y)
-  proof: by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.stalkMap_comp]
-  exact Category.assoc _ _ _
-
-中文:
-引理 stalkClosedPointTo_comp
-  条件: (g : X ⟶ Y)
-  证明: by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.stalkMap_comp]
-  exact Category.assoc _ _ _
-
-Depends on / 依赖: Category, Category.assoc, Scheme, Scheme.Hom.stalkMap_comp, stalkClosedPointTo, stalkMap_comp
+/-
+**AlgebraicGeometry.Scheme.stalkClosedPointTo_comp** 是 Mathlib 中的一个引理，位于命名空间 `Al
+gebraicGeometry.Scheme`。
+形式化陈述：stalkClosedPointTo_comp (g : X ⟶ Y) : stalkClosedPointTo (f ≫ g) = g.stalk
+Map _ ≫ stalkClosedPointTo f
+参数：g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.stalkClosedPointTo.eq_1`：∀ {X : AlgebraicGeomet
+ry.Scheme} {R : CommRingCat} [inst : IsLocalRing ↑R] (f : AlgebraicGeometry.Spec
+ R ⟶ X),   AlgebraicGeometry.Scheme.st…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.stalkMap_comp`：stalkMap_comp {X Y Z : Schem
+e.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g : X ⟶ Z).stalkMap x = g.stalkMap
+ (f x) ≫ f.stalkMap x
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
 -/
 lemma stalkClosedPointTo_comp (g : X ⟶ Y) :
     stalkClosedPointTo (f ≫ g) = g.stalkMap _ ≫ stalkClosedPointTo f := by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.stalkMap_comp]
+  rw [stalkClosedPointTo, Scheme.Hom.stalkMap_comp]
   exact Category.assoc _ _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `germ_stalkClosedPointTo_Spec` / 引理 `germ_stalkClosedPointTo_Spec`
-
-English:
-lemma germ_stalkClosedPointTo_Spec
-  given: {R S : CommRingCat} [IsLocalRing S] (φ : R ⟶ S)
-  proof: by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.germ_stalkMap_assoc]; rw [← Iso.inv_comp_eq]; rw [← ΓSpecIso_inv_naturality_assoc]
-  simp_rw [Opens.map_top]
-  rw [germ_stalkClosedPointIso_hom]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
-
-中文:
-引理 germ_stalkClosedPointTo_Spec
-  条件: {R S : 交换环范畴} [是局部环 S] (φ : R ⟶ S)
-  证明: by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.germ_stalkMap_assoc]; rw [← Iso.inv_comp_eq]; rw [← ΓSpecIso_inv_naturality_assoc]
-  simp_rw [Opens.map_top]
-  rw [germ_stalkClosedPointIso_hom]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.comp_id, Iso.inv_comp_eq, Iso.inv_hom_id, Opens.map_top, Scheme, Scheme.Hom.germ_stalkMap_assoc, comp_id, germ_stalkClosedPointIso_hom, germ_stalkMap_assoc, inv_comp_eq, inv_hom_id, map_top, simp_rw, stalkClosedPointTo
+/-
+**AlgebraicGeometry.Scheme.germ_stalkClosedPointTo_Spec** 是 Mathlib 中的一个引理，位于命名空
+间 `AlgebraicGeometry.Scheme`。
+形式化陈述：germ_stalkClosedPointTo_Spec {R S : CommRingCat} [IsLocalRing S] (φ : R ⟶ 
+S) : (Spec R).presheaf.germ ⊤ _ trivial ≫ stalkClosedPointTo (Spec.map φ) = (ΓSp
+ecIso R).hom ≫ φ
+参数：φ : R ⟶ S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.stalkClosedPointTo.eq_1`：∀ {X : AlgebraicGeomet
+ry.Scheme} {R : CommRingCat} [inst : IsLocalRing ↑R] (f : AlgebraicGeometry.Spec
+ R ⟶ X),   AlgebraicGeometry.Scheme.st…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.germ_stalkMap_assoc`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (f : X ⟶ Y) (U : Y.Opens) (x : ↥X) (hx : f x ∈ U) {Z : CommRingCat}
+   (h : X.presheaf.stalk x ⟶ Z),   Cat…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `AlgebraicGeometry.Scheme.ΓSpecIso_inv_naturality_assoc`：∀ {R S : CommRin
+gCat} (f : R ⟶ S) {Z : CommRingCat} (h : (AlgebraicGeometry.Spec S).presheaf.obj
+ (Opposite.op ⊤) ⟶ Z),   CategoryTheory.Cate…
+· 使用引理 `AlgebraicGeometry.germ_stalkClosedPointIso_hom`：germ_stalkClosedPointIso
+_hom : (Spec R).presheaf.germ ⊤ (closedPoint _) trivial ≫ (stalkClosedPointIso R
+).hom = (Scheme.ΓSpecIso R).hom
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 lemma germ_stalkClosedPointTo_Spec {R S : CommRingCat} [IsLocalRing S] (φ : R ⟶ S) :
     (Spec R).presheaf.germ ⊤ _ trivial ≫ stalkClosedPointTo (Spec.map φ) =
       (ΓSpecIso R).hom ≫ φ := by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.germ_stalkMap_assoc]; rw [← Iso.inv_comp_eq]; rw [← ΓSpecIso_inv_naturality_assoc]
+  rw [stalkClosedPointTo, Scheme.Hom.germ_stalkMap_assoc, ← Iso.inv_comp_eq,
+    ← ΓSpecIso_inv_naturality_assoc]
   simp_rw [Opens.map_top]
-  rw [germ_stalkClosedPointIso_hom]; rw [Iso.inv_hom_id]; rw [Category.comp_id]
+  rw [germ_stalkClosedPointIso_hom, Iso.inv_hom_id, Category.comp_id]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `germ_stalkClosedPointTo` / 引理 `germ_stalkClosedPointTo`
-
-English:
-lemma germ_stalkClosedPointTo
-  given: (U : Opens X) (hU : f (closedPoint R) in U)
-  proof: by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.germ_stalkMap_assoc]; rw [Iso.trans_hom]
-  congr 1
-  rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [ΓSpecIso_hom_stalkClosedPointIso_inv]
-  simp only [Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
-    TopCat.Presheaf.germ_res]
-
-中文:
-引理 germ_stalkClosedPointTo
-  条件: (U : Opens X) (hU : f (closedPoint R) in U)
-  证明: by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.germ_stalkMap_assoc]; rw [Iso.trans_hom]
-  congr 1
-  rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [ΓSpecIso_hom_stalkClosedPointIso_inv]
-  simp only [Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
-    TopCat.Presheaf.germ_res]
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.mapIso_hom, Iso.eq_comp_inv, Iso.op_hom, Iso.trans_hom, Presheaf, Scheme, Scheme.Hom.germ_stalkMap_assoc, TopCat, TopCat.Presheaf.germ_res, eqToIso, eqToIso.hom, eq_comp_inv, germ_res, germ_stalkMap_assoc, mapIso_hom, op_hom, stalkClosedPointTo
+/-
+**AlgebraicGeometry.Scheme.germ_stalkClosedPointTo** 是 Mathlib 中的一个引理，位于命名空间 `Al
+gebraicGeometry.Scheme`。
+形式化陈述：germ_stalkClosedPointTo (U : Opens X) (hU : f (closedPoint R) in U) : X.pr
+esheaf.germ U _ hU ≫ stalkClosedPointTo f = f.app U ≫ ((Spec R).presheaf.mapIso 
+(eqToIso (preimage_eq_top_of_closedPoint_mem f hU).symm).op ≪≫ ΓSpecIso R).hom
+参数：U : Opens X；hU : f (closedPoint R) in U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.preimage_eq_top_of_closedPoint_mem`：preimage_eq
+_top_of_closedPoint_mem {U : Opens X} (hU : f (closedPoint R) in U) : f ⁻¹ᵁ U = 
+⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.stalkClosedPointTo.eq_1`：∀ {X : AlgebraicGeomet
+ry.Scheme} {R : CommRingCat} [inst : IsLocalRing ↑R] (f : AlgebraicGeometry.Spec
+ R ⟶ X),   AlgebraicGeometry.Scheme.st…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.germ_stalkMap_assoc`：∀ {X Y : AlgebraicGeom
+etry.Scheme} (f : X ⟶ Y) (U : Y.Opens) (x : ↥X) (hx : f x ∈ U) {Z : CommRingCat}
+   (h : X.presheaf.stalk x ⟶ Z),   Cat…
+· 使用定理 `CategoryTheory.Iso.trans_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y Z : C} (α : X ≅ Y) (β : Y ≅ Z),   (α ≪≫ β).hom = CategoryThe
+ory.CategoryStruct…
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `trivial`：True
+· 使用引理 `AlgebraicGeometry.ΓSpecIso_hom_stalkClosedPointIso_inv`：ΓSpecIso_hom_sta
+lkClosedPointIso_inv : (Scheme.ΓSpecIso R).hom ≫ (stalkClosedPointIso R).inv = (
+Spec R).presheaf.germ ⊤ (closedPoint _) triv…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.op_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Catego
+ry.{v₁, u₁} C] {X Y : C} (α : X ≅ Y), α.op.hom = α.hom.op
+· 使用定理 `TopCat.Presheaf.germ_res`：germ_res (F : X.Presheaf C) {U V : Opens X} (i
+ : U ⟶ V) (x : X) (hx : x in U) : F.map i.op ≫ F.germ U x hx = F.germ V x (i.le 
+hx)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma germ_stalkClosedPointTo (U : Opens X) (hU : f (closedPoint R) in U) :
+lemma germ_stalkClosedPointTo (U : Opens X) (hU : f (closedPoint R) ∈ U) :
     X.presheaf.germ U _ hU ≫ stalkClosedPointTo f = f.app U ≫
       ((Spec R).presheaf.mapIso (eqToIso (preimage_eq_top_of_closedPoint_mem f hU).symm).op ≪≫
         ΓSpecIso R).hom := by
-  rw [stalkClosedPointTo]; rw [Scheme.Hom.germ_stalkMap_assoc]; rw [Iso.trans_hom]
+  rw [stalkClosedPointTo, Scheme.Hom.germ_stalkMap_assoc, Iso.trans_hom]
   congr 1
-  rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [ΓSpecIso_hom_stalkClosedPointIso_inv]
+  rw [← Iso.eq_comp_inv, Category.assoc, ΓSpecIso_hom_stalkClosedPointIso_inv]
   simp only [Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
     TopCat.Presheaf.germ_res]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `germ_stalkClosedPointTo_Spec_fromSpecStalk` / 引理 `germ_stalkClosedPointTo_Spec_fromSpecStalk`
-
-English:
-lemma germ_stalkClosedPointTo_Spec_fromSpecStalk
-  proof: by
-  have : (Spec.map f ≫ X.fromSpecStalk x) (closedPoint R) = x := by
-    rw [Hom.comp_apply]; rw [Spec_closedPoint]; rw [fromSpecStalk_closedPoint]
-  have : x in U := this ▸ hU
-  simp only [germ_stalkClosedPointTo, Hom.comp_app,
-    fromSpecStalk_app (X := X) (x := x) this, Category.assoc, Iso.trans_hom, Functor.mapIso_hom,
-      (Spec.map f).app_eq_appLE, Hom.appLE_map_assoc, Hom.map_appLE_assoc]
-  simp_rw [← Opens.map_top (Spec.map f).base]
-  rw [← (Spec.map f).app_eq_appLE]; rw [ΓSpecIso_naturality]; rw [Iso.inv_hom_id_assoc]
-
-中文:
-引理 germ_stalkClosedPointTo_Spec_fromSpecStalk
-  证明: by
-  have : (Spec.map f ≫ X.fromSpecStalk x) (closedPoint R) = x := by
-    rw [Hom.comp_apply]; rw [Spec_closedPoint]; rw [fromSpecStalk_closedPoint]
-  have : x in U := this ▸ hU
-  simp only [germ_stalkClosedPointTo, Hom.comp_app,
-    fromSpecStalk_app (X := X) (x := x) this, Category.assoc, Iso.trans_hom, Functor.mapIso_hom,
-      (Spec.map f).app_eq_appLE, Hom.appLE_map_assoc, Hom.map_appLE_assoc]
-  simp_rw [← Opens.map_top (Spec.map f).base]
-  rw [← (Spec.map f).app_eq_appLE]; rw [ΓSpecIso_naturality]; rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Category, Category.assoc, Functor, Functor.mapIso_hom, Hom.appLE_map_assoc, Hom.comp_app, Hom.comp_apply, Hom.map_appLE_assoc, Iso.inv_h, Iso.trans_hom, Opens.map_top, Spec.map, Spec_closedPoint, X.fromSpecStalk, appLE_map_assoc, app_eq_appLE, closedPoint, comp_app, comp_apply, fromSpecStalk
+/-
+**AlgebraicGeometry.Scheme.germ_stalkClosedPointTo_Spec_fromSpecStalk** 是 Mathli
+b 中的一个引理，位于命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：germ_stalkClosedPointTo_Spec_fromSpecStalk {x : X} (f : X.presheaf.stalk x
+ ⟶ R) [IsLocalHom f.hom] (U : Opens X) (hU) : X.presheaf.germ U _ hU ≫ stalkClos
+edPointTo (Spec.map f ≫ X.fromSpecStalk x) = X.presheaf.germ U x (by simpa using
+ hU) ≫ f
+参数：f : X.presheaf.stalk x ⟶ R；U : Opens X；hU。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.comp_apply`：comp_apply {X Y Z : Scheme} (f 
+: X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `AlgebraicGeometry.Spec_closedPoint`：∀ {R S : CommRingCat} [inst : IsLoca
+lRing ↑R] [inst_1 : IsLocalRing ↑S] {f : R ⟶ S}   [IsLocalHom (CommRingCat.Hom.h
+om f)],   (AlgebraicGeom…
+· 使用引理 `AlgebraicGeometry.Scheme.fromSpecStalk_closedPoint`：fromSpecStalk_closed
+Point {x : X} : X.fromSpecStalk x (closedPoint (X.presheaf.stalk x)) = x
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.preimage_eq_top_of_closedPoint_mem`：preimage_eq
+_top_of_closedPoint_mem {U : Opens X} (hU : f (closedPoint R) in U) : f ⁻¹ᵁ U = 
+⊤
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `AlgebraicGeometry.Scheme.germ_stalkClosedPointTo`：germ_stalkClosedPointT
+o (U : Opens X) (hU : f (closedPoint R) in U) : X.presheaf.germ U _ hU ≫ stalkCl
+osedPointTo f = f.app U ≫ ((Spec R).pr…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `AlgebraicGeometry.Scheme.fromSpecStalk_app`：fromSpecStalk_app {x : X} (h
+xU : x in U) : (X.fromSpecStalk x).app U = X.presheaf.germ U x hxU ≫ (ΓSpecIso (
+X.presheaf.stalk x)).inv ≫ (Spec…
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.app_eq_appLE`：app_eq_appLE {U : Y.Opens} : 
+f.app U = f.appLE U _ le_rfl
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appLE_map_assoc`：∀ {X Y : AlgebraicGeometry
+.Scheme} (f : X ⟶ Y) {U : Y.Opens} {V V' : X.Opens}   (e : V ≤ (TopologicalSpace
+.Opens.map f.base).obj U) (i : Opp…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.map_appLE_assoc`：∀ {X Y : AlgebraicGeometry
+.Scheme} (f : X ⟶ Y) {U U' : Y.Opens} {V : X.Opens}   (e : V ≤ (TopologicalSpace
+.Opens.map f.base).obj U) (i : Opp…
+· 使用引理 `AlgebraicGeometry.Scheme.ΓSpecIso_naturality`：ΓSpecIso_naturality {R S :
+ CommRingCat.{u}} (f : R ⟶ S) : (Spec.map f).appTop ≫ (ΓSpecIso S).hom = (ΓSpecI
+so R).hom ≫ f
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 lemma germ_stalkClosedPointTo_Spec_fromSpecStalk
     {x : X} (f : X.presheaf.stalk x ⟶ R) [IsLocalHom f.hom] (U : Opens X) (hU) :
     X.presheaf.germ U _ hU ≫ stalkClosedPointTo (Spec.map f ≫ X.fromSpecStalk x) =
       X.presheaf.germ U x (by simpa using hU) ≫ f := by
   have : (Spec.map f ≫ X.fromSpecStalk x) (closedPoint R) = x := by
-    rw [Hom.comp_apply]; rw [Spec_closedPoint]; rw [fromSpecStalk_closedPoint]
-  have : x in U := this ▸ hU
+    rw [Hom.comp_apply, Spec_closedPoint, fromSpecStalk_closedPoint]
+  have : x ∈ U := this ▸ hU
   simp only [germ_stalkClosedPointTo, Hom.comp_app,
     fromSpecStalk_app (X := X) (x := x) this, Category.assoc, Iso.trans_hom, Functor.mapIso_hom,
       (Spec.map f).app_eq_appLE, Hom.appLE_map_assoc, Hom.map_appLE_assoc]
   simp_rw [← Opens.map_top (Spec.map f).base]
-  rw [← (Spec.map f).app_eq_appLE]; rw [ΓSpecIso_naturality]; rw [Iso.inv_hom_id_assoc]
+  rw [← (Spec.map f).app_eq_appLE, ΓSpecIso_naturality, Iso.inv_hom_id_assoc]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `stalkClosedPointTo_fromSpecStalk` / 引理 `stalkClosedPointTo_fromSpecStalk`
-
-English:
-lemma stalkClosedPointTo_fromSpecStalk
-  given: (x : X)
-  proof: by
-  refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
-  simp only [TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes]
-  have : X.fromSpecStalk x = Spec.map (𝟙 (X.presheaf.stalk x)) ≫ X.fromSpecStalk x := by simp
-  convert! germ_stalkClosedPointTo_Spec_fromSpecStalk (𝟙 (X.presheaf.stalk x)) U hxU
-
-中文:
-引理 stalkClosedPointTo_fromSpecStalk
-  条件: (x : X)
-  证明: by
-  refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
-  simp only [TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes]
-  have : X.fromSpecStalk x = Spec.map (𝟙 (X.presheaf.stalk x)) ≫ X.fromSpecStalk x := by simp
-  convert! germ_stalkClosedPointTo_Spec_fromSpecStalk (𝟙 (X.presheaf.stalk x)) U hxU
-
-Depends on / 依赖: Presheaf, Spec.map, TopCat, TopCat.Presheaf.germ_stalkSpecializes, TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.stalk_hom_ext, X.fromSpecStalk, X.presheaf.stalk, convert, fromSpecStalk, germ_stalkClosedPointTo_Spec_fromSpecStalk, germ_stalkSpecializes, presheaf, stalkCongr_hom, stalk_hom_ext
+/-
+**AlgebraicGeometry.Scheme.stalkClosedPointTo_fromSpecStalk** 是 Mathlib 中的一个引理，位
+于命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：stalkClosedPointTo_fromSpecStalk (x : X) : stalkClosedPointTo (X.fromSpecS
+talk x) = (X.presheaf.stalkCongr (by rw [fromSpecStalk_closedPoint]; rfl)).hom
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Presheaf.stalk_hom_ext`：stalk_hom_ext (F : X.Presheaf C) {x} {Y :
+ C} {f₁ f₂ : F.stalk x ⟶ Y} (ih : forall (U : Opens X) (hxU : x in U), F.germ U 
+x hxU ≫ f₁ = F.germ…
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `Specializes.mem_open`：Specializes.mem_open (h : x ⤳ y) (hs : IsOpen s) (
+hy : y in s) : x in s
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `TopCat.Presheaf.stalkCongr_hom`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X : TopCat}   (
+F : TopCat.Presheaf …
+· 使用定理 `TopCat.Presheaf.germ_stalkSpecializes`：germ_stalkSpecializes (F : X.Pres
+heaf C) {U : Opens X} {y : X} (hy : y in U) {x : X} (h : x ⤳ y) : F.germ U y hy 
+≫ F.stalkSpecializes h = F.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicGeometry.Spec.map_id`：∀ (R : CommRingCat),   AlgebraicGeometry.
+Spec.map (CategoryTheory.CategoryStruct.id R) =     CategoryTheory.CategoryStruc
+t.id (AlgebraicGeom…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `isLocalHom_of_isIso`：isLocalHom_of_isIso {R S : CommRingCat} (f : R ⟶ S)
+ [IsIso f] : IsLocalHom f.hom
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AlgebraicGeometry.Scheme.germ_stalkClosedPointTo_Spec_fromSpecStalk`：ger
+m_stalkClosedPointTo_Spec_fromSpecStalk {x : X} (f : X.presheaf.stalk x ⟶ R) [Is
+LocalHom f.hom] (U : Opens X) (hU) : X.presheaf.germ U _ …
 -/
 lemma stalkClosedPointTo_fromSpecStalk (x : X) :
     stalkClosedPointTo (X.fromSpecStalk x) =
       (X.presheaf.stalkCongr (by rw [fromSpecStalk_closedPoint]; rfl)).hom := by
-  refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
+  refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU ↦ ?_
   simp only [TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes]
   have : X.fromSpecStalk x = Spec.map (𝟙 (X.presheaf.stalk x)) ≫ X.fromSpecStalk x := by simp
   convert! germ_stalkClosedPointTo_Spec_fromSpecStalk (𝟙 (X.presheaf.stalk x)) U hxU
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `Spec_stalkClosedPointTo_fromSpecStalk` / 引理 `Spec_stalkClosedPointTo_fromSpecStalk`
-
-English:
-lemma Spec_stalkClosedPointTo_fromSpecStalk
-  proof: by
-  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
-    (Set.mem_univ (f (closedPoint R))) isOpen_univ
-  have := IsAffineOpen.SpecMap_appLE_fromSpec f hU (isAffineOpen_top _)
-    (preimage_eq_top_of_closedPoint_mem f hxU).ge
-  rw [IsAffineOpen.fromSpec_top]; rw [Iso.eq_inv_comp]; rw [isoSpec_Spec_hom] at this
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [germ_stalkClosedPointTo]
-  simpa only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Category.assoc,
-    Hom.app_eq_appLE, Hom.appLE_map_assoc, Spec.map_comp_assoc]
-
-中文:
-引理 Spec_stalkClosedPointTo_fromSpecStalk
-  证明: by
-  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open
-    (Set.mem_univ (f (closedPoint R))) isOpen_univ
-  have := IsAffineOpen.SpecMap_appLE_fromSpec f hU (isAffineOpen_top _)
-    (preimage_eq_top_of_closedPoint_mem f hxU).ge
-  rw [IsAffineOpen.fromSpec_top]; rw [Iso.eq_inv_comp]; rw [isoSpec_Spec_hom] at this
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [germ_stalkClosedPointTo]
-  simpa only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Category.assoc,
-    Hom.app_eq_appLE, Hom.appLE_map_assoc, Spec.map_comp_assoc]
-
-Depends on / 依赖: IsAffineOpen, IsAffineOpen.SpecMap_appLE_fromSpec, IsAffineOpen.fromSpecStalk, IsAffineOpen.fromSpec_top, Iso.eq_inv_comp, Iso.trans_hom, Set.mem_univ, Spec.map_comp_assoc, SpecMap_appLE_fromSpec, X.isBasis_affineOpens.exists_subset_of_mem_open, closedPoint, eq_inv_comp, exists_subset_of_mem_open, fromSpecStalk, fromSpecStalk_eq_fromSpecStalk, fromSpec_top, germ_stalkClosedPointTo, hU.fromSpecStalk_eq_fromSpecStalk, isAffineOpen_top, isBasis_affineOpens
+/-
+**AlgebraicGeometry.Scheme.Spec_stalkClosedPointTo_fromSpecStalk** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicGeometry.Scheme`。
+形式化陈述：Spec_stalkClosedPointTo_fromSpecStalk : Spec.map (stalkClosedPointTo f) ≫ 
+X.fromSpecStalk _ = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.exists_subset_of_mem_open`：∀ {α : Ty
+pe u} [t : TopologicalSpace α] {b : Set (Set α)},   TopologicalSpace.IsTopologic
+alBasis b → ∀ {a : α} {u : Set α}, a ∈ u → IsOpen u…
+· 使用定理 `AlgebraicGeometry.Scheme.isBasis_affineOpens`：∀ (X : AlgebraicGeometry.S
+cheme), TopologicalSpace.Opens.IsBasis X.affineOpens
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用引理 `AlgebraicGeometry.Scheme.preimage_eq_top_of_closedPoint_mem`：preimage_eq
+_top_of_closedPoint_mem {U : Opens X} (hU : f (closedPoint R) in U) : f ⁻¹ᵁ U = 
+⊤
+· 使用定理 `AlgebraicGeometry.isAffineOpen_top`：isAffineOpen_top (X : Scheme) [IsAff
+ine X] : IsAffineOpen (⊤ : X.Opens)
+· 使用引理 `AlgebraicGeometry.IsAffineOpen.SpecMap_appLE_fromSpec`：SpecMap_appLE_fro
+mSpec (f : X ⟶ Y) {V : X.Opens} {U : Y.Opens} (hU : IsAffineOpen U) (hV : IsAffi
+neOpen V) (i : V <= f ⁻¹ᵁ U) : Spec.map (f.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk_eq_fromSpecStalk`：∀ {X : Al
+gebraicGeometry.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x
+ : ↥X} (hxU : x ∈ U),   hU.fromSpecStalk hxU = X.fr…
+· 使用定理 `AlgebraicGeometry.IsAffineOpen.fromSpecStalk.eq_1`：∀ {X : AlgebraicGeome
+try.Scheme} {U : X.Opens} (hU : AlgebraicGeometry.IsAffineOpen U) {x : ↥X} (hxU 
+: x ∈ U),   hU.fromSpecStalk hxU =     …
+· 使用定理 `AlgebraicGeometry.Spec.map_comp_assoc`：∀ {R S T : CommRingCat} (f : R ⟶ 
+S) (g : S ⟶ T) {Z : AlgebraicGeometry.Scheme} (h : AlgebraicGeometry.Spec R ⟶ Z)
+,   CategoryTheory.Category…
+· 使用引理 `AlgebraicGeometry.Scheme.germ_stalkClosedPointTo`：germ_stalkClosedPointT
+o (U : Opens X) (hU : f (closedPoint R) in U) : X.presheaf.germ U _ hU ≫ stalkCl
+osedPointTo f = f.app U ≫ ((Spec R).pr…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `AlgebraicGeometry.Scheme.Hom.app_eq_appLE`：app_eq_appLE {U : Y.Opens} : 
+f.app U = f.appLE U _ le_rfl
+· 使用定理 `CategoryTheory.Iso.op_hom`：∀ {C : Type u₁} [inst : CategoryTheory.Catego
+ry.{v₁, u₁} C] {X Y : C} (α : X ≅ Y), α.op.hom = α.hom.op
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.appLE_map_assoc`：∀ {X Y : AlgebraicGeometry
+.Scheme} (f : X ⟶ Y) {U : Y.Opens} {V V' : X.Opens}   (e : V ≤ (TopologicalSpace
+.Opens.map f.base).obj U) (i : Opp…
+· 使用定理 `AlgebraicGeometry.Scheme.isoSpec_Spec_hom`：∀ (R : CommRingCat),   (Algeb
+raicGeometry.Spec R).isoSpec.hom = AlgebraicGeometry.Spec.map (AlgebraicGeometry
+.Scheme.ΓSpecIso R).hom
+· 使用定理 `CategoryTheory.Iso.eq_inv_comp`：eq_inv_comp (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : g = α.inv ≫ f ↔ α.hom ≫ g = f
+· 使用引理 `AlgebraicGeometry.IsAffineOpen.fromSpec_top`：fromSpec_top [IsAffine X] :
+ (isAffineOpen_top X).fromSpec = X.isoSpec.inv
 -/
 lemma Spec_stalkClosedPointTo_fromSpecStalk :
     Spec.map (stalkClosedPointTo f) ≫ X.fromSpecStalk _ = f := by
@@ -1001,8 +1144,9 @@ lemma Spec_stalkClosedPointTo_fromSpecStalk :
     (Set.mem_univ (f (closedPoint R))) isOpen_univ
   have := IsAffineOpen.SpecMap_appLE_fromSpec f hU (isAffineOpen_top _)
     (preimage_eq_top_of_closedPoint_mem f hxU).ge
-  rw [IsAffineOpen.fromSpec_top]; rw [Iso.eq_inv_comp]; rw [isoSpec_Spec_hom] at this
-  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU]; rw [IsAffineOpen.fromSpecStalk]; rw [← Spec.map_comp_assoc]; rw [germ_stalkClosedPointTo]
+  rw [IsAffineOpen.fromSpec_top, Iso.eq_inv_comp, isoSpec_Spec_hom] at this
+  rw [← hU.fromSpecStalk_eq_fromSpecStalk hxU, IsAffineOpen.fromSpecStalk, ← Spec.map_comp_assoc,
+    germ_stalkClosedPointTo]
   simpa only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Category.assoc,
     Hom.app_eq_appLE, Hom.appLE_map_assoc, Spec.map_comp_assoc]
 
@@ -1013,32 +1157,43 @@ end stalkClosedPointTo
 variable {R}
 
 omit [IsLocalRing R] in
-/--
-lemma `SpecToEquivOfLocalRing_eq_iff` / 引理 `SpecToEquivOfLocalRing_eq_iff`
+/-- useful lemma for applications of `SpecToEquivOfLocalRing` -/
+/-
+**AlgebraicGeometry.SpecToEquivOfLocalRing_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 `Alg
+ebraicGeometry`。
+形式化陈述：SpecToEquivOfLocalRing_eq_iff {f₁ f₂ : Σ x, { f : X.presheaf.stalk x ⟶ R /
+/ IsLocalHom f.hom }} : f₁ = f₂ ↔ exists h₁ : f₁.1 = f₂.1, f₁.2.1 = (X.presheaf.
+stalkCongr (by rw [h₁]; rfl)).hom ≫ f₂.2.1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TopCat.Presheaf.stalkCongr_hom`：∀ {C : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} C] [inst_1 : CategoryTheory.Limits.HasColimits C] {X : TopCat}   (
+F : TopCat.Presheaf …
+· 使用定理 `TopCat.Presheaf.stalkSpecializes_refl`：stalkSpecializes_refl (F : X.Pres
+heaf C) (x : X) : F.stalkSpecializes (specializes_refl x) = 𝟙 _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
 
-English:
-lemma SpecToEquivOfLocalRing_eq_iff
-  proof: by
-  constructor
-  · rintro rfl; simp
-  · obtain ⟨x₁, ⟨f₁, h₁⟩⟩ := f₁
-    obtain ⟨x₂, ⟨f₂, h₂⟩⟩ := f₂
-    rintro ⟨rfl : x₁ = x₂, e : f₁ = _⟩
-    simp [e]
-
-中文:
-引理 SpecToEquivOfLocalRing_eq_iff
-  证明: by
-  constructor
-  · rintro rfl; simp
-  · obtain ⟨x₁, ⟨f₁, h₁⟩⟩ := f₁
-    obtain ⟨x₂, ⟨f₂, h₂⟩⟩ := f₂
-    rintro ⟨rfl : x₁ = x₂, e : f₁ = _⟩
-    simp [e]
+--- 原说明 ---
+useful lemma for applications of `SpecToEquivOfLocalRing`
 -/
 lemma SpecToEquivOfLocalRing_eq_iff
     {f₁ f₂ : Σ x, { f : X.presheaf.stalk x ⟶ R // IsLocalHom f.hom }} :
-    f₁ = f₂ ↔ exists h₁ : f₁.1 = f₂.1, f₁.2.1 =
+    f₁ = f₂ ↔ ∃ h₁ : f₁.1 = f₂.1, f₁.2.1 =
       (X.presheaf.stalkCongr (by rw [h₁]; rfl)).hom ≫ f₂.2.1 := by
   constructor
   · rintro rfl; simp
@@ -1056,42 +1211,16 @@ Given a local ring `R` and scheme `X`, morphisms `Spec R ⟶ X` corresponds to p
 -/
 @[simps]
 noncomputable
-/--
-Definition of `SpecToEquivOfLocalRing` / `SpecToEquivOfLocalRing` 的定义
-
-English:
-definition SpecToEquivOfLocalRing
-  signature: :
-  body: ⟨f (closedPoint R), Scheme.stalkClosedPointTo f, inferInstance⟩
-  invFun xf := Spec.map xf.2.1 ≫ X.fromSpecStalk xf.1
-  left_inv := Scheme.Spec_stalkClosedPointTo_fromSpecStalk
-  right_inv xf := by
-    obtain ⟨x, ⟨f, hf⟩⟩ := xf
-    symm
-    refine SpecToEquivOfLocalRing_eq_iff.mpr ⟨?_, ?_⟩
-    · simp only [Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply, Spec_closedPoint,
-        Scheme.fromSpecStalk_closedPoint]
-    · refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
-      simp only [Scheme.germ_stalkClosedPointTo_Spec_fromSpecStalk,
-        TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes_assoc]
-
-中文:
-定义 SpecToEquivOfLocalRing
-  签名: :
-  定义体: ⟨f (closedPoint R), Scheme.stalkClosedPointTo f, inferInstance⟩
-  invFun xf := Spec.map xf.2.1 ≫ X.fromSpecStalk xf.1
-  left_inv := Scheme.Spec_stalkClosedPointTo_fromSpecStalk
-  right_inv xf := by
-    obtain ⟨x, ⟨f, hf⟩⟩ := xf
-    symm
-    refine SpecToEquivOfLocalRing_eq_iff.mpr ⟨?_, ?_⟩
-    · simp only [Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply, Spec_closedPoint,
-        Scheme.fromSpecStalk_closedPoint]
-    · refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
-      simp only [Scheme.germ_stalkClosedPointTo_Spec_fromSpecStalk,
-        TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes_assoc]
-
-Depends on / 依赖: Scheme, Scheme.stalkClosedPointTo, closedPoint, stalkClosedPointTo
+/-
+**AlgebraicGeometry.SpecToEquivOfLocalRing** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicG
+eometry`。
+形式化陈述：SpecToEquivOfLocalRing : (Spec R ⟶ X) ≃ Σ x, { f : X.presheaf.stalk x ⟶ R 
+// IsLocalHom f.hom } where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.Scheme.Spec_stalkClosedPointTo_fromSpecStalk`：Spec_sta
+lkClosedPointTo_fromSpecStalk : Spec.map (stalkClosedPointTo f) ≫ X.fromSpecStal
+k _ = f
 -/
 def SpecToEquivOfLocalRing :
     (Spec R ⟶ X) ≃ Σ x, { f : X.presheaf.stalk x ⟶ R // IsLocalHom f.hom } where
@@ -1104,8 +1233,9 @@ def SpecToEquivOfLocalRing :
     refine SpecToEquivOfLocalRing_eq_iff.mpr ⟨?_, ?_⟩
     · simp only [Scheme.Hom.comp_base, TopCat.coe_comp, Function.comp_apply, Spec_closedPoint,
         Scheme.fromSpecStalk_closedPoint]
-    · refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU => ?_
+    · refine TopCat.Presheaf.stalk_hom_ext _ fun U hxU ↦ ?_
       simp only [Scheme.germ_stalkClosedPointTo_Spec_fromSpecStalk,
         TopCat.Presheaf.stalkCongr_hom, TopCat.Presheaf.germ_stalkSpecializes_assoc]
 
 end AlgebraicGeometry
+

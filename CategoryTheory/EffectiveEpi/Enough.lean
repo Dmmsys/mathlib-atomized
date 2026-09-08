@@ -25,23 +25,22 @@ variable {C D : Type*} [Category* C] [Category* D] (F : C ⥤ D)
 namespace Functor
 
 /--
-Definition of `EffectivePresentation` / `EffectivePresentation` 的定义
+An effective presentation of an object `X` with respect to a functor `F` is the data of an effective
+epimorphism of the form `F.obj p ⟶ X`.
+-/
+/-
+**CategoryTheory.Functor.EffectivePresentation** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] → CategoryTh
+eory.Functor C D → D → Type (max u_1 v_2)
+参数：max u_1 v_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure EffectivePresentation
-  parameters: (X : D)
-  axioms and operations (3):
-    - p : C
-    - f : F.obj p ⟶ X
-    - effectiveEpi : EffectiveEpi f
-
-中文:
-结构 EffectivePresentation
-  参数: (X : D)
-  公理与运算 (3 个):
-    - p : C
-    - f : F.obj p ⟶ X
-    - effectiveEpi : 有效满态射 f
+--- 原说明 ---
+An effective presentation of an object `X` with respect to a functor `F` is the 
+data of an effective
+epimorphism of the form `F.obj p ⟶ X`.
 -/
 structure EffectivePresentation (X : D) where
   /-- The object of `C` giving the source of the effective epi -/
@@ -52,104 +51,102 @@ structure EffectivePresentation (X : D) where
   effectiveEpi : EffectiveEpi f
 
 /--
-Definition of `EffectivelyEnough` / `EffectivelyEnough` 的定义
+`D` has *effectively enough objects* with respect to the functor `F` if every object has an
+effective presentation.
+-/
+/-
+**CategoryTheory.Functor.EffectivelyEnough** 是 Mathlib 中的一个归纳类型，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] → CategoryTh
+eory.Functor C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class EffectivelyEnough
-  parameters: : Prop where
-  axioms and operations (1):
-    - presentation : forall (X : D), Nonempty (F.EffectivePresentation X)
-
-中文:
-类 EffectivelyEnough
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - presentation : 对任意 (X : D), 非空 (F.EffectivePresentation X)
+--- 原说明 ---
+`D` has *effectively enough objects* with respect to the functor `F` if every ob
+ject has an
+effective presentation.
 -/
 class EffectivelyEnough : Prop where
   /-- For every `X : D`, there exists an object `p` of `C` with an effective epi `F.obj p ⟶ X`. -/
-  presentation : forall (X : D), Nonempty (F.EffectivePresentation X)
+  presentation : ∀ (X : D), Nonempty (F.EffectivePresentation X)
 
 variable [F.EffectivelyEnough]
 
 /--
-Definition of `effectiveEpiOverObj` / `effectiveEpiOverObj` 的定义
+`F.effectiveEpiOverObj X` provides an arbitrarily chosen object in the image of `F` equipped with an
+effective epimorphism `F.effectiveEpiOver : F.effectiveEpiOverObj X ⟶ X`.
+-/
+/-
+**CategoryTheory.Functor.effectiveEpiOverObj** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：effectiveEpiOverObj (X : D) : D
+参数：X : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EffectivelyEnough.presentation`：∀ {C : Type u_1} 
+{D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : Categor
+yTheory.Category.{v_2, u_2} D} {F : Categor…
 
-English:
-definition effectiveEpiOverObj
-  signature: (X : D)
-  body: F.obj (EffectivelyEnough.presentation (F := F) X).some.p
-
-中文:
-定义 effectiveEpiOverObj
-  签名: (X : D)
-  定义体: F.obj (EffectivelyEnough.presentation (F := F) X).some.p
-
-Depends on / 依赖: EffectivelyEnough, EffectivelyEnough.presentation, F.obj, presentation, some.p
+--- 原说明 ---
+`F.effectiveEpiOverObj X` provides an arbitrarily chosen object in the image of 
+`F` equipped with an
+effective epimorphism `F.effectiveEpiOver : F.effectiveEpiOverObj X ⟶ X`.
 -/
 noncomputable def effectiveEpiOverObj (X : D) : D :=
   F.obj (EffectivelyEnough.presentation (F := F) X).some.p
 
 /--
-Definition of `effectiveEpiOver` / `effectiveEpiOver` 的定义
+The epimorphism `F.effectiveEpiOver : F.effectiveEpiOverObj X ⟶ X` from the arbitrarily chosen
+object in the image of `F` over `X`.
+-/
+/-
+**CategoryTheory.Functor.effectiveEpiOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：effectiveEpiOver (X : D) : F.effectiveEpiOverObj X ⟶ X
+参数：X : D。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EffectivelyEnough.presentation`：∀ {C : Type u_1} 
+{D : Type u_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : Categor
+yTheory.Category.{v_2, u_2} D} {F : Categor…
 
-English:
-definition effectiveEpiOver
-  signature: (X : D)
-  body: (EffectivelyEnough.presentation X).some.f
-
-中文:
-定义 effectiveEpiOver
-  签名: (X : D)
-  定义体: (EffectivelyEnough.presentation X).some.f
-
-Depends on / 依赖: EffectivelyEnough, EffectivelyEnough.presentation, presentation, some.f
+--- 原说明 ---
+The epimorphism `F.effectiveEpiOver : F.effectiveEpiOverObj X ⟶ X` from the arbi
+trarily chosen
+object in the image of `F` over `X`.
 -/
 noncomputable def effectiveEpiOver (X : D) : F.effectiveEpiOverObj X ⟶ X :=
   (EffectivelyEnough.presentation X).some.f
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : D) : EffectiveEpi (F.effectiveEpiOver X) :=
   (EffectivelyEnough.presentation X).some.effectiveEpi
 
-/--
-Definition of `equivalenceEffectivePresentation` / `equivalenceEffectivePresentation` 的定义
+/-- An effective presentation of an object with respect to an equivalence of categories. -/
+/-
+**CategoryTheory.Functor.equivalenceEffectivePresentation** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Functor`。
+形式化陈述：equivalenceEffectivePresentation (e : C ≌ D) (X : D) : EffectivePresentati
+on e.functor X where p
+参数：e : C ≌ D；X : D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalenceEffectivePresentation
-  signature: (e : C ≌ D) (X : D)
-  body: e.inverse.obj X
-  f := e.counit.app _
-  effectiveEpi := inferInstance
-
-中文:
-定义 equivalenceEffectivePresentation
-  签名: (e : C ≌ D) (X : D)
-  定义体: e.inverse.obj X
-  f := e.counit.app _
-  effectiveEpi := inferInstance
-
-Depends on / 依赖: e.inverse.obj, inverse
+--- 原说明 ---
+An effective presentation of an object with respect to an equivalence of categor
+ies.
 -/
 def equivalenceEffectivePresentation (e : C ≌ D) (X : D) :
     EffectivePresentation e.functor X where
   p := e.inverse.obj X
   f := e.counit.app _
   effectiveEpi := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEquivalence
-  signature: F] : EffectivelyEnough F where
-  body: ⟨equivalenceEffectivePresentation F.asEquivalence X⟩
-
-中文:
-实例 [是等价
-  签名: F] : EffectivelyEnough F where
-  定义体: ⟨equivalenceEffectivePresentation F.asEquivalence X⟩
-
-Depends on / 依赖: F.asEquivalence, asEquivalence, equivalenceEffectivePresentation
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEquivalence F] : EffectivelyEnough F where
   presentation X := ⟨equivalenceEffectivePresentation F.asEquivalence X⟩
@@ -157,3 +154,4 @@ instance [IsEquivalence F] : EffectivelyEnough F where
 end Functor
 
 end CategoryTheory
+

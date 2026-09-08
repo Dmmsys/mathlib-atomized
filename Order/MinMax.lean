@@ -27,399 +27,208 @@ variable {α : Type u} {β : Type v}
 
 section
 
-variable [LinearOrder α] [LinearOrder β] {f : α -> β} {s : Set α} {a b c d : α}
+variable [LinearOrder α] [LinearOrder β] {f : α → β} {s : Set α} {a b c d : α}
 
 -- translate from lattices to linear orders (sup → max, inf → min)
 @[to_dual max_le_iff]
-/--
-theorem `le_min_iff` / 定理 `le_min_iff`
-
-English:
-theorem le_min_iff
-  statement: c <= min a b ↔ c <= a ∧ c <= b
-  proof: le_inf_iff
-
-@[to_dual min_le_iff]
-
-中文:
-定理 le_min_iff
-  结论: c <= 最小值 a b ↔ c <= a ∧ c <= b
-  证明: le_inf_iff
-
-@[to_dual min_le_iff]
-
-Depends on / 依赖: le_inf_iff
+/-
+**le_min_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_min_iff : c <= min a b ↔ c <= a ∧ c <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_inf_iff`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a 
+⊓ b ↔ c ≤ a ∧ c ≤ b
 -/
-theorem le_min_iff : c <= min a b ↔ c <= a ∧ c <= b :=
+theorem le_min_iff : c ≤ min a b ↔ c ≤ a ∧ c ≤ b :=
   le_inf_iff
 
 @[to_dual min_le_iff]
-/--
-theorem `le_max_iff` / 定理 `le_max_iff`
-
-English:
-theorem le_max_iff
-  statement: a <= max b c ↔ a <= b ∨ a <= c
-  proof: le_sup_iff
-
-@[to_dual]
-
-中文:
-定理 le_max_iff
-  结论: a <= 最大值 b c ↔ a <= b ∨ a <= c
-  证明: le_sup_iff
-
-@[to_dual]
-
-Depends on / 依赖: le_sup_iff
+/-
+**le_max_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_max_iff : a <= max b c ↔ a <= b ∨ a <= c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_iff`：le_sup_iff : a <= b ⊔ c ↔ a <= b ∨ a <= c
 -/
-theorem le_max_iff : a <= max b c ↔ a <= b ∨ a <= c :=
+theorem le_max_iff : a ≤ max b c ↔ a ≤ b ∨ a ≤ c :=
   le_sup_iff
 
 @[to_dual]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.LawfulOrderSup α
-  body: max_le_iff
-
-@[to_dual max_lt_iff]
-
-中文:
-实例 :
-  签名: Std.LawfulOrderSup α
-  定义体: max_le_iff
-
-@[to_dual max_lt_iff]
-
-Depends on / 依赖: max_le_iff
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.LawfulOrderSup α where
   max_le_iff _ _ _ := max_le_iff
 
 @[to_dual max_lt_iff]
-/--
-theorem `lt_min_iff` / 定理 `lt_min_iff`
-
-English:
-theorem lt_min_iff
-  statement: a < min b c ↔ a < b ∧ a < c
-  proof: lt_inf_iff
-
-@[to_dual min_lt_iff]
-
-中文:
-定理 lt_min_iff
-  结论: a < 最小值 b c ↔ a < b ∧ a < c
-  证明: lt_inf_iff
-
-@[to_dual min_lt_iff]
-
-Depends on / 依赖: lt_inf_iff
+/-
+**lt_min_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_min_iff : a < min b c ↔ a < b ∧ a < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_inf_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, a < min b
+ c ↔ a < b ∧ a < c
 -/
 theorem lt_min_iff : a < min b c ↔ a < b ∧ a < c :=
   lt_inf_iff
 
 @[to_dual min_lt_iff]
-/--
-theorem `lt_max_iff` / 定理 `lt_max_iff`
-
-English:
-theorem lt_max_iff
-  statement: a < max b c ↔ a < b ∨ a < c
-  proof: lt_sup_iff
-
-@[to_dual]
-
-中文:
-定理 lt_max_iff
-  结论: a < 最大值 b c ↔ a < b ∨ a < c
-  证明: lt_sup_iff
-
-@[to_dual]
-
-Depends on / 依赖: lt_sup_iff
+/-
+**lt_max_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_max_iff : a < max b c ↔ a < b ∨ a < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_sup_iff`：lt_sup_iff : a < b ⊔ c ↔ a < b ∨ a < c
 -/
 theorem lt_max_iff : a < max b c ↔ a < b ∨ a < c :=
   lt_sup_iff
 
 @[to_dual]
-/--
-theorem `max_le_max` / 定理 `max_le_max`
-
-English:
-theorem max_le_max
-  statement: a <= c -> b <= d -> max a b <= max c d
-  proof: sup_le_sup
-
-@[to_dual]
-
-中文:
-定理 max_le_max
-  结论: a <= c -> b <= d -> 最大值 a b <= 最大值 c d
-  证明: sup_le_sup
-
-@[to_dual]
-
-Depends on / 依赖: sup_le_sup
+/-
+**max_le_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_le_max : a <= c -> b <= d -> max a b <= max c d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
 -/
-theorem max_le_max : a <= c -> b <= d -> max a b <= max c d :=
+theorem max_le_max : a ≤ c → b ≤ d → max a b ≤ max c d :=
   sup_le_sup
 
 @[to_dual]
-/--
-theorem `max_le_max_left` / 定理 `max_le_max_left`
-
-English:
-theorem max_le_max_left
-  given: (c) (h : a <= b)
-  statement: max c a <= max c b
-  proof: sup_le_sup_left h c
+/-
+**max_le_max_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_le_max_left (c) (h : a <= b) : max c a <= max c b
+参数：c；h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_sup_left`：sup_le_sup_left (h₁ : a <= b) (c) : c ⊔ a <= c ⊔ b
+-/
+theorem max_le_max_left (c) (h : a ≤ b) : max c a ≤ max c b := sup_le_sup_left h c
 
 @[to_dual]
-
-中文:
-定理 max_le_max_left
-  条件: (c) (h : a <= b)
-  结论: 最大值 c a <= 最大值 c b
-  证明: sup_le_sup_left h c
-
-@[to_dual]
-
-Depends on / 依赖: sup_le_sup_left
+/-
+**max_le_max_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_le_max_right (c) (h : a <= b) : max a c <= max b c
+参数：c；h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_sup_right`：sup_le_sup_right (h₁ : a <= b) (c) : a ⊔ c <= b ⊔ c
 -/
-theorem max_le_max_left (c) (h : a <= b) : max c a <= max c b := sup_le_sup_left h c
-
-@[to_dual]
-/--
-theorem `max_le_max_right` / 定理 `max_le_max_right`
-
-English:
-theorem max_le_max_right
-  given: (c) (h : a <= b)
-  statement: max a c <= max b c
-  proof: sup_le_sup_right h c
+theorem max_le_max_right (c) (h : a ≤ b) : max a c ≤ max b c := sup_le_sup_right h c
 
 @[to_dual min_le_of_left_le]
-
-中文:
-定理 max_le_max_right
-  条件: (c) (h : a <= b)
-  结论: 最大值 a c <= 最大值 b c
-  证明: sup_le_sup_right h c
-
-@[to_dual min_le_of_left_le]
-
-Depends on / 依赖: sup_le_sup_right
+/-
+**le_max_of_le_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_max_of_le_left : a <= b -> a <= max b c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_of_le_left`：le_sup_of_le_left (h : c <= a) : c <= a ⊔ b
 -/
-theorem max_le_max_right (c) (h : a <= b) : max a c <= max b c := sup_le_sup_right h c
-
-@[to_dual min_le_of_left_le]
-/--
-theorem `le_max_of_le_left` / 定理 `le_max_of_le_left`
-
-English:
-theorem le_max_of_le_left
-  statement: a <= b -> a <= max b c
-  proof: le_sup_of_le_left
-
-@[to_dual min_le_of_right_le]
-
-中文:
-定理 le_max_of_le_left
-  结论: a <= b -> a <= 最大值 b c
-  证明: le_sup_of_le_left
-
-@[to_dual min_le_of_right_le]
-
-Depends on / 依赖: le_sup_of_le_left
--/
-theorem le_max_of_le_left : a <= b -> a <= max b c :=
+theorem le_max_of_le_left : a ≤ b → a ≤ max b c :=
   le_sup_of_le_left
 
 @[to_dual min_le_of_right_le]
-/--
-theorem `le_max_of_le_right` / 定理 `le_max_of_le_right`
-
-English:
-theorem le_max_of_le_right
-  statement: a <= c -> a <= max b c
-  proof: le_sup_of_le_right
-
-@[to_dual min_lt_of_left_lt]
-
-中文:
-定理 le_max_of_le_right
-  结论: a <= c -> a <= 最大值 b c
-  证明: le_sup_of_le_right
-
-@[to_dual min_lt_of_left_lt]
-
-Depends on / 依赖: le_sup_of_le_right
+/-
+**le_max_of_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_max_of_le_right : a <= c -> a <= max b c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_of_le_right`：le_sup_of_le_right (h : c <= b) : c <= a ⊔ b
 -/
-theorem le_max_of_le_right : a <= c -> a <= max b c :=
+theorem le_max_of_le_right : a ≤ c → a ≤ max b c :=
   le_sup_of_le_right
 
 @[to_dual min_lt_of_left_lt]
-/--
-theorem `lt_max_of_lt_left` / 定理 `lt_max_of_lt_left`
-
-English:
-theorem lt_max_of_lt_left
-  given: (h : a < b)
-  statement: a < max b c
-  proof: h.trans_le (le_max_left b c)
-
-@[to_dual min_lt_of_right_lt]
-
-中文:
-定理 lt_max_of_lt_left
-  条件: (h : a < b)
-  结论: a < 最大值 b c
-  证明: h.trans_le (le_max_left b c)
-
-@[to_dual min_lt_of_right_lt]
-
-Depends on / 依赖: h.trans_le, le_max_left, trans_le
+/-
+**lt_max_of_lt_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_max_of_lt_left (h : a < b) : a < max b c
+参数：h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
 -/
 theorem lt_max_of_lt_left (h : a < b) : a < max b c :=
   h.trans_le (le_max_left b c)
 
 @[to_dual min_lt_of_right_lt]
-/--
-theorem `lt_max_of_lt_right` / 定理 `lt_max_of_lt_right`
-
-English:
-theorem lt_max_of_lt_right
-  given: (h : a < c)
-  statement: a < max b c
-  proof: h.trans_le (le_max_right b c)
-
-@[to_dual]
-
-中文:
-定理 lt_max_of_lt_right
-  条件: (h : a < c)
-  结论: a < 最大值 b c
-  证明: h.trans_le (le_max_right b c)
-
-@[to_dual]
-
-Depends on / 依赖: h.trans_le, le_max_right, trans_le
+/-
+**lt_max_of_lt_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_max_of_lt_right (h : a < c) : a < max b c
+参数：h : a < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
 theorem lt_max_of_lt_right (h : a < c) : a < max b c :=
   h.trans_le (le_max_right b c)
 
 @[to_dual]
-/--
-lemma `max_min_distrib_left` / 引理 `max_min_distrib_left`
-
-English:
-lemma max_min_distrib_left
-  given: (a b c : α)
-  statement: max a (min b c) = min (max a b) (max a c)
-  proof: sup_inf_left _ _ _
-
-@[to_dual]
-
-中文:
-引理 max_min_distrib_left
-  条件: (a b c : α)
-  结论: 最大值 a (最小值 b c) = 最小值 (最大值 a b) (最大值 a c)
-  证明: sup_inf_left _ _ _
-
-@[to_dual]
-
-Depends on / 依赖: sup_inf_left
+/-
+**max_min_distrib_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：max_min_distrib_left (a b c : α) : max a (min b c) = min (max a b) (max a 
+c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_inf_left`：sup_inf_left (a b c : α) : a ⊔ b ⊓ c = (a ⊔ b) ⊓ (a ⊔ c)
 -/
 lemma max_min_distrib_left (a b c : α) : max a (min b c) = min (max a b) (max a c) :=
   sup_inf_left _ _ _
 
 @[to_dual]
-/--
-lemma `max_min_distrib_right` / 引理 `max_min_distrib_right`
-
-English:
-lemma max_min_distrib_right
-  given: (a b c : α)
-  statement: max (min a b) c = min (max a c) (max b c)
-  proof: sup_inf_right _ _ _
-
-中文:
-引理 max_min_distrib_right
-  条件: (a b c : α)
-  结论: 最大值 (最小值 a b) c = 最小值 (最大值 a c) (最大值 b c)
-  证明: sup_inf_right _ _ _
-
-Depends on / 依赖: sup_inf_right
+/-
+**max_min_distrib_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：max_min_distrib_right (a b c : α) : max (min a b) c = min (max a c) (max b
+ c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_inf_right`：sup_inf_right (a b c : α) : a ⊓ b ⊔ c = (a ⊔ c) ⊓ (b ⊔ c)
 -/
 lemma max_min_distrib_right (a b c : α) : max (min a b) c = min (max a c) (max b c) :=
   sup_inf_right _ _ _
-
-/--
-theorem `min_le_max` / 定理 `min_le_max`
-
-English:
-theorem min_le_max
-  statement: min a b <= max a b
-  proof: le_trans (min_le_left a b) (le_max_left a b)
-
-@[to_dual]
-
-中文:
-定理 min_le_max
-  结论: 最小值 a b <= 最大值 a b
-  证明: le_trans (min_le_left a b) (le_max_left a b)
-
-@[to_dual]
-
-Depends on / 依赖: le_max_left, le_trans, min_le_left
+/-
+**min_le_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_le_max : min a b <= max a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
 -/
-theorem min_le_max : min a b <= max a b :=
+theorem min_le_max : min a b ≤ max a b :=
   le_trans (min_le_left a b) (le_max_left a b)
 
 @[to_dual]
-/--
-theorem `min_eq_left_iff` / 定理 `min_eq_left_iff`
-
-English:
-theorem min_eq_left_iff
-  statement: min a b = a ↔ a <= b
-  proof: inf_eq_left
-
-@[to_dual]
-
-中文:
-定理 min_eq_left_iff
-  结论: 最小值 a b = a ↔ a <= b
-  证明: inf_eq_left
-
-@[to_dual]
-
-Depends on / 依赖: inf_eq_left
+/-
+**min_eq_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_eq_left_iff : min a b = a ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_eq_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b =
+ a ↔ a ≤ b
 -/
-theorem min_eq_left_iff : min a b = a ↔ a <= b :=
+theorem min_eq_left_iff : min a b = a ↔ a ≤ b :=
   inf_eq_left
 
 @[to_dual]
-/--
-theorem `min_eq_right_iff` / 定理 `min_eq_right_iff`
-
-English:
-theorem min_eq_right_iff
-  statement: min a b = b ↔ b <= a
-  proof: inf_eq_right
-
-中文:
-定理 min_eq_right_iff
-  结论: 最小值 a b = b ↔ b <= a
-  证明: inf_eq_right
-
-Depends on / 依赖: inf_eq_right
+/-
+**min_eq_right_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_eq_right_iff : min a b = b ↔ b <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_eq_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+= b ↔ b ≤ a
 -/
-theorem min_eq_right_iff : min a b = b ↔ b <= a :=
+theorem min_eq_right_iff : min a b = b ↔ b ≤ a :=
   inf_eq_right
 
 /-- For elements `a` and `b` of a linear order, either `min a b = a` and `a ≤ b`,
@@ -429,425 +238,293 @@ Use cases on this lemma to automate linarith in inequalities -/
 /-- For elements `a` and `b` of a linear order, either `max a b = a` and `b ≤ a`,
 or `max a b = b` and `a < b`.
 Use cases on this lemma to automate linarith in inequalities -/]
-/--
-theorem `min_cases` / 定理 `min_cases`
-
-English:
-theorem min_cases
-  given: (a b : α)
-  statement: min a b = a ∧ a <= b ∨ min a b = b ∧ b < a
-  proof: by
-  grind
-
-@[to_dual]
-
-中文:
-定理 min_cases
-  条件: (a b : α)
-  结论: 最小值 a b = a ∧ a <= b ∨ 最小值 a b = b ∧ b < a
-  证明: by
-  grind
-
-@[to_dual]
+/-
+**min_cases** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_cases (a b : α) : min a b = a ∧ a <= b ∨ min a b = b ∧ b < a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem min_cases (a b : α) : min a b = a ∧ a <= b ∨ min a b = b ∧ b < a := by
+theorem min_cases (a b : α) : min a b = a ∧ a ≤ b ∨ min a b = b ∧ b < a := by
   grind
 
 @[to_dual]
-/--
-theorem `min_eq_iff` / 定理 `min_eq_iff`
-
-English:
-theorem min_eq_iff
-  statement: min a b = c ↔ a = c ∧ a <= b ∨ b = c ∧ b <= a
-  proof: by
-  grind
-
-@[to_dual]
-
-中文:
-定理 min_eq_iff
-  结论: 最小值 a b = c ↔ a = c ∧ a <= b ∨ b = c ∧ b <= a
-  证明: by
-  grind
-
-@[to_dual]
+/-
+**min_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_eq_iff : min a b = c ↔ a = c ∧ a <= b ∨ b = c ∧ b <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem min_eq_iff : min a b = c ↔ a = c ∧ a <= b ∨ b = c ∧ b <= a := by
+theorem min_eq_iff : min a b = c ↔ a = c ∧ a ≤ b ∨ b = c ∧ b ≤ a := by
   grind
 
 @[to_dual]
-/--
-theorem `min_lt_min_left_iff` / 定理 `min_lt_min_left_iff`
-
-English:
-theorem min_lt_min_left_iff
-  statement: min a c < min b c ↔ a < b ∧ a < c
-  proof: by
-  grind
-
-@[to_dual]
-
-中文:
-定理 min_lt_min_left_iff
-  结论: 最小值 a c < 最小值 b c ↔ a < b ∧ a < c
-  证明: by
-  grind
-
-@[to_dual]
+/-
+**min_lt_min_left_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_lt_min_left_iff : min a c < min b c ↔ a < b ∧ a < c
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem min_lt_min_left_iff : min a c < min b c ↔ a < b ∧ a < c := by
   grind
 
 @[to_dual]
-/--
-theorem `min_lt_min_right_iff` / 定理 `min_lt_min_right_iff`
-
-English:
-theorem min_lt_min_right_iff
-  statement: min a b < min a c ↔ b < c ∧ b < a
-  proof: by
-  grind
-
-中文:
-定理 min_lt_min_right_iff
-  结论: 最小值 a b < 最小值 a c ↔ b < c ∧ b < a
-  证明: by
-  grind
+/-
+**min_lt_min_right_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_lt_min_right_iff : min a b < min a c ↔ b < c ∧ b < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem min_lt_min_right_iff : min a b < min a c ↔ b < c ∧ b < a := by
   grind
 
 /-- An instance asserting that `max a a = a` -/
 @[to_dual /-- An instance asserting that `min a a = a` -/]
-/--
-Instance `max_idem` / 实例 `max_idem`
+/-
+**max_idem** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：max_idem : Std.IdempotentOp (α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_self`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α), max a a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-instance max_idem
-  signature: : Std.IdempotentOp (α := α) max where
-  body: by simp
-
-中文:
-实例 max_idem
-  签名: : Std.IdempotentOp (α := α) 最大值 where
-  定义体: by simp
+--- 原说明 ---
+An instance asserting that `max a a = a`
 -/
 instance max_idem : Std.IdempotentOp (α := α) max where
   idempotent := by simp
-
-/--
-theorem `min_lt_max` / 定理 `min_lt_max`
-
-English:
-theorem min_lt_max
-  statement: min a b < max a b ↔ a != b
-  proof: inf_lt_sup
-
-@[to_dual]
-
-中文:
-定理 min_lt_max
-  结论: 最小值 a b < 最大值 a b ↔ a != b
-  证明: inf_lt_sup
-
-@[to_dual]
-
-Depends on / 依赖: inf_lt_sup
+/-
+**min_lt_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_lt_max : min a b < max a b ↔ a != b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inf_lt_sup`：∀ {α : Type u} [inst : Lattice α] {a b : α}, a ⊓ b < a ⊔ b ↔
+ a ≠ b
 -/
-theorem min_lt_max : min a b < max a b ↔ a != b :=
+theorem min_lt_max : min a b < max a b ↔ a ≠ b :=
   inf_lt_sup
 
 @[to_dual]
-/--
-theorem `max_lt_max` / 定理 `max_lt_max`
-
-English:
-theorem max_lt_max
-  given: (h₁ : a < c) (h₂ : b < d)
-  statement: max a b < max c d
-  proof: max_lt (lt_max_of_lt_left h₁) (lt_max_of_lt_right h₂)
-
-@[to_dual]
-
-中文:
-定理 max_lt_max
-  条件: (h₁ : a < c) (h₂ : b < d)
-  结论: 最大值 a b < 最大值 c d
-  证明: max_lt (lt_max_of_lt_left h₁) (lt_max_of_lt_right h₂)
-
-@[to_dual]
-
-Depends on / 依赖: lt_max_of_lt_left, lt_max_of_lt_right, max_lt
+/-
+**max_lt_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_lt_max (h₁ : a < c) (h₂ : b < d) : max a b < max c d
+参数：h₁ : a < c；h₂ : b < d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, b < a → c <
+ a → max b c < a
+· 使用定理 `lt_max_of_lt_left`：lt_max_of_lt_left (h : a < b) : a < max b c
+· 使用定理 `lt_max_of_lt_right`：lt_max_of_lt_right (h : a < c) : a < max b c
 -/
 theorem max_lt_max (h₁ : a < c) (h₂ : b < d) : max a b < max c d :=
   max_lt (lt_max_of_lt_left h₁) (lt_max_of_lt_right h₂)
 
 @[to_dual]
-/--
-lemma `min_right_comm` / 引理 `min_right_comm`
-
-English:
-lemma min_right_comm
-  given: (a b c : α)
-  statement: min (min a b) c = min (min a c) b
-  proof: by
-  rw [min_assoc]; rw [min_comm b]; rw [← min_assoc]
-
-@[deprecated (since := "2026-03-22")] alias Max.left_comm := max_left_comm
-@[deprecated (since := "2026-03-22")] alias Max.right_comm := max_right_comm
-
-@[to_dual]
-
-中文:
-引理 min_right_comm
-  条件: (a b c : α)
-  结论: 最小值 (最小值 a b) c = 最小值 (最小值 a c) b
-  证明: by
-  rw [min_assoc]; rw [min_comm b]; rw [← min_assoc]
-
-@[deprecated (since := "2026-03-22")] alias Max.left_comm := max_left_comm
-@[deprecated (since := "2026-03-22")] alias Max.right_comm := max_right_comm
-
-@[to_dual]
-
-Depends on / 依赖: min_assoc, min_comm
+/-
+**min_right_comm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：min_right_comm (a b c : α) : min (min a b) c = min (min a c) b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `min_assoc`：min_assoc (a b c : α) : min (min a b) c = min a (min b c)
+· 使用引理 `min_comm`：min_comm (a b : α) : min a b = min b a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma min_right_comm (a b c : α) : min (min a b) c = min (min a c) b := by
-  rw [min_assoc]; rw [min_comm b]; rw [← min_assoc]
+  rw [min_assoc, min_comm b, ← min_assoc]
 
 @[deprecated (since := "2026-03-22")] alias Max.left_comm := max_left_comm
 @[deprecated (since := "2026-03-22")] alias Max.right_comm := max_right_comm
 
 @[to_dual]
-/--
-theorem `MonotoneOn.map_max` / 定理 `MonotoneOn.map_max`
-
-English:
-theorem MonotoneOn.map_max
-  given: (hf : MonotoneOn f s) (ha : a in s) (hb : b in s)
-  statement: f (max a b) =
-  proof: by
-  rcases le_total a b with h | h <;>
-    simp only [max_eq_right, max_eq_left, hf ha hb, hf hb ha, h]
-
-@[to_dual]
-
-中文:
-定理 MonotoneOn.map_max
-  条件: (hf : MonotoneOn f s) (ha : a in s) (hb : b in s)
-  结论: f (最大值 a b) =
-  证明: by
-  rcases le_total a b with h | h <;>
-    simp only [max_eq_right, max_eq_left, hf ha hb, hf hb ha, h]
-
-@[to_dual]
-
-Depends on / 依赖: le_total, max_eq_left, max_eq_right
+/-
+**MonotoneOn.map_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonotoneOn.map_max (hf : MonotoneOn f s) (ha : a in s) (hb : b in s) : f (
+max a b) = max (f a) (f b)
+参数：hf : MonotoneOn f s；ha : a in s；hb : b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
 -/
-theorem MonotoneOn.map_max (hf : MonotoneOn f s) (ha : a in s) (hb : b in s) : f (max a b) =
+theorem MonotoneOn.map_max (hf : MonotoneOn f s) (ha : a ∈ s) (hb : b ∈ s) : f (max a b) =
     max (f a) (f b) := by
   rcases le_total a b with h | h <;>
     simp only [max_eq_right, max_eq_left, hf ha hb, hf hb ha, h]
 
 @[to_dual]
-/--
-theorem `AntitoneOn.map_max` / 定理 `AntitoneOn.map_max`
-
-English:
-theorem AntitoneOn.map_max
-  given: (hf : AntitoneOn f s) (ha : a in s) (hb : b in s)
-  statement: f (max a b) =
-  proof: hf.dual_right.map_max ha hb
-
-@[to_dual]
-
-中文:
-定理 AntitoneOn.map_max
-  条件: (hf : AntitoneOn f s) (ha : a in s) (hb : b in s)
-  结论: f (最大值 a b) =
-  证明: hf.dual_right.map_max ha hb
-
-@[to_dual]
-
-Depends on / 依赖: dual_right, hf.dual_right.map_max, map_max
+/-
+**AntitoneOn.map_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntitoneOn.map_max (hf : AntitoneOn f s) (ha : a in s) (hb : b in s) : f (
+max a b) = min (f a) (f b)
+参数：hf : AntitoneOn f s；ha : a in s；hb : b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonotoneOn.map_max`：MonotoneOn.map_max (hf : MonotoneOn f s) (ha : a in 
+s) (hb : b in s) : f (max a b) = max (f a) (f b)
+· 使用定理 `AntitoneOn.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [
+inst_1 : Preorder β] {f : α → β} {s : Set α},   AntitoneOn f s → MonotoneOn (⇑Or
+derDual.toD…
 -/
-theorem AntitoneOn.map_max (hf : AntitoneOn f s) (ha : a in s) (hb : b in s) : f (max a b) =
+theorem AntitoneOn.map_max (hf : AntitoneOn f s) (ha : a ∈ s) (hb : b ∈ s) : f (max a b) =
     min (f a) (f b) := hf.dual_right.map_max ha hb
 
 @[to_dual]
-/--
-theorem `Monotone.map_max` / 定理 `Monotone.map_max`
-
-English:
-theorem Monotone.map_max
-  given: (hf : Monotone f)
-  statement: f (max a b) = max (f a) (f b)
-  proof: by
-  rcases le_total a b with h | h <;> simp [h, hf h]
-
-@[to_dual]
-
-中文:
-定理 递增.map_max
-  条件: (hf : 递增 f)
-  结论: f (最大值 a b) = 最大值 (f a) (f b)
-  证明: by
-  rcases le_total a b with h | h <;> simp [h, hf h]
-
-@[to_dual]
-
-Depends on / 依赖: le_total
+/-
+**Monotone.map_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.map_max (hf : Monotone f) : f (max a b) = max (f a) (f b)
+参数：hf : Monotone f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
 -/
 theorem Monotone.map_max (hf : Monotone f) : f (max a b) = max (f a) (f b) := by
   rcases le_total a b with h | h <;> simp [h, hf h]
 
 @[to_dual]
-/--
-theorem `Antitone.map_max` / 定理 `Antitone.map_max`
-
-English:
-theorem Antitone.map_max
-  given: (hf : Antitone f)
-  statement: f (max a b) = min (f a) (f b)
-  proof: by
-  rcases le_total a b with h | h <;> simp [h, hf h]
-
-@[to_dual]
-
-中文:
-定理 递减.map_max
-  条件: (hf : 递减 f)
-  结论: f (最大值 a b) = 最小值 (f a) (f b)
-  证明: by
-  rcases le_total a b with h | h <;> simp [h, hf h]
-
-@[to_dual]
-
-Depends on / 依赖: le_total
+/-
+**Antitone.map_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.map_max (hf : Antitone f) : f (max a b) = min (f a) (f b)
+参数：hf : Antitone f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `inf_of_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ≤ 
+b → a ⊓ b = a
 -/
 theorem Antitone.map_max (hf : Antitone f) : f (max a b) = min (f a) (f b) := by
   rcases le_total a b with h | h <;> simp [h, hf h]
 
 @[to_dual]
-/--
-theorem `min_choice` / 定理 `min_choice`
-
-English:
-theorem min_choice
-  given: (a b : α)
-  statement: min a b = a ∨ min a b = b
-  proof: by cases le_total a b <;> simp [*]
-
-@[to_dual le_of_le_min_left]
-
-中文:
-定理 min_choice
-  条件: (a b : α)
-  结论: 最小值 a b = a ∨ 最小值 a b = b
-  证明: by cases le_total a b <;> simp [*]
-
-@[to_dual le_of_le_min_left]
-
-Depends on / 依赖: le_total
+/-
+**min_choice** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_choice (a b : α) : min a b = a ∨ min a b = b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inf_of_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ≤ 
+b → a ⊓ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
 theorem min_choice (a b : α) : min a b = a ∨ min a b = b := by cases le_total a b <;> simp [*]
 
 @[to_dual le_of_le_min_left]
-/--
-theorem `le_of_max_le_left` / 定理 `le_of_max_le_left`
-
-English:
-theorem le_of_max_le_left
-  given: {a b c : α} (h : max a b <= c)
-  statement: a <= c
-  proof: le_trans (le_max_left _ _) h
-
-@[to_dual le_of_le_min_right]
-
-中文:
-定理 le_of_max_le_left
-  条件: {a b c : α} (h : 最大值 a b <= c)
-  结论: a <= c
-  证明: le_trans (le_max_left _ _) h
-
-@[to_dual le_of_le_min_right]
-
-Depends on / 依赖: le_max_left, le_trans
+/-
+**le_of_max_le_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_of_max_le_left {a b c : α} (h : max a b <= c) : a <= c
+参数：h : max a b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
 -/
-theorem le_of_max_le_left {a b c : α} (h : max a b <= c) : a <= c :=
+theorem le_of_max_le_left {a b c : α} (h : max a b ≤ c) : a ≤ c :=
   le_trans (le_max_left _ _) h
 
 @[to_dual le_of_le_min_right]
-/--
-theorem `le_of_max_le_right` / 定理 `le_of_max_le_right`
-
-English:
-theorem le_of_max_le_right
-  given: {a b c : α} (h : max a b <= c)
-  statement: b <= c
-  proof: le_trans (le_max_right _ _) h
-
-中文:
-定理 le_of_max_le_right
-  条件: {a b c : α} (h : 最大值 a b <= c)
-  结论: b <= c
-  证明: le_trans (le_max_right _ _) h
-
-Depends on / 依赖: le_max_right, le_trans
+/-
+**le_of_max_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_of_max_le_right {a b c : α} (h : max a b <= c) : b <= c
+参数：h : max a b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-theorem le_of_max_le_right {a b c : α} (h : max a b <= c) : b <= c :=
+theorem le_of_max_le_right {a b c : α} (h : max a b ≤ c) : b ≤ c :=
   le_trans (le_max_right _ _) h
-
-/--
-Instance `instCommutativeMax` / 实例 `instCommutativeMax`
-
-English:
-instance instCommutativeMax
-  signature: : Std.Commutative (α := α) max where comm
-  body: max_comm
-
-中文:
-实例 instCommutativeMax
-  签名: : Std.交换 (α := α) 最大值 where comm
-  定义体: max_comm
+/-
+**instCommutativeMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : LinearOrder α], Std.Commutative max
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_comm`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), max a b = m
+ax b a
 -/
 @[to_dual] instance instCommutativeMax : Std.Commutative (α := α) max where comm := max_comm
-/--
-Instance `instAssociativeMax` / 实例 `instAssociativeMax`
-
-English:
-instance instAssociativeMax
-  signature: : Std.Associative (α := α) max where assoc
-  body: max_assoc
-
-@[to_dual]
-
-中文:
-实例 instAssociativeMax
-  签名: : Std.结合 (α := α) 最大值 where assoc
-  定义体: max_assoc
-
-@[to_dual]
+/-
+**instAssociativeMax** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : LinearOrder α], Std.Associative max
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_assoc`：∀ {α : Type u_1} [inst : LinearOrder α] (a b c : α), max (max
+ a b) c = max a (max b c)
 -/
 @[to_dual] instance instAssociativeMax : Std.Associative (α := α) max where assoc := max_assoc
 
 @[to_dual]
-/--
-theorem `max_left_commutative` / 定理 `max_left_commutative`
-
-English:
-theorem max_left_commutative
-  statement: LeftCommutative (max : α -> α -> α)
-  proof: ⟨max_left_comm⟩
-
-中文:
-定理 max_left_commutative
-  结论: 左交换 (最大值 : α -> α -> α)
-  证明: ⟨max_left_comm⟩
-
-Depends on / 依赖: max_left_comm
+/-
+**max_left_commutative** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_left_commutative : LeftCommutative (max : α -> α -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_left_comm`：∀ {α : Type u_1} [inst : LinearOrder α] (a b c : α), max 
+a (max b c) = max b (max a c)
 -/
-theorem max_left_commutative : LeftCommutative (max : α -> α -> α) := ⟨max_left_comm⟩
+theorem max_left_commutative : LeftCommutative (max : α → α → α) := ⟨max_left_comm⟩
 
 end
+

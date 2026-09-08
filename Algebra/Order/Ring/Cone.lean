@@ -20,93 +20,74 @@ cones in rings and the corresponding ordered rings.
 
 @[expose] public section
 
-/--
-Definition of `RingConeClass` / `RingConeClass` 的定义
+/-- `RingConeClass S R` says that `S` is a type of cones in `R`. -/
+/-
+**RingConeClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(S : Type u_1) → (R : outParam (Type u_2)) → [Ring R] → [SetLike S R] → Pr
+op
+参数：Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RingConeClass
-  parameters: (S : Type*) (R : outParam Type*) [Ring R] [SetLike S R]
-  extends: AddGroupConeClass S R, SubsemiringClass S R
-  (no additional axioms)
-
-中文:
-类 RingCone类
-  参数: (S : 类型) (R : outParam 类型) [环 R] [集合状 S R]
-  继承: 加法群锥类 S R, 子半环类 S R
-  (无附加公理)
+--- 原说明 ---
+`RingConeClass S R` says that `S` is a type of cones in `R`.
 -/
 class RingConeClass (S : Type*) (R : outParam Type*) [Ring R] [SetLike S R] : Prop
     extends AddGroupConeClass S R, SubsemiringClass S R
 
-/--
-Definition of `RingCone` / `RingCone` 的定义
+/-- A (positive) cone in a ring is a subsemiring that
+does not contain both `a` and `-a` for any nonzero `a`.
+This is equivalent to being the set of non-negative elements of
+some order making the ring into a partially ordered ring. -/
+/-
+**RingCone** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [Ring R] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingCone
-  parameters: (R : Type*) [Ring R]
-  extends: Subsemiring R, AddGroupCone R
-  (no additional axioms)
-
-中文:
-结构 RingCone
-  参数: (R : 类型) [环 R]
-  继承: 子半环 R, 加法群锥 R
-  (无附加公理)
+--- 原说明 ---
+A (positive) cone in a ring is a subsemiring that
+does not contain both `a` and `-a` for any nonzero `a`.
+This is equivalent to being the set of non-negative elements of
+some order making the ring into a partially ordered ring.
 -/
 structure RingCone (R : Type*) [Ring R] extends Subsemiring R, AddGroupCone R
 
 /-- Interpret a cone in a ring as a cone in the underlying additive group. -/
 add_decl_doc RingCone.toAddGroupCone
 
-/--
-Instance `RingCone.instSetLike` / 实例 `RingCone.instSetLike`
-
-English:
-instance RingCone.instSetLike
-  signature: (R : Type*) [Ring R]
-  body: C.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
-
-中文:
-实例 RingCone.instSetLike
-  签名: (R : 类型) [环 R]
-  定义体: C.carrier
-  coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
-
-Depends on / 依赖: C.carrier, carrier
+/-
+**RingCone.instSetLike** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：RingCone.instSetLike (R : Type*) [Ring R] : SetLike (RingCone R) R where c
+oe C
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance RingCone.instSetLike (R : Type*) [Ring R] : SetLike (RingCone R) R where
   coe C := C.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R : Type*) [Ring R] : PartialOrder (RingCone R) := .ofSetLike (RingCone R) R
-
-/--
-Instance `RingCone.instRingConeClass` / 实例 `RingCone.instRingConeClass`
-
-English:
-instance RingCone.instRingConeClass
-  signature: (R : Type*) [Ring R]
-  body: C.add_mem'
-  zero_mem {C} := C.zero_mem'
-  mul_mem {C} := C.mul_mem'
-  one_mem {C} := C.one_mem'
-  eq_zero_of_mem_of_neg_mem {C} := C.eq_zero_of_mem_of_neg_mem'
-
-@[simp]
-
-中文:
-实例 RingCone.instRingConeClass
-  签名: (R : 类型) [环 R]
-  定义体: C.add_mem'
-  zero_mem {C} := C.zero_mem'
-  mul_mem {C} := C.mul_mem'
-  one_mem {C} := C.one_mem'
-  eq_zero_of_mem_of_neg_mem {C} := C.eq_zero_of_mem_of_neg_mem'
-
-@[simp]
-
-Depends on / 依赖: C.add_mem, add_mem
+/-
+**RingCone.instRingConeClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：RingCone.instRingConeClass (R : Type*) [Ring R] : RingConeClass (RingCone 
+R) R where add_mem {C}
+参数：R : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemiring.add_mem'`：∀ {R : Type u} [inst : NonAssocSemiring R] (self :
+ Subsemiring R) {a b : R},   a ∈ self.carrier → b ∈ self.carrier → a + b ∈ self.
+carrier
+· 使用定理 `Subsemiring.zero_mem'`：∀ {R : Type u} [inst : NonAssocSemiring R] (self 
+: Subsemiring R), 0 ∈ self.carrier
+· 使用定理 `RingCone.eq_zero_of_mem_of_neg_mem'`：∀ {R : Type u_1} [inst : Ring R] (s
+elf : RingCone R) {a : R}, a ∈ self.carrier → -a ∈ self.carrier → a = 0
+· 使用定理 `Subsemigroup.mul_mem'`：∀ {M : Type u_3} [inst : Mul M] (self : Subsemigr
+oup M) {a b : M},   a ∈ self.carrier → b ∈ self.carrier → a * b ∈ self.carrier
+· 使用定理 `Submonoid.one_mem'`：∀ {M : Type u_3} [inst : MulOneClass M] (self : Subm
+onoid M), 1 ∈ self.carrier
 -/
 instance RingCone.instRingConeClass (R : Type*) [Ring R] :
     RingConeClass (RingCone R) R where
@@ -117,40 +98,29 @@ instance RingCone.instRingConeClass (R : Type*) [Ring R] :
   eq_zero_of_mem_of_neg_mem {C} := C.eq_zero_of_mem_of_neg_mem'
 
 @[simp]
-/--
-theorem `RingCone.mem_mk` / 定理 `RingCone.mem_mk`
-
-English:
-theorem RingCone.mem_mk
-  statement: {R : Type*} [Ring R] {toSubsemiring : Subsemiring R}
-  proof: .rfl
-
-@[simp]
-
-中文:
-定理 RingCone.mem_mk
-  结论: {R : 类型} [环 R] {toSubsemiring : 子半环 R}
-  证明: .rfl
-
-@[simp]
+/-
+**RingCone.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingCone.mem_mk {R : Type*} [Ring R] {toSubsemiring : Subsemiring R} (eq_z
+ero_of_mem_of_neg_mem) {x : R} : x in mk toSubsemiring eq_zero_of_mem_of_neg_mem
+ ↔ x in toSubsemiring
+参数：eq_zero_of_mem_of_neg_mem。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem RingCone.mem_mk {R : Type*} [Ring R] {toSubsemiring : Subsemiring R}
     (eq_zero_of_mem_of_neg_mem) {x : R} :
-    x in mk toSubsemiring eq_zero_of_mem_of_neg_mem ↔ x in toSubsemiring := .rfl
+    x ∈ mk toSubsemiring eq_zero_of_mem_of_neg_mem ↔ x ∈ toSubsemiring := .rfl
 
 @[simp]
-/--
-theorem `RingCone.coe_set_mk` / 定理 `RingCone.coe_set_mk`
-
-English:
-theorem RingCone.coe_set_mk
-  statement: {R : Type*} [Ring R] {toSubsemiring : Subsemiring R}
-  proof: rfl
-
-中文:
-定理 RingCone.coe_set_mk
-  结论: {R : 类型} [环 R] {toSubsemiring : 子半环 R}
-  证明: rfl
+/-
+**RingCone.coe_set_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingCone.coe_set_mk {R : Type*} [Ring R] {toSubsemiring : Subsemiring R} (
+eq_zero_of_mem_of_neg_mem) : (mk toSubsemiring eq_zero_of_mem_of_neg_mem : Set R
+) = toSubsemiring
+参数：eq_zero_of_mem_of_neg_mem。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RingCone.coe_set_mk {R : Type*} [Ring R] {toSubsemiring : Subsemiring R}
     (eq_zero_of_mem_of_neg_mem) :
@@ -161,98 +131,66 @@ namespace RingCone
 variable {T : Type*} [Ring T] [PartialOrder T] [IsOrderedRing T] {a : T}
 
 variable (T) in
-/--
-Definition of `nonneg` / `nonneg` 的定义
+/-- Construct a cone from the set of non-negative elements of a partially ordered ring. -/
+/-
+**RingCone.nonneg** 是 Mathlib 中的一个定义，位于命名空间 `RingCone`。
+形式化陈述：nonneg : RingCone T where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nonneg
-  signature: : RingCone T where
-  body: Subsemiring.nonneg T
-  eq_zero_of_mem_of_neg_mem' {a} := by simpa using ge_antisymm
-
-中文:
-定义 nonneg
-  签名: : RingCone T where
-  定义体: Subsemiring.nonneg T
-  eq_zero_of_mem_of_neg_mem' {a} := by simpa using ge_antisymm
-
-Depends on / 依赖: Subsemiring, Subsemiring.nonneg, nonneg
+--- 原说明 ---
+Construct a cone from the set of non-negative elements of a partially ordered ri
+ng.
 -/
 def nonneg : RingCone T where
   __ := Subsemiring.nonneg T
   eq_zero_of_mem_of_neg_mem' {a} := by simpa using ge_antisymm
-
-/--
-lemma `nonneg_toSubsemiring` / 引理 `nonneg_toSubsemiring`
-
-English:
-lemma nonneg_toSubsemiring
-  statement: (nonneg T).toSubsemiring = .nonneg T
-  proof: rfl
-
-中文:
-引理 nonneg_toSubsemiring
-  结论: (nonneg T).toSubsemiring = .nonneg T
-  证明: rfl
+/-
+**RingCone.nonneg_toSubsemiring** 是 Mathlib 中的一个定理，位于命名空间 `RingCone`。
+形式化陈述：∀ {T : Type u_1} [inst : Ring T] [inst_1 : PartialOrder T] [inst_2 : IsOrd
+eredRing T],   (RingCone.nonneg T).toSubsemiring = Subsemiring.nonneg T
+参数：RingCone.nonneg T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nonneg_toSubsemiring : (nonneg T).toSubsemiring = .nonneg T := rfl
-/--
-lemma `nonneg_toAddGroupCone` / 引理 `nonneg_toAddGroupCone`
-
-English:
-lemma nonneg_toAddGroupCone
-  statement: (nonneg T).toAddGroupCone = .nonneg T
-  proof: rfl
-
-中文:
-引理 nonneg_toAddGroupCone
-  结论: (nonneg T).toAddGroupCone = .nonneg T
-  证明: rfl
+/-
+**RingCone.nonneg_toAddGroupCone** 是 Mathlib 中的一个定理，位于命名空间 `RingCone`。
+形式化陈述：∀ {T : Type u_1} [inst : Ring T] [inst_1 : PartialOrder T] [inst_2 : IsOrd
+eredRing T],   (RingCone.nonneg T).toAddGroupCone = AddGroupCone.nonneg T
+参数：RingCone.nonneg T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma nonneg_toAddGroupCone : (nonneg T).toAddGroupCone = .nonneg T := rfl
-/--
-lemma `mem_nonneg` / 引理 `mem_nonneg`
-
-English:
-lemma mem_nonneg
-  statement: a in nonneg T ↔ 0 <= a
-  proof: Iff.rfl
-
-中文:
-引理 mem_nonneg
-  结论: a in nonneg T ↔ 0 <= a
-  证明: Iff.rfl
+/-
+**RingCone.mem_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `RingCone`。
+形式化陈述：∀ {T : Type u_1} [inst : Ring T] [inst_1 : PartialOrder T] [inst_2 : IsOrd
+eredRing T] {a : T},   a ∈ RingCone.nonneg T ↔ 0 ≤ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_nonneg : a in nonneg T ↔ 0 <= a := Iff.rfl
-/--
-lemma `coe_nonneg` / 引理 `coe_nonneg`
-
-English:
-lemma coe_nonneg
-  statement: nonneg T = {x : T | 0 <= x}
-  proof: rfl
-
-中文:
-引理 coe_nonneg
-  结论: nonneg T = {x : T | 0 <= x}
-  证明: rfl
+@[simp] lemma mem_nonneg : a ∈ nonneg T ↔ 0 ≤ a := Iff.rfl
+/-
+**RingCone.coe_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `RingCone`。
+形式化陈述：∀ {T : Type u_1} [inst : Ring T] [inst_1 : PartialOrder T] [inst_2 : IsOrd
+eredRing T],   ↑(RingCone.nonneg T) = {x | 0 ≤ x}
+参数：RingCone.nonneg T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_nonneg : nonneg T = {x : T | 0 <= x} := rfl
-
-/--
-Instance `nonneg.hasMemOrNegMem` / 实例 `nonneg.hasMemOrNegMem`
-
-English:
-instance nonneg.hasMemOrNegMem
-  signature: {T : Type*} [Ring T] [LinearOrder T] [IsOrderedRing T]
-  body: mem_or_neg_mem (AddGroupCone.nonneg T)
-
-中文:
-实例 nonneg.hasMemOrNegMem
-  签名: {T : 类型} [环 T] [线性序 T] [是Ordered环 T]
-  定义体: mem_or_neg_mem (AddGroupCone.nonneg T)
-
-Depends on / 依赖: AddGroupCone, AddGroupCone.nonneg, mem_or_neg_mem, nonneg
+@[simp, norm_cast] lemma coe_nonneg : nonneg T = {x : T | 0 ≤ x} := rfl
+/-
+**RingCone.nonneg.hasMemOrNegMem** 是 Mathlib 中的一个定理，位于命名空间 `RingCone.nonneg`。
+形式化陈述：∀ {T : Type u_2} [inst : Ring T] [inst_1 : LinearOrder T] [inst_2 : IsOrde
+redRing T], HasMemOrNegMem (RingCone.nonneg T)
+参数：RingCone.nonneg T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasMemOrNegMem.mem_or_neg_mem`：∀ {S : Type u_3} {G : Type u_4} {inst : N
+eg G} {inst_1 : SetLike S G} (s : S) [self : HasMemOrNegMem s] (a : G),   a ∈ s 
+∨ -a ∈ s
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `AddGroupCone.nonneg.hasMemOrNegMem`：∀ {H : Type u_2} [inst : AddCommGrou
+p H] [inst_1 : LinearOrder H] [inst_2 : IsOrderedAddMonoid H],   HasMemOrNegMem 
+(AddGroupCone.nonneg H)
 -/
 instance nonneg.hasMemOrNegMem {T : Type*} [Ring T] [LinearOrder T] [IsOrderedRing T] :
     HasMemOrNegMem (nonneg T) where
@@ -262,35 +200,55 @@ end RingCone
 
 variable {S R : Type*} [Ring R] [SetLike S R] (C : S)
 
-/--
-lemma `IsOrderedRing.mkOfCone` / 引理 `IsOrderedRing.mkOfCone`
+/-- Construct a partially ordered ring by designating a cone in a ring. -/
+/-
+**IsOrderedRing.mkOfCone** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsOrderedRing.mkOfCone [RingConeClass S R] : letI _ : PartialOrder R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsOrderedRing.of_mul_nonneg`：IsOrderedRing.of_mul_nonneg [Ring R] [Parti
+alOrder R] [IsOrderedAddMonoid R] [ZeroLEOneClass R] (mul_nonneg : forall a b : 
+R, 0 <= a -> 0 <=…
+· 使用定理 `RingConeClass.toAddGroupConeClass`：∀ {S : Type u_1} {R : outParam (Type 
+u_2)} {inst : Ring R} {inst_1 : SetLike S R} [self : RingConeClass S R],   AddGr
+oupConeClass S R
+· 使用定理 `IsOrderedAddMonoid.mkOfCone`：∀ {S : Type u_1} {G : Type u_2} [inst : Add
+CommGroup G] [inst_1 : SetLike S G] (C : S) [inst_2 : AddGroupConeClass S G],   
+have x := Partial…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `AddSubmonoidWithOneClass.toOneMemClass`：∀ {S : Type u_1} {R : outParam (
+Type u_2)} {inst : AddMonoidWithOne R} {inst_1 : SetLike S R}   [self : AddSubmo
+noidWithOneClass S R], OneMe…
+· 使用定理 `SubsemiringClass.addSubmonoidWithOneClass`：∀ (S : Type u_1) (R : Type u)
+ {x : NonAssocSemiring R} [inst : SetLike S R] [h : SubsemiringClass S R],   Add
+SubmonoidWithOneClass S R
+· 使用定理 `RingConeClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u
+_2)} [inst : Ring R] [inst_1 : SetLike S R] [self : RingConeClass S R],   Subsem
+iringClass S R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
 
-English:
-lemma IsOrderedRing.mkOfCone
-  given: [RingConeClass S R]
-  proof: .mkOfAddGroupCone C
-    IsOrderedRing R :=
-  letI _ : PartialOrder R := .mkOfAddGroupCone C
-  haveI : IsOrderedAddMonoid R := .mkOfCone C
-  haveI : ZeroLEOneClass R := ⟨show _ in C by simp⟩
-  .of_mul_nonneg fun x y xnn ynn => show _ in C by simpa using mul_mem xnn ynn
-
-中文:
-引理 是Ordered环.mkOfCone
-  条件: [RingCone类 S R]
-  证明: .mkOfAddGroupCone C
-    IsOrderedRing R :=
-  letI _ : PartialOrder R := .mkOfAddGroupCone C
-  haveI : IsOrderedAddMonoid R := .mkOfCone C
-  haveI : ZeroLEOneClass R := ⟨show _ in C by simp⟩
-  .of_mul_nonneg fun x y xnn ynn => show _ in C by simpa using mul_mem xnn ynn
-
-Depends on / 依赖: mkOfAddGroupCone
+--- 原说明 ---
+Construct a partially ordered ring by designating a cone in a ring.
 -/
 lemma IsOrderedRing.mkOfCone [RingConeClass S R] :
     letI _ : PartialOrder R := .mkOfAddGroupCone C
     IsOrderedRing R :=
   letI _ : PartialOrder R := .mkOfAddGroupCone C
   haveI : IsOrderedAddMonoid R := .mkOfCone C
-  haveI : ZeroLEOneClass R := ⟨show _ in C by simp⟩
-  .of_mul_nonneg fun x y xnn ynn => show _ in C by simpa using mul_mem xnn ynn
+  haveI : ZeroLEOneClass R := ⟨show _ ∈ C by simp⟩
+  .of_mul_nonneg fun x y xnn ynn ↦ show _ ∈ C by simpa using mul_mem xnn ynn

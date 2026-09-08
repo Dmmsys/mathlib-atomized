@@ -68,20 +68,15 @@ ring theory, ideal, filter, uniform filter, Gabriel filter, torsion theory
 
 open scoped Pointwise
 
-/--
-Definition of `IdealFilter` / `IdealFilter` 的定义
+/-- `IdealFilter A` is the type of `Order.PFilter`s on the lattice of ideals of `A`. -/
+/-
+**IdealFilter** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IdealFilter (A : Type*) [Ring A]
+参数：A : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IdealFilter
-  signature: (A : Type*) [Ring A]
-  body: Order.PFilter (Ideal A)
-
-中文:
-缩写 IdealFilter
-  签名: (A : 类型) [环 A]
-  定义体: Order.PFilter (Ideal A)
-
-Depends on / 依赖: Order.PFilter, PFilter
+--- 原说明 ---
+`IdealFilter A` is the type of `Order.PFilter`s on the lattice of ideals of `A`.
 -/
 abbrev IdealFilter (A : Type*) [Ring A] := Order.PFilter (Ideal A)
 
@@ -89,105 +84,99 @@ namespace IdealFilter
 
 variable {A : Type*} [Ring A]
 
-/--
-Definition of `IsUniform` / `IsUniform` 的定义
+/-- A filter of ideals is *uniform* if it is closed under colon by singletons. -/
+/-
+**IdealFilter.IsUniform** 是 Mathlib 中的一个归纳类型，位于命名空间 `IdealFilter`。
+形式化陈述：{A : Type u_1} → [inst : Ring A] → IdealFilter A → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsUniform
-  parameters: (F : IdealFilter A)
-  axioms and operations (1):
-    - colon_mem({I : Ideal A} (hI : I in F) (a : A)) : I.colon {a} in F
-
-中文:
-类 是一致
-  参数: (F : IdealFilter A)
-  公理与运算 (1 个):
-    - colon_mem({I : 理想 A} (hI : I in F) (a : A)) : I.colon {a} in F
+--- 原说明 ---
+A filter of ideals is *uniform* if it is closed under colon by singletons.
 -/
 class IsUniform (F : IdealFilter A) : Prop where
-  /-- **Axiom T3.** See [stenstrom1975]. -/
-  colon_mem {I : Ideal A} (hI : I in F) (a : A) : I.colon {a} in F
+  /-- **Axiom T3.**  See [stenstrom1975]. -/
+  colon_mem {I : Ideal A} (hI : I ∈ F) (a : A) : I.colon {a} ∈ F
 
-/--
-Definition of `IsTorsionElem` / `IsTorsionElem` 的定义
+/-- We say that an element `m : M` is `F`-torsion if it is annihilated by some ideal belonging to
+the filter `F`. -/
+/-
+**IdealFilter.IsTorsionElem** 是 Mathlib 中的一个定义，位于命名空间 `IdealFilter`。
+形式化陈述：IsTorsionElem (F : IdealFilter A) {M : Type*} [AddCommMonoid M] [Module A 
+M] (m : M) : Prop
+参数：F : IdealFilter A；m : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTorsionElem
-  signature: (F : IdealFilter A)
-  body: exists L in F, forall a in L, a • m = 0
-
-中文:
-定义 IsTorsionElem
-  签名: (F : IdealFilter A)
-  定义体: exists L in F, forall a in L, a • m = 0
+--- 原说明 ---
+We say that an element `m : M` is `F`-torsion if it is annihilated by some ideal
+ belonging to
+the filter `F`.
 -/
 def IsTorsionElem (F : IdealFilter A)
     {M : Type*} [AddCommMonoid M] [Module A M] (m : M) : Prop :=
-  exists L in F, forall a in L, a • m = 0
+  ∃ L ∈ F, ∀ a ∈ L, a • m = 0
 
-/--
-Definition of `IsTorsion` / `IsTorsion` 的定义
+/-- Module-level `F`-torsion: every element is `F`-torsion. -/
+/-
+**IdealFilter.IsTorsion** 是 Mathlib 中的一个定义，位于命名空间 `IdealFilter`。
+形式化陈述：IsTorsion (F : IdealFilter A) (M : Type*) [AddCommMonoid M] [Module A M] :
+ Prop
+参数：F : IdealFilter A；M : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTorsion
-  signature: (F : IdealFilter A)
-  body: forall m : M, IsTorsionElem F m
-
-中文:
-定义 是挠
-  签名: (F : IdealFilter A)
-  定义体: forall m : M, IsTorsionElem F m
-
-Depends on / 依赖: IsTorsionElem
+--- 原说明 ---
+Module-level `F`-torsion: every element is `F`-torsion.
 -/
 def IsTorsion (F : IdealFilter A)
     (M : Type*) [AddCommMonoid M] [Module A M] : Prop :=
-  forall m : M, IsTorsionElem F m
+  ∀ m : M, IsTorsionElem F m
 
-/--
-Definition of `IsTorsionQuot` / `IsTorsionQuot` 的定义
+/-- We say that the quotient `K/L` is `F`-torsion if every element `k ∈ K` is annihilated
+(modulo `L`) by some ideal in `F`. Equivalently, for each `k ∈ K` there exists `I ∈ F`
+such that `I ≤ L.colon {k}`. This formulation avoids forming the quotient module explicitly. -/
+/-
+**IdealFilter.IsTorsionQuot** 是 Mathlib 中的一个定义，位于命名空间 `IdealFilter`。
+形式化陈述：IsTorsionQuot (F : IdealFilter A) (L K : Ideal A) : Prop
+参数：F : IdealFilter A；L K : Ideal A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsTorsionQuot
-  signature: (F : IdealFilter A) (L K : Ideal A)
-  body: forall k in K, exists I in F, I <= L.colon {k}
-
-中文:
-定义 IsTorsionQuot
-  签名: (F : IdealFilter A) (L K : 理想 A)
-  定义体: forall k in K, exists I in F, I <= L.colon {k}
-
-Depends on / 依赖: L.colon
+--- 原说明 ---
+We say that the quotient `K/L` is `F`-torsion if every element `k ∈ K` is annihi
+lated
+(modulo `L`) by some ideal in `F`. Equivalently, for each `k ∈ K` there exists `
+I ∈ F`
+such that `I ≤ L.colon {k}`. This formulation avoids forming the quotient module
+ explicitly.
 -/
 def IsTorsionQuot (F : IdealFilter A) (L K : Ideal A) : Prop :=
-  forall k in K, exists I in F, I <= L.colon {k}
+  ∀ k ∈ K, ∃ I ∈ F, I ≤ L.colon {k}
 
-/--
-lemma `isTorsionQuot_inter_left_iff` / 引理 `isTorsionQuot_inter_left_iff`
+/-- Intersecting the left ideal with `K` does not change `IsTorsionQuot` on the right.
+In particular, `IsTorsionQuot F L K` need not require `L ≤ K` for it is equivalent to asserting
+the quotient `K / (L ⊓ K)` is `F`-torsion. -/
+/-
+**IdealFilter.isTorsionQuot_inter_left_iff** 是 Mathlib 中的一个引理，位于命名空间 `IdealFilte
+r`。
+形式化陈述：isTorsionQuot_inter_left_iff {F : IdealFilter A} {L K : Ideal A} : IsTorsi
+onQuot F (L ⊓ K) K ↔ IsTorsionQuot F L K
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Submodule.colon_inf_eq_left_of_subset`：colon_inf_eq_left_of_subset (h : 
+S subseteq (N₂ : Set M)) : (N₁ ⊓ N₂).colon S = N₁.colon S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma isTorsionQuot_inter_left_iff
-  given: {F : IdealFilter A} {L K : Ideal A}
-  proof: by
-  constructor <;>
-  · intro h k hk
-    rcases h k hk with ⟨I, hI, hI_le⟩
-    have hcol : (L ⊓ K).colon {k} = Submodule.colon L {k} :=
-      Submodule.colon_inf_eq_left_of_subset (Set.singleton_subset_iff.mpr hk)
-    exact ⟨I, hI, (by simpa [hcol] using hI_le)⟩
-
-中文:
-引理 isTorsionQuot_inter_left_iff
-  条件: {F : IdealFilter A} {L K : 理想 A}
-  证明: by
-  constructor <;>
-  · intro h k hk
-    rcases h k hk with ⟨I, hI, hI_le⟩
-    have hcol : (L ⊓ K).colon {k} = Submodule.colon L {k} :=
-      Submodule.colon_inf_eq_left_of_subset (Set.singleton_subset_iff.mpr hk)
-    exact ⟨I, hI, (by simpa [hcol] using hI_le)⟩
-
-Depends on / 依赖: Set.singleton_subset_iff.mpr, Submodule, Submodule.colon, Submodule.colon_inf_eq_left_of_subset, colon_inf_eq_left_of_subset, hI_le, singleton_subset_iff
+--- 原说明 ---
+Intersecting the left ideal with `K` does not change `IsTorsionQuot` on the righ
+t.
+In particular, `IsTorsionQuot F L K` need not require `L ≤ K` for it is equivale
+nt to asserting
+the quotient `K / (L ⊓ K)` is `F`-torsion.
 -/
 lemma isTorsionQuot_inter_left_iff {F : IdealFilter A} {L K : Ideal A} :
     IsTorsionQuot F (L ⊓ K) K ↔ IsTorsionQuot F L K := by
@@ -197,146 +186,104 @@ lemma isTorsionQuot_inter_left_iff {F : IdealFilter A} {L K : Ideal A} :
     have hcol : (L ⊓ K).colon {k} = Submodule.colon L {k} :=
       Submodule.colon_inf_eq_left_of_subset (Set.singleton_subset_iff.mpr hk)
     exact ⟨I, hI, (by simpa [hcol] using hI_le)⟩
-
-
-/--
-lemma `isTorsion_def` / 引理 `isTorsion_def`
-
-English:
-lemma isTorsion_def
-  given: (F : IdealFilter A) (M : Type*) [AddCommMonoid M] [Module A M]
-  proof: Iff.rfl
-
-中文:
-引理 isTorsion_def
-  条件: (F : IdealFilter A) (M : 类型) [加法交换幺半群 M] [模 A M]
-  证明: Iff.rfl
+/-
+**IdealFilter.isTorsion_def** 是 Mathlib 中的一个定理，位于命名空间 `IdealFilter`。
+形式化陈述：∀ {A : Type u_1} [inst : Ring A] (F : IdealFilter A) (M : Type u_2) [inst_
+1 : AddCommMonoid M]   [inst_2 : _root_.Module A M], F.IsTorsion M ↔ ∀ (m : M), 
+F.IsTorsionElem m
+参数：F : IdealFilter A；M : Type u_2；m : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isTorsion_def (F : IdealFilter A) (M : Type*) [AddCommMonoid M] [Module A M] :
-    IsTorsion F M ↔ forall m : M, IsTorsionElem F m :=
+    IsTorsion F M ↔ ∀ m : M, IsTorsionElem F m :=
   Iff.rfl
-
-/--
-lemma `isTorsionQuot_def` / 引理 `isTorsionQuot_def`
-
-English:
-lemma isTorsionQuot_def
-  given: {F : IdealFilter A} {L K : Ideal A}
-  proof: Iff.rfl
-
-中文:
-引理 isTorsionQuot_def
-  条件: {F : IdealFilter A} {L K : 理想 A}
-  证明: Iff.rfl
+/-
+**IdealFilter.isTorsionQuot_def** 是 Mathlib 中的一个定理，位于命名空间 `IdealFilter`。
+形式化陈述：∀ {A : Type u_1} [inst : Ring A] {F : IdealFilter A} {L K : Ideal A},   F.
+IsTorsionQuot L K ↔ ∀ k ∈ ↑K, ∃ I ∈ F, I ≤ Submodule.colon L {k}
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isTorsionQuot_def {F : IdealFilter A} {L K : Ideal A} :
-    IsTorsionQuot F L K ↔ forall k in (K : Set A), exists I in F, I <= L.colon {k} :=
+    IsTorsionQuot F L K ↔ ∀ k ∈ (K : Set A), ∃ I ∈ F, I ≤ L.colon {k} :=
   Iff.rfl
-
-/--
-lemma `isTorsionQuot_self` / 引理 `isTorsionQuot_self`
-
-English:
-lemma isTorsionQuot_self
-  given: (F : IdealFilter A) (I : Ideal A)
-  proof: by
-  intro x hx
-  obtain ⟨J, hJ⟩ := F.nonempty
-  exact ⟨J, hJ, le_of_le_of_eq le_top (by simpa [eq_comm])⟩
-
-中文:
-引理 isTorsionQuot_self
-  条件: (F : IdealFilter A) (I : 理想 A)
-  证明: by
-  intro x hx
-  obtain ⟨J, hJ⟩ := F.nonempty
-  exact ⟨J, hJ, le_of_le_of_eq le_top (by simpa [eq_comm])⟩
-
-Depends on / 依赖: F.nonempty, eq_comm, le_of_le_of_eq, le_top, nonempty
+/-
+**IdealFilter.isTorsionQuot_self** 是 Mathlib 中的一个引理，位于命名空间 `IdealFilter`。
+形式化陈述：isTorsionQuot_self (F : IdealFilter A) (I : Ideal A) : IsTorsionQuot F I I
+参数：F : IdealFilter A；I : Ideal A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.PFilter.nonempty`：∀ {P : Type u_1} [inst : Preorder P] (F : Order.
+PFilter P), (↑F).Nonempty
+· 使用定理 `le_of_le_of_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 lemma isTorsionQuot_self (F : IdealFilter A) (I : Ideal A) :
     IsTorsionQuot F I I := by
   intro x hx
   obtain ⟨J, hJ⟩ := F.nonempty
   exact ⟨J, hJ, le_of_le_of_eq le_top (by simpa [eq_comm])⟩
-
-/--
-lemma `IsTorsionQuot.mono_left` / 引理 `IsTorsionQuot.mono_left`
-
-English:
-lemma IsTorsionQuot.mono_left
-  statement: {F : IdealFilter A}
-  proof: fun _ h => (hIK _ h).imp fun _ => And.imp_right (le_trans · (Submodule.colon_mono hIJ .rfl))
-
-中文:
-引理 IsTorsionQuot.mono_left
-  结论: {F : IdealFilter A}
-  证明: fun _ h => (hIK _ h).imp fun _ => And.imp_right (le_trans · (Submodule.colon_mono hIJ .rfl))
-
-Depends on / 依赖: And.imp_right, Submodule, Submodule.colon_mono, colon_mono, imp_right, le_trans
+/-
+**IdealFilter.IsTorsionQuot.mono_left** 是 Mathlib 中的一个定理，位于命名空间 `IdealFilter.IsT
+orsionQuot`。
+形式化陈述：∀ {A : Type u_1} [inst : Ring A] {F : IdealFilter A} {I J K : Ideal A},   
+I ≤ J → F.IsTorsionQuot I K → F.IsTorsionQuot J K
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Submodule.colon_mono`：colon_mono (hn : N₁ <= N₂) (hs : S₁ subseteq S₂) :
+ N₁.colon S₂ <= N₂.colon S₁
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
 lemma IsTorsionQuot.mono_left {F : IdealFilter A}
-    {I J K : Ideal A} (hIJ : I <= J) (hIK : IsTorsionQuot F I K) : IsTorsionQuot F J K :=
-  fun _ h => (hIK _ h).imp fun _ => And.imp_right (le_trans · (Submodule.colon_mono hIJ .rfl))
-
-/--
-lemma `IsTorsionQuot.anti_right` / 引理 `IsTorsionQuot.anti_right`
-
-English:
-lemma IsTorsionQuot.anti_right
-  statement: {F : IdealFilter A}
-  proof: fun x hx => hIK x (hJK hx)
-
-中文:
-引理 IsTorsionQuot.anti_right
-  结论: {F : IdealFilter A}
-  证明: fun x hx => hIK x (hJK hx)
+    {I J K : Ideal A} (hIJ : I ≤ J) (hIK : IsTorsionQuot F I K) : IsTorsionQuot F J K :=
+  fun _ h ↦ (hIK _ h).imp fun _ ↦ And.imp_right (le_trans · (Submodule.colon_mono hIJ .rfl))
+/-
+**IdealFilter.IsTorsionQuot.anti_right** 是 Mathlib 中的一个定理，位于命名空间 `IdealFilter.Is
+TorsionQuot`。
+形式化陈述：∀ {A : Type u_1} [inst : Ring A] {F : IdealFilter A} {I J K : Ideal A},   
+J ≤ K → F.IsTorsionQuot I K → F.IsTorsionQuot I J
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsTorsionQuot.anti_right {F : IdealFilter A}
-    {I J K : Ideal A} (hJK : J <= K) (hIK : IsTorsionQuot F I K) : IsTorsionQuot F I J :=
-  fun x hx => hIK x (hJK hx)
-
-/--
-lemma `IsTorsionQuot.mono` / 引理 `IsTorsionQuot.mono`
-
-English:
-lemma IsTorsionQuot.mono
-  statement: {F : IdealFilter A} {I J K L : Ideal A} (hIK : IsTorsionQuot F I K)
-  proof: (hIK.mono_left hIJ).anti_right hLK
-
-中文:
-引理 IsTorsionQuot.mono
-  结论: {F : IdealFilter A} {I J K L : 理想 A} (hIK : IsTorsionQuot F I K)
-  证明: (hIK.mono_left hIJ).anti_right hLK
-
-Depends on / 依赖: anti_right, hIK.mono_left, mono_left
+    {I J K : Ideal A} (hJK : J ≤ K) (hIK : IsTorsionQuot F I K) : IsTorsionQuot F I J :=
+  fun x hx ↦ hIK x (hJK hx)
+/-
+**IdealFilter.IsTorsionQuot.mono** 是 Mathlib 中的一个定理，位于命名空间 `IdealFilter.IsTorsio
+nQuot`。
+形式化陈述：∀ {A : Type u_1} [inst : Ring A] {F : IdealFilter A} {I J K L : Ideal A}, 
+  F.IsTorsionQuot I K → I ≤ J → L ≤ K → F.IsTorsionQuot J L
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IdealFilter.IsTorsionQuot.anti_right`：∀ {A : Type u_1} [inst : Ring A] {
+F : IdealFilter A} {I J K : Ideal A},   J ≤ K → F.IsTorsionQuot I K → F.IsTorsio
+nQuot I J
+· 使用定理 `IdealFilter.IsTorsionQuot.mono_left`：∀ {A : Type u_1} [inst : Ring A] {F
+ : IdealFilter A} {I J K : Ideal A},   I ≤ J → F.IsTorsionQuot I K → F.IsTorsion
+Quot J K
 -/
 lemma IsTorsionQuot.mono {F : IdealFilter A} {I J K L : Ideal A} (hIK : IsTorsionQuot F I K)
-    (hIJ : I <= J) (hLK : L <= K) : IsTorsionQuot F J L :=
+    (hIJ : I ≤ J) (hLK : L ≤ K) : IsTorsionQuot F J L :=
   (hIK.mono_left hIJ).anti_right hLK
-
-/--
-lemma `IsTorsionQuot.inf` / 引理 `IsTorsionQuot.inf`
-
-English:
-lemma IsTorsionQuot.inf
-  statement: {F : IdealFilter A}
-  proof: by
-  intro x hx
-  obtain ⟨I', hI'F, hI'x⟩ := hI x hx
-  obtain ⟨J', hJ'F, hJ'x⟩ := hJ x hx
-  exact ⟨_, F.inf_mem hI'F hJ'F, (inf_le_inf hI'x hJ'x).trans Submodule.inf_colon.ge⟩
-
-中文:
-引理 IsTorsionQuot.下确界
-  结论: {F : IdealFilter A}
-  证明: by
-  intro x hx
-  obtain ⟨I', hI'F, hI'x⟩ := hI x hx
-  obtain ⟨J', hJ'F, hJ'x⟩ := hJ x hx
-  exact ⟨_, F.inf_mem hI'F hJ'F, (inf_le_inf hI'x hJ'x).trans Submodule.inf_colon.ge⟩
-
-Depends on / 依赖: F.inf_mem, Submodule, Submodule.inf_colon.ge, inf_colon, inf_le_inf, inf_mem
+/-
+**IdealFilter.IsTorsionQuot.inf** 是 Mathlib 中的一个定理，位于命名空间 `IdealFilter.IsTorsion
+Quot`。
+形式化陈述：∀ {A : Type u_1} [inst : Ring A] {F : IdealFilter A} {I J K : Ideal A},   
+F.IsTorsionQuot I K → F.IsTorsionQuot J K → F.IsTorsionQuot (I ⊓ J) K
+参数：I ⊓ J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.PFilter.inf_mem`：inf_mem (hx : x in F) (hy : y in F) : x ⊓ y in F
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `inf_le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {a b c d : α}, b ≤ 
+a → d ≤ c → b ⊓ d ≤ a ⊓ c
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用引理 `Submodule.inf_colon`：inf_colon : (N₁ ⊓ N₂).colon S = N₁.colon S ⊓ N₂.col
+on S
 -/
 lemma IsTorsionQuot.inf {F : IdealFilter A}
     {I J K : Ideal A} (hI : IsTorsionQuot F I K) (hJ : IsTorsionQuot F J K) :
@@ -345,42 +292,38 @@ lemma IsTorsionQuot.inf {F : IdealFilter A}
   obtain ⟨I', hI'F, hI'x⟩ := hI x hx
   obtain ⟨J', hJ'F, hJ'x⟩ := hJ x hx
   exact ⟨_, F.inf_mem hI'F hJ'F, (inf_le_inf hI'x hJ'x).trans Submodule.inf_colon.ge⟩
-
-/--
-lemma `isPFilter_gabrielComposition` / 引理 `isPFilter_gabrielComposition`
-
-English:
-lemma isPFilter_gabrielComposition
-  given: (F G : IdealFilter A)
-  proof: by
-  refine Order.IsPFilter.of_def ?nonempty ?directed ?mem_of_le
-  · obtain ⟨J, hJ⟩ := G.nonempty
-    exact ⟨J, J, hJ, isTorsionQuot_self F J⟩
-  · rintro I ⟨K, hK, hIK⟩ J ⟨L, hL, hJL⟩
-    refine ⟨I ⊓ J, ?_, inf_le_left, inf_le_right⟩
-    exact ⟨K ⊓ L, G.inf_mem hK hL,
-      (hIK.anti_right inf_le_left).inf (hJL.anti_right inf_le_right)⟩
-  · intro I J hIJ ⟨K, hK, hIK⟩
-    exact ⟨K, hK, hIK.mono_left hIJ⟩
-
-中文:
-引理 isPFilter_gabrielComposition
-  条件: (F G : IdealFilter A)
-  证明: by
-  refine Order.IsPFilter.of_def ?nonempty ?directed ?mem_of_le
-  · obtain ⟨J, hJ⟩ := G.nonempty
-    exact ⟨J, J, hJ, isTorsionQuot_self F J⟩
-  · rintro I ⟨K, hK, hIK⟩ J ⟨L, hL, hJL⟩
-    refine ⟨I ⊓ J, ?_, inf_le_left, inf_le_right⟩
-    exact ⟨K ⊓ L, G.inf_mem hK hL,
-      (hIK.anti_right inf_le_left).inf (hJL.anti_right inf_le_right)⟩
-  · intro I J hIJ ⟨K, hK, hIK⟩
-    exact ⟨K, hK, hIK.mono_left hIJ⟩
-
-Depends on / 依赖: G.inf_mem, G.nonempty, IsPFilter, Order.IsPFilter.of_def, anti_right, directed, hIK.anti_right, hIK.mono_left, hJL.anti_right, inf_le_left, inf_le_right, inf_mem, isTorsionQuot_self, mem_of_le, mono_left, nonempty, of_def
+/-
+**IdealFilter.isPFilter_gabrielComposition** 是 Mathlib 中的一个引理，位于命名空间 `IdealFilte
+r`。
+形式化陈述：isPFilter_gabrielComposition (F G : IdealFilter A) : Order.IsPFilter {L : 
+Ideal A | exists K in G, F.IsTorsionQuot L K}
+参数：F G : IdealFilter A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsPFilter.of_def`：∀ {P : Type u_1} [inst : Preorder P] {F : Set P}
+,   F.Nonempty → DirectedOn (fun x1 x2 => x1 ≥ x2) F → (∀ {x y : P}, x ≤ y → x ∈
+ F → y ∈ F) …
+· 使用定理 `Order.PFilter.nonempty`：∀ {P : Type u_1} [inst : Preorder P] (F : Order.
+PFilter P), (↑F).Nonempty
+· 使用引理 `IdealFilter.isTorsionQuot_self`：isTorsionQuot_self (F : IdealFilter A) (
+I : Ideal A) : IsTorsionQuot F I I
+· 使用定理 `Order.PFilter.inf_mem`：inf_mem (hx : x in F) (hy : y in F) : x ⊓ y in F
+· 使用定理 `IdealFilter.IsTorsionQuot.inf`：∀ {A : Type u_1} [inst : Ring A] {F : Ide
+alFilter A} {I J K : Ideal A},   F.IsTorsionQuot I K → F.IsTorsionQuot J K → F.I
+sTorsionQuot (I ⊓ J…
+· 使用定理 `IdealFilter.IsTorsionQuot.anti_right`：∀ {A : Type u_1} [inst : Ring A] {
+F : IdealFilter A} {I J K : Ideal A},   J ≤ K → F.IsTorsionQuot I K → F.IsTorsio
+nQuot I J
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `IdealFilter.IsTorsionQuot.mono_left`：∀ {A : Type u_1} [inst : Ring A] {F
+ : IdealFilter A} {I J K : Ideal A},   I ≤ J → F.IsTorsionQuot I K → F.IsTorsion
+Quot J K
 -/
 lemma isPFilter_gabrielComposition (F G : IdealFilter A) :
-    Order.IsPFilter {L : Ideal A | exists K in G, F.IsTorsionQuot L K} := by
+    Order.IsPFilter {L : Ideal A | ∃ K ∈ G, F.IsTorsionQuot L K} := by
   refine Order.IsPFilter.of_def ?nonempty ?directed ?mem_of_le
   · obtain ⟨J, hJ⟩ := G.nonempty
     exact ⟨J, J, hJ, isTorsionQuot_self F J⟩
@@ -391,20 +334,22 @@ lemma isPFilter_gabrielComposition (F G : IdealFilter A) :
   · intro I J hIJ ⟨K, hK, hIK⟩
     exact ⟨K, hK, hIK.mono_left hIJ⟩
 
-/--
-Definition of `gabrielComposition` / `gabrielComposition` 的定义
+/-- The Gabriel composition of ideal filters `F` and `G`.
+See [nLab: Gabriel composition](https://ncatlab.org/nlab/show/Gabriel+composition+of+filters). -/
+/-
+**IdealFilter.gabrielComposition** 是 Mathlib 中的一个定义，位于命名空间 `IdealFilter`。
+形式化陈述：gabrielComposition (F G : IdealFilter A) : IdealFilter A
+参数：F G : IdealFilter A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IdealFilter.isPFilter_gabrielComposition`：isPFilter_gabrielComposition (
+F G : IdealFilter A) : Order.IsPFilter {L : Ideal A | exists K in G, F.IsTorsion
+Quot L K}
 
-English:
-definition gabrielComposition
-  signature: (F G : IdealFilter A)
-  body: (isPFilter_gabrielComposition F G).toPFilter
-
-中文:
-定义 gabrielComposition
-  签名: (F G : IdealFilter A)
-  定义体: (isPFilter_gabrielComposition F G).toPFilter
-
-Depends on / 依赖: isPFilter_gabrielComposition, toPFilter
+--- 原说明 ---
+The Gabriel composition of ideal filters `F` and `G`.
+See [nLab: Gabriel composition](https://ncatlab.org/nlab/show/Gabriel+compositio
+n+of+filters).
 -/
 def gabrielComposition (F G : IdealFilter A) : IdealFilter A :=
   (isPFilter_gabrielComposition F G).toPFilter
@@ -412,71 +357,46 @@ def gabrielComposition (F G : IdealFilter A) : IdealFilter A :=
 /-- `F • G` is the Gabriel composition of ideal filters `F` and `G`. -/
 scoped infixl:70 " • " => gabrielComposition
 
-/--
-Definition of `IsGabriel` / `IsGabriel` 的定义
+/-- An ideal filter is Gabriel if it satisfies `IsUniform` and axiom T4.
+See [nLab: Gabriel filter](https://ncatlab.org/nlab/show/Gabriel+filter). -/
+/-
+**IdealFilter.IsGabriel** 是 Mathlib 中的一个归纳类型，位于命名空间 `IdealFilter`。
+形式化陈述：{A : Type u_1} → [inst : Ring A] → IdealFilter A → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsGabriel
-  parameters: (F : IdealFilter A)
-  extends: F.IsUniform
-  axioms and operations (1):
-    - gabriel_closed((I : Ideal A) (h : exists J in F, forall x in J, I.colon {x} in F)) : I in F
-
-中文:
-类 是Gabriel
-  参数: (F : IdealFilter A)
-  继承: F.是一致
-  公理与运算 (1 个):
-    - gabriel_closed((I : 理想 A) (h : 存在 J in F, 对任意 x in J, I.colon {x} in F)) : I in F
+--- 原说明 ---
+An ideal filter is Gabriel if it satisfies `IsUniform` and axiom T4.
+See [nLab: Gabriel filter](https://ncatlab.org/nlab/show/Gabriel+filter).
 -/
 class IsGabriel (F : IdealFilter A) extends F.IsUniform where
   /-- **Axiom T4.** See [stenstrom1975]. -/
-  gabriel_closed (I : Ideal A) (h : exists J in F, forall x in J, I.colon {x} in F) : I in F
+  gabriel_closed (I : Ideal A) (h : ∃ J ∈ F, ∀ x ∈ J, I.colon {x} ∈ F) : I ∈ F
 
-/--
-theorem `isGabriel_iff` / 定理 `isGabriel_iff`
+/-- Characterization of Gabriel filters via `IsUniform` and idempotence of
+`gabrielComposition`. -/
+/-
+**IdealFilter.isGabriel_iff** 是 Mathlib 中的一个定理，位于命名空间 `IdealFilter`。
+形式化陈述：isGabriel_iff (F : IdealFilter A) : F.IsGabriel ↔ F.IsUniform ∧ F • F = F
+参数：F : IdealFilter A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IdealFilter.IsGabriel.toIsUniform`：∀ {A : Type u_1} {inst : Ring A} {F :
+ IdealFilter A} [self : F.IsGabriel], F.IsUniform
+· 使用定理 `Order.PFilter.ext`：ext (h : (s : Set P) = t) : s = t
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `IdealFilter.IsGabriel.gabriel_closed`：∀ {A : Type u_1} {inst : Ring A} {
+F : IdealFilter A} [self : F.IsGabriel] (I : Ideal A),   (∃ J ∈ F, ∀ x ∈ J, Subm
+odule.colon I {x} ∈ F) → I…
+· 使用定理 `Order.PFilter.mem_of_le`：mem_of_le {F : PFilter P} : x <= y -> x in F ->
+ y in F
+· 使用引理 `IdealFilter.isTorsionQuot_self`：isTorsionQuot_self (F : IdealFilter A) (
+I : Ideal A) : IsTorsionQuot F I I
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 
-English:
-theorem isGabriel_iff
-  given: (F : IdealFilter A)
-  statement: F.IsGabriel ↔ F.IsUniform ∧ F • F = F
-  proof: by
-  constructor
-  · intro hF
-    refine ⟨hF.toIsUniform, ?_⟩
-    ext I
-    constructor <;> intro hI
-    · rcases hI with ⟨J, hJ, htors⟩
-      refine hF.gabriel_closed I ⟨J, hJ, fun x hx => ?_⟩
-      rcases htors x hx with ⟨K, hK, hincl⟩
-      exact Order.PFilter.mem_of_le hincl hK
-    · exact ⟨I, hI, isTorsionQuot_self F I⟩
-  · rintro ⟨h₁, h₂⟩
-    refine { toIsUniform := h₁, gabriel_closed := ?_ }
-    rintro I ⟨J, hJ, hcolon⟩
-    exact h₂.le ⟨J, hJ, fun x hx => ⟨I.colon {x}, hcolon x hx, by simp⟩⟩
-
-中文:
-定理 isGabriel_iff
-  条件: (F : IdealFilter A)
-  结论: F.是Gabriel ↔ F.是一致 ∧ F • F = F
-  证明: by
-  constructor
-  · intro hF
-    refine ⟨hF.toIsUniform, ?_⟩
-    ext I
-    constructor <;> intro hI
-    · rcases hI with ⟨J, hJ, htors⟩
-      refine hF.gabriel_closed I ⟨J, hJ, fun x hx => ?_⟩
-      rcases htors x hx with ⟨K, hK, hincl⟩
-      exact Order.PFilter.mem_of_le hincl hK
-    · exact ⟨I, hI, isTorsionQuot_self F I⟩
-  · rintro ⟨h₁, h₂⟩
-    refine { toIsUniform := h₁, gabriel_closed := ?_ }
-    rintro I ⟨J, hJ, hcolon⟩
-    exact h₂.le ⟨J, hJ, fun x hx => ⟨I.colon {x}, hcolon x hx, by simp⟩⟩
-
-Depends on / 依赖: I.colon, Order.PFilter.mem_of_le, PFilter, gabriel_closed, hF.gabriel_closed, hF.toIsUniform, hcolon, isTorsionQuot_self, mem_of_le, toIsUniform
+--- 原说明 ---
+Characterization of Gabriel filters via `IsUniform` and idempotence of
+`gabrielComposition`.
 -/
 theorem isGabriel_iff (F : IdealFilter A) : F.IsGabriel ↔ F.IsUniform ∧ F • F = F := by
   constructor
@@ -485,13 +405,14 @@ theorem isGabriel_iff (F : IdealFilter A) : F.IsGabriel ↔ F.IsUniform ∧ F �
     ext I
     constructor <;> intro hI
     · rcases hI with ⟨J, hJ, htors⟩
-      refine hF.gabriel_closed I ⟨J, hJ, fun x hx => ?_⟩
+      refine hF.gabriel_closed I ⟨J, hJ, fun x hx ↦ ?_⟩
       rcases htors x hx with ⟨K, hK, hincl⟩
       exact Order.PFilter.mem_of_le hincl hK
     · exact ⟨I, hI, isTorsionQuot_self F I⟩
   · rintro ⟨h₁, h₂⟩
     refine { toIsUniform := h₁, gabriel_closed := ?_ }
     rintro I ⟨J, hJ, hcolon⟩
-    exact h₂.le ⟨J, hJ, fun x hx => ⟨I.colon {x}, hcolon x hx, by simp⟩⟩
+    exact h₂.le ⟨J, hJ, fun x hx ↦ ⟨I.colon {x}, hcolon x hx, by simp⟩⟩
 
 end IdealFilter
+

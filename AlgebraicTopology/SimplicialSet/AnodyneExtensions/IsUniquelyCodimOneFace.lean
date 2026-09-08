@@ -33,68 +33,47 @@ namespace SSet.S
 
 variable {X : SSet.{u}} (x y : X.S)
 
-/--
-Definition of `IsUniquelyCodimOneFace` / `IsUniquelyCodimOneFace` 的定义
+/-- The property that a simplex is uniquely a `1`-codimensional face of another simplex -/
+/-
+**SSet.S.IsUniquelyCodimOneFace** 是 Mathlib 中的一个定义，位于命名空间 `SSet.S`。
+形式化陈述：IsUniquelyCodimOneFace : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsUniquelyCodimOneFace
-  signature: : Prop
-  body: y.dim = x.dim + 1 ∧ exists! (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌), Mono f ∧ X.map f.op y.simplex = x.simplex
-
-中文:
-定义 IsUniquelyCodimOneFace
-  签名: : 命题
-  定义体: y.dim = x.dim + 1 ∧ exists! (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌), Mono f ∧ X.map f.op y.simplex = x.simplex
-
-Depends on / 依赖: X.map, f.op, simplex, x.dim, x.simplex, y.dim, y.simplex
+--- 原说明 ---
+The property that a simplex is uniquely a `1`-codimensional face of another simp
+lex
 -/
 def IsUniquelyCodimOneFace : Prop :=
-  y.dim = x.dim + 1 ∧ exists! (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌), Mono f ∧ X.map f.op y.simplex = x.simplex
+  y.dim = x.dim + 1 ∧ ∃! (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌), Mono f ∧ X.map f.op y.simplex = x.simplex
 
 namespace IsUniquelyCodimOneFace
 
-/--
-lemma `iff` / 引理 `iff`
-
-English:
-lemma iff
-  given: {d : Nat} (x : X _⦋d⦌) (y : X _⦋d + 1⦌)
-  proof: by
-  constructor
-  · rintro ⟨_, ⟨f, ⟨_, h₁⟩, h₂⟩⟩
-    obtain ⟨i, rfl⟩ := SimplexCategory.eq_δ_of_mono f
-    exact ⟨i, h₁, fun j hj => SimplexCategory.δ_injective (h₂ _ ⟨inferInstance, hj⟩)⟩
-  · rintro ⟨i, h₁, h₂⟩
-    refine ⟨rfl, SimplexCategory.δ i, ⟨inferInstance, h₁⟩, fun f ⟨h₃, h₄⟩ => ?_⟩
-    obtain ⟨j, rfl⟩ := SimplexCategory.eq_δ_of_mono f
-    obtain rfl : j = i := h₂ _ h₄
-    rfl
-
-中文:
-引理 iff
-  条件: {d : 自然数} (x : X _⦋d⦌) (y : X _⦋d + 1⦌)
-  证明: by
-  constructor
-  · rintro ⟨_, ⟨f, ⟨_, h₁⟩, h₂⟩⟩
-    obtain ⟨i, rfl⟩ := SimplexCategory.eq_δ_of_mono f
-    exact ⟨i, h₁, fun j hj => SimplexCategory.δ_injective (h₂ _ ⟨inferInstance, hj⟩)⟩
-  · rintro ⟨i, h₁, h₂⟩
-    refine ⟨rfl, SimplexCategory.δ i, ⟨inferInstance, h₁⟩, fun f ⟨h₃, h₄⟩ => ?_⟩
-    obtain ⟨j, rfl⟩ := SimplexCategory.eq_δ_of_mono f
-    obtain rfl : j = i := h₂ _ h₄
-    rfl
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.eq_
+/-
+**SSet.S.IsUniquelyCodimOneFace.iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniquely
+CodimOneFace`。
+形式化陈述：iff {d : Nat} (x : X _⦋d⦌) (y : X _⦋d + 1⦌) : IsUniquelyCodimOneFace (S.mk
+ x) (S.mk y) ↔ exists! (i : Fin (d + 2)), X.δ i y = x
+参数：x : X _⦋d⦌；y : X _⦋d + 1⦌。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimplexCategory.eq_δ_of_mono`：eq_δ_of_mono {n : Nat} (θ : ⦋n⦌ ⟶ ⦋n + 1⦌)
+ [Mono θ] : exists i : Fin (n + 2), θ = δ i
+· 使用引理 `SimplexCategory.δ_injective`：δ_injective {n : Nat} : Function.Injective 
+(δ (n
+· 使用定理 `SimplexCategory.instMonoδ`：∀ {n : ℕ} {i : Fin (n + 2)}, CategoryTheory.M
+ono (SimplexCategory.δ i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma iff {d : Nat} (x : X _⦋d⦌) (y : X _⦋d + 1⦌) :
+lemma iff {d : ℕ} (x : X _⦋d⦌) (y : X _⦋d + 1⦌) :
     IsUniquelyCodimOneFace (S.mk x) (S.mk y) ↔
-      exists! (i : Fin (d + 2)), X.δ i y = x := by
+      ∃! (i : Fin (d + 2)), X.δ i y = x := by
   constructor
   · rintro ⟨_, ⟨f, ⟨_, h₁⟩, h₂⟩⟩
     obtain ⟨i, rfl⟩ := SimplexCategory.eq_δ_of_mono f
-    exact ⟨i, h₁, fun j hj => SimplexCategory.δ_injective (h₂ _ ⟨inferInstance, hj⟩)⟩
+    exact ⟨i, h₁, fun j hj ↦ SimplexCategory.δ_injective (h₂ _ ⟨inferInstance, hj⟩)⟩
   · rintro ⟨i, h₁, h₂⟩
-    refine ⟨rfl, SimplexCategory.δ i, ⟨inferInstance, h₁⟩, fun f ⟨h₃, h₄⟩ => ?_⟩
+    refine ⟨rfl, SimplexCategory.δ i, ⟨inferInstance, h₁⟩, fun f ⟨h₃, h₄⟩ ↦ ?_⟩
     obtain ⟨j, rfl⟩ := SimplexCategory.eq_δ_of_mono f
     obtain rfl : j = i := h₂ _ h₄
     rfl
@@ -102,180 +81,129 @@ lemma iff {d : Nat} (x : X _⦋d⦌) (y : X _⦋d + 1⦌) :
 variable {x y} (hxy : IsUniquelyCodimOneFace x y)
 
 include hxy in
-/--
-lemma `dim_eq` / 引理 `dim_eq`
-
-English:
-lemma dim_eq
-  statement: y.dim = x.dim + 1
-  proof: hxy.1
-
-中文:
-引理 dim_eq
-  结论: y.dim = x.dim + 1
-  证明: hxy.1
+/-
+**SSet.S.IsUniquelyCodimOneFace.dim_eq** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniqu
+elyCodimOneFace`。
+形式化陈述：dim_eq : y.dim = x.dim + 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 lemma dim_eq : y.dim = x.dim + 1 := hxy.1
 
 section
 
-variable {d : Nat} (hd : x.dim = d)
+variable {d : ℕ} (hd : x.dim = d)
 
-/--
-lemma `cast` / 引理 `cast`
-
-English:
-lemma cast
-  statement: IsUniquelyCodimOneFace (x.cast hd) (y.cast (d := d + 1) (by rw [hxy.dim_eq, hd]))
-  proof: by
-  simpa only [cast_eq_self]
-
-中文:
-引理 cast
-  结论: IsUniquelyCodimOneFace (x.cast hd) (y.cast (d := d + 1) (by rw [hxy.dim_eq, hd]))
-  证明: by
-  simpa only [cast_eq_self]
-
-Depends on / 依赖: cast_eq_self, dim_eq, hxy.dim_eq
+/-
+**SSet.S.IsUniquelyCodimOneFace.cast** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniquel
+yCodimOneFace`。
+形式化陈述：cast : IsUniquelyCodimOneFace (x.cast hd) (y.cast (d
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.cast_eq_self`：cast_eq_self : s.cast hd = s
 -/
 lemma cast : IsUniquelyCodimOneFace (x.cast hd) (y.cast (d := d + 1) (by rw [hxy.dim_eq, hd])) := by
   simpa only [cast_eq_self]
-
-/--
-lemma `existsUnique_δ_cast_simplex` / 引理 `existsUnique_δ_cast_simplex`
-
-English:
-lemma existsUnique_δ_cast_simplex
-  proof: by
-  simpa only [S.cast, iff] using hxy.cast hd
-
-include hxy in
-
-中文:
-引理 存在Unique_δ_cast_simplex
-  证明: by
-  simpa only [S.cast, iff] using hxy.cast hd
-
-include hxy in
-
-Depends on / 依赖: S.cast, hxy.cast
+/-
+**SSet.S.IsUniquelyCodimOneFace.existsUnique_** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.
+IsUniquelyCodimOneFace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma existsUnique_δ_cast_simplex :
-    exists! (i : Fin (d + 2)), X.δ i (y.cast (by rw [hxy.dim_eq, hd])).simplex =
+    ∃! (i : Fin (d + 2)), X.δ i (y.cast (by rw [hxy.dim_eq, hd])).simplex =
       (x.cast hd).simplex := by
   simpa only [S.cast, iff] using hxy.cast hd
 
 include hxy in
-/--
-Definition of `index` / `index` 的定义
+/-- When a `d`-dimensional simplex `x` is a `1`-codimensional face of `y`, this is
+the only `i : Fin (d + 2)`, such that `X.δ i y = x` (with an abuse of notation:
+see `δ_index` and `δ_eq_iff` for well typed statements). -/
+/-
+**SSet.S.IsUniquelyCodimOneFace.index** 是 Mathlib 中的一个定义，位于命名空间 `SSet.S.IsUnique
+lyCodimOneFace`。
+形式化陈述：index : Fin (d + 2)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition index
-  signature: : Fin (d + 2)
-  body: (hxy.existsUnique_δ_cast_simplex hd).exists.choose
-
-中文:
-定义 index
-  签名: : 有限集 (d + 2)
-  定义体: (hxy.existsUnique_δ_cast_simplex hd).exists.choose
-
-Depends on / 依赖: exists.choose, hxy.existsUnique_
+--- 原说明 ---
+When a `d`-dimensional simplex `x` is a `1`-codimensional face of `y`, this is
+the only `i : Fin (d + 2)`, such that `X.δ i y = x` (with an abuse of notation:
+see `δ_index` and `δ_eq_iff` for well typed statements).
 -/
 noncomputable def index : Fin (d + 2) :=
   (hxy.existsUnique_δ_cast_simplex hd).exists.choose
-
-/--
-lemma `δ_index` / 引理 `δ_index`
-
-English:
-lemma δ_index
-  proof: (hxy.existsUnique_δ_cast_simplex hd).exists.choose_spec
-
-中文:
-引理 δ_index
-  证明: (hxy.existsUnique_δ_cast_simplex hd).exists.choose_spec
-
-Depends on / 依赖: choose_spec, exists.choose_spec, hxy.existsUnique_
+/-
+**SSet.S.IsUniquelyCodimOneFace.** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniquelyCod
+imOneFace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_index :
     X.δ (hxy.index hd) (y.cast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex :=
   (hxy.existsUnique_δ_cast_simplex hd).exists.choose_spec
-
-/--
-lemma `δ_eq_iff` / 引理 `δ_eq_iff`
-
-English:
-lemma δ_eq_iff
-  given: (i : Fin (d + 2))
-  proof: ⟨fun h => (hxy.existsUnique_δ_cast_simplex hd).unique h (hxy.δ_index hd),
-    by rintro rfl; apply δ_index⟩
-
-include hxy in
-
-中文:
-引理 δ_eq_iff
-  条件: (i : 有限集 (d + 2))
-  证明: ⟨fun h => (hxy.existsUnique_δ_cast_simplex hd).unique h (hxy.δ_index hd),
-    by rintro rfl; apply δ_index⟩
-
-include hxy in
-
-Depends on / 依赖: hxy.existsUnique_, unique
+/-
+**SSet.S.IsUniquelyCodimOneFace.** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniquelyCod
+imOneFace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_eq_iff (i : Fin (d + 2)) :
     X.δ i (y.cast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex ↔
       i = hxy.index hd :=
-  ⟨fun h => (hxy.existsUnique_δ_cast_simplex hd).unique h (hxy.δ_index hd),
+  ⟨fun h ↦ (hxy.existsUnique_δ_cast_simplex hd).unique h (hxy.δ_index hd),
     by rintro rfl; apply δ_index⟩
 
 include hxy in
-/--
-lemma `le` / 引理 `le`
-
-English:
-lemma le
-  statement: x <= y
-  proof: by
-  have := hxy.δ_index rfl
-  simp only [cast_simplex_rfl] at this
-  rw [S.le_def]; rw [← y.subcomplex_cast hxy.dim_eq]; rw [Subfunctor.ofSection_le_iff]; rw [← this]
-  exact ⟨(SimplexCategory.δ _).op, rfl⟩
-
-中文:
-引理 le
-  结论: x <= y
-  证明: by
-  have := hxy.δ_index rfl
-  simp only [cast_simplex_rfl] at this
-  rw [S.le_def]; rw [← y.subcomplex_cast hxy.dim_eq]; rw [Subfunctor.ofSection_le_iff]; rw [← this]
-  exact ⟨(SimplexCategory.δ _).op, rfl⟩
-
-Depends on / 依赖: S.le_def, SimplexCategory, Subfunctor, Subfunctor.ofSection_le_iff, cast_simplex_rfl, dim_eq, hxy.dim_eq, le_def, ofSection_le_iff, subcomplex_cast, y.subcomplex_cast
+/-
+**SSet.S.IsUniquelyCodimOneFace.le** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniquelyC
+odimOneFace`。
+形式化陈述：le : x <= y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.δ_index`：δ_index : X.δ (hxy.index hd) (y.c
+ast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.le_def`：le_def {s t : X.S} : s <= t ↔ s.subcomplex <= t.subcomple
+x
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.dim_eq`：dim_eq : y.dim = x.dim + 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.S.subcomplex_cast`：subcomplex_cast (s : X.S) {d : Nat} (hd : s.dim 
+= d) : (s.cast hd).subcomplex = s.subcomplex
+· 使用引理 `CategoryTheory.Subfunctor.ofSection_le_iff`：ofSection_le_iff (G : Subfun
+ctor F) : ofSection x <= G ↔ x in G.obj X
 -/
-lemma le : x <= y := by
+lemma le : x ≤ y := by
   have := hxy.δ_index rfl
   simp only [cast_simplex_rfl] at this
-  rw [S.le_def]; rw [← y.subcomplex_cast hxy.dim_eq]; rw [Subfunctor.ofSection_le_iff]; rw [← this]
+  rw [S.le_def, ← y.subcomplex_cast hxy.dim_eq, Subfunctor.ofSection_le_iff,
+    ← this]
   exact ⟨(SimplexCategory.δ _).op, rfl⟩
 
 set_option backward.defeqAttrib.useBackward true in
 include hxy in
-/--
-lemma `unique` / 引理 `unique`
-
-English:
-lemma unique
-  statement: (f : ⦋d⦌ ⟶ ⦋d + 1⦌) [Mono f]
-  proof: (hxy.cast hd).2.unique ⟨by dsimp; infer_instance, hf⟩
-    ⟨by dsimp; infer_instance, hxy.δ_index hd⟩
-
-中文:
-引理 unique
-  结论: (f : ⦋d⦌ ⟶ ⦋d + 1⦌) [单态射 f]
-  证明: (hxy.cast hd).2.unique ⟨by dsimp; infer_instance, hf⟩
-    ⟨by dsimp; infer_instance, hxy.δ_index hd⟩
-
-Depends on / 依赖: hxy.cast, infer_instance, unique
+/-
+**SSet.S.IsUniquelyCodimOneFace.unique** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniqu
+elyCodimOneFace`。
+形式化陈述：unique (f : ⦋d⦌ ⟶ ⦋d + 1⦌) [Mono f] (hf : X.map f.op (y.cast (by rw [hxy.d
+im_eq, hd])).simplex = (x.cast hd).simplex) : f = SimplexCategory.δ (hxy.index h
+d)
+参数：f : ⦋d⦌ ⟶ ⦋d + 1⦌；hf : X.map f.op (y.cast (by rw [hxy.dim_eq, hd])).simplex =
+ (x.cast hd).simplex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.cast`：cast : IsUniquelyCodimOneFace (x.cas
+t hd) (y.cast (d
+· 使用定理 `SimplexCategory.instMonoδ`：∀ {n : ℕ} {i : Fin (n + 2)}, CategoryTheory.M
+ono (SimplexCategory.δ i)
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.δ_index`：δ_index : X.δ (hxy.index hd) (y.c
+ast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex
 -/
 lemma unique (f : ⦋d⦌ ⟶ ⦋d + 1⦌) [Mono f]
     (hf : X.map f.op (y.cast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex) :
@@ -287,70 +215,77 @@ end
 
 set_option backward.isDefEq.respectTransparency.types false in
 include hxy in
-/--
-lemma `op` / 引理 `op`
-
-English:
-lemma op
-  statement: (S.opEquiv.symm x).IsUniquelyCodimOneFace (S.opEquiv.symm y)
-  proof: by
-  obtain ⟨d, x, rfl⟩ := x.mk_surjective
-  obtain ⟨d', y, rfl⟩ := y.mk_surjective
-  obtain rfl : d' = d + 1 := hxy.dim_eq
-  simp only [opEquiv_symm_apply, iff]
-  refine ⟨(hxy.index rfl).rev, by simpa using hxy.δ_index rfl, fun i hi => ?_⟩
-  obtain ⟨i, rfl⟩ := i.rev_surjective
-  simpa [← hxy.δ_eq_iff rfl] using hi
-
-中文:
-引理 op
-  结论: (S.opEquiv.symm x).IsUniquelyCodimOneFace (S.opEquiv.symm y)
-  证明: by
-  obtain ⟨d, x, rfl⟩ := x.mk_surjective
-  obtain ⟨d', y, rfl⟩ := y.mk_surjective
-  obtain rfl : d' = d + 1 := hxy.dim_eq
-  simp only [opEquiv_symm_apply, iff]
-  refine ⟨(hxy.index rfl).rev, by simpa using hxy.δ_index rfl, fun i hi => ?_⟩
-  obtain ⟨i, rfl⟩ := i.rev_surjective
-  simpa [← hxy.δ_eq_iff rfl] using hi
-
-Depends on / 依赖: dim_eq, hxy.dim_eq, hxy.index, i.rev_surjective, mk_surjective, opEquiv_symm_apply, rev_surjective, x.mk_surjective, y.mk_surjective
+/-
+**SSet.S.IsUniquelyCodimOneFace.op** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniquelyC
+odimOneFace`。
+形式化陈述：op : (S.opEquiv.symm x).IsUniquelyCodimOneFace (S.opEquiv.symm y)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `SSet.S.mk_surjective`：mk_surjective (s : X.S) : exists (n : Nat) (x : X 
+_⦋n⦌), s = mk x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SSet.S.opEquiv_symm_apply`：∀ {X : _root_.SSet} (y : X.S), SSet.S.opEquiv
+.symm y = { dim := y.dim, simplex := SSet.opObjEquiv.symm y.simplex }
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `SSet.op_δ`：op_δ (X : SSet.{u}) {n : Nat} (i : Fin (n + 2)) (x : X.op _⦋n
+ + 1⦌) : X.op.δ i x = opObjEquiv.symm (X.δ i.rev (opObjEquiv x))
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `Fin.rev_rev`：∀ {n : ℕ} (i : Fin n), i.rev.rev = i
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.δ_index`：δ_index : X.δ (hxy.index hd) (y.c
+ast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex
+· 使用定理 `Fin.rev_surjective`：rev_surjective : Surjective (@rev n)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.δ_eq_iff`：δ_eq_iff (i : Fin (d + 2)) : X.δ
+ i (y.cast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex ↔ i = hxy.ind
+ex hd
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.dim_eq`：dim_eq : y.dim = x.dim + 1
 -/
 lemma op : (S.opEquiv.symm x).IsUniquelyCodimOneFace (S.opEquiv.symm y) := by
   obtain ⟨d, x, rfl⟩ := x.mk_surjective
   obtain ⟨d', y, rfl⟩ := y.mk_surjective
   obtain rfl : d' = d + 1 := hxy.dim_eq
   simp only [opEquiv_symm_apply, iff]
-  refine ⟨(hxy.index rfl).rev, by simpa using hxy.δ_index rfl, fun i hi => ?_⟩
+  refine ⟨(hxy.index rfl).rev, by simpa using hxy.δ_index rfl, fun i hi ↦ ?_⟩
   obtain ⟨i, rfl⟩ := i.rev_surjective
   simpa [← hxy.δ_eq_iff rfl] using hi
 
 set_option backward.defeqAttrib.useBackward true in
 include hxy in
-/--
-lemma `of_iso` / 引理 `of_iso`
-
-English:
-lemma of_iso
-  given: {Y : SSet.{u}} (e : X ≅ Y)
-  proof: by
-  obtain ⟨d, x, rfl⟩ := x.mk_surjective
-  obtain ⟨d', y, rfl⟩ := y.mk_surjective
-  obtain rfl : d' = d + 1 := hxy.dim_eq
-  rw [iff] at hxy ⊢
-  simpa [← SSet.δ_naturality_apply, dsimp% (e.app (Opposite.op ⦋d⦌)).toEquiv.apply_eq_iff_eq]
-
-中文:
-引理 of_iso
-  条件: {Y : SSet.{u}} (e : X ≅ Y)
-  证明: by
-  obtain ⟨d, x, rfl⟩ := x.mk_surjective
-  obtain ⟨d', y, rfl⟩ := y.mk_surjective
-  obtain rfl : d' = d + 1 := hxy.dim_eq
-  rw [iff] at hxy ⊢
-  simpa [← SSet.δ_naturality_apply, dsimp% (e.app (Opposite.op ⦋d⦌)).toEquiv.apply_eq_iff_eq]
-
-Depends on / 依赖: Opposite, Opposite.op, apply_eq_iff_eq, dim_eq, e.app, hxy.dim_eq, mk_surjective, toEquiv, toEquiv.apply_eq_iff_eq, x.mk_surjective, y.mk_surjective
+/-
+**SSet.S.IsUniquelyCodimOneFace.of_iso** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsUniqu
+elyCodimOneFace`。
+形式化陈述：of_iso {Y : SSet.{u}} (e : X ≅ Y) : (S.mk (e.hom.app _ x.simplex)).IsUniqu
+elyCodimOneFace (S.mk (e.hom.app _ y.simplex))
+参数：e : X ≅ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.S.mk_surjective`：mk_surjective (s : X.S) : exists (n : Nat) (x : X 
+_⦋n⦌), s = mk x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.iff`：iff {d : Nat} (x : X _⦋d⦌) (y : X _⦋d
+ + 1⦌) : IsUniquelyCodimOneFace (S.mk x) (S.mk y) ↔ exists! (i : Fin (d + 2)), X
+.δ i y = x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.apply_eq_iff_eq`：apply_eq_iff_eq (f : α ≃ β) {x y : α} : f x = f y
+ ↔ x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.dim_eq`：dim_eq : y.dim = x.dim + 1
 -/
 lemma of_iso {Y : SSet.{u}} (e : X ≅ Y) :
     (S.mk (e.hom.app _ x.simplex)).IsUniquelyCodimOneFace (S.mk (e.hom.app _ y.simplex)) := by
@@ -359,57 +294,59 @@ lemma of_iso {Y : SSet.{u}} (e : X ≅ Y) :
   obtain rfl : d' = d + 1 := hxy.dim_eq
   rw [iff] at hxy ⊢
   simpa [← SSet.δ_naturality_apply, dsimp% (e.app (Opposite.op ⦋d⦌)).toEquiv.apply_eq_iff_eq]
-
-/--
-lemma `iff_of_iso` / 引理 `iff_of_iso`
-
-English:
-lemma iff_of_iso
-  given: {Y : SSet.{u}} (e : X ≅ Y) (x y : X.S)
-  proof: ⟨fun hxy' => by simpa using hxy'.of_iso e.symm, fun hxy => hxy.of_iso e⟩
-
-中文:
-引理 iff_of_iso
-  条件: {Y : SSet.{u}} (e : X ≅ Y) (x y : X.S)
-  证明: ⟨fun hxy' => by simpa using hxy'.of_iso e.symm, fun hxy => hxy.of_iso e⟩
-
-Depends on / 依赖: e.symm, hxy.of_iso, of_iso
+/-
+**SSet.S.IsUniquelyCodimOneFace.iff_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.IsU
+niquelyCodimOneFace`。
+形式化陈述：iff_of_iso {Y : SSet.{u}} (e : X ≅ Y) (x y : X.S) : (S.mk (e.hom.app _ x.s
+implex)).IsUniquelyCodimOneFace (S.mk (e.hom.app _ y.simplex)) ↔ x.IsUniquelyCod
+imOneFace y
+参数：e : X ≅ Y；x y : X.S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_apply`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.of_iso`：of_iso {Y : SSet.{u}} (e : X ≅ Y) 
+: (S.mk (e.hom.app _ x.simplex)).IsUniquelyCodimOneFace (S.mk (e.hom.app _ y.sim
+plex))
 -/
 lemma iff_of_iso {Y : SSet.{u}} (e : X ≅ Y) (x y : X.S) :
     (S.mk (e.hom.app _ x.simplex)).IsUniquelyCodimOneFace (S.mk (e.hom.app _ y.simplex)) ↔
       x.IsUniquelyCodimOneFace y :=
-  ⟨fun hxy' => by simpa using hxy'.of_iso e.symm, fun hxy => hxy.of_iso e⟩
-
-/--
-lemma `index_of_iso` / 引理 `index_of_iso`
-
-English:
-lemma index_of_iso
-  given: {Y : SSet.{u}} (e : X ≅ Y) {d : Nat} (hd : x.dim = d)
-  proof: by
-  obtain ⟨dx, x, rfl⟩ := x.mk_surjective
-  obtain ⟨dy, y, rfl⟩ := y.mk_surjective
-  obtain rfl : dy = dx + 1 := hxy.dim_eq
-  obtain rfl : dx = d := hd
-  symm
-  simp [← (hxy.of_iso e).δ_eq_iff rfl,
-    ← SSet.δ_naturality_apply, dsimp% hxy.δ_index rfl]
-
-中文:
-引理 index_of_iso
-  条件: {Y : SSet.{u}} (e : X ≅ Y) {d : 自然数} (hd : x.dim = d)
-  证明: by
-  obtain ⟨dx, x, rfl⟩ := x.mk_surjective
-  obtain ⟨dy, y, rfl⟩ := y.mk_surjective
-  obtain rfl : dy = dx + 1 := hxy.dim_eq
-  obtain rfl : dx = d := hd
-  symm
-  simp [← (hxy.of_iso e).δ_eq_iff rfl,
-    ← SSet.δ_naturality_apply, dsimp% hxy.δ_index rfl]
-
-Depends on / 依赖: dim_eq, hxy.dim_eq, hxy.of_iso, mk_surjective, of_iso, x.mk_surjective, y.mk_surjective
+  ⟨fun hxy' ↦ by simpa using hxy'.of_iso e.symm, fun hxy ↦ hxy.of_iso e⟩
+/-
+**SSet.S.IsUniquelyCodimOneFace.index_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `SSet.S.I
+sUniquelyCodimOneFace`。
+形式化陈述：index_of_iso {Y : SSet.{u}} (e : X ≅ Y) {d : Nat} (hd : x.dim = d) : (hxy.
+of_iso e).index hd = hxy.index hd
+参数：e : X ≅ Y；hd : x.dim = d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.of_iso`：of_iso {Y : SSet.{u}} (e : X ≅ Y) 
+: (S.mk (e.hom.app _ x.simplex)).IsUniquelyCodimOneFace (S.mk (e.hom.app _ y.sim
+plex))
+· 使用引理 `SSet.S.mk_surjective`：mk_surjective (s : X.S) : exists (n : Nat) (x : X 
+_⦋n⦌), s = mk x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.δ_eq_iff`：δ_eq_iff (i : Fin (d + 2)) : X.δ
+ i (y.cast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex ↔ i = hxy.ind
+ex hd
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.δ_index`：δ_index : X.δ (hxy.index hd) (y.c
+ast (by rw [hxy.dim_eq, hd])).simplex = (x.cast hd).simplex
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `SSet.S.IsUniquelyCodimOneFace.dim_eq`：dim_eq : y.dim = x.dim + 1
 -/
-lemma index_of_iso {Y : SSet.{u}} (e : X ≅ Y) {d : Nat} (hd : x.dim = d) :
+lemma index_of_iso {Y : SSet.{u}} (e : X ≅ Y) {d : ℕ} (hd : x.dim = d) :
     (hxy.of_iso e).index hd = hxy.index hd := by
   obtain ⟨dx, x, rfl⟩ := x.mk_surjective
   obtain ⟨dy, y, rfl⟩ := y.mk_surjective
@@ -422,3 +359,4 @@ lemma index_of_iso {Y : SSet.{u}} (e : X ≅ Y) {d : Nat} (hd : x.dim = d) :
 end IsUniquelyCodimOneFace
 
 end SSet.S
+

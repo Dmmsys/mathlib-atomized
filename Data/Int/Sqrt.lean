@@ -24,133 +24,90 @@ namespace Int
 integer `r` such that `r * r ≤ n`. If it is negative, it returns `0`. For example, `sqrt (-1) = 0`,
 `sqrt 1 = 1`, `sqrt 2 = 1` -/
 @[pp_nodot]
-/--
-Definition of `sqrt` / `sqrt` 的定义
+/-
+**Int.sqrt** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：sqrt (z : Int) : Int
+参数：z : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sqrt
-  signature: (z : Int)
-  body: Nat.sqrt Int.toNat z
-
-中文:
-定义 sqrt
-  签名: (z : 整数)
-  定义体: Nat.sqrt Int.toNat z
-
-Depends on / 依赖: Int.toNat, Nat.sqrt
+--- 原说明 ---
+`sqrt z` is the square root of an integer `z`. If `z` is positive, it returns th
+e largest
+integer `r` such that `r * r ≤ n`. If it is negative, it returns `0`. For exampl
+e, `sqrt (-1) = 0`,
+`sqrt 1 = 1`, `sqrt 2 = 1`
 -/
-def sqrt (z : Int) : Int :=
-Nat.sqrt Int.toNat z
-
-/--
-theorem `sqrt_eq` / 定理 `sqrt_eq`
-
-English:
-theorem sqrt_eq
-  given: (n : Int)
-  statement: sqrt (n * n) = n.natAbs
-  proof: by
-  rw [sqrt]; rw [← natAbs_mul_self]; rw [toNat_natCast]; rw [Nat.sqrt_eq]
-
-中文:
-定理 sqrt_eq
-  条件: (n : 整数)
-  结论: sqrt (n * n) = n.natAbs
-  证明: by
-  rw [sqrt]; rw [← natAbs_mul_self]; rw [toNat_natCast]; rw [Nat.sqrt_eq]
-
-Depends on / 依赖: Nat.sqrt_eq, natAbs_mul_self, sqrt_eq, toNat_natCast
+def sqrt (z : ℤ) : ℤ :=
+  Nat.sqrt <| Int.toNat z
+/-
+**Int.sqrt_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sqrt_eq (n : Int) : sqrt (n * n) = n.natAbs
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.sqrt.eq_1`：∀ (z : ℤ), Int.sqrt z = ↑z.toNat.sqrt
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.natAbs_mul_self`：∀ {a : ℤ}, ↑(a.natAbs * a.natAbs) = a * a
+· 使用定理 `Int.toNat_natCast`：∀ (n : ℕ), (↑n).toNat = n
+· 使用引理 `Nat.sqrt_eq`：sqrt_eq (n : Nat) : sqrt (n * n) = n
 -/
-theorem sqrt_eq (n : Int) : sqrt (n * n) = n.natAbs := by
-  rw [sqrt]; rw [← natAbs_mul_self]; rw [toNat_natCast]; rw [Nat.sqrt_eq]
-
-/--
-theorem `exists_mul_self` / 定理 `exists_mul_self`
-
-English:
-theorem exists_mul_self
-  given: (x : Int)
-  statement: (exists n, n * n = x) ↔ sqrt x * sqrt x = x
-  proof: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq, ← Int.natCast_mul, natAbs_mul_self], fun h => ⟨sqrt x, h⟩⟩
-
-中文:
-定理 存在_mul_self
-  条件: (x : 整数)
-  结论: (存在 n, n * n = x) ↔ sqrt x * sqrt x = x
-  证明: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq, ← Int.natCast_mul, natAbs_mul_self], fun h => ⟨sqrt x, h⟩⟩
-
-Depends on / 依赖: Int.natCast_mul, natAbs_mul_self, natCast_mul, sqrt_eq
+theorem sqrt_eq (n : ℤ) : sqrt (n * n) = n.natAbs := by
+  rw [sqrt, ← natAbs_mul_self, toNat_natCast, Nat.sqrt_eq]
+/-
+**Int.exists_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：exists_mul_self (x : Int) : (exists n, n * n = x) ↔ sqrt x * sqrt x = x
+参数：x : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.sqrt_eq`：sqrt_eq (n : Int) : sqrt (n * n) = n.natAbs
+· 使用定理 `Int.natCast_mul`：∀ (n m : ℕ), ↑(n * m) = ↑n * ↑m
+· 使用定理 `Int.natAbs_mul_self`：∀ {a : ℤ}, ↑(a.natAbs * a.natAbs) = a * a
 -/
-theorem exists_mul_self (x : Int) : (exists n, n * n = x) ↔ sqrt x * sqrt x = x :=
+theorem exists_mul_self (x : ℤ) : (∃ n, n * n = x) ↔ sqrt x * sqrt x = x :=
   ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq, ← Int.natCast_mul, natAbs_mul_self], fun h => ⟨sqrt x, h⟩⟩
-
-/--
-theorem `sqrt_nonneg` / 定理 `sqrt_nonneg`
-
-English:
-theorem sqrt_nonneg
-  given: (n : Int)
-  statement: 0 <= sqrt n
-  proof: natCast_nonneg _
-
-@[simp, norm_cast]
-
-中文:
-定理 sqrt_nonneg
-  条件: (n : 整数)
-  结论: 0 <= sqrt n
-  证明: natCast_nonneg _
-
-@[simp, norm_cast]
-
-Depends on / 依赖: natCast_nonneg
+/-
+**Int.sqrt_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sqrt_nonneg (n : Int) : 0 <= sqrt n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natCast_nonneg`：∀ (n : ℕ), 0 ≤ ↑n
 -/
-theorem sqrt_nonneg (n : Int) : 0 <= sqrt n :=
+theorem sqrt_nonneg (n : ℤ) : 0 ≤ sqrt n :=
   natCast_nonneg _
 
 @[simp, norm_cast]
-/--
-theorem `sqrt_natCast` / 定理 `sqrt_natCast`
-
-English:
-theorem sqrt_natCast
-  given: (n : Nat)
-  statement: Int.sqrt (n : Int) = Nat.sqrt n
-  proof: by rw [sqrt, toNat_natCast]
-
-@[simp]
-
-中文:
-定理 sqrt_natCast
-  条件: (n : 自然数)
-  结论: 整数.sqrt (n : 整数) = 自然数.sqrt n
-  证明: by rw [sqrt, toNat_natCast]
-
-@[simp]
-
-Depends on / 依赖: toNat_natCast
+/-
+**Int.sqrt_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sqrt_natCast (n : Nat) : Int.sqrt (n : Int) = Nat.sqrt n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.sqrt.eq_1`：∀ (z : ℤ), Int.sqrt z = ↑z.toNat.sqrt
+· 使用定理 `Int.toNat_natCast`：∀ (n : ℕ), (↑n).toNat = n
 -/
-theorem sqrt_natCast (n : Nat) : Int.sqrt (n : Int) = Nat.sqrt n := by rw [sqrt, toNat_natCast]
+theorem sqrt_natCast (n : ℕ) : Int.sqrt (n : ℤ) = Nat.sqrt n := by rw [sqrt, toNat_natCast]
 
 @[simp]
-/--
-theorem `sqrt_ofNat` / 定理 `sqrt_ofNat`
-
-English:
-theorem sqrt_ofNat
-  given: (n : Nat)
-  statement: Int.sqrt ofNat(n) = Nat.sqrt ofNat(n)
-  proof: sqrt_natCast _
-
-中文:
-定理 sqrt_of自然数
-  条件: (n : 自然数)
-  结论: 整数.sqrt of自然数(n) = 自然数.sqrt of自然数(n)
-  证明: sqrt_natCast _
-
-Depends on / 依赖: sqrt_natCast
+/-
+**Int.sqrt_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sqrt_ofNat (n : Nat) : Int.sqrt ofNat(n) = Nat.sqrt ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.sqrt_natCast`：sqrt_natCast (n : Nat) : Int.sqrt (n : Int) = Nat.sqrt
+ n
 -/
-theorem sqrt_ofNat (n : Nat) : Int.sqrt ofNat(n) = Nat.sqrt ofNat(n) :=
+theorem sqrt_ofNat (n : ℕ) : Int.sqrt ofNat(n) = Nat.sqrt ofNat(n) :=
   sqrt_natCast _
 
 end Int
+

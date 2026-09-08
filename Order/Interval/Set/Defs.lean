@@ -34,333 +34,208 @@ variable {α : Type*} [Preorder α] {a b x : α}
 
 /-- `Iio b` is the left-infinite right-open interval $(-∞, b)$. -/
 @[to_dual /-- `Ioi a` is the left-open right-infinite interval $(a, ∞)$. -/]
-/--
-Definition of `Iio` / `Iio` 的定义
+/-
+**Set.Iio** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：Iio (b : α)
+参数：b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iio
-  signature: (b : α)
-  body: { x | x < b }
-
-中文:
-定义 左无界右开区间
-  签名: (b : α)
-  定义体: { x | x < b }
+--- 原说明 ---
+`Iio b` is the left-infinite right-open interval $(-∞, b)$.
 -/
 def Iio (b : α) := { x | x < b }
-
-/--
-theorem `mem_Iio` / 定理 `mem_Iio`
-
-English:
-theorem mem_Iio
-  statement: x in Iio b ↔ x < b
-  proof: .rfl
-
-中文:
-定理 mem_Iio
-  结论: x in 左无界右开区间 b ↔ x < b
-  证明: .rfl
+/-
+**Set.mem_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Iio b ↔ x < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[to_dual (attr := simp, grind =, push)] theorem mem_Iio : x in Iio b ↔ x < b := .rfl
-/--
-theorem `Iio_def` / 定理 `Iio_def`
-
-English:
-theorem Iio_def
-  given: (a : α)
-  statement: { x | x < a } = Iio a
-  proof: rfl
-
-中文:
-定理 Iio_def
-  条件: (a : α)
-  结论: { x | x < a } = 左无界右开区间 a
-  证明: rfl
+@[to_dual (attr := simp, grind =, push)] theorem mem_Iio : x ∈ Iio b ↔ x < b := .rfl
+/-
+**Set.Iio_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (a : α), {x | x < a} = Set.Iio a
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual] theorem Iio_def (a : α) : { x | x < a } = Iio a := rfl
 
 /-- `Iic b` is the left-infinite right-closed interval $(-∞, b]$. -/
 @[to_dual /-- `Ici a` is the left-closed right-infinite interval $[a, ∞)$. -/]
-/--
-Definition of `Iic` / `Iic` 的定义
+/-
+**Set.Iic** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：Iic (b : α)
+参数：b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iic
-  signature: (b : α)
-  body: { x | x <= b }
-
-中文:
-定义 左无界右闭区间
-  签名: (b : α)
-  定义体: { x | x <= b }
+--- 原说明 ---
+`Iic b` is the left-infinite right-closed interval $(-∞, b]$.
 -/
-def Iic (b : α) := { x | x <= b }
-
-/--
-theorem `mem_Iic` / 定理 `mem_Iic`
-
-English:
-theorem mem_Iic
-  statement: x in Iic b ↔ x <= b
-  proof: .rfl
-
-中文:
-定理 mem_Iic
-  结论: x in 左无界右闭区间 b ↔ x <= b
-  证明: .rfl
+def Iic (b : α) := { x | x ≤ b }
+/-
+**Set.mem_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Iic b ↔ x ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[to_dual (attr := simp, grind =, push)] theorem mem_Iic : x in Iic b ↔ x <= b := .rfl
-/--
-theorem `Iic_def` / 定理 `Iic_def`
-
-English:
-theorem Iic_def
-  given: (b : α)
-  statement: { x | x <= b } = Iic b
-  proof: rfl
-
-中文:
-定理 Iic_def
-  条件: (b : α)
-  结论: { x | x <= b } = 左无界右闭区间 b
-  证明: rfl
+@[to_dual (attr := simp, grind =, push)] theorem mem_Iic : x ∈ Iic b ↔ x ≤ b := .rfl
+/-
+**Set.Iic_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (b : α), {x | x ≤ b} = Set.Iic b
+参数：b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_dual] theorem Iic_def (b : α) : { x | x <= b } = Iic b := rfl
+@[to_dual] theorem Iic_def (b : α) : { x | x ≤ b } = Iic b := rfl
 
 /-- `Ioo a b` is the left-open right-open interval $(a, b)$. -/
 @[to_dual self (reorder := a b)]
-/--
-Definition of `Ioo` / `Ioo` 的定义
+/-
+**Set.Ioo** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：Ioo (a b : α)
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ioo
-  signature: (a b : α)
-  body: { x | a < x ∧ x < b }
-
-to_dual_insert_cast Ioo := by simp only [and_comm]
-
-中文:
-定义 开区间
-  签名: (a b : α)
-  定义体: { x | a < x ∧ x < b }
-
-to_dual_insert_cast Ioo := by simp only [and_comm]
+--- 原说明 ---
+`Ioo a b` is the left-open right-open interval $(a, b)$.
 -/
 def Ioo (a b : α) := { x | a < x ∧ x < b }
 
 to_dual_insert_cast Ioo := by simp only [and_comm]
-
-/--
-theorem `mem_Ioo` / 定理 `mem_Ioo`
-
-English:
-theorem mem_Ioo
-  statement: x in Ioo a b ↔ a < x ∧ x < b
-  proof: .rfl
-
-中文:
-定理 mem_Ioo
-  结论: x in 开区间 a b ↔ a < x ∧ x < b
-  证明: .rfl
+/-
+**Set.mem_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.Ioo a b ↔ a < x 
+∧ x < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, grind =, push, to_dual none] theorem mem_Ioo : x in Ioo a b ↔ a < x ∧ x < b := .rfl
-/--
-theorem `Ioo_def` / 定理 `Ioo_def`
-
-English:
-theorem Ioo_def
-  given: (a b : α)
-  statement: { x | a < x ∧ x < b } = Ioo a b
-  proof: rfl
-
-中文:
-定理 Ioo_def
-  条件: (a b : α)
-  结论: { x | a < x ∧ x < b } = 开区间 a b
-  证明: rfl
+@[simp, grind =, push, to_dual none] theorem mem_Ioo : x ∈ Ioo a b ↔ a < x ∧ x < b := .rfl
+/-
+**Set.Ioo_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (a b : α), {x | a < x ∧ x < b} = Set.
+Ioo a b
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_dual none] theorem Ioo_def (a b : α) : { x | a < x ∧ x < b } = Ioo a b := rfl
 
-/--
-Definition of `Ico` / `Ico` 的定义
+/-- `Ico a b` is the left-closed right-open interval $[a, b)$. -/
+/-
+**Set.Ico** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：Ico (a b : α)
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ico
-  signature: (a b : α)
-  body: { x | a <= x ∧ x < b }
-
-中文:
-定义 左闭右开区间
-  签名: (a b : α)
-  定义体: { x | a <= x ∧ x < b }
+--- 原说明 ---
+`Ico a b` is the left-closed right-open interval $[a, b)$.
 -/
-def Ico (a b : α) := { x | a <= x ∧ x < b }
+def Ico (a b : α) := { x | a ≤ x ∧ x < b }
 
 /-- `Ioc a b` is the left-open right-closed interval $(a, b]$. -/
 @[to_dual existing (reorder := a b)]
-/--
-Definition of `Ioc` / `Ioc` 的定义
+/-
+**Set.Ioc** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：Ioc (a b : α)
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ioc
-  signature: (a b : α)
-  body: { x | a < x ∧ x <= b }
+--- 原说明 ---
+`Ioc a b` is the left-open right-closed interval $(a, b]$.
+-/
+def Ioc (a b : α) := { x | a < x ∧ x ≤ b }
 
 to_dual_insert_cast Ico := by simp only [and_comm]
 to_dual_insert_cast Ioc := by simp only [and_comm]
-
-中文:
-定义 左开右闭区间
-  签名: (a b : α)
-  定义体: { x | a < x ∧ x <= b }
-
-to_dual_insert_cast Ico := by simp only [and_comm]
-to_dual_insert_cast Ioc := by simp only [and_comm]
+/-
+**Set.mem_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.Ico a b ↔ a ≤ x 
+∧ x < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-def Ioc (a b : α) := { x | a < x ∧ x <= b }
-
-to_dual_insert_cast Ico := by simp only [and_comm]
-to_dual_insert_cast Ioc := by simp only [and_comm]
-
-/--
-theorem `mem_Ico` / 定理 `mem_Ico`
-
-English:
-theorem mem_Ico
-  statement: x in Ico a b ↔ a <= x ∧ x < b
-  proof: .rfl
-
-中文:
-定理 mem_Ico
-  结论: x in 左闭右开区间 a b ↔ a <= x ∧ x < b
-  证明: .rfl
+@[simp, grind =, push, to_dual none] theorem mem_Ico : x ∈ Ico a b ↔ a ≤ x ∧ x < b := .rfl
+/-
+**Set.Ico_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (a b : α), {x | a ≤ x ∧ x < b} = Set.
+Ico a b
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, grind =, push, to_dual none] theorem mem_Ico : x in Ico a b ↔ a <= x ∧ x < b := .rfl
-/--
-theorem `Ico_def` / 定理 `Ico_def`
-
-English:
-theorem Ico_def
-  given: (a b : α)
-  statement: { x | a <= x ∧ x < b } = Ico a b
-  proof: rfl
-
-中文:
-定理 Ico_def
-  条件: (a b : α)
-  结论: { x | a <= x ∧ x < b } = 左闭右开区间 a b
-  证明: rfl
+@[to_dual none] theorem Ico_def (a b : α) : { x | a ≤ x ∧ x < b } = Ico a b := rfl
+/-
+**Set.mem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.Ioc a b ↔ a < x 
+∧ x ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[to_dual none] theorem Ico_def (a b : α) : { x | a <= x ∧ x < b } = Ico a b := rfl
-
-/--
-theorem `mem_Ioc` / 定理 `mem_Ioc`
-
-English:
-theorem mem_Ioc
-  statement: x in Ioc a b ↔ a < x ∧ x <= b
-  proof: .rfl
-
-中文:
-定理 mem_Ioc
-  结论: x in 左开右闭区间 a b ↔ a < x ∧ x <= b
-  证明: .rfl
+@[simp, grind =, push, to_dual none] theorem mem_Ioc : x ∈ Ioc a b ↔ a < x ∧ x ≤ b := .rfl
+/-
+**Set.Ioc_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (a b : α), {x | a < x ∧ x ≤ b} = Set.
+Ioc a b
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, grind =, push, to_dual none] theorem mem_Ioc : x in Ioc a b ↔ a < x ∧ x <= b := .rfl
-/--
-theorem `Ioc_def` / 定理 `Ioc_def`
-
-English:
-theorem Ioc_def
-  given: (a b : α)
-  statement: { x | a < x ∧ x <= b } = Ioc a b
-  proof: rfl
-
-中文:
-定理 Ioc_def
-  条件: (a b : α)
-  结论: { x | a < x ∧ x <= b } = 左开右闭区间 a b
-  证明: rfl
--/
-@[to_dual none] theorem Ioc_def (a b : α) : { x | a < x ∧ x <= b } = Ioc a b := rfl
+@[to_dual none] theorem Ioc_def (a b : α) : { x | a < x ∧ x ≤ b } = Ioc a b := rfl
 
 /-- `Icc a b` is the left-closed right-closed interval $[a, b]$. -/
 @[to_dual self (reorder := a b)]
-/--
-Definition of `Icc` / `Icc` 的定义
+/-
+**Set.Icc** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：Icc (a b : α)
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Icc
-  signature: (a b : α)
-  body: { x | a <= x ∧ x <= b }
+--- 原说明 ---
+`Icc a b` is the left-closed right-closed interval $[a, b]$.
+-/
+def Icc (a b : α) := { x | a ≤ x ∧ x ≤ b }
 
 to_dual_insert_cast Icc := by simp only [and_comm]
-
-中文:
-定义 闭区间
-  签名: (a b : α)
-  定义体: { x | a <= x ∧ x <= b }
-
-to_dual_insert_cast Icc := by simp only [and_comm]
+/-
+**Set.mem_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.Icc a b ↔ a ≤ x 
+∧ x ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-def Icc (a b : α) := { x | a <= x ∧ x <= b }
-
-to_dual_insert_cast Icc := by simp only [and_comm]
-
-/--
-theorem `mem_Icc` / 定理 `mem_Icc`
-
-English:
-theorem mem_Icc
-  statement: x in Icc a b ↔ a <= x ∧ x <= b
-  proof: .rfl
-
-中文:
-定理 mem_Icc
-  结论: x in 闭区间 a b ↔ a <= x ∧ x <= b
-  证明: .rfl
+@[simp, grind =, push, to_dual none] theorem mem_Icc : x ∈ Icc a b ↔ a ≤ x ∧ x ≤ b := .rfl
+/-
+**Set.Icc_def** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (a b : α), {x | a ≤ x ∧ x ≤ b} = Set.
+Icc a b
+参数：a b : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, grind =, push, to_dual none] theorem mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b := .rfl
-/--
-theorem `Icc_def` / 定理 `Icc_def`
+@[to_dual none] theorem Icc_def (a b : α) : { x | a ≤ x ∧ x ≤ b } = Icc a b := rfl
 
-English:
-theorem Icc_def
-  given: (a b : α)
-  statement: { x | a <= x ∧ x <= b } = Icc a b
-  proof: rfl
+/-- We say that a set `s : Set α` is `OrdConnected` if for all `x y ∈ s` it includes the
+interval `[[x, y]]`. If `α` is a `DenselyOrdered` `ConditionallyCompleteLinearOrder` with
+the `OrderTopology`, then this condition is equivalent to `IsPreconnected s`. If `α` is a
+linearly ordered field, then this condition is also equivalent to `Convex α s`. -/
+/-
+**Set.OrdConnected** 是 Mathlib 中的一个类，位于命名空间 `Set`。
+形式化陈述：OrdConnected (s : Set α) : Prop where /-- `s : Set α` is `OrdConnected` if
+ for all `x y ∈ s` it includes the interval `[[x, y]]`. -/ out' ⦃x : α⦄ (hx : x 
+in s) ⦃y : α⦄ (hy : y in s) : Icc x y subseteq s  attribute [to_dual self (reord
+er
+参数：s : Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 Icc_def
-  条件: (a b : α)
-  结论: { x | a <= x ∧ x <= b } = 闭区间 a b
-  证明: rfl
--/
-@[to_dual none] theorem Icc_def (a b : α) : { x | a <= x ∧ x <= b } = Icc a b := rfl
-
-/--
-Definition of `OrdConnected` / `OrdConnected` 的定义
-
-English:
-class OrdConnected
-  parameters: (s : Set α)
-  axioms and operations (1):
-    - out'(⦃x) : α⦄ (hx : x in s) ⦃y : α⦄ (hy : y in s) : Icc x y subseteq s
-
-中文:
-类 序连通
-  参数: (s : 集合 α)
-  公理与运算 (1 个):
-    - out'(⦃x) : α⦄ (hx : x in s) ⦃y : α⦄ (hy : y in s) : 闭区间 x y subseteq s
-
-Depends on / 依赖: OrdConnected, OrdConnected.mk
+--- 原说明 ---
+We say that a set `s : Set α` is `OrdConnected` if for all `x y ∈ s` it includes
+ the
+interval `[[x, y]]`. If `α` is a `DenselyOrdered` `ConditionallyCompleteLinearOr
+der` with
+the `OrderTopology`, then this condition is equivalent to `IsPreconnected s`. If
+ `α` is a
+linearly ordered field, then this condition is also equivalent to `Convex α s`.
 -/
 class OrdConnected (s : Set α) : Prop where
   /-- `s : Set α` is `OrdConnected` if for all `x y ∈ s` it includes the interval `[[x, y]]`. -/
-  out' ⦃x : α⦄ (hx : x in s) ⦃y : α⦄ (hy : y in s) : Icc x y subseteq s
+  out' ⦃x : α⦄ (hx : x ∈ s) ⦃y : α⦄ (hy : y ∈ s) : Icc x y ⊆ s
 
 attribute [to_dual self (reorder := out' (x y, hx hy))] OrdConnected.mk
 attribute [to_dual self (reorder := x y, hx hy)] OrdConnected.out'
 
 end Set
+

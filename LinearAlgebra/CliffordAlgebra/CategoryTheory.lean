@@ -28,29 +28,22 @@ variable {R : Type u} [CommRing R]
 
 This is `CliffordAlgebra.map` through the lens of category theory. -/
 @[simps]
-/--
-Definition of `QuadraticModuleCat.cliffordAlgebra` / `QuadraticModuleCat.cliffordAlgebra` 的定义
+/-
+**QuadraticModuleCat.cliffordAlgebra** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：QuadraticModuleCat.cliffordAlgebra : QuadraticModuleCat.{u} R ⥤ AlgCat.{u}
+ R where obj M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition QuadraticModuleCat.cliffordAlgebra
-  signature: : QuadraticModuleCat.{u} R ⥤ AlgCat.{u} R where
-  body: AlgCat.of R (CliffordAlgebra M.form)
-map {_M _N} f := AlgCat.ofHom CliffordAlgebra.map f.toIsometry
-  map_id _M := by simp
-  map_comp {_M _N _P} f g := by ext; simp
+--- 原说明 ---
+The "clifford algebra" functor, sending a quadratic `R`-module `V` to the cliffo
+rd algebra on
+`V`.
 
-中文:
-定义 二次模范畴.cliffordAlgebra
-  签名: : 二次模范畴.{u} R ⥤ Alg范畴.{u} R where
-  定义体: AlgCat.of R (CliffordAlgebra M.form)
-map {_M _N} f := AlgCat.ofHom CliffordAlgebra.map f.toIsometry
-  map_id _M := by simp
-  map_comp {_M _N _P} f g := by ext; simp
-
-Depends on / 依赖: AlgCat, AlgCat.of, CliffordAlgebra, M.form
+This is `CliffordAlgebra.map` through the lens of category theory.
 -/
 def QuadraticModuleCat.cliffordAlgebra : QuadraticModuleCat.{u} R ⥤ AlgCat.{u} R where
   obj M := AlgCat.of R (CliffordAlgebra M.form)
-map {_M _N} f := AlgCat.ofHom CliffordAlgebra.map f.toIsometry
+  map {_M _N} f := AlgCat.ofHom <| CliffordAlgebra.map f.toIsometry
   map_id _M := by simp
   map_comp {_M _N _P} f g := by ext; simp

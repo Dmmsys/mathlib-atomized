@@ -34,118 +34,101 @@ section prod
 
 /-- `prod F G` is the explicit binary product of type-valued functors `F` and `G`. -/
 @[simps obj map]
-/--
-Definition of `prod` / `prod` 的定义
+/-
+**CategoryTheory.FunctorToTypes.prod** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctorToTypes`。
+形式化陈述：prod : C ⥤ Type w where obj a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: : C ⥤ Type w where
-  body: F.obj a × G.obj a
-  map f := ↾fun a => (F.map f a.1, G.map f a.2)
-
-中文:
-定义 乘积
-  签名: : C ⥤ 类型 w where
-  定义体: F.obj a × G.obj a
-  map f := ↾fun a => (F.map f a.1, G.map f a.2)
-
-Depends on / 依赖: F.obj, G.obj
+--- 原说明 ---
+`prod F G` is the explicit binary product of type-valued functors `F` and `G`.
 -/
 def prod : C ⥤ Type w where
   obj a := F.obj a × G.obj a
-  map f := ↾fun a => (F.map f a.1, G.map f a.2)
+  map f := ↾fun a ↦ (F.map f a.1, G.map f a.2)
 
 variable {F G}
 
 /-- The first projection of `prod F G`, onto `F`. -/
 @[simps app]
-/--
-Definition of `prod.fst` / `prod.fst` 的定义
+/-
+**CategoryTheory.FunctorToTypes.prod.fst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.FunctorToTypes.prod`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F G : Ca
+tegoryTheory.Functor C (Type w)} → CategoryTheory.FunctorToTypes.prod F G ⟶ F
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.fst
-  signature: : prod F G ⟶ F where
-  body: ↾fun a => a.1
-
-中文:
-定义 乘积.fst
-  签名: : 乘积 F G ⟶ F where
-  定义体: ↾fun a => a.1
+--- 原说明 ---
+The first projection of `prod F G`, onto `F`.
 -/
 def prod.fst : prod F G ⟶ F where
-  app _ := ↾fun a => a.1
+  app _ := ↾fun a ↦ a.1
 
 /-- The second projection of `prod F G`, onto `G`. -/
 @[simps app]
-/--
-Definition of `prod.snd` / `prod.snd` 的定义
+/-
+**CategoryTheory.FunctorToTypes.prod.snd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.FunctorToTypes.prod`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F G : Ca
+tegoryTheory.Functor C (Type w)} → CategoryTheory.FunctorToTypes.prod F G ⟶ G
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.snd
-  signature: : prod F G ⟶ G where
-  body: ↾fun a => a.2
-
-中文:
-定义 乘积.snd
-  签名: : 乘积 F G ⟶ G where
-  定义体: ↾fun a => a.2
+--- 原说明 ---
+The second projection of `prod F G`, onto `G`.
 -/
 def prod.snd : prod F G ⟶ G where
-  app _ := ↾fun a => a.2
+  app _ := ↾fun a ↦ a.2
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Given natural transformations `F ⟶ F₁` and `F ⟶ F₂`, construct
 a natural transformation `F ⟶ prod F₁ F₂`. -/
 @[simps]
-/--
-Definition of `prod.lift` / `prod.lift` 的定义
+/-
+**CategoryTheory.FunctorToTypes.prod.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.FunctorToTypes.prod`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F F₁ F₂ 
+: CategoryTheory.Functor C (Type w)} → (F ⟶ F₁) → (F ⟶ F₂) → (F ⟶ CategoryTheory
+.FunctorToTypes.prod F₁ F₂)
+参数：Type w；F ⟶ F₁；F ⟶ F₂；F ⟶ CategoryTheory.FunctorToTypes.prod F₁ F₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod.lift
-  signature: {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
-  body: ↾fun y => ⟨τ₁.app x y, τ₂.app x y⟩
-
-中文:
-定义 乘积.lift
-  签名: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
-  定义体: ↾fun y => ⟨τ₁.app x y, τ₂.app x y⟩
+--- 原说明 ---
+Given natural transformations `F ⟶ F₁` and `F ⟶ F₂`, construct
+a natural transformation `F ⟶ prod F₁ F₂`.
 -/
 def prod.lift {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂) :
     F ⟶ prod F₁ F₂ where
-  app x := ↾fun y => ⟨τ₁.app x y, τ₂.app x y⟩
+  app x := ↾fun y ↦ ⟨τ₁.app x y, τ₂.app x y⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `prod.lift_fst` / 引理 `prod.lift_fst`
-
-English:
-lemma prod.lift_fst
-  given: {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
-  proof: rfl
-
-中文:
-引理 乘积.lift_fst
-  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
-  证明: rfl
+/-
+**CategoryTheory.FunctorToTypes.prod.lift_fst** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.FunctorToTypes.prod`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {F F₁ F₂ : Catego
+ryTheory.Functor C (Type w)} (τ₁ : F ⟶ F₁)   (τ₂ : F ⟶ F₂),   CategoryTheory.Cat
+egoryStruct.comp (CategoryTheory.FunctorToTypes.prod.lift τ₁ τ₂)       CategoryT
+heory.FunctorToTypes.prod.fst =     τ₁
+参数：Type w；τ₁ : F ⟶ F₁；τ₂ : F ⟶ F₂；CategoryTheory.FunctorToTypes.prod.lift τ₁ τ₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prod.lift_fst {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂) :
     prod.lift τ₁ τ₂ ≫ prod.fst = τ₁ := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `prod.lift_snd` / 引理 `prod.lift_snd`
-
-English:
-lemma prod.lift_snd
-  given: {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
-  proof: rfl
-
-中文:
-引理 乘积.lift_snd
-  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂)
-  证明: rfl
+/-
+**CategoryTheory.FunctorToTypes.prod.lift_snd** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.FunctorToTypes.prod`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {F F₁ F₂ : Catego
+ryTheory.Functor C (Type w)} (τ₁ : F ⟶ F₁)   (τ₂ : F ⟶ F₂),   CategoryTheory.Cat
+egoryStruct.comp (CategoryTheory.FunctorToTypes.prod.lift τ₁ τ₂)       CategoryT
+heory.FunctorToTypes.prod.snd =     τ₂
+参数：Type w；τ₁ : F ⟶ F₁；τ₂ : F ⟶ F₂；CategoryTheory.FunctorToTypes.prod.lift τ₁ τ₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma prod.lift_snd {F₁ F₂ : C ⥤ Type w} (τ₁ : F ⟶ F₁) (τ₂ : F ⟶ F₂) :
     prod.lift τ₁ τ₂ ≫ prod.snd = τ₂ := rfl
@@ -154,20 +137,15 @@ variable (F G)
 
 /-- The binary fan whose point is `prod F G`. -/
 @[simps!]
-/--
-Definition of `binaryProductCone` / `binaryProductCone` 的定义
+/-
+**CategoryTheory.FunctorToTypes.binaryProductCone** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductCone : BinaryFan F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryProductCone
-  signature: : BinaryFan F G
-  body: BinaryFan.mk prod.fst prod.snd
-
-中文:
-定义 binaryProductCone
-  签名: : BinaryFan F G
-  定义体: BinaryFan.mk prod.fst prod.snd
-
-Depends on / 依赖: BinaryFan, BinaryFan.mk, prod.fst, prod.snd
+--- 原说明 ---
+The binary fan whose point is `prod F G`.
 -/
 def binaryProductCone : BinaryFan F G :=
   BinaryFan.mk prod.fst prod.snd
@@ -175,145 +153,133 @@ def binaryProductCone : BinaryFan F G :=
 set_option backward.isDefEq.respectTransparency.types false in
 /-- `prod F G` is a limit cone. -/
 @[simps]
-/--
-Definition of `binaryProductLimit` / `binaryProductLimit` 的定义
+/-
+**CategoryTheory.FunctorToTypes.binaryProductLimit** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductLimit : IsLimit (binaryProductCone F G) where lift (s : Binar
+yFan F G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryProductLimit
-  signature: : IsLimit (binaryProductCone F G) where
-  body: prod.lift s.fst s.snd
-  fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
-  uniq _ _ h := by
-    simp only [← h ⟨WalkingPair.right⟩, ← h ⟨WalkingPair.left⟩]
-    congr
-
-中文:
-定义 binaryProductLimit
-  签名: : 是极限 (binaryProductCone F G) where
-  定义体: prod.lift s.fst s.snd
-  fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
-  uniq _ _ h := by
-    simp only [← h ⟨WalkingPair.right⟩, ← h ⟨WalkingPair.left⟩]
-    congr
-
-Depends on / 依赖: prod.lift, s.fst, s.snd
+--- 原说明 ---
+`prod F G` is a limit cone.
 -/
 def binaryProductLimit : IsLimit (binaryProductCone F G) where
   lift (s : BinaryFan F G) := prod.lift s.fst s.snd
-  fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
+  fac _ := fun ⟨j⟩ ↦ WalkingPair.casesOn j rfl rfl
   uniq _ _ h := by
     simp only [← h ⟨WalkingPair.right⟩, ← h ⟨WalkingPair.left⟩]
     congr
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `binaryProductLimitCone` / `binaryProductLimitCone` 的定义
+/-- `prod F G` is a binary product for `F` and `G`. -/
+/-
+**CategoryTheory.FunctorToTypes.binaryProductLimitCone** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductLimitCone : Limits.LimitCone (pair F G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryProductLimitCone
-  signature: : Limits.LimitCone (pair F G)
-  body: ⟨_, binaryProductLimit F G⟩
-
-中文:
-定义 binaryProductLimitCone
-  签名: : Limits.极限锥 (pair F G)
-  定义体: ⟨_, binaryProductLimit F G⟩
-
-Depends on / 依赖: binaryProductLimit
+--- 原说明 ---
+`prod F G` is a binary product for `F` and `G`.
 -/
 def binaryProductLimitCone : Limits.LimitCone (pair F G) :=
   ⟨_, binaryProductLimit F G⟩
 
-/--
-Definition of `binaryProductIso` / `binaryProductIso` 的定义
+/-- The categorical binary product of type-valued functors is `prod F G`. -/
+/-
+**CategoryTheory.FunctorToTypes.binaryProductIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.FunctorToTypes`。
+形式化陈述：binaryProductIso : F ⨯ G ≅ prod F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryProductIso
-  signature: : F ⨯ G ≅ prod F G
-  body: limit.isoLimitCone (binaryProductLimitCone F G)
-
-中文:
-定义 binaryProductIso
-  签名: : F ⨯ G ≅ 乘积 F G
-  定义体: limit.isoLimitCone (binaryProductLimitCone F G)
-
-Depends on / 依赖: binaryProductLimitCone, isoLimitCone, limit.isoLimitCone
+--- 原说明 ---
+The categorical binary product of type-valued functors is `prod F G`.
 -/
 noncomputable def binaryProductIso : F ⨯ G ≅ prod F G :=
   limit.isoLimitCone (binaryProductLimitCone F G)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `binaryProductIso_hom_comp_fst` / 引理 `binaryProductIso_hom_comp_fst`
-
-English:
-lemma binaryProductIso_hom_comp_fst
-  proof: rfl
-
-中文:
-引理 binaryProductIso_hom_comp_fst
-  证明: rfl
+/-
+**CategoryTheory.FunctorToTypes.binaryProductIso_hom_comp_fst** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductIso_hom_comp_fst : (binaryProductIso F G).hom ≫ prod.fst = Li
+mits.prod.fst
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 lemma binaryProductIso_hom_comp_fst :
     (binaryProductIso F G).hom ≫ prod.fst = Limits.prod.fst := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `binaryProductIso_hom_comp_snd` / 引理 `binaryProductIso_hom_comp_snd`
-
-English:
-lemma binaryProductIso_hom_comp_snd
-  proof: rfl
-
-中文:
-引理 binaryProductIso_hom_comp_snd
-  证明: rfl
+/-
+**CategoryTheory.FunctorToTypes.binaryProductIso_hom_comp_snd** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductIso_hom_comp_snd : (binaryProductIso F G).hom ≫ prod.snd = Li
+mits.prod.snd
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 lemma binaryProductIso_hom_comp_snd :
     (binaryProductIso F G).hom ≫ prod.snd = Limits.prod.snd := rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `binaryProductIso_inv_comp_fst` / 引理 `binaryProductIso_inv_comp_fst`
-
-English:
-lemma binaryProductIso_inv_comp_fst
-  proof: by
-  simp [binaryProductIso, binaryProductLimitCone]
-
-@[simp]
-
-中文:
-引理 binaryProductIso_inv_comp_fst
-  证明: by
-  simp [binaryProductIso, binaryProductLimitCone]
-
-@[simp]
-
-Depends on / 依赖: binaryProductIso, binaryProductLimitCone
+/-
+**CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_fst** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductIso_inv_comp_fst : (binaryProductIso F G).inv ≫ Limits.prod.f
+st = prod.fst
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.isoLimitCone_inv_π`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Catego
+ry.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.FunctorToTypes.binaryProductCone_π_app`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] (F G : CategoryTheory.Functor C (Type w)
+)   (x : CategoryTheory.Discrete CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma binaryProductIso_inv_comp_fst :
     (binaryProductIso F G).inv ≫ Limits.prod.fst = prod.fst := by
   simp [binaryProductIso, binaryProductLimitCone]
 
 @[simp]
-/--
-lemma `binaryProductIso_inv_comp_fst_apply` / 引理 `binaryProductIso_inv_comp_fst_apply`
-
-English:
-lemma binaryProductIso_inv_comp_fst_apply
-  given: (a : C) (z : (prod F G).obj a)
-  proof: congr_hom (congr_app (binaryProductIso_inv_comp_fst F G) a) z
-
-中文:
-引理 binaryProductIso_inv_comp_fst_apply
-  条件: (a : C) (z : (乘积 F G).obj a)
-  证明: congr_hom (congr_app (binaryProductIso_inv_comp_fst F G) a) z
-
-Depends on / 依赖: binaryProductIso, inv.app
+/-
+**CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_fst_apply** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductIso_inv_comp_fst_apply (a : C) (z : (prod F G).obj a) : dsimp
+% (Limits.prod.fst (X
+参数：a : C；z : (prod F G).obj a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用引理 `CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_fst`：binaryProdu
+ctIso_inv_comp_fst : (binaryProductIso F G).inv ≫ Limits.prod.fst = prod.fst
 -/
 lemma binaryProductIso_inv_comp_fst_apply (a : C) (z : (prod F G).obj a) :
     dsimp% (Limits.prod.fst (X := F)).app a ((binaryProductIso F G).inv.app a z) = z.1 :=
@@ -321,44 +287,52 @@ lemma binaryProductIso_inv_comp_fst_apply (a : C) (z : (prod F G).obj a) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `binaryProductIso_inv_comp_snd` / 引理 `binaryProductIso_inv_comp_snd`
-
-English:
-lemma binaryProductIso_inv_comp_snd
-  proof: by
-  simp [binaryProductIso, binaryProductLimitCone]
-
-@[simp]
-
-中文:
-引理 binaryProductIso_inv_comp_snd
-  证明: by
-  simp [binaryProductIso, binaryProductLimitCone]
-
-@[simp]
-
-Depends on / 依赖: binaryProductIso, binaryProductLimitCone
+/-
+**CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_snd** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductIso_inv_comp_snd : (binaryProductIso F G).inv ≫ Limits.prod.s
+nd = prod.snd
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.isoLimitCone_inv_π`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Catego
+ry.{v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.FunctorToTypes.binaryProductCone_π_app`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] (F G : CategoryTheory.Functor C (Type w)
+)   (x : CategoryTheory.Discrete CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma binaryProductIso_inv_comp_snd :
     (binaryProductIso F G).inv ≫ Limits.prod.snd = prod.snd := by
   simp [binaryProductIso, binaryProductLimitCone]
 
 @[simp]
-/--
-lemma `binaryProductIso_inv_comp_snd_apply` / 引理 `binaryProductIso_inv_comp_snd_apply`
-
-English:
-lemma binaryProductIso_inv_comp_snd_apply
-  given: (a : C) (z : (prod F G).obj a)
-  proof: congr_hom (congr_app (binaryProductIso_inv_comp_snd F G) a) z
-
-中文:
-引理 binaryProductIso_inv_comp_snd_apply
-  条件: (a : C) (z : (乘积 F G).obj a)
-  证明: congr_hom (congr_app (binaryProductIso_inv_comp_snd F G) a) z
-
-Depends on / 依赖: binaryProductIso, inv.app
+/-
+**CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_snd_apply** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductIso_inv_comp_snd_apply (a : C) (z : (prod F G).obj a) : dsimp
+% (Limits.prod.snd (X
+参数：a : C；z : (prod F G).obj a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用引理 `CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_snd`：binaryProdu
+ctIso_inv_comp_snd : (binaryProductIso F G).inv ≫ Limits.prod.snd = prod.snd
 -/
 lemma binaryProductIso_inv_comp_snd_apply (a : C) (z : (prod F G).obj a) :
     dsimp% (Limits.prod.snd (X := F)).app a ((binaryProductIso F G).inv.app a z) = z.2 :=
@@ -369,42 +343,39 @@ variable {F G}
 /-- Construct an element of `(F ⨯ G).obj a` from an element of `F.obj a` and
 an element of `G.obj a`. -/
 noncomputable
-/--
-Definition of `prodMk` / `prodMk` 的定义
-
-English:
-definition prodMk
-  signature: {a : C} (x : F.obj a) (y : G.obj a)
-  body: ((binaryProductIso F G).inv).app a ⟨x, y⟩
-
-中文:
-定义 prodMk
-  签名: {a : C} (x : F.obj a) (y : G.obj a)
-  定义体: ((binaryProductIso F G).inv).app a ⟨x, y⟩
-
-Depends on / 依赖: binaryProductIso
+/-
+**CategoryTheory.FunctorToTypes.prodMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.FunctorToTypes`。
+形式化陈述：prodMk {a : C} (x : F.obj a) (y : G.obj a) : (F ⨯ G).obj a
+参数：x : F.obj a；y : G.obj a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def prodMk {a : C} (x : F.obj a) (y : G.obj a) : (F ⨯ G).obj a :=
   ((binaryProductIso F G).inv).app a ⟨x, y⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `prodMk_fst` / 引理 `prodMk_fst`
-
-English:
-lemma prodMk_fst
-  given: {a : C} (x : F.obj a) (y : G.obj a)
-  proof: by
-  simp [prodMk]
-
-中文:
-引理 prodMk_fst
-  条件: {a : C} (x : F.obj a) (y : G.obj a)
-  证明: by
-  simp [prodMk]
-
-Depends on / 依赖: prodMk
+/-
+**CategoryTheory.FunctorToTypes.prodMk_fst** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.FunctorToTypes`。
+形式化陈述：prodMk_fst {a : C} (x : F.obj a) (y : G.obj a) : (Limits.prod.fst (X
+参数：x : F.obj a；y : G.obj a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_fst_apply`：binar
+yProductIso_inv_comp_fst_apply (a : C) (z : (prod F G).obj a) : dsimp% (Limits.p
+rod.fst (X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodMk_fst {a : C} (x : F.obj a) (y : G.obj a) :
     (Limits.prod.fst (X := F)).app a (prodMk x y) = x := by
@@ -412,46 +383,42 @@ lemma prodMk_fst {a : C} (x : F.obj a) (y : G.obj a) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `prodMk_snd` / 引理 `prodMk_snd`
-
-English:
-lemma prodMk_snd
-  given: {a : C} (x : F.obj a) (y : G.obj a)
-  proof: by
-  simp [prodMk]
-
-@[ext]
-
-中文:
-引理 prodMk_snd
-  条件: {a : C} (x : F.obj a) (y : G.obj a)
-  证明: by
-  simp [prodMk]
-
-@[ext]
-
-Depends on / 依赖: prodMk
+/-
+**CategoryTheory.FunctorToTypes.prodMk_snd** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.FunctorToTypes`。
+形式化陈述：prodMk_snd {a : C} (x : F.obj a) (y : G.obj a) : (Limits.prod.snd (X
+参数：x : F.obj a；y : G.obj a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.FunctorToTypes.binaryProductIso_inv_comp_snd_apply`：binar
+yProductIso_inv_comp_snd_apply (a : C) (z : (prod F G).obj a) : dsimp% (Limits.p
+rod.snd (X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma prodMk_snd {a : C} (x : F.obj a) (y : G.obj a) :
     (Limits.prod.snd (X := F)).app a (prodMk x y) = y := by
   simp [prodMk]
 
 @[ext]
-/--
-lemma `prod_ext` / 引理 `prod_ext`
-
-English:
-lemma prod_ext
-  given: {a : C} (z w : (prod F G).obj a) (h1 : z.1 = w.1) (h2 : z.2 = w.2)
-  proof: Prod.ext h1 h2
-
-中文:
-引理 prod_ext
-  条件: {a : C} (z w : (乘积 F G).obj a) (h1 : z.1 = w.1) (h2 : z.2 = w.2)
-  证明: Prod.ext h1 h2
-
-Depends on / 依赖: Prod.ext
+/-
+**CategoryTheory.FunctorToTypes.prod_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.FunctorToTypes`。
+形式化陈述：prod_ext {a : C} (z w : (prod F G).obj a) (h1 : z.1 = w.1) (h2 : z.2 = w.2
+) : z = w
+参数：z w : (prod F G).obj a；h1 : z.1 = w.1；h2 : z.2 = w.2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
 -/
 lemma prod_ext {a : C} (z w : (prod F G).obj a) (h1 : z.1 = w.1) (h2 : z.2 = w.2) :
     z = w := Prod.ext h1 h2
@@ -462,26 +429,14 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- `(F ⨯ G).obj a` is in bijection with the product of `F.obj a` and `G.obj a`. -/
 @[simps]
 noncomputable
-/--
-Definition of `binaryProductEquiv` / `binaryProductEquiv` 的定义
-
-English:
-definition binaryProductEquiv
-  signature: (a : C)
-  body: ⟨((binaryProductIso F G).hom.app a z).1, ((binaryProductIso F G).hom.app a z).2⟩
-  invFun z := prodMk z.1 z.2
-  left_inv _ := by simp [-prod_obj, prodMk]
-  right_inv _ := by simp [-prod_obj, prodMk]
-
-中文:
-定义 binaryProductEquiv
-  签名: (a : C)
-  定义体: ⟨((binaryProductIso F G).hom.app a z).1, ((binaryProductIso F G).hom.app a z).2⟩
-  invFun z := prodMk z.1 z.2
-  left_inv _ := by simp [-prod_obj, prodMk]
-  right_inv _ := by simp [-prod_obj, prodMk]
-
-Depends on / 依赖: binaryProductIso, hom.app
+/-
+**CategoryTheory.FunctorToTypes.binaryProductEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.FunctorToTypes`。
+形式化陈述：binaryProductEquiv (a : C) : (F ⨯ G).obj a ≃ (F.obj a) × (G.obj a) where t
+oFun z
+参数：a : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def binaryProductEquiv (a : C) : (F ⨯ G).obj a ≃ (F.obj a) × (G.obj a) where
   toFun z := ⟨((binaryProductIso F G).hom.app a z).1, ((binaryProductIso F G).hom.app a z).2⟩
@@ -491,24 +446,28 @@ def binaryProductEquiv (a : C) : (F ⨯ G).obj a ≃ (F.obj a) × (G.obj a) wher
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[ext]
-/--
-lemma `prod_ext'` / 引理 `prod_ext'`
-
-English:
-lemma prod_ext'
-  statement: (a : C) (z w : (F ⨯ G).obj a)
-  proof: by
-  apply Equiv.injective (binaryProductEquiv F G a)
-  aesop
-
-中文:
-引理 prod_ext'
-  结论: (a : C) (z w : (F ⨯ G).obj a)
-  证明: by
-  apply Equiv.injective (binaryProductEquiv F G a)
-  aesop
-
-Depends on / 依赖: Limits, Limits.prod.fst
+/-
+**CategoryTheory.FunctorToTypes.prod_ext'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.FunctorToTypes`。
+形式化陈述：prod_ext' (a : C) (z w : (F ⨯ G).obj a) (h1 : (Limits.prod.fst (X
+参数：a : C；z w : (F ⨯ G).obj a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.FunctorToTypes.binaryProductEquiv_apply`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] (F G : CategoryTheory.Functor C (Type w
+)) (a : C)   (z : (F ⨯ G).obj a),   (Categor…
+· 使用定理 `Prod.mk.eta`：∀ {α : Type u_1} {β : Type u_2} {p : α × β}, (p.1, p.2) = p
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
 -/
 lemma prod_ext' (a : C) (z w : (F ⨯ G).obj a)
     (h1 : (Limits.prod.fst (X := F)).app a z = (Limits.prod.fst (X := F)).app a w)
@@ -523,29 +482,19 @@ section coprod
 
 /-- `coprod F G` is the explicit binary coproduct of type-valued functors `F` and `G`. -/
 @[simps obj map]
-/--
-Definition of `coprod` / `coprod` 的定义
+/-
+**CategoryTheory.FunctorToTypes.coprod** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.FunctorToTypes`。
+形式化陈述：coprod : C ⥤ Type w where obj a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coprod
-  signature: : C ⥤ Type w where
-  body: F.obj a oplus G.obj a
-  map f := ↾(Sum.map (F.map f) (G.map f))
-  map_id _ := by ext ⟨⟩ <;> simp
-  map_comp _ _ := by ext ⟨⟩ <;> simp
-
-中文:
-定义 coprod
-  签名: : C ⥤ 类型 w where
-  定义体: F.obj a oplus G.obj a
-  map f := ↾(Sum.map (F.map f) (G.map f))
-  map_id _ := by ext ⟨⟩ <;> simp
-  map_comp _ _ := by ext ⟨⟩ <;> simp
-
-Depends on / 依赖: F.obj, G.obj
+--- 原说明 ---
+`coprod F G` is the explicit binary coproduct of type-valued functors `F` and `G
+`.
 -/
 def coprod : C ⥤ Type w where
-  obj a := F.obj a oplus G.obj a
+  obj a := F.obj a ⊕ G.obj a
   map f := ↾(Sum.map (F.map f) (G.map f))
   map_id _ := by ext ⟨⟩ <;> simp
   map_comp _ _ := by ext ⟨⟩ <;> simp
@@ -554,62 +503,52 @@ variable {F G}
 
 /-- The left inclusion of `F` into `coprod F G`. -/
 @[simps]
-/--
-Definition of `coprod.inl` / `coprod.inl` 的定义
+/-
+**CategoryTheory.FunctorToTypes.coprod.inl** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.FunctorToTypes.coprod`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F G : Ca
+tegoryTheory.Functor C (Type w)} → F ⟶ CategoryTheory.FunctorToTypes.coprod F G
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coprod.inl
-  signature: : F ⟶ coprod F G where
-  body: ↾fun x => .inl x
-
-中文:
-定义 coprod.inl
-  签名: : F ⟶ coprod F G where
-  定义体: ↾fun x => .inl x
+--- 原说明 ---
+The left inclusion of `F` into `coprod F G`.
 -/
 def coprod.inl : F ⟶ coprod F G where
-  app _ := ↾fun x => .inl x
+  app _ := ↾fun x ↦ .inl x
 
 /-- The right inclusion of `G` into `coprod F G`. -/
 @[simps]
-/--
-Definition of `coprod.inr` / `coprod.inr` 的定义
+/-
+**CategoryTheory.FunctorToTypes.coprod.inr** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.FunctorToTypes.coprod`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F G : Ca
+tegoryTheory.Functor C (Type w)} → G ⟶ CategoryTheory.FunctorToTypes.coprod F G
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coprod.inr
-  signature: : G ⟶ coprod F G where
-  body: ↾fun x => .inr x
-
-中文:
-定义 coprod.inr
-  签名: : G ⟶ coprod F G where
-  定义体: ↾fun x => .inr x
+--- 原说明 ---
+The right inclusion of `G` into `coprod F G`.
 -/
 def coprod.inr : G ⟶ coprod F G where
-  app _ := ↾fun x => .inr x
+  app _ := ↾fun x ↦ .inr x
 
 set_option backward.defeqAttrib.useBackward true in
 /-- Given natural transformations `F₁ ⟶ F` and `F₂ ⟶ F`, construct
 a natural transformation `coprod F₁ F₂ ⟶ F`. -/
 @[simps]
-/--
-Definition of `coprod.desc` / `coprod.desc` 的定义
+/-
+**CategoryTheory.FunctorToTypes.coprod.desc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.FunctorToTypes.coprod`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {F F₁ F₂ 
+: CategoryTheory.Functor C (Type w)} →       (F₁ ⟶ F) → (F₂ ⟶ F) → (CategoryTheo
+ry.FunctorToTypes.coprod F₁ F₂ ⟶ F)
+参数：Type w；F₁ ⟶ F；F₂ ⟶ F；CategoryTheory.FunctorToTypes.coprod F₁ F₂ ⟶ F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coprod.desc
-  signature: {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
-  body: ↾(Sum.elim (τ₁.app a) (τ₂.app a))
-  naturality _ _ _ := by ext ⟨⟩ <;> simp
-
-@[simp]
-
-中文:
-定义 coprod.desc
-  签名: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
-  定义体: ↾(Sum.elim (τ₁.app a) (τ₂.app a))
-  naturality _ _ _ := by ext ⟨⟩ <;> simp
-
-@[simp]
+--- 原说明 ---
+Given natural transformations `F₁ ⟶ F` and `F₂ ⟶ F`, construct
+a natural transformation `coprod F₁ F₂ ⟶ F`.
 -/
 def coprod.desc {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F) :
     coprod F₁ F₂ ⟶ F where
@@ -617,39 +556,31 @@ def coprod.desc {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ �
   naturality _ _ _ := by ext ⟨⟩ <;> simp
 
 @[simp]
-/--
-lemma `coprod.desc_inl` / 引理 `coprod.desc_inl`
-
-English:
-lemma coprod.desc_inl
-  given: {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coprod.desc_inl
-  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FunctorToTypes.coprod.desc_inl** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.FunctorToTypes.coprod`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {F F₁ F₂ : Catego
+ryTheory.Functor C (Type w)} (τ₁ : F₁ ⟶ F)   (τ₂ : F₂ ⟶ F),   CategoryTheory.Cat
+egoryStruct.comp CategoryTheory.FunctorToTypes.coprod.inl       (CategoryTheory.
+FunctorToTypes.coprod.desc τ₁ τ₂) =     τ₁
+参数：Type w；τ₁ : F₁ ⟶ F；τ₂ : F₂ ⟶ F；CategoryTheory.FunctorToTypes.coprod.desc τ₁ τ
+₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coprod.desc_inl {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F) :
     coprod.inl ≫ coprod.desc τ₁ τ₂ = τ₁ := rfl
 
 @[simp]
-/--
-lemma `coprod.desc_inr` / 引理 `coprod.desc_inr`
-
-English:
-lemma coprod.desc_inr
-  given: {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
-  proof: rfl
-
-中文:
-引理 coprod.desc_inr
-  条件: {F₁ F₂ : C ⥤ 类型 w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F)
-  证明: rfl
+/-
+**CategoryTheory.FunctorToTypes.coprod.desc_inr** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.FunctorToTypes.coprod`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {F F₁ F₂ : Catego
+ryTheory.Functor C (Type w)} (τ₁ : F₁ ⟶ F)   (τ₂ : F₂ ⟶ F),   CategoryTheory.Cat
+egoryStruct.comp CategoryTheory.FunctorToTypes.coprod.inr       (CategoryTheory.
+FunctorToTypes.coprod.desc τ₁ τ₂) =     τ₂
+参数：Type w；τ₁ : F₁ ⟶ F；τ₂ : F₂ ⟶ F；CategoryTheory.FunctorToTypes.coprod.desc τ₁ τ
+₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coprod.desc_inr {F₁ F₂ : C ⥤ Type w} (τ₁ : F₁ ⟶ F) (τ₂ : F₂ ⟶ F) :
     coprod.inr ≫ coprod.desc τ₁ τ₂ = τ₂ := rfl
@@ -658,20 +589,15 @@ variable (F G)
 
 /-- The binary cofan whose point is `coprod F G`. -/
 @[simps!]
-/--
-Definition of `binaryCoproductCocone` / `binaryCoproductCocone` 的定义
+/-
+**CategoryTheory.FunctorToTypes.binaryCoproductCocone** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryCoproductCocone : BinaryCofan F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryCoproductCocone
-  signature: : BinaryCofan F G
-  body: BinaryCofan.mk coprod.inl coprod.inr
-
-中文:
-定义 binaryCoproductCocone
-  签名: : BinaryCofan F G
-  定义体: BinaryCofan.mk coprod.inl coprod.inr
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.mk, coprod, coprod.inl, coprod.inr
+--- 原说明 ---
+The binary cofan whose point is `coprod F G`.
 -/
 def binaryCoproductCocone : BinaryCofan F G :=
   BinaryCofan.mk coprod.inl coprod.inr
@@ -680,94 +606,71 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- `coprod F G` is a colimit cocone. -/
 @[simps]
-/--
-Definition of `binaryCoproductColimit` / `binaryCoproductColimit` 的定义
+/-
+**CategoryTheory.FunctorToTypes.binaryCoproductColimit** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryCoproductColimit : IsColimit (binaryCoproductCocone F G) where desc 
+(s : BinaryCofan F G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryCoproductColimit
-  signature: : IsColimit (binaryCoproductCocone F G) where
-  body: coprod.desc s.inl s.inr
-  fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
-  uniq _ _ h := by
-    ext _ x
-    cases x with | _ => simp [← h ⟨WalkingPair.right⟩, ← h ⟨WalkingPair.left⟩]
-
-中文:
-定义 binaryCoproductColimit
-  签名: : 是余极限 (binaryCoproductCocone F G) where
-  定义体: coprod.desc s.inl s.inr
-  fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
-  uniq _ _ h := by
-    ext _ x
-    cases x with | _ => simp [← h ⟨WalkingPair.right⟩, ← h ⟨WalkingPair.left⟩]
-
-Depends on / 依赖: coprod, coprod.desc, s.inl, s.inr
+--- 原说明 ---
+`coprod F G` is a colimit cocone.
 -/
 def binaryCoproductColimit : IsColimit (binaryCoproductCocone F G) where
   desc (s : BinaryCofan F G) := coprod.desc s.inl s.inr
-  fac _ := fun ⟨j⟩ => WalkingPair.casesOn j rfl rfl
+  fac _ := fun ⟨j⟩ ↦ WalkingPair.casesOn j rfl rfl
   uniq _ _ h := by
     ext _ x
     cases x with | _ => simp [← h ⟨WalkingPair.right⟩, ← h ⟨WalkingPair.left⟩]
 
-/--
-Definition of `binaryCoproductColimitCocone` / `binaryCoproductColimitCocone` 的定义
+/-- `coprod F G` is a binary coproduct for `F` and `G`. -/
+/-
+**CategoryTheory.FunctorToTypes.binaryCoproductColimitCocone** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryCoproductColimitCocone : Limits.ColimitCocone (pair F G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryCoproductColimitCocone
-  signature: : Limits.ColimitCocone (pair F G)
-  body: ⟨_, binaryCoproductColimit F G⟩
-
-中文:
-定义 binaryCoproductColimitCocone
-  签名: : Limits.余极限余锥 (pair F G)
-  定义体: ⟨_, binaryCoproductColimit F G⟩
-
-Depends on / 依赖: binaryCoproductColimit
+--- 原说明 ---
+`coprod F G` is a binary coproduct for `F` and `G`.
 -/
 def binaryCoproductColimitCocone : Limits.ColimitCocone (pair F G) :=
   ⟨_, binaryCoproductColimit F G⟩
 
-/--
-Definition of `binaryCoproductIso` / `binaryCoproductIso` 的定义
+/-- The categorical binary coproduct of type-valued functors is `coprod F G`. -/
+/-
+**CategoryTheory.FunctorToTypes.binaryCoproductIso** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.FunctorToTypes`。
+形式化陈述：binaryCoproductIso : F ⨿ G ≅ coprod F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryCoproductIso
-  signature: : F ⨿ G ≅ coprod F G
-  body: colimit.isoColimitCocone (binaryCoproductColimitCocone F G)
-
-中文:
-定义 binaryCoproductIso
-  签名: : F ⨿ G ≅ coprod F G
-  定义体: colimit.isoColimitCocone (binaryCoproductColimitCocone F G)
-
-Depends on / 依赖: SymmetricCategory, binaryCoproductColimitCocone, colimit, colimit.isoColimitCocone, isoColimitCocone, toSymmetricCategory
+--- 原说明 ---
+The categorical binary coproduct of type-valued functors is `coprod F G`.
 -/
 noncomputable def binaryCoproductIso : F ⨿ G ≅ coprod F G :=
   colimit.isoColimitCocone (binaryCoproductColimitCocone F G)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `inl_comp_binaryCoproductIso_hom` / 引理 `inl_comp_binaryCoproductIso_hom`
-
-English:
-lemma inl_comp_binaryCoproductIso_hom
-  proof: by
-  simp only [binaryCoproductIso]
-  aesop
-
-@[simp]
-
-中文:
-引理 inl_comp_binaryCoproductIso_hom
-  证明: by
-  simp only [binaryCoproductIso]
-  aesop
-
-@[simp]
-
-Depends on / 依赖: binaryCoproductIso
+/-
+**CategoryTheory.FunctorToTypes.inl_comp_binaryCoproductIso_hom** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inl_comp_binaryCoproductIso_hom : Limits.coprod.inl ≫ (binaryCoproductIso 
+F G).hom = coprod.inl
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.isoColimitCocone_ι_hom`：∀ {J : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.
+Category.{v, u} C]   {F : CategoryTheory.F…
 -/
 lemma inl_comp_binaryCoproductIso_hom :
     Limits.coprod.inl ≫ (binaryCoproductIso F G).hom = coprod.inl := by
@@ -775,18 +678,24 @@ lemma inl_comp_binaryCoproductIso_hom :
   aesop
 
 @[simp]
-/--
-lemma `inl_comp_binaryCoproductIso_hom_apply` / 引理 `inl_comp_binaryCoproductIso_hom_apply`
-
-English:
-lemma inl_comp_binaryCoproductIso_hom_apply
-  given: (a : C) (x : F.obj a)
-  proof: congr_hom (congr_app (inl_comp_binaryCoproductIso_hom F G) a) x
-
-中文:
-引理 inl_comp_binaryCoproductIso_hom_apply
-  条件: (a : C) (x : F.obj a)
-  证明: congr_hom (congr_app (inl_comp_binaryCoproductIso_hom F G) a) x
+/-
+**CategoryTheory.FunctorToTypes.inl_comp_binaryCoproductIso_hom_apply** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inl_comp_binaryCoproductIso_hom_apply (a : C) (x : F.obj a) : dsimp% (bina
+ryCoproductIso F G).hom.app a ((Limits.coprod.inl (X
+参数：a : C；x : F.obj a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用引理 `CategoryTheory.FunctorToTypes.inl_comp_binaryCoproductIso_hom`：inl_comp_
+binaryCoproductIso_hom : Limits.coprod.inl ≫ (binaryCoproductIso F G).hom = copr
+od.inl
 -/
 lemma inl_comp_binaryCoproductIso_hom_apply (a : C) (x : F.obj a) :
     dsimp% (binaryCoproductIso F G).hom.app a ((Limits.coprod.inl (X := F)).app a x) = .inl x :=
@@ -794,26 +703,23 @@ lemma inl_comp_binaryCoproductIso_hom_apply (a : C) (x : F.obj a) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `inr_comp_binaryCoproductIso_hom` / 引理 `inr_comp_binaryCoproductIso_hom`
-
-English:
-lemma inr_comp_binaryCoproductIso_hom
-  proof: by
-  simp [binaryCoproductIso]
-  aesop
-
-@[simp]
-
-中文:
-引理 inr_comp_binaryCoproductIso_hom
-  证明: by
-  simp [binaryCoproductIso]
-  aesop
-
-@[simp]
-
-Depends on / 依赖: binaryCoproductIso
+/-
+**CategoryTheory.FunctorToTypes.inr_comp_binaryCoproductIso_hom** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inr_comp_binaryCoproductIso_hom : Limits.coprod.inr ≫ (binaryCoproductIso 
+F G).hom = coprod.inr
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimit.isoColimitCocone_ι_hom`：∀ {J : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.
+Category.{v, u} C]   {F : CategoryTheory.F…
 -/
 lemma inr_comp_binaryCoproductIso_hom :
     Limits.coprod.inr ≫ (binaryCoproductIso F G).hom = coprod.inr := by
@@ -821,101 +727,87 @@ lemma inr_comp_binaryCoproductIso_hom :
   aesop
 
 @[simp]
-/--
-lemma `inr_comp_binaryCoproductIso_hom_apply` / 引理 `inr_comp_binaryCoproductIso_hom_apply`
-
-English:
-lemma inr_comp_binaryCoproductIso_hom_apply
-  given: (a : C) (x : G.obj a)
-  proof: congr_hom (congr_app (inr_comp_binaryCoproductIso_hom F G) a) x
-
-@[simp]
-
-中文:
-引理 inr_comp_binaryCoproductIso_hom_apply
-  条件: (a : C) (x : G.obj a)
-  证明: congr_hom (congr_app (inr_comp_binaryCoproductIso_hom F G) a) x
-
-@[simp]
-
-Depends on / 依赖: HasFiniteProducts, Limits, Limits.HasFiniteProducts
+/-
+**CategoryTheory.FunctorToTypes.inr_comp_binaryCoproductIso_hom_apply** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inr_comp_binaryCoproductIso_hom_apply (a : C) (x : G.obj a) : dsimp% (bina
+ryCoproductIso F G).hom.app a ((Limits.coprod.inr (X
+参数：a : C；x : G.obj a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `CategoryTheory.congr_app`：congr_app {F G : C ⥤ D} {α β : NatTrans F G} (
+h : α = β) (X : C) : α.app X = β.app X
+· 使用引理 `CategoryTheory.FunctorToTypes.inr_comp_binaryCoproductIso_hom`：inr_comp_
+binaryCoproductIso_hom : Limits.coprod.inr ≫ (binaryCoproductIso F G).hom = copr
+od.inr
 -/
 lemma inr_comp_binaryCoproductIso_hom_apply (a : C) (x : G.obj a) :
     dsimp% (binaryCoproductIso F G).hom.app a ((Limits.coprod.inr (X := F)).app a x) = .inr x :=
   congr_hom (congr_app (inr_comp_binaryCoproductIso_hom F G) a) x
 
 @[simp]
-/--
-lemma `inl_comp_binaryCoproductIso_inv` / 引理 `inl_comp_binaryCoproductIso_inv`
-
-English:
-lemma inl_comp_binaryCoproductIso_inv
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inl_comp_binaryCoproductIso_inv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FunctorToTypes.inl_comp_binaryCoproductIso_inv** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inl_comp_binaryCoproductIso_inv : coprod.inl ≫ (binaryCoproductIso F G).in
+v = (Limits.coprod.inl (X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 lemma inl_comp_binaryCoproductIso_inv :
     coprod.inl ≫ (binaryCoproductIso F G).inv = (Limits.coprod.inl (X := F)) := rfl
 
 @[simp]
-/--
-lemma `inl_comp_binaryCoproductIso_inv_apply` / 引理 `inl_comp_binaryCoproductIso_inv_apply`
-
-English:
-lemma inl_comp_binaryCoproductIso_inv_apply
-  given: (a : C) (x : F.obj a)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inl_comp_binaryCoproductIso_inv_apply
-  条件: (a : C) (x : F.obj a)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FunctorToTypes.inl_comp_binaryCoproductIso_inv_apply** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inl_comp_binaryCoproductIso_inv_apply (a : C) (x : F.obj a) : dsimp% (bina
+ryCoproductIso F G).inv.app a (.inl x) = (Limits.coprod.inl (X
+参数：a : C；x : F.obj a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 lemma inl_comp_binaryCoproductIso_inv_apply (a : C) (x : F.obj a) :
     dsimp% (binaryCoproductIso F G).inv.app a (.inl x) = (Limits.coprod.inl (X := F)).app a x := rfl
 
 @[simp]
-/--
-lemma `inr_comp_binaryCoproductIso_inv` / 引理 `inr_comp_binaryCoproductIso_inv`
-
-English:
-lemma inr_comp_binaryCoproductIso_inv
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inr_comp_binaryCoproductIso_inv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FunctorToTypes.inr_comp_binaryCoproductIso_inv** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inr_comp_binaryCoproductIso_inv : coprod.inr ≫ (binaryCoproductIso F G).in
+v = (Limits.coprod.inr (X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 lemma inr_comp_binaryCoproductIso_inv :
     coprod.inr ≫ (binaryCoproductIso F G).inv = (Limits.coprod.inr (X := F)) := rfl
 
 @[simp]
-/--
-lemma `inr_comp_binaryCoproductIso_inv_apply` / 引理 `inr_comp_binaryCoproductIso_inv_apply`
-
-English:
-lemma inr_comp_binaryCoproductIso_inv_apply
-  given: (a : C) (x : G.obj a)
-  proof: rfl
-
-中文:
-引理 inr_comp_binaryCoproductIso_inv_apply
-  条件: (a : C) (x : G.obj a)
-  证明: rfl
+/-
+**CategoryTheory.FunctorToTypes.inr_comp_binaryCoproductIso_inv_apply** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：inr_comp_binaryCoproductIso_inv_apply (a : C) (x : G.obj a) : dsimp% (bina
+ryCoproductIso F G).inv.app a (.inr x) = (Limits.coprod.inr (X
+参数：a : C；x : G.obj a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 lemma inr_comp_binaryCoproductIso_inv_apply (a : C) (x : G.obj a) :
     dsimp% (binaryCoproductIso F G).inv.app a (.inr x) = (Limits.coprod.inr (X := F)).app a x := rfl
@@ -924,40 +816,26 @@ variable {F G}
 
 /-- Construct an element of `(F ⨿ G).obj a` from an element of `F.obj a` -/
 noncomputable
-/--
-Definition of `coprodInl` / `coprodInl` 的定义
-
-English:
-abbreviation coprodInl
-  signature: {a : C} (x : F.obj a)
-  body: (binaryCoproductIso F G).inv.app a (.inl x)
-
-中文:
-缩写 coprodInl
-  签名: {a : C} (x : F.obj a)
-  定义体: (binaryCoproductIso F G).inv.app a (.inl x)
-
-Depends on / 依赖: binaryCoproductIso, inv.app
+/-
+**CategoryTheory.FunctorToTypes.coprodInl** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.FunctorToTypes`。
+形式化陈述：coprodInl {a : C} (x : F.obj a) : (F ⨿ G).obj a
+参数：x : F.obj a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev coprodInl {a : C} (x : F.obj a) : (F ⨿ G).obj a :=
   (binaryCoproductIso F G).inv.app a (.inl x)
 
 /-- Construct an element of `(F ⨿ G).obj a` from an element of `G.obj a` -/
 noncomputable
-/--
-Definition of `coprodInr` / `coprodInr` 的定义
-
-English:
-abbreviation coprodInr
-  signature: {a : C} (x : G.obj a)
-  body: (binaryCoproductIso F G).inv.app a (.inr x)
-
-中文:
-缩写 coprodInr
-  签名: {a : C} (x : G.obj a)
-  定义体: (binaryCoproductIso F G).inv.app a (.inr x)
-
-Depends on / 依赖: binaryCoproductIso, inv.app
+/-
+**CategoryTheory.FunctorToTypes.coprodInr** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryT
+heory.FunctorToTypes`。
+形式化陈述：coprodInr {a : C} (x : G.obj a) : (F ⨿ G).obj a
+参数：x : G.obj a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev coprodInr {a : C} (x : G.obj a) : (F ⨿ G).obj a :=
   (binaryCoproductIso F G).inv.app a (.inr x)
@@ -968,29 +846,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- `(F ⨿ G).obj a` is in bijection with disjoint union of `F.obj a` and `G.obj a`. -/
 @[simps]
 noncomputable
-/--
-Definition of `binaryCoproductEquiv` / `binaryCoproductEquiv` 的定义
-
-English:
-definition binaryCoproductEquiv
-  signature: (a : C)
-  body: (binaryCoproductIso F G).hom.app a z
-  invFun z := (binaryCoproductIso F G).inv.app a z
-  left_inv _ := by simp [-coprod_obj]
-  right_inv _ := by simp [-coprod_obj]
-
-中文:
-定义 binaryCoproductEquiv
-  签名: (a : C)
-  定义体: (binaryCoproductIso F G).hom.app a z
-  invFun z := (binaryCoproductIso F G).inv.app a z
-  left_inv _ := by simp [-coprod_obj]
-  right_inv _ := by simp [-coprod_obj]
-
-Depends on / 依赖: binaryCoproductIso, hom.app
+/-
+**CategoryTheory.FunctorToTypes.binaryCoproductEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.FunctorToTypes`。
+形式化陈述：binaryCoproductEquiv (a : C) : (F ⨿ G).obj a ≃ (F.obj a) oplus (G.obj a) w
+here toFun z
+参数：a : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def binaryCoproductEquiv (a : C) :
-    (F ⨿ G).obj a ≃ (F.obj a) oplus (G.obj a) where
+    (F ⨿ G).obj a ≃ (F.obj a) ⊕ (G.obj a) where
   toFun z := (binaryCoproductIso F G).hom.app a z
   invFun z := (binaryCoproductIso F G).inv.app a z
   left_inv _ := by simp [-coprod_obj]
@@ -999,3 +865,4 @@ def binaryCoproductEquiv (a : C) :
 end coprod
 
 end CategoryTheory.FunctorToTypes
+

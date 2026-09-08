@@ -49,26 +49,19 @@ variable (W : MorphismProperty C)
 
 namespace MorphismProperty
 
-/--
-Definition of `HasLocalization` / `HasLocalization` 的定义
+/-- The data of a localized category with a given universe
+for the morphisms. -/
+/-
+**CategoryTheory.MorphismProperty.HasLocalization** 是 Mathlib 中的一个归纳类型，位于命名空间 `C
+ategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → CategoryTheor
+y.MorphismProperty C → Type (max (max (u + 1) v) (w + 1))
+参数：max (max (u + 1) v) (w + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasLocalization
-  parameters: where
-  axioms and operations (4):
-    - {D : Type u}
-    - [hD : Category.{w} D]
-    - L : C ⥤ D
-    - [hL : L.IsLocalization W]
-
-中文:
-类 有Localization
-  参数: where
-  公理与运算 (4 个):
-    - {D : 类型u}
-    - [hD : 范畴.{w} D]
-    - L : C ⥤ D
-    - [hL : L.是Localization W]
+--- 原说明 ---
+The data of a localized category with a given universe
+for the morphisms.
 -/
 class HasLocalization where
   /-- the objects of the localized category. -/
@@ -81,88 +74,59 @@ class HasLocalization where
 
 variable [HasLocalization.{w} W]
 
-/--
-Definition of `Localization'` / `Localization'` 的定义
+/-- The localized category for `W : MorphismProperty C`
+that is fixed by the `[HasLocalization W]` instance. -/
+/-
+**CategoryTheory.MorphismProperty.Localization'** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.MorphismProperty`。
+形式化陈述：Localization'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Localization'
-  body: HasLocalization.D W
-
-中文:
-定义 Localization'
-  定义体: HasLocalization.D W
-
-Depends on / 依赖: HasLocalization, HasLocalization.D, Iso.inv, NatTrans, NatTrans.congr_app, _zero_add, congr_app, congr_arg, shiftFunctorAdd
+--- 原说明 ---
+The localized category for `W : MorphismProperty C`
+that is fixed by the `[HasLocalization W]` instance.
 -/
 def Localization' := HasLocalization.D W
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category W.Localization'
-  body: HasLocalization.hD
-
-中文:
-实例 :
-  签名: 范畴 W.Localization'
-  定义体: HasLocalization.hD
-
-Depends on / 依赖: HasLocalization, HasLocalization.hD
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category W.Localization' := HasLocalization.hD
 
-/--
-Definition of `Q'` / `Q'` 的定义
+/-- The localization functor `C ⥤ W.Localization'`
+that is fixed by the `[HasLocalization W]` instance. -/
+/-
+**CategoryTheory.MorphismProperty.Q'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.M
+orphismProperty`。
+形式化陈述：Q' : C ⥤ W.Localization'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Q'
-  signature: : C ⥤ W.Localization'
-  body: HasLocalization.L
-
-中文:
-定义 Q'
-  签名: : C ⥤ W.Localization'
-  定义体: HasLocalization.L
-
-Depends on / 依赖: HasLocalization, HasLocalization.L, Iso.hom, NatTrans, NatTrans.congr_app, _add_zero, congr_app, congr_arg, shiftFunctorAdd
+--- 原说明 ---
+The localization functor `C ⥤ W.Localization'`
+that is fixed by the `[HasLocalization W]` instance.
 -/
 def Q' : C ⥤ W.Localization' := HasLocalization.L
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: W.Q'.IsLocalization W
-  body: HasLocalization.hL
-
-中文:
-实例 :
-  签名: W.Q'.是Localization W
-  定义体: HasLocalization.hL
-
-Depends on / 依赖: HasLocalization, HasLocalization.hL
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : W.Q'.IsLocalization W := HasLocalization.hL
 
 /-- The constructed localized category. -/
 @[instance_reducible]
-/--
-Definition of `HasLocalization.standard` / `HasLocalization.standard` 的定义
+/-
+**CategoryTheory.MorphismProperty.HasLocalization.standard** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.MorphismProperty.HasLocalization`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → (W : CategoryTh
+eory.MorphismProperty C) → W.HasLocalization
+参数：W : CategoryTheory.MorphismProperty C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasLocalization.standard
-  signature: : HasLocalization.{max u v} W where
-  body: W.Q
-
-中文:
-定义 有Localization.standard
-  签名: : 有Localization.{最大值 u v} W where
-  定义体: W.Q
-
-Depends on / 依赖: Iso.inv, NatTrans, NatTrans.congr_app, _add_zero, congr_app, congr_arg, shiftFunctorAdd
+--- 原说明 ---
+The constructed localized category.
 -/
 def HasLocalization.standard : HasLocalization.{max u v} W where
   L := W.Q
@@ -170,3 +134,4 @@ def HasLocalization.standard : HasLocalization.{max u v} W where
 end MorphismProperty
 
 end CategoryTheory
+

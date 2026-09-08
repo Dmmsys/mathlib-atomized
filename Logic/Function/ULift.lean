@@ -13,70 +13,39 @@ public import Mathlib.Init
 
 public section
 
-/--
-theorem `ULift.down_injective` / 定理 `ULift.down_injective`
-
-English:
-theorem ULift.down_injective
-  given: {α : Type*}
-  statement: Function.Injective (@ULift.down α)
-
-中文:
-定理 类型层提升.down_injective
-  条件: {α : 类型}
-  结论: 函数.单射 (@类型层提升.down α)
+/-
+**ULift.down_injective** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u_1}, Function.Injective ULift.down
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ULift.down_injective {α : Type*} : Function.Injective (@ULift.down α)
   | ⟨a⟩, ⟨b⟩, _ => by congr
-
-/--
-theorem `ULift.down_inj` / 定理 `ULift.down_inj`
-
-English:
-theorem ULift.down_inj
-  given: {α : Type*} {a b : ULift α}
-  statement: a.down = b.down ↔ a = b
-  proof: ⟨fun h => ULift.down_injective h, fun h => by rw [h]⟩
-
-中文:
-定理 类型层提升.down_inj
-  条件: {α : 类型} {a b : 类型层提升 α}
-  结论: a.down = b.down ↔ a = b
-  证明: ⟨fun h => ULift.down_injective h, fun h => by rw [h]⟩
+/-
+**ULift.down_inj** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u_1} {a b : ULift.{u_2, u_1} α}, a.down = b.down ↔ a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ULift.down_injective`：∀ {α : Type u_1}, Function.Injective ULift.down
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 @[simp] theorem ULift.down_inj {α : Type*} {a b : ULift α} : a.down = b.down ↔ a = b :=
-  ⟨fun h => ULift.down_injective h, fun h => by rw [h]⟩
+  ⟨fun h ↦ ULift.down_injective h, fun h ↦ by rw [h]⟩
 
 variable {α : Sort*}
-
-/--
-theorem `PLift.down_injective` / 定理 `PLift.down_injective`
-
-English:
-theorem PLift.down_injective
-  statement: Function.Injective (@PLift.down α)
-
-中文:
-定理 命题层提升.down_injective
-  结论: 函数.单射 (@命题层提升.down α)
+/-
+**PLift.down_injective** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：∀ {α : Sort u_1}, Function.Injective PLift.down
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem PLift.down_injective : Function.Injective (@PLift.down α)
   | ⟨a⟩, ⟨b⟩, _ => by congr
-
-/--
-theorem `PLift.down_inj` / 定理 `PLift.down_inj`
-
-English:
-theorem PLift.down_inj
-  given: {a b : PLift α}
-  statement: a.down = b.down ↔ a = b
-  proof: ⟨fun h => PLift.down_injective h, fun h => by rw [h]⟩
-
-中文:
-定理 命题层提升.down_inj
-  条件: {a b : 命题层提升 α}
-  结论: a.down = b.down ↔ a = b
-  证明: ⟨fun h => PLift.down_injective h, fun h => by rw [h]⟩
+/-
+**PLift.down_inj** 是 Mathlib 中的一个定理，位于命名空间 `PLift`。
+形式化陈述：∀ {α : Sort u_1} {a b : PLift α}, a.down = b.down ↔ a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PLift.down_injective`：∀ {α : Sort u_1}, Function.Injective PLift.down
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 @[simp] theorem PLift.down_inj {a b : PLift α} : a.down = b.down ↔ a = b :=
-  ⟨fun h => PLift.down_injective h, fun h => by rw [h]⟩
+  ⟨fun h ↦ PLift.down_injective h, fun h ↦ by rw [h]⟩

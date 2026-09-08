@@ -36,36 +36,43 @@ namespace CategoryTheory.Pretriangulated
 open CategoryTheory.Category
 
 variable {C : Type u} [Category.{v} C] [Preadditive C]
-variable [HasShift C Int]
+variable [HasShift C ℤ]
 variable (X : C)
 
 /-- If you rotate a triangle, you get another triangle.
 Given a triangle of the form:
 ```
-      f g h
-  X ───> Y ───> Z ───> X⟦1⟧
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
 ```
 applying `rotate` gives a triangle of the form:
 ```
-      g h -f⟦1⟧'
-  Y ───> Z ───> X⟦1⟧ ───> Y⟦1⟧
+      g       h        -f⟦1⟧'
+  Y  ───> Z  ───>  X⟦1⟧ ───> Y⟦1⟧
 ```
 -/
 @[simps!]
-/--
-Definition of `Triangle.rotate` / `Triangle.rotate` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.rotate** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Pretriangulated.Triangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Preadditive C] →       [inst_2 : CategoryTheory.HasShift C ℤ] →         C
+ategoryTheory.Pretriangulated.Triangle C → CategoryTheory.Pretriangulated.Triang
+le C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Triangle.rotate
-  signature: (T : Triangle C)
-  body: Triangle.mk T.mor₂ T.mor₃ (-T.mor₁⟦1⟧')
-
-中文:
-定义 Triangle.rotate
-  签名: (T : Triangle C)
-  定义体: Triangle.mk T.mor₂ T.mor₃ (-T.mor₁⟦1⟧')
-
-Depends on / 依赖: T.mor, Triangle, Triangle.mk
+--- 原说明 ---
+If you rotate a triangle, you get another triangle.
+Given a triangle of the form:
+```
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
+```
+applying `rotate` gives a triangle of the form:
+```
+      g       h        -f⟦1⟧'
+  Y  ───> Z  ───>  X⟦1⟧ ───> Y⟦1⟧
+```
 -/
 def Triangle.rotate (T : Triangle C) : Triangle C :=
   Triangle.mk T.mor₂ T.mor₃ (-T.mor₁⟦1⟧')
@@ -74,38 +81,46 @@ section
 
 /-- Given a triangle of the form:
 ```
-      f g h
-  X ───> Y ───> Z ───> X⟦1⟧
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
 ```
 applying `invRotate` gives a triangle that can be thought of as:
 ```
-        -h⟦-1⟧' f g
-  Z⟦-1⟧ ───> X ───> Y ───> Z
+        -h⟦-1⟧'     f       g
+  Z⟦-1⟧  ───>  X  ───> Y  ───> Z
 ```
 (note that this diagram doesn't technically fit the definition of triangle, as `Z⟦-1⟧⟦1⟧` is
 not necessarily equal to `Z`, but it is isomorphic, by the `counitIso` of `shiftEquiv C 1`)
 -/
 @[simps!]
-/--
-Definition of `Triangle.invRotate` / `Triangle.invRotate` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.invRotate** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Preadditive C] →       [inst_2 : CategoryTheory.HasShift C ℤ] →         C
+ategoryTheory.Pretriangulated.Triangle C → CategoryTheory.Pretriangulated.Triang
+le C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Triangle.invRotate
-  signature: (T : Triangle C)
-  body: Triangle.mk (-T.mor₃⟦(-1 : Int)⟧' ≫ (shiftEquiv C (1 : Int)).unitIso.inv.app _) (T.mor₁)
-    (T.mor₂ ≫ (shiftEquiv C (1 : Int)).counitIso.inv.app _)
-
-中文:
-定义 Triangle.invRotate
-  签名: (T : Triangle C)
-  定义体: Triangle.mk (-T.mor₃⟦(-1 : Int)⟧' ≫ (shiftEquiv C (1 : Int)).unitIso.inv.app _) (T.mor₁)
-    (T.mor₂ ≫ (shiftEquiv C (1 : Int)).counitIso.inv.app _)
-
-Depends on / 依赖: T.mor, Triangle, Triangle.mk, counitIso, counitIso.inv.app, shiftEquiv, unitIso, unitIso.inv.app
+--- 原说明 ---
+Given a triangle of the form:
+```
+      f       g       h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
+```
+applying `invRotate` gives a triangle that can be thought of as:
+```
+        -h⟦-1⟧'     f       g
+  Z⟦-1⟧  ───>  X  ───> Y  ───> Z
+```
+(note that this diagram doesn't technically fit the definition of triangle, as `
+Z⟦-1⟧⟦1⟧` is
+not necessarily equal to `Z`, but it is isomorphic, by the `counitIso` of `shift
+Equiv C 1`)
 -/
 def Triangle.invRotate (T : Triangle C) : Triangle C :=
-  Triangle.mk (-T.mor₃⟦(-1 : Int)⟧' ≫ (shiftEquiv C (1 : Int)).unitIso.inv.app _) (T.mor₁)
-    (T.mor₂ ≫ (shiftEquiv C (1 : Int)).counitIso.inv.app _)
+  Triangle.mk (-T.mor₃⟦(-1 : ℤ)⟧' ≫ (shiftEquiv C (1 : ℤ)).unitIso.inv.app _) (T.mor₁)
+    (T.mor₂ ≫ (shiftEquiv C (1 : ℤ)).counitIso.inv.app _)
 
 end
 
@@ -119,34 +134,15 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Rotating triangles gives an endofunctor on the category of triangles in `C`.
 -/
 @[simps]
-/--
-Definition of `rotate` / `rotate` 的定义
+/-
+**CategoryTheory.Pretriangulated.rotate** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Pretriangulated`。
+形式化陈述：rotate : Triangle C ⥤ Triangle C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rotate
-  signature: : Triangle C ⥤ Triangle C where
-  body: Triangle.rotate
-  map f :=
-  { hom₁ := f.hom₂
-    hom₂ := f.hom₃
-    hom₃ := f.hom₁⟦1⟧'
-    comm₃ := by
-      dsimp
-      simp only [comp_neg, neg_comp, ← Functor.map_comp, f.comm₁] }
-
-中文:
-定义 rotate
-  签名: : Triangle C ⥤ Triangle C where
-  定义体: Triangle.rotate
-  map f :=
-  { hom₁ := f.hom₂
-    hom₂ := f.hom₃
-    hom₃ := f.hom₁⟦1⟧'
-    comm₃ := by
-      dsimp
-      simp only [comp_neg, neg_comp, ← Functor.map_comp, f.comm₁] }
-
-Depends on / 依赖: Triangle, Triangle.rotate, rotate
+--- 原说明 ---
+Rotating triangles gives an endofunctor on the category of triangles in `C`.
 -/
 def rotate : Triangle C ⥤ Triangle C where
   obj := Triangle.rotate
@@ -162,38 +158,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The inverse rotation of triangles gives an endofunctor on the category of triangles in `C`.
 -/
 @[simps]
-/--
-Definition of `invRotate` / `invRotate` 的定义
+/-
+**CategoryTheory.Pretriangulated.invRotate** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pretriangulated`。
+形式化陈述：invRotate : Triangle C ⥤ Triangle C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invRotate
-  signature: : Triangle C ⥤ Triangle C where
-  body: Triangle.invRotate
-  map f :=
-  { hom₁ := f.hom₃⟦-1⟧'
-    hom₂ := f.hom₁
-    hom₃ := f.hom₂
-    comm₁ := by
-      dsimp
-      simp only [comp_neg, ← Functor.map_comp_assoc, ← f.comm₃]
-      rw [Functor.map_comp]
-      simp }
-
-中文:
-定义 invRotate
-  签名: : Triangle C ⥤ Triangle C where
-  定义体: Triangle.invRotate
-  map f :=
-  { hom₁ := f.hom₃⟦-1⟧'
-    hom₂ := f.hom₁
-    hom₃ := f.hom₂
-    comm₁ := by
-      dsimp
-      simp only [comp_neg, ← Functor.map_comp_assoc, ← f.comm₃]
-      rw [Functor.map_comp]
-      simp }
-
-Depends on / 依赖: Triangle, Triangle.invRotate, invRotate
+--- 原说明 ---
+The inverse rotation of triangles gives an endofunctor on the category of triang
+les in `C`.
 -/
 def invRotate : Triangle C ⥤ Triangle C where
   obj := Triangle.invRotate
@@ -208,134 +182,85 @@ def invRotate : Triangle C ⥤ Triangle C where
       simp }
 
 variable {C}
-variable [forall n : Int, Functor.Additive (shiftFunctor C n)]
+variable [∀ n : ℤ, Functor.Additive (shiftFunctor C n)]
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The unit isomorphism of the auto-equivalence of categories `triangleRotation C` of
 `Triangle C` given by the rotation of triangles. -/
 @[simps!]
-/--
-Definition of `rotCompInvRot` / `rotCompInvRot` 的定义
+/-
+**CategoryTheory.Pretriangulated.rotCompInvRot** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Pretriangulated`。
+形式化陈述：rotCompInvRot : 𝟭 (Triangle C) ≅ rotate C ⋙ invRotate C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rotCompInvRot
-  signature: : 𝟭 (Triangle C) ≅ rotate C ⋙ invRotate C
-  body: NatIso.ofComponents fun T => Triangle.isoMk _ _
-    ((shiftEquiv C (1 : Int)).unitIso.app T.obj₁) (Iso.refl _) (Iso.refl _)
-
-中文:
-定义 rotCompInvRot
-  签名: : 𝟭 (Triangle C) ≅ rotate C ⋙ invRotate C
-  定义体: NatIso.ofComponents fun T => Triangle.isoMk _ _
-    ((shiftEquiv C (1 : Int)).unitIso.app T.obj₁) (Iso.refl _) (Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, T.obj, Triangle, Triangle.isoMk, ofComponents, shiftEquiv, unitIso, unitIso.app
+--- 原说明 ---
+The unit isomorphism of the auto-equivalence of categories `triangleRotation C` 
+of
+`Triangle C` given by the rotation of triangles.
 -/
 def rotCompInvRot : 𝟭 (Triangle C) ≅ rotate C ⋙ invRotate C :=
   NatIso.ofComponents fun T => Triangle.isoMk _ _
-    ((shiftEquiv C (1 : Int)).unitIso.app T.obj₁) (Iso.refl _) (Iso.refl _)
+    ((shiftEquiv C (1 : ℤ)).unitIso.app T.obj₁) (Iso.refl _) (Iso.refl _)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The counit isomorphism of the auto-equivalence of categories `triangleRotation C` of
 `Triangle C` given by the rotation of triangles. -/
 @[simps!]
-/--
-Definition of `invRotCompRot` / `invRotCompRot` 的定义
+/-
+**CategoryTheory.Pretriangulated.invRotCompRot** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Pretriangulated`。
+形式化陈述：invRotCompRot : invRotate C ⋙ rotate C ≅ 𝟭 (Triangle C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invRotCompRot
-  signature: : invRotate C ⋙ rotate C ≅ 𝟭 (Triangle C)
-  body: NatIso.ofComponents fun T => Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _)
-    ((shiftEquiv C (1 : Int)).counitIso.app T.obj₃)
-
-中文:
-定义 invRotCompRot
-  签名: : invRotate C ⋙ rotate C ≅ 𝟭 (Triangle C)
-  定义体: NatIso.ofComponents fun T => Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _)
-    ((shiftEquiv C (1 : Int)).counitIso.app T.obj₃)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, T.obj, Triangle, Triangle.isoMk, counitIso, counitIso.app, ofComponents, shiftEquiv
+--- 原说明 ---
+The counit isomorphism of the auto-equivalence of categories `triangleRotation C
+` of
+`Triangle C` given by the rotation of triangles.
 -/
 def invRotCompRot : invRotate C ⋙ rotate C ≅ 𝟭 (Triangle C) :=
   NatIso.ofComponents fun T => Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _)
-    ((shiftEquiv C (1 : Int)).counitIso.app T.obj₃)
+    ((shiftEquiv C (1 : ℤ)).counitIso.app T.obj₃)
 
 set_option backward.isDefEq.respectTransparency false in
 variable (C) in
 /-- Rotating triangles gives an auto-equivalence on the category of triangles in `C`.
 -/
 @[simps]
-/--
-Definition of `triangleRotation` / `triangleRotation` 的定义
+/-
+**CategoryTheory.Pretriangulated.triangleRotation** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Pretriangulated`。
+形式化陈述：triangleRotation : Equivalence (Triangle C) (Triangle C) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleRotation
-  signature: : Equivalence (Triangle C) (Triangle C) where
-  body: rotate C
-  inverse := invRotate C
-  unitIso := rotCompInvRot
-  counitIso := invRotCompRot
-
-中文:
-定义 triangleRotation
-  签名: : 等价 (Triangle C) (Triangle C) where
-  定义体: rotate C
-  inverse := invRotate C
-  unitIso := rotCompInvRot
-  counitIso := invRotCompRot
-
-Depends on / 依赖: rotate
+--- 原说明 ---
+Rotating triangles gives an auto-equivalence on the category of triangles in `C`
+.
 -/
 def triangleRotation : Equivalence (Triangle C) (Triangle C) where
   functor := rotate C
   inverse := invRotate C
   unitIso := rotCompInvRot
   counitIso := invRotCompRot
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (rotate C).IsEquivalence
-  body: by
-  change (triangleRotation C).functor.IsEquivalence
-  infer_instance
-
-中文:
-实例 :
-  签名: (rotate C).是等价
-  定义体: by
-  change (triangleRotation C).functor.IsEquivalence
-  infer_instance
-
-Depends on / 依赖: IsEquivalence, functor, functor.IsEquivalence, infer_instance, triangleRotation
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (rotate C).IsEquivalence := by
   change (triangleRotation C).functor.IsEquivalence
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (invRotate C).IsEquivalence
-  body: by
-  change (triangleRotation C).inverse.IsEquivalence
-  infer_instance
-
-中文:
-实例 :
-  签名: (invRotate C).是等价
-  定义体: by
-  change (triangleRotation C).inverse.IsEquivalence
-  infer_instance
-
-Depends on / 依赖: IsEquivalence, infer_instance, inverse, inverse.IsEquivalence, triangleRotation
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (invRotate C).IsEquivalence := by
   change (triangleRotation C).inverse.IsEquivalence
   infer_instance
 
 end CategoryTheory.Pretriangulated
+

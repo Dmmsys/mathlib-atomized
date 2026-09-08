@@ -30,69 +30,58 @@ variable {α β : Type*}
 /-- Converts a family indexed by a `Type u` to one indexed by an `Ordinal.{u}` using a specified
 well-ordering. -/
 @[deprecated enum (since := "2026-04-06")]
-/--
-Definition of `bfamilyOfFamily'` / `bfamilyOfFamily'` 的定义
+/-
+**Ordinal.bfamilyOfFamily'** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : 
+ι -> α) : forall a < type r, α
+参数：r : ι -> ι -> Prop；f : ι -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bfamilyOfFamily'
-  signature: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α)
-  body: fun a ha => f (enum r ⟨a, ha⟩)
-
-中文:
-定义 bfamilyOfFamily'
-  签名: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α)
-  定义体: fun a ha => f (enum r ⟨a, ha⟩)
+--- 原说明 ---
+Converts a family indexed by a `Type u` to one indexed by an `Ordinal.{u}` using
+ a specified
+well-ordering.
 -/
-def bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α) :
-    forall a < type r, α := fun a ha => f (enum r ⟨a, ha⟩)
+def bfamilyOfFamily' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] (f : ι → α) :
+    ∀ a < type r, α := fun a ha => f (enum r ⟨a, ha⟩)
 
 /-- Converts a family indexed by a `Type u` to one indexed by an `Ordinal.{u}` using a well-ordering
 given by the axiom of choice. -/
 @[deprecated enum (since := "2026-04-06")]
-/--
-Definition of `bfamilyOfFamily` / `bfamilyOfFamily` 的定义
+/-
+**Ordinal.bfamilyOfFamily** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：bfamilyOfFamily {ι : Type u} : (ι -> α) -> forall a < type (@WellOrderingR
+el ι), α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bfamilyOfFamily
-  signature: {ι : Type u}
-  body: bfamilyOfFamily' WellOrderingRel
-
-中文:
-定义 bfamilyOfFamily
-  签名: {ι : 类型u}
-  定义体: bfamilyOfFamily' WellOrderingRel
-
-Depends on / 依赖: WellOrderingRel, bfamilyOfFamily
+--- 原说明 ---
+Converts a family indexed by a `Type u` to one indexed by an `Ordinal.{u}` using
+ a well-ordering
+given by the axiom of choice.
 -/
-def bfamilyOfFamily {ι : Type u} : (ι -> α) -> forall a < type (@WellOrderingRel ι), α :=
+def bfamilyOfFamily {ι : Type u} : (ι → α) → ∀ a < type (@WellOrderingRel ι), α :=
   bfamilyOfFamily' WellOrderingRel
 
 /-- Converts a family indexed by an `Ordinal.{u}` to one indexed by a `Type u` using a specified
 well-ordering. -/
 @[deprecated typein (since := "2026-04-06")]
-/--
-Definition of `familyOfBFamily'` / `familyOfBFamily'` 的定义
+/-
+**Ordinal.familyOfBFamily'** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o} (
+ho : type r = o) (f : forall a < o, α) : ι -> α
+参数：r : ι -> ι -> Prop；ho : type r = o；f : forall a < o, α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition familyOfBFamily'
-  signature: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o} (ho : type r = o)
-  body: fun i =>
-  f (typein r i)
-    (by
-      rw [← ho]
-      exact typein_lt_type r i)
-
-中文:
-定义 familyOfBFamily'
-  签名: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o} (ho : type r = o)
-  定义体: fun i =>
-  f (typein r i)
-    (by
-      rw [← ho]
-      exact typein_lt_type r i)
+--- 原说明 ---
+Converts a family indexed by an `Ordinal.{u}` to one indexed by a `Type u` using
+ a specified
+well-ordering.
 -/
-def familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o} (ho : type r = o)
-    (f : forall a < o, α) : ι -> α := fun i =>
+def familyOfBFamily' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] {o} (ho : type r = o)
+    (f : ∀ a < o, α) : ι → α := fun i =>
   f (typein r i)
     (by
       rw [← ho]
@@ -101,221 +90,164 @@ def familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o}
 /-- Converts a family indexed by an `Ordinal.{u}` to one indexed by a `Type u` using a well-ordering
 given by the axiom of choice. -/
 @[deprecated typein (since := "2026-04-06")]
-/--
-Definition of `familyOfBFamily` / `familyOfBFamily` 的定义
+/-
+**Ordinal.familyOfBFamily** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：familyOfBFamily (o : Ordinal) (f : forall a < o, α) : o.ToType -> α
+参数：o : Ordinal；f : forall a < o, α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
 
-English:
-definition familyOfBFamily
-  signature: (o : Ordinal) (f : forall a < o, α)
-  body: familyOfBFamily' (· < ·) (type_toType o) f
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定义 familyOfBFamily
-  签名: (o : 序数) (f : 对任意 a < o, α)
-  定义体: familyOfBFamily' (· < ·) (type_toType o) f
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-Depends on / 依赖: familyOfBFamily, type_toType
+--- 原说明 ---
+Converts a family indexed by an `Ordinal.{u}` to one indexed by a `Type u` using
+ a well-ordering
+given by the axiom of choice.
 -/
-def familyOfBFamily (o : Ordinal) (f : forall a < o, α) : o.ToType -> α :=
+def familyOfBFamily (o : Ordinal) (f : ∀ a < o, α) : o.ToType → α :=
   familyOfBFamily' (· < ·) (type_toType o) f
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `bfamilyOfFamily'_typein` / 定理 `bfamilyOfFamily'_typein`
-
-English:
-theorem bfamilyOfFamily'_typein
-  given: {ι} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α) (i)
-  proof: by
-  simp only [bfamilyOfFamily', enum_typein]
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 bfamilyOfFamily'_typein
-  条件: {ι} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α) (i)
-  证明: by
-  simp only [bfamilyOfFamily', enum_typein]
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
+/-
+**Ordinal.bfamilyOfFamily'_typein** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_3} (r : ι → ι → Prop) [inst : IsWellOrder ι r
+] (f : ι → α) (i : ι),   Ordinal.bfamilyOfFamily' r f ((Ordinal.typein r).toRelE
+mbedding i) ⋯ = f i
+参数：r : ι → ι → Prop；f : ι → α；i : ι；(Ordinal.typein r).toRelEmbedding i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Ordinal.typein_lt_type`：typein_lt_type (r : α -> α -> Prop) [IsWellOrder
+ α r] (a : α) : typein r a < type r
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.enum_typein`：enum_typein (r : α -> α -> Prop) [IsWellOrder α r] 
+(a : α) : enum r ⟨typein r a, typein_lt_type r a⟩ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem bfamilyOfFamily'_typein {ι} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α) (i) :
+theorem bfamilyOfFamily'_typein {ι} (r : ι → ι → Prop) [IsWellOrder ι r] (f : ι → α) (i) :
     bfamilyOfFamily' r f (typein r i) (typein_lt_type r i) = f i := by
   simp only [bfamilyOfFamily', enum_typein]
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `bfamilyOfFamily_typein` / 定理 `bfamilyOfFamily_typein`
-
-English:
-theorem bfamilyOfFamily_typein
-  given: {ι} (f : ι -> α) (i)
-  proof: bfamilyOfFamily'_typein _ f i
-
-中文:
-定理 bfamilyOfFamily_typein
-  条件: {ι} (f : ι -> α) (i)
-  证明: bfamilyOfFamily'_typein _ f i
-
-Depends on / 依赖: _typein, bfamilyOfFamily
+/-
+**Ordinal.bfamilyOfFamily_typein** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bfamilyOfFamily_typein {ι} (f : ι -> α) (i) : bfamilyOfFamily f (typein _ 
+i) (typein_lt_type _ i) = f i
+参数：f : ι -> α；i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bfamilyOfFamily'_typein`：∀ {α : Type u_1} {ι : Type u_3} (r : ι 
+→ ι → Prop) [inst : IsWellOrder ι r] (f : ι → α) (i : ι),   Ordinal.bfamilyOfFam
+ily' r f ((Ordinal.ty…
 -/
-theorem bfamilyOfFamily_typein {ι} (f : ι -> α) (i) :
+theorem bfamilyOfFamily_typein {ι} (f : ι → α) (i) :
     bfamilyOfFamily f (typein _ i) (typein_lt_type _ i) = f i :=
   bfamilyOfFamily'_typein _ f i
 
 set_option backward.isDefEq.respectTransparency false in
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `familyOfBFamily'_enum` / 定理 `familyOfBFamily'_enum`
-
-English:
-theorem familyOfBFamily'_enum
-  statement: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o}
-  proof: by
-  simp only [familyOfBFamily', typein_enum]
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 familyOfBFamily'_enum
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o}
-  证明: by
-  simp only [familyOfBFamily', typein_enum]
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
+/-
+**Ordinal.familyOfBFamily'_enum** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u} (r : ι → ι → Prop) [inst : IsWellOrder ι r] 
+{o : Ordinal.{u}} (ho : Ordinal.type r = o)   (f : (a : Ordinal.{u}) → a < o → α
+) (i : Ordinal.{u}) (hi : i < o),   Ordinal.familyOfBFamily' r ho f ((Ordinal.en
+um r) ⟨i, ⋯⟩) = f i hi
+参数：r : ι → ι → Prop；ho : Ordinal.type r = o；f : (a : Ordinal.{u}) → a < o → α；i 
+: Ordinal.{u}；hi : i < o；(Ordinal.enum r) ⟨i, ⋯⟩。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ordinal.typein_enum`：typein_enum (r : α -> α -> Prop) [IsWellOrder α r] 
+{o} (h : o < type r) : typein r (enum r ⟨o, h⟩) = o
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem familyOfBFamily'_enum {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o}
-    (ho : type r = o) (f : forall a < o, α) (i hi) :
+theorem familyOfBFamily'_enum {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] {o}
+    (ho : type r = o) (f : ∀ a < o, α) (i hi) :
     familyOfBFamily' r ho f (enum r ⟨i, by rwa [ho]⟩) = f i hi := by
   simp only [familyOfBFamily', typein_enum]
 
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `familyOfBFamily_enum` / 定理 `familyOfBFamily_enum`
-
-English:
-theorem familyOfBFamily_enum
-  given: (o : Ordinal) (f : forall a < o, α) (i hi)
-  proof: familyOfBFamily'_enum _ (type_toType o) f _ _
-
-中文:
-定理 familyOfBFamily_enum
-  条件: (o : 序数) (f : 对任意 a < o, α) (i hi)
-  证明: familyOfBFamily'_enum _ (type_toType o) f _ _
-
-Depends on / 依赖: ToType, hi.trans_eq, o.ToType, trans_eq, type_toType
+/-
+**Ordinal.familyOfBFamily_enum** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：familyOfBFamily_enum (o : Ordinal) (f : forall a < o, α) (i hi) : familyOf
+BFamily o f (enum (α
+参数：o : Ordinal；f : forall a < o, α；i hi。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.familyOfBFamily'_enum`：∀ {α : Type u_1} {ι : Type u} (r : ι → ι 
+→ Prop) [inst : IsWellOrder ι r] {o : Ordinal.{u}} (ho : Ordinal.type r = o)   (
+f : (a : Ordinal.{u…
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
 -/
-theorem familyOfBFamily_enum (o : Ordinal) (f : forall a < o, α) (i hi) :
+theorem familyOfBFamily_enum (o : Ordinal) (f : ∀ a < o, α) (i hi) :
     familyOfBFamily o f (enum (α := o.ToType) (· < ·) ⟨i, hi.trans_eq (type_toType _).symm⟩)
     = f i hi :=
   familyOfBFamily'_enum _ (type_toType o) f _ _
 
 /-- The range of a family indexed by ordinals. -/
 @[deprecated range (since := "2026-04-06")]
-/--
-Definition of `brange` / `brange` 的定义
+/-
+**Ordinal.brange** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：brange (o : Ordinal) (f : forall a < o, α) : Set α
+参数：o : Ordinal；f : forall a < o, α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition brange
-  signature: (o : Ordinal) (f : forall a < o, α)
-  body: { a | exists i hi, f i hi = a }
-
-@[deprecated mem_range (since := "2026-04-06")]
-
-中文:
-定义 brange
-  签名: (o : 序数) (f : 对任意 a < o, α)
-  定义体: { a | exists i hi, f i hi = a }
-
-@[deprecated mem_range (since := "2026-04-06")]
+--- 原说明 ---
+The range of a family indexed by ordinals.
 -/
-def brange (o : Ordinal) (f : forall a < o, α) : Set α :=
-  { a | exists i hi, f i hi = a }
+def brange (o : Ordinal) (f : ∀ a < o, α) : Set α :=
+  { a | ∃ i hi, f i hi = a }
 
 @[deprecated mem_range (since := "2026-04-06")]
-/--
-theorem `mem_brange` / 定理 `mem_brange`
-
-English:
-theorem mem_brange
-  given: {o : Ordinal} {f : forall a < o, α} {a}
-  statement: a in brange o f ↔ exists i hi, f i hi = a
-  proof: Iff.rfl
-
-@[deprecated mem_range_self (since := "2026-04-06")]
-
-中文:
-定理 mem_brange
-  条件: {o : 序数} {f : 对任意 a < o, α} {a}
-  结论: a in brange o f ↔ 存在 i hi, f i hi = a
-  证明: Iff.rfl
-
-@[deprecated mem_range_self (since := "2026-04-06")]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Ordinal.mem_brange** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：mem_brange {o : Ordinal} {f : forall a < o, α} {a} : a in brange o f ↔ exi
+sts i hi, f i hi = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_brange {o : Ordinal} {f : forall a < o, α} {a} : a in brange o f ↔ exists i hi, f i hi = a :=
+theorem mem_brange {o : Ordinal} {f : ∀ a < o, α} {a} : a ∈ brange o f ↔ ∃ i hi, f i hi = a :=
   Iff.rfl
 
 @[deprecated mem_range_self (since := "2026-04-06")]
-/--
-theorem `mem_brange_self` / 定理 `mem_brange_self`
-
-English:
-theorem mem_brange_self
-  given: {o} (f : forall a < o, α) (i hi)
-  statement: f i hi in brange o f
-  proof: ⟨i, hi, rfl⟩
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 mem_brange_self
-  条件: {o} (f : 对任意 a < o, α) (i hi)
-  结论: f i hi in brange o f
-  证明: ⟨i, hi, rfl⟩
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
+/-
+**Ordinal.mem_brange_self** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：mem_brange_self {o} (f : forall a < o, α) (i hi) : f i hi in brange o f
+参数：f : forall a < o, α；i hi。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_brange_self {o} (f : forall a < o, α) (i hi) : f i hi in brange o f :=
+theorem mem_brange_self {o} (f : ∀ a < o, α) (i hi) : f i hi ∈ brange o f :=
   ⟨i, hi, rfl⟩
 
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `range_familyOfBFamily'` / 定理 `range_familyOfBFamily'`
-
-English:
-theorem range_familyOfBFamily'
-  statement: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o}
-  proof: by
-  refine Set.ext fun a => ⟨?_, ?_⟩
-  · rintro ⟨b, rfl⟩
-    apply mem_brange_self
-  · rintro ⟨i, hi, rfl⟩
-    exact ⟨_, familyOfBFamily'_enum _ _ _ _ _⟩
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 range_familyOfBFamily'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o}
-  证明: by
-  refine Set.ext fun a => ⟨?_, ?_⟩
-  · rintro ⟨b, rfl⟩
-    apply mem_brange_self
-  · rintro ⟨i, hi, rfl⟩
-    exact ⟨_, familyOfBFamily'_enum _ _ _ _ _⟩
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-
-Depends on / 依赖: Set.ext, _enum, familyOfBFamily, mem_brange_self
+/-
+**Ordinal.range_familyOfBFamily'** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：range_familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r]
+ {o} (ho : type r = o) (f : forall a < o, α) : range (familyOfBFamily' r ho f) =
+ brange o f
+参数：r : ι -> ι -> Prop；ho : type r = o；f : forall a < o, α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Ordinal.mem_brange_self`：mem_brange_self {o} (f : forall a < o, α) (i hi
+) : f i hi in brange o f
+· 使用定理 `Ordinal.familyOfBFamily'_enum`：∀ {α : Type u_1} {ι : Type u} (r : ι → ι 
+→ Prop) [inst : IsWellOrder ι r] {o : Ordinal.{u}} (ho : Ordinal.type r = o)   (
+f : (a : Ordinal.{u…
 -/
-theorem range_familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o}
-    (ho : type r = o) (f : forall a < o, α) : range (familyOfBFamily' r ho f) = brange o f := by
+theorem range_familyOfBFamily' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] {o}
+    (ho : type r = o) (f : ∀ a < o, α) : range (familyOfBFamily' r ho f) = brange o f := by
   refine Set.ext fun a => ⟨?_, ?_⟩
   · rintro ⟨b, rfl⟩
     apply mem_brange_self
@@ -323,61 +255,39 @@ theorem range_familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder
     exact ⟨_, familyOfBFamily'_enum _ _ _ _ _⟩
 
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `range_familyOfBFamily` / 定理 `range_familyOfBFamily`
-
-English:
-theorem range_familyOfBFamily
-  given: {o} (f : forall a < o, α)
-  statement: range (familyOfBFamily o f) = brange o f
-  proof: range_familyOfBFamily' _ _ f
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 range_familyOfBFamily
-  条件: {o} (f : 对任意 a < o, α)
-  结论: range (familyOfBFamily o f) = brange o f
-  证明: range_familyOfBFamily' _ _ f
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-Depends on / 依赖: range_familyOfBFamily
+/-
+**Ordinal.range_familyOfBFamily** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：range_familyOfBFamily {o} (f : forall a < o, α) : range (familyOfBFamily o
+ f) = brange o f
+参数：f : forall a < o, α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.range_familyOfBFamily'`：range_familyOfBFamily' {ι : Type u} (r :
+ ι -> ι -> Prop) [IsWellOrder ι r] {o} (ho : type r = o) (f : forall a < o, α) :
+ range (familyOfBFam…
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
 -/
-theorem range_familyOfBFamily {o} (f : forall a < o, α) : range (familyOfBFamily o f) = brange o f :=
+theorem range_familyOfBFamily {o} (f : ∀ a < o, α) : range (familyOfBFamily o f) = brange o f :=
   range_familyOfBFamily' _ _ f
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `brange_bfamilyOfFamily'` / 定理 `brange_bfamilyOfFamily'`
-
-English:
-theorem brange_bfamilyOfFamily'
-  given: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α)
-  proof: by
-  refine Set.ext fun a => ⟨?_, ?_⟩
-  · rintro ⟨i, hi, rfl⟩
-    apply mem_range_self
-  · rintro ⟨b, rfl⟩
-    exact ⟨_, _, bfamilyOfFamily'_typein _ _ _⟩
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 brange_bfamilyOfFamily'
-  条件: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α)
-  证明: by
-  refine Set.ext fun a => ⟨?_, ?_⟩
-  · rintro ⟨i, hi, rfl⟩
-    apply mem_range_self
-  · rintro ⟨b, rfl⟩
-    exact ⟨_, _, bfamilyOfFamily'_typein _ _ _⟩
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-Depends on / 依赖: Set.ext, _typein, bfamilyOfFamily, mem_range_self
+/-
+**Ordinal.brange_bfamilyOfFamily'** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：brange_bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r
+] (f : ι -> α) : brange _ (bfamilyOfFamily' r f) = range f
+参数：r : ι -> ι -> Prop；f : ι -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Ordinal.typein_lt_type`：typein_lt_type (r : α -> α -> Prop) [IsWellOrder
+ α r] (a : α) : typein r a < type r
+· 使用定理 `Ordinal.bfamilyOfFamily'_typein`：∀ {α : Type u_1} {ι : Type u_3} (r : ι 
+→ ι → Prop) [inst : IsWellOrder ι r] (f : ι → α) (i : ι),   Ordinal.bfamilyOfFam
+ily' r f ((Ordinal.ty…
 -/
-theorem brange_bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α) :
+theorem brange_bfamilyOfFamily' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] (f : ι → α) :
     brange _ (bfamilyOfFamily' r f) = range f := by
   refine Set.ext fun a => ⟨?_, ?_⟩
   · rintro ⟨i, hi, rfl⟩
@@ -386,609 +296,502 @@ theorem brange_bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrde
     exact ⟨_, _, bfamilyOfFamily'_typein _ _ _⟩
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `brange_bfamilyOfFamily` / 定理 `brange_bfamilyOfFamily`
-
-English:
-theorem brange_bfamilyOfFamily
-  given: {ι : Type u} (f : ι -> α)
-  statement: brange _ (bfamilyOfFamily f) = range f
-  proof: brange_bfamilyOfFamily' _ _
-
-@[deprecated "brange is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 brange_bfamilyOfFamily
-  条件: {ι : 类型u} (f : ι -> α)
-  结论: brange _ (bfamilyOfFamily f) = range f
-  证明: brange_bfamilyOfFamily' _ _
-
-@[deprecated "brange is deprecated" (since := "2026-04-06")]
-
-Depends on / 依赖: brange_bfamilyOfFamily
+/-
+**Ordinal.brange_bfamilyOfFamily** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：brange_bfamilyOfFamily {ι : Type u} (f : ι -> α) : brange _ (bfamilyOfFami
+ly f) = range f
+参数：f : ι -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.brange_bfamilyOfFamily'`：brange_bfamilyOfFamily' {ι : Type u} (r
+ : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α) : brange _ (bfamilyOfFamily' r
+ f) = range f
 -/
-theorem brange_bfamilyOfFamily {ι : Type u} (f : ι -> α) : brange _ (bfamilyOfFamily f) = range f :=
+theorem brange_bfamilyOfFamily {ι : Type u} (f : ι → α) : brange _ (bfamilyOfFamily f) = range f :=
   brange_bfamilyOfFamily' _ _
 
 @[deprecated "brange is deprecated" (since := "2026-04-06")]
-/--
-theorem `brange_const` / 定理 `brange_const`
-
-English:
-theorem brange_const
-  given: {o : Ordinal} (ho : o != 0) {c : α}
-  statement: (brange o fun _ _ => c) = {c}
-  proof: by
-  rw [← range_familyOfBFamily]
-  exact @Set.range_const _ o.ToType (nonempty_toType_iff.2 ho) c
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 brange_const
-  条件: {o : 序数} (ho : o != 0) {c : α}
-  结论: (brange o fun _ _ => c) = {c}
-  证明: by
-  rw [← range_familyOfBFamily]
-  exact @Set.range_const _ o.ToType (nonempty_toType_iff.2 ho) c
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-Depends on / 依赖: Set.range_const, ToType, nonempty_toType_iff, o.ToType, range_const, range_familyOfBFamily
+/-
+**Ordinal.brange_const** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：brange_const {o : Ordinal} (ho : o != 0) {c : α} : (brange o fun _ _ => c)
+ = {c}
+参数：ho : o != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.range_familyOfBFamily`：range_familyOfBFamily {o} (f : forall a <
+ o, α) : range (familyOfBFamily o f) = brange o f
+· 使用定理 `Set.range_const`：range_const : forall [Nonempty ι] {c : α}, (range fun _
+ : ι => c) = {c}
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.nonempty_toType_iff`：nonempty_toType_iff {o : Ordinal} : Nonempt
+y o.ToType ↔ o != 0
 -/
-theorem brange_const {o : Ordinal} (ho : o != 0) {c : α} : (brange o fun _ _ => c) = {c} := by
+theorem brange_const {o : Ordinal} (ho : o ≠ 0) {c : α} : (brange o fun _ _ => c) = {c} := by
   rw [← range_familyOfBFamily]
   exact @Set.range_const _ o.ToType (nonempty_toType_iff.2 ho) c
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `comp_bfamilyOfFamily'` / 定理 `comp_bfamilyOfFamily'`
-
-English:
-theorem comp_bfamilyOfFamily'
-  statement: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α)
-  proof: rfl
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 comp_bfamilyOfFamily'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α)
-  证明: rfl
-
-@[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
+/-
+**Ordinal.comp_bfamilyOfFamily'** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：comp_bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] 
+(f : ι -> α) (g : α -> β) : (fun i hi => g (bfamilyOfFamily' r f i hi)) = bfamil
+yOfFamily' r (g ∘ f)
+参数：r : ι -> ι -> Prop；f : ι -> α；g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α)
-    (g : α -> β) : (fun i hi => g (bfamilyOfFamily' r f i hi)) = bfamilyOfFamily' r (g ∘ f) :=
+theorem comp_bfamilyOfFamily' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] (f : ι → α)
+    (g : α → β) : (fun i hi => g (bfamilyOfFamily' r f i hi)) = bfamilyOfFamily' r (g ∘ f) :=
   rfl
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `comp_bfamilyOfFamily` / 定理 `comp_bfamilyOfFamily`
-
-English:
-theorem comp_bfamilyOfFamily
-  given: {ι : Type u} (f : ι -> α) (g : α -> β)
-  proof: rfl
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 comp_bfamilyOfFamily
-  条件: {ι : 类型u} (f : ι -> α) (g : α -> β)
-  证明: rfl
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
+/-
+**Ordinal.comp_bfamilyOfFamily** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：comp_bfamilyOfFamily {ι : Type u} (f : ι -> α) (g : α -> β) : (fun i hi =>
+ g (bfamilyOfFamily f i hi)) = bfamilyOfFamily (g ∘ f)
+参数：f : ι -> α；g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_bfamilyOfFamily {ι : Type u} (f : ι -> α) (g : α -> β) :
+theorem comp_bfamilyOfFamily {ι : Type u} (f : ι → α) (g : α → β) :
     (fun i hi => g (bfamilyOfFamily f i hi)) = bfamilyOfFamily (g ∘ f) :=
   rfl
 
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `comp_familyOfBFamily'` / 定理 `comp_familyOfBFamily'`
-
-English:
-theorem comp_familyOfBFamily'
-  statement: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o}
-  proof: rfl
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-
-中文:
-定理 comp_familyOfBFamily'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o}
-  证明: rfl
-
-@[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
+/-
+**Ordinal.comp_familyOfBFamily'** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：comp_familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] 
+{o} (ho : type r = o) (f : forall a < o, α) (g : α -> β) : g ∘ familyOfBFamily' 
+r ho f = familyOfBFamily' r ho fun i hi => g (f i hi)
+参数：r : ι -> ι -> Prop；ho : type r = o；f : forall a < o, α；g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_familyOfBFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o}
-    (ho : type r = o) (f : forall a < o, α) (g : α -> β) :
+theorem comp_familyOfBFamily' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] {o}
+    (ho : type r = o) (f : ∀ a < o, α) (g : α → β) :
     g ∘ familyOfBFamily' r ho f = familyOfBFamily' r ho fun i hi => g (f i hi) :=
   rfl
 
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `comp_familyOfBFamily` / 定理 `comp_familyOfBFamily`
-
-English:
-theorem comp_familyOfBFamily
-  given: {o} (f : forall a < o, α) (g : α -> β)
-  proof: rfl
-
-中文:
-定理 comp_familyOfBFamily
-  条件: {o} (f : 对任意 a < o, α) (g : α -> β)
-  证明: rfl
+/-
+**Ordinal.comp_familyOfBFamily** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：comp_familyOfBFamily {o} (f : forall a < o, α) (g : α -> β) : g ∘ familyOf
+BFamily o f = familyOfBFamily o fun i hi => g (f i hi)
+参数：f : forall a < o, α；g : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_familyOfBFamily {o} (f : forall a < o, α) (g : α -> β) :
+theorem comp_familyOfBFamily {o} (f : ∀ a < o, α) (g : α → β) :
     g ∘ familyOfBFamily o f = familyOfBFamily o fun i hi => g (f i hi) :=
   rfl
 
+/-! ### Supremum of a family of ordinals -/
 
-/--
-theorem `bddAbove_of_small` / 定理 `bddAbove_of_small`
+/-
+**Ordinal.bddAbove_of_small** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bddAbove_of_small {s : Set Ordinal.{u}} [Small.{u} s] : BddAbove s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.bddAbove_of_small`：bddAbove_of_small {s : Set Cardinal.{u}} [h 
+: Small.{u} s] : BddAbove s
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Cardinal.instNoMaxOrder`：NoMaxOrder Cardinal.{u}
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 
-English:
-theorem bddAbove_of_small
-  given: {s : Set Ordinal.{u}} [Small.{u} s]
-  statement: BddAbove s
-  proof: by
-  obtain ⟨a, ha⟩ := Cardinal.bddAbove_of_small (s := (succ ∘ card) '' s)
-  refine ⟨a.ord, fun b hb => le_of_lt ?_⟩
-  simpa [lt_ord] using ha (mem_image_of_mem _ hb)
-
-@[deprecated bddAbove_of_small (since := "2026-04-04")]
-
-中文:
-定理 bddAbove_of_small
-  条件: {s : 集合 序数.{u}} [Small.{u} s]
-  结论: BddAbove s
-  证明: by
-  obtain ⟨a, ha⟩ := Cardinal.bddAbove_of_small (s := (succ ∘ card) '' s)
-  refine ⟨a.ord, fun b hb => le_of_lt ?_⟩
-  simpa [lt_ord] using ha (mem_image_of_mem _ hb)
-
-@[deprecated bddAbove_of_small (since := "2026-04-04")]
-
-Depends on / 依赖: Cardinal, Cardinal.bddAbove_of_small, a.ord, bddAbove_of_small, le_of_lt, lt_ord, mem_image_of_mem
+--- 原说明 ---
+### Supremum of a family of ordinals
 -/
 theorem bddAbove_of_small {s : Set Ordinal.{u}} [Small.{u} s] : BddAbove s := by
   obtain ⟨a, ha⟩ := Cardinal.bddAbove_of_small (s := (succ ∘ card) '' s)
-  refine ⟨a.ord, fun b hb => le_of_lt ?_⟩
+  refine ⟨a.ord, fun b hb ↦ le_of_lt ?_⟩
   simpa [lt_ord] using ha (mem_image_of_mem _ hb)
 
 @[deprecated bddAbove_of_small (since := "2026-04-04")]
-/--
-theorem `bddAbove_range` / 定理 `bddAbove_range`
-
-English:
-theorem bddAbove_range
-  given: {ι : Type u} (f : ι -> Ordinal.{max u v})
-  statement: BddAbove (Set.range f)
-  proof: bddAbove_of_small
-
-中文:
-定理 bddAbove_range
-  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
-  结论: BddAbove (集合.range f)
-  证明: bddAbove_of_small
-
-Depends on / 依赖: bddAbove_of_small
+/-
+**Ordinal.bddAbove_range** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bddAbove_range {ι : Type u} (f : ι -> Ordinal.{max u v}) : BddAbove (Set.r
+ange f)
+参数：f : ι -> Ordinal.{max u v}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-theorem bddAbove_range {ι : Type u} (f : ι -> Ordinal.{max u v}) : BddAbove (Set.range f) :=
+theorem bddAbove_range {ι : Type u} (f : ι → Ordinal.{max u v}) : BddAbove (Set.range f) :=
   bddAbove_of_small
-
-/--
-theorem `bddAbove_iff_small` / 定理 `bddAbove_iff_small`
-
-English:
-theorem bddAbove_iff_small
-  given: {s : Set Ordinal.{u}}
-  statement: BddAbove s ↔ Small.{u} s
-  proof: ⟨fun ⟨a, h⟩ => small_subset (s := Iic a) fun _ hx => h hx, fun _ => bddAbove_of_small⟩
-
-中文:
-定理 bddAbove_iff_small
-  条件: {s : 集合 序数.{u}}
-  结论: BddAbove s ↔ Small.{u} s
-  证明: ⟨fun ⟨a, h⟩ => small_subset (s := Iic a) fun _ hx => h hx, fun _ => bddAbove_of_small⟩
-
-Depends on / 依赖: bddAbove_of_small, small_subset
+/-
+**Ordinal.bddAbove_iff_small** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bddAbove_iff_small {s : Set Ordinal.{u}} : BddAbove s ↔ Small.{u} s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subset`：small_subset {s t : Set α} (hts : t subseteq s) [Small.{u}
+ s] : Small.{u} t
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
 -/
 theorem bddAbove_iff_small {s : Set Ordinal.{u}} : BddAbove s ↔ Small.{u} s :=
-  ⟨fun ⟨a, h⟩ => small_subset (s := Iic a) fun _ hx => h hx, fun _ => bddAbove_of_small⟩
-
-/--
-theorem `bddAbove_image` / 定理 `bddAbove_image`
-
-English:
-theorem bddAbove_image
-  statement: {s : Set Ordinal.{u}} (hf : BddAbove s)
-  proof: by
-  rw [bddAbove_iff_small] at hf ⊢
-  exact small_lift _
-
-中文:
-定理 bddAbove_image
-  结论: {s : 集合 序数.{u}} (hf : BddAbove s)
-  证明: by
-  rw [bddAbove_iff_small] at hf ⊢
-  exact small_lift _
-
-Depends on / 依赖: bddAbove_iff_small, small_lift
+  ⟨fun ⟨a, h⟩ ↦ small_subset (s := Iic a) fun _ hx ↦ h hx, fun _ ↦ bddAbove_of_small⟩
+/-
+**Ordinal.bddAbove_image** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bddAbove_image {s : Set Ordinal.{u}} (hf : BddAbove s) (f : Ordinal.{u} ->
+ Ordinal.{max u v}) : BddAbove (f '' s)
+参数：hf : BddAbove s；f : Ordinal.{u} -> Ordinal.{max u v}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.bddAbove_iff_small`：bddAbove_iff_small {s : Set Ordinal.{u}} : B
+ddAbove s ↔ Small.{u} s
+· 使用定理 `small_lift`：small_lift (α : Type u) [hα : Small.{v} α] : Small.{max v w}
+ α
 -/
 theorem bddAbove_image {s : Set Ordinal.{u}} (hf : BddAbove s)
-    (f : Ordinal.{u} -> Ordinal.{max u v}) : BddAbove (f '' s) := by
+    (f : Ordinal.{u} → Ordinal.{max u v}) : BddAbove (f '' s) := by
   rw [bddAbove_iff_small] at hf ⊢
   exact small_lift _
-
-/--
-theorem `bddAbove_range_comp` / 定理 `bddAbove_range_comp`
-
-English:
-theorem bddAbove_range_comp
-  statement: {ι : Type u} {f : ι -> Ordinal.{v}} (hf : BddAbove (range f))
-  proof: by
-  rw [range_comp]
-  exact bddAbove_image hf g
-
-中文:
-定理 bddAbove_range_comp
-  结论: {ι : 类型u} {f : ι -> 序数.{v}} (hf : BddAbove (range f))
-  证明: by
-  rw [range_comp]
-  exact bddAbove_image hf g
-
-Depends on / 依赖: bddAbove_image, range_comp
+/-
+**Ordinal.bddAbove_range_comp** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bddAbove_range_comp {ι : Type u} {f : ι -> Ordinal.{v}} (hf : BddAbove (ra
+nge f)) (g : Ordinal.{v} -> Ordinal.{max v w}) : BddAbove (range (g ∘ f))
+参数：hf : BddAbove (range f)；g : Ordinal.{v} -> Ordinal.{max v w}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Ordinal.bddAbove_image`：bddAbove_image {s : Set Ordinal.{u}} (hf : BddAb
+ove s) (f : Ordinal.{u} -> Ordinal.{max u v}) : BddAbove (f '' s)
 -/
-theorem bddAbove_range_comp {ι : Type u} {f : ι -> Ordinal.{v}} (hf : BddAbove (range f))
-    (g : Ordinal.{v} -> Ordinal.{max v w}) : BddAbove (range (g ∘ f)) := by
+theorem bddAbove_range_comp {ι : Type u} {f : ι → Ordinal.{v}} (hf : BddAbove (range f))
+    (g : Ordinal.{v} → Ordinal.{max v w}) : BddAbove (range (g ∘ f)) := by
   rw [range_comp]
   exact bddAbove_image hf g
 
-/--
-theorem `le_iSup` / 定理 `le_iSup`
+/-- `le_ciSup` whenever the input type is small in the output universe. This lemma sometimes
+fails to infer `f` in simple cases and needs it to be given explicitly. -/
+/-
+**Ordinal.le_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} ι] (i : ι), f i ≤ ⨆
+ i, f i
+参数：f : ι → Ordinal.{u}；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_ciSup`：le_ciSup {f : ι -> α} (H : BddAbove (range f)) (c : ι) : f c <
+= iSup f
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
 
-English:
-theorem le_iSup
-  given: {ι} (f : ι -> Ordinal.{u}) [Small.{u} ι]
-  statement: forall i, f i <= ⨆ i, f i
-  proof: le_ciSup bddAbove_of_small
-
-中文:
-定理 le_iSup
-  条件: {ι} (f : ι -> 序数.{u}) [Small.{u} ι]
-  结论: 对任意 i, f i <= ⨆ i, f i
-  证明: le_ciSup bddAbove_of_small
+--- 原说明 ---
+`le_ciSup` whenever the input type is small in the output universe. This lemma s
+ometimes
+fails to infer `f` in simple cases and needs it to be given explicitly.
 -/
-protected theorem le_iSup {ι} (f : ι -> Ordinal.{u}) [Small.{u} ι] : forall i, f i <= ⨆ i, f i :=
+protected theorem le_iSup {ι} (f : ι → Ordinal.{u}) [Small.{u} ι] : ∀ i, f i ≤ ⨆ i, f i :=
   le_ciSup bddAbove_of_small
 
 /-- `ciSup_le_iff'` whenever the input type is small in the output universe. -/
 @[simp]
-/--
-theorem `iSup_le_iff` / 定理 `iSup_le_iff`
+/-
+**Ordinal.iSup_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {ι : Type u_3} {f : ι → Ordinal.{u}} {a : Ordinal.{u}} [Small.{u, u_3} ι
+], ⨆ i, f i ≤ a ↔ ∀ (i : ι), f i ≤ a
+参数：i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciSup_le_iff'`：ciSup_le_iff' {f : ι -> α} (h : BddAbove (range f)) {a : 
+α} : ⨆ i, f i <= a ↔ forall i, f i <= a
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
 
-English:
-theorem iSup_le_iff
-  given: {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι]
-  proof: ciSup_le_iff' bddAbove_of_small
-
-中文:
-定理 iSup_le_iff
-  条件: {ι} {f : ι -> 序数.{u}} {a : 序数.{u}} [Small.{u} ι]
-  证明: ciSup_le_iff' bddAbove_of_small
+--- 原说明 ---
+`ciSup_le_iff'` whenever the input type is small in the output universe.
 -/
-protected theorem iSup_le_iff {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
-    ⨆ i, f i <= a ↔ forall i, f i <= a :=
+protected theorem iSup_le_iff {ι} {f : ι → Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
+    ⨆ i, f i ≤ a ↔ ∀ i, f i ≤ a :=
   ciSup_le_iff' bddAbove_of_small
 
-/--
-theorem `iSup_le` / 定理 `iSup_le`
+/-- An alias of `ciSup_le'` for discoverability. -/
+/-
+**Ordinal.iSup_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {ι : Sort u_3} {f : ι → Ordinal.{u_4}} {a : Ordinal.{u_4}}, (∀ (i : ι), 
+f i ≤ a) → ⨆ i, f i ≤ a
+参数：∀ (i : ι), f i ≤ a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciSup_le'`：ciSup_le' {f : ι -> α} {a : α} (h : forall i, f i <= a) : ⨆ i
+, f i <= a
 
-English:
-theorem iSup_le
-  given: {ι} {f : ι -> Ordinal} {a}
-  statement: (forall i, f i <= a) -> ⨆ i, f i <= a
-  proof: ciSup_le'
-
-中文:
-定理 iSup_le
-  条件: {ι} {f : ι -> 序数} {a}
-  结论: (对任意 i, f i <= a) -> ⨆ i, f i <= a
-  证明: ciSup_le'
+--- 原说明 ---
+An alias of `ciSup_le'` for discoverability.
 -/
-protected theorem iSup_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i <= a) -> ⨆ i, f i <= a :=
+protected theorem iSup_le {ι} {f : ι → Ordinal} {a} : (∀ i, f i ≤ a) → ⨆ i, f i ≤ a :=
   ciSup_le'
 
 /-- `lt_ciSup_iff'` whenever the input type is small in the output universe. -/
 @[simp]
-/--
-theorem `lt_iSup_iff` / 定理 `lt_iSup_iff`
+/-
+**Ordinal.lt_iSup_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {ι : Type u_3} {f : ι → Ordinal.{u}} {a : Ordinal.{u}} [Small.{u, u_3} ι
+], a < ⨆ i, f i ↔ ∃ i, a < f i
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_ciSup_iff'`：lt_ciSup_iff' {f : ι -> α} (h : BddAbove (range f)) : a <
+ iSup f ↔ exists i, a < f i
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
 
-English:
-theorem lt_iSup_iff
-  given: {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι]
-  proof: lt_ciSup_iff' bddAbove_of_small
-
-中文:
-定理 lt_iSup_iff
-  条件: {ι} {f : ι -> 序数.{u}} {a : 序数.{u}} [Small.{u} ι]
-  证明: lt_ciSup_iff' bddAbove_of_small
+--- 原说明 ---
+`lt_ciSup_iff'` whenever the input type is small in the output universe.
 -/
-protected theorem lt_iSup_iff {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
-    a < ⨆ i, f i ↔ exists i, a < f i :=
+protected theorem lt_iSup_iff {ι} {f : ι → Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
+    a < ⨆ i, f i ↔ ∃ i, a < f i :=
   lt_ciSup_iff' bddAbove_of_small
-
-/--
-theorem `lt_iSup_add_one` / 定理 `lt_iSup_add_one`
-
-English:
-theorem lt_iSup_add_one
-  given: {ι} (f : ι -> Ordinal.{u}) [Small.{u} ι] (i)
-  statement: f i < ⨆ i, f i + 1
-  proof: by
+/-
+**Ordinal.lt_iSup_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_iSup_add_one {ι} (f : ι -> Ordinal.{u}) [Small.{u} ι] (i) : f i < ⨆ i, 
+f i + 1
+参数：f : ι -> Ordinal.{u}；i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.add_one_le_iff`：add_one_le_iff [NoMaxOrder α] : x + 1 <= y ↔ x < y
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
+-/
+theorem lt_iSup_add_one {ι} (f : ι → Ordinal.{u}) [Small.{u} ι] (i) : f i < ⨆ i, f i + 1 := by
   rw [← add_one_le_iff]
   apply Ordinal.le_iSup
-
-中文:
-定理 lt_iSup_add_one
-  条件: {ι} (f : ι -> 序数.{u}) [Small.{u} ι] (i)
-  结论: f i < ⨆ i, f i + 1
-  证明: by
-  rw [← add_one_le_iff]
-  apply Ordinal.le_iSup
-
-Depends on / 依赖: Ordinal, Ordinal.le_iSup, add_one_le_iff, le_iSup
+/-
+**Ordinal.iSup_add_one_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_add_one_le_iff {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u
+} ι] : ⨆ i, f i + 1 <= a ↔ forall i, f i < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem lt_iSup_add_one {ι} (f : ι -> Ordinal.{u}) [Small.{u} ι] (i) : f i < ⨆ i, f i + 1 := by
-  rw [← add_one_le_iff]
-  apply Ordinal.le_iSup
-
-/--
-theorem `iSup_add_one_le_iff` / 定理 `iSup_add_one_le_iff`
-
-English:
-theorem iSup_add_one_le_iff
-  given: {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι]
-  proof: by
+theorem iSup_add_one_le_iff {ι} {f : ι → Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
+    ⨆ i, f i + 1 ≤ a ↔ ∀ i, f i < a := by
   simp
-
-中文:
-定理 iSup_add_one_le_iff
-  条件: {ι} {f : ι -> 序数.{u}} {a : 序数.{u}} [Small.{u} ι]
-  证明: by
-  simp
+/-
+**Ordinal.iSup_add_one_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_add_one_le {ι} {f : ι -> Ordinal.{u}} {a} (h : forall i, f i < a) : ⨆
+ i, f i + 1 <= a
+参数：h : forall i, f i < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciSup_le'`：ciSup_le' {f : ι -> α} {a : α} (h : forall i, f i <= a) : ⨆ i
+, f i <= a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
 -/
-theorem iSup_add_one_le_iff {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
-    ⨆ i, f i + 1 <= a ↔ forall i, f i < a := by
-  simp
-
-/--
-theorem `iSup_add_one_le` / 定理 `iSup_add_one_le`
-
-English:
-theorem iSup_add_one_le
-  given: {ι} {f : ι -> Ordinal.{u}} {a} (h : forall i, f i < a)
-  statement: ⨆ i, f i + 1 <= a
-  proof: ciSup_le' (by simpa)
-
-中文:
-定理 iSup_add_one_le
-  条件: {ι} {f : ι -> 序数.{u}} {a} (h : 对任意 i, f i < a)
-  结论: ⨆ i, f i + 1 <= a
-  证明: ciSup_le' (by simpa)
-
-Depends on / 依赖: ciSup_le
--/
-theorem iSup_add_one_le {ι} {f : ι -> Ordinal.{u}} {a} (h : forall i, f i < a) : ⨆ i, f i + 1 <= a :=
+theorem iSup_add_one_le {ι} {f : ι → Ordinal.{u}} {a} (h : ∀ i, f i < a) : ⨆ i, f i + 1 ≤ a :=
   ciSup_le' (by simpa)
-
-/--
-theorem `lt_iSup_add_one_iff` / 定理 `lt_iSup_add_one_iff`
-
-English:
-theorem lt_iSup_add_one_iff
-  given: {ι} {f : ι -> Ordinal.{u}} {a} [Small.{u} ι]
-  proof: by
-  simp
-
-中文:
-定理 lt_iSup_add_one_iff
-  条件: {ι} {f : ι -> 序数.{u}} {a} [Small.{u} ι]
-  证明: by
-  simp
+/-
+**Ordinal.lt_iSup_add_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_iSup_add_one_iff {ι} {f : ι -> Ordinal.{u}} {a} [Small.{u} ι] : a < ⨆ i
+, f i + 1 ↔ exists i, a <= f i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem lt_iSup_add_one_iff {ι} {f : ι -> Ordinal.{u}} {a} [Small.{u} ι] :
-    a < ⨆ i, f i + 1 ↔ exists i, a <= f i := by
+theorem lt_iSup_add_one_iff {ι} {f : ι → Ordinal.{u}} {a} [Small.{u} ι] :
+    a < ⨆ i, f i + 1 ↔ ∃ i, a ≤ f i := by
   simp
 
 -- TODO: state in terms of `IsSuccLimit`.
-/--
-theorem `succ_lt_iSup_of_ne_iSup` / 定理 `succ_lt_iSup_of_ne_iSup`
-
-English:
-theorem succ_lt_iSup_of_ne_iSup
-  statement: {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι]
-  proof: by
-  by_contra! hoa
-  exact hao.not_ge (Ordinal.iSup_le fun i => le_of_lt_succ <|
-    ((Ordinal.le_iSup _ _).lt_of_ne (hf i)).trans_le hoa)
-
-中文:
-定理 succ_lt_iSup_of_ne_iSup
-  结论: {ι} {f : ι -> 序数.{u}} [Small.{u} ι]
-  证明: by
-  by_contra! hoa
-  exact hao.not_ge (Ordinal.iSup_le fun i => le_of_lt_succ <|
-    ((Ordinal.le_iSup _ _).lt_of_ne (hf i)).trans_le hoa)
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le, Ordinal.le_iSup, hao.not_ge, iSup_le, le_iSup, le_of_lt_succ, lt_of_ne, not_ge, trans_le
+/-
+**Ordinal.succ_lt_iSup_of_ne_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：succ_lt_iSup_of_ne_iSup {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι] (hf : for
+all i, f i != iSup f) {a} (hao : a < iSup f) : succ a < iSup f
+参数：hf : forall i, f i != iSup f；hao : a < iSup f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Ordinal.iSup_le`：∀ {ι : Sort u_3} {f : ι → Ordinal.{u_4}} {a : Ordinal.{
+u_4}}, (∀ (i : ι), f i ≤ a) → ⨆ i, f i ≤ a
+· 使用定理 `Order.le_of_lt_succ`：le_of_lt_succ {a b : α} : a < succ b -> a <= b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
 -/
-theorem succ_lt_iSup_of_ne_iSup {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι]
-    (hf : forall i, f i != iSup f) {a} (hao : a < iSup f) : succ a < iSup f := by
+theorem succ_lt_iSup_of_ne_iSup {ι} {f : ι → Ordinal.{u}} [Small.{u} ι]
+    (hf : ∀ i, f i ≠ iSup f) {a} (hao : a < iSup f) : succ a < iSup f := by
   by_contra! hoa
-  exact hao.not_ge (Ordinal.iSup_le fun i => le_of_lt_succ <|
+  exact hao.not_ge (Ordinal.iSup_le fun i ↦ le_of_lt_succ <|
     ((Ordinal.le_iSup _ _).lt_of_ne (hf i)).trans_le hoa)
 
 -- TODO: generalize to conditionally complete lattices.
-/--
-theorem `iSup_eq_zero_iff` / 定理 `iSup_eq_zero_iff`
-
-English:
-theorem iSup_eq_zero_iff
-  given: {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι]
-  proof: by
-  refine
-    ⟨fun h i => ?_, fun h =>
-      le_antisymm (Ordinal.iSup_le fun i => nonpos_iff_eq_zero.2 (h i)) zero_le⟩
-  rw [← nonpos_iff_eq_zero]; rw [← h]
-  exact Ordinal.le_iSup f i
-
-@[deprecated congrArg (since := "2026-03-27")]
-
-中文:
-定理 iSup_eq_zero_iff
-  条件: {ι} {f : ι -> 序数.{u}} [Small.{u} ι]
-  证明: by
-  refine
-    ⟨fun h i => ?_, fun h =>
-      le_antisymm (Ordinal.iSup_le fun i => nonpos_iff_eq_zero.2 (h i)) zero_le⟩
-  rw [← nonpos_iff_eq_zero]; rw [← h]
-  exact Ordinal.le_iSup f i
-
-@[deprecated congrArg (since := "2026-03-27")]
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le, Ordinal.le_iSup, iSup_le, le_antisymm, le_iSup, nonpos_iff_eq_zero, zero_le
+/-
+**Ordinal.iSup_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_zero_iff {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι] : iSup f = 0 ↔ f
+orall i, f i = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.iSup_le`：∀ {ι : Sort u_3} {f : ι → Ordinal.{u_4}} {a : Ordinal.{
+u_4}}, (∀ (i : ι), f i ≤ a) → ⨆ i, f i ≤ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
 -/
-theorem iSup_eq_zero_iff {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι] :
-    iSup f = 0 ↔ forall i, f i = 0 := by
+theorem iSup_eq_zero_iff {ι} {f : ι → Ordinal.{u}} [Small.{u} ι] :
+    iSup f = 0 ↔ ∀ i, f i = 0 := by
   refine
     ⟨fun h i => ?_, fun h =>
       le_antisymm (Ordinal.iSup_le fun i => nonpos_iff_eq_zero.2 (h i)) zero_le⟩
-  rw [← nonpos_iff_eq_zero]; rw [← h]
+  rw [← nonpos_iff_eq_zero, ← h]
   exact Ordinal.le_iSup f i
 
 @[deprecated congrArg (since := "2026-03-27")]
-/--
-theorem `iSup_eq_of_range_eq` / 定理 `iSup_eq_of_range_eq`
-
-English:
-theorem iSup_eq_of_range_eq
-  statement: {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
-  proof: congr_arg _ h
-
-中文:
-定理 iSup_eq_of_range_eq
-  结论: {ι ι'} {f : ι -> 序数} {g : ι' -> 序数}
-  证明: congr_arg _ h
-
-Depends on / 依赖: congr_arg
+/-
+**Ordinal.iSup_eq_of_range_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_of_range_eq {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal} (h : Set
+.range f = Set.range g) : iSup f = iSup g
+参数：h : Set.range f = Set.range g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem iSup_eq_of_range_eq {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
+theorem iSup_eq_of_range_eq {ι ι'} {f : ι → Ordinal} {g : ι' → Ordinal}
     (h : Set.range f = Set.range g) : iSup f = iSup g :=
   congr_arg _ h
 
 -- TODO: generalize to conditionally complete lattices
-/--
-theorem `iSup_sum` / 定理 `iSup_sum`
-
-English:
-theorem iSup_sum
-  given: {α β} (f : α oplus β -> Ordinal.{u}) [Small.{u} α] [Small.{u} β]
-  proof: by
-  apply (Ordinal.iSup_le _).antisymm (max_le _ _)
-  · rintro (i | i)
-    · exact le_max_of_le_left (Ordinal.le_iSup (fun x => f (Sum.inl x)) i)
-    · exact le_max_of_le_right (Ordinal.le_iSup (fun x => f (Sum.inr x)) i)
-  all_goals
-    apply csSup_le_csSup' bddAbove_of_small
-    rintro i ⟨a, rfl⟩
-    apply mem_range_self
-
-中文:
-定理 iSup_sum
-  条件: {α β} (f : α oplus β -> 序数.{u}) [Small.{u} α] [Small.{u} β]
-  证明: by
-  apply (Ordinal.iSup_le _).antisymm (max_le _ _)
-  · rintro (i | i)
-    · exact le_max_of_le_left (Ordinal.le_iSup (fun x => f (Sum.inl x)) i)
-    · exact le_max_of_le_right (Ordinal.le_iSup (fun x => f (Sum.inr x)) i)
-  all_goals
-    apply csSup_le_csSup' bddAbove_of_small
-    rintro i ⟨a, rfl⟩
-    apply mem_range_self
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le, Ordinal.le_iSup, Sum.inl, Sum.inr, all_goals, antisymm, bddAbove_of_small, csSup_le_csSup, iSup_le, le_iSup, le_max_of_le_left, le_max_of_le_right, max_le, mem_range_self
+/-
+**Ordinal.iSup_sum** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_sum {α β} (f : α oplus β -> Ordinal.{u}) [Small.{u} α] [Small.{u} β] 
+: iSup f = max (⨆ a, f (Sum.inl a)) (⨆ b, f (Sum.inr b))
+参数：f : α oplus β -> Ordinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ordinal.iSup_le`：∀ {ι : Sort u_3} {f : ι → Ordinal.{u_4}} {a : Ordinal.{
+u_4}}, (∀ (i : ι), f i ≤ a) → ⨆ i, f i ≤ a
+· 使用定理 `le_max_of_le_left`：le_max_of_le_left : a <= b -> a <= max b c
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
+· 使用定理 `le_max_of_le_right`：le_max_of_le_right : a <= c -> a <= max b c
+· 使用定理 `max_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, a ≤ c → b ≤
+ c → max a b ≤ c
+· 使用定理 `csSup_le_csSup'`：csSup_le_csSup' {s t : Set α} (h₁ : BddAbove t) (h₂ : s
+ subseteq t) : sSup s <= sSup t
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem iSup_sum {α β} (f : α oplus β -> Ordinal.{u}) [Small.{u} α] [Small.{u} β] :
+theorem iSup_sum {α β} (f : α ⊕ β → Ordinal.{u}) [Small.{u} α] [Small.{u} β] :
     iSup f = max (⨆ a, f (Sum.inl a)) (⨆ b, f (Sum.inr b)) := by
   apply (Ordinal.iSup_le _).antisymm (max_le _ _)
   · rintro (i | i)
-    · exact le_max_of_le_left (Ordinal.le_iSup (fun x => f (Sum.inl x)) i)
-    · exact le_max_of_le_right (Ordinal.le_iSup (fun x => f (Sum.inr x)) i)
+    · exact le_max_of_le_left (Ordinal.le_iSup (fun x ↦ f (Sum.inl x)) i)
+    · exact le_max_of_le_right (Ordinal.le_iSup (fun x ↦ f (Sum.inr x)) i)
   all_goals
     apply csSup_le_csSup' bddAbove_of_small
     rintro i ⟨a, rfl⟩
     apply mem_range_self
-
-/--
-theorem `unbounded_range_of_le_iSup` / 定理 `unbounded_range_of_le_iSup`
-
-English:
-theorem unbounded_range_of_le_iSup
-  statement: {α β : Type u} (r : α -> α -> Prop) [IsWellOrder α r] (f : β -> α)
-  proof: (not_bounded_iff _).1 fun ⟨x, hx⟩ =>
-h.not_gt lt_of_le_of_lt
-      (Ordinal.iSup_le fun y => ((typein_lt_typein r).2 <| hx _ <| mem_range_self y).le)
-      (typein_lt_type r x)
-
-中文:
-定理 unbounded_range_of_le_iSup
-  结论: {α β : 类型u} (r : α -> α -> 命题) [是良序 α r] (f : β -> α)
-  证明: (not_bounded_iff _).1 fun ⟨x, hx⟩ =>
-h.not_gt lt_of_le_of_lt
-      (Ordinal.iSup_le fun y => ((typein_lt_typein r).2 <| hx _ <| mem_range_self y).le)
-      (typein_lt_type r x)
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le, h.not_gt, iSup_le, lt_of_le_of_lt, mem_range_self, not_bounded_iff, not_gt, typein_lt_type, typein_lt_typein
+/-
+**Ordinal.unbounded_range_of_le_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：unbounded_range_of_le_iSup {α β : Type u} (r : α -> α -> Prop) [IsWellOrde
+r α r] (f : β -> α) (h : type r <= ⨆ i, typein r (f i)) : Unbounded r (range f)
+参数：r : α -> α -> Prop；f : β -> α；h : type r <= ⨆ i, typein r (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.not_bounded_iff`：not_bounded_iff {r : α -> α -> Prop} (s : Set α) : 
+¬Bounded r s ↔ Unbounded r s
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Ordinal.iSup_le`：∀ {ι : Sort u_3} {f : ι → Ordinal.{u_4}} {a : Ordinal.{
+u_4}}, (∀ (i : ι), f i ≤ a) → ⨆ i, f i ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.typein_lt_typein`：typein_lt_typein (r : α -> α -> Prop) [IsWellO
+rder α r] {a b : α} : typein r a < typein r b ↔ r a b
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Ordinal.typein_lt_type`：typein_lt_type (r : α -> α -> Prop) [IsWellOrder
+ α r] (a : α) : typein r a < type r
 -/
-theorem unbounded_range_of_le_iSup {α β : Type u} (r : α -> α -> Prop) [IsWellOrder α r] (f : β -> α)
-    (h : type r <= ⨆ i, typein r (f i)) : Unbounded r (range f) :=
+theorem unbounded_range_of_le_iSup {α β : Type u} (r : α → α → Prop) [IsWellOrder α r] (f : β → α)
+    (h : type r ≤ ⨆ i, typein r (f i)) : Unbounded r (range f) :=
   (not_bounded_iff _).1 fun ⟨x, hx⟩ =>
-h.not_gt lt_of_le_of_lt
+    h.not_gt <| lt_of_le_of_lt
       (Ordinal.iSup_le fun y => ((typein_lt_typein r).2 <| hx _ <| mem_range_self y).le)
       (typein_lt_type r x)
-
-/--
-theorem `sSup_ord` / 定理 `sSup_ord`
-
-English:
-theorem sSup_ord
-  given: (s : Set Cardinal)
-  statement: (sSup s).ord = sSup (ord '' s)
-  proof: by
-  obtain rfl | hn := s.eq_empty_or_nonempty
-  · simp
-  · by_cases hs : BddAbove s
-    · exact isNormal_ord.map_sSup hn hs
-    · rw [csSup_of_not_bddAbove hs, csSup_of_not_bddAbove (bddAbove_ord_image_iff.not.2 hs)]
-      simp
-
-中文:
-定理 sSup_ord
-  条件: (s : 集合 基数)
-  结论: (sSup s).ord = sSup (ord '' s)
-  证明: by
-  obtain rfl | hn := s.eq_empty_or_nonempty
-  · simp
-  · by_cases hs : BddAbove s
-    · exact isNormal_ord.map_sSup hn hs
-    · rw [csSup_of_not_bddAbove hs, csSup_of_not_bddAbove (bddAbove_ord_image_iff.not.2 hs)]
-      simp
-
-Depends on / 依赖: BddAbove, bddAbove_ord_image_iff, bddAbove_ord_image_iff.not, csSup_of_not_bddAbove, eq_empty_or_nonempty, isNormal_ord, isNormal_ord.map_sSup, map_sSup, s.eq_empty_or_nonempty
+/-
+**Ordinal.sSup_ord** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：sSup_ord (s : Set Cardinal) : (sSup s).ord = sSup (ord '' s)
+参数：s : Set Cardinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `csSup_empty`：csSup_empty : (sSup ∅ : α) = ⊥
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `Cardinal.ord_zero`：ord_zero : ord 0 = 0
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.IsNormal.map_sSup`：map_sSup (hf : IsNormal f) {s : Set α} (hs : s.
+Nonempty) (hs' : BddAbove s) : f (sSup s) = sSup (f '' s)
+· 使用定理 `Cardinal.isNormal_ord`：isNormal_ord : Order.IsNormal ord where strictMon
+o
+· 使用引理 `csSup_of_not_bddAbove`：csSup_of_not_bddAbove (hs : ¬BddAbove s) : sSup s
+ = sSup ∅
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Cardinal.bddAbove_ord_image_iff`：bddAbove_ord_image_iff {s : Set Cardina
+l} : BddAbove (ord '' s) ↔ BddAbove s
 -/
 theorem sSup_ord (s : Set Cardinal) : (sSup s).ord = sSup (ord '' s) := by
   obtain rfl | hn := s.eq_empty_or_nonempty
@@ -997,301 +800,268 @@ theorem sSup_ord (s : Set Cardinal) : (sSup s).ord = sSup (ord '' s) := by
     · exact isNormal_ord.map_sSup hn hs
     · rw [csSup_of_not_bddAbove hs, csSup_of_not_bddAbove (bddAbove_ord_image_iff.not.2 hs)]
       simp
-
-/--
-theorem `iSup_ord` / 定理 `iSup_ord`
-
-English:
-theorem iSup_ord
-  given: {ι} (f : ι -> Cardinal)
-  statement: (⨆ i, f i).ord = ⨆ i, (f i).ord
-  proof: by
-  rw [iSup]; rw [iSup]; rw [sSup_ord]; rw [range_comp']
-
-中文:
-定理 iSup_ord
-  条件: {ι} (f : ι -> 基数)
-  结论: (⨆ i, f i).ord = ⨆ i, (f i).ord
-  证明: by
-  rw [iSup]; rw [iSup]; rw [sSup_ord]; rw [range_comp']
-
-Depends on / 依赖: range_comp, sSup_ord
+/-
+**Ordinal.iSup_ord** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_ord {ι} (f : ι -> Cardinal) : (⨆ i, f i).ord = ⨆ i, (f i).ord
+参数：f : ι -> Cardinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : SupSet α] (s : ι → α), iS
+up s = sSup (Set.range s)
+· 使用定理 `Ordinal.sSup_ord`：sSup_ord (s : Set Cardinal) : (sSup s).ord = sSup (ord
+ '' s)
+· 使用定理 `Set.range_comp'`：range_comp' (g : α -> β) (f : ι -> α) : range (fun x =>
+ g (f x)) = g '' range f
 -/
-theorem iSup_ord {ι} (f : ι -> Cardinal) : (⨆ i, f i).ord = ⨆ i, (f i).ord := by
-  rw [iSup]; rw [iSup]; rw [sSup_ord]; rw [range_comp']
-
-/--
-theorem `lift_card_sInf_compl_le` / 定理 `lift_card_sInf_compl_le`
-
-English:
-theorem lift_card_sInf_compl_le
-  given: (s : Set Ordinal.{u})
-  proof: by
-  rw [← Cardinal.mk_Iio_ordinal]
-  refine mk_le_mk_of_subset fun x (hx : x < _) => ?_
-  rw [← not_notMem]
-  exact notMem_of_lt_csInf' hx
-
-中文:
-定理 lift_card_sInf_compl_le
-  条件: (s : 集合 序数.{u})
-  证明: by
-  rw [← Cardinal.mk_Iio_ordinal]
-  refine mk_le_mk_of_subset fun x (hx : x < _) => ?_
-  rw [← not_notMem]
-  exact notMem_of_lt_csInf' hx
-
-Depends on / 依赖: Cardinal, Cardinal.mk_Iio_ordinal, mk_Iio_ordinal, mk_le_mk_of_subset, notMem_of_lt_csInf, not_notMem
+theorem iSup_ord {ι} (f : ι → Cardinal) : (⨆ i, f i).ord = ⨆ i, (f i).ord := by
+  rw [iSup, iSup, sSup_ord, range_comp']
+/-
+**Ordinal.lift_card_sInf_compl_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lift_card_sInf_compl_le (s : Set Ordinal.{u}) : Cardinal.lift.{u + 1} (sIn
+f sᶜ).card <= #s
+参数：s : Set Ordinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.mk_Iio_ordinal`：∀ (o : Ordinal.{u}), Cardinal.mk ↑(Set.Iio o) =
+ Cardinal.lift.{u + 1, u} o.card
+· 使用定理 `Cardinal.mk_le_mk_of_subset`：mk_le_mk_of_subset {α} {s t : Set α} (h : s
+ subseteq t) : #s <= #t
+· 使用定理 `Set.not_notMem`：not_notMem : ¬a ∉ s ↔ a in s
+· 使用定理 `notMem_of_lt_csInf'`：notMem_of_lt_csInf' {x : α} {s : Set α} (h : x < sI
+nf s) : x ∉ s
 -/
 theorem lift_card_sInf_compl_le (s : Set Ordinal.{u}) :
-    Cardinal.lift.{u + 1} (sInf sᶜ).card <= #s := by
+    Cardinal.lift.{u + 1} (sInf sᶜ).card ≤ #s := by
   rw [← Cardinal.mk_Iio_ordinal]
-  refine mk_le_mk_of_subset fun x (hx : x < _) => ?_
+  refine mk_le_mk_of_subset fun x (hx : x < _) ↦ ?_
   rw [← not_notMem]
   exact notMem_of_lt_csInf' hx
-
-/--
-theorem `card_sInf_range_compl_le_lift` / 定理 `card_sInf_range_compl_le_lift`
-
-English:
-theorem card_sInf_range_compl_le_lift
-  given: {ι : Type u} (f : ι -> Ordinal.{max u v})
-  proof: by
-  rw [← Cardinal.lift_le.{max u v + 1}]; rw [Cardinal.lift_lift]
-  apply (lift_card_sInf_compl_le _).trans
-  rw [← Cardinal.lift_id'.{u]; rw [max u v + 1} #(range _)]
-  exact mk_range_le_lift
-
-中文:
-定理 card_sInf_range_compl_le_lift
-  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
-  证明: by
-  rw [← Cardinal.lift_le.{max u v + 1}]; rw [Cardinal.lift_lift]
-  apply (lift_card_sInf_compl_le _).trans
-  rw [← Cardinal.lift_id'.{u]; rw [max u v + 1} #(range _)]
-  exact mk_range_le_lift
-
-Depends on / 依赖: Cardinal, Cardinal.lift_id, Cardinal.lift_le, Cardinal.lift_lift, lift_card_sInf_compl_le, lift_id, lift_le, lift_lift, mk_range_le_lift
+/-
+**Ordinal.card_sInf_range_compl_le_lift** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：card_sInf_range_compl_le_lift {ι : Type u} (f : ι -> Ordinal.{max u v}) : 
+(sInf (range f)ᶜ).card <= Cardinal.lift.{v} #ι
+参数：f : ι -> Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Ordinal.lift_card_sInf_compl_le`：lift_card_sInf_compl_le (s : Set Ordina
+l.{u}) : Cardinal.lift.{u + 1} (sInf sᶜ).card <= #s
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
+· 使用定理 `Cardinal.mk_range_le_lift`：mk_range_le_lift {α : Type u} {β : Type v} {f
+ : α -> β} : lift.{u} #(range f) <= lift.{v} #α
 -/
-theorem card_sInf_range_compl_le_lift {ι : Type u} (f : ι -> Ordinal.{max u v}) :
-    (sInf (range f)ᶜ).card <= Cardinal.lift.{v} #ι := by
-  rw [← Cardinal.lift_le.{max u v + 1}]; rw [Cardinal.lift_lift]
+theorem card_sInf_range_compl_le_lift {ι : Type u} (f : ι → Ordinal.{max u v}) :
+    (sInf (range f)ᶜ).card ≤ Cardinal.lift.{v} #ι := by
+  rw [← Cardinal.lift_le.{max u v + 1}, Cardinal.lift_lift]
   apply (lift_card_sInf_compl_le _).trans
-  rw [← Cardinal.lift_id'.{u]; rw [max u v + 1} #(range _)]
+  rw [← Cardinal.lift_id'.{u, max u v + 1} #(range _)]
   exact mk_range_le_lift
-
-/--
-theorem `card_sInf_range_compl_le` / 定理 `card_sInf_range_compl_le`
-
-English:
-theorem card_sInf_range_compl_le
-  given: {ι : Type u} (f : ι -> Ordinal.{u})
-  proof: Cardinal.lift_id #ι ▸ card_sInf_range_compl_le_lift f
-
-中文:
-定理 card_sInf_range_compl_le
-  条件: {ι : 类型u} (f : ι -> 序数.{u})
-  证明: Cardinal.lift_id #ι ▸ card_sInf_range_compl_le_lift f
-
-Depends on / 依赖: Cardinal, Cardinal.lift_id, card_sInf_range_compl_le_lift, lift_id
+/-
+**Ordinal.card_sInf_range_compl_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：card_sInf_range_compl_le {ι : Type u} (f : ι -> Ordinal.{u}) : (sInf (rang
+e f)ᶜ).card <= #ι
+参数：f : ι -> Ordinal.{u}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.card_sInf_range_compl_le_lift`：card_sInf_range_compl_le_lift {ι 
+: Type u} (f : ι -> Ordinal.{max u v}) : (sInf (range f)ᶜ).card <= Cardinal.lift
+.{v} #ι
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
 -/
-theorem card_sInf_range_compl_le {ι : Type u} (f : ι -> Ordinal.{u}) :
-    (sInf (range f)ᶜ).card <= #ι :=
+theorem card_sInf_range_compl_le {ι : Type u} (f : ι → Ordinal.{u}) :
+    (sInf (range f)ᶜ).card ≤ #ι :=
   Cardinal.lift_id #ι ▸ card_sInf_range_compl_le_lift f
-
-/--
-theorem `sInf_compl_lt_lift_ord_succ` / 定理 `sInf_compl_lt_lift_ord_succ`
-
-English:
-theorem sInf_compl_lt_lift_ord_succ
-  given: {ι : Type u} (f : ι -> Ordinal.{max u v})
-  proof: by
-  rw [lift_ord]; rw [Cardinal.lift_succ]; rw [← card_le_iff]
-  exact card_sInf_range_compl_le_lift f
-
-中文:
-定理 sInf_compl_lt_lift_ord_succ
-  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
-  证明: by
-  rw [lift_ord]; rw [Cardinal.lift_succ]; rw [← card_le_iff]
-  exact card_sInf_range_compl_le_lift f
-
-Depends on / 依赖: Cardinal, Cardinal.lift_succ, card_le_iff, card_sInf_range_compl_le_lift, lift_ord, lift_succ
+/-
+**Ordinal.sInf_compl_lt_lift_ord_succ** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：sInf_compl_lt_lift_ord_succ {ι : Type u} (f : ι -> Ordinal.{max u v}) : sI
+nf (range f)ᶜ < lift.{v} (succ #ι).ord
+参数：f : ι -> Ordinal.{max u v}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.lift_ord`：lift_ord (c) : Ordinal.lift.{u, v} (ord c) = ord (lif
+t.{u, v} c)
+· 使用定理 `Cardinal.lift_succ`：lift_succ (a) : lift.{v, u} (succ a) = succ (lift.{v
+, u} a)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.card_le_iff`：card_le_iff {o : Ordinal} {c : Cardinal} : o.card 
+<= c ↔ o < (succ c).ord
+· 使用定理 `Ordinal.card_sInf_range_compl_le_lift`：card_sInf_range_compl_le_lift {ι 
+: Type u} (f : ι -> Ordinal.{max u v}) : (sInf (range f)ᶜ).card <= Cardinal.lift
+.{v} #ι
 -/
-theorem sInf_compl_lt_lift_ord_succ {ι : Type u} (f : ι -> Ordinal.{max u v}) :
+theorem sInf_compl_lt_lift_ord_succ {ι : Type u} (f : ι → Ordinal.{max u v}) :
     sInf (range f)ᶜ < lift.{v} (succ #ι).ord := by
-  rw [lift_ord]; rw [Cardinal.lift_succ]; rw [← card_le_iff]
+  rw [lift_ord, Cardinal.lift_succ, ← card_le_iff]
   exact card_sInf_range_compl_le_lift f
-
-/--
-theorem `sInf_compl_lt_ord_succ` / 定理 `sInf_compl_lt_ord_succ`
-
-English:
-theorem sInf_compl_lt_ord_succ
-  given: {ι : Type u} (f : ι -> Ordinal.{u})
-  proof: lift_id (succ #ι).ord ▸ sInf_compl_lt_lift_ord_succ f
-
-中文:
-定理 sInf_compl_lt_ord_succ
-  条件: {ι : 类型u} (f : ι -> 序数.{u})
-  证明: lift_id (succ #ι).ord ▸ sInf_compl_lt_lift_ord_succ f
-
-Depends on / 依赖: lift_id, sInf_compl_lt_lift_ord_succ
+/-
+**Ordinal.sInf_compl_lt_ord_succ** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：sInf_compl_lt_ord_succ {ι : Type u} (f : ι -> Ordinal.{u}) : sInf (range f
+)ᶜ < (succ #ι).ord
+参数：f : ι -> Ordinal.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.sInf_compl_lt_lift_ord_succ`：sInf_compl_lt_lift_ord_succ {ι : Ty
+pe u} (f : ι -> Ordinal.{max u v}) : sInf (range f)ᶜ < lift.{v} (succ #ι).ord
+· 使用定理 `Ordinal.lift_id`：lift_id : forall a, lift.{u, u} a = a
 -/
-theorem sInf_compl_lt_ord_succ {ι : Type u} (f : ι -> Ordinal.{u}) :
+theorem sInf_compl_lt_ord_succ {ι : Type u} (f : ι → Ordinal.{u}) :
     sInf (range f)ᶜ < (succ #ι).ord :=
   lift_id (succ #ι).ord ▸ sInf_compl_lt_lift_ord_succ f
-
-/--
-theorem `bddAbove_add_one_image_iff` / 定理 `bddAbove_add_one_image_iff`
-
-English:
-theorem bddAbove_add_one_image_iff
-  given: {s : Set Ordinal}
-  proof: by
-  constructor <;> rintro ⟨a, ha⟩
-  · exact ⟨a, fun b hb => (lt_add_one _).le.trans (ha (mem_image_of_mem _ hb))⟩
-  · use a + 1
-    simpa [upperBounds]
-
-中文:
-定理 bddAbove_add_one_image_iff
-  条件: {s : 集合 序数}
-  证明: by
-  constructor <;> rintro ⟨a, ha⟩
-  · exact ⟨a, fun b hb => (lt_add_one _).le.trans (ha (mem_image_of_mem _ hb))⟩
-  · use a + 1
-    simpa [upperBounds]
-
-Depends on / 依赖: le.trans, lt_add_one, mem_image_of_mem, upperBounds
+/-
+**Ordinal.bddAbove_add_one_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bddAbove_add_one_image_iff {s : Set Ordinal} : BddAbove ((· + 1) '' s) ↔ B
+ddAbove s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
 -/
 theorem bddAbove_add_one_image_iff {s : Set Ordinal} :
     BddAbove ((· + 1) '' s) ↔ BddAbove s := by
   constructor <;> rintro ⟨a, ha⟩
-  · exact ⟨a, fun b hb => (lt_add_one _).le.trans (ha (mem_image_of_mem _ hb))⟩
+  · exact ⟨a, fun b hb ↦ (lt_add_one _).le.trans (ha (mem_image_of_mem _ hb))⟩
   · use a + 1
     simpa [upperBounds]
-
-/--
-theorem `bddAbove_range_add_one_iff` / 定理 `bddAbove_range_add_one_iff`
-
-English:
-theorem bddAbove_range_add_one_iff
-  given: {f : β -> Ordinal.{u}}
-  proof: by
-  rw [range_comp' (· + 1)]; rw [bddAbove_add_one_image_iff]
-
-中文:
-定理 bddAbove_range_add_one_iff
-  条件: {f : β -> 序数.{u}}
-  证明: by
-  rw [range_comp' (· + 1)]; rw [bddAbove_add_one_image_iff]
-
-Depends on / 依赖: bddAbove_add_one_image_iff, range_comp
+/-
+**Ordinal.bddAbove_range_add_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bddAbove_range_add_one_iff {f : β -> Ordinal.{u}} : BddAbove (range fun i 
+=> f i + 1) ↔ BddAbove (range f)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_comp'`：range_comp' (g : α -> β) (f : ι -> α) : range (fun x =>
+ g (f x)) = g '' range f
+· 使用定理 `Ordinal.bddAbove_add_one_image_iff`：bddAbove_add_one_image_iff {s : Set 
+Ordinal} : BddAbove ((· + 1) '' s) ↔ BddAbove s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem bddAbove_range_add_one_iff {f : β -> Ordinal.{u}} :
-    BddAbove (range fun i => f i + 1) ↔ BddAbove (range f) := by
-  rw [range_comp' (· + 1)]; rw [bddAbove_add_one_image_iff]
-
-/--
-theorem `sSup_le_sSup_add_one` / 定理 `sSup_le_sSup_add_one`
-
-English:
-theorem sSup_le_sSup_add_one
-  given: (s : Set Ordinal)
-  statement: sSup s <= sSup ((· + 1) '' s)
-  proof: by
+theorem bddAbove_range_add_one_iff {f : β → Ordinal.{u}} :
+    BddAbove (range fun i ↦ f i + 1) ↔ BddAbove (range f) := by
+  rw [range_comp' (· + 1), bddAbove_add_one_image_iff]
+/-
+**Ordinal.sSup_le_sSup_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：sSup_le_sSup_add_one (s : Set Ordinal) : sSup s <= sSup ((· + 1) '' s)
+参数：s : Set Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.bddAbove_add_one_image_iff`：bddAbove_add_one_image_iff {s : Set 
+Ordinal} : BddAbove ((· + 1) '' s) ↔ BddAbove s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `csSup_le_iff'`：csSup_le_iff' {s : Set α} (hs : BddAbove s) {a : α} : sSu
+p s <= a ↔ forall x in s, x <= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `le_csSup`：le_csSup (h₁ : BddAbove s) (h₂ : a in s) : a <= sSup s
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用引理 `csSup_of_not_bddAbove`：csSup_of_not_bddAbove (hs : ¬BddAbove s) : sSup s
+ = sSup ∅
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+-/
+theorem sSup_le_sSup_add_one (s : Set Ordinal) : sSup s ≤ sSup ((· + 1) '' s) := by
   by_cases hs : BddAbove s
   · have hs' := bddAbove_add_one_image_iff.2 hs
     rw [csSup_le_iff' hs]
-    exact fun x hx => (lt_add_one _).le.trans (le_csSup hs' (mem_image_of_mem _ hx))
+    exact fun x hx ↦ (lt_add_one _).le.trans (le_csSup hs' (mem_image_of_mem _ hx))
   · rw [csSup_of_not_bddAbove hs, csSup_of_not_bddAbove (s := _ '' _)]
     rwa [bddAbove_add_one_image_iff]
-
-中文:
-定理 sSup_le_sSup_add_one
-  条件: (s : 集合 序数)
-  结论: sSup s <= sSup ((· + 1) '' s)
-  证明: by
-  by_cases hs : BddAbove s
-  · have hs' := bddAbove_add_one_image_iff.2 hs
-    rw [csSup_le_iff' hs]
-    exact fun x hx => (lt_add_one _).le.trans (le_csSup hs' (mem_image_of_mem _ hx))
-  · rw [csSup_of_not_bddAbove hs, csSup_of_not_bddAbove (s := _ '' _)]
-    rwa [bddAbove_add_one_image_iff]
-
-Depends on / 依赖: BddAbove, bddAbove_add_one_image_iff, csSup_le_iff, csSup_of_not_bddAbove, le.trans, le_csSup, lt_add_one, mem_image_of_mem
+/-
+**Ordinal.iSup_le_iSup_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_le_iSup_add_one (f : β -> Ordinal) : ⨆ i, f i <= ⨆ i, f i + 1
+参数：f : β -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : SupSet α] (s : ι → α), iS
+up s = sSup (Set.range s)
+· 使用定理 `Set.range_comp'`：range_comp' (g : α -> β) (f : ι -> α) : range (fun x =>
+ g (f x)) = g '' range f
+· 使用定理 `Ordinal.sSup_le_sSup_add_one`：sSup_le_sSup_add_one (s : Set Ordinal) : s
+Sup s <= sSup ((· + 1) '' s)
 -/
-theorem sSup_le_sSup_add_one (s : Set Ordinal) : sSup s <= sSup ((· + 1) '' s) := by
-  by_cases hs : BddAbove s
-  · have hs' := bddAbove_add_one_image_iff.2 hs
-    rw [csSup_le_iff' hs]
-    exact fun x hx => (lt_add_one _).le.trans (le_csSup hs' (mem_image_of_mem _ hx))
-  · rw [csSup_of_not_bddAbove hs, csSup_of_not_bddAbove (s := _ '' _)]
-    rwa [bddAbove_add_one_image_iff]
-
-/--
-theorem `iSup_le_iSup_add_one` / 定理 `iSup_le_iSup_add_one`
-
-English:
-theorem iSup_le_iSup_add_one
-  given: (f : β -> Ordinal)
-  statement: ⨆ i, f i <= ⨆ i, f i + 1
-  proof: by
-  rw [iSup]; rw [iSup]; rw [range_comp' (· + 1)]
+theorem iSup_le_iSup_add_one (f : β → Ordinal) : ⨆ i, f i ≤ ⨆ i, f i + 1 := by
+  rw [iSup, iSup, range_comp' (· + 1)]
   exact sSup_le_sSup_add_one _
-
-中文:
-定理 iSup_le_iSup_add_one
-  条件: (f : β -> 序数)
-  结论: ⨆ i, f i <= ⨆ i, f i + 1
-  证明: by
-  rw [iSup]; rw [iSup]; rw [range_comp' (· + 1)]
-  exact sSup_le_sSup_add_one _
-
-Depends on / 依赖: range_comp, sSup_le_sSup_add_one
--/
-theorem iSup_le_iSup_add_one (f : β -> Ordinal) : ⨆ i, f i <= ⨆ i, f i + 1 := by
-  rw [iSup]; rw [iSup]; rw [range_comp' (· + 1)]
-  exact sSup_le_sSup_add_one _
-
-/--
-theorem `iSup_add_one` / 定理 `iSup_add_one`
-
-English:
-theorem iSup_add_one
-  statement: {β : Type*} [LinearOrder β] [NoMaxOrder β]
-  proof: by
-  apply (iSup_le_iSup_add_one f).antisymm'
-  by_cases hf' : BddAbove (range f)
-  · rw [ciSup_le_iff' (bddAbove_range_add_one_iff.2 hf')]
-    intro i
-    obtain ⟨j, hj⟩ := exists_gt i
-    apply (le_ciSup hf' j).trans'
-    rw [add_one_le_iff]
-    exact hf hj
-  · rw [ciSup_of_not_bddAbove hf', ciSup_of_not_bddAbove]
-    rwa [← bddAbove_range_add_one_iff] at hf'
-
-中文:
-定理 iSup_add_one
-  结论: {β : 类型} [线性序 β] [NoMax序 β]
-  证明: by
-  apply (iSup_le_iSup_add_one f).antisymm'
-  by_cases hf' : BddAbove (range f)
-  · rw [ciSup_le_iff' (bddAbove_range_add_one_iff.2 hf')]
-    intro i
-    obtain ⟨j, hj⟩ := exists_gt i
-    apply (le_ciSup hf' j).trans'
-    rw [add_one_le_iff]
-    exact hf hj
-  · rw [ciSup_of_not_bddAbove hf', ciSup_of_not_bddAbove]
-    rwa [← bddAbove_range_add_one_iff] at hf'
-
-Depends on / 依赖: BddAbove, add_one_le_iff, antisymm, bddAbove_range_add_one_iff, ciSup_le_iff, ciSup_of_not_bddAbove, exists_gt, iSup_le_iSup_add_one, le_ciSup
+/-
+**Ordinal.iSup_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_add_one {β : Type*} [LinearOrder β] [NoMaxOrder β] {f : β -> Ordinal.
+{u}} (hf : StrictMono f) : ⨆ i, f i + 1 = ⨆ i, f i
+参数：hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用定理 `Ordinal.iSup_le_iSup_add_one`：iSup_le_iSup_add_one (f : β -> Ordinal) : 
+⨆ i, f i <= ⨆ i, f i + 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ciSup_le_iff'`：ciSup_le_iff' {f : ι -> α} (h : BddAbove (range f)) {a : 
+α} : ⨆ i, f i <= a ↔ forall i, f i <= a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.bddAbove_range_add_one_iff`：bddAbove_range_add_one_iff {f : β ->
+ Ordinal.{u}} : BddAbove (range fun i => f i + 1) ↔ BddAbove (range f)
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用定理 `le_ciSup`：le_ciSup {f : ι -> α} (H : BddAbove (range f)) (c : ι) : f c <
+= iSup f
+· 使用定理 `Order.add_one_le_iff`：add_one_le_iff [NoMaxOrder α] : x + 1 <= y ↔ x < y
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用引理 `ciSup_of_not_bddAbove`：ciSup_of_not_bddAbove (hf : ¬BddAbove (range f)) 
+: ⨆ i, f i = sSup ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 theorem iSup_add_one {β : Type*} [LinearOrder β] [NoMaxOrder β]
-    {f : β -> Ordinal.{u}} (hf : StrictMono f) : ⨆ i, f i + 1 = ⨆ i, f i := by
+    {f : β → Ordinal.{u}} (hf : StrictMono f) : ⨆ i, f i + 1 = ⨆ i, f i := by
   apply (iSup_le_iSup_add_one f).antisymm'
   by_cases hf' : BddAbove (range f)
   · rw [ciSup_le_iff' (bddAbove_range_add_one_iff.2 hf')]
@@ -1302,27 +1072,19 @@ theorem iSup_add_one {β : Type*} [LinearOrder β] [NoMaxOrder β]
     exact hf hj
   · rw [ciSup_of_not_bddAbove hf', ciSup_of_not_bddAbove]
     rwa [← bddAbove_range_add_one_iff] at hf'
-
-/--
-theorem `iSup_Iio_add_one` / 定理 `iSup_Iio_add_one`
-
-English:
-theorem iSup_Iio_add_one
-  statement: {a : Ordinal.{u}} {f : Iio a -> Ordinal.{u}}
-  proof: by
-  have := ha.noMaxOrder_Iio
-  exact iSup_add_one hf
-
-中文:
-定理 iSup_Iio_add_one
-  结论: {a : 序数.{u}} {f : 左无界右开区间 a -> 序数.{u}}
-  证明: by
-  have := ha.noMaxOrder_Iio
-  exact iSup_add_one hf
-
-Depends on / 依赖: ha.noMaxOrder_Iio, iSup_add_one, noMaxOrder_Iio
+/-
+**Ordinal.iSup_Iio_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_Iio_add_one {a : Ordinal.{u}} {f : Iio a -> Ordinal.{u}} (hf : Strict
+Mono f) (ha : IsSuccPrelimit a) : ⨆ i : Iio a, f i + 1 = ⨆ i : Iio a, f i
+参数：hf : StrictMono f；ha : IsSuccPrelimit a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsSuccPrelimit.noMaxOrder_Iio`：∀ {α : Type u_1} {a : α} [inst : Pr
+eorder α], Order.IsSuccPrelimit a → NoMaxOrder ↑(Set.Iio a)
+· 使用定理 `Ordinal.iSup_add_one`：iSup_add_one {β : Type*} [LinearOrder β] [NoMaxOrd
+er β] {f : β -> Ordinal.{u}} (hf : StrictMono f) : ⨆ i, f i + 1 = ⨆ i, f i
 -/
-theorem iSup_Iio_add_one {a : Ordinal.{u}} {f : Iio a -> Ordinal.{u}}
+theorem iSup_Iio_add_one {a : Ordinal.{u}} {f : Iio a → Ordinal.{u}}
     (hf : StrictMono f) (ha : IsSuccPrelimit a) : ⨆ i : Iio a, f i + 1 = ⨆ i : Iio a, f i := by
   have := ha.noMaxOrder_Iio
   exact iSup_add_one hf
@@ -1330,23 +1092,29 @@ theorem iSup_Iio_add_one {a : Ordinal.{u}} {f : Iio a -> Ordinal.{u}}
 section bsup
 
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
-/--
-theorem `iSup_eq_iSup` / 定理 `iSup_eq_iSup`
-
-English:
-theorem iSup_eq_iSup
-  statement: {ι ι' : Type u} (r : ι -> ι -> Prop) (r' : ι' -> ι' -> Prop) [IsWellOrder ι r]
-  proof: congrArg sSup (by simp_rw [range_familyOfBFamily'])
-
-中文:
-定理 iSup_eq_iSup
-  结论: {ι ι' : 类型u} (r : ι -> ι -> 命题) (r' : ι' -> ι' -> 命题) [是良序 ι r]
-  证明: congrArg sSup (by simp_rw [range_familyOfBFamily'])
-
-Depends on / 依赖: range_familyOfBFamily, simp_rw
+/-
+**Ordinal.iSup_eq_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_iSup {ι ι' : Type u} (r : ι -> ι -> Prop) (r' : ι' -> ι' -> Prop) 
+[IsWellOrder ι r] [IsWellOrder ι' r'] {o : Ordinal} (ho : type r = o) (ho' : typ
+e r' = o) (f : forall a < o, Ordinal) : iSup (familyOfBFamily' r ho f) = iSup (f
+amilyOfBFamily' r' ho' f)
+参数：r : ι -> ι -> Prop；r' : ι' -> ι' -> Prop；ho : type r = o；ho' : type r' = o；f 
+: forall a < o, Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Ordinal.range_familyOfBFamily'`：range_familyOfBFamily' {ι : Type u} (r :
+ ι -> ι -> Prop) [IsWellOrder ι r] {o} (ho : type r = o) (f : forall a < o, α) :
+ range (familyOfBFam…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iSup_eq_iSup {ι ι' : Type u} (r : ι -> ι -> Prop) (r' : ι' -> ι' -> Prop) [IsWellOrder ι r]
-    [IsWellOrder ι' r'] {o : Ordinal} (ho : type r = o) (ho' : type r' = o) (f : forall a < o, Ordinal) :
+theorem iSup_eq_iSup {ι ι' : Type u} (r : ι → ι → Prop) (r' : ι' → ι' → Prop) [IsWellOrder ι r]
+    [IsWellOrder ι' r'] {o : Ordinal} (ho : type r = o) (ho' : type r' = o) (f : ∀ a < o, Ordinal) :
     iSup (familyOfBFamily' r ho f) = iSup (familyOfBFamily' r' ho' f) :=
   congrArg sSup (by simp_rw [range_familyOfBFamily'])
 
@@ -1354,647 +1122,525 @@ theorem iSup_eq_iSup {ι ι' : Type u} (r : ι -> ι -> Prop) (r' : ι' -> ι' -
 `o : Ordinal.{u}`. This is a special case of `iSup` over the family provided by
 `familyOfBFamily`. -/
 @[deprecated "write `⨆ i : Iio a, f i` instead." (since := "2026-04-05")]
-/--
-Definition of `bsup` / `bsup` 的定义
+/-
+**Ordinal.bsup** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：bsup (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v}) : Ordinal.{ma
+x u v}
+参数：o : Ordinal.{u}；f : forall a < o, Ordinal.{max u v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bsup
-  signature: (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v})
-  body: iSup (familyOfBFamily o f)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定义 bsup
-  签名: (o : 序数.{u}) (f : 对任意 a < o, 序数.{最大值 u v})
-  定义体: iSup (familyOfBFamily o f)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: familyOfBFamily
+--- 原说明 ---
+The supremum of a family of ordinals indexed by the set of ordinals less than so
+me
+`o : Ordinal.{u}`. This is a special case of `iSup` over the family provided by
+`familyOfBFamily`.
 -/
-def bsup (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v}) : Ordinal.{max u v} :=
+def bsup (o : Ordinal.{u}) (f : ∀ a < o, Ordinal.{max u v}) : Ordinal.{max u v} :=
   iSup (familyOfBFamily o f)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `iSup_eq_bsup` / 定理 `iSup_eq_bsup`
-
-English:
-theorem iSup_eq_bsup
-  given: {o : Ordinal} (f : forall a < o, Ordinal)
-  proof: rfl
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 iSup_eq_bsup
-  条件: {o : 序数} (f : 对任意 a < o, 序数)
-  证明: rfl
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
+/-
+**Ordinal.iSup_eq_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_bsup {o : Ordinal} (f : forall a < o, Ordinal) : iSup (familyOfBFa
+mily o f) = bsup o f
+参数：f : forall a < o, Ordinal。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iSup_eq_bsup {o : Ordinal} (f : forall a < o, Ordinal) :
+theorem iSup_eq_bsup {o : Ordinal} (f : ∀ a < o, Ordinal) :
     iSup (familyOfBFamily o f) = bsup o f :=
   rfl
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `iSup'_eq_bsup` / 定理 `iSup'_eq_bsup`
-
-English:
-theorem iSup'_eq_bsup
-  statement: {o : Ordinal} {ι} (r : ι -> ι -> Prop) [IsWellOrder ι r] (ho : type r = o)
-  proof: iSup_eq_iSup r _ ho _ f
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 iSup'_eq_bsup
-  结论: {o : 序数} {ι} (r : ι -> ι -> 命题) [是良序 ι r] (ho : type r = o)
-  证明: iSup_eq_iSup r _ ho _ f
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: iSup_eq_iSup
+/-
+**Ordinal.iSup'_eq_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {o : Ordinal.{u_3}} {ι : Type u_3} (r : ι → ι → Prop) [inst : IsWellOrde
+r ι r] (ho : Ordinal.type r = o)   (f : (a : Ordinal.{u_3}) → a < o → Ordinal.{m
+ax u_3 u_4}), iSup (Ordinal.familyOfBFamily' r ho f) = o.bsup f
+参数：r : ι → ι → Prop；ho : Ordinal.type r = o；f : (a : Ordinal.{u_3}) → a < o → Or
+dinal.{max u_3 u_4}；Ordinal.familyOfBFamily' r ho f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_eq_iSup`：iSup_eq_iSup {ι ι' : Type u} (r : ι -> ι -> Prop) 
+(r' : ι' -> ι' -> Prop) [IsWellOrder ι r] [IsWellOrder ι' r'] {o : Ordinal} (ho 
+: type r =…
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
 -/
-theorem iSup'_eq_bsup {o : Ordinal} {ι} (r : ι -> ι -> Prop) [IsWellOrder ι r] (ho : type r = o)
-    (f : forall a < o, Ordinal) : iSup (familyOfBFamily' r ho f) = bsup o f :=
+theorem iSup'_eq_bsup {o : Ordinal} {ι} (r : ι → ι → Prop) [IsWellOrder ι r] (ho : type r = o)
+    (f : ∀ a < o, Ordinal) : iSup (familyOfBFamily' r ho f) = bsup o f :=
   iSup_eq_iSup r _ ho _ f
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `sSup_eq_bsup` / 定理 `sSup_eq_bsup`
-
-English:
-theorem sSup_eq_bsup
-  given: {o : Ordinal} (f : forall a < o, Ordinal)
-  statement: sSup (brange o f) = bsup o f
-  proof: by
-  congr
-  rw [range_familyOfBFamily]
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 sSup_eq_bsup
-  条件: {o : 序数} (f : 对任意 a < o, 序数)
-  结论: sSup (brange o f) = bsup o f
-  证明: by
-  congr
-  rw [range_familyOfBFamily]
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: range_familyOfBFamily
+/-
+**Ordinal.sSup_eq_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：sSup_eq_bsup {o : Ordinal} (f : forall a < o, Ordinal) : sSup (brange o f)
+ = bsup o f
+参数：f : forall a < o, Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.range_familyOfBFamily`：range_familyOfBFamily {o} (f : forall a <
+ o, α) : range (familyOfBFamily o f) = brange o f
 -/
-theorem sSup_eq_bsup {o : Ordinal} (f : forall a < o, Ordinal) : sSup (brange o f) = bsup o f := by
+theorem sSup_eq_bsup {o : Ordinal} (f : ∀ a < o, Ordinal) : sSup (brange o f) = bsup o f := by
   congr
   rw [range_familyOfBFamily]
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup'_eq_iSup` / 定理 `bsup'_eq_iSup`
-
-English:
-theorem bsup'_eq_iSup
-  given: {ι} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> Ordinal)
-  proof: by
-  simp +unfoldPartialApp only [← iSup'_eq_bsup r, enum_typein, familyOfBFamily', bfamilyOfFamily']
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup'_eq_iSup
-  条件: {ι} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> 序数)
-  证明: by
-  simp +unfoldPartialApp only [← iSup'_eq_bsup r, enum_typein, familyOfBFamily', bfamilyOfFamily']
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: _eq_bsup, bfamilyOfFamily, enum_typein, familyOfBFamily, unfoldPartialApp
+/-
+**Ordinal.bsup'_eq_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：∀ {ι : Type u_3} (r : ι → ι → Prop) [inst : IsWellOrder ι r] (f : ι → Ordi
+nal.{max u_3 u_4}),   (Ordinal.type r).bsup (Ordinal.bfamilyOfFamily' r f) = iSu
+p f
+参数：r : ι → ι → Prop；f : ι → Ordinal.{max u_3 u_4}；Ordinal.type r；Ordinal.bfamily
+OfFamily' r f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup'_eq_bsup`：∀ {o : Ordinal.{u_3}} {ι : Type u_3} (r : ι → ι →
+ Prop) [inst : IsWellOrder ι r] (ho : Ordinal.type r = o)   (f : (a : Ordinal.{u
+_3}) → a < …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Ordinal.enum_typein`：enum_typein (r : α -> α -> Prop) [IsWellOrder α r] 
+(a : α) : enum r ⟨typein r a, typein_lt_type r a⟩ = a
 -/
-theorem bsup'_eq_iSup {ι} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> Ordinal) :
+theorem bsup'_eq_iSup {ι} (r : ι → ι → Prop) [IsWellOrder ι r] (f : ι → Ordinal) :
     bsup _ (bfamilyOfFamily' r f) = iSup f := by
   simp +unfoldPartialApp only [← iSup'_eq_bsup r, enum_typein, familyOfBFamily', bfamilyOfFamily']
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_eq_iSup` / 定理 `bsup_eq_iSup`
-
-English:
-theorem bsup_eq_iSup
-  given: {ι} (f : ι -> Ordinal)
-  statement: bsup _ (bfamilyOfFamily f) = iSup f
-  proof: bsup'_eq_iSup _ f
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_eq_iSup
-  条件: {ι} (f : ι -> 序数)
-  结论: bsup _ (bfamilyOfFamily f) = iSup f
-  证明: bsup'_eq_iSup _ f
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: _eq_iSup
+/-
+**Ordinal.bsup_eq_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_iSup {ι} (f : ι -> Ordinal) : bsup _ (bfamilyOfFamily f) = iSup f
+参数：f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup'_eq_iSup`：∀ {ι : Type u_3} (r : ι → ι → Prop) [inst : IsWel
+lOrder ι r] (f : ι → Ordinal.{max u_3 u_4}),   (Ordinal.type r).bsup (Ordinal.bf
+amilyOfFami…
 -/
-theorem bsup_eq_iSup {ι} (f : ι -> Ordinal) : bsup _ (bfamilyOfFamily f) = iSup f :=
+theorem bsup_eq_iSup {ι} (f : ι → Ordinal) : bsup _ (bfamilyOfFamily f) = iSup f :=
   bsup'_eq_iSup _ f
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_eq_bsup` / 定理 `bsup_eq_bsup`
-
-English:
-theorem bsup_eq_bsup
-  statement: {ι : Type u} (r r' : ι -> ι -> Prop) [IsWellOrder ι r] [IsWellOrder ι r']
-  proof: by
-  rw [bsup'_eq_iSup]; rw [bsup'_eq_iSup]
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_eq_bsup
-  结论: {ι : 类型u} (r r' : ι -> ι -> 命题) [是良序 ι r] [是良序 ι r']
-  证明: by
-  rw [bsup'_eq_iSup]; rw [bsup'_eq_iSup]
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: _eq_iSup
+/-
+**Ordinal.bsup_eq_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_bsup {ι : Type u} (r r' : ι -> ι -> Prop) [IsWellOrder ι r] [IsWel
+lOrder ι r'] (f : ι -> Ordinal.{max u v}) : bsup.{_, v} _ (bfamilyOfFamily' r f)
+ = bsup.{_, v} _ (bfamilyOfFamily' r' f)
+参数：r r' : ι -> ι -> Prop；f : ι -> Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.bsup'_eq_iSup`：∀ {ι : Type u_3} (r : ι → ι → Prop) [inst : IsWel
+lOrder ι r] (f : ι → Ordinal.{max u_3 u_4}),   (Ordinal.type r).bsup (Ordinal.bf
+amilyOfFami…
 -/
-theorem bsup_eq_bsup {ι : Type u} (r r' : ι -> ι -> Prop) [IsWellOrder ι r] [IsWellOrder ι r']
-    (f : ι -> Ordinal.{max u v}) :
+theorem bsup_eq_bsup {ι : Type u} (r r' : ι → ι → Prop) [IsWellOrder ι r] [IsWellOrder ι r']
+    (f : ι → Ordinal.{max u v}) :
     bsup.{_, v} _ (bfamilyOfFamily' r f) = bsup.{_, v} _ (bfamilyOfFamily' r' f) := by
-  rw [bsup'_eq_iSup]; rw [bsup'_eq_iSup]
+  rw [bsup'_eq_iSup, bsup'_eq_iSup]
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_congr` / 定理 `bsup_congr`
-
-English:
-theorem bsup_congr
-  given: {o₁ o₂ : Ordinal.{u}} (f : forall a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂)
-  proof: by
-  subst ho
-  rfl
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_congr
-  条件: {o₁ o₂ : 序数.{u}} (f : 对任意 a < o₁, 序数.{最大值 u v}) (ho : o₁ = o₂)
-  证明: by
-  subst ho
-  rfl
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
+/-
+**Ordinal.bsup_congr** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_congr {o₁ o₂ : Ordinal.{u}} (f : forall a < o₁, Ordinal.{max u v}) (h
+o : o₁ = o₂) : bsup.{_, v} o₁ f = bsup.{_, v} o₂ fun a h => f a (h.trans_eq ho.s
+ymm)
+参数：f : forall a < o₁, Ordinal.{max u v}；ho : o₁ = o₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem bsup_congr {o₁ o₂ : Ordinal.{u}} (f : forall a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂) :
+theorem bsup_congr {o₁ o₂ : Ordinal.{u}} (f : ∀ a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂) :
     bsup.{_, v} o₁ f = bsup.{_, v} o₂ fun a h => f a (h.trans_eq ho.symm) := by
   subst ho
   rfl
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_le_iff` / 定理 `bsup_le_iff`
-
-English:
-theorem bsup_le_iff
-  given: {o f a}
-  statement: bsup.{u, v} o f <= a ↔ forall i h, f i h <= a
-  proof: Ordinal.iSup_le_iff.trans
-    ⟨fun h i hi => by
-      rw [← familyOfBFamily_enum o f]
-      exact h _, fun h _ => h _ _⟩
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_le_iff
-  条件: {o f a}
-  结论: bsup.{u, v} o f <= a ↔ 对任意 i h, f i h <= a
-  证明: Ordinal.iSup_le_iff.trans
-    ⟨fun h i hi => by
-      rw [← familyOfBFamily_enum o f]
-      exact h _, fun h _ => h _ _⟩
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le_iff.trans, familyOfBFamily_enum, iSup_le_iff
+/-
+**Ordinal.bsup_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_le_iff {o f a} : bsup.{u, v} o f <= a ↔ forall i h, f i h <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Ordinal.iSup_le_iff`：∀ {ι : Type u_3} {f : ι → Ordinal.{u}} {a : Ordinal
+.{u}} [Small.{u, u_3} ι], ⨆ i, f i ≤ a ↔ ∀ (i : ι), f i ≤ a
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.familyOfBFamily_enum`：familyOfBFamily_enum (o : Ordinal) (f : fo
+rall a < o, α) (i hi) : familyOfBFamily o f (enum (α
 -/
-theorem bsup_le_iff {o f a} : bsup.{u, v} o f <= a ↔ forall i h, f i h <= a :=
+theorem bsup_le_iff {o f a} : bsup.{u, v} o f ≤ a ↔ ∀ i h, f i h ≤ a :=
   Ordinal.iSup_le_iff.trans
     ⟨fun h i hi => by
       rw [← familyOfBFamily_enum o f]
       exact h _, fun h _ => h _ _⟩
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_le` / 定理 `bsup_le`
-
-English:
-theorem bsup_le
-  given: {o : Ordinal} {f : forall b < o, Ordinal} {a}
-  proof: bsup_le_iff.2
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_le
-  条件: {o : 序数} {f : 对任意 b < o, 序数} {a}
-  证明: bsup_le_iff.2
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_le_iff
+/-
+**Ordinal.bsup_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} : (forall i h, f i h
+ <= a) -> bsup.{u, v} o f <= a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.bsup_le_iff`：bsup_le_iff {o f a} : bsup.{u, v} o f <= a ↔ forall
+ i h, f i h <= a
 -/
-theorem bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} :
-    (forall i h, f i h <= a) -> bsup.{u, v} o f <= a :=
+theorem bsup_le {o : Ordinal} {f : ∀ b < o, Ordinal} {a} :
+    (∀ i h, f i h ≤ a) → bsup.{u, v} o f ≤ a :=
   bsup_le_iff.2
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `le_bsup` / 定理 `le_bsup`
-
-English:
-theorem le_bsup
-  given: {o} (f : forall a < o, Ordinal) (i h)
-  statement: f i h <= bsup o f
-  proof: bsup_le_iff.1 le_rfl _ _
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 le_bsup
-  条件: {o} (f : 对任意 a < o, 序数) (i h)
-  结论: f i h <= bsup o f
-  证明: bsup_le_iff.1 le_rfl _ _
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_le_iff, le_rfl
+/-
+**Ordinal.le_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <= bsup o f
+参数：f : forall a < o, Ordinal；i h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.bsup_le_iff`：bsup_le_iff {o f a} : bsup.{u, v} o f <= a ↔ forall
+ i h, f i h <= a
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <= bsup o f :=
+theorem le_bsup {o} (f : ∀ a < o, Ordinal) (i h) : f i h ≤ bsup o f :=
   bsup_le_iff.1 le_rfl _ _
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `lt_bsup` / 定理 `lt_bsup`
-
-English:
-theorem lt_bsup
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) {a}
-  proof: by
-  simpa only [not_forall, not_le] using not_congr (@bsup_le_iff.{_, v} _ f a)
-
-@[deprecated IsNormal.map_iSup (since := "2026-04-05")]
-
-中文:
-定理 lt_bsup
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v}) {a}
-  证明: by
-  simpa only [not_forall, not_le] using not_congr (@bsup_le_iff.{_, v} _ f a)
-
-@[deprecated IsNormal.map_iSup (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_le_iff, not_congr, not_forall, not_le
+/-
+**Ordinal.lt_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_bsup {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) {a} : a < 
+bsup.{_, v} o f ↔ exists i hi, a < f i hi
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Ordinal.bsup_le_iff`：bsup_le_iff {o f a} : bsup.{u, v} o f <= a ↔ forall
+ i h, f i h <= a
 -/
-theorem lt_bsup {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) {a} :
-    a < bsup.{_, v} o f ↔ exists i hi, a < f i hi := by
+theorem lt_bsup {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) {a} :
+    a < bsup.{_, v} o f ↔ ∃ i hi, a < f i hi := by
   simpa only [not_forall, not_le] using not_congr (@bsup_le_iff.{_, v} _ f a)
 
 @[deprecated IsNormal.map_iSup (since := "2026-04-05")]
-/--
-theorem `IsNormal.bsup` / 定理 `IsNormal.bsup`
-
-English:
-theorem IsNormal.bsup
-  given: {f : Ordinal -> Ordinal} (H : IsNormal f) {o : Ordinal}
-  proof: inductionOn o fun α r _ g h => by
-    have := type_ne_zero_iff_nonempty.1 h
-    rw [← iSup'_eq_bsup r]; rw [Order.IsNormal.map_iSup H bddAbove_of_small]; rw [← iSup'_eq_bsup r] <;>
-      rfl
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 是正规.bsup
-  条件: {f : 序数 -> 序数} (H : 是正规 f) {o : 序数}
-  证明: inductionOn o fun α r _ g h => by
-    have := type_ne_zero_iff_nonempty.1 h
-    rw [← iSup'_eq_bsup r]; rw [Order.IsNormal.map_iSup H bddAbove_of_small]; rw [← iSup'_eq_bsup r] <;>
-      rfl
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: IsNormal, Order.IsNormal.map_iSup, _eq_bsup, bddAbove_of_small, inductionOn, map_iSup, type_ne_zero_iff_nonempty
+/-
+**Ordinal.IsNormal.bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsNormal`。
+形式化陈述：∀ {f : Ordinal.{max u_3 u_4} → Ordinal.{max u_4 u_5}},   Order.IsNormal f 
+→     ∀ {o : Ordinal.{u_4}} (g : (a : Ordinal.{u_4}) → a < o → Ordinal.{max u_4 
+u_3}),       o ≠ 0 → f (o.bsup g) = o.bsup fun a h => f (g a h)
+参数：g : (a : Ordinal.{u_4}) → a < o → Ordinal.{max u_4 u_3}；o.bsup g；g a h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.inductionOn`：inductionOn {motive : Ordinal -> Prop} (o : Ordinal
+) (type : forall (α r) [IsWellOrder α r], motive (type r)) : motive o
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.type_ne_zero_iff_nonempty`：type_ne_zero_iff_nonempty [IsWellOrde
+r α r] : type r != 0 ↔ Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup'_eq_bsup`：∀ {o : Ordinal.{u_3}} {ι : Type u_3} (r : ι → ι →
+ Prop) [inst : IsWellOrder ι r] (ho : Ordinal.type r = o)   (f : (a : Ordinal.{u
+_3}) → a < …
+· 使用定理 `Order.IsNormal.map_iSup`：map_iSup {ι} [Nonempty ι] {g : ι -> α} (hf : Is
+Normal f) (hg : BddAbove (range g)) : f (⨆ i, g i) = ⨆ i, f (g i)
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-theorem IsNormal.bsup {f : Ordinal -> Ordinal} (H : IsNormal f) {o : Ordinal} :
-    forall (g : forall a < o, Ordinal), o != 0 -> f (bsup o g) = bsup o fun a h => f (g a h) :=
+theorem IsNormal.bsup {f : Ordinal → Ordinal} (H : IsNormal f) {o : Ordinal} :
+    ∀ (g : ∀ a < o, Ordinal), o ≠ 0 → f (bsup o g) = bsup o fun a h => f (g a h) :=
   inductionOn o fun α r _ g h => by
     have := type_ne_zero_iff_nonempty.1 h
-    rw [← iSup'_eq_bsup r]; rw [Order.IsNormal.map_iSup H bddAbove_of_small]; rw [← iSup'_eq_bsup r] <;>
+    rw [← iSup'_eq_bsup r, Order.IsNormal.map_iSup H bddAbove_of_small, ← iSup'_eq_bsup r] <;>
       rfl
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `lt_bsup_of_ne_bsup` / 定理 `lt_bsup_of_ne_bsup`
-
-English:
-theorem lt_bsup_of_ne_bsup
-  given: {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}}
-  proof: ⟨fun hf _ _ => lt_of_le_of_ne (le_bsup _ _ _) (hf _ _), fun hf _ _ => ne_of_lt (hf _ _)⟩
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 lt_bsup_of_ne_bsup
-  条件: {o : 序数.{u}} {f : 对任意 a < o, 序数.{最大值 u v}}
-  证明: ⟨fun hf _ _ => lt_of_le_of_ne (le_bsup _ _ _) (hf _ _), fun hf _ _ => ne_of_lt (hf _ _)⟩
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: le_bsup, lt_of_le_of_ne, ne_of_lt
+/-
+**Ordinal.lt_bsup_of_ne_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_bsup_of_ne_bsup {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}}
+ : (forall i h, f i h != bsup.{_, v} o f) ↔ forall i h, f i h < bsup.{_, v} o f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
 -/
-theorem lt_bsup_of_ne_bsup {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}} :
-    (forall i h, f i h != bsup.{_, v} o f) ↔ forall i h, f i h < bsup.{_, v} o f :=
+theorem lt_bsup_of_ne_bsup {o : Ordinal.{u}} {f : ∀ a < o, Ordinal.{max u v}} :
+    (∀ i h, f i h ≠ bsup.{_, v} o f) ↔ ∀ i h, f i h < bsup.{_, v} o f :=
   ⟨fun hf _ _ => lt_of_le_of_ne (le_bsup _ _ _) (hf _ _), fun hf _ _ => ne_of_lt (hf _ _)⟩
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_not_succ_of_ne_bsup` / 定理 `bsup_not_succ_of_ne_bsup`
-
-English:
-theorem bsup_not_succ_of_ne_bsup
-  statement: {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}}
-  proof: by
+/-
+**Ordinal.bsup_not_succ_of_ne_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_not_succ_of_ne_bsup {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max
+ u v}} (hf : forall {i : Ordinal} (h : i < o), f i h != bsup.{_, v} o f) (a) : a
+ < bsup.{_, v} o f -> succ a < bsup.{_, v} o f
+参数：hf : forall {i : Ordinal} (h : i < o), f i h != bsup.{_, v} o f；a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup_eq_bsup`：iSup_eq_bsup {o : Ordinal} (f : forall a < o, Ordi
+nal) : iSup (familyOfBFamily o f) = bsup o f
+· 使用定理 `Ordinal.succ_lt_iSup_of_ne_iSup`：succ_lt_iSup_of_ne_iSup {ι} {f : ι -> O
+rdinal.{u}} [Small.{u} ι] (hf : forall i, f i != iSup f) {a} (hao : a < iSup f) 
+: succ a < iSup f
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+-/
+theorem bsup_not_succ_of_ne_bsup {o : Ordinal.{u}} {f : ∀ a < o, Ordinal.{max u v}}
+    (hf : ∀ {i : Ordinal} (h : i < o), f i h ≠ bsup.{_, v} o f) (a) :
+    a < bsup.{_, v} o f → succ a < bsup.{_, v} o f := by
   rw [← iSup_eq_bsup] at *
   exact succ_lt_iSup_of_ne_iSup fun i => hf _
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_not_succ_of_ne_bsup
-  结论: {o : 序数.{u}} {f : 对任意 a < o, 序数.{最大值 u v}}
-  证明: by
-  rw [← iSup_eq_bsup] at *
-  exact succ_lt_iSup_of_ne_iSup fun i => hf _
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: iSup_eq_bsup, succ_lt_iSup_of_ne_iSup
+/-
+**Ordinal.bsup_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_zero_iff {o} {f : forall a < o, Ordinal} : bsup o f = 0 ↔ forall i
+ hi, f i hi = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.bsup_le`：bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} :
+ (forall i h, f i h <= a) -> bsup.{u, v} o f <= a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
 -/
-theorem bsup_not_succ_of_ne_bsup {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}}
-    (hf : forall {i : Ordinal} (h : i < o), f i h != bsup.{_, v} o f) (a) :
-    a < bsup.{_, v} o f -> succ a < bsup.{_, v} o f := by
-  rw [← iSup_eq_bsup] at *
-  exact succ_lt_iSup_of_ne_iSup fun i => hf _
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_eq_zero_iff` / 定理 `bsup_eq_zero_iff`
-
-English:
-theorem bsup_eq_zero_iff
-  given: {o} {f : forall a < o, Ordinal}
-  statement: bsup o f = 0 ↔ forall i hi, f i hi = 0
-  proof: by
+theorem bsup_eq_zero_iff {o} {f : ∀ a < o, Ordinal} : bsup o f = 0 ↔ ∀ i hi, f i hi = 0 := by
   refine
     ⟨fun h i hi => ?_, fun h =>
       le_antisymm (bsup_le fun i hi => nonpos_iff_eq_zero.2 (h i hi)) zero_le⟩
-  rw [← nonpos_iff_eq_zero]; rw [← h]
+  rw [← nonpos_iff_eq_zero, ← h]
   exact le_bsup f i hi
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_eq_zero_iff
-  条件: {o} {f : 对任意 a < o, 序数}
-  结论: bsup o f = 0 ↔ 对任意 i hi, f i hi = 0
-  证明: by
-  refine
-    ⟨fun h i hi => ?_, fun h =>
-      le_antisymm (bsup_le fun i hi => nonpos_iff_eq_zero.2 (h i hi)) zero_le⟩
-  rw [← nonpos_iff_eq_zero]; rw [← h]
-  exact le_bsup f i hi
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_le, le_antisymm, le_bsup, nonpos_iff_eq_zero, zero_le
+/-
+**Ordinal.lt_bsup_of_limit** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_bsup_of_limit {o : Ordinal} {f : forall a < o, Ordinal} (hf : forall {a
+ a'} (ha : a < o) (ha' : a' < o), a < a' -> f a ha < f a' ha') (ho : forall a < 
+o, succ a < o) (i h) : f i h < bsup o f
+参数：hf : forall {a a'} (ha : a < o) (ha' : a' < o), a < a' -> f a ha < f a' ha'；h
+o : forall a < o, succ a < o；i h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
 -/
-theorem bsup_eq_zero_iff {o} {f : forall a < o, Ordinal} : bsup o f = 0 ↔ forall i hi, f i hi = 0 := by
-  refine
-    ⟨fun h i hi => ?_, fun h =>
-      le_antisymm (bsup_le fun i hi => nonpos_iff_eq_zero.2 (h i hi)) zero_le⟩
-  rw [← nonpos_iff_eq_zero]; rw [← h]
-  exact le_bsup f i hi
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `lt_bsup_of_limit` / 定理 `lt_bsup_of_limit`
-
-English:
-theorem lt_bsup_of_limit
-  statement: {o : Ordinal} {f : forall a < o, Ordinal}
-  proof: (hf _ _ <| lt_succ i).trans_le (le_bsup f (succ i) <| ho _ h)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 lt_bsup_of_limit
-  结论: {o : 序数} {f : 对任意 a < o, 序数}
-  证明: (hf _ _ <| lt_succ i).trans_le (le_bsup f (succ i) <| ho _ h)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: le_bsup, lt_succ, trans_le
--/
-theorem lt_bsup_of_limit {o : Ordinal} {f : forall a < o, Ordinal}
-    (hf : forall {a a'} (ha : a < o) (ha' : a' < o), a < a' -> f a ha < f a' ha')
-    (ho : forall a < o, succ a < o) (i h) : f i h < bsup o f :=
+theorem lt_bsup_of_limit {o : Ordinal} {f : ∀ a < o, Ordinal}
+    (hf : ∀ {a a'} (ha : a < o) (ha' : a' < o), a < a' → f a ha < f a' ha')
+    (ho : ∀ a < o, succ a < o) (i h) : f i h < bsup o f :=
   (hf _ _ <| lt_succ i).trans_le (le_bsup f (succ i) <| ho _ h)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_succ_of_mono` / 定理 `bsup_succ_of_mono`
-
-English:
-theorem bsup_succ_of_mono
-  statement: {o : Ordinal} {f : forall a < succ o, Ordinal}
-  proof: le_antisymm (bsup_le fun _i hi => hf _ _ <| le_of_lt_succ hi) (le_bsup _ _ _)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_succ_of_mono
-  结论: {o : 序数} {f : 对任意 a < succ o, 序数}
-  证明: le_antisymm (bsup_le fun _i hi => hf _ _ <| le_of_lt_succ hi) (le_bsup _ _ _)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_le, le_antisymm, le_bsup, le_of_lt_succ
+/-
+**Ordinal.bsup_succ_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_succ_of_mono {o : Ordinal} {f : forall a < succ o, Ordinal} (hf : for
+all {i j} (hi hj), i <= j -> f i hi <= f j hj) : bsup _ f = f o (lt_succ o)
+参数：hf : forall {i j} (hi hj), i <= j -> f i hi <= f j hj。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.bsup_le`：bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} :
+ (forall i h, f i h <= a) -> bsup.{u, v} o f <= a
+· 使用定理 `Order.le_of_lt_succ`：le_of_lt_succ {a b : α} : a < succ b -> a <= b
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
 -/
-theorem bsup_succ_of_mono {o : Ordinal} {f : forall a < succ o, Ordinal}
-    (hf : forall {i j} (hi hj), i <= j -> f i hi <= f j hj) : bsup _ f = f o (lt_succ o) :=
+theorem bsup_succ_of_mono {o : Ordinal} {f : ∀ a < succ o, Ordinal}
+    (hf : ∀ {i j} (hi hj), i ≤ j → f i hi ≤ f j hj) : bsup _ f = f o (lt_succ o) :=
   le_antisymm (bsup_le fun _i hi => hf _ _ <| le_of_lt_succ hi) (le_bsup _ _ _)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_zero` / 定理 `bsup_zero`
-
-English:
-theorem bsup_zero
-  given: (f : forall a < (0 : Ordinal), Ordinal)
-  statement: bsup 0 f = 0
-  proof: bsup_eq_zero_iff.2 fun _i hi => (not_lt_zero hi).elim
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_zero
-  条件: (f : 对任意 a < (0 : 序数), 序数)
-  结论: bsup 0 f = 0
-  证明: bsup_eq_zero_iff.2 fun _i hi => (not_lt_zero hi).elim
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_eq_zero_iff, not_lt_zero
+/-
+**Ordinal.bsup_zero** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_zero (f : forall a < (0 : Ordinal), Ordinal) : bsup 0 f = 0
+参数：f : forall a < (0 : Ordinal), Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.bsup_eq_zero_iff`：bsup_eq_zero_iff {o} {f : forall a < o, Ordina
+l} : bsup o f = 0 ↔ forall i hi, f i hi = 0
+· 使用定理 `not_lt_zero`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], ¬a < 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
 -/
-theorem bsup_zero (f : forall a < (0 : Ordinal), Ordinal) : bsup 0 f = 0 :=
+theorem bsup_zero (f : ∀ a < (0 : Ordinal), Ordinal) : bsup 0 f = 0 :=
   bsup_eq_zero_iff.2 fun _i hi => (not_lt_zero hi).elim
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_const` / 定理 `bsup_const`
-
-English:
-theorem bsup_const
-  given: {o : Ordinal.{u}} (ho : o != 0) (a : Ordinal.{max u v})
-  proof: le_antisymm (bsup_le fun _ _ => le_rfl) (le_bsup _ 0 (pos_iff_ne_zero.2 ho))
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_const
-  条件: {o : 序数.{u}} (ho : o != 0) (a : 序数.{最大值 u v})
-  证明: le_antisymm (bsup_le fun _ _ => le_rfl) (le_bsup _ 0 (pos_iff_ne_zero.2 ho))
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_le, le_antisymm, le_bsup, le_rfl, pos_iff_ne_zero
+/-
+**Ordinal.bsup_const** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_const {o : Ordinal.{u}} (ho : o != 0) (a : Ordinal.{max u v}) : (bsup
+.{_, v} o fun _ _ => a) = a
+参数：ho : o != 0；a : Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.bsup_le`：bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} :
+ (forall i h, f i h <= a) -> bsup.{u, v} o f <= a
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
 -/
-theorem bsup_const {o : Ordinal.{u}} (ho : o != 0) (a : Ordinal.{max u v}) :
+theorem bsup_const {o : Ordinal.{u}} (ho : o ≠ 0) (a : Ordinal.{max u v}) :
     (bsup.{_, v} o fun _ _ => a) = a :=
   le_antisymm (bsup_le fun _ _ => le_rfl) (le_bsup _ 0 (pos_iff_ne_zero.2 ho))
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_one` / 定理 `bsup_one`
-
-English:
-theorem bsup_one
-  given: (f : forall a < (1 : Ordinal), Ordinal)
-  statement: bsup 1 f = f 0 zero_lt_one
-  proof: by
-  simp_rw [← iSup_eq_bsup, ciSup_unique, familyOfBFamily, familyOfBFamily', typein_one_toType]
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_one
-  条件: (f : 对任意 a < (1 : 序数), 序数)
-  结论: bsup 1 f = f 0 zero_lt_one
-  证明: by
-  simp_rw [← iSup_eq_bsup, ciSup_unique, familyOfBFamily, familyOfBFamily', typein_one_toType]
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: ciSup_unique, familyOfBFamily, iSup_eq_bsup, simp_rw, typein_one_toType
+/-
+**Ordinal.bsup_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_one (f : forall a < (1 : Ordinal), Ordinal) : bsup 1 f = f 0 zero_lt_
+one
+参数：f : forall a < (1 : Ordinal), Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ciSup_unique`：ciSup_unique [Unique ι] {s : ι -> α} : ⨆ i, s i = s defaul
+t
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ordinal.typein_one_toType`：typein_one_toType (x : ToType 1) : typein (α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem bsup_one (f : forall a < (1 : Ordinal), Ordinal) : bsup 1 f = f 0 zero_lt_one := by
+theorem bsup_one (f : ∀ a < (1 : Ordinal), Ordinal) : bsup 1 f = f 0 zero_lt_one := by
   simp_rw [← iSup_eq_bsup, ciSup_unique, familyOfBFamily, familyOfBFamily', typein_one_toType]
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_le_of_brange_subset` / 定理 `bsup_le_of_brange_subset`
-
-English:
-theorem bsup_le_of_brange_subset
-  statement: {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
-  proof: bsup_le fun i hi => by
-    obtain ⟨j, hj, hj'⟩ := h ⟨i, hi, rfl⟩
-    rw [← hj']
-    apply le_bsup
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_le_of_brange_subset
-  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
-  证明: bsup_le fun i hi => by
-    obtain ⟨j, hj, hj'⟩ := h ⟨i, hi, rfl⟩
-    rw [← hj']
-    apply le_bsup
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: bsup_le, le_bsup
+/-
+**Ordinal.bsup_le_of_brange_subset** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_le_of_brange_subset {o o'} {f : forall a < o, Ordinal} {g : forall a 
+< o', Ordinal} (h : brange o f subseteq brange o' g) : bsup.{u, max v w} o f <= 
+bsup.{v, max u w} o' g
+参数：h : brange o f subseteq brange o' g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_le`：bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} :
+ (forall i h, f i h <= a) -> bsup.{u, v} o f <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
 -/
-theorem bsup_le_of_brange_subset {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
-    (h : brange o f subseteq brange o' g) : bsup.{u, max v w} o f <= bsup.{v, max u w} o' g :=
+theorem bsup_le_of_brange_subset {o o'} {f : ∀ a < o, Ordinal} {g : ∀ a < o', Ordinal}
+    (h : brange o f ⊆ brange o' g) : bsup.{u, max v w} o f ≤ bsup.{v, max u w} o' g :=
   bsup_le fun i hi => by
     obtain ⟨j, hj, hj'⟩ := h ⟨i, hi, rfl⟩
     rw [← hj']
     apply le_bsup
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `bsup_eq_of_brange_eq` / 定理 `bsup_eq_of_brange_eq`
-
-English:
-theorem bsup_eq_of_brange_eq
-  statement: {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
-  proof: (bsup_le_of_brange_subset.{u, v, w} h.le).antisymm (bsup_le_of_brange_subset.{v, u, w} h.ge)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-中文:
-定理 bsup_eq_of_brange_eq
-  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
-  证明: (bsup_le_of_brange_subset.{u, v, w} h.le).antisymm (bsup_le_of_brange_subset.{v, u, w} h.ge)
-
-@[deprecated "bsup is deprecated" (since := "2026-04-05")]
-
-Depends on / 依赖: antisymm, bsup_le_of_brange_subset, h.ge, h.le
+/-
+**Ordinal.bsup_eq_of_brange_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_of_brange_eq {o o'} {f : forall a < o, Ordinal} {g : forall a < o'
+, Ordinal} (h : brange o f = brange o' g) : bsup.{u, max v w} o f = bsup.{v, max
+ u w} o' g
+参数：h : brange o f = brange o' g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ordinal.bsup_le_of_brange_subset`：bsup_le_of_brange_subset {o o'} {f : f
+orall a < o, Ordinal} {g : forall a < o', Ordinal} (h : brange o f subseteq bran
+ge o' g) : bsup.{u, ma…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
 -/
-theorem bsup_eq_of_brange_eq {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
+theorem bsup_eq_of_brange_eq {o o'} {f : ∀ a < o, Ordinal} {g : ∀ a < o', Ordinal}
     (h : brange o f = brange o' g) : bsup.{u, max v w} o f = bsup.{v, max u w} o' g :=
   (bsup_le_of_brange_subset.{u, v, w} h.le).antisymm (bsup_le_of_brange_subset.{v, u, w} h.ge)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
-/--
-theorem `iSup_Iio_eq_bsup` / 定理 `iSup_Iio_eq_bsup`
-
-English:
-theorem iSup_Iio_eq_bsup
-  given: {o} {f : forall a < o, Ordinal}
-  statement: ⨆ a : Iio o, f a.1 a.2 = bsup o f
-  proof: by
-  simp_rw [Iio, bsup, iSup, range_familyOfBFamily, brange, range, Subtype.exists, mem_ofPred]
-
-中文:
-定理 iSup_Iio_eq_bsup
-  条件: {o} {f : 对任意 a < o, 序数}
-  结论: ⨆ a : 左无界右开区间 o, f a.1 a.2 = bsup o f
-  证明: by
-  simp_rw [Iio, bsup, iSup, range_familyOfBFamily, brange, range, Subtype.exists, mem_ofPred]
-
-Depends on / 依赖: Subtype, Subtype.exists, brange, mem_ofPred, range_familyOfBFamily, simp_rw
+/-
+**Ordinal.iSup_Iio_eq_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_Iio_eq_bsup {o} {f : forall a < o, Ordinal} : ⨆ a : Iio o, f a.1 a.2 
+= bsup o f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.range_familyOfBFamily`：range_familyOfBFamily {o} (f : forall a <
+ o, α) : range (familyOfBFamily o f) = brange o f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iSup_Iio_eq_bsup {o} {f : forall a < o, Ordinal} : ⨆ a : Iio o, f a.1 a.2 = bsup o f := by
+theorem iSup_Iio_eq_bsup {o} {f : ∀ a < o, Ordinal} : ⨆ a : Iio o, f a.1 a.2 = bsup o f := by
   simp_rw [Iio, bsup, iSup, range_familyOfBFamily, brange, range, Subtype.exists, mem_ofPred]
 
 end bsup
@@ -2003,347 +1649,247 @@ section lsub
 
 /-- The least strict upper bound of a family of ordinals. -/
 @[deprecated "write `⨆ i, f i + 1` instead." (since := "2026-03-27")]
-/--
-Definition of `lsub` / `lsub` 的定义
+/-
+**Ordinal.lsub** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：lsub {ι : Type u} (f : ι -> Ordinal.{max u v}) : Ordinal
+参数：f : ι -> Ordinal.{max u v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lsub
-  signature: {ι : Type u} (f : ι -> Ordinal.{max u v})
-  body: iSup (succ ∘ f)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定义 lsub
-  签名: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
-  定义体: iSup (succ ∘ f)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
+--- 原说明 ---
+The least strict upper bound of a family of ordinals.
 -/
-def lsub {ι : Type u} (f : ι -> Ordinal.{max u v}) : Ordinal :=
+def lsub {ι : Type u} (f : ι → Ordinal.{max u v}) : Ordinal :=
   iSup (succ ∘ f)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `iSup_eq_lsub` / 定理 `iSup_eq_lsub`
-
-English:
-theorem iSup_eq_lsub
-  given: {ι} (f : ι -> Ordinal)
-  statement: iSup (succ ∘ f) = lsub f
-  proof: rfl
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 iSup_eq_lsub
-  条件: {ι} (f : ι -> 序数)
-  结论: iSup (succ ∘ f) = lsub f
-  证明: rfl
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
+/-
+**Ordinal.iSup_eq_lsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_lsub {ι} (f : ι -> Ordinal) : iSup (succ ∘ f) = lsub f
+参数：f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iSup_eq_lsub {ι} (f : ι -> Ordinal) : iSup (succ ∘ f) = lsub f :=
+theorem iSup_eq_lsub {ι} (f : ι → Ordinal) : iSup (succ ∘ f) = lsub f :=
   rfl
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_le_iff` / 定理 `lsub_le_iff`
-
-English:
-theorem lsub_le_iff
-  given: {ι} {f : ι -> Ordinal} {a}
-  statement: lsub f <= a ↔ forall i, f i < a
-  proof: Ordinal.iSup_add_one_le_iff
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_le_iff
-  条件: {ι} {f : ι -> 序数} {a}
-  结论: lsub f <= a ↔ 对任意 i, f i < a
-  证明: Ordinal.iSup_add_one_le_iff
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_add_one_le_iff, iSup_add_one_le_iff
+/-
+**Ordinal.lsub_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_le_iff {ι} {f : ι -> Ordinal} {a} : lsub f <= a ↔ forall i, f i < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_add_one_le_iff`：iSup_add_one_le_iff {ι} {f : ι -> Ordinal.{
+u}} {a : Ordinal.{u}} [Small.{u} ι] : ⨆ i, f i + 1 <= a ↔ forall i, f i < a
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-theorem lsub_le_iff {ι} {f : ι -> Ordinal} {a} : lsub f <= a ↔ forall i, f i < a :=
+theorem lsub_le_iff {ι} {f : ι → Ordinal} {a} : lsub f ≤ a ↔ ∀ i, f i < a :=
   Ordinal.iSup_add_one_le_iff
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_le` / 定理 `lsub_le`
-
-English:
-theorem lsub_le
-  given: {ι} {f : ι -> Ordinal} {a}
-  statement: (forall i, f i < a) -> lsub f <= a
-  proof: lsub_le_iff.2
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_le
-  条件: {ι} {f : ι -> 序数} {a}
-  结论: (对任意 i, f i < a) -> lsub f <= a
-  证明: lsub_le_iff.2
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: lsub_le_iff
+/-
+**Ordinal.lsub_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i < a) -> lsub f <= a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.lsub_le_iff`：lsub_le_iff {ι} {f : ι -> Ordinal} {a} : lsub f <= 
+a ↔ forall i, f i < a
 -/
-theorem lsub_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i < a) -> lsub f <= a :=
+theorem lsub_le {ι} {f : ι → Ordinal} {a} : (∀ i, f i < a) → lsub f ≤ a :=
   lsub_le_iff.2
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lt_lsub` / 定理 `lt_lsub`
-
-English:
-theorem lt_lsub
-  given: {ι} (f : ι -> Ordinal) (i)
-  statement: f i < lsub f
-  proof: Ordinal.lt_iSup_add_one f i
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lt_lsub
-  条件: {ι} (f : ι -> 序数) (i)
-  结论: f i < lsub f
-  证明: Ordinal.lt_iSup_add_one f i
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Ordinal, Ordinal.lt_iSup_add_one, lt_iSup_add_one
+/-
+**Ordinal.lt_lsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f
+参数：f : ι -> Ordinal；i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lt_iSup_add_one`：lt_iSup_add_one {ι} (f : ι -> Ordinal.{u}) [Sma
+ll.{u} ι] (i) : f i < ⨆ i, f i + 1
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-theorem lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f :=
+theorem lt_lsub {ι} (f : ι → Ordinal) (i) : f i < lsub f :=
   Ordinal.lt_iSup_add_one f i
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lt_lsub_iff` / 定理 `lt_lsub_iff`
-
-English:
-theorem lt_lsub_iff
-  given: {ι} {f : ι -> Ordinal} {a}
-  statement: a < lsub f ↔ exists i, a <= f i
-  proof: by
-  simpa only [not_forall, not_lt, not_le] using not_congr lsub_le_iff
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lt_lsub_iff
-  条件: {ι} {f : ι -> 序数} {a}
-  结论: a < lsub f ↔ 存在 i, a <= f i
-  证明: by
-  simpa only [not_forall, not_lt, not_le] using not_congr lsub_le_iff
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: lsub_le_iff, not_congr, not_forall, not_le, not_lt
+/-
+**Ordinal.lt_lsub_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_lsub_iff {ι} {f : ι -> Ordinal} {a} : a < lsub f ↔ exists i, a <= f i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Ordinal.lsub_le_iff`：lsub_le_iff {ι} {f : ι -> Ordinal} {a} : lsub f <= 
+a ↔ forall i, f i < a
 -/
-theorem lt_lsub_iff {ι} {f : ι -> Ordinal} {a} : a < lsub f ↔ exists i, a <= f i := by
+theorem lt_lsub_iff {ι} {f : ι → Ordinal} {a} : a < lsub f ↔ ∃ i, a ≤ f i := by
   simpa only [not_forall, not_lt, not_le] using not_congr lsub_le_iff
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `iSup_le_lsub` / 定理 `iSup_le_lsub`
-
-English:
-theorem iSup_le_lsub
-  given: {ι} (f : ι -> Ordinal)
-  statement: iSup f <= lsub f
-  proof: Ordinal.iSup_le fun i => (lt_lsub f i).le
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 iSup_le_lsub
-  条件: {ι} (f : ι -> 序数)
-  结论: iSup f <= lsub f
-  证明: Ordinal.iSup_le fun i => (lt_lsub f i).le
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le, iSup_le, lt_lsub
+/-
+**Ordinal.iSup_le_lsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_le_lsub {ι} (f : ι -> Ordinal) : iSup f <= lsub f
+参数：f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_le`：∀ {ι : Sort u_3} {f : ι → Ordinal.{u_4}} {a : Ordinal.{
+u_4}}, (∀ (i : ι), f i ≤ a) → ⨆ i, f i ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Ordinal.lt_lsub`：lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f
 -/
-theorem iSup_le_lsub {ι} (f : ι -> Ordinal) : iSup f <= lsub f :=
+theorem iSup_le_lsub {ι} (f : ι → Ordinal) : iSup f ≤ lsub f :=
   Ordinal.iSup_le fun i => (lt_lsub f i).le
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_le_succ_iSup` / 定理 `lsub_le_succ_iSup`
-
-English:
-theorem lsub_le_succ_iSup
-  given: {ι} (f : ι -> Ordinal)
-  statement: lsub f <= succ (iSup f)
-  proof: lsub_le fun i => lt_succ_iff.2 (Ordinal.le_iSup f i)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_le_succ_iSup
-  条件: {ι} (f : ι -> 序数)
-  结论: lsub f <= succ (iSup f)
-  证明: lsub_le fun i => lt_succ_iff.2 (Ordinal.le_iSup f i)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Ordinal, Ordinal.le_iSup, le_iSup, lsub_le, lt_succ_iff
+/-
+**Ordinal.lsub_le_succ_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_le_succ_iSup {ι} (f : ι -> Ordinal) : lsub f <= succ (iSup f)
+参数：f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lsub_le`：lsub_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i < a
+) -> lsub f <= a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.lt_succ_iff`：lt_succ_iff : a < succ b ↔ a <= b
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-theorem lsub_le_succ_iSup {ι} (f : ι -> Ordinal) : lsub f <= succ (iSup f) :=
+theorem lsub_le_succ_iSup {ι} (f : ι → Ordinal) : lsub f ≤ succ (iSup f) :=
   lsub_le fun i => lt_succ_iff.2 (Ordinal.le_iSup f i)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `iSup_eq_lsub_or_succ_iSup_eq_lsub` / 定理 `iSup_eq_lsub_or_succ_iSup_eq_lsub`
-
-English:
-theorem iSup_eq_lsub_or_succ_iSup_eq_lsub
-  given: {ι} (f : ι -> Ordinal)
-  proof: by
-  rcases eq_or_lt_of_le (iSup_le_lsub f) with h | h
-  · exact Or.inl h
-  · exact Or.inr ((succ_le_of_lt h).antisymm (lsub_le_succ_iSup f))
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 iSup_eq_lsub_or_succ_iSup_eq_lsub
-  条件: {ι} (f : ι -> 序数)
-  证明: by
-  rcases eq_or_lt_of_le (iSup_le_lsub f) with h | h
-  · exact Or.inl h
-  · exact Or.inr ((succ_le_of_lt h).antisymm (lsub_le_succ_iSup f))
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Or.inl, Or.inr, antisymm, eq_or_lt_of_le, iSup_le_lsub, lsub_le_succ_iSup, succ_le_of_lt
+/-
+**Ordinal.iSup_eq_lsub_or_succ_iSup_eq_lsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_lsub_or_succ_iSup_eq_lsub {ι} (f : ι -> Ordinal) : iSup f = lsub f
+ ∨ succ (iSup f) = lsub f
+参数：f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `Ordinal.iSup_le_lsub`：iSup_le_lsub {ι} (f : ι -> Ordinal) : iSup f <= ls
+ub f
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Order.succ_le_of_lt`：succ_le_of_lt {a b : α} : a < b -> succ a <= b
+· 使用定理 `Ordinal.lsub_le_succ_iSup`：lsub_le_succ_iSup {ι} (f : ι -> Ordinal) : ls
+ub f <= succ (iSup f)
 -/
-theorem iSup_eq_lsub_or_succ_iSup_eq_lsub {ι} (f : ι -> Ordinal) :
+theorem iSup_eq_lsub_or_succ_iSup_eq_lsub {ι} (f : ι → Ordinal) :
     iSup f = lsub f ∨ succ (iSup f) = lsub f := by
   rcases eq_or_lt_of_le (iSup_le_lsub f) with h | h
   · exact Or.inl h
   · exact Or.inr ((succ_le_of_lt h).antisymm (lsub_le_succ_iSup f))
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `succ_iSup_le_lsub_iff` / 定理 `succ_iSup_le_lsub_iff`
-
-English:
-theorem succ_iSup_le_lsub_iff
-  given: {ι} (f : ι -> Ordinal)
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · by_contra! hf
-    have := forall_congr' fun i => (Ordinal.le_iSup f i).lt_iff_ne.symm
-    exact (succ_le_iff.1 h).ne ((iSup_le_lsub f).antisymm (lsub_le (this.1 hf)))
-  rintro ⟨_, hf⟩
-  rw [succ_le_iff]; rw [← hf]
-  exact lt_lsub _ _
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 succ_iSup_le_lsub_iff
-  条件: {ι} (f : ι -> 序数)
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · by_contra! hf
-    have := forall_congr' fun i => (Ordinal.le_iSup f i).lt_iff_ne.symm
-    exact (succ_le_iff.1 h).ne ((iSup_le_lsub f).antisymm (lsub_le (this.1 hf)))
-  rintro ⟨_, hf⟩
-  rw [succ_le_iff]; rw [← hf]
-  exact lt_lsub _ _
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Ordinal, Ordinal.le_iSup, antisymm, forall_congr, iSup_le_lsub, le_iSup, lsub_le, lt_iff_ne, lt_iff_ne.symm, lt_lsub, succ_le_iff
+/-
+**Ordinal.succ_iSup_le_lsub_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：succ_iSup_le_lsub_iff {ι} (f : ι -> Ordinal) : succ (iSup f) <= lsub f ↔ e
+xists i, f i = iSup f
+参数：f : ι -> Ordinal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LE.le.lt_iff_ne`：lt_iff_ne (h : a <= b) : a < b ↔ a != b
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.succ_le_iff`：succ_le_iff : succ a <= b ↔ a < b
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ordinal.iSup_le_lsub`：iSup_le_lsub {ι} (f : ι -> Ordinal) : iSup f <= ls
+ub f
+· 使用定理 `Ordinal.lsub_le`：lsub_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i < a
+) -> lsub f <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.lt_lsub`：lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f
 -/
-theorem succ_iSup_le_lsub_iff {ι} (f : ι -> Ordinal) :
-    succ (iSup f) <= lsub f ↔ exists i, f i = iSup f := by
+theorem succ_iSup_le_lsub_iff {ι} (f : ι → Ordinal) :
+    succ (iSup f) ≤ lsub f ↔ ∃ i, f i = iSup f := by
   refine ⟨fun h => ?_, ?_⟩
   · by_contra! hf
-    have := forall_congr' fun i => (Ordinal.le_iSup f i).lt_iff_ne.symm
+    have := forall_congr' fun i ↦ (Ordinal.le_iSup f i).lt_iff_ne.symm
     exact (succ_le_iff.1 h).ne ((iSup_le_lsub f).antisymm (lsub_le (this.1 hf)))
   rintro ⟨_, hf⟩
-  rw [succ_le_iff]; rw [← hf]
+  rw [succ_le_iff, ← hf]
   exact lt_lsub _ _
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `succ_iSup_eq_lsub_iff` / 定理 `succ_iSup_eq_lsub_iff`
-
-English:
-theorem succ_iSup_eq_lsub_iff
-  given: {ι} (f : ι -> Ordinal)
-  proof: (lsub_le_succ_iSup f).ge_iff_eq'.symm.trans (succ_iSup_le_lsub_iff f)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 succ_iSup_eq_lsub_iff
-  条件: {ι} (f : ι -> 序数)
-  证明: (lsub_le_succ_iSup f).ge_iff_eq'.symm.trans (succ_iSup_le_lsub_iff f)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: ge_iff_eq, lsub_le_succ_iSup, succ_iSup_le_lsub_iff, symm.trans
+/-
+**Ordinal.succ_iSup_eq_lsub_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：succ_iSup_eq_lsub_iff {ι} (f : ι -> Ordinal) : succ (iSup f) = lsub f ↔ ex
+ists i, f i = iSup f
+参数：f : ι -> Ordinal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LE.le.ge_iff_eq'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (a ≤ b ↔ a = b)
+· 使用定理 `Ordinal.lsub_le_succ_iSup`：lsub_le_succ_iSup {ι} (f : ι -> Ordinal) : ls
+ub f <= succ (iSup f)
+· 使用定理 `Ordinal.succ_iSup_le_lsub_iff`：succ_iSup_le_lsub_iff {ι} (f : ι -> Ordin
+al) : succ (iSup f) <= lsub f ↔ exists i, f i = iSup f
 -/
-theorem succ_iSup_eq_lsub_iff {ι} (f : ι -> Ordinal) :
-    succ (iSup f) = lsub f ↔ exists i, f i = iSup f :=
+theorem succ_iSup_eq_lsub_iff {ι} (f : ι → Ordinal) :
+    succ (iSup f) = lsub f ↔ ∃ i, f i = iSup f :=
   (lsub_le_succ_iSup f).ge_iff_eq'.symm.trans (succ_iSup_le_lsub_iff f)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `iSup_eq_lsub_iff` / 定理 `iSup_eq_lsub_iff`
-
-English:
-theorem iSup_eq_lsub_iff
-  given: {ι} (f : ι -> Ordinal)
-  proof: by
-  refine ⟨fun h => ?_, fun hf => le_antisymm (iSup_le_lsub f) (lsub_le fun i => ?_)⟩
-  · rw [← h]
-    exact fun a => succ_lt_iSup_of_ne_iSup fun i => (lsub_le_iff.1 (le_of_eq h.symm) i).ne
-  by_contra! hle
-  have heq := (succ_iSup_eq_lsub_iff f).2 ⟨i, le_antisymm (Ordinal.le_iSup _ _) hle⟩
-  have :=
-    hf _
-      (by
-        rw [← heq]
-        exact lt_succ (iSup f))
-  rw [heq] at this
-  exact this.false
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 iSup_eq_lsub_iff
-  条件: {ι} (f : ι -> 序数)
-  证明: by
-  refine ⟨fun h => ?_, fun hf => le_antisymm (iSup_le_lsub f) (lsub_le fun i => ?_)⟩
-  · rw [← h]
-    exact fun a => succ_lt_iSup_of_ne_iSup fun i => (lsub_le_iff.1 (le_of_eq h.symm) i).ne
-  by_contra! hle
-  have heq := (succ_iSup_eq_lsub_iff f).2 ⟨i, le_antisymm (Ordinal.le_iSup _ _) hle⟩
-  have :=
-    hf _
-      (by
-        rw [← heq]
-        exact lt_succ (iSup f))
-  rw [heq] at this
-  exact this.false
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Ordinal, Ordinal.le_iSup, h.symm, iSup_le_lsub, le_antisymm, le_iSup, le_of_eq, lsub_le, lsub_le_iff, lt_succ, succ_iSup_eq_lsub_iff, succ_lt_iSup_of_ne_iSup, this.false
+/-
+**Ordinal.iSup_eq_lsub_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_lsub_iff {ι} (f : ι -> Ordinal) : iSup f = lsub f ↔ forall a < lsu
+b f, succ a < lsub f
+参数：f : ι -> Ordinal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.succ_lt_iSup_of_ne_iSup`：succ_lt_iSup_of_ne_iSup {ι} {f : ι -> O
+rdinal.{u}} [Small.{u} ι] (hf : forall i, f i != iSup f) {a} (hao : a < iSup f) 
+: succ a < iSup f
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.lsub_le_iff`：lsub_le_iff {ι} {f : ι -> Ordinal} {a} : lsub f <= 
+a ↔ forall i, f i < a
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.iSup_le_lsub`：iSup_le_lsub {ι} (f : ι -> Ordinal) : iSup f <= ls
+ub f
+· 使用定理 `Ordinal.lsub_le`：lsub_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i < a
+) -> lsub f <= a
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.succ_iSup_eq_lsub_iff`：succ_iSup_eq_lsub_iff {ι} (f : ι -> Ordin
+al) : succ (iSup f) = lsub f ↔ exists i, f i = iSup f
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
 -/
-theorem iSup_eq_lsub_iff {ι} (f : ι -> Ordinal) :
-    iSup f = lsub f ↔ forall a < lsub f, succ a < lsub f := by
+theorem iSup_eq_lsub_iff {ι} (f : ι → Ordinal) :
+    iSup f = lsub f ↔ ∀ a < lsub f, succ a < lsub f := by
   refine ⟨fun h => ?_, fun hf => le_antisymm (iSup_le_lsub f) (lsub_le fun i => ?_)⟩
   · rw [← h]
     exact fun a => succ_lt_iSup_of_ne_iSup fun i => (lsub_le_iff.1 (le_of_eq h.symm) i).ne
@@ -2358,119 +1904,83 @@ theorem iSup_eq_lsub_iff {ι} (f : ι -> Ordinal) :
   exact this.false
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `iSup_eq_lsub_iff_lt_iSup` / 定理 `iSup_eq_lsub_iff_lt_iSup`
-
-English:
-theorem iSup_eq_lsub_iff_lt_iSup
-  given: {ι} (f : ι -> Ordinal)
-  proof: ⟨fun h i => by
-    rw [h]
-    apply lt_lsub, fun h => le_antisymm (iSup_le_lsub f) (lsub_le h)⟩
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 iSup_eq_lsub_iff_lt_iSup
-  条件: {ι} (f : ι -> 序数)
-  证明: ⟨fun h i => by
-    rw [h]
-    apply lt_lsub, fun h => le_antisymm (iSup_le_lsub f) (lsub_le h)⟩
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: iSup_le_lsub, le_antisymm, lsub_le, lt_lsub
+/-
+**Ordinal.iSup_eq_lsub_iff_lt_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_eq_lsub_iff_lt_iSup {ι} (f : ι -> Ordinal) : iSup f = lsub f ↔ forall
+ i, f i < iSup f
+参数：f : ι -> Ordinal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.lt_lsub`：lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.iSup_le_lsub`：iSup_le_lsub {ι} (f : ι -> Ordinal) : iSup f <= ls
+ub f
+· 使用定理 `Ordinal.lsub_le`：lsub_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i < a
+) -> lsub f <= a
 -/
-theorem iSup_eq_lsub_iff_lt_iSup {ι} (f : ι -> Ordinal) :
-    iSup f = lsub f ↔ forall i, f i < iSup f :=
+theorem iSup_eq_lsub_iff_lt_iSup {ι} (f : ι → Ordinal) :
+    iSup f = lsub f ↔ ∀ i, f i < iSup f :=
   ⟨fun h i => by
     rw [h]
     apply lt_lsub, fun h => le_antisymm (iSup_le_lsub f) (lsub_le h)⟩
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_empty` / 定理 `lsub_empty`
-
-English:
-theorem lsub_empty
-  given: {ι} [h : IsEmpty ι] (f : ι -> Ordinal)
-  statement: lsub f = 0
-  proof: by
-  rw [← nonpos_iff_eq_zero]; rw [lsub_le_iff]
-  exact h.elim
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_empty
-  条件: {ι} [h : 是空 ι] (f : ι -> 序数)
-  结论: lsub f = 0
-  证明: by
-  rw [← nonpos_iff_eq_zero]; rw [lsub_le_iff]
-  exact h.elim
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: h.elim, lsub_le_iff, nonpos_iff_eq_zero
+/-
+**Ordinal.lsub_empty** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_empty {ι} [h : IsEmpty ι] (f : ι -> Ordinal) : lsub f = 0
+参数：f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nonpos_iff_eq_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [in
+st_1 : Zero α] [IsBotZeroClass α], a ≤ 0 ↔ a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.lsub_le_iff`：lsub_le_iff {ι} {f : ι -> Ordinal} {a} : lsub f <= 
+a ↔ forall i, f i < a
 -/
-theorem lsub_empty {ι} [h : IsEmpty ι] (f : ι -> Ordinal) : lsub f = 0 := by
-  rw [← nonpos_iff_eq_zero]; rw [lsub_le_iff]
+theorem lsub_empty {ι} [h : IsEmpty ι] (f : ι → Ordinal) : lsub f = 0 := by
+  rw [← nonpos_iff_eq_zero, lsub_le_iff]
   exact h.elim
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_pos` / 定理 `lsub_pos`
-
-English:
-theorem lsub_pos
-  given: {ι} [h : Nonempty ι] (f : ι -> Ordinal)
-  statement: 0 < lsub f
-  proof: h.elim fun i => (lt_lsub f i).pos
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_pos
-  条件: {ι} [h : 非空 ι] (f : ι -> 序数)
-  结论: 0 < lsub f
-  证明: h.elim fun i => (lt_lsub f i).pos
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: h.elim, lt_lsub
+/-
+**Ordinal.lsub_pos** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_pos {ι} [h : Nonempty ι] (f : ι -> Ordinal) : 0 < lsub f
+参数：f : ι -> Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `LT.lt.pos`：∀ {α : Type u_1} {a b : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], a < b → 0 < b
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.lt_lsub`：lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f
 -/
-theorem lsub_pos {ι} [h : Nonempty ι] (f : ι -> Ordinal) : 0 < lsub f :=
+theorem lsub_pos {ι} [h : Nonempty ι] (f : ι → Ordinal) : 0 < lsub f :=
   h.elim fun i => (lt_lsub f i).pos
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_eq_zero_iff` / 定理 `lsub_eq_zero_iff`
-
-English:
-theorem lsub_eq_zero_iff
-  given: {ι} (f : ι -> Ordinal)
-  proof: by
-  refine ⟨fun h => ⟨fun i => ?_⟩, fun h => @lsub_empty _ h _⟩
-  have := @lsub_pos.{_, v} _ ⟨i⟩ f
-  rw [h] at this
-  exact this.false
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_eq_zero_iff
-  条件: {ι} (f : ι -> 序数)
-  证明: by
-  refine ⟨fun h => ⟨fun i => ?_⟩, fun h => @lsub_empty _ h _⟩
-  have := @lsub_pos.{_, v} _ ⟨i⟩ f
-  rw [h] at this
-  exact this.false
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: lsub_empty, lsub_pos, this.false
+/-
+**Ordinal.lsub_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_eq_zero_iff {ι} (f : ι -> Ordinal) : lsub.{_, v} f = 0 ↔ IsEmpty ι
+参数：f : ι -> Ordinal。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lsub_pos`：lsub_pos {ι} [h : Nonempty ι] (f : ι -> Ordinal) : 0 <
+ lsub f
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.lsub_empty`：lsub_empty {ι} [h : IsEmpty ι] (f : ι -> Ordinal) : 
+lsub f = 0
 -/
-theorem lsub_eq_zero_iff {ι} (f : ι -> Ordinal) :
+theorem lsub_eq_zero_iff {ι} (f : ι → Ordinal) :
     lsub.{_, v} f = 0 ↔ IsEmpty ι := by
   refine ⟨fun h => ⟨fun i => ?_⟩, fun h => @lsub_empty _ h _⟩
   have := @lsub_pos.{_, v} _ ⟨i⟩ f
@@ -2478,206 +1988,152 @@ theorem lsub_eq_zero_iff {ι} (f : ι -> Ordinal) :
   exact this.false
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_const` / 定理 `lsub_const`
-
-English:
-theorem lsub_const
-  given: {ι} [Nonempty ι] (o : Ordinal)
-  statement: (lsub fun _ : ι => o) = succ o
-  proof: ciSup_const
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_const
-  条件: {ι} [非空 ι] (o : 序数)
-  结论: (lsub fun _ : ι => o) = succ o
-  证明: ciSup_const
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: ciSup_const
+/-
+**Ordinal.lsub_const** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_const {ι} [Nonempty ι] (o : Ordinal) : (lsub fun _ : ι => o) = succ o
+参数：o : Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciSup_const`：ciSup_const [hι : Nonempty ι] {a : α} : ⨆ _ : ι, a = a
+· 使用定理 `Sum.instIsWellOrderLex`：∀ {α : Type u_1} {β : Type u_2} (r : α → α → Pro
+p) (s : β → β → Prop) [IsWellOrder α r] [IsWellOrder β s],   IsWellOrder (α ⊕ β)
+ (Sum.Lex r …
 -/
 theorem lsub_const {ι} [Nonempty ι] (o : Ordinal) : (lsub fun _ : ι => o) = succ o :=
   ciSup_const
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_unique` / 定理 `lsub_unique`
-
-English:
-theorem lsub_unique
-  given: {ι} [Unique ι] (f : ι -> Ordinal)
-  statement: lsub f = succ (f default)
-  proof: ciSup_unique
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_unique
-  条件: {ι} [唯一 ι] (f : ι -> 序数)
-  结论: lsub f = succ (f default)
-  证明: ciSup_unique
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: ciSup_unique
+/-
+**Ordinal.lsub_unique** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_unique {ι} [Unique ι] (f : ι -> Ordinal) : lsub f = succ (f default)
+参数：f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciSup_unique`：ciSup_unique [Unique ι] {s : ι -> α} : ⨆ i, s i = s defaul
+t
 -/
-theorem lsub_unique {ι} [Unique ι] (f : ι -> Ordinal) : lsub f = succ (f default) :=
+theorem lsub_unique {ι} [Unique ι] (f : ι → Ordinal) : lsub f = succ (f default) :=
   ciSup_unique
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_le_of_range_subset` / 定理 `lsub_le_of_range_subset`
-
-English:
-theorem lsub_le_of_range_subset
-  statement: {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
-  proof: csSup_le_csSup' bddAbove_of_small (by convert! Set.image_mono h <;> apply Set.range_comp)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_le_of_range_subset
-  结论: {ι ι'} {f : ι -> 序数} {g : ι' -> 序数}
-  证明: csSup_le_csSup' bddAbove_of_small (by convert! Set.image_mono h <;> apply Set.range_comp)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: Set.image_mono, Set.range_comp, bddAbove_of_small, convert, csSup_le_csSup, image_mono, range_comp
+/-
+**Ordinal.lsub_le_of_range_subset** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_le_of_range_subset {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal} (h :
+ Set.range f subseteq Set.range g) : lsub.{u, max v w} f <= lsub.{v, max u w} g
+参数：h : Set.range f subseteq Set.range g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csSup_le_csSup'`：csSup_le_csSup' {s t : Set α} (h₁ : BddAbove t) (h₂ : s
+ subseteq t) : sSup s <= sSup t
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
 -/
-theorem lsub_le_of_range_subset {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
-    (h : Set.range f subseteq Set.range g) : lsub.{u, max v w} f <= lsub.{v, max u w} g :=
+theorem lsub_le_of_range_subset {ι ι'} {f : ι → Ordinal} {g : ι' → Ordinal}
+    (h : Set.range f ⊆ Set.range g) : lsub.{u, max v w} f ≤ lsub.{v, max u w} g :=
   csSup_le_csSup' bddAbove_of_small (by convert! Set.image_mono h <;> apply Set.range_comp)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_eq_of_range_eq` / 定理 `lsub_eq_of_range_eq`
-
-English:
-theorem lsub_eq_of_range_eq
-  statement: {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
-  proof: (lsub_le_of_range_subset.{u, v, w} h.le).antisymm (lsub_le_of_range_subset.{v, u, w} h.ge)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_eq_of_range_eq
-  结论: {ι ι'} {f : ι -> 序数} {g : ι' -> 序数}
-  证明: (lsub_le_of_range_subset.{u, v, w} h.le).antisymm (lsub_le_of_range_subset.{v, u, w} h.ge)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: antisymm, h.ge, h.le, lsub_le_of_range_subset
+/-
+**Ordinal.lsub_eq_of_range_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_eq_of_range_eq {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal} (h : Set
+.range f = Set.range g) : lsub.{u, max v w} f = lsub.{v, max u w} g
+参数：h : Set.range f = Set.range g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ordinal.lsub_le_of_range_subset`：lsub_le_of_range_subset {ι ι'} {f : ι -
+> Ordinal} {g : ι' -> Ordinal} (h : Set.range f subseteq Set.range g) : lsub.{u,
+ max v w} f <= lsub.{…
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
 -/
-theorem lsub_eq_of_range_eq {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
+theorem lsub_eq_of_range_eq {ι ι'} {f : ι → Ordinal} {g : ι' → Ordinal}
     (h : Set.range f = Set.range g) : lsub.{u, max v w} f = lsub.{v, max u w} g :=
   (lsub_le_of_range_subset.{u, v, w} h.le).antisymm (lsub_le_of_range_subset.{v, u, w} h.ge)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_sum` / 定理 `lsub_sum`
-
-English:
-theorem lsub_sum
-  given: {α : Type u} {β : Type v} (f : α oplus β -> Ordinal)
-  proof: iSup_sum _
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_sum
-  条件: {α : 类型u} {β : 类型v} (f : α oplus β -> 序数)
-  证明: iSup_sum _
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: iSup_sum
+/-
+**Ordinal.lsub_sum** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_sum {α : Type u} {β : Type v} (f : α oplus β -> Ordinal) : lsub.{max 
+u v, w} f = max (lsub.{u, max v w} fun a => f (Sum.inl a)) (lsub.{v, max u w} fu
+n b => f (Sum.inr b))
+参数：f : α oplus β -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_sum`：iSup_sum {α β} (f : α oplus β -> Ordinal.{u}) [Small.{
+u} α] [Small.{u} β] : iSup f = max (⨆ a, f (Sum.inl a)) (⨆ b, f (Sum.inr b))
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-theorem lsub_sum {α : Type u} {β : Type v} (f : α oplus β -> Ordinal) :
+theorem lsub_sum {α : Type u} {β : Type v} (f : α ⊕ β → Ordinal) :
     lsub.{max u v, w} f =
       max (lsub.{u, max v w} fun a => f (Sum.inl a)) (lsub.{v, max u w} fun b => f (Sum.inr b)) :=
   iSup_sum _
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_notMem_range` / 定理 `lsub_notMem_range`
-
-English:
-theorem lsub_notMem_range
-  given: {ι} (f : ι -> Ordinal)
-  proof: fun ⟨i, h⟩ =>
-  h.not_lt (lt_lsub f i)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 lsub_notMem_range
-  条件: {ι} (f : ι -> 序数)
-  证明: fun ⟨i, h⟩ =>
-  h.not_lt (lt_lsub f i)
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
+/-
+**Ordinal.lsub_notMem_range** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_notMem_range {ι} (f : ι -> Ordinal) : lsub f ∉ Set.range f
+参数：f : ι -> Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.not_lt`：∀ {α : Type u_2} [inst : Preorder α] {a b : α}, a = b → ¬a < 
+b
+· 使用定理 `Ordinal.lt_lsub`：lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f
 -/
-theorem lsub_notMem_range {ι} (f : ι -> Ordinal) :
+theorem lsub_notMem_range {ι} (f : ι → Ordinal) :
     lsub f ∉ Set.range f := fun ⟨i, h⟩ =>
   h.not_lt (lt_lsub f i)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `nonempty_compl_range` / 定理 `nonempty_compl_range`
-
-English:
-theorem nonempty_compl_range
-  given: {ι : Type u} (f : ι -> Ordinal.{max u v})
-  statement: (Set.range f)ᶜ.Nonempty
-  proof: ⟨_, lsub_notMem_range f⟩
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-中文:
-定理 nonempty_compl_range
-  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
-  结论: (集合.range f)ᶜ.非空
-  证明: ⟨_, lsub_notMem_range f⟩
-
-@[deprecated "lsub is deprecated" (since := "2026-03-27")]
-
-Depends on / 依赖: lsub_notMem_range
+/-
+**Ordinal.nonempty_compl_range** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：nonempty_compl_range {ι : Type u} (f : ι -> Ordinal.{max u v}) : (Set.rang
+e f)ᶜ.Nonempty
+参数：f : ι -> Ordinal.{max u v}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lsub_notMem_range`：lsub_notMem_range {ι} (f : ι -> Ordinal) : ls
+ub f ∉ Set.range f
 -/
-theorem nonempty_compl_range {ι : Type u} (f : ι -> Ordinal.{max u v}) : (Set.range f)ᶜ.Nonempty :=
+theorem nonempty_compl_range {ι : Type u} (f : ι → Ordinal.{max u v}) : (Set.range f)ᶜ.Nonempty :=
   ⟨_, lsub_notMem_range f⟩
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
-/--
-theorem `lsub_typein` / 定理 `lsub_typein`
-
-English:
-theorem lsub_typein
-  given: (o : Ordinal)
-  statement: lsub.{u, u} (typein (α := o.ToType) (· < ·)) = o
-  proof: (lsub_le.{u, u} typein_lt_self).antisymm
-    (by
-      by_contra! h
-      have h := h.trans_eq (type_toType o).symm
-      simpa [typein_enum] using lt_lsub.{u, u} (typein (· < ·)) (enum (· < ·) ⟨_, h⟩))
-
-@[deprecated IsSuccPrelimit.sSup_Iio (since := "2026-03-27")]
-
-中文:
-定理 lsub_typein
-  条件: (o : 序数)
-  结论: lsub.{u, u} (typein (α := o.ToType) (· < ·)) = o
-  证明: (lsub_le.{u, u} typein_lt_self).antisymm
-    (by
-      by_contra! h
-      have h := h.trans_eq (type_toType o).symm
-      simpa [typein_enum] using lt_lsub.{u, u} (typein (· < ·)) (enum (· < ·) ⟨_, h⟩))
-
-@[deprecated IsSuccPrelimit.sSup_Iio (since := "2026-03-27")]
-
-Depends on / 依赖: ToType, o.ToType
+/-
+**Ordinal.lsub_typein** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_typein (o : Ordinal) : lsub.{u, u} (typein (α
+参数：o : Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `Ordinal.lsub_le`：lsub_le {ι} {f : ι -> Ordinal} {a} : (forall i, f i < a
+) -> lsub f <= a
+· 使用定理 `Ordinal.typein_lt_self`：typein_lt_self {o : Ordinal} (i : o.ToType) : ty
+pein (α
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.typein_enum`：typein_enum (r : α -> α -> Prop) [IsWellOrder α r] 
+{o} (h : o < type r) : typein r (enum r ⟨o, h⟩) = o
+· 使用定理 `Ordinal.lt_lsub`：lt_lsub {ι} (f : ι -> Ordinal) (i) : f i < lsub f
 -/
 theorem lsub_typein (o : Ordinal) : lsub.{u, u} (typein (α := o.ToType) (· < ·)) = o :=
   (lsub_le.{u, u} typein_lt_self).antisymm
@@ -2687,62 +2143,68 @@ theorem lsub_typein (o : Ordinal) : lsub.{u, u} (typein (α := o.ToType) (· < �
       simpa [typein_enum] using lt_lsub.{u, u} (typein (· < ·)) (enum (· < ·) ⟨_, h⟩))
 
 @[deprecated IsSuccPrelimit.sSup_Iio (since := "2026-03-27")]
-/--
-theorem `iSup_typein_limit` / 定理 `iSup_typein_limit`
-
-English:
-theorem iSup_typein_limit
-  given: {o : Ordinal.{u}} (ho : forall a, a < o -> succ a < o)
-  proof: by
-  replace ho : IsSuccPrelimit o := by rwa [isSuccPrelimit_iff_succ_lt]
-  rw [iSup]; rw [PrincipalSeg.range_eq]
-  simpa [Iio_def] using ho.sSup_Iio
-
-@[deprecated csSup_Iic (since := "2026-03-27")]
-
-中文:
-定理 iSup_typein_limit
-  条件: {o : 序数.{u}} (ho : 对任意 a, a < o -> succ a < o)
-  证明: by
-  replace ho : IsSuccPrelimit o := by rwa [isSuccPrelimit_iff_succ_lt]
-  rw [iSup]; rw [PrincipalSeg.range_eq]
-  simpa [Iio_def] using ho.sSup_Iio
-
-@[deprecated csSup_Iic (since := "2026-03-27")]
-
-Depends on / 依赖: Iio_def, IsSuccPrelimit, PrincipalSeg, PrincipalSeg.range_eq, ho.sSup_Iio, isSuccPrelimit_iff_succ_lt, range_eq, replace, sSup_Iio
+/-
+**Ordinal.iSup_typein_limit** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_typein_limit {o : Ordinal.{u}} (ho : forall a, a < o -> succ a < o) :
+ iSup (typein ((· < ·) : o.ToType -> o.ToType -> Prop)) = o
+参数：ho : forall a, a < o -> succ a < o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.isSuccPrelimit_iff_succ_lt`：isSuccPrelimit_iff_succ_lt : IsSuccPre
+limit b ↔ forall a < b, succ a < b
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `iSup.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : SupSet α] (s : ι → α), iS
+up s = sSup (Set.range s)
+· 使用定理 `PrincipalSeg.range_eq`：range_eq (f : r ≺i s) : Set.range f = {b | s b f.
+top}
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
+· 使用定理 `Order.IsSuccPrelimit.sSup_Iio`：Order.IsSuccPrelimit.sSup_Iio (h : IsSucc
+Prelimit x) : sSup (Iio x) = x
 -/
-theorem iSup_typein_limit {o : Ordinal.{u}} (ho : forall a, a < o -> succ a < o) :
-    iSup (typein ((· < ·) : o.ToType -> o.ToType -> Prop)) = o := by
+theorem iSup_typein_limit {o : Ordinal.{u}} (ho : ∀ a, a < o → succ a < o) :
+    iSup (typein ((· < ·) : o.ToType → o.ToType → Prop)) = o := by
   replace ho : IsSuccPrelimit o := by rwa [isSuccPrelimit_iff_succ_lt]
-  rw [iSup]; rw [PrincipalSeg.range_eq]
+  rw [iSup, PrincipalSeg.range_eq]
   simpa [Iio_def] using ho.sSup_Iio
 
 @[deprecated csSup_Iic (since := "2026-03-27")]
-/--
-theorem `iSup_typein_succ` / 定理 `iSup_typein_succ`
-
-English:
-theorem iSup_typein_succ
-  given: {o : Ordinal}
-  proof: by
-  rw [← csSup_Iic (a := o)]; rw [iSup]; rw [PrincipalSeg.range_eq]
-  congr
-  simp
-
-中文:
-定理 iSup_typein_succ
-  条件: {o : 序数}
-  证明: by
-  rw [← csSup_Iic (a := o)]; rw [iSup]; rw [PrincipalSeg.range_eq]
-  congr
-  simp
-
-Depends on / 依赖: PrincipalSeg, PrincipalSeg.range_eq, csSup_Iic, range_eq
+/-
+**Ordinal.iSup_typein_succ** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_typein_succ {o : Ordinal} : iSup (typein ((· < ·) : (succ o).ToType -
+> (succ o).ToType -> Prop)) = o
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `csSup_Iic`：csSup_Iic : sSup (Iic a) = a
+· 使用定理 `iSup.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : SupSet α] (s : ι → α), iS
+up s = sSup (Set.range s)
+· 使用定理 `PrincipalSeg.range_eq`：range_eq (f : r ≺i s) : Set.range f = {b | s b f.
+top}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem iSup_typein_succ {o : Ordinal} :
-    iSup (typein ((· < ·) : (succ o).ToType -> (succ o).ToType -> Prop)) = o := by
-  rw [← csSup_Iic (a := o)]; rw [iSup]; rw [PrincipalSeg.range_eq]
+    iSup (typein ((· < ·) : (succ o).ToType → (succ o).ToType → Prop)) = o := by
+  rw [← csSup_Iic (a := o), iSup, PrincipalSeg.range_eq]
   congr
   simp
 
@@ -2753,939 +2215,702 @@ section blsub
 /-- The least strict upper bound of a family of ordinals indexed by the set of ordinals less than
 some `o : Ordinal.{u}`. -/
 @[deprecated "write `⨆ i : Iio o, f i + 1` instead." (since := "2026-03-23")]
-/--
-Definition of `blsub` / `blsub` 的定义
+/-
+**Ordinal.blsub** 是 Mathlib 中的一个定义，位于命名空间 `Ordinal`。
+形式化陈述：blsub (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v}) : Ordinal.{m
+ax u v}
+参数：o : Ordinal.{u}；f : forall a < o, Ordinal.{max u v}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition blsub
-  signature: (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v})
-  body: bsup.{_, v} o fun a ha => succ (f a ha)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定义 blsub
-  签名: (o : 序数.{u}) (f : 对任意 a < o, 序数.{最大值 u v})
-  定义体: bsup.{_, v} o fun a ha => succ (f a ha)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
+--- 原说明 ---
+The least strict upper bound of a family of ordinals indexed by the set of ordin
+als less than
+some `o : Ordinal.{u}`.
 -/
-def blsub (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v}) : Ordinal.{max u v} :=
+def blsub (o : Ordinal.{u}) (f : ∀ a < o, Ordinal.{max u v}) : Ordinal.{max u v} :=
   bsup.{_, v} o fun a ha => succ (f a ha)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_eq_blsub` / 定理 `bsup_eq_blsub`
-
-English:
-theorem bsup_eq_blsub
-  given: (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v})
-  proof: rfl
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_eq_blsub
-  条件: (o : 序数.{u}) (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: rfl
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
+/-
+**Ordinal.bsup_eq_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_blsub (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v}) : (b
+sup.{_, v} o fun a ha => succ (f a ha)) = blsub.{_, v} o f
+参数：o : Ordinal.{u}；f : forall a < o, Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bsup_eq_blsub (o : Ordinal.{u}) (f : forall a < o, Ordinal.{max u v}) :
+theorem bsup_eq_blsub (o : Ordinal.{u}) (f : ∀ a < o, Ordinal.{max u v}) :
     (bsup.{_, v} o fun a ha => succ (f a ha)) = blsub.{_, v} o f :=
   rfl
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `lsub_eq_blsub'` / 定理 `lsub_eq_blsub'`
-
-English:
-theorem lsub_eq_blsub'
-  statement: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o} (ho : type r = o)
-  proof: iSup'_eq_bsup r ho fun a ha => succ (f a ha)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 lsub_eq_blsub'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o} (ho : type r = o)
-  证明: iSup'_eq_bsup r ho fun a ha => succ (f a ha)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: _eq_bsup
+/-
+**Ordinal.lsub_eq_blsub'** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_eq_blsub' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o} (ho
+ : type r = o) (f : forall a < o, Ordinal) : lsub (familyOfBFamily' r ho f) = bl
+sub o f
+参数：r : ι -> ι -> Prop；ho : type r = o；f : forall a < o, Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup'_eq_bsup`：∀ {o : Ordinal.{u_3}} {ι : Type u_3} (r : ι → ι →
+ Prop) [inst : IsWellOrder ι r] (ho : Ordinal.type r = o)   (f : (a : Ordinal.{u
+_3}) → a < …
 -/
-theorem lsub_eq_blsub' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] {o} (ho : type r = o)
-    (f : forall a < o, Ordinal) : lsub (familyOfBFamily' r ho f) = blsub o f :=
+theorem lsub_eq_blsub' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r] {o} (ho : type r = o)
+    (f : ∀ a < o, Ordinal) : lsub (familyOfBFamily' r ho f) = blsub o f :=
   iSup'_eq_bsup r ho fun a ha => succ (f a ha)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `lsub_eq_lsub` / 定理 `lsub_eq_lsub`
-
-English:
-theorem lsub_eq_lsub
-  statement: {ι ι' : Type u} (r : ι -> ι -> Prop) (r' : ι' -> ι' -> Prop) [IsWellOrder ι r]
-  proof: by
-  rw [lsub_eq_blsub']; rw [lsub_eq_blsub']
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 lsub_eq_lsub
-  结论: {ι ι' : 类型u} (r : ι -> ι -> 命题) (r' : ι' -> ι' -> 命题) [是良序 ι r]
-  证明: by
-  rw [lsub_eq_blsub']; rw [lsub_eq_blsub']
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: lsub_eq_blsub
+/-
+**Ordinal.lsub_eq_lsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_eq_lsub {ι ι' : Type u} (r : ι -> ι -> Prop) (r' : ι' -> ι' -> Prop) 
+[IsWellOrder ι r] [IsWellOrder ι' r'] {o} (ho : type r = o) (ho' : type r' = o) 
+(f : forall a < o, Ordinal.{max u v}) : lsub.{_, v} (familyOfBFamily' r ho f) = 
+lsub.{_, v} (familyOfBFamily' r' ho' f)
+参数：r : ι -> ι -> Prop；r' : ι' -> ι' -> Prop；ho : type r = o；ho' : type r' = o；f 
+: forall a < o, Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.lsub_eq_blsub'`：lsub_eq_blsub' {ι : Type u} (r : ι -> ι -> Prop)
+ [IsWellOrder ι r] {o} (ho : type r = o) (f : forall a < o, Ordinal) : lsub (fam
+ilyOfBFamily…
 -/
-theorem lsub_eq_lsub {ι ι' : Type u} (r : ι -> ι -> Prop) (r' : ι' -> ι' -> Prop) [IsWellOrder ι r]
+theorem lsub_eq_lsub {ι ι' : Type u} (r : ι → ι → Prop) (r' : ι' → ι' → Prop) [IsWellOrder ι r]
     [IsWellOrder ι' r'] {o} (ho : type r = o) (ho' : type r' = o)
-    (f : forall a < o, Ordinal.{max u v}) :
+    (f : ∀ a < o, Ordinal.{max u v}) :
     lsub.{_, v} (familyOfBFamily' r ho f) = lsub.{_, v} (familyOfBFamily' r' ho' f) := by
-  rw [lsub_eq_blsub']; rw [lsub_eq_blsub']
+  rw [lsub_eq_blsub', lsub_eq_blsub']
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `lsub_eq_blsub` / 定理 `lsub_eq_blsub`
-
-English:
-theorem lsub_eq_blsub
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: lsub_eq_blsub' _ _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 lsub_eq_blsub
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: lsub_eq_blsub' _ _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: lsub_eq_blsub
+/-
+**Ordinal.lsub_eq_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lsub_eq_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) : ls
+ub.{_, v} (familyOfBFamily o f) = blsub.{_, v} o f
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lsub_eq_blsub'`：lsub_eq_blsub' {ι : Type u} (r : ι -> ι -> Prop)
+ [IsWellOrder ι r] {o} (ho : type r = o) (f : forall a < o, Ordinal) : lsub (fam
+ilyOfBFamily…
+· 使用定理 `Ordinal.type_toType`：type_toType (o : Ordinal) : typeLT o.ToType = o
 -/
-theorem lsub_eq_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
+theorem lsub_eq_blsub {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
     lsub.{_, v} (familyOfBFamily o f) = blsub.{_, v} o f :=
   lsub_eq_blsub' _ _ _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_eq_lsub'` / 定理 `blsub_eq_lsub'`
-
-English:
-theorem blsub_eq_lsub'
-  statement: {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r]
-  proof: bsup'_eq_iSup r (succ ∘ f)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_eq_lsub'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r]
-  证明: bsup'_eq_iSup r (succ ∘ f)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: _eq_iSup
+/-
+**Ordinal.blsub_eq_lsub'** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_eq_lsub' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι 
+-> Ordinal.{max u v}) : blsub.{_, v} _ (bfamilyOfFamily' r f) = lsub.{_, v} f
+参数：r : ι -> ι -> Prop；f : ι -> Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup'_eq_iSup`：∀ {ι : Type u_3} (r : ι → ι → Prop) [inst : IsWel
+lOrder ι r] (f : ι → Ordinal.{max u_3 u_4}),   (Ordinal.type r).bsup (Ordinal.bf
+amilyOfFami…
 -/
-theorem blsub_eq_lsub' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r]
-    (f : ι -> Ordinal.{max u v}) : blsub.{_, v} _ (bfamilyOfFamily' r f) = lsub.{_, v} f :=
+theorem blsub_eq_lsub' {ι : Type u} (r : ι → ι → Prop) [IsWellOrder ι r]
+    (f : ι → Ordinal.{max u v}) : blsub.{_, v} _ (bfamilyOfFamily' r f) = lsub.{_, v} f :=
   bsup'_eq_iSup r (succ ∘ f)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_eq_blsub` / 定理 `blsub_eq_blsub`
-
-English:
-theorem blsub_eq_blsub
-  statement: {ι : Type u} (r r' : ι -> ι -> Prop) [IsWellOrder ι r] [IsWellOrder ι r']
-  proof: by
-  rw [blsub_eq_lsub']; rw [blsub_eq_lsub']
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_eq_blsub
-  结论: {ι : 类型u} (r r' : ι -> ι -> 命题) [是良序 ι r] [是良序 ι r']
-  证明: by
-  rw [blsub_eq_lsub']; rw [blsub_eq_lsub']
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_eq_lsub
+/-
+**Ordinal.blsub_eq_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_eq_blsub {ι : Type u} (r r' : ι -> ι -> Prop) [IsWellOrder ι r] [IsW
+ellOrder ι r'] (f : ι -> Ordinal.{max u v}) : blsub.{_, v} _ (bfamilyOfFamily' r
+ f) = blsub.{_, v} _ (bfamilyOfFamily' r' f)
+参数：r r' : ι -> ι -> Prop；f : ι -> Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.blsub_eq_lsub'`：blsub_eq_lsub' {ι : Type u} (r : ι -> ι -> Prop)
+ [IsWellOrder ι r] (f : ι -> Ordinal.{max u v}) : blsub.{_, v} _ (bfamilyOfFamil
+y' r f) = ls…
 -/
-theorem blsub_eq_blsub {ι : Type u} (r r' : ι -> ι -> Prop) [IsWellOrder ι r] [IsWellOrder ι r']
-    (f : ι -> Ordinal.{max u v}) :
+theorem blsub_eq_blsub {ι : Type u} (r r' : ι → ι → Prop) [IsWellOrder ι r] [IsWellOrder ι r']
+    (f : ι → Ordinal.{max u v}) :
     blsub.{_, v} _ (bfamilyOfFamily' r f) = blsub.{_, v} _ (bfamilyOfFamily' r' f) := by
-  rw [blsub_eq_lsub']; rw [blsub_eq_lsub']
+  rw [blsub_eq_lsub', blsub_eq_lsub']
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_eq_lsub` / 定理 `blsub_eq_lsub`
-
-English:
-theorem blsub_eq_lsub
-  given: {ι : Type u} (f : ι -> Ordinal.{max u v})
-  proof: blsub_eq_lsub' _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_eq_lsub
-  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
-  证明: blsub_eq_lsub' _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_eq_lsub
+/-
+**Ordinal.blsub_eq_lsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_eq_lsub {ι : Type u} (f : ι -> Ordinal.{max u v}) : blsub.{_, v} _ (
+bfamilyOfFamily f) = lsub.{_, v} f
+参数：f : ι -> Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.blsub_eq_lsub'`：blsub_eq_lsub' {ι : Type u} (r : ι -> ι -> Prop)
+ [IsWellOrder ι r] (f : ι -> Ordinal.{max u v}) : blsub.{_, v} _ (bfamilyOfFamil
+y' r f) = ls…
 -/
-theorem blsub_eq_lsub {ι : Type u} (f : ι -> Ordinal.{max u v}) :
+theorem blsub_eq_lsub {ι : Type u} (f : ι → Ordinal.{max u v}) :
     blsub.{_, v} _ (bfamilyOfFamily f) = lsub.{_, v} f :=
   blsub_eq_lsub' _ _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_congr` / 定理 `blsub_congr`
-
-English:
-theorem blsub_congr
-  given: {o₁ o₂ : Ordinal.{u}} (f : forall a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂)
-  proof: by
-  subst ho
-  rfl
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_congr
-  条件: {o₁ o₂ : 序数.{u}} (f : 对任意 a < o₁, 序数.{最大值 u v}) (ho : o₁ = o₂)
-  证明: by
-  subst ho
-  rfl
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
+/-
+**Ordinal.blsub_congr** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_congr {o₁ o₂ : Ordinal.{u}} (f : forall a < o₁, Ordinal.{max u v}) (
+ho : o₁ = o₂) : blsub.{_, v} o₁ f = blsub.{_, v} o₂ fun a h => f a (h.trans_eq h
+o.symm)
+参数：f : forall a < o₁, Ordinal.{max u v}；ho : o₁ = o₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem blsub_congr {o₁ o₂ : Ordinal.{u}} (f : forall a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂) :
+theorem blsub_congr {o₁ o₂ : Ordinal.{u}} (f : ∀ a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂) :
     blsub.{_, v} o₁ f = blsub.{_, v} o₂ fun a h => f a (h.trans_eq ho.symm) := by
   subst ho
   rfl
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_le_iff` / 定理 `blsub_le_iff`
-
-English:
-theorem blsub_le_iff
-  given: {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}} {a}
-  proof: by
-  convert! bsup_le_iff.{_, v} (f := fun a ha => succ (f a ha)) (a := a) using 2
-  simp_rw [succ_le_iff]
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_le_iff
-  条件: {o : 序数.{u}} {f : 对任意 a < o, 序数.{最大值 u v}} {a}
-  证明: by
-  convert! bsup_le_iff.{_, v} (f := fun a ha => succ (f a ha)) (a := a) using 2
-  simp_rw [succ_le_iff]
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_le_iff, convert, simp_rw, succ_le_iff
+/-
+**Ordinal.blsub_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_le_iff {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}} {a} :
+ blsub.{_, v} o f <= a ↔ forall i h, f i h < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Ordinal.bsup_le_iff`：bsup_le_iff {o f a} : bsup.{u, v} o f <= a ↔ forall
+ i h, f i h <= a
 -/
-theorem blsub_le_iff {o : Ordinal.{u}} {f : forall a < o, Ordinal.{max u v}} {a} :
-    blsub.{_, v} o f <= a ↔ forall i h, f i h < a := by
+theorem blsub_le_iff {o : Ordinal.{u}} {f : ∀ a < o, Ordinal.{max u v}} {a} :
+    blsub.{_, v} o f ≤ a ↔ ∀ i h, f i h < a := by
   convert! bsup_le_iff.{_, v} (f := fun a ha => succ (f a ha)) (a := a) using 2
   simp_rw [succ_le_iff]
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_le` / 定理 `blsub_le`
-
-English:
-theorem blsub_le
-  given: {o : Ordinal} {f : forall b < o, Ordinal} {a}
-  statement: (forall i h, f i h < a) -> blsub o f <= a
-  proof: blsub_le_iff.2
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_le
-  条件: {o : 序数} {f : 对任意 b < o, 序数} {a}
-  结论: (对任意 i h, f i h < a) -> blsub o f <= a
-  证明: blsub_le_iff.2
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le_iff
+/-
+**Ordinal.blsub_le** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_le {o : Ordinal} {f : forall b < o, Ordinal} {a} : (forall i h, f i 
+h < a) -> blsub o f <= a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.blsub_le_iff`：blsub_le_iff {o : Ordinal.{u}} {f : forall a < o, 
+Ordinal.{max u v}} {a} : blsub.{_, v} o f <= a ↔ forall i h, f i h < a
 -/
-theorem blsub_le {o : Ordinal} {f : forall b < o, Ordinal} {a} : (forall i h, f i h < a) -> blsub o f <= a :=
+theorem blsub_le {o : Ordinal} {f : ∀ b < o, Ordinal} {a} : (∀ i h, f i h < a) → blsub o f ≤ a :=
   blsub_le_iff.2
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `lt_blsub` / 定理 `lt_blsub`
-
-English:
-theorem lt_blsub
-  given: {o} (f : forall a < o, Ordinal) (i h)
-  statement: f i h < blsub o f
-  proof: blsub_le_iff.1 le_rfl _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 lt_blsub
-  条件: {o} (f : 对任意 a < o, 序数) (i h)
-  结论: f i h < blsub o f
-  证明: blsub_le_iff.1 le_rfl _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le_iff, le_rfl
+/-
+**Ordinal.lt_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_blsub {o} (f : forall a < o, Ordinal) (i h) : f i h < blsub o f
+参数：f : forall a < o, Ordinal；i h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.blsub_le_iff`：blsub_le_iff {o : Ordinal.{u}} {f : forall a < o, 
+Ordinal.{max u v}} {a} : blsub.{_, v} o f <= a ↔ forall i h, f i h < a
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem lt_blsub {o} (f : forall a < o, Ordinal) (i h) : f i h < blsub o f :=
+theorem lt_blsub {o} (f : ∀ a < o, Ordinal) (i h) : f i h < blsub o f :=
   blsub_le_iff.1 le_rfl _ _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `lt_blsub_iff` / 定理 `lt_blsub_iff`
-
-English:
-theorem lt_blsub_iff
-  given: {o : Ordinal.{u}} {f : forall b < o, Ordinal.{max u v}} {a}
-  proof: by
-  simpa only [not_forall, not_lt, not_le] using not_congr (@blsub_le_iff.{_, v} _ f a)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 lt_blsub_iff
-  条件: {o : 序数.{u}} {f : 对任意 b < o, 序数.{最大值 u v}} {a}
-  证明: by
-  simpa only [not_forall, not_lt, not_le] using not_congr (@blsub_le_iff.{_, v} _ f a)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le_iff, not_congr, not_forall, not_le, not_lt
+/-
+**Ordinal.lt_blsub_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：lt_blsub_iff {o : Ordinal.{u}} {f : forall b < o, Ordinal.{max u v}} {a} :
+ a < blsub.{_, v} o f ↔ exists i hi, a <= f i hi
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Ordinal.blsub_le_iff`：blsub_le_iff {o : Ordinal.{u}} {f : forall a < o, 
+Ordinal.{max u v}} {a} : blsub.{_, v} o f <= a ↔ forall i h, f i h < a
 -/
-theorem lt_blsub_iff {o : Ordinal.{u}} {f : forall b < o, Ordinal.{max u v}} {a} :
-    a < blsub.{_, v} o f ↔ exists i hi, a <= f i hi := by
+theorem lt_blsub_iff {o : Ordinal.{u}} {f : ∀ b < o, Ordinal.{max u v}} {a} :
+    a < blsub.{_, v} o f ↔ ∃ i hi, a ≤ f i hi := by
   simpa only [not_forall, not_lt, not_le] using not_congr (@blsub_le_iff.{_, v} _ f a)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_le_blsub` / 定理 `bsup_le_blsub`
-
-English:
-theorem bsup_le_blsub
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: bsup_le fun i h => (lt_blsub f i h).le
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_le_blsub
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: bsup_le fun i h => (lt_blsub f i h).le
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_le, lt_blsub
+/-
+**Ordinal.bsup_le_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_le_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) : bs
+up.{_, v} o f <= blsub.{_, v} o f
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_le`：bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} :
+ (forall i h, f i h <= a) -> bsup.{u, v} o f <= a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Ordinal.lt_blsub`：lt_blsub {o} (f : forall a < o, Ordinal) (i h) : f i h
+ < blsub o f
 -/
-theorem bsup_le_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
-    bsup.{_, v} o f <= blsub.{_, v} o f :=
+theorem bsup_le_blsub {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
+    bsup.{_, v} o f ≤ blsub.{_, v} o f :=
   bsup_le fun i h => (lt_blsub f i h).le
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_le_bsup_succ` / 定理 `blsub_le_bsup_succ`
-
-English:
-theorem blsub_le_bsup_succ
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: blsub_le fun i h => lt_succ_iff.2 (le_bsup f i h)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_le_bsup_succ
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: blsub_le fun i h => lt_succ_iff.2 (le_bsup f i h)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le, le_bsup, lt_succ_iff
+/-
+**Ordinal.blsub_le_bsup_succ** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_le_bsup_succ {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
+ : blsub.{_, v} o f <= succ (bsup.{_, v} o f)
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.blsub_le`：blsub_le {o : Ordinal} {f : forall b < o, Ordinal} {a}
+ : (forall i h, f i h < a) -> blsub o f <= a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.lt_succ_iff`：lt_succ_iff : a < succ b ↔ a <= b
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
 -/
-theorem blsub_le_bsup_succ {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
-    blsub.{_, v} o f <= succ (bsup.{_, v} o f) :=
+theorem blsub_le_bsup_succ {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
+    blsub.{_, v} o f ≤ succ (bsup.{_, v} o f) :=
   blsub_le fun i h => lt_succ_iff.2 (le_bsup f i h)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_eq_blsub_or_succ_bsup_eq_blsub` / 定理 `bsup_eq_blsub_or_succ_bsup_eq_blsub`
-
-English:
-theorem bsup_eq_blsub_or_succ_bsup_eq_blsub
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: by
-  rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
-  exact iSup_eq_lsub_or_succ_iSup_eq_lsub _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_eq_blsub_or_succ_bsup_eq_blsub
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: by
-  rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
-  exact iSup_eq_lsub_or_succ_iSup_eq_lsub _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: iSup_eq_bsup, iSup_eq_lsub_or_succ_iSup_eq_lsub, lsub_eq_blsub
+/-
+**Ordinal.bsup_eq_blsub_or_succ_bsup_eq_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal
+`。
+形式化陈述：bsup_eq_blsub_or_succ_bsup_eq_blsub {o : Ordinal.{u}} (f : forall a < o, O
+rdinal.{max u v}) : bsup.{_, v} o f = blsub.{_, v} o f ∨ succ (bsup.{_, v} o f) 
+= blsub.{_, v} o f
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup_eq_bsup`：iSup_eq_bsup {o : Ordinal} (f : forall a < o, Ordi
+nal) : iSup (familyOfBFamily o f) = bsup o f
+· 使用定理 `Ordinal.lsub_eq_blsub`：lsub_eq_blsub {o : Ordinal.{u}} (f : forall a < o
+, Ordinal.{max u v}) : lsub.{_, v} (familyOfBFamily o f) = blsub.{_, v} o f
+· 使用定理 `Ordinal.iSup_eq_lsub_or_succ_iSup_eq_lsub`：iSup_eq_lsub_or_succ_iSup_eq_
+lsub {ι} (f : ι -> Ordinal) : iSup f = lsub f ∨ succ (iSup f) = lsub f
 -/
-theorem bsup_eq_blsub_or_succ_bsup_eq_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
+theorem bsup_eq_blsub_or_succ_bsup_eq_blsub {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
     bsup.{_, v} o f = blsub.{_, v} o f ∨ succ (bsup.{_, v} o f) = blsub.{_, v} o f := by
-  rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
+  rw [← iSup_eq_bsup, ← lsub_eq_blsub]
   exact iSup_eq_lsub_or_succ_iSup_eq_lsub _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_succ_le_blsub` / 定理 `bsup_succ_le_blsub`
-
-English:
-theorem bsup_succ_le_blsub
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · by_contra! hf
-    exact
-      ne_of_lt (succ_le_iff.1 h)
-        (le_antisymm (bsup_le_blsub f) (blsub_le (lt_bsup_of_ne_bsup.1 hf)))
-  rintro ⟨_, _, hf⟩
-  rw [succ_le_iff]; rw [← hf]
-  exact lt_blsub _ _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_succ_le_blsub
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · by_contra! hf
-    exact
-      ne_of_lt (succ_le_iff.1 h)
-        (le_antisymm (bsup_le_blsub f) (blsub_le (lt_bsup_of_ne_bsup.1 hf)))
-  rintro ⟨_, _, hf⟩
-  rw [succ_le_iff]; rw [← hf]
-  exact lt_blsub _ _ _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le, bsup_le_blsub, le_antisymm, lt_blsub, lt_bsup_of_ne_bsup, ne_of_lt, succ_le_iff
+/-
+**Ordinal.bsup_succ_le_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_succ_le_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
+ : succ (bsup.{_, v} o f) <= blsub.{_, v} o f ↔ exists i hi, f i hi = bsup.{_, v
+} o f
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.succ_le_iff`：succ_le_iff : succ a <= b ↔ a < b
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.bsup_le_blsub`：bsup_le_blsub {o : Ordinal.{u}} (f : forall a < o
+, Ordinal.{max u v}) : bsup.{_, v} o f <= blsub.{_, v} o f
+· 使用定理 `Ordinal.blsub_le`：blsub_le {o : Ordinal} {f : forall b < o, Ordinal} {a}
+ : (forall i h, f i h < a) -> blsub o f <= a
+· 使用定理 `Ordinal.lt_bsup_of_ne_bsup`：lt_bsup_of_ne_bsup {o : Ordinal.{u}} {f : fo
+rall a < o, Ordinal.{max u v}} : (forall i h, f i h != bsup.{_, v} o f) ↔ forall
+ i h, f i h < bs…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.lt_blsub`：lt_blsub {o} (f : forall a < o, Ordinal) (i h) : f i h
+ < blsub o f
 -/
-theorem bsup_succ_le_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
-    succ (bsup.{_, v} o f) <= blsub.{_, v} o f ↔ exists i hi, f i hi = bsup.{_, v} o f := by
+theorem bsup_succ_le_blsub {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
+    succ (bsup.{_, v} o f) ≤ blsub.{_, v} o f ↔ ∃ i hi, f i hi = bsup.{_, v} o f := by
   refine ⟨fun h => ?_, ?_⟩
   · by_contra! hf
     exact
       ne_of_lt (succ_le_iff.1 h)
         (le_antisymm (bsup_le_blsub f) (blsub_le (lt_bsup_of_ne_bsup.1 hf)))
   rintro ⟨_, _, hf⟩
-  rw [succ_le_iff]; rw [← hf]
+  rw [succ_le_iff, ← hf]
   exact lt_blsub _ _ _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_succ_eq_blsub` / 定理 `bsup_succ_eq_blsub`
-
-English:
-theorem bsup_succ_eq_blsub
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: (blsub_le_bsup_succ f).ge_iff_eq'.symm.trans (bsup_succ_le_blsub f)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_succ_eq_blsub
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: (blsub_le_bsup_succ f).ge_iff_eq'.symm.trans (bsup_succ_le_blsub f)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le_bsup_succ, bsup_succ_le_blsub, ge_iff_eq, symm.trans
+/-
+**Ordinal.bsup_succ_eq_blsub** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_succ_eq_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
+ : succ (bsup.{_, v} o f) = blsub.{_, v} o f ↔ exists i hi, f i hi = bsup.{_, v}
+ o f
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LE.le.ge_iff_eq'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (a ≤ b ↔ a = b)
+· 使用定理 `Ordinal.blsub_le_bsup_succ`：blsub_le_bsup_succ {o : Ordinal.{u}} (f : fo
+rall a < o, Ordinal.{max u v}) : blsub.{_, v} o f <= succ (bsup.{_, v} o f)
+· 使用定理 `Ordinal.bsup_succ_le_blsub`：bsup_succ_le_blsub {o : Ordinal.{u}} (f : fo
+rall a < o, Ordinal.{max u v}) : succ (bsup.{_, v} o f) <= blsub.{_, v} o f ↔ ex
+ists i hi, f i h…
 -/
-theorem bsup_succ_eq_blsub {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
-    succ (bsup.{_, v} o f) = blsub.{_, v} o f ↔ exists i hi, f i hi = bsup.{_, v} o f :=
+theorem bsup_succ_eq_blsub {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
+    succ (bsup.{_, v} o f) = blsub.{_, v} o f ↔ ∃ i hi, f i hi = bsup.{_, v} o f :=
   (blsub_le_bsup_succ f).ge_iff_eq'.symm.trans (bsup_succ_le_blsub f)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_eq_blsub_iff_succ` / 定理 `bsup_eq_blsub_iff_succ`
-
-English:
-theorem bsup_eq_blsub_iff_succ
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: by
-  rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
-  apply iSup_eq_lsub_iff
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_eq_blsub_iff_succ
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: by
-  rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
-  apply iSup_eq_lsub_iff
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: iSup_eq_bsup, iSup_eq_lsub_iff, lsub_eq_blsub
+/-
+**Ordinal.bsup_eq_blsub_iff_succ** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_blsub_iff_succ {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u
+ v}) : bsup.{_, v} o f = blsub.{_, v} o f ↔ forall a < blsub.{_, v} o f, succ a 
+< blsub.{_, v} o f
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup_eq_bsup`：iSup_eq_bsup {o : Ordinal} (f : forall a < o, Ordi
+nal) : iSup (familyOfBFamily o f) = bsup o f
+· 使用定理 `Ordinal.lsub_eq_blsub`：lsub_eq_blsub {o : Ordinal.{u}} (f : forall a < o
+, Ordinal.{max u v}) : lsub.{_, v} (familyOfBFamily o f) = blsub.{_, v} o f
+· 使用定理 `Ordinal.iSup_eq_lsub_iff`：iSup_eq_lsub_iff {ι} (f : ι -> Ordinal) : iSup
+ f = lsub f ↔ forall a < lsub f, succ a < lsub f
 -/
-theorem bsup_eq_blsub_iff_succ {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
-    bsup.{_, v} o f = blsub.{_, v} o f ↔ forall a < blsub.{_, v} o f, succ a < blsub.{_, v} o f := by
-  rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
+theorem bsup_eq_blsub_iff_succ {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
+    bsup.{_, v} o f = blsub.{_, v} o f ↔ ∀ a < blsub.{_, v} o f, succ a < blsub.{_, v} o f := by
+  rw [← iSup_eq_bsup, ← lsub_eq_blsub]
   apply iSup_eq_lsub_iff
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_eq_blsub_iff_lt_bsup` / 定理 `bsup_eq_blsub_iff_lt_bsup`
-
-English:
-theorem bsup_eq_blsub_iff_lt_bsup
-  given: {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v})
-  proof: ⟨fun h i => by
-    rw [h]
-    apply lt_blsub, fun h => le_antisymm (bsup_le_blsub f) (blsub_le h)⟩
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_eq_blsub_iff_lt_bsup
-  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
-  证明: ⟨fun h i => by
-    rw [h]
-    apply lt_blsub, fun h => le_antisymm (bsup_le_blsub f) (blsub_le h)⟩
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le, bsup_le_blsub, le_antisymm, lt_blsub
+/-
+**Ordinal.bsup_eq_blsub_iff_lt_bsup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_blsub_iff_lt_bsup {o : Ordinal.{u}} (f : forall a < o, Ordinal.{ma
+x u v}) : bsup.{_, v} o f = blsub.{_, v} o f ↔ forall i hi, f i hi < bsup.{_, v}
+ o f
+参数：f : forall a < o, Ordinal.{max u v}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.lt_blsub`：lt_blsub {o} (f : forall a < o, Ordinal) (i h) : f i h
+ < blsub o f
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.bsup_le_blsub`：bsup_le_blsub {o : Ordinal.{u}} (f : forall a < o
+, Ordinal.{max u v}) : bsup.{_, v} o f <= blsub.{_, v} o f
+· 使用定理 `Ordinal.blsub_le`：blsub_le {o : Ordinal} {f : forall b < o, Ordinal} {a}
+ : (forall i h, f i h < a) -> blsub o f <= a
 -/
-theorem bsup_eq_blsub_iff_lt_bsup {o : Ordinal.{u}} (f : forall a < o, Ordinal.{max u v}) :
-    bsup.{_, v} o f = blsub.{_, v} o f ↔ forall i hi, f i hi < bsup.{_, v} o f :=
+theorem bsup_eq_blsub_iff_lt_bsup {o : Ordinal.{u}} (f : ∀ a < o, Ordinal.{max u v}) :
+    bsup.{_, v} o f = blsub.{_, v} o f ↔ ∀ i hi, f i hi < bsup.{_, v} o f :=
   ⟨fun h i => by
     rw [h]
     apply lt_blsub, fun h => le_antisymm (bsup_le_blsub f) (blsub_le h)⟩
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_eq_blsub_of_lt_succ_limit` / 定理 `bsup_eq_blsub_of_lt_succ_limit`
-
-English:
-theorem bsup_eq_blsub_of_lt_succ_limit
-  statement: {o : Ordinal.{u}} (ho : IsSuccLimit o)
-  proof: by
-  rw [bsup_eq_blsub_iff_lt_bsup]
-  exact fun i hi => (hf i hi).trans_le (le_bsup f _ _)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_eq_blsub_of_lt_succ_limit
-  结论: {o : 序数.{u}} (ho : 是SuccLimit o)
-  证明: by
-  rw [bsup_eq_blsub_iff_lt_bsup]
-  exact fun i hi => (hf i hi).trans_le (le_bsup f _ _)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_eq_blsub_iff_lt_bsup, le_bsup, trans_le
+/-
+**Ordinal.bsup_eq_blsub_of_lt_succ_limit** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_eq_blsub_of_lt_succ_limit {o : Ordinal.{u}} (ho : IsSuccLimit o) {f :
+ forall a < o, Ordinal.{max u v}} (hf : forall a ha, f a ha < f (succ a) (ho.suc
+c_lt ha)) : bsup.{_, v} o f = blsub.{_, v} o f
+参数：ho : IsSuccLimit o；hf : forall a ha, f a ha < f (succ a) (ho.succ_lt ha)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsSuccLimit.succ_lt`：∀ {α : Type u_1} {a b : α} [inst : PartialOrd
+er α] [inst_1 : SuccOrder α],   Order.IsSuccLimit b → a < b → Order.succ a < b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.bsup_eq_blsub_iff_lt_bsup`：bsup_eq_blsub_iff_lt_bsup {o : Ordina
+l.{u}} (f : forall a < o, Ordinal.{max u v}) : bsup.{_, v} o f = blsub.{_, v} o 
+f ↔ forall i hi, f i hi…
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
 -/
 theorem bsup_eq_blsub_of_lt_succ_limit {o : Ordinal.{u}} (ho : IsSuccLimit o)
-    {f : forall a < o, Ordinal.{max u v}} (hf : forall a ha, f a ha < f (succ a) (ho.succ_lt ha)) :
+    {f : ∀ a < o, Ordinal.{max u v}} (hf : ∀ a ha, f a ha < f (succ a) (ho.succ_lt ha)) :
     bsup.{_, v} o f = blsub.{_, v} o f := by
   rw [bsup_eq_blsub_iff_lt_bsup]
   exact fun i hi => (hf i hi).trans_le (le_bsup f _ _)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_succ_of_mono` / 定理 `blsub_succ_of_mono`
-
-English:
-theorem blsub_succ_of_mono
-  statement: {o : Ordinal.{u}} {f : forall a < succ o, Ordinal.{max u v}}
-  proof: bsup_succ_of_mono fun {_ _} hi hj h => succ_le_succ (hf hi hj h)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_succ_of_mono
-  结论: {o : 序数.{u}} {f : 对任意 a < succ o, 序数.{最大值 u v}}
-  证明: bsup_succ_of_mono fun {_ _} hi hj h => succ_le_succ (hf hi hj h)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_succ_of_mono, succ_le_succ
+/-
+**Ordinal.blsub_succ_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_succ_of_mono {o : Ordinal.{u}} {f : forall a < succ o, Ordinal.{max 
+u v}} (hf : forall {i j} (hi hj), i <= j -> f i hi <= f j hj) : blsub.{_, v} _ f
+ = succ (f o (lt_succ o))
+参数：hf : forall {i j} (hi hj), i <= j -> f i hi <= f j hj。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_succ_of_mono`：bsup_succ_of_mono {o : Ordinal} {f : forall a
+ < succ o, Ordinal} (hf : forall {i j} (hi hj), i <= j -> f i hi <= f j hj) : bs
+up _ f = f o (l…
+· 使用定理 `Order.succ_le_succ`：succ_le_succ (h : a <= b) : succ a <= succ b
 -/
-theorem blsub_succ_of_mono {o : Ordinal.{u}} {f : forall a < succ o, Ordinal.{max u v}}
-    (hf : forall {i j} (hi hj), i <= j -> f i hi <= f j hj) : blsub.{_, v} _ f = succ (f o (lt_succ o)) :=
+theorem blsub_succ_of_mono {o : Ordinal.{u}} {f : ∀ a < succ o, Ordinal.{max u v}}
+    (hf : ∀ {i j} (hi hj), i ≤ j → f i hi ≤ f j hj) : blsub.{_, v} _ f = succ (f o (lt_succ o)) :=
   bsup_succ_of_mono fun {_ _} hi hj h => succ_le_succ (hf hi hj h)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_eq_zero_iff` / 定理 `blsub_eq_zero_iff`
-
-English:
-theorem blsub_eq_zero_iff
-  given: {o} {f : forall a < o, Ordinal}
-  statement: blsub o f = 0 ↔ o = 0
-  proof: by
-  rw [← lsub_eq_blsub]; rw [lsub_eq_zero_iff]
+/-
+**Ordinal.blsub_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_eq_zero_iff {o} {f : forall a < o, Ordinal} : blsub o f = 0 ↔ o = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.lsub_eq_blsub`：lsub_eq_blsub {o : Ordinal.{u}} (f : forall a < o
+, Ordinal.{max u v}) : lsub.{_, v} (familyOfBFamily o f) = blsub.{_, v} o f
+· 使用定理 `Ordinal.lsub_eq_zero_iff`：lsub_eq_zero_iff {ι} (f : ι -> Ordinal) : lsub
+.{_, v} f = 0 ↔ IsEmpty ι
+· 使用定理 `Ordinal.isEmpty_toType_iff`：isEmpty_toType_iff {o : Ordinal} : IsEmpty o
+.ToType ↔ o = 0
+-/
+theorem blsub_eq_zero_iff {o} {f : ∀ a < o, Ordinal} : blsub o f = 0 ↔ o = 0 := by
+  rw [← lsub_eq_blsub, lsub_eq_zero_iff]
   exact isEmpty_toType_iff
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_eq_zero_iff
-  条件: {o} {f : 对任意 a < o, 序数}
-  结论: blsub o f = 0 ↔ o = 0
-  证明: by
-  rw [← lsub_eq_blsub]; rw [lsub_eq_zero_iff]
-  exact isEmpty_toType_iff
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: isEmpty_toType_iff, lsub_eq_blsub, lsub_eq_zero_iff
+/-
+**Ordinal.blsub_zero** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_zero (f : forall a < (0 : Ordinal), Ordinal) : blsub 0 f = 0
+参数：f : forall a < (0 : Ordinal), Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.blsub_eq_zero_iff`：blsub_eq_zero_iff {o} {f : forall a < o, Ordi
+nal} : blsub o f = 0 ↔ o = 0
 -/
-theorem blsub_eq_zero_iff {o} {f : forall a < o, Ordinal} : blsub o f = 0 ↔ o = 0 := by
-  rw [← lsub_eq_blsub]; rw [lsub_eq_zero_iff]
-  exact isEmpty_toType_iff
+theorem blsub_zero (f : ∀ a < (0 : Ordinal), Ordinal) : blsub 0 f = 0 := by rw [blsub_eq_zero_iff]
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_zero` / 定理 `blsub_zero`
-
-English:
-theorem blsub_zero
-  given: (f : forall a < (0 : Ordinal), Ordinal)
-  statement: blsub 0 f = 0
-  proof: by rw [blsub_eq_zero_iff]
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_zero
-  条件: (f : 对任意 a < (0 : 序数), 序数)
-  结论: blsub 0 f = 0
-  证明: by rw [blsub_eq_zero_iff]
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_eq_zero_iff
+/-
+**Ordinal.blsub_pos** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_pos {o : Ordinal} (ho : 0 < o) (f : forall a < o, Ordinal) : 0 < bls
+ub o f
+参数：ho : 0 < o；f : forall a < o, Ordinal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.pos`：∀ {α : Type u_1} {a b : α} [inst : Preorder α] [inst_1 : Zero
+ α] [IsBotZeroClass α], a < b → 0 < b
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Ordinal.lt_blsub`：lt_blsub {o} (f : forall a < o, Ordinal) (i h) : f i h
+ < blsub o f
 -/
-theorem blsub_zero (f : forall a < (0 : Ordinal), Ordinal) : blsub 0 f = 0 := by rw [blsub_eq_zero_iff]
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_pos` / 定理 `blsub_pos`
-
-English:
-theorem blsub_pos
-  given: {o : Ordinal} (ho : 0 < o) (f : forall a < o, Ordinal)
-  statement: 0 < blsub o f
-  proof: (lt_blsub f 0 ho).pos
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_pos
-  条件: {o : 序数} (ho : 0 < o) (f : 对任意 a < o, 序数)
-  结论: 0 < blsub o f
-  证明: (lt_blsub f 0 ho).pos
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: lt_blsub
--/
-theorem blsub_pos {o : Ordinal} (ho : 0 < o) (f : forall a < o, Ordinal) : 0 < blsub o f :=
+theorem blsub_pos {o : Ordinal} (ho : 0 < o) (f : ∀ a < o, Ordinal) : 0 < blsub o f :=
   (lt_blsub f 0 ho).pos
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_type` / 定理 `blsub_type`
-
-English:
-theorem blsub_type
-  statement: {α : Type u} (r : α -> α -> Prop) [IsWellOrder α r]
-  proof: eq_of_forall_ge_iff fun o => by
-    rw [blsub_le_iff]; rw [lsub_le_iff]
-    exact ⟨fun H b => H _ _, fun H i h => by simpa only [typein_enum] using H (enum r ⟨i, h⟩)⟩
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_type
-  结论: {α : 类型u} (r : α -> α -> 命题) [是良序 α r]
-  证明: eq_of_forall_ge_iff fun o => by
-    rw [blsub_le_iff]; rw [lsub_le_iff]
-    exact ⟨fun H b => H _ _, fun H i h => by simpa only [typein_enum] using H (enum r ⟨i, h⟩)⟩
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: blsub_le_iff, eq_of_forall_ge_iff, lsub_le_iff, typein_enum
+/-
+**Ordinal.blsub_type** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_type {α : Type u} (r : α -> α -> Prop) [IsWellOrder α r] (f : forall
+ a < type r, Ordinal.{max u v}) : blsub.{_, v} (type r) f = lsub.{_, v} fun a =>
+ f (typein r a) (typein_lt_type _ _)
+参数：r : α -> α -> Prop；f : forall a < type r, Ordinal.{max u v}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_ge_iff`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α},
+ (∀ (c : α), a ≤ c ↔ b ≤ c) → a = b
+· 使用定理 `Ordinal.typein_lt_type`：typein_lt_type (r : α -> α -> Prop) [IsWellOrder
+ α r] (a : α) : typein r a < type r
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.blsub_le_iff`：blsub_le_iff {o : Ordinal.{u}} {f : forall a < o, 
+Ordinal.{max u v}} {a} : blsub.{_, v} o f <= a ↔ forall i h, f i h < a
+· 使用定理 `Ordinal.lsub_le_iff`：lsub_le_iff {ι} {f : ι -> Ordinal} {a} : lsub f <= 
+a ↔ forall i, f i < a
+· 使用定理 `Ordinal.typein_enum`：typein_enum (r : α -> α -> Prop) [IsWellOrder α r] 
+{o} (h : o < type r) : typein r (enum r ⟨o, h⟩) = o
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem blsub_type {α : Type u} (r : α -> α -> Prop) [IsWellOrder α r]
-    (f : forall a < type r, Ordinal.{max u v}) :
+theorem blsub_type {α : Type u} (r : α → α → Prop) [IsWellOrder α r]
+    (f : ∀ a < type r, Ordinal.{max u v}) :
     blsub.{_, v} (type r) f = lsub.{_, v} fun a => f (typein r a) (typein_lt_type _ _) :=
   eq_of_forall_ge_iff fun o => by
-    rw [blsub_le_iff]; rw [lsub_le_iff]
+    rw [blsub_le_iff, lsub_le_iff]
     exact ⟨fun H b => H _ _, fun H i h => by simpa only [typein_enum] using H (enum r ⟨i, h⟩)⟩
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_const` / 定理 `blsub_const`
-
-English:
-theorem blsub_const
-  given: {o : Ordinal} (ho : o != 0) (a : Ordinal)
-  proof: bsup_const.{u, v} ho (succ a)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_const
-  条件: {o : 序数} (ho : o != 0) (a : 序数)
-  证明: bsup_const.{u, v} ho (succ a)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_const
+/-
+**Ordinal.blsub_const** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_const {o : Ordinal} (ho : o != 0) (a : Ordinal) : (blsub.{u, v} o fu
+n _ _ => a) = succ a
+参数：ho : o != 0；a : Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_const`：bsup_const {o : Ordinal.{u}} (ho : o != 0) (a : Ordi
+nal.{max u v}) : (bsup.{_, v} o fun _ _ => a) = a
 -/
-theorem blsub_const {o : Ordinal} (ho : o != 0) (a : Ordinal) :
+theorem blsub_const {o : Ordinal} (ho : o ≠ 0) (a : Ordinal) :
     (blsub.{u, v} o fun _ _ => a) = succ a :=
   bsup_const.{u, v} ho (succ a)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_one` / 定理 `blsub_one`
-
-English:
-theorem blsub_one
-  given: (f : forall a < (1 : Ordinal), Ordinal)
-  statement: blsub 1 f = succ (f 0 zero_lt_one)
-  proof: bsup_one _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_one
-  条件: (f : 对任意 a < (1 : 序数), 序数)
-  结论: blsub 1 f = succ (f 0 zero_lt_one)
-  证明: bsup_one _
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_one
+/-
+**Ordinal.blsub_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_one (f : forall a < (1 : Ordinal), Ordinal) : blsub 1 f = succ (f 0 
+zero_lt_one)
+参数：f : forall a < (1 : Ordinal), Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_one`：bsup_one (f : forall a < (1 : Ordinal), Ordinal) : bsu
+p 1 f = f 0 zero_lt_one
 -/
-theorem blsub_one (f : forall a < (1 : Ordinal), Ordinal) : blsub 1 f = succ (f 0 zero_lt_one) :=
+theorem blsub_one (f : ∀ a < (1 : Ordinal), Ordinal) : blsub 1 f = succ (f 0 zero_lt_one) :=
   bsup_one _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_id` / 定理 `blsub_id`
-
-English:
-theorem blsub_id
-  statement: forall o, (blsub.{u, u} o fun x _ => x) = o
-  proof: lsub_typein
-
-@[deprecated IsSuccPrelimit.sSup_Iio (since := "2026-03-23")]
-
-中文:
-定理 blsub_id
-  结论: 对任意 o, (blsub.{u, u} o fun x _ => x) = o
-  证明: lsub_typein
-
-@[deprecated IsSuccPrelimit.sSup_Iio (since := "2026-03-23")]
-
-Depends on / 依赖: lsub_typein
+/-
+**Ordinal.blsub_id** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_id : forall o, (blsub.{u, u} o fun x _ => x) = o
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.lsub_typein`：lsub_typein (o : Ordinal) : lsub.{u, u} (typein (α
 -/
-theorem blsub_id : forall o, (blsub.{u, u} o fun x _ => x) = o :=
+theorem blsub_id : ∀ o, (blsub.{u, u} o fun x _ => x) = o :=
   lsub_typein
 
 @[deprecated IsSuccPrelimit.sSup_Iio (since := "2026-03-23")]
-/--
-theorem `bsup_id_limit` / 定理 `bsup_id_limit`
-
-English:
-theorem bsup_id_limit
-  given: {o : Ordinal}
-  statement: (forall a < o, succ a < o) -> (bsup.{u, u} o fun x _ => x) = o
-  proof: iSup_typein_limit
-
-@[deprecated csSup_Iic (since := "2026-03-23")]
-
-中文:
-定理 bsup_id_limit
-  条件: {o : 序数}
-  结论: (对任意 a < o, succ a < o) -> (bsup.{u, u} o fun x _ => x) = o
-  证明: iSup_typein_limit
-
-@[deprecated csSup_Iic (since := "2026-03-23")]
-
-Depends on / 依赖: iSup_typein_limit
+/-
+**Ordinal.bsup_id_limit** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_id_limit {o : Ordinal} : (forall a < o, succ a < o) -> (bsup.{u, u} o
+ fun x _ => x) = o
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_typein_limit`：iSup_typein_limit {o : Ordinal.{u}} (ho : for
+all a, a < o -> succ a < o) : iSup (typein ((· < ·) : o.ToType -> o.ToType -> Pr
+op)) = o
 -/
-theorem bsup_id_limit {o : Ordinal} : (forall a < o, succ a < o) -> (bsup.{u, u} o fun x _ => x) = o :=
+theorem bsup_id_limit {o : Ordinal} : (∀ a < o, succ a < o) → (bsup.{u, u} o fun x _ => x) = o :=
   iSup_typein_limit
 
 @[deprecated csSup_Iic (since := "2026-03-23")]
-/--
-theorem `bsup_id_add_one` / 定理 `bsup_id_add_one`
-
-English:
-theorem bsup_id_add_one
-  given: (o)
-  statement: (bsup.{u, u} (o + 1) fun x _ => x) = o
-  proof: iSup_typein_succ
-
-@[deprecated csSup_Iic (since := "2026-03-23")]
-
-中文:
-定理 bsup_id_add_one
-  条件: (o)
-  结论: (bsup.{u, u} (o + 1) fun x _ => x) = o
-  证明: iSup_typein_succ
-
-@[deprecated csSup_Iic (since := "2026-03-23")]
-
-Depends on / 依赖: iSup_typein_succ
+/-
+**Ordinal.bsup_id_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_id_add_one (o) : (bsup.{u, u} (o + 1) fun x _ => x) = o
+参数：o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_typein_succ`：iSup_typein_succ {o : Ordinal} : iSup (typein 
+((· < ·) : (succ o).ToType -> (succ o).ToType -> Prop)) = o
 -/
 theorem bsup_id_add_one (o) : (bsup.{u, u} (o + 1) fun x _ => x) = o :=
   iSup_typein_succ
 
 @[deprecated csSup_Iic (since := "2026-03-23")]
-/--
-theorem `bsup_id_succ` / 定理 `bsup_id_succ`
-
-English:
-theorem bsup_id_succ
-  given: (o)
-  statement: (bsup.{u, u} (succ o) fun x _ => x) = o
-  proof: iSup_typein_succ
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_id_succ
-  条件: (o)
-  结论: (bsup.{u, u} (succ o) fun x _ => x) = o
-  证明: iSup_typein_succ
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: iSup_typein_succ
+/-
+**Ordinal.bsup_id_succ** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_id_succ (o) : (bsup.{u, u} (succ o) fun x _ => x) = o
+参数：o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.iSup_typein_succ`：iSup_typein_succ {o : Ordinal} : iSup (typein 
+((· < ·) : (succ o).ToType -> (succ o).ToType -> Prop)) = o
 -/
 theorem bsup_id_succ (o) : (bsup.{u, u} (succ o) fun x _ => x) = o :=
   iSup_typein_succ
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_le_of_brange_subset` / 定理 `blsub_le_of_brange_subset`
-
-English:
-theorem blsub_le_of_brange_subset
-  statement: {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
-  proof: bsup_le_of_brange_subset.{u, v, w} fun a ⟨b, hb, hb'⟩ => by
-    obtain ⟨c, hc, hc'⟩ := h ⟨b, hb, rfl⟩
-    simp_rw [← hc'] at hb'
-    exact ⟨c, hc, hb'⟩
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_le_of_brange_subset
-  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
-  证明: bsup_le_of_brange_subset.{u, v, w} fun a ⟨b, hb, hb'⟩ => by
-    obtain ⟨c, hc, hc'⟩ := h ⟨b, hb, rfl⟩
-    simp_rw [← hc'] at hb'
-    exact ⟨c, hc, hb'⟩
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_le_of_brange_subset, simp_rw
+/-
+**Ordinal.blsub_le_of_brange_subset** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_le_of_brange_subset {o o'} {f : forall a < o, Ordinal} {g : forall a
+ < o', Ordinal} (h : brange o f subseteq brange o' g) : blsub.{u, max v w} o f <
+= blsub.{v, max u w} o' g
+参数：h : brange o f subseteq brange o' g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_le_of_brange_subset`：bsup_le_of_brange_subset {o o'} {f : f
+orall a < o, Ordinal} {g : forall a < o', Ordinal} (h : brange o f subseteq bran
+ge o' g) : bsup.{u, ma…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem blsub_le_of_brange_subset {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
-    (h : brange o f subseteq brange o' g) : blsub.{u, max v w} o f <= blsub.{v, max u w} o' g :=
+theorem blsub_le_of_brange_subset {o o'} {f : ∀ a < o, Ordinal} {g : ∀ a < o', Ordinal}
+    (h : brange o f ⊆ brange o' g) : blsub.{u, max v w} o f ≤ blsub.{v, max u w} o' g :=
   bsup_le_of_brange_subset.{u, v, w} fun a ⟨b, hb, hb'⟩ => by
     obtain ⟨c, hc, hc'⟩ := h ⟨b, hb, rfl⟩
     simp_rw [← hc'] at hb'
     exact ⟨c, hc, hb'⟩
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_eq_of_brange_eq` / 定理 `blsub_eq_of_brange_eq`
-
-English:
-theorem blsub_eq_of_brange_eq
-  statement: {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
-  proof: (blsub_le_of_brange_subset.{u, v, w} h.le).antisymm (blsub_le_of_brange_subset.{v, u, w} h.ge)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 blsub_eq_of_brange_eq
-  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
-  证明: (blsub_le_of_brange_subset.{u, v, w} h.le).antisymm (blsub_le_of_brange_subset.{v, u, w} h.ge)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: antisymm, blsub_le_of_brange_subset, h.ge, h.le
+/-
+**Ordinal.blsub_eq_of_brange_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_eq_of_brange_eq {o o'} {f : forall a < o, Ordinal} {g : forall a < o
+', Ordinal} (h : { o | exists i hi, f i hi = o } = { o | exists i hi, g i hi = o
+ }) : blsub.{u, max v w} o f = blsub.{v, max u w} o' g
+参数：h : { o | exists i hi, f i hi = o } = { o | exists i hi, g i hi = o }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ordinal.blsub_le_of_brange_subset`：blsub_le_of_brange_subset {o o'} {f :
+ forall a < o, Ordinal} {g : forall a < o', Ordinal} (h : brange o f subseteq br
+ange o' g) : blsub.{u, …
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
 -/
-theorem blsub_eq_of_brange_eq {o o'} {f : forall a < o, Ordinal} {g : forall a < o', Ordinal}
-    (h : { o | exists i hi, f i hi = o } = { o | exists i hi, g i hi = o }) :
+theorem blsub_eq_of_brange_eq {o o'} {f : ∀ a < o, Ordinal} {g : ∀ a < o', Ordinal}
+    (h : { o | ∃ i hi, f i hi = o } = { o | ∃ i hi, g i hi = o }) :
     blsub.{u, max v w} o f = blsub.{v, max u w} o' g :=
   (blsub_le_of_brange_subset.{u, v, w} h.le).antisymm (blsub_le_of_brange_subset.{v, u, w} h.ge)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `bsup_comp` / 定理 `bsup_comp`
-
-English:
-theorem bsup_comp
-  statement: {o o' : Ordinal.{max u v}} {f : forall a < o, Ordinal.{max u v w}}
-  proof: by
-  apply le_antisymm <;> refine bsup_le fun i hi => ?_
-  · apply le_bsup
-  · rw [← hg, lt_blsub_iff] at hi
-    rcases hi with ⟨j, hj, hj'⟩
-    exact (hf _ _ hj').trans (le_bsup _ _ _)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-中文:
-定理 bsup_comp
-  结论: {o o' : 序数.{最大值 u v}} {f : 对任意 a < o, 序数.{最大值 u v w}}
-  证明: by
-  apply le_antisymm <;> refine bsup_le fun i hi => ?_
-  · apply le_bsup
-  · rw [← hg, lt_blsub_iff] at hi
-    rcases hi with ⟨j, hj, hj'⟩
-    exact (hf _ _ hj').trans (le_bsup _ _ _)
-
-@[deprecated "blsub is deprecated" (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_le, le_antisymm, le_bsup, lt_blsub_iff
+/-
+**Ordinal.bsup_comp** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：bsup_comp {o o' : Ordinal.{max u v}} {f : forall a < o, Ordinal.{max u v w
+}} (hf : forall {i j} (hi) (hj), i <= j -> f i hi <= f j hj) {g : forall a < o',
+ Ordinal.{max u v}} (hg : blsub.{_, u} o' g = o) : (bsup.{_, w} o' fun a ha => f
+ (g a ha) (by rw [← hg]; apply lt_blsub)) = bsup.{_, w} o f
+参数：hf : forall {i j} (hi) (hj), i <= j -> f i hi <= f j hj；hg : blsub.{_, u} o' 
+g = o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Ordinal.bsup_le`：bsup_le {o : Ordinal} {f : forall b < o, Ordinal} {a} :
+ (forall i h, f i h <= a) -> bsup.{u, v} o f <= a
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.lt_blsub_iff`：lt_blsub_iff {o : Ordinal.{u}} {f : forall b < o, 
+Ordinal.{max u v}} {a} : a < blsub.{_, v} o f ↔ exists i hi, a <= f i hi
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-theorem bsup_comp {o o' : Ordinal.{max u v}} {f : forall a < o, Ordinal.{max u v w}}
-    (hf : forall {i j} (hi) (hj), i <= j -> f i hi <= f j hj) {g : forall a < o', Ordinal.{max u v}}
+theorem bsup_comp {o o' : Ordinal.{max u v}} {f : ∀ a < o, Ordinal.{max u v w}}
+    (hf : ∀ {i j} (hi) (hj), i ≤ j → f i hi ≤ f j hj) {g : ∀ a < o', Ordinal.{max u v}}
     (hg : blsub.{_, u} o' g = o) :
     (bsup.{_, w} o' fun a ha => f (g a ha) (by rw [← hg]; apply lt_blsub)) = bsup.{_, w} o f := by
   apply le_antisymm <;> refine bsup_le fun i hi => ?_
@@ -3695,151 +2920,150 @@ theorem bsup_comp {o o' : Ordinal.{max u v}} {f : forall a < o, Ordinal.{max u v
     exact (hf _ _ hj').trans (le_bsup _ _ _)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
-/--
-theorem `blsub_comp` / 定理 `blsub_comp`
-
-English:
-theorem blsub_comp
-  statement: {o o' : Ordinal.{max u v}} {f : forall a < o, Ordinal.{max u v w}}
-  proof: @bsup_comp.{u, v, w} o _ (fun a ha => succ (f a ha))
-    (fun {_ _} _ _ h => succ_le_succ_iff.2 (hf _ _ h)) g hg
-
-@[deprecated IsNormal.apply_of_isSuccLimit (since := "2026-03-23")]
-
-中文:
-定理 blsub_comp
-  结论: {o o' : 序数.{最大值 u v}} {f : 对任意 a < o, 序数.{最大值 u v w}}
-  证明: @bsup_comp.{u, v, w} o _ (fun a ha => succ (f a ha))
-    (fun {_ _} _ _ h => succ_le_succ_iff.2 (hf _ _ h)) g hg
-
-@[deprecated IsNormal.apply_of_isSuccLimit (since := "2026-03-23")]
-
-Depends on / 依赖: bsup_comp, succ_le_succ_iff
+/-
+**Ordinal.blsub_comp** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：blsub_comp {o o' : Ordinal.{max u v}} {f : forall a < o, Ordinal.{max u v 
+w}} (hf : forall {i j} (hi) (hj), i <= j -> f i hi <= f j hj) {g : forall a < o'
+, Ordinal.{max u v}} (hg : blsub.{_, u} o' g = o) : (blsub.{_, w} o' fun a ha =>
+ f (g a ha) (by rw [← hg]; apply lt_blsub)) = blsub.{_, w} o f
+参数：hf : forall {i j} (hi) (hj), i <= j -> f i hi <= f j hj；hg : blsub.{_, u} o' 
+g = o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ordinal.bsup_comp`：bsup_comp {o o' : Ordinal.{max u v}} {f : forall a < 
+o, Ordinal.{max u v w}} (hf : forall {i j} (hi) (hj), i <= j -> f i hi <= f j hj
+) {g : …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.succ_le_succ_iff`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 
+: SuccOrder α] {a b : α} [NoMaxOrder α],   Order.succ a ≤ Order.succ b ↔ a ≤ b
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
 -/
-theorem blsub_comp {o o' : Ordinal.{max u v}} {f : forall a < o, Ordinal.{max u v w}}
-    (hf : forall {i j} (hi) (hj), i <= j -> f i hi <= f j hj) {g : forall a < o', Ordinal.{max u v}}
+theorem blsub_comp {o o' : Ordinal.{max u v}} {f : ∀ a < o, Ordinal.{max u v w}}
+    (hf : ∀ {i j} (hi) (hj), i ≤ j → f i hi ≤ f j hj) {g : ∀ a < o', Ordinal.{max u v}}
     (hg : blsub.{_, u} o' g = o) :
     (blsub.{_, w} o' fun a ha => f (g a ha) (by rw [← hg]; apply lt_blsub)) = blsub.{_, w} o f :=
   @bsup_comp.{u, v, w} o _ (fun a ha => succ (f a ha))
     (fun {_ _} _ _ h => succ_le_succ_iff.2 (hf _ _ h)) g hg
 
 @[deprecated IsNormal.apply_of_isSuccLimit (since := "2026-03-23")]
-/--
-theorem `IsNormal.bsup_eq` / 定理 `IsNormal.bsup_eq`
-
-English:
-theorem IsNormal.bsup_eq
-  statement: {f : Ordinal.{u} -> Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
-  proof: by
-  rw [← IsNormal.bsup.{u]; rw [u]; rw [v} H (fun x _ => x) h.ne_bot]; rw [bsup_id_limit fun _ => h.succ_lt]
-
-@[deprecated IsNormal.apply_of_isSuccLimit (since := "2026-03-23")]
-
-中文:
-定理 是正规.bsup_eq
-  结论: {f : 序数.{u} -> 序数.{最大值 u v}} (H : 是正规 f) {o : 序数.{u}}
-  证明: by
-  rw [← IsNormal.bsup.{u]; rw [u]; rw [v} H (fun x _ => x) h.ne_bot]; rw [bsup_id_limit fun _ => h.succ_lt]
-
-@[deprecated IsNormal.apply_of_isSuccLimit (since := "2026-03-23")]
-
-Depends on / 依赖: IsNormal, IsNormal.bsup, bsup_id_limit, h.ne_bot, h.succ_lt, ne_bot, succ_lt
+/-
+**Ordinal.IsNormal.bsup_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsNormal`。
+形式化陈述：∀ {f : Ordinal.{u} → Ordinal.{max u v}},   Order.IsNormal f → ∀ {o : Ordin
+al.{u}}, Order.IsSuccLimit o → (o.bsup fun x x_1 => f x) = f o
+参数：o.bsup fun x x_1 => f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.IsNormal.bsup`：∀ {f : Ordinal.{max u_3 u_4} → Ordinal.{max u_4 u
+_5}},   Order.IsNormal f →     ∀ {o : Ordinal.{u_4}} (g : (a : Ordinal.{u_4}) → 
+a < o → Ord…
+· 使用定理 `Order.IsSuccLimit.ne_bot`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [
+inst_1 : OrderBot α], Order.IsSuccLimit a → a ≠ ⊥
+· 使用定理 `Ordinal.bsup_id_limit`：bsup_id_limit {o : Ordinal} : (forall a < o, succ
+ a < o) -> (bsup.{u, u} o fun x _ => x) = o
+· 使用定理 `Order.IsSuccLimit.succ_lt`：∀ {α : Type u_1} {a b : α} [inst : PartialOrd
+er α] [inst_1 : SuccOrder α],   Order.IsSuccLimit b → a < b → Order.succ a < b
 -/
-theorem IsNormal.bsup_eq {f : Ordinal.{u} -> Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
+theorem IsNormal.bsup_eq {f : Ordinal.{u} → Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
     (h : IsSuccLimit o) : (Ordinal.bsup.{_, v} o fun x _ => f x) = f o := by
-  rw [← IsNormal.bsup.{u]; rw [u]; rw [v} H (fun x _ => x) h.ne_bot]; rw [bsup_id_limit fun _ => h.succ_lt]
+  rw [← IsNormal.bsup.{u, u, v} H (fun x _ => x) h.ne_bot, bsup_id_limit fun _ ↦ h.succ_lt]
 
 @[deprecated IsNormal.apply_of_isSuccLimit (since := "2026-03-23")]
-/--
-theorem `IsNormal.blsub_eq` / 定理 `IsNormal.blsub_eq`
-
-English:
-theorem IsNormal.blsub_eq
-  statement: {f : Ordinal.{u} -> Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
-  proof: by
-  rw [← IsNormal.bsup_eq.{u]; rw [v} H h]; rw [bsup_eq_blsub_of_lt_succ_limit h]
-  exact fun a _ => H.strictMono (lt_succ a)
-
-@[deprecated isNormal_iff (since := "2026-03-23")]
-
-中文:
-定理 是正规.blsub_eq
-  结论: {f : 序数.{u} -> 序数.{最大值 u v}} (H : 是正规 f) {o : 序数.{u}}
-  证明: by
-  rw [← IsNormal.bsup_eq.{u]; rw [v} H h]; rw [bsup_eq_blsub_of_lt_succ_limit h]
-  exact fun a _ => H.strictMono (lt_succ a)
-
-@[deprecated isNormal_iff (since := "2026-03-23")]
-
-Depends on / 依赖: H.strictMono, IsNormal, IsNormal.bsup_eq, bsup_eq, bsup_eq_blsub_of_lt_succ_limit, lt_succ, strictMono
+/-
+**Ordinal.IsNormal.blsub_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal.IsNormal`。
+形式化陈述：∀ {f : Ordinal.{u} → Ordinal.{max u v}},   Order.IsNormal f → ∀ {o : Ordin
+al.{u}}, Order.IsSuccLimit o → (o.blsub fun x x_1 => f x) = f o
+参数：o.blsub fun x x_1 => f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.IsNormal.bsup_eq`：∀ {f : Ordinal.{u} → Ordinal.{max u v}},   Ord
+er.IsNormal f → ∀ {o : Ordinal.{u}}, Order.IsSuccLimit o → (o.bsup fun x x_1 => 
+f x) = f o
+· 使用定理 `Ordinal.bsup_eq_blsub_of_lt_succ_limit`：bsup_eq_blsub_of_lt_succ_limit {
+o : Ordinal.{u}} (ho : IsSuccLimit o) {f : forall a < o, Ordinal.{max u v}} (hf 
+: forall a ha, f a ha < f (s…
+· 使用定理 `Order.IsNormal.strictMono`：∀ {α : Type u_1} {β : Type u_2} [inst : Linea
+rOrder α] [inst_1 : LinearOrder β] {f : α → β},   Order.IsNormal f → StrictMono 
+f
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
 -/
-theorem IsNormal.blsub_eq {f : Ordinal.{u} -> Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
+theorem IsNormal.blsub_eq {f : Ordinal.{u} → Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
     (h : IsSuccLimit o) : (blsub.{_, v} o fun x _ => f x) = f o := by
-  rw [← IsNormal.bsup_eq.{u]; rw [v} H h]; rw [bsup_eq_blsub_of_lt_succ_limit h]
+  rw [← IsNormal.bsup_eq.{u, v} H h, bsup_eq_blsub_of_lt_succ_limit h]
   exact fun a _ => H.strictMono (lt_succ a)
 
 @[deprecated isNormal_iff (since := "2026-03-23")]
-/--
-theorem `isNormal_iff_lt_succ_and_bsup_eq` / 定理 `isNormal_iff_lt_succ_and_bsup_eq`
-
-English:
-theorem isNormal_iff_lt_succ_and_bsup_eq
-  given: {f : Ordinal.{u} -> Ordinal.{max u v}}
-  proof: ⟨fun h => ⟨fun a => h.strictMono (lt_succ a), @IsNormal.bsup_eq f h⟩, fun ⟨h₁, h₂⟩ =>
-    .of_succ_lt h₁ fun ho => by
-      rw [← h₂ _ ho]
-      simpa [IsLUB, upperBounds, lowerBounds, IsLeast, bsup_le_iff] using le_bsup _⟩
-
-@[deprecated isNormal_iff (since := "2026-03-23")]
-
-中文:
-定理 isNormal_iff_lt_succ_and_bsup_eq
-  条件: {f : 序数.{u} -> 序数.{最大值 u v}}
-  证明: ⟨fun h => ⟨fun a => h.strictMono (lt_succ a), @IsNormal.bsup_eq f h⟩, fun ⟨h₁, h₂⟩ =>
-    .of_succ_lt h₁ fun ho => by
-      rw [← h₂ _ ho]
-      simpa [IsLUB, upperBounds, lowerBounds, IsLeast, bsup_le_iff] using le_bsup _⟩
-
-@[deprecated isNormal_iff (since := "2026-03-23")]
-
-Depends on / 依赖: IsLeast, IsNormal, IsNormal.bsup_eq, bsup_eq, bsup_le_iff, h.strictMono, le_bsup, lowerBounds, lt_succ, of_succ_lt, strictMono, upperBounds
+/-
+**Ordinal.isNormal_iff_lt_succ_and_bsup_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isNormal_iff_lt_succ_and_bsup_eq {f : Ordinal.{u} -> Ordinal.{max u v}} : 
+IsNormal f ↔ (forall a, f a < f (succ a)) ∧ forall o, IsSuccLimit o -> (bsup.{_,
+ v} o fun x _ => f x) = f o
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsNormal.strictMono`：∀ {α : Type u_1} {β : Type u_2} [inst : Linea
+rOrder α] [inst_1 : LinearOrder β] {f : α → β},   Order.IsNormal f → StrictMono 
+f
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
+· 使用定理 `Ordinal.IsNormal.bsup_eq`：∀ {f : Ordinal.{u} → Ordinal.{max u v}},   Ord
+er.IsNormal f → ∀ {o : Ordinal.{u}}, Order.IsSuccLimit o → (o.bsup fun x x_1 => 
+f x) = f o
+· 使用定理 `Order.IsNormal.of_succ_lt`：of_succ_lt (hs : forall a, f a < f (succ a)) 
+(hl : forall {a}, IsSuccLimit a -> IsLUB (f '' Iio a) (f a)) : IsNormal f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Ordinal.le_bsup`：le_bsup {o} (f : forall a < o, Ordinal) (i h) : f i h <
+= bsup o f
 -/
-theorem isNormal_iff_lt_succ_and_bsup_eq {f : Ordinal.{u} -> Ordinal.{max u v}} :
-    IsNormal f ↔ (forall a, f a < f (succ a)) ∧
-      forall o, IsSuccLimit o -> (bsup.{_, v} o fun x _ => f x) = f o :=
-  ⟨fun h => ⟨fun a => h.strictMono (lt_succ a), @IsNormal.bsup_eq f h⟩, fun ⟨h₁, h₂⟩ =>
-    .of_succ_lt h₁ fun ho => by
+theorem isNormal_iff_lt_succ_and_bsup_eq {f : Ordinal.{u} → Ordinal.{max u v}} :
+    IsNormal f ↔ (∀ a, f a < f (succ a)) ∧
+      ∀ o, IsSuccLimit o → (bsup.{_, v} o fun x _ => f x) = f o :=
+  ⟨fun h => ⟨fun a ↦ h.strictMono (lt_succ a), @IsNormal.bsup_eq f h⟩, fun ⟨h₁, h₂⟩ =>
+    .of_succ_lt h₁ fun ho ↦ by
       rw [← h₂ _ ho]
       simpa [IsLUB, upperBounds, lowerBounds, IsLeast, bsup_le_iff] using le_bsup _⟩
 
 @[deprecated isNormal_iff (since := "2026-03-23")]
-/--
-theorem `isNormal_iff_lt_succ_and_blsub_eq` / 定理 `isNormal_iff_lt_succ_and_blsub_eq`
-
-English:
-theorem isNormal_iff_lt_succ_and_blsub_eq
-  given: {f : Ordinal.{u} -> Ordinal.{max u v}}
-  proof: by
-  rw [isNormal_iff_lt_succ_and_bsup_eq.{u]; rw [v}]; rw [and_congr_right_iff]
-  intro h
-  constructor <;> intro H o ho <;> have := H o ho <;>
-    rwa [← bsup_eq_blsub_of_lt_succ_limit ho fun a _ => h a] at *
-
-中文:
-定理 isNormal_iff_lt_succ_and_blsub_eq
-  条件: {f : 序数.{u} -> 序数.{最大值 u v}}
-  证明: by
-  rw [isNormal_iff_lt_succ_and_bsup_eq.{u]; rw [v}]; rw [and_congr_right_iff]
-  intro h
-  constructor <;> intro H o ho <;> have := H o ho <;>
-    rwa [← bsup_eq_blsub_of_lt_succ_limit ho fun a _ => h a] at *
-
-Depends on / 依赖: and_congr_right_iff, bsup_eq_blsub_of_lt_succ_limit, isNormal_iff_lt_succ_and_bsup_eq
+/-
+**Ordinal.isNormal_iff_lt_succ_and_blsub_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：isNormal_iff_lt_succ_and_blsub_eq {f : Ordinal.{u} -> Ordinal.{max u v}} :
+ IsNormal f ↔ (forall a, f a < f (succ a)) ∧ forall o, IsSuccLimit o -> (blsub.{
+_, v} o fun x _ => f x) = f o
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.isNormal_iff_lt_succ_and_bsup_eq`：isNormal_iff_lt_succ_and_bsup_
+eq {f : Ordinal.{u} -> Ordinal.{max u v}} : IsNormal f ↔ (forall a, f a < f (suc
+c a)) ∧ forall o, IsSuccLimit …
+· 使用定理 `and_congr_right_iff`：∀ {a b c : Prop}, (a ∧ b ↔ a ∧ c) ↔ a → (b ↔ c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.bsup_eq_blsub_of_lt_succ_limit`：bsup_eq_blsub_of_lt_succ_limit {
+o : Ordinal.{u}} (ho : IsSuccLimit o) {f : forall a < o, Ordinal.{max u v}} (hf 
+: forall a ha, f a ha < f (s…
 -/
-theorem isNormal_iff_lt_succ_and_blsub_eq {f : Ordinal.{u} -> Ordinal.{max u v}} :
-    IsNormal f ↔ (forall a, f a < f (succ a)) ∧
-      forall o, IsSuccLimit o -> (blsub.{_, v} o fun x _ => f x) = f o := by
-  rw [isNormal_iff_lt_succ_and_bsup_eq.{u]; rw [v}]; rw [and_congr_right_iff]
+theorem isNormal_iff_lt_succ_and_blsub_eq {f : Ordinal.{u} → Ordinal.{max u v}} :
+    IsNormal f ↔ (∀ a, f a < f (succ a)) ∧
+      ∀ o, IsSuccLimit o → (blsub.{_, v} o fun x _ => f x) = f o := by
+  rw [isNormal_iff_lt_succ_and_bsup_eq.{u, v}, and_congr_right_iff]
   intro h
   constructor <;> intro H o ho <;> have := H o ho <;>
     rwa [← bsup_eq_blsub_of_lt_succ_limit ho fun a _ => h a] at *
@@ -3848,126 +3072,103 @@ end blsub
 
 end Ordinal
 
+/-! ### Results about injectivity and surjectivity -/
 
 
-/--
-theorem `not_surjective_of_ordinal` / 定理 `not_surjective_of_ordinal`
+/-
+**not_surjective_of_ordinal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_surjective_of_ordinal {α : Type*} [Small.{u} α] (f : α -> Ordinal.{u})
+ : ¬ Surjective f
+参数：f : α -> Ordinal.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.not_lt`：∀ {α : Type u_2} [inst : Preorder α] {a b : α}, a = b → ¬a < 
+b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.lt_iSup_iff`：∀ {ι : Type u_3} {f : ι → Ordinal.{u}} {a : Ordinal
+.{u}} [Small.{u, u_3} ι], a < ⨆ i, f i ↔ ∃ i, a < f i
+· 使用定理 `Order.lt_succ`：lt_succ (a : α) : a < succ a
+· 使用定理 `Ordinal.instNoMaxOrder`：NoMaxOrder Ordinal.{u_1}
 
-English:
-theorem not_surjective_of_ordinal
-  given: {α : Type*} [Small.{u} α] (f : α -> Ordinal.{u})
-  proof: by
-  intro h
-  obtain ⟨a, ha⟩ := h (⨆ i, succ (f i))
-  apply ha.not_lt
-  rw [Ordinal.lt_iSup_iff]
-  exact ⟨a, Order.lt_succ _⟩
-
-中文:
-定理 not_surjective_of_ordinal
-  条件: {α : 类型} [Small.{u} α] (f : α -> 序数.{u})
-  证明: by
-  intro h
-  obtain ⟨a, ha⟩ := h (⨆ i, succ (f i))
-  apply ha.not_lt
-  rw [Ordinal.lt_iSup_iff]
-  exact ⟨a, Order.lt_succ _⟩
-
-Depends on / 依赖: Order.lt_succ, Ordinal, Ordinal.lt_iSup_iff, ha.not_lt, lt_iSup_iff, lt_succ, not_lt
+--- 原说明 ---
+### Results about injectivity and surjectivity
 -/
-theorem not_surjective_of_ordinal {α : Type*} [Small.{u} α] (f : α -> Ordinal.{u}) :
+theorem not_surjective_of_ordinal {α : Type*} [Small.{u} α] (f : α → Ordinal.{u}) :
     ¬ Surjective f := by
   intro h
   obtain ⟨a, ha⟩ := h (⨆ i, succ (f i))
   apply ha.not_lt
   rw [Ordinal.lt_iSup_iff]
   exact ⟨a, Order.lt_succ _⟩
-
-/--
-theorem `not_injective_of_ordinal` / 定理 `not_injective_of_ordinal`
-
-English:
-theorem not_injective_of_ordinal
-  given: {α : Type*} [Small.{u} α] (f : Ordinal.{u} -> α)
-  proof: fun h => not_surjective_of_ordinal _ (invFun_surjective h)
-
-中文:
-定理 not_injective_of_ordinal
-  条件: {α : 类型} [Small.{u} α] (f : 序数.{u} -> α)
-  证明: fun h => not_surjective_of_ordinal _ (invFun_surjective h)
-
-Depends on / 依赖: invFun_surjective, not_surjective_of_ordinal
+/-
+**not_injective_of_ordinal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_injective_of_ordinal {α : Type*} [Small.{u} α] (f : Ordinal.{u} -> α) 
+: ¬ Injective f
+参数：f : Ordinal.{u} -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_surjective_of_ordinal`：not_surjective_of_ordinal {α : Type*} [Small.
+{u} α] (f : α -> Ordinal.{u}) : ¬ Surjective f
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Function.invFun_surjective`：invFun_surjective (hf : Injective f) : Surje
+ctive (invFun f)
 -/
-theorem not_injective_of_ordinal {α : Type*} [Small.{u} α] (f : Ordinal.{u} -> α) :
-    ¬ Injective f := fun h => not_surjective_of_ordinal _ (invFun_surjective h)
+theorem not_injective_of_ordinal {α : Type*} [Small.{u} α] (f : Ordinal.{u} → α) :
+    ¬ Injective f := fun h ↦ not_surjective_of_ordinal _ (invFun_surjective h)
 
-/--
-theorem `not_small_ordinal` / 定理 `not_small_ordinal`
+/-- The type of ordinals in universe `u` is not `Small.{u}`. This is the type-theoretic analog of
+the Burali-Forti paradox. -/
+/-
+**not_small_ordinal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_small_ordinal : ¬Small.{u} Ordinal.{max u v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_injective_of_ordinal`：not_injective_of_ordinal {α : Type*} [Small.{u
+} α] (f : Ordinal.{u} -> α) : ¬ Injective f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ordinal.lift_inj`：lift_inj {a b : Ordinal} : lift.{u, v} a = lift.{u, v}
+ b ↔ a = b
 
-English:
-theorem not_small_ordinal
-  statement: ¬Small.{u} Ordinal.{max u v}
-  proof: fun h =>
-  @not_injective_of_ordinal _ h _ fun _a _b => Ordinal.lift_inj.{v, u}.1
-
-中文:
-定理 not_small_ordinal
-  结论: ¬Small.{u} 序数.{最大值 u v}
-  证明: fun h =>
-  @not_injective_of_ordinal _ h _ fun _a _b => Ordinal.lift_inj.{v, u}.1
+--- 原说明 ---
+The type of ordinals in universe `u` is not `Small.{u}`. This is the type-theore
+tic analog of
+the Burali-Forti paradox.
 -/
 theorem not_small_ordinal : ¬Small.{u} Ordinal.{max u v} := fun h =>
   @not_injective_of_ordinal _ h _ fun _a _b => Ordinal.lift_inj.{v, u}.1
-
-/--
-Instance `Ordinal.uncountable` / 实例 `Ordinal.uncountable`
-
-English:
-instance Ordinal.uncountable
-  signature: : Uncountable Ordinal.{u}
-  body: Uncountable.of_not_small not_small_ordinal.{u}
-
-中文:
-实例 序数.uncountable
-  签名: : 不可数 序数.{u}
-  定义体: Uncountable.of_not_small not_small_ordinal.{u}
-
-Depends on / 依赖: Uncountable, Uncountable.of_not_small, not_small_ordinal, of_not_small
+/-
+**Ordinal.uncountable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Ordinal.uncountable : Uncountable Ordinal.{u}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Uncountable.of_not_small`：Uncountable.of_not_small {α : Type v} (h : ¬ S
+mall.{w} α) : Uncountable α
+· 使用定理 `not_small_ordinal`：not_small_ordinal : ¬Small.{u} Ordinal.{max u v}
 -/
 instance Ordinal.uncountable : Uncountable Ordinal.{u} :=
   Uncountable.of_not_small not_small_ordinal.{u}
-
-/--
-theorem `Ordinal.not_bddAbove_compl_of_small` / 定理 `Ordinal.not_bddAbove_compl_of_small`
-
-English:
-theorem Ordinal.not_bddAbove_compl_of_small
-  given: (s : Set Ordinal.{u}) [hs : Small.{u} s]
-  proof: by
-  rw [bddAbove_iff_small]
-  intro h
-  have := small_union s sᶜ
-  rw [union_compl_self]; rw [small_univ_iff] at this
-  exact not_small_ordinal this
-
-中文:
-定理 序数.not_bddAbove_compl_of_small
-  条件: (s : 集合 序数.{u}) [hs : Small.{u} s]
-  证明: by
-  rw [bddAbove_iff_small]
-  intro h
-  have := small_union s sᶜ
-  rw [union_compl_self]; rw [small_univ_iff] at this
-  exact not_small_ordinal this
-
-Depends on / 依赖: bddAbove_iff_small, not_small_ordinal, small_union, small_univ_iff, union_compl_self
+/-
+**Ordinal.not_bddAbove_compl_of_small** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ordinal.not_bddAbove_compl_of_small (s : Set Ordinal.{u}) [hs : Small.{u} 
+s] : ¬BddAbove sᶜ
+参数：s : Set Ordinal.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ordinal.bddAbove_iff_small`：bddAbove_iff_small {s : Set Ordinal.{u}} : B
+ddAbove s ↔ Small.{u} s
+· 使用定理 `not_small_ordinal`：not_small_ordinal : ¬Small.{u} Ordinal.{max u v}
+· 使用定理 `small_univ_iff`：small_univ_iff : Small.{u} (@Set.univ α) ↔ Small.{u} α
+· 使用定理 `Set.union_compl_self`：union_compl_self (s : Set α) : s union sᶜ = univ
 -/
 theorem Ordinal.not_bddAbove_compl_of_small (s : Set Ordinal.{u}) [hs : Small.{u} s] :
     ¬BddAbove sᶜ := by
   rw [bddAbove_iff_small]
   intro h
   have := small_union s sᶜ
-  rw [union_compl_self]; rw [small_univ_iff] at this
+  rw [union_compl_self, small_univ_iff] at this
   exact not_small_ordinal this
 
 namespace Ordinal
@@ -3975,136 +3176,134 @@ namespace Ordinal
 /-! ### Casting naturals into ordinals, compatibility with operations -/
 
 @[simp]
-/--
-theorem `iSup_natCast` / 定理 `iSup_natCast`
+/-
+**Ordinal.iSup_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_natCast : iSup Nat.cast = ω
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Ordinal.iSup_le`：∀ {ι : Sort u_3} {f : ι → Ordinal.{u_4}} {a : Ordinal.{
+u_4}}, (∀ (i : ι), f i ≤ a) → ⨆ i, f i ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Ordinal.natCast_lt_omega0`：natCast_lt_omega0 (n : Nat) : ↑n < ω
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ordinal.omega0_le`：omega0_le {o : Ordinal} : ω <= o ↔ forall n : Nat, ↑n
+ <= o
+· 使用定理 `Ordinal.le_iSup`：∀ {ι : Type u_3} (f : ι → Ordinal.{u}) [Small.{u, u_3} 
+ι] (i : ι), f i ≤ ⨆ i, f i
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 
-English:
-theorem iSup_natCast
-  statement: iSup Nat.cast = ω
-  proof: (Ordinal.iSup_le fun n => (natCast_lt_omega0 n).le).antisymm omega0_le.2 Ordinal.le_iSup _
-
-中文:
-定理 iSup_natCast
-  结论: iSup 自然数.cast = ω
-  证明: (Ordinal.iSup_le fun n => (natCast_lt_omega0 n).le).antisymm omega0_le.2 Ordinal.le_iSup _
-
-Depends on / 依赖: Ordinal, Ordinal.iSup_le, Ordinal.le_iSup, antisymm, iSup_le, le_iSup, natCast_lt_omega0, omega0_le
+--- 原说明 ---
+### Casting naturals into ordinals, compatibility with operations
 -/
 theorem iSup_natCast : iSup Nat.cast = ω :=
-(Ordinal.iSup_le fun n => (natCast_lt_omega0 n).le).antisymm omega0_le.2 Ordinal.le_iSup _
-
-/--
-theorem `apply_omega0_of_isNormal` / 定理 `apply_omega0_of_isNormal`
-
-English:
-theorem apply_omega0_of_isNormal
-  given: {f : Ordinal.{u} -> Ordinal.{v}} (hf : IsNormal f)
-  proof: by
-  rw [← iSup_natCast]; rw [hf.map_iSup bddAbove_of_small]
-
-@[simp]
-
-中文:
-定理 apply_omega0_of_isNormal
-  条件: {f : 序数.{u} -> 序数.{v}} (hf : 是正规 f)
-  证明: by
-  rw [← iSup_natCast]; rw [hf.map_iSup bddAbove_of_small]
-
-@[simp]
-
-Depends on / 依赖: bddAbove_of_small, hf.map_iSup, iSup_natCast, map_iSup
+  (Ordinal.iSup_le fun n => (natCast_lt_omega0 n).le).antisymm <| omega0_le.2 <| Ordinal.le_iSup _
+/-
+**Ordinal.apply_omega0_of_isNormal** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：apply_omega0_of_isNormal {f : Ordinal.{u} -> Ordinal.{v}} (hf : IsNormal f
+) : ⨆ n : Nat, f n = f ω
+参数：hf : IsNormal f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup_natCast`：iSup_natCast : iSup Nat.cast = ω
+· 使用定理 `Order.IsNormal.map_iSup`：map_iSup {ι} [Nonempty ι] {g : ι -> α} (hf : Is
+Normal f) (hg : BddAbove (range g)) : f (⨆ i, g i) = ⨆ i, f (g i)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
-theorem apply_omega0_of_isNormal {f : Ordinal.{u} -> Ordinal.{v}} (hf : IsNormal f) :
-    ⨆ n : Nat, f n = f ω := by
-  rw [← iSup_natCast]; rw [hf.map_iSup bddAbove_of_small]
+theorem apply_omega0_of_isNormal {f : Ordinal.{u} → Ordinal.{v}} (hf : IsNormal f) :
+    ⨆ n : ℕ, f n = f ω := by
+  rw [← iSup_natCast, hf.map_iSup bddAbove_of_small]
 
 @[simp]
-/--
-theorem `add_iSup` / 定理 `add_iSup`
-
-English:
-theorem add_iSup
-  given: (o : Ordinal.{u}) {ι} [Small.{u} ι] [Nonempty ι] (f : ι -> Ordinal)
-  proof: (isNormal_add_right o).map_iSup bddAbove_of_small
-
-@[simp]
-
-中文:
-定理 add_iSup
-  条件: (o : 序数.{u}) {ι} [Small.{u} ι] [非空 ι] (f : ι -> 序数)
-  证明: (isNormal_add_right o).map_iSup bddAbove_of_small
-
-@[simp]
-
-Depends on / 依赖: bddAbove_of_small, isNormal_add_right, map_iSup
+/-
+**Ordinal.add_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：add_iSup (o : Ordinal.{u}) {ι} [Small.{u} ι] [Nonempty ι] (f : ι -> Ordina
+l) : o + ⨆ i, f i = ⨆ i, o + f i
+参数：o : Ordinal.{u}；f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsNormal.map_iSup`：map_iSup {ι} [Nonempty ι] {g : ι -> α} (hf : Is
+Normal f) (hg : BddAbove (range g)) : f (⨆ i, g i) = ⨆ i, f (g i)
+· 使用定理 `Ordinal.isNormal_add_right`：isNormal_add_right (a : Ordinal) : IsNormal 
+(a + ·)
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
 -/
-theorem add_iSup (o : Ordinal.{u}) {ι} [Small.{u} ι] [Nonempty ι] (f : ι -> Ordinal) :
+theorem add_iSup (o : Ordinal.{u}) {ι} [Small.{u} ι] [Nonempty ι] (f : ι → Ordinal) :
     o + ⨆ i, f i = ⨆ i, o + f i :=
   (isNormal_add_right o).map_iSup bddAbove_of_small
 
 @[simp]
-/--
-theorem `add_sSup` / 定理 `add_sSup`
-
-English:
-theorem add_sSup
-  given: (o : Ordinal.{u}) {s : Set Ordinal} [Small.{u} s] (hs : s.Nonempty)
-  proof: (isNormal_add_right o).map_sSup hs bddAbove_of_small
-
-@[simp]
-
-中文:
-定理 add_sSup
-  条件: (o : 序数.{u}) {s : 集合 序数} [Small.{u} s] (hs : s.非空)
-  证明: (isNormal_add_right o).map_sSup hs bddAbove_of_small
-
-@[simp]
-
-Depends on / 依赖: bddAbove_of_small, isNormal_add_right, map_sSup
+/-
+**Ordinal.add_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：add_sSup (o : Ordinal.{u}) {s : Set Ordinal} [Small.{u} s] (hs : s.Nonempt
+y) : o + sSup s = sSup ((o + ·) '' s)
+参数：o : Ordinal.{u}；hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsNormal.map_sSup`：map_sSup (hf : IsNormal f) {s : Set α} (hs : s.
+Nonempty) (hs' : BddAbove s) : f (sSup s) = sSup (f '' s)
+· 使用定理 `Ordinal.isNormal_add_right`：isNormal_add_right (a : Ordinal) : IsNormal 
+(a + ·)
+· 使用定理 `Ordinal.bddAbove_of_small`：bddAbove_of_small {s : Set Ordinal.{u}} [Smal
+l.{u} s] : BddAbove s
 -/
 theorem add_sSup (o : Ordinal.{u}) {s : Set Ordinal} [Small.{u} s] (hs : s.Nonempty) :
     o + sSup s = sSup ((o + ·) '' s) :=
   (isNormal_add_right o).map_sSup hs bddAbove_of_small
 
 @[simp]
-/--
-lemma `mul_sSup` / 引理 `mul_sSup`
-
-English:
-lemma mul_sSup
-  given: (o : Ordinal) (s : Set Ordinal)
-  statement: o * sSup s = sSup ((o * ·) '' s)
-  proof: by
-  rcases s.eq_empty_or_nonempty with (rfl | hs)
-  · simp
-  rcases eq_zero_or_pos o with (rfl | ho)
-  · simp [hs.image_const]
-  by_cases bdd : BddAbove s
-  · exact (isNormal_mul_right ho).map_sSup hs bdd
-  · rw [csSup_of_not_bddAbove bdd, csSup_empty, csSup_of_not_bddAbove]
-    · simp
-    exact fun ⟨u, hu⟩ => bdd ⟨u, fun x hx => (x.le_mul_right ho).trans (hu ⟨x, hx, rfl⟩)⟩
-
-@[simp]
-
-中文:
-引理 mul_sSup
-  条件: (o : 序数) (s : 集合 序数)
-  结论: o * sSup s = sSup ((o * ·) '' s)
-  证明: by
-  rcases s.eq_empty_or_nonempty with (rfl | hs)
-  · simp
-  rcases eq_zero_or_pos o with (rfl | ho)
-  · simp [hs.image_const]
-  by_cases bdd : BddAbove s
-  · exact (isNormal_mul_right ho).map_sSup hs bdd
-  · rw [csSup_of_not_bddAbove bdd, csSup_empty, csSup_of_not_bddAbove]
-    · simp
-    exact fun ⟨u, hu⟩ => bdd ⟨u, fun x hx => (x.le_mul_right ho).trans (hu ⟨x, hx, rfl⟩)⟩
-
-@[simp]
-
-Depends on / 依赖: BddAbove, csSup_empty, csSup_of_not_bddAbove, eq_empty_or_nonempty, eq_zero_or_pos, hs.image_const, image_const, isNormal_mul_right, le_mul_right, map_sSup, s.eq_empty_or_nonempty, x.le_mul_right
+/-
+**Ordinal.mul_sSup** 是 Mathlib 中的一个引理，位于命名空间 `Ordinal`。
+形式化陈述：mul_sSup (o : Ordinal) (s : Set Ordinal) : o * sSup s = sSup ((o * ·) '' s
+)
+参数：o : Ordinal；s : Set Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `csSup_empty`：csSup_empty : (sSup ∅ : α) = ⊥
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_zero_or_pos`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero 
+α] [IsBotZeroClass α] (a : α), a = 0 ∨ 0 < a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.Nonempty.image_const`：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s
+.Nonempty → ∀ (a : β), (fun x => a) '' s = {a}
+· 使用定理 `csSup_singleton`：csSup_singleton (a : α) : sSup {a} = a
+· 使用定理 `Order.IsNormal.map_sSup`：map_sSup (hf : IsNormal f) {s : Set α} (hs : s.
+Nonempty) (hs' : BddAbove s) : f (sSup s) = sSup (f '' s)
+· 使用定理 `Ordinal.isNormal_mul_right`：isNormal_mul_right {a : Ordinal} (h : 0 < a)
+ : IsNormal (a * ·)
+· 使用引理 `csSup_of_not_bddAbove`：csSup_of_not_bddAbove (hs : ¬BddAbove s) : sSup s
+ = sSup ∅
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Ordinal.le_mul_right`：le_mul_right (a : Ordinal) {b : Ordinal} (hb : 0 <
+ b) : a <= b * a
 -/
 lemma mul_sSup (o : Ordinal) (s : Set Ordinal) : o * sSup s = sSup ((o * ·) '' s) := by
   rcases s.eq_empty_or_nonempty with (rfl | hs)
@@ -4115,83 +3314,63 @@ lemma mul_sSup (o : Ordinal) (s : Set Ordinal) : o * sSup s = sSup ((o * ·) '' 
   · exact (isNormal_mul_right ho).map_sSup hs bdd
   · rw [csSup_of_not_bddAbove bdd, csSup_empty, csSup_of_not_bddAbove]
     · simp
-    exact fun ⟨u, hu⟩ => bdd ⟨u, fun x hx => (x.le_mul_right ho).trans (hu ⟨x, hx, rfl⟩)⟩
+    exact fun ⟨u, hu⟩ ↦ bdd ⟨u, fun x hx ↦ (x.le_mul_right ho).trans (hu ⟨x, hx, rfl⟩)⟩
 
 @[simp]
-/--
-lemma `mul_iSup` / 引理 `mul_iSup`
-
-English:
-lemma mul_iSup
-  given: (o : Ordinal) {ι} (f : ι -> Ordinal)
-  statement: o * ⨆ i, f i = ⨆ i, o * f i
-  proof: by
-  rw [← sSup_range]; rw [mul_sSup]; rw [← Set.range_comp']; rw [sSup_range]
-
-@[simp]
-
-中文:
-引理 mul_iSup
-  条件: (o : 序数) {ι} (f : ι -> 序数)
-  结论: o * ⨆ i, f i = ⨆ i, o * f i
-  证明: by
-  rw [← sSup_range]; rw [mul_sSup]; rw [← Set.range_comp']; rw [sSup_range]
-
-@[simp]
-
-Depends on / 依赖: Set.range_comp, mul_sSup, range_comp, sSup_range
+/-
+**Ordinal.mul_iSup** 是 Mathlib 中的一个引理，位于命名空间 `Ordinal`。
+形式化陈述：mul_iSup (o : Ordinal) {ι} (f : ι -> Ordinal) : o * ⨆ i, f i = ⨆ i, o * f 
+i
+参数：o : Ordinal；f : ι -> Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sSup_range`：sSup_range : sSup (range f) = iSup f
+· 使用引理 `Ordinal.mul_sSup`：mul_sSup (o : Ordinal) (s : Set Ordinal) : o * sSup s 
+= sSup ((o * ·) '' s)
+· 使用定理 `Set.range_comp'`：range_comp' (g : α -> β) (f : ι -> α) : range (fun x =>
+ g (f x)) = g '' range f
 -/
-lemma mul_iSup (o : Ordinal) {ι} (f : ι -> Ordinal) : o * ⨆ i, f i = ⨆ i, o * f i := by
-  rw [← sSup_range]; rw [mul_sSup]; rw [← Set.range_comp']; rw [sSup_range]
+lemma mul_iSup (o : Ordinal) {ι} (f : ι → Ordinal) : o * ⨆ i, f i = ⨆ i, o * f i := by
+  rw [← sSup_range, mul_sSup, ← Set.range_comp', sSup_range]
 
 @[simp]
-/--
-theorem `iSup_add_natCast` / 定理 `iSup_add_natCast`
-
-English:
-theorem iSup_add_natCast
-  given: (o : Ordinal)
-  statement: ⨆ n : Nat, o + n = o + ω
-  proof: by
-  rw [← iSup_natCast]; rw [Ordinal.add_iSup]
-
-@[simp]
-
-中文:
-定理 iSup_add_natCast
-  条件: (o : 序数)
-  结论: ⨆ n : 自然数, o + n = o + ω
-  证明: by
-  rw [← iSup_natCast]; rw [Ordinal.add_iSup]
-
-@[simp]
-
-Depends on / 依赖: Ordinal, Ordinal.add_iSup, add_iSup, iSup_natCast
+/-
+**Ordinal.iSup_add_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_add_natCast (o : Ordinal) : ⨆ n : Nat, o + n = o + ω
+参数：o : Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup_natCast`：iSup_natCast : iSup Nat.cast = ω
+· 使用定理 `Ordinal.add_iSup`：add_iSup (o : Ordinal.{u}) {ι} [Small.{u} ι] [Nonempty
+ ι] (f : ι -> Ordinal) : o + ⨆ i, f i = ⨆ i, o + f i
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-theorem iSup_add_natCast (o : Ordinal) : ⨆ n : Nat, o + n = o + ω := by
-  rw [← iSup_natCast]; rw [Ordinal.add_iSup]
+theorem iSup_add_natCast (o : Ordinal) : ⨆ n : ℕ, o + n = o + ω := by
+  rw [← iSup_natCast, Ordinal.add_iSup]
 
 @[simp]
-/--
-theorem `iSup_mul_natCast` / 定理 `iSup_mul_natCast`
-
-English:
-theorem iSup_mul_natCast
-  given: (o : Ordinal)
-  statement: ⨆ n : Nat, o * n = o * ω
-  proof: by
-  rw [← iSup_natCast]; rw [Ordinal.mul_iSup]
-
-中文:
-定理 iSup_mul_natCast
-  条件: (o : 序数)
-  结论: ⨆ n : 自然数, o * n = o * ω
-  证明: by
-  rw [← iSup_natCast]; rw [Ordinal.mul_iSup]
-
-Depends on / 依赖: Ordinal, Ordinal.mul_iSup, iSup_natCast, mul_iSup
+/-
+**Ordinal.iSup_mul_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Ordinal`。
+形式化陈述：iSup_mul_natCast (o : Ordinal) : ⨆ n : Nat, o * n = o * ω
+参数：o : Ordinal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.iSup_natCast`：iSup_natCast : iSup Nat.cast = ω
+· 使用引理 `Ordinal.mul_iSup`：mul_iSup (o : Ordinal) {ι} (f : ι -> Ordinal) : o * ⨆ 
+i, f i = ⨆ i, o * f i
 -/
-theorem iSup_mul_natCast (o : Ordinal) : ⨆ n : Nat, o * n = o * ω := by
-  rw [← iSup_natCast]; rw [Ordinal.mul_iSup]
+theorem iSup_mul_natCast (o : Ordinal) : ⨆ n : ℕ, o * n = o * ω := by
+  rw [← iSup_natCast, Ordinal.mul_iSup]
 
 end Ordinal
+

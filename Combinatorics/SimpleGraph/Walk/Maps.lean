@@ -41,86 +41,52 @@ variable {G : SimpleGraph V} {G' : SimpleGraph V'} {G'' : SimpleGraph V''}
 
 /-! ### Mapping walks -/
 
-/--
-Definition of `map` / `map` 的定义
+/-- Given a graph homomorphism, map walks to walks. -/
+/-
+**SimpleGraph.Walk.map** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：{V : Type u} →   {V' : Type v} →     {G : SimpleGraph V} → {G' : SimpleGra
+ph V'} → (f : G →g G') → {u v : V} → G.Walk u v → G'.Walk (f u) (f v)
+参数：f : G →g G'；f u；f v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : G ->g G') {u v : V}
-
-中文:
-定义 map
-  签名: (f : G ->g G') {u v : V}
+--- 原说明 ---
+Given a graph homomorphism, map walks to walks.
 -/
-protected def map (f : G ->g G') {u v : V} : G.Walk u v -> G'.Walk (f u) (f v)
+protected def map (f : G →g G') {u v : V} : G.Walk u v → G'.Walk (f u) (f v)
   | nil => nil
   | cons h p => cons (f.map_adj h) (p.map f)
 
-variable (f : G ->g G') (f' : G' ->g G'') {u v u' v' w : V} (p : G.Walk u v)
+variable (f : G →g G') (f' : G' →g G'') {u v u' v' w : V} (p : G.Walk u v)
 
 @[simp]
-/--
-theorem `map_nil` / 定理 `map_nil`
-
-English:
-theorem map_nil
-  statement: (nil : G.Walk u u).map f = nil
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_nil
-  结论: (nil : G.途径 u u).map f = nil
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Walk.map_nil** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_nil : (nil : G.Walk u u).map f = nil
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_nil : (nil : G.Walk u u).map f = nil := rfl
 
 @[simp]
-/--
-theorem `map_cons` / 定理 `map_cons`
-
-English:
-theorem map_cons
-  given: {w : V} (h : G.Adj w u)
-  statement: (cons h p).map f = cons (f.map_adj h) (p.map f)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_cons
-  条件: {w : V} (h : G.伴随 w u)
-  结论: (cons h p).map f = cons (f.map_adj h) (p.map f)
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Walk.map_cons** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_cons {w : V} (h : G.Adj w u) : (cons h p).map f = cons (f.map_adj h) (
+p.map f)
+参数：h : G.Adj w u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_cons {w : V} (h : G.Adj w u) : (cons h p).map f = cons (f.map_adj h) (p.map f) := rfl
 
 @[simp]
-/--
-theorem `map_copy` / 定理 `map_copy`
-
-English:
-theorem map_copy
-  given: (hu : u = u') (hv : v = v')
-  proof: by
-  subst_vars
-  rfl
-
-@[simp]
-
-中文:
-定理 map_copy
-  条件: (hu : u = u') (hv : v = v')
-  证明: by
-  subst_vars
-  rfl
-
-@[simp]
+/-
+**SimpleGraph.Walk.map_copy** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_copy (hu : u = u') (hv : v = v') : (p.copy hu hv).map f = (p.map f).co
+py (hu ▸ rfl) (hv ▸ rfl)
+参数：hu : u = u'；hv : v = v'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem map_copy (hu : u = u') (hv : v = v') :
     (p.copy hu hv).map f = (p.map f).copy (hu ▸ rfl) (hv ▸ rfl) := by
@@ -128,321 +94,316 @@ theorem map_copy (hu : u = u') (hv : v = v') :
   rfl
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: (p : G.Walk u v)
-  statement: p.map Hom.id = p
-  proof: by
-  induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 map_id
-  条件: (p : G.途径 u v)
-  结论: p.map 态射.id = p
-  证明: by
-  induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.map_id** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_id (p : G.Walk u v) : p.map Hom.id = p
+参数：p : G.Walk u v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.cons.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} {u 
+v w : V} (h : G.Adj u v) (p p_1 : G.Walk v w),   p = p_1 → SimpleGraph.Walk.cons
+ h p = SimpleGraph.Wal…
 -/
 theorem map_id (p : G.Walk u v) : p.map Hom.id = p := by
   induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  statement: (p.map f).map f' = p.map (f'.comp f)
-  proof: by
-  induction p <;> simp [*]
-
-中文:
-定理 map_map
-  结论: (p.map f).map f' = p.map (f'.comp f)
-  证明: by
-  induction p <;> simp [*]
+/-
+**SimpleGraph.Walk.map_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_map : (p.map f).map f' = p.map (f'.comp f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.cons.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} {u 
+v w : V} (h : G.Adj u v) (p p_1 : G.Walk v w),   p = p_1 → SimpleGraph.Walk.cons
+ h p = SimpleGraph.Wal…
 -/
 theorem map_map : (p.map f).map f' = p.map (f'.comp f) := by
   induction p <;> simp [*]
 
-/--
-theorem `map_eq_of_eq` / 定理 `map_eq_of_eq`
+/-- Unlike categories, for graphs vertex equality is an important notion, so needing to be able to
+work with equality of graph homomorphisms is a necessary evil. -/
+/-
+**SimpleGraph.Walk.map_eq_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_eq_of_eq {f : G ->g G'} (f' : G ->g G') (h : f = f') : p.map f = (p.ma
+p f').copy (h ▸ rfl) (h ▸ rfl)
+参数：f' : G ->g G'；h : f = f'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem map_eq_of_eq
-  given: {f : G ->g G'} (f' : G ->g G') (h : f = f')
-  proof: by
-  subst_vars
-  rfl
-
-中文:
-定理 map_eq_of_eq
-  条件: {f : G ->g G'} (f' : G ->g G') (h : f = f')
-  证明: by
-  subst_vars
-  rfl
+--- 原说明 ---
+Unlike categories, for graphs vertex equality is an important notion, so needing
+ to be able to
+work with equality of graph homomorphisms is a necessary evil.
 -/
-theorem map_eq_of_eq {f : G ->g G'} (f' : G ->g G') (h : f = f') :
+theorem map_eq_of_eq {f : G →g G'} (f' : G →g G') (h : f = f') :
     p.map f = (p.map f').copy (h ▸ rfl) (h ▸ rfl) := by
   subst_vars
   rfl
 
 variable {p} in
 @[simp]
-/--
-theorem `nil_map_iff` / 定理 `nil_map_iff`
-
-English:
-theorem nil_map_iff
-  statement: (p.map f).Nil ↔ p.Nil
-  proof: by
-  cases p <;> simp
-
-@[deprecated nil_map_iff (since := "2026-05-12")]
-
-中文:
-定理 nil_map_iff
-  结论: (p.map f).Nil ↔ p.Nil
-  证明: by
-  cases p <;> simp
-
-@[deprecated nil_map_iff (since := "2026-05-12")]
+/-
+**SimpleGraph.Walk.nil_map_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：nil_map_iff : (p.map f).Nil ↔ p.Nil
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
 -/
 theorem nil_map_iff : (p.map f).Nil ↔ p.Nil := by
   cases p <;> simp
 
 @[deprecated nil_map_iff (since := "2026-05-12")]
-/--
-theorem `map_eq_nil_iff` / 定理 `map_eq_nil_iff`
-
-English:
-theorem map_eq_nil_iff
-  given: {p : G.Walk u u}
-  statement: p.map f = nil ↔ p = nil
-  proof: by cases p <;> simp
-
-@[simp]
-
-中文:
-定理 map_eq_nil_iff
-  条件: {p : G.途径 u u}
-  结论: p.map f = nil ↔ p = nil
-  证明: by cases p <;> simp
-
-@[simp]
+/-
+**SimpleGraph.Walk.map_eq_nil_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_eq_nil_iff {p : G.Walk u u} : p.map f = nil ↔ p = nil
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
 -/
 theorem map_eq_nil_iff {p : G.Walk u u} : p.map f = nil ↔ p = nil := by cases p <;> simp
 
 @[simp]
-/--
-theorem `length_map` / 定理 `length_map`
-
-English:
-theorem length_map
-  statement: (p.map f).length = p.length
-  proof: by induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 length_map
-  结论: (p.map f).length = p.length
-  证明: by induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.length_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：length_map : (p.map f).length = p.length
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem length_map : (p.map f).length = p.length := by induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `map_append` / 定理 `map_append`
-
-English:
-theorem map_append
-  given: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
-  proof: by induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 map_append
-  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
-  证明: by induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.map_append** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：map_append {u v w : V} (p : G.Walk u v) (q : G.Walk v w) : (p.append q).ma
+p f = (p.map f).append (q.map f)
+参数：p : G.Walk u v；q : G.Walk v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.cons.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} {u 
+v w : V} (h : G.Adj u v) (p p_1 : G.Walk v w),   p = p_1 → SimpleGraph.Walk.cons
+ h p = SimpleGraph.Wal…
 -/
 theorem map_append {u v w : V} (p : G.Walk u v) (q : G.Walk v w) :
     (p.append q).map f = (p.map f).append (q.map f) := by induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `reverse_map` / 定理 `reverse_map`
-
-English:
-theorem reverse_map
-  statement: (p.map f).reverse = p.reverse.map f
-  proof: by induction p <;> simp [map_append, *]
-
-@[simp]
-
-中文:
-定理 reverse_map
-  结论: (p.map f).reverse = p.reverse.map f
-  证明: by induction p <;> simp [map_append, *]
-
-@[simp]
-
-Depends on / 依赖: map_append
+/-
+**SimpleGraph.Walk.reverse_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：reverse_map : (p.map f).reverse = p.reverse.map f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.reverse_cons`：reverse_cons {u v w : V} (h : G.Adj u v) 
+(p : G.Walk v w) : (cons h p).reverse = p.reverse.append (cons h.symm nil)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Walk.map_append`：map_append {u v w : V} (p : G.Walk u v) (q 
+: G.Walk v w) : (p.append q).map f = (p.map f).append (q.map f)
 -/
 theorem reverse_map : (p.map f).reverse = p.reverse.map f := by induction p <;> simp [map_append, *]
 
 @[simp]
-/--
-theorem `support_map` / 定理 `support_map`
-
-English:
-theorem support_map
-  statement: (p.map f).support = p.support.map f
-  proof: by induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 support_map
-  结论: (p.map f).support = p.support.map f
-  证明: by induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.support_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：support_map : (p.map f).support = p.support.map f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
 theorem support_map : (p.map f).support = p.support.map f := by induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `darts_map` / 定理 `darts_map`
-
-English:
-theorem darts_map
-  statement: (p.map f).darts = p.darts.map f.mapDart
-  proof: by induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 darts_map
-  结论: (p.map f).darts = p.darts.map f.mapDart
-  证明: by induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.darts_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：darts_map : (p.map f).darts = p.darts.map f.mapDart
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `SimpleGraph.Dart.adj`：∀ {V : Type u_1} {G : SimpleGraph V} (self : G.Dar
+t), G.Adj self.toProd.1 self.toProd.2
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
 -/
 theorem darts_map : (p.map f).darts = p.darts.map f.mapDart := by induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `edges_map` / 定理 `edges_map`
-
-English:
-theorem edges_map
-  statement: (p.map f).edges = p.edges.map (Sym2.map f)
-  proof: by
-  induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 edges_map
-  结论: (p.map f).edges = p.edges.map (Sym2.map f)
-  证明: by
-  induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.edges_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：edges_map : (p.map f).edges = p.edges.map (Sym2.map f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
 -/
 theorem edges_map : (p.map f).edges = p.edges.map (Sym2.map f) := by
   induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `edgeSet_map` / 定理 `edgeSet_map`
-
-English:
-theorem edgeSet_map
-  statement: (p.map f).edgeSet = Sym2.map f '' p.edgeSet
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-定理 edgeSet_map
-  结论: (p.map f).edgeSet = Sym2.map f '' p.edgeSet
-  证明: by ext; simp
-
-@[simp]
+/-
+**SimpleGraph.Walk.edgeSet_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：edgeSet_map : (p.map f).edgeSet = Sym2.map f '' p.edgeSet
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Walk.edges_map`：edges_map : (p.map f).edges = p.edges.map (S
+ym2.map f)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem edgeSet_map : (p.map f).edgeSet = Sym2.map f '' p.edgeSet := by ext; simp
 
 @[simp]
-/--
-theorem `getVert_map` / 定理 `getVert_map`
-
-English:
-theorem getVert_map
-  given: (n : Nat)
-  statement: (p.map f).getVert n = f (p.getVert n)
-  proof: by
-  induction p generalizing n <;> cases n <;> simp [*]
-
-中文:
-定理 getVert_map
-  条件: (n : 自然数)
-  结论: (p.map f).getVert n = f (p.getVert n)
-  证明: by
-  induction p generalizing n <;> cases n <;> simp [*]
-
-Depends on / 依赖: generalizing
+/-
+**SimpleGraph.Walk.getVert_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：getVert_map (n : Nat) : (p.map f).getVert n = f (p.getVert n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem getVert_map (n : Nat) : (p.map f).getVert n = f (p.getVert n) := by
+theorem getVert_map (n : ℕ) : (p.map f).getVert n = f (p.getVert n) := by
   induction p generalizing n <;> cases n <;> simp [*]
-
-/--
-theorem `map_injective_of_injective` / 定理 `map_injective_of_injective`
-
-English:
-theorem map_injective_of_injective
-  given: {f : G ->g G'} (hinj : Function.Injective f) (u v : V)
-  proof: by
-  intro p p' h
-  induction p with
-  | nil => cases p' <;> simp at h ⊢
-  | cons _ _ ih =>
-    cases p' with
-    | nil => simp at h
-    | cons _ _ =>
-      simp only [map_cons, cons.injEq] at h
-      grind
-
-中文:
-定理 map_injective_of_injective
-  条件: {f : G ->g G'} (hinj : 函数.单射 f) (u v : V)
-  证明: by
-  intro p p' h
-  induction p with
-  | nil => cases p' <;> simp at h ⊢
-  | cons _ _ ih =>
-    cases p' with
-    | nil => simp at h
-    | cons _ _ =>
-      simp only [map_cons, cons.injEq] at h
-      grind
-
-Depends on / 依赖: cons.injEq, map_cons
+/-
+**SimpleGraph.Walk.map_injective_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `SimpleG
+raph.Walk`。
+形式化陈述：map_injective_of_injective {f : G ->g G'} (hinj : Function.Injective f) (u
+ v : V) : Function.Injective (Walk.map f : G.Walk u v -> G'.Walk (f u) (f v))
+参数：hinj : Function.Injective f；u v : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Walk.cons.injEq`：∀ {V : Type u} {G : SimpleGraph V} {u v w :
+ V} (h : G.Adj u v) (p : G.Walk v w) (v_1 : V) (h_1 : G.Adj u v_1)   (p_1 : G.Wa
+lk v_1 w), (Simpl…
 -/
-theorem map_injective_of_injective {f : G ->g G'} (hinj : Function.Injective f) (u v : V) :
-    Function.Injective (Walk.map f : G.Walk u v -> G'.Walk (f u) (f v)) := by
+theorem map_injective_of_injective {f : G →g G'} (hinj : Function.Injective f) (u v : V) :
+    Function.Injective (Walk.map f : G.Walk u v → G'.Walk (f u) (f v)) := by
   intro p p' h
   induction p with
   | nil => cases p' <;> simp at h ⊢
@@ -455,130 +416,138 @@ theorem map_injective_of_injective {f : G ->g G'} (hinj : Function.Injective f) 
 
 section mapLe
 
-variable {G' : SimpleGraph V} (h : G <= G') {u v : V} (p : G.Walk u v)
+variable {G' : SimpleGraph V} (h : G ≤ G') {u v : V} (p : G.Walk u v)
 
-/--
-Definition of `mapLe` / `mapLe` 的定义
+/-- The specialization of `SimpleGraph.Walk.map` for mapping walks to supergraphs. -/
+/-
+**SimpleGraph.Walk.mapLe** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：mapLe : G'.Walk u v
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mapLe
-  signature: : G'.Walk u v
-  body: p.map (.ofLE h)
-
-中文:
-缩写 mapLe
-  签名: : G'.途径 u v
-  定义体: p.map (.ofLE h)
-
-Depends on / 依赖: p.map
+--- 原说明 ---
+The specialization of `SimpleGraph.Walk.map` for mapping walks to supergraphs.
 -/
 abbrev mapLe : G'.Walk u v :=
   p.map (.ofLE h)
-
-/--
-theorem `length_mapLe` / 定理 `length_mapLe`
-
-English:
-theorem length_mapLe
-  statement: (p.mapLe h).length = p.length
-  proof: by
-  simp
-
-中文:
-定理 length_mapLe
-  结论: (p.mapLe h).length = p.length
-  证明: by
-  simp
+/-
+**SimpleGraph.Walk.length_mapLe** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：length_mapLe : (p.mapLe h).length = p.length
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.length_map`：length_map : (p.map f).length = p.length
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem length_mapLe : (p.mapLe h).length = p.length := by
   simp
-
-/--
-lemma `support_mapLe_eq_support` / 引理 `support_mapLe_eq_support`
-
-English:
-lemma support_mapLe_eq_support
-  statement: (p.mapLe h).support = p.support
-  proof: by
-  simp
-
-中文:
-引理 support_mapLe_eq_support
-  结论: (p.mapLe h).support = p.support
-  证明: by
-  simp
+/-
+**SimpleGraph.Walk.support_mapLe_eq_support** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph.Walk`。
+形式化陈述：support_mapLe_eq_support : (p.mapLe h).support = p.support
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.support_map`：support_map : (p.map f).support = p.suppor
+t.map f
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun`：∀ {α : Type u_1}, List.map id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma support_mapLe_eq_support : (p.mapLe h).support = p.support := by
   simp
-
-/--
-lemma `edges_mapLe_eq_edges` / 引理 `edges_mapLe_eq_edges`
-
-English:
-lemma edges_mapLe_eq_edges
-  statement: (p.mapLe h).edges = p.edges
-  proof: by
-  simp
-
-中文:
-引理 edges_mapLe_eq_edges
-  结论: (p.mapLe h).edges = p.edges
-  证明: by
-  simp
+/-
+**SimpleGraph.Walk.edges_mapLe_eq_edges** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.W
+alk`。
+形式化陈述：edges_mapLe_eq_edges : (p.mapLe h).edges = p.edges
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.edges_map`：edges_map : (p.map f).edges = p.edges.map (S
+ym2.map f)
+· 使用定理 `Sym2.map_id`：map_id : map (@id α) = id
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun`：∀ {α : Type u_1}, List.map id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma edges_mapLe_eq_edges : (p.mapLe h).edges = p.edges := by
   simp
-
-/--
-lemma `edgeSet_mapLe_eq_edgeSet` / 引理 `edgeSet_mapLe_eq_edgeSet`
-
-English:
-lemma edgeSet_mapLe_eq_edgeSet
-  statement: (p.mapLe h).edgeSet = p.edgeSet
-  proof: by
-  simp
-
-中文:
-引理 edgeSet_mapLe_eq_edgeSet
-  结论: (p.mapLe h).edgeSet = p.edgeSet
-  证明: by
-  simp
+/-
+**SimpleGraph.Walk.edgeSet_mapLe_eq_edgeSet** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph.Walk`。
+形式化陈述：edgeSet_mapLe_eq_edgeSet : (p.mapLe h).edgeSet = p.edgeSet
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.edgeSet_map`：edgeSet_map : (p.map f).edgeSet = Sym2.map
+ f '' p.edgeSet
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Sym2.map_congr`：map_congr {f g : α -> β} {s : Sym2 α} (h : forall x in s
+, f x = g x) : map f s = map g s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Sym2.map_id'`：map_id' : (map fun x : α => x) = id
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma edgeSet_mapLe_eq_edgeSet : (p.mapLe h).edgeSet = p.edgeSet := by
   simp
-
-/--
-theorem `reverse_mapLe` / 定理 `reverse_mapLe`
-
-English:
-theorem reverse_mapLe
-  statement: (p.mapLe h).reverse = p.reverse.mapLe h
-  proof: by
-  simp
-
-中文:
-定理 reverse_mapLe
-  结论: (p.mapLe h).reverse = p.reverse.mapLe h
-  证明: by
-  simp
+/-
+**SimpleGraph.Walk.reverse_mapLe** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：reverse_mapLe : (p.mapLe h).reverse = p.reverse.mapLe h
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.reverse_map`：reverse_map : (p.map f).reverse = p.revers
+e.map f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem reverse_mapLe : (p.mapLe h).reverse = p.reverse.mapLe h := by
   simp
-
-/--
-theorem `mapLe_append` / 定理 `mapLe_append`
-
-English:
-theorem mapLe_append
-  given: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
-  proof: by
-  simp
-
-中文:
-定理 mapLe_append
-  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
-  证明: by
-  simp
+/-
+**SimpleGraph.Walk.mapLe_append** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：mapLe_append {u v w : V} (p : G.Walk u v) (q : G.Walk v w) : (p.append q).
+mapLe h = (p.mapLe h).append (q.mapLe h)
+参数：p : G.Walk u v；q : G.Walk v w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.map_append`：map_append {u v w : V} (p : G.Walk u v) (q 
+: G.Walk v w) : (p.append q).map f = (p.map f).append (q.map f)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mapLe_append {u v w : V} (p : G.Walk u v) (q : G.Walk v w) :
     (p.append q).mapLe h = (p.mapLe h).append (q.mapLe h) := by
@@ -590,179 +559,173 @@ end mapLe
 
 /-- The walk `p` transferred to lie in `H`, given that `H` contains its edges. -/
 @[simp]
-/--
-Definition of `transfer` / `transfer` 的定义
+/-
+**SimpleGraph.Walk.transfer** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：{V : Type u} →   {G : SimpleGraph V} → {u v : V} → (p : G.Walk u v) → (H :
+ SimpleGraph V) → (∀ e ∈ p.edges, e ∈ H.edgeSet) → H.Walk u v
+参数：p : G.Walk u v；H : SimpleGraph V；∀ e ∈ p.edges, e ∈ H.edgeSet。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition transfer
-  signature: {u v : V} (p : G.Walk u v)
-  body: match p with
-  | nil => nil
-  | cons' u v w _ p =>
-    cons (h s(u, v) (by simp)) (p.transfer H fun e he => h e (by simp [he]))
-
-中文:
-定义 transfer
-  签名: {u v : V} (p : G.途径 u v)
-  定义体: match p with
-  | nil => nil
-  | cons' u v w _ p =>
-    cons (h s(u, v) (by simp)) (p.transfer H fun e he => h e (by simp [he]))
+--- 原说明 ---
+The walk `p` transferred to lie in `H`, given that `H` contains its edges.
 -/
 protected def transfer {u v : V} (p : G.Walk u v)
-    (H : SimpleGraph V) (h : forall e, e in p.edges -> e in H.edgeSet) : H.Walk u v :=
+    (H : SimpleGraph V) (h : ∀ e, e ∈ p.edges → e ∈ H.edgeSet) : H.Walk u v :=
   match p with
   | nil => nil
   | cons' u v w _ p =>
     cons (h s(u, v) (by simp)) (p.transfer H fun e he => h e (by simp [he]))
-
-/--
-theorem `transfer_self` / 定理 `transfer_self`
-
-English:
-theorem transfer_self
-  statement: p.transfer G p.edges_subset_edgeSet = p
-  proof: by
-  induction p <;> simp [*]
-
-中文:
-定理 transfer_self
-  结论: p.transfer G p.edges_subset_edgeSet = p
-  证明: by
-  induction p <;> simp [*]
+/-
+**SimpleGraph.Walk.transfer_self** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：transfer_self : p.transfer G p.edges_subset_edgeSet = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.edges_subset_edgeSet`：∀ {V : Type u} {G : SimpleGraph V
+} {u v : V} (p : G.Walk u v) ⦃e : Sym2 V⦄, e ∈ p.edges → e ∈ G.edgeSet
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.cons.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} {u 
+v w : V} (h : G.Adj u v) (p p_1 : G.Walk v w),   p = p_1 → SimpleGraph.Walk.cons
+ h p = SimpleGraph.Wal…
 -/
 theorem transfer_self : p.transfer G p.edges_subset_edgeSet = p := by
   induction p <;> simp [*]
 
 variable {H : SimpleGraph V}
-
-/--
-theorem `transfer_eq_map_ofLE` / 定理 `transfer_eq_map_ofLE`
-
-English:
-theorem transfer_eq_map_ofLE
-  given: (hp) (GH : G <= H)
-  statement: p.transfer H hp = p.map (.ofLE GH)
-  proof: by
-  induction p <;> simp [*]
-
-中文:
-定理 transfer_eq_map_ofLE
-  条件: (hp) (GH : G <= H)
-  结论: p.transfer H hp = p.map (.ofLE GH)
-  证明: by
-  induction p <;> simp [*]
+/-
+**SimpleGraph.Walk.transfer_eq_map_ofLE** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.W
+alk`。
+形式化陈述：transfer_eq_map_ofLE (hp) (GH : G <= H) : p.transfer H hp = p.map (.ofLE G
+H)
+参数：hp；GH : G <= H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.Hom.map_adj`：map_adj {v w : V} (h : G.Adj v w) : G'.Adj (f v
+) (f w)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.cons.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} {u 
+v w : V} (h : G.Adj u v) (p p_1 : G.Walk v w),   p = p_1 → SimpleGraph.Walk.cons
+ h p = SimpleGraph.Wal…
 -/
-theorem transfer_eq_map_ofLE (hp) (GH : G <= H) : p.transfer H hp = p.map (.ofLE GH) := by
+theorem transfer_eq_map_ofLE (hp) (GH : G ≤ H) : p.transfer H hp = p.map (.ofLE GH) := by
   induction p <;> simp [*]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `edges_transfer` / 定理 `edges_transfer`
-
-English:
-theorem edges_transfer
-  given: (hp)
-  statement: (p.transfer H hp).edges = p.edges
-  proof: by
-  induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 edges_transfer
-  条件: (hp)
-  结论: (p.transfer H hp).edges = p.edges
-  证明: by
-  induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.edges_transfer** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：edges_transfer (hp) : (p.transfer H hp).edges = p.edges
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem edges_transfer (hp) : (p.transfer H hp).edges = p.edges := by
   induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `edgeSet_transfer` / 定理 `edgeSet_transfer`
-
-English:
-theorem edgeSet_transfer
-  given: (hp)
-  statement: (p.transfer H hp).edgeSet = p.edgeSet
-  proof: by ext; simp
-
-中文:
-定理 edgeSet_transfer
-  条件: (hp)
-  结论: (p.transfer H hp).edgeSet = p.edgeSet
-  证明: by ext; simp
+/-
+**SimpleGraph.Walk.edgeSet_transfer** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`
+。
+形式化陈述：edgeSet_transfer (hp) : (p.transfer H hp).edgeSet = p.edgeSet
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Walk.edges_transfer`：edges_transfer (hp) : (p.transfer H hp)
+.edges = p.edges
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem edgeSet_transfer (hp) : (p.transfer H hp).edgeSet = p.edgeSet := by ext; simp
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `support_transfer` / 定理 `support_transfer`
-
-English:
-theorem support_transfer
-  given: (hp)
-  statement: (p.transfer H hp).support = p.support
-  proof: by
-  induction p <;> simp [*]
-
-中文:
-定理 support_transfer
-  条件: (hp)
-  结论: (p.transfer H hp).support = p.support
-  证明: by
-  induction p <;> simp [*]
+/-
+**SimpleGraph.Walk.support_transfer** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`
+。
+形式化陈述：support_transfer (hp) : (p.transfer H hp).support = p.support
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem support_transfer (hp) : (p.transfer H hp).support = p.support := by
   induction p <;> simp [*]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `length_transfer` / 定理 `length_transfer`
-
-English:
-theorem length_transfer
-  given: (hp)
-  statement: (p.transfer H hp).length = p.length
-  proof: by
-  induction p <;> simp [*]
-
-@[simp]
-
-中文:
-定理 length_transfer
-  条件: (hp)
-  结论: (p.transfer H hp).length = p.length
-  证明: by
-  induction p <;> simp [*]
-
-@[simp]
+/-
+**SimpleGraph.Walk.length_transfer** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：length_transfer (hp) : (p.transfer H hp).length = p.length
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem length_transfer (hp) : (p.transfer H hp).length = p.length := by
   induction p <;> simp [*]
 
 @[simp]
-/--
-theorem `transfer_transfer` / 定理 `transfer_transfer`
-
-English:
-theorem transfer_transfer
-  given: (hp) {K : SimpleGraph V} (hp')
-  proof: by
-  induction p <;> simp [*]
-
-中文:
-定理 transfer_transfer
-  条件: (hp) {K : 简单图 V} (hp')
-  证明: by
-  induction p <;> simp [*]
+/-
+**SimpleGraph.Walk.transfer_transfer** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk
+`。
+形式化陈述：transfer_transfer (hp) {K : SimpleGraph V} (hp') : (p.transfer H hp).trans
+fer K hp' = p.transfer K (p.edges_transfer hp ▸ hp')
+参数：hp；hp'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.edges_transfer`：edges_transfer (hp) : (p.transfer H hp)
+.edges = p.edges
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.transfer.eq_1`：∀ {V : Type u} {G : SimpleGraph V} {u : 
+V} (H : SimpleGraph V) (h_2 : ∀ e ∈ SimpleGraph.Walk.nil.edges, e ∈ H.edgeSet), 
+  SimpleGraph.Walk.n…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.Walk.cons.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} {u 
+v w : V} (h : G.Adj u v) (p p_1 : G.Walk v w),   p = p_1 → SimpleGraph.Walk.cons
+ h p = SimpleGraph.Wal…
 -/
 theorem transfer_transfer (hp) {K : SimpleGraph V} (hp') :
     (p.transfer H hp).transfer K hp' = p.transfer K (p.edges_transfer hp ▸ hp') := by
@@ -770,20 +733,27 @@ theorem transfer_transfer (hp) {K : SimpleGraph V} (hp') :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `transfer_append` / 定理 `transfer_append`
-
-English:
-theorem transfer_append
-  given: {w : V} (q : G.Walk v w) (hpq)
-  proof: by
-  induction p <;> simp [*]
-
-中文:
-定理 transfer_append
-  条件: {w : V} (q : G.途径 v w) (hpq)
-  证明: by
-  induction p <;> simp [*]
+/-
+**SimpleGraph.Walk.transfer_append** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：transfer_append {w : V} (q : G.Walk v w) (hpq) : (p.append q).transfer H h
+pq = (p.transfer H fun e he => hpq _ (by simp [he])).append (q.transfer H fun e 
+he => hpq _ (by simp [he]))
+参数：q : G.Walk v w；hpq。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.transfer.eq_2`：∀ {V : Type u} {G : SimpleGraph V} {u v 
+: V} (H : SimpleGraph V) (v_2 : V) (h_2 : G.Adj u v_2) (p_2 : G.Walk v_2 v)   (h
+_3 : ∀ e ∈ (SimpleGr…
+· 使用定理 `SimpleGraph.Walk.cons.congr_simp`：∀ {V : Type u} {G : SimpleGraph V} {u 
+v w : V} (h : G.Adj u v) (p p_1 : G.Walk v w),   p = p_1 → SimpleGraph.Walk.cons
+ h p = SimpleGraph.Wal…
 -/
 theorem transfer_append {w : V} (q : G.Walk v w) (hpq) :
     (p.append q).transfer H hpq =
@@ -793,20 +763,36 @@ theorem transfer_append {w : V} (q : G.Walk v w) (hpq) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `reverse_transfer` / 定理 `reverse_transfer`
-
-English:
-theorem reverse_transfer
-  given: (hp)
-  proof: by
-  induction p <;> simp [*]
-
-中文:
-定理 reverse_transfer
-  条件: (hp)
-  证明: by
-  induction p <;> simp [*]
+/-
+**SimpleGraph.Walk.reverse_transfer** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`
+。
+形式化陈述：reverse_transfer (hp) : (p.transfer H hp).reverse = p.reverse.transfer H (
+by simp only [edges_reverse, List.mem_reverse]; exact hp)
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.transfer.eq_1`：∀ {V : Type u} {G : SimpleGraph V} {u : 
+V} (H : SimpleGraph V) (h_2 : ∀ e ∈ SimpleGraph.Walk.nil.edges, e ∈ H.edgeSet), 
+  SimpleGraph.Walk.n…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
+· 使用定理 `SimpleGraph.Walk.reverse_cons`：reverse_cons {u v w : V} (h : G.Adj u v) 
+(p : G.Walk v w) : (cons h p).reverse = p.reverse.append (cons h.symm nil)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Walk.transfer.congr_simp`：∀ {V : Type u} {G : SimpleGraph V}
+ {u v : V} (p p_1 : G.Walk u v) (e_p : p = p_1) (H : SimpleGraph V)   (h : ∀ e ∈
+ p.edges, e ∈ H.edgeSet), …
+· 使用定理 `SimpleGraph.Walk.transfer_append`：transfer_append {w : V} (q : G.Walk v 
+w) (hpq) : (p.append q).transfer H hpq = (p.transfer H fun e he => hpq _ (by sim
+p [he])).append (q.tra…
 -/
 theorem reverse_transfer (hp) :
     (p.transfer H hp).reverse =
@@ -818,174 +804,156 @@ theorem reverse_transfer (hp) :
 variable {s s' : Set V}
 
 variable (s) in
-/--
-Definition of `induce` / `induce` 的定义
+/-- A walk in `G` which is fully contained in a set `s` of vertices lifts to a walk of `G[s]`. -/
+/-
+**SimpleGraph.Walk.induce** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：{V : Type u} →   {G : SimpleGraph V} →     (s : Set V) →       {u v : V} →
+ (w : G.Walk u v) → (hw : ∀ x ∈ w.support, x ∈ s) → (SimpleGraph.induce s G).Wal
+k ⟨u, ⋯⟩ ⟨v, ⋯⟩
+参数：s : Set V；w : G.Walk u v；hw : ∀ x ∈ w.support, x ∈ s；SimpleGraph.induce s G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition induce
-  signature: {u v : V}
-
-中文:
-定义 induce
-  签名: {u v : V}
+--- 原说明 ---
+A walk in `G` which is fully contained in a set `s` of vertices lifts to a walk 
+of `G[s]`.
 -/
 protected def induce {u v : V} :
-    forall (w : G.Walk u v) (hw : forall x in w.support, x in s),
+    ∀ (w : G.Walk u v) (hw : ∀ x ∈ w.support, x ∈ s),
       (G.induce s).Walk ⟨u, hw _ w.start_mem_support⟩ ⟨v, hw _ w.end_mem_support⟩
   | nil, hw => nil
-| cons (v := u') huu' w, hw => .cons (induce_adj.2 huu') w.induce by simp_all
-
-/--
-lemma `induce_nil` / 引理 `induce_nil`
-
-English:
-lemma induce_nil
-  given: (hw)
-  statement: (.nil : G.Walk u u).induce s hw = .nil
-  proof: rfl
-
-中文:
-引理 induce_nil
-  条件: (hw)
-  结论: (.nil : G.途径 u u).induce s hw = .nil
-  证明: rfl
+  | cons (v := u') huu' w, hw => .cons (induce_adj.2 huu') <| w.induce <| by simp_all
+/-
+**SimpleGraph.Walk.induce_nil** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {u : V} {s : Set V} (hw : ∀ x ∈ SimpleG
+raph.Walk.nil.support, x ∈ s),   SimpleGraph.Walk.induce s SimpleGraph.Walk.nil 
+hw = SimpleGraph.Walk.nil
+参数：hw : ∀ x ∈ SimpleGraph.Walk.nil.support, x ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.start_mem_support`：start_mem_support {u v : V} (p : G.W
+alk u v) : u in p.support
+· 使用定理 `SimpleGraph.Walk.end_mem_support`：end_mem_support {u v : V} (p : G.Walk 
+u v) : v in p.support
 -/
 @[simp] lemma induce_nil (hw) : (.nil : G.Walk u u).induce s hw = .nil := rfl
-
-/--
-lemma `induce_cons` / 引理 `induce_cons`
-
-English:
-lemma induce_cons
-  given: (huu' : G.Adj u u') (w : G.Walk u' v) (hw)
-  proof: rfl
-
-中文:
-引理 induce_cons
-  条件: (huu' : G.伴随 u u') (w : G.途径 u' v) (hw)
-  证明: rfl
+/-
+**SimpleGraph.Walk.induce_cons** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {u v u' : V} {s : Set V} (huu' : G.Adj 
+u u') (w : G.Walk u' v)   (hw : ∀ x ∈ (SimpleGraph.Walk.cons huu' w).support, x 
+∈ s),   SimpleGraph.Walk.induce s (SimpleGraph.Walk.cons huu' w) hw = SimpleGrap
+h.Walk.cons ⋯ (SimpleGraph.Walk.induce s w ⋯)
+参数：huu' : G.Adj u u'；w : G.Walk u' v；hw : ∀ x ∈ (SimpleGraph.Walk.cons huu' w).s
+upport, x ∈ s；SimpleGraph.Walk.cons huu' w；SimpleGraph.Walk.induce s w ⋯。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.start_mem_support`：start_mem_support {u v : V} (p : G.W
+alk u v) : u in p.support
+· 使用定理 `SimpleGraph.Walk.end_mem_support`：end_mem_support {u v : V} (p : G.Walk 
+u v) : v in p.support
 -/
 @[simp] lemma induce_cons (huu' : G.Adj u u') (w : G.Walk u' v) (hw) :
     (w.cons huu').induce s hw = .cons (induce_adj.2 huu') (w.induce s <| by simp_all) := rfl
-
-/--
-lemma `support_induce` / 引理 `support_induce`
-
-English:
-lemma support_induce
-  given: {u v : V}
-
-中文:
-引理 support_induce
-  条件: {u v : V}
+/-
+**SimpleGraph.Walk.support_induce** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {s : Set V} {u v : V} (w : G.Walk u v) 
+(hw : ∀ x ∈ w.support, x ∈ s),   (SimpleGraph.Walk.induce s w hw).support = w.su
+pport.attachWith (Membership.mem s) hw
+参数：w : G.Walk u v；hw : ∀ x ∈ w.support, x ∈ s；SimpleGraph.Walk.induce s w hw；Mem
+bership.mem s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.start_mem_support`：start_mem_support {u v : V} (p : G.W
+alk u v) : u in p.support
+· 使用定理 `SimpleGraph.Walk.end_mem_support`：end_mem_support {u v : V} (p : G.Walk 
+u v) : v in p.support
 -/
 @[simp] lemma support_induce {u v : V} :
-    forall (w : G.Walk u v) (hw), (w.induce s hw).support = w.support.attachWith _ hw
+    ∀ (w : G.Walk u v) (hw), (w.induce s hw).support = w.support.attachWith _ hw
   | .nil, hw => rfl
   | .cons (v := u') hu w, hw => by simp [support_induce]
-
-/--
-lemma `map_induce` / 引理 `map_induce`
-
-English:
-lemma map_induce
-  given: {u v : V}
-
-中文:
-引理 map_induce
-  条件: {u v : V}
+/-
+**SimpleGraph.Walk.map_induce** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {s : Set V} {u v : V} (w : G.Walk u v) 
+(hw : ∀ x ∈ w.support, x ∈ s),   SimpleGraph.Walk.map (SimpleGraph.Embedding.ind
+uce s).toHom (SimpleGraph.Walk.induce s w hw) = w
+参数：w : G.Walk u v；hw : ∀ x ∈ w.support, x ∈ s；SimpleGraph.Embedding.induce s；Sim
+pleGraph.Walk.induce s w hw。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.start_mem_support`：start_mem_support {u v : V} (p : G.W
+alk u v) : u in p.support
+· 使用定理 `SimpleGraph.Walk.end_mem_support`：end_mem_support {u v : V} (p : G.Walk 
+u v) : v in p.support
 -/
 @[simp] lemma map_induce {u v : V} :
-    forall (w : G.Walk u v) (hw), (w.induce s hw).map (Embedding.induce _).toHom = w
+    ∀ (w : G.Walk u v) (hw), (w.induce s hw).map (Embedding.induce _).toHom = w
   | .nil, hw => rfl
   | .cons (v := u') huu' w, hw => by simp [map_induce]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `map_induce_induceHomOfLE` / 引理 `map_induce_induceHomOfLE`
-
-English:
-lemma map_induce_induceHomOfLE
-  given: (hs : s subseteq s') {u v : V}
-  statement: forall (w : G.Walk u v) (hw),
-
-中文:
-引理 map_induce_induceHomOfLE
-  条件: (hs : s subseteq s') {u v : V}
-  结论: 对任意 (w : G.途径 u v) (hw),
-
-Depends on / 依赖: map_induce_induceHomOfLE
+/-
+**SimpleGraph.Walk.map_induce_induceHomOfLE** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGra
+ph.Walk`。
+形式化陈述：map_induce_induceHomOfLE (hs : s subseteq s') {u v : V} : forall (w : G.Wa
+lk u v) (hw), (w.induce s hw).map (G.induceHomOfLE hs).toHom = w.induce s' (subs
+et_trans hw hs) | .nil, hw => rfl | .cons (v
+参数：hs : s subseteq s'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.start_mem_support`：start_mem_support {u v : V} (p : G.W
+alk u v) : u in p.support
+· 使用定理 `SimpleGraph.Walk.end_mem_support`：end_mem_support {u v : V} (p : G.Walk 
+u v) : v in p.support
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
 -/
-lemma map_induce_induceHomOfLE (hs : s subseteq s') {u v : V} : forall (w : G.Walk u v) (hw),
+lemma map_induce_induceHomOfLE (hs : s ⊆ s') {u v : V} : ∀ (w : G.Walk u v) (hw),
     (w.induce s hw).map (G.induceHomOfLE hs).toHom = w.induce s' (subset_trans hw hs)
   | .nil, hw => rfl
   | .cons (v := u') huu' w, hw => by simp [map_induce_induceHomOfLE]
 
 /-! ## Deleting edges -/
 
-/--
-Definition of `toDeleteEdges` / `toDeleteEdges` 的定义
+/-- Given a walk that avoids a set of edges, produce a walk in the graph
+with those edges deleted. -/
+/-
+**SimpleGraph.Walk.toDeleteEdges** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：toDeleteEdges (s : Set (Sym2 V)) {v w : V} (p : G.Walk v w) (hp : forall e
+, e in p.edges -> e ∉ s) : (G.deleteEdges s).Walk v w
+参数：s : Set (Sym2 V)；p : G.Walk v w；hp : forall e, e in p.edges -> e ∉ s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toDeleteEdges
-  signature: (s : Set (Sym2 V)) {v w : V} (p : G.Walk v w)
-  body: p.transfer _ by
-    simp only [edgeSet_deleteEdges, Set.mem_sdiff]
-    exact fun e ep => ⟨edges_subset_edgeSet p ep, hp e ep⟩
-
-@[simp]
-
-中文:
-缩写 toDeleteEdges
-  签名: (s : 集合 (Sym2 V)) {v w : V} (p : G.途径 v w)
-  定义体: p.transfer _ by
-    simp only [edgeSet_deleteEdges, Set.mem_sdiff]
-    exact fun e ep => ⟨edges_subset_edgeSet p ep, hp e ep⟩
-
-@[simp]
-
-Depends on / 依赖: Set.mem_sdiff, edgeSet_deleteEdges, edges_subset_edgeSet, mem_sdiff, p.transfer, transfer
+--- 原说明 ---
+Given a walk that avoids a set of edges, produce a walk in the graph
+with those edges deleted.
 -/
 abbrev toDeleteEdges (s : Set (Sym2 V)) {v w : V} (p : G.Walk v w)
-    (hp : forall e, e in p.edges -> e ∉ s) : (G.deleteEdges s).Walk v w :=
-p.transfer _ by
+    (hp : ∀ e, e ∈ p.edges → e ∉ s) : (G.deleteEdges s).Walk v w :=
+  p.transfer _ <| by
     simp only [edgeSet_deleteEdges, Set.mem_sdiff]
     exact fun e ep => ⟨edges_subset_edgeSet p ep, hp e ep⟩
 
 @[simp]
-/--
-theorem `toDeleteEdges_nil` / 定理 `toDeleteEdges_nil`
-
-English:
-theorem toDeleteEdges_nil
-  given: (s : Set (Sym2 V)) {v : V} (hp)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toDeleteEdges_nil
-  条件: (s : 集合 (Sym2 V)) {v : V} (hp)
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Walk.toDeleteEdges_nil** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk
+`。
+形式化陈述：toDeleteEdges_nil (s : Set (Sym2 V)) {v : V} (hp) : (Walk.nil : G.Walk v v
+).toDeleteEdges s hp = Walk.nil
+参数：s : Set (Sym2 V)；hp。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toDeleteEdges_nil (s : Set (Sym2 V)) {v : V} (hp) :
     (Walk.nil : G.Walk v v).toDeleteEdges s hp = Walk.nil := rfl
 
 @[simp]
-/--
-theorem `toDeleteEdges_cons` / 定理 `toDeleteEdges_cons`
-
-English:
-theorem toDeleteEdges_cons
-  given: (s : Set (Sym2 V)) {u v w : V} (h : G.Adj u v) (p : G.Walk v w) (hp)
-  proof: rfl
-
-中文:
-定理 toDeleteEdges_cons
-  条件: (s : 集合 (Sym2 V)) {u v w : V} (h : G.伴随 u v) (p : G.途径 v w) (hp)
-  证明: rfl
+/-
+**SimpleGraph.Walk.toDeleteEdges_cons** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Wal
+k`。
+形式化陈述：toDeleteEdges_cons (s : Set (Sym2 V)) {u v w : V} (h : G.Adj u v) (p : G.W
+alk v w) (hp) : (Walk.cons h p).toDeleteEdges s hp = Walk.cons (deleteEdges_adj.
+mpr ⟨h, hp _ (List.Mem.head _)⟩) (p.toDeleteEdges s fun _ he => hp _ <| List.Mem
+.tail _ he)
+参数：s : Set (Sym2 V)；h : G.Adj u v；p : G.Walk v w；hp。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toDeleteEdges_cons (s : Set (Sym2 V)) {u v w : V} (h : G.Adj u v) (p : G.Walk v w) (hp) :
     (Walk.cons h p).toDeleteEdges s hp =
@@ -993,54 +961,57 @@ theorem toDeleteEdges_cons (s : Set (Sym2 V)) {u v w : V} (h : G.Adj u v) (p : G
         (p.toDeleteEdges s fun _ he => hp _ <| List.Mem.tail _ he) :=
   rfl
 
-/--
-Definition of `toDeleteEdge` / `toDeleteEdge` 的定义
+/-- Given a walk that avoids an edge, create a walk in the subgraph with that edge deleted.
+This is an abbreviation for `SimpleGraph.Walk.toDeleteEdges`. -/
+/-
+**SimpleGraph.Walk.toDeleteEdge** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：toDeleteEdge (e : Sym2 V) (p : G.Walk v w) (hp : e ∉ p.edges) : (G.deleteE
+dges {e}).Walk v w
+参数：e : Sym2 V；p : G.Walk v w；hp : e ∉ p.edges。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toDeleteEdge
-  signature: (e : Sym2 V) (p : G.Walk v w) (hp : e ∉ p.edges)
-  body: p.toDeleteEdges {e} (fun _ => by contrapose; simp +contextual [hp])
-
-@[simp]
-
-中文:
-缩写 toDeleteEdge
-  签名: (e : Sym2 V) (p : G.途径 v w) (hp : e ∉ p.edges)
-  定义体: p.toDeleteEdges {e} (fun _ => by contrapose; simp +contextual [hp])
-
-@[simp]
-
-Depends on / 依赖: contextual, contrapose, p.toDeleteEdges, toDeleteEdges
+--- 原说明 ---
+Given a walk that avoids an edge, create a walk in the subgraph with that edge d
+eleted.
+This is an abbreviation for `SimpleGraph.Walk.toDeleteEdges`.
 -/
 abbrev toDeleteEdge (e : Sym2 V) (p : G.Walk v w) (hp : e ∉ p.edges) :
     (G.deleteEdges {e}).Walk v w :=
-  p.toDeleteEdges {e} (fun _ => by contrapose; simp +contextual [hp])
+  p.toDeleteEdges {e} (fun _ ↦ by contrapose; simp +contextual [hp])
 
 @[simp]
-/--
-theorem `map_toDeleteEdges_eq` / 定理 `map_toDeleteEdges_eq`
-
-English:
-theorem map_toDeleteEdges_eq
-  given: (s : Set (Sym2 V)) {p : G.Walk v w} (hp)
-  proof: by
-  rw [← transfer_eq_map_ofLE]; rw [transfer_transfer]; rw [transfer_self]
-  apply edges_transfer _ _ ▸ p.edges_subset_edgeSet
-
-中文:
-定理 map_toDeleteEdges_eq
-  条件: (s : 集合 (Sym2 V)) {p : G.途径 v w} (hp)
-  证明: by
-  rw [← transfer_eq_map_ofLE]; rw [transfer_transfer]; rw [transfer_self]
-  apply edges_transfer _ _ ▸ p.edges_subset_edgeSet
-
-Depends on / 依赖: edges_subset_edgeSet, edges_transfer, p.edges_subset_edgeSet, transfer_eq_map_ofLE, transfer_self, transfer_transfer
+/-
+**SimpleGraph.Walk.map_toDeleteEdges_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.W
+alk`。
+形式化陈述：map_toDeleteEdges_eq (s : Set (Sym2 V)) {p : G.Walk v w} (hp) : Walk.map (
+.ofLE (G.deleteEdges_le s)) (p.toDeleteEdges s hp) = p
+参数：s : Set (Sym2 V)；hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.deleteEdges_le`：deleteEdges_le (s : Set (Sym2 V)) : G.delete
+Edges s <= G
+· 使用定理 `SimpleGraph.Walk.edges_subset_edgeSet`：∀ {V : Type u} {G : SimpleGraph V
+} {u v : V} (p : G.Walk u v) ⦃e : Sym2 V⦄, e ∈ p.edges → e ∈ G.edgeSet
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.edges_transfer`：edges_transfer (hp) : (p.transfer H hp)
+.edges = p.edges
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.transfer_eq_map_ofLE`：transfer_eq_map_ofLE (hp) (GH : G
+ <= H) : p.transfer H hp = p.map (.ofLE GH)
+· 使用定理 `SimpleGraph.Walk.transfer_transfer`：transfer_transfer (hp) {K : SimpleGr
+aph V} (hp') : (p.transfer H hp).transfer K hp' = p.transfer K (p.edges_transfer
+ hp ▸ hp')
+· 使用定理 `SimpleGraph.Walk.transfer_self`：transfer_self : p.transfer G p.edges_sub
+set_edgeSet = p
 -/
 theorem map_toDeleteEdges_eq (s : Set (Sym2 V)) {p : G.Walk v w} (hp) :
     Walk.map (.ofLE (G.deleteEdges_le s)) (p.toDeleteEdges s hp) = p := by
-  rw [← transfer_eq_map_ofLE]; rw [transfer_transfer]; rw [transfer_self]
+  rw [← transfer_eq_map_ofLE, transfer_transfer, transfer_self]
   apply edges_transfer _ _ ▸ p.edges_subset_edgeSet
 
 end Walk
 
 end SimpleGraph
+

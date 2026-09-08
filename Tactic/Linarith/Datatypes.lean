@@ -27,79 +27,88 @@ initialize registerTraceClass `linarith.detail
 
 namespace Mathlib.Tactic.Linarith
 
-/--
-Definition of `linarithGetProofsMessage` / `linarithGetProofsMessage` 的定义
+/-- A shorthand for getting the types of a list of proofs terms, to trace. -/
+/-
+**Mathlib.Tactic.Linarith.linarithGetProofsMessage** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Linarith`。
+形式化陈述：linarithGetProofsMessage (l : List Expr) : MetaM MessageData
+参数：l : List Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linarithGetProofsMessage
-  signature: (l : List Expr)
-  body: do
-  return m!"{← l.mapM fun e => do instantiateMVars (← inferType e)}"
-
-中文:
-定义 linarithGetProofsMessage
-  签名: (l : 列表 Expr)
-  定义体: do
-  return m!"{← l.mapM fun e => do instantiateMVars (← inferType e)}"
+--- 原说明 ---
+A shorthand for getting the types of a list of proofs terms, to trace.
 -/
 def linarithGetProofsMessage (l : List Expr) : MetaM MessageData := do
   return m!"{← l.mapM fun e => do instantiateMVars (← inferType e)}"
 
 /--
-Definition of `linarithTraceProofs` / `linarithTraceProofs` 的定义
+A shorthand for tracing the types of a list of proof terms
+when the `trace.linarith` option is set to true.
+-/
+/-
+**Mathlib.Tactic.Linarith.linarithTraceProofs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Linarith`。
+形式化陈述：linarithTraceProofs {α} [ToMessageData α] (s : α) (l : List Expr) : MetaM 
+Unit
+参数：s : α；l : List Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linarithTraceProofs
-  signature: {α} [ToMessageData α] (s : α) (l : List Expr)
-  body: do
-  if ← isTracingEnabledFor `linarith then
-addRawTrace .trace { cls := `linarith } (toMessageData s) #[← linarithGetProofsMessage l]
-
-中文:
-定义 linarithTraceProofs
-  签名: {α} [ToMessageData α] (s : α) (l : 列表 Expr)
-  定义体: do
-  if ← isTracingEnabledFor `linarith then
-addRawTrace .trace { cls := `linarith } (toMessageData s) #[← linarithGetProofsMessage l]
+--- 原说明 ---
+A shorthand for tracing the types of a list of proof terms
+when the `trace.linarith` option is set to true.
 -/
 def linarithTraceProofs {α} [ToMessageData α] (s : α) (l : List Expr) : MetaM Unit := do
   if ← isTracingEnabledFor `linarith then
-addRawTrace .trace { cls := `linarith } (toMessageData s) #[← linarithGetProofsMessage l]
+    addRawTrace <| .trace { cls := `linarith } (toMessageData s) #[← linarithGetProofsMessage l]
 
 /-! ### Linear expressions -/
 
 /--
-Definition of `Linexp` / `Linexp` 的定义
+A linear expression is a list of pairs of variable indices and coefficients,
+representing the sum of the products of each coefficient with its corresponding variable.
 
-English:
-abbreviation Linexp
-  signature: : Type
-  body: List (Nat × Int)
+Some functions on `Linexp` assume that `n : Nat` occurs at most once as the first element of a pair,
+and that the list is sorted in decreasing order of the first argument.
+This is not enforced by the type but the operations here preserve it.
+-/
+/-
+**Mathlib.Tactic.Linarith.Linexp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.Lin
+arith`。
+形式化陈述：Linexp : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 Linexp
-  签名: : 类型
-  定义体: List (Nat × Int)
+--- 原说明 ---
+A linear expression is a list of pairs of variable indices and coefficients,
+representing the sum of the products of each coefficient with its corresponding 
+variable.
+
+Some functions on `Linexp` assume that `n : Nat` occurs at most once as the firs
+t element of a pair,
+and that the list is sorted in decreasing order of the first argument.
+This is not enforced by the type but the operations here preserve it.
 -/
 abbrev Linexp : Type := List (Nat × Int)
 
 namespace Linexp
 /--
-Definition of `add` / `add` 的定义
-
-English:
-definition add
-  signature: : Linexp -> Linexp -> Linexp
-  body: z1 + z2
-    if sum = 0 then add t1 t2 else (n1, sum)::add t1 t2
-
-中文:
-定义 add
-  签名: : Linexp -> Linexp -> Linexp
-  定义体: z1 + z2
-    if sum = 0 then add t1 t2 else (n1, sum)::add t1 t2
+Add two `Linexp`s together componentwise.
+Preserves sorting and uniqueness of the first argument.
 -/
-partial def add : Linexp -> Linexp -> Linexp
+/-
+**Mathlib.Tactic.Linarith.Linexp.add** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tacti
+c.Linarith.Linexp`。
+形式化陈述：Mathlib.Tactic.Linarith.Linexp → Mathlib.Tactic.Linarith.Linexp → Mathlib.
+Tactic.Linarith.Linexp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Add two `Linexp`s together componentwise.
+Preserves sorting and uniqueness of the first argument.
+-/
+partial def add : Linexp → Linexp → Linexp
 | [], a => a
 | a, [] => a
 | (a@(n1,z1)::t1), (b@(n2,z2)::t2) =>
@@ -109,24 +118,17 @@ partial def add : Linexp -> Linexp -> Linexp
     let sum := z1 + z2
     if sum = 0 then add t1 t2 else (n1, sum)::add t1 t2
 
-/--
-Definition of `scale` / `scale` 的定义
+/-- `l.scale c` scales the values in `l` by `c` without modifying the order or keys. -/
+/-
+**Mathlib.Tactic.Linarith.Linexp.scale** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Linarith.Linexp`。
+形式化陈述：scale (c : Int) (l : Linexp) : Linexp
+参数：c : Int；l : Linexp。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition scale
-  signature: (c : Int) (l : Linexp)
-  body: if c = 0 then []
-  else if c = 1 then l
-  else l.map fun ⟨n, z⟩ => (n, z*c)
-
-中文:
-定义 scale
-  签名: (c : 整数) (l : Linexp)
-  定义体: if c = 0 then []
-  else if c = 1 then l
-  else l.map fun ⟨n, z⟩ => (n, z*c)
-
-Depends on / 依赖: l.map
+--- 原说明 ---
+`l.scale c` scales the values in `l` by `c` without modifying the order or keys.
 -/
 def scale (c : Int) (l : Linexp) : Linexp :=
   if c = 0 then []
@@ -134,19 +136,24 @@ def scale (c : Int) (l : Linexp) : Linexp :=
   else l.map fun ⟨n, z⟩ => (n, z*c)
 
 /--
-Definition of `get` / `get` 的定义
-
-English:
-definition get
-  signature: (n : Nat)
-
-中文:
-定义 get
-  签名: (n : 自然数)
-
-Depends on / 依赖: OrderTop, PartialOrder, PseudoEpimorphismClass, PseudoEpimorphismClass.toTopHomClass, toTopHomClass
+`l.get n` returns the value in `l` associated with key `n`, if it exists, and `none` otherwise.
+This function assumes that `l` is sorted in decreasing order of the first argument,
+that is, it will return `none` as soon as it finds a key smaller than `n`.
 -/
-def get (n : Nat) : Linexp -> Option Int
+/-
+**Mathlib.Tactic.Linarith.Linexp.get** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.L
+inarith.Linexp`。
+形式化陈述：ℕ → Mathlib.Tactic.Linarith.Linexp → Option ℤ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`l.get n` returns the value in `l` associated with key `n`, if it exists, and `n
+one` otherwise.
+This function assumes that `l` is sorted in decreasing order of the first argume
+nt,
+that is, it will return `none` as soon as it finds a key smaller than `n`.
+-/
+def get (n : Nat) : Linexp → Option Int
   | [] => none
   | ((a, b)::t) =>
     if a < n then none
@@ -154,78 +161,69 @@ def get (n : Nat) : Linexp -> Option Int
     else get n t
 
 /--
-Definition of `contains` / `contains` 的定义
-
-English:
-definition contains
-  signature: (n : Nat)
-  body: Option.isSome ∘ get n
-
-中文:
-定义 contains
-  签名: (n : 自然数)
-  定义体: Option.isSome ∘ get n
-
-Depends on / 依赖: EsakiaHomClass, EsakiaHomClass.toPseudoEpimorphismClass, Option.isSome, Preorder, TopologicalSpace, isSome, toPseudoEpimorphismClass
+`l.contains n` is true iff `n` is the first element of a pair in `l`.
 -/
-def contains (n : Nat) : Linexp -> Bool := Option.isSome ∘ get n
+/-
+**Mathlib.Tactic.Linarith.Linexp.contains** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Linarith.Linexp`。
+形式化陈述：contains (n : Nat) : Linexp -> Bool
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`l.contains n` is true iff `n` is the first element of a pair in `l`.
+-/
+def contains (n : Nat) : Linexp → Bool := Option.isSome ∘ get n
 
 /--
-Definition of `zfind` / `zfind` 的定义
+`l.zfind n` returns the value associated with key `n` if there is one, and 0 otherwise.
+-/
+/-
+**Mathlib.Tactic.Linarith.Linexp.zfind** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Linarith.Linexp`。
+形式化陈述：zfind (n : Nat) (l : Linexp) : Int
+参数：n : Nat；l : Linexp。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zfind
-  signature: (n : Nat) (l : Linexp)
-  body: match l.get n with
-  | none => 0
-  | some v => v
-
-中文:
-定义 zfind
-  签名: (n : 自然数) (l : Linexp)
-  定义体: match l.get n with
-  | none => 0
-  | some v => v
-
-Depends on / 依赖: l.get
+--- 原说明 ---
+`l.zfind n` returns the value associated with key `n` if there is one, and 0 oth
+erwise.
 -/
 def zfind (n : Nat) (l : Linexp) : Int :=
   match l.get n with
   | none => 0
   | some v => v
 
-/--
-Definition of `vars` / `vars` 的定义
+/-- `l.vars` returns the list of variables that occur in `l`. -/
+/-
+**Mathlib.Tactic.Linarith.Linexp.vars** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Linarith.Linexp`。
+形式化陈述：vars (l : Linexp) : List Nat
+参数：l : Linexp。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vars
-  signature: (l : Linexp)
-  body: l.map Prod.fst
-
-中文:
-定义 vars
-  签名: (l : Linexp)
-  定义体: l.map Prod.fst
-
-Depends on / 依赖: Prod.fst, l.map
+--- 原说明 ---
+`l.vars` returns the list of variables that occur in `l`.
 -/
 def vars (l : Linexp) : List Nat :=
   l.map Prod.fst
 
 /--
-Definition of `cmp` / `cmp` 的定义
-
-English:
-definition cmp
-  signature: : Linexp -> Linexp -> Ordering
-
-中文:
-定义 cmp
-  签名: : Linexp -> Linexp -> Ordering
-
-Depends on / 依赖: OrderIsoClass, OrderIsoClass.toPseudoEpimorphismClass, Preorder, toPseudoEpimorphismClass
+Defines a lex ordering on `Linexp`. This function is performance critical.
 -/
-def cmp : Linexp -> Linexp -> Ordering
+/-
+**Mathlib.Tactic.Linarith.Linexp.cmp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.L
+inarith.Linexp`。
+形式化陈述：Mathlib.Tactic.Linarith.Linexp → Mathlib.Tactic.Linarith.Linexp → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Defines a lex ordering on `Linexp`. This function is performance critical.
+-/
+def cmp : Linexp → Linexp → Ordering
   | [], [] => Ordering.eq
   | [], _ => Ordering.lt
   | _, [] => Ordering.gt
@@ -241,21 +239,25 @@ end Linexp
 /-! ### Comparisons with 0 -/
 
 /--
-Definition of `Comp` / `Comp` 的定义
+The main datatype for FM elimination.
+Variables are represented by natural numbers, each of which has an integer coefficient.
+Index 0 is reserved for constants, i.e. `coeffs.find 0` is the coefficient of 1.
+The represented term is `coeffs.sum (fun ⟨k, v⟩ ↦ v * Var[k])`.
+str determines the strength of the comparison -- is it < 0, ≤ 0, or = 0?
+-/
+/-
+**Mathlib.Tactic.Linarith.Comp** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.Linar
+ith`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Comp
-  parameters: : Type where
-  axioms and operations (2):
-    - str : Ineq
-    - coeffs : Linexp
-
-中文:
-结构 复合
-  参数: : 类型 where
-  公理与运算 (2 个):
-    - str : Ineq
-    - coeffs : Linexp
+--- 原说明 ---
+The main datatype for FM elimination.
+Variables are represented by natural numbers, each of which has an integer coeff
+icient.
+Index 0 is reserved for constants, i.e. `coeffs.find 0` is the coefficient of 1.
+The represented term is `coeffs.sum (fun ⟨k, v⟩ ↦ v * Var[k])`.
+str determines the strength of the comparison -- is it < 0, ≤ 0, or = 0?
 -/
 structure Comp : Type where
   /-- The strength of the comparison, `<`, `≤`, or `=`. -/
@@ -268,89 +270,76 @@ deriving Inhabited, Repr
 -- See https://github.com/leanprover/lean4/issues/10295
 attribute [nolint unusedArguments] Mathlib.Tactic.Linarith.instReprComp.repr
 
-/--
-Definition of `Comp.vars` / `Comp.vars` 的定义
+/-- `c.vars` returns the list of variables that appear in the linear expression contained in `c`. -/
+/-
+**Mathlib.Tactic.Linarith.Comp.vars** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Li
+narith.Comp`。
+形式化陈述：Mathlib.Tactic.Linarith.Comp → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Comp.vars
-  signature: : Comp -> List Nat
-  body: Linexp.vars ∘ Comp.coeffs
-
-中文:
-定义 复合.vars
-  签名: : 复合 -> 列表 自然数
-  定义体: Linexp.vars ∘ Comp.coeffs
-
-Depends on / 依赖: Comp.coeffs, Linexp, Linexp.vars, coeffs
+--- 原说明 ---
+`c.vars` returns the list of variables that appear in the linear expression cont
+ained in `c`.
 -/
-def Comp.vars : Comp -> List Nat := Linexp.vars ∘ Comp.coeffs
+def Comp.vars : Comp → List Nat := Linexp.vars ∘ Comp.coeffs
 
-/--
-Definition of `Comp.coeffOf` / `Comp.coeffOf` 的定义
+/-- `c.coeffOf a` projects the coefficient of variable `a` out of `c`. -/
+/-
+**Mathlib.Tactic.Linarith.Comp.coeffOf** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Linarith.Comp`。
+形式化陈述：Mathlib.Tactic.Linarith.Comp → ℕ → ℤ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Comp.coeffOf
-  signature: (c : Comp) (a : Nat)
-  body: c.coeffs.zfind a
-
-中文:
-定义 复合.coeffOf
-  签名: (c : 复合) (a : 自然数)
-  定义体: c.coeffs.zfind a
-
-Depends on / 依赖: c.coeffs.zfind, coeffs
+--- 原说明 ---
+`c.coeffOf a` projects the coefficient of variable `a` out of `c`.
 -/
 def Comp.coeffOf (c : Comp) (a : Nat) : Int :=
   c.coeffs.zfind a
 
-/--
-Definition of `Comp.scale` / `Comp.scale` 的定义
+/-- `c.scale n` scales the coefficients of `c` by `n`. -/
+/-
+**Mathlib.Tactic.Linarith.Comp.scale** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.L
+inarith.Comp`。
+形式化陈述：Mathlib.Tactic.Linarith.Comp → ℕ → Mathlib.Tactic.Linarith.Comp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Comp.scale
-  signature: (c : Comp) (n : Nat)
-  body: { c with coeffs := c.coeffs.scale n }
-
-中文:
-定义 复合.scale
-  签名: (c : 复合) (n : 自然数)
-  定义体: { c with coeffs := c.coeffs.scale n }
-
-Depends on / 依赖: c.coeffs.scale, coeffs
+--- 原说明 ---
+`c.scale n` scales the coefficients of `c` by `n`.
 -/
 def Comp.scale (c : Comp) (n : Nat) : Comp :=
   { c with coeffs := c.coeffs.scale n }
 
 /--
-Definition of `Comp.add` / `Comp.add` 的定义
+`Comp.add c1 c2` adds the expressions represented by `c1` and `c2`.
+The coefficient of variable `a` in `c1.add c2`
+is the sum of the coefficients of `a` in `c1` and `c2`.
+-/
+/-
+**Mathlib.Tactic.Linarith.Comp.add** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lin
+arith.Comp`。
+形式化陈述：Mathlib.Tactic.Linarith.Comp → Mathlib.Tactic.Linarith.Comp → Mathlib.Tact
+ic.Linarith.Comp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Comp.add
-  signature: (c1 c2 : Comp)
-  body: ⟨c1.str.max c2.str, c1.coeffs.add c2.coeffs⟩
-
-中文:
-定义 复合.add
-  签名: (c1 c2 : 复合)
-  定义体: ⟨c1.str.max c2.str, c1.coeffs.add c2.coeffs⟩
-
-Depends on / 依赖: c1.coeffs.add, c1.str.max, c2.coeffs, c2.str, coeffs
+--- 原说明 ---
+`Comp.add c1 c2` adds the expressions represented by `c1` and `c2`.
+The coefficient of variable `a` in `c1.add c2`
+is the sum of the coefficients of `a` in `c1` and `c2`.
 -/
 def Comp.add (c1 c2 : Comp) : Comp :=
   ⟨c1.str.max c2.str, c1.coeffs.add c2.coeffs⟩
 
-/--
-Definition of `Comp.cmp` / `Comp.cmp` 的定义
+/-- `Comp` has a lex order. First the `ineq`s are compared, then the `coeff`s. -/
+/-
+**Mathlib.Tactic.Linarith.Comp.cmp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lin
+arith.Comp`。
+形式化陈述：Mathlib.Tactic.Linarith.Comp → Mathlib.Tactic.Linarith.Comp → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Comp.cmp
-  signature: : Comp -> Comp -> Ordering
-
-中文:
-定义 复合.cmp
-  签名: : 复合 -> 复合 -> Ordering
+--- 原说明 ---
+`Comp` has a lex order. First the `ineq`s are compared, then the `coeff`s.
 -/
-def Comp.cmp : Comp -> Comp -> Ordering
+def Comp.cmp : Comp → Comp → Ordering
   | ⟨str1, coeffs1⟩, ⟨str2, coeffs2⟩ =>
     match str1.cmp str2 with
     | Ordering.lt => Ordering.lt
@@ -358,36 +347,26 @@ def Comp.cmp : Comp -> Comp -> Ordering
     | Ordering.eq => coeffs1.cmp coeffs2
 
 /--
-Definition of `Comp.isContr` / `Comp.isContr` 的定义
+A `Comp` represents a contradiction if its expression has no coefficients and its strength is <,
+that is, it represents the fact `0 < 0`.
+-/
+/-
+**Mathlib.Tactic.Linarith.Comp.isContr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Linarith.Comp`。
+形式化陈述：Mathlib.Tactic.Linarith.Comp → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Comp.isContr
-  signature: (c : Comp)
-  body: c.coeffs.isEmpty && c.str = Ineq.lt
-
-中文:
-定义 复合.isContr
-  签名: (c : 复合)
-  定义体: c.coeffs.isEmpty && c.str = Ineq.lt
-
-Depends on / 依赖: Ineq.lt, c.coeffs.isEmpty, c.str, coeffs, isEmpty
+--- 原说明 ---
+A `Comp` represents a contradiction if its expression has no coefficients and it
+s strength is <,
+that is, it represents the fact `0 < 0`.
 -/
 def Comp.isContr (c : Comp) : Bool := c.coeffs.isEmpty && c.str = Ineq.lt
-
-/--
-Instance `Comp.ToFormat` / 实例 `Comp.ToFormat`
-
-English:
-instance Comp.ToFormat
-  signature: : ToFormat Comp
-  body: ⟨fun p => format p.coeffs ++ toString p.str ++ "0"⟩
-
-中文:
-实例 复合.ToFormat
-  签名: : ToFormat 复合
-  定义体: ⟨fun p => format p.coeffs ++ toString p.str ++ "0"⟩
-
-Depends on / 依赖: coeffs, format, p.coeffs, p.str, toString
+/-
+**Mathlib.Tactic.Linarith.Comp.ToFormat** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Linarith.Comp`。
+形式化陈述：ToFormat Mathlib.Tactic.Linarith.Comp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Comp.ToFormat : ToFormat Comp :=
   ⟨fun p => format p.coeffs ++ toString p.str ++ "0"⟩
@@ -397,24 +376,16 @@ instance Comp.ToFormat : ToFormat Comp :=
 
 /-! ### Control -/
 
-/--
-Definition of `PreprocessorBase` / `PreprocessorBase` 的定义
+/-- Metadata about preprocessors, for trace output. -/
+/-
+**Mathlib.Tactic.Linarith.PreprocessorBase** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Ta
+ctic.Linarith`。
+形式化陈述：PreprocessorBase : Type where /-- The name of the preprocessor, populated 
+automatically, to create linkable trace messages. -/ name : Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PreprocessorBase
-  parameters: : Type where
-  axioms and operations (2):
-    - name : Name  [default: by exact decl_name%]
-    - description : String
-
-中文:
-结构 PreprocessorBase
-  参数: : 类型 where
-  公理与运算 (2 个):
-    - name : Name  [默认: by exact decl_name%]
-    - description : String
-
-Depends on / 依赖: decl_name
+--- 原说明 ---
+Metadata about preprocessors, for trace output.
 -/
 structure PreprocessorBase : Type where
   /-- The name of the preprocessor, populated automatically, to create linkable trace messages. -/
@@ -423,153 +394,153 @@ structure PreprocessorBase : Type where
   description : String
 
 /--
-Definition of `Preprocessor` / `Preprocessor` 的定义
+A preprocessor transforms a proof of a proposition into a proof of a different proposition.
+The return type is `List Expr`, since some preprocessing steps may create multiple new hypotheses,
+and some may remove a hypothesis from the list.
+A "no-op" preprocessor should return its input as a singleton list.
+-/
+/-
+**Mathlib.Tactic.Linarith.Preprocessor** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tact
+ic.Linarith`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Preprocessor
-  parameters: : Type extends PreprocessorBase where
-  extends: PreprocessorBase
-  axioms and operations (1):
-    - transform : Expr -> MetaM (List Expr)
-
-中文:
-结构 Preprocessor
-  参数: : 类型 extends PreprocessorBase where
-  继承: PreprocessorBase
-  公理与运算 (1 个):
-    - transform : Expr -> MetaM (列表 Expr)
+--- 原说明 ---
+A preprocessor transforms a proof of a proposition into a proof of a different p
+roposition.
+The return type is `List Expr`, since some preprocessing steps may create multip
+le new hypotheses,
+and some may remove a hypothesis from the list.
+A "no-op" preprocessor should return its input as a singleton list.
 -/
 structure Preprocessor : Type extends PreprocessorBase where
   /-- Replace a hypothesis by a list of hypotheses. These expressions are the proof terms. -/
-  transform : Expr -> MetaM (List Expr)
+  transform : Expr → MetaM (List Expr)
 
 /--
-Definition of `GlobalPreprocessor` / `GlobalPreprocessor` 的定义
+Some preprocessors need to examine the full list of hypotheses instead of working item by item.
+As with `Preprocessor`, the input to a `GlobalPreprocessor` is replaced by, not added to, its
+output.
+-/
+/-
+**Mathlib.Tactic.Linarith.GlobalPreprocessor** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathli
+b.Tactic.Linarith`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GlobalPreprocessor
-  parameters: : Type extends PreprocessorBase where
-  extends: PreprocessorBase
-  axioms and operations (1):
-    - transform : List Expr -> MetaM (List Expr)
-
-中文:
-结构 GlobalPreprocessor
-  参数: : 类型 extends PreprocessorBase where
-  继承: PreprocessorBase
-  公理与运算 (1 个):
-    - transform : 列表 Expr -> MetaM (列表 Expr)
+--- 原说明 ---
+Some preprocessors need to examine the full list of hypotheses instead of workin
+g item by item.
+As with `Preprocessor`, the input to a `GlobalPreprocessor` is replaced by, not 
+added to, its
+output.
 -/
 structure GlobalPreprocessor : Type extends PreprocessorBase where
   /-- Replace the collection of all hypotheses with new hypotheses.
   These expressions are proof terms. -/
-  transform : List Expr -> MetaM (List Expr)
+  transform : List Expr → MetaM (List Expr)
 
 /--
-Definition of `Branch` / `Branch` 的定义
+Some preprocessors perform branching case splits. A `Branch` is used to track one of these case
+splits. The first component, an `MVarId`, is the goal corresponding to this branch of the split,
+given as a metavariable. The `List Expr` component is the list of hypotheses for `linarith`
+in this branch.
+-/
+/-
+**Mathlib.Tactic.Linarith.Branch** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Linar
+ith`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Branch
-  signature: : Type
-  body: MVarId × List Expr
-
-中文:
-定义 Branch
-  签名: : 类型
-  定义体: MVarId × List Expr
+--- 原说明 ---
+Some preprocessors perform branching case splits. A `Branch` is used to track on
+e of these case
+splits. The first component, an `MVarId`, is the goal corresponding to this bran
+ch of the split,
+given as a metavariable. The `List Expr` component is the list of hypotheses for
+ `linarith`
+in this branch.
 -/
 @[expose] def Branch : Type := MVarId × List Expr
 
 /--
-Definition of `GlobalBranchingPreprocessor` / `GlobalBranchingPreprocessor` 的定义
+Some preprocessors perform branching case splits.
+A `GlobalBranchingPreprocessor` produces a list of branches to run.
+Each branch is independent, so hypotheses that appear in multiple branches should be duplicated.
+The preprocessor is responsible for making sure that each branch contains the correct goal
+metavariable.
+-/
+/-
+**Mathlib.Tactic.Linarith.GlobalBranchingPreprocessor** 是 Mathlib 中的一个归纳类型，位于命名空
+间 `Mathlib.Tactic.Linarith`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GlobalBranchingPreprocessor
-  parameters: : Type extends PreprocessorBase where
-  extends: PreprocessorBase
-  axioms and operations (1):
-    - transform : MVarId -> List Expr -> MetaM (List Branch)
-
-中文:
-结构 GlobalBranchingPreprocessor
-  参数: : 类型 extends PreprocessorBase where
-  继承: PreprocessorBase
-  公理与运算 (1 个):
-    - transform : MVarId -> 列表 Expr -> MetaM (列表 Branch)
+--- 原说明 ---
+Some preprocessors perform branching case splits.
+A `GlobalBranchingPreprocessor` produces a list of branches to run.
+Each branch is independent, so hypotheses that appear in multiple branches shoul
+d be duplicated.
+The preprocessor is responsible for making sure that each branch contains the co
+rrect goal
+metavariable.
 -/
 structure GlobalBranchingPreprocessor : Type extends PreprocessorBase where
   /-- Given a goal, and a list of hypotheses,
   produce a list of pairs (consisting of a goal and list of hypotheses). -/
-  transform : MVarId -> List Expr -> MetaM (List Branch)
+  transform : MVarId → List Expr → MetaM (List Branch)
 
 /--
-Definition of `Preprocessor.globalize` / `Preprocessor.globalize` 的定义
+A `Preprocessor` lifts to a `GlobalPreprocessor` by folding it over the input list.
+-/
+/-
+**Mathlib.Tactic.Linarith.Preprocessor.globalize** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.Linarith.Preprocessor`。
+形式化陈述：Mathlib.Tactic.Linarith.Preprocessor → Mathlib.Tactic.Linarith.GlobalPrepr
+ocessor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Preprocessor.globalize
-  signature: (pp : Preprocessor)
-  body: pp
-  transform := List.foldrM (fun e ret => do return (← pp.transform e) ++ ret) []
-
-中文:
-定义 Preprocessor.globalize
-  签名: (pp : Preprocessor)
-  定义体: pp
-  transform := List.foldrM (fun e ret => do return (← pp.transform e) ++ ret) []
+--- 原说明 ---
+A `Preprocessor` lifts to a `GlobalPreprocessor` by folding it over the input li
+st.
 -/
 def Preprocessor.globalize (pp : Preprocessor) : GlobalPreprocessor where
   __ := pp
   transform := List.foldrM (fun e ret => do return (← pp.transform e) ++ ret) []
 
 /--
-Definition of `GlobalPreprocessor.branching` / `GlobalPreprocessor.branching` 的定义
+A `GlobalPreprocessor` lifts to a `GlobalBranchingPreprocessor` by producing only one branch.
+-/
+/-
+**Mathlib.Tactic.Linarith.GlobalPreprocessor.branching** 是 Mathlib 中的一个定义，位于命名空间
+ `Mathlib.Tactic.Linarith.GlobalPreprocessor`。
+形式化陈述：Mathlib.Tactic.Linarith.GlobalPreprocessor → Mathlib.Tactic.Linarith.Globa
+lBranchingPreprocessor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GlobalPreprocessor.branching
-  signature: (pp : GlobalPreprocessor)
-  body: pp
-  transform := fun g l => do return [⟨g, ← pp.transform l⟩]
-
-中文:
-定义 GlobalPreprocessor.branching
-  签名: (pp : GlobalPreprocessor)
-  定义体: pp
-  transform := fun g l => do return [⟨g, ← pp.transform l⟩]
+--- 原说明 ---
+A `GlobalPreprocessor` lifts to a `GlobalBranchingPreprocessor` by producing onl
+y one branch.
 -/
 def GlobalPreprocessor.branching (pp : GlobalPreprocessor) : GlobalBranchingPreprocessor where
   __ := pp
   transform := fun g l => do return [⟨g, ← pp.transform l⟩]
 
 /--
-Definition of `GlobalBranchingPreprocessor.process` / `GlobalBranchingPreprocessor.process` 的定义
+`process pp l` runs `pp.transform` on `l` and returns the result,
+tracing the result if `trace.linarith` is on.
+-/
+/-
+**Mathlib.Tactic.Linarith.GlobalBranchingPreprocessor.process** 是 Mathlib 中的一个定义
+，位于命名空间 `Mathlib.Tactic.Linarith.GlobalBranchingPreprocessor`。
+形式化陈述：Mathlib.Tactic.Linarith.GlobalBranchingPreprocessor → MVarId → List Expr →
+ MetaM (List Mathlib.Tactic.Linarith.Branch)
+参数：List Mathlib.Tactic.Linarith.Branch。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GlobalBranchingPreprocessor.process
-  signature: (pp : GlobalBranchingPreprocessor)
-  body: g.withContext do
-  withTraceNode `linarith (fun _ =>
-      return m!"{.ofConstName pp.name}: {pp.description}") do
-    let branches ← pp.transform g l
-    if branches.length > 1 then
-      trace[linarith] "Preprocessing: {pp.name} has branched, with branches:"
-    for ⟨goal, hyps⟩ in branches do
-      trace[linarith] (← goal.withContext <| linarithGetProofsMessage hyps)
-    return branches
-
-中文:
-定义 GlobalBranchingPreprocessor.process
-  签名: (pp : GlobalBranchingPreprocessor)
-  定义体: g.withContext do
-  withTraceNode `linarith (fun _ =>
-      return m!"{.ofConstName pp.name}: {pp.description}") do
-    let branches ← pp.transform g l
-    if branches.length > 1 then
-      trace[linarith] "Preprocessing: {pp.name} has branched, with branches:"
-    for ⟨goal, hyps⟩ in branches do
-      trace[linarith] (← goal.withContext <| linarithGetProofsMessage hyps)
-    return branches
-
-Depends on / 依赖: g.withContext, withContext
+--- 原说明 ---
+`process pp l` runs `pp.transform` on `l` and returns the result,
+tracing the result if `trace.linarith` is on.
 -/
 def GlobalBranchingPreprocessor.process (pp : GlobalBranchingPreprocessor)
     (g : MVarId) (l : List Expr) : MetaM (List Branch) := g.withContext do
@@ -581,59 +552,53 @@ def GlobalBranchingPreprocessor.process (pp : GlobalBranchingPreprocessor)
     for ⟨goal, hyps⟩ in branches do
       trace[linarith] (← goal.withContext <| linarithGetProofsMessage hyps)
     return branches
-
-/--
-Instance `PreprocessorToGlobalBranchingPreprocessor` / 实例 `PreprocessorToGlobalBranchingPreprocessor`
-
-English:
-instance PreprocessorToGlobalBranchingPreprocessor
-  signature: :
-  body: ⟨GlobalPreprocessor.branching ∘ Preprocessor.globalize⟩
-
-中文:
-实例 PreprocessorToGlobalBranchingPreprocessor
-  签名: :
-  定义体: ⟨GlobalPreprocessor.branching ∘ Preprocessor.globalize⟩
-
-Depends on / 依赖: GlobalPreprocessor, GlobalPreprocessor.branching, Preprocessor, Preprocessor.globalize, branching, globalize
+/-
+**Mathlib.Tactic.Linarith.PreprocessorToGlobalBranchingPreprocessor** 是 Mathlib 
+中的一个实例，位于命名空间 `Mathlib.Tactic.Linarith`。
+形式化陈述：PreprocessorToGlobalBranchingPreprocessor : Coe Preprocessor GlobalBranchi
+ngPreprocessor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance PreprocessorToGlobalBranchingPreprocessor :
     Coe Preprocessor GlobalBranchingPreprocessor :=
   ⟨GlobalPreprocessor.branching ∘ Preprocessor.globalize⟩
-
-/--
-Instance `GlobalPreprocessorToGlobalBranchingPreprocessor` / 实例 `GlobalPreprocessorToGlobalBranchingPreprocessor`
-
-English:
-instance GlobalPreprocessorToGlobalBranchingPreprocessor
-  signature: :
-  body: ⟨GlobalPreprocessor.branching⟩
-
-中文:
-实例 GlobalPreprocessorToGlobalBranchingPreprocessor
-  签名: :
-  定义体: ⟨GlobalPreprocessor.branching⟩
-
-Depends on / 依赖: GlobalPreprocessor, GlobalPreprocessor.branching, branching
+/-
+**Mathlib.Tactic.Linarith.GlobalPreprocessorToGlobalBranchingPreprocessor** 是 Ma
+thlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Linarith`。
+形式化陈述：GlobalPreprocessorToGlobalBranchingPreprocessor : Coe GlobalPreprocessor G
+lobalBranchingPreprocessor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance GlobalPreprocessorToGlobalBranchingPreprocessor :
     Coe GlobalPreprocessor GlobalBranchingPreprocessor :=
   ⟨GlobalPreprocessor.branching⟩
 
 /--
-Definition of `CertificateOracle` / `CertificateOracle` 的定义
+A `CertificateOracle` provides a function
+`produceCertificate : List Comp → Nat → MetaM (HashMap Nat Nat)`.
 
-English:
-structure CertificateOracle
-  parameters: : Type where
-  axioms and operations (1):
-    - produceCertificate((hyps : List Comp) (max_var : Nat)) : MetaM (Std.HashMap Nat Nat)
+The default `CertificateOracle` used by `linarith` is
+`Linarith.CertificateOracle.simplexAlgorithmSparse`.
+`Linarith.CertificateOracle.simplexAlgorithmDense` and `Linarith.CertificateOracle.fourierMotzkin`
+are also available (though the Fourier-Motzkin oracle has some bugs).
+-/
+/-
+**Mathlib.Tactic.Linarith.CertificateOracle** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib
+.Tactic.Linarith`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 CertificateOracle
-  参数: : 类型 where
-  公理与运算 (1 个):
-    - produceCertificate((hyps : 列表 复合) (max_var : 自然数)) : MetaM (Std.HashMap 自然数 自然数)
+--- 原说明 ---
+A `CertificateOracle` provides a function
+`produceCertificate : List Comp → Nat → MetaM (HashMap Nat Nat)`.
+
+The default `CertificateOracle` used by `linarith` is
+`Linarith.CertificateOracle.simplexAlgorithmSparse`.
+`Linarith.CertificateOracle.simplexAlgorithmDense` and `Linarith.CertificateOrac
+le.fourierMotzkin`
+are also available (though the Fourier-Motzkin oracle has some bugs).
 -/
 structure CertificateOracle : Type where
   /-- `produceCertificate hyps max_var` tries to derive a contradiction from the comparisons in
@@ -649,62 +614,46 @@ These functions are used by multiple modules, so we put them here for accessibil
 -/
 
 /--
-Definition of `parseCompAndExpr` / `parseCompAndExpr` 的定义
+`parseCompAndExpr e` checks if `e` is of the form `t < 0`, `t ≤ 0`, or `t = 0`.
+If it is, it returns the comparison along with `t`.
+-/
+/-
+**Mathlib.Tactic.Linarith.parseCompAndExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Linarith`。
+形式化陈述：parseCompAndExpr (e : Expr) : MetaM (Ineq × Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parseCompAndExpr
-  signature: (e : Expr)
-  body: do
-  let (rel, _, e, z) ← e.ineq?
-  if z.zero? then return (rel, e) else throwError "invalid comparison, rhs not zero: {z}"
-
-中文:
-定义 parseCompAndExpr
-  签名: (e : Expr)
-  定义体: do
-  let (rel, _, e, z) ← e.ineq?
-  if z.zero? then return (rel, e) else throwError "invalid comparison, rhs not zero: {z}"
+--- 原说明 ---
+`parseCompAndExpr e` checks if `e` is of the form `t < 0`, `t ≤ 0`, or `t = 0`.
+If it is, it returns the comparison along with `t`.
 -/
 def parseCompAndExpr (e : Expr) : MetaM (Ineq × Expr) := do
   let (rel, _, e, z) ← e.ineq?
   if z.zero? then return (rel, e) else throwError "invalid comparison, rhs not zero: {z}"
 
 /--
-Definition of `mkSingleCompZeroOf` / `mkSingleCompZeroOf` 的定义
+`mkSingleCompZeroOf c h` assumes that `h` is a proof of `t R 0`.
+It produces a pair `(R', h')`, where `h'` is a proof of `c*t R' 0`.
+Typically `R` and `R'` will be the same, except when `c = 0`, in which case `R'` is `=`.
+If `c = 1`, `h'` is the same as `h` -- specifically, it does *not* change the type to `1*t R 0`.
+-/
+/-
+**Mathlib.Tactic.Linarith.mkSingleCompZeroOf** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Linarith`。
+形式化陈述：mkSingleCompZeroOf (c : Nat) (h : Expr) : MetaM (Ineq × Expr)
+参数：c : Nat；h : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkSingleCompZeroOf
-  signature: (c : Nat) (h : Expr)
-  body: do
-  let tp ← inferType h
-  let (iq, e) ← parseCompAndExpr tp
-  if c = 0 then do
-    let e' ← mkAppM ``zero_mul #[e]
-    return (Ineq.eq, e')
-  else if c = 1 then return (iq, h)
-  else do
-    let (_, tp, _) ← tp.ineq?
-    let cpos : Q(Prop) ← mkAppM ``GT.gt #[(← tp.ofNat c), (← tp.ofNat 0)]
-    let ex ← synthesizeUsingTactic' cpos (← `(tactic| norm_num))
-    let e' ← mkAppM iq.toConstMulName #[h, ex]
-    return (iq, e')
-
-中文:
-定义 mkSingleCompZeroOf
-  签名: (c : 自然数) (h : Expr)
-  定义体: do
-  let tp ← inferType h
-  let (iq, e) ← parseCompAndExpr tp
-  if c = 0 then do
-    let e' ← mkAppM ``zero_mul #[e]
-    return (Ineq.eq, e')
-  else if c = 1 then return (iq, h)
-  else do
-    let (_, tp, _) ← tp.ineq?
-    let cpos : Q(Prop) ← mkAppM ``GT.gt #[(← tp.ofNat c), (← tp.ofNat 0)]
-    let ex ← synthesizeUsingTactic' cpos (← `(tactic| norm_num))
-    let e' ← mkAppM iq.toConstMulName #[h, ex]
-    return (iq, e')
+--- 原说明 ---
+`mkSingleCompZeroOf c h` assumes that `h` is a proof of `t R 0`.
+It produces a pair `(R', h')`, where `h'` is a proof of `c*t R' 0`.
+Typically `R` and `R'` will be the same, except when `c = 0`, in which case `R'`
+ is `=`.
+If `c = 1`, `h'` is the same as `h` -- specifically, it does *not* change the ty
+pe to `1*t R 0`.
 -/
 def mkSingleCompZeroOf (c : Nat) (h : Expr) : MetaM (Ineq × Expr) := do
   let tp ← inferType h
@@ -721,3 +670,4 @@ def mkSingleCompZeroOf (c : Nat) (h : Expr) : MetaM (Ineq × Expr) := do
     return (iq, e')
 
 end Mathlib.Tactic.Linarith
+

@@ -72,112 +72,113 @@ variable {α : Type u} {β : Type*} {x y z : α}
 ### Generalized Boolean algebras
 -/
 
-/--
-Definition of `GeneralizedBooleanAlgebra` / `GeneralizedBooleanAlgebra` 的定义
+/-- A generalized Boolean algebra is a distributive lattice with `⊥` and a relative complement
+operation `\` (called `sdiff`, after "set difference") satisfying `(a ⊓ b) ⊔ (a \ b) = a` and
+`(a ⊓ b) ⊓ (a \ b) = ⊥`, i.e. `a \ b` is the complement of `b` in `a`.
 
-English:
-class GeneralizedBooleanAlgebra
-  parameters: (α : Type u)
-  extends: DistribLattice α, SDiff α, Bot α
-  axioms and operations (2):
-    - sup_inf_sdiff : forall a b : α, a ⊓ b ⊔ a \ b = a
-    - inf_inf_sdiff : forall a b : α, a ⊓ b ⊓ a \ b = ⊥
+This is a generalization of Boolean algebras which applies to `Finset α` for arbitrary
+(not-necessarily-`Fintype`) `α`. -/
+/-
+**GeneralizedBooleanAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 Generalized布尔ean代数
-  参数: (α : 类型u)
-  继承: Distrib格 α, 对称差 α, 底元素 α
-  公理与运算 (2 个):
-    - sup_inf_sdiff : 对任意 a b : α, a ⊓ b ⊔ a \ b = a
-    - inf_inf_sdiff : 对任意 a b : α, a ⊓ b ⊓ a \ b = ⊥
+--- 原说明 ---
+A generalized Boolean algebra is a distributive lattice with `⊥` and a relative 
+complement
+operation `\` (called `sdiff`, after "set difference") satisfying `(a ⊓ b) ⊔ (a 
+\ b) = a` and
+`(a ⊓ b) ⊓ (a \ b) = ⊥`, i.e. `a \ b` is the complement of `b` in `a`.
+
+This is a generalization of Boolean algebras which applies to `Finset α` for arb
+itrary
+(not-necessarily-`Fintype`) `α`.
 -/
 class GeneralizedBooleanAlgebra (α : Type u) extends DistribLattice α, SDiff α, Bot α where
   /-- For any `a`, `b`, `(a ⊓ b) ⊔ (a / b) = a` -/
-  sup_inf_sdiff : forall a b : α, a ⊓ b ⊔ a \ b = a
+  sup_inf_sdiff : ∀ a b : α, a ⊓ b ⊔ a \ b = a
   /-- For any `a`, `b`, `(a ⊓ b) ⊓ (a / b) = ⊥` -/
-  inf_inf_sdiff : forall a b : α, a ⊓ b ⊓ a \ b = ⊥
+  inf_inf_sdiff : ∀ a b : α, a ⊓ b ⊓ a \ b = ⊥
 
 /-!
 ### Boolean algebras
 -/
 
 
-/--
-Definition of `BooleanAlgebra` / `BooleanAlgebra` 的定义
+/-- A Boolean algebra is a bounded distributive lattice with a complement operator `ᶜ` such that
+`x ⊓ xᶜ = ⊥` and `x ⊔ xᶜ = ⊤`. For convenience, it must also provide a set difference operation `\`
+and a Heyting implication `⇨` satisfying `x \ y = x ⊓ yᶜ` and `x ⇨ y = y ⊔ xᶜ`.
 
-English:
-class BooleanAlgebra
-  parameters: (α : Type u)
-  axioms and operations (8):
-    - inf_compl_le_bot : forall x : α, x ⊓ xᶜ <= ⊥
-    - top_le_sup_compl : forall x : α, ⊤ <= x ⊔ xᶜ
-    - le_top : forall a : α, a <= ⊤
-    - bot_le : forall a : α, ⊥ <= a
-    - sdiff : = fun x y => x ⊓ yᶜ
-    - himp : = fun x y => y ⊔ xᶜ
-    - sdiff_eq : forall x y : α, x \ y = x ⊓ yᶜ  [default: by aesop]
-    - himp_eq : forall x y : α, x ⇨ y = y ⊔ xᶜ  [default: by aesop]
+This is a generalization of (classical) logic of propositions, or the powerset lattice.
 
-中文:
-类 布尔代数
-  参数: (α : 类型u)
-  公理与运算 (8 个):
-    - inf_compl_le_bot : 对任意 x : α, x ⊓ xᶜ <= ⊥
-    - top_le_sup_compl : 对任意 x : α, ⊤ <= x ⊔ xᶜ
-    - le_top : 对任意 a : α, a <= ⊤
-    - bot_le : 对任意 a : α, ⊥ <= a
-    - sdiff : = fun x y => x ⊓ yᶜ
-    - himp : = fun x y => y ⊔ xᶜ
-    - sdiff_eq : 对任意 x y : α, x \ y = x ⊓ yᶜ  [默认: by aesop]
-    - himp_eq : 对任意 x y : α, x ⇨ y = y ⊔ xᶜ  [默认: by aesop]
+Since `BoundedOrder`, `OrderBot`, and `OrderTop` are mixins that require `LE`
+to be present at define-time, the `extends` mechanism does not work with them.
+Instead, we extend using the underlying `Bot` and `Top` data typeclasses, and replicate the
+order axioms of those classes here. A "forgetful" instance back to `BoundedOrder` is provided.
+-/
+/-
+**BooleanAlgebra** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：BooleanAlgebra (α : Type u) extends DistribLattice α, Compl α, SDiff α, HI
+mp α, Top α, Bot α where /-- The infimum of `x` and `xᶜ` is at most `⊥` -/ inf_c
+ompl_le_bot : forall x : α, x ⊓ xᶜ <= ⊥ /-- The supremum of `x` and `xᶜ` is at l
+east `⊤` -/ top_le_sup_compl : forall x : α, ⊤ <= x ⊔ xᶜ /-- `⊤` is the greatest
+ element -/ le_top : forall a : α, a <= ⊤ /-- `⊥` is the least element -/ bot_le
+ : forall a : α, ⊥ <= a /-- `x \ y` is equal to `x ⊓ yᶜ` -/ sdiff
+参数：α : Type u。
+继承自：DistribLattice α, Compl α, SDiff α, HImp α, Top α, Bot α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A Boolean algebra is a bounded distributive lattice with a complement operator `
+ᶜ` such that
+`x ⊓ xᶜ = ⊥` and `x ⊔ xᶜ = ⊤`. For convenience, it must also provide a set diffe
+rence operation `\`
+and a Heyting implication `⇨` satisfying `x \ y = x ⊓ yᶜ` and `x ⇨ y = y ⊔ xᶜ`.
+
+This is a generalization of (classical) logic of propositions, or the powerset l
+attice.
+
+Since `BoundedOrder`, `OrderBot`, and `OrderTop` are mixins that require `LE`
+to be present at define-time, the `extends` mechanism does not work with them.
+Instead, we extend using the underlying `Bot` and `Top` data typeclasses, and re
+plicate the
+order axioms of those classes here. A "forgetful" instance back to `BoundedOrder
+` is provided.
 -/
 class BooleanAlgebra (α : Type u) extends
     DistribLattice α, Compl α, SDiff α, HImp α, Top α, Bot α where
   /-- The infimum of `x` and `xᶜ` is at most `⊥` -/
-  inf_compl_le_bot : forall x : α, x ⊓ xᶜ <= ⊥
+  inf_compl_le_bot : ∀ x : α, x ⊓ xᶜ ≤ ⊥
   /-- The supremum of `x` and `xᶜ` is at least `⊤` -/
-  top_le_sup_compl : forall x : α, ⊤ <= x ⊔ xᶜ
+  top_le_sup_compl : ∀ x : α, ⊤ ≤ x ⊔ xᶜ
   /-- `⊤` is the greatest element -/
-  le_top : forall a : α, a <= ⊤
+  le_top : ∀ a : α, a ≤ ⊤
   /-- `⊥` is the least element -/
-  bot_le : forall a : α, ⊥ <= a
+  bot_le : ∀ a : α, ⊥ ≤ a
   /-- `x \ y` is equal to `x ⊓ yᶜ` -/
   sdiff := fun x y => x ⊓ yᶜ
   /-- `x ⇨ y` is equal to `y ⊔ xᶜ` -/
   himp := fun x y => y ⊔ xᶜ
   /-- `x \ y` is equal to `x ⊓ yᶜ` -/
-  sdiff_eq : forall x y : α, x \ y = x ⊓ yᶜ := by aesop
+  sdiff_eq : ∀ x y : α, x \ y = x ⊓ yᶜ := by aesop
   /-- `x ⇨ y` is equal to `y ⊔ xᶜ` -/
-  himp_eq : forall x y : α, x ⇨ y = y ⊔ xᶜ := by aesop
+  himp_eq : ∀ x y : α, x ⇨ y = y ⊔ xᶜ := by aesop
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) BooleanAlgebra.toBoundedOrder [h : BooleanAlgebra α] : BoundedOrder α :=
   { h with }
-
-/--
-Instance `Prop.instBooleanAlgebra` / 实例 `Prop.instBooleanAlgebra`
-
-English:
-instance Prop.instBooleanAlgebra
-  signature: : BooleanAlgebra Prop where
-  body: Prop.instHeytingAlgebra
-  __ := GeneralizedHeytingAlgebra.toDistribLattice
-  compl := Not
-  himp_eq _ _ := propext imp_iff_or_not
-  inf_compl_le_bot _ H := H.2 H.1
-  top_le_sup_compl p _ := Classical.em p
-
-中文:
-实例 命题.inst布尔eanAlgebra
-  签名: : 布尔代数 命题 where
-  定义体: Prop.instHeytingAlgebra
-  __ := GeneralizedHeytingAlgebra.toDistribLattice
-  compl := Not
-  himp_eq _ _ := propext imp_iff_or_not
-  inf_compl_le_bot _ H := H.2 H.1
-  top_le_sup_compl p _ := Classical.em p
-
-Depends on / 依赖: Prop.instHeytingAlgebra, instHeytingAlgebra
+/-
+**Prop.instBooleanAlgebra** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prop.instBooleanAlgebra : BooleanAlgebra Prop where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribLattice.le_sup_inf`：∀ {α : Type u_1} [self : DistribLattice α] (x
+ y z : α), (x ⊔ y) ⊓ (x ⊔ z) ≤ x ⊔ y ⊓ z
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
 -/
 instance Prop.instBooleanAlgebra : BooleanAlgebra Prop where
   __ := Prop.instHeytingAlgebra
@@ -186,105 +187,47 @@ instance Prop.instBooleanAlgebra : BooleanAlgebra Prop where
   himp_eq _ _ := propext imp_iff_or_not
   inf_compl_le_bot _ H := H.2 H.1
   top_le_sup_compl p _ := Classical.em p
-
-/--
-Instance `Bool.instBooleanAlgebra` / 实例 `Bool.instBooleanAlgebra`
-
-English:
-instance Bool.instBooleanAlgebra
-  signature: : BooleanAlgebra Bool where
-  body: instBoundedOrder
-  compl := not
-  inf_compl_le_bot a := a.and_not_self.le
-  top_le_sup_compl a := a.or_not_self.ge
-
-中文:
-实例 布尔值.inst布尔eanAlgebra
-  签名: : 布尔代数 布尔值 where
-  定义体: instBoundedOrder
-  compl := not
-  inf_compl_le_bot a := a.and_not_self.le
-  top_le_sup_compl a := a.or_not_self.ge
-
-Depends on / 依赖: instBoundedOrder
+/-
+**Bool.instBooleanAlgebra** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Bool.instBooleanAlgebra : BooleanAlgebra Bool where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Bool.instBooleanAlgebra : BooleanAlgebra Bool where
   __ := instBoundedOrder
   compl := not
   inf_compl_le_bot a := a.and_not_self.le
   top_le_sup_compl a := a.or_not_self.ge
-
-/--
-theorem `Bool.sup_eq_bor` / 定理 `Bool.sup_eq_bor`
-
-English:
-theorem Bool.sup_eq_bor
-  statement: (· ⊔ ·) = or
-  proof: by dsimp
-
-中文:
-定理 布尔值.sup_eq_bor
-  结论: (· ⊔ ·) = or
-  证明: by dsimp
+/-
+**Bool.sup_eq_bor** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.sup_eq_bor : (· ⊔ ·) = or
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.sup_eq_bor : (· ⊔ ·) = or := by dsimp
-
-/--
-theorem `Bool.inf_eq_band` / 定理 `Bool.inf_eq_band`
-
-English:
-theorem Bool.inf_eq_band
-  statement: (· ⊓ ·) = and
-  proof: by dsimp
-
-@[simp]
-
-中文:
-定理 布尔值.inf_eq_band
-  结论: (· ⊓ ·) = and
-  证明: by dsimp
-
-@[simp]
+/-
+**Bool.inf_eq_band** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.inf_eq_band : (· ⊓ ·) = and
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.inf_eq_band : (· ⊓ ·) = and := by dsimp
 
 @[simp]
-/--
-theorem `Bool.compl_eq_bnot` / 定理 `Bool.compl_eq_bnot`
-
-English:
-theorem Bool.compl_eq_bnot
-  statement: Compl.compl = not
-  proof: rfl
-
-中文:
-定理 布尔值.compl_eq_bnot
-  结论: 补集.compl = not
-  证明: rfl
+/-
+**Bool.compl_eq_bnot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Bool.compl_eq_bnot : Compl.compl = not
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Bool.compl_eq_bnot : Compl.compl = not :=
   rfl
-
-/--
-Instance `PUnit.instBooleanAlgebra` / 实例 `PUnit.instBooleanAlgebra`
-
-English:
-instance PUnit.instBooleanAlgebra
-  signature: : BooleanAlgebra PUnit where
-  body: PUnit.instBiheytingAlgebra
-  le_sup_inf := by simp
-  inf_compl_le_bot _ := trivial
-  top_le_sup_compl _ := trivial
-
-中文:
-实例 命题单元.inst布尔eanAlgebra
-  签名: : 布尔代数 命题单元 where
-  定义体: PUnit.instBiheytingAlgebra
-  le_sup_inf := by simp
-  inf_compl_le_bot _ := trivial
-  top_le_sup_compl _ := trivial
-
-Depends on / 依赖: PUnit.instBiheytingAlgebra, instBiheytingAlgebra
+/-
+**PUnit.instBooleanAlgebra** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PUnit.instBooleanAlgebra : BooleanAlgebra PUnit where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 instance PUnit.instBooleanAlgebra : BooleanAlgebra PUnit where
   __ := PUnit.instBiheytingAlgebra
@@ -304,31 +247,19 @@ This is not an instance, because it creates data using choice.
 -/
 @[instance_reducible]
 noncomputable
-/--
-Definition of `booleanAlgebraOfComplemented` / `booleanAlgebraOfComplemented` 的定义
-
-English:
-definition booleanAlgebraOfComplemented
-  signature: [BoundedOrder α] [ComplementedLattice α]
-  body: ((inferInstance : BoundedOrder α))
-compl a := Classical.choose exists_isCompl a
-  inf_compl_le_bot a := (Classical.choose_spec (exists_isCompl a)).disjoint.le_bot
-  top_le_sup_compl a := (Classical.choose_spec (exists_isCompl a)).codisjoint.top_le
-
-中文:
-定义 booleanAlgebraOfComplemented
-  签名: [有界序 α] [有补格 α]
-  定义体: ((inferInstance : BoundedOrder α))
-compl a := Classical.choose exists_isCompl a
-  inf_compl_le_bot a := (Classical.choose_spec (exists_isCompl a)).disjoint.le_bot
-  top_le_sup_compl a := (Classical.choose_spec (exists_isCompl a)).codisjoint.top_le
-
-Depends on / 依赖: BoundedOrder
+/-
+**DistribLattice.booleanAlgebraOfComplemented** 是 Mathlib 中的一个定义，位于命名空间 `Distrib
+Lattice`。
+形式化陈述：booleanAlgebraOfComplemented [BoundedOrder α] [ComplementedLattice α] : Bo
+oleanAlgebra α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def booleanAlgebraOfComplemented [BoundedOrder α] [ComplementedLattice α] : BooleanAlgebra α where
   __ := ((inferInstance : BoundedOrder α))
-compl a := Classical.choose exists_isCompl a
+  compl a := Classical.choose <| exists_isCompl a
   inf_compl_le_bot a := (Classical.choose_spec (exists_isCompl a)).disjoint.le_bot
   top_le_sup_compl a := (Classical.choose_spec (exists_isCompl a)).codisjoint.top_le
 
 end DistribLattice
+

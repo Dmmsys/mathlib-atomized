@@ -28,26 +28,22 @@ An instance is defined for `Part`.
 
 universe u v
 
-variable {α : Type*} {β : α -> Type*}
+variable {α : Type*} {β : α → Type*}
 
-/--
-Definition of `Fix` / `Fix` 的定义
+/-- `Fix α` provides a `fix` operator to define recursive computation
+via the fixed point of function of type `α → α`. -/
+/-
+**Fix** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_3 → Type u_3
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Fix
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - fix : (α -> α) -> α
-
-中文:
-类 Fix
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - fix : (α -> α) -> α
+--- 原说明 ---
+`Fix α` provides a `fix` operator to define recursive computation
+via the fixed point of function of type `α → α`.
 -/
 class Fix (α : Type*) where
   /-- `fix f` represents the computation of a fixed point for `f`. -/
-  fix : (α -> α) -> α
+  fix : (α → α) → α
 
 namespace Part
 
@@ -55,140 +51,106 @@ open Part Nat Nat.Upto
 
 section Basic
 
-variable (f : (forall a, Part (β a)) -> (forall a, Part (β a)))
+variable (f : (∀ a, Part (β a)) → (∀ a, Part (β a)))
 
-/--
-Definition of `Fix.approx` / `Fix.approx` 的定义
+/-- A series of successive, finite approximation of the fixed point of `f`, defined by
+`approx f n = f^[n] ⊥`. The limit of this chain is the fixed point of `f`. -/
+/-
+**Part.Fix.approx** 是 Mathlib 中的一个定义，位于命名空间 `Part.Fix`。
+形式化陈述：{α : Type u_1} → {β : α → Type u_2} → (((a : α) → Part (β a)) → (a : α) → 
+Part (β a)) → Stream' ((a : α) → Part (β a))
+参数：((a : α) → Part (β a)) → (a : α) → Part (β a)；(a : α) → Part (β a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fix.approx
-  signature: : Stream' (forall a, Part (β a))
-
-中文:
-定义 Fix.approx
-  签名: : Stream' (对任意 a, Part (β a))
+--- 原说明 ---
+A series of successive, finite approximation of the fixed point of `f`, defined 
+by
+`approx f n = f^[n] ⊥`. The limit of this chain is the fixed point of `f`.
 -/
-def Fix.approx : Stream' (forall a, Part (β a))
+def Fix.approx : Stream' (∀ a, Part (β a))
   | 0 => ⊥
   | Nat.succ i => f (Fix.approx i)
 
-/--
-Definition of `fixAux` / `fixAux` 的定义
+/-- loop body for finding the fixed point of `f` -/
+/-
+**Part.fixAux** 是 Mathlib 中的一个定义，位于命名空间 `Part`。
+形式化陈述：fixAux {p : Nat -> Prop} (i : Nat.Upto p) (g : forall j : Nat.Upto p, i < 
+j -> forall a, Part (β a)) : forall a, Part (β a)
+参数：i : Nat.Upto p；g : forall j : Nat.Upto p, i < j -> forall a, Part (β a)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fixAux
-  signature: {p : Nat -> Prop} (i : Nat.Upto p) (g : forall j : Nat.Upto p, i < j -> forall a, Part (β a))
-  body: f fun x : α => (assert ¬p i.val) fun h : ¬p i.val => g (i.succ h) (Nat.lt_succ_self _) x
-
-中文:
-定义 fixAux
-  签名: {p : 自然数 -> 命题} (i : 自然数.Upto p) (g : 对任意 j : 自然数.Upto p, i < j -> 对任意 a, Part (β a))
-  定义体: f fun x : α => (assert ¬p i.val) fun h : ¬p i.val => g (i.succ h) (Nat.lt_succ_self _) x
-
-Depends on / 依赖: Nat.lt_succ_self, assert, i.succ, i.val, lt_succ_self
+--- 原说明 ---
+loop body for finding the fixed point of `f`
 -/
-def fixAux {p : Nat -> Prop} (i : Nat.Upto p) (g : forall j : Nat.Upto p, i < j -> forall a, Part (β a)) :
-    forall a, Part (β a) :=
+def fixAux {p : ℕ → Prop} (i : Nat.Upto p) (g : ∀ j : Nat.Upto p, i < j → ∀ a, Part (β a)) :
+    ∀ a, Part (β a) :=
   f fun x : α => (assert ¬p i.val) fun h : ¬p i.val => g (i.succ h) (Nat.lt_succ_self _) x
 
-/--
-Definition of `fix` / `fix` 的定义
+/-- The least fixed point of `f`.
 
-English:
-definition fix
-  signature: (x : α)
-  body: (Part.assert (exists i, (Fix.approx f i x).Dom)) fun h =>
-    WellFounded.fix.{1} (Nat.Upto.wf h) (fixAux f) Nat.Upto.zero x
+If `f` is a continuous function (according to complete partial orders),
+it satisfies the equations:
 
-中文:
-定义 fix
-  签名: (x : α)
-  定义体: (Part.assert (exists i, (Fix.approx f i x).Dom)) fun h =>
-    WellFounded.fix.{1} (Nat.Upto.wf h) (fixAux f) Nat.Upto.zero x
+  1. `fix f = f (fix f)`          (is a fixed point)
+  2. `∀ X, f X ≤ X → fix f ≤ X`   (least fixed point)
+-/
+/-
+**Part.fix** 是 Mathlib 中的一个定义，位于命名空间 `Part`。
+形式化陈述：{α : Type u_1} → {β : α → Type u_2} → (((a : α) → Part (β a)) → (a : α) → 
+Part (β a)) → (x : α) → Part (β x)
+参数：((a : α) → Part (β a)) → (a : α) → Part (β a)；x : α；β x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The least fixed point of `f`.
+
+If `f` is a continuous function (according to complete partial orders),
+it satisfies the equations:
+
+  1. `fix f = f (fix f)`          (is a fixed point)
+  2. `∀ X, f X ≤ X → fix f ≤ X`   (least fixed point)
 -/
 protected def fix (x : α) : Part (β x) :=
-  (Part.assert (exists i, (Fix.approx f i x).Dom)) fun h =>
+  (Part.assert (∃ i, (Fix.approx f i x).Dom)) fun h =>
     WellFounded.fix.{1} (Nat.Upto.wf h) (fixAux f) Nat.Upto.zero x
 
 open scoped Classical in
-/--
-theorem `fix_def` / 定理 `fix_def`
-
-English:
-theorem fix_def
-  given: {x : α} (h' : exists i, (Fix.approx f i x).Dom)
-  proof: by
-  let p := fun i : Nat => (Fix.approx f i x).Dom
-  have : p (Nat.find h') := Nat.find_spec h'
-  generalize hk : Nat.find h' = k
-  replace hk : Nat.find h' = k + (@Upto.zero p).val := hk
-  rw [hk] at this
-  revert hk
-  dsimp [Part.fix]; rw [assert_pos h']; revert this
-  generalize Upto.zero = z; intro _this hk
-  suffices forall x' hwf,
-    WellFounded.fix hwf (fixAux f) z x' = Fix.approx f (succ k) x'
-    from this _ _
-  induction k generalizing z with
-  | zero =>
-    intro x' _
-    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
-    congr
-    ext x : 1
-    rw [assert_neg]
-    · rfl
-    · rw [Nat.zero_add] at _this
-      simpa only [not_not, Coe]
-  | succ n n_ih =>
-    intro x' _
-    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
-    congr
-    ext : 1
-    have hh : ¬(Fix.approx f z.val x).Dom := by
-      apply Nat.find_min h'
-      lia
-    rw [succ_add_eq_add_succ] at _this hk
-    rw [assert_pos hh]; rw [n_ih (Upto.succ z hh) _this hk]
-
-中文:
-定理 fix_def
-  条件: {x : α} (h' : 存在 i, (Fix.approx f i x).Dom)
-  证明: by
-  let p := fun i : Nat => (Fix.approx f i x).Dom
-  have : p (Nat.find h') := Nat.find_spec h'
-  generalize hk : Nat.find h' = k
-  replace hk : Nat.find h' = k + (@Upto.zero p).val := hk
-  rw [hk] at this
-  revert hk
-  dsimp [Part.fix]; rw [assert_pos h']; revert this
-  generalize Upto.zero = z; intro _this hk
-  suffices forall x' hwf,
-    WellFounded.fix hwf (fixAux f) z x' = Fix.approx f (succ k) x'
-    from this _ _
-  induction k generalizing z with
-  | zero =>
-    intro x' _
-    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
-    congr
-    ext x : 1
-    rw [assert_neg]
-    · rfl
-    · rw [Nat.zero_add] at _this
-      simpa only [not_not, Coe]
-  | succ n n_ih =>
-    intro x' _
-    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
-    congr
-    ext : 1
-    have hh : ¬(Fix.approx f z.val x).Dom := by
-      apply Nat.find_min h'
-      lia
-    rw [succ_add_eq_add_succ] at _this hk
-    rw [assert_pos hh]; rw [n_ih (Upto.succ z hh) _this hk]
+/-
+**Part.fix_def** 是 Mathlib 中的一个定理，位于命名空间 `Part`。
+形式化陈述：∀ {α : Type u_1} {β : α → Type u_2} (f : ((a : α) → Part (β a)) → (a : α) 
+→ Part (β a)) {x : α}   (h' : ∃ i, (Part.Fix.approx f i x).Dom), Part.fix f x = 
+Part.Fix.approx f (Nat.find h').succ x
+参数：f : ((a : α) → Part (β a)) → (a : α) → Part (β a)；h' : ∃ i, (Part.Fix.approx 
+f i x).Dom；Nat.find h'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.find_spec`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n),
+ p (Nat.find H)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Part.assert_pos`：assert_pos {p : Prop} {f : p -> Part α} (h : p) : asser
+t p f = f h
+· 使用定理 `Part.Fix.approx.eq_2`：∀ {α : Type u_1} {β : α → Type u_2} (f : ((a : α) 
+→ Part (β a)) → (a : α) → Part (β a)) (i : ℕ),   Part.Fix.approx f i.succ = f (P
+art.Fix.ap…
+· 使用定理 `WellFounded.fix_eq`：∀ {α : Sort u} {C : α → Sort v} {r : α → α → Prop} (
+hwf : WellFounded r) (F : (x : α) → ((y : α) → r y x → C y) → C x)   (x : α), hw
+f.fix F …
+· 使用定理 `Part.fixAux.eq_1`：∀ {α : Type u_1} {β : α → Type u_2} (f : ((a : α) → Pa
+rt (β a)) → (a : α) → Part (β a)) {p : ℕ → Prop} (i : Nat.Upto p)   (g : (j : Na
+t.Upto…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Part.assert_neg`：assert_neg {p : Prop} {f : p -> Part α} (h : ¬p) : asse
+rt p f = none
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Nat.find_min`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n) {
+m : ℕ}, m < Nat.find H → ¬p m
+· 使用定理 `Nat.succ_add_eq_add_succ`：∀ (a b : ℕ), a.succ + b = a + b.succ
 -/
-protected theorem fix_def {x : α} (h' : exists i, (Fix.approx f i x).Dom) :
+protected theorem fix_def {x : α} (h' : ∃ i, (Fix.approx f i x).Dom) :
     Part.fix f x = Fix.approx f (Nat.succ (Nat.find h')) x := by
-  let p := fun i : Nat => (Fix.approx f i x).Dom
+  let p := fun i : ℕ => (Fix.approx f i x).Dom
   have : p (Nat.find h') := Nat.find_spec h'
   generalize hk : Nat.find h' = k
   replace hk : Nat.find h' = k + (@Upto.zero p).val := hk
@@ -196,13 +158,13 @@ protected theorem fix_def {x : α} (h' : exists i, (Fix.approx f i x).Dom) :
   revert hk
   dsimp [Part.fix]; rw [assert_pos h']; revert this
   generalize Upto.zero = z; intro _this hk
-  suffices forall x' hwf,
+  suffices ∀ x' hwf,
     WellFounded.fix hwf (fixAux f) z x' = Fix.approx f (succ k) x'
     from this _ _
   induction k generalizing z with
   | zero =>
     intro x' _
-    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
+    rw [Fix.approx, WellFounded.fix_eq, fixAux]
     congr
     ext x : 1
     rw [assert_neg]
@@ -211,37 +173,27 @@ protected theorem fix_def {x : α} (h' : exists i, (Fix.approx f i x).Dom) :
       simpa only [not_not, Coe]
   | succ n n_ih =>
     intro x' _
-    rw [Fix.approx]; rw [WellFounded.fix_eq]; rw [fixAux]
+    rw [Fix.approx, WellFounded.fix_eq, fixAux]
     congr
     ext : 1
     have hh : ¬(Fix.approx f z.val x).Dom := by
       apply Nat.find_min h'
       lia
     rw [succ_add_eq_add_succ] at _this hk
-    rw [assert_pos hh]; rw [n_ih (Upto.succ z hh) _this hk]
-
-/--
-theorem `fix_def'` / 定理 `fix_def'`
-
-English:
-theorem fix_def'
-  given: {x : α} (h' : ¬exists i, (Fix.approx f i x).Dom)
-  statement: Part.fix f x = none
-  proof: by
-  dsimp [Part.fix]
-  rw [assert_neg h']
-
-中文:
-定理 fix_def'
-  条件: {x : α} (h' : ¬存在 i, (Fix.approx f i x).Dom)
-  结论: Part.fix f x = none
-  证明: by
-  dsimp [Part.fix]
-  rw [assert_neg h']
-
-Depends on / 依赖: Part.fix, assert_neg
+    rw [assert_pos hh, n_ih (Upto.succ z hh) _this hk]
+/-
+**Part.fix_def'** 是 Mathlib 中的一个定理，位于命名空间 `Part`。
+形式化陈述：fix_def' {x : α} (h' : ¬exists i, (Fix.approx f i x).Dom) : Part.fix f x =
+ none
+参数：h' : ¬exists i, (Fix.approx f i x).Dom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Part.assert_neg`：assert_neg {p : Prop} {f : p -> Part α} (h : ¬p) : asse
+rt p f = none
 -/
-theorem fix_def' {x : α} (h' : ¬exists i, (Fix.approx f i x).Dom) : Part.fix f x = none := by
+theorem fix_def' {x : α} (h' : ¬∃ i, (Fix.approx f i x).Dom) : Part.fix f x = none := by
   dsimp [Part.fix]
   rw [assert_neg h']
 
@@ -251,20 +203,11 @@ end Part
 
 namespace Part
 
-/--
-Instance `hasFix` / 实例 `hasFix`
-
-English:
-instance hasFix
-  signature: : Fix (Part α)
-  body: ⟨fun f => Part.fix (fun x u => f (x u)) ()⟩
-
-中文:
-实例 hasFix
-  签名: : Fix (Part α)
-  定义体: ⟨fun f => Part.fix (fun x u => f (x u)) ()⟩
-
-Depends on / 依赖: Part.fix
+/-
+**Part.hasFix** 是 Mathlib 中的一个实例，位于命名空间 `Part`。
+形式化陈述：hasFix : Fix (Part α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasFix : Fix (Part α) :=
   ⟨fun f => Part.fix (fun x u => f (x u)) ()⟩
@@ -275,20 +218,14 @@ open Sigma
 
 namespace Pi
 
-/--
-Instance `Part.hasFix` / 实例 `Part.hasFix`
-
-English:
-instance Part.hasFix
-  signature: {β}
-  body: ⟨Part.fix⟩
-
-中文:
-实例 Part.hasFix
-  签名: {β}
-  定义体: ⟨Part.fix⟩
+/-
+**Pi.Part.hasFix** 是 Mathlib 中的一个定义，位于命名空间 `Pi.Part`。
+形式化陈述：{α : Type u_1} → {β : Type u_3} → Fix (α → Part β)
+参数：α → Part β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Part.hasFix {β} : Fix (α -> Part β) :=
+instance Part.hasFix {β} : Fix (α → Part β) :=
   ⟨Part.fix⟩
 
 end Pi
+

@@ -58,61 +58,54 @@ open DirectSum
 
 variable {ι : Type*} {σ S R : Type*}
 
-/--
-theorem `SetLike.algebraMap_mem_graded` / 定理 `SetLike.algebraMap_mem_graded`
-
-English:
-theorem SetLike.algebraMap_mem_graded
-  statement: [Zero ι] [CommSemiring S] [Semiring R] [Algebra S R]
-  proof: by
-  rw [Algebra.algebraMap_eq_smul_one]
-exact (A 0).smul_mem s SetLike.one_mem_graded _
-
-中文:
-定理 集合状.algebraMap_mem_graded
-  结论: [零 ι] [交换半环 S] [半环 R] [代数 S R]
-  证明: by
-  rw [Algebra.algebraMap_eq_smul_one]
-exact (A 0).smul_mem s SetLike.one_mem_graded _
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, SetLike, SetLike.one_mem_graded, algebraMap_eq_smul_one, one_mem_graded, smul_mem
+/-
+**SetLike.algebraMap_mem_graded** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetLike.algebraMap_mem_graded [Zero ι] [CommSemiring S] [Semiring R] [Alge
+bra S R] (A : ι -> Submodule S R) [SetLike.GradedOne A] (s : S) : algebraMap S R
+ s in A 0
+参数：A : ι -> Submodule S R；s : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `SetLike.one_mem_graded`：SetLike.one_mem_graded {S : Type*} [SetLike S R]
+ [One R] [Zero ι] (A : ι -> S) [SetLike.GradedOne A] : (1 : R) in A 0
 -/
 theorem SetLike.algebraMap_mem_graded [Zero ι] [CommSemiring S] [Semiring R] [Algebra S R]
-    (A : ι -> Submodule S R) [SetLike.GradedOne A] (s : S) : algebraMap S R s in A 0 := by
+    (A : ι → Submodule S R) [SetLike.GradedOne A] (s : S) : algebraMap S R s ∈ A 0 := by
   rw [Algebra.algebraMap_eq_smul_one]
-exact (A 0).smul_mem s SetLike.one_mem_graded _
-
-/--
-theorem `SetLike.natCast_mem_graded` / 定理 `SetLike.natCast_mem_graded`
-
-English:
-theorem SetLike.natCast_mem_graded
-  statement: [Zero ι] [AddMonoidWithOne R] [SetLike σ R]
-  proof: by
-  induction n with
-  | zero =>
-    rw [Nat.cast_zero]
-    exact zero_mem (A 0)
-  | succ _ n_ih =>
-    rw [Nat.cast_succ]
-    exact add_mem n_ih (SetLike.one_mem_graded _)
-
-中文:
-定理 集合状.natCast_mem_graded
-  结论: [零 ι] [加法带幺幺半群 R] [集合状 σ R]
-  证明: by
-  induction n with
-  | zero =>
-    rw [Nat.cast_zero]
-    exact zero_mem (A 0)
-  | succ _ n_ih =>
-    rw [Nat.cast_succ]
-    exact add_mem n_ih (SetLike.one_mem_graded _)
-
-Depends on / 依赖: Nat.cast_succ, Nat.cast_zero, SetLike, SetLike.one_mem_graded, add_mem, cast_succ, cast_zero, n_ih, one_mem_graded, zero_mem
+  exact (A 0).smul_mem s <| SetLike.one_mem_graded _
+/-
+**SetLike.natCast_mem_graded** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetLike.natCast_mem_graded [Zero ι] [AddMonoidWithOne R] [SetLike σ R] [Ad
+dSubmonoidClass σ R] (A : ι -> σ) [SetLike.GradedOne A] (n : Nat) : (n : R) in A
+ 0
+参数：A : ι -> σ；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `SetLike.one_mem_graded`：SetLike.one_mem_graded {S : Type*} [SetLike S R]
+ [One R] [Zero ι] (A : ι -> S) [SetLike.GradedOne A] : (1 : R) in A 0
 -/
 theorem SetLike.natCast_mem_graded [Zero ι] [AddMonoidWithOne R] [SetLike σ R]
-    [AddSubmonoidClass σ R] (A : ι -> σ) [SetLike.GradedOne A] (n : Nat) : (n : R) in A 0 := by
+    [AddSubmonoidClass σ R] (A : ι → σ) [SetLike.GradedOne A] (n : ℕ) : (n : R) ∈ A 0 := by
   induction n with
   | zero =>
     rw [Nat.cast_zero]
@@ -120,34 +113,34 @@ theorem SetLike.natCast_mem_graded [Zero ι] [AddMonoidWithOne R] [SetLike σ R]
   | succ _ n_ih =>
     rw [Nat.cast_succ]
     exact add_mem n_ih (SetLike.one_mem_graded _)
-
-/--
-theorem `SetLike.intCast_mem_graded` / 定理 `SetLike.intCast_mem_graded`
-
-English:
-theorem SetLike.intCast_mem_graded
-  statement: [Zero ι] [AddGroupWithOne R] [SetLike σ R]
-  proof: by
-  cases z
-  · rw [Int.ofNat_eq_natCast, Int.cast_natCast]
-    exact SetLike.natCast_mem_graded _ _
-  · rw [Int.cast_negSucc]
-    exact neg_mem (SetLike.natCast_mem_graded _ _)
-
-中文:
-定理 集合状.intCast_mem_graded
-  结论: [零 ι] [加法带幺群 R] [集合状 σ R]
-  证明: by
-  cases z
-  · rw [Int.ofNat_eq_natCast, Int.cast_natCast]
-    exact SetLike.natCast_mem_graded _ _
-  · rw [Int.cast_negSucc]
-    exact neg_mem (SetLike.natCast_mem_graded _ _)
-
-Depends on / 依赖: Int.cast_natCast, Int.cast_negSucc, Int.ofNat_eq_natCast, SetLike, SetLike.natCast_mem_graded, cast_natCast, cast_negSucc, natCast_mem_graded, neg_mem, ofNat_eq_natCast
+/-
+**SetLike.intCast_mem_graded** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetLike.intCast_mem_graded [Zero ι] [AddGroupWithOne R] [SetLike σ R] [Add
+SubgroupClass σ R] (A : ι -> σ) [SetLike.GradedOne A] (z : Int) : (z : R) in A 0
+参数：A : ι -> σ；z : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.ofNat_eq_natCast`：∀ (n : ℕ), Int.ofNat n = ↑n
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `SetLike.natCast_mem_graded`：SetLike.natCast_mem_graded [Zero ι] [AddMono
+idWithOne R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι -> σ) [SetLike.GradedO
+ne A] (n : Nat) …
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_negSucc`：cast_negSucc (n : Nat) : (-[n+1] : R) = -(n + 1 : Nat)
+· 使用定理 `NegMemClass.neg_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Neg G} {inst_1 : SetLike S G} [self : NegMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ -x ∈ s
+· 使用定理 `AddSubgroupClass.toNegMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass S G],
+   NegMemClass S G
 -/
 theorem SetLike.intCast_mem_graded [Zero ι] [AddGroupWithOne R] [SetLike σ R]
-    [AddSubgroupClass σ R] (A : ι -> σ) [SetLike.GradedOne A] (z : Int) : (z : R) in A 0 := by
+    [AddSubgroupClass σ R] (A : ι → σ) [SetLike.GradedOne A] (z : ℤ) : (z : R) ∈ A 0 := by
   cases z
   · rw [Int.ofNat_eq_natCast, Int.cast_natCast]
     exact SetLike.natCast_mem_graded _ _
@@ -163,111 +156,98 @@ variable [DecidableEq ι]
 
 namespace SetLike
 
-/--
-Instance `gnonUnitalNonAssocSemiring` / 实例 `gnonUnitalNonAssocSemiring`
+/-- Build a `DirectSum.GNonUnitalNonAssocSemiring` instance for a collection of additive
+submonoids. -/
+/-
+**SetLike.gnonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+形式化陈述：gnonUnitalNonAssocSemiring [Add ι] [NonUnitalNonAssocSemiring R] [SetLike 
+σ R] [AddSubmonoidClass σ R] (A : ι -> σ) [SetLike.GradedMul A] : DirectSum.GNon
+UnitalNonAssocSemiring fun i => A i where mul_zero _
+参数：A : ι -> σ。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gnonUnitalNonAssocSemiring
-  signature: [Add ι] [NonUnitalNonAssocSemiring R] [SetLike σ R]
-  body: Subtype.ext (mul_zero _)
-  zero_mul _ := Subtype.ext (zero_mul _)
-  mul_add _ _ _ := Subtype.ext (mul_add _ _ _)
-  add_mul _ _ _ := Subtype.ext (add_mul _ _ _)
-
-中文:
-实例 gnonUnitalNonAssocSemiring
-  签名: [加法 ι] [非幺非结合半环 R] [集合状 σ R]
-  定义体: Subtype.ext (mul_zero _)
-  zero_mul _ := Subtype.ext (zero_mul _)
-  mul_add _ _ _ := Subtype.ext (mul_add _ _ _)
-  add_mul _ _ _ := Subtype.ext (add_mul _ _ _)
-
-Depends on / 依赖: Subtype, Subtype.ext, mul_zero
+--- 原说明 ---
+Build a `DirectSum.GNonUnitalNonAssocSemiring` instance for a collection of addi
+tive
+submonoids.
 -/
 instance gnonUnitalNonAssocSemiring [Add ι] [NonUnitalNonAssocSemiring R] [SetLike σ R]
-    [AddSubmonoidClass σ R] (A : ι -> σ) [SetLike.GradedMul A] :
+    [AddSubmonoidClass σ R] (A : ι → σ) [SetLike.GradedMul A] :
     DirectSum.GNonUnitalNonAssocSemiring fun i => A i where
   mul_zero _ := Subtype.ext (mul_zero _)
   zero_mul _ := Subtype.ext (zero_mul _)
   mul_add _ _ _ := Subtype.ext (mul_add _ _ _)
   add_mul _ _ _ := Subtype.ext (add_mul _ _ _)
 
-/--
-Instance `gsemiring` / 实例 `gsemiring`
+/-- Build a `DirectSum.GSemiring` instance for a collection of additive submonoids. -/
+/-
+**SetLike.gsemiring** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+形式化陈述：gsemiring [AddMonoid ι] [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R]
+ (A : ι -> σ) [SetLike.GradedMonoid A] : DirectSum.GSemiring fun i => A i where 
+natCast n
+参数：A : ι -> σ。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gsemiring
-  signature: [AddMonoid ι] [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι -> σ)
-  body: ⟨n, SetLike.natCast_mem_graded _ _⟩
-  natCast_zero := Subtype.ext Nat.cast_zero
-  natCast_succ n := Subtype.ext (Nat.cast_succ n)
-
-中文:
-实例 gsemiring
-  签名: [加法幺半群 ι] [半环 R] [集合状 σ R] [加法子幺半群类 σ R] (A : ι -> σ)
-  定义体: ⟨n, SetLike.natCast_mem_graded _ _⟩
-  natCast_zero := Subtype.ext Nat.cast_zero
-  natCast_succ n := Subtype.ext (Nat.cast_succ n)
-
-Depends on / 依赖: SetLike, SetLike.natCast_mem_graded, natCast_mem_graded
+--- 原说明 ---
+Build a `DirectSum.GSemiring` instance for a collection of additive submonoids.
 -/
-instance gsemiring [AddMonoid ι] [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι -> σ)
+instance gsemiring [AddMonoid ι] [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι → σ)
     [SetLike.GradedMonoid A] : DirectSum.GSemiring fun i => A i where
   natCast n := ⟨n, SetLike.natCast_mem_graded _ _⟩
   natCast_zero := Subtype.ext Nat.cast_zero
   natCast_succ n := Subtype.ext (Nat.cast_succ n)
 
-/--
-Instance `gcommSemiring` / 实例 `gcommSemiring`
+/-- Build a `DirectSum.GCommSemiring` instance for a collection of additive submonoids. -/
+/-
+**SetLike.gcommSemiring** 是 Mathlib 中的一个定义，位于命名空间 `SetLike`。
+形式化陈述：{ι : Type u_1} →   {σ : Type u_2} →     {R : Type u_4} →       [inst : Add
+CommMonoid ι] →         [inst_1 : CommSemiring R] →           [inst_2 : SetLike 
+σ R] →             [inst_3 : AddSubmonoidClass σ R] →               (A : ι → σ) 
+→ [SetLike.GradedMonoid A] → DirectSum.GCommSemiring fun i => ↥(A i)
+参数：A : ι → σ；A i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gcommSemiring
-  signature: [AddCommMonoid ι] [CommSemiring R] [SetLike σ R] [AddSubmonoidClass σ R]
-
-中文:
-实例 gcommSemiring
-  签名: [加法交换幺半群 ι] [交换半环 R] [集合状 σ R] [加法子幺半群类 σ R]
+--- 原说明 ---
+Build a `DirectSum.GCommSemiring` instance for a collection of additive submonoi
+ds.
 -/
 instance gcommSemiring [AddCommMonoid ι] [CommSemiring R] [SetLike σ R] [AddSubmonoidClass σ R]
-    (A : ι -> σ) [SetLike.GradedMonoid A] : DirectSum.GCommSemiring fun i => A i where
+    (A : ι → σ) [SetLike.GradedMonoid A] : DirectSum.GCommSemiring fun i => A i where
 
-/--
-Instance `gring` / 实例 `gring`
+/-- Build a `DirectSum.GRing` instance for a collection of additive subgroups. -/
+/-
+**SetLike.gring** 是 Mathlib 中的一个实例，位于命名空间 `SetLike`。
+形式化陈述：gring [AddMonoid ι] [Ring R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -
+> σ) [SetLike.GradedMonoid A] : DirectSum.GRing fun i => A i where intCast z
+参数：A : ι -> σ。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gring
-  signature: [AddMonoid ι] [Ring R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -> σ)
-  body: ⟨z, SetLike.intCast_mem_graded _ _⟩
-intCast_ofNat n := Subtype.ext Int.cast_natCast n
-intCast_negSucc_ofNat n := Subtype.ext Int.cast_negSucc n
-
-中文:
-实例 gring
-  签名: [加法幺半群 ι] [环 R] [集合状 σ R] [加法子群类 σ R] (A : ι -> σ)
-  定义体: ⟨z, SetLike.intCast_mem_graded _ _⟩
-intCast_ofNat n := Subtype.ext Int.cast_natCast n
-intCast_negSucc_ofNat n := Subtype.ext Int.cast_negSucc n
-
-Depends on / 依赖: SetLike, SetLike.intCast_mem_graded, intCast_mem_graded
+--- 原说明 ---
+Build a `DirectSum.GRing` instance for a collection of additive subgroups.
 -/
-instance gring [AddMonoid ι] [Ring R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -> σ)
+instance gring [AddMonoid ι] [Ring R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι → σ)
     [SetLike.GradedMonoid A] : DirectSum.GRing fun i => A i where
   intCast z := ⟨z, SetLike.intCast_mem_graded _ _⟩
-intCast_ofNat n := Subtype.ext Int.cast_natCast n
-intCast_negSucc_ofNat n := Subtype.ext Int.cast_negSucc n
+  intCast_ofNat n := Subtype.ext <| Int.cast_natCast n
+  intCast_negSucc_ofNat n := Subtype.ext <| Int.cast_negSucc n
 
-/--
-Instance `gcommRing` / 实例 `gcommRing`
+/-- Build a `DirectSum.GCommRing` instance for a collection of additive submonoids. -/
+/-
+**SetLike.gcommRing** 是 Mathlib 中的一个定义，位于命名空间 `SetLike`。
+形式化陈述：{ι : Type u_1} →   {σ : Type u_2} →     {R : Type u_4} →       [inst : Add
+CommMonoid ι] →         [inst_1 : CommRing R] →           [inst_2 : SetLike σ R]
+ →             [inst_3 : AddSubgroupClass σ R] →               (A : ι → σ) → [Se
+tLike.GradedMonoid A] → DirectSum.GCommRing fun i => ↥(A i)
+参数：A : ι → σ；A i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gcommRing
-  signature: [AddCommMonoid ι] [CommRing R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -> σ)
-
-中文:
-实例 gcommRing
-  签名: [加法交换幺半群 ι] [交换环 R] [集合状 σ R] [加法子群类 σ R] (A : ι -> σ)
+--- 原说明 ---
+Build a `DirectSum.GCommRing` instance for a collection of additive submonoids.
 -/
-instance gcommRing [AddCommMonoid ι] [CommRing R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -> σ)
+instance gcommRing [AddCommMonoid ι] [CommRing R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι → σ)
     [SetLike.GradedMonoid A] : DirectSum.GCommRing fun i => A i where
 
 end SetLike
@@ -276,110 +256,134 @@ namespace DirectSum
 
 section coe
 
-variable [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι -> σ)
+variable [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι → σ)
 
-/--
-Definition of `coeRingHom` / `coeRingHom` 的定义
+/-- The canonical ring isomorphism between `⨁ i, A i` and `R` -/
+/-
+**DirectSum.coeRingHom** 是 Mathlib 中的一个定义，位于命名空间 `DirectSum`。
+形式化陈述：coeRingHom [AddMonoid ι] [SetLike.GradedMonoid A] : (⨁ i, A i) ->+* R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeRingHom
-  signature: [AddMonoid ι] [SetLike.GradedMonoid A]
-  body: DirectSum.toSemiring (fun i => AddSubmonoidClass.subtype (A i)) rfl fun _ _ => rfl
-
-中文:
-定义 coeRingHom
-  签名: [加法幺半群 ι] [集合状.分次幺半群 A]
-  定义体: DirectSum.toSemiring (fun i => AddSubmonoidClass.subtype (A i)) rfl fun _ _ => rfl
-
-Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.subtype, DirectSum, DirectSum.toSemiring, subtype, toSemiring
+--- 原说明 ---
+The canonical ring isomorphism between `⨁ i, A i` and `R`
 -/
-def coeRingHom [AddMonoid ι] [SetLike.GradedMonoid A] : (⨁ i, A i) ->+* R :=
+def coeRingHom [AddMonoid ι] [SetLike.GradedMonoid A] : (⨁ i, A i) →+* R :=
   DirectSum.toSemiring (fun i => AddSubmonoidClass.subtype (A i)) rfl fun _ _ => rfl
 
 /-- The canonical ring isomorphism between `⨁ i, A i` and `R` -/
 @[simp]
-/--
-theorem `coeRingHom_of` / 定理 `coeRingHom_of`
+/-
+**DirectSum.coeRingHom_of** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coeRingHom_of [AddMonoid ι] [SetLike.GradedMonoid A] (i : ι) (x : A i) : (
+coeRingHom A : _ ->+* R) (of (fun i => A i) i x) = x
+参数：i : ι；x : A i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.toSemiring_of`：toSemiring_of (f : forall i, A i ->+ R) (hone h
+mul) (i : ι) (x : A i) : toSemiring f hone hmul (of _ i x) = f _ x
 
-English:
-theorem coeRingHom_of
-  given: [AddMonoid ι] [SetLike.GradedMonoid A] (i : ι) (x : A i)
-  proof: DirectSum.toSemiring_of _ _ _ _ _
-
-中文:
-定理 coeRingHom_of
-  条件: [加法幺半群 ι] [集合状.分次幺半群 A] (i : ι) (x : A i)
-  证明: DirectSum.toSemiring_of _ _ _ _ _
-
-Depends on / 依赖: DirectSum, DirectSum.toSemiring_of, toSemiring_of
+--- 原说明 ---
+The canonical ring isomorphism between `⨁ i, A i` and `R`
 -/
 theorem coeRingHom_of [AddMonoid ι] [SetLike.GradedMonoid A] (i : ι) (x : A i) :
-    (coeRingHom A : _ ->+* R) (of (fun i => A i) i x) = x :=
+    (coeRingHom A : _ →+* R) (of (fun i => A i) i x) = x :=
   DirectSum.toSemiring_of _ _ _ _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_mul_apply` / 定理 `coe_mul_apply`
-
-English:
-theorem coe_mul_apply
-  statement: [AddMonoid ι] [SetLike.GradedMonoid A]
-  proof: by
-  rw [mul_eq_sum_support_ghas_mul]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
-  simp_rw [coe_of_apply, apply_ite, ZeroMemClass.coe_zero, ← Finset.sum_filter, SetLike.coe_gMul]
-
-中文:
-定理 coe_mul_apply
-  结论: [加法幺半群 ι] [集合状.分次幺半群 A]
-  证明: by
-  rw [mul_eq_sum_support_ghas_mul]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
-  simp_rw [coe_of_apply, apply_ite, ZeroMemClass.coe_zero, ← Finset.sum_filter, SetLike.coe_gMul]
-
-Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, DFinsupp, DFinsupp.finsetSum_apply, Finset, Finset.sum_filter, SetLike, SetLike.coe_gMul, ZeroMemClass, ZeroMemClass.coe_zero, apply_ite, coe_finsetSum, coe_gMul, coe_of_apply, coe_zero, finsetSum_apply, mul_eq_sum_support_ghas_mul, simp_rw, sum_filter
+/-
+**DirectSum.coe_mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_apply [AddMonoid ι] [SetLike.GradedMonoid A] [forall (i : ι) (x : 
+A i), Decidable (x != 0)] (r r' : ⨁ i, A i) (n : ι) : ((r * r') n : R) = ∑ ij in
+ r.support ×ˢ r'.support with ij.1 + ij.2 = n, (r ij.1 * r' ij.2 : R)
+参数：i : ι；x : A i；x != 0；r r' : ⨁ i, A i；n : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.mul_eq_sum_support_ghas_mul`：mul_eq_sum_support_ghas_mul [fora
+ll (i : ι) (x : A i), Decidable (x != 0)] (a a' : ⨁ i, A i) : a * a' = ∑ ij in D
+Finsupp.support a ×ˢ DFinsu…
+· 使用定理 `DFinsupp.finsetSum_apply`：finsetSum_apply {α} [forall i, AddCommMonoid (
+β i)] (s : Finset α) (g : α -> Π₀ i, β i) (i : ι) : (∑ a in s, g a) i = ∑ a in s
+, g a i
+· 使用定理 `AddSubmonoidClass.coe_finsetSum`：∀ {B : Type u_3} {S : B} {ι : Type u_4}
+ {M : Type u_5} [inst : AddCommMonoid M] [inst_1 : SetLike B M]   [inst_2 : AddS
+ubmonoidClass B M] (f…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DirectSum.coe_of_apply`：coe_of_apply {M S : Type*} [DecidableEq ι] [AddC
+ommMonoid M] [SetLike S M] [AddSubmonoidClass S M] {A : ι -> S} (i j : ι) (x : A
+ i) : (of (f…
+· 使用定理 `apply_ite`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) (P : Prop) [inst 
+: Decidable P] (x y : α),   f (if P then x else y) = if P then f x else f y
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_mul_apply [AddMonoid ι] [SetLike.GradedMonoid A]
-    [forall (i : ι) (x : A i), Decidable (x != 0)] (r r' : ⨁ i, A i) (n : ι) :
+    [∀ (i : ι) (x : A i), Decidable (x ≠ 0)] (r r' : ⨁ i, A i) (n : ι) :
     ((r * r') n : R) =
-      ∑ ij in r.support ×ˢ r'.support with ij.1 + ij.2 = n, (r ij.1 * r' ij.2 : R) := by
-  rw [mul_eq_sum_support_ghas_mul]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
+      ∑ ij ∈ r.support ×ˢ r'.support with ij.1 + ij.2 = n, (r ij.1 * r' ij.2 : R) := by
+  rw [mul_eq_sum_support_ghas_mul, DFinsupp.finsetSum_apply, AddSubmonoidClass.coe_finsetSum]
   simp_rw [coe_of_apply, apply_ite, ZeroMemClass.coe_zero, ← Finset.sum_filter, SetLike.coe_gMul]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_mul_apply_eq_dfinsuppSum` / 定理 `coe_mul_apply_eq_dfinsuppSum`
-
-English:
-theorem coe_mul_apply_eq_dfinsuppSum
-  statement: [AddMonoid ι] [SetLike.GradedMonoid A]
-  proof: by
-  rw [mul_eq_dfinsuppSum]
-  iterate 2 rw [DFinsupp.sum_apply, DFinsupp.sum, AddSubmonoidClass.coe_finsetSum]; congr; ext
-  dsimp only
-  split_ifs with h
-  · subst h
-    rw [of_eq_same]
-    rfl
-  · rw [of_eq_of_ne _ _ _ (Ne.symm h)]
-    rfl
-
-中文:
-定理 coe_mul_apply_eq_dfinsuppSum
-  结论: [加法幺半群 ι] [集合状.分次幺半群 A]
-  证明: by
-  rw [mul_eq_dfinsuppSum]
-  iterate 2 rw [DFinsupp.sum_apply, DFinsupp.sum, AddSubmonoidClass.coe_finsetSum]; congr; ext
-  dsimp only
-  split_ifs with h
-  · subst h
-    rw [of_eq_same]
-    rfl
-  · rw [of_eq_of_ne _ _ _ (Ne.symm h)]
-    rfl
-
-Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, DFinsupp, DFinsupp.sum, DFinsupp.sum_apply, Ne.symm, coe_finsetSum, iterate, mul_eq_dfinsuppSum, of_eq_of_ne, of_eq_same, split_ifs, sum_apply
+/-
+**DirectSum.coe_mul_apply_eq_dfinsuppSum** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_apply_eq_dfinsuppSum [AddMonoid ι] [SetLike.GradedMonoid A] [foral
+l (i : ι) (x : A i), Decidable (x != 0)] (r r' : ⨁ i, A i) (n : ι) : ((r * r') n
+ : R) = r.sum fun i ri => r'.sum fun j rj => if i + j = n then (ri * rj : R) els
+e 0
+参数：i : ι；x : A i；x != 0；r r' : ⨁ i, A i；n : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.mul_eq_dfinsuppSum`：mul_eq_dfinsuppSum [forall (i : ι) (x : A 
+i), Decidable (x != 0)] (a a' : ⨁ i, A i) : a * a' = a.sum fun _ ai => a'.sum fu
+n _ aj => DirectSu…
+· 使用定理 `DFinsupp.sum_apply`：sum_apply {ι} {β : ι -> Type v} {ι₁ : Type u₁} [Deci
+dableEq ι₁] {β₁ : ι₁ -> Type v₁} [forall i₁, Zero (β₁ i₁)] [forall (i) (x : β₁ i
+), Decid…
+· 使用定理 `DFinsupp.sum.eq_1`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} [inst : 
+DecidableEq ι] [inst_1 : (i : ι) → Zero (β i)]   [inst_2 : (i : ι) → (x : β i) →
+ Decida…
+· 使用定理 `AddSubmonoidClass.coe_finsetSum`：∀ {B : Type u_3} {S : B} {ι : Type u_4}
+ {M : Type u_5} [inst : AddCommMonoid M] [inst_1 : SetLike B M]   [inst_2 : AddS
+ubmonoidClass B M] (f…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `DirectSum.of_eq_same`：of_eq_same (i : ι) (x : β i) : (of _ i x) i = x
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `DirectSum.of_eq_of_ne`：of_eq_of_ne (i j : ι) (x : β i) (h : j != i) : (o
+f _ i x) j = 0
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
 theorem coe_mul_apply_eq_dfinsuppSum [AddMonoid ι] [SetLike.GradedMonoid A]
-    [forall (i : ι) (x : A i), Decidable (x != 0)] (r r' : ⨁ i, A i) (n : ι) :
+    [∀ (i : ι) (x : A i), Decidable (x ≠ 0)] (r r' : ⨁ i, A i) (n : ι) :
     ((r * r') n : R) = r.sum fun i ri => r'.sum fun j rj => if i + j = n then (ri * rj : R)
       else 0 := by
   rw [mul_eq_dfinsuppSum]
@@ -394,75 +398,113 @@ theorem coe_mul_apply_eq_dfinsuppSum [AddMonoid ι] [SetLike.GradedMonoid A]
 
 set_option backward.isDefEq.respectTransparency false in
 open Finset in
-/--
-theorem `coe_mul_apply_eq_sum_antidiagonal` / 定理 `coe_mul_apply_eq_sum_antidiagonal`
-
-English:
-theorem coe_mul_apply_eq_sum_antidiagonal
-  statement: [AddMonoid ι] [HasAntidiagonal ι]
-  proof: by
-  classical
-  rw [coe_mul_apply]
-  apply Finset.sum_subset (fun _ => by simp)
-  aesop (erase simp not_and) (add simp not_and_or)
-
-中文:
-定理 coe_mul_apply_eq_sum_antidiagonal
-  结论: [加法幺半群 ι] [有Antidiagonal ι]
-  证明: by
-  classical
-  rw [coe_mul_apply]
-  apply Finset.sum_subset (fun _ => by simp)
-  aesop (erase simp not_and) (add simp not_and_or)
-
-Depends on / 依赖: Finset, Finset.sum_subset, classical, coe_mul_apply, not_and, not_and_or, sum_subset
+/-
+**DirectSum.coe_mul_apply_eq_sum_antidiagonal** 是 Mathlib 中的一个定理，位于命名空间 `DirectS
+um`。
+形式化陈述：coe_mul_apply_eq_sum_antidiagonal [AddMonoid ι] [HasAntidiagonal ι] [SetLi
+ke.GradedMonoid A] (r r' : ⨁ i, A i) (n : ι) : (r * r') n = ∑ ij in antidiagonal
+ n, (r ij.1 : R) * r' ij.2
+参数：r r' : ⨁ i, A i；n : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.coe_mul_apply`：coe_mul_apply [AddMonoid ι] [SetLike.GradedMono
+id A] [forall (i : ι) (x : A i), Decidable (x != 0)] (r r' : ⨁ i, A i) (n : ι) :
+ ((r * r') n …
+· 使用定理 `Finset.sum_subset`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [i
+nst : AddCommMonoid M] {f : ι → M},   s₁ ⊆ s₂ → (∀ x ∈ s₂, x ∉ s₁ → f x = 0) → ∑
+ x ∈ s₁…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 theorem coe_mul_apply_eq_sum_antidiagonal [AddMonoid ι] [HasAntidiagonal ι]
     [SetLike.GradedMonoid A] (r r' : ⨁ i, A i) (n : ι) :
-    (r * r') n = ∑ ij in antidiagonal n, (r ij.1 : R) * r' ij.2 := by
+    (r * r') n = ∑ ij ∈ antidiagonal n, (r ij.1 : R) * r' ij.2 := by
   classical
   rw [coe_mul_apply]
-  apply Finset.sum_subset (fun _ => by simp)
+  apply Finset.sum_subset (fun _ ↦ by simp)
   aesop (erase simp not_and) (add simp not_and_or)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_of_mul_apply_aux` / 定理 `coe_of_mul_apply_aux`
-
-English:
-theorem coe_of_mul_apply_aux
-  statement: [AddMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r : A i)
-  proof: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, zero_mul, ite_self]
-      exact DFinsupp.sum_zero
-    simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
-    split_ifs with h
-    · rfl
-    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [mul_zero]
-
-中文:
-定理 coe_of_mul_apply_aux
-  结论: [加法幺半群 ι] [集合状.分次幺半群 A] {i : ι} (r : A i)
-  证明: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, zero_mul, ite_self]
-      exact DFinsupp.sum_zero
-    simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
-    split_ifs with h
-    · rfl
-    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [mul_zero]
-
-Depends on / 依赖: DFinsupp, DFinsupp.notMem_support_iff.mp, DFinsupp.sum, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_ite_eq, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, mul_zero, notMem_support_iff, simp_rw, split_ifs, sum_ite_eq, sum_single_index, sum_zero
+/-
+**DirectSum.coe_of_mul_apply_aux** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_of_mul_apply_aux [AddMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r : A
+ i) (r' : ⨁ i, A i) {j n : ι} (H : forall x : ι, i + x = n ↔ x = j) : ((of (fun 
+i => A i) i r * r') n : R) = r * r' j
+参数：r : A i；r' : ⨁ i, A i；H : forall x : ι, i + x = n ↔ x = j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.coe_mul_apply_eq_dfinsuppSum`：coe_mul_apply_eq_dfinsuppSum [Ad
+dMonoid ι] [SetLike.GradedMonoid A] [forall (i : ι) (x : A i), Decidable (x != 0
+)] (r r' : ⨁ i, A i) (n : ι)…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `DFinsupp.sum_single_index`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} 
+[inst : DecidableEq ι] [inst_1 : (i : ι) → Zero (β i)]   [inst_2 : (i : ι) → (x 
+: β i) → Decida…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DFinsupp.sum.congr_simp`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} {i
+nst : DecidableEq ι} [inst_1 : DecidableEq ι]   [inst_2 : (i : ι) → Zero (β i)] 
+{inst_3 : (i …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `DFinsupp.sum_zero`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} [inst : 
+DecidableEq ι] [inst_1 : (i : ι) → AddCommMonoid (β i)]   [inst_2 : (i : ι) → (x
+ : β i)…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_ite_eq'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoi
+d M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if
+ x = a t…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFinsupp.notMem_support_iff`：notMem_support_iff {f : Π₀ i, β i} {i : ι} 
+: i ∉ f.support ↔ f i = 0
+· 使用定理 `ZeroMemClass.coe_zero`：∀ {A : Type u_3} {M₁ : Type u_4} [inst : SetLike 
+A M₁] [inst_1 : Zero M₁] [hA : ZeroMemClass A M₁] (S' : A), ↑0 = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 theorem coe_of_mul_apply_aux [AddMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r : A i)
-    (r' : ⨁ i, A i) {j n : ι} (H : forall x : ι, i + x = n ↔ x = j) :
+    (r' : ⨁ i, A i) {j n : ι} (H : ∀ x : ι, i + x = n ↔ x = j) :
     ((of (fun i => A i) i r * r') n : R) = r * r' j := by
   classical
     rw [coe_mul_apply_eq_dfinsuppSum]
@@ -473,49 +515,74 @@ theorem coe_of_mul_apply_aux [AddMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r
     simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
     split_ifs with h
     · rfl
-    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [mul_zero]
+    rw [DFinsupp.notMem_support_iff.mp h, ZeroMemClass.coe_zero, mul_zero]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coe_mul_of_apply_aux` / 定理 `coe_mul_of_apply_aux`
-
-English:
-theorem coe_mul_of_apply_aux
-  statement: [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i) {i : ι}
-  proof: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]; rw [DFinsupp.sum_comm]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
-      exact DFinsupp.sum_zero
-    simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
-    split_ifs with h
-    · rfl
-    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [zero_mul]
-
-中文:
-定理 coe_mul_of_apply_aux
-  结论: [加法幺半群 ι] [集合状.分次幺半群 A] (r : ⨁ i, A i) {i : ι}
-  证明: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]; rw [DFinsupp.sum_comm]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
-      exact DFinsupp.sum_zero
-    simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
-    split_ifs with h
-    · rfl
-    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [zero_mul]
-
-Depends on / 依赖: DFinsupp, DFinsupp.notMem_support_iff.mp, DFinsupp.sum, DFinsupp.sum_comm, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_ite_eq, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, mul_zero, notMem_support_iff, simp_rw, split_ifs, sum_comm, sum_ite_eq
+/-
+**DirectSum.coe_mul_of_apply_aux** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_of_apply_aux [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i)
+ {i : ι} (r' : A i) {j n : ι} (H : forall x : ι, x + i = n ↔ x = j) : ((r * of (
+fun i => A i) i r') n : R) = r j * r'
+参数：r : ⨁ i, A i；r' : A i；H : forall x : ι, x + i = n ↔ x = j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.coe_mul_apply_eq_dfinsuppSum`：coe_mul_apply_eq_dfinsuppSum [Ad
+dMonoid ι] [SetLike.GradedMonoid A] [forall (i : ι) (x : A i), Decidable (x != 0
+)] (r r' : ⨁ i, A i) (n : ι)…
+· 使用定理 `DFinsupp.sum_comm`：∀ {γ : Type w} {ι₁ : Type u_3} {ι₂ : Type u_4} {β₁ : 
+ι₁ → Type u_1} {β₂ : ι₂ → Type u_2} [inst : DecidableEq ι₁]   [inst_1 : Decidabl
+eEq ι₂]…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `DFinsupp.sum_single_index`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} 
+[inst : DecidableEq ι] [inst_1 : (i : ι) → Zero (β i)]   [inst_2 : (i : ι) → (x 
+: β i) → Decida…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DFinsupp.sum.congr_simp`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} {i
+nst : DecidableEq ι} [inst_1 : DecidableEq ι]   [inst_2 : (i : ι) → Zero (β i)] 
+{inst_3 : (i …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `DFinsupp.sum_zero`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} [inst : 
+DecidableEq ι] [inst_1 : (i : ι) → AddCommMonoid (β i)]   [inst_2 : (i : ι) → (x
+ : β i)…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_ite_eq'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoi
+d M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if
+ x = a t…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFinsupp.notMem_support_iff`：notMem_support_iff {f : Π₀ i, β i} {i : ι} 
+: i ∉ f.support ↔ f i = 0
+· 使用定理 `ZeroMemClass.coe_zero`：∀ {A : Type u_3} {M₁ : Type u_4} [inst : SetLike 
+A M₁] [inst_1 : Zero M₁] [hA : ZeroMemClass A M₁] (S' : A), ↑0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem coe_mul_of_apply_aux [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i) {i : ι}
-    (r' : A i) {j n : ι} (H : forall x : ι, x + i = n ↔ x = j) :
+    (r' : A i) {j n : ι} (H : ∀ x : ι, x + i = n ↔ x = j) :
     ((r * of (fun i => A i) i r') n : R) = r j * r' := by
   classical
-    rw [coe_mul_apply_eq_dfinsuppSum]; rw [DFinsupp.sum_comm]
+    rw [coe_mul_apply_eq_dfinsuppSum, DFinsupp.sum_comm]
     apply (DFinsupp.sum_single_index _).trans
     swap
     · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
@@ -523,79 +590,77 @@ theorem coe_mul_of_apply_aux [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i,
     simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
     split_ifs with h
     · rfl
-    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [zero_mul]
-
-/--
-theorem `coe_of_mul_apply_add` / 定理 `coe_of_mul_apply_add`
-
-English:
-theorem coe_of_mul_apply_add
-  statement: [AddLeftCancelMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r : A i)
-  proof: coe_of_mul_apply_aux _ _ _ fun _x => ⟨fun h => add_left_cancel h, fun h => h ▸ rfl⟩
-
-中文:
-定理 coe_of_mul_apply_add
-  结论: [加法左消去幺半群 ι] [集合状.分次幺半群 A] {i : ι} (r : A i)
-  证明: coe_of_mul_apply_aux _ _ _ fun _x => ⟨fun h => add_left_cancel h, fun h => h ▸ rfl⟩
-
-Depends on / 依赖: add_left_cancel, coe_of_mul_apply_aux
+    rw [DFinsupp.notMem_support_iff.mp h, ZeroMemClass.coe_zero, zero_mul]
+/-
+**DirectSum.coe_of_mul_apply_add** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_of_mul_apply_add [AddLeftCancelMonoid ι] [SetLike.GradedMonoid A] {i :
+ ι} (r : A i) (r' : ⨁ i, A i) (j : ι) : ((of (fun i => A i) i r * r') (i + j) : 
+R) = r * r' j
+参数：r : A i；r' : ⨁ i, A i；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.coe_of_mul_apply_aux`：coe_of_mul_apply_aux [AddMonoid ι] [SetL
+ike.GradedMonoid A] {i : ι} (r : A i) (r' : ⨁ i, A i) {j n : ι} (H : forall x : 
+ι, i + x = n ↔ x = j…
+· 使用定理 `add_left_cancel`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] {a 
+b c : G}, a + b = a + c → b = c
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
 -/
 theorem coe_of_mul_apply_add [AddLeftCancelMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r : A i)
     (r' : ⨁ i, A i) (j : ι) : ((of (fun i => A i) i r * r') (i + j) : R) = r * r' j :=
   coe_of_mul_apply_aux _ _ _ fun _x => ⟨fun h => add_left_cancel h, fun h => h ▸ rfl⟩
-
-/--
-theorem `coe_mul_of_apply_add` / 定理 `coe_mul_of_apply_add`
-
-English:
-theorem coe_mul_of_apply_add
-  statement: [AddRightCancelMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i)
-  proof: coe_mul_of_apply_aux _ _ _ fun _x => ⟨fun h => add_right_cancel h, fun h => h ▸ rfl⟩
-
-中文:
-定理 coe_mul_of_apply_add
-  结论: [加法右消去幺半群 ι] [集合状.分次幺半群 A] (r : ⨁ i, A i)
-  证明: coe_mul_of_apply_aux _ _ _ fun _x => ⟨fun h => add_right_cancel h, fun h => h ▸ rfl⟩
-
-Depends on / 依赖: add_right_cancel, coe_mul_of_apply_aux
+/-
+**DirectSum.coe_mul_of_apply_add** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_of_apply_add [AddRightCancelMonoid ι] [SetLike.GradedMonoid A] (r 
+: ⨁ i, A i) {i : ι} (r' : A i) (j : ι) : ((r * of (fun i => A i) i r') (j + i) :
+ R) = r j * r'
+参数：r : ⨁ i, A i；r' : A i；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.coe_mul_of_apply_aux`：coe_mul_of_apply_aux [AddMonoid ι] [SetL
+ike.GradedMonoid A] (r : ⨁ i, A i) {i : ι} (r' : A i) {j n : ι} (H : forall x : 
+ι, x + i = n ↔ x = j…
+· 使用定理 `add_right_cancel`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] {
+a b c : G}, a + b = c + b → a = c
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem coe_mul_of_apply_add [AddRightCancelMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i)
     {i : ι} (r' : A i) (j : ι) : ((r * of (fun i => A i) i r') (j + i) : R) = r j * r' :=
   coe_mul_of_apply_aux _ _ _ fun _x => ⟨fun h => add_right_cancel h, fun h => h ▸ rfl⟩
-
-/--
-theorem `coe_of_mul_apply_of_mem_zero` / 定理 `coe_of_mul_apply_of_mem_zero`
-
-English:
-theorem coe_of_mul_apply_of_mem_zero
-  statement: [AddMonoid ι] [SetLike.GradedMonoid A] (r : A 0)
-  proof: coe_of_mul_apply_aux _ _ _ fun _x => by rw [zero_add]
-
-中文:
-定理 coe_of_mul_apply_of_mem_zero
-  结论: [加法幺半群 ι] [集合状.分次幺半群 A] (r : A 0)
-  证明: coe_of_mul_apply_aux _ _ _ fun _x => by rw [zero_add]
-
-Depends on / 依赖: coe_of_mul_apply_aux, zero_add
+/-
+**DirectSum.coe_of_mul_apply_of_mem_zero** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_of_mul_apply_of_mem_zero [AddMonoid ι] [SetLike.GradedMonoid A] (r : A
+ 0) (r' : ⨁ i, A i) (j : ι) : ((of (fun i => A i) 0 r * r') j : R) = r * r' j
+参数：r : A 0；r' : ⨁ i, A i；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.coe_of_mul_apply_aux`：coe_of_mul_apply_aux [AddMonoid ι] [SetL
+ike.GradedMonoid A] {i : ι} (r : A i) (r' : ⨁ i, A i) {j n : ι} (H : forall x : 
+ι, i + x = n ↔ x = j…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_of_mul_apply_of_mem_zero [AddMonoid ι] [SetLike.GradedMonoid A] (r : A 0)
     (r' : ⨁ i, A i) (j : ι) : ((of (fun i => A i) 0 r * r') j : R) = r * r' j :=
   coe_of_mul_apply_aux _ _ _ fun _x => by rw [zero_add]
-
-/--
-theorem `coe_mul_of_apply_of_mem_zero` / 定理 `coe_mul_of_apply_of_mem_zero`
-
-English:
-theorem coe_mul_of_apply_of_mem_zero
-  statement: [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i)
-  proof: coe_mul_of_apply_aux _ _ _ fun _x => by rw [add_zero]
-
-中文:
-定理 coe_mul_of_apply_of_mem_zero
-  结论: [加法幺半群 ι] [集合状.分次幺半群 A] (r : ⨁ i, A i)
-  证明: coe_mul_of_apply_aux _ _ _ fun _x => by rw [add_zero]
-
-Depends on / 依赖: Seq.TerminatedAt, Seq.head, Stream, TerminatedAt, _tail, add_zero, coe_mul_of_apply_aux, generalizing, gp_head, s.get, s.head, s.tail.TerminatedAt, s_head_eq, terminatedAt_n
+/-
+**DirectSum.coe_mul_of_apply_of_mem_zero** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_of_apply_of_mem_zero [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁
+ i, A i) (r' : A 0) (j : ι) : ((r * of (fun i => A i) 0 r') j : R) = r j * r'
+参数：r : ⨁ i, A i；r' : A 0；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.coe_mul_of_apply_aux`：coe_mul_of_apply_aux [AddMonoid ι] [SetL
+ike.GradedMonoid A] (r : ⨁ i, A i) {i : ι} (r' : A i) {j n : ι} (H : forall x : 
+ι, x + i = n ↔ x = j…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_mul_of_apply_of_mem_zero [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i)
     (r' : A 0) (j : ι) : ((r * of (fun i => A i) 0 r') j : R) = r j * r' :=
@@ -605,42 +670,62 @@ end coe
 
 section CanonicallyOrderedAddCommMonoid
 
-variable [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι -> σ)
+variable [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι → σ)
 variable [AddCommMonoid ι] [PartialOrder ι] [CanonicallyOrderedAdd ι] [SetLike.GradedMonoid A]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `coe_of_mul_apply_of_not_le` / 定理 `coe_of_mul_apply_of_not_le`
-
-English:
-theorem coe_of_mul_apply_of_not_le
-  given: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : ¬i <= n)
-  proof: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, zero_mul, ite_self]
-      exact DFinsupp.sum_zero
-    · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      exact fun x _ H => h ((self_le_add_right i x).trans_eq H)
-
-中文:
-定理 coe_of_mul_apply_of_not_le
-  条件: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : ¬i <= n)
-  证明: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, zero_mul, ite_self]
-      exact DFinsupp.sum_zero
-    · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      exact fun x _ H => h ((self_le_add_right i x).trans_eq H)
-
-Depends on / 依赖: Aux_stable_step_of_terminated, DFinsupp, DFinsupp.sum, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_const_zero, Finset.sum_ite_of_false, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, n_le_m, s.terminated_stable, self_le_add_right, simp_rw, sum_const_zero, sum_ite_of_false
+/-
+**DirectSum.coe_of_mul_apply_of_not_le** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_of_mul_apply_of_not_le {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : 
+¬i <= n) : ((of (fun i => A i) i r * r') n : R) = 0
+参数：r : A i；r' : ⨁ i, A i；n : ι；h : ¬i <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.coe_mul_apply_eq_dfinsuppSum`：coe_mul_apply_eq_dfinsuppSum [Ad
+dMonoid ι] [SetLike.GradedMonoid A] [forall (i : ι) (x : A i), Decidable (x != 0
+)] (r r' : ⨁ i, A i) (n : ι)…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `DFinsupp.sum_single_index`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} 
+[inst : DecidableEq ι] [inst_1 : (i : ι) → Zero (β i)]   [inst_2 : (i : ι) → (x 
+: β i) → Decida…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DFinsupp.sum.congr_simp`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} {i
+nst : DecidableEq ι} [inst_1 : DecidableEq ι]   [inst_2 : (i : ι) → Zero (β i)] 
+{inst_3 : (i …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `DFinsupp.sum_zero`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} [inst : 
+DecidableEq ι] [inst_1 : (i : ι) → AddCommMonoid (β i)]   [inst_2 : (i : ι) → (x
+ : β i)…
+· 使用定理 `DFinsupp.sum.eq_1`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} [inst : 
+DecidableEq ι] [inst_1 : (i : ι) → Zero (β i)]   [inst_2 : (i : ι) → (x : β i) →
+ Decida…
+· 使用定理 `Finset.sum_ite_of_false`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} 
+[inst : AddCommMonoid M] {p : ι → Prop} [inst_1 : DecidablePred p],   (∀ x ∈ s, 
+¬p x) → ∀ (f …
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `self_le_add_right`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [Canoni
+callyOrderedAdd α] (a b : α), a ≤ a + b
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
 -/
-theorem coe_of_mul_apply_of_not_le {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : ¬i <= n) :
+theorem coe_of_mul_apply_of_not_le {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : ¬i ≤ n) :
     ((of (fun i => A i) i r * r') n : R) = 0 := by
   classical
     rw [coe_mul_apply_eq_dfinsuppSum]
@@ -652,41 +737,64 @@ theorem coe_of_mul_apply_of_not_le {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι)
       exact fun x _ H => h ((self_le_add_right i x).trans_eq H)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `coe_mul_of_apply_of_not_le` / 定理 `coe_mul_of_apply_of_not_le`
-
-English:
-theorem coe_mul_of_apply_of_not_le
-  given: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : ¬i <= n)
-  proof: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]; rw [DFinsupp.sum_comm]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
-      exact DFinsupp.sum_zero
-    · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      exact fun x _ H => h ((self_le_add_left i x).trans_eq H)
-
-中文:
-定理 coe_mul_of_apply_of_not_le
-  条件: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : ¬i <= n)
-  证明: by
-  classical
-    rw [coe_mul_apply_eq_dfinsuppSum]; rw [DFinsupp.sum_comm]
-    apply (DFinsupp.sum_single_index _).trans
-    swap
-    · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
-      exact DFinsupp.sum_zero
-    · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      exact fun x _ H => h ((self_le_add_left i x).trans_eq H)
-
-Depends on / 依赖: DFinsupp, DFinsupp.sum, DFinsupp.sum_comm, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_const_zero, Finset.sum_ite_of_false, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, mul_zero, self_le_add_left, simp_rw, sum_comm, sum_const_zero, sum_ite_of_false
+/-
+**DirectSum.coe_mul_of_apply_of_not_le** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_of_apply_of_not_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : 
+¬i <= n) : ((r * of (fun i => A i) i r') n : R) = 0
+参数：r : ⨁ i, A i；r' : A i；n : ι；h : ¬i <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DirectSum.coe_mul_apply_eq_dfinsuppSum`：coe_mul_apply_eq_dfinsuppSum [Ad
+dMonoid ι] [SetLike.GradedMonoid A] [forall (i : ι) (x : A i), Decidable (x != 0
+)] (r r' : ⨁ i, A i) (n : ι)…
+· 使用定理 `DFinsupp.sum_comm`：∀ {γ : Type w} {ι₁ : Type u_3} {ι₂ : Type u_4} {β₁ : 
+ι₁ → Type u_1} {β₂ : ι₂ → Type u_2} [inst : DecidableEq ι₁]   [inst_1 : Decidabl
+eEq ι₂]…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `DFinsupp.sum_single_index`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} 
+[inst : DecidableEq ι] [inst_1 : (i : ι) → Zero (β i)]   [inst_2 : (i : ι) → (x 
+: β i) → Decida…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DFinsupp.sum.congr_simp`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} {i
+nst : DecidableEq ι} [inst_1 : DecidableEq ι]   [inst_2 : (i : ι) → Zero (β i)] 
+{inst_3 : (i …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `DFinsupp.sum_zero`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} [inst : 
+DecidableEq ι] [inst_1 : (i : ι) → AddCommMonoid (β i)]   [inst_2 : (i : ι) → (x
+ : β i)…
+· 使用定理 `DFinsupp.sum.eq_1`：∀ {ι : Type u} {γ : Type w} {β : ι → Type v} [inst : 
+DecidableEq ι] [inst_1 : (i : ι) → Zero (β i)]   [inst_2 : (i : ι) → (x : β i) →
+ Decida…
+· 使用定理 `Finset.sum_ite_of_false`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} 
+[inst : AddCommMonoid M] {p : ι → Prop} [inst_1 : DecidablePred p],   (∀ x ∈ s, 
+¬p x) → ∀ (f …
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `self_le_add_left`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [Canonic
+allyOrderedAdd α] (a b : α), a ≤ b + a
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
 -/
-theorem coe_mul_of_apply_of_not_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : ¬i <= n) :
+theorem coe_mul_of_apply_of_not_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : ¬i ≤ n) :
     ((r * of (fun i => A i) i r') n : R) = 0 := by
   classical
-    rw [coe_mul_apply_eq_dfinsuppSum]; rw [DFinsupp.sum_comm]
+    rw [coe_mul_apply_eq_dfinsuppSum, DFinsupp.sum_comm]
     apply (DFinsupp.sum_single_index _).trans
     swap
     · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
@@ -696,90 +804,114 @@ theorem coe_mul_of_apply_of_not_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι)
 
 variable [Sub ι] [OrderedSub ι] [AddLeftReflectLE ι]
 
+/-! The following two lemmas only require the same hypotheses as `eq_tsub_iff_add_eq_of_le`, but we
+state them for the above typeclasses for convenience. -/
 
-/--
-theorem `coe_mul_of_apply_of_le` / 定理 `coe_mul_of_apply_of_le`
+/-
+**DirectSum.coe_mul_of_apply_of_le** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_of_apply_of_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : i <=
+ n) : ((r * of (fun i => A i) i r') n : R) = r (n - i) * r'
+参数：r : ⨁ i, A i；r' : A i；n : ι；h : i <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.coe_mul_of_apply_aux`：coe_mul_of_apply_aux [AddMonoid ι] [SetL
+ike.GradedMonoid A] (r : ⨁ i, A i) {i : ι} (r' : A i) {j n : ι} (H : forall x : 
+ι, x + i = n ↔ x = j…
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `eq_tsub_iff_add_eq_of_le`：eq_tsub_iff_add_eq_of_le (h : c <= b) : a = b 
+- c ↔ a + c = b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `CanonicallyOrderedAdd.toAddLeftMono`：∀ {α : Type u} [inst : AddSemigroup
+ α] [inst_1 : LE α] [CanonicallyOrderedAdd α], AddLeftMono α
 
-English:
-theorem coe_mul_of_apply_of_le
-  given: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : i <= n)
-  proof: coe_mul_of_apply_aux _ _ _ fun _x => (eq_tsub_iff_add_eq_of_le h).symm
-
-中文:
-定理 coe_mul_of_apply_of_le
-  条件: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : i <= n)
-  证明: coe_mul_of_apply_aux _ _ _ fun _x => (eq_tsub_iff_add_eq_of_le h).symm
-
-Depends on / 依赖: coe_mul_of_apply_aux, eq_tsub_iff_add_eq_of_le
+--- 原说明 ---
+The following two lemmas only require the same hypotheses as `eq_tsub_iff_add_eq
+_of_le`, but we
+state them for the above typeclasses for convenience.
 -/
-theorem coe_mul_of_apply_of_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : i <= n) :
+theorem coe_mul_of_apply_of_le (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) (h : i ≤ n) :
     ((r * of (fun i => A i) i r') n : R) = r (n - i) * r' :=
   coe_mul_of_apply_aux _ _ _ fun _x => (eq_tsub_iff_add_eq_of_le h).symm
-
-/--
-theorem `coe_of_mul_apply_of_le` / 定理 `coe_of_mul_apply_of_le`
-
-English:
-theorem coe_of_mul_apply_of_le
-  given: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : i <= n)
-  proof: coe_of_mul_apply_aux _ _ _ fun x => by rw [eq_tsub_iff_add_eq_of_le h, add_comm]
-
-中文:
-定理 coe_of_mul_apply_of_le
-  条件: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : i <= n)
-  证明: coe_of_mul_apply_aux _ _ _ fun x => by rw [eq_tsub_iff_add_eq_of_le h, add_comm]
-
-Depends on / 依赖: add_comm, coe_of_mul_apply_aux, eq_tsub_iff_add_eq_of_le
+/-
+**DirectSum.coe_of_mul_apply_of_le** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_of_mul_apply_of_le {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : i <=
+ n) : ((of (fun i => A i) i r * r') n : R) = r * r' (n - i)
+参数：r : A i；r' : ⨁ i, A i；n : ι；h : i <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.coe_of_mul_apply_aux`：coe_of_mul_apply_aux [AddMonoid ι] [SetL
+ike.GradedMonoid A] {i : ι} (r : A i) (r' : ⨁ i, A i) {j n : ι} (H : forall x : 
+ι, i + x = n ↔ x = j…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_tsub_iff_add_eq_of_le`：eq_tsub_iff_add_eq_of_le (h : c <= b) : a = b 
+- c ↔ a + c = b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `CanonicallyOrderedAdd.toAddLeftMono`：∀ {α : Type u} [inst : AddSemigroup
+ α] [inst_1 : LE α] [CanonicallyOrderedAdd α], AddLeftMono α
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_of_mul_apply_of_le {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : i <= n) :
+theorem coe_of_mul_apply_of_le {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) (h : i ≤ n) :
     ((of (fun i => A i) i r * r') n : R) = r * r' (n - i) :=
   coe_of_mul_apply_aux _ _ _ fun x => by rw [eq_tsub_iff_add_eq_of_le h, add_comm]
-
-/--
-theorem `coe_mul_of_apply` / 定理 `coe_mul_of_apply`
-
-English:
-theorem coe_mul_of_apply
-  given: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) [Decidable (i <= n)]
-  proof: by
-  split_ifs with h
-  exacts [coe_mul_of_apply_of_le _ _ _ n h, coe_mul_of_apply_of_not_le _ _ _ n h]
-
-中文:
-定理 coe_mul_of_apply
-  条件: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) [可判定 (i <= n)]
-  证明: by
-  split_ifs with h
-  exacts [coe_mul_of_apply_of_le _ _ _ n h, coe_mul_of_apply_of_not_le _ _ _ n h]
-
-Depends on / 依赖: coe_mul_of_apply_of_le, coe_mul_of_apply_of_not_le, exacts, split_ifs
+/-
+**DirectSum.coe_mul_of_apply** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_mul_of_apply (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) [Decidable (i <
+= n)] : ((r * of (fun i => A i) i r') n : R) = if i <= n then (r (n - i) : R) * 
+r' else 0
+参数：r : ⨁ i, A i；r' : A i；n : ι；i <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `DirectSum.coe_mul_of_apply_of_le`：coe_mul_of_apply_of_le (r : ⨁ i, A i) 
+{i : ι} (r' : A i) (n : ι) (h : i <= n) : ((r * of (fun i => A i) i r') n : R) =
+ r (n - i) * r'
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `DirectSum.coe_mul_of_apply_of_not_le`：coe_mul_of_apply_of_not_le (r : ⨁ 
+i, A i) {i : ι} (r' : A i) (n : ι) (h : ¬i <= n) : ((r * of (fun i => A i) i r')
+ n : R) = 0
 -/
-theorem coe_mul_of_apply (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) [Decidable (i <= n)] :
-    ((r * of (fun i => A i) i r') n : R) = if i <= n then (r (n - i) : R) * r' else 0 := by
+theorem coe_mul_of_apply (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) [Decidable (i ≤ n)] :
+    ((r * of (fun i => A i) i r') n : R) = if i ≤ n then (r (n - i) : R) * r' else 0 := by
   split_ifs with h
   exacts [coe_mul_of_apply_of_le _ _ _ n h, coe_mul_of_apply_of_not_le _ _ _ n h]
-
-/--
-theorem `coe_of_mul_apply` / 定理 `coe_of_mul_apply`
-
-English:
-theorem coe_of_mul_apply
-  given: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) [Decidable (i <= n)]
-  proof: by
-  split_ifs with h
-  exacts [coe_of_mul_apply_of_le _ _ _ n h, coe_of_mul_apply_of_not_le _ _ _ n h]
-
-中文:
-定理 coe_of_mul_apply
-  条件: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) [可判定 (i <= n)]
-  证明: by
-  split_ifs with h
-  exacts [coe_of_mul_apply_of_le _ _ _ n h, coe_of_mul_apply_of_not_le _ _ _ n h]
-
-Depends on / 依赖: Aux_stable_of_terminated, coe_of_mul_apply_of_le, coe_of_mul_apply_of_not_le, exacts, n_le_m, split_ifs, terminatedAt_n
+/-
+**DirectSum.coe_of_mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：coe_of_mul_apply {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) [Decidable (i <
+= n)] : ((of (fun i => A i) i r * r') n : R) = if i <= n then (r * r' (n - i) : 
+R) else 0
+参数：r : A i；r' : ⨁ i, A i；n : ι；i <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `DirectSum.coe_of_mul_apply_of_le`：coe_of_mul_apply_of_le {i : ι} (r : A 
+i) (r' : ⨁ i, A i) (n : ι) (h : i <= n) : ((of (fun i => A i) i r * r') n : R) =
+ r * r' (n - i)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `DirectSum.coe_of_mul_apply_of_not_le`：coe_of_mul_apply_of_not_le {i : ι}
+ (r : A i) (r' : ⨁ i, A i) (n : ι) (h : ¬i <= n) : ((of (fun i => A i) i r * r')
+ n : R) = 0
 -/
-theorem coe_of_mul_apply {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) [Decidable (i <= n)] :
-    ((of (fun i => A i) i r * r') n : R) = if i <= n then (r * r' (n - i) : R) else 0 := by
+theorem coe_of_mul_apply {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) [Decidable (i ≤ n)] :
+    ((of (fun i => A i) i r * r') n : R) = if i ≤ n then (r * r' (n - i) : R) else 0 := by
   split_ifs with h
   exacts [coe_of_mul_apply_of_le _ _ _ n h, coe_of_mul_apply_of_not_le _ _ _ n h]
 
@@ -791,160 +923,138 @@ end DirectSum
 
 namespace Submodule
 
-/--
-Instance `galgebra` / 实例 `galgebra`
+/-- Build a `DirectSum.GAlgebra` instance for a collection of `Submodule`s. -/
+/-
+**Submodule.galgebra** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：galgebra [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R] (A : ι 
+-> Submodule S R) [SetLike.GradedMonoid A] : DirectSum.GAlgebra S fun i => A i w
+here toFun
+参数：A : ι -> Submodule S R。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance galgebra
-  signature: [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R] (A : ι -> Submodule S R)
-  body: ((Algebra.linearMap S R).codRestrict (A 0) <| SetLike.algebraMap_mem_graded A).toAddMonoidHom
-map_one := Subtype.ext (algebraMap S R).map_one
-map_mul _x _y := Sigma.subtype_ext (add_zero 0).symm (algebraMap S R).map_mul _ _
-  commutes := fun _r ⟨i, _xi⟩ =>
-Sigma.subtype_ext ((zero_add i).trans (add_zero i).symm) Algebra.commutes _ _
-smul_def := fun _r ⟨i, _xi⟩ => Sigma.subtype_ext (zero_add i).symm Algebra.smul_def _ _
-
-@[simp]
-
-中文:
-实例 galgebra
-  签名: [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R] (A : ι -> 子模 S R)
-  定义体: ((Algebra.linearMap S R).codRestrict (A 0) <| SetLike.algebraMap_mem_graded A).toAddMonoidHom
-map_one := Subtype.ext (algebraMap S R).map_one
-map_mul _x _y := Sigma.subtype_ext (add_zero 0).symm (algebraMap S R).map_mul _ _
-  commutes := fun _r ⟨i, _xi⟩ =>
-Sigma.subtype_ext ((zero_add i).trans (add_zero i).symm) Algebra.commutes _ _
-smul_def := fun _r ⟨i, _xi⟩ => Sigma.subtype_ext (zero_add i).symm Algebra.smul_def _ _
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.commutes, Algebra.linearMap, Algebra.smul_def, SetLike, SetLike.algebraMap_mem_graded, Sigma.subtype_ext, Subtype, Subtype.ext, add_zero, algebraMap, algebraMap_mem_graded, codRestrict, commutes, linearMap, map_mul, map_one, smul_def, subtype_ext, toAddMonoidHom
+--- 原说明 ---
+Build a `DirectSum.GAlgebra` instance for a collection of `Submodule`s.
 -/
-instance galgebra [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R] (A : ι -> Submodule S R)
+instance galgebra [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R] (A : ι → Submodule S R)
     [SetLike.GradedMonoid A] : DirectSum.GAlgebra S fun i => A i where
   toFun :=
     ((Algebra.linearMap S R).codRestrict (A 0) <| SetLike.algebraMap_mem_graded A).toAddMonoidHom
-map_one := Subtype.ext (algebraMap S R).map_one
-map_mul _x _y := Sigma.subtype_ext (add_zero 0).symm (algebraMap S R).map_mul _ _
+  map_one := Subtype.ext <| (algebraMap S R).map_one
+  map_mul _x _y := Sigma.subtype_ext (add_zero 0).symm <| (algebraMap S R).map_mul _ _
   commutes := fun _r ⟨i, _xi⟩ =>
-Sigma.subtype_ext ((zero_add i).trans (add_zero i).symm) Algebra.commutes _ _
-smul_def := fun _r ⟨i, _xi⟩ => Sigma.subtype_ext (zero_add i).symm Algebra.smul_def _ _
+    Sigma.subtype_ext ((zero_add i).trans (add_zero i).symm) <| Algebra.commutes _ _
+  smul_def := fun _r ⟨i, _xi⟩ => Sigma.subtype_ext (zero_add i).symm <| Algebra.smul_def _ _
 
 @[simp]
-/--
-theorem `setLike.coe_galgebra_toFun` / 定理 `setLike.coe_galgebra_toFun`
-
-English:
-theorem setLike.coe_galgebra_toFun
-  statement: {ι} [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
-  proof: rfl
-
-中文:
-定理 setLike.coe_galgebra_toFun
-  结论: {ι} [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R]
-  证明: rfl
-
-Depends on / 依赖: algebraMap
+/-
+**Submodule.setLike.coe_galgebra_toFun** 是 Mathlib 中的一个定理，位于命名空间 `Submodule.setL
+ike`。
+形式化陈述：∀ {S : Type u_3} {R : Type u_4} {ι : Type u_5} [inst : AddMonoid ι] [inst_
+1 : CommSemiring S] [inst_2 : Semiring R]   [inst_3 : Algebra S R] (A : ι → Subm
+odule S R) [inst_4 : SetLike.GradedMonoid A] (s : S),   ↑(DirectSum.GAlgebra.toF
+un s) = (algebraMap S R) s
+参数：A : ι → Submodule S R；s : S；DirectSum.GAlgebra.toFun s；algebraMap S R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem setLike.coe_galgebra_toFun {ι} [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
-    (A : ι -> Submodule S R) [SetLike.GradedMonoid A] (s : S) :
+    (A : ι → Submodule S R) [SetLike.GradedMonoid A] (s : S) :
     (DirectSum.GAlgebra.toFun (A := fun i => A i) s) = (algebraMap S R s : R) :=
   rfl
 
-/--
-Instance `nat_power_gradedMonoid` / 实例 `nat_power_gradedMonoid`
+/-- A direct sum of powers of a submodule of an algebra has a multiplicative structure. -/
+/-
+**Submodule.nat_power_gradedMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+形式化陈述：nat_power_gradedMonoid [CommSemiring S] [Semiring R] [Algebra S R] (p : Su
+bmodule S R) : SetLike.GradedMonoid fun i : Nat => p ^ i where one_mem
+参数：p : Submodule S R。
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.one_le`：one_le {P : Submodule R A} : (1 : Submodule R A) <= P 
+↔ (1 : A) in P
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Submodule.mul_mem_mul`：mul_mem_mul (hm : m in M) (hn : n in N) : m * n i
+n M * N
 
-English:
-instance nat_power_gradedMonoid
-  signature: [CommSemiring S] [Semiring R] [Algebra S R] (p : Submodule S R)
-  body: by
-    rw [← one_le]; rw [pow_zero]
-  mul_mem i j p q hp hq := by
-    rw [pow_add]
-    exact Submodule.mul_mem_mul hp hq
-
-中文:
-实例 nat_power_gradedMonoid
-  签名: [交换半环 S] [半环 R] [代数 S R] (p : 子模 S R)
-  定义体: by
-    rw [← one_le]; rw [pow_zero]
-  mul_mem i j p q hp hq := by
-    rw [pow_add]
-    exact Submodule.mul_mem_mul hp hq
-
-Depends on / 依赖: Submodule, Submodule.mul_mem_mul, mul_mem, mul_mem_mul, one_le, pow_add, pow_zero
+--- 原说明 ---
+A direct sum of powers of a submodule of an algebra has a multiplicative structu
+re.
 -/
 instance nat_power_gradedMonoid [CommSemiring S] [Semiring R] [Algebra S R] (p : Submodule S R) :
-    SetLike.GradedMonoid fun i : Nat => p ^ i where
+    SetLike.GradedMonoid fun i : ℕ => p ^ i where
   one_mem := by
-    rw [← one_le]; rw [pow_zero]
+    rw [← one_le, pow_zero]
   mul_mem i j p q hp hq := by
     rw [pow_add]
     exact Submodule.mul_mem_mul hp hq
 
 end Submodule
 
-/--
-Definition of `DirectSum.coeAlgHom` / `DirectSum.coeAlgHom` 的定义
+/-- The canonical algebra isomorphism between `⨁ i, A i` and `R`. -/
+/-
+**DirectSum.coeAlgHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DirectSum.coeAlgHom [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S
+ R] (A : ι -> Submodule S R) [SetLike.GradedMonoid A] : (⨁ i, A i) ->ₐ[S] R
+参数：A : ι -> Submodule S R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DirectSum.coeAlgHom
-  signature: [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
-  body: DirectSum.toAlgebra S _ (fun i => (A i).subtype) rfl (fun _ _ => rfl)
-
-中文:
-定义 直和.coeAlgHom
-  签名: [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R]
-  定义体: DirectSum.toAlgebra S _ (fun i => (A i).subtype) rfl (fun _ _ => rfl)
-
-Depends on / 依赖: DirectSum, DirectSum.toAlgebra, subtype, toAlgebra
+--- 原说明 ---
+The canonical algebra isomorphism between `⨁ i, A i` and `R`.
 -/
 def DirectSum.coeAlgHom [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
-    (A : ι -> Submodule S R) [SetLike.GradedMonoid A] : (⨁ i, A i) ->ₐ[S] R :=
+    (A : ι → Submodule S R) [SetLike.GradedMonoid A] : (⨁ i, A i) →ₐ[S] R :=
   DirectSum.toAlgebra S _ (fun i => (A i).subtype) rfl (fun _ _ => rfl)
 
-/--
-theorem `Submodule.iSup_eq_toSubmodule_range` / 定理 `Submodule.iSup_eq_toSubmodule_range`
+/-- The supremum of submodules that form a graded monoid is a subalgebra, and equal to the range of
+`DirectSum.coeAlgHom`. -/
+/-
+**Submodule.iSup_eq_toSubmodule_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.iSup_eq_toSubmodule_range [AddMonoid ι] [CommSemiring S] [Semiri
+ng R] [Algebra S R] (A : ι -> Submodule S R) [SetLike.GradedMonoid A] : ⨆ i, A i
+ = Subalgebra.toSubmodule (DirectSum.coeAlgHom A).range
+参数：A : ι -> Submodule S R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.iSup_eq_range_dfinsupp_lsum`：iSup_eq_range_dfinsupp_lsum (p : 
+ι -> Submodule R N) : iSup p = LinearMap.range (DFinsupp.lsum Nat fun i => (p i)
+.subtype)
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
 
-English:
-theorem Submodule.iSup_eq_toSubmodule_range
-  statement: [AddMonoid ι] [CommSemiring S] [Semiring R]
-  proof: (Submodule.iSup_eq_range_dfinsupp_lsum A).trans SetLike.coe_injective rfl
-
-@[simp]
-
-中文:
-定理 子模.iSup_eq_toSubmodule_range
-  结论: [加法幺半群 ι] [交换半环 S] [半环 R]
-  证明: (Submodule.iSup_eq_range_dfinsupp_lsum A).trans SetLike.coe_injective rfl
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, Submodule, Submodule.iSup_eq_range_dfinsupp_lsum, coe_injective, iSup_eq_range_dfinsupp_lsum
+--- 原说明 ---
+The supremum of submodules that form a graded monoid is a subalgebra, and equal 
+to the range of
+`DirectSum.coeAlgHom`.
 -/
 theorem Submodule.iSup_eq_toSubmodule_range [AddMonoid ι] [CommSemiring S] [Semiring R]
-    [Algebra S R] (A : ι -> Submodule S R) [SetLike.GradedMonoid A] :
+    [Algebra S R] (A : ι → Submodule S R) [SetLike.GradedMonoid A] :
     ⨆ i, A i = Subalgebra.toSubmodule (DirectSum.coeAlgHom A).range :=
-(Submodule.iSup_eq_range_dfinsupp_lsum A).trans SetLike.coe_injective rfl
+  (Submodule.iSup_eq_range_dfinsupp_lsum A).trans <| SetLike.coe_injective rfl
 
 @[simp]
-/--
-theorem `DirectSum.coeAlgHom_of` / 定理 `DirectSum.coeAlgHom_of`
-
-English:
-theorem DirectSum.coeAlgHom_of
-  statement: [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
-  proof: DirectSum.toSemiring_of _ rfl (fun _ _ => rfl) _ _
-
-中文:
-定理 直和.coeAlgHom_of
-  结论: [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R]
-  证明: DirectSum.toSemiring_of _ rfl (fun _ _ => rfl) _ _
-
-Depends on / 依赖: DirectSum, DirectSum.toSemiring_of, toSemiring_of
+/-
+**DirectSum.coeAlgHom_of** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DirectSum.coeAlgHom_of [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebr
+a S R] (A : ι -> Submodule S R) [SetLike.GradedMonoid A] (i : ι) (x : A i) : Dir
+ectSum.coeAlgHom A (DirectSum.of (fun i => A i) i x) = x
+参数：A : ι -> Submodule S R；i : ι；x : A i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.toSemiring_of`：toSemiring_of (f : forall i, A i ->+ R) (hone h
+mul) (i : ι) (x : A i) : toSemiring f hone hmul (of _ i x) = f _ x
 -/
 theorem DirectSum.coeAlgHom_of [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
-    (A : ι -> Submodule S R) [SetLike.GradedMonoid A] (i : ι) (x : A i) :
+    (A : ι → Submodule S R) [SetLike.GradedMonoid A] (i : ι) (x : A i) :
     DirectSum.coeAlgHom A (DirectSum.of (fun i => A i) i x) = x :=
   DirectSum.toSemiring_of _ rfl (fun _ _ => rfl) _ _
 
@@ -956,26 +1066,17 @@ namespace SetLike.GradeZero
 
 section Semiring
 variable [Semiring R] [AddMonoid ι] [SetLike σ R] [AddSubmonoidClass σ R]
-variable (A : ι -> σ) [SetLike.GradedMonoid A]
+variable (A : ι → σ) [SetLike.GradedMonoid A]
 
-/--
-Definition of `subsemiring` / `subsemiring` 的定义
+/-- The subsemiring `A 0` of `R`. -/
+/-
+**SetLike.GradeZero.subsemiring** 是 Mathlib 中的一个定义，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：subsemiring : Subsemiring R where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subsemiring
-  signature: : Subsemiring R where
-  body: submonoid A
-  add_mem' := add_mem
-  zero_mem' := zero_mem (A 0)
-
-中文:
-定义 subsemiring
-  签名: : 子半环 R where
-  定义体: submonoid A
-  add_mem' := add_mem
-  zero_mem' := zero_mem (A 0)
-
-Depends on / 依赖: submonoid
+--- 原说明 ---
+The subsemiring `A 0` of `R`.
 -/
 def subsemiring : Subsemiring R where
   __ := submonoid A
@@ -983,112 +1084,75 @@ def subsemiring : Subsemiring R where
   zero_mem' := zero_mem (A 0)
 
 -- TODO: it might be expensive to unify `A` in this instance in practice
-/--
-Instance `instSemiring` / 实例 `instSemiring`
+/-- The semiring `A 0` inherited from `R` in the presence of `SetLike.GradedMonoid A`. -/
+/-
+**SetLike.GradeZero.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：instSemiring : Semiring (A 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSemiring
-  signature: : Semiring (A 0)
-  body: inferInstanceAs Semiring (subsemiring A)
-
-中文:
-实例 instSemiring
-  签名: : 半环 (A 0)
-  定义体: inferInstanceAs Semiring (subsemiring A)
-
-Depends on / 依赖: Semiring, subsemiring
+--- 原说明 ---
+The semiring `A 0` inherited from `R` in the presence of `SetLike.GradedMonoid A
+`.
 -/
-instance instSemiring : Semiring (A 0) := inferInstanceAs Semiring (subsemiring A)
-
-/--
-theorem `coe_natCast` / 定理 `coe_natCast`
-
-English:
-theorem coe_natCast
-  given: (n : Nat)
-  statement: (n : A 0) = (n : R)
-  proof: rfl
-
-中文:
-定理 coe_natCast
-  条件: (n : 自然数)
-  结论: (n : A 0) = (n : R)
-  证明: rfl
+instance instSemiring : Semiring (A 0) := inferInstanceAs <| Semiring (subsemiring A)
+/-
+**SetLike.GradeZero.coe_natCast** 是 Mathlib 中的一个定理，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {R : Type u_4} [inst : Semiring R] [inst_1
+ : AddMonoid ι] [inst_2 : SetLike σ R]   [inst_3 : AddSubmonoidClass σ R] (A : ι
+ → σ) [inst_4 : SetLike.GradedMonoid A] (n : ℕ), ↑↑n = ↑n
+参数：A : ι → σ；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] theorem coe_natCast (n : Nat) : (n : A 0) = (n : R) := rfl
-
-/--
-theorem `coe_ofNat` / 定理 `coe_ofNat`
-
-English:
-theorem coe_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-中文:
-定理 coe_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
+@[simp, norm_cast] theorem coe_natCast (n : ℕ) : (n : A 0) = (n : R) := rfl
+/-
+**SetLike.GradeZero.coe_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {R : Type u_4} [inst : Semiring R] [inst_1
+ : AddMonoid ι] [inst_2 : SetLike σ R]   [inst_3 : AddSubmonoidClass σ R] (A : ι
+ → σ) [inst_4 : SetLike.GradedMonoid A] (n : ℕ) [inst_5 : n.AtLeastTwo],   ↑(OfN
+at.ofNat n) = OfNat.ofNat n
+参数：A : ι → σ；n : ℕ；OfNat.ofNat n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] theorem coe_ofNat (n : Nat) [n.AtLeastTwo] :
+@[simp, norm_cast] theorem coe_ofNat (n : ℕ) [n.AtLeastTwo] :
     (ofNat(n) : A 0) = (ofNat(n) : R) := rfl
 
 end Semiring
 
 section CommSemiring
 variable [CommSemiring R] [AddMonoid ι] [SetLike σ R] [AddSubmonoidClass σ R]
-variable (A : ι -> σ) [SetLike.GradedMonoid A]
+variable (A : ι → σ) [SetLike.GradedMonoid A]
 
 -- TODO: it might be expensive to unify `A` in this instance in practice
-/--
-Instance `instCommSemiring` / 实例 `instCommSemiring`
+/-- The commutative semiring `A 0` inherited from `R` in the presence of
+`SetLike.GradedMonoid A`. -/
+/-
+**SetLike.GradeZero.instCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `SetLike.GradeZer
+o`。
+形式化陈述：instCommSemiring : CommSemiring (A 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCommSemiring
-  signature: : CommSemiring (A 0)
-  body: inferInstanceAs CommSemiring (subsemiring A)
-
-中文:
-实例 instCommSemiring
-  签名: : 交换半环 (A 0)
-  定义体: inferInstanceAs CommSemiring (subsemiring A)
-
-Depends on / 依赖: CommSemiring, subsemiring
+--- 原说明 ---
+The commutative semiring `A 0` inherited from `R` in the presence of
+`SetLike.GradedMonoid A`.
 -/
-instance instCommSemiring : CommSemiring (A 0) := inferInstanceAs CommSemiring (subsemiring A)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra (A 0) R
-  body: inferInstanceAs Algebra (SetLike.GradeZero.subsemiring A) R
-
-中文:
-实例 :
-  签名: 代数 (A 0) R
-  定义体: inferInstanceAs Algebra (SetLike.GradeZero.subsemiring A) R
-
-Depends on / 依赖: Algebra, GradeZero, SetLike, SetLike.GradeZero.subsemiring, subsemiring
+instance instCommSemiring : CommSemiring (A 0) := inferInstanceAs <| CommSemiring (subsemiring A)
+/-
+**SetLike.GradeZero.** 是 Mathlib 中的一个实例，位于命名空间 `SetLike.GradeZero`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra (A 0) R :=
-inferInstanceAs Algebra (SetLike.GradeZero.subsemiring A) R
-
-/--
-lemma `algebraMap_apply` / 引理 `algebraMap_apply`
-
-English:
-lemma algebraMap_apply
-  given: (x : A 0)
-  statement: algebraMap (A 0) R x = x
-  proof: rfl
-
-中文:
-引理 algebraMap_apply
-  条件: (x : A 0)
-  结论: algebraMap (A 0) R x = x
-  证明: rfl
+  inferInstanceAs <| Algebra (SetLike.GradeZero.subsemiring A) R
+/-
+**SetLike.GradeZero.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `SetLike.GradeZer
+o`。
+形式化陈述：∀ {ι : Type u_1} {σ : Type u_2} {R : Type u_4} [inst : CommSemiring R] [in
+st_1 : AddMonoid ι] [inst_2 : SetLike σ R]   [inst_3 : AddSubmonoidClass σ R] (A
+ : ι → σ) [inst_4 : SetLike.GradedMonoid A] (x : ↥(A 0)),   (algebraMap (↥(A 0))
+ R) x = ↑x
+参数：A : ι → σ；x : ↥(A 0)；algebraMap (↥(A 0)) R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma algebraMap_apply (x : A 0) : algebraMap (A 0) R x = x := rfl
 
@@ -1096,145 +1160,105 @@ end CommSemiring
 
 section Ring
 variable [Ring R] [AddMonoid ι] [SetLike σ R] [AddSubgroupClass σ R]
-variable (A : ι -> σ) [SetLike.GradedMonoid A]
+variable (A : ι → σ) [SetLike.GradedMonoid A]
 
-/--
-Definition of `subring` / `subring` 的定义
+/-- The subring `A 0` of `R`. -/
+/-
+**SetLike.GradeZero.subring** 是 Mathlib 中的一个定义，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：subring : Subring R where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subring
-  signature: : Subring R where
-  body: subsemiring A
-  neg_mem' := neg_mem
-
-中文:
-定义 subring
-  签名: : 子环 R where
-  定义体: subsemiring A
-  neg_mem' := neg_mem
-
-Depends on / 依赖: subsemiring
+--- 原说明 ---
+The subring `A 0` of `R`.
 -/
 def subring : Subring R where
   __ := subsemiring A
   neg_mem' := neg_mem
 
 -- TODO: it might be expensive to unify `A` in this instance in practice
-/--
-Instance `instRing` / 实例 `instRing`
+/-- The ring `A 0` inherited from `R` in the presence of `SetLike.GradedMonoid A`. -/
+/-
+**SetLike.GradeZero.instRing** 是 Mathlib 中的一个实例，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：instRing : Ring (A 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instRing
-  signature: : Ring (A 0)
-  body: inferInstanceAs Ring (subring A)
-
-中文:
-实例 instRing
-  签名: : 环 (A 0)
-  定义体: inferInstanceAs Ring (subring A)
-
-Depends on / 依赖: subring
+--- 原说明 ---
+The ring `A 0` inherited from `R` in the presence of `SetLike.GradedMonoid A`.
 -/
-instance instRing : Ring (A 0) := inferInstanceAs Ring (subring A)
-
-/--
-theorem `coe_intCast` / 定理 `coe_intCast`
-
-English:
-theorem coe_intCast
-  given: (z : Int)
-  statement: (z : A 0) = (z : R)
-  proof: rfl
-
-中文:
-定理 coe_intCast
-  条件: (z : 整数)
-  结论: (z : A 0) = (z : R)
-  证明: rfl
+instance instRing : Ring (A 0) := inferInstanceAs <| Ring (subring A)
+/-
+**SetLike.GradeZero.coe_intCast** 是 Mathlib 中的一个定理，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：coe_intCast (z : Int) : (z : A 0) = (z : R)
+参数：z : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_intCast (z : Int) : (z : A 0) = (z : R) := rfl
+theorem coe_intCast (z : ℤ) : (z : A 0) = (z : R) := rfl
 
 end Ring
 
 section CommRing
 variable [CommRing R] [AddCommMonoid ι] [SetLike σ R] [AddSubgroupClass σ R]
-variable (A : ι -> σ) [SetLike.GradedMonoid A]
+variable (A : ι → σ) [SetLike.GradedMonoid A]
 
 -- TODO: it might be expensive to unify `A` in this instance in practice
-/--
-Instance `instCommRing` / 实例 `instCommRing`
+/-- The commutative ring `A 0` inherited from `R` in the presence of `SetLike.GradedMonoid A`. -/
+/-
+**SetLike.GradeZero.instCommRing** 是 Mathlib 中的一个实例，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：instCommRing : CommRing (A 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCommRing
-  signature: : CommRing (A 0)
-  body: inferInstanceAs CommRing (subring A)
-
-中文:
-实例 instCommRing
-  签名: : 交换环 (A 0)
-  定义体: inferInstanceAs CommRing (subring A)
-
-Depends on / 依赖: CommRing, subring
+--- 原说明 ---
+The commutative ring `A 0` inherited from `R` in the presence of `SetLike.Graded
+Monoid A`.
 -/
-instance instCommRing : CommRing (A 0) := inferInstanceAs CommRing (subring A)
+instance instCommRing : CommRing (A 0) := inferInstanceAs <| CommRing (subring A)
 
 end CommRing
 
 section Algebra
 variable [CommSemiring S] [Semiring R] [Algebra S R] [AddMonoid ι]
-variable (A : ι -> Submodule S R) [SetLike.GradedMonoid A]
+variable (A : ι → Submodule S R) [SetLike.GradedMonoid A]
 
-/--
-Definition of `subalgebra` / `subalgebra` 的定义
+/-- The subalgebra `A 0` of `R`. -/
+/-
+**SetLike.GradeZero.subalgebra** 是 Mathlib 中的一个定义，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：subalgebra : Subalgebra S R where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subalgebra
-  signature: : Subalgebra S R where
-  body: subsemiring A
-  algebraMap_mem' := algebraMap_mem_graded A
-
-中文:
-定义 subalgebra
-  签名: : 子代数 S R where
-  定义体: subsemiring A
-  algebraMap_mem' := algebraMap_mem_graded A
-
-Depends on / 依赖: subsemiring
+--- 原说明 ---
+The subalgebra `A 0` of `R`.
 -/
 def subalgebra : Subalgebra S R where
   __ := subsemiring A
   algebraMap_mem' := algebraMap_mem_graded A
 
 -- TODO: it might be expensive to unify `A` in this instance in practice
-/--
-Instance `instAlgebra` / 实例 `instAlgebra`
+/-- The `S`-algebra `A 0` inherited from `R` in the presence of `SetLike.GradedMonoid A`. -/
+/-
+**SetLike.GradeZero.instAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `SetLike.GradeZero`。
+形式化陈述：instAlgebra : Algebra S (A 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instAlgebra
-  signature: : Algebra S (A 0)
-  body: inferInstanceAs Algebra S (subalgebra A)
-
-中文:
-实例 instAlgebra
-  签名: : 代数 S (A 0)
-  定义体: inferInstanceAs Algebra S (subalgebra A)
-
-Depends on / 依赖: Algebra, subalgebra
+--- 原说明 ---
+The `S`-algebra `A 0` inherited from `R` in the presence of `SetLike.GradedMonoi
+d A`.
 -/
-instance instAlgebra : Algebra S (A 0) := inferInstanceAs Algebra S (subalgebra A)
-
-/--
-theorem `coe_algebraMap` / 定理 `coe_algebraMap`
-
-English:
-theorem coe_algebraMap
-  given: (s : S)
-  proof: rfl
-
-中文:
-定理 coe_algebraMap
-  条件: (s : S)
-  证明: rfl
+instance instAlgebra : Algebra S (A 0) := inferInstanceAs <| Algebra S (subalgebra A)
+/-
+**SetLike.GradeZero.coe_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `SetLike.GradeZero`
+。
+形式化陈述：∀ {ι : Type u_1} {S : Type u_3} {R : Type u_4} [inst : CommSemiring S] [in
+st_1 : Semiring R] [inst_2 : Algebra S R]   [inst_3 : AddMonoid ι] (A : ι → Subm
+odule S R) [inst_4 : SetLike.GradedMonoid A] (s : S),   ↑((algebraMap S ↥(A 0)) 
+s) = (algebraMap S R) s
+参数：A : ι → Submodule S R；s : S；(algebraMap S ↥(A 0)) s；algebraMap S R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] theorem coe_algebraMap (s : S) :
     ↑(algebraMap _ (A 0) s) = algebraMap _ R s := rfl
@@ -1245,43 +1269,31 @@ end SetLike.GradeZero
 
 section HomogeneousElement
 
-/--
-theorem `SetLike.homogeneous_zero_submodule` / 定理 `SetLike.homogeneous_zero_submodule`
-
-English:
-theorem SetLike.homogeneous_zero_submodule
-  statement: [Zero ι] [Semiring S] [AddCommMonoid R] [Module S R]
-  proof: ⟨0, Submodule.zero_mem _⟩
-
-中文:
-定理 集合状.homogeneous_zero_submodule
-  结论: [零 ι] [半环 S] [加法交换幺半群 R] [模 S R]
-  证明: ⟨0, Submodule.zero_mem _⟩
-
-Depends on / 依赖: Submodule, Submodule.zero_mem, zero_mem
+/-
+**SetLike.homogeneous_zero_submodule** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetLike.homogeneous_zero_submodule [Zero ι] [Semiring S] [AddCommMonoid R]
+ [Module S R] (A : ι -> Submodule S R) : SetLike.IsHomogeneousElem A (0 : R)
+参数：A : ι -> Submodule S R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.zero_mem`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [ins
+t_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodule R M), 0 ∈
+ p
 -/
 theorem SetLike.homogeneous_zero_submodule [Zero ι] [Semiring S] [AddCommMonoid R] [Module S R]
-    (A : ι -> Submodule S R) : SetLike.IsHomogeneousElem A (0 : R) :=
+    (A : ι → Submodule S R) : SetLike.IsHomogeneousElem A (0 : R) :=
   ⟨0, Submodule.zero_mem _⟩
-
-/--
-theorem `SetLike.Homogeneous.smul` / 定理 `SetLike.Homogeneous.smul`
-
-English:
-theorem SetLike.Homogeneous.smul
-  statement: [CommSemiring S] [Semiring R] [Algebra S R] {A : ι -> Submodule S R}
-  proof: let ⟨i, hi⟩ := hr
-  ⟨i, Submodule.smul_mem _ _ hi⟩
-
-中文:
-定理 集合状.齐次.smul
-  结论: [交换半环 S] [半环 R] [代数 S R] {A : ι -> 子模 S R}
-  证明: let ⟨i, hi⟩ := hr
-  ⟨i, Submodule.smul_mem _ _ hi⟩
-
-Depends on / 依赖: Submodule, Submodule.smul_mem, smul_mem
+/-
+**SetLike.Homogeneous.smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SetLike.Homogeneous.smul [CommSemiring S] [Semiring R] [Algebra S R] {A : 
+ι -> Submodule S R} {s : S} {r : R} (hr : SetLike.IsHomogeneousElem A r) : SetLi
+ke.IsHomogeneousElem A (s • r)
+参数：hr : SetLike.IsHomogeneousElem A r。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
 -/
-theorem SetLike.Homogeneous.smul [CommSemiring S] [Semiring R] [Algebra S R] {A : ι -> Submodule S R}
+theorem SetLike.Homogeneous.smul [CommSemiring S] [Semiring R] [Algebra S R] {A : ι → Submodule S R}
     {s : S} {r : R} (hr : SetLike.IsHomogeneousElem A r) : SetLike.IsHomogeneousElem A (s • r) :=
   let ⟨i, hi⟩ := hr
   ⟨i, Submodule.smul_mem _ _ hi⟩
@@ -1297,83 +1309,119 @@ variable [AddCommMonoid ι] [LinearOrder ι] [IsOrderedAddMonoid ι] [DecidableE
 section Semiring
 
 variable [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R]
-variable {A : ι -> σ} [SetLike.GradedMonoid A]
+variable {A : ι → σ} [SetLike.GradedMonoid A]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `mul_apply_eq_zero` / 定理 `mul_apply_eq_zero`
-
-English:
-theorem mul_apply_eq_zero
-  statement: {r r' : ⨁ i, A i} {m n : ι}
-  proof: by
-  classical
-  rw [Subtype.ext_iff]; rw [ZeroMemClass.coe_zero]; rw [coe_mul_apply]
-  apply Finset.sum_eq_zero fun x hx => ?_
-  obtain (hx | hx) : x.1 < m ∨ x.2 < n := by
-    by_contra! ⟨hm, hn⟩
-    obtain rfl : x.1 + x.2 = k := by simp_all
-apply lt_irrefl (m + n) lt_of_le_of_lt (by gcongr) hk
-  all_goals simp [hr, hr', hx]
-
-中文:
-定理 mul_apply_eq_zero
-  结论: {r r' : ⨁ i, A i} {m n : ι}
-  证明: by
-  classical
-  rw [Subtype.ext_iff]; rw [ZeroMemClass.coe_zero]; rw [coe_mul_apply]
-  apply Finset.sum_eq_zero fun x hx => ?_
-  obtain (hx | hx) : x.1 < m ∨ x.2 < n := by
-    by_contra! ⟨hm, hn⟩
-    obtain rfl : x.1 + x.2 = k := by simp_all
-apply lt_irrefl (m + n) lt_of_le_of_lt (by gcongr) hk
-  all_goals simp [hr, hr', hx]
-
-Depends on / 依赖: Finset, Finset.sum_eq_zero, Subtype, Subtype.ext_iff, ZeroMemClass, ZeroMemClass.coe_zero, all_goals, classical, coe_mul_apply, coe_zero, ext_iff, lt_irrefl, lt_of_le_of_lt, sum_eq_zero
+/-
+**mul_apply_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_apply_eq_zero {r r' : ⨁ i, A i} {m n : ι} (hr : forall i < m, r i = 0)
+ (hr' : forall i < n, r' i = 0) ⦃k : ι⦄ (hk : k < m + n) : (r * r') k = 0
+参数：hr : forall i < m, r i = 0；hr' : forall i < n, r' i = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `ZeroMemClass.coe_zero`：∀ {A : Type u_3} {M₁ : Type u_4} [inst : SetLike 
+A M₁] [inst_1 : Zero M₁] [hA : ZeroMemClass A M₁] (S' : A), ↑0 = 0
+· 使用定理 `DirectSum.coe_mul_apply`：coe_mul_apply [AddMonoid ι] [SetLike.GradedMono
+id A] [forall (i : ι) (x : A i), Decidable (x != 0)] (r r' : ⨁ i, A i) (n : ι) :
+ ((r * r') n …
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 theorem mul_apply_eq_zero {r r' : ⨁ i, A i} {m n : ι}
-    (hr : forall i < m, r i = 0) (hr' : forall i < n, r' i = 0) ⦃k : ι⦄ (hk : k < m + n) :
+    (hr : ∀ i < m, r i = 0) (hr' : ∀ i < n, r' i = 0) ⦃k : ι⦄ (hk : k < m + n) :
     (r * r') k = 0 := by
   classical
-  rw [Subtype.ext_iff]; rw [ZeroMemClass.coe_zero]; rw [coe_mul_apply]
-  apply Finset.sum_eq_zero fun x hx => ?_
+  rw [Subtype.ext_iff, ZeroMemClass.coe_zero, coe_mul_apply]
+  apply Finset.sum_eq_zero fun x hx ↦ ?_
   obtain (hx | hx) : x.1 < m ∨ x.2 < n := by
     by_contra! ⟨hm, hn⟩
     obtain rfl : x.1 + x.2 = k := by simp_all
-apply lt_irrefl (m + n) lt_of_le_of_lt (by gcongr) hk
+    apply lt_irrefl (m + n) <| lt_of_le_of_lt (by gcongr) hk
   all_goals simp [hr, hr', hx]
 
 variable [CanonicallyOrderedAdd ι]
 
-/--
-theorem `listProd_apply_eq_zero'` / 定理 `listProd_apply_eq_zero'`
+/-- The difference with `DirectSum.listProd_apply_eq_zero` is that the indices at which
+the terms of the list are zero is allowed to vary. -/
+/-
+**listProd_apply_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：listProd_apply_eq_zero' {l : List ((⨁ i, A i) × ι)} (hl : forall xn in l, 
+forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (l.map Prod.snd).sum) : (l.map Pr
+od.fst).prod n = 0
+参数：(⨁ i, A i) × ι；hl : forall xn in l, forall k < xn.2, xn.1 k = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `SetLike.GradedMonoid.toGradedOne`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `mul_apply_eq_zero`：mul_apply_eq_zero {r r' : ⨁ i, A i} {m n : ι} (hr : f
+orall i < m, r i = 0) (hr' : forall i < n, r' i = 0) ⦃k : ι⦄ (hk : k < m + n) : 
+(r * r'…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem listProd_apply_eq_zero'
-  statement: {l : List ((⨁ i, A i) × ι)}
-  proof: by
-  induction l generalizing n with
-  | nil => simp at hn
-  | cons head tail ih =>
-    simp only [List.mem_cons, forall_eq_or_imp, List.map_cons, List.sum_cons,
-      List.prod_cons] at hl hn ⊢
-    exact mul_apply_eq_zero hl.1 (ih hl.2) hn
-
-中文:
-定理 listProd_apply_eq_zero'
-  结论: {l : 列表 ((⨁ i, A i) × ι)}
-  证明: by
-  induction l generalizing n with
-  | nil => simp at hn
-  | cons head tail ih =>
-    simp only [List.mem_cons, forall_eq_or_imp, List.map_cons, List.sum_cons,
-      List.prod_cons] at hl hn ⊢
-    exact mul_apply_eq_zero hl.1 (ih hl.2) hn
-
-Depends on / 依赖: List.map_cons, List.mem_cons, List.prod_cons, List.sum_cons, forall_eq_or_imp, generalizing, map_cons, mem_cons, mul_apply_eq_zero, prod_cons, sum_cons
+--- 原说明 ---
+The difference with `DirectSum.listProd_apply_eq_zero` is that the indices at wh
+ich
+the terms of the list are zero is allowed to vary.
 -/
 theorem listProd_apply_eq_zero' {l : List ((⨁ i, A i) × ι)}
-    (hl : forall xn in l, forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (l.map Prod.snd).sum) :
+    (hl : ∀ xn ∈ l, ∀ k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (l.map Prod.snd).sum) :
     (l.map Prod.fst).prod n = 0 := by
   induction l generalizing n with
   | nil => simp at hn
@@ -1381,36 +1429,44 @@ theorem listProd_apply_eq_zero' {l : List ((⨁ i, A i) × ι)}
     simp only [List.mem_cons, forall_eq_or_imp, List.map_cons, List.sum_cons,
       List.prod_cons] at hl hn ⊢
     exact mul_apply_eq_zero hl.1 (ih hl.2) hn
-
-/--
-theorem `listProd_apply_eq_zero` / 定理 `listProd_apply_eq_zero`
-
-English:
-theorem listProd_apply_eq_zero
-  statement: {l : List (⨁ i, A i)} {m : ι}
-  proof: by
-  -- a proof which uses `DirectSum.listProd_apply_eq_zero'` is actually more work
-  induction l generalizing n with
-  | nil => simp at hn
-  | cons head tail ih =>
-    simp only [List.mem_cons, forall_eq_or_imp, List.length_cons, List.prod_cons] at hl hn ⊢
-    refine mul_apply_eq_zero hl.1 (ih hl.2) ?_
-    simpa [add_smul, add_comm m] using hn
-
-中文:
-定理 listProd_apply_eq_zero
-  结论: {l : 列表 (⨁ i, A i)} {m : ι}
-  证明: by
-  -- a proof which uses `DirectSum.listProd_apply_eq_zero'` is actually more work
-  induction l generalizing n with
-  | nil => simp at hn
-  | cons head tail ih =>
-    simp only [List.mem_cons, forall_eq_or_imp, List.length_cons, List.prod_cons] at hl hn ⊢
-    refine mul_apply_eq_zero hl.1 (ih hl.2) ?_
-    simpa [add_smul, add_comm m] using hn
+/-
+**listProd_apply_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：listProd_apply_eq_zero {l : List (⨁ i, A i)} {m : ι} (hl : forall x in l, 
+forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < l.length • m) : l.prod n = 0
+参数：⨁ i, A i；hl : forall x in l, forall k < m, x k = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `SetLike.GradedMonoid.toGradedOne`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `mul_apply_eq_zero`：mul_apply_eq_zero {r r' : ⨁ i, A i} {m n : ι} (hr : f
+orall i < m, r i = 0) (hr' : forall i < n, r' i = 0) ⦃k : ι⦄ (hk : k < m + n) : 
+(r * r'…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 theorem listProd_apply_eq_zero {l : List (⨁ i, A i)} {m : ι}
-    (hl : forall x in l, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < l.length • m) :
+    (hl : ∀ x ∈ l, ∀ k < m, x k = 0) ⦃n : ι⦄ (hn : n < l.length • m) :
     l.prod n = 0 := by
   -- a proof which uses `DirectSum.listProd_apply_eq_zero'` is actually more work
   induction l generalizing n with
@@ -1427,108 +1483,185 @@ variable [CanonicallyOrderedAdd ι]
 section CommSemiring
 
 variable [CommSemiring R] [SetLike σ R] [AddSubmonoidClass σ R]
-variable {A : ι -> σ} [SetLike.GradedMonoid A]
+variable {A : ι → σ} [SetLike.GradedMonoid A]
 
-/--
-theorem `multisetProd_apply_eq_zero'` / 定理 `multisetProd_apply_eq_zero'`
+/-- The difference with `DirectSum.multisetProd_apply_eq_zero` is that the indices at which
+the terms of the multiset are zero is allowed to vary. -/
+/-
+**multisetProd_apply_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multisetProd_apply_eq_zero' {s : Multiset ((⨁ i, A i) × ι)} (hs : forall x
+n in s, forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (s.map Prod.snd).sum) : (
+s.map Prod.fst).prod n = 0
+参数：(⨁ i, A i) × ι；hs : forall xn in s, forall k < xn.2, xn.1 k = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `SetLike.GradedMonoid.toGradedOne`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `listProd_apply_eq_zero'`：listProd_apply_eq_zero' {l : List ((⨁ i, A i) ×
+ ι)} (hl : forall xn in l, forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (l.map
+ Prod.snd).su…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 
-English:
-theorem multisetProd_apply_eq_zero'
-  statement: {s : Multiset ((⨁ i, A i) × ι)}
-  proof: by
-  have := listProd_apply_eq_zero' (l := s.toList) (by simpa using hs)
-    (by simpa [← Multiset.sum_coe, ← Multiset.map_coe])
-  simpa [← Multiset.prod_coe, ← Multiset.map_coe]
-
-中文:
-定理 multisetProd_apply_eq_zero'
-  结论: {s : Multiset ((⨁ i, A i) × ι)}
-  证明: by
-  have := listProd_apply_eq_zero' (l := s.toList) (by simpa using hs)
-    (by simpa [← Multiset.sum_coe, ← Multiset.map_coe])
-  simpa [← Multiset.prod_coe, ← Multiset.map_coe]
-
-Depends on / 依赖: Multiset, Multiset.map_coe, Multiset.prod_coe, Multiset.sum_coe, listProd_apply_eq_zero, map_coe, prod_coe, s.toList, sum_coe, toList
+--- 原说明 ---
+The difference with `DirectSum.multisetProd_apply_eq_zero` is that the indices a
+t which
+the terms of the multiset are zero is allowed to vary.
 -/
 theorem multisetProd_apply_eq_zero' {s : Multiset ((⨁ i, A i) × ι)}
-    (hs : forall xn in s, forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (s.map Prod.snd).sum) :
+    (hs : ∀ xn ∈ s, ∀ k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (s.map Prod.snd).sum) :
     (s.map Prod.fst).prod n = 0 := by
   have := listProd_apply_eq_zero' (l := s.toList) (by simpa using hs)
     (by simpa [← Multiset.sum_coe, ← Multiset.map_coe])
   simpa [← Multiset.prod_coe, ← Multiset.map_coe]
-
-/--
-theorem `multisetProd_apply_eq_zero` / 定理 `multisetProd_apply_eq_zero`
-
-English:
-theorem multisetProd_apply_eq_zero
-  statement: {s : Multiset (⨁ i, A i)} {m : ι}
-  proof: by
-  have := listProd_apply_eq_zero (l := s.toList) (by simpa using hs)
-    (by simpa [← Multiset.sum_coe, ← Multiset.map_coe])
-  simpa [← Multiset.prod_coe, ← Multiset.map_coe]
-
-中文:
-定理 multisetProd_apply_eq_zero
-  结论: {s : Multiset (⨁ i, A i)} {m : ι}
-  证明: by
-  have := listProd_apply_eq_zero (l := s.toList) (by simpa using hs)
-    (by simpa [← Multiset.sum_coe, ← Multiset.map_coe])
-  simpa [← Multiset.prod_coe, ← Multiset.map_coe]
-
-Depends on / 依赖: Multiset, Multiset.map_coe, Multiset.prod_coe, Multiset.sum_coe, listProd_apply_eq_zero, map_coe, prod_coe, s.toList, sum_coe, toList
+/-
+**multisetProd_apply_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multisetProd_apply_eq_zero {s : Multiset (⨁ i, A i)} {m : ι} (hs : forall 
+x in s, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < s.card • m) : s.prod n = 0
+参数：⨁ i, A i；hs : forall x in s, forall k < m, x k = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `SetLike.GradedMonoid.toGradedOne`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `listProd_apply_eq_zero`：listProd_apply_eq_zero {l : List (⨁ i, A i)} {m 
+: ι} (hl : forall x in l, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < l.length • m)
+ : l.prod n …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.length_toList`：length_toList (s : Multiset α) : s.toList.length
+ = card s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Multiset.coe_toList`：coe_toList (s : Multiset α) : (s.toList : Multiset 
+α) = s
 -/
 theorem multisetProd_apply_eq_zero {s : Multiset (⨁ i, A i)} {m : ι}
-    (hs : forall x in s, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < s.card • m) :
+    (hs : ∀ x ∈ s, ∀ k < m, x k = 0) ⦃n : ι⦄ (hn : n < s.card • m) :
     s.prod n = 0 := by
   have := listProd_apply_eq_zero (l := s.toList) (by simpa using hs)
     (by simpa [← Multiset.sum_coe, ← Multiset.map_coe])
   simpa [← Multiset.prod_coe, ← Multiset.map_coe]
 
-/--
-theorem `finsetProd_apply_eq_zero'` / 定理 `finsetProd_apply_eq_zero'`
+/-- The difference with `DirectSum.finsetProd_apply_eq_zero` is that the indices at which
+the terms of the multiset are zero is allowed to vary. -/
+/-
+**finsetProd_apply_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finsetProd_apply_eq_zero' {s : Finset ((⨁ i, A i) × ι)} (hs : forall xn in
+ s, forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < ∑ xn in s, xn.2) : (∏ xn in s
+, xn.1) n = 0
+参数：(⨁ i, A i) × ι；hs : forall xn in s, forall k < xn.2, xn.1 k = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `SetLike.GradedMonoid.toGradedOne`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Finset.prod_map_toList`：prod_map_toList (s : Finset ι) (f : ι -> M) : (s
+.toList.map f).prod = s.prod f
+· 使用定理 `listProd_apply_eq_zero'`：listProd_apply_eq_zero' {l : List ((⨁ i, A i) ×
+ ι)} (hl : forall xn in l, forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < (l.map
+ Prod.snd).su…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.sum_map_toList`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMo
+noid M] (s : Finset ι) (f : ι → M), (List.map f s.toList).sum = s.sum f
 
-English:
-theorem finsetProd_apply_eq_zero'
-  statement: {s : Finset ((⨁ i, A i) × ι)}
-  proof: by
-  simpa using listProd_apply_eq_zero' (l := s.toList) (by simpa using hs) (by simpa)
-
-中文:
-定理 finsetProd_apply_eq_zero'
-  结论: {s : 有限集 ((⨁ i, A i) × ι)}
-  证明: by
-  simpa using listProd_apply_eq_zero' (l := s.toList) (by simpa using hs) (by simpa)
-
-Depends on / 依赖: listProd_apply_eq_zero, s.toList, toList
+--- 原说明 ---
+The difference with `DirectSum.finsetProd_apply_eq_zero` is that the indices at 
+which
+the terms of the multiset are zero is allowed to vary.
 -/
 theorem finsetProd_apply_eq_zero' {s : Finset ((⨁ i, A i) × ι)}
-    (hs : forall xn in s, forall k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < ∑ xn in s, xn.2) :
-    (∏ xn in s, xn.1) n = 0 := by
+    (hs : ∀ xn ∈ s, ∀ k < xn.2, xn.1 k = 0) ⦃n : ι⦄ (hn : n < ∑ xn ∈ s, xn.2) :
+    (∏ xn ∈ s, xn.1) n = 0 := by
   simpa using listProd_apply_eq_zero' (l := s.toList) (by simpa using hs) (by simpa)
-
-/--
-theorem `finsetProd_apply_eq_zero` / 定理 `finsetProd_apply_eq_zero`
-
-English:
-theorem finsetProd_apply_eq_zero
-  statement: {s : Finset (⨁ i, A i)} {m : ι}
-  proof: by
-  simpa using listProd_apply_eq_zero (l := s.toList) (by simpa using hs) (by simpa)
-
-中文:
-定理 finsetProd_apply_eq_zero
-  结论: {s : 有限集 (⨁ i, A i)} {m : ι}
-  证明: by
-  simpa using listProd_apply_eq_zero (l := s.toList) (by simpa using hs) (by simpa)
-
-Depends on / 依赖: listProd_apply_eq_zero, s.toList, toList
+/-
+**finsetProd_apply_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finsetProd_apply_eq_zero {s : Finset (⨁ i, A i)} {m : ι} (hs : forall x in
+ s, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < s.card • m) : (∏ x in s, x) n = 0
+参数：⨁ i, A i；hs : forall x in s, forall k < m, x k = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SetLike.GradedMonoid.toGradedMul`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `SetLike.GradedMonoid.toGradedOne`：∀ {ι : Type u_1} {R : Type u_2} {S : T
+ype u_3} {inst : SetLike S R} {inst_1 : Monoid R} {inst_2 : AddMonoid ι}   {A : 
+ι → S} [self : SetLike…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Finset.prod_toList`：prod_toList {M : Type*} [CommMonoid M] (s : Finset M
+) : s.toList.prod = ∏ x in s, x
+· 使用定理 `listProd_apply_eq_zero`：listProd_apply_eq_zero {l : List (⨁ i, A i)} {m 
+: ι} (hl : forall x in l, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < l.length • m)
+ : l.prod n …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.length_toList`：length_toList (s : Finset α) : s.toList.length = #
+s
 -/
 theorem finsetProd_apply_eq_zero {s : Finset (⨁ i, A i)} {m : ι}
-    (hs : forall x in s, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < s.card • m) :
-    (∏ x in s, x) n = 0 := by
+    (hs : ∀ x ∈ s, ∀ k < m, x k = 0) ⦃n : ι⦄ (hn : n < s.card • m) :
+    (∏ x ∈ s, x) n = 0 := by
   simpa using listProd_apply_eq_zero (l := s.toList) (by simpa using hs) (by simpa)
 
 end CommSemiring
 
 end LinearOrderedAddCommMonoid
+

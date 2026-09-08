@@ -30,69 +30,51 @@ variable {X Y Z : AddCommGrpCat.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
 
 /-- In the category of abelian groups, every monomorphism is normal. -/
 @[instance_reducible]
-/--
-Definition of `normalMono` / `normalMono` 的定义
+/-
+**AddCommGrpCat.normalMono** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：normalMono (_ : Mono f) : NormalMono f
+参数：_ : Mono f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.forget₂AddCommGroupIsEquivalence`：(CategoryTheory.forget₂ (Mod
+uleCat ℤ) AddCommGrpCat).IsEquivalence
 
-English:
-definition normalMono
-  signature: (_ : Mono f)
-  body: equivalenceReflectsNormalMono (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
-    ModuleCat.normalMono _ inferInstance
-
-中文:
-定义 normalMono
-  签名: (_ : 单态射 f)
-  定义体: equivalenceReflectsNormalMono (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
-    ModuleCat.normalMono _ inferInstance
-
-Depends on / 依赖: AddCommGrpCat, ModuleCat, ModuleCat.normalMono, equivalenceReflectsNormalMono, normalMono
+--- 原说明 ---
+In the category of abelian groups, every monomorphism is normal.
 -/
 def normalMono (_ : Mono f) : NormalMono f :=
-equivalenceReflectsNormalMono (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
+  equivalenceReflectsNormalMono (forget₂ (ModuleCat.{u} ℤ) AddCommGrpCat.{u}).inv <|
     ModuleCat.normalMono _ inferInstance
 
 /-- In the category of abelian groups, every epimorphism is normal. -/
 @[instance_reducible]
-/--
-Definition of `normalEpi` / `normalEpi` 的定义
+/-
+**AddCommGrpCat.normalEpi** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：normalEpi (_ : Epi f) : NormalEpi f
+参数：_ : Epi f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ModuleCat.forget₂AddCommGroupIsEquivalence`：(CategoryTheory.forget₂ (Mod
+uleCat ℤ) AddCommGrpCat).IsEquivalence
 
-English:
-definition normalEpi
-  signature: (_ : Epi f)
-  body: equivalenceReflectsNormalEpi (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
-    ModuleCat.normalEpi _ inferInstance
-
-中文:
-定义 normalEpi
-  签名: (_ : 满态射 f)
-  定义体: equivalenceReflectsNormalEpi (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
-    ModuleCat.normalEpi _ inferInstance
-
-Depends on / 依赖: AddCommGrpCat, ModuleCat, ModuleCat.normalEpi, equivalenceReflectsNormalEpi, normalEpi
+--- 原说明 ---
+In the category of abelian groups, every epimorphism is normal.
 -/
 def normalEpi (_ : Epi f) : NormalEpi f :=
-equivalenceReflectsNormalEpi (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
+  equivalenceReflectsNormalEpi (forget₂ (ModuleCat.{u} ℤ) AddCommGrpCat.{u}).inv <|
     ModuleCat.normalEpi _ inferInstance
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The category of abelian groups is abelian. -/
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Abelian AddCommGrpCat.{u}
-  body: ⟨normalMono f hf⟩
-  normalEpiOfEpi f hf := ⟨normalEpi f hf⟩
-
-中文:
-实例 :
-  签名: 交换 加法交换群范畴.{u}
-  定义体: ⟨normalMono f hf⟩
-  normalEpiOfEpi f hf := ⟨normalEpi f hf⟩
-
-Depends on / 依赖: normalMono
+--- 原说明 ---
+The category of abelian groups is abelian.
 -/
 instance : Abelian AddCommGrpCat.{u} where
   normalMonoOfMono f hf := ⟨normalMono f hf⟩
   normalEpiOfEpi f hf := ⟨normalEpi f hf⟩
 
 end AddCommGrpCat
+

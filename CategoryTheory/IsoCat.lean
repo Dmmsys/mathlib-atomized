@@ -37,26 +37,20 @@ variable {C : Type*} {D : Type*} {E : Type*} [Category* C] [Category* D] [Catego
 variable (F : C ⥤ D) (G : D ⥤ E)
 
 variable (C) (D) in
-/--
-Definition of `IsoCat` / `IsoCat` 的定义
+/-- An isomorphism of categories: a pair of functors whose composites are equal to the
+identity functors. -/
+/-
+**CategoryTheory.IsoCat** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u_1) →   (D : Type u_2) →     [CategoryTheory.Category.{v_1, u_1
+} C] →       [CategoryTheory.Category.{v_2, u_2} D] → Type (max (max (max u_1 u_
+2) v_1) v_2)
+参数：max (max u_1 u_2) v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsoCat
-  parameters: where
-  axioms and operations (4):
-    - functor : C ⥤ D
-    - inverse : D ⥤ C
-    - unit_eq : 𝟭 C = functor ⋙ inverse
-    - counit_eq : inverse ⋙ functor = 𝟭 D
-
-中文:
-结构 同构范畴
-  参数: where
-  公理与运算 (4 个):
-    - functor : C ⥤ D
-    - inverse : D ⥤ C
-    - unit_eq : 𝟭 C = functor ⋙ inverse
-    - counit_eq : inverse ⋙ functor = 𝟭 D
+--- 原说明 ---
+An isomorphism of categories: a pair of functors whose composites are equal to t
+he
+identity functors.
 -/
 structure IsoCat where
   /-- The forward functor of an isomorphism of categories. -/
@@ -71,24 +65,14 @@ structure IsoCat where
 variable (C) in
 /-- The identity isomorphism of categories. -/
 @[simps, refl]
-/--
-Definition of `IsoCat.refl` / `IsoCat.refl` 的定义
+/-
+**CategoryTheory.IsoCat.refl** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsoCat`。
+形式化陈述：(C : Type u_1) → [inst : CategoryTheory.Category.{v_1, u_1} C] → CategoryT
+heory.IsoCat C C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsoCat.refl
-  signature: : IsoCat C C where
-  body: 𝟭 C
-  inverse := 𝟭 C
-  unit_eq := (Functor.comp_id _).symm
-  counit_eq := Functor.comp_id _
-
-中文:
-定义 同构范畴.refl
-  签名: : 同构范畴 C C where
-  定义体: 𝟭 C
-  inverse := 𝟭 C
-  unit_eq := (Functor.comp_id _).symm
-  counit_eq := Functor.comp_id _
+--- 原说明 ---
+The identity isomorphism of categories.
 -/
 def IsoCat.refl : IsoCat C C where
   functor := 𝟭 C
@@ -98,26 +82,16 @@ def IsoCat.refl : IsoCat C C where
 
 /-- The inverse isomorphism of categories, obtained by swapping `functor` and `inverse`. -/
 @[simps, symm]
-/--
-Definition of `IsoCat.symm` / `IsoCat.symm` 的定义
+/-
+**CategoryTheory.IsoCat.symm** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsoCat`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] → CategoryTh
+eory.IsoCat C D → CategoryTheory.IsoCat D C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsoCat.symm
-  signature: (e : IsoCat C D)
-  body: e.inverse
-  inverse := e.functor
-  unit_eq := e.counit_eq.symm
-  counit_eq := e.unit_eq.symm
-
-中文:
-定义 同构范畴.symm
-  签名: (e : 同构范畴 C D)
-  定义体: e.inverse
-  inverse := e.functor
-  unit_eq := e.counit_eq.symm
-  counit_eq := e.unit_eq.symm
-
-Depends on / 依赖: e.inverse, inverse
+--- 原说明 ---
+The inverse isomorphism of categories, obtained by swapping `functor` and `inver
+se`.
 -/
 def IsoCat.symm (e : IsoCat C D) : IsoCat D C where
   functor := e.inverse
@@ -127,65 +101,47 @@ def IsoCat.symm (e : IsoCat C D) : IsoCat D C where
 
 /-- Composition of isomorphisms of categories. -/
 @[simps, trans]
-/--
-Definition of `IsoCat.trans` / `IsoCat.trans` 的定义
+/-
+**CategoryTheory.IsoCat.trans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.IsoCat`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     {E : Type u_3} →       [inst : Cat
+egoryTheory.Category.{v_1, u_1} C] →         [inst_1 : CategoryTheory.Category.{
+v_2, u_2} D] →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       CategoryTheory.IsoCat C D → CategoryTheory.IsoCat D E → CategoryTheory.Is
+oCat C E
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsoCat.trans
-  signature: (e : IsoCat C D) (f : IsoCat D E)
-  body: e.functor ⋙ f.functor
-  inverse := f.inverse ⋙ e.inverse
-  unit_eq := by
-    rw [Functor.assoc]; rw [← Functor.assoc f.functor]; rw [← f.unit_eq]; rw [Functor.id_comp]
-    exact e.unit_eq
-  counit_eq := by
-    rw [Functor.assoc]; rw [← Functor.assoc e.inverse]; rw [e.counit_eq]; rw [Functor.id_comp]
-    exact f.counit_eq
-
-中文:
-定义 同构范畴.trans
-  签名: (e : 同构范畴 C D) (f : 同构范畴 D E)
-  定义体: e.functor ⋙ f.functor
-  inverse := f.inverse ⋙ e.inverse
-  unit_eq := by
-    rw [Functor.assoc]; rw [← Functor.assoc f.functor]; rw [← f.unit_eq]; rw [Functor.id_comp]
-    exact e.unit_eq
-  counit_eq := by
-    rw [Functor.assoc]; rw [← Functor.assoc e.inverse]; rw [e.counit_eq]; rw [Functor.id_comp]
-    exact f.counit_eq
-
-Depends on / 依赖: e.functor, f.functor, functor
+--- 原说明 ---
+Composition of isomorphisms of categories.
 -/
 def IsoCat.trans (e : IsoCat C D) (f : IsoCat D E) : IsoCat C E where
   functor := e.functor ⋙ f.functor
   inverse := f.inverse ⋙ e.inverse
   unit_eq := by
-    rw [Functor.assoc]; rw [← Functor.assoc f.functor]; rw [← f.unit_eq]; rw [Functor.id_comp]
+    rw [Functor.assoc, ← Functor.assoc f.functor, ← f.unit_eq, Functor.id_comp]
     exact e.unit_eq
   counit_eq := by
-    rw [Functor.assoc]; rw [← Functor.assoc e.inverse]; rw [e.counit_eq]; rw [Functor.id_comp]
+    rw [Functor.assoc, ← Functor.assoc e.inverse, e.counit_eq, Functor.id_comp]
     exact f.counit_eq
 
 namespace Functor
 
-/--
-Definition of `IsIso` / `IsIso` 的定义
+/-- A functor `F : C ⥤ D` is an isomorphism of categories if it is full, faithful and
+bijective on objects. Such a functor has a strict inverse `Functor.strictInv` and assembles
+into an `IsoCat` via `Functor.asIsomorphism`. -/
+/-
+**CategoryTheory.Functor.IsIso** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] → CategoryTh
+eory.Functor C D → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsIso
-  parameters: (F : C ⥤ D)
-  axioms and operations (3):
-    - faithful : F.Faithful  [default: by infer_instance]
-    - full : F.Full  [default: by infer_instance]
-    - bijective_obj((F)) : F.obj.Bijective
-
-中文:
-类 是同构
-  参数: (F : C ⥤ D)
-  公理与运算 (3 个):
-    - faithful : F.忠实  [默认: by infer_instance]
-    - full : F.满  [默认: by infer_instance]
-    - bijective_obj((F)) : F.obj.双射
+--- 原说明 ---
+A functor `F : C ⥤ D` is an isomorphism of categories if it is full, faithful an
+d
+bijective on objects. Such a functor has a strict inverse `Functor.strictInv` an
+d assembles
+into an `IsoCat` via `Functor.asIsomorphism`.
 -/
 protected class IsIso (F : C ⥤ D) : Prop where
   /-- A functor which is an isomorphism of categories is faithful. -/
@@ -198,131 +154,86 @@ protected class IsIso (F : C ⥤ D) : Prop where
 export Functor.IsIso (bijective_obj)
 
 attribute [instance] Functor.IsIso.faithful Functor.IsIso.full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (𝟭 C).IsIso
-  body: Function.bijective_id
-
-中文:
-实例 :
-  签名: (𝟭 C).是同构
-  定义体: Function.bijective_id
-
-Depends on / 依赖: Function, Function.bijective_id, bijective_id
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (𝟭 C).IsIso where
   bijective_obj := Function.bijective_id
 
 variable [F.IsIso] [G.IsIso]
 
-/--
-Definition of `objEquiv` / `objEquiv` 的定义
+/-- The bijection on objects induced by a functor that is an isomorphism of categories. -/
+/-
+**CategoryTheory.Functor.objEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：objEquiv : C ≃ D
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsIso.bijective_obj`：∀ {C : Type u_1} {D : Type u
+_2} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} D} (F : Categor…
 
-English:
-definition objEquiv
-  signature: : C ≃ D
-  body: .ofBijective _ (F.bijective_obj)
-
-@[simp]
-
-中文:
-定义 objEquiv
-  签名: : C ≃ D
-  定义体: .ofBijective _ (F.bijective_obj)
-
-@[simp]
-
-Depends on / 依赖: F.bijective_obj, bijective_obj, ofBijective
+--- 原说明 ---
+The bijection on objects induced by a functor that is an isomorphism of categori
+es.
 -/
 noncomputable def objEquiv : C ≃ D := .ofBijective _ (F.bijective_obj)
 
 @[simp]
-/--
-lemma `objEquiv_symm_apply_apply` / 引理 `objEquiv_symm_apply_apply`
-
-English:
-lemma objEquiv_symm_apply_apply
-  given: (X : C)
-  proof: F.objEquiv.symm_apply_apply X
-
-@[simp]
-
-中文:
-引理 objEquiv_symm_apply_apply
-  条件: (X : C)
-  证明: F.objEquiv.symm_apply_apply X
-
-@[simp]
-
-Depends on / 依赖: F.objEquiv.symm_apply_apply, objEquiv, symm_apply_apply
+/-
+**CategoryTheory.Functor.objEquiv_symm_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Functor`。
+形式化陈述：objEquiv_symm_apply_apply (X : C) : F.objEquiv.symm (F.obj X) = X
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
 lemma objEquiv_symm_apply_apply (X : C) :
     F.objEquiv.symm (F.obj X) = X :=
   F.objEquiv.symm_apply_apply X
 
 @[simp]
-/--
-lemma `objEquiv_apply_symm_apply` / 引理 `objEquiv_apply_symm_apply`
-
-English:
-lemma objEquiv_apply_symm_apply
-  given: (Y : D)
-  proof: F.objEquiv.apply_symm_apply Y
-
-中文:
-引理 objEquiv_apply_symm_apply
-  条件: (Y : D)
-  证明: F.objEquiv.apply_symm_apply Y
-
-Depends on / 依赖: F.objEquiv.apply_symm_apply, apply_symm_apply, objEquiv
+/-
+**CategoryTheory.Functor.objEquiv_apply_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Functor`。
+形式化陈述：objEquiv_apply_symm_apply (Y : D) : F.obj (F.objEquiv.symm Y) = Y
+参数：Y : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 lemma objEquiv_apply_symm_apply (Y : D) :
     F.obj (F.objEquiv.symm Y) = Y :=
   F.objEquiv.apply_symm_apply Y
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: F.IsEquivalence
-  body: ⟨fun Y => ⟨F.objEquiv.symm Y, ⟨eqToIso (by simp)⟩⟩⟩
-
-中文:
-实例 :
-  签名: F.是等价
-  定义体: ⟨fun Y => ⟨F.objEquiv.symm Y, ⟨eqToIso (by simp)⟩⟩⟩
-
-Depends on / 依赖: F.objEquiv.symm, eqToIso, objEquiv
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : F.IsEquivalence where
-  essSurj := ⟨fun Y => ⟨F.objEquiv.symm Y, ⟨eqToIso (by simp)⟩⟩⟩
+  essSurj := ⟨fun Y ↦ ⟨F.objEquiv.symm Y, ⟨eqToIso (by simp)⟩⟩⟩
 
 /-- The strict inverse of a functor that is an isomorphism of categories, defined using
 `Functor.objEquiv` on objects and `Functor.preimage` on morphisms. -/
 @[no_expose]
-/--
-Definition of `strictInv` / `strictInv` 的定义
+/-
+**CategoryTheory.Functor.strictInv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：strictInv : D ⥤ C where obj
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.Functor.IsIso.full`：∀ {C : Type u_1} {D : Type u_2} {inst
+ : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTheory.Category.{v_
+2, u_2} D} {F : Categor…
 
-English:
-definition strictInv
-  signature: : D ⥤ C where
-  body: F.objEquiv.symm
-  map f := F.preimage (eqToHom (by simp) ≫ f ≫ eqToHom (by simp))
-  map_comp _ _ := by simp [← preimage_comp]
-
-中文:
-定义 strictInv
-  签名: : D ⥤ C where
-  定义体: F.objEquiv.symm
-  map f := F.preimage (eqToHom (by simp) ≫ f ≫ eqToHom (by simp))
-  map_comp _ _ := by simp [← preimage_comp]
-
-Depends on / 依赖: F.objEquiv.symm, objEquiv
+--- 原说明 ---
+The strict inverse of a functor that is an isomorphism of categories, defined us
+ing
+`Functor.objEquiv` on objects and `Functor.preimage` on morphisms.
 -/
 noncomputable def strictInv : D ⥤ C where
   obj := F.objEquiv.symm
@@ -331,68 +242,52 @@ noncomputable def strictInv : D ⥤ C where
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `asIsomorphism` / `asIsomorphism` 的定义
+/-- A functor that is an isomorphism of categories assembles into an `IsoCat`,
+with `Functor.strictInv` as its inverse. -/
+/-
+**CategoryTheory.Functor.asIsomorphism** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：asIsomorphism : IsoCat C D where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asIsomorphism
-  signature: : IsoCat C D where
-  body: F
-  inverse := F.strictInv
-  unit_eq :=
-    ext (fun x => by simp [strictInv])
-      (fun _ _ _ => F.map_injective (by simp [eqToHom_map, strictInv]))
-  counit_eq :=
-    ext (fun x => by simp [strictInv])
-      (fun _ _ _ => by simp [strictInv])
-
-中文:
-定义 asIsomorphism
-  签名: : 同构范畴 C D where
-  定义体: F
-  inverse := F.strictInv
-  unit_eq :=
-    ext (fun x => by simp [strictInv])
-      (fun _ _ _ => F.map_injective (by simp [eqToHom_map, strictInv]))
-  counit_eq :=
-    ext (fun x => by simp [strictInv])
-      (fun _ _ _ => by simp [strictInv])
+--- 原说明 ---
+A functor that is an isomorphism of categories assembles into an `IsoCat`,
+with `Functor.strictInv` as its inverse.
 -/
 noncomputable def asIsomorphism : IsoCat C D where
   functor := F
   inverse := F.strictInv
   unit_eq :=
-    ext (fun x => by simp [strictInv])
-      (fun _ _ _ => F.map_injective (by simp [eqToHom_map, strictInv]))
+    ext (fun x ↦ by simp [strictInv])
+      (fun _ _ _ ↦ F.map_injective (by simp [eqToHom_map, strictInv]))
   counit_eq :=
-    ext (fun x => by simp [strictInv])
-      (fun _ _ _ => by simp [strictInv])
+    ext (fun x ↦ by simp [strictInv])
+      (fun _ _ _ ↦ by simp [strictInv])
 
 end Functor
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `IsoCat.toEquivalence` / `IsoCat.toEquivalence` 的定义
+/-- The equivalence of categories underlying an `IsoCat`, with the unit and counit
+isomorphisms induced by the defining equalities. -/
+/-
+**CategoryTheory.IsoCat.toEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+IsoCat`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] → CategoryTh
+eory.IsoCat C D → (C ≌ D)
+参数：C ≌ D。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsoCat.unit_eq`：∀ {C : Type u_1} {D : Type u_2} [inst : C
+ategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u
+_2} D] (self : Cate…
+· 使用定理 `CategoryTheory.IsoCat.counit_eq`：∀ {C : Type u_1} {D : Type u_2} [inst :
+ CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2,
+ u_2} D] (self : Cate…
 
-English:
-definition IsoCat.toEquivalence
-  signature: (e : IsoCat C D)
-  body: e.functor
-  inverse := e.inverse
-  unitIso := eqToIso e.unit_eq
-  counitIso := eqToIso e.counit_eq
-  functor_unitIso_comp X := by simp [eqToHom_map]
-
-中文:
-定义 同构范畴.toEquivalence
-  签名: (e : 同构范畴 C D)
-  定义体: e.functor
-  inverse := e.inverse
-  unitIso := eqToIso e.unit_eq
-  counitIso := eqToIso e.counit_eq
-  functor_unitIso_comp X := by simp [eqToHom_map]
-
-Depends on / 依赖: e.functor, functor
+--- 原说明 ---
+The equivalence of categories underlying an `IsoCat`, with the unit and counit
+isomorphisms induced by the defining equalities.
 -/
 def IsoCat.toEquivalence (e : IsoCat C D) : C ≌ D where
   functor := e.functor
@@ -404,59 +299,57 @@ def IsoCat.toEquivalence (e : IsoCat C D) : C ≌ D where
 /-- Promotes an equivalence of categories `e : C ≌ D` whose unit and counit isomorphisms are
 given by equalities of objects into an `IsoCat C D`. -/
 @[simps]
-/--
-Definition of `Equivalence.toIsoCat` / `Equivalence.toIsoCat` 的定义
+/-
+**CategoryTheory.Equivalence.toIsoCat** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Equivalence`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         (e
+ : C ≌ D) →           (h : ∀ (X : C), e.inverse.obj (e.functor.obj X) = X) →    
+         (h' : ∀ (Y : D), e.functor.obj (e.inverse.obj Y) = Y) →               a
+utoParam (∀ (X : C), e.unitIso.hom.app X = CategoryTheory.eqToHom ⋯)            
+       CategoryTheory.Equivalence.toIsoCat._auto_1 →                 autoParam (
+∀ (Y : D), e.counitIso.hom.app Y = CategoryTheory.eqToHom ⋯)                    
+ CategoryTheory.Equivalence.toIsoCat._auto_3 →                   CategoryTheory.
+IsoCat C D
+参数：e : C ≌ D；h : ∀ (X : C), e.inverse.obj (e.functor.obj X) = X；h' : ∀ (Y : D), 
+e.functor.obj (e.inverse.obj Y) = Y；∀ (X : C), e.unitIso.hom.app X = CategoryThe
+ory.eqToHom ⋯；∀ (Y : D), e.counitIso.hom.app Y = CategoryTheory.eqToHom ⋯。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equivalence.toIsoCat
-  signature: (e : C ≌ D)
-  body: e.functor
-  inverse := e.inverse
-  unit_eq := Functor.ext_of_iso e.unitIso (by simp [h])
-  counit_eq := Functor.ext_of_iso e.counitIso (by simp [h'])
-
-中文:
-定义 等价.toIsoCat
-  签名: (e : C ≌ D)
-  定义体: e.functor
-  inverse := e.inverse
-  unit_eq := Functor.ext_of_iso e.unitIso (by simp [h])
-  counit_eq := Functor.ext_of_iso e.counitIso (by simp [h'])
-
-Depends on / 依赖: Functor, Functor.ext_of_iso, IsoCat, cat_disch, counitIso, counit_eq, e.counitIso, e.counitIso.hom.app, e.functor, e.inverse, e.unitIso, eqToHom, ext_of_iso, functor, inverse, unitIso, unit_eq
+--- 原说明 ---
+Promotes an equivalence of categories `e : C ≌ D` whose unit and counit isomorph
+isms are
+given by equalities of objects into an `IsoCat C D`.
 -/
 def Equivalence.toIsoCat (e : C ≌ D)
-    (h : forall (X : C), e.inverse.obj (e.functor.obj X) = X)
-    (h' : forall (Y : D), e.functor.obj (e.inverse.obj Y) = Y)
-    (k : forall (X : C), e.unitIso.hom.app X = eqToHom (h X).symm := by cat_disch)
-    (k' : forall (Y : D), e.counitIso.hom.app Y = eqToHom (h' Y) := by cat_disch) : IsoCat C D where
+    (h : ∀ (X : C), e.inverse.obj (e.functor.obj X) = X)
+    (h' : ∀ (Y : D), e.functor.obj (e.inverse.obj Y) = Y)
+    (k : ∀ (X : C), e.unitIso.hom.app X = eqToHom (h X).symm := by cat_disch)
+    (k' : ∀ (Y : D), e.counitIso.hom.app Y = eqToHom (h' Y) := by cat_disch) : IsoCat C D where
   functor := e.functor
   inverse := e.inverse
   unit_eq := Functor.ext_of_iso e.unitIso (by simp [h])
   counit_eq := Functor.ext_of_iso e.counitIso (by simp [h'])
-
-/--
-Instance `IsoCat.isIso_functor` / 实例 `IsoCat.isIso_functor`
-
-English:
-instance IsoCat.isIso_functor
-  signature: (e : IsoCat C D)
-  body: e.toEquivalence.faithful_functor
-  full := e.toEquivalence.full_functor
-  bijective_obj := Function.bijective_iff_has_inverse.mpr
-    ⟨e.inverse.obj, fun X => (Functor.congr_obj e.unit_eq X).symm,
-      Functor.congr_obj e.counit_eq⟩
-
-中文:
-实例 同构范畴.isIso_functor
-  签名: (e : 同构范畴 C D)
-  定义体: e.toEquivalence.faithful_functor
-  full := e.toEquivalence.full_functor
-  bijective_obj := Function.bijective_iff_has_inverse.mpr
-    ⟨e.inverse.obj, fun X => (Functor.congr_obj e.unit_eq X).symm,
-      Functor.congr_obj e.counit_eq⟩
-
-Depends on / 依赖: e.toEquivalence.faithful_functor, faithful_functor, toEquivalence
+/-
+**CategoryTheory.IsoCat.isIso_functor** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+IsoCat`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (e : CategoryTheory.IsoCat
+ C D), e.functor.IsIso
+参数：e : CategoryTheory.IsoCat C D。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `CategoryTheory.IsoCat.unit_eq`：∀ {C : Type u_1} {D : Type u_2} [inst : C
+ategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2, u
+_2} D] (self : Cate…
+· 使用定理 `CategoryTheory.IsoCat.counit_eq`：∀ {C : Type u_1} {D : Type u_2} [inst :
+ CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.Category.{v_2,
+ u_2} D] (self : Cate…
 -/
 instance IsoCat.isIso_functor (e : IsoCat C D) : e.functor.IsIso where
   faithful := e.toEquivalence.faithful_functor
@@ -464,42 +357,22 @@ instance IsoCat.isIso_functor (e : IsoCat C D) : e.functor.IsIso where
   bijective_obj := Function.bijective_iff_has_inverse.mpr
     ⟨e.inverse.obj, fun X => (Functor.congr_obj e.unit_eq X).symm,
       Functor.congr_obj e.counit_eq⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (e : IsoCat C D) : e.inverse.IsIso := e.symm.isIso_functor
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.IsIso]
-  signature: : F.strictInv.IsIso
-  body: F.asIsomorphism.symm.isIso_functor
-
-中文:
-实例 [F.是同构]
-  签名: : F.strictInv.是同构
-  定义体: F.asIsomorphism.symm.isIso_functor
-
-Depends on / 依赖: F.asIsomorphism.symm.isIso_functor, asIsomorphism, isIso_functor
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.IsIso] : F.strictInv.IsIso := F.asIsomorphism.symm.isIso_functor
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.IsIso]
-  signature: [G.IsIso]
-  body: (F.asIsomorphism.trans G.asIsomorphism).isIso_functor
-
-中文:
-实例 [F.是同构]
-  签名: [G.是同构]
-  定义体: (F.asIsomorphism.trans G.asIsomorphism).isIso_functor
-
-Depends on / 依赖: F.asIsomorphism.trans, G.asIsomorphism, asIsomorphism, isIso_functor
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.IsIso] [G.IsIso] : (F ⋙ G).IsIso :=
   (F.asIsomorphism.trans G.asIsomorphism).isIso_functor
 
 end CategoryTheory
+

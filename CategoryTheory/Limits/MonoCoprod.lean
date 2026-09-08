@@ -45,27 +45,26 @@ namespace Limits
 
 variable (C : Type*) [Category* C]
 
-/--
-Definition of `MonoCoprod` / `MonoCoprod` 的定义
+/-- This condition expresses that inclusion morphisms into coproducts are monomorphisms. -/
+/-
+**CategoryTheory.Limits.MonoCoprod** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：(C : Type u_1) → [CategoryTheory.Category.{v_1, u_1} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MonoCoprod
-  parameters: : Prop where
-  axioms and operations (1):
-    - binaryCofan_inl : forall ⦃A B : C⦄ (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl
-
-中文:
-类 MonoCoprod
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - binaryCofan_inl : 对任意 ⦃A B : C⦄ (c : BinaryCofan A B) (_ : 是余极限 c), 单态射 c.inl
+--- 原说明 ---
+This condition expresses that inclusion morphisms into coproducts are monomorphi
+sms.
 -/
 class MonoCoprod : Prop where
   /-- the left inclusion of a colimit binary cofan is mono -/
-  binaryCofan_inl : forall ⦃A B : C⦄ (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl
+  binaryCofan_inl : ∀ ⦃A B : C⦄ (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl
 
 variable {C}
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) monoCoprodOfHasZeroMorphisms [HasZeroMorphisms C] : MonoCoprod C :=
   ⟨fun A B c hc => by
     have : IsSplitMono c.inl :=
@@ -75,32 +74,36 @@ instance (priority := 100) monoCoprodOfHasZeroMorphisms [HasZeroMorphisms C] : M
 namespace MonoCoprod
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `binaryCofan_inr` / 定理 `binaryCofan_inr`
-
-English:
-theorem binaryCofan_inr
-  given: {A B : C} [MonoCoprod C] (c : BinaryCofan A B) (hc : IsColimit c)
-  proof: by
-  have hc' : IsColimit (BinaryCofan.mk c.inr c.inl) :=
-    BinaryCofan.IsColimit.mk _
-      (fun f₁ f₂ => BinaryCofan.IsColimit.desc (s := c) hc f₂ f₁)
-      (by simp) (by simp)
-      (fun f₁ f₂ m h₁ h₂ => BinaryCofan.IsColimit.hom_ext hc (by cat_disch) (by cat_disch))
-  exact binaryCofan_inl _ hc'
-
-中文:
-定理 binaryCofan_inr
-  条件: {A B : C} [MonoCoprod C] (c : BinaryCofan A B) (hc : 是余极限 c)
-  证明: by
-  have hc' : IsColimit (BinaryCofan.mk c.inr c.inl) :=
-    BinaryCofan.IsColimit.mk _
-      (fun f₁ f₂ => BinaryCofan.IsColimit.desc (s := c) hc f₂ f₁)
-      (by simp) (by simp)
-      (fun f₁ f₂ m h₁ h₂ => BinaryCofan.IsColimit.hom_ext hc (by cat_disch) (by cat_disch))
-  exact binaryCofan_inl _ hc'
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.desc, BinaryCofan.IsColimit.hom_ext, BinaryCofan.IsColimit.mk, BinaryCofan.mk, IsColimit, binaryCofan_inl, c.inl, c.inr, cat_disch, hom_ext
+/-
+**CategoryTheory.Limits.MonoCoprod.binaryCofan_inr** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits.MonoCoprod`。
+形式化陈述：binaryCofan_inr {A B : C} [MonoCoprod C] (c : BinaryCofan A B) (hc : IsCol
+imit c) : Mono c.inr
+参数：c : BinaryCofan A B；hc : IsColimit c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.BinaryCofan.IsColimit.inr_desc`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {X Y W : C} {s : CategoryTheory.Limits.Bi
+naryCofan X Y}   (h : CategoryTheory.Limit…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.Limits.BinaryCofan.IsColimit.inl_desc`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {X Y W : C} {s : CategoryTheory.Limits.Bi
+naryCofan X Y}   (h : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.BinaryCofan.IsColimit.hom_ext`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {W X Y : C} {s : CategoryTheory.Limits.Bin
+aryCofan X Y}   (h : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.binaryCofan_inl`：∀ {C : Type u_1} {inst
+ : CategoryTheory.Category.{v_1, u_1} C} [self : CategoryTheory.Limits.MonoCopro
+d C] ⦃A B : C⦄   (c : CategoryTheory.L…
 -/
 theorem binaryCofan_inr {A B : C} [MonoCoprod C] (c : BinaryCofan A B) (hc : IsColimit c) :
     Mono c.inr := by
@@ -110,131 +113,109 @@ theorem binaryCofan_inr {A B : C} [MonoCoprod C] (c : BinaryCofan A B) (hc : IsC
       (by simp) (by simp)
       (fun f₁ f₂ m h₁ h₂ => BinaryCofan.IsColimit.hom_ext hc (by cat_disch) (by cat_disch))
   exact binaryCofan_inl _ hc'
-
+/-
+**CategoryTheory.Limits.MonoCoprod.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.MonoCoprod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A B : C} [MonoCoprod C] [HasBinaryCoproduct A B] : Mono (coprod.inl : A ⟶ A ⨿ B) :=
   binaryCofan_inl _ (colimit.isColimit _)
-
+/-
+**CategoryTheory.Limits.MonoCoprod.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.MonoCoprod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A B : C} [MonoCoprod C] [HasBinaryCoproduct A B] : Mono (coprod.inr : B ⟶ A ⨿ B) :=
   binaryCofan_inr _ (colimit.isColimit _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mono_inl_iff` / 定理 `mono_inl_iff`
-
-English:
-theorem mono_inl_iff
-  given: {A B : C} {c₁ c₂ : BinaryCofan A B} (hc₁ : IsColimit c₁) (hc₂ : IsColimit c₂)
-  proof: by
-  suffices
-    forall (c₁ c₂ : BinaryCofan A B) (_ : IsColimit c₁) (_ : IsColimit c₂) (_ : Mono c₁.inl),
-      Mono c₂.inl
-    ⟨fun h₁ => this _ _ hc₁ hc₂ h₁, fun h₂ => this _ _ hc₂ hc₁ h₂⟩
-  intro c₁ c₂ hc₁ hc₂ _
-  simpa only [IsColimit.comp_coconePointUniqueUpToIso_hom] using!
-    mono_comp c₁.inl (hc₁.coconePointUniqueUpToIso hc₂).hom
-
-中文:
-定理 mono_inl_iff
-  条件: {A B : C} {c₁ c₂ : BinaryCofan A B} (hc₁ : 是余极限 c₁) (hc₂ : 是余极限 c₂)
-  证明: by
-  suffices
-    forall (c₁ c₂ : BinaryCofan A B) (_ : IsColimit c₁) (_ : IsColimit c₂) (_ : Mono c₁.inl),
-      Mono c₂.inl
-    ⟨fun h₁ => this _ _ hc₁ hc₂ h₁, fun h₂ => this _ _ hc₂ hc₁ h₂⟩
-  intro c₁ c₂ hc₁ hc₂ _
-  simpa only [IsColimit.comp_coconePointUniqueUpToIso_hom] using!
-    mono_comp c₁.inl (hc₁.coconePointUniqueUpToIso hc₂).hom
-
-Depends on / 依赖: BinaryCofan, IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, coconePointUniqueUpToIso, comp_coconePointUniqueUpToIso_hom, mono_comp
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_inl_iff** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_inl_iff {A B : C} {c₁ c₂ : BinaryCofan A B} (hc₁ : IsColimit c₁) (hc₂
+ : IsColimit c₂) : Mono c₁.inl ↔ Mono c₂.inl
+参数：hc₁ : IsColimit c₁；hc₂ : IsColimit c₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 theorem mono_inl_iff {A B : C} {c₁ c₂ : BinaryCofan A B} (hc₁ : IsColimit c₁) (hc₂ : IsColimit c₂) :
     Mono c₁.inl ↔ Mono c₂.inl := by
   suffices
-    forall (c₁ c₂ : BinaryCofan A B) (_ : IsColimit c₁) (_ : IsColimit c₂) (_ : Mono c₁.inl),
+    ∀ (c₁ c₂ : BinaryCofan A B) (_ : IsColimit c₁) (_ : IsColimit c₂) (_ : Mono c₁.inl),
       Mono c₂.inl
-    ⟨fun h₁ => this _ _ hc₁ hc₂ h₁, fun h₂ => this _ _ hc₂ hc₁ h₂⟩
+    by exact ⟨fun h₁ => this _ _ hc₁ hc₂ h₁, fun h₂ => this _ _ hc₂ hc₁ h₂⟩
   intro c₁ c₂ hc₁ hc₂ _
   simpa only [IsColimit.comp_coconePointUniqueUpToIso_hom] using!
     mono_comp c₁.inl (hc₁.coconePointUniqueUpToIso hc₂).hom
-
-/--
-theorem `mk'` / 定理 `mk'`
-
-English:
-theorem mk'
-  given: (h : forall A B : C, exists (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl)
-  statement: MonoCoprod C
-  proof: ⟨fun A B c' hc' => by
-    obtain ⟨c, hc₁, hc₂⟩ := h A B
-    simpa only [mono_inl_iff hc' hc₁] using hc₂⟩
-
-中文:
-定理 mk'
-  条件: (h : 对任意 A B : C, 存在 (c : BinaryCofan A B) (_ : 是余极限 c), 单态射 c.inl)
-  结论: MonoCoprod C
-  证明: ⟨fun A B c' hc' => by
-    obtain ⟨c, hc₁, hc₂⟩ := h A B
-    simpa only [mono_inl_iff hc' hc₁] using hc₂⟩
-
-Depends on / 依赖: mono_inl_iff
+/-
+**CategoryTheory.Limits.MonoCoprod.mk'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.MonoCoprod`。
+形式化陈述：mk' (h : forall A B : C, exists (c : BinaryCofan A B) (_ : IsColimit c), M
+ono c.inl) : MonoCoprod C
+参数：h : forall A B : C, exists (c : BinaryCofan A B) (_ : IsColimit c), Mono c.in
+l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.mono_inl_iff`：mono_inl_iff {A B : C} {c
+₁ c₂ : BinaryCofan A B} (hc₁ : IsColimit c₁) (hc₂ : IsColimit c₂) : Mono c₁.inl 
+↔ Mono c₂.inl
 -/
-theorem mk' (h : forall A B : C, exists (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl) : MonoCoprod C :=
+theorem mk' (h : ∀ A B : C, ∃ (c : BinaryCofan A B) (_ : IsColimit c), Mono c.inl) : MonoCoprod C :=
   ⟨fun A B c' hc' => by
     obtain ⟨c, hc₁, hc₂⟩ := h A B
     simpa only [mono_inl_iff hc' hc₁] using hc₂⟩
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `monoCoprodType` / 实例 `monoCoprodType`
-
-English:
-instance monoCoprodType
-  signature: : MonoCoprod (Type u)
-  body: MonoCoprod.mk' fun A B => by
-    refine ⟨BinaryCofan.mk (↾(Sum.inl : A -> A oplus B))
-      (↾Sum.inr), ?_, ?_⟩
-    · exact BinaryCofan.IsColimit.mk _
-        (fun f₁ f₂ => ↾fun x => by
-          rcases x with x | x
-          exacts [f₁ x, f₂ x])
-        (fun f₁ f₂ => by rfl)
-        (fun f₁ f₂ => by rfl)
-        (fun f₁ f₂ m h₁ h₂ => by
-          ext x
-          rcases x with x | x
-          · exact ConcreteCategory.congr_hom h₁ x
-          · exact ConcreteCategory.congr_hom h₂ x)
-    · rw [mono_iff_injective]
-      intro a₁ a₂ h
-      simpa using h
-
-中文:
-实例 monoCoprodType
-  签名: : MonoCoprod (类型u)
-  定义体: MonoCoprod.mk' fun A B => by
-    refine ⟨BinaryCofan.mk (↾(Sum.inl : A -> A oplus B))
-      (↾Sum.inr), ?_, ?_⟩
-    · exact BinaryCofan.IsColimit.mk _
-        (fun f₁ f₂ => ↾fun x => by
-          rcases x with x | x
-          exacts [f₁ x, f₂ x])
-        (fun f₁ f₂ => by rfl)
-        (fun f₁ f₂ => by rfl)
-        (fun f₁ f₂ m h₁ h₂ => by
-          ext x
-          rcases x with x | x
-          · exact ConcreteCategory.congr_hom h₁ x
-          · exact ConcreteCategory.congr_hom h₂ x)
-    · rw [mono_iff_injective]
-      intro a₁ a₂ h
-      simpa using h
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, BinaryCofan.mk, ConcreteCategory, ConcreteCategory.congr_hom, IsColimit, MonoCoprod, MonoCoprod.mk, Sum.inl, Sum.inr, congr_hom, exacts, mono_iff_injective
+/-
+**CategoryTheory.Limits.MonoCoprod.monoCoprodType** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Limits.MonoCoprod`。
+形式化陈述：monoCoprodType : MonoCoprod (Type u)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.mk'`：mk' (h : forall A B : C, exists (c
+ : BinaryCofan A B) (_ : IsColimit c), Mono c.inl) : MonoCoprod C
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.mono_iff_injective`：mono_iff_injective {X Y : Type u} (f 
+: X ⟶ Y) : Mono f ↔ Function.Injective f
+· 使用定理 `Sum.inl.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : α), (Sum.inl val
+ = Sum.inl val_1) = (val = val_1)
 -/
 instance monoCoprodType : MonoCoprod (Type u) :=
   MonoCoprod.mk' fun A B => by
-    refine ⟨BinaryCofan.mk (↾(Sum.inl : A -> A oplus B))
+    refine ⟨BinaryCofan.mk (↾(Sum.inl : A → A ⊕ B))
       (↾Sum.inr), ?_, ?_⟩
     · exact BinaryCofan.IsColimit.mk _
         (fun f₁ f₂ => ↾fun x => by
@@ -253,7 +234,7 @@ instance monoCoprodType : MonoCoprod (Type u) :=
 
 section
 
-variable {I₁ I₂ : Type*} {X : I₁ oplus I₂ -> C} (c : Cofan X)
+variable {I₁ I₂ : Type*} {X : I₁ ⊕ I₂ → C} (c : Cofan X)
   (c₁ : Cofan (X ∘ Sum.inl)) (c₂ : Cofan (X ∘ Sum.inr))
   (hc : IsColimit c) (hc₁ : IsColimit c₁) (hc₂ : IsColimit c₂)
 include hc hc₁ hc₂
@@ -262,56 +243,35 @@ include hc hc₁ hc₂
 of `X ∘ Sum.inl` and `X ∘ Sum.inr`, this is a cofan for `c₁.pt` and `c₂.pt` whose
 point is `c.pt`. -/
 @[simp]
-/--
-Definition of `binaryCofanSum` / `binaryCofanSum` 的定义
+/-
+**CategoryTheory.Limits.MonoCoprod.binaryCofanSum** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.MonoCoprod`。
+形式化陈述：binaryCofanSum : BinaryCofan c₁.pt c₂.pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryCofanSum
-  signature: : BinaryCofan c₁.pt c₂.pt
-  body: BinaryCofan.mk (Cofan.IsColimit.desc hc₁ (fun i₁ => c.inj (Sum.inl i₁)))
-    (Cofan.IsColimit.desc hc₂ (fun i₂ => c.inj (Sum.inr i₂)))
-
-中文:
-定义 binaryCofanSum
-  签名: : BinaryCofan c₁.pt c₂.pt
-  定义体: BinaryCofan.mk (Cofan.IsColimit.desc hc₁ (fun i₁ => c.inj (Sum.inl i₁)))
-    (Cofan.IsColimit.desc hc₂ (fun i₂ => c.inj (Sum.inr i₂)))
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.mk, Cofan.IsColimit.desc, IsColimit, Sum.inl, Sum.inr, c.inj
+--- 原说明 ---
+Given a family of objects `X : I₁ ⊕ I₂ → C`, a cofan of `X`, and two colimit cof
+ans
+of `X ∘ Sum.inl` and `X ∘ Sum.inr`, this is a cofan for `c₁.pt` and `c₂.pt` whos
+e
+point is `c.pt`.
 -/
 def binaryCofanSum : BinaryCofan c₁.pt c₂.pt :=
   BinaryCofan.mk (Cofan.IsColimit.desc hc₁ (fun i₁ => c.inj (Sum.inl i₁)))
     (Cofan.IsColimit.desc hc₂ (fun i₂ => c.inj (Sum.inr i₂)))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isColimitBinaryCofanSum` / `isColimitBinaryCofanSum` 的定义
+/-- The binary cofan `binaryCofanSum c c₁ c₂ hc₁ hc₂` is colimit. -/
+/-
+**CategoryTheory.Limits.MonoCoprod.isColimitBinaryCofanSum** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：isColimitBinaryCofanSum : IsColimit (binaryCofanSum c c₁ c₂ hc₁ hc₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitBinaryCofanSum
-  signature: : IsColimit (binaryCofanSum c c₁ c₂ hc₁ hc₂)
-  body: BinaryCofan.IsColimit.mk _ (fun f₁ f₂ => Cofan.IsColimit.desc hc (fun i => match i with
-      | Sum.inl i₁ => c₁.inj i₁ ≫ f₁
-      | Sum.inr i₂ => c₂.inj i₂ ≫ f₂))
-    (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₁ _ _ (by simp))
-    (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₂ _ _ (by simp))
-    (fun f₁ f₂ m hm₁ hm₂ => by
-      apply Cofan.IsColimit.hom_ext hc
-      rintro (i₁ | i₂) <;> cat_disch)
-
-中文:
-定义 isColimitBinaryCofanSum
-  签名: : 是余极限 (binaryCofanSum c c₁ c₂ hc₁ hc₂)
-  定义体: BinaryCofan.IsColimit.mk _ (fun f₁ f₂ => Cofan.IsColimit.desc hc (fun i => match i with
-      | Sum.inl i₁ => c₁.inj i₁ ≫ f₁
-      | Sum.inr i₂ => c₂.inj i₂ ≫ f₂))
-    (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₁ _ _ (by simp))
-    (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₂ _ _ (by simp))
-    (fun f₁ f₂ m hm₁ hm₂ => by
-      apply Cofan.IsColimit.hom_ext hc
-      rintro (i₁ | i₂) <;> cat_disch)
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, Cofan.IsColimit.desc, Cofan.IsColimit.hom_ext, IsColimit, Sum.inl, Sum.inr, cat_disch, hom_ext
+--- 原说明 ---
+The binary cofan `binaryCofanSum c c₁ c₂ hc₁ hc₂` is colimit.
 -/
 def isColimitBinaryCofanSum : IsColimit (binaryCofanSum c c₁ c₂ hc₁ hc₂) :=
   BinaryCofan.IsColimit.mk _ (fun f₁ f₂ => Cofan.IsColimit.desc hc (fun i => match i with
@@ -322,71 +282,60 @@ def isColimitBinaryCofanSum : IsColimit (binaryCofanSum c c₁ c₂ hc₁ hc₂)
     (fun f₁ f₂ m hm₁ hm₂ => by
       apply Cofan.IsColimit.hom_ext hc
       rintro (i₁ | i₂) <;> cat_disch)
-
-/--
-lemma `mono_binaryCofanSum_inl` / 引理 `mono_binaryCofanSum_inl`
-
-English:
-lemma mono_binaryCofanSum_inl
-  given: [MonoCoprod C]
-  proof: MonoCoprod.binaryCofan_inl _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-
-中文:
-引理 mono_binaryCofanSum_inl
-  条件: [MonoCoprod C]
-  证明: MonoCoprod.binaryCofan_inl _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-
-Depends on / 依赖: MonoCoprod, MonoCoprod.binaryCofan_inl, binaryCofan_inl, isColimitBinaryCofanSum
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_binaryCofanSum_inl** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_binaryCofanSum_inl [MonoCoprod C] : Mono (binaryCofanSum c c₁ c₂ hc₁ 
+hc₂).inl
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.binaryCofan_inl`：∀ {C : Type u_1} {inst
+ : CategoryTheory.Category.{v_1, u_1} C} [self : CategoryTheory.Limits.MonoCopro
+d C] ⦃A B : C⦄   (c : CategoryTheory.L…
 -/
 lemma mono_binaryCofanSum_inl [MonoCoprod C] :
     Mono (binaryCofanSum c c₁ c₂ hc₁ hc₂).inl :=
   MonoCoprod.binaryCofan_inl _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-
-/--
-lemma `mono_binaryCofanSum_inr` / 引理 `mono_binaryCofanSum_inr`
-
-English:
-lemma mono_binaryCofanSum_inr
-  given: [MonoCoprod C]
-  proof: MonoCoprod.binaryCofan_inr _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-
-中文:
-引理 mono_binaryCofanSum_inr
-  条件: [MonoCoprod C]
-  证明: MonoCoprod.binaryCofan_inr _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-
-Depends on / 依赖: MonoCoprod, MonoCoprod.binaryCofan_inr, binaryCofan_inr, isColimitBinaryCofanSum
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_binaryCofanSum_inr** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_binaryCofanSum_inr [MonoCoprod C] : Mono (binaryCofanSum c c₁ c₂ hc₁ 
+hc₂).inr
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.binaryCofan_inr`：binaryCofan_inr {A B :
+ C} [MonoCoprod C] (c : BinaryCofan A B) (hc : IsColimit c) : Mono c.inr
 -/
 lemma mono_binaryCofanSum_inr [MonoCoprod C] :
     Mono (binaryCofanSum c c₁ c₂ hc₁ hc₂).inr :=
   MonoCoprod.binaryCofan_inr _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mono_binaryCofanSum_inl'` / 引理 `mono_binaryCofanSum_inl'`
-
-English:
-lemma mono_binaryCofanSum_inl'
-  statement: [MonoCoprod C] (inl : c₁.pt ⟶ c.pt)
-  proof: by
-  suffices inl = (binaryCofanSum c c₁ c₂ hc₁ hc₂).inl by
-    rw [this]
-    exact MonoCoprod.binaryCofan_inl _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-  exact Cofan.IsColimit.hom_ext hc₁ _ _ (by simpa using hinl)
-
-中文:
-引理 mono_binaryCofanSum_inl'
-  结论: [MonoCoprod C] (inl : c₁.pt ⟶ c.pt)
-  证明: by
-  suffices inl = (binaryCofanSum c c₁ c₂ hc₁ hc₂).inl by
-    rw [this]
-    exact MonoCoprod.binaryCofan_inl _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-  exact Cofan.IsColimit.hom_ext hc₁ _ _ (by simpa using hinl)
-
-Depends on / 依赖: Cofan.IsColimit.hom_ext, IsColimit, MonoCoprod, MonoCoprod.binaryCofan_inl, binaryCofanSum, binaryCofan_inl, hom_ext, isColimitBinaryCofanSum
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_binaryCofanSum_inl'** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_binaryCofanSum_inl' [MonoCoprod C] (inl : c₁.pt ⟶ c.pt) (hinl : foral
+l (i₁ : I₁), c₁.inj i₁ ≫ inl = c.inj (Sum.inl i₁)) : Mono inl
+参数：inl : c₁.pt ⟶ c.pt；hinl : forall (i₁ : I₁), c₁.inj i₁ ≫ inl = c.inj (Sum.inl 
+i₁)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cofan.IsColimit.hom_ext`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {I : Type u_1} {F : I → C} {c : CategoryTheory.L
+imits.Cofan F}   (hc : CategoryTheo…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Cofan.IsColimit.fac`：∀ {β : Type w} {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {F : β → C} {c : CategoryTheory.Limits.
+Cofan F}   (hc : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.binaryCofan_inl`：∀ {C : Type u_1} {inst
+ : CategoryTheory.Category.{v_1, u_1} C} [self : CategoryTheory.Limits.MonoCopro
+d C] ⦃A B : C⦄   (c : CategoryTheory.L…
 -/
 lemma mono_binaryCofanSum_inl' [MonoCoprod C] (inl : c₁.pt ⟶ c.pt)
-    (hinl : forall (i₁ : I₁), c₁.inj i₁ ≫ inl = c.inj (Sum.inl i₁)) :
+    (hinl : ∀ (i₁ : I₁), c₁.inj i₁ ≫ inl = c.inj (Sum.inl i₁)) :
     Mono inl := by
   suffices inl = (binaryCofanSum c c₁ c₂ hc₁ hc₂).inl by
     rw [this]
@@ -394,31 +343,30 @@ lemma mono_binaryCofanSum_inl' [MonoCoprod C] (inl : c₁.pt ⟶ c.pt)
   exact Cofan.IsColimit.hom_ext hc₁ _ _ (by simpa using hinl)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mono_binaryCofanSum_inr'` / 引理 `mono_binaryCofanSum_inr'`
-
-English:
-lemma mono_binaryCofanSum_inr'
-  statement: [MonoCoprod C] (inr : c₂.pt ⟶ c.pt)
-  proof: by
-  suffices inr = (binaryCofanSum c c₁ c₂ hc₁ hc₂).inr by
-    rw [this]
-    exact MonoCoprod.binaryCofan_inr _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-  exact Cofan.IsColimit.hom_ext hc₂ _ _ (by simpa using hinr)
-
-中文:
-引理 mono_binaryCofanSum_inr'
-  结论: [MonoCoprod C] (inr : c₂.pt ⟶ c.pt)
-  证明: by
-  suffices inr = (binaryCofanSum c c₁ c₂ hc₁ hc₂).inr by
-    rw [this]
-    exact MonoCoprod.binaryCofan_inr _ (isColimitBinaryCofanSum c c₁ c₂ hc hc₁ hc₂)
-  exact Cofan.IsColimit.hom_ext hc₂ _ _ (by simpa using hinr)
-
-Depends on / 依赖: Cofan.IsColimit.hom_ext, IsColimit, MonoCoprod, MonoCoprod.binaryCofan_inr, binaryCofanSum, binaryCofan_inr, hom_ext, isColimitBinaryCofanSum
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_binaryCofanSum_inr'** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_binaryCofanSum_inr' [MonoCoprod C] (inr : c₂.pt ⟶ c.pt) (hinr : foral
+l (i₂ : I₂), c₂.inj i₂ ≫ inr = c.inj (Sum.inr i₂)) : Mono inr
+参数：inr : c₂.pt ⟶ c.pt；hinr : forall (i₂ : I₂), c₂.inj i₂ ≫ inr = c.inj (Sum.inr 
+i₂)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cofan.IsColimit.hom_ext`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {I : Type u_1} {F : I → C} {c : CategoryTheory.L
+imits.Cofan F}   (hc : CategoryTheo…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Cofan.IsColimit.fac`：∀ {β : Type w} {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {F : β → C} {c : CategoryTheory.Limits.
+Cofan F}   (hc : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.binaryCofan_inr`：binaryCofan_inr {A B :
+ C} [MonoCoprod C] (c : BinaryCofan A B) (hc : IsColimit c) : Mono c.inr
 -/
 lemma mono_binaryCofanSum_inr' [MonoCoprod C] (inr : c₂.pt ⟶ c.pt)
-    (hinr : forall (i₂ : I₂), c₂.inj i₂ ≫ inr = c.inj (Sum.inr i₂)) :
+    (hinr : ∀ (i₂ : I₂), c₂.inj i₂ ≫ inr = c.inj (Sum.inr i₂)) :
     Mono inr := by
   suffices inr = (binaryCofanSum c c₁ c₂ hc₁ hc₂).inr by
     rw [this]
@@ -429,36 +377,50 @@ end
 
 section
 
-variable [MonoCoprod C] {I J : Type*} (X : I -> C) (ι : J -> I)
+variable [MonoCoprod C] {I J : Type*} (X : I → C) (ι : J → I)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mono_of_injective_aux` / 引理 `mono_of_injective_aux`
-
-English:
-lemma mono_of_injective_aux
-  statement: (hι : Function.Injective ι) (c : Cofan X) (c₁ : Cofan (X ∘ ι))
-  proof: by
-  classical
-  let e := ((Equiv.ofInjective ι hι).sumCongr (Equiv.refl _)).trans (Equiv.Set.sumCompl _)
-  refine mono_binaryCofanSum_inl' (Cofan.mk c.pt (fun i' => c.inj (e i'))) _ _ ?_
-    hc₁ hc₂ _ (by simp [e])
-  exact IsColimit.ofIsoColimit ((IsColimit.ofCoconeEquiv (Cocone.equivalenceOfReindexing
-    (Discrete.equivalence e) (Iso.refl _))).symm hc) (Cocone.ext (Iso.refl _))
-
-中文:
-引理 mono_of_injective_aux
-  结论: (hι : 函数.单射 ι) (c : Cofan X) (c₁ : Cofan (X ∘ ι))
-  证明: by
-  classical
-  let e := ((Equiv.ofInjective ι hι).sumCongr (Equiv.refl _)).trans (Equiv.Set.sumCompl _)
-  refine mono_binaryCofanSum_inl' (Cofan.mk c.pt (fun i' => c.inj (e i'))) _ _ ?_
-    hc₁ hc₂ _ (by simp [e])
-  exact IsColimit.ofIsoColimit ((IsColimit.ofCoconeEquiv (Cocone.equivalenceOfReindexing
-    (Discrete.equivalence e) (Iso.refl _))).symm hc) (Cocone.ext (Iso.refl _))
-
-Depends on / 依赖: Cocone, Cocone.equivalenceOfReindexing, Cocone.ext, Cofan.mk, Discrete, Discrete.equivalence, Equiv.Set.sumCompl, Equiv.ofInjective, Equiv.refl, IsColimit, IsColimit.ofCoconeEquiv, IsColimit.ofIsoColimit, Iso.refl, c.inj, c.pt, classical, equivalence, equivalenceOfReindexing, mono_binaryCofanSum_inl, ofCoconeEquiv
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_of_injective_aux** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_of_injective_aux (hι : Function.Injective ι) (c : Cofan X) (c₁ : Cofa
+n (X ∘ ι)) (hc : IsColimit c) (hc₁ : IsColimit c₁) (c₂ : Cofan (fun (k : ((Set.r
+ange ι)ᶜ : Set I)) => X k.1)) (hc₂ : IsColimit c₂) : Mono (Cofan.IsColimit.desc 
+hc₁ (fun i => c.inj (ι i)))
+参数：hι : Function.Injective ι；c : Cofan X；c₁ : Cofan (X ∘ ι)；hc : IsColimit c；hc₁
+ : IsColimit c₁；c₂ : Cofan (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)；hc₂ : I
+sColimit c₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用引理 `CategoryTheory.Limits.MonoCoprod.mono_binaryCofanSum_inl'`：mono_binaryCo
+fanSum_inl' [MonoCoprod C] (inl : c₁.pt ⟶ c.pt) (hinl : forall (i₁ : I₁), c₁.inj
+ i₁ ≫ inl = c.inj (Sum.inl i₁)) : Mono inl
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Limits.Cofan.IsColimit.fac`：∀ {β : Type w} {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {F : β → C} {c : CategoryTheory.Limits.
+Cofan F}   (hc : CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma mono_of_injective_aux (hι : Function.Injective ι) (c : Cofan X) (c₁ : Cofan (X ∘ ι))
     (hc : IsColimit c) (hc₁ : IsColimit c₁)
@@ -476,37 +438,32 @@ variable (hι : Function.Injective ι) (c : Cofan X) (c₁ : Cofan (X ∘ ι))
 include hι
 
 include hc in
-/--
-lemma `mono_of_injective` / 引理 `mono_of_injective`
-
-English:
-lemma mono_of_injective
-  given: [HasCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)]
-  proof: mono_of_injective_aux X ι hι c c₁ hc hc₁ _ (colimit.isColimit _)
-
-中文:
-引理 mono_of_injective
-  条件: [HasCoproduct (fun (k : ((集合.range ι)ᶜ : 集合 I)) => X k.1)]
-  证明: mono_of_injective_aux X ι hι c c₁ hc hc₁ _ (colimit.isColimit _)
-
-Depends on / 依赖: colimit, colimit.isColimit, isColimit, mono_of_injective_aux
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_of_injective [HasCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k
+.1)] : Mono (Cofan.IsColimit.desc hc₁ (fun i => c.inj (ι i)))
+参数：fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.MonoCoprod.mono_of_injective_aux`：mono_of_injectiv
+e_aux (hι : Function.Injective ι) (c : Cofan X) (c₁ : Cofan (X ∘ ι)) (hc : IsCol
+imit c) (hc₁ : IsColimit c₁) (c₂ : Cofan (fu…
 -/
 lemma mono_of_injective [HasCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)] :
     Mono (Cofan.IsColimit.desc hc₁ (fun i => c.inj (ι i))) :=
   mono_of_injective_aux X ι hι c c₁ hc hc₁ _ (colimit.isColimit _)
-
-/--
-lemma `mono_of_injective'` / 引理 `mono_of_injective'`
-
-English:
-lemma mono_of_injective'
-  statement: [HasCoproduct (X ∘ ι)] [HasCoproduct X]
-  proof: mono_of_injective X ι hι _ _ (colimit.isColimit _) (colimit.isColimit _)
-
-中文:
-引理 mono_of_injective'
-  结论: [HasCoproduct (X ∘ ι)] [HasCoproduct X]
-  证明: mono_of_injective X ι hι _ _ (colimit.isColimit _) (colimit.isColimit _)
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_of_injective'** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：mono_of_injective' [HasCoproduct (X ∘ ι)] [HasCoproduct X] [HasCoproduct (
+fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)] : Mono (Sigma.desc (f
+参数：X ∘ ι；fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.MonoCoprod.mono_of_injective`：mono_of_injective [H
+asCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)] : Mono (Cofan.IsColim
+it.desc hc₁ (fun i => c.inj (ι i)))
 -/
 lemma mono_of_injective' [HasCoproduct (X ∘ ι)] [HasCoproduct X]
     [HasCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)] :
@@ -514,30 +471,39 @@ lemma mono_of_injective' [HasCoproduct (X ∘ ι)] [HasCoproduct X]
   mono_of_injective X ι hι _ _ (colimit.isColimit _) (colimit.isColimit _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `mono_map'_of_injective` / 引理 `mono_map'_of_injective`
-
-English:
-lemma mono_map'_of_injective
-  statement: [HasCoproduct (X ∘ ι)] [HasCoproduct X]
-  proof: by
-  convert! mono_of_injective' X ι hι
-  apply Sigma.hom_ext
-  intro j
-  rw [Sigma.ι_comp_map']; rw [id_comp]; rw [colimit.ι_desc]
-  simp
-
-中文:
-引理 mono_map'_of_injective
-  结论: [HasCoproduct (X ∘ ι)] [HasCoproduct X]
-  证明: by
-  convert! mono_of_injective' X ι hι
-  apply Sigma.hom_ext
-  intro j
-  rw [Sigma.ι_comp_map']; rw [id_comp]; rw [colimit.ι_desc]
-  simp
-
-Depends on / 依赖: Sigma.hom_ext, colimit, convert, hom_ext, id_comp, mono_of_injective
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_map'_of_injective** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [CategoryTh
+eory.Limits.MonoCoprod C] {I : Type u_2}   {J : Type u_3} (X : I → C) (ι : J → I
+),   Function.Injective ι →     ∀ [inst_2 : CategoryTheory.Limits.HasCoproduct (
+X ∘ ι)] [inst_3 : CategoryTheory.Limits.HasCoproduct X]       [CategoryTheory.Li
+mits.HasCoproduct fun k => X ↑k],       CategoryTheory.Mono (CategoryTheory.Limi
+ts.Sigma.map' ι fun j => CategoryTheory.CategoryStruct.id ((X ∘ ι) j))
+参数：X : I → C；ι : J → I；X ∘ ι；CategoryTheory.Limits.Sigma.map' ι fun j => Categor
+yTheory.CategoryStruct.id ((X ∘ ι) j)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'`：∀ {β : Type w} {α : Type w₂} {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [
+inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Limits.MonoCoprod.mono_of_injective'`：mono_of_injective' 
+[HasCoproduct (X ∘ ι)] [HasCoproduct X] [HasCoproduct (fun (k : ((Set.range ι)ᶜ 
+: Set I)) => X k.1)] : Mono (Sigma.desc (…
 -/
 lemma mono_map'_of_injective [HasCoproduct (X ∘ ι)] [HasCoproduct X]
     [HasCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)] :
@@ -545,65 +511,56 @@ lemma mono_map'_of_injective [HasCoproduct (X ∘ ι)] [HasCoproduct X]
   convert! mono_of_injective' X ι hι
   apply Sigma.hom_ext
   intro j
-  rw [Sigma.ι_comp_map']; rw [id_comp]; rw [colimit.ι_desc]
+  rw [Sigma.ι_comp_map', id_comp, colimit.ι_desc]
   simp
 
 end
 
 section
 
-variable [MonoCoprod C] {I : Type*} (X : I -> C)
+variable [MonoCoprod C] {I : Type*} (X : I → C)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `mono_inj` / 引理 `mono_inj`
-
-English:
-lemma mono_inj
-  statement: (c : Cofan X) (h : IsColimit c) (i : I)
-  proof: by
-  let ι : Unit -> I := fun _ => i
-  have hι : Function.Injective ι := fun _ _ _ => rfl
-  exact mono_of_injective X ι hι c (Cofan.mk (X i) (fun _ => 𝟙 _)) h
-    (Cofan.IsColimit.mk _ (fun s => s.inj ()))
-
-中文:
-引理 mono_inj
-  结论: (c : Cofan X) (h : 是余极限 c) (i : I)
-  证明: by
-  let ι : Unit -> I := fun _ => i
-  have hι : Function.Injective ι := fun _ _ _ => rfl
-  exact mono_of_injective X ι hι c (Cofan.mk (X i) (fun _ => 𝟙 _)) h
-    (Cofan.IsColimit.mk _ (fun s => s.inj ()))
-
-Depends on / 依赖: Cofan.IsColimit.mk, Cofan.mk, Function, Function.Injective, Injective, IsColimit, mono_of_injective, s.inj
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_inj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Limits.MonoCoprod`。
+形式化陈述：mono_inj (c : Cofan X) (h : IsColimit c) (i : I) [HasCoproduct (fun (k : (
+(Set.range (fun _ : Unit => i))ᶜ : Set I)) => X k.1)] : Mono (Cofan.inj c i)
+参数：c : Cofan X；h : IsColimit c；i : I；fun (k : ((Set.range (fun _ : Unit => i))ᶜ 
+: Set I)) => X k.1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.MonoCoprod.mono_of_injective`：mono_of_injective [H
+asCoproduct (fun (k : ((Set.range ι)ᶜ : Set I)) => X k.1)] : Mono (Cofan.IsColim
+it.desc hc₁ (fun i => c.inj (ι i)))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 lemma mono_inj (c : Cofan X) (h : IsColimit c) (i : I)
-    [HasCoproduct (fun (k : ((Set.range (fun _ : Unit => i))ᶜ : Set I)) => X k.1)] :
+    [HasCoproduct (fun (k : ((Set.range (fun _ : Unit ↦ i))ᶜ : Set I)) => X k.1)] :
     Mono (Cofan.inj c i) := by
-  let ι : Unit -> I := fun _ => i
-  have hι : Function.Injective ι := fun _ _ _ => rfl
-  exact mono_of_injective X ι hι c (Cofan.mk (X i) (fun _ => 𝟙 _)) h
+  let ι : Unit → I := fun _ ↦ i
+  have hι : Function.Injective ι := fun _ _ _ ↦ rfl
+  exact mono_of_injective X ι hι c (Cofan.mk (X i) (fun _ ↦ 𝟙 _)) h
     (Cofan.IsColimit.mk _ (fun s => s.inj ()))
-
-/--
-Instance `mono_ι` / 实例 `mono_ι`
-
-English:
-instance mono_ι
-  signature: [HasCoproduct X] (i : I)
-  body: mono_inj X _ (colimit.isColimit _) i
-
-中文:
-实例 mono_ι
-  签名: [HasCoproduct X] (i : I)
-  定义体: mono_inj X _ (colimit.isColimit _) i
-
-Depends on / 依赖: colimit, colimit.isColimit, isColimit, mono_inj
+/-
+**CategoryTheory.Limits.MonoCoprod.mono_** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Limits.MonoCoprod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mono_ι [HasCoproduct X] (i : I)
-    [HasCoproduct (fun (k : ((Set.range (fun _ : Unit => i))ᶜ : Set I)) => X k.1)] :
+    [HasCoproduct (fun (k : ((Set.range (fun _ : Unit ↦ i))ᶜ : Set I)) => X k.1)] :
     Mono (Sigma.ι X i) :=
   mono_inj X _ (colimit.isColimit _) i
 
@@ -616,38 +573,34 @@ section Preservation
 variable {D : Type*} [Category* D] (F : C ⥤ D)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `monoCoprod_of_preservesCoprod_of_reflectsMono` / 定理 `monoCoprod_of_preservesCoprod_of_reflectsMono`
-
-English:
-theorem monoCoprod_of_preservesCoprod_of_reflectsMono
-  statement: [MonoCoprod D]
-  proof: by
-    let c' := BinaryCofan.mk (F.map c.inl) (F.map c.inr)
-    apply mono_of_mono_map F
-    change Mono c'.inl
-    apply MonoCoprod.binaryCofan_inl
-    apply mapIsColimitOfPreservesOfIsColimit F
-    apply IsColimit.ofIsoColimit h
-    refine Cocone.ext (φ := eqToIso rfl) ?_
-    rintro ⟨(j₁ | j₂)⟩ <;> simp only [eqToIso_refl, Iso.refl_hom,
-      Category.comp_id, BinaryCofan.mk_inl, BinaryCofan.mk_inr]
-
-中文:
-定理 monoCoprod_of_preservesCoprod_of_reflectsMono
-  结论: [MonoCoprod D]
-  证明: by
-    let c' := BinaryCofan.mk (F.map c.inl) (F.map c.inr)
-    apply mono_of_mono_map F
-    change Mono c'.inl
-    apply MonoCoprod.binaryCofan_inl
-    apply mapIsColimitOfPreservesOfIsColimit F
-    apply IsColimit.ofIsoColimit h
-    refine Cocone.ext (φ := eqToIso rfl) ?_
-    rintro ⟨(j₁ | j₂)⟩ <;> simp only [eqToIso_refl, Iso.refl_hom,
-      Category.comp_id, BinaryCofan.mk_inl, BinaryCofan.mk_inr]
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.mk, BinaryCofan.mk_inl, BinaryCofan.mk_inr, Category, Category.comp_id, Cocone, Cocone.ext, F.map, IsColimit, IsColimit.ofIsoColimit, Iso.refl_hom, MonoCoprod, MonoCoprod.binaryCofan_inl, binaryCofan_inl, c.inl, c.inr, comp_id, eqToIso, eqToIso_refl
+/-
+**CategoryTheory.Limits.MonoCoprod.monoCoprod_of_preservesCoprod_of_reflectsMono
+** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.MonoCoprod`。
+形式化陈述：monoCoprod_of_preservesCoprod_of_reflectsMono [MonoCoprod D] [PreservesCol
+imitsOfShape (Discrete WalkingPair) F] [ReflectsMonomorphisms F] : MonoCoprod C 
+where binaryCofan_inl {A B} c h
+参数：Discrete WalkingPair。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mono_of_mono_map`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.MonoCoprod.binaryCofan_inl`：∀ {C : Type u_1} {inst
+ : CategoryTheory.Category.{v_1, u_1} C} [self : CategoryTheory.Limits.MonoCopro
+d C] ⦃A B : C⦄   (c : CategoryTheory.L…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem monoCoprod_of_preservesCoprod_of_reflectsMono [MonoCoprod D]
     [PreservesColimitsOfShape (Discrete WalkingPair) F]
@@ -667,8 +620,13 @@ end Preservation
 
 section Concrete
 
-instance {FC : outParam <| C -> C -> Type*} {CC : outParam <| C -> Type*}
-    [outParam <| forall X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory C FC]
+/-
+**CategoryTheory.Limits.MonoCoprod.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.MonoCoprod`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {FC : outParam <| C → C → Type*} {CC : outParam <| C → Type*}
+    [outParam <| ∀ X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory C FC]
     [PreservesColimitsOfShape (Discrete WalkingPair) (forget C)]
     [ReflectsMonomorphisms (forget C)] : MonoCoprod C :=
   monoCoprod_of_preservesCoprod_of_reflectsMono (forget C)
@@ -677,12 +635,17 @@ end Concrete
 
 end MonoCoprod
 
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : C) [HasCoproducts.{u} C] [MonoCoprod C] :
     (sigmaConst.{u}.obj A).PreservesMonomorphisms where
   preserves {J I} ι hι := by
     rw [mono_iff_injective] at hι
-    exact MonoCoprod.mono_map'_of_injective (fun (i : I) => A) ι hι
+    exact MonoCoprod.mono_map'_of_injective (fun (i : I) ↦ A) ι hι
 
 end Limits
 
 end CategoryTheory
+

@@ -25,22 +25,12 @@ namespace ENNReal
 
 open NNReal TopologicalSpace
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MetrizableSpace ENNReal
-  body: orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.metrizableSpace
-
-中文:
-实例 :
-  签名: Metrizable空间 广义非负实数
-  定义体: orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.metrizableSpace
-
-Depends on / 依赖: isEmbedding, metrizableSpace, orderIsoUnitIntervalBirational, orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.metrizableSpace, toHomeomorph
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MetrizableSpace ENNReal :=
   orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.metrizableSpace
 
 end ENNReal
+

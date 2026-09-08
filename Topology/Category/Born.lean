@@ -21,24 +21,15 @@ universe u
 
 open CategoryTheory
 
-/--
-Definition of `Born` / `Born` 的定义
+/-- The category of bornologies. -/
+/-
+**Born** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u_1 + 1)
+参数：u_1 + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Born
-  parameters: where
-  axioms and operations (3):
-    - of : :
-    - carrier : Type*
-    - [str : Bornology carrier]
-
-中文:
-结构 有界
-  参数: where
-  公理与运算 (3 个):
-    - of : :
-    - carrier : 类型
-    - [str : 有界结构 carrier]
+--- 原说明 ---
+The category of bornologies.
 -/
 structure Born where
   /-- Construct a bundled `Born` from a `Bornology`. -/
@@ -51,81 +42,33 @@ attribute [instance] Born.str
 
 namespace Born
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort Born Type*
-  body: ⟨carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 有界 类型
-  定义体: ⟨carrier⟩
-
-Depends on / 依赖: carrier
+/-
+**Born.** 是 Mathlib 中的一个实例，位于命名空间 `Born`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort Born Type* :=
   ⟨carrier⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Born
-  body: ⟨of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 有界
-  定义体: ⟨of PUnit⟩
+/-
+**Born.** 是 Mathlib 中的一个实例，位于命名空间 `Born`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Born :=
   ⟨of PUnit⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LargeCategory.{u} Born
-  body: LocallyBoundedMap X Y
-  id X := LocallyBoundedMap.id X
-  comp f g := g.comp f
-
-中文:
-实例 :
-  签名: 大范畴.{u} 有界
-  定义体: LocallyBoundedMap X Y
-  id X := LocallyBoundedMap.id X
-  comp f g := g.comp f
-
-Depends on / 依赖: LocallyBoundedMap
+/-
+**Born.** 是 Mathlib 中的一个实例，位于命名空间 `Born`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LargeCategory.{u} Born where
   Hom X Y := LocallyBoundedMap X Y
   id X := LocallyBoundedMap.id X
   comp f g := g.comp f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory Born (LocallyBoundedMap · ·)
-  body: f
-  ofHom f := f
-
-中文:
-实例 :
-  签名: 余ncrete范畴 有界 (LocallyBounded映射 · ·)
-  定义体: f
-  ofHom f := f
+/-
+**Born.** 是 Mathlib 中的一个实例，位于命名空间 `Born`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConcreteCategory Born (LocallyBoundedMap · ·) where
   hom f := f
   ofHom f := f
 
 end Born
+

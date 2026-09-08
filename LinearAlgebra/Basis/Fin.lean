@@ -28,7 +28,7 @@ namespace Module
 
 open LinearMap
 
-variable {v : ι -> M}
+variable {v : ι → M}
 variable [Ring R] [CommRing R₂] [AddCommGroup M]
 variable [Module R M] [Module R₂ M]
 variable {x y : M}
@@ -38,46 +38,30 @@ namespace Basis
 
 section Fin
 
-/--
-Definition of `mkFinCons` / `mkFinCons` 的定义
+/-- Let `b` be a basis for a submodule `N` of `M`. If `y : M` is linear independent of `N`
+and `y` and `N` together span the whole of `M`, then there is a basis for `M`
+whose basis vectors are given by `Fin.cons y b`. -/
+/-
+**Module.Basis.mkFinCons** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：mkFinCons {n : Nat} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N) (h
+li : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z : M,
+ exists c : R, z + c • y in N) : Basis (Fin (n + 1)) R M
+参数：y : M；b : Basis (Fin n) R N；hli : forall (c : R), forall x in N, c • y + x = 
+0 -> c = 0；hsp : forall z : M, exists c : R, z + c • y in N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFinCons
-  signature: {n : Nat} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
-  body: have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
-    rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
-  Basis.mk (v := Fin.cons y (N.subtype ∘ b))
-    ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finCons' _ _
-      (by
-        intro c x hx hc
-        rw [← span_b] at hx
-        exact hli c x hx hc))
-    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
-
-@[simp]
-
-中文:
-定义 mkFinCons
-  签名: {n : 自然数} {N : 子模 R M} (y : M) (b : 基 (有限集 n) R N)
-  定义体: have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
-    rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
-  Basis.mk (v := Fin.cons y (N.subtype ∘ b))
-    ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finCons' _ _
-      (by
-        intro c x hx hc
-        rw [← span_b] at hx
-        exact hli c x hx hc))
-    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
-
-@[simp]
-
-Depends on / 依赖: Basis.mk, Fin.cons, N.subtype, Set.range, Set.range_comp, Submodule, Submodule.ker_subtype, Submodule.map_subtype_top, Submodule.mem_span_insert, Submodule.span, Submodule.span_image, b.linearIndependent.map, b.span_eq, finCons, ker_subtype, linearIndependent, map_subtype_top, mem_span_insert, range_comp, span_b
+--- 原说明 ---
+Let `b` be a basis for a submodule `N` of `M`. If `y : M` is linear independent 
+of `N`
+and `y` and `N` together span the whole of `M`, then there is a basis for `M`
+whose basis vectors are given by `Fin.cons y b`.
 -/
-noncomputable def mkFinCons {n : Nat} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
-    (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z : M, exists c : R, z + c • y in N) :
+noncomputable def mkFinCons {n : ℕ} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
+    (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0) (hsp : ∀ z : M, ∃ c : R, z + c • y ∈ N) :
     Basis (Fin (n + 1)) R M :=
   have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
-    rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
+    rw [Set.range_comp, Submodule.span_image, b.span_eq, Submodule.map_subtype_top]
   Basis.mk (v := Fin.cons y (N.subtype ∘ b))
     ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finCons' _ _
       (by
@@ -87,292 +71,327 @@ noncomputable def mkFinCons {n : Nat} {N : Submodule R M} (y : M) (b : Basis (Fi
     fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
 
 @[simp]
-/--
-theorem `coe_mkFinCons` / 定理 `coe_mkFinCons`
-
-English:
-theorem coe_mkFinCons
-  statement: {n : Nat} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
-  proof: by
-  unfold mkFinCons
-  exact coe_mk (v := Fin.cons y (N.subtype ∘ b)) _ _
-
-中文:
-定理 coe_mkFinCons
-  结论: {n : 自然数} {N : 子模 R M} (y : M) (b : 基 (有限集 n) R N)
-  证明: by
-  unfold mkFinCons
-  exact coe_mk (v := Fin.cons y (N.subtype ∘ b)) _ _
-
-Depends on / 依赖: Fin.cons, N.subtype, coe_mk, mkFinCons, subtype
+/-
+**Module.Basis.coe_mkFinCons** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coe_mkFinCons {n : Nat} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N
+) (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z 
+: M, exists c : R, z + c • y in N) : (mkFinCons y b hli hsp : Fin (n + 1) -> M) 
+= Fin.cons y ((↑) ∘ b)
+参数：y : M；b : Basis (Fin n) R N；hli : forall (c : R), forall x in N, c • y + x = 
+0 -> c = 0；hsp : forall z : M, exists c : R, z + c • y in N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.coe_mk`：coe_mk : ⇑(Basis.mk hli hsp) = v
 -/
-theorem coe_mkFinCons {n : Nat} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
-    (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z : M, exists c : R, z + c • y in N) :
-    (mkFinCons y b hli hsp : Fin (n + 1) -> M) = Fin.cons y ((↑) ∘ b) := by
+theorem coe_mkFinCons {n : ℕ} {N : Submodule R M} (y : M) (b : Basis (Fin n) R N)
+    (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0) (hsp : ∀ z : M, ∃ c : R, z + c • y ∈ N) :
+    (mkFinCons y b hli hsp : Fin (n + 1) → M) = Fin.cons y ((↑) ∘ b) := by
   unfold mkFinCons
   exact coe_mk (v := Fin.cons y (N.subtype ∘ b)) _ _
 
-/--
-Definition of `mkFinConsOfLE` / `mkFinConsOfLE` 的定义
+/-- Let `b` be a basis for a submodule `N ≤ O`. If `y ∈ O` is linear independent of `N`
+and `y` and `N` together span the whole of `O`, then there is a basis for `O`
+whose basis vectors are given by `Fin.cons y b`. -/
+/-
+**Module.Basis.mkFinConsOfLE** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：mkFinConsOfLE {n : Nat} {N O : Submodule R M} (y : M) (yO : y in O) (b : B
+asis (Fin n) R N) (hNO : N <= O) (hli : forall (c : R), forall x in N, c • y + x
+ = 0 -> c = 0) (hsp : forall z in O, exists c : R, z + c • y in N) : Basis (Fin 
+(n + 1)) R O
+参数：y : M；yO : y in O；b : Basis (Fin n) R N；hNO : N <= O；hli : forall (c : R), fo
+rall x in N, c • y + x = 0 -> c = 0；hsp : forall z in O, exists c : R, z + c • y
+ in N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFinConsOfLE
-  signature: {n : Nat} {N O : Submodule R M} (y : M) (yO : y in O)
-  body: mkFinCons ⟨y, yO⟩ (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm)
-    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
-    fun z => hsp z z.2
-
-@[simp]
-
-中文:
-定义 mkFinConsOfLE
-  签名: {n : 自然数} {N O : 子模 R M} (y : M) (yO : y in O)
-  定义体: mkFinCons ⟨y, yO⟩ (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm)
-    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
-    fun z => hsp z z.2
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.comapSubtypeEquivOfLe, Submodule.mem_comap.mp, b.map, comapSubtypeEquivOfLe, congr_arg, mem_comap, mkFinCons
+--- 原说明 ---
+Let `b` be a basis for a submodule `N ≤ O`. If `y ∈ O` is linear independent of 
+`N`
+and `y` and `N` together span the whole of `O`, then there is a basis for `O`
+whose basis vectors are given by `Fin.cons y b`.
 -/
-noncomputable def mkFinConsOfLE {n : Nat} {N O : Submodule R M} (y : M) (yO : y in O)
-    (b : Basis (Fin n) R N) (hNO : N <= O) (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0)
-    (hsp : forall z in O, exists c : R, z + c • y in N) : Basis (Fin (n + 1)) R O :=
+noncomputable def mkFinConsOfLE {n : ℕ} {N O : Submodule R M} (y : M) (yO : y ∈ O)
+    (b : Basis (Fin n) R N) (hNO : N ≤ O) (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0)
+    (hsp : ∀ z ∈ O, ∃ c : R, z + c • y ∈ N) : Basis (Fin (n + 1)) R O :=
   mkFinCons ⟨y, yO⟩ (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm)
-    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
+    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O → M) hx))
     fun z => hsp z z.2
 
 @[simp]
-/--
-theorem `coe_mkFinConsOfLE` / 定理 `coe_mkFinConsOfLE`
-
-English:
-theorem coe_mkFinConsOfLE
-  statement: {n : Nat} {N O : Submodule R M} (y : M) (yO : y in O) (b : Basis (Fin n) R N)
-  proof: coe_mkFinCons _ _ _ _
-
-中文:
-定理 coe_mkFinConsOfLE
-  结论: {n : 自然数} {N O : 子模 R M} (y : M) (yO : y in O) (b : 基 (有限集 n) R N)
-  证明: coe_mkFinCons _ _ _ _
-
-Depends on / 依赖: coe_mkFinCons
+/-
+**Module.Basis.coe_mkFinConsOfLE** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coe_mkFinConsOfLE {n : Nat} {N O : Submodule R M} (y : M) (yO : y in O) (b
+ : Basis (Fin n) R N) (hNO : N <= O) (hli : forall (c : R), forall x in N, c • y
+ + x = 0 -> c = 0) (hsp : forall z in O, exists c : R, z + c • y in N) : (mkFinC
+onsOfLE y yO b hNO hli hsp : Fin (n + 1) -> O) = Fin.cons ⟨y, yO⟩ (Submodule.inc
+lusion hNO ∘ b)
+参数：y : M；yO : y in O；b : Basis (Fin n) R N；hNO : N <= O；hli : forall (c : R), fo
+rall x in N, c • y + x = 0 -> c = 0；hsp : forall z in O, exists c : R, z + c • y
+ in N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.coe_mkFinCons`：coe_mkFinCons {n : Nat} {N : Submodule R M} 
+(y : M) (b : Basis (Fin n) R N) (hli : forall (c : R), forall x in N, c • y + x 
+= 0 -> c = 0) (h…
 -/
-theorem coe_mkFinConsOfLE {n : Nat} {N O : Submodule R M} (y : M) (yO : y in O) (b : Basis (Fin n) R N)
-    (hNO : N <= O) (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0)
-    (hsp : forall z in O, exists c : R, z + c • y in N) :
-    (mkFinConsOfLE y yO b hNO hli hsp : Fin (n + 1) -> O) =
+theorem coe_mkFinConsOfLE {n : ℕ} {N O : Submodule R M} (y : M) (yO : y ∈ O) (b : Basis (Fin n) R N)
+    (hNO : N ≤ O) (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0)
+    (hsp : ∀ z ∈ O, ∃ c : R, z + c • y ∈ N) :
+    (mkFinConsOfLE y yO b hNO hli hsp : Fin (n + 1) → O) =
       Fin.cons ⟨y, yO⟩ (Submodule.inclusion hNO ∘ b) :=
   coe_mkFinCons _ _ _ _
 
-/--
-Definition of `mkFinSnoc` / `mkFinSnoc` 的定义
+/-- Let `b` be a basis for a submodule `N` of `M`. If `y : M` is linear independent of `N`
+and `y` and `N` together span the whole of `M`, then there is a basis for `M`
+whose basis vectors are given by `Fin.snoc b y`. -/
+/-
+**Module.Basis.mkFinSnoc** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：mkFinSnoc {n : Nat} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M) (h
+li : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z : M,
+ exists c : R, z + c • y in N) : Basis (Fin (n + 1)) R M
+参数：b : Basis (Fin n) R N；y : M；hli : forall (c : R), forall x in N, c • y + x = 
+0 -> c = 0；hsp : forall z : M, exists c : R, z + c • y in N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFinSnoc
-  signature: {n : Nat} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
-  body: have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
-    rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
-  Basis.mk (v := Fin.snoc (N.subtype ∘ b) y)
-    ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finSnoc' _ _
-      (by
-        intro c x hx hc
-        rw [← span_b] at hx
-        exact hli c x hx hc))
-    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
-
-@[simp]
-
-中文:
-定义 mkFinSnoc
-  签名: {n : 自然数} {N : 子模 R M} (b : 基 (有限集 n) R N) (y : M)
-  定义体: have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
-    rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
-  Basis.mk (v := Fin.snoc (N.subtype ∘ b) y)
-    ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finSnoc' _ _
-      (by
-        intro c x hx hc
-        rw [← span_b] at hx
-        exact hli c x hx hc))
-    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
-
-@[simp]
-
-Depends on / 依赖: Basis.mk, Fin.snoc, N.subtype, Set.range, Set.range_comp, Submodule, Submodule.ker_subtype, Submodule.map_subtype_top, Submodule.mem_span_insert, Submodule.span, Submodule.span_image, b.linearIndependent.map, b.span_eq, finSnoc, ker_subtype, linearIndependent, map_subtype_top, mem_span_insert, range_comp, span_b
+--- 原说明 ---
+Let `b` be a basis for a submodule `N` of `M`. If `y : M` is linear independent 
+of `N`
+and `y` and `N` together span the whole of `M`, then there is a basis for `M`
+whose basis vectors are given by `Fin.snoc b y`.
 -/
-noncomputable def mkFinSnoc {n : Nat} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
-    (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z : M, exists c : R, z + c • y in N) :
+noncomputable def mkFinSnoc {n : ℕ} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
+    (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0) (hsp : ∀ z : M, ∃ c : R, z + c • y ∈ N) :
     Basis (Fin (n + 1)) R M :=
   have span_b : N = Submodule.span R (Set.range (N.subtype ∘ b)) := by
-    rw [Set.range_comp]; rw [Submodule.span_image]; rw [b.span_eq]; rw [Submodule.map_subtype_top]
+    rw [Set.range_comp, Submodule.span_image, b.span_eq, Submodule.map_subtype_top]
   Basis.mk (v := Fin.snoc (N.subtype ∘ b) y)
     ((b.linearIndependent.map' N.subtype (Submodule.ker_subtype _)).finSnoc' _ _
       (by
         intro c x hx hc
         rw [← span_b] at hx
         exact hli c x hx hc))
-    fun x _ => by simpa [Submodule.mem_span_insert', span_b] using hsp x
+    fun x _ ↦ by simpa [Submodule.mem_span_insert', span_b] using hsp x
 
 @[simp]
-/--
-theorem `coe_mkFinSnoc` / 定理 `coe_mkFinSnoc`
-
-English:
-theorem coe_mkFinSnoc
-  statement: {n : Nat} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
-  proof: by
-  unfold mkFinSnoc
-  exact coe_mk (v := Fin.snoc (N.subtype ∘ b) y) _ _
-
-中文:
-定理 coe_mkFinSnoc
-  结论: {n : 自然数} {N : 子模 R M} (b : 基 (有限集 n) R N) (y : M)
-  证明: by
-  unfold mkFinSnoc
-  exact coe_mk (v := Fin.snoc (N.subtype ∘ b) y) _ _
-
-Depends on / 依赖: Fin.snoc, N.subtype, coe_mk, mkFinSnoc, subtype
+/-
+**Module.Basis.coe_mkFinSnoc** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coe_mkFinSnoc {n : Nat} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M
+) (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z 
+: M, exists c : R, z + c • y in N) : (mkFinSnoc b y hli hsp : Fin (n + 1) -> M) 
+= Fin.snoc ((↑) ∘ b) y
+参数：b : Basis (Fin n) R N；y : M；hli : forall (c : R), forall x in N, c • y + x = 
+0 -> c = 0；hsp : forall z : M, exists c : R, z + c • y in N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.coe_mk`：coe_mk : ⇑(Basis.mk hli hsp) = v
 -/
-theorem coe_mkFinSnoc {n : Nat} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
-    (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0) (hsp : forall z : M, exists c : R, z + c • y in N) :
-    (mkFinSnoc b y hli hsp : Fin (n + 1) -> M) = Fin.snoc ((↑) ∘ b) y := by
+theorem coe_mkFinSnoc {n : ℕ} {N : Submodule R M} (b : Basis (Fin n) R N) (y : M)
+    (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0) (hsp : ∀ z : M, ∃ c : R, z + c • y ∈ N) :
+    (mkFinSnoc b y hli hsp : Fin (n + 1) → M) = Fin.snoc ((↑) ∘ b) y := by
   unfold mkFinSnoc
   exact coe_mk (v := Fin.snoc (N.subtype ∘ b) y) _ _
 
-/--
-Definition of `mkFinSnocOfLE` / `mkFinSnocOfLE` 的定义
+/-- Let `b` be a basis for a submodule `N ≤ O`. If `y ∈ O` is linear independent of `N`
+and `y` and `N` together span the whole of `O`, then there is a basis for `O`
+whose basis vectors are given by `Fin.snoc b y`. -/
+/-
+**Module.Basis.mkFinSnocOfLE** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：mkFinSnocOfLE {n : Nat} {N O : Submodule R M} (b : Basis (Fin n) R N) (hNO
+ : N <= O) (y : M) (yO : y in O) (hli : forall (c : R), forall x in N, c • y + x
+ = 0 -> c = 0) (hsp : forall z in O, exists c : R, z + c • y in N) : Basis (Fin 
+(n + 1)) R O
+参数：b : Basis (Fin n) R N；hNO : N <= O；y : M；yO : y in O；hli : forall (c : R), fo
+rall x in N, c • y + x = 0 -> c = 0；hsp : forall z in O, exists c : R, z + c • y
+ in N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFinSnocOfLE
-  signature: {n : Nat} {N O : Submodule R M} (b : Basis (Fin n) R N)
-  body: mkFinSnoc (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm) ⟨y, yO⟩
-    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
-    fun z => hsp z z.2
-
-@[simp]
-
-中文:
-定义 mkFinSnocOfLE
-  签名: {n : 自然数} {N O : 子模 R M} (b : 基 (有限集 n) R N)
-  定义体: mkFinSnoc (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm) ⟨y, yO⟩
-    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
-    fun z => hsp z z.2
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.comapSubtypeEquivOfLe, Submodule.mem_comap.mp, b.map, comapSubtypeEquivOfLe, congr_arg, mem_comap, mkFinSnoc
+--- 原说明 ---
+Let `b` be a basis for a submodule `N ≤ O`. If `y ∈ O` is linear independent of 
+`N`
+and `y` and `N` together span the whole of `O`, then there is a basis for `O`
+whose basis vectors are given by `Fin.snoc b y`.
 -/
-noncomputable def mkFinSnocOfLE {n : Nat} {N O : Submodule R M} (b : Basis (Fin n) R N)
-    (hNO : N <= O) (y : M) (yO : y in O) (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0)
-    (hsp : forall z in O, exists c : R, z + c • y in N) : Basis (Fin (n + 1)) R O :=
+noncomputable def mkFinSnocOfLE {n : ℕ} {N O : Submodule R M} (b : Basis (Fin n) R N)
+    (hNO : N ≤ O) (y : M) (yO : y ∈ O) (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0)
+    (hsp : ∀ z ∈ O, ∃ c : R, z + c • y ∈ N) : Basis (Fin (n + 1)) R O :=
   mkFinSnoc (b.map (Submodule.comapSubtypeEquivOfLe hNO).symm) ⟨y, yO⟩
-    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O -> M) hx))
+    (fun c x hc hx => hli c x (Submodule.mem_comap.mp hc) (congr_arg ((↑) : O → M) hx))
     fun z => hsp z z.2
 
 @[simp]
-/--
-theorem `coe_mkFinSnocOfLE` / 定理 `coe_mkFinSnocOfLE`
-
-English:
-theorem coe_mkFinSnocOfLE
-  statement: {n : Nat} {N O : Submodule R M} (b : Basis (Fin n) R N)
-  proof: coe_mkFinSnoc _ _ _ _
-
-中文:
-定理 coe_mkFinSnocOfLE
-  结论: {n : 自然数} {N O : 子模 R M} (b : 基 (有限集 n) R N)
-  证明: coe_mkFinSnoc _ _ _ _
-
-Depends on / 依赖: coe_mkFinSnoc
+/-
+**Module.Basis.coe_mkFinSnocOfLE** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coe_mkFinSnocOfLE {n : Nat} {N O : Submodule R M} (b : Basis (Fin n) R N) 
+(hNO : N <= O) (y : M) (yO : y in O) (hli : forall (c : R), forall x in N, c • y
+ + x = 0 -> c = 0) (hsp : forall z in O, exists c : R, z + c • y in N) : (mkFinS
+nocOfLE b hNO y yO hli hsp : Fin (n + 1) -> O) = Fin.snoc (Submodule.inclusion h
+NO ∘ b) ⟨y, yO⟩
+参数：b : Basis (Fin n) R N；hNO : N <= O；y : M；yO : y in O；hli : forall (c : R), fo
+rall x in N, c • y + x = 0 -> c = 0；hsp : forall z in O, exists c : R, z + c • y
+ in N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.coe_mkFinSnoc`：coe_mkFinSnoc {n : Nat} {N : Submodule R M} 
+(b : Basis (Fin n) R N) (y : M) (hli : forall (c : R), forall x in N, c • y + x 
+= 0 -> c = 0) (h…
 -/
-theorem coe_mkFinSnocOfLE {n : Nat} {N O : Submodule R M} (b : Basis (Fin n) R N)
-    (hNO : N <= O) (y : M) (yO : y in O) (hli : forall (c : R), forall x in N, c • y + x = 0 -> c = 0)
-    (hsp : forall z in O, exists c : R, z + c • y in N) :
-    (mkFinSnocOfLE b hNO y yO hli hsp : Fin (n + 1) -> O) =
+theorem coe_mkFinSnocOfLE {n : ℕ} {N O : Submodule R M} (b : Basis (Fin n) R N)
+    (hNO : N ≤ O) (y : M) (yO : y ∈ O) (hli : ∀ (c : R), ∀ x ∈ N, c • y + x = 0 → c = 0)
+    (hsp : ∀ z ∈ O, ∃ c : R, z + c • y ∈ N) :
+    (mkFinSnocOfLE b hNO y yO hli hsp : Fin (n + 1) → O) =
       Fin.snoc (Submodule.inclusion hNO ∘ b) ⟨y, yO⟩ :=
   coe_mkFinSnoc _ _ _ _
 
-/--
-Definition of `finTwoProd` / `finTwoProd` 的定义
+/-- The basis of `R × R` given by the two vectors `(1, 0)` and `(0, 1)`. -/
+/-
+**Module.Basis.finTwoProd** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：(R : Type u_7) → [inst : Semiring R] → Module.Basis (Fin 2) R (R × R)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finTwoProd
-  signature: (R : Type*) [Semiring R]
-  body: Basis.ofEquivFun (LinearEquiv.finTwoArrow R R).symm
-
-中文:
-定义 finTwoProd
-  签名: (R : 类型) [半环 R]
-  定义体: Basis.ofEquivFun (LinearEquiv.finTwoArrow R R).symm
+--- 原说明 ---
+The basis of `R × R` given by the two vectors `(1, 0)` and `(0, 1)`.
 -/
 protected def finTwoProd (R : Type*) [Semiring R] : Basis (Fin 2) R (R × R) :=
   Basis.ofEquivFun (LinearEquiv.finTwoArrow R R).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `finTwoProd_zero` / 定理 `finTwoProd_zero`
-
-English:
-theorem finTwoProd_zero
-  given: (R : Type*) [Semiring R]
-  statement: Basis.finTwoProd R 0 = (1, 0)
-  proof: by
-  simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
-
-中文:
-定理 finTwoProd_zero
-  条件: (R : 类型) [半环 R]
-  结论: 基.finTwoProd R 0 = (1, 0)
-  证明: by
-  simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
-
-Depends on / 依赖: Basis.finTwoProd, LinearEquiv, LinearEquiv.finTwoArrow, finTwoArrow, finTwoProd
+/-
+**Module.Basis.finTwoProd_zero** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：finTwoProd_zero (R : Type*) [Semiring R] : Basis.finTwoProd R 0 = (1, 0)
+参数：R : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddHom.map_add'`：∀ {M : Type u_10} {N : Type u_11} [inst : Add M] [inst_
+1 : Add N] (self : M →ₙ+ N) (x y : M),   self.toFun (x + y) = self.toFun x + sel
+f.toF…
+· 使用定理 `finTwoArrowEquiv_apply`：∀ (α : Type u_1), ⇑(finTwoArrowEquiv α) = (piFin
+TwoEquiv fun x => α).toFun
+· 使用定理 `piFinTwoEquiv_apply`：∀ (α : Fin 2 → Type u), ⇑(piFinTwoEquiv α) = fun f 
+=> (f 0, f 1)
+· 使用定理 `AddHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : Add M] [
+inst_1 : Add N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_add' 
+: ∀ (x y :…
+· 使用定理 `finTwoArrowEquiv_symm_apply`：∀ (α : Type u_1), ⇑(finTwoArrowEquiv α).sym
+m = fun x => ![x.1, x.2]
+· 使用定理 `LinearMap.mk.congr_simp`：∀ {R : Type u_14} {S : Type u_15} [inst : Semir
+ing R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_16}   {M₂ : Type u_17} [i
+nst_2 : AddCo…
+· 使用定理 `LinearMap.map_smul'`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring 
+R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_16}   {M₂ : Type u_17} [inst_
+2 : AddCo…
+· 使用定理 `LinearEquiv.left_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+· 使用定理 `LinearEquiv.right_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semirin
+g R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPa
+ir σ σ'] [i…
+· 使用定理 `Module.Basis.ofEquivFun.congr_simp`：∀ {ι : Type u_1} {R : Type u_3} {M :
+ Type u_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Mod
+ule R M] [inst_3 : Finit…
+· 使用定理 `LinearEquiv.mk.congr_simp`：∀ {R : Type u_14} {S : Type u_15} [inst : Sem
+iring R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomI
+nvPair σ σ'] [i…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_ofEquivFun`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u
+_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] [inst_3 : Finit…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finTwoProd_zero (R : Type*) [Semiring R] : Basis.finTwoProd R 0 = (1, 0) := by
   simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `finTwoProd_one` / 定理 `finTwoProd_one`
-
-English:
-theorem finTwoProd_one
-  given: (R : Type*) [Semiring R]
-  statement: Basis.finTwoProd R 1 = (0, 1)
-  proof: by
-  simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
-
-@[simp]
-
-中文:
-定理 finTwoProd_one
-  条件: (R : 类型) [半环 R]
-  结论: 基.finTwoProd R 1 = (0, 1)
-  证明: by
-  simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
-
-@[simp]
-
-Depends on / 依赖: Basis.finTwoProd, LinearEquiv, LinearEquiv.finTwoArrow, finTwoArrow, finTwoProd
+/-
+**Module.Basis.finTwoProd_one** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：finTwoProd_one (R : Type*) [Semiring R] : Basis.finTwoProd R 1 = (0, 1)
+参数：R : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddHom.map_add'`：∀ {M : Type u_10} {N : Type u_11} [inst : Add M] [inst_
+1 : Add N] (self : M →ₙ+ N) (x y : M),   self.toFun (x + y) = self.toFun x + sel
+f.toF…
+· 使用定理 `finTwoArrowEquiv_apply`：∀ (α : Type u_1), ⇑(finTwoArrowEquiv α) = (piFin
+TwoEquiv fun x => α).toFun
+· 使用定理 `piFinTwoEquiv_apply`：∀ (α : Fin 2 → Type u), ⇑(piFinTwoEquiv α) = fun f 
+=> (f 0, f 1)
+· 使用定理 `AddHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : Add M] [
+inst_1 : Add N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_add' 
+: ∀ (x y :…
+· 使用定理 `finTwoArrowEquiv_symm_apply`：∀ (α : Type u_1), ⇑(finTwoArrowEquiv α).sym
+m = fun x => ![x.1, x.2]
+· 使用定理 `LinearMap.mk.congr_simp`：∀ {R : Type u_14} {S : Type u_15} [inst : Semir
+ing R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_16}   {M₂ : Type u_17} [i
+nst_2 : AddCo…
+· 使用定理 `LinearMap.map_smul'`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring 
+R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_16}   {M₂ : Type u_17} [inst_
+2 : AddCo…
+· 使用定理 `LinearEquiv.left_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+· 使用定理 `LinearEquiv.right_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semirin
+g R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPa
+ir σ σ'] [i…
+· 使用定理 `Module.Basis.ofEquivFun.congr_simp`：∀ {ι : Type u_1} {R : Type u_3} {M :
+ Type u_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Mod
+ule R M] [inst_3 : Finit…
+· 使用定理 `LinearEquiv.mk.congr_simp`：∀ {R : Type u_14} {S : Type u_15} [inst : Sem
+iring R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomI
+nvPair σ σ'] [i…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_ofEquivFun`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u
+_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] [inst_3 : Finit…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finTwoProd_one (R : Type*) [Semiring R] : Basis.finTwoProd R 1 = (0, 1) := by
   simp [Basis.finTwoProd, LinearEquiv.finTwoArrow]
 
 @[simp]
-/--
-theorem `coe_finTwoProd_repr` / 定理 `coe_finTwoProd_repr`
-
-English:
-theorem coe_finTwoProd_repr
-  given: {R : Type*} [Semiring R] (x : R × R)
-  proof: rfl
-
-中文:
-定理 coe_finTwoProd_repr
-  条件: {R : 类型} [半环 R] (x : R × R)
-  证明: rfl
+/-
+**Module.Basis.coe_finTwoProd_repr** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coe_finTwoProd_repr {R : Type*} [Semiring R] (x : R × R) : ⇑((Basis.finTwo
+Prod R).repr x) = ![x.fst, x.snd]
+参数：x : R × R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_finTwoProd_repr {R : Type*} [Semiring R] (x : R × R) :
     ⇑((Basis.finTwoProd R).repr x) = ![x.fst, x.snd] :=
@@ -383,3 +402,4 @@ end Fin
 end Basis
 
 end Module
+

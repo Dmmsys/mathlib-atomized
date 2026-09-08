@@ -35,94 +35,61 @@ namespace Walk
 universe u
 variable {V : Type u} {G : SimpleGraph V} {u v w : V}
 
-/--
-Definition of `getVert` / `getVert` 的定义
+/-- Get the `n`th vertex from a walk, where `n` is generally expected to be
+between `0` and `p.length`, inclusive.
+If `n` is greater than or equal to `p.length`, the result is the path's endpoint. -/
+/-
+**SimpleGraph.Walk.getVert** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：{V : Type u} → {G : SimpleGraph V} → {u v : V} → G.Walk u v → ℕ → V
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getVert
-  signature: {u v : V}
-
-中文:
-定义 getVert
-  签名: {u v : V}
+--- 原说明 ---
+Get the `n`th vertex from a walk, where `n` is generally expected to be
+between `0` and `p.length`, inclusive.
+If `n` is greater than or equal to `p.length`, the result is the path's endpoint
+.
 -/
-def getVert {u v : V} : G.Walk u v -> Nat -> V
+def getVert {u v : V} : G.Walk u v → ℕ → V
   | nil, _ => u
   | cons _ _, 0 => u
   | cons _ q, n + 1 => q.getVert n
 
 @[simp]
-/--
-theorem `getVert_zero` / 定理 `getVert_zero`
-
-English:
-theorem getVert_zero
-  given: {u v} (w : G.Walk u v)
-  statement: w.getVert 0 = u
-  proof: by cases w <;> rfl
-
-@[simp]
-
-中文:
-定理 getVert_zero
-  条件: {u v} (w : G.途径 u v)
-  结论: w.getVert 0 = u
-  证明: by cases w <;> rfl
-
-@[simp]
+/-
+**SimpleGraph.Walk.getVert_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：getVert_zero {u v} (w : G.Walk u v) : w.getVert 0 = u
+参数：w : G.Walk u v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem getVert_zero {u v} (w : G.Walk u v) : w.getVert 0 = u := by cases w <;> rfl
 
 @[simp]
-/--
-theorem `getVert_nil` / 定理 `getVert_nil`
-
-English:
-theorem getVert_nil
-  given: (u : V) {i : Nat}
-  statement: (@nil _ G u).getVert i = u
-  proof: rfl
-
-中文:
-定理 getVert_nil
-  条件: (u : V) {i : 自然数}
-  结论: (@nil _ G u).getVert i = u
-  证明: rfl
+/-
+**SimpleGraph.Walk.getVert_nil** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：getVert_nil (u : V) {i : Nat} : (@nil _ G u).getVert i = u
+参数：u : V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem getVert_nil (u : V) {i : Nat} : (@nil _ G u).getVert i = u := rfl
-
-/--
-theorem `getVert_of_length_le` / 定理 `getVert_of_length_le`
-
-English:
-theorem getVert_of_length_le
-  given: {u v} (w : G.Walk u v) {i : Nat} (hi : w.length <= i)
-  proof: by
-  induction w generalizing i with
-  | nil => rfl
-  | cons _ _ ih =>
-    cases i
-    · cases hi
-    · exact ih (Nat.succ_le_succ_iff.1 hi)
-
-@[simp]
-
-中文:
-定理 getVert_of_length_le
-  条件: {u v} (w : G.途径 u v) {i : 自然数} (hi : w.length <= i)
-  证明: by
-  induction w generalizing i with
-  | nil => rfl
-  | cons _ _ ih =>
-    cases i
-    · cases hi
-    · exact ih (Nat.succ_le_succ_iff.1 hi)
-
-@[simp]
-
-Depends on / 依赖: Nat.succ_le_succ_iff, generalizing, succ_le_succ_iff
+theorem getVert_nil (u : V) {i : ℕ} : (@nil _ G u).getVert i = u := rfl
+/-
+**SimpleGraph.Walk.getVert_of_length_le** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.W
+alk`。
+形式化陈述：getVert_of_length_le {u v} (w : G.Walk u v) {i : Nat} (hi : w.length <= i)
+ : w.getVert i = v
+参数：w : G.Walk u v；hi : w.length <= i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.succ_le_succ_iff`：∀ {a b : ℕ}, a.succ ≤ b.succ ↔ a ≤ b
 -/
-theorem getVert_of_length_le {u v} (w : G.Walk u v) {i : Nat} (hi : w.length <= i) :
+theorem getVert_of_length_le {u v} (w : G.Walk u v) {i : ℕ} (hi : w.length ≤ i) :
     w.getVert i = v := by
   induction w generalizing i with
   | nil => rfl
@@ -132,58 +99,40 @@ theorem getVert_of_length_le {u v} (w : G.Walk u v) {i : Nat} (hi : w.length <= 
     · exact ih (Nat.succ_le_succ_iff.1 hi)
 
 @[simp]
-/--
-theorem `getVert_length` / 定理 `getVert_length`
-
-English:
-theorem getVert_length
-  given: {u v} (w : G.Walk u v)
-  statement: w.getVert w.length = v
-  proof: w.getVert_of_length_le rfl.le
-
-中文:
-定理 getVert_length
-  条件: {u v} (w : G.途径 u v)
-  结论: w.getVert w.length = v
-  证明: w.getVert_of_length_le rfl.le
-
-Depends on / 依赖: getVert_of_length_le, rfl.le, w.getVert_of_length_le
+/-
+**SimpleGraph.Walk.getVert_length** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：getVert_length {u v} (w : G.Walk u v) : w.getVert w.length = v
+参数：w : G.Walk u v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.getVert_of_length_le`：getVert_of_length_le {u v} (w : G
+.Walk u v) {i : Nat} (hi : w.length <= i) : w.getVert i = v
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
 theorem getVert_length {u v} (w : G.Walk u v) : w.getVert w.length = v :=
   w.getVert_of_length_le rfl.le
-
-/--
-theorem `adj_getVert_succ` / 定理 `adj_getVert_succ`
-
-English:
-theorem adj_getVert_succ
-  given: {u v} (w : G.Walk u v) {i : Nat} (hi : i < w.length)
-  proof: by
-  induction w generalizing i with
-  | nil => cases hi
-  | cons hxy _ ih =>
-    cases i
-    · simp [getVert, hxy]
-    · exact ih (Nat.succ_lt_succ_iff.1 hi)
-
-@[simp]
-
-中文:
-定理 adj_getVert_succ
-  条件: {u v} (w : G.途径 u v) {i : 自然数} (hi : i < w.length)
-  证明: by
-  induction w generalizing i with
-  | nil => cases hi
-  | cons hxy _ ih =>
-    cases i
-    · simp [getVert, hxy]
-    · exact ih (Nat.succ_lt_succ_iff.1 hi)
-
-@[simp]
-
-Depends on / 依赖: Nat.succ_lt_succ_iff, generalizing, getVert, succ_lt_succ_iff
+/-
+**SimpleGraph.Walk.adj_getVert_succ** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`
+。
+形式化陈述：adj_getVert_succ {u v} (w : G.Walk u v) {i : Nat} (hi : i < w.length) : G.
+Adj (w.getVert i) (w.getVert (i + 1))
+参数：w : G.Walk u v；hi : i < w.length。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.succ_lt_succ_iff`：∀ {a b : ℕ}, a.succ < b.succ ↔ a < b
 -/
-theorem adj_getVert_succ {u v} (w : G.Walk u v) {i : Nat} (hi : i < w.length) :
+theorem adj_getVert_succ {u v} (w : G.Walk u v) {i : ℕ} (hi : i < w.length) :
     G.Adj (w.getVert i) (w.getVert (i + 1)) := by
   induction w generalizing i with
   | nil => cases hi
@@ -193,103 +142,84 @@ theorem adj_getVert_succ {u v} (w : G.Walk u v) {i : Nat} (hi : i < w.length) :
     · exact ih (Nat.succ_lt_succ_iff.1 hi)
 
 @[simp]
-/--
-lemma `getVert_cons_succ` / 引理 `getVert_cons_succ`
-
-English:
-lemma getVert_cons_succ
-  given: {u v w n} (p : G.Walk v w) (h : G.Adj u v)
-  proof: rfl
-
-中文:
-引理 getVert_cons_succ
-  条件: {u v w n} (p : G.途径 v w) (h : G.伴随 u v)
-  证明: rfl
+/-
+**SimpleGraph.Walk.getVert_cons_succ** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Walk
+`。
+形式化陈述：getVert_cons_succ {u v w n} (p : G.Walk v w) (h : G.Adj u v) : (p.cons h).
+getVert (n + 1) = p.getVert n
+参数：p : G.Walk v w；h : G.Adj u v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma getVert_cons_succ {u v w n} (p : G.Walk v w) (h : G.Adj u v) :
     (p.cons h).getVert (n + 1) = p.getVert n := rfl
-
-/--
-lemma `getVert_cons` / 引理 `getVert_cons`
-
-English:
-lemma getVert_cons
-  given: {u v w n} (p : G.Walk v w) (h : G.Adj u v) (hn : n != 0)
-  proof: by
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hn
-  rw [getVert_cons_succ]; rw [Nat.add_sub_cancel]
-
-@[simp]
-
-中文:
-引理 getVert_cons
-  条件: {u v w n} (p : G.途径 v w) (h : G.伴随 u v) (hn : n != 0)
-  证明: by
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hn
-  rw [getVert_cons_succ]; rw [Nat.add_sub_cancel]
-
-@[simp]
-
-Depends on / 依赖: Nat.add_sub_cancel, Nat.exists_eq_add_one_of_ne_zero, add_sub_cancel, exists_eq_add_one_of_ne_zero, getVert_cons_succ
+/-
+**SimpleGraph.Walk.getVert_cons** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：getVert_cons {u v w n} (p : G.Walk v w) (h : G.Adj u v) (hn : n != 0) : (p
+.cons h).getVert n = p.getVert (n - 1)
+参数：p : G.Walk v w；h : G.Adj u v；hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_one_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k + 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.Walk.getVert_cons_succ`：getVert_cons_succ {u v w n} (p : G.W
+alk v w) (h : G.Adj u v) : (p.cons h).getVert (n + 1) = p.getVert n
+· 使用定理 `Nat.add_sub_cancel`：∀ (n m : ℕ), n + m - m = n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma getVert_cons {u v w n} (p : G.Walk v w) (h : G.Adj u v) (hn : n != 0) :
+lemma getVert_cons {u v w n} (p : G.Walk v w) (h : G.Adj u v) (hn : n ≠ 0) :
     (p.cons h).getVert n = p.getVert (n - 1) := by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hn
-  rw [getVert_cons_succ]; rw [Nat.add_sub_cancel]
+  rw [getVert_cons_succ, Nat.add_sub_cancel]
 
 @[simp]
-/--
-theorem `getVert_mem_support` / 定理 `getVert_mem_support`
-
-English:
-theorem getVert_mem_support
-  given: {u v : V} (p : G.Walk u v) (i : Nat)
-  statement: p.getVert i in p.support
-  proof: by
-  induction p generalizing i <;> cases i <;> simp [*]
-
-中文:
-定理 getVert_mem_support
-  条件: {u v : V} (p : G.途径 u v) (i : 自然数)
-  结论: p.getVert i in p.support
-  证明: by
-  induction p generalizing i <;> cases i <;> simp [*]
-
-Depends on / 依赖: generalizing
+/-
+**SimpleGraph.Walk.getVert_mem_support** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Wa
+lk`。
+形式化陈述：getVert_mem_support {u v : V} (p : G.Walk u v) (i : Nat) : p.getVert i in 
+p.support
+参数：p : G.Walk u v；i : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
 -/
-theorem getVert_mem_support {u v : V} (p : G.Walk u v) (i : Nat) : p.getVert i in p.support := by
+theorem getVert_mem_support {u v : V} (p : G.Walk u v) (i : ℕ) : p.getVert i ∈ p.support := by
   induction p generalizing i <;> cases i <;> simp [*]
 
-/--
-lemma `getVert_eq_support_getElem` / 引理 `getVert_eq_support_getElem`
+/-- Use `support_getElem_eq_getVert` to rewrite in the reverse direction. -/
+/-
+**SimpleGraph.Walk.getVert_eq_support_getElem** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph.Walk`。
+形式化陈述：getVert_eq_support_getElem {u v : V} {n : Nat} (p : G.Walk u v) (h : n <= 
+p.length) : p.getVert n = p.support[n]'(p.length_support ▸ Nat.lt_add_one_of_le 
+h)
+参数：p : G.Walk u v；h : n <= p.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.getVert_eq_support_getElem._unary`：∀ {V : Type u} {G : 
+SimpleGraph V} {v : V} (_x : (u : V) ×' (n : ℕ) ×' (p : G.Walk u v) ×' n ≤ p.len
+gth),   _x.2.2.1.getVert _x.2.1 = _x.2.2…
 
-English:
-lemma getVert_eq_support_getElem
-  given: {u v : V} {n : Nat} (p : G.Walk u v) (h : n <= p.length)
-  proof: by
-  cases p with
-  | nil => simp
-  | cons => cases n with
-    | zero => simp
-    | succ n =>
-      simp_rw [support_cons, getVert_cons _ _ n.zero_ne_add_one.symm, List.getElem_cons]
-      exact getVert_eq_support_getElem _ (Nat.sub_le_of_le_add h)
-
-中文:
-引理 getVert_eq_support_getElem
-  条件: {u v : V} {n : 自然数} (p : G.途径 u v) (h : n <= p.length)
-  证明: by
-  cases p with
-  | nil => simp
-  | cons => cases n with
-    | zero => simp
-    | succ n =>
-      simp_rw [support_cons, getVert_cons _ _ n.zero_ne_add_one.symm, List.getElem_cons]
-      exact getVert_eq_support_getElem _ (Nat.sub_le_of_le_add h)
-
-Depends on / 依赖: List.getElem_cons, Nat.sub_le_of_le_add, getElem_cons, getVert_cons, getVert_eq_support_getElem, n.zero_ne_add_one.symm, simp_rw, sub_le_of_le_add, support_cons, zero_ne_add_one
+--- 原说明 ---
+Use `support_getElem_eq_getVert` to rewrite in the reverse direction.
 -/
-lemma getVert_eq_support_getElem {u v : V} {n : Nat} (p : G.Walk u v) (h : n <= p.length) :
+lemma getVert_eq_support_getElem {u v : V} {n : ℕ} (p : G.Walk u v) (h : n ≤ p.length) :
     p.getVert n = p.support[n]'(p.length_support ▸ Nat.lt_add_one_of_le h) := by
   cases p with
   | nil => simp
@@ -299,525 +229,445 @@ lemma getVert_eq_support_getElem {u v : V} {n : Nat} (p : G.Walk u v) (h : n <= 
       simp_rw [support_cons, getVert_cons _ _ n.zero_ne_add_one.symm, List.getElem_cons]
       exact getVert_eq_support_getElem _ (Nat.sub_le_of_le_add h)
 
-/--
-lemma `support_getElem_eq_getVert` / 引理 `support_getElem_eq_getVert`
+/-- Use `getVert_eq_support_getElem` to rewrite in the reverse direction. -/
+/-
+**SimpleGraph.Walk.support_getElem_eq_getVert** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph.Walk`。
+形式化陈述：support_getElem_eq_getVert {u v : V} {n : Nat} (p : G.Walk u v) (h) : p.su
+pport[n]'h = p.getVert n
+参数：p : G.Walk u v；h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.lt_add_one_of_le`：∀ {n m : ℕ}, n ≤ m → n < m + 1
+· 使用定理 `SimpleGraph.Walk.length_support`：length_support {u v : V} (p : G.Walk u 
+v) : p.support.length = p.length + 1
+· 使用引理 `SimpleGraph.Walk.getVert_eq_support_getElem`：getVert_eq_support_getElem 
+{u v : V} {n : Nat} (p : G.Walk u v) (h : n <= p.length) : p.getVert n = p.suppo
+rt[n]'(p.length_support ▸ Nat.lt_…
 
-English:
-lemma support_getElem_eq_getVert
-  given: {u v : V} {n : Nat} (p : G.Walk u v) (h)
-  proof: (p.getVert_eq_support_getElem <| by grind).symm
-
-中文:
-引理 support_getElem_eq_getVert
-  条件: {u v : V} {n : 自然数} (p : G.途径 u v) (h)
-  证明: (p.getVert_eq_support_getElem <| by grind).symm
-
-Depends on / 依赖: getVert_eq_support_getElem, p.getVert_eq_support_getElem
+--- 原说明 ---
+Use `getVert_eq_support_getElem` to rewrite in the reverse direction.
 -/
-lemma support_getElem_eq_getVert {u v : V} {n : Nat} (p : G.Walk u v) (h) :
+lemma support_getElem_eq_getVert {u v : V} {n : ℕ} (p : G.Walk u v) (h) :
     p.support[n]'h = p.getVert n :=
   (p.getVert_eq_support_getElem <| by grind).symm
-
-/--
-lemma `getVert_eq_support_getElem?` / 引理 `getVert_eq_support_getElem?`
-
-English:
-lemma getVert_eq_support_getElem?
-  given: {u v : V} {n : Nat} (p : G.Walk u v) (h : n <= p.length)
-  proof: by
-  rw [getVert_eq_support_getElem p h]; rw [← List.getElem?_eq_getElem]
-
-中文:
-引理 getVert_eq_support_getElem?
-  条件: {u v : V} {n : 自然数} (p : G.途径 u v) (h : n <= p.length)
-  证明: by
-  rw [getVert_eq_support_getElem p h]; rw [← List.getElem?_eq_getElem]
+/-
+**SimpleGraph.Walk.getVert_eq_support_getElem** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph.Walk`。
+形式化陈述：getVert_eq_support_getElem {u v : V} {n : Nat} (p : G.Walk u v) (h : n <= 
+p.length) : p.getVert n = p.support[n]'(p.length_support ▸ Nat.lt_add_one_of_le 
+h)
+参数：p : G.Walk u v；h : n <= p.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.getVert_eq_support_getElem._unary`：∀ {V : Type u} {G : 
+SimpleGraph V} {v : V} (_x : (u : V) ×' (n : ℕ) ×' (p : G.Walk u v) ×' n ≤ p.len
+gth),   _x.2.2.1.getVert _x.2.1 = _x.2.2…
 -/
-lemma getVert_eq_support_getElem? {u v : V} {n : Nat} (p : G.Walk u v) (h : n <= p.length) :
+lemma getVert_eq_support_getElem? {u v : V} {n : ℕ} (p : G.Walk u v) (h : n ≤ p.length) :
     some (p.getVert n) = p.support[n]? := by
-  rw [getVert_eq_support_getElem p h]; rw [← List.getElem?_eq_getElem]
-
-/--
-lemma `getVert_eq_getD_support` / 引理 `getVert_eq_getD_support`
-
-English:
-lemma getVert_eq_getD_support
-  given: {u v : V} (p : G.Walk u v) (n : Nat)
-  proof: by
-  by_cases h : n <= p.length
-  · simp [← getVert_eq_support_getElem? p h]
-  grind [getVert_of_length_le, length_support]
-
-@[simp]
-
-中文:
-引理 getVert_eq_getD_support
-  条件: {u v : V} (p : G.途径 u v) (n : 自然数)
-  证明: by
-  by_cases h : n <= p.length
-  · simp [← getVert_eq_support_getElem? p h]
-  grind [getVert_of_length_le, length_support]
-
-@[simp]
-
-Depends on / 依赖: getVert_eq_support_getElem, getVert_of_length_le, length, length_support, p.length
+  rw [getVert_eq_support_getElem p h, ← List.getElem?_eq_getElem]
+/-
+**SimpleGraph.Walk.getVert_eq_getD_support** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGrap
+h.Walk`。
+形式化陈述：getVert_eq_getD_support {u v : V} (p : G.Walk u v) (n : Nat) : p.getVert n
+ = p.support.getD n v
+参数：p : G.Walk u v；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.getD_eq_getElem?_getD`：∀ {α : Type u_1} {l : List α} {i : ℕ} {a : α
+}, l.getD i a = l[i]?.getD a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.getVert_eq_support_getElem?`：∀ {V : Type u} {G : Simple
+Graph V} {u v : V} {n : ℕ} (p : G.Walk u v), n ≤ p.length → some (p.getVert n) =
+ p.support[n]?
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma getVert_eq_getD_support {u v : V} (p : G.Walk u v) (n : Nat) :
+lemma getVert_eq_getD_support {u v : V} (p : G.Walk u v) (n : ℕ) :
     p.getVert n = p.support.getD n v := by
-  by_cases h : n <= p.length
+  by_cases h : n ≤ p.length
   · simp [← getVert_eq_support_getElem? p h]
   grind [getVert_of_length_le, length_support]
 
 @[simp]
-/--
-lemma `getVert_support_idxOf` / 引理 `getVert_support_idxOf`
-
-English:
-lemma getVert_support_idxOf
-  given: [DecidableEq V] (p : G.Walk u v) (h : w in p.support)
-  proof: by
-  grind [getVert_eq_support_getElem]
-
-中文:
-引理 getVert_support_idxOf
-  条件: [DecidableEq V] (p : G.途径 u v) (h : w in p.support)
-  证明: by
-  grind [getVert_eq_support_getElem]
-
-Depends on / 依赖: getVert_eq_support_getElem
+/-
+**SimpleGraph.Walk.getVert_support_idxOf** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.
+Walk`。
+形式化陈述：getVert_support_idxOf [DecidableEq V] (p : G.Walk u v) (h : w in p.support
+) : p.getVert (p.support.idxOf w) = w
+参数：p : G.Walk u v；h : w in p.support。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma getVert_support_idxOf [DecidableEq V] (p : G.Walk u v) (h : w in p.support) :
+lemma getVert_support_idxOf [DecidableEq V] (p : G.Walk u v) (h : w ∈ p.support) :
     p.getVert (p.support.idxOf w) = w := by
   grind [getVert_eq_support_getElem]
-
-/--
-theorem `getVert_comp_val_eq_get_support` / 定理 `getVert_comp_val_eq_get_support`
-
-English:
-theorem getVert_comp_val_eq_get_support
-  given: {u v : V} (p : G.Walk u v)
-  proof: by
-  grind [getVert_eq_support_getElem, length_support]
-
-中文:
-定理 getVert_comp_val_eq_get_support
-  条件: {u v : V} (p : G.途径 u v)
-  证明: by
-  grind [getVert_eq_support_getElem, length_support]
-
-Depends on / 依赖: getVert_eq_support_getElem, length_support
+/-
+**SimpleGraph.Walk.getVert_comp_val_eq_get_support** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph.Walk`。
+形式化陈述：getVert_comp_val_eq_get_support {u v : V} (p : G.Walk u v) : p.getVert ∘ F
+in.val = p.support.get
+参数：p : G.Walk u v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem getVert_comp_val_eq_get_support {u v : V} (p : G.Walk u v) :
     p.getVert ∘ Fin.val = p.support.get := by
   grind [getVert_eq_support_getElem, length_support]
-
-/--
-theorem `range_getVert_eq_range_support_getElem` / 定理 `range_getVert_eq_range_support_getElem`
-
-English:
-theorem range_getVert_eq_range_support_getElem
-  given: {u v : V} (p : G.Walk u v)
-  proof: Set.ext fun _ => ⟨by grind [Set.range_list_get, getVert_mem_support],
-    fun ⟨n, _⟩ => ⟨n, by grind [getVert_eq_support_getElem, length_support]⟩⟩
-
-中文:
-定理 range_getVert_eq_range_support_getElem
-  条件: {u v : V} (p : G.途径 u v)
-  证明: Set.ext fun _ => ⟨by grind [Set.range_list_get, getVert_mem_support],
-    fun ⟨n, _⟩ => ⟨n, by grind [getVert_eq_support_getElem, length_support]⟩⟩
-
-Depends on / 依赖: Set.ext, Set.range_list_get, getVert_eq_support_getElem, getVert_mem_support, length_support, range_list_get
+/-
+**SimpleGraph.Walk.range_getVert_eq_range_support_getElem** 是 Mathlib 中的一个定理，位于命
+名空间 `SimpleGraph.Walk`。
+形式化陈述：range_getVert_eq_range_support_getElem {u v : V} (p : G.Walk u v) : Set.ra
+nge p.getVert = Set.range p.support.get
+参数：p : G.Walk u v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
 theorem range_getVert_eq_range_support_getElem {u v : V} (p : G.Walk u v) :
     Set.range p.getVert = Set.range p.support.get :=
-  Set.ext fun _ => ⟨by grind [Set.range_list_get, getVert_mem_support],
-    fun ⟨n, _⟩ => ⟨n, by grind [getVert_eq_support_getElem, length_support]⟩⟩
-
-/--
-theorem `darts_getElem_eq_getVert` / 定理 `darts_getElem_eq_getVert`
-
-English:
-theorem darts_getElem_eq_getVert
-  given: {u v : V} {p : G.Walk u v} (n : Nat) (h : n < p.darts.length)
-  proof: by
-  rw [p.length_darts] at h
-  ext <;> simp [p.getVert_eq_support_getElem (le_of_lt h), p.getVert_eq_support_getElem h]
-
-中文:
-定理 darts_getElem_eq_getVert
-  条件: {u v : V} {p : G.途径 u v} (n : 自然数) (h : n < p.darts.length)
-  证明: by
-  rw [p.length_darts] at h
-  ext <;> simp [p.getVert_eq_support_getElem (le_of_lt h), p.getVert_eq_support_getElem h]
-
-Depends on / 依赖: getVert_eq_support_getElem, le_of_lt, length_darts, p.getVert_eq_support_getElem, p.length_darts
+  Set.ext fun _ ↦ ⟨by grind [Set.range_list_get, getVert_mem_support],
+    fun ⟨n, _⟩ ↦ ⟨n, by grind [getVert_eq_support_getElem, length_support]⟩⟩
+/-
+**SimpleGraph.Walk.darts_getElem_eq_getVert** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph.Walk`。
+形式化陈述：darts_getElem_eq_getVert {u v : V} {p : G.Walk u v} (n : Nat) (h : n < p.d
+arts.length) : p.darts[n] = ⟨⟨p.getVert n, p.getVert (n + 1)⟩, p.adj_getVert_suc
+c (p.length_darts ▸ h)⟩
+参数：n : Nat；h : n < p.darts.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Dart.ext`：∀ {V : Type u_1} {G : SimpleGraph V} (d₁ d₂ : G.Da
+rt), d₁.toProd = d₂.toProd → d₁ = d₂
+· 使用定理 `SimpleGraph.Walk.adj_getVert_succ`：adj_getVert_succ {u v} (w : G.Walk u 
+v) {i : Nat} (hi : i < w.length) : G.Adj (w.getVert i) (w.getVert (i + 1))
+· 使用定理 `SimpleGraph.Walk.length_darts`：length_darts {u v : V} (p : G.Walk u v) :
+ p.darts.length = p.length
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.lt_of_lt_of_le`：∀ {n m k : ℕ}, n < m → m ≤ k → n < k
+· 使用定理 `Nat.pred_le`：∀ (n : ℕ), n.pred ≤ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.length_dropLast`：∀ {α : Type u_1} {xs : List α}, xs.dropLast.length
+ = xs.length - 1
+· 使用定理 `Nat.lt_add_one_of_le`：∀ {n m : ℕ}, n ≤ m → n < m + 1
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.length_support`：length_support {u v : V} (p : G.Walk u 
+v) : p.support.length = p.length + 1
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.Walk.fst_darts_getElem`：fst_darts_getElem {p : G.Walk u v} {
+i : Nat} (hi : i < p.darts.length) : p.darts[i].fst = p.support.dropLast[i]'(by 
+grind)
+· 使用定理 `List.getElem_dropLast`：∀ {α : Type u_1} {xs : List α} {i : ℕ} (h : i < x
+s.dropLast.length), xs.dropLast[i] = xs[i]
+· 使用引理 `SimpleGraph.Walk.getVert_eq_support_getElem`：getVert_eq_support_getElem 
+{u v : V} {n : Nat} (p : G.Walk u v) (h : n <= p.length) : p.getVert n = p.suppo
+rt[n]'(p.length_support ▸ Nat.lt_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.add_lt_of_lt_sub`：∀ {a b c : ℕ}, a < c - b → a + b < c
+· 使用定理 `SimpleGraph.Walk.snd_darts_getElem`：snd_darts_getElem {p : G.Walk u v} {
+i : Nat} (hi : i < p.darts.length) : p.darts[i].snd = p.support.tail[i]'(by grin
+d)
+· 使用定理 `List.getElem_tail`：∀ {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.tail
+.length), l.tail[i] = l[i + 1]
 -/
-theorem darts_getElem_eq_getVert {u v : V} {p : G.Walk u v} (n : Nat) (h : n < p.darts.length) :
+theorem darts_getElem_eq_getVert {u v : V} {p : G.Walk u v} (n : ℕ) (h : n < p.darts.length) :
     p.darts[n] = ⟨⟨p.getVert n, p.getVert (n + 1)⟩, p.adj_getVert_succ (p.length_darts ▸ h)⟩ := by
   rw [p.length_darts] at h
   ext <;> simp [p.getVert_eq_support_getElem (le_of_lt h), p.getVert_eq_support_getElem h]
-
-/--
-theorem `getElem_edges` / 定理 `getElem_edges`
-
-English:
-theorem getElem_edges
-  given: {p : G.Walk u v} {i : Nat} (h : i < p.edges.length)
-  proof: by
-  simp [getElem_edges_eq_edge_getElem_darts, darts_getElem_eq_getVert]
-
-中文:
-定理 getElem_edges
-  条件: {p : G.途径 u v} {i : 自然数} (h : i < p.edges.length)
-  证明: by
-  simp [getElem_edges_eq_edge_getElem_darts, darts_getElem_eq_getVert]
-
-Depends on / 依赖: darts_getElem_eq_getVert, getElem_edges_eq_edge_getElem_darts
+/-
+**SimpleGraph.Walk.getElem_edges** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：getElem_edges {p : G.Walk u v} {i : Nat} (h : i < p.edges.length) : p.edge
+s[i] = s(p.getVert i, p.getVert (i + 1))
+参数：h : i < p.edges.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.adj_getVert_succ`：adj_getVert_succ {u v} (w : G.Walk u 
+v) {i : Nat} (hi : i < w.length) : G.Adj (w.getVert i) (w.getVert (i + 1))
+· 使用定理 `SimpleGraph.Walk.length_darts`：length_darts {u v : V} (p : G.Walk u v) :
+ p.darts.length = p.length
+· 使用定理 `SimpleGraph.Walk.getElem_edges_eq_edge_getElem_darts`：getElem_edges_eq_e
+dge_getElem_darts {p : G.Walk u v} {i : Nat} (h : i < p.edges.length) : p.edges[
+i] = (p.darts[i]'(by grind)).edge
+· 使用定理 `SimpleGraph.Walk.darts_getElem_eq_getVert`：darts_getElem_eq_getVert {u v
+ : V} {p : G.Walk u v} (n : Nat) (h : n < p.darts.length) : p.darts[n] = ⟨⟨p.get
+Vert n, p.getVert (n + 1)⟩, p.a…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem getElem_edges {p : G.Walk u v} {i : Nat} (h : i < p.edges.length) :
+theorem getElem_edges {p : G.Walk u v} {i : ℕ} (h : i < p.edges.length) :
     p.edges[i] = s(p.getVert i, p.getVert (i + 1)) := by
   simp [getElem_edges_eq_edge_getElem_darts, darts_getElem_eq_getVert]
-
-/--
-theorem `mk_mem_edges_iff_exists` / 定理 `mk_mem_edges_iff_exists`
-
-English:
-theorem mk_mem_edges_iff_exists
-  given: {u' v' : V} (p : G.Walk u v)
-  proof: by
-  constructor <;> grind [getElem_edges, List.mem_iff_getElem]
-
-中文:
-定理 mk_mem_edges_iff_存在
-  条件: {u' v' : V} (p : G.途径 u v)
-  证明: by
-  constructor <;> grind [getElem_edges, List.mem_iff_getElem]
-
-Depends on / 依赖: List.mem_iff_getElem, getElem_edges, mem_iff_getElem
+/-
+**SimpleGraph.Walk.mk_mem_edges_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.Walk`。
+形式化陈述：mk_mem_edges_iff_exists {u' v' : V} (p : G.Walk u v) : s(u', v') in p.edge
+s ↔ exists i < p.length, s(p.getVert i, p.getVert (i + 1)) = s(u', v')
+参数：p : G.Walk u v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_mem_edges_iff_exists {u' v' : V} (p : G.Walk u v) :
-    s(u', v') in p.edges ↔ exists i < p.length, s(p.getVert i, p.getVert (i + 1)) = s(u', v') := by
+    s(u', v') ∈ p.edges ↔ ∃ i < p.length, s(p.getVert i, p.getVert (i + 1)) = s(u', v') := by
   constructor <;> grind [getElem_edges, List.mem_iff_getElem]
-
-/--
-theorem `adj_of_infix_support` / 定理 `adj_of_infix_support`
-
-English:
-theorem adj_of_infix_support
-  given: {u v u' v'} {p : G.Walk u v} (h : [u', v'] <:+: p.support)
-  proof: by
-  have ⟨k, hk, h⟩ := List.infix_iff_getElem?.mp h
-  have h₀ := Nat.zero_add _ ▸ h 0 Nat.zero_lt_two
-  have h₁ := Nat.add_comm .. ▸ h 1 Nat.one_lt_two
-  rw [← getVert_eq_support_getElem? _ <| by grind]; rw [Option.some.injEq] at h₀ h₁
-exact h₀ ▸ h₁ ▸ p.adj_getVert_succ (i := k) by grind
-
-中文:
-定理 adj_of_infix_support
-  条件: {u v u' v'} {p : G.途径 u v} (h : [u', v'] <:+: p.support)
-  证明: by
-  have ⟨k, hk, h⟩ := List.infix_iff_getElem?.mp h
-  have h₀ := Nat.zero_add _ ▸ h 0 Nat.zero_lt_two
-  have h₁ := Nat.add_comm .. ▸ h 1 Nat.one_lt_two
-  rw [← getVert_eq_support_getElem? _ <| by grind]; rw [Option.some.injEq] at h₀ h₁
-exact h₀ ▸ h₁ ▸ p.adj_getVert_succ (i := k) by grind
-
-Depends on / 依赖: List.infix_iff_getElem, Nat.add_comm, Nat.one_lt_two, Nat.zero_add, Nat.zero_lt_two, Option.some.injEq, add_comm, adj_getVert_succ, getVert_eq_support_getElem, infix_iff_getElem, one_lt_two, p.adj_getVert_succ, zero_add, zero_lt_two
+/-
+**SimpleGraph.Walk.adj_of_infix_support** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.W
+alk`。
+形式化陈述：adj_of_infix_support {u v u' v'} {p : G.Walk u v} (h : [u', v'] <:+: p.sup
+port) : G.Adj u' v'
+参数：h : [u', v'] <:+: p.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.infix_iff_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α},   l₁ <:+: l₂
+ ↔ ∃ k, l₁.length + k ≤ l₂.length ∧ ∀ (i : ℕ) (h : i < l₁.length), l₂[i + k]? = 
+some l₁[i]
+· 使用定理 `Nat.zero_lt_two`：0 < 2
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Nat.one_lt_two`：1 < 2
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `SimpleGraph.Walk.adj_getVert_succ`：adj_getVert_succ {u v} (w : G.Walk u 
+v) {i : Nat} (hi : i < w.length) : G.Adj (w.getVert i) (w.getVert (i + 1))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.getVert_eq_support_getElem?`：∀ {V : Type u} {G : Simple
+Graph V} {u v : V} {n : ℕ} (p : G.Walk u v), n ≤ p.length → some (p.getVert n) =
+ p.support[n]?
 -/
 theorem adj_of_infix_support {u v u' v'} {p : G.Walk u v} (h : [u', v'] <:+: p.support) :
     G.Adj u' v' := by
   have ⟨k, hk, h⟩ := List.infix_iff_getElem?.mp h
   have h₀ := Nat.zero_add _ ▸ h 0 Nat.zero_lt_two
   have h₁ := Nat.add_comm .. ▸ h 1 Nat.one_lt_two
-  rw [← getVert_eq_support_getElem? _ <| by grind]; rw [Option.some.injEq] at h₀ h₁
-exact h₀ ▸ h₁ ▸ p.adj_getVert_succ (i := k) by grind
+  rw [← getVert_eq_support_getElem? _ <| by grind, Option.some.injEq] at h₀ h₁
+  exact h₀ ▸ h₁ ▸ p.adj_getVert_succ (i := k) <| by grind
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- The second vertex of a walk, or the only vertex in a nil walk. -/
+/-
+**SimpleGraph.Walk.snd** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：snd (p : G.Walk u v) : V
+参数：p : G.Walk u v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation snd
-  signature: (p : G.Walk u v)
-  body: p.getVert 1
-
-中文:
-缩写 snd
-  签名: (p : G.途径 u v)
-  定义体: p.getVert 1
-
-Depends on / 依赖: getVert, p.getVert
+--- 原说明 ---
+The second vertex of a walk, or the only vertex in a nil walk.
 -/
 abbrev snd (p : G.Walk u v) : V := p.getVert 1
-
-/--
-lemma `adj_snd` / 引理 `adj_snd`
-
-English:
-lemma adj_snd
-  given: {p : G.Walk v w} (hp : ¬ p.Nil)
-  proof: by
-  simpa using adj_getVert_succ p (by simpa [not_nil_iff_lt_length] using hp : 0 < p.length)
-
-中文:
-引理 adj_snd
-  条件: {p : G.途径 v w} (hp : ¬ p.Nil)
-  证明: by
-  simpa using adj_getVert_succ p (by simpa [not_nil_iff_lt_length] using hp : 0 < p.length)
+/-
+**SimpleGraph.Walk.adj_snd** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：∀ {V : Type u} {G : SimpleGraph V} {v w : V} {p : G.Walk v w}, ¬p.Nil → G.
+Adj v p.snd
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `SimpleGraph.Walk.adj_getVert_succ`：adj_getVert_succ {u v} (w : G.Walk u 
+v) {i : Nat} (hi : i < w.length) : G.Adj (w.getVert i) (w.getVert (i + 1))
 -/
 @[simp] lemma adj_snd {p : G.Walk v w} (hp : ¬ p.Nil) :
     G.Adj v p.snd := by
   simpa using adj_getVert_succ p (by simpa [not_nil_iff_lt_length] using hp : 0 < p.length)
-
-/--
-lemma `snd_cons` / 引理 `snd_cons`
-
-English:
-lemma snd_cons
-  given: {u v w} (q : G.Walk v w) (hadj : G.Adj u v)
-  proof: by simp
-
-中文:
-引理 snd_cons
-  条件: {u v w} (q : G.途径 v w) (hadj : G.伴随 u v)
-  证明: by simp
+/-
+**SimpleGraph.Walk.snd_cons** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：snd_cons {u v w} (q : G.Walk v w) (hadj : G.Adj u v) : (q.cons hadj).snd =
+ v
+参数：q : G.Walk v w；hadj : G.Adj u v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma snd_cons {u v w} (q : G.Walk v w) (hadj : G.Adj u v) :
     (q.cons hadj).snd = v := by simp
-
-/--
-lemma `snd_mem_tail_support` / 引理 `snd_mem_tail_support`
-
-English:
-lemma snd_mem_tail_support
-  given: {u v : V} {p : G.Walk u v} (h : ¬p.Nil)
-  statement: p.snd in p.support.tail
-  proof: p.notNilRec (by simp) h
-
-中文:
-引理 snd_mem_tail_support
-  条件: {u v : V} {p : G.途径 u v} (h : ¬p.Nil)
-  结论: p.snd in p.support.tail
-  证明: p.notNilRec (by simp) h
-
-Depends on / 依赖: notNilRec, p.notNilRec
+/-
+**SimpleGraph.Walk.snd_mem_tail_support** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.W
+alk`。
+形式化陈述：snd_mem_tail_support {u v : V} {p : G.Walk u v} (h : ¬p.Nil) : p.snd in p.
+support.tail
+参数：h : ¬p.Nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma snd_mem_tail_support {u v : V} {p : G.Walk u v} (h : ¬p.Nil) : p.snd in p.support.tail :=
+lemma snd_mem_tail_support {u v : V} {p : G.Walk u v} (h : ¬p.Nil) : p.snd ∈ p.support.tail :=
   p.notNilRec (by simp) h
 
 /-- Use `snd_eq_support_getElem_one` to rewrite in the reverse direction. -/
 @[simp]
-/--
-lemma `support_getElem_one` / 引理 `support_getElem_one`
+/-
+**SimpleGraph.Walk.support_getElem_one** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Wa
+lk`。
+形式化陈述：support_getElem_one {p : G.Walk u v} (hp) : p.support[1]'hp = p.snd
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma support_getElem_one
-  given: {p : G.Walk u v} (hp)
-  statement: p.support[1]'hp = p.snd
-  proof: by
-  grind [getVert_eq_support_getElem]
-
-中文:
-引理 support_getElem_one
-  条件: {p : G.途径 u v} (hp)
-  结论: p.support[1]'hp = p.snd
-  证明: by
-  grind [getVert_eq_support_getElem]
-
-Depends on / 依赖: getVert_eq_support_getElem
+--- 原说明 ---
+Use `snd_eq_support_getElem_one` to rewrite in the reverse direction.
 -/
 lemma support_getElem_one {p : G.Walk u v} (hp) : p.support[1]'hp = p.snd := by
   grind [getVert_eq_support_getElem]
 
-/--
-lemma `snd_eq_support_getElem_one` / 引理 `snd_eq_support_getElem_one`
+/-- Use `support_getElem_one` to rewrite in the reverse direction. -/
+/-
+**SimpleGraph.Walk.snd_eq_support_getElem_one** 是 Mathlib 中的一个引理，位于命名空间 `SimpleG
+raph.Walk`。
+形式化陈述：snd_eq_support_getElem_one {p : G.Walk u v} (hnil : ¬p.Nil) : p.snd = p.su
+pport[1]'(by grind [not_nil_iff_lt_length])
+参数：hnil : ¬p.Nil。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SimpleGraph.Walk.support_getElem_one`：support_getElem_one {p : G.Walk u 
+v} (hp) : p.support[1]'hp = p.snd
 
-English:
-lemma snd_eq_support_getElem_one
-  given: {p : G.Walk u v} (hnil : ¬p.Nil)
-  proof: .symm support_getElem_one _
-
-中文:
-引理 snd_eq_support_getElem_one
-  条件: {p : G.途径 u v} (hnil : ¬p.Nil)
-  证明: .symm support_getElem_one _
-
-Depends on / 依赖: support_getElem_one
+--- 原说明 ---
+Use `support_getElem_one` to rewrite in the reverse direction.
 -/
 lemma snd_eq_support_getElem_one {p : G.Walk u v} (hnil : ¬p.Nil) :
     p.snd = p.support[1]'(by grind [not_nil_iff_lt_length]) :=
-.symm support_getElem_one _
+  support_getElem_one _ |>.symm
 
-/--
-Definition of `penultimate` / `penultimate` 的定义
+/-- The penultimate vertex of a walk, or the only vertex in a nil walk. -/
+/-
+**SimpleGraph.Walk.penultimate** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：penultimate (p : G.Walk u v) : V
+参数：p : G.Walk u v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation penultimate
-  signature: (p : G.Walk u v)
-  body: p.getVert (p.length - 1)
-
-@[simp]
-
-中文:
-缩写 penultimate
-  签名: (p : G.途径 u v)
-  定义体: p.getVert (p.length - 1)
-
-@[simp]
-
-Depends on / 依赖: getVert, length, p.getVert, p.length
+--- 原说明 ---
+The penultimate vertex of a walk, or the only vertex in a nil walk.
 -/
 abbrev penultimate (p : G.Walk u v) : V := p.getVert (p.length - 1)
 
 @[simp]
-/--
-lemma `penultimate_nil` / 引理 `penultimate_nil`
-
-English:
-lemma penultimate_nil
-  statement: (@nil _ G v).penultimate = v
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 penultimate_nil
-  结论: (@nil _ G v).penultimate = v
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Walk.penultimate_nil** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：penultimate_nil : (@nil _ G v).penultimate = v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma penultimate_nil : (@nil _ G v).penultimate = v := rfl
 
 @[simp]
-/--
-lemma `penultimate_cons_nil` / 引理 `penultimate_cons_nil`
-
-English:
-lemma penultimate_cons_nil
-  given: (h : G.Adj u v)
-  statement: (cons h nil).penultimate = u
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 penultimate_cons_nil
-  条件: (h : G.伴随 u v)
-  结论: (cons h nil).penultimate = u
-  证明: rfl
-
-@[simp]
+/-
+**SimpleGraph.Walk.penultimate_cons_nil** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.W
+alk`。
+形式化陈述：penultimate_cons_nil (h : G.Adj u v) : (cons h nil).penultimate = u
+参数：h : G.Adj u v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma penultimate_cons_nil (h : G.Adj u v) : (cons h nil).penultimate = u := rfl
 
 @[simp]
-/--
-lemma `penultimate_cons_cons` / 引理 `penultimate_cons_cons`
-
-English:
-lemma penultimate_cons_cons
-  given: {w'} (h : G.Adj u v) (h₂ : G.Adj v w) (p : G.Walk w w')
-  proof: rfl
-
-中文:
-引理 penultimate_cons_cons
-  条件: {w'} (h : G.伴随 u v) (h₂ : G.伴随 v w) (p : G.途径 w w')
-  证明: rfl
+/-
+**SimpleGraph.Walk.penultimate_cons_cons** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.
+Walk`。
+形式化陈述：penultimate_cons_cons {w'} (h : G.Adj u v) (h₂ : G.Adj v w) (p : G.Walk w 
+w') : (cons h (cons h₂ p)).penultimate = (cons h₂ p).penultimate
+参数：h : G.Adj u v；h₂ : G.Adj v w；p : G.Walk w w'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma penultimate_cons_cons {w'} (h : G.Adj u v) (h₂ : G.Adj v w) (p : G.Walk w w') :
     (cons h (cons h₂ p)).penultimate = (cons h₂ p).penultimate := rfl
-
-/--
-lemma `penultimate_cons_of_not_nil` / 引理 `penultimate_cons_of_not_nil`
-
-English:
-lemma penultimate_cons_of_not_nil
-  given: (h : G.Adj u v) (p : G.Walk v w) (hp : ¬ p.Nil)
-  proof: p.notNilRec (by simp) hp h
-
-@[simp]
-
-中文:
-引理 penultimate_cons_of_not_nil
-  条件: (h : G.伴随 u v) (p : G.途径 v w) (hp : ¬ p.Nil)
-  证明: p.notNilRec (by simp) hp h
-
-@[simp]
-
-Depends on / 依赖: notNilRec, p.notNilRec
+/-
+**SimpleGraph.Walk.penultimate_cons_of_not_nil** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+Graph.Walk`。
+形式化陈述：penultimate_cons_of_not_nil (h : G.Adj u v) (p : G.Walk v w) (hp : ¬ p.Nil
+) : (cons h p).penultimate = p.penultimate
+参数：h : G.Adj u v；p : G.Walk v w；hp : ¬ p.Nil。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma penultimate_cons_of_not_nil (h : G.Adj u v) (p : G.Walk v w) (hp : ¬ p.Nil) :
     (cons h p).penultimate = p.penultimate :=
   p.notNilRec (by simp) hp h
 
 @[simp]
-/--
-lemma `adj_penultimate` / 引理 `adj_penultimate`
-
-English:
-lemma adj_penultimate
-  given: {p : G.Walk v w} (hp : ¬ p.Nil)
-  statement: G.Adj p.penultimate w
-  proof: by
-  grind [getVert_length, adj_getVert_succ]
-
-中文:
-引理 adj_penultimate
-  条件: {p : G.途径 v w} (hp : ¬ p.Nil)
-  结论: G.伴随 p.penultimate w
-  证明: by
-  grind [getVert_length, adj_getVert_succ]
-
-Depends on / 依赖: adj_getVert_succ, getVert_length
+/-
+**SimpleGraph.Walk.adj_penultimate** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：adj_penultimate {p : G.Walk v w} (hp : ¬ p.Nil) : G.Adj p.penultimate w
+参数：hp : ¬ p.Nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma adj_penultimate {p : G.Walk v w} (hp : ¬ p.Nil) : G.Adj p.penultimate w := by
   grind [getVert_length, adj_getVert_succ]
-
-/--
-lemma `penultimate_mem_dropLast_support` / 引理 `penultimate_mem_dropLast_support`
-
-English:
-lemma penultimate_mem_dropLast_support
-  given: {p : G.Walk u v} (h : ¬p.Nil)
-  proof: by
-.ne have := adj_penultimate h
-  grind [getVert_mem_support, List.dropLast_concat_getLast, getLast_support]
-
-@[simp]
-
-中文:
-引理 penultimate_mem_dropLast_support
-  条件: {p : G.途径 u v} (h : ¬p.Nil)
-  证明: by
-.ne have := adj_penultimate h
-  grind [getVert_mem_support, List.dropLast_concat_getLast, getLast_support]
-
-@[simp]
-
-Depends on / 依赖: List.dropLast_concat_getLast, adj_penultimate, dropLast_concat_getLast, getLast_support, getVert_mem_support
+/-
+**SimpleGraph.Walk.penultimate_mem_dropLast_support** 是 Mathlib 中的一个引理，位于命名空间 `S
+impleGraph.Walk`。
+形式化陈述：penultimate_mem_dropLast_support {p : G.Walk u v} (h : ¬p.Nil) : p.penulti
+mate in p.support.dropLast
+参数：h : ¬p.Nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Adj.ne`：∀ {V : Type u} {G : SimpleGraph V} {a b : V}, G.Adj 
+a b → a ≠ b
+· 使用引理 `SimpleGraph.Walk.adj_penultimate`：adj_penultimate {p : G.Walk v w} (hp :
+ ¬ p.Nil) : G.Adj p.penultimate w
 -/
 lemma penultimate_mem_dropLast_support {p : G.Walk u v} (h : ¬p.Nil) :
-    p.penultimate in p.support.dropLast := by
-.ne have := adj_penultimate h
+    p.penultimate ∈ p.support.dropLast := by
+  have := adj_penultimate h |>.ne
   grind [getVert_mem_support, List.dropLast_concat_getLast, getLast_support]
 
 @[simp]
-/--
-lemma `support_getElem_length_sub_one_eq_penultimate` / 引理 `support_getElem_length_sub_one_eq_penultimate`
-
-English:
-lemma support_getElem_length_sub_one_eq_penultimate
-  given: {p : G.Walk u v}
-  proof: by
-  grind [getVert_eq_support_getElem]
-
-中文:
-引理 support_getElem_length_sub_one_eq_penultimate
-  条件: {p : G.途径 u v}
-  证明: by
-  grind [getVert_eq_support_getElem]
-
-Depends on / 依赖: getVert_eq_support_getElem
+/-
+**SimpleGraph.Walk.support_getElem_length_sub_one_eq_penultimate** 是 Mathlib 中的一
+个引理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：support_getElem_length_sub_one_eq_penultimate {p : G.Walk u v} : p.support
+[p.length - 1] = p.penultimate
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma support_getElem_length_sub_one_eq_penultimate {p : G.Walk u v} :
     p.support[p.length - 1] = p.penultimate := by
@@ -825,22 +675,17 @@ lemma support_getElem_length_sub_one_eq_penultimate {p : G.Walk u v} :
 
 /-- The first dart of a walk. -/
 @[simps]
-/--
-Definition of `firstDart` / `firstDart` 的定义
+/-
+**SimpleGraph.Walk.firstDart** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：firstDart (p : G.Walk v w) (hp : ¬ p.Nil) : G.Dart where fst
+参数：p : G.Walk v w；hp : ¬ p.Nil。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Walk.adj_snd`：∀ {V : Type u} {G : SimpleGraph V} {v w : V} {
+p : G.Walk v w}, ¬p.Nil → G.Adj v p.snd
 
-English:
-definition firstDart
-  signature: (p : G.Walk v w) (hp : ¬ p.Nil)
-  body: v
-  snd := p.snd
-  adj := p.adj_snd hp
-
-中文:
-定义 firstDart
-  签名: (p : G.途径 v w) (hp : ¬ p.Nil)
-  定义体: v
-  snd := p.snd
-  adj := p.adj_snd hp
+--- 原说明 ---
+The first dart of a walk.
 -/
 def firstDart (p : G.Walk v w) (hp : ¬ p.Nil) : G.Dart where
   fst := v
@@ -849,101 +694,110 @@ def firstDart (p : G.Walk v w) (hp : ¬ p.Nil) : G.Dart where
 
 /-- The last dart of a walk. -/
 @[simps]
-/--
-Definition of `lastDart` / `lastDart` 的定义
+/-
+**SimpleGraph.Walk.lastDart** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：lastDart (p : G.Walk v w) (hp : ¬ p.Nil) : G.Dart where fst
+参数：p : G.Walk v w；hp : ¬ p.Nil。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SimpleGraph.Walk.adj_penultimate`：adj_penultimate {p : G.Walk v w} (hp :
+ ¬ p.Nil) : G.Adj p.penultimate w
 
-English:
-definition lastDart
-  signature: (p : G.Walk v w) (hp : ¬ p.Nil)
-  body: p.penultimate
-  snd := w
-  adj := p.adj_penultimate hp
-
-中文:
-定义 lastDart
-  签名: (p : G.途径 v w) (hp : ¬ p.Nil)
-  定义体: p.penultimate
-  snd := w
-  adj := p.adj_penultimate hp
-
-Depends on / 依赖: p.penultimate, penultimate
+--- 原说明 ---
+The last dart of a walk.
 -/
 def lastDart (p : G.Walk v w) (hp : ¬ p.Nil) : G.Dart where
   fst := p.penultimate
   snd := w
   adj := p.adj_penultimate hp
-
-/--
-lemma `edge_firstDart` / 引理 `edge_firstDart`
-
-English:
-lemma edge_firstDart
-  given: (p : G.Walk v w) (hp : ¬ p.Nil)
-  proof: rfl
-
-中文:
-引理 edge_firstDart
-  条件: (p : G.途径 v w) (hp : ¬ p.Nil)
-  证明: rfl
+/-
+**SimpleGraph.Walk.edge_firstDart** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：edge_firstDart (p : G.Walk v w) (hp : ¬ p.Nil) : (p.firstDart hp).edge = s
+(v, p.snd)
+参数：p : G.Walk v w；hp : ¬ p.Nil。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma edge_firstDart (p : G.Walk v w) (hp : ¬ p.Nil) :
     (p.firstDart hp).edge = s(v, p.snd) := rfl
-
-/--
-lemma `edge_lastDart` / 引理 `edge_lastDart`
-
-English:
-lemma edge_lastDart
-  given: (p : G.Walk v w) (hp : ¬ p.Nil)
-  proof: rfl
-
-中文:
-引理 edge_lastDart
-  条件: (p : G.途径 v w) (hp : ¬ p.Nil)
-  证明: rfl
+/-
+**SimpleGraph.Walk.edge_lastDart** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：edge_lastDart (p : G.Walk v w) (hp : ¬ p.Nil) : (p.lastDart hp).edge = s(p
+.penultimate, w)
+参数：p : G.Walk v w；hp : ¬ p.Nil。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma edge_lastDart (p : G.Walk v w) (hp : ¬ p.Nil) :
     (p.lastDart hp).edge = s(p.penultimate, w) := rfl
-
-/--
-theorem `firstDart_eq` / 定理 `firstDart_eq`
-
-English:
-theorem firstDart_eq
-  given: {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
-  proof: by
-  simp [Dart.ext_iff, firstDart_toProd, darts_getElem_eq_getVert]
-
-中文:
-定理 firstDart_eq
-  条件: {p : G.途径 v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
-  证明: by
-  simp [Dart.ext_iff, firstDart_toProd, darts_getElem_eq_getVert]
-
-Depends on / 依赖: Dart.ext_iff, darts_getElem_eq_getVert, ext_iff, firstDart_toProd
+/-
+**SimpleGraph.Walk.firstDart_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：firstDart_eq {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length) : p
+.firstDart h₁ = p.darts[0]
+参数：h₁ : ¬ p.Nil；h₂ : 0 < p.darts.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Walk.adj_getVert_succ`：adj_getVert_succ {u v} (w : G.Walk u 
+v) {i : Nat} (hi : i < w.length) : G.Adj (w.getVert i) (w.getVert (i + 1))
+· 使用定理 `SimpleGraph.Walk.length_darts`：length_darts {u v : V} (p : G.Walk u v) :
+ p.darts.length = p.length
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.getVert_zero`：getVert_zero {u v} (w : G.Walk u v) : w.g
+etVert 0 = u
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `SimpleGraph.Walk.darts_getElem_eq_getVert`：darts_getElem_eq_getVert {u v
+ : V} {p : G.Walk u v} (n : Nat) (h : n < p.darts.length) : p.darts[n] = ⟨⟨p.get
+Vert n, p.getVert (n + 1)⟩, p.a…
+· 使用定理 `SimpleGraph.Dart.mk.congr_simp`：∀ {V : Type u_1} {G : SimpleGraph V} (to
+Prod toProd_1 : V × V) (e_toProd : toProd = toProd_1)   (adj : G.Adj toProd.1 to
+Prod.2), { toProd :=…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SimpleGraph.Walk.firstDart_toProd`：∀ {V : Type u} {G : SimpleGraph V} {v
+ w : V} (p : G.Walk v w) (hp : ¬p.Nil), (p.firstDart hp).toProd = (v, p.snd)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem firstDart_eq {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length) :
     p.firstDart h₁ = p.darts[0] := by
   simp [Dart.ext_iff, firstDart_toProd, darts_getElem_eq_getVert]
-
-/--
-theorem `lastDart_eq` / 定理 `lastDart_eq`
-
-English:
-theorem lastDart_eq
-  given: {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
-  proof: by
-  simp (disch := grind) [Dart.ext_iff, lastDart_toProd, darts_getElem_eq_getVert,
-    p.getVert_of_length_le]
-
-中文:
-定理 lastDart_eq
-  条件: {p : G.途径 v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
-  证明: by
-  simp (disch := grind) [Dart.ext_iff, lastDart_toProd, darts_getElem_eq_getVert,
-    p.getVert_of_length_le]
-
-Depends on / 依赖: Dart.ext_iff, darts_getElem_eq_getVert, ext_iff, getVert_of_length_le, lastDart_toProd, p.getVert_of_length_le
+/-
+**SimpleGraph.Walk.lastDart_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Walk`。
+形式化陈述：lastDart_eq {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length) : p.
+lastDart h₁ = p.darts[p.darts.length - 1]
+参数：h₁ : ¬ p.Nil；h₂ : 0 < p.darts.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `SimpleGraph.Walk.adj_getVert_succ`：adj_getVert_succ {u v} (w : G.Walk u 
+v) {i : Nat} (hi : i < w.length) : G.Adj (w.getVert i) (w.getVert (i + 1))
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.Walk.length_darts`：length_darts {u v : V} (p : G.Walk u v) :
+ p.darts.length = p.length
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
+· 使用定理 `SimpleGraph.Walk.getVert_of_length_le`：getVert_of_length_le {u v} (w : G
+.Walk u v) {i : Nat} (hi : w.length <= i) : w.getVert i = v
+· 使用定理 `GetElem.getElem.congr_simp`：∀ {coll : Type u} {idx : Type v} {elem : Typ
+e w} {valid : coll → idx → Prop} [self : GetElem coll idx elem valid]   (xs xs_1
+ : coll) (e_xs :…
+· 使用定理 `SimpleGraph.Walk.darts_getElem_eq_getVert`：darts_getElem_eq_getVert {u v
+ : V} {p : G.Walk u v} (n : Nat) (h : n < p.darts.length) : p.darts[n] = ⟨⟨p.get
+Vert n, p.getVert (n + 1)⟩, p.a…
+· 使用定理 `SimpleGraph.Dart.mk.congr_simp`：∀ {V : Type u_1} {G : SimpleGraph V} (to
+Prod toProd_1 : V × V) (e_toProd : toProd = toProd_1)   (adj : G.Adj toProd.1 to
+Prod.2), { toProd :=…
+· 使用定理 `SimpleGraph.Walk.lastDart_toProd`：∀ {V : Type u} {G : SimpleGraph V} {v 
+w : V} (p : G.Walk v w) (hp : ¬p.Nil), (p.lastDart hp).toProd = (p.penultimate, 
+w)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lastDart_eq {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length) :
     p.lastDart h₁ = p.darts[p.darts.length - 1] := by
@@ -952,267 +806,296 @@ theorem lastDart_eq {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.lengt
 
 /-- Use `firstDart_eq_head_darts` to rewrite in the reverse direction. -/
 @[simp]
-/--
-theorem `head_darts_eq_firstDart` / 定理 `head_darts_eq_firstDart`
+/-
+**SimpleGraph.Walk.head_darts_eq_firstDart** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.Walk`。
+形式化陈述：head_darts_eq_firstDart {p : G.Walk v w} (hnil : p.darts != []) : p.darts.
+head hnil = p.firstDart (darts_eq_nil.not.mp hnil)
+参数：hnil : p.darts != []。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem head_darts_eq_firstDart
-  given: {p : G.Walk v w} (hnil : p.darts != [])
-  proof: by
-  grind [firstDart_eq]
-
-中文:
-定理 head_darts_eq_firstDart
-  条件: {p : G.途径 v w} (hnil : p.darts != [])
-  证明: by
-  grind [firstDart_eq]
-
-Depends on / 依赖: firstDart_eq
+--- 原说明 ---
+Use `firstDart_eq_head_darts` to rewrite in the reverse direction.
 -/
-theorem head_darts_eq_firstDart {p : G.Walk v w} (hnil : p.darts != []) :
+theorem head_darts_eq_firstDart {p : G.Walk v w} (hnil : p.darts ≠ []) :
     p.darts.head hnil = p.firstDart (darts_eq_nil.not.mp hnil) := by
   grind [firstDart_eq]
 
-/--
-theorem `firstDart_eq_head_darts` / 定理 `firstDart_eq_head_darts`
+/-- Use `head_darts_eq_firstDart` to rewrite in the reverse direction. -/
+/-
+**SimpleGraph.Walk.firstDart_eq_head_darts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.Walk`。
+形式化陈述：firstDart_eq_head_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.firstDart hni
+l = p.darts.head (darts_eq_nil.not.mpr hnil)
+参数：hnil : ¬p.Nil。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.darts_eq_nil`：darts_eq_nil {p : G.Walk v w} : p.darts =
+ [] ↔ p.Nil
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.Walk.head_darts_eq_firstDart`：head_darts_eq_firstDart {p : G
+.Walk v w} (hnil : p.darts != []) : p.darts.head hnil = p.firstDart (darts_eq_ni
+l.not.mp hnil)
 
-English:
-theorem firstDart_eq_head_darts
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  proof: .symm head_darts_eq_firstDart _
-
-@[simp]
-
-中文:
-定理 firstDart_eq_head_darts
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  证明: .symm head_darts_eq_firstDart _
-
-@[simp]
-
-Depends on / 依赖: head_darts_eq_firstDart
+--- 原说明 ---
+Use `head_darts_eq_firstDart` to rewrite in the reverse direction.
 -/
 theorem firstDart_eq_head_darts {p : G.Walk v w} (hnil : ¬p.Nil) :
     p.firstDart hnil = p.darts.head (darts_eq_nil.not.mpr hnil) :=
-.symm head_darts_eq_firstDart _
+  head_darts_eq_firstDart _ |>.symm
 
 @[simp]
-/--
-theorem `firstDart_mem_darts` / 定理 `firstDart_mem_darts`
-
-English:
-theorem firstDart_mem_darts
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  statement: p.firstDart hnil in p.darts
-  proof: p.firstDart_eq_head_darts _ ▸ List.head_mem _
-
-@[simp]
-
-中文:
-定理 firstDart_mem_darts
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  结论: p.firstDart hnil in p.darts
-  证明: p.firstDart_eq_head_darts _ ▸ List.head_mem _
-
-@[simp]
-
-Depends on / 依赖: List.head_mem, firstDart_eq_head_darts, head_mem, p.firstDart_eq_head_darts
+/-
+**SimpleGraph.Walk.firstDart_mem_darts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Wa
+lk`。
+形式化陈述：firstDart_mem_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.firstDart hnil in
+ p.darts
+参数：hnil : ¬p.Nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.darts_eq_nil`：darts_eq_nil {p : G.Walk v w} : p.darts =
+ [] ↔ p.Nil
+· 使用定理 `List.head_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head h ∈ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.firstDart_eq_head_darts`：firstDart_eq_head_darts {p : G
+.Walk v w} (hnil : ¬p.Nil) : p.firstDart hnil = p.darts.head (darts_eq_nil.not.m
+pr hnil)
 -/
-theorem firstDart_mem_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.firstDart hnil in p.darts :=
+theorem firstDart_mem_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.firstDart hnil ∈ p.darts :=
   p.firstDart_eq_head_darts _ ▸ List.head_mem _
 
 @[simp]
-/--
-theorem `getLast_darts_eq_lastDart` / 定理 `getLast_darts_eq_lastDart`
-
-English:
-theorem getLast_darts_eq_lastDart
-  given: {p : G.Walk v w} (hnil : p.darts != [])
-  proof: by
-  grind [lastDart_eq, not_nil_iff_lt_length]
-
-中文:
-定理 getLast_darts_eq_lastDart
-  条件: {p : G.途径 v w} (hnil : p.darts != [])
-  证明: by
-  grind [lastDart_eq, not_nil_iff_lt_length]
-
-Depends on / 依赖: lastDart_eq, not_nil_iff_lt_length
+/-
+**SimpleGraph.Walk.getLast_darts_eq_lastDart** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.Walk`。
+形式化陈述：getLast_darts_eq_lastDart {p : G.Walk v w} (hnil : p.darts != []) : p.dart
+s.getLast hnil = p.lastDart (darts_eq_nil.not.mp hnil)
+参数：hnil : p.darts != []。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem getLast_darts_eq_lastDart {p : G.Walk v w} (hnil : p.darts != []) :
+theorem getLast_darts_eq_lastDart {p : G.Walk v w} (hnil : p.darts ≠ []) :
     p.darts.getLast hnil = p.lastDart (darts_eq_nil.not.mp hnil) := by
   grind [lastDart_eq, not_nil_iff_lt_length]
-
-/--
-theorem `lastDart_eq_getLast_darts` / 定理 `lastDart_eq_getLast_darts`
-
-English:
-theorem lastDart_eq_getLast_darts
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  proof: by
-  grind [lastDart_eq, not_nil_iff_lt_length]
-
-@[simp]
-
-中文:
-定理 lastDart_eq_getLast_darts
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  证明: by
-  grind [lastDart_eq, not_nil_iff_lt_length]
-
-@[simp]
-
-Depends on / 依赖: lastDart_eq, not_nil_iff_lt_length
+/-
+**SimpleGraph.Walk.lastDart_eq_getLast_darts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.Walk`。
+形式化陈述：lastDart_eq_getLast_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.lastDart hn
+il = p.darts.getLast (darts_eq_nil.not.mpr hnil)
+参数：hnil : ¬p.Nil。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lastDart_eq_getLast_darts {p : G.Walk v w} (hnil : ¬p.Nil) :
     p.lastDart hnil = p.darts.getLast (darts_eq_nil.not.mpr hnil) := by
   grind [lastDart_eq, not_nil_iff_lt_length]
 
 @[simp]
-/--
-theorem `lastDart_mem_darts` / 定理 `lastDart_mem_darts`
-
-English:
-theorem lastDart_mem_darts
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  statement: p.lastDart hnil in p.darts
-  proof: p.lastDart_eq_getLast_darts _ ▸ List.getLast_mem _
-
-中文:
-定理 lastDart_mem_darts
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  结论: p.lastDart hnil in p.darts
-  证明: p.lastDart_eq_getLast_darts _ ▸ List.getLast_mem _
-
-Depends on / 依赖: List.getLast_mem, getLast_mem, lastDart_eq_getLast_darts, p.lastDart_eq_getLast_darts
+/-
+**SimpleGraph.Walk.lastDart_mem_darts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Wal
+k`。
+形式化陈述：lastDart_mem_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.lastDart hnil in p
+.darts
+参数：hnil : ¬p.Nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.darts_eq_nil`：darts_eq_nil {p : G.Walk v w} : p.darts =
+ [] ↔ p.Nil
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.lastDart_eq_getLast_darts`：lastDart_eq_getLast_darts {p
+ : G.Walk v w} (hnil : ¬p.Nil) : p.lastDart hnil = p.darts.getLast (darts_eq_nil
+.not.mpr hnil)
 -/
-theorem lastDart_mem_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.lastDart hnil in p.darts :=
+theorem lastDart_mem_darts {p : G.Walk v w} (hnil : ¬p.Nil) : p.lastDart hnil ∈ p.darts :=
   p.lastDart_eq_getLast_darts _ ▸ List.getLast_mem _
 
 /-- Use `mk_start_snd_eq_head_edges` to rewrite in the reverse direction. -/
 @[simp]
-/--
-theorem `head_edges_eq_mk_start_snd` / 定理 `head_edges_eq_mk_start_snd`
+/-
+**SimpleGraph.Walk.head_edges_eq_mk_start_snd** 是 Mathlib 中的一个定理，位于命名空间 `SimpleG
+raph.Walk`。
+形式化陈述：head_edges_eq_mk_start_snd {p : G.Walk v w} (hp) : p.edges.head hp = s(v, 
+p.snd)
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.darts_eq_nil`：darts_eq_nil {p : G.Walk v w} : p.darts =
+ [] ↔ p.Nil
+· 使用定理 `List.head_map`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l : List α} 
+(w : List.map f l ≠ []), (List.map f l).head w = f (l.head ⋯)
+· 使用定理 `SimpleGraph.Walk.head_darts_eq_firstDart`：head_darts_eq_firstDart {p : G
+.Walk v w} (hnil : p.darts != []) : p.darts.head hnil = p.firstDart (darts_eq_ni
+l.not.mp hnil)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem head_edges_eq_mk_start_snd
-  given: {p : G.Walk v w} (hp)
-  statement: p.edges.head hp = s(v, p.snd)
-  proof: by
-  simp [p.edge_firstDart, Walk.edges]
-
-中文:
-定理 head_edges_eq_mk_start_snd
-  条件: {p : G.途径 v w} (hp)
-  结论: p.edges.head hp = s(v, p.snd)
-  证明: by
-  simp [p.edge_firstDart, Walk.edges]
-
-Depends on / 依赖: Walk.edges, edge_firstDart, p.edge_firstDart
+--- 原说明 ---
+Use `mk_start_snd_eq_head_edges` to rewrite in the reverse direction.
 -/
 theorem head_edges_eq_mk_start_snd {p : G.Walk v w} (hp) : p.edges.head hp = s(v, p.snd) := by
   simp [p.edge_firstDart, Walk.edges]
 
-/--
-theorem `mk_start_snd_eq_head_edges` / 定理 `mk_start_snd_eq_head_edges`
+/-- Use `head_edges_eq_mk_start_snd` to rewrite in the reverse direction. -/
+/-
+**SimpleGraph.Walk.mk_start_snd_eq_head_edges** 是 Mathlib 中的一个定理，位于命名空间 `SimpleG
+raph.Walk`。
+形式化陈述：mk_start_snd_eq_head_edges {p : G.Walk v w} (hnil : ¬p.Nil) : s(v, p.snd) 
+= p.edges.head (edges_eq_nil.not.mpr hnil)
+参数：hnil : ¬p.Nil。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.edges_eq_nil`：edges_eq_nil {p : G.Walk v w} : p.edges =
+ [] ↔ p.Nil
+· 使用定理 `SimpleGraph.Walk.head_edges_eq_mk_start_snd`：head_edges_eq_mk_start_snd 
+{p : G.Walk v w} (hp) : p.edges.head hp = s(v, p.snd)
 
-English:
-theorem mk_start_snd_eq_head_edges
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  proof: .symm head_edges_eq_mk_start_snd _
-
-中文:
-定理 mk_start_snd_eq_head_edges
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  证明: .symm head_edges_eq_mk_start_snd _
-
-Depends on / 依赖: head_edges_eq_mk_start_snd
+--- 原说明 ---
+Use `head_edges_eq_mk_start_snd` to rewrite in the reverse direction.
 -/
 theorem mk_start_snd_eq_head_edges {p : G.Walk v w} (hnil : ¬p.Nil) :
     s(v, p.snd) = p.edges.head (edges_eq_nil.not.mpr hnil) :=
-.symm head_edges_eq_mk_start_snd _
-
-/--
-theorem `mk_start_snd_mem_edges` / 定理 `mk_start_snd_mem_edges`
-
-English:
-theorem mk_start_snd_mem_edges
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  statement: s(v, p.snd) in p.edges
-  proof: p.mk_start_snd_eq_head_edges hnil ▸ List.head_mem _
-
-中文:
-定理 mk_start_snd_mem_edges
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  结论: s(v, p.snd) in p.edges
-  证明: p.mk_start_snd_eq_head_edges hnil ▸ List.head_mem _
-
-Depends on / 依赖: List.head_mem, head_mem, mk_start_snd_eq_head_edges, p.mk_start_snd_eq_head_edges
+  head_edges_eq_mk_start_snd _ |>.symm
+/-
+**SimpleGraph.Walk.mk_start_snd_mem_edges** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.Walk`。
+形式化陈述：mk_start_snd_mem_edges {p : G.Walk v w} (hnil : ¬p.Nil) : s(v, p.snd) in p
+.edges
+参数：hnil : ¬p.Nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.edges_eq_nil`：edges_eq_nil {p : G.Walk v w} : p.edges =
+ [] ↔ p.Nil
+· 使用定理 `List.head_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head h ∈ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.mk_start_snd_eq_head_edges`：mk_start_snd_eq_head_edges 
+{p : G.Walk v w} (hnil : ¬p.Nil) : s(v, p.snd) = p.edges.head (edges_eq_nil.not.
+mpr hnil)
 -/
-theorem mk_start_snd_mem_edges {p : G.Walk v w} (hnil : ¬p.Nil) : s(v, p.snd) in p.edges :=
+theorem mk_start_snd_mem_edges {p : G.Walk v w} (hnil : ¬p.Nil) : s(v, p.snd) ∈ p.edges :=
   p.mk_start_snd_eq_head_edges hnil ▸ List.head_mem _
 
 /-- Use `mk_penultimate_end_eq_getLast_edges` to rewrite in the reverse direction. -/
 @[simp]
-/--
-theorem `getLast_edges_eq_mk_penultimate_end` / 定理 `getLast_edges_eq_mk_penultimate_end`
+/-
+**SimpleGraph.Walk.getLast_edges_eq_mk_penultimate_end** 是 Mathlib 中的一个定理，位于命名空间
+ `SimpleGraph.Walk`。
+形式化陈述：getLast_edges_eq_mk_penultimate_end {p : G.Walk v w} (hp) : p.edges.getLas
+t hp = s(p.penultimate, w)
+参数：hp。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.darts_eq_nil`：darts_eq_nil {p : G.Walk v w} : p.darts =
+ [] ↔ p.Nil
+· 使用定理 `List.getLast_map`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l : List 
+α} (h : List.map f l ≠ []),   (List.map f l).getLast h = f (l.getLast ⋯)
+· 使用定理 `SimpleGraph.Walk.getLast_darts_eq_lastDart`：getLast_darts_eq_lastDart {p
+ : G.Walk v w} (hnil : p.darts != []) : p.darts.getLast hnil = p.lastDart (darts
+_eq_nil.not.mp hnil)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem getLast_edges_eq_mk_penultimate_end
-  given: {p : G.Walk v w} (hp)
-  proof: by
-  simp [p.edge_lastDart, Walk.edges]
-
-中文:
-定理 getLast_edges_eq_mk_penultimate_end
-  条件: {p : G.途径 v w} (hp)
-  证明: by
-  simp [p.edge_lastDart, Walk.edges]
-
-Depends on / 依赖: Walk.edges, edge_lastDart, p.edge_lastDart
+--- 原说明 ---
+Use `mk_penultimate_end_eq_getLast_edges` to rewrite in the reverse direction.
 -/
 theorem getLast_edges_eq_mk_penultimate_end {p : G.Walk v w} (hp) :
     p.edges.getLast hp = s(p.penultimate, w) := by
   simp [p.edge_lastDart, Walk.edges]
 
-/--
-theorem `mk_penultimate_end_eq_getLast_edges` / 定理 `mk_penultimate_end_eq_getLast_edges`
+/-- Use `getLast_edges_eq_mk_penultimate_end` to rewrite in the reverse direction. -/
+/-
+**SimpleGraph.Walk.mk_penultimate_end_eq_getLast_edges** 是 Mathlib 中的一个定理，位于命名空间
+ `SimpleGraph.Walk`。
+形式化陈述：mk_penultimate_end_eq_getLast_edges {p : G.Walk v w} (hnil : ¬p.Nil) : s(p
+.penultimate, w) = p.edges.getLast (edges_eq_nil.not.mpr hnil)
+参数：hnil : ¬p.Nil。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.edges_eq_nil`：edges_eq_nil {p : G.Walk v w} : p.edges =
+ [] ↔ p.Nil
+· 使用定理 `SimpleGraph.Walk.getLast_edges_eq_mk_penultimate_end`：getLast_edges_eq_m
+k_penultimate_end {p : G.Walk v w} (hp) : p.edges.getLast hp = s(p.penultimate, 
+w)
 
-English:
-theorem mk_penultimate_end_eq_getLast_edges
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  proof: .symm getLast_edges_eq_mk_penultimate_end _
-
-中文:
-定理 mk_penultimate_end_eq_getLast_edges
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  证明: .symm getLast_edges_eq_mk_penultimate_end _
-
-Depends on / 依赖: getLast_edges_eq_mk_penultimate_end
+--- 原说明 ---
+Use `getLast_edges_eq_mk_penultimate_end` to rewrite in the reverse direction.
 -/
 theorem mk_penultimate_end_eq_getLast_edges {p : G.Walk v w} (hnil : ¬p.Nil) :
     s(p.penultimate, w) = p.edges.getLast (edges_eq_nil.not.mpr hnil) :=
-.symm getLast_edges_eq_mk_penultimate_end _
-
-/--
-theorem `mk_penultimate_end_mem_edges` / 定理 `mk_penultimate_end_mem_edges`
-
-English:
-theorem mk_penultimate_end_mem_edges
-  given: {p : G.Walk v w} (hnil : ¬p.Nil)
-  proof: p.mk_penultimate_end_eq_getLast_edges hnil ▸ List.getLast_mem _
-
-中文:
-定理 mk_penultimate_end_mem_edges
-  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
-  证明: p.mk_penultimate_end_eq_getLast_edges hnil ▸ List.getLast_mem _
-
-Depends on / 依赖: List.getLast_mem, getLast_mem, mk_penultimate_end_eq_getLast_edges, p.mk_penultimate_end_eq_getLast_edges
+  getLast_edges_eq_mk_penultimate_end _ |>.symm
+/-
+**SimpleGraph.Walk.mk_penultimate_end_mem_edges** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph.Walk`。
+形式化陈述：mk_penultimate_end_mem_edges {p : G.Walk v w} (hnil : ¬p.Nil) : s(p.penult
+imate, w) in p.edges
+参数：hnil : ¬p.Nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.Walk.edges_eq_nil`：edges_eq_nil {p : G.Walk v w} : p.edges =
+ [] ↔ p.Nil
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.Walk.mk_penultimate_end_eq_getLast_edges`：mk_penultimate_end
+_eq_getLast_edges {p : G.Walk v w} (hnil : ¬p.Nil) : s(p.penultimate, w) = p.edg
+es.getLast (edges_eq_nil.not.mpr hnil)
 -/
 theorem mk_penultimate_end_mem_edges {p : G.Walk v w} (hnil : ¬p.Nil) :
-    s(p.penultimate, w) in p.edges :=
+    s(p.penultimate, w) ∈ p.edges :=
   p.mk_penultimate_end_eq_getLast_edges hnil ▸ List.getLast_mem _
 
 end Walk
 
 end SimpleGraph
+

@@ -22,420 +22,379 @@ open scoped Topology
 
 section Module
 
-variable {E : Type*} [AddCommGroup E] [Module Real E] {f : E -> Real} {s : Set E} {a b : E} {f' : Real}
+variable {E : Type*} [AddCommGroup E] [Module ℝ E] {f : E → ℝ} {s : Set E} {a b : E} {f' : ℝ}
 
-/--
-theorem `IsExtrFilter.hasLineDerivAt_eq_zero` / 定理 `IsExtrFilter.hasLineDerivAt_eq_zero`
-
-English:
-theorem IsExtrFilter.hasLineDerivAt_eq_zero
-  statement: {l : Filter E} (h : IsExtrFilter f l a)
-  proof: IsLocalExtr.hasDerivAt_eq_zero (IsExtrFilter.comp_tendsto (by simpa using h) h') hd
-
-中文:
-定理 IsExtrFilter.hasLineDerivAt_eq_zero
-  结论: {l : 滤子 E} (h : IsExtrFilter f l a)
-  证明: IsLocalExtr.hasDerivAt_eq_zero (IsExtrFilter.comp_tendsto (by simpa using h) h') hd
-
-Depends on / 依赖: IsExtrFilter, IsExtrFilter.comp_tendsto, IsLocalExtr, IsLocalExtr.hasDerivAt_eq_zero, comp_tendsto, hasDerivAt_eq_zero
+/-
+**IsExtrFilter.hasLineDerivAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrFilter.hasLineDerivAt_eq_zero {l : Filter E} (h : IsExtrFilter f l a
+) (hd : HasLineDerivAt Real f f' a b) (h' : Tendsto (fun t : Real => a + t • b) 
+(𝓝 0) l) : f' = 0
+参数：h : IsExtrFilter f l a；hd : HasLineDerivAt Real f f' a b；h' : Tendsto (fun t 
+: Real => a + t • b) (𝓝 0) l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtr.hasDerivAt_eq_zero`：IsLocalExtr.hasDerivAt_eq_zero (h : IsLo
+calExtr f a) : HasDerivAt f f' a -> f' = 0
+· 使用定理 `IsExtrFilter.comp_tendsto`：IsExtrFilter.comp_tendsto {g : δ -> α} {l' : 
+Filter δ} {b : δ} (hf : IsExtrFilter f l (g b)) (hg : Tendsto g l' l) : IsExtrFi
+lter (f ∘ g) l'…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem IsExtrFilter.hasLineDerivAt_eq_zero {l : Filter E} (h : IsExtrFilter f l a)
-    (hd : HasLineDerivAt Real f f' a b) (h' : Tendsto (fun t : Real => a + t • b) (𝓝 0) l) : f' = 0 :=
+    (hd : HasLineDerivAt ℝ f f' a b) (h' : Tendsto (fun t : ℝ ↦ a + t • b) (𝓝 0) l) : f' = 0 :=
   IsLocalExtr.hasDerivAt_eq_zero (IsExtrFilter.comp_tendsto (by simpa using h) h') hd
-
-/--
-theorem `IsExtrFilter.lineDeriv_eq_zero` / 定理 `IsExtrFilter.lineDeriv_eq_zero`
-
-English:
-theorem IsExtrFilter.lineDeriv_eq_zero
-  statement: {l : Filter E} (h : IsExtrFilter f l a)
-  proof: by
-  classical
-  exact if hd : LineDifferentiableAt Real f a b then
-    h.hasLineDerivAt_eq_zero hd.hasLineDerivAt h'
-  else
-    lineDeriv_zero_of_not_lineDifferentiableAt hd
-
-中文:
-定理 IsExtrFilter.lineDeriv_eq_zero
-  结论: {l : 滤子 E} (h : IsExtrFilter f l a)
-  证明: by
-  classical
-  exact if hd : LineDifferentiableAt Real f a b then
-    h.hasLineDerivAt_eq_zero hd.hasLineDerivAt h'
-  else
-    lineDeriv_zero_of_not_lineDifferentiableAt hd
-
-Depends on / 依赖: LineDifferentiableAt, classical, h.hasLineDerivAt_eq_zero, hasLineDerivAt, hasLineDerivAt_eq_zero, hd.hasLineDerivAt, lineDeriv_zero_of_not_lineDifferentiableAt
+/-
+**IsExtrFilter.lineDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrFilter.lineDeriv_eq_zero {l : Filter E} (h : IsExtrFilter f l a) (h'
+ : Tendsto (fun t : Real => a + t • b) (𝓝 0) l) : lineDeriv Real f a b = 0
+参数：h : IsExtrFilter f l a；h' : Tendsto (fun t : Real => a + t • b) (𝓝 0) l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.hasLineDerivAt_eq_zero`：IsExtrFilter.hasLineDerivAt_eq_zero
+ {l : Filter E} (h : IsExtrFilter f l a) (hd : HasLineDerivAt Real f f' a b) (h'
+ : Tendsto (fun t : Real …
+· 使用定理 `LineDifferentiableAt.hasLineDerivAt`：LineDifferentiableAt.hasLineDerivAt
+ (h : LineDifferentiableAt 𝕜 f x v) : HasLineDerivAt 𝕜 f (lineDeriv 𝕜 f x v) x v
+· 使用定理 `lineDeriv_zero_of_not_lineDifferentiableAt`：lineDeriv_zero_of_not_lineDi
+fferentiableAt (h : ¬LineDifferentiableAt 𝕜 f x v) : lineDeriv 𝕜 f x v = 0
 -/
 theorem IsExtrFilter.lineDeriv_eq_zero {l : Filter E} (h : IsExtrFilter f l a)
-    (h' : Tendsto (fun t : Real => a + t • b) (𝓝 0) l) : lineDeriv Real f a b = 0 := by
+    (h' : Tendsto (fun t : ℝ ↦ a + t • b) (𝓝 0) l) : lineDeriv ℝ f a b = 0 := by
   classical
-  exact if hd : LineDifferentiableAt Real f a b then
+  exact if hd : LineDifferentiableAt ℝ f a b then
     h.hasLineDerivAt_eq_zero hd.hasLineDerivAt h'
   else
     lineDeriv_zero_of_not_lineDifferentiableAt hd
-
-/--
-theorem `IsExtrOn.hasLineDerivAt_eq_zero` / 定理 `IsExtrOn.hasLineDerivAt_eq_zero`
-
-English:
-theorem IsExtrOn.hasLineDerivAt_eq_zero
-  statement: (h : IsExtrOn f s a) (hd : HasLineDerivAt Real f f' a b)
-  proof: IsExtrFilter.hasLineDerivAt_eq_zero h hd tendsto_principal.2 h'
-
-中文:
-定理 IsExtrOn.hasLineDerivAt_eq_zero
-  结论: (h : IsExtrOn f s a) (hd : HasLineDerivAt 实数 f f' a b)
-  证明: IsExtrFilter.hasLineDerivAt_eq_zero h hd tendsto_principal.2 h'
-
-Depends on / 依赖: IsExtrFilter, IsExtrFilter.hasLineDerivAt_eq_zero, hasLineDerivAt_eq_zero, tendsto_principal
+/-
+**IsExtrOn.hasLineDerivAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrOn.hasLineDerivAt_eq_zero (h : IsExtrOn f s a) (hd : HasLineDerivAt 
+Real f f' a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0
+参数：h : IsExtrOn f s a；hd : HasLineDerivAt Real f f' a b；h' : forallᶠ t : Real in
+ 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.hasLineDerivAt_eq_zero`：IsExtrFilter.hasLineDerivAt_eq_zero
+ {l : Filter E} (h : IsExtrFilter f l a) (hd : HasLineDerivAt Real f f' a b) (h'
+ : Tendsto (fun t : Real …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.tendsto_principal`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l
+ : Filter α} {s : Set β},   Filter.Tendsto f l (Filter.principal s) ↔ ∀ᶠ (a : α)
+ in l, f a ∈ s
 -/
-theorem IsExtrOn.hasLineDerivAt_eq_zero (h : IsExtrOn f s a) (hd : HasLineDerivAt Real f f' a b)
-    (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0 :=
-IsExtrFilter.hasLineDerivAt_eq_zero h hd tendsto_principal.2 h'
-
-/--
-theorem `IsExtrOn.lineDeriv_eq_zero` / 定理 `IsExtrOn.lineDeriv_eq_zero`
-
-English:
-theorem IsExtrOn.lineDeriv_eq_zero
-  given: (h : IsExtrOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s)
-  proof: IsExtrFilter.lineDeriv_eq_zero h tendsto_principal.2 h'
-
-中文:
-定理 IsExtrOn.lineDeriv_eq_zero
-  条件: (h : IsExtrOn f s a) (h' : 对任意ᶠ t : 实数 in 𝓝 0, a + t • b in s)
-  证明: IsExtrFilter.lineDeriv_eq_zero h tendsto_principal.2 h'
-
-Depends on / 依赖: IsExtrFilter, IsExtrFilter.lineDeriv_eq_zero, lineDeriv_eq_zero, tendsto_principal
+theorem IsExtrOn.hasLineDerivAt_eq_zero (h : IsExtrOn f s a) (hd : HasLineDerivAt ℝ f f' a b)
+    (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : f' = 0 :=
+  IsExtrFilter.hasLineDerivAt_eq_zero h hd <| tendsto_principal.2 h'
+/-
+**IsExtrOn.lineDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrOn.lineDeriv_eq_zero (h : IsExtrOn f s a) (h' : forallᶠ t : Real in 
+𝓝 0, a + t • b in s) : lineDeriv Real f a b = 0
+参数：h : IsExtrOn f s a；h' : forallᶠ t : Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.lineDeriv_eq_zero`：IsExtrFilter.lineDeriv_eq_zero {l : Filt
+er E} (h : IsExtrFilter f l a) (h' : Tendsto (fun t : Real => a + t • b) (𝓝 0) l
+) : lineDeriv Real f…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.tendsto_principal`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l
+ : Filter α} {s : Set β},   Filter.Tendsto f l (Filter.principal s) ↔ ∀ᶠ (a : α)
+ in l, f a ∈ s
 -/
-theorem IsExtrOn.lineDeriv_eq_zero (h : IsExtrOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) :
-    lineDeriv Real f a b = 0 :=
-IsExtrFilter.lineDeriv_eq_zero h tendsto_principal.2 h'
-
-/--
-theorem `IsMinOn.hasLineDerivAt_eq_zero` / 定理 `IsMinOn.hasLineDerivAt_eq_zero`
-
-English:
-theorem IsMinOn.hasLineDerivAt_eq_zero
-  statement: (h : IsMinOn f s a) (hd : HasLineDerivAt Real f f' a b)
-  proof: h.isExtr.hasLineDerivAt_eq_zero hd h'
-
-中文:
-定理 IsMinOn.hasLineDerivAt_eq_zero
-  结论: (h : IsMinOn f s a) (hd : HasLineDerivAt 实数 f f' a b)
-  证明: h.isExtr.hasLineDerivAt_eq_zero hd h'
-
-Depends on / 依赖: h.isExtr.hasLineDerivAt_eq_zero, hasLineDerivAt_eq_zero, isExtr
+theorem IsExtrOn.lineDeriv_eq_zero (h : IsExtrOn f s a) (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) :
+    lineDeriv ℝ f a b = 0 :=
+  IsExtrFilter.lineDeriv_eq_zero h <| tendsto_principal.2 h'
+/-
+**IsMinOn.hasLineDerivAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMinOn.hasLineDerivAt_eq_zero (h : IsMinOn f s a) (hd : HasLineDerivAt Re
+al f f' a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0
+参数：h : IsMinOn f s a；hd : HasLineDerivAt Real f f' a b；h' : forallᶠ t : Real in 
+𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.hasLineDerivAt_eq_zero`：IsExtrOn.hasLineDerivAt_eq_zero (h : Is
+ExtrOn f s a) (hd : HasLineDerivAt Real f f' a b) (h' : forallᶠ t : Real in 𝓝 0,
+ a + t • b in s) : f'…
+· 使用定理 `IsMinOn.isExtr`：IsMinOn.isExtr (h : IsMinOn f s a) : IsExtrOn f s a
 -/
-theorem IsMinOn.hasLineDerivAt_eq_zero (h : IsMinOn f s a) (hd : HasLineDerivAt Real f f' a b)
-    (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0 :=
+theorem IsMinOn.hasLineDerivAt_eq_zero (h : IsMinOn f s a) (hd : HasLineDerivAt ℝ f f' a b)
+    (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : f' = 0 :=
   h.isExtr.hasLineDerivAt_eq_zero hd h'
-
-/--
-theorem `IsMinOn.lineDeriv_eq_zero` / 定理 `IsMinOn.lineDeriv_eq_zero`
-
-English:
-theorem IsMinOn.lineDeriv_eq_zero
-  given: (h : IsMinOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s)
-  proof: h.isExtr.lineDeriv_eq_zero h'
-
-中文:
-定理 IsMinOn.lineDeriv_eq_zero
-  条件: (h : IsMinOn f s a) (h' : 对任意ᶠ t : 实数 in 𝓝 0, a + t • b in s)
-  证明: h.isExtr.lineDeriv_eq_zero h'
-
-Depends on / 依赖: h.isExtr.lineDeriv_eq_zero, isExtr, lineDeriv_eq_zero
+/-
+**IsMinOn.lineDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMinOn.lineDeriv_eq_zero (h : IsMinOn f s a) (h' : forallᶠ t : Real in 𝓝 
+0, a + t • b in s) : lineDeriv Real f a b = 0
+参数：h : IsMinOn f s a；h' : forallᶠ t : Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.lineDeriv_eq_zero`：IsExtrOn.lineDeriv_eq_zero (h : IsExtrOn f s
+ a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : lineDeriv Real f a b = 0
+· 使用定理 `IsMinOn.isExtr`：IsMinOn.isExtr (h : IsMinOn f s a) : IsExtrOn f s a
 -/
-theorem IsMinOn.lineDeriv_eq_zero (h : IsMinOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) :
-    lineDeriv Real f a b = 0 :=
+theorem IsMinOn.lineDeriv_eq_zero (h : IsMinOn f s a) (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) :
+    lineDeriv ℝ f a b = 0 :=
   h.isExtr.lineDeriv_eq_zero h'
-
-/--
-theorem `IsMaxOn.hasLineDerivAt_eq_zero` / 定理 `IsMaxOn.hasLineDerivAt_eq_zero`
-
-English:
-theorem IsMaxOn.hasLineDerivAt_eq_zero
-  statement: (h : IsMaxOn f s a) (hd : HasLineDerivAt Real f f' a b)
-  proof: h.isExtr.hasLineDerivAt_eq_zero hd h'
-
-中文:
-定理 IsMaxOn.hasLineDerivAt_eq_zero
-  结论: (h : IsMaxOn f s a) (hd : HasLineDerivAt 实数 f f' a b)
-  证明: h.isExtr.hasLineDerivAt_eq_zero hd h'
-
-Depends on / 依赖: h.isExtr.hasLineDerivAt_eq_zero, hasLineDerivAt_eq_zero, isExtr
+/-
+**IsMaxOn.hasLineDerivAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxOn.hasLineDerivAt_eq_zero (h : IsMaxOn f s a) (hd : HasLineDerivAt Re
+al f f' a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0
+参数：h : IsMaxOn f s a；hd : HasLineDerivAt Real f f' a b；h' : forallᶠ t : Real in 
+𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.hasLineDerivAt_eq_zero`：IsExtrOn.hasLineDerivAt_eq_zero (h : Is
+ExtrOn f s a) (hd : HasLineDerivAt Real f f' a b) (h' : forallᶠ t : Real in 𝓝 0,
+ a + t • b in s) : f'…
+· 使用定理 `IsMaxOn.isExtr`：IsMaxOn.isExtr (h : IsMaxOn f s a) : IsExtrOn f s a
 -/
-theorem IsMaxOn.hasLineDerivAt_eq_zero (h : IsMaxOn f s a) (hd : HasLineDerivAt Real f f' a b)
-    (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0 :=
+theorem IsMaxOn.hasLineDerivAt_eq_zero (h : IsMaxOn f s a) (hd : HasLineDerivAt ℝ f f' a b)
+    (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : f' = 0 :=
   h.isExtr.hasLineDerivAt_eq_zero hd h'
-
-/--
-theorem `IsMaxOn.lineDeriv_eq_zero` / 定理 `IsMaxOn.lineDeriv_eq_zero`
-
-English:
-theorem IsMaxOn.lineDeriv_eq_zero
-  given: (h : IsMaxOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s)
-  proof: h.isExtr.lineDeriv_eq_zero h'
-
-中文:
-定理 IsMaxOn.lineDeriv_eq_zero
-  条件: (h : IsMaxOn f s a) (h' : 对任意ᶠ t : 实数 in 𝓝 0, a + t • b in s)
-  证明: h.isExtr.lineDeriv_eq_zero h'
-
-Depends on / 依赖: h.isExtr.lineDeriv_eq_zero, isExtr, lineDeriv_eq_zero
+/-
+**IsMaxOn.lineDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxOn.lineDeriv_eq_zero (h : IsMaxOn f s a) (h' : forallᶠ t : Real in 𝓝 
+0, a + t • b in s) : lineDeriv Real f a b = 0
+参数：h : IsMaxOn f s a；h' : forallᶠ t : Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.lineDeriv_eq_zero`：IsExtrOn.lineDeriv_eq_zero (h : IsExtrOn f s
+ a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : lineDeriv Real f a b = 0
+· 使用定理 `IsMaxOn.isExtr`：IsMaxOn.isExtr (h : IsMaxOn f s a) : IsExtrOn f s a
 -/
-theorem IsMaxOn.lineDeriv_eq_zero (h : IsMaxOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) :
-    lineDeriv Real f a b = 0 :=
+theorem IsMaxOn.lineDeriv_eq_zero (h : IsMaxOn f s a) (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) :
+    lineDeriv ℝ f a b = 0 :=
   h.isExtr.lineDeriv_eq_zero h'
-
-/--
-theorem `IsExtrOn.hasLineDerivWithinAt_eq_zero` / 定理 `IsExtrOn.hasLineDerivWithinAt_eq_zero`
-
-English:
-theorem IsExtrOn.hasLineDerivWithinAt_eq_zero
-  statement: (h : IsExtrOn f s a)
-  proof: h.hasLineDerivAt_eq_zero (hd.hasLineDerivAt' h') h'
-
-中文:
-定理 IsExtrOn.hasLineDerivWithinAt_eq_zero
-  结论: (h : IsExtrOn f s a)
-  证明: h.hasLineDerivAt_eq_zero (hd.hasLineDerivAt' h') h'
-
-Depends on / 依赖: h.hasLineDerivAt_eq_zero, hasLineDerivAt, hasLineDerivAt_eq_zero, hd.hasLineDerivAt
+/-
+**IsExtrOn.hasLineDerivWithinAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrOn.hasLineDerivWithinAt_eq_zero (h : IsExtrOn f s a) (hd : HasLineDe
+rivWithinAt Real f f' s a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f'
+ = 0
+参数：h : IsExtrOn f s a；hd : HasLineDerivWithinAt Real f f' s a b；h' : forallᶠ t :
+ Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.hasLineDerivAt_eq_zero`：IsExtrOn.hasLineDerivAt_eq_zero (h : Is
+ExtrOn f s a) (hd : HasLineDerivAt Real f f' a b) (h' : forallᶠ t : Real in 𝓝 0,
+ a + t • b in s) : f'…
+· 使用定理 `HasLineDerivWithinAt.hasLineDerivAt'`：HasLineDerivWithinAt.hasLineDerivA
+t' (h : HasLineDerivWithinAt 𝕜 f f' s x v) (hs : forallᶠ t : 𝕜 in 𝓝 0, x + t • v
+ in s) : HasLineDerivAt 𝕜 …
 -/
 theorem IsExtrOn.hasLineDerivWithinAt_eq_zero (h : IsExtrOn f s a)
-    (hd : HasLineDerivWithinAt Real f f' s a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0 :=
+    (hd : HasLineDerivWithinAt ℝ f f' s a b) (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : f' = 0 :=
   h.hasLineDerivAt_eq_zero (hd.hasLineDerivAt' h') h'
-
-/--
-theorem `IsExtrOn.lineDerivWithin_eq_zero` / 定理 `IsExtrOn.lineDerivWithin_eq_zero`
-
-English:
-theorem IsExtrOn.lineDerivWithin_eq_zero
-  statement: (h : IsExtrOn f s a)
-  proof: by
-  classical
-  exact if hd : LineDifferentiableWithinAt Real f s a b then
-    h.hasLineDerivWithinAt_eq_zero hd.hasLineDerivWithinAt h'
-  else
-    lineDerivWithin_zero_of_not_lineDifferentiableWithinAt hd
-
-中文:
-定理 IsExtrOn.lineDerivWithin_eq_zero
-  结论: (h : IsExtrOn f s a)
-  证明: by
-  classical
-  exact if hd : LineDifferentiableWithinAt Real f s a b then
-    h.hasLineDerivWithinAt_eq_zero hd.hasLineDerivWithinAt h'
-  else
-    lineDerivWithin_zero_of_not_lineDifferentiableWithinAt hd
-
-Depends on / 依赖: LineDifferentiableWithinAt, classical, h.hasLineDerivWithinAt_eq_zero, hasLineDerivWithinAt, hasLineDerivWithinAt_eq_zero, hd.hasLineDerivWithinAt, lineDerivWithin_zero_of_not_lineDifferentiableWithinAt
+/-
+**IsExtrOn.lineDerivWithin_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsExtrOn.lineDerivWithin_eq_zero (h : IsExtrOn f s a) (h' : forallᶠ t : Re
+al in 𝓝 0, a + t • b in s) : lineDerivWithin Real f s a b = 0
+参数：h : IsExtrOn f s a；h' : forallᶠ t : Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.hasLineDerivWithinAt_eq_zero`：IsExtrOn.hasLineDerivWithinAt_eq_
+zero (h : IsExtrOn f s a) (hd : HasLineDerivWithinAt Real f f' s a b) (h' : fora
+llᶠ t : Real in 𝓝 0, a + t …
+· 使用定理 `LineDifferentiableWithinAt.hasLineDerivWithinAt`：LineDifferentiableWithi
+nAt.hasLineDerivWithinAt (h : LineDifferentiableWithinAt 𝕜 f s x v) : HasLineDer
+ivWithinAt 𝕜 f (lineDerivWithin 𝕜 f s…
+· 使用定理 `lineDerivWithin_zero_of_not_lineDifferentiableWithinAt`：lineDerivWithin_
+zero_of_not_lineDifferentiableWithinAt (h : ¬LineDifferentiableWithinAt 𝕜 f s x 
+v) : lineDerivWithin 𝕜 f s x v = 0
 -/
 theorem IsExtrOn.lineDerivWithin_eq_zero (h : IsExtrOn f s a)
-    (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : lineDerivWithin Real f s a b = 0 := by
+    (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : lineDerivWithin ℝ f s a b = 0 := by
   classical
-  exact if hd : LineDifferentiableWithinAt Real f s a b then
+  exact if hd : LineDifferentiableWithinAt ℝ f s a b then
     h.hasLineDerivWithinAt_eq_zero hd.hasLineDerivWithinAt h'
   else
     lineDerivWithin_zero_of_not_lineDifferentiableWithinAt hd
-
-/--
-theorem `IsMinOn.hasLineDerivWithinAt_eq_zero` / 定理 `IsMinOn.hasLineDerivWithinAt_eq_zero`
-
-English:
-theorem IsMinOn.hasLineDerivWithinAt_eq_zero
-  statement: (h : IsMinOn f s a)
-  proof: h.isExtr.hasLineDerivWithinAt_eq_zero hd h'
-
-中文:
-定理 IsMinOn.hasLineDerivWithinAt_eq_zero
-  结论: (h : IsMinOn f s a)
-  证明: h.isExtr.hasLineDerivWithinAt_eq_zero hd h'
-
-Depends on / 依赖: h.isExtr.hasLineDerivWithinAt_eq_zero, hasLineDerivWithinAt_eq_zero, isExtr
+/-
+**IsMinOn.hasLineDerivWithinAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMinOn.hasLineDerivWithinAt_eq_zero (h : IsMinOn f s a) (hd : HasLineDeri
+vWithinAt Real f f' s a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' =
+ 0
+参数：h : IsMinOn f s a；hd : HasLineDerivWithinAt Real f f' s a b；h' : forallᶠ t : 
+Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.hasLineDerivWithinAt_eq_zero`：IsExtrOn.hasLineDerivWithinAt_eq_
+zero (h : IsExtrOn f s a) (hd : HasLineDerivWithinAt Real f f' s a b) (h' : fora
+llᶠ t : Real in 𝓝 0, a + t …
+· 使用定理 `IsMinOn.isExtr`：IsMinOn.isExtr (h : IsMinOn f s a) : IsExtrOn f s a
 -/
 theorem IsMinOn.hasLineDerivWithinAt_eq_zero (h : IsMinOn f s a)
-    (hd : HasLineDerivWithinAt Real f f' s a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0 :=
+    (hd : HasLineDerivWithinAt ℝ f f' s a b) (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : f' = 0 :=
   h.isExtr.hasLineDerivWithinAt_eq_zero hd h'
-
-/--
-theorem `IsMinOn.lineDerivWithin_eq_zero` / 定理 `IsMinOn.lineDerivWithin_eq_zero`
-
-English:
-theorem IsMinOn.lineDerivWithin_eq_zero
-  statement: (h : IsMinOn f s a)
-  proof: h.isExtr.lineDerivWithin_eq_zero h'
-
-中文:
-定理 IsMinOn.lineDerivWithin_eq_zero
-  结论: (h : IsMinOn f s a)
-  证明: h.isExtr.lineDerivWithin_eq_zero h'
-
-Depends on / 依赖: h.isExtr.lineDerivWithin_eq_zero, isExtr, lineDerivWithin_eq_zero
+/-
+**IsMinOn.lineDerivWithin_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMinOn.lineDerivWithin_eq_zero (h : IsMinOn f s a) (h' : forallᶠ t : Real
+ in 𝓝 0, a + t • b in s) : lineDerivWithin Real f s a b = 0
+参数：h : IsMinOn f s a；h' : forallᶠ t : Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.lineDerivWithin_eq_zero`：IsExtrOn.lineDerivWithin_eq_zero (h : 
+IsExtrOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : lineDerivWithin
+ Real f s a b = 0
+· 使用定理 `IsMinOn.isExtr`：IsMinOn.isExtr (h : IsMinOn f s a) : IsExtrOn f s a
 -/
 theorem IsMinOn.lineDerivWithin_eq_zero (h : IsMinOn f s a)
-    (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : lineDerivWithin Real f s a b = 0 :=
+    (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : lineDerivWithin ℝ f s a b = 0 :=
   h.isExtr.lineDerivWithin_eq_zero h'
-
-/--
-theorem `IsMaxOn.hasLineDerivWithinAt_eq_zero` / 定理 `IsMaxOn.hasLineDerivWithinAt_eq_zero`
-
-English:
-theorem IsMaxOn.hasLineDerivWithinAt_eq_zero
-  statement: (h : IsMaxOn f s a)
-  proof: h.isExtr.hasLineDerivWithinAt_eq_zero hd h'
-
-中文:
-定理 IsMaxOn.hasLineDerivWithinAt_eq_zero
-  结论: (h : IsMaxOn f s a)
-  证明: h.isExtr.hasLineDerivWithinAt_eq_zero hd h'
-
-Depends on / 依赖: h.isExtr.hasLineDerivWithinAt_eq_zero, hasLineDerivWithinAt_eq_zero, isExtr
+/-
+**IsMaxOn.hasLineDerivWithinAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxOn.hasLineDerivWithinAt_eq_zero (h : IsMaxOn f s a) (hd : HasLineDeri
+vWithinAt Real f f' s a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' =
+ 0
+参数：h : IsMaxOn f s a；hd : HasLineDerivWithinAt Real f f' s a b；h' : forallᶠ t : 
+Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.hasLineDerivWithinAt_eq_zero`：IsExtrOn.hasLineDerivWithinAt_eq_
+zero (h : IsExtrOn f s a) (hd : HasLineDerivWithinAt Real f f' s a b) (h' : fora
+llᶠ t : Real in 𝓝 0, a + t …
+· 使用定理 `IsMaxOn.isExtr`：IsMaxOn.isExtr (h : IsMaxOn f s a) : IsExtrOn f s a
 -/
 theorem IsMaxOn.hasLineDerivWithinAt_eq_zero (h : IsMaxOn f s a)
-    (hd : HasLineDerivWithinAt Real f f' s a b) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : f' = 0 :=
+    (hd : HasLineDerivWithinAt ℝ f f' s a b) (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : f' = 0 :=
   h.isExtr.hasLineDerivWithinAt_eq_zero hd h'
-
-/--
-theorem `IsMaxOn.lineDerivWithin_eq_zero` / 定理 `IsMaxOn.lineDerivWithin_eq_zero`
-
-English:
-theorem IsMaxOn.lineDerivWithin_eq_zero
-  statement: (h : IsMaxOn f s a)
-  proof: h.isExtr.lineDerivWithin_eq_zero h'
-
-中文:
-定理 IsMaxOn.lineDerivWithin_eq_zero
-  结论: (h : IsMaxOn f s a)
-  证明: h.isExtr.lineDerivWithin_eq_zero h'
-
-Depends on / 依赖: h.isExtr.lineDerivWithin_eq_zero, isExtr, lineDerivWithin_eq_zero
+/-
+**IsMaxOn.lineDerivWithin_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsMaxOn.lineDerivWithin_eq_zero (h : IsMaxOn f s a) (h' : forallᶠ t : Real
+ in 𝓝 0, a + t • b in s) : lineDerivWithin Real f s a b = 0
+参数：h : IsMaxOn f s a；h' : forallᶠ t : Real in 𝓝 0, a + t • b in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrOn.lineDerivWithin_eq_zero`：IsExtrOn.lineDerivWithin_eq_zero (h : 
+IsExtrOn f s a) (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : lineDerivWithin
+ Real f s a b = 0
+· 使用定理 `IsMaxOn.isExtr`：IsMaxOn.isExtr (h : IsMaxOn f s a) : IsExtrOn f s a
 -/
 theorem IsMaxOn.lineDerivWithin_eq_zero (h : IsMaxOn f s a)
-    (h' : forallᶠ t : Real in 𝓝 0, a + t • b in s) : lineDerivWithin Real f s a b = 0 :=
+    (h' : ∀ᶠ t : ℝ in 𝓝 0, a + t • b ∈ s) : lineDerivWithin ℝ f s a b = 0 :=
   h.isExtr.lineDerivWithin_eq_zero h'
 end Module
 
-variable {E : Type*} [AddCommGroup E] [Module Real E]
-  [TopologicalSpace E] [ContinuousAdd E] [ContinuousSMul Real E]
-  {f : E -> Real} {s : Set E} {a b : E} {f' : Real}
+variable {E : Type*} [AddCommGroup E] [Module ℝ E]
+  [TopologicalSpace E] [ContinuousAdd E] [ContinuousSMul ℝ E]
+  {f : E → ℝ} {s : Set E} {a b : E} {f' : ℝ}
 
-/--
-theorem `IsLocalExtr.hasLineDerivAt_eq_zero` / 定理 `IsLocalExtr.hasLineDerivAt_eq_zero`
-
-English:
-theorem IsLocalExtr.hasLineDerivAt_eq_zero
-  given: (h : IsLocalExtr f a) (hd : HasLineDerivAt Real f f' a b)
-  proof: IsExtrFilter.hasLineDerivAt_eq_zero h hd Continuous.tendsto' (by fun_prop) _ _ (by simp)
-
-中文:
-定理 IsLocalExtr.hasLineDerivAt_eq_zero
-  条件: (h : IsLocalExtr f a) (hd : HasLineDerivAt 实数 f f' a b)
-  证明: IsExtrFilter.hasLineDerivAt_eq_zero h hd Continuous.tendsto' (by fun_prop) _ _ (by simp)
-
-Depends on / 依赖: Continuous, Continuous.tendsto, IsExtrFilter, IsExtrFilter.hasLineDerivAt_eq_zero, fun_prop, hasLineDerivAt_eq_zero, tendsto
+/-
+**IsLocalExtr.hasLineDerivAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtr.hasLineDerivAt_eq_zero (h : IsLocalExtr f a) (hd : HasLineDeri
+vAt Real f f' a b) : f' = 0
+参数：h : IsLocalExtr f a；hd : HasLineDerivAt Real f f' a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsExtrFilter.hasLineDerivAt_eq_zero`：IsExtrFilter.hasLineDerivAt_eq_zero
+ {l : Filter E} (h : IsExtrFilter f l a) (hd : HasLineDerivAt Real f f' a b) (h'
+ : Tendsto (fun t : Real …
+· 使用定理 `Continuous.tendsto'`：Continuous.tendsto' (hf : Continuous f) (x : X) (y 
+: Y) (h : f x = y) : Tendsto f (𝓝 x) (𝓝 y)
+· 使用定理 `Continuous.const_add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst
+_1 : Add M] [SeparatelyContinuousAdd M] {X : Type u_2}   [inst_3 : TopologicalSp
+ace X] {f …
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
+· 使用定理 `Continuous.fun_smul`：∀ {M : Type u_1} {X : Type u_2} {Y : Type u_3} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X]   [inst_2 : TopologicalSpa
+ce Y] [in…
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem IsLocalExtr.hasLineDerivAt_eq_zero (h : IsLocalExtr f a) (hd : HasLineDerivAt Real f f' a b) :
+theorem IsLocalExtr.hasLineDerivAt_eq_zero (h : IsLocalExtr f a) (hd : HasLineDerivAt ℝ f f' a b) :
     f' = 0 :=
-IsExtrFilter.hasLineDerivAt_eq_zero h hd Continuous.tendsto' (by fun_prop) _ _ (by simp)
-
-/--
-theorem `IsLocalExtr.lineDeriv_eq_zero` / 定理 `IsLocalExtr.lineDeriv_eq_zero`
-
-English:
-theorem IsLocalExtr.lineDeriv_eq_zero
-  given: (h : IsLocalExtr f a)
-  statement: lineDeriv Real f a = 0
-  proof: funext fun b => IsExtrFilter.lineDeriv_eq_zero h Continuous.tendsto' (by fun_prop) _ _ (by simp)
-
-中文:
-定理 IsLocalExtr.lineDeriv_eq_zero
-  条件: (h : IsLocalExtr f a)
-  结论: lineDeriv 实数 f a = 0
-  证明: funext fun b => IsExtrFilter.lineDeriv_eq_zero h Continuous.tendsto' (by fun_prop) _ _ (by simp)
-
-Depends on / 依赖: Continuous, Continuous.tendsto, IsExtrFilter, IsExtrFilter.lineDeriv_eq_zero, fun_prop, lineDeriv_eq_zero, tendsto
+  IsExtrFilter.hasLineDerivAt_eq_zero h hd <| Continuous.tendsto' (by fun_prop) _ _ (by simp)
+/-
+**IsLocalExtr.lineDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalExtr.lineDeriv_eq_zero (h : IsLocalExtr f a) : lineDeriv Real f a =
+ 0
+参数：h : IsLocalExtr f a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsExtrFilter.lineDeriv_eq_zero`：IsExtrFilter.lineDeriv_eq_zero {l : Filt
+er E} (h : IsExtrFilter f l a) (h' : Tendsto (fun t : Real => a + t • b) (𝓝 0) l
+) : lineDeriv Real f…
+· 使用定理 `Continuous.tendsto'`：Continuous.tendsto' (hf : Continuous f) (x : X) (y 
+: Y) (h : f x = y) : Tendsto f (𝓝 x) (𝓝 y)
+· 使用定理 `Continuous.const_add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst
+_1 : Add M] [SeparatelyContinuousAdd M] {X : Type u_2}   [inst_3 : TopologicalSp
+ace X] {f …
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
+· 使用定理 `Continuous.fun_smul`：∀ {M : Type u_1} {X : Type u_2} {Y : Type u_3} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X]   [inst_2 : TopologicalSpa
+ce Y] [in…
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem IsLocalExtr.lineDeriv_eq_zero (h : IsLocalExtr f a) : lineDeriv Real f a = 0 :=
-funext fun b => IsExtrFilter.lineDeriv_eq_zero h Continuous.tendsto' (by fun_prop) _ _ (by simp)
-
-/--
-theorem `IsLocalMin.hasLineDerivAt_eq_zero` / 定理 `IsLocalMin.hasLineDerivAt_eq_zero`
-
-English:
-theorem IsLocalMin.hasLineDerivAt_eq_zero
-  given: (h : IsLocalMin f a) (hd : HasLineDerivAt Real f f' a b)
-  proof: IsLocalExtr.hasLineDerivAt_eq_zero (.inl h) hd
-
-中文:
-定理 IsLocalMin.hasLineDerivAt_eq_zero
-  条件: (h : IsLocalMin f a) (hd : HasLineDerivAt 实数 f f' a b)
-  证明: IsLocalExtr.hasLineDerivAt_eq_zero (.inl h) hd
-
-Depends on / 依赖: IsLocalExtr, IsLocalExtr.hasLineDerivAt_eq_zero, hasLineDerivAt_eq_zero
+theorem IsLocalExtr.lineDeriv_eq_zero (h : IsLocalExtr f a) : lineDeriv ℝ f a = 0 :=
+  funext fun b ↦ IsExtrFilter.lineDeriv_eq_zero h <| Continuous.tendsto' (by fun_prop) _ _ (by simp)
+/-
+**IsLocalMin.hasLineDerivAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMin.hasLineDerivAt_eq_zero (h : IsLocalMin f a) (hd : HasLineDerivA
+t Real f f' a b) : f' = 0
+参数：h : IsLocalMin f a；hd : HasLineDerivAt Real f f' a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtr.hasLineDerivAt_eq_zero`：IsLocalExtr.hasLineDerivAt_eq_zero (
+h : IsLocalExtr f a) (hd : HasLineDerivAt Real f f' a b) : f' = 0
 -/
-theorem IsLocalMin.hasLineDerivAt_eq_zero (h : IsLocalMin f a) (hd : HasLineDerivAt Real f f' a b) :
+theorem IsLocalMin.hasLineDerivAt_eq_zero (h : IsLocalMin f a) (hd : HasLineDerivAt ℝ f f' a b) :
     f' = 0 :=
   IsLocalExtr.hasLineDerivAt_eq_zero (.inl h) hd
-
-/--
-theorem `IsLocalMin.lineDeriv_eq_zero` / 定理 `IsLocalMin.lineDeriv_eq_zero`
-
-English:
-theorem IsLocalMin.lineDeriv_eq_zero
-  given: (h : IsLocalMin f a)
-  statement: lineDeriv Real f a = 0
-  proof: IsLocalExtr.lineDeriv_eq_zero (.inl h)
-
-中文:
-定理 IsLocalMin.lineDeriv_eq_zero
-  条件: (h : IsLocalMin f a)
-  结论: lineDeriv 实数 f a = 0
-  证明: IsLocalExtr.lineDeriv_eq_zero (.inl h)
-
-Depends on / 依赖: IsLocalExtr, IsLocalExtr.lineDeriv_eq_zero, lineDeriv_eq_zero
+/-
+**IsLocalMin.lineDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMin.lineDeriv_eq_zero (h : IsLocalMin f a) : lineDeriv Real f a = 0
+参数：h : IsLocalMin f a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtr.lineDeriv_eq_zero`：IsLocalExtr.lineDeriv_eq_zero (h : IsLoca
+lExtr f a) : lineDeriv Real f a = 0
 -/
-theorem IsLocalMin.lineDeriv_eq_zero (h : IsLocalMin f a) : lineDeriv Real f a = 0 :=
+theorem IsLocalMin.lineDeriv_eq_zero (h : IsLocalMin f a) : lineDeriv ℝ f a = 0 :=
   IsLocalExtr.lineDeriv_eq_zero (.inl h)
-
-/--
-theorem `IsLocalMax.hasLineDerivAt_eq_zero` / 定理 `IsLocalMax.hasLineDerivAt_eq_zero`
-
-English:
-theorem IsLocalMax.hasLineDerivAt_eq_zero
-  given: (h : IsLocalMax f a) (hd : HasLineDerivAt Real f f' a b)
-  proof: IsLocalExtr.hasLineDerivAt_eq_zero (.inr h) hd
-
-中文:
-定理 IsLocalMax.hasLineDerivAt_eq_zero
-  条件: (h : IsLocalMax f a) (hd : HasLineDerivAt 实数 f f' a b)
-  证明: IsLocalExtr.hasLineDerivAt_eq_zero (.inr h) hd
-
-Depends on / 依赖: IsLocalExtr, IsLocalExtr.hasLineDerivAt_eq_zero, hasLineDerivAt_eq_zero
+/-
+**IsLocalMax.hasLineDerivAt_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMax.hasLineDerivAt_eq_zero (h : IsLocalMax f a) (hd : HasLineDerivA
+t Real f f' a b) : f' = 0
+参数：h : IsLocalMax f a；hd : HasLineDerivAt Real f f' a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtr.hasLineDerivAt_eq_zero`：IsLocalExtr.hasLineDerivAt_eq_zero (
+h : IsLocalExtr f a) (hd : HasLineDerivAt Real f f' a b) : f' = 0
 -/
-theorem IsLocalMax.hasLineDerivAt_eq_zero (h : IsLocalMax f a) (hd : HasLineDerivAt Real f f' a b) :
+theorem IsLocalMax.hasLineDerivAt_eq_zero (h : IsLocalMax f a) (hd : HasLineDerivAt ℝ f f' a b) :
     f' = 0 :=
   IsLocalExtr.hasLineDerivAt_eq_zero (.inr h) hd
-
-/--
-theorem `IsLocalMax.lineDeriv_eq_zero` / 定理 `IsLocalMax.lineDeriv_eq_zero`
-
-English:
-theorem IsLocalMax.lineDeriv_eq_zero
-  given: (h : IsLocalMax f a)
-  statement: lineDeriv Real f a = 0
-  proof: IsLocalExtr.lineDeriv_eq_zero (.inr h)
-
-中文:
-定理 IsLocalMax.lineDeriv_eq_zero
-  条件: (h : IsLocalMax f a)
-  结论: lineDeriv 实数 f a = 0
-  证明: IsLocalExtr.lineDeriv_eq_zero (.inr h)
-
-Depends on / 依赖: IsLocalExtr, IsLocalExtr.lineDeriv_eq_zero, lineDeriv_eq_zero
+/-
+**IsLocalMax.lineDeriv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMax.lineDeriv_eq_zero (h : IsLocalMax f a) : lineDeriv Real f a = 0
+参数：h : IsLocalMax f a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalExtr.lineDeriv_eq_zero`：IsLocalExtr.lineDeriv_eq_zero (h : IsLoca
+lExtr f a) : lineDeriv Real f a = 0
 -/
-theorem IsLocalMax.lineDeriv_eq_zero (h : IsLocalMax f a) : lineDeriv Real f a = 0 :=
+theorem IsLocalMax.lineDeriv_eq_zero (h : IsLocalMax f a) : lineDeriv ℝ f a = 0 :=
   IsLocalExtr.lineDeriv_eq_zero (.inr h)

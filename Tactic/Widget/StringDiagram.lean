@@ -78,207 +78,169 @@ initialize registerTraceClass `string_diagram
 
 /-! ## Objects in string diagrams -/
 
-/--
-Definition of `AtomNode` / `AtomNode` 的定义
+/-- Nodes for 2-morphisms in a string diagram. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.AtomNode** 是 Mathlib 中的一个归纳类型，位于命名空间 `Math
+lib.Tactic.Widget.StringDiagram`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AtomNode
-  parameters: : Type where
-  axioms and operations (4):
-    - vPos : Nat
-    - hPosSrc : Nat
-    - hPosTar : Nat
-    - atom : Atom
-
-中文:
-结构 AtomNode
-  参数: : 类型 where
-  公理与运算 (4 个):
-    - vPos : 自然数
-    - hPosSrc : 自然数
-    - hPosTar : 自然数
-    - atom : 原子
+--- 原说明 ---
+Nodes for 2-morphisms in a string diagram.
 -/
 structure AtomNode : Type where
   /-- The vertical position of the node in the string diagram. -/
-  vPos : Nat
+  vPos : ℕ
   /-- The horizontal position of the node in the string diagram, counting strings in domains. -/
-  hPosSrc : Nat
+  hPosSrc : ℕ
   /-- The horizontal position of the node in the string diagram, counting strings in codomains. -/
-  hPosTar : Nat
+  hPosTar : ℕ
   /-- The underlying expression of the node. -/
   atom : Atom
 
-/--
-Definition of `IdNode` / `IdNode` 的定义
+/-- Nodes for identity 2-morphisms in a string diagram. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.IdNode** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathli
+b.Tactic.Widget.StringDiagram`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IdNode
-  parameters: : Type where
-  axioms and operations (4):
-    - vPos : Nat
-    - hPosSrc : Nat
-    - hPosTar : Nat
-    - id : Atom₁
-
-中文:
-结构 IdNode
-  参数: : 类型 where
-  公理与运算 (4 个):
-    - vPos : 自然数
-    - hPosSrc : 自然数
-    - hPosTar : 自然数
-    - id : Atom₁
+--- 原说明 ---
+Nodes for identity 2-morphisms in a string diagram.
 -/
 structure IdNode : Type where
   /-- The vertical position of the node in the string diagram. -/
-  vPos : Nat
+  vPos : ℕ
   /-- The horizontal position of the node in the string diagram, counting strings in domains. -/
-  hPosSrc : Nat
+  hPosSrc : ℕ
   /-- The horizontal position of the node in the string diagram, counting strings in codomains. -/
-  hPosTar : Nat
+  hPosTar : ℕ
   /-- The underlying expression of the node. -/
   id : Atom₁
 
-/--
-Inductive type `Node` / 归纳类型 `Node`
+/-- Nodes in a string diagram. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.
+Tactic.Widget.StringDiagram`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Node
-  parameters: : Type
-  constructors (2):
-    - atom: AtomNode -> Node
-    - id: IdNode -> Node
-
-中文:
-归纳类型 Node
-  参数: : 类型
-  构造子 (2 个):
-    - atom: AtomNode -> Node
-    - id: IdNode -> Node
+--- 原说明 ---
+Nodes in a string diagram.
 -/
 inductive Node : Type
-  | atom : AtomNode -> Node
-  | id : IdNode -> Node
+  | atom : AtomNode → Node
+  | id : IdNode → Node
 
-/--
-Definition of `Node.e` / `Node.e` 的定义
+/-- The underlying expression of a node. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node.e** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Widget.StringDiagram.Node`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Node → Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Node.e
-  signature: : Node -> Expr
-
-中文:
-定义 Node.e
-  签名: : Node -> Expr
+--- 原说明 ---
+The underlying expression of a node.
 -/
-def Node.e : Node -> Expr
+def Node.e : Node → Expr
   | Node.atom n => n.atom.e
   | Node.id n => n.id.e
 
-/--
-Definition of `Node.srcList` / `Node.srcList` 的定义
+/-- The domain of the 2-morphism associated with a node as a list
+(the first component is the node itself). -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node.srcList** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Widget.StringDiagram.Node`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Node →   List (Mathlib.Tactic.Widget.S
+tringDiagram.Node × Mathlib.Tactic.BicategoryLike.Atom₁)
+参数：Mathlib.Tactic.Widget.StringDiagram.Node × Mathlib.Tactic.BicategoryLike.Atom
+₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Node.srcList
-  signature: : Node -> List (Node × Atom₁)
-
-中文:
-定义 Node.srcList
-  签名: : Node -> 列表 (Node × Atom₁)
+--- 原说明 ---
+The domain of the 2-morphism associated with a node as a list
+(the first component is the node itself).
 -/
-def Node.srcList : Node -> List (Node × Atom₁)
-  | Node.atom n => n.atom.src.toList.map (fun f => (.atom n, f))
+def Node.srcList : Node → List (Node × Atom₁)
+  | Node.atom n => n.atom.src.toList.map (fun f ↦ (.atom n, f))
   | Node.id n => [(.id n, n.id)]
 
-/--
-Definition of `Node.tarList` / `Node.tarList` 的定义
+/-- The codomain of the 2-morphism associated with a node as a list
+(the first component is the node itself). -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node.tarList** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Widget.StringDiagram.Node`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Node →   List (Mathlib.Tactic.Widget.S
+tringDiagram.Node × Mathlib.Tactic.BicategoryLike.Atom₁)
+参数：Mathlib.Tactic.Widget.StringDiagram.Node × Mathlib.Tactic.BicategoryLike.Atom
+₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Node.tarList
-  signature: : Node -> List (Node × Atom₁)
-
-中文:
-定义 Node.tarList
-  签名: : Node -> 列表 (Node × Atom₁)
+--- 原说明 ---
+The codomain of the 2-morphism associated with a node as a list
+(the first component is the node itself).
 -/
-def Node.tarList : Node -> List (Node × Atom₁)
-  | Node.atom n => n.atom.tgt.toList.map (fun f => (.atom n, f))
+def Node.tarList : Node → List (Node × Atom₁)
+  | Node.atom n => n.atom.tgt.toList.map (fun f ↦ (.atom n, f))
   | Node.id n => [(.id n, n.id)]
 
-/--
-Definition of `Node.vPos` / `Node.vPos` 的定义
+/-- The vertical position of a node in a string diagram. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node.vPos** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.Widget.StringDiagram.Node`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Node → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Node.vPos
-  signature: : Node -> Nat
-
-中文:
-定义 Node.vPos
-  签名: : Node -> 自然数
+--- 原说明 ---
+The vertical position of a node in a string diagram.
 -/
-def Node.vPos : Node -> Nat
+def Node.vPos : Node → ℕ
   | Node.atom n => n.vPos
   | Node.id n => n.vPos
 
-/--
-Definition of `Node.hPosSrc` / `Node.hPosSrc` 的定义
+/-- The horizontal position of a node in a string diagram, counting strings in domains. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node.hPosSrc** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Widget.StringDiagram.Node`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Node → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Node.hPosSrc
-  signature: : Node -> Nat
-
-中文:
-定义 Node.hPosSrc
-  签名: : Node -> 自然数
+--- 原说明 ---
+The horizontal position of a node in a string diagram, counting strings in domai
+ns.
 -/
-def Node.hPosSrc : Node -> Nat
+def Node.hPosSrc : Node → ℕ
   | Node.atom n => n.hPosSrc
   | Node.id n => n.hPosSrc
 
-/--
-Definition of `Node.hPosTar` / `Node.hPosTar` 的定义
+/-- The horizontal position of a node in a string diagram, counting strings in codomains. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node.hPosTar** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Widget.StringDiagram.Node`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Node → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Node.hPosTar
-  signature: : Node -> Nat
-
-中文:
-定义 Node.hPosTar
-  签名: : Node -> 自然数
-
-Depends on / 依赖: NoetherianSpace, PrespectralSpace
+--- 原说明 ---
+The horizontal position of a node in a string diagram, counting strings in codom
+ains.
 -/
-def Node.hPosTar : Node -> Nat
+def Node.hPosTar : Node → ℕ
   | Node.atom n => n.hPosTar
   | Node.id n => n.hPosTar
 
-/--
-Definition of `Strand` / `Strand` 的定义
+/-- Strings in a string diagram. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Strand** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathli
+b.Tactic.Widget.StringDiagram`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Strand
-  parameters: : Type where
-  axioms and operations (4):
-    - hPos : Nat
-    - startPoint : Node
-    - endPoint : Node
-    - atom₁ : Atom₁
-
-中文:
-结构 Strand
-  参数: : 类型 where
-  公理与运算 (4 个):
-    - hPos : 自然数
-    - startPoint : Node
-    - endPoint : Node
-    - atom₁ : Atom₁
-
-Depends on / 依赖: LocallyCompactSpace, PrespectralSpace
+--- 原说明 ---
+Strings in a string diagram.
 -/
 structure Strand : Type where
   /-- The horizontal position of the strand in the string diagram. -/
-  hPos : Nat
+  hPos : ℕ
   /-- The start point of the strand in the string diagram. -/
   startPoint : Node
   /-- The end point of the strand in the string diagram. -/
@@ -286,22 +248,17 @@ structure Strand : Type where
   /-- The underlying expression of the strand. -/
   atom₁ : Atom₁
 
-/--
-Definition of `Strand.vPos` / `Strand.vPos` 的定义
+/-- The vertical position of a strand in a string diagram. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Strand.vPos** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.Widget.StringDiagram.Strand`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Strand → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Strand.vPos
-  signature: (s : Strand)
-  body: s.startPoint.vPos
-
-中文:
-定义 Strand.vPos
-  签名: (s : Strand)
-  定义体: s.startPoint.vPos
-
-Depends on / 依赖: PrespectralSpace, T2Space, TotallySeparatedSpace, s.startPoint.vPos, startPoint
+--- 原说明 ---
+The vertical position of a strand in a string diagram.
 -/
-def Strand.vPos (s : Strand) : Nat :=
+def Strand.vPos (s : Strand) : ℕ :=
   s.startPoint.vPos
 
 end Widget.StringDiagram
@@ -310,84 +267,64 @@ namespace BicategoryLike
 
 open Widget.StringDiagram
 
-/--
-Definition of `WhiskerRight.nodes` / `WhiskerRight.nodes` 的定义
+/-- The list of nodes associated with a 2-morphism. The position is counted from the
+specified natural numbers. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerRight.nodes** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.BicategoryLike.WhiskerRight`。
+形式化陈述：ℕ → ℕ → ℕ → Mathlib.Tactic.BicategoryLike.WhiskerRight → List Mathlib.Tact
+ic.Widget.StringDiagram.Node
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerRight.nodes
-  signature: (v h₁ h₂ : Nat)
-  body: η.nodes v h₁ h₂
-    let k₁ := (ηs.map (fun n => n.srcList)).flatten.length
-    let k₂ := (ηs.map (fun n => n.tarList)).flatten.length
-    let s : Node := .id ⟨v, h₁ + k₁, h₂ + k₂, f⟩
-    ηs ++ [s]
-
-中文:
-定义 WhiskerRight.nodes
-  签名: (v h₁ h₂ : 自然数)
-  定义体: η.nodes v h₁ h₂
-    let k₁ := (ηs.map (fun n => n.srcList)).flatten.length
-    let k₂ := (ηs.map (fun n => n.tarList)).flatten.length
-    let s : Node := .id ⟨v, h₁ + k₁, h₂ + k₂, f⟩
-    ηs ++ [s]
+--- 原说明 ---
+The list of nodes associated with a 2-morphism. The position is counted from the
+specified natural numbers.
 -/
-def WhiskerRight.nodes (v h₁ h₂ : Nat) : WhiskerRight -> List Node
+def WhiskerRight.nodes (v h₁ h₂ : ℕ) : WhiskerRight → List Node
   | WhiskerRight.of η => [.atom ⟨v, h₁, h₂, η⟩]
   | WhiskerRight.whisker _ η f =>
     let ηs := η.nodes v h₁ h₂
-    let k₁ := (ηs.map (fun n => n.srcList)).flatten.length
-    let k₂ := (ηs.map (fun n => n.tarList)).flatten.length
+    let k₁ := (ηs.map (fun n ↦ n.srcList)).flatten.length
+    let k₂ := (ηs.map (fun n ↦ n.tarList)).flatten.length
     let s : Node := .id ⟨v, h₁ + k₁, h₂ + k₂, f⟩
     ηs ++ [s]
 
-/--
-Definition of `HorizontalComp.nodes` / `HorizontalComp.nodes` 的定义
+/-- The list of nodes associated with a 2-morphism. The position is counted from the
+specified natural numbers. -/
+/-
+**Mathlib.Tactic.BicategoryLike.HorizontalComp.nodes** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.BicategoryLike.HorizontalComp`。
+形式化陈述：ℕ → ℕ → ℕ → Mathlib.Tactic.BicategoryLike.HorizontalComp → List Mathlib.Ta
+ctic.Widget.StringDiagram.Node
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HorizontalComp.nodes
-  signature: (v h₁ h₂ : Nat)
-  body: η.nodes v h₁ h₂
-    let k₁ := (s₁.map (fun n => n.srcList)).flatten.length
-    let k₂ := (s₁.map (fun n => n.tarList)).flatten.length
-    let s₂ := ηs.nodes v (h₁ + k₁) (h₂ + k₂)
-    s₁ ++ s₂
-
-中文:
-定义 HorizontalComp.nodes
-  签名: (v h₁ h₂ : 自然数)
-  定义体: η.nodes v h₁ h₂
-    let k₁ := (s₁.map (fun n => n.srcList)).flatten.length
-    let k₂ := (s₁.map (fun n => n.tarList)).flatten.length
-    let s₂ := ηs.nodes v (h₁ + k₁) (h₂ + k₂)
-    s₁ ++ s₂
+--- 原说明 ---
+The list of nodes associated with a 2-morphism. The position is counted from the
+specified natural numbers.
 -/
-def HorizontalComp.nodes (v h₁ h₂ : Nat) : HorizontalComp -> List Node
+def HorizontalComp.nodes (v h₁ h₂ : ℕ) : HorizontalComp → List Node
   | HorizontalComp.of η => η.nodes v h₁ h₂
   | HorizontalComp.cons _ η ηs =>
     let s₁ := η.nodes v h₁ h₂
-    let k₁ := (s₁.map (fun n => n.srcList)).flatten.length
-    let k₂ := (s₁.map (fun n => n.tarList)).flatten.length
+    let k₁ := (s₁.map (fun n ↦ n.srcList)).flatten.length
+    let k₂ := (s₁.map (fun n ↦ n.tarList)).flatten.length
     let s₂ := ηs.nodes v (h₁ + k₁) (h₂ + k₂)
     s₁ ++ s₂
 
-/--
-Definition of `WhiskerLeft.nodes` / `WhiskerLeft.nodes` 的定义
+/-- The list of nodes associated with a 2-morphism. The position is counted from the
+specified natural numbers. -/
+/-
+**Mathlib.Tactic.BicategoryLike.WhiskerLeft.nodes** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.BicategoryLike.WhiskerLeft`。
+形式化陈述：ℕ → ℕ → ℕ → Mathlib.Tactic.BicategoryLike.WhiskerLeft → List Mathlib.Tacti
+c.Widget.StringDiagram.Node
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WhiskerLeft.nodes
-  signature: (v h₁ h₂ : Nat)
-  body: .id ⟨v, h₁, h₂, f⟩
-    let ss := η.nodes v (h₁ + 1) (h₂ + 1)
-    s :: ss
-
-中文:
-定义 WhiskerLeft.nodes
-  签名: (v h₁ h₂ : 自然数)
-  定义体: .id ⟨v, h₁, h₂, f⟩
-    let ss := η.nodes v (h₁ + 1) (h₂ + 1)
-    s :: ss
+--- 原说明 ---
+The list of nodes associated with a 2-morphism. The position is counted from the
+specified natural numbers.
 -/
-def WhiskerLeft.nodes (v h₁ h₂ : Nat) : WhiskerLeft -> List Node
+def WhiskerLeft.nodes (v h₁ h₂ : ℕ) : WhiskerLeft → List Node
   | WhiskerLeft.of η => η.nodes v h₁ h₂
   | WhiskerLeft.whisker _ f η =>
     let s : Node := .id ⟨v, h₁, h₂, f⟩
@@ -396,70 +333,60 @@ def WhiskerLeft.nodes (v h₁ h₂ : Nat) : WhiskerLeft -> List Node
 
 variable {ρ : Type} [MonadMor₁ (CoherenceM ρ)]
 
-/--
-Definition of `topNodes` / `topNodes` 的定义
+/-- The list of nodes at the top of a string diagram. -/
+/-
+**Mathlib.Tactic.BicategoryLike.topNodes** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.BicategoryLike`。
+形式化陈述：topNodes (η : WhiskerLeft) : CoherenceM ρ (List Node)
+参数：η : WhiskerLeft。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topNodes
-  signature: (η : WhiskerLeft)
-  body: do
-  return (← η.srcM).toList.mapIdx fun i f => .id ⟨0, i, i, f⟩
-
-中文:
-定义 topNodes
-  签名: (η : WhiskerLeft)
-  定义体: do
-  return (← η.srcM).toList.mapIdx fun i f => .id ⟨0, i, i, f⟩
+--- 原说明 ---
+The list of nodes at the top of a string diagram.
 -/
 def topNodes (η : WhiskerLeft) : CoherenceM ρ (List Node) := do
   return (← η.srcM).toList.mapIdx fun i f => .id ⟨0, i, i, f⟩
 
-/--
-Definition of `NormalExpr.nodesAux` / `NormalExpr.nodesAux` 的定义
+/-- The list of nodes at the top of a string diagram. The position is counted from the
+specified natural number. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.nodesAux** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.Bi
+categoryLike.CoherenceM ρ)] →     ℕ →       Mathlib.Tactic.BicategoryLike.Normal
+Expr →         Mathlib.Tactic.BicategoryLike.CoherenceM ρ (List (List Mathlib.Ta
+ctic.Widget.StringDiagram.Node))
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；List (List Mathlib.Tactic.Widget.S
+tringDiagram.Node)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalExpr.nodesAux
-  signature: (v : Nat)
-  body: η.nodes v 0 0
-    let s₂ ← ηs.nodesAux (v + 1)
-    return s₁ :: s₂
-
-中文:
-定义 NormalExpr.nodesAux
-  签名: (v : 自然数)
-  定义体: η.nodes v 0 0
-    let s₂ ← ηs.nodesAux (v + 1)
-    return s₁ :: s₂
+--- 原说明 ---
+The list of nodes at the top of a string diagram. The position is counted from t
+he
+specified natural number.
 -/
-def NormalExpr.nodesAux (v : Nat) : NormalExpr -> CoherenceM ρ (List (List Node))
+def NormalExpr.nodesAux (v : ℕ) : NormalExpr → CoherenceM ρ (List (List Node))
   | NormalExpr.nil _ α => return [(← α.srcM).toList.mapIdx fun i f => .id ⟨v, i, i, f⟩]
   | NormalExpr.cons _ _ η ηs => do
     let s₁ := η.nodes v 0 0
     let s₂ ← ηs.nodesAux (v + 1)
     return s₁ :: s₂
 
-/--
-Definition of `NormalExpr.nodes` / `NormalExpr.nodes` 的定义
+/-- The list of nodes associated with a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.nodes** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.Bi
+categoryLike.CoherenceM ρ)] →     Mathlib.Tactic.BicategoryLike.NormalExpr →    
+   Mathlib.Tactic.BicategoryLike.CoherenceM ρ (List (List Mathlib.Tactic.Widget.
+StringDiagram.Node))
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；List (List Mathlib.Tactic.Widget.S
+tringDiagram.Node)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalExpr.nodes
-  signature: (e : NormalExpr)
-  body: match e with
-  | NormalExpr.nil _ _ => return []
-  | NormalExpr.cons _ _ η _ => return (← topNodes η) :: (← e.nodesAux 1)
-
-@[deprecated (since := "2026-02-26")] meta alias pairs := List.consecutivePairs
-
-中文:
-定义 NormalExpr.nodes
-  签名: (e : NormalExpr)
-  定义体: match e with
-  | NormalExpr.nil _ _ => return []
-  | NormalExpr.cons _ _ η _ => return (← topNodes η) :: (← e.nodesAux 1)
-
-@[deprecated (since := "2026-02-26")] meta alias pairs := List.consecutivePairs
-
-Depends on / 依赖: NormalExpr, NormalExpr.cons, NormalExpr.nil, e.nodesAux, nodesAux, return, topNodes
+--- 原说明 ---
+The list of nodes associated with a 2-morphism.
 -/
 def NormalExpr.nodes (e : NormalExpr) : CoherenceM ρ (List (List Node)) :=
   match e with
@@ -468,44 +395,28 @@ def NormalExpr.nodes (e : NormalExpr) : CoherenceM ρ (List (List Node)) :=
 
 @[deprecated (since := "2026-02-26")] meta alias pairs := List.consecutivePairs
 
-/--
-Definition of `NormalExpr.strands` / `NormalExpr.strands` 的定义
+/-- The list of strands associated with a 2-morphism. -/
+/-
+**Mathlib.Tactic.BicategoryLike.NormalExpr.strands** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.BicategoryLike.NormalExpr`。
+形式化陈述：{ρ : Type} →   [Mathlib.Tactic.BicategoryLike.MonadMor₁ (Mathlib.Tactic.Bi
+categoryLike.CoherenceM ρ)] →     Mathlib.Tactic.BicategoryLike.NormalExpr →    
+   Mathlib.Tactic.BicategoryLike.CoherenceM ρ (List (List Mathlib.Tactic.Widget.
+StringDiagram.Strand))
+参数：Mathlib.Tactic.BicategoryLike.CoherenceM ρ；List (List Mathlib.Tactic.Widget.S
+tringDiagram.Strand)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NormalExpr.strands
-  signature: (e : NormalExpr)
-  body: do
-  let l ← e.nodes
-  (l.consecutivePairs).mapM fun (x, y) => do
-    let xs := (x.map (fun n => n.tarList)).flatten
-    let ys := (y.map (fun n => n.srcList)).flatten
-    -- sanity check
-    if xs.length != ys.length then
-      throwError "The number of the start and end points of a string does not match."
-    (xs.zip ys).mapIdxM fun k ((n₁, f₁), (n₂, _)) => do
-      return ⟨n₁.hPosTar + k, n₁, n₂, f₁⟩
-
-中文:
-定义 NormalExpr.strands
-  签名: (e : NormalExpr)
-  定义体: do
-  let l ← e.nodes
-  (l.consecutivePairs).mapM fun (x, y) => do
-    let xs := (x.map (fun n => n.tarList)).flatten
-    let ys := (y.map (fun n => n.srcList)).flatten
-    -- sanity check
-    if xs.length != ys.length then
-      throwError "The number of the start and end points of a string does not match."
-    (xs.zip ys).mapIdxM fun k ((n₁, f₁), (n₂, _)) => do
-      return ⟨n₁.hPosTar + k, n₁, n₂, f₁⟩
+--- 原说明 ---
+The list of strands associated with a 2-morphism.
 -/
 def NormalExpr.strands (e : NormalExpr) : CoherenceM ρ (List (List Strand)) := do
   let l ← e.nodes
-  (l.consecutivePairs).mapM fun (x, y) => do
-    let xs := (x.map (fun n => n.tarList)).flatten
-    let ys := (y.map (fun n => n.srcList)).flatten
+  (l.consecutivePairs).mapM fun (x, y) ↦ do
+    let xs := (x.map (fun n ↦ n.tarList)).flatten
+    let ys := (y.map (fun n ↦ n.srcList)).flatten
     -- sanity check
-    if xs.length != ys.length then
+    if xs.length ≠ ys.length then
       throwError "The number of the start and end points of a string does not match."
     (xs.zip ys).mapIdxM fun k ((n₁, f₁), (n₂, _)) => do
       return ⟨n₁.hPosTar + k, n₁, n₂, f₁⟩
@@ -514,83 +425,55 @@ end BicategoryLike
 
 namespace Widget.StringDiagram
 
-/--
-Definition of `PenroseVar` / `PenroseVar` 的定义
+/-- A type for Penrose variables. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.PenroseVar** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ma
+thlib.Tactic.Widget.StringDiagram`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PenroseVar
-  parameters: : Type where
-  axioms and operations (3):
-    - ident : String
-    - indices : List Nat
-    - e : Expr
-
-中文:
-结构 PenroseVar
-  参数: : 类型 where
-  公理与运算 (3 个):
-    - ident : String
-    - indices : 列表 自然数
-    - e : Expr
+--- 原说明 ---
+A type for Penrose variables.
 -/
 structure PenroseVar : Type where
   /-- The identifier of the variable. -/
   ident : String
   /-- The indices of the variable. -/
-  indices : List Nat
+  indices : List ℕ
   /-- The underlying expression of the variable. -/
   e : Expr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToString PenroseVar
-  body: ⟨fun v => v.ident ++ v.indices.foldl (fun s x => s ++ s!"_{x}") ""⟩
-
-中文:
-实例 :
-  签名: ToString PenroseVar
-  定义体: ⟨fun v => v.ident ++ v.indices.foldl (fun s x => s ++ s!"_{x}") ""⟩
-
-Depends on / 依赖: indices, v.ident, v.indices.foldl
+/-
+**Mathlib.Tactic.Widget.StringDiagram.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic
+.Widget.StringDiagram`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToString PenroseVar :=
   ⟨fun v => v.ident ++ v.indices.foldl (fun s x => s ++ s!"_{x}") ""⟩
 
-/--
-Definition of `Node.toPenroseVar` / `Node.toPenroseVar` 的定义
+/-- The penrose variable associated with a node. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Node.toPenroseVar** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.Widget.StringDiagram.Node`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Node → Mathlib.Tactic.Widget.StringDia
+gram.PenroseVar
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Node.toPenroseVar
-  signature: (n : Node)
-  body: ⟨"E", [n.vPos, n.hPosSrc, n.hPosTar], n.e⟩
-
-中文:
-定义 Node.toPenroseVar
-  签名: (n : Node)
-  定义体: ⟨"E", [n.vPos, n.hPosSrc, n.hPosTar], n.e⟩
-
-Depends on / 依赖: hPosSrc, hPosTar, n.hPosSrc, n.hPosTar, n.vPos
+--- 原说明 ---
+The penrose variable associated with a node.
 -/
 def Node.toPenroseVar (n : Node) : PenroseVar :=
   ⟨"E", [n.vPos, n.hPosSrc, n.hPosTar], n.e⟩
 
-/--
-Definition of `Strand.toPenroseVar` / `Strand.toPenroseVar` 的定义
+/-- The penrose variable associated with a strand. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Strand.toPenroseVar** 是 Mathlib 中的一个定义，位于命
+名空间 `Mathlib.Tactic.Widget.StringDiagram.Strand`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Strand → Mathlib.Tactic.Widget.StringD
+iagram.PenroseVar
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Strand.toPenroseVar
-  signature: (s : Strand)
-  body: ⟨"f", [s.vPos, s.hPos], s.atom₁.e⟩
-
-中文:
-定义 Strand.toPenroseVar
-  签名: (s : Strand)
-  定义体: ⟨"f", [s.vPos, s.hPos], s.atom₁.e⟩
-
-Depends on / 依赖: s.atom, s.hPos, s.vPos
+--- 原说明 ---
+The penrose variable associated with a strand.
 -/
 def Strand.toPenroseVar (s : Strand) : PenroseVar :=
   ⟨"f", [s.vPos, s.hPos], s.atom₁.e⟩
@@ -600,44 +483,35 @@ def Strand.toPenroseVar (s : Strand) : PenroseVar :=
 open ProofWidgets Penrose DiagramBuilderM Lean.Server
 
 open scoped Jsx in
-/--
-Definition of `addPenroseVar` / `addPenroseVar` 的定义
+/-- Add the variable `v` with the type `tp` to the substance program. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.addPenroseVar** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.Widget.StringDiagram`。
+形式化陈述：addPenroseVar (tp : String) (v : PenroseVar) : DiagramBuilderM Unit
+参数：tp : String；v : PenroseVar。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addPenroseVar
-  signature: (tp : String) (v : PenroseVar)
-  body: do
-  let h := <InteractiveCode fmt={← Widget.ppExprTagged v.e} />
-  addEmbed (toString v) tp h
-
-中文:
-定义 addPenroseVar
-  签名: (tp : String) (v : PenroseVar)
-  定义体: do
-  let h := <InteractiveCode fmt={← Widget.ppExprTagged v.e} />
-  addEmbed (toString v) tp h
+--- 原说明 ---
+Add the variable `v` with the type `tp` to the substance program.
 -/
 def addPenroseVar (tp : String) (v : PenroseVar) :
     DiagramBuilderM Unit := do
   let h := <InteractiveCode fmt={← Widget.ppExprTagged v.e} />
   addEmbed (toString v) tp h
 
-/--
-Definition of `addConstructor` / `addConstructor` 的定义
+/-- Add constructor `tp v := nm (vs)` to the substance program. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.addConstructor** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.Widget.StringDiagram`。
+形式化陈述：addConstructor (tp : String) (v : PenroseVar) (nm : String) (vs : List Pen
+roseVar) : DiagramBuilderM Unit
+参数：tp : String；v : PenroseVar；nm : String；vs : List PenroseVar。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addConstructor
-  signature: (tp : String) (v : PenroseVar) (nm : String) (vs : List PenroseVar)
-  body: do
-  let vs' := ", ".intercalate (vs.map (fun v => toString v))
-  addInstruction s!"{tp} {v} := {nm} ({vs'})"
-
-中文:
-定义 addConstructor
-  签名: (tp : String) (v : PenroseVar) (nm : String) (vs : 列表 PenroseVar)
-  定义体: do
-  let vs' := ", ".intercalate (vs.map (fun v => toString v))
-  addInstruction s!"{tp} {v} := {nm} ({vs'})"
+--- 原说明 ---
+Add constructor `tp v := nm (vs)` to the substance program.
 -/
 def addConstructor (tp : String) (v : PenroseVar) (nm : String) (vs : List PenroseVar) :
     DiagramBuilderM Unit := do
@@ -645,56 +519,21 @@ def addConstructor (tp : String) (v : PenroseVar) (nm : String) (vs : List Penro
   addInstruction s!"{tp} {v} := {nm} ({vs'})"
 
 open scoped Jsx in
-/--
-Definition of `mkStringDiagram` / `mkStringDiagram` 的定义
+/-- Construct a string diagram from a Penrose `sub`stance program and expressions `embeds` to
+display as labels in the diagram. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.mkStringDiagram** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Tactic.Widget.StringDiagram`。
+形式化陈述：mkStringDiagram (nodes : List (List Node)) (strands : List (List Strand)) 
+: DiagramBuilderM PUnit
+参数：nodes : List (List Node)；strands : List (List Strand)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkStringDiagram
-  signature: (nodes : List (List Node)) (strands : List (List Strand))
-  body: do
-  /- Add 2-morphisms. -/
-  for x in nodes.flatten do
-    match x with
-    | .atom _ => do addPenroseVar "Atom" x.toPenroseVar
-    | .id _ => do addPenroseVar "Id" x.toPenroseVar
-  /- Add constraints. -/
-  for l in nodes do
-    for (x₁, x₂) in l.consecutivePairs do
-      addInstruction s!"Left({x₁.toPenroseVar}, {x₂.toPenroseVar})"
-  /- Add constraints. -/
-  for (l₁, l₂) in nodes.consecutivePairs do
-    if let some x₁ := l₁.head? then
-      if let some x₂ := l₂.head? then
-        addInstruction s!"Above({x₁.toPenroseVar}, {x₂.toPenroseVar})"
-  /- Add 1-morphisms as strings. -/
-  for l in strands do
-    for s in l do
-      addConstructor "Mor1" s.toPenroseVar
-        "MakeString" [s.startPoint.toPenroseVar, s.endPoint.toPenroseVar]
-
-中文:
-定义 mkStringDiagram
-  签名: (nodes : 列表 (列表 Node)) (strands : 列表 (列表 Strand))
-  定义体: do
-  /- Add 2-morphisms. -/
-  for x in nodes.flatten do
-    match x with
-    | .atom _ => do addPenroseVar "Atom" x.toPenroseVar
-    | .id _ => do addPenroseVar "Id" x.toPenroseVar
-  /- Add constraints. -/
-  for l in nodes do
-    for (x₁, x₂) in l.consecutivePairs do
-      addInstruction s!"Left({x₁.toPenroseVar}, {x₂.toPenroseVar})"
-  /- Add constraints. -/
-  for (l₁, l₂) in nodes.consecutivePairs do
-    if let some x₁ := l₁.head? then
-      if let some x₂ := l₂.head? then
-        addInstruction s!"Above({x₁.toPenroseVar}, {x₂.toPenroseVar})"
-  /- Add 1-morphisms as strings. -/
-  for l in strands do
-    for s in l do
-      addConstructor "Mor1" s.toPenroseVar
-        "MakeString" [s.startPoint.toPenroseVar, s.endPoint.toPenroseVar]
+--- 原说明 ---
+Construct a string diagram from a Penrose `sub`stance program and expressions `e
+mbeds` to
+display as labels in the diagram.
 -/
 def mkStringDiagram (nodes : List (List Node)) (strands : List (List Strand)) :
     DiagramBuilderM PUnit := do
@@ -718,114 +557,73 @@ def mkStringDiagram (nodes : List (List Node)) (strands : List (List Strand)) :
       addConstructor "Mor1" s.toPenroseVar
         "MakeString" [s.startPoint.toPenroseVar, s.endPoint.toPenroseVar]
 
-/--
-Definition of `dsl` / `dsl` 的定义
+/-- Penrose dsl file for string diagrams. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.dsl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Widget.StringDiagram`。
+形式化陈述：dsl
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dsl
-  body: include_str ".."/".."/".."/"widget"/"src"/"penrose"/"monoidal.dsl"
-
-中文:
-定义 dsl
-  定义体: include_str ".."/".."/".."/"widget"/"src"/"penrose"/"monoidal.dsl"
-
-Depends on / 依赖: include_str, monoidal, monoidal.dsl, penrose, widget
+--- 原说明 ---
+Penrose dsl file for string diagrams.
 -/
 def dsl :=
   include_str ".."/".."/".."/"widget"/"src"/"penrose"/"monoidal.dsl"
 
-/--
-Definition of `sty` / `sty` 的定义
+/-- Penrose sty file for string diagrams. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.sty** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Widget.StringDiagram`。
+形式化陈述：sty
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sty
-  body: include_str ".."/".."/".."/"widget"/"src"/"penrose"/"monoidal.sty"
-
-中文:
-定义 sty
-  定义体: include_str ".."/".."/".."/"widget"/"src"/"penrose"/"monoidal.sty"
-
-Depends on / 依赖: include_str, monoidal, monoidal.sty, penrose, widget
+--- 原说明 ---
+Penrose sty file for string diagrams.
 -/
 def sty :=
   include_str ".."/".."/".."/"widget"/"src"/"penrose"/"monoidal.sty"
 
-/--
-Inductive type `Kind` / 归纳类型 `Kind`
+/-- The kind of the context. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Kind** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.
+Tactic.Widget.StringDiagram`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Kind
-  parameters: where
-  constructors (3):
-    - monoidal: Kind
-    - bicategory: Kind
-    - none: Kind
-
-中文:
-归纳类型 Kind
-  参数: where
-  构造子 (3 个):
-    - monoidal: Kind
-    - bicategory: Kind
-    - none: Kind
+--- 原说明 ---
+The kind of the context.
 -/
 inductive Kind where
   | monoidal : Kind
   | bicategory : Kind
   | none : Kind
 
-/--
-Definition of `Kind.name` / `Kind.name` 的定义
+/-- The name of the context. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.Kind.name** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.Widget.StringDiagram.Kind`。
+形式化陈述：Mathlib.Tactic.Widget.StringDiagram.Kind → Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Kind.name
-  signature: : Kind -> Name
-
-中文:
-定义 Kind.name
-  签名: : Kind -> Name
+--- 原说明 ---
+The name of the context.
 -/
-def Kind.name : Kind -> Name
+def Kind.name : Kind → Name
   | Kind.monoidal => `monoidal
   | Kind.bicategory => `bicategory
   | Kind.none => default
 
-/--
-Definition of `mkKind` / `mkKind` 的定义
+/-- Given an expression, return the kind of the context. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.mkKind** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Widget.StringDiagram`。
+形式化陈述：mkKind (e : Expr) : MetaM Kind
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkKind
-  signature: (e : Expr)
-  body: do
-  let e ← instantiateMVars e
-  let e ← (match (← whnfR e).eq? with
-    | some (_, lhs, _) => return lhs
-    | none => return e)
-  let ctx? ← BicategoryLike.mkContext? (ρ := Bicategory.Context) e
-  match ctx? with
-  | some _ => return .bicategory
-  | none =>
-    let ctx? ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e
-    match ctx? with
-    | some _ => return .monoidal
-    | none => return .none
-
-中文:
-定义 mkKind
-  签名: (e : Expr)
-  定义体: do
-  let e ← instantiateMVars e
-  let e ← (match (← whnfR e).eq? with
-    | some (_, lhs, _) => return lhs
-    | none => return e)
-  let ctx? ← BicategoryLike.mkContext? (ρ := Bicategory.Context) e
-  match ctx? with
-  | some _ => return .bicategory
-  | none =>
-    let ctx? ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e
-    match ctx? with
-    | some _ => return .monoidal
-    | none => return .none
+--- 原说明 ---
+Given an expression, return the kind of the context.
 -/
 def mkKind (e : Expr) : MetaM Kind := do
   let e ← instantiateMVars e
@@ -842,64 +640,17 @@ def mkKind (e : Expr) : MetaM Kind := do
     | none => return .none
 
 open scoped Jsx in
-/--
-Definition of `stringM?` / `stringM?` 的定义
+/-- Given a 2-morphism, return a string diagram. Otherwise `none`. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.stringM** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Widget.StringDiagram`。
+形式化陈述：stringM? (e : Expr) : MetaM (Option Html)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stringM?
-  signature: (e : Expr)
-  body: do
-  let e ← instantiateMVars e
-  let k ← mkKind e
-  let x : Option (List (List Node) × List (List Strand)) ← (match k with
-    | .monoidal => do
-      let some ctx ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e | return none
-      CoherenceM.run (ctx := ctx) do
-        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
-        return some (← e'.nodes, ← e'.strands)
-    | .bicategory => do
-      let some ctx ← BicategoryLike.mkContext? (ρ := Bicategory.Context) e | return none
-      CoherenceM.run (ctx := ctx) do
-        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
-        return some (← e'.nodes, ← e'.strands)
-    | .none => return none)
-  match x with
-  | none => return none
-  | some (nodes, strands) => do
-    DiagramBuilderM.run do
-      mkStringDiagram nodes strands
-      trace[string_diagram] "Penrose substance: \n{(← get).sub}"
-      match ← DiagramBuilderM.buildDiagram dsl sty with
-      | some html => return html
-      | none => return <span>No non-structural morphisms found.</span>
-
-中文:
-定义 stringM?
-  签名: (e : Expr)
-  定义体: do
-  let e ← instantiateMVars e
-  let k ← mkKind e
-  let x : Option (List (List Node) × List (List Strand)) ← (match k with
-    | .monoidal => do
-      let some ctx ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e | return none
-      CoherenceM.run (ctx := ctx) do
-        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
-        return some (← e'.nodes, ← e'.strands)
-    | .bicategory => do
-      let some ctx ← BicategoryLike.mkContext? (ρ := Bicategory.Context) e | return none
-      CoherenceM.run (ctx := ctx) do
-        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
-        return some (← e'.nodes, ← e'.strands)
-    | .none => return none)
-  match x with
-  | none => return none
-  | some (nodes, strands) => do
-    DiagramBuilderM.run do
-      mkStringDiagram nodes strands
-      trace[string_diagram] "Penrose substance: \n{(← get).sub}"
-      match ← DiagramBuilderM.buildDiagram dsl sty with
-      | some html => return html
-      | none => return <span>No non-structural morphisms found.</span>
+--- 原说明 ---
+Given a 2-morphism, return a string diagram. Otherwise `none`.
 -/
 def stringM? (e : Expr) : MetaM (Option Html) := do
   let e ← instantiateMVars e
@@ -927,42 +678,17 @@ def stringM? (e : Expr) : MetaM (Option Html) := do
       | none => return <span>No non-structural morphisms found.</span>
 
 open scoped Jsx in
-/--
-Definition of `mkEqHtml` / `mkEqHtml` 的定义
+/-- Help function for displaying two string diagrams in an equality. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.mkEqHtml** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Widget.StringDiagram`。
+形式化陈述：mkEqHtml (lhs rhs : Html) : Html
+参数：lhs rhs : Html。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkEqHtml
-  signature: (lhs rhs : Html)
-  body: <div className="flex">
-    <div className="w-50">
-      <details «open»={true}>
-        <summary className="mv2 pointer">String diagram for LHS</summary> {lhs}
-      </details>
-    </div>
-    <div className="w-50">
-      <details «open»={true}>
-        <summary className="mv2 pointer">String diagram for RHS</summary> {rhs}
-      </details>
-    </div>
-  </div>
-
-中文:
-定义 mkEqHtml
-  签名: (lhs rhs : Html)
-  定义体: <div className="flex">
-    <div className="w-50">
-      <details «open»={true}>
-        <summary className="mv2 pointer">String diagram for LHS</summary> {lhs}
-      </details>
-    </div>
-    <div className="w-50">
-      <details «open»={true}>
-        <summary className="mv2 pointer">String diagram for RHS</summary> {rhs}
-      </details>
-    </div>
-  </div>
-
-Depends on / 依赖: className, details, diagram, pointer, summary
+--- 原说明 ---
+Help function for displaying two string diagrams in an equality.
 -/
 def mkEqHtml (lhs rhs : Html) : Html :=
   <div className="flex">
@@ -978,62 +704,41 @@ def mkEqHtml (lhs rhs : Html) : Html :=
     </div>
   </div>
 
-/--
-Definition of `stringEqM?` / `stringEqM?` 的定义
+/-- Given an equality between 2-morphisms, return a string diagram of the LHS and RHS.
+Otherwise `none`. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.stringEqM** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.Widget.StringDiagram`。
+形式化陈述：stringEqM? (e : Expr) : MetaM (Option Html)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stringEqM?
-  signature: (e : Expr)
-  body: do
-let e ← whnfR ← instantiateMVars e
-  let some (_, lhs, rhs) := e.eq? | return none
-  let some lhs ← stringM? lhs | return none
-  let some rhs ← stringM? rhs | return none
-return some mkEqHtml lhs rhs
-
-中文:
-定义 stringEqM?
-  签名: (e : Expr)
-  定义体: do
-let e ← whnfR ← instantiateMVars e
-  let some (_, lhs, rhs) := e.eq? | return none
-  let some lhs ← stringM? lhs | return none
-  let some rhs ← stringM? rhs | return none
-return some mkEqHtml lhs rhs
+--- 原说明 ---
+Given an equality between 2-morphisms, return a string diagram of the LHS and RH
+S.
+Otherwise `none`.
 -/
 def stringEqM? (e : Expr) : MetaM (Option Html) := do
-let e ← whnfR ← instantiateMVars e
+  let e ← whnfR <| ← instantiateMVars e
   let some (_, lhs, rhs) := e.eq? | return none
   let some lhs ← stringM? lhs | return none
   let some rhs ← stringM? rhs | return none
-return some mkEqHtml lhs rhs
+  return some <| mkEqHtml lhs rhs
 
-/--
-Definition of `stringMorOrEqM?` / `stringMorOrEqM?` 的定义
+/-- Given an 2-morphism or equality between 2-morphisms, return a string diagram.
+Otherwise `none`. -/
+/-
+**Mathlib.Tactic.Widget.StringDiagram.stringMorOrEqM** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.Widget.StringDiagram`。
+形式化陈述：stringMorOrEqM? (e : Expr) : MetaM (Option Html)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stringMorOrEqM?
-  signature: (e : Expr)
-  body: do
-  forallTelescopeReducing (← whnfR <| ← inferType e) fun xs a => do
-    if let some html ← stringM? (mkAppN e xs) then
-      return some html
-    else if let some html ← stringEqM? a then
-      return some html
-    else
-      return none
-
-中文:
-定义 stringMorOrEqM?
-  签名: (e : Expr)
-  定义体: do
-  forallTelescopeReducing (← whnfR <| ← inferType e) fun xs a => do
-    if let some html ← stringM? (mkAppN e xs) then
-      return some html
-    else if let some html ← stringEqM? a then
-      return some html
-    else
-      return none
+--- 原说明 ---
+Given an 2-morphism or equality between 2-morphisms, return a string diagram.
+Otherwise `none`.
 -/
 def stringMorOrEqM? (e : Expr) : MetaM (Option Html) := do
   forallTelescopeReducing (← whnfR <| ← inferType e) fun xs a => do
@@ -1046,30 +751,15 @@ def stringMorOrEqM? (e : Expr) : MetaM (Option Html) := do
 
 /-- The `Expr` presenter for displaying string diagrams. -/
 @[expr_presenter]
-/--
-Definition of `stringPresenter` / `stringPresenter` 的定义
+/-
+**Mathlib.Tactic.Widget.StringDiagram.stringPresenter** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Tactic.Widget.StringDiagram`。
+形式化陈述：stringPresenter : ExprPresenter where userName
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stringPresenter
-  signature: : ExprPresenter where
-  body: "String diagram"
-  layoutKind := .block
-  present type := do
-    if let some html ← stringMorOrEqM? type then
-      return html
-    throwError "Couldn't find a 2-morphism to display a string diagram."
-
-中文:
-定义 stringPresenter
-  签名: : ExprPresenter where
-  定义体: "String diagram"
-  layoutKind := .block
-  present type := do
-    if let some html ← stringMorOrEqM? type then
-      return html
-    throwError "Couldn't find a 2-morphism to display a string diagram."
-
-Depends on / 依赖: diagram
+--- 原说明 ---
+The `Expr` presenter for displaying string diagrams.
 -/
 def stringPresenter : ExprPresenter where
   userName := "String diagram"
@@ -1082,42 +772,16 @@ def stringPresenter : ExprPresenter where
 open scoped Jsx in
 /-- The RPC method for displaying string diagrams. -/
 @[server_rpc_method]
-/--
-Definition of `rpc` / `rpc` 的定义
+/-
+**Mathlib.Tactic.Widget.StringDiagram.rpc** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Widget.StringDiagram`。
+形式化陈述：rpc (props : PanelWidgetProps) : RequestM (RequestTask Html)
+参数：props : PanelWidgetProps。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rpc
-  signature: (props : PanelWidgetProps)
-  body: RequestM.asTask do
-    let html : Option Html ← (do
-      if props.goals.isEmpty then
-        return none
-      let some g := props.goals[0]? | unreachable!
-      g.ctx.val.runMetaM {} do
-        g.mvarId.withContext do
-          let type ← g.mvarId.getType
-          stringEqM? type)
-    match html with
-    | none => return <span>No String Diagram.</span>
-    | some inner => return inner
-
-中文:
-定义 rpc
-  签名: (props : PanelWidgetProps)
-  定义体: RequestM.asTask do
-    let html : Option Html ← (do
-      if props.goals.isEmpty then
-        return none
-      let some g := props.goals[0]? | unreachable!
-      g.ctx.val.runMetaM {} do
-        g.mvarId.withContext do
-          let type ← g.mvarId.getType
-          stringEqM? type)
-    match html with
-    | none => return <span>No String Diagram.</span>
-    | some inner => return inner
-
-Depends on / 依赖: Diagram, RequestM, RequestM.asTask, asTask, g.ctx.val.runMetaM, g.mvarId.getType, g.mvarId.withContext, getType, isEmpty, mvarId, props.goals, props.goals.isEmpty, return, runMetaM, stringEqM, unreachable, withContext
+--- 原说明 ---
+The RPC method for displaying string diagrams.
 -/
 def rpc (props : PanelWidgetProps) : RequestM (RequestTask Html) :=
   RequestM.asTask do
@@ -1139,20 +803,15 @@ open ProofWidgets
 
 /-- Display the string diagrams if the goal is an equality of morphisms in a monoidal category. -/
 @[widget_module]
-/--
-Definition of `StringDiagram` / `StringDiagram` 的定义
+/-
+**Mathlib.Tactic.Widget.StringDiagram** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Widget`。
+形式化陈述：ProofWidgets.Component ProofWidgets.PanelWidgetProps
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StringDiagram
-  signature: : Component PanelWidgetProps
-  body: mk_rpc_widget% StringDiagram.rpc
-
-中文:
-定义 StringDiagram
-  签名: : Component PanelWidgetProps
-  定义体: mk_rpc_widget% StringDiagram.rpc
-
-Depends on / 依赖: StringDiagram, StringDiagram.rpc, mk_rpc_widget
+--- 原说明 ---
+Display the string diagrams if the goal is an equality of morphisms in a monoida
+l category.
 -/
 def StringDiagram : Component PanelWidgetProps :=
   mk_rpc_widget% StringDiagram.rpc
@@ -1168,49 +827,18 @@ Example usage:
 #string_diagram MonoidalCategory.whisker_exchange
 
 /- String diagram for the morphism. -/
-variable {C : Type u} [Category.{v} C] [MonoidalCategory C] {X Y : C} (f : 𝟙_ C ⟶ X otimes Y) in
+variable {C : Type u} [Category.{v} C] [MonoidalCategory C] {X Y : C} (f : 𝟙_ C ⟶ X ⊗ Y) in
 #string_diagram f
 ```
 -/
 syntax (name := stringDiagram) "#string_diagram " term : command
 
 @[command_elab stringDiagram, inherit_doc stringDiagram]
-/--
-Definition of `elabStringDiagramCmd` / `elabStringDiagramCmd` 的定义
-
-English:
-definition elabStringDiagramCmd
-  signature: : CommandElab
-  body: fun
-  | stx@`(#string_diagram $t:term) => do
-    let html ← runTermElabM fun _ => do
-      let e ← try mkConstWithFreshMVarLevels (← realizeGlobalConstNoOverloadWithInfo t)
-        catch _ => Term.levelMVarToParam (← instantiateMVars (← Term.elabTerm t none))
-      match ← StringDiagram.stringMorOrEqM? e with
-      | some html => return html
-      | none => throwError "could not find a morphism or equality: {e}"
-liftCoreM Widget.savePanelWidgetInfo
-      (hash HtmlDisplay.javascript)
-      (return json% { html: $(← Server.RpcEncodable.rpcEncode html) })
-      stx
-  | stx => throwError "Unexpected syntax {stx}."
-
-中文:
-定义 elabStringDiagramCmd
-  签名: : CommandElab
-  定义体: fun
-  | stx@`(#string_diagram $t:term) => do
-    let html ← runTermElabM fun _ => do
-      let e ← try mkConstWithFreshMVarLevels (← realizeGlobalConstNoOverloadWithInfo t)
-        catch _ => Term.levelMVarToParam (← instantiateMVars (← Term.elabTerm t none))
-      match ← StringDiagram.stringMorOrEqM? e with
-      | some html => return html
-      | none => throwError "could not find a morphism or equality: {e}"
-liftCoreM Widget.savePanelWidgetInfo
-      (hash HtmlDisplay.javascript)
-      (return json% { html: $(← Server.RpcEncodable.rpcEncode html) })
-      stx
-  | stx => throwError "Unexpected syntax {stx}."
+/-
+**Mathlib.Tactic.Widget.elabStringDiagramCmd** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Widget`。
+形式化陈述：CommandElab
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def elabStringDiagramCmd : CommandElab := fun
   | stx@`(#string_diagram $t:term) => do
@@ -1220,10 +848,11 @@ def elabStringDiagramCmd : CommandElab := fun
       match ← StringDiagram.stringMorOrEqM? e with
       | some html => return html
       | none => throwError "could not find a morphism or equality: {e}"
-liftCoreM Widget.savePanelWidgetInfo
+    liftCoreM <| Widget.savePanelWidgetInfo
       (hash HtmlDisplay.javascript)
       (return json% { html: $(← Server.RpcEncodable.rpcEncode html) })
       stx
   | stx => throwError "Unexpected syntax {stx}."
 
 end Mathlib.Tactic.Widget
+

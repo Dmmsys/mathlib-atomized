@@ -15,45 +15,21 @@ public import Mathlib.Init
 variable {α β : Type}
 
 @[noinline, deprecated "deprecated without replacement" (since := "2026-01-24")]
-/--
-Definition of `injectIntoBaseIO` / `injectIntoBaseIO` 的定义
-
-English:
-definition injectIntoBaseIO
-  signature: {α : Type} (a : α)
-  body: pure a
-
-@[deprecated "deprecated without replacement" (since := "2026-01-24")]
-unsafe def memoFixImpl [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β := unsafeBaseIO do
-  let cache : IO.Ref (Lean.PtrMap α β) ← ST.mkRef Lean.mkPtrMap
-  let rec fix (a) : β := unsafeBaseIO do
-    if let some b := (← cache.get).find? a then
-      return b
-    let b ← injectIntoBaseIO (f fix a)
-    cache.modify (·.insert a b)
-    return b
-  return fix
-
-中文:
-定义 inject整数oBaseIO
-  签名: {α : 类型} (a : α)
-  定义体: pure a
-
-@[deprecated "deprecated without replacement" (since := "2026-01-24")]
-unsafe def memoFixImpl [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β := unsafeBaseIO do
-  let cache : IO.Ref (Lean.PtrMap α β) ← ST.mkRef Lean.mkPtrMap
-  let rec fix (a) : β := unsafeBaseIO do
-    if let some b := (← cache.get).find? a then
-      return b
-    let b ← injectIntoBaseIO (f fix a)
-    cache.modify (·.insert a b)
-    return b
-  return fix
+/-
+**injectIntoBaseIO** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：injectIntoBaseIO {α : Type} (a : α) : BaseIO α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def injectIntoBaseIO {α : Type} (a : α) : BaseIO α := pure a
 
 @[deprecated "deprecated without replacement" (since := "2026-01-24")]
-unsafe def memoFixImpl [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β := unsafeBaseIO do
+/-
+**memoFixImpl** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+unsafe def memoFixImpl [Nonempty β] (f : (α → β) → (α → β)) : α → β := unsafeBaseIO do
   let cache : IO.Ref (Lean.PtrMap α β) ← ST.mkRef Lean.mkPtrMap
   let rec fix (a) : β := unsafeBaseIO do
     if let some b := (← cache.get).find? a then
@@ -70,5 +46,6 @@ This is useful for implementing tree traversal functions where
 subtrees may be referenced in multiple places.
 -/
 @[implemented_by memoFixImpl,
-deprecated "use `MonadCacheT` and `checkCache`" (since := "2026-01-24")]
-public opaque memoFix [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β
+deprecated "use `MonadCacheT`  and `checkCache`" (since := "2026-01-24")]
+public opaque memoFix [Nonempty β] (f : (α → β) → (α → β)) : α → β
+

@@ -60,142 +60,78 @@ open scoped ComplexStarModule
 
 variable {A : Type*} [CStarAlgebra A] {a b x : A} [IsStarNormal a] [IsStarNormal b]
 
-/--
-Definition of `expMulMulExp` / `expMulMulExp` 的定义
+/-- The map `expMulMulExp : ℂ → A` given by `z ↦ exp (z • star b) * x * exp (z • star (-a))` for
+fixed `a b x : A`. -/
+/-
+**expMulMulExp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：expMulMulExp (a b x : A) (z : Complex) : A
+参数：a b x : A；z : Complex。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition expMulMulExp
-  signature: (a b x : A) (z : Complex)
-  body: exp (z • star b) * x * exp (z • star (-a))
-
-中文:
-定义 expMulMulExp
-  签名: (a b x : A) (z : 复形)
-  定义体: exp (z • star b) * x * exp (z • star (-a))
+--- 原说明 ---
+The map `expMulMulExp : ℂ → A` given by `z ↦ exp (z • star b) * x * exp (z • sta
+r (-a))` for
+fixed `a b x : A`.
 -/
-noncomputable def expMulMulExp (a b x : A) (z : Complex) : A := exp (z • star b) * x * exp (z • star (-a))
-
-/--
-lemma `expMulMulExp_eq_expUnitary_mul_mul_expUnitary` / 引理 `expMulMulExp_eq_expUnitary_mul_mul_expUnitary`
-
-English:
-lemma expMulMulExp_eq_expUnitary_mul_mul_expUnitary
-  given: (h : SemiconjBy x a b) (z : Complex)
-  proof: by
-  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
-  nth_rw 1 [expMulMulExp, ← (h.smul_right (star z)).exp_neg_mul_mul_exp_eq_self]
-  simp_rw [← mul_assoc, mul_assoc (_ * _ * x)]
-  congr!
-  all_goals
-    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_smul I I, sub_eq_add_neg]
-    grind [exp_add_of_commute, Commute.smul_right, Commute.neg_right]
-
-中文:
-引理 expMulMulExp_eq_expUnitary_mul_mul_expUnitary
-  条件: (h : SemiconjBy x a b) (z : 复形)
-  证明: by
-  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
-  nth_rw 1 [expMulMulExp, ← (h.smul_right (star z)).exp_neg_mul_mul_exp_eq_self]
-  simp_rw [← mul_assoc, mul_assoc (_ * _ * x)]
-  congr!
-  all_goals
-    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_smul I I, sub_eq_add_neg]
-    grind [exp_add_of_commute, Commute.smul_right, Commute.neg_right]
-
-Depends on / 依赖: Commute, Commute.neg_right, Commute.smul_right, NormedAlgebra, all_goals, expMulMulExp, exp_add_of_commute, exp_neg_mul_mul_exp_eq_self, h.smul_right, imaginaryPart_apply_coe, mul_assoc, neg_right, nth_rw, restrictScalars, simp_rw, smul_comm, smul_right, smul_smul, sub_eq_add_neg
+noncomputable def expMulMulExp (a b x : A) (z : ℂ) : A := exp (z • star b) * x * exp (z • star (-a))
+/-
+**expMulMulExp_eq_expUnitary_mul_mul_expUnitary** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：expMulMulExp_eq_expUnitary_mul_mul_expUnitary (h : SemiconjBy x a b) (z : 
+Complex) : expMulMulExp a b x z = expUnitary ((2 : Real) • ℑ (z • star b)) * x *
+ expUnitary ((2 : Real) • ℑ (star z • a))
+参数：h : SemiconjBy x a b；z : Complex。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma expMulMulExp_eq_expUnitary_mul_mul_expUnitary (h : SemiconjBy x a b) (z : Complex) :
+lemma expMulMulExp_eq_expUnitary_mul_mul_expUnitary (h : SemiconjBy x a b) (z : ℂ) :
     expMulMulExp a b x z =
-      expUnitary ((2 : Real) • ℑ (z • star b)) * x * expUnitary ((2 : Real) • ℑ (star z • a)) := by
-  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
+      expUnitary ((2 : ℝ) • ℑ (z • star b)) * x * expUnitary ((2 : ℝ) • ℑ (star z • a)) := by
+  let _ : NormedAlgebra ℚ A := .restrictScalars ℚ ℂ A
   nth_rw 1 [expMulMulExp, ← (h.smul_right (star z)).exp_neg_mul_mul_exp_eq_self]
   simp_rw [← mul_assoc, mul_assoc (_ * _ * x)]
   congr!
   all_goals
-    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_smul I I, sub_eq_add_neg]
+    simp [imaginaryPart_apply_coe, smul_comm (2 : ℝ) I, smul_smul I I, sub_eq_add_neg]
     grind [exp_add_of_commute, Commute.smul_right, Commute.neg_right]
-
-/--
-lemma `expMulMulExp_const` / 引理 `expMulMulExp_const`
-
-English:
-lemma expMulMulExp_const
-  given: (h : SemiconjBy x a b) (z : Complex)
-  statement: expMulMulExp a b x z = x
-  proof: by
-  have hf : Differentiable Complex (expMulMulExp a b x : Complex -> A) := by unfold expMulMulExp; fun_prop
-  have : IsBounded (Set.range (expMulMulExp a b x)) := by
-.subset apply Metric.isBounded_sphere (x := (0 : A)) (r := ‖x‖)
-    rintro - ⟨z, hz, rfl⟩
-    rw [mem_sphere_iff_norm]; rw [sub_zero]; rw [expMulMulExp_eq_expUnitary_mul_mul_expUnitary h z]; rw [CStarRing.norm_mul_coe_unitary]; rw [CStarRing.norm_coe_unitary_mul]
-  simpa [expMulMulExp] using hf.apply_eq_apply_of_bounded this z 0
-
-中文:
-引理 expMulMulExp_const
-  条件: (h : SemiconjBy x a b) (z : 复形)
-  结论: expMulMulExp a b x z = x
-  证明: by
-  have hf : Differentiable Complex (expMulMulExp a b x : Complex -> A) := by unfold expMulMulExp; fun_prop
-  have : IsBounded (Set.range (expMulMulExp a b x)) := by
-.subset apply Metric.isBounded_sphere (x := (0 : A)) (r := ‖x‖)
-    rintro - ⟨z, hz, rfl⟩
-    rw [mem_sphere_iff_norm]; rw [sub_zero]; rw [expMulMulExp_eq_expUnitary_mul_mul_expUnitary h z]; rw [CStarRing.norm_mul_coe_unitary]; rw [CStarRing.norm_coe_unitary_mul]
-  simpa [expMulMulExp] using hf.apply_eq_apply_of_bounded this z 0
-
-Depends on / 依赖: CStarRing, CStarRing.norm_coe_unitary_mul, CStarRing.norm_mul_coe_unitary, Differentiable, IsBounded, Metric, Metric.isBounded_sphere, Set.range, apply_eq_apply_of_bounded, expMulMulExp, expMulMulExp_eq_expUnitary_mul_mul_expUnitary, fun_prop, hf.apply_eq_apply_of_bounded, isBounded_sphere, mem_sphere_iff_norm, norm_coe_unitary_mul, norm_mul_coe_unitary, sub_zero, subset
+/-
+**expMulMulExp_const** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：expMulMulExp_const (h : SemiconjBy x a b) (z : Complex) : expMulMulExp a b
+ x z = x
+参数：h : SemiconjBy x a b；z : Complex。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma expMulMulExp_const (h : SemiconjBy x a b) (z : Complex) : expMulMulExp a b x z = x := by
-  have hf : Differentiable Complex (expMulMulExp a b x : Complex -> A) := by unfold expMulMulExp; fun_prop
+lemma expMulMulExp_const (h : SemiconjBy x a b) (z : ℂ) : expMulMulExp a b x z = x := by
+  have hf : Differentiable ℂ (expMulMulExp a b x : ℂ → A) := by unfold expMulMulExp; fun_prop
   have : IsBounded (Set.range (expMulMulExp a b x)) := by
-.subset apply Metric.isBounded_sphere (x := (0 : A)) (r := ‖x‖)
+    apply Metric.isBounded_sphere (x := (0 : A)) (r := ‖x‖) |>.subset
     rintro - ⟨z, hz, rfl⟩
-    rw [mem_sphere_iff_norm]; rw [sub_zero]; rw [expMulMulExp_eq_expUnitary_mul_mul_expUnitary h z]; rw [CStarRing.norm_mul_coe_unitary]; rw [CStarRing.norm_coe_unitary_mul]
+    rw [mem_sphere_iff_norm, sub_zero, expMulMulExp_eq_expUnitary_mul_mul_expUnitary h z,
+      CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary_mul]
   simpa [expMulMulExp] using hf.apply_eq_apply_of_bounded this z 0
 
-/--
-lemma `SemiconjBy.star_right_of_unital` / 引理 `SemiconjBy.star_right_of_unital`
+/- This is not public because it is superseded by `SemiconjBy.star_right`. -/
+/-
+**SemiconjBy.star_right_of_unital** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SemiconjBy.star_right_of_unital (h : SemiconjBy x a b) : SemiconjBy x (sta
+r a) (star b)
+参数：h : SemiconjBy x a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma SemiconjBy.star_right_of_unital
-  given: (h : SemiconjBy x a b)
-  proof: by
-  suffices key : forall z : Complex, x * exp (z • star a) = exp (z • star b) * x by
-    have (a : A) : HasDerivAt (fun z : Complex => exp (z • a)) a 0 := by
-      simpa using hasDerivAt_exp_smul_const a (0 : Complex)
-.unique apply (this (star a)).const_mul x
-    simpa [key] using (this (star b)).mul_const x
-  intro z
-  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
-  let _ := invertibleExp (z • star a)
-  simpa [← mul_assoc, ← invOf_exp, expMulMulExp] using
-    congr($(expMulMulExp_const h z) * exp (z • star a)).symm
-
-中文:
-引理 SemiconjBy.star_right_of_unital
-  条件: (h : SemiconjBy x a b)
-  证明: by
-  suffices key : forall z : Complex, x * exp (z • star a) = exp (z • star b) * x by
-    have (a : A) : HasDerivAt (fun z : Complex => exp (z • a)) a 0 := by
-      simpa using hasDerivAt_exp_smul_const a (0 : Complex)
-.unique apply (this (star a)).const_mul x
-    simpa [key] using (this (star b)).mul_const x
-  intro z
-  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
-  let _ := invertibleExp (z • star a)
-  simpa [← mul_assoc, ← invOf_exp, expMulMulExp] using
-    congr($(expMulMulExp_const h z) * exp (z • star a)).symm
-
-Depends on / 依赖: HasDerivAt, NormedAlgebra, const_mul, expMulMulExp, expMulMulExp_const, hasDerivAt_exp_smul_const, invOf_exp, invertibleExp, mul_assoc, mul_const, restrictScalars, unique
+--- 原说明 ---
+This is not public because it is superseded by `SemiconjBy.star_right`.
 -/
 lemma SemiconjBy.star_right_of_unital (h : SemiconjBy x a b) :
     SemiconjBy x (star a) (star b) := by
-  suffices key : forall z : Complex, x * exp (z • star a) = exp (z • star b) * x by
-    have (a : A) : HasDerivAt (fun z : Complex => exp (z • a)) a 0 := by
-      simpa using hasDerivAt_exp_smul_const a (0 : Complex)
-.unique apply (this (star a)).const_mul x
+  suffices key : ∀ z : ℂ, x * exp (z • star a) = exp (z • star b) * x by
+    have (a : A) : HasDerivAt (fun z : ℂ ↦ exp (z • a)) a 0 := by
+      simpa using hasDerivAt_exp_smul_const a (0 : ℂ)
+    apply (this (star a)).const_mul x |>.unique
     simpa [key] using (this (star b)).mul_const x
   intro z
-  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
+  let _ : NormedAlgebra ℚ A := .restrictScalars ℚ ℂ A
   let _ := invertibleExp (z • star a)
   simpa [← mul_assoc, ← invOf_exp, expMulMulExp] using
     congr($(expMulMulExp_const h z) * exp (z • star a)).symm
@@ -205,7 +141,7 @@ are interwined by `x`, then `star a` and `star b` are also intertwined by `x`. -
 public lemma SemiconjBy.star_right {A : Type*} [NonUnitalCStarAlgebra A] {a b x : A}
     (ha : IsStarNormal a) (hb : IsStarNormal b) (h : SemiconjBy x a b) :
     SemiconjBy x (star a) (star b) := by
-  apply Unitization.inr_injective (R := Complex)
+  apply Unitization.inr_injective (R := ℂ)
   simp only [Unitization.inr_mul, Unitization.inr_star]
   apply SemiconjBy.star_right_of_unital
   simpa [SemiconjBy] using mod_cast h.eq
@@ -224,24 +160,24 @@ commutes with `x`, then `star a` commutes with `x`. -/
 public lemma IsStarNormal.commute_star_left {A : Type*} [NonUnitalCStarAlgebra A] {a x : A}
     (ha : IsStarNormal a) (h : Commute a x) :
     Commute (star a) x :=
-.symm ha.commute_star_right h.symm
+  ha.commute_star_right h.symm |>.symm
 
 /-- A characterization of normal elements in a C⋆-algebra in terms of exponentials. -/
 public lemma isStarNormal_iff_forall_exp_mul_exp_mem_unitary {a : A} :
-    IsStarNormal a ↔ forall x : Real, exp (x • a) * exp (-x • star a) in unitary A := by
-  let _ : NormedAlgebra Rat A := .restrictScalars Rat Complex A
+    IsStarNormal a ↔ ∀ x : ℝ, exp (x • a) * exp (-x • star a) ∈ unitary A := by
+  let _ : NormedAlgebra ℚ A := .restrictScalars ℚ ℂ A
   have : IsAddTorsionFree A := IsAddTorsionFree.of_module_rat A
-  refine ⟨fun ha x => ?_, fun ha => ?_⟩
+  refine ⟨fun ha x ↦ ?_, fun ha ↦ ?_⟩
   /- If `a` is normal, then clearly `exp (x • a) * exp (- x • star a) = exp (I • x • 2 • ℑ a)`
   and the latter is clearly an exponential unitary. -/
-  · convert! (selfAdjoint.expUnitary (x • (2 : Real) • ℑ a)).2
-.smul_right (-x) .symm.smul_left x have hcomm := star_comm_self (x := a)
+  · convert! (selfAdjoint.expUnitary (x • (2 : ℝ) • ℑ a)).2
+    have hcomm := star_comm_self (x := a) |>.symm.smul_left x |>.smul_right (-x)
     rw [← exp_add_of_commute hcomm]
-    simp [imaginaryPart_apply_coe, smul_comm (2 : Real) I, smul_comm x I, smul_smul I I, smul_add x,
+    simp [imaginaryPart_apply_coe, smul_comm (2 : ℝ) I, smul_comm x I, smul_smul I I, smul_add x,
       sub_eq_add_neg]
   /- Take any `x : ℝ` and suppose `u := exp (x • a) * exp (- x • a)` is unitary. Then
   `exp (- x • a) * exp (x • star a) = star u = u⁻¹ = exp (x • star a) * exp (- x • a)`. -/
-  · have key : forall x : Real, exp (- x • a) * exp (x • star a) = exp (x • star a) * exp (- x • a) := by
+  · have key : ∀ x : ℝ, exp (- x • a) * exp (x • star a) = exp (x • star a) * exp (- x • a) := by
       intro x
       let u : unitary A := ⟨_, ha x⟩
       convert! congr(($(Unitary.star_eq_inv u) : A))
@@ -253,14 +189,14 @@ public lemma isStarNormal_iff_forall_exp_mul_exp_mem_unitary {a : A} :
         simp [← invOf_exp]
     /- Compute the second derivative with respect to `x` of each side of this expression and
     evaluate at `x = 0`. -/
-    have h_deriv (a b c : A) (y : Real) :
-        deriv (fun x : Real => exp (x • a) * c * exp (x • b)) y =
+    have h_deriv (a b c : A) (y : ℝ) :
+        deriv (fun x : ℝ ↦ exp (x • a) * c * exp (x • b)) y =
           exp (y • a) * (a * c + c * b) * exp (y • b) := by
-      rw [mul_add]; rw [add_mul]; rw [← mul_assoc _ a]; rw [← mul_assoc _ c b]; rw [mul_assoc _ b]
-.mul exact (hasDerivAt_exp_smul_const a y).mul_const c
-.deriv (hasDerivAt_exp_smul_const' b y)
+      rw [mul_add, add_mul, ← mul_assoc _ a, ← mul_assoc _ c b, mul_assoc _ b]
+      exact (hasDerivAt_exp_smul_const a y).mul_const c |>.mul
+        (hasDerivAt_exp_smul_const' b y) |>.deriv
     have h_deriv₂ (a b : A) :
-        deriv (fun y => deriv (fun x : Real => exp (x • a) * exp (x • b)) y) 0 =
+        deriv (fun y ↦ deriv (fun x : ℝ ↦ exp (x • a) * exp (x • b)) y) 0 =
           a ^ 2 + 2 • (a * b) + b ^ 2 := by
       conv => enter [1, 1, y, 1, x, 1]; rw [← mul_one (exp (x • a))]
       simp_rw [h_deriv, zero_smul, NormedSpace.exp_zero, mul_one, one_mul]
@@ -270,11 +206,12 @@ public lemma isStarNormal_iff_forall_exp_mul_exp_mem_unitary {a : A} :
     simp only [smul_neg, even_two, Even.neg_pow, neg_smul] at h₃ h₄ key
     /- By `key`, these second derivatives evaluated at zero must be equal, so we find
     `a ^ 2 + 2 • (- a * star a) + (star a) ^ 2 = star ^ 2 + 2 • (star a * a) + a ^ 2`,
-    and then elementary algebra shows `star a * a = a * star a`, so `a` is normal. -/
+    and then elementary algebra shows `star a * a = a * star a`, so `a` is normal.  -/
     simp_rw [key] at h₃
     rw [h₃] at h₄
-    rw [isStarNormal_iff]; rw [commute_iff_eq]
+    rw [isStarNormal_iff, commute_iff_eq]
     apply nsmul_right_injective two_ne_zero
     rw [← sub_eq_zero] at h₄ ⊢
     rw [← h₄]
     noncomm_ring
+

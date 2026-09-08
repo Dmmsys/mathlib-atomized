@@ -21,20 +21,16 @@ namespace Lean.Elab.Tactic
 
 /-- Derives `Inhabited α` from `Nonempty α` with `Classical.choice`. -/
 @[instance_reducible]
-/--
-Definition of `nonempty_to_inhabited` / `nonempty_to_inhabited` 的定义
+/-
+**Lean.Elab.Tactic.nonempty_to_inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Ta
+ctic`。
+形式化陈述：nonempty_to_inhabited (α : Sort*) (_ : Nonempty α) : Inhabited α
+参数：α : Sort*；_ : Nonempty α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nonempty_to_inhabited
-  signature: (α : Sort*) (_ : Nonempty α)
-  body: Inhabited.mk (Classical.ofNonempty)
-
-中文:
-定义 nonempty_to_inhabited
-  签名: (α : 类型层*) (_ : 非空 α)
-  定义体: Inhabited.mk (Classical.ofNonempty)
-
-Depends on / 依赖: Classical, Classical.ofNonempty, Inhabited, Inhabited.mk, ofNonempty
+--- 原说明 ---
+Derives `Inhabited α` from `Nonempty α` with `Classical.choice`.
 -/
 noncomputable def nonempty_to_inhabited (α : Sort*) (_ : Nonempty α) : Inhabited α :=
   Inhabited.mk (Classical.ofNonempty)
@@ -42,23 +38,21 @@ noncomputable def nonempty_to_inhabited (α : Sort*) (_ : Nonempty α) : Inhabit
 /-- Derives `Inhabited α` from `Nonempty α` without `Classical.choice`
 assuming `α` is of type `Prop`. -/
 @[instance_reducible]
-/--
-Definition of `nonempty_prop_to_inhabited` / `nonempty_prop_to_inhabited` 的定义
+/-
+**Lean.Elab.Tactic.nonempty_prop_to_inhabited** 是 Mathlib 中的一个定义，位于命名空间 `Lean.El
+ab.Tactic`。
+形式化陈述：nonempty_prop_to_inhabited (α : Prop) (α_nonempty : Nonempty α) : Inhabite
+d α
+参数：α : Prop；α_nonempty : Nonempty α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nonempty_prop_to_inhabited
-  signature: (α : Prop) (α_nonempty : Nonempty α)
-  body: Inhabited.mk Nonempty.elim α_nonempty id
-
-中文:
-定义 nonempty_prop_to_inhabited
-  签名: (α : 命题) (α_nonempty : 非空 α)
-  定义体: Inhabited.mk Nonempty.elim α_nonempty id
-
-Depends on / 依赖: Inhabited, Inhabited.mk, Nonempty, Nonempty.elim
+--- 原说明 ---
+Derives `Inhabited α` from `Nonempty α` without `Classical.choice`
+assuming `α` is of type `Prop`.
 -/
 def nonempty_prop_to_inhabited (α : Prop) (α_nonempty : Nonempty α) : Inhabited α :=
-Inhabited.mk Nonempty.elim α_nonempty id
+  Inhabited.mk <| Nonempty.elim α_nonempty id
 
 /--
 `inhabit α` tries to derive a `Nonempty α` instance and
@@ -67,58 +61,20 @@ If the target is a `Prop`, this is done constructively. Otherwise, it uses `Clas
 -/
 syntax (name := inhabit) "inhabit " atomic(ident " : ")? term : tactic
 
-/--
-Definition of `evalInhabit` / `evalInhabit` 的定义
+/-- `evalInhabit` takes in the MVarId of the main goal, runs the core portion of the inhabit tactic,
+and returns the resulting MVarId -/
+/-
+**Lean.Elab.Tactic.evalInhabit** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：evalInhabit (goal : MVarId) (h_name : Option Ident) (term : Syntax) : Tact
+icM MVarId
+参数：goal : MVarId；h_name : Option Ident；term : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalInhabit
-  signature: (goal : MVarId) (h_name : Option Ident) (term : Syntax)
-  body: do
-  goal.withContext do
-    let e ← Tactic.elabTerm term none
-    let e_lvl ← Meta.getLevel e
-    let inhabited_e := mkApp (mkConst ``Inhabited [e_lvl]) e
-    let nonempty_e := mkApp (mkConst ``Nonempty [e_lvl]) e
-    let nonempty_e_pf ← synthInstance nonempty_e
-    let h_name : Name :=
-      match h_name with
-      | some h_name => h_name.getId
-      | none => `inhabited_h
-    let pf ←
-      if ← isProp e then Meta.mkAppM ``nonempty_prop_to_inhabited #[e, nonempty_e_pf]
-      else Meta.mkAppM ``nonempty_to_inhabited #[e, nonempty_e_pf]
-    let (_, r) ← (← goal.assert h_name inhabited_e pf).intro1P
-    return r
-
-elab_rules : tactic
-  | `(tactic| inhabit $[$h_name:ident :]? $term) => do
-    let goal ← evalInhabit (← getMainGoal) h_name term
-    replaceMainGoal [goal]
-
-中文:
-定义 evalInhabit
-  签名: (goal : MVarId) (h_name : 选项类型 Ident) (term : Syntax)
-  定义体: do
-  goal.withContext do
-    let e ← Tactic.elabTerm term none
-    let e_lvl ← Meta.getLevel e
-    let inhabited_e := mkApp (mkConst ``Inhabited [e_lvl]) e
-    let nonempty_e := mkApp (mkConst ``Nonempty [e_lvl]) e
-    let nonempty_e_pf ← synthInstance nonempty_e
-    let h_name : Name :=
-      match h_name with
-      | some h_name => h_name.getId
-      | none => `inhabited_h
-    let pf ←
-      if ← isProp e then Meta.mkAppM ``nonempty_prop_to_inhabited #[e, nonempty_e_pf]
-      else Meta.mkAppM ``nonempty_to_inhabited #[e, nonempty_e_pf]
-    let (_, r) ← (← goal.assert h_name inhabited_e pf).intro1P
-    return r
-
-elab_rules : tactic
-  | `(tactic| inhabit $[$h_name:ident :]? $term) => do
-    let goal ← evalInhabit (← getMainGoal) h_name term
-    replaceMainGoal [goal]
+--- 原说明 ---
+`evalInhabit` takes in the MVarId of the main goal, runs the core portion of the
+ inhabit tactic,
+and returns the resulting MVarId
 -/
 def evalInhabit (goal : MVarId) (h_name : Option Ident) (term : Syntax) : TacticM MVarId := do
   goal.withContext do
@@ -143,3 +99,4 @@ elab_rules : tactic
     replaceMainGoal [goal]
 
 end Lean.Elab.Tactic
+

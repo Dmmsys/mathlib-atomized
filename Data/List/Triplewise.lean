@@ -26,297 +26,248 @@ variable {α β : Type*}
 
 /-- Whether a predicate holds for all ordered triples of elements of a list. -/
 @[mk_iff]
-/--
-Inductive type `Triplewise` / 归纳类型 `Triplewise`
+/-
+**List.Triplewise** 是 Mathlib 中的一个归纳类型，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} → (α → α → α → Prop) → List α → Prop
+参数：α → α → α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Triplewise
-  parameters: (p : α -> α -> α -> Prop)
-  constructors (2):
-    - nil: [].Triplewise p
-    - cons: {a : α} {l : List α} : l.Pairwise (p a) -> l.Triplewise p -> (a :: l).Triplewise p
-
-中文:
-归纳类型 Triplewise
-  参数: (p : α -> α -> α -> 命题)
-  构造子 (2 个):
-    - nil: [].Triplewise p
-    - cons: {a : α} {l : 列表 α} : l.两两 (p a) -> l.Triplewise p -> (a :: l).Triplewise p
+--- 原说明 ---
+Whether a predicate holds for all ordered triples of elements of a list.
 -/
-inductive Triplewise (p : α -> α -> α -> Prop) : List α -> Prop
+inductive Triplewise (p : α → α → α → Prop) : List α → Prop
   | nil : [].Triplewise p
-  | cons {a : α} {l : List α} : l.Pairwise (p a) -> l.Triplewise p -> (a :: l).Triplewise p
+  | cons {a : α} {l : List α} : l.Pairwise (p a) → l.Triplewise p → (a :: l).Triplewise p
 
 attribute [simp, grind ←] Triplewise.nil
 
-variable {a b c : α} {l l₁ l₂ : List α} {p q : α -> α -> α -> Prop} {f : α -> β} {p' : β -> β -> β -> Prop}
+variable {a b c : α} {l l₁ l₂ : List α} {p q : α → α → α → Prop} {f : α → β} {p' : β → β → β → Prop}
 
 @[grind =]
-/--
-lemma `triplewise_cons` / 引理 `triplewise_cons`
-
-English:
-lemma triplewise_cons
-  statement: (a :: l).Triplewise p ↔ l.Pairwise (p a) ∧ l.Triplewise p
-  proof: by
-  grind [triplewise_iff]
-
-中文:
-引理 triplewise_cons
-  结论: (a :: l).Triplewise p ↔ l.两两 (p a) ∧ l.Triplewise p
-  证明: by
-  grind [triplewise_iff]
-
-Depends on / 依赖: triplewise_iff
+/-
+**List.triplewise_cons** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：triplewise_cons : (a :: l).Triplewise p ↔ l.Pairwise (p a) ∧ l.Triplewise 
+p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma triplewise_cons : (a :: l).Triplewise p ↔ l.Pairwise (p a) ∧ l.Triplewise p := by
   grind [triplewise_iff]
 
 variable (a b p)
-
-/--
-lemma `triplewise_singleton` / 引理 `triplewise_singleton`
-
-English:
-lemma triplewise_singleton
-  statement: [a].Triplewise p
-  proof: by
-  simp [triplewise_cons]
-
-中文:
-引理 triplewise_singleton
-  结论: [a].Triplewise p
-  证明: by
-  simp [triplewise_cons]
+/-
+**List.triplewise_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (a : α) (p : α → α → α → Prop), List.Triplewise p [a]
+参数：a : α；p : α → α → α → Prop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 @[simp] lemma triplewise_singleton : [a].Triplewise p := by
   simp [triplewise_cons]
-
-/--
-lemma `triplewise_pair` / 引理 `triplewise_pair`
-
-English:
-lemma triplewise_pair
-  statement: [a, b].Triplewise p
-  proof: by
-  simp [triplewise_cons]
-
-中文:
-引理 triplewise_pair
-  结论: [a, b].Triplewise p
-  证明: by
-  simp [triplewise_cons]
+/-
+**List.triplewise_pair** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} (a b : α) (p : α → α → α → Prop), List.Triplewise p [a, b
+]
+参数：a b : α；p : α → α → α → Prop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `false_implies`：∀ (p : Prop), (False → p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 @[simp] lemma triplewise_pair : [a, b].Triplewise p := by
   simp [triplewise_cons]
 
 variable {a b p}
-
-/--
-lemma `triplewise_triple` / 引理 `triplewise_triple`
-
-English:
-lemma triplewise_triple
-  statement: [a, b, c].Triplewise p ↔ p a b c
-  proof: by
-  simp [triplewise_cons]
-
-中文:
-引理 triplewise_triple
-  结论: [a, b, c].Triplewise p ↔ p a b c
-  证明: by
-  simp [triplewise_cons]
+/-
+**List.triplewise_triple** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：∀ {α : Type u_1} {a b c : α} {p : α → α → α → Prop}, List.Triplewise p [a,
+ b, c] ↔ p a b c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `false_implies`：∀ (p : Prop), (False → p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma triplewise_triple : [a, b, c].Triplewise p ↔ p a b c := by
   simp [triplewise_cons]
-
-/--
-lemma `Triplewise.imp` / 引理 `Triplewise.imp`
-
-English:
-lemma Triplewise.imp
-  given: (h : forall {a b c}, p a b c -> q a b c) (hl : l.Triplewise p)
-  proof: by
-  induction hl with
-  | nil => exact .nil
-  | cons head tail ih => exact .cons (head.imp h) ih
-
-中文:
-引理 Triplewise.imp
-  条件: (h : 对任意 {a b c}, p a b c -> q a b c) (hl : l.Triplewise p)
-  证明: by
-  induction hl with
-  | nil => exact .nil
-  | cons head tail ih => exact .cons (head.imp h) ih
-
-Depends on / 依赖: head.imp
+/-
+**List.Triplewise.imp** 是 Mathlib 中的一个定理，位于命名空间 `List.Triplewise`。
+形式化陈述：∀ {α : Type u_1} {l : List α} {p q : α → α → α → Prop},   (∀ {a b c : α}, 
+p a b c → q a b c) → List.Triplewise p l → List.Triplewise q l
+参数：∀ {a b c : α}, p a b c → q a b c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.imp`：∀ {α : Type u_1} {R S : α → α → Prop},   (∀ {a b : α}
+, R a b → S a b) → ∀ {l : List α}, List.Pairwise R l → List.Pairwise S l
 -/
-lemma Triplewise.imp (h : forall {a b c}, p a b c -> q a b c) (hl : l.Triplewise p) :
+lemma Triplewise.imp (h : ∀ {a b c}, p a b c → q a b c) (hl : l.Triplewise p) :
     l.Triplewise q := by
   induction hl with
   | nil => exact .nil
   | cons head tail ih => exact .cons (head.imp h) ih
-
-/--
-lemma `triplewise_map` / 引理 `triplewise_map`
-
-English:
-lemma triplewise_map
-  proof: by
-  induction l with
-  | nil => simp
-  | cons h t ih => simp [map, triplewise_cons, ih, pairwise_map]
-
-中文:
-引理 triplewise_map
-  证明: by
-  induction l with
-  | nil => simp
-  | cons h t ih => simp [map, triplewise_cons, ih, pairwise_map]
-
-Depends on / 依赖: pairwise_map, triplewise_cons
+/-
+**List.triplewise_map** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：triplewise_map : (l.map f).Triplewise p' ↔ l.Triplewise (fun a b c => p' (
+f a) (f b) (f c))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma triplewise_map :
-    (l.map f).Triplewise p' ↔ l.Triplewise (fun a b c => p' (f a) (f b) (f c)) := by
+    (l.map f).Triplewise p' ↔ l.Triplewise (fun a b c ↦ p' (f a) (f b) (f c)) := by
   induction l with
   | nil => simp
   | cons h t ih => simp [map, triplewise_cons, ih, pairwise_map]
-
-/--
-lemma `Triplewise.of_map` / 引理 `Triplewise.of_map`
-
-English:
-lemma Triplewise.of_map
-  proof: by
-  rw [triplewise_map] at hl
-  exact hl.imp h
-
-中文:
-引理 Triplewise.of_map
-  证明: by
-  rw [triplewise_map] at hl
-  exact hl.imp h
-
-Depends on / 依赖: hl.imp, triplewise_map
+/-
+**List.Triplewise.of_map** 是 Mathlib 中的一个定理，位于命名空间 `List.Triplewise`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {l : List α} {p : α → α → α → Prop} {f : α
+ → β} {p' : β → β → β → Prop},   (∀ {a b c : α}, p' (f a) (f b) (f c) → p a b c)
+ → List.Triplewise p' (List.map f l) → List.Triplewise p l
+参数：∀ {a b c : α}, p' (f a) (f b) (f c) → p a b c；List.map f l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Triplewise.imp`：∀ {α : Type u_1} {l : List α} {p q : α → α → α → Pr
+op},   (∀ {a b c : α}, p a b c → q a b c) → List.Triplewise p l → List.Triplewis
+e q l
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `List.triplewise_map`：triplewise_map : (l.map f).Triplewise p' ↔ l.Triple
+wise (fun a b c => p' (f a) (f b) (f c))
 -/
 lemma Triplewise.of_map
-    (h : forall {a b c}, p' (f a) (f b) (f c) -> p a b c) (hl : (l.map f).Triplewise p') :
+    (h : ∀ {a b c}, p' (f a) (f b) (f c) → p a b c) (hl : (l.map f).Triplewise p') :
     l.Triplewise p := by
   rw [triplewise_map] at hl
   exact hl.imp h
-
-/--
-lemma `Triplewise.map` / 引理 `Triplewise.map`
-
-English:
-lemma Triplewise.map
-  given: (h : forall {a b c}, p a b c -> p' (f a) (f b) (f c)) (hl : l.Triplewise p)
-  proof: triplewise_map.2 (hl.imp h)
-
-中文:
-引理 Triplewise.map
-  条件: (h : 对任意 {a b c}, p a b c -> p' (f a) (f b) (f c)) (hl : l.Triplewise p)
-  证明: triplewise_map.2 (hl.imp h)
-
-Depends on / 依赖: hl.imp, triplewise_map
+/-
+**List.Triplewise.map** 是 Mathlib 中的一个定理，位于命名空间 `List.Triplewise`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {l : List α} {p : α → α → α → Prop} {f : α
+ → β} {p' : β → β → β → Prop},   (∀ {a b c : α}, p a b c → p' (f a) (f b) (f c))
+ → List.Triplewise p l → List.Triplewise p' (List.map f l)
+参数：∀ {a b c : α}, p a b c → p' (f a) (f b) (f c)；List.map f l。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `List.triplewise_map`：triplewise_map : (l.map f).Triplewise p' ↔ l.Triple
+wise (fun a b c => p' (f a) (f b) (f c))
+· 使用定理 `List.Triplewise.imp`：∀ {α : Type u_1} {l : List α} {p q : α → α → α → Pr
+op},   (∀ {a b c : α}, p a b c → q a b c) → List.Triplewise p l → List.Triplewis
+e q l
 -/
-lemma Triplewise.map (h : forall {a b c}, p a b c -> p' (f a) (f b) (f c)) (hl : l.Triplewise p) :
+lemma Triplewise.map (h : ∀ {a b c}, p a b c → p' (f a) (f b) (f c)) (hl : l.Triplewise p) :
     (l.map f).Triplewise p' :=
   triplewise_map.2 (hl.imp h)
-
-/--
-lemma `triplewise_iff_getElem` / 引理 `triplewise_iff_getElem`
-
-English:
-lemma triplewise_iff_getElem
-  statement: l.Triplewise p ↔ forall i j k (hij : i < j) (hjk : j < k)
-  proof: by
-  induction l with
-  | nil => simp
-  | cons head tail ih =>
-    simp only [triplewise_cons, length_cons, pairwise_iff_getElem, ih]
-    refine ⟨fun ⟨hh, ht⟩ i j k hij hjk hk => ?_,
-            fun h => ⟨fun i j hi hj hij => ?_, fun i j k hij hjk hk => ?_⟩⟩
-    · grind
-    · simpa using! h 0 (i + 1) (j + 1) (by lia) (by lia) (by lia)
-    · simpa using! h (i + 1) (j + 1) (k + 1) (by lia) (by lia) (by lia)
-
-中文:
-引理 triplewise_iff_getElem
-  结论: l.Triplewise p ↔ 对任意 i j k (hij : i < j) (hjk : j < k)
-  证明: by
-  induction l with
-  | nil => simp
-  | cons head tail ih =>
-    simp only [triplewise_cons, length_cons, pairwise_iff_getElem, ih]
-    refine ⟨fun ⟨hh, ht⟩ i j k hij hjk hk => ?_,
-            fun h => ⟨fun i j hi hj hij => ?_, fun i j k hij hjk hk => ?_⟩⟩
-    · grind
-    · simpa using! h 0 (i + 1) (j + 1) (by lia) (by lia) (by lia)
-    · simpa using! h (i + 1) (j + 1) (k + 1) (by lia) (by lia) (by lia)
-
-Depends on / 依赖: length_cons, pairwise_iff_getElem, triplewise_cons
+/-
+**List.triplewise_iff_getElem** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：triplewise_iff_getElem : l.Triplewise p ↔ forall i j k (hij : i < j) (hjk 
+: j < k) (hk : k < l.length), p l[i] l[j] l[k]
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `forall_false`：∀ (p : False → Prop), (∀ (h : False), p h) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-lemma triplewise_iff_getElem : l.Triplewise p ↔ forall i j k (hij : i < j) (hjk : j < k)
+lemma triplewise_iff_getElem : l.Triplewise p ↔ ∀ i j k (hij : i < j) (hjk : j < k)
     (hk : k < l.length), p l[i] l[j] l[k] := by
   induction l with
   | nil => simp
   | cons head tail ih =>
     simp only [triplewise_cons, length_cons, pairwise_iff_getElem, ih]
-    refine ⟨fun ⟨hh, ht⟩ i j k hij hjk hk => ?_,
-            fun h => ⟨fun i j hi hj hij => ?_, fun i j k hij hjk hk => ?_⟩⟩
+    refine ⟨fun ⟨hh, ht⟩ i j k hij hjk hk ↦ ?_,
+            fun h ↦ ⟨fun i j hi hj hij ↦ ?_, fun i j k hij hjk hk ↦ ?_⟩⟩
     · grind
     · simpa using! h 0 (i + 1) (j + 1) (by lia) (by lia) (by lia)
     · simpa using! h (i + 1) (j + 1) (k + 1) (by lia) (by lia) (by lia)
-
-/--
-lemma `triplewise_append` / 引理 `triplewise_append`
-
-English:
-lemma triplewise_append
-  statement: (l₁ ++ l₂).Triplewise p ↔ l₁.Triplewise p ∧ l₂.Triplewise p ∧
-  proof: by
-  induction l₁ with grind [pairwise_cons]
-
-中文:
-引理 triplewise_append
-  结论: (l₁ ++ l₂).Triplewise p ↔ l₁.Triplewise p ∧ l₂.Triplewise p ∧
-  证明: by
-  induction l₁ with grind [pairwise_cons]
-
-Depends on / 依赖: pairwise_cons
+/-
+**List.triplewise_append** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：triplewise_append : (l₁ ++ l₂).Triplewise p ↔ l₁.Triplewise p ∧ l₂.Triplew
+ise p ∧ (forall a in l₁, l₂.Pairwise (p a)) ∧ forall a in l₂, l₁.Pairwise fun x 
+y => p x y a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma triplewise_append : (l₁ ++ l₂).Triplewise p ↔ l₁.Triplewise p ∧ l₂.Triplewise p ∧
-    (forall a in l₁, l₂.Pairwise (p a)) ∧ forall a in l₂, l₁.Pairwise fun x y => p x y a := by
+    (∀ a ∈ l₁, l₂.Pairwise (p a)) ∧ ∀ a ∈ l₂, l₁.Pairwise fun x y ↦ p x y a := by
   induction l₁ with grind [pairwise_cons]
-
-/--
-lemma `triplewise_reverse` / 引理 `triplewise_reverse`
-
-English:
-lemma triplewise_reverse
-  statement: l.reverse.Triplewise p ↔ l.Triplewise fun a b c => p c b a
-  proof: by
-  induction l with
-  | nil => simp
-  | cons h t ih =>
-    simp [triplewise_append, pairwise_reverse, triplewise_cons, ih, and_comm]
-
-中文:
-引理 triplewise_reverse
-  结论: l.reverse.Triplewise p ↔ l.Triplewise fun a b c => p c b a
-  证明: by
-  induction l with
-  | nil => simp
-  | cons h t ih =>
-    simp [triplewise_append, pairwise_reverse, triplewise_cons, ih, and_comm]
-
-Depends on / 依赖: and_comm, pairwise_reverse, triplewise_append, triplewise_cons
+/-
+**List.triplewise_reverse** 是 Mathlib 中的一个引理，位于命名空间 `List`。
+形式化陈述：triplewise_reverse : l.reverse.Triplewise p ↔ l.Triplewise fun a b c => p 
+c b a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `false_implies`：∀ (p : Prop), (False → p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
 -/
-lemma triplewise_reverse : l.reverse.Triplewise p ↔ l.Triplewise fun a b c => p c b a := by
+lemma triplewise_reverse : l.reverse.Triplewise p ↔ l.Triplewise fun a b c ↦ p c b a := by
   induction l with
   | nil => simp
   | cons h t ih =>
     simp [triplewise_append, pairwise_reverse, triplewise_cons, ih, and_comm]
 
 end List
+

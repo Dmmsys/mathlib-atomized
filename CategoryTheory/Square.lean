@@ -19,8 +19,8 @@ The four objects in a commutative square are
 numbered as follows:
 ```
 X₁ --> X₂
-| |
-v v
+|      |
+v      v
 X₃ --> X₄
 ```
 
@@ -43,36 +43,14 @@ open Category
 
 variable (C : Type u) [Category.{v} C] {D : Type u'} [Category.{v'} D]
 
-/--
-Definition of `Square` / `Square` 的定义
+/-- The category of commutative squares in a category. -/
+/-
+**CategoryTheory.Square** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Square
-  parameters: where
-  axioms and operations (9):
-    - {X₁ : C}
-    - {X₂ : C}
-    - {X₃ : C}
-    - {X₄ : C}
-    - f₁₂ : X₁ ⟶ X₂
-    - f₁₃ : X₁ ⟶ X₃
-    - f₂₄ : X₂ ⟶ X₄
-    - f₃₄ : X₃ ⟶ X₄
-    - fac : f₁₂ ≫ f₂₄ = f₁₃ ≫ f₃₄
-
-中文:
-结构 Square
-  参数: where
-  公理与运算 (9 个):
-    - {X₁ : C}
-    - {X₂ : C}
-    - {X₃ : C}
-    - {X₄ : C}
-    - f₁₂ : X₁ ⟶ X₂
-    - f₁₃ : X₁ ⟶ X₃
-    - f₂₄ : X₂ ⟶ X₄
-    - f₃₄ : X₃ ⟶ X₄
-    - fac : f₁₂ ≫ f₂₄ = f₁₃ ≫ f₃₄
+--- 原说明 ---
+The category of commutative squares in a category.
 -/
 structure Square where
   /-- the top-left object -/
@@ -97,22 +75,16 @@ namespace Square
 
 variable {C}
 
-/--
-lemma `commSq` / 引理 `commSq`
-
-English:
-lemma commSq
-  given: (sq : Square C)
-  statement: CommSq sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄ where
-  proof: sq.fac
-
-中文:
-引理 commSq
-  条件: (sq : Square C)
-  结论: 交换Sq sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄ where
-  证明: sq.fac
-
-Depends on / 依赖: sq.fac
+/-
+**CategoryTheory.Square.commSq** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Square`
+。
+形式化陈述：commSq (sq : Square C) : CommSq sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄ where w
+参数：sq : Square C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Square.fac`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] (self : CategoryTheory.Square C),   CategoryTheory.CategoryStruct.co
+mp self.f₁₂ sel…
 -/
 lemma commSq (sq : Square C) : CommSq sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄ where
   w := sq.fac
@@ -120,36 +92,18 @@ lemma commSq (sq : Square C) : CommSq sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃�
 /-- A morphism between two commutative squares consists of 4 morphisms
 which extend these two squares into a commuting cube. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Square.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Square`。
+形式化陈述：Hom (sq₁ sq₂ : Square C) where /-- the top-left morphism -/ τ₁ : sq₁.X₁ ⟶ 
+sq₂.X₁ /-- the top-right morphism -/ τ₂ : sq₁.X₂ ⟶ sq₂.X₂ /-- the bottom-left mo
+rphism -/ τ₃ : sq₁.X₃ ⟶ sq₂.X₃ /-- the bottom-right morphism -/ τ₄ : sq₁.X₄ ⟶ sq
+₂.X₄ comm₁₂ : sq₁.f₁₂ ≫ τ₂ = τ₁ ≫ sq₂.f₁₂
+参数：sq₁ sq₂ : Square C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (sq₁ sq₂ : Square C)
-  axioms and operations (8):
-    - τ₁ : sq₁.X₁ ⟶ sq₂.X₁
-    - τ₂ : sq₁.X₂ ⟶ sq₂.X₂
-    - τ₃ : sq₁.X₃ ⟶ sq₂.X₃
-    - τ₄ : sq₁.X₄ ⟶ sq₂.X₄
-    - comm₁₂ : sq₁.f₁₂ ≫ τ₂ = τ₁ ≫ sq₂.f₁₂  [default: by cat_disch]
-    - comm₁₃ : sq₁.f₁₃ ≫ τ₃ = τ₁ ≫ sq₂.f₁₃  [default: by cat_disch]
-    - comm₂₄ : sq₁.f₂₄ ≫ τ₄ = τ₂ ≫ sq₂.f₂₄  [default: by cat_disch]
-    - comm₃₄ : sq₁.f₃₄ ≫ τ₄ = τ₃ ≫ sq₂.f₃₄  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (sq₁ sq₂ : Square C)
-  公理与运算 (8 个):
-    - τ₁ : sq₁.X₁ ⟶ sq₂.X₁
-    - τ₂ : sq₁.X₂ ⟶ sq₂.X₂
-    - τ₃ : sq₁.X₃ ⟶ sq₂.X₃
-    - τ₄ : sq₁.X₄ ⟶ sq₂.X₄
-    - comm₁₂ : sq₁.f₁₂ ≫ τ₂ = τ₁ ≫ sq₂.f₁₂  [默认: by cat_disch]
-    - comm₁₃ : sq₁.f₁₃ ≫ τ₃ = τ₁ ≫ sq₂.f₁₃  [默认: by cat_disch]
-    - comm₂₄ : sq₁.f₂₄ ≫ τ₄ = τ₂ ≫ sq₂.f₂₄  [默认: by cat_disch]
-    - comm₃₄ : sq₁.f₃₄ ≫ τ₄ = τ₃ ≫ sq₂.f₃₄  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism between two commutative squares consists of 4 morphisms
+which extend these two squares into a commuting cube.
 -/
 structure Hom (sq₁ sq₂ : Square C) where
   /-- the top-left morphism -/
@@ -171,24 +125,16 @@ attribute [reassoc (attr := simp)] comm₁₂ comm₁₃ comm₂₄ comm₃₄
 
 /-- The identity of a commutative square. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.Square.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Square.
+Hom`。
+形式化陈述：id (sq : Square C) : Hom sq sq where τ₁
+参数：sq : Square C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (sq : Square C)
-  body: 𝟙 _
-  τ₂ := 𝟙 _
-  τ₃ := 𝟙 _
-  τ₄ := 𝟙 _
-
-中文:
-定义 id
-  签名: (sq : Square C)
-  定义体: 𝟙 _
-  τ₂ := 𝟙 _
-  τ₃ := 𝟙 _
-  τ₄ := 𝟙 _
+--- 原说明 ---
+The identity of a commutative square.
 -/
 def id (sq : Square C) : Hom sq sq where
   τ₁ := 𝟙 _
@@ -198,24 +144,17 @@ def id (sq : Square C) : Hom sq sq where
 
 /-- The composition of morphisms of squares. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.Square.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Squar
+e.Hom`。
+形式化陈述：comp {sq₁ sq₂ sq₃ : Square C} (f : Hom sq₁ sq₂) (g : Hom sq₂ sq₃) : Hom sq
+₁ sq₃ where τ₁
+参数：f : Hom sq₁ sq₂；g : Hom sq₂ sq₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {sq₁ sq₂ sq₃ : Square C} (f : Hom sq₁ sq₂) (g : Hom sq₂ sq₃)
-  body: f.τ₁ ≫ g.τ₁
-  τ₂ := f.τ₂ ≫ g.τ₂
-  τ₃ := f.τ₃ ≫ g.τ₃
-  τ₄ := f.τ₄ ≫ g.τ₄
-
-中文:
-定义 comp
-  签名: {sq₁ sq₂ sq₃ : Square C} (f : 态射 sq₁ sq₂) (g : 态射 sq₂ sq₃)
-  定义体: f.τ₁ ≫ g.τ₁
-  τ₂ := f.τ₂ ≫ g.τ₂
-  τ₃ := f.τ₃ ≫ g.τ₃
-  τ₄ := f.τ₄ ≫ g.τ₄
+--- 原说明 ---
+The composition of morphisms of squares.
 -/
 def comp {sq₁ sq₂ sq₃ : Square C} (f : Hom sq₁ sq₂) (g : Hom sq₂ sq₃) : Hom sq₁ sq₃ where
   τ₁ := f.τ₁ ≫ g.τ₁
@@ -226,26 +165,12 @@ def comp {sq₁ sq₂ sq₃ : Square C} (f : Hom sq₁ sq₂) (g : Hom sq₂ sq�
 end Hom
 
 @[simps!]
-/--
-Instance `category` / 实例 `category`
-
-English:
-instance category
-  signature: : Category (Square C) where
-  body: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[ext]
-
-中文:
-实例 category
-  签名: : 范畴 (Square C) where
-  定义体: Hom
-  id := Hom.id
-  comp := Hom.comp
-
-@[ext]
+/-
+**CategoryTheory.Square.category** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Squar
+e`。
+形式化陈述：category : Category (Square C) where Hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance category : Category (Square C) where
   Hom := Hom
@@ -253,72 +178,40 @@ instance category : Category (Square C) where
   comp := Hom.comp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {sq₁ sq₂ : Square C} {f g : sq₁ ⟶ sq₂}
-  proof: Hom.ext h₁ h₂ h₃ h₄
-
-中文:
-引理 hom_ext
-  结论: {sq₁ sq₂ : Square C} {f g : sq₁ ⟶ sq₂}
-  证明: Hom.ext h₁ h₂ h₃ h₄
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.Square.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Square
+`。
+形式化陈述：hom_ext {sq₁ sq₂ : Square C} {f g : sq₁ ⟶ sq₂} (h₁ : f.τ₁ = g.τ₁) (h₂ : f.
+τ₂ = g.τ₂) (h₃ : f.τ₃ = g.τ₃) (h₄ : f.τ₄ = g.τ₄) : f = g
+参数：h₁ : f.τ₁ = g.τ₁；h₂ : f.τ₂ = g.τ₂；h₃ : f.τ₃ = g.τ₃；h₄ : f.τ₄ = g.τ₄。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Square.Hom.ext`：∀ {C : Type u} {inst : CategoryTheory.Cat
+egory.{v, u} C} {sq₁ sq₂ : CategoryTheory.Square C} {x y : sq₁.Hom sq₂},   x.τ₁ 
+= y.τ₁ → x.τ₂ = y.τ…
 -/
 lemma hom_ext {sq₁ sq₂ : Square C} {f g : sq₁ ⟶ sq₂}
     (h₁ : f.τ₁ = g.τ₁) (h₂ : f.τ₂ = g.τ₂)
     (h₃ : f.τ₃ = g.τ₃) (h₄ : f.τ₄ = g.τ₄) : f = g :=
   Hom.ext h₁ h₂ h₃ h₄
 
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-- Constructor for isomorphisms in `Square C` -/
+/-
+**CategoryTheory.Square.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Square`。
+形式化陈述：isoMk {sq₁ sq₂ : Square C} (e₁ : sq₁.X₁ ≅ sq₂.X₁) (e₂ : sq₁.X₂ ≅ sq₂.X₂) (
+e₃ : sq₁.X₃ ≅ sq₂.X₃) (e₄ : sq₁.X₄ ≅ sq₂.X₄) (comm₁₂ : sq₁.f₁₂ ≫ e₂.hom = e₁.hom
+ ≫ sq₂.f₁₂) (comm₁₃ : sq₁.f₁₃ ≫ e₃.hom = e₁.hom ≫ sq₂.f₁₃) (comm₂₄ : sq₁.f₂₄ ≫ e
+₄.hom = e₂.hom ≫ sq₂.f₂₄) (comm₃₄ : sq₁.f₃₄ ≫ e₄.hom = e₃.hom ≫ sq₂.f₃₄) : sq₁ ≅
+ sq₂ where hom
+参数：e₁ : sq₁.X₁ ≅ sq₂.X₁；e₂ : sq₁.X₂ ≅ sq₂.X₂；e₃ : sq₁.X₃ ≅ sq₂.X₃；e₄ : sq₁.X₄ ≅ 
+sq₂.X₄；comm₁₂ : sq₁.f₁₂ ≫ e₂.hom = e₁.hom ≫ sq₂.f₁₂；comm₁₃ : sq₁.f₁₃ ≫ e₃.hom = 
+e₁.hom ≫ sq₂.f₁₃；comm₂₄ : sq₁.f₂₄ ≫ e₄.hom = e₂.hom ≫ sq₂.f₂₄；comm₃₄ : sq₁.f₃₄ ≫
+ e₄.hom = e₃.hom ≫ sq₂.f₃₄。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: {sq₁ sq₂ : Square C} (e₁ : sq₁.X₁ ≅ sq₂.X₁) (e₂ : sq₁.X₂ ≅ sq₂.X₂)
-  body: { τ₁ := e₁.hom
-      τ₂ := e₂.hom
-      τ₃ := e₃.hom
-      τ₄ := e₄.hom }
-  inv :=
-    { τ₁ := e₁.inv
-      τ₂ := e₂.inv
-      τ₃ := e₃.inv
-      τ₄ := e₄.inv
-      comm₁₂ := by simp only [← cancel_mono e₂.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₁₂, Iso.inv_hom_id_assoc]
-      comm₁₃ := by simp only [← cancel_mono e₃.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₁₃, Iso.inv_hom_id_assoc]
-      comm₂₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₂₄, Iso.inv_hom_id_assoc]
-      comm₃₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₃₄, Iso.inv_hom_id_assoc] }
-
-中文:
-定义 isoMk
-  签名: {sq₁ sq₂ : Square C} (e₁ : sq₁.X₁ ≅ sq₂.X₁) (e₂ : sq₁.X₂ ≅ sq₂.X₂)
-  定义体: { τ₁ := e₁.hom
-      τ₂ := e₂.hom
-      τ₃ := e₃.hom
-      τ₄ := e₄.hom }
-  inv :=
-    { τ₁ := e₁.inv
-      τ₂ := e₂.inv
-      τ₃ := e₃.inv
-      τ₄ := e₄.inv
-      comm₁₂ := by simp only [← cancel_mono e₂.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₁₂, Iso.inv_hom_id_assoc]
-      comm₁₃ := by simp only [← cancel_mono e₃.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₁₃, Iso.inv_hom_id_assoc]
-      comm₂₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₂₄, Iso.inv_hom_id_assoc]
-      comm₃₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
-                      comp_id, comm₃₄, Iso.inv_hom_id_assoc] }
-
-Depends on / 依赖: Iso.in, Iso.inv_hom_id, Iso.inv_hom_id_assoc, cancel_mono, comp_id, inv_hom_id, inv_hom_id_assoc
+--- 原说明 ---
+Constructor for isomorphisms in `Square C`
 -/
 def isoMk {sq₁ sq₂ : Square C} (e₁ : sq₁.X₁ ≅ sq₂.X₁) (e₂ : sq₁.X₂ ≅ sq₂.X₂)
     (e₃ : sq₁.X₃ ≅ sq₂.X₃) (e₄ : sq₁.X₄ ≅ sq₂.X₄)
@@ -348,28 +241,15 @@ def isoMk {sq₁ sq₂ : Square C} (e₁ : sq₁.X₁ ≅ sq₂.X₁) (e₂ : sq
 
 /-- Flipping a square by switching the top-right and the bottom-left objects. -/
 @[simps]
-/--
-Definition of `flip` / `flip` 的定义
+/-
+**CategoryTheory.Square.flip** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Square`。
+形式化陈述：flip (sq : Square C) : Square C where f₁₂
+参数：sq : Square C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flip
-  signature: (sq : Square C)
-  body: sq.f₁₃
-  f₁₃ := sq.f₁₂
-  f₂₄ := sq.f₃₄
-  f₃₄ := sq.f₂₄
-  fac := sq.fac.symm
-
-中文:
-定义 flip
-  签名: (sq : Square C)
-  定义体: sq.f₁₃
-  f₁₃ := sq.f₁₂
-  f₂₄ := sq.f₃₄
-  f₃₄ := sq.f₂₄
-  fac := sq.fac.symm
-
-Depends on / 依赖: sq.f
+--- 原说明 ---
+Flipping a square by switching the top-right and the bottom-left objects.
 -/
 def flip (sq : Square C) : Square C where
   f₁₂ := sq.f₁₃
@@ -381,28 +261,15 @@ def flip (sq : Square C) : Square C where
 set_option backward.defeqAttrib.useBackward true in
 /-- The functor which flips commutative squares. -/
 @[simps]
-/--
-Definition of `flipFunctor` / `flipFunctor` 的定义
+/-
+**CategoryTheory.Square.flipFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sq
+uare`。
+形式化陈述：flipFunctor : Square C ⥤ Square C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipFunctor
-  signature: : Square C ⥤ Square C where
-  body: flip
-  map φ :=
-    { τ₁ := φ.τ₁
-      τ₂ := φ.τ₃
-      τ₃ := φ.τ₂
-      τ₄ := φ.τ₄ }
-
-中文:
-定义 flipFunctor
-  签名: : Square C ⥤ Square C where
-  定义体: flip
-  map φ :=
-    { τ₁ := φ.τ₁
-      τ₂ := φ.τ₃
-      τ₃ := φ.τ₂
-      τ₄ := φ.τ₄ }
+--- 原说明 ---
+The functor which flips commutative squares.
 -/
 def flipFunctor : Square C ⥤ Square C where
   obj := flip
@@ -416,26 +283,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Flipping commutative squares is an auto-equivalence. -/
 @[simps]
-/--
-Definition of `flipEquivalence` / `flipEquivalence` 的定义
+/-
+**CategoryTheory.Square.flipEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Square`。
+形式化陈述：flipEquivalence : Square C ≌ Square C where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flipEquivalence
-  signature: : Square C ≌ Square C where
-  body: flipFunctor
-  inverse := flipFunctor
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 flipEquivalence
-  签名: : Square C ≌ Square C where
-  定义体: flipFunctor
-  inverse := flipFunctor
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: flipFunctor
+--- 原说明 ---
+Flipping commutative squares is an auto-equivalence.
 -/
 def flipEquivalence : Square C ≌ Square C where
   functor := flipFunctor
@@ -449,24 +305,20 @@ set_option backward.defeqAttrib.useBackward true in
 commutative square `sq` to the obvious arrow from the left morphism of `sq`
 to the right morphism of `sq`. -/
 @[simps!]
-/--
-Definition of `toArrowArrowFunctor` / `toArrowArrowFunctor` 的定义
+/-
+**CategoryTheory.Square.toArrowArrowFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Square`。
+形式化陈述：toArrowArrowFunctor : Square C ⥤ Arrow (Arrow C) where obj sq
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Square.fac`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] (self : CategoryTheory.Square C),   CategoryTheory.CategoryStruct.co
+mp self.f₁₂ sel…
 
-English:
-definition toArrowArrowFunctor
-  signature: : Square C ⥤ Arrow (Arrow C) where
-  body: Arrow.mk (Arrow.homMk _ _ sq.fac : Arrow.mk sq.f₁₃ ⟶ Arrow.mk sq.f₂₄)
-  map φ := Arrow.homMk (Arrow.homMk _ _ φ.comm₁₃.symm)
-    (Arrow.homMk _ _ φ.comm₂₄.symm)
-
-中文:
-定义 toArrowArrowFunctor
-  签名: : Square C ⥤ 箭头 (箭头 C) where
-  定义体: Arrow.mk (Arrow.homMk _ _ sq.fac : Arrow.mk sq.f₁₃ ⟶ Arrow.mk sq.f₂₄)
-  map φ := Arrow.homMk (Arrow.homMk _ _ φ.comm₁₃.symm)
-    (Arrow.homMk _ _ φ.comm₂₄.symm)
-
-Depends on / 依赖: Arrow.homMk, Arrow.mk, sq.f, sq.fac
+--- 原说明 ---
+The functor `Square C ⥤ Arrow (Arrow C)` which sends a
+commutative square `sq` to the obvious arrow from the left morphism of `sq`
+to the right morphism of `sq`.
 -/
 def toArrowArrowFunctor : Square C ⥤ Arrow (Arrow C) where
   obj sq := Arrow.mk (Arrow.homMk _ _ sq.fac : Arrow.mk sq.f₁₃ ⟶ Arrow.mk sq.f₂₄)
@@ -477,38 +329,17 @@ def toArrowArrowFunctor : Square C ⥤ Arrow (Arrow C) where
 a morphism `Arrow.mk f ⟶ Arrow.mk g` to the commutative square
 with `f` on the left side and `g` on the right side. -/
 @[simps!]
-/--
-Definition of `fromArrowArrowFunctor` / `fromArrowArrowFunctor` 的定义
+/-
+**CategoryTheory.Square.fromArrowArrowFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Square`。
+形式化陈述：fromArrowArrowFunctor : Arrow (Arrow C) ⥤ Square C where obj f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromArrowArrowFunctor
-  signature: : Arrow (Arrow C) ⥤ Square C where
-  body: { fac := f.hom.w, .. }
-  map φ :=
-    { τ₁ := φ.left.left
-      τ₂ := φ.right.left
-      τ₃ := φ.left.right
-      τ₄ := φ.right.right
-      comm₁₂ := Arrow.leftFunc.congr_map φ.w.symm
-      comm₁₃ := φ.left.w.symm
-      comm₂₄ := φ.right.w.symm
-      comm₃₄ := Arrow.rightFunc.congr_map φ.w.symm }
-
-中文:
-定义 fromArrowArrowFunctor
-  签名: : 箭头 (箭头 C) ⥤ Square C where
-  定义体: { fac := f.hom.w, .. }
-  map φ :=
-    { τ₁ := φ.left.left
-      τ₂ := φ.right.left
-      τ₃ := φ.left.right
-      τ₄ := φ.right.right
-      comm₁₂ := Arrow.leftFunc.congr_map φ.w.symm
-      comm₁₃ := φ.left.w.symm
-      comm₂₄ := φ.right.w.symm
-      comm₃₄ := Arrow.rightFunc.congr_map φ.w.symm }
-
-Depends on / 依赖: f.hom.w
+--- 原说明 ---
+The functor `Arrow (Arrow C) ⥤ Square C` which sends
+a morphism `Arrow.mk f ⟶ Arrow.mk g` to the commutative square
+with `f` on the left side and `g` on the right side.
 -/
 def fromArrowArrowFunctor : Arrow (Arrow C) ⥤ Square C where
   obj f := { fac := f.hom.w, .. }
@@ -528,26 +359,17 @@ set_option backward.defeqAttrib.useBackward true in
 commutative square `sq` to the obvious arrow from the left morphism of `sq`
 to the right morphism of `sq`. -/
 @[simps]
-/--
-Definition of `arrowArrowEquivalence` / `arrowArrowEquivalence` 的定义
+/-
+**CategoryTheory.Square.arrowArrowEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Square`。
+形式化陈述：arrowArrowEquivalence : Square C ≌ Arrow (Arrow C) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowArrowEquivalence
-  signature: : Square C ≌ Arrow (Arrow C) where
-  body: toArrowArrowFunctor
-  inverse := fromArrowArrowFunctor
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 arrowArrowEquivalence
-  签名: : Square C ≌ 箭头 (箭头 C) where
-  定义体: toArrowArrowFunctor
-  inverse := fromArrowArrowFunctor
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: toArrowArrowFunctor
+--- 原说明 ---
+The equivalence `Square C ≌ Arrow (Arrow C)` which sends a
+commutative square `sq` to the obvious arrow from the left morphism of `sq`
+to the right morphism of `sq`.
 -/
 def arrowArrowEquivalence : Square C ≌ Arrow (Arrow C) where
   functor := toArrowArrowFunctor
@@ -561,24 +383,17 @@ set_option backward.defeqAttrib.useBackward true in
 commutative square `sq` to the obvious arrow from the top morphism of `sq`
 to the bottom morphism of `sq`. -/
 @[simps!]
-/--
-Definition of `toArrowArrowFunctor'` / `toArrowArrowFunctor'` 的定义
+/-
+**CategoryTheory.Square.toArrowArrowFunctor'** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Square`。
+形式化陈述：toArrowArrowFunctor' : Square C ⥤ Arrow (Arrow C) where obj sq
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toArrowArrowFunctor'
-  signature: : Square C ⥤ Arrow (Arrow C) where
-  body: Arrow.mk (Arrow.homMk _ _ sq.fac.symm : Arrow.mk sq.f₁₂ ⟶ Arrow.mk sq.f₃₄)
-  map φ := Arrow.homMk (Arrow.homMk _ _ φ.comm₁₂.symm)
-    (Arrow.homMk _ _ φ.comm₃₄.symm)
-
-中文:
-定义 toArrowArrowFunctor'
-  签名: : Square C ⥤ 箭头 (箭头 C) where
-  定义体: Arrow.mk (Arrow.homMk _ _ sq.fac.symm : Arrow.mk sq.f₁₂ ⟶ Arrow.mk sq.f₃₄)
-  map φ := Arrow.homMk (Arrow.homMk _ _ φ.comm₁₂.symm)
-    (Arrow.homMk _ _ φ.comm₃₄.symm)
-
-Depends on / 依赖: Arrow.homMk, Arrow.mk, sq.f, sq.fac.symm
+--- 原说明 ---
+The functor `Square C ⥤ Arrow (Arrow C)` which sends a
+commutative square `sq` to the obvious arrow from the top morphism of `sq`
+to the bottom morphism of `sq`.
 -/
 def toArrowArrowFunctor' : Square C ⥤ Arrow (Arrow C) where
   obj sq := Arrow.mk (Arrow.homMk _ _ sq.fac.symm : Arrow.mk sq.f₁₂ ⟶ Arrow.mk sq.f₃₄)
@@ -589,38 +404,17 @@ def toArrowArrowFunctor' : Square C ⥤ Arrow (Arrow C) where
 a morphism `Arrow.mk f ⟶ Arrow.mk g` to the commutative square
 with `f` on the top side and `g` on the bottom side. -/
 @[simps!]
-/--
-Definition of `fromArrowArrowFunctor'` / `fromArrowArrowFunctor'` 的定义
+/-
+**CategoryTheory.Square.fromArrowArrowFunctor'** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Square`。
+形式化陈述：fromArrowArrowFunctor' : Arrow (Arrow C) ⥤ Square C where obj f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromArrowArrowFunctor'
-  signature: : Arrow (Arrow C) ⥤ Square C where
-  body: { fac := f.hom.w.symm, .. }
-  map φ :=
-    { τ₁ := φ.left.left
-      τ₂ := φ.left.right
-      τ₃ := φ.right.left
-      τ₄ := φ.right.right
-      comm₁₂ := φ.left.w.symm
-      comm₁₃ := Arrow.leftFunc.congr_map φ.w.symm
-      comm₂₄ := Arrow.rightFunc.congr_map φ.w.symm
-      comm₃₄ := φ.right.w.symm }
-
-中文:
-定义 fromArrowArrowFunctor'
-  签名: : 箭头 (箭头 C) ⥤ Square C where
-  定义体: { fac := f.hom.w.symm, .. }
-  map φ :=
-    { τ₁ := φ.left.left
-      τ₂ := φ.left.right
-      τ₃ := φ.right.left
-      τ₄ := φ.right.right
-      comm₁₂ := φ.left.w.symm
-      comm₁₃ := Arrow.leftFunc.congr_map φ.w.symm
-      comm₂₄ := Arrow.rightFunc.congr_map φ.w.symm
-      comm₃₄ := φ.right.w.symm }
-
-Depends on / 依赖: f.hom.w.symm
+--- 原说明 ---
+The functor `Arrow (Arrow C) ⥤ Square C` which sends
+a morphism `Arrow.mk f ⟶ Arrow.mk g` to the commutative square
+with `f` on the top side and `g` on the bottom side.
 -/
 def fromArrowArrowFunctor' : Arrow (Arrow C) ⥤ Square C where
   obj f := { fac := f.hom.w.symm, .. }
@@ -640,26 +434,17 @@ set_option backward.defeqAttrib.useBackward true in
 commutative square `sq` to the obvious arrow from the top morphism of `sq`
 to the bottom morphism of `sq`. -/
 @[simps]
-/--
-Definition of `arrowArrowEquivalence'` / `arrowArrowEquivalence'` 的定义
+/-
+**CategoryTheory.Square.arrowArrowEquivalence'** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Square`。
+形式化陈述：arrowArrowEquivalence' : Square C ≌ Arrow (Arrow C) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowArrowEquivalence'
-  signature: : Square C ≌ Arrow (Arrow C) where
-  body: toArrowArrowFunctor'
-  inverse := fromArrowArrowFunctor'
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 arrowArrowEquivalence'
-  签名: : Square C ≌ 箭头 (箭头 C) where
-  定义体: toArrowArrowFunctor'
-  inverse := fromArrowArrowFunctor'
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: toArrowArrowFunctor
+--- 原说明 ---
+The equivalence `Square C ≌ Arrow (Arrow C)` which sends a
+commutative square `sq` to the obvious arrow from the top morphism of `sq`
+to the bottom morphism of `sq`.
 -/
 def arrowArrowEquivalence' : Square C ≌ Arrow (Arrow C) where
   functor := toArrowArrowFunctor'
@@ -669,22 +454,13 @@ def arrowArrowEquivalence' : Square C ≌ Arrow (Arrow C) where
 
 /-- The top-left evaluation `Square C ⥤ C`. -/
 @[simps]
-/--
-Definition of `evaluation₁` / `evaluation₁` 的定义
+/-
+**CategoryTheory.Square.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Squ
+are`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evaluation₁
-  signature: : Square C ⥤ C where
-  body: sq.X₁
-  map φ := φ.τ₁
-
-中文:
-定义 evaluation₁
-  签名: : Square C ⥤ C where
-  定义体: sq.X₁
-  map φ := φ.τ₁
-
-Depends on / 依赖: sq.X
+--- 原说明 ---
+The top-left evaluation `Square C ⥤ C`.
 -/
 def evaluation₁ : Square C ⥤ C where
   obj sq := sq.X₁
@@ -692,22 +468,13 @@ def evaluation₁ : Square C ⥤ C where
 
 /-- The top-right evaluation `Square C ⥤ C`. -/
 @[simps]
-/--
-Definition of `evaluation₂` / `evaluation₂` 的定义
+/-
+**CategoryTheory.Square.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Squ
+are`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evaluation₂
-  signature: : Square C ⥤ C where
-  body: sq.X₂
-  map φ := φ.τ₂
-
-中文:
-定义 evaluation₂
-  签名: : Square C ⥤ C where
-  定义体: sq.X₂
-  map φ := φ.τ₂
-
-Depends on / 依赖: sq.X
+--- 原说明 ---
+The top-right evaluation `Square C ⥤ C`.
 -/
 def evaluation₂ : Square C ⥤ C where
   obj sq := sq.X₂
@@ -715,22 +482,13 @@ def evaluation₂ : Square C ⥤ C where
 
 /-- The bottom-left evaluation `Square C ⥤ C`. -/
 @[simps]
-/--
-Definition of `evaluation₃` / `evaluation₃` 的定义
+/-
+**CategoryTheory.Square.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Squ
+are`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evaluation₃
-  signature: : Square C ⥤ C where
-  body: sq.X₃
-  map φ := φ.τ₃
-
-中文:
-定义 evaluation₃
-  签名: : Square C ⥤ C where
-  定义体: sq.X₃
-  map φ := φ.τ₃
-
-Depends on / 依赖: sq.X
+--- 原说明 ---
+The bottom-left evaluation `Square C ⥤ C`.
 -/
 def evaluation₃ : Square C ⥤ C where
   obj sq := sq.X₃
@@ -738,22 +496,13 @@ def evaluation₃ : Square C ⥤ C where
 
 /-- The bottom-right evaluation `Square C ⥤ C`. -/
 @[simps]
-/--
-Definition of `evaluation₄` / `evaluation₄` 的定义
+/-
+**CategoryTheory.Square.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Squ
+are`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evaluation₄
-  signature: : Square C ⥤ C where
-  body: sq.X₄
-  map φ := φ.τ₄
-
-中文:
-定义 evaluation₄
-  签名: : Square C ⥤ C where
-  定义体: sq.X₄
-  map φ := φ.τ₄
-
-Depends on / 依赖: sq.X
+--- 原说明 ---
+The bottom-right evaluation `Square C ⥤ C`.
 -/
 def evaluation₄ : Square C ⥤ C where
   obj sq := sq.X₄
@@ -762,26 +511,15 @@ def evaluation₄ : Square C ⥤ C where
 /-- The map `Square C → Square Cᵒᵖ` which switches `X₁` and `X₃`, but
 does not move `X₂` and `X₃`. -/
 @[simps]
-/--
-Definition of `op` / `op` 的定义
+/-
+**CategoryTheory.Square.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Square`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Square C → CategoryTheory.Square Cᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: (sq : Square C)
-  body: sq.f₂₄.op
-  f₁₃ := sq.f₃₄.op
-  f₂₄ := sq.f₁₂.op
-  f₃₄ := sq.f₁₃.op
-  fac := Quiver.Hom.unop_inj sq.fac
-
-中文:
-定义 op
-  签名: (sq : Square C)
-  定义体: sq.f₂₄.op
-  f₁₃ := sq.f₃₄.op
-  f₂₄ := sq.f₁₂.op
-  f₃₄ := sq.f₁₃.op
-  fac := Quiver.Hom.unop_inj sq.fac
+--- 原说明 ---
+The map `Square C → Square Cᵒᵖ` which switches `X₁` and `X₃`, but
+does not move `X₂` and `X₃`.
 -/
 protected def op (sq : Square C) : Square Cᵒᵖ where
   f₁₂ := sq.f₂₄.op
@@ -793,26 +531,15 @@ protected def op (sq : Square C) : Square Cᵒᵖ where
 /-- The map `Square Cᵒᵖ → Square C` which switches `X₁` and `X₃`, but
 does not move `X₂` and `X₃`. -/
 @[simps]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**CategoryTheory.Square.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Square`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Square Cᵒᵖ → CategoryTheory.Square C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unop
-  signature: (sq : Square Cᵒᵖ)
-  body: sq.f₂₄.unop
-  f₁₃ := sq.f₃₄.unop
-  f₂₄ := sq.f₁₂.unop
-  f₃₄ := sq.f₁₃.unop
-  fac := Quiver.Hom.op_inj sq.fac
-
-中文:
-定义 unop
-  签名: (sq : Square Cᵒᵖ)
-  定义体: sq.f₂₄.unop
-  f₁₃ := sq.f₃₄.unop
-  f₂₄ := sq.f₁₂.unop
-  f₃₄ := sq.f₁₃.unop
-  fac := Quiver.Hom.op_inj sq.fac
+--- 原说明 ---
+The map `Square Cᵒᵖ → Square C` which switches `X₁` and `X₃`, but
+does not move `X₂` and `X₃`.
 -/
 protected def unop (sq : Square Cᵒᵖ) : Square C where
   f₁₂ := sq.f₂₄.unop
@@ -824,38 +551,15 @@ protected def unop (sq : Square Cᵒᵖ) : Square C where
 set_option backward.defeqAttrib.useBackward true in
 /-- The functor `(Square C)ᵒᵖ ⥤ Square Cᵒᵖ`. -/
 @[simps]
-/--
-Definition of `opFunctor` / `opFunctor` 的定义
+/-
+**CategoryTheory.Square.opFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Squa
+re`。
+形式化陈述：opFunctor : (Square C)ᵒᵖ ⥤ Square Cᵒᵖ where obj sq
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opFunctor
-  signature: : (Square C)ᵒᵖ ⥤ Square Cᵒᵖ where
-  body: sq.unop.op
-  map φ :=
-    { τ₁ := φ.unop.τ₄.op
-      τ₂ := φ.unop.τ₂.op
-      τ₃ := φ.unop.τ₃.op
-      τ₄ := φ.unop.τ₁.op
-      comm₁₂ := Quiver.Hom.unop_inj (by simp)
-      comm₁₃ := Quiver.Hom.unop_inj (by simp)
-      comm₂₄ := Quiver.Hom.unop_inj (by simp)
-      comm₃₄ := Quiver.Hom.unop_inj (by simp) }
-
-中文:
-定义 opFunctor
-  签名: : (Square C)ᵒᵖ ⥤ Square Cᵒᵖ where
-  定义体: sq.unop.op
-  map φ :=
-    { τ₁ := φ.unop.τ₄.op
-      τ₂ := φ.unop.τ₂.op
-      τ₃ := φ.unop.τ₃.op
-      τ₄ := φ.unop.τ₁.op
-      comm₁₂ := Quiver.Hom.unop_inj (by simp)
-      comm₁₃ := Quiver.Hom.unop_inj (by simp)
-      comm₂₄ := Quiver.Hom.unop_inj (by simp)
-      comm₃₄ := Quiver.Hom.unop_inj (by simp) }
-
-Depends on / 依赖: sq.unop.op
+--- 原说明 ---
+The functor `(Square C)ᵒᵖ ⥤ Square Cᵒᵖ`.
 -/
 def opFunctor : (Square C)ᵒᵖ ⥤ Square Cᵒᵖ where
   obj sq := sq.unop.op
@@ -870,38 +574,16 @@ def opFunctor : (Square C)ᵒᵖ ⥤ Square Cᵒᵖ where
       comm₃₄ := Quiver.Hom.unop_inj (by simp) }
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `unopFunctor` / `unopFunctor` 的定义
+/-- The functor `(Square Cᵒᵖ)ᵒᵖ ⥤ Square Cᵒᵖ`. -/
+/-
+**CategoryTheory.Square.unopFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sq
+uare`。
+形式化陈述：unopFunctor : (Square Cᵒᵖ)ᵒᵖ ⥤ Square C where obj sq
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unopFunctor
-  signature: : (Square Cᵒᵖ)ᵒᵖ ⥤ Square C where
-  body: sq.unop.unop
-  map φ :=
-    { τ₁ := φ.unop.τ₄.unop
-      τ₂ := φ.unop.τ₂.unop
-      τ₃ := φ.unop.τ₃.unop
-      τ₄ := φ.unop.τ₁.unop
-      comm₁₂ := Quiver.Hom.op_inj (by simp)
-      comm₁₃ := Quiver.Hom.op_inj (by simp)
-      comm₂₄ := Quiver.Hom.op_inj (by simp)
-      comm₃₄ := Quiver.Hom.op_inj (by simp) }
-
-中文:
-定义 unopFunctor
-  签名: : (Square Cᵒᵖ)ᵒᵖ ⥤ Square C where
-  定义体: sq.unop.unop
-  map φ :=
-    { τ₁ := φ.unop.τ₄.unop
-      τ₂ := φ.unop.τ₂.unop
-      τ₃ := φ.unop.τ₃.unop
-      τ₄ := φ.unop.τ₁.unop
-      comm₁₂ := Quiver.Hom.op_inj (by simp)
-      comm₁₃ := Quiver.Hom.op_inj (by simp)
-      comm₂₄ := Quiver.Hom.op_inj (by simp)
-      comm₃₄ := Quiver.Hom.op_inj (by simp) }
-
-Depends on / 依赖: sq.unop.unop
+--- 原说明 ---
+The functor `(Square Cᵒᵖ)ᵒᵖ ⥤ Square Cᵒᵖ`.
 -/
 def unopFunctor : (Square Cᵒᵖ)ᵒᵖ ⥤ Square C where
   obj sq := sq.unop.unop
@@ -916,26 +598,16 @@ def unopFunctor : (Square Cᵒᵖ)ᵒᵖ ⥤ Square C where
       comm₃₄ := Quiver.Hom.op_inj (by simp) }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `opEquivalence` / `opEquivalence` 的定义
+/-- The equivalence `(Square C)ᵒᵖ ≌ Square Cᵒᵖ`. -/
+/-
+**CategoryTheory.Square.opEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Square`。
+形式化陈述：opEquivalence : (Square C)ᵒᵖ ≌ Square Cᵒᵖ where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opEquivalence
-  signature: : (Square C)ᵒᵖ ≌ Square Cᵒᵖ where
-  body: opFunctor
-  inverse := unopFunctor.rightOp
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 opEquivalence
-  签名: : (Square C)ᵒᵖ ≌ Square Cᵒᵖ where
-  定义体: opFunctor
-  inverse := unopFunctor.rightOp
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: opFunctor
+--- 原说明 ---
+The equivalence `(Square C)ᵒᵖ ≌ Square Cᵒᵖ`.
 -/
 def opEquivalence : (Square C)ᵒᵖ ≌ Square Cᵒᵖ where
   functor := opFunctor
@@ -945,28 +617,15 @@ def opEquivalence : (Square C)ᵒᵖ ≌ Square Cᵒᵖ where
 
 /-- The image of a commutative square by a functor. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.Square.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Square`。
+形式化陈述：map (sq : Square C) (F : C ⥤ D) : Square D where f₁₂
+参数：sq : Square C；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (sq : Square C) (F : C ⥤ D)
-  body: F.map sq.f₁₂
-  f₁₃ := F.map sq.f₁₃
-  f₂₄ := F.map sq.f₂₄
-  f₃₄ := F.map sq.f₃₄
-  fac := by simpa using F.congr_map sq.fac
-
-中文:
-定义 map
-  签名: (sq : Square C) (F : C ⥤ D)
-  定义体: F.map sq.f₁₂
-  f₁₃ := F.map sq.f₁₃
-  f₂₄ := F.map sq.f₂₄
-  f₃₄ := F.map sq.f₃₄
-  fac := by simpa using F.congr_map sq.fac
-
-Depends on / 依赖: F.map, sq.f
+--- 原说明 ---
+The image of a commutative square by a functor.
 -/
 def map (sq : Square C) (F : C ⥤ D) : Square D where
   f₁₂ := F.map sq.f₁₂
@@ -983,38 +642,16 @@ namespace Functor
 
 /-- The functor `Square C ⥤ Square D` induced by a functor `C ⥤ D`. -/
 @[simps]
-/--
-Definition of `mapSquare` / `mapSquare` 的定义
+/-
+**CategoryTheory.Functor.mapSquare** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：mapSquare (F : C ⥤ D) : Square C ⥤ Square D where obj sq
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapSquare
-  signature: (F : C ⥤ D)
-  body: sq.map F
-  map φ :=
-    { τ₁ := F.map φ.τ₁
-      τ₂ := F.map φ.τ₂
-      τ₃ := F.map φ.τ₃
-      τ₄ := F.map φ.τ₄
-      comm₁₂ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₂
-      comm₁₃ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₃
-      comm₂₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₂₄
-      comm₃₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₃₄ }
-
-中文:
-定义 mapSquare
-  签名: (F : C ⥤ D)
-  定义体: sq.map F
-  map φ :=
-    { τ₁ := F.map φ.τ₁
-      τ₂ := F.map φ.τ₂
-      τ₃ := F.map φ.τ₃
-      τ₄ := F.map φ.τ₄
-      comm₁₂ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₂
-      comm₁₃ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₃
-      comm₂₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₂₄
-      comm₃₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₃₄ }
-
-Depends on / 依赖: sq.map
+--- 原说明 ---
+The functor `Square C ⥤ Square D` induced by a functor `C ⥤ D`.
 -/
 def mapSquare (F : C ⥤ D) : Square C ⥤ Square D where
   obj sq := sq.map F
@@ -1035,24 +672,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The natural transformation `F.mapSquare ⟶ G.mapSquare` induces
 by a natural transformation `F ⟶ G`. -/
 @[simps]
-/--
-Definition of `NatTrans.mapSquare` / `NatTrans.mapSquare` 的定义
+/-
+**CategoryTheory.NatTrans.mapSquare** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Na
+tTrans`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u'} →       [inst_1 : CategoryTheory.Category.{v', u'} D] →         {F G : Cate
+goryTheory.Functor C D} → (F ⟶ G) → (F.mapSquare ⟶ G.mapSquare)
+参数：F ⟶ G；F.mapSquare ⟶ G.mapSquare。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition NatTrans.mapSquare
-  signature: {F G : C ⥤ D} (τ : F ⟶ G)
-  body: { τ₁ := τ.app _
-      τ₂ := τ.app _
-      τ₃ := τ.app _
-      τ₄ := τ.app _ }
-
-中文:
-定义 自然变换.mapSquare
-  签名: {F G : C ⥤ D} (τ : F ⟶ G)
-  定义体: { τ₁ := τ.app _
-      τ₂ := τ.app _
-      τ₃ := τ.app _
-      τ₄ := τ.app _ }
+--- 原说明 ---
+The natural transformation `F.mapSquare ⟶ G.mapSquare` induces
+by a natural transformation `F ⟶ G`.
 -/
 def NatTrans.mapSquare {F G : C ⥤ D} (τ : F ⟶ G) :
     F.mapSquare ⟶ G.mapSquare where
@@ -1065,25 +696,23 @@ def NatTrans.mapSquare {F G : C ⥤ D} (τ : F ⟶ G) :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The functor `(C ⥤ D) ⥤ Square C ⥤ Square D`. -/
 @[simps]
-/--
-Definition of `Square.mapFunctor` / `Square.mapFunctor` 的定义
+/-
+**CategoryTheory.Square.mapFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Squ
+are`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u'} →       [inst_1 : CategoryTheory.Category.{v', u'} D] →         CategoryThe
+ory.Functor (CategoryTheory.Functor C D)           (CategoryTheory.Functor (Cate
+goryTheory.Square C) (CategoryTheory.Square D))
+参数：CategoryTheory.Functor C D；CategoryTheory.Functor (CategoryTheory.Square C) (
+CategoryTheory.Square D)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Square.mapFunctor
-  signature: : (C ⥤ D) ⥤ Square C ⥤ Square D where
-  body: F.mapSquare
-  map τ := NatTrans.mapSquare τ
-
-中文:
-定义 Square.mapFunctor
-  签名: : (C ⥤ D) ⥤ Square C ⥤ Square D where
-  定义体: F.mapSquare
-  map τ := NatTrans.mapSquare τ
-
-Depends on / 依赖: F.mapSquare, mapSquare
+--- 原说明 ---
+The functor `(C ⥤ D) ⥤ Square C ⥤ Square D`.
 -/
 def Square.mapFunctor : (C ⥤ D) ⥤ Square C ⥤ Square D where
   obj F := F.mapSquare
   map τ := NatTrans.mapSquare τ
 
 end CategoryTheory
+

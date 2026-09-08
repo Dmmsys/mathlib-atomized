@@ -38,78 +38,63 @@ open OrderDual
 
 namespace Order
 
-/--
-Definition of `PFilter` / `PFilter` 的定义
+/-- A filter on a preorder `P` is a subset of `P` that is
+  - nonempty
+  - downward directed
+  - upward closed. -/
+/-
+**Order.PFilter** 是 Mathlib 中的一个归纳类型，位于命名空间 `Order`。
+形式化陈述：(P : Type u_1) → [Preorder P] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PFilter
-  parameters: (P : Type*) [Preorder P]
-  axioms and operations (1):
-    - dual : Ideal Pᵒᵈ
-
-中文:
-结构 PFilter
-  参数: (P : 类型) [预序 P]
-  公理与运算 (1 个):
-    - dual : 理想 Pᵒᵈ
+--- 原说明 ---
+A filter on a preorder `P` is a subset of `P` that is
+  - nonempty
+  - downward directed
+  - upward closed.
 -/
 structure PFilter (P : Type*) [Preorder P] where
   dual : Ideal Pᵒᵈ
 
 variable {P : Type*}
 
-/--
-Definition of `IsPFilter` / `IsPFilter` 的定义
+/-- A predicate for when a subset of `P` is a filter. -/
+/-
+**Order.IsPFilter** 是 Mathlib 中的一个定义，位于命名空间 `Order`。
+形式化陈述：IsPFilter [Preorder P] (F : Set P) : Prop
+参数：F : Set P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPFilter
-  signature: [Preorder P] (F : Set P)
-  body: IsIdeal (OrderDual.ofDual ⁻¹' F)
-
-中文:
-定义 IsPFilter
-  签名: [预序 P] (F : 集合 P)
-  定义体: IsIdeal (OrderDual.ofDual ⁻¹' F)
-
-Depends on / 依赖: IsIdeal, OrderDual, OrderDual.ofDual, ofDual
+--- 原说明 ---
+A predicate for when a subset of `P` is a filter.
 -/
 def IsPFilter [Preorder P] (F : Set P) : Prop :=
   IsIdeal (OrderDual.ofDual ⁻¹' F)
-
-/--
-theorem `IsPFilter.of_def` / 定理 `IsPFilter.of_def`
-
-English:
-theorem IsPFilter.of_def
-  statement: [Preorder P] {F : Set P} (nonempty : F.Nonempty)
-  proof: ⟨fun _ _ _ _ => mem_of_le ‹_› ‹_›, nonempty, directed⟩
-
-中文:
-定理 IsPFilter.of_def
-  结论: [预序 P] {F : 集合 P} (nonempty : F.非空)
-  证明: ⟨fun _ _ _ _ => mem_of_le ‹_› ‹_›, nonempty, directed⟩
-
-Depends on / 依赖: directed, mem_of_le, nonempty
+/-
+**Order.IsPFilter.of_def** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsPFilter`。
+形式化陈述：∀ {P : Type u_1} [inst : Preorder P] {F : Set P},   F.Nonempty → DirectedO
+n (fun x1 x2 => x1 ≥ x2) F → (∀ {x y : P}, x ≤ y → x ∈ F → y ∈ F) → Order.IsPFil
+ter F
+参数：fun x1 x2 => x1 ≥ x2；∀ {x y : P}, x ≤ y → x ∈ F → y ∈ F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsPFilter.of_def [Preorder P] {F : Set P} (nonempty : F.Nonempty)
-    (directed : DirectedOn (· >= ·) F) (mem_of_le : forall {x y : P}, x <= y -> x in F -> y in F) :
+    (directed : DirectedOn (· ≥ ·) F) (mem_of_le : ∀ {x y : P}, x ≤ y → x ∈ F → y ∈ F) :
     IsPFilter F :=
   ⟨fun _ _ _ _ => mem_of_le ‹_› ‹_›, nonempty, directed⟩
 
-/--
-Definition of `IsPFilter.toPFilter` / `IsPFilter.toPFilter` 的定义
+/-- Create an element of type `Order.PFilter` from a set satisfying the predicate
+`Order.IsPFilter`. -/
+/-
+**Order.IsPFilter.toPFilter** 是 Mathlib 中的一个定义，位于命名空间 `Order.IsPFilter`。
+形式化陈述：{P : Type u_1} → [inst : Preorder P] → {F : Set P} → Order.IsPFilter F → O
+rder.PFilter P
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPFilter.toPFilter
-  signature: [Preorder P] {F : Set P} (h : IsPFilter F)
-  body: ⟨h.toIdeal⟩
-
-中文:
-定义 IsPFilter.toPFilter
-  签名: [预序 P] {F : 集合 P} (h : IsPFilter F)
-  定义体: ⟨h.toIdeal⟩
-
-Depends on / 依赖: h.toIdeal, toIdeal
+--- 原说明 ---
+Create an element of type `Order.PFilter` from a set satisfying the predicate
+`Order.IsPFilter`.
 -/
 def IsPFilter.toPFilter [Preorder P] {F : Set P} (h : IsPFilter F) : PFilter P :=
   ⟨h.toIdeal⟩
@@ -120,288 +105,163 @@ section Preorder
 
 variable [Preorder P] {x y : P} (F s t : PFilter P)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: P] : Inhabited (PFilter P)
-  body: ⟨⟨default⟩⟩
-
-中文:
-实例 [可居
-  签名: P] : 可居 (PFilter P)
-  定义体: ⟨⟨default⟩⟩
+/-
+**Order.PFilter.** 是 Mathlib 中的一个实例，位于命名空间 `Order.PFilter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited P] : Inhabited (PFilter P) := ⟨⟨default⟩⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A filter on `P` is a subset of `P`. -/
+/-
+**Order.PFilter.** 是 Mathlib 中的一个实例，位于命名空间 `Order.PFilter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: SetLike (PFilter P) P
-  body: toDual ⁻¹' F.dual.carrier
-coe_injective := fun ⟨_⟩ ⟨_⟩ h => congr_arg mk Ideal.ext h
-
-中文:
-实例 :
-  签名: 集合状 (PFilter P) P
-  定义体: toDual ⁻¹' F.dual.carrier
-coe_injective := fun ⟨_⟩ ⟨_⟩ h => congr_arg mk Ideal.ext h
-
-Depends on / 依赖: F.dual.carrier, carrier, toDual
+--- 原说明 ---
+A filter on `P` is a subset of `P`.
 -/
 instance : SetLike (PFilter P) P where
   coe F := toDual ⁻¹' F.dual.carrier
-coe_injective := fun ⟨_⟩ ⟨_⟩ h => congr_arg mk Ideal.ext h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (PFilter P)
-  body: .ofSetLike (PFilter P) P
-
-中文:
-实例 :
-  签名: 偏序 (PFilter P)
-  定义体: .ofSetLike (PFilter P) P
-
-Depends on / 依赖: PFilter, ofSetLike
+  coe_injective := fun ⟨_⟩ ⟨_⟩ h => congr_arg mk <| Ideal.ext h
+/-
+**Order.PFilter.** 是 Mathlib 中的一个实例，位于命名空间 `Order.PFilter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (PFilter P) := .ofSetLike (PFilter P) P
-
-/--
-theorem `isPFilter` / 定理 `isPFilter`
-
-English:
-theorem isPFilter
-  statement: IsPFilter (F : Set P)
-  proof: F.dual.isIdeal
-
-中文:
-定理 isPFilter
-  结论: IsPFilter (F : 集合 P)
-  证明: F.dual.isIdeal
-
-Depends on / 依赖: F.dual.isIdeal, isIdeal
+/-
+**Order.PFilter.isPFilter** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：isPFilter : IsPFilter (F : Set P)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.isIdeal`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P),
+ Order.IsIdeal ↑s
 -/
 theorem isPFilter : IsPFilter (F : Set P) := F.dual.isIdeal
-
-/--
-theorem `nonempty` / 定理 `nonempty`
-
-English:
-theorem nonempty
-  statement: (F : Set P).Nonempty
-  proof: F.dual.nonempty
-
-中文:
-定理 nonempty
-  结论: (F : 集合 P).非空
-  证明: F.dual.nonempty
+/-
+**Order.PFilter.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：∀ {P : Type u_1} [inst : Preorder P] (F : Order.PFilter P), (↑F).Nonempty
+参数：F : Order.PFilter P；↑F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.nonempty`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, (↑s).Nonempty
 -/
 protected theorem nonempty : (F : Set P).Nonempty := F.dual.nonempty
-
-/--
-theorem `directed` / 定理 `directed`
-
-English:
-theorem directed
-  statement: DirectedOn (· >= ·) (F : Set P)
-  proof: F.dual.directed
-
-中文:
-定理 directed
-  结论: DirectedOn (· >= ·) (F : 集合 P)
-  证明: F.dual.directed
-
-Depends on / 依赖: F.dual.directed, directed
+/-
+**Order.PFilter.directed** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：directed : DirectedOn (· >= ·) (F : Set P)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.directed`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, DirectedOn (fun x1 x2 => x1 ≤ x2) ↑s
 -/
-theorem directed : DirectedOn (· >= ·) (F : Set P) := F.dual.directed
-
-/--
-theorem `mem_of_le` / 定理 `mem_of_le`
-
-English:
-theorem mem_of_le
-  given: {F : PFilter P}
-  statement: x <= y -> x in F -> y in F
-  proof: fun h => F.dual.lower h
-
-中文:
-定理 mem_of_le
-  条件: {F : PFilter P}
-  结论: x <= y -> x in F -> y in F
-  证明: fun h => F.dual.lower h
-
-Depends on / 依赖: F.dual.lower
+theorem directed : DirectedOn (· ≥ ·) (F : Set P) := F.dual.directed
+/-
+**Order.PFilter.mem_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：mem_of_le {F : PFilter P} : x <= y -> x in F -> y in F
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
 -/
-theorem mem_of_le {F : PFilter P} : x <= y -> x in F -> y in F := fun h => F.dual.lower h
+theorem mem_of_le {F : PFilter P} : x ≤ y → x ∈ F → y ∈ F := fun h => F.dual.lower h
 
 /-- Two filters are equal when their underlying sets are equal. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**Order.PFilter.ext** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：ext (h : (s : Set P) = t) : s = t
+参数：h : (s : Set P) = t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
 
-English:
-theorem ext
-  given: (h : (s : Set P) = t)
-  statement: s = t
-  proof: SetLike.ext' h
-
-@[trans]
-
-中文:
-定理 ext
-  条件: (h : (s : 集合 P) = t)
-  结论: s = t
-  证明: SetLike.ext' h
-
-@[trans]
-
-Depends on / 依赖: SetLike, SetLike.ext
+--- 原说明 ---
+Two filters are equal when their underlying sets are equal.
 -/
 theorem ext (h : (s : Set P) = t) : s = t := SetLike.ext' h
 
 @[trans]
-/--
-theorem `mem_of_mem_of_le` / 定理 `mem_of_mem_of_le`
-
-English:
-theorem mem_of_mem_of_le
-  given: {F G : PFilter P} (hx : x in F) (hle : F <= G)
-  statement: x in G
-  proof: hle hx
-
-中文:
-定理 mem_of_mem_of_le
-  条件: {F G : PFilter P} (hx : x in F) (hle : F <= G)
-  结论: x in G
-  证明: hle hx
+/-
+**Order.PFilter.mem_of_mem_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：mem_of_mem_of_le {F G : PFilter P} (hx : x in F) (hle : F <= G) : x in G
+参数：hx : x in F；hle : F <= G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_of_mem_of_le {F G : PFilter P} (hx : x in F) (hle : F <= G) : x in G :=
+theorem mem_of_mem_of_le {F G : PFilter P} (hx : x ∈ F) (hle : F ≤ G) : x ∈ G :=
   hle hx
 
-/--
-Definition of `principal` / `principal` 的定义
+/-- The smallest filter containing a given element. -/
+/-
+**Order.PFilter.principal** 是 Mathlib 中的一个定义，位于命名空间 `Order.PFilter`。
+形式化陈述：principal (p : P) : PFilter P
+参数：p : P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition principal
-  signature: (p : P)
-  body: ⟨Ideal.principal (toDual p)⟩
-
-@[simp]
-
-中文:
-定义 principal
-  签名: (p : P)
-  定义体: ⟨Ideal.principal (toDual p)⟩
-
-@[simp]
-
-Depends on / 依赖: Ideal.principal, principal, toDual
+--- 原说明 ---
+The smallest filter containing a given element.
 -/
 def principal (p : P) : PFilter P :=
   ⟨Ideal.principal (toDual p)⟩
 
 @[simp]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: (x : P) (I : Ideal Pᵒᵈ)
-  statement: x in (⟨I⟩ : PFilter P) ↔ toDual x in I
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_mk
-  条件: (x : P) (I : 理想 Pᵒᵈ)
-  结论: x in (⟨I⟩ : PFilter P) ↔ toDual x in I
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.PFilter.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：mem_mk (x : P) (I : Ideal Pᵒᵈ) : x in (⟨I⟩ : PFilter P) ↔ toDual x in I
+参数：x : P；I : Ideal Pᵒᵈ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mk (x : P) (I : Ideal Pᵒᵈ) : x in (⟨I⟩ : PFilter P) ↔ toDual x in I :=
+theorem mem_mk (x : P) (I : Ideal Pᵒᵈ) : x ∈ (⟨I⟩ : PFilter P) ↔ toDual x ∈ I :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `principal_le_iff` / 定理 `principal_le_iff`
-
-English:
-theorem principal_le_iff
-  given: {F : PFilter P}
-  statement: principal x <= F ↔ x in F
-  proof: Ideal.principal_le_iff (x := toDual x)
-
-中文:
-定理 principal_le_iff
-  条件: {F : PFilter P}
-  结论: principal x <= F ↔ x in F
-  证明: Ideal.principal_le_iff (x := toDual x)
-
-Depends on / 依赖: Ideal.principal_le_iff, principal_le_iff, toDual
+/-
+**Order.PFilter.principal_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：principal_le_iff {F : PFilter P} : principal x <= F ↔ x in F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.principal_le_iff`：principal_le_iff : principal x <= I ↔ x in
+ I
 -/
-theorem principal_le_iff {F : PFilter P} : principal x <= F ↔ x in F :=
+theorem principal_le_iff {F : PFilter P} : principal x ≤ F ↔ x ∈ F :=
   Ideal.principal_le_iff (x := toDual x)
-
-/--
-theorem `mem_principal` / 定理 `mem_principal`
-
-English:
-theorem mem_principal
-  statement: x in principal y ↔ y <= x
-  proof: Iff.rfl
-
-中文:
-定理 mem_principal
-  结论: x in principal y ↔ y <= x
-  证明: Iff.rfl
+/-
+**Order.PFilter.mem_principal** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：∀ {P : Type u_1} [inst : Preorder P] {x y : P}, x ∈ Order.PFilter.principa
+l y ↔ y ≤ x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] theorem mem_principal : x in principal y ↔ y <= x := Iff.rfl
-
-/--
-theorem `principal_le_principal_iff` / 定理 `principal_le_principal_iff`
-
-English:
-theorem principal_le_principal_iff
-  given: {p q : P}
-  statement: principal q <= principal p ↔ p <= q
-  proof: by simp
-
-中文:
-定理 principal_le_principal_iff
-  条件: {p q : P}
-  结论: principal q <= principal p ↔ p <= q
-  证明: by simp
+@[simp] theorem mem_principal : x ∈ principal y ↔ y ≤ x := Iff.rfl
+/-
+**Order.PFilter.principal_le_principal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFil
+ter`。
+形式化陈述：principal_le_principal_iff {p q : P} : principal q <= principal p ↔ p <= q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem principal_le_principal_iff {p q : P} : principal q <= principal p ↔ p <= q := by simp
+theorem principal_le_principal_iff {p q : P} : principal q ≤ principal p ↔ p ≤ q := by simp
 
 -- defeq abuse
-/--
-theorem `antitone_principal` / 定理 `antitone_principal`
-
-English:
-theorem antitone_principal
-  statement: Antitone (principal : P -> PFilter P)
-  proof: fun _ _ =>
-  principal_le_principal_iff.2
-
-中文:
-定理 antitone_principal
-  结论: 递减 (principal : P -> PFilter P)
-  证明: fun _ _ =>
-  principal_le_principal_iff.2
+/-
+**Order.PFilter.antitone_principal** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：antitone_principal : Antitone (principal : P -> PFilter P)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.PFilter.principal_le_principal_iff`：principal_le_principal_iff {p 
+q : P} : principal q <= principal p ↔ p <= q
 -/
-theorem antitone_principal : Antitone (principal : P -> PFilter P) := fun _ _ =>
+theorem antitone_principal : Antitone (principal : P → PFilter P) := fun _ _ =>
   principal_le_principal_iff.2
 
 end Preorder
@@ -410,92 +270,73 @@ section OrderTop
 
 variable [Preorder P] [OrderTop P] {F : PFilter P}
 
-/--
-theorem `top_mem` / 定理 `top_mem`
+/-- A specific witness of `pfilter.nonempty` when `P` has a top element. -/
+/-
+**Order.PFilter.top_mem** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：∀ {P : Type u_1} [inst : Preorder P] [inst_1 : OrderTop P] {F : Order.PFil
+ter P}, ⊤ ∈ F
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.bot_mem`：bot_mem (s : Ideal P) : ⊥ in s
 
-English:
-theorem top_mem
-  statement: ⊤ in F
-  proof: Ideal.bot_mem _
-
-中文:
-定理 top_mem
-  结论: ⊤ in F
-  证明: Ideal.bot_mem _
+--- 原说明 ---
+A specific witness of `pfilter.nonempty` when `P` has a top element.
 -/
-@[simp] theorem top_mem : ⊤ in F := Ideal.bot_mem _
+@[simp] theorem top_mem : ⊤ ∈ F := Ideal.bot_mem _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- There is a bottom filter when `P` has a top element. -/
+/-
+**Order.PFilter.** 是 Mathlib 中的一个实例，位于命名空间 `Order.PFilter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: OrderBot (PFilter P)
-  body: ⟨⊥⟩
-  bot_le F := (bot_le : ⊥ <= F.dual)
-
-中文:
-实例 :
-  签名: 有底序 (PFilter P)
-  定义体: ⟨⊥⟩
-  bot_le F := (bot_le : ⊥ <= F.dual)
+--- 原说明 ---
+There is a bottom filter when `P` has a top element.
 -/
 instance : OrderBot (PFilter P) where
   bot := ⟨⊥⟩
-  bot_le F := (bot_le : ⊥ <= F.dual)
+  bot_le F := (bot_le : ⊥ ≤ F.dual)
 
 end OrderTop
 
 /-- There is a top filter when `P` has a bottom element. -/
+/-
+**Order.PFilter.** 是 Mathlib 中的一个实例，位于命名空间 `Order.PFilter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+There is a top filter when `P` has a bottom element.
+-/
 instance {P} [Preorder P] [OrderBot P] : OrderTop (PFilter P) where
   top := ⟨⊤⟩
-  le_top F := (le_top : F.dual <= ⊤)
+  le_top F := (le_top : F.dual ≤ ⊤)
 
 section SemilatticeInf
 
 variable [SemilatticeInf P] {x y : P} {F : PFilter P}
 
-/--
-theorem `inf_mem` / 定理 `inf_mem`
+/-- A specific witness of `pfilter.directed` when `P` has meets. -/
+/-
+**Order.PFilter.inf_mem** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：inf_mem (hx : x in F) (hy : y in F) : x ⊓ y in F
+参数：hx : x in F；hy : y in F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.sup_mem`：sup_mem (hx : x in s) (hy : y in s) : x ⊔ y in s
 
-English:
-theorem inf_mem
-  given: (hx : x in F) (hy : y in F)
-  statement: x ⊓ y in F
-  proof: Ideal.sup_mem hx hy
-
-@[simp]
-
-中文:
-定理 inf_mem
-  条件: (hx : x in F) (hy : y in F)
-  结论: x ⊓ y in F
-  证明: Ideal.sup_mem hx hy
-
-@[simp]
-
-Depends on / 依赖: Ideal.sup_mem, sup_mem
+--- 原说明 ---
+A specific witness of `pfilter.directed` when `P` has meets.
 -/
-theorem inf_mem (hx : x in F) (hy : y in F) : x ⊓ y in F :=
+theorem inf_mem (hx : x ∈ F) (hy : y ∈ F) : x ⊓ y ∈ F :=
   Ideal.sup_mem hx hy
 
 @[simp]
-/--
-theorem `inf_mem_iff` / 定理 `inf_mem_iff`
-
-English:
-theorem inf_mem_iff
-  statement: x ⊓ y in F ↔ x in F ∧ y in F
-  proof: Ideal.sup_mem_iff
-
-中文:
-定理 inf_mem_iff
-  结论: x ⊓ y in F ↔ x in F ∧ y in F
-  证明: Ideal.sup_mem_iff
-
-Depends on / 依赖: Ideal.sup_mem_iff, IsJacobsonRing, KrullDimLE, Ring.KrullDimLE, sup_mem_iff
+/-
+**Order.PFilter.inf_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：inf_mem_iff : x ⊓ y in F ↔ x in F ∧ y in F
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.sup_mem_iff`：sup_mem_iff : x ⊔ y in I ↔ x in I ∧ y in I
 -/
-theorem inf_mem_iff : x ⊓ y in F ↔ x in F ∧ y in F :=
+theorem inf_mem_iff : x ⊓ y ∈ F ↔ x ∈ F ∧ y ∈ F :=
   Ideal.sup_mem_iff
 
 end SemilatticeInf
@@ -504,44 +345,51 @@ section CompleteSemilatticeInf
 
 variable [CompleteSemilatticeInf P]
 
-/--
-theorem `sInf_gc` / 定理 `sInf_gc`
-
-English:
-theorem sInf_gc
-  proof: fun x F => by simp only [le_sInf_iff, SetLike.mem_coe, toDual_le, SetLike.le_def, mem_principal]
-
-中文:
-定理 sInf_gc
-  证明: fun x F => by simp only [le_sInf_iff, SetLike.mem_coe, toDual_le, SetLike.le_def, mem_principal]
-
-Depends on / 依赖: SetLike, SetLike.le_def, SetLike.mem_coe, le_def, le_sInf_iff, mem_coe, mem_principal, toDual_le
+/-
+**Order.PFilter.sInf_gc** 是 Mathlib 中的一个定理，位于命名空间 `Order.PFilter`。
+形式化陈述：sInf_gc : GaloisConnection (fun x => toDual (principal x)) fun F => sInf (
+ofDual F : PFilter P)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sInf_gc :
     GaloisConnection (fun x => toDual (principal x)) fun F => sInf (ofDual F : PFilter P) :=
   fun x F => by simp only [le_sInf_iff, SetLike.mem_coe, toDual_le, SetLike.le_def, mem_principal]
 
-/--
-Definition of `infGi` / `infGi` 的定义
+/-- If a poset `P` admits arbitrary `Inf`s, then `principal` and `Inf` form a Galois coinsertion. -/
+/-
+**Order.PFilter.infGi** 是 Mathlib 中的一个定义，位于命名空间 `Order.PFilter`。
+形式化陈述：infGi : GaloisCoinsertion (fun x => toDual (principal x)) fun F => sInf (o
+fDual F : PFilter P)
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.PFilter.sInf_gc`：sInf_gc : GaloisConnection (fun x => toDual (prin
+cipal x)) fun F => sInf (ofDual F : PFilter P)
 
-English:
-definition infGi
-  signature: :
-  body: sInf_gc.toGaloisCoinsertion fun _ => sInf_le mem_principal.2 le_rfl
-
-中文:
-定义 infGi
-  签名: :
-  定义体: sInf_gc.toGaloisCoinsertion fun _ => sInf_le mem_principal.2 le_rfl
-
-Depends on / 依赖: le_rfl, mem_principal, sInf_gc, sInf_gc.toGaloisCoinsertion, sInf_le, toGaloisCoinsertion
+--- 原说明 ---
+If a poset `P` admits arbitrary `Inf`s, then `principal` and `Inf` form a Galois
+ coinsertion.
 -/
 def infGi :
     GaloisCoinsertion (fun x => toDual (principal x)) fun F => sInf (ofDual F : PFilter P) :=
-sInf_gc.toGaloisCoinsertion fun _ => sInf_le mem_principal.2 le_rfl
+  sInf_gc.toGaloisCoinsertion fun _ => sInf_le <| mem_principal.2 le_rfl
 
 end CompleteSemilatticeInf
 
 end PFilter
 
 end Order
+

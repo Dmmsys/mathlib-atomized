@@ -22,26 +22,30 @@ section
 variable {R S M : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [Module S M]
 
 @[ext high]
-/--
-theorem `LinearMap.ext_ring_op` / 定理 `LinearMap.ext_ring_op`
-
-English:
-theorem LinearMap.ext_ring_op
-  proof: ext fun x => by
-    rw [← one_mul x]; rw [← op_smul_eq_mul]; rw [f.map_smulₛₗ]; rw [h]; rw [g.map_smulₛₗ]
-
-中文:
-定理 线性映射.ext_ring_op
-  证明: ext fun x => by
-    rw [← one_mul x]; rw [← op_smul_eq_mul]; rw [f.map_smulₛₗ]; rw [h]; rw [g.map_smulₛₗ]
-
-Depends on / 依赖: f.map_smul, g.map_smul, one_mul, op_smul_eq_mul
+/-
+**LinearMap.ext_ring_op** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LinearMap.ext_ring_op {σ : Rᵐᵒᵖ ->+* S} {f g : R ->ₛₗ[σ] M} (h : f (1 : R)
+ = g (1 : R)) : f = g
+参数：h : f (1 : R) = g (1 : R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用引理 `op_smul_eq_mul`：op_smul_eq_mul {α : Type*} [Mul α] (a b : α) : MulOpposi
+te.op a • b = b * a
+· 使用定理 `LinearMap.map_smulₛₗ`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃
+ : Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst…
 -/
 theorem LinearMap.ext_ring_op
-    {σ : Rᵐᵒᵖ ->+* S} {f g : R ->ₛₗ[σ] M} (h : f (1 : R) = g (1 : R)) :
+    {σ : Rᵐᵒᵖ →+* S} {f g : R →ₛₗ[σ] M} (h : f (1 : R) = g (1 : R)) :
     f = g :=
-  ext fun x => by
-    rw [← one_mul x]; rw [← op_smul_eq_mul]; rw [f.map_smulₛₗ]; rw [h]; rw [g.map_smulₛₗ]
+  ext fun x ↦ by
+    rw [← one_mul x, ← op_smul_eq_mul, f.map_smulₛₗ, h, g.map_smulₛₗ]
 
 end
 
@@ -51,177 +55,120 @@ universe u v
 
 variable (R : Type u) {M : Type v} [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Definition of `opLinearEquiv` / `opLinearEquiv` 的定义
+/-- The function `op` is a linear equivalence. -/
+/-
+**MulOpposite.opLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MulOpposite`。
+形式化陈述：opLinearEquiv : M ≃ₗ[R] Mᵐᵒᵖ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opLinearEquiv
-  signature: : M ≃ₗ[R] Mᵐᵒᵖ
-  body: { opAddEquiv with map_smul' := MulOpposite.op_smul }
-
-@[simp]
-
-中文:
-定义 opLinearEquiv
-  签名: : M ≃ₗ[R] Mᵐᵒᵖ
-  定义体: { opAddEquiv with map_smul' := MulOpposite.op_smul }
-
-@[simp]
-
-Depends on / 依赖: MulOpposite, MulOpposite.op_smul, map_smul, opAddEquiv, op_smul
+--- 原说明 ---
+The function `op` is a linear equivalence.
 -/
 def opLinearEquiv : M ≃ₗ[R] Mᵐᵒᵖ :=
   { opAddEquiv with map_smul' := MulOpposite.op_smul }
 
 @[simp]
-/--
-theorem `coe_opLinearEquiv` / 定理 `coe_opLinearEquiv`
-
-English:
-theorem coe_opLinearEquiv
-  statement: (opLinearEquiv R : M -> Mᵐᵒᵖ) = op
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_opLinearEquiv
-  结论: (opLinearEquiv R : M -> Mᵐᵒᵖ) = op
-  证明: rfl
-
-@[simp]
+/-
+**MulOpposite.coe_opLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：coe_opLinearEquiv : (opLinearEquiv R : M -> Mᵐᵒᵖ) = op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_opLinearEquiv : (opLinearEquiv R : M -> Mᵐᵒᵖ) = op :=
+theorem coe_opLinearEquiv : (opLinearEquiv R : M → Mᵐᵒᵖ) = op :=
   rfl
 
 @[simp]
-/--
-theorem `coe_opLinearEquiv_symm` / 定理 `coe_opLinearEquiv_symm`
-
-English:
-theorem coe_opLinearEquiv_symm
-  statement: ((opLinearEquiv R).symm : Mᵐᵒᵖ -> M) = unop
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_opLinearEquiv_symm
-  结论: ((opLinearEquiv R).symm : Mᵐᵒᵖ -> M) = unop
-  证明: rfl
-
-@[simp]
+/-
+**MulOpposite.coe_opLinearEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：coe_opLinearEquiv_symm : ((opLinearEquiv R).symm : Mᵐᵒᵖ -> M) = unop
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_opLinearEquiv_symm : ((opLinearEquiv R).symm : Mᵐᵒᵖ -> M) = unop :=
+theorem coe_opLinearEquiv_symm : ((opLinearEquiv R).symm : Mᵐᵒᵖ → M) = unop :=
   rfl
 
 @[simp]
-/--
-theorem `coe_opLinearEquiv_toLinearMap` / 定理 `coe_opLinearEquiv_toLinearMap`
-
-English:
-theorem coe_opLinearEquiv_toLinearMap
-  statement: ((opLinearEquiv R).toLinearMap : M -> Mᵐᵒᵖ) = op
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_opLinearEquiv_toLinearMap
-  结论: ((opLinearEquiv R).toLinearMap : M -> Mᵐᵒᵖ) = op
-  证明: rfl
-
-@[simp]
+/-
+**MulOpposite.coe_opLinearEquiv_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposi
+te`。
+形式化陈述：coe_opLinearEquiv_toLinearMap : ((opLinearEquiv R).toLinearMap : M -> Mᵐᵒᵖ
+) = op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_opLinearEquiv_toLinearMap : ((opLinearEquiv R).toLinearMap : M -> Mᵐᵒᵖ) = op :=
+theorem coe_opLinearEquiv_toLinearMap : ((opLinearEquiv R).toLinearMap : M → Mᵐᵒᵖ) = op :=
   rfl
 
 @[simp]
-/--
-theorem `coe_opLinearEquiv_symm_toLinearMap` / 定理 `coe_opLinearEquiv_symm_toLinearMap`
-
-English:
-theorem coe_opLinearEquiv_symm_toLinearMap
-  proof: rfl
-
-中文:
-定理 coe_opLinearEquiv_symm_toLinearMap
-  证明: rfl
+/-
+**MulOpposite.coe_opLinearEquiv_symm_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `MulO
+pposite`。
+形式化陈述：coe_opLinearEquiv_symm_toLinearMap : ((opLinearEquiv R).symm.toLinearMap :
+ Mᵐᵒᵖ -> M) = unop
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_opLinearEquiv_symm_toLinearMap :
-    ((opLinearEquiv R).symm.toLinearMap : Mᵐᵒᵖ -> M) = unop :=
+    ((opLinearEquiv R).symm.toLinearMap : Mᵐᵒᵖ → M) = unop :=
   rfl
-
-/--
-theorem `opLinearEquiv_toAddEquiv` / 定理 `opLinearEquiv_toAddEquiv`
-
-English:
-theorem opLinearEquiv_toAddEquiv
-  statement: (opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).toAddEquiv = opAddEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 opLinearEquiv_toAddEquiv
-  结论: (opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).toAddEquiv = opAddEquiv
-  证明: rfl
-
-@[simp]
+/-
+**MulOpposite.opLinearEquiv_toAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：opLinearEquiv_toAddEquiv : (opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).toAddEquiv = o
+pAddEquiv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem opLinearEquiv_toAddEquiv : (opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).toAddEquiv = opAddEquiv :=
   rfl
 
 @[simp]
-/--
-theorem `coe_opLinearEquiv_addEquiv` / 定理 `coe_opLinearEquiv_addEquiv`
-
-English:
-theorem coe_opLinearEquiv_addEquiv
-  statement: ((opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ) : M ≃+ Mᵐᵒᵖ) = opAddEquiv
-  proof: rfl
-
-中文:
-定理 coe_opLinearEquiv_addEquiv
-  结论: ((opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ) : M ≃+ Mᵐᵒᵖ) = opAddEquiv
-  证明: rfl
+/-
+**MulOpposite.coe_opLinearEquiv_addEquiv** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`
+。
+形式化陈述：coe_opLinearEquiv_addEquiv : ((opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ) : M ≃+ Mᵐᵒᵖ
+) = opAddEquiv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearEquivClass.toAddEquivClass`：∀ {F : Type u_14} {R : outParam (T
+ype u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S} 
+  {σ : outParam (R →+* S)}…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 theorem coe_opLinearEquiv_addEquiv : ((opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ) : M ≃+ Mᵐᵒᵖ) = opAddEquiv :=
   rfl
-
-/--
-theorem `opLinearEquiv_symm_toAddEquiv` / 定理 `opLinearEquiv_symm_toAddEquiv`
-
-English:
-theorem opLinearEquiv_symm_toAddEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 opLinearEquiv_symm_toAddEquiv
-  证明: rfl
-
-@[simp]
+/-
+**MulOpposite.opLinearEquiv_symm_toAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposi
+te`。
+形式化陈述：opLinearEquiv_symm_toAddEquiv : (opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).symm.toAd
+dEquiv = opAddEquiv.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem opLinearEquiv_symm_toAddEquiv :
     (opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).symm.toAddEquiv = opAddEquiv.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_opLinearEquiv_symm_addEquiv` / 定理 `coe_opLinearEquiv_symm_addEquiv`
-
-English:
-theorem coe_opLinearEquiv_symm_addEquiv
-  proof: rfl
-
-中文:
-定理 coe_opLinearEquiv_symm_addEquiv
-  证明: rfl
+/-
+**MulOpposite.coe_opLinearEquiv_symm_addEquiv** 是 Mathlib 中的一个定理，位于命名空间 `MulOppo
+site`。
+形式化陈述：coe_opLinearEquiv_symm_addEquiv : ((opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).symm :
+ Mᵐᵒᵖ ≃+ M) = opAddEquiv.symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearEquivClass.toAddEquivClass`：∀ {F : Type u_14} {R : outParam (T
+ype u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S} 
+  {σ : outParam (R →+* S)}…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
 theorem coe_opLinearEquiv_symm_addEquiv :
     ((opLinearEquiv R : M ≃ₗ[R] Mᵐᵒᵖ).symm : Mᵐᵒᵖ ≃+ M) = opAddEquiv.symm :=
   rfl
 
 end MulOpposite
+

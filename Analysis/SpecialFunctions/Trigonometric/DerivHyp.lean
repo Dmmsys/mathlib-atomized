@@ -33,475 +33,451 @@ open Set
 
 namespace Complex
 
-/--
-theorem `hasStrictDerivAt_sinh` / 定理 `hasStrictDerivAt_sinh`
+/-- The complex hyperbolic sine function is everywhere strictly differentiable, with the derivative
+`cosh x`. -/
+/-
+**Complex.hasStrictDerivAt_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：hasStrictDerivAt_sinh (x : Complex) : HasStrictDerivAt sinh (cosh x) x
+参数：x : Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasStrictDerivAt.congr_simp`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {F : Type v} [inst_1 : AddCommGroup F] [inst_2 : _root_.Module 𝕜 F]   [in
+st_3 : Topologica…
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `id.eq_1`：∀ {α : Sort u} (a : α), id a = a
+· 使用定理 `mul_neg_one`：mul_neg_one (a : α) : a * -1 = -a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `HasStrictDerivAt.mul_const`：HasStrictDerivAt.mul_const (hc : HasStrictDe
+rivAt c c' x) (d : 𝔸) : HasStrictDerivAt (fun y => c y * d) (c' * d) x
+· 使用定理 `HasStrictDerivAt.sub`：HasStrictDerivAt.sub (hf : HasStrictDerivAt f f' x
+) (hg : HasStrictDerivAt g g' x) : HasStrictDerivAt (f - g) (f' - g') x
+· 使用定理 `Complex.hasStrictDerivAt_exp`：hasStrictDerivAt_exp (x : Complex) : HasSt
+rictDerivAt exp (exp x) x
+· 使用定理 `HasStrictDerivAt.cexp`：HasStrictDerivAt.cexp (hf : HasStrictDerivAt f f'
+ x) : HasStrictDerivAt (fun x => Complex.exp (f x)) (Complex.exp (f x) * f') x
+· 使用定理 `HasStrictDerivAt.fun_neg`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField
+ 𝕜] {F : Type v} [inst_1 : NormedAddCommGroup F]   [inst_2 : NormedSpace 𝕜 F] {f
+ : 𝕜 → F} {f' …
+· 使用定理 `hasStrictDerivAt_id`：hasStrictDerivAt_id : HasStrictDerivAt id 1 x
 
-English:
-theorem hasStrictDerivAt_sinh
-  given: (x : Complex)
-  statement: HasStrictDerivAt sinh (cosh x) x
-  proof: by
-  simp only [cosh, div_eq_mul_inv]
-  convert!
-    ((hasStrictDerivAt_exp x).sub (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : Complex)⁻¹ using 1
-  rw [id]; rw [mul_neg_one]; rw [sub_eq_add_neg]; rw [neg_neg]
-
-中文:
-定理 hasStrictDerivAt_sinh
-  条件: (x : 复形)
-  结论: HasStrictDerivAt sinh (cosh x) x
-  证明: by
-  simp only [cosh, div_eq_mul_inv]
-  convert!
-    ((hasStrictDerivAt_exp x).sub (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : Complex)⁻¹ using 1
-  rw [id]; rw [mul_neg_one]; rw [sub_eq_add_neg]; rw [neg_neg]
-
-Depends on / 依赖: convert, div_eq_mul_inv, fun_neg, fun_neg.cexp, hasStrictDerivAt_exp, hasStrictDerivAt_id, mul_const, mul_neg_one, neg_neg, sub_eq_add_neg
+--- 原说明 ---
+The complex hyperbolic sine function is everywhere strictly differentiable, with
+ the derivative
+`cosh x`.
 -/
-theorem hasStrictDerivAt_sinh (x : Complex) : HasStrictDerivAt sinh (cosh x) x := by
+theorem hasStrictDerivAt_sinh (x : ℂ) : HasStrictDerivAt sinh (cosh x) x := by
   simp only [cosh, div_eq_mul_inv]
   convert!
-    ((hasStrictDerivAt_exp x).sub (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : Complex)⁻¹ using 1
-  rw [id]; rw [mul_neg_one]; rw [sub_eq_add_neg]; rw [neg_neg]
+    ((hasStrictDerivAt_exp x).sub (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : ℂ)⁻¹ using 1
+  rw [id, mul_neg_one, sub_eq_add_neg, neg_neg]
 
-/--
-theorem `hasDerivAt_sinh` / 定理 `hasDerivAt_sinh`
+/-- The complex hyperbolic sine function is everywhere differentiable, with the derivative
+`cosh x`. -/
+/-
+**Complex.hasDerivAt_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh (cosh x) x
+参数：x : Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.hasDerivAt`：HasStrictDerivAt.hasDerivAt (h : HasStrictD
+erivAt f f' x) : HasDerivAt f f' x
+· 使用定理 `Complex.hasStrictDerivAt_sinh`：hasStrictDerivAt_sinh (x : Complex) : Has
+StrictDerivAt sinh (cosh x) x
 
-English:
-theorem hasDerivAt_sinh
-  given: (x : Complex)
-  statement: HasDerivAt sinh (cosh x) x
-  proof: (hasStrictDerivAt_sinh x).hasDerivAt
-
-中文:
-定理 hasDerivAt_sinh
-  条件: (x : 复形)
-  结论: 在点处可导 sinh (cosh x) x
-  证明: (hasStrictDerivAt_sinh x).hasDerivAt
-
-Depends on / 依赖: hasDerivAt, hasStrictDerivAt_sinh
+--- 原说明 ---
+The complex hyperbolic sine function is everywhere differentiable, with the deri
+vative
+`cosh x`.
 -/
-theorem hasDerivAt_sinh (x : Complex) : HasDerivAt sinh (cosh x) x :=
+theorem hasDerivAt_sinh (x : ℂ) : HasDerivAt sinh (cosh x) x :=
   (hasStrictDerivAt_sinh x).hasDerivAt
-
-/--
-theorem `isEquivalent_sinh` / 定理 `isEquivalent_sinh`
-
-English:
-theorem isEquivalent_sinh
-  statement: sinh ~[𝓝 0] id
-  proof: by simpa using! (hasDerivAt_sinh 0).isLittleO
-
-@[fun_prop]
-
-中文:
-定理 isEquivalent_sinh
-  结论: sinh ~[𝓝 0] id
-  证明: by simpa using! (hasDerivAt_sinh 0).isLittleO
-
-@[fun_prop]
-
-Depends on / 依赖: hasDerivAt_sinh, isLittleO
+/-
+**Complex.isEquivalent_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：isEquivalent_sinh : sinh ~[𝓝 0] id
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Complex.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Complex.cosh_zero`：cosh_zero : cosh 0 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `HasDerivAt.isLittleO`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜] 
+{F : Type v} [inst_1 : NormedAddCommGroup F]   [inst_2 : NormedSpace 𝕜 F] {f : 𝕜
+ → F} {f' …
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
 theorem isEquivalent_sinh : sinh ~[𝓝 0] id := by simpa using! (hasDerivAt_sinh 0).isLittleO
 
 @[fun_prop]
-/--
-theorem `contDiff_sinh` / 定理 `contDiff_sinh`
-
-English:
-theorem contDiff_sinh
-  given: {n}
-  statement: ContDiff Complex n sinh
-  proof: (contDiff_exp.sub contDiff_neg.cexp).div_const _
-
-@[simp]
-
-中文:
-定理 contDiff_sinh
-  条件: {n}
-  结论: 连续可微 复形 n sinh
-  证明: (contDiff_exp.sub contDiff_neg.cexp).div_const _
-
-@[simp]
-
-Depends on / 依赖: contDiff_exp, contDiff_exp.sub, contDiff_neg, contDiff_neg.cexp, div_const
+/-
+**Complex.contDiff_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：contDiff_sinh {n} : ContDiff Complex n sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.div_const`：ContDiff.div_const {f : E -> 𝕜'} {n} (hf : ContDiff 
+𝕜 n f) (c : 𝕜') : ContDiff 𝕜 n fun x => f x / c
+· 使用定理 `ContDiff.sub`：ContDiff.sub {f g : E -> F} (hf : ContDiff 𝕜 n f) (hg : Co
+ntDiff 𝕜 n g) : ContDiff 𝕜 n fun x => f x - g x
+· 使用定理 `Complex.contDiff_exp`：contDiff_exp {n : WithTop Nat∞} : ContDiff 𝕜 n exp
+· 使用定理 `ContDiff.cexp`：ContDiff.cexp {n} (h : ContDiff 𝕜 n f) : ContDiff 𝕜 n fun
+ x => Complex.exp (f x)
+· 使用定理 `contDiff_neg`：contDiff_neg : ContDiff 𝕜 n fun p : F => -p
 -/
-theorem contDiff_sinh {n} : ContDiff Complex n sinh :=
+theorem contDiff_sinh {n} : ContDiff ℂ n sinh :=
   (contDiff_exp.sub contDiff_neg.cexp).div_const _
 
 @[simp]
-/--
-theorem `differentiable_sinh` / 定理 `differentiable_sinh`
-
-English:
-theorem differentiable_sinh
-  statement: Differentiable Complex sinh
-  proof: fun x => (hasDerivAt_sinh x).differentiableAt
-
-@[simp]
-
-中文:
-定理 differentiable_sinh
-  结论: 可微 复形 sinh
-  证明: fun x => (hasDerivAt_sinh x).differentiableAt
-
-@[simp]
-
-Depends on / 依赖: Discrete, Discrete.natIso, differentiableAt, hasDerivAt_sinh, infer_instance, natIso
+/-
+**Complex.differentiable_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：differentiable_sinh : Differentiable Complex sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.differentiableAt`：HasDerivAt.differentiableAt (h : HasDerivAt
+ f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
-theorem differentiable_sinh : Differentiable Complex sinh := fun x => (hasDerivAt_sinh x).differentiableAt
+theorem differentiable_sinh : Differentiable ℂ sinh := fun x => (hasDerivAt_sinh x).differentiableAt
 
 @[simp]
-/--
-theorem `differentiableAt_sinh` / 定理 `differentiableAt_sinh`
-
-English:
-theorem differentiableAt_sinh
-  given: {x : Complex}
-  statement: DifferentiableAt Complex sinh x
-  proof: differentiable_sinh x
-
-中文:
-定理 differentiableAt_sinh
-  条件: {x : 复形}
-  结论: DifferentiableAt 复形 sinh x
-  证明: differentiable_sinh x
-
-Depends on / 依赖: differentiable_sinh
+/-
+**Complex.differentiableAt_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：differentiableAt_sinh {x : Complex} : DifferentiableAt Complex sinh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.differentiable_sinh`：differentiable_sinh : Differentiable Comple
+x sinh
 -/
-theorem differentiableAt_sinh {x : Complex} : DifferentiableAt Complex sinh x :=
+theorem differentiableAt_sinh {x : ℂ} : DifferentiableAt ℂ sinh x :=
   differentiable_sinh x
 
 /-- The function `Complex.sinh` is complex analytic. -/
 @[fun_prop]
-/--
-lemma `analyticAt_sinh` / 引理 `analyticAt_sinh`
+/-
+**Complex.analyticAt_sinh** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：analyticAt_sinh {x : Complex} : AnalyticAt Complex sinh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.analyticAt`：ContDiffAt.analyticAt (h : ContDiffAt 𝕜 ω f x) : 
+AnalyticAt 𝕜 f x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 
-English:
-lemma analyticAt_sinh
-  given: {x : Complex}
-  statement: AnalyticAt Complex sinh x
-  proof: contDiff_sinh.contDiffAt.analyticAt
-
-中文:
-引理 analyticAt_sinh
-  条件: {x : 复形}
-  结论: AnalyticAt 复形 sinh x
-  证明: contDiff_sinh.contDiffAt.analyticAt
-
-Depends on / 依赖: analyticAt, contDiffAt, contDiff_sinh, contDiff_sinh.contDiffAt.analyticAt
+--- 原说明 ---
+The function `Complex.sinh` is complex analytic.
 -/
-lemma analyticAt_sinh {x : Complex} : AnalyticAt Complex sinh x :=
+lemma analyticAt_sinh {x : ℂ} : AnalyticAt ℂ sinh x :=
   contDiff_sinh.contDiffAt.analyticAt
 
-/--
-lemma `analyticWithinAt_sinh` / 引理 `analyticWithinAt_sinh`
+/-- The function `Complex.sinh` is complex analytic. -/
+/-
+**Complex.analyticWithinAt_sinh** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：analyticWithinAt_sinh {x : Complex} {s : Set Complex} : AnalyticWithinAt C
+omplex sinh s x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContDiffWithinAt.analyticWithinAt`：ContDiffWithinAt.analyticWithinAt (h 
+: ContDiffWithinAt 𝕜 ω f s x) : AnalyticWithinAt 𝕜 f s x
+· 使用定理 `ContDiff.contDiffWithinAt`：ContDiff.contDiffWithinAt (h : ContDiff 𝕜 n f
+) : ContDiffWithinAt 𝕜 n f s x
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 
-English:
-lemma analyticWithinAt_sinh
-  given: {x : Complex} {s : Set Complex}
-  statement: AnalyticWithinAt Complex sinh s x
-  proof: contDiff_sinh.contDiffWithinAt.analyticWithinAt
-
-中文:
-引理 analyticWithinAt_sinh
-  条件: {x : 复形} {s : 集合 复形}
-  结论: AnalyticWithinAt 复形 sinh s x
-  证明: contDiff_sinh.contDiffWithinAt.analyticWithinAt
-
-Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_sinh, contDiff_sinh.contDiffWithinAt.analyticWithinAt
+--- 原说明 ---
+The function `Complex.sinh` is complex analytic.
 -/
-lemma analyticWithinAt_sinh {x : Complex} {s : Set Complex} : AnalyticWithinAt Complex sinh s x :=
+lemma analyticWithinAt_sinh {x : ℂ} {s : Set ℂ} : AnalyticWithinAt ℂ sinh s x :=
   contDiff_sinh.contDiffWithinAt.analyticWithinAt
 
-/--
-theorem `analyticOnNhd_sinh` / 定理 `analyticOnNhd_sinh`
+/-- The function `Complex.sinh` is complex analytic. -/
+/-
+**Complex.analyticOnNhd_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：analyticOnNhd_sinh {s : Set Complex} : AnalyticOnNhd Complex sinh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Complex.analyticAt_sinh`：analyticAt_sinh {x : Complex} : AnalyticAt Comp
+lex sinh x
 
-English:
-theorem analyticOnNhd_sinh
-  given: {s : Set Complex}
-  statement: AnalyticOnNhd Complex sinh s
-  proof: fun _ _ => analyticAt_sinh
-
-中文:
-定理 analyticOnNhd_sinh
-  条件: {s : 集合 复形}
-  结论: AnalyticOnNhd 复形 sinh s
-  证明: fun _ _ => analyticAt_sinh
-
-Depends on / 依赖: analyticAt_sinh
+--- 原说明 ---
+The function `Complex.sinh` is complex analytic.
 -/
-theorem analyticOnNhd_sinh {s : Set Complex} : AnalyticOnNhd Complex sinh s :=
-  fun _ _ => analyticAt_sinh
+theorem analyticOnNhd_sinh {s : Set ℂ} : AnalyticOnNhd ℂ sinh s :=
+  fun _ _ ↦ analyticAt_sinh
 
-/--
-lemma `analyticOn_sinh` / 引理 `analyticOn_sinh`
+/-- The function `Complex.sinh` is complex analytic. -/
+/-
+**Complex.analyticOn_sinh** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：analyticOn_sinh {s : Set Complex} : AnalyticOn Complex sinh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffOn.analyticOn`：ContDiffOn.analyticOn (h : ContDiffOn 𝕜 ω f s) : 
+AnalyticOn 𝕜 f s
+· 使用定理 `ContDiff.contDiffOn`：ContDiff.contDiffOn (h : ContDiff 𝕜 n f) : ContDiff
+On 𝕜 n f s
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 
-English:
-lemma analyticOn_sinh
-  given: {s : Set Complex}
-  statement: AnalyticOn Complex sinh s
-  proof: contDiff_sinh.contDiffOn.analyticOn
-
-@[simp]
-
-中文:
-引理 analyticOn_sinh
-  条件: {s : 集合 复形}
-  结论: AnalyticOn 复形 sinh s
-  证明: contDiff_sinh.contDiffOn.analyticOn
-
-@[simp]
-
-Depends on / 依赖: analyticOn, contDiffOn, contDiff_sinh, contDiff_sinh.contDiffOn.analyticOn
+--- 原说明 ---
+The function `Complex.sinh` is complex analytic.
 -/
-lemma analyticOn_sinh {s : Set Complex} : AnalyticOn Complex sinh s :=
+lemma analyticOn_sinh {s : Set ℂ} : AnalyticOn ℂ sinh s :=
   contDiff_sinh.contDiffOn.analyticOn
 
 @[simp]
-/--
-theorem `deriv_sinh` / 定理 `deriv_sinh`
-
-English:
-theorem deriv_sinh
-  statement: deriv sinh = cosh
-  proof: funext fun x => (hasDerivAt_sinh x).deriv
-
-中文:
-定理 deriv_sinh
-  结论: deriv sinh = cosh
-  证明: funext fun x => (hasDerivAt_sinh x).deriv
-
-Depends on / 依赖: hasDerivAt_sinh
+/-
+**Complex.deriv_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：deriv_sinh : deriv sinh = cosh
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
 theorem deriv_sinh : deriv sinh = cosh :=
   funext fun x => (hasDerivAt_sinh x).deriv
 
-/--
-theorem `hasStrictDerivAt_cosh` / 定理 `hasStrictDerivAt_cosh`
+/-- The complex hyperbolic cosine function is everywhere strictly differentiable, with the
+derivative `sinh x`. -/
+/-
+**Complex.hasStrictDerivAt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：hasStrictDerivAt_cosh (x : Complex) : HasStrictDerivAt cosh (sinh x) x
+参数：x : Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasStrictDerivAt.congr_simp`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {F : Type v} [inst_1 : AddCommGroup F] [inst_2 : _root_.Module 𝕜 F]   [in
+st_3 : Topologica…
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `id.eq_1`：∀ {α : Sort u} (a : α), id a = a
+· 使用定理 `mul_neg_one`：mul_neg_one (a : α) : a * -1 = -a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `HasStrictDerivAt.mul_const`：HasStrictDerivAt.mul_const (hc : HasStrictDe
+rivAt c c' x) (d : 𝔸) : HasStrictDerivAt (fun y => c y * d) (c' * d) x
+· 使用定理 `HasStrictDerivAt.add`：HasStrictDerivAt.add (hf : HasStrictDerivAt f f' x
+) (hg : HasStrictDerivAt g g' x) : HasStrictDerivAt (f + g) (f' + g') x
+· 使用定理 `Complex.hasStrictDerivAt_exp`：hasStrictDerivAt_exp (x : Complex) : HasSt
+rictDerivAt exp (exp x) x
+· 使用定理 `HasStrictDerivAt.cexp`：HasStrictDerivAt.cexp (hf : HasStrictDerivAt f f'
+ x) : HasStrictDerivAt (fun x => Complex.exp (f x)) (Complex.exp (f x) * f') x
+· 使用定理 `HasStrictDerivAt.fun_neg`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField
+ 𝕜] {F : Type v} [inst_1 : NormedAddCommGroup F]   [inst_2 : NormedSpace 𝕜 F] {f
+ : 𝕜 → F} {f' …
+· 使用定理 `hasStrictDerivAt_id`：hasStrictDerivAt_id : HasStrictDerivAt id 1 x
 
-English:
-theorem hasStrictDerivAt_cosh
-  given: (x : Complex)
-  statement: HasStrictDerivAt cosh (sinh x) x
-  proof: by
-  simp only [sinh, div_eq_mul_inv]
-  convert!
-    ((hasStrictDerivAt_exp x).add (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : Complex)⁻¹ using 1
-  rw [id]; rw [mul_neg_one]; rw [sub_eq_add_neg]
-
-中文:
-定理 hasStrictDerivAt_cosh
-  条件: (x : 复形)
-  结论: HasStrictDerivAt cosh (sinh x) x
-  证明: by
-  simp only [sinh, div_eq_mul_inv]
-  convert!
-    ((hasStrictDerivAt_exp x).add (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : Complex)⁻¹ using 1
-  rw [id]; rw [mul_neg_one]; rw [sub_eq_add_neg]
-
-Depends on / 依赖: convert, div_eq_mul_inv, fun_neg, fun_neg.cexp, hasStrictDerivAt_exp, hasStrictDerivAt_id, mul_const, mul_neg_one, sub_eq_add_neg
+--- 原说明 ---
+The complex hyperbolic cosine function is everywhere strictly differentiable, wi
+th the
+derivative `sinh x`.
 -/
-theorem hasStrictDerivAt_cosh (x : Complex) : HasStrictDerivAt cosh (sinh x) x := by
+theorem hasStrictDerivAt_cosh (x : ℂ) : HasStrictDerivAt cosh (sinh x) x := by
   simp only [sinh, div_eq_mul_inv]
   convert!
-    ((hasStrictDerivAt_exp x).add (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : Complex)⁻¹ using 1
-  rw [id]; rw [mul_neg_one]; rw [sub_eq_add_neg]
+    ((hasStrictDerivAt_exp x).add (hasStrictDerivAt_id x).fun_neg.cexp).mul_const (2 : ℂ)⁻¹ using 1
+  rw [id, mul_neg_one, sub_eq_add_neg]
 
-/--
-theorem `hasDerivAt_cosh` / 定理 `hasDerivAt_cosh`
+/-- The complex hyperbolic cosine function is everywhere differentiable, with the derivative
+`sinh x`. -/
+/-
+**Complex.hasDerivAt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh (sinh x) x
+参数：x : Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.hasDerivAt`：HasStrictDerivAt.hasDerivAt (h : HasStrictD
+erivAt f f' x) : HasDerivAt f f' x
+· 使用定理 `Complex.hasStrictDerivAt_cosh`：hasStrictDerivAt_cosh (x : Complex) : Has
+StrictDerivAt cosh (sinh x) x
 
-English:
-theorem hasDerivAt_cosh
-  given: (x : Complex)
-  statement: HasDerivAt cosh (sinh x) x
-  proof: (hasStrictDerivAt_cosh x).hasDerivAt
-
-@[fun_prop]
-
-中文:
-定理 hasDerivAt_cosh
-  条件: (x : 复形)
-  结论: 在点处可导 cosh (sinh x) x
-  证明: (hasStrictDerivAt_cosh x).hasDerivAt
-
-@[fun_prop]
-
-Depends on / 依赖: hasDerivAt, hasStrictDerivAt_cosh
+--- 原说明 ---
+The complex hyperbolic cosine function is everywhere differentiable, with the de
+rivative
+`sinh x`.
 -/
-theorem hasDerivAt_cosh (x : Complex) : HasDerivAt cosh (sinh x) x :=
+theorem hasDerivAt_cosh (x : ℂ) : HasDerivAt cosh (sinh x) x :=
   (hasStrictDerivAt_cosh x).hasDerivAt
 
 @[fun_prop]
-/--
-theorem `contDiff_cosh` / 定理 `contDiff_cosh`
-
-English:
-theorem contDiff_cosh
-  given: {n}
-  statement: ContDiff Complex n cosh
-  proof: (contDiff_exp.add contDiff_neg.cexp).div_const _
-
-@[simp]
-
-中文:
-定理 contDiff_cosh
-  条件: {n}
-  结论: 连续可微 复形 n cosh
-  证明: (contDiff_exp.add contDiff_neg.cexp).div_const _
-
-@[simp]
-
-Depends on / 依赖: contDiff_exp, contDiff_exp.add, contDiff_neg, contDiff_neg.cexp, div_const
+/-
+**Complex.contDiff_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：contDiff_cosh {n} : ContDiff Complex n cosh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.div_const`：ContDiff.div_const {f : E -> 𝕜'} {n} (hf : ContDiff 
+𝕜 n f) (c : 𝕜') : ContDiff 𝕜 n fun x => f x / c
+· 使用定理 `ContDiff.add`：ContDiff.add {f g : E -> F} (hf : ContDiff 𝕜 n f) (hg : Co
+ntDiff 𝕜 n g) : ContDiff 𝕜 n fun x => f x + g x
+· 使用定理 `Complex.contDiff_exp`：contDiff_exp {n : WithTop Nat∞} : ContDiff 𝕜 n exp
+· 使用定理 `ContDiff.cexp`：ContDiff.cexp {n} (h : ContDiff 𝕜 n f) : ContDiff 𝕜 n fun
+ x => Complex.exp (f x)
+· 使用定理 `contDiff_neg`：contDiff_neg : ContDiff 𝕜 n fun p : F => -p
 -/
-theorem contDiff_cosh {n} : ContDiff Complex n cosh :=
+theorem contDiff_cosh {n} : ContDiff ℂ n cosh :=
   (contDiff_exp.add contDiff_neg.cexp).div_const _
 
 @[simp]
-/--
-theorem `differentiable_cosh` / 定理 `differentiable_cosh`
-
-English:
-theorem differentiable_cosh
-  statement: Differentiable Complex cosh
-  proof: fun x => (hasDerivAt_cosh x).differentiableAt
-
-@[simp]
-
-中文:
-定理 differentiable_cosh
-  结论: 可微 复形 cosh
-  证明: fun x => (hasDerivAt_cosh x).differentiableAt
-
-@[simp]
-
-Depends on / 依赖: differentiableAt, hasDerivAt_cosh
+/-
+**Complex.differentiable_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：differentiable_cosh : Differentiable Complex cosh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.differentiableAt`：HasDerivAt.differentiableAt (h : HasDerivAt
+ f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Complex.hasDerivAt_cosh`：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh
+ (sinh x) x
 -/
-theorem differentiable_cosh : Differentiable Complex cosh := fun x => (hasDerivAt_cosh x).differentiableAt
+theorem differentiable_cosh : Differentiable ℂ cosh := fun x => (hasDerivAt_cosh x).differentiableAt
 
 @[simp]
-/--
-theorem `differentiableAt_cosh` / 定理 `differentiableAt_cosh`
-
-English:
-theorem differentiableAt_cosh
-  given: {x : Complex}
-  statement: DifferentiableAt Complex cosh x
-  proof: differentiable_cosh x
-
-中文:
-定理 differentiableAt_cosh
-  条件: {x : 复形}
-  结论: DifferentiableAt 复形 cosh x
-  证明: differentiable_cosh x
-
-Depends on / 依赖: differentiable_cosh
+/-
+**Complex.differentiableAt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：differentiableAt_cosh {x : Complex} : DifferentiableAt Complex cosh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.differentiable_cosh`：differentiable_cosh : Differentiable Comple
+x cosh
 -/
-theorem differentiableAt_cosh {x : Complex} : DifferentiableAt Complex cosh x :=
+theorem differentiableAt_cosh {x : ℂ} : DifferentiableAt ℂ cosh x :=
   differentiable_cosh x
 
 /-- The function `Complex.cosh` is complex analytic. -/
 @[fun_prop]
-/--
-lemma `analyticAt_cosh` / 引理 `analyticAt_cosh`
+/-
+**Complex.analyticAt_cosh** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：analyticAt_cosh {x : Complex} : AnalyticAt Complex cosh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.analyticAt`：ContDiffAt.analyticAt (h : ContDiffAt 𝕜 ω f x) : 
+AnalyticAt 𝕜 f x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 
-English:
-lemma analyticAt_cosh
-  given: {x : Complex}
-  statement: AnalyticAt Complex cosh x
-  proof: contDiff_cosh.contDiffAt.analyticAt
-
-中文:
-引理 analyticAt_cosh
-  条件: {x : 复形}
-  结论: AnalyticAt 复形 cosh x
-  证明: contDiff_cosh.contDiffAt.analyticAt
-
-Depends on / 依赖: analyticAt, contDiffAt, contDiff_cosh, contDiff_cosh.contDiffAt.analyticAt
+--- 原说明 ---
+The function `Complex.cosh` is complex analytic.
 -/
-lemma analyticAt_cosh {x : Complex} : AnalyticAt Complex cosh x :=
+lemma analyticAt_cosh {x : ℂ} : AnalyticAt ℂ cosh x :=
   contDiff_cosh.contDiffAt.analyticAt
 
-/--
-lemma `analyticWithinAt_cosh` / 引理 `analyticWithinAt_cosh`
+/-- The function `Complex.cosh` is complex analytic. -/
+/-
+**Complex.analyticWithinAt_cosh** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：analyticWithinAt_cosh {x : Complex} {s : Set Complex} : AnalyticWithinAt C
+omplex cosh s x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContDiffWithinAt.analyticWithinAt`：ContDiffWithinAt.analyticWithinAt (h 
+: ContDiffWithinAt 𝕜 ω f s x) : AnalyticWithinAt 𝕜 f s x
+· 使用定理 `ContDiff.contDiffWithinAt`：ContDiff.contDiffWithinAt (h : ContDiff 𝕜 n f
+) : ContDiffWithinAt 𝕜 n f s x
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 
-English:
-lemma analyticWithinAt_cosh
-  given: {x : Complex} {s : Set Complex}
-  statement: AnalyticWithinAt Complex cosh s x
-  proof: contDiff_cosh.contDiffWithinAt.analyticWithinAt
-
-中文:
-引理 analyticWithinAt_cosh
-  条件: {x : 复形} {s : 集合 复形}
-  结论: AnalyticWithinAt 复形 cosh s x
-  证明: contDiff_cosh.contDiffWithinAt.analyticWithinAt
-
-Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_cosh, contDiff_cosh.contDiffWithinAt.analyticWithinAt
+--- 原说明 ---
+The function `Complex.cosh` is complex analytic.
 -/
-lemma analyticWithinAt_cosh {x : Complex} {s : Set Complex} : AnalyticWithinAt Complex cosh s x :=
+lemma analyticWithinAt_cosh {x : ℂ} {s : Set ℂ} : AnalyticWithinAt ℂ cosh s x :=
   contDiff_cosh.contDiffWithinAt.analyticWithinAt
 
-/--
-theorem `analyticOnNhd_cosh` / 定理 `analyticOnNhd_cosh`
+/-- The function `Complex.cosh` is complex analytic. -/
+/-
+**Complex.analyticOnNhd_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：analyticOnNhd_cosh {s : Set Complex} : AnalyticOnNhd Complex cosh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Complex.analyticAt_cosh`：analyticAt_cosh {x : Complex} : AnalyticAt Comp
+lex cosh x
 
-English:
-theorem analyticOnNhd_cosh
-  given: {s : Set Complex}
-  statement: AnalyticOnNhd Complex cosh s
-  proof: fun _ _ => analyticAt_cosh
-
-中文:
-定理 analyticOnNhd_cosh
-  条件: {s : 集合 复形}
-  结论: AnalyticOnNhd 复形 cosh s
-  证明: fun _ _ => analyticAt_cosh
-
-Depends on / 依赖: analyticAt_cosh
+--- 原说明 ---
+The function `Complex.cosh` is complex analytic.
 -/
-theorem analyticOnNhd_cosh {s : Set Complex} : AnalyticOnNhd Complex cosh s :=
-  fun _ _ => analyticAt_cosh
+theorem analyticOnNhd_cosh {s : Set ℂ} : AnalyticOnNhd ℂ cosh s :=
+  fun _ _ ↦ analyticAt_cosh
 
-/--
-lemma `analyticOn_cosh` / 引理 `analyticOn_cosh`
+/-- The function `Complex.cosh` is complex analytic. -/
+/-
+**Complex.analyticOn_cosh** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：analyticOn_cosh {s : Set Complex} : AnalyticOn Complex cosh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffOn.analyticOn`：ContDiffOn.analyticOn (h : ContDiffOn 𝕜 ω f s) : 
+AnalyticOn 𝕜 f s
+· 使用定理 `ContDiff.contDiffOn`：ContDiff.contDiffOn (h : ContDiff 𝕜 n f) : ContDiff
+On 𝕜 n f s
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 
-English:
-lemma analyticOn_cosh
-  given: {s : Set Complex}
-  statement: AnalyticOn Complex cosh s
-  proof: contDiff_cosh.contDiffOn.analyticOn
-
-@[simp]
-
-中文:
-引理 analyticOn_cosh
-  条件: {s : 集合 复形}
-  结论: AnalyticOn 复形 cosh s
-  证明: contDiff_cosh.contDiffOn.analyticOn
-
-@[simp]
-
-Depends on / 依赖: analyticOn, contDiffOn, contDiff_cosh, contDiff_cosh.contDiffOn.analyticOn
+--- 原说明 ---
+The function `Complex.cosh` is complex analytic.
 -/
-lemma analyticOn_cosh {s : Set Complex} : AnalyticOn Complex cosh s :=
+lemma analyticOn_cosh {s : Set ℂ} : AnalyticOn ℂ cosh s :=
   contDiff_cosh.contDiffOn.analyticOn
 
 @[simp]
-/--
-theorem `deriv_cosh` / 定理 `deriv_cosh`
-
-English:
-theorem deriv_cosh
-  statement: deriv cosh = sinh
-  proof: funext fun x => (hasDerivAt_cosh x).deriv
-
-中文:
-定理 deriv_cosh
-  结论: deriv cosh = sinh
-  证明: funext fun x => (hasDerivAt_cosh x).deriv
-
-Depends on / 依赖: hasDerivAt_cosh
+/-
+**Complex.deriv_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：deriv_cosh : deriv cosh = sinh
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `Complex.hasDerivAt_cosh`：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh
+ (sinh x) x
 -/
 theorem deriv_cosh : deriv cosh = sinh :=
   funext fun x => (hasDerivAt_cosh x).deriv
@@ -512,207 +488,257 @@ section
 
 /-! ### Simp lemmas for derivatives of `fun x => Complex.cos (f x)` etc., `f : ℂ → ℂ` -/
 
-variable {f : Complex -> Complex} {f' x : Complex} {s : Set Complex}
+variable {f : ℂ → ℂ} {f' x : ℂ} {s : Set ℂ}
 
+/-! #### `Complex.cosh` -/
 
-/--
-theorem `HasStrictDerivAt.ccosh` / 定理 `HasStrictDerivAt.ccosh`
+/-
+**HasStrictDerivAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictDerivAt.ccosh (hf : HasStrictDerivAt f f' x) : HasStrictDerivAt (
+fun x => Complex.cosh (f x)) (Complex.sinh (f x) * f') x
+参数：hf : HasStrictDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasStrictDerivAt.comp`：HasStrictDerivAt.comp (hh₂ : HasStrictDerivAt h₂ 
+h₂' (h x)) (hh : HasStrictDerivAt h h' x) : HasStrictDerivAt (h₂ ∘ h) (h₂' * h')
+ x
+· 使用定理 `Complex.hasStrictDerivAt_cosh`：hasStrictDerivAt_cosh (x : Complex) : Has
+StrictDerivAt cosh (sinh x) x
 
-English:
-theorem HasStrictDerivAt.ccosh
-  given: (hf : HasStrictDerivAt f f' x)
-  proof: (Complex.hasStrictDerivAt_cosh (f x)).comp x hf
-
-中文:
-定理 HasStrictDerivAt.ccosh
-  条件: (hf : HasStrictDerivAt f f' x)
-  证明: (Complex.hasStrictDerivAt_cosh (f x)).comp x hf
-
-Depends on / 依赖: Complex.hasStrictDerivAt_cosh, hasStrictDerivAt_cosh
+--- 原说明 ---
+#### `Complex.cosh`
 -/
 theorem HasStrictDerivAt.ccosh (hf : HasStrictDerivAt f f' x) :
     HasStrictDerivAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) * f') x :=
   (Complex.hasStrictDerivAt_cosh (f x)).comp x hf
-
-/--
-theorem `HasDerivAt.ccosh` / 定理 `HasDerivAt.ccosh`
-
-English:
-theorem HasDerivAt.ccosh
-  given: (hf : HasDerivAt f f' x)
-  proof: (Complex.hasDerivAt_cosh (f x)).comp x hf
-
-中文:
-定理 在点处可导.ccosh
-  条件: (hf : 在点处可导 f f' x)
-  证明: (Complex.hasDerivAt_cosh (f x)).comp x hf
-
-Depends on / 依赖: Complex.hasDerivAt_cosh, hasDerivAt_cosh
+/-
+**HasDerivAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivAt.ccosh (hf : HasDerivAt f f' x) : HasDerivAt (fun x => Complex.c
+osh (f x)) (Complex.sinh (f x) * f') x
+参数：hf : HasDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasDerivAt.comp`：HasDerivAt.comp (hh₂ : HasDerivAt h₂ h₂' (h x)) (hh : H
+asDerivAt h h' x) : HasDerivAt (h₂ ∘ h) (h₂' * h') x
+· 使用定理 `Complex.hasDerivAt_cosh`：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh
+ (sinh x) x
 -/
 theorem HasDerivAt.ccosh (hf : HasDerivAt f f' x) :
     HasDerivAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) * f') x :=
   (Complex.hasDerivAt_cosh (f x)).comp x hf
-
-/--
-theorem `HasDerivWithinAt.ccosh` / 定理 `HasDerivWithinAt.ccosh`
-
-English:
-theorem HasDerivWithinAt.ccosh
-  given: (hf : HasDerivWithinAt f f' s x)
-  proof: (Complex.hasDerivAt_cosh (f x)).comp_hasDerivWithinAt x hf
-
-中文:
-定理 HasDerivWithinAt.ccosh
-  条件: (hf : HasDerivWithinAt f f' s x)
-  证明: (Complex.hasDerivAt_cosh (f x)).comp_hasDerivWithinAt x hf
-
-Depends on / 依赖: Complex.hasDerivAt_cosh, comp_hasDerivWithinAt, hasDerivAt_cosh
+/-
+**HasDerivWithinAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivWithinAt.ccosh (hf : HasDerivWithinAt f f' s x) : HasDerivWithinAt
+ (fun x => Complex.cosh (f x)) (Complex.sinh (f x) * f') s x
+参数：hf : HasDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasDerivAt.comp_hasDerivWithinAt`：HasDerivAt.comp_hasDerivWithinAt (hh₂ 
+: HasDerivAt h₂ h₂' (h x)) (hh : HasDerivWithinAt h h' s x) : HasDerivWithinAt (
+h₂ ∘ h) (h₂' * h') s x
+· 使用定理 `Complex.hasDerivAt_cosh`：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh
+ (sinh x) x
 -/
 theorem HasDerivWithinAt.ccosh (hf : HasDerivWithinAt f f' s x) :
     HasDerivWithinAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) * f') s x :=
   (Complex.hasDerivAt_cosh (f x)).comp_hasDerivWithinAt x hf
-
-/--
-theorem `derivWithin_ccosh` / 定理 `derivWithin_ccosh`
-
-English:
-theorem derivWithin_ccosh
-  given: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
-  proof: hf.hasDerivWithinAt.ccosh.derivWithin hxs
-
-@[simp]
-
-中文:
-定理 derivWithin_ccosh
-  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
-  证明: hf.hasDerivWithinAt.ccosh.derivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: derivWithin, hasDerivWithinAt, hf.hasDerivWithinAt.ccosh.derivWithin
+/-
+**derivWithin_ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：derivWithin_ccosh (hf : DifferentiableWithinAt Complex f s x) (hxs : Uniqu
+eDiffWithinAt Complex s x) : derivWithin (fun x => Complex.cosh (f x)) s x = Com
+plex.sinh (f x) * derivWithin f s x
+参数：hf : DifferentiableWithinAt Complex f s x；hxs : UniqueDiffWithinAt Complex s 
+x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivWithinAt.derivWithin`：HasDerivWithinAt.derivWithin (h : HasDeriv
+WithinAt f f' s x) (hxs : UniqueDiffWithinAt 𝕜 s x) : derivWithin f s x = f'
+· 使用定理 `HasDerivWithinAt.ccosh`：HasDerivWithinAt.ccosh (hf : HasDerivWithinAt f 
+f' s x) : HasDerivWithinAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) * f
+') s x
+· 使用定理 `DifferentiableWithinAt.hasDerivWithinAt`：DifferentiableWithinAt.hasDeriv
+WithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasDerivWithinAt f (derivWithin 
+f s x) s x
 -/
-theorem derivWithin_ccosh (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x) :
+theorem derivWithin_ccosh (hf : DifferentiableWithinAt ℂ f s x) (hxs : UniqueDiffWithinAt ℂ s x) :
     derivWithin (fun x => Complex.cosh (f x)) s x = Complex.sinh (f x) * derivWithin f s x :=
   hf.hasDerivWithinAt.ccosh.derivWithin hxs
 
 @[simp]
-/--
-theorem `deriv_ccosh` / 定理 `deriv_ccosh`
-
-English:
-theorem deriv_ccosh
-  given: (hc : DifferentiableAt Complex f x)
-  proof: hc.hasDerivAt.ccosh.deriv
-
-中文:
-定理 deriv_ccosh
-  条件: (hc : DifferentiableAt 复形 f x)
-  证明: hc.hasDerivAt.ccosh.deriv
-
-Depends on / 依赖: hasDerivAt, hc.hasDerivAt.ccosh.deriv
+/-
+**deriv_ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_ccosh (hc : DifferentiableAt Complex f x) : deriv (fun x => Complex.
+cosh (f x)) x = Complex.sinh (f x) * deriv f x
+参数：hc : DifferentiableAt Complex f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `HasDerivAt.ccosh`：HasDerivAt.ccosh (hf : HasDerivAt f f' x) : HasDerivAt
+ (fun x => Complex.cosh (f x)) (Complex.sinh (f x) * f') x
+· 使用定理 `DifferentiableAt.hasDerivAt`：DifferentiableAt.hasDerivAt (h : Differenti
+ableAt 𝕜 f x) : HasDerivAt f (deriv f x) x
 -/
-theorem deriv_ccosh (hc : DifferentiableAt Complex f x) :
+theorem deriv_ccosh (hc : DifferentiableAt ℂ f x) :
     deriv (fun x => Complex.cosh (f x)) x = Complex.sinh (f x) * deriv f x :=
   hc.hasDerivAt.ccosh.deriv
 
+/-! #### `Complex.sinh` -/
 
-/--
-theorem `HasStrictDerivAt.csinh` / 定理 `HasStrictDerivAt.csinh`
+/-
+**HasStrictDerivAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictDerivAt.csinh (hf : HasStrictDerivAt f f' x) : HasStrictDerivAt (
+fun x => Complex.sinh (f x)) (Complex.cosh (f x) * f') x
+参数：hf : HasStrictDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasStrictDerivAt.comp`：HasStrictDerivAt.comp (hh₂ : HasStrictDerivAt h₂ 
+h₂' (h x)) (hh : HasStrictDerivAt h h' x) : HasStrictDerivAt (h₂ ∘ h) (h₂' * h')
+ x
+· 使用定理 `Complex.hasStrictDerivAt_sinh`：hasStrictDerivAt_sinh (x : Complex) : Has
+StrictDerivAt sinh (cosh x) x
 
-English:
-theorem HasStrictDerivAt.csinh
-  given: (hf : HasStrictDerivAt f f' x)
-  proof: (Complex.hasStrictDerivAt_sinh (f x)).comp x hf
-
-中文:
-定理 HasStrictDerivAt.csinh
-  条件: (hf : HasStrictDerivAt f f' x)
-  证明: (Complex.hasStrictDerivAt_sinh (f x)).comp x hf
-
-Depends on / 依赖: Complex.hasStrictDerivAt_sinh, hasStrictDerivAt_sinh
+--- 原说明 ---
+#### `Complex.sinh`
 -/
 theorem HasStrictDerivAt.csinh (hf : HasStrictDerivAt f f' x) :
     HasStrictDerivAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) * f') x :=
   (Complex.hasStrictDerivAt_sinh (f x)).comp x hf
-
-/--
-theorem `HasDerivAt.csinh` / 定理 `HasDerivAt.csinh`
-
-English:
-theorem HasDerivAt.csinh
-  given: (hf : HasDerivAt f f' x)
-  proof: (Complex.hasDerivAt_sinh (f x)).comp x hf
-
-中文:
-定理 在点处可导.csinh
-  条件: (hf : 在点处可导 f f' x)
-  证明: (Complex.hasDerivAt_sinh (f x)).comp x hf
-
-Depends on / 依赖: Complex.hasDerivAt_sinh, hasDerivAt_sinh
+/-
+**HasDerivAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivAt.csinh (hf : HasDerivAt f f' x) : HasDerivAt (fun x => Complex.s
+inh (f x)) (Complex.cosh (f x) * f') x
+参数：hf : HasDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasDerivAt.comp`：HasDerivAt.comp (hh₂ : HasDerivAt h₂ h₂' (h x)) (hh : H
+asDerivAt h h' x) : HasDerivAt (h₂ ∘ h) (h₂' * h') x
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
 theorem HasDerivAt.csinh (hf : HasDerivAt f f' x) :
     HasDerivAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) * f') x :=
   (Complex.hasDerivAt_sinh (f x)).comp x hf
-
-/--
-theorem `HasDerivWithinAt.csinh` / 定理 `HasDerivWithinAt.csinh`
-
-English:
-theorem HasDerivWithinAt.csinh
-  given: (hf : HasDerivWithinAt f f' s x)
-  proof: (Complex.hasDerivAt_sinh (f x)).comp_hasDerivWithinAt x hf
-
-中文:
-定理 HasDerivWithinAt.csinh
-  条件: (hf : HasDerivWithinAt f f' s x)
-  证明: (Complex.hasDerivAt_sinh (f x)).comp_hasDerivWithinAt x hf
-
-Depends on / 依赖: Complex.hasDerivAt_sinh, comp_hasDerivWithinAt, hasDerivAt_sinh
+/-
+**HasDerivWithinAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivWithinAt.csinh (hf : HasDerivWithinAt f f' s x) : HasDerivWithinAt
+ (fun x => Complex.sinh (f x)) (Complex.cosh (f x) * f') s x
+参数：hf : HasDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasDerivAt.comp_hasDerivWithinAt`：HasDerivAt.comp_hasDerivWithinAt (hh₂ 
+: HasDerivAt h₂ h₂' (h x)) (hh : HasDerivWithinAt h h' s x) : HasDerivWithinAt (
+h₂ ∘ h) (h₂' * h') s x
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
 theorem HasDerivWithinAt.csinh (hf : HasDerivWithinAt f f' s x) :
     HasDerivWithinAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) * f') s x :=
   (Complex.hasDerivAt_sinh (f x)).comp_hasDerivWithinAt x hf
-
-/--
-theorem `derivWithin_csinh` / 定理 `derivWithin_csinh`
-
-English:
-theorem derivWithin_csinh
-  given: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
-  proof: hf.hasDerivWithinAt.csinh.derivWithin hxs
-
-@[simp]
-
-中文:
-定理 derivWithin_csinh
-  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
-  证明: hf.hasDerivWithinAt.csinh.derivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: derivWithin, hasDerivWithinAt, hf.hasDerivWithinAt.csinh.derivWithin
+/-
+**derivWithin_csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：derivWithin_csinh (hf : DifferentiableWithinAt Complex f s x) (hxs : Uniqu
+eDiffWithinAt Complex s x) : derivWithin (fun x => Complex.sinh (f x)) s x = Com
+plex.cosh (f x) * derivWithin f s x
+参数：hf : DifferentiableWithinAt Complex f s x；hxs : UniqueDiffWithinAt Complex s 
+x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivWithinAt.derivWithin`：HasDerivWithinAt.derivWithin (h : HasDeriv
+WithinAt f f' s x) (hxs : UniqueDiffWithinAt 𝕜 s x) : derivWithin f s x = f'
+· 使用定理 `HasDerivWithinAt.csinh`：HasDerivWithinAt.csinh (hf : HasDerivWithinAt f 
+f' s x) : HasDerivWithinAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) * f
+') s x
+· 使用定理 `DifferentiableWithinAt.hasDerivWithinAt`：DifferentiableWithinAt.hasDeriv
+WithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasDerivWithinAt f (derivWithin 
+f s x) s x
 -/
-theorem derivWithin_csinh (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x) :
+theorem derivWithin_csinh (hf : DifferentiableWithinAt ℂ f s x) (hxs : UniqueDiffWithinAt ℂ s x) :
     derivWithin (fun x => Complex.sinh (f x)) s x = Complex.cosh (f x) * derivWithin f s x :=
   hf.hasDerivWithinAt.csinh.derivWithin hxs
 
 @[simp]
-/--
-theorem `deriv_csinh` / 定理 `deriv_csinh`
-
-English:
-theorem deriv_csinh
-  given: (hc : DifferentiableAt Complex f x)
-  proof: hc.hasDerivAt.csinh.deriv
-
-中文:
-定理 deriv_csinh
-  条件: (hc : DifferentiableAt 复形 f x)
-  证明: hc.hasDerivAt.csinh.deriv
-
-Depends on / 依赖: hasDerivAt, hc.hasDerivAt.csinh.deriv
+/-
+**deriv_csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_csinh (hc : DifferentiableAt Complex f x) : deriv (fun x => Complex.
+sinh (f x)) x = Complex.cosh (f x) * deriv f x
+参数：hc : DifferentiableAt Complex f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `HasDerivAt.csinh`：HasDerivAt.csinh (hf : HasDerivAt f f' x) : HasDerivAt
+ (fun x => Complex.sinh (f x)) (Complex.cosh (f x) * f') x
+· 使用定理 `DifferentiableAt.hasDerivAt`：DifferentiableAt.hasDerivAt (h : Differenti
+ableAt 𝕜 f x) : HasDerivAt f (deriv f x) x
 -/
-theorem deriv_csinh (hc : DifferentiableAt Complex f x) :
+theorem deriv_csinh (hc : DifferentiableAt ℂ f x) :
     deriv (fun x => Complex.sinh (f x)) x = Complex.cosh (f x) * deriv f x :=
   hc.hasDerivAt.csinh.deriv
 
@@ -722,1471 +748,1452 @@ section
 
 /-! ### Simp lemmas for derivatives of `fun x => Complex.cos (f x)` etc., `f : E → ℂ` -/
 
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace Complex E] {f : E -> Complex} {f' : StrongDual Complex E}
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] {f : E → ℂ} {f' : StrongDual ℂ E}
   {x : E} {s : Set E}
 
+/-! #### `Complex.cosh` -/
 
-/--
-theorem `HasStrictFDerivAt.ccosh` / 定理 `HasStrictFDerivAt.ccosh`
+/-
+**HasStrictFDerivAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.ccosh (hf : HasStrictFDerivAt f f' x) : HasStrictFDerivA
+t (fun x => Complex.cosh (f x)) (Complex.sinh (f x) • f') x
+参数：hf : HasStrictFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.comp_hasStrictFDerivAt`：HasStrictDerivAt.comp_hasStrict
+FDerivAt {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} (x) (hh : HasStrictDerivAt h₂ h₂' (f x
+)) (hf : HasStrictFDerivAt f …
+· 使用定理 `Complex.hasStrictDerivAt_cosh`：hasStrictDerivAt_cosh (x : Complex) : Has
+StrictDerivAt cosh (sinh x) x
 
-English:
-theorem HasStrictFDerivAt.ccosh
-  given: (hf : HasStrictFDerivAt f f' x)
-  proof: (Complex.hasStrictDerivAt_cosh (f x)).comp_hasStrictFDerivAt x hf
-
-中文:
-定理 HasStrictFDerivAt.ccosh
-  条件: (hf : HasStrictFDerivAt f f' x)
-  证明: (Complex.hasStrictDerivAt_cosh (f x)).comp_hasStrictFDerivAt x hf
-
-Depends on / 依赖: Complex.hasStrictDerivAt_cosh, comp_hasStrictFDerivAt, hasStrictDerivAt_cosh
+--- 原说明 ---
+#### `Complex.cosh`
 -/
 theorem HasStrictFDerivAt.ccosh (hf : HasStrictFDerivAt f f' x) :
     HasStrictFDerivAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) • f') x :=
   (Complex.hasStrictDerivAt_cosh (f x)).comp_hasStrictFDerivAt x hf
-
-/--
-theorem `HasFDerivAt.ccosh` / 定理 `HasFDerivAt.ccosh`
-
-English:
-theorem HasFDerivAt.ccosh
-  given: (hf : HasFDerivAt f f' x)
-  proof: (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
-
-中文:
-定理 在点处Fréchet可导.ccosh
-  条件: (hf : 在点处Fréchet可导 f f' x)
-  证明: (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
-
-Depends on / 依赖: Complex.hasDerivAt_cosh, comp_hasFDerivAt, hasDerivAt_cosh
+/-
+**HasFDerivAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.ccosh (hf : HasFDerivAt f f' x) : HasFDerivAt (fun x => Comple
+x.cosh (f x)) (Complex.sinh (f x) • f') x
+参数：hf : HasFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivAt`：HasDerivAt.comp_hasFDerivAt {f : E -> 𝕜'} {
+f' : E ->L[𝕜] 𝕜'} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFDerivAt f f' x) :
+ HasFDerivAt (h₂ …
+· 使用定理 `Complex.hasDerivAt_cosh`：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh
+ (sinh x) x
 -/
 theorem HasFDerivAt.ccosh (hf : HasFDerivAt f f' x) :
     HasFDerivAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) • f') x :=
   (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
-
-/--
-theorem `HasFDerivWithinAt.ccosh` / 定理 `HasFDerivWithinAt.ccosh`
-
-English:
-theorem HasFDerivWithinAt.ccosh
-  given: (hf : HasFDerivWithinAt f f' s x)
-  proof: (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivWithinAt x hf
-
-中文:
-定理 HasFDerivWithinAt.ccosh
-  条件: (hf : HasFDerivWithinAt f f' s x)
-  证明: (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivWithinAt x hf
-
-Depends on / 依赖: Complex.hasDerivAt_cosh, comp_hasFDerivWithinAt, hasDerivAt_cosh
+/-
+**HasFDerivWithinAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.ccosh (hf : HasFDerivWithinAt f f' s x) : HasFDerivWithi
+nAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) • f') s x
+参数：hf : HasFDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivWithinAt`：HasDerivAt.comp_hasFDerivWithinAt {f 
+: E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} {s} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFD
+erivWithinAt f f' s x) …
+· 使用定理 `Complex.hasDerivAt_cosh`：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh
+ (sinh x) x
 -/
 theorem HasFDerivWithinAt.ccosh (hf : HasFDerivWithinAt f f' s x) :
     HasFDerivWithinAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) • f') s x :=
   (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivWithinAt x hf
-
-/--
-theorem `DifferentiableWithinAt.ccosh` / 定理 `DifferentiableWithinAt.ccosh`
-
-English:
-theorem DifferentiableWithinAt.ccosh
-  given: (hf : DifferentiableWithinAt Complex f s x)
-  proof: hf.hasFDerivWithinAt.ccosh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-中文:
-定理 DifferentiableWithinAt.ccosh
-  条件: (hf : DifferentiableWithinAt 复形 f s x)
-  证明: hf.hasFDerivWithinAt.ccosh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-Depends on / 依赖: differentiableWithinAt, hasFDerivWithinAt, hf.hasFDerivWithinAt.ccosh.differentiableWithinAt
+/-
+**DifferentiableWithinAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.ccosh (hf : DifferentiableWithinAt Complex f s x) :
+ DifferentiableWithinAt Complex (fun x => Complex.cosh (f x)) s x
+参数：hf : DifferentiableWithinAt Complex f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.differentiableWithinAt`：HasFDerivWithinAt.differentiab
+leWithinAt (h : HasFDerivWithinAt f f' s x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasFDerivWithinAt.ccosh`：HasFDerivWithinAt.ccosh (hf : HasFDerivWithinAt
+ f f' s x) : HasFDerivWithinAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x)
+ • f') s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem DifferentiableWithinAt.ccosh (hf : DifferentiableWithinAt Complex f s x) :
-    DifferentiableWithinAt Complex (fun x => Complex.cosh (f x)) s x :=
+theorem DifferentiableWithinAt.ccosh (hf : DifferentiableWithinAt ℂ f s x) :
+    DifferentiableWithinAt ℂ (fun x => Complex.cosh (f x)) s x :=
   hf.hasFDerivWithinAt.ccosh.differentiableWithinAt
 
 @[simp, fun_prop]
-/--
-theorem `DifferentiableAt.ccosh` / 定理 `DifferentiableAt.ccosh`
-
-English:
-theorem DifferentiableAt.ccosh
-  given: (hc : DifferentiableAt Complex f x)
-  proof: hc.hasFDerivAt.ccosh.differentiableAt
-
-中文:
-定理 DifferentiableAt.ccosh
-  条件: (hc : DifferentiableAt 复形 f x)
-  证明: hc.hasFDerivAt.ccosh.differentiableAt
-
-Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.ccosh.differentiableAt
+/-
+**DifferentiableAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.ccosh (hc : DifferentiableAt Complex f x) : Differentiabl
+eAt Complex (fun x => Complex.cosh (f x)) x
+参数：hc : DifferentiableAt Complex f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.differentiableAt`：HasFDerivAt.differentiableAt (h : HasFDeri
+vAt f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasFDerivAt.ccosh`：HasFDerivAt.ccosh (hf : HasFDerivAt f f' x) : HasFDer
+ivAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem DifferentiableAt.ccosh (hc : DifferentiableAt Complex f x) :
-    DifferentiableAt Complex (fun x => Complex.cosh (f x)) x :=
+theorem DifferentiableAt.ccosh (hc : DifferentiableAt ℂ f x) :
+    DifferentiableAt ℂ (fun x => Complex.cosh (f x)) x :=
   hc.hasFDerivAt.ccosh.differentiableAt
-
-/--
-theorem `DifferentiableOn.ccosh` / 定理 `DifferentiableOn.ccosh`
-
-English:
-theorem DifferentiableOn.ccosh
-  given: (hc : DifferentiableOn Complex f s)
-  proof: fun x h => (hc x h).ccosh
+/-
+**DifferentiableOn.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.ccosh (hc : DifferentiableOn Complex f s) : Differentiabl
+eOn Complex (fun x => Complex.cosh (f x)) s
+参数：hc : DifferentiableOn Complex f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.ccosh`：DifferentiableWithinAt.ccosh (hf : Differe
+ntiableWithinAt Complex f s x) : DifferentiableWithinAt Complex (fun x => Comple
+x.cosh (f x)) s x
+-/
+theorem DifferentiableOn.ccosh (hc : DifferentiableOn ℂ f s) :
+    DifferentiableOn ℂ (fun x => Complex.cosh (f x)) s := fun x h => (hc x h).ccosh
 
 @[simp, fun_prop]
-
-中文:
-定理 DifferentiableOn.ccosh
-  条件: (hc : DifferentiableOn 复形 f s)
-  证明: fun x h => (hc x h).ccosh
-
-@[simp, fun_prop]
+/-
+**Differentiable.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Differentiable.ccosh (hc : Differentiable Complex f) : Differentiable Comp
+lex fun x => Complex.cosh (f x)
+参数：hc : Differentiable Complex f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.ccosh`：DifferentiableAt.ccosh (hc : DifferentiableAt Co
+mplex f x) : DifferentiableAt Complex (fun x => Complex.cosh (f x)) x
 -/
-theorem DifferentiableOn.ccosh (hc : DifferentiableOn Complex f s) :
-    DifferentiableOn Complex (fun x => Complex.cosh (f x)) s := fun x h => (hc x h).ccosh
-
-@[simp, fun_prop]
-/--
-theorem `Differentiable.ccosh` / 定理 `Differentiable.ccosh`
-
-English:
-theorem Differentiable.ccosh
-  given: (hc : Differentiable Complex f)
-  proof: fun x => (hc x).ccosh
-
-中文:
-定理 可微.ccosh
-  条件: (hc : 可微 复形 f)
-  证明: fun x => (hc x).ccosh
+theorem Differentiable.ccosh (hc : Differentiable ℂ f) :
+    Differentiable ℂ fun x => Complex.cosh (f x) := fun x => (hc x).ccosh
+/-
+**fderivWithin_ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_ccosh (hf : DifferentiableWithinAt Complex f s x) (hxs : Uniq
+ueDiffWithinAt Complex s x) : fderivWithin Complex (fun x => Complex.cosh (f x))
+ s x = Complex.sinh (f x) • fderivWithin Complex f s x
+参数：hf : DifferentiableWithinAt Complex f s x；hxs : UniqueDiffWithinAt Complex s 
+x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Complex.instT2Space`：T2Space ℂ
+· 使用定理 `HasFDerivWithinAt.ccosh`：HasFDerivWithinAt.ccosh (hf : HasFDerivWithinAt
+ f f' s x) : HasFDerivWithinAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x)
+ • f') s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem Differentiable.ccosh (hc : Differentiable Complex f) :
-    Differentiable Complex fun x => Complex.cosh (f x) := fun x => (hc x).ccosh
-
-/--
-theorem `fderivWithin_ccosh` / 定理 `fderivWithin_ccosh`
-
-English:
-theorem fderivWithin_ccosh
-  given: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
-  proof: hf.hasFDerivWithinAt.ccosh.fderivWithin hxs
-
-@[simp]
-
-中文:
-定理 fderivWithin_ccosh
-  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
-  证明: hf.hasFDerivWithinAt.ccosh.fderivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: fderivWithin, hasFDerivWithinAt, hf.hasFDerivWithinAt.ccosh.fderivWithin
--/
-theorem fderivWithin_ccosh (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x) :
-    fderivWithin Complex (fun x => Complex.cosh (f x)) s x = Complex.sinh (f x) • fderivWithin Complex f s x :=
+theorem fderivWithin_ccosh (hf : DifferentiableWithinAt ℂ f s x) (hxs : UniqueDiffWithinAt ℂ s x) :
+    fderivWithin ℂ (fun x => Complex.cosh (f x)) s x = Complex.sinh (f x) • fderivWithin ℂ f s x :=
   hf.hasFDerivWithinAt.ccosh.fderivWithin hxs
 
 @[simp]
-/--
-theorem `fderiv_ccosh` / 定理 `fderiv_ccosh`
-
-English:
-theorem fderiv_ccosh
-  given: (hc : DifferentiableAt Complex f x)
-  proof: hc.hasFDerivAt.ccosh.fderiv
-
-中文:
-定理 fderiv_ccosh
-  条件: (hc : DifferentiableAt 复形 f x)
-  证明: hc.hasFDerivAt.ccosh.fderiv
-
-Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.ccosh.fderiv
+/-
+**fderiv_ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_ccosh (hc : DifferentiableAt Complex f x) : fderiv Complex (fun x =
+> Complex.cosh (f x)) x = Complex.sinh (f x) • fderiv Complex f x
+参数：hc : DifferentiableAt Complex f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Complex.instT2Space`：T2Space ℂ
+· 使用定理 `HasFDerivAt.ccosh`：HasFDerivAt.ccosh (hf : HasFDerivAt f f' x) : HasFDer
+ivAt (fun x => Complex.cosh (f x)) (Complex.sinh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem fderiv_ccosh (hc : DifferentiableAt Complex f x) :
-    fderiv Complex (fun x => Complex.cosh (f x)) x = Complex.sinh (f x) • fderiv Complex f x :=
+theorem fderiv_ccosh (hc : DifferentiableAt ℂ f x) :
+    fderiv ℂ (fun x => Complex.cosh (f x)) x = Complex.sinh (f x) • fderiv ℂ f x :=
   hc.hasFDerivAt.ccosh.fderiv
-
-/--
-theorem `ContDiff.ccosh` / 定理 `ContDiff.ccosh`
-
-English:
-theorem ContDiff.ccosh
-  given: {n} (h : ContDiff Complex n f)
-  statement: ContDiff Complex n fun x => Complex.cosh (f x)
-  proof: Complex.contDiff_cosh.comp h
-
-中文:
-定理 连续可微.ccosh
-  条件: {n} (h : 连续可微 复形 n f)
-  结论: 连续可微 复形 n fun x => 复形.cosh (f x)
-  证明: Complex.contDiff_cosh.comp h
-
-Depends on / 依赖: Complex.contDiff_cosh.comp, contDiff_cosh
+/-
+**ContDiff.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiff.ccosh {n} (h : ContDiff Complex n f) : ContDiff Complex n fun x =
+> Complex.cosh (f x)
+参数：h : ContDiff Complex n f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp`：ContDiff.comp {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 
+n g) (hf : ContDiff 𝕜 n f) : ContDiff 𝕜 n (g ∘ f)
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 -/
-theorem ContDiff.ccosh {n} (h : ContDiff Complex n f) : ContDiff Complex n fun x => Complex.cosh (f x) :=
+theorem ContDiff.ccosh {n} (h : ContDiff ℂ n f) : ContDiff ℂ n fun x => Complex.cosh (f x) :=
   Complex.contDiff_cosh.comp h
-
-/--
-theorem `ContDiffAt.ccosh` / 定理 `ContDiffAt.ccosh`
-
-English:
-theorem ContDiffAt.ccosh
-  given: {n} (hf : ContDiffAt Complex n f x)
-  proof: Complex.contDiff_cosh.contDiffAt.comp x hf
-
-中文:
-定理 ContDiffAt.ccosh
-  条件: {n} (hf : ContDiffAt 复形 n f x)
-  证明: Complex.contDiff_cosh.contDiffAt.comp x hf
-
-Depends on / 依赖: Complex.contDiff_cosh.contDiffAt.comp, contDiffAt, contDiff_cosh
+/-
+**ContDiffAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffAt.ccosh {n} (hf : ContDiffAt Complex n f x) : ContDiffAt Complex 
+n (fun x => Complex.cosh (f x)) x
+参数：hf : ContDiffAt Complex n f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} {G : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 -/
-theorem ContDiffAt.ccosh {n} (hf : ContDiffAt Complex n f x) :
-    ContDiffAt Complex n (fun x => Complex.cosh (f x)) x :=
+theorem ContDiffAt.ccosh {n} (hf : ContDiffAt ℂ n f x) :
+    ContDiffAt ℂ n (fun x => Complex.cosh (f x)) x :=
   Complex.contDiff_cosh.contDiffAt.comp x hf
-
-/--
-theorem `ContDiffOn.ccosh` / 定理 `ContDiffOn.ccosh`
-
-English:
-theorem ContDiffOn.ccosh
-  given: {n} (hf : ContDiffOn Complex n f s)
-  proof: Complex.contDiff_cosh.comp_contDiffOn hf
-
-中文:
-定理 ContDiffOn.ccosh
-  条件: {n} (hf : ContDiffOn 复形 n f s)
-  证明: Complex.contDiff_cosh.comp_contDiffOn hf
-
-Depends on / 依赖: Complex.contDiff_cosh.comp_contDiffOn, comp_contDiffOn, contDiff_cosh
+/-
+**ContDiffOn.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffOn.ccosh {n} (hf : ContDiffOn Complex n f s) : ContDiffOn Complex 
+n (fun x => Complex.cosh (f x)) s
+参数：hf : ContDiffOn Complex n f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp_contDiffOn`：ContDiff.comp_contDiffOn {s : Set E} {g : F ->
+ G} {f : E -> F} (hg : ContDiff 𝕜 n g) (hf : ContDiffOn 𝕜 n f s) : ContDiffOn 𝕜 
+n (g ∘ f) s
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 -/
-theorem ContDiffOn.ccosh {n} (hf : ContDiffOn Complex n f s) :
-    ContDiffOn Complex n (fun x => Complex.cosh (f x)) s :=
+theorem ContDiffOn.ccosh {n} (hf : ContDiffOn ℂ n f s) :
+    ContDiffOn ℂ n (fun x => Complex.cosh (f x)) s :=
   Complex.contDiff_cosh.comp_contDiffOn hf
-
-/--
-theorem `ContDiffWithinAt.ccosh` / 定理 `ContDiffWithinAt.ccosh`
-
-English:
-theorem ContDiffWithinAt.ccosh
-  given: {n} (hf : ContDiffWithinAt Complex n f s x)
-  proof: Complex.contDiff_cosh.contDiffAt.comp_contDiffWithinAt x hf
-
-中文:
-定理 ContDiffWithinAt.ccosh
-  条件: {n} (hf : ContDiffWithinAt 复形 n f s x)
-  证明: Complex.contDiff_cosh.contDiffAt.comp_contDiffWithinAt x hf
-
-Depends on / 依赖: Complex.contDiff_cosh.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_cosh
+/-
+**ContDiffWithinAt.ccosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffWithinAt.ccosh {n} (hf : ContDiffWithinAt Complex n f s x) : ContD
+iffWithinAt Complex n (fun x => Complex.cosh (f x)) s x
+参数：hf : ContDiffWithinAt Complex n f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp_contDiffWithinAt`：ContDiffAt.comp_contDiffWithinAt (x : 
+E) (hg : ContDiffAt 𝕜 n g (f x)) (hf : ContDiffWithinAt 𝕜 n f s x) : ContDiffWit
+hinAt 𝕜 n (g ∘ f) s x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 -/
-theorem ContDiffWithinAt.ccosh {n} (hf : ContDiffWithinAt Complex n f s x) :
-    ContDiffWithinAt Complex n (fun x => Complex.cosh (f x)) s x :=
+theorem ContDiffWithinAt.ccosh {n} (hf : ContDiffWithinAt ℂ n f s x) :
+    ContDiffWithinAt ℂ n (fun x => Complex.cosh (f x)) s x :=
   Complex.contDiff_cosh.contDiffAt.comp_contDiffWithinAt x hf
 
+/-! #### `Complex.sinh` -/
 
-/--
-theorem `HasStrictFDerivAt.csinh` / 定理 `HasStrictFDerivAt.csinh`
+/-
+**HasStrictFDerivAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.csinh (hf : HasStrictFDerivAt f f' x) : HasStrictFDerivA
+t (fun x => Complex.sinh (f x)) (Complex.cosh (f x) • f') x
+参数：hf : HasStrictFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.comp_hasStrictFDerivAt`：HasStrictDerivAt.comp_hasStrict
+FDerivAt {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} (x) (hh : HasStrictDerivAt h₂ h₂' (f x
+)) (hf : HasStrictFDerivAt f …
+· 使用定理 `Complex.hasStrictDerivAt_sinh`：hasStrictDerivAt_sinh (x : Complex) : Has
+StrictDerivAt sinh (cosh x) x
 
-English:
-theorem HasStrictFDerivAt.csinh
-  given: (hf : HasStrictFDerivAt f f' x)
-  proof: (Complex.hasStrictDerivAt_sinh (f x)).comp_hasStrictFDerivAt x hf
-
-中文:
-定理 HasStrictFDerivAt.csinh
-  条件: (hf : HasStrictFDerivAt f f' x)
-  证明: (Complex.hasStrictDerivAt_sinh (f x)).comp_hasStrictFDerivAt x hf
-
-Depends on / 依赖: Complex.hasStrictDerivAt_sinh, comp_hasStrictFDerivAt, hasStrictDerivAt_sinh
+--- 原说明 ---
+#### `Complex.sinh`
 -/
 theorem HasStrictFDerivAt.csinh (hf : HasStrictFDerivAt f f' x) :
     HasStrictFDerivAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) • f') x :=
   (Complex.hasStrictDerivAt_sinh (f x)).comp_hasStrictFDerivAt x hf
-
-/--
-theorem `HasFDerivAt.csinh` / 定理 `HasFDerivAt.csinh`
-
-English:
-theorem HasFDerivAt.csinh
-  given: (hf : HasFDerivAt f f' x)
-  proof: (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
-
-中文:
-定理 在点处Fréchet可导.csinh
-  条件: (hf : 在点处Fréchet可导 f f' x)
-  证明: (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
-
-Depends on / 依赖: Complex.hasDerivAt_sinh, comp_hasFDerivAt, hasDerivAt_sinh
+/-
+**HasFDerivAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.csinh (hf : HasFDerivAt f f' x) : HasFDerivAt (fun x => Comple
+x.sinh (f x)) (Complex.cosh (f x) • f') x
+参数：hf : HasFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivAt`：HasDerivAt.comp_hasFDerivAt {f : E -> 𝕜'} {
+f' : E ->L[𝕜] 𝕜'} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFDerivAt f f' x) :
+ HasFDerivAt (h₂ …
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
 theorem HasFDerivAt.csinh (hf : HasFDerivAt f f' x) :
     HasFDerivAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) • f') x :=
   (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
-
-/--
-theorem `HasFDerivWithinAt.csinh` / 定理 `HasFDerivWithinAt.csinh`
-
-English:
-theorem HasFDerivWithinAt.csinh
-  given: (hf : HasFDerivWithinAt f f' s x)
-  proof: (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivWithinAt x hf
-
-中文:
-定理 HasFDerivWithinAt.csinh
-  条件: (hf : HasFDerivWithinAt f f' s x)
-  证明: (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivWithinAt x hf
-
-Depends on / 依赖: Complex.hasDerivAt_sinh, comp_hasFDerivWithinAt, hasDerivAt_sinh
+/-
+**HasFDerivWithinAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.csinh (hf : HasFDerivWithinAt f f' s x) : HasFDerivWithi
+nAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) • f') s x
+参数：hf : HasFDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivWithinAt`：HasDerivAt.comp_hasFDerivWithinAt {f 
+: E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} {s} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFD
+erivWithinAt f f' s x) …
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
 theorem HasFDerivWithinAt.csinh (hf : HasFDerivWithinAt f f' s x) :
     HasFDerivWithinAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) • f') s x :=
   (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivWithinAt x hf
-
-/--
-theorem `DifferentiableWithinAt.csinh` / 定理 `DifferentiableWithinAt.csinh`
-
-English:
-theorem DifferentiableWithinAt.csinh
-  given: (hf : DifferentiableWithinAt Complex f s x)
-  proof: hf.hasFDerivWithinAt.csinh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-中文:
-定理 DifferentiableWithinAt.csinh
-  条件: (hf : DifferentiableWithinAt 复形 f s x)
-  证明: hf.hasFDerivWithinAt.csinh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-Depends on / 依赖: differentiableWithinAt, hasFDerivWithinAt, hf.hasFDerivWithinAt.csinh.differentiableWithinAt
+/-
+**DifferentiableWithinAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.csinh (hf : DifferentiableWithinAt Complex f s x) :
+ DifferentiableWithinAt Complex (fun x => Complex.sinh (f x)) s x
+参数：hf : DifferentiableWithinAt Complex f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.differentiableWithinAt`：HasFDerivWithinAt.differentiab
+leWithinAt (h : HasFDerivWithinAt f f' s x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasFDerivWithinAt.csinh`：HasFDerivWithinAt.csinh (hf : HasFDerivWithinAt
+ f f' s x) : HasFDerivWithinAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x)
+ • f') s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem DifferentiableWithinAt.csinh (hf : DifferentiableWithinAt Complex f s x) :
-    DifferentiableWithinAt Complex (fun x => Complex.sinh (f x)) s x :=
+theorem DifferentiableWithinAt.csinh (hf : DifferentiableWithinAt ℂ f s x) :
+    DifferentiableWithinAt ℂ (fun x => Complex.sinh (f x)) s x :=
   hf.hasFDerivWithinAt.csinh.differentiableWithinAt
 
 @[simp, fun_prop]
-/--
-theorem `DifferentiableAt.csinh` / 定理 `DifferentiableAt.csinh`
-
-English:
-theorem DifferentiableAt.csinh
-  given: (hc : DifferentiableAt Complex f x)
-  proof: hc.hasFDerivAt.csinh.differentiableAt
-
-中文:
-定理 DifferentiableAt.csinh
-  条件: (hc : DifferentiableAt 复形 f x)
-  证明: hc.hasFDerivAt.csinh.differentiableAt
-
-Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.csinh.differentiableAt
+/-
+**DifferentiableAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.csinh (hc : DifferentiableAt Complex f x) : Differentiabl
+eAt Complex (fun x => Complex.sinh (f x)) x
+参数：hc : DifferentiableAt Complex f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.differentiableAt`：HasFDerivAt.differentiableAt (h : HasFDeri
+vAt f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `HasFDerivAt.csinh`：HasFDerivAt.csinh (hf : HasFDerivAt f f' x) : HasFDer
+ivAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem DifferentiableAt.csinh (hc : DifferentiableAt Complex f x) :
-    DifferentiableAt Complex (fun x => Complex.sinh (f x)) x :=
+theorem DifferentiableAt.csinh (hc : DifferentiableAt ℂ f x) :
+    DifferentiableAt ℂ (fun x => Complex.sinh (f x)) x :=
   hc.hasFDerivAt.csinh.differentiableAt
-
-/--
-theorem `DifferentiableOn.csinh` / 定理 `DifferentiableOn.csinh`
-
-English:
-theorem DifferentiableOn.csinh
-  given: (hc : DifferentiableOn Complex f s)
-  proof: fun x h => (hc x h).csinh
+/-
+**DifferentiableOn.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.csinh (hc : DifferentiableOn Complex f s) : Differentiabl
+eOn Complex (fun x => Complex.sinh (f x)) s
+参数：hc : DifferentiableOn Complex f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.csinh`：DifferentiableWithinAt.csinh (hf : Differe
+ntiableWithinAt Complex f s x) : DifferentiableWithinAt Complex (fun x => Comple
+x.sinh (f x)) s x
+-/
+theorem DifferentiableOn.csinh (hc : DifferentiableOn ℂ f s) :
+    DifferentiableOn ℂ (fun x => Complex.sinh (f x)) s := fun x h => (hc x h).csinh
 
 @[simp, fun_prop]
-
-中文:
-定理 DifferentiableOn.csinh
-  条件: (hc : DifferentiableOn 复形 f s)
-  证明: fun x h => (hc x h).csinh
-
-@[simp, fun_prop]
+/-
+**Differentiable.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Differentiable.csinh (hc : Differentiable Complex f) : Differentiable Comp
+lex fun x => Complex.sinh (f x)
+参数：hc : Differentiable Complex f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.csinh`：DifferentiableAt.csinh (hc : DifferentiableAt Co
+mplex f x) : DifferentiableAt Complex (fun x => Complex.sinh (f x)) x
 -/
-theorem DifferentiableOn.csinh (hc : DifferentiableOn Complex f s) :
-    DifferentiableOn Complex (fun x => Complex.sinh (f x)) s := fun x h => (hc x h).csinh
-
-@[simp, fun_prop]
-/--
-theorem `Differentiable.csinh` / 定理 `Differentiable.csinh`
-
-English:
-theorem Differentiable.csinh
-  given: (hc : Differentiable Complex f)
-  proof: fun x => (hc x).csinh
-
-中文:
-定理 可微.csinh
-  条件: (hc : 可微 复形 f)
-  证明: fun x => (hc x).csinh
+theorem Differentiable.csinh (hc : Differentiable ℂ f) :
+    Differentiable ℂ fun x => Complex.sinh (f x) := fun x => (hc x).csinh
+/-
+**fderivWithin_csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_csinh (hf : DifferentiableWithinAt Complex f s x) (hxs : Uniq
+ueDiffWithinAt Complex s x) : fderivWithin Complex (fun x => Complex.sinh (f x))
+ s x = Complex.cosh (f x) • fderivWithin Complex f s x
+参数：hf : DifferentiableWithinAt Complex f s x；hxs : UniqueDiffWithinAt Complex s 
+x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Complex.instT2Space`：T2Space ℂ
+· 使用定理 `HasFDerivWithinAt.csinh`：HasFDerivWithinAt.csinh (hf : HasFDerivWithinAt
+ f f' s x) : HasFDerivWithinAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x)
+ • f') s x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem Differentiable.csinh (hc : Differentiable Complex f) :
-    Differentiable Complex fun x => Complex.sinh (f x) := fun x => (hc x).csinh
-
-/--
-theorem `fderivWithin_csinh` / 定理 `fderivWithin_csinh`
-
-English:
-theorem fderivWithin_csinh
-  given: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
-  proof: hf.hasFDerivWithinAt.csinh.fderivWithin hxs
-
-@[simp]
-
-中文:
-定理 fderivWithin_csinh
-  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
-  证明: hf.hasFDerivWithinAt.csinh.fderivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: fderivWithin, hasFDerivWithinAt, hf.hasFDerivWithinAt.csinh.fderivWithin
--/
-theorem fderivWithin_csinh (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x) :
-    fderivWithin Complex (fun x => Complex.sinh (f x)) s x = Complex.cosh (f x) • fderivWithin Complex f s x :=
+theorem fderivWithin_csinh (hf : DifferentiableWithinAt ℂ f s x) (hxs : UniqueDiffWithinAt ℂ s x) :
+    fderivWithin ℂ (fun x => Complex.sinh (f x)) s x = Complex.cosh (f x) • fderivWithin ℂ f s x :=
   hf.hasFDerivWithinAt.csinh.fderivWithin hxs
 
 @[simp]
-/--
-theorem `fderiv_csinh` / 定理 `fderiv_csinh`
-
-English:
-theorem fderiv_csinh
-  given: (hc : DifferentiableAt Complex f x)
-  proof: hc.hasFDerivAt.csinh.fderiv
-
-中文:
-定理 fderiv_csinh
-  条件: (hc : DifferentiableAt 复形 f x)
-  证明: hc.hasFDerivAt.csinh.fderiv
-
-Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.csinh.fderiv
+/-
+**fderiv_csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_csinh (hc : DifferentiableAt Complex f x) : fderiv Complex (fun x =
+> Complex.sinh (f x)) x = Complex.cosh (f x) • fderiv Complex f x
+参数：hc : DifferentiableAt Complex f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Complex.instT2Space`：T2Space ℂ
+· 使用定理 `HasFDerivAt.csinh`：HasFDerivAt.csinh (hf : HasFDerivAt f f' x) : HasFDer
+ivAt (fun x => Complex.sinh (f x)) (Complex.cosh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem fderiv_csinh (hc : DifferentiableAt Complex f x) :
-    fderiv Complex (fun x => Complex.sinh (f x)) x = Complex.cosh (f x) • fderiv Complex f x :=
+theorem fderiv_csinh (hc : DifferentiableAt ℂ f x) :
+    fderiv ℂ (fun x => Complex.sinh (f x)) x = Complex.cosh (f x) • fderiv ℂ f x :=
   hc.hasFDerivAt.csinh.fderiv
-
-/--
-theorem `ContDiff.csinh` / 定理 `ContDiff.csinh`
-
-English:
-theorem ContDiff.csinh
-  given: {n} (h : ContDiff Complex n f)
-  statement: ContDiff Complex n fun x => Complex.sinh (f x)
-  proof: Complex.contDiff_sinh.comp h
-
-中文:
-定理 连续可微.csinh
-  条件: {n} (h : 连续可微 复形 n f)
-  结论: 连续可微 复形 n fun x => 复形.sinh (f x)
-  证明: Complex.contDiff_sinh.comp h
-
-Depends on / 依赖: Complex.contDiff_sinh.comp, contDiff_sinh
+/-
+**ContDiff.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiff.csinh {n} (h : ContDiff Complex n f) : ContDiff Complex n fun x =
+> Complex.sinh (f x)
+参数：h : ContDiff Complex n f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp`：ContDiff.comp {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 
+n g) (hf : ContDiff 𝕜 n f) : ContDiff 𝕜 n (g ∘ f)
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 -/
-theorem ContDiff.csinh {n} (h : ContDiff Complex n f) : ContDiff Complex n fun x => Complex.sinh (f x) :=
+theorem ContDiff.csinh {n} (h : ContDiff ℂ n f) : ContDiff ℂ n fun x => Complex.sinh (f x) :=
   Complex.contDiff_sinh.comp h
-
-/--
-theorem `ContDiffAt.csinh` / 定理 `ContDiffAt.csinh`
-
-English:
-theorem ContDiffAt.csinh
-  given: {n} (hf : ContDiffAt Complex n f x)
-  proof: Complex.contDiff_sinh.contDiffAt.comp x hf
-
-中文:
-定理 ContDiffAt.csinh
-  条件: {n} (hf : ContDiffAt 复形 n f x)
-  证明: Complex.contDiff_sinh.contDiffAt.comp x hf
-
-Depends on / 依赖: Complex.contDiff_sinh.contDiffAt.comp, contDiffAt, contDiff_sinh
+/-
+**ContDiffAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffAt.csinh {n} (hf : ContDiffAt Complex n f x) : ContDiffAt Complex 
+n (fun x => Complex.sinh (f x)) x
+参数：hf : ContDiffAt Complex n f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} {G : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 -/
-theorem ContDiffAt.csinh {n} (hf : ContDiffAt Complex n f x) :
-    ContDiffAt Complex n (fun x => Complex.sinh (f x)) x :=
+theorem ContDiffAt.csinh {n} (hf : ContDiffAt ℂ n f x) :
+    ContDiffAt ℂ n (fun x => Complex.sinh (f x)) x :=
   Complex.contDiff_sinh.contDiffAt.comp x hf
-
-/--
-theorem `ContDiffOn.csinh` / 定理 `ContDiffOn.csinh`
-
-English:
-theorem ContDiffOn.csinh
-  given: {n} (hf : ContDiffOn Complex n f s)
-  proof: Complex.contDiff_sinh.comp_contDiffOn hf
-
-中文:
-定理 ContDiffOn.csinh
-  条件: {n} (hf : ContDiffOn 复形 n f s)
-  证明: Complex.contDiff_sinh.comp_contDiffOn hf
-
-Depends on / 依赖: Complex.contDiff_sinh.comp_contDiffOn, comp_contDiffOn, contDiff_sinh
+/-
+**ContDiffOn.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffOn.csinh {n} (hf : ContDiffOn Complex n f s) : ContDiffOn Complex 
+n (fun x => Complex.sinh (f x)) s
+参数：hf : ContDiffOn Complex n f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp_contDiffOn`：ContDiff.comp_contDiffOn {s : Set E} {g : F ->
+ G} {f : E -> F} (hg : ContDiff 𝕜 n g) (hf : ContDiffOn 𝕜 n f s) : ContDiffOn 𝕜 
+n (g ∘ f) s
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 -/
-theorem ContDiffOn.csinh {n} (hf : ContDiffOn Complex n f s) :
-    ContDiffOn Complex n (fun x => Complex.sinh (f x)) s :=
+theorem ContDiffOn.csinh {n} (hf : ContDiffOn ℂ n f s) :
+    ContDiffOn ℂ n (fun x => Complex.sinh (f x)) s :=
   Complex.contDiff_sinh.comp_contDiffOn hf
-
-/--
-theorem `ContDiffWithinAt.csinh` / 定理 `ContDiffWithinAt.csinh`
-
-English:
-theorem ContDiffWithinAt.csinh
-  given: {n} (hf : ContDiffWithinAt Complex n f s x)
-  proof: Complex.contDiff_sinh.contDiffAt.comp_contDiffWithinAt x hf
-
-中文:
-定理 ContDiffWithinAt.csinh
-  条件: {n} (hf : ContDiffWithinAt 复形 n f s x)
-  证明: Complex.contDiff_sinh.contDiffAt.comp_contDiffWithinAt x hf
-
-Depends on / 依赖: Complex.contDiff_sinh.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_sinh
+/-
+**ContDiffWithinAt.csinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffWithinAt.csinh {n} (hf : ContDiffWithinAt Complex n f s x) : ContD
+iffWithinAt Complex n (fun x => Complex.sinh (f x)) s x
+参数：hf : ContDiffWithinAt Complex n f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp_contDiffWithinAt`：ContDiffAt.comp_contDiffWithinAt (x : 
+E) (hg : ContDiffAt 𝕜 n g (f x)) (hf : ContDiffWithinAt 𝕜 n f s x) : ContDiffWit
+hinAt 𝕜 n (g ∘ f) s x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 -/
-theorem ContDiffWithinAt.csinh {n} (hf : ContDiffWithinAt Complex n f s x) :
-    ContDiffWithinAt Complex n (fun x => Complex.sinh (f x)) s x :=
+theorem ContDiffWithinAt.csinh {n} (hf : ContDiffWithinAt ℂ n f s x) :
+    ContDiffWithinAt ℂ n (fun x => Complex.sinh (f x)) s x :=
   Complex.contDiff_sinh.contDiffAt.comp_contDiffWithinAt x hf
 
 end
 
 namespace Real
 
-variable {x y z : Real}
+variable {x y z : ℝ}
 
-/--
-theorem `hasStrictDerivAt_sinh` / 定理 `hasStrictDerivAt_sinh`
-
-English:
-theorem hasStrictDerivAt_sinh
-  given: (x : Real)
-  statement: HasStrictDerivAt sinh (cosh x) x
-  proof: (Complex.hasStrictDerivAt_sinh x).real_of_complex
-
-中文:
-定理 hasStrictDerivAt_sinh
-  条件: (x : 实数)
-  结论: HasStrictDerivAt sinh (cosh x) x
-  证明: (Complex.hasStrictDerivAt_sinh x).real_of_complex
-
-Depends on / 依赖: Complex.hasStrictDerivAt_sinh, hasStrictDerivAt_sinh, real_of_complex
+/-
+**Real.hasStrictDerivAt_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：hasStrictDerivAt_sinh (x : Real) : HasStrictDerivAt sinh (cosh x) x
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.real_of_complex`：HasStrictDerivAt.real_of_complex (h : 
+HasStrictDerivAt e e' z) : HasStrictDerivAt (fun x : Real => (e x).re) e'.re z
+· 使用定理 `Complex.hasStrictDerivAt_sinh`：hasStrictDerivAt_sinh (x : Complex) : Has
+StrictDerivAt sinh (cosh x) x
 -/
-theorem hasStrictDerivAt_sinh (x : Real) : HasStrictDerivAt sinh (cosh x) x :=
+theorem hasStrictDerivAt_sinh (x : ℝ) : HasStrictDerivAt sinh (cosh x) x :=
   (Complex.hasStrictDerivAt_sinh x).real_of_complex
-
-/--
-theorem `hasDerivAt_sinh` / 定理 `hasDerivAt_sinh`
-
-English:
-theorem hasDerivAt_sinh
-  given: (x : Real)
-  statement: HasDerivAt sinh (cosh x) x
-  proof: (Complex.hasDerivAt_sinh x).real_of_complex
-
-中文:
-定理 hasDerivAt_sinh
-  条件: (x : 实数)
-  结论: 在点处可导 sinh (cosh x) x
-  证明: (Complex.hasDerivAt_sinh x).real_of_complex
-
-Depends on / 依赖: Complex.hasDerivAt_sinh, EffectiveEpi, hasDerivAt_sinh, real_of_complex, strongEpi_of_effectiveEpi
+/-
+**Real.hasDerivAt_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh x) x
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.real_of_complex`：HasDerivAt.real_of_complex (h : HasDerivAt e
+ e' z) : HasDerivAt (fun x : Real => (e x).re) e'.re z
+· 使用定理 `Complex.hasDerivAt_sinh`：hasDerivAt_sinh (x : Complex) : HasDerivAt sinh
+ (cosh x) x
 -/
-theorem hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh x) x :=
+theorem hasDerivAt_sinh (x : ℝ) : HasDerivAt sinh (cosh x) x :=
   (Complex.hasDerivAt_sinh x).real_of_complex
-
-/--
-theorem `isEquivalent_sinh` / 定理 `isEquivalent_sinh`
-
-English:
-theorem isEquivalent_sinh
-  statement: sinh ~[𝓝 0] id
-  proof: by simpa using! (hasDerivAt_sinh 0).isLittleO
-
-@[fun_prop]
-
-中文:
-定理 isEquivalent_sinh
-  结论: sinh ~[𝓝 0] id
-  证明: by simpa using! (hasDerivAt_sinh 0).isLittleO
-
-@[fun_prop]
-
-Depends on / 依赖: hasDerivAt_sinh, isLittleO
+/-
+**Real.isEquivalent_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：isEquivalent_sinh : sinh ~[𝓝 0] id
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Real.cosh_zero`：cosh_zero : cosh 0 = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `HasDerivAt.isLittleO`：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜] 
+{F : Type v} [inst_1 : NormedAddCommGroup F]   [inst_2 : NormedSpace 𝕜 F] {f : 𝕜
+ → F} {f' …
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
 -/
 theorem isEquivalent_sinh : sinh ~[𝓝 0] id := by simpa using! (hasDerivAt_sinh 0).isLittleO
 
 @[fun_prop]
-/--
-theorem `contDiff_sinh` / 定理 `contDiff_sinh`
-
-English:
-theorem contDiff_sinh
-  given: {n}
-  statement: ContDiff Real n sinh
-  proof: Complex.contDiff_sinh.real_of_complex
-
-@[simp]
-
-中文:
-定理 contDiff_sinh
-  条件: {n}
-  结论: 连续可微 实数 n sinh
-  证明: Complex.contDiff_sinh.real_of_complex
-
-@[simp]
-
-Depends on / 依赖: Complex.contDiff_sinh.real_of_complex, contDiff_sinh, real_of_complex
+/-
+**Real.contDiff_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：contDiff_sinh {n} : ContDiff Real n sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.real_of_complex`：ContDiff.real_of_complex {n : WithTop Nat∞} (h
+ : ContDiff Complex n e) : ContDiff Real n fun x : Real => (e x).re
+· 使用定理 `Complex.contDiff_sinh`：contDiff_sinh {n} : ContDiff Complex n sinh
 -/
-theorem contDiff_sinh {n} : ContDiff Real n sinh :=
+theorem contDiff_sinh {n} : ContDiff ℝ n sinh :=
   Complex.contDiff_sinh.real_of_complex
 
 @[simp]
-/--
-theorem `differentiable_sinh` / 定理 `differentiable_sinh`
-
-English:
-theorem differentiable_sinh
-  statement: Differentiable Real sinh
-  proof: fun x => (hasDerivAt_sinh x).differentiableAt
-
-@[simp]
-
-中文:
-定理 differentiable_sinh
-  结论: 可微 实数 sinh
-  证明: fun x => (hasDerivAt_sinh x).differentiableAt
-
-@[simp]
-
-Depends on / 依赖: differentiableAt, hasDerivAt_sinh
+/-
+**Real.differentiable_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：differentiable_sinh : Differentiable Real sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.differentiableAt`：HasDerivAt.differentiableAt (h : HasDerivAt
+ f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
 -/
-theorem differentiable_sinh : Differentiable Real sinh := fun x => (hasDerivAt_sinh x).differentiableAt
+theorem differentiable_sinh : Differentiable ℝ sinh := fun x => (hasDerivAt_sinh x).differentiableAt
 
 @[simp]
-/--
-theorem `differentiableAt_sinh` / 定理 `differentiableAt_sinh`
-
-English:
-theorem differentiableAt_sinh
-  statement: DifferentiableAt Real sinh x
-  proof: differentiable_sinh x
-
-中文:
-定理 differentiableAt_sinh
-  结论: DifferentiableAt 实数 sinh x
-  证明: differentiable_sinh x
-
-Depends on / 依赖: differentiable_sinh
+/-
+**Real.differentiableAt_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：differentiableAt_sinh : DifferentiableAt Real sinh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.differentiable_sinh`：differentiable_sinh : Differentiable Real sinh
 -/
-theorem differentiableAt_sinh : DifferentiableAt Real sinh x :=
+theorem differentiableAt_sinh : DifferentiableAt ℝ sinh x :=
   differentiable_sinh x
 
 /-- The function `Real.sinh` is real analytic. -/
 @[fun_prop]
-/--
-lemma `analyticAt_sinh` / 引理 `analyticAt_sinh`
+/-
+**Real.analyticAt_sinh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticAt_sinh : AnalyticAt Real sinh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.analyticAt`：ContDiffAt.analyticAt (h : ContDiffAt 𝕜 ω f x) : 
+AnalyticAt 𝕜 f x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 
-English:
-lemma analyticAt_sinh
-  statement: AnalyticAt Real sinh x
-  proof: contDiff_sinh.contDiffAt.analyticAt
-
-中文:
-引理 analyticAt_sinh
-  结论: AnalyticAt 实数 sinh x
-  证明: contDiff_sinh.contDiffAt.analyticAt
-
-Depends on / 依赖: analyticAt, contDiffAt, contDiff_sinh, contDiff_sinh.contDiffAt.analyticAt
+--- 原说明 ---
+The function `Real.sinh` is real analytic.
 -/
-lemma analyticAt_sinh : AnalyticAt Real sinh x :=
+lemma analyticAt_sinh : AnalyticAt ℝ sinh x :=
   contDiff_sinh.contDiffAt.analyticAt
 
-/--
-lemma `analyticWithinAt_sinh` / 引理 `analyticWithinAt_sinh`
+/-- The function `Real.sinh` is real analytic. -/
+/-
+**Real.analyticWithinAt_sinh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticWithinAt_sinh {s : Set Real} : AnalyticWithinAt Real sinh s x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContDiffWithinAt.analyticWithinAt`：ContDiffWithinAt.analyticWithinAt (h 
+: ContDiffWithinAt 𝕜 ω f s x) : AnalyticWithinAt 𝕜 f s x
+· 使用定理 `ContDiff.contDiffWithinAt`：ContDiff.contDiffWithinAt (h : ContDiff 𝕜 n f
+) : ContDiffWithinAt 𝕜 n f s x
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 
-English:
-lemma analyticWithinAt_sinh
-  given: {s : Set Real}
-  statement: AnalyticWithinAt Real sinh s x
-  proof: contDiff_sinh.contDiffWithinAt.analyticWithinAt
-
-中文:
-引理 analyticWithinAt_sinh
-  条件: {s : 集合 实数}
-  结论: AnalyticWithinAt 实数 sinh s x
-  证明: contDiff_sinh.contDiffWithinAt.analyticWithinAt
-
-Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_sinh, contDiff_sinh.contDiffWithinAt.analyticWithinAt
+--- 原说明 ---
+The function `Real.sinh` is real analytic.
 -/
-lemma analyticWithinAt_sinh {s : Set Real} : AnalyticWithinAt Real sinh s x :=
+lemma analyticWithinAt_sinh {s : Set ℝ} : AnalyticWithinAt ℝ sinh s x :=
   contDiff_sinh.contDiffWithinAt.analyticWithinAt
 
-/--
-theorem `analyticOnNhd_sinh` / 定理 `analyticOnNhd_sinh`
+/-- The function `Real.sinh` is real analytic. -/
+/-
+**Real.analyticOnNhd_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：analyticOnNhd_sinh {s : Set Real} : AnalyticOnNhd Real sinh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.analyticAt_sinh`：analyticAt_sinh : AnalyticAt Real sinh x
 
-English:
-theorem analyticOnNhd_sinh
-  given: {s : Set Real}
-  statement: AnalyticOnNhd Real sinh s
-  proof: fun _ _ => analyticAt_sinh
-
-中文:
-定理 analyticOnNhd_sinh
-  条件: {s : 集合 实数}
-  结论: AnalyticOnNhd 实数 sinh s
-  证明: fun _ _ => analyticAt_sinh
-
-Depends on / 依赖: analyticAt_sinh, effectiveEpiFamilyStructSingletonOfEffectiveEpi
+--- 原说明 ---
+The function `Real.sinh` is real analytic.
 -/
-theorem analyticOnNhd_sinh {s : Set Real} : AnalyticOnNhd Real sinh s :=
-  fun _ _ => analyticAt_sinh
+theorem analyticOnNhd_sinh {s : Set ℝ} : AnalyticOnNhd ℝ sinh s :=
+  fun _ _ ↦ analyticAt_sinh
 
-/--
-lemma `analyticOn_sinh` / 引理 `analyticOn_sinh`
+/-- The function `Real.sinh` is real analytic. -/
+/-
+**Real.analyticOn_sinh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticOn_sinh {s : Set Real} : AnalyticOn Real sinh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffOn.analyticOn`：ContDiffOn.analyticOn (h : ContDiffOn 𝕜 ω f s) : 
+AnalyticOn 𝕜 f s
+· 使用定理 `ContDiff.contDiffOn`：ContDiff.contDiffOn (h : ContDiff 𝕜 n f) : ContDiff
+On 𝕜 n f s
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 
-English:
-lemma analyticOn_sinh
-  given: {s : Set Real}
-  statement: AnalyticOn Real sinh s
-  proof: contDiff_sinh.contDiffOn.analyticOn
-
-@[simp]
-
-中文:
-引理 analyticOn_sinh
-  条件: {s : 集合 实数}
-  结论: AnalyticOn 实数 sinh s
-  证明: contDiff_sinh.contDiffOn.analyticOn
-
-@[simp]
-
-Depends on / 依赖: analyticOn, contDiffOn, contDiff_sinh, contDiff_sinh.contDiffOn.analyticOn
+--- 原说明 ---
+The function `Real.sinh` is real analytic.
 -/
-lemma analyticOn_sinh {s : Set Real} : AnalyticOn Real sinh s :=
+lemma analyticOn_sinh {s : Set ℝ} : AnalyticOn ℝ sinh s :=
   contDiff_sinh.contDiffOn.analyticOn
 
 @[simp]
-/--
-theorem `deriv_sinh` / 定理 `deriv_sinh`
-
-English:
-theorem deriv_sinh
-  statement: deriv sinh = cosh
-  proof: funext fun x => (hasDerivAt_sinh x).deriv
-
-中文:
-定理 deriv_sinh
-  结论: deriv sinh = cosh
-  证明: funext fun x => (hasDerivAt_sinh x).deriv
-
-Depends on / 依赖: effectiveEpiStructOfEffectiveEpiFamilySingleton, hasDerivAt_sinh
+/-
+**Real.deriv_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：deriv_sinh : deriv sinh = cosh
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
 -/
 theorem deriv_sinh : deriv sinh = cosh :=
   funext fun x => (hasDerivAt_sinh x).deriv
-
-/--
-theorem `hasStrictDerivAt_cosh` / 定理 `hasStrictDerivAt_cosh`
-
-English:
-theorem hasStrictDerivAt_cosh
-  given: (x : Real)
-  statement: HasStrictDerivAt cosh (sinh x) x
-  proof: (Complex.hasStrictDerivAt_cosh x).real_of_complex
-
-中文:
-定理 hasStrictDerivAt_cosh
-  条件: (x : 实数)
-  结论: HasStrictDerivAt cosh (sinh x) x
-  证明: (Complex.hasStrictDerivAt_cosh x).real_of_complex
-
-Depends on / 依赖: Complex.hasStrictDerivAt_cosh, hasStrictDerivAt_cosh, real_of_complex
+/-
+**Real.hasStrictDerivAt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：hasStrictDerivAt_cosh (x : Real) : HasStrictDerivAt cosh (sinh x) x
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.real_of_complex`：HasStrictDerivAt.real_of_complex (h : 
+HasStrictDerivAt e e' z) : HasStrictDerivAt (fun x : Real => (e x).re) e'.re z
+· 使用定理 `Complex.hasStrictDerivAt_cosh`：hasStrictDerivAt_cosh (x : Complex) : Has
+StrictDerivAt cosh (sinh x) x
 -/
-theorem hasStrictDerivAt_cosh (x : Real) : HasStrictDerivAt cosh (sinh x) x :=
+theorem hasStrictDerivAt_cosh (x : ℝ) : HasStrictDerivAt cosh (sinh x) x :=
   (Complex.hasStrictDerivAt_cosh x).real_of_complex
-
-/--
-theorem `hasDerivAt_cosh` / 定理 `hasDerivAt_cosh`
-
-English:
-theorem hasDerivAt_cosh
-  given: (x : Real)
-  statement: HasDerivAt cosh (sinh x) x
-  proof: (Complex.hasDerivAt_cosh x).real_of_complex
-
-@[fun_prop]
-
-中文:
-定理 hasDerivAt_cosh
-  条件: (x : 实数)
-  结论: 在点处可导 cosh (sinh x) x
-  证明: (Complex.hasDerivAt_cosh x).real_of_complex
-
-@[fun_prop]
-
-Depends on / 依赖: Complex.hasDerivAt_cosh, hasDerivAt_cosh, real_of_complex
+/-
+**Real.hasDerivAt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh x) x
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.real_of_complex`：HasDerivAt.real_of_complex (h : HasDerivAt e
+ e' z) : HasDerivAt (fun x : Real => (e x).re) e'.re z
+· 使用定理 `Complex.hasDerivAt_cosh`：hasDerivAt_cosh (x : Complex) : HasDerivAt cosh
+ (sinh x) x
 -/
-theorem hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh x) x :=
+theorem hasDerivAt_cosh (x : ℝ) : HasDerivAt cosh (sinh x) x :=
   (Complex.hasDerivAt_cosh x).real_of_complex
 
 @[fun_prop]
-/--
-theorem `contDiff_cosh` / 定理 `contDiff_cosh`
-
-English:
-theorem contDiff_cosh
-  given: {n}
-  statement: ContDiff Real n cosh
-  proof: Complex.contDiff_cosh.real_of_complex
-
-@[simp]
-
-中文:
-定理 contDiff_cosh
-  条件: {n}
-  结论: 连续可微 实数 n cosh
-  证明: Complex.contDiff_cosh.real_of_complex
-
-@[simp]
-
-Depends on / 依赖: Complex.contDiff_cosh.real_of_complex, contDiff_cosh, effectiveEpiFamilyStructOfIsIsoDesc, real_of_complex
+/-
+**Real.contDiff_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：contDiff_cosh {n} : ContDiff Real n cosh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.real_of_complex`：ContDiff.real_of_complex {n : WithTop Nat∞} (h
+ : ContDiff Complex n e) : ContDiff Real n fun x : Real => (e x).re
+· 使用定理 `Complex.contDiff_cosh`：contDiff_cosh {n} : ContDiff Complex n cosh
 -/
-theorem contDiff_cosh {n} : ContDiff Real n cosh :=
+theorem contDiff_cosh {n} : ContDiff ℝ n cosh :=
   Complex.contDiff_cosh.real_of_complex
 
 @[simp]
-/--
-theorem `differentiable_cosh` / 定理 `differentiable_cosh`
-
-English:
-theorem differentiable_cosh
-  statement: Differentiable Real cosh
-  proof: fun x => (hasDerivAt_cosh x).differentiableAt
-
-@[simp]
-
-中文:
-定理 differentiable_cosh
-  结论: 可微 实数 cosh
-  证明: fun x => (hasDerivAt_cosh x).differentiableAt
-
-@[simp]
-
-Depends on / 依赖: differentiableAt, hasDerivAt_cosh
+/-
+**Real.differentiable_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：differentiable_cosh : Differentiable Real cosh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.differentiableAt`：HasDerivAt.differentiableAt (h : HasDerivAt
+ f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Real.hasDerivAt_cosh`：hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh
+ x) x
 -/
-theorem differentiable_cosh : Differentiable Real cosh := fun x => (hasDerivAt_cosh x).differentiableAt
+theorem differentiable_cosh : Differentiable ℝ cosh := fun x => (hasDerivAt_cosh x).differentiableAt
 
 @[simp]
-/--
-theorem `differentiableAt_cosh` / 定理 `differentiableAt_cosh`
-
-English:
-theorem differentiableAt_cosh
-  statement: DifferentiableAt Real cosh x
-  proof: differentiable_cosh x
-
-中文:
-定理 differentiableAt_cosh
-  结论: DifferentiableAt 实数 cosh x
-  证明: differentiable_cosh x
-
-Depends on / 依赖: differentiable_cosh, effectiveEpiStructOfIsIso
+/-
+**Real.differentiableAt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：differentiableAt_cosh : DifferentiableAt Real cosh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.differentiable_cosh`：differentiable_cosh : Differentiable Real cosh
 -/
-theorem differentiableAt_cosh : DifferentiableAt Real cosh x :=
+theorem differentiableAt_cosh : DifferentiableAt ℝ cosh x :=
   differentiable_cosh x
 
 /-- The function `Real.cosh` is real analytic. -/
 @[fun_prop]
-/--
-lemma `analyticAt_cosh` / 引理 `analyticAt_cosh`
+/-
+**Real.analyticAt_cosh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticAt_cosh : AnalyticAt Real cosh x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.analyticAt`：ContDiffAt.analyticAt (h : ContDiffAt 𝕜 ω f x) : 
+AnalyticAt 𝕜 f x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 
-English:
-lemma analyticAt_cosh
-  statement: AnalyticAt Real cosh x
-  proof: contDiff_cosh.contDiffAt.analyticAt
-
-中文:
-引理 analyticAt_cosh
-  结论: AnalyticAt 实数 cosh x
-  证明: contDiff_cosh.contDiffAt.analyticAt
-
-Depends on / 依赖: analyticAt, contDiffAt, contDiff_cosh, contDiff_cosh.contDiffAt.analyticAt
+--- 原说明 ---
+The function `Real.cosh` is real analytic.
 -/
-lemma analyticAt_cosh : AnalyticAt Real cosh x :=
+lemma analyticAt_cosh : AnalyticAt ℝ cosh x :=
   contDiff_cosh.contDiffAt.analyticAt
 
-/--
-lemma `analyticWithinAt_cosh` / 引理 `analyticWithinAt_cosh`
+/-- The function `Real.cosh` is real analytic. -/
+/-
+**Real.analyticWithinAt_cosh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticWithinAt_cosh {s : Set Real} : AnalyticWithinAt Real cosh s x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContDiffWithinAt.analyticWithinAt`：ContDiffWithinAt.analyticWithinAt (h 
+: ContDiffWithinAt 𝕜 ω f s x) : AnalyticWithinAt 𝕜 f s x
+· 使用定理 `ContDiff.contDiffWithinAt`：ContDiff.contDiffWithinAt (h : ContDiff 𝕜 n f
+) : ContDiffWithinAt 𝕜 n f s x
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 
-English:
-lemma analyticWithinAt_cosh
-  given: {s : Set Real}
-  statement: AnalyticWithinAt Real cosh s x
-  proof: contDiff_cosh.contDiffWithinAt.analyticWithinAt
-
-中文:
-引理 analyticWithinAt_cosh
-  条件: {s : 集合 实数}
-  结论: AnalyticWithinAt 实数 cosh s x
-  证明: contDiff_cosh.contDiffWithinAt.analyticWithinAt
-
-Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_cosh, contDiff_cosh.contDiffWithinAt.analyticWithinAt
+--- 原说明 ---
+The function `Real.cosh` is real analytic.
 -/
-lemma analyticWithinAt_cosh {s : Set Real} : AnalyticWithinAt Real cosh s x :=
+lemma analyticWithinAt_cosh {s : Set ℝ} : AnalyticWithinAt ℝ cosh s x :=
   contDiff_cosh.contDiffWithinAt.analyticWithinAt
 
-/--
-theorem `analyticOnNhd_cosh` / 定理 `analyticOnNhd_cosh`
+/-- The function `Real.cosh` is real analytic. -/
+/-
+**Real.analyticOnNhd_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：analyticOnNhd_cosh {s : Set Real} : AnalyticOnNhd Real cosh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.analyticAt_cosh`：analyticAt_cosh : AnalyticAt Real cosh x
 
-English:
-theorem analyticOnNhd_cosh
-  given: {s : Set Real}
-  statement: AnalyticOnNhd Real cosh s
-  proof: fun _ _ => analyticAt_cosh
-
-中文:
-定理 analyticOnNhd_cosh
-  条件: {s : 集合 实数}
-  结论: AnalyticOnNhd 实数 cosh s
-  证明: fun _ _ => analyticAt_cosh
-
-Depends on / 依赖: analyticAt_cosh
+--- 原说明 ---
+The function `Real.cosh` is real analytic.
 -/
-theorem analyticOnNhd_cosh {s : Set Real} : AnalyticOnNhd Real cosh s :=
-  fun _ _ => analyticAt_cosh
+theorem analyticOnNhd_cosh {s : Set ℝ} : AnalyticOnNhd ℝ cosh s :=
+  fun _ _ ↦ analyticAt_cosh
 
-/--
-lemma `analyticOn_cosh` / 引理 `analyticOn_cosh`
+/-- The function `Real.cosh` is real analytic. -/
+/-
+**Real.analyticOn_cosh** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：analyticOn_cosh {s : Set Real} : AnalyticOn Real cosh s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffOn.analyticOn`：ContDiffOn.analyticOn (h : ContDiffOn 𝕜 ω f s) : 
+AnalyticOn 𝕜 f s
+· 使用定理 `ContDiff.contDiffOn`：ContDiff.contDiffOn (h : ContDiff 𝕜 n f) : ContDiff
+On 𝕜 n f s
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 
-English:
-lemma analyticOn_cosh
-  given: {s : Set Real}
-  statement: AnalyticOn Real cosh s
-  proof: contDiff_cosh.contDiffOn.analyticOn
-
-@[simp]
-
-中文:
-引理 analyticOn_cosh
-  条件: {s : 集合 实数}
-  结论: AnalyticOn 实数 cosh s
-  证明: contDiff_cosh.contDiffOn.analyticOn
-
-@[simp]
-
-Depends on / 依赖: analyticOn, contDiffOn, contDiff_cosh, contDiff_cosh.contDiffOn.analyticOn
+--- 原说明 ---
+The function `Real.cosh` is real analytic.
 -/
-lemma analyticOn_cosh {s : Set Real} : AnalyticOn Real cosh s :=
+lemma analyticOn_cosh {s : Set ℝ} : AnalyticOn ℝ cosh s :=
   contDiff_cosh.contDiffOn.analyticOn
 
 @[simp]
-/--
-theorem `deriv_cosh` / 定理 `deriv_cosh`
-
-English:
-theorem deriv_cosh
-  statement: deriv cosh = sinh
-  proof: funext fun x => (hasDerivAt_cosh x).deriv
-
-中文:
-定理 deriv_cosh
-  结论: deriv cosh = sinh
-  证明: funext fun x => (hasDerivAt_cosh x).deriv
-
-Depends on / 依赖: effectiveEpiFamilyStructCompOfEffectiveEpiSplitEpi, hasDerivAt_cosh
+/-
+**Real.deriv_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：deriv_cosh : deriv cosh = sinh
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `Real.hasDerivAt_cosh`：hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh
+ x) x
 -/
 theorem deriv_cosh : deriv cosh = sinh :=
   funext fun x => (hasDerivAt_cosh x).deriv
 
-/--
-theorem `sinh_strictMono` / 定理 `sinh_strictMono`
+/-- `sinh` is strictly monotone. -/
+/-
+**Real.sinh_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_strictMono : StrictMono sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `strictMono_of_deriv_pos`：strictMono_of_deriv_pos {f : Real -> Real} (hf'
+ : forall x, 0 < deriv f x) : StrictMono f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.deriv_sinh`：deriv_sinh : deriv sinh = cosh
+· 使用定理 `Real.cosh_pos`：cosh_pos (x : Real) : 0 < Real.cosh x
 
-English:
-theorem sinh_strictMono
-  statement: StrictMono sinh
-  proof: strictMono_of_deriv_pos by rw [Real.deriv_sinh]; exact cosh_pos
-
-中文:
-定理 sinh_strictMono
-  结论: 严格递增 sinh
-  证明: strictMono_of_deriv_pos by rw [Real.deriv_sinh]; exact cosh_pos
-
-Depends on / 依赖: Real.deriv_sinh, cosh_pos, deriv_sinh, strictMono_of_deriv_pos
+--- 原说明 ---
+`sinh` is strictly monotone.
 -/
 theorem sinh_strictMono : StrictMono sinh :=
-strictMono_of_deriv_pos by rw [Real.deriv_sinh]; exact cosh_pos
+  strictMono_of_deriv_pos <| by rw [Real.deriv_sinh]; exact cosh_pos
 
-/--
-theorem `sinh_injective` / 定理 `sinh_injective`
+/-- `sinh` is injective, `∀ a b, sinh a = sinh b → a = b`. -/
+/-
+**Real.sinh_injective** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_injective : Function.Injective sinh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.injective`：StrictMono.injective (hf : StrictMono f) : Injecti
+ve f
+· 使用定理 `Real.sinh_strictMono`：sinh_strictMono : StrictMono sinh
 
-English:
-theorem sinh_injective
-  statement: Function.Injective sinh
-  proof: sinh_strictMono.injective
-
-@[simp]
-
-中文:
-定理 sinh_injective
-  结论: 函数.单射 sinh
-  证明: sinh_strictMono.injective
-
-@[simp]
-
-Depends on / 依赖: injective, sinh_strictMono, sinh_strictMono.injective
+--- 原说明 ---
+`sinh` is injective, `∀ a b, sinh a = sinh b → a = b`.
 -/
 theorem sinh_injective : Function.Injective sinh :=
   sinh_strictMono.injective
 
 @[simp]
-/--
-theorem `sinh_inj` / 定理 `sinh_inj`
-
-English:
-theorem sinh_inj
-  statement: sinh x = sinh y ↔ x = y
-  proof: sinh_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 sinh_inj
-  结论: sinh x = sinh y ↔ x = y
-  证明: sinh_injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: eq_iff, sinh_injective, sinh_injective.eq_iff
+/-
+**Real.sinh_inj** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_inj : sinh x = sinh y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Real.sinh_injective`：sinh_injective : Function.Injective sinh
 -/
 theorem sinh_inj : sinh x = sinh y ↔ x = y :=
   sinh_injective.eq_iff
 
 @[simp]
-/--
-theorem `sinh_le_sinh` / 定理 `sinh_le_sinh`
-
-English:
-theorem sinh_le_sinh
-  statement: sinh x <= sinh y ↔ x <= y
-  proof: sinh_strictMono.le_iff_le
-
-@[simp]
-
-中文:
-定理 sinh_le_sinh
-  结论: sinh x <= sinh y ↔ x <= y
-  证明: sinh_strictMono.le_iff_le
-
-@[simp]
-
-Depends on / 依赖: le_iff_le, sinh_strictMono, sinh_strictMono.le_iff_le
+/-
+**Real.sinh_le_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_le_sinh : sinh x <= sinh y ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `Real.sinh_strictMono`：sinh_strictMono : StrictMono sinh
 -/
-theorem sinh_le_sinh : sinh x <= sinh y ↔ x <= y :=
+theorem sinh_le_sinh : sinh x ≤ sinh y ↔ x ≤ y :=
   sinh_strictMono.le_iff_le
 
 @[simp]
-/--
-theorem `sinh_lt_sinh` / 定理 `sinh_lt_sinh`
-
-English:
-theorem sinh_lt_sinh
-  statement: sinh x < sinh y ↔ x < y
-  proof: sinh_strictMono.lt_iff_lt
-
-中文:
-定理 sinh_lt_sinh
-  结论: sinh x < sinh y ↔ x < y
-  证明: sinh_strictMono.lt_iff_lt
-
-Depends on / 依赖: lt_iff_lt, sinh_strictMono, sinh_strictMono.lt_iff_lt
+/-
+**Real.sinh_lt_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_lt_sinh : sinh x < sinh y ↔ x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用定理 `Real.sinh_strictMono`：sinh_strictMono : StrictMono sinh
 -/
 theorem sinh_lt_sinh : sinh x < sinh y ↔ x < y :=
   sinh_strictMono.lt_iff_lt
-
-/--
-lemma `sinh_eq_zero` / 引理 `sinh_eq_zero`
-
-English:
-lemma sinh_eq_zero
-  statement: sinh x = 0 ↔ x = 0
-  proof: by rw [← @sinh_inj x, sinh_zero]
-
-中文:
-引理 sinh_eq_zero
-  结论: sinh x = 0 ↔ x = 0
-  证明: by rw [← @sinh_inj x, sinh_zero]
+/-
+**Real.sinh_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：∀ {x : ℝ}, Real.sinh x = 0 ↔ x = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.sinh_inj`：sinh_inj : sinh x = sinh y ↔ x = y
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma sinh_eq_zero : sinh x = 0 ↔ x = 0 := by rw [← @sinh_inj x, sinh_zero]
-
-/--
-lemma `sinh_ne_zero` / 引理 `sinh_ne_zero`
-
-English:
-lemma sinh_ne_zero
-  statement: sinh x != 0 ↔ x != 0
-  proof: sinh_eq_zero.not
-
-@[simp]
-
-中文:
-引理 sinh_ne_zero
-  结论: sinh x != 0 ↔ x != 0
-  证明: sinh_eq_zero.not
-
-@[simp]
-
-Depends on / 依赖: sinh_eq_zero, sinh_eq_zero.not
+/-
+**Real.sinh_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Real`。
+形式化陈述：sinh_ne_zero : sinh x != 0 ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Real.sinh_eq_zero`：∀ {x : ℝ}, Real.sinh x = 0 ↔ x = 0
 -/
-lemma sinh_ne_zero : sinh x != 0 ↔ x != 0 := sinh_eq_zero.not
+lemma sinh_ne_zero : sinh x ≠ 0 ↔ x ≠ 0 := sinh_eq_zero.not
 
 @[simp]
-/--
-theorem `sinh_pos_iff` / 定理 `sinh_pos_iff`
-
-English:
-theorem sinh_pos_iff
-  statement: 0 < sinh x ↔ 0 < x
-  proof: by simpa only [sinh_zero] using @sinh_lt_sinh 0 x
-
-@[simp]
-
-中文:
-定理 sinh_pos_iff
-  结论: 0 < sinh x ↔ 0 < x
-  证明: by simpa only [sinh_zero] using @sinh_lt_sinh 0 x
-
-@[simp]
-
-Depends on / 依赖: sinh_lt_sinh, sinh_zero
+/-
+**Real.sinh_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_pos_iff : 0 < sinh x ↔ 0 < x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `Real.sinh_lt_sinh`：sinh_lt_sinh : sinh x < sinh y ↔ x < y
 -/
 theorem sinh_pos_iff : 0 < sinh x ↔ 0 < x := by simpa only [sinh_zero] using @sinh_lt_sinh 0 x
 
 @[simp]
-/--
-theorem `sinh_nonpos_iff` / 定理 `sinh_nonpos_iff`
-
-English:
-theorem sinh_nonpos_iff
-  statement: sinh x <= 0 ↔ x <= 0
-  proof: by simpa only [sinh_zero] using @sinh_le_sinh x 0
-
-@[simp]
-
-中文:
-定理 sinh_nonpos_iff
-  结论: sinh x <= 0 ↔ x <= 0
-  证明: by simpa only [sinh_zero] using @sinh_le_sinh x 0
-
-@[simp]
-
-Depends on / 依赖: Category, Category.id_comp, Cocone, Cocone.ext_inv_hom, Cofan.mk_pt, IsColimit, IsColimit.ofIsoColimit_desc, Iso.refl_inv, cocone_x, colimit, colimit.cocone_x, colimit.isColimit_desc, coproductIsCoproduct, effectiveEpiStructIsColimitDescOfEffectiveEpiFamily, ext_inv_hom, id_comp, isColimit_desc, mk_pt, ofIsoColimit_desc, refl_inv
+/-
+**Real.sinh_nonpos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_nonpos_iff : sinh x <= 0 ↔ x <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `Real.sinh_le_sinh`：sinh_le_sinh : sinh x <= sinh y ↔ x <= y
 -/
-theorem sinh_nonpos_iff : sinh x <= 0 ↔ x <= 0 := by simpa only [sinh_zero] using @sinh_le_sinh x 0
+theorem sinh_nonpos_iff : sinh x ≤ 0 ↔ x ≤ 0 := by simpa only [sinh_zero] using @sinh_le_sinh x 0
 
 @[simp]
-/--
-theorem `sinh_neg_iff` / 定理 `sinh_neg_iff`
-
-English:
-theorem sinh_neg_iff
-  statement: sinh x < 0 ↔ x < 0
-  proof: by simpa only [sinh_zero] using @sinh_lt_sinh x 0
-
-@[simp]
-
-中文:
-定理 sinh_neg_iff
-  结论: sinh x < 0 ↔ x < 0
-  证明: by simpa only [sinh_zero] using @sinh_lt_sinh x 0
-
-@[simp]
-
-Depends on / 依赖: sinh_lt_sinh, sinh_zero
+/-
+**Real.sinh_neg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_neg_iff : sinh x < 0 ↔ x < 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `Real.sinh_lt_sinh`：sinh_lt_sinh : sinh x < sinh y ↔ x < y
 -/
 theorem sinh_neg_iff : sinh x < 0 ↔ x < 0 := by simpa only [sinh_zero] using @sinh_lt_sinh x 0
 
 @[simp]
-/--
-theorem `sinh_nonneg_iff` / 定理 `sinh_nonneg_iff`
-
-English:
-theorem sinh_nonneg_iff
-  statement: 0 <= sinh x ↔ 0 <= x
-  proof: by simpa only [sinh_zero] using @sinh_le_sinh 0 x
-
-中文:
-定理 sinh_nonneg_iff
-  结论: 0 <= sinh x ↔ 0 <= x
-  证明: by simpa only [sinh_zero] using @sinh_le_sinh 0 x
-
-Depends on / 依赖: sinh_le_sinh, sinh_zero
+/-
+**Real.sinh_nonneg_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_nonneg_iff : 0 <= sinh x ↔ 0 <= x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `Real.sinh_le_sinh`：sinh_le_sinh : sinh x <= sinh y ↔ x <= y
 -/
-theorem sinh_nonneg_iff : 0 <= sinh x ↔ 0 <= x := by simpa only [sinh_zero] using @sinh_le_sinh 0 x
-
-/--
-theorem `abs_sinh` / 定理 `abs_sinh`
-
-English:
-theorem abs_sinh
-  given: (x : Real)
-  statement: |sinh x| = sinh |x|
-  proof: by
-  cases le_total x 0 <;> simp [abs_of_nonneg, abs_of_nonpos, *]
-
-中文:
-定理 abs_sinh
-  条件: (x : 实数)
-  结论: |sinh x| = sinh |x|
-  证明: by
-  cases le_total x 0 <;> simp [abs_of_nonneg, abs_of_nonpos, *]
-
-Depends on / 依赖: abs_of_nonneg, abs_of_nonpos, le_total
+theorem sinh_nonneg_iff : 0 ≤ sinh x ↔ 0 ≤ x := by simpa only [sinh_zero] using @sinh_le_sinh 0 x
+/-
+**Real.abs_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：abs_sinh (x : Real) : |sinh x| = sinh |x|
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_of_nonpos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], a ≤ 0 → |a| = -a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Real.sinh_neg`：sinh_neg : sinh (-x) = -sinh x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
 -/
-theorem abs_sinh (x : Real) : |sinh x| = sinh |x| := by
+theorem abs_sinh (x : ℝ) : |sinh x| = sinh |x| := by
   cases le_total x 0 <;> simp [abs_of_nonneg, abs_of_nonpos, *]
-
-/--
-theorem `cosh_strictMonoOn` / 定理 `cosh_strictMonoOn`
-
-English:
-theorem cosh_strictMonoOn
-  statement: StrictMonoOn cosh (Ici 0)
-  proof: strictMonoOn_of_deriv_pos (convex_Ici _) continuous_cosh.continuousOn fun x hx => by
-    rw [interior_Ici]; rw [mem_Ioi] at hx; rwa [deriv_cosh, sinh_pos_iff]
-
-@[simp]
-
-中文:
-定理 cosh_strictMonoOn
-  结论: StrictMonoOn cosh (左闭右无界区间 0)
-  证明: strictMonoOn_of_deriv_pos (convex_Ici _) continuous_cosh.continuousOn fun x hx => by
-    rw [interior_Ici]; rw [mem_Ioi] at hx; rwa [deriv_cosh, sinh_pos_iff]
-
-@[simp]
-
-Depends on / 依赖: continuousOn, continuous_cosh, continuous_cosh.continuousOn, convex_Ici, deriv_cosh, interior_Ici, mem_Ioi, sinh_pos_iff, strictMonoOn_of_deriv_pos
+/-
+**Real.cosh_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：cosh_strictMonoOn : StrictMonoOn cosh (Ici 0)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `strictMonoOn_of_deriv_pos`：strictMonoOn_of_deriv_pos {D : Set Real} (hD 
+: Convex Real D) {f : Real -> Real} (hf : ContinuousOn f D) (hf' : forall x in i
+nterior D, 0 < …
+· 使用定理 `convex_Ici`：convex_Ici (r : β) : Convex 𝕜 (Ici r)
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Real.continuous_cosh`：continuous_cosh : Continuous cosh
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.deriv_cosh`：deriv_cosh : deriv cosh = sinh
+· 使用定理 `Real.sinh_pos_iff`：sinh_pos_iff : 0 < sinh x ↔ 0 < x
+· 使用定理 `Set.mem_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Ioi
+ b ↔ b < x
+· 使用定理 `interior_Ici`：interior_Ici [NoMinOrder α] {a : α} : interior (Ici a) = I
+oi a
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `LinearOrderedSemiField.toDenselyOrdered`：∀ {α : Type u_2} [inst : Semifi
+eld α] [inst_1 : PartialOrder α] [PosMulReflectLT α] [IsStrictOrderedRing α],   
+DenselyOrdered α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
 -/
 theorem cosh_strictMonoOn : StrictMonoOn cosh (Ici 0) :=
   strictMonoOn_of_deriv_pos (convex_Ici _) continuous_cosh.continuousOn fun x hx => by
-    rw [interior_Ici]; rw [mem_Ioi] at hx; rwa [deriv_cosh, sinh_pos_iff]
+    rw [interior_Ici, mem_Ioi] at hx; rwa [deriv_cosh, sinh_pos_iff]
 
 @[simp]
-/--
-theorem `cosh_le_cosh` / 定理 `cosh_le_cosh`
-
-English:
-theorem cosh_le_cosh
-  statement: cosh x <= cosh y ↔ |x| <= |y|
-  proof: cosh_abs x ▸ cosh_abs y ▸ cosh_strictMonoOn.le_iff_le (abs_nonneg x) (abs_nonneg y)
-
-@[simp]
-
-中文:
-定理 cosh_le_cosh
-  结论: cosh x <= cosh y ↔ |x| <= |y|
-  证明: cosh_abs x ▸ cosh_abs y ▸ cosh_strictMonoOn.le_iff_le (abs_nonneg x) (abs_nonneg y)
-
-@[simp]
-
-Depends on / 依赖: EffectivelyEnough, EffectivelyEnough.presentation, abs_nonneg, cosh_abs, cosh_strictMonoOn, cosh_strictMonoOn.le_iff_le, effectiveEpi, le_iff_le, presentation, some.effectiveEpi
+/-
+**Real.cosh_le_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：cosh_le_cosh : cosh x <= cosh y ↔ |x| <= |y|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMonoOn.le_iff_le`：StrictMonoOn.le_iff_le (hf : StrictMonoOn f s) {
+a b : α} (ha : a in s) (hb : b in s) : f a <= f b ↔ a <= b
+· 使用定理 `Real.cosh_strictMonoOn`：cosh_strictMonoOn : StrictMonoOn cosh (Ici 0)
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Real.cosh_abs`：cosh_abs : cosh |x| = cosh x
 -/
-theorem cosh_le_cosh : cosh x <= cosh y ↔ |x| <= |y| :=
+theorem cosh_le_cosh : cosh x ≤ cosh y ↔ |x| ≤ |y| :=
   cosh_abs x ▸ cosh_abs y ▸ cosh_strictMonoOn.le_iff_le (abs_nonneg x) (abs_nonneg y)
 
 @[simp]
-/--
-theorem `cosh_lt_cosh` / 定理 `cosh_lt_cosh`
-
-English:
-theorem cosh_lt_cosh
-  statement: cosh x < cosh y ↔ |x| < |y|
-  proof: lt_iff_lt_of_le_iff_le cosh_le_cosh
-
-@[simp]
-
-中文:
-定理 cosh_lt_cosh
-  结论: cosh x < cosh y ↔ |x| < |y|
-  证明: lt_iff_lt_of_le_iff_le cosh_le_cosh
-
-@[simp]
-
-Depends on / 依赖: cosh_le_cosh, lt_iff_lt_of_le_iff_le
+/-
+**Real.cosh_lt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：cosh_lt_cosh : cosh x < cosh y ↔ |x| < |y|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Real.cosh_le_cosh`：cosh_le_cosh : cosh x <= cosh y ↔ |x| <= |y|
 -/
 theorem cosh_lt_cosh : cosh x < cosh y ↔ |x| < |y| :=
   lt_iff_lt_of_le_iff_le cosh_le_cosh
 
 @[simp]
-/--
-theorem `one_le_cosh` / 定理 `one_le_cosh`
-
-English:
-theorem one_le_cosh
-  given: (x : Real)
-  statement: 1 <= cosh x
-  proof: cosh_zero ▸ cosh_le_cosh.2 (by simp only [_root_.abs_zero, _root_.abs_nonneg])
-
-@[simp]
-
-中文:
-定理 one_le_cosh
-  条件: (x : 实数)
-  结论: 1 <= cosh x
-  证明: cosh_zero ▸ cosh_le_cosh.2 (by simp only [_root_.abs_zero, _root_.abs_nonneg])
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.abs_nonneg, _root_.abs_zero, abs_nonneg, abs_zero, cosh_le_cosh, cosh_zero
+/-
+**Real.one_le_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：one_le_cosh (x : Real) : 1 <= cosh x
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.cosh_le_cosh`：cosh_le_cosh : cosh x <= cosh y ↔ |x| <= |y|
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_zero`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [Add
+LeftMono α], |0| = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Real.cosh_zero`：cosh_zero : cosh 0 = 1
 -/
-theorem one_le_cosh (x : Real) : 1 <= cosh x :=
+theorem one_le_cosh (x : ℝ) : 1 ≤ cosh x :=
   cosh_zero ▸ cosh_le_cosh.2 (by simp only [_root_.abs_zero, _root_.abs_nonneg])
 
 @[simp]
-/--
-theorem `one_lt_cosh` / 定理 `one_lt_cosh`
-
-English:
-theorem one_lt_cosh
-  statement: 1 < cosh x ↔ x != 0
-  proof: cosh_zero ▸ cosh_lt_cosh.trans (by simp only [_root_.abs_zero, abs_pos])
-
-中文:
-定理 one_lt_cosh
-  结论: 1 < cosh x ↔ x != 0
-  证明: cosh_zero ▸ cosh_lt_cosh.trans (by simp only [_root_.abs_zero, abs_pos])
-
-Depends on / 依赖: _root_, _root_.abs_zero, abs_pos, abs_zero, cosh_lt_cosh, cosh_lt_cosh.trans, cosh_zero
+/-
+**Real.one_lt_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：one_lt_cosh : 1 < cosh x ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Real.cosh_lt_cosh`：cosh_lt_cosh : cosh x < cosh y ↔ |x| < |y|
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_zero`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [Add
+LeftMono α], |0| = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Real.cosh_zero`：cosh_zero : cosh 0 = 1
 -/
-theorem one_lt_cosh : 1 < cosh x ↔ x != 0 :=
+theorem one_lt_cosh : 1 < cosh x ↔ x ≠ 0 :=
   cosh_zero ▸ cosh_lt_cosh.trans (by simp only [_root_.abs_zero, abs_pos])
-
-/--
-theorem `sinh_sub_id_strictMono` / 定理 `sinh_sub_id_strictMono`
-
-English:
-theorem sinh_sub_id_strictMono
-  statement: StrictMono fun x => sinh x - x
-  proof: by
-  refine strictMono_of_odd_strictMonoOn_nonneg (fun x => by simp; abel) ?_
-  refine strictMonoOn_of_deriv_pos (convex_Ici _) ?_ fun x hx => ?_
-  · exact (continuous_sinh.sub continuous_id).continuousOn
-  · rw [interior_Ici, mem_Ioi] at hx
-    rw [deriv_fun_sub]; rw [deriv_sinh]; rw [deriv_id'']; rw [sub_pos]; rw [one_lt_cosh]
-    exacts [hx.ne', differentiableAt_sinh, differentiableAt_id]
-
-@[simp]
-
-中文:
-定理 sinh_sub_id_strictMono
-  结论: 严格递增 fun x => sinh x - x
-  证明: by
-  refine strictMono_of_odd_strictMonoOn_nonneg (fun x => by simp; abel) ?_
-  refine strictMonoOn_of_deriv_pos (convex_Ici _) ?_ fun x hx => ?_
-  · exact (continuous_sinh.sub continuous_id).continuousOn
-  · rw [interior_Ici, mem_Ioi] at hx
-    rw [deriv_fun_sub]; rw [deriv_sinh]; rw [deriv_id'']; rw [sub_pos]; rw [one_lt_cosh]
-    exacts [hx.ne', differentiableAt_sinh, differentiableAt_id]
-
-@[simp]
-
-Depends on / 依赖: continuousOn, continuous_id, continuous_sinh, continuous_sinh.sub, convex_Ici, deriv_fun_sub, deriv_id, deriv_sinh, differentiableAt_id, differentiableAt_sinh, exacts, hx.ne, interior_Ici, mem_Ioi, one_lt_cosh, strictMonoOn_of_deriv_pos, strictMono_of_odd_strictMonoOn_nonneg, sub_pos
+/-
+**Real.sinh_sub_id_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_sub_id_strictMono : StrictMono fun x => sinh x - x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `strictMono_of_odd_strictMonoOn_nonneg`：strictMono_of_odd_strictMonoOn_no
+nneg {f : G -> H} (h₁ : forall x, f (-x) = -f x) (h₂ : StrictMonoOn f (Ici 0)) :
+ StrictMono f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.sinh_neg`：sinh_neg : sinh (-x) = -sinh x
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `_private.Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp.0.Real
+.sinh_sub_id_strictMono._abel_1_1`：∀ (x : ℝ), -Real.sinh x + x = x - Real.sinh x
+· 使用定理 `strictMonoOn_of_deriv_pos`：strictMonoOn_of_deriv_pos {D : Set Real} (hD 
+: Convex Real D) {f : Real -> Real} (hf : ContinuousOn f D) (hf' : forall x in i
+nterior D, 0 < …
+· 使用定理 `convex_Ici`：convex_Ici (r : β) : Convex 𝕜 (Ici r)
+· 使用定理 `IsOrderedModule.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Continuous.sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalSpace
+ X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g : X 
+→ G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `Real.continuous_sinh`：continuous_sinh : Continuous sinh
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `deriv_fun_sub`：deriv_fun_sub (hf : DifferentiableAt 𝕜 f x) (hg : Differe
+ntiableAt 𝕜 g x) : deriv (fun y => f y - g y) x = deriv f x - deriv g x
+· 使用定理 `Real.differentiableAt_sinh`：differentiableAt_sinh : DifferentiableAt Rea
+l sinh x
+· 使用定理 `differentiableAt_id`：differentiableAt_id : DifferentiableAt 𝕜 id x
+· 使用定理 `Real.deriv_sinh`：deriv_sinh : deriv sinh = cosh
+· 使用定理 `deriv_id''`：deriv_id'' : (deriv fun x : 𝕜 => x) = fun _ => 1
+· 使用定理 `sub_pos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddRightStr
+ictMono α] {a b : α}, 0 < a - b ↔ b < a
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+（共 43 条，此处仅展示前 30 条）
 -/
 theorem sinh_sub_id_strictMono : StrictMono fun x => sinh x - x := by
   refine strictMono_of_odd_strictMonoOn_nonneg (fun x => by simp; abel) ?_
   refine strictMonoOn_of_deriv_pos (convex_Ici _) ?_ fun x hx => ?_
   · exact (continuous_sinh.sub continuous_id).continuousOn
   · rw [interior_Ici, mem_Ioi] at hx
-    rw [deriv_fun_sub]; rw [deriv_sinh]; rw [deriv_id'']; rw [sub_pos]; rw [one_lt_cosh]
+    rw [deriv_fun_sub, deriv_sinh, deriv_id'', sub_pos, one_lt_cosh]
     exacts [hx.ne', differentiableAt_sinh, differentiableAt_id]
 
 @[simp]
-/--
-theorem `self_le_sinh_iff` / 定理 `self_le_sinh_iff`
-
-English:
-theorem self_le_sinh_iff
-  statement: x <= sinh x ↔ 0 <= x
-  proof: calc
-    x <= sinh x ↔ sinh 0 - 0 <= sinh x - x := by simp
-    _ ↔ 0 <= x := sinh_sub_id_strictMono.le_iff_le
-
-@[simp]
-
-中文:
-定理 self_le_sinh_iff
-  结论: x <= sinh x ↔ 0 <= x
-  证明: calc
-    x <= sinh x ↔ sinh 0 - 0 <= sinh x - x := by simp
-    _ ↔ 0 <= x := sinh_sub_id_strictMono.le_iff_le
-
-@[simp]
-
-Depends on / 依赖: le_iff_le, sinh_sub_id_strictMono, sinh_sub_id_strictMono.le_iff_le
+/-
+**Real.self_le_sinh_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：self_le_sinh_iff : x <= sinh x ↔ 0 <= x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `Real.sinh_sub_id_strictMono`：sinh_sub_id_strictMono : StrictMono fun x =
+> sinh x - x
 -/
-theorem self_le_sinh_iff : x <= sinh x ↔ 0 <= x :=
+theorem self_le_sinh_iff : x ≤ sinh x ↔ 0 ≤ x :=
   calc
-    x <= sinh x ↔ sinh 0 - 0 <= sinh x - x := by simp
-    _ ↔ 0 <= x := sinh_sub_id_strictMono.le_iff_le
+    x ≤ sinh x ↔ sinh 0 - 0 ≤ sinh x - x := by simp
+    _ ↔ 0 ≤ x := sinh_sub_id_strictMono.le_iff_le
 
 @[simp]
-/--
-theorem `sinh_le_self_iff` / 定理 `sinh_le_self_iff`
-
-English:
-theorem sinh_le_self_iff
-  statement: sinh x <= x ↔ x <= 0
-  proof: calc
-    sinh x <= x ↔ sinh x - x <= sinh 0 - 0 := by simp
-    _ ↔ x <= 0 := sinh_sub_id_strictMono.le_iff_le
-
-@[simp]
-
-中文:
-定理 sinh_le_self_iff
-  结论: sinh x <= x ↔ x <= 0
-  证明: calc
-    sinh x <= x ↔ sinh x - x <= sinh 0 - 0 := by simp
-    _ ↔ x <= 0 := sinh_sub_id_strictMono.le_iff_le
-
-@[simp]
-
-Depends on / 依赖: le_iff_le, sinh_sub_id_strictMono, sinh_sub_id_strictMono.le_iff_le
+/-
+**Real.sinh_le_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_le_self_iff : sinh x <= x ↔ x <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.sinh_zero`：sinh_zero : sinh 0 = 0
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `Real.sinh_sub_id_strictMono`：sinh_sub_id_strictMono : StrictMono fun x =
+> sinh x - x
 -/
-theorem sinh_le_self_iff : sinh x <= x ↔ x <= 0 :=
+theorem sinh_le_self_iff : sinh x ≤ x ↔ x ≤ 0 :=
   calc
-    sinh x <= x ↔ sinh x - x <= sinh 0 - 0 := by simp
-    _ ↔ x <= 0 := sinh_sub_id_strictMono.le_iff_le
+    sinh x ≤ x ↔ sinh x - x ≤ sinh 0 - 0 := by simp
+    _ ↔ x ≤ 0 := sinh_sub_id_strictMono.le_iff_le
 
 @[simp]
-/--
-theorem `self_lt_sinh_iff` / 定理 `self_lt_sinh_iff`
-
-English:
-theorem self_lt_sinh_iff
-  statement: x < sinh x ↔ 0 < x
-  proof: lt_iff_lt_of_le_iff_le sinh_le_self_iff
-
-@[simp]
-
-中文:
-定理 self_lt_sinh_iff
-  结论: x < sinh x ↔ 0 < x
-  证明: lt_iff_lt_of_le_iff_le sinh_le_self_iff
-
-@[simp]
-
-Depends on / 依赖: lt_iff_lt_of_le_iff_le, sinh_le_self_iff
+/-
+**Real.self_lt_sinh_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：self_lt_sinh_iff : x < sinh x ↔ 0 < x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Real.sinh_le_self_iff`：sinh_le_self_iff : sinh x <= x ↔ x <= 0
 -/
 theorem self_lt_sinh_iff : x < sinh x ↔ 0 < x :=
   lt_iff_lt_of_le_iff_le sinh_le_self_iff
 
 @[simp]
-/--
-theorem `sinh_lt_self_iff` / 定理 `sinh_lt_self_iff`
-
-English:
-theorem sinh_lt_self_iff
-  statement: sinh x < x ↔ x < 0
-  proof: lt_iff_lt_of_le_iff_le self_le_sinh_iff
-
-中文:
-定理 sinh_lt_self_iff
-  结论: sinh x < x ↔ x < 0
-  证明: lt_iff_lt_of_le_iff_le self_le_sinh_iff
-
-Depends on / 依赖: F.asEquivalence, asEquivalence, effectiveEpiFamilyStructOfEquivalence, lt_iff_lt_of_le_iff_le, self_le_sinh_iff
+/-
+**Real.sinh_lt_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：sinh_lt_self_iff : sinh x < x ↔ x < 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Real.self_le_sinh_iff`：self_le_sinh_iff : x <= sinh x ↔ 0 <= x
 -/
 theorem sinh_lt_self_iff : sinh x < x ↔ x < 0 :=
   lt_iff_lt_of_le_iff_le self_le_sinh_iff
@@ -2200,218 +2207,200 @@ section iteratedDeriv
 namespace Complex
 
 @[simp]
-/--
-theorem `iteratedDeriv_add_one_sinh` / 定理 `iteratedDeriv_add_one_sinh`
-
-English:
-theorem iteratedDeriv_add_one_sinh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-中文:
-定理 iteratedDeriv_add_one_sinh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-Depends on / 依赖: iteratedDeriv_succ
+/-
+**Complex.iteratedDeriv_add_one_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：iteratedDeriv_add_one_sinh (n : Nat) : iteratedDeriv (n + 1) sinh = iterat
+edDeriv n cosh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iteratedDeriv_one`：iteratedDeriv_one : iteratedDeriv 1 f = deriv f
+· 使用定理 `Complex.deriv_sinh`：deriv_sinh : deriv sinh = cosh
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iteratedDeriv_succ`：iteratedDeriv_succ : iteratedDeriv (n + 1) f = deriv
+ (iteratedDeriv n f)
 -/
-theorem iteratedDeriv_add_one_sinh (n : Nat) :
+theorem iteratedDeriv_add_one_sinh (n : ℕ) :
     iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh := by
   induction n with
   | zero => simp
   | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
+    rw [iteratedDeriv_succ, ih, iteratedDeriv_succ]
 
 @[simp]
-/--
-theorem `iteratedDeriv_add_one_cosh` / 定理 `iteratedDeriv_add_one_cosh`
-
-English:
-theorem iteratedDeriv_add_one_cosh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => ext; simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-中文:
-定理 iteratedDeriv_add_one_cosh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => ext; simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-Depends on / 依赖: iteratedDeriv_succ
+/-
+**Complex.iteratedDeriv_add_one_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：iteratedDeriv_add_one_cosh (n : Nat) : iteratedDeriv (n + 1) cosh = iterat
+edDeriv n sinh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `iteratedDeriv_one`：iteratedDeriv_one : iteratedDeriv 1 f = deriv f
+· 使用定理 `Complex.deriv_cosh`：deriv_cosh : deriv cosh = sinh
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iteratedDeriv_succ`：iteratedDeriv_succ : iteratedDeriv (n + 1) f = deriv
+ (iteratedDeriv n f)
 -/
-theorem iteratedDeriv_add_one_cosh (n : Nat) :
+theorem iteratedDeriv_add_one_cosh (n : ℕ) :
     iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh := by
   induction n with
   | zero => ext; simp
   | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
+    rw [iteratedDeriv_succ, ih, iteratedDeriv_succ]
 
 @[simp]
-/--
-theorem `iteratedDeriv_even_sinh` / 定理 `iteratedDeriv_even_sinh`
-
-English:
-theorem iteratedDeriv_even_sinh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-@[simp]
-
-中文:
-定理 iteratedDeriv_even_sinh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-@[simp]
-
-Depends on / 依赖: mul_add
+/-
+**Complex.iteratedDeriv_even_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：iteratedDeriv_even_sinh (n : Nat) : iteratedDeriv (2 * n) sinh = sinh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Complex.iteratedDeriv_add_one_sinh`：iteratedDeriv_add_one_sinh (n : Nat)
+ : iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh
+· 使用定理 `Complex.iteratedDeriv_add_one_cosh`：iteratedDeriv_add_one_cosh (n : Nat)
+ : iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh
 -/
-theorem iteratedDeriv_even_sinh (n : Nat) :
+theorem iteratedDeriv_even_sinh (n : ℕ) :
     iteratedDeriv (2 * n) sinh = sinh := by
   induction n with
   | zero => simp
   | succ n ih => simp_all [mul_add]
 
 @[simp]
-/--
-theorem `iteratedDeriv_even_cosh` / 定理 `iteratedDeriv_even_cosh`
-
-English:
-theorem iteratedDeriv_even_cosh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-中文:
-定理 iteratedDeriv_even_cosh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-Depends on / 依赖: mul_add
+/-
+**Complex.iteratedDeriv_even_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：iteratedDeriv_even_cosh (n : Nat) : iteratedDeriv (2 * n) cosh = cosh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Complex.iteratedDeriv_add_one_cosh`：iteratedDeriv_add_one_cosh (n : Nat)
+ : iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh
+· 使用定理 `Complex.iteratedDeriv_add_one_sinh`：iteratedDeriv_add_one_sinh (n : Nat)
+ : iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh
 -/
-theorem iteratedDeriv_even_cosh (n : Nat) :
+theorem iteratedDeriv_even_cosh (n : ℕ) :
     iteratedDeriv (2 * n) cosh = cosh := by
   induction n with
   | zero => simp
   | succ n ih => simp_all [mul_add]
-
-/--
-theorem `iteratedDeriv_odd_sinh` / 定理 `iteratedDeriv_odd_sinh`
-
-English:
-theorem iteratedDeriv_odd_sinh
-  given: (n : Nat)
-  proof: by simp
-
-中文:
-定理 iteratedDeriv_odd_sinh
-  条件: (n : 自然数)
-  证明: by simp
+/-
+**Complex.iteratedDeriv_odd_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：iteratedDeriv_odd_sinh (n : Nat) : iteratedDeriv (2 * n + 1) sinh = cosh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.iteratedDeriv_add_one_sinh`：iteratedDeriv_add_one_sinh (n : Nat)
+ : iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh
+· 使用定理 `Complex.iteratedDeriv_even_cosh`：iteratedDeriv_even_cosh (n : Nat) : ite
+ratedDeriv (2 * n) cosh = cosh
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iteratedDeriv_odd_sinh (n : Nat) :
+theorem iteratedDeriv_odd_sinh (n : ℕ) :
     iteratedDeriv (2 * n + 1) sinh = cosh := by simp
-
-/--
-theorem `iteratedDeriv_odd_cosh` / 定理 `iteratedDeriv_odd_cosh`
-
-English:
-theorem iteratedDeriv_odd_cosh
-  given: (n : Nat)
-  proof: by simp
-
-中文:
-定理 iteratedDeriv_odd_cosh
-  条件: (n : 自然数)
-  证明: by simp
+/-
+**Complex.iteratedDeriv_odd_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：iteratedDeriv_odd_cosh (n : Nat) : iteratedDeriv (2 * n + 1) cosh = sinh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.iteratedDeriv_add_one_cosh`：iteratedDeriv_add_one_cosh (n : Nat)
+ : iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh
+· 使用定理 `Complex.iteratedDeriv_even_sinh`：iteratedDeriv_even_sinh (n : Nat) : ite
+ratedDeriv (2 * n) sinh = sinh
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iteratedDeriv_odd_cosh (n : Nat) :
+theorem iteratedDeriv_odd_cosh (n : ℕ) :
     iteratedDeriv (2 * n + 1) cosh = sinh := by simp
-
-/--
-theorem `differentiable_iteratedDeriv_sinh` / 定理 `differentiable_iteratedDeriv_sinh`
-
-English:
-theorem differentiable_iteratedDeriv_sinh
-  given: (n : Nat)
-  proof: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_sinh]
-
-中文:
-定理 differentiable_iteratedDeriv_sinh
-  条件: (n : 自然数)
-  证明: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_sinh]
-
-Depends on / 依赖: differentiable_iteratedDeriv_sinh
+/-
+**Complex.differentiable_iteratedDeriv_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：differentiable_iteratedDeriv_sinh (n : Nat) : Differentiable Complex (iter
+atedDeriv n sinh)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem differentiable_iteratedDeriv_sinh (n : Nat) :
-    Differentiable Complex (iteratedDeriv n sinh) :=
+theorem differentiable_iteratedDeriv_sinh (n : ℕ) :
+    Differentiable ℂ (iteratedDeriv n sinh) :=
   match n with
   | 0 => by simp
   | 1 => by simp
   | n + 2 => by simp [differentiable_iteratedDeriv_sinh]
-
-/--
-theorem `differentiable_iteratedDeriv_cosh` / 定理 `differentiable_iteratedDeriv_cosh`
-
-English:
-theorem differentiable_iteratedDeriv_cosh
-  given: (n : Nat)
-  proof: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_cosh]
-
-中文:
-定理 differentiable_iteratedDeriv_cosh
-  条件: (n : 自然数)
-  证明: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_cosh]
-
-Depends on / 依赖: differentiable_iteratedDeriv_cosh
+/-
+**Complex.differentiable_iteratedDeriv_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：differentiable_iteratedDeriv_cosh (n : Nat) : Differentiable Complex (iter
+atedDeriv n cosh)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem differentiable_iteratedDeriv_cosh (n : Nat) :
-    Differentiable Complex (iteratedDeriv n cosh) :=
+theorem differentiable_iteratedDeriv_cosh (n : ℕ) :
+    Differentiable ℂ (iteratedDeriv n cosh) :=
   match n with
   | 0 => by simp
   | 1 => by simp
@@ -2422,316 +2411,288 @@ end Complex
 namespace Real
 
 @[simp]
-/--
-theorem `iteratedDeriv_add_one_sinh` / 定理 `iteratedDeriv_add_one_sinh`
-
-English:
-theorem iteratedDeriv_add_one_sinh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-中文:
-定理 iteratedDeriv_add_one_sinh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-Depends on / 依赖: infer_instance, iteratedDeriv_succ
+/-
+**Real.iteratedDeriv_add_one_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDeriv_add_one_sinh (n : Nat) : iteratedDeriv (n + 1) sinh = iterat
+edDeriv n cosh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `iteratedDeriv_one`：iteratedDeriv_one : iteratedDeriv 1 f = deriv f
+· 使用定理 `Real.deriv_sinh`：deriv_sinh : deriv sinh = cosh
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iteratedDeriv_succ`：iteratedDeriv_succ : iteratedDeriv (n + 1) f = deriv
+ (iteratedDeriv n f)
 -/
-theorem iteratedDeriv_add_one_sinh (n : Nat) :
+theorem iteratedDeriv_add_one_sinh (n : ℕ) :
     iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh := by
   induction n with
   | zero => simp
   | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
+    rw [iteratedDeriv_succ, ih, iteratedDeriv_succ]
 
 @[simp]
-/--
-theorem `iteratedDeriv_add_one_cosh` / 定理 `iteratedDeriv_add_one_cosh`
-
-English:
-theorem iteratedDeriv_add_one_cosh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => ext; simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-中文:
-定理 iteratedDeriv_add_one_cosh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => ext; simp
-  | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
-
-@[simp]
-
-Depends on / 依赖: infer_instance, iteratedDeriv_succ
+/-
+**Real.iteratedDeriv_add_one_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDeriv_add_one_cosh (n : Nat) : iteratedDeriv (n + 1) cosh = iterat
+edDeriv n sinh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `iteratedDeriv_one`：iteratedDeriv_one : iteratedDeriv 1 f = deriv f
+· 使用定理 `Real.deriv_cosh`：deriv_cosh : deriv cosh = sinh
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iteratedDeriv_succ`：iteratedDeriv_succ : iteratedDeriv (n + 1) f = deriv
+ (iteratedDeriv n f)
 -/
-theorem iteratedDeriv_add_one_cosh (n : Nat) :
+theorem iteratedDeriv_add_one_cosh (n : ℕ) :
     iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh := by
   induction n with
   | zero => ext; simp
   | succ n ih =>
-    rw [iteratedDeriv_succ]; rw [ih]; rw [iteratedDeriv_succ]
+    rw [iteratedDeriv_succ, ih, iteratedDeriv_succ]
 
 @[simp]
-/--
-theorem `iteratedDeriv_even_sinh` / 定理 `iteratedDeriv_even_sinh`
-
-English:
-theorem iteratedDeriv_even_sinh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-@[simp]
-
-中文:
-定理 iteratedDeriv_even_sinh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-@[simp]
-
-Depends on / 依赖: infer_instance, mul_add
+/-
+**Real.iteratedDeriv_even_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDeriv_even_sinh (n : Nat) : iteratedDeriv (2 * n) sinh = sinh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Real.iteratedDeriv_add_one_sinh`：iteratedDeriv_add_one_sinh (n : Nat) : 
+iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh
+· 使用定理 `Real.iteratedDeriv_add_one_cosh`：iteratedDeriv_add_one_cosh (n : Nat) : 
+iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh
 -/
-theorem iteratedDeriv_even_sinh (n : Nat) :
+theorem iteratedDeriv_even_sinh (n : ℕ) :
     iteratedDeriv (2 * n) sinh = sinh := by
   induction n with
   | zero => simp
   | succ n ih => simp_all [mul_add]
 
 @[simp]
-/--
-theorem `iteratedDeriv_even_cosh` / 定理 `iteratedDeriv_even_cosh`
-
-English:
-theorem iteratedDeriv_even_cosh
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-中文:
-定理 iteratedDeriv_even_cosh
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih => simp_all [mul_add]
-
-Depends on / 依赖: mul_add
+/-
+**Real.iteratedDeriv_even_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDeriv_even_cosh (n : Nat) : iteratedDeriv (2 * n) cosh = cosh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `iteratedDeriv_zero`：iteratedDeriv_zero : iteratedDeriv 0 f = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Real.iteratedDeriv_add_one_cosh`：iteratedDeriv_add_one_cosh (n : Nat) : 
+iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh
+· 使用定理 `Real.iteratedDeriv_add_one_sinh`：iteratedDeriv_add_one_sinh (n : Nat) : 
+iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh
 -/
-theorem iteratedDeriv_even_cosh (n : Nat) :
+theorem iteratedDeriv_even_cosh (n : ℕ) :
     iteratedDeriv (2 * n) cosh = cosh := by
   induction n with
   | zero => simp
   | succ n ih => simp_all [mul_add]
-
-/--
-theorem `iteratedDeriv_odd_sinh` / 定理 `iteratedDeriv_odd_sinh`
-
-English:
-theorem iteratedDeriv_odd_sinh
-  given: (n : Nat)
-  proof: by simp
-
-中文:
-定理 iteratedDeriv_odd_sinh
-  条件: (n : 自然数)
-  证明: by simp
+/-
+**Real.iteratedDeriv_odd_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDeriv_odd_sinh (n : Nat) : iteratedDeriv (2 * n + 1) sinh = cosh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.iteratedDeriv_add_one_sinh`：iteratedDeriv_add_one_sinh (n : Nat) : 
+iteratedDeriv (n + 1) sinh = iteratedDeriv n cosh
+· 使用定理 `Real.iteratedDeriv_even_cosh`：iteratedDeriv_even_cosh (n : Nat) : iterat
+edDeriv (2 * n) cosh = cosh
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iteratedDeriv_odd_sinh (n : Nat) :
+theorem iteratedDeriv_odd_sinh (n : ℕ) :
     iteratedDeriv (2 * n + 1) sinh = cosh := by simp
-
-/--
-theorem `iteratedDeriv_odd_cosh` / 定理 `iteratedDeriv_odd_cosh`
-
-English:
-theorem iteratedDeriv_odd_cosh
-  given: (n : Nat)
-  proof: by simp
-
-中文:
-定理 iteratedDeriv_odd_cosh
-  条件: (n : 自然数)
-  证明: by simp
+/-
+**Real.iteratedDeriv_odd_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDeriv_odd_cosh (n : Nat) : iteratedDeriv (2 * n + 1) cosh = sinh
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.iteratedDeriv_add_one_cosh`：iteratedDeriv_add_one_cosh (n : Nat) : 
+iteratedDeriv (n + 1) cosh = iteratedDeriv n sinh
+· 使用定理 `Real.iteratedDeriv_even_sinh`：iteratedDeriv_even_sinh (n : Nat) : iterat
+edDeriv (2 * n) sinh = sinh
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iteratedDeriv_odd_cosh (n : Nat) :
+theorem iteratedDeriv_odd_cosh (n : ℕ) :
     iteratedDeriv (2 * n + 1) cosh = sinh := by simp
-
-/--
-theorem `differentiable_iteratedDeriv_sinh` / 定理 `differentiable_iteratedDeriv_sinh`
-
-English:
-theorem differentiable_iteratedDeriv_sinh
-  given: (n : Nat)
-  proof: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_sinh]
-
-中文:
-定理 differentiable_iteratedDeriv_sinh
-  条件: (n : 自然数)
-  证明: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_sinh]
-
-Depends on / 依赖: F.effectiveEpiFamily_of_map, differentiable_iteratedDeriv_sinh, effectiveEpiFamily_of_map, infer_instance
+/-
+**Real.differentiable_iteratedDeriv_sinh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：differentiable_iteratedDeriv_sinh (n : Nat) : Differentiable Real (iterate
+dDeriv n sinh)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem differentiable_iteratedDeriv_sinh (n : Nat) :
-    Differentiable Real (iteratedDeriv n sinh) :=
+theorem differentiable_iteratedDeriv_sinh (n : ℕ) :
+    Differentiable ℝ (iteratedDeriv n sinh) :=
   match n with
   | 0 => by simp
   | 1 => by simp
   | n + 2 => by simp [differentiable_iteratedDeriv_sinh]
-
-/--
-theorem `differentiable_iteratedDeriv_cosh` / 定理 `differentiable_iteratedDeriv_cosh`
-
-English:
-theorem differentiable_iteratedDeriv_cosh
-  given: (n : Nat)
-  proof: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_cosh]
-
-@[simp]
-
-中文:
-定理 differentiable_iteratedDeriv_cosh
-  条件: (n : 自然数)
-  证明: match n with
-  | 0 => by simp
-  | 1 => by simp
-  | n + 2 => by simp [differentiable_iteratedDeriv_cosh]
-
-@[simp]
-
-Depends on / 依赖: F.finite_effectiveEpiFamily_of_map, differentiable_iteratedDeriv_cosh, effectiveEpi_iff_effectiveEpiFamily, finite_effectiveEpiFamily_of_map, infer_instance
+/-
+**Real.differentiable_iteratedDeriv_cosh** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：differentiable_iteratedDeriv_cosh (n : Nat) : Differentiable Real (iterate
+dDeriv n cosh)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem differentiable_iteratedDeriv_cosh (n : Nat) :
-    Differentiable Real (iteratedDeriv n cosh) :=
+theorem differentiable_iteratedDeriv_cosh (n : ℕ) :
+    Differentiable ℝ (iteratedDeriv n cosh) :=
   match n with
   | 0 => by simp
   | 1 => by simp
   | n + 2 => by simp [differentiable_iteratedDeriv_cosh]
 
 @[simp]
-/--
-theorem `iteratedDerivWithin_sinh_Icc` / 定理 `iteratedDerivWithin_sinh_Icc`
-
-English:
-theorem iteratedDerivWithin_sinh_Icc
-  given: (n : Nat) {a b : Real} (h : a < b) {x : Real} (hx : x in Icc a b)
-  proof: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_sinh.contDiffAt hx
-
-@[simp]
-
-中文:
-定理 iteratedDerivWithin_sinh_Icc
-  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in 闭区间 a b)
-  证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_sinh.contDiffAt hx
-
-@[simp]
-
-Depends on / 依赖: EffectiveEpiFamily, F.map, F.obj, Iso.hom_inv_id_app_assoc, asEquivalence, contDiffAt, contDiff_sinh, contDiff_sinh.contDiffAt, hom_inv_id_app_assoc, inv_fun_map, iteratedDerivWithin_eq_iteratedDeriv, uniqueDiffOn_Icc, unit.app, unitInv, unitInv.app
+/-
+**Real.iteratedDerivWithin_sinh_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDerivWithin_sinh_Icc (n : Nat) {a b : Real} (h : a < b) {x : Real}
+ (hx : x in Icc a b) : iteratedDerivWithin n sinh (Icc a b) x = iteratedDeriv n 
+sinh x
+参数：n : Nat；h : a < b；hx : x in Icc a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedDerivWithin_eq_iteratedDeriv`：iteratedDerivWithin_eq_iteratedDer
+iv (hs : UniqueDiffOn 𝕜 s) (h : ContDiffAt 𝕜 n f x) (hx : x in s) : iteratedDeri
+vWithin n f s x = iterated…
+· 使用定理 `uniqueDiffOn_Icc`：uniqueDiffOn_Icc {a b : Real} (hab : a < b) : UniqueDi
+ffOn Real (Icc a b)
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 -/
-theorem iteratedDerivWithin_sinh_Icc (n : Nat) {a b : Real} (h : a < b) {x : Real} (hx : x in Icc a b) :
+theorem iteratedDerivWithin_sinh_Icc (n : ℕ) {a b : ℝ} (h : a < b) {x : ℝ} (hx : x ∈ Icc a b) :
     iteratedDerivWithin n sinh (Icc a b) x = iteratedDeriv n sinh x :=
   iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_sinh.contDiffAt hx
 
 @[simp]
-/--
-theorem `iteratedDerivWithin_cosh_Icc` / 定理 `iteratedDerivWithin_cosh_Icc`
-
-English:
-theorem iteratedDerivWithin_cosh_Icc
-  given: (n : Nat) {a b : Real} (h : a < b) {x : Real} (hx : x in Icc a b)
-  proof: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_cosh.contDiffAt hx
-
-@[simp]
-
-中文:
-定理 iteratedDerivWithin_cosh_Icc
-  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in 闭区间 a b)
-  证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_cosh.contDiffAt hx
-
-@[simp]
-
-Depends on / 依赖: F.effectiveEpi_of_map, G.effectiveEpi_of_map, contDiffAt, contDiff_cosh, contDiff_cosh.contDiffAt, effectiveEpi_of_map, iteratedDerivWithin_eq_iteratedDeriv, uniqueDiffOn_Icc
+/-
+**Real.iteratedDerivWithin_cosh_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDerivWithin_cosh_Icc (n : Nat) {a b : Real} (h : a < b) {x : Real}
+ (hx : x in Icc a b) : iteratedDerivWithin n cosh (Icc a b) x = iteratedDeriv n 
+cosh x
+参数：n : Nat；h : a < b；hx : x in Icc a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedDerivWithin_eq_iteratedDeriv`：iteratedDerivWithin_eq_iteratedDer
+iv (hs : UniqueDiffOn 𝕜 s) (h : ContDiffAt 𝕜 n f x) (hx : x in s) : iteratedDeri
+vWithin n f s x = iterated…
+· 使用定理 `uniqueDiffOn_Icc`：uniqueDiffOn_Icc {a b : Real} (hab : a < b) : UniqueDi
+ffOn Real (Icc a b)
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 -/
-theorem iteratedDerivWithin_cosh_Icc (n : Nat) {a b : Real} (h : a < b) {x : Real} (hx : x in Icc a b) :
+theorem iteratedDerivWithin_cosh_Icc (n : ℕ) {a b : ℝ} (h : a < b) {x : ℝ} (hx : x ∈ Icc a b) :
     iteratedDerivWithin n cosh (Icc a b) x = iteratedDeriv n cosh x :=
   iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_cosh.contDiffAt hx
 
 @[simp]
-/--
-theorem `iteratedDerivWithin_sinh_Ioo` / 定理 `iteratedDerivWithin_sinh_Ioo`
-
-English:
-theorem iteratedDerivWithin_sinh_Ioo
-  given: (n : Nat) {a b x : Real} (hx : x in Ioo a b)
-  proof: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_sinh.contDiffAt hx
-
-@[simp]
-
-中文:
-定理 iteratedDerivWithin_sinh_Ioo
-  条件: (n : 自然数) {a b x : 实数} (hx : x in 开区间 a b)
-  证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_sinh.contDiffAt hx
-
-@[simp]
-
-Depends on / 依赖: F.finite_effectiveEpiFamily_of_map, G.finite_effectiveEpiFamily_of_map, contDiffAt, contDiff_sinh, contDiff_sinh.contDiffAt, finite_effectiveEpiFamily_of_map, iteratedDerivWithin_eq_iteratedDeriv, uniqueDiffOn_Ioo
+/-
+**Real.iteratedDerivWithin_sinh_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDerivWithin_sinh_Ioo (n : Nat) {a b x : Real} (hx : x in Ioo a b) 
+: iteratedDerivWithin n sinh (Ioo a b) x = iteratedDeriv n sinh x
+参数：n : Nat；hx : x in Ioo a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedDerivWithin_eq_iteratedDeriv`：iteratedDerivWithin_eq_iteratedDer
+iv (hs : UniqueDiffOn 𝕜 s) (h : ContDiffAt 𝕜 n f x) (hx : x in s) : iteratedDeri
+vWithin n f s x = iterated…
+· 使用定理 `uniqueDiffOn_Ioo`：uniqueDiffOn_Ioo (a b : Real) : UniqueDiffOn Real (Ioo
+ a b)
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 -/
-theorem iteratedDerivWithin_sinh_Ioo (n : Nat) {a b x : Real} (hx : x in Ioo a b) :
+theorem iteratedDerivWithin_sinh_Ioo (n : ℕ) {a b x : ℝ} (hx : x ∈ Ioo a b) :
     iteratedDerivWithin n sinh (Ioo a b) x = iteratedDeriv n sinh x :=
   iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_sinh.contDiffAt hx
 
 @[simp]
-/--
-theorem `iteratedDerivWithin_cosh_Ioo` / 定理 `iteratedDerivWithin_cosh_Ioo`
-
-English:
-theorem iteratedDerivWithin_cosh_Ioo
-  given: (n : Nat) {a b x : Real} (hx : x in Ioo a b)
-  proof: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_cosh.contDiffAt hx
-
-中文:
-定理 iteratedDerivWithin_cosh_Ioo
-  条件: (n : 自然数) {a b x : 实数} (hx : x in 开区间 a b)
-  证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_cosh.contDiffAt hx
-
-Depends on / 依赖: F.effectiveEpiFamily_of_map, G.effectiveEpiFamily_of_map, contDiffAt, contDiff_cosh, contDiff_cosh.contDiffAt, effectiveEpiFamily_of_map, iteratedDerivWithin_eq_iteratedDeriv, uniqueDiffOn_Ioo
+/-
+**Real.iteratedDerivWithin_cosh_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：iteratedDerivWithin_cosh_Ioo (n : Nat) {a b x : Real} (hx : x in Ioo a b) 
+: iteratedDerivWithin n cosh (Ioo a b) x = iteratedDeriv n cosh x
+参数：n : Nat；hx : x in Ioo a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedDerivWithin_eq_iteratedDeriv`：iteratedDerivWithin_eq_iteratedDer
+iv (hs : UniqueDiffOn 𝕜 s) (h : ContDiffAt 𝕜 n f x) (hx : x in s) : iteratedDeri
+vWithin n f s x = iterated…
+· 使用定理 `uniqueDiffOn_Ioo`：uniqueDiffOn_Ioo (a b : Real) : UniqueDiffOn Real (Ioo
+ a b)
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 -/
-theorem iteratedDerivWithin_cosh_Ioo (n : Nat) {a b x : Real} (hx : x in Ioo a b) :
+theorem iteratedDerivWithin_cosh_Ioo (n : ℕ) {a b x : ℝ} (hx : x ∈ Ioo a b) :
     iteratedDerivWithin n cosh (Ioo a b) x = iteratedDeriv n cosh x :=
   iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_cosh.contDiffAt hx
 
@@ -2743,207 +2704,229 @@ section
 
 /-! ### Simp lemmas for derivatives of `fun x => Real.cos (f x)` etc., `f : ℝ → ℝ` -/
 
-variable {f : Real -> Real} {f' x : Real} {s : Set Real}
+variable {f : ℝ → ℝ} {f' x : ℝ} {s : Set ℝ}
 
+/-! #### `Real.cosh` -/
 
-/--
-theorem `HasStrictDerivAt.cosh` / 定理 `HasStrictDerivAt.cosh`
+/-
+**HasStrictDerivAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictDerivAt.cosh (hf : HasStrictDerivAt f f' x) : HasStrictDerivAt (f
+un x => Real.cosh (f x)) (Real.sinh (f x) * f') x
+参数：hf : HasStrictDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasStrictDerivAt.comp`：HasStrictDerivAt.comp (hh₂ : HasStrictDerivAt h₂ 
+h₂' (h x)) (hh : HasStrictDerivAt h h' x) : HasStrictDerivAt (h₂ ∘ h) (h₂' * h')
+ x
+· 使用定理 `Real.hasStrictDerivAt_cosh`：hasStrictDerivAt_cosh (x : Real) : HasStrict
+DerivAt cosh (sinh x) x
 
-English:
-theorem HasStrictDerivAt.cosh
-  given: (hf : HasStrictDerivAt f f' x)
-  proof: (Real.hasStrictDerivAt_cosh (f x)).comp x hf
-
-中文:
-定理 HasStrictDerivAt.cosh
-  条件: (hf : HasStrictDerivAt f f' x)
-  证明: (Real.hasStrictDerivAt_cosh (f x)).comp x hf
-
-Depends on / 依赖: Real.hasStrictDerivAt_cosh, hasStrictDerivAt_cosh
+--- 原说明 ---
+#### `Real.cosh`
 -/
 theorem HasStrictDerivAt.cosh (hf : HasStrictDerivAt f f' x) :
     HasStrictDerivAt (fun x => Real.cosh (f x)) (Real.sinh (f x) * f') x :=
   (Real.hasStrictDerivAt_cosh (f x)).comp x hf
-
-/--
-theorem `HasDerivAt.cosh` / 定理 `HasDerivAt.cosh`
-
-English:
-theorem HasDerivAt.cosh
-  given: (hf : HasDerivAt f f' x)
-  proof: (Real.hasDerivAt_cosh (f x)).comp x hf
-
-中文:
-定理 在点处可导.cosh
-  条件: (hf : 在点处可导 f f' x)
-  证明: (Real.hasDerivAt_cosh (f x)).comp x hf
-
-Depends on / 依赖: Real.hasDerivAt_cosh, hasDerivAt_cosh
+/-
+**HasDerivAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivAt.cosh (hf : HasDerivAt f f' x) : HasDerivAt (fun x => Real.cosh 
+(f x)) (Real.sinh (f x) * f') x
+参数：hf : HasDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasDerivAt.comp`：HasDerivAt.comp (hh₂ : HasDerivAt h₂ h₂' (h x)) (hh : H
+asDerivAt h h' x) : HasDerivAt (h₂ ∘ h) (h₂' * h') x
+· 使用定理 `Real.hasDerivAt_cosh`：hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh
+ x) x
 -/
 theorem HasDerivAt.cosh (hf : HasDerivAt f f' x) :
     HasDerivAt (fun x => Real.cosh (f x)) (Real.sinh (f x) * f') x :=
   (Real.hasDerivAt_cosh (f x)).comp x hf
-
-/--
-theorem `HasDerivWithinAt.cosh` / 定理 `HasDerivWithinAt.cosh`
-
-English:
-theorem HasDerivWithinAt.cosh
-  given: (hf : HasDerivWithinAt f f' s x)
-  proof: (Real.hasDerivAt_cosh (f x)).comp_hasDerivWithinAt x hf
-
-中文:
-定理 HasDerivWithinAt.cosh
-  条件: (hf : HasDerivWithinAt f f' s x)
-  证明: (Real.hasDerivAt_cosh (f x)).comp_hasDerivWithinAt x hf
-
-Depends on / 依赖: Real.hasDerivAt_cosh, comp_hasDerivWithinAt, hasDerivAt_cosh
+/-
+**HasDerivWithinAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivWithinAt.cosh (hf : HasDerivWithinAt f f' s x) : HasDerivWithinAt 
+(fun x => Real.cosh (f x)) (Real.sinh (f x) * f') s x
+参数：hf : HasDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasDerivAt.comp_hasDerivWithinAt`：HasDerivAt.comp_hasDerivWithinAt (hh₂ 
+: HasDerivAt h₂ h₂' (h x)) (hh : HasDerivWithinAt h h' s x) : HasDerivWithinAt (
+h₂ ∘ h) (h₂' * h') s x
+· 使用定理 `Real.hasDerivAt_cosh`：hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh
+ x) x
 -/
 theorem HasDerivWithinAt.cosh (hf : HasDerivWithinAt f f' s x) :
     HasDerivWithinAt (fun x => Real.cosh (f x)) (Real.sinh (f x) * f') s x :=
   (Real.hasDerivAt_cosh (f x)).comp_hasDerivWithinAt x hf
-
-/--
-theorem `derivWithin_cosh` / 定理 `derivWithin_cosh`
-
-English:
-theorem derivWithin_cosh
-  given: (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x)
-  proof: hf.hasDerivWithinAt.cosh.derivWithin hxs
-
-@[simp]
-
-中文:
-定理 derivWithin_cosh
-  条件: (hf : DifferentiableWithinAt 实数 f s x) (hxs : UniqueDiffWithinAt 实数 s x)
-  证明: hf.hasDerivWithinAt.cosh.derivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: derivWithin, hasDerivWithinAt, hf.hasDerivWithinAt.cosh.derivWithin
+/-
+**derivWithin_cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：derivWithin_cosh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDif
+fWithinAt Real s x) : derivWithin (fun x => Real.cosh (f x)) s x = Real.sinh (f 
+x) * derivWithin f s x
+参数：hf : DifferentiableWithinAt Real f s x；hxs : UniqueDiffWithinAt Real s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivWithinAt.derivWithin`：HasDerivWithinAt.derivWithin (h : HasDeriv
+WithinAt f f' s x) (hxs : UniqueDiffWithinAt 𝕜 s x) : derivWithin f s x = f'
+· 使用定理 `HasDerivWithinAt.cosh`：HasDerivWithinAt.cosh (hf : HasDerivWithinAt f f'
+ s x) : HasDerivWithinAt (fun x => Real.cosh (f x)) (Real.sinh (f x) * f') s x
+· 使用定理 `DifferentiableWithinAt.hasDerivWithinAt`：DifferentiableWithinAt.hasDeriv
+WithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasDerivWithinAt f (derivWithin 
+f s x) s x
 -/
-theorem derivWithin_cosh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x) :
+theorem derivWithin_cosh (hf : DifferentiableWithinAt ℝ f s x) (hxs : UniqueDiffWithinAt ℝ s x) :
     derivWithin (fun x => Real.cosh (f x)) s x = Real.sinh (f x) * derivWithin f s x :=
   hf.hasDerivWithinAt.cosh.derivWithin hxs
 
 @[simp]
-/--
-theorem `deriv_cosh` / 定理 `deriv_cosh`
-
-English:
-theorem deriv_cosh
-  given: (hc : DifferentiableAt Real f x)
-  proof: hc.hasDerivAt.cosh.deriv
-
-中文:
-定理 deriv_cosh
-  条件: (hc : DifferentiableAt 实数 f x)
-  证明: hc.hasDerivAt.cosh.deriv
-
-Depends on / 依赖: hasDerivAt, hc.hasDerivAt.cosh.deriv
+/-
+**deriv_cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_cosh (hc : DifferentiableAt Real f x) : deriv (fun x => Real.cosh (f
+ x)) x = Real.sinh (f x) * deriv f x
+参数：hc : DifferentiableAt Real f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `HasDerivAt.cosh`：HasDerivAt.cosh (hf : HasDerivAt f f' x) : HasDerivAt (
+fun x => Real.cosh (f x)) (Real.sinh (f x) * f') x
+· 使用定理 `DifferentiableAt.hasDerivAt`：DifferentiableAt.hasDerivAt (h : Differenti
+ableAt 𝕜 f x) : HasDerivAt f (deriv f x) x
 -/
-theorem deriv_cosh (hc : DifferentiableAt Real f x) :
+theorem deriv_cosh (hc : DifferentiableAt ℝ f x) :
     deriv (fun x => Real.cosh (f x)) x = Real.sinh (f x) * deriv f x :=
   hc.hasDerivAt.cosh.deriv
 
+/-! #### `Real.sinh` -/
 
-/--
-theorem `HasStrictDerivAt.sinh` / 定理 `HasStrictDerivAt.sinh`
+/-
+**HasStrictDerivAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictDerivAt.sinh (hf : HasStrictDerivAt f f' x) : HasStrictDerivAt (f
+un x => Real.sinh (f x)) (Real.cosh (f x) * f') x
+参数：hf : HasStrictDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasStrictDerivAt.comp`：HasStrictDerivAt.comp (hh₂ : HasStrictDerivAt h₂ 
+h₂' (h x)) (hh : HasStrictDerivAt h h' x) : HasStrictDerivAt (h₂ ∘ h) (h₂' * h')
+ x
+· 使用定理 `Real.hasStrictDerivAt_sinh`：hasStrictDerivAt_sinh (x : Real) : HasStrict
+DerivAt sinh (cosh x) x
 
-English:
-theorem HasStrictDerivAt.sinh
-  given: (hf : HasStrictDerivAt f f' x)
-  proof: (Real.hasStrictDerivAt_sinh (f x)).comp x hf
-
-中文:
-定理 HasStrictDerivAt.sinh
-  条件: (hf : HasStrictDerivAt f f' x)
-  证明: (Real.hasStrictDerivAt_sinh (f x)).comp x hf
-
-Depends on / 依赖: Real.hasStrictDerivAt_sinh, hasStrictDerivAt_sinh
+--- 原说明 ---
+#### `Real.sinh`
 -/
 theorem HasStrictDerivAt.sinh (hf : HasStrictDerivAt f f' x) :
     HasStrictDerivAt (fun x => Real.sinh (f x)) (Real.cosh (f x) * f') x :=
   (Real.hasStrictDerivAt_sinh (f x)).comp x hf
-
-/--
-theorem `HasDerivAt.sinh` / 定理 `HasDerivAt.sinh`
-
-English:
-theorem HasDerivAt.sinh
-  given: (hf : HasDerivAt f f' x)
-  proof: (Real.hasDerivAt_sinh (f x)).comp x hf
-
-中文:
-定理 在点处可导.sinh
-  条件: (hf : 在点处可导 f f' x)
-  证明: (Real.hasDerivAt_sinh (f x)).comp x hf
-
-Depends on / 依赖: Real.hasDerivAt_sinh, hasDerivAt_sinh
+/-
+**HasDerivAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivAt.sinh (hf : HasDerivAt f f' x) : HasDerivAt (fun x => Real.sinh 
+(f x)) (Real.cosh (f x) * f') x
+参数：hf : HasDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasDerivAt.comp`：HasDerivAt.comp (hh₂ : HasDerivAt h₂ h₂' (h x)) (hh : H
+asDerivAt h h' x) : HasDerivAt (h₂ ∘ h) (h₂' * h') x
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
 -/
 theorem HasDerivAt.sinh (hf : HasDerivAt f f' x) :
     HasDerivAt (fun x => Real.sinh (f x)) (Real.cosh (f x) * f') x :=
   (Real.hasDerivAt_sinh (f x)).comp x hf
-
-/--
-theorem `HasDerivWithinAt.sinh` / 定理 `HasDerivWithinAt.sinh`
-
-English:
-theorem HasDerivWithinAt.sinh
-  given: (hf : HasDerivWithinAt f f' s x)
-  proof: (Real.hasDerivAt_sinh (f x)).comp_hasDerivWithinAt x hf
-
-中文:
-定理 HasDerivWithinAt.sinh
-  条件: (hf : HasDerivWithinAt f f' s x)
-  证明: (Real.hasDerivAt_sinh (f x)).comp_hasDerivWithinAt x hf
-
-Depends on / 依赖: Real.hasDerivAt_sinh, comp_hasDerivWithinAt, hasDerivAt_sinh
+/-
+**HasDerivWithinAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasDerivWithinAt.sinh (hf : HasDerivWithinAt f f' s x) : HasDerivWithinAt 
+(fun x => Real.sinh (f x)) (Real.cosh (f x) * f') s x
+参数：hf : HasDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasDerivAt.comp_hasDerivWithinAt`：HasDerivAt.comp_hasDerivWithinAt (hh₂ 
+: HasDerivAt h₂ h₂' (h x)) (hh : HasDerivWithinAt h h' s x) : HasDerivWithinAt (
+h₂ ∘ h) (h₂' * h') s x
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
 -/
 theorem HasDerivWithinAt.sinh (hf : HasDerivWithinAt f f' s x) :
     HasDerivWithinAt (fun x => Real.sinh (f x)) (Real.cosh (f x) * f') s x :=
   (Real.hasDerivAt_sinh (f x)).comp_hasDerivWithinAt x hf
-
-/--
-theorem `derivWithin_sinh` / 定理 `derivWithin_sinh`
-
-English:
-theorem derivWithin_sinh
-  given: (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x)
-  proof: hf.hasDerivWithinAt.sinh.derivWithin hxs
-
-@[simp]
-
-中文:
-定理 derivWithin_sinh
-  条件: (hf : DifferentiableWithinAt 实数 f s x) (hxs : UniqueDiffWithinAt 实数 s x)
-  证明: hf.hasDerivWithinAt.sinh.derivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: derivWithin, hasDerivWithinAt, hf.hasDerivWithinAt.sinh.derivWithin
+/-
+**derivWithin_sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：derivWithin_sinh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDif
+fWithinAt Real s x) : derivWithin (fun x => Real.sinh (f x)) s x = Real.cosh (f 
+x) * derivWithin f s x
+参数：hf : DifferentiableWithinAt Real f s x；hxs : UniqueDiffWithinAt Real s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivWithinAt.derivWithin`：HasDerivWithinAt.derivWithin (h : HasDeriv
+WithinAt f f' s x) (hxs : UniqueDiffWithinAt 𝕜 s x) : derivWithin f s x = f'
+· 使用定理 `HasDerivWithinAt.sinh`：HasDerivWithinAt.sinh (hf : HasDerivWithinAt f f'
+ s x) : HasDerivWithinAt (fun x => Real.sinh (f x)) (Real.cosh (f x) * f') s x
+· 使用定理 `DifferentiableWithinAt.hasDerivWithinAt`：DifferentiableWithinAt.hasDeriv
+WithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasDerivWithinAt f (derivWithin 
+f s x) s x
 -/
-theorem derivWithin_sinh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x) :
+theorem derivWithin_sinh (hf : DifferentiableWithinAt ℝ f s x) (hxs : UniqueDiffWithinAt ℝ s x) :
     derivWithin (fun x => Real.sinh (f x)) s x = Real.cosh (f x) * derivWithin f s x :=
   hf.hasDerivWithinAt.sinh.derivWithin hxs
 
 @[simp]
-/--
-theorem `deriv_sinh` / 定理 `deriv_sinh`
-
-English:
-theorem deriv_sinh
-  given: (hc : DifferentiableAt Real f x)
-  proof: hc.hasDerivAt.sinh.deriv
-
-中文:
-定理 deriv_sinh
-  条件: (hc : DifferentiableAt 实数 f x)
-  证明: hc.hasDerivAt.sinh.deriv
-
-Depends on / 依赖: hasDerivAt, hc.hasDerivAt.sinh.deriv
+/-
+**deriv_sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：deriv_sinh (hc : DifferentiableAt Real f x) : deriv (fun x => Real.sinh (f
+ x)) x = Real.cosh (f x) * deriv f x
+参数：hc : DifferentiableAt Real f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `HasDerivAt.sinh`：HasDerivAt.sinh (hf : HasDerivAt f f' x) : HasDerivAt (
+fun x => Real.sinh (f x)) (Real.cosh (f x) * f') x
+· 使用定理 `DifferentiableAt.hasDerivAt`：DifferentiableAt.hasDerivAt (h : Differenti
+ableAt 𝕜 f x) : HasDerivAt f (deriv f x) x
 -/
-theorem deriv_sinh (hc : DifferentiableAt Real f x) :
+theorem deriv_sinh (hc : DifferentiableAt ℝ f x) :
     deriv (fun x => Real.sinh (f x)) x = Real.cosh (f x) * deriv f x :=
   hc.hasDerivAt.sinh.deriv
 
@@ -2953,582 +2936,680 @@ section
 
 /-! ### Simp lemmas for derivatives of `fun x => Real.cos (f x)` etc., `f : E → ℝ` -/
 
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] {f : E -> Real} {f' : StrongDual Real E}
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] {f : E → ℝ} {f' : StrongDual ℝ E}
   {x : E} {s : Set E}
 
+/-! #### `Real.cosh` -/
 
-/--
-theorem `HasStrictFDerivAt.cosh` / 定理 `HasStrictFDerivAt.cosh`
+/-
+**HasStrictFDerivAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.cosh (hf : HasStrictFDerivAt f f' x) : HasStrictFDerivAt
+ (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') x
+参数：hf : HasStrictFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.comp_hasStrictFDerivAt`：HasStrictDerivAt.comp_hasStrict
+FDerivAt {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} (x) (hh : HasStrictDerivAt h₂ h₂' (f x
+)) (hf : HasStrictFDerivAt f …
+· 使用定理 `Real.hasStrictDerivAt_cosh`：hasStrictDerivAt_cosh (x : Real) : HasStrict
+DerivAt cosh (sinh x) x
 
-English:
-theorem HasStrictFDerivAt.cosh
-  given: (hf : HasStrictFDerivAt f f' x)
-  proof: (Real.hasStrictDerivAt_cosh (f x)).comp_hasStrictFDerivAt x hf
-
-中文:
-定理 HasStrictFDerivAt.cosh
-  条件: (hf : HasStrictFDerivAt f f' x)
-  证明: (Real.hasStrictDerivAt_cosh (f x)).comp_hasStrictFDerivAt x hf
-
-Depends on / 依赖: Real.hasStrictDerivAt_cosh, comp_hasStrictFDerivAt, hasStrictDerivAt_cosh
+--- 原说明 ---
+#### `Real.cosh`
 -/
 theorem HasStrictFDerivAt.cosh (hf : HasStrictFDerivAt f f' x) :
     HasStrictFDerivAt (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') x :=
   (Real.hasStrictDerivAt_cosh (f x)).comp_hasStrictFDerivAt x hf
-
-/--
-theorem `HasFDerivAt.cosh` / 定理 `HasFDerivAt.cosh`
-
-English:
-theorem HasFDerivAt.cosh
-  given: (hf : HasFDerivAt f f' x)
-  proof: (Real.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
-
-中文:
-定理 在点处Fréchet可导.cosh
-  条件: (hf : 在点处Fréchet可导 f f' x)
-  证明: (Real.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
-
-Depends on / 依赖: Real.hasDerivAt_cosh, comp_hasFDerivAt, hasDerivAt_cosh
+/-
+**HasFDerivAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.cosh (hf : HasFDerivAt f f' x) : HasFDerivAt (fun x => Real.co
+sh (f x)) (Real.sinh (f x) • f') x
+参数：hf : HasFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivAt`：HasDerivAt.comp_hasFDerivAt {f : E -> 𝕜'} {
+f' : E ->L[𝕜] 𝕜'} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFDerivAt f f' x) :
+ HasFDerivAt (h₂ …
+· 使用定理 `Real.hasDerivAt_cosh`：hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh
+ x) x
 -/
 theorem HasFDerivAt.cosh (hf : HasFDerivAt f f' x) :
     HasFDerivAt (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') x :=
   (Real.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
-
-/--
-theorem `HasFDerivWithinAt.cosh` / 定理 `HasFDerivWithinAt.cosh`
-
-English:
-theorem HasFDerivWithinAt.cosh
-  given: (hf : HasFDerivWithinAt f f' s x)
-  proof: (Real.hasDerivAt_cosh (f x)).comp_hasFDerivWithinAt x hf
-
-中文:
-定理 HasFDerivWithinAt.cosh
-  条件: (hf : HasFDerivWithinAt f f' s x)
-  证明: (Real.hasDerivAt_cosh (f x)).comp_hasFDerivWithinAt x hf
-
-Depends on / 依赖: Real.hasDerivAt_cosh, comp_hasFDerivWithinAt, hasDerivAt_cosh
+/-
+**HasFDerivWithinAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.cosh (hf : HasFDerivWithinAt f f' s x) : HasFDerivWithin
+At (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') s x
+参数：hf : HasFDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivWithinAt`：HasDerivAt.comp_hasFDerivWithinAt {f 
+: E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} {s} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFD
+erivWithinAt f f' s x) …
+· 使用定理 `Real.hasDerivAt_cosh`：hasDerivAt_cosh (x : Real) : HasDerivAt cosh (sinh
+ x) x
 -/
 theorem HasFDerivWithinAt.cosh (hf : HasFDerivWithinAt f f' s x) :
     HasFDerivWithinAt (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') s x :=
   (Real.hasDerivAt_cosh (f x)).comp_hasFDerivWithinAt x hf
-
-/--
-theorem `DifferentiableWithinAt.cosh` / 定理 `DifferentiableWithinAt.cosh`
-
-English:
-theorem DifferentiableWithinAt.cosh
-  given: (hf : DifferentiableWithinAt Real f s x)
-  proof: hf.hasFDerivWithinAt.cosh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-中文:
-定理 DifferentiableWithinAt.cosh
-  条件: (hf : DifferentiableWithinAt 实数 f s x)
-  证明: hf.hasFDerivWithinAt.cosh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-Depends on / 依赖: differentiableWithinAt, hasFDerivWithinAt, hf.hasFDerivWithinAt.cosh.differentiableWithinAt
+/-
+**DifferentiableWithinAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.cosh (hf : DifferentiableWithinAt Real f s x) : Dif
+ferentiableWithinAt Real (fun x => Real.cosh (f x)) s x
+参数：hf : DifferentiableWithinAt Real f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.differentiableWithinAt`：HasFDerivWithinAt.differentiab
+leWithinAt (h : HasFDerivWithinAt f f' s x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasFDerivWithinAt.cosh`：HasFDerivWithinAt.cosh (hf : HasFDerivWithinAt f
+ f' s x) : HasFDerivWithinAt (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') s
+ x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem DifferentiableWithinAt.cosh (hf : DifferentiableWithinAt Real f s x) :
-    DifferentiableWithinAt Real (fun x => Real.cosh (f x)) s x :=
+theorem DifferentiableWithinAt.cosh (hf : DifferentiableWithinAt ℝ f s x) :
+    DifferentiableWithinAt ℝ (fun x => Real.cosh (f x)) s x :=
   hf.hasFDerivWithinAt.cosh.differentiableWithinAt
 
 @[simp, fun_prop]
-/--
-theorem `DifferentiableAt.cosh` / 定理 `DifferentiableAt.cosh`
-
-English:
-theorem DifferentiableAt.cosh
-  given: (hc : DifferentiableAt Real f x)
-  proof: hc.hasFDerivAt.cosh.differentiableAt
-
-中文:
-定理 DifferentiableAt.cosh
-  条件: (hc : DifferentiableAt 实数 f x)
-  证明: hc.hasFDerivAt.cosh.differentiableAt
-
-Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.cosh.differentiableAt
+/-
+**DifferentiableAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.cosh (hc : DifferentiableAt Real f x) : DifferentiableAt 
+Real (fun x => Real.cosh (f x)) x
+参数：hc : DifferentiableAt Real f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.differentiableAt`：HasFDerivAt.differentiableAt (h : HasFDeri
+vAt f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasFDerivAt.cosh`：HasFDerivAt.cosh (hf : HasFDerivAt f f' x) : HasFDeriv
+At (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem DifferentiableAt.cosh (hc : DifferentiableAt Real f x) :
-    DifferentiableAt Real (fun x => Real.cosh (f x)) x :=
+theorem DifferentiableAt.cosh (hc : DifferentiableAt ℝ f x) :
+    DifferentiableAt ℝ (fun x => Real.cosh (f x)) x :=
   hc.hasFDerivAt.cosh.differentiableAt
-
-/--
-theorem `DifferentiableOn.cosh` / 定理 `DifferentiableOn.cosh`
-
-English:
-theorem DifferentiableOn.cosh
-  given: (hc : DifferentiableOn Real f s)
-  proof: fun x h => (hc x h).cosh
-
-@[simp, fun_prop]
-
-中文:
-定理 DifferentiableOn.cosh
-  条件: (hc : DifferentiableOn 实数 f s)
-  证明: fun x h => (hc x h).cosh
-
-@[simp, fun_prop]
+/-
+**DifferentiableOn.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.cosh (hc : DifferentiableOn Real f s) : DifferentiableOn 
+Real (fun x => Real.cosh (f x)) s
+参数：hc : DifferentiableOn Real f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.cosh`：DifferentiableWithinAt.cosh (hf : Different
+iableWithinAt Real f s x) : DifferentiableWithinAt Real (fun x => Real.cosh (f x
+)) s x
 -/
-theorem DifferentiableOn.cosh (hc : DifferentiableOn Real f s) :
-    DifferentiableOn Real (fun x => Real.cosh (f x)) s := fun x h => (hc x h).cosh
+theorem DifferentiableOn.cosh (hc : DifferentiableOn ℝ f s) :
+    DifferentiableOn ℝ (fun x => Real.cosh (f x)) s := fun x h => (hc x h).cosh
 
 @[simp, fun_prop]
-/--
-theorem `Differentiable.cosh` / 定理 `Differentiable.cosh`
-
-English:
-theorem Differentiable.cosh
-  given: (hc : Differentiable Real f)
-  statement: Differentiable Real fun x => Real.cosh (f x)
-  proof: fun x => (hc x).cosh
-
-中文:
-定理 可微.cosh
-  条件: (hc : 可微 实数 f)
-  结论: 可微 实数 fun x => 实数.cosh (f x)
-  证明: fun x => (hc x).cosh
+/-
+**Differentiable.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Differentiable.cosh (hc : Differentiable Real f) : Differentiable Real fun
+ x => Real.cosh (f x)
+参数：hc : Differentiable Real f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.cosh`：DifferentiableAt.cosh (hc : DifferentiableAt Real
+ f x) : DifferentiableAt Real (fun x => Real.cosh (f x)) x
 -/
-theorem Differentiable.cosh (hc : Differentiable Real f) : Differentiable Real fun x => Real.cosh (f x) :=
+theorem Differentiable.cosh (hc : Differentiable ℝ f) : Differentiable ℝ fun x => Real.cosh (f x) :=
   fun x => (hc x).cosh
-
-/--
-theorem `fderivWithin_cosh` / 定理 `fderivWithin_cosh`
-
-English:
-theorem fderivWithin_cosh
-  given: (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x)
-  proof: hf.hasFDerivWithinAt.cosh.fderivWithin hxs
-
-@[simp]
-
-中文:
-定理 fderivWithin_cosh
-  条件: (hf : DifferentiableWithinAt 实数 f s x) (hxs : UniqueDiffWithinAt 实数 s x)
-  证明: hf.hasFDerivWithinAt.cosh.fderivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: fderivWithin, hasFDerivWithinAt, hf.hasFDerivWithinAt.cosh.fderivWithin
+/-
+**fderivWithin_cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_cosh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDi
+ffWithinAt Real s x) : fderivWithin Real (fun x => Real.cosh (f x)) s x = Real.s
+inh (f x) • fderivWithin Real f s x
+参数：hf : DifferentiableWithinAt Real f s x；hxs : UniqueDiffWithinAt Real s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivWithinAt.cosh`：HasFDerivWithinAt.cosh (hf : HasFDerivWithinAt f
+ f' s x) : HasFDerivWithinAt (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') s
+ x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem fderivWithin_cosh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x) :
-    fderivWithin Real (fun x => Real.cosh (f x)) s x = Real.sinh (f x) • fderivWithin Real f s x :=
+theorem fderivWithin_cosh (hf : DifferentiableWithinAt ℝ f s x) (hxs : UniqueDiffWithinAt ℝ s x) :
+    fderivWithin ℝ (fun x => Real.cosh (f x)) s x = Real.sinh (f x) • fderivWithin ℝ f s x :=
   hf.hasFDerivWithinAt.cosh.fderivWithin hxs
 
 @[simp]
-/--
-theorem `fderiv_cosh` / 定理 `fderiv_cosh`
-
-English:
-theorem fderiv_cosh
-  given: (hc : DifferentiableAt Real f x)
-  proof: hc.hasFDerivAt.cosh.fderiv
-
-中文:
-定理 fderiv_cosh
-  条件: (hc : DifferentiableAt 实数 f x)
-  证明: hc.hasFDerivAt.cosh.fderiv
-
-Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.cosh.fderiv
+/-
+**fderiv_cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_cosh (hc : DifferentiableAt Real f x) : fderiv Real (fun x => Real.
+cosh (f x)) x = Real.sinh (f x) • fderiv Real f x
+参数：hc : DifferentiableAt Real f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivAt.cosh`：HasFDerivAt.cosh (hf : HasFDerivAt f f' x) : HasFDeriv
+At (fun x => Real.cosh (f x)) (Real.sinh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem fderiv_cosh (hc : DifferentiableAt Real f x) :
-    fderiv Real (fun x => Real.cosh (f x)) x = Real.sinh (f x) • fderiv Real f x :=
+theorem fderiv_cosh (hc : DifferentiableAt ℝ f x) :
+    fderiv ℝ (fun x => Real.cosh (f x)) x = Real.sinh (f x) • fderiv ℝ f x :=
   hc.hasFDerivAt.cosh.fderiv
-
-/--
-theorem `ContDiff.cosh` / 定理 `ContDiff.cosh`
-
-English:
-theorem ContDiff.cosh
-  given: {n} (h : ContDiff Real n f)
-  statement: ContDiff Real n fun x => Real.cosh (f x)
-  proof: Real.contDiff_cosh.comp h
-
-中文:
-定理 连续可微.cosh
-  条件: {n} (h : 连续可微 实数 n f)
-  结论: 连续可微 实数 n fun x => 实数.cosh (f x)
-  证明: Real.contDiff_cosh.comp h
-
-Depends on / 依赖: Real.contDiff_cosh.comp, contDiff_cosh
+/-
+**ContDiff.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiff.cosh {n} (h : ContDiff Real n f) : ContDiff Real n fun x => Real.
+cosh (f x)
+参数：h : ContDiff Real n f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp`：ContDiff.comp {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 
+n g) (hf : ContDiff 𝕜 n f) : ContDiff 𝕜 n (g ∘ f)
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 -/
-theorem ContDiff.cosh {n} (h : ContDiff Real n f) : ContDiff Real n fun x => Real.cosh (f x) :=
+theorem ContDiff.cosh {n} (h : ContDiff ℝ n f) : ContDiff ℝ n fun x => Real.cosh (f x) :=
   Real.contDiff_cosh.comp h
-
-/--
-theorem `ContDiffAt.cosh` / 定理 `ContDiffAt.cosh`
-
-English:
-theorem ContDiffAt.cosh
-  given: {n} (hf : ContDiffAt Real n f x)
-  proof: Real.contDiff_cosh.contDiffAt.comp x hf
-
-中文:
-定理 ContDiffAt.cosh
-  条件: {n} (hf : ContDiffAt 实数 n f x)
-  证明: Real.contDiff_cosh.contDiffAt.comp x hf
-
-Depends on / 依赖: Real.contDiff_cosh.contDiffAt.comp, contDiffAt, contDiff_cosh
+/-
+**ContDiffAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffAt.cosh {n} (hf : ContDiffAt Real n f x) : ContDiffAt Real n (fun 
+x => Real.cosh (f x)) x
+参数：hf : ContDiffAt Real n f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} {G : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 -/
-theorem ContDiffAt.cosh {n} (hf : ContDiffAt Real n f x) :
-    ContDiffAt Real n (fun x => Real.cosh (f x)) x :=
+theorem ContDiffAt.cosh {n} (hf : ContDiffAt ℝ n f x) :
+    ContDiffAt ℝ n (fun x => Real.cosh (f x)) x :=
   Real.contDiff_cosh.contDiffAt.comp x hf
-
-/--
-theorem `ContDiffOn.cosh` / 定理 `ContDiffOn.cosh`
-
-English:
-theorem ContDiffOn.cosh
-  given: {n} (hf : ContDiffOn Real n f s)
-  proof: Real.contDiff_cosh.comp_contDiffOn hf
-
-中文:
-定理 ContDiffOn.cosh
-  条件: {n} (hf : ContDiffOn 实数 n f s)
-  证明: Real.contDiff_cosh.comp_contDiffOn hf
-
-Depends on / 依赖: Real.contDiff_cosh.comp_contDiffOn, comp_contDiffOn, contDiff_cosh
+/-
+**ContDiffOn.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffOn.cosh {n} (hf : ContDiffOn Real n f s) : ContDiffOn Real n (fun 
+x => Real.cosh (f x)) s
+参数：hf : ContDiffOn Real n f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp_contDiffOn`：ContDiff.comp_contDiffOn {s : Set E} {g : F ->
+ G} {f : E -> F} (hg : ContDiff 𝕜 n g) (hf : ContDiffOn 𝕜 n f s) : ContDiffOn 𝕜 
+n (g ∘ f) s
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 -/
-theorem ContDiffOn.cosh {n} (hf : ContDiffOn Real n f s) :
-    ContDiffOn Real n (fun x => Real.cosh (f x)) s :=
+theorem ContDiffOn.cosh {n} (hf : ContDiffOn ℝ n f s) :
+    ContDiffOn ℝ n (fun x => Real.cosh (f x)) s :=
   Real.contDiff_cosh.comp_contDiffOn hf
-
-/--
-theorem `ContDiffWithinAt.cosh` / 定理 `ContDiffWithinAt.cosh`
-
-English:
-theorem ContDiffWithinAt.cosh
-  given: {n} (hf : ContDiffWithinAt Real n f s x)
-  proof: Real.contDiff_cosh.contDiffAt.comp_contDiffWithinAt x hf
-
-中文:
-定理 ContDiffWithinAt.cosh
-  条件: {n} (hf : ContDiffWithinAt 实数 n f s x)
-  证明: Real.contDiff_cosh.contDiffAt.comp_contDiffWithinAt x hf
-
-Depends on / 依赖: Real.contDiff_cosh.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_cosh
+/-
+**ContDiffWithinAt.cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffWithinAt.cosh {n} (hf : ContDiffWithinAt Real n f s x) : ContDiffW
+ithinAt Real n (fun x => Real.cosh (f x)) s x
+参数：hf : ContDiffWithinAt Real n f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp_contDiffWithinAt`：ContDiffAt.comp_contDiffWithinAt (x : 
+E) (hg : ContDiffAt 𝕜 n g (f x)) (hf : ContDiffWithinAt 𝕜 n f s x) : ContDiffWit
+hinAt 𝕜 n (g ∘ f) s x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_cosh`：contDiff_cosh {n} : ContDiff Real n cosh
 -/
-theorem ContDiffWithinAt.cosh {n} (hf : ContDiffWithinAt Real n f s x) :
-    ContDiffWithinAt Real n (fun x => Real.cosh (f x)) s x :=
+theorem ContDiffWithinAt.cosh {n} (hf : ContDiffWithinAt ℝ n f s x) :
+    ContDiffWithinAt ℝ n (fun x => Real.cosh (f x)) s x :=
   Real.contDiff_cosh.contDiffAt.comp_contDiffWithinAt x hf
 
+/-! #### `Real.sinh` -/
 
-/--
-theorem `HasStrictFDerivAt.sinh` / 定理 `HasStrictFDerivAt.sinh`
+/-
+**HasStrictFDerivAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasStrictFDerivAt.sinh (hf : HasStrictFDerivAt f f' x) : HasStrictFDerivAt
+ (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') x
+参数：hf : HasStrictFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictDerivAt.comp_hasStrictFDerivAt`：HasStrictDerivAt.comp_hasStrict
+FDerivAt {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} (x) (hh : HasStrictDerivAt h₂ h₂' (f x
+)) (hf : HasStrictFDerivAt f …
+· 使用定理 `Real.hasStrictDerivAt_sinh`：hasStrictDerivAt_sinh (x : Real) : HasStrict
+DerivAt sinh (cosh x) x
 
-English:
-theorem HasStrictFDerivAt.sinh
-  given: (hf : HasStrictFDerivAt f f' x)
-  proof: (Real.hasStrictDerivAt_sinh (f x)).comp_hasStrictFDerivAt x hf
-
-中文:
-定理 HasStrictFDerivAt.sinh
-  条件: (hf : HasStrictFDerivAt f f' x)
-  证明: (Real.hasStrictDerivAt_sinh (f x)).comp_hasStrictFDerivAt x hf
-
-Depends on / 依赖: Real.hasStrictDerivAt_sinh, comp_hasStrictFDerivAt, hasStrictDerivAt_sinh
+--- 原说明 ---
+#### `Real.sinh`
 -/
 theorem HasStrictFDerivAt.sinh (hf : HasStrictFDerivAt f f' x) :
     HasStrictFDerivAt (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') x :=
   (Real.hasStrictDerivAt_sinh (f x)).comp_hasStrictFDerivAt x hf
-
-/--
-theorem `HasFDerivAt.sinh` / 定理 `HasFDerivAt.sinh`
-
-English:
-theorem HasFDerivAt.sinh
-  given: (hf : HasFDerivAt f f' x)
-  proof: (Real.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
-
-中文:
-定理 在点处Fréchet可导.sinh
-  条件: (hf : 在点处Fréchet可导 f f' x)
-  证明: (Real.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
-
-Depends on / 依赖: Real.hasDerivAt_sinh, comp_hasFDerivAt, hasDerivAt_sinh
+/-
+**HasFDerivAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivAt.sinh (hf : HasFDerivAt f f' x) : HasFDerivAt (fun x => Real.si
+nh (f x)) (Real.cosh (f x) • f') x
+参数：hf : HasFDerivAt f f' x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivAt`：HasDerivAt.comp_hasFDerivAt {f : E -> 𝕜'} {
+f' : E ->L[𝕜] 𝕜'} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFDerivAt f f' x) :
+ HasFDerivAt (h₂ …
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
 -/
 theorem HasFDerivAt.sinh (hf : HasFDerivAt f f' x) :
     HasFDerivAt (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') x :=
   (Real.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
-
-/--
-theorem `HasFDerivWithinAt.sinh` / 定理 `HasFDerivWithinAt.sinh`
-
-English:
-theorem HasFDerivWithinAt.sinh
-  given: (hf : HasFDerivWithinAt f f' s x)
-  proof: (Real.hasDerivAt_sinh (f x)).comp_hasFDerivWithinAt x hf
-
-中文:
-定理 HasFDerivWithinAt.sinh
-  条件: (hf : HasFDerivWithinAt f f' s x)
-  证明: (Real.hasDerivAt_sinh (f x)).comp_hasFDerivWithinAt x hf
-
-Depends on / 依赖: Real.hasDerivAt_sinh, comp_hasFDerivWithinAt, hasDerivAt_sinh
+/-
+**HasFDerivWithinAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFDerivWithinAt.sinh (hf : HasFDerivWithinAt f f' s x) : HasFDerivWithin
+At (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') s x
+参数：hf : HasFDerivWithinAt f f' s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDerivAt.comp_hasFDerivWithinAt`：HasDerivAt.comp_hasFDerivWithinAt {f 
+: E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} {s} (x) (hh : HasDerivAt h₂ h₂' (f x)) (hf : HasFD
+erivWithinAt f f' s x) …
+· 使用定理 `Real.hasDerivAt_sinh`：hasDerivAt_sinh (x : Real) : HasDerivAt sinh (cosh
+ x) x
 -/
 theorem HasFDerivWithinAt.sinh (hf : HasFDerivWithinAt f f' s x) :
     HasFDerivWithinAt (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') s x :=
   (Real.hasDerivAt_sinh (f x)).comp_hasFDerivWithinAt x hf
-
-/--
-theorem `DifferentiableWithinAt.sinh` / 定理 `DifferentiableWithinAt.sinh`
-
-English:
-theorem DifferentiableWithinAt.sinh
-  given: (hf : DifferentiableWithinAt Real f s x)
-  proof: hf.hasFDerivWithinAt.sinh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-中文:
-定理 DifferentiableWithinAt.sinh
-  条件: (hf : DifferentiableWithinAt 实数 f s x)
-  证明: hf.hasFDerivWithinAt.sinh.differentiableWithinAt
-
-@[simp, fun_prop]
-
-Depends on / 依赖: differentiableWithinAt, hasFDerivWithinAt, hf.hasFDerivWithinAt.sinh.differentiableWithinAt
+/-
+**DifferentiableWithinAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.sinh (hf : DifferentiableWithinAt Real f s x) : Dif
+ferentiableWithinAt Real (fun x => Real.sinh (f x)) s x
+参数：hf : DifferentiableWithinAt Real f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.differentiableWithinAt`：HasFDerivWithinAt.differentiab
+leWithinAt (h : HasFDerivWithinAt f f' s x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasFDerivWithinAt.sinh`：HasFDerivWithinAt.sinh (hf : HasFDerivWithinAt f
+ f' s x) : HasFDerivWithinAt (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') s
+ x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem DifferentiableWithinAt.sinh (hf : DifferentiableWithinAt Real f s x) :
-    DifferentiableWithinAt Real (fun x => Real.sinh (f x)) s x :=
+theorem DifferentiableWithinAt.sinh (hf : DifferentiableWithinAt ℝ f s x) :
+    DifferentiableWithinAt ℝ (fun x => Real.sinh (f x)) s x :=
   hf.hasFDerivWithinAt.sinh.differentiableWithinAt
 
 @[simp, fun_prop]
-/--
-theorem `DifferentiableAt.sinh` / 定理 `DifferentiableAt.sinh`
-
-English:
-theorem DifferentiableAt.sinh
-  given: (hc : DifferentiableAt Real f x)
-  proof: hc.hasFDerivAt.sinh.differentiableAt
-
-中文:
-定理 DifferentiableAt.sinh
-  条件: (hc : DifferentiableAt 实数 f x)
-  证明: hc.hasFDerivAt.sinh.differentiableAt
-
-Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.sinh.differentiableAt
+/-
+**DifferentiableAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.sinh (hc : DifferentiableAt Real f x) : DifferentiableAt 
+Real (fun x => Real.sinh (f x)) x
+参数：hc : DifferentiableAt Real f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.differentiableAt`：HasFDerivAt.differentiableAt (h : HasFDeri
+vAt f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `HasFDerivAt.sinh`：HasFDerivAt.sinh (hf : HasFDerivAt f f' x) : HasFDeriv
+At (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem DifferentiableAt.sinh (hc : DifferentiableAt Real f x) :
-    DifferentiableAt Real (fun x => Real.sinh (f x)) x :=
+theorem DifferentiableAt.sinh (hc : DifferentiableAt ℝ f x) :
+    DifferentiableAt ℝ (fun x => Real.sinh (f x)) x :=
   hc.hasFDerivAt.sinh.differentiableAt
-
-/--
-theorem `DifferentiableOn.sinh` / 定理 `DifferentiableOn.sinh`
-
-English:
-theorem DifferentiableOn.sinh
-  given: (hc : DifferentiableOn Real f s)
-  proof: fun x h => (hc x h).sinh
-
-@[simp, fun_prop]
-
-中文:
-定理 DifferentiableOn.sinh
-  条件: (hc : DifferentiableOn 实数 f s)
-  证明: fun x h => (hc x h).sinh
-
-@[simp, fun_prop]
+/-
+**DifferentiableOn.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.sinh (hc : DifferentiableOn Real f s) : DifferentiableOn 
+Real (fun x => Real.sinh (f x)) s
+参数：hc : DifferentiableOn Real f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.sinh`：DifferentiableWithinAt.sinh (hf : Different
+iableWithinAt Real f s x) : DifferentiableWithinAt Real (fun x => Real.sinh (f x
+)) s x
 -/
-theorem DifferentiableOn.sinh (hc : DifferentiableOn Real f s) :
-    DifferentiableOn Real (fun x => Real.sinh (f x)) s := fun x h => (hc x h).sinh
+theorem DifferentiableOn.sinh (hc : DifferentiableOn ℝ f s) :
+    DifferentiableOn ℝ (fun x => Real.sinh (f x)) s := fun x h => (hc x h).sinh
 
 @[simp, fun_prop]
-/--
-theorem `Differentiable.sinh` / 定理 `Differentiable.sinh`
-
-English:
-theorem Differentiable.sinh
-  given: (hc : Differentiable Real f)
-  statement: Differentiable Real fun x => Real.sinh (f x)
-  proof: fun x => (hc x).sinh
-
-中文:
-定理 可微.sinh
-  条件: (hc : 可微 实数 f)
-  结论: 可微 实数 fun x => 实数.sinh (f x)
-  证明: fun x => (hc x).sinh
+/-
+**Differentiable.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Differentiable.sinh (hc : Differentiable Real f) : Differentiable Real fun
+ x => Real.sinh (f x)
+参数：hc : Differentiable Real f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableAt.sinh`：DifferentiableAt.sinh (hc : DifferentiableAt Real
+ f x) : DifferentiableAt Real (fun x => Real.sinh (f x)) x
 -/
-theorem Differentiable.sinh (hc : Differentiable Real f) : Differentiable Real fun x => Real.sinh (f x) :=
+theorem Differentiable.sinh (hc : Differentiable ℝ f) : Differentiable ℝ fun x => Real.sinh (f x) :=
   fun x => (hc x).sinh
-
-/--
-theorem `fderivWithin_sinh` / 定理 `fderivWithin_sinh`
-
-English:
-theorem fderivWithin_sinh
-  given: (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x)
-  proof: hf.hasFDerivWithinAt.sinh.fderivWithin hxs
-
-@[simp]
-
-中文:
-定理 fderivWithin_sinh
-  条件: (hf : DifferentiableWithinAt 实数 f s x) (hxs : UniqueDiffWithinAt 实数 s x)
-  证明: hf.hasFDerivWithinAt.sinh.fderivWithin hxs
-
-@[simp]
-
-Depends on / 依赖: fderivWithin, hasFDerivWithinAt, hf.hasFDerivWithinAt.sinh.fderivWithin
+/-
+**fderivWithin_sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_sinh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDi
+ffWithinAt Real s x) : fderivWithin Real (fun x => Real.sinh (f x)) s x = Real.c
+osh (f x) • fderivWithin Real f s x
+参数：hf : DifferentiableWithinAt Real f s x；hxs : UniqueDiffWithinAt Real s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivWithinAt.sinh`：HasFDerivWithinAt.sinh (hf : HasFDerivWithinAt f
+ f' s x) : HasFDerivWithinAt (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') s
+ x
+· 使用定理 `DifferentiableWithinAt.hasFDerivWithinAt`：DifferentiableWithinAt.hasFDer
+ivWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : HasFDerivWithinAt f (fderivWit
+hin 𝕜 f s x) s x
 -/
-theorem fderivWithin_sinh (hf : DifferentiableWithinAt Real f s x) (hxs : UniqueDiffWithinAt Real s x) :
-    fderivWithin Real (fun x => Real.sinh (f x)) s x = Real.cosh (f x) • fderivWithin Real f s x :=
+theorem fderivWithin_sinh (hf : DifferentiableWithinAt ℝ f s x) (hxs : UniqueDiffWithinAt ℝ s x) :
+    fderivWithin ℝ (fun x => Real.sinh (f x)) s x = Real.cosh (f x) • fderivWithin ℝ f s x :=
   hf.hasFDerivWithinAt.sinh.fderivWithin hxs
 
 @[simp]
-/--
-theorem `fderiv_sinh` / 定理 `fderiv_sinh`
-
-English:
-theorem fderiv_sinh
-  given: (hc : DifferentiableAt Real f x)
-  proof: hc.hasFDerivAt.sinh.fderiv
-
-中文:
-定理 fderiv_sinh
-  条件: (hc : DifferentiableAt 实数 f x)
-  证明: hc.hasFDerivAt.sinh.fderiv
-
-Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.sinh.fderiv
+/-
+**fderiv_sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_sinh (hc : DifferentiableAt Real f x) : fderiv Real (fun x => Real.
+sinh (f x)) x = Real.cosh (f x) • fderiv Real f x
+参数：hc : DifferentiableAt Real f x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFDerivAt.sinh`：HasFDerivAt.sinh (hf : HasFDerivAt f f' x) : HasFDeriv
+At (fun x => Real.sinh (f x)) (Real.cosh (f x) • f') x
+· 使用定理 `DifferentiableAt.hasFDerivAt`：DifferentiableAt.hasFDerivAt (h : Differen
+tiableAt 𝕜 f x) : HasFDerivAt f (fderiv 𝕜 f x) x
 -/
-theorem fderiv_sinh (hc : DifferentiableAt Real f x) :
-    fderiv Real (fun x => Real.sinh (f x)) x = Real.cosh (f x) • fderiv Real f x :=
+theorem fderiv_sinh (hc : DifferentiableAt ℝ f x) :
+    fderiv ℝ (fun x => Real.sinh (f x)) x = Real.cosh (f x) • fderiv ℝ f x :=
   hc.hasFDerivAt.sinh.fderiv
-
-/--
-theorem `ContDiff.sinh` / 定理 `ContDiff.sinh`
-
-English:
-theorem ContDiff.sinh
-  given: {n} (h : ContDiff Real n f)
-  statement: ContDiff Real n fun x => Real.sinh (f x)
-  proof: Real.contDiff_sinh.comp h
-
-中文:
-定理 连续可微.sinh
-  条件: {n} (h : 连续可微 实数 n f)
-  结论: 连续可微 实数 n fun x => 实数.sinh (f x)
-  证明: Real.contDiff_sinh.comp h
-
-Depends on / 依赖: Real.contDiff_sinh.comp, contDiff_sinh
+/-
+**ContDiff.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiff.sinh {n} (h : ContDiff Real n f) : ContDiff Real n fun x => Real.
+sinh (f x)
+参数：h : ContDiff Real n f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp`：ContDiff.comp {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 
+n g) (hf : ContDiff 𝕜 n f) : ContDiff 𝕜 n (g ∘ f)
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 -/
-theorem ContDiff.sinh {n} (h : ContDiff Real n f) : ContDiff Real n fun x => Real.sinh (f x) :=
+theorem ContDiff.sinh {n} (h : ContDiff ℝ n f) : ContDiff ℝ n fun x => Real.sinh (f x) :=
   Real.contDiff_sinh.comp h
-
-/--
-theorem `ContDiffAt.sinh` / 定理 `ContDiffAt.sinh`
-
-English:
-theorem ContDiffAt.sinh
-  given: {n} (hf : ContDiffAt Real n f x)
-  proof: Real.contDiff_sinh.contDiffAt.comp x hf
-
-中文:
-定理 ContDiffAt.sinh
-  条件: {n} (hf : ContDiffAt 实数 n f x)
-  证明: Real.contDiff_sinh.contDiffAt.comp x hf
-
-Depends on / 依赖: Real.contDiff_sinh.contDiffAt.comp, contDiffAt, contDiff_sinh
+/-
+**ContDiffAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffAt.sinh {n} (hf : ContDiffAt Real n f x) : ContDiffAt Real n (fun 
+x => Real.sinh (f x)) x
+参数：hf : ContDiffAt Real n f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp`：∀ {𝕜 : Type u_1} {E : Type u_2} {F : Type u_3} {G : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜]   [inst_1 : NormedAddCommGroup E] [ins
+t_2 :…
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 -/
-theorem ContDiffAt.sinh {n} (hf : ContDiffAt Real n f x) :
-    ContDiffAt Real n (fun x => Real.sinh (f x)) x :=
+theorem ContDiffAt.sinh {n} (hf : ContDiffAt ℝ n f x) :
+    ContDiffAt ℝ n (fun x => Real.sinh (f x)) x :=
   Real.contDiff_sinh.contDiffAt.comp x hf
-
-/--
-theorem `ContDiffOn.sinh` / 定理 `ContDiffOn.sinh`
-
-English:
-theorem ContDiffOn.sinh
-  given: {n} (hf : ContDiffOn Real n f s)
-  proof: Real.contDiff_sinh.comp_contDiffOn hf
-
-中文:
-定理 ContDiffOn.sinh
-  条件: {n} (hf : ContDiffOn 实数 n f s)
-  证明: Real.contDiff_sinh.comp_contDiffOn hf
-
-Depends on / 依赖: Real.contDiff_sinh.comp_contDiffOn, comp_contDiffOn, contDiff_sinh
+/-
+**ContDiffOn.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffOn.sinh {n} (hf : ContDiffOn Real n f s) : ContDiffOn Real n (fun 
+x => Real.sinh (f x)) s
+参数：hf : ContDiffOn Real n f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiff.comp_contDiffOn`：ContDiff.comp_contDiffOn {s : Set E} {g : F ->
+ G} {f : E -> F} (hg : ContDiff 𝕜 n g) (hf : ContDiffOn 𝕜 n f s) : ContDiffOn 𝕜 
+n (g ∘ f) s
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 -/
-theorem ContDiffOn.sinh {n} (hf : ContDiffOn Real n f s) :
-    ContDiffOn Real n (fun x => Real.sinh (f x)) s :=
+theorem ContDiffOn.sinh {n} (hf : ContDiffOn ℝ n f s) :
+    ContDiffOn ℝ n (fun x => Real.sinh (f x)) s :=
   Real.contDiff_sinh.comp_contDiffOn hf
-
-/--
-theorem `ContDiffWithinAt.sinh` / 定理 `ContDiffWithinAt.sinh`
-
-English:
-theorem ContDiffWithinAt.sinh
-  given: {n} (hf : ContDiffWithinAt Real n f s x)
-  proof: Real.contDiff_sinh.contDiffAt.comp_contDiffWithinAt x hf
-
-中文:
-定理 ContDiffWithinAt.sinh
-  条件: {n} (hf : ContDiffWithinAt 实数 n f s x)
-  证明: Real.contDiff_sinh.contDiffAt.comp_contDiffWithinAt x hf
-
-Depends on / 依赖: Real.contDiff_sinh.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_sinh
+/-
+**ContDiffWithinAt.sinh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContDiffWithinAt.sinh {n} (hf : ContDiffWithinAt Real n f s x) : ContDiffW
+ithinAt Real n (fun x => Real.sinh (f x)) s x
+参数：hf : ContDiffWithinAt Real n f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContDiffAt.comp_contDiffWithinAt`：ContDiffAt.comp_contDiffWithinAt (x : 
+E) (hg : ContDiffAt 𝕜 n g (f x)) (hf : ContDiffWithinAt 𝕜 n f s x) : ContDiffWit
+hinAt 𝕜 n (g ∘ f) s x
+· 使用定理 `ContDiff.contDiffAt`：ContDiff.contDiffAt (h : ContDiff 𝕜 n f) : ContDiff
+At 𝕜 n f x
+· 使用定理 `Real.contDiff_sinh`：contDiff_sinh {n} : ContDiff Real n sinh
 -/
-theorem ContDiffWithinAt.sinh {n} (hf : ContDiffWithinAt Real n f s x) :
-    ContDiffWithinAt Real n (fun x => Real.sinh (f x)) s x :=
+theorem ContDiffWithinAt.sinh {n} (hf : ContDiffWithinAt ℝ n f s x) :
+    ContDiffWithinAt ℝ n (fun x => Real.sinh (f x)) s x :=
   Real.contDiff_sinh.contDiffAt.comp_contDiffWithinAt x hf
 
 section LogDeriv
 
 @[simp]
-/--
-theorem `Complex.logDeriv_cosh` / 定理 `Complex.logDeriv_cosh`
-
-English:
-theorem Complex.logDeriv_cosh
-  statement: logDeriv (Complex.cosh) = Complex.tanh
-  proof: by
-  ext
-  rw [logDeriv]; rw [Complex.deriv_cosh]; rw [Pi.div_apply]; rw [Complex.tanh]
-
-@[simp]
-
-中文:
-定理 复形.logDeriv_cosh
-  结论: logDeriv (复形.cosh) = 复形.tanh
-  证明: by
-  ext
-  rw [logDeriv]; rw [Complex.deriv_cosh]; rw [Pi.div_apply]; rw [Complex.tanh]
-
-@[simp]
-
-Depends on / 依赖: Complex.deriv_cosh, Complex.tanh, Pi.div_apply, deriv_cosh, div_apply, logDeriv
+/-
+**Complex.logDeriv_cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Complex.logDeriv_cosh : logDeriv (Complex.cosh) = Complex.tanh
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `logDeriv.eq_1`：∀ {𝕜 : Type u_1} {𝕜' : Type u_2} [inst : NontriviallyNorm
+edField 𝕜] [inst_1 : NontriviallyNormedField 𝕜']   [inst_2 : NormedAlgebra 𝕜 𝕜']
+ (f…
+· 使用定理 `Complex.deriv_cosh`：deriv_cosh : deriv cosh = sinh
+· 使用引理 `Pi.div_apply`：div_apply (f g : forall i, G i) (i : ι) : (f / g) i = f i 
+/ g i
+· 使用定理 `Complex.tanh.eq_1`：∀ (z : ℂ), Complex.tanh z = Complex.sinh z / Complex.
+cosh z
 -/
 theorem Complex.logDeriv_cosh : logDeriv (Complex.cosh) = Complex.tanh := by
   ext
-  rw [logDeriv]; rw [Complex.deriv_cosh]; rw [Pi.div_apply]; rw [Complex.tanh]
+  rw [logDeriv, Complex.deriv_cosh, Pi.div_apply, Complex.tanh]
 
 @[simp]
-/--
-theorem `Real.logDeriv_cosh` / 定理 `Real.logDeriv_cosh`
-
-English:
-theorem Real.logDeriv_cosh
-  statement: logDeriv (Real.cosh) = Real.tanh
-  proof: by
-  ext
-  rw [logDeriv]; rw [Real.deriv_cosh]; rw [Pi.div_apply]; rw [Real.tanh_eq_sinh_div_cosh]
-
-中文:
-定理 实数.logDeriv_cosh
-  结论: logDeriv (实数.cosh) = 实数.tanh
-  证明: by
-  ext
-  rw [logDeriv]; rw [Real.deriv_cosh]; rw [Pi.div_apply]; rw [Real.tanh_eq_sinh_div_cosh]
-
-Depends on / 依赖: Pi.div_apply, Real.deriv_cosh, Real.tanh_eq_sinh_div_cosh, deriv_cosh, div_apply, logDeriv, tanh_eq_sinh_div_cosh
+/-
+**Real.logDeriv_cosh** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Real.logDeriv_cosh : logDeriv (Real.cosh) = Real.tanh
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `logDeriv.eq_1`：∀ {𝕜 : Type u_1} {𝕜' : Type u_2} [inst : NontriviallyNorm
+edField 𝕜] [inst_1 : NontriviallyNormedField 𝕜']   [inst_2 : NormedAlgebra 𝕜 𝕜']
+ (f…
+· 使用定理 `Real.deriv_cosh`：deriv_cosh : deriv cosh = sinh
+· 使用引理 `Pi.div_apply`：div_apply (f g : forall i, G i) (i : ι) : (f / g) i = f i 
+/ g i
+· 使用定理 `Real.tanh_eq_sinh_div_cosh`：∀ (x : ℝ), Real.tanh x = Real.sinh x / Real.
+cosh x
 -/
 theorem Real.logDeriv_cosh : logDeriv (Real.cosh) = Real.tanh := by
   ext
-  rw [logDeriv]; rw [Real.deriv_cosh]; rw [Pi.div_apply]; rw [Real.tanh_eq_sinh_div_cosh]
+  rw [logDeriv, Real.deriv_cosh, Pi.div_apply, Real.tanh_eq_sinh_div_cosh]
 
 end LogDeriv
 
@@ -3546,10 +3627,10 @@ is. -/
 @[positivity Real.sinh _]
 meta def evalSinh : PositivityExt where eval {u α} _ pα? e :=
   match pα? with | none => pure .none | some _ => do
-  let zα : Q(Zero Real) := q(inferInstance)
-  let pα : Q(PartialOrder Real) := q(inferInstance)
+  let zα : Q(Zero ℝ) := q(inferInstance)
+  let pα : Q(PartialOrder ℝ) := q(inferInstance)
   match u, α, e with
-  | 0, ~q(Real), ~q(Real.sinh $a) =>
+  | 0, ~q(ℝ), ~q(Real.sinh $a) =>
     assumeInstancesCommute
     match ← core zα pα a with
     | .positive pa => return .positive q(sinh_pos_of_pos $pa)
@@ -3558,8 +3639,21 @@ meta def evalSinh : PositivityExt where eval {u α} _ pα? e :=
     | _ => return .none
   | _, _, _ => throwError "not Real.sinh"
 
-example (x : Real) (hx : 0 < x) : 0 < x.sinh := by positivity
-example (x : Real) (hx : 0 <= x) : 0 <= x.sinh := by positivity
-example (x : Real) (hx : x != 0) : x.sinh != 0 := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (x : ℝ) (hx : 0 < x) : 0 < x.sinh := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (x : ℝ) (hx : 0 ≤ x) : 0 ≤ x.sinh := by positivity
+/-
+**Mathlib.Meta.Positivity.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Meta.Positivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (x : ℝ) (hx : x ≠ 0) : x.sinh ≠ 0 := by positivity
 
 end Mathlib.Meta.Positivity
+

@@ -21,117 +21,99 @@ section sum
 
 variable {R : Type*} [NonUnitalNonAssocRing R] (I : TwoSidedIdeal R)
 
-/--
-lemma `listSum_mem` / 引理 `listSum_mem`
-
-English:
-lemma listSum_mem
-  given: {ι : Type*} (l : List ι) (f : ι -> R) (hl : forall x in l, f x in I)
-  proof: by
-  rw [mem_iff]; rw [← List.sum_map_zero]
-  exact I.ringCon.listSum l hl
-
-中文:
-引理 listSum_mem
-  条件: {ι : 类型} (l : 列表 ι) (f : ι -> R) (hl : 对任意 x in l, f x in I)
-  证明: by
-  rw [mem_iff]; rw [← List.sum_map_zero]
-  exact I.ringCon.listSum l hl
-
-Depends on / 依赖: I.ringCon.listSum, List.sum_map_zero, listSum, mem_iff, ringCon, sum_map_zero
+/-
+**TwoSidedIdeal.listSum_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：listSum_mem {ι : Type*} (l : List ι) (f : ι -> R) (hl : forall x in l, f x
+ in I) : (l.map f).sum in I
+参数：l : List ι；f : ι -> R；hl : forall x in l, f x in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `TwoSidedIdeal.mem_iff`：mem_iff (x : R) : x in I ↔ I.ringCon x 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.sum_map_zero`：∀ {ι : Type u_1} {M : Type u_2} [inst : AddZeroClass 
+M] {l : List ι}, (List.map (fun x => 0) l).sum = 0
+· 使用定理 `RingCon.listSum`：∀ {ι : Type u_1} {S : Type u_2} [inst : AddMonoid S] [i
+nst_1 : Mul S] (t : RingCon S) (l : List ι) {f g : ι → S},   (∀ i ∈ l, t (f i) (
+g i))…
 -/
-lemma listSum_mem {ι : Type*} (l : List ι) (f : ι -> R) (hl : forall x in l, f x in I) :
-    (l.map f).sum in I := by
-  rw [mem_iff]; rw [← List.sum_map_zero]
+lemma listSum_mem {ι : Type*} (l : List ι) (f : ι → R) (hl : ∀ x ∈ l, f x ∈ I) :
+    (l.map f).sum ∈ I := by
+  rw [mem_iff, ← List.sum_map_zero]
   exact I.ringCon.listSum l hl
-
-/--
-lemma `multisetSum_mem` / 引理 `multisetSum_mem`
-
-English:
-lemma multisetSum_mem
-  given: {ι : Type*} (s : Multiset ι) (f : ι -> R) (hs : forall x in s, f x in I)
-  proof: by
-  rw [mem_iff]; rw [← Multiset.sum_map_zero]
-  exact I.ringCon.multisetSum s hs
-
-中文:
-引理 multisetSum_mem
-  条件: {ι : 类型} (s : Multiset ι) (f : ι -> R) (hs : 对任意 x in s, f x in I)
-  证明: by
-  rw [mem_iff]; rw [← Multiset.sum_map_zero]
-  exact I.ringCon.multisetSum s hs
-
-Depends on / 依赖: I.ringCon.multisetSum, Multiset, Multiset.sum_map_zero, mem_iff, multisetSum, ringCon, sum_map_zero
+/-
+**TwoSidedIdeal.multisetSum_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：multisetSum_mem {ι : Type*} (s : Multiset ι) (f : ι -> R) (hs : forall x i
+n s, f x in I) : (s.map f).sum in I
+参数：s : Multiset ι；f : ι -> R；hs : forall x in s, f x in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `TwoSidedIdeal.mem_iff`：mem_iff (x : R) : x in I ↔ I.ringCon x 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.sum_map_zero`：∀ {ι : Type u_2} {M : Type u_3} [inst : AddCommMo
+noid M] {m : Multiset ι}, (Multiset.map (fun x => 0) m).sum = 0
+· 使用定理 `RingCon.multisetSum`：∀ {ι : Type u_1} {S : Type u_2} [inst : AddCommMono
+id S] [inst_1 : Mul S] (t : RingCon S) (s : Multiset ι)   {f g : ι → S}, (∀ i ∈ 
+s, t (f i…
 -/
-lemma multisetSum_mem {ι : Type*} (s : Multiset ι) (f : ι -> R) (hs : forall x in s, f x in I) :
-    (s.map f).sum in I := by
-  rw [mem_iff]; rw [← Multiset.sum_map_zero]
+lemma multisetSum_mem {ι : Type*} (s : Multiset ι) (f : ι → R) (hs : ∀ x ∈ s, f x ∈ I) :
+    (s.map f).sum ∈ I := by
+  rw [mem_iff, ← Multiset.sum_map_zero]
   exact I.ringCon.multisetSum s hs
-
-/--
-lemma `finsetSum_mem` / 引理 `finsetSum_mem`
-
-English:
-lemma finsetSum_mem
-  given: {ι : Type*} (s : Finset ι) (f : ι -> R) (hs : forall x in s, f x in I)
-  proof: by
-  rw [mem_iff]; rw [← Finset.sum_const_zero]
-  exact I.ringCon.finsetSum s hs
-
-中文:
-引理 finsetSum_mem
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R) (hs : 对任意 x in s, f x in I)
-  证明: by
-  rw [mem_iff]; rw [← Finset.sum_const_zero]
-  exact I.ringCon.finsetSum s hs
-
-Depends on / 依赖: Finset, Finset.sum_const_zero, I.ringCon.finsetSum, finsetSum, mem_iff, ringCon, sum_const_zero
+/-
+**TwoSidedIdeal.finsetSum_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：finsetSum_mem {ι : Type*} (s : Finset ι) (f : ι -> R) (hs : forall x in s,
+ f x in I) : s.sum f in I
+参数：s : Finset ι；f : ι -> R；hs : forall x in s, f x in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `TwoSidedIdeal.mem_iff`：mem_iff (x : R) : x in I ↔ I.ringCon x 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `RingCon.finsetSum`：∀ {ι : Type u_1} {S : Type u_2} [inst : AddCommMonoid
+ S] [inst_1 : Mul S] (t : RingCon S) (s : Finset ι) {f g : ι → S},   (∀ i ∈ s, t
+ (f i) …
 -/
-lemma finsetSum_mem {ι : Type*} (s : Finset ι) (f : ι -> R) (hs : forall x in s, f x in I) :
-    s.sum f in I := by
-  rw [mem_iff]; rw [← Finset.sum_const_zero]
+lemma finsetSum_mem {ι : Type*} (s : Finset ι) (f : ι → R) (hs : ∀ x ∈ s, f x ∈ I) :
+    s.sum f ∈ I := by
+  rw [mem_iff, ← Finset.sum_const_zero]
   exact I.ringCon.finsetSum s hs
-
-/--
-lemma `finsuppSum_mem` / 引理 `finsuppSum_mem`
-
-English:
-lemma finsuppSum_mem
-  statement: {ι : Type*} {β : Type*} [Zero β]
-  proof: finsetSum_mem _ _ _ h
-
-中文:
-引理 finsuppSum_mem
-  结论: {ι : 类型} {β : 类型} [零 β]
-  证明: finsetSum_mem _ _ _ h
-
-Depends on / 依赖: finsetSum_mem
+/-
+**TwoSidedIdeal.finsuppSum_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：finsuppSum_mem {ι : Type*} {β : Type*} [Zero β] {f : ι ->₀ β} (g : ι -> β 
+-> R) (h : forall i in f.support, g i (f i) in I) : f.sum g in I
+参数：g : ι -> β -> R；h : forall i in f.support, g i (f i) in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TwoSidedIdeal.finsetSum_mem`：finsetSum_mem {ι : Type*} (s : Finset ι) (f
+ : ι -> R) (hs : forall x in s, f x in I) : s.sum f in I
 -/
 lemma finsuppSum_mem {ι : Type*} {β : Type*} [Zero β]
-    {f : ι ->₀ β} (g : ι -> β -> R) (h : forall i in f.support, g i (f i) in I) :
-    f.sum g in I :=
+    {f : ι →₀ β} (g : ι → β → R) (h : ∀ i ∈ f.support, g i (f i) ∈ I) :
+    f.sum g ∈ I :=
   finsetSum_mem _ _ _ h
-
-/--
-lemma `dfinsuppSum_mem` / 引理 `dfinsuppSum_mem`
-
-English:
-lemma dfinsuppSum_mem
-  statement: {ι : Type*} {β : ι -> Type*}
-  proof: finsetSum_mem _ _ _ h
-
-中文:
-引理 dfinsuppSum_mem
-  结论: {ι : 类型} {β : ι -> 类型}
-  证明: finsetSum_mem _ _ _ h
-
-Depends on / 依赖: finsetSum_mem
+/-
+**TwoSidedIdeal.dfinsuppSum_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：dfinsuppSum_mem {ι : Type*} {β : ι -> Type*} [DecidableEq ι] [forall i, Ze
+ro (β i)] [(i : ι) -> (x : β i) -> Decidable (x != 0)] {f : Π₀ i, β i} (g : (i :
+ ι) -> β i -> R) (h : forall i in f.support, g i (f i) in I) : f.sum g in I
+参数：β i；i : ι；x : β i；x != 0；g : (i : ι) -> β i -> R；h : forall i in f.support, g
+ i (f i) in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TwoSidedIdeal.finsetSum_mem`：finsetSum_mem {ι : Type*} (s : Finset ι) (f
+ : ι -> R) (hs : forall x in s, f x in I) : s.sum f in I
 -/
-lemma dfinsuppSum_mem {ι : Type*} {β : ι -> Type*}
-    [DecidableEq ι] [forall i, Zero (β i)] [(i : ι) -> (x : β i) -> Decidable (x != 0)]
-    {f : Π₀ i, β i} (g : (i : ι) -> β i -> R) (h : forall i in f.support, g i (f i) in I) :
-    f.sum g in I :=
+lemma dfinsuppSum_mem {ι : Type*} {β : ι → Type*}
+    [DecidableEq ι] [∀ i, Zero (β i)] [(i : ι) → (x : β i) → Decidable (x ≠ 0)]
+    {f : Π₀ i, β i} (g : (i : ι) → β i → R) (h : ∀ i ∈ f.support, g i (f i) ∈ I) :
+    f.sum g ∈ I :=
   finsetSum_mem _ _ _ h
 
 end sum
@@ -142,44 +124,37 @@ section ring
 
 variable {R : Type*} [Ring R] (I : TwoSidedIdeal R)
 
-/--
-lemma `listProd_mem` / 引理 `listProd_mem`
-
-English:
-lemma listProd_mem
-  given: {ι : Type*} (l : List ι) (f : ι -> R) (hl : exists x in l, f x in I)
-  proof: by
-  induction l with
-  | nil => simp only [List.not_mem_nil, false_and, exists_false] at hl
-  | cons x l ih =>
-    simp only [List.mem_cons, exists_eq_or_imp] at hl
-    rcases hl with h | hal
-    · simpa only [List.map_cons, List.prod_cons] using I.mul_mem_right _ _ h
-· simpa only [List.map_cons, List.prod_cons] using I.mul_mem_left _ _ ih hal
-
-中文:
-引理 listProd_mem
-  条件: {ι : 类型} (l : 列表 ι) (f : ι -> R) (hl : 存在 x in l, f x in I)
-  证明: by
-  induction l with
-  | nil => simp only [List.not_mem_nil, false_and, exists_false] at hl
-  | cons x l ih =>
-    simp only [List.mem_cons, exists_eq_or_imp] at hl
-    rcases hl with h | hal
-    · simpa only [List.map_cons, List.prod_cons] using I.mul_mem_right _ _ h
-· simpa only [List.map_cons, List.prod_cons] using I.mul_mem_left _ _ ih hal
-
-Depends on / 依赖: I.mul_mem_left, I.mul_mem_right, List.map_cons, List.mem_cons, List.not_mem_nil, List.prod_cons, exists_eq_or_imp, exists_false, false_and, map_cons, mem_cons, mul_mem_left, mul_mem_right, not_mem_nil, prod_cons
+/-
+**TwoSidedIdeal.listProd_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：listProd_mem {ι : Type*} (l : List ι) (f : ι -> R) (hl : exists x in l, f 
+x in I) : (l.map f).prod in I
+参数：l : List ι；f : ι -> R；hl : exists x in l, f x in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用引理 `TwoSidedIdeal.mul_mem_right`：mul_mem_right (x y) (hx : x in I) : x * y i
+n I
+· 使用引理 `TwoSidedIdeal.mul_mem_left`：mul_mem_left (x y) (hy : y in I) : x * y in 
+I
 -/
-lemma listProd_mem {ι : Type*} (l : List ι) (f : ι -> R) (hl : exists x in l, f x in I) :
-    (l.map f).prod in I := by
+lemma listProd_mem {ι : Type*} (l : List ι) (f : ι → R) (hl : ∃ x ∈ l, f x ∈ I) :
+    (l.map f).prod ∈ I := by
   induction l with
   | nil => simp only [List.not_mem_nil, false_and, exists_false] at hl
   | cons x l ih =>
     simp only [List.mem_cons, exists_eq_or_imp] at hl
     rcases hl with h | hal
     · simpa only [List.map_cons, List.prod_cons] using I.mul_mem_right _ _ h
-· simpa only [List.map_cons, List.prod_cons] using I.mul_mem_left _ _ ih hal
+    · simpa only [List.map_cons, List.prod_cons] using I.mul_mem_left _ _ <| ih hal
 
 end ring
 
@@ -187,92 +162,63 @@ section commRing
 
 variable {R : Type*} [CommRing R] (I : TwoSidedIdeal R)
 
-/--
-lemma `multiSetProd_mem` / 引理 `multiSetProd_mem`
-
-English:
-lemma multiSetProd_mem
-  given: {ι : Type*} (s : Multiset ι) (f : ι -> R) (hs : exists x in s, f x in I)
-  proof: by
-  rcases s
-  simpa using listProd_mem (hl := hs)
-
-中文:
-引理 multiSetProd_mem
-  条件: {ι : 类型} (s : Multiset ι) (f : ι -> R) (hs : 存在 x in s, f x in I)
-  证明: by
-  rcases s
-  simpa using listProd_mem (hl := hs)
-
-Depends on / 依赖: listProd_mem
+/-
+**TwoSidedIdeal.multiSetProd_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：multiSetProd_mem {ι : Type*} (s : Multiset ι) (f : ι -> R) (hs : exists x 
+in s, f x in I) : (s.map f).prod in I
+参数：s : Multiset ι；f : ι -> R；hs : exists x in s, f x in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TwoSidedIdeal.listProd_mem`：listProd_mem {ι : Type*} (l : List ι) (f : ι
+ -> R) (hl : exists x in l, f x in I) : (l.map f).prod in I
 -/
-lemma multiSetProd_mem {ι : Type*} (s : Multiset ι) (f : ι -> R) (hs : exists x in s, f x in I) :
-    (s.map f).prod in I := by
+lemma multiSetProd_mem {ι : Type*} (s : Multiset ι) (f : ι → R) (hs : ∃ x ∈ s, f x ∈ I) :
+    (s.map f).prod ∈ I := by
   rcases s
   simpa using listProd_mem (hl := hs)
-
-/--
-lemma `finsetProd_mem` / 引理 `finsetProd_mem`
-
-English:
-lemma finsetProd_mem
-  given: {ι : Type*} (s : Finset ι) (f : ι -> R) (hs : exists x in s, f x in I)
-  proof: by
-  rcases s
-  simpa using multiSetProd_mem (hs := hs)
-
-中文:
-引理 finsetProd_mem
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> R) (hs : 存在 x in s, f x in I)
-  证明: by
-  rcases s
-  simpa using multiSetProd_mem (hs := hs)
-
-Depends on / 依赖: multiSetProd_mem
+/-
+**TwoSidedIdeal.finsetProd_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：finsetProd_mem {ι : Type*} (s : Finset ι) (f : ι -> R) (hs : exists x in s
+, f x in I) : s.prod f in I
+参数：s : Finset ι；f : ι -> R；hs : exists x in s, f x in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TwoSidedIdeal.multiSetProd_mem`：multiSetProd_mem {ι : Type*} (s : Multis
+et ι) (f : ι -> R) (hs : exists x in s, f x in I) : (s.map f).prod in I
 -/
-lemma finsetProd_mem {ι : Type*} (s : Finset ι) (f : ι -> R) (hs : exists x in s, f x in I) :
-    s.prod f in I := by
+lemma finsetProd_mem {ι : Type*} (s : Finset ι) (f : ι → R) (hs : ∃ x ∈ s, f x ∈ I) :
+    s.prod f ∈ I := by
   rcases s
   simpa using multiSetProd_mem (hs := hs)
-
-/--
-lemma `finsuppProd_mem` / 引理 `finsuppProd_mem`
-
-English:
-lemma finsuppProd_mem
-  statement: {ι : Type*} {β : Type*} [Zero β]
-  proof: finsetProd_mem _ _ _ H
-
-中文:
-引理 finsuppProd_mem
-  结论: {ι : 类型} {β : 类型} [零 β]
-  证明: finsetProd_mem _ _ _ H
-
-Depends on / 依赖: finsetProd_mem
+/-
+**TwoSidedIdeal.finsuppProd_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：finsuppProd_mem {ι : Type*} {β : Type*} [Zero β] (h : ι -> β -> R) {f : ι 
+->₀ β} (H : exists i in f.support, h i (f i) in I) : f.prod h in I
+参数：h : ι -> β -> R；H : exists i in f.support, h i (f i) in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TwoSidedIdeal.finsetProd_mem`：finsetProd_mem {ι : Type*} (s : Finset ι) 
+(f : ι -> R) (hs : exists x in s, f x in I) : s.prod f in I
 -/
 lemma finsuppProd_mem {ι : Type*} {β : Type*} [Zero β]
-    (h : ι -> β -> R) {f : ι ->₀ β} (H : exists i in f.support, h i (f i) in I) : f.prod h in I :=
+    (h : ι → β → R) {f : ι →₀ β} (H : ∃ i ∈ f.support, h i (f i) ∈ I) : f.prod h ∈ I :=
   finsetProd_mem _ _ _ H
-
-/--
-lemma `dfinsuppProd_mem` / 引理 `dfinsuppProd_mem`
-
-English:
-lemma dfinsuppProd_mem
-  statement: {ι : Type*} {β : ι -> Type*}
-  proof: finsetProd_mem _ _ _ h
-
-中文:
-引理 dfinsuppProd_mem
-  结论: {ι : 类型} {β : ι -> 类型}
-  证明: finsetProd_mem _ _ _ h
-
-Depends on / 依赖: finsetProd_mem
+/-
+**TwoSidedIdeal.dfinsuppProd_mem** 是 Mathlib 中的一个引理，位于命名空间 `TwoSidedIdeal`。
+形式化陈述：dfinsuppProd_mem {ι : Type*} {β : ι -> Type*} [DecidableEq ι] [forall i, Z
+ero (β i)] [(i : ι) -> (x : β i) -> Decidable (x != 0)] {f : Π₀ i, β i} (g : (i 
+: ι) -> β i -> R) (h : exists i in f.support, g i (f i) in I) : f.prod g in I
+参数：β i；i : ι；x : β i；x != 0；g : (i : ι) -> β i -> R；h : exists i in f.support, g
+ i (f i) in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TwoSidedIdeal.finsetProd_mem`：finsetProd_mem {ι : Type*} (s : Finset ι) 
+(f : ι -> R) (hs : exists x in s, f x in I) : s.prod f in I
 -/
-lemma dfinsuppProd_mem {ι : Type*} {β : ι -> Type*}
-    [DecidableEq ι] [forall i, Zero (β i)] [(i : ι) -> (x : β i) -> Decidable (x != 0)]
-    {f : Π₀ i, β i} (g : (i : ι) -> β i -> R) (h : exists i in f.support, g i (f i) in I) :
-    f.prod g in I :=
+lemma dfinsuppProd_mem {ι : Type*} {β : ι → Type*}
+    [DecidableEq ι] [∀ i, Zero (β i)] [(i : ι) → (x : β i) → Decidable (x ≠ 0)]
+    {f : Π₀ i, β i} (g : (i : ι) → β i → R) (h : ∃ i ∈ f.support, g i (f i) ∈ I) :
+    f.prod g ∈ I :=
   finsetProd_mem _ _ _ h
 
 end commRing
@@ -280,3 +226,4 @@ end commRing
 end prod
 
 end TwoSidedIdeal
+

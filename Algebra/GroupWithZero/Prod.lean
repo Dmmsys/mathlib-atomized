@@ -29,108 +29,54 @@ variable {M₀ N₀ : Type*}
 
 namespace Prod
 
-/--
-Instance `instMulZeroClass` / 实例 `instMulZeroClass`
-
-English:
-instance instMulZeroClass
-  signature: [MulZeroClass M₀] [MulZeroClass N₀]
-  body: by simp [Prod.mul_def]
-  mul_zero := by simp [Prod.mul_def]
-
-中文:
-实例 instMulZeroClass
-  签名: [乘零类 M₀] [乘零类 N₀]
-  定义体: by simp [Prod.mul_def]
-  mul_zero := by simp [Prod.mul_def]
-
-Depends on / 依赖: Prod.mul_def, mul_def, mul_zero
+/-
+**Prod.instMulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instMulZeroClass [MulZeroClass M₀] [MulZeroClass N₀] : MulZeroClass (M₀ × 
+N₀) where zero_mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulZeroClass [MulZeroClass M₀] [MulZeroClass N₀] : MulZeroClass (M₀ × N₀) where
   zero_mul := by simp [Prod.mul_def]
   mul_zero := by simp [Prod.mul_def]
-
-/--
-Instance `instSemigroupWithZero` / 实例 `instSemigroupWithZero`
-
-English:
-instance instSemigroupWithZero
-  signature: [SemigroupWithZero M₀] [SemigroupWithZero N₀]
-  body: by simp
-  mul_zero := by simp
-
-中文:
-实例 instSemigroupWithZero
-  签名: [带零半群 M₀] [带零半群 N₀]
-  定义体: by simp
-  mul_zero := by simp
-
-Depends on / 依赖: mul_zero
+/-
+**Prod.instSemigroupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instSemigroupWithZero [SemigroupWithZero M₀] [SemigroupWithZero N₀] : Semi
+groupWithZero (M₀ × N₀) where zero_mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemigroupWithZero [SemigroupWithZero M₀] [SemigroupWithZero N₀] :
     SemigroupWithZero (M₀ × N₀) where
   zero_mul := by simp
   mul_zero := by simp
-
-/--
-Instance `instMulZeroOneClass` / 实例 `instMulZeroOneClass`
-
-English:
-instance instMulZeroOneClass
-  signature: [MulZeroOneClass M₀] [MulZeroOneClass N₀]
-  body: by simp
-  mul_zero := by simp
-
-中文:
-实例 instMulZeroOneClass
-  签名: [乘零幺类 M₀] [乘零幺类 N₀]
-  定义体: by simp
-  mul_zero := by simp
-
-Depends on / 依赖: mul_zero
+/-
+**Prod.instMulZeroOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instMulZeroOneClass [MulZeroOneClass M₀] [MulZeroOneClass N₀] : MulZeroOne
+Class (M₀ × N₀) where zero_mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulZeroOneClass [MulZeroOneClass M₀] [MulZeroOneClass N₀] :
     MulZeroOneClass (M₀ × N₀) where
   zero_mul := by simp
   mul_zero := by simp
-
-/--
-Instance `instMonoidWithZero` / 实例 `instMonoidWithZero`
-
-English:
-instance instMonoidWithZero
-  signature: [MonoidWithZero M₀] [MonoidWithZero N₀]
-  body: by simp
-  mul_zero := by simp
-
-中文:
-实例 instMonoidWithZero
-  签名: [带零幺半群 M₀] [带零幺半群 N₀]
-  定义体: by simp
-  mul_zero := by simp
-
-Depends on / 依赖: mul_zero
+/-
+**Prod.instMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instMonoidWithZero [MonoidWithZero M₀] [MonoidWithZero N₀] : MonoidWithZer
+o (M₀ × N₀) where zero_mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoidWithZero [MonoidWithZero M₀] [MonoidWithZero N₀] : MonoidWithZero (M₀ × N₀) where
   zero_mul := by simp
   mul_zero := by simp
-
-/--
-Instance `instCommMonoidWithZero` / 实例 `instCommMonoidWithZero`
-
-English:
-instance instCommMonoidWithZero
-  signature: [CommMonoidWithZero M₀] [CommMonoidWithZero N₀]
-  body: by simp
-  mul_zero := by simp
-
-中文:
-实例 instCommMonoidWithZero
-  签名: [带零交换幺半群 M₀] [带零交换幺半群 N₀]
-  定义体: by simp
-  mul_zero := by simp
-
-Depends on / 依赖: mul_zero
+/-
+**Prod.instCommMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：instCommMonoidWithZero [CommMonoidWithZero M₀] [CommMonoidWithZero N₀] : C
+ommMonoidWithZero (M₀ × N₀) where zero_mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoidWithZero [CommMonoidWithZero M₀] [CommMonoidWithZero N₀] :
     CommMonoidWithZero (M₀ × N₀) where
@@ -141,21 +87,21 @@ end Prod
 
 variable (M₀) in
 @[simp]
-/--
-lemma `WithZero.ofClass_withZeroUnitsEquiv` / 引理 `WithZero.ofClass_withZeroUnitsEquiv`
-
-English:
-lemma WithZero.ofClass_withZeroUnitsEquiv
-  statement: [GroupWithZero M₀]
-  proof: rfl
-
-中文:
-引理 WithZero.ofClass_withZeroUnitsEquiv
-  结论: [带零群 M₀]
-  证明: rfl
+/-
+**WithZero.ofClass_withZeroUnitsEquiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：WithZero.ofClass_withZeroUnitsEquiv [GroupWithZero M₀] [DecidablePred fun 
+x : M₀ => x = 0] : .ofClass WithZero.withZeroUnitsEquiv = WithZero.lift' (Units.
+coeHom M₀)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.toMonoidWithZeroHomClass`：∀ {F : Type u_1} {α : Type u_2} 
+{β : Type u_3} [inst : EquivLike F α β] [inst_1 : MulZeroOneClass α]   [inst_2 :
+ MulZeroOneClass β] [MulEqui…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 lemma WithZero.ofClass_withZeroUnitsEquiv [GroupWithZero M₀]
-    [DecidablePred fun x : M₀ => x = 0] :
+    [DecidablePred fun x : M₀ ↦ x = 0] :
     .ofClass WithZero.withZeroUnitsEquiv =
       WithZero.lift' (Units.coeHom M₀) :=
   rfl
@@ -166,48 +112,33 @@ section BundledMulDiv
 
 /-- Multiplication as a multiplicative homomorphism with zero. -/
 @[simps]
-/--
-Definition of `mulMonoidWithZeroHom` / `mulMonoidWithZeroHom` 的定义
+/-
+**mulMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mulMonoidWithZeroHom [CommMonoidWithZero M₀] : M₀ × M₀ ->*₀ M₀ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulMonoidWithZeroHom
-  signature: [CommMonoidWithZero M₀]
-  body: mulMonoidHom
-  map_zero' := mul_zero _
-
-中文:
-定义 mulMonoidWithZeroHom
-  签名: [带零交换幺半群 M₀]
-  定义体: mulMonoidHom
-  map_zero' := mul_zero _
-
-Depends on / 依赖: mulMonoidHom
+--- 原说明 ---
+Multiplication as a multiplicative homomorphism with zero.
 -/
-def mulMonoidWithZeroHom [CommMonoidWithZero M₀] : M₀ × M₀ ->*₀ M₀ where
+def mulMonoidWithZeroHom [CommMonoidWithZero M₀] : M₀ × M₀ →*₀ M₀ where
   __ := mulMonoidHom
   map_zero' := mul_zero _
 
 /-- Division as a multiplicative homomorphism with zero. -/
 @[simps]
-/--
-Definition of `divMonoidWithZeroHom` / `divMonoidWithZeroHom` 的定义
+/-
+**divMonoidWithZeroHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：divMonoidWithZeroHom [CommGroupWithZero M₀] : M₀ × M₀ ->*₀ M₀ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divMonoidWithZeroHom
-  signature: [CommGroupWithZero M₀]
-  body: divMonoidHom
-  map_zero' := zero_div _
-
-中文:
-定义 divMonoidWithZeroHom
-  签名: [带零交换群 M₀]
-  定义体: divMonoidHom
-  map_zero' := zero_div _
-
-Depends on / 依赖: divMonoidHom
+--- 原说明 ---
+Division as a multiplicative homomorphism with zero.
 -/
-def divMonoidWithZeroHom [CommGroupWithZero M₀] : M₀ × M₀ ->*₀ M₀ where
+def divMonoidWithZeroHom [CommGroupWithZero M₀] : M₀ × M₀ →*₀ M₀ where
   __ := divMonoidHom
   map_zero' := zero_div _
 
 end BundledMulDiv
+

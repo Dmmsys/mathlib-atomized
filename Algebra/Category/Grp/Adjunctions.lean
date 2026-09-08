@@ -50,46 +50,26 @@ namespace AddCommGrpCat
 free abelian group with generators `x : X`.
 -/
 @[simps obj map]
-/--
-Definition of `free` / `free` 的定义
+/-
+**AddCommGrpCat.free** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：free : Type u ⥤ AddCommGrpCat where obj α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition free
-  signature: : Type u ⥤ AddCommGrpCat where
-  body: of (FreeAbelianGroup α)
-  map f := ofHom (FreeAbelianGroup.map f)
-
-@[simp]
-
-中文:
-定义 free
-  签名: : 类型u ⥤ 加法交换群范畴 where
-  定义体: of (FreeAbelianGroup α)
-  map f := ofHom (FreeAbelianGroup.map f)
-
-@[simp]
-
-Depends on / 依赖: FreeAbelianGroup
+--- 原说明 ---
+The free functor `Type u ⥤ AddCommGroup` sending a type `X` to the
+free abelian group with generators `x : X`.
 -/
 def free : Type u ⥤ AddCommGrpCat where
   obj α := of (FreeAbelianGroup α)
   map f := ofHom (FreeAbelianGroup.map f)
 
 @[simp]
-/--
-theorem `free_obj_coe` / 定理 `free_obj_coe`
-
-English:
-theorem free_obj_coe
-  given: {α : Type u}
-  statement: (free.obj α : Type u) = FreeAbelianGroup α
-  proof: rfl
-
-中文:
-定理 free_obj_coe
-  条件: {α : 类型u}
-  结论: (free.obj α : 类型u) = 自由交换群 α
-  证明: rfl
+/-
+**AddCommGrpCat.free_obj_coe** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：free_obj_coe {α : Type u} : (free.obj α : Type u) = FreeAbelianGroup α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem free_obj_coe {α : Type u} : (free.obj α : Type u) = FreeAbelianGroup α :=
   rfl
@@ -97,59 +77,33 @@ theorem free_obj_coe {α : Type u} : (free.obj α : Type u) = FreeAbelianGroup �
 -- This currently can't be a `simp` lemma,
 -- because `free_obj_coe` will simplify implicit arguments in the LHS.
 -- (The `simpNF` linter will, correctly, complain.)
-/--
-theorem `free_map_coe` / 定理 `free_map_coe`
-
-English:
-theorem free_map_coe
-  given: {α β : Type u} {f : α ⟶ β} (x : FreeAbelianGroup α)
-  proof: rfl
-
-中文:
-定理 free_map_coe
-  条件: {α β : 类型u} {f : α ⟶ β} (x : 自由交换群 α)
-  证明: rfl
+/-
+**AddCommGrpCat.free_map_coe** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：free_map_coe {α β : Type u} {f : α ⟶ β} (x : FreeAbelianGroup α) : (free.m
+ap f) x = f < > x
+参数：x : FreeAbelianGroup α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem free_map_coe {α β : Type u} {f : α ⟶ β} (x : FreeAbelianGroup α) :
-(free.map f) x = f < > x :=
+    (free.map f) x = f <$> x :=
   rfl
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `adj` / `adj` 的定义
+/-- The free-forgetful adjunction for abelian groups.
+-/
+/-
+**AddCommGrpCat.adj** 是 Mathlib 中的一个定义，位于命名空间 `AddCommGrpCat`。
+形式化陈述：adj : free ⊣ forget AddCommGrpCat.{u}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition adj
-  signature: : free ⊣ forget AddCommGrpCat.{u}
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv X Y := by
-        refine ConcreteCategory.homEquiv.trans (Equiv.trans ?_ TypeCat.homEquiv.symm)
-        exact FreeAbelianGroup.lift.symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext; rfl`.
-      homEquiv_naturality_left_symm := by
-        intros
-        ext
-        dsimp [ConcreteCategory.homEquiv]
-        rw [← FreeAbelianGroup.lift_comp]
-        rfl }
-
-中文:
-定义 adj
-  签名: : free ⊣ forget 加法交换群范畴.{u}
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv X Y := by
-        refine ConcreteCategory.homEquiv.trans (Equiv.trans ?_ TypeCat.homEquiv.symm)
-        exact FreeAbelianGroup.lift.symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext; rfl`.
-      homEquiv_naturality_left_symm := by
-        intros
-        ext
-        dsimp [ConcreteCategory.homEquiv]
-        rw [← FreeAbelianGroup.lift_comp]
-        rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, ConcreteCategory, ConcreteCategory.homEquiv.trans, Equiv.trans, FreeAbelianGroup, FreeAbelianGroup.lift.symm, TypeCat, TypeCat.homEquiv.symm, homEquiv, mkOfHomEquiv
+--- 原说明 ---
+The free-forgetful adjunction for abelian groups.
 -/
 def adj : free ⊣ forget AddCommGrpCat.{u} :=
   Adjunction.mkOfHomEquiv
@@ -163,35 +117,15 @@ def adj : free ⊣ forget AddCommGrpCat.{u} :=
         dsimp [ConcreteCategory.homEquiv]
         rw [← FreeAbelianGroup.lift_comp]
         rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: free.{u}.IsLeftAdjoint
-  body: ⟨_, ⟨adj⟩⟩
-
-中文:
-实例 :
-  签名: free.{u}.是左伴随
-  定义体: ⟨_, ⟨adj⟩⟩
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : free.{u}.IsLeftAdjoint :=
   ⟨_, ⟨adj⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget AddCommGrpCat.{u}).IsRightAdjoint
-  body: ⟨_, ⟨adj⟩⟩
-
-中文:
-实例 :
-  签名: (forget 加法交换群范畴.{u}).是右伴随
-  定义体: ⟨_, ⟨adj⟩⟩
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget AddCommGrpCat.{u}).IsRightAdjoint :=
   ⟨_, ⟨adj⟩⟩
@@ -201,41 +135,21 @@ the monomorphisms in `AddCommGroup` are just the injective functions.
 
 (This proof works in all universes.)
 -/
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个示例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+As an example, we now give a high-powered proof that
+the monomorphisms in `AddCommGroup` are just the injective functions.
+
+(This proof works in all universes.)
+-/
 example {G H : AddCommGrpCat.{u}} (f : G ⟶ H) [Mono f] : Function.Injective f :=
   (mono_iff_injective _).mp (Functor.map_mono (forget AddCommGrpCat) f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (free.{u}).PreservesMonomorphisms
-  body: by
-    by_cases! hX : IsEmpty X
-    · constructor
-      intros
-      apply (IsInitial.isInitialObj free _
-        ((Types.initial_iff_empty X).2 hX).some).isZero.eq_of_tgt
-    · have hf : Function.Injective f := by rwa [← mono_iff_injective]
-      obtain ⟨g, hg⟩ := hf.hasLeftInverse
-      have : IsSplitMono f := IsSplitMono.mk' { retraction := ↾g }
-      infer_instance
-
-中文:
-实例 :
-  签名: (free.{u}).保持Monomorphisms
-  定义体: by
-    by_cases! hX : IsEmpty X
-    · constructor
-      intros
-      apply (IsInitial.isInitialObj free _
-        ((Types.initial_iff_empty X).2 hX).some).isZero.eq_of_tgt
-    · have hf : Function.Injective f := by rwa [← mono_iff_injective]
-      obtain ⟨g, hg⟩ := hf.hasLeftInverse
-      have : IsSplitMono f := IsSplitMono.mk' { retraction := ↾g }
-      infer_instance
-
-Depends on / 依赖: Function, Function.Injective, Injective, IsEmpty, IsInitial, IsInitial.isInitialObj, IsSplitMono, IsSplitMono.mk, Types.initial_iff_empty, eq_of_tgt, hasLeftInverse, hf.hasLeftInverse, infer_instance, initial_iff_empty, intros, isInitialObj, isZero, isZero.eq_of_tgt, mono_iff_injective, retraction
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (free.{u}).PreservesMonomorphisms where
   preserves {X Y} f _ := by
@@ -253,61 +167,35 @@ end AddCommGrpCat
 
 namespace GrpCat
 
-/--
-Definition of `free` / `free` 的定义
+/-- The free functor `Type u ⥤ Group` sending a type `X` to the free group with generators `x : X`.
+-/
+/-
+**GrpCat.free** 是 Mathlib 中的一个定义，位于命名空间 `GrpCat`。
+形式化陈述：free : Type u ⥤ GrpCat where obj α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition free
-  signature: : Type u ⥤ GrpCat where
-  body: of (FreeGroup α)
-  map f := ofHom (FreeGroup.map f)
-
-中文:
-定义 free
-  签名: : 类型u ⥤ 群范畴 where
-  定义体: of (FreeGroup α)
-  map f := ofHom (FreeGroup.map f)
-
-Depends on / 依赖: FreeGroup
+--- 原说明 ---
+The free functor `Type u ⥤ Group` sending a type `X` to the free group with gene
+rators `x : X`.
 -/
 def free : Type u ⥤ GrpCat where
   obj α := of (FreeGroup α)
   map f := ofHom (FreeGroup.map f)
 
-/--
-Definition of `adj` / `adj` 的定义
+/-- The free-forgetful adjunction for groups.
+-/
+/-
+**GrpCat.adj** 是 Mathlib 中的一个定义，位于命名空间 `GrpCat`。
+形式化陈述：adj : free ⊣ forget GrpCat.{u}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition adj
-  signature: : free ⊣ forget GrpCat.{u}
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv X Y :=
-        ConcreteCategory.homEquiv.trans
-          (Equiv.trans (FreeGroup.lift.symm) TypeCat.homEquiv.symm)
-      homEquiv_naturality_left_symm := by
-        intros
-        ext : 1
-        -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` doesn't apply this theorem anymore
-        apply FreeGroup.ext_hom
-        intros
-        rfl }
-
-中文:
-定义 adj
-  签名: : free ⊣ forget 群范畴.{u}
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv X Y :=
-        ConcreteCategory.homEquiv.trans
-          (Equiv.trans (FreeGroup.lift.symm) TypeCat.homEquiv.symm)
-      homEquiv_naturality_left_symm := by
-        intros
-        ext : 1
-        -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` doesn't apply this theorem anymore
-        apply FreeGroup.ext_hom
-        intros
-        rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, ConcreteCategory, ConcreteCategory.homEquiv.trans, Equiv.trans, FreeGroup, FreeGroup.lift.symm, TypeCat, TypeCat.homEquiv.symm, homEquiv, homEquiv_naturality_left_symm, intros, mkOfHomEquiv
+--- 原说明 ---
+The free-forgetful adjunction for groups.
 -/
 def adj : free ⊣ forget GrpCat.{u} :=
   Adjunction.mkOfHomEquiv
@@ -321,61 +209,26 @@ def adj : free ⊣ forget GrpCat.{u} :=
         apply FreeGroup.ext_hom
         intros
         rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget GrpCat.{u}).IsRightAdjoint
-  body: ⟨_, ⟨adj⟩⟩
-
-中文:
-实例 :
-  签名: (forget 群范畴.{u}).是右伴随
-  定义体: ⟨_, ⟨adj⟩⟩
+/-
+**GrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `GrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget GrpCat.{u}).IsRightAdjoint :=
   ⟨_, ⟨adj⟩⟩
 
 section Abelianization
 
-/--
-Definition of `abelianize` / `abelianize` 的定义
+/-- The abelianization functor `Group ⥤ CommGroup` sending a group `G` to its abelianization `Gᵃᵇ`.
+-/
+/-
+**GrpCat.abelianize** 是 Mathlib 中的一个定义，位于命名空间 `GrpCat`。
+形式化陈述：abelianize : GrpCat.{u} ⥤ CommGrpCat.{u} where obj G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abelianize
-  signature: : GrpCat.{u} ⥤ CommGrpCat.{u} where
-  body: CommGrpCat.of (Abelianization G)
-  map f := CommGrpCat.ofHom (Abelianization.lift (Abelianization.of.comp f.hom))
-  map_id := by
-    intros
-    ext : 1
-    apply (Equiv.eq_symm_apply Abelianization.lift).mp
-    rfl
-  map_comp := by
-    intros
-    ext : 1
-    apply (Equiv.eq_symm_apply Abelianization.lift).mp
-    rfl
-
-中文:
-定义 abelianize
-  签名: : 群范畴.{u} ⥤ 交换群范畴.{u} where
-  定义体: CommGrpCat.of (Abelianization G)
-  map f := CommGrpCat.ofHom (Abelianization.lift (Abelianization.of.comp f.hom))
-  map_id := by
-    intros
-    ext : 1
-    apply (Equiv.eq_symm_apply Abelianization.lift).mp
-    rfl
-  map_comp := by
-    intros
-    ext : 1
-    apply (Equiv.eq_symm_apply Abelianization.lift).mp
-    rfl
-
-Depends on / 依赖: Abelianization, CommGrpCat, CommGrpCat.of
+--- 原说明 ---
+The abelianization functor `Group ⥤ CommGroup` sending a group `G` to its abelia
+nization `Gᵃᵇ`.
 -/
 def abelianize : GrpCat.{u} ⥤ CommGrpCat.{u} where
   obj G := CommGrpCat.of (Abelianization G)
@@ -391,44 +244,18 @@ def abelianize : GrpCat.{u} ⥤ CommGrpCat.{u} where
     apply (Equiv.eq_symm_apply Abelianization.lift).mp
     rfl
 
-/--
-Definition of `abelianizeAdj` / `abelianizeAdj` 的定义
+/-- The abelianization-forgetful adjunction from `Group` to `CommGroup`. -/
+/-
+**GrpCat.abelianizeAdj** 是 Mathlib 中的一个定义，位于命名空间 `GrpCat`。
+形式化陈述：abelianizeAdj : abelianize ⊣ forget₂ CommGrpCat.{u} GrpCat.{u}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition abelianizeAdj
-  signature: : abelianize ⊣ forget₂ CommGrpCat.{u} GrpCat.{u}
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv := fun _ _ => ((ConcreteCategory.homEquiv (C := CommGrpCat)).trans
-        Abelianization.lift.symm).trans
-        (ConcreteCategory.homEquiv (C := GrpCat)).symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext1; rfl`.
-      homEquiv_naturality_left_symm := by
-        intros
-        ext
-        simp +instances only
-        apply Eq.symm
-        apply Abelianization.lift_unique
-        intros
-        apply Abelianization.lift_apply_of }
-
-中文:
-定义 abelianizeAdj
-  签名: : abelianize ⊣ forget₂ 交换群范畴.{u} 群范畴.{u}
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv := fun _ _ => ((ConcreteCategory.homEquiv (C := CommGrpCat)).trans
-        Abelianization.lift.symm).trans
-        (ConcreteCategory.homEquiv (C := GrpCat)).symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext1; rfl`.
-      homEquiv_naturality_left_symm := by
-        intros
-        ext
-        simp +instances only
-        apply Eq.symm
-        apply Abelianization.lift_unique
-        intros
-        apply Abelianization.lift_apply_of }
-
-Depends on / 依赖: Abelianization, Abelianization.lift.symm, Adjunction, Adjunction.mkOfHomEquiv, CommGrpCat, ConcreteCategory, ConcreteCategory.homEquiv, GrpCat, homEquiv, mkOfHomEquiv
+--- 原说明 ---
+The abelianization-forgetful adjunction from `Group` to `CommGroup`.
 -/
 def abelianizeAdj : abelianize ⊣ forget₂ CommGrpCat.{u} GrpCat.{u} :=
   Adjunction.mkOfHomEquiv
@@ -451,65 +278,28 @@ end GrpCat
 
 /-- The functor taking a monoid to its subgroup of units. -/
 @[simps!]
-/--
-Definition of `MonCat.units` / `MonCat.units` 的定义
+/-
+**MonCat.units** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonCat.units : MonCat.{u} ⥤ GrpCat.{u} where obj R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MonCat.units
-  signature: : MonCat.{u} ⥤ GrpCat.{u} where
-  body: GrpCat.of Rˣ
-map f := GrpCat.ofHom Units.map f.hom
-  map_id _ := GrpCat.ext fun _ => Units.ext rfl
-  map_comp _ _ := GrpCat.ext fun _ => Units.ext rfl
-
-中文:
-定义 幺半群范畴.units
-  签名: : 幺半群范畴.{u} ⥤ 群范畴.{u} where
-  定义体: GrpCat.of Rˣ
-map f := GrpCat.ofHom Units.map f.hom
-  map_id _ := GrpCat.ext fun _ => Units.ext rfl
-  map_comp _ _ := GrpCat.ext fun _ => Units.ext rfl
-
-Depends on / 依赖: GrpCat, GrpCat.of
+--- 原说明 ---
+The functor taking a monoid to its subgroup of units.
 -/
 def MonCat.units : MonCat.{u} ⥤ GrpCat.{u} where
   obj R := GrpCat.of Rˣ
-map f := GrpCat.ofHom Units.map f.hom
+  map f := GrpCat.ofHom <| Units.map f.hom
   map_id _ := GrpCat.ext fun _ => Units.ext rfl
   map_comp _ _ := GrpCat.ext fun _ => Units.ext rfl
 
-/--
-Definition of `GrpCat.forget₂MonAdj` / `GrpCat.forget₂MonAdj` 的定义
+/-- The forgetful-units adjunction between `GrpCat` and `MonCat`. -/
+/-
+**GrpCat.forget** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GrpCat.forget₂MonAdj
-  signature: : forget₂ GrpCat MonCat ⊣ MonCat.units.{u}
-  body: Adjunction.mk' {
-  homEquiv _ Y :=
-    { toFun f := ofHom (MonoidHom.toHomUnits f.hom)
-      invFun f := MonCat.ofHom ((Units.coeHom Y).comp f.hom) }
-  unit :=
-    { app X := ofHom (@toUnits X _)
-      naturality _ _ _ := GrpCat.ext fun _ => Units.ext rfl }
-  counit :=
-    { app X := MonCat.ofHom (Units.coeHom X)
-      naturality _ _ _ := MonCat.ext fun _ => rfl } }
-
-中文:
-定义 群范畴.forget₂MonAdj
-  签名: : forget₂ 群范畴 幺半群范畴 ⊣ 幺半群范畴.units.{u}
-  定义体: Adjunction.mk' {
-  homEquiv _ Y :=
-    { toFun f := ofHom (MonoidHom.toHomUnits f.hom)
-      invFun f := MonCat.ofHom ((Units.coeHom Y).comp f.hom) }
-  unit :=
-    { app X := ofHom (@toUnits X _)
-      naturality _ _ _ := GrpCat.ext fun _ => Units.ext rfl }
-  counit :=
-    { app X := MonCat.ofHom (Units.coeHom X)
-      naturality _ _ _ := MonCat.ext fun _ => rfl } }
-
-Depends on / 依赖: Adjunction, Adjunction.mk
+--- 原说明 ---
+The forgetful-units adjunction between `GrpCat` and `MonCat`.
 -/
 def GrpCat.forget₂MonAdj : forget₂ GrpCat MonCat ⊣ MonCat.units.{u} := Adjunction.mk' {
   homEquiv _ Y :=
@@ -521,98 +311,41 @@ def GrpCat.forget₂MonAdj : forget₂ GrpCat MonCat ⊣ MonCat.units.{u} := Adj
   counit :=
     { app X := MonCat.ofHom (Units.coeHom X)
       naturality _ _ _ := MonCat.ext fun _ => rfl } }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonCat.units.{u}.IsRightAdjoint
-  body: ⟨_, ⟨GrpCat.forget₂MonAdj⟩⟩
-
-中文:
-实例 :
-  签名: 幺半群范畴.units.{u}.是右伴随
-  定义体: ⟨_, ⟨GrpCat.forget₂MonAdj⟩⟩
-
-Depends on / 依赖: GrpCat, GrpCat.forget
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonCat.units.{u}.IsRightAdjoint :=
   ⟨_, ⟨GrpCat.forget₂MonAdj⟩⟩
 
 /-- The functor taking a monoid to its subgroup of units. -/
 @[simps!]
-/--
-Definition of `CommMonCat.units` / `CommMonCat.units` 的定义
+/-
+**CommMonCat.units** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CommMonCat.units : CommMonCat.{u} ⥤ CommGrpCat.{u} where obj R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CommMonCat.units
-  signature: : CommMonCat.{u} ⥤ CommGrpCat.{u} where
-  body: CommGrpCat.of Rˣ
-map f := CommGrpCat.ofHom Units.map f.hom
-  map_id _ := CommGrpCat.ext fun _ => Units.ext rfl
-  map_comp _ _ := CommGrpCat.ext fun _ => Units.ext rfl
-
-中文:
-定义 交换幺半群范畴.units
-  签名: : 交换幺半群范畴.{u} ⥤ 交换群范畴.{u} where
-  定义体: CommGrpCat.of Rˣ
-map f := CommGrpCat.ofHom Units.map f.hom
-  map_id _ := CommGrpCat.ext fun _ => Units.ext rfl
-  map_comp _ _ := CommGrpCat.ext fun _ => Units.ext rfl
-
-Depends on / 依赖: CommGrpCat, CommGrpCat.of
+--- 原说明 ---
+The functor taking a monoid to its subgroup of units.
 -/
 def CommMonCat.units : CommMonCat.{u} ⥤ CommGrpCat.{u} where
   obj R := CommGrpCat.of Rˣ
-map f := CommGrpCat.ofHom Units.map f.hom
+  map f := CommGrpCat.ofHom <| Units.map f.hom
   map_id _ := CommGrpCat.ext fun _ => Units.ext rfl
   map_comp _ _ := CommGrpCat.ext fun _ => Units.ext rfl
 
-/--
-Definition of `CommGrpCat.forget₂CommMonAdj` / `CommGrpCat.forget₂CommMonAdj` 的定义
+/-- The forgetful-units adjunction between `CommGrpCat` and `CommMonCat`. -/
+/-
+**CommGrpCat.forget** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CommGrpCat.forget₂CommMonAdj
-  signature: : forget₂ CommGrpCat CommMonCat ⊣ CommMonCat.units.{u}
-  body: Adjunction.mk' {
-    homEquiv := fun _ Y =>
-      { toFun f := ofHom (MonoidHom.toHomUnits f.hom)
-        invFun f := CommMonCat.ofHom ((Units.coeHom Y).comp f.hom) }
-    unit.app X := ofHom toUnits.toMonoidHom
-    -- `aesop` can find the following proof but it takes `0.5`s.
-    unit.naturality _ _ _ := CommGrpCat.ext fun _ => Units.ext rfl
-    counit.app X := CommMonCat.ofHom (Units.coeHom X)
-    -- `aesop` can find the following proof but it takes `0.5`s.
-    counit.naturality _ _ _ := CommMonCat.ext fun _ => rfl
-    -- `aesop` can find the following proof but it takes `0.2`s.
-    homEquiv_unit := by intros; rfl
-    -- `aesop` can find the following proof but it takes `0.2`s.
-    homEquiv_counit := by intros; rfl }
-
-中文:
-定义 交换群范畴.forget₂CommMonAdj
-  签名: : forget₂ 交换群范畴 交换幺半群范畴 ⊣ 交换幺半群范畴.units.{u}
-  定义体: Adjunction.mk' {
-    homEquiv := fun _ Y =>
-      { toFun f := ofHom (MonoidHom.toHomUnits f.hom)
-        invFun f := CommMonCat.ofHom ((Units.coeHom Y).comp f.hom) }
-    unit.app X := ofHom toUnits.toMonoidHom
-    -- `aesop` can find the following proof but it takes `0.5`s.
-    unit.naturality _ _ _ := CommGrpCat.ext fun _ => Units.ext rfl
-    counit.app X := CommMonCat.ofHom (Units.coeHom X)
-    -- `aesop` can find the following proof but it takes `0.5`s.
-    counit.naturality _ _ _ := CommMonCat.ext fun _ => rfl
-    -- `aesop` can find the following proof but it takes `0.2`s.
-    homEquiv_unit := by intros; rfl
-    -- `aesop` can find the following proof but it takes `0.2`s.
-    homEquiv_counit := by intros; rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mk, CommMonCat, CommMonCat.ofHom, MonoidHom, MonoidHom.toHomUnits, Units.coeHom, coeHom, f.hom, homEquiv, invFun, toHomUnits, toMonoidHom, toUnits, toUnits.toMonoidHom, unit.app
+--- 原说明 ---
+The forgetful-units adjunction between `CommGrpCat` and `CommMonCat`.
 -/
 def CommGrpCat.forget₂CommMonAdj : forget₂ CommGrpCat CommMonCat ⊣ CommMonCat.units.{u} :=
   Adjunction.mk' {
-    homEquiv := fun _ Y =>
+    homEquiv := fun _ Y ↦
       { toFun f := ofHom (MonoidHom.toHomUnits f.hom)
         invFun f := CommMonCat.ofHom ((Units.coeHom Y).comp f.hom) }
     unit.app X := ofHom toUnits.toMonoidHom
@@ -625,21 +358,9 @@ def CommGrpCat.forget₂CommMonAdj : forget₂ CommGrpCat CommMonCat ⊣ CommMon
     homEquiv_unit := by intros; rfl
     -- `aesop` can find the following proof but it takes `0.2`s.
     homEquiv_counit := by intros; rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommMonCat.units.{u}.IsRightAdjoint
-  body: ⟨_, ⟨CommGrpCat.forget₂CommMonAdj⟩⟩
-
-中文:
-实例 :
-  签名: 交换幺半群范畴.units.{u}.是右伴随
-  定义体: ⟨_, ⟨CommGrpCat.forget₂CommMonAdj⟩⟩
-
-Depends on / 依赖: CommGrpCat, CommGrpCat.forget
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommMonCat.units.{u}.IsRightAdjoint :=
   ⟨_, ⟨CommGrpCat.forget₂CommMonAdj⟩⟩

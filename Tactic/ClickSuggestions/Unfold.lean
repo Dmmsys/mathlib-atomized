@@ -64,48 +64,22 @@ open Lean Meta ProofWidgets Jsx
 
 namespace Mathlib.Tactic.ClickSuggestions
 
-/--
-Definition of `unfoldProjDefaultInst?` / `unfoldProjDefaultInst?` 的定义
+/-- Unfold a class projection if the instance is tagged with `@[default_instance]`.
+This is used in the `unfold?` tactic in order to not show these unfolds to the user.
+Similar to `Lean.Meta.unfoldProjInst?`. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.unfoldProjDefaultInst** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.ClickSuggestions`。
+形式化陈述：unfoldProjDefaultInst? (e : Expr) : MetaM (Option Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unfoldProjDefaultInst?
-  signature: (e : Expr)
-  body: do
-  let .const declName _ := e.getAppFn | return none
-  let some { fromClass := true, ctorName, .. } ← getProjectionFnInfo? declName | return none
-  -- get the list of default instances of the class
-  let some (ConstantInfo.ctorInfo ci) := (← getEnv).find? ctorName | return none
-  let defaults ← getDefaultInstances ci.induct
-  if defaults.isEmpty then return none
-
-let some e ← withDefault unfoldDefinition? e | return none
-  let .proj _ i c := e.getAppFn | return none
-  -- check that the structure `c` comes from one of the default instances
-  let .const inst _ := c.getAppFn | return none
-  unless defaults.any (·.1 == inst) do return none
-
-let some r ← withReducibleAndInstances project? c i | return none
-.headBeta return mkAppN r e.getAppArgs
-
-中文:
-定义 unfoldProjDefaultInst?
-  签名: (e : Expr)
-  定义体: do
-  let .const declName _ := e.getAppFn | return none
-  let some { fromClass := true, ctorName, .. } ← getProjectionFnInfo? declName | return none
-  -- get the list of default instances of the class
-  let some (ConstantInfo.ctorInfo ci) := (← getEnv).find? ctorName | return none
-  let defaults ← getDefaultInstances ci.induct
-  if defaults.isEmpty then return none
-
-let some e ← withDefault unfoldDefinition? e | return none
-  let .proj _ i c := e.getAppFn | return none
-  -- check that the structure `c` comes from one of the default instances
-  let .const inst _ := c.getAppFn | return none
-  unless defaults.any (·.1 == inst) do return none
-
-let some r ← withReducibleAndInstances project? c i | return none
-.headBeta return mkAppN r e.getAppArgs
+--- 原说明 ---
+Unfold a class projection if the instance is tagged with `@[default_instance]`.
+This is used in the `unfold?` tactic in order to not show these unfolds to the u
+ser.
+Similar to `Lean.Meta.unfoldProjInst?`.
 -/
 def unfoldProjDefaultInst? (e : Expr) : MetaM (Option Expr) := do
   let .const declName _ := e.getAppFn | return none
@@ -115,31 +89,23 @@ def unfoldProjDefaultInst? (e : Expr) : MetaM (Option Expr) := do
   let defaults ← getDefaultInstances ci.induct
   if defaults.isEmpty then return none
 
-let some e ← withDefault unfoldDefinition? e | return none
+  let some e ← withDefault <| unfoldDefinition? e | return none
   let .proj _ i c := e.getAppFn | return none
   -- check that the structure `c` comes from one of the default instances
   let .const inst _ := c.getAppFn | return none
   unless defaults.any (·.1 == inst) do return none
 
-let some r ← withReducibleAndInstances project? c i | return none
-.headBeta return mkAppN r e.getAppArgs
+  let some r ← withReducibleAndInstances <| project? c i | return none
+  return mkAppN r e.getAppArgs |>.headBeta
 
-/--
-Definition of `unfolds` / `unfolds` 的定义
+/-- Return the consecutive unfoldings of `e`. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.unfolds** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unfolds
-  signature: (e : Expr)
-  body: do
-  let e' ← whnfCore e
-  go e' (if e == e' then #[] else #[e'])
-
-中文:
-定义 unfolds
-  签名: (e : Expr)
-  定义体: do
-  let e' ← whnfCore e
-  go e' (if e == e' then #[] else #[e'])
+--- 原说明 ---
+Return the consecutive unfoldings of `e`.
 -/
 partial def unfolds (e : Expr) : MetaM (Array Expr) := do
   let e' ← whnfCore e
@@ -168,38 +134,28 @@ where
       fun _ =>
         return acc
 
-/--
-Definition of `isUserFriendly` / `isUserFriendly` 的定义
+/-- Determine whether `e` contains no internal names or raw projections.
+We only consider the explicit parts of `e`, because it may happen that an
+/-
+**Mathlib.Tactic.ClickSuggestions.implicit** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Ta
+ctic.ClickSuggestions`。
+形式化陈述：implicit argument is marked as an internal detail, but that is not a probl
+em. - / partial def isUserFriendly (e : Expr) : MetaM Bool
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance implicit argument is marked as an internal detail, but that is not a problem. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.isUserFriendly** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isUserFriendly
-  signature: (e : Expr)
-  body: do
-  match e with
-  | .const name _ => return !name.isInternalDetail
-  | .proj .. => return false
-  | .app .. =>
-    e.withApp fun f args => do
-    (isUserFriendly f) <&&> do
-      let finfo ← getFunInfoNArgs f e.getAppNumArgs
-      e.getAppNumArgs.allM fun i _ =>
-        if finfo.paramInfo[i]?.all (·.isExplicit) then isUserFriendly args[i]! else return true
-  | _ => return true
-
-中文:
-定义 isUserFriendly
-  签名: (e : Expr)
-  定义体: do
-  match e with
-  | .const name _ => return !name.isInternalDetail
-  | .proj .. => return false
-  | .app .. =>
-    e.withApp fun f args => do
-    (isUserFriendly f) <&&> do
-      let finfo ← getFunInfoNArgs f e.getAppNumArgs
-      e.getAppNumArgs.allM fun i _ =>
-        if finfo.paramInfo[i]?.all (·.isExplicit) then isUserFriendly args[i]! else return true
-  | _ => return true
+--- 原说明 ---
+Determine whether `e` contains no internal names or raw projections.
+We only consider the explicit parts of `e`, because it may happen that an
+instance implicit argument is marked as an internal detail, but that is not a pr
+oblem.
 -/
 partial def isUserFriendly (e : Expr) : MetaM Bool := do
   match e with
@@ -213,44 +169,33 @@ partial def isUserFriendly (e : Expr) : MetaM Bool := do
         if finfo.paramInfo[i]?.all (·.isExplicit) then isUserFriendly args[i]! else return true
   | _ => return true
 
-/--
-Definition of `filteredUnfolds` / `filteredUnfolds` 的定义
+/-- Return the consecutive unfoldings of `e` that are user friendly. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.filteredUnfolds** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.ClickSuggestions`。
+形式化陈述：filteredUnfolds (e : Expr) : MetaM (Array Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition filteredUnfolds
-  signature: (e : Expr)
-  body: withDefault do (← unfolds e).filterM isUserFriendly
-
-中文:
-定义 filteredUnfolds
-  签名: (e : Expr)
-  定义体: withDefault do (← unfolds e).filterM isUserFriendly
-
-Depends on / 依赖: filterM, isUserFriendly, unfolds, withDefault
+--- 原说明 ---
+Return the consecutive unfoldings of `e` that are user friendly.
 -/
 def filteredUnfolds (e : Expr) : MetaM (Array Expr) :=
   withDefault do (← unfolds e).filterM isUserFriendly
 
-/--
-Definition of `tacticSyntax` / `tacticSyntax` 的定义
+/-- Return the tactic string that does the unfolding. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.tacticSyntax** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.ClickSuggestions`。
+形式化陈述：tacticSyntax (e eNew : Expr) (rwKind : RwKind) : ClickSuggestionsM (TSynta
+x `tactic)
+参数：e eNew : Expr；rwKind : RwKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tacticSyntax
-  signature: (e eNew : Expr) (rwKind : RwKind)
-  body: do
-  let e ← PrettyPrinter.delab e
-  let eNew ← PrettyPrinter.delab eNew
-  let fromRfl ← `(show $e = $eNew from $(mkIdent `rfl))
-  mkRewrite rwKind false fromRfl (← getHypIdent?)
-
-中文:
-定义 tacticSyntax
-  签名: (e eNew : Expr) (rwKind : RwKind)
-  定义体: do
-  let e ← PrettyPrinter.delab e
-  let eNew ← PrettyPrinter.delab eNew
-  let fromRfl ← `(show $e = $eNew from $(mkIdent `rfl))
-  mkRewrite rwKind false fromRfl (← getHypIdent?)
+--- 原说明 ---
+Return the tactic string that does the unfolding.
 -/
 def tacticSyntax (e eNew : Expr) (rwKind : RwKind) :
     ClickSuggestionsM (TSyntax `tactic) := do
@@ -291,3 +236,4 @@ elab "#unfold? " e:term : command => do
         ++ .joinSep unfolds "\n")
 
 end Mathlib.Tactic.ClickSuggestions
+

@@ -30,294 +30,220 @@ open Nat
 
 namespace List
 
-/--
-Definition of `Ico` / `Ico` 的定义
+/-- `Ico n m` is the list of natural numbers `n ≤ x < m`.
+(Ico stands for "interval, closed-open".)
 
-English:
-definition Ico
-  signature: (n m : Nat)
-  body: range' n (m - n)
-
-中文:
-定义 左闭右开区间
-  签名: (n m : 自然数)
-  定义体: range' n (m - n)
+See also `Mathlib/Order/Interval/Basic.lean` for modelling intervals in general preorders, as well
+as sibling definitions alongside it such as `Set.Ico`, `Multiset.Ico` and `Finset.Ico`
+for sets, multisets and finite sets respectively.
 -/
-def Ico (n m : Nat) : List Nat :=
+/-
+**List.Ico** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：Ico (n m : Nat) : List Nat
+参数：n m : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+
+--- 原说明 ---
+`Ico n m` is the list of natural numbers `n ≤ x < m`.
+(Ico stands for "interval, closed-open".)
+
+See also `Mathlib/Order/Interval/Basic.lean` for modelling intervals in general 
+preorders, as well
+as sibling definitions alongside it such as `Set.Ico`, `Multiset.Ico` and `Finse
+t.Ico`
+for sets, multisets and finite sets respectively.
+-/
+def Ico (n m : ℕ) : List ℕ :=
   range' n (m - n)
 
 namespace Ico
 
-/--
-theorem `zero_bot` / 定理 `zero_bot`
-
-English:
-theorem zero_bot
-  given: (n : Nat)
-  statement: Ico 0 n = range n
-  proof: by rw [Ico, Nat.sub_zero, range_eq_range']
+/-
+**List.Ico.zero_bot** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：zero_bot (n : Nat) : Ico 0 n = range n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Ico.eq_1`：∀ (n m : ℕ), List.Ico n m = List.range' n (m - n)
+· 使用定理 `Nat.sub_zero`：∀ (n : ℕ), n - 0 = n
+· 使用定理 `List.range_eq_range'`：∀ {n : ℕ}, List.range n = List.range' 0 n
+-/
+theorem zero_bot (n : ℕ) : Ico 0 n = range n := by rw [Ico, Nat.sub_zero, range_eq_range']
 
 @[simp]
-
-中文:
-定理 zero_bot
-  条件: (n : 自然数)
-  结论: 左闭右开区间 0 n = range n
-  证明: by rw [Ico, Nat.sub_zero, range_eq_range']
-
-@[simp]
-
-Depends on / 依赖: Nat.sub_zero, range_eq_range, sub_zero
+/-
+**List.Ico.length** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：length (n m : Nat) : length (Ico n m) = m - n
+参数：n m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.length_range'`：∀ {s step n : ℕ}, (List.range' s n step).length = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem zero_bot (n : Nat) : Ico 0 n = range n := by rw [Ico, Nat.sub_zero, range_eq_range']
-
-@[simp]
-/--
-theorem `length` / 定理 `length`
-
-English:
-theorem length
-  given: (n m : Nat)
-  statement: length (Ico n m) = m - n
-  proof: by
+theorem length (n m : ℕ) : length (Ico n m) = m - n := by
   dsimp [Ico]
   simp [length_range']
-
-中文:
-定理 length
-  条件: (n m : 自然数)
-  结论: length (左闭右开区间 n m) = m - n
-  证明: by
-  dsimp [Ico]
-  simp [length_range']
-
-Depends on / 依赖: length_range
+/-
+**List.Ico.pairwise_lt** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：pairwise_lt (n m : Nat) : Pairwise (· < ·) (Ico n m)
+参数：n m : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
 -/
-theorem length (n m : Nat) : length (Ico n m) = m - n := by
-  dsimp [Ico]
-  simp [length_range']
-
-/--
-theorem `pairwise_lt` / 定理 `pairwise_lt`
-
-English:
-theorem pairwise_lt
-  given: (n m : Nat)
-  statement: Pairwise (· < ·) (Ico n m)
-  proof: by
+theorem pairwise_lt (n m : ℕ) : Pairwise (· < ·) (Ico n m) := by
   dsimp [Ico]
   simp [pairwise_lt_range']
-
-中文:
-定理 pairwise_lt
-  条件: (n m : 自然数)
-  结论: 两两 (· < ·) (左闭右开区间 n m)
-  证明: by
-  dsimp [Ico]
-  simp [pairwise_lt_range']
-
-Depends on / 依赖: pairwise_lt_range
+/-
+**List.Ico.nodup** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：nodup (n m : Nat) : Nodup (Ico n m)
+参数：n m : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
 -/
-theorem pairwise_lt (n m : Nat) : Pairwise (· < ·) (Ico n m) := by
-  dsimp [Ico]
-  simp [pairwise_lt_range']
-
-/--
-theorem `nodup` / 定理 `nodup`
-
-English:
-theorem nodup
-  given: (n m : Nat)
-  statement: Nodup (Ico n m)
-  proof: by
+theorem nodup (n m : ℕ) : Nodup (Ico n m) := by
   dsimp [Ico]
   simp [nodup_range']
 
 @[simp]
-
-中文:
-定理 nodup
-  条件: (n m : 自然数)
-  结论: Nodup (左闭右开区间 n m)
-  证明: by
-  dsimp [Ico]
-  simp [nodup_range']
-
-@[simp]
-
-Depends on / 依赖: nodup_range
+/-
+**List.Ico.mem** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：mem {n m l : Nat} : l in Ico n m ↔ n <= l ∧ l < m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem nodup (n m : Nat) : Nodup (Ico n m) := by
-  dsimp [Ico]
-  simp [nodup_range']
-
-@[simp]
-/--
-theorem `mem` / 定理 `mem`
-
-English:
-theorem mem
-  given: {n m l : Nat}
-  statement: l in Ico n m ↔ n <= l ∧ l < m
-  proof: by
-  suffices n <= l ∧ l < n + (m - n) ↔ n <= l ∧ l < m by simp [Ico, this]
+theorem mem {n m l : ℕ} : l ∈ Ico n m ↔ n ≤ l ∧ l < m := by
+  suffices n ≤ l ∧ l < n + (m - n) ↔ n ≤ l ∧ l < m by simp [Ico, this]
   lia
-
-中文:
-定理 mem
-  条件: {n m l : 自然数}
-  结论: l in 左闭右开区间 n m ↔ n <= l ∧ l < m
-  证明: by
-  suffices n <= l ∧ l < n + (m - n) ↔ n <= l ∧ l < m by simp [Ico, this]
-  lia
+/-
+**List.Ico.eq_nil_of_le** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：eq_nil_of_le {n m : Nat} (h : m <= n) : Ico n m = []
+参数：h : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.sub_eq_zero_iff_le`：∀ {n m : ℕ}, n - m = 0 ↔ n ≤ m
+· 使用定理 `List.range'_zero`：∀ {s step : ℕ}, List.range' s 0 step = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mem {n m l : Nat} : l in Ico n m ↔ n <= l ∧ l < m := by
-  suffices n <= l ∧ l < n + (m - n) ↔ n <= l ∧ l < m by simp [Ico, this]
-  lia
-
-/--
-theorem `eq_nil_of_le` / 定理 `eq_nil_of_le`
-
-English:
-theorem eq_nil_of_le
-  given: {n m : Nat} (h : m <= n)
-  statement: Ico n m = []
-  proof: by
+theorem eq_nil_of_le {n m : ℕ} (h : m ≤ n) : Ico n m = [] := by
   simp [Ico, Nat.sub_eq_zero_iff_le.mpr h]
-
-中文:
-定理 eq_nil_of_le
-  条件: {n m : 自然数} (h : m <= n)
-  结论: 左闭右开区间 n m = []
-  证明: by
-  simp [Ico, Nat.sub_eq_zero_iff_le.mpr h]
-
-Depends on / 依赖: Nat.sub_eq_zero_iff_le.mpr, sub_eq_zero_iff_le
+/-
+**List.Ico.map_add** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：map_add (n m k : Nat) : (Ico n m).map (k + ·) = Ico (n + k) (m + k)
+参数：n m k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Ico.eq_1`：∀ (n m : ℕ), List.Ico n m = List.range' n (m - n)
+· 使用定理 `List.map_add_range'`：∀ {a : ℕ} (s n step : ℕ), List.map (fun x => a + x)
+ (List.range' s n step) = List.range' (a + s) n step
+· 使用定理 `Nat.add_sub_add_right`：∀ (n k m : ℕ), n + k - (m + k) = n - m
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
 -/
-theorem eq_nil_of_le {n m : Nat} (h : m <= n) : Ico n m = [] := by
-  simp [Ico, Nat.sub_eq_zero_iff_le.mpr h]
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (n m k : Nat)
-  statement: (Ico n m).map (k + ·) = Ico (n + k) (m + k)
-  proof: by
-  rw [Ico]; rw [Ico]; rw [map_add_range']; rw [Nat.add_sub_add_right m k]; rw [Nat.add_comm n k]
-
-中文:
-定理 map_add
-  条件: (n m k : 自然数)
-  结论: (左闭右开区间 n m).map (k + ·) = 左闭右开区间 (n + k) (m + k)
-  证明: by
-  rw [Ico]; rw [Ico]; rw [map_add_range']; rw [Nat.add_sub_add_right m k]; rw [Nat.add_comm n k]
-
-Depends on / 依赖: Nat.add_comm, Nat.add_sub_add_right, add_comm, add_sub_add_right, map_add_range
+theorem map_add (n m k : ℕ) : (Ico n m).map (k + ·) = Ico (n + k) (m + k) := by
+  rw [Ico, Ico, map_add_range', Nat.add_sub_add_right m k, Nat.add_comm n k]
+/-
+**List.Ico.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：map_sub (n m k : Nat) (h₁ : k <= n) : ((Ico n m).map fun x => x - k) = Ico
+ (n - k) (m - k)
+参数：n m k : Nat；h₁ : k <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Ico.eq_1`：∀ (n m : ℕ), List.Ico n m = List.range' n (m - n)
+· 使用定理 `Nat.sub_sub_sub_cancel_right`：∀ {a b c : ℕ}, c ≤ b → a - c - (b - c) = a
+ - b
+· 使用定理 `List.map_sub_range'`：∀ {step a s : ℕ}, a ≤ s → ∀ (n : ℕ), List.map (fun 
+x => x - a) (List.range' s n step) = List.range' (s - a) n step
 -/
-theorem map_add (n m k : Nat) : (Ico n m).map (k + ·) = Ico (n + k) (m + k) := by
-  rw [Ico]; rw [Ico]; rw [map_add_range']; rw [Nat.add_sub_add_right m k]; rw [Nat.add_comm n k]
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  given: (n m k : Nat) (h₁ : k <= n)
-  proof: by
-  rw [Ico]; rw [Ico]; rw [Nat.sub_sub_sub_cancel_right h₁]; rw [map_sub_range' h₁]
-
-@[simp]
-
-中文:
-定理 map_sub
-  条件: (n m k : 自然数) (h₁ : k <= n)
-  证明: by
-  rw [Ico]; rw [Ico]; rw [Nat.sub_sub_sub_cancel_right h₁]; rw [map_sub_range' h₁]
-
-@[simp]
-
-Depends on / 依赖: Nat.sub_sub_sub_cancel_right, map_sub_range, sub_sub_sub_cancel_right
--/
-theorem map_sub (n m k : Nat) (h₁ : k <= n) :
+theorem map_sub (n m k : ℕ) (h₁ : k ≤ n) :
     ((Ico n m).map fun x => x - k) = Ico (n - k) (m - k) := by
-  rw [Ico]; rw [Ico]; rw [Nat.sub_sub_sub_cancel_right h₁]; rw [map_sub_range' h₁]
+  rw [Ico, Ico, Nat.sub_sub_sub_cancel_right h₁, map_sub_range' h₁]
 
 @[simp]
-/--
-theorem `self_empty` / 定理 `self_empty`
-
-English:
-theorem self_empty
-  given: {n : Nat}
-  statement: Ico n n = []
-  proof: eq_nil_of_le (le_refl n)
-
-@[simp]
-
-中文:
-定理 self_empty
-  条件: {n : 自然数}
-  结论: 左闭右开区间 n n = []
-  证明: eq_nil_of_le (le_refl n)
-
-@[simp]
-
-Depends on / 依赖: eq_nil_of_le, le_refl
+/-
+**List.Ico.self_empty** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：self_empty {n : Nat} : Ico n n = []
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Ico.eq_nil_of_le`：eq_nil_of_le {n m : Nat} (h : m <= n) : Ico n m =
+ []
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem self_empty {n : Nat} : Ico n n = [] :=
+theorem self_empty {n : ℕ} : Ico n n = [] :=
   eq_nil_of_le (le_refl n)
 
 @[simp]
-/--
-theorem `eq_empty_iff` / 定理 `eq_empty_iff`
-
-English:
-theorem eq_empty_iff
-  given: {n m : Nat}
-  statement: Ico n m = [] ↔ m <= n
-  proof: Iff.intro (fun h => Nat.sub_eq_zero_iff_le.mp <| by rw [← length, h, List.length]) eq_nil_of_le
-
-中文:
-定理 eq_empty_iff
-  条件: {n m : 自然数}
-  结论: 左闭右开区间 n m = [] ↔ m <= n
-  证明: Iff.intro (fun h => Nat.sub_eq_zero_iff_le.mp <| by rw [← length, h, List.length]) eq_nil_of_le
-
-Depends on / 依赖: Iff.intro, List.length, Nat.sub_eq_zero_iff_le.mp, eq_nil_of_le, length, sub_eq_zero_iff_le
+/-
+**List.Ico.eq_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：eq_empty_iff {n m : Nat} : Ico n m = [] ↔ m <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.sub_eq_zero_iff_le`：∀ {n m : ℕ}, n - m = 0 ↔ n ≤ m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Ico.length`：length (n m : Nat) : length (Ico n m) = m - n
+· 使用定理 `List.length.eq_1`：∀ {α : Type u_1}, [].length = 0
+· 使用定理 `List.Ico.eq_nil_of_le`：eq_nil_of_le {n m : Nat} (h : m <= n) : Ico n m =
+ []
 -/
-theorem eq_empty_iff {n m : Nat} : Ico n m = [] ↔ m <= n :=
+theorem eq_empty_iff {n m : ℕ} : Ico n m = [] ↔ m ≤ n :=
   Iff.intro (fun h => Nat.sub_eq_zero_iff_le.mp <| by rw [← length, h, List.length]) eq_nil_of_le
-
-/--
-theorem `append_consecutive` / 定理 `append_consecutive`
-
-English:
-theorem append_consecutive
-  given: {n m l : Nat} (hnm : n <= m) (hml : m <= l)
-  proof: by
-  dsimp only [Ico]
-  convert! range'_append using 2
-  · rw [Nat.one_mul, Nat.add_sub_cancel' hnm]
-  · lia
-
-@[simp]
-
-中文:
-定理 append_consecutive
-  条件: {n m l : 自然数} (hnm : n <= m) (hml : m <= l)
-  证明: by
-  dsimp only [Ico]
-  convert! range'_append using 2
-  · rw [Nat.one_mul, Nat.add_sub_cancel' hnm]
-  · lia
-
-@[simp]
-
-Depends on / 依赖: Nat.add_sub_cancel, Nat.one_mul, _append, add_sub_cancel, convert, one_mul
+/-
+**List.Ico.append_consecutive** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：append_consecutive {n m l : Nat} (hnm : n <= m) (hml : m <= l) : Ico n m +
++ Ico m l = Ico n l
+参数：hnm : n <= m；hml : m <= l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.one_mul`：∀ (n : ℕ), 1 * n = n
+· 使用定理 `Nat.add_sub_cancel'`：∀ {n m : ℕ}, m ≤ n → m + (n - m) = n
+· 使用定理 `List.range'_append`：∀ {s m n step : ℕ}, List.range' s m step ++ List.ran
+ge' (s + step * m) n step = List.range' s (m + n) step
 -/
-theorem append_consecutive {n m l : Nat} (hnm : n <= m) (hml : m <= l) :
+theorem append_consecutive {n m l : ℕ} (hnm : n ≤ m) (hml : m ≤ l) :
     Ico n m ++ Ico m l = Ico n l := by
   dsimp only [Ico]
   convert! range'_append using 2
@@ -325,40 +251,27 @@ theorem append_consecutive {n m l : Nat} (hnm : n <= m) (hml : m <= l) :
   · lia
 
 @[simp]
-/--
-theorem `inter_consecutive` / 定理 `inter_consecutive`
-
-English:
-theorem inter_consecutive
-  given: (n m l : Nat)
-  statement: Ico n m inter Ico m l = []
-  proof: by
-  apply eq_nil_iff_forall_not_mem.2
-  intro a
-  simp only [and_imp, not_and, not_lt, List.mem_inter_iff, List.Ico.mem]
-  intro _ h₂ h₃
-  exfalso
-  exact not_lt_of_ge h₃ h₂
-
-@[simp]
-
-中文:
-定理 inter_consecutive
-  条件: (n m l : 自然数)
-  结论: 左闭右开区间 n m inter 左闭右开区间 m l = []
-  证明: by
-  apply eq_nil_iff_forall_not_mem.2
-  intro a
-  simp only [and_imp, not_and, not_lt, List.mem_inter_iff, List.Ico.mem]
-  intro _ h₂ h₃
-  exfalso
-  exact not_lt_of_ge h₃ h₂
-
-@[simp]
-
-Depends on / 依赖: List.Ico.mem, List.mem_inter_iff, and_imp, eq_nil_iff_forall_not_mem, mem_inter_iff, not_and, not_lt, not_lt_of_ge
+/-
+**List.Ico.inter_consecutive** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：inter_consecutive (n m l : Nat) : Ico n m inter Ico m l = []
+参数：n m l : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.eq_nil_iff_forall_not_mem`：∀ {α : Type u_1} {l : List α}, l = [] ↔ 
+∀ (a : α), a ∉ l
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instLawfulBEq`：LawfulBEq ℕ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
 -/
-theorem inter_consecutive (n m l : Nat) : Ico n m inter Ico m l = [] := by
+theorem inter_consecutive (n m l : ℕ) : Ico n m ∩ Ico m l = [] := by
   apply eq_nil_iff_forall_not_mem.2
   intro a
   simp only [and_imp, not_and, not_lt, List.mem_inter_iff, List.Ico.mem]
@@ -367,265 +280,216 @@ theorem inter_consecutive (n m l : Nat) : Ico n m inter Ico m l = [] := by
   exact not_lt_of_ge h₃ h₂
 
 @[simp]
-/--
-theorem `bagInter_consecutive` / 定理 `bagInter_consecutive`
-
-English:
-theorem bagInter_consecutive
-  given: (n m l : Nat)
-  proof: (bagInter_nil_iff_inter_nil _ _).2 (by convert! inter_consecutive n m l)
-
-@[simp]
-
-中文:
-定理 bag整数er_consecutive
-  条件: (n m l : 自然数)
-  证明: (bagInter_nil_iff_inter_nil _ _).2 (by convert! inter_consecutive n m l)
-
-@[simp]
-
-Depends on / 依赖: bagInter_nil_iff_inter_nil, convert, inter_consecutive
+/-
+**List.Ico.bagInter_consecutive** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：bagInter_consecutive (n m l : Nat) : @List.bagInter Nat instBEqOfDecidable
+Eq (Ico n m) (Ico m l) = []
+参数：n m l : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.bagInter_nil_iff_inter_nil`：∀ {α : Type u_1} [inst : DecidableEq α]
+ (l₁ l₂ : List α), l₁.bagInter l₂ = [] ↔ l₁ ∩ l₂ = []
+· 使用定理 `List.Ico.inter_consecutive`：inter_consecutive (n m l : Nat) : Ico n m in
+ter Ico m l = []
 -/
 theorem bagInter_consecutive (n m l : Nat) :
-    @List.bagInter Nat instBEqOfDecidableEq (Ico n m) (Ico m l) = [] :=
+    @List.bagInter ℕ instBEqOfDecidableEq (Ico n m) (Ico m l) = [] :=
   (bagInter_nil_iff_inter_nil _ _).2 (by convert! inter_consecutive n m l)
 
 @[simp]
-/--
-theorem `succ_singleton` / 定理 `succ_singleton`
-
-English:
-theorem succ_singleton
-  given: {n : Nat}
-  statement: Ico n (n + 1) = [n]
-  proof: by
-  dsimp [Ico]
-  simp [Nat.add_sub_cancel_left]
-
-中文:
-定理 succ_singleton
-  条件: {n : 自然数}
-  结论: 左闭右开区间 n (n + 1) = [n]
-  证明: by
-  dsimp [Ico]
-  simp [Nat.add_sub_cancel_left]
-
-Depends on / 依赖: Nat.add_sub_cancel_left, add_sub_cancel_left
+/-
+**List.Ico.succ_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：succ_singleton {n : Nat} : Ico n (n + 1) = [n]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.add_sub_cancel_left`：∀ (n m : ℕ), n + m - n = m
+· 使用定理 `List.range'_one`：∀ {s step : ℕ}, List.range' s 1 step = [s]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem succ_singleton {n : Nat} : Ico n (n + 1) = [n] := by
+theorem succ_singleton {n : ℕ} : Ico n (n + 1) = [n] := by
   dsimp [Ico]
   simp [Nat.add_sub_cancel_left]
-
-/--
-theorem `succ_top` / 定理 `succ_top`
-
-English:
-theorem succ_top
-  given: {n m : Nat} (h : n <= m)
-  statement: Ico n (m + 1) = Ico n m ++ [m]
-  proof: by
-  rwa [← succ_singleton, append_consecutive]
-  exact Nat.le_succ _
-
-中文:
-定理 succ_top
-  条件: {n m : 自然数} (h : n <= m)
-  结论: 左闭右开区间 n (m + 1) = 左闭右开区间 n m ++ [m]
-  证明: by
-  rwa [← succ_singleton, append_consecutive]
-  exact Nat.le_succ _
-
-Depends on / 依赖: Nat.le_succ, append_consecutive, le_succ, succ_singleton
+/-
+**List.Ico.succ_top** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：succ_top {n m : Nat} (h : n <= m) : Ico n (m + 1) = Ico n m ++ [m]
+参数：h : n <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Ico.succ_singleton`：succ_singleton {n : Nat} : Ico n (n + 1) = [n]
+· 使用定理 `List.Ico.append_consecutive`：append_consecutive {n m l : Nat} (hnm : n <
+= m) (hml : m <= l) : Ico n m ++ Ico m l = Ico n l
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
 -/
-theorem succ_top {n m : Nat} (h : n <= m) : Ico n (m + 1) = Ico n m ++ [m] := by
+theorem succ_top {n m : ℕ} (h : n ≤ m) : Ico n (m + 1) = Ico n m ++ [m] := by
   rwa [← succ_singleton, append_consecutive]
   exact Nat.le_succ _
-
-/--
-theorem `eq_cons` / 定理 `eq_cons`
-
-English:
-theorem eq_cons
-  given: {n m : Nat} (h : n < m)
-  statement: Ico n m = n :: Ico (n + 1) m
-  proof: by
-  rw [← append_consecutive (Nat.le_succ n) h]; rw [succ_singleton]
+/-
+**List.Ico.eq_cons** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：eq_cons {n m : Nat} (h : n < m) : Ico n m = n :: Ico (n + 1) m
+参数：h : n < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Ico.append_consecutive`：append_consecutive {n m l : Nat} (hnm : n <
+= m) (hml : m <= l) : Ico n m ++ Ico m l = Ico n l
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `List.Ico.succ_singleton`：succ_singleton {n : Nat} : Ico n (n + 1) = [n]
+-/
+theorem eq_cons {n m : ℕ} (h : n < m) : Ico n m = n :: Ico (n + 1) m := by
+  rw [← append_consecutive (Nat.le_succ n) h, succ_singleton]
   rfl
 
 @[simp]
-
-中文:
-定理 eq_cons
-  条件: {n m : 自然数} (h : n < m)
-  结论: 左闭右开区间 n m = n :: 左闭右开区间 (n + 1) m
-  证明: by
-  rw [← append_consecutive (Nat.le_succ n) h]; rw [succ_singleton]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: Nat.le_succ, append_consecutive, le_succ, succ_singleton
+/-
+**List.Ico.pred_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：pred_singleton {m : Nat} (h : 0 < m) : Ico (m - 1) m = [m - 1]
+参数：h : 0 < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `List.range'`：range'_0 (a b : Nat) : range' a b 0 = replicate b a
+· 使用定理 `Nat.sub_sub_self`：∀ {n m : ℕ}, m ≤ n → n - (n - m) = m
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `List.range'_one`：∀ {s step : ℕ}, List.range' s 1 step = [s]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem eq_cons {n m : Nat} (h : n < m) : Ico n m = n :: Ico (n + 1) m := by
-  rw [← append_consecutive (Nat.le_succ n) h]; rw [succ_singleton]
-  rfl
-
-@[simp]
-/--
-theorem `pred_singleton` / 定理 `pred_singleton`
-
-English:
-theorem pred_singleton
-  given: {m : Nat} (h : 0 < m)
-  statement: Ico (m - 1) m = [m - 1]
-  proof: by
+theorem pred_singleton {m : ℕ} (h : 0 < m) : Ico (m - 1) m = [m - 1] := by
   simp [Ico, Nat.sub_sub_self (succ_le_of_lt h)]
-
-中文:
-定理 pred_singleton
-  条件: {m : 自然数} (h : 0 < m)
-  结论: 左闭右开区间 (m - 1) m = [m - 1]
-  证明: by
-  simp [Ico, Nat.sub_sub_self (succ_le_of_lt h)]
-
-Depends on / 依赖: Nat.sub_sub_self, sub_sub_self, succ_le_of_lt
+/-
+**List.Ico.isChain_succ** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：isChain_succ (n m : Nat) : IsChain (fun a b => b = succ a) (Ico n m)
+参数：n m : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Ico.eq_cons`：eq_cons {n m : Nat} (h : n < m) : Ico n m = n :: Ico (
+n + 1) m
+· 使用定理 `List.isChain_range'`：∀ (s n step : ℕ), List.IsChain (fun a b => b = a + 
+step) (List.range' s n step)
+· 使用定理 `List.Ico.eq_nil_of_le`：eq_nil_of_le {n m : Nat} (h : m <= n) : Ico n m =
+ []
 -/
-theorem pred_singleton {m : Nat} (h : 0 < m) : Ico (m - 1) m = [m - 1] := by
-  simp [Ico, Nat.sub_sub_self (succ_le_of_lt h)]
-
-/--
-theorem `isChain_succ` / 定理 `isChain_succ`
-
-English:
-theorem isChain_succ
-  given: (n m : Nat)
-  statement: IsChain (fun a b => b = succ a) (Ico n m)
-  proof: by
+theorem isChain_succ (n m : ℕ) : IsChain (fun a b => b = succ a) (Ico n m) := by
   by_cases! h : n < m
   · rw [eq_cons h]
     unfold List.Ico
     exact isChain_range' _ (_ + 1) 1
   · rw [eq_nil_of_le h]
     exact .nil
-
-中文:
-定理 isChain_succ
-  条件: (n m : 自然数)
-  结论: IsChain (fun a b => b = succ a) (左闭右开区间 n m)
-  证明: by
-  by_cases! h : n < m
-  · rw [eq_cons h]
-    unfold List.Ico
-    exact isChain_range' _ (_ + 1) 1
-  · rw [eq_nil_of_le h]
-    exact .nil
-
-Depends on / 依赖: List.Ico, eq_cons, eq_nil_of_le, isChain_range
+/-
+**List.Ico.notMem_top** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：notMem_top {n m : Nat} : m ∉ Ico n m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem isChain_succ (n m : Nat) : IsChain (fun a b => b = succ a) (Ico n m) := by
-  by_cases! h : n < m
-  · rw [eq_cons h]
-    unfold List.Ico
-    exact isChain_range' _ (_ + 1) 1
-  · rw [eq_nil_of_le h]
-    exact .nil
-
-/--
-theorem `notMem_top` / 定理 `notMem_top`
-
-English:
-theorem notMem_top
-  given: {n m : Nat}
-  statement: m ∉ Ico n m
-  proof: by simp
-
-中文:
-定理 notMem_top
-  条件: {n m : 自然数}
-  结论: m ∉ 左闭右开区间 n m
-  证明: by simp
+theorem notMem_top {n m : ℕ} : m ∉ Ico n m := by simp
+/-
+**List.Ico.filter_lt_of_top_le** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_lt_of_top_le {n m l : Nat} (hml : m <= l) : ((Ico n m).filter fun x
+ => x < l) = Ico n m
+参数：hml : m <= l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.filter_eq_self`：∀ {α : Type u_1} {p : α → Bool} {l : List α}, List.
+filter p l = l ↔ ∀ a ∈ l, p a = true
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Decidable.decide.congr_simp`：∀ (p p_1 : Prop), p = p_1 → ∀ {h : Decidabl
+e p} [h_1 : Decidable p_1], decide p = decide p_1
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.Ico.mem`：mem {n m l : Nat} : l in Ico n m ↔ n <= l ∧ l < m
+· 使用定理 `decide_true`：∀ (h : Decidable True), decide True = true
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem notMem_top {n m : Nat} : m ∉ Ico n m := by simp
-
-/--
-theorem `filter_lt_of_top_le` / 定理 `filter_lt_of_top_le`
-
-English:
-theorem filter_lt_of_top_le
-  given: {n m l : Nat} (hml : m <= l)
-  proof: filter_eq_self.2 fun k hk => by
-    simp only [(lt_of_lt_of_le (mem.1 hk).2 hml), decide_true]
-
-中文:
-定理 filter_lt_of_top_le
-  条件: {n m l : 自然数} (hml : m <= l)
-  证明: filter_eq_self.2 fun k hk => by
-    simp only [(lt_of_lt_of_le (mem.1 hk).2 hml), decide_true]
-
-Depends on / 依赖: decide_true, filter_eq_self, lt_of_lt_of_le
--/
-theorem filter_lt_of_top_le {n m l : Nat} (hml : m <= l) :
+theorem filter_lt_of_top_le {n m l : ℕ} (hml : m ≤ l) :
     ((Ico n m).filter fun x => x < l) = Ico n m :=
   filter_eq_self.2 fun k hk => by
     simp only [(lt_of_lt_of_le (mem.1 hk).2 hml), decide_true]
-
-/--
-theorem `filter_lt_of_le_bot` / 定理 `filter_lt_of_le_bot`
-
-English:
-theorem filter_lt_of_le_bot
-  given: {n m l : Nat} (hln : l <= n)
-  statement: ((Ico n m).filter fun x => x < l) = []
-  proof: filter_eq_nil_iff.2 fun k hk => by
-     simp only [decide_eq_true_eq, not_lt]
-     apply le_trans hln
-     exact (mem.1 hk).1
-
-中文:
-定理 filter_lt_of_le_bot
-  条件: {n m l : 自然数} (hln : l <= n)
-  结论: ((左闭右开区间 n m).filter fun x => x < l) = []
-  证明: filter_eq_nil_iff.2 fun k hk => by
-     simp only [decide_eq_true_eq, not_lt]
-     apply le_trans hln
-     exact (mem.1 hk).1
-
-Depends on / 依赖: decide_eq_true_eq, filter_eq_nil_iff, le_trans, not_lt
+/-
+**List.Ico.filter_lt_of_le_bot** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_lt_of_le_bot {n m l : Nat} (hln : l <= n) : ((Ico n m).filter fun x
+ => x < l) = []
+参数：hln : l <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.filter_eq_nil_iff`：∀ {α : Type u_1} {p : α → Bool} {l : List α}, Li
+st.filter p l = [] ↔ ∀ a ∈ l, ¬p a = true
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.Ico.mem`：mem {n m l : Nat} : l in Ico n m ↔ n <= l ∧ l < m
 -/
-theorem filter_lt_of_le_bot {n m l : Nat} (hln : l <= n) : ((Ico n m).filter fun x => x < l) = [] :=
+theorem filter_lt_of_le_bot {n m l : ℕ} (hln : l ≤ n) : ((Ico n m).filter fun x => x < l) = [] :=
   filter_eq_nil_iff.2 fun k hk => by
      simp only [decide_eq_true_eq, not_lt]
      apply le_trans hln
      exact (mem.1 hk).1
-
-/--
-theorem `filter_lt_of_ge` / 定理 `filter_lt_of_ge`
-
-English:
-theorem filter_lt_of_ge
-  given: {n m l : Nat} (hlm : l <= m)
-  proof: by
-  rcases le_total n l with hnl | hln
-  · rw [← append_consecutive hnl hlm, filter_append, filter_lt_of_top_le (le_refl l),
-      filter_lt_of_le_bot (le_refl l), append_nil]
-  · rw [eq_nil_of_le hln, filter_lt_of_le_bot hln]
-
-@[simp]
-
-中文:
-定理 filter_lt_of_ge
-  条件: {n m l : 自然数} (hlm : l <= m)
-  证明: by
-  rcases le_total n l with hnl | hln
-  · rw [← append_consecutive hnl hlm, filter_append, filter_lt_of_top_le (le_refl l),
-      filter_lt_of_le_bot (le_refl l), append_nil]
-  · rw [eq_nil_of_le hln, filter_lt_of_le_bot hln]
-
-@[simp]
-
-Depends on / 依赖: append_consecutive, append_nil, eq_nil_of_le, filter_append, filter_lt_of_le_bot, filter_lt_of_top_le, le_refl, le_total
+/-
+**List.Ico.filter_lt_of_ge** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_lt_of_ge {n m l : Nat} (hlm : l <= m) : ((Ico n m).filter fun x => 
+x < l) = Ico n l
+参数：hlm : l <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Ico.append_consecutive`：append_consecutive {n m l : Nat} (hnm : n <
+= m) (hml : m <= l) : Ico n m ++ Ico m l = Ico n l
+· 使用定理 `List.filter_append`：∀ {α : Type u_1} {p : α → Bool} (l₁ l₂ : List α), Li
+st.filter p (l₁ ++ l₂) = List.filter p l₁ ++ List.filter p l₂
+· 使用定理 `List.Ico.filter_lt_of_top_le`：filter_lt_of_top_le {n m l : Nat} (hml : m
+ <= l) : ((Ico n m).filter fun x => x < l) = Ico n m
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `List.Ico.filter_lt_of_le_bot`：filter_lt_of_le_bot {n m l : Nat} (hln : l
+ <= n) : ((Ico n m).filter fun x => x < l) = []
+· 使用定理 `List.append_nil`：∀ {α : Type u} (as : List α), as ++ [] = as
+· 使用定理 `List.Ico.eq_nil_of_le`：eq_nil_of_le {n m : Nat} (h : m <= n) : Ico n m =
+ []
 -/
-theorem filter_lt_of_ge {n m l : Nat} (hlm : l <= m) :
+theorem filter_lt_of_ge {n m l : ℕ} (hlm : l ≤ m) :
     ((Ico n m).filter fun x => x < l) = Ico n l := by
   rcases le_total n l with hnl | hln
   · rw [← append_consecutive hnl hlm, filter_append, filter_lt_of_top_le (le_refl l),
@@ -633,224 +497,206 @@ theorem filter_lt_of_ge {n m l : Nat} (hlm : l <= m) :
   · rw [eq_nil_of_le hln, filter_lt_of_le_bot hln]
 
 @[simp]
-/--
-theorem `filter_lt` / 定理 `filter_lt`
-
-English:
-theorem filter_lt
-  given: (n m l : Nat)
-  proof: by
-  rcases le_total m l with hml | hlm
-  · rw [min_eq_left hml, filter_lt_of_top_le hml]
-  · rw [min_eq_right hlm, filter_lt_of_ge hlm]
-
-中文:
-定理 filter_lt
-  条件: (n m l : 自然数)
-  证明: by
-  rcases le_total m l with hml | hlm
-  · rw [min_eq_left hml, filter_lt_of_top_le hml]
-  · rw [min_eq_right hlm, filter_lt_of_ge hlm]
-
-Depends on / 依赖: filter_lt_of_ge, filter_lt_of_top_le, le_total, min_eq_left, min_eq_right
+/-
+**List.Ico.filter_lt** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_lt (n m l : Nat) : ((Ico n m).filter fun x => x < l) = Ico n (min m
+ l)
+参数：n m l : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `min_eq_left`：min_eq_left (h : a <= b) : min a b = a
+· 使用定理 `List.Ico.filter_lt_of_top_le`：filter_lt_of_top_le {n m l : Nat} (hml : m
+ <= l) : ((Ico n m).filter fun x => x < l) = Ico n m
+· 使用引理 `min_eq_right`：min_eq_right (h : b <= a) : min a b = b
+· 使用定理 `List.Ico.filter_lt_of_ge`：filter_lt_of_ge {n m l : Nat} (hlm : l <= m) :
+ ((Ico n m).filter fun x => x < l) = Ico n l
 -/
-theorem filter_lt (n m l : Nat) :
+theorem filter_lt (n m l : ℕ) :
     ((Ico n m).filter fun x => x < l) = Ico n (min m l) := by
   rcases le_total m l with hml | hlm
   · rw [min_eq_left hml, filter_lt_of_top_le hml]
   · rw [min_eq_right hlm, filter_lt_of_ge hlm]
-
-/--
-theorem `filter_le_of_le_bot` / 定理 `filter_le_of_le_bot`
-
-English:
-theorem filter_le_of_le_bot
-  given: {n m l : Nat} (hln : l <= n)
-  proof: filter_eq_self.2 fun k hk => by
-    rw [decide_eq_true_eq]
-    exact le_trans hln (mem.1 hk).1
-
-中文:
-定理 filter_le_of_le_bot
-  条件: {n m l : 自然数} (hln : l <= n)
-  证明: filter_eq_self.2 fun k hk => by
-    rw [decide_eq_true_eq]
-    exact le_trans hln (mem.1 hk).1
-
-Depends on / 依赖: decide_eq_true_eq, filter_eq_self, le_trans
+/-
+**List.Ico.filter_le_of_le_bot** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_le_of_le_bot {n m l : Nat} (hln : l <= n) : ((Ico n m).filter fun x
+ => l <= x) = Ico n m
+参数：hln : l <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.filter_eq_self`：∀ {α : Type u_1} {p : α → Bool} {l : List α}, List.
+filter p l = l ↔ ∀ a ∈ l, p a = true
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.Ico.mem`：mem {n m l : Nat} : l in Ico n m ↔ n <= l ∧ l < m
 -/
-theorem filter_le_of_le_bot {n m l : Nat} (hln : l <= n) :
-    ((Ico n m).filter fun x => l <= x) = Ico n m :=
+theorem filter_le_of_le_bot {n m l : ℕ} (hln : l ≤ n) :
+    ((Ico n m).filter fun x => l ≤ x) = Ico n m :=
   filter_eq_self.2 fun k hk => by
     rw [decide_eq_true_eq]
     exact le_trans hln (mem.1 hk).1
-
-/--
-theorem `filter_le_of_top_le` / 定理 `filter_le_of_top_le`
-
-English:
-theorem filter_le_of_top_le
-  given: {n m l : Nat} (hml : m <= l)
-  statement: ((Ico n m).filter fun x => l <= x) = []
-  proof: filter_eq_nil_iff.2 fun k hk => by
-    rw [decide_eq_true_eq]
-    exact not_le_of_gt (lt_of_lt_of_le (mem.1 hk).2 hml)
-
-中文:
-定理 filter_le_of_top_le
-  条件: {n m l : 自然数} (hml : m <= l)
-  结论: ((左闭右开区间 n m).filter fun x => l <= x) = []
-  证明: filter_eq_nil_iff.2 fun k hk => by
-    rw [decide_eq_true_eq]
-    exact not_le_of_gt (lt_of_lt_of_le (mem.1 hk).2 hml)
-
-Depends on / 依赖: decide_eq_true_eq, filter_eq_nil_iff, lt_of_lt_of_le, not_le_of_gt
+/-
+**List.Ico.filter_le_of_top_le** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_le_of_top_le {n m l : Nat} (hml : m <= l) : ((Ico n m).filter fun x
+ => l <= x) = []
+参数：hml : m <= l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.filter_eq_nil_iff`：∀ {α : Type u_1} {p : α → Bool} {l : List α}, Li
+st.filter p l = [] ↔ ∀ a ∈ l, ¬p a = true
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `decide_eq_true_eq`：∀ {p : Prop} [inst : Decidable p], (decide p = true) 
+= p
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.Ico.mem`：mem {n m l : Nat} : l in Ico n m ↔ n <= l ∧ l < m
 -/
-theorem filter_le_of_top_le {n m l : Nat} (hml : m <= l) : ((Ico n m).filter fun x => l <= x) = [] :=
+theorem filter_le_of_top_le {n m l : ℕ} (hml : m ≤ l) : ((Ico n m).filter fun x => l ≤ x) = [] :=
   filter_eq_nil_iff.2 fun k hk => by
     rw [decide_eq_true_eq]
     exact not_le_of_gt (lt_of_lt_of_le (mem.1 hk).2 hml)
-
-/--
-theorem `filter_le_of_le` / 定理 `filter_le_of_le`
-
-English:
-theorem filter_le_of_le
-  given: {n m l : Nat} (hnl : n <= l)
-  proof: by
+/-
+**List.Ico.filter_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_le_of_le {n m l : Nat} (hnl : n <= l) : ((Ico n m).filter fun x => 
+l <= x) = Ico l m
+参数：hnl : n <= l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Ico.append_consecutive`：append_consecutive {n m l : Nat} (hnm : n <
+= m) (hml : m <= l) : Ico n m ++ Ico m l = Ico n l
+· 使用定理 `List.filter_append`：∀ {α : Type u_1} {p : α → Bool} (l₁ l₂ : List α), Li
+st.filter p (l₁ ++ l₂) = List.filter p l₁ ++ List.filter p l₂
+· 使用定理 `List.Ico.filter_le_of_top_le`：filter_le_of_top_le {n m l : Nat} (hml : m
+ <= l) : ((Ico n m).filter fun x => l <= x) = []
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `List.Ico.filter_le_of_le_bot`：filter_le_of_le_bot {n m l : Nat} (hln : l
+ <= n) : ((Ico n m).filter fun x => l <= x) = Ico n m
+· 使用定理 `List.nil_append`：∀ {α : Type u} (as : List α), [] ++ as = as
+· 使用定理 `List.Ico.eq_nil_of_le`：eq_nil_of_le {n m : Nat} (h : m <= n) : Ico n m =
+ []
+-/
+theorem filter_le_of_le {n m l : ℕ} (hnl : n ≤ l) :
+    ((Ico n m).filter fun x => l ≤ x) = Ico l m := by
   rcases le_total l m with hlm | hml
   · rw [← append_consecutive hnl hlm, filter_append, filter_le_of_top_le (le_refl l),
       filter_le_of_le_bot (le_refl l), nil_append]
   · rw [eq_nil_of_le hml, filter_le_of_top_le hml]
 
 @[simp]
-
-中文:
-定理 filter_le_of_le
-  条件: {n m l : 自然数} (hnl : n <= l)
-  证明: by
-  rcases le_total l m with hlm | hml
-  · rw [← append_consecutive hnl hlm, filter_append, filter_le_of_top_le (le_refl l),
-      filter_le_of_le_bot (le_refl l), nil_append]
-  · rw [eq_nil_of_le hml, filter_le_of_top_le hml]
-
-@[simp]
-
-Depends on / 依赖: append_consecutive, eq_nil_of_le, filter_append, filter_le_of_le_bot, filter_le_of_top_le, le_refl, le_total, nil_append
+/-
+**List.Ico.filter_le** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_le (n m l : Nat) : ((Ico n m).filter fun x => l <= x) = Ico (max n 
+l) m
+参数：n m l : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `List.Ico.filter_le_of_le`：filter_le_of_le {n m l : Nat} (hnl : n <= l) :
+ ((Ico n m).filter fun x => l <= x) = Ico l m
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `List.Ico.filter_le_of_le_bot`：filter_le_of_le_bot {n m l : Nat} (hln : l
+ <= n) : ((Ico n m).filter fun x => l <= x) = Ico n m
 -/
-theorem filter_le_of_le {n m l : Nat} (hnl : n <= l) :
-    ((Ico n m).filter fun x => l <= x) = Ico l m := by
-  rcases le_total l m with hlm | hml
-  · rw [← append_consecutive hnl hlm, filter_append, filter_le_of_top_le (le_refl l),
-      filter_le_of_le_bot (le_refl l), nil_append]
-  · rw [eq_nil_of_le hml, filter_le_of_top_le hml]
-
-@[simp]
-/--
-theorem `filter_le` / 定理 `filter_le`
-
-English:
-theorem filter_le
-  given: (n m l : Nat)
-  statement: ((Ico n m).filter fun x => l <= x) = Ico (max n l) m
-  proof: by
+theorem filter_le (n m l : ℕ) : ((Ico n m).filter fun x => l ≤ x) = Ico (max n l) m := by
   rcases le_total n l with hnl | hln
   · rw [max_eq_right hnl, filter_le_of_le hnl]
   · rw [max_eq_left hln, filter_le_of_le_bot hln]
-
-中文:
-定理 filter_le
-  条件: (n m l : 自然数)
-  结论: ((左闭右开区间 n m).filter fun x => l <= x) = 左闭右开区间 (最大值 n l) m
-  证明: by
-  rcases le_total n l with hnl | hln
-  · rw [max_eq_right hnl, filter_le_of_le hnl]
-  · rw [max_eq_left hln, filter_le_of_le_bot hln]
-
-Depends on / 依赖: filter_le_of_le, filter_le_of_le_bot, le_total, max_eq_left, max_eq_right
+/-
+**List.Ico.filter_lt_of_succ_bot** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_lt_of_succ_bot {n m : Nat} (hnm : n < m) : ((Ico n m).filter fun x 
+=> x < n + 1) = [n]
+参数：hnm : n < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inf_eq_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+= b ↔ b ≤ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.Ico.filter_lt`：filter_lt (n m l : Nat) : ((Ico n m).filter fun x =>
+ x < l) = Ico n (min m l)
+· 使用定理 `List.Ico.succ_singleton`：succ_singleton {n : Nat} : Ico n (n + 1) = [n]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem filter_le (n m l : Nat) : ((Ico n m).filter fun x => l <= x) = Ico (max n l) m := by
-  rcases le_total n l with hnl | hln
-  · rw [max_eq_right hnl, filter_le_of_le hnl]
-  · rw [max_eq_left hln, filter_le_of_le_bot hln]
-
-/--
-theorem `filter_lt_of_succ_bot` / 定理 `filter_lt_of_succ_bot`
-
-English:
-theorem filter_lt_of_succ_bot
-  given: {n m : Nat} (hnm : n < m)
-  proof: by
-  have r : min m (n + 1) = n + 1 := (@inf_eq_right _ _ m (n + 1)).mpr hnm
-  simp [filter_lt n m (n + 1), r]
-
-@[simp]
-
-中文:
-定理 filter_lt_of_succ_bot
-  条件: {n m : 自然数} (hnm : n < m)
-  证明: by
-  have r : min m (n + 1) = n + 1 := (@inf_eq_right _ _ m (n + 1)).mpr hnm
-  simp [filter_lt n m (n + 1), r]
-
-@[simp]
-
-Depends on / 依赖: filter_lt, inf_eq_right
--/
-theorem filter_lt_of_succ_bot {n m : Nat} (hnm : n < m) :
+theorem filter_lt_of_succ_bot {n m : ℕ} (hnm : n < m) :
     ((Ico n m).filter fun x => x < n + 1) = [n] := by
   have r : min m (n + 1) = n + 1 := (@inf_eq_right _ _ m (n + 1)).mpr hnm
   simp [filter_lt n m (n + 1), r]
 
 @[simp]
-/--
-theorem `filter_le_of_bot` / 定理 `filter_le_of_bot`
-
-English:
-theorem filter_le_of_bot
-  given: {n m : Nat} (hnm : n < m)
-  statement: ((Ico n m).filter fun x => x <= n) = [n]
-  proof: by
-  rw [← filter_lt_of_succ_bot hnm]
-  exact filter_congr fun _ _ => by
-    simpa using Nat.lt_succ_iff.symm
-
-中文:
-定理 filter_le_of_bot
-  条件: {n m : 自然数} (hnm : n < m)
-  结论: ((左闭右开区间 n m).filter fun x => x <= n) = [n]
-  证明: by
-  rw [← filter_lt_of_succ_bot hnm]
-  exact filter_congr fun _ _ => by
-    simpa using Nat.lt_succ_iff.symm
-
-Depends on / 依赖: Nat.lt_succ_iff.symm, filter_congr, filter_lt_of_succ_bot, lt_succ_iff
+/-
+**List.Ico.filter_le_of_bot** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：filter_le_of_bot {n m : Nat} (hnm : n < m) : ((Ico n m).filter fun x => x 
+<= n) = [n]
+参数：hnm : n < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.Ico.filter_lt_of_succ_bot`：filter_lt_of_succ_bot {n m : Nat} (hnm :
+ n < m) : ((Ico n m).filter fun x => x < n + 1) = [n]
+· 使用定理 `List.filter_congr`：∀ {α : Type u_1} {p q : α → Bool} {l : List α}, (∀ x 
+∈ l, p x = q x) → List.filter p l = List.filter q l
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Nat.lt_succ_iff`：∀ {m n : ℕ}, m < n.succ ↔ m ≤ n
 -/
-theorem filter_le_of_bot {n m : Nat} (hnm : n < m) : ((Ico n m).filter fun x => x <= n) = [n] := by
+theorem filter_le_of_bot {n m : ℕ} (hnm : n < m) : ((Ico n m).filter fun x => x ≤ n) = [n] := by
   rw [← filter_lt_of_succ_bot hnm]
   exact filter_congr fun _ _ => by
     simpa using Nat.lt_succ_iff.symm
 
-/--
-theorem `trichotomy` / 定理 `trichotomy`
-
-English:
-theorem trichotomy
-  given: (n a b : Nat)
-  statement: n < a ∨ b <= n ∨ n in Ico a b
-  proof: by
-  grind [mem]
-
-中文:
-定理 trichotomy
-  条件: (n a b : 自然数)
-  结论: n < a ∨ b <= n ∨ n in 左闭右开区间 a b
-  证明: by
-  grind [mem]
+/-- For any natural numbers n, a, and b, one of the following holds:
+1. n < a
+2. n ≥ b
+3. n ∈ Ico a b
 -/
-theorem trichotomy (n a b : Nat) : n < a ∨ b <= n ∨ n in Ico a b := by
+/-
+**List.Ico.trichotomy** 是 Mathlib 中的一个定理，位于命名空间 `List.Ico`。
+形式化陈述：trichotomy (n a b : Nat) : n < a ∨ b <= n ∨ n in Ico a b
+参数：n a b : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+For any natural numbers n, a, and b, one of the following holds:
+1. n < a
+2. n ≥ b
+3. n ∈ Ico a b
+-/
+theorem trichotomy (n a b : ℕ) : n < a ∨ b ≤ n ∨ n ∈ Ico a b := by
   grind [mem]
 
 end Ico
 
 end List
+

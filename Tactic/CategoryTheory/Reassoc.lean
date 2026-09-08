@@ -36,41 +36,36 @@ namespace Mathlib.Tactic.Reassoc
 
 /-- A variant of `eq_whisker` with a more convenient argument order for use in tactics. -/
 @[to_dual none]
-/--
-theorem `eq_whisker'` / 定理 `eq_whisker'`
+/-
+**Mathlib.Tactic.Reassoc.eq_whisker'** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.R
+eassoc`。
+形式化陈述：eq_whisker' {C : Type*} [Category* C] {X Y : C} {f g : X ⟶ Y} (w : f = g) 
+{Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+参数：w : f = g；h : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-theorem eq_whisker'
-  statement: {C : Type*} [Category* C]
-  proof: by rw [w]
-
-中文:
-定理 eq_whisker'
-  结论: {C : 类型} [范畴* C]
-  证明: by rw [w]
+--- 原说明 ---
+A variant of `eq_whisker` with a more convenient argument order for use in tacti
+cs.
 -/
 theorem eq_whisker' {C : Type*} [Category* C]
     {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) :
     f ≫ h = g ≫ h := by rw [w]
 
-/--
-Definition of `categorySimp` / `categorySimp` 的定义
+/-- Simplify an expression using only the axioms of a category. -/
+/-
+**Mathlib.Tactic.Reassoc.categorySimp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Reassoc`。
+形式化陈述：categorySimp (e : Expr) : MetaM Simp.Result
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition categorySimp
-  signature: (e : Expr)
-  body: simpOnlyNames [``Category.comp_id, ``Category.id_comp, ``Category.assoc,
-    ``Functor.id_obj, ``Functor.id_map, ``Functor.comp_obj, ``Functor.comp_map] e
-    (config := { decide := false })
-
-中文:
-定义 categorySimp
-  签名: (e : Expr)
-  定义体: simpOnlyNames [``Category.comp_id, ``Category.id_comp, ``Category.assoc,
-    ``Functor.id_obj, ``Functor.id_map, ``Functor.comp_obj, ``Functor.comp_map] e
-    (config := { decide := false })
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Functor, Functor.comp_map, Functor.comp_obj, Functor.id_map, Functor.id_obj, comp_id, comp_map, comp_obj, config, id_comp, id_map, id_obj, simpOnlyNames
+--- 原说明 ---
+Simplify an expression using only the axioms of a category.
 -/
 def categorySimp (e : Expr) : MetaM Simp.Result :=
   simpOnlyNames [``Category.comp_id, ``Category.id_comp, ``Category.assoc,
@@ -78,33 +73,25 @@ def categorySimp (e : Expr) : MetaM Simp.Result :=
     (config := { decide := false })
 
 /--
-Definition of `reassocExprHom` / `reassocExprHom` 的定义
+Given an equation `f = g` between morphisms `X ⟶ Y` in a category,
+produce the equation `∀ {Z} (h : Y ⟶ Z), f ≫ h = g ≫ h`,
+but with compositions fully right associated and identities removed.
+Also returns the category `C` and any instance metavariables that need to be solved for.
+-/
+/-
+**Mathlib.Tactic.Reassoc.reassocExprHom** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Reassoc`。
+形式化陈述：reassocExprHom (e : Expr) : MetaM (Expr × Array MVarId)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reassocExprHom
-  signature: (e : Expr)
-  body: do
-  let lem₀ ← mkConstWithFreshMVarLevels ``eq_whisker'
-  let (args, _, _) ← forallMetaBoundedTelescope (← inferType lem₀) 7
-  let inst := args[1]!
-  inst.mvarId!.setKind .synthetic
-  let w := args[6]!
-  w.mvarId!.assignIfDefEq e
-  withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType categorySimp (mkAppN lem₀ args), #[inst.mvarId!])
-
-中文:
-定义 reassocExprHom
-  签名: (e : Expr)
-  定义体: do
-  let lem₀ ← mkConstWithFreshMVarLevels ``eq_whisker'
-  let (args, _, _) ← forallMetaBoundedTelescope (← inferType lem₀) 7
-  let inst := args[1]!
-  inst.mvarId!.setKind .synthetic
-  let w := args[6]!
-  w.mvarId!.assignIfDefEq e
-  withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType categorySimp (mkAppN lem₀ args), #[inst.mvarId!])
+--- 原说明 ---
+Given an equation `f = g` between morphisms `X ⟶ Y` in a category,
+produce the equation `∀ {Z} (h : Y ⟶ Z), f ≫ h = g ≫ h`,
+but with compositions fully right associated and identities removed.
+Also returns the category `C` and any instance metavariables that need to be sol
+ved for.
 -/
 def reassocExprHom (e : Expr) : MetaM (Expr × Array MVarId) := do
   let lem₀ ← mkConstWithFreshMVarLevels ``eq_whisker'
@@ -155,84 +142,75 @@ with additional handlers. Handlers take a proof of the equation.
 The default handler is `reassocExprHom` for morphism reassociation.
 This will be extended in `Tactic.CategoryTheory.IsoReassoc` for isomorphism reassociation.
 -/
-private initialize reassocImplRef : IO.Ref (Array (Expr -> MetaM (Expr × Array MVarId))) ←
+private initialize reassocImplRef : IO.Ref (Array (Expr → MetaM (Expr × Array MVarId))) ←
   IO.mkRef #[reassocExprHom]
 
 /--
-Definition of `registerReassocExpr` / `registerReassocExpr` 的定义
-
-English:
-definition registerReassocExpr
-  signature: (f : Expr -> MetaM (Expr × Array MVarId))
-  body: do
-  reassocImplRef.modify (·.push f)
-
-中文:
-定义 registerReassocExpr
-  签名: (f : Expr -> MetaM (Expr × 数组 MVarId))
-  定义体: do
-  reassocImplRef.modify (·.push f)
+Registers a handler for `reassocExpr`. The handler takes a proof of an equation
+and returns a proof of the reassociation lemma.
+Handlers are considered in order of registration.
+They are applied directly to the equation in the body of the forall.
 -/
-def registerReassocExpr (f : Expr -> MetaM (Expr × Array MVarId)) : IO Unit := do
+/-
+**Mathlib.Tactic.Reassoc.registerReassocExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Reassoc`。
+形式化陈述：registerReassocExpr (f : Expr -> MetaM (Expr × Array MVarId)) : IO Unit
+参数：f : Expr -> MetaM (Expr × Array MVarId)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Registers a handler for `reassocExpr`. The handler takes a proof of an equation
+and returns a proof of the reassociation lemma.
+Handlers are considered in order of registration.
+They are applied directly to the equation in the body of the forall.
+-/
+def registerReassocExpr (f : Expr → MetaM (Expr × Array MVarId)) : IO Unit := do
   reassocImplRef.modify (·.push f)
 
 /--
-Definition of `reassocExpr` / `reassocExpr` 的定义
+Reassociates the morphisms in the type of `pf` using the registered handlers,
+using `reassocExprHom` as the default.
 
-English:
-definition reassocExpr
-  signature: (pf : Expr)
-  body: do
-  forallTelescopeReducing (← inferType pf) fun xs _ => do
-    let pf := mkAppN pf xs
-    let handlers ← reassocImplRef.get
-let (pf, insts) ← handlers.firstM (fun h => h pf) > do
-      throwError "`reassoc` can only be used on terms about equality of (iso)morphisms"
-    return (← mkLambdaFVars xs pf, insts)
+Returns the proof of the lemma along with instance metavariables that need synthesis.
+-/
+/-
+**Mathlib.Tactic.Reassoc.reassocExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.R
+eassoc`。
+形式化陈述：reassocExpr (pf : Expr) : MetaM (Expr × Array MVarId)
+参数：pf : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 reassocExpr
-  签名: (pf : Expr)
-  定义体: do
-  forallTelescopeReducing (← inferType pf) fun xs _ => do
-    let pf := mkAppN pf xs
-    let handlers ← reassocImplRef.get
-let (pf, insts) ← handlers.firstM (fun h => h pf) > do
-      throwError "`reassoc` can only be used on terms about equality of (iso)morphisms"
-    return (← mkLambdaFVars xs pf, insts)
+--- 原说明 ---
+Reassociates the morphisms in the type of `pf` using the registered handlers,
+using `reassocExprHom` as the default.
+
+Returns the proof of the lemma along with instance metavariables that need synth
+esis.
 -/
 def reassocExpr (pf : Expr) : MetaM (Expr × Array MVarId) := do
   forallTelescopeReducing (← inferType pf) fun xs _ => do
     let pf := mkAppN pf xs
     let handlers ← reassocImplRef.get
-let (pf, insts) ← handlers.firstM (fun h => h pf) > do
+    let (pf, insts) ← handlers.firstM (fun h => h pf) <|> do
       throwError "`reassoc` can only be used on terms about equality of (iso)morphisms"
     return (← mkLambdaFVars xs pf, insts)
 
 /--
-Definition of `reassocExpr'` / `reassocExpr'` 的定义
+Version of `reassocExpr` for the `TermElabM` monad. Handles instance metavariables automatically.
+-/
+/-
+**Mathlib.Tactic.Reassoc.reassocExpr'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Reassoc`。
+形式化陈述：reassocExpr' (pf : Expr) : TermElabM Expr
+参数：pf : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reassocExpr'
-  signature: (pf : Expr)
-  body: do
-  let (e, insts) ← reassocExpr pf
-  for inst in insts do
-    inst.withContext do
-      unless ← Term.synthesizeInstMVarCore inst do
-        Term.registerSyntheticMVarWithCurrRef inst (.typeClass none)
-  return e
-
-中文:
-定义 reassocExpr'
-  签名: (pf : Expr)
-  定义体: do
-  let (e, insts) ← reassocExpr pf
-  for inst in insts do
-    inst.withContext do
-      unless ← Term.synthesizeInstMVarCore inst do
-        Term.registerSyntheticMVarWithCurrRef inst (.typeClass none)
-  return e
+--- 原说明 ---
+Version of `reassocExpr` for the `TermElabM` monad. Handles instance metavariabl
+es automatically.
 -/
 def reassocExpr' (pf : Expr) : TermElabM Expr := do
   let (e, insts) ← reassocExpr pf
@@ -241,51 +219,10 @@ def reassocExpr' (pf : Expr) : TermElabM Expr := do
       unless ← Term.synthesizeInstMVarCore inst do
         Term.registerSyntheticMVarWithCurrRef inst (.typeClass none)
   return e
-
-/--
-Definition of `reassocImpl` / `reassocImpl` 的定义
-
-English:
-definition reassocImpl
-  signature: (src : Name) (ref : Syntax) (kind : AttributeKind)
-  body: match ref with
-  | `(attr| reassoc $[$toDual:toDualOpt]? $optAttr) => MetaM.run' do
-    unless kind == AttributeKind.global do
-      throwAttrMustBeGlobal `reassoc kind
-    let toDual := toDual.isSome || (Translate.findTranslation? (← getEnv) ToDual.data src).isSome
-    let tgt := src.appendAfter "_assoc"
-    addRelatedDecl src tgt ref optAttr fun value levels => do
-Term.TermElabM.run' Term.withSynthesize do
-        let pf ← reassocExpr' value
-        pure (pf, levels)
-    -- If the original declaration is tagged with `to_dual`,
-    -- then tag the generated declaration with `to_dual none`.
-    if toDual then
-liftCommandElabM Command.elabCommand ←
-        `(command| attribute [to_dual none] $(mkIdent tgt))
-    return tgt
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 reassocImpl
-  签名: (src : Name) (ref : Syntax) (kind : AttributeKind)
-  定义体: match ref with
-  | `(attr| reassoc $[$toDual:toDualOpt]? $optAttr) => MetaM.run' do
-    unless kind == AttributeKind.global do
-      throwAttrMustBeGlobal `reassoc kind
-    let toDual := toDual.isSome || (Translate.findTranslation? (← getEnv) ToDual.data src).isSome
-    let tgt := src.appendAfter "_assoc"
-    addRelatedDecl src tgt ref optAttr fun value levels => do
-Term.TermElabM.run' Term.withSynthesize do
-        let pf ← reassocExpr' value
-        pure (pf, levels)
-    -- If the original declaration is tagged with `to_dual`,
-    -- then tag the generated declaration with `to_dual none`.
-    if toDual then
-liftCommandElabM Command.elabCommand ←
-        `(command| attribute [to_dual none] $(mkIdent tgt))
-    return tgt
-  | _ => throwUnsupportedSyntax
+/-
+**Mathlib.Tactic.Reassoc.reassocImpl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.R
+eassoc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def reassocImpl (src : Name) (ref : Syntax) (kind : AttributeKind) : AttrM Name :=
   match ref with
@@ -295,13 +232,13 @@ private def reassocImpl (src : Name) (ref : Syntax) (kind : AttributeKind) : Att
     let toDual := toDual.isSome || (Translate.findTranslation? (← getEnv) ToDual.data src).isSome
     let tgt := src.appendAfter "_assoc"
     addRelatedDecl src tgt ref optAttr fun value levels => do
-Term.TermElabM.run' Term.withSynthesize do
+      Term.TermElabM.run' <| Term.withSynthesize do
         let pf ← reassocExpr' value
         pure (pf, levels)
     -- If the original declaration is tagged with `to_dual`,
     -- then tag the generated declaration with `to_dual none`.
     if toDual then
-liftCommandElabM Command.elabCommand ←
+      liftCommandElabM <| Command.elabCommand <| ←
         `(command| attribute [to_dual none] $(mkIdent tgt))
     return tgt
   | _ => throwUnsupportedSyntax
@@ -324,7 +261,8 @@ This also works for equations between isomorphisms, provided that
 `Tactic.CategoryTheory.IsoReassoc` has been imported.
 -/
 elab "reassoc_of% " t:term : term => do
-let e ← Term.withSynthesizeLight Term.elabTerm t none
+  let e ← Term.withSynthesizeLight <| Term.elabTerm t none
   reassocExpr' e
 
 end Mathlib.Tactic.Reassoc
+

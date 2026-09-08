@@ -48,29 +48,31 @@ open scoped ENNReal
 
 namespace ProbabilityTheory
 
-/--
-Definition of `Kernel` / `Kernel` 的定义
+/-- A kernel from a measurable space `α` to another measurable space `β` is a measurable function
+`κ : α → Measure β`. The measurable space structure on `MeasureTheory.Measure β` is given by
+`MeasureTheory.Measure.instMeasurableSpace`. A map `κ : α → MeasureTheory.Measure β` is measurable
+iff `∀ s : Set β, MeasurableSet s → Measurable (fun a ↦ κ a s)`. -/
+/-
+**ProbabilityTheory.Kernel** 是 Mathlib 中的一个归纳类型，位于命名空间 `ProbabilityTheory`。
+形式化陈述：(α : Type u_1) → (β : Type u_2) → [MeasurableSpace α] → [MeasurableSpace β
+] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Kernel
-  parameters: (α β : Type*) [MeasurableSpace α] [MeasurableSpace β]
-  axioms and operations (2):
-    - toFun : α -> Measure β
-    - measurable' : Measurable toFun
-
-中文:
-结构 核
-  参数: (α β : 类型) [可测空间 α] [可测空间 β]
-  公理与运算 (2 个):
-    - toFun : α -> 测度 β
-    - measurable' : 可测 toFun
+--- 原说明 ---
+A kernel from a measurable space `α` to another measurable space `β` is a measur
+able function
+`κ : α → Measure β`. The measurable space structure on `MeasureTheory.Measure β`
+ is given by
+`MeasureTheory.Measure.instMeasurableSpace`. A map `κ : α → MeasureTheory.Measur
+e β` is measurable
+iff `∀ s : Set β, MeasurableSet s → Measurable (fun a ↦ κ a s)`.
 -/
 structure Kernel (α β : Type*) [MeasurableSpace α] [MeasurableSpace β] where
   /-- The underlying function of a kernel.
 
   Do not use this function directly. Instead use the coercion coming from the `DFunLike`
   instance. -/
-  toFun : α -> Measure β
+  toFun : α → Measure β
   /-- A kernel is a measurable map.
 
   Do not use this lemma directly. Use `Kernel.measurable` instead. -/
@@ -86,201 +88,100 @@ variable {α β ι : Type*} {mα : MeasurableSpace α} {mβ : MeasurableSpace β
 
 namespace Kernel
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (Kernel α β) α (Measure β) where
-  body: toFun
-  coe_injective f g h := by cases f; cases g; congr
-
-@[fun_prop]
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (核 α β) α (测度 β) where
-  定义体: toFun
-  coe_injective f g h := by cases f; cases g; congr
-
-@[fun_prop]
+/-
+**ProbabilityTheory.Kernel.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：instFunLike : FunLike (Kernel α β) α (Measure β) where coe
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike (Kernel α β) α (Measure β) where
   coe := toFun
   coe_injective f g h := by cases f; cases g; congr
 
 @[fun_prop]
-/--
-lemma `measurable` / 引理 `measurable`
-
-English:
-lemma measurable
-  given: (κ : Kernel α β)
-  statement: Measurable κ
-  proof: κ.measurable'
-
-中文:
-引理 measurable
-  条件: (κ : 核 α β)
-  结论: 可测 κ
-  证明: κ.measurable'
-
-Depends on / 依赖: measurable
+/-
+**ProbabilityTheory.Kernel.measurable** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：measurable (κ : Kernel α β) : Measurable κ
+参数：κ : Kernel α β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.measurable'`：∀ {α : Type u_1} {β : Type u_2} [i
+nst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   (self : ProbabilityTheor
+y.Kernel α β), Measurable …
 -/
 lemma measurable (κ : Kernel α β) : Measurable κ := κ.measurable'
-
-/--
-lemma `aemeasurable` / 引理 `aemeasurable`
-
-English:
-lemma aemeasurable
-  given: (κ : Kernel α β) {μ : Measure α}
-  statement: AEMeasurable κ μ
-  proof: κ.measurable.aemeasurable
-
-中文:
-引理 aemeasurable
-  条件: (κ : 核 α β) {μ : 测度 α}
-  结论: 几乎处处可测 κ μ
-  证明: κ.measurable.aemeasurable
-
-Depends on / 依赖: aemeasurable, measurable, measurable.aemeasurable
+/-
+**ProbabilityTheory.Kernel.aemeasurable** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：aemeasurable (κ : Kernel α β) {μ : Measure α} : AEMeasurable κ μ
+参数：κ : Kernel α β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用引理 `ProbabilityTheory.Kernel.measurable`：measurable (κ : Kernel α β) : Measu
+rable κ
 -/
 lemma aemeasurable (κ : Kernel α β) {μ : Measure α} : AEMeasurable κ μ := κ.measurable.aemeasurable
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (f : α -> Measure β) (hf)
-  statement: mk f hf = f
-  proof: rfl
-
-initialize_simps_projections Kernel (toFun -> apply)
-
-中文:
-引理 coe_mk
-  条件: (f : α -> 测度 β) (hf)
-  结论: mk f hf = f
-  证明: rfl
-
-initialize_simps_projections Kernel (toFun -> apply)
+/-
+**ProbabilityTheory.Kernel.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory.K
+ernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} (f : α → MeasureTheory.Measure β)   (hf : Measurable f), ⇑{ toFun := f, 
+measurable' := hf } = f
+参数：f : α → MeasureTheory.Measure β；hf : Measurable f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_mk (f : α -> Measure β) (hf) : mk f hf = f := rfl
+@[simp, norm_cast] lemma coe_mk (f : α → Measure β) (hf) : mk f hf = f := rfl
 
-initialize_simps_projections Kernel (toFun -> apply)
-
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: : Zero (Kernel α β) where zero
-  body: ⟨0, measurable_zero⟩
-
-中文:
-实例 instZero
-  签名: : 零 (核 α β) where zero
-  定义体: ⟨0, measurable_zero⟩
-
-Depends on / 依赖: measurable_zero
+initialize_simps_projections Kernel (toFun → apply)
+/-
+**ProbabilityTheory.Kernel.instZero** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：instZero : Zero (Kernel α β) where zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero : Zero (Kernel α β) where zero := ⟨0, measurable_zero⟩
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: : Add (Kernel α β) where add κ η
-  body: ⟨κ + η, κ.2.add η.2⟩
-
-中文:
-实例 instAdd
-  签名: : 加法 (核 α β) where add κ η
-  定义体: ⟨κ + η, κ.2.add η.2⟩
+/-
+**ProbabilityTheory.Kernel.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.
+Kernel`。
+形式化陈述：instAdd : Add (Kernel α β) where add κ η
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instAdd : Add (Kernel α β) where add κ η := ⟨κ + η, κ.2.add η.2⟩
-/--
-Instance `instSMulNat` / 实例 `instSMulNat`
-
-English:
-instance instSMulNat
-  signature: : SMul Nat (Kernel α β) where
-  body: ⟨n • κ, (measurable_const (a := n)).smul κ.2⟩
-
-中文:
-实例 instSMul自然数
-  签名: : 标量乘法 自然数 (核 α β) where
-  定义体: ⟨n • κ, (measurable_const (a := n)).smul κ.2⟩
-
-Depends on / 依赖: measurable_const
+/-
+**ProbabilityTheory.Kernel.instSMulNat** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：instSMulNat : SMul Nat (Kernel α β) where smul n κ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance instSMulNat : SMul Nat (Kernel α β) where
+noncomputable instance instSMulNat : SMul ℕ (Kernel α β) where
   smul n κ := ⟨n • κ, (measurable_const (a := n)).smul κ.2⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroApply (Kernel α β) α (Measure β)
-  body: rfl
-
-中文:
-实例 :
-  签名: 是ZeroApply (核 α β) α (测度 β)
-  定义体: rfl
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZeroApply (Kernel α β) α (Measure β) where
   zero_apply _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsAddApply (Kernel α β) α (Measure β)
-  body: rfl
-
-中文:
-实例 :
-  签名: 是加法Apply (核 α β) α (测度 β)
-  定义体: rfl
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsAddApply (Kernel α β) α (Measure β) where
   add_apply _ _ _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSMulApply Nat (Kernel α β) α (Measure β)
-  body: rfl
-
-@[deprecated (since := "2026-06-30")] alias coe_zero := FunLike.coe_zero
-@[deprecated (since := "2026-06-30")] alias coe_add := FunLike.coe_add
-@[deprecated (since := "2026-06-30")] alias coe_nsmul := FunLike.coe_smul
-
-@[deprecated (since := "2026-06-30")] protected alias zero_apply := zero_apply
-@[deprecated (since := "2026-06-30")] protected alias add_apply := add_apply
-@[deprecated (since := "2026-06-30")] protected alias nsmul_apply := smul_apply
-
-中文:
-实例 :
-  签名: 是SMulApply 自然数 (核 α β) α (测度 β)
-  定义体: rfl
-
-@[deprecated (since := "2026-06-30")] alias coe_zero := FunLike.coe_zero
-@[deprecated (since := "2026-06-30")] alias coe_add := FunLike.coe_add
-@[deprecated (since := "2026-06-30")] alias coe_nsmul := FunLike.coe_smul
-
-@[deprecated (since := "2026-06-30")] protected alias zero_apply := zero_apply
-@[deprecated (since := "2026-06-30")] protected alias add_apply := add_apply
-@[deprecated (since := "2026-06-30")] protected alias nsmul_apply := smul_apply
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsSMulApply Nat (Kernel α β) α (Measure β) where
+instance : IsSMulApply ℕ (Kernel α β) α (Measure β) where
   smul_apply _ _ _ := rfl
 
 @[deprecated (since := "2026-06-30")] alias coe_zero := FunLike.coe_zero
@@ -290,85 +191,40 @@ instance : IsSMulApply Nat (Kernel α β) α (Measure β) where
 @[deprecated (since := "2026-06-30")] protected alias zero_apply := zero_apply
 @[deprecated (since := "2026-06-30")] protected alias add_apply := add_apply
 @[deprecated (since := "2026-06-30")] protected alias nsmul_apply := smul_apply
-
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: : AddCommMonoid (Kernel α β)
-  body: fast_instance% FunLike.addCommMonoid
-
-中文:
-实例 instAddCommMonoid
-  签名: : 加法交换幺半群 (核 α β)
-  定义体: fast_instance% FunLike.addCommMonoid
-
-Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
+/-
+**ProbabilityTheory.Kernel.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Probabil
+ityTheory.Kernel`。
+形式化陈述：instAddCommMonoid : AddCommMonoid (Kernel α β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instAddCommMonoid : AddCommMonoid (Kernel α β) :=
   fast_instance% FunLike.addCommMonoid
-
-/--
-Instance `instPartialOrder` / 实例 `instPartialOrder`
-
-English:
-instance instPartialOrder
-  signature: : PartialOrder (Kernel α β)
-  body: .lift _ DFunLike.coe_injective
-
-中文:
-实例 instPartialOrder
-  签名: : 偏序 (核 α β)
-  定义体: .lift _ DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**ProbabilityTheory.Kernel.instPartialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：instPartialOrder : PartialOrder (Kernel α β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instPartialOrder : PartialOrder (Kernel α β) := .lift _ DFunLike.coe_injective
-
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α β : Type*} [MeasurableSpace α] [MeasurableSpace β] :
     AddLeftMono (Kernel α β) :=
-  ⟨fun _ _ _ hμ a => add_le_add_right (hμ a) _⟩
+  ⟨fun _ _ _ hμ a ↦ add_le_add_right (hμ a) _⟩
 
 noncomputable
-/--
-Instance `instOrderBot` / 实例 `instOrderBot`
-
-English:
-instance instOrderBot
-  signature: {α β : Type*} [MeasurableSpace α] [MeasurableSpace β]
-  body: 0
-  bot_le κ a := by simp only [zero_apply, Measure.zero_le]
-
-@[deprecated (since := "2026-06-30")] alias coeAddHom := FunLike.coe_coeAddMonoidHom
-
-@[deprecated (since := "2026-06-30")] alias coeAddHom_apply := FunLike.coeAddMonoidHom_apply
-
-@[deprecated (since := "2026-06-30")] alias coe_finsetSum := FunLike.coe_sum
-
-@[deprecated (since := "2026-04-08")] alias coe_finset_sum := FunLike.coe_sum
-
-@[deprecated (since := "2026-06-30")] alias finsetSum_apply := sum_apply
-
-@[deprecated (since := "2026-04-08")] alias finset_sum_apply := sum_apply
-
-中文:
-实例 instOrderBot
-  签名: {α β : 类型} [可测空间 α] [可测空间 β]
-  定义体: 0
-  bot_le κ a := by simp only [zero_apply, Measure.zero_le]
-
-@[deprecated (since := "2026-06-30")] alias coeAddHom := FunLike.coe_coeAddMonoidHom
-
-@[deprecated (since := "2026-06-30")] alias coeAddHom_apply := FunLike.coeAddMonoidHom_apply
-
-@[deprecated (since := "2026-06-30")] alias coe_finsetSum := FunLike.coe_sum
-
-@[deprecated (since := "2026-04-08")] alias coe_finset_sum := FunLike.coe_sum
-
-@[deprecated (since := "2026-06-30")] alias finsetSum_apply := sum_apply
-
-@[deprecated (since := "2026-04-08")] alias finset_sum_apply := sum_apply
+/-
+**ProbabilityTheory.Kernel.instOrderBot** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：instOrderBot {α β : Type*} [MeasurableSpace α] [MeasurableSpace β] : Order
+Bot (Kernel α β) where bot
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOrderBot {α β : Type*} [MeasurableSpace α] [MeasurableSpace β] :
     OrderBot (Kernel α β) where
@@ -386,387 +242,375 @@ instance instOrderBot {α β : Type*} [MeasurableSpace α] [MeasurableSpace β] 
 @[deprecated (since := "2026-06-30")] alias finsetSum_apply := sum_apply
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_apply := sum_apply
-
-/--
-theorem `finsetSum_apply'` / 定理 `finsetSum_apply'`
-
-English:
-theorem finsetSum_apply'
-  given: (I : Finset ι) (κ : ι -> Kernel α β) (a : α) (s : Set β)
-  proof: by rw [sum_apply, Measure.finsetSum_apply]
-
-@[deprecated (since := "2026-04-08")] alias finset_sum_apply' := finsetSum_apply'
-
-中文:
-定理 finsetSum_apply'
-  条件: (I : 有限集 ι) (κ : ι -> 核 α β) (a : α) (s : 集合 β)
-  证明: by rw [sum_apply, Measure.finsetSum_apply]
-
-@[deprecated (since := "2026-04-08")] alias finset_sum_apply' := finsetSum_apply'
-
-Depends on / 依赖: Measure, Measure.finsetSum_apply, finsetSum_apply, sum_apply
+/-
+**ProbabilityTheory.Kernel.finsetSum_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：finsetSum_apply' (I : Finset ι) (κ : ι -> Kernel α β) (a : α) (s : Set β) 
+: (∑ i in I, κ i) a s = ∑ i in I, κ i a s
+参数：I : Finset ι；κ : ι -> Kernel α β；a : α；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sum_apply`：∀ {F : Type u_8} {α : Type u_9} {β : Type u_10} {ι : Type u_1
+1} [inst : FunLike F α β] [inst_1 : AddCommMonoid β]   [inst_2 : AddCommMonoid …
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `ProbabilityTheory.Kernel.instIsAddApplyMeasure`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsAddApply (Probabi
+lityTheory.Kernel α β) α (MeasureThe…
+· 使用定理 `MeasureTheory.Measure.finsetSum_apply`：finsetSum_apply {m : MeasurableSp
+ace α} (I : Finset ι) (μ : ι -> Measure α) (s : Set α) : (∑ i in I, μ i) s = ∑ i
+ in I, μ i s
 -/
-theorem finsetSum_apply' (I : Finset ι) (κ : ι -> Kernel α β) (a : α) (s : Set β) :
-    (∑ i in I, κ i) a s = ∑ i in I, κ i a s := by rw [sum_apply, Measure.finsetSum_apply]
+theorem finsetSum_apply' (I : Finset ι) (κ : ι → Kernel α β) (a : α) (s : Set β) :
+    (∑ i ∈ I, κ i) a s = ∑ i ∈ I, κ i a s := by rw [sum_apply, Measure.finsetSum_apply]
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_apply' := finsetSum_apply'
 
 end Kernel
 
-/--
-Definition of `IsMarkovKernel` / `IsMarkovKernel` 的定义
+/-- A kernel is a Markov kernel if every measure in its image is a probability measure. -/
+/-
+**ProbabilityTheory.IsMarkovKernel** 是 Mathlib 中的一个归纳类型，位于命名空间 `ProbabilityTheor
+y`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} → {mα : MeasurableSpace α} → {mβ : Measu
+rableSpace β} → ProbabilityTheory.Kernel α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsMarkovKernel
-  parameters: (κ : Kernel α β)
-  axioms and operations (1):
-    - isProbabilityMeasure : forall a, IsProbabilityMeasure (κ a)
-
-中文:
-类 是MarkovKernel
-  参数: (κ : 核 α β)
-  公理与运算 (1 个):
-    - isProbabilityMeasure : 对任意 a, 是概率测度 (κ a)
+--- 原说明 ---
+A kernel is a Markov kernel if every measure in its image is a probability measu
+re.
 -/
 class IsMarkovKernel (κ : Kernel α β) : Prop where
-  isProbabilityMeasure : forall a, IsProbabilityMeasure (κ a)
+  isProbabilityMeasure : ∀ a, IsProbabilityMeasure (κ a)
 
-/--
-Definition of `IsZeroOrMarkovKernel` / `IsZeroOrMarkovKernel` 的定义
+/-- A class for kernels which are zero or a Markov kernel. -/
+/-
+**ProbabilityTheory.IsZeroOrMarkovKernel** 是 Mathlib 中的一个归纳类型，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} → {mα : MeasurableSpace α} → {mβ : Measu
+rableSpace β} → ProbabilityTheory.Kernel α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsZeroOrMarkovKernel
-  parameters: (κ : Kernel α β)
-  axioms and operations (1):
-    - eq_zero_or_isMarkovKernel' : κ = 0 ∨ IsMarkovKernel κ
-
-中文:
-类 是ZeroOrMarkovKernel
-  参数: (κ : 核 α β)
-  公理与运算 (1 个):
-    - eq_zero_or_isMarkovKernel' : κ = 0 ∨ 是MarkovKernel κ
+--- 原说明 ---
+A class for kernels which are zero or a Markov kernel.
 -/
 class IsZeroOrMarkovKernel (κ : Kernel α β) : Prop where
   eq_zero_or_isMarkovKernel' : κ = 0 ∨ IsMarkovKernel κ
 
-/--
-Definition of `IsFiniteKernel` / `IsFiniteKernel` 的定义
+/-- A kernel is finite if every measure in its image is finite, with a uniform bound. -/
+/-
+**ProbabilityTheory.IsFiniteKernel** 是 Mathlib 中的一个归纳类型，位于命名空间 `ProbabilityTheor
+y`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} → {mα : MeasurableSpace α} → {mβ : Measu
+rableSpace β} → ProbabilityTheory.Kernel α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsFiniteKernel
-  parameters: (κ : Kernel α β)
-  axioms and operations (1):
-    - exists_univ_le : exists C : Real>=0∞, C < ∞ ∧ forall a, κ a Set.univ <= C
-
-中文:
-类 是FiniteKernel
-  参数: (κ : 核 α β)
-  公理与运算 (1 个):
-    - exists_univ_le : 存在 C : 实数>=0∞, C < ∞ ∧ 对任意 a, κ a 集合.univ <= C
+--- 原说明 ---
+A kernel is finite if every measure in its image is finite, with a uniform bound
+.
 -/
 class IsFiniteKernel (κ : Kernel α β) : Prop where
-  exists_univ_le : exists C : Real>=0∞, C < ∞ ∧ forall a, κ a Set.univ <= C
-
-/--
-theorem `eq_zero_or_isMarkovKernel` / 定理 `eq_zero_or_isMarkovKernel`
-
-English:
-theorem eq_zero_or_isMarkovKernel
-  proof: h.eq_zero_or_isMarkovKernel'
-
-中文:
-定理 eq_zero_or_isMarkovKernel
-  证明: h.eq_zero_or_isMarkovKernel'
-
-Depends on / 依赖: eq_zero_or_isMarkovKernel, h.eq_zero_or_isMarkovKernel
+  exists_univ_le : ∃ C : ℝ≥0∞, C < ∞ ∧ ∀ a, κ a Set.univ ≤ C
+/-
+**ProbabilityTheory.eq_zero_or_isMarkovKernel** 是 Mathlib 中的一个定理，位于命名空间 `Probabi
+lityTheory`。
+形式化陈述：eq_zero_or_isMarkovKernel (κ : Kernel α β) [h : IsZeroOrMarkovKernel κ] : 
+κ = 0 ∨ IsMarkovKernel κ
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IsZeroOrMarkovKernel.eq_zero_or_isMarkovKernel'`：∀ {α 
+: Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ 
+: ProbabilityTheory.Kernel α β}   [self : ProbabilityTh…
 -/
 theorem eq_zero_or_isMarkovKernel
     (κ : Kernel α β) [h : IsZeroOrMarkovKernel κ] :
     κ = 0 ∨ IsMarkovKernel κ :=
   h.eq_zero_or_isMarkovKernel'
 
-/--
-Definition of `Kernel.bound` / `Kernel.bound` 的定义
+/-- A constant `C : ℝ≥0∞` such that `C < ∞` for a finite kernel
+(`ProbabilityTheory.IsFiniteKernel.bound_lt_top κ`) and for all `a : α` and `s : Set β`,
+`κ a s ≤ C` (`ProbabilityTheory.Kernel.measure_le_bound κ a s`). -/
+/-
+**ProbabilityTheory.Kernel.bound** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Ke
+rnel`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} → {mα : MeasurableSpace α} → {mβ : Measu
+rableSpace β} → ProbabilityTheory.Kernel α β → ENNReal
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Kernel.bound
-  signature: (κ : Kernel α β)
-  body: ⨆ a, κ a Set.univ
-
-中文:
-定义 核.bound
-  签名: (κ : 核 α β)
-  定义体: ⨆ a, κ a Set.univ
-
-Depends on / 依赖: Set.univ
+--- 原说明 ---
+A constant `C : ℝ≥0∞` such that `C < ∞` for a finite kernel
+(`ProbabilityTheory.IsFiniteKernel.bound_lt_top κ`) and for all `a : α` and `s :
+ Set β`,
+`κ a s ≤ C` (`ProbabilityTheory.Kernel.measure_le_bound κ a s`).
 -/
-noncomputable def Kernel.bound (κ : Kernel α β) : Real>=0∞ :=
+noncomputable def Kernel.bound (κ : Kernel α β) : ℝ≥0∞ :=
   ⨆ a, κ a Set.univ
 
 namespace Kernel
 
-/--
-theorem `bound_lt_top` / 定理 `bound_lt_top`
-
-English:
-theorem bound_lt_top
-  given: (κ : Kernel α β) [h : IsFiniteKernel κ]
-  statement: κ.bound < ∞
-  proof: by
-  obtain ⟨C, hC, hle⟩ := h.exists_univ_le
-  refine lt_of_le_of_lt ?_ hC
-  simp [bound, hle]
-
-中文:
-定理 bound_lt_top
-  条件: (κ : 核 α β) [h : 是FiniteKernel κ]
-  结论: κ.bound < ∞
-  证明: by
-  obtain ⟨C, hC, hle⟩ := h.exists_univ_le
-  refine lt_of_le_of_lt ?_ hC
-  simp [bound, hle]
-
-Depends on / 依赖: exists_univ_le, h.exists_univ_le, lt_of_le_of_lt
+/-
+**ProbabilityTheory.Kernel.bound_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：bound_lt_top (κ : Kernel α β) [h : IsFiniteKernel κ] : κ.bound < ∞
+参数：κ : Kernel α β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.exists_univ_le`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheor
+y.Kernel α β}   [self : ProbabilityTh…
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem bound_lt_top (κ : Kernel α β) [h : IsFiniteKernel κ] : κ.bound < ∞ := by
   obtain ⟨C, hC, hle⟩ := h.exists_univ_le
   refine lt_of_le_of_lt ?_ hC
   simp [bound, hle]
-
-/--
-theorem `bound_ne_top` / 定理 `bound_ne_top`
-
-English:
-theorem bound_ne_top
-  given: (κ : Kernel α β) [IsFiniteKernel κ]
-  proof: κ.bound_lt_top.ne
-
-中文:
-定理 bound_ne_top
-  条件: (κ : 核 α β) [是FiniteKernel κ]
-  证明: κ.bound_lt_top.ne
-
-Depends on / 依赖: bound_lt_top, bound_lt_top.ne
+/-
+**ProbabilityTheory.Kernel.bound_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：bound_ne_top (κ : Kernel α β) [IsFiniteKernel κ] : κ.bound != ∞
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `ProbabilityTheory.Kernel.bound_lt_top`：bound_lt_top (κ : Kernel α β) [h 
+: IsFiniteKernel κ] : κ.bound < ∞
 -/
 theorem bound_ne_top (κ : Kernel α β) [IsFiniteKernel κ] :
-    κ.bound != ∞ := κ.bound_lt_top.ne
-
-/--
-theorem `measure_le_bound` / 定理 `measure_le_bound`
-
-English:
-theorem measure_le_bound
-  given: (κ : Kernel α β) (a : α) (s : Set β)
-  proof: (measure_mono (Set.subset_univ s)).trans le_iSup (f := fun a => κ a .univ) a
-
-@[simp]
-
-中文:
-定理 measure_le_bound
-  条件: (κ : 核 α β) (a : α) (s : 集合 β)
-  证明: (measure_mono (Set.subset_univ s)).trans le_iSup (f := fun a => κ a .univ) a
-
-@[simp]
-
-Depends on / 依赖: Set.subset_univ, le_iSup, measure_mono, subset_univ
+    κ.bound ≠ ∞ := κ.bound_lt_top.ne
+/-
+**ProbabilityTheory.Kernel.measure_le_bound** 是 Mathlib 中的一个定理，位于命名空间 `Probabili
+tyTheory.Kernel`。
+形式化陈述：measure_le_bound (κ : Kernel α β) (a : α) (s : Set β) : κ a s <= κ.bound
+参数：κ : Kernel α β；a : α；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
 theorem measure_le_bound (κ : Kernel α β) (a : α) (s : Set β) :
-    κ a s <= κ.bound :=
-(measure_mono (Set.subset_univ s)).trans le_iSup (f := fun a => κ a .univ) a
+    κ a s ≤ κ.bound :=
+  (measure_mono (Set.subset_univ s)).trans <| le_iSup (f := fun a ↦ κ a .univ) a
 
 @[simp]
-/--
-lemma `bound_eq_zero_of_isEmpty` / 引理 `bound_eq_zero_of_isEmpty`
-
-English:
-lemma bound_eq_zero_of_isEmpty
-  given: [IsEmpty α] (κ : Kernel α β)
-  proof: by simp [bound]
-
-@[simp]
-
-中文:
-引理 bound_eq_zero_of_isEmpty
-  条件: [是空 α] (κ : 核 α β)
-  证明: by simp [bound]
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.bound_eq_zero_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间 `P
+robabilityTheory.Kernel`。
+形式化陈述：bound_eq_zero_of_isEmpty [IsEmpty α] (κ : Kernel α β) : κ.bound = 0
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ciSup_of_empty`：ciSup_of_empty [IsEmpty ι] (f : ι -> α) : ⨆ i, f i = ⊥
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma bound_eq_zero_of_isEmpty [IsEmpty α] (κ : Kernel α β) :
     κ.bound = 0 := by simp [bound]
 
 @[simp]
-/--
-lemma `bound_eq_zero_of_isEmpty'` / 引理 `bound_eq_zero_of_isEmpty'`
-
-English:
-lemma bound_eq_zero_of_isEmpty'
-  given: [IsEmpty β] (κ : Kernel α β)
-  proof: by simp [bound, Subsingleton.elim _ (0 : Measure β)]
-
-@[simp]
-
-中文:
-引理 bound_eq_zero_of_isEmpty'
-  条件: [是空 β] (κ : 核 α β)
-  证明: by simp [bound, Subsingleton.elim _ (0 : Measure β)]
-
-@[simp]
-
-Depends on / 依赖: Measure, Subsingleton, Subsingleton.elim
+/-
+**ProbabilityTheory.Kernel.bound_eq_zero_of_isEmpty'** 是 Mathlib 中的一个引理，位于命名空间 `
+ProbabilityTheory.Kernel`。
+形式化陈述：bound_eq_zero_of_isEmpty' [IsEmpty β] (κ : Kernel α β) : κ.bound = 0
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `ENNReal.iSup_zero`：∀ {ι : Sort u_1}, ⨆ x, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma bound_eq_zero_of_isEmpty' [IsEmpty β] (κ : Kernel α β) :
     κ.bound = 0 := by simp [bound, Subsingleton.elim _ (0 : Measure β)]
 
 @[simp]
-/--
-lemma `bound_zero` / 引理 `bound_zero`
-
-English:
-lemma bound_zero
-  statement: bound (0 : Kernel α β) = 0
-  proof: by
-  simp [bound]
-
-中文:
-引理 bound_zero
-  结论: bound (0 : 核 α β) = 0
-  证明: by
-  simp [bound]
+/-
+**ProbabilityTheory.Kernel.bound_zero** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：bound_zero : bound (0 : Kernel α β) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `ENNReal.iSup_zero`：∀ {ι : Sort u_1}, ⨆ x, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma bound_zero : bound (0 : Kernel α β) = 0 := by
   simp [bound]
 
 end Kernel
 
-/--
-Instance `isFiniteKernel_zero` / 实例 `isFiniteKernel_zero`
-
-English:
-instance isFiniteKernel_zero
-  signature: (α β : Type*) {_ : MeasurableSpace α} {_ : MeasurableSpace β}
-  body: ⟨⟨0, ENNReal.coe_lt_top, fun _ => by simp⟩⟩
-
-中文:
-实例 isFiniteKernel_zero
-  签名: (α β : 类型) {_ : 可测空间 α} {_ : 可测空间 β}
-  定义体: ⟨⟨0, ENNReal.coe_lt_top, fun _ => by simp⟩⟩
-
-Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, coe_lt_top
+/-
+**ProbabilityTheory.isFiniteKernel_zero** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTh
+eory`。
+形式化陈述：isFiniteKernel_zero (α β : Type*) {_ : MeasurableSpace α} {_ : MeasurableS
+pace β} : IsFiniteKernel (0 : Kernel α β)
+参数：α β : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.coe_lt_top`：∀ {r : NNReal}, ↑r < ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
 -/
 instance isFiniteKernel_zero (α β : Type*) {_ : MeasurableSpace α} {_ : MeasurableSpace β} :
     IsFiniteKernel (0 : Kernel α β) :=
   ⟨⟨0, ENNReal.coe_lt_top, fun _ => by simp⟩⟩
-
-/--
-Instance `IsFiniteKernel.add` / 实例 `IsFiniteKernel.add`
-
-English:
-instance IsFiniteKernel.add
-  signature: (κ η : Kernel α β) [IsFiniteKernel κ] [IsFiniteKernel η]
-  body: by
-  refine ⟨⟨κ.bound + η.bound, ENNReal.add_lt_top.mpr ⟨κ.bound_lt_top, η.bound_lt_top⟩, fun a => ?_⟩⟩
-  exact add_le_add (Kernel.measure_le_bound _ _ _) (Kernel.measure_le_bound _ _ _)
-
-中文:
-实例 是FiniteKernel.add
-  签名: (κ η : 核 α β) [是FiniteKernel κ] [是FiniteKernel η]
-  定义体: by
-  refine ⟨⟨κ.bound + η.bound, ENNReal.add_lt_top.mpr ⟨κ.bound_lt_top, η.bound_lt_top⟩, fun a => ?_⟩⟩
-  exact add_le_add (Kernel.measure_le_bound _ _ _) (Kernel.measure_le_bound _ _ _)
-
-Depends on / 依赖: ENNReal, ENNReal.add_lt_top.mpr, Kernel, Kernel.measure_le_bound, add_le_add, add_lt_top, bound_lt_top, measure_le_bound
+/-
+**ProbabilityTheory.IsFiniteKernel.add** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} (κ η : ProbabilityTheory.Kernel α β)   [ProbabilityTheory.IsFiniteKernel
+ κ] [ProbabilityTheory.IsFiniteKernel η], ProbabilityTheory.IsFiniteKernel (κ + 
+η)
+参数：κ η : ProbabilityTheory.Kernel α β；κ + η。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ENNReal.add_lt_top`：∀ {a b : ENNReal}, a + b < ⊤ ↔ a < ⊤ ∧ b < ⊤
+· 使用定理 `ProbabilityTheory.Kernel.bound_lt_top`：bound_lt_top (κ : Kernel α β) [h 
+: IsFiniteKernel κ] : κ.bound < ∞
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `ProbabilityTheory.Kernel.measure_le_bound`：measure_le_bound (κ : Kernel 
+α β) (a : α) (s : Set β) : κ a s <= κ.bound
 -/
 instance IsFiniteKernel.add (κ η : Kernel α β) [IsFiniteKernel κ] [IsFiniteKernel η] :
     IsFiniteKernel (κ + η) := by
   refine ⟨⟨κ.bound + η.bound, ENNReal.add_lt_top.mpr ⟨κ.bound_lt_top, η.bound_lt_top⟩, fun a => ?_⟩⟩
   exact add_le_add (Kernel.measure_le_bound _ _ _) (Kernel.measure_le_bound _ _ _)
-
-/--
-lemma `isFiniteKernel_of_le` / 引理 `isFiniteKernel_of_le`
-
-English:
-lemma isFiniteKernel_of_le
-  given: {κ ν : Kernel α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν)
-  proof: ⟨ν.bound, ν.bound_lt_top, fun a => (hκν _ _).trans (ν.measure_le_bound a Set.univ)⟩
-
-中文:
-引理 isFiniteKernel_of_le
-  条件: {κ ν : 核 α β} [hν : 是FiniteKernel ν] (hκν : κ <= ν)
-  证明: ⟨ν.bound, ν.bound_lt_top, fun a => (hκν _ _).trans (ν.measure_le_bound a Set.univ)⟩
-
-Depends on / 依赖: Set.univ, bound_lt_top, measure_le_bound
+/-
+**ProbabilityTheory.isFiniteKernel_of_le** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：isFiniteKernel_of_le {κ ν : Kernel α β} [hν : IsFiniteKernel ν] (hκν : κ <
+= ν) : IsFiniteKernel κ
+参数：hκν : κ <= ν。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.bound_lt_top`：bound_lt_top (κ : Kernel α β) [h 
+: IsFiniteKernel κ] : κ.bound < ∞
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `ProbabilityTheory.Kernel.measure_le_bound`：measure_le_bound (κ : Kernel 
+α β) (a : α) (s : Set β) : κ a s <= κ.bound
 -/
-lemma isFiniteKernel_of_le {κ ν : Kernel α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν) :
+lemma isFiniteKernel_of_le {κ ν : Kernel α β} [hν : IsFiniteKernel ν] (hκν : κ ≤ ν) :
     IsFiniteKernel κ :=
-  ⟨ν.bound, ν.bound_lt_top, fun a => (hκν _ _).trans (ν.measure_le_bound a Set.univ)⟩
+  ⟨ν.bound, ν.bound_lt_top, fun a ↦ (hκν _ _).trans (ν.measure_le_bound a Set.univ)⟩
 
 variable {κ η : Kernel α β}
-
-/--
-Instance `IsMarkovKernel.is_probability_measure'` / 实例 `IsMarkovKernel.is_probability_measure'`
-
-English:
-instance IsMarkovKernel.is_probability_measure'
-  signature: [IsMarkovKernel κ] (a : α)
-  body: IsMarkovKernel.isProbabilityMeasure a
-
-中文:
-实例 是MarkovKernel.is_probability_measure'
-  签名: [是MarkovKernel κ] (a : α)
-  定义体: IsMarkovKernel.isProbabilityMeasure a
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.isProbabilityMeasure, isProbabilityMeasure
+/-
+**ProbabilityTheory.IsMarkovKernel.is_probability_measure'** 是 Mathlib 中的一个定理，位于
+命名空间 `ProbabilityTheory.IsMarkovKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {κ : ProbabilityTheory.Kernel α β}   [ProbabilityTheory.IsMarkovKernel κ
+] (a : α), MeasureTheory.IsProbabilityMeasure (κ a)
+参数：a : α；κ a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.isProbabilityMeasure`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [self : ProbabilityTh…
 -/
 instance IsMarkovKernel.is_probability_measure' [IsMarkovKernel κ] (a : α) :
     IsProbabilityMeasure (κ a) :=
   IsMarkovKernel.isProbabilityMeasure a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroOrMarkovKernel (0 : Kernel α β)
-  body: ⟨Or.inl rfl⟩
-
-中文:
-实例 :
-  签名: 是ZeroOrMarkovKernel (0 : 核 α β)
-  定义体: ⟨Or.inl rfl⟩
-
-Depends on / 依赖: Or.inl
+/-
+**ProbabilityTheory.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZeroOrMarkovKernel (0 : Kernel α β) := ⟨Or.inl rfl⟩
-
+/-
+**ProbabilityTheory.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsMarkovKernel.IsZeroOrMarkovKernel [h : IsMarkovKernel κ] :
     IsZeroOrMarkovKernel κ := ⟨Or.inr h⟩
-
+/-
+**ProbabilityTheory.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsZeroOrMarkovKernel.isZeroOrProbabilityMeasure
     [IsZeroOrMarkovKernel κ] (a : α) : IsZeroOrProbabilityMeasure (κ a) := by
   rcases eq_zero_or_isMarkovKernel κ with rfl | h'
   · simp only [zero_apply]
     infer_instance
   · infer_instance
-
-/--
-Instance `IsFiniteKernel.isFiniteMeasure` / 实例 `IsFiniteKernel.isFiniteMeasure`
-
-English:
-instance IsFiniteKernel.isFiniteMeasure
-  signature: [IsFiniteKernel κ] (a : α)
-  body: ⟨(κ.measure_le_bound a Set.univ).trans_lt κ.bound_lt_top⟩
-
-中文:
-实例 是FiniteKernel.isFiniteMeasure
-  签名: [是FiniteKernel κ] (a : α)
-  定义体: ⟨(κ.measure_le_bound a Set.univ).trans_lt κ.bound_lt_top⟩
-
-Depends on / 依赖: Set.univ, bound_lt_top, measure_le_bound, trans_lt
+/-
+**ProbabilityTheory.IsFiniteKernel.isFiniteMeasure** 是 Mathlib 中的一个定理，位于命名空间 `Pr
+obabilityTheory.IsFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} {κ : ProbabilityTheory.Kernel α β}   [ProbabilityTheory.IsFiniteKernel κ
+] (a : α), MeasureTheory.IsFiniteMeasure (κ a)
+参数：a : α；κ a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `ProbabilityTheory.Kernel.measure_le_bound`：measure_le_bound (κ : Kernel 
+α β) (a : α) (s : Set β) : κ a s <= κ.bound
+· 使用定理 `ProbabilityTheory.Kernel.bound_lt_top`：bound_lt_top (κ : Kernel α β) [h 
+: IsFiniteKernel κ] : κ.bound < ∞
 -/
 instance IsFiniteKernel.isFiniteMeasure [IsFiniteKernel κ] (a : α) : IsFiniteMeasure (κ a) :=
   ⟨(κ.measure_le_bound a Set.univ).trans_lt κ.bound_lt_top⟩
-
+/-
+**ProbabilityTheory.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsZeroOrMarkovKernel.isFiniteKernel [h : IsZeroOrMarkovKernel κ] :
     IsFiniteKernel κ := by
   rcases eq_zero_or_isMarkovKernel κ with rfl | _h'
@@ -776,233 +620,181 @@ instance (priority := 100) IsZeroOrMarkovKernel.isFiniteKernel [h : IsZeroOrMark
 namespace Kernel
 
 @[simp]
-/--
-lemma `bound_eq_one` / 引理 `bound_eq_one`
-
-English:
-lemma bound_eq_one
-  given: [Nonempty α] (κ : Kernel α β) [IsMarkovKernel κ]
-  proof: by simp [bound]
-
-@[simp]
-
-中文:
-引理 bound_eq_one
-  条件: [非空 α] (κ : 核 α β) [是MarkovKernel κ]
-  证明: by simp [bound]
-
-@[simp]
+/-
+**ProbabilityTheory.Kernel.bound_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：bound_eq_one [Nonempty α] (κ : Kernel α β) [IsMarkovKernel κ] : κ.bound = 
+1
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.is_probability_measure'`：∀ {α : Type u_
+1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabi
+lityTheory.Kernel α β}   [ProbabilityTheory.Is…
+· 使用定理 `ciSup_const`：ciSup_const [hι : Nonempty ι] {a : α} : ⨆ _ : ι, a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma bound_eq_one [Nonempty α] (κ : Kernel α β) [IsMarkovKernel κ] :
     κ.bound = 1 := by simp [bound]
 
 @[simp]
-/--
-lemma `bound_le_one` / 引理 `bound_le_one`
-
-English:
-lemma bound_le_one
-  given: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
-  proof: by
-  rcases isEmpty_or_nonempty α
-  · simp
-  · rcases eq_zero_or_isMarkovKernel κ with rfl | _ <;> simp
-
-@[ext]
-
-中文:
-引理 bound_le_one
-  条件: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
-  证明: by
-  rcases isEmpty_or_nonempty α
-  · simp
-  · rcases eq_zero_or_isMarkovKernel κ with rfl | _ <;> simp
-
-@[ext]
-
-Depends on / 依赖: eq_zero_or_isMarkovKernel, isEmpty_or_nonempty
+/-
+**ProbabilityTheory.Kernel.bound_le_one** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory.Kernel`。
+形式化陈述：bound_le_one (κ : Kernel α β) [IsZeroOrMarkovKernel κ] : κ.bound <= 1
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.Kernel.bound_eq_zero_of_isEmpty`：bound_eq_zero_of_isEm
+pty [IsEmpty α] (κ : Kernel α β) : κ.bound = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `ProbabilityTheory.eq_zero_or_isMarkovKernel`：eq_zero_or_isMarkovKernel (
+κ : Kernel α β) [h : IsZeroOrMarkovKernel κ] : κ = 0 ∨ IsMarkovKernel κ
+· 使用引理 `ProbabilityTheory.Kernel.bound_zero`：bound_zero : bound (0 : Kernel α β)
+ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ProbabilityTheory.Kernel.bound_eq_one`：bound_eq_one [Nonempty α] (κ : Ke
+rnel α β) [IsMarkovKernel κ] : κ.bound = 1
 -/
 lemma bound_le_one (κ : Kernel α β) [IsZeroOrMarkovKernel κ] :
-    κ.bound <= 1 := by
+    κ.bound ≤ 1 := by
   rcases isEmpty_or_nonempty α
   · simp
   · rcases eq_zero_or_isMarkovKernel κ with rfl | _ <;> simp
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (h : forall a, κ a = η a)
-  statement: κ = η
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: (h : 对任意 a, κ a = η a)
-  结论: κ = η
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ProbabilityTheory.Kernel.ext** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory.Kern
+el`。
+形式化陈述：ext (h : forall a, κ a = η a) : κ = η
+参数：h : forall a, κ a = η a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (h : forall a, κ a = η a) : κ = η := DFunLike.ext _ _ h
-
-/--
-theorem `ext_iff'` / 定理 `ext_iff'`
-
-English:
-theorem ext_iff'
-  statement: κ = η ↔ forall a s, MeasurableSet s -> κ a s = η a s
-  proof: by
-  simp_rw [Kernel.ext_iff, Measure.ext_iff]
-
-中文:
-定理 ext_iff'
-  结论: κ = η ↔ 对任意 a s, 可测集 s -> κ a s = η a s
-  证明: by
-  simp_rw [Kernel.ext_iff, Measure.ext_iff]
-
-Depends on / 依赖: Kernel, Kernel.ext_iff, Measure, Measure.ext_iff, ext_iff, simp_rw
+theorem ext (h : ∀ a, κ a = η a) : κ = η := DFunLike.ext _ _ h
+/-
+**ProbabilityTheory.Kernel.ext_iff'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：ext_iff' : κ = η ↔ forall a s, MeasurableSet s -> κ a s = η a s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ext_iff' : κ = η ↔ forall a s, MeasurableSet s -> κ a s = η a s := by
+theorem ext_iff' : κ = η ↔ ∀ a s, MeasurableSet s → κ a s = η a s := by
   simp_rw [Kernel.ext_iff, Measure.ext_iff]
-
-/--
-theorem `ext_fun` / 定理 `ext_fun`
-
-English:
-theorem ext_fun
-  given: (h : forall a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a)
-  proof: by
-  ext a s hs
-  specialize h a (s.indicator fun _ => 1) (Measurable.indicator measurable_const hs)
-  simp_rw [lintegral_indicator_const hs, one_mul] at h
-  rw [h]
-
-中文:
-定理 ext_fun
-  条件: (h : 对任意 a f, 可测 f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a)
-  证明: by
-  ext a s hs
-  specialize h a (s.indicator fun _ => 1) (Measurable.indicator measurable_const hs)
-  simp_rw [lintegral_indicator_const hs, one_mul] at h
-  rw [h]
-
-Depends on / 依赖: Measurable, Measurable.indicator, indicator, lintegral_indicator_const, measurable_const, one_mul, s.indicator, simp_rw, specialize
+/-
+**ProbabilityTheory.Kernel.ext_fun** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory.
+Kernel`。
+形式化陈述：ext_fun (h : forall a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a) 
+: κ = η
+参数：h : forall a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MeasureTheory.lintegral_indicator_const`：lintegral_indicator_const {s : 
+Set α} (hs : MeasurableSet s) (c : Real>=0∞) : ∫⁻ a, s.indicator (fun _ => c) a 
+∂μ = c * μ s
+· 使用定理 `Measurable.indicator`：Measurable.indicator [Zero β] (hf : Measurable f) 
+(hs : MeasurableSet s) : Measurable (s.indicator f)
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
 -/
-theorem ext_fun (h : forall a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a) :
+theorem ext_fun (h : ∀ a f, Measurable f → ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a) :
     κ = η := by
   ext a s hs
   specialize h a (s.indicator fun _ => 1) (Measurable.indicator measurable_const hs)
   simp_rw [lintegral_indicator_const hs, one_mul] at h
   rw [h]
-
-/--
-theorem `ext_fun_iff` / 定理 `ext_fun_iff`
-
-English:
-theorem ext_fun_iff
-  statement: κ = η ↔ forall a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a
-  proof: ⟨fun h a f _ => by rw [h], ext_fun⟩
-
-中文:
-定理 ext_fun_iff
-  结论: κ = η ↔ 对任意 a f, 可测 f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a
-  证明: ⟨fun h a f _ => by rw [h], ext_fun⟩
-
-Depends on / 依赖: ext_fun
+/-
+**ProbabilityTheory.Kernel.ext_fun_iff** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：ext_fun_iff : κ = η ↔ forall a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f
+ b ∂η a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.ext_fun`：ext_fun (h : forall a f, Measurable f 
+-> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a) : κ = η
 -/
-theorem ext_fun_iff : κ = η ↔ forall a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a :=
+theorem ext_fun_iff : κ = η ↔ ∀ a f, Measurable f → ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a :=
   ⟨fun h a f _ => by rw [h], ext_fun⟩
 
 section IsEmptyNonempty
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: β] : Subsingleton (Kernel α β) where
-  body: by ext a s; simp [Set.eq_empty_of_isEmpty s]
-
-中文:
-实例 [是空
-  签名: β] : 子单例 (核 α β) where
-  定义体: by ext a s; simp [Set.eq_empty_of_isEmpty s]
-
-Depends on / 依赖: Set.eq_empty_of_isEmpty, eq_empty_of_isEmpty
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty β] : Subsingleton (Kernel α β) where
   allEq κ η := by ext a s; simp [Set.eq_empty_of_isEmpty s]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: α] (κ
-  body: by simp
-
-中文:
-实例 [是空
-  签名: α] (κ
-  定义体: by simp
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty α] (κ : Kernel α β) : IsMarkovKernel κ where
   isProbabilityMeasure := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsEmpty
-  signature: β] (κ
-  body: by
-    left
-    ext a s
-    simp [Set.eq_empty_of_isEmpty s]
-
-中文:
-实例 [是空
-  签名: β] (κ
-  定义体: by
-    left
-    ext a s
-    simp [Set.eq_empty_of_isEmpty s]
-
-Depends on / 依赖: Set.eq_empty_of_isEmpty, eq_empty_of_isEmpty
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsEmpty β] (κ : Kernel α β) : IsZeroOrMarkovKernel κ where
   eq_zero_or_isMarkovKernel' := by
     left
     ext a s
     simp [Set.eq_empty_of_isEmpty s]
-
-/--
-lemma `not_isMarkovKernel_zero` / 引理 `not_isMarkovKernel_zero`
-
-English:
-lemma not_isMarkovKernel_zero
-  given: [Nonempty α]
-  statement: ¬ IsMarkovKernel (0 : Kernel α β)
-  proof: by
-  by_contra h
-  let x : α := Nonempty.some inferInstance
-  have h1 : (0 : Measure β) .univ = 1 := (h.isProbabilityMeasure x).measure_univ
-  simp at h1
-
-中文:
-引理 not_isMarkovKernel_zero
-  条件: [非空 α]
-  结论: ¬ 是MarkovKernel (0 : 核 α β)
-  证明: by
-  by_contra h
-  let x : α := Nonempty.some inferInstance
-  have h1 : (0 : Measure β) .univ = 1 := (h.isProbabilityMeasure x).measure_univ
-  simp at h1
-
-Depends on / 依赖: Measure, Nonempty, Nonempty.some, h.isProbabilityMeasure, isProbabilityMeasure, measure_univ
+/-
+**ProbabilityTheory.Kernel.not_isMarkovKernel_zero** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+obabilityTheory.Kernel`。
+形式化陈述：not_isMarkovKernel_zero [Nonempty α] : ¬ IsMarkovKernel (0 : Kernel α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `ProbabilityTheory.IsMarkovKernel.isProbabilityMeasure`：∀ {α : Type u_1} 
+{β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabilit
+yTheory.Kernel α β}   [self : ProbabilityTh…
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
 -/
 lemma not_isMarkovKernel_zero [Nonempty α] : ¬ IsMarkovKernel (0 : Kernel α β) := by
   by_contra h
@@ -1012,92 +804,96 @@ lemma not_isMarkovKernel_zero [Nonempty α] : ¬ IsMarkovKernel (0 : Kernel α �
 
 end IsEmptyNonempty
 
-/--
-theorem `measurable_coe` / 定理 `measurable_coe`
-
-English:
-theorem measurable_coe
-  given: (κ : Kernel α β) {s : Set β} (hs : MeasurableSet s)
-  proof: (Measure.measurable_coe hs).comp κ.measurable
-
-中文:
-定理 measurable_coe
-  条件: (κ : 核 α β) {s : 集合 β} (hs : 可测集 s)
-  证明: (Measure.measurable_coe hs).comp κ.measurable
+/-
+**ProbabilityTheory.Kernel.measurable_coe** 是 Mathlib 中的一个定理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} (κ : ProbabilityTheory.Kernel α β)   {s : Set β}, MeasurableSet s → Meas
+urable fun a => (κ a) s
+参数：κ : ProbabilityTheory.Kernel α β；κ a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `MeasureTheory.Measure.measurable_coe`：measurable_coe {s : Set α} (hs : M
+easurableSet s) : Measurable fun μ : Measure α => μ s
+· 使用引理 `ProbabilityTheory.Kernel.measurable`：measurable (κ : Kernel α β) : Measu
+rable κ
 -/
 protected theorem measurable_coe (κ : Kernel α β) {s : Set β} (hs : MeasurableSet s) :
     Measurable fun a => κ a s :=
   (Measure.measurable_coe hs).comp κ.measurable
-
-/--
-lemma `apply_congr_of_mem_measurableAtom` / 引理 `apply_congr_of_mem_measurableAtom`
-
-English:
-lemma apply_congr_of_mem_measurableAtom
-  given: (κ : Kernel α β) {y' y : α} (hy' : y' in measurableAtom y)
-  proof: by
-  ext s hs
-  exact mem_of_mem_measurableAtom hy' (κ.measurable_coe hs (measurableSet_singleton (κ y s))) rfl
-
-中文:
-引理 apply_congr_of_mem_measurableAtom
-  条件: (κ : 核 α β) {y' y : α} (hy' : y' in measurableAtom y)
-  证明: by
-  ext s hs
-  exact mem_of_mem_measurableAtom hy' (κ.measurable_coe hs (measurableSet_singleton (κ y s))) rfl
-
-Depends on / 依赖: measurableSet_singleton, measurable_coe, mem_of_mem_measurableAtom
+/-
+**ProbabilityTheory.Kernel.apply_congr_of_mem_measurableAtom** 是 Mathlib 中的一个引理，
+位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：apply_congr_of_mem_measurableAtom (κ : Kernel α β) {y' y : α} (hy' : y' in
+ measurableAtom y) : κ y' = κ y
+参数：κ : Kernel α β；hy' : y' in measurableAtom y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用引理 `mem_of_mem_measurableAtom`：mem_of_mem_measurableAtom {x y : β} (h : y in
+ measurableAtom x) {s : Set β} (hs : MeasurableSet s) (hxs : x in s) : y in s
+· 使用定理 `ProbabilityTheory.Kernel.measurable_coe`：∀ {α : Type u_1} {β : Type u_2}
+ {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (κ : ProbabilityTheory.Kernel
+ α β)   {s : Set β}, Measurab…
+· 使用定理 `MeasurableSingletonClass.measurableSet_singleton`：∀ {α : Type u_7} {inst
+ : MeasurableSpace α} [self : MeasurableSingletonClass α] (x : α), MeasurableSet
+ {x}
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `StandardBorelSpace.instMeasurableEq`：∀ {α : Type u_1} [inst : Measurable
+Space α] [StandardBorelSpace α], MeasurableEq α
+· 使用定理 `standardBorel_of_polish`：∀ {α : Type u_1} [inst : MeasurableSpace α] [τ 
+: TopologicalSpace α] [BorelSpace α] [PolishSpace α],   StandardBorelSpace α
+· 使用定理 `PolishSpace.instENNReal`：PolishSpace ENNReal
 -/
-lemma apply_congr_of_mem_measurableAtom (κ : Kernel α β) {y' y : α} (hy' : y' in measurableAtom y) :
+lemma apply_congr_of_mem_measurableAtom (κ : Kernel α β) {y' y : α} (hy' : y' ∈ measurableAtom y) :
     κ y' = κ y := by
   ext s hs
   exact mem_of_mem_measurableAtom hy' (κ.measurable_coe hs (measurableSet_singleton (κ y s))) rfl
-
-/--
-lemma `eq_zero_of_isEmpty_left` / 引理 `eq_zero_of_isEmpty_left`
-
-English:
-lemma eq_zero_of_isEmpty_left
-  given: (κ : Kernel α β) [h : IsEmpty α]
-  statement: κ = 0
-  proof: by
-  ext a
-  exact h.elim a
-
-中文:
-引理 eq_zero_of_isEmpty_left
-  条件: (κ : 核 α β) [h : 是空 α]
-  结论: κ = 0
-  证明: by
-  ext a
-  exact h.elim a
-
-Depends on / 依赖: h.elim
+/-
+**ProbabilityTheory.Kernel.eq_zero_of_isEmpty_left** 是 Mathlib 中的一个引理，位于命名空间 `Pr
+obabilityTheory.Kernel`。
+形式化陈述：eq_zero_of_isEmpty_left (κ : Kernel α β) [h : IsEmpty α] : κ = 0
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
 -/
 lemma eq_zero_of_isEmpty_left (κ : Kernel α β) [h : IsEmpty α] : κ = 0 := by
   ext a
   exact h.elim a
-
-/--
-lemma `eq_zero_of_isEmpty_right` / 引理 `eq_zero_of_isEmpty_right`
-
-English:
-lemma eq_zero_of_isEmpty_right
-  given: (κ : Kernel α β) [IsEmpty β]
-  statement: κ = 0
-  proof: by
-  ext a
-  simp [Measure.eq_zero_of_isEmpty (κ a)]
-
-中文:
-引理 eq_zero_of_isEmpty_right
-  条件: (κ : 核 α β) [是空 β]
-  结论: κ = 0
-  证明: by
-  ext a
-  simp [Measure.eq_zero_of_isEmpty (κ a)]
-
-Depends on / 依赖: Measure, Measure.eq_zero_of_isEmpty, eq_zero_of_isEmpty
+/-
+**ProbabilityTheory.Kernel.eq_zero_of_isEmpty_right** 是 Mathlib 中的一个引理，位于命名空间 `P
+robabilityTheory.Kernel`。
+形式化陈述：eq_zero_of_isEmpty_right (κ : Kernel α β) [IsEmpty β] : κ = 0
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.Measure.eq_zero_of_isEmpty`：eq_zero_of_isEmpty [IsEmpty α]
+ {_m : MeasurableSpace α} (μ : Measure α) : μ = 0
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma eq_zero_of_isEmpty_right (κ : Kernel α β) [IsEmpty β] : κ = 0 := by
   ext a
@@ -1105,175 +901,186 @@ lemma eq_zero_of_isEmpty_right (κ : Kernel α β) [IsEmpty β] : κ = 0 := by
 
 section Sum
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Sum of an indexed family of kernels. -/
+/-
+**ProbabilityTheory.Kernel.sum** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Kern
+el`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     {ι : Type u_3} →       {mα : Measu
+rableSpace α} →         {mβ : MeasurableSpace β} → [Countable ι] → (ι → Probabil
+ityTheory.Kernel α β) → ProbabilityTheory.Kernel α β
+参数：ι → ProbabilityTheory.Kernel α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def sum [Countable ι] (κ : ι -> Kernel α β)
-  body: Measure.sum fun n => κ n a
-  measurable' := by
-    refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
-    simp_rw [Measure.sum_apply _ hs]
-    exact Measurable.tsum fun n => Kernel.measurable_coe (κ n) hs
-
-中文:
-定义 noncomputable
-  签名: def 求和 [可数 ι] (κ : ι -> 核 α β)
-  定义体: Measure.sum fun n => κ n a
-  measurable' := by
-    refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
-    simp_rw [Measure.sum_apply _ hs]
-    exact Measurable.tsum fun n => Kernel.measurable_coe (κ n) hs
+--- 原说明 ---
+Sum of an indexed family of kernels.
 -/
-protected noncomputable def sum [Countable ι] (κ : ι -> Kernel α β) : Kernel α β where
+protected noncomputable def sum [Countable ι] (κ : ι → Kernel α β) : Kernel α β where
   toFun a := Measure.sum fun n => κ n a
   measurable' := by
     refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
     simp_rw [Measure.sum_apply _ hs]
     exact Measurable.tsum fun n => Kernel.measurable_coe (κ n) hs
-
-/--
-theorem `sum_apply` / 定理 `sum_apply`
-
-English:
-theorem sum_apply
-  given: [Countable ι] (κ : ι -> Kernel α β) (a : α)
-  proof: rfl
-
-中文:
-定理 sum_apply
-  条件: [可数 ι] (κ : ι -> 核 α β) (a : α)
-  证明: rfl
+/-
+**ProbabilityTheory.Kernel.sum_apply** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheor
+y.Kernel`。
+形式化陈述：sum_apply [Countable ι] (κ : ι -> Kernel α β) (a : α) : Kernel.sum κ a = M
+easure.sum fun n => κ n a
+参数：κ : ι -> Kernel α β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sum_apply [Countable ι] (κ : ι -> Kernel α β) (a : α) :
+theorem sum_apply [Countable ι] (κ : ι → Kernel α β) (a : α) :
     Kernel.sum κ a = Measure.sum fun n => κ n a :=
   rfl
-
-/--
-theorem `sum_apply'` / 定理 `sum_apply'`
-
-English:
-theorem sum_apply'
-  given: [Countable ι] (κ : ι -> Kernel α β) (a : α) {s : Set β} (hs : MeasurableSet s)
-  proof: by rw [sum_apply κ a, Measure.sum_apply _ hs]
-
-@[simp]
-
-中文:
-定理 sum_apply'
-  条件: [可数 ι] (κ : ι -> 核 α β) (a : α) {s : 集合 β} (hs : 可测集 s)
-  证明: by rw [sum_apply κ a, Measure.sum_apply _ hs]
-
-@[simp]
-
-Depends on / 依赖: Measure, Measure.sum_apply, sum_apply
+/-
+**ProbabilityTheory.Kernel.sum_apply'** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheo
+ry.Kernel`。
+形式化陈述：sum_apply' [Countable ι] (κ : ι -> Kernel α β) (a : α) {s : Set β} (hs : M
+easurableSet s) : Kernel.sum κ a s = ∑' n, κ n a s
+参数：κ : ι -> Kernel α β；a : α；hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum_apply`：sum_apply [Countable ι] (κ : ι -> Ke
+rnel α β) (a : α) : Kernel.sum κ a = Measure.sum fun n => κ n a
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
 -/
-theorem sum_apply' [Countable ι] (κ : ι -> Kernel α β) (a : α) {s : Set β} (hs : MeasurableSet s) :
+theorem sum_apply' [Countable ι] (κ : ι → Kernel α β) (a : α) {s : Set β} (hs : MeasurableSet s) :
     Kernel.sum κ a s = ∑' n, κ n a s := by rw [sum_apply κ a, Measure.sum_apply _ hs]
 
 @[simp]
-/--
-theorem `sum_zero` / 定理 `sum_zero`
-
-English:
-theorem sum_zero
-  given: [Countable ι]
-  statement: (Kernel.sum fun _ : ι => (0 : Kernel α β)) = 0
-  proof: by
-  ext a s hs
-  rw [sum_apply' _ a hs]
-  simp only [zero_apply, Measure.coe_zero, Pi.zero_apply, tsum_zero]
-
-中文:
-定理 sum_zero
-  条件: [可数 ι]
-  结论: (核.求和 fun _ : ι => (0 : 核 α β)) = 0
-  证明: by
-  ext a s hs
-  rw [sum_apply' _ a hs]
-  simp only [zero_apply, Measure.coe_zero, Pi.zero_apply, tsum_zero]
-
-Depends on / 依赖: Measure, Measure.coe_zero, Pi.zero_apply, coe_zero, sum_apply, tsum_zero, zero_apply
+/-
+**ProbabilityTheory.Kernel.sum_zero** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：sum_zero [Countable ι] : (Kernel.sum fun _ : ι => (0 : Kernel α β)) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum_apply'`：sum_apply' [Countable ι] (κ : ι -> 
+Kernel α β) (a : α) {s : Set β} (hs : MeasurableSet s) : Kernel.sum κ a s = ∑' n
+, κ n a s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `tsum_zero`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : TopologicalSpace α] {L : SummationFilter β},   ∑'[L] (x : β), 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sum_zero [Countable ι] : (Kernel.sum fun _ : ι => (0 : Kernel α β)) = 0 := by
   ext a s hs
   rw [sum_apply' _ a hs]
   simp only [zero_apply, Measure.coe_zero, Pi.zero_apply, tsum_zero]
-
-/--
-theorem `sum_comm` / 定理 `sum_comm`
-
-English:
-theorem sum_comm
-  given: [Countable ι] (κ : ι -> ι -> Kernel α β)
-  proof: by
-  ext a s; simp_rw [sum_apply]; rw [Measure.sum_comm]
-
-@[simp]
-
-中文:
-定理 sum_comm
-  条件: [可数 ι] (κ : ι -> ι -> 核 α β)
-  证明: by
-  ext a s; simp_rw [sum_apply]; rw [Measure.sum_comm]
-
-@[simp]
-
-Depends on / 依赖: Measure, Measure.sum_comm, simp_rw, sum_apply, sum_comm
+/-
+**ProbabilityTheory.Kernel.sum_comm** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory
+.Kernel`。
+形式化陈述：sum_comm [Countable ι] (κ : ι -> ι -> Kernel α β) : (Kernel.sum fun n => K
+ernel.sum (κ n)) = Kernel.sum fun m => Kernel.sum fun n => κ n m
+参数：κ : ι -> ι -> Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.sum_comm`：sum_comm {ι' : Type*} (μ : ι -> ι' -> Me
+asure α) : (sum fun n => sum (μ n)) = sum fun m => sum fun n => μ n m
 -/
-theorem sum_comm [Countable ι] (κ : ι -> ι -> Kernel α β) :
+theorem sum_comm [Countable ι] (κ : ι → ι → Kernel α β) :
     (Kernel.sum fun n => Kernel.sum (κ n)) = Kernel.sum fun m => Kernel.sum fun n => κ n m := by
   ext a s; simp_rw [sum_apply]; rw [Measure.sum_comm]
 
 @[simp]
-/--
-theorem `sum_fintype` / 定理 `sum_fintype`
-
-English:
-theorem sum_fintype
-  given: [Fintype ι] (κ : ι -> Kernel α β)
-  statement: Kernel.sum κ = ∑ i, κ i
-  proof: by
-  ext a s hs
-  simp only [sum_apply' κ a hs, finsetSum_apply' _ κ a s, tsum_fintype]
-
-中文:
-定理 sum_fintype
-  条件: [有限类型 ι] (κ : ι -> 核 α β)
-  结论: 核.求和 κ = ∑ i, κ i
-  证明: by
-  ext a s hs
-  simp only [sum_apply' κ a hs, finsetSum_apply' _ κ a s, tsum_fintype]
-
-Depends on / 依赖: finsetSum_apply, sum_apply, tsum_fintype
+/-
+**ProbabilityTheory.Kernel.sum_fintype** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityThe
+ory.Kernel`。
+形式化陈述：sum_fintype [Fintype ι] (κ : ι -> Kernel α β) : Kernel.sum κ = ∑ i, κ i
+参数：κ : ι -> Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum_apply'`：sum_apply' [Countable ι] (κ : ι -> 
+Kernel α β) (a : α) {s : Set β} (hs : MeasurableSet s) : Kernel.sum κ a s = ∑' n
+, κ n a s
+· 使用定理 `tsum_fintype`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [
+inst_1 : TopologicalSpace α] {L : SummationFilter β}   [L.LeAtTop] [inst_3 : Fin
+ty…
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `ProbabilityTheory.Kernel.finsetSum_apply'`：finsetSum_apply' (I : Finset 
+ι) (κ : ι -> Kernel α β) (a : α) (s : Set β) : (∑ i in I, κ i) a s = ∑ i in I, κ
+ i a s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_fintype [Fintype ι] (κ : ι -> Kernel α β) : Kernel.sum κ = ∑ i, κ i := by
+theorem sum_fintype [Fintype ι] (κ : ι → Kernel α β) : Kernel.sum κ = ∑ i, κ i := by
   ext a s hs
   simp only [sum_apply' κ a hs, finsetSum_apply' _ κ a s, tsum_fintype]
-
-/--
-theorem `sum_add` / 定理 `sum_add`
-
-English:
-theorem sum_add
-  given: [Countable ι] (κ η : ι -> Kernel α β)
-  proof: by
-  ext a s hs
-  simp only [add_apply, sum_apply, Measure.sum_apply _ hs, Pi.add_apply,
-    Measure.coe_add, ENNReal.summable.tsum_add ENNReal.summable]
-
-中文:
-定理 sum_add
-  条件: [可数 ι] (κ η : ι -> 核 α β)
-  证明: by
-  ext a s hs
-  simp only [add_apply, sum_apply, Measure.sum_apply _ hs, Pi.add_apply,
-    Measure.coe_add, ENNReal.summable.tsum_add ENNReal.summable]
-
-Depends on / 依赖: ENNReal, ENNReal.summable, ENNReal.summable.tsum_add, Measure, Measure.coe_add, Measure.sum_apply, Pi.add_apply, add_apply, coe_add, sum_apply, summable, tsum_add
+/-
+**ProbabilityTheory.Kernel.sum_add** 是 Mathlib 中的一个定理，位于命名空间 `ProbabilityTheory.
+Kernel`。
+形式化陈述：sum_add [Countable ι] (κ η : ι -> Kernel α β) : (Kernel.sum fun n => κ n +
+ η n) = Kernel.sum κ + Kernel.sum η
+参数：κ η : ι -> Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Typ
+e u_3)} {inst : FunLike F α β} {inst_1 : Add β}   {inst_2 : Add F} [self : IsAd…
+· 使用定理 `ProbabilityTheory.Kernel.instIsAddApplyMeasure`：∀ {α : Type u_1} {β : Ty
+pe u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsAddApply (Probabi
+lityTheory.Kernel α β) α (MeasureThe…
+· 使用定理 `MeasureTheory.Measure.sum_apply`：sum_apply (f : ι -> Measure α) {s : Set
+ α} (hs : MeasurableSet s) : sum f s = ∑' i, f i s
+· 使用定理 `Summable.tsum_add`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid
+ α] [inst_1 : TopologicalSpace α] {f g : β → α}   {L : SummationFilter β} [T2Spa
+ce α] […
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `ENNReal.summable`：∀ {α : Type u_1} {f : α → ENNReal}, Summable f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem sum_add [Countable ι] (κ η : ι -> Kernel α β) :
+theorem sum_add [Countable ι] (κ η : ι → Kernel α β) :
     (Kernel.sum fun n => κ n + η n) = Kernel.sum κ + Kernel.sum η := by
   ext a s hs
   simp only [add_apply, sum_apply, Measure.sum_apply _ hs, Pi.add_apply,
@@ -1283,24 +1090,23 @@ end Sum
 
 section SFinite
 
-/--
-Definition of `_root_.ProbabilityTheory.IsSFiniteKernel` / `_root_.ProbabilityTheory.IsSFiniteKernel` 的定义
+/-- A kernel is s-finite if it can be written as the sum of countably many finite kernels. -/
+/-
+**ProbabilityTheory.Kernel._root_.ProbabilityTheory.IsSFiniteKernel** 是 Mathlib 
+中的一个类，位于命名空间 `ProbabilityTheory.Kernel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class _root_.ProbabilityTheory.IsSFiniteKernel
-  parameters: (κ : Kernel α β)
-  axioms and operations (1):
-    - tsum_finite : exists κs : Nat -> Kernel α β, (forall n, IsFiniteKernel (κs n)) ∧ κ = Kernel.sum κs
-
-中文:
-类 _root_.ProbabilityTheory.是SFiniteKernel
-  参数: (κ : 核 α β)
-  公理与运算 (1 个):
-    - tsum_finite : 存在 κs : 自然数 -> 核 α β, (对任意 n, 是FiniteKernel (κs n)) ∧ κ = 核.求和 κs
+--- 原说明 ---
+A kernel is s-finite if it can be written as the sum of countably many finite ke
+rnels.
 -/
 class _root_.ProbabilityTheory.IsSFiniteKernel (κ : Kernel α β) : Prop where
-  tsum_finite : exists κs : Nat -> Kernel α β, (forall n, IsFiniteKernel (κs n)) ∧ κ = Kernel.sum κs
-
+  tsum_finite : ∃ κs : ℕ → Kernel α β, (∀ n, IsFiniteKernel (κs n)) ∧ κ = Kernel.sum κs
+/-
+**ProbabilityTheory.Kernel.** 是 Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsFiniteKernel.isSFiniteKernel [h : IsFiniteKernel κ] :
     IsSFiniteKernel κ :=
   ⟨⟨fun n => if n = 0 then κ else 0, fun n => by
@@ -1311,249 +1117,244 @@ instance (priority := 100) IsFiniteKernel.isSFiniteKernel [h : IsFiniteKernel κ
       rw [Kernel.sum_apply' _ _ hs]
       have : (fun i => ((ite (i = 0) κ 0) a) s) = fun i => ite (i = 0) (κ a s) 0 := by
         ext1 i; split_ifs <;> rfl
-      rw [this]; rw [tsum_ite_eq]⟩⟩
+      rw [this, tsum_ite_eq]⟩⟩
 
-/--
-Definition of `seq` / `seq` 的定义
+/-- A sequence of finite kernels such that `κ = ProbabilityTheory.Kernel.sum (seq κ)`. See
+`ProbabilityTheory.Kernel.isFiniteKernel_seq` and `ProbabilityTheory.Kernel.kernel_sum_seq`. -/
+/-
+**ProbabilityTheory.Kernel.seq** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory.Kern
+el`。
+形式化陈述：seq (κ : Kernel α β) [h : IsSFiniteKernel κ] : Nat -> Kernel α β
+参数：κ : Kernel α β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ProbabilityTheory.IsSFiniteKernel.tsum_finite`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheory.
+Kernel α β}   [self : ProbabilityTh…
 
-English:
-definition seq
-  signature: (κ : Kernel α β) [h : IsSFiniteKernel κ]
-  body: h.tsum_finite.choose
-
-中文:
-定义 seq
-  签名: (κ : 核 α β) [h : 是SFiniteKernel κ]
-  定义体: h.tsum_finite.choose
-
-Depends on / 依赖: h.tsum_finite.choose, tsum_finite
+--- 原说明 ---
+A sequence of finite kernels such that `κ = ProbabilityTheory.Kernel.sum (seq κ)
+`. See
+`ProbabilityTheory.Kernel.isFiniteKernel_seq` and `ProbabilityTheory.Kernel.kern
+el_sum_seq`.
 -/
-noncomputable def seq (κ : Kernel α β) [h : IsSFiniteKernel κ] : Nat -> Kernel α β :=
+noncomputable def seq (κ : Kernel α β) [h : IsSFiniteKernel κ] : ℕ → Kernel α β :=
   h.tsum_finite.choose
-
-/--
-theorem `kernel_sum_seq` / 定理 `kernel_sum_seq`
-
-English:
-theorem kernel_sum_seq
-  given: (κ : Kernel α β) [h : IsSFiniteKernel κ]
-  statement: Kernel.sum (seq κ) = κ
-  proof: h.tsum_finite.choose_spec.2.symm
-
-中文:
-定理 kernel_sum_seq
-  条件: (κ : 核 α β) [h : 是SFiniteKernel κ]
-  结论: 核.求和 (seq κ) = κ
-  证明: h.tsum_finite.choose_spec.2.symm
-
-Depends on / 依赖: choose_spec, h.tsum_finite.choose_spec, tsum_finite
+/-
+**ProbabilityTheory.Kernel.kernel_sum_seq** 是 Mathlib 中的一个定理，位于命名空间 `Probability
+Theory.Kernel`。
+形式化陈述：kernel_sum_seq (κ : Kernel α β) [h : IsSFiniteKernel κ] : Kernel.sum (seq 
+κ) = κ
+参数：κ : Kernel α β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ProbabilityTheory.IsSFiniteKernel.tsum_finite`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheory.
+Kernel α β}   [self : ProbabilityTh…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 theorem kernel_sum_seq (κ : Kernel α β) [h : IsSFiniteKernel κ] : Kernel.sum (seq κ) = κ :=
   h.tsum_finite.choose_spec.2.symm
-
-/--
-theorem `measure_sum_seq` / 定理 `measure_sum_seq`
-
-English:
-theorem measure_sum_seq
-  given: (κ : Kernel α β) [h : IsSFiniteKernel κ] (a : α)
-  proof: by rw [← Kernel.sum_apply, kernel_sum_seq κ]
-
-中文:
-定理 measure_sum_seq
-  条件: (κ : 核 α β) [h : 是SFiniteKernel κ] (a : α)
-  证明: by rw [← Kernel.sum_apply, kernel_sum_seq κ]
-
-Depends on / 依赖: Finite, Kernel, Kernel.sum_apply, Module, Module.Finite, QuasiFinite, kernel_sum_seq, sum_apply
+/-
+**ProbabilityTheory.Kernel.measure_sum_seq** 是 Mathlib 中的一个定理，位于命名空间 `Probabilit
+yTheory.Kernel`。
+形式化陈述：measure_sum_seq (κ : Kernel α β) [h : IsSFiniteKernel κ] (a : α) : (Measur
+e.sum fun n => seq κ n a) = κ a
+参数：κ : Kernel α β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ProbabilityTheory.Kernel.sum_apply`：sum_apply [Countable ι] (κ : ι -> Ke
+rnel α β) (a : α) : Kernel.sum κ a = Measure.sum fun n => κ n a
+· 使用定理 `ProbabilityTheory.Kernel.kernel_sum_seq`：kernel_sum_seq (κ : Kernel α β)
+ [h : IsSFiniteKernel κ] : Kernel.sum (seq κ) = κ
 -/
 theorem measure_sum_seq (κ : Kernel α β) [h : IsSFiniteKernel κ] (a : α) :
     (Measure.sum fun n => seq κ n a) = κ a := by rw [← Kernel.sum_apply, kernel_sum_seq κ]
-
-/--
-Instance `isFiniteKernel_seq` / 实例 `isFiniteKernel_seq`
-
-English:
-instance isFiniteKernel_seq
-  signature: (κ : Kernel α β) [h : IsSFiniteKernel κ] (n : Nat)
-  body: h.tsum_finite.choose_spec.1 n
-
-中文:
-实例 isFiniteKernel_seq
-  签名: (κ : 核 α β) [h : 是SFiniteKernel κ] (n : 自然数)
-  定义体: h.tsum_finite.choose_spec.1 n
-
-Depends on / 依赖: choose_spec, h.tsum_finite.choose_spec, tsum_finite
+/-
+**ProbabilityTheory.Kernel.isFiniteKernel_seq** 是 Mathlib 中的一个实例，位于命名空间 `Probabi
+lityTheory.Kernel`。
+形式化陈述：isFiniteKernel_seq (κ : Kernel α β) [h : IsSFiniteKernel κ] (n : Nat) : Is
+FiniteKernel (Kernel.seq κ n)
+参数：κ : Kernel α β；n : Nat。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ProbabilityTheory.IsSFiniteKernel.tsum_finite`：∀ {α : Type u_1} {β : Typ
+e u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : ProbabilityTheory.
+Kernel α β}   [self : ProbabilityTh…
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-instance isFiniteKernel_seq (κ : Kernel α β) [h : IsSFiniteKernel κ] (n : Nat) :
+instance isFiniteKernel_seq (κ : Kernel α β) [h : IsSFiniteKernel κ] (n : ℕ) :
     IsFiniteKernel (Kernel.seq κ n) :=
   h.tsum_finite.choose_spec.1 n
-
-/--
-Instance `_root_.ProbabilityTheory.IsSFiniteKernel.sFinite` / 实例 `_root_.ProbabilityTheory.IsSFiniteKernel.sFinite`
-
-English:
-instance _root_.ProbabilityTheory.IsSFiniteKernel.sFinite
-  signature: [IsSFiniteKernel κ] (a : α)
-  body: ⟨⟨fun n => seq κ n a, inferInstance, (measure_sum_seq κ a).symm⟩⟩
-
-中文:
-实例 _root_.ProbabilityTheory.是SFiniteKernel.sFinite
-  签名: [是SFiniteKernel κ] (a : α)
-  定义体: ⟨⟨fun n => seq κ n a, inferInstance, (measure_sum_seq κ a).symm⟩⟩
-
-Depends on / 依赖: measure_sum_seq
+/-
+**ProbabilityTheory.Kernel._root_.ProbabilityTheory.IsSFiniteKernel.sFinite** 是 
+Mathlib 中的一个实例，位于命名空间 `ProbabilityTheory.Kernel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.ProbabilityTheory.IsSFiniteKernel.sFinite [IsSFiniteKernel κ] (a : α) :
     SFinite (κ a) :=
-  ⟨⟨fun n => seq κ n a, inferInstance, (measure_sum_seq κ a).symm⟩⟩
-
-/--
-Instance `IsSFiniteKernel.add` / 实例 `IsSFiniteKernel.add`
-
-English:
-instance IsSFiniteKernel.add
-  signature: (κ η : Kernel α β) [IsSFiniteKernel κ] [IsSFiniteKernel η]
-  body: by
-  refine ⟨⟨fun n => seq κ n + seq η n, fun n => inferInstance, ?_⟩⟩
-  rw [sum_add]; rw [kernel_sum_seq κ]; rw [kernel_sum_seq η]
-
-中文:
-实例 是SFiniteKernel.add
-  签名: (κ η : 核 α β) [是SFiniteKernel κ] [是SFiniteKernel η]
-  定义体: by
-  refine ⟨⟨fun n => seq κ n + seq η n, fun n => inferInstance, ?_⟩⟩
-  rw [sum_add]; rw [kernel_sum_seq κ]; rw [kernel_sum_seq η]
-
-Depends on / 依赖: kernel_sum_seq, sum_add
+  ⟨⟨fun n ↦ seq κ n a, inferInstance, (measure_sum_seq κ a).symm⟩⟩
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.add** 是 Mathlib 中的一个定理，位于命名空间 `Probab
+ilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableS
+pace β} (κ η : ProbabilityTheory.Kernel α β)   [ProbabilityTheory.IsSFiniteKerne
+l κ] [ProbabilityTheory.IsSFiniteKernel η], ProbabilityTheory.IsSFiniteKernel (κ
+ + η)
+参数：κ η : ProbabilityTheory.Kernel α β；κ + η。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `ProbabilityTheory.IsFiniteKernel.add`：∀ {α : Type u_1} {β : Type u_2} {m
+α : MeasurableSpace α} {mβ : MeasurableSpace β} (κ η : ProbabilityTheory.Kernel 
+α β)   [ProbabilityTheory.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum_add`：sum_add [Countable ι] (κ η : ι -> Kern
+el α β) : (Kernel.sum fun n => κ n + η n) = Kernel.sum κ + Kernel.sum η
+· 使用定理 `ProbabilityTheory.Kernel.kernel_sum_seq`：kernel_sum_seq (κ : Kernel α β)
+ [h : IsSFiniteKernel κ] : Kernel.sum (seq κ) = κ
 -/
 instance IsSFiniteKernel.add (κ η : Kernel α β) [IsSFiniteKernel κ] [IsSFiniteKernel η] :
     IsSFiniteKernel (κ + η) := by
   refine ⟨⟨fun n => seq κ n + seq η n, fun n => inferInstance, ?_⟩⟩
-  rw [sum_add]; rw [kernel_sum_seq κ]; rw [kernel_sum_seq η]
-
-/--
-theorem `IsSFiniteKernel.finsetSum` / 定理 `IsSFiniteKernel.finsetSum`
-
-English:
-theorem IsSFiniteKernel.finsetSum
-  statement: {κs : ι -> Kernel α β} (I : Finset ι)
-  proof: by
+  rw [sum_add, kernel_sum_seq κ, kernel_sum_seq η]
+/-
+**ProbabilityTheory.Kernel.IsSFiniteKernel.finsetSum** 是 Mathlib 中的一个定理，位于命名空间 `
+ProbabilityTheory.Kernel.IsSFiniteKernel`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {ι : Type u_3} {mα : MeasurableSpace α} {m
+β : MeasurableSpace β}   {κs : ι → ProbabilityTheory.Kernel α β} (I : Finset ι),
+   (∀ i ∈ I, ProbabilityTheory.IsSFiniteKernel (κs i)) → ProbabilityTheory.IsSFi
+niteKernel (∑ i ∈ I, κs i)
+参数：I : Finset ι；∀ i ∈ I, ProbabilityTheory.IsSFiniteKernel (κs i)；∑ i ∈ I, κs i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_empty`：∀ {ι : Type u_1} {M : Type u_3} {f : ι → M} [inst : Ad
+dCommMonoid M], ∑ x ∈ ∅, f x = 0
+· 使用定理 `ProbabilityTheory.Kernel.IsFiniteKernel.isSFiniteKernel`：∀ {α : Type u_1
+} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {κ : Probabil
+ityTheory.Kernel α β}   [h : ProbabilityTheor…
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.add`：∀ {α : Type u_1} {β : Type
+ u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} (κ η : ProbabilityTheory
+.Kernel α β)   [ProbabilityTheory.…
+-/
+theorem IsSFiniteKernel.finsetSum {κs : ι → Kernel α β} (I : Finset ι)
+    (h : ∀ i ∈ I, IsSFiniteKernel (κs i)) : IsSFiniteKernel (∑ i ∈ I, κs i) := by
   classical
   induction I using Finset.induction with
   | empty => rw [Finset.sum_empty]; infer_instance
   | insert i I hi_notMem_I h_ind =>
     rw [Finset.sum_insert hi_notMem_I]
     have : IsSFiniteKernel (κs i) := h i (Finset.mem_insert_self _ _)
-    have : IsSFiniteKernel (∑ x in I, κs x) :=
+    have : IsSFiniteKernel (∑ x ∈ I, κs x) :=
       h_ind fun i hiI => h i (Finset.mem_insert_of_mem hiI)
     exact IsSFiniteKernel.add _ _
 
 @[deprecated (since := "2026-04-08")] alias IsSFiniteKernel.finset_sum := IsSFiniteKernel.finsetSum
-
-中文:
-定理 是SFiniteKernel.finsetSum
-  结论: {κs : ι -> 核 α β} (I : 有限集 ι)
-  证明: by
-  classical
-  induction I using Finset.induction with
-  | empty => rw [Finset.sum_empty]; infer_instance
-  | insert i I hi_notMem_I h_ind =>
-    rw [Finset.sum_insert hi_notMem_I]
-    have : IsSFiniteKernel (κs i) := h i (Finset.mem_insert_self _ _)
-    have : IsSFiniteKernel (∑ x in I, κs x) :=
-      h_ind fun i hiI => h i (Finset.mem_insert_of_mem hiI)
-    exact IsSFiniteKernel.add _ _
-
-@[deprecated (since := "2026-04-08")] alias IsSFiniteKernel.finset_sum := IsSFiniteKernel.finsetSum
-
-Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_empty, Finset.sum_insert, IsSFiniteKernel, IsSFiniteKernel.add, classical, h_ind, hi_notMem_I, infer_instance, insert, mem_insert_of_mem, mem_insert_self, sum_empty, sum_insert
+/-
+**ProbabilityTheory.Kernel.isSFiniteKernel_sum_of_denumerable** 是 Mathlib 中的一个定理
+，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：isSFiniteKernel_sum_of_denumerable [Denumerable ι] {κs : ι -> Kernel α β} 
+(hκs : forall n, IsSFiniteKernel (κs n)) : IsSFiniteKernel (Kernel.sum κs)
+参数：hκs : forall n, IsSFiniteKernel (κs n)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum.congr_simp`：∀ {α : Type u_1} {β : Type u_2}
+ {ι : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [inst : Counta
+ble ι]   (κ κ_1 : ι → Probabi…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ProbabilityTheory.Kernel.kernel_sum_seq`：kernel_sum_seq (κ : Kernel α β)
+ [h : IsSFiniteKernel κ] : Kernel.sum (seq κ) = κ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ProbabilityTheory.Kernel.ext`：ext (h : forall a, κ a = η a) : κ = η
+· 使用定理 `MeasureTheory.Measure.ext`：ext (h : forall s, MeasurableSet s -> μ₁ s = 
+μ₂ s) : μ₁ = μ₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `ProbabilityTheory.Kernel.sum_apply'`：sum_apply' [Countable ι] (κ : ι -> 
+Kernel α β) (a : α) {s : Set β} (hs : MeasurableSet s) : Kernel.sum κ a s = ∑' n
+, κ n a s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.tsum_eq`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : Ad
+dCommMonoid α] [inst_1 : TopologicalSpace α] (e : γ ≃ β)   (f : β → α), ∑' (c : 
+γ),…
+· 使用定理 `Summable.tsum_prod'`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [ins
+t : AddCommMonoid α] [inst_1 : TopologicalSpace α] [ContinuousAdd α]   [T3Space 
+α] {f : β…
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
+· 使用定理 `T4Space.t3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T4Space X
+], T3Space X
+· 使用定理 `ENNReal.instT4Space`：T4Space ENNReal
+· 使用定理 `ENNReal.summable`：∀ {α : Type u_1} {f : α → ENNReal}, Summable f
 -/
-theorem IsSFiniteKernel.finsetSum {κs : ι -> Kernel α β} (I : Finset ι)
-    (h : forall i in I, IsSFiniteKernel (κs i)) : IsSFiniteKernel (∑ i in I, κs i) := by
-  classical
-  induction I using Finset.induction with
-  | empty => rw [Finset.sum_empty]; infer_instance
-  | insert i I hi_notMem_I h_ind =>
-    rw [Finset.sum_insert hi_notMem_I]
-    have : IsSFiniteKernel (κs i) := h i (Finset.mem_insert_self _ _)
-    have : IsSFiniteKernel (∑ x in I, κs x) :=
-      h_ind fun i hiI => h i (Finset.mem_insert_of_mem hiI)
-    exact IsSFiniteKernel.add _ _
-
-@[deprecated (since := "2026-04-08")] alias IsSFiniteKernel.finset_sum := IsSFiniteKernel.finsetSum
-
-/--
-theorem `isSFiniteKernel_sum_of_denumerable` / 定理 `isSFiniteKernel_sum_of_denumerable`
-
-English:
-theorem isSFiniteKernel_sum_of_denumerable
-  statement: [Denumerable ι] {κs : ι -> Kernel α β}
-  proof: by
-  let e : Nat ≃ ι × Nat := (Denumerable.eqv (ι × Nat)).symm
+theorem isSFiniteKernel_sum_of_denumerable [Denumerable ι] {κs : ι → Kernel α β}
+    (hκs : ∀ n, IsSFiniteKernel (κs n)) : IsSFiniteKernel (Kernel.sum κs) := by
+  let e : ℕ ≃ ι × ℕ := (Denumerable.eqv (ι × ℕ)).symm
   refine ⟨⟨fun n => seq (κs (e n).1) (e n).2, inferInstance, ?_⟩⟩
   have hκ_eq : Kernel.sum κs = Kernel.sum fun n => Kernel.sum (seq (κs n)) := by
     simp_rw [kernel_sum_seq]
   ext a s hs
   rw [hκ_eq]
   simp_rw [Kernel.sum_apply' _ _ hs]
-  change (∑' i, ∑' m, seq (κs i) m a s) = ∑' n, (fun im : ι × Nat => seq (κs im.fst) im.snd a s) (e n)
-  rw [e.tsum_eq (fun im : ι × Nat => seq (κs im.fst) im.snd a s)]; rw [ENNReal.summable.tsum_prod' fun _ => ENNReal.summable]
-
-中文:
-定理 isSFiniteKernel_sum_of_denumerable
-  结论: [可枚举 ι] {κs : ι -> 核 α β}
-  证明: by
-  let e : Nat ≃ ι × Nat := (Denumerable.eqv (ι × Nat)).symm
-  refine ⟨⟨fun n => seq (κs (e n).1) (e n).2, inferInstance, ?_⟩⟩
-  have hκ_eq : Kernel.sum κs = Kernel.sum fun n => Kernel.sum (seq (κs n)) := by
-    simp_rw [kernel_sum_seq]
-  ext a s hs
-  rw [hκ_eq]
-  simp_rw [Kernel.sum_apply' _ _ hs]
-  change (∑' i, ∑' m, seq (κs i) m a s) = ∑' n, (fun im : ι × Nat => seq (κs im.fst) im.snd a s) (e n)
-  rw [e.tsum_eq (fun im : ι × Nat => seq (κs im.fst) im.snd a s)]; rw [ENNReal.summable.tsum_prod' fun _ => ENNReal.summable]
-
-Depends on / 依赖: Denumerable, Denumerable.eqv, ENNReal, ENNReal.summable.tsum_prod, Kernel, Kernel.sum, Kernel.sum_apply, e.tsum_eq, im.fst, im.snd, kernel_sum_seq, simp_rw, sum_apply, summable, tsum_eq, tsum_prod
+  change (∑' i, ∑' m, seq (κs i) m a s) = ∑' n, (fun im : ι × ℕ => seq (κs im.fst) im.snd a s) (e n)
+  rw [e.tsum_eq (fun im : ι × ℕ => seq (κs im.fst) im.snd a s),
+    ENNReal.summable.tsum_prod' fun _ => ENNReal.summable]
+/-
+**ProbabilityTheory.Kernel.isSFiniteKernel_sum** 是 Mathlib 中的一个实例，位于命名空间 `Probab
+ilityTheory.Kernel`。
+形式化陈述：isSFiniteKernel_sum [Countable ι] {κs : ι -> Kernel α β} [hκs : forall n, 
+IsSFiniteKernel (κs n)] : IsSFiniteKernel (Kernel.sum κs)
+参数：κs n。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `ProbabilityTheory.Kernel.sum_fintype`：sum_fintype [Fintype ι] (κ : ι -> 
+Kernel α β) : Kernel.sum κ = ∑ i, κ i
+· 使用定理 `ProbabilityTheory.Kernel.IsSFiniteKernel.finsetSum`：∀ {α : Type u_1} {β 
+: Type u_2} {ι : Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {
+κs : ι → ProbabilityTheory.Kernel α β} (…
+· 使用定理 `nonempty_denumerable`：nonempty_denumerable (α : Type*) [Countable α] [In
+finite α] : Nonempty (Denumerable α)
+· 使用定理 `ProbabilityTheory.Kernel.isSFiniteKernel_sum_of_denumerable`：isSFiniteKe
+rnel_sum_of_denumerable [Denumerable ι] {κs : ι -> Kernel α β} (hκs : forall n, 
+IsSFiniteKernel (κs n)) : IsSFiniteKernel (Kernel…
 -/
-theorem isSFiniteKernel_sum_of_denumerable [Denumerable ι] {κs : ι -> Kernel α β}
-    (hκs : forall n, IsSFiniteKernel (κs n)) : IsSFiniteKernel (Kernel.sum κs) := by
-  let e : Nat ≃ ι × Nat := (Denumerable.eqv (ι × Nat)).symm
-  refine ⟨⟨fun n => seq (κs (e n).1) (e n).2, inferInstance, ?_⟩⟩
-  have hκ_eq : Kernel.sum κs = Kernel.sum fun n => Kernel.sum (seq (κs n)) := by
-    simp_rw [kernel_sum_seq]
-  ext a s hs
-  rw [hκ_eq]
-  simp_rw [Kernel.sum_apply' _ _ hs]
-  change (∑' i, ∑' m, seq (κs i) m a s) = ∑' n, (fun im : ι × Nat => seq (κs im.fst) im.snd a s) (e n)
-  rw [e.tsum_eq (fun im : ι × Nat => seq (κs im.fst) im.snd a s)]; rw [ENNReal.summable.tsum_prod' fun _ => ENNReal.summable]
-
-/--
-Instance `isSFiniteKernel_sum` / 实例 `isSFiniteKernel_sum`
-
-English:
-instance isSFiniteKernel_sum
-  signature: [Countable ι] {κs : ι -> Kernel α β}
-  body: by
-  cases fintypeOrInfinite ι
-  · rw [sum_fintype]
-    exact IsSFiniteKernel.finsetSum Finset.univ fun i _ => hκs i
-  cases nonempty_denumerable ι
-  exact isSFiniteKernel_sum_of_denumerable hκs
-
-中文:
-实例 isSFiniteKernel_sum
-  签名: [可数 ι] {κs : ι -> 核 α β}
-  定义体: by
-  cases fintypeOrInfinite ι
-  · rw [sum_fintype]
-    exact IsSFiniteKernel.finsetSum Finset.univ fun i _ => hκs i
-  cases nonempty_denumerable ι
-  exact isSFiniteKernel_sum_of_denumerable hκs
-
-Depends on / 依赖: Finset, Finset.univ, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsSFiniteKernel, IsSFiniteKernel.finsetSum, Quotient, finsetSum, fintypeOrInfinite, isSFiniteKernel_sum_of_denumerable, mk_surjective, nonempty_denumerable, of_surjective_algHom, sum_fintype
--/
-instance isSFiniteKernel_sum [Countable ι] {κs : ι -> Kernel α β}
-    [hκs : forall n, IsSFiniteKernel (κs n)] : IsSFiniteKernel (Kernel.sum κs) := by
+instance isSFiniteKernel_sum [Countable ι] {κs : ι → Kernel α β}
+    [hκs : ∀ n, IsSFiniteKernel (κs n)] : IsSFiniteKernel (Kernel.sum κs) := by
   cases fintypeOrInfinite ι
   · rw [sum_fintype]
     exact IsSFiniteKernel.finsetSum Finset.univ fun i _ => hκs i
@@ -1563,3 +1364,4 @@ instance isSFiniteKernel_sum [Countable ι] {κs : ι -> Kernel α β}
 end SFinite
 end Kernel
 end ProbabilityTheory
+

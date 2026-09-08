@@ -50,32 +50,21 @@ namespace HomotopicalAlgebra
 
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `PrepathObject` / `PrepathObject` 的定义
+/-- A pre-path object for `A : C` is the data of a morphism
+`ι : A ⟶ P` equipped with two retractions. -/
+/-
+**HomotopicalAlgebra.PrepathObject** 是 Mathlib 中的一个结构，位于命名空间 `HomotopicalAlgebra
+`。
+形式化陈述：PrepathObject (A : C) where /-- the underlying object of a (pre)path objec
+t -/ P : C /-- the first "projection" from the (pre)path object -/ p₀ : P ⟶ A /-
+- the second "projection" from the (pre)path object -/ p₁ : P ⟶ A /-- the diagon
+al of the (pre)path object -/ ι : A ⟶ P ι_p₀ : ι ≫ p₀ = 𝟙 A
+参数：A : C；pre。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PrepathObject
-  parameters: (A : C)
-  axioms and operations (6):
-    - P : C
-    - p₀ : P ⟶ A
-    - p₁ : P ⟶ A
-    - ι : A ⟶ P
-    - ι_p₀ : ι ≫ p₀ = 𝟙 A  [default: by aesop_cat]
-    - ι_p₁ : ι ≫ p₁ = 𝟙 A  [default: by aesop_cat]
-
-中文:
-结构 PrepathObject
-  参数: (A : C)
-  公理与运算 (6 个):
-    - P : C
-    - p₀ : P ⟶ A
-    - p₁ : P ⟶ A
-    - ι : A ⟶ P
-    - ι_p₀ : ι ≫ p₀ = 𝟙 A  [默认: by aesop_cat]
-    - ι_p₁ : ι ≫ p₁ = 𝟙 A  [默认: by aesop_cat]
-
-Depends on / 依赖: aesop_cat
+--- 原说明 ---
+A pre-path object for `A : C` is the data of a morphism
+`ι : A ⟶ P` equipped with two retractions.
 -/
 structure PrepathObject (A : C) where
   /-- the underlying object of a (pre)path object -/
@@ -97,24 +86,15 @@ variable {A : C} (P : PrepathObject A)
 
 /-- The pre-path object obtained by switching the two projections. -/
 @[simps]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**HomotopicalAlgebra.PrepathObject.symm** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAl
+gebra.PrepathObject`。
+形式化陈述：symm : PrepathObject A where P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: : PrepathObject A where
-  body: P.P
-  p₀ := P.p₁
-  p₁ := P.p₀
-  ι := P.ι
-
-中文:
-定义 symm
-  签名: : PrepathObject A where
-  定义体: P.P
-  p₀ := P.p₁
-  p₁ := P.p₀
-  ι := P.ι
+--- 原说明 ---
+The pre-path object obtained by switching the two projections.
 -/
 def symm : PrepathObject A where
   P := P.P
@@ -125,26 +105,17 @@ def symm : PrepathObject A where
 set_option backward.isDefEq.respectTransparency false in
 /-- The gluing of two pre-path objects. -/
 @[simps]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**HomotopicalAlgebra.PrepathObject.trans** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalA
+lgebra.PrepathObject`。
+形式化陈述：trans (P' : PrepathObject A) [HasPullback P.p₁ P'.p₀] : PrepathObject A wh
+ere P
+参数：P' : PrepathObject A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (P' : PrepathObject A) [HasPullback P.p₁ P'.p₀]
-  body: pullback P.p₁ P'.p₀
-  p₀ := pullback.fst _ _ ≫ P.p₀
-  p₁ := pullback.snd _ _ ≫ P'.p₁
-  ι := pullback.lift P.ι P'.ι (by simp)
-
-中文:
-定义 trans
-  签名: (P' : PrepathObject A) [HasPullback P.p₁ P'.p₀]
-  定义体: pullback P.p₁ P'.p₀
-  p₀ := pullback.fst _ _ ≫ P.p₀
-  p₁ := pullback.snd _ _ ≫ P'.p₁
-  ι := pullback.lift P.ι P'.ι (by simp)
-
-Depends on / 依赖: pullback
+--- 原说明 ---
+The gluing of two pre-path objects.
 -/
 noncomputable def trans (P' : PrepathObject A) [HasPullback P.p₁ P'.p₀] :
     PrepathObject A where
@@ -157,74 +128,90 @@ section
 
 variable [HasBinaryProduct A A]
 
-/--
-Definition of `p` / `p` 的定义
+/-- The map from `P.P` to the product of two copies of `A`, when `P` is
+a pre-path object for `A`. `P` shall be a *good* path object
+when this morphism is a fibration. -/
+/-
+**HomotopicalAlgebra.PrepathObject.p** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgeb
+ra.PrepathObject`。
+形式化陈述：p : P.P ⟶ A ⨯ A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition p
-  signature: : P.P ⟶ A ⨯ A
-  body: prod.lift P.p₀ P.p₁
-
-中文:
-定义 p
-  签名: : P.P ⟶ A ⨯ A
-  定义体: prod.lift P.p₀ P.p₁
-
-Depends on / 依赖: prod.lift
+--- 原说明 ---
+The map from `P.P` to the product of two copies of `A`, when `P` is
+a pre-path object for `A`. `P` shall be a *good* path object
+when this morphism is a fibration.
 -/
 noncomputable def p : P.P ⟶ A ⨯ A := prod.lift P.p₀ P.p₁
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `p_fst` / 引理 `p_fst`
-
-English:
-lemma p_fst
-  statement: P.p ≫ prod.fst = P.p₀
-  proof: by simp [p]
-
-中文:
-引理 p_fst
-  结论: P.p ≫ 乘积.fst = P.p₀
-  证明: by simp [p]
+/-
+**HomotopicalAlgebra.PrepathObject.p_fst** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalA
+lgebra.PrepathObject`。
+形式化陈述：p_fst : P.p ≫ prod.fst = P.p₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma p_fst : P.p ≫ prod.fst = P.p₀ := by simp [p]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `p_snd` / 引理 `p_snd`
-
-English:
-lemma p_snd
-  statement: P.p ≫ prod.snd = P.p₁
-  proof: by simp [p]
-
-中文:
-引理 p_snd
-  结论: P.p ≫ 乘积.snd = P.p₁
-  证明: by simp [p]
+/-
+**HomotopicalAlgebra.PrepathObject.p_snd** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalA
+lgebra.PrepathObject`。
+形式化陈述：p_snd : P.p ≫ prod.snd = P.p₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma p_snd : P.p ≫ prod.snd = P.p₁ := by simp [p]
 
 end
 
 @[simp, reassoc]
-/--
-lemma `symm_p` / 引理 `symm_p`
-
-English:
-lemma symm_p
-  given: [HasBinaryProducts C]
-  proof: by aesop_cat
-
-中文:
-引理 symm_p
-  条件: [HasBinaryProducts C]
-  证明: by aesop_cat
-
-Depends on / 依赖: aesop_cat
+/-
+**HomotopicalAlgebra.PrepathObject.symm_p** 是 Mathlib 中的一个引理，位于命名空间 `Homotopical
+Algebra.PrepathObject`。
+形式化陈述：symm_p [HasBinaryProducts C] : P.symm.p = P.p ≫ (prod.braiding A A).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.prod.braiding_hom`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] (P Q : C) [inst_1 : CategoryTheory.Limits.HasBinaryPro
+duct P Q]   [inst_2 : Categor…
+· 使用定理 `CategoryTheory.Limits.prod.comp_lift`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {V W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinary
+Product X Y] (f : V ⟶ W) (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `HomotopicalAlgebra.PrepathObject.p_snd`：p_snd : P.p ≫ prod.snd = P.p₁
+· 使用引理 `HomotopicalAlgebra.PrepathObject.p_fst`：p_fst : P.p ≫ prod.fst = P.p₀
 -/
 lemma symm_p [HasBinaryProducts C] :
     P.symm.p = P.p ≫ (prod.braiding A A).hom := by aesop_cat
@@ -232,24 +219,18 @@ lemma symm_p [HasBinaryProducts C] :
 /-- The pre-path object in a full subcategory of `C` induced by a pre-path object
 in the category `C`. -/
 @[simps]
-/--
-Definition of `toFullSubcategory` / `toFullSubcategory` 的定义
+/-
+**HomotopicalAlgebra.PrepathObject.toFullSubcategory** 是 Mathlib 中的一个定义，位于命名空间 `
+HomotopicalAlgebra.PrepathObject`。
+形式化陈述：toFullSubcategory {P : ObjectProperty C} {X : P.FullSubcategory} (Q : Prep
+athObject X.obj) (hQ : P Q.P) : PrepathObject X where P
+参数：Q : PrepathObject X.obj；hQ : P Q.P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toFullSubcategory
-  signature: {P : ObjectProperty C} {X : P.FullSubcategory} (Q : PrepathObject X.obj)
-  body: ⟨Q.P, hQ⟩
-  p₀ := P.homMk Q.p₀
-  p₁ := P.homMk Q.p₁
-  ι := P.homMk Q.ι
-
-中文:
-定义 toFullSubcategory
-  签名: {P : ObjectProperty C} {X : P.满子范畴} (Q : PrepathObject X.obj)
-  定义体: ⟨Q.P, hQ⟩
-  p₀ := P.homMk Q.p₀
-  p₁ := P.homMk Q.p₁
-  ι := P.homMk Q.ι
+--- 原说明 ---
+The pre-path object in a full subcategory of `C` induced by a pre-path object
+in the category `C`.
 -/
 def toFullSubcategory {P : ObjectProperty C} {X : P.FullSubcategory} (Q : PrepathObject X.obj)
     (hQ : P Q.P) :
@@ -261,30 +242,17 @@ def toFullSubcategory {P : ObjectProperty C} {X : P.FullSubcategory} (Q : Prepat
 
 /-- The image of a pre-path object by a functor. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**HomotopicalAlgebra.PrepathObject.map** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlg
+ebra.PrepathObject`。
+形式化陈述：map {X : C} (P : PrepathObject X) {D : Type*} [Category* D] (F : C ⥤ D) : 
+PrepathObject (F.obj X) where P
+参数：P : PrepathObject X；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {X : C} (P : PrepathObject X) {D : Type*} [Category* D] (F : C ⥤ D)
-  body: F.obj P.P
-  p₀ := F.map P.p₀
-  p₁ := F.map P.p₁
-  ι := F.map P.ι
-  ι_p₀ := by simp [← F.map_comp]
-  ι_p₁ := by simp [← F.map_comp]
-
-中文:
-定义 map
-  签名: {X : C} (P : PrepathObject X) {D : 类型} [范畴* D] (F : C ⥤ D)
-  定义体: F.obj P.P
-  p₀ := F.map P.p₀
-  p₁ := F.map P.p₁
-  ι := F.map P.ι
-  ι_p₀ := by simp [← F.map_comp]
-  ι_p₁ := by simp [← F.map_comp]
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+The image of a pre-path object by a functor.
 -/
 def map {X : C} (P : PrepathObject X) {D : Type*} [Category* D] (F : C ⥤ D) :
     PrepathObject (F.obj X) where
@@ -297,24 +265,19 @@ def map {X : C} (P : PrepathObject X) {D : Type*} [Category* D] (F : C ⥤ D) :
 
 end PrepathObject
 
-/--
-Definition of `PathObject` / `PathObject` 的定义
+/-- In a category with weak equivalences, a path object is the
+data of a weak equivalence `ι : A ⟶ P` equipped with two retractions. -/
+/-
+**HomotopicalAlgebra.PathObject** 是 Mathlib 中的一个结构，位于命名空间 `HomotopicalAlgebra`。
+形式化陈述：PathObject [CategoryWithWeakEquivalences C] (A : C) extends PrepathObject 
+A where weakEquivalence_ι : WeakEquivalence ι
+参数：A : C。
+继承自：PrepathObject A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PathObject
-  parameters: [CategoryWithWeakEquivalences C] (A : C)
-  extends: PrepathObject A
-  axioms and operations (1):
-    - weakEquivalence_ι : WeakEquivalence ι  [default: by infer_instance]
-
-中文:
-结构 PathObject
-  参数: [带弱等价范畴 C] (A : C)
-  继承: PrepathObject A
-  公理与运算 (1 个):
-    - weakEquivalence_ι : 弱等价 ι  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+In a category with weak equivalences, a path object is the
+data of a weak equivalence `ι : A ⟶ P` equipped with two retractions.
 -/
 structure PathObject [CategoryWithWeakEquivalences C] (A : C) extends PrepathObject A where
   weakEquivalence_ι : WeakEquivalence ι := by infer_instance
@@ -330,46 +293,29 @@ variable {A : C} [CategoryWithWeakEquivalences C] (P : PathObject A)
 set_option backward.defeqAttrib.useBackward true in
 /-- The path object obtained by switching the two projections. -/
 @[simps!]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**HomotopicalAlgebra.PathObject.symm** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgeb
+ra.PathObject`。
+形式化陈述：symm : PathObject A where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: : PathObject A where
-  body: P.toPrepathObject.symm
-  weakEquivalence_ι := by dsimp; infer_instance
-
-@[simp, reassoc]
-
-中文:
-定义 symm
-  签名: : PathObject A where
-  定义体: P.toPrepathObject.symm
-  weakEquivalence_ι := by dsimp; infer_instance
-
-@[simp, reassoc]
-
-Depends on / 依赖: P.toPrepathObject.symm, toPrepathObject
+--- 原说明 ---
+The path object obtained by switching the two projections.
 -/
 def symm : PathObject A where
   __ := P.toPrepathObject.symm
   weakEquivalence_ι := by dsimp; infer_instance
 
 @[simp, reassoc]
-/--
-lemma `symm_p` / 引理 `symm_p`
-
-English:
-lemma symm_p
-  given: [HasBinaryProducts C]
-  proof: P.toPrepathObject.symm_p
-
-中文:
-引理 symm_p
-  条件: [HasBinaryProducts C]
-  证明: P.toPrepathObject.symm_p
-
-Depends on / 依赖: P.toPrepathObject.symm_p, symm_p, toPrepathObject
+/-
+**HomotopicalAlgebra.PathObject.symm_p** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlg
+ebra.PathObject`。
+形式化陈述：symm_p [HasBinaryProducts C] : P.symm.p = P.p ≫ (prod.braiding A A).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomotopicalAlgebra.PrepathObject.symm_p`：symm_p [HasBinaryProducts C] : 
+P.symm.p = P.p ≫ (prod.braiding A A).hom
 -/
 lemma symm_p [HasBinaryProducts C] :
     P.symm.p = P.p ≫ (prod.braiding A A).hom :=
@@ -380,82 +326,50 @@ section
 variable [(weakEquivalences C).HasTwoOutOfThreeProperty]
   [(weakEquivalences C).ContainsIdentities]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WeakEquivalence P.p₀
-  body: weakEquivalence_of_precomp_of_fac P.ι_p₀
-
-中文:
-实例 :
-  签名: 弱等价 P.p₀
-  定义体: weakEquivalence_of_precomp_of_fac P.ι_p₀
-
-Depends on / 依赖: weakEquivalence_of_precomp_of_fac
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WeakEquivalence P.p₀ :=
   weakEquivalence_of_precomp_of_fac P.ι_p₀
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: WeakEquivalence P.p₁
-  body: weakEquivalence_of_precomp_of_fac P.ι_p₁
-
-中文:
-实例 :
-  签名: 弱等价 P.p₁
-  定义体: weakEquivalence_of_precomp_of_fac P.ι_p₁
-
-Depends on / 依赖: weakEquivalence_of_precomp_of_fac
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : WeakEquivalence P.p₁ :=
   weakEquivalence_of_precomp_of_fac P.ι_p₁
 
 end
 
-/--
-Definition of `IsGood` / `IsGood` 的定义
+/-- A path object `P` is good if the morphism
+`P.p : P.P ⟶ A ⨯ A` is a fibration. -/
+/-
+**HomotopicalAlgebra.PathObject.IsGood** 是 Mathlib 中的一个类，位于命名空间 `HomotopicalAlge
+bra.PathObject`。
+形式化陈述：IsGood [HasBinaryProduct A A] [CategoryWithFibrations C] : Prop where fibr
+ation_p : Fibration P.p
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsGood
-  parameters: [HasBinaryProduct A A] [CategoryWithFibrations C]
-  axioms and operations (1):
-    - fibration_p : Fibration P.p  [default: by infer_instance]
-
-中文:
-类 是Good
-  参数: [HasBinaryProduct A A] [带纤维化范畴 C]
-  公理与运算 (1 个):
-    - fibration_p : 纤维化 P.p  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A path object `P` is good if the morphism
+`P.p : P.P ⟶ A ⨯ A` is a fibration.
 -/
 class IsGood [HasBinaryProduct A A] [CategoryWithFibrations C] : Prop where
   fibration_p : Fibration P.p := by infer_instance
 
-/--
-Definition of `IsVeryGood` / `IsVeryGood` 的定义
+/-- A good path object `P` is very good if `P.ι` is a (trivial) cofibration. -/
+/-
+**HomotopicalAlgebra.PathObject.IsVeryGood** 是 Mathlib 中的一个类，位于命名空间 `Homotopical
+Algebra.PathObject`。
+形式化陈述：IsVeryGood [HasBinaryProduct A A] [CategoryWithFibrations C] [CategoryWith
+Cofibrations C] : Prop extends P.IsGood where cofibration_ι : Cofibration P.ι
+继承自：P.IsGood。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsVeryGood
-  parameters: [HasBinaryProduct A A] [CategoryWithFibrations C]
-  extends: P.IsGood
-  axioms and operations (1):
-    - cofibration_ι : Cofibration P.ι  [default: by infer_instance]
-
-中文:
-类 是VeryGood
-  参数: [HasBinaryProduct A A] [带纤维化范畴 C]
-  继承: P.是Good
-  公理与运算 (1 个):
-    - cofibration_ι : 余纤维化 P.ι  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A good path object `P` is very good if `P.ι` is a (trivial) cofibration.
 -/
 class IsVeryGood [HasBinaryProduct A A] [CategoryWithFibrations C]
     [CategoryWithCofibrations C] : Prop extends P.IsGood where
@@ -470,66 +384,26 @@ variable [HasBinaryProduct A A] [CategoryWithFibrations C]
   [(fibrations C).IsStableUnderBaseChange]
   [IsFibrant A] [P.IsGood]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fibration P.p₀
-  body: by
-  rw [← P.p_fst]
-  infer_instance
-
-中文:
-实例 :
-  签名: 纤维化 P.p₀
-  定义体: by
-  rw [← P.p_fst]
-  infer_instance
-
-Depends on / 依赖: P.p_fst, infer_instance, p_fst
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Fibration P.p₀ := by
   rw [← P.p_fst]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Fibration P.p₁
-  body: by
-  rw [← P.p_snd]
-  infer_instance
-
-中文:
-实例 :
-  签名: 纤维化 P.p₁
-  定义体: by
-  rw [← P.p_snd]
-  infer_instance
-
-Depends on / 依赖: P.p_snd, infer_instance, p_snd
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Fibration P.p₁ := by
   rw [← P.p_snd]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsFibrant P.P
-  body: isFibrant_of_fibration P.p₀
-
-中文:
-实例 :
-  签名: IsFibrant P.P
-  定义体: isFibrant_of_fibration P.p₀
-
-Depends on / 依赖: isFibrant_of_fibration
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsFibrant P.P :=
   isFibrant_of_fibration P.p₀
@@ -537,34 +411,16 @@ instance : IsFibrant P.P :=
 end
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasBinaryProducts
-  signature: C] [CategoryWithFibrations C] [P.IsGood]
-  body: by
-    have hp : fibrations C P.p := by rw [← fibration_iff]; infer_instance
-    rw [P.symm_p]; rw [fibration_iff]
-    refine ((fibrations C).arrow_mk_iso_iff ?_).2 hp
-    exact Arrow.isoMk (Iso.refl _) (prod.braiding A A)
-
-中文:
-实例 [HasBinaryProducts
-  签名: C] [带纤维化范畴 C] [P.是Good]
-  定义体: by
-    have hp : fibrations C P.p := by rw [← fibration_iff]; infer_instance
-    rw [P.symm_p]; rw [fibration_iff]
-    refine ((fibrations C).arrow_mk_iso_iff ?_).2 hp
-    exact Arrow.isoMk (Iso.refl _) (prod.braiding A A)
-
-Depends on / 依赖: Arrow.isoMk, Iso.refl, P.symm_p, arrow_mk_iso_iff, braiding, fibration_iff, fibrations, infer_instance, prod.braiding, symm_p
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasBinaryProducts C] [CategoryWithFibrations C] [P.IsGood]
     [(fibrations C).RespectsIso] : P.symm.IsGood where
   fibration_p := by
     have hp : fibrations C P.p := by rw [← fibration_iff]; infer_instance
-    rw [P.symm_p]; rw [fibration_iff]
+    rw [P.symm_p, fibration_iff]
     refine ((fibrations C).arrow_mk_iso_iff ?_).2 hp
     exact Arrow.isoMk (Iso.refl _) (prod.braiding A A)
 
@@ -573,39 +429,19 @@ section
 variable [CategoryWithFibrations C] [CategoryWithCofibrations C]
   [(cofibrations C).IsStableUnderComposition]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasBinaryProduct
-  signature: A A] [HasInitial C] [IsCofibrant A] [P.IsVeryGood] : IsCofibrant P.P
-  body: isCofibrant_of_cofibration P.ι
-
-中文:
-实例 [HasBinaryProduct
-  签名: A A] [HasInitial C] [IsCofibrant A] [P.是VeryGood] : IsCofibrant P.P
-  定义体: isCofibrant_of_cofibration P.ι
-
-Depends on / 依赖: isCofibrant_of_cofibration
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasBinaryProduct A A] [HasInitial C] [IsCofibrant A] [P.IsVeryGood] : IsCofibrant P.P :=
   isCofibrant_of_cofibration P.ι
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(fibrations
-  signature: C).RespectsIso] [HasBinaryProducts C] [P.IsVeryGood] :
-  body: by dsimp; infer_instance
-
-中文:
-实例 [(fibrations
-  签名: C).RespectsIso] [HasBinaryProducts C] [P.是VeryGood] :
-  定义体: by dsimp; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(fibrations C).RespectsIso] [HasBinaryProducts C] [P.IsVeryGood] :
     P.symm.IsVeryGood where
@@ -626,28 +462,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- A path object for `A` can be obtained from a factorization of the obvious
 map `A ⟶ A ⨯ A` as a trivial cofibration followed by a fibration. -/
 @[simps]
-/--
-Definition of `ofFactorizationData` / `ofFactorizationData` 的定义
+/-
+**HomotopicalAlgebra.PathObject.ofFactorizationData** 是 Mathlib 中的一个定义，位于命名空间 `H
+omotopicalAlgebra.PathObject`。
+形式化陈述：ofFactorizationData : PathObject A where P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFactorizationData
-  signature: : PathObject A where
-  body: h.Z
-  p₀ := h.p ≫ prod.fst
-  p₁ := h.p ≫ prod.snd
-  ι := h.i
-
-@[simp]
-
-中文:
-定义 ofFactorizationData
-  签名: : PathObject A where
-  定义体: h.Z
-  p₀ := h.p ≫ prod.fst
-  p₁ := h.p ≫ prod.snd
-  ι := h.i
-
-@[simp]
+--- 原说明 ---
+A path object for `A` can be obtained from a factorization of the obvious
+map `A ⟶ A ⨯ A` as a trivial cofibration followed by a fibration.
 -/
 noncomputable def ofFactorizationData : PathObject A where
   P := h.Z
@@ -656,59 +480,54 @@ noncomputable def ofFactorizationData : PathObject A where
   ι := h.i
 
 @[simp]
-/--
-lemma `ofFactorizationData_p` / 引理 `ofFactorizationData_p`
-
-English:
-lemma ofFactorizationData_p
-  statement: (ofFactorizationData h).p = h.p
-  proof: by aesop_cat
-
-中文:
-引理 ofFactorizationData_p
-  结论: (ofFactorizationData h).p = h.p
-  证明: by aesop_cat
-
-Depends on / 依赖: aesop_cat
+/-
+**HomotopicalAlgebra.PathObject.ofFactorizationData_p** 是 Mathlib 中的一个引理，位于命名空间 
+`HomotopicalAlgebra.PathObject`。
+形式化陈述：ofFactorizationData_p : (ofFactorizationData h).p = h.p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasFiniteProducts_of_hasFiniteLimits`：∀ (C : Type 
+u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLim
+its C],   CategoryTheory.Limits.HasFiniteProduct…
+· 使用定理 `HomotopicalAlgebra.ModelCategory.cm1a`：∀ {C : Type u} {inst : CategoryTh
+eory.Category.{v, u} C} [self : HomotopicalAlgebra.ModelCategory C],   CategoryT
+heory.Limits.HasFiniteLimit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.prod.hom_ext`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinaryProd
+uct X Y] {f g : W ⟶ X ⨯ …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `HomotopicalAlgebra.PrepathObject.p_fst`：p_fst : P.p ≫ prod.fst = P.p₀
+· 使用定理 `HomotopicalAlgebra.PathObject.ofFactorizationData_p₀`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [inst_1 : HomotopicalAlgebra.ModelCategor
+y C] {A : C}   (h :     (HomotopicalAlgebr…
+· 使用引理 `HomotopicalAlgebra.PrepathObject.p_snd`：p_snd : P.p ≫ prod.snd = P.p₁
+· 使用定理 `HomotopicalAlgebra.PathObject.ofFactorizationData_p₁`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [inst_1 : HomotopicalAlgebra.ModelCategor
+y C] {A : C}   (h :     (HomotopicalAlgebr…
 -/
 lemma ofFactorizationData_p : (ofFactorizationData h).p = h.p := by aesop_cat
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (ofFactorizationData h).IsVeryGood
-  body: by simpa using inferInstanceAs (Fibration h.p)
-  cofibration_ι := by dsimp; infer_instance
-
-中文:
-实例 :
-  签名: (ofFactorizationData h).是VeryGood
-  定义体: by simpa using inferInstanceAs (Fibration h.p)
-  cofibration_ι := by dsimp; infer_instance
-
-Depends on / 依赖: Fibration, infer_instance
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (ofFactorizationData h).IsVeryGood where
   fibration_p := by simpa using inferInstanceAs (Fibration h.p)
   cofibration_ι := by dsimp; infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasInitial
-  signature: C] [IsCofibrant A] [(cofibrations C).IsStableUnderComposition] :
-  body: isCofibrant_of_cofibration (ofFactorizationData h).ι
-
-中文:
-实例 [HasInitial
-  签名: C] [IsCofibrant A] [(cofibrations C).是StableUnderComposition] :
-  定义体: isCofibrant_of_cofibration (ofFactorizationData h).ι
-
-Depends on / 依赖: isCofibrant_of_cofibration, ofFactorizationData
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasInitial C] [IsCofibrant A] [(cofibrations C).IsStableUnderComposition] :
     IsCofibrant (ofFactorizationData h).P :=
@@ -717,74 +536,54 @@ instance [HasInitial C] [IsCofibrant A] [(cofibrations C).IsStableUnderCompositi
 end
 
 variable (A) in
-/--
-lemma `exists_very_good` / 引理 `exists_very_good`
-
-English:
-lemma exists_very_good
-  proof: ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
-    inferInstance⟩
-
-中文:
-引理 存在_very_good
-  证明: ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
-    inferInstance⟩
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.factorizationData, factorizationData, ofFactorizationData
+/-
+**HomotopicalAlgebra.PathObject.exists_very_good** 是 Mathlib 中的一个引理，位于命名空间 `Homo
+topicalAlgebra.PathObject`。
+形式化陈述：exists_very_good : exists (P : PathObject A), P.IsVeryGood
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasFiniteProducts_of_hasFiniteLimits`：∀ (C : Type 
+u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLim
+its C],   CategoryTheory.Limits.HasFiniteProduct…
+· 使用定理 `HomotopicalAlgebra.ModelCategory.cm1a`：∀ {C : Type u} {inst : CategoryTh
+eory.Category.{v, u} C} [self : HomotopicalAlgebra.ModelCategory C],   CategoryT
+heory.Limits.HasFiniteLimit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `HomotopicalAlgebra.ModelCategory.cm5a`：∀ {C : Type u} {inst : CategoryTh
+eory.Category.{v, u} C} [self : HomotopicalAlgebra.ModelCategory C],   (Homotopi
+calAlgebra.trivialCofibrati…
+· 使用定理 `HomotopicalAlgebra.PathObject.instIsVeryGoodOfFactorizationData`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : HomotopicalAlgebra.M
+odelCategory C] {A : C}   (h :     (HomotopicalAlgebr…
 -/
 lemma exists_very_good :
-    exists (P : PathObject A), P.IsVeryGood :=
+    ∃ (P : PathObject A), P.IsVeryGood :=
   ⟨ofFactorizationData (MorphismProperty.factorizationData _ _ _),
     inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nonempty (PathObject A)
-  body: ⟨(exists_very_good A).choose⟩
-
-中文:
-实例 :
-  签名: 非空 (PathObject A)
-  定义体: ⟨(exists_very_good A).choose⟩
-
-Depends on / 依赖: exists_very_good
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nonempty (PathObject A) := ⟨(exists_very_good A).choose⟩
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The gluing of two good path objects. -/
 @[simps!]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**HomotopicalAlgebra.PathObject.trans** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlge
+bra.PathObject`。
+形式化陈述：trans [IsFibrant A] (P P' : PathObject A) [P'.IsGood] : PathObject A where
+ __
+参数：P P' : PathObject A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: [IsFibrant A] (P P' : PathObject A) [P'.IsGood]
-  body: P.toPrepathObject.trans P'.toPrepathObject
-  weakEquivalence_ι := by
-    have : WeakEquivalence (pullback.lift P.ι P'.ι (by simp) ≫
-        pullback.fst P.p₁ P'.p₀ ≫ P.p₀) := by
-      rw [pullback.lift_fst_assoc]; rw [PrepathObject.ι_p₀]
-      infer_instance
-    dsimp
-    apply weakEquivalence_of_postcomp _ (pullback.fst P.p₁ P'.p₀ ≫ P.p₀)
-
-中文:
-定义 trans
-  签名: [IsFibrant A] (P P' : PathObject A) [P'.是Good]
-  定义体: P.toPrepathObject.trans P'.toPrepathObject
-  weakEquivalence_ι := by
-    have : WeakEquivalence (pullback.lift P.ι P'.ι (by simp) ≫
-        pullback.fst P.p₁ P'.p₀ ≫ P.p₀) := by
-      rw [pullback.lift_fst_assoc]; rw [PrepathObject.ι_p₀]
-      infer_instance
-    dsimp
-    apply weakEquivalence_of_postcomp _ (pullback.fst P.p₁ P'.p₀ ≫ P.p₀)
-
-Depends on / 依赖: P.toPrepathObject.trans, toPrepathObject
+--- 原说明 ---
+The gluing of two good path objects.
 -/
 noncomputable def trans [IsFibrant A] (P P' : PathObject A) [P'.IsGood] :
     PathObject A where
@@ -792,60 +591,22 @@ noncomputable def trans [IsFibrant A] (P P' : PathObject A) [P'.IsGood] :
   weakEquivalence_ι := by
     have : WeakEquivalence (pullback.lift P.ι P'.ι (by simp) ≫
         pullback.fst P.p₁ P'.p₀ ≫ P.p₀) := by
-      rw [pullback.lift_fst_assoc]; rw [PrepathObject.ι_p₀]
+      rw [pullback.lift_fst_assoc, PrepathObject.ι_p₀]
       infer_instance
     dsimp
     apply weakEquivalence_of_postcomp _ (pullback.fst P.p₁ P'.p₀ ≫ P.p₀)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsFibrant
-  signature: A] (P P'
-  body: by
-    let ψ : (P.trans P').P ⟶ P.P ⨯ A := prod.lift (pullback.fst _ _) (pullback.snd _ _ ≫ P'.p₁)
-    rw [show (P.trans P').p = ψ ≫ prod.map P.p₀ (𝟙 A) by simp [PrepathObject.p]; rw [ψ]]
-    have fac : ψ ≫ prod.map P.p₁ (𝟙 A) = pullback.snd _ _ ≫ P'.p := by
-      ext
-      · simp [ψ, pullback.condition]
-      · simp [ψ]
-    have sq : IsPullback (ψ ≫ prod.fst) (pullback.snd P.p₁ P'.p₀) P.p₁ (P'.p ≫ prod.fst) := by
-      simpa [ψ] using IsPullback.of_hasPullback P.p₁ P'.p₀
-    have : Fibration ψ := by
-      rw [fibration_iff]
-      exact (fibrations C).of_isPullback
-        (IsPullback.of_right sq fac (IsPullback.of_prod_fst_with_id P.p₁ A)).flip
-          (by rw [← fibration_iff]; infer_instance)
-    infer_instance
-
-中文:
-实例 [IsFibrant
-  签名: A] (P P'
-  定义体: by
-    let ψ : (P.trans P').P ⟶ P.P ⨯ A := prod.lift (pullback.fst _ _) (pullback.snd _ _ ≫ P'.p₁)
-    rw [show (P.trans P').p = ψ ≫ prod.map P.p₀ (𝟙 A) by simp [PrepathObject.p]; rw [ψ]]
-    have fac : ψ ≫ prod.map P.p₁ (𝟙 A) = pullback.snd _ _ ≫ P'.p := by
-      ext
-      · simp [ψ, pullback.condition]
-      · simp [ψ]
-    have sq : IsPullback (ψ ≫ prod.fst) (pullback.snd P.p₁ P'.p₀) P.p₁ (P'.p ≫ prod.fst) := by
-      simpa [ψ] using IsPullback.of_hasPullback P.p₁ P'.p₀
-    have : Fibration ψ := by
-      rw [fibration_iff]
-      exact (fibrations C).of_isPullback
-        (IsPullback.of_right sq fac (IsPullback.of_prod_fst_with_id P.p₁ A)).flip
-          (by rw [← fibration_iff]; infer_instance)
-    infer_instance
-
-Depends on / 依赖: Fibration, IsPullback, IsPullback.of_hasPullback, P.trans, PrepathObject, PrepathObject.p, condition, fibration_iff, fibrations, of_hasPullback, prod.fst, prod.lift, prod.map, pullback, pullback.condition, pullback.fst, pullback.snd
+/-
+**HomotopicalAlgebra.PathObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra.P
+athObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsFibrant A] (P P' : PathObject A) [P.IsGood] [P'.IsGood] :
     (P.trans P').IsGood where
   fibration_p := by
     let ψ : (P.trans P').P ⟶ P.P ⨯ A := prod.lift (pullback.fst _ _) (pullback.snd _ _ ≫ P'.p₁)
-    rw [show (P.trans P').p = ψ ≫ prod.map P.p₀ (𝟙 A) by simp [PrepathObject.p]; rw [ψ]]
+    rw [show (P.trans P').p = ψ ≫ prod.map P.p₀ (𝟙 A) by simp [PrepathObject.p, ψ]]
     have fac : ψ ≫ prod.map P.p₁ (𝟙 A) = pullback.snd _ _ ≫ P'.p := by
       ext
       · simp [ψ, pullback.condition]
@@ -863,28 +624,17 @@ end PathObject
 
 /-- The opposite of a pre-path object is a precylinder object. -/
 @[simps]
-/--
-Definition of `PrepathObject.op` / `PrepathObject.op` 的定义
+/-
+**HomotopicalAlgebra.PrepathObject.op** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlge
+bra.PrepathObject`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {A : C} →
+ HomotopicalAlgebra.PrepathObject A → HomotopicalAlgebra.Precylinder (Opposite.o
+p A)
+参数：Opposite.op A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PrepathObject.op
-  signature: {A : C} (P : PrepathObject A)
-  body: op P.P
-  i₀ := P.p₀.op
-  i₁ := P.p₁.op
-  π := P.ι.op
-  i₀_π := Quiver.Hom.unop_inj (by simp)
-  i₁_π := Quiver.Hom.unop_inj (by simp)
-
-中文:
-定义 PrepathObject.op
-  签名: {A : C} (P : PrepathObject A)
-  定义体: op P.P
-  i₀ := P.p₀.op
-  i₁ := P.p₁.op
-  π := P.ι.op
-  i₀_π := Quiver.Hom.unop_inj (by simp)
-  i₁_π := Quiver.Hom.unop_inj (by simp)
+--- 原说明 ---
+The opposite of a pre-path object is a precylinder object.
 -/
 protected def PrepathObject.op {A : C} (P : PrepathObject A) :
     Precylinder (op A) where
@@ -897,28 +647,17 @@ protected def PrepathObject.op {A : C} (P : PrepathObject A) :
 
 /-- The precylinder object obtained from a pre-path object in the opposite category. -/
 @[simps]
-/--
-Definition of `PrepathObject.unop` / `PrepathObject.unop` 的定义
+/-
+**HomotopicalAlgebra.PrepathObject.unop** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAl
+gebra.PrepathObject`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {A : Cᵒᵖ}
+ → HomotopicalAlgebra.PrepathObject A → HomotopicalAlgebra.Precylinder (Opposite
+.unop A)
+参数：Opposite.unop A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PrepathObject.unop
-  signature: {A : Cᵒᵖ} (P : PrepathObject A)
-  body: P.P.unop
-  i₀ := P.p₀.unop
-  i₁ := P.p₁.unop
-  π := P.ι.unop
-  i₀_π := Quiver.Hom.op_inj (by simp)
-  i₁_π := Quiver.Hom.op_inj (by simp)
-
-中文:
-定义 PrepathObject.unop
-  签名: {A : Cᵒᵖ} (P : PrepathObject A)
-  定义体: P.P.unop
-  i₀ := P.p₀.unop
-  i₁ := P.p₁.unop
-  π := P.ι.unop
-  i₀_π := Quiver.Hom.op_inj (by simp)
-  i₁_π := Quiver.Hom.op_inj (by simp)
+--- 原说明 ---
+The precylinder object obtained from a pre-path object in the opposite category.
 -/
 protected def PrepathObject.unop {A : Cᵒᵖ} (P : PrepathObject A) :
     Precylinder A.unop where
@@ -931,28 +670,17 @@ protected def PrepathObject.unop {A : Cᵒᵖ} (P : PrepathObject A) :
 
 /-- The opposite of a precylinder object is a pre-path object. -/
 @[simps]
-/--
-Definition of `Precylinder.op` / `Precylinder.op` 的定义
+/-
+**HomotopicalAlgebra.Precylinder.op** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgebr
+a.Precylinder`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {A : C} →
+ HomotopicalAlgebra.Precylinder A → HomotopicalAlgebra.PrepathObject (Opposite.o
+p A)
+参数：Opposite.op A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Precylinder.op
-  signature: {A : C} (P : Precylinder A)
-  body: op P.I
-  p₀ := P.i₀.op
-  p₁ := P.i₁.op
-  ι := P.π.op
-  ι_p₀ := Quiver.Hom.unop_inj (by simp)
-  ι_p₁ := Quiver.Hom.unop_inj (by simp)
-
-中文:
-定义 Precylinder.op
-  签名: {A : C} (P : Precylinder A)
-  定义体: op P.I
-  p₀ := P.i₀.op
-  p₁ := P.i₁.op
-  ι := P.π.op
-  ι_p₀ := Quiver.Hom.unop_inj (by simp)
-  ι_p₁ := Quiver.Hom.unop_inj (by simp)
+--- 原说明 ---
+The opposite of a precylinder object is a pre-path object.
 -/
 protected def Precylinder.op {A : C} (P : Precylinder A) :
     PrepathObject (op A) where
@@ -965,28 +693,17 @@ protected def Precylinder.op {A : C} (P : Precylinder A) :
 
 /-- The pre-path object object obtained from a cylinder in the opposite category. -/
 @[simps]
-/--
-Definition of `Precylinder.unop` / `Precylinder.unop` 的定义
+/-
+**HomotopicalAlgebra.Precylinder.unop** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlge
+bra.Precylinder`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {A : Cᵒᵖ}
+ → HomotopicalAlgebra.Precylinder A → HomotopicalAlgebra.PrepathObject (Opposite
+.unop A)
+参数：Opposite.unop A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Precylinder.unop
-  signature: {A : Cᵒᵖ} (P : Precylinder A)
-  body: P.I.unop
-  p₀ := P.i₀.unop
-  p₁ := P.i₁.unop
-  ι := P.π.unop
-  ι_p₀ := Quiver.Hom.op_inj (by simp)
-  ι_p₁ := Quiver.Hom.op_inj (by simp)
-
-中文:
-定义 Precylinder.unop
-  签名: {A : Cᵒᵖ} (P : Precylinder A)
-  定义体: P.I.unop
-  p₀ := P.i₀.unop
-  p₁ := P.i₁.unop
-  ι := P.π.unop
-  ι_p₀ := Quiver.Hom.op_inj (by simp)
-  ι_p₁ := Quiver.Hom.op_inj (by simp)
+--- 原说明 ---
+The pre-path object object obtained from a cylinder in the opposite category.
 -/
 protected def Precylinder.unop {A : Cᵒᵖ} (P : Precylinder A) :
     PrepathObject A.unop where
@@ -998,3 +715,4 @@ protected def Precylinder.unop {A : Cᵒᵖ} (P : Precylinder A) :
   ι_p₁ := Quiver.Hom.op_inj (by simp)
 
 end HomotopicalAlgebra
+

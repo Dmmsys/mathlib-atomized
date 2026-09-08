@@ -45,98 +45,106 @@ the set of all values of `v (coeff t f) * ∏ i : t.support, c i` for all `t : �
 
 namespace MvPowerSeries
 
-variable {R σ : Type*} (v : R -> Real) (c : σ -> Real) (f : MvPowerSeries σ R)
+variable {R σ : Type*} (v : R → ℝ) (c : σ → ℝ) (f : MvPowerSeries σ R)
 
 section Semiring
 
 variable [Semiring R]
 
-/--
-Definition of `gaussNorm` / `gaussNorm` 的定义
+/-- Given a multivariate power series `f` in, a function `v : R → ℝ` and a tuple `c` of real
+  numbers, the Gauss norm is defined as the supremum of the set of all values of
+  `v (coeff t f) * ∏ i : t.support, c i` for all `t : σ →₀ ℕ`. -/
+/-
+**MvPowerSeries.gaussNorm** 是 Mathlib 中的一个定义，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm : Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gaussNorm
-  signature: : Real
-  body: ⨆ t : σ ->₀ Nat, v (coeff t f) * t.prod (c · ^ ·)
-
-中文:
-定义 gaussNorm
-  签名: : 实数
-  定义体: ⨆ t : σ ->₀ Nat, v (coeff t f) * t.prod (c · ^ ·)
-
-Depends on / 依赖: t.prod
+--- 原说明 ---
+Given a multivariate power series `f` in, a function `v : R → ℝ` and a tuple `c`
+ of real
+  numbers, the Gauss norm is defined as the supremum of the set of all values of
+  `v (coeff t f) * ∏ i : t.support, c i` for all `t : σ →₀ ℕ`.
 -/
-noncomputable def gaussNorm : Real :=
-   ⨆ t : σ ->₀ Nat, v (coeff t f) * t.prod (c · ^ ·)
+noncomputable def gaussNorm : ℝ :=
+   ⨆ t : σ →₀ ℕ, v (coeff t f) * t.prod (c · ^ ·)
 
-/--
-Definition of `HasGaussNorm` / `HasGaussNorm` 的定义
+/-- We say `f` HasGaussNorm if the values `v (coeff t f) * ∏ i : t.support, c i` is bounded above,
+  that is `gaussNorm f` is finite. -/
+/-
+**MvPowerSeries.HasGaussNorm** 是 Mathlib 中的一个缩写定义，位于命名空间 `MvPowerSeries`。
+形式化陈述：HasGaussNorm
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasGaussNorm
-  body: BddAbove (Set.range (fun (t : σ ->₀ Nat) => (v (coeff t f) * t.prod (c · ^ ·))))
-
-@[simp]
-
-中文:
-缩写 HasGaussNorm
-  定义体: BddAbove (Set.range (fun (t : σ ->₀ Nat) => (v (coeff t f) * t.prod (c · ^ ·))))
-
-@[simp]
-
-Depends on / 依赖: BddAbove, Set.range, t.prod
+--- 原说明 ---
+We say `f` HasGaussNorm if the values `v (coeff t f) * ∏ i : t.support, c i` is 
+bounded above,
+  that is `gaussNorm f` is finite.
 -/
-abbrev HasGaussNorm := BddAbove (Set.range (fun (t : σ ->₀ Nat) => (v (coeff t f) * t.prod (c · ^ ·))))
+abbrev HasGaussNorm := BddAbove (Set.range (fun (t : σ →₀ ℕ) ↦ (v (coeff t f) * t.prod (c · ^ ·))))
 
 @[simp]
-/--
-theorem `gaussNorm_zero` / 定理 `gaussNorm_zero`
-
-English:
-theorem gaussNorm_zero
-  given: (vZero : v 0 = 0)
-  statement: gaussNorm v c 0 = 0
-  proof: by simp [gaussNorm, vZero]
-
-中文:
-定理 gaussNorm_zero
-  条件: (vZero : v 0 = 0)
-  结论: gaussNorm v c 0 = 0
-  证明: by simp [gaussNorm, vZero]
-
-Depends on / 依赖: gaussNorm
+/-
+**MvPowerSeries.gaussNorm_zero** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_zero (vZero : v 0 = 0) : gaussNorm v c 0 = 0
+参数：vZero : v 0 = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `ciSup_const`：ciSup_const [hι : Nonempty ι] {a : α} : ⨆ _ : ι, a = a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem gaussNorm_zero (vZero : v 0 = 0) : gaussNorm v c 0 = 0 := by simp [gaussNorm, vZero]
-
-/--
-lemma `le_gaussNorm` / 引理 `le_gaussNorm`
-
-English:
-lemma le_gaussNorm
-  given: (hbd : HasGaussNorm v c f) (t : σ ->₀ Nat)
-  proof: by
-  apply le_ciSup hbd
-
-中文:
-引理 le_gaussNorm
-  条件: (hbd : HasGaussNorm v c f) (t : σ ->₀ 自然数)
-  证明: by
-  apply le_ciSup hbd
-
-Depends on / 依赖: le_ciSup
+/-
+**MvPowerSeries.le_gaussNorm** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：le_gaussNorm (hbd : HasGaussNorm v c f) (t : σ ->₀ Nat) : v (coeff t f) * 
+t.prod (c · ^ ·) <= gaussNorm v c f
+参数：hbd : HasGaussNorm v c f；t : σ ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_ciSup`：le_ciSup {f : ι -> α} (H : BddAbove (range f)) (c : ι) : f c <
+= iSup f
 -/
-lemma le_gaussNorm (hbd : HasGaussNorm v c f) (t : σ ->₀ Nat) :
-    v (coeff t f) * t.prod (c · ^ ·) <= gaussNorm v c f := by
+lemma le_gaussNorm (hbd : HasGaussNorm v c f) (t : σ →₀ ℕ) :
+    v (coeff t f) * t.prod (c · ^ ·) ≤ gaussNorm v c f := by
   apply le_ciSup hbd
-
-/--
-lemma `gaussNorm_nonneg` / 引理 `gaussNorm_nonneg`
-
-English:
-lemma gaussNorm_nonneg
-  given: (vNonneg : forall a, v a >= 0)
-  statement: 0 <= gaussNorm v c f
-  proof: by
+/-
+**MvPowerSeries.gaussNorm_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_nonneg (vNonneg : forall a, v a >= 0) : 0 <= gaussNorm v c f
+参数：vNonneg : forall a, v a >= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.gaussNorm.eq_1`：∀ {R : Type u_1} {σ : Type u_2} (v : R → ℝ
+) (c : σ → ℝ) (f : MvPowerSeries σ R) [inst : Semiring R],   MvPowerSeries.gauss
+Norm v c f = ⨆ t, …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `MvPowerSeries.le_gaussNorm`：le_gaussNorm (hbd : HasGaussNorm v c f) (t :
+ σ ->₀ Nat) : v (coeff t f) * t.prod (c · ^ ·) <= gaussNorm v c f
+· 使用引理 `ciSup_of_not_bddAbove`：ciSup_of_not_bddAbove (hf : ¬BddAbove (range f)) 
+: ⨆ i, f i = sSup ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Real.sSup_empty`：sSup_empty : sSup (∅ : Set Real) = 0
+-/
+lemma gaussNorm_nonneg (vNonneg : ∀ a, v a ≥ 0) : 0 ≤ gaussNorm v c f := by
   rw [gaussNorm]
   by_cases h : HasGaussNorm v c f
   · trans v (constantCoeff f)
@@ -144,200 +152,135 @@ lemma gaussNorm_nonneg
     · convert! (le_gaussNorm v c f h 0)
       simp
   · simp [h]
-
-中文:
-引理 gaussNorm_nonneg
-  条件: (vNonneg : 对任意 a, v a >= 0)
-  结论: 0 <= gaussNorm v c f
-  证明: by
-  rw [gaussNorm]
-  by_cases h : HasGaussNorm v c f
-  · trans v (constantCoeff f)
-    · simp [vNonneg]
-    · convert! (le_gaussNorm v c f h 0)
-      simp
-  · simp [h]
-
-Depends on / 依赖: HasGaussNorm, constantCoeff, convert, gaussNorm, le_gaussNorm, vNonneg
+/-
+**MvPowerSeries.gaussNorm_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_eq_zero_iff (vZero : v 0 = 0) (vNonneg : forall a, v a >= 0) (h_
+eq_zero : forall x : R, v x = 0 -> x = 0) (hc : forall i, 0 < c i) (hbd : HasGau
+ssNorm v c f) : gaussNorm v c f = 0 ↔ f = 0
+参数：vZero : v 0 = 0；vNonneg : forall a, v a >= 0；h_eq_zero : forall x : R, v x = 
+0 -> x = 0；hc : forall i, 0 < c i；hbd : HasGaussNorm v c f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero`：ne_zero_iff_exists_coeff
+_ne_zero (f : MvPowerSeries σ R) : f != 0 ↔ (exists d : σ ->₀ Nat, coeff d f != 
+0)
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用引理 `Finset.prod_pos`：prod_pos (h0 : forall i in s, 0 < f i) : 0 < ∏ i in s, 
+f i
+· 使用定理 `pow_pos`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : PartialO
+rder M₀] {a : M₀} [PosMulStrictMono M₀]   [ZeroLEOneClass M₀], 0 < a → ∀ (n :…
+· 使用引理 `MvPowerSeries.le_gaussNorm`：le_gaussNorm (hbd : HasGaussNorm v c f) (t :
+ σ ->₀ Nat) : v (coeff t f) * t.prod (c · ^ ·) <= gaussNorm v c f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `MvPowerSeries.gaussNorm_zero`：gaussNorm_zero (vZero : v 0 = 0) : gaussNo
+rm v c 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma gaussNorm_nonneg (vNonneg : forall a, v a >= 0) : 0 <= gaussNorm v c f := by
-  rw [gaussNorm]
-  by_cases h : HasGaussNorm v c f
-  · trans v (constantCoeff f)
-    · simp [vNonneg]
-    · convert! (le_gaussNorm v c f h 0)
-      simp
-  · simp [h]
-
-/--
-lemma `gaussNorm_eq_zero_iff` / 引理 `gaussNorm_eq_zero_iff`
-
-English:
-lemma gaussNorm_eq_zero_iff
-  statement: (vZero : v 0 = 0) (vNonneg : forall a, v a >= 0)
-  proof: by
-  refine ⟨?_, fun hf => by simp [hf, vZero]⟩
-  contrapose!
-  intro hf
-  apply ne_of_gt
-  obtain ⟨n, hn⟩ := (MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero f).mp hf
-  calc
-  0 < v (f.coeff n) * ∏ i in n.support, (c i) ^ (n i) := by
-    apply mul_pos _ (by exact Finset.prod_pos fun i a => (fun i => pow_pos (hc i) (n i)) i)
-    specialize h_eq_zero (f.coeff n)
-    grind
-  _ <= _ := le_gaussNorm v c f hbd n
-
-中文:
-引理 gaussNorm_eq_zero_iff
-  结论: (vZero : v 0 = 0) (vNonneg : 对任意 a, v a >= 0)
-  证明: by
-  refine ⟨?_, fun hf => by simp [hf, vZero]⟩
-  contrapose!
-  intro hf
-  apply ne_of_gt
-  obtain ⟨n, hn⟩ := (MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero f).mp hf
-  calc
-  0 < v (f.coeff n) * ∏ i in n.support, (c i) ^ (n i) := by
-    apply mul_pos _ (by exact Finset.prod_pos fun i a => (fun i => pow_pos (hc i) (n i)) i)
-    specialize h_eq_zero (f.coeff n)
-    grind
-  _ <= _ := le_gaussNorm v c f hbd n
-
-Depends on / 依赖: Finset, Finset.prod_pos, MvPowerSeries, MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero, contrapose, f.coeff, h_eq_zero, le_gaussNorm, mul_pos, n.support, ne_of_gt, ne_zero_iff_exists_coeff_ne_zero, pow_pos, prod_pos, specialize, support
--/
-lemma gaussNorm_eq_zero_iff (vZero : v 0 = 0) (vNonneg : forall a, v a >= 0)
-    (h_eq_zero : forall x : R, v x = 0 -> x = 0) (hc : forall i, 0 < c i) (hbd : HasGaussNorm v c f) :
+lemma gaussNorm_eq_zero_iff (vZero : v 0 = 0) (vNonneg : ∀ a, v a ≥ 0)
+    (h_eq_zero : ∀ x : R, v x = 0 → x = 0) (hc : ∀ i, 0 < c i) (hbd : HasGaussNorm v c f) :
     gaussNorm v c f = 0 ↔ f = 0 := by
-  refine ⟨?_, fun hf => by simp [hf, vZero]⟩
+  refine ⟨?_, fun hf ↦ by simp [hf, vZero]⟩
   contrapose!
   intro hf
   apply ne_of_gt
   obtain ⟨n, hn⟩ := (MvPowerSeries.ne_zero_iff_exists_coeff_ne_zero f).mp hf
   calc
-  0 < v (f.coeff n) * ∏ i in n.support, (c i) ^ (n i) := by
-    apply mul_pos _ (by exact Finset.prod_pos fun i a => (fun i => pow_pos (hc i) (n i)) i)
+  0 < v (f.coeff n) * ∏ i ∈ n.support, (c i) ^ (n i) := by
+    apply mul_pos _ (by exact Finset.prod_pos fun i a ↦ (fun i ↦ pow_pos (hc i) (n i)) i)
     specialize h_eq_zero (f.coeff n)
     grind
-  _ <= _ := le_gaussNorm v c f hbd n
-
-/--
-lemma `gaussNorm_add_le_max` / 引理 `gaussNorm_add_le_max`
-
-English:
-lemma gaussNorm_add_le_max
-  statement: (f g : MvPowerSeries σ R) (hc : 0 <= c)
-  proof: by
-  have H (t : σ ->₀ Nat) : 0 <= ∏ i in t.support, c i ^ t i :=
-    Finset.prod_nonneg (fun i hi => pow_nonneg (hc i) (t i))
-  have Final (t : σ ->₀ Nat) : v ((coeff t) (f + g)) * ∏ i in t.support, c ↑i ^ t ↑i <=
-      max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-      (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
-    specialize hv (coeff t f) (coeff t g)
-    rcases max_choice (v ((coeff t) f)) (v ((coeff t) g)) with h | h
-    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
-          (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i) := by
-        simp only [sup_eq_left]
-        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-      simp_rw [this]
-      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
-        simp only [sup_eq_right]
-        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-      simp_rw [this]
-      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-  refine Real.iSup_le ?_ ?_
-  · refine fun t => calc
-    _ <= _ := Final t
-    _ <= max (gaussNorm v c f) (gaussNorm v c g) := by
-      simp only [le_sup_iff]
-      rcases max_choice (v ((coeff t) f) * ∏ i in t.support, c i ^ t i)
-        (v ((coeff t) g) * ∏ i in t.support, c i ^ t i) with h | h
-      · left
-        simpa [h] using! le_gaussNorm v c f hbfd t
-      · right
-        simpa [h] using! le_gaussNorm v c g hbgd t
-  · simp only [le_sup_iff]
-    left
-    exact gaussNorm_nonneg v c f vNonneg
-
-中文:
-引理 gaussNorm_add_le_max
-  结论: (f g : MvPowerSeries σ R) (hc : 0 <= c)
-  证明: by
-  have H (t : σ ->₀ Nat) : 0 <= ∏ i in t.support, c i ^ t i :=
-    Finset.prod_nonneg (fun i hi => pow_nonneg (hc i) (t i))
-  have Final (t : σ ->₀ Nat) : v ((coeff t) (f + g)) * ∏ i in t.support, c ↑i ^ t ↑i <=
-      max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-      (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
-    specialize hv (coeff t f) (coeff t g)
-    rcases max_choice (v ((coeff t) f)) (v ((coeff t) g)) with h | h
-    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
-          (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i) := by
-        simp only [sup_eq_left]
-        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-      simp_rw [this]
-      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
-        simp only [sup_eq_right]
-        exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-      simp_rw [this]
-      exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-  refine Real.iSup_le ?_ ?_
-  · refine fun t => calc
-    _ <= _ := Final t
-    _ <= max (gaussNorm v c f) (gaussNorm v c g) := by
-      simp only [le_sup_iff]
-      rcases max_choice (v ((coeff t) f) * ∏ i in t.support, c i ^ t i)
-        (v ((coeff t) g) * ∏ i in t.support, c i ^ t i) with h | h
-      · left
-        simpa [h] using! le_gaussNorm v c f hbfd t
-      · right
-        simpa [h] using! le_gaussNorm v c g hbgd t
-  · simp only [le_sup_iff]
-    left
-    exact gaussNorm_nonneg v c f vNonneg
-
-Depends on / 依赖: Finset, Finset.prod_nonneg, max_choice, pow_nonneg, prod_nonneg, specialize, support, t.support
+  _ ≤ _ := le_gaussNorm v c f hbd n
+/-
+**MvPowerSeries.gaussNorm_add_le_max** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_add_le_max (f g : MvPowerSeries σ R) (hc : 0 <= c) (vNonneg : fo
+rall a, v a >= 0) (hv : IsNonarchimedean v) (hbfd : HasGaussNorm v c f) (hbgd : 
+HasGaussNorm v c g) : gaussNorm v c (f + g) <= max (gaussNorm v c f) (gaussNorm 
+v c g)
+参数：f g : MvPowerSeries σ R；hc : 0 <= c；vNonneg : forall a, v a >= 0；hv : IsNonar
+chimedean v；hbfd : HasGaussNorm v c f；hbgd : HasGaussNorm v c g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.prod_nonneg`：prod_nonneg (h0 : forall i in s, 0 <= f i) : 0 <= ∏ 
+i in s, f i
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `pow_nonneg`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : Preor
+der M₀] {a : M₀} [ZeroLEOneClass M₀] [PosMulMono M₀],   0 ≤ a → ∀ (n : ℕ), 0 ≤ a
+…
+· 使用定理 `max_choice`：∀ {α : Type u} [inst : LinearOrder α] (a b : α), max a b = a
+ ∨ max a b = b
+· 使用定理 `mul_le_mul_of_nonneg`：mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α]
+ (h₁ : a <= b) (h₂ : c <= d) (a0 : 0 <= a) (d0 : 0 <= d) : a * c <= b * d
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Real.iSup_le`：∀ {ι : Sort u_1} {f : ι → ℝ} {a : ℝ}, (∀ (i : ι), f i ≤ a)
+ → 0 ≤ a → ⨆ i, f i ≤ a
+· 使用引理 `MvPowerSeries.le_gaussNorm`：le_gaussNorm (hbd : HasGaussNorm v c f) (t :
+ σ ->₀ Nat) : v (coeff t f) * t.prod (c · ^ ·) <= gaussNorm v c f
+· 使用引理 `MvPowerSeries.gaussNorm_nonneg`：gaussNorm_nonneg (vNonneg : forall a, v 
+a >= 0) : 0 <= gaussNorm v c f
 -/
-lemma gaussNorm_add_le_max (f g : MvPowerSeries σ R) (hc : 0 <= c)
-    (vNonneg : forall a, v a >= 0) (hv : IsNonarchimedean v)
+lemma gaussNorm_add_le_max (f g : MvPowerSeries σ R) (hc : 0 ≤ c)
+    (vNonneg : ∀ a, v a ≥ 0) (hv : IsNonarchimedean v)
     (hbfd : HasGaussNorm v c f) (hbgd : HasGaussNorm v c g) :
-    gaussNorm v c (f + g) <= max (gaussNorm v c f) (gaussNorm v c g) := by
-  have H (t : σ ->₀ Nat) : 0 <= ∏ i in t.support, c i ^ t i :=
-    Finset.prod_nonneg (fun i hi => pow_nonneg (hc i) (t i))
-  have Final (t : σ ->₀ Nat) : v ((coeff t) (f + g)) * ∏ i in t.support, c ↑i ^ t ↑i <=
-      max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-      (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+    gaussNorm v c (f + g) ≤ max (gaussNorm v c f) (gaussNorm v c g) := by
+  have H (t : σ →₀ ℕ) : 0 ≤ ∏ i ∈ t.support, c i ^ t i :=
+    Finset.prod_nonneg (fun i hi ↦ pow_nonneg (hc i) (t i))
+  have Final (t : σ →₀ ℕ) : v ((coeff t) (f + g)) * ∏ i ∈ t.support, c ↑i ^ t ↑i ≤
+      max (v ((coeff t) f) * ∏ i ∈ t.support, c ↑i ^ t ↑i)
+      (v ((coeff t) g) * ∏ i ∈ t.support, c ↑i ^ t ↑i) := by
     specialize hv (coeff t f) (coeff t g)
     rcases max_choice (v ((coeff t) f)) (v ((coeff t) g)) with h | h
-    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
-          (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+    · have : max (v ((coeff t) f) * ∏ i ∈ t.support, c ↑i ^ t ↑i)
+          (v ((coeff t) g) * ∏ i ∈ t.support, c ↑i ^ t ↑i) =
+          (v ((coeff t) f) * ∏ i ∈ t.support, c ↑i ^ t ↑i) := by
         simp only [sup_eq_left]
         exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
       simp_rw [this]
       exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
-    · have : max (v ((coeff t) f) * ∏ i in t.support, c ↑i ^ t ↑i)
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) =
-          (v ((coeff t) g) * ∏ i in t.support, c ↑i ^ t ↑i) := by
+    · have : max (v ((coeff t) f) * ∏ i ∈ t.support, c ↑i ^ t ↑i)
+          (v ((coeff t) g) * ∏ i ∈ t.support, c ↑i ^ t ↑i) =
+          (v ((coeff t) g) * ∏ i ∈ t.support, c ↑i ^ t ↑i) := by
         simp only [sup_eq_right]
         exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
       simp_rw [this]
       exact mul_le_mul_of_nonneg (by aesop) (by aesop) (by aesop) (H t)
   refine Real.iSup_le ?_ ?_
-  · refine fun t => calc
-    _ <= _ := Final t
-    _ <= max (gaussNorm v c f) (gaussNorm v c g) := by
+  · refine fun t ↦ calc
+    _ ≤ _ := Final t
+    _ ≤ max (gaussNorm v c f) (gaussNorm v c g) := by
       simp only [le_sup_iff]
-      rcases max_choice (v ((coeff t) f) * ∏ i in t.support, c i ^ t i)
-        (v ((coeff t) g) * ∏ i in t.support, c i ^ t i) with h | h
+      rcases max_choice (v ((coeff t) f) * ∏ i ∈ t.support, c i ^ t i)
+        (v ((coeff t) g) * ∏ i ∈ t.support, c i ^ t i) with h | h
       · left
         simpa [h] using! le_gaussNorm v c f hbfd t
       · right
@@ -345,93 +288,96 @@ lemma gaussNorm_add_le_max (f g : MvPowerSeries σ R) (hc : 0 <= c)
   · simp only [le_sup_iff]
     left
     exact gaussNorm_nonneg v c f vNonneg
-
-/--
-lemma `c_prod_nonneg` / 引理 `c_prod_nonneg`
-
-English:
-lemma c_prod_nonneg
-  given: (hc : 0 <= c) (t : σ ->₀ Nat)
-  statement: 0 <= t.prod (c · ^ ·)
-  proof: Finset.prod_nonneg (fun i _ => pow_nonneg (hc i) (t i))
-
-中文:
-引理 c_prod_nonneg
-  条件: (hc : 0 <= c) (t : σ ->₀ 自然数)
-  结论: 0 <= t.乘积 (c · ^ ·)
-  证明: Finset.prod_nonneg (fun i _ => pow_nonneg (hc i) (t i))
+/-
+**MvPowerSeries.c_prod_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma c_prod_nonneg (hc : 0 <= c) (t : σ ->₀ Nat) : 0 <= t.prod (c · ^ ·) :=
-  Finset.prod_nonneg (fun i _ => pow_nonneg (hc i) (t i))
-
-/--
-lemma `gaussNorm_mul_le` / 引理 `gaussNorm_mul_le`
-
-English:
-lemma gaussNorm_mul_le
-  statement: (f g : MvPowerSeries σ R) (hc : 0 <= c) (vNonneg : forall a, v a >= 0)
-  proof: by
-  classical
-  refine Real.iSup_le ?_ ?_
-  · intro t
-    obtain ⟨k, hk, hsum⟩ := IsNonarchimedean.finset_image_add vZero vNonneg vna
-      (fun a => coeff a.1 f * coeff a.2 g) (Finset.antidiagonal t)
-    have hk' : k.1 + k.2 = t := by
-      simpa [Finset.mem_antidiagonal] using hk (Finset.nonempty_def.mpr ⟨(t, 0), by simp⟩)
-    have hprod : t.prod (c · ^ ·) = k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·) := by
-      simp [← hk', Finsupp.prod_add_index' (h := (c · ^ ·)) (by grind) (by grind)]
-    rw [hprod]
-    refine (mul_le_mul hsum (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1) (c_prod_nonneg c hc k.2))
-      (vNonneg _)).trans ?_
-    have : v ((coeff k.1) f * (coeff k.2) g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) <=
-        (v (coeff k.1 f) * k.1.prod (c · ^ ·)) * (v (coeff k.2 g) * k.2.prod (c · ^ ·)) := by
-      calc
-      _ <= v (coeff k.1 f) * v (coeff k.2 g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) :=
-        mul_le_mul (vMul _ _) (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1)
-          (c_prod_nonneg c hc k.2)) (mul_nonneg (vNonneg _) (vNonneg _))
-      _ = _ := by ring
-    exact this.trans (mul_le_mul (le_gaussNorm v c f hbfd k.1) (le_gaussNorm v c g hbgd k.2)
-      (mul_nonneg (vNonneg _) (c_prod_nonneg c hc k.2)) (gaussNorm_nonneg v c f vNonneg))
-  · exact mul_nonneg (gaussNorm_nonneg v c f vNonneg) (gaussNorm_nonneg v c g vNonneg)
-
-中文:
-引理 gaussNorm_mul_le
-  结论: (f g : MvPowerSeries σ R) (hc : 0 <= c) (vNonneg : 对任意 a, v a >= 0)
-  证明: by
-  classical
-  refine Real.iSup_le ?_ ?_
-  · intro t
-    obtain ⟨k, hk, hsum⟩ := IsNonarchimedean.finset_image_add vZero vNonneg vna
-      (fun a => coeff a.1 f * coeff a.2 g) (Finset.antidiagonal t)
-    have hk' : k.1 + k.2 = t := by
-      simpa [Finset.mem_antidiagonal] using hk (Finset.nonempty_def.mpr ⟨(t, 0), by simp⟩)
-    have hprod : t.prod (c · ^ ·) = k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·) := by
-      simp [← hk', Finsupp.prod_add_index' (h := (c · ^ ·)) (by grind) (by grind)]
-    rw [hprod]
-    refine (mul_le_mul hsum (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1) (c_prod_nonneg c hc k.2))
-      (vNonneg _)).trans ?_
-    have : v ((coeff k.1) f * (coeff k.2) g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) <=
-        (v (coeff k.1 f) * k.1.prod (c · ^ ·)) * (v (coeff k.2 g) * k.2.prod (c · ^ ·)) := by
-      calc
-      _ <= v (coeff k.1 f) * v (coeff k.2 g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) :=
-        mul_le_mul (vMul _ _) (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1)
-          (c_prod_nonneg c hc k.2)) (mul_nonneg (vNonneg _) (vNonneg _))
-      _ = _ := by ring
-    exact this.trans (mul_le_mul (le_gaussNorm v c f hbfd k.1) (le_gaussNorm v c g hbgd k.2)
-      (mul_nonneg (vNonneg _) (c_prod_nonneg c hc k.2)) (gaussNorm_nonneg v c f vNonneg))
-  · exact mul_nonneg (gaussNorm_nonneg v c f vNonneg) (gaussNorm_nonneg v c g vNonneg)
-
-Depends on / 依赖: Finset, Finset.antidiagonal, Finset.mem_antidiagonal, Finset.nonempty_def.mpr, Finsupp, Finsupp.prod_add_index, IsNonarchimedean, IsNonarchimedean.finset_image_add, Real.iSup_le, antidiagonal, classical, finset_image_add, iSup_le, mem_antidiagonal, mul_le_mul, nonempty_def, prod_add_index, t.prod, vNonneg
+private lemma c_prod_nonneg (hc : 0 ≤ c) (t : σ →₀ ℕ) : 0 ≤ t.prod (c · ^ ·) :=
+  Finset.prod_nonneg (fun i _ ↦ pow_nonneg (hc i) (t i))
+/-
+**MvPowerSeries.gaussNorm_mul_le** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_mul_le (f g : MvPowerSeries σ R) (hc : 0 <= c) (vNonneg : forall
+ a, v a >= 0) (vMul : forall a b, v (a * b) <= v a * v b) (vna : IsNonarchimedea
+n v) (vZero : v 0 = 0) (hbfd : HasGaussNorm v c f) (hbgd : HasGaussNorm v c g) :
+ gaussNorm v c (f * g) <= gaussNorm v c f * gaussNorm v c g
+参数：f g : MvPowerSeries σ R；hc : 0 <= c；vNonneg : forall a, v a >= 0；vMul : foral
+l a b, v (a * b) <= v a * v b；vna : IsNonarchimedean v；vZero : v 0 = 0；hbfd : Ha
+sGaussNorm v c f；hbgd : HasGaussNorm v c g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.iSup_le`：∀ {ι : Sort u_1} {f : ι → ℝ} {a : ℝ}, (∀ (i : ι), f i ≤ a)
+ → 0 ≤ a → ⨆ i, f i ≤ a
+· 使用引理 `IsNonarchimedean.finset_image_add`：finset_image_add {α β : Type*} [AddCo
+mmMonoid α] [Nonempty β] {f : α -> R} (f_zero : f 0 = 0) (f_nonneg : forall x, 0
+ <= f x) (hna : IsNonar…
+· 使用定理 `instNonemptyProd`：∀ {α : Type u_1} {β : Type u_2} [h1 : Nonempty α] [h2 
+: Nonempty β], Nonempty (α × β)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.nonempty_def`：nonempty_def {s : Finset α} : s.Nonempty ↔ exists x
+, x in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.prod_add_index'`：prod_add_index' [AddZeroClass M] [CommMonoid N]
+ {f g : α ->₀ M} {h : α -> M -> N} (h_zero : forall a, h a 0 = 1) (h_add : foral
+l a b₁ b₂, h …
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : Zero α] [inst_2 : 
+Preorder α] {a b c d : α} [PosMulMono α] [MulPosMono α],   a ≤ b → c ≤ d → 0 ≤ c
+…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `_private.Mathlib.RingTheory.MvPowerSeries.GaussNorm.0.MvPowerSeries.c_pr
+od_nonneg`：∀ {σ : Type u_2} (c : σ → ℝ), 0 ≤ c → ∀ (t : σ →₀ ℕ), 0 ≤ t.prod fun 
+x1 x2 => c x1 ^ x2
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+（共 36 条，此处仅展示前 30 条）
 -/
-lemma gaussNorm_mul_le (f g : MvPowerSeries σ R) (hc : 0 <= c) (vNonneg : forall a, v a >= 0)
-    (vMul : forall a b, v (a * b) <= v a * v b) (vna : IsNonarchimedean v)
+lemma gaussNorm_mul_le (f g : MvPowerSeries σ R) (hc : 0 ≤ c) (vNonneg : ∀ a, v a ≥ 0)
+    (vMul : ∀ a b, v (a * b) ≤ v a * v b) (vna : IsNonarchimedean v)
     (vZero : v 0 = 0) (hbfd : HasGaussNorm v c f) (hbgd : HasGaussNorm v c g) :
-    gaussNorm v c (f * g) <= gaussNorm v c f * gaussNorm v c g := by
+    gaussNorm v c (f * g) ≤ gaussNorm v c f * gaussNorm v c g := by
   classical
   refine Real.iSup_le ?_ ?_
   · intro t
     obtain ⟨k, hk, hsum⟩ := IsNonarchimedean.finset_image_add vZero vNonneg vna
-      (fun a => coeff a.1 f * coeff a.2 g) (Finset.antidiagonal t)
+      (fun a ↦ coeff a.1 f * coeff a.2 g) (Finset.antidiagonal t)
     have hk' : k.1 + k.2 = t := by
       simpa [Finset.mem_antidiagonal] using hk (Finset.nonempty_def.mpr ⟨(t, 0), by simp⟩)
     have hprod : t.prod (c · ^ ·) = k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·) := by
@@ -439,10 +385,10 @@ lemma gaussNorm_mul_le (f g : MvPowerSeries σ R) (hc : 0 <= c) (vNonneg : foral
     rw [hprod]
     refine (mul_le_mul hsum (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1) (c_prod_nonneg c hc k.2))
       (vNonneg _)).trans ?_
-    have : v ((coeff k.1) f * (coeff k.2) g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) <=
+    have : v ((coeff k.1) f * (coeff k.2) g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) ≤
         (v (coeff k.1 f) * k.1.prod (c · ^ ·)) * (v (coeff k.2 g) * k.2.prod (c · ^ ·)) := by
       calc
-      _ <= v (coeff k.1 f) * v (coeff k.2 g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) :=
+      _ ≤ v (coeff k.1 f) * v (coeff k.2 g) * (k.1.prod (c · ^ ·) * k.2.prod (c · ^ ·)) :=
         mul_le_mul (vMul _ _) (by rfl) (mul_nonneg (c_prod_nonneg c hc k.1)
           (c_prod_nonneg c hc k.2)) (mul_nonneg (vNonneg _) (vNonneg _))
       _ = _ := by ring
@@ -454,84 +400,84 @@ end Semiring
 
 variable [Ring R]
 
-/--
-Definition of `AchievesGaussNorm` / `AchievesGaussNorm` 的定义
+/-- Predicate for when the gaussNorm is achieved by an index. -/
+/-
+**MvPowerSeries.AchievesGaussNorm** 是 Mathlib 中的一个缩写定义，位于命名空间 `MvPowerSeries`。
+形式化陈述：AchievesGaussNorm (i : σ ->₀ Nat) : Prop
+参数：i : σ ->₀ Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation AchievesGaussNorm
-  signature: (i : σ ->₀ Nat)
-  body: v (coeff i f) * i.prod (c · ^ ·) = gaussNorm v c f
-
-中文:
-缩写 AchievesGaussNorm
-  签名: (i : σ ->₀ 自然数)
-  定义体: v (coeff i f) * i.prod (c · ^ ·) = gaussNorm v c f
-
-Depends on / 依赖: gaussNorm, i.prod
+--- 原说明 ---
+Predicate for when the gaussNorm is achieved by an index.
 -/
-abbrev AchievesGaussNorm (i : σ ->₀ Nat) : Prop :=
+abbrev AchievesGaussNorm (i : σ →₀ ℕ) : Prop :=
   v (coeff i f) * i.prod (c · ^ ·) = gaussNorm v c f
-
-/--
-lemma `gaussNorm_neg` / 引理 `gaussNorm_neg`
-
-English:
-lemma gaussNorm_neg
-  given: (vNeg : forall x, v (-x) = v x) (f : MvPowerSeries σ R)
-  proof: by
-  simp_rw [gaussNorm]
-  have (t : σ ->₀ Nat) : (coeff t) (-f) = - (coeff t) f := by rfl
-  simp_rw [this, vNeg]
-
-中文:
-引理 gaussNorm_neg
-  条件: (vNeg : 对任意 x, v (-x) = v x) (f : MvPowerSeries σ R)
-  证明: by
-  simp_rw [gaussNorm]
-  have (t : σ ->₀ Nat) : (coeff t) (-f) = - (coeff t) f := by rfl
-  simp_rw [this, vNeg]
-
-Depends on / 依赖: gaussNorm, simp_rw
+/-
+**MvPowerSeries.gaussNorm_neg** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_neg (vNeg : forall x, v (-x) = v x) (f : MvPowerSeries σ R) : ga
+ussNorm v c (-f) = gaussNorm v c f
+参数：vNeg : forall x, v (-x) = v x；f : MvPowerSeries σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma gaussNorm_neg (vNeg : forall x, v (-x) = v x) (f : MvPowerSeries σ R) :
-    gaussNorm v c (-f) = gaussNorm v c f := by
+lemma gaussNorm_neg (vNeg : ∀ x, v (-x) = v x) (f : MvPowerSeries σ R) :
+    gaussNorm v c (-f) = gaussNorm v c f  := by
   simp_rw [gaussNorm]
-  have (t : σ ->₀ Nat) : (coeff t) (-f) = - (coeff t) f := by rfl
+  have (t : σ →₀ ℕ) : (coeff t) (-f) = - (coeff t) f := by rfl
   simp_rw [this, vNeg]
 
 section absoluteValue
 
-variable {α S : Type*} [LinearOrder S] [AddCommGroup α] (f : α -> S)
+variable {α S : Type*} [LinearOrder S] [AddCommGroup α] (f : α → S)
 
-/--
-lemma `ultrametric_strict` / 引理 `ultrametric_strict`
-
-English:
-lemma ultrametric_strict
-  statement: (na : IsNonarchimedean f)
-  proof: by
-  wlog hab : f a > f b generalizing a b with H
-  · simpa [add_comm, max_comm] using (H hne.symm ((not_lt.mp hab).lt_of_ne hne))
-  apply le_antisymm (na a b)
-  rcases le_max_iff.mp (na (a + b) (-b)) with h | h
-  · simpa [max_eq_left (le_of_lt hab)] using h
-  · exact absurd h (not_le.mpr (by simpa [Neg b] using hab))
-
-中文:
-引理 ultrametric_strict
-  结论: (na : IsNonarchimedean f)
-  证明: by
-  wlog hab : f a > f b generalizing a b with H
-  · simpa [add_comm, max_comm] using (H hne.symm ((not_lt.mp hab).lt_of_ne hne))
-  apply le_antisymm (na a b)
-  rcases le_max_iff.mp (na (a + b) (-b)) with h | h
-  · simpa [max_eq_left (le_of_lt hab)] using h
-  · exact absurd h (not_le.mpr (by simpa [Neg b] using hab))
-
-Depends on / 依赖: absurd, add_comm, generalizing, hne.symm, le_antisymm, le_max_iff, le_max_iff.mp, le_of_lt, lt_of_ne, max_comm, max_eq_left, not_le, not_le.mpr, not_lt, not_lt.mp
+/-
+**MvPowerSeries.ultrametric_strict** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：ultrametric_strict (na : IsNonarchimedean f) (Neg : forall a, f a = f (-a)
+) {a b : α} (hne : f a != f b) : f (a + b) = max (f a) (f b)
+参数：na : IsNonarchimedean f；Neg : forall a, f a = f (-a)；hne : f a != f b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_max_iff`：le_max_iff : a <= max b c ↔ a <= b ∨ a <= c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `add_neg_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b + -b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `max_comm`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), max a b = m
+ax b a
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
 -/
 lemma ultrametric_strict (na : IsNonarchimedean f)
-    (Neg : forall a, f a = f (-a)) {a b : α} (hne : f a != f b) : f (a + b) = max (f a) (f b) := by
+    (Neg : ∀ a, f a = f (-a)) {a b : α} (hne : f a ≠ f b) : f (a + b) = max (f a) (f b) := by
   wlog hab : f a > f b generalizing a b with H
   · simpa [add_comm, max_comm] using (H hne.symm ((not_lt.mp hab).lt_of_ne hne))
   apply le_antisymm (na a b)
@@ -540,138 +486,183 @@ lemma ultrametric_strict (na : IsNonarchimedean f)
   · exact absurd h (not_le.mpr (by simpa [Neg b] using hab))
 
 variable [Semiring S]
-
-/--
-lemma `Finset.Nonempty.map_sum_le_sup'_map` / 引理 `Finset.Nonempty.map_sum_le_sup'_map`
-
-English:
-lemma Finset.Nonempty.map_sum_le_sup'_map
-  proof: by
-  simp only [Finset.le_sup'_iff]
-  induction hs using Finset.Nonempty.cons_induction with
-  | singleton j => simp only [Finset.mem_singleton, Finset.sum_singleton, exists_eq_left, le_refl]
-  | cons j s hj _ IH =>
-      simp only [Finset.sum_cons, Finset.mem_cons, exists_eq_or_imp]
-      refine (le_total (g (∑ i in s, f i)) (g (f j))).imp ?_ ?_ <;> intro h
-      · exact (na _ _).trans (max_eq_left h).le
-· exact ⟨_, IH.choose_spec.left, (na _ _).trans
-          ((max_eq_right h).le.trans IH.choose_spec.right)⟩
-
-中文:
-引理 有限集.非空.map_sum_le_sup'_map
-  证明: by
-  simp only [Finset.le_sup'_iff]
-  induction hs using Finset.Nonempty.cons_induction with
-  | singleton j => simp only [Finset.mem_singleton, Finset.sum_singleton, exists_eq_left, le_refl]
-  | cons j s hj _ IH =>
-      simp only [Finset.sum_cons, Finset.mem_cons, exists_eq_or_imp]
-      refine (le_total (g (∑ i in s, f i)) (g (f j))).imp ?_ ?_ <;> intro h
-      · exact (na _ _).trans (max_eq_left h).le
-· exact ⟨_, IH.choose_spec.left, (na _ _).trans
-          ((max_eq_right h).le.trans IH.choose_spec.right)⟩
-
-Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.le_sup, Finset.mem_cons, Finset.mem_singleton, Finset.sum_cons, Finset.sum_singleton, IH.choose_spec.left, IH.choose_spec.right, Nonempty, _iff, choose_spec, cons_induction, exists_eq_left, exists_eq_or_imp, le.trans, le_refl, le_sup, le_total, max_eq_left
+/-
+**MvPowerSeries.Finset.Nonempty.map_sum_le_sup'_map** 是 Mathlib 中的一个定理，位于命名空间 `M
+vPowerSeries.Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_5} {S : Type u_6} [inst : LinearOrder S] [inst_1 : AddCommMo
+noid α] (g : α → S) {ι : Type u_7}   {s : Finset ι} (hs : s.Nonempty) (f : ι → α
+),   (∀ (a b : α), g (a + b) ≤ max (g a) (g b)) → g (∑ i ∈ s, f i) ≤ s.sup' hs f
+un x => g (f x)
+参数：g : α → S；hs : s.Nonempty；f : ι → α；∀ (a b : α), g (a + b) ≤ max (g a) (g b)；
+∑ i ∈ s, f i；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.Nonempty.cons_induction`：∀ {α : Type u_3} {motive : (s : Finset α
+) → s.Nonempty → Prop},   (∀ (a : α), motive {a} ⋯) →     (∀ (a : α) (s : Finset
+ α) (h : a ∉ s) (hs …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
 -/
 lemma Finset.Nonempty.map_sum_le_sup'_map
-    {α S : Type*} [LinearOrder S] [AddCommMonoid α] (g : α -> S)
-    {ι : Type*} {s : Finset ι} (hs : s.Nonempty) (f : ι -> α)
-    (na : forall a b, g (a + b) <= max (g a) (g b)) :
-    g (∑ i in s, f i) <= s.sup' hs fun x => g (f x) := by
+    {α S : Type*} [LinearOrder S] [AddCommMonoid α] (g : α → S)
+    {ι : Type*} {s : Finset ι} (hs : s.Nonempty) (f : ι → α)
+    (na : ∀ a b, g (a + b) ≤ max (g a) (g b)) :
+    g (∑ i ∈ s, f i) ≤ s.sup' hs fun x ↦ g (f x) := by
   simp only [Finset.le_sup'_iff]
   induction hs using Finset.Nonempty.cons_induction with
   | singleton j => simp only [Finset.mem_singleton, Finset.sum_singleton, exists_eq_left, le_refl]
   | cons j s hj _ IH =>
       simp only [Finset.sum_cons, Finset.mem_cons, exists_eq_or_imp]
-      refine (le_total (g (∑ i in s, f i)) (g (f j))).imp ?_ ?_ <;> intro h
+      refine (le_total (g (∑ i ∈ s, f i)) (g (f j))).imp ?_ ?_ <;> intro h
       · exact (na _ _).trans (max_eq_left h).le
-· exact ⟨_, IH.choose_spec.left, (na _ _).trans
+      · exact ⟨_, IH.choose_spec.left, (na _ _).trans <|
           ((max_eq_right h).le.trans IH.choose_spec.right)⟩
 
 variable [DecidableEq σ] (f g : MvPowerSeries σ R)
-
-/--
-lemma `antidiagonal_dominant` / 引理 `antidiagonal_dominant`
-
-English:
-lemma antidiagonal_dominant
-  statement: (i j : σ ->₀ Nat) (vna : IsNonarchimedean v)
-  proof: by
-  rw [← vMulEq] at hdom
-  rw [coeff_mul]; rw [IsNonarchimedean.apply_sum_eq_of_lt vna (by grind) (k := (i]; rw [j))
-    (s := Finset.antidiagonal (i + j)) (Finset.mem_antidiagonal.mpr rfl) hdom]
-
-中文:
-引理 antidiagonal_dominant
-  结论: (i j : σ ->₀ 自然数) (vna : IsNonarchimedean v)
-  证明: by
-  rw [← vMulEq] at hdom
-  rw [coeff_mul]; rw [IsNonarchimedean.apply_sum_eq_of_lt vna (by grind) (k := (i]; rw [j))
-    (s := Finset.antidiagonal (i + j)) (Finset.mem_antidiagonal.mpr rfl) hdom]
-
-Depends on / 依赖: Finset, Finset.antidiagonal, Finset.mem_antidiagonal.mpr, IsNonarchimedean, IsNonarchimedean.apply_sum_eq_of_lt, antidiagonal, apply_sum_eq_of_lt, coeff_mul, mem_antidiagonal, vMulEq
+/-
+**MvPowerSeries.antidiagonal_dominant** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：antidiagonal_dominant (i j : σ ->₀ Nat) (vna : IsNonarchimedean v) (vMulEq
+ : forall a b, v (a * b) = v a * v b) (vNeg : forall a, v a = v (-a)) (hdom : fo
+rall p in Finset.antidiagonal (i + j), p != (i, j) -> v (coeff p.1 f * coeff p.2
+ g) < v (coeff i f) * v (coeff j g)) : v (coeff (i + j) (f * g)) = v (coeff i f 
+* coeff j g)
+参数：i j : σ ->₀ Nat；vna : IsNonarchimedean v；vMulEq : forall a b, v (a * b) = v a
+ * v b；vNeg : forall a, v a = v (-a)；hdom : forall p in Finset.antidiagonal (i +
+ j), p != (i, j) -> v (coeff p.1 f * coeff p.2 g) < v (coeff i f) * v (coeff j g
+)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.coeff_mul`：coeff_mul [DecidableEq σ] : coeff n (φ * ψ) = ∑
+ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用引理 `IsNonarchimedean.apply_sum_eq_of_lt`：apply_sum_eq_of_lt {α β : Type*} [A
+ddCommGroup α] {f : α -> R} (fna : IsNonarchimedean f) (f_neg : forall a, f a = 
+f (-a)) {s : Finset β} {l…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma antidiagonal_dominant (i j : σ ->₀ Nat) (vna : IsNonarchimedean v)
-    (vMulEq : forall a b, v (a * b) = v a * v b) (vNeg : forall a, v a = v (-a))
-    (hdom : forall p in Finset.antidiagonal (i + j), p != (i, j) ->
+lemma antidiagonal_dominant (i j : σ →₀ ℕ) (vna : IsNonarchimedean v)
+    (vMulEq : ∀ a b, v (a * b) = v a * v b) (vNeg : ∀ a, v a = v (-a))
+    (hdom : ∀ p ∈ Finset.antidiagonal (i + j), p ≠ (i, j) →
       v (coeff p.1 f * coeff p.2 g) < v (coeff i f) * v (coeff j g)) :
-    v (coeff (i + j) (f * g)) = v (coeff i f * coeff j g) := by
+    v (coeff (i + j) (f * g))  = v (coeff i f * coeff j g) := by
   rw [← vMulEq] at hdom
-  rw [coeff_mul]; rw [IsNonarchimedean.apply_sum_eq_of_lt vna (by grind) (k := (i]; rw [j))
+  rw [coeff_mul, IsNonarchimedean.apply_sum_eq_of_lt vna (by grind) (k := (i, j))
     (s := Finset.antidiagonal (i + j)) (Finset.mem_antidiagonal.mpr rfl) hdom]
-
-/--
-lemma `gaussNorm_le_mul` / 引理 `gaussNorm_le_mul`
-
-English:
-lemma gaussNorm_le_mul
-  statement: (vMulEq : forall a b, v (a * b) = v a * v b)
-  proof: by
-  obtain ⟨i₀, j₀, hi₀, hj₀, hdom'⟩ := hdom
-  unfold AchievesGaussNorm at hi₀ hj₀
-  calc
-    _ = (v (coeff i₀ f) * i₀.prod (c · ^ ·)) * (v (coeff j₀ g) * j₀.prod (c · ^ ·)) := by
-          rw [← hi₀]; rw [← hj₀]
-    _ = v (coeff i₀ f) * v (coeff j₀ g) * ((i₀ + j₀).prod (c · ^ ·)) := by
-          have hprod : (i₀ + j₀).prod (c · ^ ·) = i₀.prod (c · ^ ·) * j₀.prod (c · ^ ·) := by
-            simp [Finsupp.prod_add_index', pow_add]
-          rw [hprod]; ring
-    _ = v (coeff i₀ f * coeff j₀ g) * (i₀ + j₀).prod (c · ^ ·) := by rw [vMulEq]
-    _ = v (coeff (i₀ + j₀) (f * g)) * (i₀ + j₀).prod (c · ^ ·) := by
-      rw [antidiagonal_dominant v f g i₀ j₀ vna vMulEq vNeg hdom']
-    _ <= gaussNorm v c (f * g) := le_gaussNorm v c (f * g) hbfg (i₀ + j₀)
-
-中文:
-引理 gaussNorm_le_mul
-  结论: (vMulEq : 对任意 a b, v (a * b) = v a * v b)
-  证明: by
-  obtain ⟨i₀, j₀, hi₀, hj₀, hdom'⟩ := hdom
-  unfold AchievesGaussNorm at hi₀ hj₀
-  calc
-    _ = (v (coeff i₀ f) * i₀.prod (c · ^ ·)) * (v (coeff j₀ g) * j₀.prod (c · ^ ·)) := by
-          rw [← hi₀]; rw [← hj₀]
-    _ = v (coeff i₀ f) * v (coeff j₀ g) * ((i₀ + j₀).prod (c · ^ ·)) := by
-          have hprod : (i₀ + j₀).prod (c · ^ ·) = i₀.prod (c · ^ ·) * j₀.prod (c · ^ ·) := by
-            simp [Finsupp.prod_add_index', pow_add]
-          rw [hprod]; ring
-    _ = v (coeff i₀ f * coeff j₀ g) * (i₀ + j₀).prod (c · ^ ·) := by rw [vMulEq]
-    _ = v (coeff (i₀ + j₀) (f * g)) * (i₀ + j₀).prod (c · ^ ·) := by
-      rw [antidiagonal_dominant v f g i₀ j₀ vna vMulEq vNeg hdom']
-    _ <= gaussNorm v c (f * g) := le_gaussNorm v c (f * g) hbfg (i₀ + j₀)
-
-Depends on / 依赖: AchievesGaussNorm, Finsupp, Finsupp.prod_add_index, pow_add, prod_add_index, vMulEq
+/-
+**MvPowerSeries.gaussNorm_le_mul** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_le_mul (vMulEq : forall a b, v (a * b) = v a * v b) (vna : IsNon
+archimedean v) (vNeg : forall a, v a = v (-a)) (hbfg : HasGaussNorm v c (f * g))
+ (hdom : exists i j, AchievesGaussNorm v c f i ∧ AchievesGaussNorm v c g j ∧ for
+all p in Finset.antidiagonal (i + j), p != (i, j) -> v (coeff p.1 f * coeff p.2 
+g) < v (coeff i f) * v (coeff j g)) : gaussNorm v c f * gaussNorm v c g <= gauss
+Norm v c (f * g)
+参数：vMulEq : forall a b, v (a * b) = v a * v b；vna : IsNonarchimedean v；vNeg : fo
+rall a, v a = v (-a)；hbfg : HasGaussNorm v c (f * g)；hdom : exists i j, Achieves
+GaussNorm v c f i ∧ AchievesGaussNorm v c g j ∧ forall p in Finset.antidiagonal 
+(i + j), p != (i, j) -> v (coeff p.1 f * coeff p.2 g) < v (coeff i f) * v (coeff
+ j g)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.prod_add_index'`：prod_add_index' [AddZeroClass M] [CommMonoid N]
+ {f g : α ->₀ M} {h : α -> M -> N} (h_zero : forall a, h a 0 = 1) (h_add : foral
+l a b₁ b₂, h …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用引理 `MvPowerSeries.antidiagonal_dominant`：antidiagonal_dominant (i j : σ ->₀ 
+Nat) (vna : IsNonarchimedean v) (vMulEq : forall a b, v (a * b) = v a * v b) (vN
+eg : forall a, v a = v (-…
+· 使用引理 `MvPowerSeries.le_gaussNorm`：le_gaussNorm (hbd : HasGaussNorm v c f) (t :
+ σ ->₀ Nat) : v (coeff t f) * t.prod (c · ^ ·) <= gaussNorm v c f
 -/
-lemma gaussNorm_le_mul (vMulEq : forall a b, v (a * b) = v a * v b)
-    (vna : IsNonarchimedean v) (vNeg : forall a, v a = v (-a))
+lemma gaussNorm_le_mul (vMulEq : ∀ a b, v (a * b) = v a * v b)
+    (vna : IsNonarchimedean v) (vNeg : ∀ a, v a = v (-a))
     (hbfg : HasGaussNorm v c (f * g))
-    (hdom : exists i j, AchievesGaussNorm v c f i ∧ AchievesGaussNorm v c g j ∧
-      forall p in Finset.antidiagonal (i + j), p != (i, j) ->
+    (hdom : ∃ i j, AchievesGaussNorm v c f i ∧ AchievesGaussNorm v c g j ∧
+      ∀ p ∈ Finset.antidiagonal (i + j), p ≠ (i, j) →
         v (coeff p.1 f * coeff p.2 g) < v (coeff i f) * v (coeff j g)) :
-    gaussNorm v c f * gaussNorm v c g <= gaussNorm v c (f * g) := by
+    gaussNorm v c f * gaussNorm v c g ≤ gaussNorm v c (f * g) := by
   obtain ⟨i₀, j₀, hi₀, hj₀, hdom'⟩ := hdom
   unfold AchievesGaussNorm at hi₀ hj₀
   calc
-    _ = (v (coeff i₀ f) * i₀.prod (c · ^ ·)) * (v (coeff j₀ g) * j₀.prod (c · ^ ·)) := by
-          rw [← hi₀]; rw [← hj₀]
+    _  = (v (coeff i₀ f) * i₀.prod (c · ^ ·)) * (v (coeff j₀ g) * j₀.prod (c · ^ ·)) := by
+          rw [← hi₀, ← hj₀]
     _ = v (coeff i₀ f) * v (coeff j₀ g) * ((i₀ + j₀).prod (c · ^ ·)) := by
           have hprod : (i₀ + j₀).prod (c · ^ ·) = i₀.prod (c · ^ ·) * j₀.prod (c · ^ ·) := by
             simp [Finsupp.prod_add_index', pow_add]
@@ -679,68 +670,71 @@ lemma gaussNorm_le_mul (vMulEq : forall a b, v (a * b) = v a * v b)
     _ = v (coeff i₀ f * coeff j₀ g) * (i₀ + j₀).prod (c · ^ ·) := by rw [vMulEq]
     _ = v (coeff (i₀ + j₀) (f * g)) * (i₀ + j₀).prod (c · ^ ·) := by
       rw [antidiagonal_dominant v f g i₀ j₀ vna vMulEq vNeg hdom']
-    _ <= gaussNorm v c (f * g) := le_gaussNorm v c (f * g) hbfg (i₀ + j₀)
-
-/--
-lemma `gaussNorm_mul_eq_mul` / 引理 `gaussNorm_mul_eq_mul`
-
-English:
-lemma gaussNorm_mul_eq_mul
-  statement: (f g : MvPowerSeries σ R) (hf : HasGaussNorm v c f)
-  proof: by
-  by_cases hf' : f = 0
-  · simp [hf', gaussNorm_zero v c vZero]
-  by_cases hg' : g = 0
-  · simp [hg', gaussNorm_zero v c vZero]
-  have hf1 : gaussNorm v c f != 0 := by
-    convert gaussNorm_eq_zero_iff v c f vZero vNonneg h_eq_zero hc hf
-    grind
-  have hg1 : gaussNorm v c g != 0 := by
-    convert gaussNorm_eq_zero_iff v c g vZero vNonneg h_eq_zero hc hg
-    grind
-  apply ge_antisymm_iff.mpr
-  constructor
-  · exact gaussNorm_le_mul v c f g vMulEq vNA (by grind) hfg hdom
-  · exact gaussNorm_mul_le v c f g (StrongLT.le hc) vNonneg (by grind) vNA vZero hf hg
-
-中文:
-引理 gaussNorm_mul_eq_mul
-  结论: (f g : MvPowerSeries σ R) (hf : HasGaussNorm v c f)
-  证明: by
-  by_cases hf' : f = 0
-  · simp [hf', gaussNorm_zero v c vZero]
-  by_cases hg' : g = 0
-  · simp [hg', gaussNorm_zero v c vZero]
-  have hf1 : gaussNorm v c f != 0 := by
-    convert gaussNorm_eq_zero_iff v c f vZero vNonneg h_eq_zero hc hf
-    grind
-  have hg1 : gaussNorm v c g != 0 := by
-    convert gaussNorm_eq_zero_iff v c g vZero vNonneg h_eq_zero hc hg
-    grind
-  apply ge_antisymm_iff.mpr
-  constructor
-  · exact gaussNorm_le_mul v c f g vMulEq vNA (by grind) hfg hdom
-  · exact gaussNorm_mul_le v c f g (StrongLT.le hc) vNonneg (by grind) vNA vZero hf hg
-
-Depends on / 依赖: StrongLT, StrongLT.le, convert, gaussNorm, gaussNorm_eq_zero_iff, gaussNorm_le_mul, gaussNorm_mul_le, gaussNorm_zero, ge_antisymm_iff, ge_antisymm_iff.mpr, h_eq_zero, vMulEq, vNonneg
+    _ ≤ gaussNorm v c (f * g) := le_gaussNorm v c (f * g) hbfg (i₀ + j₀)
+/-
+**MvPowerSeries.gaussNorm_mul_eq_mul** 是 Mathlib 中的一个引理，位于命名空间 `MvPowerSeries`。
+形式化陈述：gaussNorm_mul_eq_mul (f g : MvPowerSeries σ R) (hf : HasGaussNorm v c f) (
+hg : HasGaussNorm v c g) (hfg : HasGaussNorm v c (f * g)) (vNonneg : forall a, v
+ a >= 0) (vZero : v 0 = 0) (vNA : IsNonarchimedean v) (vMulEq : forall (a b : R)
+, v (a * b) = v a * v b) (vNeg : forall (a : R), v (-a) = v a) (h_eq_zero : fora
+ll (x : R), v x = 0 -> x = 0) (hc : forall (i : σ), 0 < c i) (hdom : exists i j,
+ AchievesGaussNorm v c f i ∧ AchievesGaussNorm v c g j ∧ forall p in Finset.anti
+diagonal (i + j), p != (i,
+参数：f g : MvPowerSeries σ R；hf : HasGaussNorm v c f；hg : HasGaussNorm v c g；hfg :
+ HasGaussNorm v c (f * g)；vNonneg : forall a, v a >= 0；vZero : v 0 = 0；vNA : IsN
+onarchimedean v；vMulEq : forall (a b : R), v (a * b) = v a * v b；vNeg : forall (
+a : R), v (-a) = v a；h_eq_zero : forall (x : R), v x = 0 -> x = 0；hc : forall (i
+ : σ), 0 < c i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MvPowerSeries.gaussNorm_zero`：gaussNorm_zero (vZero : v 0 = 0) : gaussNo
+rm v c 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用引理 `MvPowerSeries.gaussNorm_eq_zero_iff`：gaussNorm_eq_zero_iff (vZero : v 0 
+= 0) (vNonneg : forall a, v a >= 0) (h_eq_zero : forall x : R, v x = 0 -> x = 0)
+ (hc : forall i, 0 < c i)…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ge_antisymm_iff`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a =
+ b ↔ b ≤ a ∧ a ≤ b
+· 使用引理 `MvPowerSeries.gaussNorm_le_mul`：gaussNorm_le_mul (vMulEq : forall a b, v
+ (a * b) = v a * v b) (vna : IsNonarchimedean v) (vNeg : forall a, v a = v (-a))
+ (hbfg : HasGaussNor…
+· 使用引理 `MvPowerSeries.gaussNorm_mul_le`：gaussNorm_mul_le (f g : MvPowerSeries σ 
+R) (hc : 0 <= c) (vNonneg : forall a, v a >= 0) (vMul : forall a b, v (a * b) <=
+ v a * v b) (vna : I…
+· 使用定理 `StrongLT.le`：∀ {ι : Type u_1} {π : ι → Type u_4} [inst : (i : ι) → Preor
+der (π i)] {a b : (i : ι) → π i}, StrongLT a b → a ≤ b
 -/
 lemma gaussNorm_mul_eq_mul (f g : MvPowerSeries σ R) (hf : HasGaussNorm v c f)
     (hg : HasGaussNorm v c g) (hfg : HasGaussNorm v c (f * g))
-    (vNonneg : forall a, v a >= 0) (vZero : v 0 = 0) (vNA : IsNonarchimedean v)
-    (vMulEq : forall (a b : R), v (a * b) = v a * v b) (vNeg : forall (a : R), v (-a) = v a)
-    (h_eq_zero : forall (x : R), v x = 0 -> x = 0) (hc : forall (i : σ), 0 < c i)
-    (hdom : exists i j, AchievesGaussNorm v c f i ∧ AchievesGaussNorm v c g j ∧
-      forall p in Finset.antidiagonal (i + j), p != (i, j) -> v (coeff p.1 f * coeff p.2 g) <
+    (vNonneg : ∀ a, v a ≥ 0) (vZero : v 0 = 0) (vNA : IsNonarchimedean v)
+    (vMulEq : ∀ (a b : R), v (a * b) = v a * v b) (vNeg : ∀ (a : R), v (-a) = v a)
+    (h_eq_zero : ∀ (x : R), v x = 0 → x = 0) (hc : ∀ (i : σ), 0 < c i)
+    (hdom : ∃ i j, AchievesGaussNorm v c f i ∧ AchievesGaussNorm v c g j ∧
+      ∀ p ∈ Finset.antidiagonal (i + j), p ≠ (i, j) → v (coeff p.1 f * coeff p.2 g) <
       v (coeff i f) * v (coeff j g)) :
     gaussNorm v c (f * g) = gaussNorm v c f * gaussNorm v c g := by
   by_cases hf' : f = 0
   · simp [hf', gaussNorm_zero v c vZero]
   by_cases hg' : g = 0
   · simp [hg', gaussNorm_zero v c vZero]
-  have hf1 : gaussNorm v c f != 0 := by
+  have hf1 : gaussNorm v c f ≠ 0 := by
     convert gaussNorm_eq_zero_iff v c f vZero vNonneg h_eq_zero hc hf
     grind
-  have hg1 : gaussNorm v c g != 0 := by
+  have hg1 : gaussNorm v c g ≠ 0 := by
     convert gaussNorm_eq_zero_iff v c g vZero vNonneg h_eq_zero hc hg
     grind
   apply ge_antisymm_iff.mpr
@@ -751,3 +745,4 @@ lemma gaussNorm_mul_eq_mul (f g : MvPowerSeries σ R) (hf : HasGaussNorm v c f)
 end absoluteValue
 
 end MvPowerSeries
+

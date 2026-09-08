@@ -23,87 +23,78 @@ variable {α : Type u} {β : Type v} {a b : α} {s s₁ s₂ t t₁ t₂ u : Set
 
 section Preorder
 
-variable [Preorder α] [Preorder β] {f : α -> β}
+variable [Preorder α] [Preorder β] {f : α → β}
 
-/--
-theorem `monotoneOn_iff_monotone` / 定理 `monotoneOn_iff_monotone`
-
-English:
-theorem monotoneOn_iff_monotone
-  statement: MonotoneOn f s ↔
-  proof: by
-  simp [Monotone, MonotoneOn]
-
-中文:
-定理 monotoneOn_iff_monotone
-  结论: MonotoneOn f s ↔
-  证明: by
-  simp [Monotone, MonotoneOn]
-
-Depends on / 依赖: Monotone, MonotoneOn
+/-
+**Set.monotoneOn_iff_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：monotoneOn_iff_monotone : MonotoneOn f s ↔ Monotone fun a : s => f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem monotoneOn_iff_monotone : MonotoneOn f s ↔
     Monotone fun a : s => f a := by
   simp [Monotone, MonotoneOn]
-
-/--
-theorem `antitoneOn_iff_antitone` / 定理 `antitoneOn_iff_antitone`
-
-English:
-theorem antitoneOn_iff_antitone
-  statement: AntitoneOn f s ↔
-  proof: by
-  simp [Antitone, AntitoneOn]
-
-中文:
-定理 antitoneOn_iff_antitone
-  结论: AntitoneOn f s ↔
-  证明: by
-  simp [Antitone, AntitoneOn]
-
-Depends on / 依赖: Antitone, AntitoneOn
+/-
+**Set.antitoneOn_iff_antitone** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：antitoneOn_iff_antitone : AntitoneOn f s ↔ Antitone fun a : s => f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem antitoneOn_iff_antitone : AntitoneOn f s ↔
     Antitone fun a : s => f a := by
   simp [Antitone, AntitoneOn]
-
-/--
-theorem `strictMonoOn_iff_strictMono` / 定理 `strictMonoOn_iff_strictMono`
-
-English:
-theorem strictMonoOn_iff_strictMono
-  statement: StrictMonoOn f s ↔
-  proof: by
-  simp [StrictMono, StrictMonoOn]
-
-中文:
-定理 strictMonoOn_iff_strictMono
-  结论: StrictMonoOn f s ↔
-  证明: by
-  simp [StrictMono, StrictMonoOn]
-
-Depends on / 依赖: StrictMono, StrictMonoOn
+/-
+**Set.strictMonoOn_iff_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：strictMonoOn_iff_strictMono : StrictMonoOn f s ↔ StrictMono fun a : s => f
+ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem strictMonoOn_iff_strictMono : StrictMonoOn f s ↔
     StrictMono fun a : s => f a := by
   simp [StrictMono, StrictMonoOn]
-
-/--
-theorem `strictAntiOn_iff_strictAnti` / 定理 `strictAntiOn_iff_strictAnti`
-
-English:
-theorem strictAntiOn_iff_strictAnti
-  statement: StrictAntiOn f s ↔
-  proof: by
-  simp [StrictAnti, StrictAntiOn]
-
-中文:
-定理 strictAntiOn_iff_strictAnti
-  结论: StrictAntiOn f s ↔
-  证明: by
-  simp [StrictAnti, StrictAntiOn]
-
-Depends on / 依赖: StrictAnti, StrictAntiOn
+/-
+**Set.strictAntiOn_iff_strictAnti** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：strictAntiOn_iff_strictAnti : StrictAntiOn f s ↔ StrictAnti fun a : s => f
+ a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem strictAntiOn_iff_strictAnti : StrictAntiOn f s ↔
     StrictAnti fun a : s => f a := by
@@ -113,55 +104,85 @@ end Preorder
 
 section LinearOrder
 
-variable [LinearOrder α] [LinearOrder β] {f : α -> β}
+variable [LinearOrder α] [LinearOrder β] {f : α → β}
 
-/--
-theorem `not_monotoneOn_not_antitoneOn_iff_exists_le_le` / 定理 `not_monotoneOn_not_antitoneOn_iff_exists_le_le`
+/-- A function between linear orders which is neither monotone nor antitone makes a dent upright or
+downright. -/
+/-
+**Set.not_monotoneOn_not_antitoneOn_iff_exists_le_le** 是 Mathlib 中的一个定理，位于命名空间 `
+Set`。
+形式化陈述：not_monotoneOn_not_antitoneOn_iff_exists_le_le : ¬MonotoneOn f s ∧ ¬Antito
+neOn f s ↔ existsᵉ (a in s) (b in s) (c in s), a <= b ∧ b <= c ∧ (f a < f b ∧ f 
+c < f b ∨ f b < f a ∧ f b < f c)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `and_left_comm`：∀ {a b c : Prop}, a ∧ b ∧ c ↔ b ∧ a ∧ c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem not_monotoneOn_not_antitoneOn_iff_exists_le_le
-  proof: by
-  simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
-    not_monotone_not_antitone_iff_exists_le_le, @and_left_comm (_ in s)]
-
-中文:
-定理 not_monotoneOn_not_antitoneOn_iff_存在_le_le
-  证明: by
-  simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
-    not_monotone_not_antitone_iff_exists_le_le, @and_left_comm (_ in s)]
-
-Depends on / 依赖: and_assoc, and_left_comm, antitoneOn_iff_antitone, exists_and_left, f.base, monotoneOn_iff_monotone, not_monotone_not_antitone_iff_exists_le_le
+--- 原说明 ---
+A function between linear orders which is neither monotone nor antitone makes a 
+dent upright or
+downright.
 -/
 theorem not_monotoneOn_not_antitoneOn_iff_exists_le_le :
     ¬MonotoneOn f s ∧ ¬AntitoneOn f s ↔
-      existsᵉ (a in s) (b in s) (c in s), a <= b ∧ b <= c ∧
+      ∃ᵉ (a ∈ s) (b ∈ s) (c ∈ s), a ≤ b ∧ b ≤ c ∧
         (f a < f b ∧ f c < f b ∨ f b < f a ∧ f b < f c) := by
   simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
-    not_monotone_not_antitone_iff_exists_le_le, @and_left_comm (_ in s)]
+    not_monotone_not_antitone_iff_exists_le_le, @and_left_comm (_ ∈ s)]
 
-/--
-theorem `not_monotoneOn_not_antitoneOn_iff_exists_lt_lt` / 定理 `not_monotoneOn_not_antitoneOn_iff_exists_lt_lt`
+/-- A function between linear orders which is neither monotone nor antitone makes a dent upright or
+downright. -/
+/-
+**Set.not_monotoneOn_not_antitoneOn_iff_exists_lt_lt** 是 Mathlib 中的一个定理，位于命名空间 `
+Set`。
+形式化陈述：not_monotoneOn_not_antitoneOn_iff_exists_lt_lt : ¬MonotoneOn f s ∧ ¬Antito
+neOn f s ↔ existsᵉ (a in s) (b in s) (c in s), a < b ∧ b < c ∧ (f a < f b ∧ f c 
+< f b ∨ f b < f a ∧ f b < f c)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `and_left_comm`：∀ {a b c : Prop}, a ∧ b ∧ c ↔ b ∧ a ∧ c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem not_monotoneOn_not_antitoneOn_iff_exists_lt_lt
-  proof: by
-  simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
-    not_monotone_not_antitone_iff_exists_lt_lt, @and_left_comm (_ in s)]
-
-中文:
-定理 not_monotoneOn_not_antitoneOn_iff_存在_lt_lt
-  证明: by
-  simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
-    not_monotone_not_antitone_iff_exists_lt_lt, @and_left_comm (_ in s)]
-
-Depends on / 依赖: and_assoc, and_left_comm, antitoneOn_iff_antitone, exists_and_left, monotoneOn_iff_monotone, not_monotone_not_antitone_iff_exists_lt_lt
+--- 原说明 ---
+A function between linear orders which is neither monotone nor antitone makes a 
+dent upright or
+downright.
 -/
 theorem not_monotoneOn_not_antitoneOn_iff_exists_lt_lt :
     ¬MonotoneOn f s ∧ ¬AntitoneOn f s ↔
-      existsᵉ (a in s) (b in s) (c in s), a < b ∧ b < c ∧
+      ∃ᵉ (a ∈ s) (b ∈ s) (c ∈ s), a < b ∧ b < c ∧
         (f a < f b ∧ f c < f b ∨ f b < f a ∧ f b < f c) := by
   simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
-    not_monotone_not_antitone_iff_exists_lt_lt, @and_left_comm (_ in s)]
+    not_monotone_not_antitone_iff_exists_lt_lt, @and_left_comm (_ ∈ s)]
 
 end LinearOrder
 
@@ -172,222 +193,157 @@ end Set
 section Monotone
 variable {α β : Type*}
 
-/--
-theorem `Monotone.inter` / 定理 `Monotone.inter`
-
-English:
-theorem Monotone.inter
-  given: [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Monotone g)
-  proof: hf.inf hg
-
-中文:
-定理 递增.inter
-  条件: [预序 β] {f g : β -> 集合 α} (hf : 递增 f) (hg : 递增 g)
-  证明: hf.inf hg
-
-Depends on / 依赖: hf.inf
+/-
+**Monotone.inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.inter [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Mon
+otone g) : Monotone fun x => f x inter g x
+参数：hf : Monotone f；hg : Monotone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.inf`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : 
+SemilatticeInf β] {f g : α → β},   Monotone f → Monotone g → Monotone (f ⊓ g)
 -/
-theorem Monotone.inter [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Monotone g) :
-    Monotone fun x => f x inter g x :=
+theorem Monotone.inter [Preorder β] {f g : β → Set α} (hf : Monotone f) (hg : Monotone g) :
+    Monotone fun x => f x ∩ g x :=
   hf.inf hg
-
-/--
-theorem `MonotoneOn.inter` / 定理 `MonotoneOn.inter`
-
-English:
-theorem MonotoneOn.inter
-  statement: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : MonotoneOn f s)
-  proof: hf.inf hg
-
-中文:
-定理 MonotoneOn.inter
-  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : MonotoneOn f s)
-  证明: hf.inf hg
-
-Depends on / 依赖: hf.inf
+/-
+**MonotoneOn.inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonotoneOn.inter [Preorder β] {f g : β -> Set α} {s : Set β} (hf : Monoton
+eOn f s) (hg : MonotoneOn g s) : MonotoneOn (fun x => f x inter g x) s
+参数：hf : MonotoneOn f s；hg : MonotoneOn g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonotoneOn.inf`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 
+: SemilatticeInf β] {f g : α → β} {s : Set α},   MonotoneOn f s → MonotoneOn g s
+ → M…
 -/
-theorem MonotoneOn.inter [Preorder β] {f g : β -> Set α} {s : Set β} (hf : MonotoneOn f s)
-    (hg : MonotoneOn g s) : MonotoneOn (fun x => f x inter g x) s :=
+theorem MonotoneOn.inter [Preorder β] {f g : β → Set α} {s : Set β} (hf : MonotoneOn f s)
+    (hg : MonotoneOn g s) : MonotoneOn (fun x => f x ∩ g x) s :=
   hf.inf hg
-
-/--
-theorem `Antitone.inter` / 定理 `Antitone.inter`
-
-English:
-theorem Antitone.inter
-  given: [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Antitone g)
-  proof: hf.inf hg
-
-中文:
-定理 递减.inter
-  条件: [预序 β] {f g : β -> 集合 α} (hf : 递减 f) (hg : 递减 g)
-  证明: hf.inf hg
-
-Depends on / 依赖: hf.inf
+/-
+**Antitone.inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.inter [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Ant
+itone g) : Antitone fun x => f x inter g x
+参数：hf : Antitone f；hg : Antitone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Antitone.inf`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : 
+SemilatticeInf β] {f g : α → β},   Antitone f → Antitone g → Antitone (f ⊓ g)
 -/
-theorem Antitone.inter [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Antitone g) :
-    Antitone fun x => f x inter g x :=
+theorem Antitone.inter [Preorder β] {f g : β → Set α} (hf : Antitone f) (hg : Antitone g) :
+    Antitone fun x => f x ∩ g x :=
   hf.inf hg
-
-/--
-theorem `AntitoneOn.inter` / 定理 `AntitoneOn.inter`
-
-English:
-theorem AntitoneOn.inter
-  statement: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : AntitoneOn f s)
-  proof: hf.inf hg
-
-中文:
-定理 AntitoneOn.inter
-  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : AntitoneOn f s)
-  证明: hf.inf hg
-
-Depends on / 依赖: hf.inf
+/-
+**AntitoneOn.inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntitoneOn.inter [Preorder β] {f g : β -> Set α} {s : Set β} (hf : Antiton
+eOn f s) (hg : AntitoneOn g s) : AntitoneOn (fun x => f x inter g x) s
+参数：hf : AntitoneOn f s；hg : AntitoneOn g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntitoneOn.inf`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 
+: SemilatticeInf β] {f g : α → β} {s : Set α},   AntitoneOn f s → AntitoneOn g s
+ → A…
 -/
-theorem AntitoneOn.inter [Preorder β] {f g : β -> Set α} {s : Set β} (hf : AntitoneOn f s)
-    (hg : AntitoneOn g s) : AntitoneOn (fun x => f x inter g x) s :=
+theorem AntitoneOn.inter [Preorder β] {f g : β → Set α} {s : Set β} (hf : AntitoneOn f s)
+    (hg : AntitoneOn g s) : AntitoneOn (fun x => f x ∩ g x) s :=
   hf.inf hg
-
-/--
-theorem `Monotone.union` / 定理 `Monotone.union`
-
-English:
-theorem Monotone.union
-  given: [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Monotone g)
-  proof: hf.sup hg
-
-中文:
-定理 递增.union
-  条件: [预序 β] {f g : β -> 集合 α} (hf : 递增 f) (hg : 递增 g)
-  证明: hf.sup hg
-
-Depends on / 依赖: hf.sup
+/-
+**Monotone.union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.union [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Mon
+otone g) : Monotone fun x => f x union g x
+参数：hf : Monotone f；hg : Monotone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.sup`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : 
+SemilatticeSup β] {f g : α → β},   Monotone f → Monotone g → Monotone (f ⊔ g)
 -/
-theorem Monotone.union [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Monotone g) :
-    Monotone fun x => f x union g x :=
+theorem Monotone.union [Preorder β] {f g : β → Set α} (hf : Monotone f) (hg : Monotone g) :
+    Monotone fun x => f x ∪ g x :=
   hf.sup hg
-
-/--
-theorem `MonotoneOn.union` / 定理 `MonotoneOn.union`
-
-English:
-theorem MonotoneOn.union
-  statement: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : MonotoneOn f s)
-  proof: hf.sup hg
-
-中文:
-定理 MonotoneOn.union
-  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : MonotoneOn f s)
-  证明: hf.sup hg
-
-Depends on / 依赖: hf.sup
+/-
+**MonotoneOn.union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MonotoneOn.union [Preorder β] {f g : β -> Set α} {s : Set β} (hf : Monoton
+eOn f s) (hg : MonotoneOn g s) : MonotoneOn (fun x => f x union g x) s
+参数：hf : MonotoneOn f s；hg : MonotoneOn g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonotoneOn.sup`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 
+: SemilatticeSup β] {f g : α → β} {s : Set α},   MonotoneOn f s → MonotoneOn g s
+ → M…
 -/
-theorem MonotoneOn.union [Preorder β] {f g : β -> Set α} {s : Set β} (hf : MonotoneOn f s)
-    (hg : MonotoneOn g s) : MonotoneOn (fun x => f x union g x) s :=
+theorem MonotoneOn.union [Preorder β] {f g : β → Set α} {s : Set β} (hf : MonotoneOn f s)
+    (hg : MonotoneOn g s) : MonotoneOn (fun x => f x ∪ g x) s :=
   hf.sup hg
-
-/--
-theorem `Antitone.union` / 定理 `Antitone.union`
-
-English:
-theorem Antitone.union
-  given: [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Antitone g)
-  proof: hf.sup hg
-
-中文:
-定理 递减.union
-  条件: [预序 β] {f g : β -> 集合 α} (hf : 递减 f) (hg : 递减 g)
-  证明: hf.sup hg
-
-Depends on / 依赖: hf.sup
+/-
+**Antitone.union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.union [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Ant
+itone g) : Antitone fun x => f x union g x
+参数：hf : Antitone f；hg : Antitone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Antitone.sup`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 : 
+SemilatticeSup β] {f g : α → β},   Antitone f → Antitone g → Antitone (f ⊔ g)
 -/
-theorem Antitone.union [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Antitone g) :
-    Antitone fun x => f x union g x :=
+theorem Antitone.union [Preorder β] {f g : β → Set α} (hf : Antitone f) (hg : Antitone g) :
+    Antitone fun x => f x ∪ g x :=
   hf.sup hg
-
-/--
-theorem `AntitoneOn.union` / 定理 `AntitoneOn.union`
-
-English:
-theorem AntitoneOn.union
-  statement: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : AntitoneOn f s)
-  proof: hf.sup hg
-
-中文:
-定理 AntitoneOn.union
-  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : AntitoneOn f s)
-  证明: hf.sup hg
-
-Depends on / 依赖: hf.sup
+/-
+**AntitoneOn.union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AntitoneOn.union [Preorder β] {f g : β -> Set α} {s : Set β} (hf : Antiton
+eOn f s) (hg : AntitoneOn g s) : AntitoneOn (fun x => f x union g x) s
+参数：hf : AntitoneOn f s；hg : AntitoneOn g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AntitoneOn.sup`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 
+: SemilatticeSup β] {f g : α → β} {s : Set α},   AntitoneOn f s → AntitoneOn g s
+ → A…
 -/
-theorem AntitoneOn.union [Preorder β] {f g : β -> Set α} {s : Set β} (hf : AntitoneOn f s)
-    (hg : AntitoneOn g s) : AntitoneOn (fun x => f x union g x) s :=
+theorem AntitoneOn.union [Preorder β] {f g : β → Set α} {s : Set β} (hf : AntitoneOn f s)
+    (hg : AntitoneOn g s) : AntitoneOn (fun x => f x ∪ g x) s :=
   hf.sup hg
 
 namespace Set
 
-/--
-theorem `monotone_ofPred` / 定理 `monotone_ofPred`
-
-English:
-theorem monotone_ofPred
-  given: [Preorder α] {p : α -> β -> Prop} (hp : forall b, Monotone fun a => p a b)
-  proof: fun _ _ h b => hp b h
-
-@[deprecated (since := "2026-07-09")] alias monotone_setOf := monotone_ofPred
-
-中文:
-定理 monotone_ofPred
-  条件: [预序 α] {p : α -> β -> 命题} (hp : 对任意 b, 递增 fun a => p a b)
-  证明: fun _ _ h b => hp b h
-
-@[deprecated (since := "2026-07-09")] alias monotone_setOf := monotone_ofPred
+/-
+**Set.monotone_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：monotone_ofPred [Preorder α] {p : α -> β -> Prop} (hp : forall b, Monotone
+ fun a => p a b) : Monotone fun a => { b | p a b }
+参数：hp : forall b, Monotone fun a => p a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem monotone_ofPred [Preorder α] {p : α -> β -> Prop} (hp : forall b, Monotone fun a => p a b) :
+theorem monotone_ofPred [Preorder α] {p : α → β → Prop} (hp : ∀ b, Monotone fun a => p a b) :
     Monotone fun a => { b | p a b } := fun _ _ h b => hp b h
 
 @[deprecated (since := "2026-07-09")] alias monotone_setOf := monotone_ofPred
-
-/--
-theorem `antitone_ofPred` / 定理 `antitone_ofPred`
-
-English:
-theorem antitone_ofPred
-  given: [Preorder α] {p : α -> β -> Prop} (hp : forall b, Antitone fun a => p a b)
-  proof: fun _ _ h b => hp b h
-
-@[deprecated (since := "2026-07-09")] alias antitone_setOf := antitone_ofPred
-
-中文:
-定理 antitone_ofPred
-  条件: [预序 α] {p : α -> β -> 命题} (hp : 对任意 b, 递减 fun a => p a b)
-  证明: fun _ _ h b => hp b h
-
-@[deprecated (since := "2026-07-09")] alias antitone_setOf := antitone_ofPred
+/-
+**Set.antitone_ofPred** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：antitone_ofPred [Preorder α] {p : α -> β -> Prop} (hp : forall b, Antitone
+ fun a => p a b) : Antitone fun a => { b | p a b }
+参数：hp : forall b, Antitone fun a => p a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem antitone_ofPred [Preorder α] {p : α -> β -> Prop} (hp : forall b, Antitone fun a => p a b) :
+theorem antitone_ofPred [Preorder α] {p : α → β → Prop} (hp : ∀ b, Antitone fun a => p a b) :
     Antitone fun a => { b | p a b } := fun _ _ h b => hp b h
 
 @[deprecated (since := "2026-07-09")] alias antitone_setOf := antitone_ofPred
 
-/--
-theorem `antitone_bforall` / 定理 `antitone_bforall`
+/-- Quantifying over a set is antitone in the set -/
+/-
+**Set.antitone_bforall** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：antitone_bforall {P : α -> Prop} : Antitone fun s : Set α => forall x in s
+, P x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem antitone_bforall
-  given: {P : α -> Prop}
-  statement: Antitone fun s : Set α => forall x in s, P x
-  proof: fun _ _ hst h x hx => h x hst hx
-
-中文:
-定理 antitone_b对任意
-  条件: {P : α -> 命题}
-  结论: 递减 fun s : 集合 α => 对任意 x in s, P x
-  证明: fun _ _ hst h x hx => h x hst hx
+--- 原说明 ---
+Quantifying over a set is antitone in the set
 -/
-theorem antitone_bforall {P : α -> Prop} : Antitone fun s : Set α => forall x in s, P x :=
-fun _ _ hst h x hx => h x hst hx
+theorem antitone_bforall {P : α → Prop} : Antitone fun s : Set α => ∀ x ∈ s, P x :=
+  fun _ _ hst h x hx => h x <| hst hx
 
 end Set
 
 end Monotone
+

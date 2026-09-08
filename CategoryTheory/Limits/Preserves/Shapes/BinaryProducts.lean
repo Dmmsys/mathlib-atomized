@@ -40,25 +40,24 @@ variable {P X Y Z : C} (f : P ⟶ X) (g : P ⟶ Y)
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /--
-Definition of `isLimitMapConeBinaryFanEquiv` / `isLimitMapConeBinaryFanEquiv` 的定义
+The map of a binary fan is a limit iff the fork consisting of the mapped morphisms is a limit. This
+essentially lets us commute `BinaryFan.mk` with `Functor.mapCone`.
+-/
+/-
+**CategoryTheory.Limits.isLimitMapConeBinaryFanEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：isLimitMapConeBinaryFanEquiv : IsLimit (G.mapCone (BinaryFan.mk f g)) ≃ Is
+Limit (BinaryFan.mk (G.map f) (G.map g))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isLimitMapConeBinaryFanEquiv
-  signature: :
-  body: (IsLimit.postcomposeHomEquiv (diagramIsoPair _) _).symm.trans
-    (IsLimit.equivIsoLimit
-      (Cone.ext (Iso.refl _)
-        (by rintro (_ | _) <;> simp)))
-
-中文:
-定义 isLimitMapConeBinaryFanEquiv
-  签名: :
-  定义体: (IsLimit.postcomposeHomEquiv (diagramIsoPair _) _).symm.trans
-    (IsLimit.equivIsoLimit
-      (Cone.ext (Iso.refl _)
-        (by rintro (_ | _) <;> simp)))
-
-Depends on / 依赖: Cone.ext, IsLimit, IsLimit.equivIsoLimit, IsLimit.postcomposeHomEquiv, Iso.refl, diagramIsoPair, equivIsoLimit, postcomposeHomEquiv, symm.trans
+--- 原说明 ---
+The map of a binary fan is a limit iff the fork consisting of the mapped morphis
+ms is a limit. This
+essentially lets us commute `BinaryFan.mk` with `Functor.mapCone`.
 -/
 def isLimitMapConeBinaryFanEquiv :
     IsLimit (G.mapCone (BinaryFan.mk f g)) ≃ IsLimit (BinaryFan.mk (G.map f) (G.map g)) :=
@@ -67,39 +66,36 @@ def isLimitMapConeBinaryFanEquiv :
       (Cone.ext (Iso.refl _)
         (by rintro (_ | _) <;> simp)))
 
-/--
-Definition of `mapIsLimitOfPreservesOfIsLimit` / `mapIsLimitOfPreservesOfIsLimit` 的定义
+/-- The property of preserving products expressed in terms of binary fans. -/
+/-
+**CategoryTheory.Limits.mapIsLimitOfPreservesOfIsLimit** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits`。
+形式化陈述：mapIsLimitOfPreservesOfIsLimit [PreservesLimit (pair X Y) G] (l : IsLimit 
+(BinaryFan.mk f g)) : IsLimit (BinaryFan.mk (G.map f) (G.map g))
+参数：pair X Y；l : IsLimit (BinaryFan.mk f g)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapIsLimitOfPreservesOfIsLimit
-  signature: [PreservesLimit (pair X Y) G] (l : IsLimit (BinaryFan.mk f g))
-  body: isLimitMapConeBinaryFanEquiv G f g (isLimitOfPreserves G l)
-
-中文:
-定义 mapIsLimitOfPreservesOfIsLimit
-  签名: [保持极限 (pair X Y) G] (l : 是极限 (BinaryFan.mk f g))
-  定义体: isLimitMapConeBinaryFanEquiv G f g (isLimitOfPreserves G l)
-
-Depends on / 依赖: isLimitMapConeBinaryFanEquiv, isLimitOfPreserves
+--- 原说明 ---
+The property of preserving products expressed in terms of binary fans.
 -/
 def mapIsLimitOfPreservesOfIsLimit [PreservesLimit (pair X Y) G] (l : IsLimit (BinaryFan.mk f g)) :
     IsLimit (BinaryFan.mk (G.map f) (G.map g)) :=
   isLimitMapConeBinaryFanEquiv G f g (isLimitOfPreserves G l)
 
-/--
-Definition of `isLimitOfReflectsOfMapIsLimit` / `isLimitOfReflectsOfMapIsLimit` 的定义
+/-- The property of reflecting products expressed in terms of binary fans. -/
+/-
+**CategoryTheory.Limits.isLimitOfReflectsOfMapIsLimit** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：isLimitOfReflectsOfMapIsLimit [ReflectsLimit (pair X Y) G] (l : IsLimit (B
+inaryFan.mk (G.map f) (G.map g))) : IsLimit (BinaryFan.mk f g)
+参数：pair X Y；l : IsLimit (BinaryFan.mk (G.map f) (G.map g))。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isLimitOfReflectsOfMapIsLimit
-  signature: [ReflectsLimit (pair X Y) G]
-  body: isLimitOfReflects G ((isLimitMapConeBinaryFanEquiv G f g).symm l)
-
-中文:
-定义 isLimitOfReflectsOfMapIsLimit
-  签名: [反映极限 (pair X Y) G]
-  定义体: isLimitOfReflects G ((isLimitMapConeBinaryFanEquiv G f g).symm l)
-
-Depends on / 依赖: isLimitMapConeBinaryFanEquiv, isLimitOfReflects
+--- 原说明 ---
+The property of reflecting products expressed in terms of binary fans.
 -/
 def isLimitOfReflectsOfMapIsLimit [ReflectsLimit (pair X Y) G]
     (l : IsLimit (BinaryFan.mk (G.map f) (G.map g))) : IsLimit (BinaryFan.mk f g) :=
@@ -108,39 +104,30 @@ def isLimitOfReflectsOfMapIsLimit [ReflectsLimit (pair X Y) G]
 variable (X Y)
 variable [HasBinaryProduct X Y]
 
-/--
-Definition of `isLimitOfHasBinaryProductOfPreservesLimit` / `isLimitOfHasBinaryProductOfPreservesLimit` 的定义
+/-- If `G` preserves binary products and `C` has them, then the binary fan constructed of the mapped
+morphisms of the binary product cone is a limit.
+-/
+/-
+**CategoryTheory.Limits.isLimitOfHasBinaryProductOfPreservesLimit** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：isLimitOfHasBinaryProductOfPreservesLimit [PreservesLimit (pair X Y) G] : 
+IsLimit (BinaryFan.mk (G.map (Limits.prod.fst : X ⨯ Y ⟶ X)) (G.map Limits.prod.s
+nd))
+参数：pair X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitOfHasBinaryProductOfPreservesLimit
-  signature: [PreservesLimit (pair X Y) G]
-  body: mapIsLimitOfPreservesOfIsLimit G _ _ (prodIsProd X Y)
-
-中文:
-定义 isLimitOfHasBinaryProductOfPreservesLimit
-  签名: [保持极限 (pair X Y) G]
-  定义体: mapIsLimitOfPreservesOfIsLimit G _ _ (prodIsProd X Y)
-
-Depends on / 依赖: mapIsLimitOfPreservesOfIsLimit, prodIsProd
+--- 原说明 ---
+If `G` preserves binary products and `C` has them, then the binary fan construct
+ed of the mapped
+morphisms of the binary product cone is a limit.
 -/
 def isLimitOfHasBinaryProductOfPreservesLimit [PreservesLimit (pair X Y) G] :
     IsLimit (BinaryFan.mk (G.map (Limits.prod.fst : X ⨯ Y ⟶ X)) (G.map Limits.prod.snd)) :=
   mapIsLimitOfPreservesOfIsLimit G _ _ (prodIsProd X Y)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PreservesLimit
-  signature: (pair X Y) G] :
-  body: ⟨_, isLimitOfHasBinaryProductOfPreservesLimit G X Y⟩
-
-中文:
-实例 [保持极限
-  签名: (pair X Y) G] :
-  定义体: ⟨_, isLimitOfHasBinaryProductOfPreservesLimit G X Y⟩
-
-Depends on / 依赖: isLimitOfHasBinaryProductOfPreservesLimit
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PreservesLimit (pair X Y) G] :
     HasBinaryProduct (G.obj X) (G.obj Y) :=
@@ -148,28 +135,30 @@ instance [PreservesLimit (pair X Y) G] :
 
 variable [HasBinaryProduct (G.obj X) (G.obj Y)]
 
-/--
-lemma `PreservesLimitPair.of_iso_prod_comparison` / 引理 `PreservesLimitPair.of_iso_prod_comparison`
+/-- If the product comparison map for `G` at `(X,Y)` is an isomorphism, then `G` preserves the
+pair of `(X,Y)`.
+-/
+/-
+**CategoryTheory.Limits.PreservesLimitPair.of_iso_prod_comparison** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.Limits.PreservesLimitPair`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheory.Functor C D)
+ (X Y : C) [inst_2 : CategoryTheory.Limits.HasBinaryProduct X Y]   [inst_3 : Cat
+egoryTheory.Limits.HasBinaryProduct (G.obj X) (G.obj Y)]   [i : CategoryTheory.I
+sIso (CategoryTheory.Limits.prodComparison G X Y)],   CategoryTheory.Limits.Pres
+ervesLimit (CategoryTheory.Limits.pair X Y) G
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+prodComparison G X Y；CategoryTheory.Limits.pair X Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-lemma PreservesLimitPair.of_iso_prod_comparison
-  given: [i : IsIso (prodComparison G X Y)]
-  proof: by
-  apply preservesLimit_of_preserves_limit_cone (prodIsProd X Y)
-  apply (isLimitMapConeBinaryFanEquiv _ _ _).symm _
-  refine @IsLimit.ofPointIso _ _ _ _ _ _ _ (limit.isLimit (pair (G.obj X) (G.obj Y))) ?_
-  apply i
-
-中文:
-引理 PreservesLimitPair.of_iso_prod_comparison
-  条件: [i : 是同构 (prodComparison G X Y)]
-  证明: by
-  apply preservesLimit_of_preserves_limit_cone (prodIsProd X Y)
-  apply (isLimitMapConeBinaryFanEquiv _ _ _).symm _
-  refine @IsLimit.ofPointIso _ _ _ _ _ _ _ (limit.isLimit (pair (G.obj X) (G.obj Y))) ?_
-  apply i
-
-Depends on / 依赖: G.obj, IsLimit, IsLimit.ofPointIso, isLimit, isLimitMapConeBinaryFanEquiv, limit.isLimit, ofPointIso, preservesLimit_of_preserves_limit_cone, prodIsProd
+--- 原说明 ---
+If the product comparison map for `G` at `(X,Y)` is an isomorphism, then `G` pre
+serves the
+pair of `(X,Y)`.
 -/
 lemma PreservesLimitPair.of_iso_prod_comparison [i : IsIso (prodComparison G X Y)] :
     PreservesLimit (pair X Y) G := by
@@ -180,146 +169,168 @@ lemma PreservesLimitPair.of_iso_prod_comparison [i : IsIso (prodComparison G X Y
 
 variable [PreservesLimit (pair X Y) G]
 
-/--
-Definition of `PreservesLimitPair.iso` / `PreservesLimitPair.iso` 的定义
+/-- If `G` preserves the product of `(X,Y)`, then the product comparison map for `G` at `(X,Y)` is
+an isomorphism.
+-/
+/-
+**CategoryTheory.Limits.PreservesLimitPair.iso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.PreservesLimitPair`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (G : Cat
+egoryTheory.Functor C D) →           (X Y : C) →             [inst_2 : CategoryT
+heory.Limits.HasBinaryProduct X Y] →               [inst_3 : CategoryTheory.Limi
+ts.HasBinaryProduct (G.obj X) (G.obj Y)] →                 [CategoryTheory.Limit
+s.PreservesLimit (CategoryTheory.Limits.pair X Y) G] →                   G.obj (
+X ⨯ Y) ≅ G.obj X ⨯ G.obj Y
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+pair X Y；X ⨯ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PreservesLimitPair.iso
-  signature: : G.obj (X ⨯ Y) ≅ G.obj X ⨯ G.obj Y
-  body: IsLimit.conePointUniqueUpToIso (isLimitOfHasBinaryProductOfPreservesLimit G X Y) (limit.isLimit _)
-
-@[simp]
-
-中文:
-定义 PreservesLimitPair.iso
-  签名: : G.obj (X ⨯ Y) ≅ G.obj X ⨯ G.obj Y
-  定义体: IsLimit.conePointUniqueUpToIso (isLimitOfHasBinaryProductOfPreservesLimit G X Y) (limit.isLimit _)
-
-@[simp]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, isLimitOfHasBinaryProductOfPreservesLimit, limit.isLimit
+--- 原说明 ---
+If `G` preserves the product of `(X,Y)`, then the product comparison map for `G`
+ at `(X,Y)` is
+an isomorphism.
 -/
 def PreservesLimitPair.iso : G.obj (X ⨯ Y) ≅ G.obj X ⨯ G.obj Y :=
   IsLimit.conePointUniqueUpToIso (isLimitOfHasBinaryProductOfPreservesLimit G X Y) (limit.isLimit _)
 
 @[simp]
-/--
-theorem `PreservesLimitPair.iso_hom` / 定理 `PreservesLimitPair.iso_hom`
-
-English:
-theorem PreservesLimitPair.iso_hom
-  statement: (PreservesLimitPair.iso G X Y).hom = prodComparison G X Y
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-定理 PreservesLimitPair.iso_hom
-  结论: (PreservesLimitPair.iso G X Y).hom = prodComparison G X Y
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**CategoryTheory.Limits.PreservesLimitPair.iso_hom** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits.PreservesLimitPair`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheory.Functor C D)
+ (X Y : C) [inst_2 : CategoryTheory.Limits.HasBinaryProduct X Y]   [inst_3 : Cat
+egoryTheory.Limits.HasBinaryProduct (G.obj X) (G.obj Y)]   [inst_4 : CategoryThe
+ory.Limits.PreservesLimit (CategoryTheory.Limits.pair X Y) G],   (CategoryTheory
+.Limits.PreservesLimitPair.iso G X Y).hom = CategoryTheory.Limits.prodComparison
+ G X Y
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+pair X Y；CategoryTheory.Limits.PreservesLimitPair.iso G X Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem PreservesLimitPair.iso_hom : (PreservesLimitPair.iso G X Y).hom = prodComparison G X Y :=
   rfl
 
 @[simp, reassoc]
-/--
-theorem `PreservesLimitPair.iso_inv_fst` / 定理 `PreservesLimitPair.iso_inv_fst`
-
-English:
-theorem PreservesLimitPair.iso_inv_fst
-  proof: by
-  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y)]; rw [← Category.assoc]; rw [Iso.hom_inv_id]
-  simp
-
-@[simp, reassoc]
-
-中文:
-定理 PreservesLimitPair.iso_inv_fst
-  证明: by
-  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y)]; rw [← Category.assoc]; rw [Iso.hom_inv_id]
-  simp
-
-@[simp, reassoc]
-
-Depends on / 依赖: Category, Category.assoc, Iso.cancel_iso_hom_left, Iso.hom_inv_id, PreservesLimitPair, PreservesLimitPair.iso, cancel_iso_hom_left, hom_inv_id
+/-
+**CategoryTheory.Limits.PreservesLimitPair.iso_inv_fst** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits.PreservesLimitPair`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheory.Functor C D)
+ (X Y : C) [inst_2 : CategoryTheory.Limits.HasBinaryProduct X Y]   [inst_3 : Cat
+egoryTheory.Limits.HasBinaryProduct (G.obj X) (G.obj Y)]   [inst_4 : CategoryThe
+ory.Limits.PreservesLimit (CategoryTheory.Limits.pair X Y) G],   CategoryTheory.
+CategoryStruct.comp (CategoryTheory.Limits.PreservesLimitPair.iso G X Y).inv    
+   (G.map CategoryTheory.Limits.prod.fst) =     CategoryTheory.Limits.prod.fst
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+pair X Y；CategoryTheory.Limits.PreservesLimitPair.iso G X Y；G.map CategoryTheory
+.Limits.prod.fst。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.cancel_iso_hom_left`：cancel_iso_hom_left {X Y Z : C} 
+(f : X ≅ Y) (g g' : Y ⟶ Z) : f.hom ≫ g = f.hom ≫ g' ↔ g = g'
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.prodComparison_fst`：prodComparison_fst : prodCompa
+rison F A B ≫ prod.fst = F.map prod.fst
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem PreservesLimitPair.iso_inv_fst :
     (PreservesLimitPair.iso G X Y).inv ≫ G.map prod.fst = prod.fst := by
-  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y)]; rw [← Category.assoc]; rw [Iso.hom_inv_id]
+  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y), ← Category.assoc, Iso.hom_inv_id]
   simp
 
 @[simp, reassoc]
-/--
-theorem `PreservesLimitPair.iso_inv_snd` / 定理 `PreservesLimitPair.iso_inv_snd`
-
-English:
-theorem PreservesLimitPair.iso_inv_snd
-  proof: by
-  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y)]; rw [← Category.assoc]; rw [Iso.hom_inv_id]
-  simp
-
-中文:
-定理 PreservesLimitPair.iso_inv_snd
-  证明: by
-  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y)]; rw [← Category.assoc]; rw [Iso.hom_inv_id]
-  simp
-
-Depends on / 依赖: Category, Category.assoc, Iso.cancel_iso_hom_left, Iso.hom_inv_id, PreservesLimitPair, PreservesLimitPair.iso, cancel_iso_hom_left, hom_inv_id
+/-
+**CategoryTheory.Limits.PreservesLimitPair.iso_inv_snd** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Limits.PreservesLimitPair`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheory.Functor C D)
+ (X Y : C) [inst_2 : CategoryTheory.Limits.HasBinaryProduct X Y]   [inst_3 : Cat
+egoryTheory.Limits.HasBinaryProduct (G.obj X) (G.obj Y)]   [inst_4 : CategoryThe
+ory.Limits.PreservesLimit (CategoryTheory.Limits.pair X Y) G],   CategoryTheory.
+CategoryStruct.comp (CategoryTheory.Limits.PreservesLimitPair.iso G X Y).inv    
+   (G.map CategoryTheory.Limits.prod.snd) =     CategoryTheory.Limits.prod.snd
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+pair X Y；CategoryTheory.Limits.PreservesLimitPair.iso G X Y；G.map CategoryTheory
+.Limits.prod.snd。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Iso.cancel_iso_hom_left`：cancel_iso_hom_left {X Y Z : C} 
+(f : X ≅ Y) (g g' : Y ⟶ Z) : f.hom ≫ g = f.hom ≫ g' ↔ g = g'
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.prodComparison_snd`：prodComparison_snd : prodCompa
+rison F A B ≫ prod.snd = F.map prod.snd
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem PreservesLimitPair.iso_inv_snd :
     (PreservesLimitPair.iso G X Y).inv ≫ G.map prod.snd = prod.snd := by
-  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y)]; rw [← Category.assoc]; rw [Iso.hom_inv_id]
+  rw [← Iso.cancel_iso_hom_left (PreservesLimitPair.iso G X Y), ← Category.assoc, Iso.hom_inv_id]
   simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (prodComparison G X Y)
-  body: by
-  rw [← PreservesLimitPair.iso_hom]
-  infer_instance
-
-中文:
-实例 :
-  签名: 是同构 (prodComparison G X Y)
-  定义体: by
-  rw [← PreservesLimitPair.iso_hom]
-  infer_instance
-
-Depends on / 依赖: PreservesLimitPair, PreservesLimitPair.iso_hom, infer_instance, iso_hom
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (prodComparison G X Y) := by
   rw [← PreservesLimitPair.iso_hom]
   infer_instance
 
-/--
-lemma `preservesBinaryProducts_of_isIso_prodComparison` / 引理 `preservesBinaryProducts_of_isIso_prodComparison`
+/-- If the product comparison maps of `G` at every pair `(X,Y)` is an
+isomorphism, then `G` preserves binary products. -/
+/-
+**CategoryTheory.Limits.preservesBinaryProducts_of_isIso_prodComparison** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：preservesBinaryProducts_of_isIso_prodComparison [HasBinaryProducts C] [Has
+BinaryProducts D] [i : forall {X Y : C}, IsIso (prodComparison G X Y)] : Preserv
+esLimitsOfShape (Discrete WalkingPair) G where preservesLimit
+参数：prodComparison G X Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitPair.of_iso_prod_comparison`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_iso_diagram`：preservesLimit_of_i
+so_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesLimit K₁ F] : Pre
+servesLimit K₂ F where preserves {c} t
 
-English:
-lemma preservesBinaryProducts_of_isIso_prodComparison
-  proof: by
-    intro K
-    have : PreservesLimit (pair (K.obj ⟨WalkingPair.left⟩) (K.obj ⟨WalkingPair.right⟩)) G :=
-      PreservesLimitPair.of_iso_prod_comparison ..
-    apply preservesLimit_of_iso_diagram G (diagramIsoPair K).symm
-
-中文:
-引理 preservesBinaryProducts_of_isIso_prodComparison
-  证明: by
-    intro K
-    have : PreservesLimit (pair (K.obj ⟨WalkingPair.left⟩) (K.obj ⟨WalkingPair.right⟩)) G :=
-      PreservesLimitPair.of_iso_prod_comparison ..
-    apply preservesLimit_of_iso_diagram G (diagramIsoPair K).symm
-
-Depends on / 依赖: K.obj, PreservesLimit, PreservesLimitPair, PreservesLimitPair.of_iso_prod_comparison, WalkingPair, WalkingPair.left, WalkingPair.right, diagramIsoPair, of_iso_prod_comparison, preservesLimit_of_iso_diagram
+--- 原说明 ---
+If the product comparison maps of `G` at every pair `(X,Y)` is an
+isomorphism, then `G` preserves binary products.
 -/
 lemma preservesBinaryProducts_of_isIso_prodComparison
     [HasBinaryProducts C] [HasBinaryProducts D]
-    [i : forall {X Y : C}, IsIso (prodComparison G X Y)] :
+    [i : ∀ {X Y : C}, IsIso (prodComparison G X Y)] :
     PreservesLimitsOfShape (Discrete WalkingPair) G where
   preservesLimit := by
     intro K
@@ -335,26 +346,25 @@ variable {P X Y Z : C} (f : X ⟶ P) (g : Y ⟶ P)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `isColimitMapCoconeBinaryCofanEquiv` / `isColimitMapCoconeBinaryCofanEquiv` 的定义
+/-- The map of a binary cofan is a colimit iff
+the cofork consisting of the mapped morphisms is a colimit.
+This essentially lets us commute `BinaryCofan.mk` with `Functor.mapCocone`.
+-/
+/-
+**CategoryTheory.Limits.isColimitMapCoconeBinaryCofanEquiv** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：isColimitMapCoconeBinaryCofanEquiv : IsColimit (Functor.mapCocone G (Binar
+yCofan.mk f g)) ≃ IsColimit (BinaryCofan.mk (G.map f) (G.map g))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isColimitMapCoconeBinaryCofanEquiv
-  signature: :
-  body: (IsColimit.precomposeHomEquiv (diagramIsoPair _).symm _).symm.trans
-    (IsColimit.equivIsoColimit
-      (Cocone.ext (Iso.refl _)
-        (by rintro (_ | _) <;> simp)))
-
-中文:
-定义 isColimitMapCoconeBinaryCofanEquiv
-  签名: :
-  定义体: (IsColimit.precomposeHomEquiv (diagramIsoPair _).symm _).symm.trans
-    (IsColimit.equivIsoColimit
-      (Cocone.ext (Iso.refl _)
-        (by rintro (_ | _) <;> simp)))
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.equivIsoColimit, IsColimit.precomposeHomEquiv, Iso.refl, diagramIsoPair, equivIsoColimit, precomposeHomEquiv, symm.trans
+--- 原说明 ---
+The map of a binary cofan is a colimit iff
+the cofork consisting of the mapped morphisms is a colimit.
+This essentially lets us commute `BinaryCofan.mk` with `Functor.mapCocone`.
 -/
 def isColimitMapCoconeBinaryCofanEquiv :
     IsColimit (Functor.mapCocone G (BinaryCofan.mk f g))
@@ -364,39 +374,36 @@ def isColimitMapCoconeBinaryCofanEquiv :
       (Cocone.ext (Iso.refl _)
         (by rintro (_ | _) <;> simp)))
 
-/--
-Definition of `mapIsColimitOfPreservesOfIsColimit` / `mapIsColimitOfPreservesOfIsColimit` 的定义
+/-- The property of preserving coproducts expressed in terms of binary cofans. -/
+/-
+**CategoryTheory.Limits.mapIsColimitOfPreservesOfIsColimit** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：mapIsColimitOfPreservesOfIsColimit [PreservesColimit (pair X Y) G] (l : Is
+Colimit (BinaryCofan.mk f g)) : IsColimit (BinaryCofan.mk (G.map f) (G.map g))
+参数：pair X Y；l : IsColimit (BinaryCofan.mk f g)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapIsColimitOfPreservesOfIsColimit
-  signature: [PreservesColimit (pair X Y) G]
-  body: isColimitMapCoconeBinaryCofanEquiv G f g (isColimitOfPreserves G l)
-
-中文:
-定义 mapIsColimitOfPreservesOfIsColimit
-  签名: [保持余极限 (pair X Y) G]
-  定义体: isColimitMapCoconeBinaryCofanEquiv G f g (isColimitOfPreserves G l)
-
-Depends on / 依赖: isColimitMapCoconeBinaryCofanEquiv, isColimitOfPreserves
+--- 原说明 ---
+The property of preserving coproducts expressed in terms of binary cofans.
 -/
 def mapIsColimitOfPreservesOfIsColimit [PreservesColimit (pair X Y) G]
     (l : IsColimit (BinaryCofan.mk f g)) : IsColimit (BinaryCofan.mk (G.map f) (G.map g)) :=
   isColimitMapCoconeBinaryCofanEquiv G f g (isColimitOfPreserves G l)
 
-/--
-Definition of `isColimitOfReflectsOfMapIsColimit` / `isColimitOfReflectsOfMapIsColimit` 的定义
+/-- The property of reflecting coproducts expressed in terms of binary cofans. -/
+/-
+**CategoryTheory.Limits.isColimitOfReflectsOfMapIsColimit** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Limits`。
+形式化陈述：isColimitOfReflectsOfMapIsColimit [ReflectsColimit (pair X Y) G] (l : IsCo
+limit (BinaryCofan.mk (G.map f) (G.map g))) : IsColimit (BinaryCofan.mk f g)
+参数：pair X Y；l : IsColimit (BinaryCofan.mk (G.map f) (G.map g))。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition isColimitOfReflectsOfMapIsColimit
-  signature: [ReflectsColimit (pair X Y) G]
-  body: isColimitOfReflects G ((isColimitMapCoconeBinaryCofanEquiv G f g).symm l)
-
-中文:
-定义 isColimitOfReflectsOfMapIsColimit
-  签名: [反映余极限 (pair X Y) G]
-  定义体: isColimitOfReflects G ((isColimitMapCoconeBinaryCofanEquiv G f g).symm l)
-
-Depends on / 依赖: isColimitMapCoconeBinaryCofanEquiv, isColimitOfReflects
+--- 原说明 ---
+The property of reflecting coproducts expressed in terms of binary cofans.
 -/
 def isColimitOfReflectsOfMapIsColimit [ReflectsColimit (pair X Y) G]
     (l : IsColimit (BinaryCofan.mk (G.map f) (G.map g))) : IsColimit (BinaryCofan.mk f g) :=
@@ -406,19 +413,23 @@ variable (X Y)
 variable [HasBinaryCoproduct X Y]
 
 /--
-Definition of `isColimitOfHasBinaryCoproductOfPreservesColimit` / `isColimitOfHasBinaryCoproductOfPreservesColimit` 的定义
+If `G` preserves binary coproducts and `C` has them, then the binary cofan constructed of the mapped
+morphisms of the binary product cocone is a colimit.
+-/
+/-
+**CategoryTheory.Limits.isColimitOfHasBinaryCoproductOfPreservesColimit** 是 Math
+lib 中的一个定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：isColimitOfHasBinaryCoproductOfPreservesColimit [PreservesColimit (pair X 
+Y) G] : IsColimit (BinaryCofan.mk (G.map (Limits.coprod.inl : X ⟶ X ⨿ Y)) (G.map
+ Limits.coprod.inr))
+参数：pair X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitOfHasBinaryCoproductOfPreservesColimit
-  signature: [PreservesColimit (pair X Y) G]
-  body: mapIsColimitOfPreservesOfIsColimit G _ _ (coprodIsCoprod X Y)
-
-中文:
-定义 isColimitOfHasBinaryCoproductOfPreservesColimit
-  签名: [保持余极限 (pair X Y) G]
-  定义体: mapIsColimitOfPreservesOfIsColimit G _ _ (coprodIsCoprod X Y)
-
-Depends on / 依赖: coprodIsCoprod, mapIsColimitOfPreservesOfIsColimit
+--- 原说明 ---
+If `G` preserves binary coproducts and `C` has them, then the binary cofan const
+ructed of the mapped
+morphisms of the binary product cocone is a colimit.
 -/
 def isColimitOfHasBinaryCoproductOfPreservesColimit [PreservesColimit (pair X Y) G] :
     IsColimit (BinaryCofan.mk (G.map (Limits.coprod.inl : X ⟶ X ⨿ Y)) (G.map Limits.coprod.inr)) :=
@@ -426,28 +437,30 @@ def isColimitOfHasBinaryCoproductOfPreservesColimit [PreservesColimit (pair X Y)
 
 variable [HasBinaryCoproduct (G.obj X) (G.obj Y)]
 
-/--
-lemma `PreservesColimitPair.of_iso_coprod_comparison` / 引理 `PreservesColimitPair.of_iso_coprod_comparison`
+/-- If the coproduct comparison map for `G` at `(X,Y)` is an isomorphism, then `G` preserves the
+pair of `(X,Y)`.
+-/
+/-
+**CategoryTheory.Limits.PreservesColimitPair.of_iso_coprod_comparison** 是 Mathli
+b 中的一个定理，位于命名空间 `CategoryTheory.Limits.PreservesColimitPair`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheory.Functor C D)
+ (X Y : C) [inst_2 : CategoryTheory.Limits.HasBinaryCoproduct X Y]   [inst_3 : C
+ategoryTheory.Limits.HasBinaryCoproduct (G.obj X) (G.obj Y)]   [i : CategoryTheo
+ry.IsIso (CategoryTheory.Limits.coprodComparison G X Y)],   CategoryTheory.Limit
+s.PreservesColimit (CategoryTheory.Limits.pair X Y) G
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+coprodComparison G X Y；CategoryTheory.Limits.pair X Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone`：pres
+ervesColimit_of_preserves_colimit_cocone {F : C ⥤ D} {t : Cocone K} (h : IsColim
+it t) (hF : IsColimit (F.mapCocone t)) : PreservesColimi…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-lemma PreservesColimitPair.of_iso_coprod_comparison
-  given: [i : IsIso (coprodComparison G X Y)]
-  proof: by
-  apply preservesColimit_of_preserves_colimit_cocone (coprodIsCoprod X Y)
-  apply (isColimitMapCoconeBinaryCofanEquiv _ _ _).symm _
-  refine @IsColimit.ofPointIso _ _ _ _ _ _ _ (colimit.isColimit (pair (G.obj X) (G.obj Y))) ?_
-  apply i
-
-中文:
-引理 PreservesColimitPair.of_iso_coprod_comparison
-  条件: [i : 是同构 (coprodComparison G X Y)]
-  证明: by
-  apply preservesColimit_of_preserves_colimit_cocone (coprodIsCoprod X Y)
-  apply (isColimitMapCoconeBinaryCofanEquiv _ _ _).symm _
-  refine @IsColimit.ofPointIso _ _ _ _ _ _ _ (colimit.isColimit (pair (G.obj X) (G.obj Y))) ?_
-  apply i
-
-Depends on / 依赖: G.obj, IsColimit, IsColimit.ofPointIso, colimit, colimit.isColimit, coprodIsCoprod, isColimit, isColimitMapCoconeBinaryCofanEquiv, ofPointIso, preservesColimit_of_preserves_colimit_cocone
+--- 原说明 ---
+If the coproduct comparison map for `G` at `(X,Y)` is an isomorphism, then `G` p
+reserves the
+pair of `(X,Y)`.
 -/
 lemma PreservesColimitPair.of_iso_coprod_comparison [i : IsIso (coprodComparison G X Y)] :
     PreservesColimit (pair X Y) G := by
@@ -459,92 +472,85 @@ lemma PreservesColimitPair.of_iso_coprod_comparison [i : IsIso (coprodComparison
 variable [PreservesColimit (pair X Y) G]
 
 /--
-Definition of `PreservesColimitPair.iso` / `PreservesColimitPair.iso` 的定义
+If `G` preserves the coproduct of `(X,Y)`, then the coproduct comparison map for `G` at `(X,Y)` is
+an isomorphism.
+-/
+/-
+**CategoryTheory.Limits.PreservesColimitPair.iso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.PreservesColimitPair`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (G : Cat
+egoryTheory.Functor C D) →           (X Y : C) →             [inst_2 : CategoryT
+heory.Limits.HasBinaryCoproduct X Y] →               [inst_3 : CategoryTheory.Li
+mits.HasBinaryCoproduct (G.obj X) (G.obj Y)] →                 [CategoryTheory.L
+imits.PreservesColimit (CategoryTheory.Limits.pair X Y) G] →                   G
+.obj X ⨿ G.obj Y ≅ G.obj (X ⨿ Y)
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+pair X Y；X ⨿ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PreservesColimitPair.iso
-  signature: : G.obj X ⨿ G.obj Y ≅ G.obj (X ⨿ Y)
-  body: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
-    (isColimitOfHasBinaryCoproductOfPreservesColimit G X Y)
-
-@[simp]
-
-中文:
-定义 PreservesColimitPair.iso
-  签名: : G.obj X ⨿ G.obj Y ≅ G.obj (X ⨿ Y)
-  定义体: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
-    (isColimitOfHasBinaryCoproductOfPreservesColimit G X Y)
-
-@[simp]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, colimit, colimit.isColimit, isColimit, isColimitOfHasBinaryCoproductOfPreservesColimit
+--- 原说明 ---
+If `G` preserves the coproduct of `(X,Y)`, then the coproduct comparison map for
+ `G` at `(X,Y)` is
+an isomorphism.
 -/
 def PreservesColimitPair.iso : G.obj X ⨿ G.obj Y ≅ G.obj (X ⨿ Y) :=
   IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
     (isColimitOfHasBinaryCoproductOfPreservesColimit G X Y)
 
 @[simp]
-/--
-theorem `PreservesColimitPair.iso_hom` / 定理 `PreservesColimitPair.iso_hom`
-
-English:
-theorem PreservesColimitPair.iso_hom
-  proof: rfl
-
-中文:
-定理 PreservesColimitPair.iso_hom
-  证明: rfl
+/-
+**CategoryTheory.Limits.PreservesColimitPair.iso_hom** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits.PreservesColimitPair`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheory.Functor C D)
+ (X Y : C) [inst_2 : CategoryTheory.Limits.HasBinaryCoproduct X Y]   [inst_3 : C
+ategoryTheory.Limits.HasBinaryCoproduct (G.obj X) (G.obj Y)]   [inst_4 : Categor
+yTheory.Limits.PreservesColimit (CategoryTheory.Limits.pair X Y) G],   (Category
+Theory.Limits.PreservesColimitPair.iso G X Y).hom = CategoryTheory.Limits.coprod
+Comparison G X Y
+参数：G : CategoryTheory.Functor C D；X Y : C；G.obj X；G.obj Y；CategoryTheory.Limits.
+pair X Y；CategoryTheory.Limits.PreservesColimitPair.iso G X Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem PreservesColimitPair.iso_hom :
     (PreservesColimitPair.iso G X Y).hom = coprodComparison G X Y := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso (coprodComparison G X Y)
-  body: by
-  rw [← PreservesColimitPair.iso_hom]
-  infer_instance
-
-中文:
-实例 :
-  签名: 是同构 (coprodComparison G X Y)
-  定义体: by
-  rw [← PreservesColimitPair.iso_hom]
-  infer_instance
-
-Depends on / 依赖: PreservesColimitPair, PreservesColimitPair.iso_hom, infer_instance, iso_hom
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso (coprodComparison G X Y) := by
   rw [← PreservesColimitPair.iso_hom]
   infer_instance
 
-/--
-lemma `preservesBinaryCoproducts_of_isIso_coprodComparison` / 引理 `preservesBinaryCoproducts_of_isIso_coprodComparison`
+/-- If the coproduct comparison maps of `G` at every pair `(X,Y)` is an
+isomorphism, then `G` preserves binary coproducts. -/
+/-
+**CategoryTheory.Limits.preservesBinaryCoproducts_of_isIso_coprodComparison** 是 
+Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：preservesBinaryCoproducts_of_isIso_coprodComparison [HasBinaryCoproducts C
+] [HasBinaryCoproducts D] [i : forall {X Y : C}, IsIso (coprodComparison G X Y)]
+ : PreservesColimitsOfShape (Discrete WalkingPair) G where preservesColimit
+参数：coprodComparison G X Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.PreservesColimitPair.of_iso_coprod_comparison`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 :
+ CategoryTheory.Category.{v₂, u₂} D]   (G : CategoryTheor…
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_iso_diagram`：preservesColimit_
+of_iso_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesColimit K₁ F]
+ : PreservesColimit K₂ F where preserves {c…
 
-English:
-lemma preservesBinaryCoproducts_of_isIso_coprodComparison
-  proof: by
-    intro K
-    have : PreservesColimit (pair (K.obj ⟨WalkingPair.left⟩) (K.obj ⟨WalkingPair.right⟩)) G :=
-      PreservesColimitPair.of_iso_coprod_comparison ..
-    apply preservesColimit_of_iso_diagram G (diagramIsoPair K).symm
-
-中文:
-引理 preservesBinaryCoproducts_of_isIso_coprodComparison
-  证明: by
-    intro K
-    have : PreservesColimit (pair (K.obj ⟨WalkingPair.left⟩) (K.obj ⟨WalkingPair.right⟩)) G :=
-      PreservesColimitPair.of_iso_coprod_comparison ..
-    apply preservesColimit_of_iso_diagram G (diagramIsoPair K).symm
-
-Depends on / 依赖: K.obj, PreservesColimit, PreservesColimitPair, PreservesColimitPair.of_iso_coprod_comparison, WalkingPair, WalkingPair.left, WalkingPair.right, diagramIsoPair, of_iso_coprod_comparison, preservesColimit_of_iso_diagram
+--- 原说明 ---
+If the coproduct comparison maps of `G` at every pair `(X,Y)` is an
+isomorphism, then `G` preserves binary coproducts.
 -/
 lemma preservesBinaryCoproducts_of_isIso_coprodComparison
     [HasBinaryCoproducts C] [HasBinaryCoproducts D]
-    [i : forall {X Y : C}, IsIso (coprodComparison G X Y)] :
+    [i : ∀ {X Y : C}, IsIso (coprodComparison G X Y)] :
     PreservesColimitsOfShape (Discrete WalkingPair) G where
   preservesColimit := by
     intro K
@@ -555,3 +561,4 @@ lemma preservesBinaryCoproducts_of_isIso_coprodComparison
 end
 
 end CategoryTheory.Limits
+

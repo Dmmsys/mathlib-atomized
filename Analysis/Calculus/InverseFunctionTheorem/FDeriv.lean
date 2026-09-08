@@ -69,461 +69,530 @@ function. -/
 
 namespace HasStrictFDerivAt
 
-/--
-theorem `approximates_deriv_on_nhds` / 定理 `approximates_deriv_on_nhds`
+/-- If `f` has derivative `f'` at `a` in the strict sense and `c > 0`, then `f` approximates `f'`
+with constant `c` on some neighborhood of `a`. -/
+/-
+**HasStrictFDerivAt.approximates_deriv_on_nhds** 是 Mathlib 中的一个定理，位于命名空间 `HasStr
+ictFDerivAt`。
+形式化陈述：approximates_deriv_on_nhds {f : E -> F} {f' : E ->L[𝕜] F} {a : E} (hf : Ha
+sStrictFDerivAt f f' a) {c : Real>=0} (hc : Subsingleton E ∨ 0 < c) : exists s i
+n 𝓝 a, ApproximatesLinearOn f f' s c
+参数：hf : HasStrictFDerivAt f f' a；hc : Subsingleton E ∨ 0 < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+· 使用定理 `trivial`：True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `ContinuousSemilinearMapClass.toSemilinearMapClass`：∀ {F : Type u_1} {R :
+ outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Semiring R} {inst_1 : Se
+miring S}   {σ : outParam (R →+* S)} {M…
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Asymptotics.IsLittleO.def`：∀ {α : Type u_1} {E : Type u_3} {F : Type u_4
+} [inst : Norm E] [inst_1 : Norm F] {c : ℝ} {f : α → E} {g : α → F}   {l : Filte
+r α}, f =o[l] g…
+· 使用定理 `HasStrictFDerivAt.isLittleO`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormed
+Field 𝕜] {E : Type u_2} [inst_1 : SeminormedAddCommGroup E]   [inst_2 : NormedSp
+ace 𝕜 E] {F : Typ…
+· 使用定理 `Filter.mem_prod_same_iff`：∀ {α : Type u_1} {la : Filter α} {s : Set (α ×
+ α)}, s ∈ la ×ˢ la ↔ ∃ t ∈ la, t ×ˢ t ⊆ s
+· 使用定理 `Filter.Eventually.eq_1`：∀ {α : Type u_1} (p : α → Prop) (f : Filter α), 
+Filter.Eventually p f = ({x | p x} ∈ f)
+· 使用定理 `nhds_prod_eq`：nhds_prod_eq {x : X} {y : Y} : 𝓝 (x, y) = 𝓝 x ×ˢ 𝓝 y
+· 使用定理 `Set.mk_mem_prod`：mk_mem_prod (ha : a in s) (hb : b in t) : (a, b) in s ×
+ˢ t
 
-English:
-theorem approximates_deriv_on_nhds
-  statement: {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
-  proof: by
-  rcases hc with hE | hc
-  · refine ⟨univ, IsOpen.mem_nhds isOpen_univ trivial, fun x _ y _ => ?_⟩
-    simp [@Subsingleton.elim E hE x y]
-  have := hf.isLittleO.def hc
-  rw [nhds_prod_eq]; rw [Filter.Eventually]; rw [mem_prod_same_iff] at this
-  rcases this with ⟨s, has, hs⟩
-  exact ⟨s, has, fun x hx y hy => hs (mk_mem_prod hx hy)⟩
-
-中文:
-定理 approximates_deriv_on_nhds
-  结论: {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
-  证明: by
-  rcases hc with hE | hc
-  · refine ⟨univ, IsOpen.mem_nhds isOpen_univ trivial, fun x _ y _ => ?_⟩
-    simp [@Subsingleton.elim E hE x y]
-  have := hf.isLittleO.def hc
-  rw [nhds_prod_eq]; rw [Filter.Eventually]; rw [mem_prod_same_iff] at this
-  rcases this with ⟨s, has, hs⟩
-  exact ⟨s, has, fun x hx y hy => hs (mk_mem_prod hx hy)⟩
-
-Depends on / 依赖: Eventually, Filter, Filter.Eventually, IsOpen, IsOpen.mem_nhds, Subsingleton, Subsingleton.elim, hf.isLittleO.def, isLittleO, isOpen_univ, mem_nhds, mem_prod_same_iff, mk_mem_prod, nhds_prod_eq
+--- 原说明 ---
+If `f` has derivative `f'` at `a` in the strict sense and `c > 0`, then `f` appr
+oximates `f'`
+with constant `c` on some neighborhood of `a`.
 -/
-theorem approximates_deriv_on_nhds {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
-    (hf : HasStrictFDerivAt f f' a) {c : Real>=0} (hc : Subsingleton E ∨ 0 < c) :
-    exists s in 𝓝 a, ApproximatesLinearOn f f' s c := by
+theorem approximates_deriv_on_nhds {f : E → F} {f' : E →L[𝕜] F} {a : E}
+    (hf : HasStrictFDerivAt f f' a) {c : ℝ≥0} (hc : Subsingleton E ∨ 0 < c) :
+    ∃ s ∈ 𝓝 a, ApproximatesLinearOn f f' s c := by
   rcases hc with hE | hc
   · refine ⟨univ, IsOpen.mem_nhds isOpen_univ trivial, fun x _ y _ => ?_⟩
     simp [@Subsingleton.elim E hE x y]
   have := hf.isLittleO.def hc
-  rw [nhds_prod_eq]; rw [Filter.Eventually]; rw [mem_prod_same_iff] at this
+  rw [nhds_prod_eq, Filter.Eventually, mem_prod_same_iff] at this
   rcases this with ⟨s, has, hs⟩
   exact ⟨s, has, fun x hx y hy => hs (mk_mem_prod hx hy)⟩
-
-/--
-theorem `map_nhds_eq_of_surj` / 定理 `map_nhds_eq_of_surj`
-
-English:
-theorem map_nhds_eq_of_surj
-  statement: [CompleteSpace E] [CompleteSpace F] {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
-  proof: by
-  let f'symm := f'.nonlinearRightInverseOfSurjective h
-  set c : Real>=0 := f'symm.nnnorm⁻¹ / 2 with hc
-  have f'symm_pos : 0 < f'symm.nnnorm := f'.nonlinearRightInverseOfSurjective_nnnorm_pos h
-  have cpos : 0 < c := by simp [hc, inv_pos, f'symm_pos]
-  obtain ⟨s, s_nhds, hs⟩ : exists s in 𝓝 a, ApproximatesLinearOn f f' s c :=
-    hf.approximates_deriv_on_nhds (Or.inr cpos)
-  apply hs.map_nhds_eq f'symm s_nhds (Or.inr (NNReal.half_lt_self _))
-  simp [ne_of_gt f'symm_pos]
-
-中文:
-定理 map_nhds_eq_of_surj
-  结论: [完备空间 E] [完备空间 F] {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
-  证明: by
-  let f'symm := f'.nonlinearRightInverseOfSurjective h
-  set c : Real>=0 := f'symm.nnnorm⁻¹ / 2 with hc
-  have f'symm_pos : 0 < f'symm.nnnorm := f'.nonlinearRightInverseOfSurjective_nnnorm_pos h
-  have cpos : 0 < c := by simp [hc, inv_pos, f'symm_pos]
-  obtain ⟨s, s_nhds, hs⟩ : exists s in 𝓝 a, ApproximatesLinearOn f f' s c :=
-    hf.approximates_deriv_on_nhds (Or.inr cpos)
-  apply hs.map_nhds_eq f'symm s_nhds (Or.inr (NNReal.half_lt_self _))
-  simp [ne_of_gt f'symm_pos]
-
-Depends on / 依赖: ApproximatesLinearOn, NNReal, NNReal.half_lt_self, Or.inr, approximates_deriv_on_nhds, half_lt_self, hf.approximates_deriv_on_nhds, hs.map_nhds_eq, inv_pos, map_nhds_eq, ne_of_gt, nnnorm, nonlinearRightInverseOfSurjective, nonlinearRightInverseOfSurjective_nnnorm_pos, s_nhds, symm.nnnorm, symm_pos
+/-
+**HasStrictFDerivAt.map_nhds_eq_of_surj** 是 Mathlib 中的一个定理，位于命名空间 `HasStrictFDer
+ivAt`。
+形式化陈述：map_nhds_eq_of_surj [CompleteSpace E] [CompleteSpace F] {f : E -> F} {f' :
+ E ->L[𝕜] F} {a : E} (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) (h : f'.rang
+e = ⊤) : map f (𝓝 a) = 𝓝 (f a)
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a；h : f'.range = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `ContinuousLinearMap.nonlinearRightInverseOfSurjective_nnnorm_pos`：nonlin
+earRightInverseOfSurjective_nnnorm_pos (f : E ->SL[σ] F) (hsurj : f.range = ⊤) :
+ 0 < (nonlinearRightInverseOfSurjective f hsurj).nnnor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `NNReal.instIsStrictOrderedRing_1`：IsStrictOrderedRing NNReal
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `NNReal.instIsOrderedRing_1`：IsOrderedRing NNReal
+· 使用定理 `NNReal.instNontrivial`：Nontrivial NNReal
+· 使用定理 `HasStrictFDerivAt.approximates_deriv_on_nhds`：approximates_deriv_on_nhds
+ {f : E -> F} {f' : E ->L[𝕜] F} {a : E} (hf : HasStrictFDerivAt f f' a) {c : Rea
+l>=0} (hc : Subsingleton E ∨ 0 < c…
+· 使用定理 `ApproximatesLinearOn.map_nhds_eq`：map_nhds_eq (hf : ApproximatesLinearOn
+ f f' s c) (f'symm : f'.NonlinearRightInverse) {x : E} (hs : s in 𝓝 x) (hc : Sub
+singleton F ∨ c < f'sy…
+· 使用定理 `NNReal.half_lt_self`：∀ {a : NNReal}, a ≠ 0 → a / 2 < a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem map_nhds_eq_of_surj [CompleteSpace E] [CompleteSpace F] {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
-    (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) (h : f'.range = ⊤) :
+theorem map_nhds_eq_of_surj [CompleteSpace E] [CompleteSpace F] {f : E → F} {f' : E →L[𝕜] F} {a : E}
+    (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) (h : f'.range = ⊤) :
     map f (𝓝 a) = 𝓝 (f a) := by
   let f'symm := f'.nonlinearRightInverseOfSurjective h
-  set c : Real>=0 := f'symm.nnnorm⁻¹ / 2 with hc
+  set c : ℝ≥0 := f'symm.nnnorm⁻¹ / 2 with hc
   have f'symm_pos : 0 < f'symm.nnnorm := f'.nonlinearRightInverseOfSurjective_nnnorm_pos h
   have cpos : 0 < c := by simp [hc, inv_pos, f'symm_pos]
-  obtain ⟨s, s_nhds, hs⟩ : exists s in 𝓝 a, ApproximatesLinearOn f f' s c :=
+  obtain ⟨s, s_nhds, hs⟩ : ∃ s ∈ 𝓝 a, ApproximatesLinearOn f f' s c :=
     hf.approximates_deriv_on_nhds (Or.inr cpos)
   apply hs.map_nhds_eq f'symm s_nhds (Or.inr (NNReal.half_lt_self _))
   simp [ne_of_gt f'symm_pos]
 
-variable {f : E -> F} {f' : E ≃L[𝕜] F} {a : E}
-
-/--
-theorem `approximates_deriv_on_open_nhds` / 定理 `approximates_deriv_on_open_nhds`
-
-English:
-theorem approximates_deriv_on_open_nhds
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: by
-  simp only [← and_assoc]
-  refine ((nhds_basis_opens a).exists_iff fun s t => ApproximatesLinearOn.mono_set).1 ?_
-  exact
-hf.approximates_deriv_on_nhds
-f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' => half_pos inv_pos.2 hf'
-
-中文:
-定理 approximates_deriv_on_open_nhds
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: by
-  simp only [← and_assoc]
-  refine ((nhds_basis_opens a).exists_iff fun s t => ApproximatesLinearOn.mono_set).1 ?_
-  exact
-hf.approximates_deriv_on_nhds
-f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' => half_pos inv_pos.2 hf'
-
-Depends on / 依赖: ApproximatesLinearOn, ApproximatesLinearOn.mono_set, and_assoc, approximates_deriv_on_nhds, exists_iff, half_pos, hf.approximates_deriv_on_nhds, inv_pos, mono_set, nhds_basis_opens, subsingleton_or_nnnorm_symm_pos, subsingleton_or_nnnorm_symm_pos.imp
+variable {f : E → F} {f' : E ≃L[𝕜] F} {a : E}
+/-
+**HasStrictFDerivAt.approximates_deriv_on_open_nhds** 是 Mathlib 中的一个定理，位于命名空间 `H
+asStrictFDerivAt`。
+形式化陈述：approximates_deriv_on_open_nhds (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F
+) a) : exists s : Set E, a in s ∧ IsOpen s ∧ ApproximatesLinearOn f (f' : E ->L[
+𝕜] F) s (‖(f'.symm : F ->L[𝕜] E)‖₊⁻¹ / 2)
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.exists_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {P : Set α → Prop}, (∀ ⦃
+s t : Set α⦄, s …
+· 使用定理 `nhds_basis_opens`：nhds_basis_opens (x : X) : (𝓝 x).HasBasis (fun s : Set
+ X => x in s ∧ IsOpen s) fun s => s
+· 使用定理 `ApproximatesLinearOn.mono_set`：mono_set (hst : s subseteq t) (hf : Appro
+ximatesLinearOn f f' t c) : ApproximatesLinearOn f f' s c
+· 使用定理 `HasStrictFDerivAt.approximates_deriv_on_nhds`：approximates_deriv_on_nhds
+ {f : E -> F} {f' : E ->L[𝕜] F} {a : E} (hf : HasStrictFDerivAt f f' a) {c : Rea
+l>=0} (hc : Subsingleton E ∨ 0 < c…
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `half_pos`：half_pos (h : 0 < a) : 0 < a / 2
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `NNReal.instIsStrictOrderedRing_1`：IsStrictOrderedRing NNReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `ContinuousLinearEquiv.subsingleton_or_nnnorm_symm_pos`：subsingleton_or_n
+nnorm_symm_pos [RingHomIsometric σ₁₂] (e : E ≃SL[σ₁₂] F) : Subsingleton E ∨ 0 < 
+‖(e.symm : F ->SL[σ₂₁] E)‖₊
 -/
-theorem approximates_deriv_on_open_nhds (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
-    exists s : Set E, a in s ∧ IsOpen s ∧
-      ApproximatesLinearOn f (f' : E ->L[𝕜] F) s (‖(f'.symm : F ->L[𝕜] E)‖₊⁻¹ / 2) := by
+theorem approximates_deriv_on_open_nhds (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
+    ∃ s : Set E, a ∈ s ∧ IsOpen s ∧
+      ApproximatesLinearOn f (f' : E →L[𝕜] F) s (‖(f'.symm : F →L[𝕜] E)‖₊⁻¹ / 2) := by
   simp only [← and_assoc]
   refine ((nhds_basis_opens a).exists_iff fun s t => ApproximatesLinearOn.mono_set).1 ?_
   exact
-hf.approximates_deriv_on_nhds
-f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' => half_pos inv_pos.2 hf'
+    hf.approximates_deriv_on_nhds <|
+      f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' => half_pos <| inv_pos.2 hf'
 
 variable (f)
 variable [CompleteSpace E]
 
-/--
-Definition of `toOpenPartialHomeomorph` / `toOpenPartialHomeomorph` 的定义
+/-- Given a function with an invertible strict derivative at `a`, returns an `OpenPartialHomeomorph`
+with `to_fun = f` and `a ∈ source`. This is a part of the inverse function theorem.
+The other part `HasStrictFDerivAt.to_localInverse` states that the inverse function
+of this `OpenPartialHomeomorph` has derivative `f'.symm`. -/
+/-
+**HasStrictFDerivAt.toOpenPartialHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `HasStrict
+FDerivAt`。
+形式化陈述：toOpenPartialHomeomorph (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : O
+penPartialHomeomorph E F
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictFDerivAt.approximates_deriv_on_open_nhds`：approximates_deriv_on
+_open_nhds (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : exists s : Set E, a 
+in s ∧ IsOpen s ∧ ApproximatesLinearOn …
 
-English:
-definition toOpenPartialHomeomorph
-  signature: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  body: ApproximatesLinearOn.toOpenPartialHomeomorph f
-    (Classical.choose hf.approximates_deriv_on_open_nhds)
-    (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.2
-    (f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' =>
-NNReal.half_lt_self ne_of_gt inv_pos.2 hf')
-    (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.1
-
-中文:
-定义 toOpenPartialHomeomorph
-  签名: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  定义体: ApproximatesLinearOn.toOpenPartialHomeomorph f
-    (Classical.choose hf.approximates_deriv_on_open_nhds)
-    (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.2
-    (f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' =>
-NNReal.half_lt_self ne_of_gt inv_pos.2 hf')
-    (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.1
-
-Depends on / 依赖: ApproximatesLinearOn, ApproximatesLinearOn.toOpenPartialHomeomorph, Classical, Classical.choose, Classical.choose_spec, NNReal, NNReal.half_lt_self, approximates_deriv_on_open_nhds, choose_spec, half_lt_self, hf.approximates_deriv_on_open_nhds, inv_pos, ne_of_gt, subsingleton_or_nnnorm_symm_pos, subsingleton_or_nnnorm_symm_pos.imp, toOpenPartialHomeomorph
+--- 原说明 ---
+Given a function with an invertible strict derivative at `a`, returns an `OpenPa
+rtialHomeomorph`
+with `to_fun = f` and `a ∈ source`. This is a part of the inverse function theor
+em.
+The other part `HasStrictFDerivAt.to_localInverse` states that the inverse funct
+ion
+of this `OpenPartialHomeomorph` has derivative `f'.symm`.
 -/
-def toOpenPartialHomeomorph (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
+def toOpenPartialHomeomorph (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
   OpenPartialHomeomorph E F :=
     ApproximatesLinearOn.toOpenPartialHomeomorph f
     (Classical.choose hf.approximates_deriv_on_open_nhds)
     (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.2
     (f'.subsingleton_or_nnnorm_symm_pos.imp id fun hf' =>
-NNReal.half_lt_self ne_of_gt inv_pos.2 hf')
+      NNReal.half_lt_self <| ne_of_gt <| inv_pos.2 hf')
     (Classical.choose_spec hf.approximates_deriv_on_open_nhds).2.1
 
 variable {f}
 
 @[simp]
-/--
-theorem `toOpenPartialHomeomorph_coe` / 定理 `toOpenPartialHomeomorph_coe`
-
-English:
-theorem toOpenPartialHomeomorph_coe
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: rfl
-
-中文:
-定理 toOpenPartialHomeomorph_coe
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: rfl
+/-
+**HasStrictFDerivAt.toOpenPartialHomeomorph_coe** 是 Mathlib 中的一个定理，位于命名空间 `HasSt
+rictFDerivAt`。
+形式化陈述：toOpenPartialHomeomorph_coe (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
+ : (hf.toOpenPartialHomeomorph f : E -> F) = f
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toOpenPartialHomeomorph_coe (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
-    (hf.toOpenPartialHomeomorph f : E -> F) = f :=
+theorem toOpenPartialHomeomorph_coe (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
+    (hf.toOpenPartialHomeomorph f : E → F) = f :=
   rfl
-
-/--
-theorem `mem_toOpenPartialHomeomorph_source` / 定理 `mem_toOpenPartialHomeomorph_source`
-
-English:
-theorem mem_toOpenPartialHomeomorph_source
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (Classical.choose_spec hf.approximates_deriv_on_open_nhds).1
-
-中文:
-定理 mem_toOpenPartialHomeomorph_source
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (Classical.choose_spec hf.approximates_deriv_on_open_nhds).1
-
-Depends on / 依赖: Classical, Classical.choose_spec, approximates_deriv_on_open_nhds, choose_spec, hf.approximates_deriv_on_open_nhds
+/-
+**HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source** 是 Mathlib 中的一个定理，位于命名空间
+ `HasStrictFDerivAt`。
+形式化陈述：mem_toOpenPartialHomeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜
+] F) a) : a in (hf.toOpenPartialHomeomorph f).source
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `HasStrictFDerivAt.approximates_deriv_on_open_nhds`：approximates_deriv_on
+_open_nhds (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : exists s : Set E, a 
+in s ∧ IsOpen s ∧ ApproximatesLinearOn …
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem mem_toOpenPartialHomeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
-    a in (hf.toOpenPartialHomeomorph f).source :=
+theorem mem_toOpenPartialHomeomorph_source (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
+    a ∈ (hf.toOpenPartialHomeomorph f).source :=
   (Classical.choose_spec hf.approximates_deriv_on_open_nhds).1
-
-/--
-theorem `image_mem_toOpenPartialHomeomorph_target` / 定理 `image_mem_toOpenPartialHomeomorph_target`
-
-English:
-theorem image_mem_toOpenPartialHomeomorph_target
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (hf.toOpenPartialHomeomorph f).map_source hf.mem_toOpenPartialHomeomorph_source
-
-中文:
-定理 image_mem_toOpenPartialHomeomorph_target
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (hf.toOpenPartialHomeomorph f).map_source hf.mem_toOpenPartialHomeomorph_source
-
-Depends on / 依赖: hf.mem_toOpenPartialHomeomorph_source, hf.toOpenPartialHomeomorph, map_source, mem_toOpenPartialHomeomorph_source, toOpenPartialHomeomorph
+/-
+**HasStrictFDerivAt.image_mem_toOpenPartialHomeomorph_target** 是 Mathlib 中的一个定理，
+位于命名空间 `HasStrictFDerivAt`。
+形式化陈述：image_mem_toOpenPartialHomeomorph_target (hf : HasStrictFDerivAt f (f' : E
+ ->L[𝕜] F) a) : f a in (hf.toOpenPartialHomeomorph f).target
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.map_source`：map_source {x : X} (h : x in e.source)
+ : e x in e.target
+· 使用定理 `HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source`：mem_toOpenPartialH
+omeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : a in (hf.toOpe
+nPartialHomeomorph f).source
 -/
-theorem image_mem_toOpenPartialHomeomorph_target (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
-    f a in (hf.toOpenPartialHomeomorph f).target :=
+theorem image_mem_toOpenPartialHomeomorph_target (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
+    f a ∈ (hf.toOpenPartialHomeomorph f).target :=
   (hf.toOpenPartialHomeomorph f).map_source hf.mem_toOpenPartialHomeomorph_source
-
-/--
-theorem `map_nhds_eq_of_equiv` / 定理 `map_nhds_eq_of_equiv`
-
-English:
-theorem map_nhds_eq_of_equiv
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (hf.toOpenPartialHomeomorph f).map_nhds_eq hf.mem_toOpenPartialHomeomorph_source
-
-中文:
-定理 map_nhds_eq_of_equiv
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (hf.toOpenPartialHomeomorph f).map_nhds_eq hf.mem_toOpenPartialHomeomorph_source
-
-Depends on / 依赖: hf.mem_toOpenPartialHomeomorph_source, hf.toOpenPartialHomeomorph, map_nhds_eq, mem_toOpenPartialHomeomorph_source, toOpenPartialHomeomorph
+/-
+**HasStrictFDerivAt.map_nhds_eq_of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `HasStrictFDe
+rivAt`。
+形式化陈述：map_nhds_eq_of_equiv (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : map 
+f (𝓝 a) = 𝓝 (f a)
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.map_nhds_eq`：map_nhds_eq {x} (hx : x in e.source) 
+: map e (𝓝 x) = 𝓝 (e x)
+· 使用定理 `HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source`：mem_toOpenPartialH
+omeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : a in (hf.toOpe
+nPartialHomeomorph f).source
 -/
-theorem map_nhds_eq_of_equiv (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
+theorem map_nhds_eq_of_equiv (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
     map f (𝓝 a) = 𝓝 (f a) :=
   (hf.toOpenPartialHomeomorph f).map_nhds_eq hf.mem_toOpenPartialHomeomorph_source
 
 variable (f f' a)
 
-/--
-Definition of `localInverse` / `localInverse` 的定义
+/-- Given a function `f` with an invertible derivative, returns a function that is locally inverse
+to `f`. -/
+/-
+**HasStrictFDerivAt.localInverse** 是 Mathlib 中的一个定义，位于命名空间 `HasStrictFDerivAt`。
+形式化陈述：localInverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : F -> E
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition localInverse
-  signature: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  body: (hf.toOpenPartialHomeomorph f).symm
-
-中文:
-定义 localInverse
-  签名: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  定义体: (hf.toOpenPartialHomeomorph f).symm
-
-Depends on / 依赖: hf.toOpenPartialHomeomorph, toOpenPartialHomeomorph
+--- 原说明 ---
+Given a function `f` with an invertible derivative, returns a function that is l
+ocally inverse
+to `f`.
 -/
-def localInverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : F -> E :=
+def localInverse (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) : F → E :=
   (hf.toOpenPartialHomeomorph f).symm
 
 variable {f f' a}
-
-/--
-theorem `localInverse_def` / 定理 `localInverse_def`
-
-English:
-theorem localInverse_def
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: rfl
-
-中文:
-定理 localInverse_def
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: rfl
+/-
+**HasStrictFDerivAt.localInverse_def** 是 Mathlib 中的一个定理，位于命名空间 `HasStrictFDerivA
+t`。
+形式化陈述：localInverse_def (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : hf.local
+Inverse f _ _ = (hf.toOpenPartialHomeomorph f).symm
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem localInverse_def (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
+theorem localInverse_def (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
     hf.localInverse f _ _ = (hf.toOpenPartialHomeomorph f).symm :=
   rfl
-
-/--
-theorem `eventually_left_inverse` / 定理 `eventually_left_inverse`
-
-English:
-theorem eventually_left_inverse
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (hf.toOpenPartialHomeomorph f).eventually_left_inverse hf.mem_toOpenPartialHomeomorph_source
-
-@[simp]
-
-中文:
-定理 eventually_left_inverse
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (hf.toOpenPartialHomeomorph f).eventually_left_inverse hf.mem_toOpenPartialHomeomorph_source
-
-@[simp]
-
-Depends on / 依赖: eventually_left_inverse, hf.mem_toOpenPartialHomeomorph_source, hf.toOpenPartialHomeomorph, mem_toOpenPartialHomeomorph_source, toOpenPartialHomeomorph
+/-
+**HasStrictFDerivAt.eventually_left_inverse** 是 Mathlib 中的一个定理，位于命名空间 `HasStrict
+FDerivAt`。
+形式化陈述：eventually_left_inverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : f
+orallᶠ x in 𝓝 a, hf.localInverse f f' a (f x) = x
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.eventually_left_inverse`：eventually_left_inverse {
+x} (hx : x in e.source) : forallᶠ y in 𝓝 x, e.symm (e y) = y
+· 使用定理 `HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source`：mem_toOpenPartialH
+omeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : a in (hf.toOpe
+nPartialHomeomorph f).source
 -/
-theorem eventually_left_inverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
-    forallᶠ x in 𝓝 a, hf.localInverse f f' a (f x) = x :=
+theorem eventually_left_inverse (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
+    ∀ᶠ x in 𝓝 a, hf.localInverse f f' a (f x) = x :=
   (hf.toOpenPartialHomeomorph f).eventually_left_inverse hf.mem_toOpenPartialHomeomorph_source
 
 @[simp]
-/--
-theorem `localInverse_apply_image` / 定理 `localInverse_apply_image`
-
-English:
-theorem localInverse_apply_image
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: hf.eventually_left_inverse.self_of_nhds
-
-中文:
-定理 localInverse_apply_image
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: hf.eventually_left_inverse.self_of_nhds
-
-Depends on / 依赖: eventually_left_inverse, hf.eventually_left_inverse.self_of_nhds, self_of_nhds
+/-
+**HasStrictFDerivAt.localInverse_apply_image** 是 Mathlib 中的一个定理，位于命名空间 `HasStric
+tFDerivAt`。
+形式化陈述：localInverse_apply_image (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : 
+hf.localInverse f f' a (f a) = a
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.self_of_nhds`：Filter.Eventually.self_of_nhds {p : X ->
+ Prop} (h : forallᶠ y in 𝓝 x, p y) : p x
+· 使用定理 `HasStrictFDerivAt.eventually_left_inverse`：eventually_left_inverse (hf :
+ HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : forallᶠ x in 𝓝 a, hf.localInverse f 
+f' a (f x) = x
 -/
-theorem localInverse_apply_image (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
+theorem localInverse_apply_image (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
     hf.localInverse f f' a (f a) = a :=
   hf.eventually_left_inverse.self_of_nhds
-
-/--
-theorem `eventually_right_inverse` / 定理 `eventually_right_inverse`
-
-English:
-theorem eventually_right_inverse
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (hf.toOpenPartialHomeomorph f).eventually_right_inverse' hf.mem_toOpenPartialHomeomorph_source
-
-中文:
-定理 eventually_right_inverse
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (hf.toOpenPartialHomeomorph f).eventually_right_inverse' hf.mem_toOpenPartialHomeomorph_source
-
-Depends on / 依赖: eventually_right_inverse, hf.mem_toOpenPartialHomeomorph_source, hf.toOpenPartialHomeomorph, mem_toOpenPartialHomeomorph_source, toOpenPartialHomeomorph
+/-
+**HasStrictFDerivAt.eventually_right_inverse** 是 Mathlib 中的一个定理，位于命名空间 `HasStric
+tFDerivAt`。
+形式化陈述：eventually_right_inverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : 
+forallᶠ y in 𝓝 (f a), f (hf.localInverse f f' a y) = y
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.eventually_right_inverse'`：eventually_right_invers
+e' {x} (hx : x in e.source) : forallᶠ y in 𝓝 (e x), e (e.symm y) = y
+· 使用定理 `HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source`：mem_toOpenPartialH
+omeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : a in (hf.toOpe
+nPartialHomeomorph f).source
 -/
-theorem eventually_right_inverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
-    forallᶠ y in 𝓝 (f a), f (hf.localInverse f f' a y) = y :=
+theorem eventually_right_inverse (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
+    ∀ᶠ y in 𝓝 (f a), f (hf.localInverse f f' a y) = y :=
   (hf.toOpenPartialHomeomorph f).eventually_right_inverse' hf.mem_toOpenPartialHomeomorph_source
-
-/--
-theorem `localInverse_continuousAt` / 定理 `localInverse_continuousAt`
-
-English:
-theorem localInverse_continuousAt
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (hf.toOpenPartialHomeomorph f).continuousAt_symm hf.image_mem_toOpenPartialHomeomorph_target
-
-中文:
-定理 localInverse_continuousAt
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (hf.toOpenPartialHomeomorph f).continuousAt_symm hf.image_mem_toOpenPartialHomeomorph_target
-
-Depends on / 依赖: continuousAt_symm, hf.image_mem_toOpenPartialHomeomorph_target, hf.toOpenPartialHomeomorph, image_mem_toOpenPartialHomeomorph_target, toOpenPartialHomeomorph
+/-
+**HasStrictFDerivAt.localInverse_continuousAt** 是 Mathlib 中的一个定理，位于命名空间 `HasStri
+ctFDerivAt`。
+形式化陈述：localInverse_continuousAt (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
+ ContinuousAt (hf.localInverse f f' a) (f a)
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.continuousAt_symm`：continuousAt_symm {x : Y} (h : 
+x in e.target) : ContinuousAt e.symm x
+· 使用定理 `HasStrictFDerivAt.image_mem_toOpenPartialHomeomorph_target`：image_mem_to
+OpenPartialHomeomorph_target (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : f 
+a in (hf.toOpenPartialHomeomorph f).target
 -/
-theorem localInverse_continuousAt (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
+theorem localInverse_continuousAt (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
     ContinuousAt (hf.localInverse f f' a) (f a) :=
   (hf.toOpenPartialHomeomorph f).continuousAt_symm hf.image_mem_toOpenPartialHomeomorph_target
-
-/--
-theorem `localInverse_tendsto` / 定理 `localInverse_tendsto`
-
-English:
-theorem localInverse_tendsto
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (hf.toOpenPartialHomeomorph f).tendsto_symm hf.mem_toOpenPartialHomeomorph_source
-
-中文:
-定理 localInverse_tendsto
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (hf.toOpenPartialHomeomorph f).tendsto_symm hf.mem_toOpenPartialHomeomorph_source
-
-Depends on / 依赖: hf.mem_toOpenPartialHomeomorph_source, hf.toOpenPartialHomeomorph, mem_toOpenPartialHomeomorph_source, tendsto_symm, toOpenPartialHomeomorph
+/-
+**HasStrictFDerivAt.localInverse_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `HasStrictFDe
+rivAt`。
+形式化陈述：localInverse_tendsto (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : Tend
+sto (hf.localInverse f f' a) (𝓝 <| f a) (𝓝 a)
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.tendsto_symm`：tendsto_symm {x} (hx : x in e.source
+) : Tendsto e.symm (𝓝 (e x)) (𝓝 x)
+· 使用定理 `HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source`：mem_toOpenPartialH
+omeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : a in (hf.toOpe
+nPartialHomeomorph f).source
 -/
-theorem localInverse_tendsto (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
+theorem localInverse_tendsto (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
     Tendsto (hf.localInverse f f' a) (𝓝 <| f a) (𝓝 a) :=
   (hf.toOpenPartialHomeomorph f).tendsto_symm hf.mem_toOpenPartialHomeomorph_source
-
-/--
-theorem `localInverse_unique` / 定理 `localInverse_unique`
-
-English:
-theorem localInverse_unique
-  statement: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : F -> E}
-  proof: eventuallyEq_of_left_inv_of_right_inv hg hf.eventually_right_inverse
-    (hf.toOpenPartialHomeomorph f).tendsto_symm hf.mem_toOpenPartialHomeomorph_source
-
-中文:
-定理 localInverse_unique
-  结论: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : F -> E}
-  证明: eventuallyEq_of_left_inv_of_right_inv hg hf.eventually_right_inverse
-    (hf.toOpenPartialHomeomorph f).tendsto_symm hf.mem_toOpenPartialHomeomorph_source
-
-Depends on / 依赖: eventuallyEq_of_left_inv_of_right_inv, eventually_right_inverse, hf.eventually_right_inverse, hf.mem_toOpenPartialHomeomorph_source, hf.toOpenPartialHomeomorph, mem_toOpenPartialHomeomorph_source, tendsto_symm, toOpenPartialHomeomorph
+/-
+**HasStrictFDerivAt.localInverse_unique** 是 Mathlib 中的一个定理，位于命名空间 `HasStrictFDer
+ivAt`。
+形式化陈述：localInverse_unique (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : F 
+-> E} (hg : forallᶠ x in 𝓝 a, g (f x) = x) : forallᶠ y in 𝓝 (f a), g y = localIn
+verse f f' a hf y
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a；hg : forallᶠ x in 𝓝 a, g (f x) =
+ x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.eventuallyEq_of_left_inv_of_right_inv`：eventuallyEq_of_left_inv_o
+f_right_inv {f : α -> β} {g₁ g₂ : β -> α} {fa : Filter α} {fb : Filter β} (hleft
+ : forallᶠ x in fa, g₁ (f x) = x) …
+· 使用定理 `HasStrictFDerivAt.eventually_right_inverse`：eventually_right_inverse (hf
+ : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : forallᶠ y in 𝓝 (f a), f (hf.localI
+nverse f f' a y) = y
+· 使用定理 `OpenPartialHomeomorph.tendsto_symm`：tendsto_symm {x} (hx : x in e.source
+) : Tendsto e.symm (𝓝 (e x)) (𝓝 x)
+· 使用定理 `HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source`：mem_toOpenPartialH
+omeomorph_source (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : a in (hf.toOpe
+nPartialHomeomorph f).source
 -/
-theorem localInverse_unique (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : F -> E}
-    (hg : forallᶠ x in 𝓝 a, g (f x) = x) : forallᶠ y in 𝓝 (f a), g y = localInverse f f' a hf y :=
-eventuallyEq_of_left_inv_of_right_inv hg hf.eventually_right_inverse
+theorem localInverse_unique (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) {g : F → E}
+    (hg : ∀ᶠ x in 𝓝 a, g (f x) = x) : ∀ᶠ y in 𝓝 (f a), g y = localInverse f f' a hf y :=
+  eventuallyEq_of_left_inv_of_right_inv hg hf.eventually_right_inverse <|
     (hf.toOpenPartialHomeomorph f).tendsto_symm hf.mem_toOpenPartialHomeomorph_source
 
-/--
-theorem `to_localInverse` / 定理 `to_localInverse`
+/-- If `f` has an invertible derivative `f'` at `a` in the sense of strict differentiability `(hf)`,
+then the inverse function `hf.localInverse f` has derivative `f'.symm` at `f a`. -/
+/-
+**HasStrictFDerivAt.to_localInverse** 是 Mathlib 中的一个定理，位于命名空间 `HasStrictFDerivAt
+`。
+形式化陈述：to_localInverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : HasStrict
+FDerivAt (hf.localInverse f f' a) (f'.symm : F ->L[𝕜] E) (f a)
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OpenPartialHomeomorph.hasStrictFDerivAt_symm`：OpenPartialHomeomorph.hasS
+trictFDerivAt_symm (f : OpenPartialHomeomorph E F) {f' : E ≃L[𝕜] F} {a : F} (ha 
+: a in f.target) (htff' : HasStric…
+· 使用定理 `HasStrictFDerivAt.image_mem_toOpenPartialHomeomorph_target`：image_mem_to
+OpenPartialHomeomorph_target (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : f 
+a in (hf.toOpenPartialHomeomorph f).target
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HasStrictFDerivAt.localInverse_apply_image`：localInverse_apply_image (hf
+ : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) : hf.localInverse f f' a (f a) = a
 
-English:
-theorem to_localInverse
-  given: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  proof: (hf.toOpenPartialHomeomorph f).hasStrictFDerivAt_symm
-hf.image_mem_toOpenPartialHomeomorph_target by
-    simpa [← localInverse_def] using hf
-
-中文:
-定理 to_localInverse
-  条件: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a)
-  证明: (hf.toOpenPartialHomeomorph f).hasStrictFDerivAt_symm
-hf.image_mem_toOpenPartialHomeomorph_target by
-    simpa [← localInverse_def] using hf
-
-Depends on / 依赖: hasStrictFDerivAt_symm, hf.image_mem_toOpenPartialHomeomorph_target, hf.toOpenPartialHomeomorph, image_mem_toOpenPartialHomeomorph_target, localInverse_def, toOpenPartialHomeomorph
+--- 原说明 ---
+If `f` has an invertible derivative `f'` at `a` in the sense of strict different
+iability `(hf)`,
+then the inverse function `hf.localInverse f` has derivative `f'.symm` at `f a`.
 -/
-theorem to_localInverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) :
-    HasStrictFDerivAt (hf.localInverse f f' a) (f'.symm : F ->L[𝕜] E) (f a) :=
+theorem to_localInverse (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) :
+    HasStrictFDerivAt (hf.localInverse f f' a) (f'.symm : F →L[𝕜] E) (f a) :=
   (hf.toOpenPartialHomeomorph f).hasStrictFDerivAt_symm
-hf.image_mem_toOpenPartialHomeomorph_target by
+    hf.image_mem_toOpenPartialHomeomorph_target <| by
     simpa [← localInverse_def] using hf
 
-/--
-theorem `to_local_left_inverse` / 定理 `to_local_left_inverse`
+/-- If `f : E → F` has an invertible derivative `f'` at `a` in the sense of strict differentiability
+and `g (f x) = x` in a neighborhood of `a`, then `g` has derivative `f'.symm` at `f a`.
 
-English:
-theorem to_local_left_inverse
-  statement: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : F -> E}
-  proof: hf.to_localInverse.congr_of_eventuallyEq (hf.localInverse_unique hg).mono fun _ => Eq.symm
+For a version assuming `f (g y) = y` and continuity of `g` at `f a` but not `[CompleteSpace E]`
+see `of_local_left_inverse`. -/
+/-
+**HasStrictFDerivAt.to_local_left_inverse** 是 Mathlib 中的一个定理，位于命名空间 `HasStrictFD
+erivAt`。
+形式化陈述：to_local_left_inverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : 
+F -> E} (hg : forallᶠ x in 𝓝 a, g (f x) = x) : HasStrictFDerivAt g (f'.symm : F 
+->L[𝕜] E) (f a)
+参数：hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a；hg : forallᶠ x in 𝓝 a, g (f x) =
+ x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasStrictFDerivAt.congr_of_eventuallyEq`：HasStrictFDerivAt.congr_of_even
+tuallyEq (h : HasStrictFDerivAt f f' x) (h₁ : f =ᶠ[𝓝 x] f₁) : HasStrictFDerivAt 
+f₁ f' x
+· 使用定理 `HasStrictFDerivAt.to_localInverse`：to_localInverse (hf : HasStrictFDeriv
+At f (f' : E ->L[𝕜] F) a) : HasStrictFDerivAt (hf.localInverse f f' a) (f'.symm 
+: F ->L[𝕜] E) (f a)
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `HasStrictFDerivAt.localInverse_unique`：localInverse_unique (hf : HasStri
+ctFDerivAt f (f' : E ->L[𝕜] F) a) {g : F -> E} (hg : forallᶠ x in 𝓝 a, g (f x) =
+ x) : forallᶠ y in 𝓝 (f a),…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-中文:
-定理 to_local_left_inverse
-  结论: (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : F -> E}
-  证明: hf.to_localInverse.congr_of_eventuallyEq (hf.localInverse_unique hg).mono fun _ => Eq.symm
+--- 原说明 ---
+If `f : E → F` has an invertible derivative `f'` at `a` in the sense of strict d
+ifferentiability
+and `g (f x) = x` in a neighborhood of `a`, then `g` has derivative `f'.symm` at
+ `f a`.
 
-Depends on / 依赖: Eq.symm, congr_of_eventuallyEq, hf.localInverse_unique, hf.to_localInverse.congr_of_eventuallyEq, localInverse_unique, to_localInverse
+For a version assuming `f (g y) = y` and continuity of `g` at `f a` but not `[Co
+mpleteSpace E]`
+see `of_local_left_inverse`.
 -/
-theorem to_local_left_inverse (hf : HasStrictFDerivAt f (f' : E ->L[𝕜] F) a) {g : F -> E}
-    (hg : forallᶠ x in 𝓝 a, g (f x) = x) : HasStrictFDerivAt g (f'.symm : F ->L[𝕜] E) (f a) :=
-hf.to_localInverse.congr_of_eventuallyEq (hf.localInverse_unique hg).mono fun _ => Eq.symm
+theorem to_local_left_inverse (hf : HasStrictFDerivAt f (f' : E →L[𝕜] F) a) {g : F → E}
+    (hg : ∀ᶠ x in 𝓝 a, g (f x) = x) : HasStrictFDerivAt g (f'.symm : F →L[𝕜] E) (f a) :=
+  hf.to_localInverse.congr_of_eventuallyEq <| (hf.localInverse_unique hg).mono fun _ => Eq.symm
 
 end HasStrictFDerivAt
 
-/--
-theorem `isOpenMap_of_hasStrictFDerivAt_equiv` / 定理 `isOpenMap_of_hasStrictFDerivAt_equiv`
+/-- If a function has an invertible strict derivative at all points, then it is an open map. -/
+/-
+**isOpenMap_of_hasStrictFDerivAt_equiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpenMap_of_hasStrictFDerivAt_equiv [CompleteSpace E] {f : E -> F} {f' : 
+E -> E ≃L[𝕜] F} (hf : forall x, HasStrictFDerivAt f (f' x : E ->L[𝕜] F) x) : IsO
+penMap f
+参数：hf : forall x, HasStrictFDerivAt f (f' x : E ->L[𝕜] F) x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isOpenMap_iff_nhds_le`：∀ {X : Type u_1} {Y : Type u_2} {f : X → Y} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   IsOpenMap f ↔ ∀ (x : X),
+ nhds (f x)…
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `HasStrictFDerivAt.map_nhds_eq_of_equiv`：map_nhds_eq_of_equiv (hf : HasSt
+rictFDerivAt f (f' : E ->L[𝕜] F) a) : map f (𝓝 a) = 𝓝 (f a)
 
-English:
-theorem isOpenMap_of_hasStrictFDerivAt_equiv
-  statement: [CompleteSpace E] {f : E -> F} {f' : E -> E ≃L[𝕜] F}
-  proof: isOpenMap_iff_nhds_le.2 fun x => (hf x).map_nhds_eq_of_equiv.ge
-
-中文:
-定理 isOpenMap_of_hasStrictFDerivAt_equiv
-  结论: [完备空间 E] {f : E -> F} {f' : E -> E ≃L[𝕜] F}
-  证明: isOpenMap_iff_nhds_le.2 fun x => (hf x).map_nhds_eq_of_equiv.ge
-
-Depends on / 依赖: isOpenMap_iff_nhds_le, map_nhds_eq_of_equiv, map_nhds_eq_of_equiv.ge
+--- 原说明 ---
+If a function has an invertible strict derivative at all points, then it is an o
+pen map.
 -/
-theorem isOpenMap_of_hasStrictFDerivAt_equiv [CompleteSpace E] {f : E -> F} {f' : E -> E ≃L[𝕜] F}
-    (hf : forall x, HasStrictFDerivAt f (f' x : E ->L[𝕜] F) x) : IsOpenMap f :=
+theorem isOpenMap_of_hasStrictFDerivAt_equiv [CompleteSpace E] {f : E → F} {f' : E → E ≃L[𝕜] F}
+    (hf : ∀ x, HasStrictFDerivAt f (f' x : E →L[𝕜] F) x) : IsOpenMap f :=
   isOpenMap_iff_nhds_le.2 fun x => (hf x).map_nhds_eq_of_equiv.ge

@@ -82,7 +82,7 @@ open Function
 variable (α : Type*)
 
 /-- Local notation for the nonnegative elements of a type `α`. -/
-local notation3 "α>=0" => { x : α // 0 <= x }
+local notation3 "α≥0" => { x : α // 0 ≤ x }
 
 /-- Local notation for the positive elements of a type `α`. -/
 local notation3 "α>0" => { x : α // 0 < x }
@@ -91,149 +91,181 @@ section Abbreviations
 
 variable [Mul α] [Zero α] [Preorder α]
 
-/--
-Definition of `PosMulMono` / `PosMulMono` 的定义
+/-- Typeclass for monotonicity of multiplication by nonnegative elements on the left,
+namely `a₁ ≤ a₂ → b * a₁ ≤ b * a₂` if `0 ≤ b`.
 
-English:
-class PosMulMono
-  parameters: : Prop where
-  axioms and operations (1):
-    - mul_le_mul_of_nonneg_left(⦃a) : α⦄ (ha : 0 <= a) ⦃b c : α⦄ (hbc : b <= c) : a * b <= a * c
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsOrderedRing`. -/
+/-
+**PosMulMono** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 正乘递增
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - mul_le_mul_of_nonneg_left(⦃a) : α⦄ (ha : 0 <= a) ⦃b c : α⦄ (hbc : b <= c) : a * b <= a * c
+--- 原说明 ---
+Typeclass for monotonicity of multiplication by nonnegative elements on the left
+,
+namely `a₁ ≤ a₂ → b * a₁ ≤ b * a₂` if `0 ≤ b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsOrderedRing`.
 -/
 @[mk_iff] class PosMulMono : Prop where
   /-- Do not use this. Use `_root_.mul_le_mul_of_nonneg_left` instead. -/
-  protected mul_le_mul_of_nonneg_left ⦃a : α⦄ (ha : 0 <= a) ⦃b c : α⦄ (hbc : b <= c) : a * b <= a * c
+  protected mul_le_mul_of_nonneg_left ⦃a : α⦄ (ha : 0 ≤ a) ⦃b c : α⦄ (hbc : b ≤ c) : a * b ≤ a * c
 
-/--
-Definition of `PosMulStrictMono` / `PosMulStrictMono` 的定义
+/-- Typeclass for strict monotonicity of multiplication by positive elements on the left,
+namely `a₁ < a₂ → b * a₁ < b * a₂` if `0 < b`.
 
-English:
-class PosMulStrictMono
-  parameters: : Prop where
-  axioms and operations (1):
-    - mul_lt_mul_of_pos_left(⦃a) : α⦄ (ha : 0 < a) ⦃b c : α⦄ (hbc : b < c) : a * b < a * c
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsStrictOrderedRing`. -/
+/-
+**PosMulStrictMono** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 正乘严格递增
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - mul_lt_mul_of_pos_left(⦃a) : α⦄ (ha : 0 < a) ⦃b c : α⦄ (hbc : b < c) : a * b < a * c
+--- 原说明 ---
+Typeclass for strict monotonicity of multiplication by positive elements on the 
+left,
+namely `a₁ < a₂ → b * a₁ < b * a₂` if `0 < b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsStrictOrderedRing`.
 -/
 @[mk_iff] class PosMulStrictMono : Prop where
   /-- Do not use this. Use `_root_.mul_lt_mul_of_pos_left` instead. -/
   protected mul_lt_mul_of_pos_left ⦃a : α⦄ (ha : 0 < a) ⦃b c : α⦄ (hbc : b < c) : a * b < a * c
 
-/--
-Definition of `PosMulReflectLT` / `PosMulReflectLT` 的定义
+/-- Typeclass for strict reverse monotonicity of multiplication by nonnegative elements on
+the left, namely `b * a₁ < b * a₂ → a₁ < a₂` if `0 ≤ b`.
 
-English:
-class PosMulReflectLT
-  parameters: : Prop extends ContravariantClass α>=0 α (fun x y => x * y) (· < ·)
-  extends: ContravariantClass α>=0 α (fun x y => x * y) (· < ·)
-  (no additional axioms)
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsStrictOrderedRing`. -/
+/-
+**PosMulReflectLT** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 正乘反映严格偏序
-  参数: : 命题 extends 反变类 α>=0 α (fun x y => x * y) (· < ·)
-  继承: 反变类 α>=0 α (fun x y => x * y) (· < ·)
-  (无附加公理)
+--- 原说明 ---
+Typeclass for strict reverse monotonicity of multiplication by nonnegative eleme
+nts on
+the left, namely `b * a₁ < b * a₂ → a₁ < a₂` if `0 ≤ b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsStrictOrderedRing`.
 -/
-@[mk_iff] class PosMulReflectLT : Prop extends ContravariantClass α>=0 α (fun x y => x * y) (· < ·)
+@[mk_iff] class PosMulReflectLT : Prop extends ContravariantClass α≥0 α (fun x y => x * y) (· < ·)
 
-/--
-Definition of `PosMulReflectLE` / `PosMulReflectLE` 的定义
+/-- Typeclass for reverse monotonicity of multiplication by positive elements on the left,
+namely `b * a₁ ≤ b * a₂ → a₁ ≤ a₂` if `0 < b`.
 
-English:
-class PosMulReflectLE
-  parameters: : Prop extends ContravariantClass α>0 α (fun x y => x * y) (· <= ·)
-  extends: ContravariantClass α>0 α (fun x y => x * y) (· <= ·)
-  (no additional axioms)
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsStrictOrderedRing`. -/
+/-
+**PosMulReflectLE** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 正乘反映偏序
-  参数: : 命题 extends 反变类 α>0 α (fun x y => x * y) (· <= ·)
-  继承: 反变类 α>0 α (fun x y => x * y) (· <= ·)
-  (无附加公理)
+--- 原说明 ---
+Typeclass for reverse monotonicity of multiplication by positive elements on the
+ left,
+namely `b * a₁ ≤ b * a₂ → a₁ ≤ a₂` if `0 < b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsStrictOrderedRing`.
 -/
-@[mk_iff] class PosMulReflectLE : Prop extends ContravariantClass α>0 α (fun x y => x * y) (· <= ·)
+@[mk_iff] class PosMulReflectLE : Prop extends ContravariantClass α>0 α (fun x y => x * y) (· ≤ ·)
 
-/--
-Definition of `MulPosMono` / `MulPosMono` 的定义
+/-- Typeclass for monotonicity of multiplication by nonnegative elements on the right,
+namely `a₁ ≤ a₂ → a₁ * b ≤ a₂ * b` if `0 ≤ b`.
 
-English:
-class MulPosMono
-  parameters: : Prop where
-  axioms and operations (1):
-    - mul_le_mul_of_nonneg_right(⦃c) : α⦄ (hc : 0 <= c) ⦃a b : α⦄ (hab : a <= b) : a * c <= b * c
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsOrderedRing`. -/
+/-
+**MulPosMono** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 乘正递增
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - mul_le_mul_of_nonneg_right(⦃c) : α⦄ (hc : 0 <= c) ⦃a b : α⦄ (hab : a <= b) : a * c <= b * c
+--- 原说明 ---
+Typeclass for monotonicity of multiplication by nonnegative elements on the righ
+t,
+namely `a₁ ≤ a₂ → a₁ * b ≤ a₂ * b` if `0 ≤ b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsOrderedRing`.
 -/
 @[mk_iff] class MulPosMono : Prop where
   /-- Do not use this. Use `_root_.mul_le_mul_of_nonneg_right` instead. -/
-  protected mul_le_mul_of_nonneg_right ⦃c : α⦄ (hc : 0 <= c) ⦃a b : α⦄ (hab : a <= b) : a * c <= b * c
+  protected mul_le_mul_of_nonneg_right ⦃c : α⦄ (hc : 0 ≤ c) ⦃a b : α⦄ (hab : a ≤ b) : a * c ≤ b * c
 
-/--
-Definition of `MulPosStrictMono` / `MulPosStrictMono` 的定义
+/-- Typeclass for strict monotonicity of multiplication by positive elements on the right,
+namely `a₁ < a₂ → a₁ * b < a₂ * b` if `0 < b`.
 
-English:
-class MulPosStrictMono
-  parameters: : Prop where
-  axioms and operations (1):
-    - mul_lt_mul_of_pos_right(⦃c) : α⦄ (hc : 0 < c) ⦃a b : α⦄ (hab : a < b) : a * c < b * c
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsStrictOrderedRing`. -/
+/-
+**MulPosStrictMono** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 乘正严格递增
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - mul_lt_mul_of_pos_right(⦃c) : α⦄ (hc : 0 < c) ⦃a b : α⦄ (hab : a < b) : a * c < b * c
+--- 原说明 ---
+Typeclass for strict monotonicity of multiplication by positive elements on the 
+right,
+namely `a₁ < a₂ → a₁ * b < a₂ * b` if `0 < b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsStrictOrderedRing`.
 -/
 @[mk_iff] class MulPosStrictMono : Prop where
   /-- Do not use this. Use `_root_.mul_lt_mul_of_pos_right` instead. -/
   protected mul_lt_mul_of_pos_right ⦃c : α⦄ (hc : 0 < c) ⦃a b : α⦄ (hab : a < b) : a * c < b * c
 
-/--
-Definition of `MulPosReflectLT` / `MulPosReflectLT` 的定义
+/-- Typeclass for strict reverse monotonicity of multiplication by nonnegative elements on
+the right, namely `a₁ * b < a₂ * b → a₁ < a₂` if `0 ≤ b`.
 
-English:
-class MulPosReflectLT
-  parameters: : Prop extends ContravariantClass α>=0 α (fun x y => y * x) (· < ·)
-  extends: ContravariantClass α>=0 α (fun x y => y * x) (· < ·)
-  (no additional axioms)
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsStrictOrderedRing`. -/
+/-
+**MulPosReflectLT** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 乘正反映严格偏序
-  参数: : 命题 extends 反变类 α>=0 α (fun x y => y * x) (· < ·)
-  继承: 反变类 α>=0 α (fun x y => y * x) (· < ·)
-  (无附加公理)
+--- 原说明 ---
+Typeclass for strict reverse monotonicity of multiplication by nonnegative eleme
+nts on
+the right, namely `a₁ * b < a₂ * b → a₁ < a₂` if `0 ≤ b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsStrictOrderedRing`.
 -/
-@[mk_iff] class MulPosReflectLT : Prop extends ContravariantClass α>=0 α (fun x y => y * x) (· < ·)
+@[mk_iff] class MulPosReflectLT : Prop extends ContravariantClass α≥0 α (fun x y => y * x) (· < ·)
 
-/--
-Definition of `MulPosReflectLE` / `MulPosReflectLE` 的定义
+/-- Typeclass for reverse monotonicity of multiplication by positive elements on the right,
+namely `a₁ * b ≤ a₂ * b → a₁ ≤ a₂` if `0 < b`.
 
-English:
-class MulPosReflectLE
-  parameters: : Prop extends ContravariantClass α>0 α (fun x y => y * x) (· <= ·)
-  extends: ContravariantClass α>0 α (fun x y => y * x) (· <= ·)
-  (no additional axioms)
+You should usually not use this very granular typeclass directly, but rather a typeclass like
+`IsStrictOrderedRing`. -/
+/-
+**MulPosReflectLE** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → [Zero α] → [Preorder α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 乘正反映偏序
-  参数: : 命题 extends 反变类 α>0 α (fun x y => y * x) (· <= ·)
-  继承: 反变类 α>0 α (fun x y => y * x) (· <= ·)
-  (无附加公理)
+--- 原说明 ---
+Typeclass for reverse monotonicity of multiplication by positive elements on the
+ right,
+namely `a₁ * b ≤ a₂ * b → a₁ ≤ a₂` if `0 < b`.
+
+You should usually not use this very granular typeclass directly, but rather a t
+ypeclass like
+`IsStrictOrderedRing`.
 -/
-@[mk_iff] class MulPosReflectLE : Prop extends ContravariantClass α>0 α (fun x y => y * x) (· <= ·)
+@[mk_iff] class MulPosReflectLE : Prop extends ContravariantClass α>0 α (fun x y => y * x) (· ≤ ·)
 
 end Abbreviations
 
@@ -244,491 +276,427 @@ section Preorder
 
 variable [Preorder α] {a b c d : α}
 
-/--
-Instance `PosMulMono.to_covariantClass_nonneg_mul_le` / 实例 `PosMulMono.to_covariantClass_nonneg_mul_le`
-
-English:
-instance PosMulMono.to_covariantClass_nonneg_mul_le
-  signature: [PosMulMono α]
-  body: PosMulMono.mul_le_mul_of_nonneg_left a.2 hbc
-
-中文:
-实例 正乘递增.to_covariantClass_nonneg_mul_le
-  签名: [正乘递增 α]
-  定义体: PosMulMono.mul_le_mul_of_nonneg_left a.2 hbc
-
-Depends on / 依赖: PosMulMono, PosMulMono.mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_left
+/-
+**PosMulMono.to_covariantClass_nonneg_mul_le** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PosMulMono.to_covariantClass_nonneg_mul_le [PosMulMono α] : CovariantClass
+ α>=0 α (fun x y => x * y) (· <= ·) where elim a _b _c hbc
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulMono.mul_le_mul_of_nonneg_left`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulMono α] ⦃a : α⦄,   0 ≤ a → ∀
+ ⦃b c : α⦄, b ≤ c → a * b …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance PosMulMono.to_covariantClass_nonneg_mul_le [PosMulMono α] :
-    CovariantClass α>=0 α (fun x y => x * y) (· <= ·) where
+    CovariantClass α≥0 α (fun x y => x * y) (· ≤ ·) where
   elim a _b _c hbc := PosMulMono.mul_le_mul_of_nonneg_left a.2 hbc
-
-/--
-Instance `MulPosMono.to_covariantClass_nonneg_mul_le` / 实例 `MulPosMono.to_covariantClass_nonneg_mul_le`
-
-English:
-instance MulPosMono.to_covariantClass_nonneg_mul_le
-  signature: [MulPosMono α]
-  body: MulPosMono.mul_le_mul_of_nonneg_right a.2 hbc
-
-中文:
-实例 乘正递增.to_covariantClass_nonneg_mul_le
-  签名: [乘正递增 α]
-  定义体: MulPosMono.mul_le_mul_of_nonneg_right a.2 hbc
-
-Depends on / 依赖: MulPosMono, MulPosMono.mul_le_mul_of_nonneg_right, mul_le_mul_of_nonneg_right
+/-
+**MulPosMono.to_covariantClass_nonneg_mul_le** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MulPosMono.to_covariantClass_nonneg_mul_le [MulPosMono α] : CovariantClass
+ α>=0 α (fun x y => y * x) (· <= ·) where elim a _b _c hbc
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulPosMono.mul_le_mul_of_nonneg_right`：∀ {α : Type u_1} {inst : Mul α} {
+inst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosMono α] ⦃c : α⦄,   0 ≤ c → 
+∀ ⦃a b : α⦄, a ≤ b → a * c …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance MulPosMono.to_covariantClass_nonneg_mul_le [MulPosMono α] :
-    CovariantClass α>=0 α (fun x y => y * x) (· <= ·) where
+    CovariantClass α≥0 α (fun x y => y * x) (· ≤ ·) where
   elim a _b _c hbc := MulPosMono.mul_le_mul_of_nonneg_right a.2 hbc
-
-/--
-Instance `PosMulMono.to_covariantClass_pos_mul_le` / 实例 `PosMulMono.to_covariantClass_pos_mul_le`
-
-English:
-instance PosMulMono.to_covariantClass_pos_mul_le
-  signature: [PosMulMono α]
-  body: PosMulMono.mul_le_mul_of_nonneg_left a.2.le hbc
-
-中文:
-实例 正乘递增.to_covariantClass_pos_mul_le
-  签名: [正乘递增 α]
-  定义体: PosMulMono.mul_le_mul_of_nonneg_left a.2.le hbc
-
-Depends on / 依赖: PosMulMono, PosMulMono.mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_left
+/-
+**PosMulMono.to_covariantClass_pos_mul_le** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PosMulMono.to_covariantClass_pos_mul_le [PosMulMono α] : CovariantClass α>
+0 α (fun x y => x * y) (· <= ·) where elim a _b _c hbc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulMono.mul_le_mul_of_nonneg_left`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulMono α] ⦃a : α⦄,   0 ≤ a → ∀
+ ⦃b c : α⦄, b ≤ c → a * b …
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance PosMulMono.to_covariantClass_pos_mul_le [PosMulMono α] :
-    CovariantClass α>0 α (fun x y => x * y) (· <= ·) where
+    CovariantClass α>0 α (fun x y => x * y) (· ≤ ·) where
   elim a _b _c hbc := PosMulMono.mul_le_mul_of_nonneg_left a.2.le hbc
-
-/--
-Instance `MulPosMono.to_covariantClass_pos_mul_le` / 实例 `MulPosMono.to_covariantClass_pos_mul_le`
-
-English:
-instance MulPosMono.to_covariantClass_pos_mul_le
-  signature: [MulPosMono α]
-  body: MulPosMono.mul_le_mul_of_nonneg_right a.2.le hbc
-
-中文:
-实例 乘正递增.to_covariantClass_pos_mul_le
-  签名: [乘正递增 α]
-  定义体: MulPosMono.mul_le_mul_of_nonneg_right a.2.le hbc
-
-Depends on / 依赖: MulPosMono, MulPosMono.mul_le_mul_of_nonneg_right, mul_le_mul_of_nonneg_right
+/-
+**MulPosMono.to_covariantClass_pos_mul_le** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MulPosMono.to_covariantClass_pos_mul_le [MulPosMono α] : CovariantClass α>
+0 α (fun x y => y * x) (· <= ·) where elim a _b _c hbc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulPosMono.mul_le_mul_of_nonneg_right`：∀ {α : Type u_1} {inst : Mul α} {
+inst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosMono α] ⦃c : α⦄,   0 ≤ c → 
+∀ ⦃a b : α⦄, a ≤ b → a * c …
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance MulPosMono.to_covariantClass_pos_mul_le [MulPosMono α] :
-    CovariantClass α>0 α (fun x y => y * x) (· <= ·) where
+    CovariantClass α>0 α (fun x y => y * x) (· ≤ ·) where
   elim a _b _c hbc := MulPosMono.mul_le_mul_of_nonneg_right a.2.le hbc
-
-/--
-Instance `PosMulStrictMono.to_covariantClass_pos_mul_le` / 实例 `PosMulStrictMono.to_covariantClass_pos_mul_le`
-
-English:
-instance PosMulStrictMono.to_covariantClass_pos_mul_le
-  signature: [PosMulStrictMono α]
-  body: PosMulStrictMono.mul_lt_mul_of_pos_left a.2 hbc
-
-中文:
-实例 正乘严格递增.to_covariantClass_pos_mul_le
-  签名: [正乘严格递增 α]
-  定义体: PosMulStrictMono.mul_lt_mul_of_pos_left a.2 hbc
-
-Depends on / 依赖: PosMulStrictMono, PosMulStrictMono.mul_lt_mul_of_pos_left, mul_lt_mul_of_pos_left
+/-
+**PosMulStrictMono.to_covariantClass_pos_mul_le** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PosMulStrictMono.to_covariantClass_pos_mul_le [PosMulStrictMono α] : Covar
+iantClass α>0 α (fun x y => x * y) (· < ·) where elim a _b _c hbc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulStrictMono.mul_lt_mul_of_pos_left`：∀ {α : Type u_1} {inst : Mul α}
+ {inst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulStrictMono α] ⦃a : α⦄,   
+0 < a → ∀ ⦃b c : α⦄, b < c → …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance PosMulStrictMono.to_covariantClass_pos_mul_le [PosMulStrictMono α] :
     CovariantClass α>0 α (fun x y => x * y) (· < ·) where
   elim a _b _c hbc := PosMulStrictMono.mul_lt_mul_of_pos_left a.2 hbc
-
-/--
-Instance `MulPosStrictMono.to_covariantClass_pos_mul_le` / 实例 `MulPosStrictMono.to_covariantClass_pos_mul_le`
-
-English:
-instance MulPosStrictMono.to_covariantClass_pos_mul_le
-  signature: [MulPosStrictMono α]
-  body: MulPosStrictMono.mul_lt_mul_of_pos_right a.2 hbc
-
-中文:
-实例 乘正严格递增.to_covariantClass_pos_mul_le
-  签名: [乘正严格递增 α]
-  定义体: MulPosStrictMono.mul_lt_mul_of_pos_right a.2 hbc
-
-Depends on / 依赖: MulPosStrictMono, MulPosStrictMono.mul_lt_mul_of_pos_right, mul_lt_mul_of_pos_right
+/-
+**MulPosStrictMono.to_covariantClass_pos_mul_le** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MulPosStrictMono.to_covariantClass_pos_mul_le [MulPosStrictMono α] : Covar
+iantClass α>0 α (fun x y => y * x) (· < ·) where elim a _b _c hbc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulPosStrictMono.mul_lt_mul_of_pos_right`：∀ {α : Type u_1} {inst : Mul α
+} {inst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosStrictMono α] ⦃c : α⦄,  
+ 0 < c → ∀ ⦃a b : α⦄, a < b → …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance MulPosStrictMono.to_covariantClass_pos_mul_le [MulPosStrictMono α] :
     CovariantClass α>0 α (fun x y => y * x) (· < ·) where
   elim a _b _c hbc := MulPosStrictMono.mul_lt_mul_of_pos_right a.2 hbc
-
-/--
-Instance `PosMulReflectLT.to_contravariantClass_pos_mul_lt` / 实例 `PosMulReflectLT.to_contravariantClass_pos_mul_lt`
-
-English:
-instance PosMulReflectLT.to_contravariantClass_pos_mul_lt
-  signature: [PosMulReflectLT α]
-  body: ⟨fun a _ _ bc => @ContravariantClass.elim α>=0 α (fun x y => x * y) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
-
-中文:
-实例 正乘反映严格偏序.to_contravariantClass_pos_mul_lt
-  签名: [正乘反映严格偏序 α]
-  定义体: ⟨fun a _ _ bc => @ContravariantClass.elim α>=0 α (fun x y => x * y) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
-
-Depends on / 依赖: ContravariantClass, ContravariantClass.elim
+/-
+**PosMulReflectLT.to_contravariantClass_pos_mul_lt** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：PosMulReflectLT.to_contravariantClass_pos_mul_lt [PosMulReflectLT α] : Con
+travariantClass α>0 α (fun x y => x * y) (· < ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContravariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N}
+ {r : N → N → Prop} [self : ContravariantClass M N μ r],   Contravariant M N μ r
+· 使用定理 `PosMulReflectLT.toContravariantClass`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulReflectLT α],   Contravarian
+tClass { x // 0 ≤ x } α (f…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance PosMulReflectLT.to_contravariantClass_pos_mul_lt [PosMulReflectLT α] :
     ContravariantClass α>0 α (fun x y => x * y) (· < ·) :=
-  ⟨fun a _ _ bc => @ContravariantClass.elim α>=0 α (fun x y => x * y) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
-
-/--
-Instance `MulPosReflectLT.to_contravariantClass_pos_mul_lt` / 实例 `MulPosReflectLT.to_contravariantClass_pos_mul_lt`
-
-English:
-instance MulPosReflectLT.to_contravariantClass_pos_mul_lt
-  signature: [MulPosReflectLT α]
-  body: ⟨fun a _ _ bc => @ContravariantClass.elim α>=0 α (fun x y => y * x) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
-
-中文:
-实例 乘正反映严格偏序.to_contravariantClass_pos_mul_lt
-  签名: [乘正反映严格偏序 α]
-  定义体: ⟨fun a _ _ bc => @ContravariantClass.elim α>=0 α (fun x y => y * x) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
-
-Depends on / 依赖: ContravariantClass, ContravariantClass.elim
+  ⟨fun a _ _ bc => @ContravariantClass.elim α≥0 α (fun x y => x * y) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
+/-
+**MulPosReflectLT.to_contravariantClass_pos_mul_lt** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MulPosReflectLT.to_contravariantClass_pos_mul_lt [MulPosReflectLT α] : Con
+travariantClass α>0 α (fun x y => y * x) (· < ·)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContravariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N}
+ {r : N → N → Prop} [self : ContravariantClass M N μ r],   Contravariant M N μ r
+· 使用定理 `MulPosReflectLT.toContravariantClass`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosReflectLT α],   Contravarian
+tClass { x // 0 ≤ x } α (f…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 instance MulPosReflectLT.to_contravariantClass_pos_mul_lt [MulPosReflectLT α] :
     ContravariantClass α>0 α (fun x y => y * x) (· < ·) :=
-  ⟨fun a _ _ bc => @ContravariantClass.elim α>=0 α (fun x y => y * x) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
-
+  ⟨fun a _ _ bc => @ContravariantClass.elim α≥0 α (fun x y => y * x) (· < ·) _ ⟨_, a.2.le⟩ _ _ bc⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulLeftMono.toPosMulMono [MulLeftMono α] :
     PosMulMono α where mul_le_mul_of_nonneg_left _ _ _ _ := ‹MulLeftMono α›.elim _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulRightMono.toMulPosMono [MulRightMono α] :
     MulPosMono α where mul_le_mul_of_nonneg_right _ _ _ _ := ‹MulRightMono α›.elim _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulLeftStrictMono.toPosMulStrictMono [MulLeftStrictMono α] :
     PosMulStrictMono α where mul_lt_mul_of_pos_left _ _ _ _ := ‹MulLeftStrictMono α›.elim _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulRightStrictMono.toMulPosStrictMono [MulRightStrictMono α] :
     MulPosStrictMono α where mul_lt_mul_of_pos_right _ _ _ _ := ‹MulRightStrictMono α›.elim _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulLeftMono.toPosMulReflectLT [MulLeftReflectLT α] :
     PosMulReflectLT α where elim _ _ := ‹MulLeftReflectLT α›.elim _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulRightMono.toMulPosReflectLT [MulRightReflectLT α] :
     MulPosReflectLT α where elim _ _ := ‹MulRightReflectLT α›.elim _
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulLeftStrictMono.toPosMulReflectLE [MulLeftReflectLE α] :
     PosMulReflectLE α where
   elim _ _ _ := ‹MulLeftReflectLE α›.le_of_mul_le_mul_left'
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulRightStrictMono.toMulPosReflectLE [MulRightReflectLE α] :
     MulPosReflectLE α where
   elim _ _ _ := ‹MulRightReflectLE α›.le_of_mul_le_mul_right'
 
 @[gcongr]
-/--
-theorem `mul_le_mul_of_nonneg_left` / 定理 `mul_le_mul_of_nonneg_left`
-
-English:
-theorem mul_le_mul_of_nonneg_left
-  given: [PosMulMono α] (hbc : b <= c) (ha : 0 <= a)
-  statement: a * b <= a * c
-  proof: PosMulMono.mul_le_mul_of_nonneg_left ha hbc
-
-@[gcongr]
-
-中文:
-定理 mul_le_mul_of_nonneg_left
-  条件: [正乘递增 α] (hbc : b <= c) (ha : 0 <= a)
-  结论: a * b <= a * c
-  证明: PosMulMono.mul_le_mul_of_nonneg_left ha hbc
-
-@[gcongr]
-
-Depends on / 依赖: PosMulMono, PosMulMono.mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_left
+/-
+**mul_le_mul_of_nonneg_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b <= c) (ha : 0 <= a) : a 
+* b <= a * c
+参数：hbc : b <= c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulMono.mul_le_mul_of_nonneg_left`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulMono α] ⦃a : α⦄,   0 ≤ a → ∀
+ ⦃b c : α⦄, b ≤ c → a * b …
 -/
-theorem mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b <= c) (ha : 0 <= a) : a * b <= a * c :=
+theorem mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : a * b ≤ a * c :=
   PosMulMono.mul_le_mul_of_nonneg_left ha hbc
 
 @[gcongr]
-/--
-theorem `mul_le_mul_of_nonneg_right` / 定理 `mul_le_mul_of_nonneg_right`
-
-English:
-theorem mul_le_mul_of_nonneg_right
-  given: [MulPosMono α] (hbc : b <= c) (ha : 0 <= a)
-  statement: b * a <= c * a
-  proof: MulPosMono.mul_le_mul_of_nonneg_right ha hbc
-
-@[gcongr]
-
-中文:
-定理 mul_le_mul_of_nonneg_right
-  条件: [乘正递增 α] (hbc : b <= c) (ha : 0 <= a)
-  结论: b * a <= c * a
-  证明: MulPosMono.mul_le_mul_of_nonneg_right ha hbc
-
-@[gcongr]
-
-Depends on / 依赖: MulPosMono, MulPosMono.mul_le_mul_of_nonneg_right, mul_le_mul_of_nonneg_right
+/-
+**mul_le_mul_of_nonneg_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b <= c) (ha : 0 <= a) : b
+ * a <= c * a
+参数：hbc : b <= c；ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulPosMono.mul_le_mul_of_nonneg_right`：∀ {α : Type u_1} {inst : Mul α} {
+inst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosMono α] ⦃c : α⦄,   0 ≤ c → 
+∀ ⦃a b : α⦄, a ≤ b → a * c …
 -/
-theorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b <= c) (ha : 0 <= a) : b * a <= c * a :=
+theorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a :=
   MulPosMono.mul_le_mul_of_nonneg_right ha hbc
 
 @[gcongr]
-/--
-theorem `mul_lt_mul_of_pos_left` / 定理 `mul_lt_mul_of_pos_left`
-
-English:
-theorem mul_lt_mul_of_pos_left
-  given: [PosMulStrictMono α] (hbc : b < c) (ha : 0 < a)
-  statement: a * b < a * c
-  proof: PosMulStrictMono.mul_lt_mul_of_pos_left ha hbc
-
-@[gcongr]
-
-中文:
-定理 mul_lt_mul_of_pos_left
-  条件: [正乘严格递增 α] (hbc : b < c) (ha : 0 < a)
-  结论: a * b < a * c
-  证明: PosMulStrictMono.mul_lt_mul_of_pos_left ha hbc
-
-@[gcongr]
-
-Depends on / 依赖: PosMulStrictMono, PosMulStrictMono.mul_lt_mul_of_pos_left, mul_lt_mul_of_pos_left
+/-
+**mul_lt_mul_of_pos_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc : b < c) (ha : 0 < a) : a
+ * b < a * c
+参数：hbc : b < c；ha : 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulStrictMono.mul_lt_mul_of_pos_left`：∀ {α : Type u_1} {inst : Mul α}
+ {inst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulStrictMono α] ⦃a : α⦄,   
+0 < a → ∀ ⦃b c : α⦄, b < c → …
 -/
 theorem mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc : b < c) (ha : 0 < a) : a * b < a * c :=
   PosMulStrictMono.mul_lt_mul_of_pos_left ha hbc
 
 @[gcongr]
-/--
-theorem `mul_lt_mul_of_pos_right` / 定理 `mul_lt_mul_of_pos_right`
-
-English:
-theorem mul_lt_mul_of_pos_right
-  given: [MulPosStrictMono α] (hbc : b < c) (ha : 0 < a)
-  statement: b * a < c * a
-  proof: MulPosStrictMono.mul_lt_mul_of_pos_right ha hbc
-
-中文:
-定理 mul_lt_mul_of_pos_right
-  条件: [乘正严格递增 α] (hbc : b < c) (ha : 0 < a)
-  结论: b * a < c * a
-  证明: MulPosStrictMono.mul_lt_mul_of_pos_right ha hbc
-
-Depends on / 依赖: MulPosStrictMono, MulPosStrictMono.mul_lt_mul_of_pos_right, mul_lt_mul_of_pos_right
+/-
+**mul_lt_mul_of_pos_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_pos_right [MulPosStrictMono α] (hbc : b < c) (ha : 0 < a) : 
+b * a < c * a
+参数：hbc : b < c；ha : 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulPosStrictMono.mul_lt_mul_of_pos_right`：∀ {α : Type u_1} {inst : Mul α
+} {inst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosStrictMono α] ⦃c : α⦄,  
+ 0 < c → ∀ ⦃a b : α⦄, a < b → …
 -/
 theorem mul_lt_mul_of_pos_right [MulPosStrictMono α] (hbc : b < c) (ha : 0 < a) : b * a < c * a :=
   MulPosStrictMono.mul_lt_mul_of_pos_right ha hbc
-
-/--
-theorem `lt_of_mul_lt_mul_left` / 定理 `lt_of_mul_lt_mul_left`
-
-English:
-theorem lt_of_mul_lt_mul_left
-  given: [PosMulReflectLT α] (h : a * b < a * c) (a0 : 0 <= a)
-  statement: b < c
-  proof: @ContravariantClass.elim α>=0 α (fun x y => x * y) (· < ·) _ ⟨a, a0⟩ _ _ h
-
-中文:
-定理 lt_of_mul_lt_mul_left
-  条件: [正乘反映严格偏序 α] (h : a * b < a * c) (a0 : 0 <= a)
-  结论: b < c
-  证明: @ContravariantClass.elim α>=0 α (fun x y => x * y) (· < ·) _ ⟨a, a0⟩ _ _ h
-
-Depends on / 依赖: ContravariantClass, ContravariantClass.elim
+/-
+**lt_of_mul_lt_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_of_mul_lt_mul_left [PosMulReflectLT α] (h : a * b < a * c) (a0 : 0 <= a
+) : b < c
+参数：h : a * b < a * c；a0 : 0 <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContravariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N}
+ {r : N → N → Prop} [self : ContravariantClass M N μ r],   Contravariant M N μ r
+· 使用定理 `PosMulReflectLT.toContravariantClass`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulReflectLT α],   Contravarian
+tClass { x // 0 ≤ x } α (f…
 -/
-theorem lt_of_mul_lt_mul_left [PosMulReflectLT α] (h : a * b < a * c) (a0 : 0 <= a) : b < c :=
-  @ContravariantClass.elim α>=0 α (fun x y => x * y) (· < ·) _ ⟨a, a0⟩ _ _ h
-
-/--
-theorem `lt_of_mul_lt_mul_right` / 定理 `lt_of_mul_lt_mul_right`
-
-English:
-theorem lt_of_mul_lt_mul_right
-  given: [MulPosReflectLT α] (h : b * a < c * a) (a0 : 0 <= a)
-  statement: b < c
-  proof: @ContravariantClass.elim α>=0 α (fun x y => y * x) (· < ·) _ ⟨a, a0⟩ _ _ h
-
-中文:
-定理 lt_of_mul_lt_mul_right
-  条件: [乘正反映严格偏序 α] (h : b * a < c * a) (a0 : 0 <= a)
-  结论: b < c
-  证明: @ContravariantClass.elim α>=0 α (fun x y => y * x) (· < ·) _ ⟨a, a0⟩ _ _ h
-
-Depends on / 依赖: ContravariantClass, ContravariantClass.elim
+theorem lt_of_mul_lt_mul_left [PosMulReflectLT α] (h : a * b < a * c) (a0 : 0 ≤ a) : b < c :=
+  @ContravariantClass.elim α≥0 α (fun x y => x * y) (· < ·) _ ⟨a, a0⟩ _ _ h
+/-
+**lt_of_mul_lt_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_of_mul_lt_mul_right [MulPosReflectLT α] (h : b * a < c * a) (a0 : 0 <= 
+a) : b < c
+参数：h : b * a < c * a；a0 : 0 <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContravariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N}
+ {r : N → N → Prop} [self : ContravariantClass M N μ r],   Contravariant M N μ r
+· 使用定理 `MulPosReflectLT.toContravariantClass`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosReflectLT α],   Contravarian
+tClass { x // 0 ≤ x } α (f…
 -/
-theorem lt_of_mul_lt_mul_right [MulPosReflectLT α] (h : b * a < c * a) (a0 : 0 <= a) : b < c :=
-  @ContravariantClass.elim α>=0 α (fun x y => y * x) (· < ·) _ ⟨a, a0⟩ _ _ h
-
-/--
-theorem `le_of_mul_le_mul_left` / 定理 `le_of_mul_le_mul_left`
-
-English:
-theorem le_of_mul_le_mul_left
-  given: [PosMulReflectLE α] (bc : a * b <= a * c) (a0 : 0 < a)
-  statement: b <= c
-  proof: @ContravariantClass.elim α>0 α (fun x y => x * y) (· <= ·) _ ⟨a, a0⟩ _ _ bc
-
-中文:
-定理 le_of_mul_le_mul_left
-  条件: [正乘反映偏序 α] (bc : a * b <= a * c) (a0 : 0 < a)
-  结论: b <= c
-  证明: @ContravariantClass.elim α>0 α (fun x y => x * y) (· <= ·) _ ⟨a, a0⟩ _ _ bc
-
-Depends on / 依赖: ContravariantClass, ContravariantClass.elim
+theorem lt_of_mul_lt_mul_right [MulPosReflectLT α] (h : b * a < c * a) (a0 : 0 ≤ a) : b < c :=
+  @ContravariantClass.elim α≥0 α (fun x y => y * x) (· < ·) _ ⟨a, a0⟩ _ _ h
+/-
+**le_of_mul_le_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_of_mul_le_mul_left [PosMulReflectLE α] (bc : a * b <= a * c) (a0 : 0 < 
+a) : b <= c
+参数：bc : a * b <= a * c；a0 : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContravariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N}
+ {r : N → N → Prop} [self : ContravariantClass M N μ r],   Contravariant M N μ r
+· 使用定理 `PosMulReflectLE.toContravariantClass`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : PosMulReflectLE α],   Contravarian
+tClass { x // 0 < x } α (f…
 -/
-theorem le_of_mul_le_mul_left [PosMulReflectLE α] (bc : a * b <= a * c) (a0 : 0 < a) : b <= c :=
-  @ContravariantClass.elim α>0 α (fun x y => x * y) (· <= ·) _ ⟨a, a0⟩ _ _ bc
-
-/--
-theorem `le_of_mul_le_mul_right` / 定理 `le_of_mul_le_mul_right`
-
-English:
-theorem le_of_mul_le_mul_right
-  given: [MulPosReflectLE α] (bc : b * a <= c * a) (a0 : 0 < a)
-  statement: b <= c
-  proof: @ContravariantClass.elim α>0 α (fun x y => y * x) (· <= ·) _ ⟨a, a0⟩ _ _ bc
+theorem le_of_mul_le_mul_left [PosMulReflectLE α] (bc : a * b ≤ a * c) (a0 : 0 < a) : b ≤ c :=
+  @ContravariantClass.elim α>0 α (fun x y => x * y) (· ≤ ·) _ ⟨a, a0⟩ _ _ bc
+/-
+**le_of_mul_le_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_of_mul_le_mul_right [MulPosReflectLE α] (bc : b * a <= c * a) (a0 : 0 <
+ a) : b <= c
+参数：bc : b * a <= c * a；a0 : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContravariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N}
+ {r : N → N → Prop} [self : ContravariantClass M N μ r],   Contravariant M N μ r
+· 使用定理 `MulPosReflectLE.toContravariantClass`：∀ {α : Type u_1} {inst : Mul α} {i
+nst_1 : Zero α} {inst_2 : Preorder α} [self : MulPosReflectLE α],   Contravarian
+tClass { x // 0 < x } α (f…
+-/
+theorem le_of_mul_le_mul_right [MulPosReflectLE α] (bc : b * a ≤ c * a) (a0 : 0 < a) : b ≤ c :=
+  @ContravariantClass.elim α>0 α (fun x y => y * x) (· ≤ ·) _ ⟨a, a0⟩ _ _ bc
 
 alias lt_of_mul_lt_mul_of_nonneg_left := lt_of_mul_lt_mul_left
 alias lt_of_mul_lt_mul_of_nonneg_right := lt_of_mul_lt_mul_right
 alias le_of_mul_le_mul_of_pos_left := le_of_mul_le_mul_left
 alias le_of_mul_le_mul_of_pos_right := le_of_mul_le_mul_right
+/-- Pullback `PosMulMono`. -/
+/-
+**Function.Injective.posMulMono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Injective.posMulMono [PosMulMono α] {β : Type*} [Zero β] [Mul β] 
+[Preorder β] (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x * y) = f x * 
+f y) (le : forall {x y}, f x <= f y ↔ x <= y) : PosMulMono β where mul_le_mul_of
+_nonneg_left a ha b c hbc
+参数：f : β -> α；zero : f 0 = 0；mul : forall x y, f (x * y) = f x * f y；le : forall
+ {x y}, f x <= f y ↔ x <= y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-中文:
-定理 le_of_mul_le_mul_right
-  条件: [乘正反映偏序 α] (bc : b * a <= c * a) (a0 : 0 < a)
-  结论: b <= c
-  证明: @ContravariantClass.elim α>0 α (fun x y => y * x) (· <= ·) _ ⟨a, a0⟩ _ _ bc
-
-alias lt_of_mul_lt_mul_of_nonneg_left := lt_of_mul_lt_mul_left
-alias lt_of_mul_lt_mul_of_nonneg_right := lt_of_mul_lt_mul_right
-alias le_of_mul_le_mul_of_pos_left := le_of_mul_le_mul_left
-alias le_of_mul_le_mul_of_pos_right := le_of_mul_le_mul_right
-
-Depends on / 依赖: ContravariantClass, ContravariantClass.elim
--/
-theorem le_of_mul_le_mul_right [MulPosReflectLE α] (bc : b * a <= c * a) (a0 : 0 < a) : b <= c :=
-  @ContravariantClass.elim α>0 α (fun x y => y * x) (· <= ·) _ ⟨a, a0⟩ _ _ bc
-
-alias lt_of_mul_lt_mul_of_nonneg_left := lt_of_mul_lt_mul_left
-alias lt_of_mul_lt_mul_of_nonneg_right := lt_of_mul_lt_mul_right
-alias le_of_mul_le_mul_of_pos_left := le_of_mul_le_mul_left
-alias le_of_mul_le_mul_of_pos_right := le_of_mul_le_mul_right
-/--
-lemma `Function.Injective.posMulMono` / 引理 `Function.Injective.posMulMono`
-
-English:
-lemma Function.Injective.posMulMono
-  statement: [PosMulMono α] {β : Type*} [Zero β] [Mul β] [Preorder β]
-  proof: by
-    rw [← le]; rw [mul]; rw [mul]; exact mul_le_mul_of_nonneg_left (le.2 hbc) (by rwa [← zero, le])
-
-中文:
-引理 函数.单射.posMulMono
-  结论: [正乘递增 α] {β : 类型} [零 β] [乘法 β] [预序 β]
-  证明: by
-    rw [← le]; rw [mul]; rw [mul]; exact mul_le_mul_of_nonneg_left (le.2 hbc) (by rwa [← zero, le])
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left
+--- 原说明 ---
+Pullback `PosMulMono`.
 -/
 lemma Function.Injective.posMulMono [PosMulMono α] {β : Type*} [Zero β] [Mul β] [Preorder β]
-    (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x * y) = f x * f y)
-    (le : forall {x y}, f x <= f y ↔ x <= y) : PosMulMono β where
+    (f : β → α) (zero : f 0 = 0) (mul : ∀ x y, f (x * y) = f x * f y)
+    (le : ∀ {x y}, f x ≤ f y ↔ x ≤ y) : PosMulMono β where
   mul_le_mul_of_nonneg_left a ha b c hbc := by
-    rw [← le]; rw [mul]; rw [mul]; exact mul_le_mul_of_nonneg_left (le.2 hbc) (by rwa [← zero, le])
+    rw [← le, mul, mul]; exact mul_le_mul_of_nonneg_left (le.2 hbc) (by rwa [← zero, le])
 
-/--
-lemma `Function.Injective.mulPosMono` / 引理 `Function.Injective.mulPosMono`
+/-- Pullback `MulPosMono`. -/
+/-
+**Function.Injective.mulPosMono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Injective.mulPosMono [MulPosMono α] {β : Type*} [Zero β] [Mul β] 
+[Preorder β] (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x * y) = f x * 
+f y) (le : forall {x y}, f x <= f y ↔ x <= y) : MulPosMono β where mul_le_mul_of
+_nonneg_right a ha b c hbc
+参数：f : β -> α；zero : f 0 = 0；mul : forall x y, f (x * y) = f x * f y；le : forall
+ {x y}, f x <= f y ↔ x <= y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-lemma Function.Injective.mulPosMono
-  statement: [MulPosMono α] {β : Type*} [Zero β] [Mul β] [Preorder β]
-  proof: by
-    rw [← le]; rw [mul]; rw [mul]; exact mul_le_mul_of_nonneg_right (le.2 hbc) (by rwa [← zero, le])
-
-中文:
-引理 函数.单射.mulPosMono
-  结论: [乘正递增 α] {β : 类型} [零 β] [乘法 β] [预序 β]
-  证明: by
-    rw [← le]; rw [mul]; rw [mul]; exact mul_le_mul_of_nonneg_right (le.2 hbc) (by rwa [← zero, le])
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right
+--- 原说明 ---
+Pullback `MulPosMono`.
 -/
 lemma Function.Injective.mulPosMono [MulPosMono α] {β : Type*} [Zero β] [Mul β] [Preorder β]
-    (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x * y) = f x * f y)
-    (le : forall {x y}, f x <= f y ↔ x <= y) : MulPosMono β where
+    (f : β → α) (zero : f 0 = 0) (mul : ∀ x y, f (x * y) = f x * f y)
+    (le : ∀ {x y}, f x ≤ f y ↔ x ≤ y) : MulPosMono β where
   mul_le_mul_of_nonneg_right a ha b c hbc := by
-    rw [← le]; rw [mul]; rw [mul]; exact mul_le_mul_of_nonneg_right (le.2 hbc) (by rwa [← zero, le])
+    rw [← le, mul, mul]; exact mul_le_mul_of_nonneg_right (le.2 hbc) (by rwa [← zero, le])
 
-/--
-lemma `Function.Injective.posMulStrictMono` / 引理 `Function.Injective.posMulStrictMono`
+/-- Pullback `PosMulStrictMono`. -/
+/-
+**Function.Injective.posMulStrictMono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Injective.posMulStrictMono [PosMulStrictMono α] {β : Type*} [Zero
+ β] [Mul β] [Preorder β] (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x *
+ y) = f x * f y) (lt : forall {x y}, f x < f y ↔ x < y) : PosMulStrictMono β whe
+re mul_lt_mul_of_pos_left a ha b c hbc
+参数：f : β -> α；zero : f 0 = 0；mul : forall x y, f (x * y) = f x * f y；lt : forall
+ {x y}, f x < f y ↔ x < y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_lt_mul_of_pos_left`：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc
+ : b < c) (ha : 0 < a) : a * b < a * c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-lemma Function.Injective.posMulStrictMono
-  statement: [PosMulStrictMono α] {β : Type*} [Zero β] [Mul β]
-  proof: by
-    rw [← lt]; rw [mul]; rw [mul]; exact mul_lt_mul_of_pos_left (lt.2 hbc) (by rwa [← zero, lt])
-
-中文:
-引理 函数.单射.posMulStrictMono
-  结论: [正乘严格递增 α] {β : 类型} [零 β] [乘法 β]
-  证明: by
-    rw [← lt]; rw [mul]; rw [mul]; exact mul_lt_mul_of_pos_left (lt.2 hbc) (by rwa [← zero, lt])
-
-Depends on / 依赖: mul_lt_mul_of_pos_left
+--- 原说明 ---
+Pullback `PosMulStrictMono`.
 -/
 lemma Function.Injective.posMulStrictMono [PosMulStrictMono α] {β : Type*} [Zero β] [Mul β]
-    [Preorder β] (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x * y) = f x * f y)
-    (lt : forall {x y}, f x < f y ↔ x < y) : PosMulStrictMono β where
+    [Preorder β] (f : β → α) (zero : f 0 = 0) (mul : ∀ x y, f (x * y) = f x * f y)
+    (lt : ∀ {x y}, f x < f y ↔ x < y) : PosMulStrictMono β where
   mul_lt_mul_of_pos_left a ha b c hbc := by
-    rw [← lt]; rw [mul]; rw [mul]; exact mul_lt_mul_of_pos_left (lt.2 hbc) (by rwa [← zero, lt])
+    rw [← lt, mul, mul]; exact mul_lt_mul_of_pos_left (lt.2 hbc) (by rwa [← zero, lt])
 
-/--
-lemma `Function.Injective.mulPosStrictMono` / 引理 `Function.Injective.mulPosStrictMono`
+/-- Pullback `MulPosStrictMono`. -/
+/-
+**Function.Injective.mulPosStrictMono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Injective.mulPosStrictMono [MulPosStrictMono α] {β : Type*} [Zero
+ β] [Mul β] [Preorder β] (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x *
+ y) = f x * f y) (lt : forall {x y}, f x < f y ↔ x < y) : MulPosStrictMono β whe
+re mul_lt_mul_of_pos_right a ha b c hbc
+参数：f : β -> α；zero : f 0 = 0；mul : forall x y, f (x * y) = f x * f y；lt : forall
+ {x y}, f x < f y ↔ x < y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_lt_mul_of_pos_right`：mul_lt_mul_of_pos_right [MulPosStrictMono α] (h
+bc : b < c) (ha : 0 < a) : b * a < c * a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-lemma Function.Injective.mulPosStrictMono
-  statement: [MulPosStrictMono α] {β : Type*} [Zero β] [Mul β]
-  proof: by
-    rw [← lt]; rw [mul]; rw [mul]; exact mul_lt_mul_of_pos_right (lt.2 hbc) (by rwa [← zero, lt])
-
-@[simp]
-
-中文:
-引理 函数.单射.mulPosStrictMono
-  结论: [乘正严格递增 α] {β : 类型} [零 β] [乘法 β]
-  证明: by
-    rw [← lt]; rw [mul]; rw [mul]; exact mul_lt_mul_of_pos_right (lt.2 hbc) (by rwa [← zero, lt])
-
-@[simp]
-
-Depends on / 依赖: mul_lt_mul_of_pos_right
+--- 原说明 ---
+Pullback `MulPosStrictMono`.
 -/
 lemma Function.Injective.mulPosStrictMono [MulPosStrictMono α] {β : Type*} [Zero β] [Mul β]
-    [Preorder β] (f : β -> α) (zero : f 0 = 0) (mul : forall x y, f (x * y) = f x * f y)
-    (lt : forall {x y}, f x < f y ↔ x < y) : MulPosStrictMono β where
+    [Preorder β] (f : β → α) (zero : f 0 = 0) (mul : ∀ x y, f (x * y) = f x * f y)
+    (lt : ∀ {x y}, f x < f y ↔ x < y) : MulPosStrictMono β where
   mul_lt_mul_of_pos_right a ha b c hbc := by
-    rw [← lt]; rw [mul]; rw [mul]; exact mul_lt_mul_of_pos_right (lt.2 hbc) (by rwa [← zero, lt])
+    rw [← lt, mul, mul]; exact mul_lt_mul_of_pos_right (lt.2 hbc) (by rwa [← zero, lt])
 
 @[simp]
-/--
-theorem `mul_lt_mul_iff_right₀` / 定理 `mul_lt_mul_iff_right₀`
-
-English:
-theorem mul_lt_mul_iff_right₀
-  given: [PosMulStrictMono α] [PosMulReflectLT α] (a0 : 0 < a)
-  proof: lt_of_mul_lt_mul_left h a0.le
-  mpr h := mul_lt_mul_of_pos_left h a0
-
-@[simp]
-
-中文:
-定理 mul_lt_mul_iff_right₀
-  条件: [正乘严格递增 α] [正乘反映严格偏序 α] (a0 : 0 < a)
-  证明: lt_of_mul_lt_mul_left h a0.le
-  mpr h := mul_lt_mul_of_pos_left h a0
-
-@[simp]
-
-Depends on / 依赖: a0.le, lt_of_mul_lt_mul_left
+/-
+**mul_lt_mul_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_iff_right [MulRightStrictMono α] [MulRightReflectLT α] (a : α) 
+{b c : α} : b * a < c * a ↔ b < c
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `rel_iff_cov`：rel_iff_cov [CovariantClass M N μ r] [ContravariantClass M 
+N μ r] (m : M) {a b : N} : r (μ m a) (μ m b) ↔ r a b
 -/
 theorem mul_lt_mul_iff_right₀ [PosMulStrictMono α] [PosMulReflectLT α] (a0 : 0 < a) :
     a * b < a * c ↔ b < c where
@@ -736,26 +704,15 @@ theorem mul_lt_mul_iff_right₀ [PosMulStrictMono α] [PosMulReflectLT α] (a0 :
   mpr h := mul_lt_mul_of_pos_left h a0
 
 @[simp]
-/--
-theorem `mul_lt_mul_iff_left₀` / 定理 `mul_lt_mul_iff_left₀`
-
-English:
-theorem mul_lt_mul_iff_left₀
-  given: [MulPosStrictMono α] [MulPosReflectLT α] (a0 : 0 < a)
-  proof: lt_of_mul_lt_mul_right h a0.le
-  mpr h := mul_lt_mul_of_pos_right h a0
-
-@[simp]
-
-中文:
-定理 mul_lt_mul_iff_left₀
-  条件: [乘正严格递增 α] [乘正反映严格偏序 α] (a0 : 0 < a)
-  证明: lt_of_mul_lt_mul_right h a0.le
-  mpr h := mul_lt_mul_of_pos_right h a0
-
-@[simp]
-
-Depends on / 依赖: a0.le, lt_of_mul_lt_mul_right
+/-
+**mul_lt_mul_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_iff_left [MulLeftStrictMono α] [MulLeftReflectLT α] (a : α) {b 
+c : α} : a * b < a * c ↔ b < c
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `rel_iff_cov`：rel_iff_cov [CovariantClass M N μ r] [ContravariantClass M 
+N μ r] (m : M) {a b : N} : r (μ m a) (μ m b) ↔ r a b
 -/
 theorem mul_lt_mul_iff_left₀ [MulPosStrictMono α] [MulPosReflectLT α] (a0 : 0 < a) :
     b * a < c * a ↔ b < c where
@@ -763,239 +720,189 @@ theorem mul_lt_mul_iff_left₀ [MulPosStrictMono α] [MulPosReflectLT α] (a0 : 
   mpr h := mul_lt_mul_of_pos_right h a0
 
 @[simp]
-/--
-theorem `mul_le_mul_iff_right₀` / 定理 `mul_le_mul_iff_right₀`
-
-English:
-theorem mul_le_mul_iff_right₀
-  given: [PosMulMono α] [PosMulReflectLE α] (a0 : 0 < a)
-  proof: @rel_iff_cov α>0 α (fun x y => x * y) (· <= ·) _ _ ⟨a, a0⟩ _ _
-
-@[simp]
-
-中文:
-定理 mul_le_mul_iff_right₀
-  条件: [正乘递增 α] [正乘反映偏序 α] (a0 : 0 < a)
-  证明: @rel_iff_cov α>0 α (fun x y => x * y) (· <= ·) _ _ ⟨a, a0⟩ _ _
-
-@[simp]
-
-Depends on / 依赖: rel_iff_cov
+/-
+**mul_le_mul_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_mul_iff_right [MulRightMono α] [MulRightReflectLE α] (a : α) {b c :
+ α} : b * a <= c * a ↔ b <= c
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `rel_iff_cov'`：rel_iff_cov' (hcov : Covariant M N μ r) (hcontra : Contrav
+ariant M N μ r) {m : M} {a b : N} : r (μ m a) (μ m b) ↔ r a b
+· 使用定理 `CovariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N} {r 
+: N → N → Prop} [self : CovariantClass M N μ r], Covariant M N μ r
+· 使用定理 `MulRightReflectLE.le_of_mul_le_mul_right'`：∀ {M : Type u_1} {inst : Mul 
+M} {inst_1 : LE M} [self : MulRightReflectLE M] {b a₁ a₂ : M}, a₁ * b ≤ a₂ * b →
+ a₁ ≤ a₂
 -/
 theorem mul_le_mul_iff_right₀ [PosMulMono α] [PosMulReflectLE α] (a0 : 0 < a) :
-    a * b <= a * c ↔ b <= c :=
-  @rel_iff_cov α>0 α (fun x y => x * y) (· <= ·) _ _ ⟨a, a0⟩ _ _
+    a * b ≤ a * c ↔ b ≤ c :=
+  @rel_iff_cov α>0 α (fun x y => x * y) (· ≤ ·) _ _ ⟨a, a0⟩ _ _
 
 @[simp]
-/--
-theorem `mul_le_mul_iff_left₀` / 定理 `mul_le_mul_iff_left₀`
-
-English:
-theorem mul_le_mul_iff_left₀
-  given: [MulPosMono α] [MulPosReflectLE α] (a0 : 0 < a)
-  proof: @rel_iff_cov α>0 α (fun x y => y * x) (· <= ·) _ _ ⟨a, a0⟩ _ _
-
-alias mul_le_mul_iff_of_pos_left := mul_le_mul_iff_right₀
-alias mul_le_mul_iff_of_pos_right := mul_le_mul_iff_left₀
-alias mul_lt_mul_iff_of_pos_left := mul_lt_mul_iff_right₀
-alias mul_lt_mul_iff_of_pos_right := mul_lt_mul_iff_left₀
-
-中文:
-定理 mul_le_mul_iff_left₀
-  条件: [乘正递增 α] [乘正反映偏序 α] (a0 : 0 < a)
-  证明: @rel_iff_cov α>0 α (fun x y => y * x) (· <= ·) _ _ ⟨a, a0⟩ _ _
-
-alias mul_le_mul_iff_of_pos_left := mul_le_mul_iff_right₀
-alias mul_le_mul_iff_of_pos_right := mul_le_mul_iff_left₀
-alias mul_lt_mul_iff_of_pos_left := mul_lt_mul_iff_right₀
-alias mul_lt_mul_iff_of_pos_right := mul_lt_mul_iff_left₀
-
-Depends on / 依赖: rel_iff_cov
+/-
+**mul_le_mul_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_mul_iff_left [MulLeftMono α] [MulLeftReflectLE α] (a : α) {b c : α}
+ : a * b <= a * c ↔ b <= c
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `rel_iff_cov'`：rel_iff_cov' (hcov : Covariant M N μ r) (hcontra : Contrav
+ariant M N μ r) {m : M} {a b : N} : r (μ m a) (μ m b) ↔ r a b
+· 使用定理 `CovariantClass.elim`：∀ {M : Type u_1} {N : Type u_2} {μ : M → N → N} {r 
+: N → N → Prop} [self : CovariantClass M N μ r], Covariant M N μ r
+· 使用定理 `MulLeftReflectLE.le_of_mul_le_mul_left'`：∀ {M : Type u_1} {inst : Mul M}
+ {inst_1 : LE M} [self : MulLeftReflectLE M] {a b₁ b₂ : M}, a * b₁ ≤ a * b₂ → b₁
+ ≤ b₂
 -/
 theorem mul_le_mul_iff_left₀ [MulPosMono α] [MulPosReflectLE α] (a0 : 0 < a) :
-    b * a <= c * a ↔ b <= c :=
-  @rel_iff_cov α>0 α (fun x y => y * x) (· <= ·) _ _ ⟨a, a0⟩ _ _
+    b * a ≤ c * a ↔ b ≤ c :=
+  @rel_iff_cov α>0 α (fun x y => y * x) (· ≤ ·) _ _ ⟨a, a0⟩ _ _
 
 alias mul_le_mul_iff_of_pos_left := mul_le_mul_iff_right₀
 alias mul_le_mul_iff_of_pos_right := mul_le_mul_iff_left₀
 alias mul_lt_mul_iff_of_pos_left := mul_lt_mul_iff_right₀
 alias mul_lt_mul_iff_of_pos_right := mul_lt_mul_iff_left₀
-
-/--
-theorem `mul_le_mul_of_nonneg` / 定理 `mul_le_mul_of_nonneg`
-
-English:
-theorem mul_le_mul_of_nonneg
-  statement: [PosMulMono α] [MulPosMono α]
-  proof: (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)
-
-中文:
-定理 mul_le_mul_of_nonneg
-  结论: [正乘递增 α] [乘正递增 α]
-  证明: (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right
+/-
+**mul_le_mul_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α] (h₁ : a <= b) (h₂ : c <
+= d) (a0 : 0 <= a) (d0 : 0 <= d) : a * c <= b * d
+参数：h₁ : a <= b；h₂ : c <= d；a0 : 0 <= a；d0 : 0 <= d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
 -/
 theorem mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α]
-    (h₁ : a <= b) (h₂ : c <= d) (a0 : 0 <= a) (d0 : 0 <= d) : a * c <= b * d :=
+    (h₁ : a ≤ b) (h₂ : c ≤ d) (a0 : 0 ≤ a) (d0 : 0 ≤ d) : a * c ≤ b * d :=
   (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)
-
-/--
-theorem `mul_le_mul_of_nonneg'` / 定理 `mul_le_mul_of_nonneg'`
-
-English:
-theorem mul_le_mul_of_nonneg'
-  statement: [PosMulMono α] [MulPosMono α]
-  proof: (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)
-
-中文:
-定理 mul_le_mul_of_nonneg'
-  结论: [正乘递增 α] [乘正递增 α]
-  证明: (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right
+/-
+**mul_le_mul_of_nonneg'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_mul_of_nonneg' [PosMulMono α] [MulPosMono α] (h₁ : a <= b) (h₂ : c 
+<= d) (c0 : 0 <= c) (b0 : 0 <= b) : a * c <= b * d
+参数：h₁ : a <= b；h₂ : c <= d；c0 : 0 <= c；b0 : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
 theorem mul_le_mul_of_nonneg' [PosMulMono α] [MulPosMono α]
-    (h₁ : a <= b) (h₂ : c <= d) (c0 : 0 <= c) (b0 : 0 <= b) : a * c <= b * d :=
+    (h₁ : a ≤ b) (h₂ : c ≤ d) (c0 : 0 ≤ c) (b0 : 0 ≤ b) : a * c ≤ b * d :=
   (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)
-
-/--
-theorem `mul_lt_mul_of_le_of_lt_of_pos_of_nonneg` / 定理 `mul_lt_mul_of_le_of_lt_of_pos_of_nonneg`
-
-English:
-theorem mul_lt_mul_of_le_of_lt_of_pos_of_nonneg
-  statement: [PosMulStrictMono α] [MulPosMono α]
-  proof: (mul_lt_mul_of_pos_left h₂ a0).trans_le (mul_le_mul_of_nonneg_right h₁ d0)
-
-alias mul_lt_mul_of_pos_of_nonneg := mul_lt_mul_of_le_of_lt_of_pos_of_nonneg
-
-中文:
-定理 mul_lt_mul_of_le_of_lt_of_pos_of_nonneg
-  结论: [正乘严格递增 α] [乘正递增 α]
-  证明: (mul_lt_mul_of_pos_left h₂ a0).trans_le (mul_le_mul_of_nonneg_right h₁ d0)
-
-alias mul_lt_mul_of_pos_of_nonneg := mul_lt_mul_of_le_of_lt_of_pos_of_nonneg
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right, mul_lt_mul_of_pos_left, trans_le
+/-
+**mul_lt_mul_of_le_of_lt_of_pos_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_le_of_lt_of_pos_of_nonneg [PosMulStrictMono α] [MulPosMono α
+] (h₁ : a <= b) (h₂ : c < d) (a0 : 0 < a) (d0 : 0 <= d) : a * c < b * d
+参数：h₁ : a <= b；h₂ : c < d；a0 : 0 < a；d0 : 0 <= d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `mul_lt_mul_of_pos_left`：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc
+ : b < c) (ha : 0 < a) : a * b < a * c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
 -/
 theorem mul_lt_mul_of_le_of_lt_of_pos_of_nonneg [PosMulStrictMono α] [MulPosMono α]
-    (h₁ : a <= b) (h₂ : c < d) (a0 : 0 < a) (d0 : 0 <= d) : a * c < b * d :=
+    (h₁ : a ≤ b) (h₂ : c < d) (a0 : 0 < a) (d0 : 0 ≤ d) : a * c < b * d :=
   (mul_lt_mul_of_pos_left h₂ a0).trans_le (mul_le_mul_of_nonneg_right h₁ d0)
 
 alias mul_lt_mul_of_pos_of_nonneg := mul_lt_mul_of_le_of_lt_of_pos_of_nonneg
-
-/--
-theorem `mul_lt_mul_of_le_of_lt_of_nonneg_of_pos` / 定理 `mul_lt_mul_of_le_of_lt_of_nonneg_of_pos`
-
-English:
-theorem mul_lt_mul_of_le_of_lt_of_nonneg_of_pos
-  statement: [PosMulStrictMono α] [MulPosMono α]
-  proof: (mul_le_mul_of_nonneg_right h₁ c0).trans_lt (mul_lt_mul_of_pos_left h₂ b0)
-
-alias mul_lt_mul_of_nonneg_of_pos' := mul_lt_mul_of_le_of_lt_of_nonneg_of_pos
-
-中文:
-定理 mul_lt_mul_of_le_of_lt_of_nonneg_of_pos
-  结论: [正乘严格递增 α] [乘正递增 α]
-  证明: (mul_le_mul_of_nonneg_right h₁ c0).trans_lt (mul_lt_mul_of_pos_left h₂ b0)
-
-alias mul_lt_mul_of_nonneg_of_pos' := mul_lt_mul_of_le_of_lt_of_nonneg_of_pos
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right, mul_lt_mul_of_pos_left, trans_lt
+/-
+**mul_lt_mul_of_le_of_lt_of_nonneg_of_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_le_of_lt_of_nonneg_of_pos [PosMulStrictMono α] [MulPosMono α
+] (h₁ : a <= b) (h₂ : c < d) (c0 : 0 <= c) (b0 : 0 < b) : a * c < b * d
+参数：h₁ : a <= b；h₂ : c < d；c0 : 0 <= c；b0 : 0 < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `mul_lt_mul_of_pos_left`：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc
+ : b < c) (ha : 0 < a) : a * b < a * c
 -/
 theorem mul_lt_mul_of_le_of_lt_of_nonneg_of_pos [PosMulStrictMono α] [MulPosMono α]
-    (h₁ : a <= b) (h₂ : c < d) (c0 : 0 <= c) (b0 : 0 < b) : a * c < b * d :=
+    (h₁ : a ≤ b) (h₂ : c < d) (c0 : 0 ≤ c) (b0 : 0 < b) : a * c < b * d :=
   (mul_le_mul_of_nonneg_right h₁ c0).trans_lt (mul_lt_mul_of_pos_left h₂ b0)
 
 alias mul_lt_mul_of_nonneg_of_pos' := mul_lt_mul_of_le_of_lt_of_nonneg_of_pos
-
-/--
-theorem `mul_lt_mul_of_lt_of_le_of_nonneg_of_pos` / 定理 `mul_lt_mul_of_lt_of_le_of_nonneg_of_pos`
-
-English:
-theorem mul_lt_mul_of_lt_of_le_of_nonneg_of_pos
-  statement: [PosMulMono α] [MulPosStrictMono α]
-  proof: (mul_le_mul_of_nonneg_left h₂ a0).trans_lt (mul_lt_mul_of_pos_right h₁ d0)
-
-alias mul_lt_mul_of_nonneg_of_pos := mul_lt_mul_of_lt_of_le_of_nonneg_of_pos
-
-中文:
-定理 mul_lt_mul_of_lt_of_le_of_nonneg_of_pos
-  结论: [正乘递增 α] [乘正严格递增 α]
-  证明: (mul_le_mul_of_nonneg_left h₂ a0).trans_lt (mul_lt_mul_of_pos_right h₁ d0)
-
-alias mul_lt_mul_of_nonneg_of_pos := mul_lt_mul_of_lt_of_le_of_nonneg_of_pos
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left, mul_lt_mul_of_pos_right, trans_lt
+/-
+**mul_lt_mul_of_lt_of_le_of_nonneg_of_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_lt_of_le_of_nonneg_of_pos [PosMulMono α] [MulPosStrictMono α
+] (h₁ : a < b) (h₂ : c <= d) (a0 : 0 <= a) (d0 : 0 < d) : a * c < b * d
+参数：h₁ : a < b；h₂ : c <= d；a0 : 0 <= a；d0 : 0 < d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `mul_lt_mul_of_pos_right`：mul_lt_mul_of_pos_right [MulPosStrictMono α] (h
+bc : b < c) (ha : 0 < a) : b * a < c * a
 -/
 theorem mul_lt_mul_of_lt_of_le_of_nonneg_of_pos [PosMulMono α] [MulPosStrictMono α]
-    (h₁ : a < b) (h₂ : c <= d) (a0 : 0 <= a) (d0 : 0 < d) : a * c < b * d :=
+    (h₁ : a < b) (h₂ : c ≤ d) (a0 : 0 ≤ a) (d0 : 0 < d) : a * c < b * d :=
   (mul_le_mul_of_nonneg_left h₂ a0).trans_lt (mul_lt_mul_of_pos_right h₁ d0)
 
 alias mul_lt_mul_of_nonneg_of_pos := mul_lt_mul_of_lt_of_le_of_nonneg_of_pos
-
-/--
-theorem `mul_lt_mul_of_lt_of_le_of_pos_of_nonneg` / 定理 `mul_lt_mul_of_lt_of_le_of_pos_of_nonneg`
-
-English:
-theorem mul_lt_mul_of_lt_of_le_of_pos_of_nonneg
-  statement: [PosMulMono α] [MulPosStrictMono α]
-  proof: (mul_lt_mul_of_pos_right h₁ c0).trans_le (mul_le_mul_of_nonneg_left h₂ b0)
-
-alias mul_lt_mul_of_pos_of_nonneg' := mul_lt_mul_of_lt_of_le_of_pos_of_nonneg
-
-中文:
-定理 mul_lt_mul_of_lt_of_le_of_pos_of_nonneg
-  结论: [正乘递增 α] [乘正严格递增 α]
-  证明: (mul_lt_mul_of_pos_right h₁ c0).trans_le (mul_le_mul_of_nonneg_left h₂ b0)
-
-alias mul_lt_mul_of_pos_of_nonneg' := mul_lt_mul_of_lt_of_le_of_pos_of_nonneg
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left, mul_lt_mul_of_pos_right, trans_le
+/-
+**mul_lt_mul_of_lt_of_le_of_pos_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_lt_of_le_of_pos_of_nonneg [PosMulMono α] [MulPosStrictMono α
+] (h₁ : a < b) (h₂ : c <= d) (c0 : 0 < c) (b0 : 0 <= b) : a * c < b * d
+参数：h₁ : a < b；h₂ : c <= d；c0 : 0 < c；b0 : 0 <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `mul_lt_mul_of_pos_right`：mul_lt_mul_of_pos_right [MulPosStrictMono α] (h
+bc : b < c) (ha : 0 < a) : b * a < c * a
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
 theorem mul_lt_mul_of_lt_of_le_of_pos_of_nonneg [PosMulMono α] [MulPosStrictMono α]
-    (h₁ : a < b) (h₂ : c <= d) (c0 : 0 < c) (b0 : 0 <= b) : a * c < b * d :=
+    (h₁ : a < b) (h₂ : c ≤ d) (c0 : 0 < c) (b0 : 0 ≤ b) : a * c < b * d :=
   (mul_lt_mul_of_pos_right h₁ c0).trans_le (mul_le_mul_of_nonneg_left h₂ b0)
 
 alias mul_lt_mul_of_pos_of_nonneg' := mul_lt_mul_of_lt_of_le_of_pos_of_nonneg
-
-/--
-theorem `mul_lt_mul_of_pos` / 定理 `mul_lt_mul_of_pos`
-
-English:
-theorem mul_lt_mul_of_pos
-  statement: [PosMulStrictMono α] [MulPosStrictMono α]
-  proof: (mul_lt_mul_of_pos_left h₂ a0).trans (mul_lt_mul_of_pos_right h₁ d0)
-
-中文:
-定理 mul_lt_mul_of_pos
-  结论: [正乘严格递增 α] [乘正严格递增 α]
-  证明: (mul_lt_mul_of_pos_left h₂ a0).trans (mul_lt_mul_of_pos_right h₁ d0)
-
-Depends on / 依赖: mul_lt_mul_of_pos_left, mul_lt_mul_of_pos_right
+/-
+**mul_lt_mul_of_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_pos [PosMulStrictMono α] [MulPosStrictMono α] (h₁ : a < b) (
+h₂ : c < d) (a0 : 0 < a) (d0 : 0 < d) : a * c < b * d
+参数：h₁ : a < b；h₂ : c < d；a0 : 0 < a；d0 : 0 < d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `mul_lt_mul_of_pos_left`：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc
+ : b < c) (ha : 0 < a) : a * b < a * c
+· 使用定理 `mul_lt_mul_of_pos_right`：mul_lt_mul_of_pos_right [MulPosStrictMono α] (h
+bc : b < c) (ha : 0 < a) : b * a < c * a
 -/
 theorem mul_lt_mul_of_pos [PosMulStrictMono α] [MulPosStrictMono α]
     (h₁ : a < b) (h₂ : c < d) (a0 : 0 < a) (d0 : 0 < d) : a * c < b * d :=
   (mul_lt_mul_of_pos_left h₂ a0).trans (mul_lt_mul_of_pos_right h₁ d0)
-
-/--
-theorem `mul_lt_mul_of_pos'` / 定理 `mul_lt_mul_of_pos'`
-
-English:
-theorem mul_lt_mul_of_pos'
-  statement: [PosMulStrictMono α] [MulPosStrictMono α]
-  proof: (mul_lt_mul_of_pos_right h₁ c0).trans (mul_lt_mul_of_pos_left h₂ b0)
-
-alias mul_le_mul := mul_le_mul_of_nonneg'
-
-中文:
-定理 mul_lt_mul_of_pos'
-  结论: [正乘严格递增 α] [乘正严格递增 α]
-  证明: (mul_lt_mul_of_pos_right h₁ c0).trans (mul_lt_mul_of_pos_left h₂ b0)
-
-alias mul_le_mul := mul_le_mul_of_nonneg'
-
-Depends on / 依赖: mul_lt_mul_of_pos_left, mul_lt_mul_of_pos_right
+/-
+**mul_lt_mul_of_pos'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_of_pos' [PosMulStrictMono α] [MulPosStrictMono α] (h₁ : a < b) 
+(h₂ : c < d) (c0 : 0 < c) (b0 : 0 < b) : a * c < b * d
+参数：h₁ : a < b；h₂ : c < d；c0 : 0 < c；b0 : 0 < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `mul_lt_mul_of_pos_right`：mul_lt_mul_of_pos_right [MulPosStrictMono α] (h
+bc : b < c) (ha : 0 < a) : b * a < c * a
+· 使用定理 `mul_lt_mul_of_pos_left`：mul_lt_mul_of_pos_left [PosMulStrictMono α] (hbc
+ : b < c) (ha : 0 < a) : a * b < a * c
 -/
 theorem mul_lt_mul_of_pos' [PosMulStrictMono α] [MulPosStrictMono α]
     (h₁ : a < b) (h₂ : c < d) (c0 : 0 < c) (b0 : 0 < b) : a * c < b * d :=
@@ -1007,316 +914,256 @@ attribute [gcongr] mul_le_mul
 alias mul_lt_mul := mul_lt_mul_of_pos_of_nonneg'
 
 alias mul_lt_mul' := mul_lt_mul_of_nonneg_of_pos'
-
-/--
-theorem `mul_le_of_mul_le_of_nonneg_left` / 定理 `mul_le_of_mul_le_of_nonneg_left`
-
-English:
-theorem mul_le_of_mul_le_of_nonneg_left
-  given: [PosMulMono α] (h : a * b <= c) (hle : d <= b) (a0 : 0 <= a)
-  proof: (mul_le_mul_of_nonneg_left hle a0).trans h
-
-中文:
-定理 mul_le_of_mul_le_of_nonneg_left
-  条件: [正乘递增 α] (h : a * b <= c) (hle : d <= b) (a0 : 0 <= a)
-  证明: (mul_le_mul_of_nonneg_left hle a0).trans h
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left
+/-
+**mul_le_of_mul_le_of_nonneg_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_of_mul_le_of_nonneg_left [PosMulMono α] (h : a * b <= c) (hle : d <
+= b) (a0 : 0 <= a) : a * d <= c
+参数：h : a * b <= c；hle : d <= b；a0 : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
-theorem mul_le_of_mul_le_of_nonneg_left [PosMulMono α] (h : a * b <= c) (hle : d <= b) (a0 : 0 <= a) :
-    a * d <= c :=
+theorem mul_le_of_mul_le_of_nonneg_left [PosMulMono α] (h : a * b ≤ c) (hle : d ≤ b) (a0 : 0 ≤ a) :
+    a * d ≤ c :=
   (mul_le_mul_of_nonneg_left hle a0).trans h
-
-/--
-theorem `mul_lt_of_mul_lt_of_nonneg_left` / 定理 `mul_lt_of_mul_lt_of_nonneg_left`
-
-English:
-theorem mul_lt_of_mul_lt_of_nonneg_left
-  given: [PosMulMono α] (h : a * b < c) (hle : d <= b) (a0 : 0 <= a)
-  proof: (mul_le_mul_of_nonneg_left hle a0).trans_lt h
-
-中文:
-定理 mul_lt_of_mul_lt_of_nonneg_left
-  条件: [正乘递增 α] (h : a * b < c) (hle : d <= b) (a0 : 0 <= a)
-  证明: (mul_le_mul_of_nonneg_left hle a0).trans_lt h
-
-Depends on / 依赖: mul_le_mul_of_nonneg_left, trans_lt
+/-
+**mul_lt_of_mul_lt_of_nonneg_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_of_mul_lt_of_nonneg_left [PosMulMono α] (h : a * b < c) (hle : d <=
+ b) (a0 : 0 <= a) : a * d < c
+参数：h : a * b < c；hle : d <= b；a0 : 0 <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
-theorem mul_lt_of_mul_lt_of_nonneg_left [PosMulMono α] (h : a * b < c) (hle : d <= b) (a0 : 0 <= a) :
+theorem mul_lt_of_mul_lt_of_nonneg_left [PosMulMono α] (h : a * b < c) (hle : d ≤ b) (a0 : 0 ≤ a) :
     a * d < c :=
   (mul_le_mul_of_nonneg_left hle a0).trans_lt h
-
-/--
-theorem `le_mul_of_le_mul_of_nonneg_left` / 定理 `le_mul_of_le_mul_of_nonneg_left`
-
-English:
-theorem le_mul_of_le_mul_of_nonneg_left
-  given: [PosMulMono α] (h : a <= b * c) (hle : c <= d) (b0 : 0 <= b)
-  proof: h.trans (mul_le_mul_of_nonneg_left hle b0)
-
-中文:
-定理 le_mul_of_le_mul_of_nonneg_left
-  条件: [正乘递增 α] (h : a <= b * c) (hle : c <= d) (b0 : 0 <= b)
-  证明: h.trans (mul_le_mul_of_nonneg_left hle b0)
-
-Depends on / 依赖: h.trans, mul_le_mul_of_nonneg_left
+/-
+**le_mul_of_le_mul_of_nonneg_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_mul_of_le_mul_of_nonneg_left [PosMulMono α] (h : a <= b * c) (hle : c <
+= d) (b0 : 0 <= b) : a <= b * d
+参数：h : a <= b * c；hle : c <= d；b0 : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
-theorem le_mul_of_le_mul_of_nonneg_left [PosMulMono α] (h : a <= b * c) (hle : c <= d) (b0 : 0 <= b) :
-    a <= b * d :=
+theorem le_mul_of_le_mul_of_nonneg_left [PosMulMono α] (h : a ≤ b * c) (hle : c ≤ d) (b0 : 0 ≤ b) :
+    a ≤ b * d :=
   h.trans (mul_le_mul_of_nonneg_left hle b0)
-
-/--
-theorem `lt_mul_of_lt_mul_of_nonneg_left` / 定理 `lt_mul_of_lt_mul_of_nonneg_left`
-
-English:
-theorem lt_mul_of_lt_mul_of_nonneg_left
-  given: [PosMulMono α] (h : a < b * c) (hle : c <= d) (b0 : 0 <= b)
-  proof: h.trans_le (mul_le_mul_of_nonneg_left hle b0)
-
-中文:
-定理 lt_mul_of_lt_mul_of_nonneg_left
-  条件: [正乘递增 α] (h : a < b * c) (hle : c <= d) (b0 : 0 <= b)
-  证明: h.trans_le (mul_le_mul_of_nonneg_left hle b0)
-
-Depends on / 依赖: h.trans_le, mul_le_mul_of_nonneg_left, trans_le
+/-
+**lt_mul_of_lt_mul_of_nonneg_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_mul_of_lt_mul_of_nonneg_left [PosMulMono α] (h : a < b * c) (hle : c <=
+ d) (b0 : 0 <= b) : a < b * d
+参数：h : a < b * c；hle : c <= d；b0 : 0 <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
-theorem lt_mul_of_lt_mul_of_nonneg_left [PosMulMono α] (h : a < b * c) (hle : c <= d) (b0 : 0 <= b) :
+theorem lt_mul_of_lt_mul_of_nonneg_left [PosMulMono α] (h : a < b * c) (hle : c ≤ d) (b0 : 0 ≤ b) :
     a < b * d :=
   h.trans_le (mul_le_mul_of_nonneg_left hle b0)
-
-/--
-theorem `mul_le_of_mul_le_of_nonneg_right` / 定理 `mul_le_of_mul_le_of_nonneg_right`
-
-English:
-theorem mul_le_of_mul_le_of_nonneg_right
-  given: [MulPosMono α] (h : a * b <= c) (hle : d <= a) (b0 : 0 <= b)
-  proof: (mul_le_mul_of_nonneg_right hle b0).trans h
-
-中文:
-定理 mul_le_of_mul_le_of_nonneg_right
-  条件: [乘正递增 α] (h : a * b <= c) (hle : d <= a) (b0 : 0 <= b)
-  证明: (mul_le_mul_of_nonneg_right hle b0).trans h
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right
+/-
+**mul_le_of_mul_le_of_nonneg_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_le_of_mul_le_of_nonneg_right [MulPosMono α] (h : a * b <= c) (hle : d 
+<= a) (b0 : 0 <= b) : d * b <= c
+参数：h : a * b <= c；hle : d <= a；b0 : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
 -/
-theorem mul_le_of_mul_le_of_nonneg_right [MulPosMono α] (h : a * b <= c) (hle : d <= a) (b0 : 0 <= b) :
-    d * b <= c :=
+theorem mul_le_of_mul_le_of_nonneg_right [MulPosMono α] (h : a * b ≤ c) (hle : d ≤ a) (b0 : 0 ≤ b) :
+    d * b ≤ c :=
   (mul_le_mul_of_nonneg_right hle b0).trans h
-
-/--
-theorem `mul_lt_of_mul_lt_of_nonneg_right` / 定理 `mul_lt_of_mul_lt_of_nonneg_right`
-
-English:
-theorem mul_lt_of_mul_lt_of_nonneg_right
-  given: [MulPosMono α] (h : a * b < c) (hle : d <= a) (b0 : 0 <= b)
-  proof: (mul_le_mul_of_nonneg_right hle b0).trans_lt h
-
-中文:
-定理 mul_lt_of_mul_lt_of_nonneg_right
-  条件: [乘正递增 α] (h : a * b < c) (hle : d <= a) (b0 : 0 <= b)
-  证明: (mul_le_mul_of_nonneg_right hle b0).trans_lt h
-
-Depends on / 依赖: mul_le_mul_of_nonneg_right, trans_lt
+/-
+**mul_lt_of_mul_lt_of_nonneg_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_of_mul_lt_of_nonneg_right [MulPosMono α] (h : a * b < c) (hle : d <
+= a) (b0 : 0 <= b) : d * b < c
+参数：h : a * b < c；hle : d <= a；b0 : 0 <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
 -/
-theorem mul_lt_of_mul_lt_of_nonneg_right [MulPosMono α] (h : a * b < c) (hle : d <= a) (b0 : 0 <= b) :
+theorem mul_lt_of_mul_lt_of_nonneg_right [MulPosMono α] (h : a * b < c) (hle : d ≤ a) (b0 : 0 ≤ b) :
     d * b < c :=
   (mul_le_mul_of_nonneg_right hle b0).trans_lt h
-
-/--
-theorem `le_mul_of_le_mul_of_nonneg_right` / 定理 `le_mul_of_le_mul_of_nonneg_right`
-
-English:
-theorem le_mul_of_le_mul_of_nonneg_right
-  given: [MulPosMono α] (h : a <= b * c) (hle : b <= d) (c0 : 0 <= c)
-  proof: h.trans (mul_le_mul_of_nonneg_right hle c0)
-
-中文:
-定理 le_mul_of_le_mul_of_nonneg_right
-  条件: [乘正递增 α] (h : a <= b * c) (hle : b <= d) (c0 : 0 <= c)
-  证明: h.trans (mul_le_mul_of_nonneg_right hle c0)
-
-Depends on / 依赖: h.trans, mul_le_mul_of_nonneg_right
+/-
+**le_mul_of_le_mul_of_nonneg_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_mul_of_le_mul_of_nonneg_right [MulPosMono α] (h : a <= b * c) (hle : b 
+<= d) (c0 : 0 <= c) : a <= d * c
+参数：h : a <= b * c；hle : b <= d；c0 : 0 <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
 -/
-theorem le_mul_of_le_mul_of_nonneg_right [MulPosMono α] (h : a <= b * c) (hle : b <= d) (c0 : 0 <= c) :
-    a <= d * c :=
+theorem le_mul_of_le_mul_of_nonneg_right [MulPosMono α] (h : a ≤ b * c) (hle : b ≤ d) (c0 : 0 ≤ c) :
+    a ≤ d * c :=
   h.trans (mul_le_mul_of_nonneg_right hle c0)
-
-/--
-theorem `lt_mul_of_lt_mul_of_nonneg_right` / 定理 `lt_mul_of_lt_mul_of_nonneg_right`
-
-English:
-theorem lt_mul_of_lt_mul_of_nonneg_right
-  given: [MulPosMono α] (h : a < b * c) (hle : b <= d) (c0 : 0 <= c)
-  proof: h.trans_le (mul_le_mul_of_nonneg_right hle c0)
-
-中文:
-定理 lt_mul_of_lt_mul_of_nonneg_right
-  条件: [乘正递增 α] (h : a < b * c) (hle : b <= d) (c0 : 0 <= c)
-  证明: h.trans_le (mul_le_mul_of_nonneg_right hle c0)
-
-Depends on / 依赖: h.trans_le, mul_le_mul_of_nonneg_right, trans_le
+/-
+**lt_mul_of_lt_mul_of_nonneg_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_mul_of_lt_mul_of_nonneg_right [MulPosMono α] (h : a < b * c) (hle : b <
+= d) (c0 : 0 <= c) : a < d * c
+参数：h : a < b * c；hle : b <= d；c0 : 0 <= c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
 -/
-theorem lt_mul_of_lt_mul_of_nonneg_right [MulPosMono α] (h : a < b * c) (hle : b <= d) (c0 : 0 <= c) :
+theorem lt_mul_of_lt_mul_of_nonneg_right [MulPosMono α] (h : a < b * c) (hle : b ≤ d) (c0 : 0 ≤ c) :
     a < d * c :=
   h.trans_le (mul_le_mul_of_nonneg_right hle c0)
 
 variable [IsMulCommutative α]
-
-/--
-theorem `posMulMono_iff_mulPosMono` / 定理 `posMulMono_iff_mulPosMono`
-
-English:
-theorem posMulMono_iff_mulPosMono
-  statement: PosMulMono α ↔ MulPosMono α
-  proof: by
-  simp [posMulMono_iff, mulPosMono_iff, mul_comm']
-
-中文:
-定理 posMulMono_iff_mulPosMono
-  结论: 正乘递增 α ↔ 乘正递增 α
-  证明: by
-  simp [posMulMono_iff, mulPosMono_iff, mul_comm']
-
-Depends on / 依赖: mulPosMono_iff, mul_comm, posMulMono_iff
+/-
+**posMulMono_iff_mulPosMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：posMulMono_iff_mulPosMono : PosMulMono α ↔ MulPosMono α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `mul_comm'`：mul_comm' {M : Type*} [Mul M] [IsMulCommutative M] (a b : M) 
+: a * b = b * a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem posMulMono_iff_mulPosMono : PosMulMono α ↔ MulPosMono α := by
   simp [posMulMono_iff, mulPosMono_iff, mul_comm']
-
-/--
-theorem `PosMulMono.toMulPosMono` / 定理 `PosMulMono.toMulPosMono`
-
-English:
-theorem PosMulMono.toMulPosMono
-  given: [PosMulMono α]
-  statement: MulPosMono α
-  proof: posMulMono_iff_mulPosMono.mp ‹_›
-
-中文:
-定理 正乘递增.toMulPosMono
-  条件: [正乘递增 α]
-  结论: 乘正递增 α
-  证明: posMulMono_iff_mulPosMono.mp ‹_›
-
-Depends on / 依赖: posMulMono_iff_mulPosMono, posMulMono_iff_mulPosMono.mp
+/-
+**PosMulMono.toMulPosMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PosMulMono.toMulPosMono [PosMulMono α] : MulPosMono α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `posMulMono_iff_mulPosMono`：posMulMono_iff_mulPosMono : PosMulMono α ↔ Mu
+lPosMono α
 -/
 theorem PosMulMono.toMulPosMono [PosMulMono α] : MulPosMono α := posMulMono_iff_mulPosMono.mp ‹_›
-
-/--
-theorem `posMulStrictMono_iff_mulPosStrictMono` / 定理 `posMulStrictMono_iff_mulPosStrictMono`
-
-English:
-theorem posMulStrictMono_iff_mulPosStrictMono
-  statement: PosMulStrictMono α ↔ MulPosStrictMono α
-  proof: by
-  simp [posMulStrictMono_iff, mulPosStrictMono_iff, mul_comm']
-
-中文:
-定理 posMulStrictMono_iff_mulPosStrictMono
-  结论: 正乘严格递增 α ↔ 乘正严格递增 α
-  证明: by
-  simp [posMulStrictMono_iff, mulPosStrictMono_iff, mul_comm']
-
-Depends on / 依赖: mulPosStrictMono_iff, mul_comm, posMulStrictMono_iff
+/-
+**posMulStrictMono_iff_mulPosStrictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：posMulStrictMono_iff_mulPosStrictMono : PosMulStrictMono α ↔ MulPosStrictM
+ono α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `mul_comm'`：mul_comm' {M : Type*} [Mul M] [IsMulCommutative M] (a b : M) 
+: a * b = b * a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem posMulStrictMono_iff_mulPosStrictMono : PosMulStrictMono α ↔ MulPosStrictMono α := by
   simp [posMulStrictMono_iff, mulPosStrictMono_iff, mul_comm']
-
-/--
-theorem `PosMulStrictMono.toMulPosStrictMono` / 定理 `PosMulStrictMono.toMulPosStrictMono`
-
-English:
-theorem PosMulStrictMono.toMulPosStrictMono
-  given: [PosMulStrictMono α]
-  statement: MulPosStrictMono α
-  proof: posMulStrictMono_iff_mulPosStrictMono.mp ‹_›
-
-中文:
-定理 正乘严格递增.toMulPosStrictMono
-  条件: [正乘严格递增 α]
-  结论: 乘正严格递增 α
-  证明: posMulStrictMono_iff_mulPosStrictMono.mp ‹_›
-
-Depends on / 依赖: posMulStrictMono_iff_mulPosStrictMono, posMulStrictMono_iff_mulPosStrictMono.mp
+/-
+**PosMulStrictMono.toMulPosStrictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PosMulStrictMono.toMulPosStrictMono [PosMulStrictMono α] : MulPosStrictMon
+o α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `posMulStrictMono_iff_mulPosStrictMono`：posMulStrictMono_iff_mulPosStrict
+Mono : PosMulStrictMono α ↔ MulPosStrictMono α
 -/
 theorem PosMulStrictMono.toMulPosStrictMono [PosMulStrictMono α] : MulPosStrictMono α :=
   posMulStrictMono_iff_mulPosStrictMono.mp ‹_›
-
-/--
-theorem `posMulReflectLE_iff_mulPosReflectLE` / 定理 `posMulReflectLE_iff_mulPosReflectLE`
-
-English:
-theorem posMulReflectLE_iff_mulPosReflectLE
-  statement: PosMulReflectLE α ↔ MulPosReflectLE α
-  proof: by
-  simp [posMulReflectLE_iff, mulPosReflectLE_iff, mul_comm']
-
-中文:
-定理 posMulReflectLE_iff_mulPosReflectLE
-  结论: 正乘反映偏序 α ↔ 乘正反映偏序 α
-  证明: by
-  simp [posMulReflectLE_iff, mulPosReflectLE_iff, mul_comm']
-
-Depends on / 依赖: mulPosReflectLE_iff, mul_comm, posMulReflectLE_iff
+/-
+**posMulReflectLE_iff_mulPosReflectLE** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：posMulReflectLE_iff_mulPosReflectLE : PosMulReflectLE α ↔ MulPosReflectLE 
+α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `mul_comm'`：mul_comm' {M : Type*} [Mul M] [IsMulCommutative M] (a b : M) 
+: a * b = b * a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem posMulReflectLE_iff_mulPosReflectLE : PosMulReflectLE α ↔ MulPosReflectLE α := by
   simp [posMulReflectLE_iff, mulPosReflectLE_iff, mul_comm']
-
-/--
-theorem `PosMulReflectLE.toMulPosReflectLE` / 定理 `PosMulReflectLE.toMulPosReflectLE`
-
-English:
-theorem PosMulReflectLE.toMulPosReflectLE
-  given: [PosMulReflectLE α]
-  statement: MulPosReflectLE α
-  proof: posMulReflectLE_iff_mulPosReflectLE.mp ‹_›
-
-中文:
-定理 正乘反映偏序.toMulPosReflectLE
-  条件: [正乘反映偏序 α]
-  结论: 乘正反映偏序 α
-  证明: posMulReflectLE_iff_mulPosReflectLE.mp ‹_›
-
-Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.toZeroLEOneClass, posMulReflectLE_iff_mulPosReflectLE, posMulReflectLE_iff_mulPosReflectLE.mp, toZeroLEOneClass
+/-
+**PosMulReflectLE.toMulPosReflectLE** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PosMulReflectLE.toMulPosReflectLE [PosMulReflectLE α] : MulPosReflectLE α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `posMulReflectLE_iff_mulPosReflectLE`：posMulReflectLE_iff_mulPosReflectLE
+ : PosMulReflectLE α ↔ MulPosReflectLE α
 -/
 theorem PosMulReflectLE.toMulPosReflectLE [PosMulReflectLE α] : MulPosReflectLE α :=
   posMulReflectLE_iff_mulPosReflectLE.mp ‹_›
-
-/--
-theorem `posMulReflectLT_iff_mulPosReflectLT` / 定理 `posMulReflectLT_iff_mulPosReflectLT`
-
-English:
-theorem posMulReflectLT_iff_mulPosReflectLT
-  statement: PosMulReflectLT α ↔ MulPosReflectLT α
-  proof: by
-  simp [posMulReflectLT_iff, mulPosReflectLT_iff, mul_comm']
-
-中文:
-定理 posMulReflectLT_iff_mulPosReflectLT
-  结论: 正乘反映严格偏序 α ↔ 乘正反映严格偏序 α
-  证明: by
-  simp [posMulReflectLT_iff, mulPosReflectLT_iff, mul_comm']
-
-Depends on / 依赖: mulPosReflectLT_iff, mul_comm, posMulReflectLT_iff
+/-
+**posMulReflectLT_iff_mulPosReflectLT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：posMulReflectLT_iff_mulPosReflectLT : PosMulReflectLT α ↔ MulPosReflectLT 
+α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `mul_comm'`：mul_comm' {M : Type*} [Mul M] [IsMulCommutative M] (a b : M) 
+: a * b = b * a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem posMulReflectLT_iff_mulPosReflectLT : PosMulReflectLT α ↔ MulPosReflectLT α := by
   simp [posMulReflectLT_iff, mulPosReflectLT_iff, mul_comm']
-
-/--
-theorem `PosMulReflectLT.toMulPosReflectLT` / 定理 `PosMulReflectLT.toMulPosReflectLT`
-
-English:
-theorem PosMulReflectLT.toMulPosReflectLT
-  given: [PosMulReflectLT α]
-  statement: MulPosReflectLT α
-  proof: posMulReflectLT_iff_mulPosReflectLT.mp ‹_›
-
-中文:
-定理 正乘反映严格偏序.toMulPosReflectLT
-  条件: [正乘反映严格偏序 α]
-  结论: 乘正反映严格偏序 α
-  证明: posMulReflectLT_iff_mulPosReflectLT.mp ‹_›
-
-Depends on / 依赖: NonUnitalNonAssocSemiring, posMulReflectLT_iff_mulPosReflectLT, posMulReflectLT_iff_mulPosReflectLT.mp, toMulLeftMono
+/-
+**PosMulReflectLT.toMulPosReflectLT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PosMulReflectLT.toMulPosReflectLT [PosMulReflectLT α] : MulPosReflectLT α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `posMulReflectLT_iff_mulPosReflectLT`：posMulReflectLT_iff_mulPosReflectLT
+ : PosMulReflectLT α ↔ MulPosReflectLT α
 -/
 theorem PosMulReflectLT.toMulPosReflectLT [PosMulReflectLT α] : MulPosReflectLT α :=
   posMulReflectLT_iff_mulPosReflectLT.mp ‹_›
@@ -1328,216 +1175,187 @@ section LinearOrder
 variable [LinearOrder α]
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) PosMulStrictMono.toPosMulReflectLE [PosMulStrictMono α] :
     PosMulReflectLE α where
   elim := (covariant_lt_iff_contravariant_le _ _ _).1 CovariantClass.elim
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulPosStrictMono.toMulPosReflectLE [MulPosStrictMono α] :
     MulPosReflectLE α where
   elim := (covariant_lt_iff_contravariant_le _ _ _).1 CovariantClass.elim
-
-/--
-theorem `PosMulReflectLE.toPosMulStrictMono` / 定理 `PosMulReflectLE.toPosMulStrictMono`
-
-English:
-theorem PosMulReflectLE.toPosMulStrictMono
-  given: [PosMulReflectLE α]
-  statement: PosMulStrictMono α where
-  proof: not_le.1 fun h => hbc.not_ge le_of_mul_le_mul_left h ha
-
-中文:
-定理 正乘反映偏序.toPosMulStrictMono
-  条件: [正乘反映偏序 α]
-  结论: 正乘严格递增 α where
-  证明: not_le.1 fun h => hbc.not_ge le_of_mul_le_mul_left h ha
-
-Depends on / 依赖: NonUnitalNonAssocSemiring, hbc.not_ge, le_of_mul_le_mul_left, not_ge, not_le, toMulRightMono
+/-
+**PosMulReflectLE.toPosMulStrictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PosMulReflectLE.toPosMulStrictMono [PosMulReflectLE α] : PosMulStrictMono 
+α where mul_lt_mul_of_pos_left _a ha _b _c hbc
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `le_of_mul_le_mul_left`：le_of_mul_le_mul_left [PosMulReflectLE α] (bc : a
+ * b <= a * c) (a0 : 0 < a) : b <= c
 -/
 theorem PosMulReflectLE.toPosMulStrictMono [PosMulReflectLE α] : PosMulStrictMono α where
   mul_lt_mul_of_pos_left _a ha _b _c hbc :=
-not_le.1 fun h => hbc.not_ge le_of_mul_le_mul_left h ha
-
-/--
-theorem `MulPosReflectLE.toMulPosStrictMono` / 定理 `MulPosReflectLE.toMulPosStrictMono`
-
-English:
-theorem MulPosReflectLE.toMulPosStrictMono
-  given: [MulPosReflectLE α]
-  statement: MulPosStrictMono α where
-  proof: not_le.1 fun h => hbc.not_ge le_of_mul_le_mul_right h ha
-
-中文:
-定理 乘正反映偏序.toMulPosStrictMono
-  条件: [乘正反映偏序 α]
-  结论: 乘正严格递增 α where
-  证明: not_le.1 fun h => hbc.not_ge le_of_mul_le_mul_right h ha
-
-Depends on / 依赖: hbc.not_ge, le_of_mul_le_mul_right, not_ge, not_le
+    not_le.1 fun h ↦ hbc.not_ge <| le_of_mul_le_mul_left h ha
+/-
+**MulPosReflectLE.toMulPosStrictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulPosReflectLE.toMulPosStrictMono [MulPosReflectLE α] : MulPosStrictMono 
+α where mul_lt_mul_of_pos_right _a ha _b _c hbc
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `le_of_mul_le_mul_right`：le_of_mul_le_mul_right [MulPosReflectLE α] (bc :
+ b * a <= c * a) (a0 : 0 < a) : b <= c
 -/
 theorem MulPosReflectLE.toMulPosStrictMono [MulPosReflectLE α] : MulPosStrictMono α where
   mul_lt_mul_of_pos_right _a ha _b _c hbc :=
-not_le.1 fun h => hbc.not_ge le_of_mul_le_mul_right h ha
-
-/--
-theorem `posMulStrictMono_iff_posMulReflectLE` / 定理 `posMulStrictMono_iff_posMulReflectLE`
-
-English:
-theorem posMulStrictMono_iff_posMulReflectLE
-  statement: PosMulStrictMono α ↔ PosMulReflectLE α
-  proof: ⟨@PosMulStrictMono.toPosMulReflectLE _ _ _ _, @PosMulReflectLE.toPosMulStrictMono _ _ _ _⟩
-
-中文:
-定理 posMulStrictMono_iff_posMulReflectLE
-  结论: 正乘严格递增 α ↔ 正乘反映偏序 α
-  证明: ⟨@PosMulStrictMono.toPosMulReflectLE _ _ _ _, @PosMulReflectLE.toPosMulStrictMono _ _ _ _⟩
-
-Depends on / 依赖: PosMulReflectLE, PosMulReflectLE.toPosMulStrictMono, PosMulStrictMono, PosMulStrictMono.toPosMulReflectLE, toPosMulReflectLE, toPosMulStrictMono
+    not_le.1 fun h ↦ hbc.not_ge <| le_of_mul_le_mul_right h ha
+/-
+**posMulStrictMono_iff_posMulReflectLE** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：posMulStrictMono_iff_posMulReflectLE : PosMulStrictMono α ↔ PosMulReflectL
+E α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `PosMulReflectLE.toPosMulStrictMono`：PosMulReflectLE.toPosMulStrictMono [
+PosMulReflectLE α] : PosMulStrictMono α where mul_lt_mul_of_pos_left _a ha _b _c
+ hbc
 -/
 theorem posMulStrictMono_iff_posMulReflectLE : PosMulStrictMono α ↔ PosMulReflectLE α :=
   ⟨@PosMulStrictMono.toPosMulReflectLE _ _ _ _, @PosMulReflectLE.toPosMulStrictMono _ _ _ _⟩
-
-/--
-theorem `mulPosStrictMono_iff_mulPosReflectLE` / 定理 `mulPosStrictMono_iff_mulPosReflectLE`
-
-English:
-theorem mulPosStrictMono_iff_mulPosReflectLE
-  statement: MulPosStrictMono α ↔ MulPosReflectLE α
-  proof: ⟨@MulPosStrictMono.toMulPosReflectLE _ _ _ _, @MulPosReflectLE.toMulPosStrictMono _ _ _ _⟩
-
-中文:
-定理 mulPosStrictMono_iff_mulPosReflectLE
-  结论: 乘正严格递增 α ↔ 乘正反映偏序 α
-  证明: ⟨@MulPosStrictMono.toMulPosReflectLE _ _ _ _, @MulPosReflectLE.toMulPosStrictMono _ _ _ _⟩
-
-Depends on / 依赖: MulPosReflectLE, MulPosReflectLE.toMulPosStrictMono, MulPosStrictMono, MulPosStrictMono.toMulPosReflectLE, toMulPosReflectLE, toMulPosStrictMono
+/-
+**mulPosStrictMono_iff_mulPosReflectLE** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mulPosStrictMono_iff_mulPosReflectLE : MulPosStrictMono α ↔ MulPosReflectL
+E α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `MulPosReflectLE.toMulPosStrictMono`：MulPosReflectLE.toMulPosStrictMono [
+MulPosReflectLE α] : MulPosStrictMono α where mul_lt_mul_of_pos_right _a ha _b _
+c hbc
 -/
 theorem mulPosStrictMono_iff_mulPosReflectLE : MulPosStrictMono α ↔ MulPosReflectLE α :=
   ⟨@MulPosStrictMono.toMulPosReflectLE _ _ _ _, @MulPosReflectLE.toMulPosStrictMono _ _ _ _⟩
-
-/--
-theorem `PosMulReflectLT.toPosMulMono` / 定理 `PosMulReflectLT.toPosMulMono`
-
-English:
-theorem PosMulReflectLT.toPosMulMono
-  given: [PosMulReflectLT α]
-  statement: PosMulMono α where
-  proof: not_lt.1 fun h => hbc.not_gt lt_of_mul_lt_mul_left h ha
-
-中文:
-定理 正乘反映严格偏序.toPosMulMono
-  条件: [正乘反映严格偏序 α]
-  结论: 正乘递增 α where
-  证明: not_lt.1 fun h => hbc.not_gt lt_of_mul_lt_mul_left h ha
-
-Depends on / 依赖: hbc.not_gt, lt_of_mul_lt_mul_left, not_gt, not_lt
+/-
+**PosMulReflectLT.toPosMulMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PosMulReflectLT.toPosMulMono [PosMulReflectLT α] : PosMulMono α where mul_
+le_mul_of_nonneg_left _a ha _b _c hbc
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `lt_of_mul_lt_mul_left`：lt_of_mul_lt_mul_left [PosMulReflectLT α] (h : a 
+* b < a * c) (a0 : 0 <= a) : b < c
 -/
 theorem PosMulReflectLT.toPosMulMono [PosMulReflectLT α] : PosMulMono α where
   mul_le_mul_of_nonneg_left _a ha _b _c hbc :=
-not_lt.1 fun h => hbc.not_gt lt_of_mul_lt_mul_left h ha
-
-/--
-theorem `MulPosReflectLT.toMulPosMono` / 定理 `MulPosReflectLT.toMulPosMono`
-
-English:
-theorem MulPosReflectLT.toMulPosMono
-  given: [MulPosReflectLT α]
-  statement: MulPosMono α where
-  proof: not_lt.1 fun h => hbc.not_gt lt_of_mul_lt_mul_right h ha
-
-中文:
-定理 乘正反映严格偏序.toMulPosMono
-  条件: [乘正反映严格偏序 α]
-  结论: 乘正递增 α where
-  证明: not_lt.1 fun h => hbc.not_gt lt_of_mul_lt_mul_right h ha
-
-Depends on / 依赖: hbc.not_gt, lt_of_mul_lt_mul_right, not_gt, not_lt
+    not_lt.1 fun h ↦ hbc.not_gt <| lt_of_mul_lt_mul_left h ha
+/-
+**MulPosReflectLT.toMulPosMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulPosReflectLT.toMulPosMono [MulPosReflectLT α] : MulPosMono α where mul_
+le_mul_of_nonneg_right _a ha _b _c hbc
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `lt_of_mul_lt_mul_right`：lt_of_mul_lt_mul_right [MulPosReflectLT α] (h : 
+b * a < c * a) (a0 : 0 <= a) : b < c
 -/
 theorem MulPosReflectLT.toMulPosMono [MulPosReflectLT α] : MulPosMono α where
   mul_le_mul_of_nonneg_right _a ha _b _c hbc :=
-not_lt.1 fun h => hbc.not_gt lt_of_mul_lt_mul_right h ha
-
-/--
-theorem `PosMulMono.toPosMulReflectLT` / 定理 `PosMulMono.toPosMulReflectLT`
-
-English:
-theorem PosMulMono.toPosMulReflectLT
-  given: [PosMulMono α]
-  statement: PosMulReflectLT α where
-  proof: (covariant_le_iff_contravariant_lt _ _ _).1
-    fun a _b _c hbc => mul_le_mul_of_nonneg_left hbc a.2
-
-中文:
-定理 正乘递增.toPosMulReflectLT
-  条件: [正乘递增 α]
-  结论: 正乘反映严格偏序 α where
-  证明: (covariant_le_iff_contravariant_lt _ _ _).1
-    fun a _b _c hbc => mul_le_mul_of_nonneg_left hbc a.2
-
-Depends on / 依赖: covariant_le_iff_contravariant_lt
+    not_lt.1 fun h ↦ hbc.not_gt <| lt_of_mul_lt_mul_right h ha
+/-
+**PosMulMono.toPosMulReflectLT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：PosMulMono.toPosMulReflectLT [PosMulMono α] : PosMulReflectLT α where elim
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `covariant_le_iff_contravariant_lt`：covariant_le_iff_contravariant_lt [Li
+nearOrder N] : Covariant M N μ (· <= ·) ↔ Contravariant M N μ (· < ·)
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem PosMulMono.toPosMulReflectLT [PosMulMono α] : PosMulReflectLT α where
   elim := (covariant_le_iff_contravariant_lt _ _ _).1
-    fun a _b _c hbc => mul_le_mul_of_nonneg_left hbc a.2
-
-/--
-theorem `MulPosMono.toMulPosReflectLT` / 定理 `MulPosMono.toMulPosReflectLT`
-
-English:
-theorem MulPosMono.toMulPosReflectLT
-  given: [MulPosMono α]
-  statement: MulPosReflectLT α where
-  proof: (covariant_le_iff_contravariant_lt _ _ _).1
-    fun a _b _c hbc => mul_le_mul_of_nonneg_right hbc a.2
-
-中文:
-定理 乘正递增.toMulPosReflectLT
-  条件: [乘正递增 α]
-  结论: 乘正反映严格偏序 α where
-  证明: (covariant_le_iff_contravariant_lt _ _ _).1
-    fun a _b _c hbc => mul_le_mul_of_nonneg_right hbc a.2
-
-Depends on / 依赖: covariant_le_iff_contravariant_lt
+    fun a _b _c hbc ↦ mul_le_mul_of_nonneg_left hbc a.2
+/-
+**MulPosMono.toMulPosReflectLT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulPosMono.toMulPosReflectLT [MulPosMono α] : MulPosReflectLT α where elim
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `covariant_le_iff_contravariant_lt`：covariant_le_iff_contravariant_lt [Li
+nearOrder N] : Covariant M N μ (· <= ·) ↔ Contravariant M N μ (· < ·)
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem MulPosMono.toMulPosReflectLT [MulPosMono α] : MulPosReflectLT α where
   elim := (covariant_le_iff_contravariant_lt _ _ _).1
-    fun a _b _c hbc => mul_le_mul_of_nonneg_right hbc a.2
+    fun a _b _c hbc ↦ mul_le_mul_of_nonneg_right hbc a.2
 
+/-! TODO: Currently, only one in four of the above are made instances; we could consider making
+  both directions of `covariant_le_iff_contravariant_lt` and `covariant_lt_iff_contravariant_le`
+  instances, then all of the above become redundant instances, but there are performance issues. -/
 
-/--
-theorem `posMulMono_iff_posMulReflectLT` / 定理 `posMulMono_iff_posMulReflectLT`
+/-
+**posMulMono_iff_posMulReflectLT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：posMulMono_iff_posMulReflectLT : PosMulMono α ↔ PosMulReflectLT α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulMono.toPosMulReflectLT`：PosMulMono.toPosMulReflectLT [PosMulMono α
+] : PosMulReflectLT α where elim
+· 使用定理 `PosMulReflectLT.toPosMulMono`：PosMulReflectLT.toPosMulMono [PosMulReflec
+tLT α] : PosMulMono α where mul_le_mul_of_nonneg_left _a ha _b _c hbc
 
-English:
-theorem posMulMono_iff_posMulReflectLT
-  statement: PosMulMono α ↔ PosMulReflectLT α
-  proof: ⟨@PosMulMono.toPosMulReflectLT _ _ _ _, @PosMulReflectLT.toPosMulMono _ _ _ _⟩
-
-中文:
-定理 posMulMono_iff_posMulReflectLT
-  结论: 正乘递增 α ↔ 正乘反映严格偏序 α
-  证明: ⟨@PosMulMono.toPosMulReflectLT _ _ _ _, @PosMulReflectLT.toPosMulMono _ _ _ _⟩
-
-Depends on / 依赖: PosMulMono, PosMulMono.toPosMulReflectLT, PosMulReflectLT, PosMulReflectLT.toPosMulMono, toPosMulMono, toPosMulReflectLT
+--- 原说明 ---
+TODO: Currently, only one in four of the above are made instances; we could cons
+ider making
+  both directions of `covariant_le_iff_contravariant_lt` and `covariant_lt_iff_c
+ontravariant_le`
+  instances, then all of the above become redundant instances, but there are per
+formance issues.
 -/
 theorem posMulMono_iff_posMulReflectLT : PosMulMono α ↔ PosMulReflectLT α :=
   ⟨@PosMulMono.toPosMulReflectLT _ _ _ _, @PosMulReflectLT.toPosMulMono _ _ _ _⟩
-
-/--
-theorem `mulPosMono_iff_mulPosReflectLT` / 定理 `mulPosMono_iff_mulPosReflectLT`
-
-English:
-theorem mulPosMono_iff_mulPosReflectLT
-  statement: MulPosMono α ↔ MulPosReflectLT α
-  proof: ⟨@MulPosMono.toMulPosReflectLT _ _ _ _, @MulPosReflectLT.toMulPosMono _ _ _ _⟩
-
-中文:
-定理 mulPosMono_iff_mulPosReflectLT
-  结论: 乘正递增 α ↔ 乘正反映严格偏序 α
-  证明: ⟨@MulPosMono.toMulPosReflectLT _ _ _ _, @MulPosReflectLT.toMulPosMono _ _ _ _⟩
-
-Depends on / 依赖: MulPosMono, MulPosMono.toMulPosReflectLT, MulPosReflectLT, MulPosReflectLT.toMulPosMono, toMulPosMono, toMulPosReflectLT
+/-
+**mulPosMono_iff_mulPosReflectLT** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mulPosMono_iff_mulPosReflectLT : MulPosMono α ↔ MulPosReflectLT α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulPosMono.toMulPosReflectLT`：MulPosMono.toMulPosReflectLT [MulPosMono α
+] : MulPosReflectLT α where elim
+· 使用定理 `MulPosReflectLT.toMulPosMono`：MulPosReflectLT.toMulPosMono [MulPosReflec
+tLT α] : MulPosMono α where mul_le_mul_of_nonneg_right _a ha _b _c hbc
 -/
 theorem mulPosMono_iff_mulPosReflectLT : MulPosMono α ↔ MulPosReflectLT α :=
   ⟨@MulPosMono.toMulPosReflectLT _ _ _ _, @MulPosReflectLT.toMulPosMono _ _ _ _⟩
 
 end LinearOrder
+

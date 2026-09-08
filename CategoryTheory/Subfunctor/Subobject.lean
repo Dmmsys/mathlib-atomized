@@ -30,38 +30,18 @@ namespace Subfunctor
 set_option backward.defeqAttrib.useBackward true in
 /-- The equivalence of categories `Subfunctor F ≌ MonoOver F`. -/
 @[simps]
-/--
-Definition of `equivalenceMonoOver` / `equivalenceMonoOver` 的定义
+/-
+**CategoryTheory.Subfunctor.equivalenceMonoOver** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Subfunctor`。
+形式化陈述：equivalenceMonoOver : Subfunctor F ≌ MonoOver F where functor
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.instMonoFunctorTypeι`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {F : CategoryTheory.Functor C (Type w)}   (G : 
+CategoryTheory.Subfunctor F), Catego…
 
-English:
-definition equivalenceMonoOver
-  signature: : Subfunctor F ≌ MonoOver F where
-  body: { obj A := MonoOver.mk A.ι
-      map {A B} f := MonoOver.homMk (Subfunctor.homOfLe (leOfHom f)) }
-  inverse :=
-    { obj X := Subfunctor.range X.arrow
-      map {X Y} f := homOfLE (by
-        rw [← MonoOver.w f]
-        apply range_comp_le) }
-  unitIso := NatIso.ofComponents (fun A => eqToIso (by simp))
-  counitIso := NatIso.ofComponents
-    (fun X => MonoOver.isoMk ((asIso (toRange X.arrow)).symm))
-
-中文:
-定义 equivalenceMonoOver
-  签名: : 子函子 F ≌ MonoOver F where
-  定义体: { obj A := MonoOver.mk A.ι
-      map {A B} f := MonoOver.homMk (Subfunctor.homOfLe (leOfHom f)) }
-  inverse :=
-    { obj X := Subfunctor.range X.arrow
-      map {X Y} f := homOfLE (by
-        rw [← MonoOver.w f]
-        apply range_comp_le) }
-  unitIso := NatIso.ofComponents (fun A => eqToIso (by simp))
-  counitIso := NatIso.ofComponents
-    (fun X => MonoOver.isoMk ((asIso (toRange X.arrow)).symm))
-
-Depends on / 依赖: MonoOver, MonoOver.homMk, MonoOver.isoMk, MonoOver.mk, MonoOver.w, NatIso, NatIso.ofComponents, Subfunctor, Subfunctor.homOfLe, Subfunctor.range, X.arrow, counitIso, eqToIso, homOfLE, homOfLe, inverse, leOfHom, ofComponents, range_comp_le, toRange
+--- 原说明 ---
+The equivalence of categories `Subfunctor F ≌ MonoOver F`.
 -/
 noncomputable def equivalenceMonoOver : Subfunctor F ≌ MonoOver F where
   functor :=
@@ -72,28 +52,16 @@ noncomputable def equivalenceMonoOver : Subfunctor F ≌ MonoOver F where
       map {X Y} f := homOfLE (by
         rw [← MonoOver.w f]
         apply range_comp_le) }
-  unitIso := NatIso.ofComponents (fun A => eqToIso (by simp))
+  unitIso := NatIso.ofComponents (fun A ↦ eqToIso (by simp))
   counitIso := NatIso.ofComponents
-    (fun X => MonoOver.isoMk ((asIso (toRange X.arrow)).symm))
+    (fun X ↦ MonoOver.isoMk ((asIso (toRange X.arrow)).symm))
 
 variable {F} in
 @[simp]
-/--
-lemma `range_subobjectMk_ι` / 引理 `range_subobjectMk_ι`
-
-English:
-lemma range_subobjectMk_ι
-  given: (A : Subfunctor F)
-  proof: (((equivalenceMonoOver F).trans
-    (ThinSkeleton.equivalence _).symm).unitIso.app A).to_eq.symm
-
-中文:
-引理 range_subobjectMk_ι
-  条件: (A : 子函子 F)
-  证明: (((equivalenceMonoOver F).trans
-    (ThinSkeleton.equivalence _).symm).unitIso.app A).to_eq.symm
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.equivalence, equivalence, equivalenceMonoOver, to_eq, to_eq.symm, unitIso, unitIso.app
+/-
+**CategoryTheory.Subfunctor.range_subobjectMk_** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Subfunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma range_subobjectMk_ι (A : Subfunctor F) :
     range (Subobject.mk A.ι).arrow = A :=
@@ -102,22 +70,16 @@ lemma range_subobjectMk_ι (A : Subfunctor F) :
 
 variable {F} in
 @[simp]
-/--
-lemma `subobjectMk_range_arrow` / 引理 `subobjectMk_range_arrow`
-
-English:
-lemma subobjectMk_range_arrow
-  given: (X : Subobject F)
-  proof: (((equivalenceMonoOver F).trans
-    (ThinSkeleton.equivalence _).symm).counitIso.app X).to_eq
-
-中文:
-引理 subobjectMk_range_arrow
-  条件: (X : Subobject F)
-  证明: (((equivalenceMonoOver F).trans
-    (ThinSkeleton.equivalence _).symm).counitIso.app X).to_eq
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.equivalence, counitIso, counitIso.app, equivalence, equivalenceMonoOver, to_eq
+/-
+**CategoryTheory.Subfunctor.subobjectMk_range_arrow** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Subfunctor`。
+形式化陈述：subobjectMk_range_arrow (X : Subobject F) : Subobject.mk (range X.arrow).ι
+ = X
+参数：X : Subobject F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.to_eq`：∀ {X : Type u} [inst : PartialOrder X] {x y : 
+X} (f : x ≅ y), x = y
 -/
 lemma subobjectMk_range_arrow (X : Subobject F) :
     Subobject.mk (range X.arrow).ι = X :=
@@ -126,46 +88,18 @@ lemma subobjectMk_range_arrow (X : Subobject F) :
 
 /-- The order isomorphism `Subfunctor F ≃o MonoOver F`. -/
 @[simps]
-/--
-Definition of `orderIsoSubobject` / `orderIsoSubobject` 的定义
+/-
+**CategoryTheory.Subfunctor.orderIsoSubobject** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Subfunctor`。
+形式化陈述：orderIsoSubobject : Subfunctor F ≃o Subobject F where toFun A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subfunctor.instMonoFunctorTypeι`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {F : CategoryTheory.Functor C (Type w)}   (G : 
+CategoryTheory.Subfunctor F), Catego…
 
-English:
-definition orderIsoSubobject
-  signature: : Subfunctor F ≃o Subobject F where
-  body: Subobject.mk A.ι
-  invFun X := Subfunctor.range X.arrow
-  left_inv A := by simp
-  right_inv X := by simp
-  map_rel_iff' {A B} := by
-    constructor
-    · intro h
-      have : range (Subobject.mk A.ι).arrow <= range (Subobject.mk B.ι).arrow :=
-        leOfHom (((equivalenceMonoOver F).trans
-          (ThinSkeleton.equivalence _).symm).inverse.map (homOfLE h))
-      simpa using this
-    · intro h
-      exact leOfHom (((equivalenceMonoOver F).trans
-        (ThinSkeleton.equivalence _).symm).functor.map (homOfLE h))
-
-中文:
-定义 orderIsoSubobject
-  签名: : 子函子 F ≃o Subobject F where
-  定义体: Subobject.mk A.ι
-  invFun X := Subfunctor.range X.arrow
-  left_inv A := by simp
-  right_inv X := by simp
-  map_rel_iff' {A B} := by
-    constructor
-    · intro h
-      have : range (Subobject.mk A.ι).arrow <= range (Subobject.mk B.ι).arrow :=
-        leOfHom (((equivalenceMonoOver F).trans
-          (ThinSkeleton.equivalence _).symm).inverse.map (homOfLE h))
-      simpa using this
-    · intro h
-      exact leOfHom (((equivalenceMonoOver F).trans
-        (ThinSkeleton.equivalence _).symm).functor.map (homOfLE h))
-
-Depends on / 依赖: Subobject, Subobject.mk
+--- 原说明 ---
+The order isomorphism `Subfunctor F ≃o MonoOver F`.
 -/
 noncomputable def orderIsoSubobject : Subfunctor F ≃o Subobject F where
   toFun A := Subobject.mk A.ι
@@ -175,7 +109,7 @@ noncomputable def orderIsoSubobject : Subfunctor F ≃o Subobject F where
   map_rel_iff' {A B} := by
     constructor
     · intro h
-      have : range (Subobject.mk A.ι).arrow <= range (Subobject.mk B.ι).arrow :=
+      have : range (Subobject.mk A.ι).arrow ≤ range (Subobject.mk B.ι).arrow :=
         leOfHom (((equivalenceMonoOver F).trans
           (ThinSkeleton.equivalence _).symm).inverse.map (homOfLE h))
       simpa using this
@@ -186,3 +120,4 @@ noncomputable def orderIsoSubobject : Subfunctor F ≃o Subobject F where
 end Subfunctor
 
 end CategoryTheory
+

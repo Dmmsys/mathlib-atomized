@@ -23,81 +23,71 @@ open scoped NNReal
 
 namespace NNReal
 
-/--
-lemma `Icc_subset_segment` / 引理 `Icc_subset_segment`
-
-English:
-lemma Icc_subset_segment
-  given: {x y : Real>=0}
-  proof: Nonneg.Icc_subset_segment
-
-中文:
-引理 Icc_subset_segment
-  条件: {x y : 实数>=0}
-  证明: Nonneg.Icc_subset_segment
+/-
+**NNReal.Icc_subset_segment** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {x y : NNReal}, Set.Icc x y ⊆ segment NNReal x y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonneg.Icc_subset_segment`：∀ {𝕜 : Type u_1} [inst : Field 𝕜] [inst_1 : L
+inearOrder 𝕜] [inst_2 : IsStrictOrderedRing 𝕜] {x y : { t // 0 ≤ t }},   Set.Icc
+ x y ⊆ segment …
 -/
-protected lemma Icc_subset_segment {x y : Real>=0} :
-    Icc x y subseteq segment Real>=0 x y :=
+protected lemma Icc_subset_segment {x y : ℝ≥0} :
+    Icc x y ⊆ segment ℝ≥0 x y :=
   Nonneg.Icc_subset_segment
-
-/--
-lemma `segment_eq_Icc` / 引理 `segment_eq_Icc`
-
-English:
-lemma segment_eq_Icc
-  given: {x y : Real>=0} (hxy : x <= y)
-  proof: Nonneg.segment_eq_Icc hxy
-
-中文:
-引理 segment_eq_Icc
-  条件: {x y : 实数>=0} (hxy : x <= y)
-  证明: Nonneg.segment_eq_Icc hxy
+/-
+**NNReal.segment_eq_Icc** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {x y : NNReal}, x ≤ y → segment NNReal x y = Set.Icc x y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonneg.segment_eq_Icc`：∀ {𝕜 : Type u_1} [inst : Field 𝕜] [inst_1 : Linea
+rOrder 𝕜] [inst_2 : IsStrictOrderedRing 𝕜] {x y : { t // 0 ≤ t }},   x ≤ y → seg
+ment { t //…
 -/
-protected lemma segment_eq_Icc {x y : Real>=0} (hxy : x <= y) :
-    segment Real>=0 x y = Icc x y :=
+protected lemma segment_eq_Icc {x y : ℝ≥0} (hxy : x ≤ y) :
+    segment ℝ≥0 x y = Icc x y :=
   Nonneg.segment_eq_Icc hxy
-
-/--
-lemma `segment_eq_uIcc` / 引理 `segment_eq_uIcc`
-
-English:
-lemma segment_eq_uIcc
-  given: {x y : Real>=0}
-  proof: Nonneg.segment_eq_uIcc
-
-中文:
-引理 segment_eq_uIcc
-  条件: {x y : 实数>=0}
-  证明: Nonneg.segment_eq_uIcc
+/-
+**NNReal.segment_eq_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {x y : NNReal}, segment NNReal x y = Set.uIcc x y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonneg.segment_eq_uIcc`：∀ {𝕜 : Type u_1} [inst : Field 𝕜] [inst_1 : Line
+arOrder 𝕜] [inst_2 : IsStrictOrderedRing 𝕜] {x y : { t // 0 ≤ t }},   segment { 
+t // 0 ≤ t }…
 -/
-protected lemma segment_eq_uIcc {x y : Real>=0} :
-    segment Real>=0 x y = uIcc x y :=
+protected lemma segment_eq_uIcc {x y : ℝ≥0} :
+    segment ℝ≥0 x y = uIcc x y :=
   Nonneg.segment_eq_uIcc
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `convex_iff` / 引理 `convex_iff`
-
-English:
-lemma convex_iff
-  given: {M : Type*} [AddCommMonoid M] [Module Real M] {s : Set M}
-  proof: by
-  refine ⟨fun H => ?_, Convex.lift Real>=0⟩
-  intro _ hx _ hy a b ha hb hab
-  exact H hx hy (a := ⟨a, ha⟩) (b := ⟨b, hb⟩) zero_le zero_le (by ext; simpa)
-
-中文:
-引理 convex_iff
-  条件: {M : 类型} [加法交换幺半群 M] [模 实数 M] {s : 集合 M}
-  证明: by
-  refine ⟨fun H => ?_, Convex.lift Real>=0⟩
-  intro _ hx _ hy a b ha hb hab
-  exact H hx hy (a := ⟨a, ha⟩) (b := ⟨b, hb⟩) zero_le zero_le (by ext; simpa)
+/-
+**NNReal.convex_iff** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：∀ {M : Type u_1} [inst : AddCommMonoid M] [inst_1 : _root_.Module ℝ M] {s 
+: Set M}, Convex NNReal s ↔ Convex ℝ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `Convex.lift`：Convex.lift [SMulPosMono R 𝕜] {s : Set E} (hs : Convex 𝕜 s)
+ : Convex R s
+· 使用定理 `NNReal.instIsScalarTowerOfReal`：∀ {M : Type u_1} {N : Type u_2} [inst : 
+MulAction ℝ M] [inst_1 : MulAction ℝ N] [inst_2 : SMul M N]   [IsScalarTower ℝ M
+ N], IsScalarTower N…
+· 使用定理 `IsOrderedModule.toSMulPosMono`：∀ {α : Type u_1} {β : Type u_2} {inst : S
+Mul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero α}   {inst_4
+ : Zero β} [self : …
+· 使用定理 `IsStrictOrderedModule.toIsOrderedModule`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : Partial
+Order α]   [inst_4 : PartialO…
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
 -/
-protected lemma convex_iff {M : Type*} [AddCommMonoid M] [Module Real M] {s : Set M} :
-    Convex Real>=0 s ↔ Convex Real s := by
-  refine ⟨fun H => ?_, Convex.lift Real>=0⟩
+protected lemma convex_iff {M : Type*} [AddCommMonoid M] [Module ℝ M] {s : Set M} :
+    Convex ℝ≥0 s ↔ Convex ℝ s := by
+  refine ⟨fun H ↦ ?_, Convex.lift ℝ≥0⟩
   intro _ hx _ hy a b ha hb hab
   exact H hx hy (a := ⟨a, ha⟩) (b := ⟨b, hb⟩) zero_le zero_le (by ext; simpa)
 
 end NNReal
+

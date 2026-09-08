@@ -22,120 +22,63 @@ namespace Equiv
 variable {α β : Type*} (e : α ≃ β)
 
 -- See note [instance transfer via equivalence]
-/--
-Definition of `nnratCast` / `nnratCast` 的定义
+/-- Transfer `NNRatCast` across an `Equiv` -/
+/-
+**Equiv.nnratCast** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [NNRatCast β] → NNRatCast α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation nnratCast
-  signature: [NNRatCast β]
-  body: e.invFun q
-
-中文:
-缩写 nnratCast
-  签名: [非负有理数嵌入 β]
-  定义体: e.invFun q
+--- 原说明 ---
+Transfer `NNRatCast` across an `Equiv`
 -/
 protected abbrev nnratCast [NNRatCast β] : NNRatCast α where nnratCast q := e.invFun q
 
-/--
-Definition of `ratCast` / `ratCast` 的定义
+/-- Transfer `RatCast` across an `Equiv` -/
+/-
+**Equiv.ratCast** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [RatCast β] → RatCast α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ratCast
-  signature: [RatCast β]
-  body: e.invFun n
-
-中文:
-缩写 ratCast
-  签名: [有理数嵌入 β]
-  定义体: e.invFun n
+--- 原说明 ---
+Transfer `RatCast` across an `Equiv`
 -/
 protected abbrev ratCast [RatCast β] : RatCast α where ratCast n := e.invFun n
 
-/--
-Definition of `divisionRing` / `divisionRing` 的定义
+/-- Transfer `DivisionRing` across an `Equiv` -/
+/-
+**Equiv.divisionRing** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [DivisionRing β] → DivisionRing 
+α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation divisionRing
-  signature: [DivisionRing β]
-  body: by
-  let add_group_with_one := e.addGroupWithOne
-  let inv := e.Inv
-  let div := e.div
-  let mul := e.mul
-  let npow := e.pow Nat
-  let zpow := e.pow Int
-  let nnratCast := e.nnratCast
-  let ratCast := e.ratCast
-  let nnqsmul := e.smul Rat>=0
-  let qsmul := e.smul Rat
-  apply e.injective.divisionRing _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 divisionRing
-  签名: [除环 β]
-  定义体: by
-  let add_group_with_one := e.addGroupWithOne
-  let inv := e.Inv
-  let div := e.div
-  let mul := e.mul
-  let npow := e.pow Nat
-  let zpow := e.pow Int
-  let nnratCast := e.nnratCast
-  let ratCast := e.ratCast
-  let nnqsmul := e.smul Rat>=0
-  let qsmul := e.smul Rat
-  apply e.injective.divisionRing _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `DivisionRing` across an `Equiv`
 -/
 protected abbrev divisionRing [DivisionRing β] : DivisionRing α := by
   let add_group_with_one := e.addGroupWithOne
   let inv := e.Inv
   let div := e.div
   let mul := e.mul
-  let npow := e.pow Nat
-  let zpow := e.pow Int
+  let npow := e.pow ℕ
+  let zpow := e.pow ℤ
   let nnratCast := e.nnratCast
   let ratCast := e.ratCast
-  let nnqsmul := e.smul Rat>=0
-  let qsmul := e.smul Rat
+  let nnqsmul := e.smul ℚ≥0
+  let qsmul := e.smul ℚ
   apply e.injective.divisionRing _ <;> intros <;> exact e.apply_symm_apply _
 
-/--
-Definition of `field` / `field` 的定义
+/-- Transfer `Field` across an `Equiv` -/
+/-
+**Equiv.field** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → α ≃ β → [Field β] → Field α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation field
-  signature: [Field β]
-  body: by
-  let add_group_with_one := e.addGroupWithOne
-  let neg := e.Neg
-  let inv := e.Inv
-  let div := e.div
-  let mul := e.mul
-  let npow := e.pow Nat
-  let zpow := e.pow Int
-  let nnratCast := e.nnratCast
-  let ratCast := e.ratCast
-  let nnqsmul := e.smul Rat>=0
-  let qsmul := e.smul Rat
-  apply e.injective.field _ <;> intros <;> exact e.apply_symm_apply _
-
-中文:
-缩写 field
-  签名: [域 β]
-  定义体: by
-  let add_group_with_one := e.addGroupWithOne
-  let neg := e.Neg
-  let inv := e.Inv
-  let div := e.div
-  let mul := e.mul
-  let npow := e.pow Nat
-  let zpow := e.pow Int
-  let nnratCast := e.nnratCast
-  let ratCast := e.ratCast
-  let nnqsmul := e.smul Rat>=0
-  let qsmul := e.smul Rat
-  apply e.injective.field _ <;> intros <;> exact e.apply_symm_apply _
+--- 原说明 ---
+Transfer `Field` across an `Equiv`
 -/
 protected abbrev field [Field β] : Field α := by
   let add_group_with_one := e.addGroupWithOne
@@ -143,12 +86,13 @@ protected abbrev field [Field β] : Field α := by
   let inv := e.Inv
   let div := e.div
   let mul := e.mul
-  let npow := e.pow Nat
-  let zpow := e.pow Int
+  let npow := e.pow ℕ
+  let zpow := e.pow ℤ
   let nnratCast := e.nnratCast
   let ratCast := e.ratCast
-  let nnqsmul := e.smul Rat>=0
-  let qsmul := e.smul Rat
+  let nnqsmul := e.smul ℚ≥0
+  let qsmul := e.smul ℚ
   apply e.injective.field _ <;> intros <;> exact e.apply_symm_apply _
 
 end Equiv
+

@@ -16,36 +16,15 @@ public section
 
 variable {G : Type*} [Group G]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fintype
-  signature: G] [DecidablePred (· in commutator G)] : Fintype (Abelianization G)
-  body: QuotientGroup.fintype (commutator G)
-
-中文:
-实例 [有限类型
-  签名: G] [DecidablePred (· in commutator G)] : 有限类型 (交换化 G)
-  定义体: QuotientGroup.fintype (commutator G)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Fintype G] [DecidablePred (· in commutator G)] : Fintype (Abelianization G) :=
+instance [Fintype G] [DecidablePred (· ∈ commutator G)] : Fintype (Abelianization G) :=
   QuotientGroup.fintype (commutator G)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: G] : Finite (Abelianization G)
-  body: Quotient.finite _
-
-中文:
-实例 [有限
-  签名: G] : 有限 (交换化 G)
-  定义体: Quotient.finite _
-
-Depends on / 依赖: Quotient, Quotient.finite, finite
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite G] : Finite (Abelianization G) :=
   Quotient.finite _

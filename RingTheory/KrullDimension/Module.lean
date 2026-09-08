@@ -28,270 +28,204 @@ namespace Module
 
 open Order
 
-/--
-Definition of `supportDim` / `supportDim` 的定义
+/-- The krull dimension of module, defined as `krullDim` of its support. -/
+/-
+**Module.supportDim** 是 Mathlib 中的一个定义，位于命名空间 `Module`。
+形式化陈述：supportDim : WithBot Nat∞
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition supportDim
-  signature: : WithBot Nat∞
-  body: krullDim (Module.support R M)
-
-@[nontriviality]
-
-中文:
-定义 supportDim
-  签名: : WithBot 自然数∞
-  定义体: krullDim (Module.support R M)
-
-@[nontriviality]
-
-Depends on / 依赖: Module, Module.support, krullDim, support
+--- 原说明 ---
+The krull dimension of module, defined as `krullDim` of its support.
 -/
-noncomputable def supportDim : WithBot Nat∞ :=
+noncomputable def supportDim : WithBot ℕ∞ :=
   krullDim (Module.support R M)
 
 @[nontriviality]
-/--
-lemma `supportDim_eq_bot_of_subsingleton` / 引理 `supportDim_eq_bot_of_subsingleton`
-
-English:
-lemma supportDim_eq_bot_of_subsingleton
-  given: [Subsingleton M]
-  statement: supportDim R M = ⊥
-  proof: by
-  simpa [supportDim, support_eq_empty_iff]
-
-中文:
-引理 supportDim_eq_bot_of_subsingleton
-  条件: [子单例 M]
-  结论: supportDim R M = ⊥
-  证明: by
-  simpa [supportDim, support_eq_empty_iff]
-
-Depends on / 依赖: supportDim, support_eq_empty_iff
+/-
+**Module.supportDim_eq_bot_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_eq_bot_of_subsingleton [Subsingleton M] : supportDim R M = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 lemma supportDim_eq_bot_of_subsingleton [Subsingleton M] : supportDim R M = ⊥ := by
   simpa [supportDim, support_eq_empty_iff]
-
-/--
-lemma `supportDim_ne_bot_of_nontrivial` / 引理 `supportDim_ne_bot_of_nontrivial`
-
-English:
-lemma supportDim_ne_bot_of_nontrivial
-  given: [Nontrivial M]
-  statement: supportDim R M != ⊥
-  proof: by
-  have : Nonempty (Module.support R M) := nonempty_support_of_nontrivial.to_subtype
-  simp [supportDim]
-
-中文:
-引理 supportDim_ne_bot_of_nontrivial
-  条件: [非平凡 M]
-  结论: supportDim R M != ⊥
-  证明: by
-  have : Nonempty (Module.support R M) := nonempty_support_of_nontrivial.to_subtype
-  simp [supportDim]
-
-Depends on / 依赖: Module, Module.support, Nonempty, nonempty_support_of_nontrivial, nonempty_support_of_nontrivial.to_subtype, support, supportDim, to_subtype
+/-
+**Module.supportDim_ne_bot_of_nontrivial** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_ne_bot_of_nontrivial [Nontrivial M] : supportDim R M != ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用引理 `Module.nonempty_support_of_nontrivial`：Module.nonempty_support_of_nontri
+vial [Nontrivial M] : (Module.support R M).Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma supportDim_ne_bot_of_nontrivial [Nontrivial M] : supportDim R M != ⊥ := by
+lemma supportDim_ne_bot_of_nontrivial [Nontrivial M] : supportDim R M ≠ ⊥ := by
   have : Nonempty (Module.support R M) := nonempty_support_of_nontrivial.to_subtype
   simp [supportDim]
-
-/--
-lemma `supportDim_eq_bot_iff_subsingleton` / 引理 `supportDim_eq_bot_iff_subsingleton`
-
-English:
-lemma supportDim_eq_bot_iff_subsingleton
-  statement: supportDim R M = ⊥ ↔ Subsingleton M
-  proof: by
-  simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff]
-
-中文:
-引理 supportDim_eq_bot_iff_subsingleton
-  结论: supportDim R M = ⊥ ↔ 子单例 M
-  证明: by
-  simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff]
-
-Depends on / 依赖: krullDim_eq_bot_iff, supportDim, support_eq_empty_iff
+/-
+**Module.supportDim_eq_bot_iff_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_eq_bot_iff_subsingleton : supportDim R M = ⊥ ↔ Subsingleton M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma supportDim_eq_bot_iff_subsingleton : supportDim R M = ⊥ ↔ Subsingleton M := by
   simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff]
-
-/--
-lemma `supportDim_ne_bot_iff_nontrivial` / 引理 `supportDim_ne_bot_iff_nontrivial`
-
-English:
-lemma supportDim_ne_bot_iff_nontrivial
-  statement: supportDim R M != ⊥ ↔ Nontrivial M
-  proof: by
-  simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff, not_subsingleton_iff_nontrivial]
-
-中文:
-引理 supportDim_ne_bot_iff_nontrivial
-  结论: supportDim R M != ⊥ ↔ 非平凡 M
-  证明: by
-  simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff, not_subsingleton_iff_nontrivial]
-
-Depends on / 依赖: krullDim_eq_bot_iff, not_subsingleton_iff_nontrivial, supportDim, support_eq_empty_iff
+/-
+**Module.supportDim_ne_bot_iff_nontrivial** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_ne_bot_iff_nontrivial : supportDim R M != ⊥ ↔ Nontrivial M
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma supportDim_ne_bot_iff_nontrivial : supportDim R M != ⊥ ↔ Nontrivial M := by
+lemma supportDim_ne_bot_iff_nontrivial : supportDim R M ≠ ⊥ ↔ Nontrivial M := by
   simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff, not_subsingleton_iff_nontrivial]
-
-/--
-lemma `supportDim_eq_ringKrullDim_quotient_annihilator` / 引理 `supportDim_eq_ringKrullDim_quotient_annihilator`
-
-English:
-lemma supportDim_eq_ringKrullDim_quotient_annihilator
-  given: [Module.Finite R M]
-  proof: by
-  simp only [supportDim]
-  rw [support_eq_zeroLocus]; rw [ringKrullDim_quotient]
-
-中文:
-引理 supportDim_eq_ringKrullDim_quotient_annihilator
-  条件: [模.有限 R M]
-  证明: by
-  simp only [supportDim]
-  rw [support_eq_zeroLocus]; rw [ringKrullDim_quotient]
-
-Depends on / 依赖: ringKrullDim_quotient, supportDim, support_eq_zeroLocus
+/-
+**Module.supportDim_eq_ringKrullDim_quotient_annihilator** 是 Mathlib 中的一个引理，位于命名
+空间 `Module`。
+形式化陈述：supportDim_eq_ringKrullDim_quotient_annihilator [Module.Finite R M] : supp
+ortDim R M = ringKrullDim (R ⧸ annihilator R M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.support_eq_zeroLocus`：Module.support_eq_zeroLocus : Module.suppor
+t R M = zeroLocus (Module.annihilator R M)
+· 使用引理 `ringKrullDim_quotient`：ringKrullDim_quotient (I : Ideal R) : ringKrullDi
+m (R ⧸ I) = Order.krullDim (PrimeSpectrum.zeroLocus (R
 -/
 lemma supportDim_eq_ringKrullDim_quotient_annihilator [Module.Finite R M] :
     supportDim R M = ringKrullDim (R ⧸ annihilator R M) := by
   simp only [supportDim]
-  rw [support_eq_zeroLocus]; rw [ringKrullDim_quotient]
-
-/--
-lemma `supportDim_self_eq_ringKrullDim` / 引理 `supportDim_self_eq_ringKrullDim`
-
-English:
-lemma supportDim_self_eq_ringKrullDim
-  statement: supportDim R R = ringKrullDim R
-  proof: by
-  have : annihilator R R = ⊥ :=
-    annihilator_eq_bot.mpr ((faithfulSMul_iff_algebraMap_injective R R).mpr fun {a₁ a₂} a => a)
-  rw [supportDim_eq_ringKrullDim_quotient_annihilator]; rw [this]
-  exact (RingEquiv.ringKrullDim (RingEquiv.quotientBot R))
-
-中文:
-引理 supportDim_self_eq_ringKrullDim
-  结论: supportDim R R = ringKrullDim R
-  证明: by
-  have : annihilator R R = ⊥ :=
-    annihilator_eq_bot.mpr ((faithfulSMul_iff_algebraMap_injective R R).mpr fun {a₁ a₂} a => a)
-  rw [supportDim_eq_ringKrullDim_quotient_annihilator]; rw [this]
-  exact (RingEquiv.ringKrullDim (RingEquiv.quotientBot R))
-
-Depends on / 依赖: RingEquiv, RingEquiv.quotientBot, RingEquiv.ringKrullDim, annihilator, annihilator_eq_bot, annihilator_eq_bot.mpr, faithfulSMul_iff_algebraMap_injective, quotientBot, ringKrullDim, supportDim_eq_ringKrullDim_quotient_annihilator
+  rw [support_eq_zeroLocus, ringKrullDim_quotient]
+/-
+**Module.supportDim_self_eq_ringKrullDim** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_self_eq_ringKrullDim : supportDim R R = ringKrullDim R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Module.annihilator_eq_bot`：Module.annihilator_eq_bot {R M} [Ring R] [Add
+CommGroup M] [Module R M] : Module.annihilator R M = ⊥ ↔ FaithfulSMul R M
+· 使用引理 `faithfulSMul_iff_algebraMap_injective`：faithfulSMul_iff_algebraMap_injec
+tive : FaithfulSMul R A ↔ Injective (algebraMap R A)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.supportDim_eq_ringKrullDim_quotient_annihilator`：supportDim_eq_ri
+ngKrullDim_quotient_annihilator [Module.Finite R M] : supportDim R M = ringKrull
+Dim (R ⧸ annihilator R M)
+· 使用定理 `RingEquiv.ringKrullDim`：∀ {R : Type u_1} {S : Type u_2} [inst : CommSemi
+ring R] [inst_1 : CommSemiring S] (e : R ≃+* S),   ringKrullDim R = ringKrullDim
+ S
 -/
 lemma supportDim_self_eq_ringKrullDim : supportDim R R = ringKrullDim R := by
   have : annihilator R R = ⊥ :=
-    annihilator_eq_bot.mpr ((faithfulSMul_iff_algebraMap_injective R R).mpr fun {a₁ a₂} a => a)
-  rw [supportDim_eq_ringKrullDim_quotient_annihilator]; rw [this]
+    annihilator_eq_bot.mpr ((faithfulSMul_iff_algebraMap_injective R R).mpr fun {a₁ a₂} a ↦ a)
+  rw [supportDim_eq_ringKrullDim_quotient_annihilator, this]
   exact (RingEquiv.ringKrullDim (RingEquiv.quotientBot R))
-
-/--
-lemma `supportDim_le_ringKrullDim` / 引理 `supportDim_le_ringKrullDim`
-
-English:
-lemma supportDim_le_ringKrullDim
-  statement: supportDim R M <= ringKrullDim R
-  proof: krullDim_le_of_strictMono (fun a => a) fun {_ _} lt => lt
-
-中文:
-引理 supportDim_le_ringKrullDim
-  结论: supportDim R M <= ringKrullDim R
-  证明: krullDim_le_of_strictMono (fun a => a) fun {_ _} lt => lt
-
-Depends on / 依赖: krullDim_le_of_strictMono
+/-
+**Module.supportDim_le_ringKrullDim** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_le_ringKrullDim : supportDim R M <= ringKrullDim R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Order.krullDim_le_of_strictMono`：krullDim_le_of_strictMono (f : α -> β) 
+(hf : StrictMono f) : krullDim α <= krullDim β
 -/
-lemma supportDim_le_ringKrullDim : supportDim R M <= ringKrullDim R :=
-  krullDim_le_of_strictMono (fun a => a) fun {_ _} lt => lt
+lemma supportDim_le_ringKrullDim : supportDim R M ≤ ringKrullDim R :=
+  krullDim_le_of_strictMono (fun a ↦ a) fun {_ _} lt ↦ lt
 
 variable {R M N}
-
-/--
-lemma `supportDim_quotient_eq_ringKrullDim` / 引理 `supportDim_quotient_eq_ringKrullDim`
-
-English:
-lemma supportDim_quotient_eq_ringKrullDim
-  given: (I : Ideal R)
-  proof: by
-  rw [supportDim_eq_ringKrullDim_quotient_annihilator]; rw [Ideal.annihilator_quotient]
-
-中文:
-引理 supportDim_quotient_eq_ringKrullDim
-  条件: (I : 理想 R)
-  证明: by
-  rw [supportDim_eq_ringKrullDim_quotient_annihilator]; rw [Ideal.annihilator_quotient]
-
-Depends on / 依赖: Ideal.annihilator_quotient, annihilator_quotient, supportDim_eq_ringKrullDim_quotient_annihilator
+/-
+**Module.supportDim_quotient_eq_ringKrullDim** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_quotient_eq_ringKrullDim (I : Ideal R) : supportDim R (R ⧸ I) =
+ ringKrullDim (R ⧸ I)
+参数：I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.supportDim_eq_ringKrullDim_quotient_annihilator`：supportDim_eq_ri
+ngKrullDim_quotient_annihilator [Module.Finite R M] : supportDim R M = ringKrull
+Dim (R ⧸ annihilator R M)
+· 使用定理 `Ideal.annihilator_quotient`：∀ {R : Type u_1} [inst : Ring R] {I : Ideal 
+R} [I.IsTwoSided], Module.annihilator R (R ⧸ I) = I
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 -/
 lemma supportDim_quotient_eq_ringKrullDim (I : Ideal R) :
     supportDim R (R ⧸ I) = ringKrullDim (R ⧸ I) := by
-  rw [supportDim_eq_ringKrullDim_quotient_annihilator]; rw [Ideal.annihilator_quotient]
-
-/--
-lemma `supportDim_le_of_injective` / 引理 `supportDim_le_of_injective`
-
-English:
-lemma supportDim_le_of_injective
-  given: (f : M ->ₗ[R] N) (h : Function.Injective f)
-  proof: krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_injective f h a.2⟩)
-    (fun {_ _} lt => lt)
-
-中文:
-引理 supportDim_le_of_injective
-  条件: (f : M ->ₗ[R] N) (h : 函数.单射 f)
-  证明: krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_injective f h a.2⟩)
-    (fun {_ _} lt => lt)
-
-Depends on / 依赖: Module, Module.support_subset_of_injective, krullDim_le_of_strictMono, support_subset_of_injective
+  rw [supportDim_eq_ringKrullDim_quotient_annihilator, Ideal.annihilator_quotient]
+/-
+**Module.supportDim_le_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_le_of_injective (f : M ->ₗ[R] N) (h : Function.Injective f) : s
+upportDim R M <= supportDim R N
+参数：f : M ->ₗ[R] N；h : Function.Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Order.krullDim_le_of_strictMono`：krullDim_le_of_strictMono (f : α -> β) 
+(hf : StrictMono f) : krullDim α <= krullDim β
+· 使用引理 `Module.support_subset_of_injective`：Module.support_subset_of_injective (
+hf : Function.Injective f) : Module.support R M subseteq Module.support R N
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-lemma supportDim_le_of_injective (f : M ->ₗ[R] N) (h : Function.Injective f) :
-    supportDim R M <= supportDim R N :=
-  krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_injective f h a.2⟩)
-    (fun {_ _} lt => lt)
-
-/--
-lemma `supportDim_le_of_surjective` / 引理 `supportDim_le_of_surjective`
-
-English:
-lemma supportDim_le_of_surjective
-  given: (f : M ->ₗ[R] N) (h : Function.Surjective f)
-  proof: krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_surjective f h a.2⟩)
-    (fun {_ _} lt => lt)
-
-中文:
-引理 supportDim_le_of_surjective
-  条件: (f : M ->ₗ[R] N) (h : 函数.满射 f)
-  证明: krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_surjective f h a.2⟩)
-    (fun {_ _} lt => lt)
-
-Depends on / 依赖: Module, Module.support_subset_of_surjective, krullDim_le_of_strictMono, support_subset_of_surjective
+lemma supportDim_le_of_injective (f : M →ₗ[R] N) (h : Function.Injective f) :
+    supportDim R M ≤ supportDim R N :=
+  krullDim_le_of_strictMono (fun a ↦ ⟨a.1, Module.support_subset_of_injective f h a.2⟩)
+    (fun {_ _} lt ↦ lt)
+/-
+**Module.supportDim_le_of_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_le_of_surjective (f : M ->ₗ[R] N) (h : Function.Surjective f) :
+ supportDim R N <= supportDim R M
+参数：f : M ->ₗ[R] N；h : Function.Surjective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Order.krullDim_le_of_strictMono`：krullDim_le_of_strictMono (f : α -> β) 
+(hf : StrictMono f) : krullDim α <= krullDim β
+· 使用引理 `Module.support_subset_of_surjective`：Module.support_subset_of_surjective
+ (hf : Function.Surjective f) : Module.support R N subseteq Module.support R M
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-lemma supportDim_le_of_surjective (f : M ->ₗ[R] N) (h : Function.Surjective f) :
-    supportDim R N <= supportDim R M :=
-  krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_surjective f h a.2⟩)
-    (fun {_ _} lt => lt)
-
-/--
-lemma `supportDim_eq_of_equiv` / 引理 `supportDim_eq_of_equiv`
-
-English:
-lemma supportDim_eq_of_equiv
-  given: (e : M ≃ₗ[R] N)
-  proof: le_antisymm (supportDim_le_of_injective e e.injective)
-    (supportDim_le_of_surjective e e.surjective)
-
-中文:
-引理 supportDim_eq_of_equiv
-  条件: (e : M ≃ₗ[R] N)
-  证明: le_antisymm (supportDim_le_of_injective e e.injective)
-    (supportDim_le_of_surjective e e.surjective)
-
-Depends on / 依赖: e.injective, e.surjective, injective, le_antisymm, supportDim_le_of_injective, supportDim_le_of_surjective, surjective
+lemma supportDim_le_of_surjective (f : M →ₗ[R] N) (h : Function.Surjective f) :
+    supportDim R N ≤ supportDim R M :=
+  krullDim_le_of_strictMono (fun a ↦ ⟨a.1, Module.support_subset_of_surjective f h a.2⟩)
+    (fun {_ _} lt ↦ lt)
+/-
+**Module.supportDim_eq_of_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Module`。
+形式化陈述：supportDim_eq_of_equiv (e : M ≃ₗ[R] N) : supportDim R M = supportDim R N
+参数：e : M ≃ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `Module.supportDim_le_of_injective`：supportDim_le_of_injective (f : M ->ₗ
+[R] N) (h : Function.Injective f) : supportDim R M <= supportDim R N
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用引理 `Module.supportDim_le_of_surjective`：supportDim_le_of_surjective (f : M -
+>ₗ[R] N) (h : Function.Surjective f) : supportDim R N <= supportDim R M
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
 -/
 lemma supportDim_eq_of_equiv (e : M ≃ₗ[R] N) :
     supportDim R M = supportDim R N :=
@@ -302,50 +236,49 @@ end Module
 
 open Ideal IsLocalRing
 
-/--
-lemma `support_of_supportDim_eq_zero` / 引理 `support_of_supportDim_eq_zero`
-
-English:
-lemma support_of_supportDim_eq_zero
-  statement: [IsLocalRing R]
-  proof: by
-  let _ : Nontrivial N := by simp [← Module.supportDim_ne_bot_iff_nontrivial R, dim]
-  rw [PrimeSpectrum.zeroLocus_eq_singleton]
-  apply le_antisymm
-  · intro p hp
-    by_contra nmem
-    push _ in _ at nmem
-    have : p < ⟨maximalIdeal R, IsMaximal.isPrime' (maximalIdeal R)⟩ :=
-      lt_of_le_of_ne (IsLocalRing.le_maximalIdeal IsPrime.ne_top') nmem
-    have : Module.supportDim R N > 0 := by
-      simp only [Module.supportDim, gt_iff_lt, Order.krullDim_pos_iff, Subtype.exists,
-        Subtype.mk_lt_mk, exists_prop]
-      use p
-      simpa [hp] using! ⟨_, IsLocalRing.closedPoint_mem_support R N, this⟩
-    exact (ne_of_lt this) dim.symm
-  · simpa using! IsLocalRing.closedPoint_mem_support R N
-
-中文:
-引理 support_of_supportDim_eq_zero
-  结论: [是局部环 R]
-  证明: by
-  let _ : Nontrivial N := by simp [← Module.supportDim_ne_bot_iff_nontrivial R, dim]
-  rw [PrimeSpectrum.zeroLocus_eq_singleton]
-  apply le_antisymm
-  · intro p hp
-    by_contra nmem
-    push _ in _ at nmem
-    have : p < ⟨maximalIdeal R, IsMaximal.isPrime' (maximalIdeal R)⟩ :=
-      lt_of_le_of_ne (IsLocalRing.le_maximalIdeal IsPrime.ne_top') nmem
-    have : Module.supportDim R N > 0 := by
-      simp only [Module.supportDim, gt_iff_lt, Order.krullDim_pos_iff, Subtype.exists,
-        Subtype.mk_lt_mk, exists_prop]
-      use p
-      simpa [hp] using! ⟨_, IsLocalRing.closedPoint_mem_support R N, this⟩
-    exact (ne_of_lt this) dim.symm
-  · simpa using! IsLocalRing.closedPoint_mem_support R N
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.le_maximalIdeal, IsMaximal, IsMaximal.isPrime, IsPrime, IsPrime.ne_top, Module, Module.supportDim, Module.supportDim_ne_bot_iff_nontrivial, Nontrivial, Order.krullDim_pos_iff, PrimeSpectrum, PrimeSpectrum.zeroLocus_eq_singleton, Subtype, Subtype.exists, Subtype.mk_lt_mk, exists_prop, gt_iff_lt, isPrime, krullDim_pos_iff
+/-
+**support_of_supportDim_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：support_of_supportDim_eq_zero [IsLocalRing R] (dim : Module.supportDim R N
+ = 0) : Module.support R N = PrimeSpectrum.zeroLocus (maximalIdeal R)
+参数：dim : Module.supportDim R N = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Module.supportDim_ne_bot_iff_nontrivial`：supportDim_ne_bot_iff_nontrivia
+l : supportDim R M != ⊥ ↔ Nontrivial M
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Ideal.IsMaximal.isPrime'`：∀ {α : Type u} [inst : CommSemiring α] (I : Id
+eal α) [_H : I.IsMaximal], I.IsPrime
+· 使用定理 `IsLocalRing.maximalIdeal.isMaximal`：∀ (R : Type u_1) [inst : CommSemirin
+g R] [inst_1 : IsLocalRing R], (IsLocalRing.maximalIdeal R).IsMaximal
+· 使用引理 `PrimeSpectrum.zeroLocus_eq_singleton`：zeroLocus_eq_singleton (m : Ideal 
+R) [m.IsMaximal] : zeroLocus m = {⟨m, inferInstance⟩}
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `IsLocalRing.le_maximalIdeal`：le_maximalIdeal {J : Ideal R} (hJ : J != ⊤)
+ : J <= maximalIdeal R
+· 使用定理 `Ideal.IsPrime.ne_top'`：∀ {α : Type u} {inst : Semiring α} {I : Ideal α} 
+[self : I.IsPrime], I ≠ ⊤
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用引理 `IsLocalRing.closedPoint_mem_support`：IsLocalRing.closedPoint_mem_support
+ [IsLocalRing R] [Nontrivial M] : IsLocalRing.closedPoint R in Module.support R 
+M
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
 -/
 lemma support_of_supportDim_eq_zero [IsLocalRing R]
     (dim : Module.supportDim R N = 0) :
@@ -355,7 +288,7 @@ lemma support_of_supportDim_eq_zero [IsLocalRing R]
   apply le_antisymm
   · intro p hp
     by_contra nmem
-    push _ in _ at nmem
+    push _ ∈ _ at nmem
     have : p < ⟨maximalIdeal R, IsMaximal.isPrime' (maximalIdeal R)⟩ :=
       lt_of_le_of_ne (IsLocalRing.le_maximalIdeal IsPrime.ne_top') nmem
     have : Module.supportDim R N > 0 := by

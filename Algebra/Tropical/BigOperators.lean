@@ -39,394 +39,408 @@ variable {R S : Type*}
 
 open Tropical Finset
 
-/--
-theorem `List.trop_sum` / 定理 `List.trop_sum`
-
-English:
-theorem List.trop_sum
-  given: [AddMonoid R] (l : List R)
-  statement: trop l.sum = List.prod (l.map trop)
-  proof: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH => simp [← IH]
-
-中文:
-定理 列表.trop_sum
-  条件: [加法幺半群 R] (l : 列表 R)
-  结论: trop l.求和 = 列表.乘积 (l.map trop)
-  证明: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH => simp [← IH]
+/-
+**List.trop_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：List.trop_sum [AddMonoid R] (l : List R) : trop l.sum = List.prod (l.map t
+rop)
+参数：l : List R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem List.trop_sum [AddMonoid R] (l : List R) : trop l.sum = List.prod (l.map trop) := by
   induction l with
   | nil => simp
   | cons hd tl IH => simp [← IH]
-
-/--
-theorem `Multiset.trop_sum` / 定理 `Multiset.trop_sum`
-
-English:
-theorem Multiset.trop_sum
-  given: [AddCommMonoid R] (s : Multiset R)
-  proof: Quotient.inductionOn s (by simpa using List.trop_sum)
-
-中文:
-定理 Multiset.trop_sum
-  条件: [加法交换幺半群 R] (s : Multiset R)
-  证明: Quotient.inductionOn s (by simpa using List.trop_sum)
-
-Depends on / 依赖: List.trop_sum, Quotient, Quotient.inductionOn, inductionOn, trop_sum
+/-
+**Multiset.trop_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.trop_sum [AddCommMonoid R] (s : Multiset R) : trop s.sum = Multis
+et.prod (s.map trop)
+参数：s : Multiset R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `List.trop_sum`：List.trop_sum [AddMonoid R] (l : List R) : trop l.sum = L
+ist.prod (l.map trop)
 -/
 theorem Multiset.trop_sum [AddCommMonoid R] (s : Multiset R) :
     trop s.sum = Multiset.prod (s.map trop) :=
   Quotient.inductionOn s (by simpa using List.trop_sum)
-
-/--
-theorem `trop_sum` / 定理 `trop_sum`
-
-English:
-theorem trop_sum
-  given: [AddCommMonoid R] (s : Finset S) (f : S -> R)
-  proof: by
-  convert! Multiset.trop_sum (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply]
-  rfl
-
-中文:
-定理 trop_sum
-  条件: [加法交换幺半群 R] (s : 有限集 S) (f : S -> R)
-  证明: by
-  convert! Multiset.trop_sum (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply]
-  rfl
-
-Depends on / 依赖: Function, Function.comp_apply, Multiset, Multiset.map_map, Multiset.trop_sum, comp_apply, convert, map_map, s.val.map, trop_sum
+/-
+**trop_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：trop_sum [AddCommMonoid R] (s : Finset S) (f : S -> R) : trop (∑ i in s, f
+ i) = ∏ i in s, trop (f i)
+参数：s : Finset S；f : S -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.trop_sum`：Multiset.trop_sum [AddCommMonoid R] (s : Multiset R) 
+: trop s.sum = Multiset.prod (s.map trop)
 -/
-theorem trop_sum [AddCommMonoid R] (s : Finset S) (f : S -> R) :
-    trop (∑ i in s, f i) = ∏ i in s, trop (f i) := by
+theorem trop_sum [AddCommMonoid R] (s : Finset S) (f : S → R) :
+    trop (∑ i ∈ s, f i) = ∏ i ∈ s, trop (f i) := by
   convert! Multiset.trop_sum (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply]
   rfl
-
-/--
-theorem `List.untrop_prod` / 定理 `List.untrop_prod`
-
-English:
-theorem List.untrop_prod
-  given: [AddMonoid R] (l : List (Tropical R))
-  proof: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH => simp [← IH]
-
-中文:
-定理 列表.untrop_prod
-  条件: [加法幺半群 R] (l : 列表 (Tropical R))
-  证明: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH => simp [← IH]
+/-
+**List.untrop_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：List.untrop_prod [AddMonoid R] (l : List (Tropical R)) : untrop l.prod = L
+ist.sum (l.map untrop)
+参数：l : List (Tropical R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem List.untrop_prod [AddMonoid R] (l : List (Tropical R)) :
     untrop l.prod = List.sum (l.map untrop) := by
   induction l with
   | nil => simp
   | cons hd tl IH => simp [← IH]
-
-/--
-theorem `Multiset.untrop_prod` / 定理 `Multiset.untrop_prod`
-
-English:
-theorem Multiset.untrop_prod
-  given: [AddCommMonoid R] (s : Multiset (Tropical R))
-  proof: Quotient.inductionOn s (by simpa using List.untrop_prod)
-
-中文:
-定理 Multiset.untrop_prod
-  条件: [加法交换幺半群 R] (s : Multiset (Tropical R))
-  证明: Quotient.inductionOn s (by simpa using List.untrop_prod)
-
-Depends on / 依赖: List.untrop_prod, Quotient, Quotient.inductionOn, inductionOn, untrop_prod
+/-
+**Multiset.untrop_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.untrop_prod [AddCommMonoid R] (s : Multiset (Tropical R)) : untro
+p s.prod = Multiset.sum (s.map untrop)
+参数：s : Multiset (Tropical R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `List.untrop_prod`：List.untrop_prod [AddMonoid R] (l : List (Tropical R))
+ : untrop l.prod = List.sum (l.map untrop)
 -/
 theorem Multiset.untrop_prod [AddCommMonoid R] (s : Multiset (Tropical R)) :
     untrop s.prod = Multiset.sum (s.map untrop) :=
   Quotient.inductionOn s (by simpa using List.untrop_prod)
-
-/--
-theorem `untrop_prod` / 定理 `untrop_prod`
-
-English:
-theorem untrop_prod
-  given: [AddCommMonoid R] (s : Finset S) (f : S -> Tropical R)
-  proof: by
-  convert! Multiset.untrop_prod (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply]
-  rfl
-
-中文:
-定理 untrop_prod
-  条件: [加法交换幺半群 R] (s : 有限集 S) (f : S -> Tropical R)
-  证明: by
-  convert! Multiset.untrop_prod (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply]
-  rfl
-
-Depends on / 依赖: Function, Function.comp_apply, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.coprodMap, Multiset, Multiset.map_map, Multiset.untrop_prod, comp_apply, convert, coprodMap, map_map, s.val.map, untrop_prod
+/-
+**untrop_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：untrop_prod [AddCommMonoid R] (s : Finset S) (f : S -> Tropical R) : untro
+p (∏ i in s, f i) = ∑ i in s, untrop (f i)
+参数：s : Finset S；f : S -> Tropical R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.untrop_prod`：Multiset.untrop_prod [AddCommMonoid R] (s : Multis
+et (Tropical R)) : untrop s.prod = Multiset.sum (s.map untrop)
 -/
-theorem untrop_prod [AddCommMonoid R] (s : Finset S) (f : S -> Tropical R) :
-    untrop (∏ i in s, f i) = ∑ i in s, untrop (f i) := by
+theorem untrop_prod [AddCommMonoid R] (s : Finset S) (f : S → Tropical R) :
+    untrop (∏ i ∈ s, f i) = ∑ i ∈ s, untrop (f i) := by
   convert! Multiset.untrop_prod (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply]
   rfl
-
-/--
-theorem `List.trop_minimum` / 定理 `List.trop_minimum`
-
-English:
-theorem List.trop_minimum
-  given: [LinearOrder R] (l : List R)
-  proof: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH => simp [List.minimum_cons, ← IH]
-
-中文:
-定理 列表.trop_minimum
-  条件: [线性序 R] (l : 列表 R)
-  证明: by
-  induction l with
-  | nil => simp
-  | cons hd tl IH => simp [List.minimum_cons, ← IH]
-
-Depends on / 依赖: List.minimum_cons, minimum_cons
+/-
+**List.trop_minimum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：List.trop_minimum [LinearOrder R] (l : List R) : trop l.minimum = List.sum
+ (l.map (trop ∘ WithTop.some))
+参数：l : List R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.minimum_cons`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α) (l : 
+List α), (a :: l).minimum = min (↑a) l.minimum
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem List.trop_minimum [LinearOrder R] (l : List R) :
     trop l.minimum = List.sum (l.map (trop ∘ WithTop.some)) := by
   induction l with
   | nil => simp
   | cons hd tl IH => simp [List.minimum_cons, ← IH]
-
-/--
-theorem `Multiset.trop_inf` / 定理 `Multiset.trop_inf`
-
-English:
-theorem Multiset.trop_inf
-  given: [LinearOrder R] [OrderTop R] (s : Multiset R)
-  proof: by
-  induction s using Multiset.induction with
-  | empty => simp
-  | cons s x IH => simp [← IH]
-
-中文:
-定理 Multiset.trop_inf
-  条件: [线性序 R] [有顶序 R] (s : Multiset R)
-  证明: by
-  induction s using Multiset.induction with
-  | empty => simp
-  | cons s x IH => simp [← IH]
-
-Depends on / 依赖: Multiset, Multiset.induction
+/-
+**Multiset.trop_inf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.trop_inf [LinearOrder R] [OrderTop R] (s : Multiset R) : trop s.i
+nf = Multiset.sum (s.map trop)
+参数：s : Multiset R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction`：∀ {α : Type u_1} {p : Multiset α → Prop},   p 0 → (∀
+ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → ∀ (s : Multiset α), p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.inf_zero`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : 
+OrderTop α], Multiset.inf 0 = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.inf_cons`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : 
+OrderTop α] (a : α) (s : Multiset α), (a ::ₘ s).inf = a ⊓ s.inf
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `Multiset.sum_cons`：∀ {M : Type u_3} [inst : AddCommMonoid M] (a : M) (s 
+: Multiset M), (a ::ₘ s).sum = a + s.sum
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Multiset.trop_inf [LinearOrder R] [OrderTop R] (s : Multiset R) :
     trop s.inf = Multiset.sum (s.map trop) := by
   induction s using Multiset.induction with
   | empty => simp
   | cons s x IH => simp [← IH]
-
-/--
-theorem `Finset.trop_inf` / 定理 `Finset.trop_inf`
-
-English:
-theorem Finset.trop_inf
-  given: [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> R)
-  proof: by
+/-
+**Finset.trop_inf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.trop_inf [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> R) :
+ trop (s.inf f) = ∑ i in s, trop (f i)
+参数：s : Finset S；f : S -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.trop_inf`：Multiset.trop_inf [LinearOrder R] [OrderTop R] (s : M
+ultiset R) : trop s.inf = Multiset.sum (s.map trop)
+-/
+theorem Finset.trop_inf [LinearOrder R] [OrderTop R] (s : Finset S) (f : S → R) :
+    trop (s.inf f) = ∑ i ∈ s, trop (f i) := by
   convert! Multiset.trop_inf (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply]
   rfl
-
-中文:
-定理 有限集.trop_inf
-  条件: [线性序 R] [有顶序 R] (s : 有限集 S) (f : S -> R)
-  证明: by
-  convert! Multiset.trop_inf (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply]
-  rfl
-
-Depends on / 依赖: Function, Function.comp_apply, Multiset, Multiset.map_map, Multiset.trop_inf, comp_apply, convert, map_map, s.val.map, trop_inf
+/-
+**trop_sInf_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：trop_sInf_image [ConditionallyCompleteLinearOrder R] (s : Finset S) (f : S
+ -> WithTop R) : trop (sInf (f '' s)) = ∑ i in s, trop (f i)
+参数：s : Finset S；f : S -> WithTop R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `WithTop.sInf_empty`：sInf_empty [InfSet α] : sInf (∅ : Set (WithTop α)) =
+ ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.inf'_eq_csInf_image`：∀ {ι : Type u_1} {α : Type u_2} [inst : Cond
+itionallyCompleteLattice α] (s : Finset ι) (H : s.Nonempty) (f : ι → α),   s.inf
+' H f = sInf (f …
+· 使用定理 `Finset.inf'_eq_inf`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeI
+nf α] [inst_1 : OrderTop α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.inf
+' H f = …
+· 使用定理 `Finset.trop_inf`：Finset.trop_inf [LinearOrder R] [OrderTop R] (s : Finse
+t S) (f : S -> R) : trop (s.inf f) = ∑ i in s, trop (f i)
 -/
-theorem Finset.trop_inf [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> R) :
-    trop (s.inf f) = ∑ i in s, trop (f i) := by
-  convert! Multiset.trop_inf (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply]
-  rfl
-
-/--
-theorem `trop_sInf_image` / 定理 `trop_sInf_image`
-
-English:
-theorem trop_sInf_image
-  given: [ConditionallyCompleteLinearOrder R] (s : Finset S) (f : S -> WithTop R)
-  proof: by
+theorem trop_sInf_image [ConditionallyCompleteLinearOrder R] (s : Finset S) (f : S → WithTop R) :
+    trop (sInf (f '' s)) = ∑ i ∈ s, trop (f i) := by
   rcases s.eq_empty_or_nonempty with (rfl | h)
   · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, trop_top]
-  rw [← inf'_eq_csInf_image _ h]; rw [inf'_eq_inf]; rw [s.trop_inf]
-
-中文:
-定理 trop_sInf_image
-  条件: [条件完备线性序 R] (s : 有限集 S) (f : S -> WithTop R)
-  证明: by
-  rcases s.eq_empty_or_nonempty with (rfl | h)
-  · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, trop_top]
-  rw [← inf'_eq_csInf_image _ h]; rw [inf'_eq_inf]; rw [s.trop_inf]
-
-Depends on / 依赖: IsOpenImmersion, IsPreimmersion, Scheme, Set.image_empty, WithTop, WithTop.sInf_empty, _eq_csInf_image, _eq_inf, coe_empty, eq_empty_or_nonempty, image_empty, s.eq_empty_or_nonempty, s.trop_inf, sInf_empty, sum_empty, trop_inf, trop_top
+  rw [← inf'_eq_csInf_image _ h, inf'_eq_inf, s.trop_inf]
+/-
+**trop_iInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：trop_iInf [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> WithT
+op R) : trop (⨅ i : S, f i) = ∑ i : S, trop (f i)
+参数：f : S -> WithTop R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `trop_sInf_image`：trop_sInf_image [ConditionallyCompleteLinearOrder R] (s
+ : Finset S) (f : S -> WithTop R) : trop (sInf (f '' s)) = ∑ i in s, trop (f i)
 -/
-theorem trop_sInf_image [ConditionallyCompleteLinearOrder R] (s : Finset S) (f : S -> WithTop R) :
-    trop (sInf (f '' s)) = ∑ i in s, trop (f i) := by
-  rcases s.eq_empty_or_nonempty with (rfl | h)
-  · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, trop_top]
-  rw [← inf'_eq_csInf_image _ h]; rw [inf'_eq_inf]; rw [s.trop_inf]
-
-/--
-theorem `trop_iInf` / 定理 `trop_iInf`
-
-English:
-theorem trop_iInf
-  given: [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> WithTop R)
-  proof: by
-  rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [trop_sInf_image]
-
-中文:
-定理 trop_iInf
-  条件: [条件完备线性序 R] [有限类型 S] (f : S -> WithTop R)
-  证明: by
-  rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [trop_sInf_image]
-
-Depends on / 依赖: Set.image_univ, coe_univ, image_univ, trop_sInf_image
--/
-theorem trop_iInf [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> WithTop R) :
+theorem trop_iInf [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S → WithTop R) :
     trop (⨅ i : S, f i) = ∑ i : S, trop (f i) := by
-  rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [trop_sInf_image]
-
-/--
-theorem `Multiset.untrop_sum` / 定理 `Multiset.untrop_sum`
-
-English:
-theorem Multiset.untrop_sum
-  given: [LinearOrder R] [OrderTop R] (s : Multiset (Tropical R))
-  proof: by
-  induction s using Multiset.induction with
-  | empty => simp
-  | cons s x IH => simp only [sum_cons, untrop_add, map_cons, inf_cons, ← IH]
-
-中文:
-定理 Multiset.untrop_sum
-  条件: [线性序 R] [有顶序 R] (s : Multiset (Tropical R))
-  证明: by
-  induction s using Multiset.induction with
-  | empty => simp
-  | cons s x IH => simp only [sum_cons, untrop_add, map_cons, inf_cons, ← IH]
-
-Depends on / 依赖: Multiset, Multiset.induction, inf_cons, map_cons, sum_cons, untrop_add
+  rw [iInf, ← Set.image_univ, ← coe_univ, trop_sInf_image]
+/-
+**Multiset.untrop_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multiset.untrop_sum [LinearOrder R] [OrderTop R] (s : Multiset (Tropical R
+)) : untrop s.sum = Multiset.inf (s.map untrop)
+参数：s : Multiset (Tropical R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction`：∀ {α : Type u_1} {p : Multiset α → Prop},   p 0 → (∀
+ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → ∀ (s : Multiset α), p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.inf_zero`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : 
+OrderTop α], Multiset.inf 0 = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.sum_cons`：∀ {M : Type u_3} [inst : AddCommMonoid M] (a : M) (s 
+: Multiset M), (a ::ₘ s).sum = a + s.sum
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `Multiset.inf_cons`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : 
+OrderTop α] (a : α) (s : Multiset α), (a ::ₘ s).inf = a ⊓ s.inf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Multiset.untrop_sum [LinearOrder R] [OrderTop R] (s : Multiset (Tropical R)) :
     untrop s.sum = Multiset.inf (s.map untrop) := by
   induction s using Multiset.induction with
   | empty => simp
   | cons s x IH => simp only [sum_cons, untrop_add, map_cons, inf_cons, ← IH]
-
-/--
-theorem `Finset.untrop_sum'` / 定理 `Finset.untrop_sum'`
-
-English:
-theorem Finset.untrop_sum'
-  given: [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> Tropical R)
-  proof: by
-  convert! Multiset.untrop_sum (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply, inf_def]
-
-中文:
-定理 有限集.untrop_sum'
-  条件: [线性序 R] [有顶序 R] (s : 有限集 S) (f : S -> Tropical R)
-  证明: by
-  convert! Multiset.untrop_sum (s.val.map f)
-  simp only [Multiset.map_map, Function.comp_apply, inf_def]
-
-Depends on / 依赖: Function, Function.comp_apply, IsPreimmersion, Multiset, Multiset.map_map, Multiset.untrop_sum, comp_apply, convert, inf_def, map_map, s.val.map, untrop_sum
+/-
+**Finset.untrop_sum'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.untrop_sum' [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> T
+ropical R) : untrop (∑ i in s, f i) = s.inf (untrop ∘ f)
+参数：s : Finset S；f : S -> Tropical R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Multiset.untrop_sum`：Multiset.untrop_sum [LinearOrder R] [OrderTop R] (s
+ : Multiset (Tropical R)) : untrop s.sum = Multiset.inf (s.map untrop)
 -/
-theorem Finset.untrop_sum' [LinearOrder R] [OrderTop R] (s : Finset S) (f : S -> Tropical R) :
-    untrop (∑ i in s, f i) = s.inf (untrop ∘ f) := by
+theorem Finset.untrop_sum' [LinearOrder R] [OrderTop R] (s : Finset S) (f : S → Tropical R) :
+    untrop (∑ i ∈ s, f i) = s.inf (untrop ∘ f) := by
   convert! Multiset.untrop_sum (s.val.map f)
   simp only [Multiset.map_map, Function.comp_apply, inf_def]
-
-/--
-theorem `untrop_sum_eq_sInf_image` / 定理 `untrop_sum_eq_sInf_image`
-
-English:
-theorem untrop_sum_eq_sInf_image
-  statement: [ConditionallyCompleteLinearOrder R] (s : Finset S)
-  proof: by
-  rcases s.eq_empty_or_nonempty with (rfl | h)
-  · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, untrop_zero]
-  · rw [← inf'_eq_csInf_image _ h, inf'_eq_inf, Finset.untrop_sum']
-
-中文:
-定理 untrop_sum_eq_sInf_image
-  结论: [条件完备线性序 R] (s : 有限集 S)
-  证明: by
-  rcases s.eq_empty_or_nonempty with (rfl | h)
-  · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, untrop_zero]
-  · rw [← inf'_eq_csInf_image _ h, inf'_eq_inf, Finset.untrop_sum']
-
-Depends on / 依赖: Finset, Finset.untrop_sum, Set.image_empty, WithTop, WithTop.sInf_empty, _eq_csInf_image, _eq_inf, coe_empty, eq_empty_or_nonempty, image_empty, s.eq_empty_or_nonempty, sInf_empty, sum_empty, untrop_sum, untrop_zero
+/-
+**untrop_sum_eq_sInf_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：untrop_sum_eq_sInf_image [ConditionallyCompleteLinearOrder R] (s : Finset 
+S) (f : S -> Tropical (WithTop R)) : untrop (∑ i in s, f i) = sInf (untrop ∘ f '
+' s)
+参数：s : Finset S；f : S -> Tropical (WithTop R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `WithTop.sInf_empty`：sInf_empty [InfSet α] : sInf (∅ : Set (WithTop α)) =
+ ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.inf'_eq_csInf_image`：∀ {ι : Type u_1} {α : Type u_2} [inst : Cond
+itionallyCompleteLattice α] (s : Finset ι) (H : s.Nonempty) (f : ι → α),   s.inf
+' H f = sInf (f …
+· 使用定理 `Finset.inf'_eq_inf`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeI
+nf α] [inst_1 : OrderTop α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.inf
+' H f = …
+· 使用定理 `Finset.untrop_sum'`：Finset.untrop_sum' [LinearOrder R] [OrderTop R] (s :
+ Finset S) (f : S -> Tropical R) : untrop (∑ i in s, f i) = s.inf (untrop ∘ f)
 -/
 theorem untrop_sum_eq_sInf_image [ConditionallyCompleteLinearOrder R] (s : Finset S)
-    (f : S -> Tropical (WithTop R)) : untrop (∑ i in s, f i) = sInf (untrop ∘ f '' s) := by
+    (f : S → Tropical (WithTop R)) : untrop (∑ i ∈ s, f i) = sInf (untrop ∘ f '' s) := by
   rcases s.eq_empty_or_nonempty with (rfl | h)
   · simp only [Set.image_empty, coe_empty, sum_empty, WithTop.sInf_empty, untrop_zero]
   · rw [← inf'_eq_csInf_image _ h, inf'_eq_inf, Finset.untrop_sum']
-
-/--
-theorem `untrop_sum` / 定理 `untrop_sum`
-
-English:
-theorem untrop_sum
-  given: [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> Tropical (WithTop R))
-  proof: by
-  rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [untrop_sum_eq_sInf_image]; rw [Function.comp_def]
-
-中文:
-定理 untrop_sum
-  条件: [条件完备线性序 R] [有限类型 S] (f : S -> Tropical (WithTop R))
-  证明: by
-  rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [untrop_sum_eq_sInf_image]; rw [Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, Set.image_univ, coe_univ, comp_def, image_univ, untrop_sum_eq_sInf_image
+/-
+**untrop_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：untrop_sum [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> Trop
+ical (WithTop R)) : untrop (∑ i : S, f i) = ⨅ i : S, untrop (f i)
+参数：f : S -> Tropical (WithTop R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf.eq_1`：∀ {α : Type u} {ι : Sort v} [inst : InfSet α] (s : ι → α), iI
+nf s = sInf (Set.range s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Finset.coe_univ`：coe_univ : ↑(univ : Finset α) = (Set.univ : Set α)
+· 使用定理 `untrop_sum_eq_sInf_image`：untrop_sum_eq_sInf_image [ConditionallyComplet
+eLinearOrder R] (s : Finset S) (f : S -> Tropical (WithTop R)) : untrop (∑ i in 
+s, f i) = sInf…
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
 -/
-theorem untrop_sum [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S -> Tropical (WithTop R)) :
+theorem untrop_sum [ConditionallyCompleteLinearOrder R] [Fintype S] (f : S → Tropical (WithTop R)) :
     untrop (∑ i : S, f i) = ⨅ i : S, untrop (f i) := by
-  rw [iInf]; rw [← Set.image_univ]; rw [← coe_univ]; rw [untrop_sum_eq_sInf_image]; rw [Function.comp_def]
+  rw [iInf, ← Set.image_univ, ← coe_univ, untrop_sum_eq_sInf_image, Function.comp_def]
 
-/--
-theorem `Finset.untrop_sum` / 定理 `Finset.untrop_sum`
+/-- Note we cannot use `i ∈ s` instead of `i : s` here
+as it is simply not true on conditionally complete lattices! -/
+/-
+**Finset.untrop_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.untrop_sum [ConditionallyCompleteLinearOrder R] (s : Finset S) (f :
+ S -> Tropical (WithTop R)) : untrop (∑ i in s, f i) = ⨅ i : s, untrop (f i)
+参数：s : Finset S；f : S -> Tropical (WithTop R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_attach`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMonoid
+ M] (s : Finset ι) (f : ι → M), ∑ x ∈ s.attach, f ↑x = ∑ x ∈ s, f x
 
-English:
-theorem Finset.untrop_sum
-  statement: [ConditionallyCompleteLinearOrder R] (s : Finset S)
-  proof: by
-  simpa [← _root_.untrop_sum] using (sum_attach _ _).symm
-
-中文:
-定理 有限集.untrop_sum
-  结论: [条件完备线性序 R] (s : 有限集 S)
-  证明: by
-  simpa [← _root_.untrop_sum] using (sum_attach _ _).symm
-
-Depends on / 依赖: _root_, _root_.untrop_sum, sum_attach, untrop_sum
+--- 原说明 ---
+Note we cannot use `i ∈ s` instead of `i : s` here
+as it is simply not true on conditionally complete lattices!
 -/
 theorem Finset.untrop_sum [ConditionallyCompleteLinearOrder R] (s : Finset S)
-    (f : S -> Tropical (WithTop R)) : untrop (∑ i in s, f i) = ⨅ i : s, untrop (f i) := by
+    (f : S → Tropical (WithTop R)) : untrop (∑ i ∈ s, f i) = ⨅ i : s, untrop (f i) := by
   simpa [← _root_.untrop_sum] using (sum_attach _ _).symm

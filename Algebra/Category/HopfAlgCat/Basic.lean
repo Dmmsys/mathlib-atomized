@@ -27,26 +27,15 @@ universe v u
 variable (R : Type u) [CommRing R]
 
 set_option backward.privateInPublic true in
-/--
-Definition of `HopfAlgCat` / `HopfAlgCat` 的定义
+/-- The category of `R`-Hopf algebras. -/
+/-
+**HopfAlgCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [CommRing R] → Type (max u (v + 1))
+参数：v + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HopfAlgCat
-  parameters: where
-  axioms and operations (4):
-    - private(mk) : :
-    - carrier : Type v
-    - [instRing : Ring carrier]
-    - [instHopfAlgebra : HopfAlgebra R carrier]
-
-中文:
-结构 HopfAlg范畴
-  参数: where
-  公理与运算 (4 个):
-    - private(mk) : :
-    - carrier : 类型v
-    - [instRing : 环 carrier]
-    - [instHopfAlgebra : Hopf代数 R carrier]
+--- 原说明 ---
+The category of `R`-Hopf algebras.
 -/
 structure HopfAlgCat where
   private mk ::
@@ -64,20 +53,9 @@ namespace HopfAlgCat
 
 open HopfAlgebra
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (HopfAlgCat.{v} R) (Type v)
-  body: ⟨(·.carrier)⟩
-
-中文:
-实例 :
-  签名: CoeSort (HopfAlg范畴.{v} R) (类型v)
-  定义体: ⟨(·.carrier)⟩
-
-Depends on / 依赖: carrier
+/-
+**HopfAlgCat.** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (HopfAlgCat.{v} R) (Type v) :=
   ⟨(·.carrier)⟩
@@ -85,65 +63,38 @@ instance : CoeSort (HopfAlgCat.{v} R) (Type v) :=
 variable (R) in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `of` / `of` 的定义
+/-- The object in the category of `R`-Hopf algebras associated to an `R`-Hopf algebra. -/
+/-
+**HopfAlgCat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `HopfAlgCat`。
+形式化陈述：of (X : Type v) [Ring X] [HopfAlgebra R X] : HopfAlgCat R where carrier
+参数：X : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (X : Type v) [Ring X] [HopfAlgebra R X]
-  body: X
-
-@[simp]
-
-中文:
-缩写 of
-  签名: (X : 类型v) [环 X] [Hopf代数 R X]
-  定义体: X
-
-@[simp]
+--- 原说明 ---
+The object in the category of `R`-Hopf algebras associated to an `R`-Hopf algebr
+a.
 -/
 abbrev of (X : Type v) [Ring X] [HopfAlgebra R X] :
     HopfAlgCat R where
   carrier := X
 
 @[simp]
-/--
-lemma `of_comul` / 引理 `of_comul`
-
-English:
-lemma of_comul
-  given: {X : Type v} [Ring X] [HopfAlgebra R X]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 of_comul
-  条件: {X : 类型v} [环 X] [Hopf代数 R X]
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Coalgebra, Coalgebra.comul
+/-
+**HopfAlgCat.of_comul** 是 Mathlib 中的一个引理，位于命名空间 `HopfAlgCat`。
+形式化陈述：of_comul {X : Type v} [Ring X] [HopfAlgebra R X] : Coalgebra.comul (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_comul {X : Type v} [Ring X] [HopfAlgebra R X] :
     Coalgebra.comul (A := of R X) = Coalgebra.comul (R := R) (A := X) := rfl
 
 @[simp]
-/--
-lemma `of_counit` / 引理 `of_counit`
-
-English:
-lemma of_counit
-  given: {X : Type v} [Ring X] [HopfAlgebra R X]
-  proof: rfl
-
-中文:
-引理 of_counit
-  条件: {X : 类型v} [环 X] [Hopf代数 R X]
-  证明: rfl
-
-Depends on / 依赖: Coalgebra, Coalgebra.counit, IsEquivalence, counit, functor, functor.IsEquivalence, restrictScalarsEquivalenceOfRingEquiv
+/-
+**HopfAlgCat.of_counit** 是 Mathlib 中的一个引理，位于命名空间 `HopfAlgCat`。
+形式化陈述：of_counit {X : Type v} [Ring X] [HopfAlgebra R X] : Coalgebra.counit (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_counit {X : Type v} [Ring X] [HopfAlgebra R X] :
     Coalgebra.counit (A := of R X) = Coalgebra.counit (R := R) (A := X) := rfl
@@ -151,201 +102,122 @@ lemma of_counit {X : Type v} [Ring X] [HopfAlgebra R X] :
 /-- A type alias for `BialgHom` to avoid confusion between the categorical and
 algebraic spellings of composition. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**HopfAlgCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `HopfAlgCat`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → HopfAlgCat R → HopfAlgCat R → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (V W : HopfAlgCat.{v} R)
-  axioms and operations (1):
-    - toBialgHom' : V ->ₐc[R] W
-
-中文:
-结构 态射
-  参数: (V W : HopfAlg范畴.{v} R)
-  公理与运算 (1 个):
-    - toBialgHom' : V ->ₐc[R] W
-
-Depends on / 依赖: IsEquivalence, inverse, inverse.IsEquivalence, restrictScalarsEquivalenceOfRingEquiv
+--- 原说明 ---
+A type alias for `BialgHom` to avoid confusion between the categorical and
+algebraic spellings of composition.
 -/
 structure Hom (V W : HopfAlgCat.{v} R) where
   /-- The underlying `BialgHom`. -/
-  toBialgHom' : V ->ₐc[R] W
-
-/--
-Instance `category` / 实例 `category`
-
-English:
-instance category
-  signature: : Category (HopfAlgCat.{v} R) where
-  body: Hom X Y
-  id X := ⟨BialgHom.id R X⟩
-  comp f g := ⟨BialgHom.comp g.toBialgHom' f.toBialgHom'⟩
-
-中文:
-实例 category
-  签名: : 范畴 (HopfAlg范畴.{v} R) where
-  定义体: Hom X Y
-  id X := ⟨BialgHom.id R X⟩
-  comp f g := ⟨BialgHom.comp g.toBialgHom' f.toBialgHom'⟩
+  toBialgHom' : V →ₐc[R] W
+/-
+**HopfAlgCat.category** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgCat`。
+形式化陈述：category : Category (HopfAlgCat.{v} R) where Hom X Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance category : Category (HopfAlgCat.{v} R) where
   Hom X Y := Hom X Y
   id X := ⟨BialgHom.id R X⟩
   comp f g := ⟨BialgHom.comp g.toBialgHom' f.toBialgHom'⟩
-
-/--
-Instance `concreteCategory` / 实例 `concreteCategory`
-
-English:
-instance concreteCategory
-  signature: : ConcreteCategory (HopfAlgCat.{v} R) (· ->ₐc[R] ·) where
-  body: f.toBialgHom'
-  ofHom f := ⟨f⟩
-
-中文:
-实例 concreteCategory
-  签名: : 余ncrete范畴 (HopfAlg范畴.{v} R) (· ->ₐc[R] ·) where
-  定义体: f.toBialgHom'
-  ofHom f := ⟨f⟩
-
-Depends on / 依赖: f.toBialgHom, toBialgHom
+/-
+**HopfAlgCat.concreteCategory** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgCat`。
+形式化陈述：concreteCategory : ConcreteCategory (HopfAlgCat.{v} R) (· ->ₐc[R] ·) where
+ hom f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance concreteCategory : ConcreteCategory (HopfAlgCat.{v} R) (· ->ₐc[R] ·) where
+instance concreteCategory : ConcreteCategory (HopfAlgCat.{v} R) (· →ₐc[R] ·) where
   hom f := f.toBialgHom'
   ofHom f := ⟨f⟩
 
-/--
-Definition of `Hom.toBialgHom` / `Hom.toBialgHom` 的定义
+/-- Turn a morphism in `HopfAlgCat` back into a `BialgHom`. -/
+/-
+**HopfAlgCat.Hom.toBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `HopfAlgCat.Hom`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → {X Y : HopfAlgCat R} → X.Hom Y → X.ca
+rrier →ₐc[R] Y.carrier
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.toBialgHom
-  signature: {X Y : HopfAlgCat R} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := HopfAlgCat R) f
-
-中文:
-缩写 态射.toBialgHom
-  签名: {X Y : HopfAlg范畴 R} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := HopfAlgCat R) f
+--- 原说明 ---
+Turn a morphism in `HopfAlgCat` back into a `BialgHom`.
 -/
 abbrev Hom.toBialgHom {X Y : HopfAlgCat R} (f : Hom X Y) :=
   ConcreteCategory.hom (C := HopfAlgCat R) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `BialgHom` as a morphism in `HopfAlgCat R`. -/
+/-
+**HopfAlgCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `HopfAlgCat`。
+形式化陈述：ofHom {X Y : Type v} [Ring X] [Ring Y] [HopfAlgebra R X] [HopfAlgebra R Y]
+ (f : X ->ₐc[R] Y) : of R X ⟶ of R Y
+参数：f : X ->ₐc[R] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type v} [Ring X] [Ring Y]
-  body: ConcreteCategory.ofHom f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型v} [环 X] [环 Y]
-  定义体: ConcreteCategory.ofHom f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a `BialgHom` as a morphism in `HopfAlgCat R`.
 -/
 abbrev ofHom {X Y : Type v} [Ring X] [Ring Y]
-    [HopfAlgebra R X] [HopfAlgebra R Y] (f : X ->ₐc[R] Y) :
+    [HopfAlgebra R X] [HopfAlgebra R Y] (f : X →ₐc[R] Y) :
     of R X ⟶ of R Y :=
   ConcreteCategory.ofHom f
-
-/--
-lemma `Hom.toBialgHom_injective` / 引理 `Hom.toBialgHom_injective`
-
-English:
-lemma Hom.toBialgHom_injective
-  given: (V W : HopfAlgCat.{v} R)
-  proof: fun ⟨f⟩ ⟨g⟩ _ => by congr
-
-@[ext]
-
-中文:
-引理 态射.toBialgHom_injective
-  条件: (V W : HopfAlg范畴.{v} R)
-  证明: fun ⟨f⟩ ⟨g⟩ _ => by congr
-
-@[ext]
+/-
+**HopfAlgCat.Hom.toBialgHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `HopfAlgCat.Hom`
+。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] (V W : HopfAlgCat R), Function.Injectiv
+e HopfAlgCat.Hom.toBialgHom
+参数：V W : HopfAlgCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.toBialgHom_injective (V W : HopfAlgCat.{v} R) :
-    Function.Injective (Hom.toBialgHom : Hom V W -> _) :=
+    Function.Injective (Hom.toBialgHom : Hom V W → _) :=
   fun ⟨f⟩ ⟨g⟩ _ => by congr
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : HopfAlgCat.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBialgHom)
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {X Y : HopfAlg范畴.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBialgHom)
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**HopfAlgCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `HopfAlgCat`。
+形式化陈述：hom_ext {X Y : HopfAlgCat.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBia
+lgHom) : f = g
+参数：f g : X ⟶ Y；h : f.toBialgHom = g.toBialgHom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HopfAlgCat.Hom.ext`：∀ {R : Type u} {inst : CommRing R} {V W : HopfAlgCat
+ R} {x y : V.Hom W}, x.toBialgHom' = y.toBialgHom' → x = y
 -/
 lemma hom_ext {X Y : HopfAlgCat.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBialgHom) :
     f = g :=
   Hom.ext h
-
-/--
-theorem `toBialgHom_comp` / 定理 `toBialgHom_comp`
-
-English:
-theorem toBialgHom_comp
-  given: {X Y Z : HopfAlgCat.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-定理 toBialgHom_comp
-  条件: {X Y Z : HopfAlg范畴.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**HopfAlgCat.toBialgHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `HopfAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y Z : HopfAlgCat R} (f : X ⟶ Y) (g :
+ Y ⟶ Z),   HopfAlgCat.Hom.toBialgHom (CategoryTheory.CategoryStruct.comp f g) = 
+    (HopfAlgCat.Hom.toBialgHom g).comp (HopfAlgCat.Hom.toBialgHom f)
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g；HopfAlgCat.Hom.toB
+ialgHom g；HopfAlgCat.Hom.toBialgHom f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toBialgHom_comp {X Y Z : HopfAlgCat.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).toBialgHom = g.toBialgHom.comp f.toBialgHom :=
   rfl
-
-/--
-theorem `toBialgHom_id` / 定理 `toBialgHom_id`
-
-English:
-theorem toBialgHom_id
-  given: {M : HopfAlgCat.{v} R}
-  proof: rfl
-
-中文:
-定理 toBialgHom_id
-  条件: {M : HopfAlg范畴.{v} R}
-  证明: rfl
+/-
+**HopfAlgCat.toBialgHom_id** 是 Mathlib 中的一个定理，位于命名空间 `HopfAlgCat`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {M : HopfAlgCat R},   HopfAlgCat.Hom.to
+BialgHom (CategoryTheory.CategoryStruct.id M) = BialgHom.id R M.carrier
+参数：CategoryTheory.CategoryStruct.id M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toBialgHom_id {M : HopfAlgCat.{v} R} :
     Hom.toBialgHom (𝟙 M) = BialgHom.id _ _ :=
   rfl
-
-/--
-Instance `hasForgetToBialgebra` / 实例 `hasForgetToBialgebra`
-
-English:
-instance hasForgetToBialgebra
-  signature: : HasForget₂ (HopfAlgCat R) (BialgCat R) where
-  body: { obj := fun X => BialgCat.of R X
-      map := fun {_ _} f => BialgCat.ofHom f.toBialgHom }
-
-@[simp]
-
-中文:
-实例 hasForgetToBialgebra
-  签名: : 有Forget₂ (HopfAlg范畴 R) (Bialg范畴 R) where
-  定义体: { obj := fun X => BialgCat.of R X
-      map := fun {_ _} f => BialgCat.ofHom f.toBialgHom }
-
-@[simp]
-
-Depends on / 依赖: BialgCat, BialgCat.of, BialgCat.ofHom, f.toBialgHom, sectionsSubalgebra, toBialgHom
+/-
+**HopfAlgCat.hasForgetToBialgebra** 是 Mathlib 中的一个实例，位于命名空间 `HopfAlgCat`。
+形式化陈述：hasForgetToBialgebra : HasForget₂ (HopfAlgCat R) (BialgCat R) where forget
+₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToBialgebra : HasForget₂ (HopfAlgCat R) (BialgCat R) where
   forget₂ :=
@@ -353,42 +225,18 @@ instance hasForgetToBialgebra : HasForget₂ (HopfAlgCat R) (BialgCat R) where
       map := fun {_ _} f => BialgCat.ofHom f.toBialgHom }
 
 @[simp]
-/--
-theorem `forget₂_bialgebra_obj` / 定理 `forget₂_bialgebra_obj`
-
-English:
-theorem forget₂_bialgebra_obj
-  given: (X : HopfAlgCat R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 forget₂_bialgebra_obj
-  条件: (X : HopfAlg范畴 R)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Algebra, sectionsSubalgebra
+/-
+**HopfAlgCat.forget** 是 Mathlib 中的一个定理，位于命名空间 `HopfAlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂_bialgebra_obj (X : HopfAlgCat R) :
     (forget₂ (HopfAlgCat R) (BialgCat R)).obj X = BialgCat.of R X :=
   rfl
 
 @[simp]
-/--
-theorem `forget₂_bialgebra_map` / 定理 `forget₂_bialgebra_map`
-
-English:
-theorem forget₂_bialgebra_map
-  given: (X Y : HopfAlgCat R) (f : X ⟶ Y)
-  proof: rfl
-
-中文:
-定理 forget₂_bialgebra_map
-  条件: (X Y : HopfAlg范畴 R) (f : X ⟶ Y)
-  证明: rfl
+/-
+**HopfAlgCat.forget** 是 Mathlib 中的一个定理，位于命名空间 `HopfAlgCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem forget₂_bialgebra_map (X Y : HopfAlgCat R) (f : X ⟶ Y) :
     (forget₂ (HopfAlgCat R) (BialgCat R)).map f = BialgCat.ofHom f.toBialgHom :=
@@ -407,77 +255,53 @@ variable [HopfAlgebra R X] [HopfAlgebra R Y] [HopfAlgebra R Z]
 /-- Build an isomorphism in the category `HopfAlgCat R` from a
 `BialgEquiv`. -/
 @[simps]
-/--
-Definition of `toHopfAlgIso` / `toHopfAlgIso` 的定义
+/-
+**BialgEquiv.toHopfAlgIso** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：toHopfAlgIso (e : X ≃ₐc[R] Y) : HopfAlgCat.of R X ≅ HopfAlgCat.of R Y wher
+e hom
+参数：e : X ≃ₐc[R] Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toHopfAlgIso
-  signature: (e : X ≃ₐc[R] Y)
-  body: HopfAlgCat.ofHom e
-  inv := HopfAlgCat.ofHom e.symm
-hom_inv_id := Hom.ext DFunLike.ext _ _ e.left_inv
-inv_hom_id := Hom.ext DFunLike.ext _ _ e.right_inv
-
-中文:
-定义 toHopfAlgIso
-  签名: (e : X ≃ₐc[R] Y)
-  定义体: HopfAlgCat.ofHom e
-  inv := HopfAlgCat.ofHom e.symm
-hom_inv_id := Hom.ext DFunLike.ext _ _ e.left_inv
-inv_hom_id := Hom.ext DFunLike.ext _ _ e.right_inv
-
-Depends on / 依赖: HopfAlgCat, HopfAlgCat.ofHom
+--- 原说明 ---
+Build an isomorphism in the category `HopfAlgCat R` from a
+`BialgEquiv`.
 -/
 def toHopfAlgIso (e : X ≃ₐc[R] Y) : HopfAlgCat.of R X ≅ HopfAlgCat.of R Y where
   hom := HopfAlgCat.ofHom e
   inv := HopfAlgCat.ofHom e.symm
-hom_inv_id := Hom.ext DFunLike.ext _ _ e.left_inv
-inv_hom_id := Hom.ext DFunLike.ext _ _ e.right_inv
-
-/--
-theorem `toHopfAlgIso_refl` / 定理 `toHopfAlgIso_refl`
-
-English:
-theorem toHopfAlgIso_refl
-  proof: rfl
-
-中文:
-定理 toHopfAlgIso_refl
-  证明: rfl
+  hom_inv_id := Hom.ext <| DFunLike.ext _ _ e.left_inv
+  inv_hom_id := Hom.ext <| DFunLike.ext _ _ e.right_inv
+/-
+**BialgEquiv.toHopfAlgIso_refl** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X : Type v} [inst_1 : Ring X] [inst_2 
+: HopfAlgebra R X],   (BialgEquiv.refl R X).toHopfAlgIso = CategoryTheory.Iso.re
+fl (HopfAlgCat.of R X)
+参数：BialgEquiv.refl R X；HopfAlgCat.of R X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toHopfAlgIso_refl :
     toHopfAlgIso (BialgEquiv.refl R X) = .refl _ :=
   rfl
-
-/--
-theorem `toHopfAlgIso_symm` / 定理 `toHopfAlgIso_symm`
-
-English:
-theorem toHopfAlgIso_symm
-  given: (e : X ≃ₐc[R] Y)
-  proof: rfl
-
-中文:
-定理 toHopfAlgIso_symm
-  条件: (e : X ≃ₐc[R] Y)
-  证明: rfl
+/-
+**BialgEquiv.toHopfAlgIso_symm** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y : Type v} [inst_1 : Ring X] [inst_
+2 : Ring Y] [inst_3 : HopfAlgebra R X]   [inst_4 : HopfAlgebra R Y] (e : X ≃ₐc[R
+] Y), e.symm.toHopfAlgIso = e.toHopfAlgIso.symm
+参数：e : X ≃ₐc[R] Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toHopfAlgIso_symm (e : X ≃ₐc[R] Y) :
     toHopfAlgIso e.symm = (toHopfAlgIso e).symm :=
   rfl
-
-/--
-theorem `toHopfAlgIso_trans` / 定理 `toHopfAlgIso_trans`
-
-English:
-theorem toHopfAlgIso_trans
-  given: (e : X ≃ₐc[R] Y) (f : Y ≃ₐc[R] Z)
-  proof: rfl
-
-中文:
-定理 toHopfAlgIso_trans
-  条件: (e : X ≃ₐc[R] Y) (f : Y ≃ₐc[R] Z)
-  证明: rfl
+/-
+**BialgEquiv.toHopfAlgIso_trans** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y Z : Type v} [inst_1 : Ring X] [ins
+t_2 : Ring Y] [inst_3 : Ring Z]   [inst_4 : HopfAlgebra R X] [inst_5 : HopfAlgeb
+ra R Y] [inst_6 : HopfAlgebra R Z] (e : X ≃ₐc[R] Y) (f : Y ≃ₐc[R] Z),   (e.trans
+ f).toHopfAlgIso = e.toHopfAlgIso ≪≫ f.toHopfAlgIso
+参数：e : X ≃ₐc[R] Y；f : Y ≃ₐc[R] Z；e.trans f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toHopfAlgIso_trans (e : X ≃ₐc[R] Y) (f : Y ≃ₐc[R] Z) :
     toHopfAlgIso (e.trans f) = toHopfAlgIso e ≪≫ toHopfAlgIso f :=
@@ -491,94 +315,69 @@ open HopfAlgebra
 
 variable {X Y Z : HopfAlgCat.{v} R}
 
-/--
-Definition of `toHopfAlgEquiv` / `toHopfAlgEquiv` 的定义
+/-- Build a `BialgEquiv` from an isomorphism in the category
+`HopfAlgCat R`. -/
+/-
+**CategoryTheory.Iso.toHopfAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Is
+o`。
+形式化陈述：toHopfAlgEquiv (i : X ≅ Y) : X ≃ₐc[R] Y
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toHopfAlgEquiv
-  signature: (i : X ≅ Y)
-  body: { i.hom.toBialgHom with
-    invFun := i.inv.toBialgHom
-    left_inv := fun x => BialgHom.congr_fun (congr_arg HopfAlgCat.Hom.toBialgHom i.3) x
-    right_inv := fun x => BialgHom.congr_fun (congr_arg HopfAlgCat.Hom.toBialgHom i.4) x }
-
-中文:
-定义 toHopfAlgEquiv
-  签名: (i : X ≅ Y)
-  定义体: { i.hom.toBialgHom with
-    invFun := i.inv.toBialgHom
-    left_inv := fun x => BialgHom.congr_fun (congr_arg HopfAlgCat.Hom.toBialgHom i.3) x
-    right_inv := fun x => BialgHom.congr_fun (congr_arg HopfAlgCat.Hom.toBialgHom i.4) x }
-
-Depends on / 依赖: BialgHom, BialgHom.congr_fun, HopfAlgCat, HopfAlgCat.Hom.toBialgHom, congr_arg, congr_fun, i.hom.toBialgHom, i.inv.toBialgHom, invFun, left_inv, right_inv, toBialgHom
+--- 原说明 ---
+Build a `BialgEquiv` from an isomorphism in the category
+`HopfAlgCat R`.
 -/
 def toHopfAlgEquiv (i : X ≅ Y) : X ≃ₐc[R] Y :=
   { i.hom.toBialgHom with
     invFun := i.inv.toBialgHom
     left_inv := fun x => BialgHom.congr_fun (congr_arg HopfAlgCat.Hom.toBialgHom i.3) x
     right_inv := fun x => BialgHom.congr_fun (congr_arg HopfAlgCat.Hom.toBialgHom i.4) x }
-
-/--
-theorem `toHopfAlgEquiv_toBialgHom` / 定理 `toHopfAlgEquiv_toBialgHom`
-
-English:
-theorem toHopfAlgEquiv_toBialgHom
-  given: (i : X ≅ Y)
-  proof: rfl
-
-中文:
-定理 toHopfAlgEquiv_toBialgHom
-  条件: (i : X ≅ Y)
-  证明: rfl
+/-
+**CategoryTheory.Iso.toHopfAlgEquiv_toBialgHom** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y : HopfAlgCat R} (i : X ≅ Y), ↑i.to
+HopfAlgEquiv = i.hom.toBialgHom'
+参数：i : X ≅ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
 @[simp] theorem toHopfAlgEquiv_toBialgHom (i : X ≅ Y) :
-    (i.toHopfAlgEquiv : X ->ₐc[R] Y) = i.hom.1 := rfl
-
-/--
-theorem `toHopfAlgEquiv_refl` / 定理 `toHopfAlgEquiv_refl`
-
-English:
-theorem toHopfAlgEquiv_refl
-  statement: toHopfAlgEquiv (.refl X) = .refl _ _
-  proof: rfl
-
-中文:
-定理 toHopfAlgEquiv_refl
-  结论: toHopfAlgEquiv (.refl X) = .refl _ _
-  证明: rfl
+    (i.toHopfAlgEquiv : X →ₐc[R] Y) = i.hom.1 := rfl
+/-
+**CategoryTheory.Iso.toHopfAlgEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X : HopfAlgCat R},   (CategoryTheory.I
+so.refl X).toHopfAlgEquiv = BialgEquiv.refl R X.carrier
+参数：CategoryTheory.Iso.refl X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toHopfAlgEquiv_refl : toHopfAlgEquiv (.refl X) = .refl _ _ :=
   rfl
-
-/--
-theorem `toHopfAlgEquiv_symm` / 定理 `toHopfAlgEquiv_symm`
-
-English:
-theorem toHopfAlgEquiv_symm
-  given: (e : X ≅ Y)
-  proof: rfl
-
-中文:
-定理 toHopfAlgEquiv_symm
-  条件: (e : X ≅ Y)
-  证明: rfl
+/-
+**CategoryTheory.Iso.toHopfAlgEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y : HopfAlgCat R} (e : X ≅ Y), e.sym
+m.toHopfAlgEquiv = e.toHopfAlgEquiv.symm
+参数：e : X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toHopfAlgEquiv_symm (e : X ≅ Y) :
     toHopfAlgEquiv e.symm = (toHopfAlgEquiv e).symm :=
   rfl
-
-/--
-theorem `toHopfAlgEquiv_trans` / 定理 `toHopfAlgEquiv_trans`
-
-English:
-theorem toHopfAlgEquiv_trans
-  given: (e : X ≅ Y) (f : Y ≅ Z)
-  proof: rfl
-
-中文:
-定理 toHopfAlgEquiv_trans
-  条件: (e : X ≅ Y) (f : Y ≅ Z)
-  证明: rfl
+/-
+**CategoryTheory.Iso.toHopfAlgEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Iso`。
+形式化陈述：∀ {R : Type u} [inst : CommRing R] {X Y Z : HopfAlgCat R} (e : X ≅ Y) (f :
+ Y ≅ Z),   (e ≪≫ f).toHopfAlgEquiv = e.toHopfAlgEquiv.trans f.toHopfAlgEquiv
+参数：e : X ≅ Y；f : Y ≅ Z；e ≪≫ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toHopfAlgEquiv_trans (e : X ≅ Y) (f : Y ≅ Z) :
     toHopfAlgEquiv (e ≪≫ f) = e.toHopfAlgEquiv.trans f.toHopfAlgEquiv :=
@@ -586,26 +385,24 @@ theorem toHopfAlgEquiv_trans
 
 end CategoryTheory.Iso
 
-/--
-Instance `HopfAlgCat.forget_reflects_isos` / 实例 `HopfAlgCat.forget_reflects_isos`
-
-English:
-instance HopfAlgCat.forget_reflects_isos
-  signature: :
-  body: by
-    let i := asIso ((forget (HopfAlgCat.{v} R)).map f)
-    let e : X ≃ₐc[R] Y := { f.toBialgHom, i.toEquiv with }
-    exact ⟨e.toHopfAlgIso.isIso_hom.1⟩
-
-中文:
-实例 HopfAlg范畴.forget_reflects_isos
-  签名: :
-  定义体: by
-    let i := asIso ((forget (HopfAlgCat.{v} R)).map f)
-    let e : X ≃ₐc[R] Y := { f.toBialgHom, i.toEquiv with }
-    exact ⟨e.toHopfAlgIso.isIso_hom.1⟩
-
-Depends on / 依赖: HopfAlgCat, e.toHopfAlgIso.isIso_hom, f.toBialgHom, forget, i.toEquiv, isIso_hom, toBialgHom, toEquiv, toHopfAlgIso
+/-
+**HopfAlgCat.forget_reflects_isos** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：HopfAlgCat.forget_reflects_isos : (forget (HopfAlgCat.{v} R)).ReflectsIsom
+orphisms where reflects {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `BialgHom.map_mul'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
+· 使用定理 `CategoryTheory.IsIso.out`：∀ {C : Type u} {inst : CategoryTheory.Category
+.{v, u} C} {X Y : C} {f : X ⟶ Y} [self : CategoryTheory.IsIso f],   ∃ inv,     C
+ategoryTheory.…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance HopfAlgCat.forget_reflects_isos :
     (forget (HopfAlgCat.{v} R)).ReflectsIsomorphisms where

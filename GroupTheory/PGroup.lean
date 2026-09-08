@@ -20,602 +20,365 @@ It also contains proofs of some corollaries of this lemma about existence of fix
 
 open Fintype MulAction
 
-variable (p : Nat) (G : Type*) [Group G]
+variable (p : ℕ) (G : Type*) [Group G]
 
-/--
-Definition of `IsPGroup` / `IsPGroup` 的定义
+/-- A p-group is a group in which the order of every element is a power of `p`. -/
+/-
+**IsPGroup** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsPGroup : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPGroup
-  signature: : Prop
-  body: forall g : G, exists k : Nat, g ^ p ^ k = 1
-
-中文:
-定义 是p群
-  签名: : 命题
-  定义体: forall g : G, exists k : Nat, g ^ p ^ k = 1
+--- 原说明 ---
+A p-group is a group in which the order of every element is a power of `p`.
 -/
 def IsPGroup : Prop :=
-  forall g : G, exists k : Nat, g ^ p ^ k = 1
+  ∀ g : G, ∃ k : ℕ, g ^ p ^ k = 1
 
 variable {p} {G}
 
 namespace IsPGroup
 
-/--
-theorem `_root_.isPGroup_iff_pow_pow_eq_one` / 定理 `_root_.isPGroup_iff_pow_pow_eq_one`
-
-English:
-theorem _root_.isPGroup_iff_pow_pow_eq_one
-  statement: IsPGroup p G ↔ forall g : G, exists k, g ^ p ^ k = 1
-  proof: .rfl
-
-alias ⟨exists_pow_pow_eq_one, _⟩ := isPGroup_iff_pow_pow_eq_one
-
-中文:
-定理 _root_.isPGroup_iff_pow_pow_eq_one
-  结论: 是p群 p G ↔ 对任意 g : G, 存在 k, g ^ p ^ k = 1
-  证明: .rfl
-
-alias ⟨exists_pow_pow_eq_one, _⟩ := isPGroup_iff_pow_pow_eq_one
+/-
+**IsPGroup._root_.isPGroup_iff_pow_pow_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `IsPGrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.isPGroup_iff_pow_pow_eq_one : IsPGroup p G ↔ forall g : G, exists k, g ^ p ^ k = 1 :=
+theorem _root_.isPGroup_iff_pow_pow_eq_one : IsPGroup p G ↔ ∀ g : G, ∃ k, g ^ p ^ k = 1 :=
   .rfl
 
 alias ⟨exists_pow_pow_eq_one, _⟩ := isPGroup_iff_pow_pow_eq_one
-
-/--
-theorem `_root_.isPGroup_iff_orderOf_dvd_pow` / 定理 `_root_.isPGroup_iff_orderOf_dvd_pow`
-
-English:
-theorem _root_.isPGroup_iff_orderOf_dvd_pow
-  statement: IsPGroup p G ↔ forall g : G, exists k, orderOf g ∣ p ^ k
-  proof: by
+/-
+**IsPGroup._root_.isPGroup_iff_orderOf_dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGro
+up`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem _root_.isPGroup_iff_orderOf_dvd_pow : IsPGroup p G ↔ ∀ g : G, ∃ k, orderOf g ∣ p ^ k := by
   simp_rw [isPGroup_iff_pow_pow_eq_one, orderOf_dvd_iff_pow_eq_one]
 
 alias ⟨exists_orderOf_dvd_pow, _⟩ := isPGroup_iff_orderOf_dvd_pow
-
-中文:
-定理 _root_.isPGroup_iff_orderOf_dvd_pow
-  结论: 是p群 p G ↔ 对任意 g : G, 存在 k, orderOf g ∣ p ^ k
-  证明: by
-  simp_rw [isPGroup_iff_pow_pow_eq_one, orderOf_dvd_iff_pow_eq_one]
-
-alias ⟨exists_orderOf_dvd_pow, _⟩ := isPGroup_iff_orderOf_dvd_pow
-
-Depends on / 依赖: isPGroup_iff_pow_pow_eq_one, orderOf_dvd_iff_pow_eq_one, simp_rw
+/-
+**IsPGroup.iff_orderOf** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：iff_orderOf [Fact p.Prime] : IsPGroup p G ↔ forall g : G, exists k, orderO
+f g = p ^ k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.dvd_prime_pow`：dvd_prime_pow {p : Nat} (pp : Prime p) {m i : Nat} : 
+i ∣ p ^ m ↔ exists k <= m, i = p ^ k
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
 -/
-theorem _root_.isPGroup_iff_orderOf_dvd_pow : IsPGroup p G ↔ forall g : G, exists k, orderOf g ∣ p ^ k := by
-  simp_rw [isPGroup_iff_pow_pow_eq_one, orderOf_dvd_iff_pow_eq_one]
-
-alias ⟨exists_orderOf_dvd_pow, _⟩ := isPGroup_iff_orderOf_dvd_pow
-
-/--
-theorem `iff_orderOf` / 定理 `iff_orderOf`
-
-English:
-theorem iff_orderOf
-  given: [Fact p.Prime]
-  statement: IsPGroup p G ↔ forall g : G, exists k, orderOf g = p ^ k
-  proof: by
+theorem iff_orderOf [Fact p.Prime] : IsPGroup p G ↔ ∀ g : G, ∃ k, orderOf g = p ^ k := by
   simp_rw [isPGroup_iff_orderOf_dvd_pow, Nat.dvd_prime_pow Fact.out]
-exact forall_congr' fun g => ⟨by grind, .imp by grind⟩
+  exact forall_congr' fun g ↦ ⟨by grind, .imp <| by grind⟩
 
 alias ⟨exists_orderOf_eq_pow, _⟩ := iff_orderOf
-
-中文:
-定理 iff_orderOf
-  条件: [Fact p.素]
-  结论: 是p群 p G ↔ 对任意 g : G, 存在 k, orderOf g = p ^ k
-  证明: by
-  simp_rw [isPGroup_iff_orderOf_dvd_pow, Nat.dvd_prime_pow Fact.out]
-exact forall_congr' fun g => ⟨by grind, .imp by grind⟩
-
-alias ⟨exists_orderOf_eq_pow, _⟩ := iff_orderOf
-
-Depends on / 依赖: Fact.out, Nat.dvd_prime_pow, dvd_prime_pow, forall_congr, isPGroup_iff_orderOf_dvd_pow, simp_rw
+/-
+**IsPGroup.of_card_dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_card_dvd_pow {n : Nat} (hG : Nat.card G ∣ p ^ n) : IsPGroup p G
+参数：hG : Nat.card G ∣ p ^ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `orderOf_dvd_iff_pow_eq_one`：orderOf_dvd_iff_pow_eq_one {n : Nat} : order
+Of x ∣ n ↔ x ^ n = 1
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `instIsTransDvd`：∀ {α : Type u_1} [inst : Semigroup α], IsTrans α Dvd.dvd
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
+· 使用定理 `orderOf_dvd_natCard`：orderOf_dvd_natCard {G : Type*} [Group G] (x : G) :
+ orderOf x ∣ Nat.card G
 -/
-theorem iff_orderOf [Fact p.Prime] : IsPGroup p G ↔ forall g : G, exists k, orderOf g = p ^ k := by
-  simp_rw [isPGroup_iff_orderOf_dvd_pow, Nat.dvd_prime_pow Fact.out]
-exact forall_congr' fun g => ⟨by grind, .imp by grind⟩
-
-alias ⟨exists_orderOf_eq_pow, _⟩ := iff_orderOf
-
-/--
-theorem `of_card_dvd_pow` / 定理 `of_card_dvd_pow`
-
-English:
-theorem of_card_dvd_pow
-  given: {n : Nat} (hG : Nat.card G ∣ p ^ n)
-  statement: IsPGroup p G
-  proof: by
-  refine fun g => ⟨n, ?_⟩
+theorem of_card_dvd_pow {n : ℕ} (hG : Nat.card G ∣ p ^ n) : IsPGroup p G := by
+  refine fun g ↦ ⟨n, ?_⟩
   grw [← orderOf_dvd_iff_pow_eq_one, ← hG, orderOf_dvd_natCard]
-
-中文:
-定理 of_card_dvd_pow
-  条件: {n : 自然数} (hG : 自然数.card G ∣ p ^ n)
-  结论: 是p群 p G
-  证明: by
-  refine fun g => ⟨n, ?_⟩
-  grw [← orderOf_dvd_iff_pow_eq_one, ← hG, orderOf_dvd_natCard]
-
-Depends on / 依赖: orderOf_dvd_iff_pow_eq_one, orderOf_dvd_natCard
+/-
+**IsPGroup._root_.isPGroup_iff_card_dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem of_card_dvd_pow {n : Nat} (hG : Nat.card G ∣ p ^ n) : IsPGroup p G := by
-  refine fun g => ⟨n, ?_⟩
-  grw [← orderOf_dvd_iff_pow_eq_one, ← hG, orderOf_dvd_natCard]
-
-/--
-theorem `_root_.isPGroup_iff_card_dvd_pow` / 定理 `_root_.isPGroup_iff_card_dvd_pow`
-
-English:
-theorem _root_.isPGroup_iff_card_dvd_pow
-  given: [Finite G]
-  statement: IsPGroup p G ↔ exists n, Nat.card G ∣ p ^ n
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨n, hn⟩ => of_card_dvd_pow hn⟩
+theorem _root_.isPGroup_iff_card_dvd_pow [Finite G] : IsPGroup p G ↔ ∃ n, Nat.card G ∣ p ^ n := by
+  refine ⟨fun h ↦ ?_, fun ⟨n, hn⟩ ↦ of_card_dvd_pow hn⟩
   rcases eq_or_ne p 0 with rfl | hp
   · exact ⟨1, by simp⟩
-.mpr fun q hq => ?_⟩ refine ⟨Nat.card G, Nat.dvd_pow_self_iff NeZero.out hp
+  refine ⟨Nat.card G, Nat.dvd_pow_self_iff NeZero.out hp |>.mpr fun q hq ↦ ?_⟩
   have ⟨hqp, hqdvd, _⟩ := Nat.mem_primeFactors.mp hq
   have ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' q (hp := ⟨hqp⟩) hqdvd
   have ⟨k, hk⟩ := h.exists_orderOf_dvd_pow g
-exact Nat.mem_primeFactors.mpr ⟨hqp, hqp.dvd_of_dvd_pow hg ▸ hk, hp⟩
+  exact Nat.mem_primeFactors.mpr ⟨hqp, hqp.dvd_of_dvd_pow <| hg ▸ hk, hp⟩
 
 alias ⟨exists_card_dvd_pow, _⟩ := isPGroup_iff_card_dvd_pow
-
-中文:
-定理 _root_.isPGroup_iff_card_dvd_pow
-  条件: [有限 G]
-  结论: 是p群 p G ↔ 存在 n, 自然数.card G ∣ p ^ n
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨n, hn⟩ => of_card_dvd_pow hn⟩
-  rcases eq_or_ne p 0 with rfl | hp
-  · exact ⟨1, by simp⟩
-.mpr fun q hq => ?_⟩ refine ⟨Nat.card G, Nat.dvd_pow_self_iff NeZero.out hp
-  have ⟨hqp, hqdvd, _⟩ := Nat.mem_primeFactors.mp hq
-  have ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' q (hp := ⟨hqp⟩) hqdvd
-  have ⟨k, hk⟩ := h.exists_orderOf_dvd_pow g
-exact Nat.mem_primeFactors.mpr ⟨hqp, hqp.dvd_of_dvd_pow hg ▸ hk, hp⟩
-
-alias ⟨exists_card_dvd_pow, _⟩ := isPGroup_iff_card_dvd_pow
-
-Depends on / 依赖: Nat.card, Nat.dvd_pow_self_iff, Nat.mem_primeFactors.mp, Nat.mem_primeFactors.mpr, NeZero, NeZero.out, dvd_of_dvd_pow, dvd_pow_self_iff, eq_or_ne, exists_orderOf_dvd_pow, exists_prime_orderOf_dvd_card, h.exists_orderOf_dvd_pow, hqp.dvd_of_dvd_pow, mem_primeFactors, of_card_dvd_pow
+/-
+**IsPGroup.dvd_orderOf** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：dvd_orderOf [Fact p.Prime] (hG : IsPGroup p G) {g : G} (hg : g != 1) : p ∣
+ orderOf g
+参数：hG : IsPGroup p G；hg : g != 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.exists_orderOf_eq_pow`：∀ {p : ℕ} {G : Type u_1} [inst : Group G
+] [Fact (Nat.Prime p)], IsPGroup p G → ∀ (g : G), ∃ k, orderOf g = p ^ k
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `dvd_pow_self`：dvd_pow_self (a : α) {n : Nat} (hn : n != 0) : a ∣ a ^ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `orderOf_eq_one_iff`：orderOf_eq_one_iff : orderOf x = 1 ↔ x = 1
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
 -/
-theorem _root_.isPGroup_iff_card_dvd_pow [Finite G] : IsPGroup p G ↔ exists n, Nat.card G ∣ p ^ n := by
-  refine ⟨fun h => ?_, fun ⟨n, hn⟩ => of_card_dvd_pow hn⟩
-  rcases eq_or_ne p 0 with rfl | hp
-  · exact ⟨1, by simp⟩
-.mpr fun q hq => ?_⟩ refine ⟨Nat.card G, Nat.dvd_pow_self_iff NeZero.out hp
-  have ⟨hqp, hqdvd, _⟩ := Nat.mem_primeFactors.mp hq
-  have ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' q (hp := ⟨hqp⟩) hqdvd
-  have ⟨k, hk⟩ := h.exists_orderOf_dvd_pow g
-exact Nat.mem_primeFactors.mpr ⟨hqp, hqp.dvd_of_dvd_pow hg ▸ hk, hp⟩
-
-alias ⟨exists_card_dvd_pow, _⟩ := isPGroup_iff_card_dvd_pow
-
-/--
-theorem `dvd_orderOf` / 定理 `dvd_orderOf`
-
-English:
-theorem dvd_orderOf
-  given: [Fact p.Prime] (hG : IsPGroup p G) {g : G} (hg : g != 1)
-  statement: p ∣ orderOf g
-  proof: by
+theorem dvd_orderOf [Fact p.Prime] (hG : IsPGroup p G) {g : G} (hg : g ≠ 1) : p ∣ orderOf g := by
   have ⟨k, hk⟩ := hG.exists_orderOf_eq_pow g
   rw [hk]
-  refine dvd_pow_self _ fun hk0 => hg ?_
-  rw [← orderOf_eq_one_iff]; rw [hk]; rw [hk0]; rw [pow_zero]
-
-中文:
-定理 dvd_orderOf
-  条件: [Fact p.素] (hG : 是p群 p G) {g : G} (hg : g != 1)
-  结论: p ∣ orderOf g
-  证明: by
-  have ⟨k, hk⟩ := hG.exists_orderOf_eq_pow g
-  rw [hk]
-  refine dvd_pow_self _ fun hk0 => hg ?_
-  rw [← orderOf_eq_one_iff]; rw [hk]; rw [hk0]; rw [pow_zero]
-
-Depends on / 依赖: dvd_pow_self, exists_orderOf_eq_pow, hG.exists_orderOf_eq_pow, orderOf_eq_one_iff, pow_zero
+  refine dvd_pow_self _ fun hk0 ↦ hg ?_
+  rw [← orderOf_eq_one_iff, hk, hk0, pow_zero]
+/-
+**IsPGroup.of_card** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_card {n : Nat} (hG : Nat.card G = p ^ n) : IsPGroup p G
+参数：hG : Nat.card G = p ^ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.of_card_dvd_pow`：of_card_dvd_pow {n : Nat} (hG : Nat.card G ∣ p
+ ^ n) : IsPGroup p G
+· 使用定理 `Eq.dvd`：∀ {α : Type u_1} [inst : Monoid α] {a b : α}, a = b → a ∣ b
 -/
-theorem dvd_orderOf [Fact p.Prime] (hG : IsPGroup p G) {g : G} (hg : g != 1) : p ∣ orderOf g := by
-  have ⟨k, hk⟩ := hG.exists_orderOf_eq_pow g
-  rw [hk]
-  refine dvd_pow_self _ fun hk0 => hg ?_
-  rw [← orderOf_eq_one_iff]; rw [hk]; rw [hk0]; rw [pow_zero]
-
-/--
-theorem `of_card` / 定理 `of_card`
-
-English:
-theorem of_card
-  given: {n : Nat} (hG : Nat.card G = p ^ n)
-  statement: IsPGroup p G
-  proof: of_card_dvd_pow hG.dvd
-
-中文:
-定理 of_card
-  条件: {n : 自然数} (hG : 自然数.card G = p ^ n)
-  结论: 是p群 p G
-  证明: of_card_dvd_pow hG.dvd
-
-Depends on / 依赖: hG.dvd, of_card_dvd_pow
--/
-theorem of_card {n : Nat} (hG : Nat.card G = p ^ n) : IsPGroup p G :=
+theorem of_card {n : ℕ} (hG : Nat.card G = p ^ n) : IsPGroup p G :=
   of_card_dvd_pow hG.dvd
 
 variable (p G) in
-/--
-theorem `of_subsingleton` / 定理 `of_subsingleton`
-
-English:
-theorem of_subsingleton
-  given: [Subsingleton G]
-  statement: IsPGroup p G
-  proof: of_card (n := 0) (by simp)
-
-中文:
-定理 of_subsingleton
-  条件: [子单例 G]
-  结论: 是p群 p G
-  证明: of_card (n := 0) (by simp)
-
-Depends on / 依赖: of_card
+/-
+**IsPGroup.of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_subsingleton [Subsingleton G] : IsPGroup p G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.of_card`：of_card {n : Nat} (hG : Nat.card G = p ^ n) : IsPGroup
+ p G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_unique`：card_unique [Nonempty α] [Subsingleton α] : Nat.card α 
+= 1
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem of_subsingleton [Subsingleton G] : IsPGroup p G :=
   of_card (n := 0) (by simp)
-
-/--
-theorem `of_bot` / 定理 `of_bot`
-
-English:
-theorem of_bot
-  statement: IsPGroup p (⊥ : Subgroup G)
-  proof: .of_subsingleton p _
-
-中文:
-定理 of_bot
-  结论: 是p群 p (⊥ : 子群 G)
-  证明: .of_subsingleton p _
-
-Depends on / 依赖: of_subsingleton
+/-
+**IsPGroup.of_bot** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_bot : IsPGroup p (⊥ : Subgroup G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.of_subsingleton`：of_subsingleton [Subsingleton G] : IsPGroup p 
+G
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem of_bot : IsPGroup p (⊥ : Subgroup G) :=
   .of_subsingleton p _
 
 variable (G) in
 @[simp]
-/--
-theorem `zero` / 定理 `zero`
-
-English:
-theorem zero
-  statement: IsPGroup 0 G
-  proof: fun g => ⟨1, by simp⟩
-
-@[simp]
-
-中文:
-定理 zero
-  结论: 是p群 0 G
-  证明: fun g => ⟨1, by simp⟩
-
-@[simp]
+/-
+**IsPGroup.zero** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：∀ (G : Type u_1) [inst : Group G], IsPGroup 0 G
+参数：G : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem zero : IsPGroup 0 G :=
-  fun g => ⟨1, by simp⟩
+  fun g ↦ ⟨1, by simp⟩
 
 @[simp]
-/--
-theorem `_root_.isPGroup_one_iff_subsingleton` / 定理 `_root_.isPGroup_one_iff_subsingleton`
-
-English:
-theorem _root_.isPGroup_one_iff_subsingleton
-  statement: IsPGroup 1 G ↔ Subsingleton G
-  proof: by
-  refine ⟨?_, fun h => .of_subsingleton 1 G⟩
-  simpa [isPGroup_iff_pow_pow_eq_one] using subsingleton_of_forall_eq 1
-
-中文:
-定理 _root_.isPGroup_one_iff_subsingleton
-  结论: 是p群 1 G ↔ 子单例 G
-  证明: by
-  refine ⟨?_, fun h => .of_subsingleton 1 G⟩
-  simpa [isPGroup_iff_pow_pow_eq_one] using subsingleton_of_forall_eq 1
-
-Depends on / 依赖: isPGroup_iff_pow_pow_eq_one, of_subsingleton, subsingleton_of_forall_eq
+/-
+**IsPGroup._root_.isPGroup_one_iff_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `IsPGr
+oup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.isPGroup_one_iff_subsingleton : IsPGroup 1 G ↔ Subsingleton G := by
-  refine ⟨?_, fun h => .of_subsingleton 1 G⟩
+  refine ⟨?_, fun h ↦ .of_subsingleton 1 G⟩
   simpa [isPGroup_iff_pow_pow_eq_one] using subsingleton_of_forall_eq 1
-
-/--
-theorem `card` / 定理 `card`
-
-English:
-theorem card
-  statement: IsPGroup (Nat.card G) G
-  proof: fun g => ⟨1, by simp⟩
-
-@[gcongr]
-
-中文:
-定理 card
-  结论: 是p群 (自然数.card G) G
-  证明: fun g => ⟨1, by simp⟩
-
-@[gcongr]
+/-
+**IsPGroup.card** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G], IsPGroup (Nat.card G) G
+参数：Nat.card G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `pow_card_eq_one'`：pow_card_eq_one' {G : Type*} [Group G] {x : G} : x ^ N
+at.card G = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem card : IsPGroup (Nat.card G) G :=
-  fun g => ⟨1, by simp⟩
+  fun g ↦ ⟨1, by simp⟩
 
 @[gcongr]
-/--
-theorem `mono` / 定理 `mono`
-
-English:
-theorem mono
-  given: {q : Nat} (hpq : p ∣ q) (hp : IsPGroup p G)
-  statement: IsPGroup q G
-  proof: by
-  rw [isPGroup_iff_orderOf_dvd_pow] at hp ⊢
-exact fun g => (hp g).imp fun k hk => hk.trans pow_dvd_pow_of_dvd hpq k
-
-中文:
-定理 mono
-  条件: {q : 自然数} (hpq : p ∣ q) (hp : 是p群 p G)
-  结论: 是p群 q G
-  证明: by
-  rw [isPGroup_iff_orderOf_dvd_pow] at hp ⊢
-exact fun g => (hp g).imp fun k hk => hk.trans pow_dvd_pow_of_dvd hpq k
+/-
+**IsPGroup.mono** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：∀ {p : ℕ} {G : Type u_1} [inst : Group G] {q : ℕ}, p ∣ q → IsPGroup p G → 
+IsPGroup q G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isPGroup_iff_orderOf_dvd_pow`：∀ {p : ℕ} {G : Type u_1} [inst : Group G],
+ IsPGroup p G ↔ ∀ (g : G), ∃ k, orderOf g ∣ p ^ k
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `pow_dvd_pow_of_dvd`：pow_dvd_pow_of_dvd (h : a ∣ b) (n : Nat) : a ^ n ∣ b
+ ^ n
 -/
-protected theorem mono {q : Nat} (hpq : p ∣ q) (hp : IsPGroup p G) : IsPGroup q G := by
+protected theorem mono {q : ℕ} (hpq : p ∣ q) (hp : IsPGroup p G) : IsPGroup q G := by
   rw [isPGroup_iff_orderOf_dvd_pow] at hp ⊢
-exact fun g => (hp g).imp fun k hk => hk.trans pow_dvd_pow_of_dvd hpq k
-
-/--
-theorem `of_pow` / 定理 `of_pow`
-
-English:
-theorem of_pow
-  given: {n : Nat} (h : IsPGroup (p ^ n) G)
-  statement: IsPGroup p G
-  proof: fun g => (h g).imp' (n * ·) by simp [pow_mul]
-
-中文:
-定理 of_pow
-  条件: {n : 自然数} (h : 是p群 (p ^ n) G)
-  结论: 是p群 p G
-  证明: fun g => (h g).imp' (n * ·) by simp [pow_mul]
-
-Depends on / 依赖: pow_mul
+  exact fun g ↦ (hp g).imp fun k hk ↦ hk.trans <| pow_dvd_pow_of_dvd hpq k
+/-
+**IsPGroup.of_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_pow {n : Nat} (h : IsPGroup (p ^ n) G) : IsPGroup p G
+参数：h : IsPGroup (p ^ n) G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp'`：∀ {α : Sort u_2} {p : α → Prop} {β : Sort u_1} {q : β → Pro
+p} (f : α → β),   (∀ (a : α), p a → q (f a)) → (∃ a, p a) → ∃ b, q b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem of_pow {n : Nat} (h : IsPGroup (p ^ n) G) : IsPGroup p G :=
-fun g => (h g).imp' (n * ·) by simp [pow_mul]
-
-/--
-theorem `iff_card` / 定理 `iff_card`
-
-English:
-theorem iff_card
-  given: [Fact p.Prime] [Finite G]
-  statement: IsPGroup p G ↔ exists n : Nat, Nat.card G = p ^ n
-  proof: by
+theorem of_pow {n : ℕ} (h : IsPGroup (p ^ n) G) : IsPGroup p G :=
+  fun g ↦ (h g).imp' (n * ·) <| by simp [pow_mul]
+/-
+**IsPGroup.iff_card** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：iff_card [Fact p.Prime] [Finite G] : IsPGroup p G ↔ exists n : Nat, Nat.ca
+rd G = p ^ n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.dvd_prime_pow`：dvd_prime_pow {p : Nat} (pp : Prime p) {m i : Nat} : 
+i ∣ p ^ m ↔ exists k <= m, i = p ^ k
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用引理 `le_rfl`：le_rfl : a <= a
+-/
+theorem iff_card [Fact p.Prime] [Finite G] : IsPGroup p G ↔ ∃ n : ℕ, Nat.card G = p ^ n := by
   simp_rw [isPGroup_iff_card_dvd_pow, Nat.dvd_prime_pow Fact.out]
-  exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
+  exact ⟨fun ⟨n, k, _, hk⟩ ↦ ⟨k, hk⟩, fun ⟨n, hn⟩ ↦ ⟨n, n, le_rfl, hn⟩⟩
 
 alias ⟨exists_card_eq, _⟩ := iff_card
-
-中文:
-定理 iff_card
-  条件: [Fact p.素] [有限 G]
-  结论: 是p群 p G ↔ 存在 n : 自然数, 自然数.card G = p ^ n
-  证明: by
-  simp_rw [isPGroup_iff_card_dvd_pow, Nat.dvd_prime_pow Fact.out]
-  exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
-
-alias ⟨exists_card_eq, _⟩ := iff_card
-
-Depends on / 依赖: Fact.out, Nat.dvd_prime_pow, dvd_prime_pow, isPGroup_iff_card_dvd_pow, le_rfl, simp_rw
--/
-theorem iff_card [Fact p.Prime] [Finite G] : IsPGroup p G ↔ exists n : Nat, Nat.card G = p ^ n := by
-  simp_rw [isPGroup_iff_card_dvd_pow, Nat.dvd_prime_pow Fact.out]
-  exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
-
-alias ⟨exists_card_eq, _⟩ := iff_card
-
-/--
-theorem `_root_.isPGroup_iff_exists_orderOf_dvd_pow` / 定理 `_root_.isPGroup_iff_exists_orderOf_dvd_pow`
-
-English:
-theorem _root_.isPGroup_iff_exists_orderOf_dvd_pow
-  given: [Finite G]
-  proof: by
-  refine isPGroup_iff_orderOf_dvd_pow.trans ⟨fun h => ?_, fun ⟨k, hk⟩ => fun g => ⟨k, hk g⟩⟩
-  choose k hk using h
-  have := Fintype.ofFinite G
-  have ⟨g, _, hg⟩ := Finset.exists_max_image .univ k Finset.univ_nonempty
-  refine ⟨k g, fun g' => ?_⟩
-  grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_univ g']
-  exact hk g'
-
-中文:
-定理 _root_.isPGroup_iff_存在_orderOf_dvd_pow
-  条件: [有限 G]
-  证明: by
-  refine isPGroup_iff_orderOf_dvd_pow.trans ⟨fun h => ?_, fun ⟨k, hk⟩ => fun g => ⟨k, hk g⟩⟩
-  choose k hk using h
-  have := Fintype.ofFinite G
-  have ⟨g, _, hg⟩ := Finset.exists_max_image .univ k Finset.univ_nonempty
-  refine ⟨k g, fun g' => ?_⟩
-  grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_univ g']
-  exact hk g'
-
-Depends on / 依赖: Finset, Finset.exists_max_image, Finset.mem_univ, Finset.univ_nonempty, Fintype, Fintype.ofFinite, Nat.pow_dvd_pow, exists_max_image, isPGroup_iff_orderOf_dvd_pow, isPGroup_iff_orderOf_dvd_pow.trans, mem_univ, ofFinite, pow_dvd_pow, univ_nonempty
+/-
+**IsPGroup._root_.isPGroup_iff_exists_orderOf_dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 
+`IsPGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.isPGroup_iff_exists_orderOf_dvd_pow [Finite G] :
-    IsPGroup p G ↔ exists k, forall g : G, orderOf g ∣ p ^ k := by
-  refine isPGroup_iff_orderOf_dvd_pow.trans ⟨fun h => ?_, fun ⟨k, hk⟩ => fun g => ⟨k, hk g⟩⟩
+    IsPGroup p G ↔ ∃ k, ∀ g : G, orderOf g ∣ p ^ k := by
+  refine isPGroup_iff_orderOf_dvd_pow.trans ⟨fun h ↦ ?_, fun ⟨k, hk⟩ ↦ fun g ↦ ⟨k, hk g⟩⟩
   choose k hk using h
   have := Fintype.ofFinite G
   have ⟨g, _, hg⟩ := Finset.exists_max_image .univ k Finset.univ_nonempty
-  refine ⟨k g, fun g' => ?_⟩
+  refine ⟨k g, fun g' ↦ ?_⟩
   grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_univ g']
   exact hk g'
-
-/--
-theorem `_root_.isPGroup_iff_exists_pow_pow_eq_one` / 定理 `_root_.isPGroup_iff_exists_pow_pow_eq_one`
-
-English:
-theorem _root_.isPGroup_iff_exists_pow_pow_eq_one
-  given: [Finite G]
-  proof: by
-  simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, orderOf_dvd_iff_pow_eq_one]
-
-中文:
-定理 _root_.isPGroup_iff_存在_pow_pow_eq_one
-  条件: [有限 G]
-  证明: by
-  simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, orderOf_dvd_iff_pow_eq_one]
-
-Depends on / 依赖: isPGroup_iff_exists_orderOf_dvd_pow, orderOf_dvd_iff_pow_eq_one, simp_rw
+/-
+**IsPGroup._root_.isPGroup_iff_exists_pow_pow_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `
+IsPGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.isPGroup_iff_exists_pow_pow_eq_one [Finite G] :
-    IsPGroup p G ↔ exists k, forall g : G, g ^ p ^ k = 1 := by
+    IsPGroup p G ↔ ∃ k, ∀ g : G, g ^ p ^ k = 1 := by
   simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, orderOf_dvd_iff_pow_eq_one]
-
-/--
-theorem `of_exponent_dvd_pow` / 定理 `of_exponent_dvd_pow`
-
-English:
-theorem of_exponent_dvd_pow
-  given: {n : Nat} (h : Monoid.exponent G ∣ p ^ n)
-  statement: IsPGroup p G
-  proof: fun g => ⟨n, Monoid.exponent_dvd_iff_forall_pow_eq_one.mp h g⟩
-
-中文:
-定理 of_exponent_dvd_pow
-  条件: {n : 自然数} (h : 幺半群.exponent G ∣ p ^ n)
-  结论: 是p群 p G
-  证明: fun g => ⟨n, Monoid.exponent_dvd_iff_forall_pow_eq_one.mp h g⟩
-
-Depends on / 依赖: Monoid, Monoid.exponent_dvd_iff_forall_pow_eq_one.mp, exponent_dvd_iff_forall_pow_eq_one
+/-
+**IsPGroup.of_exponent_dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_exponent_dvd_pow {n : Nat} (h : Monoid.exponent G ∣ p ^ n) : IsPGroup p
+ G
+参数：h : Monoid.exponent G ∣ p ^ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Monoid.exponent_dvd_iff_forall_pow_eq_one`：exponent_dvd_iff_forall_pow_e
+q_one {n : Nat} : exponent G ∣ n ↔ forall g : G, g ^ n = 1
 -/
-theorem of_exponent_dvd_pow {n : Nat} (h : Monoid.exponent G ∣ p ^ n) : IsPGroup p G :=
-  fun g => ⟨n, Monoid.exponent_dvd_iff_forall_pow_eq_one.mp h g⟩
-
-/--
-theorem `_root_.isPGroup_iff_exponent_dvd_pow` / 定理 `_root_.isPGroup_iff_exponent_dvd_pow`
-
-English:
-theorem _root_.isPGroup_iff_exponent_dvd_pow
-  given: [Finite G]
-  proof: by
-  simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, Monoid.exponent_dvd]
-
-alias ⟨exists_exponent_dvd_pow, _⟩ := isPGroup_iff_exponent_dvd_pow
-
-中文:
-定理 _root_.isPGroup_iff_exponent_dvd_pow
-  条件: [有限 G]
-  证明: by
-  simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, Monoid.exponent_dvd]
-
-alias ⟨exists_exponent_dvd_pow, _⟩ := isPGroup_iff_exponent_dvd_pow
-
-Depends on / 依赖: Monoid, Monoid.exponent_dvd, exponent_dvd, isPGroup_iff_exists_orderOf_dvd_pow, simp_rw
+theorem of_exponent_dvd_pow {n : ℕ} (h : Monoid.exponent G ∣ p ^ n) : IsPGroup p G :=
+  fun g ↦ ⟨n, Monoid.exponent_dvd_iff_forall_pow_eq_one.mp h g⟩
+/-
+**IsPGroup._root_.isPGroup_iff_exponent_dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGr
+oup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.isPGroup_iff_exponent_dvd_pow [Finite G] :
-    IsPGroup p G ↔ exists n, Monoid.exponent G ∣ p ^ n := by
+    IsPGroup p G ↔ ∃ n, Monoid.exponent G ∣ p ^ n := by
   simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, Monoid.exponent_dvd]
 
 alias ⟨exists_exponent_dvd_pow, _⟩ := isPGroup_iff_exponent_dvd_pow
-
-/--
-theorem `_root_.isPGroup_iff_exponent_eq_pow` / 定理 `_root_.isPGroup_iff_exponent_eq_pow`
-
-English:
-theorem _root_.isPGroup_iff_exponent_eq_pow
-  given: [Finite G] [Fact p.Prime]
-  proof: by
-  simp_rw [isPGroup_iff_exponent_dvd_pow, Nat.dvd_prime_pow Fact.out]
-  exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
-
-alias ⟨exists_exponent_eq_pow, _⟩ := isPGroup_iff_exponent_eq_pow
-
-中文:
-定理 _root_.isPGroup_iff_exponent_eq_pow
-  条件: [有限 G] [Fact p.素]
-  证明: by
-  simp_rw [isPGroup_iff_exponent_dvd_pow, Nat.dvd_prime_pow Fact.out]
-  exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
-
-alias ⟨exists_exponent_eq_pow, _⟩ := isPGroup_iff_exponent_eq_pow
-
-Depends on / 依赖: Fact.out, Nat.dvd_prime_pow, dvd_prime_pow, isPGroup_iff_exponent_dvd_pow, le_rfl, simp_rw
+/-
+**IsPGroup._root_.isPGroup_iff_exponent_eq_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGro
+up`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.isPGroup_iff_exponent_eq_pow [Finite G] [Fact p.Prime] :
-    IsPGroup p G ↔ exists n, Monoid.exponent G = p ^ n := by
+    IsPGroup p G ↔ ∃ n, Monoid.exponent G = p ^ n := by
   simp_rw [isPGroup_iff_exponent_dvd_pow, Nat.dvd_prime_pow Fact.out]
-  exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
+  exact ⟨fun ⟨n, k, _, hk⟩ ↦ ⟨k, hk⟩, fun ⟨n, hn⟩ ↦ ⟨n, n, le_rfl, hn⟩⟩
 
 alias ⟨exists_exponent_eq_pow, _⟩ := isPGroup_iff_exponent_eq_pow
-
-/--
-theorem `_root_.isPGroup_iff_isPGroup_prod_primeFactors` / 定理 `_root_.isPGroup_iff_isPGroup_prod_primeFactors`
-
-English:
-theorem _root_.isPGroup_iff_isPGroup_prod_primeFactors
-  given: (h : p != 0)
-  proof: ⟨(.of_pow <| ·.mono <| p.dvd_prod_primeFactors_pow_self h), .mono p.prod_primeFactors_dvd⟩
-
-中文:
-定理 _root_.isPGroup_iff_isPGroup_prod_primeFactors
-  条件: (h : p != 0)
-  证明: ⟨(.of_pow <| ·.mono <| p.dvd_prod_primeFactors_pow_self h), .mono p.prod_primeFactors_dvd⟩
-
-Depends on / 依赖: dvd_prod_primeFactors_pow_self, of_pow, p.dvd_prod_primeFactors_pow_self, p.prod_primeFactors_dvd, prod_primeFactors_dvd
+/-
+**IsPGroup._root_.isPGroup_iff_isPGroup_prod_primeFactors** 是 Mathlib 中的一个定理，位于命
+名空间 `IsPGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.isPGroup_iff_isPGroup_prod_primeFactors (h : p != 0) :
+theorem _root_.isPGroup_iff_isPGroup_prod_primeFactors (h : p ≠ 0) :
     IsPGroup p G ↔ IsPGroup (p.primeFactors.prod id) G :=
   ⟨(.of_pow <| ·.mono <| p.dvd_prod_primeFactors_pow_self h), .mono p.prod_primeFactors_dvd⟩
-
-/--
-theorem `_root_.isPGroup_iff_primeFactors_card_subset` / 定理 `_root_.isPGroup_iff_primeFactors_card_subset`
-
-English:
-theorem _root_.isPGroup_iff_primeFactors_card_subset
-  given: [Finite G] (h : p != 0)
-  proof: by
-  refine isPGroup_iff_card_dvd_pow.trans ⟨fun ⟨n, hn⟩ => ?_, fun hG => ?_⟩
-  · rcases eq_or_ne n 0 with (rfl | hn0)
-    · simp_all
-    grw [← Nat.primeFactors_pow p hn0, Nat.primeFactors_mono hn <| pow_ne_zero n h]
-.trans ?_⟩ · refine ⟨Nat.card G, Nat.dvd_prod_primeFactors_pow_self NeZero.out
-    grw [Finset.prod_dvd_prod_of_subset _ _ (·) hG, p.prod_primeFactors_dvd]
-
-中文:
-定理 _root_.isPGroup_iff_primeFactors_card_subset
-  条件: [有限 G] (h : p != 0)
-  证明: by
-  refine isPGroup_iff_card_dvd_pow.trans ⟨fun ⟨n, hn⟩ => ?_, fun hG => ?_⟩
-  · rcases eq_or_ne n 0 with (rfl | hn0)
-    · simp_all
-    grw [← Nat.primeFactors_pow p hn0, Nat.primeFactors_mono hn <| pow_ne_zero n h]
-.trans ?_⟩ · refine ⟨Nat.card G, Nat.dvd_prod_primeFactors_pow_self NeZero.out
-    grw [Finset.prod_dvd_prod_of_subset _ _ (·) hG, p.prod_primeFactors_dvd]
-
-Depends on / 依赖: Finset, Finset.prod_dvd_prod_of_subset, Nat.card, Nat.dvd_prod_primeFactors_pow_self, Nat.primeFactors_mono, Nat.primeFactors_pow, NeZero, NeZero.out, dvd_prod_primeFactors_pow_self, eq_or_ne, isPGroup_iff_card_dvd_pow, isPGroup_iff_card_dvd_pow.trans, p.prod_primeFactors_dvd, pow_ne_zero, primeFactors_mono, primeFactors_pow, prod_dvd_prod_of_subset, prod_primeFactors_dvd
+/-
+**IsPGroup._root_.isPGroup_iff_primeFactors_card_subset** 是 Mathlib 中的一个定理，位于命名空
+间 `IsPGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.isPGroup_iff_primeFactors_card_subset [Finite G] (h : p != 0) :
-    IsPGroup p G ↔ (Nat.card G).primeFactors subseteq p.primeFactors := by
-  refine isPGroup_iff_card_dvd_pow.trans ⟨fun ⟨n, hn⟩ => ?_, fun hG => ?_⟩
+theorem _root_.isPGroup_iff_primeFactors_card_subset [Finite G] (h : p ≠ 0) :
+    IsPGroup p G ↔ (Nat.card G).primeFactors ⊆ p.primeFactors := by
+  refine isPGroup_iff_card_dvd_pow.trans ⟨fun ⟨n, hn⟩ ↦ ?_, fun hG ↦ ?_⟩
   · rcases eq_or_ne n 0 with (rfl | hn0)
     · simp_all
     grw [← Nat.primeFactors_pow p hn0, Nat.primeFactors_mono hn <| pow_ne_zero n h]
-.trans ?_⟩ · refine ⟨Nat.card G, Nat.dvd_prod_primeFactors_pow_self NeZero.out
+  · refine ⟨Nat.card G, Nat.dvd_prod_primeFactors_pow_self NeZero.out |>.trans ?_⟩
     grw [Finset.prod_dvd_prod_of_subset _ _ (·) hG, p.prod_primeFactors_dvd]
 
 section GIsPGroup
@@ -623,335 +386,254 @@ section GIsPGroup
 variable (hG : IsPGroup p G)
 include hG
 
-/--
-theorem `of_injective` / 定理 `of_injective`
-
-English:
-theorem of_injective
-  given: {H : Type*} [Group H] (ϕ : H ->* G) (hϕ : Function.Injective ϕ)
-  proof: by
-  simp_rw [IsPGroup, ← hϕ.eq_iff, ϕ.map_pow, ϕ.map_one]
-  exact fun h => hG (ϕ h)
-
-中文:
-定理 of_injective
-  条件: {H : 类型} [群 H] (ϕ : H ->* G) (hϕ : 函数.单射 ϕ)
-  证明: by
-  simp_rw [IsPGroup, ← hϕ.eq_iff, ϕ.map_pow, ϕ.map_one]
-  exact fun h => hG (ϕ h)
-
-Depends on / 依赖: IsPGroup, eq_iff, map_one, map_pow, simp_rw
+/-
+**IsPGroup.of_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_injective {H : Type*} [Group H] (ϕ : H ->* G) (hϕ : Function.Injective 
+ϕ) : IsPGroup p H
+参数：ϕ : H ->* G；hϕ : Function.Injective ϕ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
+· 使用定理 `MonoidHom.map_one`：∀ {M : Type u_4} {N : Type u_5} [inst : MulOne M] [in
+st_1 : MulOne N] (f : M →* N), f 1 = 1
 -/
-theorem of_injective {H : Type*} [Group H] (ϕ : H ->* G) (hϕ : Function.Injective ϕ) :
+theorem of_injective {H : Type*} [Group H] (ϕ : H →* G) (hϕ : Function.Injective ϕ) :
     IsPGroup p H := by
   simp_rw [IsPGroup, ← hϕ.eq_iff, ϕ.map_pow, ϕ.map_one]
   exact fun h => hG (ϕ h)
-
-/--
-theorem `to_subgroup` / 定理 `to_subgroup`
-
-English:
-theorem to_subgroup
-  given: (H : Subgroup G)
-  statement: IsPGroup p H
-  proof: hG.of_injective H.subtype Subtype.coe_injective
-
-中文:
-定理 to_subgroup
-  条件: (H : 子群 G)
-  结论: 是p群 p H
-  证明: hG.of_injective H.subtype Subtype.coe_injective
-
-Depends on / 依赖: H.subtype, Subtype, Subtype.coe_injective, coe_injective, hG.of_injective, of_injective, subtype
+/-
+**IsPGroup.to_subgroup** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_subgroup (H : Subgroup G) : IsPGroup p H
+参数：H : Subgroup G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.of_injective`：of_injective {H : Type*} [Group H] (ϕ : H ->* G) 
+(hϕ : Function.Injective ϕ) : IsPGroup p H
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 theorem to_subgroup (H : Subgroup G) : IsPGroup p H :=
   hG.of_injective H.subtype Subtype.coe_injective
-
-/--
-theorem `of_surjective` / 定理 `of_surjective`
-
-English:
-theorem of_surjective
-  given: {H : Type*} [Group H] (ϕ : G ->* H) (hϕ : Function.Surjective ϕ)
-  proof: by
-  refine fun h => Exists.elim (hϕ h) fun g hg => Exists.imp (fun k hk => ?_) (hG g)
-  rw [← hg]; rw [← ϕ.map_pow]; rw [hk]; rw [ϕ.map_one]
-
-中文:
-定理 of_surjective
-  条件: {H : 类型} [群 H] (ϕ : G ->* H) (hϕ : 函数.满射 ϕ)
-  证明: by
-  refine fun h => Exists.elim (hϕ h) fun g hg => Exists.imp (fun k hk => ?_) (hG g)
-  rw [← hg]; rw [← ϕ.map_pow]; rw [hk]; rw [ϕ.map_one]
-
-Depends on / 依赖: Exists, Exists.elim, Exists.imp, map_one, map_pow
+/-
+**IsPGroup.of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_surjective {H : Type*} [Group H] (ϕ : G ->* H) (hϕ : Function.Surjectiv
+e ϕ) : IsPGroup p H
+参数：ϕ : G ->* H；hϕ : Function.Surjective ϕ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
+· 使用定理 `MonoidHom.map_one`：∀ {M : Type u_4} {N : Type u_5} [inst : MulOne M] [in
+st_1 : MulOne N] (f : M →* N), f 1 = 1
 -/
-theorem of_surjective {H : Type*} [Group H] (ϕ : G ->* H) (hϕ : Function.Surjective ϕ) :
+theorem of_surjective {H : Type*} [Group H] (ϕ : G →* H) (hϕ : Function.Surjective ϕ) :
     IsPGroup p H := by
   refine fun h => Exists.elim (hϕ h) fun g hg => Exists.imp (fun k hk => ?_) (hG g)
-  rw [← hg]; rw [← ϕ.map_pow]; rw [hk]; rw [ϕ.map_one]
-
-/--
-theorem `to_quotient` / 定理 `to_quotient`
-
-English:
-theorem to_quotient
-  given: (H : Subgroup G) [H.Normal]
-  statement: IsPGroup p (G ⧸ H)
-  proof: hG.of_surjective (QuotientGroup.mk' H) Quotient.mk''_surjective
-
-中文:
-定理 to_quotient
-  条件: (H : 子群 G) [H.正规]
-  结论: 是p群 p (G ⧸ H)
-  证明: hG.of_surjective (QuotientGroup.mk' H) Quotient.mk''_surjective
-
-Depends on / 依赖: Quotient, Quotient.mk, QuotientGroup, QuotientGroup.mk, _surjective, hG.of_surjective, of_surjective
+  rw [← hg, ← ϕ.map_pow, hk, ϕ.map_one]
+/-
+**IsPGroup.to_quotient** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_quotient (H : Subgroup G) [H.Normal] : IsPGroup p (G ⧸ H)
+参数：H : Subgroup G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.of_surjective`：of_surjective {H : Type*} [Group H] (ϕ : G ->* H
+) (hϕ : Function.Surjective ϕ) : IsPGroup p H
+· 使用定理 `Quotient.mk''_surjective`：∀ {α : Sort u_1} {s₁ : Setoid α}, Function.Sur
+jective Quotient.mk''
 -/
 theorem to_quotient (H : Subgroup G) [H.Normal] : IsPGroup p (G ⧸ H) :=
   hG.of_surjective (QuotientGroup.mk' H) Quotient.mk''_surjective
-
-/--
-theorem `of_equiv` / 定理 `of_equiv`
-
-English:
-theorem of_equiv
-  given: {H : Type*} [Group H] (ϕ : G ≃* H)
-  statement: IsPGroup p H
-  proof: hG.of_surjective ϕ.toMonoidHom ϕ.surjective
-
-中文:
-定理 of_equiv
-  条件: {H : 类型} [群 H] (ϕ : G ≃* H)
-  结论: 是p群 p H
-  证明: hG.of_surjective ϕ.toMonoidHom ϕ.surjective
-
-Depends on / 依赖: hG.of_surjective, of_surjective, surjective, toMonoidHom
+/-
+**IsPGroup.of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：of_equiv {H : Type*} [Group H] (ϕ : G ≃* H) : IsPGroup p H
+参数：ϕ : G ≃* H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.of_surjective`：of_surjective {H : Type*} [Group H] (ϕ : G ->* H
+) (hϕ : Function.Surjective ϕ) : IsPGroup p H
+· 使用定理 `MulEquiv.surjective`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [ins
+t_1 : Mul N] (e : M ≃* N), Function.Surjective ⇑e
 -/
 theorem of_equiv {H : Type*} [Group H] (ϕ : G ≃* H) : IsPGroup p H :=
   hG.of_surjective ϕ.toMonoidHom ϕ.surjective
-
-/--
-theorem `isOfFinOrder` / 定理 `isOfFinOrder`
-
-English:
-theorem isOfFinOrder
-  given: (hp : p != 0) (g : G)
-  statement: IsOfFinOrder g
-  proof: .elim (isOfFinOrder_iff_pow_eq_one.mpr ⟨_, pow_ne_zero · hp |>.pos, ·⟩) hG g
-
-中文:
-定理 isOfFinOrder
-  条件: (hp : p != 0) (g : G)
-  结论: IsOfFinOrder g
-  证明: .elim (isOfFinOrder_iff_pow_eq_one.mpr ⟨_, pow_ne_zero · hp |>.pos, ·⟩) hG g
-
-Depends on / 依赖: isOfFinOrder_iff_pow_eq_one, isOfFinOrder_iff_pow_eq_one.mpr, pow_ne_zero
+/-
+**IsPGroup.isOfFinOrder** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：isOfFinOrder (hp : p != 0) (g : G) : IsOfFinOrder g
+参数：hp : p != 0；g : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isOfFinOrder_iff_pow_eq_one`：isOfFinOrder_iff_pow_eq_one : IsOfFinOrder 
+x ↔ exists n, 0 < n ∧ x ^ n = 1
+· 使用定理 `Ne.pos`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_1 : Zero 
+α] [IsBotZeroClass α], a ≠ 0 → 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
 -/
-theorem isOfFinOrder (hp : p != 0) (g : G) : IsOfFinOrder g :=
-.elim (isOfFinOrder_iff_pow_eq_one.mpr ⟨_, pow_ne_zero · hp |>.pos, ·⟩) hG g
-
-/--
-theorem `orderOf_coprime` / 定理 `orderOf_coprime`
-
-English:
-theorem orderOf_coprime
-  given: {n : Nat} (hn : p.Coprime n) (g : G)
-  statement: (orderOf g).Coprime n
-  proof: let ⟨k, hk⟩ := hG g
-  (hn.pow_left k).coprime_dvd_left (orderOf_dvd_of_pow_eq_one hk)
-
-中文:
-定理 orderOf_coprime
-  条件: {n : 自然数} (hn : p.Coprime n) (g : G)
-  结论: (orderOf g).Coprime n
-  证明: let ⟨k, hk⟩ := hG g
-  (hn.pow_left k).coprime_dvd_left (orderOf_dvd_of_pow_eq_one hk)
-
-Depends on / 依赖: coprime_dvd_left, hn.pow_left, orderOf_dvd_of_pow_eq_one, pow_left
+theorem isOfFinOrder (hp : p ≠ 0) (g : G) : IsOfFinOrder g :=
+  hG g |>.elim (isOfFinOrder_iff_pow_eq_one.mpr ⟨_, pow_ne_zero · hp |>.pos, ·⟩)
+/-
+**IsPGroup.orderOf_coprime** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：orderOf_coprime {n : Nat} (hn : p.Coprime n) (g : G) : (orderOf g).Coprime
+ n
+参数：hn : p.Coprime n；g : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.Coprime.coprime_dvd_left`：∀ {m k n : ℕ}, m ∣ k → k.Coprime n → m.Cop
+rime n
+· 使用定理 `orderOf_dvd_of_pow_eq_one`：orderOf_dvd_of_pow_eq_one (h : x ^ n = 1) : o
+rderOf x ∣ n
+· 使用定理 `Nat.Coprime.pow_left`：∀ {m k : ℕ} (n : ℕ), m.Coprime k → (m ^ n).Coprime
+ k
 -/
-theorem orderOf_coprime {n : Nat} (hn : p.Coprime n) (g : G) : (orderOf g).Coprime n :=
+theorem orderOf_coprime {n : ℕ} (hn : p.Coprime n) (g : G) : (orderOf g).Coprime n :=
   let ⟨k, hk⟩ := hG g
   (hn.pow_left k).coprime_dvd_left (orderOf_dvd_of_pow_eq_one hk)
 
-/--
-Definition of `powEquiv` / `powEquiv` 的定义
+/-- If `gcd(p,n) = 1`, then the `n`th power map is a bijection. -/
+/-
+**IsPGroup.powEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsPGroup`。
+形式化陈述：powEquiv {n : Nat} (hn : p.Coprime n) : G ≃ G
+参数：hn : p.Coprime n。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Subgroup.mem_zpowers`：mem_zpowers (g : G) : g in zpowers g
 
-English:
-definition powEquiv
-  signature: {n : Nat} (hn : p.Coprime n)
-  body: let h : forall g : G, (Nat.card (Subgroup.zpowers g)).Coprime n := fun g =>
-    (Nat.card_zpowers g).symm ▸ hG.orderOf_coprime hn g
-  { toFun := (· ^ n)
-    invFun := fun g => (powCoprime (h g)).symm ⟨g, Subgroup.mem_zpowers g⟩
-    left_inv := fun g =>
-Subtype.ext_iff.1
-        (powCoprime (h (g ^ n))).left_inv
-⟨g, _, Subtype.ext_iff.1 (powCoprime (h g)).left_inv ⟨g, Subgroup.mem_zpowers g⟩⟩
-    right_inv := fun g =>
-Subtype.ext_iff.1 (powCoprime (h g)).right_inv ⟨g, Subgroup.mem_zpowers g⟩ }
-
-@[simp]
-
-中文:
-定义 powEquiv
-  签名: {n : 自然数} (hn : p.Coprime n)
-  定义体: let h : forall g : G, (Nat.card (Subgroup.zpowers g)).Coprime n := fun g =>
-    (Nat.card_zpowers g).symm ▸ hG.orderOf_coprime hn g
-  { toFun := (· ^ n)
-    invFun := fun g => (powCoprime (h g)).symm ⟨g, Subgroup.mem_zpowers g⟩
-    left_inv := fun g =>
-Subtype.ext_iff.1
-        (powCoprime (h (g ^ n))).left_inv
-⟨g, _, Subtype.ext_iff.1 (powCoprime (h g)).left_inv ⟨g, Subgroup.mem_zpowers g⟩⟩
-    right_inv := fun g =>
-Subtype.ext_iff.1 (powCoprime (h g)).right_inv ⟨g, Subgroup.mem_zpowers g⟩ }
-
-@[simp]
-
-Depends on / 依赖: Coprime, Nat.card, Nat.card_zpowers, Subgroup, Subgroup.mem_zpowers, Subgroup.zpowers, Subtype, Subtype.ext_iff, card_zpowers, ext_iff, hG.orderOf_coprime, invFun, left_inv, mem_zpowers, orderOf_coprime, powCoprime, right_inv, zpowers
+--- 原说明 ---
+If `gcd(p,n) = 1`, then the `n`th power map is a bijection.
 -/
-noncomputable def powEquiv {n : Nat} (hn : p.Coprime n) : G ≃ G :=
-  let h : forall g : G, (Nat.card (Subgroup.zpowers g)).Coprime n := fun g =>
+noncomputable def powEquiv {n : ℕ} (hn : p.Coprime n) : G ≃ G :=
+  let h : ∀ g : G, (Nat.card (Subgroup.zpowers g)).Coprime n := fun g =>
     (Nat.card_zpowers g).symm ▸ hG.orderOf_coprime hn g
   { toFun := (· ^ n)
     invFun := fun g => (powCoprime (h g)).symm ⟨g, Subgroup.mem_zpowers g⟩
     left_inv := fun g =>
-Subtype.ext_iff.1
+      Subtype.ext_iff.1 <|
         (powCoprime (h (g ^ n))).left_inv
-⟨g, _, Subtype.ext_iff.1 (powCoprime (h g)).left_inv ⟨g, Subgroup.mem_zpowers g⟩⟩
+          ⟨g, _, Subtype.ext_iff.1 <| (powCoprime (h g)).left_inv ⟨g, Subgroup.mem_zpowers g⟩⟩
     right_inv := fun g =>
-Subtype.ext_iff.1 (powCoprime (h g)).right_inv ⟨g, Subgroup.mem_zpowers g⟩ }
+      Subtype.ext_iff.1 <| (powCoprime (h g)).right_inv ⟨g, Subgroup.mem_zpowers g⟩ }
 
 @[simp]
-/--
-theorem `powEquiv_apply` / 定理 `powEquiv_apply`
-
-English:
-theorem powEquiv_apply
-  given: {n : Nat} (hn : p.Coprime n) (g : G)
-  statement: hG.powEquiv hn g = g ^ n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 powEquiv_apply
-  条件: {n : 自然数} (hn : p.Coprime n) (g : G)
-  结论: hG.powEquiv hn g = g ^ n
-  证明: rfl
-
-@[simp]
+/-
+**IsPGroup.powEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：powEquiv_apply {n : Nat} (hn : p.Coprime n) (g : G) : hG.powEquiv hn g = g
+ ^ n
+参数：hn : p.Coprime n；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem powEquiv_apply {n : Nat} (hn : p.Coprime n) (g : G) : hG.powEquiv hn g = g ^ n :=
+theorem powEquiv_apply {n : ℕ} (hn : p.Coprime n) (g : G) : hG.powEquiv hn g = g ^ n :=
   rfl
 
 @[simp]
-/--
-theorem `powEquiv_symm_apply` / 定理 `powEquiv_symm_apply`
-
-English:
-theorem powEquiv_symm_apply
-  given: {n : Nat} (hn : p.Coprime n) (g : G)
-  proof: by rw [← Nat.card_zpowers]; rfl
-
-中文:
-定理 powEquiv_symm_apply
-  条件: {n : 自然数} (hn : p.Coprime n) (g : G)
-  证明: by rw [← Nat.card_zpowers]; rfl
-
-Depends on / 依赖: Nat.card_zpowers, card_zpowers
+/-
+**IsPGroup.powEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：powEquiv_symm_apply {n : Nat} (hn : p.Coprime n) (g : G) : (hG.powEquiv hn
+).symm g = g ^ (orderOf g).gcdB n
+参数：hn : p.Coprime n；g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_zpowers`：Nat.card_zpowers : Nat.card (zpowers a) = orderOf a
 -/
-theorem powEquiv_symm_apply {n : Nat} (hn : p.Coprime n) (g : G) :
+theorem powEquiv_symm_apply {n : ℕ} (hn : p.Coprime n) (g : G) :
     (hG.powEquiv hn).symm g = g ^ (orderOf g).gcdB n := by rw [← Nat.card_zpowers]; rfl
 
 variable [hp : Fact p.Prime]
 
-/--
-Definition of `powEquiv'` / `powEquiv'` 的定义
+/-- If `p ∤ n`, then the `n`th power map is a bijection. -/
+/-
+**IsPGroup.powEquiv'** 是 Mathlib 中的一个缩写定义，位于命名空间 `IsPGroup`。
+形式化陈述：powEquiv' {n : Nat} (hn : ¬p ∣ n) : G ≃ G
+参数：hn : ¬p ∣ n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation powEquiv'
-  signature: {n : Nat} (hn : ¬p ∣ n)
-  body: powEquiv hG (hp.out.coprime_iff_not_dvd.mpr hn)
-
-中文:
-缩写 powEquiv'
-  签名: {n : 自然数} (hn : ¬p ∣ n)
-  定义体: powEquiv hG (hp.out.coprime_iff_not_dvd.mpr hn)
-
-Depends on / 依赖: coprime_iff_not_dvd, hp.out.coprime_iff_not_dvd.mpr, powEquiv
+--- 原说明 ---
+If `p ∤ n`, then the `n`th power map is a bijection.
 -/
-noncomputable abbrev powEquiv' {n : Nat} (hn : ¬p ∣ n) : G ≃ G :=
+noncomputable abbrev powEquiv' {n : ℕ} (hn : ¬p ∣ n) : G ≃ G :=
   powEquiv hG (hp.out.coprime_iff_not_dvd.mpr hn)
-
-/--
-theorem `index` / 定理 `index`
-
-English:
-theorem index
-  given: (H : Subgroup G) [H.FiniteIndex]
-  statement: exists n : Nat, H.index = p ^ n
-  proof: by
-  obtain ⟨n, hn⟩ := iff_card.mp (hG.to_quotient H.normalCore)
-  obtain ⟨k, _, hk2⟩ :=
-    (Nat.dvd_prime_pow hp.out).mp
-      ((congr_arg _ (H.normalCore.index_eq_card.trans hn)).mp
-        (Subgroup.index_dvd_of_le H.normalCore_le))
-  exact ⟨k, hk2⟩
-
-中文:
-定理 index
-  条件: (H : 子群 G) [H.FiniteIndex]
-  结论: 存在 n : 自然数, H.index = p ^ n
-  证明: by
-  obtain ⟨n, hn⟩ := iff_card.mp (hG.to_quotient H.normalCore)
-  obtain ⟨k, _, hk2⟩ :=
-    (Nat.dvd_prime_pow hp.out).mp
-      ((congr_arg _ (H.normalCore.index_eq_card.trans hn)).mp
-        (Subgroup.index_dvd_of_le H.normalCore_le))
-  exact ⟨k, hk2⟩
-
-Depends on / 依赖: H.normalCore, H.normalCore.index_eq_card.trans, H.normalCore_le, Nat.dvd_prime_pow, Subgroup, Subgroup.index_dvd_of_le, congr_arg, dvd_prime_pow, hG.to_quotient, hp.out, iff_card, iff_card.mp, index_dvd_of_le, index_eq_card, normalCore, normalCore_le, to_quotient
+/-
+**IsPGroup.index** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：index (H : Subgroup G) [H.FiniteIndex] : exists n : Nat, H.index = p ^ n
+参数：H : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPGroup.iff_card`：iff_card [Fact p.Prime] [Finite G] : IsPGroup p G ↔ e
+xists n : Nat, Nat.card G = p ^ n
+· 使用定理 `IsPGroup.to_quotient`：to_quotient (H : Subgroup G) [H.Normal] : IsPGroup
+ p (G ⧸ H)
+· 使用定理 `Nat.dvd_prime_pow`：dvd_prime_pow {p : Nat} (pp : Prime p) {m i : Nat} : 
+i ∣ p ^ m ↔ exists k <= m, i = p ^ k
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subgroup.index_eq_card`：index_eq_card : H.index = Nat.card (G ⧸ H)
+· 使用定理 `Subgroup.index_dvd_of_le`：index_dvd_of_le (h : H <= K) : K.index ∣ H.ind
+ex
+· 使用定理 `Subgroup.normalCore_le`：normalCore_le (H : Subgroup G) : H.normalCore <=
+ H
 -/
-theorem index (H : Subgroup G) [H.FiniteIndex] : exists n : Nat, H.index = p ^ n := by
+theorem index (H : Subgroup G) [H.FiniteIndex] : ∃ n : ℕ, H.index = p ^ n := by
   obtain ⟨n, hn⟩ := iff_card.mp (hG.to_quotient H.normalCore)
   obtain ⟨k, _, hk2⟩ :=
     (Nat.dvd_prime_pow hp.out).mp
       ((congr_arg _ (H.normalCore.index_eq_card.trans hn)).mp
         (Subgroup.index_dvd_of_le H.normalCore_le))
   exact ⟨k, hk2⟩
-
-/--
-theorem `card_eq_or_dvd` / 定理 `card_eq_or_dvd`
-
-English:
-theorem card_eq_or_dvd
-  statement: Nat.card G = 1 ∨ p ∣ Nat.card G
-  proof: by
-  cases finite_or_infinite G
-  · obtain ⟨n, hn⟩ := iff_card.mp hG
-    rw [hn]
-    rcases n with - | n
-    · exact Or.inl rfl
-    · exact Or.inr ⟨p ^ n, by rw [pow_succ']⟩
-  · rw [Nat.card_eq_zero_of_infinite]
-    exact Or.inr ⟨0, rfl⟩
-
-中文:
-定理 card_eq_or_dvd
-  结论: 自然数.card G = 1 ∨ p ∣ 自然数.card G
-  证明: by
-  cases finite_or_infinite G
-  · obtain ⟨n, hn⟩ := iff_card.mp hG
-    rw [hn]
-    rcases n with - | n
-    · exact Or.inl rfl
-    · exact Or.inr ⟨p ^ n, by rw [pow_succ']⟩
-  · rw [Nat.card_eq_zero_of_infinite]
-    exact Or.inr ⟨0, rfl⟩
-
-Depends on / 依赖: Nat.card_eq_zero_of_infinite, Or.inl, Or.inr, card_eq_zero_of_infinite, finite_or_infinite, iff_card, iff_card.mp, pow_succ
+/-
+**IsPGroup.card_eq_or_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：card_eq_or_dvd : Nat.card G = 1 ∨ p ∣ Nat.card G
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPGroup.iff_card`：iff_card [Fact p.Prime] [Finite G] : IsPGroup p G ↔ e
+xists n : Nat, Nat.card G = p ^ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Nat.card_eq_zero_of_infinite`：∀ {α : Type u_1} [Infinite α], Nat.card α 
+= 0
 -/
 theorem card_eq_or_dvd : Nat.card G = 1 ∨ p ∣ Nat.card G := by
   cases finite_or_infinite G
@@ -962,81 +644,66 @@ theorem card_eq_or_dvd : Nat.card G = 1 ∨ p ∣ Nat.card G := by
     · exact Or.inr ⟨p ^ n, by rw [pow_succ']⟩
   · rw [Nat.card_eq_zero_of_infinite]
     exact Or.inr ⟨0, rfl⟩
-
-/--
-theorem `nontrivial_iff_card` / 定理 `nontrivial_iff_card`
-
-English:
-theorem nontrivial_iff_card
-  given: [Finite G]
-  statement: Nontrivial G ↔ exists n > 0, Nat.card G = p ^ n
-  proof: ⟨fun hGnt =>
-    let ⟨k, hk⟩ := iff_card.1 hG
-    ⟨k,
-      Nat.pos_of_ne_zero fun hk0 => by
-        rw [hk0]; rw [pow_zero] at hk; exact Finite.one_lt_card.ne' hk,
-      hk⟩,
-    fun ⟨_, hk0, hk⟩ =>
-Finite.one_lt_card_iff_nontrivial.1
-      hk.symm ▸ one_lt_pow₀ (Fact.out (p := p.Prime)).one_lt (ne_of_gt hk0)⟩
-
-中文:
-定理 nontrivial_iff_card
-  条件: [有限 G]
-  结论: 非平凡 G ↔ 存在 n > 0, 自然数.card G = p ^ n
-  证明: ⟨fun hGnt =>
-    let ⟨k, hk⟩ := iff_card.1 hG
-    ⟨k,
-      Nat.pos_of_ne_zero fun hk0 => by
-        rw [hk0]; rw [pow_zero] at hk; exact Finite.one_lt_card.ne' hk,
-      hk⟩,
-    fun ⟨_, hk0, hk⟩ =>
-Finite.one_lt_card_iff_nontrivial.1
-      hk.symm ▸ one_lt_pow₀ (Fact.out (p := p.Prime)).one_lt (ne_of_gt hk0)⟩
-
-Depends on / 依赖: Fact.out, Finite, Finite.one_lt_card.ne, Finite.one_lt_card_iff_nontrivial, Nat.pos_of_ne_zero, hk.symm, iff_card, ne_of_gt, one_lt, one_lt_card, one_lt_card_iff_nontrivial, p.Prime, pos_of_ne_zero, pow_zero
+/-
+**IsPGroup.nontrivial_iff_card** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：nontrivial_iff_card [Finite G] : Nontrivial G ↔ exists n > 0, Nat.card G =
+ p ^ n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPGroup.iff_card`：iff_card [Fact p.Prime] [Finite G] : IsPGroup p G ↔ e
+xists n : Nat, Nat.card G = p ^ n
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Finite.one_lt_card`：one_lt_card [Finite α] [h : Nontrivial α] : 1 < Nat.
+card α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Finite.one_lt_card_iff_nontrivial`：one_lt_card_iff_nontrivial [Finite α]
+ : 1 < Nat.card α ↔ Nontrivial α
+· 使用定理 `one_lt_pow₀`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : Preo
+rder M₀] {a : M₀} [ZeroLEOneClass M₀] [PosMulMono M₀],   1 < a → ∀ {n : ℕ}, n ≠ 
+0…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem nontrivial_iff_card [Finite G] : Nontrivial G ↔ exists n > 0, Nat.card G = p ^ n :=
+theorem nontrivial_iff_card [Finite G] : Nontrivial G ↔ ∃ n > 0, Nat.card G = p ^ n :=
   ⟨fun hGnt =>
     let ⟨k, hk⟩ := iff_card.1 hG
     ⟨k,
       Nat.pos_of_ne_zero fun hk0 => by
-        rw [hk0]; rw [pow_zero] at hk; exact Finite.one_lt_card.ne' hk,
+        rw [hk0, pow_zero] at hk; exact Finite.one_lt_card.ne' hk,
       hk⟩,
     fun ⟨_, hk0, hk⟩ =>
-Finite.one_lt_card_iff_nontrivial.1
+    Finite.one_lt_card_iff_nontrivial.1 <|
       hk.symm ▸ one_lt_pow₀ (Fact.out (p := p.Prime)).one_lt (ne_of_gt hk0)⟩
 
 variable {α : Type*} [MulAction G α]
-
-/--
-theorem `card_orbit` / 定理 `card_orbit`
-
-English:
-theorem card_orbit
-  given: (a : α) [Finite (orbit G a)]
-  statement: exists n : Nat, Nat.card (orbit G a) = p ^ n
-  proof: by
-  let ϕ := orbitEquivQuotientStabilizer G a
-  have := Finite.of_equiv (orbit G a) ϕ
-  have := (stabilizer G a).finiteIndex_of_finite_quotient
-  rw [Nat.card_congr ϕ]
-  exact hG.index (stabilizer G a)
-
-中文:
-定理 card_orbit
-  条件: (a : α) [有限 (orbit G a)]
-  结论: 存在 n : 自然数, 自然数.card (orbit G a) = p ^ n
-  证明: by
-  let ϕ := orbitEquivQuotientStabilizer G a
-  have := Finite.of_equiv (orbit G a) ϕ
-  have := (stabilizer G a).finiteIndex_of_finite_quotient
-  rw [Nat.card_congr ϕ]
-  exact hG.index (stabilizer G a)
-
-Depends on / 依赖: Finite, Finite.of_equiv, Nat.card_congr, card_congr, finiteIndex_of_finite_quotient, hG.index, of_equiv, orbitEquivQuotientStabilizer, stabilizer
+/-
+**IsPGroup.card_orbit** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：card_orbit (a : α) [Finite (orbit G a)] : exists n : Nat, Nat.card (orbit 
+G a) = p ^ n
+参数：a : α；orbit G a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_equiv`：Finite.of_equiv (α : Sort*) [h : Finite α] (f : α ≃ β) 
+: Finite β
+· 使用定理 `Subgroup.finiteIndex_of_finite_quotient`：finiteIndex_of_finite_quotient 
+[Finite (G ⧸ H)] : FiniteIndex H
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `IsPGroup.index`：index (H : Subgroup G) [H.FiniteIndex] : exists n : Nat,
+ H.index = p ^ n
 -/
-theorem card_orbit (a : α) [Finite (orbit G a)] : exists n : Nat, Nat.card (orbit G a) = p ^ n := by
+theorem card_orbit (a : α) [Finite (orbit G a)] : ∃ n : ℕ, Nat.card (orbit G a) = p ^ n := by
   let ϕ := orbitEquivQuotientStabilizer G a
   have := Finite.of_equiv (orbit G a) ϕ
   have := (stabilizer G a).finiteIndex_of_finite_quotient
@@ -1045,87 +712,77 @@ theorem card_orbit (a : α) [Finite (orbit G a)] : exists n : Nat, Nat.card (orb
 
 variable (α) [Finite α]
 
-/--
-theorem `card_modEq_card_fixedPoints` / 定理 `card_modEq_card_fixedPoints`
+/-- If `G` is a `p`-group acting on a finite set `α`, then the number of fixed points
+  of the action is congruent mod `p` to the cardinality of `α` -/
+/-
+**IsPGroup.card_modEq_card_fixedPoints** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：card_modEq_card_fixedPoints : Nat.card α ≡ Nat.card (fixedPoints G α) [MOD
+ p]
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Fintype.card_sigma`：∀ {ι : Type u_8} {α : ι → Type u_7} [inst : Fintype 
+ι] [inst_1 : (i : ι) → Fintype (α i)],   Fintype.card (Sigma α) = ∑ i, Fintype.c
+ard (α i…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ZMod.natCast_eq_natCast_iff`：natCast_eq_natCast_iff (a b c : Nat) : (a :
+ ZMod c) = (b : ZMod c) ↔ a ≡ b [MOD c]
+· 使用引理 `Nat.cast_sum`：cast_sum [AddCommMonoidWithOne R] (s : Finset ι) (f : ι ->
+ Nat) : ↑(∑ x in s, f x : Nat) = ∑ x in s, (f x : R)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_bij_ne_zero`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_4} [
+inst : AddCommMonoid M] {s : Finset ι} {t : Finset κ} {f : ι → M}   {g : κ → M} 
+(i : (a : ι)…
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MulAction.mem_fixedPoints'`：mem_fixedPoints' {a : α} : a in fixedPoints 
+M α ↔ forall a', a' in orbit M a -> a' = a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Quotient.exact'`：exact' {a b : α} : (Quotient.mk'' a : Quotient s₁) = Qu
+otient.mk'' b -> s₁ a b
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `IsPGroup.card_orbit`：card_orbit (a : α) [Finite (orbit G a)] : exists n 
+: Nat, Nat.card (orbit G a) = p ^ n
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_pow`：∀ {α : Type u_1} [inst : Semiring α] (m n : ℕ), ↑(m ^ n) =
+ ↑m ^ n
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 41 条，此处仅展示前 30 条）
 
-English:
-theorem card_modEq_card_fixedPoints
-  statement: Nat.card α ≡ Nat.card (fixedPoints G α) [MOD p]
-  proof: by
-  have := Fintype.ofFinite α
-  have := Fintype.ofFinite (fixedPoints G α)
-  rw [Nat.card_eq_fintype_card]; rw [Nat.card_eq_fintype_card]
-  classical
-    calc
-      card α = card (Σ y : Quotient (orbitRel G α), { x // Quotient.mk'' x = y }) :=
-        card_congr (Equiv.sigmaFiberEquiv (@Quotient.mk'' _ (orbitRel G α))).symm
-      _ = ∑ a : Quotient (orbitRel G α), card { x // Quotient.mk'' x = a } := card_sigma
-      _ ≡ ∑ _a : fixedPoints G α, 1 [MOD p] := ?_
-      _ = _ := by simp
-    rw [← ZMod.natCast_eq_natCast_iff _ _ p]; rw [Nat.cast_sum]; rw [Nat.cast_sum]
-    have key :
-      forall x,
-        card { y // (Quotient.mk'' y : Quotient (orbitRel G α)) = Quotient.mk'' x } =
-          card (orbit G x) :=
-      fun x => by simp only [Quotient.eq'']; congr
-    refine
-      Eq.symm
-        (Finset.sum_bij_ne_zero (fun a _ _ => Quotient.mk'' a.1) (fun _ _ _ => Finset.mem_univ _)
-          (fun a₁ _ _ a₂ _ _ h =>
-            Subtype.ext (mem_fixedPoints'.mp a₂.2 a₁.1 (Quotient.exact' h)))
-          (fun b => Quotient.inductionOn' b fun b _ hb => ?_) fun a ha _ => by
-          rw [key]; rw [mem_fixedPoints_iff_card_orbit_eq_one.mp a.2])
-    obtain ⟨k, hk⟩ := hG.card_orbit b
-    rw [Nat.card_eq_fintype_card] at hk
-    have : k = 0 := by
-      contrapose! hb
-      simp [key, hk, hb]
-    exact
-⟨⟨b, mem_fixedPoints_iff_card_orbit_eq_one.2 by rw [hk, this, pow_zero]⟩,
-        Finset.mem_univ _, ne_of_eq_of_ne Nat.cast_one one_ne_zero, rfl⟩
-
-中文:
-定理 card_modEq_card_fixedPoints
-  结论: 自然数.card α ≡ 自然数.card (fixedPoints G α) [MOD p]
-  证明: by
-  have := Fintype.ofFinite α
-  have := Fintype.ofFinite (fixedPoints G α)
-  rw [Nat.card_eq_fintype_card]; rw [Nat.card_eq_fintype_card]
-  classical
-    calc
-      card α = card (Σ y : Quotient (orbitRel G α), { x // Quotient.mk'' x = y }) :=
-        card_congr (Equiv.sigmaFiberEquiv (@Quotient.mk'' _ (orbitRel G α))).symm
-      _ = ∑ a : Quotient (orbitRel G α), card { x // Quotient.mk'' x = a } := card_sigma
-      _ ≡ ∑ _a : fixedPoints G α, 1 [MOD p] := ?_
-      _ = _ := by simp
-    rw [← ZMod.natCast_eq_natCast_iff _ _ p]; rw [Nat.cast_sum]; rw [Nat.cast_sum]
-    have key :
-      forall x,
-        card { y // (Quotient.mk'' y : Quotient (orbitRel G α)) = Quotient.mk'' x } =
-          card (orbit G x) :=
-      fun x => by simp only [Quotient.eq'']; congr
-    refine
-      Eq.symm
-        (Finset.sum_bij_ne_zero (fun a _ _ => Quotient.mk'' a.1) (fun _ _ _ => Finset.mem_univ _)
-          (fun a₁ _ _ a₂ _ _ h =>
-            Subtype.ext (mem_fixedPoints'.mp a₂.2 a₁.1 (Quotient.exact' h)))
-          (fun b => Quotient.inductionOn' b fun b _ hb => ?_) fun a ha _ => by
-          rw [key]; rw [mem_fixedPoints_iff_card_orbit_eq_one.mp a.2])
-    obtain ⟨k, hk⟩ := hG.card_orbit b
-    rw [Nat.card_eq_fintype_card] at hk
-    have : k = 0 := by
-      contrapose! hb
-      simp [key, hk, hb]
-    exact
-⟨⟨b, mem_fixedPoints_iff_card_orbit_eq_one.2 by rw [hk, this, pow_zero]⟩,
-        Finset.mem_univ _, ne_of_eq_of_ne Nat.cast_one one_ne_zero, rfl⟩
-
-Depends on / 依赖: Equiv.sigmaFiberEquiv, Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, Nat.cast, Quotient, Quotient.mk, ZMod.natCast_eq_natCast_iff, card_congr, card_eq_fintype_card, card_sigma, classical, fixedPoints, natCast_eq_natCast_iff, ofFinite, orbitRel, sigmaFiberEquiv
+--- 原说明 ---
+If `G` is a `p`-group acting on a finite set `α`, then the number of fixed point
+s
+  of the action is congruent mod `p` to the cardinality of `α`
 -/
 theorem card_modEq_card_fixedPoints : Nat.card α ≡ Nat.card (fixedPoints G α) [MOD p] := by
   have := Fintype.ofFinite α
   have := Fintype.ofFinite (fixedPoints G α)
-  rw [Nat.card_eq_fintype_card]; rw [Nat.card_eq_fintype_card]
+  rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
   classical
     calc
       card α = card (Σ y : Quotient (orbitRel G α), { x // Quotient.mk'' x = y }) :=
@@ -1133,9 +790,9 @@ theorem card_modEq_card_fixedPoints : Nat.card α ≡ Nat.card (fixedPoints G α
       _ = ∑ a : Quotient (orbitRel G α), card { x // Quotient.mk'' x = a } := card_sigma
       _ ≡ ∑ _a : fixedPoints G α, 1 [MOD p] := ?_
       _ = _ := by simp
-    rw [← ZMod.natCast_eq_natCast_iff _ _ p]; rw [Nat.cast_sum]; rw [Nat.cast_sum]
+    rw [← ZMod.natCast_eq_natCast_iff _ _ p, Nat.cast_sum, Nat.cast_sum]
     have key :
-      forall x,
+      ∀ x,
         card { y // (Quotient.mk'' y : Quotient (orbitRel G α)) = Quotient.mk'' x } =
           card (orbit G x) :=
       fun x => by simp only [Quotient.eq'']; congr
@@ -1145,86 +802,103 @@ theorem card_modEq_card_fixedPoints : Nat.card α ≡ Nat.card (fixedPoints G α
           (fun a₁ _ _ a₂ _ _ h =>
             Subtype.ext (mem_fixedPoints'.mp a₂.2 a₁.1 (Quotient.exact' h)))
           (fun b => Quotient.inductionOn' b fun b _ hb => ?_) fun a ha _ => by
-          rw [key]; rw [mem_fixedPoints_iff_card_orbit_eq_one.mp a.2])
+          rw [key, mem_fixedPoints_iff_card_orbit_eq_one.mp a.2])
     obtain ⟨k, hk⟩ := hG.card_orbit b
     rw [Nat.card_eq_fintype_card] at hk
     have : k = 0 := by
       contrapose! hb
       simp [key, hk, hb]
     exact
-⟨⟨b, mem_fixedPoints_iff_card_orbit_eq_one.2 by rw [hk, this, pow_zero]⟩,
+      ⟨⟨b, mem_fixedPoints_iff_card_orbit_eq_one.2 <| by rw [hk, this, pow_zero]⟩,
         Finset.mem_univ _, ne_of_eq_of_ne Nat.cast_one one_ne_zero, rfl⟩
 
-/--
-theorem `nonempty_fixed_point_of_prime_not_dvd_card` / 定理 `nonempty_fixed_point_of_prime_not_dvd_card`
+/-- If a p-group acts on `α` and the cardinality of `α` is not a multiple
+  of `p` then the action has a fixed point. -/
+/-
+**IsPGroup.nonempty_fixed_point_of_prime_not_dvd_card** 是 Mathlib 中的一个定理，位于命名空间 
+`IsPGroup`。
+形式化陈述：nonempty_fixed_point_of_prime_not_dvd_card (α) [MulAction G α] (hpα : ¬p ∣
+ Nat.card α) : (fixedPoints G α).Nonempty
+参数：α；hpα : ¬p ∣ Nat.card α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.finite_of_card_ne_zero`：finite_of_card_ne_zero (h : Nat.card α != 0)
+ : Finite α
+· 使用定理 `dvd_zero`：dvd_zero (a : α) : a ∣ 0
+· 使用定理 `Set.Nonempty.of_subtype`：∀ {α : Type u} {s : Set α} [Nonempty ↑s], s.Non
+empty
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finite.card_pos_iff`：Finite.card_pos_iff [Finite α] : 0 < Nat.card α ↔ N
+onempty α
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Nat.modEq_zero_iff_dvd`：modEq_zero_iff_dvd : a ≡ 0 [MOD n] ↔ n ∣ a
+· 使用定理 `IsPGroup.card_modEq_card_fixedPoints`：card_modEq_card_fixedPoints : Nat.
+card α ≡ Nat.card (fixedPoints G α) [MOD p]
 
-English:
-theorem nonempty_fixed_point_of_prime_not_dvd_card
-  given: (α) [MulAction G α] (hpα : ¬p ∣ Nat.card α)
-  proof: have : Finite α := Nat.finite_of_card_ne_zero (fun h => (h ▸ hpα) (dvd_zero p))
-  @Set.Nonempty.of_subtype _ _
-    (by
-      rw [← Finite.card_pos_iff]; rw [pos_iff_ne_zero]
-      contrapose hpα
-      rw [← Nat.modEq_zero_iff_dvd]; rw [← hpα]
-      exact hG.card_modEq_card_fixedPoints α)
-
-中文:
-定理 nonempty_fixed_point_of_prime_not_dvd_card
-  条件: (α) [乘法作用 G α] (hpα : ¬p ∣ 自然数.card α)
-  证明: have : Finite α := Nat.finite_of_card_ne_zero (fun h => (h ▸ hpα) (dvd_zero p))
-  @Set.Nonempty.of_subtype _ _
-    (by
-      rw [← Finite.card_pos_iff]; rw [pos_iff_ne_zero]
-      contrapose hpα
-      rw [← Nat.modEq_zero_iff_dvd]; rw [← hpα]
-      exact hG.card_modEq_card_fixedPoints α)
-
-Depends on / 依赖: Finite, Finite.card_pos_iff, Nat.finite_of_card_ne_zero, Nat.modEq_zero_iff_dvd, Nonempty, Set.Nonempty.of_subtype, card_modEq_card_fixedPoints, card_pos_iff, contrapose, dvd_zero, finite_of_card_ne_zero, hG.card_modEq_card_fixedPoints, modEq_zero_iff_dvd, of_subtype, pos_iff_ne_zero
+--- 原说明 ---
+If a p-group acts on `α` and the cardinality of `α` is not a multiple
+  of `p` then the action has a fixed point.
 -/
 theorem nonempty_fixed_point_of_prime_not_dvd_card (α) [MulAction G α] (hpα : ¬p ∣ Nat.card α) :
     (fixedPoints G α).Nonempty :=
-  have : Finite α := Nat.finite_of_card_ne_zero (fun h => (h ▸ hpα) (dvd_zero p))
+  have : Finite α := Nat.finite_of_card_ne_zero (fun h ↦ (h ▸ hpα) (dvd_zero p))
   @Set.Nonempty.of_subtype _ _
     (by
-      rw [← Finite.card_pos_iff]; rw [pos_iff_ne_zero]
+      rw [← Finite.card_pos_iff, pos_iff_ne_zero]
       contrapose hpα
-      rw [← Nat.modEq_zero_iff_dvd]; rw [← hpα]
+      rw [← Nat.modEq_zero_iff_dvd, ← hpα]
       exact hG.card_modEq_card_fixedPoints α)
 
-/--
-theorem `exists_fixed_point_of_prime_dvd_card_of_fixed_point` / 定理 `exists_fixed_point_of_prime_dvd_card_of_fixed_point`
+/-- If a p-group acts on `α` and the cardinality of `α` is a multiple
+  of `p`, and the action has one fixed point, then it has another fixed point. -/
+/-
+**IsPGroup.exists_fixed_point_of_prime_dvd_card_of_fixed_point** 是 Mathlib 中的一个定
+理，位于命名空间 `IsPGroup`。
+形式化陈述：exists_fixed_point_of_prime_dvd_card_of_fixed_point (hpα : p ∣ Nat.card α)
+ {a : α} (ha : a in fixedPoints G α) : exists b, b in fixedPoints G α ∧ a != b
+参数：hpα : p ∣ Nat.card α；ha : a in fixedPoints G α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.modEq_zero_iff_dvd`：modEq_zero_iff_dvd : a ≡ 0 [MOD n] ↔ n ∣ a
+· 使用定理 `Nat.ModEq.trans`：∀ {n a b c : ℕ}, a ≡ b [MOD n] → b ≡ c [MOD n] → a ≡ c 
+[MOD n]
+· 使用定理 `Nat.ModEq.symm`：∀ {n a b : ℕ}, a ≡ b [MOD n] → b ≡ a [MOD n]
+· 使用定理 `IsPGroup.card_modEq_card_fixedPoints`：card_modEq_card_fixedPoints : Nat.
+card α ≡ Nat.card (fixedPoints G α) [MOD p]
+· 使用定理 `Dvd.dvd.modEq_zero_nat`：∀ {n a : ℕ}, n ∣ a → a ≡ 0 [MOD n]
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.Prime.one_lt`：∀ {p : ℕ}, Nat.Prime p → 1 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finite.card_pos_iff`：Finite.card_pos_iff [Finite α] : 0 < Nat.card α ↔ N
+onempty α
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finite.one_lt_card_iff_nontrivial`：one_lt_card_iff_nontrivial [Finite α]
+ : 1 < Nat.card α ↔ Nontrivial α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem exists_fixed_point_of_prime_dvd_card_of_fixed_point
-  statement: (hpα : p ∣ Nat.card α) {a : α}
-  proof: by
-  have hpf : p ∣ Nat.card (fixedPoints G α) :=
-    Nat.modEq_zero_iff_dvd.mp ((hG.card_modEq_card_fixedPoints α).symm.trans hpα.modEq_zero_nat)
-  have hα : 1 < Nat.card (fixedPoints G α) :=
-    (Fact.out (p := p.Prime)).one_lt.trans_le (Nat.le_of_dvd (Finite.card_pos_iff.2 ⟨⟨a, ha⟩⟩) hpf)
-  rw [Finite.one_lt_card_iff_nontrivial] at hα
-  exact
-    let ⟨⟨b, hb⟩, hba⟩ := exists_ne (⟨a, ha⟩ : fixedPoints G α)
-    ⟨b, hb, fun hab => hba (by simp_rw [hab])⟩
-
-中文:
-定理 存在_fixed_point_of_prime_dvd_card_of_fixed_point
-  结论: (hpα : p ∣ 自然数.card α) {a : α}
-  证明: by
-  have hpf : p ∣ Nat.card (fixedPoints G α) :=
-    Nat.modEq_zero_iff_dvd.mp ((hG.card_modEq_card_fixedPoints α).symm.trans hpα.modEq_zero_nat)
-  have hα : 1 < Nat.card (fixedPoints G α) :=
-    (Fact.out (p := p.Prime)).one_lt.trans_le (Nat.le_of_dvd (Finite.card_pos_iff.2 ⟨⟨a, ha⟩⟩) hpf)
-  rw [Finite.one_lt_card_iff_nontrivial] at hα
-  exact
-    let ⟨⟨b, hb⟩, hba⟩ := exists_ne (⟨a, ha⟩ : fixedPoints G α)
-    ⟨b, hb, fun hab => hba (by simp_rw [hab])⟩
-
-Depends on / 依赖: Fact.out, Finite, Finite.card_pos_iff, Finite.one_lt_card_iff_nontrivial, Nat.card, Nat.le_of_dvd, Nat.modEq_zero_iff_dvd.mp, card_modEq_card_fixedPoints, card_pos_iff, exists_ne, fixedPoints, hG.card_modEq_card_fixedPoints, le_of_dvd, modEq_zero_iff_dvd, modEq_zero_nat, one_lt, one_lt.trans_le, one_lt_card_iff_nontrivial, p.Prime, simp_rw
+--- 原说明 ---
+If a p-group acts on `α` and the cardinality of `α` is a multiple
+  of `p`, and the action has one fixed point, then it has another fixed point.
 -/
 theorem exists_fixed_point_of_prime_dvd_card_of_fixed_point (hpα : p ∣ Nat.card α) {a : α}
-    (ha : a in fixedPoints G α) : exists b, b in fixedPoints G α ∧ a != b := by
+    (ha : a ∈ fixedPoints G α) : ∃ b, b ∈ fixedPoints G α ∧ a ≠ b := by
   have hpf : p ∣ Nat.card (fixedPoints G α) :=
     Nat.modEq_zero_iff_dvd.mp ((hG.card_modEq_card_fixedPoints α).symm.trans hpα.modEq_zero_nat)
   have hα : 1 < Nat.card (fixedPoints G α) :=
@@ -1233,37 +907,34 @@ theorem exists_fixed_point_of_prime_dvd_card_of_fixed_point (hpα : p ∣ Nat.ca
   exact
     let ⟨⟨b, hb⟩, hba⟩ := exists_ne (⟨a, ha⟩ : fixedPoints G α)
     ⟨b, hb, fun hab => hba (by simp_rw [hab])⟩
-
-/--
-theorem `center_nontrivial` / 定理 `center_nontrivial`
-
-English:
-theorem center_nontrivial
-  given: [Nontrivial G] [Finite G]
-  statement: Nontrivial (Subgroup.center G)
-  proof: by
-  have := (hG.of_equiv ConjAct.toConjAct).exists_fixed_point_of_prime_dvd_card_of_fixed_point G
-  rw [ConjAct.fixedPoints_eq_center] at this
-  have dvd : p ∣ Nat.card G := by
-    obtain ⟨n, hn0, hn⟩ := hG.nontrivial_iff_card.mp inferInstance
-    exact hn.symm ▸ dvd_pow_self _ (ne_of_gt hn0)
-  obtain ⟨g, hg⟩ := this dvd (Subgroup.center G).one_mem
-  exact ⟨⟨1, ⟨g, hg.1⟩, mt Subtype.ext_iff.mp hg.2⟩⟩
-
-中文:
-定理 center_nontrivial
-  条件: [非平凡 G] [有限 G]
-  结论: 非平凡 (子群.center G)
-  证明: by
-  have := (hG.of_equiv ConjAct.toConjAct).exists_fixed_point_of_prime_dvd_card_of_fixed_point G
-  rw [ConjAct.fixedPoints_eq_center] at this
-  have dvd : p ∣ Nat.card G := by
-    obtain ⟨n, hn0, hn⟩ := hG.nontrivial_iff_card.mp inferInstance
-    exact hn.symm ▸ dvd_pow_self _ (ne_of_gt hn0)
-  obtain ⟨g, hg⟩ := this dvd (Subgroup.center G).one_mem
-  exact ⟨⟨1, ⟨g, hg.1⟩, mt Subtype.ext_iff.mp hg.2⟩⟩
-
-Depends on / 依赖: ConjAct, ConjAct.fixedPoints_eq_center, ConjAct.toConjAct, Nat.card, Subgroup, Subgroup.center, Subtype, Subtype.ext_iff.mp, center, dvd_pow_self, exists_fixed_point_of_prime_dvd_card_of_fixed_point, ext_iff, fixedPoints_eq_center, hG.nontrivial_iff_card.mp, hG.of_equiv, hn.symm, ne_of_gt, nontrivial_iff_card, of_equiv, one_mem
+/-
+**IsPGroup.center_nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：center_nontrivial [Nontrivial G] [Finite G] : Nontrivial (Subgroup.center 
+G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.exists_fixed_point_of_prime_dvd_card_of_fixed_point`：exists_fix
+ed_point_of_prime_dvd_card_of_fixed_point (hpα : p ∣ Nat.card α) {a : α} (ha : a
+ in fixedPoints G α) : exists b, b in fixedPoints …
+· 使用定理 `IsPGroup.of_equiv`：of_equiv {H : Type*} [Group H] (ϕ : G ≃* H) : IsPGrou
+p p H
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPGroup.nontrivial_iff_card`：nontrivial_iff_card [Finite G] : Nontrivia
+l G ↔ exists n > 0, Nat.card G = p ^ n
+· 使用引理 `dvd_pow_self`：dvd_pow_self (a : α) {n : Nat} (hn : n != 0) : a ∣ a ^ n
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ConjAct.fixedPoints_eq_center`：fixedPoints_eq_center : fixedPoints (Conj
+Act G) G = center G
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem center_nontrivial [Nontrivial G] [Finite G] : Nontrivial (Subgroup.center G) := by
   have := (hG.of_equiv ConjAct.toConjAct).exists_fixed_point_of_prime_dvd_card_of_fixed_point G
@@ -1273,29 +944,23 @@ theorem center_nontrivial [Nontrivial G] [Finite G] : Nontrivial (Subgroup.cente
     exact hn.symm ▸ dvd_pow_self _ (ne_of_gt hn0)
   obtain ⟨g, hg⟩ := this dvd (Subgroup.center G).one_mem
   exact ⟨⟨1, ⟨g, hg.1⟩, mt Subtype.ext_iff.mp hg.2⟩⟩
-
-/--
-theorem `bot_lt_center` / 定理 `bot_lt_center`
-
-English:
-theorem bot_lt_center
-  given: [Nontrivial G] [Finite G]
-  statement: ⊥ < Subgroup.center G
-  proof: by
-  have := center_nontrivial hG
-  exact
-      bot_lt_iff_ne_bot.mpr ((Subgroup.center G).one_lt_card_iff_ne_bot.mp Finite.one_lt_card)
-
-中文:
-定理 bot_lt_center
-  条件: [非平凡 G] [有限 G]
-  结论: ⊥ < 子群.center G
-  证明: by
-  have := center_nontrivial hG
-  exact
-      bot_lt_iff_ne_bot.mpr ((Subgroup.center G).one_lt_card_iff_ne_bot.mp Finite.one_lt_card)
-
-Depends on / 依赖: Finite, Finite.one_lt_card, Subgroup, Subgroup.center, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, center, center_nontrivial, one_lt_card, one_lt_card_iff_ne_bot, one_lt_card_iff_ne_bot.mp
+/-
+**IsPGroup.bot_lt_center** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：bot_lt_center [Nontrivial G] [Finite G] : ⊥ < Subgroup.center G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.center_nontrivial`：center_nontrivial [Nontrivial G] [Finite G] 
+: Nontrivial (Subgroup.center G)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.one_lt_card_iff_ne_bot`：one_lt_card_iff_ne_bot [Finite H] : 1 <
+ Nat.card H ↔ H != ⊥
+· 使用定理 `Subgroup.instFiniteSubtypeMem`：∀ {G : Type u_1} [inst : Group G] (K : Su
+bgroup G) [Finite G], Finite ↥K
+· 使用定理 `Finite.one_lt_card`：one_lt_card [Finite α] [h : Nontrivial α] : 1 < Nat.
+card α
 -/
 theorem bot_lt_center [Nontrivial G] [Finite G] : ⊥ < Subgroup.center G := by
   have := center_nontrivial hG
@@ -1304,267 +969,227 @@ theorem bot_lt_center [Nontrivial G] [Finite G] : ⊥ < Subgroup.center G := by
 
 end GIsPGroup
 
-/--
-theorem `to_le` / 定理 `to_le`
-
-English:
-theorem to_le
-  given: {H K : Subgroup G} (hK : IsPGroup p K) (hHK : H <= K)
-  statement: IsPGroup p H
-  proof: hK.of_injective (Subgroup.inclusion hHK) fun a b h =>
-    Subtype.ext (by
-      change ((Subgroup.inclusion hHK) a : G) = (Subgroup.inclusion hHK) b
-      apply Subtype.ext_iff.mp h)
-
-中文:
-定理 to_le
-  条件: {H K : 子群 G} (hK : 是p群 p K) (hHK : H <= K)
-  结论: 是p群 p H
-  证明: hK.of_injective (Subgroup.inclusion hHK) fun a b h =>
-    Subtype.ext (by
-      change ((Subgroup.inclusion hHK) a : G) = (Subgroup.inclusion hHK) b
-      apply Subtype.ext_iff.mp h)
-
-Depends on / 依赖: Subgroup, Subgroup.inclusion, Subtype, Subtype.ext, Subtype.ext_iff.mp, ext_iff, hK.of_injective, inclusion, of_injective
+/-
+**IsPGroup.to_le** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_le {H K : Subgroup G} (hK : IsPGroup p K) (hHK : H <= K) : IsPGroup p H
+参数：hK : IsPGroup p K；hHK : H <= K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.of_injective`：of_injective {H : Type*} [Group H] (ϕ : H ->* G) 
+(hϕ : Function.Injective ϕ) : IsPGroup p H
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
 -/
-theorem to_le {H K : Subgroup G} (hK : IsPGroup p K) (hHK : H <= K) : IsPGroup p H :=
+theorem to_le {H K : Subgroup G} (hK : IsPGroup p K) (hHK : H ≤ K) : IsPGroup p H :=
   hK.of_injective (Subgroup.inclusion hHK) fun a b h =>
     Subtype.ext (by
       change ((Subgroup.inclusion hHK) a : G) = (Subgroup.inclusion hHK) b
       apply Subtype.ext_iff.mp h)
-
-/--
-theorem `to_inf_left` / 定理 `to_inf_left`
-
-English:
-theorem to_inf_left
-  given: {H K : Subgroup G} (hH : IsPGroup p H)
-  statement: IsPGroup p (H ⊓ K : Subgroup G)
-  proof: hH.to_le inf_le_left
-
-中文:
-定理 to_inf_left
-  条件: {H K : 子群 G} (hH : 是p群 p H)
-  结论: 是p群 p (H ⊓ K : 子群 G)
-  证明: hH.to_le inf_le_left
-
-Depends on / 依赖: hH.to_le, inf_le_left, to_le
+/-
+**IsPGroup.to_inf_left** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_inf_left {H K : Subgroup G} (hH : IsPGroup p H) : IsPGroup p (H ⊓ K : S
+ubgroup G)
+参数：hH : IsPGroup p H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.to_le`：to_le {H K : Subgroup G} (hK : IsPGroup p K) (hHK : H <=
+ K) : IsPGroup p H
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
 -/
 theorem to_inf_left {H K : Subgroup G} (hH : IsPGroup p H) : IsPGroup p (H ⊓ K : Subgroup G) :=
   hH.to_le inf_le_left
-
-/--
-theorem `to_inf_right` / 定理 `to_inf_right`
-
-English:
-theorem to_inf_right
-  given: {H K : Subgroup G} (hK : IsPGroup p K)
-  statement: IsPGroup p (H ⊓ K : Subgroup G)
-  proof: hK.to_le inf_le_right
-
-中文:
-定理 to_inf_right
-  条件: {H K : 子群 G} (hK : 是p群 p K)
-  结论: 是p群 p (H ⊓ K : 子群 G)
-  证明: hK.to_le inf_le_right
-
-Depends on / 依赖: hK.to_le, inf_le_right, to_le
+/-
+**IsPGroup.to_inf_right** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_inf_right {H K : Subgroup G} (hK : IsPGroup p K) : IsPGroup p (H ⊓ K : 
+Subgroup G)
+参数：hK : IsPGroup p K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.to_le`：to_le {H K : Subgroup G} (hK : IsPGroup p K) (hHK : H <=
+ K) : IsPGroup p H
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
 -/
 theorem to_inf_right {H K : Subgroup G} (hK : IsPGroup p K) : IsPGroup p (H ⊓ K : Subgroup G) :=
   hK.to_le inf_le_right
-
-/--
-theorem `map` / 定理 `map`
-
-English:
-theorem map
-  given: {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : G ->* K)
-  proof: by
-  rw [← H.range_subtype]; rw [MonoidHom.map_range]
-  exact hH.of_surjective (ϕ.domRestrict H).rangeRestrict (ϕ.domRestrict H).rangeRestrict_surjective
-
-中文:
-定理 map
-  条件: {H : 子群 G} (hH : 是p群 p H) {K : 类型} [群 K] (ϕ : G ->* K)
-  证明: by
-  rw [← H.range_subtype]; rw [MonoidHom.map_range]
-  exact hH.of_surjective (ϕ.domRestrict H).rangeRestrict (ϕ.domRestrict H).rangeRestrict_surjective
-
-Depends on / 依赖: H.range_subtype, MonoidHom, MonoidHom.map_range, domRestrict, hH.of_surjective, map_range, of_surjective, rangeRestrict, rangeRestrict_surjective, range_subtype
+/-
+**IsPGroup.map** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：map {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : G ->* 
+K) : IsPGroup p (H.map ϕ)
+参数：hH : IsPGroup p H；ϕ : G ->* K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.range_subtype`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup 
+G), H.subtype.range = H
+· 使用定理 `MonoidHom.map_range`：map_range (g : N ->* P) (f : G ->* N) : f.range.map
+ g = (g.comp f).range
+· 使用定理 `IsPGroup.of_surjective`：of_surjective {H : Type*} [Group H] (ϕ : G ->* H
+) (hϕ : Function.Surjective ϕ) : IsPGroup p H
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `MonoidHom.rangeRestrict_surjective`：rangeRestrict_surjective (f : G ->* 
+N) : Function.Surjective f.rangeRestrict
 -/
-theorem map {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : G ->* K) :
+theorem map {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : G →* K) :
     IsPGroup p (H.map ϕ) := by
-  rw [← H.range_subtype]; rw [MonoidHom.map_range]
+  rw [← H.range_subtype, MonoidHom.map_range]
   exact hH.of_surjective (ϕ.domRestrict H).rangeRestrict (ϕ.domRestrict H).rangeRestrict_surjective
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `comap_of_ker_isPGroup` / 定理 `comap_of_ker_isPGroup`
-
-English:
-theorem comap_of_ker_isPGroup
-  statement: {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K]
-  proof: by
-  intro g
-  obtain ⟨j, hj⟩ := hH ⟨ϕ g.1, g.2⟩
-  rw [Subtype.ext_iff]; rw [H.coe_pow]; rw [Subtype.coe_mk]; rw [← ϕ.map_pow] at hj
-  obtain ⟨k, hk⟩ := hϕ ⟨g.1 ^ p ^ j, hj⟩
-  rw [Subtype.ext_iff]; rw [ϕ.ker.coe_pow]; rw [Subtype.coe_mk]; rw [← pow_mul]; rw [← pow_add] at hk
-  exact ⟨j + k, by rwa [Subtype.ext_iff, (H.comap ϕ).coe_pow]⟩
-
-中文:
-定理 comap_of_ker_isPGroup
-  结论: {H : 子群 G} (hH : 是p群 p H) {K : 类型} [群 K]
-  证明: by
-  intro g
-  obtain ⟨j, hj⟩ := hH ⟨ϕ g.1, g.2⟩
-  rw [Subtype.ext_iff]; rw [H.coe_pow]; rw [Subtype.coe_mk]; rw [← ϕ.map_pow] at hj
-  obtain ⟨k, hk⟩ := hϕ ⟨g.1 ^ p ^ j, hj⟩
-  rw [Subtype.ext_iff]; rw [ϕ.ker.coe_pow]; rw [Subtype.coe_mk]; rw [← pow_mul]; rw [← pow_add] at hk
-  exact ⟨j + k, by rwa [Subtype.ext_iff, (H.comap ϕ).coe_pow]⟩
-
-Depends on / 依赖: H.coe_pow, H.comap, Subtype, Subtype.coe_mk, Subtype.ext_iff, coe_mk, coe_pow, ext_iff, ker.coe_pow, map_pow, pow_add, pow_mul
+/-
+**IsPGroup.comap_of_ker_isPGroup** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：comap_of_ker_isPGroup {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Gr
+oup K] (ϕ : K ->* G) (hϕ : IsPGroup p ϕ.ker) : IsPGroup p (H.comap ϕ)
+参数：hH : IsPGroup p H；ϕ : K ->* G；hϕ : IsPGroup p ϕ.ker。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `Subgroup.coe_pow`：coe_pow (x : H) (n : Nat) : ((x ^ n : H) : G) = (x : G
+) ^ n
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
 -/
 theorem comap_of_ker_isPGroup {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K]
-    (ϕ : K ->* G) (hϕ : IsPGroup p ϕ.ker) : IsPGroup p (H.comap ϕ) := by
+    (ϕ : K →* G) (hϕ : IsPGroup p ϕ.ker) : IsPGroup p (H.comap ϕ) := by
   intro g
   obtain ⟨j, hj⟩ := hH ⟨ϕ g.1, g.2⟩
-  rw [Subtype.ext_iff]; rw [H.coe_pow]; rw [Subtype.coe_mk]; rw [← ϕ.map_pow] at hj
+  rw [Subtype.ext_iff, H.coe_pow, Subtype.coe_mk, ← ϕ.map_pow] at hj
   obtain ⟨k, hk⟩ := hϕ ⟨g.1 ^ p ^ j, hj⟩
-  rw [Subtype.ext_iff]; rw [ϕ.ker.coe_pow]; rw [Subtype.coe_mk]; rw [← pow_mul]; rw [← pow_add] at hk
+  rw [Subtype.ext_iff, ϕ.ker.coe_pow, Subtype.coe_mk, ← pow_mul, ← pow_add] at hk
   exact ⟨j + k, by rwa [Subtype.ext_iff, (H.comap ϕ).coe_pow]⟩
-
-/--
-theorem `ker_isPGroup_of_injective` / 定理 `ker_isPGroup_of_injective`
-
-English:
-theorem ker_isPGroup_of_injective
-  given: {K : Type*} [Group K] {ϕ : K ->* G} (hϕ : Function.Injective ϕ)
-  proof: (congr_arg (fun Q : Subgroup K => IsPGroup p Q) (ϕ.ker_eq_bot hϕ)).mpr IsPGroup.of_bot
-
-中文:
-定理 ker_isPGroup_of_injective
-  条件: {K : 类型} [群 K] {ϕ : K ->* G} (hϕ : 函数.单射 ϕ)
-  证明: (congr_arg (fun Q : Subgroup K => IsPGroup p Q) (ϕ.ker_eq_bot hϕ)).mpr IsPGroup.of_bot
-
-Depends on / 依赖: IsPGroup, IsPGroup.of_bot, Subgroup, congr_arg, ker_eq_bot, of_bot
+/-
+**IsPGroup.ker_isPGroup_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：ker_isPGroup_of_injective {K : Type*} [Group K] {ϕ : K ->* G} (hϕ : Functi
+on.Injective ϕ) : IsPGroup p ϕ.ker
+参数：hϕ : Function.Injective ϕ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `MonoidHom.ker_eq_bot`：ker_eq_bot (f : G ->* M) (hf : Function.Injective 
+f) : f.ker = ⊥
+· 使用定理 `IsPGroup.of_bot`：of_bot : IsPGroup p (⊥ : Subgroup G)
 -/
-theorem ker_isPGroup_of_injective {K : Type*} [Group K] {ϕ : K ->* G} (hϕ : Function.Injective ϕ) :
+theorem ker_isPGroup_of_injective {K : Type*} [Group K] {ϕ : K →* G} (hϕ : Function.Injective ϕ) :
     IsPGroup p ϕ.ker :=
   (congr_arg (fun Q : Subgroup K => IsPGroup p Q) (ϕ.ker_eq_bot hϕ)).mpr IsPGroup.of_bot
-
-/--
-theorem `comap_of_injective` / 定理 `comap_of_injective`
-
-English:
-theorem comap_of_injective
-  statement: {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : K ->* G)
-  proof: hH.comap_of_ker_isPGroup ϕ (ker_isPGroup_of_injective hϕ)
-
-中文:
-定理 comap_of_injective
-  结论: {H : 子群 G} (hH : 是p群 p H) {K : 类型} [群 K] (ϕ : K ->* G)
-  证明: hH.comap_of_ker_isPGroup ϕ (ker_isPGroup_of_injective hϕ)
-
-Depends on / 依赖: comap_of_ker_isPGroup, hH.comap_of_ker_isPGroup, ker_isPGroup_of_injective
+/-
+**IsPGroup.comap_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：comap_of_injective {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group
+ K] (ϕ : K ->* G) (hϕ : Function.Injective ϕ) : IsPGroup p (H.comap ϕ)
+参数：hH : IsPGroup p H；ϕ : K ->* G；hϕ : Function.Injective ϕ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.comap_of_ker_isPGroup`：comap_of_ker_isPGroup {H : Subgroup G} (
+hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : K ->* G) (hϕ : IsPGroup p ϕ.ker) :
+ IsPGroup p (H.comap…
+· 使用定理 `IsPGroup.ker_isPGroup_of_injective`：ker_isPGroup_of_injective {K : Type*
+} [Group K] {ϕ : K ->* G} (hϕ : Function.Injective ϕ) : IsPGroup p ϕ.ker
 -/
-theorem comap_of_injective {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : K ->* G)
+theorem comap_of_injective {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : K →* G)
     (hϕ : Function.Injective ϕ) : IsPGroup p (H.comap ϕ) :=
   hH.comap_of_ker_isPGroup ϕ (ker_isPGroup_of_injective hϕ)
-
-/--
-theorem `comap_subtype` / 定理 `comap_subtype`
-
-English:
-theorem comap_subtype
-  given: {H : Subgroup G} (hH : IsPGroup p H) {K : Subgroup G}
-  proof: hH.comap_of_injective K.subtype Subtype.coe_injective
-
-中文:
-定理 comap_subtype
-  条件: {H : 子群 G} (hH : 是p群 p H) {K : 子群 G}
-  证明: hH.comap_of_injective K.subtype Subtype.coe_injective
-
-Depends on / 依赖: K.subtype, Subtype, Subtype.coe_injective, coe_injective, comap_of_injective, hH.comap_of_injective, subtype
+/-
+**IsPGroup.comap_subtype** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：comap_subtype {H : Subgroup G} (hH : IsPGroup p H) {K : Subgroup G} : IsPG
+roup p (H.comap K.subtype)
+参数：hH : IsPGroup p H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.comap_of_injective`：comap_of_injective {H : Subgroup G} (hH : I
+sPGroup p H) {K : Type*} [Group K] (ϕ : K ->* G) (hϕ : Function.Injective ϕ) : I
+sPGroup p (H.coma…
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
 theorem comap_subtype {H : Subgroup G} (hH : IsPGroup p H) {K : Subgroup G} :
     IsPGroup p (H.comap K.subtype) :=
   hH.comap_of_injective K.subtype Subtype.coe_injective
-
-/--
-theorem `to_sup_of_normal_right` / 定理 `to_sup_of_normal_right`
-
-English:
-theorem to_sup_of_normal_right
-  statement: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
-  proof: by
-  rw [← QuotientGroup.ker_mk' K]; rw [← Subgroup.comap_map_eq]
-  apply (hH.map (QuotientGroup.mk' K)).comap_of_ker_isPGroup
-  rwa [QuotientGroup.ker_mk']
-
-中文:
-定理 to_sup_of_normal_right
-  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
-  证明: by
-  rw [← QuotientGroup.ker_mk' K]; rw [← Subgroup.comap_map_eq]
-  apply (hH.map (QuotientGroup.mk' K)).comap_of_ker_isPGroup
-  rwa [QuotientGroup.ker_mk']
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.ker_mk, QuotientGroup.mk, Subgroup, Subgroup.comap_map_eq, comap_map_eq, comap_of_ker_isPGroup, hH.map, ker_mk
+/-
+**IsPGroup.to_sup_of_normal_right** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_sup_of_normal_right {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGro
+up p K) [K.Normal] : IsPGroup p (H ⊔ K : Subgroup G)
+参数：hH : IsPGroup p H；hK : IsPGroup p K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.ker_mk'`：ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G 
+->* G ⧸ N) = N
+· 使用定理 `Subgroup.comap_map_eq`：comap_map_eq (H : Subgroup G) : comap f (map f H)
+ = H ⊔ f.ker
+· 使用定理 `IsPGroup.comap_of_ker_isPGroup`：comap_of_ker_isPGroup {H : Subgroup G} (
+hH : IsPGroup p H) {K : Type*} [Group K] (ϕ : K ->* G) (hϕ : IsPGroup p ϕ.ker) :
+ IsPGroup p (H.comap…
+· 使用定理 `IsPGroup.map`：map {H : Subgroup G} (hH : IsPGroup p H) {K : Type*} [Grou
+p K] (ϕ : G ->* K) : IsPGroup p (H.map ϕ)
 -/
 theorem to_sup_of_normal_right {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
     [K.Normal] : IsPGroup p (H ⊔ K : Subgroup G) := by
-  rw [← QuotientGroup.ker_mk' K]; rw [← Subgroup.comap_map_eq]
+  rw [← QuotientGroup.ker_mk' K, ← Subgroup.comap_map_eq]
   apply (hH.map (QuotientGroup.mk' K)).comap_of_ker_isPGroup
   rwa [QuotientGroup.ker_mk']
-
-/--
-theorem `to_sup_of_normal_left` / 定理 `to_sup_of_normal_left`
-
-English:
-theorem to_sup_of_normal_left
-  statement: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
-  proof: sup_comm H K ▸ to_sup_of_normal_right hK hH
-
-中文:
-定理 to_sup_of_normal_left
-  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
-  证明: sup_comm H K ▸ to_sup_of_normal_right hK hH
-
-Depends on / 依赖: sup_comm, to_sup_of_normal_right
+/-
+**IsPGroup.to_sup_of_normal_left** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_sup_of_normal_left {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGrou
+p p K) [H.Normal] : IsPGroup p (H ⊔ K : Subgroup G)
+参数：hH : IsPGroup p H；hK : IsPGroup p K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.to_sup_of_normal_right`：to_sup_of_normal_right {H K : Subgroup 
+G} (hH : IsPGroup p H) (hK : IsPGroup p K) [K.Normal] : IsPGroup p (H ⊔ K : Subg
+roup G)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
 -/
 theorem to_sup_of_normal_left {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
     [H.Normal] : IsPGroup p (H ⊔ K : Subgroup G) := sup_comm H K ▸ to_sup_of_normal_right hK hH
-
-/--
-theorem `to_sup_of_normal_right'` / 定理 `to_sup_of_normal_right'`
-
-English:
-theorem to_sup_of_normal_right'
-  statement: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
-  proof: let hHK' :=
-    to_sup_of_normal_right (hH.of_equiv (Subgroup.subgroupOfEquivOfLe hHK).symm)
-      (hK.of_equiv (Subgroup.subgroupOfEquivOfLe Subgroup.le_normalizer).symm)
-  ((congr_arg (fun H : Subgroup (Subgroup.normalizer K) => IsPGroup p H)
-            ((Subgroup.subgroupOf_sup hHK Subgroup.le_normalizer).symm)).mp
-        hHK').of_equiv
-    (Subgroup.subgroupOfEquivOfLe (sup_le hHK Subgroup.le_normalizer))
-
-中文:
-定理 to_sup_of_normal_right'
-  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
-  证明: let hHK' :=
-    to_sup_of_normal_right (hH.of_equiv (Subgroup.subgroupOfEquivOfLe hHK).symm)
-      (hK.of_equiv (Subgroup.subgroupOfEquivOfLe Subgroup.le_normalizer).symm)
-  ((congr_arg (fun H : Subgroup (Subgroup.normalizer K) => IsPGroup p H)
-            ((Subgroup.subgroupOf_sup hHK Subgroup.le_normalizer).symm)).mp
-        hHK').of_equiv
-    (Subgroup.subgroupOfEquivOfLe (sup_le hHK Subgroup.le_normalizer))
-
-Depends on / 依赖: IsPGroup, Subgroup, Subgroup.le_normalizer, Subgroup.normalizer, Subgroup.subgroupOfEquivOfLe, Subgroup.subgroupOf_sup, congr_arg, hH.of_equiv, hK.of_equiv, le_normalizer, normalizer, of_equiv, subgroupOfEquivOfLe, subgroupOf_sup, sup_le, to_sup_of_normal_right
+/-
+**IsPGroup.to_sup_of_normal_right'** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_sup_of_normal_right' {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGr
+oup p K) (hHK : H <= Subgroup.normalizer K) : IsPGroup p (H ⊔ K : Subgroup G)
+参数：hH : IsPGroup p H；hK : IsPGroup p K；hHK : H <= Subgroup.normalizer K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.to_sup_of_normal_right`：to_sup_of_normal_right {H K : Subgroup 
+G} (hH : IsPGroup p H) (hK : IsPGroup p K) [K.Normal] : IsPGroup p (H ⊔ K : Subg
+roup G)
+· 使用定理 `IsPGroup.of_equiv`：of_equiv {H : Type*} [Group H] (ϕ : G ≃* H) : IsPGrou
+p p H
+· 使用定理 `Subgroup.le_normalizer`：le_normalizer : H <= normalizer H
+· 使用定理 `Subgroup.normal_in_normalizer`：∀ {G : Type u_1} [inst : Group G] {H : Su
+bgroup G}, (H.subgroupOf (Subgroup.normalizer ↑H)).Normal
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.subgroupOf_sup`：subgroupOf_sup {A A' B : Subgroup G} (hA : A <=
+ B) (hA' : A' <= B) : (A ⊔ A').subgroupOf B = A.subgroupOf B ⊔ A'.subgroupOf B
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
 -/
 theorem to_sup_of_normal_right' {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
-    (hHK : H <= Subgroup.normalizer K) : IsPGroup p (H ⊔ K : Subgroup G) :=
+    (hHK : H ≤ Subgroup.normalizer K) : IsPGroup p (H ⊔ K : Subgroup G) :=
   let hHK' :=
     to_sup_of_normal_right (hH.of_equiv (Subgroup.subgroupOfEquivOfLe hHK).symm)
       (hK.of_equiv (Subgroup.subgroupOfEquivOfLe Subgroup.le_normalizer).symm)
@@ -1572,172 +1197,166 @@ theorem to_sup_of_normal_right' {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsP
             ((Subgroup.subgroupOf_sup hHK Subgroup.le_normalizer).symm)).mp
         hHK').of_equiv
     (Subgroup.subgroupOfEquivOfLe (sup_le hHK Subgroup.le_normalizer))
-
-/--
-theorem `to_sup_of_normal_left'` / 定理 `to_sup_of_normal_left'`
-
-English:
-theorem to_sup_of_normal_left'
-  statement: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
-  proof: sup_comm H K ▸ to_sup_of_normal_right' hK hH hHK
-
-中文:
-定理 to_sup_of_normal_left'
-  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
-  证明: sup_comm H K ▸ to_sup_of_normal_right' hK hH hHK
-
-Depends on / 依赖: sup_comm, to_sup_of_normal_right
+/-
+**IsPGroup.to_sup_of_normal_left'** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：to_sup_of_normal_left' {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGro
+up p K) (hHK : K <= Subgroup.normalizer H) : IsPGroup p (H ⊔ K : Subgroup G)
+参数：hH : IsPGroup p H；hK : IsPGroup p K；hHK : K <= Subgroup.normalizer H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.to_sup_of_normal_right'`：to_sup_of_normal_right' {H K : Subgrou
+p G} (hH : IsPGroup p H) (hK : IsPGroup p K) (hHK : H <= Subgroup.normalizer K) 
+: IsPGroup p (H ⊔ K : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
 -/
 theorem to_sup_of_normal_left' {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
-    (hHK : K <= Subgroup.normalizer H) : IsPGroup p (H ⊔ K : Subgroup G) :=
+    (hHK : K ≤ Subgroup.normalizer H) : IsPGroup p (H ⊔ K : Subgroup G) :=
   sup_comm H K ▸ to_sup_of_normal_right' hK hH hHK
 
-/--
-theorem `coprime_card_of_ne` / 定理 `coprime_card_of_ne`
+/-- finite p-groups with different p have coprime orders -/
+/-
+**IsPGroup.coprime_card_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：coprime_card_of_ne {G₂ : Type*} [Group G₂] (p₁ p₂ : Nat) [hp₁ : Fact p₁.Pr
+ime] [hp₂ : Fact p₂.Prime] (hne : p₁ != p₂) (H₁ : Subgroup G) (H₂ : Subgroup G₂)
+ [Finite H₁] [Finite H₂] (hH₁ : IsPGroup p₁ H₁) (hH₂ : IsPGroup p₂ H₂) : Nat.Cop
+rime (Nat.card H₁) (Nat.card H₂)
+参数：p₁ p₂ : Nat；hne : p₁ != p₂；H₁ : Subgroup G；H₂ : Subgroup G₂；hH₁ : IsPGroup p₁
+ H₁；hH₂ : IsPGroup p₂ H₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsPGroup.iff_card`：iff_card [Fact p.Prime] [Finite G] : IsPGroup p G ↔ e
+xists n : Nat, Nat.card G = p ^ n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.coprime_pow_primes`：coprime_pow_primes {p q : Nat} (n m : Nat) (pp :
+ Prime p) (pq : Prime q) (h : p != q) : Coprime (p ^ n) (q ^ m)
+· 使用定理 `Fact.elim`：Fact.elim {p : Prop} (h : Fact p) : p
 
-English:
-theorem coprime_card_of_ne
-  statement: {G₂ : Type*} [Group G₂] (p₁ p₂ : Nat) [hp₁ : Fact p₁.Prime]
-  proof: by
-  obtain ⟨n₁, heq₁⟩ := iff_card.mp hH₁; rw [heq₁]; clear heq₁
-  obtain ⟨n₂, heq₂⟩ := iff_card.mp hH₂; rw [heq₂]; clear heq₂
-  exact Nat.coprime_pow_primes _ _ hp₁.elim hp₂.elim hne
-
-中文:
-定理 coprime_card_of_ne
-  结论: {G₂ : 类型} [群 G₂] (p₁ p₂ : 自然数) [hp₁ : Fact p₁.素]
-  证明: by
-  obtain ⟨n₁, heq₁⟩ := iff_card.mp hH₁; rw [heq₁]; clear heq₁
-  obtain ⟨n₂, heq₂⟩ := iff_card.mp hH₂; rw [heq₂]; clear heq₂
-  exact Nat.coprime_pow_primes _ _ hp₁.elim hp₂.elim hne
-
-Depends on / 依赖: Nat.coprime_pow_primes, coprime_pow_primes, iff_card, iff_card.mp
+--- 原说明 ---
+finite p-groups with different p have coprime orders
 -/
-theorem coprime_card_of_ne {G₂ : Type*} [Group G₂] (p₁ p₂ : Nat) [hp₁ : Fact p₁.Prime]
-    [hp₂ : Fact p₂.Prime] (hne : p₁ != p₂) (H₁ : Subgroup G) (H₂ : Subgroup G₂) [Finite H₁]
+theorem coprime_card_of_ne {G₂ : Type*} [Group G₂] (p₁ p₂ : ℕ) [hp₁ : Fact p₁.Prime]
+    [hp₂ : Fact p₂.Prime] (hne : p₁ ≠ p₂) (H₁ : Subgroup G) (H₂ : Subgroup G₂) [Finite H₁]
     [Finite H₂] (hH₁ : IsPGroup p₁ H₁) (hH₂ : IsPGroup p₂ H₂) :
     Nat.Coprime (Nat.card H₁) (Nat.card H₂) := by
   obtain ⟨n₁, heq₁⟩ := iff_card.mp hH₁; rw [heq₁]; clear heq₁
   obtain ⟨n₂, heq₂⟩ := iff_card.mp hH₂; rw [heq₂]; clear heq₂
   exact Nat.coprime_pow_primes _ _ hp₁.elim hp₂.elim hne
-
-/--
-theorem `disjoint_of_coprime` / 定理 `disjoint_of_coprime`
-
-English:
-theorem disjoint_of_coprime
-  statement: {p₁ p₂ : Nat} {H₁ H₂ : Subgroup G} (hH₁ : IsPGroup p₁ H₁)
-  proof: by
-  refine Subgroup.disjoint_def.mpr fun {g} hg₁ hg₂ => ?_
-  have ⟨k₁, hk₁⟩ := hH₁ ⟨g, hg₁⟩
-  have hg₁ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₁
-  have ⟨k₂, hk₂⟩ := hH₂ ⟨g, hg₂⟩
-  have hg₂ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₂
-exact orderOf_eq_one_iff.mp Nat.eq_one_of_dvd_coprimes (h.pow k₁ k₂) hg₁ hg₂
-
-中文:
-定理 disjoint_of_coprime
-  结论: {p₁ p₂ : 自然数} {H₁ H₂ : 子群 G} (hH₁ : 是p群 p₁ H₁)
-  证明: by
-  refine Subgroup.disjoint_def.mpr fun {g} hg₁ hg₂ => ?_
-  have ⟨k₁, hk₁⟩ := hH₁ ⟨g, hg₁⟩
-  have hg₁ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₁
-  have ⟨k₂, hk₂⟩ := hH₂ ⟨g, hg₂⟩
-  have hg₂ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₂
-exact orderOf_eq_one_iff.mp Nat.eq_one_of_dvd_coprimes (h.pow k₁ k₂) hg₁ hg₂
-
-Depends on / 依赖: Nat.eq_one_of_dvd_coprimes, Subgroup, Subgroup.disjoint_def.mpr, Subgroup.orderOf_mk, disjoint_def, eq_one_of_dvd_coprimes, h.pow, orderOf_dvd_of_pow_eq_one, orderOf_eq_one_iff, orderOf_eq_one_iff.mp, orderOf_mk
+/-
+**IsPGroup.disjoint_of_coprime** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：disjoint_of_coprime {p₁ p₂ : Nat} {H₁ H₂ : Subgroup G} (hH₁ : IsPGroup p₁ 
+H₁) (hH₂ : IsPGroup p₂ H₂) (h : p₁.Coprime p₂) : Disjoint H₁ H₂
+参数：hH₁ : IsPGroup p₁ H₁；hH₂ : IsPGroup p₂ H₂；h : p₁.Coprime p₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.disjoint_def`：disjoint_def {H₁ H₂ : Subgroup G} : Disjoint H₁ H
+₂ ↔ forall {x : G}, x in H₁ -> x in H₂ -> x = 1
+· 使用定理 `orderOf_dvd_of_pow_eq_one`：orderOf_dvd_of_pow_eq_one (h : x ^ n = 1) : o
+rderOf x ∣ n
+· 使用引理 `Subgroup.orderOf_mk`：orderOf_mk (a : G) (ha) : orderOf (⟨a, ha⟩ : H) = o
+rderOf a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `orderOf_eq_one_iff`：orderOf_eq_one_iff : orderOf x = 1 ↔ x = 1
+· 使用定理 `Nat.eq_one_of_dvd_coprimes`：eq_one_of_dvd_coprimes {a b k : Nat} (h_ab_c
+oprime : Coprime a b) (hka : k ∣ a) (hkb : k ∣ b) : k = 1
+· 使用定理 `Nat.Coprime.pow`：∀ {k l : ℕ} (m n : ℕ), k.Coprime l → (k ^ m).Coprime (l
+ ^ n)
 -/
-theorem disjoint_of_coprime {p₁ p₂ : Nat} {H₁ H₂ : Subgroup G} (hH₁ : IsPGroup p₁ H₁)
+theorem disjoint_of_coprime {p₁ p₂ : ℕ} {H₁ H₂ : Subgroup G} (hH₁ : IsPGroup p₁ H₁)
     (hH₂ : IsPGroup p₂ H₂) (h : p₁.Coprime p₂) : Disjoint H₁ H₂ := by
-  refine Subgroup.disjoint_def.mpr fun {g} hg₁ hg₂ => ?_
+  refine Subgroup.disjoint_def.mpr fun {g} hg₁ hg₂ ↦ ?_
   have ⟨k₁, hk₁⟩ := hH₁ ⟨g, hg₁⟩
   have hg₁ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₁
   have ⟨k₂, hk₂⟩ := hH₂ ⟨g, hg₂⟩
   have hg₂ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₂
-exact orderOf_eq_one_iff.mp Nat.eq_one_of_dvd_coprimes (h.pow k₁ k₂) hg₁ hg₂
+  exact orderOf_eq_one_iff.mp <| Nat.eq_one_of_dvd_coprimes (h.pow k₁ k₂) hg₁ hg₂
 
-/--
-theorem `disjoint_of_ne` / 定理 `disjoint_of_ne`
+/-- p-groups with different p are disjoint -/
+/-
+**IsPGroup.disjoint_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：disjoint_of_ne (p₁ p₂ : Nat) [hp₁ : Fact p₁.Prime] [hp₂ : Fact p₂.Prime] (
+hne : p₁ != p₂) (H₁ H₂ : Subgroup G) (hH₁ : IsPGroup p₁ H₁) (hH₂ : IsPGroup p₂ H
+₂) : Disjoint H₁ H₂
+参数：p₁ p₂ : Nat；hne : p₁ != p₂；H₁ H₂ : Subgroup G；hH₁ : IsPGroup p₁ H₁；hH₂ : IsPG
+roup p₂ H₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.disjoint_of_coprime`：disjoint_of_coprime {p₁ p₂ : Nat} {H₁ H₂ :
+ Subgroup G} (hH₁ : IsPGroup p₁ H₁) (hH₂ : IsPGroup p₂ H₂) (h : p₁.Coprime p₂) :
+ Disjoint H₁ H₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.coprime_primes`：coprime_primes {p q : Nat} (pp : Prime p) (pq : Prim
+e q) : Coprime p q ↔ p != q
+· 使用定理 `Fact.elim`：Fact.elim {p : Prop} (h : Fact p) : p
 
-English:
-theorem disjoint_of_ne
-  statement: (p₁ p₂ : Nat) [hp₁ : Fact p₁.Prime] [hp₂ : Fact p₂.Prime] (hne : p₁ != p₂)
-  proof: disjoint_of_coprime hH₁ hH₂ .mpr hne Nat.coprime_primes hp₁.elim hp₂.elim
-
-中文:
-定理 disjoint_of_ne
-  结论: (p₁ p₂ : 自然数) [hp₁ : Fact p₁.素] [hp₂ : Fact p₂.素] (hne : p₁ != p₂)
-  证明: disjoint_of_coprime hH₁ hH₂ .mpr hne Nat.coprime_primes hp₁.elim hp₂.elim
-
-Depends on / 依赖: Nat.coprime_primes, coprime_primes, disjoint_of_coprime
+--- 原说明 ---
+p-groups with different p are disjoint
 -/
-theorem disjoint_of_ne (p₁ p₂ : Nat) [hp₁ : Fact p₁.Prime] [hp₂ : Fact p₂.Prime] (hne : p₁ != p₂)
+theorem disjoint_of_ne (p₁ p₂ : ℕ) [hp₁ : Fact p₁.Prime] [hp₂ : Fact p₂.Prime] (hne : p₁ ≠ p₂)
     (H₁ H₂ : Subgroup G) (hH₁ : IsPGroup p₁ H₁) (hH₂ : IsPGroup p₂ H₂) : Disjoint H₁ H₂ :=
-disjoint_of_coprime hH₁ hH₂ .mpr hne Nat.coprime_primes hp₁.elim hp₂.elim
-
-/--
-theorem `le_or_disjoint_of_coprime` / 定理 `le_or_disjoint_of_coprime`
-
-English:
-theorem le_or_disjoint_of_coprime
-  statement: [hp : Fact p.Prime] {P : Subgroup G} (hP : IsPGroup p P)
-  proof: by
-  by_cases h1 : Nat.card H = 0
-  · rw [h1, Nat.coprime_zero_left, Subgroup.index_eq_one] at h_cop
-    rw [h_cop]
-    exact Or.inl le_top
-  by_cases h2 : H.index = 0
-  · rw [h2, Nat.coprime_zero_right, Subgroup.card_eq_one] at h_cop
-    rw [h_cop]
-    exact Or.inr disjoint_bot_left
-  have : Finite G := by
-    apply Nat.finite_of_card_ne_zero
-    rw [← H.card_mul_index]
-    exact mul_ne_zero h1 h2
-  have h3 : (Nat.card H).Coprime (Nat.card P) ∨ H.index.Coprime (Nat.card P) := by
-    obtain ⟨k, hk⟩ := hP.exists_card_eq
-    refine hk ▸ Or.imp hp.out.coprime_pow_of_not_dvd hp.out.coprime_pow_of_not_dvd ?_
-    contrapose! h_cop
-    exact Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp.out, h_cop⟩
-  refine h3.symm.imp (fun h4 => ?_) (fun h4 => ?_)
-  · rw [← Subgroup.relIndex_eq_one]
-    exact Nat.eq_one_of_dvd_coprimes h4 (H.relIndex_dvd_index_of_normal P)
-      (Subgroup.relIndex_dvd_card H P)
-  · exact Subgroup.disjoint_of_coprime_natCard h4
-
-中文:
-定理 le_or_disjoint_of_coprime
-  结论: [hp : Fact p.素] {P : 子群 G} (hP : 是p群 p P)
-  证明: by
-  by_cases h1 : Nat.card H = 0
-  · rw [h1, Nat.coprime_zero_left, Subgroup.index_eq_one] at h_cop
-    rw [h_cop]
-    exact Or.inl le_top
-  by_cases h2 : H.index = 0
-  · rw [h2, Nat.coprime_zero_right, Subgroup.card_eq_one] at h_cop
-    rw [h_cop]
-    exact Or.inr disjoint_bot_left
-  have : Finite G := by
-    apply Nat.finite_of_card_ne_zero
-    rw [← H.card_mul_index]
-    exact mul_ne_zero h1 h2
-  have h3 : (Nat.card H).Coprime (Nat.card P) ∨ H.index.Coprime (Nat.card P) := by
-    obtain ⟨k, hk⟩ := hP.exists_card_eq
-    refine hk ▸ Or.imp hp.out.coprime_pow_of_not_dvd hp.out.coprime_pow_of_not_dvd ?_
-    contrapose! h_cop
-    exact Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp.out, h_cop⟩
-  refine h3.symm.imp (fun h4 => ?_) (fun h4 => ?_)
-  · rw [← Subgroup.relIndex_eq_one]
-    exact Nat.eq_one_of_dvd_coprimes h4 (H.relIndex_dvd_index_of_normal P)
-      (Subgroup.relIndex_dvd_card H P)
-  · exact Subgroup.disjoint_of_coprime_natCard h4
-
-Depends on / 依赖: Coprime, Finite, H.card_mul_index, H.index, H.index.Coprime, Nat.card, Nat.coprime_zero_left, Nat.coprime_zero_right, Nat.finite_of_card_ne_zero, Or.imp, Or.inl, Or.inr, Subgroup, Subgroup.card_eq_one, Subgroup.index_eq_one, card_eq_one, card_mul_index, coprime_zero_left, coprime_zero_right, disjoint_bot_left
+  disjoint_of_coprime hH₁ hH₂ <| Nat.coprime_primes hp₁.elim hp₂.elim |>.mpr hne
+/-
+**IsPGroup.le_or_disjoint_of_coprime** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：le_or_disjoint_of_coprime [hp : Fact p.Prime] {P : Subgroup G} (hP : IsPGr
+oup p P) {H : Subgroup G} [H.Normal] (h_cop : (Nat.card H).Coprime H.index) : P 
+<= H ∨ Disjoint H P
+参数：hP : IsPGroup p P；h_cop : (Nat.card H).Coprime H.index。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.index_eq_one`：index_eq_one : H.index = 1 ↔ H = ⊤
+· 使用定理 `Nat.coprime_zero_left`：∀ (n : ℕ), Nat.Coprime 0 n ↔ n = 1
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Subgroup.card_eq_one`：card_eq_one : Nat.card H = 1 ↔ H = ⊥
+· 使用定理 `Nat.coprime_zero_right`：∀ (n : ℕ), n.Coprime 0 ↔ n = 1
+· 使用定理 `disjoint_bot_left`：disjoint_bot_left : Disjoint ⊥ a
+· 使用定理 `Nat.finite_of_card_ne_zero`：finite_of_card_ne_zero (h : Nat.card α != 0)
+ : Finite α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.card_mul_index`：card_mul_index : Nat.card H * H.index = Nat.car
+d G
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsPGroup.exists_card_eq`：∀ {p : ℕ} {G : Type u_1} [inst : Group G] [Fact
+ (Nat.Prime p)] [Finite G], IsPGroup p G → ∃ n, Nat.card G = p ^ n
+· 使用定理 `Subgroup.instFiniteSubtypeMem`：∀ {G : Type u_1} [inst : Group G] (K : Su
+bgroup G) [Finite G], Finite ↥K
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Nat.Prime.coprime_pow_of_not_dvd`：∀ {p m a : ℕ}, Nat.Prime p → ¬p ∣ a → 
+a.Coprime (p ^ m)
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.Prime.not_coprime_iff_dvd`：∀ {m n : ℕ}, ¬m.Coprime n ↔ ∃ p, Nat.Prim
+e p ∧ p ∣ m ∧ p ∣ n
+· 使用定理 `Subgroup.relIndex_eq_one`：relIndex_eq_one : H.relIndex K = 1 ↔ K <= H
+· 使用定理 `Nat.eq_one_of_dvd_coprimes`：eq_one_of_dvd_coprimes {a b k : Nat} (h_ab_c
+oprime : Coprime a b) (hka : k ∣ a) (hkb : k ∣ b) : k = 1
+· 使用定理 `Subgroup.relIndex_dvd_index_of_normal`：relIndex_dvd_index_of_normal [H.N
+ormal] : H.relIndex K ∣ H.index
+· 使用定理 `Subgroup.relIndex_dvd_card`：relIndex_dvd_card : H.relIndex K ∣ Nat.card 
+K
+· 使用引理 `Subgroup.disjoint_of_coprime_natCard`：disjoint_of_coprime_natCard (h : N
+at.card H |>.Coprime <| Nat.card K) : Disjoint H K
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
 -/
 theorem le_or_disjoint_of_coprime [hp : Fact p.Prime] {P : Subgroup G} (hP : IsPGroup p P)
     {H : Subgroup G} [H.Normal] (h_cop : (Nat.card H).Coprime H.index) :
-    P <= H ∨ Disjoint H P := by
+    P ≤ H ∨ Disjoint H P := by
   by_cases h1 : Nat.card H = 0
   · rw [h1, Nat.coprime_zero_left, Subgroup.index_eq_one] at h_cop
     rw [h_cop]
@@ -1755,7 +1374,7 @@ theorem le_or_disjoint_of_coprime [hp : Fact p.Prime] {P : Subgroup G} (hP : IsP
     refine hk ▸ Or.imp hp.out.coprime_pow_of_not_dvd hp.out.coprime_pow_of_not_dvd ?_
     contrapose! h_cop
     exact Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp.out, h_cop⟩
-  refine h3.symm.imp (fun h4 => ?_) (fun h4 => ?_)
+  refine h3.symm.imp (fun h4 ↦ ?_) (fun h4 ↦ ?_)
   · rw [← Subgroup.relIndex_eq_one]
     exact Nat.eq_one_of_dvd_coprimes h4 (H.relIndex_dvd_index_of_normal P)
       (Subgroup.relIndex_dvd_card H P)
@@ -1763,97 +1382,130 @@ theorem le_or_disjoint_of_coprime [hp : Fact p.Prime] {P : Subgroup G} (hP : IsP
 
 section P2comm
 
-variable [Fact p.Prime] {n : Nat}
+variable [Fact p.Prime] {n : ℕ}
 
 open Subgroup
 
-/--
-theorem `card_center_eq_prime_pow` / 定理 `card_center_eq_prime_pow`
+/-- The cardinality of the `center` of a `p`-group is `p ^ k` where `k` is positive. -/
+/-
+**IsPGroup.card_center_eq_prime_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：card_center_eq_prime_pow (hGpn : Nat.card G = p ^ n) (hn : 0 < n) : exists
+ k > 0, Nat.card (center G) = p ^ k
+参数：hGpn : Nat.card G = p ^ n；hn : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.finite_of_card_ne_zero`：finite_of_card_ne_zero (h : Nat.card α != 0)
+ : Finite α
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPGroup.to_subgroup`：to_subgroup (H : Subgroup G) : IsPGroup p H
+· 使用定理 `IsPGroup.of_card`：of_card {n : Nat} (hG : Nat.card G = p ^ n) : IsPGroup
+ p G
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsPGroup.nontrivial_iff_card`：nontrivial_iff_card [Finite G] : Nontrivia
+l G ↔ exists n > 0, Nat.card G = p ^ n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subgroup.instFiniteSubtypeMem`：∀ {G : Type u_1} [inst : Group G] (K : Su
+bgroup G) [Finite G], Finite ↥K
+· 使用定理 `IsPGroup.center_nontrivial`：center_nontrivial [Nontrivial G] [Finite G] 
+: Nontrivial (Subgroup.center G)
 
-English:
-theorem card_center_eq_prime_pow
-  given: (hGpn : Nat.card G = p ^ n) (hn : 0 < n)
-  proof: by
-  have : Finite G := Nat.finite_of_card_ne_zero (hGpn ▸ pow_ne_zero n (NeZero.ne p))
-  have hcG := to_subgroup (of_card hGpn) (center G)
-  rcases iff_card.1 hcG with _
-  have : Nontrivial G := (nontrivial_iff_card <| of_card hGpn).2 ⟨n, hn, hGpn⟩
-  exact (nontrivial_iff_card hcG).mp (center_nontrivial (of_card hGpn))
-
-中文:
-定理 card_center_eq_prime_pow
-  条件: (hGpn : 自然数.card G = p ^ n) (hn : 0 < n)
-  证明: by
-  have : Finite G := Nat.finite_of_card_ne_zero (hGpn ▸ pow_ne_zero n (NeZero.ne p))
-  have hcG := to_subgroup (of_card hGpn) (center G)
-  rcases iff_card.1 hcG with _
-  have : Nontrivial G := (nontrivial_iff_card <| of_card hGpn).2 ⟨n, hn, hGpn⟩
-  exact (nontrivial_iff_card hcG).mp (center_nontrivial (of_card hGpn))
-
-Depends on / 依赖: Finite, Nat.finite_of_card_ne_zero, NeZero, NeZero.ne, Nontrivial, center, center_nontrivial, finite_of_card_ne_zero, iff_card, nontrivial_iff_card, of_card, pow_ne_zero, to_subgroup
+--- 原说明 ---
+The cardinality of the `center` of a `p`-group is `p ^ k` where `k` is positive.
 -/
 theorem card_center_eq_prime_pow (hGpn : Nat.card G = p ^ n) (hn : 0 < n) :
-    exists k > 0, Nat.card (center G) = p ^ k := by
+    ∃ k > 0, Nat.card (center G) = p ^ k := by
   have : Finite G := Nat.finite_of_card_ne_zero (hGpn ▸ pow_ne_zero n (NeZero.ne p))
   have hcG := to_subgroup (of_card hGpn) (center G)
   rcases iff_card.1 hcG with _
   have : Nontrivial G := (nontrivial_iff_card <| of_card hGpn).2 ⟨n, hn, hGpn⟩
   exact (nontrivial_iff_card hcG).mp (center_nontrivial (of_card hGpn))
 
-/--
-theorem `cyclic_center_quotient_of_card_eq_prime_sq` / 定理 `cyclic_center_quotient_of_card_eq_prime_sq`
+/-- The quotient by the center of a group of cardinality `p ^ 2` is cyclic. -/
+/-
+**IsPGroup.cyclic_center_quotient_of_card_eq_prime_sq** 是 Mathlib 中的一个定理，位于命名空间 
+`IsPGroup`。
+形式化陈述：cyclic_center_quotient_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : IsC
+yclic (G ⧸ center G)
+参数：hG : Nat.card G = p ^ 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isCyclic_of_card_dvd_prime`：isCyclic_of_card_dvd_prime {p : Nat} [hp : F
+act p.Prime] (h : Nat.card α ∣ p) : IsCyclic α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_dvd_mul_iff_left`：mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCan
+celMulZero α] {a b c : α} (ha : a != 0) : a * b ∣ a * c ↔ b ∣ c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Subgroup.card_mul_index`：card_mul_index : Nat.card H * H.index = Nat.car
+d G
+· 使用定理 `mul_dvd_mul_right`：mul_dvd_mul_right (h : a ∣ b) (c : α) : a * c ∣ b * c
+· 使用定理 `IsPGroup.card_center_eq_prime_pow`：card_center_eq_prime_pow (hGpn : Nat.
+card G = p ^ n) (hn : 0 < n) : exists k > 0, Nat.card (center G) = p ^ k
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `dvd_pow_self`：dvd_pow_self (a : α) {n : Nat} (hn : n != 0) : a ∣ a ^ n
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 
-English:
-theorem cyclic_center_quotient_of_card_eq_prime_sq
-  given: (hG : Nat.card G = p ^ 2)
-  proof: by
-  apply isCyclic_of_card_dvd_prime (p := p)
-  rw [← mul_dvd_mul_iff_left (NeZero.ne p)]; rw [← sq]; rw [← hG]; rw [← (center G).card_mul_index]
-  apply mul_dvd_mul_right
-  rcases card_center_eq_prime_pow hG zero_lt_two with ⟨k, hk0, hk⟩
-  rw [hk]
-  exact dvd_pow_self p hk0.ne'
-
-中文:
-定理 cyclic_center_quotient_of_card_eq_prime_sq
-  条件: (hG : 自然数.card G = p ^ 2)
-  证明: by
-  apply isCyclic_of_card_dvd_prime (p := p)
-  rw [← mul_dvd_mul_iff_left (NeZero.ne p)]; rw [← sq]; rw [← hG]; rw [← (center G).card_mul_index]
-  apply mul_dvd_mul_right
-  rcases card_center_eq_prime_pow hG zero_lt_two with ⟨k, hk0, hk⟩
-  rw [hk]
-  exact dvd_pow_self p hk0.ne'
-
-Depends on / 依赖: NeZero, NeZero.ne, card_center_eq_prime_pow, card_mul_index, center, dvd_pow_self, hk0.ne, isCyclic_of_card_dvd_prime, mul_dvd_mul_iff_left, mul_dvd_mul_right, zero_lt_two
+--- 原说明 ---
+The quotient by the center of a group of cardinality `p ^ 2` is cyclic.
 -/
 theorem cyclic_center_quotient_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) :
     IsCyclic (G ⧸ center G) := by
   apply isCyclic_of_card_dvd_prime (p := p)
-  rw [← mul_dvd_mul_iff_left (NeZero.ne p)]; rw [← sq]; rw [← hG]; rw [← (center G).card_mul_index]
+  rw [← mul_dvd_mul_iff_left (NeZero.ne p), ← sq, ← hG, ← (center G).card_mul_index]
   apply mul_dvd_mul_right
   rcases card_center_eq_prime_pow hG zero_lt_two with ⟨k, hk0, hk⟩
   rw [hk]
   exact dvd_pow_self p hk0.ne'
 
-/--
-theorem `isMulCommutative_of_card_eq_prime_sq` / 定理 `isMulCommutative_of_card_eq_prime_sq`
+/-- A group of order `p ^ 2` is commutative. See also `IsPGroup.commGroupOfCardEqPrimeSq`
+for the `CommGroup` instance. -/
+/-
+**IsPGroup.isMulCommutative_of_card_eq_prime_sq** 是 Mathlib 中的一个定理，位于命名空间 `IsPGr
+oup`。
+形式化陈述：isMulCommutative_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : IsMulComm
+utative G
+参数：hG : Nat.card G = p ^ 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.cyclic_center_quotient_of_card_eq_prime_sq`：cyclic_center_quoti
+ent_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : IsCyclic (G ⧸ center G)
+· 使用定理 `isMulCommutative_of_isCyclic_quotient_center_self`：isMulCommutative_of_i
+sCyclic_quotient_center_self [IsCyclic (G ⧸ Subgroup.center G)] : IsMulCommutati
+ve G
 
-English:
-theorem isMulCommutative_of_card_eq_prime_sq
-  given: (hG : Nat.card G = p ^ 2)
-  statement: IsMulCommutative G
-  proof: let := cyclic_center_quotient_of_card_eq_prime_sq hG
-  isMulCommutative_of_isCyclic_quotient_center_self G
-
-中文:
-定理 isMulCommutative_of_card_eq_prime_sq
-  条件: (hG : 自然数.card G = p ^ 2)
-  结论: 是MulCommutative G
-  证明: let := cyclic_center_quotient_of_card_eq_prime_sq hG
-  isMulCommutative_of_isCyclic_quotient_center_self G
-
-Depends on / 依赖: cyclic_center_quotient_of_card_eq_prime_sq, isMulCommutative_of_isCyclic_quotient_center_self
+--- 原说明 ---
+A group of order `p ^ 2` is commutative. See also `IsPGroup.commGroupOfCardEqPri
+meSq`
+for the `CommGroup` instance.
 -/
 theorem isMulCommutative_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : IsMulCommutative G :=
   let := cyclic_center_quotient_of_card_eq_prime_sq hG
@@ -1862,80 +1514,68 @@ theorem isMulCommutative_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : IsMulCo
 /-- A group of order `p ^ 2` is commutative. See also `IsPGroup.commutative_of_card_eq_prime_sq`
 for just the proof that `∀ a b, a * b = b * a` -/
 @[instance_reducible]
-/--
-Definition of `commGroupOfCardEqPrimeSq` / `commGroupOfCardEqPrimeSq` 的定义
+/-
+**IsPGroup.commGroupOfCardEqPrimeSq** 是 Mathlib 中的一个定义，位于命名空间 `IsPGroup`。
+形式化陈述：commGroupOfCardEqPrimeSq (hG : Nat.card G = p ^ 2) : CommGroup G
+参数：hG : Nat.card G = p ^ 2。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPGroup.cyclic_center_quotient_of_card_eq_prime_sq`：cyclic_center_quoti
+ent_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : IsCyclic (G ⧸ center G)
 
-English:
-definition commGroupOfCardEqPrimeSq
-  signature: (hG : Nat.card G = p ^ 2)
-  body: let := cyclic_center_quotient_of_card_eq_prime_sq hG
-  commGroupOfCyclicCenterQuotient _ (QuotientGroup.ker_mk' <| center G).le
-
-@[deprecated isMulCommutative_of_card_eq_prime_sq (since := "2026-05-26")]
-
-中文:
-定义 commGroupOfCardEqPrimeSq
-  签名: (hG : 自然数.card G = p ^ 2)
-  定义体: let := cyclic_center_quotient_of_card_eq_prime_sq hG
-  commGroupOfCyclicCenterQuotient _ (QuotientGroup.ker_mk' <| center G).le
-
-@[deprecated isMulCommutative_of_card_eq_prime_sq (since := "2026-05-26")]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.ker_mk, center, commGroupOfCyclicCenterQuotient, cyclic_center_quotient_of_card_eq_prime_sq, ker_mk
+--- 原说明 ---
+A group of order `p ^ 2` is commutative. See also `IsPGroup.commutative_of_card_
+eq_prime_sq`
+for just the proof that `∀ a b, a * b = b * a`
 -/
 def commGroupOfCardEqPrimeSq (hG : Nat.card G = p ^ 2) : CommGroup G :=
   let := cyclic_center_quotient_of_card_eq_prime_sq hG
   commGroupOfCyclicCenterQuotient _ (QuotientGroup.ker_mk' <| center G).le
 
 @[deprecated isMulCommutative_of_card_eq_prime_sq (since := "2026-05-26")]
-/--
-theorem `commutative_of_card_eq_prime_sq` / 定理 `commutative_of_card_eq_prime_sq`
-
-English:
-theorem commutative_of_card_eq_prime_sq
-  given: (hG : Nat.card G = p ^ 2)
-  statement: forall a b : G, a * b = b * a
-  proof: .is_comm.comm isMulCommutative_of_card_eq_prime_sq hG
-
-中文:
-定理 commutative_of_card_eq_prime_sq
-  条件: (hG : 自然数.card G = p ^ 2)
-  结论: 对任意 a b : G, a * b = b * a
-  证明: .is_comm.comm isMulCommutative_of_card_eq_prime_sq hG
-
-Depends on / 依赖: isMulCommutative_of_card_eq_prime_sq, is_comm, is_comm.comm
+/-
+**IsPGroup.commutative_of_card_eq_prime_sq** 是 Mathlib 中的一个定理，位于命名空间 `IsPGroup`。
+形式化陈述：commutative_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : forall a b : G
+, a * b = b * a
+参数：hG : Nat.card G = p ^ 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Std.Commutative.comm`：∀ {α : Sort u} {op : α → α → α} [self : Std.Commut
+ative op] (a b : α), op a b = op b a
+· 使用定理 `IsMulCommutative.is_comm`：∀ {M : Type u_2} {inst : Mul M} [self : IsMulC
+ommutative M], Std.Commutative fun x1 x2 => x1 * x2
+· 使用定理 `IsPGroup.isMulCommutative_of_card_eq_prime_sq`：isMulCommutative_of_card_
+eq_prime_sq (hG : Nat.card G = p ^ 2) : IsMulCommutative G
 -/
-theorem commutative_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : forall a b : G, a * b = b * a :=
-.is_comm.comm isMulCommutative_of_card_eq_prime_sq hG
+theorem commutative_of_card_eq_prime_sq (hG : Nat.card G = p ^ 2) : ∀ a b : G, a * b = b * a :=
+  isMulCommutative_of_card_eq_prime_sq hG |>.is_comm.comm
 
 end P2comm
 
 end IsPGroup
 
 namespace ZModModule
-variable {n : Nat} {G : Type*} [AddCommGroup G] [Module (ZMod n) G]
+variable {n : ℕ} {G : Type*} [AddCommGroup G] [Module (ZMod n) G]
 
-/--
-lemma `isPGroup_multiplicative` / 引理 `isPGroup_multiplicative`
-
-English:
-lemma isPGroup_multiplicative
-  statement: IsPGroup n (Multiplicative G)
-  proof: by
-  simpa [IsPGroup, Multiplicative.forall] using
-    fun _ => ⟨1, by simp [← ofAdd_nsmul, ZModModule.char_nsmul_eq_zero]⟩
-
-中文:
-引理 isPGroup_multiplicative
-  结论: 是p群 n (Multiplicative G)
-  证明: by
-  simpa [IsPGroup, Multiplicative.forall] using
-    fun _ => ⟨1, by simp [← ofAdd_nsmul, ZModModule.char_nsmul_eq_zero]⟩
-
-Depends on / 依赖: IsPGroup, Multiplicative, Multiplicative.forall, ZModModule, ZModModule.char_nsmul_eq_zero, char_nsmul_eq_zero, ofAdd_nsmul
+/-
+**ZModModule.isPGroup_multiplicative** 是 Mathlib 中的一个引理，位于命名空间 `ZModModule`。
+形式化陈述：isPGroup_multiplicative : IsPGroup n (Multiplicative G)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用引理 `ZModModule.char_nsmul_eq_zero`：ZModModule.char_nsmul_eq_zero (x : G) : n
+ • x = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma isPGroup_multiplicative : IsPGroup n (Multiplicative G) := by
   simpa [IsPGroup, Multiplicative.forall] using
-    fun _ => ⟨1, by simp [← ofAdd_nsmul, ZModModule.char_nsmul_eq_zero]⟩
+    fun _ ↦ ⟨1, by simp [← ofAdd_nsmul, ZModModule.char_nsmul_eq_zero]⟩
 
 end ZModModule
+

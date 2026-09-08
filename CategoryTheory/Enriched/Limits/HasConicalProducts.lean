@@ -19,26 +19,27 @@ namespace CategoryTheory.Enriched
 
 open Limits
 
-/--
-Definition of `HasConicalProducts` / `HasConicalProducts` 的定义
+/-- Has conical products if all discrete diagrams of bounded size have conical products. -/
+/-
+**CategoryTheory.Enriched.HasConicalProducts** 是 Mathlib 中的一个类，位于命名空间 `CategoryT
+heory.Enriched`。
+形式化陈述：HasConicalProducts (V : outParam <| Type u') [Category.{v'} V] [MonoidalCa
+tegory V] (C : Type u) [Category.{v} C] [EnrichedOrdinaryCategory V C] : Prop wh
+ere /-- A family of objects (parametrized by any `J : Type w`) has a conical pro
+duct. -/ hasConicalLimitsOfShape : forall J : Type w, HasConicalLimitsOfShape (D
+iscrete J) V C
+参数：V : outParam <| Type u'；C : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasConicalProducts
-  axioms and operations (1):
-    - hasConicalLimitsOfShape : forall J : Type w, HasConicalLimitsOfShape (Discrete J) V C  [default: by infer_instance]
-
-中文:
-类 有余nicalProducts
-  公理与运算 (1 个):
-    - hasConicalLimitsOfShape : 对任意 J : 类型 w, 有余nicalLimitsOfShape (离散 J) V C  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+Has conical products if all discrete diagrams of bounded size have conical produ
+cts.
 -/
 class HasConicalProducts
     (V : outParam <| Type u') [Category.{v'} V] [MonoidalCategory V]
     (C : Type u) [Category.{v} C] [EnrichedOrdinaryCategory V C] : Prop where
   /-- A family of objects (parametrized by any `J : Type w`) has a conical product. -/
-  hasConicalLimitsOfShape : forall J : Type w, HasConicalLimitsOfShape (Discrete J) V C := by
+  hasConicalLimitsOfShape : ∀ J : Type w, HasConicalLimitsOfShape (Discrete J) V C := by
     infer_instance
 
 attribute [instance] HasConicalProducts.hasConicalLimitsOfShape
@@ -46,25 +47,29 @@ attribute [instance] HasConicalProducts.hasConicalLimitsOfShape
 variable (V : Type u') [Category.{v'} V] [MonoidalCategory V]
 variable {C : Type u} [Category.{v} C] [EnrichedOrdinaryCategory V C]
 
-/--
-Definition of `HasConicalProduct` / `HasConicalProduct` 的定义
+/-- An abbreviation for `HasConicalLimit V (Discrete.functor f)`. -/
+/-
+**CategoryTheory.Enriched.HasConicalProduct** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.Enriched`。
+形式化陈述：HasConicalProduct {I : Type w} (f : I -> C)
+参数：f : I -> C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasConicalProduct
-  signature: {I : Type w} (f : I -> C)
-  body: HasConicalLimit V (Discrete.functor f)
-
-中文:
-缩写 HasConicalProduct
-  签名: {I : 类型 w} (f : I -> C)
-  定义体: HasConicalLimit V (Discrete.functor f)
-
-Depends on / 依赖: Discrete, Discrete.functor, HasConicalLimit, functor
+--- 原说明 ---
+An abbreviation for `HasConicalLimit V (Discrete.functor f)`.
 -/
-abbrev HasConicalProduct {I : Type w} (f : I -> C) :=
+abbrev HasConicalProduct {I : Type w} (f : I → C) :=
   HasConicalLimit V (Discrete.functor f)
 
 /-- ensure products exists from the existence of conical products -/
+/-
+**CategoryTheory.Enriched.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Enriched`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+ensure products exists from the existence of conical products
+-/
 example [HasConicalProducts.{w} V C] : HasProducts.{w} C := inferInstance
 
 end CategoryTheory.Enriched
+

@@ -44,141 +44,55 @@ namespace Mathlib.Tactic.FieldSimp
 open Lean Elab.Tactic Parser.Tactic Lean.Meta
 open Qq
 
-/--
-Definition of `dischargerTraceMessage` / `dischargerTraceMessage` 的定义
+/-- Constructs a trace message for the `discharge` function. -/
+/-
+**Mathlib.Tactic.FieldSimp.dischargerTraceMessage** 是 Mathlib 中的一个定义，位于命名空间 `Mat
+hlib.Tactic.FieldSimp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dischargerTraceMessage
-  signature: {ε : Type*} (prop : Expr)
-
-中文:
-定义 dischargerTraceMessage
-  签名: {ε : 类型} (prop : Expr)
+--- 原说明 ---
+Constructs a trace message for the `discharge` function.
 -/
 private def dischargerTraceMessage {ε : Type*} (prop : Expr) :
-    Except ε (Option Expr) -> SimpM MessageData
+    Except ε (Option Expr) → SimpM MessageData
 | _ => return m!"discharge {prop}"
 
-/--
-Definition of `discharge` / `discharge` 的定义
+/-- Default discharge strategy for `field` and `field_simp`: try to solve the (in)equality `prop`,
+of the form `t = 0` or `t > 0`, by one of the following strategies:
 
-English:
-definition discharge
-  signature: (prop : Expr)
-  body: withTraceNode `Tactic.field_simp (dischargerTraceMessage prop) do
-    -- Discharge strategy 1: Use assumptions
-    if let some r ← Simp.dischargeUsingAssumption? prop then
-      return some r
+* Use an assumption from the context.
+* Use the `norm_num` tactic.
+* Use the `positivity` tactic.
+* Use the `simp` tactic with `discharge` as discharger and lemmas stating:
+  * `2 ≠ 0`, `3 ≠ 0`, `4 ≠ 0`
+  * `x ≠ 0 → y ≠ 0 → x * y ≠ 0`
+  * `a ≠ 0 → a ^ n ≠ 0` (for `n : ℕ` and `n : ℤ`)
+  * `↑n + 1 ≠ 0`, if `n : ℕ` and the field has characteristic 0.
 
-    -- Discharge strategy 2: Normalize inequalities using NormNum
-    let prop : Q(Prop) ← (do pure prop)
-    let pf? ← match prop with
-    | ~q(($e : $α) != $b) =>
-        try
-          let res ← Mathlib.Meta.NormNum.derive prop
-          match res with
-          | .isTrue pf => pure (some pf)
-          | _ => pure none
-        catch _ =>
-          pure none
-    | _ => pure none
-    if let some pf := pf? then return some pf
+If none of the strategies finds a proof for `prop`, the result is `none`.
+-/
+/-
+**Mathlib.Tactic.FieldSimp.discharge** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tacti
+c.FieldSimp`。
+形式化陈述：Expr → Meta.SimpM (Option Expr)
+参数：Option Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-    -- Discharge strategy 3: Use positivity
-    let pf? ←
-try some < > Mathlib.Meta.Positivity.solve prop
-      catch _ => pure none
-    if let some pf := pf? then return some pf
+--- 原说明 ---
+Default discharge strategy for `field` and `field_simp`: try to solve the (in)eq
+uality `prop`,
+of the form `t = 0` or `t > 0`, by one of the following strategies:
 
-    -- Discharge strategy 4: Use the simplifier
-    Simp.withIncDischargeDepth do
-      let ctx ← readThe Simp.Context
-      -- these lemmas allow `simp` to function as a cheap approximation to `positivity` in fields
-      -- where `positivity` is not available (e.g. through lack of a `≤`)
-      let lems := [``two_ne_zero, ``three_ne_zero, ``four_ne_zero, ``mul_ne_zero, ``pow_ne_zero,
-        ``zpow_ne_zero, ``Nat.cast_add_one_ne_zero]
-let ctx' := ctx.setSimpTheorems ctx.simpTheorems.push
-        ← lems.foldlM (SimpTheorems.addConst · · (post := false)) {}
-      let stats : Simp.Stats := { (← get) with }
+* Use an assumption from the context.
+* Use the `norm_num` tactic.
+* Use the `positivity` tactic.
+* Use the `simp` tactic with `discharge` as discharger and lemmas stating:
+  * `2 ≠ 0`, `3 ≠ 0`, `4 ≠ 0`
+  * `x ≠ 0 → y ≠ 0 → x * y ≠ 0`
+  * `a ≠ 0 → a ^ n ≠ 0` (for `n : ℕ` and `n : ℤ`)
+  * `↑n + 1 ≠ 0`, if `n : ℕ` and the field has characteristic 0.
 
-      -- Porting note: mathlib3's analogous field_simp discharger `field_simp.ne_zero`
-      -- does not explicitly call `simp` recursively like this. It's unclear to me
-      -- whether this is because
-      -- 1) Lean 3 simp dischargers automatically call `simp` recursively. (Do they?),
-      -- 2) mathlib3 norm_num1 is able to handle any needed discharging, or
-      -- 3) some other reason?
-      let ⟨simpResult, stats'⟩ ←
-        simp prop ctx' #[(← Simp.getSimprocs)]
-          discharge stats
-      set { (← get) with usedTheorems := stats'.usedTheorems, diag := stats'.diag }
-      if simpResult.expr.isConstOf ``True then
-        try
-          return some (← mkOfEqTrue (← simpResult.getProof))
-        catch _ =>
-          return none
-      else
-        return none
-
-@[inherit_doc discharge]
-
-中文:
-定义 discharge
-  签名: (prop : Expr)
-  定义体: withTraceNode `Tactic.field_simp (dischargerTraceMessage prop) do
-    -- Discharge strategy 1: Use assumptions
-    if let some r ← Simp.dischargeUsingAssumption? prop then
-      return some r
-
-    -- Discharge strategy 2: Normalize inequalities using NormNum
-    let prop : Q(Prop) ← (do pure prop)
-    let pf? ← match prop with
-    | ~q(($e : $α) != $b) =>
-        try
-          let res ← Mathlib.Meta.NormNum.derive prop
-          match res with
-          | .isTrue pf => pure (some pf)
-          | _ => pure none
-        catch _ =>
-          pure none
-    | _ => pure none
-    if let some pf := pf? then return some pf
-
-    -- Discharge strategy 3: Use positivity
-    let pf? ←
-try some < > Mathlib.Meta.Positivity.solve prop
-      catch _ => pure none
-    if let some pf := pf? then return some pf
-
-    -- Discharge strategy 4: Use the simplifier
-    Simp.withIncDischargeDepth do
-      let ctx ← readThe Simp.Context
-      -- these lemmas allow `simp` to function as a cheap approximation to `positivity` in fields
-      -- where `positivity` is not available (e.g. through lack of a `≤`)
-      let lems := [``two_ne_zero, ``three_ne_zero, ``four_ne_zero, ``mul_ne_zero, ``pow_ne_zero,
-        ``zpow_ne_zero, ``Nat.cast_add_one_ne_zero]
-let ctx' := ctx.setSimpTheorems ctx.simpTheorems.push
-        ← lems.foldlM (SimpTheorems.addConst · · (post := false)) {}
-      let stats : Simp.Stats := { (← get) with }
-
-      -- Porting note: mathlib3's analogous field_simp discharger `field_simp.ne_zero`
-      -- does not explicitly call `simp` recursively like this. It's unclear to me
-      -- whether this is because
-      -- 1) Lean 3 simp dischargers automatically call `simp` recursively. (Do they?),
-      -- 2) mathlib3 norm_num1 is able to handle any needed discharging, or
-      -- 3) some other reason?
-      let ⟨simpResult, stats'⟩ ←
-        simp prop ctx' #[(← Simp.getSimprocs)]
-          discharge stats
-      set { (← get) with usedTheorems := stats'.usedTheorems, diag := stats'.diag }
-      if simpResult.expr.isConstOf ``True then
-        try
-          return some (← mkOfEqTrue (← simpResult.getProof))
-        catch _ =>
-          return none
-      else
-        return none
-
-@[inherit_doc discharge]
+If none of the strategies finds a proof for `prop`, the result is `none`.
 -/
 partial def discharge (prop : Expr) : SimpM (Option Expr) :=
   withTraceNode `Tactic.field_simp (dischargerTraceMessage prop) do
@@ -189,7 +103,7 @@ partial def discharge (prop : Expr) : SimpM (Option Expr) :=
     -- Discharge strategy 2: Normalize inequalities using NormNum
     let prop : Q(Prop) ← (do pure prop)
     let pf? ← match prop with
-    | ~q(($e : $α) != $b) =>
+    | ~q(($e : $α) ≠ $b) =>
         try
           let res ← Mathlib.Meta.NormNum.derive prop
           match res with
@@ -202,7 +116,7 @@ partial def discharge (prop : Expr) : SimpM (Option Expr) :=
 
     -- Discharge strategy 3: Use positivity
     let pf? ←
-try some < > Mathlib.Meta.Positivity.solve prop
+      try some <$> Mathlib.Meta.Positivity.solve prop
       catch _ => pure none
     if let some pf := pf? then return some pf
 
@@ -213,16 +127,16 @@ try some < > Mathlib.Meta.Positivity.solve prop
       -- where `positivity` is not available (e.g. through lack of a `≤`)
       let lems := [``two_ne_zero, ``three_ne_zero, ``four_ne_zero, ``mul_ne_zero, ``pow_ne_zero,
         ``zpow_ne_zero, ``Nat.cast_add_one_ne_zero]
-let ctx' := ctx.setSimpTheorems ctx.simpTheorems.push
+      let ctx' := ctx.setSimpTheorems <| ctx.simpTheorems.push <|
         ← lems.foldlM (SimpTheorems.addConst · · (post := false)) {}
       let stats : Simp.Stats := { (← get) with }
 
       -- Porting note: mathlib3's analogous field_simp discharger `field_simp.ne_zero`
       -- does not explicitly call `simp` recursively like this. It's unclear to me
       -- whether this is because
-      -- 1) Lean 3 simp dischargers automatically call `simp` recursively. (Do they?),
-      -- 2) mathlib3 norm_num1 is able to handle any needed discharging, or
-      -- 3) some other reason?
+      --   1) Lean 3 simp dischargers automatically call `simp` recursively. (Do they?),
+      --   2) mathlib3 norm_num1 is able to handle any needed discharging, or
+      --   3) some other reason?
       let ⟨simpResult, stats'⟩ ←
         simp prop ctx' #[(← Simp.getSimprocs)]
           discharge stats
@@ -239,3 +153,4 @@ let ctx' := ctx.setSimpTheorems ctx.simpTheorems.push
 elab "field_simp_discharge" : tactic => wrapSimpDischarger Mathlib.Tactic.FieldSimp.discharge
 
 end Mathlib.Tactic.FieldSimp
+

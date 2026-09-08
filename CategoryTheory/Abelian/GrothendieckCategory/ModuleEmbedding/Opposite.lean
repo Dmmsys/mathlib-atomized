@@ -32,158 +32,69 @@ namespace OppositeModuleEmbedding
 variable [Abelian C] [IsGrothendieckAbelian.{v} C]
 
 variable (C) in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def projectiveSeparator
-  body: (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose
-
-中文:
-定义 noncomputable
-  签名: def projectiveSeparator
-  定义体: (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.projectiv
+eSeparator** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbeli
+an.OppositeModuleEmbedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private noncomputable def projectiveSeparator : Cᵒᵖ :=
   (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Projective (projectiveSeparator C)
-  body: (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose_spec.1
-
-中文:
-实例 :
-  签名: 投射 (projectiveSeparator C)
-  定义体: (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose_spec.1
-
-Depends on / 依赖: StructuredArrow, StructuredArrow.preEquivalence, isConnected_of_equivalent, preEquivalence
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.** 是 Math
+lib 中的一个实例，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEm
+bedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private instance : Projective (projectiveSeparator C) :=
   (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose_spec.1
-
-/--
-theorem `isSeparator_projectiveSeparator` / 定理 `isSeparator_projectiveSeparator`
-
-English:
-theorem isSeparator_projectiveSeparator
-  statement: IsSeparator (projectiveSeparator C)
-  proof: (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose_spec.2
-
-中文:
-定理 isSeparator_projectiveSeparator
-  结论: IsSeparator (projectiveSeparator C)
-  证明: (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose_spec.2
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.preEquivalence, isConnected_of_equivalent, preEquivalence
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.isSeparat
+or_projectiveSeparator** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Abelian.IsGroth
+endieckAbelian.OppositeModuleEmbedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem isSeparator_projectiveSeparator : IsSeparator (projectiveSeparator C) :=
   (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose_spec.2
 
 set_option backward.privateInPublic true in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def generator
-  body: ∐ (fun (X : D) => ∐ fun (_ : projectiveSeparator C ⟶ F.obj X) => projectiveSeparator C)
-
-中文:
-定义 noncomputable
-  签名: def generator
-  定义体: ∐ (fun (X : D) => ∐ fun (_ : projectiveSeparator C ⟶ F.obj X) => projectiveSeparator C)
-
-Depends on / 依赖: A.hom, G.map, IsCofiltered, IsCofiltered.min, IsCofiltered.minToLeft, IsCofiltered.nonempty, IsCofilteredOrEmpty, Nonempty, StructuredArrow, StructuredArrow.pre, T.obj, U.right, Y.hom, Y.right, minToLeft, nonempty
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.generator
+** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.Opposit
+eModuleEmbedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private noncomputable def generator : Cᵒᵖ :=
   ∐ (fun (X : D) => ∐ fun (_ : projectiveSeparator C ⟶ F.obj X) => projectiveSeparator C)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `exists_epi` / 定理 `exists_epi`
-
-English:
-theorem exists_epi
-  given: (X : D)
-  statement: exists f : generator F ⟶ F.obj X, Epi f
-  proof: by
-  classical
-  refine ⟨Sigma.desc (Pi.single X (𝟙 _)) ≫ Sigma.desc (fun f => f), ?_⟩
-  have h := (isSeparator_iff_epi (projectiveSeparator C)).1
-    isSeparator_projectiveSeparator (F.obj X)
-  suffices Epi (Sigma.desc (Pi.single X (𝟙 _))) from epi_comp' this h
-  exact SplitEpi.epi ⟨Sigma.ι (fun (X : D) => ∐ fun _ => projectiveSeparator C) X, by simp⟩
-
-中文:
-定理 存在_epi
-  条件: (X : D)
-  结论: 存在 f : generator F ⟶ F.obj X, 满态射 f
-  证明: by
-  classical
-  refine ⟨Sigma.desc (Pi.single X (𝟙 _)) ≫ Sigma.desc (fun f => f), ?_⟩
-  have h := (isSeparator_iff_epi (projectiveSeparator C)).1
-    isSeparator_projectiveSeparator (F.obj X)
-  suffices Epi (Sigma.desc (Pi.single X (𝟙 _))) from epi_comp' this h
-  exact SplitEpi.epi ⟨Sigma.ι (fun (X : D) => ∐ fun _ => projectiveSeparator C) X, by simp⟩
-
-Depends on / 依赖: F.op, G.op, IsCofiltered, IsCofiltered.iff_of_equivalence, StructuredArrow, costructuredArrowOpEquivalence, iff_of_equivalence, isCofiltered_op_iff_isFiltered
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.exists_ep
+i** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.Opposi
+teModuleEmbedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem exists_epi (X : D) : exists f : generator F ⟶ F.obj X, Epi f := by
+private theorem exists_epi (X : D) : ∃ f : generator F ⟶ F.obj X, Epi f := by
   classical
   refine ⟨Sigma.desc (Pi.single X (𝟙 _)) ≫ Sigma.desc (fun f => f), ?_⟩
   have h := (isSeparator_iff_epi (projectiveSeparator C)).1
     isSeparator_projectiveSeparator (F.obj X)
   suffices Epi (Sigma.desc (Pi.single X (𝟙 _))) from epi_comp' this h
   exact SplitEpi.epi ⟨Sigma.ι (fun (X : D) => ∐ fun _ => projectiveSeparator C) X, by simp⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Projective (generator F)
-  body: by
-  rw [generator]
-  infer_instance
-
-中文:
-实例 :
-  签名: 投射 (generator F)
-  定义体: by
-  rw [generator]
-  infer_instance
-
-Depends on / 依赖: CategoryOfElements, CategoryOfElements.structuredArrowEquivalence, IsCofiltered, StructuredArrow, infer_instance, of_equivalence, structuredArrowEquivalence
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.** 是 Math
+lib 中的一个实例，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEm
+bedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private instance : Projective (generator F) := by
   rw [generator]
   infer_instance
-
-/--
-theorem `isSeparator` / 定理 `isSeparator`
-
-English:
-theorem isSeparator
-  given: [Nonempty D]
-  statement: IsSeparator (generator F)
-  proof: by
-  apply isSeparator_sigma_of_isSeparator _ Classical.ofNonempty
-  apply isSeparator_sigma_of_isSeparator _ 0
-  exact isSeparator_projectiveSeparator
-
-中文:
-定理 isSeparator
-  条件: [非空 D]
-  结论: IsSeparator (generator F)
-  证明: by
-  apply isSeparator_sigma_of_isSeparator _ Classical.ofNonempty
-  apply isSeparator_sigma_of_isSeparator _ 0
-  exact isSeparator_projectiveSeparator
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.isSeparat
+or** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.Oppos
+iteModuleEmbedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem isSeparator [Nonempty D] : IsSeparator (generator F) := by
   apply isSeparator_sigma_of_isSeparator _ Classical.ofNonempty
@@ -192,142 +103,137 @@ private theorem isSeparator [Nonempty D] : IsSeparator (generator F) := by
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `EmbeddingRing` / `EmbeddingRing` 的定义
+/-- Given a functor `F : D ⥤ Cᵒᵖ`, where `C` is Grothendieck abelian, this is a ring `R` such that
+`Cᵒᵖ` has a nice embedding into `ModuleCat (EmbeddingRing F)`; see
+`OppositeModuleEmbedding.embedding`. -/
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.Embedding
+Ring** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.Opp
+ositeModuleEmbedding`。
+形式化陈述：EmbeddingRing : Type v
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EmbeddingRing
-  signature: : Type v
-  body: (End (generator F))ᵐᵒᵖ
-
-中文:
-定义 EmbeddingRing
-  签名: : 类型v
-  定义体: (End (generator F))ᵐᵒᵖ
-
-Depends on / 依赖: generator
+--- 原说明 ---
+Given a functor `F : D ⥤ Cᵒᵖ`, where `C` is Grothendieck abelian, this is a ring
+ `R` such that
+`Cᵒᵖ` has a nice embedding into `ModuleCat (EmbeddingRing F)`; see
+`OppositeModuleEmbedding.embedding`.
 -/
 def EmbeddingRing : Type v := (End (generator F))ᵐᵒᵖ
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Ring (EmbeddingRing F)
-  body: inferInstanceAs Ring (End (generator F))ᵐᵒᵖ
-
-中文:
-实例 :
-  签名: 环 (EmbeddingRing F)
-  定义体: inferInstanceAs Ring (End (generator F))ᵐᵒᵖ
-
-Depends on / 依赖: generator
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.** 是 Math
+lib 中的一个实例，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEm
+bedding`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Ring (EmbeddingRing F) :=
-inferInstanceAs Ring (End (generator F))ᵐᵒᵖ
+  inferInstanceAs <| Ring (End (generator F))ᵐᵒᵖ
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `embedding` / `embedding` 的定义
+/-- This is a functor `embedding F : Cᵒᵖ ⥤ ModuleCat (EmbeddingRing F)`. We have that `embedding F`
+is faithful and preserves finite limits and colimits. Furthermore, `F ⋙ embedding F` is full. -/
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.embedding
+** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.Opposit
+eModuleEmbedding`。
+形式化陈述：embedding : Cᵒᵖ ⥤ ModuleCat.{v} (EmbeddingRing F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition embedding
-  signature: : Cᵒᵖ ⥤ ModuleCat.{v} (EmbeddingRing F)
-  body: preadditiveCoyonedaObj (generator F)
-
-中文:
-定义 embedding
-  签名: : Cᵒᵖ ⥤ 模范畴.{v} (EmbeddingRing F)
-  定义体: preadditiveCoyonedaObj (generator F)
-
-Depends on / 依赖: generator, preadditiveCoyonedaObj
+--- 原说明 ---
+This is a functor `embedding F : Cᵒᵖ ⥤ ModuleCat (EmbeddingRing F)`. We have tha
+t `embedding F`
+is faithful and preserves finite limits and colimits. Furthermore, `F ⋙ embeddin
+g F` is full.
 -/
 noncomputable def embedding : Cᵒᵖ ⥤ ModuleCat.{v} (EmbeddingRing F) :=
   preadditiveCoyonedaObj (generator F)
-
-/--
-Instance `faithful_embedding` / 实例 `faithful_embedding`
-
-English:
-instance faithful_embedding
-  signature: [Nonempty D]
-  body: (isSeparator_iff_faithful_preadditiveCoyonedaObj _).1 (isSeparator F)
-
-中文:
-实例 faithful_embedding
-  签名: [非空 D]
-  定义体: (isSeparator_iff_faithful_preadditiveCoyonedaObj _).1 (isSeparator F)
-
-Depends on / 依赖: isSeparator, isSeparator_iff_faithful_preadditiveCoyonedaObj
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.faithful_
+embedding** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelia
+n.OppositeModuleEmbedding`。
+形式化陈述：faithful_embedding [Nonempty D] : (embedding F).Faithful
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.isSeparator_iff_faithful_preadditiveCoyonedaObj`：isSepara
+tor_iff_faithful_preadditiveCoyonedaObj (G : C) : IsSeparator G ↔ (preadditiveCo
+yonedaObj G).Faithful
+· 使用定理 `_private.Mathlib.CategoryTheory.Abelian.GrothendieckCategory.ModuleEmbed
+ding.Opposite.0.CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbed
+ding.isSeparator`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : 
+Type v} [inst_1 : CategoryTheory.SmallCategory D]   (F : CategoryTheory.Functo…
 -/
 instance faithful_embedding [Nonempty D] : (embedding F).Faithful :=
   (isSeparator_iff_faithful_preadditiveCoyonedaObj _).1 (isSeparator F)
-
-/--
-Instance `full_embedding` / 实例 `full_embedding`
-
-English:
-instance full_embedding
-  signature: [Nonempty D] [F.Full]
-  body: full_comp_preadditiveCoyonedaObj _ (isSeparator F) (exists_epi F)
-
-中文:
-实例 full_embedding
-  签名: [非空 D] [F.满]
-  定义体: full_comp_preadditiveCoyonedaObj _ (isSeparator F) (exists_epi F)
-
-Depends on / 依赖: exists_epi, full_comp_preadditiveCoyonedaObj, isSeparator
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.full_embe
+dding** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Abelian.IsGrothendieckAbelian.Op
+positeModuleEmbedding`。
+形式化陈述：full_embedding [Nonempty D] [F.Full] : (F ⋙ embedding F).Full
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Abelian.full_comp_preadditiveCoyonedaObj`：full_comp_pread
+ditiveCoyonedaObj [F.Full] {G : C} [Projective G] (hG : IsSeparator G) (hG₂ : fo
+rall X, exists (p : G ⟶ F.obj X), Epi p) : (F…
+· 使用定理 `_private.Mathlib.CategoryTheory.Abelian.GrothendieckCategory.ModuleEmbed
+ding.Opposite.0.CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbed
+ding.instProjectiveOppositeGenerator`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {D : Type v} [inst_1 : CategoryTheory.SmallCategory D]   (F : Cat
+egoryTheory.Functo…
+· 使用定理 `_private.Mathlib.CategoryTheory.Abelian.GrothendieckCategory.ModuleEmbed
+ding.Opposite.0.CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbed
+ding.isSeparator`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : 
+Type v} [inst_1 : CategoryTheory.SmallCategory D]   (F : CategoryTheory.Functo…
+· 使用定理 `_private.Mathlib.CategoryTheory.Abelian.GrothendieckCategory.ModuleEmbed
+ding.Opposite.0.CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbed
+ding.exists_epi`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : T
+ype v} [inst_1 : CategoryTheory.SmallCategory D]   (F : CategoryTheory.Functo…
 -/
 instance full_embedding [Nonempty D] [F.Full] : (F ⋙ embedding F).Full :=
   full_comp_preadditiveCoyonedaObj _ (isSeparator F) (exists_epi F)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `preservesFiniteLimits_embedding` / 实例 `preservesFiniteLimits_embedding`
-
-English:
-instance preservesFiniteLimits_embedding
-  signature: : PreservesFiniteLimits (embedding F)
-  body: by
-  rw [embedding]
-  apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize
-  infer_instance
-
-中文:
-实例 preservesFiniteLimits_embedding
-  签名: : 保持FiniteLimits (embedding F)
-  定义体: by
-  rw [embedding]
-  apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize
-  infer_instance
-
-Depends on / 依赖: embedding, infer_instance, preservesFiniteLimits_of_preservesFiniteLimitsOfSize
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.preserves
+FiniteLimits_embedding** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Abelian.IsGroth
+endieckAbelian.OppositeModuleEmbedding`。
+形式化陈述：preservesFiniteLimits_embedding : PreservesFiniteLimits (embedding F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.emb
+edding.eq_1`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type 
+v} [inst_1 : CategoryTheory.SmallCategory D]   (F : CategoryTheory.Functo…
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_preservesFiniteLimitsOfSi
+ze`：preservesFiniteLimits_of_preservesFiniteLimitsOfSize (F : C ⥤ D) (h : forall
+ (J : Type w) {𝒥 : SmallCategory J} (_ : @FinCategory J 𝒥), Pres…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfSize.preservesLimitsOfShape`：∀ {C
+ : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : 
+CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 instance preservesFiniteLimits_embedding : PreservesFiniteLimits (embedding F) := by
   rw [embedding]
   apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize
   infer_instance
-
-/--
-Instance `preservesFiniteColimits_embedding` / 实例 `preservesFiniteColimits_embedding`
-
-English:
-instance preservesFiniteColimits_embedding
-  signature: : PreservesFiniteColimits (embedding F)
-  body: by
-  apply preservesFiniteColimits_preadditiveCoyonedaObj_of_projective
-
-中文:
-实例 preservesFiniteColimits_embedding
-  签名: : 保持FiniteColimits (embedding F)
-  定义体: by
-  apply preservesFiniteColimits_preadditiveCoyonedaObj_of_projective
-
-Depends on / 依赖: preservesFiniteColimits_preadditiveCoyonedaObj_of_projective
+/-
+**CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbedding.preserves
+FiniteColimits_embedding** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Abelian.IsGro
+thendieckAbelian.OppositeModuleEmbedding`。
+形式化陈述：preservesFiniteColimits_embedding : PreservesFiniteColimits (embedding F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.CategoryTheory.Abelian.GrothendieckCategory.ModuleEmbed
+ding.Opposite.0.CategoryTheory.Abelian.IsGrothendieckAbelian.OppositeModuleEmbed
+ding.instProjectiveOppositeGenerator`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {D : Type v} [inst_1 : CategoryTheory.SmallCategory D]   (F : Cat
+egoryTheory.Functo…
 -/
 instance preservesFiniteColimits_embedding : PreservesFiniteColimits (embedding F) := by
   apply preservesFiniteColimits_preadditiveCoyonedaObj_of_projective
@@ -335,3 +241,4 @@ instance preservesFiniteColimits_embedding : PreservesFiniteColimits (embedding 
 end OppositeModuleEmbedding
 
 end CategoryTheory.Abelian.IsGrothendieckAbelian
+

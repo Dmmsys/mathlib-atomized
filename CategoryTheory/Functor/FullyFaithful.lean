@@ -42,20 +42,15 @@ namespace Functor
 
 /-- A functor `F : C ⥤ D` is full if for each `X Y : C`, `F.map` is surjective. -/
 @[stacks 001C]
-/--
-Definition of `Full` / `Full` 的定义
+/-
+**CategoryTheory.Functor.Full** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：Full (F : C ⥤ D) : Prop where map_surjective {X Y : C} : Function.Surjecti
+ve (F.map (X
+参数：F : C ⥤ D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Full
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - map_surjective({X Y : C}) : Function.Surjective (F.map (X := X) (Y := Y))
-
-中文:
-类 满
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - map_surjective({X Y : C}) : 函数.满射 (F.map (X := X) (Y := Y))
+--- 原说明 ---
+A functor `F : C ⥤ D` is full if for each `X Y : C`, `F.map` is surjective.
 -/
 class Full (F : C ⥤ D) : Prop where
   map_surjective {X Y : C} : Function.Surjective (F.map (X := X) (Y := Y))
@@ -64,26 +59,21 @@ attribute [to_dual self] Full.map_surjective Full.mk
 
 /-- A functor `F : C ⥤ D` is faithful if for each `X Y : C`, `F.map` is injective. -/
 @[stacks 001C]
-/--
-Definition of `Faithful` / `Faithful` 的定义
+/-
+**CategoryTheory.Functor.Faithful** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory.Funct
+or`。
+形式化陈述：Faithful (F : C ⥤ D) : Prop where /-- `F.map` is injective for each `X Y :
+ C`. -/ map_injective : forall {X Y : C}, Function.Injective (F.map : (X ⟶ Y) ->
+ (F.obj X ⟶ F.obj Y))
+参数：F : C ⥤ D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Faithful
-  parameters: (F : C ⥤ D)
-  axioms and operations (1):
-    - map_injective : forall {X Y : C}, Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))  [default: by cat_disch]
-
-中文:
-类 忠实
-  参数: (F : C ⥤ D)
-  公理与运算 (1 个):
-    - map_injective : 对任意 {X Y : C}, 函数.单射 (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))  [默认: by cat_disch]
-
-Depends on / 依赖: HasImage, cat_disch, mono_hasImage
+--- 原说明 ---
+A functor `F : C ⥤ D` is faithful if for each `X Y : C`, `F.map` is injective.
 -/
 class Faithful (F : C ⥤ D) : Prop where
   /-- `F.map` is injective for each `X Y : C`. -/
-  map_injective : forall {X Y : C}, Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y)) := by
+  map_injective : ∀ {X Y : C}, Function.Injective (F.map : (X ⟶ Y) → (F.obj X ⟶ F.obj Y)) := by
     cat_disch
 
 attribute [to_dual self] Faithful.map_injective Faithful.mk
@@ -91,98 +81,84 @@ attribute [to_dual self] Faithful.map_injective Faithful.mk
 variable {X Y : C}
 
 @[grind inj, to_dual self]
-/--
-theorem `map_injective` / 定理 `map_injective`
-
-English:
-theorem map_injective
-  given: (F : C ⥤ D) [Faithful F]
-  proof: Faithful.map_injective
-
-中文:
-定理 map_injective
-  条件: (F : C ⥤ D) [忠实 F]
-  证明: Faithful.map_injective
-
-Depends on / 依赖: Faithful, Faithful.map_injective, map_injective
+/-
+**CategoryTheory.Functor.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：map_injective (F : C ⥤ D) [Faithful F] : Function.Injective (F.map : (X ⟶ 
+Y) -> (F.obj X ⟶ F.obj Y))
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.map_injective`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 theorem map_injective (F : C ⥤ D) [Faithful F] :
-Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y)) :=
+    Function.Injective <| (F.map : (X ⟶ Y) → (F.obj X ⟶ F.obj Y)) :=
   Faithful.map_injective
-
-/--
-lemma `map_injective_iff` / 引理 `map_injective_iff`
-
-English:
-lemma map_injective_iff
-  given: (F : C ⥤ D) [Faithful F] {X Y : C} (f g : X ⟶ Y)
-  proof: ⟨fun h => F.map_injective h, fun h => by rw [h]⟩
-
-中文:
-引理 map_injective_iff
-  条件: (F : C ⥤ D) [忠实 F] {X Y : C} (f g : X ⟶ Y)
-  证明: ⟨fun h => F.map_injective h, fun h => by rw [h]⟩
-
-Depends on / 依赖: F.map_injective, map_injective
+/-
+**CategoryTheory.Functor.map_injective_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：map_injective_iff (F : C ⥤ D) [Faithful F] {X Y : C} (f g : X ⟶ Y) : F.map
+ f = F.map g ↔ f = g
+参数：F : C ⥤ D；f g : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma map_injective_iff (F : C ⥤ D) [Faithful F] {X Y : C} (f g : X ⟶ Y) :
     F.map f = F.map g ↔ f = g :=
   ⟨fun h => F.map_injective h, fun h => by rw [h]⟩
-
-/--
-theorem `mapIso_injective` / 定理 `mapIso_injective`
-
-English:
-theorem mapIso_injective
-  given: (F : C ⥤ D) [Faithful F]
-  proof: fun _ _ h =>
-  Iso.ext (map_injective F (congr_arg Iso.hom h :))
-
-中文:
-定理 mapIso_injective
-  条件: (F : C ⥤ D) [忠实 F]
-  证明: fun _ _ h =>
-  Iso.ext (map_injective F (congr_arg Iso.hom h :))
+/-
+**CategoryTheory.Functor.mapIso_injective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：mapIso_injective (F : C ⥤ D) [Faithful F] : Function.Injective (F.mapIso :
+ (X ≅ Y) -> (F.obj X ≅ F.obj Y))
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem mapIso_injective (F : C ⥤ D) [Faithful F] :
-Function.Injective (F.mapIso : (X ≅ Y) -> (F.obj X ≅ F.obj Y)) := fun _ _ h =>
+    Function.Injective <| (F.mapIso : (X ≅ Y) → (F.obj X ≅ F.obj Y)) := fun _ _ h =>
   Iso.ext (map_injective F (congr_arg Iso.hom h :))
-
-/--
-theorem `map_surjective` / 定理 `map_surjective`
-
-English:
-theorem map_surjective
-  given: (F : C ⥤ D) [Full F]
-  proof: Full.map_surjective
-
-中文:
-定理 map_surjective
-  条件: (F : C ⥤ D) [满 F]
-  证明: Full.map_surjective
-
-Depends on / 依赖: Full.map_surjective, map_surjective
+/-
+**CategoryTheory.Functor.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：map_surjective (F : C ⥤ D) [Full F] : Function.Surjective (F.map : (X ⟶ Y)
+ -> (F.obj X ⟶ F.obj Y))
+参数：F : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Full.map_surjective`：∀ {C : Type u₁} {inst : Cate
+goryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.
+{v₂, u₂} D}   {F : CategoryTheor…
 -/
 theorem map_surjective (F : C ⥤ D) [Full F] :
-    Function.Surjective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y)) :=
+    Function.Surjective (F.map : (X ⟶ Y) → (F.obj X ⟶ F.obj Y)) :=
   Full.map_surjective
 
 /-- The choice of a preimage of a morphism under a full functor. -/
 @[to_dual self]
-/--
-Definition of `preimage` / `preimage` 的定义
+/-
+**CategoryTheory.Functor.preimage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：preimage (F : C ⥤ D) [Full F] (f : F.obj X ⟶ F.obj Y) : X ⟶ Y
+参数：F : C ⥤ D；f : F.obj X ⟶ F.obj Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_surjective`：map_surjective (F : C ⥤ D) [Full 
+F] : Function.Surjective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
 
-English:
-definition preimage
-  signature: (F : C ⥤ D) [Full F] (f : F.obj X ⟶ F.obj Y)
-  body: (F.map_surjective f).choose
-
-中文:
-定义 原像
-  签名: (F : C ⥤ D) [满 F] (f : F.obj X ⟶ F.obj Y)
-  定义体: (F.map_surjective f).choose
-
-Depends on / 依赖: F.map_surjective, Image.monoFactorisation, map_surjective, monoFactorisation
+--- 原说明 ---
+The choice of a preimage of a morphism under a full functor.
 -/
 noncomputable def preimage (F : C ⥤ D) [Full F] (f : F.obj X ⟶ F.obj Y) : X ⟶ Y :=
   (F.map_surjective f).choose
@@ -191,20 +167,18 @@ noncomputable def preimage (F : C ⥤ D) [Full F] (f : F.obj X ⟶ F.obj Y) : X 
 attribute [to_dual self] preimage.congr_simp
 
 @[simp, to_dual self]
-/--
-theorem `map_preimage` / 定理 `map_preimage`
-
-English:
-theorem map_preimage
-  given: (F : C ⥤ D) [Full F] {X Y : C} (f : F.obj X ⟶ F.obj Y)
-  proof: (F.map_surjective f).choose_spec
-
-中文:
-定理 map_preimage
-  条件: (F : C ⥤ D) [满 F] {X Y : C} (f : F.obj X ⟶ F.obj Y)
-  证明: (F.map_surjective f).choose_spec
-
-Depends on / 依赖: F.map_surjective, choose_spec, map_surjective
+/-
+**CategoryTheory.Functor.map_preimage** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：map_preimage (F : C ⥤ D) [Full F] {X Y : C} (f : F.obj X ⟶ F.obj Y) : F.ma
+p (preimage F f) = f
+参数：F : C ⥤ D；f : F.obj X ⟶ F.obj Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `CategoryTheory.Functor.map_surjective`：map_surjective (F : C ⥤ D) [Full 
+F] : Function.Surjective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
 -/
 theorem map_preimage (F : C ⥤ D) [Full F] {X Y : C} (f : F.obj X ⟶ F.obj Y) :
     F.map (preimage F f) = f :=
@@ -216,69 +190,77 @@ section
 variable [Full F] [F.Faithful]
 
 @[simp]
-/--
-theorem `preimage_id` / 定理 `preimage_id`
-
-English:
-theorem preimage_id
-  statement: F.preimage (𝟙 (F.obj X)) = 𝟙 X
-  proof: F.map_injective (by simp)
-
-@[simp, to_dual self]
-
-中文:
-定理 preimage_id
-  结论: F.原像 (𝟙 (F.obj X)) = 𝟙 X
-  证明: F.map_injective (by simp)
-
-@[simp, to_dual self]
-
-Depends on / 依赖: F.map_injective, map_injective
+/-
+**CategoryTheory.Functor.preimage_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：preimage_id : F.preimage (𝟙 (F.obj X)) = 𝟙 X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preimage_id : F.preimage (𝟙 (F.obj X)) = 𝟙 X :=
   F.map_injective (by simp)
 
 @[simp, to_dual self]
-/--
-theorem `preimage_comp` / 定理 `preimage_comp`
-
-English:
-theorem preimage_comp
-  given: (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z)
-  proof: F.map_injective (by simp)
-
-@[simp, to_dual self]
-
-中文:
-定理 preimage_comp
-  条件: (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z)
-  证明: F.map_injective (by simp)
-
-@[simp, to_dual self]
-
-Depends on / 依赖: F.map_injective, map_injective
+/-
+**CategoryTheory.Functor.preimage_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：preimage_comp (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z) : F.preimage
+ (f ≫ g) = F.preimage f ≫ F.preimage g
+参数：f : F.obj X ⟶ F.obj Y；g : F.obj Y ⟶ F.obj Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preimage_comp (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z) :
     F.preimage (f ≫ g) = F.preimage f ≫ F.preimage g :=
   F.map_injective (by simp)
 
 @[simp, to_dual self]
-/--
-theorem `preimage_map` / 定理 `preimage_map`
-
-English:
-theorem preimage_map
-  given: (f : X ⟶ Y)
-  statement: F.preimage (F.map f) = f
-  proof: F.map_injective (by simp)
-
-中文:
-定理 preimage_map
-  条件: (f : X ⟶ Y)
-  结论: F.原像 (F.map f) = f
-  证明: F.map_injective (by simp)
-
-Depends on / 依赖: F.map_injective, map_injective
+/-
+**CategoryTheory.Functor.preimage_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：preimage_map (f : X ⟶ Y) : F.preimage (F.map f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preimage_map (f : X ⟶ Y) : F.preimage (F.map f) = f :=
   F.map_injective (by simp)
@@ -287,30 +269,17 @@ variable (F)
 
 /-- If `F : C ⥤ D` is fully faithful, every isomorphism `F.obj X ≅ F.obj Y` has a preimage. -/
 @[simps]
-/--
-Definition of `preimageIso` / `preimageIso` 的定义
+/-
+**CategoryTheory.Functor.preimageIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：preimageIso (f : F.obj X ≅ F.obj Y) : X ≅ Y where hom
+参数：f : F.obj X ≅ F.obj Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preimageIso
-  signature: (f : F.obj X ≅ F.obj Y)
-  body: F.preimage f.hom
-  inv := F.preimage f.inv
-  hom_inv_id := F.map_injective (by simp)
-  inv_hom_id := F.map_injective (by simp)
-
-@[simp]
-
-中文:
-定义 preimageIso
-  签名: (f : F.obj X ≅ F.obj Y)
-  定义体: F.preimage f.hom
-  inv := F.preimage f.inv
-  hom_inv_id := F.map_injective (by simp)
-  inv_hom_id := F.map_injective (by simp)
-
-@[simp]
-
-Depends on / 依赖: F.preimage, Image.monoFactorisation, f.hom, monoFactorisation, preimage
+--- 原说明 ---
+If `F : C ⥤ D` is fully faithful, every isomorphism `F.obj X ≅ F.obj Y` has a pr
+eimage.
 -/
 noncomputable def preimageIso (f : F.obj X ≅ F.obj Y) :
     X ≅ Y where
@@ -320,26 +289,26 @@ noncomputable def preimageIso (f : F.obj X ≅ F.obj Y) :
   inv_hom_id := F.map_injective (by simp)
 
 @[simp]
-/--
-theorem `preimageIso_mapIso` / 定理 `preimageIso_mapIso`
-
-English:
-theorem preimageIso_mapIso
-  given: (f : X ≅ Y)
-  statement: F.preimageIso (F.mapIso f) = f
-  proof: by
-  ext
-  simp
-
-中文:
-定理 preimageIso_mapIso
-  条件: (f : X ≅ Y)
-  结论: F.preimageIso (F.mapIso f) = f
-  证明: by
-  ext
-  simp
-
-Depends on / 依赖: Image.isImage, isImage
+/-
+**CategoryTheory.Functor.preimageIso_mapIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Functor`。
+形式化陈述：preimageIso_mapIso (f : X ≅ Y) : F.preimageIso (F.mapIso f) = f
+参数：f : X ≅ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.preimageIso_hom`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.preimage_map`：preimage_map (f : X ⟶ Y) : F.preima
+ge (F.map f) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem preimageIso_mapIso (f : X ≅ Y) : F.preimageIso (F.mapIso f) = f := by
   ext
@@ -348,26 +317,21 @@ theorem preimageIso_mapIso (f : X ≅ Y) : F.preimageIso (F.mapIso f) = f := by
 end
 
 variable (F) in
-/--
-Definition of `FullyFaithful` / `FullyFaithful` 的定义
+/-- Structure containing the data of inverse map `(F.obj X ⟶ F.obj Y) ⟶ (X ⟶ Y)` of `F.map`
+in order to express that `F` is a fully faithful functor. -/
+/-
+**CategoryTheory.Functor.FullyFaithful** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：FullyFaithful where /-- The inverse map `(F.obj X ⟶ F.obj Y) ⟶ (X ⟶ Y)` of
+ `F.map`. -/ preimage {X Y : C} (f : F.obj X ⟶ F.obj Y) : X ⟶ Y map_preimage {X 
+Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage f) = f
+参数：F.obj X ⟶ F.obj Y；X ⟶ Y；f : F.obj X ⟶ F.obj Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FullyFaithful
-  parameters: where
-  axioms and operations (3):
-    - preimage({X Y : C} (f : F.obj X ⟶ F.obj Y)) : X ⟶ Y
-    - map_preimage({X Y : C} (f : F.obj X ⟶ F.obj Y)) : F.map (preimage f) = f  [default: by cat_disch]
-    - preimage_map({X Y : C} (f : X ⟶ Y)) : preimage (F.map f) = f  [default: by cat_disch]
-
-中文:
-结构 满忠实
-  参数: where
-  公理与运算 (3 个):
-    - preimage({X Y : C} (f : F.obj X ⟶ F.obj Y)) : X ⟶ Y
-    - map_preimage({X Y : C} (f : F.obj X ⟶ F.obj Y)) : F.map (原像 f) = f  [默认: by cat_disch]
-    - preimage_map({X Y : C} (f : X ⟶ Y)) : 原像 (F.map f) = f  [默认: by cat_disch]
-
-Depends on / 依赖: F.map, Image.isImage, cat_disch, isImage, lift_fac, preimage, preimage_map
+--- 原说明 ---
+Structure containing the data of inverse map `(F.obj X ⟶ F.obj Y) ⟶ (X ⟶ Y)` of 
+`F.map`
+in order to express that `F` is a fully faithful functor.
 -/
 structure FullyFaithful where
   /-- The inverse map `(F.obj X ⟶ F.obj Y) ⟶ (X ⟶ Y)` of `F.map`. -/
@@ -380,20 +344,18 @@ namespace FullyFaithful
 attribute [simp] map_preimage preimage_map
 
 variable (F) in
-/--
-Definition of `ofFullyFaithful` / `ofFullyFaithful` 的定义
+/-- A `FullyFaithful` structure can be obtained from the assumption the `F` is both
+full and faithful. -/
+/-
+**CategoryTheory.Functor.FullyFaithful.ofFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：ofFullyFaithful [F.Full] [F.Faithful] : F.FullyFaithful where preimage
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofFullyFaithful
-  signature: [F.Full] [F.Faithful]
-  body: F.preimage
-
-中文:
-定义 ofFullyFaithful
-  签名: [F.满] [F.忠实]
-  定义体: F.preimage
-
-Depends on / 依赖: F.preimage, preimage
+--- 原说明 ---
+A `FullyFaithful` structure can be obtained from the assumption the `F` is both
+full and faithful.
 -/
 noncomputable def ofFullyFaithful [F.Full] [F.Faithful] :
     F.FullyFaithful where
@@ -402,18 +364,15 @@ noncomputable def ofFullyFaithful [F.Full] [F.Faithful] :
 variable (C) in
 /-- The identity functor is fully faithful. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor.FullyFaithful`。
+形式化陈述：id : (𝟭 C).FullyFaithful where preimage f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : (𝟭 C).FullyFaithful where
-  body: f
-
-中文:
-定义 id
-  签名: : (𝟭 C).满忠实 where
-  定义体: f
+--- 原说明 ---
+The identity functor is fully faithful.
 -/
 def id : (𝟭 C).FullyFaithful where
   preimage f := f
@@ -425,201 +384,142 @@ include hF
 
 /-- The equivalence `(X ⟶ Y) ≃ (F.obj X ⟶ F.obj Y)` given by `h : F.FullyFaithful`. -/
 @[simps]
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor.FullyFaithful`。
+形式化陈述：homEquiv {X Y : C} : (X ⟶ Y) ≃ (F.obj X ⟶ F.obj Y) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homEquiv
-  signature: {X Y : C}
-  body: F.map
-  invFun := hF.preimage
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-中文:
-定义 homEquiv
-  签名: {X Y : C}
-  定义体: F.map
-  invFun := hF.preimage
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-Depends on / 依赖: F.map
+--- 原说明 ---
+The equivalence `(X ⟶ Y) ≃ (F.obj X ⟶ F.obj Y)` given by `h : F.FullyFaithful`.
 -/
 def homEquiv {X Y : C} : (X ⟶ Y) ≃ (F.obj X ⟶ F.obj Y) where
   toFun := F.map
   invFun := hF.preimage
   left_inv _ := by simp
   right_inv _ := by simp
-
-/--
-lemma `map_injective` / 引理 `map_injective`
-
-English:
-lemma map_injective
-  given: {X Y : C} {f g : X ⟶ Y} (h : F.map f = F.map g)
-  statement: f = g
-  proof: hF.homEquiv.injective h
-
-中文:
-引理 map_injective
-  条件: {X Y : C} {f g : X ⟶ Y} (h : F.map f = F.map g)
-  结论: f = g
-  证明: hF.homEquiv.injective h
-
-Depends on / 依赖: hF.homEquiv.injective, homEquiv, injective
+/-
+**CategoryTheory.Functor.FullyFaithful.map_injective** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：map_injective {X Y : C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g
+参数：h : F.map f = F.map g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma map_injective {X Y : C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g :=
   hF.homEquiv.injective h
-
-/--
-lemma `map_surjective` / 引理 `map_surjective`
-
-English:
-lemma map_surjective
-  given: {X Y : C}
-  proof: hF.homEquiv.surjective
-
-中文:
-引理 map_surjective
-  条件: {X Y : C}
-  证明: hF.homEquiv.surjective
-
-Depends on / 依赖: hF.homEquiv.surjective, homEquiv, surjective
+/-
+**CategoryTheory.Functor.FullyFaithful.map_surjective** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：map_surjective {X Y : C} : Function.Surjective (F.map : (X ⟶ Y) -> (F.obj 
+X ⟶ F.obj Y))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 lemma map_surjective {X Y : C} :
-    Function.Surjective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y)) :=
+    Function.Surjective (F.map : (X ⟶ Y) → (F.obj X ⟶ F.obj Y)) :=
   hF.homEquiv.surjective
-
-/--
-lemma `map_bijective` / 引理 `map_bijective`
-
-English:
-lemma map_bijective
-  given: (X Y : C)
-  proof: hF.homEquiv.bijective
-
-@[simp]
-
-中文:
-引理 map_bijective
-  条件: (X Y : C)
-  证明: hF.homEquiv.bijective
-
-@[simp]
-
-Depends on / 依赖: bijective, hF.homEquiv.bijective, homEquiv
+/-
+**CategoryTheory.Functor.FullyFaithful.map_bijective** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：map_bijective (X Y : C) : Function.Bijective (F.map : (X ⟶ Y) -> (F.obj X 
+⟶ F.obj Y))
+参数：X Y : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 lemma map_bijective (X Y : C) :
-    Function.Bijective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y)) :=
+    Function.Bijective (F.map : (X ⟶ Y) → (F.obj X ⟶ F.obj Y)) :=
   hF.homEquiv.bijective
 
 @[simp]
-/--
-lemma `preimage_id` / 引理 `preimage_id`
-
-English:
-lemma preimage_id
-  given: {X : C}
-  proof: hF.map_injective (by simp)
-
-@[simp, reassoc]
-
-中文:
-引理 preimage_id
-  条件: {X : C}
-  证明: hF.map_injective (by simp)
-
-@[simp, reassoc]
-
-Depends on / 依赖: hF.map_injective, map_injective
+/-
+**CategoryTheory.Functor.FullyFaithful.preimage_id** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Functor.FullyFaithful`。
+形式化陈述：preimage_id {X : C} : hF.preimage (𝟙 (F.obj X)) = 𝟙 X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_injective`：map_injective {X Y :
+ C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.map_preimage`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma preimage_id {X : C} :
     hF.preimage (𝟙 (F.obj X)) = 𝟙 X :=
   hF.map_injective (by simp)
 
 @[simp, reassoc]
-/--
-lemma `preimage_comp` / 引理 `preimage_comp`
-
-English:
-lemma preimage_comp
-  given: {X Y Z : C} (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z)
-  proof: hF.map_injective (by simp)
-
-中文:
-引理 preimage_comp
-  条件: {X Y Z : C} (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z)
-  证明: hF.map_injective (by simp)
-
-Depends on / 依赖: factorThruImage, hF.map_injective, image.lift, isImage, map_injective
+/-
+**CategoryTheory.Functor.FullyFaithful.preimage_comp** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：preimage_comp {X Y Z : C} (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z) 
+: hF.preimage (f ≫ g) = hF.preimage f ≫ hF.preimage g
+参数：f : F.obj X ⟶ F.obj Y；g : F.obj Y ⟶ F.obj Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_injective`：map_injective {X Y :
+ C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.map_preimage`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma preimage_comp {X Y Z : C} (f : F.obj X ⟶ F.obj Y) (g : F.obj Y ⟶ F.obj Z) :
     hF.preimage (f ≫ g) = hF.preimage f ≫ hF.preimage g :=
   hF.map_injective (by simp)
-
-/--
-lemma `full` / 引理 `full`
-
-English:
-lemma full
-  statement: F.Full where
-  proof: hF.map_surjective
-
-中文:
-引理 full
-  结论: F.满 where
-  证明: hF.map_surjective
-
-Depends on / 依赖: hF.map_surjective, map_surjective
+/-
+**CategoryTheory.Functor.FullyFaithful.full** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Functor.FullyFaithful`。
+形式化陈述：full : F.Full where map_surjective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_surjective`：map_surjective {X Y
+ : C} : Function.Surjective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
 -/
 lemma full : F.Full where
   map_surjective := hF.map_surjective
-
-/--
-lemma `faithful` / 引理 `faithful`
-
-English:
-lemma faithful
-  statement: F.Faithful where
-  proof: hF.map_injective
-
-中文:
-引理 faithful
-  结论: F.忠实 where
-  证明: hF.map_injective
-
-Depends on / 依赖: hF.map_injective, map_injective
+/-
+**CategoryTheory.Functor.FullyFaithful.faithful** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Functor.FullyFaithful`。
+形式化陈述：faithful : F.Faithful where map_injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_injective`：map_injective {X Y :
+ C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g
 -/
 lemma faithful : F.Faithful where
   map_injective := hF.map_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton F.FullyFaithful
-  body: by
-    have := h₁.faithful
-    cases h₁ with | mk f₁ hf₁ _ => cases h₂ with | mk f₂ hf₂ _ =>
-    simp only [Functor.FullyFaithful.mk.injEq]
-    ext
-    apply F.map_injective
-    rw [hf₁]; rw [hf₂]
-
-中文:
-实例 :
-  签名: 子单例 F.满忠实
-  定义体: by
-    have := h₁.faithful
-    cases h₁ with | mk f₁ hf₁ _ => cases h₂ with | mk f₂ hf₂ _ =>
-    simp only [Functor.FullyFaithful.mk.injEq]
-    ext
-    apply F.map_injective
-    rw [hf₁]; rw [hf₂]
-
-Depends on / 依赖: F.map_injective, FullyFaithful, Functor, Functor.FullyFaithful.mk.injEq, faithful, map_injective
+/-
+**CategoryTheory.Functor.FullyFaithful.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Functor.FullyFaithful`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton F.FullyFaithful where
   allEq h₁ h₂ := by
@@ -628,54 +528,46 @@ instance : Subsingleton F.FullyFaithful where
     simp only [Functor.FullyFaithful.mk.injEq]
     ext
     apply F.map_injective
-    rw [hf₁]; rw [hf₂]
+    rw [hf₁, hf₂]
 
 /-- The unique isomorphism `X ≅ Y` which induces an isomorphism `F.obj X ≅ F.obj Y`
 when `hF : F.FullyFaithful`. -/
 @[simps]
-/--
-Definition of `preimageIso` / `preimageIso` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.preimageIso** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor.FullyFaithful`。
+形式化陈述：preimageIso {X Y : C} (e : F.obj X ≅ F.obj Y) : X ≅ Y where hom
+参数：e : F.obj X ≅ F.obj Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preimageIso
-  signature: {X Y : C} (e : F.obj X ≅ F.obj Y)
-  body: hF.preimage e.hom
-  inv := hF.preimage e.inv
-  hom_inv_id := hF.map_injective (by simp)
-  inv_hom_id := hF.map_injective (by simp)
-
-中文:
-定义 preimageIso
-  签名: {X Y : C} (e : F.obj X ≅ F.obj Y)
-  定义体: hF.preimage e.hom
-  inv := hF.preimage e.inv
-  hom_inv_id := hF.map_injective (by simp)
-  inv_hom_id := hF.map_injective (by simp)
-
-Depends on / 依赖: e.hom, hF.preimage, preimage
+--- 原说明 ---
+The unique isomorphism `X ≅ Y` which induces an isomorphism `F.obj X ≅ F.obj Y`
+when `hF : F.FullyFaithful`.
 -/
 def preimageIso {X Y : C} (e : F.obj X ≅ F.obj Y) : X ≅ Y where
   hom := hF.preimage e.hom
   inv := hF.preimage e.inv
   hom_inv_id := hF.map_injective (by simp)
   inv_hom_id := hF.map_injective (by simp)
-
-/--
-lemma `isIso_of_isIso_map` / 引理 `isIso_of_isIso_map`
-
-English:
-lemma isIso_of_isIso_map
-  given: {X Y : C} (f : X ⟶ Y) [IsIso (F.map f)]
-  proof: by
-  simpa using (hF.preimageIso (asIso (F.map f))).isIso_hom
-
-中文:
-引理 isIso_of_isIso_map
-  条件: {X Y : C} (f : X ⟶ Y) [是同构 (F.map f)]
-  证明: by
-  simpa using (hF.preimageIso (asIso (F.map f))).isIso_hom
-
-Depends on / 依赖: F.map, hF.preimageIso, isIso_hom, preimageIso
+/-
+**CategoryTheory.Functor.FullyFaithful.isIso_of_isIso_map** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：isIso_of_isIso_map {X Y : C} (f : X ⟶ Y) [IsIso (F.map f)] : IsIso f
+参数：f : X ⟶ Y；F.map f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.preimageIso_hom`：∀ {C : Type u₁} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory
+.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.FullyFaithful.preimage_map`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Ca
+tegory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 lemma isIso_of_isIso_map {X Y : C} (f : X ⟶ Y) [IsIso (F.map f)] :
     IsIso f := by
@@ -683,26 +575,15 @@ lemma isIso_of_isIso_map {X Y : C} (f : X ⟶ Y) [IsIso (F.map f)] :
 
 /-- The equivalence `(X ≅ Y) ≃ (F.obj X ≅ F.obj Y)` given by `h : F.FullyFaithful`. -/
 @[simps]
-/--
-Definition of `isoEquiv` / `isoEquiv` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.isoEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor.FullyFaithful`。
+形式化陈述：isoEquiv {X Y : C} : (X ≅ Y) ≃ (F.obj X ≅ F.obj Y) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoEquiv
-  signature: {X Y : C}
-  body: F.mapIso
-  invFun := hF.preimageIso
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-中文:
-定义 isoEquiv
-  签名: {X Y : C}
-  定义体: F.mapIso
-  invFun := hF.preimageIso
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-Depends on / 依赖: F.mapIso, mapIso
+--- 原说明 ---
+The equivalence `(X ≅ Y) ≃ (F.obj X ≅ F.obj Y)` given by `h : F.FullyFaithful`.
 -/
 def isoEquiv {X Y : C} : (X ≅ Y) ≃ (F.obj X ≅ F.obj Y) where
   toFun := F.mapIso
@@ -712,40 +593,32 @@ def isoEquiv {X Y : C} : (X ≅ Y) ≃ (F.obj X ≅ F.obj Y) where
 
 /-- Fully faithful functors are stable by composition. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor.FullyFaithful`。
+形式化陈述：comp {G : D ⥤ E} (hG : G.FullyFaithful) : (F ⋙ G).FullyFaithful where prei
+mage f
+参数：hG : G.FullyFaithful。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {G : D ⥤ E} (hG : G.FullyFaithful)
-  body: hF.preimage (hG.preimage f)
-
-中文:
-定义 comp
-  签名: {G : D ⥤ E} (hG : G.满忠实)
-  定义体: hF.preimage (hG.preimage f)
-
-Depends on / 依赖: hF.preimage, hG.preimage, preimage
+--- 原说明 ---
+Fully faithful functors are stable by composition.
 -/
 def comp {G : D ⥤ E} (hG : G.FullyFaithful) : (F ⋙ G).FullyFaithful where
   preimage f := hF.preimage (hG.preimage f)
 
-/--
-Definition of `ofIso` / `ofIso` 的定义
+/-- If `F` is fully faithful and `F ≅ G`, then `G` is fully faithful. -/
+/-
+**CategoryTheory.Functor.FullyFaithful.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Functor.FullyFaithful`。
+形式化陈述：ofIso {G : C ⥤ D} (e : F ≅ G) : G.FullyFaithful where preimage f
+参数：e : F ≅ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIso
-  signature: {G : C ⥤ D} (e : F ≅ G)
-  body: hF.preimage (e.hom.app _ ≫ f ≫ e.inv.app _)
-  map_preimage f := by simp [← NatIso.naturality_1 e]
-
-中文:
-定义 ofIso
-  签名: {G : C ⥤ D} (e : F ≅ G)
-  定义体: hF.preimage (e.hom.app _ ≫ f ≫ e.inv.app _)
-  map_preimage f := by simp [← NatIso.naturality_1 e]
-
-Depends on / 依赖: e.hom.app, e.inv.app, hF.preimage, preimage
+--- 原说明 ---
+If `F` is fully faithful and `F ≅ G`, then `G` is fully faithful.
 -/
 def ofIso {G : C ⥤ D} (e : F ≅ G) : G.FullyFaithful where
   preimage f := hF.preimage (e.hom.app _ ≫ f ≫ e.inv.app _)
@@ -754,50 +627,39 @@ def ofIso {G : C ⥤ D} (e : F ≅ G) : G.FullyFaithful where
 end
 
 variable (F) in
-/--
-lemma `nonempty_iff_map_bijective` / 引理 `nonempty_iff_map_bijective`
-
-English:
-lemma nonempty_iff_map_bijective
-  proof: ⟨fun ⟨hF⟩ => hF.map_bijective, fun hF => by
-    have : F.Faithful := ⟨fun h => (hF _ _).injective h⟩
-    have : F.Full := ⟨(hF _ _).surjective⟩
-    exact ⟨.ofFullyFaithful _⟩⟩
-
-中文:
-引理 nonempty_iff_map_bijective
-  证明: ⟨fun ⟨hF⟩ => hF.map_bijective, fun hF => by
-    have : F.Faithful := ⟨fun h => (hF _ _).injective h⟩
-    have : F.Full := ⟨(hF _ _).surjective⟩
-    exact ⟨.ofFullyFaithful _⟩⟩
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.Faithful, F.Full, Faithful, cancel_mono, eqToHom, h.symm, hF.map_bijective, id_comp, image.eqToHom, injective, map_bijective, ofFullyFaithful, surjective
+/-
+**CategoryTheory.Functor.FullyFaithful.nonempty_iff_map_bijective** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：nonempty_iff_map_bijective : Nonempty F.FullyFaithful ↔ forall (X Y : C), 
+Function.Bijective (F.map : (X ⟶ Y) -> _)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_bijective`：map_bijective (X Y :
+ C) : Function.Bijective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
 -/
 lemma nonempty_iff_map_bijective :
-    Nonempty F.FullyFaithful ↔ forall (X Y : C), Function.Bijective (F.map : (X ⟶ Y) -> _) :=
-  ⟨fun ⟨hF⟩ => hF.map_bijective, fun hF => by
-    have : F.Faithful := ⟨fun h => (hF _ _).injective h⟩
+    Nonempty F.FullyFaithful ↔ ∀ (X Y : C), Function.Bijective (F.map : (X ⟶ Y) → _) :=
+  ⟨fun ⟨hF⟩ ↦ hF.map_bijective, fun hF ↦ by
+    have : F.Faithful := ⟨fun h ↦ (hF _ _).injective h⟩
     have : F.Full := ⟨(hF _ _).surjective⟩
     exact ⟨.ofFullyFaithful _⟩⟩
 
-/--
-Definition of `ofCompFaithful` / `ofCompFaithful` 的定义
+/-- If `F ⋙ G` is fully faithful and `G` is faithful, then `F` is fully faithful. -/
+/-
+**CategoryTheory.Functor.FullyFaithful.ofCompFaithful** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：ofCompFaithful {G : D ⥤ E} [G.Faithful] (hFG : (F ⋙ G).FullyFaithful) : F.
+FullyFaithful where preimage f
+参数：hFG : (F ⋙ G).FullyFaithful。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCompFaithful
-  signature: {G : D ⥤ E} [G.Faithful] (hFG : (F ⋙ G).FullyFaithful)
-  body: hFG.preimage (G.map f)
-  map_preimage f := G.map_injective (hFG.map_preimage (G.map f))
-  preimage_map f := hFG.preimage_map f
-
-中文:
-定义 ofCompFaithful
-  签名: {G : D ⥤ E} [G.忠实] (hFG : (F ⋙ G).满忠实)
-  定义体: hFG.preimage (G.map f)
-  map_preimage f := G.map_injective (hFG.map_preimage (G.map f))
-  preimage_map f := hFG.preimage_map f
-
-Depends on / 依赖: G.map, hFG.preimage, preimage
+--- 原说明 ---
+If `F ⋙ G` is fully faithful and `G` is faithful, then `F` is fully faithful.
 -/
 def ofCompFaithful {G : D ⥤ E} [G.Faithful] (hFG : (F ⋙ G).FullyFaithful) :
     F.FullyFaithful where
@@ -814,22 +676,43 @@ section
 
 variable (F : C ⥤ D) [F.Full] [F.Faithful] {X Y : C}
 
-/--
-theorem `isIso_of_fully_faithful` / 定理 `isIso_of_fully_faithful`
+/-- If the image of a morphism under a fully faithful functor in an isomorphism,
+then the original morphisms is also an isomorphism.
+-/
+/-
+**CategoryTheory.isIso_of_fully_faithful** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：isIso_of_fully_faithful (f : X ⟶ Y) [IsIso (F.map f)] : IsIso f
+参数：f : X ⟶ Y；F.map f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
 
-English:
-theorem isIso_of_fully_faithful
-  given: (f : X ⟶ Y) [IsIso (F.map f)]
-  statement: IsIso f
-  proof: ⟨⟨F.preimage (inv (F.map f)), ⟨F.map_injective (by simp), F.map_injective (by simp)⟩⟩⟩
-
-中文:
-定理 isIso_of_fully_faithful
-  条件: (f : X ⟶ Y) [是同构 (F.map f)]
-  结论: 是同构 f
-  证明: ⟨⟨F.preimage (inv (F.map f)), ⟨F.map_injective (by simp), F.map_injective (by simp)⟩⟩⟩
-
-Depends on / 依赖: F.map, F.map_injective, F.preimage, map_injective, preimage
+--- 原说明 ---
+If the image of a morphism under a fully faithful functor in an isomorphism,
+then the original morphisms is also an isomorphism.
 -/
 theorem isIso_of_fully_faithful (f : X ⟶ Y) [IsIso (F.map f)] : IsIso f :=
   ⟨⟨F.preimage (inv (F.map f)), ⟨F.map_injective (by simp), F.map_injective (by simp)⟩⟩⟩
@@ -845,125 +728,128 @@ namespace Functor
 
 variable {C : Type u₁} [Category.{v₁} C]
 
-/--
-Instance `Full.id` / 实例 `Full.id`
-
-English:
-instance Full.id
-  signature: : Full (𝟭 C) where map_surjective
-  body: Function.surjective_id
-
-中文:
-实例 满.id
-  签名: : 满 (𝟭 C) where map_surjective
-  定义体: Function.surjective_id
-
-Depends on / 依赖: Function, Function.surjective_id, surjective_id
+/-
+**CategoryTheory.Functor.Full.id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Funct
+or.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C], (CategoryTheo
+ry.Functor.id C).Full
+参数：CategoryTheory.Functor.id C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.surjective_id`：∀ {α : Sort u_1}, Function.Surjective id
 -/
 instance Full.id : Full (𝟭 C) where map_surjective := Function.surjective_id
-
-/--
-Instance `Faithful.id` / 实例 `Faithful.id`
-
-English:
-instance Faithful.id
-  signature: : Functor.Faithful (𝟭 C)
-  body: { }
-
-中文:
-实例 忠实.id
-  签名: : 函子.忠实 (𝟭 C)
-  定义体: { }
+/-
+**CategoryTheory.Functor.Faithful.id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C], (CategoryTheo
+ry.Functor.id C).Faithful
+参数：CategoryTheory.Functor.id C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance Faithful.id : Functor.Faithful (𝟭 C) := { }
 
 variable {D : Type u₂} [Category.{v₂} D] {E : Type u₃} [Category.{v₃} E]
 variable (F F' : C ⥤ D) (G : D ⥤ E)
-
-/--
-Instance `Faithful.comp` / 实例 `Faithful.comp`
-
-English:
-instance Faithful.comp
-  signature: [F.Faithful] [G.Faithful]
-  body: F.map_injective (G.map_injective p)
-
-中文:
-实例 忠实.comp
-  签名: [F.忠实] [G.忠实]
-  定义体: F.map_injective (G.map_injective p)
-
-Depends on / 依赖: F.map_injective, G.map_injective, map_injective
+/-
+**CategoryTheory.Functor.Faithful.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C D)   (G : CategoryTheo
+ry.Functor D E) [F.Faithful] [G.Faithful], (F.comp G).Faithful
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
 -/
 instance Faithful.comp [F.Faithful] [G.Faithful] : (F ⋙ G).Faithful where
   map_injective p := F.map_injective (G.map_injective p)
-
-/--
-theorem `Faithful.of_comp` / 定理 `Faithful.of_comp`
-
-English:
-theorem Faithful.of_comp
-  given: [(F ⋙ G).Faithful]
-  statement: F.Faithful
-  proof: -- Porting note: (F ⋙ G).map_injective.of_comp has the incorrect type
-  { map_injective := fun {_ _} => Function.Injective.of_comp (F ⋙ G).map_injective }
-
-中文:
-定理 忠实.of_comp
-  条件: [(F ⋙ G).忠实]
-  结论: F.忠实
-  证明: -- Porting note: (F ⋙ G).map_injective.of_comp has the incorrect type
-  { map_injective := fun {_ _} => Function.Injective.of_comp (F ⋙ G).map_injective }
+/-
+**CategoryTheory.Functor.Faithful.of_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C D)   (G : CategoryTheo
+ry.Functor D E) [(F.comp G).Faithful], F.Faithful
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
 -/
 theorem Faithful.of_comp [(F ⋙ G).Faithful] : F.Faithful :=
   -- Porting note: (F ⋙ G).map_injective.of_comp has the incorrect type
   { map_injective := fun {_ _} => Function.Injective.of_comp (F ⋙ G).map_injective }
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [Quiver.IsThin C] : F.Faithful where
 
 section
 
 variable {F F'}
 
-/--
-lemma `Full.of_iso` / 引理 `Full.of_iso`
+/-- If `F` is full, and naturally isomorphic to some `F'`, then `F'` is also full. -/
+/-
+**CategoryTheory.Functor.Full.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctor.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F F' : CategoryTheory.Functor C
+ D} [F.Full] (α : F ≅ F'), F'.Full
+参数：α : F ≅ F'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatIso.naturality_1`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Full.of_iso
-  given: [Full F] (α : F ≅ F')
-  statement: Full F' where
-  proof: ⟨F.preimage ((α.app X).hom ≫ f ≫ (α.app Y).inv), by simp [← NatIso.naturality_1 α]⟩
-
-中文:
-引理 满.of_iso
-  条件: [满 F] (α : F ≅ F')
-  结论: 满 F' where
-  证明: ⟨F.preimage ((α.app X).hom ≫ f ≫ (α.app Y).inv), by simp [← NatIso.naturality_1 α]⟩
-
-Depends on / 依赖: F.preimage, NatIso, NatIso.naturality_1, naturality_1, preimage
+--- 原说明 ---
+If `F` is full, and naturally isomorphic to some `F'`, then `F'` is also full.
 -/
 lemma Full.of_iso [Full F] (α : F ≅ F') : Full F' where
   map_surjective {X Y} f :=
     ⟨F.preimage ((α.app X).hom ≫ f ≫ (α.app Y).inv), by simp [← NatIso.naturality_1 α]⟩
-
-/--
-theorem `Faithful.of_iso` / 定理 `Faithful.of_iso`
-
-English:
-theorem Faithful.of_iso
-  given: [F.Faithful] (α : F ≅ F')
-  statement: F'.Faithful
-  proof: { map_injective := fun h =>
-      F.map_injective (by rw [← NatIso.naturality_1 α.symm, h, NatIso.naturality_1 α.symm]) }
-
-中文:
-定理 忠实.of_iso
-  条件: [F.忠实] (α : F ≅ F')
-  结论: F'.忠实
-  证明: { map_injective := fun h =>
-      F.map_injective (by rw [← NatIso.naturality_1 α.symm, h, NatIso.naturality_1 α.symm]) }
-
-Depends on / 依赖: F.map_injective, NatIso, NatIso.naturality_1, map_injective, naturality_1
+/-
+**CategoryTheory.Functor.Faithful.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F F' : CategoryTheory.Functor C
+ D} [F.Faithful] (α : F ≅ F'), F'.Faithful
+参数：α : F ≅ F'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatIso.naturality_1`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem Faithful.of_iso [F.Faithful] (α : F ≅ F') : F'.Faithful :=
   { map_injective := fun h =>
@@ -973,26 +859,22 @@ end
 
 variable {F G}
 
-/--
-theorem `Faithful.of_comp_iso` / 定理 `Faithful.of_comp_iso`
-
-English:
-theorem Faithful.of_comp_iso
-  given: {H : C ⥤ E} [H.Faithful] (h : F ⋙ G ≅ H)
-  statement: F.Faithful
-  proof: @Faithful.of_comp _ _ _ _ _ _ F G (Faithful.of_iso h.symm)
-
-alias _root_.CategoryTheory.Iso.faithful_of_comp := Faithful.of_comp_iso
-
-中文:
-定理 忠实.of_comp_iso
-  条件: {H : C ⥤ E} [H.忠实] (h : F ⋙ G ≅ H)
-  结论: F.忠实
-  证明: @Faithful.of_comp _ _ _ _ _ _ F G (Faithful.of_iso h.symm)
-
-alias _root_.CategoryTheory.Iso.faithful_of_comp := Faithful.of_comp_iso
-
-Depends on / 依赖: Faithful, Faithful.of_comp, Faithful.of_iso, h.symm, of_comp, of_iso
+/-
+**CategoryTheory.Functor.Faithful.of_comp_iso** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] {F : CategoryTheory.Functor C D}   {G : CategoryTheo
+ry.Functor D E} {H : CategoryTheory.Functor C E} [H.Faithful] (h : F.comp G ≅ H)
+, F.Faithful
+参数：h : F.comp G ≅ H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.of_comp`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.Faithful.of_iso`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {F F' : CategoryTh…
 -/
 theorem Faithful.of_comp_iso {H : C ⥤ E} [H.Faithful] (h : F ⋙ G ≅ H) : F.Faithful :=
   @Faithful.of_comp _ _ _ _ _ _ F G (Faithful.of_iso h.symm)
@@ -1001,26 +883,19 @@ alias _root_.CategoryTheory.Iso.faithful_of_comp := Faithful.of_comp_iso
 
 -- We could prove this from `Faithful.of_comp_iso` using `eq_to_iso`,
 -- but that would introduce a cyclic import.
-/--
-theorem `Faithful.of_comp_eq` / 定理 `Faithful.of_comp_eq`
-
-English:
-theorem Faithful.of_comp_eq
-  given: {H : C ⥤ E} [ℋ : H.Faithful] (h : F ⋙ G = H)
-  statement: F.Faithful
-  proof: @Faithful.of_comp _ _ _ _ _ _ F G (h.symm ▸ ℋ)
-
-alias _root_.Eq.faithful_of_comp := Faithful.of_comp_eq
-
-中文:
-定理 忠实.of_comp_eq
-  条件: {H : C ⥤ E} [ℋ : H.忠实] (h : F ⋙ G = H)
-  结论: F.忠实
-  证明: @Faithful.of_comp _ _ _ _ _ _ F G (h.symm ▸ ℋ)
-
-alias _root_.Eq.faithful_of_comp := Faithful.of_comp_eq
-
-Depends on / 依赖: Faithful, Faithful.of_comp, h.symm, of_comp
+/-
+**CategoryTheory.Functor.Faithful.of_comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] {F : CategoryTheory.Functor C D}   {G : CategoryTheo
+ry.Functor D E} {H : CategoryTheory.Functor C E} [ℋ : H.Faithful], F.comp G = H 
+→ F.Faithful
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Faithful.of_comp`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {E : Type u₃} [ins…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Faithful.of_comp_eq {H : C ⥤ E} [ℋ : H.Faithful] (h : F ⋙ G = H) : F.Faithful :=
   @Faithful.of_comp _ _ _ _ _ _ F G (h.symm ▸ ℋ)
@@ -1028,32 +903,29 @@ theorem Faithful.of_comp_eq {H : C ⥤ E} [ℋ : H.Faithful] (h : F ⋙ G = H) :
 alias _root_.Eq.faithful_of_comp := Faithful.of_comp_eq
 
 variable (F G)
-/--
-Definition of `Faithful.div` / `Faithful.div` 的定义
+/-- “Divide” a functor by a faithful functor. -/
+/-
+**CategoryTheory.Functor.Faithful.div** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Functor.Faithful`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {E : Typ
+e u₃} →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             (F
+ : CategoryTheory.Functor C E) →               (G : CategoryTheory.Functor D E) 
+→                 [G.Faithful] →                   (obj : C → D) →              
+       (∀ (X : C), G.obj (obj X) = F.obj X) →                       (map : {X Y 
+: C} → (X ⟶ Y) → (obj X ⟶ obj Y)) →                         (∀ {X Y : C} {f : X 
+⟶ Y}, G.map (map f) ≍ F.map f) → CategoryTheory.Functor C D
+参数：F : CategoryTheory.Functor C E；G : CategoryTheory.Functor D E；obj : C → D；∀ (
+X : C), G.obj (obj X) = F.obj X；map : {X Y : C} → (X ⟶ Y) → (obj X ⟶ obj Y)；∀ {X
+ Y : C} {f : X ⟶ Y}, G.map (map f) ≍ F.map f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Faithful.div
-  signature: (F : C ⥤ E) (G : D ⥤ E) [G.Faithful] (obj : C -> D)
-  body: { obj, map := @map,
-    map_id := by
-      intro X
-      apply G.map_injective
-      grind
-    map_comp := by grind }
-
-中文:
-定义 忠实.div
-  签名: (F : C ⥤ E) (G : D ⥤ E) [G.忠实] (obj : C -> D)
-  定义体: { obj, map := @map,
-    map_id := by
-      intro X
-      apply G.map_injective
-      grind
-    map_comp := by grind }
+--- 原说明 ---
+“Divide” a functor by a faithful functor.
 -/
-protected def Faithful.div (F : C ⥤ E) (G : D ⥤ E) [G.Faithful] (obj : C -> D)
-    (h_obj : forall X, G.obj (obj X) = F.obj X) (map : forall {X Y}, (X ⟶ Y) -> (obj X ⟶ obj Y))
-    (h_map : forall {X Y} {f : X ⟶ Y}, G.map (map f) ≍ F.map f) : C ⥤ D :=
+protected def Faithful.div (F : C ⥤ E) (G : D ⥤ E) [G.Faithful] (obj : C → D)
+    (h_obj : ∀ X, G.obj (obj X) = F.obj X) (map : ∀ {X Y}, (X ⟶ Y) → (obj X ⟶ obj Y))
+    (h_map : ∀ {X Y} {f : X ⟶ Y}, G.map (map f) ≍ F.map f) : C ⥤ D :=
   { obj, map := @map,
     map_id := by
       intro X
@@ -1065,40 +937,31 @@ protected def Faithful.div (F : C ⥤ E) (G : D ⥤ E) [G.Faithful] (obj : C -> 
 -- but importing `CategoryTheory.EqToHom` causes an import loop:
 -- CategoryTheory.EqToHom → CategoryTheory.Opposites →
 -- CategoryTheory.Equivalence → CategoryTheory.FullyFaithful
-/--
-theorem `Faithful.div_comp` / 定理 `Faithful.div_comp`
-
-English:
-theorem Faithful.div_comp
-  statement: (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C -> D)
-  proof: by
-  obtain ⟨F_obj, _, _, _⟩ := F; obtain ⟨G_obj, _, _, _⟩ := G
-  unfold Faithful.div Functor.comp
-  have : F_obj = G_obj ∘ obj := (funext h_obj).symm
-  subst this
-  congr
-  simp only [Function.comp_apply, heq_eq_eq] at h_map
-  ext
-  exact h_map
-
-中文:
-定理 忠实.div_comp
-  结论: (F : C ⥤ E) [F.忠实] (G : D ⥤ E) [G.忠实] (obj : C -> D)
-  证明: by
-  obtain ⟨F_obj, _, _, _⟩ := F; obtain ⟨G_obj, _, _, _⟩ := G
-  unfold Faithful.div Functor.comp
-  have : F_obj = G_obj ∘ obj := (funext h_obj).symm
-  subst this
-  congr
-  simp only [Function.comp_apply, heq_eq_eq] at h_map
-  ext
-  exact h_map
-
-Depends on / 依赖: F_obj, Faithful, Faithful.div, Function, Function.comp_apply, Functor, Functor.comp, G_obj, comp_apply, h_map, h_obj, heq_eq_eq
+/-
+**CategoryTheory.Functor.Faithful.div_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C E) [F.Faithful]   (G :
+ CategoryTheory.Functor D E) [inst_4 : G.Faithful] (obj : C → D) (h_obj : ∀ (X :
+ C), G.obj (obj X) = F.obj X)   (map : {X Y : C} → (X ⟶ Y) → (obj X ⟶ obj Y)) (h
+_map : ∀ {X Y : C} {f : X ⟶ Y}, G.map (map f) ≍ F.map f),   (CategoryTheory.Func
+tor.Faithful.div F G obj h_obj map h_map).comp G = F
+参数：F : CategoryTheory.Functor C E；G : CategoryTheory.Functor D E；obj : C → D；h_o
+bj : ∀ (X : C), G.obj (obj X) = F.obj X；map : {X Y : C} → (X ⟶ Y) → (obj X ⟶ obj
+ Y)；h_map : ∀ {X Y : C} {f : X ⟶ Y}, G.map (map f) ≍ F.map f；CategoryTheory.Func
+tor.Faithful.div F G obj h_obj map h_map。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
 -/
-theorem Faithful.div_comp (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C -> D)
-    (h_obj : forall X, G.obj (obj X) = F.obj X) (map : forall {X Y}, (X ⟶ Y) -> (obj X ⟶ obj Y))
-    (h_map : forall {X Y} {f : X ⟶ Y}, G.map (map f) ≍ F.map f) :
+theorem Faithful.div_comp (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C → D)
+    (h_obj : ∀ X, G.obj (obj X) = F.obj X) (map : ∀ {X Y}, (X ⟶ Y) → (obj X ⟶ obj Y))
+    (h_map : ∀ {X Y} {f : X ⟶ Y}, G.map (map f) ≍ F.map f) :
     Faithful.div F G obj @h_obj @map @h_map ⋙ G = F := by
   obtain ⟨F_obj, _, _, _⟩ := F; obtain ⟨G_obj, _, _, _⟩ := G
   unfold Faithful.div Functor.comp
@@ -1108,110 +971,118 @@ theorem Faithful.div_comp (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] 
   simp only [Function.comp_apply, heq_eq_eq] at h_map
   ext
   exact h_map
-
-/--
-theorem `Faithful.div_faithful` / 定理 `Faithful.div_faithful`
-
-English:
-theorem Faithful.div_faithful
-  statement: (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C -> D)
-  proof: (Faithful.div_comp F G _ h_obj _ @h_map).faithful_of_comp
-
-中文:
-定理 忠实.div_faithful
-  结论: (F : C ⥤ E) [F.忠实] (G : D ⥤ E) [G.忠实] (obj : C -> D)
-  证明: (Faithful.div_comp F G _ h_obj _ @h_map).faithful_of_comp
-
-Depends on / 依赖: Faithful, Faithful.div_comp, div_comp, faithful_of_comp, h_map, h_obj
+/-
+**CategoryTheory.Functor.Faithful.div_faithful** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor.Faithful`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C E) [F.Faithful]   (G :
+ CategoryTheory.Functor D E) [inst_4 : G.Faithful] (obj : C → D) (h_obj : ∀ (X :
+ C), G.obj (obj X) = F.obj X)   (map : {X Y : C} → (X ⟶ Y) → (obj X ⟶ obj Y)) (h
+_map : ∀ {X Y : C} {f : X ⟶ Y}, G.map (map f) ≍ F.map f),   (CategoryTheory.Func
+tor.Faithful.div F G obj h_obj map h_map).Faithful
+参数：F : CategoryTheory.Functor C E；G : CategoryTheory.Functor D E；obj : C → D；h_o
+bj : ∀ (X : C), G.obj (obj X) = F.obj X；map : {X Y : C} → (X ⟶ Y) → (obj X ⟶ obj
+ Y)；h_map : ∀ {X Y : C} {f : X ⟶ Y}, G.map (map f) ≍ F.map f；CategoryTheory.Func
+tor.Faithful.div F G obj h_obj map h_map。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.faithful_of_comp`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁
+, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type
+ u₃} [ins…
+· 使用定理 `CategoryTheory.Functor.Faithful.div_comp`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {E : Type u₃} [ins…
 -/
-theorem Faithful.div_faithful (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C -> D)
-    (h_obj : forall X, G.obj (obj X) = F.obj X) (map : forall {X Y}, (X ⟶ Y) -> (obj X ⟶ obj Y))
-    (h_map : forall {X Y} {f : X ⟶ Y}, G.map (map f) ≍ F.map f) :
+theorem Faithful.div_faithful (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C → D)
+    (h_obj : ∀ X, G.obj (obj X) = F.obj X) (map : ∀ {X Y}, (X ⟶ Y) → (obj X ⟶ obj Y))
+    (h_map : ∀ {X Y} {f : X ⟶ Y}, G.map (map f) ≍ F.map f) :
     Functor.Faithful (Faithful.div F G obj @h_obj @map @h_map) :=
   (Faithful.div_comp F G _ h_obj _ @h_map).faithful_of_comp
-
-/--
-Instance `Full.comp` / 实例 `Full.comp`
-
-English:
-instance Full.comp
-  signature: [Full F] [Full G]
-  body: ⟨F.preimage (G.preimage f), by simp⟩
-
-中文:
-实例 满.comp
-  签名: [满 F] [满 G]
-  定义体: ⟨F.preimage (G.preimage f), by simp⟩
-
-Depends on / 依赖: F.preimage, G.preimage, preimage
+/-
+**CategoryTheory.Functor.Full.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Fun
+ctor.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C D)   (G : CategoryTheo
+ry.Functor D E) [F.Full] [G.Full], (F.comp G).Full
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance Full.comp [Full F] [Full G] : Full (F ⋙ G) where
   map_surjective f := ⟨F.preimage (G.preimage f), by simp⟩
 
-/--
-lemma `Full.of_comp_faithful` / 引理 `Full.of_comp_faithful`
+/-- If `F ⋙ G` is full and `G` is faithful, then `F` is full. -/
+/-
+**CategoryTheory.Functor.Full.of_comp_faithful** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] (F : CategoryTheory.Functor C D)   (G : CategoryTheo
+ry.Functor D E) [(F.comp G).Full] [G.Faithful], F.Full
+参数：F : CategoryTheory.Functor C D；G : CategoryTheory.Functor D E；F.comp G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `CategoryTheory.Functor.map_preimage`：map_preimage (F : C ⥤ D) [Full F] {
+X Y : C} (f : F.obj X ⟶ F.obj Y) : F.map (preimage F f) = f
 
-English:
-lemma Full.of_comp_faithful
-  given: [Full <| F ⋙ G] [G.Faithful]
-  statement: Full F where
-  proof: ⟨(F ⋙ G).preimage (G.map f), G.map_injective ((F ⋙ G).map_preimage _)⟩
-
-中文:
-引理 满.of_comp_faithful
-  条件: [满 <| F ⋙ G] [G.忠实]
-  结论: 满 F where
-  证明: ⟨(F ⋙ G).preimage (G.map f), G.map_injective ((F ⋙ G).map_preimage _)⟩
-
-Depends on / 依赖: G.map, G.map_injective, HasImage, map_injective, map_preimage, preimage
+--- 原说明 ---
+If `F ⋙ G` is full and `G` is faithful, then `F` is full.
 -/
 lemma Full.of_comp_faithful [Full <| F ⋙ G] [G.Faithful] : Full F where
   map_surjective f := ⟨(F ⋙ G).preimage (G.map f), G.map_injective ((F ⋙ G).map_preimage _)⟩
 
-/--
-lemma `Full.of_comp_faithful_iso` / 引理 `Full.of_comp_faithful_iso`
+/-- If `F ⋙ G` is full and `G` is faithful, then `F` is full. -/
+/-
+**CategoryTheory.Functor.Full.of_comp_faithful_iso** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Functor.Full`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {E : Type u₃} [inst_2 : Category
+Theory.Category.{v₃, u₃} E] {F : CategoryTheory.Functor C D}   {G : CategoryTheo
+ry.Functor D E} {H : CategoryTheory.Functor C E} [H.Full] [G.Faithful] (h : F.co
+mp G ≅ H), F.Full
+参数：h : F.comp G ≅ H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Full.of_iso`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F F' : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.Full.of_comp_faithful`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {E : Type u₃} [ins…
 
-English:
-lemma Full.of_comp_faithful_iso
-  statement: {F : C ⥤ D} {G : D ⥤ E} {H : C ⥤ E} [Full H] [G.Faithful]
-  proof: by
-  have := Full.of_iso h.symm
-  exact Full.of_comp_faithful F G
-
-中文:
-引理 满.of_comp_faithful_iso
-  结论: {F : C ⥤ D} {G : D ⥤ E} {H : C ⥤ E} [满 H] [G.忠实]
-  证明: by
-  have := Full.of_iso h.symm
-  exact Full.of_comp_faithful F G
-
-Depends on / 依赖: Full.of_comp_faithful, Full.of_iso, h.symm, of_comp_faithful, of_iso
+--- 原说明 ---
+If `F ⋙ G` is full and `G` is faithful, then `F` is full.
 -/
 lemma Full.of_comp_faithful_iso {F : C ⥤ D} {G : D ⥤ E} {H : C ⥤ E} [Full H] [G.Faithful]
     (h : F ⋙ G ≅ H) : Full F := by
   have := Full.of_iso h.symm
   exact Full.of_comp_faithful F G
 
-/--
-Definition of `fullyFaithfulCancelRight` / `fullyFaithfulCancelRight` 的定义
+/-- Given a natural isomorphism between `F ⋙ H` and `G ⋙ H` for a fully faithful functor `H`, we
+can 'cancel' it to give a natural iso between `F` and `G`.
+-/
+/-
+**CategoryTheory.Functor.fullyFaithfulCancelRight** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：fullyFaithfulCancelRight {F G : C ⥤ D} (H : D ⥤ E) [Full H] [H.Faithful] (
+comp_iso : F ⋙ H ≅ G ⋙ H) : F ≅ G
+参数：H : D ⥤ E；comp_iso : F ⋙ H ≅ G ⋙ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulCancelRight
-  signature: {F G : C ⥤ D} (H : D ⥤ E) [Full H] [H.Faithful]
-  body: NatIso.ofComponents (fun X => H.preimageIso (comp_iso.app X)) fun f =>
-    H.map_injective (by simpa using! comp_iso.hom.naturality f)
-
-@[simp]
-
-中文:
-定义 fullyFaithfulCancelRight
-  签名: {F G : C ⥤ D} (H : D ⥤ E) [满 H] [H.忠实]
-  定义体: NatIso.ofComponents (fun X => H.preimageIso (comp_iso.app X)) fun f =>
-    H.map_injective (by simpa using! comp_iso.hom.naturality f)
-
-@[simp]
-
-Depends on / 依赖: H.map_injective, H.preimageIso, NatIso, NatIso.ofComponents, comp_iso, comp_iso.app, comp_iso.hom.naturality, map_injective, naturality, ofComponents, preimageIso
+--- 原说明 ---
+Given a natural isomorphism between `F ⋙ H` and `G ⋙ H` for a fully faithful fun
+ctor `H`, we
+can 'cancel' it to give a natural iso between `F` and `G`.
 -/
 noncomputable def fullyFaithfulCancelRight {F G : C ⥤ D} (H : D ⥤ E) [Full H] [H.Faithful]
     (comp_iso : F ⋙ H ≅ G ⋙ H) : F ≅ G :=
@@ -1219,22 +1090,15 @@ noncomputable def fullyFaithfulCancelRight {F G : C ⥤ D} (H : D ⥤ E) [Full H
     H.map_injective (by simpa using! comp_iso.hom.naturality f)
 
 @[simp]
-/--
-theorem `fullyFaithfulCancelRight_hom_app` / 定理 `fullyFaithfulCancelRight_hom_app`
-
-English:
-theorem fullyFaithfulCancelRight_hom_app
-  statement: {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Faithful]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fullyFaithfulCancelRight_hom_app
-  结论: {F G : C ⥤ D} {H : D ⥤ E} [满 H] [H.忠实]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.fullyFaithfulCancelRight_hom_app** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Functor`。
+形式化陈述：fullyFaithfulCancelRight_hom_app {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Fai
+thful] (comp_iso : F ⋙ H ≅ G ⋙ H) (X : C) : (fullyFaithfulCancelRight H comp_iso
+).hom.app X = H.preimage (comp_iso.hom.app X)
+参数：comp_iso : F ⋙ H ≅ G ⋙ H；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fullyFaithfulCancelRight_hom_app {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Faithful]
     (comp_iso : F ⋙ H ≅ G ⋙ H) (X : C) :
@@ -1242,18 +1106,15 @@ theorem fullyFaithfulCancelRight_hom_app {F G : C ⥤ D} {H : D ⥤ E} [Full H] 
   rfl
 
 @[simp]
-/--
-theorem `fullyFaithfulCancelRight_inv_app` / 定理 `fullyFaithfulCancelRight_inv_app`
-
-English:
-theorem fullyFaithfulCancelRight_inv_app
-  statement: {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Faithful]
-  proof: rfl
-
-中文:
-定理 fullyFaithfulCancelRight_inv_app
-  结论: {F G : C ⥤ D} {H : D ⥤ E} [满 H] [H.忠实]
-  证明: rfl
+/-
+**CategoryTheory.Functor.fullyFaithfulCancelRight_inv_app** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Functor`。
+形式化陈述：fullyFaithfulCancelRight_inv_app {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Fai
+thful] (comp_iso : F ⋙ H ≅ G ⋙ H) (X : C) : (fullyFaithfulCancelRight H comp_iso
+).inv.app X = H.preimage (comp_iso.inv.app X)
+参数：comp_iso : F ⋙ H ≅ G ⋙ H；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fullyFaithfulCancelRight_inv_app {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Faithful]
     (comp_iso : F ⋙ H ≅ G ⋙ H) (X : C) :
@@ -1262,3 +1123,4 @@ theorem fullyFaithfulCancelRight_inv_app {F G : C ⥤ D} {H : D ⥤ E} [Full H] 
 
 end Functor
 end CategoryTheory
+

@@ -113,11 +113,11 @@ open ENat NNReal Topology Filter Set Fin Filter Function
 and `ω`.
 Natural numbers `n` correspond to `n`-fold continuous differentiability, `∞` to smoothness, and `ω`
 to analyticity. -/
-scoped[ContDiff] notation "Nat∞ω" => WithTop Nat∞
+scoped[ContDiff] notation "ℕ∞ω" => WithTop ℕ∞
 /-- Smoothness exponent for analytic functions. -/
-scoped[ContDiff] notation3 "ω" => (⊤ : WithTop Nat∞)
+scoped[ContDiff] notation3 "ω" => (⊤ : WithTop ℕ∞)
 /-- Smoothness exponent for infinitely differentiable functions. -/
-scoped[ContDiff] notation3 "∞" => ((⊤ : Nat∞) : WithTop Nat∞)
+scoped[ContDiff] notation3 "∞" => ((⊤ : ℕ∞) : WithTop ℕ∞)
 
 open scoped ContDiff Pointwise
 
@@ -125,131 +125,212 @@ universe u uE uF
 
 variable {𝕜 : Type u} [NontriviallyNormedField 𝕜] {E : Type uE} [NormedAddCommGroup E]
   [NormedSpace 𝕜 E] {F : Type uF} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-  {s t u : Set E} {f f₁ : E -> F} {x : E} {m n N : Nat∞ω}
-  {p : E -> FormalMultilinearSeries 𝕜 E F}
+  {s t u : Set E} {f f₁ : E → F} {x : E} {m n N : ℕ∞ω}
+  {p : E → FormalMultilinearSeries 𝕜 E F}
 
 /-! ### Functions with a Taylor series on a domain -/
 
-/--
-Definition of `HasFTaylorSeriesUpToOn` / `HasFTaylorSeriesUpToOn` 的定义
+/-- `HasFTaylorSeriesUpToOn n f p s` registers the fact that `p 0 = f` and `p (m+1)` is a
+derivative of `p m` for `m < n`, and is continuous for `m ≤ n`. This is a predicate analogous to
+`HasFDerivWithinAt` but for higher-order derivatives.
 
-English:
-structure HasFTaylorSeriesUpToOn
-  axioms and operations (3):
-    - zero_eq : forall x in s, (p x 0).curry0 = f x
-    - fderivWithin : forall m : Nat, m < n -> forall x in s, HasFDerivWithinAt (p · m) (p x m.succ).curryLeft s x
-    - cont : forall m : Nat, m <= n -> ContinuousOn (p · m) s
+Notice that `p` does not sum up to `f` on the diagonal (`FormalMultilinearSeries.sum`), even if
+`f` is analytic and `n = ∞`: an additional `1/m!` factor on the `m`th term is necessary for that. -/
+/-
+**HasFTaylorSeriesUpToOn** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{𝕜 : Type u} →   [inst : NontriviallyNormedField 𝕜] →     {E : Type uE} → 
+      [inst_1 : NormedAddCommGroup E] →         [inst_2 : NormedSpace 𝕜 E] →    
+       {F : Type uF} →             [inst_3 : NormedAddCommGroup F] →            
+   [inst_4 : NormedSpace 𝕜 F] → WithTop ℕ∞ → (E → F) → (E → FormalMultilinearSer
+ies 𝕜 E F) → Set E → Prop
+参数：E → F；E → FormalMultilinearSeries 𝕜 E F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 有FTaylorSeriesUpToOn
-  公理与运算 (3 个):
-    - zero_eq : 对任意 x in s, (p x 0).curry0 = f x
-    - fderivWithin : 对任意 m : 自然数, m < n -> 对任意 x in s, HasFDerivWithinAt (p · m) (p x m.succ).curryLeft s x
-    - cont : 对任意 m : 自然数, m <= n -> ContinuousOn (p · m) s
+--- 原说明 ---
+`HasFTaylorSeriesUpToOn n f p s` registers the fact that `p 0 = f` and `p (m+1)`
+ is a
+derivative of `p m` for `m < n`, and is continuous for `m ≤ n`. This is a predic
+ate analogous to
+`HasFDerivWithinAt` but for higher-order derivatives.
+
+Notice that `p` does not sum up to `f` on the diagonal (`FormalMultilinearSeries
+.sum`), even if
+`f` is analytic and `n = ∞`: an additional `1/m!` factor on the `m`th term is ne
+cessary for that.
 -/
 structure HasFTaylorSeriesUpToOn
-  (n : Nat∞ω) (f : E -> F) (p : E -> FormalMultilinearSeries 𝕜 E F) (s : Set E) : Prop where
-  zero_eq : forall x in s, (p x 0).curry0 = f x
-  protected fderivWithin : forall m : Nat, m < n -> forall x in s,
+  (n : ℕ∞ω) (f : E → F) (p : E → FormalMultilinearSeries 𝕜 E F) (s : Set E) : Prop where
+  zero_eq : ∀ x ∈ s, (p x 0).curry0 = f x
+  protected fderivWithin : ∀ m : ℕ, m < n → ∀ x ∈ s,
     HasFDerivWithinAt (p · m) (p x m.succ).curryLeft s x
-  cont : forall m : Nat, m <= n -> ContinuousOn (p · m) s
-
-/--
-theorem `HasFTaylorSeriesUpToOn.zero_eq'` / 定理 `HasFTaylorSeriesUpToOn.zero_eq'`
-
-English:
-theorem HasFTaylorSeriesUpToOn.zero_eq'
-  given: (h : HasFTaylorSeriesUpToOn n f p s) {x : E} (hx : x in s)
-  proof: by
-  rw [← h.zero_eq x hx]
-  exact (p x 0).uncurry0_curry0.symm
-
-中文:
-定理 有FTaylorSeriesUpToOn.zero_eq'
-  条件: (h : 有FTaylorSeriesUpToOn n f p s) {x : E} (hx : x in s)
-  证明: by
-  rw [← h.zero_eq x hx]
-  exact (p x 0).uncurry0_curry0.symm
-
-Depends on / 依赖: h.zero_eq, uncurry0_curry0, uncurry0_curry0.symm, zero_eq
+  cont : ∀ m : ℕ, m ≤ n → ContinuousOn (p · m) s
+/-
+**HasFTaylorSeriesUpToOn.zero_eq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.zero_eq' (h : HasFTaylorSeriesUpToOn n f p s) {x : 
+E} (hx : x in s) : p x 0 = (continuousMultilinearCurryFin0 𝕜 E F).symm (f x)
+参数：h : HasFTaylorSeriesUpToOn n f p s；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `ContinuousMultilinearMap.uncurry0_curry0`：ContinuousMultilinearMap.uncur
+ry0_curry0 (f : G [×0]->L[𝕜] G') : ContinuousMultilinearMap.uncurry0 𝕜 G f.curry
+0 = f
 -/
-theorem HasFTaylorSeriesUpToOn.zero_eq' (h : HasFTaylorSeriesUpToOn n f p s) {x : E} (hx : x in s) :
+theorem HasFTaylorSeriesUpToOn.zero_eq' (h : HasFTaylorSeriesUpToOn n f p s) {x : E} (hx : x ∈ s) :
     p x 0 = (continuousMultilinearCurryFin0 𝕜 E F).symm (f x) := by
   rw [← h.zero_eq x hx]
   exact (p x 0).uncurry0_curry0.symm
-
-/--
-theorem `hasFTaylorSeriesUpToOn_empty` / 定理 `hasFTaylorSeriesUpToOn_empty`
-
-English:
-theorem hasFTaylorSeriesUpToOn_empty
-  statement: HasFTaylorSeriesUpToOn n f p ∅
-  proof: by
-  constructor <;> simp
-
-中文:
-定理 hasFTaylorSeriesUpToOn_empty
-  结论: 有FTaylorSeriesUpToOn n f p ∅
-  证明: by
-  constructor <;> simp
+/-
+**hasFTaylorSeriesUpToOn_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜] {E : Type uE} [inst_1 : 
+NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type uF} [inst_3 : Norme
+dAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f : E → F}   {n : WithTop ℕ∞} {p : 
+E → FormalMultilinearSeries 𝕜 E F}, HasFTaylorSeriesUpToOn n f p ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.zero_empty`：∀ {α : Type u_1} [inst : Zero α], 0 = ![]
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 @[simp] theorem hasFTaylorSeriesUpToOn_empty : HasFTaylorSeriesUpToOn n f p ∅ := by
   constructor <;> simp
 
-/--
-theorem `HasFTaylorSeriesUpToOn.congr` / 定理 `HasFTaylorSeriesUpToOn.congr`
+/-- If two functions coincide on a set `s`, then a Taylor series for the first one is as well a
+Taylor series for the second one. -/
+/-
+**HasFTaylorSeriesUpToOn.congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.congr (h : HasFTaylorSeriesUpToOn n f p s) (h₁ : fo
+rall x in s, f₁ x = f x) : HasFTaylorSeriesUpToOn n f₁ p s
+参数：h : HasFTaylorSeriesUpToOn n f p s；h₁ : forall x in s, f₁ x = f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
 
-English:
-theorem HasFTaylorSeriesUpToOn.congr
-  statement: (h : HasFTaylorSeriesUpToOn n f p s)
-  proof: by
-  refine ⟨fun x hx => ?_, h.fderivWithin, h.cont⟩
-  rw [h₁ x hx]
-  exact h.zero_eq x hx
-
-中文:
-定理 有FTaylorSeriesUpToOn.congr
-  结论: (h : 有FTaylorSeriesUpToOn n f p s)
-  证明: by
-  refine ⟨fun x hx => ?_, h.fderivWithin, h.cont⟩
-  rw [h₁ x hx]
-  exact h.zero_eq x hx
-
-Depends on / 依赖: fderivWithin, h.cont, h.fderivWithin, h.zero_eq, zero_eq
+--- 原说明 ---
+If two functions coincide on a set `s`, then a Taylor series for the first one i
+s as well a
+Taylor series for the second one.
 -/
 theorem HasFTaylorSeriesUpToOn.congr (h : HasFTaylorSeriesUpToOn n f p s)
-    (h₁ : forall x in s, f₁ x = f x) : HasFTaylorSeriesUpToOn n f₁ p s := by
+    (h₁ : ∀ x ∈ s, f₁ x = f x) : HasFTaylorSeriesUpToOn n f₁ p s := by
   refine ⟨fun x hx => ?_, h.fderivWithin, h.cont⟩
   rw [h₁ x hx]
   exact h.zero_eq x hx
-
-/--
-theorem `HasFTaylorSeriesUpToOn.congr_series` / 定理 `HasFTaylorSeriesUpToOn.congr_series`
-
-English:
-theorem HasFTaylorSeriesUpToOn.congr_series
-  statement: {q} (hp : HasFTaylorSeriesUpToOn n f p s)
-  proof: by simp only [← hpq 0 zero_le hx, hp.zero_eq x hx]
-  fderivWithin m hm x hx := by
-    refine ((hp.fderivWithin m hm x hx).congr' (hpq m hm.le).symm hx).congr_fderiv ?_
-    refine congrArg _ (hpq (m + 1) ?_ hx)
-    exact ENat.add_one_natCast_le_withTop_of_lt hm
-  cont m hm := (hp.cont m hm).congr (hpq m hm).symm
-
-中文:
-定理 有FTaylorSeriesUpToOn.congr_series
-  结论: {q} (hp : 有FTaylorSeriesUpToOn n f p s)
-  证明: by simp only [← hpq 0 zero_le hx, hp.zero_eq x hx]
-  fderivWithin m hm x hx := by
-    refine ((hp.fderivWithin m hm x hx).congr' (hpq m hm.le).symm hx).congr_fderiv ?_
-    refine congrArg _ (hpq (m + 1) ?_ hx)
-    exact ENat.add_one_natCast_le_withTop_of_lt hm
-  cont m hm := (hp.cont m hm).congr (hpq m hm).symm
-
-Depends on / 依赖: ENat.add_one_natCast_le_withTop_of_lt, add_one_natCast_le_withTop_of_lt, congr_fderiv, fderivWithin, hm.le, hp.cont, hp.fderivWithin, hp.zero_eq, zero_eq, zero_le
+/-
+**HasFTaylorSeriesUpToOn.congr_series** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.congr_series {q} (hp : HasFTaylorSeriesUpToOn n f p
+ s) (hpq : forall m : Nat, m <= n -> EqOn (p · m) (q · m) s) : HasFTaylorSeriesU
+pToOn n f q s where zero_eq x hx
+参数：hp : HasFTaylorSeriesUpToOn n f p s；hpq : forall m : Nat, m <= n -> EqOn (p ·
+ m) (q · m) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `WithTop.instIsBotZeroClass`：∀ {α : Type u} [inst : Zero α] [inst_1 : LE 
+α] [IsBotZeroClass α], IsBotZeroClass (WithTop α)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `HasFDerivWithinAt.congr_fderiv`：HasFDerivWithinAt.congr_fderiv (h : HasF
+DerivWithinAt f f' s x) (h' : f' = g') : HasFDerivWithinAt f g' s x
+· 使用定理 `HasFDerivWithinAt.congr'`：HasFDerivWithinAt.congr' (h : HasFDerivWithinA
+t f f' s x) (hs : EqOn f₁ f s) (hx : x in s) : HasFDerivWithinAt f₁ f' s x
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `Set.EqOn.symm`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : α → 
+β}, Set.EqOn f₁ f₂ s → Set.EqOn f₂ f₁ s
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `ENat.add_one_natCast_le_withTop_of_lt`：add_one_natCast_le_withTop_of_lt 
+{m : Nat} {n : WithTop Nat∞} (h : m < n) : (m + 1 : Nat) <= n
+· 使用定理 `ContinuousOn.congr`：ContinuousOn.congr (h : ContinuousOn f s) (h' : EqOn
+ g f s) : ContinuousOn g s
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
 -/
 theorem HasFTaylorSeriesUpToOn.congr_series {q} (hp : HasFTaylorSeriesUpToOn n f p s)
-    (hpq : forall m : Nat, m <= n -> EqOn (p · m) (q · m) s) :
+    (hpq : ∀ m : ℕ, m ≤ n → EqOn (p · m) (q · m) s) :
     HasFTaylorSeriesUpToOn n f q s where
   zero_eq x hx := by simp only [← hpq 0 zero_le hx, hp.zero_eq x hx]
   fderivWithin m hm x hx := by
@@ -257,119 +338,223 @@ theorem HasFTaylorSeriesUpToOn.congr_series {q} (hp : HasFTaylorSeriesUpToOn n f
     refine congrArg _ (hpq (m + 1) ?_ hx)
     exact ENat.add_one_natCast_le_withTop_of_lt hm
   cont m hm := (hp.cont m hm).congr (hpq m hm).symm
-
-/--
-theorem `HasFTaylorSeriesUpToOn.mono` / 定理 `HasFTaylorSeriesUpToOn.mono`
-
-English:
-theorem HasFTaylorSeriesUpToOn.mono
-  given: (h : HasFTaylorSeriesUpToOn n f p s) {t : Set E} (hst : t subseteq s)
-  proof: ⟨fun x hx => h.zero_eq x (hst hx), fun m hm x hx => (h.fderivWithin m hm x (hst hx)).mono hst,
-    fun m hm => (h.cont m hm).mono hst⟩
-
-中文:
-定理 有FTaylorSeriesUpToOn.mono
-  条件: (h : 有FTaylorSeriesUpToOn n f p s) {t : 集合 E} (hst : t subseteq s)
-  证明: ⟨fun x hx => h.zero_eq x (hst hx), fun m hm x hx => (h.fderivWithin m hm x (hst hx)).mono hst,
-    fun m hm => (h.cont m hm).mono hst⟩
-
-Depends on / 依赖: fderivWithin, h.cont, h.fderivWithin, h.zero_eq, zero_eq
+/-
+**HasFTaylorSeriesUpToOn.mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.mono (h : HasFTaylorSeriesUpToOn n f p s) {t : Set 
+E} (hst : t subseteq s) : HasFTaylorSeriesUpToOn n f p t
+参数：h : HasFTaylorSeriesUpToOn n f p s；hst : t subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `HasFDerivWithinAt.mono`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField
+ 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [ins
+t_3 : Topolo…
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
 -/
-theorem HasFTaylorSeriesUpToOn.mono (h : HasFTaylorSeriesUpToOn n f p s) {t : Set E} (hst : t subseteq s) :
+theorem HasFTaylorSeriesUpToOn.mono (h : HasFTaylorSeriesUpToOn n f p s) {t : Set E} (hst : t ⊆ s) :
     HasFTaylorSeriesUpToOn n f p t :=
   ⟨fun x hx => h.zero_eq x (hst hx), fun m hm x hx => (h.fderivWithin m hm x (hst hx)).mono hst,
     fun m hm => (h.cont m hm).mono hst⟩
-
-/--
-theorem `HasFTaylorSeriesUpToOn.of_le` / 定理 `HasFTaylorSeriesUpToOn.of_le`
-
-English:
-theorem HasFTaylorSeriesUpToOn.of_le
-  given: (h : HasFTaylorSeriesUpToOn n f p s) (hmn : m <= n)
-  proof: ⟨h.zero_eq, fun k hk x hx => h.fderivWithin k (lt_of_lt_of_le hk hmn) x hx, fun k hk =>
-    h.cont k (le_trans hk hmn)⟩
-
-中文:
-定理 有FTaylorSeriesUpToOn.of_le
-  条件: (h : 有FTaylorSeriesUpToOn n f p s) (hmn : m <= n)
-  证明: ⟨h.zero_eq, fun k hk x hx => h.fderivWithin k (lt_of_lt_of_le hk hmn) x hx, fun k hk =>
-    h.cont k (le_trans hk hmn)⟩
-
-Depends on / 依赖: fderivWithin, h.cont, h.fderivWithin, h.zero_eq, le_trans, lt_of_lt_of_le, zero_eq
+/-
+**HasFTaylorSeriesUpToOn.of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.of_le (h : HasFTaylorSeriesUpToOn n f p s) (hmn : m
+ <= n) : HasFTaylorSeriesUpToOn m f p s
+参数：h : HasFTaylorSeriesUpToOn n f p s；hmn : m <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
 -/
-theorem HasFTaylorSeriesUpToOn.of_le (h : HasFTaylorSeriesUpToOn n f p s) (hmn : m <= n) :
+theorem HasFTaylorSeriesUpToOn.of_le (h : HasFTaylorSeriesUpToOn n f p s) (hmn : m ≤ n) :
     HasFTaylorSeriesUpToOn m f p s :=
   ⟨h.zero_eq, fun k hk x hx => h.fderivWithin k (lt_of_lt_of_le hk hmn) x hx, fun k hk =>
     h.cont k (le_trans hk hmn)⟩
-
-/--
-theorem `HasFTaylorSeriesUpToOn.continuousOn` / 定理 `HasFTaylorSeriesUpToOn.continuousOn`
-
-English:
-theorem HasFTaylorSeriesUpToOn.continuousOn
-  given: (h : HasFTaylorSeriesUpToOn n f p s)
-  proof: by
-  have := (h.cont 0 bot_le).congr fun x hx => (h.zero_eq' hx).symm
-  rwa [← (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_continuousOn_iff]
-
-中文:
-定理 有FTaylorSeriesUpToOn.continuousOn
-  条件: (h : 有FTaylorSeriesUpToOn n f p s)
-  证明: by
-  have := (h.cont 0 bot_le).congr fun x hx => (h.zero_eq' hx).symm
-  rwa [← (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_continuousOn_iff]
-
-Depends on / 依赖: bot_le, comp_continuousOn_iff, continuousMultilinearCurryFin0, h.cont, h.zero_eq, symm.comp_continuousOn_iff, zero_eq
+/-
+**HasFTaylorSeriesUpToOn.continuousOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.continuousOn (h : HasFTaylorSeriesUpToOn n f p s) :
+ ContinuousOn f s
+参数：h : HasFTaylorSeriesUpToOn n f p s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousOn.congr`：ContinuousOn.congr (h : ContinuousOn f s) (h' : EqOn
+ g f s) : ContinuousOn g s
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq'`：HasFTaylorSeriesUpToOn.zero_eq' (h : Ha
+sFTaylorSeriesUpToOn n f p s) {x : E} (hx : x in s) : p x 0 = (continuousMultili
+nearCurryFin0 𝕜 E F).…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearIsometryEquiv.comp_continuousOn_iff`：comp_continuousOn_iff {f : α 
+-> E} {s : Set α} : ContinuousOn (e ∘ f) s ↔ ContinuousOn f s
 -/
 theorem HasFTaylorSeriesUpToOn.continuousOn (h : HasFTaylorSeriesUpToOn n f p s) :
     ContinuousOn f s := by
   have := (h.cont 0 bot_le).congr fun x hx => (h.zero_eq' hx).symm
   rwa [← (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_continuousOn_iff]
-
-/--
-theorem `hasFTaylorSeriesUpToOn_zero_iff` / 定理 `hasFTaylorSeriesUpToOn_zero_iff`
-
-English:
-theorem hasFTaylorSeriesUpToOn_zero_iff
-  proof: by
-  refine ⟨fun H => ⟨H.continuousOn, H.zero_eq⟩, fun H =>
-      ⟨H.2, fun m hm => False.elim (not_le.2 hm bot_le), fun m hm => ?_⟩⟩
-  obtain rfl : m = 0 := mod_cast hm.antisymm zero_le
-  have : EqOn (p · 0) ((continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f) s := fun x hx =>
-    (continuousMultilinearCurryFin0 𝕜 E F).eq_symm_apply.2 (H.2 x hx)
-  rw [continuousOn_congr this]; rw [LinearIsometryEquiv.comp_continuousOn_iff]
-  exact H.1
-
-中文:
-定理 hasFTaylorSeriesUpToOn_zero_iff
-  证明: by
-  refine ⟨fun H => ⟨H.continuousOn, H.zero_eq⟩, fun H =>
-      ⟨H.2, fun m hm => False.elim (not_le.2 hm bot_le), fun m hm => ?_⟩⟩
-  obtain rfl : m = 0 := mod_cast hm.antisymm zero_le
-  have : EqOn (p · 0) ((continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f) s := fun x hx =>
-    (continuousMultilinearCurryFin0 𝕜 E F).eq_symm_apply.2 (H.2 x hx)
-  rw [continuousOn_congr this]; rw [LinearIsometryEquiv.comp_continuousOn_iff]
-  exact H.1
-
-Depends on / 依赖: False.elim, H.continuousOn, H.zero_eq, LinearIsometryEquiv, LinearIsometryEquiv.comp_continuousOn_iff, antisymm, bot_le, comp_continuousOn_iff, continuousMultilinearCurryFin0, continuousOn, continuousOn_congr, eq_symm_apply, hm.antisymm, mod_cast, not_le, zero_eq, zero_le
+/-
+**hasFTaylorSeriesUpToOn_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_zero_iff : HasFTaylorSeriesUpToOn 0 f p s ↔ Continu
+ousOn f s ∧ forall x in s, (p x 0).curry0 = f x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.continuousOn`：HasFTaylorSeriesUpToOn.continuousOn
+ (h : HasFTaylorSeriesUpToOn n f p s) : ContinuousOn f s
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `LinearIsometryEquiv.eq_symm_apply`：eq_symm_apply {x y} : y = e.symm x ↔ 
+e y = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuousOn_congr`：continuousOn_congr (h' : EqOn g f s) : ContinuousOn 
+g s ↔ ContinuousOn f s
+· 使用定理 `LinearIsometryEquiv.comp_continuousOn_iff`：comp_continuousOn_iff {f : α 
+-> E} {s : Set α} : ContinuousOn (e ∘ f) s ↔ ContinuousOn f s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `WithTop.instIsBotZeroClass`：∀ {α : Type u} [inst : Zero α] [inst_1 : LE 
+α] [IsBotZeroClass α], IsBotZeroClass (WithTop α)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
 -/
 theorem hasFTaylorSeriesUpToOn_zero_iff :
-    HasFTaylorSeriesUpToOn 0 f p s ↔ ContinuousOn f s ∧ forall x in s, (p x 0).curry0 = f x := by
+    HasFTaylorSeriesUpToOn 0 f p s ↔ ContinuousOn f s ∧ ∀ x ∈ s, (p x 0).curry0 = f x := by
   refine ⟨fun H => ⟨H.continuousOn, H.zero_eq⟩, fun H =>
-      ⟨H.2, fun m hm => False.elim (not_le.2 hm bot_le), fun m hm => ?_⟩⟩
+      ⟨H.2, fun m hm => False.elim (not_le.2 hm bot_le), fun m hm ↦ ?_⟩⟩
   obtain rfl : m = 0 := mod_cast hm.antisymm zero_le
-  have : EqOn (p · 0) ((continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f) s := fun x hx =>
+  have : EqOn (p · 0) ((continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f) s := fun x hx ↦
     (continuousMultilinearCurryFin0 𝕜 E F).eq_symm_apply.2 (H.2 x hx)
-  rw [continuousOn_congr this]; rw [LinearIsometryEquiv.comp_continuousOn_iff]
+  rw [continuousOn_congr this, LinearIsometryEquiv.comp_continuousOn_iff]
   exact H.1
-
-/--
-theorem `hasFTaylorSeriesUpToOn_top_iff_add` / 定理 `hasFTaylorSeriesUpToOn_top_iff_add`
-
-English:
-theorem hasFTaylorSeriesUpToOn_top_iff_add
-  given: (hN : ∞ <= N) (k : Nat)
-  proof: by
+/-
+**hasFTaylorSeriesUpToOn_top_iff_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_top_iff_add (hN : ∞ <= N) (k : Nat) : HasFTaylorSer
+iesUpToOn N f p s ↔ forall n : Nat, HasFTaylorSeriesUpToOn (n + k : Nat) f p s
+参数：hN : ∞ <= N；k : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.of_le`：HasFTaylorSeriesUpToOn.of_le (h : HasFTayl
+orSeriesUpToOn n f p s) (hmn : m <= n) : HasFTaylorSeriesUpToOn m f p s
+· 使用引理 `ENat.natCast_le_of_coe_top_le_withTop`：natCast_le_of_coe_top_le_withTop 
+{N : WithTop Nat∞} (hN : (⊤ : Nat∞) <= N) (n : Nat) : n <= N
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `WithTop.canonicallyOrderedAdd`：∀ {α : Type u} [inst : Add α] [inst_1 : P
+reorder α] [CanonicallyOrderedAdd α], CanonicallyOrderedAdd (WithTop α)
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+-/
+theorem hasFTaylorSeriesUpToOn_top_iff_add (hN : ∞ ≤ N) (k : ℕ) :
+    HasFTaylorSeriesUpToOn N f p s ↔ ∀ n : ℕ, HasFTaylorSeriesUpToOn (n + k : ℕ) f p s := by
   constructor
   · intro H n
     apply H.of_le (natCast_le_of_coe_top_le_withTop hN _)
@@ -380,279 +565,378 @@ theorem hasFTaylorSeriesUpToOn_top_iff_add
       apply (H m.succ).fderivWithin m (by norm_cast; lia)
     · intro m _
       apply (H m).cont m (by simp)
-
-中文:
-定理 hasFTaylorSeriesUpToOn_top_iff_add
-  条件: (hN : ∞ <= N) (k : 自然数)
-  证明: by
-  constructor
-  · intro H n
-    apply H.of_le (natCast_le_of_coe_top_le_withTop hN _)
-  · intro H
-    constructor
-    · exact (H 0).zero_eq
-    · intro m _
-      apply (H m.succ).fderivWithin m (by norm_cast; lia)
-    · intro m _
-      apply (H m).cont m (by simp)
-
-Depends on / 依赖: H.of_le, fderivWithin, m.succ, natCast_le_of_coe_top_le_withTop, of_le, zero_eq
+/-
+**hasFTaylorSeriesUpToOn_top_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_top_iff (hN : ∞ <= N) : HasFTaylorSeriesUpToOn N f 
+p s ↔ forall n : Nat, HasFTaylorSeriesUpToOn n f p s
+参数：hN : ∞ <= N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `hasFTaylorSeriesUpToOn_top_iff_add`：hasFTaylorSeriesUpToOn_top_iff_add (
+hN : ∞ <= N) (k : Nat) : HasFTaylorSeriesUpToOn N f p s ↔ forall n : Nat, HasFTa
+ylorSeriesUpToOn (n + k …
 -/
-theorem hasFTaylorSeriesUpToOn_top_iff_add (hN : ∞ <= N) (k : Nat) :
-    HasFTaylorSeriesUpToOn N f p s ↔ forall n : Nat, HasFTaylorSeriesUpToOn (n + k : Nat) f p s := by
-  constructor
-  · intro H n
-    apply H.of_le (natCast_le_of_coe_top_le_withTop hN _)
-  · intro H
-    constructor
-    · exact (H 0).zero_eq
-    · intro m _
-      apply (H m.succ).fderivWithin m (by norm_cast; lia)
-    · intro m _
-      apply (H m).cont m (by simp)
-
-/--
-theorem `hasFTaylorSeriesUpToOn_top_iff` / 定理 `hasFTaylorSeriesUpToOn_top_iff`
-
-English:
-theorem hasFTaylorSeriesUpToOn_top_iff
-  given: (hN : ∞ <= N)
-  proof: by
+theorem hasFTaylorSeriesUpToOn_top_iff (hN : ∞ ≤ N) :
+    HasFTaylorSeriesUpToOn N f p s ↔ ∀ n : ℕ, HasFTaylorSeriesUpToOn n f p s := by
   simpa using hasFTaylorSeriesUpToOn_top_iff_add hN 0
 
-中文:
-定理 hasFTaylorSeriesUpToOn_top_iff
-  条件: (hN : ∞ <= N)
-  证明: by
-  simpa using hasFTaylorSeriesUpToOn_top_iff_add hN 0
+/-- In the case that `n = ∞` we don't need the continuity assumption in
+`HasFTaylorSeriesUpToOn`. -/
+/-
+**hasFTaylorSeriesUpToOn_top_iff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_top_iff' (hN : ∞ <= N) : HasFTaylorSeriesUpToOn N f
+ p s ↔ (forall x in s, (p x 0).curry0 = f x) ∧ forall m : Nat, forall x in s, Ha
+sFDerivWithinAt (fun y => p y m) (p x m.succ).curryLeft s x
+参数：hN : ∞ <= N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用引理 `ENat.natCast_lt_of_coe_top_le_withTop`：natCast_lt_of_coe_top_le_withTop 
+{N : WithTop Nat∞} (hN : (⊤ : Nat∞) <= N) (n : Nat) : n < N
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `HasFDerivWithinAt.continuousWithinAt`：HasFDerivWithinAt.continuousWithin
+At (h : HasFDerivWithinAt f f' s x) : ContinuousWithinAt f s x
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
 
-Depends on / 依赖: hasFTaylorSeriesUpToOn_top_iff_add
+--- 原说明 ---
+In the case that `n = ∞` we don't need the continuity assumption in
+`HasFTaylorSeriesUpToOn`.
 -/
-theorem hasFTaylorSeriesUpToOn_top_iff (hN : ∞ <= N) :
-    HasFTaylorSeriesUpToOn N f p s ↔ forall n : Nat, HasFTaylorSeriesUpToOn n f p s := by
-  simpa using hasFTaylorSeriesUpToOn_top_iff_add hN 0
-
-/--
-theorem `hasFTaylorSeriesUpToOn_top_iff'` / 定理 `hasFTaylorSeriesUpToOn_top_iff'`
-
-English:
-theorem hasFTaylorSeriesUpToOn_top_iff'
-  given: (hN : ∞ <= N)
-  proof: by
-  -- Everything except for the continuity is trivial:
-  refine ⟨fun h => ⟨h.1, fun m => h.2 m (natCast_lt_of_coe_top_le_withTop hN _)⟩, fun h =>
-    ⟨h.1, fun m _ => h.2 m, fun m _ x hx =>
-      -- The continuity follows from the existence of a derivative:
-      (h.2 m x hx).continuousWithinAt⟩⟩
-
-中文:
-定理 hasFTaylorSeriesUpToOn_top_iff'
-  条件: (hN : ∞ <= N)
-  证明: by
-  -- Everything except for the continuity is trivial:
-  refine ⟨fun h => ⟨h.1, fun m => h.2 m (natCast_lt_of_coe_top_le_withTop hN _)⟩, fun h =>
-    ⟨h.1, fun m _ => h.2 m, fun m _ x hx =>
-      -- The continuity follows from the existence of a derivative:
-      (h.2 m x hx).continuousWithinAt⟩⟩
--/
-theorem hasFTaylorSeriesUpToOn_top_iff' (hN : ∞ <= N) :
+theorem hasFTaylorSeriesUpToOn_top_iff' (hN : ∞ ≤ N) :
     HasFTaylorSeriesUpToOn N f p s ↔
-      (forall x in s, (p x 0).curry0 = f x) ∧
-        forall m : Nat, forall x in s, HasFDerivWithinAt (fun y => p y m) (p x m.succ).curryLeft s x := by
+      (∀ x ∈ s, (p x 0).curry0 = f x) ∧
+        ∀ m : ℕ, ∀ x ∈ s, HasFDerivWithinAt (fun y => p y m) (p x m.succ).curryLeft s x := by
   -- Everything except for the continuity is trivial:
   refine ⟨fun h => ⟨h.1, fun m => h.2 m (natCast_lt_of_coe_top_le_withTop hN _)⟩, fun h =>
     ⟨h.1, fun m _ => h.2 m, fun m _ x hx =>
       -- The continuity follows from the existence of a derivative:
       (h.2 m x hx).continuousWithinAt⟩⟩
 
-/--
-theorem `HasFTaylorSeriesUpToOn.hasFDerivWithinAt` / 定理 `HasFTaylorSeriesUpToOn.hasFDerivWithinAt`
+/-- If a function has a Taylor series at order at least `1`, then the term of order `1` of this
+series is a derivative of `f`. -/
+/-
+**HasFTaylorSeriesUpToOn.hasFDerivWithinAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.hasFDerivWithinAt (h : HasFTaylorSeriesUpToOn n f p
+ s) (hn : n != 0) (hx : x in s) : HasFDerivWithinAt f (continuousMultilinearCurr
+yFin1 𝕜 E F (p x 1)) s x
+参数：h : HasFTaylorSeriesUpToOn n f p s；hn : n != 0；hx : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearIsometryEquiv.comp_hasFDerivWithinAt_iff'`：comp_hasFDerivWithinAt_
+iff' {f : G -> E} {s : Set G} {x : G} {f' : G ->L[𝕜] F} : HasFDerivWithinAt (iso
+ ∘ f) f' s x ↔ HasFDerivWithinAt f ((…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `WithTop.instIsBotZeroClass`：∀ {α : Type u} [inst : Zero α] [inst_1 : LE 
+α] [IsBotZeroClass α], IsBotZeroClass (WithTop α)
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Unique.eq_default`：eq_default (a : α) : a = default
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `HasFDerivWithinAt.congr`：HasFDerivWithinAt.congr (h : HasFDerivWithinAt 
+f f' s x) (hs : EqOn f₁ f s) (hx : f₁ x = f x) : HasFDerivWithinAt f₁ f' s x
 
-English:
-theorem HasFTaylorSeriesUpToOn.hasFDerivWithinAt
-  statement: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  proof: by
-  have A : forall y in s, f y = (continuousMultilinearCurryFin0 𝕜 E F) (p y 0) := fun y hy =>
-    (h.zero_eq y hy).symm
-  suffices H : HasFDerivWithinAt (continuousMultilinearCurryFin0 𝕜 E F ∘ (p · 0))
-    (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) s x from H.congr A (A x hx)
-  rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff']
-  have : ((0 : Nat) : Nat∞) < n := pos_iff_ne_zero.mpr hn
-  convert! h.fderivWithin _ this x hx
-  ext y v
-  change (p x 1) (snoc 0 y) = (p x 1) (cons y v)
-  congr with i
-  rw [Unique.eq_default (α := Fin 1) i]
-  rfl
-
-中文:
-定理 有FTaylorSeriesUpToOn.hasFDerivWithinAt
-  结论: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  证明: by
-  have A : forall y in s, f y = (continuousMultilinearCurryFin0 𝕜 E F) (p y 0) := fun y hy =>
-    (h.zero_eq y hy).symm
-  suffices H : HasFDerivWithinAt (continuousMultilinearCurryFin0 𝕜 E F ∘ (p · 0))
-    (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) s x from H.congr A (A x hx)
-  rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff']
-  have : ((0 : Nat) : Nat∞) < n := pos_iff_ne_zero.mpr hn
-  convert! h.fderivWithin _ this x hx
-  ext y v
-  change (p x 1) (snoc 0 y) = (p x 1) (cons y v)
-  congr with i
-  rw [Unique.eq_default (α := Fin 1) i]
-  rfl
-
-Depends on / 依赖: H.congr, HasFDerivWithinAt, LinearIsometryEquiv, LinearIsometryEquiv.comp_hasFDerivWithinAt_iff, Unique, Unique.eq_d, comp_hasFDerivWithinAt_iff, continuousMultilinearCurryFin0, continuousMultilinearCurryFin1, convert, eq_d, fderivWithin, h.fderivWithin, h.zero_eq, pos_iff_ne_zero, pos_iff_ne_zero.mpr, zero_eq
+--- 原说明 ---
+If a function has a Taylor series at order at least `1`, then the term of order 
+`1` of this
+series is a derivative of `f`.
 -/
-theorem HasFTaylorSeriesUpToOn.hasFDerivWithinAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
-    (hx : x in s) : HasFDerivWithinAt f (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) s x := by
-  have A : forall y in s, f y = (continuousMultilinearCurryFin0 𝕜 E F) (p y 0) := fun y hy =>
+theorem HasFTaylorSeriesUpToOn.hasFDerivWithinAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n ≠ 0)
+    (hx : x ∈ s) : HasFDerivWithinAt f (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) s x := by
+  have A : ∀ y ∈ s, f y = (continuousMultilinearCurryFin0 𝕜 E F) (p y 0) := fun y hy ↦
     (h.zero_eq y hy).symm
   suffices H : HasFDerivWithinAt (continuousMultilinearCurryFin0 𝕜 E F ∘ (p · 0))
     (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) s x from H.congr A (A x hx)
   rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff']
-  have : ((0 : Nat) : Nat∞) < n := pos_iff_ne_zero.mpr hn
+  have : ((0 : ℕ) : ℕ∞) < n := pos_iff_ne_zero.mpr hn
   convert! h.fderivWithin _ this x hx
   ext y v
   change (p x 1) (snoc 0 y) = (p x 1) (cons y v)
   congr with i
   rw [Unique.eq_default (α := Fin 1) i]
   rfl
-
-/--
-theorem `HasFTaylorSeriesUpToOn.differentiableOn` / 定理 `HasFTaylorSeriesUpToOn.differentiableOn`
-
-English:
-theorem HasFTaylorSeriesUpToOn.differentiableOn
-  given: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  proof: fun _x hx => (h.hasFDerivWithinAt hn hx).differentiableWithinAt
-
-中文:
-定理 有FTaylorSeriesUpToOn.differentiableOn
-  条件: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  证明: fun _x hx => (h.hasFDerivWithinAt hn hx).differentiableWithinAt
-
-Depends on / 依赖: differentiableWithinAt, h.hasFDerivWithinAt, hasFDerivWithinAt
+/-
+**HasFTaylorSeriesUpToOn.differentiableOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.differentiableOn (h : HasFTaylorSeriesUpToOn n f p 
+s) (hn : n != 0) : DifferentiableOn 𝕜 f s
+参数：h : HasFTaylorSeriesUpToOn n f p s；hn : n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFDerivWithinAt.differentiableWithinAt`：HasFDerivWithinAt.differentiab
+leWithinAt (h : HasFDerivWithinAt f f' s x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `HasFTaylorSeriesUpToOn.hasFDerivWithinAt`：HasFTaylorSeriesUpToOn.hasFDer
+ivWithinAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0) (hx : x in s) : Ha
+sFDerivWithinAt f (continuousM…
 -/
-theorem HasFTaylorSeriesUpToOn.differentiableOn (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0) :
+theorem HasFTaylorSeriesUpToOn.differentiableOn (h : HasFTaylorSeriesUpToOn n f p s) (hn : n ≠ 0) :
     DifferentiableOn 𝕜 f s := fun _x hx => (h.hasFDerivWithinAt hn hx).differentiableWithinAt
 
-/--
-theorem `HasFTaylorSeriesUpToOn.hasFDerivAt` / 定理 `HasFTaylorSeriesUpToOn.hasFDerivAt`
+/-- If a function has a Taylor series at order at least `1` on a neighborhood of `x`, then the term
+of order `1` of this series is a derivative of `f` at `x`. -/
+/-
+**HasFTaylorSeriesUpToOn.hasFDerivAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.hasFDerivAt (h : HasFTaylorSeriesUpToOn n f p s) (h
+n : n != 0) (hx : s in 𝓝 x) : HasFDerivAt f (continuousMultilinearCurryFin1 𝕜 E 
+F (p x 1)) x
+参数：h : HasFTaylorSeriesUpToOn n f p s；hn : n != 0；hx : s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFDerivWithinAt.hasFDerivAt`：HasFDerivWithinAt.hasFDerivAt (h : HasFDe
+rivWithinAt f f' s x) (hs : s in 𝓝 x) : HasFDerivAt f f' x
+· 使用定理 `HasFTaylorSeriesUpToOn.hasFDerivWithinAt`：HasFTaylorSeriesUpToOn.hasFDer
+ivWithinAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0) (hx : x in s) : Ha
+sFDerivWithinAt f (continuousM…
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
 
-English:
-theorem HasFTaylorSeriesUpToOn.hasFDerivAt
-  statement: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  proof: (h.hasFDerivWithinAt hn (mem_of_mem_nhds hx)).hasFDerivAt hx
-
-中文:
-定理 有FTaylorSeriesUpToOn.hasFDerivAt
-  结论: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  证明: (h.hasFDerivWithinAt hn (mem_of_mem_nhds hx)).hasFDerivAt hx
-
-Depends on / 依赖: h.hasFDerivWithinAt, hasFDerivAt, hasFDerivWithinAt, mem_of_mem_nhds
+--- 原说明 ---
+If a function has a Taylor series at order at least `1` on a neighborhood of `x`
+, then the term
+of order `1` of this series is a derivative of `f` at `x`.
 -/
-theorem HasFTaylorSeriesUpToOn.hasFDerivAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
-    (hx : s in 𝓝 x) : HasFDerivAt f (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) x :=
+theorem HasFTaylorSeriesUpToOn.hasFDerivAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n ≠ 0)
+    (hx : s ∈ 𝓝 x) : HasFDerivAt f (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) x :=
   (h.hasFDerivWithinAt hn (mem_of_mem_nhds hx)).hasFDerivAt hx
 
-/--
-theorem `HasFTaylorSeriesUpToOn.eventually_hasFDerivAt` / 定理 `HasFTaylorSeriesUpToOn.eventually_hasFDerivAt`
+/-- If a function has a Taylor series at order at least `1` on a neighborhood of `x`, then
+in a neighborhood of `x`, the term of order `1` of this series is a derivative of `f`. -/
+/-
+**HasFTaylorSeriesUpToOn.eventually_hasFDerivAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.eventually_hasFDerivAt (h : HasFTaylorSeriesUpToOn 
+n f p s) (hn : n != 0) (hx : s in 𝓝 x) : forallᶠ y in 𝓝 x, HasFDerivAt f (contin
+uousMultilinearCurryFin1 𝕜 E F (p y 1)) y
+参数：h : HasFTaylorSeriesUpToOn n f p s；hn : n != 0；hx : s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eventually_eventually_nhds`：eventually_eventually_nhds {p : X -> Prop} :
+ (forallᶠ y in 𝓝 x, forallᶠ x in 𝓝 y, p x) ↔ forallᶠ x in 𝓝 x, p x
+· 使用定理 `HasFTaylorSeriesUpToOn.hasFDerivAt`：HasFTaylorSeriesUpToOn.hasFDerivAt (
+h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0) (hx : s in 𝓝 x) : HasFDerivAt 
+f (continuousMultilinear…
 
-English:
-theorem HasFTaylorSeriesUpToOn.eventually_hasFDerivAt
-  statement: (h : HasFTaylorSeriesUpToOn n f p s)
-  proof: (eventually_eventually_nhds.2 hx).mono fun _y hy => h.hasFDerivAt hn hy
-
-中文:
-定理 有FTaylorSeriesUpToOn.eventually_hasFDerivAt
-  结论: (h : 有FTaylorSeriesUpToOn n f p s)
-  证明: (eventually_eventually_nhds.2 hx).mono fun _y hy => h.hasFDerivAt hn hy
-
-Depends on / 依赖: eventually_eventually_nhds, h.hasFDerivAt, hasFDerivAt
+--- 原说明 ---
+If a function has a Taylor series at order at least `1` on a neighborhood of `x`
+, then
+in a neighborhood of `x`, the term of order `1` of this series is a derivative o
+f `f`.
 -/
 theorem HasFTaylorSeriesUpToOn.eventually_hasFDerivAt (h : HasFTaylorSeriesUpToOn n f p s)
-    (hn : n != 0) (hx : s in 𝓝 x) :
-    forallᶠ y in 𝓝 x, HasFDerivAt f (continuousMultilinearCurryFin1 𝕜 E F (p y 1)) y :=
+    (hn : n ≠ 0) (hx : s ∈ 𝓝 x) :
+    ∀ᶠ y in 𝓝 x, HasFDerivAt f (continuousMultilinearCurryFin1 𝕜 E F (p y 1)) y :=
   (eventually_eventually_nhds.2 hx).mono fun _y hy => h.hasFDerivAt hn hy
 
-/--
-theorem `HasFTaylorSeriesUpToOn.differentiableAt` / 定理 `HasFTaylorSeriesUpToOn.differentiableAt`
+/-- If a function has a Taylor series at order at least `1` on a neighborhood of `x`, then
+it is differentiable at `x`. -/
+/-
+**HasFTaylorSeriesUpToOn.differentiableAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.differentiableAt (h : HasFTaylorSeriesUpToOn n f p 
+s) (hn : n != 0) (hx : s in 𝓝 x) : DifferentiableAt 𝕜 f x
+参数：h : HasFTaylorSeriesUpToOn n f p s；hn : n != 0；hx : s in 𝓝 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFDerivAt.differentiableAt`：HasFDerivAt.differentiableAt (h : HasFDeri
+vAt f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `HasFTaylorSeriesUpToOn.hasFDerivAt`：HasFTaylorSeriesUpToOn.hasFDerivAt (
+h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0) (hx : s in 𝓝 x) : HasFDerivAt 
+f (continuousMultilinear…
 
-English:
-theorem HasFTaylorSeriesUpToOn.differentiableAt
-  statement: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  proof: (h.hasFDerivAt hn hx).differentiableAt
-
-中文:
-定理 有FTaylorSeriesUpToOn.differentiableAt
-  结论: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
-  证明: (h.hasFDerivAt hn hx).differentiableAt
-
-Depends on / 依赖: differentiableAt, h.hasFDerivAt, hasFDerivAt
+--- 原说明 ---
+If a function has a Taylor series at order at least `1` on a neighborhood of `x`
+, then
+it is differentiable at `x`.
 -/
-theorem HasFTaylorSeriesUpToOn.differentiableAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
-    (hx : s in 𝓝 x) : DifferentiableAt 𝕜 f x :=
+theorem HasFTaylorSeriesUpToOn.differentiableAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n ≠ 0)
+    (hx : s ∈ 𝓝 x) : DifferentiableAt 𝕜 f x :=
   (h.hasFDerivAt hn hx).differentiableAt
 
-/--
-theorem `hasFTaylorSeriesUpToOn_succ_iff_left` / 定理 `hasFTaylorSeriesUpToOn_succ_iff_left`
+/-- `p` is a Taylor series of `f` up to `n+1` if and only if `p` is a Taylor series up to `n`, and
+`p (n + 1)` is a derivative of `p n`. -/
+/-
+**hasFTaylorSeriesUpToOn_succ_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_succ_iff_left {n : Nat} : HasFTaylorSeriesUpToOn (n
+ + 1) f p s ↔ HasFTaylorSeriesUpToOn n f p s ∧ (forall x in s, HasFDerivWithinAt
+ (fun y => p y n) (p x n.succ).curryLeft s x) ∧ ContinuousOn (fun x => p x (n + 
+1)) s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.of_le`：HasFTaylorSeriesUpToOn.of_le (h : HasFTayl
+orSeriesUpToOn n f p s) (hmn : m <= n) : HasFTaylorSeriesUpToOn m f p s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Nat.eq_of_lt_succ_of_not_lt`：∀ {m n : ℕ}, m < n + 1 → ¬m < n → m = n
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
 
-English:
-theorem hasFTaylorSeriesUpToOn_succ_iff_left
-  given: {n : Nat}
-  proof: by
-  constructor
-  · exact fun h => ⟨h.of_le (mod_cast Nat.le_succ n),
-      h.fderivWithin _ (mod_cast lt_add_one n), h.cont (n + 1) le_rfl⟩
-  · intro h
-    constructor
-    · exact h.1.zero_eq
-    · intro m hm
-      by_cases h' : m < n
-      · exact h.1.fderivWithin m (mod_cast h')
-      · have : m = n := Nat.eq_of_lt_succ_of_not_lt (mod_cast hm) h'
-        rw [this]
-        exact h.2.1
-    · intro m hm
-      by_cases h' : m <= n
-      · apply h.1.cont m (mod_cast h')
-      · have : m = n + 1 := le_antisymm (mod_cast hm) (not_le.1 h')
-        rw [this]
-        exact h.2.2
-
-中文:
-定理 hasFTaylorSeriesUpToOn_succ_iff_left
-  条件: {n : 自然数}
-  证明: by
-  constructor
-  · exact fun h => ⟨h.of_le (mod_cast Nat.le_succ n),
-      h.fderivWithin _ (mod_cast lt_add_one n), h.cont (n + 1) le_rfl⟩
-  · intro h
-    constructor
-    · exact h.1.zero_eq
-    · intro m hm
-      by_cases h' : m < n
-      · exact h.1.fderivWithin m (mod_cast h')
-      · have : m = n := Nat.eq_of_lt_succ_of_not_lt (mod_cast hm) h'
-        rw [this]
-        exact h.2.1
-    · intro m hm
-      by_cases h' : m <= n
-      · apply h.1.cont m (mod_cast h')
-      · have : m = n + 1 := le_antisymm (mod_cast hm) (not_le.1 h')
-        rw [this]
-        exact h.2.2
-
-Depends on / 依赖: Nat.eq_of_lt_succ_of_not_lt, Nat.le_succ, eq_of_lt_succ_of_not_lt, fderivWithin, h.cont, h.fderivWithin, h.of_le, le_antisymm, le_rfl, le_succ, lt_add_one, mod_cast, not_le, of_le, zero_eq
+--- 原说明 ---
+`p` is a Taylor series of `f` up to `n+1` if and only if `p` is a Taylor series 
+up to `n`, and
+`p (n + 1)` is a derivative of `p n`.
 -/
-theorem hasFTaylorSeriesUpToOn_succ_iff_left {n : Nat} :
+theorem hasFTaylorSeriesUpToOn_succ_iff_left {n : ℕ} :
     HasFTaylorSeriesUpToOn (n + 1) f p s ↔
       HasFTaylorSeriesUpToOn n f p s ∧
-        (forall x in s, HasFDerivWithinAt (fun y => p y n) (p x n.succ).curryLeft s x) ∧
+        (∀ x ∈ s, HasFDerivWithinAt (fun y => p y n) (p x n.succ).curryLeft s x) ∧
           ContinuousOn (fun x => p x (n + 1)) s := by
   constructor
-  · exact fun h => ⟨h.of_le (mod_cast Nat.le_succ n),
+  · exact fun h ↦ ⟨h.of_le (mod_cast Nat.le_succ n),
       h.fderivWithin _ (mod_cast lt_add_one n), h.cont (n + 1) le_rfl⟩
   · intro h
     constructor
@@ -664,74 +948,78 @@ theorem hasFTaylorSeriesUpToOn_succ_iff_left {n : Nat} :
         rw [this]
         exact h.2.1
     · intro m hm
-      by_cases h' : m <= n
+      by_cases h' : m ≤ n
       · apply h.1.cont m (mod_cast h')
       · have : m = n + 1 := le_antisymm (mod_cast hm) (not_le.1 h')
         rw [this]
         exact h.2.2
-
-/--
-theorem `HasFTaylorSeriesUpToOn.shift_of_succ` / 定理 `HasFTaylorSeriesUpToOn.shift_of_succ`
-
-English:
-theorem HasFTaylorSeriesUpToOn.shift_of_succ
-  proof: by
-  constructor
-  · intro x _
-    rfl
-  · intro m (hm : (m : Nat∞ω) < n) x (hx : x in s)
-    have A : (m.succ : Nat∞ω) < n.succ := by
-      rw [Nat.cast_lt] at hm ⊢
-      exact Nat.succ_lt_succ hm
-    change HasFDerivWithinAt (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
-      (p x m.succ.succ).curryRight.curryLeft s x
-    rw [(continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_hasFDerivWithinAt_iff']
-    convert! H.fderivWithin _ A x hx
-    ext y v
-    change p x (m + 2) (snoc (cons y (init v)) (v (last _))) = p x (m + 2) (cons y v)
-    rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
-  · intro m (hm : (m : Nat∞ω) <= n)
-    suffices A : ContinuousOn (p · (m + 1)) s from
-      (continuousMultilinearCurryRightEquiv' 𝕜 m E F).continuous.comp_continuousOn A
-    refine H.cont _ ?_
-    rw [Nat.cast_le] at hm ⊢
-    exact Nat.succ_le_succ hm
-
-中文:
-定理 有FTaylorSeriesUpToOn.shift_of_succ
-  证明: by
-  constructor
-  · intro x _
-    rfl
-  · intro m (hm : (m : Nat∞ω) < n) x (hx : x in s)
-    have A : (m.succ : Nat∞ω) < n.succ := by
-      rw [Nat.cast_lt] at hm ⊢
-      exact Nat.succ_lt_succ hm
-    change HasFDerivWithinAt (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
-      (p x m.succ.succ).curryRight.curryLeft s x
-    rw [(continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_hasFDerivWithinAt_iff']
-    convert! H.fderivWithin _ A x hx
-    ext y v
-    change p x (m + 2) (snoc (cons y (init v)) (v (last _))) = p x (m + 2) (cons y v)
-    rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
-  · intro m (hm : (m : Nat∞ω) <= n)
-    suffices A : ContinuousOn (p · (m + 1)) s from
-      (continuousMultilinearCurryRightEquiv' 𝕜 m E F).continuous.comp_continuousOn A
-    refine H.cont _ ?_
-    rw [Nat.cast_le] at hm ⊢
-    exact Nat.succ_le_succ hm
-
-Depends on / 依赖: H.fderivWithin, HasFDerivWithinAt, Nat.cast_lt, Nat.succ_lt_succ, cast_lt, comp_hasFDerivWithinAt_iff, continuousMultilinearCurryRightEquiv, convert, curryLeft, curryRight, curryRight.curryLeft, fderivWithin, m.succ, m.succ.succ, n.succ, succ_lt_succ
+/-
+**HasFTaylorSeriesUpToOn.shift_of_succ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.shift_of_succ {n : Nat} (H : HasFTaylorSeriesUpToOn
+ (n + 1 : Nat) f p s) : (HasFTaylorSeriesUpToOn n (fun x => continuousMultilinea
+rCurryFin1 𝕜 E F (p x 1)) (fun x => (p x).shift)) s
+参数：H : HasFTaylorSeriesUpToOn (n + 1 : Nat) f p s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `LinearIsometryEquiv.comp_hasFDerivWithinAt_iff'`：comp_hasFDerivWithinAt_
+iff' {f : G -> E} {s : Set G} {x : G} {f' : G ->L[𝕜] F} : HasFDerivWithinAt (iso
+ ∘ f) f' s x ↔ HasFDerivWithinAt f ((…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `Fin.cons_snoc_eq_snoc_cons`：cons_snoc_eq_snoc_cons {β : Sort*} (a : β) (
+q : Fin n -> β) (b : β) : @cons n.succ (fun _ => β) a (snoc q b) = snoc (cons a 
+q) b
+· 使用定理 `Fin.snoc_init_self`：snoc_init_self : snoc (init q) (q (last n)) = q
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `Nat.succ_le_succ`：∀ {n m : ℕ}, n ≤ m → n.succ ≤ m.succ
+· 使用定理 `Continuous.comp_continuousOn`：Continuous.comp_continuousOn {g : β -> γ} 
+{f : α -> β} {s : Set α} (hg : Continuous g) (hf : ContinuousOn f s) : Continuou
+sOn (g ∘ f) s
+· 使用定理 `LinearIsometryEquiv.continuous`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Ty
+pe u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+
+* R₂} {σ₂₁ : R₂ →+* …
 -/
 theorem HasFTaylorSeriesUpToOn.shift_of_succ
-    {n : Nat} (H : HasFTaylorSeriesUpToOn (n + 1 : Nat) f p s) :
+    {n : ℕ} (H : HasFTaylorSeriesUpToOn (n + 1 : ℕ) f p s) :
     (HasFTaylorSeriesUpToOn n (fun x => continuousMultilinearCurryFin1 𝕜 E F (p x 1))
       (fun x => (p x).shift)) s := by
   constructor
   · intro x _
     rfl
-  · intro m (hm : (m : Nat∞ω) < n) x (hx : x in s)
-    have A : (m.succ : Nat∞ω) < n.succ := by
+  · intro m (hm : (m : ℕ∞ω) < n) x (hx : x ∈ s)
+    have A : (m.succ : ℕ∞ω) < n.succ := by
       rw [Nat.cast_lt] at hm ⊢
       exact Nat.succ_lt_succ hm
     change HasFDerivWithinAt (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
@@ -740,99 +1028,95 @@ theorem HasFTaylorSeriesUpToOn.shift_of_succ
     convert! H.fderivWithin _ A x hx
     ext y v
     change p x (m + 2) (snoc (cons y (init v)) (v (last _))) = p x (m + 2) (cons y v)
-    rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
-  · intro m (hm : (m : Nat∞ω) <= n)
+    rw [← cons_snoc_eq_snoc_cons, snoc_init_self]
+  · intro m (hm : (m : ℕ∞ω) ≤ n)
     suffices A : ContinuousOn (p · (m + 1)) s from
       (continuousMultilinearCurryRightEquiv' 𝕜 m E F).continuous.comp_continuousOn A
     refine H.cont _ ?_
     rw [Nat.cast_le] at hm ⊢
     exact Nat.succ_le_succ hm
 
-/--
-theorem `hasFTaylorSeriesUpToOn_succ_nat_iff_right` / 定理 `hasFTaylorSeriesUpToOn_succ_nat_iff_right`
+/-- `p` is a Taylor series of `f` up to `n+1` if and only if `p.shift` is a Taylor series up to `n`
+for `p 1`, which is a derivative of `f`. Version for `n : ℕ`. -/
+/-
+**hasFTaylorSeriesUpToOn_succ_nat_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_succ_nat_iff_right {n : Nat} : HasFTaylorSeriesUpTo
+On (n + 1 : Nat) f p s ↔ (forall x in s, (p x 0).curry0 = f x) ∧ (forall x in s,
+ HasFDerivWithinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧ HasFTaylorSeriesUpT
+oOn n (fun x => continuousMultilinearCurryFin1 𝕜 E F (p x 1)) (fun x => (p x).sh
+ift) s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `HasFTaylorSeriesUpToOn.shift_of_succ`：HasFTaylorSeriesUpToOn.shift_of_su
+cc {n : Nat} (H : HasFTaylorSeriesUpToOn (n + 1 : Nat) f p s) : (HasFTaylorSerie
+sUpToOn n (fun x => contin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.lt_of_succ_lt_succ`：∀ {n m : ℕ}, n.succ < m.succ → n < m
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `Fin.cons_snoc_eq_snoc_cons`：cons_snoc_eq_snoc_cons {β : Sort*} (a : β) (
+q : Fin n -> β) (b : β) : @cons n.succ (fun _ => β) a (snoc q b) = snoc (cons a 
+q) b
+· 使用定理 `Fin.snoc_init_self`：snoc_init_self : snoc (init q) (q (last n)) = q
+· 使用定理 `LinearIsometryEquiv.comp_hasFDerivWithinAt_iff'`：comp_hasFDerivWithinAt_
+iff' {f : G -> E} {s : Set G} {x : G} {f' : G ->L[𝕜] F} : HasFDerivWithinAt (iso
+ ∘ f) f' s x ↔ HasFDerivWithinAt f ((…
+· 使用定理 `HasFDerivWithinAt.differentiableWithinAt`：HasFDerivWithinAt.differentiab
+leWithinAt (h : HasFDerivWithinAt f f' s x) : DifferentiableWithinAt 𝕜 f s x
+· 使用定理 `DifferentiableOn.continuousOn`：DifferentiableOn.continuousOn (h : Differ
+entiableOn 𝕜 f s) : ContinuousOn f s
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearIsometryEquiv.comp_continuousOn_iff`：comp_continuousOn_iff {f : α 
+-> E} {s : Set α} : ContinuousOn (e ∘ f) s ↔ ContinuousOn f s
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+（共 32 条，此处仅展示前 30 条）
 
-English:
-theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right
-  given: {n : Nat}
-  proof: by
-  constructor
-  · intro H
-    refine ⟨H.zero_eq, H.fderivWithin 0 (Nat.cast_lt.2 (Nat.succ_pos n)), ?_⟩
-    exact H.shift_of_succ
-  · rintro ⟨Hzero_eq, Hfderiv_zero, Htaylor⟩
-    constructor
-    · exact Hzero_eq
-    · intro m (hm : (m : Nat∞ω) < n.succ) x (hx : x in s)
-      rcases m with - | m
-      · exact Hfderiv_zero x hx
-      · have A : (m : Nat∞ω) < n := by
-          rw [Nat.cast_lt] at hm ⊢
-          exact Nat.lt_of_succ_lt_succ hm
-        have :
-          HasFDerivWithinAt (𝕜 := 𝕜) (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
-            ((p x).shift m.succ).curryLeft s x := Htaylor.fderivWithin _ A x hx
-        rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff'
-            (f' := ((p x).shift m.succ).curryLeft)] at this
-        convert! this
-        ext y v
-        change
-          (p x (Nat.succ (Nat.succ m))) (cons y v) =
-            (p x m.succ.succ) (snoc (cons y (init v)) (v (last _)))
-        rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
-    · intro m (hm : (m : Nat∞ω) <= n.succ)
-      rcases m with - | m
-      · have : DifferentiableOn 𝕜 (fun x => p x 0) s := fun x hx =>
-          (Hfderiv_zero x hx).differentiableWithinAt
-        exact this.continuousOn
-      · refine (continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_continuousOn_iff.mp ?_
-        refine Htaylor.cont _ ?_
-        rw [Nat.cast_le] at hm ⊢
-        exact Nat.lt_succ_iff.mp hm
-
-中文:
-定理 hasFTaylorSeriesUpToOn_succ_nat_iff_right
-  条件: {n : 自然数}
-  证明: by
-  constructor
-  · intro H
-    refine ⟨H.zero_eq, H.fderivWithin 0 (Nat.cast_lt.2 (Nat.succ_pos n)), ?_⟩
-    exact H.shift_of_succ
-  · rintro ⟨Hzero_eq, Hfderiv_zero, Htaylor⟩
-    constructor
-    · exact Hzero_eq
-    · intro m (hm : (m : Nat∞ω) < n.succ) x (hx : x in s)
-      rcases m with - | m
-      · exact Hfderiv_zero x hx
-      · have A : (m : Nat∞ω) < n := by
-          rw [Nat.cast_lt] at hm ⊢
-          exact Nat.lt_of_succ_lt_succ hm
-        have :
-          HasFDerivWithinAt (𝕜 := 𝕜) (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
-            ((p x).shift m.succ).curryLeft s x := Htaylor.fderivWithin _ A x hx
-        rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff'
-            (f' := ((p x).shift m.succ).curryLeft)] at this
-        convert! this
-        ext y v
-        change
-          (p x (Nat.succ (Nat.succ m))) (cons y v) =
-            (p x m.succ.succ) (snoc (cons y (init v)) (v (last _)))
-        rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
-    · intro m (hm : (m : Nat∞ω) <= n.succ)
-      rcases m with - | m
-      · have : DifferentiableOn 𝕜 (fun x => p x 0) s := fun x hx =>
-          (Hfderiv_zero x hx).differentiableWithinAt
-        exact this.continuousOn
-      · refine (continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_continuousOn_iff.mp ?_
-        refine Htaylor.cont _ ?_
-        rw [Nat.cast_le] at hm ⊢
-        exact Nat.lt_succ_iff.mp hm
-
-Depends on / 依赖: H.fderivWithin, H.shift_of_succ, H.zero_eq, HasFDerivWithinAt, Hfderiv_zero, Htaylor, Hzero_eq, Nat.cast_lt, Nat.lt_of_succ_lt_succ, Nat.succ_pos, cast_lt, continuousMultilinearCurryRightEquiv, fderivWithin, lt_of_succ_lt_succ, m.succ, n.succ, shift_of_succ, succ_pos, zero_eq
+--- 原说明 ---
+`p` is a Taylor series of `f` up to `n+1` if and only if `p.shift` is a Taylor s
+eries up to `n`
+for `p 1`, which is a derivative of `f`. Version for `n : ℕ`.
 -/
-theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right {n : Nat} :
-    HasFTaylorSeriesUpToOn (n + 1 : Nat) f p s ↔
-      (forall x in s, (p x 0).curry0 = f x) ∧
-        (forall x in s, HasFDerivWithinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧
+theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right {n : ℕ} :
+    HasFTaylorSeriesUpToOn (n + 1 : ℕ) f p s ↔
+      (∀ x ∈ s, (p x 0).curry0 = f x) ∧
+        (∀ x ∈ s, HasFDerivWithinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧
           HasFTaylorSeriesUpToOn n (fun x => continuousMultilinearCurryFin1 𝕜 E F (p x 1))
             (fun x => (p x).shift) s := by
   constructor
@@ -842,10 +1126,10 @@ theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right {n : Nat} :
   · rintro ⟨Hzero_eq, Hfderiv_zero, Htaylor⟩
     constructor
     · exact Hzero_eq
-    · intro m (hm : (m : Nat∞ω) < n.succ) x (hx : x in s)
+    · intro m (hm : (m : ℕ∞ω) < n.succ) x (hx : x ∈ s)
       rcases m with - | m
       · exact Hfderiv_zero x hx
-      · have A : (m : Nat∞ω) < n := by
+      · have A : (m : ℕ∞ω) < n := by
           rw [Nat.cast_lt] at hm ⊢
           exact Nat.lt_of_succ_lt_succ hm
         have :
@@ -858,8 +1142,8 @@ theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right {n : Nat} :
         change
           (p x (Nat.succ (Nat.succ m))) (cons y v) =
             (p x m.succ.succ) (snoc (cons y (init v)) (v (last _)))
-        rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
-    · intro m (hm : (m : Nat∞ω) <= n.succ)
+        rw [← cons_snoc_eq_snoc_cons, snoc_init_self]
+    · intro m (hm : (m : ℕ∞ω) ≤ n.succ)
       rcases m with - | m
       · have : DifferentiableOn 𝕜 (fun x => p x 0) s := fun x hx =>
           (Hfderiv_zero x hx).differentiableWithinAt
@@ -869,329 +1153,371 @@ theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right {n : Nat} :
         rw [Nat.cast_le] at hm ⊢
         exact Nat.lt_succ_iff.mp hm
 
-/--
-theorem `hasFTaylorSeriesUpToOn_top_iff_right` / 定理 `hasFTaylorSeriesUpToOn_top_iff_right`
+/-- `p` is a Taylor series of `f` up to `⊤` if and only if `p.shift` is a Taylor series up to `⊤`
+for `p 1`, which is a derivative of `f`. -/
+/-
+**hasFTaylorSeriesUpToOn_top_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_top_iff_right (hN : ∞ <= N) : HasFTaylorSeriesUpToO
+n N f p s ↔ (forall x in s, (p x 0).curry0 = f x) ∧ (forall x in s, HasFDerivWit
+hinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧ HasFTaylorSeriesUpToOn N (fun x 
+=> continuousMultilinearCurryFin1 𝕜 E F (p x 1)) (fun x => (p x).shift) s
+参数：hN : ∞ <= N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hasFTaylorSeriesUpToOn_top_iff`：hasFTaylorSeriesUpToOn_top_iff (hN : ∞ <
+= N) : HasFTaylorSeriesUpToOn N f p s ↔ forall n : Nat, HasFTaylorSeriesUpToOn n
+ f p s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `hasFTaylorSeriesUpToOn_succ_nat_iff_right`：hasFTaylorSeriesUpToOn_succ_n
+at_iff_right {n : Nat} : HasFTaylorSeriesUpToOn (n + 1 : Nat) f p s ↔ (forall x 
+in s, (p x 0).curry0 = f x) ∧ (…
+· 使用定理 `hasFTaylorSeriesUpToOn_top_iff_add`：hasFTaylorSeriesUpToOn_top_iff_add (
+hN : ∞ <= N) (k : Nat) : HasFTaylorSeriesUpToOn N f p s ↔ forall n : Nat, HasFTa
+ylorSeriesUpToOn (n + k …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `HasFTaylorSeriesUpToOn.of_le`：HasFTaylorSeriesUpToOn.of_le (h : HasFTayl
+orSeriesUpToOn n f p s) (hmn : m <= n) : HasFTaylorSeriesUpToOn m f p s
+· 使用引理 `ENat.natCast_le_of_coe_top_le_withTop`：natCast_le_of_coe_top_le_withTop 
+{N : WithTop Nat∞} (hN : (⊤ : Nat∞) <= N) (n : Nat) : n <= N
 
-English:
-theorem hasFTaylorSeriesUpToOn_top_iff_right
-  given: (hN : ∞ <= N)
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [hasFTaylorSeriesUpToOn_top_iff_add hN 1] at h
-    rw [hasFTaylorSeriesUpToOn_top_iff hN]
-    exact ⟨(hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).1,
-      (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).2.1,
-      fun n => (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h n)).2.2⟩
-  · apply (hasFTaylorSeriesUpToOn_top_iff_add hN 1).2 (fun n => ?_)
-    rw [hasFTaylorSeriesUpToOn_succ_nat_iff_right]
-    exact ⟨h.1, h.2.1, (h.2.2).of_le (m := n) (natCast_le_of_coe_top_le_withTop hN n)⟩
-
-中文:
-定理 hasFTaylorSeriesUpToOn_top_iff_right
-  条件: (hN : ∞ <= N)
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [hasFTaylorSeriesUpToOn_top_iff_add hN 1] at h
-    rw [hasFTaylorSeriesUpToOn_top_iff hN]
-    exact ⟨(hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).1,
-      (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).2.1,
-      fun n => (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h n)).2.2⟩
-  · apply (hasFTaylorSeriesUpToOn_top_iff_add hN 1).2 (fun n => ?_)
-    rw [hasFTaylorSeriesUpToOn_succ_nat_iff_right]
-    exact ⟨h.1, h.2.1, (h.2.2).of_le (m := n) (natCast_le_of_coe_top_le_withTop hN n)⟩
-
-Depends on / 依赖: hasFTaylorSeriesUpToOn_succ_nat_iff_right, hasFTaylorSeriesUpToOn_top_iff, hasFTaylorSeriesUpToOn_top_iff_add, natCast_le_of_coe_top_le_withTo, of_le
+--- 原说明 ---
+`p` is a Taylor series of `f` up to `⊤` if and only if `p.shift` is a Taylor ser
+ies up to `⊤`
+for `p 1`, which is a derivative of `f`.
 -/
-theorem hasFTaylorSeriesUpToOn_top_iff_right (hN : ∞ <= N) :
+theorem hasFTaylorSeriesUpToOn_top_iff_right (hN : ∞ ≤ N) :
     HasFTaylorSeriesUpToOn N f p s ↔
-      (forall x in s, (p x 0).curry0 = f x) ∧
-        (forall x in s, HasFDerivWithinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧
+      (∀ x ∈ s, (p x 0).curry0 = f x) ∧
+        (∀ x ∈ s, HasFDerivWithinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧
           HasFTaylorSeriesUpToOn N (fun x => continuousMultilinearCurryFin1 𝕜 E F (p x 1))
             (fun x => (p x).shift) s := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · rw [hasFTaylorSeriesUpToOn_top_iff_add hN 1] at h
     rw [hasFTaylorSeriesUpToOn_top_iff hN]
     exact ⟨(hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).1,
       (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).2.1,
-      fun n => (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h n)).2.2⟩
-  · apply (hasFTaylorSeriesUpToOn_top_iff_add hN 1).2 (fun n => ?_)
+      fun n ↦ (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h n)).2.2⟩
+  · apply (hasFTaylorSeriesUpToOn_top_iff_add hN 1).2 (fun n ↦ ?_)
     rw [hasFTaylorSeriesUpToOn_succ_nat_iff_right]
     exact ⟨h.1, h.2.1, (h.2.2).of_le (m := n) (natCast_le_of_coe_top_le_withTop hN n)⟩
 
-/--
-theorem `hasFTaylorSeriesUpToOn_succ_iff_right` / 定理 `hasFTaylorSeriesUpToOn_succ_iff_right`
+/-- `p` is a Taylor series of `f` up to `n+1` if and only if `p.shift` is a Taylor series up to `n`
+for `p 1`, which is a derivative of `f`. Version for `n : ℕ∞ω`. -/
+/-
+**hasFTaylorSeriesUpToOn_succ_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_succ_iff_right : HasFTaylorSeriesUpToOn (n + 1) f p
+ s ↔ (forall x in s, (p x 0).curry0 = f x) ∧ (forall x in s, HasFDerivWithinAt (
+fun y => p y 0) (p x 1).curryLeft s x) ∧ HasFTaylorSeriesUpToOn n (fun x => cont
+inuousMultilinearCurryFin1 𝕜 E F (p x 1)) (fun x => (p x).shift) s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `hasFTaylorSeriesUpToOn_top_iff_right`：hasFTaylorSeriesUpToOn_top_iff_rig
+ht (hN : ∞ <= N) : HasFTaylorSeriesUpToOn N f p s ↔ (forall x in s, (p x 0).curr
+y0 = f x) ∧ (forall x in s…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `hasFTaylorSeriesUpToOn_succ_nat_iff_right`：hasFTaylorSeriesUpToOn_succ_n
+at_iff_right {n : Nat} : HasFTaylorSeriesUpToOn (n + 1 : Nat) f p s ↔ (forall x 
+in s, (p x 0).curry0 = f x) ∧ (…
 
-English:
-theorem hasFTaylorSeriesUpToOn_succ_iff_right
-  proof: by
-  match n with
-  | ⊤ => exact hasFTaylorSeriesUpToOn_top_iff_right (by simp)
-  | (⊤ : Nat∞) => exact hasFTaylorSeriesUpToOn_top_iff_right (by simp)
-  | (n : Nat) => exact hasFTaylorSeriesUpToOn_succ_nat_iff_right
-
-中文:
-定理 hasFTaylorSeriesUpToOn_succ_iff_right
-  证明: by
-  match n with
-  | ⊤ => exact hasFTaylorSeriesUpToOn_top_iff_right (by simp)
-  | (⊤ : Nat∞) => exact hasFTaylorSeriesUpToOn_top_iff_right (by simp)
-  | (n : Nat) => exact hasFTaylorSeriesUpToOn_succ_nat_iff_right
-
-Depends on / 依赖: hasFTaylorSeriesUpToOn_succ_nat_iff_right, hasFTaylorSeriesUpToOn_top_iff_right
+--- 原说明 ---
+`p` is a Taylor series of `f` up to `n+1` if and only if `p.shift` is a Taylor s
+eries up to `n`
+for `p 1`, which is a derivative of `f`. Version for `n : ℕ∞ω`.
 -/
 theorem hasFTaylorSeriesUpToOn_succ_iff_right :
     HasFTaylorSeriesUpToOn (n + 1) f p s ↔
-      (forall x in s, (p x 0).curry0 = f x) ∧
-        (forall x in s, HasFDerivWithinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧
+      (∀ x ∈ s, (p x 0).curry0 = f x) ∧
+        (∀ x ∈ s, HasFDerivWithinAt (fun y => p y 0) (p x 1).curryLeft s x) ∧
           HasFTaylorSeriesUpToOn n (fun x => continuousMultilinearCurryFin1 𝕜 E F (p x 1))
             (fun x => (p x).shift) s := by
   match n with
   | ⊤ => exact hasFTaylorSeriesUpToOn_top_iff_right (by simp)
-  | (⊤ : Nat∞) => exact hasFTaylorSeriesUpToOn_top_iff_right (by simp)
-  | (n : Nat) => exact hasFTaylorSeriesUpToOn_succ_nat_iff_right
+  | (⊤ : ℕ∞) => exact hasFTaylorSeriesUpToOn_top_iff_right (by simp)
+  | (n : ℕ) => exact hasFTaylorSeriesUpToOn_succ_nat_iff_right
 
 /-! ### Iterated derivative within a set -/
 
 
 variable (𝕜)
 
-/--
-Definition of `iteratedFDerivWithin` / `iteratedFDerivWithin` 的定义
-
-English:
-definition iteratedFDerivWithin
-  signature: (n : Nat) (f : E -> F) (s : Set E)
-  body: Nat.recOn n (fun x => ContinuousMultilinearMap.uncurry0 𝕜 E (f x)) fun _ rec x =>
-    ContinuousLinearMap.uncurryLeft (fderivWithin 𝕜 rec s x)
-
-中文:
-定义 iteratedFDerivWithin
-  签名: (n : 自然数) (f : E -> F) (s : 集合 E)
-  定义体: Nat.recOn n (fun x => ContinuousMultilinearMap.uncurry0 𝕜 E (f x)) fun _ rec x =>
-    ContinuousLinearMap.uncurryLeft (fderivWithin 𝕜 rec s x)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.uncurryLeft, ContinuousMultilinearMap, ContinuousMultilinearMap.uncurry0, Nat.recOn, fderivWithin, uncurry0, uncurryLeft
+/-- The `n`-th derivative of a function along a set, defined inductively by saying that the `n+1`-th
+derivative of `f` is the derivative of the `n`-th derivative of `f` along this set, together with
+an uncurrying step to see it as a multilinear map in `n+1` variables..
 -/
-noncomputable def iteratedFDerivWithin (n : Nat) (f : E -> F) (s : Set E) : E -> E [×n]->L[𝕜] F :=
+/-
+**iteratedFDerivWithin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin (n : Nat) (f : E -> F) (s : Set E) : E -> E [×n]->L[𝕜
+] F
+参数：n : Nat；f : E -> F；s : Set E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The `n`-th derivative of a function along a set, defined inductively by saying t
+hat the `n+1`-th
+derivative of `f` is the derivative of the `n`-th derivative of `f` along this s
+et, together with
+an uncurrying step to see it as a multilinear map in `n+1` variables..
+-/
+noncomputable def iteratedFDerivWithin (n : ℕ) (f : E → F) (s : Set E) : E → E [×n]→L[𝕜] F :=
   Nat.recOn n (fun x => ContinuousMultilinearMap.uncurry0 𝕜 E (f x)) fun _ rec x =>
     ContinuousLinearMap.uncurryLeft (fderivWithin 𝕜 rec s x)
 
-/--
-Definition of `ftaylorSeriesWithin` / `ftaylorSeriesWithin` 的定义
+/-- Formal Taylor series associated to a function within a set. -/
+/-
+**ftaylorSeriesWithin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ftaylorSeriesWithin (f : E -> F) (s : Set E) (x : E) : FormalMultilinearSe
+ries 𝕜 E F
+参数：f : E -> F；s : Set E；x : E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ftaylorSeriesWithin
-  signature: (f : E -> F) (s : Set E) (x : E)
-  body: fun n =>
-  iteratedFDerivWithin 𝕜 n f s x
-
-中文:
-定义 ftaylorSeriesWithin
-  签名: (f : E -> F) (s : 集合 E) (x : E)
-  定义体: fun n =>
-  iteratedFDerivWithin 𝕜 n f s x
+--- 原说明 ---
+Formal Taylor series associated to a function within a set.
 -/
-def ftaylorSeriesWithin (f : E -> F) (s : Set E) (x : E) : FormalMultilinearSeries 𝕜 E F := fun n =>
+def ftaylorSeriesWithin (f : E → F) (s : Set E) (x : E) : FormalMultilinearSeries 𝕜 E F := fun n =>
   iteratedFDerivWithin 𝕜 n f s x
 
 variable {𝕜}
 
 @[simp]
-/--
-theorem `iteratedFDerivWithin_zero_apply` / 定理 `iteratedFDerivWithin_zero_apply`
-
-English:
-theorem iteratedFDerivWithin_zero_apply
-  given: (m : Fin 0 -> E)
-  proof: rfl
-
-中文:
-定理 iteratedFDerivWithin_zero_apply
-  条件: (m : 有限集 0 -> E)
-  证明: rfl
+/-
+**iteratedFDerivWithin_zero_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_zero_apply (m : Fin 0 -> E) : (iteratedFDerivWithin 𝕜
+ 0 f s x : (Fin 0 -> E) -> F) m = f x
+参数：m : Fin 0 -> E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedFDerivWithin_zero_apply (m : Fin 0 -> E) :
-    (iteratedFDerivWithin 𝕜 0 f s x : (Fin 0 -> E) -> F) m = f x :=
+theorem iteratedFDerivWithin_zero_apply (m : Fin 0 → E) :
+    (iteratedFDerivWithin 𝕜 0 f s x : (Fin 0 → E) → F) m = f x :=
   rfl
-
-/--
-theorem `iteratedFDerivWithin_zero_eq_comp` / 定理 `iteratedFDerivWithin_zero_eq_comp`
-
-English:
-theorem iteratedFDerivWithin_zero_eq_comp
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 iteratedFDerivWithin_zero_eq_comp
-  证明: rfl
-
-@[simp]
+/-
+**iteratedFDerivWithin_zero_eq_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_zero_eq_comp : iteratedFDerivWithin 𝕜 0 f s = (contin
+uousMultilinearCurryFin0 𝕜 E F).symm ∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iteratedFDerivWithin_zero_eq_comp :
     iteratedFDerivWithin 𝕜 0 f s = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f :=
   rfl
 
 @[simp]
-/--
-theorem `dist_iteratedFDerivWithin_zero` / 定理 `dist_iteratedFDerivWithin_zero`
-
-English:
-theorem dist_iteratedFDerivWithin_zero
-  statement: (f : E -> F) (s : Set E) (x : E)
-  proof: by
-  simp only [iteratedFDerivWithin_zero_eq_comp, comp_apply, LinearIsometryEquiv.dist_map]
-
-@[simp]
-
-中文:
-定理 dist_iteratedFDerivWithin_zero
-  结论: (f : E -> F) (s : 集合 E) (x : E)
-  证明: by
-  simp only [iteratedFDerivWithin_zero_eq_comp, comp_apply, LinearIsometryEquiv.dist_map]
-
-@[simp]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.dist_map, comp_apply, dist_map, iteratedFDerivWithin_zero_eq_comp
+/-
+**dist_iteratedFDerivWithin_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_iteratedFDerivWithin_zero (f : E -> F) (s : Set E) (x : E) (g : E -> 
+F) (t : Set E) (y : E) : dist (iteratedFDerivWithin 𝕜 0 f s x) (iteratedFDerivWi
+thin 𝕜 0 g t y) = dist (f x) (g y)
+参数：f : E -> F；s : Set E；x : E；g : E -> F；t : Set E；y : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearIsometryEquiv.dist_map`：dist_map (x y : E) : dist (e x) (e y) = di
+st x y
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dist_iteratedFDerivWithin_zero (f : E -> F) (s : Set E) (x : E)
-    (g : E -> F) (t : Set E) (y : E) :
+theorem dist_iteratedFDerivWithin_zero (f : E → F) (s : Set E) (x : E)
+    (g : E → F) (t : Set E) (y : E) :
     dist (iteratedFDerivWithin 𝕜 0 f s x) (iteratedFDerivWithin 𝕜 0 g t y) = dist (f x) (g y) := by
   simp only [iteratedFDerivWithin_zero_eq_comp, comp_apply, LinearIsometryEquiv.dist_map]
 
 @[simp]
-/--
-theorem `norm_iteratedFDerivWithin_zero` / 定理 `norm_iteratedFDerivWithin_zero`
-
-English:
-theorem norm_iteratedFDerivWithin_zero
-  statement: ‖iteratedFDerivWithin 𝕜 0 f s x‖ = ‖f x‖
-  proof: by
-  rw [iteratedFDerivWithin_zero_eq_comp]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-中文:
-定理 norm_iteratedFDerivWithin_zero
-  结论: ‖iteratedFDerivWithin 𝕜 0 f s x‖ = ‖f x‖
-  证明: by
-  rw [iteratedFDerivWithin_zero_eq_comp]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, comp_apply, iteratedFDerivWithin_zero_eq_comp, norm_map
+/-
+**norm_iteratedFDerivWithin_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_iteratedFDerivWithin_zero : ‖iteratedFDerivWithin 𝕜 0 f s x‖ = ‖f x‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDerivWithin_zero_eq_comp`：iteratedFDerivWithin_zero_eq_comp : i
+teratedFDerivWithin 𝕜 0 f s = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LinearIsometryEquiv.norm_map`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type
+ u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* 
+R₂} {σ₂₁ : R₂ →+* …
 -/
 theorem norm_iteratedFDerivWithin_zero : ‖iteratedFDerivWithin 𝕜 0 f s x‖ = ‖f x‖ := by
-  rw [iteratedFDerivWithin_zero_eq_comp]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-/--
-theorem `iteratedFDerivWithin_succ_apply_left` / 定理 `iteratedFDerivWithin_succ_apply_left`
-
-English:
-theorem iteratedFDerivWithin_succ_apply_left
-  given: {n : Nat} (m : Fin (n + 1) -> E)
-  proof: rfl
-
-中文:
-定理 iteratedFDerivWithin_succ_apply_left
-  条件: {n : 自然数} (m : 有限集 (n + 1) -> E)
-  证明: rfl
+  rw [iteratedFDerivWithin_zero_eq_comp, comp_apply, LinearIsometryEquiv.norm_map]
+/-
+**iteratedFDerivWithin_succ_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_succ_apply_left {n : Nat} (m : Fin (n + 1) -> E) : (i
+teratedFDerivWithin 𝕜 (n + 1) f s x : (Fin (n + 1) -> E) -> F) m = (fderivWithin
+ 𝕜 (iteratedFDerivWithin 𝕜 n f s) s x : E -> E [×n]->L[𝕜] F) (m 0) (tail m)
+参数：m : Fin (n + 1) -> E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedFDerivWithin_succ_apply_left {n : Nat} (m : Fin (n + 1) -> E) :
-    (iteratedFDerivWithin 𝕜 (n + 1) f s x : (Fin (n + 1) -> E) -> F) m =
-      (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n f s) s x : E -> E [×n]->L[𝕜] F) (m 0) (tail m) :=
+theorem iteratedFDerivWithin_succ_apply_left {n : ℕ} (m : Fin (n + 1) → E) :
+    (iteratedFDerivWithin 𝕜 (n + 1) f s x : (Fin (n + 1) → E) → F) m =
+      (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n f s) s x : E → E [×n]→L[𝕜] F) (m 0) (tail m) :=
   rfl
 
-/--
-theorem `iteratedFDerivWithin_succ_eq_comp_left` / 定理 `iteratedFDerivWithin_succ_eq_comp_left`
+/-- Writing explicitly the `n+1`-th derivative as the composition of a currying linear equiv,
+and the derivative of the `n`-th derivative. -/
+/-
+**iteratedFDerivWithin_succ_eq_comp_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_succ_eq_comp_left {n : Nat} : iteratedFDerivWithin 𝕜 
+(n + 1) f s = (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (n + 1) => E) 
+F).symm ∘ fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n f s) s
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem iteratedFDerivWithin_succ_eq_comp_left
-  given: {n : Nat}
-  proof: rfl
-
-中文:
-定理 iteratedFDerivWithin_succ_eq_comp_left
-  条件: {n : 自然数}
-  证明: rfl
+--- 原说明 ---
+Writing explicitly the `n+1`-th derivative as the composition of a currying line
+ar equiv,
+and the derivative of the `n`-th derivative.
 -/
-theorem iteratedFDerivWithin_succ_eq_comp_left {n : Nat} :
+theorem iteratedFDerivWithin_succ_eq_comp_left {n : ℕ} :
     iteratedFDerivWithin 𝕜 (n + 1) f s =
       (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (n + 1) => E) F).symm ∘
         fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n f s) s :=
   rfl
-
-/--
-theorem `fderivWithin_iteratedFDerivWithin` / 定理 `fderivWithin_iteratedFDerivWithin`
-
-English:
-theorem fderivWithin_iteratedFDerivWithin
-  given: {s : Set E} {n : Nat}
-  proof: rfl
-
-中文:
-定理 fderivWithin_iteratedFDerivWithin
-  条件: {s : 集合 E} {n : 自然数}
-  证明: rfl
+/-
+**fderivWithin_iteratedFDerivWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderivWithin_iteratedFDerivWithin {s : Set E} {n : Nat} : fderivWithin 𝕜 (
+iteratedFDerivWithin 𝕜 n f s) s = (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ 
+: Fin (n + 1) => E) F) ∘ iteratedFDerivWithin 𝕜 (n + 1) f s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 -/
-theorem fderivWithin_iteratedFDerivWithin {s : Set E} {n : Nat} :
+theorem fderivWithin_iteratedFDerivWithin {s : Set E} {n : ℕ} :
     fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n f s) s =
       (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (n + 1) => E) F) ∘
         iteratedFDerivWithin 𝕜 (n + 1) f s :=
   rfl
-
-/--
-theorem `norm_fderivWithin_iteratedFDerivWithin` / 定理 `norm_fderivWithin_iteratedFDerivWithin`
-
-English:
-theorem norm_fderivWithin_iteratedFDerivWithin
-  given: {n : Nat}
-  proof: by
-  rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-@[simp]
-
-中文:
-定理 norm_fderivWithin_iteratedFDerivWithin
-  条件: {n : 自然数}
-  证明: by
-  rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-@[simp]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, comp_apply, iteratedFDerivWithin_succ_eq_comp_left, norm_map
+/-
+**norm_fderivWithin_iteratedFDerivWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_fderivWithin_iteratedFDerivWithin {n : Nat} : ‖fderivWithin 𝕜 (iterat
+edFDerivWithin 𝕜 n f s) s x‖ = ‖iteratedFDerivWithin 𝕜 (n + 1) f s x‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDerivWithin_succ_eq_comp_left`：iteratedFDerivWithin_succ_eq_com
+p_left {n : Nat} : iteratedFDerivWithin 𝕜 (n + 1) f s = (continuousMultilinearCu
+rryLeftEquiv 𝕜 (fun _ : Fin …
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LinearIsometryEquiv.norm_map`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type
+ u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* 
+R₂} {σ₂₁ : R₂ →+* …
 -/
-theorem norm_fderivWithin_iteratedFDerivWithin {n : Nat} :
+theorem norm_fderivWithin_iteratedFDerivWithin {n : ℕ} :
     ‖fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n f s) s x‖ =
       ‖iteratedFDerivWithin 𝕜 (n + 1) f s x‖ := by
-  rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
+  rw [iteratedFDerivWithin_succ_eq_comp_left, comp_apply, LinearIsometryEquiv.norm_map]
 
 @[simp]
-/--
-theorem `dist_iteratedFDerivWithin_one` / 定理 `dist_iteratedFDerivWithin_one`
-
-English:
-theorem dist_iteratedFDerivWithin_one
-  statement: (f g : E -> F) {y}
-  proof: by
-  simp only [iteratedFDerivWithin_succ_eq_comp_left, comp_apply,
-    LinearIsometryEquiv.dist_map, iteratedFDerivWithin_zero_eq_comp,
-    LinearIsometryEquiv.comp_fderivWithin, hsx, hyt]
-  apply (continuousMultilinearCurryFin0 𝕜 E F).symm.toLinearIsometry.postcomp.dist_map
-
-@[simp]
-
-中文:
-定理 dist_iteratedFDerivWithin_one
-  结论: (f g : E -> F) {y}
-  证明: by
-  simp only [iteratedFDerivWithin_succ_eq_comp_left, comp_apply,
-    LinearIsometryEquiv.dist_map, iteratedFDerivWithin_zero_eq_comp,
-    LinearIsometryEquiv.comp_fderivWithin, hsx, hyt]
-  apply (continuousMultilinearCurryFin0 𝕜 E F).symm.toLinearIsometry.postcomp.dist_map
-
-@[simp]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.comp_fderivWithin, LinearIsometryEquiv.dist_map, comp_apply, comp_fderivWithin, continuousMultilinearCurryFin0, dist_map, iteratedFDerivWithin_succ_eq_comp_left, iteratedFDerivWithin_zero_eq_comp, postcomp, symm.toLinearIsometry.postcomp.dist_map, toLinearIsometry
+/-
+**dist_iteratedFDerivWithin_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dist_iteratedFDerivWithin_one (f g : E -> F) {y} (hsx : UniqueDiffWithinAt
+ 𝕜 s x) (hyt : UniqueDiffWithinAt 𝕜 t y) : dist (iteratedFDerivWithin 𝕜 1 f s x)
+ (iteratedFDerivWithin 𝕜 1 g t y) = dist (fderivWithin 𝕜 f s x) (fderivWithin 𝕜 
+g t y)
+参数：f g : E -> F；hsx : UniqueDiffWithinAt 𝕜 s x；hyt : UniqueDiffWithinAt 𝕜 t y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LinearIsometryEquiv.comp_fderivWithin`：comp_fderivWithin {f : G -> E} {s
+ : Set G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x) : fderivWithin 𝕜 (iso ∘ f) s 
+x = (iso : E ->L[𝕜] F).comp…
+· 使用定理 `LinearIsometryEquiv.dist_map`：dist_map (x y : E) : dist (e x) (e y) = di
+st x y
+· 使用定理 `LinearIsometry.dist_map`：dist_map (x y : E) : dist (f x) (f y) = dist x 
+y
 -/
-theorem dist_iteratedFDerivWithin_one (f g : E -> F) {y}
+theorem dist_iteratedFDerivWithin_one (f g : E → F) {y}
     (hsx : UniqueDiffWithinAt 𝕜 s x) (hyt : UniqueDiffWithinAt 𝕜 t y) :
     dist (iteratedFDerivWithin 𝕜 1 f s x) (iteratedFDerivWithin 𝕜 1 g t y)
       = dist (fderivWithin 𝕜 f s x) (fderivWithin 𝕜 g t y) := by
@@ -1201,285 +1527,344 @@ theorem dist_iteratedFDerivWithin_one (f g : E -> F) {y}
   apply (continuousMultilinearCurryFin0 𝕜 E F).symm.toLinearIsometry.postcomp.dist_map
 
 @[simp]
-/--
-theorem `norm_iteratedFDerivWithin_one` / 定理 `norm_iteratedFDerivWithin_one`
-
-English:
-theorem norm_iteratedFDerivWithin_one
-  given: (f : E -> F) (h : UniqueDiffWithinAt 𝕜 s x)
-  proof: by
-  simp only [← norm_fderivWithin_iteratedFDerivWithin,
-    iteratedFDerivWithin_zero_eq_comp, LinearIsometryEquiv.comp_fderivWithin _ h]
-  apply (continuousMultilinearCurryFin0 𝕜 E F).symm.toLinearIsometry.norm_toContinuousLinearMap_comp
-
-中文:
-定理 norm_iteratedFDerivWithin_one
-  条件: (f : E -> F) (h : UniqueDiffWithinAt 𝕜 s x)
-  证明: by
-  simp only [← norm_fderivWithin_iteratedFDerivWithin,
-    iteratedFDerivWithin_zero_eq_comp, LinearIsometryEquiv.comp_fderivWithin _ h]
-  apply (continuousMultilinearCurryFin0 𝕜 E F).symm.toLinearIsometry.norm_toContinuousLinearMap_comp
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.comp_fderivWithin, comp_fderivWithin, continuousMultilinearCurryFin0, iteratedFDerivWithin_zero_eq_comp, norm_fderivWithin_iteratedFDerivWithin, norm_toContinuousLinearMap_comp, symm.toLinearIsometry.norm_toContinuousLinearMap_comp, toLinearIsometry
+/-
+**norm_iteratedFDerivWithin_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_iteratedFDerivWithin_one (f : E -> F) (h : UniqueDiffWithinAt 𝕜 s x) 
+: ‖iteratedFDerivWithin 𝕜 1 f s x‖ = ‖fderivWithin 𝕜 f s x‖
+参数：f : E -> F；h : UniqueDiffWithinAt 𝕜 s x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearIsometryEquiv.comp_fderivWithin`：comp_fderivWithin {f : G -> E} {s
+ : Set G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x) : fderivWithin 𝕜 (iso ∘ f) s 
+x = (iso : E ->L[𝕜] F).comp…
+· 使用引理 `LinearIsometry.norm_toContinuousLinearMap_comp`：norm_toContinuousLinearM
+ap_comp [RingHomIsometric σ₁₂] (f : F ->ₛₗᵢ[σ₂₃] G) {g : E ->SL[σ₁₂] F} : ‖f.toC
+ontinuousLinearMap.comp g‖ = ‖g‖
 -/
-theorem norm_iteratedFDerivWithin_one (f : E -> F) (h : UniqueDiffWithinAt 𝕜 s x) :
+theorem norm_iteratedFDerivWithin_one (f : E → F) (h : UniqueDiffWithinAt 𝕜 s x) :
     ‖iteratedFDerivWithin 𝕜 1 f s x‖ = ‖fderivWithin 𝕜 f s x‖ := by
   simp only [← norm_fderivWithin_iteratedFDerivWithin,
     iteratedFDerivWithin_zero_eq_comp, LinearIsometryEquiv.comp_fderivWithin _ h]
   apply (continuousMultilinearCurryFin0 𝕜 E F).symm.toLinearIsometry.norm_toContinuousLinearMap_comp
-
-/--
-theorem `iteratedFDerivWithin_succ_apply_right` / 定理 `iteratedFDerivWithin_succ_apply_right`
-
-English:
-theorem iteratedFDerivWithin_succ_apply_right
-  statement: {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s)
-  proof: by
-  induction n generalizing x with
-  | zero =>
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_zero_eq_comp]; rw [iteratedFDerivWithin_zero_apply]; rw [Function.comp_apply]; rw [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
-    simp
-  | succ n IH =>
-    let I := (continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm
-    have A : forall y in s, iteratedFDerivWithin 𝕜 n.succ f s y =
-        (I ∘ iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) y := fun y hy => by
-      ext m
-      simp [IH hy m, I]
-    calc
-      (iteratedFDerivWithin 𝕜 (n + 2) f s x : (Fin (n + 2) -> E) -> F) m =
-          (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n.succ f s) s x : E -> E [×n + 1]->L[𝕜] F) (m 0)
-            (tail m) := by
-        simp [iteratedFDerivWithin_succ_eq_comp_left]
-      _ = (fderivWithin 𝕜 (I ∘ iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
-              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
-        rw [fderivWithin_congr A (A x hx)]
-      _ = (I ∘ fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
-              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
-        simp [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
-      _ = (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) s x :
-              E -> E [×n]->L[𝕜] E ->L[𝕜] F) (m 0) (init (tail m)) ((tail m) (last n)) := by
-        simp [I]
-      _ = iteratedFDerivWithin 𝕜 (Nat.succ n) (fun y => fderivWithin 𝕜 f s y) s x (init m)
-            (m (last (n + 1))) := by
-        rw [iteratedFDerivWithin_succ_apply_left]; rw [tail_init_eq_init_tail]
-        simp [init, tail]
-
-中文:
-定理 iteratedFDerivWithin_succ_apply_right
-  结论: {n : 自然数} (hs : UniqueDiffOn 𝕜 s) (hx : x in s)
-  证明: by
-  induction n generalizing x with
-  | zero =>
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_zero_eq_comp]; rw [iteratedFDerivWithin_zero_apply]; rw [Function.comp_apply]; rw [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
-    simp
-  | succ n IH =>
-    let I := (continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm
-    have A : forall y in s, iteratedFDerivWithin 𝕜 n.succ f s y =
-        (I ∘ iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) y := fun y hy => by
-      ext m
-      simp [IH hy m, I]
-    calc
-      (iteratedFDerivWithin 𝕜 (n + 2) f s x : (Fin (n + 2) -> E) -> F) m =
-          (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n.succ f s) s x : E -> E [×n + 1]->L[𝕜] F) (m 0)
-            (tail m) := by
-        simp [iteratedFDerivWithin_succ_eq_comp_left]
-      _ = (fderivWithin 𝕜 (I ∘ iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
-              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
-        rw [fderivWithin_congr A (A x hx)]
-      _ = (I ∘ fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
-              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
-        simp [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
-      _ = (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) s x :
-              E -> E [×n]->L[𝕜] E ->L[𝕜] F) (m 0) (init (tail m)) ((tail m) (last n)) := by
-        simp [I]
-      _ = iteratedFDerivWithin 𝕜 (Nat.succ n) (fun y => fderivWithin 𝕜 f s y) s x (init m)
-            (m (last (n + 1))) := by
-        rw [iteratedFDerivWithin_succ_apply_left]; rw [tail_init_eq_init_tail]
-        simp [init, tail]
-
-Depends on / 依赖: Function, Function.comp_apply, LinearIsometryEquiv, LinearIsometryEquiv.comp_fderivWithin, comp_apply, comp_fderivWithin, continuousMultilinearCurryRightEquiv, fderivWithin, generalizing, iteratedFDerivWithin, iteratedFDerivWithin_succ_eq_comp_left, iteratedFDerivWithin_zero_apply, iteratedFDerivWithin_zero_eq_comp, n.succ
+/-
+**iteratedFDerivWithin_succ_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_succ_apply_right {n : Nat} (hs : UniqueDiffOn 𝕜 s) (h
+x : x in s) (m : Fin (n + 1) -> E) : (iteratedFDerivWithin 𝕜 (n + 1) f s x : (Fi
+n (n + 1) -> E) -> F) m = iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s 
+y) s x (init m) (m (last n))
+参数：hs : UniqueDiffOn 𝕜 s；hx : x in s；m : Fin (n + 1) -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDerivWithin_succ_eq_comp_left`：iteratedFDerivWithin_succ_eq_com
+p_left {n : Nat} : iteratedFDerivWithin 𝕜 (n + 1) f s = (continuousMultilinearCu
+rryLeftEquiv 𝕜 (fun _ : Fin …
+· 使用定理 `iteratedFDerivWithin_zero_eq_comp`：iteratedFDerivWithin_zero_eq_comp : i
+teratedFDerivWithin 𝕜 0 f s = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f
+· 使用定理 `iteratedFDerivWithin_zero_apply`：iteratedFDerivWithin_zero_apply (m : Fi
+n 0 -> E) : (iteratedFDerivWithin 𝕜 0 f s x : (Fin 0 -> E) -> F) m = f x
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LinearIsometryEquiv.comp_fderivWithin`：comp_fderivWithin {f : G -> E} {s
+ : Set G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x) : fderivWithin 𝕜 (iso ∘ f) s 
+x = (iso : E ->L[𝕜] F).comp…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Fin.last_zero`：Fin.last 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用定理 `fderivWithin_congr`：fderivWithin_congr (hs : EqOn f₁ f s) (hx : f₁ x = f
+ x) : fderivWithin 𝕜 f₁ s x = fderivWithin 𝕜 f s x
+· 使用定理 `iteratedFDerivWithin_succ_apply_left`：iteratedFDerivWithin_succ_apply_le
+ft {n : Nat} (m : Fin (n + 1) -> E) : (iteratedFDerivWithin 𝕜 (n + 1) f s x : (F
+in (n + 1) -> E) -> F) m =…
+· 使用定理 `Fin.tail_init_eq_init_tail`：tail_init_eq_init_tail {β : Sort*} (q : Fin 
+(n + 2) -> β) : tail (init q) = init (tail q)
 -/
-theorem iteratedFDerivWithin_succ_apply_right {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s)
-    (m : Fin (n + 1) -> E) :
-    (iteratedFDerivWithin 𝕜 (n + 1) f s x : (Fin (n + 1) -> E) -> F) m =
+theorem iteratedFDerivWithin_succ_apply_right {n : ℕ} (hs : UniqueDiffOn 𝕜 s) (hx : x ∈ s)
+    (m : Fin (n + 1) → E) :
+    (iteratedFDerivWithin 𝕜 (n + 1) f s x : (Fin (n + 1) → E) → F) m =
       iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s x (init m) (m (last n)) := by
   induction n generalizing x with
   | zero =>
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_zero_eq_comp]; rw [iteratedFDerivWithin_zero_apply]; rw [Function.comp_apply]; rw [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
+    rw [iteratedFDerivWithin_succ_eq_comp_left, iteratedFDerivWithin_zero_eq_comp,
+      iteratedFDerivWithin_zero_apply, Function.comp_apply,
+      LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
     simp
   | succ n IH =>
     let I := (continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm
-    have A : forall y in s, iteratedFDerivWithin 𝕜 n.succ f s y =
-        (I ∘ iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) y := fun y hy => by
+    have A : ∀ y ∈ s, iteratedFDerivWithin 𝕜 n.succ f s y =
+        (I ∘ iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) y := fun y hy ↦ by
       ext m
       simp [IH hy m, I]
     calc
-      (iteratedFDerivWithin 𝕜 (n + 2) f s x : (Fin (n + 2) -> E) -> F) m =
-          (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n.succ f s) s x : E -> E [×n + 1]->L[𝕜] F) (m 0)
+      (iteratedFDerivWithin 𝕜 (n + 2) f s x : (Fin (n + 2) → E) → F) m =
+          (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n.succ f s) s x : E → E [×n + 1]→L[𝕜] F) (m 0)
             (tail m) := by
         simp [iteratedFDerivWithin_succ_eq_comp_left]
       _ = (fderivWithin 𝕜 (I ∘ iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
-              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
+              E → E [×n + 1]→L[𝕜] F) (m 0) (tail m) := by
         rw [fderivWithin_congr A (A x hx)]
       _ = (I ∘ fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
-              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
+              E → E [×n + 1]→L[𝕜] F) (m 0) (tail m) := by
         simp [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
       _ = (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) s x :
-              E -> E [×n]->L[𝕜] E ->L[𝕜] F) (m 0) (init (tail m)) ((tail m) (last n)) := by
+              E → E [×n]→L[𝕜] E →L[𝕜] F) (m 0) (init (tail m)) ((tail m) (last n)) := by
         simp [I]
       _ = iteratedFDerivWithin 𝕜 (Nat.succ n) (fun y => fderivWithin 𝕜 f s y) s x (init m)
             (m (last (n + 1))) := by
-        rw [iteratedFDerivWithin_succ_apply_left]; rw [tail_init_eq_init_tail]
+        rw [iteratedFDerivWithin_succ_apply_left, tail_init_eq_init_tail]
         simp [init, tail]
 
-/--
-theorem `iteratedFDerivWithin_succ_eq_comp_right` / 定理 `iteratedFDerivWithin_succ_eq_comp_right`
+/-- Writing explicitly the `n+1`-th derivative as the composition of a currying linear equiv,
+and the `n`-th derivative of the derivative. -/
+/-
+**iteratedFDerivWithin_succ_eq_comp_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_succ_eq_comp_right {n : Nat} (hs : UniqueDiffOn 𝕜 s) 
+(hx : x in s) : iteratedFDerivWithin 𝕜 (n + 1) f s x = ((continuousMultilinearCu
+rryRightEquiv' 𝕜 n E F).symm ∘ iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜
+ f s y) s) x
+参数：hs : UniqueDiffOn 𝕜 s；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDerivWithin_succ_apply_right`：iteratedFDerivWithin_succ_apply_r
+ight {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s) (m : Fin (n + 1) -> E) : (i
+teratedFDerivWithin 𝕜 (n + …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem iteratedFDerivWithin_succ_eq_comp_right
-  given: {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s)
-  proof: by
-  ext m; simp [iteratedFDerivWithin_succ_apply_right hs hx]
-
-中文:
-定理 iteratedFDerivWithin_succ_eq_comp_right
-  条件: {n : 自然数} (hs : UniqueDiffOn 𝕜 s) (hx : x in s)
-  证明: by
-  ext m; simp [iteratedFDerivWithin_succ_apply_right hs hx]
-
-Depends on / 依赖: iteratedFDerivWithin_succ_apply_right
+--- 原说明 ---
+Writing explicitly the `n+1`-th derivative as the composition of a currying line
+ar equiv,
+and the `n`-th derivative of the derivative.
 -/
-theorem iteratedFDerivWithin_succ_eq_comp_right {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s) :
+theorem iteratedFDerivWithin_succ_eq_comp_right {n : ℕ} (hs : UniqueDiffOn 𝕜 s) (hx : x ∈ s) :
     iteratedFDerivWithin 𝕜 (n + 1) f s x =
       ((continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm ∘
           iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s)
         x := by
   ext m; simp [iteratedFDerivWithin_succ_apply_right hs hx]
-
-/--
-theorem `norm_iteratedFDerivWithin_fderivWithin` / 定理 `norm_iteratedFDerivWithin_fderivWithin`
-
-English:
-theorem norm_iteratedFDerivWithin_fderivWithin
-  given: {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s)
-  proof: by
-  rw [iteratedFDerivWithin_succ_eq_comp_right hs hx]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-@[simp]
-
-中文:
-定理 norm_iteratedFDerivWithin_fderivWithin
-  条件: {n : 自然数} (hs : UniqueDiffOn 𝕜 s) (hx : x in s)
-  证明: by
-  rw [iteratedFDerivWithin_succ_eq_comp_right hs hx]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-@[simp]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, comp_apply, iteratedFDerivWithin_succ_eq_comp_right, norm_map
+/-
+**norm_iteratedFDerivWithin_fderivWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_iteratedFDerivWithin_fderivWithin {n : Nat} (hs : UniqueDiffOn 𝕜 s) (
+hx : x in s) : ‖iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s x‖ = ‖iteratedFD
+erivWithin 𝕜 (n + 1) f s x‖
+参数：hs : UniqueDiffOn 𝕜 s；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDerivWithin_succ_eq_comp_right`：iteratedFDerivWithin_succ_eq_co
+mp_right {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s) : iteratedFDerivWithin 
+𝕜 (n + 1) f s x = ((continuou…
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LinearIsometryEquiv.norm_map`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type
+ u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* 
+R₂} {σ₂₁ : R₂ →+* …
 -/
-theorem norm_iteratedFDerivWithin_fderivWithin {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s) :
+theorem norm_iteratedFDerivWithin_fderivWithin {n : ℕ} (hs : UniqueDiffOn 𝕜 s) (hx : x ∈ s) :
     ‖iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s x‖ =
       ‖iteratedFDerivWithin 𝕜 (n + 1) f s x‖ := by
-  rw [iteratedFDerivWithin_succ_eq_comp_right hs hx]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
+  rw [iteratedFDerivWithin_succ_eq_comp_right hs hx, comp_apply, LinearIsometryEquiv.norm_map]
 
 @[simp]
-/--
-theorem `iteratedFDerivWithin_one_apply` / 定理 `iteratedFDerivWithin_one_apply`
-
-English:
-theorem iteratedFDerivWithin_one_apply
-  given: (h : UniqueDiffWithinAt 𝕜 s x) (m : Fin 1 -> E)
-  proof: by
-  simp [iteratedFDerivWithin_succ_apply_left, iteratedFDerivWithin_zero_eq_comp,
-    (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_fderivWithin h]
-
-中文:
-定理 iteratedFDerivWithin_one_apply
-  条件: (h : UniqueDiffWithinAt 𝕜 s x) (m : 有限集 1 -> E)
-  证明: by
-  simp [iteratedFDerivWithin_succ_apply_left, iteratedFDerivWithin_zero_eq_comp,
-    (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_fderivWithin h]
-
-Depends on / 依赖: comp_fderivWithin, continuousMultilinearCurryFin0, iteratedFDerivWithin_succ_apply_left, iteratedFDerivWithin_zero_eq_comp, symm.comp_fderivWithin
+/-
+**iteratedFDerivWithin_one_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_one_apply (h : UniqueDiffWithinAt 𝕜 s x) (m : Fin 1 -
+> E) : iteratedFDerivWithin 𝕜 1 f s x m = fderivWithin 𝕜 f s x (m 0)
+参数：h : UniqueDiffWithinAt 𝕜 s x；m : Fin 1 -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `LinearIsometryEquiv.comp_fderivWithin`：comp_fderivWithin {f : G -> E} {s
+ : Set G} {x : G} (hxs : UniqueDiffWithinAt 𝕜 s x) : fderivWithin 𝕜 (iso ∘ f) s 
+x = (iso : E ->L[𝕜] F).comp…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iteratedFDerivWithin_one_apply (h : UniqueDiffWithinAt 𝕜 s x) (m : Fin 1 -> E) :
+theorem iteratedFDerivWithin_one_apply (h : UniqueDiffWithinAt 𝕜 s x) (m : Fin 1 → E) :
     iteratedFDerivWithin 𝕜 1 f s x m = fderivWithin 𝕜 f s x (m 0) := by
   simp [iteratedFDerivWithin_succ_apply_left, iteratedFDerivWithin_zero_eq_comp,
     (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_fderivWithin h]
 
-/--
-lemma `iteratedFDerivWithin_two_apply` / 引理 `iteratedFDerivWithin_two_apply`
+/-- On a set of unique differentiability, the second derivative is obtained by taking the
+derivative of the derivative. -/
+/-
+**iteratedFDerivWithin_two_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_two_apply (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 s
+) (hz : z in s) (m : Fin 2 -> E) : iteratedFDerivWithin 𝕜 2 f s z m = fderivWith
+in 𝕜 (fderivWithin 𝕜 f s) s z (m 0) (m 1)
+参数：f : E -> F；hs : UniqueDiffOn 𝕜 s；hz : z in s；m : Fin 2 -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iteratedFDerivWithin_succ_apply_right`：iteratedFDerivWithin_succ_apply_r
+ight {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s) (m : Fin (n + 1) -> E) : (i
+teratedFDerivWithin 𝕜 (n + …
 
-English:
-lemma iteratedFDerivWithin_two_apply
-  statement: (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z in s)
-  proof: by
-  simp only [iteratedFDerivWithin_succ_apply_right hs hz]
-  rfl
-
-中文:
-引理 iteratedFDerivWithin_two_apply
-  结论: (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z in s)
-  证明: by
-  simp only [iteratedFDerivWithin_succ_apply_right hs hz]
-  rfl
-
-Depends on / 依赖: iteratedFDerivWithin_succ_apply_right
+--- 原说明 ---
+On a set of unique differentiability, the second derivative is obtained by takin
+g the
+derivative of the derivative.
 -/
-lemma iteratedFDerivWithin_two_apply (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z in s)
-    (m : Fin 2 -> E) :
+lemma iteratedFDerivWithin_two_apply (f : E → F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z ∈ s)
+    (m : Fin 2 → E) :
     iteratedFDerivWithin 𝕜 2 f s z m = fderivWithin 𝕜 (fderivWithin 𝕜 f s) s z (m 0) (m 1) := by
   simp only [iteratedFDerivWithin_succ_apply_right hs hz]
   rfl
 
-/--
-lemma `iteratedFDerivWithin_two_apply'` / 引理 `iteratedFDerivWithin_two_apply'`
+/-- On a set of unique differentiability, the second derivative is obtained by taking the
+derivative of the derivative. -/
+/-
+**iteratedFDerivWithin_two_apply'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_two_apply' (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 
+s) (hz : z in s) (v w : E) : iteratedFDerivWithin 𝕜 2 f s z ![v, w] = fderivWith
+in 𝕜 (fderivWithin 𝕜 f s) s z v w
+参数：f : E -> F；hs : UniqueDiffOn 𝕜 s；hz : z in s；v w : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `iteratedFDerivWithin_two_apply`：iteratedFDerivWithin_two_apply (f : E ->
+ F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z in s) (m : Fin 2 -> E) : iteratedFDe
+rivWithin 𝕜 2 f s z …
 
-English:
-lemma iteratedFDerivWithin_two_apply'
-  statement: (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z in s)
-  proof: iteratedFDerivWithin_two_apply f hs hz _
-
-中文:
-引理 iteratedFDerivWithin_two_apply'
-  结论: (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z in s)
-  证明: iteratedFDerivWithin_two_apply f hs hz _
-
-Depends on / 依赖: iteratedFDerivWithin_two_apply
+--- 原说明 ---
+On a set of unique differentiability, the second derivative is obtained by takin
+g the
+derivative of the derivative.
 -/
-lemma iteratedFDerivWithin_two_apply' (f : E -> F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z in s)
+lemma iteratedFDerivWithin_two_apply' (f : E → F) {z : E} (hs : UniqueDiffOn 𝕜 s) (hz : z ∈ s)
     (v w : E) :
     iteratedFDerivWithin 𝕜 2 f s z ![v, w] = fderivWithin 𝕜 (fderivWithin 𝕜 f s) s z v w :=
   iteratedFDerivWithin_two_apply f hs hz _
-
-/--
-theorem `Filter.EventuallyEq.iteratedFDerivWithin'` / 定理 `Filter.EventuallyEq.iteratedFDerivWithin'`
-
-English:
-theorem Filter.EventuallyEq.iteratedFDerivWithin'
-  given: (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s) (n : Nat)
-  proof: by
-  induction n with
-  | zero => exact h.mono fun y hy => DFunLike.ext _ _ fun _ => hy
-  | succ n ihn =>
-    have : fderivWithin 𝕜 _ t =ᶠ[𝓝[s] x] fderivWithin 𝕜 _ t := ihn.fderivWithin' ht
-    refine this.mono fun y hy => ?_
-    simp only [iteratedFDerivWithin_succ_eq_comp_left, hy, (· ∘ ·)]
-
-中文:
-定理 滤子.EventuallyEq.iteratedFDerivWithin'
-  条件: (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s) (n : 自然数)
-  证明: by
-  induction n with
-  | zero => exact h.mono fun y hy => DFunLike.ext _ _ fun _ => hy
-  | succ n ihn =>
-    have : fderivWithin 𝕜 _ t =ᶠ[𝓝[s] x] fderivWithin 𝕜 _ t := ihn.fderivWithin' ht
-    refine this.mono fun y hy => ?_
-    simp only [iteratedFDerivWithin_succ_eq_comp_left, hy, (· ∘ ·)]
-
-Depends on / 依赖: DFunLike, DFunLike.ext, fderivWithin, h.mono, ihn.fderivWithin, iteratedFDerivWithin_succ_eq_comp_left, this.mono
+/-
+**Filter.EventuallyEq.iteratedFDerivWithin'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.iteratedFDerivWithin' (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t su
+bseteq s) (n : Nat) : iteratedFDerivWithin 𝕜 n f₁ t =ᶠ[𝓝[s] x] iteratedFDerivWit
+hin 𝕜 n f t
+参数：h : f₁ =ᶠ[𝓝[s] x] f；ht : t subseteq s；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Filter.EventuallyEq.fderivWithin'`：Filter.EventuallyEq.fderivWithin' (hs
+ : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s) : fderivWithin 𝕜 f₁ t =ᶠ[𝓝[s] x] fderivW
+ithin 𝕜 f t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Filter.EventuallyEq.iteratedFDerivWithin' (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s) (n : Nat) :
+theorem Filter.EventuallyEq.iteratedFDerivWithin' (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t ⊆ s) (n : ℕ) :
     iteratedFDerivWithin 𝕜 n f₁ t =ᶠ[𝓝[s] x] iteratedFDerivWithin 𝕜 n f t := by
   induction n with
   | zero => exact h.mono fun y hy => DFunLike.ext _ _ fun _ => hy
@@ -1489,42 +1874,75 @@ theorem Filter.EventuallyEq.iteratedFDerivWithin' (h : f₁ =ᶠ[𝓝[s] x] f) (
     simp only [iteratedFDerivWithin_succ_eq_comp_left, hy, (· ∘ ·)]
 
 variable (𝕜) in
-/--
-theorem `Filter.EventuallyEq.iteratedFDerivWithin` / 定理 `Filter.EventuallyEq.iteratedFDerivWithin`
+/-- If two functions agree in a neighborhood within `s`, then so do their iterated derivatives. -/
+/-
+**Filter.EventuallyEq.iteratedFDerivWithin** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eve
+ntuallyEq`。
+形式化陈述：∀ (𝕜 : Type u) [inst : NontriviallyNormedField 𝕜] {E : Type uE} [inst_1 : 
+NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type uF} [inst_3 : Norme
+dAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {s : Set E}   {f f₁ : E → F} {x : E}
+,   f₁ =ᶠ[nhdsWithin x s] f → ∀ (n : ℕ), iteratedFDerivWithin 𝕜 n f₁ s =ᶠ[nhdsWi
+thin x s] iteratedFDerivWithin 𝕜 n f s
+参数：𝕜 : Type u；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.iteratedFDerivWithin'`：Filter.EventuallyEq.iteratedF
+DerivWithin' (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s) (n : Nat) : iteratedFDeri
+vWithin 𝕜 n f₁ t =ᶠ[𝓝[s] x] ite…
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 
-English:
-theorem Filter.EventuallyEq.iteratedFDerivWithin
-  given: (h : f₁ =ᶠ[𝓝[s] x] f) (n : Nat)
-  proof: h.iteratedFDerivWithin' Subset.rfl n
-
-中文:
-定理 滤子.EventuallyEq.iteratedFDerivWithin
-  条件: (h : f₁ =ᶠ[𝓝[s] x] f) (n : 自然数)
-  证明: h.iteratedFDerivWithin' Subset.rfl n
+--- 原说明 ---
+If two functions agree in a neighborhood within `s`, then so do their iterated d
+erivatives.
 -/
-protected theorem Filter.EventuallyEq.iteratedFDerivWithin (h : f₁ =ᶠ[𝓝[s] x] f) (n : Nat) :
+protected theorem Filter.EventuallyEq.iteratedFDerivWithin (h : f₁ =ᶠ[𝓝[s] x] f) (n : ℕ) :
     iteratedFDerivWithin 𝕜 n f₁ s =ᶠ[𝓝[s] x] iteratedFDerivWithin 𝕜 n f s :=
   h.iteratedFDerivWithin' Subset.rfl n
 
 variable (𝕜) in
-/--
-theorem `Filter.EventuallyEq.ftaylorSeriesWithin` / 定理 `Filter.EventuallyEq.ftaylorSeriesWithin`
+/-- If two functions agree in a neighborhood within `s`, then so do their Taylor series. -/
+/-
+**Filter.EventuallyEq.ftaylorSeriesWithin** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Even
+tuallyEq`。
+形式化陈述：∀ (𝕜 : Type u) [inst : NontriviallyNormedField 𝕜] {E : Type uE} [inst_1 : 
+NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type uF} [inst_3 : Norme
+dAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {s : Set E}   {f f₁ : E → F} {x : E}
+,   f₁ =ᶠ[nhdsWithin x s] f → ftaylorSeriesWithin 𝕜 f₁ s =ᶠ[nhdsWithin x s] ftay
+lorSeriesWithin 𝕜 f s
+参数：𝕜 : Type u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eventually_eventually_nhdsWithin`：eventually_eventually_nhdsWithin {a : 
+α} {s : Set α} {p : α -> Prop} : (forallᶠ y in 𝓝[s] a, forallᶠ x in 𝓝[s] y, p x)
+ ↔ forallᶠ x in 𝓝[s] a…
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `FormalMultilinearSeries.ext`：∀ {𝕜 : Type u} {E : Type v} {F : Type w} [i
+nst : Semiring 𝕜] [inst_1 : AddCommMonoid E] [inst_2 : _root_.Module 𝕜 E]   [ins
+t_3 : Topological…
+· 使用定理 `Filter.EventuallyEq.eq_of_nhdsWithin`：Filter.EventuallyEq.eq_of_nhdsWith
+in {s : Set α} {f g : α -> β} {a : α} (h : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : f a
+ = g a
+· 使用定理 `Filter.EventuallyEq.iteratedFDerivWithin`：∀ (𝕜 : Type u) [inst : Nontriv
+iallyNormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : No
+rmedSpace 𝕜 E] {F : Type uF} […
 
-English:
-theorem Filter.EventuallyEq.ftaylorSeriesWithin
-  given: (h : f₁ =ᶠ[𝓝[s] x] f)
-  proof: by
-  filter_upwards [eventually_eventually_nhdsWithin.2 h, self_mem_nhdsWithin] with x₁ h₁x₁ h₂x₁
-  ext n : 1
-  apply (Filter.EventuallyEq.iteratedFDerivWithin (𝕜 := 𝕜) h₁x₁ n).eq_of_nhdsWithin h₂x₁
-
-中文:
-定理 滤子.EventuallyEq.ftaylorSeriesWithin
-  条件: (h : f₁ =ᶠ[𝓝[s] x] f)
-  证明: by
-  filter_upwards [eventually_eventually_nhdsWithin.2 h, self_mem_nhdsWithin] with x₁ h₁x₁ h₂x₁
-  ext n : 1
-  apply (Filter.EventuallyEq.iteratedFDerivWithin (𝕜 := 𝕜) h₁x₁ n).eq_of_nhdsWithin h₂x₁
+--- 原说明 ---
+If two functions agree in a neighborhood within `s`, then so do their Taylor ser
+ies.
 -/
 protected theorem Filter.EventuallyEq.ftaylorSeriesWithin (h : f₁ =ᶠ[𝓝[s] x] f) :
     ftaylorSeriesWithin 𝕜 f₁ s =ᶠ[𝓝[s] x] ftaylorSeriesWithin 𝕜 f s := by
@@ -1532,308 +1950,437 @@ protected theorem Filter.EventuallyEq.ftaylorSeriesWithin (h : f₁ =ᶠ[𝓝[s]
   ext n : 1
   apply (Filter.EventuallyEq.iteratedFDerivWithin (𝕜 := 𝕜) h₁x₁ n).eq_of_nhdsWithin h₂x₁
 
-/--
-theorem `Filter.EventuallyEq.iteratedFDerivWithin_eq` / 定理 `Filter.EventuallyEq.iteratedFDerivWithin_eq`
+/-- If two functions coincide in a neighborhood of `x` within a set `s` and at `x`, then their
+iterated differentials within this set at `x` coincide. -/
+/-
+**Filter.EventuallyEq.iteratedFDerivWithin_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.EventuallyEq.iteratedFDerivWithin_eq (h : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁
+ x = f x) (n : Nat) : iteratedFDerivWithin 𝕜 n f₁ s x = iteratedFDerivWithin 𝕜 n
+ f s x
+参数：h : f₁ =ᶠ[𝓝[s] x] f；hx : f₁ x = f x；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsWithin_insert`：nhdsWithin_insert (a : α) (s : Set α) : 𝓝[insert a s]
+ a = pure a ⊔ 𝓝[s] a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Filter.Eventually.self_of_nhdsWithin`：Filter.Eventually.self_of_nhdsWith
+in {p : α -> Prop} {s : Set α} {x : α} (h : forallᶠ y in 𝓝[s] x, p y) (hx : x in
+ s) : p x
+· 使用定理 `Filter.EventuallyEq.iteratedFDerivWithin'`：Filter.EventuallyEq.iteratedF
+DerivWithin' (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s) (n : Nat) : iteratedFDeri
+vWithin 𝕜 n f₁ t =ᶠ[𝓝[s] x] ite…
+· 使用定理 `Set.subset_insert`：subset_insert (x : α) (s : Set α) : s subseteq insert
+ x s
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
 
-English:
-theorem Filter.EventuallyEq.iteratedFDerivWithin_eq
-  statement: (h : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
-  proof: have : f₁ =ᶠ[𝓝[insert x s] x] f := by simpa [EventuallyEq, hx]
-  (this.iteratedFDerivWithin' (subset_insert _ _) n).self_of_nhdsWithin (mem_insert _ _)
-
-中文:
-定理 滤子.EventuallyEq.iteratedFDerivWithin_eq
-  结论: (h : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
-  证明: have : f₁ =ᶠ[𝓝[insert x s] x] f := by simpa [EventuallyEq, hx]
-  (this.iteratedFDerivWithin' (subset_insert _ _) n).self_of_nhdsWithin (mem_insert _ _)
-
-Depends on / 依赖: EventuallyEq, insert, iteratedFDerivWithin, mem_insert, self_of_nhdsWithin, subset_insert, this.iteratedFDerivWithin
+--- 原说明 ---
+If two functions coincide in a neighborhood of `x` within a set `s` and at `x`, 
+then their
+iterated differentials within this set at `x` coincide.
 -/
 theorem Filter.EventuallyEq.iteratedFDerivWithin_eq (h : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
-    (n : Nat) : iteratedFDerivWithin 𝕜 n f₁ s x = iteratedFDerivWithin 𝕜 n f s x :=
+    (n : ℕ) : iteratedFDerivWithin 𝕜 n f₁ s x = iteratedFDerivWithin 𝕜 n f s x :=
   have : f₁ =ᶠ[𝓝[insert x s] x] f := by simpa [EventuallyEq, hx]
   (this.iteratedFDerivWithin' (subset_insert _ _) n).self_of_nhdsWithin (mem_insert _ _)
 
-/--
-theorem `iteratedFDerivWithin_congr` / 定理 `iteratedFDerivWithin_congr`
+/-- If two functions coincide on a set `s`, then their iterated differentials within this set
+coincide. See also `Filter.EventuallyEq.iteratedFDerivWithin_eq` and
+`Filter.EventuallyEq.iteratedFDerivWithin`. -/
+/-
+**iteratedFDerivWithin_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_congr (hs : EqOn f₁ f s) (hx : x in s) (n : Nat) : it
+eratedFDerivWithin 𝕜 n f₁ s x = iteratedFDerivWithin 𝕜 n f s x
+参数：hs : EqOn f₁ f s；hx : x in s；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.iteratedFDerivWithin_eq`：Filter.EventuallyEq.iterate
+dFDerivWithin_eq (h : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x) (n : Nat) : iteratedFDe
+rivWithin 𝕜 n f₁ s x = iteratedFD…
+· 使用定理 `Filter.EventuallyEq.filter_mono`：∀ {α : Type u} {β : Type v} {l l' : Fil
+ter α} {f g : α → β}, f =ᶠ[l] g → l' ≤ l → f =ᶠ[l'] g
+· 使用定理 `Set.EqOn.eventuallyEq`：Set.EqOn.eventuallyEq {α β} {s : Set α} {f g : α 
+-> β} (h : EqOn f g s) : f =ᶠ[𝓟 s] g
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
 
-English:
-theorem iteratedFDerivWithin_congr
-  given: (hs : EqOn f₁ f s) (hx : x in s) (n : Nat)
-  proof: (hs.eventuallyEq.filter_mono inf_le_right).iteratedFDerivWithin_eq (hs hx) _
-
-中文:
-定理 iteratedFDerivWithin_congr
-  条件: (hs : EqOn f₁ f s) (hx : x in s) (n : 自然数)
-  证明: (hs.eventuallyEq.filter_mono inf_le_right).iteratedFDerivWithin_eq (hs hx) _
-
-Depends on / 依赖: eventuallyEq, filter_mono, hs.eventuallyEq.filter_mono, inf_le_right, iteratedFDerivWithin_eq
+--- 原说明 ---
+If two functions coincide on a set `s`, then their iterated differentials within
+ this set
+coincide. See also `Filter.EventuallyEq.iteratedFDerivWithin_eq` and
+`Filter.EventuallyEq.iteratedFDerivWithin`.
 -/
-theorem iteratedFDerivWithin_congr (hs : EqOn f₁ f s) (hx : x in s) (n : Nat) :
+theorem iteratedFDerivWithin_congr (hs : EqOn f₁ f s) (hx : x ∈ s) (n : ℕ) :
     iteratedFDerivWithin 𝕜 n f₁ s x = iteratedFDerivWithin 𝕜 n f s x :=
   (hs.eventuallyEq.filter_mono inf_le_right).iteratedFDerivWithin_eq (hs hx) _
 
-/--
-theorem `Set.EqOn.iteratedFDerivWithin` / 定理 `Set.EqOn.iteratedFDerivWithin`
+/-- If two functions coincide on a set `s`, then their iterated differentials within this set
+coincide. See also `Filter.EventuallyEq.iteratedFDerivWithin_eq` and
+`Filter.EventuallyEq.iteratedFDerivWithin`. -/
+/-
+**Set.EqOn.iteratedFDerivWithin** 是 Mathlib 中的一个定理，位于命名空间 `Set.EqOn`。
+形式化陈述：∀ {𝕜 : Type u} [inst : NontriviallyNormedField 𝕜] {E : Type uE} [inst_1 : 
+NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type uF} [inst_3 : Norme
+dAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {s : Set E}   {f f₁ : E → F}, Set.Eq
+On f₁ f s → ∀ (n : ℕ), Set.EqOn (iteratedFDerivWithin 𝕜 n f₁ s) (iteratedFDerivW
+ithin 𝕜 n f s) s
+参数：n : ℕ；iteratedFDerivWithin 𝕜 n f₁ s；iteratedFDerivWithin 𝕜 n f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedFDerivWithin_congr`：iteratedFDerivWithin_congr (hs : EqOn f₁ f s
+) (hx : x in s) (n : Nat) : iteratedFDerivWithin 𝕜 n f₁ s x = iteratedFDerivWith
+in 𝕜 n f s x
 
-English:
-theorem Set.EqOn.iteratedFDerivWithin
-  given: (hs : EqOn f₁ f s) (n : Nat)
-  proof: fun _x hx =>
-  iteratedFDerivWithin_congr hs hx n
-
-中文:
-定理 集合.EqOn.iteratedFDerivWithin
-  条件: (hs : EqOn f₁ f s) (n : 自然数)
-  证明: fun _x hx =>
-  iteratedFDerivWithin_congr hs hx n
+--- 原说明 ---
+If two functions coincide on a set `s`, then their iterated differentials within
+ this set
+coincide. See also `Filter.EventuallyEq.iteratedFDerivWithin_eq` and
+`Filter.EventuallyEq.iteratedFDerivWithin`.
 -/
-protected theorem Set.EqOn.iteratedFDerivWithin (hs : EqOn f₁ f s) (n : Nat) :
+protected theorem Set.EqOn.iteratedFDerivWithin (hs : EqOn f₁ f s) (n : ℕ) :
     EqOn (iteratedFDerivWithin 𝕜 n f₁ s) (iteratedFDerivWithin 𝕜 n f s) s := fun _x hx =>
   iteratedFDerivWithin_congr hs hx n
-
-/--
-theorem `iteratedFDerivWithin_eventually_congr_set'` / 定理 `iteratedFDerivWithin_eventually_congr_set'`
-
-English:
-theorem iteratedFDerivWithin_eventually_congr_set'
-  given: (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat)
-  proof: by
-  induction n generalizing x with
-  | zero => rfl
-  | succ n ihn =>
-    refine (eventually_nhds_nhdsWithin.2 h).mono fun y hy => ?_
-    simp only [iteratedFDerivWithin_succ_eq_comp_left, (· ∘ ·)]
-    rw [(ihn hy).fderivWithin_eq_of_nhds]; rw [fderivWithin_congr_set' _ hy]
-
-中文:
-定理 iteratedFDerivWithin_eventually_congr_set'
-  条件: (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : 自然数)
-  证明: by
-  induction n generalizing x with
-  | zero => rfl
-  | succ n ihn =>
-    refine (eventually_nhds_nhdsWithin.2 h).mono fun y hy => ?_
-    simp only [iteratedFDerivWithin_succ_eq_comp_left, (· ∘ ·)]
-    rw [(ihn hy).fderivWithin_eq_of_nhds]; rw [fderivWithin_congr_set' _ hy]
-
-Depends on / 依赖: eventually_nhds_nhdsWithin, fderivWithin_congr_set, fderivWithin_eq_of_nhds, generalizing, iteratedFDerivWithin_succ_eq_comp_left
+/-
+**iteratedFDerivWithin_eventually_congr_set'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_eventually_congr_set' (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t)
+ (n : Nat) : iteratedFDerivWithin 𝕜 n f s =ᶠ[𝓝 x] iteratedFDerivWithin 𝕜 n f t
+参数：y : E；h : s =ᶠ[𝓝[{y}ᶜ] x] t；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eventually_nhds_nhdsWithin`：eventually_nhds_nhdsWithin {a : α} {s : Set 
+α} {p : α -> Prop} : (forallᶠ y in 𝓝 a, forallᶠ x in 𝓝[s] y, p x) ↔ forallᶠ x in
+ 𝓝[s] a, p x
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.EventuallyEq.fderivWithin_eq_of_nhds`：Filter.EventuallyEq.fderivW
+ithin_eq_of_nhds (h : f₁ =ᶠ[𝓝 x] f) : fderivWithin 𝕜 f₁ s x = fderivWithin 𝕜 f s
+ x
+· 使用定理 `fderivWithin_congr_set'`：fderivWithin_congr_set' [T1Space E] (y : E) (h 
+: s =ᶠ[𝓝[{y}ᶜ] x] t) : fderivWithin 𝕜 f s x = fderivWithin 𝕜 f t x
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
-theorem iteratedFDerivWithin_eventually_congr_set' (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat) :
+theorem iteratedFDerivWithin_eventually_congr_set' (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : ℕ) :
     iteratedFDerivWithin 𝕜 n f s =ᶠ[𝓝 x] iteratedFDerivWithin 𝕜 n f t := by
   induction n generalizing x with
   | zero => rfl
   | succ n ihn =>
     refine (eventually_nhds_nhdsWithin.2 h).mono fun y hy => ?_
     simp only [iteratedFDerivWithin_succ_eq_comp_left, (· ∘ ·)]
-    rw [(ihn hy).fderivWithin_eq_of_nhds]; rw [fderivWithin_congr_set' _ hy]
-
-/--
-theorem `iteratedFDerivWithin_eventually_congr_set` / 定理 `iteratedFDerivWithin_eventually_congr_set`
-
-English:
-theorem iteratedFDerivWithin_eventually_congr_set
-  given: (h : s =ᶠ[𝓝 x] t) (n : Nat)
-  proof: iteratedFDerivWithin_eventually_congr_set' x (h.filter_mono inf_le_left) n
-
-中文:
-定理 iteratedFDerivWithin_eventually_congr_set
-  条件: (h : s =ᶠ[𝓝 x] t) (n : 自然数)
-  证明: iteratedFDerivWithin_eventually_congr_set' x (h.filter_mono inf_le_left) n
-
-Depends on / 依赖: filter_mono, h.filter_mono, inf_le_left, iteratedFDerivWithin_eventually_congr_set
+    rw [(ihn hy).fderivWithin_eq_of_nhds, fderivWithin_congr_set' _ hy]
+/-
+**iteratedFDerivWithin_eventually_congr_set** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_eventually_congr_set (h : s =ᶠ[𝓝 x] t) (n : Nat) : it
+eratedFDerivWithin 𝕜 n f s =ᶠ[𝓝 x] iteratedFDerivWithin 𝕜 n f t
+参数：h : s =ᶠ[𝓝 x] t；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedFDerivWithin_eventually_congr_set'`：iteratedFDerivWithin_eventua
+lly_congr_set' (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat) : iteratedFDerivWithin 
+𝕜 n f s =ᶠ[𝓝 x] iteratedFDerivWi…
+· 使用定理 `Filter.EventuallyEq.filter_mono`：∀ {α : Type u} {β : Type v} {l l' : Fil
+ter α} {f g : α → β}, f =ᶠ[l] g → l' ≤ l → f =ᶠ[l'] g
+· 使用定理 `inf_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b ≤
+ a
 -/
-theorem iteratedFDerivWithin_eventually_congr_set (h : s =ᶠ[𝓝 x] t) (n : Nat) :
+theorem iteratedFDerivWithin_eventually_congr_set (h : s =ᶠ[𝓝 x] t) (n : ℕ) :
     iteratedFDerivWithin 𝕜 n f s =ᶠ[𝓝 x] iteratedFDerivWithin 𝕜 n f t :=
   iteratedFDerivWithin_eventually_congr_set' x (h.filter_mono inf_le_left) n
 
-/--
-theorem `iteratedFDerivWithin_congr_set'` / 定理 `iteratedFDerivWithin_congr_set'`
+/-- If two sets coincide in a punctured neighborhood of `x`,
+then the corresponding iterated derivatives are equal.
 
-English:
-theorem iteratedFDerivWithin_congr_set'
-  given: {y} (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat)
-  proof: (iteratedFDerivWithin_eventually_congr_set' y h n).self_of_nhds
+Note that we also allow to puncture the neighborhood of `x` at `y`.
+If `y ≠ x`, then this is a no-op. -/
+/-
+**iteratedFDerivWithin_congr_set'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_congr_set' {y} (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat) : it
+eratedFDerivWithin 𝕜 n f s x = iteratedFDerivWithin 𝕜 n f t x
+参数：h : s =ᶠ[𝓝[{y}ᶜ] x] t；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.self_of_nhds`：Filter.Eventually.self_of_nhds {p : X ->
+ Prop} (h : forallᶠ y in 𝓝 x, p y) : p x
+· 使用定理 `iteratedFDerivWithin_eventually_congr_set'`：iteratedFDerivWithin_eventua
+lly_congr_set' (y : E) (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat) : iteratedFDerivWithin 
+𝕜 n f s =ᶠ[𝓝 x] iteratedFDerivWi…
 
-@[simp]
+--- 原说明 ---
+If two sets coincide in a punctured neighborhood of `x`,
+then the corresponding iterated derivatives are equal.
 
-中文:
-定理 iteratedFDerivWithin_congr_set'
-  条件: {y} (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : 自然数)
-  证明: (iteratedFDerivWithin_eventually_congr_set' y h n).self_of_nhds
-
-@[simp]
-
-Depends on / 依赖: iteratedFDerivWithin_eventually_congr_set, self_of_nhds
+Note that we also allow to puncture the neighborhood of `x` at `y`.
+If `y ≠ x`, then this is a no-op.
 -/
-theorem iteratedFDerivWithin_congr_set' {y} (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat) :
+theorem iteratedFDerivWithin_congr_set' {y} (h : s =ᶠ[𝓝[{y}ᶜ] x] t) (n : ℕ) :
     iteratedFDerivWithin 𝕜 n f s x = iteratedFDerivWithin 𝕜 n f t x :=
   (iteratedFDerivWithin_eventually_congr_set' y h n).self_of_nhds
 
 @[simp]
-/--
-theorem `iteratedFDerivWithin_insert` / 定理 `iteratedFDerivWithin_insert`
-
-English:
-theorem iteratedFDerivWithin_insert
-  given: {n y}
-  proof: iteratedFDerivWithin_congr_set' (y := x)
-    (eventually_mem_nhdsWithin.mono <| by intros; simp_all).set_eq _
-
-中文:
-定理 iteratedFDerivWithin_insert
-  条件: {n y}
-  证明: iteratedFDerivWithin_congr_set' (y := x)
-    (eventually_mem_nhdsWithin.mono <| by intros; simp_all).set_eq _
-
-Depends on / 依赖: eventually_mem_nhdsWithin, eventually_mem_nhdsWithin.mono, intros, iteratedFDerivWithin_congr_set, set_eq
+/-
+**iteratedFDerivWithin_insert** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_insert {n y} : iteratedFDerivWithin 𝕜 n f (insert x s
+) y = iteratedFDerivWithin 𝕜 n f s y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedFDerivWithin_congr_set'`：iteratedFDerivWithin_congr_set' {y} (h 
+: s =ᶠ[𝓝[{y}ᶜ] x] t) (n : Nat) : iteratedFDerivWithin 𝕜 n f s x = iteratedFDeriv
+Within 𝕜 n f t x
+· 使用定理 `Filter.Eventually.set_eq`：∀ {α : Type u} {s t : Set α} {l : Filter α}, (
+∀ᶠ (x : α) in l, x ∈ s ↔ x ∈ t) → s =ᶠ[l] t
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `eventually_mem_nhdsWithin`：eventually_mem_nhdsWithin {a : α} {s : Set α}
+ : forallᶠ x in 𝓝[s] a, x in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem iteratedFDerivWithin_insert {n y} :
     iteratedFDerivWithin 𝕜 n f (insert x s) y = iteratedFDerivWithin 𝕜 n f s y :=
   iteratedFDerivWithin_congr_set' (y := x)
     (eventually_mem_nhdsWithin.mono <| by intros; simp_all).set_eq _
-
-/--
-theorem `iteratedFDerivWithin_congr_set` / 定理 `iteratedFDerivWithin_congr_set`
-
-English:
-theorem iteratedFDerivWithin_congr_set
-  given: (h : s =ᶠ[𝓝 x] t) (n : Nat)
-  proof: (iteratedFDerivWithin_eventually_congr_set h n).self_of_nhds
-
-@[simp]
-
-中文:
-定理 iteratedFDerivWithin_congr_set
-  条件: (h : s =ᶠ[𝓝 x] t) (n : 自然数)
-  证明: (iteratedFDerivWithin_eventually_congr_set h n).self_of_nhds
-
-@[simp]
-
-Depends on / 依赖: iteratedFDerivWithin_eventually_congr_set, self_of_nhds
+/-
+**iteratedFDerivWithin_congr_set** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_congr_set (h : s =ᶠ[𝓝 x] t) (n : Nat) : iteratedFDeri
+vWithin 𝕜 n f s x = iteratedFDerivWithin 𝕜 n f t x
+参数：h : s =ᶠ[𝓝 x] t；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.self_of_nhds`：Filter.Eventually.self_of_nhds {p : X ->
+ Prop} (h : forallᶠ y in 𝓝 x, p y) : p x
+· 使用定理 `iteratedFDerivWithin_eventually_congr_set`：iteratedFDerivWithin_eventual
+ly_congr_set (h : s =ᶠ[𝓝 x] t) (n : Nat) : iteratedFDerivWithin 𝕜 n f s =ᶠ[𝓝 x] 
+iteratedFDerivWithin 𝕜 n f t
 -/
-theorem iteratedFDerivWithin_congr_set (h : s =ᶠ[𝓝 x] t) (n : Nat) :
+theorem iteratedFDerivWithin_congr_set (h : s =ᶠ[𝓝 x] t) (n : ℕ) :
     iteratedFDerivWithin 𝕜 n f s x = iteratedFDerivWithin 𝕜 n f t x :=
   (iteratedFDerivWithin_eventually_congr_set h n).self_of_nhds
 
 @[simp]
-/--
-theorem `ftaylorSeriesWithin_insert` / 定理 `ftaylorSeriesWithin_insert`
-
-English:
-theorem ftaylorSeriesWithin_insert
-  proof: by
-  ext y n : 2
-  apply iteratedFDerivWithin_insert
-
-中文:
-定理 ftaylorSeriesWithin_insert
-  证明: by
-  ext y n : 2
-  apply iteratedFDerivWithin_insert
-
-Depends on / 依赖: iteratedFDerivWithin_insert
+/-
+**ftaylorSeriesWithin_insert** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ftaylorSeriesWithin_insert : ftaylorSeriesWithin 𝕜 f (insert x s) = ftaylo
+rSeriesWithin 𝕜 f s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `FormalMultilinearSeries.ext`：∀ {𝕜 : Type u} {E : Type v} {F : Type w} [i
+nst : Semiring 𝕜] [inst_1 : AddCommMonoid E] [inst_2 : _root_.Module 𝕜 E]   [ins
+t_3 : Topological…
+· 使用定理 `iteratedFDerivWithin_insert`：iteratedFDerivWithin_insert {n y} : iterate
+dFDerivWithin 𝕜 n f (insert x s) y = iteratedFDerivWithin 𝕜 n f s y
 -/
 theorem ftaylorSeriesWithin_insert :
     ftaylorSeriesWithin 𝕜 f (insert x s) = ftaylorSeriesWithin 𝕜 f s := by
   ext y n : 2
   apply iteratedFDerivWithin_insert
 
-/--
-theorem `iteratedFDerivWithin_inter'` / 定理 `iteratedFDerivWithin_inter'`
+/-- The iterated differential within a set `s` at a point `x` is not modified if one intersects
+`s` with a neighborhood of `x` within `s`. -/
+/-
+**iteratedFDerivWithin_inter'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_inter' {n : Nat} (hu : u in 𝓝[s] x) : iteratedFDerivW
+ithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x
+参数：hu : u in 𝓝[s] x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedFDerivWithin_congr_set`：iteratedFDerivWithin_congr_set (h : s =ᶠ
+[𝓝 x] t) (n : Nat) : iteratedFDerivWithin 𝕜 n f s x = iteratedFDerivWithin 𝕜 n f
+ t x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `nhdsWithin_eq_iff_eventuallyEq`：nhdsWithin_eq_iff_eventuallyEq {s t : Se
+t α} {x : α} : 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
+· 使用定理 `nhdsWithin_inter_of_mem'`：nhdsWithin_inter_of_mem' {a : α} {s t : Set α}
+ (h : t in 𝓝[s] a) : 𝓝[s inter t] a = 𝓝[s] a
 
-English:
-theorem iteratedFDerivWithin_inter'
-  given: {n : Nat} (hu : u in 𝓝[s] x)
-  proof: iteratedFDerivWithin_congr_set (nhdsWithin_eq_iff_eventuallyEq.1 <| nhdsWithin_inter_of_mem' hu) _
-
-中文:
-定理 iteratedFDerivWithin_inter'
-  条件: {n : 自然数} (hu : u in 𝓝[s] x)
-  证明: iteratedFDerivWithin_congr_set (nhdsWithin_eq_iff_eventuallyEq.1 <| nhdsWithin_inter_of_mem' hu) _
-
-Depends on / 依赖: iteratedFDerivWithin_congr_set, nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_inter_of_mem
+--- 原说明 ---
+The iterated differential within a set `s` at a point `x` is not modified if one
+ intersects
+`s` with a neighborhood of `x` within `s`.
 -/
-theorem iteratedFDerivWithin_inter' {n : Nat} (hu : u in 𝓝[s] x) :
-    iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x :=
+theorem iteratedFDerivWithin_inter' {n : ℕ} (hu : u ∈ 𝓝[s] x) :
+    iteratedFDerivWithin 𝕜 n f (s ∩ u) x = iteratedFDerivWithin 𝕜 n f s x :=
   iteratedFDerivWithin_congr_set (nhdsWithin_eq_iff_eventuallyEq.1 <| nhdsWithin_inter_of_mem' hu) _
 
-/--
-theorem `iteratedFDerivWithin_inter` / 定理 `iteratedFDerivWithin_inter`
+/-- The iterated differential within a set `s` at a point `x` is not modified if one intersects
+`s` with a neighborhood of `x`. -/
+/-
+**iteratedFDerivWithin_inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_inter {n : Nat} (hu : u in 𝓝 x) : iteratedFDerivWithi
+n 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x
+参数：hu : u in 𝓝 x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedFDerivWithin_inter'`：iteratedFDerivWithin_inter' {n : Nat} (hu :
+ u in 𝓝[s] x) : iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 
+𝕜 n f s x
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
 
-English:
-theorem iteratedFDerivWithin_inter
-  given: {n : Nat} (hu : u in 𝓝 x)
-  proof: iteratedFDerivWithin_inter' (mem_nhdsWithin_of_mem_nhds hu)
-
-中文:
-定理 iteratedFDerivWithin_inter
-  条件: {n : 自然数} (hu : u in 𝓝 x)
-  证明: iteratedFDerivWithin_inter' (mem_nhdsWithin_of_mem_nhds hu)
-
-Depends on / 依赖: iteratedFDerivWithin_inter, mem_nhdsWithin_of_mem_nhds
+--- 原说明 ---
+The iterated differential within a set `s` at a point `x` is not modified if one
+ intersects
+`s` with a neighborhood of `x`.
 -/
-theorem iteratedFDerivWithin_inter {n : Nat} (hu : u in 𝓝 x) :
-    iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x :=
+theorem iteratedFDerivWithin_inter {n : ℕ} (hu : u ∈ 𝓝 x) :
+    iteratedFDerivWithin 𝕜 n f (s ∩ u) x = iteratedFDerivWithin 𝕜 n f s x :=
   iteratedFDerivWithin_inter' (mem_nhdsWithin_of_mem_nhds hu)
 
-/--
-theorem `iteratedFDerivWithin_inter_open` / 定理 `iteratedFDerivWithin_inter_open`
+/-- The iterated differential within a set `s` at a point `x` is not modified if one intersects
+`s` with an open set containing `x`. -/
+/-
+**iteratedFDerivWithin_inter_open** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_inter_open {n : Nat} (hu : IsOpen u) (hx : x in u) : 
+iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x
+参数：hu : IsOpen u；hx : x in u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iteratedFDerivWithin_inter`：iteratedFDerivWithin_inter {n : Nat} (hu : u
+ in 𝓝 x) : iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f
+ s x
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-theorem iteratedFDerivWithin_inter_open
-  given: {n : Nat} (hu : IsOpen u) (hx : x in u)
-  proof: iteratedFDerivWithin_inter (hu.mem_nhds hx)
-
-中文:
-定理 iteratedFDerivWithin_inter_open
-  条件: {n : 自然数} (hu : 是开集 u) (hx : x in u)
-  证明: iteratedFDerivWithin_inter (hu.mem_nhds hx)
-
-Depends on / 依赖: hu.mem_nhds, iteratedFDerivWithin_inter, mem_nhds
+--- 原说明 ---
+The iterated differential within a set `s` at a point `x` is not modified if one
+ intersects
+`s` with an open set containing `x`.
 -/
-theorem iteratedFDerivWithin_inter_open {n : Nat} (hu : IsOpen u) (hx : x in u) :
-    iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x :=
+theorem iteratedFDerivWithin_inter_open {n : ℕ} (hu : IsOpen u) (hx : x ∈ u) :
+    iteratedFDerivWithin 𝕜 n f (s ∩ u) x = iteratedFDerivWithin 𝕜 n f s x :=
   iteratedFDerivWithin_inter (hu.mem_nhds hx)
 
-/--
-theorem `HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn` / 定理 `HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn`
+/-- On a set with unique differentiability, any choice of iterated differential has to coincide
+with the one we have chosen in `iteratedFDerivWithin 𝕜 m f s`. -/
+/-
+**HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn** 是 Mathlib 中的一
+个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn (h : HasFTa
+ylorSeriesUpToOn n f p s) {m : Nat} (hmn : m <= n) (hs : UniqueDiffOn 𝕜 s) (hx :
+ x in s) : p x m = iteratedFDerivWithin 𝕜 m f s x
+参数：h : HasFTaylorSeriesUpToOn n f p s；hmn : m <= n；hs : UniqueDiffOn 𝕜 s；hx : x 
+in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq'`：HasFTaylorSeriesUpToOn.zero_eq' (h : Ha
+sFTaylorSeriesUpToOn n f p s) {x : E} (hx : x in s) : p x 0 = (continuousMultili
+nearCurryFin0 𝕜 E F).…
+· 使用定理 `iteratedFDerivWithin_zero_eq_comp`：iteratedFDerivWithin_zero_eq_comp : i
+teratedFDerivWithin 𝕜 0 f s = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `HasFDerivWithinAt.congr`：HasFDerivWithinAt.congr (h : HasFDerivWithinAt 
+f f' s x) (hs : EqOn f₁ f s) (hx : f₁ x = f x) : HasFDerivWithinAt f₁ f' s x
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `iteratedFDerivWithin_succ_eq_comp_left`：iteratedFDerivWithin_succ_eq_com
+p_left {n : Nat} : iteratedFDerivWithin 𝕜 (n + 1) f s = (continuousMultilinearCu
+rryLeftEquiv 𝕜 (fun _ : Fin …
+· 使用定理 `HasFDerivWithinAt.fderivWithin`：∀ {𝕜 : Type u_1} [inst : NontriviallyNor
+medField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜
+ E] [inst_3 : Topolo…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `ContinuousMultilinearMap.uncurry_curryLeft`：ContinuousMultilinearMap.unc
+urry_curryLeft (f : ContinuousMultilinearMap 𝕜 Ei G) : f.curryLeft.uncurryLeft =
+ f
 
-English:
-theorem HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
-  proof: by
-  induction m generalizing x with
-  | zero => rw [h.zero_eq' hx, iteratedFDerivWithin_zero_eq_comp, comp_apply]
-  | succ m IH =>
-    have A : m < n := lt_of_lt_of_le (mod_cast lt_add_one m) hmn
-    have :
-      HasFDerivWithinAt (fun y : E => iteratedFDerivWithin 𝕜 m f s y)
-        (ContinuousMultilinearMap.curryLeft (p x (Nat.succ m))) s x :=
-      (h.fderivWithin m A x hx).congr (fun y hy => (IH (le_of_lt A) hy).symm)
-        (IH (le_of_lt A) hx).symm
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [this.fderivWithin (hs x hx)]
-    exact (ContinuousMultilinearMap.uncurry_curryLeft _).symm
-
-中文:
-定理 有FTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
-  证明: by
-  induction m generalizing x with
-  | zero => rw [h.zero_eq' hx, iteratedFDerivWithin_zero_eq_comp, comp_apply]
-  | succ m IH =>
-    have A : m < n := lt_of_lt_of_le (mod_cast lt_add_one m) hmn
-    have :
-      HasFDerivWithinAt (fun y : E => iteratedFDerivWithin 𝕜 m f s y)
-        (ContinuousMultilinearMap.curryLeft (p x (Nat.succ m))) s x :=
-      (h.fderivWithin m A x hx).congr (fun y hy => (IH (le_of_lt A) hy).symm)
-        (IH (le_of_lt A) hx).symm
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [this.fderivWithin (hs x hx)]
-    exact (ContinuousMultilinearMap.uncurry_curryLeft _).symm
-
-Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curryLeft, Function, Function.comp_apply, HasFDerivWithinAt, Nat.succ, comp_apply, curryLeft, fderivWithin, generalizing, h.fderivWithin, h.zero_eq, iteratedFDerivWithin, iteratedFDerivWithin_succ_eq_comp_left, iteratedFDerivWithin_zero_eq_comp, le_of_lt, lt_add_one, lt_of_lt_of_le, mod_cast, this.f
+--- 原说明 ---
+On a set with unique differentiability, any choice of iterated differential has 
+to coincide
+with the one we have chosen in `iteratedFDerivWithin 𝕜 m f s`.
 -/
 theorem HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
-    (h : HasFTaylorSeriesUpToOn n f p s) {m : Nat} (hmn : m <= n) (hs : UniqueDiffOn 𝕜 s)
-    (hx : x in s) : p x m = iteratedFDerivWithin 𝕜 m f s x := by
+    (h : HasFTaylorSeriesUpToOn n f p s) {m : ℕ} (hmn : m ≤ n) (hs : UniqueDiffOn 𝕜 s)
+    (hx : x ∈ s) : p x m = iteratedFDerivWithin 𝕜 m f s x := by
   induction m generalizing x with
   | zero => rw [h.zero_eq' hx, iteratedFDerivWithin_zero_eq_comp, comp_apply]
   | succ m IH =>
@@ -1843,489 +2390,762 @@ theorem HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
         (ContinuousMultilinearMap.curryLeft (p x (Nat.succ m))) s x :=
       (h.fderivWithin m A x hx).congr (fun y hy => (IH (le_of_lt A) hy).symm)
         (IH (le_of_lt A) hx).symm
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [this.fderivWithin (hs x hx)]
+    rw [iteratedFDerivWithin_succ_eq_comp_left, Function.comp_apply, this.fderivWithin (hs x hx)]
     exact (ContinuousMultilinearMap.uncurry_curryLeft _).symm
 
-/--
-lemma `iteratedFDerivWithin_comp_add_left'` / 引理 `iteratedFDerivWithin_comp_add_left'`
+/-- The iterated derivative commutes with shifting the function by a constant on the left. -/
+/-
+**iteratedFDerivWithin_comp_add_left'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_add_left' (n : Nat) (a : E) : iteratedFDerivWith
+in 𝕜 n (fun z => f (a + z)) s = fun x => iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (a 
++ x)
+参数：n : Nat；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `fderivWithin_comp_add_left`：fderivWithin_comp_add_left (a : E) : fderivW
+ithin 𝕜 (fun x => f (a + x)) s x = fderivWithin 𝕜 f (a +ᵥ s) (a + x)
 
-English:
-lemma iteratedFDerivWithin_comp_add_left'
-  given: (n : Nat) (a : E)
-  proof: by
-  induction n with
-  | zero => simp [iteratedFDerivWithin]
-  | succ n IH =>
-    ext v
-    simp [iteratedFDerivWithin_succ_eq_comp_left, IH, fderivWithin_comp_add_left]
-
-中文:
-引理 iteratedFDerivWithin_comp_add_left'
-  条件: (n : 自然数) (a : E)
-  证明: by
-  induction n with
-  | zero => simp [iteratedFDerivWithin]
-  | succ n IH =>
-    ext v
-    simp [iteratedFDerivWithin_succ_eq_comp_left, IH, fderivWithin_comp_add_left]
-
-Depends on / 依赖: fderivWithin_comp_add_left, iteratedFDerivWithin, iteratedFDerivWithin_succ_eq_comp_left
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ left.
 -/
-lemma iteratedFDerivWithin_comp_add_left' (n : Nat) (a : E) :
-    iteratedFDerivWithin 𝕜 n (fun z => f (a + z)) s =
-      fun x => iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (a + x) := by
+lemma iteratedFDerivWithin_comp_add_left' (n : ℕ) (a : E) :
+    iteratedFDerivWithin 𝕜 n (fun z ↦ f (a + z)) s =
+      fun x ↦ iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (a + x) := by
   induction n with
   | zero => simp [iteratedFDerivWithin]
   | succ n IH =>
     ext v
     simp [iteratedFDerivWithin_succ_eq_comp_left, IH, fderivWithin_comp_add_left]
 
-/--
-lemma `iteratedFDerivWithin_comp_add_left` / 引理 `iteratedFDerivWithin_comp_add_left`
+/-- The iterated derivative commutes with shifting the function by a constant on the left. -/
+/-
+**iteratedFDerivWithin_comp_add_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_add_left (n : Nat) (a : E) (x : E) : iteratedFDe
+rivWithin 𝕜 n (fun z => f (a + z)) s x = iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (a 
++ x)
+参数：n : Nat；a : E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `iteratedFDerivWithin_comp_add_left'`：iteratedFDerivWithin_comp_add_left'
+ (n : Nat) (a : E) : iteratedFDerivWithin 𝕜 n (fun z => f (a + z)) s = fun x => 
+iteratedFDerivWithin 𝕜 n …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma iteratedFDerivWithin_comp_add_left
-  given: (n : Nat) (a : E) (x : E)
-  proof: by
-  simp [iteratedFDerivWithin_comp_add_left']
-
-中文:
-引理 iteratedFDerivWithin_comp_add_left
-  条件: (n : 自然数) (a : E) (x : E)
-  证明: by
-  simp [iteratedFDerivWithin_comp_add_left']
-
-Depends on / 依赖: iteratedFDerivWithin_comp_add_left
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ left.
 -/
-lemma iteratedFDerivWithin_comp_add_left (n : Nat) (a : E) (x : E) :
-    iteratedFDerivWithin 𝕜 n (fun z => f (a + z)) s x =
+lemma iteratedFDerivWithin_comp_add_left (n : ℕ) (a : E) (x : E) :
+    iteratedFDerivWithin 𝕜 n (fun z ↦ f (a + z)) s x =
       iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (a + x) := by
   simp [iteratedFDerivWithin_comp_add_left']
 
-/--
-lemma `iteratedFDerivWithin_comp_add_right'` / 引理 `iteratedFDerivWithin_comp_add_right'`
+/-- The iterated derivative commutes with shifting the function by a constant on the right. -/
+/-
+**iteratedFDerivWithin_comp_add_right'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_add_right' (n : Nat) (a : E) : iteratedFDerivWit
+hin 𝕜 n (fun z => f (z + a)) s = fun x => iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (x
+ + a)
+参数：n : Nat；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `iteratedFDerivWithin_comp_add_left'`：iteratedFDerivWithin_comp_add_left'
+ (n : Nat) (a : E) : iteratedFDerivWithin 𝕜 n (fun z => f (a + z)) s = fun x => 
+iteratedFDerivWithin 𝕜 n …
 
-English:
-lemma iteratedFDerivWithin_comp_add_right'
-  given: (n : Nat) (a : E)
-  proof: by
-  simpa [add_comm a] using iteratedFDerivWithin_comp_add_left' n a
-
-中文:
-引理 iteratedFDerivWithin_comp_add_right'
-  条件: (n : 自然数) (a : E)
-  证明: by
-  simpa [add_comm a] using iteratedFDerivWithin_comp_add_left' n a
-
-Depends on / 依赖: add_comm, iteratedFDerivWithin_comp_add_left
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ right.
 -/
-lemma iteratedFDerivWithin_comp_add_right' (n : Nat) (a : E) :
-    iteratedFDerivWithin 𝕜 n (fun z => f (z + a)) s =
-      fun x => iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (x + a) := by
+lemma iteratedFDerivWithin_comp_add_right' (n : ℕ) (a : E) :
+    iteratedFDerivWithin 𝕜 n (fun z ↦ f (z + a)) s =
+      fun x ↦ iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (x + a) := by
   simpa [add_comm a] using iteratedFDerivWithin_comp_add_left' n a
 
-/--
-lemma `iteratedFDerivWithin_comp_add_right` / 引理 `iteratedFDerivWithin_comp_add_right`
+/-- The iterated derivative commutes with shifting the function by a constant on the right. -/
+/-
+**iteratedFDerivWithin_comp_add_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_add_right (n : Nat) (a : E) (x : E) : iteratedFD
+erivWithin 𝕜 n (fun z => f (z + a)) s x = iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (x
+ + a)
+参数：n : Nat；a : E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `iteratedFDerivWithin_comp_add_right'`：iteratedFDerivWithin_comp_add_righ
+t' (n : Nat) (a : E) : iteratedFDerivWithin 𝕜 n (fun z => f (z + a)) s = fun x =
+> iteratedFDerivWithin 𝕜 n…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma iteratedFDerivWithin_comp_add_right
-  given: (n : Nat) (a : E) (x : E)
-  proof: by
-  simp [iteratedFDerivWithin_comp_add_right']
-
-中文:
-引理 iteratedFDerivWithin_comp_add_right
-  条件: (n : 自然数) (a : E) (x : E)
-  证明: by
-  simp [iteratedFDerivWithin_comp_add_right']
-
-Depends on / 依赖: iteratedFDerivWithin_comp_add_right
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ right.
 -/
-lemma iteratedFDerivWithin_comp_add_right (n : Nat) (a : E) (x : E) :
-    iteratedFDerivWithin 𝕜 n (fun z => f (z + a)) s x =
+lemma iteratedFDerivWithin_comp_add_right (n : ℕ) (a : E) (x : E) :
+    iteratedFDerivWithin 𝕜 n (fun z ↦ f (z + a)) s x =
       iteratedFDerivWithin 𝕜 n f (a +ᵥ s) (x + a) := by
   simp [iteratedFDerivWithin_comp_add_right']
 
-/--
-lemma `iteratedFDerivWithin_comp_sub'` / 引理 `iteratedFDerivWithin_comp_sub'`
+/-- The iterated derivative commutes with subtracting a constant. -/
+/-
+**iteratedFDerivWithin_comp_sub'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_sub' (n : Nat) (a : E) : iteratedFDerivWithin 𝕜 
+n (fun z => f (z - a)) s = fun x => iteratedFDerivWithin 𝕜 n f (-a +ᵥ s) (x - a)
+参数：n : Nat；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用引理 `iteratedFDerivWithin_comp_add_right'`：iteratedFDerivWithin_comp_add_righ
+t' (n : Nat) (a : E) : iteratedFDerivWithin 𝕜 n (fun z => f (z + a)) s = fun x =
+> iteratedFDerivWithin 𝕜 n…
 
-English:
-lemma iteratedFDerivWithin_comp_sub'
-  given: (n : Nat) (a : E)
-  proof: by
-  simpa [sub_eq_add_neg] using iteratedFDerivWithin_comp_add_right' n (-a)
-
-中文:
-引理 iteratedFDerivWithin_comp_sub'
-  条件: (n : 自然数) (a : E)
-  证明: by
-  simpa [sub_eq_add_neg] using iteratedFDerivWithin_comp_add_right' n (-a)
-
-Depends on / 依赖: iteratedFDerivWithin_comp_add_right, sub_eq_add_neg
+--- 原说明 ---
+The iterated derivative commutes with subtracting a constant.
 -/
-lemma iteratedFDerivWithin_comp_sub' (n : Nat) (a : E) :
-    iteratedFDerivWithin 𝕜 n (fun z => f (z - a)) s =
-      fun x => iteratedFDerivWithin 𝕜 n f (-a +ᵥ s) (x - a) := by
+lemma iteratedFDerivWithin_comp_sub' (n : ℕ) (a : E) :
+    iteratedFDerivWithin 𝕜 n (fun z ↦ f (z - a)) s =
+      fun x ↦ iteratedFDerivWithin 𝕜 n f (-a +ᵥ s) (x - a) := by
   simpa [sub_eq_add_neg] using iteratedFDerivWithin_comp_add_right' n (-a)
 
-/--
-lemma `iteratedFDerivWithin_comp_sub` / 引理 `iteratedFDerivWithin_comp_sub`
+/-- The iterated derivative commutes with subtracting a constant. -/
+/-
+**iteratedFDerivWithin_comp_sub** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_sub (n : Nat) (a : E) : iteratedFDerivWithin 𝕜 n
+ (fun z => f (z - a)) s x = iteratedFDerivWithin 𝕜 n f (-a +ᵥ s) (x - a)
+参数：n : Nat；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `iteratedFDerivWithin_comp_sub'`：iteratedFDerivWithin_comp_sub' (n : Nat)
+ (a : E) : iteratedFDerivWithin 𝕜 n (fun z => f (z - a)) s = fun x => iteratedFD
+erivWithin 𝕜 n f (-a…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma iteratedFDerivWithin_comp_sub
-  given: (n : Nat) (a : E)
-  proof: by
-  simp [iteratedFDerivWithin_comp_sub']
-
-中文:
-引理 iteratedFDerivWithin_comp_sub
-  条件: (n : 自然数) (a : E)
-  证明: by
-  simp [iteratedFDerivWithin_comp_sub']
-
-Depends on / 依赖: iteratedFDerivWithin_comp_sub
+--- 原说明 ---
+The iterated derivative commutes with subtracting a constant.
 -/
-lemma iteratedFDerivWithin_comp_sub (n : Nat) (a : E) :
-    iteratedFDerivWithin 𝕜 n (fun z => f (z - a)) s x =
+lemma iteratedFDerivWithin_comp_sub (n : ℕ) (a : E) :
+    iteratedFDerivWithin 𝕜 n (fun z ↦ f (z - a)) s x =
       iteratedFDerivWithin 𝕜 n f (-a +ᵥ s) (x - a) := by
   simp [iteratedFDerivWithin_comp_sub']
 
 /-! ### Functions with a Taylor series on the whole space -/
 
-/--
-Definition of `HasFTaylorSeriesUpTo` / `HasFTaylorSeriesUpTo` 的定义
+/-- `HasFTaylorSeriesUpTo n f p` registers the fact that `p 0 = f` and `p (m+1)` is a
+derivative of `p m` for `m < n`, and is continuous for `m ≤ n`. This is a predicate analogous to
+`HasFDerivAt` but for higher-order derivatives.
 
-English:
-structure HasFTaylorSeriesUpTo
-  axioms and operations (3):
-    - zero_eq : forall x, (p x 0).curry0 = f x
-    - fderiv : forall m : Nat, m < n -> forall x, HasFDerivAt (fun y => p y m) (p x m.succ).curryLeft x
-    - cont : forall m : Nat, m <= n -> Continuous fun x => p x m
+Notice that `p` does not sum up to `f` on the diagonal (`FormalMultilinearSeries.sum`), even if
+`f` is analytic and `n = ∞`: an addition `1/m!` factor on the `m`th term is necessary for that. -/
+/-
+**HasFTaylorSeriesUpTo** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{𝕜 : Type u} →   [inst : NontriviallyNormedField 𝕜] →     {E : Type uE} → 
+      [inst_1 : NormedAddCommGroup E] →         [inst_2 : NormedSpace 𝕜 E] →    
+       {F : Type uF} →             [inst_3 : NormedAddCommGroup F] →            
+   [inst_4 : NormedSpace 𝕜 F] → WithTop ℕ∞ → (E → F) → (E → FormalMultilinearSer
+ies 𝕜 E F) → Prop
+参数：E → F；E → FormalMultilinearSeries 𝕜 E F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 有FTaylorSeriesUpTo
-  公理与运算 (3 个):
-    - zero_eq : 对任意 x, (p x 0).curry0 = f x
-    - fderiv : 对任意 m : 自然数, m < n -> 对任意 x, 在点处Fréchet可导 (fun y => p y m) (p x m.succ).curryLeft x
-    - cont : 对任意 m : 自然数, m <= n -> 连续 fun x => p x m
+--- 原说明 ---
+`HasFTaylorSeriesUpTo n f p` registers the fact that `p 0 = f` and `p (m+1)` is 
+a
+derivative of `p m` for `m < n`, and is continuous for `m ≤ n`. This is a predic
+ate analogous to
+`HasFDerivAt` but for higher-order derivatives.
+
+Notice that `p` does not sum up to `f` on the diagonal (`FormalMultilinearSeries
+.sum`), even if
+`f` is analytic and `n = ∞`: an addition `1/m!` factor on the `m`th term is nece
+ssary for that.
 -/
 structure HasFTaylorSeriesUpTo
-  (n : Nat∞ω) (f : E -> F) (p : E -> FormalMultilinearSeries 𝕜 E F) : Prop where
-  zero_eq : forall x, (p x 0).curry0 = f x
-  protected fderiv : forall m : Nat, m < n -> forall x, HasFDerivAt (fun y => p y m) (p x m.succ).curryLeft x
-  cont : forall m : Nat, m <= n -> Continuous fun x => p x m
-
-/--
-theorem `HasFTaylorSeriesUpTo.zero_eq'` / 定理 `HasFTaylorSeriesUpTo.zero_eq'`
-
-English:
-theorem HasFTaylorSeriesUpTo.zero_eq'
-  given: (h : HasFTaylorSeriesUpTo n f p) (x : E)
-  proof: by
-  rw [← h.zero_eq x]
-  exact (p x 0).uncurry0_curry0.symm
-
-中文:
-定理 有FTaylorSeriesUpTo.zero_eq'
-  条件: (h : 有FTaylorSeriesUpTo n f p) (x : E)
-  证明: by
-  rw [← h.zero_eq x]
-  exact (p x 0).uncurry0_curry0.symm
-
-Depends on / 依赖: h.zero_eq, uncurry0_curry0, uncurry0_curry0.symm, zero_eq
+  (n : ℕ∞ω) (f : E → F) (p : E → FormalMultilinearSeries 𝕜 E F) : Prop where
+  zero_eq : ∀ x, (p x 0).curry0 = f x
+  protected fderiv : ∀ m : ℕ, m < n → ∀ x, HasFDerivAt (fun y => p y m) (p x m.succ).curryLeft x
+  cont : ∀ m : ℕ, m ≤ n → Continuous fun x => p x m
+/-
+**HasFTaylorSeriesUpTo.zero_eq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.zero_eq' (h : HasFTaylorSeriesUpTo n f p) (x : E) : p
+ x 0 = (continuousMultilinearCurryFin0 𝕜 E F).symm (f x)
+参数：h : HasFTaylorSeriesUpTo n f p；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HasFTaylorSeriesUpTo.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {F : Type uF} […
+· 使用定理 `ContinuousMultilinearMap.uncurry0_curry0`：ContinuousMultilinearMap.uncur
+ry0_curry0 (f : G [×0]->L[𝕜] G') : ContinuousMultilinearMap.uncurry0 𝕜 G f.curry
+0 = f
 -/
 theorem HasFTaylorSeriesUpTo.zero_eq' (h : HasFTaylorSeriesUpTo n f p) (x : E) :
     p x 0 = (continuousMultilinearCurryFin0 𝕜 E F).symm (f x) := by
   rw [← h.zero_eq x]
   exact (p x 0).uncurry0_curry0.symm
-
-/--
-lemma `HasFTaylorSeriesUpTo.fderiv_eq` / 引理 `HasFTaylorSeriesUpTo.fderiv_eq`
-
-English:
-lemma HasFTaylorSeriesUpTo.fderiv_eq
-  statement: (h : HasFTaylorSeriesUpTo n f p)
-  proof: .fderiv h.fderiv m hmn x
-
-中文:
-引理 有FTaylorSeriesUpTo.fderiv_eq
-  结论: (h : 有FTaylorSeriesUpTo n f p)
-  证明: .fderiv h.fderiv m hmn x
-
-Depends on / 依赖: fderiv, h.fderiv
+/-
+**HasFTaylorSeriesUpTo.fderiv_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.fderiv_eq (h : HasFTaylorSeriesUpTo n f p) {m : Nat} 
+(hmn : m < n) (x : E) : fderiv 𝕜 (p · m) x = (p x m.succ).curryLeft
+参数：h : HasFTaylorSeriesUpTo n f p；hmn : m < n；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFDerivAt.fderiv`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] 
+{E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 𝕜 E] [inst_3 
+: Topolo…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `HasFTaylorSeriesUpTo.fderiv`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
 -/
 lemma HasFTaylorSeriesUpTo.fderiv_eq (h : HasFTaylorSeriesUpTo n f p)
-    {m : Nat} (hmn : m < n) (x : E) : fderiv 𝕜 (p · m) x = (p x m.succ).curryLeft :=
-.fderiv h.fderiv m hmn x
-
-/--
-theorem `hasFTaylorSeriesUpToOn_univ_iff` / 定理 `hasFTaylorSeriesUpToOn_univ_iff`
-
-English:
-theorem hasFTaylorSeriesUpToOn_univ_iff
-  proof: by
-  constructor <;> refine fun H => ⟨by simpa using H.zero_eq, ?_, by simpa using H.cont⟩
-  · simpa using H.fderivWithin
-  · simpa using H.fderiv
-
-中文:
-定理 hasFTaylorSeriesUpToOn_univ_iff
-  证明: by
-  constructor <;> refine fun H => ⟨by simpa using H.zero_eq, ?_, by simpa using H.cont⟩
-  · simpa using H.fderivWithin
-  · simpa using H.fderiv
-
-Depends on / 依赖: H.cont, H.fderiv, H.fderivWithin, H.zero_eq, fderiv, fderivWithin, zero_eq
+    {m : ℕ} (hmn : m < n) (x : E) : fderiv 𝕜 (p · m) x = (p x m.succ).curryLeft :=
+  h.fderiv m hmn x |>.fderiv
+/-
+**hasFTaylorSeriesUpToOn_univ_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpToOn_univ_iff : HasFTaylorSeriesUpToOn n f p univ ↔ HasF
+TaylorSeriesUpTo n f p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.zero_empty`：∀ {α : Type u_1} [inst : Zero α], 0 = ![]
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `HasFTaylorSeriesUpToOn.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNorme
+dField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 
+𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.fderivWithin`：∀ {𝕜 : Type u} [inst : Nontrivially
+NormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpToOn.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpTo.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpTo.fderiv`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFi
+eld 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E
+] {F : Type uF} […
+· 使用定理 `HasFTaylorSeriesUpTo.cont`：∀ {𝕜 : Type u} [inst : NontriviallyNormedFiel
+d 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] 
+{F : Type uF} […
 -/
 theorem hasFTaylorSeriesUpToOn_univ_iff :
     HasFTaylorSeriesUpToOn n f p univ ↔ HasFTaylorSeriesUpTo n f p := by
-  constructor <;> refine fun H => ⟨by simpa using H.zero_eq, ?_, by simpa using H.cont⟩
+  constructor <;> refine fun H ↦ ⟨by simpa using H.zero_eq, ?_, by simpa using H.cont⟩
   · simpa using H.fderivWithin
   · simpa using H.fderiv
-
-/--
-theorem `HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn` / 定理 `HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn`
-
-English:
-theorem HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn
-  given: (h : HasFTaylorSeriesUpTo n f p) (s : Set E)
-  proof: (hasFTaylorSeriesUpToOn_univ_iff.2 h).mono (subset_univ _)
-
-中文:
-定理 有FTaylorSeriesUpTo.hasFTaylorSeriesUpToOn
-  条件: (h : 有FTaylorSeriesUpTo n f p) (s : 集合 E)
-  证明: (hasFTaylorSeriesUpToOn_univ_iff.2 h).mono (subset_univ _)
-
-Depends on / 依赖: hasFTaylorSeriesUpToOn_univ_iff, subset_univ
+/-
+**HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn (h : HasFTaylorSeriesUpTo n f 
+p) (s : Set E) : HasFTaylorSeriesUpToOn n f p s
+参数：h : HasFTaylorSeriesUpTo n f p；s : Set E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFTaylorSeriesUpToOn.mono`：HasFTaylorSeriesUpToOn.mono (h : HasFTaylor
+SeriesUpToOn n f p s) {t : Set E} (hst : t subseteq s) : HasFTaylorSeriesUpToOn 
+n f p t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `hasFTaylorSeriesUpToOn_univ_iff`：hasFTaylorSeriesUpToOn_univ_iff : HasFT
+aylorSeriesUpToOn n f p univ ↔ HasFTaylorSeriesUpTo n f p
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 -/
 theorem HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn (h : HasFTaylorSeriesUpTo n f p) (s : Set E) :
     HasFTaylorSeriesUpToOn n f p s :=
   (hasFTaylorSeriesUpToOn_univ_iff.2 h).mono (subset_univ _)
-
-/--
-theorem `HasFTaylorSeriesUpTo.of_le` / 定理 `HasFTaylorSeriesUpTo.of_le`
-
-English:
-theorem HasFTaylorSeriesUpTo.of_le
-  given: (h : HasFTaylorSeriesUpTo n f p) (hmn : m <= n)
-  proof: by
-  rw [← hasFTaylorSeriesUpToOn_univ_iff] at h ⊢; exact h.of_le hmn
-
-中文:
-定理 有FTaylorSeriesUpTo.of_le
-  条件: (h : 有FTaylorSeriesUpTo n f p) (hmn : m <= n)
-  证明: by
-  rw [← hasFTaylorSeriesUpToOn_univ_iff] at h ⊢; exact h.of_le hmn
-
-Depends on / 依赖: h.of_le, hasFTaylorSeriesUpToOn_univ_iff, of_le
+/-
+**HasFTaylorSeriesUpTo.of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.of_le (h : HasFTaylorSeriesUpTo n f p) (hmn : m <= n)
+ : HasFTaylorSeriesUpTo m f p
+参数：h : HasFTaylorSeriesUpTo n f p；hmn : m <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `hasFTaylorSeriesUpToOn_univ_iff`：hasFTaylorSeriesUpToOn_univ_iff : HasFT
+aylorSeriesUpToOn n f p univ ↔ HasFTaylorSeriesUpTo n f p
+· 使用定理 `HasFTaylorSeriesUpToOn.of_le`：HasFTaylorSeriesUpToOn.of_le (h : HasFTayl
+orSeriesUpToOn n f p s) (hmn : m <= n) : HasFTaylorSeriesUpToOn m f p s
 -/
-theorem HasFTaylorSeriesUpTo.of_le (h : HasFTaylorSeriesUpTo n f p) (hmn : m <= n) :
+theorem HasFTaylorSeriesUpTo.of_le (h : HasFTaylorSeriesUpTo n f p) (hmn : m ≤ n) :
     HasFTaylorSeriesUpTo m f p := by
   rw [← hasFTaylorSeriesUpToOn_univ_iff] at h ⊢; exact h.of_le hmn
-
-/--
-theorem `HasFTaylorSeriesUpTo.continuous` / 定理 `HasFTaylorSeriesUpTo.continuous`
-
-English:
-theorem HasFTaylorSeriesUpTo.continuous
-  given: (h : HasFTaylorSeriesUpTo n f p)
-  statement: Continuous f
-  proof: by
-  rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
-  rw [← continuousOn_univ]
-  exact h.continuousOn
-
-中文:
-定理 有FTaylorSeriesUpTo.continuous
-  条件: (h : 有FTaylorSeriesUpTo n f p)
-  结论: 连续 f
-  证明: by
-  rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
-  rw [← continuousOn_univ]
-  exact h.continuousOn
-
-Depends on / 依赖: continuousOn, continuousOn_univ, h.continuousOn, hasFTaylorSeriesUpToOn_univ_iff
+/-
+**HasFTaylorSeriesUpTo.continuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.continuous (h : HasFTaylorSeriesUpTo n f p) : Continu
+ous f
+参数：h : HasFTaylorSeriesUpTo n f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `continuousOn_univ`：continuousOn_univ {f : α -> β} : ContinuousOn f univ 
+↔ Continuous f
+· 使用定理 `HasFTaylorSeriesUpToOn.continuousOn`：HasFTaylorSeriesUpToOn.continuousOn
+ (h : HasFTaylorSeriesUpToOn n f p s) : ContinuousOn f s
+· 使用定理 `hasFTaylorSeriesUpToOn_univ_iff`：hasFTaylorSeriesUpToOn_univ_iff : HasFT
+aylorSeriesUpToOn n f p univ ↔ HasFTaylorSeriesUpTo n f p
 -/
 theorem HasFTaylorSeriesUpTo.continuous (h : HasFTaylorSeriesUpTo n f p) : Continuous f := by
   rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
   rw [← continuousOn_univ]
   exact h.continuousOn
-
-/--
-theorem `hasFTaylorSeriesUpTo_zero_iff` / 定理 `hasFTaylorSeriesUpTo_zero_iff`
-
-English:
-theorem hasFTaylorSeriesUpTo_zero_iff
-  proof: by
-  simp [hasFTaylorSeriesUpToOn_univ_iff.symm, continuousOn_univ,
-    hasFTaylorSeriesUpToOn_zero_iff]
-
-中文:
-定理 hasFTaylorSeriesUpTo_zero_iff
-  证明: by
-  simp [hasFTaylorSeriesUpToOn_univ_iff.symm, continuousOn_univ,
-    hasFTaylorSeriesUpToOn_zero_iff]
-
-Depends on / 依赖: continuousOn_univ, hasFTaylorSeriesUpToOn_univ_iff, hasFTaylorSeriesUpToOn_univ_iff.symm, hasFTaylorSeriesUpToOn_zero_iff
+/-
+**hasFTaylorSeriesUpTo_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpTo_zero_iff : HasFTaylorSeriesUpTo 0 f p ↔ Continuous f 
+∧ forall x, (p x 0).curry0 = f x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `hasFTaylorSeriesUpToOn_univ_iff`：hasFTaylorSeriesUpToOn_univ_iff : HasFT
+aylorSeriesUpToOn n f p univ ↔ HasFTaylorSeriesUpTo n f p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.zero_empty`：∀ {α : Type u_1} [inst : Zero α], 0 = ![]
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem hasFTaylorSeriesUpTo_zero_iff :
-    HasFTaylorSeriesUpTo 0 f p ↔ Continuous f ∧ forall x, (p x 0).curry0 = f x := by
+    HasFTaylorSeriesUpTo 0 f p ↔ Continuous f ∧ ∀ x, (p x 0).curry0 = f x := by
   simp [hasFTaylorSeriesUpToOn_univ_iff.symm, continuousOn_univ,
     hasFTaylorSeriesUpToOn_zero_iff]
-
-/--
-theorem `hasFTaylorSeriesUpTo_top_iff` / 定理 `hasFTaylorSeriesUpTo_top_iff`
-
-English:
-theorem hasFTaylorSeriesUpTo_top_iff
-  given: (hN : ∞ <= N)
-  proof: by
-  simp only [← hasFTaylorSeriesUpToOn_univ_iff, hasFTaylorSeriesUpToOn_top_iff hN]
-
-中文:
-定理 hasFTaylorSeriesUpTo_top_iff
-  条件: (hN : ∞ <= N)
-  证明: by
-  simp only [← hasFTaylorSeriesUpToOn_univ_iff, hasFTaylorSeriesUpToOn_top_iff hN]
-
-Depends on / 依赖: hasFTaylorSeriesUpToOn_top_iff, hasFTaylorSeriesUpToOn_univ_iff
+/-
+**hasFTaylorSeriesUpTo_top_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpTo_top_iff (hN : ∞ <= N) : HasFTaylorSeriesUpTo N f p ↔ 
+forall n : Nat, HasFTaylorSeriesUpTo n f p
+参数：hN : ∞ <= N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hasFTaylorSeriesUpToOn_top_iff`：hasFTaylorSeriesUpToOn_top_iff (hN : ∞ <
+= N) : HasFTaylorSeriesUpToOn N f p s ↔ forall n : Nat, HasFTaylorSeriesUpToOn n
+ f p s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem hasFTaylorSeriesUpTo_top_iff (hN : ∞ <= N) :
-    HasFTaylorSeriesUpTo N f p ↔ forall n : Nat, HasFTaylorSeriesUpTo n f p := by
+theorem hasFTaylorSeriesUpTo_top_iff (hN : ∞ ≤ N) :
+    HasFTaylorSeriesUpTo N f p ↔ ∀ n : ℕ, HasFTaylorSeriesUpTo n f p := by
   simp only [← hasFTaylorSeriesUpToOn_univ_iff, hasFTaylorSeriesUpToOn_top_iff hN]
 
-/--
-theorem `hasFTaylorSeriesUpTo_top_iff'` / 定理 `hasFTaylorSeriesUpTo_top_iff'`
+/-- In the case that `n = ∞` we don't need the continuity assumption in
+`HasFTaylorSeriesUpTo`. -/
+/-
+**hasFTaylorSeriesUpTo_top_iff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpTo_top_iff' (hN : ∞ <= N) : HasFTaylorSeriesUpTo N f p ↔
+ (forall x, (p x 0).curry0 = f x) ∧ forall (m : Nat) (x), HasFDerivAt (fun y => 
+p y m) (p x m.succ).curryLeft x
+参数：hN : ∞ <= N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `hasFTaylorSeriesUpToOn_top_iff'`：hasFTaylorSeriesUpToOn_top_iff' (hN : ∞
+ <= N) : HasFTaylorSeriesUpToOn N f p s ↔ (forall x in s, (p x 0).curry0 = f x) 
+∧ forall m : Nat, for…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem hasFTaylorSeriesUpTo_top_iff'
-  given: (hN : ∞ <= N)
-  proof: by
-  simp only [← hasFTaylorSeriesUpToOn_univ_iff, hasFTaylorSeriesUpToOn_top_iff' hN, mem_univ,
-    forall_true_left, hasFDerivWithinAt_univ]
-
-中文:
-定理 hasFTaylorSeriesUpTo_top_iff'
-  条件: (hN : ∞ <= N)
-  证明: by
-  simp only [← hasFTaylorSeriesUpToOn_univ_iff, hasFTaylorSeriesUpToOn_top_iff' hN, mem_univ,
-    forall_true_left, hasFDerivWithinAt_univ]
-
-Depends on / 依赖: forall_true_left, hasFDerivWithinAt_univ, hasFTaylorSeriesUpToOn_top_iff, hasFTaylorSeriesUpToOn_univ_iff, mem_univ
+--- 原说明 ---
+In the case that `n = ∞` we don't need the continuity assumption in
+`HasFTaylorSeriesUpTo`.
 -/
-theorem hasFTaylorSeriesUpTo_top_iff' (hN : ∞ <= N) :
+theorem hasFTaylorSeriesUpTo_top_iff' (hN : ∞ ≤ N) :
     HasFTaylorSeriesUpTo N f p ↔
-      (forall x, (p x 0).curry0 = f x) ∧
-        forall (m : Nat) (x), HasFDerivAt (fun y => p y m) (p x m.succ).curryLeft x := by
+      (∀ x, (p x 0).curry0 = f x) ∧
+        ∀ (m : ℕ) (x), HasFDerivAt (fun y => p y m) (p x m.succ).curryLeft x := by
   simp only [← hasFTaylorSeriesUpToOn_univ_iff, hasFTaylorSeriesUpToOn_top_iff' hN, mem_univ,
     forall_true_left, hasFDerivWithinAt_univ]
 
-/--
-theorem `HasFTaylorSeriesUpTo.hasFDerivAt` / 定理 `HasFTaylorSeriesUpTo.hasFDerivAt`
+/-- If a function has a Taylor series at order at least `1`, then the term of order `1` of this
+series is a derivative of `f`. -/
+/-
+**HasFTaylorSeriesUpTo.hasFDerivAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.hasFDerivAt (h : HasFTaylorSeriesUpTo n f p) (hn : n 
+!= 0) (x : E) : HasFDerivAt f (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) x
+参数：h : HasFTaylorSeriesUpTo n f p；hn : n != 0；x : E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `hasFDerivWithinAt_univ`：hasFDerivWithinAt_univ : HasFDerivWithinAt f f' 
+univ x ↔ HasFDerivAt f f' x
+· 使用定理 `HasFTaylorSeriesUpToOn.hasFDerivWithinAt`：HasFTaylorSeriesUpToOn.hasFDer
+ivWithinAt (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0) (hx : x in s) : Ha
+sFDerivWithinAt f (continuousM…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `hasFTaylorSeriesUpToOn_univ_iff`：hasFTaylorSeriesUpToOn_univ_iff : HasFT
+aylorSeriesUpToOn n f p univ ↔ HasFTaylorSeriesUpTo n f p
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 
-English:
-theorem HasFTaylorSeriesUpTo.hasFDerivAt
-  given: (h : HasFTaylorSeriesUpTo n f p) (hn : n != 0) (x : E)
-  proof: by
-  rw [← hasFDerivWithinAt_univ]
-  exact (hasFTaylorSeriesUpToOn_univ_iff.2 h).hasFDerivWithinAt hn (mem_univ _)
-
-中文:
-定理 有FTaylorSeriesUpTo.hasFDerivAt
-  条件: (h : 有FTaylorSeriesUpTo n f p) (hn : n != 0) (x : E)
-  证明: by
-  rw [← hasFDerivWithinAt_univ]
-  exact (hasFTaylorSeriesUpToOn_univ_iff.2 h).hasFDerivWithinAt hn (mem_univ _)
-
-Depends on / 依赖: hasFDerivWithinAt, hasFDerivWithinAt_univ, hasFTaylorSeriesUpToOn_univ_iff, mem_univ
+--- 原说明 ---
+If a function has a Taylor series at order at least `1`, then the term of order 
+`1` of this
+series is a derivative of `f`.
 -/
-theorem HasFTaylorSeriesUpTo.hasFDerivAt (h : HasFTaylorSeriesUpTo n f p) (hn : n != 0) (x : E) :
+theorem HasFTaylorSeriesUpTo.hasFDerivAt (h : HasFTaylorSeriesUpTo n f p) (hn : n ≠ 0) (x : E) :
     HasFDerivAt f (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) x := by
   rw [← hasFDerivWithinAt_univ]
   exact (hasFTaylorSeriesUpToOn_univ_iff.2 h).hasFDerivWithinAt hn (mem_univ _)
-
-/--
-theorem `HasFTaylorSeriesUpTo.differentiable` / 定理 `HasFTaylorSeriesUpTo.differentiable`
-
-English:
-theorem HasFTaylorSeriesUpTo.differentiable
-  given: (h : HasFTaylorSeriesUpTo n f p) (hn : n != 0)
-  proof: fun x => (h.hasFDerivAt hn x).differentiableAt
-
-中文:
-定理 有FTaylorSeriesUpTo.differentiable
-  条件: (h : 有FTaylorSeriesUpTo n f p) (hn : n != 0)
-  证明: fun x => (h.hasFDerivAt hn x).differentiableAt
-
-Depends on / 依赖: differentiableAt, h.hasFDerivAt, hasFDerivAt
+/-
+**HasFTaylorSeriesUpTo.differentiable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.differentiable (h : HasFTaylorSeriesUpTo n f p) (hn :
+ n != 0) : Differentiable 𝕜 f
+参数：h : HasFTaylorSeriesUpTo n f p；hn : n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `HasFDerivAt.differentiableAt`：HasFDerivAt.differentiableAt (h : HasFDeri
+vAt f f' x) : DifferentiableAt 𝕜 f x
+· 使用定理 `HasFTaylorSeriesUpTo.hasFDerivAt`：HasFTaylorSeriesUpTo.hasFDerivAt (h : 
+HasFTaylorSeriesUpTo n f p) (hn : n != 0) (x : E) : HasFDerivAt f (continuousMul
+tilinearCurryFin1 𝕜 E …
 -/
-theorem HasFTaylorSeriesUpTo.differentiable (h : HasFTaylorSeriesUpTo n f p) (hn : n != 0) :
+theorem HasFTaylorSeriesUpTo.differentiable (h : HasFTaylorSeriesUpTo n f p) (hn : n ≠ 0) :
     Differentiable 𝕜 f := fun x => (h.hasFDerivAt hn x).differentiableAt
 
-/--
-theorem `hasFTaylorSeriesUpTo_succ_nat_iff_right` / 定理 `hasFTaylorSeriesUpTo_succ_nat_iff_right`
+/-- `p` is a Taylor series of `f` up to `n+1` if and only if `p.shift` is a Taylor series up to `n`
+for `p 1`, which is a derivative of `f`. -/
+/-
+**hasFTaylorSeriesUpTo_succ_nat_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasFTaylorSeriesUpTo_succ_nat_iff_right {n : Nat} : HasFTaylorSeriesUpTo (
+n + 1 : Nat) f p ↔ (forall x, (p x 0).curry0 = f x) ∧ (forall x, HasFDerivAt (fu
+n y => p y 0) (p x 1).curryLeft x) ∧ HasFTaylorSeriesUpTo n (fun x => continuous
+MultilinearCurryFin1 𝕜 E F (p x 1)) fun x => (p x).shift
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem hasFTaylorSeriesUpTo_succ_nat_iff_right
-  given: {n : Nat}
-  proof: by
-  simp only [hasFTaylorSeriesUpToOn_succ_nat_iff_right, ← hasFTaylorSeriesUpToOn_univ_iff, mem_univ,
-    forall_true_left, hasFDerivWithinAt_univ]
-
-中文:
-定理 hasFTaylorSeriesUpTo_succ_nat_iff_right
-  条件: {n : 自然数}
-  证明: by
-  simp only [hasFTaylorSeriesUpToOn_succ_nat_iff_right, ← hasFTaylorSeriesUpToOn_univ_iff, mem_univ,
-    forall_true_left, hasFDerivWithinAt_univ]
-
-Depends on / 依赖: forall_true_left, hasFDerivWithinAt_univ, hasFTaylorSeriesUpToOn_succ_nat_iff_right, hasFTaylorSeriesUpToOn_univ_iff, mem_univ
+--- 原说明 ---
+`p` is a Taylor series of `f` up to `n+1` if and only if `p.shift` is a Taylor s
+eries up to `n`
+for `p 1`, which is a derivative of `f`.
 -/
-theorem hasFTaylorSeriesUpTo_succ_nat_iff_right {n : Nat} :
-    HasFTaylorSeriesUpTo (n + 1 : Nat) f p ↔
-      (forall x, (p x 0).curry0 = f x) ∧
-        (forall x, HasFDerivAt (fun y => p y 0) (p x 1).curryLeft x) ∧
+theorem hasFTaylorSeriesUpTo_succ_nat_iff_right {n : ℕ} :
+    HasFTaylorSeriesUpTo (n + 1 : ℕ) f p ↔
+      (∀ x, (p x 0).curry0 = f x) ∧
+        (∀ x, HasFDerivAt (fun y => p y 0) (p x 1).curryLeft x) ∧
           HasFTaylorSeriesUpTo n (fun x => continuousMultilinearCurryFin1 𝕜 E F (p x 1)) fun x =>
             (p x).shift := by
   simp only [hasFTaylorSeriesUpToOn_succ_nat_iff_right, ← hasFTaylorSeriesUpToOn_univ_iff, mem_univ,
     forall_true_left, hasFDerivWithinAt_univ]
-
-/--
-lemma `HasFTaylorSeriesUpTo.tsupport_mono` / 引理 `HasFTaylorSeriesUpTo.tsupport_mono`
-
-English:
-lemma HasFTaylorSeriesUpTo.tsupport_mono
-  statement: {k m : Nat} (h : k <= m) (h2 : m <= n)
-  proof: by
-  induction h with
-  | refl => rfl
-  | @step l h ih =>
-    have hl : l < n := lt_of_lt_of_le (mod_cast lt_add_one l) h2
-    refine subset_trans ?_ (ih hl.le)
-    refine Eq.trans_subset ?_ (tsupport_fderiv_subset 𝕜)
-    rw [funext <| hf.fderiv_eq (mod_cast hl)]
-.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curryLeft) (fun {x} => ?_) _
-    exact (continuousMultilinearCurryLeftEquiv _ _ _).map_eq_zero_iff (x := x)
-
-中文:
-引理 有FTaylorSeriesUpTo.tsupport_mono
-  结论: {k m : 自然数} (h : k <= m) (h2 : m <= n)
-  证明: by
-  induction h with
-  | refl => rfl
-  | @step l h ih =>
-    have hl : l < n := lt_of_lt_of_le (mod_cast lt_add_one l) h2
-    refine subset_trans ?_ (ih hl.le)
-    refine Eq.trans_subset ?_ (tsupport_fderiv_subset 𝕜)
-    rw [funext <| hf.fderiv_eq (mod_cast hl)]
-.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curryLeft) (fun {x} => ?_) _
-    exact (continuousMultilinearCurryLeftEquiv _ _ _).map_eq_zero_iff (x := x)
-
-Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curryLeft, Eq.trans_subset, continuousMultilinearCurryLeftEquiv, curryLeft, fderiv_eq, hf.fderiv_eq, hl.le, lt_add_one, lt_of_lt_of_le, map_eq_zero_iff, mod_cast, subset_trans, trans_subset, tsupport_comp_eq, tsupport_fderiv_subset
+/-
+**HasFTaylorSeriesUpTo.tsupport_mono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.tsupport_mono {k m : Nat} (h : k <= m) (h2 : m <= n) 
+(hf : HasFTaylorSeriesUpTo n f p) : tsupport (p · m) subseteq tsupport (p · k)
+参数：h : k <= m；h2 : m <= n；hf : HasFTaylorSeriesUpTo n f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedAddCommMonoidWithTop.toIsOrderedAddMonoid`：∀ {α : Type u_3}
+ [self : LinearOrderedAddCommMonoidWithTop α], IsOrderedAddMonoid α
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Eq.trans_subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] {a b c : α
+} [inst : LE α], a = b → b ⊆ c → a ⊆ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `HasFTaylorSeriesUpTo.fderiv_eq`：HasFTaylorSeriesUpTo.fderiv_eq (h : HasF
+TaylorSeriesUpTo n f p) {m : Nat} (hmn : m < n) (x : E) : fderiv 𝕜 (p · m) x = (
+p x m.succ).curryLef…
+· 使用定理 `tsupport_comp_eq`：∀ {X : Type u_1} {α : Type u_2} {β : Type u_4} [inst :
+ Zero α] [inst_1 : TopologicalSpace X] [inst_2 : Zero β]   {g : α → β}, (∀ {x : 
+α}, g …
+· 使用定理 `LinearIsometryEquiv.map_eq_zero_iff`：map_eq_zero_iff {x : E} : e x = 0 ↔
+ x = 0
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `tsupport_fderiv_subset`：tsupport_fderiv_subset : tsupport (fderiv 𝕜 f) s
+ubseteq tsupport f
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma HasFTaylorSeriesUpTo.tsupport_mono {k m : Nat} (h : k <= m) (h2 : m <= n)
+lemma HasFTaylorSeriesUpTo.tsupport_mono {k m : ℕ} (h : k ≤ m) (h2 : m ≤ n)
     (hf : HasFTaylorSeriesUpTo n f p) :
-    tsupport (p · m) subseteq tsupport (p · k) := by
+    tsupport (p · m) ⊆ tsupport (p · k) := by
   induction h with
   | refl => rfl
   | @step l h ih =>
@@ -2333,38 +3153,55 @@ lemma HasFTaylorSeriesUpTo.tsupport_mono {k m : Nat} (h : k <= m) (h2 : m <= n)
     refine subset_trans ?_ (ih hl.le)
     refine Eq.trans_subset ?_ (tsupport_fderiv_subset 𝕜)
     rw [funext <| hf.fderiv_eq (mod_cast hl)]
-.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curryLeft) (fun {x} => ?_) _
+    refine tsupport_comp_eq (g := ContinuousMultilinearMap.curryLeft) (fun {x} ↦ ?_) _ |>.symm
     exact (continuousMultilinearCurryLeftEquiv _ _ _).map_eq_zero_iff (x := x)
-
-/--
-lemma `HasFTaylorSeriesUpTo.tsupport_subset` / 引理 `HasFTaylorSeriesUpTo.tsupport_subset`
-
-English:
-lemma HasFTaylorSeriesUpTo.tsupport_subset
-  statement: {m : Nat} (h : m <= n)
-  proof: by
-  refine (hf.tsupport_mono zero_le h).trans_eq ?_
-  rw [← funext hf.zero_eq]
-.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curry0) (fun {x} => ?_) _
-  exact (continuousMultilinearCurryFin0 _ _ _).map_eq_zero_iff (x := x)
-
-中文:
-引理 有FTaylorSeriesUpTo.tsupport_subset
-  结论: {m : 自然数} (h : m <= n)
-  证明: by
-  refine (hf.tsupport_mono zero_le h).trans_eq ?_
-  rw [← funext hf.zero_eq]
-.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curry0) (fun {x} => ?_) _
-  exact (continuousMultilinearCurryFin0 _ _ _).map_eq_zero_iff (x := x)
-
-Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curry0, continuousMultilinearCurryFin0, curry0, hf.tsupport_mono, hf.zero_eq, map_eq_zero_iff, trans_eq, tsupport_comp_eq, tsupport_mono, zero_eq, zero_le
+/-
+**HasFTaylorSeriesUpTo.tsupport_subset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.tsupport_subset {m : Nat} (h : m <= n) (hf : HasFTayl
+orSeriesUpTo n f p) : tsupport (p · m) subseteq tsupport f
+参数：h : m <= n；hf : HasFTaylorSeriesUpTo n f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `HasFTaylorSeriesUpTo.tsupport_mono`：HasFTaylorSeriesUpTo.tsupport_mono {
+k m : Nat} (h : k <= m) (h2 : m <= n) (hf : HasFTaylorSeriesUpTo n f p) : tsuppo
+rt (p · m) subseteq tsup…
+· 使用定理 `zero_le`：∀ {α : Type u_1} [inst : LE α] [inst_1 : Zero α] [IsBotZeroClas
+s α] {a : α}, 0 ≤ a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `HasFTaylorSeriesUpTo.zero_eq`：∀ {𝕜 : Type u} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 
+E] {F : Type uF} […
+· 使用定理 `tsupport_comp_eq`：∀ {X : Type u_1} {α : Type u_2} {β : Type u_4} [inst :
+ Zero α] [inst_1 : TopologicalSpace X] [inst_2 : Zero β]   {g : α → β}, (∀ {x : 
+α}, g …
+· 使用定理 `LinearIsometryEquiv.map_eq_zero_iff`：map_eq_zero_iff {x : E} : e x = 0 ↔
+ x = 0
 -/
-lemma HasFTaylorSeriesUpTo.tsupport_subset {m : Nat} (h : m <= n)
+lemma HasFTaylorSeriesUpTo.tsupport_subset {m : ℕ} (h : m ≤ n)
     (hf : HasFTaylorSeriesUpTo n f p) :
-    tsupport (p · m) subseteq tsupport f := by
+    tsupport (p · m) ⊆ tsupport f := by
   refine (hf.tsupport_mono zero_le h).trans_eq ?_
   rw [← funext hf.zero_eq]
-.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curry0) (fun {x} => ?_) _
+  refine tsupport_comp_eq (g := ContinuousMultilinearMap.curry0) (fun {x} ↦ ?_) _ |>.symm
   exact (continuousMultilinearCurryFin0 _ _ _).map_eq_zero_iff (x := x)
 
 /-! ### Iterated derivative -/
@@ -2372,238 +3209,267 @@ lemma HasFTaylorSeriesUpTo.tsupport_subset {m : Nat} (h : m <= n)
 
 variable (𝕜)
 
-/--
-Definition of `iteratedFDeriv` / `iteratedFDeriv` 的定义
+/-- The `n`-th derivative of a function, as a multilinear map, defined inductively. -/
+/-
+**iteratedFDeriv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：iteratedFDeriv (n : Nat) (f : E -> F) : E -> E [×n]->L[𝕜] F
+参数：n : Nat；f : E -> F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iteratedFDeriv
-  signature: (n : Nat) (f : E -> F)
-  body: Nat.recOn n (fun x => ContinuousMultilinearMap.uncurry0 𝕜 E (f x)) fun _ rec x =>
-    ContinuousLinearMap.uncurryLeft (fderiv 𝕜 rec x)
-
-中文:
-定义 iteratedFDeriv
-  签名: (n : 自然数) (f : E -> F)
-  定义体: Nat.recOn n (fun x => ContinuousMultilinearMap.uncurry0 𝕜 E (f x)) fun _ rec x =>
-    ContinuousLinearMap.uncurryLeft (fderiv 𝕜 rec x)
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.uncurryLeft, ContinuousMultilinearMap, ContinuousMultilinearMap.uncurry0, Nat.recOn, fderiv, uncurry0, uncurryLeft
+--- 原说明 ---
+The `n`-th derivative of a function, as a multilinear map, defined inductively.
 -/
-noncomputable def iteratedFDeriv (n : Nat) (f : E -> F) : E -> E [×n]->L[𝕜] F :=
+noncomputable def iteratedFDeriv (n : ℕ) (f : E → F) : E → E [×n]→L[𝕜] F :=
   Nat.recOn n (fun x => ContinuousMultilinearMap.uncurry0 𝕜 E (f x)) fun _ rec x =>
     ContinuousLinearMap.uncurryLeft (fderiv 𝕜 rec x)
 
-/--
-Definition of `ftaylorSeries` / `ftaylorSeries` 的定义
+/-- Formal Taylor series associated to a function. -/
+/-
+**ftaylorSeries** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ftaylorSeries (f : E -> F) (x : E) : FormalMultilinearSeries 𝕜 E F
+参数：f : E -> F；x : E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ftaylorSeries
-  signature: (f : E -> F) (x : E)
-  body: fun n =>
-  iteratedFDeriv 𝕜 n f x
-
-中文:
-定义 ftaylorSeries
-  签名: (f : E -> F) (x : E)
-  定义体: fun n =>
-  iteratedFDeriv 𝕜 n f x
+--- 原说明 ---
+Formal Taylor series associated to a function.
 -/
-def ftaylorSeries (f : E -> F) (x : E) : FormalMultilinearSeries 𝕜 E F := fun n =>
+def ftaylorSeries (f : E → F) (x : E) : FormalMultilinearSeries 𝕜 E F := fun n =>
   iteratedFDeriv 𝕜 n f x
 
 variable {𝕜}
 
 @[simp]
-/--
-theorem `iteratedFDeriv_zero_apply` / 定理 `iteratedFDeriv_zero_apply`
-
-English:
-theorem iteratedFDeriv_zero_apply
-  given: (m : Fin 0 -> E)
-  proof: rfl
-
-中文:
-定理 iteratedFDeriv_zero_apply
-  条件: (m : 有限集 0 -> E)
-  证明: rfl
+/-
+**iteratedFDeriv_zero_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_zero_apply (m : Fin 0 -> E) : (iteratedFDeriv 𝕜 0 f x : (Fi
+n 0 -> E) -> F) m = f x
+参数：m : Fin 0 -> E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedFDeriv_zero_apply (m : Fin 0 -> E) :
-    (iteratedFDeriv 𝕜 0 f x : (Fin 0 -> E) -> F) m = f x :=
+theorem iteratedFDeriv_zero_apply (m : Fin 0 → E) :
+    (iteratedFDeriv 𝕜 0 f x : (Fin 0 → E) → F) m = f x :=
   rfl
-
-/--
-theorem `iteratedFDeriv_zero_eq_comp` / 定理 `iteratedFDeriv_zero_eq_comp`
-
-English:
-theorem iteratedFDeriv_zero_eq_comp
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 iteratedFDeriv_zero_eq_comp
-  证明: rfl
-
-@[simp]
+/-
+**iteratedFDeriv_zero_eq_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_zero_eq_comp : iteratedFDeriv 𝕜 0 f = (continuousMultilinea
+rCurryFin0 𝕜 E F).symm ∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iteratedFDeriv_zero_eq_comp :
     iteratedFDeriv 𝕜 0 f = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f :=
   rfl
 
 @[simp]
-/--
-theorem `norm_iteratedFDeriv_zero` / 定理 `norm_iteratedFDeriv_zero`
-
-English:
-theorem norm_iteratedFDeriv_zero
-  statement: ‖iteratedFDeriv 𝕜 0 f x‖ = ‖f x‖
-  proof: by
-  rw [iteratedFDeriv_zero_eq_comp]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-中文:
-定理 norm_iteratedFDeriv_zero
-  结论: ‖iteratedFDeriv 𝕜 0 f x‖ = ‖f x‖
-  证明: by
-  rw [iteratedFDeriv_zero_eq_comp]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, comp_apply, iteratedFDeriv_zero_eq_comp, norm_map
+/-
+**norm_iteratedFDeriv_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_iteratedFDeriv_zero : ‖iteratedFDeriv 𝕜 0 f x‖ = ‖f x‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDeriv_zero_eq_comp`：iteratedFDeriv_zero_eq_comp : iteratedFDeri
+v 𝕜 0 f = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LinearIsometryEquiv.norm_map`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type
+ u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* 
+R₂} {σ₂₁ : R₂ →+* …
 -/
 theorem norm_iteratedFDeriv_zero : ‖iteratedFDeriv 𝕜 0 f x‖ = ‖f x‖ := by
-  rw [iteratedFDeriv_zero_eq_comp]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-/--
-theorem `iteratedFDerivWithin_zero_eq` / 定理 `iteratedFDerivWithin_zero_eq`
-
-English:
-theorem iteratedFDerivWithin_zero_eq
-  statement: iteratedFDerivWithin 𝕜 0 f s = iteratedFDeriv 𝕜 0 f
-  proof: rfl
-
-中文:
-定理 iteratedFDerivWithin_zero_eq
-  结论: iteratedFDerivWithin 𝕜 0 f s = iteratedFDeriv 𝕜 0 f
-  证明: rfl
+  rw [iteratedFDeriv_zero_eq_comp, comp_apply, LinearIsometryEquiv.norm_map]
+/-
+**iteratedFDerivWithin_zero_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_zero_eq : iteratedFDerivWithin 𝕜 0 f s = iteratedFDer
+iv 𝕜 0 f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iteratedFDerivWithin_zero_eq : iteratedFDerivWithin 𝕜 0 f s = iteratedFDeriv 𝕜 0 f := rfl
-
-/--
-theorem `iteratedFDeriv_succ_apply_left` / 定理 `iteratedFDeriv_succ_apply_left`
-
-English:
-theorem iteratedFDeriv_succ_apply_left
-  given: {n : Nat} (m : Fin (n + 1) -> E)
-  proof: rfl
-
-中文:
-定理 iteratedFDeriv_succ_apply_left
-  条件: {n : 自然数} (m : 有限集 (n + 1) -> E)
-  证明: rfl
+/-
+**iteratedFDeriv_succ_apply_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_succ_apply_left {n : Nat} (m : Fin (n + 1) -> E) : (iterate
+dFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -> F) m = (fderiv 𝕜 (iteratedFDeriv 𝕜
+ n f) x : E -> E [×n]->L[𝕜] F) (m 0) (tail m)
+参数：m : Fin (n + 1) -> E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedFDeriv_succ_apply_left {n : Nat} (m : Fin (n + 1) -> E) :
-    (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -> F) m =
-      (fderiv 𝕜 (iteratedFDeriv 𝕜 n f) x : E -> E [×n]->L[𝕜] F) (m 0) (tail m) :=
+theorem iteratedFDeriv_succ_apply_left {n : ℕ} (m : Fin (n + 1) → E) :
+    (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) → E) → F) m =
+      (fderiv 𝕜 (iteratedFDeriv 𝕜 n f) x : E → E [×n]→L[𝕜] F) (m 0) (tail m) :=
   rfl
 
-/--
-theorem `DifferentiableAt.iteratedFDeriv_succ_apply_left'` / 定理 `DifferentiableAt.iteratedFDeriv_succ_apply_left'`
+/-- The iterated derivative is given by the derivative of the `n-1` iterated derivative. -/
+/-
+**DifferentiableAt.iteratedFDeriv_succ_apply_left'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.iteratedFDeriv_succ_apply_left' {n : Nat} {m : Fin (n + 1
+) -> E} (hf : DifferentiableAt 𝕜 (iteratedFDeriv 𝕜 n f) x) : iteratedFDeriv 𝕜 (n
+ + 1) f x m = fderiv 𝕜 (fun y => iteratedFDeriv 𝕜 n f y (Fin.tail m)) x (m 0)
+参数：n + 1；hf : DifferentiableAt 𝕜 (iteratedFDeriv 𝕜 n f) x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `fderiv_continuousMultilinear_apply_const`：fderiv_continuousMultilinear_a
+pply_const (hc : DifferentiableAt 𝕜 c x) (u : forall i, M i) : (fderiv 𝕜 (fun y 
+=> (c y) u) x) = (fderiv 𝕜 c x…
+· 使用定理 `ContinuousLinearMap.flipMultilinear_apply_apply`：∀ {𝕜 : Type u} {ι : Typ
+e v} {E : ι → Type wE} {G : Type wG} {G' : Type wG'} [inst : NontriviallyNormedF
+ield 𝕜]   [inst_1 : (i : ι) → Seminor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iteratedFDeriv_succ_apply_left`：iteratedFDeriv_succ_apply_left {n : Nat}
+ (m : Fin (n + 1) -> E) : (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -> 
+F) m = (fderiv 𝕜 (it…
 
-English:
-theorem DifferentiableAt.iteratedFDeriv_succ_apply_left'
-  statement: {n : Nat} {m : Fin (n + 1) -> E}
-  proof: by
-  convert iteratedFDeriv_succ_apply_left m
-  simp [fderiv_continuousMultilinear_apply_const hf]
-
-中文:
-定理 DifferentiableAt.iteratedFDeriv_succ_apply_left'
-  结论: {n : 自然数} {m : 有限集 (n + 1) -> E}
-  证明: by
-  convert iteratedFDeriv_succ_apply_left m
-  simp [fderiv_continuousMultilinear_apply_const hf]
-
-Depends on / 依赖: convert, fderiv_continuousMultilinear_apply_const, iteratedFDeriv_succ_apply_left
+--- 原说明 ---
+The iterated derivative is given by the derivative of the `n-1` iterated derivat
+ive.
 -/
-theorem DifferentiableAt.iteratedFDeriv_succ_apply_left' {n : Nat} {m : Fin (n + 1) -> E}
+theorem DifferentiableAt.iteratedFDeriv_succ_apply_left' {n : ℕ} {m : Fin (n + 1) → E}
     (hf : DifferentiableAt 𝕜 (iteratedFDeriv 𝕜 n f) x) :
     iteratedFDeriv 𝕜 (n + 1) f x m =
-    fderiv 𝕜 (fun y => iteratedFDeriv 𝕜 n f y (Fin.tail m)) x (m 0) := by
+    fderiv 𝕜 (fun y ↦ iteratedFDeriv 𝕜 n f y (Fin.tail m)) x (m 0) := by
   convert iteratedFDeriv_succ_apply_left m
   simp [fderiv_continuousMultilinear_apply_const hf]
 
-/--
-theorem `iteratedFDeriv_succ_eq_comp_left` / 定理 `iteratedFDeriv_succ_eq_comp_left`
+/-- Writing explicitly the `n+1`-th derivative as the composition of a currying linear equiv,
+and the derivative of the `n`-th derivative. -/
+/-
+**iteratedFDeriv_succ_eq_comp_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_succ_eq_comp_left {n : Nat} : iteratedFDeriv 𝕜 (n + 1) f = 
+(continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (n + 1) => E) F).symm ∘ fder
+iv 𝕜 (iteratedFDeriv 𝕜 n f)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem iteratedFDeriv_succ_eq_comp_left
-  given: {n : Nat}
-  proof: rfl
-
-中文:
-定理 iteratedFDeriv_succ_eq_comp_left
-  条件: {n : 自然数}
-  证明: rfl
+--- 原说明 ---
+Writing explicitly the `n+1`-th derivative as the composition of a currying line
+ar equiv,
+and the derivative of the `n`-th derivative.
 -/
-theorem iteratedFDeriv_succ_eq_comp_left {n : Nat} :
+theorem iteratedFDeriv_succ_eq_comp_left {n : ℕ} :
     iteratedFDeriv 𝕜 (n + 1) f =
       (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (n + 1) => E) F).symm ∘
         fderiv 𝕜 (iteratedFDeriv 𝕜 n f) :=
   rfl
 
-/--
-theorem `fderiv_iteratedFDeriv` / 定理 `fderiv_iteratedFDeriv`
+/-- Writing explicitly the derivative of the `n`-th derivative as the composition of a currying
+linear equiv, and the `n + 1`-th derivative. -/
+/-
+**fderiv_iteratedFDeriv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fderiv_iteratedFDeriv {n : Nat} : fderiv 𝕜 (iteratedFDeriv 𝕜 n f) = contin
+uousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (n + 1) => E) F ∘ iteratedFDeriv 𝕜 
+(n + 1) f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
 
-English:
-theorem fderiv_iteratedFDeriv
-  given: {n : Nat}
-  proof: rfl
-
-中文:
-定理 fderiv_iteratedFDeriv
-  条件: {n : 自然数}
-  证明: rfl
+--- 原说明 ---
+Writing explicitly the derivative of the `n`-th derivative as the composition of
+ a currying
+linear equiv, and the `n + 1`-th derivative.
 -/
-theorem fderiv_iteratedFDeriv {n : Nat} :
+theorem fderiv_iteratedFDeriv {n : ℕ} :
     fderiv 𝕜 (iteratedFDeriv 𝕜 n f) =
       continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (n + 1) => E) F ∘
         iteratedFDeriv 𝕜 (n + 1) f :=
   rfl
-
-/--
-theorem `tsupport_iteratedFDeriv_subset` / 定理 `tsupport_iteratedFDeriv_subset`
-
-English:
-theorem tsupport_iteratedFDeriv_subset
-  given: (n : Nat)
-  statement: tsupport (iteratedFDeriv 𝕜 n f) subseteq tsupport f
-  proof: by
-  induction n with
-  | zero =>
-    rw [iteratedFDeriv_zero_eq_comp]
-    exact closure_minimal ((support_comp_subset (map_zero _) _).trans subset_closure)
-      isClosed_closure
-  | succ n IH =>
-    rw [iteratedFDeriv_succ_eq_comp_left]
-    exact closure_minimal ((support_comp_subset (map_zero _) _).trans
-      ((support_fderiv_subset 𝕜).trans IH)) isClosed_closure
-
-中文:
-定理 tsupport_iteratedFDeriv_subset
-  条件: (n : 自然数)
-  结论: tsupport (iteratedFDeriv 𝕜 n f) subseteq tsupport f
-  证明: by
-  induction n with
-  | zero =>
-    rw [iteratedFDeriv_zero_eq_comp]
-    exact closure_minimal ((support_comp_subset (map_zero _) _).trans subset_closure)
-      isClosed_closure
-  | succ n IH =>
-    rw [iteratedFDeriv_succ_eq_comp_left]
-    exact closure_minimal ((support_comp_subset (map_zero _) _).trans
-      ((support_fderiv_subset 𝕜).trans IH)) isClosed_closure
-
-Depends on / 依赖: closure_minimal, isClosed_closure, iteratedFDeriv_succ_eq_comp_left, iteratedFDeriv_zero_eq_comp, map_zero, subset_closure, support_comp_subset, support_fderiv_subset
+/-
+**tsupport_iteratedFDeriv_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsupport_iteratedFDeriv_subset (n : Nat) : tsupport (iteratedFDeriv 𝕜 n f)
+ subseteq tsupport f
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDeriv_zero_eq_comp`：iteratedFDeriv_zero_eq_comp : iteratedFDeri
+v 𝕜 0 f = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Function.support_comp_subset`：∀ {ι : Type u_1} {M : Type u_3} {N : Type 
+u_4} [inst : Zero M] [inst_1 : Zero N] {g : M → N},   g 0 = 0 → ∀ (f : ι → M), F
+unction.support (g…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `SemilinearIsometryEquivClass.toSemilinearIsometryClass`：∀ {R : Type u_1}
+ {R₂ : Type u_2} {E : Type u_5} {E₂ : Type u_6} (𝓕 : Type u_10) [inst : Semiring
+ R]   [inst_1 : Semiring R₂] {σ₁₂ : R →+* R₂…
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `iteratedFDeriv_succ_eq_comp_left`：iteratedFDeriv_succ_eq_comp_left {n : 
+Nat} : iteratedFDeriv 𝕜 (n + 1) f = (continuousMultilinearCurryLeftEquiv 𝕜 (fun 
+_ : Fin (n + 1) => E) …
+· 使用定理 `support_fderiv_subset`：support_fderiv_subset : support (fderiv 𝕜 f) subs
+eteq tsupport f
 -/
-theorem tsupport_iteratedFDeriv_subset (n : Nat) : tsupport (iteratedFDeriv 𝕜 n f) subseteq tsupport f := by
+theorem tsupport_iteratedFDeriv_subset (n : ℕ) : tsupport (iteratedFDeriv 𝕜 n f) ⊆ tsupport f := by
   induction n with
   | zero =>
     rw [iteratedFDeriv_zero_eq_comp]
@@ -2613,562 +3479,800 @@ theorem tsupport_iteratedFDeriv_subset (n : Nat) : tsupport (iteratedFDeriv 𝕜
     rw [iteratedFDeriv_succ_eq_comp_left]
     exact closure_minimal ((support_comp_subset (map_zero _) _).trans
       ((support_fderiv_subset 𝕜).trans IH)) isClosed_closure
-
-/--
-theorem `support_iteratedFDeriv_subset` / 定理 `support_iteratedFDeriv_subset`
-
-English:
-theorem support_iteratedFDeriv_subset
-  given: (n : Nat)
-  statement: support (iteratedFDeriv 𝕜 n f) subseteq tsupport f
-  proof: subset_closure.trans (tsupport_iteratedFDeriv_subset n)
-
-中文:
-定理 support_iteratedFDeriv_subset
-  条件: (n : 自然数)
-  结论: support (iteratedFDeriv 𝕜 n f) subseteq tsupport f
-  证明: subset_closure.trans (tsupport_iteratedFDeriv_subset n)
-
-Depends on / 依赖: subset_closure, subset_closure.trans, tsupport_iteratedFDeriv_subset
+/-
+**support_iteratedFDeriv_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：support_iteratedFDeriv_subset (n : Nat) : support (iteratedFDeriv 𝕜 n f) s
+ubseteq tsupport f
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `tsupport_iteratedFDeriv_subset`：tsupport_iteratedFDeriv_subset (n : Nat)
+ : tsupport (iteratedFDeriv 𝕜 n f) subseteq tsupport f
 -/
-theorem support_iteratedFDeriv_subset (n : Nat) : support (iteratedFDeriv 𝕜 n f) subseteq tsupport f :=
+theorem support_iteratedFDeriv_subset (n : ℕ) : support (iteratedFDeriv 𝕜 n f) ⊆ tsupport f :=
   subset_closure.trans (tsupport_iteratedFDeriv_subset n)
-
-/--
-theorem `HasCompactSupport.iteratedFDeriv` / 定理 `HasCompactSupport.iteratedFDeriv`
-
-English:
-theorem HasCompactSupport.iteratedFDeriv
-  given: (hf : HasCompactSupport f) (n : Nat)
-  proof: hf.of_isClosed_subset isClosed_closure (tsupport_iteratedFDeriv_subset n)
-
-中文:
-定理 HasCompactSupport.iteratedFDeriv
-  条件: (hf : HasCompactSupport f) (n : 自然数)
-  证明: hf.of_isClosed_subset isClosed_closure (tsupport_iteratedFDeriv_subset n)
-
-Depends on / 依赖: hf.of_isClosed_subset, isClosed_closure, of_isClosed_subset, tsupport_iteratedFDeriv_subset
+/-
+**HasCompactSupport.iteratedFDeriv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasCompactSupport.iteratedFDeriv (hf : HasCompactSupport f) (n : Nat) : Ha
+sCompactSupport (iteratedFDeriv 𝕜 n f)
+参数：hf : HasCompactSupport f；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.of_isClosed_subset`：IsCompact.of_isClosed_subset (hs : IsCompa
+ct s) (ht : IsClosed t) (h : t subseteq s) : IsCompact t
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `tsupport_iteratedFDeriv_subset`：tsupport_iteratedFDeriv_subset (n : Nat)
+ : tsupport (iteratedFDeriv 𝕜 n f) subseteq tsupport f
 -/
-theorem HasCompactSupport.iteratedFDeriv (hf : HasCompactSupport f) (n : Nat) :
+theorem HasCompactSupport.iteratedFDeriv (hf : HasCompactSupport f) (n : ℕ) :
     HasCompactSupport (iteratedFDeriv 𝕜 n f) :=
   hf.of_isClosed_subset isClosed_closure (tsupport_iteratedFDeriv_subset n)
-
-/--
-theorem `norm_fderiv_iteratedFDeriv` / 定理 `norm_fderiv_iteratedFDeriv`
-
-English:
-theorem norm_fderiv_iteratedFDeriv
-  given: {n : Nat}
-  proof: by
-  rw [iteratedFDeriv_succ_eq_comp_left]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-中文:
-定理 norm_fderiv_iteratedFDeriv
-  条件: {n : 自然数}
-  证明: by
-  rw [iteratedFDeriv_succ_eq_comp_left]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, comp_apply, iteratedFDeriv_succ_eq_comp_left, norm_map
+/-
+**norm_fderiv_iteratedFDeriv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_fderiv_iteratedFDeriv {n : Nat} : ‖fderiv 𝕜 (iteratedFDeriv 𝕜 n f) x‖
+ = ‖iteratedFDeriv 𝕜 (n + 1) f x‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDeriv_succ_eq_comp_left`：iteratedFDeriv_succ_eq_comp_left {n : 
+Nat} : iteratedFDeriv 𝕜 (n + 1) f = (continuousMultilinearCurryLeftEquiv 𝕜 (fun 
+_ : Fin (n + 1) => E) …
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LinearIsometryEquiv.norm_map`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type
+ u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* 
+R₂} {σ₂₁ : R₂ →+* …
 -/
-theorem norm_fderiv_iteratedFDeriv {n : Nat} :
+theorem norm_fderiv_iteratedFDeriv {n : ℕ} :
     ‖fderiv 𝕜 (iteratedFDeriv 𝕜 n f) x‖ = ‖iteratedFDeriv 𝕜 (n + 1) f x‖ := by
-  rw [iteratedFDeriv_succ_eq_comp_left]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-/--
-theorem `iteratedFDerivWithin_univ` / 定理 `iteratedFDerivWithin_univ`
-
-English:
-theorem iteratedFDerivWithin_univ
-  given: {n : Nat}
-  proof: by
-  simp [iteratedFDerivWithin, iteratedFDeriv]
-
-中文:
-定理 iteratedFDerivWithin_univ
-  条件: {n : 自然数}
-  证明: by
-  simp [iteratedFDerivWithin, iteratedFDeriv]
-
-Depends on / 依赖: iteratedFDeriv, iteratedFDerivWithin
+  rw [iteratedFDeriv_succ_eq_comp_left, comp_apply, LinearIsometryEquiv.norm_map]
+/-
+**iteratedFDerivWithin_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_univ {n : Nat} : iteratedFDerivWithin 𝕜 n f univ = it
+eratedFDeriv 𝕜 n f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `fderivWithin_univ`：fderivWithin_univ : fderivWithin 𝕜 f univ = fderiv 𝕜 
+f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem iteratedFDerivWithin_univ {n : Nat} :
+theorem iteratedFDerivWithin_univ {n : ℕ} :
     iteratedFDerivWithin 𝕜 n f univ = iteratedFDeriv 𝕜 n f := by
   simp [iteratedFDerivWithin, iteratedFDeriv]
 
 variable (𝕜) in
-/--
-theorem `Filter.EventuallyEq.iteratedFDeriv` / 定理 `Filter.EventuallyEq.iteratedFDeriv`
+/-- If two functions agree in a neighborhood, then so do their iterated derivatives. -/
+/-
+**Filter.EventuallyEq.iteratedFDeriv** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventuall
+yEq`。
+形式化陈述：∀ (𝕜 : Type u) [inst : NontriviallyNormedField 𝕜] {E : Type uE} [inst_1 : 
+NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type uF} [inst_3 : Norme
+dAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f₁ f₂ : E → F}   {x : E}, f₁ =ᶠ[nhd
+s x] f₂ → ∀ (n : ℕ), iteratedFDeriv 𝕜 n f₁ =ᶠ[nhds x] iteratedFDeriv 𝕜 n f₂
+参数：𝕜 : Type u；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 
-English:
-theorem Filter.EventuallyEq.iteratedFDeriv
-  proof: by
-  simp_all [← nhdsWithin_univ, ← iteratedFDerivWithin_univ, EventuallyEq.iteratedFDerivWithin]
-
-中文:
-定理 滤子.EventuallyEq.iteratedFDeriv
-  证明: by
-  simp_all [← nhdsWithin_univ, ← iteratedFDerivWithin_univ, EventuallyEq.iteratedFDerivWithin]
+--- 原说明 ---
+If two functions agree in a neighborhood, then so do their iterated derivatives.
 -/
 protected theorem Filter.EventuallyEq.iteratedFDeriv
-    {f₁ f₂ : E -> F} {x : E} (h : f₁ =ᶠ[𝓝 x] f₂) (n : Nat) :
+    {f₁ f₂ : E → F} {x : E} (h : f₁ =ᶠ[𝓝 x] f₂) (n : ℕ) :
     iteratedFDeriv 𝕜 n f₁ =ᶠ[𝓝 x] iteratedFDeriv 𝕜 n f₂ := by
   simp_all [← nhdsWithin_univ, ← iteratedFDerivWithin_univ, EventuallyEq.iteratedFDerivWithin]
 
 variable (𝕜) in
-/--
-theorem `Filter.EventuallyEq.ftaylorSeries` / 定理 `Filter.EventuallyEq.ftaylorSeries`
+/-- If two functions agree in a neighborhood, then so do their Taylor series. -/
+/-
+**Filter.EventuallyEq.ftaylorSeries** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Eventually
+Eq`。
+形式化陈述：∀ (𝕜 : Type u) [inst : NontriviallyNormedField 𝕜] {E : Type uE} [inst_1 : 
+NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {F : Type uF} [inst_3 : Norme
+dAddCommGroup F] [inst_4 : NormedSpace 𝕜 F] {f f₁ : E → F}   {x : E}, f₁ =ᶠ[nhds
+ x] f → ftaylorSeries 𝕜 f₁ =ᶠ[nhds x] ftaylorSeries 𝕜 f
+参数：𝕜 : Type u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eventually_eventuallyEq_nhds`：eventually_eventuallyEq_nhds {f g : X -> α
+} : (forallᶠ y in 𝓝 x, f =ᶠ[𝓝 y] g) ↔ f =ᶠ[𝓝 x] g
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `FormalMultilinearSeries.ext`：∀ {𝕜 : Type u} {E : Type v} {F : Type w} [i
+nst : Semiring 𝕜] [inst_1 : AddCommMonoid E] [inst_2 : _root_.Module 𝕜 E]   [ins
+t_3 : Topological…
+· 使用定理 `Filter.EventuallyEq.eq_of_nhds`：Filter.EventuallyEq.eq_of_nhds {f g : X 
+-> α} (h : f =ᶠ[𝓝 x] g) : f x = g x
+· 使用定理 `Filter.EventuallyEq.iteratedFDeriv`：∀ (𝕜 : Type u) [inst : NontriviallyN
+ormedField 𝕜] {E : Type uE} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSp
+ace 𝕜 E] {F : Type uF} […
 
-English:
-theorem Filter.EventuallyEq.ftaylorSeries
-  given: (h : f₁ =ᶠ[𝓝 x] f)
-  proof: by
-  filter_upwards [eventually_eventuallyEq_nhds.2 h] with e₁ he₁
-  ext n : 1
-  exact (he₁.iteratedFDeriv 𝕜 n).eq_of_nhds
-
-中文:
-定理 滤子.EventuallyEq.ftaylorSeries
-  条件: (h : f₁ =ᶠ[𝓝 x] f)
-  证明: by
-  filter_upwards [eventually_eventuallyEq_nhds.2 h] with e₁ he₁
-  ext n : 1
-  exact (he₁.iteratedFDeriv 𝕜 n).eq_of_nhds
+--- 原说明 ---
+If two functions agree in a neighborhood, then so do their Taylor series.
 -/
 protected theorem Filter.EventuallyEq.ftaylorSeries (h : f₁ =ᶠ[𝓝 x] f) :
     ftaylorSeries 𝕜 f₁ =ᶠ[𝓝 x] ftaylorSeries 𝕜 f := by
   filter_upwards [eventually_eventuallyEq_nhds.2 h] with e₁ he₁
   ext n : 1
   exact (he₁.iteratedFDeriv 𝕜 n).eq_of_nhds
-
-/--
-theorem `HasFTaylorSeriesUpTo.eq_iteratedFDeriv` / 定理 `HasFTaylorSeriesUpTo.eq_iteratedFDeriv`
-
-English:
-theorem HasFTaylorSeriesUpTo.eq_iteratedFDeriv
-  proof: by
-  rw [← iteratedFDerivWithin_univ]
-  rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
-  exact h.eq_iteratedFDerivWithin_of_uniqueDiffOn hmn uniqueDiffOn_univ (mem_univ _)
-
-中文:
-定理 有FTaylorSeriesUpTo.eq_iteratedFDeriv
-  证明: by
-  rw [← iteratedFDerivWithin_univ]
-  rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
-  exact h.eq_iteratedFDerivWithin_of_uniqueDiffOn hmn uniqueDiffOn_univ (mem_univ _)
-
-Depends on / 依赖: eq_iteratedFDerivWithin_of_uniqueDiffOn, h.eq_iteratedFDerivWithin_of_uniqueDiffOn, hasFTaylorSeriesUpToOn_univ_iff, iteratedFDerivWithin_univ, mem_univ, uniqueDiffOn_univ
+/-
+**HasFTaylorSeriesUpTo.eq_iteratedFDeriv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasFTaylorSeriesUpTo.eq_iteratedFDeriv (h : HasFTaylorSeriesUpTo n f p) {m
+ : Nat} (hmn : m <= n) (x : E) : p x m = iteratedFDeriv 𝕜 m f x
+参数：h : HasFTaylorSeriesUpTo n f p；hmn : m <= n；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iteratedFDerivWithin_univ`：iteratedFDerivWithin_univ {n : Nat} : iterate
+dFDerivWithin 𝕜 n f univ = iteratedFDeriv 𝕜 n f
+· 使用定理 `HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn`：HasFTayl
+orSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn (h : HasFTaylorSeriesUpTo
+On n f p s) {m : Nat} (hmn : m <= n) (hs : UniqueDif…
+· 使用定理 `hasFTaylorSeriesUpToOn_univ_iff`：hasFTaylorSeriesUpToOn_univ_iff : HasFT
+aylorSeriesUpToOn n f p univ ↔ HasFTaylorSeriesUpTo n f p
+· 使用定理 `uniqueDiffOn_univ`：uniqueDiffOn_univ : UniqueDiffOn 𝕜 (univ : Set E)
+· 使用定理 `NormedField.nhdsNE_neBot`：nhdsNE_neBot (x : α) : NeBot (𝓝[!=] x)
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem HasFTaylorSeriesUpTo.eq_iteratedFDeriv
-    (h : HasFTaylorSeriesUpTo n f p) {m : Nat} (hmn : m <= n) (x : E) :
+    (h : HasFTaylorSeriesUpTo n f p) {m : ℕ} (hmn : m ≤ n) (x : E) :
     p x m = iteratedFDeriv 𝕜 m f x := by
   rw [← iteratedFDerivWithin_univ]
   rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
   exact h.eq_iteratedFDerivWithin_of_uniqueDiffOn hmn uniqueDiffOn_univ (mem_univ _)
 
-/--
-theorem `iteratedFDerivWithin_of_isOpen` / 定理 `iteratedFDerivWithin_of_isOpen`
+/-- In an open set, the iterated derivative within this set coincides with the global iterated
+derivative. -/
+/-
+**iteratedFDerivWithin_of_isOpen** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_of_isOpen (n : Nat) (hs : IsOpen s) : EqOn (iteratedF
+DerivWithin 𝕜 n f s) (iteratedFDeriv 𝕜 n f) s
+参数：n : Nat；hs : IsOpen s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iteratedFDerivWithin_univ`：iteratedFDerivWithin_univ {n : Nat} : iterate
+dFDerivWithin 𝕜 n f univ = iteratedFDeriv 𝕜 n f
+· 使用定理 `iteratedFDerivWithin_congr_set`：iteratedFDerivWithin_congr_set (h : s =ᶠ
+[𝓝 x] t) (n : Nat) : iteratedFDerivWithin 𝕜 n f s x = iteratedFDerivWithin 𝕜 n f
+ t x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.eventuallyEq_univ`：eventuallyEq_univ {s : Set α} {l : Filter α} :
+ s =ᶠ[l] univ ↔ s in l
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-theorem iteratedFDerivWithin_of_isOpen
-  given: (n : Nat) (hs : IsOpen s)
-  proof: by
-  intro x hx
-  rw [← iteratedFDerivWithin_univ]
-  exact iteratedFDerivWithin_congr_set (Filter.eventuallyEq_univ.mpr <| hs.mem_nhds hx) n
-
-中文:
-定理 iteratedFDerivWithin_of_isOpen
-  条件: (n : 自然数) (hs : 是开集 s)
-  证明: by
-  intro x hx
-  rw [← iteratedFDerivWithin_univ]
-  exact iteratedFDerivWithin_congr_set (Filter.eventuallyEq_univ.mpr <| hs.mem_nhds hx) n
-
-Depends on / 依赖: Filter, Filter.eventuallyEq_univ.mpr, eventuallyEq_univ, hs.mem_nhds, iteratedFDerivWithin_congr_set, iteratedFDerivWithin_univ, mem_nhds
+--- 原说明 ---
+In an open set, the iterated derivative within this set coincides with the globa
+l iterated
+derivative.
 -/
-theorem iteratedFDerivWithin_of_isOpen (n : Nat) (hs : IsOpen s) :
+theorem iteratedFDerivWithin_of_isOpen (n : ℕ) (hs : IsOpen s) :
     EqOn (iteratedFDerivWithin 𝕜 n f s) (iteratedFDeriv 𝕜 n f) s := by
   intro x hx
   rw [← iteratedFDerivWithin_univ]
   exact iteratedFDerivWithin_congr_set (Filter.eventuallyEq_univ.mpr <| hs.mem_nhds hx) n
-
-/--
-theorem `ftaylorSeriesWithin_univ` / 定理 `ftaylorSeriesWithin_univ`
-
-English:
-theorem ftaylorSeriesWithin_univ
-  statement: ftaylorSeriesWithin 𝕜 f univ = ftaylorSeries 𝕜 f
-  proof: by
-  ext1 x; ext1 n
-  change iteratedFDerivWithin 𝕜 n f univ x = iteratedFDeriv 𝕜 n f x
-  rw [iteratedFDerivWithin_univ]
-
-中文:
-定理 ftaylorSeriesWithin_univ
-  结论: ftaylorSeriesWithin 𝕜 f univ = ftaylorSeries 𝕜 f
-  证明: by
-  ext1 x; ext1 n
-  change iteratedFDerivWithin 𝕜 n f univ x = iteratedFDeriv 𝕜 n f x
-  rw [iteratedFDerivWithin_univ]
-
-Depends on / 依赖: iteratedFDeriv, iteratedFDerivWithin, iteratedFDerivWithin_univ
+/-
+**ftaylorSeriesWithin_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ftaylorSeriesWithin_univ : ftaylorSeriesWithin 𝕜 f univ = ftaylorSeries 𝕜 
+f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `FormalMultilinearSeries.ext`：∀ {𝕜 : Type u} {E : Type v} {F : Type w} [i
+nst : Semiring 𝕜] [inst_1 : AddCommMonoid E] [inst_2 : _root_.Module 𝕜 E]   [ins
+t_3 : Topological…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDerivWithin_univ`：iteratedFDerivWithin_univ {n : Nat} : iterate
+dFDerivWithin 𝕜 n f univ = iteratedFDeriv 𝕜 n f
 -/
 theorem ftaylorSeriesWithin_univ : ftaylorSeriesWithin 𝕜 f univ = ftaylorSeries 𝕜 f := by
   ext1 x; ext1 n
   change iteratedFDerivWithin 𝕜 n f univ x = iteratedFDeriv 𝕜 n f x
   rw [iteratedFDerivWithin_univ]
-
-/--
-theorem `iteratedFDeriv_succ_apply_right` / 定理 `iteratedFDeriv_succ_apply_right`
-
-English:
-theorem iteratedFDeriv_succ_apply_right
-  given: {n : Nat} (m : Fin (n + 1) -> E)
-  proof: by
-  rw [← iteratedFDerivWithin_univ]; rw [← iteratedFDerivWithin_univ]; rw [← fderivWithin_univ]
-  exact iteratedFDerivWithin_succ_apply_right uniqueDiffOn_univ (mem_univ _) _
-
-中文:
-定理 iteratedFDeriv_succ_apply_right
-  条件: {n : 自然数} (m : 有限集 (n + 1) -> E)
-  证明: by
-  rw [← iteratedFDerivWithin_univ]; rw [← iteratedFDerivWithin_univ]; rw [← fderivWithin_univ]
-  exact iteratedFDerivWithin_succ_apply_right uniqueDiffOn_univ (mem_univ _) _
-
-Depends on / 依赖: fderivWithin_univ, iteratedFDerivWithin_succ_apply_right, iteratedFDerivWithin_univ, mem_univ, uniqueDiffOn_univ
+/-
+**iteratedFDeriv_succ_apply_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_succ_apply_right {n : Nat} (m : Fin (n + 1) -> E) : (iterat
+edFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -> F) m = iteratedFDeriv 𝕜 n (fun y 
+=> fderiv 𝕜 f y) x (init m) (m (last n))
+参数：m : Fin (n + 1) -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iteratedFDerivWithin_univ`：iteratedFDerivWithin_univ {n : Nat} : iterate
+dFDerivWithin 𝕜 n f univ = iteratedFDeriv 𝕜 n f
+· 使用定理 `fderivWithin_univ`：fderivWithin_univ : fderivWithin 𝕜 f univ = fderiv 𝕜 
+f
+· 使用定理 `iteratedFDerivWithin_succ_apply_right`：iteratedFDerivWithin_succ_apply_r
+ight {n : Nat} (hs : UniqueDiffOn 𝕜 s) (hx : x in s) (m : Fin (n + 1) -> E) : (i
+teratedFDerivWithin 𝕜 (n + …
+· 使用定理 `uniqueDiffOn_univ`：uniqueDiffOn_univ : UniqueDiffOn 𝕜 (univ : Set E)
+· 使用定理 `NormedField.nhdsNE_neBot`：nhdsNE_neBot (x : α) : NeBot (𝓝[!=] x)
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem iteratedFDeriv_succ_apply_right {n : Nat} (m : Fin (n + 1) -> E) :
-    (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -> F) m =
+theorem iteratedFDeriv_succ_apply_right {n : ℕ} (m : Fin (n + 1) → E) :
+    (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) → E) → F) m =
       iteratedFDeriv 𝕜 n (fun y => fderiv 𝕜 f y) x (init m) (m (last n)) := by
-  rw [← iteratedFDerivWithin_univ]; rw [← iteratedFDerivWithin_univ]; rw [← fderivWithin_univ]
+  rw [← iteratedFDerivWithin_univ, ← iteratedFDerivWithin_univ, ← fderivWithin_univ]
   exact iteratedFDerivWithin_succ_apply_right uniqueDiffOn_univ (mem_univ _) _
 
-/--
-theorem `iteratedFDeriv_succ_eq_comp_right` / 定理 `iteratedFDeriv_succ_eq_comp_right`
+/-- Writing explicitly the `n+1`-th derivative as the composition of a currying linear equiv,
+and the `n`-th derivative of the derivative. -/
+/-
+**iteratedFDeriv_succ_eq_comp_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_succ_eq_comp_right {n : Nat} : iteratedFDeriv 𝕜 (n + 1) f x
+ = ((continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm ∘ iteratedFDeriv 𝕜 n fu
+n y => fderiv 𝕜 f y) x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMultilinearMap.ext`：ext {f f' : ContinuousMultilinearMap R M₁ 
+M₂} (H : forall x, f x = f' x) : f = f'
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDeriv_succ_apply_right`：iteratedFDeriv_succ_apply_right {n : Na
+t} (m : Fin (n + 1) -> E) : (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -
+> F) m = iteratedFDer…
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `continuousMultilinearCurryRightEquiv_symm_apply'`：continuousMultilinearC
+urryRightEquiv_symm_apply' (f : G [×n]->L[𝕜] G ->L[𝕜] G') (v : Fin (n + 1) -> G)
+ : (continuousMultilinearCurryRightEqu…
 
-English:
-theorem iteratedFDeriv_succ_eq_comp_right
-  given: {n : Nat}
-  proof: by
-  ext m
-  rw [iteratedFDeriv_succ_apply_right]; rw [comp_apply]; rw [continuousMultilinearCurryRightEquiv_symm_apply']
-
-中文:
-定理 iteratedFDeriv_succ_eq_comp_right
-  条件: {n : 自然数}
-  证明: by
-  ext m
-  rw [iteratedFDeriv_succ_apply_right]; rw [comp_apply]; rw [continuousMultilinearCurryRightEquiv_symm_apply']
-
-Depends on / 依赖: comp_apply, continuousMultilinearCurryRightEquiv_symm_apply, iteratedFDeriv_succ_apply_right
+--- 原说明 ---
+Writing explicitly the `n+1`-th derivative as the composition of a currying line
+ar equiv,
+and the `n`-th derivative of the derivative.
 -/
-theorem iteratedFDeriv_succ_eq_comp_right {n : Nat} :
+theorem iteratedFDeriv_succ_eq_comp_right {n : ℕ} :
     iteratedFDeriv 𝕜 (n + 1) f x =
       ((continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm ∘
           iteratedFDeriv 𝕜 n fun y => fderiv 𝕜 f y) x := by
   ext m
-  rw [iteratedFDeriv_succ_apply_right]; rw [comp_apply]; rw [continuousMultilinearCurryRightEquiv_symm_apply']
-
-/--
-theorem `norm_iteratedFDeriv_fderiv` / 定理 `norm_iteratedFDeriv_fderiv`
-
-English:
-theorem norm_iteratedFDeriv_fderiv
-  given: {n : Nat}
-  proof: by
-  rw [iteratedFDeriv_succ_eq_comp_right]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-@[simp]
-
-中文:
-定理 norm_iteratedFDeriv_fderiv
-  条件: {n : 自然数}
-  证明: by
-  rw [iteratedFDeriv_succ_eq_comp_right]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
-
-@[simp]
-
-Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, comp_apply, iteratedFDeriv_succ_eq_comp_right, norm_map
+  rw [iteratedFDeriv_succ_apply_right, comp_apply, continuousMultilinearCurryRightEquiv_symm_apply']
+/-
+**norm_iteratedFDeriv_fderiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_iteratedFDeriv_fderiv {n : Nat} : ‖iteratedFDeriv 𝕜 n (fderiv 𝕜 f) x‖
+ = ‖iteratedFDeriv 𝕜 (n + 1) f x‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDeriv_succ_eq_comp_right`：iteratedFDeriv_succ_eq_comp_right {n 
+: Nat} : iteratedFDeriv 𝕜 (n + 1) f x = ((continuousMultilinearCurryRightEquiv' 
+𝕜 n E F).symm ∘ iterate…
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `LinearIsometryEquiv.norm_map`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type
+ u_5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* 
+R₂} {σ₂₁ : R₂ →+* …
 -/
-theorem norm_iteratedFDeriv_fderiv {n : Nat} :
+theorem norm_iteratedFDeriv_fderiv {n : ℕ} :
     ‖iteratedFDeriv 𝕜 n (fderiv 𝕜 f) x‖ = ‖iteratedFDeriv 𝕜 (n + 1) f x‖ := by
-  rw [iteratedFDeriv_succ_eq_comp_right]; rw [comp_apply]; rw [LinearIsometryEquiv.norm_map]
+  rw [iteratedFDeriv_succ_eq_comp_right, comp_apply, LinearIsometryEquiv.norm_map]
 
 @[simp]
-/--
-theorem `iteratedFDeriv_one_apply` / 定理 `iteratedFDeriv_one_apply`
-
-English:
-theorem iteratedFDeriv_one_apply
-  given: (m : Fin 1 -> E)
-  proof: by
-  rw [iteratedFDeriv_succ_apply_right]; rw [iteratedFDeriv_zero_apply]; rw [last_zero]
-
-@[simp]
-
-中文:
-定理 iteratedFDeriv_one_apply
-  条件: (m : 有限集 1 -> E)
-  证明: by
-  rw [iteratedFDeriv_succ_apply_right]; rw [iteratedFDeriv_zero_apply]; rw [last_zero]
-
-@[simp]
-
-Depends on / 依赖: iteratedFDeriv_succ_apply_right, iteratedFDeriv_zero_apply, last_zero
+/-
+**iteratedFDeriv_one_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_one_apply (m : Fin 1 -> E) : iteratedFDeriv 𝕜 1 f x m = fde
+riv 𝕜 f x (m 0)
+参数：m : Fin 1 -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDeriv_succ_apply_right`：iteratedFDeriv_succ_apply_right {n : Na
+t} (m : Fin (n + 1) -> E) : (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -
+> F) m = iteratedFDer…
+· 使用定理 `iteratedFDeriv_zero_apply`：iteratedFDeriv_zero_apply (m : Fin 0 -> E) : 
+(iteratedFDeriv 𝕜 0 f x : (Fin 0 -> E) -> F) m = f x
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Fin.last_zero`：Fin.last 0 = 0
 -/
-theorem iteratedFDeriv_one_apply (m : Fin 1 -> E) :
+theorem iteratedFDeriv_one_apply (m : Fin 1 → E) :
     iteratedFDeriv 𝕜 1 f x m = fderiv 𝕜 f x (m 0) := by
-  rw [iteratedFDeriv_succ_apply_right]; rw [iteratedFDeriv_zero_apply]; rw [last_zero]
+  rw [iteratedFDeriv_succ_apply_right, iteratedFDeriv_zero_apply, last_zero]
 
 @[simp]
-/--
-theorem `norm_iteratedFDeriv_one` / 定理 `norm_iteratedFDeriv_one`
-
-English:
-theorem norm_iteratedFDeriv_one
-  given: (f : E -> F)
-  proof: by
-  rw [← iteratedFDerivWithin_univ]; rw [← fderivWithin_univ]
-  exact norm_iteratedFDerivWithin_one f uniqueDiffWithinAt_univ
-
-中文:
-定理 norm_iteratedFDeriv_one
-  条件: (f : E -> F)
-  证明: by
-  rw [← iteratedFDerivWithin_univ]; rw [← fderivWithin_univ]
-  exact norm_iteratedFDerivWithin_one f uniqueDiffWithinAt_univ
-
-Depends on / 依赖: fderivWithin_univ, iteratedFDerivWithin_univ, norm_iteratedFDerivWithin_one, uniqueDiffWithinAt_univ
+/-
+**norm_iteratedFDeriv_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：norm_iteratedFDeriv_one (f : E -> F) : ‖iteratedFDeriv 𝕜 1 f x‖ = ‖fderiv 
+𝕜 f x‖
+参数：f : E -> F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iteratedFDerivWithin_univ`：iteratedFDerivWithin_univ {n : Nat} : iterate
+dFDerivWithin 𝕜 n f univ = iteratedFDeriv 𝕜 n f
+· 使用定理 `fderivWithin_univ`：fderivWithin_univ : fderivWithin 𝕜 f univ = fderiv 𝕜 
+f
+· 使用定理 `norm_iteratedFDerivWithin_one`：norm_iteratedFDerivWithin_one (f : E -> F
+) (h : UniqueDiffWithinAt 𝕜 s x) : ‖iteratedFDerivWithin 𝕜 1 f s x‖ = ‖fderivWit
+hin 𝕜 f s x‖
+· 使用定理 `uniqueDiffWithinAt_univ`：uniqueDiffWithinAt_univ : UniqueDiffWithinAt 𝕜 
+univ x
+· 使用定理 `NormedField.nhdsNE_neBot`：nhdsNE_neBot (x : α) : NeBot (𝓝[!=] x)
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
 -/
-theorem norm_iteratedFDeriv_one (f : E -> F) :
+theorem norm_iteratedFDeriv_one (f : E → F) :
     ‖iteratedFDeriv 𝕜 1 f x‖ = ‖fderiv 𝕜 f x‖ := by
-  rw [← iteratedFDerivWithin_univ]; rw [← fderivWithin_univ]
+  rw [← iteratedFDerivWithin_univ, ← fderivWithin_univ]
   exact norm_iteratedFDerivWithin_one f uniqueDiffWithinAt_univ
-
-/--
-lemma `iteratedFDeriv_two_apply` / 引理 `iteratedFDeriv_two_apply`
-
-English:
-lemma iteratedFDeriv_two_apply
-  given: (f : E -> F) (z : E) (m : Fin 2 -> E)
-  proof: by
-  simp [iteratedFDeriv_succ_apply_right, init]
-
-中文:
-引理 iteratedFDeriv_two_apply
-  条件: (f : E -> F) (z : E) (m : 有限集 2 -> E)
-  证明: by
-  simp [iteratedFDeriv_succ_apply_right, init]
-
-Depends on / 依赖: iteratedFDeriv_succ_apply_right
+/-
+**iteratedFDeriv_two_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_two_apply (f : E -> F) (z : E) (m : Fin 2 -> E) : iteratedF
+Deriv 𝕜 2 f z m = fderiv 𝕜 (fderiv 𝕜 f) z (m 0) (m 1)
+参数：f : E -> F；z : E；m : Fin 2 -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iteratedFDeriv_succ_apply_right`：iteratedFDeriv_succ_apply_right {n : Na
+t} (m : Fin (n + 1) -> E) : (iteratedFDeriv 𝕜 (n + 1) f x : (Fin (n + 1) -> E) -
+> F) m = iteratedFDer…
+· 使用定理 `Fin.last_zero`：Fin.last 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma iteratedFDeriv_two_apply (f : E -> F) (z : E) (m : Fin 2 -> E) :
+lemma iteratedFDeriv_two_apply (f : E → F) (z : E) (m : Fin 2 → E) :
     iteratedFDeriv 𝕜 2 f z m = fderiv 𝕜 (fderiv 𝕜 f) z (m 0) (m 1) := by
   simp [iteratedFDeriv_succ_apply_right, init]
 
-/--
-lemma `iteratedFDeriv_comp_add_left'` / 引理 `iteratedFDeriv_comp_add_left'`
+/-- The iterated derivative commutes with shifting the function by a constant on the left. -/
+/-
+**iteratedFDeriv_comp_add_left'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_comp_add_left' (n : Nat) (a : E) : iteratedFDeriv 𝕜 n (fun 
+z => f (a + z)) = fun x => iteratedFDeriv 𝕜 n f (a + x)
+参数：n : Nat；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.vadd_set_univ`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup α] [
+inst_1 : AddAction α β] {a : α}, a +ᵥ Set.univ = Set.univ
+· 使用引理 `iteratedFDerivWithin_comp_add_left'`：iteratedFDerivWithin_comp_add_left'
+ (n : Nat) (a : E) : iteratedFDerivWithin 𝕜 n (fun z => f (a + z)) s = fun x => 
+iteratedFDerivWithin 𝕜 n …
 
-English:
-lemma iteratedFDeriv_comp_add_left'
-  given: (n : Nat) (a : E)
-  proof: by
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ left.
+-/
+lemma iteratedFDeriv_comp_add_left' (n : ℕ) (a : E) :
+    iteratedFDeriv 𝕜 n (fun z ↦ f (a + z)) = fun x ↦ iteratedFDeriv 𝕜 n f (a + x) := by
   simpa [← iteratedFDerivWithin_univ] using iteratedFDerivWithin_comp_add_left' n a (s := univ)
 
-中文:
-引理 iteratedFDeriv_comp_add_left'
-  条件: (n : 自然数) (a : E)
-  证明: by
-  simpa [← iteratedFDerivWithin_univ] using iteratedFDerivWithin_comp_add_left' n a (s := univ)
+/-- The iterated derivative commutes with shifting the function by a constant on the left. -/
+/-
+**iteratedFDeriv_comp_add_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_comp_add_left (n : Nat) (a : E) (x : E) : iteratedFDeriv 𝕜 
+n (fun z => f (a + z)) x = iteratedFDeriv 𝕜 n f (a + x)
+参数：n : Nat；a : E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `iteratedFDeriv_comp_add_left'`：iteratedFDeriv_comp_add_left' (n : Nat) (
+a : E) : iteratedFDeriv 𝕜 n (fun z => f (a + z)) = fun x => iteratedFDeriv 𝕜 n f
+ (a + x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: iteratedFDerivWithin_comp_add_left, iteratedFDerivWithin_univ
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ left.
 -/
-lemma iteratedFDeriv_comp_add_left' (n : Nat) (a : E) :
-    iteratedFDeriv 𝕜 n (fun z => f (a + z)) = fun x => iteratedFDeriv 𝕜 n f (a + x) := by
-  simpa [← iteratedFDerivWithin_univ] using iteratedFDerivWithin_comp_add_left' n a (s := univ)
-
-/--
-lemma `iteratedFDeriv_comp_add_left` / 引理 `iteratedFDeriv_comp_add_left`
-
-English:
-lemma iteratedFDeriv_comp_add_left
-  given: (n : Nat) (a : E) (x : E)
-  proof: by
+lemma iteratedFDeriv_comp_add_left (n : ℕ) (a : E) (x : E) :
+    iteratedFDeriv 𝕜 n (fun z ↦ f (a + z)) x = iteratedFDeriv 𝕜 n f (a + x) := by
   simp [iteratedFDeriv_comp_add_left']
 
-中文:
-引理 iteratedFDeriv_comp_add_left
-  条件: (n : 自然数) (a : E) (x : E)
-  证明: by
-  simp [iteratedFDeriv_comp_add_left']
+/-- The iterated derivative commutes with shifting the function by a constant on the right. -/
+/-
+**iteratedFDeriv_comp_add_right'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_comp_add_right' (n : Nat) (a : E) : iteratedFDeriv 𝕜 n (fun
+ z => f (z + a)) = fun x => iteratedFDeriv 𝕜 n f (x + a)
+参数：n : Nat；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `iteratedFDeriv_comp_add_left'`：iteratedFDeriv_comp_add_left' (n : Nat) (
+a : E) : iteratedFDeriv 𝕜 n (fun z => f (a + z)) = fun x => iteratedFDeriv 𝕜 n f
+ (a + x)
 
-Depends on / 依赖: iteratedFDeriv_comp_add_left
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ right.
 -/
-lemma iteratedFDeriv_comp_add_left (n : Nat) (a : E) (x : E) :
-    iteratedFDeriv 𝕜 n (fun z => f (a + z)) x = iteratedFDeriv 𝕜 n f (a + x) := by
-  simp [iteratedFDeriv_comp_add_left']
-
-/--
-lemma `iteratedFDeriv_comp_add_right'` / 引理 `iteratedFDeriv_comp_add_right'`
-
-English:
-lemma iteratedFDeriv_comp_add_right'
-  given: (n : Nat) (a : E)
-  proof: by
+lemma iteratedFDeriv_comp_add_right' (n : ℕ) (a : E) :
+    iteratedFDeriv 𝕜 n (fun z ↦ f (z + a)) = fun x ↦ iteratedFDeriv 𝕜 n f (x + a) := by
   simpa [add_comm a] using iteratedFDeriv_comp_add_left' n a
 
-中文:
-引理 iteratedFDeriv_comp_add_right'
-  条件: (n : 自然数) (a : E)
-  证明: by
-  simpa [add_comm a] using iteratedFDeriv_comp_add_left' n a
+/-- The iterated derivative commutes with shifting the function by a constant on the right. -/
+/-
+**iteratedFDeriv_comp_add_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_comp_add_right (n : Nat) (a : E) (x : E) : iteratedFDeriv 𝕜
+ n (fun z => f (z + a)) x = iteratedFDeriv 𝕜 n f (x + a)
+参数：n : Nat；a : E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `iteratedFDeriv_comp_add_right'`：iteratedFDeriv_comp_add_right' (n : Nat)
+ (a : E) : iteratedFDeriv 𝕜 n (fun z => f (z + a)) = fun x => iteratedFDeriv 𝕜 n
+ f (x + a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: add_comm, iteratedFDeriv_comp_add_left
+--- 原说明 ---
+The iterated derivative commutes with shifting the function by a constant on the
+ right.
 -/
-lemma iteratedFDeriv_comp_add_right' (n : Nat) (a : E) :
-    iteratedFDeriv 𝕜 n (fun z => f (z + a)) = fun x => iteratedFDeriv 𝕜 n f (x + a) := by
-  simpa [add_comm a] using iteratedFDeriv_comp_add_left' n a
-
-/--
-lemma `iteratedFDeriv_comp_add_right` / 引理 `iteratedFDeriv_comp_add_right`
-
-English:
-lemma iteratedFDeriv_comp_add_right
-  given: (n : Nat) (a : E) (x : E)
-  proof: by
+lemma iteratedFDeriv_comp_add_right (n : ℕ) (a : E) (x : E) :
+    iteratedFDeriv 𝕜 n (fun z ↦ f (z + a)) x = iteratedFDeriv 𝕜 n f (x + a) := by
   simp [iteratedFDeriv_comp_add_right']
 
-中文:
-引理 iteratedFDeriv_comp_add_right
-  条件: (n : 自然数) (a : E) (x : E)
-  证明: by
-  simp [iteratedFDeriv_comp_add_right']
+/-- The iterated derivative commutes with subtracting a constant. -/
+/-
+**iteratedFDeriv_comp_sub'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_comp_sub' (n : Nat) (a : E) : iteratedFDeriv 𝕜 n (fun z => 
+f (z - a)) = fun x => iteratedFDeriv 𝕜 n f (x - a)
+参数：n : Nat；a : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用引理 `iteratedFDeriv_comp_add_right'`：iteratedFDeriv_comp_add_right' (n : Nat)
+ (a : E) : iteratedFDeriv 𝕜 n (fun z => f (z + a)) = fun x => iteratedFDeriv 𝕜 n
+ f (x + a)
 
-Depends on / 依赖: iteratedFDeriv_comp_add_right
+--- 原说明 ---
+The iterated derivative commutes with subtracting a constant.
 -/
-lemma iteratedFDeriv_comp_add_right (n : Nat) (a : E) (x : E) :
-    iteratedFDeriv 𝕜 n (fun z => f (z + a)) x = iteratedFDeriv 𝕜 n f (x + a) := by
-  simp [iteratedFDeriv_comp_add_right']
-
-/--
-lemma `iteratedFDeriv_comp_sub'` / 引理 `iteratedFDeriv_comp_sub'`
-
-English:
-lemma iteratedFDeriv_comp_sub'
-  given: (n : Nat) (a : E)
-  proof: by
+lemma iteratedFDeriv_comp_sub' (n : ℕ) (a : E) :
+    iteratedFDeriv 𝕜 n (fun z ↦ f (z - a)) = fun x ↦ iteratedFDeriv 𝕜 n f (x - a) := by
   simpa [sub_eq_add_neg] using iteratedFDeriv_comp_add_right' n (-a)
 
-中文:
-引理 iteratedFDeriv_comp_sub'
-  条件: (n : 自然数) (a : E)
-  证明: by
-  simpa [sub_eq_add_neg] using iteratedFDeriv_comp_add_right' n (-a)
+/-- The iterated derivative commutes with subtracting a constant. -/
+/-
+**iteratedFDeriv_comp_sub** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDeriv_comp_sub (n : Nat) (a : E) (x : E) : iteratedFDeriv 𝕜 n (fu
+n z => f (z - a)) x = iteratedFDeriv 𝕜 n f (x - a)
+参数：n : Nat；a : E；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `iteratedFDeriv_comp_sub'`：iteratedFDeriv_comp_sub' (n : Nat) (a : E) : i
+teratedFDeriv 𝕜 n (fun z => f (z - a)) = fun x => iteratedFDeriv 𝕜 n f (x - a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-Depends on / 依赖: iteratedFDeriv_comp_add_right, sub_eq_add_neg
+--- 原说明 ---
+The iterated derivative commutes with subtracting a constant.
 -/
-lemma iteratedFDeriv_comp_sub' (n : Nat) (a : E) :
-    iteratedFDeriv 𝕜 n (fun z => f (z - a)) = fun x => iteratedFDeriv 𝕜 n f (x - a) := by
-  simpa [sub_eq_add_neg] using iteratedFDeriv_comp_add_right' n (-a)
-
-/--
-lemma `iteratedFDeriv_comp_sub` / 引理 `iteratedFDeriv_comp_sub`
-
-English:
-lemma iteratedFDeriv_comp_sub
-  given: (n : Nat) (a : E) (x : E)
-  proof: by
+lemma iteratedFDeriv_comp_sub (n : ℕ) (a : E) (x : E) :
+    iteratedFDeriv 𝕜 n (fun z ↦ f (z - a)) x = iteratedFDeriv 𝕜 n f (x - a) := by
   simp [iteratedFDeriv_comp_sub']
-
-中文:
-引理 iteratedFDeriv_comp_sub
-  条件: (n : 自然数) (a : E) (x : E)
-  证明: by
-  simp [iteratedFDeriv_comp_sub']
-
-Depends on / 依赖: iteratedFDeriv_comp_sub
+/-
+**iteratedFDerivWithin_comp_neg** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_neg {f : 𝕜 -> F} {s : Set 𝕜} (n : Nat) (a : 𝕜) :
+ iteratedFDerivWithin 𝕜 n (fun x => f (-x)) s a = (-1 : 𝕜) ^ n • iteratedFDerivW
+ithin 𝕜 n f (-s) (-a)
+参数：n : Nat；a : 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ContinuousMultilinearMap.ext_ring`：ext_ring [Finite ι] [TopologicalSpace
+ R] ⦃f g : ContinuousMultilinearMap R (fun _ : ι => R) M₂⦄ (h : f (fun _ => 1) =
+ g (fun _ => 1)) : f = …
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousMultilinearMap.instSMulCommClass`：∀ {ι : Type v} {M₁ : ι → Typ
+e w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCommMo
+noid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `iteratedFDerivWithin_succ_eq_comp_left`：iteratedFDerivWithin_succ_eq_com
+p_left {n : Nat} : iteratedFDerivWithin 𝕜 (n + 1) f s = (continuousMultilinearCu
+rryLeftEquiv 𝕜 (fun _ : Fin …
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Pi.smul_def`：∀ {ι : Type u_1} {α : Type u_2} {M : ι → Type u_5} [inst : 
+(i : ι) → SMul α (M i)] (a : α) (f : (i : ι) → M i),   a • f = fun i => a • f i
+· 使用定理 `SeminormedAddCommGroup.to_isUniformAddGroup`：∀ {E : Type u_2} [inst : Se
+minormedAddCommGroup E], IsUniformAddGroup E
+· 使用引理 `fderivWithin_const_smul_field'`：fderivWithin_const_smul_field' {s : Set 
+𝕜} {f : 𝕜 -> F} {x : 𝕜} (c : R) : fderivWithin 𝕜 (c • f) s x = c • fderivWithin 
+𝕜 f s x
+· 使用定理 `fderivWithin_comp_neg`：fderivWithin_comp_neg {f : 𝕜 -> F} {s : Set 𝕜} {x
+ : 𝕜} : fderivWithin 𝕜 (fun a => f (-a)) s x = -fderivWithin 𝕜 f (-s) (-x)
+· 使用定理 `neg_one_smul`：neg_one_smul (x : M) : (-1 : R) • x = -x
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `SemilinearIsometryEquivClass.toSemilinearIsometryClass`：∀ {R : Type u_1}
+ {R₂ : Type u_2} {E : Type u_5} {E₂ : Type u_6} (𝓕 : Type u_10) [inst : Semiring
+ R]   [inst_1 : Semiring R₂] {σ₁₂ : R →+* R₂…
 -/
-lemma iteratedFDeriv_comp_sub (n : Nat) (a : E) (x : E) :
-    iteratedFDeriv 𝕜 n (fun z => f (z - a)) x = iteratedFDeriv 𝕜 n f (x - a) := by
-  simp [iteratedFDeriv_comp_sub']
-
-/--
-lemma `iteratedFDerivWithin_comp_neg` / 引理 `iteratedFDerivWithin_comp_neg`
-
-English:
-lemma iteratedFDerivWithin_comp_neg
-  given: {f : 𝕜 -> F} {s : Set 𝕜} (n : Nat) (a : 𝕜)
-  proof: by
-  induction n generalizing a with
-  | zero => simp [iteratedFDerivWithin]
-  | succ n ih =>
-    have ih' : iteratedFDerivWithin 𝕜 n (fun x => f (-x)) s
-        = fun a => (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (-s) (-a) := by
-      ext b
-      rw [ih b]
-    set g := fun a => iteratedFDerivWithin 𝕜 n f (-s) a
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [ih']; rw [← Pi.smul_def]; rw [fderivWithin_const_smul_field' ((-1 : 𝕜) ^ n) (f := fun a => g (-a))]; rw [fderivWithin_comp_neg (f := g)]; rw [← neg_one_smul 𝕜 (fderivWithin 𝕜 _ (-s) (-a))]; rw [← mul_smul _ (-1)]; rw [← pow_succ (-1) n]; rw [map_smul]
-
-中文:
-引理 iteratedFDerivWithin_comp_neg
-  条件: {f : 𝕜 -> F} {s : 集合 𝕜} (n : 自然数) (a : 𝕜)
-  证明: by
-  induction n generalizing a with
-  | zero => simp [iteratedFDerivWithin]
-  | succ n ih =>
-    have ih' : iteratedFDerivWithin 𝕜 n (fun x => f (-x)) s
-        = fun a => (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (-s) (-a) := by
-      ext b
-      rw [ih b]
-    set g := fun a => iteratedFDerivWithin 𝕜 n f (-s) a
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [ih']; rw [← Pi.smul_def]; rw [fderivWithin_const_smul_field' ((-1 : 𝕜) ^ n) (f := fun a => g (-a))]; rw [fderivWithin_comp_neg (f := g)]; rw [← neg_one_smul 𝕜 (fderivWithin 𝕜 _ (-s) (-a))]; rw [← mul_smul _ (-1)]; rw [← pow_succ (-1) n]; rw [map_smul]
-
-Depends on / 依赖: Function, Function.comp_apply, Pi.smul_def, comp_apply, fderivWithin_const_smul_field, generalizing, iteratedFDerivWithin, iteratedFDerivWithin_succ_eq_comp_left, smul_def
--/
-lemma iteratedFDerivWithin_comp_neg {f : 𝕜 -> F} {s : Set 𝕜} (n : Nat) (a : 𝕜) :
-    iteratedFDerivWithin 𝕜 n (fun x => f (-x)) s a
+lemma iteratedFDerivWithin_comp_neg {f : 𝕜 → F} {s : Set 𝕜} (n : ℕ) (a : 𝕜) :
+    iteratedFDerivWithin 𝕜 n (fun x ↦ f (-x)) s a
       = (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (-s) (-a) := by
   induction n generalizing a with
   | zero => simp [iteratedFDerivWithin]
   | succ n ih =>
     have ih' : iteratedFDerivWithin 𝕜 n (fun x => f (-x)) s
-        = fun a => (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (-s) (-a) := by
+        = fun a ↦ (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (-s) (-a) := by
       ext b
       rw [ih b]
-    set g := fun a => iteratedFDerivWithin 𝕜 n f (-s) a
-    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [ih']; rw [← Pi.smul_def]; rw [fderivWithin_const_smul_field' ((-1 : 𝕜) ^ n) (f := fun a => g (-a))]; rw [fderivWithin_comp_neg (f := g)]; rw [← neg_one_smul 𝕜 (fderivWithin 𝕜 _ (-s) (-a))]; rw [← mul_smul _ (-1)]; rw [← pow_succ (-1) n]; rw [map_smul]
-
-/--
-theorem `iteratedFDerivWithin_comp_const_sub` / 定理 `iteratedFDerivWithin_comp_const_sub`
-
-English:
-theorem iteratedFDerivWithin_comp_const_sub
-  given: {f : 𝕜 -> F} {s : Set 𝕜} (n : Nat) (c : 𝕜)
-  proof: by
-  ext a
-  have : (fun z : 𝕜 => f (c - z)) = fun z => (fun w => f (c + w)) (-z) := by
-    simp only [sub_eq_add_neg]
-  rw [this]; rw [iteratedFDerivWithin_comp_neg (f := fun w => f (c + w)) n a]; rw [iteratedFDerivWithin_comp_add_left]
-  ring_nf
-
-中文:
-定理 iteratedFDerivWithin_comp_const_sub
-  条件: {f : 𝕜 -> F} {s : 集合 𝕜} (n : 自然数) (c : 𝕜)
-  证明: by
-  ext a
-  have : (fun z : 𝕜 => f (c - z)) = fun z => (fun w => f (c + w)) (-z) := by
-    simp only [sub_eq_add_neg]
-  rw [this]; rw [iteratedFDerivWithin_comp_neg (f := fun w => f (c + w)) n a]; rw [iteratedFDerivWithin_comp_add_left]
-  ring_nf
-
-Depends on / 依赖: iteratedFDerivWithin_comp_add_left, iteratedFDerivWithin_comp_neg, ring_nf, sub_eq_add_neg
+    set g := fun a ↦ iteratedFDerivWithin 𝕜 n f (-s) a
+    rw [iteratedFDerivWithin_succ_eq_comp_left, iteratedFDerivWithin_succ_eq_comp_left,
+      Function.comp_apply, Function.comp_apply, ih', ← Pi.smul_def,
+      fderivWithin_const_smul_field' ((-1 : 𝕜) ^ n) (f := fun a ↦ g (-a)),
+      fderivWithin_comp_neg (f := g), ← neg_one_smul 𝕜 (fderivWithin 𝕜 _ (-s) (-a)),
+      ← mul_smul _ (-1), ← pow_succ (-1) n, map_smul]
+/-
+**iteratedFDerivWithin_comp_const_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iteratedFDerivWithin_comp_const_sub {f : 𝕜 -> F} {s : Set 𝕜} (n : Nat) (c 
+: 𝕜) : iteratedFDerivWithin 𝕜 n (fun z => f (c - z)) s = fun x => (-1 : 𝕜) ^ n •
+ iteratedFDerivWithin 𝕜 n f (c +ᵥ -s) (c - x)
+参数：n : Nat；c : 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `ContinuousMultilinearMap.ext_ring`：ext_ring [Finite ι] [TopologicalSpace
+ R] ⦃f g : ContinuousMultilinearMap R (fun _ : ι => R) M₂⦄ (h : f (fun _ => 1) =
+ g (fun _ => 1)) : f = …
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `iteratedFDerivWithin_comp_neg`：iteratedFDerivWithin_comp_neg {f : 𝕜 -> F
+} {s : Set 𝕜} (n : Nat) (a : 𝕜) : iteratedFDerivWithin 𝕜 n (fun x => f (-x)) s a
+ = (-1 : 𝕜) ^ n • i…
+· 使用引理 `iteratedFDerivWithin_comp_add_left`：iteratedFDerivWithin_comp_add_left (
+n : Nat) (a : E) (x : E) : iteratedFDerivWithin 𝕜 n (fun z => f (a + z)) s x = i
+teratedFDerivWithin 𝕜 n …
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.RingNF.add_assoc_rev`：add_assoc_rev (a b c : R) : a + (b 
++ c) = a + b + c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Mathlib.Tactic.RingNF.nat_rawCast_1`：nat_rawCast_1 : (Nat.rawCast 1 : R)
+ = 1
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+（共 35 条，此处仅展示前 30 条）
 -/
-theorem iteratedFDerivWithin_comp_const_sub {f : 𝕜 -> F} {s : Set 𝕜} (n : Nat) (c : 𝕜) :
+theorem iteratedFDerivWithin_comp_const_sub {f : 𝕜 → F} {s : Set 𝕜} (n : ℕ) (c : 𝕜) :
     iteratedFDerivWithin 𝕜 n (fun z => f (c - z)) s =
-      fun x => (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (c +ᵥ -s) (c - x) := by
+      fun x ↦ (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (c +ᵥ -s) (c - x) := by
   ext a
   have : (fun z : 𝕜 => f (c - z)) = fun z => (fun w => f (c + w)) (-z) := by
     simp only [sub_eq_add_neg]
-  rw [this]; rw [iteratedFDerivWithin_comp_neg (f := fun w => f (c + w)) n a]; rw [iteratedFDerivWithin_comp_add_left]
+  rw [this, iteratedFDerivWithin_comp_neg (f := fun w => f (c + w)) n a,
+    iteratedFDerivWithin_comp_add_left]
   ring_nf

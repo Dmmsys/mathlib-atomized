@@ -43,22 +43,25 @@ attribute [local trans] Subset.trans Superset.trans
 
 section Filter
 
-variable (p q : α -> Prop) [DecidablePred p] [DecidablePred q] {s t : Finset α}
+variable (p q : α → Prop) [DecidablePred p] [DecidablePred q] {s t : Finset α}
 
-/--
-Definition of `filter` / `filter` 的定义
+/-- `Finset.filter p s` is the set of elements of `s` that satisfy `p`.
 
-English:
-definition filter
-  signature: (s : Finset α)
-  body: ⟨_, s.2.filter p⟩
+For example, one can use `s.filter (· ∈ t)` to get the intersection of `s` with `t : Set α`
+as a `Finset α` (when a `DecidablePred (· ∈ t)` instance is available). -/
+/-
+**Finset.filter** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：filter (s : Finset α) : Finset α
+参数：s : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 filter
-  签名: (s : 有限集 α)
-  定义体: ⟨_, s.2.filter p⟩
+--- 原说明 ---
+`Finset.filter p s` is the set of elements of `s` that satisfy `p`.
 
-Depends on / 依赖: filter
+For example, one can use `s.filter (· ∈ t)` to get the intersection of `s` with 
+`t : Set α`
+as a `Finset α` (when a `DecidablePred (· ∈ t)` instance is available).
 -/
 def filter (s : Finset α) : Finset α :=
   ⟨_, s.2.filter p⟩
@@ -104,7 +107,7 @@ TODO: Write a delaborator
 -/
 @[term_elab setBuilder]
 meta def elabFinsetBuilderSep : TermElab
-  | `({ $x:ident in $s:term | $p }), expectedType? => do
+  | `({ $x:ident ∈ $s:term | $p }), expectedType? => do
     -- If the expected type is known to be `Set ?α`, give up. If it is not known to be `Set ?α` or
     -- `Finset ?α`, check the expected type of `s`.
     unless ← knownToBeFinsetNotSet expectedType? do
@@ -115,646 +118,491 @@ meta def elabFinsetBuilderSep : TermElab
       | _ => throwUnsupportedSyntax
     -- Finally, we can elaborate the syntax as a finset.
     -- TODO: Seems a bit wasteful to have computed the expected type but still use `expectedType?`.
-    elabTerm (← `(Finset.filter (fun $x:ident => $p) $s)) expectedType?
+    elabTerm (← `(Finset.filter (fun $x:ident ↦ $p) $s)) expectedType?
   | _, _ => throwUnsupportedSyntax
 
 end Mathlib.Meta
 
 namespace Finset
 section Filter
-variable (p q : α -> Prop) [DecidablePred p] [DecidablePred q] {s t : Finset α}
+variable (p q : α → Prop) [DecidablePred p] [DecidablePred q] {s t : Finset α}
 
 @[simp]
-/--
-theorem `filter_val` / 定理 `filter_val`
-
-English:
-theorem filter_val
-  given: (s : Finset α)
-  statement: (filter p s).1 = s.1.filter p
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 filter_val
-  条件: (s : 有限集 α)
-  结论: (filter p s).1 = s.1.filter p
-  证明: rfl
-
-@[simp]
+/-
+**Finset.filter_val** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p] (s : Finset α),  
+ (Finset.filter p s).val = Multiset.filter p s.val
+参数：p : α → Prop；s : Finset α；Finset.filter p s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem filter_val (s : Finset α) : (filter p s).1 = s.1.filter p :=
   rfl
 
 @[simp]
-/--
-theorem `filter_subset` / 定理 `filter_subset`
-
-English:
-theorem filter_subset
-  given: (s : Finset α)
-  statement: s.filter p subseteq s
-  proof: Multiset.filter_subset _ _
-
-中文:
-定理 filter_subset
-  条件: (s : 有限集 α)
-  结论: s.filter p subseteq s
-  证明: Multiset.filter_subset _ _
-
-Depends on / 依赖: Multiset, Multiset.filter_subset, filter_subset
+/-
+**Finset.filter_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p] (s : Finset α), F
+inset.filter p s ⊆ s
+参数：p : α → Prop；s : Finset α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.filter_subset`：filter_subset (s : Multiset α) : filter p s subs
+eteq s
 -/
-theorem filter_subset (s : Finset α) : s.filter p subseteq s :=
+theorem filter_subset (s : Finset α) : s.filter p ⊆ s :=
   Multiset.filter_subset _ _
 
 variable {p}
 
 @[simp, grind =]
-/--
-theorem `mem_filter` / 定理 `mem_filter`
-
-English:
-theorem mem_filter
-  given: {s : Finset α} {a : α}
-  statement: a in s.filter p ↔ a in s ∧ p a
-  proof: Multiset.mem_filter
-
-中文:
-定理 mem_filter
-  条件: {s : 有限集 α} {a : α}
-  结论: a in s.filter p ↔ a in s ∧ p a
-  证明: Multiset.mem_filter
-
-Depends on / 依赖: Multiset, Multiset.mem_filter, mem_filter
+/-
+**Finset.mem_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α} {a
+ : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_filter`：mem_filter {a : α} {s} : a in filter p s ↔ a in s ∧
+ p a
 -/
-theorem mem_filter {s : Finset α} {a : α} : a in s.filter p ↔ a in s ∧ p a :=
+theorem mem_filter {s : Finset α} {a : α} : a ∈ s.filter p ↔ a ∈ s ∧ p a :=
   Multiset.mem_filter
-
-/--
-theorem `mem_of_mem_filter` / 定理 `mem_of_mem_filter`
-
-English:
-theorem mem_of_mem_filter
-  given: {s : Finset α} (x : α) (h : x in s.filter p)
-  statement: x in s
-  proof: Multiset.mem_of_mem_filter h
-
-中文:
-定理 mem_of_mem_filter
-  条件: {s : 有限集 α} (x : α) (h : x in s.filter p)
-  结论: x in s
-  证明: Multiset.mem_of_mem_filter h
-
-Depends on / 依赖: Multiset, Multiset.mem_of_mem_filter, mem_of_mem_filter
+/-
+**Finset.mem_of_mem_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α}, ∀
+ x ∈ Finset.filter p s, x ∈ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_of_mem_filter`：mem_of_mem_filter {a : α} {s} (h : a in filt
+er p s) : a in s
 -/
-theorem mem_of_mem_filter {s : Finset α} (x : α) (h : x in s.filter p) : x in s :=
+theorem mem_of_mem_filter {s : Finset α} (x : α) (h : x ∈ s.filter p) : x ∈ s :=
   Multiset.mem_of_mem_filter h
-
-/--
-theorem `filter_ssubset` / 定理 `filter_ssubset`
-
-English:
-theorem filter_ssubset
-  given: {s : Finset α}
-  statement: s.filter p ⊂ s ↔ exists x in s, ¬p x
-  proof: by grind
-
-中文:
-定理 filter_ssubset
-  条件: {s : 有限集 α}
-  结论: s.filter p ⊂ s ↔ 存在 x in s, ¬p x
-  证明: by grind
+/-
+**Finset.filter_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α}, F
+inset.filter p s ⊂ s ↔ ∃ x ∈ s, ¬p x
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem filter_ssubset {s : Finset α} : s.filter p ⊂ s ↔ exists x in s, ¬p x := by grind
+theorem filter_ssubset {s : Finset α} : s.filter p ⊂ s ↔ ∃ x ∈ s, ¬p x := by grind
 
 variable (p)
-
-/--
-theorem `filter_filter` / 定理 `filter_filter`
-
-English:
-theorem filter_filter
-  given: (s : Finset α)
-  statement: (s.filter p).filter q = s.filter fun a => p a ∧ q a
-  proof: by
-  grind
-
-中文:
-定理 filter_filter
-  条件: (s : 有限集 α)
-  结论: (s.filter p).filter q = s.filter fun a => p a ∧ q a
-  证明: by
-  grind
+/-
+**Finset.filter_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p q : α → Prop) [inst : DecidablePred p] [inst_1 : Decid
+ablePred q] (s : Finset α),   Finset.filter q (Finset.filter p s) = {a ∈ s | p a
+ ∧ q a}
+参数：p q : α → Prop；s : Finset α；Finset.filter p s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem filter_filter (s : Finset α) : (s.filter p).filter q = s.filter fun a => p a ∧ q a := by
   grind
-
-/--
-theorem `filter_comm` / 定理 `filter_comm`
-
-English:
-theorem filter_comm
-  given: (s : Finset α)
-  statement: (s.filter p).filter q = (s.filter q).filter p
-  proof: by
-  grind
-
-中文:
-定理 filter_comm
-  条件: (s : 有限集 α)
-  结论: (s.filter p).filter q = (s.filter q).filter p
-  证明: by
-  grind
+/-
+**Finset.filter_comm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p q : α → Prop) [inst : DecidablePred p] [inst_1 : Decid
+ablePred q] (s : Finset α),   Finset.filter q (Finset.filter p s) = Finset.filte
+r p (Finset.filter q s)
+参数：p q : α → Prop；s : Finset α；Finset.filter p s；Finset.filter q s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem filter_comm (s : Finset α) : (s.filter p).filter q = (s.filter q).filter p := by
   grind
 
 -- We can replace an application of filter where the decidability is inferred in "the wrong way".
-/--
-theorem `filter_congr_decidable` / 定理 `filter_congr_decidable`
-
-English:
-theorem filter_congr_decidable
-  statement: (s : Finset α) (p : α -> Prop) (h : DecidablePred p)
-  proof: by congr
-
-@[simp]
-
-中文:
-定理 filter_congr_decidable
-  结论: (s : 有限集 α) (p : α -> 命题) (h : DecidablePred p)
-  证明: by congr
-
-@[simp]
+/-
+**Finset.filter_congr_decidable** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (s : Finset α) (p : α → Prop) (h : DecidablePred p) [inst
+ : DecidablePred p],   Finset.filter p s = Finset.filter p s
+参数：s : Finset α；p : α → Prop；h : DecidablePred p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Pi.instSubsingleton`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Subsing
+leton (β a)], Subsingleton ((a : α) → β a)
+· 使用定理 `instSubsingletonDecidable`：∀ (p : Prop), Subsingleton (Decidable p)
 -/
-theorem filter_congr_decidable (s : Finset α) (p : α -> Prop) (h : DecidablePred p)
+theorem filter_congr_decidable (s : Finset α) (p : α → Prop) (h : DecidablePred p)
     [DecidablePred p] : @filter α p h s = s.filter p := by congr
 
 @[simp]
-/--
-theorem `filter_true` / 定理 `filter_true`
-
-English:
-theorem filter_true
-  given: {h} (s : Finset α)
-  statement: @filter _ (fun _ => True) h s = s
-  proof: by ext; simp
-
-@[simp]
-
-中文:
-定理 filter_true
-  条件: {h} (s : 有限集 α)
-  结论: @filter _ (fun _ => 真) h s = s
-  证明: by ext; simp
-
-@[simp]
+/-
+**Finset.filter_true** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {h : DecidablePred fun x => True} (s : Finset α), {x ∈ s 
+| True} = s
+参数：s : Finset α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem filter_true {h} (s : Finset α) : @filter _ (fun _ => True) h s = s := by ext; simp
 
 @[simp]
-/--
-theorem `filter_false` / 定理 `filter_false`
-
-English:
-theorem filter_false
-  given: {h} (s : Finset α)
-  statement: @filter _ (fun _ => False) h s = ∅
-  proof: by ext; simp
-
-中文:
-定理 filter_false
-  条件: {h} (s : 有限集 α)
-  结论: @filter _ (fun _ => 假) h s = ∅
-  证明: by ext; simp
+/-
+**Finset.filter_false** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {h : DecidablePred fun x => False} (s : Finset α), {x ∈ s
+ | False} = ∅
+参数：s : Finset α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem filter_false {h} (s : Finset α) : @filter _ (fun _ => False) h s = ∅ := by ext; simp
 
 variable {p q}
 
 @[simp]
-/--
-lemma `filter_eq_self` / 引理 `filter_eq_self`
-
-English:
-lemma filter_eq_self
-  statement: s.filter p = s ↔ forall x in s, p x
-  proof: by simp [Finset.ext_iff]
-
-@[simp]
-
-中文:
-引理 filter_eq_self
-  结论: s.filter p = s ↔ 对任意 x in s, p x
-  证明: by simp [Finset.ext_iff]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+/-
+**Finset.filter_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α}, F
+inset.filter p s = s ↔ ∀ x ∈ s, p x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma filter_eq_self : s.filter p = s ↔ forall x in s, p x := by simp [Finset.ext_iff]
+lemma filter_eq_self : s.filter p = s ↔ ∀ x ∈ s, p x := by simp [Finset.ext_iff]
 
 @[simp]
-/--
-theorem `filter_eq_empty_iff` / 定理 `filter_eq_empty_iff`
-
-English:
-theorem filter_eq_empty_iff
-  statement: s.filter p = ∅ ↔ forall ⦃x⦄, x in s -> ¬p x
-  proof: by simp [Finset.ext_iff]
-
-中文:
-定理 filter_eq_empty_iff
-  结论: s.filter p = ∅ ↔ 对任意 ⦃x⦄, x in s -> ¬p x
-  证明: by simp [Finset.ext_iff]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+/-
+**Finset.filter_eq_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α}, F
+inset.filter p s = ∅ ↔ ∀ ⦃x : α⦄, x ∈ s → ¬p x
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem filter_eq_empty_iff : s.filter p = ∅ ↔ forall ⦃x⦄, x in s -> ¬p x := by simp [Finset.ext_iff]
-
-/--
-theorem `filter_nonempty_iff` / 定理 `filter_nonempty_iff`
-
-English:
-theorem filter_nonempty_iff
-  statement: (s.filter p).Nonempty ↔ exists a in s, p a
-  proof: by
+theorem filter_eq_empty_iff : s.filter p = ∅ ↔ ∀ ⦃x⦄, x ∈ s → ¬p x := by simp [Finset.ext_iff]
+/-
+**Finset.filter_nonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α}, (
+Finset.filter p s).Nonempty ↔ ∃ a ∈ s, p a
+参数：Finset.filter p s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem filter_nonempty_iff : (s.filter p).Nonempty ↔ ∃ a ∈ s, p a := by
   simp only [nonempty_iff_ne_empty, Ne, filter_eq_empty_iff, Classical.not_not, not_forall,
     exists_prop]
 
-中文:
-定理 filter_nonempty_iff
-  结论: (s.filter p).非空 ↔ 存在 a in s, p a
-  证明: by
-  simp only [nonempty_iff_ne_empty, Ne, filter_eq_empty_iff, Classical.not_not, not_forall,
-    exists_prop]
+/-- If all elements of a `Finset` satisfy the predicate `p`, `s.filter p` is `s`. -/
+/-
+**Finset.filter_true_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α}, (
+∀ x ∈ s, p x) → Finset.filter p s = s
+参数：∀ x ∈ s, p x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.filter_eq_self`：∀ {α : Type u_1} {p : α → Prop} [inst : Decidable
+Pred p] {s : Finset α}, Finset.filter p s = s ↔ ∀ x ∈ s, p x
 
-Depends on / 依赖: Classical, Classical.not_not, exists_prop, filter_eq_empty_iff, nonempty_iff_ne_empty, not_forall, not_not
+--- 原说明 ---
+If all elements of a `Finset` satisfy the predicate `p`, `s.filter p` is `s`.
 -/
-theorem filter_nonempty_iff : (s.filter p).Nonempty ↔ exists a in s, p a := by
-  simp only [nonempty_iff_ne_empty, Ne, filter_eq_empty_iff, Classical.not_not, not_forall,
-    exists_prop]
+theorem filter_true_of_mem (h : ∀ x ∈ s, p x) : s.filter p = s := filter_eq_self.2 h
 
-/--
-theorem `filter_true_of_mem` / 定理 `filter_true_of_mem`
+/-- If all elements of a `Finset` fail to satisfy the predicate `p`, `s.filter p` is `∅`. -/
+/-
+**Finset.filter_false_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s : Finset α}, (
+∀ x ∈ s, ¬p x) → Finset.filter p s = ∅
+参数：∀ x ∈ s, ¬p x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.filter_eq_empty_iff`：∀ {α : Type u_1} {p : α → Prop} [inst : Deci
+dablePred p] {s : Finset α}, Finset.filter p s = ∅ ↔ ∀ ⦃x : α⦄, x ∈ s → ¬p x
 
-English:
-theorem filter_true_of_mem
-  given: (h : forall x in s, p x)
-  statement: s.filter p = s
-  proof: filter_eq_self.2 h
-
-中文:
-定理 filter_true_of_mem
-  条件: (h : 对任意 x in s, p x)
-  结论: s.filter p = s
-  证明: filter_eq_self.2 h
-
-Depends on / 依赖: filter_eq_self
+--- 原说明 ---
+If all elements of a `Finset` fail to satisfy the predicate `p`, `s.filter p` is
+ `∅`.
 -/
-theorem filter_true_of_mem (h : forall x in s, p x) : s.filter p = s := filter_eq_self.2 h
-
-/--
-theorem `filter_false_of_mem` / 定理 `filter_false_of_mem`
-
-English:
-theorem filter_false_of_mem
-  given: (h : forall x in s, ¬p x)
-  statement: s.filter p = ∅
-  proof: filter_eq_empty_iff.2 h
+theorem filter_false_of_mem (h : ∀ x ∈ s, ¬p x) : s.filter p = ∅ := filter_eq_empty_iff.2 h
 
 @[simp]
-
-中文:
-定理 filter_false_of_mem
-  条件: (h : 对任意 x in s, ¬p x)
-  结论: s.filter p = ∅
-  证明: filter_eq_empty_iff.2 h
-
-@[simp]
-
-Depends on / 依赖: filter_eq_empty_iff
--/
-theorem filter_false_of_mem (h : forall x in s, ¬p x) : s.filter p = ∅ := filter_eq_empty_iff.2 h
-
-@[simp]
-/--
-theorem `filter_const` / 定理 `filter_const`
-
-English:
-theorem filter_const
-  given: (p : Prop) [Decidable p] (s : Finset α)
-  proof: by split_ifs <;> simp [*]
-
-@[congr]
-
-中文:
-定理 filter_const
-  条件: (p : 命题) [可判定 p] (s : 有限集 α)
-  证明: by split_ifs <;> simp [*]
-
-@[congr]
-
-Depends on / 依赖: split_ifs
+/-
+**Finset.filter_const** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : Prop) [inst : Decidable p] (s : Finset α), {_a ∈ s |
+ p} = if p then s else ∅
+参数：p : Prop；s : Finset α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.filter.congr_simp`：∀ {α : Type u_1} (p p_1 : α → Prop),   p = p_1
+ →     ∀ {inst : DecidablePred p} [inst_1 : DecidablePred p_1] (s s_1 : Finset α
+),       s = s…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.filter_true`：∀ {α : Type u_1} {h : DecidablePred fun x => True} (
+s : Finset α), {x ∈ s | True} = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Finset.filter_false`：∀ {α : Type u_1} {h : DecidablePred fun x => False}
+ (s : Finset α), {x ∈ s | False} = ∅
 -/
 theorem filter_const (p : Prop) [Decidable p] (s : Finset α) :
     (s.filter fun _a => p) = if p then s else ∅ := by split_ifs <;> simp [*]
 
 @[congr]
-/--
-theorem `filter_congr` / 定理 `filter_congr`
-
-English:
-theorem filter_congr
-  given: {s : Finset α} (H : forall x in s, p x ↔ q x)
-  statement: filter p s = filter q s
-  proof: eq_of_veq Multiset.filter_congr H
-
-中文:
-定理 filter_congr
-  条件: {s : 有限集 α} (H : 对任意 x in s, p x ↔ q x)
-  结论: filter p s = filter q s
-  证明: eq_of_veq Multiset.filter_congr H
-
-Depends on / 依赖: Multiset, Multiset.filter_congr, eq_of_veq, filter_congr
+/-
+**Finset.filter_congr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p q : α → Prop} [inst : DecidablePred p] [inst_1 : Decid
+ablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Finset.filter p s = Finset.
+filter q s
+参数：∀ x ∈ s, p x ↔ q x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `Multiset.filter_congr`：filter_congr {p q : α -> Prop} [DecidablePred p] 
+[DecidablePred q] {s : Multiset α} : (forall x in s, p x ↔ q x) -> filter p s = 
+filter q s
 -/
-theorem filter_congr {s : Finset α} (H : forall x in s, p x ↔ q x) : filter p s = filter q s :=
-eq_of_veq Multiset.filter_congr H
+theorem filter_congr {s : Finset α} (H : ∀ x ∈ s, p x ↔ q x) : filter p s = filter q s :=
+  eq_of_veq <| Multiset.filter_congr H
 
 variable (p q)
 
 @[simp]
-/--
-theorem `filter_empty` / 定理 `filter_empty`
-
-English:
-theorem filter_empty
-  statement: filter p ∅ = ∅
-  proof: subset_empty.1 filter_subset _ _
-
-@[gcongr]
-
-中文:
-定理 filter_empty
-  结论: filter p ∅ = ∅
-  证明: subset_empty.1 filter_subset _ _
-
-@[gcongr]
-
-Depends on / 依赖: filter_subset, subset_empty
+/-
+**Finset.filter_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p], Finset.filter p 
+∅ = ∅
+参数：p : α → Prop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.subset_empty`：∀ {α : Type u_1} {s : Finset α}, s ⊆ ∅ ↔ s = ∅
+· 使用定理 `Finset.filter_subset`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidableP
+red p] (s : Finset α), Finset.filter p s ⊆ s
 -/
 theorem filter_empty : filter p ∅ = ∅ :=
-subset_empty.1 filter_subset _ _
+  subset_empty.1 <| filter_subset _ _
 
 @[gcongr]
-/--
-theorem `filter_subset_filter` / 定理 `filter_subset_filter`
-
-English:
-theorem filter_subset_filter
-  given: {s t : Finset α} (h : s subseteq t)
-  statement: s.filter p subseteq t.filter p
-  proof: fun _a ha =>
-  mem_filter.2 ⟨h (mem_filter.1 ha).1, (mem_filter.1 ha).2⟩
-
-中文:
-定理 filter_subset_filter
-  条件: {s t : 有限集 α} (h : s subseteq t)
-  结论: s.filter p subseteq t.filter p
-  证明: fun _a ha =>
-  mem_filter.2 ⟨h (mem_filter.1 ha).1, (mem_filter.1 ha).2⟩
+/-
+**Finset.filter_subset_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p] {s t : Finset α},
+ s ⊆ t → Finset.filter p s ⊆ Finset.filter p t
+参数：p : α → Prop。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem filter_subset_filter {s t : Finset α} (h : s subseteq t) : s.filter p subseteq t.filter p := fun _a ha =>
+theorem filter_subset_filter {s t : Finset α} (h : s ⊆ t) : s.filter p ⊆ t.filter p := fun _a ha =>
   mem_filter.2 ⟨h (mem_filter.1 ha).1, (mem_filter.1 ha).2⟩
-
-/--
-theorem `monotone_filter_left` / 定理 `monotone_filter_left`
-
-English:
-theorem monotone_filter_left
-  statement: Monotone (filter p)
-  proof: fun _ _ => filter_subset_filter p
-
-@[gcongr]
-
-中文:
-定理 monotone_filter_left
-  结论: 递增 (filter p)
-  证明: fun _ _ => filter_subset_filter p
-
-@[gcongr]
-
-Depends on / 依赖: filter_subset_filter
+/-
+**Finset.monotone_filter_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p], Monotone (Finset
+.filter p)
+参数：p : α → Prop；Finset.filter p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.filter_subset_filter`：∀ {α : Type u_1} (p : α → Prop) [inst : Dec
+idablePred p] {s t : Finset α}, s ⊆ t → Finset.filter p s ⊆ Finset.filter p t
 -/
 theorem monotone_filter_left : Monotone (filter p) := fun _ _ => filter_subset_filter p
 
 @[gcongr]
-/--
-theorem `monotone_filter_right` / 定理 `monotone_filter_right`
-
-English:
-theorem monotone_filter_right
-  given: (s : Finset α) ⦃p q
-  statement: α -> Prop⦄ [DecidablePred p] [DecidablePred q]
-  proof: by simp +contextual [subset_iff, h]
-
-@[simp, norm_cast]
-
-中文:
-定理 monotone_filter_right
-  条件: (s : 有限集 α) ⦃p q
-  结论: α -> 命题⦄ [DecidablePred p] [DecidablePred q]
-  证明: by simp +contextual [subset_iff, h]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: contextual, subset_iff
+/-
+**Finset.monotone_filter_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (s : Finset α) ⦃p q : α → Prop⦄ [inst : DecidablePred p] 
+[inst_1 : DecidablePred q],   (∀ a ∈ s, p a → q a) → Finset.filter p s ⊆ Finset.
+filter q s
+参数：s : Finset α。
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem monotone_filter_right (s : Finset α) ⦃p q : α -> Prop⦄ [DecidablePred p] [DecidablePred q]
-    (h : forall a in s, p a -> q a) : s.filter p subseteq s.filter q := by simp +contextual [subset_iff, h]
+theorem monotone_filter_right (s : Finset α) ⦃p q : α → Prop⦄ [DecidablePred p] [DecidablePred q]
+    (h : ∀ a ∈ s, p a → q a) : s.filter p ⊆ s.filter q := by simp +contextual [subset_iff, h]
 
 @[simp, norm_cast]
-/--
-theorem `coe_filter` / 定理 `coe_filter`
-
-English:
-theorem coe_filter
-  given: (s : Finset α)
-  statement: ↑(s.filter p) = ({ x in ↑s | p x } : Set α)
-  proof: Set.ext fun _ => mem_filter
-
-中文:
-定理 coe_filter
-  条件: (s : 有限集 α)
-  结论: ↑(s.filter p) = ({ x in ↑s | p x } : 集合 α)
-  证明: Set.ext fun _ => mem_filter
-
-Depends on / 依赖: Set.ext, mem_filter
+/-
+**Finset.coe_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p] (s : Finset α), ↑
+(Finset.filter p s) = {x | x ∈ s ∧ p x}
+参数：p : α → Prop；s : Finset α；Finset.filter p s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
 -/
-theorem coe_filter (s : Finset α) : ↑(s.filter p) = ({ x in ↑s | p x } : Set α) :=
+theorem coe_filter (s : Finset α) : ↑(s.filter p) = ({ x ∈ ↑s | p x } : Set α) :=
   Set.ext fun _ => mem_filter
-
-/--
-theorem `subset_coe_filter_of_subset_forall` / 定理 `subset_coe_filter_of_subset_forall`
-
-English:
-theorem subset_coe_filter_of_subset_forall
-  statement: (s : Finset α) {t : Set α} (h₁ : t subseteq s)
-  proof: fun x hx => (s.coe_filter p).symm ▸ ⟨h₁ hx, h₂ x hx⟩
-
-中文:
-定理 subset_coe_filter_of_subset_对任意
-  结论: (s : 有限集 α) {t : 集合 α} (h₁ : t subseteq s)
-  证明: fun x hx => (s.coe_filter p).symm ▸ ⟨h₁ hx, h₂ x hx⟩
-
-Depends on / 依赖: coe_filter, s.coe_filter
+/-
+**Finset.subset_coe_filter_of_subset_forall** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p] (s : Finset α) {t
+ : Set α},   t ⊆ ↑s → (∀ x ∈ t, p x) → t ⊆ ↑(Finset.filter p s)
+参数：p : α → Prop；s : Finset α；∀ x ∈ t, p x；Finset.filter p s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_filter`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α), ↑(Finset.filter p s) = {x | x ∈ s ∧ p x}
 -/
-theorem subset_coe_filter_of_subset_forall (s : Finset α) {t : Set α} (h₁ : t subseteq s)
-    (h₂ : forall x in t, p x) : t subseteq s.filter p := fun x hx => (s.coe_filter p).symm ▸ ⟨h₁ hx, h₂ x hx⟩
-
-/--
-theorem `disjoint_filter_filter` / 定理 `disjoint_filter_filter`
-
-English:
-theorem disjoint_filter_filter
-  statement: {s t : Finset α}
-  proof: Disjoint.mono (filter_subset _ _) (filter_subset _ _)
-
-中文:
-定理 disjoint_filter_filter
-  结论: {s t : 有限集 α}
-  证明: Disjoint.mono (filter_subset _ _) (filter_subset _ _)
-
-Depends on / 依赖: Disjoint, Disjoint.mono, filter_subset
+theorem subset_coe_filter_of_subset_forall (s : Finset α) {t : Set α} (h₁ : t ⊆ s)
+    (h₂ : ∀ x ∈ t, p x) : t ⊆ s.filter p := fun x hx => (s.coe_filter p).symm ▸ ⟨h₁ hx, h₂ x hx⟩
+/-
+**Finset.disjoint_filter_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {s t : Finset α} {p q : α → Prop} [inst : DecidablePred p
+] [inst_1 : DecidablePred q],   Disjoint s t → Disjoint (Finset.filter p s) (Fin
+set.filter q t)
+参数：Finset.filter p s；Finset.filter q t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.mono`：Disjoint.mono {x y : Perm α} (h : Disjoint f g) (hf : x.s
+upport <= f.support) (hg : y.support <= g.support) : Disjoint x y
+· 使用定理 `Finset.filter_subset`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidableP
+red p] (s : Finset α), Finset.filter p s ⊆ s
 -/
 theorem disjoint_filter_filter {s t : Finset α}
-    {p q : α -> Prop} [DecidablePred p] [DecidablePred q] :
-    Disjoint s t -> Disjoint (s.filter p) (t.filter q) :=
+    {p q : α → Prop} [DecidablePred p] [DecidablePred q] :
+    Disjoint s t → Disjoint (s.filter p) (t.filter q) :=
   Disjoint.mono (filter_subset _ _) (filter_subset _ _)
-
-/--
-lemma `_root_.Set.pairwiseDisjoint_filter` / 引理 `_root_.Set.pairwiseDisjoint_filter`
-
-English:
-lemma _root_.Set.pairwiseDisjoint_filter
-  given: [DecidableEq β] (f : α -> β) (s : Set β) (t : Finset α)
-  proof: by
-  rintro i - j - h u hi hj x hx
-  obtain ⟨-, rfl⟩ : x in t ∧ f x = i := by simpa using hi hx
-  obtain ⟨-, rfl⟩ : x in t ∧ f x = j := by simpa using hj hx
-  contradiction
-
-中文:
-引理 _root_.集合.pairwiseDisjoint_filter
-  条件: [DecidableEq β] (f : α -> β) (s : 集合 β) (t : 有限集 α)
-  证明: by
-  rintro i - j - h u hi hj x hx
-  obtain ⟨-, rfl⟩ : x in t ∧ f x = i := by simpa using hi hx
-  obtain ⟨-, rfl⟩ : x in t ∧ f x = j := by simpa using hj hx
-  contradiction
+/-
+**Finset._root_.Set.pairwiseDisjoint_filter** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Set.pairwiseDisjoint_filter [DecidableEq β] (f : α -> β) (s : Set β) (t : Finset α) :
-    s.PairwiseDisjoint fun x => t.filter (f · = x) := by
+lemma _root_.Set.pairwiseDisjoint_filter [DecidableEq β] (f : α → β) (s : Set β) (t : Finset α) :
+    s.PairwiseDisjoint fun x ↦ t.filter (f · = x) := by
   rintro i - j - h u hi hj x hx
-  obtain ⟨-, rfl⟩ : x in t ∧ f x = i := by simpa using hi hx
-  obtain ⟨-, rfl⟩ : x in t ∧ f x = j := by simpa using hj hx
+  obtain ⟨-, rfl⟩ : x ∈ t ∧ f x = i := by simpa using hi hx
+  obtain ⟨-, rfl⟩ : x ∈ t ∧ f x = j := by simpa using hj hx
   contradiction
-
-/--
-theorem `disjoint_filter_and_not_filter` / 定理 `disjoint_filter_and_not_filter`
-
-English:
-theorem disjoint_filter_and_not_filter
-  proof: by
-  intro _ htp htq
-  simp only [bot_eq_empty, subset_empty]
-  by_contra! ⟨_, hx⟩
-  exact (mem_filter.mp (htq hx)).2.2 (mem_filter.mp (htp hx)).2.1
-
-中文:
-定理 disjoint_filter_and_not_filter
-  证明: by
-  intro _ htp htq
-  simp only [bot_eq_empty, subset_empty]
-  by_contra! ⟨_, hx⟩
-  exact (mem_filter.mp (htq hx)).2.2 (mem_filter.mp (htp hx)).2.1
-
-Depends on / 依赖: bot_eq_empty, mem_filter, mem_filter.mp, subset_empty
+/-
+**Finset.disjoint_filter_and_not_filter** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} (p q : α → Prop) [inst : DecidablePred p] [inst_1 : Decid
+ablePred q] {s : Finset α},   Disjoint ({x ∈ s | p x ∧ ¬q x}) ({x ∈ s | q x ∧ ¬p
+ x})
+参数：p q : α → Prop；{x ∈ s | p x ∧ ¬q x}；{x ∈ s | q x ∧ ¬p x}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem disjoint_filter_and_not_filter :
-    Disjoint (s.filter (fun x => p x ∧ ¬q x)) (s.filter (fun x => q x ∧ ¬p x)) := by
+    Disjoint (s.filter (fun x ↦ p x ∧ ¬q x)) (s.filter (fun x ↦ q x ∧ ¬p x)) := by
   intro _ htp htq
   simp only [bot_eq_empty, subset_empty]
   by_contra! ⟨_, hx⟩
   exact (mem_filter.mp (htq hx)).2.2 (mem_filter.mp (htp hx)).2.1
 
 variable {p q}
-
-/--
-lemma `filter_inj` / 引理 `filter_inj`
-
-English:
-lemma filter_inj
-  statement: s.filter p = t.filter p ↔ forall ⦃a⦄, p a -> (a in s ↔ a in t)
-  proof: by
-  simp [Finset.ext_iff]
-
-中文:
-引理 filter_inj
-  结论: s.filter p = t.filter p ↔ 对任意 ⦃a⦄, p a -> (a in s ↔ a in t)
-  证明: by
-  simp [Finset.ext_iff]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+/-
+**Finset.filter_inj** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred p] {s t : Finset α},
+   Finset.filter p s = Finset.filter p t ↔ ∀ ⦃a : α⦄, p a → (a ∈ s ↔ a ∈ t)
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma filter_inj : s.filter p = t.filter p ↔ forall ⦃a⦄, p a -> (a in s ↔ a in t) := by
+lemma filter_inj : s.filter p = t.filter p ↔ ∀ ⦃a⦄, p a → (a ∈ s ↔ a ∈ t) := by
   simp [Finset.ext_iff]
-
-/--
-lemma `filter_inj'` / 引理 `filter_inj'`
-
-English:
-lemma filter_inj'
-  statement: s.filter p = s.filter q ↔ forall ⦃a⦄, a in s -> (p a ↔ q a)
-  proof: by
+/-
+**Finset.filter_inj'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {p q : α → Prop} [inst : DecidablePred p] [inst_1 : Decid
+ablePred q] {s : Finset α},   Finset.filter p s = Finset.filter q s ↔ ∀ ⦃a : α⦄,
+ a ∈ s → (p a ↔ q a)
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma filter_inj' : s.filter p = s.filter q ↔ ∀ ⦃a⦄, a ∈ s → (p a ↔ q a) := by
   simp [Finset.ext_iff]
 
 @[simp]
-
-中文:
-引理 filter_inj'
-  结论: s.filter p = s.filter q ↔ 对任意 ⦃a⦄, a in s -> (p a ↔ q a)
-  证明: by
-  simp [Finset.ext_iff]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+/-
+**Finset.filter_mem_eq_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {s t : Finset α} [inst : DecidablePred fun x => x ∈ s], s
+ ⊆ t → {x ∈ t | x ∈ s} = s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma filter_inj' : s.filter p = s.filter q ↔ forall ⦃a⦄, a in s -> (p a ↔ q a) := by
-  simp [Finset.ext_iff]
-
-@[simp]
-/--
-lemma `filter_mem_eq_of_subset` / 引理 `filter_mem_eq_of_subset`
-
-English:
-lemma filter_mem_eq_of_subset
-  given: [DecidablePred (· in s)] (hst : s subseteq t)
-  proof: by
-  grind
-
-中文:
-引理 filter_mem_eq_of_subset
-  条件: [DecidablePred (· in s)] (hst : s subseteq t)
-  证明: by
-  grind
--/
-lemma filter_mem_eq_of_subset [DecidablePred (· in s)] (hst : s subseteq t) :
-    t.filter (· in s) = s := by
+lemma filter_mem_eq_of_subset [DecidablePred (· ∈ s)] (hst : s ⊆ t) :
+    t.filter (· ∈ s) = s := by
   grind
 
 end Filter
 
 end Finset
+

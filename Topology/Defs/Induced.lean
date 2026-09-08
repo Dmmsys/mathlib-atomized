@@ -61,67 +61,37 @@ variable {X Y : Type*}
   that are preimages of some open set in `Y`.
   This is the coarsest topology that makes `f` continuous. -/
 @[instance_reducible]
-/--
-Definition of `induced` / `induced` 的定义
+/-
+**TopologicalSpace.induced** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace`。
+形式化陈述：induced (f : X -> Y) (t : TopologicalSpace Y) : TopologicalSpace X where I
+sOpen s
+参数：f : X -> Y；t : TopologicalSpace Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition induced
-  signature: (f : X -> Y) (t : TopologicalSpace Y)
-  body: exists t, IsOpen t ∧ f ⁻¹' t = s
-  isOpen_univ := ⟨univ, isOpen_univ, preimage_univ⟩
-  isOpen_inter := by
-    rintro s₁ s₂ ⟨s'₁, hs₁, rfl⟩ ⟨s'₂, hs₂, rfl⟩
-    exact ⟨s'₁ inter s'₂, hs₁.inter hs₂, preimage_inter⟩
-  isOpen_sUnion S h := by
-    choose! g hgo hfg using h
-refine ⟨⋃₀ (g '' S), isOpen_sUnion forall_mem_image.2 hgo, ?_⟩
-    rw [preimage_sUnion]; rw [biUnion_image]; rw [sUnion_eq_biUnion]
-    exact iUnion₂_congr hfg
-
-中文:
-定义 induced
-  签名: (f : X -> Y) (t : 拓扑空间 Y)
-  定义体: exists t, IsOpen t ∧ f ⁻¹' t = s
-  isOpen_univ := ⟨univ, isOpen_univ, preimage_univ⟩
-  isOpen_inter := by
-    rintro s₁ s₂ ⟨s'₁, hs₁, rfl⟩ ⟨s'₂, hs₂, rfl⟩
-    exact ⟨s'₁ inter s'₂, hs₁.inter hs₂, preimage_inter⟩
-  isOpen_sUnion S h := by
-    choose! g hgo hfg using h
-refine ⟨⋃₀ (g '' S), isOpen_sUnion forall_mem_image.2 hgo, ?_⟩
-    rw [preimage_sUnion]; rw [biUnion_image]; rw [sUnion_eq_biUnion]
-    exact iUnion₂_congr hfg
-
-Depends on / 依赖: IsOpen
+--- 原说明 ---
+Given `f : X → Y` and a topology on `Y`,
+  the induced topology on `X` is the collection of sets
+  that are preimages of some open set in `Y`.
+  This is the coarsest topology that makes `f` continuous.
 -/
-def induced (f : X -> Y) (t : TopologicalSpace Y) : TopologicalSpace X where
-  IsOpen s := exists t, IsOpen t ∧ f ⁻¹' t = s
+def induced (f : X → Y) (t : TopologicalSpace Y) : TopologicalSpace X where
+  IsOpen s := ∃ t, IsOpen t ∧ f ⁻¹' t = s
   isOpen_univ := ⟨univ, isOpen_univ, preimage_univ⟩
   isOpen_inter := by
     rintro s₁ s₂ ⟨s'₁, hs₁, rfl⟩ ⟨s'₂, hs₂, rfl⟩
-    exact ⟨s'₁ inter s'₂, hs₁.inter hs₂, preimage_inter⟩
+    exact ⟨s'₁ ∩ s'₂, hs₁.inter hs₂, preimage_inter⟩
   isOpen_sUnion S h := by
     choose! g hgo hfg using h
-refine ⟨⋃₀ (g '' S), isOpen_sUnion forall_mem_image.2 hgo, ?_⟩
-    rw [preimage_sUnion]; rw [biUnion_image]; rw [sUnion_eq_biUnion]
+    refine ⟨⋃₀ (g '' S), isOpen_sUnion <| forall_mem_image.2 hgo, ?_⟩
+    rw [preimage_sUnion, biUnion_image, sUnion_eq_biUnion]
     exact iUnion₂_congr hfg
-
-/--
-Instance `_root_.instTopologicalSpaceSubtype` / 实例 `_root_.instTopologicalSpaceSubtype`
-
-English:
-instance _root_.instTopologicalSpaceSubtype
-  signature: {p : X -> Prop} [t : TopologicalSpace X]
-  body: induced (↑) t
-
-中文:
-实例 _root_.instTopologicalSpaceSubtype
-  签名: {p : X -> 命题} [t : 拓扑空间 X]
-  定义体: induced (↑) t
-
-Depends on / 依赖: induced
+/-
+**TopologicalSpace._root_.instTopologicalSpaceSubtype** 是 Mathlib 中的一个实例，位于命名空间 
+`TopologicalSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance _root_.instTopologicalSpaceSubtype {p : X -> Prop} [t : TopologicalSpace X] :
+instance _root_.instTopologicalSpaceSubtype {p : X → Prop} [t : TopologicalSpace X] :
     TopologicalSpace (Subtype p) :=
   induced (↑) t
 
@@ -130,28 +100,23 @@ instance _root_.instTopologicalSpaceSubtype {p : X -> Prop} [t : TopologicalSpac
   `s : Set Y` is open if the preimage of `s` is open.
   This is the finest topology that makes `f` continuous. -/
 @[instance_reducible]
-/--
-Definition of `coinduced` / `coinduced` 的定义
+/-
+**TopologicalSpace.coinduced** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace`。
+形式化陈述：coinduced (f : X -> Y) (t : TopologicalSpace X) : TopologicalSpace Y where
+ IsOpen s
+参数：f : X -> Y；t : TopologicalSpace X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.isOpen_univ`：∀ {X : Type u} [self : TopologicalSpace X]
+, TopologicalSpace.IsOpen Set.univ
 
-English:
-definition coinduced
-  signature: (f : X -> Y) (t : TopologicalSpace X)
-  body: IsOpen (f ⁻¹' s)
-  isOpen_univ := t.isOpen_univ
-  isOpen_inter _ _ h₁ h₂ := h₁.inter h₂
-  isOpen_sUnion s h := by simpa only [preimage_sUnion] using isOpen_biUnion h
-
-中文:
-定义 coinduced
-  签名: (f : X -> Y) (t : 拓扑空间 X)
-  定义体: IsOpen (f ⁻¹' s)
-  isOpen_univ := t.isOpen_univ
-  isOpen_inter _ _ h₁ h₂ := h₁.inter h₂
-  isOpen_sUnion s h := by simpa only [preimage_sUnion] using isOpen_biUnion h
-
-Depends on / 依赖: IsOpen
+--- 原说明 ---
+Given `f : X → Y` and a topology on `X`,
+  the coinduced topology on `Y` is defined such that
+  `s : Set Y` is open if the preimage of `s` is open.
+  This is the finest topology that makes `f` continuous.
 -/
-def coinduced (f : X -> Y) (t : TopologicalSpace X) : TopologicalSpace Y where
+def coinduced (f : X → Y) (t : TopologicalSpace X) : TopologicalSpace Y where
   IsOpen s := IsOpen (f ⁻¹' s)
   isOpen_univ := t.isOpen_univ
   isOpen_inter _ _ h₁ h₂ := h₁.inter h₂
@@ -161,37 +126,24 @@ end TopologicalSpace
 
 namespace WithTopology
 
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
-
-English:
-instance instTopologicalSpace
-  signature: (X : Type*) (t : TopologicalSpace X)
-  body: .coinduced (WithTopology.toTopology t) t
-
-中文:
-实例 instTopologicalSpace
-  签名: (X : 类型) (t : 拓扑空间 X)
-  定义体: .coinduced (WithTopology.toTopology t) t
-
-Depends on / 依赖: WithTopology, WithTopology.toTopology, coinduced, toTopology
+/-
+**WithTopology.instTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `WithTopology`。
+形式化陈述：instTopologicalSpace (X : Type*) (t : TopologicalSpace X) : TopologicalSpa
+ce (WithTopology X t)
+参数：X : Type*；t : TopologicalSpace X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instTopologicalSpace (X : Type*) (t : TopologicalSpace X) :
     TopologicalSpace (WithTopology X t) :=
   .coinduced (WithTopology.toTopology t) t
-
-/--
-lemma `topology_eq_coinduced` / 引理 `topology_eq_coinduced`
-
-English:
-lemma topology_eq_coinduced
-  given: (X : Type*) (t : TopologicalSpace X)
-  proof: rfl
-
-中文:
-引理 topology_eq_coinduced
-  条件: (X : 类型) (t : 拓扑空间 X)
-  证明: rfl
+/-
+**WithTopology.topology_eq_coinduced** 是 Mathlib 中的一个引理，位于命名空间 `WithTopology`。
+形式化陈述：topology_eq_coinduced (X : Type*) (t : TopologicalSpace X) : instTopologic
+alSpace X t = .coinduced (.toTopology t) t
+参数：X : Type*；t : TopologicalSpace X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma topology_eq_coinduced (X : Type*) (t : TopologicalSpace X) :
     instTopologicalSpace X t = .coinduced (.toTopology t) t :=
@@ -199,24 +151,13 @@ lemma topology_eq_coinduced (X : Type*) (t : TopologicalSpace X) :
 
 /-- `WithTopology.ofTopology` and `WithTopology.toTopology` as an equivalence. -/
 @[simps]
-/--
-Definition of `equiv` / `equiv` 的定义
+/-
+**WithTopology.equiv** 是 Mathlib 中的一个定义，位于命名空间 `WithTopology`。
+形式化陈述：(X : Type u_1) → (t : TopologicalSpace X) → WithTopology X t ≃ X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equiv
-  signature: (X : Type*) (t : TopologicalSpace X)
-  body: WithTopology.ofTopology
-  invFun := WithTopology.toTopology t
-  left_inv _ := rfl
-  right_inv _ := rfl
-
-中文:
-定义 equiv
-  签名: (X : 类型) (t : 拓扑空间 X)
-  定义体: WithTopology.ofTopology
-  invFun := WithTopology.toTopology t
-  left_inv _ := rfl
-  right_inv _ := rfl
+--- 原说明 ---
+`WithTopology.ofTopology` and `WithTopology.toTopology` as an equivalence.
 -/
 protected def equiv (X : Type*) (t : TopologicalSpace X) : WithTopology X t ≃ X where
   toFun := WithTopology.ofTopology
@@ -229,44 +170,53 @@ end WithTopology
 namespace Topology
 variable {X Y : Type*} [tX : TopologicalSpace X] [tY : TopologicalSpace Y]
 
-/--
-Definition of `IsCoherentWith` / `IsCoherentWith` 的定义
+/-- We say that restrictions of the topology on `X` to sets from a family `S`
+generates the original topology,
+if either of the following equivalent conditions hold:
 
-English:
-structure IsCoherentWith
-  parameters: (S : Set (Set X))
-  axioms and operations (1):
-    - isOpen_of_forall_induced((u : Set X)) : (forall s in S, IsOpen ((↑) ⁻¹' u : Set s)) -> IsOpen u
+- a set which is relatively open in each `s ∈ S` is open;
+- a set which is relatively closed in each `s ∈ S` is closed;
+- for any topological space `Y`, a function `f : X → Y` is continuous
+  provided that it is continuous on each `s ∈ S`.
+-/
+/-
+**Topology.IsCoherentWith** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：{X : Type u_1} → [tX : TopologicalSpace X] → Set (Set X) → Prop
+参数：Set X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 是余herentWith
-  参数: (S : 集合 (集合 X))
-  公理与运算 (1 个):
-    - isOpen_of_forall_induced((u : 集合 X)) : (对任意 s in S, 是开集 ((↑) ⁻¹' u : 集合 s)) -> 是开集 u
+--- 原说明 ---
+We say that restrictions of the topology on `X` to sets from a family `S`
+generates the original topology,
+if either of the following equivalent conditions hold:
+
+- a set which is relatively open in each `s ∈ S` is open;
+- a set which is relatively closed in each `s ∈ S` is closed;
+- for any topological space `Y`, a function `f : X → Y` is continuous
+  provided that it is continuous on each `s ∈ S`.
 -/
 structure IsCoherentWith (S : Set (Set X)) : Prop where
-  isOpen_of_forall_induced (u : Set X) : (forall s in S, IsOpen ((↑) ⁻¹' u : Set s)) -> IsOpen u
+  isOpen_of_forall_induced (u : Set X) : (∀ s ∈ S, IsOpen ((↑) ⁻¹' u : Set s)) → IsOpen u
 
 /-- A function `f : X → Y` between topological spaces is inducing if the topology on `X` is induced
 by the topology on `Y` through `f`, meaning that a set `s : Set X` is open iff it is the preimage
 under `f` of some open set `t : Set Y`. -/
 @[fun_prop, mk_iff]
-/--
-Definition of `IsInducing` / `IsInducing` 的定义
+/-
+**Topology.IsInducing** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [tX : TopologicalSpace X] → [tY : Topolo
+gicalSpace Y] → (X → Y) → Prop
+参数：X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsInducing
-  parameters: (f : X -> Y)
-  axioms and operations (1):
-    - eq_induced : tX = tY.induced f
-
-中文:
-结构 是Inducing
-  参数: (f : X -> Y)
-  公理与运算 (1 个):
-    - eq_induced : tX = tY.induced f
+--- 原说明 ---
+A function `f : X → Y` between topological spaces is inducing if the topology on
+ `X` is induced
+by the topology on `Y` through `f`, meaning that a set `s : Set X` is open iff i
+t is the preimage
+under `f` of some open set `t : Set Y`.
 -/
-structure IsInducing (f : X -> Y) : Prop where
+structure IsInducing (f : X → Y) : Prop where
   /-- The topology on the domain is equal to the induced topology. -/
   eq_induced : tX = tY.induced f
 
@@ -274,117 +224,91 @@ structure IsInducing (f : X -> Y) : Prop where
 coinduced by the topology on `X` through `f`, meaning that a set `s : Set Y` is open iff its
 preimage is open. -/
 @[fun_prop, mk_iff isCoinducing_iff']
-/--
-Definition of `IsCoinducing` / `IsCoinducing` 的定义
+/-
+**Topology.IsCoinducing** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [tX : TopologicalSpace X] → [tY : Topolo
+gicalSpace Y] → (X → Y) → Prop
+参数：X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsCoinducing
-  parameters: (f : X -> Y)
-  axioms and operations (1):
-    - eq_coinduced : tY = tX.coinduced f
-
-中文:
-结构 是余inducing
-  参数: (f : X -> Y)
-  公理与运算 (1 个):
-    - eq_coinduced : tY = tX.coinduced f
+--- 原说明 ---
+A function `f : X → Y` between topological spaces is coinducing if the topology 
+on `Y` is
+coinduced by the topology on `X` through `f`, meaning that a set `s : Set Y` is 
+open iff its
+preimage is open.
 -/
-structure IsCoinducing (f : X -> Y) : Prop where
+structure IsCoinducing (f : X → Y) : Prop where
   /-- The topology on the codomain is equal to the coinduced topology. -/
   eq_coinduced : tY = tX.coinduced f
 
 /-- A function between topological spaces is an embedding if it is injective,
   and for all `s : Set X`, `s` is open iff it is the preimage of an open set. -/
 @[fun_prop, mk_iff]
-/--
-Definition of `IsEmbedding` / `IsEmbedding` 的定义
+/-
+**Topology.IsEmbedding** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [tX : TopologicalSpace X] → [tY : Topolo
+gicalSpace Y] → (X → Y) → Prop
+参数：X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsEmbedding
-  parameters: (f : X -> Y)
-  extends: IsInducing f
-  axioms and operations (1):
-    - injective : Function.Injective f
-
-中文:
-结构 是嵌入
-  参数: (f : X -> Y)
-  继承: 是Inducing f
-  公理与运算 (1 个):
-    - injective : 函数.单射 f
+--- 原说明 ---
+A function between topological spaces is an embedding if it is injective,
+  and for all `s : Set X`, `s` is open iff it is the preimage of an open set.
 -/
-structure IsEmbedding (f : X -> Y) : Prop extends IsInducing f where
+structure IsEmbedding (f : X → Y) : Prop extends IsInducing f where
   /-- A topological embedding is injective. -/
   injective : Function.Injective f
 
 /-- An open embedding is an embedding with open range. -/
 @[fun_prop, mk_iff]
-/--
-Definition of `IsOpenEmbedding` / `IsOpenEmbedding` 的定义
+/-
+**Topology.IsOpenEmbedding** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [tX : TopologicalSpace X] → [tY : Topolo
+gicalSpace Y] → (X → Y) → Prop
+参数：X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsOpenEmbedding
-  parameters: (f : X -> Y)
-  extends: IsEmbedding f
-  axioms and operations (1):
-    - isOpen_range : IsOpen range f
-
-中文:
-结构 是开嵌入
-  参数: (f : X -> Y)
-  继承: 是嵌入 f
-  公理与运算 (1 个):
-    - isOpen_range : 是开集 range f
+--- 原说明 ---
+An open embedding is an embedding with open range.
 -/
-structure IsOpenEmbedding (f : X -> Y) : Prop extends IsEmbedding f where
+structure IsOpenEmbedding (f : X → Y) : Prop extends IsEmbedding f where
   /-- The range of an open embedding is an open set. -/
-isOpen_range : IsOpen range f
+  isOpen_range : IsOpen <| range f
 
 /-- A closed embedding is an embedding with closed image. -/
 @[fun_prop, mk_iff]
-/--
-Definition of `IsClosedEmbedding` / `IsClosedEmbedding` 的定义
+/-
+**Topology.IsClosedEmbedding** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [tX : TopologicalSpace X] → [tY : Topolo
+gicalSpace Y] → (X → Y) → Prop
+参数：X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsClosedEmbedding
-  parameters: (f : X -> Y)
-  extends: IsEmbedding f
-  axioms and operations (1):
-    - isClosed_range : IsClosed range f
-
-中文:
-结构 是闭嵌入
-  参数: (f : X -> Y)
-  继承: 是嵌入 f
-  公理与运算 (1 个):
-    - isClosed_range : 是闭集 range f
+--- 原说明 ---
+A closed embedding is an embedding with closed image.
 -/
-structure IsClosedEmbedding (f : X -> Y) : Prop extends IsEmbedding f where
+structure IsClosedEmbedding (f : X → Y) : Prop extends IsEmbedding f where
   /-- The range of a closed embedding is a closed set. -/
-isClosed_range : IsClosed range f
+  isClosed_range : IsClosed <| range f
 
 /-- A function between topological spaces is a quotient map if it is surjective,
   and for all `s : Set Y`, `s` is open iff its preimage is an open set. -/
 @[fun_prop, mk_iff]
-/--
-Definition of `IsQuotientMap` / `IsQuotientMap` 的定义
+/-
+**Topology.IsQuotientMap** 是 Mathlib 中的一个归纳类型，位于命名空间 `Topology`。
+形式化陈述：{X : Type u_3} → {Y : Type u_4} → [TopologicalSpace X] → [TopologicalSpace
+ Y] → (X → Y) → Prop
+参数：X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsQuotientMap
-  parameters: {X : Type*} {Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-  extends: isCoinducing : IsCoinducing f
-  axioms and operations (1):
-    - surjective : Function.Surjective f
-
-中文:
-结构 是商映射
-  参数: {X : 类型} {Y : 类型} [拓扑空间 X] [拓扑空间 Y]
-  继承: isCoinducing : 是余inducing f
-  公理与运算 (1 个):
-    - surjective : 函数.满射 f
+--- 原说明 ---
+A function between topological spaces is a quotient map if it is surjective,
+  and for all `s : Set Y`, `s` is open iff its preimage is an open set.
 -/
 structure IsQuotientMap {X : Type*} {Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-    (f : X -> Y) : Prop extends isCoinducing : IsCoinducing f where
+    (f : X → Y) : Prop extends isCoinducing : IsCoinducing f where
   surjective : Function.Surjective f
 
 end Topology
+

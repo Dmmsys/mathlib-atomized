@@ -39,24 +39,31 @@ public section
 
 universe u v
 
-/--
-Definition of `HasQuotient` / `HasQuotient` 的定义
+/-- `HasQuotient A B` is a notation typeclass that allows us to write `A ⧸ b` for `b : B`.
+This allows the usual notation for quotients of algebraic structures,
+such as groups, modules and rings.
 
-English:
-class HasQuotient
-  parameters: (A : outParam <| Type u) (B : Type v)
-  axioms and operations (1):
-    - Quotient((A)) : B -> Type max u v
+`A` is a parameter, despite being unused in the definition below, so it appears in the notation.
+-/
+/-
+**HasQuotient** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：outParam (Type u) → Type v → Type (max (u + 1) (v + 1))
+参数：Type u；max (u + 1) (v + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有商
-  参数: (A : outParam <| 类型u) (B : 类型v)
-  公理与运算 (1 个):
-    - Quotient((A)) : B -> 类型 最大值 u v
+--- 原说明 ---
+`HasQuotient A B` is a notation typeclass that allows us to write `A ⧸ b` for `b
+ : B`.
+This allows the usual notation for quotients of algebraic structures,
+such as groups, modules and rings.
+
+`A` is a parameter, despite being unused in the definition below, so it appears 
+in the notation.
 -/
 class HasQuotient (A : outParam <| Type u) (B : Type v) where
   /-- `HasQuotient.Quotient A b` (denoted as `A ⧸ b`) is the quotient of the type `A` by `b`. -/
-  Quotient (A) : B -> Type max u v
+  Quotient (A) : B → Type max u v
 
 /-- Quotient notation based on the `HasQuotient` typeclass -/
 notation:35 G " ⧸ " H:34 => HasQuotient.Quotient G H
+

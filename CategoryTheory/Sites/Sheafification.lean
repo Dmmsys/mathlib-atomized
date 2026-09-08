@@ -32,246 +32,149 @@ variable {C : Type u₁} [Category.{v₁} C] (J : GrothendieckTopology C)
 variable (A : Type u₂) [Category.{v₂} A]
 
 /--
-Definition of `HasWeakSheafify` / `HasWeakSheafify` 的定义
+A proposition saying that the inclusion functor from sheaves to presheaves admits a left adjoint.
+-/
+/-
+**CategoryTheory.HasWeakSheafify** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：HasWeakSheafify : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasWeakSheafify
-  signature: : Prop
-  body: (sheafToPresheaf J A).IsRightAdjoint
-
-中文:
-缩写 HasWeakSheafify
-  签名: : 命题
-  定义体: (sheafToPresheaf J A).IsRightAdjoint
-
-Depends on / 依赖: IsRightAdjoint, sheafToPresheaf
+--- 原说明 ---
+A proposition saying that the inclusion functor from sheaves to presheaves admit
+s a left adjoint.
 -/
 abbrev HasWeakSheafify : Prop := (sheafToPresheaf J A).IsRightAdjoint
 
 /--
-Definition of `HasSheafify` / `HasSheafify` 的定义
+`HasSheafify` means that the inclusion functor from sheaves to presheaves admits a left exact
+left adjoint (sheafification).
 
-English:
-class HasSheafify
-  parameters: : Prop where
-  axioms and operations (2):
-    - isRightAdjoint : HasWeakSheafify J A
-    - isLeftExact : PreservesFiniteLimits ((sheafToPresheaf J A).leftAdjoint)
+Given a functor, preserving finite limits, `F : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A` and an adjunction
+`adj : F ⊣ sheafToPresheaf J A`, use `HasSheafify.mk'` to construct a `HasSheafify` instance.
+-/
+/-
+**CategoryTheory.HasSheafify** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     Catego
+ryTheory.GrothendieckTopology C → (A : Type u₂) → [CategoryTheory.Category.{v₂, 
+u₂} A] → Prop
+参数：A : Type u₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有Sheafify
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - isRightAdjoint : HasWeakSheafify J A
-    - isLeftExact : 保持FiniteLimits ((sheafToPresheaf J A).leftAdjoint)
+--- 原说明 ---
+`HasSheafify` means that the inclusion functor from sheaves to presheaves admits
+ a left exact
+left adjoint (sheafification).
 
-Depends on / 依赖: _apply, _eq_zero_iff_forall_adj, hA.reachable, reachable
+Given a functor, preserving finite limits, `F : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A` and an ad
+junction
+`adj : F ⊣ sheafToPresheaf J A`, use `HasSheafify.mk'` to construct a `HasSheafi
+fy` instance.
 -/
 class HasSheafify : Prop where
   isRightAdjoint : HasWeakSheafify J A
   isLeftExact : PreservesFiniteLimits ((sheafToPresheaf J A).leftAdjoint)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasSheafify
-  signature: J A] : HasWeakSheafify J A
-  body: HasSheafify.isRightAdjoint
-
-noncomputable section
-
-中文:
-实例 [有Sheafify
-  签名: J A] : HasWeakSheafify J A
-  定义体: HasSheafify.isRightAdjoint
-
-noncomputable section
-
-Depends on / 依赖: HasSheafify, HasSheafify.isRightAdjoint, isRightAdjoint
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasSheafify J A] : HasWeakSheafify J A := HasSheafify.isRightAdjoint
 
 noncomputable section
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasSheafify
-  signature: J A] : PreservesFiniteLimits ((sheafToPresheaf J A).leftAdjoint)
-  body: HasSheafify.isLeftExact
-
-中文:
-实例 [有Sheafify
-  签名: J A] : 保持FiniteLimits ((sheafToPresheaf J A).leftAdjoint)
-  定义体: HasSheafify.isLeftExact
-
-Depends on / 依赖: HasSheafify, HasSheafify.isLeftExact, isLeftExact
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasSheafify J A] : PreservesFiniteLimits ((sheafToPresheaf J A).leftAdjoint) :=
   HasSheafify.isLeftExact
-
-/--
-theorem `HasSheafify.mk'` / 定理 `HasSheafify.mk'`
-
-English:
-theorem HasSheafify.mk'
-  statement: {F : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A} (adj : F ⊣ sheafToPresheaf J A)
-  proof: ⟨F, ⟨adj⟩⟩
-  isLeftExact := ⟨by
-    have : (sheafToPresheaf J A).IsRightAdjoint := ⟨_, ⟨adj⟩⟩
-    exact fun _ _ _ => preservesLimitsOfShape_of_natIso
-      (adj.leftAdjointUniq (Adjunction.ofIsRightAdjoint (sheafToPresheaf J A)))⟩
-
-中文:
-定理 有Sheafify.mk'
-  结论: {F : (Cᵒᵖ ⥤ A) ⥤ 层 J A} (adj : F ⊣ sheafToPresheaf J A)
-  证明: ⟨F, ⟨adj⟩⟩
-  isLeftExact := ⟨by
-    have : (sheafToPresheaf J A).IsRightAdjoint := ⟨_, ⟨adj⟩⟩
-    exact fun _ _ _ => preservesLimitsOfShape_of_natIso
-      (adj.leftAdjointUniq (Adjunction.ofIsRightAdjoint (sheafToPresheaf J A)))⟩
+/-
+**CategoryTheory.HasSheafify.mk'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.HasSh
+eafify`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (J : CategoryT
+heory.GrothendieckTopology C) (A : Type u₂)   [inst_1 : CategoryTheory.Category.
+{v₂, u₂} A]   {F : CategoryTheory.Functor (CategoryTheory.Functor Cᵒᵖ A) (Catego
+ryTheory.Sheaf J A)}   (adj : F ⊣ CategoryTheory.sheafToPresheaf J A) [CategoryT
+heory.Limits.PreservesFiniteLimits F],   CategoryTheory.HasSheafify J A
+参数：J : CategoryTheory.GrothendieckTopology C；A : Type u₂；CategoryTheory.Functor 
+Cᵒᵖ A；CategoryTheory.Sheaf J A；adj : F ⊣ CategoryTheory.sheafToPresheaf J A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimitsOfShape_of_natIso`：preservesLimitsO
+fShape_of_natIso {F G : C ⥤ D} (h : F ≅ G) [PreservesLimitsOfShape J F] : Preser
+vesLimitsOfShape J G where preservesLimit {K…
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteLimits.preservesFiniteLimits`：∀ {C 
+: Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : C
+ategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
 -/
 theorem HasSheafify.mk' {F : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A} (adj : F ⊣ sheafToPresheaf J A)
     [PreservesFiniteLimits F] : HasSheafify J A where
   isRightAdjoint := ⟨F, ⟨adj⟩⟩
   isLeftExact := ⟨by
     have : (sheafToPresheaf J A).IsRightAdjoint := ⟨_, ⟨adj⟩⟩
-    exact fun _ _ _ => preservesLimitsOfShape_of_natIso
+    exact fun _ _ _ ↦ preservesLimitsOfShape_of_natIso
       (adj.leftAdjointUniq (Adjunction.ofIsRightAdjoint (sheafToPresheaf J A)))⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasSheafify (⊥ : GrothendieckTopology C) A
-  body: HasSheafify.mk' _ _
-    (sheafBotEquivalence A).symm.toAdjunction
-
-中文:
-实例 :
-  签名: 有Sheafify (⊥ : Grothendieck拓扑 C) A
-  定义体: HasSheafify.mk' _ _
-    (sheafBotEquivalence A).symm.toAdjunction
-
-Depends on / 依赖: HasSheafify, HasSheafify.mk, sheafBotEquivalence, symm.toAdjunction, toAdjunction
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasSheafify (⊥ : GrothendieckTopology C) A :=
   HasSheafify.mk' _ _
     (sheafBotEquivalence A).symm.toAdjunction
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F G : Sheaf J A} [HasWeakSheafify J A] (f : F ⟶ G) [Mono f] : Mono f.hom :=
   inferInstanceAs (Mono ((sheafToPresheaf J A).map f))
 
-/--
-Definition of `presheafToSheaf` / `presheafToSheaf` 的定义
+/-- The sheafification functor, left adjoint to the inclusion. -/
+/-
+**CategoryTheory.presheafToSheaf** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：presheafToSheaf [HasWeakSheafify J A] : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presheafToSheaf
-  signature: [HasWeakSheafify J A]
-  body: (sheafToPresheaf J A).leftAdjoint
-
-中文:
-定义 presheafToSheaf
-  签名: [HasWeakSheafify J A]
-  定义体: (sheafToPresheaf J A).leftAdjoint
-
-Depends on / 依赖: leftAdjoint, sheafToPresheaf
+--- 原说明 ---
+The sheafification functor, left adjoint to the inclusion.
 -/
 def presheafToSheaf [HasWeakSheafify J A] : (Cᵒᵖ ⥤ A) ⥤ Sheaf J A :=
   (sheafToPresheaf J A).leftAdjoint
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasSheafify
-  signature: J A] : PreservesFiniteLimits (presheafToSheaf J A)
-  body: HasSheafify.isLeftExact
-
-中文:
-实例 [有Sheafify
-  签名: J A] : 保持FiniteLimits (presheafToSheaf J A)
-  定义体: HasSheafify.isLeftExact
-
-Depends on / 依赖: HasSheafify, HasSheafify.isLeftExact, isLeftExact
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasSheafify J A] : PreservesFiniteLimits (presheafToSheaf J A) :=
   HasSheafify.isLeftExact
 
-/--
-Definition of `sheafificationAdjunction` / `sheafificationAdjunction` 的定义
+/-- The sheafification-inclusion adjunction. -/
+/-
+**CategoryTheory.sheafificationAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：sheafificationAdjunction [HasWeakSheafify J A] : presheafToSheaf J A ⊣ she
+afToPresheaf J A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafificationAdjunction
-  signature: [HasWeakSheafify J A]
-  body: Adjunction.ofIsRightAdjoint _
-
-中文:
-定义 sheafificationAdjunction
-  签名: [HasWeakSheafify J A]
-  定义体: Adjunction.ofIsRightAdjoint _
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint
+--- 原说明 ---
+The sheafification-inclusion adjunction.
 -/
 def sheafificationAdjunction [HasWeakSheafify J A] :
     presheafToSheaf J A ⊣ sheafToPresheaf J A := Adjunction.ofIsRightAdjoint _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasWeakSheafify
-  signature: J A] : (presheafToSheaf J A).IsLeftAdjoint
-  body: ⟨_, ⟨sheafificationAdjunction J A⟩⟩
-
-中文:
-实例 [HasWeakSheafify
-  签名: J A] : (presheafToSheaf J A).是左伴随
-  定义体: ⟨_, ⟨sheafificationAdjunction J A⟩⟩
-
-Depends on / 依赖: sheafificationAdjunction
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasWeakSheafify J A] : (presheafToSheaf J A).IsLeftAdjoint :=
   ⟨_, ⟨sheafificationAdjunction J A⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasWeakSheafify
-  signature: J A] : Reflective (sheafToPresheaf J A) where
-  body: presheafToSheaf J A
-  adj := sheafificationAdjunction _ _
-
-中文:
-实例 [HasWeakSheafify
-  签名: J A] : 反射 (sheafToPresheaf J A) where
-  定义体: presheafToSheaf J A
-  adj := sheafificationAdjunction _ _
-
-Depends on / 依赖: presheafToSheaf
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasWeakSheafify J A] : Reflective (sheafToPresheaf J A) where
   L := presheafToSheaf J A
   adj := sheafificationAdjunction _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasSheafify
-  signature: J A] : PreservesFiniteLimits (reflector (sheafToPresheaf J A))
-  body: inferInstanceAs (PreservesFiniteLimits (presheafToSheaf _ _))
-
-中文:
-实例 [有Sheafify
-  签名: J A] : 保持FiniteLimits (reflector (sheafToPresheaf J A))
-  定义体: inferInstanceAs (PreservesFiniteLimits (presheafToSheaf _ _))
-
-Depends on / 依赖: PreservesFiniteLimits, presheafToSheaf
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasSheafify J A] : PreservesFiniteLimits (reflector (sheafToPresheaf J A)) :=
   inferInstanceAs (PreservesFiniteLimits (presheafToSheaf _ _))
@@ -280,245 +183,178 @@ end
 
 variable {D : Type*} [Category* D] [HasWeakSheafify J D]
 
-/--
-Definition of `sheafify` / `sheafify` 的定义
+/-- The sheafification of a presheaf `P`. -/
+/-
+**CategoryTheory.sheafify** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafify (P : Cᵒᵖ ⥤ D) : Cᵒᵖ ⥤ D
+参数：P : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sheafify
-  signature: (P : Cᵒᵖ ⥤ D)
-  body: .obj .obj P presheafToSheaf J D
-
-中文:
-缩写 sheafify
-  签名: (P : Cᵒᵖ ⥤ D)
-  定义体: .obj .obj P presheafToSheaf J D
-
-Depends on / 依赖: presheafToSheaf
+--- 原说明 ---
+The sheafification of a presheaf `P`.
 -/
 noncomputable abbrev sheafify (P : Cᵒᵖ ⥤ D) : Cᵒᵖ ⥤ D :=
-.obj .obj P presheafToSheaf J D
+  presheafToSheaf J D |>.obj P |>.obj
 
-/--
-Definition of `toSheafify` / `toSheafify` 的定义
+/-- The canonical map from `P` to its sheafification. -/
+/-
+**CategoryTheory.toSheafify** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toSheafify (P : Cᵒᵖ ⥤ D) : P ⟶ sheafify J P
+参数：P : Cᵒᵖ ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toSheafify
-  signature: (P : Cᵒᵖ ⥤ D)
-  body: .unit.app P sheafificationAdjunction J D
-
-@[simp]
-
-中文:
-缩写 toSheafify
-  签名: (P : Cᵒᵖ ⥤ D)
-  定义体: .unit.app P sheafificationAdjunction J D
-
-@[simp]
-
-Depends on / 依赖: sheafificationAdjunction, unit.app
+--- 原说明 ---
+The canonical map from `P` to its sheafification.
 -/
 noncomputable abbrev toSheafify (P : Cᵒᵖ ⥤ D) : P ⟶ sheafify J P :=
-.unit.app P sheafificationAdjunction J D
+  sheafificationAdjunction J D |>.unit.app P
 
 @[simp]
-/--
-theorem `sheafificationAdjunction_unit_app` / 定理 `sheafificationAdjunction_unit_app`
-
-English:
-theorem sheafificationAdjunction_unit_app
-  given: (P : Cᵒᵖ ⥤ D)
-  proof: rfl
-
-中文:
-定理 sheafificationAdjunction_unit_app
-  条件: (P : Cᵒᵖ ⥤ D)
-  证明: rfl
+/-
+**CategoryTheory.sheafificationAdjunction_unit_app** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：sheafificationAdjunction_unit_app (P : Cᵒᵖ ⥤ D) : (sheafificationAdjunctio
+n J D).unit.app P = toSheafify J P
+参数：P : Cᵒᵖ ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sheafificationAdjunction_unit_app (P : Cᵒᵖ ⥤ D) :
     (sheafificationAdjunction J D).unit.app P = toSheafify J P := rfl
 
-/--
-Definition of `sheafifyMap` / `sheafifyMap` 的定义
+/-- The canonical map on sheafifications induced by a morphism. -/
+/-
+**CategoryTheory.sheafifyMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafifyMap {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) : sheafify J P ⟶ sheafify J Q
+参数：η : P ⟶ Q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sheafifyMap
-  signature: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q)
-  body: .hom .map η presheafToSheaf J D
-
-@[simp]
-
-中文:
-缩写 sheafifyMap
-  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q)
-  定义体: .hom .map η presheafToSheaf J D
-
-@[simp]
-
-Depends on / 依赖: presheafToSheaf
+--- 原说明 ---
+The canonical map on sheafifications induced by a morphism.
 -/
 noncomputable abbrev sheafifyMap {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) : sheafify J P ⟶ sheafify J Q :=
-.hom .map η presheafToSheaf J D
+  presheafToSheaf J D |>.map η |>.hom
 
 @[simp]
-/--
-theorem `sheafifyMap_id` / 定理 `sheafifyMap_id`
-
-English:
-theorem sheafifyMap_id
-  given: (P : Cᵒᵖ ⥤ D)
-  statement: sheafifyMap J (𝟙 P) = 𝟙 (sheafify J P)
-  proof: by
-  simp [sheafifyMap, sheafify]
-
-@[simp]
-
-中文:
-定理 sheafifyMap_id
-  条件: (P : Cᵒᵖ ⥤ D)
-  结论: sheafifyMap J (𝟙 P) = 𝟙 (sheafify J P)
-  证明: by
-  simp [sheafifyMap, sheafify]
-
-@[simp]
-
-Depends on / 依赖: sheafify, sheafifyMap
+/-
+**CategoryTheory.sheafifyMap_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafifyMap_id (P : Cᵒᵖ ⥤ D) : sheafifyMap J (𝟙 P) = 𝟙 (sheafify J P)
+参数：P : Cᵒᵖ ⥤ D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sheafifyMap_id (P : Cᵒᵖ ⥤ D) : sheafifyMap J (𝟙 P) = 𝟙 (sheafify J P) := by
   simp [sheafifyMap, sheafify]
 
 @[simp]
-/--
-theorem `sheafifyMap_comp` / 定理 `sheafifyMap_comp`
-
-English:
-theorem sheafifyMap_comp
-  given: {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R)
-  proof: by
-  simp [sheafifyMap, sheafify]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 sheafifyMap_comp
-  条件: {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R)
-  证明: by
-  simp [sheafifyMap, sheafify]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: sheafify, sheafifyMap
+/-
+**CategoryTheory.sheafifyMap_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafifyMap_comp {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) : sheafifyMap J
+ (η ≫ γ) = sheafifyMap J η ≫ sheafifyMap J γ
+参数：η : P ⟶ Q；γ : Q ⟶ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sheafifyMap_comp {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) :
     sheafifyMap J (η ≫ γ) = sheafifyMap J η ≫ sheafifyMap J γ := by
   simp [sheafifyMap, sheafify]
 
 @[reassoc (attr := simp)]
-/--
-theorem `toSheafify_naturality` / 定理 `toSheafify_naturality`
-
-English:
-theorem toSheafify_naturality
-  given: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q)
-  proof: .unit.naturality η sheafificationAdjunction J D
-
-中文:
-定理 toSheafify_naturality
-  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q)
-  证明: .unit.naturality η sheafificationAdjunction J D
-
-Depends on / 依赖: naturality, sheafificationAdjunction, unit.naturality
+/-
+**CategoryTheory.toSheafify_naturality** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：toSheafify_naturality {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) : η ≫ toSheafify J _ = t
+oSheafify J _ ≫ sheafifyMap J η
+参数：η : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 theorem toSheafify_naturality {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) :
     η ≫ toSheafify J _ = toSheafify J _ ≫ sheafifyMap J η :=
-.unit.naturality η sheafificationAdjunction J D
+  sheafificationAdjunction J D |>.unit.naturality η
 
 variable (D)
 
-/--
-Definition of `sheafification` / `sheafification` 的定义
+/-- The sheafification of a presheaf `P`, as a functor. -/
+/-
+**CategoryTheory.sheafification** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafification : (Cᵒᵖ ⥤ D) ⥤ Cᵒᵖ ⥤ D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sheafification
-  signature: : (Cᵒᵖ ⥤ D) ⥤ Cᵒᵖ ⥤ D
-  body: presheafToSheaf J D ⋙ sheafToPresheaf J D
-
-中文:
-缩写 sheafification
-  签名: : (Cᵒᵖ ⥤ D) ⥤ Cᵒᵖ ⥤ D
-  定义体: presheafToSheaf J D ⋙ sheafToPresheaf J D
-
-Depends on / 依赖: presheafToSheaf, sheafToPresheaf
+--- 原说明 ---
+The sheafification of a presheaf `P`, as a functor.
 -/
 noncomputable abbrev sheafification : (Cᵒᵖ ⥤ D) ⥤ Cᵒᵖ ⥤ D :=
   presheafToSheaf J D ⋙ sheafToPresheaf J D
-
-/--
-theorem `sheafification_obj` / 定理 `sheafification_obj`
-
-English:
-theorem sheafification_obj
-  given: (P : Cᵒᵖ ⥤ D)
-  statement: (sheafification J D).obj P = sheafify J P
-  proof: rfl
-
-中文:
-定理 sheafification_obj
-  条件: (P : Cᵒᵖ ⥤ D)
-  结论: (sheafification J D).obj P = sheafify J P
-  证明: rfl
+/-
+**CategoryTheory.sheafification_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafification_obj (P : Cᵒᵖ ⥤ D) : (sheafification J D).obj P = sheafify J
+ P
+参数：P : Cᵒᵖ ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sheafification_obj (P : Cᵒᵖ ⥤ D) : (sheafification J D).obj P = sheafify J P :=
   rfl
-
-/--
-theorem `sheafification_map` / 定理 `sheafification_map`
-
-English:
-theorem sheafification_map
-  given: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q)
-  proof: rfl
-
-中文:
-定理 sheafification_map
-  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q)
-  证明: rfl
+/-
+**CategoryTheory.sheafification_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafification_map {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) : (sheafification J D).map 
+η = sheafifyMap J η
+参数：η : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sheafification_map {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) :
     (sheafification J D).map η = sheafifyMap J η :=
   rfl
 
-/--
-Definition of `toSheafification` / `toSheafification` 的定义
+/-- The canonical map from `P` to its sheafification, as a natural transformation. -/
+/-
+**CategoryTheory.toSheafification** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toSheafification : 𝟭 _ ⟶ sheafification J D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toSheafification
-  signature: : 𝟭 _ ⟶ sheafification J D
-  body: .unit sheafificationAdjunction J D
-
-中文:
-缩写 toSheafification
-  签名: : 𝟭 _ ⟶ sheafification J D
-  定义体: .unit sheafificationAdjunction J D
-
-Depends on / 依赖: sheafificationAdjunction
+--- 原说明 ---
+The canonical map from `P` to its sheafification, as a natural transformation.
 -/
 noncomputable abbrev toSheafification : 𝟭 _ ⟶ sheafification J D :=
-.unit sheafificationAdjunction J D
-
-/--
-theorem `toSheafification_app` / 定理 `toSheafification_app`
-
-English:
-theorem toSheafification_app
-  given: (P : Cᵒᵖ ⥤ D)
-  statement: (toSheafification J D).app P = toSheafify J P
-  proof: rfl
-
-中文:
-定理 toSheafification_app
-  条件: (P : Cᵒᵖ ⥤ D)
-  结论: (toSheafification J D).app P = toSheafify J P
-  证明: rfl
+  sheafificationAdjunction J D |>.unit
+/-
+**CategoryTheory.toSheafification_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：toSheafification_app (P : Cᵒᵖ ⥤ D) : (toSheafification J D).app P = toShea
+fify J P
+参数：P : Cᵒᵖ ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toSheafification_app (P : Cᵒᵖ ⥤ D) : (toSheafification J D).app P = toSheafify J P :=
   rfl
@@ -527,131 +363,118 @@ variable {D}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `isIso_toSheafify` / 定理 `isIso_toSheafify`
-
-English:
-theorem isIso_toSheafify
-  given: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
-  statement: IsIso (toSheafify J P)
-  proof: by
-  refine ⟨(sheafificationAdjunction J D |>.counit.app ⟨P, hP⟩).hom, ?_, ?_⟩
-.right_triangle_components ⟨P, hP⟩ · exact sheafificationAdjunction J D
-  · change (sheafToPresheaf _ _).map _ ≫ _ = _
-    change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨P, hP⟩) = _
-    rw [← (sheafificationAdjunction J D).inv_counit_map (X := ⟨P]; rw [hP⟩)]
-    simp
-
-中文:
-定理 isIso_toSheafify
-  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
-  结论: 是同构 (toSheafify J P)
-  证明: by
-  refine ⟨(sheafificationAdjunction J D |>.counit.app ⟨P, hP⟩).hom, ?_, ?_⟩
-.right_triangle_components ⟨P, hP⟩ · exact sheafificationAdjunction J D
-  · change (sheafToPresheaf _ _).map _ ≫ _ = _
-    change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨P, hP⟩) = _
-    rw [← (sheafificationAdjunction J D).inv_counit_map (X := ⟨P]; rw [hP⟩)]
-    simp
-
-Depends on / 依赖: counit, counit.app, inv_counit_map, right_triangle_components, sheafToPresheaf, sheafificationAdjunction, unit.app
+/-
+**CategoryTheory.isIso_toSheafify** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：isIso_toSheafify {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) : IsIso (toShea
+fify J P)
+参数：hP : Presheaf.IsSheaf J P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppCounitOfFullOfFaithful`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Adjunction.inv_counit_map`：inv_counit_map {X : D} [IsIso 
+(h.counit.app X)] : inv (R.map (h.counit.app X)) = h.unit.app (R.obj X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isIso_toSheafify {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) : IsIso (toSheafify J P) := by
   refine ⟨(sheafificationAdjunction J D |>.counit.app ⟨P, hP⟩).hom, ?_, ?_⟩
-.right_triangle_components ⟨P, hP⟩ · exact sheafificationAdjunction J D
+  · exact sheafificationAdjunction J D |>.right_triangle_components ⟨P, hP⟩
   · change (sheafToPresheaf _ _).map _ ≫ _ = _
     change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨P, hP⟩) = _
-    rw [← (sheafificationAdjunction J D).inv_counit_map (X := ⟨P]; rw [hP⟩)]
+    rw [← (sheafificationAdjunction J D).inv_counit_map (X := ⟨P, hP⟩)]
     simp
 
-/--
-Definition of `isoSheafify` / `isoSheafify` 的定义
+/-- If `P` is a sheaf, then `P` is isomorphic to `sheafify J P`. -/
+/-
+**CategoryTheory.isoSheafify** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：isoSheafify {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) : P ≅ sheafify J P
+参数：hP : Presheaf.IsSheaf J P。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isIso_toSheafify`：isIso_toSheafify {P : Cᵒᵖ ⥤ D} (hP : Pr
+esheaf.IsSheaf J P) : IsIso (toSheafify J P)
 
-English:
-definition isoSheafify
-  signature: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
-  body: letI := isIso_toSheafify J hP
-  asIso (toSheafify J P)
-
-@[simp]
-
-中文:
-定义 isoSheafify
-  签名: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
-  定义体: letI := isIso_toSheafify J hP
-  asIso (toSheafify J P)
-
-@[simp]
-
-Depends on / 依赖: isIso_toSheafify, toSheafify
+--- 原说明 ---
+If `P` is a sheaf, then `P` is isomorphic to `sheafify J P`.
 -/
 noncomputable def isoSheafify {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) : P ≅ sheafify J P :=
   letI := isIso_toSheafify J hP
   asIso (toSheafify J P)
 
 @[simp]
-/--
-theorem `isoSheafify_hom` / 定理 `isoSheafify_hom`
-
-English:
-theorem isoSheafify_hom
-  given: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
-  proof: rfl
-
-中文:
-定理 isoSheafify_hom
-  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
-  证明: rfl
+/-
+**CategoryTheory.isoSheafify_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：isoSheafify_hom {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) : (isoSheafify J
+ hP).hom = toSheafify J P
+参数：hP : Presheaf.IsSheaf J P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isoSheafify_hom {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) :
     (isoSheafify J hP).hom = toSheafify J P :=
   rfl
 
-/--
-Definition of `sheafifyLift` / `sheafifyLift` 的定义
+/-- Given a sheaf `Q` and a morphism `P ⟶ Q`, construct a morphism from `sheafify J P` to `Q`. -/
+/-
+**CategoryTheory.sheafifyLift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafifyLift {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) : she
+afify J P ⟶ Q
+参数：η : P ⟶ Q；hQ : Presheaf.IsSheaf J Q。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sheafifyLift
-  signature: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
-  body: .hom .symm η (sheafificationAdjunction J D).homEquiv P ⟨Q, hQ⟩
-
-中文:
-定义 sheafifyLift
-  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
-  定义体: .hom .symm η (sheafificationAdjunction J D).homEquiv P ⟨Q, hQ⟩
-
-Depends on / 依赖: homEquiv, sheafificationAdjunction
+--- 原说明 ---
+Given a sheaf `Q` and a morphism `P ⟶ Q`, construct a morphism from `sheafify J 
+P` to `Q`.
 -/
 noncomputable def sheafifyLift {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) :
     sheafify J P ⟶ Q :=
-.hom .symm η (sheafificationAdjunction J D).homEquiv P ⟨Q, hQ⟩
+  (sheafificationAdjunction J D).homEquiv P ⟨Q, hQ⟩ |>.symm η |>.hom
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `sheafificationAdjunction_counit_app_val` / 定理 `sheafificationAdjunction_counit_app_val`
-
-English:
-theorem sheafificationAdjunction_counit_app_val
-  given: (P : Sheaf J D)
-  proof: by
-  unfold sheafifyLift
-  rw [Adjunction.homEquiv_counit]
-  simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 sheafificationAdjunction_counit_app_val
-  条件: (P : 层 J D)
-  证明: by
-  unfold sheafifyLift
-  rw [Adjunction.homEquiv_counit]
-  simp
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_counit, homEquiv_counit, sheafifyLift
+/-
+**CategoryTheory.sheafificationAdjunction_counit_app_val** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory`。
+形式化陈述：sheafificationAdjunction_counit_app_val (P : Sheaf J D) : ((sheafification
+Adjunction J D).counit.app P).hom = sheafifyLift J (𝟙 P.obj) P.property
+参数：P : Sheaf J D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_counit`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sheafificationAdjunction_counit_app_val (P : Sheaf J D) :
     ((sheafificationAdjunction J D).counit.app P).hom = sheafifyLift J (𝟙 P.obj) P.property := by
@@ -660,182 +483,186 @@ theorem sheafificationAdjunction_counit_app_val (P : Sheaf J D) :
   simp
 
 @[reassoc (attr := simp)]
-/--
-theorem `toSheafify_sheafifyLift` / 定理 `toSheafify_sheafifyLift`
-
-English:
-theorem toSheafify_sheafifyLift
-  given: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
-  proof: by
-  rw [toSheafify]; rw [sheafifyLift]; rw [Adjunction.homEquiv_counit]
-  change _ ≫ (sheafToPresheaf J D).map _ ≫ _ = _
-  simp only [Adjunction.unit_naturality_assoc]
-  change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨Q, hQ⟩) ≫ _ = _
-  change _ ≫ _ ≫ (sheafToPresheaf J D).map _ = _
-  rw [sheafificationAdjunction J D |>.right_triangle_components (Y := ⟨Q]; rw [hQ⟩)]
-  simp
-
-中文:
-定理 toSheafify_sheafifyLift
-  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
-  证明: by
-  rw [toSheafify]; rw [sheafifyLift]; rw [Adjunction.homEquiv_counit]
-  change _ ≫ (sheafToPresheaf J D).map _ ≫ _ = _
-  simp only [Adjunction.unit_naturality_assoc]
-  change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨Q, hQ⟩) ≫ _ = _
-  change _ ≫ _ ≫ (sheafToPresheaf J D).map _ = _
-  rw [sheafificationAdjunction J D |>.right_triangle_components (Y := ⟨Q]; rw [hQ⟩)]
-  simp
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_counit, Adjunction.unit_naturality_assoc, homEquiv_counit, right_triangle_components, sheafToPresheaf, sheafificationAdjunction, sheafifyLift, toSheafify, unit.app, unit_naturality_assoc
+/-
+**CategoryTheory.toSheafify_sheafifyLift** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：toSheafify_sheafifyLift {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf
+ J Q) : toSheafify J P ≫ sheafifyLift J η hQ = η
+参数：η : P ⟶ Q；hQ : Presheaf.IsSheaf J Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.toSheafify.eq_1`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D : Type u_1}  
+ [inst_1 : CategoryT…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.sheafifyLift.eq_1`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D : Type u_1}
+   [inst_1 : CategoryT…
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_counit`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality_assoc`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Adjunction.right_triangle_components`：∀ {C : Type u₁} [in
+st : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.
+Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toSheafify_sheafifyLift {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) :
     toSheafify J P ≫ sheafifyLift J η hQ = η := by
-  rw [toSheafify]; rw [sheafifyLift]; rw [Adjunction.homEquiv_counit]
+  rw [toSheafify, sheafifyLift, Adjunction.homEquiv_counit]
   change _ ≫ (sheafToPresheaf J D).map _ ≫ _ = _
   simp only [Adjunction.unit_naturality_assoc]
   change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨Q, hQ⟩) ≫ _ = _
   change _ ≫ _ ≫ (sheafToPresheaf J D).map _ = _
-  rw [sheafificationAdjunction J D |>.right_triangle_components (Y := ⟨Q]; rw [hQ⟩)]
+  rw [sheafificationAdjunction J D |>.right_triangle_components (Y := ⟨Q, hQ⟩)]
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `sheafifyLift_unique` / 定理 `sheafifyLift_unique`
-
-English:
-theorem sheafifyLift_unique
-  statement: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
-  proof: by
-  intro h
-  rw [toSheafify] at h
-  rw [sheafifyLift]
-  let γ' : (presheafToSheaf J D).obj P ⟶ ⟨Q, hQ⟩ := ⟨γ⟩
-  change γ'.hom = _
-  rw [← Sheaf.hom_ext_iff]; rw [← Adjunction.homEquiv_apply_eq]; rw [Adjunction.homEquiv_unit]
-  exact h
-
-@[simp]
-
-中文:
-定理 sheafifyLift_unique
-  结论: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
-  证明: by
-  intro h
-  rw [toSheafify] at h
-  rw [sheafifyLift]
-  let γ' : (presheafToSheaf J D).obj P ⟶ ⟨Q, hQ⟩ := ⟨γ⟩
-  change γ'.hom = _
-  rw [← Sheaf.hom_ext_iff]; rw [← Adjunction.homEquiv_apply_eq]; rw [Adjunction.homEquiv_unit]
-  exact h
-
-@[simp]
-
-Depends on / 依赖: Adjunction, Adjunction.homEquiv_apply_eq, Adjunction.homEquiv_unit, Sheaf.hom_ext_iff, homEquiv_apply_eq, homEquiv_unit, hom_ext_iff, presheafToSheaf, sheafifyLift, toSheafify
+/-
+**CategoryTheory.sheafifyLift_unique** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafifyLift_unique {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q
+) (γ : sheafify J P ⟶ Q) : toSheafify J P ≫ γ = η -> γ = sheafifyLift J η hQ
+参数：η : P ⟶ Q；hQ : Presheaf.IsSheaf J Q；γ : sheafify J P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.sheafifyLift.eq_1`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D : Type u_1}
+   [inst_1 : CategoryT…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Sheaf.hom_ext_iff`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {J : CategoryTheory.GrothendieckTopology C} {A : Type u₂} 
+  [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_apply_eq`：homEquiv_apply_eq {A : C} {
+B : D} (f : F.obj A ⟶ B) (g : A ⟶ G.obj B) : adj.homEquiv A B f = g ↔ f = (adj.h
+omEquiv A B).symm g
+· 使用定理 `CategoryTheory.Adjunction.homEquiv_unit`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.toSheafify.eq_1`：∀ {C : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D : Type u_1}  
+ [inst_1 : CategoryT…
 -/
 theorem sheafifyLift_unique {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
-    (γ : sheafify J P ⟶ Q) : toSheafify J P ≫ γ = η -> γ = sheafifyLift J η hQ := by
+    (γ : sheafify J P ⟶ Q) : toSheafify J P ≫ γ = η → γ = sheafifyLift J η hQ := by
   intro h
   rw [toSheafify] at h
   rw [sheafifyLift]
   let γ' : (presheafToSheaf J D).obj P ⟶ ⟨Q, hQ⟩ := ⟨γ⟩
   change γ'.hom = _
-  rw [← Sheaf.hom_ext_iff]; rw [← Adjunction.homEquiv_apply_eq]; rw [Adjunction.homEquiv_unit]
+  rw [← Sheaf.hom_ext_iff, ← Adjunction.homEquiv_apply_eq, Adjunction.homEquiv_unit]
   exact h
 
 @[simp]
-/--
-theorem `isoSheafify_inv` / 定理 `isoSheafify_inv`
-
-English:
-theorem isoSheafify_inv
-  given: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
-  proof: by
-  apply sheafifyLift_unique
-  simp [Iso.comp_inv_eq]
-
-中文:
-定理 isoSheafify_inv
-  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
-  证明: by
-  apply sheafifyLift_unique
-  simp [Iso.comp_inv_eq]
-
-Depends on / 依赖: Iso.comp_inv_eq, comp_inv_eq, sheafifyLift_unique
+/-
+**CategoryTheory.isoSheafify_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：isoSheafify_inv {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) : (isoSheafify J
+ hP).inv = sheafifyLift J (𝟙 _) hP
+参数：hP : Presheaf.IsSheaf J P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.sheafifyLift_unique`：sheafifyLift_unique {P Q : Cᵒᵖ ⥤ D} 
+(η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) (γ : sheafify J P ⟶ Q) : toSheafify J P 
+≫ γ = η -> γ = sheafifyL…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isoSheafify_inv {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) :
     (isoSheafify J hP).inv = sheafifyLift J (𝟙 _) hP := by
   apply sheafifyLift_unique
   simp [Iso.comp_inv_eq]
-
-/--
-theorem `sheafify_hom_ext` / 定理 `sheafify_hom_ext`
-
-English:
-theorem sheafify_hom_ext
-  statement: {P Q : Cᵒᵖ ⥤ D} (η γ : sheafify J P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
-  proof: by
-  rw [sheafifyLift_unique J _ hQ _ h]; rw [← h]
-  exact (sheafifyLift_unique J _ hQ _ h.symm).symm
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 sheafify_hom_ext
-  结论: {P Q : Cᵒᵖ ⥤ D} (η γ : sheafify J P ⟶ Q) (hQ : 预层.是层 J Q)
-  证明: by
-  rw [sheafifyLift_unique J _ hQ _ h]; rw [← h]
-  exact (sheafifyLift_unique J _ hQ _ h.symm).symm
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: h.symm, sheafifyLift_unique
+/-
+**CategoryTheory.sheafify_hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafify_hom_ext {P Q : Cᵒᵖ ⥤ D} (η γ : sheafify J P ⟶ Q) (hQ : Presheaf.I
+sSheaf J Q) (h : toSheafify J P ≫ η = toSheafify J P ≫ γ) : η = γ
+参数：η γ : sheafify J P ⟶ Q；hQ : Presheaf.IsSheaf J Q；h : toSheafify J P ≫ η = toS
+heafify J P ≫ γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.sheafifyLift_unique`：sheafifyLift_unique {P Q : Cᵒᵖ ⥤ D} 
+(η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) (γ : sheafify J P ⟶ Q) : toSheafify J P 
+≫ γ = η -> γ = sheafifyL…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem sheafify_hom_ext {P Q : Cᵒᵖ ⥤ D} (η γ : sheafify J P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
     (h : toSheafify J P ≫ η = toSheafify J P ≫ γ) : η = γ := by
-  rw [sheafifyLift_unique J _ hQ _ h]; rw [← h]
+  rw [sheafifyLift_unique J _ hQ _ h, ← h]
   exact (sheafifyLift_unique J _ hQ _ h.symm).symm
 
 @[reassoc (attr := simp)]
-/--
-theorem `sheafifyMap_sheafifyLift` / 定理 `sheafifyMap_sheafifyLift`
-
-English:
-theorem sheafifyMap_sheafifyLift
-  statement: {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R)
-  proof: by
-  apply sheafifyLift_unique
-  rw [← Category.assoc]; rw [← toSheafify_naturality]; rw [Category.assoc]; rw [toSheafify_sheafifyLift]
-
-中文:
-定理 sheafifyMap_sheafifyLift
-  结论: {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R)
-  证明: by
-  apply sheafifyLift_unique
-  rw [← Category.assoc]; rw [← toSheafify_naturality]; rw [Category.assoc]; rw [toSheafify_sheafifyLift]
-
-Depends on / 依赖: Category, Category.assoc, sheafifyLift_unique, toSheafify_naturality, toSheafify_sheafifyLift
+/-
+**CategoryTheory.sheafifyMap_sheafifyLift** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：sheafifyMap_sheafifyLift {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) (hR : P
+resheaf.IsSheaf J R) : sheafifyMap J η ≫ sheafifyLift J γ hR = sheafifyLift J (η
+ ≫ γ) hR
+参数：η : P ⟶ Q；γ : Q ⟶ R；hR : Presheaf.IsSheaf J R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.sheafifyLift_unique`：sheafifyLift_unique {P Q : Cᵒᵖ ⥤ D} 
+(η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) (γ : sheafify J P ⟶ Q) : toSheafify J P 
+≫ γ = η -> γ = sheafifyL…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.toSheafify_naturality`：toSheafify_naturality {P Q : Cᵒᵖ ⥤
+ D} (η : P ⟶ Q) : η ≫ toSheafify J _ = toSheafify J _ ≫ sheafifyMap J η
+· 使用定理 `CategoryTheory.toSheafify_sheafifyLift`：toSheafify_sheafifyLift {P Q : C
+ᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) : toSheafify J P ≫ sheafifyLift 
+J η hQ = η
 -/
 theorem sheafifyMap_sheafifyLift {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R)
     (hR : Presheaf.IsSheaf J R) :
     sheafifyMap J η ≫ sheafifyLift J γ hR = sheafifyLift J (η ≫ γ) hR := by
   apply sheafifyLift_unique
-  rw [← Category.assoc]; rw [← toSheafify_naturality]; rw [Category.assoc]; rw [toSheafify_sheafifyLift]
-
-/--
-lemma `sheafifyLift_comp` / 引理 `sheafifyLift_comp`
-
-English:
-lemma sheafifyLift_comp
-  statement: {F P Q : Cᵒᵖ ⥤ D} (a : F ⟶ P) (hP : Presheaf.IsSheaf J P)
-  proof: (sheafifyLift_unique _ _ _ _ (by simp)).symm
-
-中文:
-引理 sheafifyLift_comp
-  结论: {F P Q : Cᵒᵖ ⥤ D} (a : F ⟶ P) (hP : 预层.是层 J P)
-  证明: (sheafifyLift_unique _ _ _ _ (by simp)).symm
-
-Depends on / 依赖: sheafifyLift_unique
+  rw [← Category.assoc, ← toSheafify_naturality, Category.assoc, toSheafify_sheafifyLift]
+/-
+**CategoryTheory.sheafifyLift_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafifyLift_comp {F P Q : Cᵒᵖ ⥤ D} (a : F ⟶ P) (hP : Presheaf.IsSheaf J P
+) (η : P ⟶ Q) (hQ : CategoryTheory.Presheaf.IsSheaf J Q) : sheafifyLift J (a ≫ η
+) hQ = sheafifyLift _ a hP ≫ η
+参数：a : F ⟶ P；hP : Presheaf.IsSheaf J P；η : P ⟶ Q；hQ : CategoryTheory.Presheaf.Is
+Sheaf J Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.sheafifyLift_unique`：sheafifyLift_unique {P Q : Cᵒᵖ ⥤ D} 
+(η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) (γ : sheafify J P ⟶ Q) : toSheafify J P 
+≫ γ = η -> γ = sheafifyL…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.toSheafify_sheafifyLift_assoc`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D
+ : Type u_1}   [inst_1 : CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sheafifyLift_comp {F P Q : Cᵒᵖ ⥤ D} (a : F ⟶ P) (hP : Presheaf.IsSheaf J P)
     (η : P ⟶ Q) (hQ : CategoryTheory.Presheaf.IsSheaf J Q) :
@@ -846,34 +673,16 @@ variable {J}
 
 /-- A sheaf `P` is isomorphic to its own sheafification. -/
 @[simps]
-/--
-Definition of `sheafificationIso` / `sheafificationIso` 的定义
+/-
+**CategoryTheory.sheafificationIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：sheafificationIso (P : Sheaf J D) : P ≅ (presheafToSheaf J D).obj P.obj wh
+ere hom
+参数：P : Sheaf J D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafificationIso
-  signature: (P : Sheaf J D)
-  body: ⟨(isoSheafify J P.2).hom⟩
-  inv := ⟨(isoSheafify J P.2).inv⟩
-  hom_inv_id := by
-    ext1
-    apply (isoSheafify J P.2).hom_inv_id
-  inv_hom_id := by
-    ext1
-    apply (isoSheafify J P.2).inv_hom_id
-
-中文:
-定义 sheafificationIso
-  签名: (P : 层 J D)
-  定义体: ⟨(isoSheafify J P.2).hom⟩
-  inv := ⟨(isoSheafify J P.2).inv⟩
-  hom_inv_id := by
-    ext1
-    apply (isoSheafify J P.2).hom_inv_id
-  inv_hom_id := by
-    ext1
-    apply (isoSheafify J P.2).inv_hom_id
-
-Depends on / 依赖: isoSheafify
+--- 原说明 ---
+A sheaf `P` is isomorphic to its own sheafification.
 -/
 noncomputable def sheafificationIso (P : Sheaf J D) : P ≅ (presheafToSheaf J D).obj P.obj where
   hom := ⟨(isoSheafify J P.2).hom⟩
@@ -884,72 +693,103 @@ noncomputable def sheafificationIso (P : Sheaf J D) : P ≅ (presheafToSheaf J D
   inv_hom_id := by
     ext1
     apply (isoSheafify J P.2).inv_hom_id
-
-/--
-Instance `isIso_sheafificationAdjunction_counit` / 实例 `isIso_sheafificationAdjunction_counit`
-
-English:
-instance isIso_sheafificationAdjunction_counit
-  signature: (P : Sheaf J D)
-  body: isIso_of_fully_faithful (sheafToPresheaf J D) _
-
-中文:
-实例 isIso_sheafificationAdjunction_counit
-  签名: (P : 层 J D)
-  定义体: isIso_of_fully_faithful (sheafToPresheaf J D) _
-
-Depends on / 依赖: isIso_of_fully_faithful, sheafToPresheaf
+/-
+**CategoryTheory.isIso_sheafificationAdjunction_counit** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory`。
+形式化陈述：isIso_sheafificationAdjunction_counit (P : Sheaf J D) : IsIso ((sheafifica
+tionAdjunction J D).counit.app P)
+参数：P : Sheaf J D。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.isIso_of_fully_faithful`：isIso_of_fully_faithful (f : X ⟶
+ Y) [IsIso (F.map f)] : IsIso f
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoAppCounitOfFullOfFaithful`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
 -/
 instance isIso_sheafificationAdjunction_counit (P : Sheaf J D) :
     IsIso ((sheafificationAdjunction J D).counit.app P) :=
   isIso_of_fully_faithful (sheafToPresheaf J D) _
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (P : Sheaf J D) :
     IsIso ((sheafificationAdjunction J D).counit.app P).hom :=
   inferInstanceAs (IsIso ((sheafToPresheaf J D).map _))
-
-/--
-Instance `sheafification_reflective` / 实例 `sheafification_reflective`
-
-English:
-instance sheafification_reflective
-  signature: : IsIso (sheafificationAdjunction J D).counit
-  body: NatIso.isIso_of_isIso_app _
-
-中文:
-实例 sheafification_reflective
-  签名: : 是同构 (sheafificationAdjunction J D).counit
-  定义体: NatIso.isIso_of_isIso_app _
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app
+/-
+**CategoryTheory.sheafification_reflective** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：sheafification_reflective : IsIso (sheafificationAdjunction J D).counit
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatIso.isIso_of_isIso_app`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   {F G : CategoryThe…
 -/
 instance sheafification_reflective : IsIso (sheafificationAdjunction J D).counit :=
   NatIso.isIso_of_isIso_app _
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `sheafifyLift_id_toSheafify` / 引理 `sheafifyLift_id_toSheafify`
-
-English:
-lemma sheafifyLift_id_toSheafify
-  given: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
-  proof: by
-  rw [← cancel_mono ((sheafificationAdjunction J D).counit.app ⟨P]; rw [hP⟩).hom]
-  cat_disch
-
-中文:
-引理 sheafifyLift_id_toSheafify
-  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
-  证明: by
-  rw [← cancel_mono ((sheafificationAdjunction J D).counit.app ⟨P]; rw [hP⟩).hom]
-  cat_disch
-
-Depends on / 依赖: cancel_mono, cat_disch, counit, counit.app, sheafificationAdjunction
+/-
+**CategoryTheory.sheafifyLift_id_toSheafify** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：sheafifyLift_id_toSheafify {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) : she
+afifyLift J (𝟙 P) hP ≫ toSheafify J P = 𝟙 (sheafify J P)
+参数：hP : Presheaf.IsSheaf J P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.instMonoFunctorOppositeHomFullSubcategoryIsSheafOfHasWeak
+SheafifyOfSheaf`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (J 
+: CategoryTheory.GrothendieckTopology C) (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.toSheafify_naturality`：toSheafify_naturality {P Q : Cᵒᵖ ⥤
+ D} (η : P ⟶ Q) : η ≫ toSheafify J _ = toSheafify J _ ≫ sheafifyMap J η
+· 使用定理 `CategoryTheory.sheafificationAdjunction_counit_app_val`：sheafificationAd
+junction_counit_app_val (P : Sheaf J D) : ((sheafificationAdjunction J D).counit
+.app P).hom = sheafifyLift J (𝟙 P.obj) P.pro…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.sheafifyMap_sheafifyLift`：sheafifyMap_sheafifyLift {P Q R
+ : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) (hR : Presheaf.IsSheaf J R) : sheafifyMap J 
+η ≫ sheafifyLift J γ hR = she…
+· 使用定理 `CategoryTheory.sheafifyLift.congr_simp`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C) {D : Typ
+e u_1}   [inst_1 : CategoryT…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.toSheafify_sheafifyLift`：toSheafify_sheafifyLift {P Q : C
+ᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q) : toSheafify J P ≫ sheafifyLift 
+J η hQ = η
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sheafifyLift_id_toSheafify {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P) :
     sheafifyLift J (𝟙 P) hP ≫ toSheafify J P = 𝟙 (sheafify J P) := by
-  rw [← cancel_mono ((sheafificationAdjunction J D).counit.app ⟨P]; rw [hP⟩).hom]
+  rw [← cancel_mono ((sheafificationAdjunction J D).counit.app ⟨P, hP⟩).hom]
   cat_disch
 
 variable (J D)
@@ -957,23 +797,21 @@ variable (J D)
 set_option backward.defeqAttrib.useBackward true in
 /-- The natural isomorphism `𝟭 (Sheaf J D) ≅ sheafToPresheaf J D ⋙ presheafToSheaf J D`. -/
 @[simps!]
-/--
-Definition of `sheafificationNatIso` / `sheafificationNatIso` 的定义
+/-
+**CategoryTheory.sheafificationNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：sheafificationNatIso : 𝟭 (Sheaf J D) ≅ sheafToPresheaf J D ⋙ presheafToShe
+af J D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafificationNatIso
-  signature: :
-  body: NatIso.ofComponents (fun P => sheafificationIso P) (by cat_disch)
-
-中文:
-定义 sheafification自然数Iso
-  签名: :
-  定义体: NatIso.ofComponents (fun P => sheafificationIso P) (by cat_disch)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, cat_disch, ofComponents, sheafificationIso
+--- 原说明 ---
+The natural isomorphism `𝟭 (Sheaf J D) ≅ sheafToPresheaf J D ⋙ presheafToSheaf J
+ D`.
 -/
 noncomputable def sheafificationNatIso :
     𝟭 (Sheaf J D) ≅ sheafToPresheaf J D ⋙ presheafToSheaf J D :=
   NatIso.ofComponents (fun P => sheafificationIso P) (by cat_disch)
 
 end CategoryTheory
+

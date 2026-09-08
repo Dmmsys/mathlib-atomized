@@ -43,129 +43,103 @@ namespace CliffordAlgebra
 
 section Involute
 
-/--
-Definition of `involute` / `involute` 的定义
+/-- Grade involution, inverting the sign of each basis vector. -/
+/-
+**CliffordAlgebra.involute** 是 Mathlib 中的一个定义，位于命名空间 `CliffordAlgebra`。
+形式化陈述：involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition involute
-  signature: : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q
-  body: CliffordAlgebra.lift Q ⟨-ι Q, fun m => by simp⟩
-
-@[simp]
-
-中文:
-定义 involute
-  签名: : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q
-  定义体: CliffordAlgebra.lift Q ⟨-ι Q, fun m => by simp⟩
-
-@[simp]
-
-Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.lift
+--- 原说明 ---
+Grade involution, inverting the sign of each basis vector.
 -/
-def involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q :=
+def involute : CliffordAlgebra Q →ₐ[R] CliffordAlgebra Q :=
   CliffordAlgebra.lift Q ⟨-ι Q, fun m => by simp⟩
 
 @[simp]
-/--
-theorem `involute_ι` / 定理 `involute_ι`
-
-English:
-theorem involute_ι
-  given: (m : M)
-  statement: involute (ι Q m) = -ι Q m
-  proof: lift_ι_apply _ _ m
-
-@[simp]
-
-中文:
-定理 involute_ι
-  条件: (m : M)
-  结论: involute (ι Q m) = -ι Q m
-  证明: lift_ι_apply _ _ m
-
-@[simp]
+/-
+**CliffordAlgebra.involute_** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem involute_ι (m : M) : involute (ι Q m) = -ι Q m :=
   lift_ι_apply _ _ m
 
 @[simp]
-/--
-theorem `involute_comp_involute` / 定理 `involute_comp_involute`
-
-English:
-theorem involute_comp_involute
-  statement: involute.comp involute = AlgHom.id R (CliffordAlgebra Q)
-  proof: by
-  ext; simp
-
-中文:
-定理 involute_comp_involute
-  结论: involute.comp involute = 代数态射.id R (CliffordAlgebra Q)
-  证明: by
-  ext; simp
+/-
+**CliffordAlgebra.involute_comp_involute** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlge
+bra`。
+形式化陈述：involute_comp_involute : involute.comp involute = AlgHom.id R (CliffordAlg
+ebra Q)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.hom_ext`：hom_ext {A : Type*} [Semiring A] [Algebra R A] 
+{f g : CliffordAlgebra Q ->ₐ[R] A} : f.toLinearMap.comp (ι Q) = g.toLinearMap.co
+mp (ι Q) -> f…
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CliffordAlgebra.involute_ι`：involute_ι (m : M) : involute (ι Q m) = -ι Q
+ m
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem involute_comp_involute : involute.comp involute = AlgHom.id R (CliffordAlgebra Q) := by
   ext; simp
-
-/--
-theorem `involute_involutive` / 定理 `involute_involutive`
-
-English:
-theorem involute_involutive
-  statement: Function.Involutive (involute : _ -> CliffordAlgebra Q)
-  proof: AlgHom.congr_fun involute_comp_involute
-
-@[simp]
-
-中文:
-定理 involute_involutive
-  结论: 函数.对合 (involute : _ -> CliffordAlgebra Q)
-  证明: AlgHom.congr_fun involute_comp_involute
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.congr_fun, congr_fun, involute_comp_involute
+/-
+**CliffordAlgebra.involute_involutive** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra
+`。
+形式化陈述：involute_involutive : Function.Involutive (involute : _ -> CliffordAlgebra
+ Q)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.congr_fun`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
+· 使用定理 `CliffordAlgebra.involute_comp_involute`：involute_comp_involute : involut
+e.comp involute = AlgHom.id R (CliffordAlgebra Q)
 -/
-theorem involute_involutive : Function.Involutive (involute : _ -> CliffordAlgebra Q) :=
+theorem involute_involutive : Function.Involutive (involute : _ → CliffordAlgebra Q) :=
   AlgHom.congr_fun involute_comp_involute
 
 @[simp]
-/--
-theorem `involute_involute` / 定理 `involute_involute`
-
-English:
-theorem involute_involute
-  statement: forall a : CliffordAlgebra Q, involute (involute a) = a
-  proof: involute_involutive
-
-中文:
-定理 involute_involute
-  结论: 对任意 a : CliffordAlgebra Q, involute (involute a) = a
-  证明: involute_involutive
-
-Depends on / 依赖: involute_involutive
+/-
+**CliffordAlgebra.involute_involute** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+形式化陈述：involute_involute : forall a : CliffordAlgebra Q, involute (involute a) = 
+a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.involute_involutive`：involute_involutive : Function.Invo
+lutive (involute : _ -> CliffordAlgebra Q)
 -/
-theorem involute_involute : forall a : CliffordAlgebra Q, involute (involute a) = a :=
+theorem involute_involute : ∀ a : CliffordAlgebra Q, involute (involute a) = a :=
   involute_involutive
 
 /-- `CliffordAlgebra.involute` as an `AlgEquiv`. -/
 @[simps!]
-/--
-Definition of `involuteEquiv` / `involuteEquiv` 的定义
+/-
+**CliffordAlgebra.involuteEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CliffordAlgebra`。
+形式化陈述：involuteEquiv : CliffordAlgebra Q ≃ₐ[R] CliffordAlgebra Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition involuteEquiv
-  signature: : CliffordAlgebra Q ≃ₐ[R] CliffordAlgebra Q
-  body: AlgEquiv.ofAlgHom involute involute (AlgHom.ext <| involute_involute)
-    (AlgHom.ext <| involute_involute)
-
-中文:
-定义 involuteEquiv
-  签名: : CliffordAlgebra Q ≃ₐ[R] CliffordAlgebra Q
-  定义体: AlgEquiv.ofAlgHom involute involute (AlgHom.ext <| involute_involute)
-    (AlgHom.ext <| involute_involute)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgHom, AlgHom.ext, involute, involute_involute, ofAlgHom
+--- 原说明 ---
+`CliffordAlgebra.involute` as an `AlgEquiv`.
 -/
 def involuteEquiv : CliffordAlgebra Q ≃ₐ[R] CliffordAlgebra Q :=
   AlgEquiv.ofAlgHom involute involute (AlgHom.ext <| involute_involute)
@@ -177,73 +151,37 @@ section Reverse
 
 open MulOpposite
 
-/--
-Definition of `reverseOp` / `reverseOp` 的定义
+/-- `CliffordAlgebra.reverse` as an `AlgHom` to the opposite algebra -/
+/-
+**CliffordAlgebra.reverseOp** 是 Mathlib 中的一个定义，位于命名空间 `CliffordAlgebra`。
+形式化陈述：reverseOp : CliffordAlgebra Q ->ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverseOp
-  signature: : CliffordAlgebra Q ->ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ
-  body: CliffordAlgebra.lift Q
-⟨(MulOpposite.opLinearEquiv R).toLinearMap ∘ₗ ι Q, fun m => unop_injective by simp⟩
-
-@[simp]
-
-中文:
-定义 reverseOp
-  签名: : CliffordAlgebra Q ->ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ
-  定义体: CliffordAlgebra.lift Q
-⟨(MulOpposite.opLinearEquiv R).toLinearMap ∘ₗ ι Q, fun m => unop_injective by simp⟩
-
-@[simp]
-
-Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.lift, MulOpposite, MulOpposite.opLinearEquiv, opLinearEquiv, toLinearMap, unop_injective
+--- 原说明 ---
+`CliffordAlgebra.reverse` as an `AlgHom` to the opposite algebra
 -/
-def reverseOp : CliffordAlgebra Q ->ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ :=
+def reverseOp : CliffordAlgebra Q →ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ :=
   CliffordAlgebra.lift Q
-⟨(MulOpposite.opLinearEquiv R).toLinearMap ∘ₗ ι Q, fun m => unop_injective by simp⟩
+    ⟨(MulOpposite.opLinearEquiv R).toLinearMap ∘ₗ ι Q, fun m => unop_injective <| by simp⟩
 
 @[simp]
-/--
-theorem `reverseOp_ι` / 定理 `reverseOp_ι`
-
-English:
-theorem reverseOp_ι
-  given: (m : M)
-  statement: reverseOp (ι Q m) = op (ι Q m)
-  proof: lift_ι_apply _ _ _
-
-中文:
-定理 reverseOp_ι
-  条件: (m : M)
-  结论: reverseOp (ι Q m) = op (ι Q m)
-  证明: lift_ι_apply _ _ _
+/-
+**CliffordAlgebra.reverseOp_** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reverseOp_ι (m : M) : reverseOp (ι Q m) = op (ι Q m) := lift_ι_apply _ _ _
 
 /-- `CliffordAlgebra.reverseEquiv` as an `AlgEquiv` to the opposite algebra -/
 @[simps! apply]
-/--
-Definition of `reverseOpEquiv` / `reverseOpEquiv` 的定义
+/-
+**CliffordAlgebra.reverseOpEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CliffordAlgebra`。
+形式化陈述：reverseOpEquiv : CliffordAlgebra Q ≃ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverseOpEquiv
-  signature: : CliffordAlgebra Q ≃ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ
-  body: AlgEquiv.ofAlgHom reverseOp (AlgHom.opComm reverseOp)
-    (AlgHom.unop.injective <| hom_ext <| LinearMap.ext fun _ => by simp)
-    (hom_ext <| LinearMap.ext fun _ => by simp)
-
-@[simp]
-
-中文:
-定义 reverseOpEquiv
-  签名: : CliffordAlgebra Q ≃ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ
-  定义体: AlgEquiv.ofAlgHom reverseOp (AlgHom.opComm reverseOp)
-    (AlgHom.unop.injective <| hom_ext <| LinearMap.ext fun _ => by simp)
-    (hom_ext <| LinearMap.ext fun _ => by simp)
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgHom, AlgHom.opComm, AlgHom.unop.injective, LinearMap, LinearMap.ext, hom_ext, injective, ofAlgHom, opComm, reverseOp
+--- 原说明 ---
+`CliffordAlgebra.reverseEquiv` as an `AlgEquiv` to the opposite algebra
 -/
 def reverseOpEquiv : CliffordAlgebra Q ≃ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ :=
   AlgEquiv.ofAlgHom reverseOp (AlgHom.opComm reverseOp)
@@ -251,281 +189,245 @@ def reverseOpEquiv : CliffordAlgebra Q ≃ₐ[R] (CliffordAlgebra Q)ᵐᵒᵖ :=
     (hom_ext <| LinearMap.ext fun _ => by simp)
 
 @[simp]
-/--
-theorem `reverseOpEquiv_opComm` / 定理 `reverseOpEquiv_opComm`
-
-English:
-theorem reverseOpEquiv_opComm
-  proof: rfl
-
-中文:
-定理 reverseOpEquiv_opComm
-  证明: rfl
-
-Depends on / 依赖: reverseOpEquiv, reverseOpEquiv.symm
+/-
+**CliffordAlgebra.reverseOpEquiv_opComm** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgeb
+ra`。
+形式化陈述：reverseOpEquiv_opComm : AlgEquiv.opComm (reverseOpEquiv (Q
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reverseOpEquiv_opComm :
     AlgEquiv.opComm (reverseOpEquiv (Q := Q)) = reverseOpEquiv.symm := rfl
 
-/--
-Definition of `reverse` / `reverse` 的定义
+/-- Grade reversion, inverting the multiplication order of basis vectors.
+Also called *transpose* in some literature. -/
+/-
+**CliffordAlgebra.reverse** 是 Mathlib 中的一个定义，位于命名空间 `CliffordAlgebra`。
+形式化陈述：reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reverse
-  signature: : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q
-  body: (opLinearEquiv R).symm.toLinearMap.comp reverseOp.toLinearMap
-
-中文:
-定义 reverse
-  签名: : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q
-  定义体: (opLinearEquiv R).symm.toLinearMap.comp reverseOp.toLinearMap
-
-Depends on / 依赖: opLinearEquiv, reverseOp, reverseOp.toLinearMap, symm.toLinearMap.comp, toLinearMap
+--- 原说明 ---
+Grade reversion, inverting the multiplication order of basis vectors.
+Also called *transpose* in some literature.
 -/
-def reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q :=
+def reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q :=
   (opLinearEquiv R).symm.toLinearMap.comp reverseOp.toLinearMap
-
-/--
-theorem `unop_reverseOp` / 定理 `unop_reverseOp`
-
-English:
-theorem unop_reverseOp
-  given: (x : CliffordAlgebra Q)
-  statement: (reverseOp x).unop = reverse x
-  proof: rfl
-
-中文:
-定理 unop_reverseOp
-  条件: (x : CliffordAlgebra Q)
-  结论: (reverseOp x).unop = reverse x
-  证明: rfl
+/-
+**CliffordAlgebra.unop_reverseOp** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {M : Type u_2} [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {Q : QuadraticForm R M} (x : CliffordAlgebra 
+Q),   MulOpposite.unop (CliffordAlgebra.reverseOp x) = CliffordAlgebra.reverse x
+参数：x : CliffordAlgebra Q；CliffordAlgebra.reverseOp x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem unop_reverseOp (x : CliffordAlgebra Q) : (reverseOp x).unop = reverse x := rfl
-
-/--
-theorem `op_reverse` / 定理 `op_reverse`
-
-English:
-theorem op_reverse
-  given: (x : CliffordAlgebra Q)
-  statement: op (reverse x) = reverseOp x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 op_reverse
-  条件: (x : CliffordAlgebra Q)
-  结论: op (reverse x) = reverseOp x
-  证明: rfl
-
-@[simp]
+/-
+**CliffordAlgebra.op_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {M : Type u_2} [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {Q : QuadraticForm R M} (x : CliffordAlgebra 
+Q),   MulOpposite.op (CliffordAlgebra.reverse x) = CliffordAlgebra.reverseOp x
+参数：x : CliffordAlgebra Q；CliffordAlgebra.reverse x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem op_reverse (x : CliffordAlgebra Q) : op (reverse x) = reverseOp x := rfl
 
 @[simp]
-/--
-theorem `reverse_ι` / 定理 `reverse_ι`
-
-English:
-theorem reverse_ι
-  given: (m : M)
-  statement: reverse (ι Q m) = ι Q m
-  proof: by simp [reverse]
-
-@[simp]
-
-中文:
-定理 reverse_ι
-  条件: (m : M)
-  结论: reverse (ι Q m) = ι Q m
-  证明: by simp [reverse]
-
-@[simp]
-
-Depends on / 依赖: reverse
+/-
+**CliffordAlgebra.reverse_** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reverse_ι (m : M) : reverse (ι Q m) = ι Q m := by simp [reverse]
 
 @[simp]
-/--
-theorem `reverse.commutes` / 定理 `reverse.commutes`
-
-English:
-theorem reverse.commutes
-  given: (r : R)
-  proof: op_injective reverseOp.commutes r
-
-@[simp]
-
-中文:
-定理 reverse.commutes
-  条件: (r : R)
-  证明: op_injective reverseOp.commutes r
-
-@[simp]
-
-Depends on / 依赖: commutes, op_injective, reverseOp, reverseOp.commutes
+/-
+**CliffordAlgebra.reverse.commutes** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra.re
+verse`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {M : Type u_2} [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {Q : QuadraticForm R M} (r : R),   CliffordAl
+gebra.reverse ((algebraMap R (CliffordAlgebra Q)) r) = (algebraMap R (CliffordAl
+gebra Q)) r
+参数：r : R；(algebraMap R (CliffordAlgebra Q)) r；algebraMap R (CliffordAlgebra Q)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
 -/
 theorem reverse.commutes (r : R) :
     reverse (algebraMap R (CliffordAlgebra Q) r) = algebraMap R _ r :=
-op_injective reverseOp.commutes r
+  op_injective <| reverseOp.commutes r
 
 @[simp]
-/--
-theorem `reverse.map_one` / 定理 `reverse.map_one`
-
-English:
-theorem reverse.map_one
-  statement: reverse (1 : CliffordAlgebra Q) = 1
-  proof: op_injective (map_one reverseOp)
-
-@[simp]
-
-中文:
-定理 reverse.map_one
-  结论: reverse (1 : CliffordAlgebra Q) = 1
-  证明: op_injective (map_one reverseOp)
-
-@[simp]
+/-
+**CliffordAlgebra.reverse.map_one** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra.rev
+erse`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {M : Type u_2} [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {Q : QuadraticForm R M}, CliffordAlgebra.reve
+rse 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
 protected theorem reverse.map_one : reverse (1 : CliffordAlgebra Q) = 1 :=
   op_injective (map_one reverseOp)
 
 @[simp]
-/--
-theorem `reverse.map_mul` / 定理 `reverse.map_mul`
-
-English:
-theorem reverse.map_mul
-  given: (a b : CliffordAlgebra Q)
-  proof: op_injective (map_mul reverseOp a b)
-
-@[simp]
-
-中文:
-定理 reverse.map_mul
-  条件: (a b : CliffordAlgebra Q)
-  证明: op_injective (map_mul reverseOp a b)
-
-@[simp]
+/-
+**CliffordAlgebra.reverse.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra.rev
+erse`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {M : Type u_2} [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {Q : QuadraticForm R M} (a b : CliffordAlgebr
+a Q),   CliffordAlgebra.reverse (a * b) = CliffordAlgebra.reverse b * CliffordAl
+gebra.reverse a
+参数：a b : CliffordAlgebra Q；a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
 -/
 protected theorem reverse.map_mul (a b : CliffordAlgebra Q) :
     reverse (a * b) = reverse b * reverse a :=
   op_injective (map_mul reverseOp a b)
 
 @[simp]
-/--
-theorem `reverse_involutive` / 定理 `reverse_involutive`
-
-English:
-theorem reverse_involutive
-  statement: Function.Involutive (reverse (Q := Q))
-  proof: AlgHom.congr_fun reverseOpEquiv.symm_comp
-
-@[simp]
-
-中文:
-定理 reverse_involutive
-  结论: 函数.对合 (reverse (Q := Q))
-  证明: AlgHom.congr_fun reverseOpEquiv.symm_comp
-
-@[simp]
+/-
+**CliffordAlgebra.reverse_involutive** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`
+。
+形式化陈述：reverse_involutive : Function.Involutive (reverse (Q
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.congr_fun`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
+· 使用定理 `AlgEquiv.symm_comp`：symm_comp (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp ↑e.symm (e
+ : A₁ ->ₐ[R] A₂) = AlgHom.id R A₁
 -/
 theorem reverse_involutive : Function.Involutive (reverse (Q := Q)) :=
   AlgHom.congr_fun reverseOpEquiv.symm_comp
 
 @[simp]
-/--
-theorem `reverse_comp_reverse` / 定理 `reverse_comp_reverse`
-
-English:
-theorem reverse_comp_reverse
-  proof: LinearMap.ext reverse_involutive
-
-@[simp]
-
-中文:
-定理 reverse_comp_reverse
-  证明: LinearMap.ext reverse_involutive
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.ext, reverse_involutive
+/-
+**CliffordAlgebra.reverse_comp_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebr
+a`。
+形式化陈述：reverse_comp_reverse : reverse.comp reverse = (LinearMap.id : _ ->ₗ[R] Cli
+ffordAlgebra Q)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `CliffordAlgebra.reverse_involutive`：reverse_involutive : Function.Involu
+tive (reverse (Q
 -/
 theorem reverse_comp_reverse :
-    reverse.comp reverse = (LinearMap.id : _ ->ₗ[R] CliffordAlgebra Q) :=
+    reverse.comp reverse = (LinearMap.id : _ →ₗ[R] CliffordAlgebra Q) :=
   LinearMap.ext reverse_involutive
 
 @[simp]
-/--
-theorem `reverse_reverse` / 定理 `reverse_reverse`
-
-English:
-theorem reverse_reverse
-  statement: forall a : CliffordAlgebra Q, reverse (reverse a) = a
-  proof: reverse_involutive
-
-中文:
-定理 reverse_reverse
-  结论: 对任意 a : CliffordAlgebra Q, reverse (reverse a) = a
-  证明: reverse_involutive
-
-Depends on / 依赖: reverse_involutive
+/-
+**CliffordAlgebra.reverse_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+形式化陈述：reverse_reverse : forall a : CliffordAlgebra Q, reverse (reverse a) = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.reverse_involutive`：reverse_involutive : Function.Involu
+tive (reverse (Q
 -/
-theorem reverse_reverse : forall a : CliffordAlgebra Q, reverse (reverse a) = a :=
+theorem reverse_reverse : ∀ a : CliffordAlgebra Q, reverse (reverse a) = a :=
   reverse_involutive
 
 /-- `CliffordAlgebra.reverse` as a `LinearEquiv`. -/
 @[simps!]
-/--
-Definition of `reverseEquiv` / `reverseEquiv` 的定义
+/-
+**CliffordAlgebra.reverseEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CliffordAlgebra`。
+形式化陈述：reverseEquiv : CliffordAlgebra Q ≃ₗ[R] CliffordAlgebra Q
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.reverse_involutive`：reverse_involutive : Function.Involu
+tive (reverse (Q
 
-English:
-definition reverseEquiv
-  signature: : CliffordAlgebra Q ≃ₗ[R] CliffordAlgebra Q
-  body: LinearEquiv.ofInvolutive reverse reverse_involutive
-
-中文:
-定义 reverseEquiv
-  签名: : CliffordAlgebra Q ≃ₗ[R] CliffordAlgebra Q
-  定义体: LinearEquiv.ofInvolutive reverse reverse_involutive
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofInvolutive, ofInvolutive, reverse, reverse_involutive
+--- 原说明 ---
+`CliffordAlgebra.reverse` as a `LinearEquiv`.
 -/
 def reverseEquiv : CliffordAlgebra Q ≃ₗ[R] CliffordAlgebra Q :=
   LinearEquiv.ofInvolutive reverse reverse_involutive
-
-/--
-theorem `reverse_comp_involute` / 定理 `reverse_comp_involute`
-
-English:
-theorem reverse_comp_involute
-  proof: by
-  ext x
-  simp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply]
-  induction x using CliffordAlgebra.induction with
-  | algebraMap => simp
-  | ι => simp
-  | mul a b ha hb => simp only [ha, hb, reverse.map_mul, map_mul]
-  | add a b ha hb => simp only [ha, hb, reverse.map_add, map_add]
-
-中文:
-定理 reverse_comp_involute
-  证明: by
-  ext x
-  simp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply]
-  induction x using CliffordAlgebra.induction with
-  | algebraMap => simp
-  | ι => simp
-  | mul a b ha hb => simp only [ha, hb, reverse.map_mul, map_mul]
-  | add a b ha hb => simp only [ha, hb, reverse.map_add, map_add]
-
-Depends on / 依赖: AlgHom, AlgHom.toLinearMap_apply, CliffordAlgebra, CliffordAlgebra.induction, LinearMap, LinearMap.comp_apply, algebraMap, comp_apply, map_add, map_mul, reverse, reverse.map_add, reverse.map_mul, toLinearMap_apply
+/-
+**CliffordAlgebra.reverse_comp_involute** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgeb
+ra`。
+形式化陈述：reverse_comp_involute : reverse.comp involute.toLinearMap = (involute.toLi
+nearMap.comp reverse : _ ->ₗ[R] CliffordAlgebra Q)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `CliffordAlgebra.induction`：induction {C : CliffordAlgebra Q -> Prop} (al
+gebraMap : forall r, C (algebraMap R (CliffordAlgebra Q) r)) (ι : forall x, C (ι
+ Q x)) (mul : f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `CliffordAlgebra.reverse.commutes`：∀ {R : Type u_1} [inst : CommRing R] {
+M : Type u_2} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {Q : Quad
+raticForm R M} (r : R)…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CliffordAlgebra.involute_ι`：involute_ι (m : M) : involute (ι Q m) = -ι Q
+ m
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `CliffordAlgebra.reverse_ι`：reverse_ι (m : M) : reverse (ι Q m) = ι Q m
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `CliffordAlgebra.reverse.map_mul`：∀ {R : Type u_1} [inst : CommRing R] {M
+ : Type u_2} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {Q : Quadr
+aticForm R M} (a b : …
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `LinearMap.map_add`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ : 
+Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid M
+] [inst…
 -/
 theorem reverse_comp_involute :
     reverse.comp involute.toLinearMap =
-      (involute.toLinearMap.comp reverse : _ ->ₗ[R] CliffordAlgebra Q) := by
+      (involute.toLinearMap.comp reverse : _ →ₗ[R] CliffordAlgebra Q) := by
   ext x
   simp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply]
   induction x using CliffordAlgebra.induction with
@@ -534,39 +436,39 @@ theorem reverse_comp_involute :
   | mul a b ha hb => simp only [ha, hb, reverse.map_mul, map_mul]
   | add a b ha hb => simp only [ha, hb, reverse.map_add, map_add]
 
-/--
-theorem `reverse_involute_commute` / 定理 `reverse_involute_commute`
+/-- `CliffordAlgebra.reverse` and `CliffordAlgebra.involute` commute. Note that the composition
+is sometimes referred to as the "clifford conjugate". -/
+/-
+**CliffordAlgebra.reverse_involute_commute** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAl
+gebra`。
+形式化陈述：reverse_involute_commute : Function.Commute (reverse (Q
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
+· 使用定理 `CliffordAlgebra.reverse_comp_involute`：reverse_comp_involute : reverse.c
+omp involute.toLinearMap = (involute.toLinearMap.comp reverse : _ ->ₗ[R] Cliffor
+dAlgebra Q)
 
-English:
-theorem reverse_involute_commute
-  statement: Function.Commute (reverse (Q := Q)) involute
-  proof: LinearMap.congr_fun reverse_comp_involute
-
-中文:
-定理 reverse_involute_commute
-  结论: 函数.Commute (reverse (Q := Q)) involute
-  证明: LinearMap.congr_fun reverse_comp_involute
-
-Depends on / 依赖: involute
+--- 原说明 ---
+`CliffordAlgebra.reverse` and `CliffordAlgebra.involute` commute. Note that the 
+composition
+is sometimes referred to as the "clifford conjugate".
 -/
 theorem reverse_involute_commute : Function.Commute (reverse (Q := Q)) involute :=
   LinearMap.congr_fun reverse_comp_involute
-
-/--
-theorem `reverse_involute` / 定理 `reverse_involute`
-
-English:
-theorem reverse_involute
-  proof: reverse_involute_commute
-
-中文:
-定理 reverse_involute
-  证明: reverse_involute_commute
-
-Depends on / 依赖: reverse_involute_commute
+/-
+**CliffordAlgebra.reverse_involute** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+形式化陈述：reverse_involute : forall a : CliffordAlgebra Q, reverse (involute a) = in
+volute (reverse a)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.reverse_involute_commute`：reverse_involute_commute : Fun
+ction.Commute (reverse (Q
 -/
 theorem reverse_involute :
-    forall a : CliffordAlgebra Q, reverse (involute a) = involute (reverse a) :=
+    ∀ a : CliffordAlgebra Q, reverse (involute a) = involute (reverse a) :=
   reverse_involute_commute
 
 end Reverse
@@ -578,31 +480,36 @@ end Reverse
 
 section List
 
-/--
-theorem `reverse_prod_map_ι` / 定理 `reverse_prod_map_ι`
+/-- Taking the reverse of the product a list of $n$ vectors lifted via `ι` is equivalent to
+taking the product of the reverse of that list. -/
+/-
+**CliffordAlgebra.reverse_prod_map_** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem reverse_prod_map_ι
-
-中文:
-定理 reverse_prod_map_ι
+--- 原说明 ---
+Taking the reverse of the product a list of $n$ vectors lifted via `ι` is equiva
+lent to
+taking the product of the reverse of that list.
 -/
 theorem reverse_prod_map_ι :
-    forall l : List M, reverse (l.map <| ι Q).prod = (l.map <| ι Q).reverse.prod
+    ∀ l : List M, reverse (l.map <| ι Q).prod = (l.map <| ι Q).reverse.prod
   | [] => by simp
   | x::xs => by simp [reverse_prod_map_ι xs]
 
-/--
-theorem `involute_prod_map_ι` / 定理 `involute_prod_map_ι`
+/-- Taking the involute of the product a list of $n$ vectors lifted via `ι` is equivalent to
+premultiplying by ${-1}^n$. -/
+/-
+**CliffordAlgebra.involute_prod_map_** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem involute_prod_map_ι
-
-中文:
-定理 involute_prod_map_ι
+--- 原说明 ---
+Taking the involute of the product a list of $n$ vectors lifted via `ι` is equiv
+alent to
+premultiplying by ${-1}^n$.
 -/
 theorem involute_prod_map_ι :
-    forall l : List M, involute (l.map <| ι Q).prod = (-1 : R) ^ l.length • (l.map <| ι Q).prod
+    ∀ l : List M, involute (l.map <| ι Q).prod = (-1 : R) ^ l.length • (l.map <| ι Q).prod
   | [] => by simp
   | x::xs => by simp [pow_succ, involute_prod_map_ι xs]
 
@@ -619,470 +526,484 @@ variable (Q)
 
 section Involute
 
-/--
-theorem `submodule_map_involute_eq_comap` / 定理 `submodule_map_involute_eq_comap`
-
-English:
-theorem submodule_map_involute_eq_comap
-  given: (p : Submodule R (CliffordAlgebra Q))
-  proof: Submodule.map_equiv_eq_comap_symm involuteEquiv.toLinearEquiv _
-
-@[simp]
-
-中文:
-定理 submodule_map_involute_eq_comap
-  条件: (p : 子模 R (CliffordAlgebra Q))
-  证明: Submodule.map_equiv_eq_comap_symm involuteEquiv.toLinearEquiv _
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_equiv_eq_comap_symm, involuteEquiv, involuteEquiv.toLinearEquiv, map_equiv_eq_comap_symm, toLinearEquiv
+/-
+**CliffordAlgebra.submodule_map_involute_eq_comap** 是 Mathlib 中的一个定理，位于命名空间 `Cli
+ffordAlgebra`。
+形式化陈述：submodule_map_involute_eq_comap (p : Submodule R (CliffordAlgebra Q)) : p.
+map (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap = p.coma
+p (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap
+参数：p : Submodule R (CliffordAlgebra Q)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_equiv_eq_comap_symm`：map_equiv_eq_comap_symm (e : M ≃ₛₗ[τ₁
+₂] M₂) (K : Submodule R M) : K.map (e : M ->ₛₗ[τ₁₂] M₂) = K.comap (e.symm : M₂ -
+>ₛₗ[τ₂₁] M)
 -/
 theorem submodule_map_involute_eq_comap (p : Submodule R (CliffordAlgebra Q)) :
-    p.map (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap =
-      p.comap (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap :=
+    p.map (involute : CliffordAlgebra Q →ₐ[R] CliffordAlgebra Q).toLinearMap =
+      p.comap (involute : CliffordAlgebra Q →ₐ[R] CliffordAlgebra Q).toLinearMap :=
   Submodule.map_equiv_eq_comap_symm involuteEquiv.toLinearEquiv _
 
 @[simp]
-/--
-theorem `ι_range_map_involute` / 定理 `ι_range_map_involute`
-
-English:
-theorem ι_range_map_involute
-  proof: (ι_range_map_lift _ _).trans (LinearMap.range_neg _)
-
-@[simp]
-
-中文:
-定理 ι_range_map_involute
-  证明: (ι_range_map_lift _ _).trans (LinearMap.range_neg _)
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.range_neg, range_neg
+/-
+**CliffordAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_range_map_involute :
-    (LinearMap.range (ι Q)).map (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap =
+    (LinearMap.range (ι Q)).map (involute : CliffordAlgebra Q →ₐ[R] CliffordAlgebra Q).toLinearMap =
       LinearMap.range (ι Q) :=
   (ι_range_map_lift _ _).trans (LinearMap.range_neg _)
 
 @[simp]
-/--
-theorem `ι_range_comap_involute` / 定理 `ι_range_comap_involute`
-
-English:
-theorem ι_range_comap_involute
-  proof: by
-  rw [← submodule_map_involute_eq_comap]; rw [ι_range_map_involute]
-
-@[simp]
-
-中文:
-定理 ι_range_comap_involute
-  证明: by
-  rw [← submodule_map_involute_eq_comap]; rw [ι_range_map_involute]
-
-@[simp]
-
-Depends on / 依赖: submodule_map_involute_eq_comap
+/-
+**CliffordAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_range_comap_involute :
     (LinearMap.range (ι Q)).comap
-      (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap =
+      (involute : CliffordAlgebra Q →ₐ[R] CliffordAlgebra Q).toLinearMap =
       LinearMap.range (ι Q) := by
-  rw [← submodule_map_involute_eq_comap]; rw [ι_range_map_involute]
+  rw [← submodule_map_involute_eq_comap, ι_range_map_involute]
 
 @[simp]
-/--
-theorem `evenOdd_map_involute` / 定理 `evenOdd_map_involute`
-
-English:
-theorem evenOdd_map_involute
-  given: (n : ZMod 2)
-  proof: by
-  simp_rw [evenOdd, Submodule.map_iSup, Submodule.map_pow, ι_range_map_involute]
-
-@[simp]
-
-中文:
-定理 evenOdd_map_involute
-  条件: (n : ZMod 2)
-  证明: by
-  simp_rw [evenOdd, Submodule.map_iSup, Submodule.map_pow, ι_range_map_involute]
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_iSup, Submodule.map_pow, evenOdd, map_iSup, map_pow, simp_rw
+/-
+**CliffordAlgebra.evenOdd_map_involute** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebr
+a`。
+形式化陈述：evenOdd_map_involute (n : ZMod 2) : (evenOdd Q n).map (involute : Clifford
+Algebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap = evenOdd Q n
+参数：n : ZMod 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_iSup`：map_iSup {ι : Sort*} (f : M ->ₛₗ[σ₁₂] M₂) (p : ι -> 
+Submodule R M) : map f (⨆ i, p i) = ⨆ i, map f (p i)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submodule.map_pow`：∀ {R : Type u} [inst : CommSemiring R] {A : Type v} [
+inst_1 : Semiring A] [inst_2 : Algebra R A] (M : Submodule R A)   {A' : Type u_1
+} [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CliffordAlgebra.ι_range_map_involute`：ι_range_map_involute : (LinearMap.
+range (ι Q)).map (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinea
+rMap = LinearMap.range (ι …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem evenOdd_map_involute (n : ZMod 2) :
-    (evenOdd Q n).map (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap =
+    (evenOdd Q n).map (involute : CliffordAlgebra Q →ₐ[R] CliffordAlgebra Q).toLinearMap =
       evenOdd Q n := by
   simp_rw [evenOdd, Submodule.map_iSup, Submodule.map_pow, ι_range_map_involute]
 
 @[simp]
-/--
-theorem `evenOdd_comap_involute` / 定理 `evenOdd_comap_involute`
-
-English:
-theorem evenOdd_comap_involute
-  given: (n : ZMod 2)
-  proof: by
-  rw [← submodule_map_involute_eq_comap]; rw [evenOdd_map_involute]
-
-中文:
-定理 evenOdd_comap_involute
-  条件: (n : ZMod 2)
-  证明: by
-  rw [← submodule_map_involute_eq_comap]; rw [evenOdd_map_involute]
-
-Depends on / 依赖: evenOdd_map_involute, submodule_map_involute_eq_comap
+/-
+**CliffordAlgebra.evenOdd_comap_involute** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlge
+bra`。
+形式化陈述：evenOdd_comap_involute (n : ZMod 2) : (evenOdd Q n).comap (involute : Clif
+fordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap = evenOdd Q n
+参数：n : ZMod 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CliffordAlgebra.submodule_map_involute_eq_comap`：submodule_map_involute_
+eq_comap (p : Submodule R (CliffordAlgebra Q)) : p.map (involute : CliffordAlgeb
+ra Q ->ₐ[R] CliffordAlgebra Q).toLine…
+· 使用定理 `CliffordAlgebra.evenOdd_map_involute`：evenOdd_map_involute (n : ZMod 2) 
+: (evenOdd Q n).map (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLi
+nearMap = evenOdd Q n
 -/
 theorem evenOdd_comap_involute (n : ZMod 2) :
-    (evenOdd Q n).comap (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q).toLinearMap =
+    (evenOdd Q n).comap (involute : CliffordAlgebra Q →ₐ[R] CliffordAlgebra Q).toLinearMap =
       evenOdd Q n := by
-  rw [← submodule_map_involute_eq_comap]; rw [evenOdd_map_involute]
+  rw [← submodule_map_involute_eq_comap, evenOdd_map_involute]
 
 end Involute
 
 section Reverse
 
-/--
-theorem `submodule_map_reverse_eq_comap` / 定理 `submodule_map_reverse_eq_comap`
-
-English:
-theorem submodule_map_reverse_eq_comap
-  given: (p : Submodule R (CliffordAlgebra Q))
-  proof: Submodule.map_equiv_eq_comap_symm (reverseEquiv : _ ≃ₗ[R] _) _
-
-@[simp]
-
-中文:
-定理 submodule_map_reverse_eq_comap
-  条件: (p : 子模 R (CliffordAlgebra Q))
-  证明: Submodule.map_equiv_eq_comap_symm (reverseEquiv : _ ≃ₗ[R] _) _
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_equiv_eq_comap_symm, map_equiv_eq_comap_symm, reverseEquiv
+/-
+**CliffordAlgebra.submodule_map_reverse_eq_comap** 是 Mathlib 中的一个定理，位于命名空间 `Clif
+fordAlgebra`。
+形式化陈述：submodule_map_reverse_eq_comap (p : Submodule R (CliffordAlgebra Q)) : p.m
+ap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = p.comap (reverse : C
+liffordAlgebra Q ->ₗ[R] CliffordAlgebra Q)
+参数：p : Submodule R (CliffordAlgebra Q)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_equiv_eq_comap_symm`：map_equiv_eq_comap_symm (e : M ≃ₛₗ[τ₁
+₂] M₂) (K : Submodule R M) : K.map (e : M ->ₛₗ[τ₁₂] M₂) = K.comap (e.symm : M₂ -
+>ₛₗ[τ₂₁] M)
 -/
 theorem submodule_map_reverse_eq_comap (p : Submodule R (CliffordAlgebra Q)) :
-    p.map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) =
-      p.comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) :=
+    p.map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) =
+      p.comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) :=
   Submodule.map_equiv_eq_comap_symm (reverseEquiv : _ ≃ₗ[R] _) _
 
 @[simp]
-/--
-theorem `ι_range_map_reverse` / 定理 `ι_range_map_reverse`
-
-English:
-theorem ι_range_map_reverse
-  proof: by
-  rw [reverse]; rw [reverseOp]; rw [Submodule.map_comp]; rw [ι_range_map_lift]; rw [LinearMap.range_comp]; rw [← Submodule.map_comp]
-  exact Submodule.map_id _
-
-@[simp]
-
-中文:
-定理 ι_range_map_reverse
-  证明: by
-  rw [reverse]; rw [reverseOp]; rw [Submodule.map_comp]; rw [ι_range_map_lift]; rw [LinearMap.range_comp]; rw [← Submodule.map_comp]
-  exact Submodule.map_id _
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.range_comp, Submodule, Submodule.map_comp, Submodule.map_id, map_comp, map_id, range_comp, reverse, reverseOp
+/-
+**CliffordAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_range_map_reverse :
-    (LinearMap.range (ι Q)).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q)
+    (LinearMap.range (ι Q)).map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q)
       = LinearMap.range (ι Q) := by
-  rw [reverse]; rw [reverseOp]; rw [Submodule.map_comp]; rw [ι_range_map_lift]; rw [LinearMap.range_comp]; rw [← Submodule.map_comp]
+  rw [reverse, reverseOp, Submodule.map_comp, ι_range_map_lift, LinearMap.range_comp,
+    ← Submodule.map_comp]
   exact Submodule.map_id _
 
 @[simp]
-/--
-theorem `ι_range_comap_reverse` / 定理 `ι_range_comap_reverse`
-
-English:
-theorem ι_range_comap_reverse
-  proof: by
-  rw [← submodule_map_reverse_eq_comap]; rw [ι_range_map_reverse]
-
-中文:
-定理 ι_range_comap_reverse
-  证明: by
-  rw [← submodule_map_reverse_eq_comap]; rw [ι_range_map_reverse]
-
-Depends on / 依赖: submodule_map_reverse_eq_comap
+/-
+**CliffordAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_range_comap_reverse :
-    (LinearMap.range (ι Q)).comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q)
+    (LinearMap.range (ι Q)).comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q)
       = LinearMap.range (ι Q) := by
-  rw [← submodule_map_reverse_eq_comap]; rw [ι_range_map_reverse]
+  rw [← submodule_map_reverse_eq_comap, ι_range_map_reverse]
 
-/--
-theorem `submodule_map_mul_reverse` / 定理 `submodule_map_mul_reverse`
+/-- Like `Submodule.map_mul`, but with the multiplication reversed. -/
+/-
+**CliffordAlgebra.submodule_map_mul_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CliffordA
+lgebra`。
+形式化陈述：submodule_map_mul_reverse (p q : Submodule R (CliffordAlgebra Q)) : (p * q
+).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = q.map (reverse : 
+CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) * p.map (reverse : CliffordAlgebra Q
+ ->ₗ[R] CliffordAlgebra Q)
+参数：p q : Submodule R (CliffordAlgebra Q)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_comp`：map_comp [RingHomSurjective σ₂₃] [RingHomSurjective 
+σ₁₃] (f : M ->ₛₗ[σ₁₂] M₂) (g : M₂ ->ₛₗ[σ₂₃] M₃) (p : Submodule R M) : map (g.com
+p f : M …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `Submodule.map_mul`：∀ {R : Type u} [inst : CommSemiring R] {A : Type v} [
+inst_1 : Semiring A] [inst_2 : Algebra R A] (M N : Submodule R A)   {A' : Type u
+_1} [in…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.map_unop_mul`：map_unop_mul (M N : Submodule R Aᵐᵒᵖ) : map (↑(o
+pLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ).symm : Aᵐᵒᵖ ->ₗ[R] A) (M * N) = map (↑(opLinearEq
+uiv R : A ≃ₗ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem submodule_map_mul_reverse
-  given: (p q : Submodule R (CliffordAlgebra Q))
-  proof: by
-  simp_rw [reverse, Submodule.map_comp, Submodule.map_mul, Submodule.map_unop_mul]
-
-中文:
-定理 submodule_map_mul_reverse
-  条件: (p q : 子模 R (CliffordAlgebra Q))
-  证明: by
-  simp_rw [reverse, Submodule.map_comp, Submodule.map_mul, Submodule.map_unop_mul]
-
-Depends on / 依赖: Submodule, Submodule.map_comp, Submodule.map_mul, Submodule.map_unop_mul, map_comp, map_mul, map_unop_mul, reverse, simp_rw
+--- 原说明 ---
+Like `Submodule.map_mul`, but with the multiplication reversed.
 -/
 theorem submodule_map_mul_reverse (p q : Submodule R (CliffordAlgebra Q)) :
-    (p * q).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) =
-      q.map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) *
-        p.map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) := by
+    (p * q).map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) =
+      q.map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) *
+        p.map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) := by
   simp_rw [reverse, Submodule.map_comp, Submodule.map_mul, Submodule.map_unop_mul]
-
-/--
-theorem `submodule_comap_mul_reverse` / 定理 `submodule_comap_mul_reverse`
-
-English:
-theorem submodule_comap_mul_reverse
-  given: (p q : Submodule R (CliffordAlgebra Q))
-  proof: by
-  simp_rw [← submodule_map_reverse_eq_comap, submodule_map_mul_reverse]
-
-中文:
-定理 submodule_comap_mul_reverse
-  条件: (p q : 子模 R (CliffordAlgebra Q))
-  证明: by
-  simp_rw [← submodule_map_reverse_eq_comap, submodule_map_mul_reverse]
-
-Depends on / 依赖: simp_rw, submodule_map_mul_reverse, submodule_map_reverse_eq_comap
+/-
+**CliffordAlgebra.submodule_comap_mul_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Cliffor
+dAlgebra`。
+形式化陈述：submodule_comap_mul_reverse (p q : Submodule R (CliffordAlgebra Q)) : (p *
+ q).comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = q.comap (reve
+rse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) * p.comap (reverse : CliffordA
+lgebra Q ->ₗ[R] CliffordAlgebra Q)
+参数：p q : Submodule R (CliffordAlgebra Q)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CliffordAlgebra.submodule_map_mul_reverse`：submodule_map_mul_reverse (p 
+q : Submodule R (CliffordAlgebra Q)) : (p * q).map (reverse : CliffordAlgebra Q 
+->ₗ[R] CliffordAlgebra Q) = q.m…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem submodule_comap_mul_reverse (p q : Submodule R (CliffordAlgebra Q)) :
-    (p * q).comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) =
-      q.comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) *
-        p.comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) := by
+    (p * q).comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) =
+      q.comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) *
+        p.comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) := by
   simp_rw [← submodule_map_reverse_eq_comap, submodule_map_mul_reverse]
 
-/--
-theorem `submodule_map_pow_reverse` / 定理 `submodule_map_pow_reverse`
+/-- Like `Submodule.map_pow` -/
+/-
+**CliffordAlgebra.submodule_map_pow_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CliffordA
+lgebra`。
+形式化陈述：submodule_map_pow_reverse (p : Submodule R (CliffordAlgebra Q)) (n : Nat) 
+: (p ^ n).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = p.map (re
+verse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) ^ n
+参数：p : Submodule R (CliffordAlgebra Q)；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_comp`：map_comp [RingHomSurjective σ₂₃] [RingHomSurjective 
+σ₁₃] (f : M ->ₛₗ[σ₁₂] M₂) (g : M₂ ->ₛₗ[σ₂₃] M₃) (p : Submodule R M) : map (g.com
+p f : M …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `Submodule.map_pow`：∀ {R : Type u} [inst : CommSemiring R] {A : Type v} [
+inst_1 : Semiring A] [inst_2 : Algebra R A] (M : Submodule R A)   {A' : Type u_1
+} [inst…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.map_unop_pow`：map_unop_pow (n : Nat) (M : Submodule R Aᵐᵒᵖ) : 
+map (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ).symm : Aᵐᵒᵖ ->ₗ[R] A) (M ^ n) = map (↑(op
+LinearEquiv …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem submodule_map_pow_reverse
-  given: (p : Submodule R (CliffordAlgebra Q)) (n : Nat)
-  proof: by
-  simp_rw [reverse, Submodule.map_comp, Submodule.map_pow, Submodule.map_unop_pow]
-
-中文:
-定理 submodule_map_pow_reverse
-  条件: (p : 子模 R (CliffordAlgebra Q)) (n : 自然数)
-  证明: by
-  simp_rw [reverse, Submodule.map_comp, Submodule.map_pow, Submodule.map_unop_pow]
-
-Depends on / 依赖: Submodule, Submodule.map_comp, Submodule.map_pow, Submodule.map_unop_pow, map_comp, map_pow, map_unop_pow, reverse, simp_rw
+--- 原说明 ---
+Like `Submodule.map_pow`
 -/
-theorem submodule_map_pow_reverse (p : Submodule R (CliffordAlgebra Q)) (n : Nat) :
-    (p ^ n).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) =
-      p.map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) ^ n := by
+theorem submodule_map_pow_reverse (p : Submodule R (CliffordAlgebra Q)) (n : ℕ) :
+    (p ^ n).map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) =
+      p.map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) ^ n := by
   simp_rw [reverse, Submodule.map_comp, Submodule.map_pow, Submodule.map_unop_pow]
-
-/--
-theorem `submodule_comap_pow_reverse` / 定理 `submodule_comap_pow_reverse`
-
-English:
-theorem submodule_comap_pow_reverse
-  given: (p : Submodule R (CliffordAlgebra Q)) (n : Nat)
-  proof: by
-  simp_rw [← submodule_map_reverse_eq_comap, submodule_map_pow_reverse]
-
-@[simp]
-
-中文:
-定理 submodule_comap_pow_reverse
-  条件: (p : 子模 R (CliffordAlgebra Q)) (n : 自然数)
-  证明: by
-  simp_rw [← submodule_map_reverse_eq_comap, submodule_map_pow_reverse]
-
-@[simp]
-
-Depends on / 依赖: simp_rw, submodule_map_pow_reverse, submodule_map_reverse_eq_comap
+/-
+**CliffordAlgebra.submodule_comap_pow_reverse** 是 Mathlib 中的一个定理，位于命名空间 `Cliffor
+dAlgebra`。
+形式化陈述：submodule_comap_pow_reverse (p : Submodule R (CliffordAlgebra Q)) (n : Nat
+) : (p ^ n).comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = p.com
+ap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) ^ n
+参数：p : Submodule R (CliffordAlgebra Q)；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CliffordAlgebra.submodule_map_pow_reverse`：submodule_map_pow_reverse (p 
+: Submodule R (CliffordAlgebra Q)) (n : Nat) : (p ^ n).map (reverse : CliffordAl
+gebra Q ->ₗ[R] CliffordAlgebra …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem submodule_comap_pow_reverse (p : Submodule R (CliffordAlgebra Q)) (n : Nat) :
-    (p ^ n).comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) =
-      p.comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) ^ n := by
+theorem submodule_comap_pow_reverse (p : Submodule R (CliffordAlgebra Q)) (n : ℕ) :
+    (p ^ n).comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) =
+      p.comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) ^ n := by
   simp_rw [← submodule_map_reverse_eq_comap, submodule_map_pow_reverse]
 
 @[simp]
-/--
-theorem `evenOdd_map_reverse` / 定理 `evenOdd_map_reverse`
-
-English:
-theorem evenOdd_map_reverse
-  given: (n : ZMod 2)
-  proof: by
-  simp_rw [evenOdd, Submodule.map_iSup, submodule_map_pow_reverse, ι_range_map_reverse]
-
-@[simp]
-
-中文:
-定理 evenOdd_map_reverse
-  条件: (n : ZMod 2)
-  证明: by
-  simp_rw [evenOdd, Submodule.map_iSup, submodule_map_pow_reverse, ι_range_map_reverse]
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.map_iSup, evenOdd, map_iSup, simp_rw, submodule_map_pow_reverse
+/-
+**CliffordAlgebra.evenOdd_map_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgebra
+`。
+形式化陈述：evenOdd_map_reverse (n : ZMod 2) : (evenOdd Q n).map (reverse : CliffordAl
+gebra Q ->ₗ[R] CliffordAlgebra Q) = evenOdd Q n
+参数：n : ZMod 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_iSup`：map_iSup {ι : Sort*} (f : M ->ₛₗ[σ₁₂] M₂) (p : ι -> 
+Submodule R M) : map f (⨆ i, p i) = ⨆ i, map f (p i)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CliffordAlgebra.submodule_map_pow_reverse`：submodule_map_pow_reverse (p 
+: Submodule R (CliffordAlgebra Q)) (n : Nat) : (p ^ n).map (reverse : CliffordAl
+gebra Q ->ₗ[R] CliffordAlgebra …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CliffordAlgebra.ι_range_map_reverse`：ι_range_map_reverse : (LinearMap.ra
+nge (ι Q)).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = LinearMa
+p.range (ι Q)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem evenOdd_map_reverse (n : ZMod 2) :
-    (evenOdd Q n).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = evenOdd Q n := by
+    (evenOdd Q n).map (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) = evenOdd Q n := by
   simp_rw [evenOdd, Submodule.map_iSup, submodule_map_pow_reverse, ι_range_map_reverse]
 
 @[simp]
-/--
-theorem `evenOdd_comap_reverse` / 定理 `evenOdd_comap_reverse`
-
-English:
-theorem evenOdd_comap_reverse
-  given: (n : ZMod 2)
-  proof: by
-  rw [← submodule_map_reverse_eq_comap]; rw [evenOdd_map_reverse]
-
-中文:
-定理 evenOdd_comap_reverse
-  条件: (n : ZMod 2)
-  证明: by
-  rw [← submodule_map_reverse_eq_comap]; rw [evenOdd_map_reverse]
-
-Depends on / 依赖: evenOdd_map_reverse, submodule_map_reverse_eq_comap
+/-
+**CliffordAlgebra.evenOdd_comap_reverse** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlgeb
+ra`。
+形式化陈述：evenOdd_comap_reverse (n : ZMod 2) : (evenOdd Q n).comap (reverse : Cliffo
+rdAlgebra Q ->ₗ[R] CliffordAlgebra Q) = evenOdd Q n
+参数：n : ZMod 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CliffordAlgebra.submodule_map_reverse_eq_comap`：submodule_map_reverse_eq
+_comap (p : Submodule R (CliffordAlgebra Q)) : p.map (reverse : CliffordAlgebra 
+Q ->ₗ[R] CliffordAlgebra Q) = p.coma…
+· 使用定理 `CliffordAlgebra.evenOdd_map_reverse`：evenOdd_map_reverse (n : ZMod 2) : 
+(evenOdd Q n).map (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = evenO
+dd Q n
 -/
 theorem evenOdd_comap_reverse (n : ZMod 2) :
-    (evenOdd Q n).comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) = evenOdd Q n := by
-  rw [← submodule_map_reverse_eq_comap]; rw [evenOdd_map_reverse]
+    (evenOdd Q n).comap (reverse : CliffordAlgebra Q →ₗ[R] CliffordAlgebra Q) = evenOdd Q n := by
+  rw [← submodule_map_reverse_eq_comap, evenOdd_map_reverse]
 
 end Reverse
 
 @[simp]
-/--
-theorem `involute_mem_evenOdd_iff` / 定理 `involute_mem_evenOdd_iff`
-
-English:
-theorem involute_mem_evenOdd_iff
-  given: {x : CliffordAlgebra Q} {n : ZMod 2}
-  proof: SetLike.ext_iff.mp (evenOdd_comap_involute Q n) x
-
-@[simp]
-
-中文:
-定理 involute_mem_evenOdd_iff
-  条件: {x : CliffordAlgebra Q} {n : ZMod 2}
-  证明: SetLike.ext_iff.mp (evenOdd_comap_involute Q n) x
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.ext_iff.mp, evenOdd_comap_involute, ext_iff
+/-
+**CliffordAlgebra.involute_mem_evenOdd_iff** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAl
+gebra`。
+形式化陈述：involute_mem_evenOdd_iff {x : CliffordAlgebra Q} {n : ZMod 2} : involute x
+ in evenOdd Q n ↔ x in evenOdd Q n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `CliffordAlgebra.evenOdd_comap_involute`：evenOdd_comap_involute (n : ZMod
+ 2) : (evenOdd Q n).comap (involute : CliffordAlgebra Q ->ₐ[R] CliffordAlgebra Q
+).toLinearMap = evenOdd Q n
 -/
 theorem involute_mem_evenOdd_iff {x : CliffordAlgebra Q} {n : ZMod 2} :
-    involute x in evenOdd Q n ↔ x in evenOdd Q n :=
+    involute x ∈ evenOdd Q n ↔ x ∈ evenOdd Q n :=
   SetLike.ext_iff.mp (evenOdd_comap_involute Q n) x
 
 @[simp]
-/--
-theorem `reverse_mem_evenOdd_iff` / 定理 `reverse_mem_evenOdd_iff`
-
-English:
-theorem reverse_mem_evenOdd_iff
-  given: {x : CliffordAlgebra Q} {n : ZMod 2}
-  proof: SetLike.ext_iff.mp (evenOdd_comap_reverse Q n) x
-
-中文:
-定理 reverse_mem_evenOdd_iff
-  条件: {x : CliffordAlgebra Q} {n : ZMod 2}
-  证明: SetLike.ext_iff.mp (evenOdd_comap_reverse Q n) x
-
-Depends on / 依赖: SetLike, SetLike.ext_iff.mp, evenOdd_comap_reverse, ext_iff
+/-
+**CliffordAlgebra.reverse_mem_evenOdd_iff** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlg
+ebra`。
+形式化陈述：reverse_mem_evenOdd_iff {x : CliffordAlgebra Q} {n : ZMod 2} : reverse x i
+n evenOdd Q n ↔ x in evenOdd Q n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `CliffordAlgebra.evenOdd_comap_reverse`：evenOdd_comap_reverse (n : ZMod 2
+) : (evenOdd Q n).comap (reverse : CliffordAlgebra Q ->ₗ[R] CliffordAlgebra Q) =
+ evenOdd Q n
 -/
 theorem reverse_mem_evenOdd_iff {x : CliffordAlgebra Q} {n : ZMod 2} :
-    reverse x in evenOdd Q n ↔ x in evenOdd Q n :=
+    reverse x ∈ evenOdd Q n ↔ x ∈ evenOdd Q n :=
   SetLike.ext_iff.mp (evenOdd_comap_reverse Q n) x
 
 end Submodule
 
+/-!
+### Related properties of the even and odd submodules
 
-
-/--
-theorem `involute_eq_of_mem_even` / 定理 `involute_eq_of_mem_even`
-
-English:
-theorem involute_eq_of_mem_even
-  given: {x : CliffordAlgebra Q} (h : x in evenOdd Q 0)
-  statement: involute x = x
-  proof: by
-  induction x, h using even_induction with
-  | algebraMap r => exact AlgHom.commutes _ _
-  | add x y _hx _hy ihx ihy =>
-    rw [map_add]; rw [ihx]; rw [ihy]
-  | ι_mul_ι_mul m₁ m₂ x _hx ihx =>
-    rw [map_mul]; rw [map_mul]; rw [involute_ι]; rw [involute_ι]; rw [ihx]; rw [neg_mul_neg]
-
-中文:
-定理 involute_eq_of_mem_even
-  条件: {x : CliffordAlgebra Q} (h : x in evenOdd Q 0)
-  结论: involute x = x
-  证明: by
-  induction x, h using even_induction with
-  | algebraMap r => exact AlgHom.commutes _ _
-  | add x y _hx _hy ihx ihy =>
-    rw [map_add]; rw [ihx]; rw [ihy]
-  | ι_mul_ι_mul m₁ m₂ x _hx ihx =>
-    rw [map_mul]; rw [map_mul]; rw [involute_ι]; rw [involute_ι]; rw [ihx]; rw [neg_mul_neg]
-
-Depends on / 依赖: AlgHom, AlgHom.commutes, algebraMap, commutes, even_induction, map_add, map_mul, neg_mul_neg
+TODO: show that these are `iff`s when `Invertible (2 : R)`.
 -/
-theorem involute_eq_of_mem_even {x : CliffordAlgebra Q} (h : x in evenOdd Q 0) : involute x = x := by
+
+
+/-
+**CliffordAlgebra.involute_eq_of_mem_even** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlg
+ebra`。
+形式化陈述：involute_eq_of_mem_even {x : CliffordAlgebra Q} (h : x in evenOdd Q 0) : i
+nvolute x = x
+参数：h : x in evenOdd Q 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.even_induction`：even_induction {motive : forall x, x in 
+evenOdd Q 0 -> Prop} (algebraMap : forall r : R, motive (algebraMap _ _ r) (SetL
+ike.algebraMap_mem_g…
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `CliffordAlgebra.involute_ι`：involute_ι (m : M) : involute (ι Q m) = -ι Q
+ m
+· 使用定理 `neg_mul_neg`：neg_mul_neg (a b : α) : -a * -b = a * b
+
+--- 原说明 ---
+### Related properties of the even and odd submodules
+
+TODO: show that these are `iff`s when `Invertible (2 : R)`.
+-/
+theorem involute_eq_of_mem_even {x : CliffordAlgebra Q} (h : x ∈ evenOdd Q 0) : involute x = x := by
   induction x, h using even_induction with
   | algebraMap r => exact AlgHom.commutes _ _
   | add x y _hx _hy ihx ihy =>
-    rw [map_add]; rw [ihx]; rw [ihy]
+    rw [map_add, ihx, ihy]
   | ι_mul_ι_mul m₁ m₂ x _hx ihx =>
-    rw [map_mul]; rw [map_mul]; rw [involute_ι]; rw [involute_ι]; rw [ihx]; rw [neg_mul_neg]
-
-/--
-theorem `involute_eq_of_mem_odd` / 定理 `involute_eq_of_mem_odd`
-
-English:
-theorem involute_eq_of_mem_odd
-  given: {x : CliffordAlgebra Q} (h : x in evenOdd Q 1)
-  statement: involute x = -x
-  proof: by
-  induction x, h using odd_induction with
-  | ι m => exact involute_ι _
-  | add x y _hx _hy ihx ihy =>
-    rw [map_add]; rw [ihx]; rw [ihy]; rw [neg_add]
-  | ι_mul_ι_mul m₁ m₂ x _hx ihx =>
-    rw [map_mul]; rw [map_mul]; rw [involute_ι]; rw [involute_ι]; rw [ihx]; rw [neg_mul_neg]; rw [mul_neg]
-
-中文:
-定理 involute_eq_of_mem_odd
-  条件: {x : CliffordAlgebra Q} (h : x in evenOdd Q 1)
-  结论: involute x = -x
-  证明: by
-  induction x, h using odd_induction with
-  | ι m => exact involute_ι _
-  | add x y _hx _hy ihx ihy =>
-    rw [map_add]; rw [ihx]; rw [ihy]; rw [neg_add]
-  | ι_mul_ι_mul m₁ m₂ x _hx ihx =>
-    rw [map_mul]; rw [map_mul]; rw [involute_ι]; rw [involute_ι]; rw [ihx]; rw [neg_mul_neg]; rw [mul_neg]
-
-Depends on / 依赖: map_add, map_mul, mul_neg, neg_add, neg_mul_neg, odd_induction
+    rw [map_mul, map_mul, involute_ι, involute_ι, ihx, neg_mul_neg]
+/-
+**CliffordAlgebra.involute_eq_of_mem_odd** 是 Mathlib 中的一个定理，位于命名空间 `CliffordAlge
+bra`。
+形式化陈述：involute_eq_of_mem_odd {x : CliffordAlgebra Q} (h : x in evenOdd Q 1) : in
+volute x = -x
+参数：h : x in evenOdd Q 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CliffordAlgebra.odd_induction`：odd_induction {P : forall x, x in evenOdd
+ Q 1 -> Prop} (ι : forall v, P (ι Q v) (ι_mem_evenOdd_one _ _)) (add : forall x 
+y hx hy, P x hx -> …
+· 使用定理 `CliffordAlgebra.involute_ι`：involute_ι (m : M) : involute (ι Q m) = -ι Q
+ m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `neg_mul_neg`：neg_mul_neg (a b : α) : -a * -b = a * b
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
 -/
-theorem involute_eq_of_mem_odd {x : CliffordAlgebra Q} (h : x in evenOdd Q 1) : involute x = -x := by
+theorem involute_eq_of_mem_odd {x : CliffordAlgebra Q} (h : x ∈ evenOdd Q 1) : involute x = -x := by
   induction x, h using odd_induction with
   | ι m => exact involute_ι _
   | add x y _hx _hy ihx ihy =>
-    rw [map_add]; rw [ihx]; rw [ihy]; rw [neg_add]
+    rw [map_add, ihx, ihy, neg_add]
   | ι_mul_ι_mul m₁ m₂ x _hx ihx =>
-    rw [map_mul]; rw [map_mul]; rw [involute_ι]; rw [involute_ι]; rw [ihx]; rw [neg_mul_neg]; rw [mul_neg]
+    rw [map_mul, map_mul, involute_ι, involute_ι, ihx, neg_mul_neg, mul_neg]
 
 end CliffordAlgebra
+

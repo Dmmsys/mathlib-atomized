@@ -26,46 +26,21 @@ variable (R M : Type*) [CommRing R] [AddCommGroup M] [Module R M]
 
 namespace PolynomialModule
 
-/--
-Definition of `polynomialTensorProductLEquivPolynomialModule` / `polynomialTensorProductLEquivPolynomialModule` 的定义
+/-- The `R[X]`-linear equivalence `(R[X] ⊗[R] M) ≃ₗ[R[X]] (PolynomialModule R M)`. -/
+/-
+**PolynomialModule.polynomialTensorProductLEquivPolynomialModule** 是 Mathlib 中的一
+个定义，位于命名空间 `PolynomialModule`。
+形式化陈述：polynomialTensorProductLEquivPolynomialModule : R[X] otimes[R] M ≃ₗ[R[X]] 
+PolynomialModule R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition polynomialTensorProductLEquivPolynomialModule
-  signature: :
-  body: let e := liftBaseChange R[X] lsingle R (M := M) 0
-  let inv := (eval X).restrictScalars R ∘ₗ map R[X] (TensorProduct.mk R R[X] M 1)
-  have left : inv ∘ₗ e = .id := by
-    ext n x
-    simp [inv, e, ← monomial_one_right_eq_X_pow, smul_tmul']
-  have right : e.restrictScalars R ∘ₗ inv = .id := by
-    ext n x
-    simp [e, inv, ← monomial_one_right_eq_X_pow]
-  { __ := e
-    invFun := inv
-    left_inv := (congr($left ·))
-    right_inv := (congr($right ·)) }
-
-中文:
-定义 polynomialTensorProductLEquivPolynomialModule
-  签名: :
-  定义体: let e := liftBaseChange R[X] lsingle R (M := M) 0
-  let inv := (eval X).restrictScalars R ∘ₗ map R[X] (TensorProduct.mk R R[X] M 1)
-  have left : inv ∘ₗ e = .id := by
-    ext n x
-    simp [inv, e, ← monomial_one_right_eq_X_pow, smul_tmul']
-  have right : e.restrictScalars R ∘ₗ inv = .id := by
-    ext n x
-    simp [e, inv, ← monomial_one_right_eq_X_pow]
-  { __ := e
-    invFun := inv
-    left_inv := (congr($left ·))
-    right_inv := (congr($right ·)) }
-
-Depends on / 依赖: TensorProduct, TensorProduct.mk, e.restrictScalars, invFun, left_inv, liftBaseChange, lsingle, monomial_one_right_eq_X_pow, restrictScalars, right_inv, smul_tmul
+--- 原说明 ---
+The `R[X]`-linear equivalence `(R[X] ⊗[R] M) ≃ₗ[R[X]] (PolynomialModule R M)`.
 -/
 def polynomialTensorProductLEquivPolynomialModule :
-    R[X] otimes[R] M ≃ₗ[R[X]] PolynomialModule R M :=
-let e := liftBaseChange R[X] lsingle R (M := M) 0
+    R[X] ⊗[R] M ≃ₗ[R[X]] PolynomialModule R M :=
+  let e := liftBaseChange R[X] <| lsingle R (M := M) 0
   let inv := (eval X).restrictScalars R ∘ₗ map R[X] (TensorProduct.mk R R[X] M 1)
   have left : inv ∘ₗ e = .id := by
     ext n x
@@ -79,3 +54,4 @@ let e := liftBaseChange R[X] lsingle R (M := M) 0
     right_inv := (congr($right ·)) }
 
 end PolynomialModule
+

@@ -13,16 +13,16 @@ public import Mathlib.Util.AtomM
 
 /-! # A tactic for normalization over modules
 
-This file provides the two tactics `match_scalars` and `module`. Given a goal which is an equality
+This file provides the two tactics `match_scalars` and `module`.  Given a goal which is an equality
 in a type `M` (with `M` an `AddCommMonoid`), the `match_scalars` tactic parses the LHS and RHS of
 the goal as linear combinations of `M`-atoms over some semiring `R`, and reduces the goal to
-the respective equalities of the `R`-coefficients of each atom. The `module` tactic does this and
+the respective equalities of the `R`-coefficients of each atom.  The `module` tactic does this and
 then runs the `ring` tactic on each of these coefficient-wise equalities, failing if this does not
 resolve them.
 
 The scalar type `R` is not pre-determined: instead it starts as `ℕ` (when each atom is initially
 given a scalar `(1:ℕ)`) and gets bumped up into bigger semirings when such semirings are
-encountered. However, to permit this, it is assumed that there is a "linear order" on all the
+encountered.  However, to permit this, it is assumed that there is a "linear order" on all the
 semirings which appear in the expression: for any two semirings `R` and `S` which occur, we have
 either `Algebra R S` or `Algebra S R`.
 -/
@@ -39,22 +39,33 @@ namespace Mathlib.Tactic.Module
 /-! ### Theory of lists of pairs (scalar, vector)
 
 This section contains the lemmas which are orchestrated by the `match_scalars` and `module` tactics
-to prove goals in modules. The basic object which these lemmas concern is `NF R M`, a type synonym
+to prove goals in modules.  The basic object which these lemmas concern is `NF R M`, a type synonym
 for a list of ordered pairs in `R × M`, where typically `M` is an `R`-module.
 -/
 
-/--
-Definition of `NF` / `NF` 的定义
+/-- Basic theoretical "normal form" object of the `match_scalars` and `module` tactics: a type
+synonym for a list of ordered pairs in `R × M`, where typically `M` is an `R`-module.  This is the
+form to which the tactics reduce module expressions.
 
-English:
-definition NF
-  signature: (R : Type*) (M : Type*)
-  body: List (R × M)
+(It is not a full "normal form" because the scalars, i.e. `R` components, are not themselves
+ring-normalized. But this partial normal form is more convenient for our purposes.) -/
+/-
+**Mathlib.Tactic.Module.NF** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Module`。
+形式化陈述：NF (R : Type*) (M : Type*)
+参数：R : Type*；M : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 NF
-  签名: (R : 类型) (M : 类型)
-  定义体: List (R × M)
+--- 原说明 ---
+Basic theoretical "normal form" object of the `match_scalars` and `module` tacti
+cs: a type
+synonym for a list of ordered pairs in `R × M`, where typically `M` is an `R`-mo
+dule.  This is the
+form to which the tactics reduce module expressions.
+
+(It is not a full "normal form" because the scalars, i.e. `R` components, are no
+t themselves
+ring-normalized. But this partial normal form is more convenient for our purpose
+s.)
 -/
 def NF (R : Type*) (M : Type*) := List (R × M)
 
@@ -64,144 +75,121 @@ variable {S : Type*} {R : Type*} {M : Type*}
 /-- Augment a `Module.NF R M` object `l`, i.e. a list of pairs in `R × M`, by prepending another
 pair `p : R × M`. -/
 @[match_pattern]
-/--
-Definition of `cons` / `cons` 的定义
+/-
+**Mathlib.Tactic.Module.NF.cons** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Module
+.NF`。
+形式化陈述：cons (p : R × M) (l : NF R M) : NF R M
+参数：p : R × M；l : NF R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cons
-  signature: (p : R × M) (l : NF R M)
-  body: p :: l
-
-@[inherit_doc cons] infixl:100 " ::ᵣ " => cons
-
-中文:
-定义 cons
-  签名: (p : R × M) (l : NF R M)
-  定义体: p :: l
-
-@[inherit_doc cons] infixl:100 " ::ᵣ " => cons
+--- 原说明 ---
+Augment a `Module.NF R M` object `l`, i.e. a list of pairs in `R × M`, by prepen
+ding another
+pair `p : R × M`.
 -/
 def cons (p : R × M) (l : NF R M) : NF R M := p :: l
 
 @[inherit_doc cons] infixl:100 " ::ᵣ " => cons
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- Evaluate a `Module.NF R M` object `l`, i.e. a list of pairs in `R × M`, to an element of `M`, by
+forming the "linear combination" it specifies: scalar-multiply each `R` term to the corresponding
+`M` term, then add them all up. -/
+/-
+**Mathlib.Tactic.Module.NF.eval** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Module
+.NF`。
+形式化陈述：eval [Add M] [Zero M] [SMul R M] (l : NF R M) : M
+参数：l : NF R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: [Add M] [Zero M] [SMul R M] (l : NF R M)
-  body: (l.map (fun (⟨r, x⟩ : R × M) => r • x)).sum
-
-中文:
-定义 eval
-  签名: [加法 M] [零 M] [标量乘法 R M] (l : NF R M)
-  定义体: (l.map (fun (⟨r, x⟩ : R × M) => r • x)).sum
-
-Depends on / 依赖: l.map
+--- 原说明 ---
+Evaluate a `Module.NF R M` object `l`, i.e. a list of pairs in `R × M`, to an el
+ement of `M`, by
+forming the "linear combination" it specifies: scalar-multiply each `R` term to 
+the corresponding
+`M` term, then add them all up.
 -/
-def eval [Add M] [Zero M] [SMul R M] (l : NF R M) : M := (l.map (fun (⟨r, x⟩ : R × M) => r • x)).sum
-
-/--
-theorem `eval_cons` / 定理 `eval_cons`
-
-English:
-theorem eval_cons
-  given: [AddMonoid M] [SMul R M] (p : R × M) (l : NF R M)
-  proof: by
-  rfl
-
-中文:
-定理 eval_cons
-  条件: [加法幺半群 M] [标量乘法 R M] (p : R × M) (l : NF R M)
-  证明: by
-  rfl
+def eval [Add M] [Zero M] [SMul R M] (l : NF R M) : M := (l.map (fun (⟨r, x⟩ : R × M) ↦ r • x)).sum
+/-
+**Mathlib.Tactic.Module.NF.eval_cons** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.M
+odule.NF`。
+形式化陈述：∀ {R : Type u_2} {M : Type u_3} [inst : AddMonoid M] [inst_1 : SMul R M] (
+p : R × M) (l : Mathlib.Tactic.Module.NF R M),   (p ::ᵣ l).eval = p.1 • p.2 + l.
+eval
+参数：p : R × M；l : Mathlib.Tactic.Module.NF R M；p ::ᵣ l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem eval_cons [AddMonoid M] [SMul R M] (p : R × M) (l : NF R M) :
     (p ::ᵣ l).eval = p.1 • p.2 + l.eval := by
   rfl
-
-/--
-theorem `atom_eq_eval` / 定理 `atom_eq_eval`
-
-English:
-theorem atom_eq_eval
-  given: [AddMonoid M] (x : M)
-  statement: x = NF.eval [(1, x)]
-  proof: by simp [eval]
-
-中文:
-定理 atom_eq_eval
-  条件: [加法幺半群 M] (x : M)
-  结论: x = NF.eval [(1, x)]
-  证明: by simp [eval]
+/-
+**Mathlib.Tactic.Module.NF.atom_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tacti
+c.Module.NF`。
+形式化陈述：atom_eq_eval [AddMonoid M] (x : M) : x = NF.eval [(1, x)]
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem atom_eq_eval [AddMonoid M] (x : M) : x = NF.eval [(1, x)] := by simp [eval]
 
 variable (M) in
-/--
-theorem `zero_eq_eval` / 定理 `zero_eq_eval`
-
-English:
-theorem zero_eq_eval
-  given: [AddMonoid M]
-  statement: (0:M) = NF.eval (R := Nat) (M := M) []
-  proof: rfl
-
-中文:
-定理 zero_eq_eval
-  条件: [加法幺半群 M]
-  结论: (0:M) = NF.eval (R := 自然数) (M := M) []
-  证明: rfl
+/-
+**Mathlib.Tactic.Module.NF.zero_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tacti
+c.Module.NF`。
+形式化陈述：zero_eq_eval [AddMonoid M] : (0:M) = NF.eval (R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zero_eq_eval [AddMonoid M] : (0:M) = NF.eval (R := Nat) (M := M) [] := rfl
-
-/--
-theorem `add_eq_eval₁` / 定理 `add_eq_eval₁`
-
-English:
-theorem add_eq_eval₁
-  statement: [AddMonoid M] [SMul R M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
-  proof: by
-  simp only [eval_cons, ← h, add_assoc]
-
-中文:
-定理 add_eq_eval₁
-  结论: [加法幺半群 M] [标量乘法 R M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
-  证明: by
-  simp only [eval_cons, ← h, add_assoc]
-
-Depends on / 依赖: add_assoc, eval_cons
+theorem zero_eq_eval [AddMonoid M] : (0:M) = NF.eval (R := ℕ) (M := M) [] := rfl
+/-
+**Mathlib.Tactic.Module.NF.add_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：add_eq_eval {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [S
+emiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] {l₁ l₂ l : NF R M} {l₁' : 
+NF R₁ M} {l₂' : NF R₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁'.eval) (hx₂ : x₂ = l₂'.eval)
+ (h₁ : l₁.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval + l₂.eval = l.
+eval) : x₁ + x₂ = l.eval
+参数：hx₁ : x₁ = l₁'.eval；hx₂ : x₂ = l₂'.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval 
+= l₂'.eval；h : l₁.eval + l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_eq_eval₁ [AddMonoid M] [SMul R M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
     (h : l₁.eval + (a₂ ::ᵣ l₂).eval = l.eval) :
     (a₁ ::ᵣ l₁).eval + (a₂ ::ᵣ l₂).eval = (a₁ ::ᵣ l).eval := by
   simp only [eval_cons, ← h, add_assoc]
-
-/--
-theorem `add_eq_eval₂` / 定理 `add_eq_eval₂`
-
-English:
-theorem add_eq_eval₂
-  statement: [Semiring R] [AddCommMonoid M] [Module R M] (r₁ r₂ : R) (x : M)
-  proof: by
-  simp only [← h, eval_cons, add_smul, add_assoc]
-  congr! 1
-  simp only [← add_assoc]
-  congr! 1
-  rw [add_comm]
-
-中文:
-定理 add_eq_eval₂
-  结论: [半环 R] [加法交换幺半群 M] [模 R M] (r₁ r₂ : R) (x : M)
-  证明: by
-  simp only [← h, eval_cons, add_smul, add_assoc]
-  congr! 1
-  simp only [← add_assoc]
-  congr! 1
-  rw [add_comm]
-
-Depends on / 依赖: add_assoc, add_comm, add_smul, eval_cons
+/-
+**Mathlib.Tactic.Module.NF.add_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：add_eq_eval {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [S
+emiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] {l₁ l₂ l : NF R M} {l₁' : 
+NF R₁ M} {l₂' : NF R₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁'.eval) (hx₂ : x₂ = l₂'.eval)
+ (h₁ : l₁.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval + l₂.eval = l.
+eval) : x₁ + x₂ = l.eval
+参数：hx₁ : x₁ = l₁'.eval；hx₂ : x₂ = l₂'.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval 
+= l₂'.eval；h : l₁.eval + l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_eq_eval₂ [Semiring R] [AddCommMonoid M] [Module R M] (r₁ r₂ : R) (x : M)
     {l₁ l₂ l : NF R M} (h : l₁.eval + l₂.eval = l.eval) :
@@ -211,31 +199,21 @@ theorem add_eq_eval₂ [Semiring R] [AddCommMonoid M] [Module R M] (r₁ r₂ : 
   simp only [← add_assoc]
   congr! 1
   rw [add_comm]
-
-/--
-theorem `add_eq_eval₃` / 定理 `add_eq_eval₃`
-
-English:
-theorem add_eq_eval₃
-  statement: [Semiring R] [AddCommMonoid M] [Module R M] {a₁ : R × M} (a₂ : R × M)
-  proof: by
-  simp only [eval_cons, ← h]
-  nth_rw 4 [add_comm]
-  simp only [add_assoc]
-  congr! 2
-  rw [add_comm]
-
-中文:
-定理 add_eq_eval₃
-  结论: [半环 R] [加法交换幺半群 M] [模 R M] {a₁ : R × M} (a₂ : R × M)
-  证明: by
-  simp only [eval_cons, ← h]
-  nth_rw 4 [add_comm]
-  simp only [add_assoc]
-  congr! 2
-  rw [add_comm]
-
-Depends on / 依赖: add_assoc, add_comm, eval_cons, nth_rw
+/-
+**Mathlib.Tactic.Module.NF.add_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：add_eq_eval {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [S
+emiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] {l₁ l₂ l : NF R M} {l₁' : 
+NF R₁ M} {l₂' : NF R₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁'.eval) (hx₂ : x₂ = l₂'.eval)
+ (h₁ : l₁.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval + l₂.eval = l.
+eval) : x₁ + x₂ = l.eval
+参数：hx₁ : x₁ = l₁'.eval；hx₂ : x₂ = l₂'.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval 
+= l₂'.eval；h : l₁.eval + l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_eq_eval₃ [Semiring R] [AddCommMonoid M] [Module R M] {a₁ : R × M} (a₂ : R × M)
     {l₁ l₂ l : NF R M} (h : (a₁ ::ᵣ l₁).eval + l₂.eval = l.eval) :
@@ -245,77 +223,69 @@ theorem add_eq_eval₃ [Semiring R] [AddCommMonoid M] [Module R M] {a₁ : R × 
   simp only [add_assoc]
   congr! 2
   rw [add_comm]
-
-/--
-theorem `add_eq_eval` / 定理 `add_eq_eval`
-
-English:
-theorem add_eq_eval
-  statement: {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁]
-  proof: by
-  rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
-
-中文:
-定理 add_eq_eval
-  结论: {R₁ R₂ : 类型} [加法交换幺半群 M] [半环 R] [模 R M] [半环 R₁]
-  证明: by
-  rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
-
-Depends on / 依赖: AlexandrovDiscrete, DiscreteTopology, T1Space, discreteTopology_iff_nhds, principal_nhdsKer_singleton
+/-
+**Mathlib.Tactic.Module.NF.add_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：add_eq_eval {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [S
+emiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] {l₁ l₂ l : NF R M} {l₁' : 
+NF R₁ M} {l₂' : NF R₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁'.eval) (hx₂ : x₂ = l₂'.eval)
+ (h₁ : l₁.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval + l₂.eval = l.
+eval) : x₁ + x₂ = l.eval
+参数：hx₁ : x₁ = l₁'.eval；hx₂ : x₂ = l₂'.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval 
+= l₂'.eval；h : l₁.eval + l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem add_eq_eval {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁]
     [Module R₁ M] [Semiring R₂] [Module R₂ M] {l₁ l₂ l : NF R M} {l₁' : NF R₁ M} {l₂' : NF R₂ M}
     {x₁ x₂ : M} (hx₁ : x₁ = l₁'.eval) (hx₂ : x₂ = l₂'.eval) (h₁ : l₁.eval = l₁'.eval)
     (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval + l₂.eval = l.eval) :
     x₁ + x₂ = l.eval := by
-  rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
-
-/--
-theorem `sub_eq_eval₁` / 定理 `sub_eq_eval₁`
-
-English:
-theorem sub_eq_eval₁
-  statement: [SMul R M] [AddGroup M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
-  proof: by
-  simp only [eval_cons, ← h, sub_eq_add_neg, add_assoc]
-
-中文:
-定理 sub_eq_eval₁
-  结论: [标量乘法 R M] [加法群 M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
-  证明: by
-  simp only [eval_cons, ← h, sub_eq_add_neg, add_assoc]
-
-Depends on / 依赖: add_assoc, eval_cons, sub_eq_add_neg
+  rw [hx₁, hx₂, ← h₁, ← h₂, h]
+/-
+**Mathlib.Tactic.Module.NF.sub_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：sub_eq_eval {R₁ R₂ S₁ S₂ : Type*} [AddCommGroup M] [Ring R] [Module R M] [
+Semiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] [Semiring S₁] [Module S₁ 
+M] [Semiring S₂] [Module S₂ M] {l₁ l₂ l : NF R M} {l₁' : NF R₁ M} {l₂' : NF R₂ M
+} {l₁'' : NF S₁ M} {l₂'' : NF S₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁''.eval) (hx₂ : x₂
+ = l₂''.eval) (h₁' : l₁'.eval = l₁''.eval) (h₂' : l₂'.eval = l₂''.eval) (h₁ : l₁
+.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval - l₂.eval = l.eval) : x
+₁ - x₂ = l.eval
+参数：hx₁ : x₁ = l₁''.eval；hx₂ : x₂ = l₂''.eval；h₁' : l₁'.eval = l₁''.eval；h₂' : l₂
+'.eval = l₂''.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval = l₂'.eval；h : l₁.eval -
+ l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem sub_eq_eval₁ [SMul R M] [AddGroup M] (a₁ : R × M) {a₂ : R × M} {l₁ l₂ l : NF R M}
     (h : l₁.eval - (a₂ ::ᵣ l₂).eval = l.eval) :
     (a₁ ::ᵣ l₁).eval - (a₂ ::ᵣ l₂).eval = (a₁ ::ᵣ l).eval := by
   simp only [eval_cons, ← h, sub_eq_add_neg, add_assoc]
-
-/--
-theorem `sub_eq_eval₂` / 定理 `sub_eq_eval₂`
-
-English:
-theorem sub_eq_eval₂
-  statement: [Ring R] [AddCommGroup M] [Module R M] (r₁ r₂ : R) (x : M) {l₁ l₂ l : NF R M}
-  proof: by
-  simp only [← h, eval_cons, sub_eq_add_neg, neg_add, add_smul, neg_smul, add_assoc]
-  congr! 1
-  simp only [← add_assoc]
-  congr! 1
-  rw [add_comm]
-
-中文:
-定理 sub_eq_eval₂
-  结论: [环 R] [加法交换群 M] [模 R M] (r₁ r₂ : R) (x : M) {l₁ l₂ l : NF R M}
-  证明: by
-  simp only [← h, eval_cons, sub_eq_add_neg, neg_add, add_smul, neg_smul, add_assoc]
-  congr! 1
-  simp only [← add_assoc]
-  congr! 1
-  rw [add_comm]
-
-Depends on / 依赖: add_assoc, add_comm, add_smul, eval_cons, neg_add, neg_smul, sub_eq_add_neg
+/-
+**Mathlib.Tactic.Module.NF.sub_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：sub_eq_eval {R₁ R₂ S₁ S₂ : Type*} [AddCommGroup M] [Ring R] [Module R M] [
+Semiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] [Semiring S₁] [Module S₁ 
+M] [Semiring S₂] [Module S₂ M] {l₁ l₂ l : NF R M} {l₁' : NF R₁ M} {l₂' : NF R₂ M
+} {l₁'' : NF S₁ M} {l₂'' : NF S₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁''.eval) (hx₂ : x₂
+ = l₂''.eval) (h₁' : l₁'.eval = l₁''.eval) (h₂' : l₂'.eval = l₂''.eval) (h₁ : l₁
+.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval - l₂.eval = l.eval) : x
+₁ - x₂ = l.eval
+参数：hx₁ : x₁ = l₁''.eval；hx₂ : x₂ = l₂''.eval；h₁' : l₁'.eval = l₁''.eval；h₂' : l₂
+'.eval = l₂''.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval = l₂'.eval；h : l₁.eval -
+ l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem sub_eq_eval₂ [Ring R] [AddCommGroup M] [Module R M] (r₁ r₂ : R) (x : M) {l₁ l₂ l : NF R M}
     (h : l₁.eval - l₂.eval = l.eval) :
@@ -325,49 +295,49 @@ theorem sub_eq_eval₂ [Ring R] [AddCommGroup M] [Module R M] (r₁ r₂ : R) (x
   simp only [← add_assoc]
   congr! 1
   rw [add_comm]
-
-/--
-theorem `sub_eq_eval₃` / 定理 `sub_eq_eval₃`
-
-English:
-theorem sub_eq_eval₃
-  statement: [Ring R] [AddCommGroup M] [Module R M] {a₁ : R × M} (a₂ : R × M)
-  proof: by
-  simp only [eval_cons, neg_smul, neg_add, sub_eq_add_neg, ← h, ← add_assoc]
-  congr! 1
-  rw [add_comm]; rw [add_assoc]
-
-中文:
-定理 sub_eq_eval₃
-  结论: [环 R] [加法交换群 M] [模 R M] {a₁ : R × M} (a₂ : R × M)
-  证明: by
-  simp only [eval_cons, neg_smul, neg_add, sub_eq_add_neg, ← h, ← add_assoc]
-  congr! 1
-  rw [add_comm]; rw [add_assoc]
-
-Depends on / 依赖: add_assoc, add_comm, eval_cons, neg_add, neg_smul, sub_eq_add_neg
+/-
+**Mathlib.Tactic.Module.NF.sub_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：sub_eq_eval {R₁ R₂ S₁ S₂ : Type*} [AddCommGroup M] [Ring R] [Module R M] [
+Semiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] [Semiring S₁] [Module S₁ 
+M] [Semiring S₂] [Module S₂ M] {l₁ l₂ l : NF R M} {l₁' : NF R₁ M} {l₂' : NF R₂ M
+} {l₁'' : NF S₁ M} {l₂'' : NF S₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁''.eval) (hx₂ : x₂
+ = l₂''.eval) (h₁' : l₁'.eval = l₁''.eval) (h₂' : l₂'.eval = l₂''.eval) (h₁ : l₁
+.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval - l₂.eval = l.eval) : x
+₁ - x₂ = l.eval
+参数：hx₁ : x₁ = l₁''.eval；hx₂ : x₂ = l₂''.eval；h₁' : l₁'.eval = l₁''.eval；h₂' : l₂
+'.eval = l₂''.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval = l₂'.eval；h : l₁.eval -
+ l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem sub_eq_eval₃ [Ring R] [AddCommGroup M] [Module R M] {a₁ : R × M} (a₂ : R × M)
     {l₁ l₂ l : NF R M} (h : (a₁ ::ᵣ l₁).eval - l₂.eval = l.eval) :
     (a₁ ::ᵣ l₁).eval - (a₂ ::ᵣ l₂).eval = ((-a₂.1, a₂.2) ::ᵣ l).eval := by
   simp only [eval_cons, neg_smul, neg_add, sub_eq_add_neg, ← h, ← add_assoc]
   congr! 1
-  rw [add_comm]; rw [add_assoc]
-
-/--
-theorem `sub_eq_eval` / 定理 `sub_eq_eval`
-
-English:
-theorem sub_eq_eval
-  statement: {R₁ R₂ S₁ S₂ : Type*} [AddCommGroup M] [Ring R] [Module R M] [Semiring R₁]
-  proof: by
-  rw [hx₁]; rw [hx₂]; rw [← h₁']; rw [← h₂']; rw [← h₁]; rw [← h₂]; rw [h]
-
-中文:
-定理 sub_eq_eval
-  结论: {R₁ R₂ S₁ S₂ : 类型} [加法交换群 M] [环 R] [模 R M] [半环 R₁]
-  证明: by
-  rw [hx₁]; rw [hx₂]; rw [← h₁']; rw [← h₂']; rw [← h₁]; rw [← h₂]; rw [h]
+  rw [add_comm, add_assoc]
+/-
+**Mathlib.Tactic.Module.NF.sub_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：sub_eq_eval {R₁ R₂ S₁ S₂ : Type*} [AddCommGroup M] [Ring R] [Module R M] [
+Semiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] [Semiring S₁] [Module S₁ 
+M] [Semiring S₂] [Module S₂ M] {l₁ l₂ l : NF R M} {l₁' : NF R₁ M} {l₂' : NF R₂ M
+} {l₁'' : NF S₁ M} {l₂'' : NF S₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁''.eval) (hx₂ : x₂
+ = l₂''.eval) (h₁' : l₁'.eval = l₁''.eval) (h₂' : l₂'.eval = l₂''.eval) (h₁ : l₁
+.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval - l₂.eval = l.eval) : x
+₁ - x₂ = l.eval
+参数：hx₁ : x₁ = l₁''.eval；hx₂ : x₂ = l₂''.eval；h₁' : l₁'.eval = l₁''.eval；h₂' : l₂
+'.eval = l₂''.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval = l₂'.eval；h : l₁.eval -
+ l₂.eval = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem sub_eq_eval {R₁ R₂ S₁ S₂ : Type*} [AddCommGroup M] [Ring R] [Module R M] [Semiring R₁]
     [Module R₁ M] [Semiring R₂] [Module R₂ M] [Semiring S₁] [Module S₁ M] [Semiring S₂]
@@ -376,162 +346,134 @@ theorem sub_eq_eval {R₁ R₂ S₁ S₂ : Type*} [AddCommGroup M] [Ring R] [Mod
     (h₁' : l₁'.eval = l₁''.eval) (h₂' : l₂'.eval = l₂''.eval) (h₁ : l₁.eval = l₁'.eval)
     (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval - l₂.eval = l.eval) :
     x₁ - x₂ = l.eval := by
-  rw [hx₁]; rw [hx₂]; rw [← h₁']; rw [← h₂']; rw [← h₁]; rw [← h₂]; rw [h]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Neg
-  signature: R] : Neg (NF R M) where
-  body: l.map fun (a, x) => (-a, x)
-
-中文:
-实例 [取负
-  签名: R] : 取负 (NF R M) where
-  定义体: l.map fun (a, x) => (-a, x)
-
-Depends on / 依赖: l.map
+  rw [hx₁, hx₂, ← h₁', ← h₂', ← h₁, ← h₂, h]
+/-
+**Mathlib.Tactic.Module.NF.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Module.NF`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Neg R] : Neg (NF R M) where
-  neg l := l.map fun (a, x) => (-a, x)
+  neg l := l.map fun (a, x) ↦ (-a, x)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `eval_neg` / 定理 `eval_neg`
-
-English:
-theorem eval_neg
-  given: [AddCommGroup M] [Ring R] [Module R M] (l : NF R M)
-  statement: (-l).eval = - l.eval
-  proof: by
-  simp +instances only [NF.eval, List.map_map, List.sum_neg, NF.instNeg]
-  congr
-  ext p
-  simp
-
-中文:
-定理 eval_neg
-  条件: [加法交换群 M] [环 R] [模 R M] (l : NF R M)
-  结论: (-l).eval = - l.eval
-  证明: by
-  simp +instances only [NF.eval, List.map_map, List.sum_neg, NF.instNeg]
-  congr
-  ext p
-  simp
-
-Depends on / 依赖: List.map_map, List.sum_neg, NF.eval, NF.instNeg, instNeg, instances, map_map, sum_neg
+/-
+**Mathlib.Tactic.Module.NF.eval_neg** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Mo
+dule.NF`。
+形式化陈述：eval_neg [AddCommGroup M] [Ring R] [Module R M] (l : NF R M) : (-l).eval =
+ - l.eval
+参数：l : NF R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.sum_neg`：∀ {K : Type u_8} [inst : SubtractionCommMonoid K] (L : Lis
+t K), -L.sum = (List.map (fun x => -x) L).sum
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_neg [AddCommGroup M] [Ring R] [Module R M] (l : NF R M) : (-l).eval = - l.eval := by
   simp +instances only [NF.eval, List.map_map, List.sum_neg, NF.instNeg]
   congr
   ext p
   simp
-
-/--
-theorem `zero_sub_eq_eval` / 定理 `zero_sub_eq_eval`
-
-English:
-theorem zero_sub_eq_eval
-  given: [AddCommGroup M] [Ring R] [Module R M] (l : NF R M)
-  proof: by
-  simp [eval_neg]
-
-中文:
-定理 zero_sub_eq_eval
-  条件: [加法交换群 M] [环 R] [模 R M] (l : NF R M)
-  证明: by
-  simp [eval_neg]
-
-Depends on / 依赖: eval_neg
+/-
+**Mathlib.Tactic.Module.NF.zero_sub_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.T
+actic.Module.NF`。
+形式化陈述：zero_sub_eq_eval [AddCommGroup M] [Ring R] [Module R M] (l : NF R M) : 0 -
+ l.eval = (-l).eval
+参数：l : NF R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `Mathlib.Tactic.Module.NF.eval_neg`：eval_neg [AddCommGroup M] [Ring R] [M
+odule R M] (l : NF R M) : (-l).eval = - l.eval
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem zero_sub_eq_eval [AddCommGroup M] [Ring R] [Module R M] (l : NF R M) :
     0 - l.eval = (-l).eval := by
   simp [eval_neg]
-
-/--
-theorem `neg_eq_eval` / 定理 `neg_eq_eval`
-
-English:
-theorem neg_eq_eval
-  statement: [AddCommGroup M] [Semiring S] [Module S M] [Ring R] [Module R M] {l : NF R M}
-  proof: by
-  rw [h]; rw [← hl]; rw [eval_neg]
-
-中文:
-定理 neg_eq_eval
-  结论: [加法交换群 M] [半环 S] [模 S M] [环 R] [模 R M] {l : NF R M}
-  证明: by
-  rw [h]; rw [← hl]; rw [eval_neg]
-
-Depends on / 依赖: eval_neg
+/-
+**Mathlib.Tactic.Module.NF.neg_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic
+.Module.NF`。
+形式化陈述：neg_eq_eval [AddCommGroup M] [Semiring S] [Module S M] [Ring R] [Module R 
+M] {l : NF R M} {l₀ : NF S M} (hl : l.eval = l₀.eval) {x : M} (h : x = l₀.eval) 
+: - x = (-l).eval
+参数：hl : l.eval = l₀.eval；h : x = l₀.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Module.NF.eval_neg`：eval_neg [AddCommGroup M] [Ring R] [M
+odule R M] (l : NF R M) : (-l).eval = - l.eval
 -/
 theorem neg_eq_eval [AddCommGroup M] [Semiring S] [Module S M] [Ring R] [Module R M] {l : NF R M}
     {l₀ : NF S M} (hl : l.eval = l₀.eval) {x : M} (h : x = l₀.eval) :
     - x = (-l).eval := by
-  rw [h]; rw [← hl]; rw [eval_neg]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] : SMul R (NF R M) where
-  body: l.map fun (a, x) => (r * a, x)
-
-中文:
-实例 [乘法
-  签名: R] : 标量乘法 R (NF R M) where
-  定义体: l.map fun (a, x) => (r * a, x)
-
-Depends on / 依赖: l.map
+  rw [h, ← hl, eval_neg]
+/-
+**Mathlib.Tactic.Module.NF.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Module.NF`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul R] : SMul R (NF R M) where
-  smul r l := l.map fun (a, x) => (r * a, x)
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: [Mul R] (r : R) (l : NF R M)
-  statement: r • l = l.map fun (a, x) => (r * a, x)
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: [乘法 R] (r : R) (l : NF R M)
-  结论: r • l = l.map fun (a, x) => (r * a, x)
-  证明: rfl
+  smul r l := l.map fun (a, x) ↦ (r * a, x)
+/-
+**Mathlib.Tactic.Module.NF.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.
+Module.NF`。
+形式化陈述：∀ {R : Type u_2} {M : Type u_3} [inst : Mul R] (r : R) (l : Mathlib.Tactic
+.Module.NF R M),   r • l =     List.map       (fun x =>         match x with    
+     | (a, x) => (r * a, x))       l
+参数：r : R；l : Mathlib.Tactic.Module.NF R M；fun x =>         match x with         
+| (a, x) => (r * a, x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem smul_apply [Mul R] (r : R) (l : NF R M) : r • l = l.map fun (a, x) => (r * a, x) :=
+@[simp] theorem smul_apply [Mul R] (r : R) (l : NF R M) : r • l = l.map fun (a, x) ↦ (r * a, x) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `eval_smul` / 定理 `eval_smul`
-
-English:
-theorem eval_smul
-  statement: [AddCommMonoid M] [Semiring R] [Module R M] {l : NF R M} {x : M} (h : x = l.eval)
-  proof: by
-  unfold NF.eval at h ⊢
-  simp only [h, smul_sum, map_map, NF.smul_apply]
-  congr
-  ext p
-  simp [mul_smul]
-
-中文:
-定理 eval_smul
-  结论: [加法交换幺半群 M] [半环 R] [模 R M] {l : NF R M} {x : M} (h : x = l.eval)
-  证明: by
-  unfold NF.eval at h ⊢
-  simp only [h, smul_sum, map_map, NF.smul_apply]
-  congr
-  ext p
-  simp [mul_smul]
-
-Depends on / 依赖: NF.eval, NF.smul_apply, map_map, mul_smul, smul_apply, smul_sum
+/-
+**Mathlib.Tactic.Module.NF.eval_smul** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.M
+odule.NF`。
+形式化陈述：eval_smul [AddCommMonoid M] [Semiring R] [Module R M] {l : NF R M} {x : M}
+ (h : x = l.eval) (r : R) : (r • l).eval = r • x
+参数：h : x = l.eval；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `List.smul_sum`：List.smul_sum {r : M} {l : List N} : r • l.sum = (l.map (
+r • ·)).sum
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_smul [AddCommMonoid M] [Semiring R] [Module R M] {l : NF R M} {x : M} (h : x = l.eval)
     (r : R) : (r • l).eval = r • x := by
@@ -540,158 +482,180 @@ theorem eval_smul [AddCommMonoid M] [Semiring R] [Module R M] {l : NF R M} {x : 
   congr
   ext p
   simp [mul_smul]
-
-/--
-theorem `smul_eq_eval` / 定理 `smul_eq_eval`
-
-English:
-theorem smul_eq_eval
-  statement: {R₀ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₀]
-  proof: by
-  rw [← hs]; rw [hx]; rw [← hl]; rw [eval_smul]
-  rfl
-
-中文:
-定理 smul_eq_eval
-  结论: {R₀ : 类型} [加法交换幺半群 M] [半环 R] [模 R M] [半环 R₀]
-  证明: by
-  rw [← hs]; rw [hx]; rw [← hl]; rw [eval_smul]
-  rfl
-
-Depends on / 依赖: eval_smul
+/-
+**Mathlib.Tactic.Module.NF.smul_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tacti
+c.Module.NF`。
+形式化陈述：smul_eq_eval {R₀ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Sem
+iring R₀] [Module R₀ M] [Semiring S] [Module S M] {l : NF R M} {l₀ : NF R₀ M} {s
+ : S} {r : R} {x : M} (hx : x = l₀.eval) (hl : l.eval = l₀.eval) (hs : r • x = s
+ • x) : s • x = (r • l).eval
+参数：hx : x = l₀.eval；hl : l.eval = l₀.eval；hs : r • x = s • x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Module.NF.eval_smul`：eval_smul [AddCommMonoid M] [Semirin
+g R] [Module R M] {l : NF R M} {x : M} (h : x = l.eval) (r : R) : (r • l).eval =
+ r • x
 -/
 theorem smul_eq_eval {R₀ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₀]
     [Module R₀ M] [Semiring S] [Module S M] {l : NF R M} {l₀ : NF R₀ M} {s : S} {r : R}
     {x : M} (hx : x = l₀.eval) (hl : l.eval = l₀.eval) (hs : r • x = s • x) :
     s • x = (r • l).eval := by
-  rw [← hs]; rw [hx]; rw [← hl]; rw [eval_smul]
+  rw [← hs, hx, ← hl, eval_smul]
   rfl
-
-/--
-theorem `eq_cons_cons` / 定理 `eq_cons_cons`
-
-English:
-theorem eq_cons_cons
-  statement: [AddMonoid M] [SMul R M] {r₁ r₂ : R} (m : M) {l₁ l₂ : NF R M} (h1 : r₁ = r₂)
-  proof: by
-  simp [h1, h2]
-
-中文:
-定理 eq_cons_cons
-  结论: [加法幺半群 M] [标量乘法 R M] {r₁ r₂ : R} (m : M) {l₁ l₂ : NF R M} (h1 : r₁ = r₂)
-  证明: by
-  simp [h1, h2]
+/-
+**Mathlib.Tactic.Module.NF.eq_cons_cons** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tacti
+c.Module.NF`。
+形式化陈述：eq_cons_cons [AddMonoid M] [SMul R M] {r₁ r₂ : R} (m : M) {l₁ l₂ : NF R M}
+ (h1 : r₁ = r₂) (h2 : l₁.eval = l₂.eval) : ((r₁, m) ::ᵣ l₁).eval = ((r₂, m) ::ᵣ 
+l₂).eval
+参数：m : M；h1 : r₁ = r₂；h2 : l₁.eval = l₂.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Mathlib.Tactic.Module.NF.eval_cons`：∀ {R : Type u_2} {M : Type u_3} [ins
+t : AddMonoid M] [inst_1 : SMul R M] (p : R × M) (l : Mathlib.Tactic.Module.NF R
+ M),   (p ::ᵣ l).eval = …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_cons_cons [AddMonoid M] [SMul R M] {r₁ r₂ : R} (m : M) {l₁ l₂ : NF R M} (h1 : r₁ = r₂)
     (h2 : l₁.eval = l₂.eval) :
     ((r₁, m) ::ᵣ l₁).eval = ((r₂, m) ::ᵣ l₂).eval := by
   simp [h1, h2]
-
-/--
-theorem `eq_cons_const` / 定理 `eq_cons_const`
-
-English:
-theorem eq_cons_const
-  statement: [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) {n : M}
-  proof: by
-  simp [h1, h2]
-
-中文:
-定理 eq_cons_const
-  结论: [加法交换幺半群 M] [半环 R] [模 R M] {r : R} (m : M) {n : M}
-  证明: by
-  simp [h1, h2]
+/-
+**Mathlib.Tactic.Module.NF.eq_cons_const** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tact
+ic.Module.NF`。
+形式化陈述：eq_cons_const [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) 
+{n : M} {l : NF R M} (h1 : r = 0) (h2 : l.eval = n) : ((r, m) ::ᵣ l).eval = n
+参数：m : M；h1 : r = 0；h2 : l.eval = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Module.NF.eval_cons`：∀ {R : Type u_2} {M : Type u_3} [ins
+t : AddMonoid M] [inst_1 : SMul R M] (p : R × M) (l : Mathlib.Tactic.Module.NF R
+ M),   (p ::ᵣ l).eval = …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_cons_const [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) {n : M}
     {l : NF R M} (h1 : r = 0) (h2 : l.eval = n) :
     ((r, m) ::ᵣ l).eval = n := by
   simp [h1, h2]
-
-/--
-theorem `eq_const_cons` / 定理 `eq_const_cons`
-
-English:
-theorem eq_const_cons
-  statement: [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) {n : M}
-  proof: by
-  simp [← h1, h2]
-
-中文:
-定理 eq_const_cons
-  结论: [加法交换幺半群 M] [半环 R] [模 R M] {r : R} (m : M) {n : M}
-  证明: by
-  simp [← h1, h2]
+/-
+**Mathlib.Tactic.Module.NF.eq_const_cons** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tact
+ic.Module.NF`。
+形式化陈述：eq_const_cons [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) 
+{n : M} {l : NF R M} (h1 : 0 = r) (h2 : n = l.eval) : n = ((r, m) ::ᵣ l).eval
+参数：m : M；h1 : 0 = r；h2 : n = l.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Module.NF.eval_cons`：∀ {R : Type u_2} {M : Type u_3} [ins
+t : AddMonoid M] [inst_1 : SMul R M] (p : R × M) (l : Mathlib.Tactic.Module.NF R
+ M),   (p ::ᵣ l).eval = …
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_const_cons [AddCommMonoid M] [Semiring R] [Module R M] {r : R} (m : M) {n : M}
     {l : NF R M} (h1 : 0 = r) (h2 : n = l.eval) :
     n = ((r, m) ::ᵣ l).eval := by
   simp [← h1, h2]
-
-/--
-theorem `eq_of_eval_eq_eval` / 定理 `eq_of_eval_eq_eval`
-
-English:
-theorem eq_of_eval_eq_eval
-  statement: {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁]
-  proof: by
-  rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
-
-中文:
-定理 eq_of_eval_eq_eval
-  结论: {R₁ R₂ : 类型} [加法交换幺半群 M] [半环 R] [模 R M] [半环 R₁]
-  证明: by
-  rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
+/-
+**Mathlib.Tactic.Module.NF.eq_of_eval_eq_eval** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib
+.Tactic.Module.NF`。
+形式化陈述：eq_of_eval_eq_eval {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module 
+R M] [Semiring R₁] [Module R₁ M] [Semiring R₂] [Module R₂ M] {l₁ l₂ : NF R M} {l
+₁' : NF R₁ M} {l₂' : NF R₂ M} {x₁ x₂ : M} (hx₁ : x₁ = l₁'.eval) (hx₂ : x₂ = l₂'.
+eval) (h₁ : l₁.eval = l₁'.eval) (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval = l₂.eval
+) : x₁ = x₂
+参数：hx₁ : x₁ = l₁'.eval；hx₂ : x₂ = l₂'.eval；h₁ : l₁.eval = l₁'.eval；h₂ : l₂.eval 
+= l₂'.eval；h : l₁.eval = l₂.eval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem eq_of_eval_eq_eval {R₁ R₂ : Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁]
     [Module R₁ M] [Semiring R₂] [Module R₂ M] {l₁ l₂ : NF R M} {l₁' : NF R₁ M} {l₂' : NF R₂ M}
     {x₁ x₂ : M} (hx₁ : x₁ = l₁'.eval) (hx₂ : x₂ = l₂'.eval) (h₁ : l₁.eval = l₁'.eval)
     (h₂ : l₂.eval = l₂'.eval) (h : l₁.eval = l₂.eval) :
     x₁ = x₂ := by
-  rw [hx₁]; rw [hx₂]; rw [← h₁]; rw [← h₂]; rw [h]
+  rw [hx₁, hx₂, ← h₁, ← h₂, h]
 
 variable (R)
 
-/--
-Definition of `algebraMap` / `algebraMap` 的定义
+/-- Operate on a `Module.NF S M` object `l`, i.e. a list of pairs in `S × M`, where `S` is some
+commutative semiring, by applying to each `S`-component the algebra-map from `S` into a specified
+`S`-algebra `R`. -/
+/-
+**Mathlib.Tactic.Module.NF.algebraMap** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Module.NF`。
+形式化陈述：algebraMap [CommSemiring S] [Semiring R] [Algebra S R] (l : NF S M) : NF R
+ M
+参数：l : NF S M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraMap
-  signature: [CommSemiring S] [Semiring R] [Algebra S R] (l : NF S M)
-  body: l.map (fun ⟨s, x⟩ => (Algebra.algebraMap S R s, x))
-
-中文:
-定义 algebraMap
-  签名: [交换半环 S] [半环 R] [代数 S R] (l : NF S M)
-  定义体: l.map (fun ⟨s, x⟩ => (Algebra.algebraMap S R s, x))
-
-Depends on / 依赖: Algebra, Algebra.algebraMap, algebraMap, l.map
+--- 原说明 ---
+Operate on a `Module.NF S M` object `l`, i.e. a list of pairs in `S × M`, where 
+`S` is some
+commutative semiring, by applying to each `S`-component the algebra-map from `S`
+ into a specified
+`S`-algebra `R`.
 -/
 def algebraMap [CommSemiring S] [Semiring R] [Algebra S R] (l : NF S M) : NF R M :=
-  l.map (fun ⟨s, x⟩ => (Algebra.algebraMap S R s, x))
+  l.map (fun ⟨s, x⟩ ↦ (Algebra.algebraMap S R s, x))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `eval_algebraMap` / 定理 `eval_algebraMap`
-
-English:
-theorem eval_algebraMap
-  statement: [CommSemiring S] [Semiring R] [Algebra S R] [AddMonoid M] [SMul S M]
-  proof: by
-  simp only [NF.eval, algebraMap, map_map]
-  congr
-  ext
-  simp [IsScalarTower.algebraMap_smul]
-
-中文:
-定理 eval_algebraMap
-  结论: [交换半环 S] [半环 R] [代数 S R] [加法幺半群 M] [标量乘法 S M]
-  证明: by
-  simp only [NF.eval, algebraMap, map_map]
-  congr
-  ext
-  simp [IsScalarTower.algebraMap_smul]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_smul, NF.eval, algebraMap, algebraMap_smul, map_map
+/-
+**Mathlib.Tactic.Module.NF.eval_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Ta
+ctic.Module.NF`。
+形式化陈述：eval_algebraMap [CommSemiring S] [Semiring R] [Algebra S R] [AddMonoid M] 
+[SMul S M] [MulAction R M] [IsScalarTower S R M] (l : NF S M) : (l.algebraMap R)
+.eval = l.eval
+参数：l : NF S M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsScalarTower.algebraMap_smul`：algebraMap_smul [SMul R M] [IsScalarTower
+ R A M] (r : R) (x : M) : algebraMap R A r • x = r • x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_algebraMap [CommSemiring S] [Semiring R] [Algebra S R] [AddMonoid M] [SMul S M]
     [MulAction R M] [IsScalarTower S R M] (l : NF S M) :
@@ -709,67 +673,99 @@ variable {u v : Level}
 
 /-! ### Lists of expressions representing scalars and vectors, and operations on such lists -/
 
-/--
-Definition of `qNF` / `qNF` 的定义
+/-- Basic meta-code "normal form" object of the `match_scalars` and `module` tactics: a type synonym
+for a list of ordered triples comprising expressions representing terms of two types `R` and `M`
+(where typically `M` is an `R`-module), together with a natural number "index".
 
-English:
-abbreviation qNF
-  signature: (R : Q(Type u)) (M : Q(Type v))
-  body: List ((Q($R) × Q($M)) × Nat)
+The natural number represents the index of the `M` term in the `AtomM` monad: this is not enforced,
+but is sometimes assumed in operations.  Thus when items `((a₁, x₁), k)` and `((a₂, x₂), k)`
+appear in two different `Module.qNF` objects (i.e. with the same `ℕ`-index `k`), it is expected that
+the expressions `x₁` and `x₂` are the same.  It is also expected that the items in a `Module.qNF`
+list are in strictly increasing order by natural-number index.
 
-中文:
-缩写 qNF
-  签名: (R : Q(类型u)) (M : Q(类型v))
-  定义体: List ((Q($R) × Q($M)) × Nat)
+By forgetting the natural number indices, an expression representing a `Mathlib.Tactic.Module.NF`
+object can be built from a `Module.qNF` object; this construction is provided as
+`Mathlib.Tactic.Module.qNF.toNF`. -/
+/-
+**Mathlib.Tactic.Module.qNF** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.Module`。
+形式化陈述：qNF (R : Q(Type u)) (M : Q(Type v))
+参数：R : Q(Type u)；M : Q(Type v)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Basic meta-code "normal form" object of the `match_scalars` and `module` tactics
+: a type synonym
+for a list of ordered triples comprising expressions representing terms of two t
+ypes `R` and `M`
+(where typically `M` is an `R`-module), together with a natural number "index".
+
+The natural number represents the index of the `M` term in the `AtomM` monad: th
+is is not enforced,
+but is sometimes assumed in operations.  Thus when items `((a₁, x₁), k)` and `((
+a₂, x₂), k)`
+appear in two different `Module.qNF` objects (i.e. with the same `ℕ`-index `k`),
+ it is expected that
+the expressions `x₁` and `x₂` are the same.  It is also expected that the items 
+in a `Module.qNF`
+list are in strictly increasing order by natural-number index.
+
+By forgetting the natural number indices, an expression representing a `Mathlib.
+Tactic.Module.NF`
+object can be built from a `Module.qNF` object; this construction is provided as
+`Mathlib.Tactic.Module.qNF.toNF`.
 -/
-abbrev qNF (R : Q(Type u)) (M : Q(Type v)) := List ((Q($R) × Q($M)) × Nat)
+abbrev qNF (R : Q(Type u)) (M : Q(Type v)) := List ((Q($R) × Q($M)) × ℕ)
 
 namespace qNF
 
 variable {M : Q(Type v)} {R : Q(Type u)}
 
-/--
-Definition of `toNF` / `toNF` 的定义
+/-- Given `l` of type `qNF R M`, i.e. a list of `(Q($R) × Q($M)) × ℕ`s (two `Expr`s and a natural
+number), build an `Expr` representing an object of type `NF R M` (i.e. `List (R × M)`) in the
+in the obvious way: by forgetting the natural numbers and gluing together the `Expr`s. -/
+/-
+**Mathlib.Tactic.Module.qNF.toNF** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Modul
+e.qNF`。
+形式化陈述：toNF (l : qNF R M) : Q(NF $R $M)
+参数：l : qNF R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNF
-  signature: (l : qNF R M)
-  body: let l' : List Q($R × $M) := (l.map Prod.fst).map (fun (a, x) => q(($a, $x)))
-  let qt : List Q($R × $M) -> Q(List ($R × $M)) := List.rec q([]) (fun e _ l => q($e ::ᵣ $l))
-  qt l'
-
-中文:
-定义 toNF
-  签名: (l : qNF R M)
-  定义体: let l' : List Q($R × $M) := (l.map Prod.fst).map (fun (a, x) => q(($a, $x)))
-  let qt : List Q($R × $M) -> Q(List ($R × $M)) := List.rec q([]) (fun e _ l => q($e ::ᵣ $l))
-  qt l'
-
-Depends on / 依赖: List.rec, Prod.fst, l.map
+--- 原说明 ---
+Given `l` of type `qNF R M`, i.e. a list of `(Q($R) × Q($M)) × ℕ`s (two `Expr`s 
+and a natural
+number), build an `Expr` representing an object of type `NF R M` (i.e. `List (R 
+× M)`) in the
+in the obvious way: by forgetting the natural numbers and gluing together the `E
+xpr`s.
 -/
 def toNF (l : qNF R M) : Q(NF $R $M) :=
-  let l' : List Q($R × $M) := (l.map Prod.fst).map (fun (a, x) => q(($a, $x)))
-  let qt : List Q($R × $M) -> Q(List ($R × $M)) := List.rec q([]) (fun e _ l => q($e ::ᵣ $l))
+  let l' : List Q($R × $M) := (l.map Prod.fst).map (fun (a, x) ↦ q(($a, $x)))
+  let qt : List Q($R × $M) → Q(List ($R × $M)) := List.rec q([]) (fun e _ l ↦ q($e ::ᵣ $l))
   qt l'
 
-/--
-Definition of `onScalar` / `onScalar` 的定义
+/-- Given `l` of type `qNF R₁ M`, i.e. a list of `(Q($R₁) × Q($M)) × ℕ`s (two `Expr`s and a natural
+number), apply an expression representing a function with domain `R₁` to each of the `Q($R₁)`
+components. -/
+/-
+**Mathlib.Tactic.Module.qNF.onScalar** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.M
+odule.qNF`。
+形式化陈述：onScalar {u₁ u₂ : Level} {R₁ : Q(Type u₁)} {R₂ : Q(Type u₂)} (l : qNF R₁ M
+) (f : Q($R₁ -> $R₂)) : qNF R₂ M
+参数：Type u₁；Type u₂；l : qNF R₁ M；f : Q($R₁ -> $R₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition onScalar
-  signature: {u₁ u₂ : Level} {R₁ : Q(Type u₁)} {R₂ : Q(Type u₂)} (l : qNF R₁ M) (f : Q($R₁ -> $R₂))
-  body: l.map fun ((a, x), k) => ((q($f $a), x), k)
-
-中文:
-定义 onScalar
-  签名: {u₁ u₂ : Level} {R₁ : Q(类型u₁)} {R₂ : Q(类型u₂)} (l : qNF R₁ M) (f : Q($R₁ -> $R₂))
-  定义体: l.map fun ((a, x), k) => ((q($f $a), x), k)
-
-Depends on / 依赖: l.map
+--- 原说明 ---
+Given `l` of type `qNF R₁ M`, i.e. a list of `(Q($R₁) × Q($M)) × ℕ`s (two `Expr`
+s and a natural
+number), apply an expression representing a function with domain `R₁` to each of
+ the `Q($R₁)`
+components.
 -/
-def onScalar {u₁ u₂ : Level} {R₁ : Q(Type u₁)} {R₂ : Q(Type u₂)} (l : qNF R₁ M) (f : Q($R₁ -> $R₂)) :
+def onScalar {u₁ u₂ : Level} {R₁ : Q(Type u₁)} {R₂ : Q(Type u₂)} (l : qNF R₁ M) (f : Q($R₁ → $R₂)) :
     qNF R₂ M :=
-  l.map fun ((a, x), k) => ((q($f $a), x), k)
+  l.map fun ((a, x), k) ↦ ((q($f $a), x), k)
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Given two terms `l₁`, `l₂` of type `qNF R M`, i.e. lists of `(Q($R) × Q($M)) × ℕ`s (two `Expr`s
@@ -784,7 +780,7 @@ the same `ℕ`-component `k`, then the expressions `x₁` and `x₂` are equal.
 The construction is as follows: merge the two lists, except that if pairs `(a₁, x₁)` and `(a₂, x₂)`
 appear in `l₁`, `l₂` respectively with the same `ℕ`-component `k`, then contribute a term
 `(a₁ + a₂, x₁)` to the output list with `ℕ`-component `k`. -/
-meta def add (iR : Q(Semiring $R)) : qNF R M -> qNF R M -> qNF R M
+meta def add (iR : Q(Semiring $R)) : qNF R M → qNF R M → qNF R M
   | [], l => l
   | l, [] => l
   | ((a₁, x₁), k₁) ::ᵣ t₁, ((a₂, x₂), k₂) ::ᵣ t₂ =>
@@ -818,18 +814,51 @@ meta def mkAddProof {iR : Q(Semiring $R)} {iM : Q(AddCommMonoid $M)} (iRM : Q(Mo
       (q(NF.add_eq_eval₃ ($a₂, $x₂) $pf):)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `sub` / `sub` 的定义
+/-- Given two terms `l₁`, `l₂` of type `qNF R M`, i.e. lists of `(Q($R) × Q($M)) × ℕ`s (two `Expr`s
+and a natural number), construct another such term `l`, which will have the property that in the
+`$R`-module `$M`, the difference of the "linear combinations" represented by `l₁` and `l₂` is the
+linear combination represented by `l`.
 
-English:
-definition sub
-  signature: (iR : Q(Ring $R))
+The construction assumes, to be valid, that the lists `l₁` and `l₂` are in strictly increasing order
+by `ℕ`-component, and that if pairs `(a₁, x₁)` and `(a₂, x₂)` appear in `l₁`, `l₂` respectively with
+the same `ℕ`-component `k`, then the expressions `x₁` and `x₂` are equal.
 
-中文:
-定义 sub
-  签名: (iR : Q(环 $R))
+The construction is as follows: merge the first list and the negation of the second list, except
+that if pairs `(a₁, x₁)` and `(a₂, x₂)` appear in `l₁`, `l₂` respectively with the same
+`ℕ`-component `k`, then contribute a term `(a₁ - a₂, x₁)` to the output list with `ℕ`-component `k`.
 -/
-def sub (iR : Q(Ring $R)) : qNF R M -> qNF R M -> qNF R M
+/-
+**Mathlib.Tactic.Module.qNF.sub** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Module
+.qNF`。
+形式化陈述：{u v : Level} →   {M : Q(Type v)} →     {R : Q(Type u)} →       Q(Ring «$R
+») → Mathlib.Tactic.Module.qNF R M → Mathlib.Tactic.Module.qNF R M → Mathlib.Tac
+tic.Module.qNF R M
+参数：Type v；Type u；Ring «$R»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given two terms `l₁`, `l₂` of type `qNF R M`, i.e. lists of `(Q($R) × Q($M)) × ℕ
+`s (two `Expr`s
+and a natural number), construct another such term `l`, which will have the prop
+erty that in the
+`$R`-module `$M`, the difference of the "linear combinations" represented by `l₁
+` and `l₂` is the
+linear combination represented by `l`.
+
+The construction assumes, to be valid, that the lists `l₁` and `l₂` are in stric
+tly increasing order
+by `ℕ`-component, and that if pairs `(a₁, x₁)` and `(a₂, x₂)` appear in `l₁`, `l
+₂` respectively with
+the same `ℕ`-component `k`, then the expressions `x₁` and `x₂` are equal.
+
+The construction is as follows: merge the first list and the negation of the sec
+ond list, except
+that if pairs `(a₁, x₁)` and `(a₂, x₂)` appear in `l₁`, `l₂` respectively with t
+he same
+`ℕ`-component `k`, then contribute a term `(a₁ - a₂, x₁)` to the output list wit
+h `ℕ`-component `k`.
+-/
+def sub (iR : Q(Ring $R)) : qNF R M → qNF R M → qNF R M
   | [], l => l.onScalar q(Neg.neg)
   | l, [] => l
   | ((a₁, x₁), k₁) ::ᵣ t₁, ((a₂, x₂), k₂) ::ᵣ t₂ =>
@@ -841,44 +870,29 @@ def sub (iR : Q(Ring $R)) : qNF R M -> qNF R M -> qNF R M
       ((q(-$a₂), x₂), k₂) ::ᵣ sub iR (((a₁, x₁), k₁) ::ᵣ t₁) t₂
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `mkSubProof` / `mkSubProof` 的定义
+/-- Given two terms `l₁`, `l₂` of type `qNF R M`, i.e. lists of `(Q($R) × Q($M)) × ℕ`s (two `Expr`s
+and a natural number), recursively construct a proof that in the `$R`-module `$M`, the difference
+of the "linear combinations" represented by `l₁` and `l₂` is the linear combination represented by
+`Module.qNF.sub iR l₁ l₁`. -/
+/-
+**Mathlib.Tactic.Module.qNF.mkSubProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Module.qNF`。
+形式化陈述：mkSubProof (iR : Q(Ring $R)) (iM : Q(AddCommGroup $M)) (iRM : Q(Module $R 
+$M)) (l₁ l₂ : qNF R M) : Q(NF.eval $(l₁.toNF) - NF.eval $(l₂.toNF) = NF.eval $((
+qNF.sub iR l₁ l₂).toNF))
+参数：iR : Q(Ring $R)；iM : Q(AddCommGroup $M)；iRM : Q(Module $R $M)；l₁ l₂ : qNF R M
+。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkSubProof
-  signature: (iR : Q(Ring $R)) (iM : Q(AddCommGroup $M)) (iRM : Q(Module $R $M))
-  body: match l₁, l₂ with
-  | [], l => (q(NF.zero_sub_eq_eval $(l.toNF)):)
-  | l, [] => (q(sub_zero (NF.eval $(l.toNF))):)
-  | ((a₁, x₁), k₁) ::ᵣ t₁, ((a₂, x₂), k₂) ::ᵣ t₂ =>
-    if k₁ < k₂ then
-      let pf := mkSubProof iR iM iRM t₁ (((a₂, x₂), k₂) ::ᵣ t₂)
-      (q(NF.sub_eq_eval₁ ($a₁, $x₁) $pf):)
-    else if k₁ = k₂ then
-      let pf := mkSubProof iR iM iRM t₁ t₂
-      (q(NF.sub_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
-    else
-      let pf := mkSubProof iR iM iRM (((a₁, x₁), k₁) ::ᵣ t₁) t₂
-      (q(NF.sub_eq_eval₃ ($a₂, $x₂) $pf):)
-
-中文:
-定义 mkSubProof
-  签名: (iR : Q(环 $R)) (iM : Q(加法交换群 $M)) (iRM : Q(模 $R $M))
-  定义体: match l₁, l₂ with
-  | [], l => (q(NF.zero_sub_eq_eval $(l.toNF)):)
-  | l, [] => (q(sub_zero (NF.eval $(l.toNF))):)
-  | ((a₁, x₁), k₁) ::ᵣ t₁, ((a₂, x₂), k₂) ::ᵣ t₂ =>
-    if k₁ < k₂ then
-      let pf := mkSubProof iR iM iRM t₁ (((a₂, x₂), k₂) ::ᵣ t₂)
-      (q(NF.sub_eq_eval₁ ($a₁, $x₁) $pf):)
-    else if k₁ = k₂ then
-      let pf := mkSubProof iR iM iRM t₁ t₂
-      (q(NF.sub_eq_eval₂ $a₁ $a₂ $x₁ $pf):)
-    else
-      let pf := mkSubProof iR iM iRM (((a₁, x₁), k₁) ::ᵣ t₁) t₂
-      (q(NF.sub_eq_eval₃ ($a₂, $x₂) $pf):)
-
-Depends on / 依赖: NF.eval, NF.sub_eq_eval, NF.zero_sub_eq_eval, l.toNF, mkSubProof, sub_zero, zero_sub_eq_eval
+--- 原说明 ---
+Given two terms `l₁`, `l₂` of type `qNF R M`, i.e. lists of `(Q($R) × Q($M)) × ℕ
+`s (two `Expr`s
+and a natural number), recursively construct a proof that in the `$R`-module `$M
+`, the difference
+of the "linear combinations" represented by `l₁` and `l₂` is the linear combinat
+ion represented by
+`Module.qNF.sub iR l₁ l₁`.
 -/
 def mkSubProof (iR : Q(Ring $R)) (iM : Q(AddCommGroup $M)) (iRM : Q(Module $R $M))
     (l₁ l₂ : qNF R M) :
@@ -901,77 +915,50 @@ variable {iM : Q(AddCommMonoid $M)}
   {u₁ : Level} {R₁ : Q(Type u₁)} {iR₁ : Q(Semiring $R₁)} (iRM₁ : Q(@Module $R₁ $M $iR₁ $iM))
   {u₂ : Level} {R₂ : Q(Type u₂)} (iR₂ : Q(Semiring $R₂)) (iRM₂ : Q(@Module $R₂ $M $iR₂ $iM))
 
-/--
-Definition of `matchRings` / `matchRings` 的定义
+/-- Given an expression `M` representing a type which is an `AddCommMonoid` and a module over *two*
+semirings `R₁` and `R₂`, find the "bigger" of the two semirings.  That is, we assume that it will
+turn out to be the case that either (1) `R₁` is an `R₂`-algebra and the `R₂` scalar action on `M` is
+induced from `R₁`'s scalar action on `M`, or (2) vice versa; we return the semiring `R₁` in the
+first case and `R₂` in the second case.
 
-English:
-definition matchRings
-  signature: (l₁ : qNF R₁ M) (l₂ : qNF R₂ M) (r : Q($R₂)) (x : Q($M))
-  body: do
-if ← withReducible isDefEq R₁ R₂ then
-  -- the case when `R₁ = R₂` is handled separately, so as not to require commutativity of that ring
-    pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂, (q(@rfl _ (NF.eval $(l₂.toNF))):)⟩,
-      r, (q(@rfl _ ($r • $x)):)⟩
-  -- otherwise the "smaller" of the two rings must be commutative
-  else try
-    -- first try to exhibit `R₂` as an `R₁`-algebra
-    let _i₁ ← synthInstanceQ q(CommSemiring $R₁)
-    let _i₃ ← synthInstanceQ q(Algebra $R₁ $R₂)
-    let _i₄ ← synthInstanceQ q(IsScalarTower $R₁ $R₂ $M)
-    assumeInstancesCommute
-    let l₁' : qNF R₂ M := l₁.onScalar q(algebraMap $R₁ $R₂)
-    pure ⟨u₂, R₂, iR₂, iRM₂, ⟨l₁', (q(NF.eval_algebraMap $R₂ $(l₁.toNF)):)⟩, ⟨l₂, q(rfl)⟩,
-      r, q(rfl)⟩
-  catch _ => try
-    -- then if that fails, try to exhibit `R₁` as an `R₂`-algebra
-    let _i₁ ← synthInstanceQ q(CommSemiring $R₂)
-    let _i₃ ← synthInstanceQ q(Algebra $R₂ $R₁)
-    let _i₄ ← synthInstanceQ q(IsScalarTower $R₂ $R₁ $M)
-    assumeInstancesCommute
-    let l₂' : qNF R₁ M := l₂.onScalar q(algebraMap $R₂ $R₁)
-    let r' : Q($R₁) := q(algebraMap $R₂ $R₁ $r)
-    pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂', (q(NF.eval_algebraMap $R₁ $(l₂.toNF)):)⟩,
-      r', (q(IsScalarTower.algebraMap_smul $R₁ $r $x):)⟩
-  catch _ =>
-    throwError "match_scalars failed: {R₁} is not an {R₂}-algebra and {R₂} is not an {R₁}-algebra"
+Moreover, given expressions representing particular scalar multiplications of `R₁` and/or `R₂` on
+`M` (a `List (R₁ × M)`, a `List (R₂ × M)`, a pair `(r, x) : R₂ × M`), bump these up to the "big"
+ring by applying the algebra-map where needed. -/
+/-
+**Mathlib.Tactic.Module.qNF.matchRings** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Module.qNF`。
+形式化陈述：matchRings (l₁ : qNF R₁ M) (l₂ : qNF R₂ M) (r : Q($R₂)) (x : Q($M)) : Meta
+M Σ u : Level, Σ R : Q(Type u), Σ iR : Q(Semiring $R), Σ _ : Q(@Module $R $M $iR
+ $iM), (Σ l₁' : qNF R M, Q(NF.eval $(l₁'.toNF) = NF.eval $(l₁.toNF))) × (Σ l₂' :
+ qNF R M, Q(NF.eval $(l₂'.toNF) = NF.eval $(l₂.toNF))) × (Σ r' : Q($R), Q($r' • 
+$x = $r • $x))
+参数：l₁ : qNF R₁ M；l₂ : qNF R₂ M；r : Q($R₂)；x : Q($M)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 matchRings
-  签名: (l₁ : qNF R₁ M) (l₂ : qNF R₂ M) (r : Q($R₂)) (x : Q($M))
-  定义体: do
-if ← withReducible isDefEq R₁ R₂ then
-  -- the case when `R₁ = R₂` is handled separately, so as not to require commutativity of that ring
-    pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂, (q(@rfl _ (NF.eval $(l₂.toNF))):)⟩,
-      r, (q(@rfl _ ($r • $x)):)⟩
-  -- otherwise the "smaller" of the two rings must be commutative
-  else try
-    -- first try to exhibit `R₂` as an `R₁`-algebra
-    let _i₁ ← synthInstanceQ q(CommSemiring $R₁)
-    let _i₃ ← synthInstanceQ q(Algebra $R₁ $R₂)
-    let _i₄ ← synthInstanceQ q(IsScalarTower $R₁ $R₂ $M)
-    assumeInstancesCommute
-    let l₁' : qNF R₂ M := l₁.onScalar q(algebraMap $R₁ $R₂)
-    pure ⟨u₂, R₂, iR₂, iRM₂, ⟨l₁', (q(NF.eval_algebraMap $R₂ $(l₁.toNF)):)⟩, ⟨l₂, q(rfl)⟩,
-      r, q(rfl)⟩
-  catch _ => try
-    -- then if that fails, try to exhibit `R₁` as an `R₂`-algebra
-    let _i₁ ← synthInstanceQ q(CommSemiring $R₂)
-    let _i₃ ← synthInstanceQ q(Algebra $R₂ $R₁)
-    let _i₄ ← synthInstanceQ q(IsScalarTower $R₂ $R₁ $M)
-    assumeInstancesCommute
-    let l₂' : qNF R₁ M := l₂.onScalar q(algebraMap $R₂ $R₁)
-    let r' : Q($R₁) := q(algebraMap $R₂ $R₁ $r)
-    pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂', (q(NF.eval_algebraMap $R₁ $(l₂.toNF)):)⟩,
-      r', (q(IsScalarTower.algebraMap_smul $R₁ $r $x):)⟩
-  catch _ =>
-    throwError "match_scalars failed: {R₁} is not an {R₂}-algebra and {R₂} is not an {R₁}-algebra"
+--- 原说明 ---
+Given an expression `M` representing a type which is an `AddCommMonoid` and a mo
+dule over *two*
+semirings `R₁` and `R₂`, find the "bigger" of the two semirings.  That is, we as
+sume that it will
+turn out to be the case that either (1) `R₁` is an `R₂`-algebra and the `R₂` sca
+lar action on `M` is
+induced from `R₁`'s scalar action on `M`, or (2) vice versa; we return the semir
+ing `R₁` in the
+first case and `R₂` in the second case.
+
+Moreover, given expressions representing particular scalar multiplications of `R
+₁` and/or `R₂` on
+`M` (a `List (R₁ × M)`, a `List (R₂ × M)`, a pair `(r, x) : R₂ × M`), bump these
+ up to the "big"
+ring by applying the algebra-map where needed.
 -/
 def matchRings (l₁ : qNF R₁ M) (l₂ : qNF R₂ M) (r : Q($R₂)) (x : Q($M)) :
-MetaM Σ u : Level, Σ R : Q(Type u), Σ iR : Q(Semiring $R), Σ _ : Q(@Module $R $M $iR $iM),
+    MetaM <| Σ u : Level, Σ R : Q(Type u), Σ iR : Q(Semiring $R), Σ _ : Q(@Module $R $M $iR $iM),
       (Σ l₁' : qNF R M, Q(NF.eval $(l₁'.toNF) = NF.eval $(l₁.toNF)))
       × (Σ l₂' : qNF R M, Q(NF.eval $(l₂'.toNF) = NF.eval $(l₂.toNF)))
       × (Σ r' : Q($R), Q($r' • $x = $r • $x)) := do
-if ← withReducible isDefEq R₁ R₂ then
+  if ← withReducible <| isDefEq R₁ R₂ then
   -- the case when `R₁ = R₂` is handled separately, so as not to require commutativity of that ring
     pure ⟨u₁, R₁, iR₁, iRM₁, ⟨l₁, q(rfl)⟩, ⟨l₂, (q(@rfl _ (NF.eval $(l₂.toNF))):)⟩,
       r, (q(@rfl _ ($r • $x)):)⟩
@@ -1004,132 +991,67 @@ end qNF
 
 variable {M : Q(Type v)}
 
-/--
-Definition of `parse` / `parse` 的定义
+/-- The main algorithm behind the `match_scalars` and `module` tactics: partially-normalizing an
+expression in an additive commutative monoid `M` into the form c1 • x1 + c2 • x2 + ... c_k • x_k,
+where x1, x2, ... are distinct atoms in `M`, and c1, c2, ... are scalars. The scalar type of the
+expression is not pre-determined: instead it starts as `ℕ` (when each atom is initially given a
+scalar `(1:ℕ)`) and gets bumped up into bigger semirings when such semirings are encountered.
 
-English:
-definition parse
-  signature: (iM : Q(AddCommMonoid $M)) (x : Q($M))
-  body: do
-  match x with
-  /- parse an addition: `x₁ + x₂` -/
-  | ~q($x₁ + $x₂) =>
-    let ⟨_, _, _, iRM₁, l₁', pf₁'⟩ ← parse iM x₁
-    let ⟨_, _, _, iRM₂, l₂', pf₂'⟩ ← parse iM x₂
-    -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂`
-    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁' l₂' q(0) q(0)
-    -- build the new list and proof
-    let pf := qNF.mkAddProof iRM l₁ l₂
-    pure ⟨u, R, iR, iRM, qNF.add iR l₁ l₂, (q(NF.add_eq_eval $pf₁' $pf₂' $pf₁ $pf₂ $pf):)⟩
-  /- parse a subtraction: `x₁ - x₂` -/
-  | ~q(@HSub.hSub _ _ _ (@instHSub _ $iM') $x₁ $x₂) =>
-    let ⟨_, _, _, iRM₁, l₁'', pf₁''⟩ ← parse iM x₁
-    let ⟨_, _, _, iRM₂, l₂'', pf₂''⟩ ← parse iM x₂
-    -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂ ⊗ ℤ`
-    let iZ := q(Int.instSemiring)
-    let iMZ ← synthInstanceQ q(Module Int $M)
-    let ⟨_, _, _, iRM₁', ⟨l₁', pf₁'⟩, _, _⟩ ← qNF.matchRings iRM₁ iZ iMZ l₁'' [] q(0) q(0)
-    let ⟨_, _, _, iRM₂', ⟨l₂', pf₂'⟩, _, _⟩ ← qNF.matchRings iRM₂ iZ iMZ l₂'' [] q(0) q(0)
-    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁' _ iRM₂' l₁' l₂' q(0) q(0)
-    let iR' ← synthInstanceQ q(Ring $R)
-    let iM' ← synthInstanceQ q(AddCommGroup $M)
-    assumeInstancesCommute
-    -- build the new list and proof
-    let pf := qNF.mkSubProof iR' iM' iRM l₁ l₂
-    pure ⟨u, R, iR, iRM, qNF.sub iR' l₁ l₂,
-      q(NF.sub_eq_eval $pf₁'' $pf₂'' $pf₁' $pf₂' $pf₁ $pf₂ $pf)⟩
-  /- parse a negation: `-y` -/
-  | ~q(@Neg.neg _ $iM' $y) =>
-    let ⟨u₀, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
-    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ ℤ`
-    let _i ← synthInstanceQ q(AddCommGroup $M)
-    let iZ := q(Int.instSemiring)
-    let iMZ ← synthInstanceQ q(Module Int $M)
-    let ⟨u, R, iR, iRM, ⟨l, pf⟩, _, _⟩ ← qNF.matchRings iRM₀ iZ iMZ l₀ [] q(0) q(0)
-    let _i' ← synthInstanceQ q(Ring $R)
-    assumeInstancesCommute
-    -- build the new list and proof
-    pure ⟨u, R, iR, iRM, l.onScalar q(Neg.neg), (q(NF.neg_eq_eval $pf $pf₀):)⟩
-  /- parse a scalar multiplication: `(s₀ : S) • y` -/
-  | ~q(@HSMul.hSMul _ _ _ (@instHSMul $S _ $iS) $s₀ $y) =>
-    let ⟨_, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
-    let i₁ ← synthInstanceQ q(Semiring $S)
-    let i₂ ← synthInstanceQ q(Module $S $M)
-    assumeInstancesCommute
-    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ S`
-    let ⟨u, R, iR, iRM, ⟨l, pf_l⟩, _, ⟨s, pf_r⟩⟩ ← qNF.matchRings iRM₀ i₁ i₂ l₀ [] s₀ y
-    -- build the new list and proof
-    pure ⟨u, R, iR, iRM, l.onScalar q(HMul.hMul $s), (q(NF.smul_eq_eval $pf₀ $pf_l $pf_r) :)⟩
-  /- parse a `(0:M)` -/
-  | ~q(0) =>
-    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [], q(NF.zero_eq_eval $M)⟩
-  /- anything else should be treated as an atom -/
-  | _ =>
-    let (k, ⟨x', _⟩) ← AtomM.addAtomQ x
-    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [((q(1), x'), k)],
-      q(NF.atom_eq_eval $x')⟩
+It is assumed that there is a "linear order" on all the semirings which appear in the expression:
+for any two semirings `R` and `S` which occur, we have either `Algebra R S` or `Algebra S R`.
 
-中文:
-定义 parse
-  签名: (iM : Q(加法交换幺半群 $M)) (x : Q($M))
-  定义体: do
-  match x with
-  /- parse an addition: `x₁ + x₂` -/
-  | ~q($x₁ + $x₂) =>
-    let ⟨_, _, _, iRM₁, l₁', pf₁'⟩ ← parse iM x₁
-    let ⟨_, _, _, iRM₂, l₂', pf₂'⟩ ← parse iM x₂
-    -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂`
-    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁' l₂' q(0) q(0)
-    -- build the new list and proof
-    let pf := qNF.mkAddProof iRM l₁ l₂
-    pure ⟨u, R, iR, iRM, qNF.add iR l₁ l₂, (q(NF.add_eq_eval $pf₁' $pf₂' $pf₁ $pf₂ $pf):)⟩
-  /- parse a subtraction: `x₁ - x₂` -/
-  | ~q(@HSub.hSub _ _ _ (@instHSub _ $iM') $x₁ $x₂) =>
-    let ⟨_, _, _, iRM₁, l₁'', pf₁''⟩ ← parse iM x₁
-    let ⟨_, _, _, iRM₂, l₂'', pf₂''⟩ ← parse iM x₂
-    -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂ ⊗ ℤ`
-    let iZ := q(Int.instSemiring)
-    let iMZ ← synthInstanceQ q(Module Int $M)
-    let ⟨_, _, _, iRM₁', ⟨l₁', pf₁'⟩, _, _⟩ ← qNF.matchRings iRM₁ iZ iMZ l₁'' [] q(0) q(0)
-    let ⟨_, _, _, iRM₂', ⟨l₂', pf₂'⟩, _, _⟩ ← qNF.matchRings iRM₂ iZ iMZ l₂'' [] q(0) q(0)
-    let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁' _ iRM₂' l₁' l₂' q(0) q(0)
-    let iR' ← synthInstanceQ q(Ring $R)
-    let iM' ← synthInstanceQ q(AddCommGroup $M)
-    assumeInstancesCommute
-    -- build the new list and proof
-    let pf := qNF.mkSubProof iR' iM' iRM l₁ l₂
-    pure ⟨u, R, iR, iRM, qNF.sub iR' l₁ l₂,
-      q(NF.sub_eq_eval $pf₁'' $pf₂'' $pf₁' $pf₂' $pf₁ $pf₂ $pf)⟩
-  /- parse a negation: `-y` -/
-  | ~q(@Neg.neg _ $iM' $y) =>
-    let ⟨u₀, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
-    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ ℤ`
-    let _i ← synthInstanceQ q(AddCommGroup $M)
-    let iZ := q(Int.instSemiring)
-    let iMZ ← synthInstanceQ q(Module Int $M)
-    let ⟨u, R, iR, iRM, ⟨l, pf⟩, _, _⟩ ← qNF.matchRings iRM₀ iZ iMZ l₀ [] q(0) q(0)
-    let _i' ← synthInstanceQ q(Ring $R)
-    assumeInstancesCommute
-    -- build the new list and proof
-    pure ⟨u, R, iR, iRM, l.onScalar q(Neg.neg), (q(NF.neg_eq_eval $pf $pf₀):)⟩
-  /- parse a scalar multiplication: `(s₀ : S) • y` -/
-  | ~q(@HSMul.hSMul _ _ _ (@instHSMul $S _ $iS) $s₀ $y) =>
-    let ⟨_, _, _, iRM₀, l₀, pf₀⟩ ← parse iM y
-    let i₁ ← synthInstanceQ q(Semiring $S)
-    let i₂ ← synthInstanceQ q(Module $S $M)
-    assumeInstancesCommute
-    -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ S`
-    let ⟨u, R, iR, iRM, ⟨l, pf_l⟩, _, ⟨s, pf_r⟩⟩ ← qNF.matchRings iRM₀ i₁ i₂ l₀ [] s₀ y
-    -- build the new list and proof
-    pure ⟨u, R, iR, iRM, l.onScalar q(HMul.hMul $s), (q(NF.smul_eq_eval $pf₀ $pf_l $pf_r) :)⟩
-  /- parse a `(0:M)` -/
-  | ~q(0) =>
-    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [], q(NF.zero_eq_eval $M)⟩
-  /- anything else should be treated as an atom -/
-  | _ =>
-    let (k, ⟨x', _⟩) ← AtomM.addAtomQ x
-    pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [((q(1), x'), k)],
-      q(NF.atom_eq_eval $x')⟩
+TODO: implement a variant in which a semiring `R` is provided by the user, and the assumption is
+instead that for any semiring `S` which occurs, we have `Algebra S R`. The PR https://github.com/leanprover-community/mathlib4/pull/16984 provides a
+proof-of-concept implementation of this variant, but it would need some polishing before joining
+Mathlib.
+
+Possible TODO, if poor performance on large problems is witnessed: switch the implementation from
+`AtomM` to `CanonM`, per the discussion
+https://github.com/leanprover-community/mathlib4/pull/16593/files#r1749623191 -/
+/-
+**Mathlib.Tactic.Module.parse** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.Modul
+e`。
+形式化陈述：{v : Level} →   {M : Q(Type v)} →     (iM : Q(AddCommMonoid «$M»)) →      
+ (x : Q(«$M»)) →         Mathlib.Tactic.AtomM           ((u : Level) ×          
+   (R : Q(Type u)) ×               (iR : Q(Semiring «$R»)) ×                 (x_
+1 : Q(_root_.Module «$R» «$M»)) ×                   (l : Mathlib.Tactic.Module.q
+NF R M) ×                     have a := l.toNF;                     Q(«$x» = «$a
+».eval))
+参数：Type v；iM : Q(AddCommMonoid «$M»)；x : Q(«$M»)；(u : Level) ×             (R : 
+Q(Type u)) ×               (iR : Q(Semiring «$R»)) ×                 (x_1 : Q(_r
+oot_.Module «$R» «$M»)) ×                   (l : Mathlib.Tactic.Module.qNF R M) 
+×                     have a := l.toNF;                     Q(«$x» = «$a».eval)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The main algorithm behind the `match_scalars` and `module` tactics: partially-no
+rmalizing an
+expression in an additive commutative monoid `M` into the form c1 • x1 + c2 • x2
+ + ... c_k • x_k,
+where x1, x2, ... are distinct atoms in `M`, and c1, c2, ... are scalars. The sc
+alar type of the
+expression is not pre-determined: instead it starts as `ℕ` (when each atom is in
+itially given a
+scalar `(1:ℕ)`) and gets bumped up into bigger semirings when such semirings are
+ encountered.
+
+It is assumed that there is a "linear order" on all the semirings which appear i
+n the expression:
+for any two semirings `R` and `S` which occur, we have either `Algebra R S` or `
+Algebra S R`.
+
+TODO: implement a variant in which a semiring `R` is provided by the user, and t
+he assumption is
+instead that for any semiring `S` which occurs, we have `Algebra S R`. The PR ht
+tps://github.com/leanprover-community/mathlib4/pull/16984 provides a
+proof-of-concept implementation of this variant, but it would need some polishin
+g before joining
+Mathlib.
+
+Possible TODO, if poor performance on large problems is witnessed: switch the im
+plementation from
+`AtomM` to `CanonM`, per the discussion
+https://github.com/leanprover-community/mathlib4/pull/16593/files#r1749623191
 -/
 partial def parse (iM : Q(AddCommMonoid $M)) (x : Q($M)) :
     AtomM (Σ u : Level, Σ R : Q(Type u), Σ iR : Q(Semiring $R), Σ _ : Q(@Module $R $M $iR $iM),
@@ -1150,7 +1072,7 @@ partial def parse (iM : Q(AddCommMonoid $M)) (x : Q($M)) :
     let ⟨_, _, _, iRM₂, l₂'', pf₂''⟩ ← parse iM x₂
     -- lift from the semirings of scalars parsed from `x₁`, `x₂` (say `R₁`, `R₂`) to `R₁ ⊗ R₂ ⊗ ℤ`
     let iZ := q(Int.instSemiring)
-    let iMZ ← synthInstanceQ q(Module Int $M)
+    let iMZ ← synthInstanceQ q(Module ℤ $M)
     let ⟨_, _, _, iRM₁', ⟨l₁', pf₁'⟩, _, _⟩ ← qNF.matchRings iRM₁ iZ iMZ l₁'' [] q(0) q(0)
     let ⟨_, _, _, iRM₂', ⟨l₂', pf₂'⟩, _, _⟩ ← qNF.matchRings iRM₂ iZ iMZ l₂'' [] q(0) q(0)
     let ⟨u, R, iR, iRM, ⟨l₁, pf₁⟩, ⟨l₂, pf₂⟩, _⟩ ← qNF.matchRings iRM₁' _ iRM₂' l₁' l₂' q(0) q(0)
@@ -1167,7 +1089,7 @@ partial def parse (iM : Q(AddCommMonoid $M)) (x : Q($M)) :
     -- lift from original semiring of scalars (say `R₀`) to `R₀ ⊗ ℤ`
     let _i ← synthInstanceQ q(AddCommGroup $M)
     let iZ := q(Int.instSemiring)
-    let iMZ ← synthInstanceQ q(Module Int $M)
+    let iMZ ← synthInstanceQ q(Module ℤ $M)
     let ⟨u, R, iR, iRM, ⟨l, pf⟩, _, _⟩ ← qNF.matchRings iRM₀ iZ iMZ l₀ [] q(0) q(0)
     let _i' ← synthInstanceQ q(Ring $R)
     assumeInstancesCommute
@@ -1192,83 +1114,12 @@ partial def parse (iM : Q(AddCommMonoid $M)) (x : Q($M)) :
     pure ⟨0, q(Nat), q(Nat.instSemiring), q(AddCommMonoid.toNatModule), [((q(1), x'), k)],
       q(NF.atom_eq_eval $x')⟩
 
-/--
-Definition of `reduceCoefficientwise` / `reduceCoefficientwise` 的定义
-
-English:
-definition reduceCoefficientwise
-  signature: {R : Q(Type u)} {_ : Q(AddCommMonoid $M)} {_ : Q(Semiring $R)}
-  body: do
-  match l₁, l₂ with
-  /- if both empty, return a `rfl` proof that `(0:M) = 0` -/
-  | [], [] =>
-    let pf : Q(NF.eval $(l₁.toNF) = NF.eval $(l₁.toNF)) := q(rfl)
-    pure ([], pf)
-  /- if one of the lists is empty and the other one is not, recurse down the nonempty one,
-    forming goals that each of the listed coefficients is equal to
-    zero -/
-  | [], ((a, x), _) ::ᵣ L =>
-    let mvar : Q((0:$R) = $a) ← mkFreshExprMVar q((0:$R) = $a)
-    let (mvars, pf) ← reduceCoefficientwise iRM [] L
-    pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x $mvar $pf):))
-  | ((a, x), _) ::ᵣ L, [] =>
-    let mvar : Q($a = (0:$R)) ← mkFreshExprMVar q($a = (0:$R))
-    let (mvars, pf) ← reduceCoefficientwise iRM L []
-    pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x $mvar $pf):))
-  /- if both lists are nonempty, then deal with the numerically-smallest term in either list,
-    forming a goal that it is equal to zero (if it appears in only one list) or that its
-    coefficients in the two lists are the same (if it appears in both lists); then recurse -/
-  | ((a₁, x₁), k₁) ::ᵣ L₁, ((a₂, x₂), k₂) ::ᵣ L₂ =>
-    if k₁ < k₂ then
-      let mvar : Q($a₁ = (0:$R)) ← mkFreshExprMVar q($a₁ = (0:$R))
-      let (mvars, pf) ← reduceCoefficientwise iRM L₁ l₂
-      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x₁ $mvar $pf):))
-    else if k₁ = k₂ then
-      let mvar : Q($a₁ = $a₂) ← mkFreshExprMVar q($a₁ = $a₂)
-      let (mvars, pf) ← reduceCoefficientwise iRM L₁ L₂
-      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_cons $x₁ $mvar $pf):))
-    else
-      let mvar : Q((0:$R) = $a₂) ← mkFreshExprMVar q((0:$R) = $a₂)
-      let (mvars, pf) ← reduceCoefficientwise iRM l₁ L₂
-      pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x₂ $mvar $pf):))
-
-中文:
-定义 reduceCoefficientwise
-  签名: {R : Q(类型u)} {_ : Q(加法交换幺半群 $M)} {_ : Q(半环 $R)}
-  定义体: do
-  match l₁, l₂ with
-  /- if both empty, return a `rfl` proof that `(0:M) = 0` -/
-  | [], [] =>
-    let pf : Q(NF.eval $(l₁.toNF) = NF.eval $(l₁.toNF)) := q(rfl)
-    pure ([], pf)
-  /- if one of the lists is empty and the other one is not, recurse down the nonempty one,
-    forming goals that each of the listed coefficients is equal to
-    zero -/
-  | [], ((a, x), _) ::ᵣ L =>
-    let mvar : Q((0:$R) = $a) ← mkFreshExprMVar q((0:$R) = $a)
-    let (mvars, pf) ← reduceCoefficientwise iRM [] L
-    pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x $mvar $pf):))
-  | ((a, x), _) ::ᵣ L, [] =>
-    let mvar : Q($a = (0:$R)) ← mkFreshExprMVar q($a = (0:$R))
-    let (mvars, pf) ← reduceCoefficientwise iRM L []
-    pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x $mvar $pf):))
-  /- if both lists are nonempty, then deal with the numerically-smallest term in either list,
-    forming a goal that it is equal to zero (if it appears in only one list) or that its
-    coefficients in the two lists are the same (if it appears in both lists); then recurse -/
-  | ((a₁, x₁), k₁) ::ᵣ L₁, ((a₂, x₂), k₂) ::ᵣ L₂ =>
-    if k₁ < k₂ then
-      let mvar : Q($a₁ = (0:$R)) ← mkFreshExprMVar q($a₁ = (0:$R))
-      let (mvars, pf) ← reduceCoefficientwise iRM L₁ l₂
-      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_const $x₁ $mvar $pf):))
-    else if k₁ = k₂ then
-      let mvar : Q($a₁ = $a₂) ← mkFreshExprMVar q($a₁ = $a₂)
-      let (mvars, pf) ← reduceCoefficientwise iRM L₁ L₂
-      pure (mvar.mvarId! :: mvars, (q(NF.eq_cons_cons $x₁ $mvar $pf):))
-    else
-      let mvar : Q((0:$R) = $a₂) ← mkFreshExprMVar q((0:$R) = $a₂)
-      let (mvars, pf) ← reduceCoefficientwise iRM l₁ L₂
-      pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x₂ $mvar $pf):))
--/
+/-- Given expressions `R` and `M` representing types such that `M`'s is a module over `R`'s, and
+given two terms `l₁`, `l₂` of type `qNF R M`, i.e. lists of `(Q($R) × Q($M)) × ℕ`s (two `Expr`s
+and a natural number), construct a list of new goals: that the `R`-coefficient of an `M`-atom which
+appears in only one list is zero, and that the `R`-coefficients of an `M`-atom which appears in both
+lists are equal.  Also construct (dependent on these new goals) a proof that the "linear
+combinations" represented by `l₁` and `l₂` are equal in `M`. -/
 partial def reduceCoefficientwise {R : Q(Type u)} {_ : Q(AddCommMonoid $M)} {_ : Q(Semiring $R)}
     (iRM : Q(Module $R $M)) (l₁ l₂ : qNF R M) :
     MetaM (List MVarId × Q(NF.eval $(l₁.toNF) = NF.eval $(l₂.toNF))) := do
@@ -1305,93 +1156,12 @@ partial def reduceCoefficientwise {R : Q(Type u)} {_ : Q(AddCommMonoid $M)} {_ :
       let (mvars, pf) ← reduceCoefficientwise iRM l₁ L₂
       pure (mvar.mvarId! :: mvars, (q(NF.eq_const_cons $x₂ $mvar $pf):))
 
-/--
-Definition of `matchScalarsAux` / `matchScalarsAux` 的定义
+/-- Given a goal which is an equality in a type `M` (with `M` an `AddCommMonoid`), parse the LHS and
+RHS of the goal as linear combinations of `M`-atoms over some semiring `R`, and reduce the goal to
+the respective equalities of the `R`-coefficients of each atom.
 
-English:
-definition matchScalarsAux
-  signature: (g : MVarId)
-  body: do
-  /- Parse the goal as an equality in a type `M` of two expressions `lhs` and `rhs`, with `M`
-  carrying an `AddCommMonoid` instance. -/
-  let eqData ← do
-    match (← g.getType').eq? with
-    | some e => pure e
-    | none => throwError "goal {← g.getType} is not an equality"
-  let .sort v₀ ← whnf (← inferType eqData.1) | unreachable!
-  let some v := v₀.dec | unreachable!
-  let ((M : Q(Type v)), (lhs : Q($M)), (rhs :Q($M))) := eqData
-  let iM ← synthInstanceQ q(AddCommMonoid.{v} $M)
-  /- Construct from the `lhs` expression a term `l₁` of type `qNF R₁ M` for some semiring `R₁` --
-  that is, a list of `(Q($R₁) × Q($M)) × ℕ`s (two `Expr`s and a natural number) -- together with a
-  proof that `lhs` is equal to the `R₁`-linear combination in `M` this represents. -/
-  let e₁ ← parse iM lhs
-  have u₁ : Level := e₁.fst
-  have R₁ : Q(Type u₁) := e₁.snd.fst
-  have _iR₁ : Q(Semiring.{u₁} $R₁) := e₁.snd.snd.fst
-  let iRM₁ ← synthInstanceQ q(Module $R₁ $M)
-  assumeInstancesCommute
-  have l₁ : qNF R₁ M := e₁.snd.snd.snd.snd.fst
-  let pf₁ : Q($lhs = NF.eval $(l₁.toNF)) := e₁.snd.snd.snd.snd.snd
-  /- Do the same for the `rhs` expression, obtaining a term `l₂` of type `qNF R₂ M` for some
-  semiring `R₂`. -/
-  let e₂ ← parse iM rhs
-  have u₂ : Level := e₂.fst
-  have R₂ : Q(Type u₂) := e₂.snd.fst
-  have _iR₂ : Q(Semiring.{u₂} $R₂) := e₂.snd.snd.fst
-  let iRM₂ ← synthInstanceQ q(Module $R₂ $M)
-  have l₂ : qNF R₂ M := e₂.snd.snd.snd.snd.fst
-  let pf₂ : Q($rhs = NF.eval $(l₂.toNF)) := e₂.snd.snd.snd.snd.snd
-  /- Lift everything to the same scalar ring, `R`. -/
-  let ⟨_, _, _, iRM, ⟨l₁', pf₁'⟩, ⟨l₂', pf₂'⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁ l₂ q(0) q(0)
-  /- Construct a list of goals for the coefficientwise equality of these formal linear combinations,
-  and resolve our original goal (modulo these new goals). -/
-  let (mvars, pf) ← reduceCoefficientwise iRM l₁' l₂'
-  g.assign q(NF.eq_of_eval_eq_eval $pf₁ $pf₂ $pf₁' $pf₂' $pf)
-  return mvars
-
-中文:
-定义 matchScalarsAux
-  签名: (g : MVarId)
-  定义体: do
-  /- Parse the goal as an equality in a type `M` of two expressions `lhs` and `rhs`, with `M`
-  carrying an `AddCommMonoid` instance. -/
-  let eqData ← do
-    match (← g.getType').eq? with
-    | some e => pure e
-    | none => throwError "goal {← g.getType} is not an equality"
-  let .sort v₀ ← whnf (← inferType eqData.1) | unreachable!
-  let some v := v₀.dec | unreachable!
-  let ((M : Q(Type v)), (lhs : Q($M)), (rhs :Q($M))) := eqData
-  let iM ← synthInstanceQ q(AddCommMonoid.{v} $M)
-  /- Construct from the `lhs` expression a term `l₁` of type `qNF R₁ M` for some semiring `R₁` --
-  that is, a list of `(Q($R₁) × Q($M)) × ℕ`s (two `Expr`s and a natural number) -- together with a
-  proof that `lhs` is equal to the `R₁`-linear combination in `M` this represents. -/
-  let e₁ ← parse iM lhs
-  have u₁ : Level := e₁.fst
-  have R₁ : Q(Type u₁) := e₁.snd.fst
-  have _iR₁ : Q(Semiring.{u₁} $R₁) := e₁.snd.snd.fst
-  let iRM₁ ← synthInstanceQ q(Module $R₁ $M)
-  assumeInstancesCommute
-  have l₁ : qNF R₁ M := e₁.snd.snd.snd.snd.fst
-  let pf₁ : Q($lhs = NF.eval $(l₁.toNF)) := e₁.snd.snd.snd.snd.snd
-  /- Do the same for the `rhs` expression, obtaining a term `l₂` of type `qNF R₂ M` for some
-  semiring `R₂`. -/
-  let e₂ ← parse iM rhs
-  have u₂ : Level := e₂.fst
-  have R₂ : Q(Type u₂) := e₂.snd.fst
-  have _iR₂ : Q(Semiring.{u₂} $R₂) := e₂.snd.snd.fst
-  let iRM₂ ← synthInstanceQ q(Module $R₂ $M)
-  have l₂ : qNF R₂ M := e₂.snd.snd.snd.snd.fst
-  let pf₂ : Q($rhs = NF.eval $(l₂.toNF)) := e₂.snd.snd.snd.snd.snd
-  /- Lift everything to the same scalar ring, `R`. -/
-  let ⟨_, _, _, iRM, ⟨l₁', pf₁'⟩, ⟨l₂', pf₂'⟩, _⟩ ← qNF.matchRings iRM₁ _ iRM₂ l₁ l₂ q(0) q(0)
-  /- Construct a list of goals for the coefficientwise equality of these formal linear combinations,
-  and resolve our original goal (modulo these new goals). -/
-  let (mvars, pf) ← reduceCoefficientwise iRM l₁' l₂'
-  g.assign q(NF.eq_of_eval_eq_eval $pf₁ $pf₂ $pf₁' $pf₂' $pf)
-  return mvars
--/
+This is an auxiliary function which produces slightly awkward goals in `R`; they are later cleaned
+up by the function `Mathlib.Tactic.Module.postprocess`. -/
 def matchScalarsAux (g : MVarId) : AtomM (List MVarId) := do
   /- Parse the goal as an equality in a type `M` of two expressions `lhs` and `rhs`, with `M`
   carrying an `AddCommMonoid` instance. -/
@@ -1431,58 +1201,16 @@ def matchScalarsAux (g : MVarId) : AtomM (List MVarId) := do
   g.assign q(NF.eq_of_eval_eq_eval $pf₁ $pf₂ $pf₁' $pf₂' $pf)
   return mvars
 
-/--
-Definition of `algebraMapThms` / `algebraMapThms` 的定义
-
-English:
-definition algebraMapThms
-  signature: : Array Name
-  body: #[``eq_natCast, ``eq_intCast, ``eq_ratCast]
-
-中文:
-定义 algebraMapThms
-  签名: : 数组 Name
-  定义体: #[``eq_natCast, ``eq_intCast, ``eq_ratCast]
-
-Depends on / 依赖: eq_intCast, eq_natCast, eq_ratCast
--/
+/-- Lemmas used to post-process the result of the `match_scalars` and `module` tactics by converting
+the `algebraMap` operations which (which proliferate in the constructed scalar goals) to more
+familiar forms: `ℕ`, `ℤ` and `ℚ` casts. -/
 def algebraMapThms : Array Name := #[``eq_natCast, ``eq_intCast, ``eq_ratCast]
 
-/--
-Definition of `postprocess` / `postprocess` 的定义
-
-English:
-definition postprocess
-  signature: (mvarId : MVarId)
-  body: do
-  -- collect the available `push_cast` lemmas
-  let mut thms : SimpTheorems ← NormCast.pushCastExt.getTheorems
-  -- augment this list with the `algebraMapThms` lemmas, which handle `algebraMap` operations
-  for thm in algebraMapThms do
-    let ⟨levelParams, _, proof⟩ ← abstractMVars (mkConst thm)
-    thms ← thms.add (.stx (← mkFreshId) Syntax.missing) levelParams proof
-  -- now run `simp` with these lemmas, and (importantly) *no* simprocs
-  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
-  let (some r, _) ← simpTarget mvarId ctx (simprocs := #[]) |
-    throwError "internal error in match_scalars tactic: postprocessing should not close goals"
-  return r
-
-中文:
-定义 postprocess
-  签名: (mvarId : MVarId)
-  定义体: do
-  -- collect the available `push_cast` lemmas
-  let mut thms : SimpTheorems ← NormCast.pushCastExt.getTheorems
-  -- augment this list with the `algebraMapThms` lemmas, which handle `algebraMap` operations
-  for thm in algebraMapThms do
-    let ⟨levelParams, _, proof⟩ ← abstractMVars (mkConst thm)
-    thms ← thms.add (.stx (← mkFreshId) Syntax.missing) levelParams proof
-  -- now run `simp` with these lemmas, and (importantly) *no* simprocs
-  let ctx ← Simp.mkContext { failIfUnchanged := false } (simpTheorems := #[thms])
-  let (some r, _) ← simpTarget mvarId ctx (simprocs := #[]) |
-    throwError "internal error in match_scalars tactic: postprocessing should not close goals"
-  return r
--/
+/-- Postprocessing for the scalar goals constructed in the `match_scalars` and `module` tactics.
+These goals feature a proliferation of `algebraMap` operations (because the scalars start in `ℕ` and
+get successively bumped up by `algebraMap`s as new semirings are encountered), so we reinterpret the
+most commonly occurring `algebraMap`s (those out of `ℕ`, `ℤ` and `ℚ`) into their standard forms
+(`ℕ`, `ℤ` and `ℚ` casts) and then try to disperse the casts using the various `push_cast` lemmas. -/
 def postprocess (mvarId : MVarId) : MetaM MVarId := do
   -- collect the available `push_cast` lemmas
   let mut thms : SimpTheorems ← NormCast.pushCastExt.getTheorems
@@ -1496,23 +1224,9 @@ def postprocess (mvarId : MVarId) : MetaM MVarId := do
     throwError "internal error in match_scalars tactic: postprocessing should not close goals"
   return r
 
-/--
-Definition of `matchScalars` / `matchScalars` 的定义
-
-English:
-definition matchScalars
-  signature: (g : MVarId)
-  body: do
-  let mvars ← AtomM.run .instances (matchScalarsAux g)
-  mvars.mapM postprocess
-
-中文:
-定义 matchScalars
-  签名: (g : MVarId)
-  定义体: do
-  let mvars ← AtomM.run .instances (matchScalarsAux g)
-  mvars.mapM postprocess
--/
+/-- Given a goal which is an equality in a type `M` (with `M` an `AddCommMonoid`), parse the LHS and
+RHS of the goal as linear combinations of `M`-atoms over some semiring `R`, and reduce the goal to
+the respective equalities of the `R`-coefficients of each atom. -/
 def matchScalars (g : MVarId) : MetaM (List MVarId) := do
   let mvars ← AtomM.run .instances (matchScalarsAux g)
   mvars.mapM postprocess
@@ -1585,9 +1299,10 @@ example [AddCommGroup M] [CommRing R] [Module R M] (a b μ ν : R) (x y : M) :
   module
 ```
 -/
-elab "module" : tactic => Tactic.liftMetaFinishingTactic fun g => do
+elab "module" : tactic => Tactic.liftMetaFinishingTactic fun g ↦ do
   let l ← matchScalars g
-discard l.mapM fun mvar => AtomM.run .instances (Ring.proveEq mvar)
+  discard <| l.mapM fun mvar ↦ AtomM.run .instances (Ring.proveEq mvar)
 
 end
 end Mathlib.Tactic.Module
+

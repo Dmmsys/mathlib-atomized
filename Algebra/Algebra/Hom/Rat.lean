@@ -16,118 +16,87 @@ public import Mathlib.Algebra.Algebra.Rat
 
 @[expose] public section
 
-variable {R S : Type*} [Ring R] [Ring S] [Algebra Rat R] [Algebra Rat S]
+variable {R S : Type*} [Ring R] [Ring S] [Algebra ℚ R] [Algebra ℚ S]
 
 namespace RingHom
 
-/--
-Definition of `toRatAlgHom` / `toRatAlgHom` 的定义
+/-- Reinterpret a `RingHom` as a `ℚ`-algebra homomorphism. This actually yields an equivalence,
+see `RingHom.equivRatAlgHom`. -/
+/-
+**RingHom.toRatAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：toRatAlgHom (f : R ->+* S) : R ->ₐ[Rat] S
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toRatAlgHom
-  signature: (f : R ->+* S)
-  body: { f with commutes' := f.map_rat_algebraMap }
-
-@[simp]
-
-中文:
-定义 toRatAlgHom
-  签名: (f : R ->+* S)
-  定义体: { f with commutes' := f.map_rat_algebraMap }
-
-@[simp]
-
-Depends on / 依赖: commutes, f.map_rat_algebraMap, map_rat_algebraMap
+--- 原说明 ---
+Reinterpret a `RingHom` as a `ℚ`-algebra homomorphism. This actually yields an e
+quivalence,
+see `RingHom.equivRatAlgHom`.
 -/
-def toRatAlgHom (f : R ->+* S) : R ->ₐ[Rat] S :=
+def toRatAlgHom (f : R →+* S) : R →ₐ[ℚ] S :=
   { f with commutes' := f.map_rat_algebraMap }
 
 @[simp]
-/--
-theorem `toRatAlgHom_toRingHom` / 定理 `toRatAlgHom_toRingHom`
-
-English:
-theorem toRatAlgHom_toRingHom
-  given: (f : R ->+* S)
-  proof: RingHom.ext fun _x => rfl
-
-@[simp]
-
-中文:
-定理 toRatAlgHom_toRingHom
-  条件: (f : R ->+* S)
-  证明: RingHom.ext fun _x => rfl
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.ext
+/-
+**RingHom.toRatAlgHom_toRingHom** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：toRatAlgHom_toRingHom (f : R ->+* S) : ↑f.toRatAlgHom = f
+参数：f : R ->+* S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-theorem toRatAlgHom_toRingHom (f : R ->+* S) :
+theorem toRatAlgHom_toRingHom (f : R →+* S) :
     ↑f.toRatAlgHom = f :=
   RingHom.ext fun _x => rfl
 
 @[simp]
-/--
-theorem `toRatAlgHom_apply` / 定理 `toRatAlgHom_apply`
-
-English:
-theorem toRatAlgHom_apply
-  given: (f : R ->+* S) (x : R)
-  proof: rfl
-
-中文:
-定理 toRatAlgHom_apply
-  条件: (f : R ->+* S) (x : R)
-  证明: rfl
+/-
+**RingHom.toRatAlgHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：toRatAlgHom_apply (f : R ->+* S) (x : R) : f.toRatAlgHom x = f x
+参数：f : R ->+* S；x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toRatAlgHom_apply (f : R ->+* S) (x : R) :
+theorem toRatAlgHom_apply (f : R →+* S) (x : R) :
     f.toRatAlgHom x = f x :=
   rfl
 
 end RingHom
 
 @[simp]
-/--
-theorem `AlgHom.toRingHom_toRatAlgHom` / 定理 `AlgHom.toRingHom_toRatAlgHom`
-
-English:
-theorem AlgHom.toRingHom_toRatAlgHom
-  given: (f : R ->ₐ[Rat] S)
-  statement: (f : R ->+* S).toRatAlgHom = f
-  proof: AlgHom.ext fun _x => rfl
-
-中文:
-定理 代数态射.toRingHom_toRatAlgHom
-  条件: (f : R ->ₐ[有理数] S)
-  结论: (f : R ->+* S).toRatAlgHom = f
-  证明: AlgHom.ext fun _x => rfl
-
-Depends on / 依赖: AlgHom, AlgHom.ext
+/-
+**AlgHom.toRingHom_toRatAlgHom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AlgHom.toRingHom_toRatAlgHom (f : R ->ₐ[Rat] S) : (f : R ->+* S).toRatAlgH
+om = f
+参数：f : R ->ₐ[Rat] S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-theorem AlgHom.toRingHom_toRatAlgHom (f : R ->ₐ[Rat] S) : (f : R ->+* S).toRatAlgHom = f :=
+theorem AlgHom.toRingHom_toRatAlgHom (f : R →ₐ[ℚ] S) : (f : R →+* S).toRatAlgHom = f :=
   AlgHom.ext fun _x => rfl
 
 variable (R) (S) in
 /-- The equivalence between `RingHom` and `ℚ`-algebra homomorphisms. -/
 @[simps]
-/--
-Definition of `RingHom.equivRatAlgHom` / `RingHom.equivRatAlgHom` 的定义
+/-
+**RingHom.equivRatAlgHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingHom.equivRatAlgHom : (R ->+* S) ≃ (R ->ₐ[Rat] S) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RingHom.equivRatAlgHom
-  signature: : (R ->+* S) ≃ (R ->ₐ[Rat] S) where
-  body: RingHom.toRatAlgHom
-  invFun := AlgHom.toRingHom
-
-中文:
-定义 环态射.equivRatAlgHom
-  签名: : (R ->+* S) ≃ (R ->ₐ[有理数] S) where
-  定义体: RingHom.toRatAlgHom
-  invFun := AlgHom.toRingHom
-
-Depends on / 依赖: RingHom, RingHom.toRatAlgHom, toRatAlgHom
+--- 原说明 ---
+The equivalence between `RingHom` and `ℚ`-algebra homomorphisms.
 -/
-def RingHom.equivRatAlgHom : (R ->+* S) ≃ (R ->ₐ[Rat] S) where
+def RingHom.equivRatAlgHom : (R →+* S) ≃ (R →ₐ[ℚ] S) where
   toFun := RingHom.toRatAlgHom
   invFun := AlgHom.toRingHom
 
@@ -136,103 +105,62 @@ namespace RingEquiv
 /-- Reinterpret a `RingEquiv` as a `ℚ`-algebra isomorphism. This actually yields an
 equivalence, see `RingEquiv.equivRatAlgEquiv`. -/
 @[simps! -isSimp apply]
-/--
-Definition of `toRatAlgEquiv` / `toRatAlgEquiv` 的定义
+/-
+**RingEquiv.toRatAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：toRatAlgEquiv (f : R ≃+* S) : R ≃ₐ[Rat] S where toEquiv
+参数：f : R ≃+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toRatAlgEquiv
-  signature: (f : R ≃+* S)
-  body: f
-  __ := f.toRingHom.toRatAlgHom
-
-@[simp]
-
-中文:
-定义 toRatAlgEquiv
-  签名: (f : R ≃+* S)
-  定义体: f
-  __ := f.toRingHom.toRatAlgHom
-
-@[simp]
+--- 原说明 ---
+Reinterpret a `RingEquiv` as a `ℚ`-algebra isomorphism. This actually yields an
+equivalence, see `RingEquiv.equivRatAlgEquiv`.
 -/
-def toRatAlgEquiv (f : R ≃+* S) : R ≃ₐ[Rat] S where
+def toRatAlgEquiv (f : R ≃+* S) : R ≃ₐ[ℚ] S where
   toEquiv := f
   __ := f.toRingHom.toRatAlgHom
 
 @[simp]
-/--
-theorem `coe_toRatAlgEquiv` / 定理 `coe_toRatAlgEquiv`
-
-English:
-theorem coe_toRatAlgEquiv
-  given: (f : R ≃+* S)
-  statement: ⇑f.toRatAlgEquiv = ⇑f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toRatAlgEquiv
-  条件: (f : R ≃+* S)
-  结论: ⇑f.toRatAlgEquiv = ⇑f
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.coe_toRatAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：coe_toRatAlgEquiv (f : R ≃+* S) : ⇑f.toRatAlgEquiv = ⇑f
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toRatAlgEquiv (f : R ≃+* S) : ⇑f.toRatAlgEquiv = ⇑f := rfl
 
 @[simp]
-/--
-theorem `toRingEquiv_toRatAlgEquiv` / 定理 `toRingEquiv_toRatAlgEquiv`
-
-English:
-theorem toRingEquiv_toRatAlgEquiv
-  given: (f : R ≃+* S)
-  proof: rfl
-
-中文:
-定理 toRingEquiv_toRatAlgEquiv
-  条件: (f : R ≃+* S)
-  证明: rfl
+/-
+**RingEquiv.toRingEquiv_toRatAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：toRingEquiv_toRatAlgEquiv (f : R ≃+* S) : f.toRatAlgEquiv = f
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toRingEquiv_toRatAlgEquiv (f : R ≃+* S) :
     f.toRatAlgEquiv = f :=
   rfl
-
-/--
-theorem `toAlgHom_toRatAlgEquiv` / 定理 `toAlgHom_toRatAlgEquiv`
-
-English:
-theorem toAlgHom_toRatAlgEquiv
-  given: (f : R ≃+* S)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toAlgHom_toRatAlgEquiv
-  条件: (f : R ≃+* S)
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.toAlgHom_toRatAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：toAlgHom_toRatAlgEquiv (f : R ≃+* S) : f.toRatAlgEquiv.toAlgHom = (f : R -
+>+* S).toRatAlgHom
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAlgHom_toRatAlgEquiv (f : R ≃+* S) :
-    f.toRatAlgEquiv.toAlgHom = (f : R ->+* S).toRatAlgHom :=
+    f.toRatAlgEquiv.toAlgHom = (f : R →+* S).toRatAlgHom :=
   rfl
 
 @[simp]
-/--
-theorem `symm_toRatAlgEquiv` / 定理 `symm_toRatAlgEquiv`
-
-English:
-theorem symm_toRatAlgEquiv
-  given: (f : R ≃+* S)
-  proof: rfl
-
-中文:
-定理 symm_toRatAlgEquiv
-  条件: (f : R ≃+* S)
-  证明: rfl
+/-
+**RingEquiv.symm_toRatAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `RingEquiv`。
+形式化陈述：symm_toRatAlgEquiv (f : R ≃+* S) : f.toRatAlgEquiv.symm = f.symm.toRatAlgE
+quiv
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_toRatAlgEquiv (f : R ≃+* S) :
     f.toRatAlgEquiv.symm = f.symm.toRatAlgEquiv :=
@@ -241,61 +169,41 @@ theorem symm_toRatAlgEquiv (f : R ≃+* S) :
 end RingEquiv
 
 @[simp]
-/--
-theorem `AlgEquiv.toRatAlgEquiv_toRingEquiv` / 定理 `AlgEquiv.toRatAlgEquiv_toRingEquiv`
-
-English:
-theorem AlgEquiv.toRatAlgEquiv_toRingEquiv
-  given: (f : R ≃ₐ[Rat] S)
-  statement: (f : R ≃+* S).toRatAlgEquiv = f
-  proof: rfl
-
-中文:
-定理 代数等价.toRatAlgEquiv_toRingEquiv
-  条件: (f : R ≃ₐ[有理数] S)
-  结论: (f : R ≃+* S).toRatAlgEquiv = f
-  证明: rfl
+/-
+**AlgEquiv.toRatAlgEquiv_toRingEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AlgEquiv.toRatAlgEquiv_toRingEquiv (f : R ≃ₐ[Rat] S) : (f : R ≃+* S).toRat
+AlgEquiv = f
+参数：f : R ≃ₐ[Rat] S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem AlgEquiv.toRatAlgEquiv_toRingEquiv (f : R ≃ₐ[Rat] S) : (f : R ≃+* S).toRatAlgEquiv = f :=
+theorem AlgEquiv.toRatAlgEquiv_toRingEquiv (f : R ≃ₐ[ℚ] S) : (f : R ≃+* S).toRatAlgEquiv = f :=
   rfl
 
 variable (R) (S) in
 /-- The equivalence between `RingEquiv` and `ℚ`-algebra isomorphisms. -/
 @[simps apply symm_apply]
-/--
-Definition of `RingEquiv.equivRatAlgEquiv` / `RingEquiv.equivRatAlgEquiv` 的定义
+/-
+**RingEquiv.equivRatAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingEquiv.equivRatAlgEquiv : (R ≃+* S) ≃ (R ≃ₐ[Rat] S) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RingEquiv.equivRatAlgEquiv
-  signature: : (R ≃+* S) ≃ (R ≃ₐ[Rat] S) where
-  body: RingEquiv.toRatAlgEquiv
-  invFun := AlgEquiv.toRingEquiv
-
-中文:
-定义 环等价.equivRatAlgEquiv
-  签名: : (R ≃+* S) ≃ (R ≃ₐ[有理数] S) where
-  定义体: RingEquiv.toRatAlgEquiv
-  invFun := AlgEquiv.toRingEquiv
-
-Depends on / 依赖: RingEquiv, RingEquiv.toRatAlgEquiv, toRatAlgEquiv
+--- 原说明 ---
+The equivalence between `RingEquiv` and `ℚ`-algebra isomorphisms.
 -/
-def RingEquiv.equivRatAlgEquiv : (R ≃+* S) ≃ (R ≃ₐ[Rat] S) where
+def RingEquiv.equivRatAlgEquiv : (R ≃+* S) ≃ (R ≃ₐ[ℚ] S) where
   toFun := RingEquiv.toRatAlgEquiv
   invFun := AlgEquiv.toRingEquiv
-
-/--
-lemma `RingEquiv.toRatAlgEquiv_injective` / 引理 `RingEquiv.toRatAlgEquiv_injective`
-
-English:
-lemma RingEquiv.toRatAlgEquiv_injective
-  proof: (RingEquiv.equivRatAlgEquiv R S).injective
-
-中文:
-引理 环等价.toRatAlgEquiv_injective
-  证明: (RingEquiv.equivRatAlgEquiv R S).injective
-
-Depends on / 依赖: RingEquiv, RingEquiv.equivRatAlgEquiv, equivRatAlgEquiv, injective
+/-
+**RingEquiv.toRatAlgEquiv_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：RingEquiv.toRatAlgEquiv_injective : Function.Injective (RingEquiv.toRatAlg
+Equiv : (R ≃+* S) -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma RingEquiv.toRatAlgEquiv_injective :
-    Function.Injective (RingEquiv.toRatAlgEquiv : (R ≃+* S) -> _) :=
+    Function.Injective (RingEquiv.toRatAlgEquiv : (R ≃+* S) → _) :=
   (RingEquiv.equivRatAlgEquiv R S).injective

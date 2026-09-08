@@ -21,125 +21,127 @@ namespace List
 for `l ++ [a]` if it holds for `l`, then it holds for all lists. The principle is given for
 a `Sort`-valued predicate, i.e., it can also be used to construct data. -/
 @[elab_as_elim]
-/--
-Definition of `reverseRec` / `reverseRec` 的定义
+/-
+**List.reverseRec** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} →   {motive : List α → Sort u_2} →     motive [] → ((l : Li
+st α) → (a : α) → motive l → motive (l ++ [a])) → (l : List α) → motive l
+参数：(l : List α) → (a : α) → motive l → motive (l ++ [a])；l : List α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
 
-English:
-definition reverseRec
-  signature: {motive : List α -> Sort*} (nil : motive [])
-
-中文:
-定义 reverseRec
-  签名: {motive : 列表 α -> 类型层*} (nil : motive [])
+--- 原说明 ---
+Induction principle from the right for lists: if a property holds for the empty 
+list, and
+for `l ++ [a]` if it holds for `l`, then it holds for all lists. The principle i
+s given for
+a `Sort`-valued predicate, i.e., it can also be used to construct data.
 -/
-def reverseRec {motive : List α -> Sort*} (nil : motive [])
-    (append_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) : forall l, motive l
+def reverseRec {motive : List α → Sort*} (nil : motive [])
+    (append_singleton : ∀ (l : List α) (a : α), motive l → motive (l ++ [a])) : ∀ l, motive l
   | [] => nil
   | a :: l => (dropLast_concat_getLast (cons_ne_nil a l)) ▸
     append_singleton _ _ ((a :: l).dropLast.reverseRec nil append_singleton)
   termination_by l => l.length
 
 @[simp]
-/--
-theorem `reverseRec_nil` / 定理 `reverseRec_nil`
-
-English:
-theorem reverseRec_nil
-  statement: {motive : List α -> Sort*} (nil : motive [])
-  proof: by grind [reverseRec]
-
-@[simp]
-
-中文:
-定理 reverseRec_nil
-  结论: {motive : 列表 α -> 类型层*} (nil : motive [])
-  证明: by grind [reverseRec]
-
-@[simp]
-
-Depends on / 依赖: reverseRec
+/-
+**List.reverseRec_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：reverseRec_nil {motive : List α -> Sort*} (nil : motive []) (append_single
+ton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) : [].reverseRe
+c nil append_singleton = nil
+参数：nil : motive []；append_singleton : forall (l : List α) (a : α), motive l -> m
+otive (l ++ [a])。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem reverseRec_nil {motive : List α -> Sort*} (nil : motive [])
-    (append_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) :
+theorem reverseRec_nil {motive : List α → Sort*} (nil : motive [])
+    (append_singleton : ∀ (l : List α) (a : α), motive l → motive (l ++ [a])) :
     [].reverseRec nil append_singleton = nil := by grind [reverseRec]
 
 @[simp]
-/--
-theorem `reverseRec_concat` / 定理 `reverseRec_concat`
-
-English:
-theorem reverseRec_concat
-  statement: {motive : List α -> Sort*} (x : α) (xs : List α) (nil : motive [])
-  proof: by
-  grind [reverseRec, cases List]
-
-中文:
-定理 reverseRec_concat
-  结论: {motive : 列表 α -> 类型层*} (x : α) (xs : 列表 α) (nil : motive [])
-  证明: by
-  grind [reverseRec, cases List]
-
-Depends on / 依赖: reverseRec
+/-
+**List.reverseRec_concat** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：reverseRec_concat {motive : List α -> Sort*} (x : α) (xs : List α) (nil : 
+motive []) (append_singleton : forall (l : List α) (a : α), motive l -> motive (
+l ++ [a])) : (xs ++ [x]).reverseRec nil append_singleton = append_singleton xs x
+ (xs.reverseRec nil append_singleton)
+参数：x : α；xs : List α；nil : motive []；append_singleton : forall (l : List α) (a :
+ α), motive l -> motive (l ++ [a])。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem reverseRec_concat {motive : List α -> Sort*} (x : α) (xs : List α) (nil : motive [])
-    (append_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) :
+theorem reverseRec_concat {motive : List α → Sort*} (x : α) (xs : List α) (nil : motive [])
+    (append_singleton : ∀ (l : List α) (a : α), motive l → motive (l ++ [a])) :
     (xs ++ [x]).reverseRec nil append_singleton =
     append_singleton xs x (xs.reverseRec nil append_singleton) := by
   grind [reverseRec, cases List]
 
 /-- Like `reverseRec`, but with the list parameter placed first. -/
 @[elab_as_elim]
-/--
-Definition of `reverseRecOn` / `reverseRecOn` 的定义
+/-
+**List.reverseRecOn** 是 Mathlib 中的一个缩写定义，位于命名空间 `List`。
+形式化陈述：reverseRecOn {motive : List α -> Sort*} (l : List α) (nil : motive []) (ap
+pend_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) : m
+otive l
+参数：l : List α；nil : motive []；append_singleton : forall (l : List α) (a : α), mo
+tive l -> motive (l ++ [a])。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation reverseRecOn
-  signature: {motive : List α -> Sort*} (l : List α) (nil : motive [])
-  body: reverseRec nil append_singleton l
-
-中文:
-缩写 reverseRecOn
-  签名: {motive : 列表 α -> 类型层*} (l : 列表 α) (nil : motive [])
-  定义体: reverseRec nil append_singleton l
-
-Depends on / 依赖: append_singleton, reverseRec
+--- 原说明 ---
+Like `reverseRec`, but with the list parameter placed first.
 -/
-abbrev reverseRecOn {motive : List α -> Sort*} (l : List α) (nil : motive [])
-    (append_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) : motive l :=
+abbrev reverseRecOn {motive : List α → Sort*} (l : List α) (nil : motive [])
+    (append_singleton : ∀ (l : List α) (a : α), motive l → motive (l ++ [a])) : motive l :=
   reverseRec nil append_singleton l
-
-/--
-theorem `reverseRecOn_nil` / 定理 `reverseRecOn_nil`
-
-English:
-theorem reverseRecOn_nil
-  statement: {motive : List α -> Sort*} (nil : motive [])
-  proof: by simp
-
-中文:
-定理 reverseRecOn_nil
-  结论: {motive : 列表 α -> 类型层*} (nil : motive [])
-  证明: by simp
+/-
+**List.reverseRecOn_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：reverseRecOn_nil {motive : List α -> Sort*} (nil : motive []) (append_sing
+leton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) : reverseRec
+On [] nil append_singleton = nil
+参数：nil : motive []；append_singleton : forall (l : List α) (a : α), motive l -> m
+otive (l ++ [a])。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverseRec_nil`：reverseRec_nil {motive : List α -> Sort*} (nil : mo
+tive []) (append_singleton : forall (l : List α) (a : α), motive l -> motive (l 
+++ [a])) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem reverseRecOn_nil {motive : List α -> Sort*} (nil : motive [])
-    (append_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) :
+theorem reverseRecOn_nil {motive : List α → Sort*} (nil : motive [])
+    (append_singleton : ∀ (l : List α) (a : α), motive l → motive (l ++ [a])) :
     reverseRecOn [] nil append_singleton = nil := by simp
-
-/--
-theorem `reverseRecOn_concat` / 定理 `reverseRecOn_concat`
-
-English:
-theorem reverseRecOn_concat
-  statement: {motive : List α -> Sort*} (x : α) (xs : List α) (nil : motive [])
-  proof: by simp
-
-中文:
-定理 reverseRecOn_concat
-  结论: {motive : 列表 α -> 类型层*} (x : α) (xs : 列表 α) (nil : motive [])
-  证明: by simp
+/-
+**List.reverseRecOn_concat** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：reverseRecOn_concat {motive : List α -> Sort*} (x : α) (xs : List α) (nil 
+: motive []) (append_singleton : forall (l : List α) (a : α), motive l -> motive
+ (l ++ [a])) : (xs ++ [x]).reverseRecOn nil append_singleton = append_singleton 
+xs x (reverseRecOn xs nil append_singleton)
+参数：x : α；xs : List α；nil : motive []；append_singleton : forall (l : List α) (a :
+ α), motive l -> motive (l ++ [a])。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverseRec_concat`：reverseRec_concat {motive : List α -> Sort*} (x 
+: α) (xs : List α) (nil : motive []) (append_singleton : forall (l : List α) (a 
+: α), motive…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem reverseRecOn_concat {motive : List α -> Sort*} (x : α) (xs : List α) (nil : motive [])
-    (append_singleton : forall (l : List α) (a : α), motive l -> motive (l ++ [a])) :
+theorem reverseRecOn_concat {motive : List α → Sort*} (x : α) (xs : List α) (nil : motive [])
+    (append_singleton : ∀ (l : List α) (a : α), motive l → motive (l ++ [a])) :
     (xs ++ [x]).reverseRecOn nil append_singleton =
       append_singleton xs x (reverseRecOn xs nil append_singleton) := by simp
 
@@ -148,20 +150,30 @@ singleton list, and `a :: (l ++ [b])` from `l`, then it holds for all lists. Thi
 prove statements about palindromes. The principle is given for a `Sort`-valued predicate, i.e., it
 can also be used to construct data. -/
 @[elab_as_elim]
-/--
-Definition of `bidirectionalRec` / `bidirectionalRec` 的定义
+/-
+**List.bidirectionalRec** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u_1} →   {motive : List α → Sort u_2} →     motive [] →       ((
+a : α) → motive [a]) →         ((a : α) → (l : List α) → (b : α) → motive l → mo
+tive (a :: (l ++ [b]))) → (l : List α) → motive l
+参数：(a : α) → motive [a]；(a : α) → (l : List α) → (b : α) → motive l → motive (a 
+:: (l ++ [b]))；l : List α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
 
-English:
-definition bidirectionalRec
-  signature: {motive : List α -> Sort*} (nil : motive []) (singleton : forall a : α, motive [a])
-
-中文:
-定义 bidirectionalRec
-  签名: {motive : 列表 α -> 类型层*} (nil : motive []) (singleton : 对任意 a : α, motive [a])
+--- 原说明 ---
+Bidirectional induction principle for lists: if a property holds for the empty l
+ist, the
+singleton list, and `a :: (l ++ [b])` from `l`, then it holds for all lists. Thi
+s can be used to
+prove statements about palindromes. The principle is given for a `Sort`-valued p
+redicate, i.e., it
+can also be used to construct data.
 -/
-def bidirectionalRec {motive : List α -> Sort*} (nil : motive []) (singleton : forall a : α, motive [a])
-    (cons_append : forall (a : α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b]))) :
-    forall l, motive l
+def bidirectionalRec {motive : List α → Sort*} (nil : motive []) (singleton : ∀ a : α, motive [a])
+    (cons_append : ∀ (a : α) (l : List α) (b : α), motive l → motive (a :: (l ++ [b]))) :
+    ∀ l, motive l
   | [] => nil
   | [a] => singleton a
   | a :: b :: l =>
@@ -171,82 +183,58 @@ def bidirectionalRec {motive : List α -> Sort*} (nil : motive []) (singleton : 
 termination_by l => l.length
 
 @[simp]
-/--
-theorem `bidirectionalRec_nil` / 定理 `bidirectionalRec_nil`
-
-English:
-theorem bidirectionalRec_nil
-  statement: {motive : List α -> Sort*}
-  proof: by grind [bidirectionalRec]
-
-
-@[simp]
-
-中文:
-定理 bidirectionalRec_nil
-  结论: {motive : 列表 α -> 类型层*}
-  证明: by grind [bidirectionalRec]
-
-
-@[simp]
-
-Depends on / 依赖: bidirectionalRec
+/-
+**List.bidirectionalRec_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：bidirectionalRec_nil {motive : List α -> Sort*} (nil : motive []) (singlet
+on : forall a : α, motive [a]) (cons_append : forall (a : α) (l : List α) (b : α
+), motive l -> motive (a :: (l ++ [b]))) : bidirectionalRec nil singleton cons_a
+ppend [] = nil
+参数：nil : motive []；singleton : forall a : α, motive [a]；cons_append : forall (a 
+: α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b]))。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bidirectionalRec_nil {motive : List α -> Sort*}
-    (nil : motive []) (singleton : forall a : α, motive [a])
-    (cons_append : forall (a : α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b]))) :
+theorem bidirectionalRec_nil {motive : List α → Sort*}
+    (nil : motive []) (singleton : ∀ a : α, motive [a])
+    (cons_append : ∀ (a : α) (l : List α) (b : α), motive l → motive (a :: (l ++ [b]))) :
     bidirectionalRec nil singleton cons_append [] = nil := by grind [bidirectionalRec]
 
 
 @[simp]
-/--
-theorem `bidirectionalRec_singleton` / 定理 `bidirectionalRec_singleton`
-
-English:
-theorem bidirectionalRec_singleton
-  statement: {motive : List α -> Sort*}
-  proof: by
-  grind [bidirectionalRec]
-
-@[simp]
-
-中文:
-定理 bidirectionalRec_singleton
-  结论: {motive : 列表 α -> 类型层*}
-  证明: by
-  grind [bidirectionalRec]
-
-@[simp]
-
-Depends on / 依赖: bidirectionalRec
+/-
+**List.bidirectionalRec_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：bidirectionalRec_singleton {motive : List α -> Sort*} (nil : motive []) (s
+ingleton : forall a : α, motive [a]) (cons_append : forall (a : α) (l : List α) 
+(b : α), motive l -> motive (a :: (l ++ [b]))) (a : α) : bidirectionalRec nil si
+ngleton cons_append [a] = singleton a
+参数：nil : motive []；singleton : forall a : α, motive [a]；cons_append : forall (a 
+: α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b]))；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bidirectionalRec_singleton {motive : List α -> Sort*}
-    (nil : motive []) (singleton : forall a : α, motive [a])
-    (cons_append : forall (a : α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b]))) (a : α) :
+theorem bidirectionalRec_singleton {motive : List α → Sort*}
+    (nil : motive []) (singleton : ∀ a : α, motive [a])
+    (cons_append : ∀ (a : α) (l : List α) (b : α), motive l → motive (a :: (l ++ [b]))) (a : α) :
     bidirectionalRec nil singleton cons_append [a] = singleton a := by
   grind [bidirectionalRec]
 
 @[simp]
-/--
-theorem `bidirectionalRec_cons_append` / 定理 `bidirectionalRec_cons_append`
-
-English:
-theorem bidirectionalRec_cons_append
-  statement: {motive : List α -> Sort*}
-  proof: by
-  grind [bidirectionalRec, cases List]
-
-中文:
-定理 bidirectionalRec_cons_append
-  结论: {motive : 列表 α -> 类型层*}
-  证明: by
-  grind [bidirectionalRec, cases List]
-
-Depends on / 依赖: bidirectionalRec
+/-
+**List.bidirectionalRec_cons_append** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：bidirectionalRec_cons_append {motive : List α -> Sort*} (nil : motive []) 
+(singleton : forall a : α, motive [a]) (cons_append : forall (a : α) (l : List α
+) (b : α), motive l -> motive (a :: (l ++ [b]))) (a : α) (l : List α) (b : α) : 
+bidirectionalRec nil singleton cons_append (a :: (l ++ [b])) = cons_append a l b
+ (bidirectionalRec nil singleton cons_append l)
+参数：nil : motive []；singleton : forall a : α, motive [a]；cons_append : forall (a 
+: α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b]))；a : α；l : List α
+；b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bidirectionalRec_cons_append {motive : List α -> Sort*}
-    (nil : motive []) (singleton : forall a : α, motive [a])
-    (cons_append : forall (a : α) (l : List α) (b : α), motive l -> motive (a :: (l ++ [b])))
+theorem bidirectionalRec_cons_append {motive : List α → Sort*}
+    (nil : motive []) (singleton : ∀ a : α, motive [a])
+    (cons_append : ∀ (a : α) (l : List α) (b : α), motive l → motive (a :: (l ++ [b])))
     (a : α) (l : List α) (b : α) :
     bidirectionalRec nil singleton cons_append (a :: (l ++ [b])) =
       cons_append a l b (bidirectionalRec nil singleton cons_append l) := by
@@ -254,23 +242,21 @@ theorem bidirectionalRec_cons_append {motive : List α -> Sort*}
 
 /-- Like `bidirectionalRec`, but with the list parameter placed first. -/
 @[elab_as_elim]
-/--
-Definition of `bidirectionalRecOn` / `bidirectionalRecOn` 的定义
+/-
+**List.bidirectionalRecOn** 是 Mathlib 中的一个缩写定义，位于命名空间 `List`。
+形式化陈述：bidirectionalRecOn {C : List α -> Sort*} (l : List α) (H0 : C []) (H1 : fo
+rall a : α, C [a]) (Hn : forall (a : α) (l : List α) (b : α), C l -> C (a :: (l 
+++ [b]))) : C l
+参数：l : List α；H0 : C []；H1 : forall a : α, C [a]；Hn : forall (a : α) (l : List α
+) (b : α), C l -> C (a :: (l ++ [b]))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation bidirectionalRecOn
-  signature: {C : List α -> Sort*} (l : List α) (H0 : C []) (H1 : forall a : α, C [a])
-  body: bidirectionalRec H0 H1 Hn l
-
-中文:
-缩写 bidirectionalRecOn
-  签名: {C : 列表 α -> 类型层*} (l : 列表 α) (H0 : C []) (H1 : 对任意 a : α, C [a])
-  定义体: bidirectionalRec H0 H1 Hn l
-
-Depends on / 依赖: bidirectionalRec
+--- 原说明 ---
+Like `bidirectionalRec`, but with the list parameter placed first.
 -/
-abbrev bidirectionalRecOn {C : List α -> Sort*} (l : List α) (H0 : C []) (H1 : forall a : α, C [a])
-    (Hn : forall (a : α) (l : List α) (b : α), C l -> C (a :: (l ++ [b]))) : C l :=
+abbrev bidirectionalRecOn {C : List α → Sort*} (l : List α) (H0 : C []) (H1 : ∀ a : α, C [a])
+    (Hn : ∀ (a : α) (l : List α) (b : α), C l → C (a :: (l ++ [b]))) : C l :=
   bidirectionalRec H0 H1 Hn l
 
 /--
@@ -278,82 +264,67 @@ A dependent recursion principle for nonempty lists. Useful for dealing with
 operations like `List.head` which are not defined on the empty list.
 -/
 @[elab_as_elim]
-/--
-Definition of `recNeNil` / `recNeNil` 的定义
+/-
+**List.recNeNil** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：recNeNil {motive : (l : List α) -> l != [] -> Sort*} (singleton : forall x
+, motive [x] (cons_ne_nil x [])) (cons : forall x xs h, motive xs h -> motive (x
+ :: xs) (cons_ne_nil x xs)) (l : List α) (h : l != []) : motive l h
+参数：l : List α；singleton : forall x, motive [x] (cons_ne_nil x [])；cons : forall 
+x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs)；l : List α；h : l != [
+]。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
 
-English:
-definition recNeNil
-  signature: {motive : (l : List α) -> l != [] -> Sort*}
-  body: match l with
-  | [x] => singleton x
-  | x :: y :: xs =>
-    cons x (y :: xs) (cons_ne_nil y xs) (recNeNil singleton cons (y :: xs) (cons_ne_nil y xs))
-
-@[simp]
-
-中文:
-定义 recNeNil
-  签名: {motive : (l : 列表 α) -> l != [] -> 类型层*}
-  定义体: match l with
-  | [x] => singleton x
-  | x :: y :: xs =>
-    cons x (y :: xs) (cons_ne_nil y xs) (recNeNil singleton cons (y :: xs) (cons_ne_nil y xs))
-
-@[simp]
-
-Depends on / 依赖: cons_ne_nil, recNeNil, singleton
+--- 原说明 ---
+A dependent recursion principle for nonempty lists. Useful for dealing with
+operations like `List.head` which are not defined on the empty list.
 -/
-def recNeNil {motive : (l : List α) -> l != [] -> Sort*}
-    (singleton : forall x, motive [x] (cons_ne_nil x []))
-    (cons : forall x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs))
-    (l : List α) (h : l != []) : motive l h :=
+def recNeNil {motive : (l : List α) → l ≠ [] → Sort*}
+    (singleton : ∀ x, motive [x] (cons_ne_nil x []))
+    (cons : ∀ x xs h, motive xs h → motive (x :: xs) (cons_ne_nil x xs))
+    (l : List α) (h : l ≠ []) : motive l h :=
   match l with
   | [x] => singleton x
   | x :: y :: xs =>
     cons x (y :: xs) (cons_ne_nil y xs) (recNeNil singleton cons (y :: xs) (cons_ne_nil y xs))
 
 @[simp]
-/--
-theorem `recNeNil_singleton` / 定理 `recNeNil_singleton`
-
-English:
-theorem recNeNil_singleton
-  statement: {motive : (l : List α) -> l != [] -> Sort*} (x : α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 recNeNil_singleton
-  结论: {motive : (l : 列表 α) -> l != [] -> 类型层*} (x : α)
-  证明: rfl
-
-@[simp]
+/-
+**List.recNeNil_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：recNeNil_singleton {motive : (l : List α) -> l != [] -> Sort*} (x : α) (si
+ngleton : forall x, motive [x] (cons_ne_nil x [])) (cons : forall x xs h, motive
+ xs h -> motive (x :: xs) (cons_ne_nil x xs)) : recNeNil singleton cons [x] (con
+s_ne_nil x []) = singleton x
+参数：l : List α；x : α；singleton : forall x, motive [x] (cons_ne_nil x [])；cons : f
+orall x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
 -/
-theorem recNeNil_singleton {motive : (l : List α) -> l != [] -> Sort*} (x : α)
-    (singleton : forall x, motive [x] (cons_ne_nil x []))
-    (cons : forall x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs)) :
+theorem recNeNil_singleton {motive : (l : List α) → l ≠ [] → Sort*} (x : α)
+    (singleton : ∀ x, motive [x] (cons_ne_nil x []))
+    (cons : ∀ x xs h, motive xs h → motive (x :: xs) (cons_ne_nil x xs)) :
     recNeNil singleton cons [x] (cons_ne_nil x []) = singleton x := rfl
 
 @[simp]
-/--
-theorem `recNeNil_cons` / 定理 `recNeNil_cons`
-
-English:
-theorem recNeNil_cons
-  statement: {motive : (l : List α) -> l != [] -> Sort*} (x : α) (xs : List α) (h : xs != [])
-  proof: match xs with
-  | _ :: _ => rfl
-
-中文:
-定理 recNeNil_cons
-  结论: {motive : (l : 列表 α) -> l != [] -> 类型层*} (x : α) (xs : 列表 α) (h : xs != [])
-  证明: match xs with
-  | _ :: _ => rfl
+/-
+**List.recNeNil_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：recNeNil_cons {motive : (l : List α) -> l != [] -> Sort*} (x : α) (xs : Li
+st α) (h : xs != []) (singleton : forall x, motive [x] (cons_ne_nil x [])) (cons
+ : forall x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs)) : recNeNil
+ singleton cons (x :: xs) (cons_ne_nil x xs) = cons x xs h (recNeNil singleton c
+ons xs h)
+参数：l : List α；x : α；xs : List α；h : xs != []；singleton : forall x, motive [x] (c
+ons_ne_nil x [])；cons : forall x xs h, motive xs h -> motive (x :: xs) (cons_ne_
+nil x xs)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
 -/
-theorem recNeNil_cons {motive : (l : List α) -> l != [] -> Sort*} (x : α) (xs : List α) (h : xs != [])
-    (singleton : forall x, motive [x] (cons_ne_nil x []))
-    (cons : forall x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs)) :
+theorem recNeNil_cons {motive : (l : List α) → l ≠ [] → Sort*} (x : α) (xs : List α) (h : xs ≠ [])
+    (singleton : ∀ x, motive [x] (cons_ne_nil x []))
+    (cons : ∀ x xs h, motive xs h → motive (x :: xs) (cons_ne_nil x xs)) :
     recNeNil singleton cons (x :: xs) (cons_ne_nil x xs) =
       cons x xs h (recNeNil singleton cons xs h) :=
   match xs with
@@ -365,62 +336,49 @@ operations like `List.head` which are not defined on the empty list.
 Same as `List.recNeNil`, with a more convenient argument order.
 -/
 @[elab_as_elim, simp]
-/--
-Definition of `recOnNeNil` / `recOnNeNil` 的定义
+/-
+**List.recOnNeNil** 是 Mathlib 中的一个缩写定义，位于命名空间 `List`。
+形式化陈述：recOnNeNil {motive : (l : List α) -> l != [] -> Sort*} (l : List α) (h : l
+ != []) (singleton : forall x, motive [x] (cons_ne_nil x [])) (cons : forall x x
+s h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs)) : motive l h
+参数：l : List α；l : List α；h : l != []；singleton : forall x, motive [x] (cons_ne_n
+il x [])；cons : forall x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs
+)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
 
-English:
-abbreviation recOnNeNil
-  signature: {motive : (l : List α) -> l != [] -> Sort*} (l : List α) (h : l != [])
-  body: recNeNil singleton cons l h
-
-中文:
-缩写 recOnNeNil
-  签名: {motive : (l : 列表 α) -> l != [] -> 类型层*} (l : 列表 α) (h : l != [])
-  定义体: recNeNil singleton cons l h
-
-Depends on / 依赖: recNeNil, singleton
+--- 原说明 ---
+A dependent recursion principle for nonempty lists. Useful for dealing with
+operations like `List.head` which are not defined on the empty list.
+Same as `List.recNeNil`, with a more convenient argument order.
 -/
-abbrev recOnNeNil {motive : (l : List α) -> l != [] -> Sort*} (l : List α) (h : l != [])
-    (singleton : forall x, motive [x] (cons_ne_nil x []))
-    (cons : forall x xs h, motive xs h -> motive (x :: xs) (cons_ne_nil x xs)) :
+abbrev recOnNeNil {motive : (l : List α) → l ≠ [] → Sort*} (l : List α) (h : l ≠ [])
+    (singleton : ∀ x, motive [x] (cons_ne_nil x []))
+    (cons : ∀ x xs h, motive xs h → motive (x :: xs) (cons_ne_nil x xs)) :
     motive l h := recNeNil singleton cons l h
 
 /--
 A recursion principle for lists which separates the singleton case.
 -/
 @[elab_as_elim]
-/--
-Definition of `twoStepInduction` / `twoStepInduction` 的定义
+/-
+**List.twoStepInduction** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：twoStepInduction {motive : (l : List α) -> Sort*} (nil : motive []) (singl
+eton : forall x, motive [x]) (cons_cons : forall x y xs, motive xs -> (forall y,
+ motive (y :: xs)) -> motive (x :: y :: xs)) (l : List α) : motive l
+参数：l : List α；nil : motive []；singleton : forall x, motive [x]；cons_cons : foral
+l x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs)；l :
+ List α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition twoStepInduction
-  signature: {motive : (l : List α) -> Sort*} (nil : motive [])
-  body: match l with
-  | [] => nil
-  | [x] => singleton x
-  | x :: y :: xs =>
-    cons_cons x y xs
-    (twoStepInduction nil singleton cons_cons xs)
-    (fun y => twoStepInduction nil singleton cons_cons (y :: xs))
-
-@[simp]
-
-中文:
-定义 twoStepInduction
-  签名: {motive : (l : 列表 α) -> 类型层*} (nil : motive [])
-  定义体: match l with
-  | [] => nil
-  | [x] => singleton x
-  | x :: y :: xs =>
-    cons_cons x y xs
-    (twoStepInduction nil singleton cons_cons xs)
-    (fun y => twoStepInduction nil singleton cons_cons (y :: xs))
-
-@[simp]
+--- 原说明 ---
+A recursion principle for lists which separates the singleton case.
 -/
-def twoStepInduction {motive : (l : List α) -> Sort*} (nil : motive [])
-    (singleton : forall x, motive [x])
-    (cons_cons : forall x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs))
+def twoStepInduction {motive : (l : List α) → Sort*} (nil : motive [])
+    (singleton : ∀ x, motive [x])
+    (cons_cons : ∀ x y xs, motive xs → (∀ y, motive (y :: xs)) → motive (x :: y :: xs))
     (l : List α) : motive l := match l with
   | [] => nil
   | [x] => singleton x
@@ -430,77 +388,71 @@ def twoStepInduction {motive : (l : List α) -> Sort*} (nil : motive [])
     (fun y => twoStepInduction nil singleton cons_cons (y :: xs))
 
 @[simp]
-/--
-theorem `twoStepInduction_nil` / 定理 `twoStepInduction_nil`
-
-English:
-theorem twoStepInduction_nil
-  statement: {motive : (l : List α) -> Sort*} (nil : motive [])
-  proof: twoStepInduction.eq_1 ..
-
-@[simp]
-
-中文:
-定理 twoStepInduction_nil
-  结论: {motive : (l : 列表 α) -> 类型层*} (nil : motive [])
-  证明: twoStepInduction.eq_1 ..
-
-@[simp]
-
-Depends on / 依赖: eq_1, twoStepInduction, twoStepInduction.eq_1
+/-
+**List.twoStepInduction_nil** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：twoStepInduction_nil {motive : (l : List α) -> Sort*} (nil : motive []) (s
+ingleton : forall x, motive [x]) (cons_cons : forall x y xs, motive xs -> (foral
+l y, motive (y :: xs)) -> motive (x :: y :: xs)) : twoStepInduction nil singleto
+n cons_cons [] = nil
+参数：l : List α；nil : motive []；singleton : forall x, motive [x]；cons_cons : foral
+l x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.twoStepInduction.eq_1`：∀ {α : Type u_1} {motive : List α → Sort u_2
+} (nil : motive []) (singleton : (x : α) → motive [x])   (cons_cons : (x y : α) 
+→ (xs : List α) …
 -/
-theorem twoStepInduction_nil {motive : (l : List α) -> Sort*} (nil : motive [])
-    (singleton : forall x, motive [x])
-    (cons_cons : forall x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs)) :
+theorem twoStepInduction_nil {motive : (l : List α) → Sort*} (nil : motive [])
+    (singleton : ∀ x, motive [x])
+    (cons_cons : ∀ x y xs, motive xs → (∀ y, motive (y :: xs)) → motive (x :: y :: xs)) :
     twoStepInduction nil singleton cons_cons [] = nil := twoStepInduction.eq_1 ..
 
 @[simp]
-/--
-theorem `twoStepInduction_singleton` / 定理 `twoStepInduction_singleton`
-
-English:
-theorem twoStepInduction_singleton
-  statement: {motive : (l : List α) -> Sort*} (x : α) (nil : motive [])
-  proof: twoStepInduction.eq_2 ..
-
-@[simp]
-
-中文:
-定理 twoStepInduction_singleton
-  结论: {motive : (l : 列表 α) -> 类型层*} (x : α) (nil : motive [])
-  证明: twoStepInduction.eq_2 ..
-
-@[simp]
-
-Depends on / 依赖: eq_2, twoStepInduction, twoStepInduction.eq_2
+/-
+**List.twoStepInduction_singleton** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：twoStepInduction_singleton {motive : (l : List α) -> Sort*} (x : α) (nil :
+ motive []) (singleton : forall x, motive [x]) (cons_cons : forall x y xs, motiv
+e xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs)) : twoStepInductio
+n nil singleton cons_cons [x] = singleton x
+参数：l : List α；x : α；nil : motive []；singleton : forall x, motive [x]；cons_cons :
+ forall x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: x
+s)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.twoStepInduction.eq_2`：∀ {α : Type u_1} {motive : List α → Sort u_2
+} (nil : motive []) (singleton : (x : α) → motive [x])   (cons_cons : (x y : α) 
+→ (xs : List α) …
 -/
-theorem twoStepInduction_singleton {motive : (l : List α) -> Sort*} (x : α) (nil : motive [])
-    (singleton : forall x, motive [x])
-    (cons_cons : forall x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs)) :
+theorem twoStepInduction_singleton {motive : (l : List α) → Sort*} (x : α) (nil : motive [])
+    (singleton : ∀ x, motive [x])
+    (cons_cons : ∀ x y xs, motive xs → (∀ y, motive (y :: xs)) → motive (x :: y :: xs)) :
     twoStepInduction nil singleton cons_cons [x] = singleton x := twoStepInduction.eq_2 ..
 
 @[simp]
-/--
-theorem `twoStepInduction_cons_cons` / 定理 `twoStepInduction_cons_cons`
-
-English:
-theorem twoStepInduction_cons_cons
-  statement: {motive : (l : List α) -> Sort*} (x y : α) (xs : List α)
-  proof: twoStepInduction.eq_3 ..
-
-中文:
-定理 twoStepInduction_cons_cons
-  结论: {motive : (l : 列表 α) -> 类型层*} (x y : α) (xs : 列表 α)
-  证明: twoStepInduction.eq_3 ..
-
-Depends on / 依赖: eq_3, twoStepInduction, twoStepInduction.eq_3
+/-
+**List.twoStepInduction_cons_cons** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：twoStepInduction_cons_cons {motive : (l : List α) -> Sort*} (x y : α) (xs 
+: List α) (nil : motive []) (singleton : forall x, motive [x]) (cons_cons : fora
+ll x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs)) :
+ twoStepInduction nil singleton cons_cons (x :: y :: xs) = cons_cons x y xs (two
+StepInduction nil singleton cons_cons xs) (fun y => twoStepInduction nil singlet
+on cons_cons (y :: xs))
+参数：l : List α；x y : α；xs : List α；nil : motive []；singleton : forall x, motive [
+x]；cons_cons : forall x y xs, motive xs -> (forall y, motive (y :: xs)) -> motiv
+e (x :: y :: xs)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.twoStepInduction.eq_3`：∀ {α : Type u_1} {motive : List α → Sort u_2
+} (nil : motive []) (singleton : (x : α) → motive [x])   (cons_cons : (x y : α) 
+→ (xs : List α) …
 -/
-theorem twoStepInduction_cons_cons {motive : (l : List α) -> Sort*} (x y : α) (xs : List α)
-    (nil : motive []) (singleton : forall x, motive [x])
-    (cons_cons : forall x y xs, motive xs -> (forall y, motive (y :: xs)) -> motive (x :: y :: xs)) :
+theorem twoStepInduction_cons_cons {motive : (l : List α) → Sort*} (x y : α) (xs : List α)
+    (nil : motive []) (singleton : ∀ x, motive [x])
+    (cons_cons : ∀ x y xs, motive xs → (∀ y, motive (y :: xs)) → motive (x :: y :: xs)) :
     twoStepInduction nil singleton cons_cons (x :: y :: xs) =
     cons_cons x y xs
     (twoStepInduction nil singleton cons_cons xs)
     (fun y => twoStepInduction nil singleton cons_cons (y :: xs)) := twoStepInduction.eq_3 ..
 
 end List
+

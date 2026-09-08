@@ -23,56 +23,30 @@ universe u v
 namespace Algebra.FormallySmooth
 
 variable {R A : Type*} [CommRing R] [CommRing A] [Algebra R A]
-  {S : Type*} [CommRing S] [Algebra R S] (I : Ideal S) (f : A ->ₐ[R] S ⧸ I)
+  {S : Type*} [CommRing S] [Algebra R S] (I : Ideal S) (f : A →ₐ[R] S ⧸ I)
 
 open RingHom
 
 variable [FormallySmooth R A]
 
 /--
-Definition of `liftAdicCompletionAux` / `liftAdicCompletionAux` 的定义
-
-English:
-definition liftAdicCompletionAux
-  signature: : (m : Nat) -> A ->ₐ[R] S ⧸ (I ^ m)
-  body: by simp
-    default
-  | 1 => (Ideal.quotientEquivAlgOfEq R (show I = I ^ 1 by simp)).toAlgHom.comp f
-  | m + 2 =>
-    letI T := S ⧸ I ^ (m + 1 + 1)
-    letI J : Ideal T := (I ^ (m + 1)).map (Ideal.Quotient.mkₐ R (I ^ (m + 1 + 1)))
-    letI q : A ->ₐ[R] T ⧸ J :=
-      (DoubleQuot.quotQuotEquivQuotOfLEₐ R
-        (Ideal.pow_le_pow_right (I := I) (m + 1).le_succ)).symm.toAlgHom.comp
-      (liftAdicCompletionAux (m + 1))
-    haveI : J ^ (m + 1 + 1) = 0 := by
-      rw [← Ideal.map_pow]; rw [Submodule.zero_eq_bot]; rw [← pow_mul]
-      exact eq_bot_mono (Ideal.map_mono <| Ideal.pow_le_pow_right (by simp))
-        (Ideal.map_quotient_self _)
-    FormallySmooth.lift J ⟨m + 1 + 1, this⟩ q
-
-中文:
-定义 liftAdicCompletionAux
-  签名: : (m : 自然数) -> A ->ₐ[R] S ⧸ (I ^ m)
-  定义体: by simp
-    default
-  | 1 => (Ideal.quotientEquivAlgOfEq R (show I = I ^ 1 by simp)).toAlgHom.comp f
-  | m + 2 =>
-    letI T := S ⧸ I ^ (m + 1 + 1)
-    letI J : Ideal T := (I ^ (m + 1)).map (Ideal.Quotient.mkₐ R (I ^ (m + 1 + 1)))
-    letI q : A ->ₐ[R] T ⧸ J :=
-      (DoubleQuot.quotQuotEquivQuotOfLEₐ R
-        (Ideal.pow_le_pow_right (I := I) (m + 1).le_succ)).symm.toAlgHom.comp
-      (liftAdicCompletionAux (m + 1))
-    haveI : J ^ (m + 1 + 1) = 0 := by
-      rw [← Ideal.map_pow]; rw [Submodule.zero_eq_bot]; rw [← pow_mul]
-      exact eq_bot_mono (Ideal.map_mono <| Ideal.pow_le_pow_right (by simp))
-        (Ideal.map_quotient_self _)
-    FormallySmooth.lift J ⟨m + 1 + 1, this⟩ q
-
-Depends on / 依赖: DoubleQuot, DoubleQuot.quotQuotEquivQuotOfLE, Ideal.Quotient.mk, Ideal.map_pow, Ideal.pow_le_pow_right, Ideal.quotientEquivAlgOfEq, Quotient, Submodule, Submodule.zero_eq_bot, eq_bot_mono, le_succ, liftAdicCompletionAux, map_pow, pow_le_pow_right, pow_mul, quotientEquivAlgOfEq, symm.toAlgHom.comp, toAlgHom, toAlgHom.comp, zero_eq_bot
+(Implementation): Lift `A →ₐ[R] S ⧸ I` inductively to `A →ₐ[R] S ⧸ I ^ m` using formal
+smoothness.
 -/
-noncomputable def liftAdicCompletionAux : (m : Nat) -> A ->ₐ[R] S ⧸ (I ^ m)
+/-
+**Algebra.FormallySmooth.liftAdicCompletionAux** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+a.FormallySmooth`。
+形式化陈述：liftAdicCompletionAux : (m : Nat) -> A ->ₐ[R] S ⧸ (I ^ m) | 0 => haveI : S
+ubsingleton (S ⧸ I ^ 0)
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+(Implementation): Lift `A →ₐ[R] S ⧸ I` inductively to `A →ₐ[R] S ⧸ I ^ m` using 
+formal
+smoothness.
+-/
+noncomputable def liftAdicCompletionAux : (m : ℕ) → A →ₐ[R] S ⧸ (I ^ m)
   | 0 =>
     haveI : Subsingleton (S ⧸ I ^ 0) := by simp
     default
@@ -80,56 +54,24 @@ noncomputable def liftAdicCompletionAux : (m : Nat) -> A ->ₐ[R] S ⧸ (I ^ m)
   | m + 2 =>
     letI T := S ⧸ I ^ (m + 1 + 1)
     letI J : Ideal T := (I ^ (m + 1)).map (Ideal.Quotient.mkₐ R (I ^ (m + 1 + 1)))
-    letI q : A ->ₐ[R] T ⧸ J :=
+    letI q : A →ₐ[R] T ⧸ J :=
       (DoubleQuot.quotQuotEquivQuotOfLEₐ R
         (Ideal.pow_le_pow_right (I := I) (m + 1).le_succ)).symm.toAlgHom.comp
       (liftAdicCompletionAux (m + 1))
     haveI : J ^ (m + 1 + 1) = 0 := by
-      rw [← Ideal.map_pow]; rw [Submodule.zero_eq_bot]; rw [← pow_mul]
+      rw [← Ideal.map_pow, Submodule.zero_eq_bot, ← pow_mul]
       exact eq_bot_mono (Ideal.map_mono <| Ideal.pow_le_pow_right (by simp))
         (Ideal.map_quotient_self _)
     FormallySmooth.lift J ⟨m + 1 + 1, this⟩ q
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `factorₐ_comp_liftAdicCompletionAux` / 引理 `factorₐ_comp_liftAdicCompletionAux`
-
-English:
-lemma factorₐ_comp_liftAdicCompletionAux
-  given: (m : Nat)
-  proof: by
-  cases m with
-  | zero =>
-    ext
-    apply eq_of_zero_eq_one
-    simp [subsingleton_iff_zero_eq_one]
-  | succ m =>
-    rw [liftAdicCompletionAux]; rw [← DoubleQuot.quotQuotEquivQuotOfLEₐ_comp_mkₐ]
-    ext
-    simp
-
-@[simp]
-
-中文:
-引理 factorₐ_comp_liftAdicCompletionAux
-  条件: (m : 自然数)
-  证明: by
-  cases m with
-  | zero =>
-    ext
-    apply eq_of_zero_eq_one
-    simp [subsingleton_iff_zero_eq_one]
-  | succ m =>
-    rw [liftAdicCompletionAux]; rw [← DoubleQuot.quotQuotEquivQuotOfLEₐ_comp_mkₐ]
-    ext
-    simp
-
-@[simp]
-
-Depends on / 依赖: DoubleQuot, DoubleQuot.quotQuotEquivQuotOfLE, Sigma.univ, continuous_sigmaMk, eq_of_zero_eq_one, isLindelof_iUnion, isLindelof_range, liftAdicCompletionAux, subsingleton_iff_zero_eq_one
+/-
+**Algebra.FormallySmooth.factor** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.FormallySmoot
+h`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma factorₐ_comp_liftAdicCompletionAux (m : Nat) :
+lemma factorₐ_comp_liftAdicCompletionAux (m : ℕ) :
     (Ideal.Quotient.factorₐ _ (Ideal.pow_le_pow_right m.le_succ)).comp
       (liftAdicCompletionAux I f (m + 1)) = liftAdicCompletionAux I f m := by
   cases m with
@@ -138,52 +80,30 @@ lemma factorₐ_comp_liftAdicCompletionAux (m : Nat) :
     apply eq_of_zero_eq_one
     simp [subsingleton_iff_zero_eq_one]
   | succ m =>
-    rw [liftAdicCompletionAux]; rw [← DoubleQuot.quotQuotEquivQuotOfLEₐ_comp_mkₐ]
+    rw [liftAdicCompletionAux, ← DoubleQuot.quotQuotEquivQuotOfLEₐ_comp_mkₐ]
     ext
     simp
 
 @[simp]
-/--
-lemma `factorₐ_comp_liftAdicCompletionAux_of_le` / 引理 `factorₐ_comp_liftAdicCompletionAux_of_le`
-
-English:
-lemma factorₐ_comp_liftAdicCompletionAux_of_le
-  given: {m n : Nat} (hn : m <= n)
-  proof: by
-  induction n, hn using Nat.le_induction with
-  | base => simp
-  | succ n hmn ih =>
-    rw [← Ideal.Quotient.factorₐ_comp _
-      (Ideal.pow_le_pow_right n.le_succ) (Ideal.pow_le_pow_right hmn)]; rw [AlgHom.comp_assoc]
-    simpa
-
-中文:
-引理 factorₐ_comp_liftAdicCompletionAux_of_le
-  条件: {m n : 自然数} (hn : m <= n)
-  证明: by
-  induction n, hn using Nat.le_induction with
-  | base => simp
-  | succ n hmn ih =>
-    rw [← Ideal.Quotient.factorₐ_comp _
-      (Ideal.pow_le_pow_right n.le_succ) (Ideal.pow_le_pow_right hmn)]; rw [AlgHom.comp_assoc]
-    simpa
-
-Depends on / 依赖: AlgHom, AlgHom.comp_assoc, Ideal.Quotient.factor, Ideal.pow_le_pow_right, Nat.le_induction, Quotient, comp_assoc, le_induction, le_succ, n.le_succ, pow_le_pow_right
+/-
+**Algebra.FormallySmooth.factor** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.FormallySmoot
+h`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma factorₐ_comp_liftAdicCompletionAux_of_le {m n : Nat} (hn : m <= n) :
+lemma factorₐ_comp_liftAdicCompletionAux_of_le {m n : ℕ} (hn : m ≤ n) :
     (Ideal.Quotient.factorₐ _ (Ideal.pow_le_pow_right hn)).comp (liftAdicCompletionAux I f n) =
       liftAdicCompletionAux I f m := by
   induction n, hn using Nat.le_induction with
   | base => simp
   | succ n hmn ih =>
     rw [← Ideal.Quotient.factorₐ_comp _
-      (Ideal.pow_le_pow_right n.le_succ) (Ideal.pow_le_pow_right hmn)]; rw [AlgHom.comp_assoc]
+      (Ideal.pow_le_pow_right n.le_succ) (Ideal.pow_le_pow_right hmn), AlgHom.comp_assoc]
     simpa
 
 /-- If `A` is formally smooth over `R`, any map `A →ₐ[R] S ⧸ I` lifts
 to `A →ₐ[R] AdicCompletion I S`. -/
-public lemma exists_adicCompletionEvalOneₐ_comp_eq {I : Ideal S} (f : A ->ₐ[R] S ⧸ I) :
-    exists (g : A ->ₐ[R] AdicCompletion I S),
+public lemma exists_adicCompletionEvalOneₐ_comp_eq {I : Ideal S} (f : A →ₐ[R] S ⧸ I) :
+    ∃ (g : A →ₐ[R] AdicCompletion I S),
       ((AdicCompletion.evalOneₐ I).restrictScalars R).comp g = f := by
   refine ⟨AdicCompletion.liftAlgHom I (liftAdicCompletionAux I f)
     (factorₐ_comp_liftAdicCompletionAux_of_le I f), ?_⟩
@@ -195,8 +115,8 @@ to `A →ₐ[R] S` if `S` is `I`-adically complete.
 See `Algebra.FormallySmooth.exists_adicCompletionEvalOneₐ_comp_eq` for a version
 about `AdicCompletion`. -/
 public lemma exists_mkₐ_comp_eq_of_isAdicComplete {I : Ideal S} [IsAdicComplete I S]
-    (f : A ->ₐ[R] S ⧸ I) :
-    exists (g : A ->ₐ[R] S), (Ideal.Quotient.mkₐ _ _).comp g = f := by
+    (f : A →ₐ[R] S ⧸ I) :
+    ∃ (g : A →ₐ[R] S), (Ideal.Quotient.mkₐ _ _).comp g = f := by
   obtain ⟨g, hg⟩ := exists_adicCompletionEvalOneₐ_comp_eq f
   refine ⟨AlgHom.comp ((AdicCompletion.ofAlgEquiv I).symm.toAlgHom.restrictScalars R) g, ?_⟩
   ext x
@@ -204,8 +124,8 @@ public lemma exists_mkₐ_comp_eq_of_isAdicComplete {I : Ideal S} [IsAdicComplet
 
 /-- If `A` is formally smooth over `R`, the projection from the adic completion of
 `S` at the kernel of `f : S →ₐ[R] A` has a section. -/
-public lemma exists_kerProj_comp_eq_id (f : S ->ₐ[R] A) (hf : Function.Surjective f) :
-    exists (g : A ->ₐ[R] AdicCompletion (ker f) S),
+public lemma exists_kerProj_comp_eq_id (f : S →ₐ[R] A) (hf : Function.Surjective f) :
+    ∃ (g : A →ₐ[R] AdicCompletion (ker f) S),
     (AdicCompletion.kerProj hf).comp g = AlgHom.id R A := by
   obtain ⟨g, hg⟩ := exists_adicCompletionEvalOneₐ_comp_eq
     (Ideal.quotientKerAlgEquivOfSurjective hf).symm.toAlgHom
@@ -216,3 +136,4 @@ public lemma exists_kerProj_comp_eq_id (f : S ->ₐ[R] A) (hf : Function.Surject
 end FormallySmooth
 
 end Algebra
+

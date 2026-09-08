@@ -27,179 +27,70 @@ variable [CommMonoid α] [PartialOrder α] [IsOrderedCancelMonoid α] {s : Submo
   {a₁ b₁ : α} {a₂ b₂ : s}
 
 @[to_additive]
-/--
-Instance `le` / 实例 `le`
-
-English:
-instance le
-  signature: : LE (Localization s)
-  body: ⟨fun a b =>
-    Localization.liftOn₂ a b (fun a₁ a₂ b₁ b₂ => ↑b₂ * a₁ <= a₂ * b₁)
-fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
-        obtain ⟨e, he⟩ := r_iff_exists.1 hab
-        obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
-        simp only [mul_right_inj] at he hf
-        rw [← mul_le_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_le_mul_iff_right]; rw [← mul_le_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_le_mul_iff_left]⟩
-
-@[to_additive]
-
-中文:
-实例 le
-  签名: : LE (Localization s)
-  定义体: ⟨fun a b =>
-    Localization.liftOn₂ a b (fun a₁ a₂ b₁ b₂ => ↑b₂ * a₁ <= a₂ * b₁)
-fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
-        obtain ⟨e, he⟩ := r_iff_exists.1 hab
-        obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
-        simp only [mul_right_inj] at he hf
-        rw [← mul_le_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_le_mul_iff_right]; rw [← mul_le_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_le_mul_iff_left]⟩
-
-@[to_additive]
-
-Depends on / 依赖: Localization, Localization.liftOn, mul_le_mul_i, mul_le_mul_iff_left, mul_le_mul_iff_right, mul_left_comm, mul_right_comm, mul_right_inj, propext, r_iff_exists
+/-
+**Localization.le** 是 Mathlib 中的一个实例，位于命名空间 `Localization`。
+形式化陈述：le : LE (Localization s)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance le : LE (Localization s) :=
   ⟨fun a b =>
-    Localization.liftOn₂ a b (fun a₁ a₂ b₁ b₂ => ↑b₂ * a₁ <= a₂ * b₁)
-fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
+    Localization.liftOn₂ a b (fun a₁ a₂ b₁ b₂ => ↑b₂ * a₁ ≤ a₂ * b₁)
+      fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext <| by
         obtain ⟨e, he⟩ := r_iff_exists.1 hab
         obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
         simp only [mul_right_inj] at he hf
-        rw [← mul_le_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_le_mul_iff_right]; rw [← mul_le_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_le_mul_iff_left]⟩
+        rw [← mul_le_mul_iff_right, mul_right_comm, ← hf, mul_right_comm, mul_right_comm (a₂ : α),
+          mul_le_mul_iff_right, ← mul_le_mul_iff_left, mul_left_comm, he, mul_left_comm,
+          mul_left_comm (b₂ : α), mul_le_mul_iff_left]⟩
 
 @[to_additive]
-/--
-Instance `lt` / 实例 `lt`
-
-English:
-instance lt
-  signature: : LT (Localization s)
-  body: ⟨fun a b =>
-    Localization.liftOn₂ a b (fun a₁ a₂ b₁ b₂ => ↑b₂ * a₁ < a₂ * b₁)
-fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
-        obtain ⟨e, he⟩ := r_iff_exists.1 hab
-        obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
-        simp only [mul_right_inj] at he hf
-        rw [← mul_lt_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_lt_mul_iff_right]; rw [← mul_lt_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_lt_mul_iff_left]⟩
-
-@[to_additive]
-
-中文:
-实例 lt
-  签名: : LT (Localization s)
-  定义体: ⟨fun a b =>
-    Localization.liftOn₂ a b (fun a₁ a₂ b₁ b₂ => ↑b₂ * a₁ < a₂ * b₁)
-fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
-        obtain ⟨e, he⟩ := r_iff_exists.1 hab
-        obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
-        simp only [mul_right_inj] at he hf
-        rw [← mul_lt_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_lt_mul_iff_right]; rw [← mul_lt_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_lt_mul_iff_left]⟩
-
-@[to_additive]
-
-Depends on / 依赖: Localization, Localization.liftOn, mul_left_comm, mul_lt_mul_if, mul_lt_mul_iff_left, mul_lt_mul_iff_right, mul_right_comm, mul_right_inj, propext, r_iff_exists
+/-
+**Localization.lt** 是 Mathlib 中的一个实例，位于命名空间 `Localization`。
+形式化陈述：lt : LT (Localization s)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance lt : LT (Localization s) :=
   ⟨fun a b =>
     Localization.liftOn₂ a b (fun a₁ a₂ b₁ b₂ => ↑b₂ * a₁ < a₂ * b₁)
-fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
+      fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext <| by
         obtain ⟨e, he⟩ := r_iff_exists.1 hab
         obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
         simp only [mul_right_inj] at he hf
-        rw [← mul_lt_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_lt_mul_iff_right]; rw [← mul_lt_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_lt_mul_iff_left]⟩
+        rw [← mul_lt_mul_iff_right, mul_right_comm, ← hf, mul_right_comm, mul_right_comm (a₂ : α),
+          mul_lt_mul_iff_right, ← mul_lt_mul_iff_left, mul_left_comm, he, mul_left_comm,
+          mul_left_comm (b₂ : α), mul_lt_mul_iff_left]⟩
 
 @[to_additive]
-/--
-theorem `mk_le_mk` / 定理 `mk_le_mk`
-
-English:
-theorem mk_le_mk
-  statement: mk a₁ a₂ <= mk b₁ b₂ ↔ ↑b₂ * a₁ <= a₂ * b₁
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 mk_le_mk
-  结论: mk a₁ a₂ <= mk b₁ b₂ ↔ ↑b₂ * a₁ <= a₂ * b₁
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Localization.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `Localization`。
+形式化陈述：mk_le_mk : mk a₁ a₂ <= mk b₁ b₂ ↔ ↑b₂ * a₁ <= a₂ * b₁
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mk_le_mk : mk a₁ a₂ <= mk b₁ b₂ ↔ ↑b₂ * a₁ <= a₂ * b₁ :=
+theorem mk_le_mk : mk a₁ a₂ ≤ mk b₁ b₂ ↔ ↑b₂ * a₁ ≤ a₂ * b₁ :=
   Iff.rfl
 
 @[to_additive]
-/--
-theorem `mk_lt_mk` / 定理 `mk_lt_mk`
-
-English:
-theorem mk_lt_mk
-  statement: mk a₁ a₂ < mk b₁ b₂ ↔ ↑b₂ * a₁ < a₂ * b₁
-  proof: Iff.rfl
-
-中文:
-定理 mk_lt_mk
-  结论: mk a₁ a₂ < mk b₁ b₂ ↔ ↑b₂ * a₁ < a₂ * b₁
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Localization.mk_lt_mk** 是 Mathlib 中的一个定理，位于命名空间 `Localization`。
+形式化陈述：mk_lt_mk : mk a₁ a₂ < mk b₁ b₂ ↔ ↑b₂ * a₁ < a₂ * b₁
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mk_lt_mk : mk a₁ a₂ < mk b₁ b₂ ↔ ↑b₂ * a₁ < a₂ * b₁ :=
   Iff.rfl
 
 -- declaring this separately to the instance below makes things faster
 @[to_additive]
-/--
-Instance `partialOrder` / 实例 `partialOrder`
-
-English:
-instance partialOrder
-  signature: : PartialOrder (Localization s) where
-  body: Localization.induction_on a fun _ => le_rfl
-  le_trans a b c :=
-    Localization.induction_on₃ a b c fun a b c hab hbc => by
-      simp only [mk_le_mk] at hab hbc ⊢
-      apply le_of_mul_le_mul_left' _
-      · exact ↑b.2
-      grw [mul_left_comm, hab]
-      rwa [mul_left_comm, mul_left_comm (b.2 : α), mul_le_mul_iff_left]
-  le_antisymm a b := by
-    induction a using Localization.rec
-    on_goal 1 =>
-      induction b using Localization.rec
-      · simp_rw [mk_le_mk, mk_eq_mk_iff, r_iff_exists]
-        exact fun hab hba => ⟨1, by rw [hab.antisymm hba]⟩
-    all_goals rfl
-  lt_iff_le_not_ge a b := Localization.induction_on₂ a b fun _ _ => lt_iff_le_not_ge
-
-@[to_additive]
-
-中文:
-实例 partialOrder
-  签名: : 偏序 (Localization s) where
-  定义体: Localization.induction_on a fun _ => le_rfl
-  le_trans a b c :=
-    Localization.induction_on₃ a b c fun a b c hab hbc => by
-      simp only [mk_le_mk] at hab hbc ⊢
-      apply le_of_mul_le_mul_left' _
-      · exact ↑b.2
-      grw [mul_left_comm, hab]
-      rwa [mul_left_comm, mul_left_comm (b.2 : α), mul_le_mul_iff_left]
-  le_antisymm a b := by
-    induction a using Localization.rec
-    on_goal 1 =>
-      induction b using Localization.rec
-      · simp_rw [mk_le_mk, mk_eq_mk_iff, r_iff_exists]
-        exact fun hab hba => ⟨1, by rw [hab.antisymm hba]⟩
-    all_goals rfl
-  lt_iff_le_not_ge a b := Localization.induction_on₂ a b fun _ _ => lt_iff_le_not_ge
-
-@[to_additive]
-
-Depends on / 依赖: Localization, Localization.induction_on, induction_on, le_rfl
+/-
+**Localization.partialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Localization`。
+形式化陈述：partialOrder : PartialOrder (Localization s) where le_refl a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance partialOrder : PartialOrder (Localization s) where
   le_refl a := Localization.induction_on a fun _ => le_rfl
@@ -220,38 +111,44 @@ instance partialOrder : PartialOrder (Localization s) where
   lt_iff_le_not_ge a b := Localization.induction_on₂ a b fun _ _ => lt_iff_le_not_ge
 
 @[to_additive]
-/--
-Instance `isOrderedCancelMonoid` / 实例 `isOrderedCancelMonoid`
-
-English:
-instance isOrderedCancelMonoid
-  signature: : IsOrderedCancelMonoid (Localization s) where
-  body: fun a b =>
-    Localization.induction_on₂ a b fun a b hab c =>
-      Localization.induction_on c fun c => by
-        simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ (c.2 : α)] at hab ⊢
-        exact mul_le_mul_left hab _
-  le_of_mul_le_mul_left := fun a b c =>
-    Localization.induction_on₃ a b c fun a b c hab => by
-      simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ _ a.1] at hab ⊢
-      exact le_of_mul_le_mul_left' hab
-
-@[to_additive]
-
-中文:
-实例 isOrderedCancelMonoid
-  签名: : 是OrderedCancel幺半群 (Localization s) where
-  定义体: fun a b =>
-    Localization.induction_on₂ a b fun a b hab c =>
-      Localization.induction_on c fun c => by
-        simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ (c.2 : α)] at hab ⊢
-        exact mul_le_mul_left hab _
-  le_of_mul_le_mul_left := fun a b c =>
-    Localization.induction_on₃ a b c fun a b c hab => by
-      simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ _ a.1] at hab ⊢
-      exact le_of_mul_le_mul_left' hab
-
-@[to_additive]
+/-
+**Localization.isOrderedCancelMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Localization`。
+形式化陈述：isOrderedCancelMonoid : IsOrderedCancelMonoid (Localization s) where mul_l
+e_mul_left
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Localization.induction_on₂`：induction_on₂ {p : Localization S -> Localiz
+ation S -> Prop} (x y) (H : forall x y : M × S, p (mk x.1 x.2) (mk y.1 y.2)) : p
+ x y
+· 使用定理 `Localization.induction_on`：induction_on {p : Localization S -> Prop} (x)
+ (H : forall y : M × S, p (mk y.1 y.2)) : p x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Localization.mk_mul`：mk_mul (a c : M) (b d : S) : mk a b * mk c d = mk (
+a * c) (b * d)
+· 使用定理 `mul_mul_mul_comm`：mul_mul_mul_comm (a b c d : G) : a * b * (c * d) = a *
+ c * (b * d)
+· 使用定理 `mul_le_mul_left`：mul_le_mul_left [i : MulRightMono α] {b c : α} (bc : b 
+<= c) (a : α) : b * a <= c * a
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `IsOrderedCancelMonoid.toIsOrderedMonoid`：∀ {α : Type u_2} {inst : CommMo
+noid α} {inst_1 : Preorder α} [self : IsOrderedCancelMonoid α], IsOrderedMonoid 
+α
+· 使用定理 `Localization.induction_on₃`：induction_on₃ {p : Localization S -> Localiz
+ation S -> Localization S -> Prop} (x y z) (H : forall x y z : M × S, p (mk x.1 
+x.2) (mk y.1 y.2…
+· 使用定理 `le_of_mul_le_mul_left'`：le_of_mul_le_mul_left' [MulLeftReflectLE α] {a b
+ c : α} (bc : a * b <= a * c) : b <= c
+· 使用定理 `IsCancelMul.toIsLeftCancelMul`：∀ {G : Type u} {inst : Mul G} [self : IsC
+ancelMul G], IsLeftCancelMul G
+· 使用定理 `IsOrderedCancelMonoid.toIsCancelMul`：∀ {α : Type u_1} [inst : CommMonoid
+ α] [inst_1 : PartialOrder α] [IsOrderedCancelMonoid α], IsCancelMul α
+· 使用定理 `IsOrderedCancelMonoid.toMulLeftReflectLT`：∀ {α : Type u_1} [inst : CommM
+onoid α] [inst_1 : PartialOrder α] [IsOrderedCancelMonoid α], MulLeftReflectLT α
 -/
 instance isOrderedCancelMonoid : IsOrderedCancelMonoid (Localization s) where
   mul_le_mul_left := fun a b =>
@@ -265,43 +162,25 @@ instance isOrderedCancelMonoid : IsOrderedCancelMonoid (Localization s) where
       exact le_of_mul_le_mul_left' hab
 
 @[to_additive]
-/--
-Instance `decidableLE` / 实例 `decidableLE`
-
-English:
-instance decidableLE
-  signature: [DecidableLE α]
-  body: fun a b =>
-  Localization.recOnSubsingleton₂ a b fun _ _ _ _ => decidable_of_iff' _ mk_le_mk
-
-@[to_additive]
-
-中文:
-实例 decidableLE
-  签名: [DecidableLE α]
-  定义体: fun a b =>
-  Localization.recOnSubsingleton₂ a b fun _ _ _ _ => decidable_of_iff' _ mk_le_mk
-
-@[to_additive]
+/-
+**Localization.decidableLE** 是 Mathlib 中的一个实例，位于命名空间 `Localization`。
+形式化陈述：decidableLE [DecidableLE α] : DecidableLE (Localization s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Localization.mk_le_mk`：mk_le_mk : mk a₁ a₂ <= mk b₁ b₂ ↔ ↑b₂ * a₁ <= a₂ 
+* b₁
 -/
 instance decidableLE [DecidableLE α] : DecidableLE (Localization s) := fun a b =>
   Localization.recOnSubsingleton₂ a b fun _ _ _ _ => decidable_of_iff' _ mk_le_mk
 
 @[to_additive]
-/--
-Instance `decidableLT` / 实例 `decidableLT`
-
-English:
-instance decidableLT
-  signature: [DecidableLT α]
-  body: fun a b =>
-  Localization.recOnSubsingleton₂ a b fun _ _ _ _ => decidable_of_iff' _ mk_lt_mk
-
-中文:
-实例 decidableLT
-  签名: [DecidableLT α]
-  定义体: fun a b =>
-  Localization.recOnSubsingleton₂ a b fun _ _ _ _ => decidable_of_iff' _ mk_lt_mk
+/-
+**Localization.decidableLT** 是 Mathlib 中的一个实例，位于命名空间 `Localization`。
+形式化陈述：decidableLT [DecidableLT α] : DecidableLT (Localization s)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Localization.mk_lt_mk`：mk_lt_mk : mk a₁ a₂ < mk b₁ b₂ ↔ ↑b₂ * a₁ < a₂ * 
+b₁
 -/
 instance decidableLT [DecidableLT α] : DecidableLT (Localization s) := fun a b =>
   Localization.recOnSubsingleton₂ a b fun _ _ _ _ => decidable_of_iff' _ mk_lt_mk
@@ -309,22 +188,12 @@ instance decidableLT [DecidableLT α] : DecidableLT (Localization s) := fun a b 
 /-- An ordered cancellative monoid injects into its localization by sending `a` to `a / b`. -/
 @[to_additive (attr := simps!) /-- An ordered cancellative monoid injects into its localization by
 sending `a` to `a - b`. -/]
-/--
-Definition of `mkOrderEmbedding` / `mkOrderEmbedding` 的定义
-
-English:
-definition mkOrderEmbedding
-  signature: (b : s)
-  body: mk a b
-  inj' := mk_left_injective _
-  map_rel_iff' {a b} := by simp [mk_le_mk]
-
-中文:
-定义 mkOrderEmbedding
-  签名: (b : s)
-  定义体: mk a b
-  inj' := mk_left_injective _
-  map_rel_iff' {a b} := by simp [mk_le_mk]
+/-
+**Localization.mkOrderEmbedding** 是 Mathlib 中的一个定义，位于命名空间 `Localization`。
+形式化陈述：mkOrderEmbedding (b : s) : α ↪o Localization s where toFun a
+参数：b : s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mkOrderEmbedding (b : s) : α ↪o Localization s where
   toFun a := mk a b
@@ -334,32 +203,9 @@ def mkOrderEmbedding (b : s) : α ↪o Localization s where
 end OrderedCancelCommMonoid
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommMonoid
-  signature: α] [LinearOrder α] [IsOrderedCancelMonoid α] {s
-  body: { le_total := fun a b =>
-      Localization.induction_on₂ a b fun _ _ => by
-        simp_rw [mk_le_mk]
-        exact le_total _ _
-    toDecidableLE := Localization.decidableLE
-    toDecidableLT := Localization.decidableLT
-    toDecidableEq := Localization.decidableEq }
-
-中文:
-实例 [交换幺半群
-  签名: α] [线性序 α] [是OrderedCancel幺半群 α] {s
-  定义体: { le_total := fun a b =>
-      Localization.induction_on₂ a b fun _ _ => by
-        simp_rw [mk_le_mk]
-        exact le_total _ _
-    toDecidableLE := Localization.decidableLE
-    toDecidableLT := Localization.decidableLT
-    toDecidableEq := Localization.decidableEq }
-
-Depends on / 依赖: Localization, Localization.decidableEq, Localization.decidableLE, Localization.decidableLT, Localization.induction_on, decidableEq, decidableLE, decidableLT, le_total, mk_le_mk, simp_rw, toDecidableEq, toDecidableLE, toDecidableLT
+/-
+**Localization.** 是 Mathlib 中的一个实例，位于命名空间 `Localization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommMonoid α] [LinearOrder α] [IsOrderedCancelMonoid α] {s : Submonoid α} :
     LinearOrder (Localization s) :=
@@ -372,3 +218,4 @@ instance [CommMonoid α] [LinearOrder α] [IsOrderedCancelMonoid α] {s : Submon
     toDecidableEq := Localization.decidableEq }
 
 end Localization
+

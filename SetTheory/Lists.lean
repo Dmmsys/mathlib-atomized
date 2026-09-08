@@ -49,188 +49,147 @@ This calls for a two-step definition of ZFA lists:
 
 variable {α : Type*}
 
-/--
-Inductive type `Lists'.` / 归纳类型 `Lists'.`
+/-- Prelists, helper type to define `Lists`. `Lists' α false` are the "atoms", a copy of `α`.
+`Lists' α true` are the "proper" ZFA prelists, inductively defined from the empty ZFA prelist and
+from appending a ZFA prelist to a proper ZFA prelist. It is made so that you can't append anything
+to an atom while having only one appending function for appending both atoms and proper ZFA prelists
+to a proper ZFA prelist. -/
+/-
+**Lists'.** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Lists'.{u}
-  parameters: (α : Type u)
-  constructors (3):
-    - atom: α -> Lists' α false
-    - nil: Lists' α true
-    - cons': {b} : Lists' α b -> Lists' α true -> Lists' α true
-
-中文:
-归纳类型 Lists'.{u}
-  参数: (α : 类型u)
-  构造子 (3 个):
-    - atom: α -> Lists' α false
-    - nil: Lists' α true
-    - cons': {b} : Lists' α b -> Lists' α true -> Lists' α true
+--- 原说明 ---
+Prelists, helper type to define `Lists`. `Lists' α false` are the "atoms", a cop
+y of `α`.
+`Lists' α true` are the "proper" ZFA prelists, inductively defined from the empt
+y ZFA prelist and
+from appending a ZFA prelist to a proper ZFA prelist. It is made so that you can
+'t append anything
+to an atom while having only one appending function for appending both atoms and
+ proper ZFA prelists
+to a proper ZFA prelist.
 -/
-inductive Lists'.{u} (α : Type u) : Bool -> Type u
-  | atom : α -> Lists' α false
+inductive Lists'.{u} (α : Type u) : Bool → Type u
+  | atom : α → Lists' α false
   | nil : Lists' α true
-  | cons' {b} : Lists' α b -> Lists' α true -> Lists' α true
+  | cons' {b} : Lists' α b → Lists' α true → Lists' α true
   deriving DecidableEq
 compile_inductive% Lists'
 
-/--
-Definition of `Lists` / `Lists` 的定义
+/-- Hereditarily finite list, aka ZFA list. A ZFA list is either an "atom" (`b = false`),
+corresponding to an element of `α`, or a "proper" ZFA list, inductively defined from the empty ZFA
+list and from appending a ZFA list to a proper ZFA list. -/
+/-
+**Lists** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lists (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Lists
-  signature: (α : Type*)
-  body: Σ b, Lists' α b
-
-中文:
-定义 Lists
-  签名: (α : 类型)
-  定义体: Σ b, Lists' α b
+--- 原说明 ---
+Hereditarily finite list, aka ZFA list. A ZFA list is either an "atom" (`b = fal
+se`),
+corresponding to an element of `α`, or a "proper" ZFA list, inductively defined 
+from the empty ZFA
+list and from appending a ZFA list to a proper ZFA list.
 -/
 def Lists (α : Type*) :=
   Σ b, Lists' α b
 
 namespace Lists'
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : forall b, Inhabited (Lists' α b)
-
-中文:
-实例 [可居
-  签名: α] : 对任意 b, 可居 (Lists' α b)
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Inhabited α] : forall b, Inhabited (Lists' α b)
+instance [Inhabited α] : ∀ b, Inhabited (Lists' α b)
   | true => ⟨nil⟩
   | false => ⟨atom default⟩
 
-/--
-Definition of `cons` / `cons` 的定义
+/-- Appending a ZFA list to a proper ZFA prelist. -/
+/-
+**Lists.cons** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cons
-  signature: : Lists α -> Lists' α true -> Lists' α true
-
-中文:
-定义 cons
-  签名: : Lists α -> Lists' α true -> Lists' α true
+--- 原说明 ---
+Appending a ZFA list to a proper ZFA prelist.
 -/
-def cons : Lists α -> Lists' α true -> Lists' α true
+def cons : Lists α → Lists' α true → Lists' α true
   | ⟨_, a⟩, l => cons' a l
 
 /-- Converts a ZFA prelist to a `List` of ZFA lists. Atoms are sent to `[]`. -/
 @[simp]
-/--
-Definition of `toList` / `toList` 的定义
+/-
+**Lists.toList** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：{α : Type u_1} → Lists α → List (Lists α)
+参数：Lists α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toList
-  signature: : forall {b}, Lists' α b -> List (Lists α)
-
-中文:
-定义 toList
-  签名: : 对任意 {b}, Lists' α b -> 列表 (Lists α)
+--- 原说明 ---
+Converts a ZFA prelist to a `List` of ZFA lists. Atoms are sent to `[]`.
 -/
-def toList : forall {b}, Lists' α b -> List (Lists α)
+def toList : ∀ {b}, Lists' α b → List (Lists α)
   | _, atom _ => []
   | _, nil => []
   | _, cons' a l => ⟨_, a⟩ :: l.toList
 
 @[simp]
-/--
-theorem `toList_cons` / 定理 `toList_cons`
-
-English:
-theorem toList_cons
-  given: (a : Lists α) (l)
-  statement: toList (cons a l) = a :: l.toList
-  proof: rfl
-
-中文:
-定理 toList_cons
-  条件: (a : Lists α) (l)
-  结论: toList (cons a l) = a :: l.toList
-  证明: rfl
+/-
+**Lists.toList_cons** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toList_cons (a : Lists α) (l) : toList (cons a l) = a :: l.toList := rfl
 
 /-- Converts a `List` of ZFA lists to a proper ZFA prelist. -/
 @[simp]
-/--
-Definition of `ofList` / `ofList` 的定义
+/-
+**Lists.ofList** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：ofList (l : List (Lists α)) : Lists α
+参数：l : List (Lists α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofList
-  signature: : List (Lists α) -> Lists' α true
-
-中文:
-定义 ofList
-  签名: : 列表 (Lists α) -> Lists' α true
+--- 原说明 ---
+Converts a `List` of ZFA lists to a proper ZFA prelist.
 -/
-def ofList : List (Lists α) -> Lists' α true
+def ofList : List (Lists α) → Lists' α true
   | [] => nil
   | a :: l => cons a (ofList l)
 
 @[simp]
-/--
-theorem `to_ofList` / 定理 `to_ofList`
-
-English:
-theorem to_ofList
-  given: (l : List (Lists α))
-  statement: toList (ofList l) = l
-  proof: by induction l <;> simp [*]
-
-@[simp]
-
-中文:
-定理 to_ofList
-  条件: (l : 列表 (Lists α))
-  结论: toList (ofList l) = l
-  证明: by induction l <;> simp [*]
-
-@[simp]
+/-
+**Lists.to_ofList** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：to_ofList (l : List (Lists α)) : toList (ofList l) = l
+参数：l : List (Lists α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lists'.to_ofList`：to_ofList (l : List (Lists α)) : toList (ofList l) = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem to_ofList (l : List (Lists α)) : toList (ofList l) = l := by induction l <;> simp [*]
 
 @[simp]
-/--
-theorem `of_toList` / 定理 `of_toList`
-
-English:
-theorem of_toList
-  statement: forall l : Lists' α true, ofList (toList l) = l
-  proof: suffices forall (b) (h : true = b) (l : Lists' α b),
-      let l' : Lists' α true := h ▸ l
-      ofList (toList l') = l'
-    from this _ rfl
-  fun b h l => by
-    induction l with
-    | atom => cases h
-    | nil => simp
-    | cons' b a _ IH => simpa [cons] using IH rfl
-
-中文:
-定理 of_toList
-  结论: 对任意 l : Lists' α true, ofList (toList l) = l
-  证明: suffices forall (b) (h : true = b) (l : Lists' α b),
-      let l' : Lists' α true := h ▸ l
-      ofList (toList l') = l'
-    from this _ rfl
-  fun b h l => by
-    induction l with
-    | atom => cases h
-    | nil => simp
-    | cons' b a _ IH => simpa [cons] using IH rfl
-
-Depends on / 依赖: ofList, toList
+/-
+**Lists.of_toList** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：∀ {α : Type u_1} {l : Lists α}, l.IsList → Lists.ofList l.toList = l
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lists'.of_toList`：of_toList : forall l : Lists' α true, ofList (toList l
+) = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem of_toList : forall l : Lists' α true, ofList (toList l) = l :=
-  suffices forall (b) (h : true = b) (l : Lists' α b),
+theorem of_toList : ∀ l : Lists' α true, ofList (toList l) = l :=
+  suffices ∀ (b) (h : true = b) (l : Lists' α b),
       let l' : Lists' α true := h ▸ l
       ofList (toList l') = l'
     from this _ rfl
@@ -242,191 +201,104 @@ theorem of_toList : forall l : Lists' α true, ofList (toList l) = l :=
 
 /-- Recursion/induction principle for `Lists'.ofList`. -/
 @[elab_as_elim]
-/--
-Definition of `recOfList` / `recOfList` 的定义
+/-
+**Lists.recOfList** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition recOfList
-  signature: {motive : Lists' α true -> Sort*} (ofList : forall l, motive (ofList l))
-  body: fun l => cast (by simp) ofList (l.toList)
-
-中文:
-定义 recOfList
-  签名: {motive : Lists' α true -> 类型层*} (ofList : 对任意 l, motive (ofList l))
-  定义体: fun l => cast (by simp) ofList (l.toList)
-
-Depends on / 依赖: l.toList, ofList, toList
+--- 原说明 ---
+Recursion/induction principle for `Lists'.ofList`.
 -/
-def recOfList {motive : Lists' α true -> Sort*} (ofList : forall l, motive (ofList l)) : forall l, motive l :=
-fun l => cast (by simp) ofList (l.toList)
+def recOfList {motive : Lists' α true → Sort*} (ofList : ∀ l, motive (ofList l)) : ∀ l, motive l :=
+  fun l ↦ cast (by simp) <| ofList (l.toList)
 
 end Lists'
 
 mutual
-/--
-Inductive type `Lists.Equiv` / 归纳类型 `Lists.Equiv`
+  /-- Equivalence of ZFA lists. Defined inductively. -/
+/-
+**Lists.Equiv** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lists`。
+形式化陈述：{α : Type u_1} → Lists α → Lists α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Lists.Equiv
-  parameters: : Lists α -> Lists α -> Prop
-  constructors (2):
-    - refl: (l) : Lists.Equiv l l
-    - antisymm: {l₁ l₂ : Lists' α true} : Lists'.Subset l₁ l₂ -> Lists'.Subset l₂ l₁ -> Lists.Equiv ⟨_, l₁⟩ ⟨_, l₂⟩
-
-中文:
-归纳类型 Lists.等价
-  参数: : Lists α -> Lists α -> 命题
-  构造子 (2 个):
-    - refl: (l) : Lists.等价 l l
-    - antisymm: {l₁ l₂ : Lists' α true} : Lists'.子集 l₁ l₂ -> Lists'.子集 l₂ l₁ -> Lists.等价 ⟨_, l₁⟩ ⟨_, l₂⟩
+--- 原说明 ---
+Equivalence of ZFA lists. Defined inductively.
 -/
-  inductive Lists.Equiv : Lists α -> Lists α -> Prop
+  inductive Lists.Equiv : Lists α → Lists α → Prop
     | refl (l) : Lists.Equiv l l
     | antisymm {l₁ l₂ : Lists' α true} :
-      Lists'.Subset l₁ l₂ -> Lists'.Subset l₂ l₁ -> Lists.Equiv ⟨_, l₁⟩ ⟨_, l₂⟩
+      Lists'.Subset l₁ l₂ → Lists'.Subset l₂ l₁ → Lists.Equiv ⟨_, l₁⟩ ⟨_, l₂⟩
 
-/--
-Inductive type `Lists'.Subset` / 归纳类型 `Lists'.Subset`
+  /-- Subset relation for ZFA lists. Defined inductively. -/
+/-
+**Lists'.Subset** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lists'`。
+形式化陈述：{α : Type u_1} → Lists' α true → Lists' α true → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Lists'.Subset
-  parameters: : Lists' α true -> Lists' α true -> Prop
-  constructors (2):
-    - nil: {l} : Lists'.Subset Lists'.nil l
-    - cons: {a a' l l'} : Lists.Equiv a a' -> a' in Lists'.toList l' -> Lists'.Subset l l' -> Lists'.Subset (Lists'.cons a l) l'
-
-中文:
-归纳类型 Lists'.子集
-  参数: : Lists' α true -> Lists' α true -> 命题
-  构造子 (2 个):
-    - nil: {l} : Lists'.子集 Lists'.nil l
-    - cons: {a a' l l'} : Lists.等价 a a' -> a' in Lists'.toList l' -> Lists'.子集 l l' -> Lists'.子集 (Lists'.cons a l) l'
+--- 原说明 ---
+Subset relation for ZFA lists. Defined inductively.
 -/
-  inductive Lists'.Subset : Lists' α true -> Lists' α true -> Prop
+  inductive Lists'.Subset : Lists' α true → Lists' α true → Prop
     | nil {l} : Lists'.Subset Lists'.nil l
     | cons {a a' l l'} :
-      Lists.Equiv a a' ->
-        a' in Lists'.toList l' -> Lists'.Subset l l' -> Lists'.Subset (Lists'.cons a l) l'
+      Lists.Equiv a a' →
+        a' ∈ Lists'.toList l' → Lists'.Subset l l' → Lists'.Subset (Lists'.cons a l) l'
 end
 
 local infixl:50 " ~ " => Lists.Equiv
 
 namespace Lists'
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasSubset (Lists' α true)
-  body: ⟨Lists'.Subset⟩
-
-中文:
-实例 :
-  签名: HasSubset (Lists' α true)
-  定义体: ⟨Lists'.Subset⟩
-
-Depends on / 依赖: Subset
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasSubset (Lists' α true) :=
   ⟨Lists'.Subset⟩
 
 /-- ZFA prelist membership. A ZFA list is in a ZFA prelist if some element of this ZFA prelist is
 equivalent as a ZFA list to this ZFA list. -/
-instance {b} : Membership (Lists α) (Lists' α b) :=
-  ⟨fun l a => exists a' in l.toList, a ~ a'⟩
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-theorem `mem_def` / 定理 `mem_def`
-
-English:
-theorem mem_def
-  given: {b a} {l : Lists' α b}
-  statement: a in l ↔ exists a' in l.toList, a ~ a'
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_def
-  条件: {b a} {l : Lists' α b}
-  结论: a in l ↔ 存在 a' in l.toList, a ~ a'
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+ZFA prelist membership. A ZFA list is in a ZFA prelist if some element of this Z
+FA prelist is
+equivalent as a ZFA list to this ZFA list.
 -/
-theorem mem_def {b a} {l : Lists' α b} : a in l ↔ exists a' in l.toList, a ~ a' :=
+instance {b} : Membership (Lists α) (Lists' α b) :=
+  ⟨fun l a => ∃ a' ∈ l.toList, a ~ a'⟩
+/-
+**Lists.mem_def** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem mem_def {b a} {l : Lists' α b} : a ∈ l ↔ ∃ a' ∈ l.toList, a ~ a' :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_cons` / 定理 `mem_cons`
-
-English:
-theorem mem_cons
-  given: {a y l}
-  statement: a in @cons α y l ↔ a ~ y ∨ a in l
-  proof: by
-  simp [mem_def, or_and_right, exists_or]
-
-中文:
-定理 mem_cons
-  条件: {a y l}
-  结论: a in @cons α y l ↔ a ~ y ∨ a in l
-  证明: by
-  simp [mem_def, or_and_right, exists_or]
-
-Depends on / 依赖: exists_or, mem_def, or_and_right
+/-
+**Lists.mem_cons** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_cons {a y l} : a in @cons α y l ↔ a ~ y ∨ a in l := by
+theorem mem_cons {a y l} : a ∈ @cons α y l ↔ a ~ y ∨ a ∈ l := by
   simp [mem_def, or_and_right, exists_or]
-
-/--
-theorem `cons_subset` / 定理 `cons_subset`
-
-English:
-theorem cons_subset
-  given: {a} {l₁ l₂ : Lists' α true}
-  statement: Lists'.cons a l₁ subseteq l₂ ↔ a in l₂ ∧ l₁ subseteq l₂
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨⟨a', m, e⟩, s⟩ => Subset.cons e m s⟩
-  generalize h' : Lists'.cons a l₁ = l₁' at h
-  obtain - | @⟨a', _, _, _, e, m, s⟩ := h
-  · cases a
-    cases h'
-  cases a; cases a'; cases h'; exact ⟨⟨_, m, e⟩, s⟩
-
-中文:
-定理 cons_subset
-  条件: {a} {l₁ l₂ : Lists' α true}
-  结论: Lists'.cons a l₁ subseteq l₂ ↔ a in l₂ ∧ l₁ subseteq l₂
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨⟨a', m, e⟩, s⟩ => Subset.cons e m s⟩
-  generalize h' : Lists'.cons a l₁ = l₁' at h
-  obtain - | @⟨a', _, _, _, e, m, s⟩ := h
-  · cases a
-    cases h'
-  cases a; cases a'; cases h'; exact ⟨⟨_, m, e⟩, s⟩
-
-Depends on / 依赖: Subset, Subset.cons, generalize
+/-
+**Lists.cons_subset** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cons_subset {a} {l₁ l₂ : Lists' α true} : Lists'.cons a l₁ subseteq l₂ ↔ a in l₂ ∧ l₁ subseteq l₂ := by
+theorem cons_subset {a} {l₁ l₂ : Lists' α true} : Lists'.cons a l₁ ⊆ l₂ ↔ a ∈ l₂ ∧ l₁ ⊆ l₂ := by
   refine ⟨fun h => ?_, fun ⟨⟨a', m, e⟩, s⟩ => Subset.cons e m s⟩
   generalize h' : Lists'.cons a l₁ = l₁' at h
   obtain - | @⟨a', _, _, _, e, m, s⟩ := h
   · cases a
     cases h'
   cases a; cases a'; cases h'; exact ⟨⟨_, m, e⟩, s⟩
-
-/--
-theorem `ofList_subset` / 定理 `ofList_subset`
-
-English:
-theorem ofList_subset
-  given: {l₁ l₂ : List (Lists α)} (h : l₁ subseteq l₂)
-  proof: by
+/-
+**Lists.ofList_subset** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem ofList_subset {l₁ l₂ : List (Lists α)} (h : l₁ ⊆ l₂) :
+    Lists'.ofList l₁ ⊆ Lists'.ofList l₂ := by
   induction l₁ with
   | nil => exact Subset.nil
   | cons _ _ l₁_ih =>
@@ -434,106 +306,28 @@ theorem ofList_subset
     simp only [List.cons_subset] at h; simp [h]
 
 @[refl]
-
-中文:
-定理 ofList_subset
-  条件: {l₁ l₂ : 列表 (Lists α)} (h : l₁ subseteq l₂)
-  证明: by
-  induction l₁ with
-  | nil => exact Subset.nil
-  | cons _ _ l₁_ih =>
-    refine Subset.cons (Lists.Equiv.refl _) ?_ (l₁_ih (List.subset_of_cons_subset h))
-    simp only [List.cons_subset] at h; simp [h]
-
-@[refl]
-
-Depends on / 依赖: List.cons_subset, List.subset_of_cons_subset, Lists.Equiv.refl, Subset, Subset.cons, Subset.nil, cons_subset, subset_of_cons_subset
+/-
+**Lists.Subset.refl** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofList_subset {l₁ l₂ : List (Lists α)} (h : l₁ subseteq l₂) :
-    Lists'.ofList l₁ subseteq Lists'.ofList l₂ := by
-  induction l₁ with
-  | nil => exact Subset.nil
-  | cons _ _ l₁_ih =>
-    refine Subset.cons (Lists.Equiv.refl _) ?_ (l₁_ih (List.subset_of_cons_subset h))
-    simp only [List.cons_subset] at h; simp [h]
-
-@[refl]
-/--
-theorem `Subset.refl` / 定理 `Subset.refl`
-
-English:
-theorem Subset.refl
-  given: {l : Lists' α true}
-  statement: l subseteq l
-  proof: by
+theorem Subset.refl {l : Lists' α true} : l ⊆ l := by
   rw [← Lists'.of_toList l]; exact ofList_subset (List.Subset.refl _)
-
-中文:
-定理 子集.refl
-  条件: {l : Lists' α true}
-  结论: l subseteq l
-  证明: by
-  rw [← Lists'.of_toList l]; exact ofList_subset (List.Subset.refl _)
+/-
+**Lists.subset_nil** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subset.refl {l : Lists' α true} : l subseteq l := by
-  rw [← Lists'.of_toList l]; exact ofList_subset (List.Subset.refl _)
-
-/--
-theorem `subset_nil` / 定理 `subset_nil`
-
-English:
-theorem subset_nil
-  given: {l : Lists' α true}
-  statement: l subseteq Lists'.nil -> l = Lists'.nil
-  proof: by
-  rw [← of_toList l]
-  induction toList l <;> intro h
-  · rfl
-  · rcases cons_subset.1 h with ⟨⟨_, ⟨⟩, _⟩, _⟩
-
-中文:
-定理 subset_nil
-  条件: {l : Lists' α true}
-  结论: l subseteq Lists'.nil -> l = Lists'.nil
-  证明: by
-  rw [← of_toList l]
-  induction toList l <;> intro h
-  · rfl
-  · rcases cons_subset.1 h with ⟨⟨_, ⟨⟩, _⟩, _⟩
-
-Depends on / 依赖: cons_subset, of_toList, toList
--/
-theorem subset_nil {l : Lists' α true} : l subseteq Lists'.nil -> l = Lists'.nil := by
+theorem subset_nil {l : Lists' α true} : l ⊆ Lists'.nil → l = Lists'.nil := by
   rw [← of_toList l]
   induction toList l <;> intro h
   · rfl
   · rcases cons_subset.1 h with ⟨⟨_, ⟨⟩, _⟩, _⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mem_of_subset'` / 定理 `mem_of_subset'`
-
-English:
-theorem mem_of_subset'
-  given: {a}
-  statement: forall {l₁ l₂ : Lists' α true} (_ : l₁ subseteq l₂) (_ : a in l₁.toList), a in l₂
-  proof: s
-    simp only [toList, Sigma.eta, List.mem_cons] at h
-    rcases h with (rfl | h)
-    · exact ⟨_, m, e⟩
-    · exact mem_of_subset' s h
-
-中文:
-定理 mem_of_subset'
-  条件: {a}
-  结论: 对任意 {l₁ l₂ : Lists' α true} (_ : l₁ subseteq l₂) (_ : a in l₁.toList), a in l₂
-  证明: s
-    simp only [toList, Sigma.eta, List.mem_cons] at h
-    rcases h with (rfl | h)
-    · exact ⟨_, m, e⟩
-    · exact mem_of_subset' s h
+/-
+**Lists.mem_of_subset'** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_of_subset' {a} : forall {l₁ l₂ : Lists' α true} (_ : l₁ subseteq l₂) (_ : a in l₁.toList), a in l₂
+theorem mem_of_subset' {a} : ∀ {l₁ l₂ : Lists' α true} (_ : l₁ ⊆ l₂) (_ : a ∈ l₁.toList), a ∈ l₂
   | nil, _, Lists'.Subset.nil, h => by cases h
   | cons' a0 l0, l₂, s, h => by
     obtain - | ⟨e, m, s⟩ := s
@@ -541,37 +335,11 @@ theorem mem_of_subset' {a} : forall {l₁ l₂ : Lists' α true} (_ : l₁ subse
     rcases h with (rfl | h)
     · exact ⟨_, m, e⟩
     · exact mem_of_subset' s h
-
-/--
-theorem `subset_def` / 定理 `subset_def`
-
-English:
-theorem subset_def
-  given: {l₁ l₂ : Lists' α true}
-  statement: l₁ subseteq l₂ ↔ forall a in l₁.toList, a in l₂
-  proof: ⟨fun H _ => mem_of_subset' H, fun H => by
-    induction l₁ using recOfList with | _ l₁
-    induction l₁ with
-    | nil => exact Subset.nil
-    | cons h t t_ih =>
-      simp only [to_ofList, ofList, toList_cons, List.mem_cons, forall_eq_or_imp] at *
-      exact cons_subset.2 ⟨H.1, t_ih H.2⟩⟩
-
-中文:
-定理 subset_def
-  条件: {l₁ l₂ : Lists' α true}
-  结论: l₁ subseteq l₂ ↔ 对任意 a in l₁.toList, a in l₂
-  证明: ⟨fun H _ => mem_of_subset' H, fun H => by
-    induction l₁ using recOfList with | _ l₁
-    induction l₁ with
-    | nil => exact Subset.nil
-    | cons h t t_ih =>
-      simp only [to_ofList, ofList, toList_cons, List.mem_cons, forall_eq_or_imp] at *
-      exact cons_subset.2 ⟨H.1, t_ih H.2⟩⟩
-
-Depends on / 依赖: List.mem_cons, Subset, Subset.nil, cons_subset, forall_eq_or_imp, mem_cons, mem_of_subset, ofList, recOfList, t_ih, toList_cons, to_ofList
+/-
+**Lists.subset_def** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_def {l₁ l₂ : Lists' α true} : l₁ subseteq l₂ ↔ forall a in l₁.toList, a in l₂ :=
+theorem subset_def {l₁ l₂ : Lists' α true} : l₁ ⊆ l₂ ↔ ∀ a ∈ l₁.toList, a ∈ l₂ :=
   ⟨fun H _ => mem_of_subset' H, fun H => by
     induction l₁ using recOfList with | _ l₁
     induction l₁ with
@@ -586,207 +354,161 @@ namespace Lists
 
 /-- Sends `a : α` to the corresponding atom in `Lists α`. -/
 @[match_pattern]
-/--
-Definition of `atom` / `atom` 的定义
+/-
+**Lists.atom** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：atom (a : α) : Lists α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition atom
-  signature: (a : α)
-  body: ⟨_, Lists'.atom a⟩
-
-中文:
-定义 atom
-  签名: (a : α)
-  定义体: ⟨_, Lists'.atom a⟩
+--- 原说明 ---
+Sends `a : α` to the corresponding atom in `Lists α`.
 -/
 def atom (a : α) : Lists α :=
   ⟨_, Lists'.atom a⟩
 
 /-- Converts a proper ZFA prelist to a ZFA list. -/
 @[match_pattern]
-/--
-Definition of `of'` / `of'` 的定义
+/-
+**Lists.of'** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：of' (l : Lists' α true) : Lists α
+参数：l : Lists' α true。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of'
-  signature: (l : Lists' α true)
-  body: ⟨_, l⟩
-
-中文:
-定义 of'
-  签名: (l : Lists' α true)
-  定义体: ⟨_, l⟩
+--- 原说明 ---
+Converts a proper ZFA prelist to a ZFA list.
 -/
 def of' (l : Lists' α true) : Lists α :=
   ⟨_, l⟩
 
 /-- Converts a ZFA list to a `List` of ZFA lists. Atoms are sent to `[]`. -/
 @[simp]
-/--
-Definition of `toList` / `toList` 的定义
+/-
+**Lists.toList** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：{α : Type u_1} → Lists α → List (Lists α)
+参数：Lists α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toList
-  signature: : Lists α -> List (Lists α)
-
-中文:
-定义 toList
-  签名: : Lists α -> 列表 (Lists α)
+--- 原说明 ---
+Converts a ZFA list to a `List` of ZFA lists. Atoms are sent to `[]`.
 -/
-def toList : Lists α -> List (Lists α)
+def toList : Lists α → List (Lists α)
   | ⟨_, l⟩ => l.toList
 
-/--
-Definition of `IsList` / `IsList` 的定义
+/-- Predicate stating that a ZFA list is proper. -/
+/-
+**Lists.IsList** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：IsList (l : Lists α) : Prop
+参数：l : Lists α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsList
-  signature: (l : Lists α)
-  body: l.1
-
-中文:
-定义 IsList
-  签名: (l : Lists α)
-  定义体: l.1
+--- 原说明 ---
+Predicate stating that a ZFA list is proper.
 -/
 def IsList (l : Lists α) : Prop :=
   l.1
 
-/--
-Definition of `ofList` / `ofList` 的定义
+/-- Converts a `List` of ZFA lists to a ZFA list. -/
+/-
+**Lists.ofList** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：ofList (l : List (Lists α)) : Lists α
+参数：l : List (Lists α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofList
-  signature: (l : List (Lists α))
-  body: of' (Lists'.ofList l)
-
-中文:
-定义 ofList
-  签名: (l : 列表 (Lists α))
-  定义体: of' (Lists'.ofList l)
-
-Depends on / 依赖: ofList
+--- 原说明 ---
+Converts a `List` of ZFA lists to a ZFA list.
 -/
 def ofList (l : List (Lists α)) : Lists α :=
   of' (Lists'.ofList l)
-
-/--
-theorem `isList_toList` / 定理 `isList_toList`
-
-English:
-theorem isList_toList
-  given: (l : List (Lists α))
-  statement: IsList (ofList l)
-  proof: Eq.refl _
-
-中文:
-定理 isList_toList
-  条件: (l : 列表 (Lists α))
-  结论: IsList (ofList l)
-  证明: Eq.refl _
-
-Depends on / 依赖: Eq.refl
+/-
+**Lists.isList_toList** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：isList_toList (l : List (Lists α)) : IsList (ofList l)
+参数：l : List (Lists α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isList_toList (l : List (Lists α)) : IsList (ofList l) :=
   Eq.refl _
-
-/--
-theorem `to_ofList` / 定理 `to_ofList`
-
-English:
-theorem to_ofList
-  given: (l : List (Lists α))
-  statement: toList (ofList l) = l
-  proof: by simp [ofList, of']
-
-中文:
-定理 to_ofList
-  条件: (l : 列表 (Lists α))
-  结论: toList (ofList l) = l
-  证明: by simp [ofList, of']
-
-Depends on / 依赖: ofList
+/-
+**Lists.to_ofList** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：to_ofList (l : List (Lists α)) : toList (ofList l) = l
+参数：l : List (Lists α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lists'.to_ofList`：to_ofList (l : List (Lists α)) : toList (ofList l) = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem to_ofList (l : List (Lists α)) : toList (ofList l) = l := by simp [ofList, of']
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `of_toList` / 定理 `of_toList`
-
-English:
-theorem of_toList
-  statement: forall {l : Lists α}, IsList l -> ofList (toList l) = l
-
-中文:
-定理 of_toList
-  结论: 对任意 {l : Lists α}, IsList l -> ofList (toList l) = l
+/-
+**Lists.of_toList** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：∀ {α : Type u_1} {l : Lists α}, l.IsList → Lists.ofList l.toList = l
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lists'.of_toList`：of_toList : forall l : Lists' α true, ofList (toList l
+) = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem of_toList : forall {l : Lists α}, IsList l -> ofList (toList l) = l
+theorem of_toList : ∀ {l : Lists α}, IsList l → ofList (toList l) = l
   | ⟨true, l⟩, _ => by simp_all [ofList, of']
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Lists α)
-  body: ⟨of' Lists'.nil⟩
-
-中文:
-实例 :
-  签名: 可居 (Lists α)
-  定义体: ⟨of' Lists'.nil⟩
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Lists α) :=
   ⟨of' Lists'.nil⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] : DecidableEq (Lists α)
-  body: inferInstanceAs DecidableEq (Sigma _)
-
-中文:
-实例 [DecidableEq
-  签名: α] : DecidableEq (Lists α)
-  定义体: inferInstanceAs DecidableEq (Sigma _)
-
-Depends on / 依赖: DecidableEq
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DecidableEq α] : DecidableEq (Lists α) := inferInstanceAs DecidableEq (Sigma _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SizeOf
-  signature: α] : SizeOf (Lists α)
-  body: inferInstanceAs SizeOf (Sigma _)
-
-中文:
-实例 [SizeOf
-  签名: α] : SizeOf (Lists α)
-  定义体: inferInstanceAs SizeOf (Sigma _)
-
-Depends on / 依赖: SizeOf
+instance [DecidableEq α] : DecidableEq (Lists α) := inferInstanceAs <| DecidableEq (Sigma _)
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [SizeOf α] : SizeOf (Lists α) := inferInstanceAs SizeOf (Sigma _)
+instance [SizeOf α] : SizeOf (Lists α) := inferInstanceAs <| SizeOf (Sigma _)
 
-/--
-Definition of `inductionMut` / `inductionMut` 的定义
+/-- A recursion principle for pairs of ZFA lists and proper ZFA prelists. -/
+/-
+**Lists.inductionMut** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：inductionMut (C : Lists α -> Sort*) (D : Lists' α true -> Sort*) (C0 : for
+all a, C (atom a)) (C1 : forall l, D l -> C (of' l)) (D0 : D Lists'.nil) (D1 : f
+orall a l, C a -> D l -> D (Lists'.cons a l)) : PProd (forall l, C l) (forall l,
+ D l)
+参数：C : Lists α -> Sort*；D : Lists' α true -> Sort*；C0 : forall a, C (atom a)；C1 
+: forall l, D l -> C (of' l)；D0 : D Lists'.nil；D1 : forall a l, C a -> D l -> D 
+(Lists'.cons a l)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inductionMut
-  signature: (C : Lists α -> Sort*) (D : Lists' α true -> Sort*)
-  body: by
-  suffices forall {b} (l : Lists' α b),
+--- 原说明 ---
+A recursion principle for pairs of ZFA lists and proper ZFA prelists.
+-/
+def inductionMut (C : Lists α → Sort*) (D : Lists' α true → Sort*)
+    (C0 : ∀ a, C (atom a)) (C1 : ∀ l, D l → C (of' l))
+    (D0 : D Lists'.nil) (D1 : ∀ a l, C a → D l → D (Lists'.cons a l)) :
+    PProd (∀ l, C l) (∀ l, D l) := by
+  suffices ∀ {b} (l : Lists' α b),
       PProd (C ⟨_, l⟩)
         (match b, l with
         | true, l => D l
         | false, _ => PUnit)
-    ⟨fun ⟨b, l⟩ => (this _).1, fun l => (this l).2⟩
+    by exact ⟨fun ⟨b, l⟩ => (this _).1, fun l => (this l).2⟩
   intro b l
   induction l with
   | atom => exact ⟨C0 _, ⟨⟩⟩
@@ -795,232 +517,112 @@ definition inductionMut
     have : D (Lists'.cons' a l) := D1 ⟨_, _⟩ _ IH₁.1 IH.2
     exact ⟨C1 _ this, this⟩
 
-中文:
-定义 inductionMut
-  签名: (C : Lists α -> 类型层*) (D : Lists' α true -> 类型层*)
-  定义体: by
-  suffices forall {b} (l : Lists' α b),
-      PProd (C ⟨_, l⟩)
-        (match b, l with
-        | true, l => D l
-        | false, _ => PUnit)
-    ⟨fun ⟨b, l⟩ => (this _).1, fun l => (this l).2⟩
-  intro b l
-  induction l with
-  | atom => exact ⟨C0 _, ⟨⟩⟩
-  | nil => exact ⟨C1 _ D0, D0⟩
-  | cons' a l IH₁ IH =>
-    have : D (Lists'.cons' a l) := D1 ⟨_, _⟩ _ IH₁.1 IH.2
-    exact ⟨C1 _ this, this⟩
+/-- Membership of ZFA list. A ZFA list belongs to a proper ZFA list if it belongs to the latter as a
+proper ZFA prelist. An atom has no members. -/
+/-
+**Lists.mem** 是 Mathlib 中的一个定义，位于命名空间 `Lists`。
+形式化陈述：{α : Type u_1} → Lists α → Lists α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Membership of ZFA list. A ZFA list belongs to a proper ZFA list if it belongs to
+ the latter as a
+proper ZFA prelist. An atom has no members.
 -/
-def inductionMut (C : Lists α -> Sort*) (D : Lists' α true -> Sort*)
-    (C0 : forall a, C (atom a)) (C1 : forall l, D l -> C (of' l))
-    (D0 : D Lists'.nil) (D1 : forall a l, C a -> D l -> D (Lists'.cons a l)) :
-    PProd (forall l, C l) (forall l, D l) := by
-  suffices forall {b} (l : Lists' α b),
-      PProd (C ⟨_, l⟩)
-        (match b, l with
-        | true, l => D l
-        | false, _ => PUnit)
-    ⟨fun ⟨b, l⟩ => (this _).1, fun l => (this l).2⟩
-  intro b l
-  induction l with
-  | atom => exact ⟨C0 _, ⟨⟩⟩
-  | nil => exact ⟨C1 _ D0, D0⟩
-  | cons' a l IH₁ IH =>
-    have : D (Lists'.cons' a l) := D1 ⟨_, _⟩ _ IH₁.1 IH.2
-    exact ⟨C1 _ this, this⟩
-
-/--
-Definition of `mem` / `mem` 的定义
-
-English:
-definition mem
-  signature: (a : Lists α)
-
-中文:
-定义 mem
-  签名: (a : Lists α)
--/
-def mem (a : Lists α) : Lists α -> Prop
+def mem (a : Lists α) : Lists α → Prop
   | ⟨false, _⟩ => False
-  | ⟨_, l⟩ => a in l
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership (Lists α) (Lists α)
-  body: mem l ls
-
-中文:
-实例 :
-  签名: Membership (Lists α) (Lists α)
-  定义体: mem l ls
+  | ⟨_, l⟩ => a ∈ l
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership (Lists α) (Lists α) where
   mem ls l := mem l ls
-
-/--
-theorem `isList_of_mem` / 定理 `isList_of_mem`
-
-English:
-theorem isList_of_mem
-  given: {a : Lists α}
-  statement: forall {l : Lists α}, a in l -> IsList l
-
-中文:
-定理 isList_of_mem
-  条件: {a : Lists α}
-  结论: 对任意 {l : Lists α}, a in l -> IsList l
+/-
+**Lists.isList_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：∀ {α : Type u_1} {a l : Lists α}, a ∈ l → l.IsList
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isList_of_mem {a : Lists α} : forall {l : Lists α}, a in l -> IsList l
+theorem isList_of_mem {a : Lists α} : ∀ {l : Lists α}, a ∈ l → IsList l
   | ⟨_, Lists'.nil⟩, _ => rfl
   | ⟨_, Lists'.cons' _ _⟩, _ => rfl
-
-/--
-theorem `Equiv.antisymm_iff` / 定理 `Equiv.antisymm_iff`
-
-English:
-theorem Equiv.antisymm_iff
-  given: {l₁ l₂ : Lists' α true}
-  statement: of' l₁ ~ of' l₂ ↔ l₁ subseteq l₂ ∧ l₂ subseteq l₁
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨h₁, h₂⟩ => Equiv.antisymm h₁ h₂⟩
-  obtain - | ⟨h₁, h₂⟩ := h
-  · simp [Lists'.Subset.refl]
-  · exact ⟨h₁, h₂⟩
-
-中文:
-定理 等价.antisymm_iff
-  条件: {l₁ l₂ : Lists' α true}
-  结论: of' l₁ ~ of' l₂ ↔ l₁ subseteq l₂ ∧ l₂ subseteq l₁
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨h₁, h₂⟩ => Equiv.antisymm h₁ h₂⟩
-  obtain - | ⟨h₁, h₂⟩ := h
-  · simp [Lists'.Subset.refl]
-  · exact ⟨h₁, h₂⟩
-
-Depends on / 依赖: Equiv.antisymm, Subset, Subset.refl, antisymm
+/-
+**Lists.Equiv.antisymm_iff** 是 Mathlib 中的一个定理，位于命名空间 `Lists.Equiv`。
+形式化陈述：∀ {α : Type u_1} {l₁ l₂ : Lists' α true}, (Lists.of' l₁).Equiv (Lists.of' 
+l₂) ↔ l₁ ⊆ l₂ ∧ l₂ ⊆ l₁
+参数：Lists.of' l₁；Lists.of' l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem Equiv.antisymm_iff {l₁ l₂ : Lists' α true} : of' l₁ ~ of' l₂ ↔ l₁ subseteq l₂ ∧ l₂ subseteq l₁ := by
+theorem Equiv.antisymm_iff {l₁ l₂ : Lists' α true} : of' l₁ ~ of' l₂ ↔ l₁ ⊆ l₂ ∧ l₂ ⊆ l₁ := by
   refine ⟨fun h => ?_, fun ⟨h₁, h₂⟩ => Equiv.antisymm h₁ h₂⟩
   obtain - | ⟨h₁, h₂⟩ := h
   · simp [Lists'.Subset.refl]
   · exact ⟨h₁, h₂⟩
 
 attribute [refl] Equiv.refl
-
-/--
-theorem `equiv_atom` / 定理 `equiv_atom`
-
-English:
-theorem equiv_atom
-  given: {a} {l : Lists α}
-  statement: atom a ~ l ↔ atom a = l
-  proof: ⟨fun h => by cases h; rfl, fun h => h ▸ Equiv.refl _⟩
-
-@[symm]
-
-中文:
-定理 equiv_atom
-  条件: {a} {l : Lists α}
-  结论: atom a ~ l ↔ atom a = l
-  证明: ⟨fun h => by cases h; rfl, fun h => h ▸ Equiv.refl _⟩
-
-@[symm]
-
-Depends on / 依赖: Equiv.refl
+/-
+**Lists.equiv_atom** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：equiv_atom {a} {l : Lists α} : atom a ~ l ↔ atom a = l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem equiv_atom {a} {l : Lists α} : atom a ~ l ↔ atom a = l :=
   ⟨fun h => by cases h; rfl, fun h => h ▸ Equiv.refl _⟩
 
 @[symm]
-/--
-theorem `Equiv.symm` / 定理 `Equiv.symm`
-
-English:
-theorem Equiv.symm
-  given: {l₁ l₂ : Lists α} (h : l₁ ~ l₂)
-  statement: l₂ ~ l₁
-  proof: by
-  obtain - | ⟨h₁, h₂⟩ := h <;> [rfl; exact Equiv.antisymm h₂ h₁]
-
-中文:
-定理 等价.symm
-  条件: {l₁ l₂ : Lists α} (h : l₁ ~ l₂)
-  结论: l₂ ~ l₁
-  证明: by
-  obtain - | ⟨h₁, h₂⟩ := h <;> [rfl; exact Equiv.antisymm h₂ h₁]
+/-
+**Lists.Equiv.symm** 是 Mathlib 中的一个定理，位于命名空间 `Lists.Equiv`。
+形式化陈述：∀ {α : Type u_1} {l₁ l₂ : Lists α}, l₁.Equiv l₂ → l₂.Equiv l₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Equiv.symm {l₁ l₂ : Lists α} (h : l₁ ~ l₂) : l₂ ~ l₁ := by
   obtain - | ⟨h₁, h₂⟩ := h <;> [rfl; exact Equiv.antisymm h₂ h₁]
-
-/--
-theorem `Equiv.trans` / 定理 `Equiv.trans`
-
-English:
-theorem Equiv.trans
-  statement: forall {l₁ l₂ l₃ : Lists α}, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
-  proof: by
-  let trans := fun l₁ : Lists α => forall ⦃l₂ l₃⦄, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
-  suffices PProd (forall l₁, trans l₁) (forall (l : Lists' α true), forall l' in l.toList, trans l') by exact this.1
-  apply inductionMut
-  · intro a l₂ l₃ h₁ h₂
-    rwa [← equiv_atom.1 h₁] at h₂
-  · intro l₁ IH l₂ l₃ h₁ h₂
-    obtain - | l₂ := id h₁
-    · exact h₂
-    obtain - | l₃ := id h₂
-    · exact h₁
-    obtain ⟨hl₁, hr₁⟩ := Equiv.antisymm_iff.1 h₁
-    obtain ⟨hl₂, hr₂⟩ := Equiv.antisymm_iff.1 h₂
-    apply Equiv.antisymm_iff.2; constructor <;> apply Lists'.subset_def.2
-    · intro a₁ m₁
-      rcases Lists'.mem_of_subset' hl₁ m₁ with ⟨a₂, m₂, e₁₂⟩
-      rcases Lists'.mem_of_subset' hl₂ m₂ with ⟨a₃, m₃, e₂₃⟩
-      exact ⟨a₃, m₃, IH _ m₁ e₁₂ e₂₃⟩
-    · intro a₃ m₃
-      rcases Lists'.mem_of_subset' hr₂ m₃ with ⟨a₂, m₂, e₃₂⟩
-      rcases Lists'.mem_of_subset' hr₁ m₂ with ⟨a₁, m₁, e₂₁⟩
-      exact ⟨a₁, m₁, (IH _ m₁ e₂₁.symm e₃₂.symm).symm⟩
-  · rintro _ ⟨⟩
-  · intro a l IH₁ IH₂
-    simpa using ⟨IH₁, IH₂⟩
-
-中文:
-定理 等价.trans
-  结论: 对任意 {l₁ l₂ l₃ : Lists α}, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
-  证明: by
-  let trans := fun l₁ : Lists α => forall ⦃l₂ l₃⦄, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
-  suffices PProd (forall l₁, trans l₁) (forall (l : Lists' α true), forall l' in l.toList, trans l') by exact this.1
-  apply inductionMut
-  · intro a l₂ l₃ h₁ h₂
-    rwa [← equiv_atom.1 h₁] at h₂
-  · intro l₁ IH l₂ l₃ h₁ h₂
-    obtain - | l₂ := id h₁
-    · exact h₂
-    obtain - | l₃ := id h₂
-    · exact h₁
-    obtain ⟨hl₁, hr₁⟩ := Equiv.antisymm_iff.1 h₁
-    obtain ⟨hl₂, hr₂⟩ := Equiv.antisymm_iff.1 h₂
-    apply Equiv.antisymm_iff.2; constructor <;> apply Lists'.subset_def.2
-    · intro a₁ m₁
-      rcases Lists'.mem_of_subset' hl₁ m₁ with ⟨a₂, m₂, e₁₂⟩
-      rcases Lists'.mem_of_subset' hl₂ m₂ with ⟨a₃, m₃, e₂₃⟩
-      exact ⟨a₃, m₃, IH _ m₁ e₁₂ e₂₃⟩
-    · intro a₃ m₃
-      rcases Lists'.mem_of_subset' hr₂ m₃ with ⟨a₂, m₂, e₃₂⟩
-      rcases Lists'.mem_of_subset' hr₁ m₂ with ⟨a₁, m₁, e₂₁⟩
-      exact ⟨a₁, m₁, (IH _ m₁ e₂₁.symm e₃₂.symm).symm⟩
-  · rintro _ ⟨⟩
-  · intro a l IH₁ IH₂
-    simpa using ⟨IH₁, IH₂⟩
+/-
+**Lists.Equiv.trans** 是 Mathlib 中的一个定理，位于命名空间 `Lists.Equiv`。
+形式化陈述：∀ {α : Type u_1} {l₁ l₂ l₃ : Lists α}, l₁.Equiv l₂ → l₂.Equiv l₃ → l₁.Equi
+v l₃
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Lists.equiv_atom`：equiv_atom {a} {l : Lists α} : atom a ~ l ↔ atom a = l
+· 使用定理 `Lists.Equiv.antisymm_iff`：∀ {α : Type u_1} {l₁ l₂ : Lists' α true}, (Lis
+ts.of' l₁).Equiv (Lists.of' l₂) ↔ l₁ ⊆ l₂ ∧ l₂ ⊆ l₁
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Lists'.subset_def`：subset_def {l₁ l₂ : Lists' α true} : l₁ subseteq l₂ ↔
+ forall a in l₁.toList, a in l₂
+· 使用定理 `Lists'.mem_of_subset'`：mem_of_subset' {a} : forall {l₁ l₂ : Lists' α tru
+e} (_ : l₁ subseteq l₂) (_ : a in l₁.toList), a in l₂ | nil, _, Lists'.Subset.ni
+l, h => by …
+· 使用定理 `Lists.Equiv.symm`：∀ {α : Type u_1} {l₁ l₂ : Lists α}, l₁.Equiv l₂ → l₂.E
+quiv l₁
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem Equiv.trans : forall {l₁ l₂ l₃ : Lists α}, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃ := by
-  let trans := fun l₁ : Lists α => forall ⦃l₂ l₃⦄, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
-  suffices PProd (forall l₁, trans l₁) (forall (l : Lists' α true), forall l' in l.toList, trans l') by exact this.1
+theorem Equiv.trans : ∀ {l₁ l₂ l₃ : Lists α}, l₁ ~ l₂ → l₂ ~ l₃ → l₁ ~ l₃ := by
+  let trans := fun l₁ : Lists α => ∀ ⦃l₂ l₃⦄, l₁ ~ l₂ → l₂ ~ l₃ → l₁ ~ l₃
+  suffices PProd (∀ l₁, trans l₁) (∀ (l : Lists' α true), ∀ l' ∈ l.toList, trans l') by exact this.1
   apply inductionMut
   · intro a l₂ l₃ h₁ h₂
     rwa [← equiv_atom.1 h₁] at h₂
@@ -1043,70 +645,73 @@ theorem Equiv.trans : forall {l₁ l₂ l₃ : Lists α}, l₁ ~ l₂ -> l₂ ~ 
   · rintro _ ⟨⟩
   · intro a l IH₁ IH₂
     simpa using ⟨IH₁, IH₂⟩
-
-/--
-Instance `instSetoidLists` / 实例 `instSetoidLists`
-
-English:
-instance instSetoidLists
-  signature: : Setoid (Lists α)
-  body: ⟨(· ~ ·), Equiv.refl, @Equiv.symm _, @Equiv.trans _⟩
-
-中文:
-实例 instSetoidLists
-  签名: : 集合等价关系 (Lists α)
-  定义体: ⟨(· ~ ·), Equiv.refl, @Equiv.symm _, @Equiv.trans _⟩
-
-Depends on / 依赖: Equiv.refl, Equiv.symm, Equiv.trans
+/-
+**Lists.instSetoidLists** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+形式化陈述：instSetoidLists : Setoid (Lists α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSetoidLists : Setoid (Lists α) :=
   ⟨(· ~ ·), Equiv.refl, @Equiv.symm _, @Equiv.trans _⟩
 
 section Decidable
 
-/--
-theorem `sizeof_pos` / 定理 `sizeof_pos`
-
-English:
-theorem sizeof_pos
-  given: {b} (l : Lists' α b)
-  statement: 0 < SizeOf.sizeOf l
-  proof: by
-  cases l <;> simp only [Lists'.atom.sizeOf_spec, Lists'.nil.sizeOf_spec, Lists'.cons'.sizeOf_spec,
-    true_or, add_pos_iff, zero_lt_one]
-
-中文:
-定理 sizeof_pos
-  条件: {b} (l : Lists' α b)
-  结论: 0 < SizeOf.sizeOf l
-  证明: by
-  cases l <;> simp only [Lists'.atom.sizeOf_spec, Lists'.nil.sizeOf_spec, Lists'.cons'.sizeOf_spec,
-    true_or, add_pos_iff, zero_lt_one]
-
-Depends on / 依赖: add_pos_iff, atom.sizeOf_spec, nil.sizeOf_spec, sizeOf_spec, true_or, zero_lt_one
+/-
+**Lists.sizeof_pos** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：sizeof_pos {b} (l : Lists' α b) : 0 < SizeOf.sizeOf l
+参数：l : Lists' α b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Lists'.atom.sizeOf_spec`：∀ {α : Type u} [inst : SizeOf α] (a : α), sizeO
+f (Lists'.atom a) = 1 + sizeOf a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Lists'.nil.sizeOf_spec`：∀ {α : Type u} [inst : SizeOf α], sizeOf Lists'.
+nil = 1
+· 使用定理 `Lists'.cons'.sizeOf_spec`：∀ {α : Type u} [inst : SizeOf α] {b : Bool} (a
+ : Lists' α b) (a_1 : Lists' α true),   sizeOf (a.cons' a_1) = 1 + sizeOf b + si
+zeOf a + sizeO…
 -/
 theorem sizeof_pos {b} (l : Lists' α b) : 0 < SizeOf.sizeOf l := by
   cases l <;> simp only [Lists'.atom.sizeOf_spec, Lists'.nil.sizeOf_spec, Lists'.cons'.sizeOf_spec,
     true_or, add_pos_iff, zero_lt_one]
-
-/--
-theorem `lt_sizeof_cons'` / 定理 `lt_sizeof_cons'`
-
-English:
-theorem lt_sizeof_cons'
-  given: {b} (a : Lists' α b) (l)
-  proof: by
-  simp only [Sigma.mk.sizeOf_spec, Lists'.cons'.sizeOf_spec, lt_add_iff_pos_right]
-  apply sizeof_pos
-
-中文:
-定理 lt_sizeof_cons'
-  条件: {b} (a : Lists' α b) (l)
-  证明: by
-  simp only [Sigma.mk.sizeOf_spec, Lists'.cons'.sizeOf_spec, lt_add_iff_pos_right]
-  apply sizeof_pos
-
-Depends on / 依赖: Sigma.mk.sizeOf_spec, lt_add_iff_pos_right, sizeOf_spec, sizeof_pos
+/-
+**Lists.lt_sizeof_cons'** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+形式化陈述：lt_sizeof_cons' {b} (a : Lists' α b) (l) : SizeOf.sizeOf (⟨b, a⟩ : Lists α
+) < SizeOf.sizeOf (Lists'.cons' a l)
+参数：a : Lists' α b；l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Sigma.mk.sizeOf_spec`：∀ {α : Type u} {β : α → Type v} [inst : SizeOf α] 
+[inst_1 : (a : α) → SizeOf (β a)] (fst : α) (snd : β fst),   sizeOf ⟨fst, snd⟩ =
+ 1 + sizeO…
+· 使用定理 `Lists'.cons'.sizeOf_spec`：∀ {α : Type u} [inst : SizeOf α] {b : Bool} (a
+ : Lists' α b) (a_1 : Lists' α true),   sizeOf (a.cons' a_1) = 1 + sizeOf b + si
+zeOf a + sizeO…
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Lists.sizeof_pos`：sizeof_pos {b} (l : Lists' α b) : 0 < SizeOf.sizeOf l
 -/
 theorem lt_sizeof_cons' {b} (a : Lists' α b) (l) :
     SizeOf.sizeOf (⟨b, a⟩ : Lists α) < SizeOf.sizeOf (Lists'.cons' a l) := by
@@ -1118,59 +723,22 @@ variable [DecidableEq α]
 set_option backward.isDefEq.respectTransparency false in
 mutual
   @[instance_reducible]
-/--
-Definition of `Equiv.decidable` / `Equiv.decidable` 的定义
-
-English:
-definition Equiv.decidable
-  signature: : forall l₁ l₂ : Lists α, Decidable (l₁ ~ l₂)
-  body: have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
-            SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
-          decreasing_tactic
-        Subset.decidable l₁ l₂
-      haveI : Decidable (l₂ subseteq l₁) :=
-        have : SizeOf.sizeOf l₂ + SizeOf.sizeOf l₁ <
-            SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
-          decreasing_tactic
-        Subset.decidable l₂ l₁
-      exact decidable_of_iff' _ Equiv.antisymm_iff
-  termination_by x y => sizeOf x + sizeOf y
-  @[instance_reducible]
-
-中文:
-定义 等价.decidable
-  签名: : 对任意 l₁ l₂ : Lists α, 可判定 (l₁ ~ l₂)
-  定义体: have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
-            SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
-          decreasing_tactic
-        Subset.decidable l₁ l₂
-      haveI : Decidable (l₂ subseteq l₁) :=
-        have : SizeOf.sizeOf l₂ + SizeOf.sizeOf l₁ <
-            SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
-          decreasing_tactic
-        Subset.decidable l₂ l₁
-      exact decidable_of_iff' _ Equiv.antisymm_iff
-  termination_by x y => sizeOf x + sizeOf y
-  @[instance_reducible]
-
-Depends on / 依赖: Decidable, Equiv.antisymm_iff, SizeOf, SizeOf.sizeOf, Subset, Subset.decidable, antisymm_iff, decidable, decidable_of_iff, decreasing_tactic, instance_reducible, sizeOf, subseteq, termination_by
--/
-  def Equiv.decidable : forall l₁ l₂ : Lists α, Decidable (l₁ ~ l₂)
+  def Equiv.decidable : ∀ l₁ l₂ : Lists α, Decidable (l₁ ~ l₂)
     | ⟨false, l₁⟩, ⟨false, l₂⟩ =>
-decidable_of_iff' (l₁ = l₂) by
+      decidable_of_iff' (l₁ = l₂) <| by
         cases l₁
         apply equiv_atom.trans
         simp only [atom]
         constructor <;> (rintro ⟨rfl⟩; rfl)
-| ⟨false, l₁⟩, ⟨true, l₂⟩ => isFalse by rintro ⟨⟩
-| ⟨true, l₁⟩, ⟨false, l₂⟩ => isFalse by rintro ⟨⟩
+    | ⟨false, l₁⟩, ⟨true, l₂⟩ => isFalse <| by rintro ⟨⟩
+    | ⟨true, l₁⟩, ⟨false, l₂⟩ => isFalse <| by rintro ⟨⟩
     | ⟨true, l₁⟩, ⟨true, l₂⟩ => by
-      haveI : Decidable (l₁ subseteq l₂) :=
+      haveI : Decidable (l₁ ⊆ l₂) :=
         have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
             SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
           decreasing_tactic
         Subset.decidable l₁ l₂
-      haveI : Decidable (l₂ subseteq l₁) :=
+      haveI : Decidable (l₂ ⊆ l₁) :=
         have : SizeOf.sizeOf l₂ + SizeOf.sizeOf l₁ <
             SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
           decreasing_tactic
@@ -1178,40 +746,7 @@ decidable_of_iff' (l₁ = l₂) by
       exact decidable_of_iff' _ Equiv.antisymm_iff
   termination_by x y => sizeOf x + sizeOf y
   @[instance_reducible]
-/--
-Definition of `Subset.decidable` / `Subset.decidable` 的定义
-
-English:
-definition Subset.decidable
-  signature: : forall l₁ l₂ : Lists' α true, Decidable (l₁ subseteq l₂)
-  body: have : sizeOf (⟨b, a⟩ : Lists α) < 1 + 1 + sizeOf a + sizeOf l₁ := by simp [sizeof_pos]
-        mem.decidable ⟨b, a⟩ l₂
-      haveI :=
-        have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
-            SizeOf.sizeOf (Lists'.cons' a l₁) + SizeOf.sizeOf l₂ := by
-          decreasing_tactic
-        Subset.decidable l₁ l₂
-      exact decidable_of_iff' _ (@Lists'.cons_subset _ ⟨_, _⟩ _ _)
-  termination_by x y => sizeOf x + sizeOf y
-  @[instance_reducible]
-
-中文:
-定义 子集.decidable
-  签名: : 对任意 l₁ l₂ : Lists' α true, 可判定 (l₁ subseteq l₂)
-  定义体: have : sizeOf (⟨b, a⟩ : Lists α) < 1 + 1 + sizeOf a + sizeOf l₁ := by simp [sizeof_pos]
-        mem.decidable ⟨b, a⟩ l₂
-      haveI :=
-        have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
-            SizeOf.sizeOf (Lists'.cons' a l₁) + SizeOf.sizeOf l₂ := by
-          decreasing_tactic
-        Subset.decidable l₁ l₂
-      exact decidable_of_iff' _ (@Lists'.cons_subset _ ⟨_, _⟩ _ _)
-  termination_by x y => sizeOf x + sizeOf y
-  @[instance_reducible]
-
-Depends on / 依赖: SizeOf, SizeOf.sizeOf, Subset, Subset.decidable, cons_subset, decidable, decidable_of_iff, decreasing_tactic, instance_reducible, mem.decidable, sizeOf, sizeof_pos, termination_by
--/
-  def Subset.decidable : forall l₁ l₂ : Lists' α true, Decidable (l₁ subseteq l₂)
+  def Subset.decidable : ∀ l₁ l₂ : Lists' α true, Decidable (l₁ ⊆ l₂)
     | Lists'.nil, _ => isTrue Lists'.Subset.nil
     | @Lists'.cons' _ b a l₁, l₂ => by
       haveI :=
@@ -1225,43 +760,8 @@ Depends on / 依赖: SizeOf, SizeOf.sizeOf, Subset, Subset.decidable, cons_subse
       exact decidable_of_iff' _ (@Lists'.cons_subset _ ⟨_, _⟩ _ _)
   termination_by x y => sizeOf x + sizeOf y
   @[instance_reducible]
-/--
-Definition of `mem.decidable` / `mem.decidable` 的定义
-
-English:
-definition mem.decidable
-  signature: : forall (a : Lists α) (l : Lists' α true), Decidable (a in l)
-  body: have : sizeOf (⟨_, b⟩ : Lists α) < 1 + 1 + sizeOf b + sizeOf l₂ := by simp [sizeof_pos]
-        Equiv.decidable a ⟨_, b⟩
-      haveI :=
-        have :
-          SizeOf.sizeOf a + SizeOf.sizeOf l₂ <
-            SizeOf.sizeOf a + SizeOf.sizeOf (Lists'.cons' b l₂) := by
-          decreasing_tactic
-        mem.decidable a l₂
-      refine decidable_of_iff' (a ~ ⟨_, b⟩ ∨ a in l₂) ?_
-      rw [← Lists'.mem_cons]; rfl
-  termination_by x y => sizeOf x + sizeOf y
-
-中文:
-定义 mem.decidable
-  签名: : 对任意 (a : Lists α) (l : Lists' α true), 可判定 (a in l)
-  定义体: have : sizeOf (⟨_, b⟩ : Lists α) < 1 + 1 + sizeOf b + sizeOf l₂ := by simp [sizeof_pos]
-        Equiv.decidable a ⟨_, b⟩
-      haveI :=
-        have :
-          SizeOf.sizeOf a + SizeOf.sizeOf l₂ <
-            SizeOf.sizeOf a + SizeOf.sizeOf (Lists'.cons' b l₂) := by
-          decreasing_tactic
-        mem.decidable a l₂
-      refine decidable_of_iff' (a ~ ⟨_, b⟩ ∨ a in l₂) ?_
-      rw [← Lists'.mem_cons]; rfl
-  termination_by x y => sizeOf x + sizeOf y
-
-Depends on / 依赖: CauSeq, CauSeq.IsComplete, IsComplete, completeSpace_of_cauSeq_isComplete
--/
-  def mem.decidable : forall (a : Lists α) (l : Lists' α true), Decidable (a in l)
-| a, Lists'.nil => isFalse by rintro ⟨_, ⟨⟩, _⟩
+  def mem.decidable : ∀ (a : Lists α) (l : Lists' α true), Decidable (a ∈ l)
+    | a, Lists'.nil => isFalse <| by rintro ⟨_, ⟨⟩, _⟩
     | a, Lists'.cons' b l₂ => by
       haveI :=
         have : sizeOf (⟨_, b⟩ : Lists α) < 1 + 1 + sizeOf b + sizeOf l₂ := by simp [sizeof_pos]
@@ -1272,29 +772,22 @@ Depends on / 依赖: CauSeq, CauSeq.IsComplete, IsComplete, completeSpace_of_cau
             SizeOf.sizeOf a + SizeOf.sizeOf (Lists'.cons' b l₂) := by
           decreasing_tactic
         mem.decidable a l₂
-      refine decidable_of_iff' (a ~ ⟨_, b⟩ ∨ a in l₂) ?_
+      refine decidable_of_iff' (a ~ ⟨_, b⟩ ∨ a ∈ l₂) ?_
       rw [← Lists'.mem_cons]; rfl
   termination_by x y => sizeOf x + sizeOf y
 end
 
 attribute [instance] Equiv.decidable Subset.decidable mem.decidable
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Copy over the decidability to the `Setoid` instance. -/
+/-
+**Lists.** 是 Mathlib 中的一个实例，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: DecidableRel ((· ≈ ·) : Lists α -> Lists α -> Prop)
-  body: Lists.Equiv.decidable
-
-中文:
-实例 :
-  签名: DecidableRel ((· ≈ ·) : Lists α -> Lists α -> 命题)
-  定义体: Lists.Equiv.decidable
-
-Depends on / 依赖: Lists.Equiv.decidable, decidable
+--- 原说明 ---
+Copy over the decidability to the `Setoid` instance.
 -/
-instance : DecidableRel ((· ≈ ·) : Lists α -> Lists α -> Prop) :=
+instance : DecidableRel ((· ≈ ·) : Lists α → Lists α → Prop) :=
   Lists.Equiv.decidable
 
 end Decidable
@@ -1303,135 +796,61 @@ end Lists
 
 namespace Lists'
 
-/--
-theorem `mem_equiv_left` / 定理 `mem_equiv_left`
-
-English:
-theorem mem_equiv_left
-  given: {l : Lists' α true}
-  statement: forall {a a'}, a ~ a' -> (a in l ↔ a' in l)
-  proof: suffices forall {a a'}, a ~ a' -> a in l -> a' in l from fun e => ⟨this e, this e.symm⟩
-  fun e₁ ⟨_, m₃, e₂⟩ => ⟨_, m₃, e₁.symm.trans e₂⟩
-
-中文:
-定理 mem_equiv_left
-  条件: {l : Lists' α true}
-  结论: 对任意 {a a'}, a ~ a' -> (a in l ↔ a' in l)
-  证明: suffices forall {a a'}, a ~ a' -> a in l -> a' in l from fun e => ⟨this e, this e.symm⟩
-  fun e₁ ⟨_, m₃, e₂⟩ => ⟨_, m₃, e₁.symm.trans e₂⟩
-
-Depends on / 依赖: e.symm, symm.trans
+/-
+**Lists.mem_equiv_left** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_equiv_left {l : Lists' α true} : forall {a a'}, a ~ a' -> (a in l ↔ a' in l) :=
-  suffices forall {a a'}, a ~ a' -> a in l -> a' in l from fun e => ⟨this e, this e.symm⟩
+theorem mem_equiv_left {l : Lists' α true} : ∀ {a a'}, a ~ a' → (a ∈ l ↔ a' ∈ l) :=
+  suffices ∀ {a a'}, a ~ a' → a ∈ l → a' ∈ l from fun e => ⟨this e, this e.symm⟩
   fun e₁ ⟨_, m₃, e₂⟩ => ⟨_, m₃, e₁.symm.trans e₂⟩
-
-/--
-theorem `mem_of_subset` / 定理 `mem_of_subset`
-
-English:
-theorem mem_of_subset
-  given: {a} {l₁ l₂ : Lists' α true} (s : l₁ subseteq l₂)
-  statement: a in l₁ -> a in l₂
-
-中文:
-定理 mem_of_subset
-  条件: {a} {l₁ l₂ : Lists' α true} (s : l₁ subseteq l₂)
-  结论: a in l₁ -> a in l₂
+/-
+**Lists.mem_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_of_subset {a} {l₁ l₂ : Lists' α true} (s : l₁ subseteq l₂) : a in l₁ -> a in l₂
+theorem mem_of_subset {a} {l₁ l₂ : Lists' α true} (s : l₁ ⊆ l₂) : a ∈ l₁ → a ∈ l₂
   | ⟨_, m, e⟩ => (mem_equiv_left e).2 (mem_of_subset' s m)
-
-/--
-theorem `Subset.trans` / 定理 `Subset.trans`
-
-English:
-theorem Subset.trans
-  given: {l₁ l₂ l₃ : Lists' α true} (h₁ : l₁ subseteq l₂) (h₂ : l₂ subseteq l₃)
-  statement: l₁ subseteq l₃
-  proof: subset_def.2 fun _ m₁ => mem_of_subset h₂ mem_of_subset' h₁ m₁
-
-中文:
-定理 子集.trans
-  条件: {l₁ l₂ l₃ : Lists' α true} (h₁ : l₁ subseteq l₂) (h₂ : l₂ subseteq l₃)
-  结论: l₁ subseteq l₃
-  证明: subset_def.2 fun _ m₁ => mem_of_subset h₂ mem_of_subset' h₁ m₁
+/-
+**Lists.Subset.trans** 是 Mathlib 中的一个定理，位于命名空间 `Lists`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Subset.trans {l₁ l₂ l₃ : Lists' α true} (h₁ : l₁ subseteq l₂) (h₂ : l₂ subseteq l₃) : l₁ subseteq l₃ :=
-subset_def.2 fun _ m₁ => mem_of_subset h₂ mem_of_subset' h₁ m₁
+theorem Subset.trans {l₁ l₂ l₃ : Lists' α true} (h₁ : l₁ ⊆ l₂) (h₂ : l₂ ⊆ l₃) : l₁ ⊆ l₃ :=
+  subset_def.2 fun _ m₁ => mem_of_subset h₂ <| mem_of_subset' h₁ m₁
 
 end Lists'
 
-/--
-Definition of `Finsets` / `Finsets` 的定义
+/-- `Finsets` are defined via equivalence classes of `Lists` -/
+/-
+**Finsets** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Finsets (α : Type*)
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Finsets
-  signature: (α : Type*)
-  body: Quotient (@Lists.instSetoidLists α)
-
-中文:
-定义 Finsets
-  签名: (α : 类型)
-  定义体: Quotient (@Lists.instSetoidLists α)
-
-Depends on / 依赖: Lists.instSetoidLists, Quotient, instSetoidLists
+--- 原说明 ---
+`Finsets` are defined via equivalence classes of `Lists`
 -/
 def Finsets (α : Type*) :=
   Quotient (@Lists.instSetoidLists α)
 
 namespace Finsets
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EmptyCollection (Finsets α)
-  body: ⟨⟦Lists.of' Lists'.nil⟧⟩
-
-中文:
-实例 :
-  签名: EmptyCollection (Finsets α)
-  定义体: ⟨⟦Lists.of' Lists'.nil⟧⟩
-
-Depends on / 依赖: Lists.of
+/-
+**Finsets.** 是 Mathlib 中的一个实例，位于命名空间 `Finsets`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EmptyCollection (Finsets α) :=
   ⟨⟦Lists.of' Lists'.nil⟧⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Finsets α)
-  body: ⟨∅⟩
-
-中文:
-实例 :
-  签名: 可居 (Finsets α)
-  定义体: ⟨∅⟩
+/-
+**Finsets.** 是 Mathlib 中的一个实例，位于命名空间 `Finsets`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Finsets α) :=
   ⟨∅⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DecidableEq
-  signature: α] : DecidableEq (Finsets α)
-  body: inferInstanceAs DecidableEq (Quotient Lists.instSetoidLists)
-
-中文:
-实例 [DecidableEq
-  签名: α] : DecidableEq (Finsets α)
-  定义体: inferInstanceAs DecidableEq (Quotient Lists.instSetoidLists)
-
-Depends on / 依赖: DecidableEq, Lists.instSetoidLists, Quotient, instSetoidLists
+/-
+**Finsets.** 是 Mathlib 中的一个实例，位于命名空间 `Finsets`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [DecidableEq α] : DecidableEq (Finsets α) :=
-inferInstanceAs DecidableEq (Quotient Lists.instSetoidLists)
+  inferInstanceAs <| DecidableEq (Quotient Lists.instSetoidLists)
 
 end Finsets
+

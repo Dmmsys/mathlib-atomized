@@ -37,47 +37,40 @@ namespace SheafOfModules
 
 section
 
-variable [forall X, HasWeakSheafify (J.over X) AddCommGrpCat.{u}]
-  [forall X, (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
+variable [∀ X, HasWeakSheafify (J.over X) AddCommGrpCat.{u}]
+  [∀ X, (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
 
 namespace LocalGeneratorsData
 
-/--
-Definition of `IsLocallyFreeData` / `IsLocallyFreeData` 的定义
+/-- Local generator data `q` is locally free data if all of the natural morphisms
+`free (q.generators i).I ⟶ M.over (q.X i)` are isomorphisms. -/
+/-
+**SheafOfModules.LocalGeneratorsData.IsLocallyFreeData** 是 Mathlib 中的一个类，位于命名空间 
+`SheafOfModules.LocalGeneratorsData`。
+形式化陈述：IsLocallyFreeData {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData) :
+ Prop where isIso : forall i, IsIso (q.generators i).π
+参数：q : M.LocalGeneratorsData。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLocallyFreeData
-  parameters: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
-  axioms and operations (1):
-    - isIso : forall i, IsIso (q.generators i).π  [default: by infer_instance]
-
-中文:
-类 是LocallyFreeData
-  参数: {M : 模层.{u} R} (q : M.LocalGeneratorsData)
-  公理与运算 (1 个):
-    - isIso : 对任意 i, 是同构 (q.generators i).π  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+Local generator data `q` is locally free data if all of the natural morphisms
+`free (q.generators i).I ⟶ M.over (q.X i)` are isomorphisms.
 -/
 class IsLocallyFreeData {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData) : Prop where
-  isIso : forall i, IsIso (q.generators i).π := by infer_instance
+  isIso : ∀ i, IsIso (q.generators i).π := by infer_instance
 
 attribute [instance] IsLocallyFreeData.isIso
-
-/--
-Instance `IsLocallyFreeData.shrink` / 实例 `IsLocallyFreeData.shrink`
-
-English:
-instance IsLocallyFreeData.shrink
-  signature: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
-  body: inferInstanceAs (IsIso (q.generators i.2.choose).π)
-
-中文:
-实例 是LocallyFreeData.shrink
-  签名: {M : 模层.{u} R} (q : M.LocalGeneratorsData)
-  定义体: inferInstanceAs (IsIso (q.generators i.2.choose).π)
-
-Depends on / 依赖: generators, q.generators
+/-
+**SheafOfModules.LocalGeneratorsData.IsLocallyFreeData.shrink** 是 Mathlib 中的一个定理
+，位于命名空间 `SheafOfModules.LocalGeneratorsData.IsLocallyFreeData`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryT
+heory.GrothendieckTopology C}   {R : CategoryTheory.Sheaf J RingCat} [inst_1 : ∀
+ (X : C), CategoryTheory.HasWeakSheafify (J.over X) AddCommGrpCat]   [inst_2 : ∀
+ (X : C), (J.over X).WEqualsLocallyBijective AddCommGrpCat] {M : SheafOfModules 
+R}   (q : M.LocalGeneratorsData) [q.IsLocallyFreeData], q.shrink.IsLocallyFreeDa
+ta
+参数：X : C；J.over X；X : C；J.over X；q : M.LocalGeneratorsData。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance IsLocallyFreeData.shrink {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
     [q.IsLocallyFreeData] : q.shrink.IsLocallyFreeData where
@@ -88,38 +81,35 @@ end LocalGeneratorsData
 /-- A sheaf of modules is locally free if it is locally isomorphic to free sheaves:
 There exist local generators satisfying `IsLocallyFreeData`. -/
 @[stacks 01C6 "(1)"]
-/--
-Definition of `IsLocallyFree` / `IsLocallyFree` 的定义
+/-
+**SheafOfModules.IsLocallyFree** 是 Mathlib 中的一个归纳类型，位于命名空间 `SheafOfModules`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {J : C
+ategoryTheory.GrothendieckTopology C} →       {R : CategoryTheory.Sheaf J RingCa
+t} →         [∀ (X : C), CategoryTheory.HasWeakSheafify (J.over X) AddCommGrpCat
+] →           [∀ (X : C), (J.over X).WEqualsLocallyBijective AddCommGrpCat] → Sh
+eafOfModules R → Prop
+参数：X : C；J.over X；X : C；J.over X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLocallyFree
-  parameters: (M : SheafOfModules.{u} R)
-  axioms and operations (1):
-    - exists_isLocallyFreeData : exists q : LocalGeneratorsData.{u₁} M, q.IsLocallyFreeData
-
-中文:
-类 是LocallyFree
-  参数: (M : 模层.{u} R)
-  公理与运算 (1 个):
-    - exists_isLocallyFreeData : 存在 q : LocalGeneratorsData.{u₁} M, q.是LocallyFreeData
+--- 原说明 ---
+A sheaf of modules is locally free if it is locally isomorphic to free sheaves:
+There exist local generators satisfying `IsLocallyFreeData`.
 -/
 class IsLocallyFree (M : SheafOfModules.{u} R) : Prop where
-  exists_isLocallyFreeData : exists q : LocalGeneratorsData.{u₁} M, q.IsLocallyFreeData
-
-/--
-theorem `LocalGeneratorsData.isLocallyFree` / 定理 `LocalGeneratorsData.isLocallyFree`
-
-English:
-theorem LocalGeneratorsData.isLocallyFree
-  statement: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
-  proof: ⟨q.shrink, inferInstance⟩
-
-中文:
-定理 LocalGeneratorsData.isLocallyFree
-  结论: {M : 模层.{u} R} (q : M.LocalGeneratorsData)
-  证明: ⟨q.shrink, inferInstance⟩
-
-Depends on / 依赖: q.shrink, shrink
+  exists_isLocallyFreeData : ∃ q : LocalGeneratorsData.{u₁} M, q.IsLocallyFreeData
+/-
+**SheafOfModules.LocalGeneratorsData.isLocallyFree** 是 Mathlib 中的一个定理，位于命名空间 `Sh
+eafOfModules.LocalGeneratorsData`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryT
+heory.GrothendieckTopology C}   {R : CategoryTheory.Sheaf J RingCat} [inst_1 : ∀
+ (X : C), CategoryTheory.HasWeakSheafify (J.over X) AddCommGrpCat]   [inst_2 : ∀
+ (X : C), (J.over X).WEqualsLocallyBijective AddCommGrpCat] {M : SheafOfModules 
+R}   (q : M.LocalGeneratorsData) [q.IsLocallyFreeData], M.IsLocallyFree
+参数：X : C；J.over X；X : C；J.over X；q : M.LocalGeneratorsData。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SheafOfModules.LocalGeneratorsData.IsLocallyFreeData.shrink`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {J : CategoryTheory.Grothendiec
+kTopology C}   {R : CategoryTheory.Sheaf J RingCa…
 -/
 theorem LocalGeneratorsData.isLocallyFree {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
     [q.IsLocallyFreeData] : M.IsLocallyFree := ⟨q.shrink, inferInstance⟩
@@ -132,32 +122,19 @@ variable [HasWeakSheafify J AddCommGrpCat.{u}] [J.WEqualsLocallyBijective AddCom
 
 /-- The generating sections of the free sheaf of modules. -/
 @[expose, simps]
-/--
-Definition of `free.generatingSections` / `free.generatingSections` 的定义
+/-
+**SheafOfModules.free.generatingSections** 是 Mathlib 中的一个定义，位于命名空间 `SheafOfModul
+es.free`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {J : C
+ategoryTheory.GrothendieckTopology C} →       {R : CategoryTheory.Sheaf J RingCa
+t} →         [inst_1 : CategoryTheory.HasWeakSheafify J AddCommGrpCat] →        
+   [inst_2 : J.WEqualsLocallyBijective AddCommGrpCat] → (I : Type u) → (SheafOfM
+odules.free I).GeneratingSections
+参数：I : Type u；SheafOfModules.free I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition free.generatingSections
-  signature: (I : Type u)
-  body: I
-  s (i) := freeSection i
-  epi := by
-    simp only [Equiv.symm_apply_apply]
-    infer_instance
-
-@[simp]
-
-中文:
-定义 free.generatingSections
-  签名: (I : 类型u)
-  定义体: I
-  s (i) := freeSection i
-  epi := by
-    simp only [Equiv.symm_apply_apply]
-    infer_instance
-
-@[simp]
-
-Depends on / 依赖: GeneratingSections
+--- 原说明 ---
+The generating sections of the free sheaf of modules.
 -/
 def free.generatingSections (I : Type u) : (free (R := R) I).GeneratingSections where
   I := I
@@ -167,39 +144,42 @@ def free.generatingSections (I : Type u) : (free (R := R) I).GeneratingSections 
     infer_instance
 
 @[simp]
-/--
-lemma `free.generatingSections_π` / 引理 `free.generatingSections_π`
-
-English:
-lemma free.generatingSections_π
-  given: (I : Type u)
-  proof: Equiv.symm_apply_apply (free I).freeHomEquiv _
-
-中文:
-引理 free.generatingSections_π
-  条件: (I : 类型u)
-  证明: Equiv.symm_apply_apply (free I).freeHomEquiv _
+/-
+**SheafOfModules.free.generatingSections_** 是 Mathlib 中的一个引理，位于命名空间 `SheafOfModu
+les`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma free.generatingSections_π (I : Type u) :
     (free.generatingSections (R := R) I).π = 𝟙 (free I) :=
   Equiv.symm_apply_apply (free I).freeHomEquiv _
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (I : Type u) : IsIso (free.generatingSections (R := R) I).π := by
   rw [free.generatingSections_π]
   infer_instance
 
-variable [forall X, HasSheafify (J.over X) AddCommGrpCat.{u}] [HasBinaryProducts C]
-  [forall X, (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}] [HasSheafify J AddCommGrpCat]
+variable [∀ X, HasSheafify (J.over X) AddCommGrpCat.{u}] [HasBinaryProducts C]
+  [∀ X, (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}] [HasSheafify J AddCommGrpCat]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (I : Type u) :
     (free.generatingSections (R := R) I).localGeneratorsData.IsLocallyFreeData where
   isIso i := by
     dsimp
     infer_instance
-
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (I : Type u) : (free (R := R) I).IsLocallyFree where
   exists_isLocallyFreeData := ⟨(free.generatingSections I).localGeneratorsData, inferInstance⟩
 
@@ -207,43 +187,25 @@ end
 
 section
 
-variable [forall X, HasSheafify (J.over X) AddCommGrpCat.{u}]
-  [forall X, (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
+variable [∀ X, HasSheafify (J.over X) AddCommGrpCat.{u}]
+  [∀ X, (J.over X).WEqualsLocallyBijective AddCommGrpCat.{u}]
 
 namespace LocalGeneratorsData
 
 /-- Given locally free data, this is the `QuasiCoherentData` where there are no relations. -/
 @[expose, simps]
-/--
-Definition of `quasiCoherentData` / `quasiCoherentData` 的定义
+/-
+**SheafOfModules.LocalGeneratorsData.quasiCoherentData** 是 Mathlib 中的一个定义，位于命名空间
+ `SheafOfModules.LocalGeneratorsData`。
+形式化陈述：quasiCoherentData {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData) [
+q.IsLocallyFreeData] : M.QuasicoherentData where I
+参数：q : M.LocalGeneratorsData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quasiCoherentData
-  signature: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData) [q.IsLocallyFreeData]
-  body: q.I
-  X := q.X
-  coversTop := q.coversTop
-  presentation i := {
-    generators := q.generators i
-    relations.I := ULift Empty
-    relations.s j := Empty.rec _ j.down
-    relations.epi := IsZero.epi (IsZero.of_iso (isZero_zero _) (Limits.kernel.ofMono _)) _ }
-
-@[simp]
-
-中文:
-定义 quasiCoherentData
-  签名: {M : 模层.{u} R} (q : M.LocalGeneratorsData) [q.是LocallyFreeData]
-  定义体: q.I
-  X := q.X
-  coversTop := q.coversTop
-  presentation i := {
-    generators := q.generators i
-    relations.I := ULift Empty
-    relations.s j := Empty.rec _ j.down
-    relations.epi := IsZero.epi (IsZero.of_iso (isZero_zero _) (Limits.kernel.ofMono _)) _ }
-
-@[simp]
+--- 原说明 ---
+Given locally free data, this is the `QuasiCoherentData` where there are no rela
+tions.
 -/
 def quasiCoherentData {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData) [q.IsLocallyFreeData] :
     M.QuasicoherentData where
@@ -257,18 +219,18 @@ def quasiCoherentData {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData) [q.
     relations.epi := IsZero.epi (IsZero.of_iso (isZero_zero _) (Limits.kernel.ofMono _)) _ }
 
 @[simp]
-/--
-lemma `quasiCoherentData_localGeneratorsData` / 引理 `quasiCoherentData_localGeneratorsData`
-
-English:
-lemma quasiCoherentData_localGeneratorsData
-  statement: {M : SheafOfModules.{u} R}
-  proof: rfl
-
-中文:
-引理 quasiCoherentData_localGeneratorsData
-  结论: {M : 模层.{u} R}
-  证明: rfl
+/-
+**SheafOfModules.LocalGeneratorsData.quasiCoherentData_localGeneratorsData** 是 M
+athlib 中的一个引理，位于命名空间 `SheafOfModules.LocalGeneratorsData`。
+形式化陈述：quasiCoherentData_localGeneratorsData {M : SheafOfModules.{u} R} (q : M.Lo
+calGeneratorsData) [q.IsLocallyFreeData] : q.quasiCoherentData.localGeneratorsDa
+ta = q
+参数：q : M.LocalGeneratorsData。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
 -/
 lemma quasiCoherentData_localGeneratorsData {M : SheafOfModules.{u} R}
     (q : M.LocalGeneratorsData) [q.IsLocallyFreeData] :
@@ -276,6 +238,10 @@ lemma quasiCoherentData_localGeneratorsData {M : SheafOfModules.{u} R}
 
 end LocalGeneratorsData
 
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (M : SheafOfModules.{u} R) [h : M.IsLocallyFree] : M.IsQuasicoherent :=
   have := h.exists_isLocallyFreeData.choose_spec
   h.exists_isLocallyFreeData.choose.quasiCoherentData.isQuasicoherent
@@ -283,3 +249,4 @@ instance (priority := 100) (M : SheafOfModules.{u} R) [h : M.IsLocallyFree] : M.
 end
 
 end SheafOfModules
+

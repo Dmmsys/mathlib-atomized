@@ -42,191 +42,129 @@ namespace Multiset
 
 variable {α : Type*} [Preorder α] {M N P : Multiset α} {a : α}
 
-/--
-Definition of `IsDershowitzMannaLT` / `IsDershowitzMannaLT` 的定义
+/-- The standard Dershowitz–Manna ordering. -/
+/-
+**Multiset.IsDershowitzMannaLT** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：IsDershowitzMannaLT (M N : Multiset α) : Prop
+参数：M N : Multiset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsDershowitzMannaLT
-  signature: (M N : Multiset α)
-  body: exists X Y Z,
-      Z != ∅
-    ∧ M = X + Y
-    ∧ N = X + Z
-    ∧ forall y in Y, exists z in Z, y < z
-
-中文:
-定义 IsDershowitzMannaLT
-  签名: (M N : Multiset α)
-  定义体: exists X Y Z,
-      Z != ∅
-    ∧ M = X + Y
-    ∧ N = X + Z
-    ∧ forall y in Y, exists z in Z, y < z
+--- 原说明 ---
+The standard Dershowitz–Manna ordering.
 -/
 def IsDershowitzMannaLT (M N : Multiset α) : Prop :=
-  exists X Y Z,
-      Z != ∅
+  ∃ X Y Z,
+      Z ≠ ∅
     ∧ M = X + Y
     ∧ N = X + Z
-    ∧ forall y in Y, exists z in Z, y < z
+    ∧ ∀ y ∈ Y, ∃ z ∈ Z, y < z
 
-/--
-lemma `IsDershowitzMannaLT.trans` / 引理 `IsDershowitzMannaLT.trans`
+/-- `IsDershowitzMannaLT` is transitive. -/
+/-
+**Multiset.IsDershowitzMannaLT.trans** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.IsDersh
+owitzMannaLT`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {M N P : Multiset α},   M.IsDershowit
+zMannaLT N → N.IsDershowitzMannaLT P → M.IsDershowitzMannaLT P
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Multiset.instCanonicallyOrderedAdd`：∀ {α : Type u_1}, CanonicallyOrdered
+Add (Multiset α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `Multiset.inter_add_sub_of_add_eq_add`：inter_add_sub_of_add_eq_add [Decid
+ableEq α] {M N P Q : Multiset α} (h : M + N = P + Q) : (N inter Q) + (P - M) = N
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用引理 `Multiset.inter_comm`：inter_comm (s t : Multiset α) : s inter t = t inter
+ s
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `Multiset.mem_sub`：mem_sub {a : α} {s t : Multiset α} : a in s - t ↔ t.co
+unt a < s.count a
+· 使用定理 `Multiset.count_eq_zero_of_notMem`：count_eq_zero_of_notMem {a : α} {s : M
+ultiset α} (h : a ∉ s) : count a s = 0
+· 使用定理 `Multiset.count_pos`：count_pos {a : α} {s : Multiset α} : 0 < count a s ↔
+ a in s
+· 使用定理 `Multiset.mem_of_le`：mem_of_le (h : s <= t) : a in s -> a in t
+· 使用定理 `Multiset.sub_le_self`：∀ {α : Type u_1} [inst : DecidableEq α] (s t : Mul
+tiset α), s - t ≤ s
 
-English:
-lemma IsDershowitzMannaLT.trans
-  proof: by
-  classical
-  rintro ⟨X₁, Y₁, Z₁, -, rfl, rfl, hYZ₁⟩ ⟨X₂, Y₂, Z₂, hZ₂, hXZXY, rfl, hYZ₂⟩
-  rw [add_comm X₁]; rw [add_comm X₂] at hXZXY
-  refine ⟨X₁ inter X₂, Y₁ + (Y₂ - Z₁), Z₂ + (Z₁ - Y₂), ?_, ?_, ?_, ?_⟩
-  · simpa [-not_and, not_and_or] using .inl hZ₂
-  · rwa [← add_assoc, add_right_comm, inter_add_sub_of_add_eq_add]
-  · rw [← add_assoc, add_right_comm, add_left_inj, inter_comm, inter_add_sub_of_add_eq_add]
-    rwa [eq_comm]
-  simp only [mem_add, or_imp, forall_and]
-  refine ⟨fun y hy => ?_, fun y hy => ?_⟩
-  · obtain ⟨z, hz, hyz⟩ := hYZ₁ y hy
-    by_cases z_in : z in Y₂
-    · obtain ⟨w, hw, hzw⟩ := hYZ₂ z z_in
-      exact ⟨w, .inl hw, hyz.trans hzw⟩
-· exact ⟨z, .inr by rwa [mem_sub, count_eq_zero_of_notMem z_in, count_pos], hyz⟩
-· obtain ⟨z, hz, hyz⟩ := hYZ₂ y mem_of_le (Multiset.sub_le_self ..) hy
-    exact ⟨z, .inl hz, hyz⟩
-
-中文:
-引理 IsDershowitzMannaLT.trans
-  证明: by
-  classical
-  rintro ⟨X₁, Y₁, Z₁, -, rfl, rfl, hYZ₁⟩ ⟨X₂, Y₂, Z₂, hZ₂, hXZXY, rfl, hYZ₂⟩
-  rw [add_comm X₁]; rw [add_comm X₂] at hXZXY
-  refine ⟨X₁ inter X₂, Y₁ + (Y₂ - Z₁), Z₂ + (Z₁ - Y₂), ?_, ?_, ?_, ?_⟩
-  · simpa [-not_and, not_and_or] using .inl hZ₂
-  · rwa [← add_assoc, add_right_comm, inter_add_sub_of_add_eq_add]
-  · rw [← add_assoc, add_right_comm, add_left_inj, inter_comm, inter_add_sub_of_add_eq_add]
-    rwa [eq_comm]
-  simp only [mem_add, or_imp, forall_and]
-  refine ⟨fun y hy => ?_, fun y hy => ?_⟩
-  · obtain ⟨z, hz, hyz⟩ := hYZ₁ y hy
-    by_cases z_in : z in Y₂
-    · obtain ⟨w, hw, hzw⟩ := hYZ₂ z z_in
-      exact ⟨w, .inl hw, hyz.trans hzw⟩
-· exact ⟨z, .inr by rwa [mem_sub, count_eq_zero_of_notMem z_in, count_pos], hyz⟩
-· obtain ⟨z, hz, hyz⟩ := hYZ₂ y mem_of_le (Multiset.sub_le_self ..) hy
-    exact ⟨z, .inl hz, hyz⟩
-
-Depends on / 依赖: add_assoc, add_comm, add_left_inj, add_right_comm, classical, eq_comm, forall_and, inter_add_sub_of_add_eq_add, inter_comm, mem_add, not_and, not_and_or, or_imp
+--- 原说明 ---
+`IsDershowitzMannaLT` is transitive.
 -/
 lemma IsDershowitzMannaLT.trans :
-    IsDershowitzMannaLT M N -> IsDershowitzMannaLT N P -> IsDershowitzMannaLT M P := by
+    IsDershowitzMannaLT M N → IsDershowitzMannaLT N P → IsDershowitzMannaLT M P := by
   classical
   rintro ⟨X₁, Y₁, Z₁, -, rfl, rfl, hYZ₁⟩ ⟨X₂, Y₂, Z₂, hZ₂, hXZXY, rfl, hYZ₂⟩
-  rw [add_comm X₁]; rw [add_comm X₂] at hXZXY
-  refine ⟨X₁ inter X₂, Y₁ + (Y₂ - Z₁), Z₂ + (Z₁ - Y₂), ?_, ?_, ?_, ?_⟩
+  rw [add_comm X₁, add_comm X₂] at hXZXY
+  refine ⟨X₁ ∩ X₂, Y₁ + (Y₂ - Z₁), Z₂ + (Z₁ - Y₂), ?_, ?_, ?_, ?_⟩
   · simpa [-not_and, not_and_or] using .inl hZ₂
   · rwa [← add_assoc, add_right_comm, inter_add_sub_of_add_eq_add]
   · rw [← add_assoc, add_right_comm, add_left_inj, inter_comm, inter_add_sub_of_add_eq_add]
     rwa [eq_comm]
   simp only [mem_add, or_imp, forall_and]
-  refine ⟨fun y hy => ?_, fun y hy => ?_⟩
+  refine ⟨fun y hy ↦ ?_, fun y hy ↦ ?_⟩
   · obtain ⟨z, hz, hyz⟩ := hYZ₁ y hy
-    by_cases z_in : z in Y₂
+    by_cases z_in : z ∈ Y₂
     · obtain ⟨w, hw, hzw⟩ := hYZ₂ z z_in
       exact ⟨w, .inl hw, hyz.trans hzw⟩
-· exact ⟨z, .inr by rwa [mem_sub, count_eq_zero_of_notMem z_in, count_pos], hyz⟩
-· obtain ⟨z, hz, hyz⟩ := hYZ₂ y mem_of_le (Multiset.sub_le_self ..) hy
+    · exact ⟨z, .inr <| by rwa [mem_sub, count_eq_zero_of_notMem z_in, count_pos], hyz⟩
+  · obtain ⟨z, hz, hyz⟩ := hYZ₂ y <| mem_of_le (Multiset.sub_le_self ..) hy
     exact ⟨z, .inl hz, hyz⟩
 
-/--
-Definition of `OneStep` / `OneStep` 的定义
+/-- A special case of `IsDershowitzMannaLT`. The transitive closure of it is used to define
+an equivalent (proved later) version of the ordering. -/
+/-
+**Multiset.OneStep** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OneStep
-  signature: (M N : Multiset α)
-  body: exists X Y a,
-      M = X + Y
-    ∧ N = X + {a}
-    ∧ forall y in Y, y < a
-
-中文:
-定义 OneStep
-  签名: (M N : Multiset α)
-  定义体: exists X Y a,
-      M = X + Y
-    ∧ N = X + {a}
-    ∧ forall y in Y, y < a
+--- 原说明 ---
+A special case of `IsDershowitzMannaLT`. The transitive closure of it is used to
+ define
+an equivalent (proved later) version of the ordering.
 -/
 private def OneStep (M N : Multiset α) : Prop :=
-  exists X Y a,
+  ∃ X Y a,
       M = X + Y
     ∧ N = X + {a}
-    ∧ forall y in Y, y < a
-
-/--
-lemma `isDershowitzMannaLT_of_oneStep` / 引理 `isDershowitzMannaLT_of_oneStep`
-
-English:
-lemma isDershowitzMannaLT_of_oneStep
-  statement: OneStep M N -> IsDershowitzMannaLT M N
-  proof: by
-  rintro ⟨X, Y, a, M_def, N_def, ys_lt_a⟩
-  use X, Y, {a}, by simp, M_def, N_def
-  · simpa
-
-中文:
-引理 isDershowitzMannaLT_of_oneStep
-  结论: OneStep M N -> IsDershowitzMannaLT M N
-  证明: by
-  rintro ⟨X, Y, a, M_def, N_def, ys_lt_a⟩
-  use X, Y, {a}, by simp, M_def, N_def
-  · simpa
+    ∧ ∀ y ∈ Y, y < a
+/-
+**Multiset.isDershowitzMannaLT_of_oneStep** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma isDershowitzMannaLT_of_oneStep : OneStep M N -> IsDershowitzMannaLT M N := by
+private lemma isDershowitzMannaLT_of_oneStep : OneStep M N → IsDershowitzMannaLT M N := by
   rintro ⟨X, Y, a, M_def, N_def, ys_lt_a⟩
   use X, Y, {a}, by simp, M_def, N_def
   · simpa
-
-/--
-lemma `isDershowitzMannaLT_singleton_insert` / 引理 `isDershowitzMannaLT_singleton_insert`
-
-English:
-lemma isDershowitzMannaLT_singleton_insert
-  given: (h : OneStep N (a ::ₘ M))
-  proof: by
-  classical
-  obtain ⟨X, Y, b, rfl, h0, h2⟩ := h
-  obtain rfl | hab := eq_or_ne a b
-  · refine ⟨Y, .inr ⟨?_, h2⟩⟩
-    simpa [add_comm _ {a}, singleton_add, eq_comm] using h0
-  refine ⟨Y + (M - {b}), .inl ⟨?_, M - {b}, Y, b, add_comm .., ?_, h2⟩⟩
-  · rw [← singleton_add, add_comm] at h0
-    rw [tsub_eq_tsub_of_add_eq_add h0]; rw [add_comm Y]; rw [← singleton_add]; rw [← add_assoc]; rw [add_tsub_cancel_of_le]
-    have : a in X + {b} := by simp [← h0]
-    simpa [hab] using this
-  · rw [tsub_add_cancel_of_le]
-    have : b in a ::ₘ M := by simp [h0]
-    simpa [hab.symm] using this
-
-中文:
-引理 isDershowitzMannaLT_singleton_insert
-  条件: (h : OneStep N (a ::ₘ M))
-  证明: by
-  classical
-  obtain ⟨X, Y, b, rfl, h0, h2⟩ := h
-  obtain rfl | hab := eq_or_ne a b
-  · refine ⟨Y, .inr ⟨?_, h2⟩⟩
-    simpa [add_comm _ {a}, singleton_add, eq_comm] using h0
-  refine ⟨Y + (M - {b}), .inl ⟨?_, M - {b}, Y, b, add_comm .., ?_, h2⟩⟩
-  · rw [← singleton_add, add_comm] at h0
-    rw [tsub_eq_tsub_of_add_eq_add h0]; rw [add_comm Y]; rw [← singleton_add]; rw [← add_assoc]; rw [add_tsub_cancel_of_le]
-    have : a in X + {b} := by simp [← h0]
-    simpa [hab] using this
-  · rw [tsub_add_cancel_of_le]
-    have : b in a ::ₘ M := by simp [h0]
-    simpa [hab.symm] using this
+/-
+**Multiset.isDershowitzMannaLT_singleton_insert** 是 Mathlib 中的一个引理，位于命名空间 `Multi
+set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma isDershowitzMannaLT_singleton_insert (h : OneStep N (a ::ₘ M)) :
-    exists M', N = a ::ₘ M' ∧ OneStep M' M ∨ N = M + M' ∧ forall x in M', x < a := by
+    ∃ M', N = a ::ₘ M' ∧ OneStep M' M ∨ N = M + M' ∧ ∀ x ∈ M', x < a := by
   classical
   obtain ⟨X, Y, b, rfl, h0, h2⟩ := h
   obtain rfl | hab := eq_or_ne a b
@@ -234,60 +172,23 @@ private lemma isDershowitzMannaLT_singleton_insert (h : OneStep N (a ::ₘ M)) :
     simpa [add_comm _ {a}, singleton_add, eq_comm] using h0
   refine ⟨Y + (M - {b}), .inl ⟨?_, M - {b}, Y, b, add_comm .., ?_, h2⟩⟩
   · rw [← singleton_add, add_comm] at h0
-    rw [tsub_eq_tsub_of_add_eq_add h0]; rw [add_comm Y]; rw [← singleton_add]; rw [← add_assoc]; rw [add_tsub_cancel_of_le]
-    have : a in X + {b} := by simp [← h0]
+    rw [tsub_eq_tsub_of_add_eq_add h0, add_comm Y, ← singleton_add, ← add_assoc,
+      add_tsub_cancel_of_le]
+    have : a ∈ X + {b} := by simp [← h0]
     simpa [hab] using this
   · rw [tsub_add_cancel_of_le]
-    have : b in a ::ₘ M := by simp [h0]
+    have : b ∈ a ::ₘ M := by simp [h0]
     simpa [hab.symm] using this
-
-/--
-lemma `acc_oneStep_cons_of_acc_lt` / 引理 `acc_oneStep_cons_of_acc_lt`
-
-English:
-lemma acc_oneStep_cons_of_acc_lt
-  given: (ha : Acc LT.lt a)
-  proof: by
-  induction ha with | _ a _ ha
-  rintro M hM
-  induction hM with | _ M hM ihM
-  refine .intro _ fun N hNM => ?_
-  obtain ⟨N, ⟨rfl, hNM'⟩ | ⟨rfl, hN⟩⟩ := isDershowitzMannaLT_singleton_insert hNM
-  · exact ihM _ hNM'
-  clear hNM
-  induction N using Multiset.induction with
-  | empty =>
-    simpa using .intro _ hM
-  | @cons b N ihN =>
-    simp only [mem_cons, forall_eq_or_imp, add_cons] at hN ⊢
-    obtain ⟨hba, hN⟩ := hN
-exact ha _ hba ihN hN
-
-中文:
-引理 acc_oneStep_cons_of_acc_lt
-  条件: (ha : Acc LT.lt a)
-  证明: by
-  induction ha with | _ a _ ha
-  rintro M hM
-  induction hM with | _ M hM ihM
-  refine .intro _ fun N hNM => ?_
-  obtain ⟨N, ⟨rfl, hNM'⟩ | ⟨rfl, hN⟩⟩ := isDershowitzMannaLT_singleton_insert hNM
-  · exact ihM _ hNM'
-  clear hNM
-  induction N using Multiset.induction with
-  | empty =>
-    simpa using .intro _ hM
-  | @cons b N ihN =>
-    simp only [mem_cons, forall_eq_or_imp, add_cons] at hN ⊢
-    obtain ⟨hba, hN⟩ := hN
-exact ha _ hba ihN hN
+/-
+**Multiset.acc_oneStep_cons_of_acc_lt** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma acc_oneStep_cons_of_acc_lt (ha : Acc LT.lt a) :
-    forall {M}, Acc OneStep M -> Acc OneStep (a ::ₘ M) := by
+    ∀ {M}, Acc OneStep M → Acc OneStep (a ::ₘ M) := by
   induction ha with | _ a _ ha
   rintro M hM
   induction hM with | _ M hM ihM
-  refine .intro _ fun N hNM => ?_
+  refine .intro _ fun N hNM ↦ ?_
   obtain ⟨N, ⟨rfl, hNM'⟩ | ⟨rfl, hN⟩⟩ := isDershowitzMannaLT_singleton_insert hNM
   · exact ihM _ hNM'
   clear hNM
@@ -297,102 +198,47 @@ private lemma acc_oneStep_cons_of_acc_lt (ha : Acc LT.lt a) :
   | @cons b N ihN =>
     simp only [mem_cons, forall_eq_or_imp, add_cons] at hN ⊢
     obtain ⟨hba, hN⟩ := hN
-exact ha _ hba ihN hN
+    exact ha _ hba <| ihN hN
 
-/--
-lemma `acc_oneStep_of_acc_lt` / 引理 `acc_oneStep_of_acc_lt`
+/-- If all elements of a multiset `M` are accessible with `<`, then the multiset `M` is
+accessible given the `OneStep` relation. -/
+/-
+**Multiset.acc_oneStep_of_acc_lt** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma acc_oneStep_of_acc_lt
-  given: (hM : forall x in M, Acc LT.lt x)
-  statement: Acc OneStep M
-  proof: by
-  induction M using Multiset.induction_on with
-  | empty =>
-    constructor
-    simp [OneStep, eq_comm (b := _ + _)]
-  | cons a M ih =>
-exact acc_oneStep_cons_of_acc_lt (hM _ <| mem_cons_self ..) ih fun x hx =>
-hM _ mem_cons_of_mem hx
-
-中文:
-引理 acc_oneStep_of_acc_lt
-  条件: (hM : 对任意 x in M, Acc LT.lt x)
-  结论: Acc OneStep M
-  证明: by
-  induction M using Multiset.induction_on with
-  | empty =>
-    constructor
-    simp [OneStep, eq_comm (b := _ + _)]
-  | cons a M ih =>
-exact acc_oneStep_cons_of_acc_lt (hM _ <| mem_cons_self ..) ih fun x hx =>
-hM _ mem_cons_of_mem hx
+--- 原说明 ---
+If all elements of a multiset `M` are accessible with `<`, then the multiset `M`
+ is
+accessible given the `OneStep` relation.
 -/
-private lemma acc_oneStep_of_acc_lt (hM : forall x in M, Acc LT.lt x) : Acc OneStep M := by
+private lemma acc_oneStep_of_acc_lt (hM : ∀ x ∈ M, Acc LT.lt x) : Acc OneStep M := by
   induction M using Multiset.induction_on with
   | empty =>
     constructor
     simp [OneStep, eq_comm (b := _ + _)]
   | cons a M ih =>
-exact acc_oneStep_cons_of_acc_lt (hM _ <| mem_cons_self ..) ih fun x hx =>
-hM _ mem_cons_of_mem hx
+    exact acc_oneStep_cons_of_acc_lt (hM _ <| mem_cons_self ..) <| ih fun x hx ↦
+      hM _ <| mem_cons_of_mem hx
 
-/--
-lemma `isDershowitzMannaLT_singleton_wf` / 引理 `isDershowitzMannaLT_singleton_wf`
+/-- Over a well-founded order, `OneStep` is well-founded. -/
+/-
+**Multiset.isDershowitzMannaLT_singleton_wf** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma isDershowitzMannaLT_singleton_wf
-  given: [WellFoundedLT α]
-  proof: ⟨fun _M => acc_oneStep_of_acc_lt fun a _ => WellFoundedLT.apply a⟩
-
-中文:
-引理 isDershowitzMannaLT_singleton_wf
-  条件: [WellFoundedLT α]
-  证明: ⟨fun _M => acc_oneStep_of_acc_lt fun a _ => WellFoundedLT.apply a⟩
+--- 原说明 ---
+Over a well-founded order, `OneStep` is well-founded.
 -/
 private lemma isDershowitzMannaLT_singleton_wf [WellFoundedLT α] :
-    WellFounded (OneStep : Multiset α -> Multiset α -> Prop) :=
-  ⟨fun _M => acc_oneStep_of_acc_lt fun a _ => WellFoundedLT.apply a⟩
-
-/--
-lemma `transGen_oneStep_of_isDershowitzMannaLT` / 引理 `transGen_oneStep_of_isDershowitzMannaLT`
-
-English:
-lemma transGen_oneStep_of_isDershowitzMannaLT
-  proof: by
-  classical
-  rintro ⟨X, Y, Z, hZ, hM, hN, hYZ⟩
-  induction Z using Multiset.induction_on generalizing X Y M N with
-  | empty => simp at hZ
-  | cons z Z ih => ?_
-  obtain rfl | hZ := eq_or_ne Z 0
-  · exact .single ⟨X, Y, z, hM, hN, by simpa using hYZ⟩
-  let Y' : Multiset α := Y.filter (· < z)
-refine .tail (b := X + Y' + Z) (ih (X + Y') (Y - Y') hZ ?_ rfl fun y hy => ?_)
-    ⟨X + Z, Y', z, add_right_comm .., by simp [hN, add_comm (_ + _)], by simp [Y']⟩
-  · rw [add_add_tsub_cancel (filter_le ..), hM]
-  · simp only [sub_filter_eq_filter_not, mem_filter, Y'] at hy
-    simpa [hy.2] using hYZ y (by simp_all)
-
-中文:
-引理 transGen_oneStep_of_isDershowitzMannaLT
-  证明: by
-  classical
-  rintro ⟨X, Y, Z, hZ, hM, hN, hYZ⟩
-  induction Z using Multiset.induction_on generalizing X Y M N with
-  | empty => simp at hZ
-  | cons z Z ih => ?_
-  obtain rfl | hZ := eq_or_ne Z 0
-  · exact .single ⟨X, Y, z, hM, hN, by simpa using hYZ⟩
-  let Y' : Multiset α := Y.filter (· < z)
-refine .tail (b := X + Y' + Z) (ih (X + Y') (Y - Y') hZ ?_ rfl fun y hy => ?_)
-    ⟨X + Z, Y', z, add_right_comm .., by simp [hN, add_comm (_ + _)], by simp [Y']⟩
-  · rw [add_add_tsub_cancel (filter_le ..), hM]
-  · simp only [sub_filter_eq_filter_not, mem_filter, Y'] at hy
-    simpa [hy.2] using hYZ y (by simp_all)
+    WellFounded (OneStep : Multiset α → Multiset α → Prop) :=
+  ⟨fun _M ↦ acc_oneStep_of_acc_lt fun a _ ↦ WellFoundedLT.apply a⟩
+/-
+**Multiset.transGen_oneStep_of_isDershowitzMannaLT** 是 Mathlib 中的一个引理，位于命名空间 `Mu
+ltiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma transGen_oneStep_of_isDershowitzMannaLT :
-    IsDershowitzMannaLT M N -> TransGen OneStep M N := by
+    IsDershowitzMannaLT M N → TransGen OneStep M N := by
   classical
   rintro ⟨X, Y, Z, hZ, hM, hN, hYZ⟩
   induction Z using Multiset.induction_on generalizing X Y M N with
@@ -401,92 +247,75 @@ private lemma transGen_oneStep_of_isDershowitzMannaLT :
   obtain rfl | hZ := eq_or_ne Z 0
   · exact .single ⟨X, Y, z, hM, hN, by simpa using hYZ⟩
   let Y' : Multiset α := Y.filter (· < z)
-refine .tail (b := X + Y' + Z) (ih (X + Y') (Y - Y') hZ ?_ rfl fun y hy => ?_)
+  refine .tail (b := X + Y' + Z) (ih (X + Y') (Y - Y') hZ ?_ rfl fun y hy ↦ ?_) <|
     ⟨X + Z, Y', z, add_right_comm .., by simp [hN, add_comm (_ + _)], by simp [Y']⟩
   · rw [add_add_tsub_cancel (filter_le ..), hM]
   · simp only [sub_filter_eq_filter_not, mem_filter, Y'] at hy
     simpa [hy.2] using hYZ y (by simp_all)
-
-/--
-lemma `isDershowitzMannaLT_of_transGen_oneStep` / 引理 `isDershowitzMannaLT_of_transGen_oneStep`
-
-English:
-lemma isDershowitzMannaLT_of_transGen_oneStep
-  given: (hMN : TransGen OneStep M N)
-  proof: hMN.trans_induction_on (by rintro _ _ ⟨X, Y, a, rfl, rfl, hYa⟩; exact ⟨X, Y, {a}, by simpa⟩)
-    fun _ _ => .trans
-
-中文:
-引理 isDershowitzMannaLT_of_transGen_oneStep
-  条件: (hMN : TransGen OneStep M N)
-  证明: hMN.trans_induction_on (by rintro _ _ ⟨X, Y, a, rfl, rfl, hYa⟩; exact ⟨X, Y, {a}, by simpa⟩)
-    fun _ _ => .trans
+/-
+**Multiset.isDershowitzMannaLT_of_transGen_oneStep** 是 Mathlib 中的一个引理，位于命名空间 `Mu
+ltiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma isDershowitzMannaLT_of_transGen_oneStep (hMN : TransGen OneStep M N) :
     IsDershowitzMannaLT M N :=
   hMN.trans_induction_on (by rintro _ _ ⟨X, Y, a, rfl, rfl, hYa⟩; exact ⟨X, Y, {a}, by simpa⟩)
-    fun _ _ => .trans
+    fun _ _ ↦ .trans
 
-/--
-lemma `transGen_oneStep_eq_isDershowitzMannaLT` / 引理 `transGen_oneStep_eq_isDershowitzMannaLT`
+/-- `TransGen OneStep` and `IsDershowitzMannaLT` are equivalent. -/
+/-
+**Multiset.transGen_oneStep_eq_isDershowitzMannaLT** 是 Mathlib 中的一个引理，位于命名空间 `Mu
+ltiset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma transGen_oneStep_eq_isDershowitzMannaLT
-  proof: by
-  ext M N
-  exact ⟨isDershowitzMannaLT_of_transGen_oneStep, transGen_oneStep_of_isDershowitzMannaLT⟩
-
-中文:
-引理 transGen_oneStep_eq_isDershowitzMannaLT
-  证明: by
-  ext M N
-  exact ⟨isDershowitzMannaLT_of_transGen_oneStep, transGen_oneStep_of_isDershowitzMannaLT⟩
+--- 原说明 ---
+`TransGen OneStep` and `IsDershowitzMannaLT` are equivalent.
 -/
 private lemma transGen_oneStep_eq_isDershowitzMannaLT :
-    (TransGen OneStep : Multiset α -> Multiset α -> Prop) = IsDershowitzMannaLT := by
+    (TransGen OneStep : Multiset α → Multiset α → Prop) = IsDershowitzMannaLT := by
   ext M N
   exact ⟨isDershowitzMannaLT_of_transGen_oneStep, transGen_oneStep_of_isDershowitzMannaLT⟩
 
-/--
-theorem `wellFounded_isDershowitzMannaLT` / 定理 `wellFounded_isDershowitzMannaLT`
+/-- Over a well-founded order, the Dershowitz-Manna order on multisets is well-founded. -/
+/-
+**Multiset.wellFounded_isDershowitzMannaLT** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：wellFounded_isDershowitzMannaLT [WellFoundedLT α] : WellFounded (IsDershow
+itzMannaLT : Multiset α -> Multiset α -> Prop)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Data.Multiset.DershowitzManna.0.Multiset.transGen_oneSt
+ep_eq_isDershowitzMannaLT`：∀ {α : Type u_1} [inst : Preorder α], Relation.TransG
+en Multiset.OneStep✝ = Multiset.IsDershowitzMannaLT
+· 使用定理 `WellFounded.transGen`：∀ {α : Sort u_1} {r : α → α → Prop}, WellFounded r
+ → WellFounded (Relation.TransGen r)
+· 使用定理 `_private.Mathlib.Data.Multiset.DershowitzManna.0.Multiset.isDershowitzMa
+nnaLT_singleton_wf`：∀ {α : Type u_1} [inst : Preorder α] [WellFoundedLT α], Well
+Founded Multiset.OneStep✝
 
-English:
-theorem wellFounded_isDershowitzMannaLT
-  given: [WellFoundedLT α]
-  proof: by
-  rw [← transGen_oneStep_eq_isDershowitzMannaLT]
-  exact isDershowitzMannaLT_singleton_wf.transGen
-
-中文:
-定理 wellFounded_isDershowitzMannaLT
-  条件: [WellFoundedLT α]
-  证明: by
-  rw [← transGen_oneStep_eq_isDershowitzMannaLT]
-  exact isDershowitzMannaLT_singleton_wf.transGen
-
-Depends on / 依赖: isDershowitzMannaLT_singleton_wf, isDershowitzMannaLT_singleton_wf.transGen, transGen, transGen_oneStep_eq_isDershowitzMannaLT
+--- 原说明 ---
+Over a well-founded order, the Dershowitz-Manna order on multisets is well-found
+ed.
 -/
 theorem wellFounded_isDershowitzMannaLT [WellFoundedLT α] :
-    WellFounded (IsDershowitzMannaLT : Multiset α -> Multiset α -> Prop) := by
+    WellFounded (IsDershowitzMannaLT : Multiset α → Multiset α → Prop) := by
   rw [← transGen_oneStep_eq_isDershowitzMannaLT]
   exact isDershowitzMannaLT_singleton_wf.transGen
-
-/--
-Instance `instWellFoundedIsDershowitzMannaLT` / 实例 `instWellFoundedIsDershowitzMannaLT`
-
-English:
-instance instWellFoundedIsDershowitzMannaLT
-  signature: [WellFoundedLT α]
-  body: ⟨IsDershowitzMannaLT, wellFounded_isDershowitzMannaLT⟩
-
-中文:
-实例 instWellFoundedIsDershowitzMannaLT
-  签名: [WellFoundedLT α]
-  定义体: ⟨IsDershowitzMannaLT, wellFounded_isDershowitzMannaLT⟩
-
-Depends on / 依赖: IsDershowitzMannaLT, wellFounded_isDershowitzMannaLT
+/-
+**Multiset.instWellFoundedIsDershowitzMannaLT** 是 Mathlib 中的一个实例，位于命名空间 `Multise
+t`。
+形式化陈述：instWellFoundedIsDershowitzMannaLT [WellFoundedLT α] : WellFoundedRelation
+ (Multiset α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.wellFounded_isDershowitzMannaLT`：wellFounded_isDershowitzMannaL
+T [WellFoundedLT α] : WellFounded (IsDershowitzMannaLT : Multiset α -> Multiset 
+α -> Prop)
 -/
 instance instWellFoundedIsDershowitzMannaLT [WellFoundedLT α] : WellFoundedRelation (Multiset α) :=
     ⟨IsDershowitzMannaLT, wellFounded_isDershowitzMannaLT⟩
 
 end Multiset
+

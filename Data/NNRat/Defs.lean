@@ -54,44 +54,27 @@ un-`@[simp]`ed):
 
 open Function
 
-/--
-Instance `Rat.instPosMulMono` / 实例 `Rat.instPosMulMono`
-
-English:
-instance Rat.instPosMulMono
-  signature: : PosMulMono Rat where
-  body: by
-    simpa [mul_sub, sub_nonneg] using Rat.mul_nonneg hr (sub_nonneg.2 hpq)
-
-deriving instance CommSemiring for NNRat
-
-deriving instance AddCancelCommMonoid for NNRat
-
-deriving instance LinearOrder for NNRat
-
-deriving instance Sub for NNRat
-
-deriving instance Inhabited for NNRat
-
-中文:
-实例 有理数.instPosMulMono
-  签名: : 正乘递增 有理数 where
-  定义体: by
-    simpa [mul_sub, sub_nonneg] using Rat.mul_nonneg hr (sub_nonneg.2 hpq)
-
-deriving instance CommSemiring for NNRat
-
-deriving instance AddCancelCommMonoid for NNRat
-
-deriving instance LinearOrder for NNRat
-
-deriving instance Sub for NNRat
-
-deriving instance Inhabited for NNRat
-
-Depends on / 依赖: Rat.mul_nonneg, mul_nonneg, mul_sub, sub_nonneg
+/-
+**Rat.instPosMulMono** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Rat.instPosMulMono : PosMulMono Rat where mul_le_mul_of_nonneg_left r hr p
+ q hpq
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Rat.mul_nonneg`：∀ {a b : ℚ}, 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
 -/
-instance Rat.instPosMulMono : PosMulMono Rat where
+instance Rat.instPosMulMono : PosMulMono ℚ where
   mul_le_mul_of_nonneg_left r hr p q hpq := by
     simpa [mul_sub, sub_nonneg] using Rat.mul_nonneg hr (sub_nonneg.2 hpq)
 
@@ -107,1011 +90,569 @@ deriving instance Inhabited for NNRat
 
 namespace NNRat
 
-variable {p q : Rat>=0}
+variable {p q : ℚ≥0}
 
-/--
-Instance `instNontrivial` / 实例 `instNontrivial`
-
-English:
-instance instNontrivial
-  signature: : Nontrivial Rat>=0 where exists_pair_ne
-  body: ⟨1, 0, by decide⟩
-
-中文:
-实例 instNontrivial
-  签名: : 非平凡 有理数>=0 where 存在_pair_ne
-  定义体: ⟨1, 0, by decide⟩
+/-
+**NNRat.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instNontrivial : Nontrivial Rat>=0 where exists_pair_ne
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
 -/
-instance instNontrivial : Nontrivial Rat>=0 where exists_pair_ne := ⟨1, 0, by decide⟩
-/--
-Instance `instOrderBot` / 实例 `instOrderBot`
-
-English:
-instance instOrderBot
-  signature: : OrderBot Rat>=0 where
-  body: 0
-  bot_le q := q.2
-
-中文:
-实例 instOrderBot
-  签名: : 有底序 有理数>=0 where
-  定义体: 0
-  bot_le q := q.2
+instance instNontrivial : Nontrivial ℚ≥0 where exists_pair_ne := ⟨1, 0, by decide⟩
+/-
+**NNRat.instOrderBot** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instOrderBot : OrderBot Rat>=0 where bot
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instOrderBot : OrderBot Rat>=0 where
+instance instOrderBot : OrderBot ℚ≥0 where
   bot := 0
   bot_le q := q.2
-
-/--
-lemma `val_eq_cast` / 引理 `val_eq_cast`
-
-English:
-lemma val_eq_cast
-  given: (q : Rat>=0)
-  statement: q.1 = q
-  proof: rfl
-
-中文:
-引理 val_eq_cast
-  条件: (q : 有理数>=0)
-  结论: q.1 = q
-  证明: rfl
+/-
+**NNRat.val_eq_cast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), ↑q = ↑q
+参数：q : ℚ≥0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma val_eq_cast (q : Rat>=0) : q.1 = q := rfl
-
-/--
-Instance `instCharZero` / 实例 `instCharZero`
-
-English:
-instance instCharZero
-  signature: : CharZero Rat>=0 where
-  body: by simpa using! congr_arg num hab
-
-中文:
-实例 instCharZero
-  签名: : 特征零 有理数>=0 where
-  定义体: by simpa using! congr_arg num hab
-
-Depends on / 依赖: congr_arg
+@[simp] lemma val_eq_cast (q : ℚ≥0) : q.1 = q := rfl
+/-
+**NNRat.instCharZero** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instCharZero : CharZero Rat>=0 where cast_injective a b hab
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-instance instCharZero : CharZero Rat>=0 where
+instance instCharZero : CharZero ℚ≥0 where
   cast_injective a b hab := by simpa using! congr_arg num hab
-
-/--
-Instance `canLift` / 实例 `canLift`
-
-English:
-instance canLift
-  signature: : CanLift Rat Rat>=0 (↑) fun q => 0 <= q where
-  body: ⟨⟨q, hq⟩, rfl⟩
-
-@[ext]
-
-中文:
-实例 canLift
-  签名: : CanLift 有理数 有理数>=0 (↑) fun q => 0 <= q where
-  定义体: ⟨⟨q, hq⟩, rfl⟩
-
-@[ext]
+/-
+**NNRat.canLift** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：canLift : CanLift Rat Rat>=0 (↑) fun q => 0 <= q where prf q hq
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance canLift : CanLift Rat Rat>=0 (↑) fun q => 0 <= q where
+instance canLift : CanLift ℚ ℚ≥0 (↑) fun q ↦ 0 ≤ q where
   prf q hq := ⟨⟨q, hq⟩, rfl⟩
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: (p : Rat) = (q : Rat) -> p = q
-  proof: Subtype.ext
-
-中文:
-定理 ext
-  结论: (p : 有理数) = (q : 有理数) -> p = q
-  证明: Subtype.ext
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**NNRat.ext** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：ext : (p : Rat) = (q : Rat) -> p = q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
-theorem ext : (p : Rat) = (q : Rat) -> p = q :=
+theorem ext : (p : ℚ) = (q : ℚ) → p = q :=
   Subtype.ext
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Injective ((↑) : Rat>=0 -> Rat)
-  proof: Subtype.coe_injective
-
-中文:
-定理 coe_injective
-  结论: 单射 ((↑) : 有理数>=0 -> 有理数)
-  证明: Subtype.coe_injective
+/-
+**NNRat.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：Function.Injective NNRat.cast
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-protected theorem coe_injective : Injective ((↑) : Rat>=0 -> Rat) :=
+protected theorem coe_injective : Injective ((↑) : ℚ≥0 → ℚ) :=
   Subtype.coe_injective
 
 -- See note [specialised high priority simp lemma]
 @[simp high, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  statement: (p : Rat) = q ↔ p = q
-  proof: Subtype.coe_inj
-
-中文:
-定理 coe_inj
-  结论: (p : 有理数) = q ↔ p = q
-  证明: Subtype.coe_inj
-
-Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj
+/-
+**NNRat.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_inj : (p : Rat) = q ↔ p = q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_inj`：coe_inj {a b : Subtype p} : (a : α) = b ↔ a = b
 -/
-theorem coe_inj : (p : Rat) = q ↔ p = q :=
+theorem coe_inj : (p : ℚ) = q ↔ p = q :=
   Subtype.coe_inj
-
-/--
-theorem `ne_iff` / 定理 `ne_iff`
-
-English:
-theorem ne_iff
-  given: {x y : Rat>=0}
-  statement: (x : Rat) != (y : Rat) ↔ x != y
-  proof: NNRat.coe_inj.not
-
-中文:
-定理 ne_iff
-  条件: {x y : 有理数>=0}
-  结论: (x : 有理数) != (y : 有理数) ↔ x != y
-  证明: NNRat.coe_inj.not
-
-Depends on / 依赖: NNRat.coe_inj.not, coe_inj
+/-
+**NNRat.ne_iff** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：ne_iff {x y : Rat>=0} : (x : Rat) != (y : Rat) ↔ x != y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `NNRat.coe_inj`：coe_inj : (p : Rat) = q ↔ p = q
 -/
-theorem ne_iff {x y : Rat>=0} : (x : Rat) != (y : Rat) ↔ x != y :=
+theorem ne_iff {x y : ℚ≥0} : (x : ℚ) ≠ (y : ℚ) ↔ x ≠ y :=
   NNRat.coe_inj.not
 
 -- TODO: We have to write `NNRat.cast` explicitly, else the statement picks up `Subtype.val` instead
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (q : Rat) (hq)
-  statement: NNRat.cast ⟨q, hq⟩ = q
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (q : 有理数) (hq)
-  结论: NNRat.cast ⟨q, hq⟩ = q
-  证明: rfl
+/-
+**NNRat.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ) (hq : 0 ≤ q), ↑⟨q, hq⟩ = q
+参数：q : ℚ；hq : 0 ≤ q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_mk (q : Rat) (hq) : NNRat.cast ⟨q, hq⟩ = q := rfl
-
-/--
-lemma `«forall»` / 引理 `«forall»`
-
-English:
-lemma «forall»
-  given: {p : Rat>=0 -> Prop}
-  statement: (forall q, p q) ↔ forall q hq, p ⟨q, hq⟩
-  proof: Subtype.forall
-
-中文:
-引理 «对任意»
-  条件: {p : 有理数>=0 -> 命题}
-  结论: (对任意 q, p q) ↔ 对任意 q hq, p ⟨q, hq⟩
-  证明: Subtype.forall
+@[simp, norm_cast] lemma coe_mk (q : ℚ) (hq) : NNRat.cast ⟨q, hq⟩ = q := rfl
+/-
+**NNRat.** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma «forall» {p : Rat>=0 -> Prop} : (forall q, p q) ↔ forall q hq, p ⟨q, hq⟩ := Subtype.forall
-/--
-lemma `«exists»` / 引理 `«exists»`
-
-English:
-lemma «exists»
-  given: {p : Rat>=0 -> Prop}
-  statement: (exists q, p q) ↔ exists q hq, p ⟨q, hq⟩
-  proof: Subtype.exists
-
-中文:
-引理 «存在»
-  条件: {p : 有理数>=0 -> 命题}
-  结论: (存在 q, p q) ↔ 存在 q hq, p ⟨q, hq⟩
-  证明: Subtype.exists
+lemma «forall» {p : ℚ≥0 → Prop} : (∀ q, p q) ↔ ∀ q hq, p ⟨q, hq⟩ := Subtype.forall
+/-
+**NNRat.** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma «exists» {p : Rat>=0 -> Prop} : (exists q, p q) ↔ exists q hq, p ⟨q, hq⟩ := Subtype.exists
+lemma «exists» {p : ℚ≥0 → Prop} : (∃ q, p q) ↔ ∃ q hq, p ⟨q, hq⟩ := Subtype.exists
 
-/--
-Definition of `_root_.Rat.toNNRat` / `_root_.Rat.toNNRat` 的定义
+/-- Reinterpret a rational number `q` as a non-negative rational number. Returns `0` if `q ≤ 0`. -/
+/-
+**NNRat._root_.Rat.toNNRat** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Rat.toNNRat
-  signature: (q : Rat)
-  body: ⟨max q 0, le_max_right _ _⟩
-
-中文:
-定义 _root_.有理数.toNNRat
-  签名: (q : 有理数)
-  定义体: ⟨max q 0, le_max_right _ _⟩
-
-Depends on / 依赖: le_max_right
+--- 原说明 ---
+Reinterpret a rational number `q` as a non-negative rational number. Returns `0`
+ if `q ≤ 0`.
 -/
-def _root_.Rat.toNNRat (q : Rat) : Rat>=0 :=
+def _root_.Rat.toNNRat (q : ℚ) : ℚ≥0 :=
   ⟨max q 0, le_max_right _ _⟩
-
-/--
-theorem `_root_.Rat.coe_toNNRat` / 定理 `_root_.Rat.coe_toNNRat`
-
-English:
-theorem _root_.Rat.coe_toNNRat
-  given: (q : Rat) (hq : 0 <= q)
-  statement: (q.toNNRat : Rat) = q
-  proof: max_eq_left hq
-
-中文:
-定理 _root_.有理数.coe_toNNRat
-  条件: (q : 有理数) (hq : 0 <= q)
-  结论: (q.toNNRat : 有理数) = q
-  证明: max_eq_left hq
-
-Depends on / 依赖: max_eq_left
+/-
+**NNRat._root_.Rat.coe_toNNRat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Rat.coe_toNNRat (q : Rat) (hq : 0 <= q) : (q.toNNRat : Rat) = q :=
+theorem _root_.Rat.coe_toNNRat (q : ℚ) (hq : 0 ≤ q) : (q.toNNRat : ℚ) = q :=
   max_eq_left hq
-
-/--
-theorem `_root_.Rat.le_coe_toNNRat` / 定理 `_root_.Rat.le_coe_toNNRat`
-
-English:
-theorem _root_.Rat.le_coe_toNNRat
-  given: (q : Rat)
-  statement: q <= q.toNNRat
-  proof: le_max_left _ _
-
-中文:
-定理 _root_.有理数.le_coe_toNNRat
-  条件: (q : 有理数)
-  结论: q <= q.toNNRat
-  证明: le_max_left _ _
-
-Depends on / 依赖: le_max_left
+/-
+**NNRat._root_.Rat.le_coe_toNNRat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Rat.le_coe_toNNRat (q : Rat) : q <= q.toNNRat :=
+theorem _root_.Rat.le_coe_toNNRat (q : ℚ) : q ≤ q.toNNRat :=
   le_max_left _ _
 
 open Rat (toNNRat)
 
 @[simp]
-/--
-theorem `coe_nonneg` / 定理 `coe_nonneg`
-
-English:
-theorem coe_nonneg
-  given: (q : Rat>=0)
-  statement: (0 : Rat) <= q
-  proof: q.2
-
-中文:
-定理 coe_nonneg
-  条件: (q : 有理数>=0)
-  结论: (0 : 有理数) <= q
-  证明: q.2
+/-
+**NNRat.coe_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_nonneg (q : Rat>=0) : (0 : Rat) <= q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem coe_nonneg (q : Rat>=0) : (0 : Rat) <= q :=
+theorem coe_nonneg (q : ℚ≥0) : (0 : ℚ) ≤ q :=
   q.2
-
-/--
-lemma `coe_zero` / 引理 `coe_zero`
-
-English:
-lemma coe_zero
-  statement: ((0 : Rat>=0) : Rat) = 0
-  proof: rfl
-
-中文:
-引理 coe_zero
-  结论: ((0 : 有理数>=0) : 有理数) = 0
-  证明: rfl
+/-
+**NNRat.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：↑0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_zero : ((0 : Rat>=0) : Rat) = 0 := rfl
-/--
-lemma `num_zero` / 引理 `num_zero`
-
-English:
-lemma num_zero
-  statement: num 0 = 0
-  proof: rfl
-
-中文:
-引理 num_zero
-  结论: num 0 = 0
-  证明: rfl
+@[simp, norm_cast] lemma coe_zero : ((0 : ℚ≥0) : ℚ) = 0 := rfl
+/-
+**NNRat.num_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：NNRat.num 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma num_zero : num 0 = 0 := rfl
-/--
-lemma `den_zero` / 引理 `den_zero`
-
-English:
-lemma den_zero
-  statement: den 0 = 1
-  proof: rfl
-
-中文:
-引理 den_zero
-  结论: den 0 = 1
-  证明: rfl
+/-
+**NNRat.den_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：NNRat.den 0 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma den_zero : den 0 = 1 := rfl
-
-/--
-lemma `coe_one` / 引理 `coe_one`
-
-English:
-lemma coe_one
-  statement: ((1 : Rat>=0) : Rat) = 1
-  proof: rfl
-
-中文:
-引理 coe_one
-  结论: ((1 : 有理数>=0) : 有理数) = 1
-  证明: rfl
+/-
+**NNRat.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：↑1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_one : ((1 : Rat>=0) : Rat) = 1 := rfl
-/--
-lemma `num_one` / 引理 `num_one`
-
-English:
-lemma num_one
-  statement: num 1 = 1
-  proof: rfl
-
-中文:
-引理 num_one
-  结论: num 1 = 1
-  证明: rfl
-
-Depends on / 依赖: tower_top
+@[simp, norm_cast] lemma coe_one : ((1 : ℚ≥0) : ℚ) = 1 := rfl
+/-
+**NNRat.num_one** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：NNRat.num 1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma num_one : num 1 = 1 := rfl
-/--
-lemma `den_one` / 引理 `den_one`
-
-English:
-lemma den_one
-  statement: den 1 = 1
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 den_one
-  结论: den 1 = 1
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NNRat.den_one** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：NNRat.den 1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma den_one : den 1 = 1 := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (p q : Rat>=0)
-  statement: ((p + q : Rat>=0) : Rat) = p + q
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_add
-  条件: (p q : 有理数>=0)
-  结论: ((p + q : 有理数>=0) : 有理数) = p + q
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NNRat.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_add (p q : Rat>=0) : ((p + q : Rat>=0) : Rat) = p + q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_add (p q : Rat>=0) : ((p + q : Rat>=0) : Rat) = p + q :=
+theorem coe_add (p q : ℚ≥0) : ((p + q : ℚ≥0) : ℚ) = p + q :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (p q : Rat>=0)
-  statement: ((p * q : Rat>=0) : Rat) = p * q
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: (p q : 有理数>=0)
-  结论: ((p * q : 有理数>=0) : 有理数) = p * q
-  证明: rfl
+/-
+**NNRat.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_mul (p q : Rat>=0) : ((p * q : Rat>=0) : Rat) = p * q
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mul (p q : Rat>=0) : ((p * q : Rat>=0) : Rat) = p * q :=
+theorem coe_mul (p q : ℚ≥0) : ((p * q : ℚ≥0) : ℚ) = p * q :=
   rfl
-
-/--
-lemma `coe_pow` / 引理 `coe_pow`
-
-English:
-lemma coe_pow
-  given: (q : Rat>=0) (n : Nat)
-  statement: (↑(q ^ n) : Rat) = (q : Rat) ^ n
-  proof: rfl
-
-中文:
-引理 coe_pow
-  条件: (q : 有理数>=0) (n : 自然数)
-  结论: (↑(q ^ n) : 有理数) = (q : 有理数) ^ n
-  证明: rfl
+/-
+**NNRat.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0) (n : ℕ), ↑(q ^ n) = ↑q ^ n
+参数：q : ℚ≥0；n : ℕ；q ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_pow (q : Rat>=0) (n : Nat) : (↑(q ^ n) : Rat) = (q : Rat) ^ n :=
+@[simp, norm_cast] lemma coe_pow (q : ℚ≥0) (n : ℕ) : (↑(q ^ n) : ℚ) = (q : ℚ) ^ n :=
   rfl
-
-/--
-lemma `num_pow` / 引理 `num_pow`
-
-English:
-lemma num_pow
-  given: (q : Rat>=0) (n : Nat)
-  statement: (q ^ n).num = q.num ^ n
-  proof: by simp [num, Int.natAbs_pow]
-
-中文:
-引理 num_pow
-  条件: (q : 有理数>=0) (n : 自然数)
-  结论: (q ^ n).num = q.num ^ n
-  证明: by simp [num, Int.natAbs_pow]
+/-
+**NNRat.num_pow** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0) (n : ℕ), (q ^ n).num = q.num ^ n
+参数：q : ℚ≥0；n : ℕ；q ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natAbs_pow`：∀ (n : ℤ) (k : ℕ), (n ^ k).natAbs = n.natAbs ^ k
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma num_pow (q : Rat>=0) (n : Nat) : (q ^ n).num = q.num ^ n := by simp [num, Int.natAbs_pow]
-/--
-lemma `den_pow` / 引理 `den_pow`
-
-English:
-lemma den_pow
-  given: (q : Rat>=0) (n : Nat)
-  statement: (q ^ n).den = q.den ^ n
-  proof: rfl
+@[simp] lemma num_pow (q : ℚ≥0) (n : ℕ) : (q ^ n).num = q.num ^ n := by simp [num, Int.natAbs_pow]
+/-
+**NNRat.den_pow** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0) (n : ℕ), (q ^ n).den = q.den ^ n
+参数：q : ℚ≥0；n : ℕ；q ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp] lemma den_pow (q : ℚ≥0) (n : ℕ) : (q ^ n).den = q.den ^ n := rfl
 
 @[simp, norm_cast]
-
-中文:
-引理 den_pow
-  条件: (q : 有理数>=0) (n : 自然数)
-  结论: (q ^ n).den = q.den ^ n
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**NNRat.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_sub (h : q <= p) : ((p - q : Rat>=0) : Rat) = p - q
+参数：h : q <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_sub_comm`：∀ {α : Type u} [inst : AddCommGroup α] [inst_1 : LE α] [Add
+LeftMono α] {a b c : α}, a ≤ b - c ↔ c ≤ b - a
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
-@[simp] lemma den_pow (q : Rat>=0) (n : Nat) : (q ^ n).den = q.den ^ n := rfl
-
-@[simp, norm_cast]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (h : q <= p)
-  statement: ((p - q : Rat>=0) : Rat) = p - q
-  proof: max_eq_left le_sub_comm.2 by rwa [sub_zero]
-
-中文:
-定理 coe_sub
-  条件: (h : q <= p)
-  结论: ((p - q : 有理数>=0) : 有理数) = p - q
-  证明: max_eq_left le_sub_comm.2 by rwa [sub_zero]
-
-Depends on / 依赖: le_sub_comm, max_eq_left, sub_zero
--/
-theorem coe_sub (h : q <= p) : ((p - q : Rat>=0) : Rat) = p - q :=
-max_eq_left le_sub_comm.2 by rwa [sub_zero]
+theorem coe_sub (h : q ≤ p) : ((p - q : ℚ≥0) : ℚ) = p - q :=
+  max_eq_left <| le_sub_comm.2 <| by rwa [sub_zero]
 
 -- See note [specialised high priority simp lemma]
 @[simp high]
-/--
-theorem `coe_eq_zero` / 定理 `coe_eq_zero`
-
-English:
-theorem coe_eq_zero
-  statement: (q : Rat) = 0 ↔ q = 0
-  proof: by norm_cast
-
-中文:
-定理 coe_eq_zero
-  结论: (q : 有理数) = 0 ↔ q = 0
-  证明: by norm_cast
+/-
+**NNRat.coe_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_eq_zero : (q : Rat) = 0 ↔ q = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_eq_zero : (q : Rat) = 0 ↔ q = 0 := by norm_cast
-
-/--
-theorem `coe_ne_zero` / 定理 `coe_ne_zero`
-
-English:
-theorem coe_ne_zero
-  statement: (q : Rat) != 0 ↔ q != 0
-  proof: coe_eq_zero.not
-
-@[simp]
-
-中文:
-定理 coe_ne_zero
-  结论: (q : 有理数) != 0 ↔ q != 0
-  证明: coe_eq_zero.not
-
-@[simp]
-
-Depends on / 依赖: coe_eq_zero, coe_eq_zero.not
+theorem coe_eq_zero : (q : ℚ) = 0 ↔ q = 0 := by norm_cast
+/-
+**NNRat.coe_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_ne_zero : (q : Rat) != 0 ↔ q != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `NNRat.coe_eq_zero`：coe_eq_zero : (q : Rat) = 0 ↔ q = 0
 -/
-theorem coe_ne_zero : (q : Rat) != 0 ↔ q != 0 :=
+theorem coe_ne_zero : (q : ℚ) ≠ 0 ↔ q ≠ 0 :=
   coe_eq_zero.not
 
 @[simp]
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  statement: (⟨0, le_rfl⟩ : Rat>=0) = 0
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 mk_zero
-  结论: (⟨0, le_rfl⟩ : 有理数>=0) = 0
-  证明: rfl
-
-@[norm_cast]
+/-
+**NNRat.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：mk_zero : (⟨0, le_rfl⟩ : Rat>=0) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem mk_zero : (⟨0, le_rfl⟩ : Rat>=0) = 0 := rfl
+theorem mk_zero : (⟨0, le_rfl⟩ : ℚ≥0) = 0 := rfl
 
 @[norm_cast]
-/--
-theorem `coe_le_coe` / 定理 `coe_le_coe`
-
-English:
-theorem coe_le_coe
-  statement: (p : Rat) <= q ↔ p <= q
-  proof: Iff.rfl
-
-@[norm_cast]
-
-中文:
-定理 coe_le_coe
-  结论: (p : 有理数) <= q ↔ p <= q
-  证明: Iff.rfl
-
-@[norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**NNRat.coe_le_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_le_coe : (p : Rat) <= q ↔ p <= q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_le_coe : (p : Rat) <= q ↔ p <= q :=
+theorem coe_le_coe : (p : ℚ) ≤ q ↔ p ≤ q :=
   Iff.rfl
 
 @[norm_cast]
-/--
-theorem `coe_lt_coe` / 定理 `coe_lt_coe`
-
-English:
-theorem coe_lt_coe
-  statement: (p : Rat) < q ↔ p < q
-  proof: Iff.rfl
-
-@[norm_cast]
-
-中文:
-定理 coe_lt_coe
-  结论: (p : 有理数) < q ↔ p < q
-  证明: Iff.rfl
-
-@[norm_cast]
-
-Depends on / 依赖: Iff.rfl
+/-
+**NNRat.coe_lt_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_lt_coe : (p : Rat) < q ↔ p < q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_lt_coe : (p : Rat) < q ↔ p < q :=
+theorem coe_lt_coe : (p : ℚ) < q ↔ p < q :=
   Iff.rfl
 
 @[norm_cast]
-/--
-theorem `coe_pos` / 定理 `coe_pos`
-
-English:
-theorem coe_pos
-  statement: (0 : Rat) < q ↔ 0 < q
-  proof: Iff.rfl
-
-中文:
-定理 coe_pos
-  结论: (0 : 有理数) < q ↔ 0 < q
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl, IntermediateField, IsGalois, IsGalois.tower_top_intermediateField, tower_top_intermediateField
+/-
+**NNRat.coe_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_pos : (0 : Rat) < q ↔ 0 < q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_pos : (0 : Rat) < q ↔ 0 < q :=
+theorem coe_pos : (0 : ℚ) < q ↔ 0 < q :=
   Iff.rfl
-
-/--
-theorem `coe_mono` / 定理 `coe_mono`
-
-English:
-theorem coe_mono
-  statement: Monotone ((↑) : Rat>=0 -> Rat)
-  proof: fun _ _ => coe_le_coe.2
-
-中文:
-定理 coe_mono
-  结论: 递增 ((↑) : 有理数>=0 -> 有理数)
-  证明: fun _ _ => coe_le_coe.2
-
-Depends on / 依赖: coe_le_coe
+/-
+**NNRat.coe_mono** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_mono : Monotone ((↑) : Rat>=0 -> Rat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `NNRat.coe_le_coe`：coe_le_coe : (p : Rat) <= q ↔ p <= q
 -/
-theorem coe_mono : Monotone ((↑) : Rat>=0 -> Rat) :=
-  fun _ _ => coe_le_coe.2
-
-/--
-theorem `toNNRat_mono` / 定理 `toNNRat_mono`
-
-English:
-theorem toNNRat_mono
-  statement: Monotone toNNRat
-  proof: fun _ _ h => max_le_max h le_rfl
-
-@[simp]
-
-中文:
-定理 toNNRat_mono
-  结论: 递增 toNNRat
-  证明: fun _ _ h => max_le_max h le_rfl
-
-@[simp]
-
-Depends on / 依赖: le_rfl, max_le_max
+theorem coe_mono : Monotone ((↑) : ℚ≥0 → ℚ) :=
+  fun _ _ ↦ coe_le_coe.2
+/-
+**NNRat.toNNRat_mono** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：toNNRat_mono : Monotone toNNRat
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `max_le_max`：max_le_max : a <= c -> b <= d -> max a b <= max c d
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem toNNRat_mono : Monotone toNNRat :=
-  fun _ _ h => max_le_max h le_rfl
+  fun _ _ h ↦ max_le_max h le_rfl
 
 @[simp]
-/--
-theorem `toNNRat_coe` / 定理 `toNNRat_coe`
-
-English:
-theorem toNNRat_coe
-  given: (q : Rat>=0)
-  statement: toNNRat q = q
-  proof: ext max_eq_left q.2
-
-@[simp]
-
-中文:
-定理 toNNRat_coe
-  条件: (q : 有理数>=0)
-  结论: toNNRat q = q
-  证明: ext max_eq_left q.2
-
-@[simp]
-
-Depends on / 依赖: max_eq_left
+/-
+**NNRat.toNNRat_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：toNNRat_coe (q : Rat>=0) : toNNRat q = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem toNNRat_coe (q : Rat>=0) : toNNRat q = q :=
-ext max_eq_left q.2
+theorem toNNRat_coe (q : ℚ≥0) : toNNRat q = q :=
+  ext <| max_eq_left q.2
 
 @[simp]
-/--
-theorem `toNNRat_coe_nat` / 定理 `toNNRat_coe_nat`
-
-English:
-theorem toNNRat_coe_nat
-  given: (n : Nat)
-  statement: toNNRat n = n
-  proof: ext by simp only [Nat.cast_nonneg', Rat.coe_toNNRat]; rfl
-
-中文:
-定理 toNNRat_coe_nat
-  条件: (n : 自然数)
-  结论: toNNRat n = n
-  证明: ext by simp only [Nat.cast_nonneg', Rat.coe_toNNRat]; rfl
-
-Depends on / 依赖: Nat.cast_nonneg, Rat.coe_toNNRat, cast_nonneg, coe_toNNRat
+/-
+**NNRat.toNNRat_coe_nat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：toNNRat_coe_nat (n : Nat) : toNNRat n = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.coe_toNNRat`：∀ (q : ℚ), 0 ≤ q → ↑q.toNNRat = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
 -/
-theorem toNNRat_coe_nat (n : Nat) : toNNRat n = n :=
-ext by simp only [Nat.cast_nonneg', Rat.coe_toNNRat]; rfl
+theorem toNNRat_coe_nat (n : ℕ) : toNNRat n = n :=
+  ext <| by simp only [Nat.cast_nonneg', Rat.coe_toNNRat]; rfl
 
-/--
-Definition of `gi` / `gi` 的定义
+/-- `toNNRat` and `(↑) : ℚ≥0 → ℚ` form a Galois insertion. -/
+/-
+**NNRat.gi** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+形式化陈述：GaloisInsertion Rat.toNNRat NNRat.cast
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.coe_mono`：coe_mono : Monotone ((↑) : Rat>=0 -> Rat)
+· 使用定理 `NNRat.toNNRat_mono`：toNNRat_mono : Monotone toNNRat
+· 使用定理 `Rat.le_coe_toNNRat`：∀ (q : ℚ), q ≤ ↑q.toNNRat
+· 使用定理 `NNRat.toNNRat_coe`：toNNRat_coe (q : Rat>=0) : toNNRat q = q
 
-English:
-definition gi
-  signature: : GaloisInsertion toNNRat (↑)
-  body: GaloisInsertion.monotoneIntro coe_mono toNNRat_mono Rat.le_coe_toNNRat toNNRat_coe
-
-中文:
-定义 gi
-  签名: : Galois嵌入 toNNRat (↑)
-  定义体: GaloisInsertion.monotoneIntro coe_mono toNNRat_mono Rat.le_coe_toNNRat toNNRat_coe
+--- 原说明 ---
+`toNNRat` and `(↑) : ℚ≥0 → ℚ` form a Galois insertion.
 -/
 protected def gi : GaloisInsertion toNNRat (↑) :=
   GaloisInsertion.monotoneIntro coe_mono toNNRat_mono Rat.le_coe_toNNRat toNNRat_coe
 
-/--
-Definition of `coeHom` / `coeHom` 的定义
+/-- Coercion `ℚ≥0 → ℚ` as a `RingHom`. -/
+/-
+**NNRat.coeHom** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+形式化陈述：coeHom : Rat>=0 ->+* Rat where toFun
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.coe_one`：↑1 = 1
+· 使用定理 `NNRat.coe_mul`：coe_mul (p q : Rat>=0) : ((p * q : Rat>=0) : Rat) = p * q
+· 使用定理 `NNRat.coe_zero`：↑0 = 0
+· 使用定理 `NNRat.coe_add`：coe_add (p q : Rat>=0) : ((p + q : Rat>=0) : Rat) = p + q
 
-English:
-definition coeHom
-  signature: : Rat>=0 ->+* Rat where
-  body: (↑)
-  map_one' := coe_one
-  map_mul' := coe_mul
-  map_zero' := coe_zero
-  map_add' := coe_add
-
-中文:
-定义 coeHom
-  签名: : 有理数>=0 ->+* 有理数 where
-  定义体: (↑)
-  map_one' := coe_one
-  map_mul' := coe_mul
-  map_zero' := coe_zero
-  map_add' := coe_add
+--- 原说明 ---
+Coercion `ℚ≥0 → ℚ` as a `RingHom`.
 -/
-def coeHom : Rat>=0 ->+* Rat where
+def coeHom : ℚ≥0 →+* ℚ where
   toFun := (↑)
   map_one' := coe_one
   map_mul' := coe_mul
   map_zero' := coe_zero
   map_add' := coe_add
-
-/--
-lemma `coe_natCast` / 引理 `coe_natCast`
-
-English:
-lemma coe_natCast
-  given: (n : Nat)
-  statement: (↑(↑n : Rat>=0) : Rat) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_natCast
-  条件: (n : 自然数)
-  结论: (↑(↑n : 有理数>=0) : 有理数) = n
-  证明: rfl
-
-@[simp]
+/-
+**NNRat.coe_natCast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n : ℕ), ↑↑n = ↑n
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_natCast (n : Nat) : (↑(↑n : Rat>=0) : Rat) = n := rfl
+@[simp, norm_cast] lemma coe_natCast (n : ℕ) : (↑(↑n : ℚ≥0) : ℚ) = n := rfl
 
 @[simp]
-/--
-theorem `mk_natCast` / 定理 `mk_natCast`
-
-English:
-theorem mk_natCast
-  given: (n : Nat)
-  statement: @Eq Rat>=0 (⟨(n : Rat), Nat.cast_nonneg' n⟩ : Rat>=0) n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_natCast
-  条件: (n : 自然数)
-  结论: @相等 有理数>=0 (⟨(n : 有理数), 自然数.cast_nonneg' n⟩ : 有理数>=0) n
-  证明: rfl
-
-@[simp]
+/-
+**NNRat.mk_natCast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：mk_natCast (n : Nat) : @Eq Rat>=0 (⟨(n : Rat), Nat.cast_nonneg' n⟩ : Rat>=
+0) n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
 -/
-theorem mk_natCast (n : Nat) : @Eq Rat>=0 (⟨(n : Rat), Nat.cast_nonneg' n⟩ : Rat>=0) n :=
+theorem mk_natCast (n : ℕ) : @Eq ℚ≥0 (⟨(n : ℚ), Nat.cast_nonneg' n⟩ : ℚ≥0) n :=
   rfl
 
 @[simp]
-/--
-theorem `coe_coeHom` / 定理 `coe_coeHom`
-
-English:
-theorem coe_coeHom
-  statement: ⇑coeHom = ((↑) : Rat>=0 -> Rat)
-  proof: rfl
-
-@[norm_cast]
-
-中文:
-定理 coe_coeHom
-  结论: ⇑coeHom = ((↑) : 有理数>=0 -> 有理数)
-  证明: rfl
-
-@[norm_cast]
+/-
+**NNRat.coe_coeHom** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_coeHom : ⇑coeHom = ((↑) : Rat>=0 -> Rat)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coeHom : ⇑coeHom = ((↑) : Rat>=0 -> Rat) :=
+theorem coe_coeHom : ⇑coeHom = ((↑) : ℚ≥0 → ℚ) :=
   rfl
 
 @[norm_cast]
-/--
-theorem `nsmul_coe` / 定理 `nsmul_coe`
-
-English:
-theorem nsmul_coe
-  given: (q : Rat>=0) (n : Nat)
-  statement: ↑(n • q) = n • (q : Rat)
-  proof: coeHom.toAddMonoidHom.map_nsmul _ _
-
-中文:
-定理 nsmul_coe
-  条件: (q : 有理数>=0) (n : 自然数)
-  结论: ↑(n • q) = n • (q : 有理数)
-  证明: coeHom.toAddMonoidHom.map_nsmul _ _
-
-Depends on / 依赖: coeHom, coeHom.toAddMonoidHom.map_nsmul, map_nsmul, toAddMonoidHom
+/-
+**NNRat.nsmul_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：nsmul_coe (q : Rat>=0) (n : Nat) : ↑(n • q) = n • (q : Rat)
+参数：q : Rat>=0；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_nsmul`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoi
+d M] [inst_1 : AddMonoid N] (f : M →+ N) (n : ℕ) (a : M),   f (n • a) = n • f a
 -/
-theorem nsmul_coe (q : Rat>=0) (n : Nat) : ↑(n • q) = n • (q : Rat) :=
+theorem nsmul_coe (q : ℚ≥0) (n : ℕ) : ↑(n • q) = n • (q : ℚ) :=
   coeHom.toAddMonoidHom.map_nsmul _ _
-
-/--
-theorem `bddAbove_coe` / 定理 `bddAbove_coe`
-
-English:
-theorem bddAbove_coe
-  given: {s : Set Rat>=0}
-  statement: BddAbove ((↑) '' s : Set Rat) ↔ BddAbove s
-  proof: ⟨fun ⟨b, hb⟩ =>
-    ⟨toNNRat b, fun ⟨y, _⟩ hys =>
-show y <= max b 0 from (hb <| Set.mem_image_of_mem _ hys).trans le_max_left _ _⟩,
-    fun ⟨b, hb⟩ => ⟨b, fun _ ⟨_, hx, Eq⟩ => Eq ▸ hb hx⟩⟩
-
-中文:
-定理 bddAbove_coe
-  条件: {s : 集合 有理数>=0}
-  结论: BddAbove ((↑) '' s : 集合 有理数) ↔ BddAbove s
-  证明: ⟨fun ⟨b, hb⟩ =>
-    ⟨toNNRat b, fun ⟨y, _⟩ hys =>
-show y <= max b 0 from (hb <| Set.mem_image_of_mem _ hys).trans le_max_left _ _⟩,
-    fun ⟨b, hb⟩ => ⟨b, fun _ ⟨_, hx, Eq⟩ => Eq ▸ hb hx⟩⟩
-
-Depends on / 依赖: Set.mem_image_of_mem, le_max_left, mem_image_of_mem, toNNRat
+/-
+**NNRat.bddAbove_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：bddAbove_coe {s : Set Rat>=0} : BddAbove ((↑) '' s : Set Rat) ↔ BddAbove s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
 -/
-theorem bddAbove_coe {s : Set Rat>=0} : BddAbove ((↑) '' s : Set Rat) ↔ BddAbove s :=
-  ⟨fun ⟨b, hb⟩ =>
-    ⟨toNNRat b, fun ⟨y, _⟩ hys =>
-show y <= max b 0 from (hb <| Set.mem_image_of_mem _ hys).trans le_max_left _ _⟩,
-    fun ⟨b, hb⟩ => ⟨b, fun _ ⟨_, hx, Eq⟩ => Eq ▸ hb hx⟩⟩
-
-/--
-theorem `bddBelow_coe` / 定理 `bddBelow_coe`
-
-English:
-theorem bddBelow_coe
-  given: (s : Set Rat>=0)
-  statement: BddBelow (((↑) : Rat>=0 -> Rat) '' s)
-  proof: ⟨0, fun _ ⟨q, _, h⟩ => h ▸ q.2⟩
-
-@[norm_cast]
-
-中文:
-定理 bddBelow_coe
-  条件: (s : 集合 有理数>=0)
-  结论: BddBelow (((↑) : 有理数>=0 -> 有理数) '' s)
-  证明: ⟨0, fun _ ⟨q, _, h⟩ => h ▸ q.2⟩
-
-@[norm_cast]
+theorem bddAbove_coe {s : Set ℚ≥0} : BddAbove ((↑) '' s : Set ℚ) ↔ BddAbove s :=
+  ⟨fun ⟨b, hb⟩ ↦
+    ⟨toNNRat b, fun ⟨y, _⟩ hys ↦
+      show y ≤ max b 0 from (hb <| Set.mem_image_of_mem _ hys).trans <| le_max_left _ _⟩,
+    fun ⟨b, hb⟩ ↦ ⟨b, fun _ ⟨_, hx, Eq⟩ ↦ Eq ▸ hb hx⟩⟩
+/-
+**NNRat.bddBelow_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：bddBelow_coe (s : Set Rat>=0) : BddBelow (((↑) : Rat>=0 -> Rat) '' s)
+参数：s : Set Rat>=0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem bddBelow_coe (s : Set Rat>=0) : BddBelow (((↑) : Rat>=0 -> Rat) '' s) :=
-  ⟨0, fun _ ⟨q, _, h⟩ => h ▸ q.2⟩
+theorem bddBelow_coe (s : Set ℚ≥0) : BddBelow (((↑) : ℚ≥0 → ℚ) '' s) :=
+  ⟨0, fun _ ⟨q, _, h⟩ ↦ h ▸ q.2⟩
 
 @[norm_cast]
-/--
-theorem `coe_max` / 定理 `coe_max`
-
-English:
-theorem coe_max
-  given: (x y : Rat>=0)
-  statement: ((max x y : Rat>=0) : Rat) = max (x : Rat) (y : Rat)
-  proof: coe_mono.map_max
-
-@[norm_cast]
-
-中文:
-定理 coe_max
-  条件: (x y : 有理数>=0)
-  结论: ((最大值 x y : 有理数>=0) : 有理数) = 最大值 (x : 有理数) (y : 有理数)
-  证明: coe_mono.map_max
-
-@[norm_cast]
-
-Depends on / 依赖: coe_mono, coe_mono.map_max, map_max
+/-
+**NNRat.coe_max** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_max (x y : Rat>=0) : ((max x y : Rat>=0) : Rat) = max (x : Rat) (y : R
+at)
+参数：x y : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_max`：Monotone.map_max (hf : Monotone f) : f (max a b) = max
+ (f a) (f b)
+· 使用定理 `NNRat.coe_mono`：coe_mono : Monotone ((↑) : Rat>=0 -> Rat)
 -/
-theorem coe_max (x y : Rat>=0) : ((max x y : Rat>=0) : Rat) = max (x : Rat) (y : Rat) :=
+theorem coe_max (x y : ℚ≥0) : ((max x y : ℚ≥0) : ℚ) = max (x : ℚ) (y : ℚ) :=
   coe_mono.map_max
 
 @[norm_cast]
-/--
-theorem `coe_min` / 定理 `coe_min`
-
-English:
-theorem coe_min
-  given: (x y : Rat>=0)
-  statement: ((min x y : Rat>=0) : Rat) = min (x : Rat) (y : Rat)
-  proof: coe_mono.map_min
-
-中文:
-定理 coe_min
-  条件: (x y : 有理数>=0)
-  结论: ((最小值 x y : 有理数>=0) : 有理数) = 最小值 (x : 有理数) (y : 有理数)
-  证明: coe_mono.map_min
-
-Depends on / 依赖: coe_mono, coe_mono.map_min, map_min
+/-
+**NNRat.coe_min** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：coe_min (x y : Rat>=0) : ((min x y : Rat>=0) : Rat) = min (x : Rat) (y : R
+at)
+参数：x y : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.map_min`：∀ {α : Type u} {β : Type v} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] {f : α → β} {a b : α},   Monotone f → f (min a b) = min (f
+ a) (f…
+· 使用定理 `NNRat.coe_mono`：coe_mono : Monotone ((↑) : Rat>=0 -> Rat)
 -/
-theorem coe_min (x y : Rat>=0) : ((min x y : Rat>=0) : Rat) = min (x : Rat) (y : Rat) :=
+theorem coe_min (x y : ℚ≥0) : ((min x y : ℚ≥0) : ℚ) = min (x : ℚ) (y : ℚ) :=
   coe_mono.map_min
-
-/--
-theorem `sub_def` / 定理 `sub_def`
-
-English:
-theorem sub_def
-  given: (p q : Rat>=0)
-  statement: p - q = toNNRat (p - q)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sub_def
-  条件: (p q : 有理数>=0)
-  结论: p - q = toNNRat (p - q)
-  证明: rfl
-
-@[simp]
+/-
+**NNRat.sub_def** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：sub_def (p q : Rat>=0) : p - q = toNNRat (p - q)
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sub_def (p q : Rat>=0) : p - q = toNNRat (p - q) :=
+theorem sub_def (p q : ℚ≥0) : p - q = toNNRat (p - q) :=
   rfl
 
 @[simp]
-/--
-theorem `abs_coe` / 定理 `abs_coe`
-
-English:
-theorem abs_coe
-  given: (q : Rat>=0)
-  statement: |(q : Rat)| = q
-  proof: abs_of_nonneg q.2
-
-中文:
-定理 abs_coe
-  条件: (q : 有理数>=0)
-  结论: |(q : 有理数)| = q
-  证明: abs_of_nonneg q.2
-
-Depends on / 依赖: abs_of_nonneg
+/-
+**NNRat.abs_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：abs_coe (q : Rat>=0) : |(q : Rat)| = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem abs_coe (q : Rat>=0) : |(q : Rat)| = q :=
+theorem abs_coe (q : ℚ≥0) : |(q : ℚ)| = q :=
   abs_of_nonneg q.2
 
 -- See note [specialised high priority simp lemma]
 @[simp high]
-/--
-theorem `nonpos_iff_eq_zero` / 定理 `nonpos_iff_eq_zero`
-
-English:
-theorem nonpos_iff_eq_zero
-  given: (q : Rat>=0)
-  statement: q <= 0 ↔ q = 0
-  proof: ⟨fun h => le_antisymm h q.2, fun h => h.symm ▸ q.2⟩
-
-中文:
-定理 nonpos_iff_eq_zero
-  条件: (q : 有理数>=0)
-  结论: q <= 0 ↔ q = 0
-  证明: ⟨fun h => le_antisymm h q.2, fun h => h.symm ▸ q.2⟩
-
-Depends on / 依赖: h.symm, le_antisymm
+/-
+**NNRat.nonpos_iff_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：nonpos_iff_eq_zero (q : Rat>=0) : q <= 0 ↔ q = 0
+参数：q : Rat>=0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem nonpos_iff_eq_zero (q : Rat>=0) : q <= 0 ↔ q = 0 :=
+theorem nonpos_iff_eq_zero (q : ℚ≥0) : q ≤ 0 ↔ q = 0 :=
   ⟨fun h => le_antisymm h q.2, fun h => h.symm ▸ q.2⟩
 
 end NNRat
@@ -1120,1076 +661,851 @@ open NNRat
 
 namespace Rat
 
-variable {p q : Rat}
+variable {p q : ℚ}
 
 @[simp]
-/--
-theorem `toNNRat_zero` / 定理 `toNNRat_zero`
-
-English:
-theorem toNNRat_zero
-  statement: toNNRat 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toNNRat_zero
-  结论: toNNRat 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**Rat.toNNRat_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_zero : toNNRat 0 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toNNRat_zero : toNNRat 0 = 0 := rfl
 
 @[simp]
-/--
-theorem `toNNRat_one` / 定理 `toNNRat_one`
-
-English:
-theorem toNNRat_one
-  statement: toNNRat 1 = 1
-  proof: rfl
-
-中文:
-定理 toNNRat_one
-  结论: toNNRat 1 = 1
-  证明: rfl
+/-
+**Rat.toNNRat_one** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_one : toNNRat 1 = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toNNRat_one : toNNRat 1 = 1 := rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toNNRat_pos` / 定理 `toNNRat_pos`
-
-English:
-theorem toNNRat_pos
-  statement: 0 < toNNRat q ↔ 0 < q
-  proof: by simp [toNNRat, ← coe_lt_coe]
-
-@[simp]
-
-中文:
-定理 toNNRat_pos
-  结论: 0 < toNNRat q ↔ 0 < q
-  证明: by simp [toNNRat, ← coe_lt_coe]
-
-@[simp]
-
-Depends on / 依赖: coe_lt_coe, toNNRat
+/-
+**Rat.toNNRat_pos** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_pos : 0 < toNNRat q ↔ 0 < q
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toNNRat_pos : 0 < toNNRat q ↔ 0 < q := by simp [toNNRat, ← coe_lt_coe]
 
 @[simp]
-/--
-theorem `toNNRat_eq_zero` / 定理 `toNNRat_eq_zero`
-
-English:
-theorem toNNRat_eq_zero
-  statement: toNNRat q = 0 ↔ q <= 0
-  proof: by
-  simpa [-toNNRat_pos] using (@toNNRat_pos q).not
-
-alias ⟨_, toNNRat_of_nonpos⟩ := toNNRat_eq_zero
-
-中文:
-定理 toNNRat_eq_zero
-  结论: toNNRat q = 0 ↔ q <= 0
-  证明: by
-  simpa [-toNNRat_pos] using (@toNNRat_pos q).not
-
-alias ⟨_, toNNRat_of_nonpos⟩ := toNNRat_eq_zero
-
-Depends on / 依赖: toNNRat_pos
+/-
+**Rat.toNNRat_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_eq_zero : toNNRat q = 0 ↔ q <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Rat.toNNRat_pos`：toNNRat_pos : 0 < toNNRat q ↔ 0 < q
 -/
-theorem toNNRat_eq_zero : toNNRat q = 0 ↔ q <= 0 := by
+theorem toNNRat_eq_zero : toNNRat q = 0 ↔ q ≤ 0 := by
   simpa [-toNNRat_pos] using (@toNNRat_pos q).not
 
 alias ⟨_, toNNRat_of_nonpos⟩ := toNNRat_eq_zero
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toNNRat_le_toNNRat_iff` / 定理 `toNNRat_le_toNNRat_iff`
-
-English:
-theorem toNNRat_le_toNNRat_iff
-  given: (hp : 0 <= p)
-  statement: toNNRat q <= toNNRat p ↔ q <= p
-  proof: by
-  simp [← coe_le_coe, toNNRat, hp]
-
-中文:
-定理 toNNRat_le_toNNRat_iff
-  条件: (hp : 0 <= p)
-  结论: toNNRat q <= toNNRat p ↔ q <= p
-  证明: by
-  simp [← coe_le_coe, toNNRat, hp]
-
-Depends on / 依赖: coe_le_coe, toNNRat
+/-
+**Rat.toNNRat_le_toNNRat_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_le_toNNRat_iff (hp : 0 <= p) : toNNRat q <= toNNRat p ↔ q <= p
+参数：hp : 0 <= p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem toNNRat_le_toNNRat_iff (hp : 0 <= p) : toNNRat q <= toNNRat p ↔ q <= p := by
+theorem toNNRat_le_toNNRat_iff (hp : 0 ≤ p) : toNNRat q ≤ toNNRat p ↔ q ≤ p := by
   simp [← coe_le_coe, toNNRat, hp]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toNNRat_lt_toNNRat_iff'` / 定理 `toNNRat_lt_toNNRat_iff'`
-
-English:
-theorem toNNRat_lt_toNNRat_iff'
-  statement: toNNRat q < toNNRat p ↔ q < p ∧ 0 < p
-  proof: by
-  simp [← coe_lt_coe, toNNRat]
-
-中文:
-定理 toNNRat_lt_toNNRat_iff'
-  结论: toNNRat q < toNNRat p ↔ q < p ∧ 0 < p
-  证明: by
-  simp [← coe_lt_coe, toNNRat]
-
-Depends on / 依赖: coe_lt_coe, toNNRat
+/-
+**Rat.toNNRat_lt_toNNRat_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_lt_toNNRat_iff' : toNNRat q < toNNRat p ↔ q < p ∧ 0 < p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem toNNRat_lt_toNNRat_iff' : toNNRat q < toNNRat p ↔ q < p ∧ 0 < p := by
   simp [← coe_lt_coe, toNNRat]
-
-/--
-theorem `toNNRat_lt_toNNRat_iff` / 定理 `toNNRat_lt_toNNRat_iff`
-
-English:
-theorem toNNRat_lt_toNNRat_iff
-  given: (h : 0 < p)
-  statement: toNNRat q < toNNRat p ↔ q < p
-  proof: toNNRat_lt_toNNRat_iff'.trans (and_iff_left h)
-
-中文:
-定理 toNNRat_lt_toNNRat_iff
-  条件: (h : 0 < p)
-  结论: toNNRat q < toNNRat p ↔ q < p
-  证明: toNNRat_lt_toNNRat_iff'.trans (and_iff_left h)
-
-Depends on / 依赖: and_iff_left, toNNRat_lt_toNNRat_iff
+/-
+**Rat.toNNRat_lt_toNNRat_iff** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_lt_toNNRat_iff (h : 0 < p) : toNNRat q < toNNRat p ↔ q < p
+参数：h : 0 < p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Rat.toNNRat_lt_toNNRat_iff'`：toNNRat_lt_toNNRat_iff' : toNNRat q < toNNR
+at p ↔ q < p ∧ 0 < p
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
 -/
 theorem toNNRat_lt_toNNRat_iff (h : 0 < p) : toNNRat q < toNNRat p ↔ q < p :=
   toNNRat_lt_toNNRat_iff'.trans (and_iff_left h)
-
-/--
-theorem `toNNRat_lt_toNNRat_iff_of_nonneg` / 定理 `toNNRat_lt_toNNRat_iff_of_nonneg`
-
-English:
-theorem toNNRat_lt_toNNRat_iff_of_nonneg
-  given: (hq : 0 <= q)
-  statement: toNNRat q < toNNRat p ↔ q < p
-  proof: toNNRat_lt_toNNRat_iff'.trans ⟨And.left, fun h => ⟨h, hq.trans_lt h⟩⟩
-
-中文:
-定理 toNNRat_lt_toNNRat_iff_of_nonneg
-  条件: (hq : 0 <= q)
-  结论: toNNRat q < toNNRat p ↔ q < p
-  证明: toNNRat_lt_toNNRat_iff'.trans ⟨And.left, fun h => ⟨h, hq.trans_lt h⟩⟩
-
-Depends on / 依赖: And.left, hq.trans_lt, toNNRat_lt_toNNRat_iff, trans_lt
+/-
+**Rat.toNNRat_lt_toNNRat_iff_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_lt_toNNRat_iff_of_nonneg (hq : 0 <= q) : toNNRat q < toNNRat p ↔ q
+ < p
+参数：hq : 0 <= q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Rat.toNNRat_lt_toNNRat_iff'`：toNNRat_lt_toNNRat_iff' : toNNRat q < toNNR
+at p ↔ q < p ∧ 0 < p
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
 -/
-theorem toNNRat_lt_toNNRat_iff_of_nonneg (hq : 0 <= q) : toNNRat q < toNNRat p ↔ q < p :=
-  toNNRat_lt_toNNRat_iff'.trans ⟨And.left, fun h => ⟨h, hq.trans_lt h⟩⟩
+theorem toNNRat_lt_toNNRat_iff_of_nonneg (hq : 0 ≤ q) : toNNRat q < toNNRat p ↔ q < p :=
+  toNNRat_lt_toNNRat_iff'.trans ⟨And.left, fun h ↦ ⟨h, hq.trans_lt h⟩⟩
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toNNRat_add` / 定理 `toNNRat_add`
-
-English:
-theorem toNNRat_add
-  given: (hq : 0 <= q) (hp : 0 <= p)
-  statement: toNNRat (q + p) = toNNRat q + toNNRat p
-  proof: NNRat.ext by simp [toNNRat, hq, hp, add_nonneg]
-
-中文:
-定理 toNNRat_add
-  条件: (hq : 0 <= q) (hp : 0 <= p)
-  结论: toNNRat (q + p) = toNNRat q + toNNRat p
-  证明: NNRat.ext by simp [toNNRat, hq, hp, add_nonneg]
-
-Depends on / 依赖: NNRat.ext, add_nonneg, toNNRat
+/-
+**Rat.toNNRat_add** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_add (hq : 0 <= q) (hp : 0 <= p) : toNNRat (q + p) = toNNRat q + to
+NNRat p
+参数：hq : 0 <= q；hp : 0 <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toNNRat_add (hq : 0 <= q) (hp : 0 <= p) : toNNRat (q + p) = toNNRat q + toNNRat p :=
-NNRat.ext by simp [toNNRat, hq, hp, add_nonneg]
-
-/--
-theorem `toNNRat_add_le` / 定理 `toNNRat_add_le`
-
-English:
-theorem toNNRat_add_le
-  statement: toNNRat (q + p) <= toNNRat q + toNNRat p
-  proof: coe_le_coe.1 max_le (add_le_add (le_max_left _ _) (le_max_left _ _)) coe_nonneg _
-
-中文:
-定理 toNNRat_add_le
-  结论: toNNRat (q + p) <= toNNRat q + toNNRat p
-  证明: coe_le_coe.1 max_le (add_le_add (le_max_left _ _) (le_max_left _ _)) coe_nonneg _
-
-Depends on / 依赖: add_le_add, coe_le_coe, coe_nonneg, le_max_left, max_le
+theorem toNNRat_add (hq : 0 ≤ q) (hp : 0 ≤ p) : toNNRat (q + p) = toNNRat q + toNNRat p :=
+  NNRat.ext <| by simp [toNNRat, hq, hp, add_nonneg]
+/-
+**Rat.toNNRat_add_le** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_add_le : toNNRat (q + p) <= toNNRat q + toNNRat p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `NNRat.coe_le_coe`：coe_le_coe : (p : Rat) <= q ↔ p <= q
+· 使用定理 `max_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, a ≤ c → b ≤
+ c → max a b ≤ c
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用定理 `NNRat.coe_nonneg`：coe_nonneg (q : Rat>=0) : (0 : Rat) <= q
 -/
-theorem toNNRat_add_le : toNNRat (q + p) <= toNNRat q + toNNRat p :=
-coe_le_coe.1 max_le (add_le_add (le_max_left _ _) (le_max_left _ _)) coe_nonneg _
-
-/--
-theorem `toNNRat_le_iff_le_coe` / 定理 `toNNRat_le_iff_le_coe`
-
-English:
-theorem toNNRat_le_iff_le_coe
-  given: {p : Rat>=0}
-  statement: toNNRat q <= p ↔ q <= ↑p
-  proof: NNRat.gi.gc q p
-
-中文:
-定理 toNNRat_le_iff_le_coe
-  条件: {p : 有理数>=0}
-  结论: toNNRat q <= p ↔ q <= ↑p
-  证明: NNRat.gi.gc q p
-
-Depends on / 依赖: NNRat.gi.gc
+theorem toNNRat_add_le : toNNRat (q + p) ≤ toNNRat q + toNNRat p :=
+  coe_le_coe.1 <| max_le (add_le_add (le_max_left _ _) (le_max_left _ _)) <| coe_nonneg _
+/-
+**Rat.toNNRat_le_iff_le_coe** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_le_iff_le_coe {p : Rat>=0} : toNNRat q <= p ↔ q <= ↑p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem toNNRat_le_iff_le_coe {p : Rat>=0} : toNNRat q <= p ↔ q <= ↑p :=
+theorem toNNRat_le_iff_le_coe {p : ℚ≥0} : toNNRat q ≤ p ↔ q ≤ ↑p :=
   NNRat.gi.gc q p
-
-/--
-theorem `le_toNNRat_iff_coe_le` / 定理 `le_toNNRat_iff_coe_le`
-
-English:
-theorem le_toNNRat_iff_coe_le
-  given: {q : Rat>=0} (hp : 0 <= p)
-  statement: q <= toNNRat p ↔ ↑q <= p
-  proof: by
-  rw [← coe_le_coe]; rw [Rat.coe_toNNRat p hp]
-
-中文:
-定理 le_toNNRat_iff_coe_le
-  条件: {q : 有理数>=0} (hp : 0 <= p)
-  结论: q <= toNNRat p ↔ ↑q <= p
-  证明: by
-  rw [← coe_le_coe]; rw [Rat.coe_toNNRat p hp]
-
-Depends on / 依赖: Rat.coe_toNNRat, coe_le_coe, coe_toNNRat
+/-
+**Rat.le_toNNRat_iff_coe_le** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：le_toNNRat_iff_coe_le {q : Rat>=0} (hp : 0 <= p) : q <= toNNRat p ↔ ↑q <= 
+p
+参数：hp : 0 <= p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.coe_le_coe`：coe_le_coe : (p : Rat) <= q ↔ p <= q
+· 使用定理 `Rat.coe_toNNRat`：∀ (q : ℚ), 0 ≤ q → ↑q.toNNRat = q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_toNNRat_iff_coe_le {q : Rat>=0} (hp : 0 <= p) : q <= toNNRat p ↔ ↑q <= p := by
-  rw [← coe_le_coe]; rw [Rat.coe_toNNRat p hp]
-
-/--
-theorem `le_toNNRat_iff_coe_le'` / 定理 `le_toNNRat_iff_coe_le'`
-
-English:
-theorem le_toNNRat_iff_coe_le'
-  given: {q : Rat>=0} (hq : 0 < q)
-  statement: q <= toNNRat p ↔ ↑q <= p
-  proof: (le_or_gt 0 p).elim le_toNNRat_iff_coe_le fun hp => by
+theorem le_toNNRat_iff_coe_le {q : ℚ≥0} (hp : 0 ≤ p) : q ≤ toNNRat p ↔ ↑q ≤ p := by
+  rw [← coe_le_coe, Rat.coe_toNNRat p hp]
+/-
+**Rat.le_toNNRat_iff_coe_le'** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：le_toNNRat_iff_coe_le' {q : Rat>=0} (hq : 0 < q) : q <= toNNRat p ↔ ↑q <= 
+p
+参数：hq : 0 < q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `Rat.le_toNNRat_iff_coe_le`：le_toNNRat_iff_coe_le {q : Rat>=0} (hp : 0 <=
+ p) : q <= toNNRat p ↔ ↑q <= p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.toNNRat_eq_zero`：toNNRat_eq_zero : toNNRat q = 0 ↔ q <= 0
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `NNRat.coe_nonneg`：coe_nonneg (q : Rat>=0) : (0 : Rat) <= q
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem le_toNNRat_iff_coe_le' {q : ℚ≥0} (hq : 0 < q) : q ≤ toNNRat p ↔ ↑q ≤ p :=
+  (le_or_gt 0 p).elim le_toNNRat_iff_coe_le fun hp ↦ by
     simp only [(hp.trans_le q.coe_nonneg).not_ge, toNNRat_eq_zero.2 hp.le, hq.not_ge]
-
-中文:
-定理 le_toNNRat_iff_coe_le'
-  条件: {q : 有理数>=0} (hq : 0 < q)
-  结论: q <= toNNRat p ↔ ↑q <= p
-  证明: (le_or_gt 0 p).elim le_toNNRat_iff_coe_le fun hp => by
-    simp only [(hp.trans_le q.coe_nonneg).not_ge, toNNRat_eq_zero.2 hp.le, hq.not_ge]
-
-Depends on / 依赖: coe_nonneg, hp.le, hp.trans_le, hq.not_ge, le_or_gt, le_toNNRat_iff_coe_le, not_ge, q.coe_nonneg, toNNRat_eq_zero, trans_le
+/-
+**Rat.toNNRat_lt_iff_lt_coe** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_lt_iff_lt_coe {p : Rat>=0} (hq : 0 <= q) : toNNRat q < p ↔ q < ↑p
+参数：hq : 0 <= q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.coe_lt_coe`：coe_lt_coe : (p : Rat) < q ↔ p < q
+· 使用定理 `Rat.coe_toNNRat`：∀ (q : ℚ), 0 ≤ q → ↑q.toNNRat = q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_toNNRat_iff_coe_le' {q : Rat>=0} (hq : 0 < q) : q <= toNNRat p ↔ ↑q <= p :=
-  (le_or_gt 0 p).elim le_toNNRat_iff_coe_le fun hp => by
-    simp only [(hp.trans_le q.coe_nonneg).not_ge, toNNRat_eq_zero.2 hp.le, hq.not_ge]
-
-/--
-theorem `toNNRat_lt_iff_lt_coe` / 定理 `toNNRat_lt_iff_lt_coe`
-
-English:
-theorem toNNRat_lt_iff_lt_coe
-  given: {p : Rat>=0} (hq : 0 <= q)
-  statement: toNNRat q < p ↔ q < ↑p
-  proof: by
-  rw [← coe_lt_coe]; rw [Rat.coe_toNNRat q hq]
-
-中文:
-定理 toNNRat_lt_iff_lt_coe
-  条件: {p : 有理数>=0} (hq : 0 <= q)
-  结论: toNNRat q < p ↔ q < ↑p
-  证明: by
-  rw [← coe_lt_coe]; rw [Rat.coe_toNNRat q hq]
-
-Depends on / 依赖: Rat.coe_toNNRat, coe_lt_coe, coe_toNNRat
+theorem toNNRat_lt_iff_lt_coe {p : ℚ≥0} (hq : 0 ≤ q) : toNNRat q < p ↔ q < ↑p := by
+  rw [← coe_lt_coe, Rat.coe_toNNRat q hq]
+/-
+**Rat.lt_toNNRat_iff_coe_lt** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：lt_toNNRat_iff_coe_lt {q : Rat>=0} : q < toNNRat p ↔ ↑q < p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.lt_iff_lt`：lt_iff_lt (gc : GaloisConnection l u) {a : α
+} {b : β} : b < l a ↔ u b < a
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem toNNRat_lt_iff_lt_coe {p : Rat>=0} (hq : 0 <= q) : toNNRat q < p ↔ q < ↑p := by
-  rw [← coe_lt_coe]; rw [Rat.coe_toNNRat q hq]
-
-/--
-theorem `lt_toNNRat_iff_coe_lt` / 定理 `lt_toNNRat_iff_coe_lt`
-
-English:
-theorem lt_toNNRat_iff_coe_lt
-  given: {q : Rat>=0}
-  statement: q < toNNRat p ↔ ↑q < p
-  proof: NNRat.gi.gc.lt_iff_lt
-
-中文:
-定理 lt_toNNRat_iff_coe_lt
-  条件: {q : 有理数>=0}
-  结论: q < toNNRat p ↔ ↑q < p
-  证明: NNRat.gi.gc.lt_iff_lt
-
-Depends on / 依赖: NNRat.gi.gc.lt_iff_lt, lt_iff_lt
--/
-theorem lt_toNNRat_iff_coe_lt {q : Rat>=0} : q < toNNRat p ↔ ↑q < p :=
+theorem lt_toNNRat_iff_coe_lt {q : ℚ≥0} : q < toNNRat p ↔ ↑q < p :=
   NNRat.gi.gc.lt_iff_lt
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toNNRat_mul` / 定理 `toNNRat_mul`
-
-English:
-theorem toNNRat_mul
-  given: (hp : 0 <= p)
-  statement: toNNRat (p * q) = toNNRat p * toNNRat q
-  proof: by
-  rcases le_total 0 q with hq | hq
-  · ext; simp [toNNRat, hp, hq, mul_nonneg]
-  · have hpq := mul_nonpos_of_nonneg_of_nonpos hp hq
-    rw [toNNRat_eq_zero.2 hq]; rw [toNNRat_eq_zero.2 hpq]; rw [mul_zero]
-
-中文:
-定理 toNNRat_mul
-  条件: (hp : 0 <= p)
-  结论: toNNRat (p * q) = toNNRat p * toNNRat q
-  证明: by
-  rcases le_total 0 q with hq | hq
-  · ext; simp [toNNRat, hp, hq, mul_nonneg]
-  · have hpq := mul_nonpos_of_nonneg_of_nonpos hp hq
-    rw [toNNRat_eq_zero.2 hq]; rw [toNNRat_eq_zero.2 hpq]; rw [mul_zero]
-
-Depends on / 依赖: le_total, mul_nonneg, mul_nonpos_of_nonneg_of_nonpos, mul_zero, toNNRat, toNNRat_eq_zero
+/-
+**Rat.toNNRat_mul** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：toNNRat_mul (hp : 0 <= p) : toNNRat (p * q) = toNNRat p * toNNRat q
+参数：hp : 0 <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `mul_nonpos_of_nonneg_of_nonpos`：mul_nonpos_of_nonneg_of_nonpos [PosMulMo
+no α] (ha : 0 <= a) (hb : b <= 0) : a * b <= 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.toNNRat_eq_zero`：toNNRat_eq_zero : toNNRat q = 0 ↔ q <= 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem toNNRat_mul (hp : 0 <= p) : toNNRat (p * q) = toNNRat p * toNNRat q := by
+theorem toNNRat_mul (hp : 0 ≤ p) : toNNRat (p * q) = toNNRat p * toNNRat q := by
   rcases le_total 0 q with hq | hq
   · ext; simp [toNNRat, hp, hq, mul_nonneg]
   · have hpq := mul_nonpos_of_nonneg_of_nonpos hp hq
-    rw [toNNRat_eq_zero.2 hq]; rw [toNNRat_eq_zero.2 hpq]; rw [mul_zero]
+    rw [toNNRat_eq_zero.2 hq, toNNRat_eq_zero.2 hpq, mul_zero]
 
 end Rat
 
 /-- The absolute value on `ℚ` as a map to `ℚ≥0`. -/
 @[pp_nodot]
-/--
-Definition of `Rat.nnabs` / `Rat.nnabs` 的定义
+/-
+**Rat.nnabs** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Rat.nnabs (x : Rat) : Rat>=0
+参数：x : Rat。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Rat.nnabs
-  signature: (x : Rat)
-  body: ⟨abs x, abs_nonneg x⟩
-
-@[norm_cast, simp]
-
-中文:
-定义 有理数.nnabs
-  签名: (x : 有理数)
-  定义体: ⟨abs x, abs_nonneg x⟩
-
-@[norm_cast, simp]
-
-Depends on / 依赖: abs_nonneg
+--- 原说明 ---
+The absolute value on `ℚ` as a map to `ℚ≥0`.
 -/
-def Rat.nnabs (x : Rat) : Rat>=0 :=
+def Rat.nnabs (x : ℚ) : ℚ≥0 :=
   ⟨abs x, abs_nonneg x⟩
 
 @[norm_cast, simp]
-/--
-theorem `Rat.coe_nnabs` / 定理 `Rat.coe_nnabs`
-
-English:
-theorem Rat.coe_nnabs
-  given: (x : Rat)
-  statement: (Rat.nnabs x : Rat) = abs x
-  proof: rfl
-
-中文:
-定理 有理数.coe_nnabs
-  条件: (x : 有理数)
-  结论: (有理数.nnabs x : 有理数) = abs x
-  证明: rfl
+/-
+**Rat.coe_nnabs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Rat.coe_nnabs (x : Rat) : (Rat.nnabs x : Rat) = abs x
+参数：x : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Rat.coe_nnabs (x : Rat) : (Rat.nnabs x : Rat) = abs x := rfl
+theorem Rat.coe_nnabs (x : ℚ) : (Rat.nnabs x : ℚ) = abs x := rfl
 
 /-! ### Numerator and denominator -/
 
 
 namespace NNRat
 
-variable {p q : Rat>=0}
+variable {p q : ℚ≥0}
 
-/--
-lemma `num_coe` / 引理 `num_coe`
-
-English:
-lemma num_coe
-  given: (q : Rat>=0)
-  statement: (q : Rat).num = q.num
-  proof: by
+/-
+**NNRat.num_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+参数：q : ℚ≥0；↑q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natCast_natAbs`：∀ (n : ℤ), ↑n.natAbs = |n|
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+@[norm_cast] lemma num_coe (q : ℚ≥0) : (q : ℚ).num = q.num := by
   simp only [num, Int.natCast_natAbs, Rat.num_nonneg, coe_nonneg, abs_of_nonneg]
-
-中文:
-引理 num_coe
-  条件: (q : 有理数>=0)
-  结论: (q : 有理数).num = q.num
-  证明: by
-  simp only [num, Int.natCast_natAbs, Rat.num_nonneg, coe_nonneg, abs_of_nonneg]
+/-
+**NNRat.natAbs_num_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：natAbs_num_coe : (q : Rat).num.natAbs = q.num
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[norm_cast] lemma num_coe (q : Rat>=0) : (q : Rat).num = q.num := by
-  simp only [num, Int.natCast_natAbs, Rat.num_nonneg, coe_nonneg, abs_of_nonneg]
-
-/--
-theorem `natAbs_num_coe` / 定理 `natAbs_num_coe`
-
-English:
-theorem natAbs_num_coe
-  statement: (q : Rat).num.natAbs = q.num
-  proof: rfl
-
-中文:
-定理 natAbs_num_coe
-  结论: (q : 有理数).num.natAbs = q.num
-  证明: rfl
+theorem natAbs_num_coe : (q : ℚ).num.natAbs = q.num := rfl
+/-
+**NNRat.den_coe** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {q : ℚ≥0}, (↑q).den = q.den
+参数：↑q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem natAbs_num_coe : (q : Rat).num.natAbs = q.num := rfl
-
-/--
-lemma `den_coe` / 引理 `den_coe`
-
-English:
-lemma den_coe
-  statement: (q : Rat).den = q.den
-  proof: rfl
-
-中文:
-引理 den_coe
-  结论: (q : 有理数).den = q.den
-  证明: rfl
+@[norm_cast] lemma den_coe : (q : ℚ).den = q.den := rfl
+/-
+**NNRat.num_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {q : ℚ≥0}, q.num ≠ 0 ↔ q ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[norm_cast] lemma den_coe : (q : Rat).den = q.den := rfl
-
-/--
-lemma `num_ne_zero` / 引理 `num_ne_zero`
-
-English:
-lemma num_ne_zero
-  statement: q.num != 0 ↔ q != 0
-  proof: by simp [num]
-
-中文:
-引理 num_ne_zero
-  结论: q.num != 0 ↔ q != 0
-  证明: by simp [num]
--/
-@[simp] lemma num_ne_zero : q.num != 0 ↔ q != 0 := by simp [num]
-/--
-lemma `num_pos` / 引理 `num_pos`
-
-English:
-lemma num_pos
-  statement: 0 < q.num ↔ 0 < q
-  proof: by
-.not.symm simpa [num, -nonpos_iff_eq_zero] using nonpos_iff_eq_zero _
-
-中文:
-引理 num_pos
-  结论: 0 < q.num ↔ 0 < q
-  证明: by
-.not.symm simpa [num, -nonpos_iff_eq_zero] using nonpos_iff_eq_zero _
+@[simp] lemma num_ne_zero : q.num ≠ 0 ↔ q ≠ 0 := by simp [num]
+/-
+**NNRat.num_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {q : ℚ≥0}, 0 < q.num ↔ 0 < q
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `NNRat.nonpos_iff_eq_zero`：nonpos_iff_eq_zero (q : Rat>=0) : q <= 0 ↔ q =
+ 0
 -/
 @[simp] lemma num_pos : 0 < q.num ↔ 0 < q := by
-.not.symm simpa [num, -nonpos_iff_eq_zero] using nonpos_iff_eq_zero _
-/--
-lemma `den_pos` / 引理 `den_pos`
-
-English:
-lemma den_pos
-  given: (q : Rat>=0)
-  statement: 0 < q.den
-  proof: Rat.den_pos _
-
-中文:
-引理 den_pos
-  条件: (q : 有理数>=0)
-  结论: 0 < q.den
-  证明: Rat.den_pos _
+  simpa [num, -nonpos_iff_eq_zero] using nonpos_iff_eq_zero _ |>.not.symm
+/-
+**NNRat.den_pos** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), 0 < q.den
+参数：q : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.den_pos`：∀ (self : ℚ), 0 < self.den
 -/
-@[simp] lemma den_pos (q : Rat>=0) : 0 < q.den := Rat.den_pos _
-/--
-lemma `den_ne_zero` / 引理 `den_ne_zero`
-
-English:
-lemma den_ne_zero
-  given: (q : Rat>=0)
-  statement: q.den != 0
-  proof: Rat.den_ne_zero _
-
-中文:
-引理 den_ne_zero
-  条件: (q : 有理数>=0)
-  结论: q.den != 0
-  证明: Rat.den_ne_zero _
+@[simp] lemma den_pos (q : ℚ≥0) : 0 < q.den := Rat.den_pos _
+/-
+**NNRat.den_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), q.den ≠ 0
+参数：q : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.den_ne_zero`：∀ (q : ℚ), q.den ≠ 0
 -/
-@[simp] lemma den_ne_zero (q : Rat>=0) : q.den != 0 := Rat.den_ne_zero _
-
-/--
-lemma `coprime_num_den` / 引理 `coprime_num_den`
-
-English:
-lemma coprime_num_den
-  given: (q : Rat>=0)
-  statement: q.num.Coprime q.den
-  proof: by simpa [num, den] using Rat.reduced _
-
-中文:
-引理 coprime_num_den
-  条件: (q : 有理数>=0)
-  结论: q.num.Coprime q.den
-  证明: by simpa [num, den] using Rat.reduced _
-
-Depends on / 依赖: Rat.reduced, reduced
+@[simp] lemma den_ne_zero (q : ℚ≥0) : q.den ≠ 0 := Rat.den_ne_zero _
+/-
+**NNRat.coprime_num_den** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：coprime_num_den (q : Rat>=0) : q.num.Coprime q.den
+参数：q : Rat>=0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.reduced`：∀ (self : ℚ), self.num.natAbs.Coprime self.den
 -/
-lemma coprime_num_den (q : Rat>=0) : q.num.Coprime q.den := by simpa [num, den] using Rat.reduced _
+lemma coprime_num_den (q : ℚ≥0) : q.num.Coprime q.den := by simpa [num, den] using Rat.reduced _
 
 -- TODO: Rename `Rat.coe_nat_num`, `Rat.intCast_den`, `Rat.ofNat_num`, `Rat.ofNat_den`
-/--
-lemma `num_natCast` / 引理 `num_natCast`
-
-English:
-lemma num_natCast
-  given: (n : Nat)
-  statement: num n = n
-  proof: rfl
-
-中文:
-引理 num_natCast
-  条件: (n : 自然数)
-  结论: num n = n
-  证明: rfl
+/-
+**NNRat.num_natCast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n : ℕ), (↑n).num = n
+参数：n : ℕ；↑n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma num_natCast (n : Nat) : num n = n := rfl
-/--
-lemma `den_natCast` / 引理 `den_natCast`
-
-English:
-lemma den_natCast
-  given: (n : Nat)
-  statement: den n = 1
-  proof: rfl
-
-中文:
-引理 den_natCast
-  条件: (n : 自然数)
-  结论: den n = 1
-  证明: rfl
+@[simp, norm_cast] lemma num_natCast (n : ℕ) : num n = n := rfl
+/-
+**NNRat.den_natCast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n : ℕ), (↑n).den = 1
+参数：n : ℕ；↑n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma den_natCast (n : Nat) : den n = 1 := rfl
-
-/--
-lemma `num_ofNat` / 引理 `num_ofNat`
-
-English:
-lemma num_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: num ofNat(n) = OfNat.ofNat n
-  proof: rfl
-
-中文:
-引理 num_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: num of自然数(n) = Of自然数.of自然数 n
-  证明: rfl
-
-Depends on / 依赖: Algebra, IsAlgClosure, IsAlgClosure.isGalois, isGalois
+@[simp, norm_cast] lemma den_natCast (n : ℕ) : den n = 1 := rfl
+/-
+**NNRat.num_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n : ℕ) [inst : n.AtLeastTwo], (OfNat.ofNat n).num = OfNat.ofNat n
+参数：n : ℕ；OfNat.ofNat n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma num_ofNat (n : Nat) [n.AtLeastTwo] : num ofNat(n) = OfNat.ofNat n :=
+@[simp] lemma num_ofNat (n : ℕ) [n.AtLeastTwo] : num ofNat(n) = OfNat.ofNat n :=
   rfl
-/--
-lemma `den_ofNat` / 引理 `den_ofNat`
-
-English:
-lemma den_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: den ofNat(n) = 1
-  proof: rfl
-
-中文:
-引理 den_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: den of自然数(n) = 1
-  证明: rfl
+/-
+**NNRat.den_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n : ℕ) [inst : n.AtLeastTwo], (OfNat.ofNat n).den = 1
+参数：n : ℕ；OfNat.ofNat n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma den_ofNat (n : Nat) [n.AtLeastTwo] : den ofNat(n) = 1 := rfl
-
-/--
-theorem `ext_num_den` / 定理 `ext_num_den`
-
-English:
-theorem ext_num_den
-  given: (hn : p.num = q.num) (hd : p.den = q.den)
-  statement: p = q
-  proof: by
-refine ext Rat.ext ?_ hd
-  simpa [num_coe]
-
-中文:
-定理 ext_num_den
-  条件: (hn : p.num = q.num) (hd : p.den = q.den)
-  结论: p = q
-  证明: by
-refine ext Rat.ext ?_ hd
-  simpa [num_coe]
-
-Depends on / 依赖: Rat.ext, num_coe
+@[simp] lemma den_ofNat (n : ℕ) [n.AtLeastTwo] : den ofNat(n) = 1 := rfl
+/-
+**NNRat.ext_num_den** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：ext_num_den (hn : p.num = q.num) (hd : p.den = q.den) : p = q
+参数：hn : p.num = q.num；hd : p.den = q.den。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `Rat.ext`：∀ {p q : ℚ}, p.num = q.num → p.den = q.den → p = q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
 -/
 theorem ext_num_den (hn : p.num = q.num) (hd : p.den = q.den) : p = q := by
-refine ext Rat.ext ?_ hd
+  refine ext <| Rat.ext ?_ hd
   simpa [num_coe]
-
-/--
-theorem `ext_num_den_iff` / 定理 `ext_num_den_iff`
-
-English:
-theorem ext_num_den_iff
-  statement: p = q ↔ p.num = q.num ∧ p.den = q.den
-  proof: ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun h => ext_num_den h.1 h.2⟩
-
-中文:
-定理 ext_num_den_iff
-  结论: p = q ↔ p.num = q.num ∧ p.den = q.den
-  证明: ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun h => ext_num_den h.1 h.2⟩
-
-Depends on / 依赖: ext_num_den
+/-
+**NNRat.ext_num_den_iff** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：ext_num_den_iff : p = q ↔ p.num = q.num ∧ p.den = q.den
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext_num_den`：ext_num_den (hn : p.num = q.num) (hd : p.den = q.den)
+ : p = q
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem ext_num_den_iff : p = q ↔ p.num = q.num ∧ p.den = q.den :=
-  ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun h => ext_num_den h.1 h.2⟩
+  ⟨by rintro rfl; exact ⟨rfl, rfl⟩, fun h ↦ ext_num_den h.1 h.2⟩
 
-/--
-Definition of `divNat` / `divNat` 的定义
+/-- Form the quotient `n / d` where `n d : ℕ`.
 
-English:
-definition divNat
-  signature: (n d : Nat)
-  body: ⟨.divInt n d, Rat.divInt_nonneg (Int.natCast_nonneg n) (Int.natCast_nonneg d)⟩
+See also `Rat.divInt` and `mkRat`. -/
+/-
+**NNRat.divNat** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+形式化陈述：divNat (n d : Nat) : Rat>=0
+参数：n d : Nat。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 div自然数
-  签名: (n d : 自然数)
-  定义体: ⟨.divInt n d, Rat.divInt_nonneg (Int.natCast_nonneg n) (Int.natCast_nonneg d)⟩
+--- 原说明 ---
+Form the quotient `n / d` where `n d : ℕ`.
 
-Depends on / 依赖: Int.natCast_nonneg, Rat.divInt_nonneg, divInt, divInt_nonneg, natCast_nonneg
+See also `Rat.divInt` and `mkRat`.
 -/
-def divNat (n d : Nat) : Rat>=0 :=
+def divNat (n d : ℕ) : ℚ≥0 :=
   ⟨.divInt n d, Rat.divInt_nonneg (Int.natCast_nonneg n) (Int.natCast_nonneg d)⟩
 
-variable {n₁ n₂ d₁ d₂ : Nat}
-
-/--
-lemma `coe_divNat` / 引理 `coe_divNat`
-
-English:
-lemma coe_divNat
-  given: (n d : Nat)
-  statement: (divNat n d : Rat) = .divInt n d
-  proof: rfl
-
-中文:
-引理 coe_div自然数
-  条件: (n d : 自然数)
-  结论: (div自然数 n d : 有理数) = .div整数 n d
-  证明: rfl
+variable {n₁ n₂ d₁ d₂ : ℕ}
+/-
+**NNRat.coe_divNat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n d : ℕ), ↑(NNRat.divNat n d) = Rat.divInt ↑n ↑d
+参数：n d : ℕ；NNRat.divNat n d。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_divNat (n d : Nat) : (divNat n d : Rat) = .divInt n d := rfl
-
-/--
-lemma `mk_divInt` / 引理 `mk_divInt`
-
-English:
-lemma mk_divInt
-  given: (n d : Nat)
-  proof: rfl
-
-中文:
-引理 mk_div整数
-  条件: (n d : 自然数)
-  证明: rfl
+@[simp, norm_cast] lemma coe_divNat (n d : ℕ) : (divNat n d : ℚ) = .divInt n d := rfl
+/-
+**NNRat.mk_divInt** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：mk_divInt (n d : Nat) : ⟨.divInt n d, Rat.divInt_nonneg (Int.natCast_nonne
+g n) (Int.natCast_nonneg d)⟩ = divNat n d
+参数：n d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.divInt_nonneg`：∀ {a b : ℤ}, 0 ≤ a → 0 ≤ b → 0 ≤ Rat.divInt a b
+· 使用定理 `Int.natCast_nonneg`：∀ (n : ℕ), 0 ≤ ↑n
 -/
-lemma mk_divInt (n d : Nat) :
+lemma mk_divInt (n d : ℕ) :
     ⟨.divInt n d, Rat.divInt_nonneg (Int.natCast_nonneg n) (Int.natCast_nonneg d)⟩ =
       divNat n d := rfl
-
-/--
-lemma `divNat_inj` / 引理 `divNat_inj`
-
-English:
-lemma divNat_inj
-  given: (h₁ : d₁ != 0) (h₂ : d₂ != 0)
-  statement: divNat n₁ d₁ = divNat n₂ d₂ ↔ n₁ * d₂ = n₂ * d₁
-  proof: by
-  rw [← coe_inj]; simp [Rat.mkRat_eq_iff, h₁, h₂]; norm_cast
-
-中文:
-引理 div自然数_inj
-  条件: (h₁ : d₁ != 0) (h₂ : d₂ != 0)
-  结论: div自然数 n₁ d₁ = div自然数 n₂ d₂ ↔ n₁ * d₂ = n₂ * d₁
-  证明: by
-  rw [← coe_inj]; simp [Rat.mkRat_eq_iff, h₁, h₂]; norm_cast
-
-Depends on / 依赖: Rat.mkRat_eq_iff, coe_inj, mkRat_eq_iff
+/-
+**NNRat.divNat_inj** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：divNat_inj (h₁ : d₁ != 0) (h₂ : d₂ != 0) : divNat n₁ d₁ = divNat n₂ d₂ ↔ n
+₁ * d₂ = n₂ * d₁
+参数：h₁ : d₁ != 0；h₂ : d₂ != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.coe_inj`：coe_inj : (p : Rat) = q ↔ p = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Rat.divInt_ofNat`：∀ (num : ℤ) (den : ℕ), Rat.divInt num ↑den = mkRat num
+ den
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma divNat_inj (h₁ : d₁ != 0) (h₂ : d₂ != 0) : divNat n₁ d₁ = divNat n₂ d₂ ↔ n₁ * d₂ = n₂ * d₁ := by
+lemma divNat_inj (h₁ : d₁ ≠ 0) (h₂ : d₂ ≠ 0) : divNat n₁ d₁ = divNat n₂ d₂ ↔ n₁ * d₂ = n₂ * d₁ := by
   rw [← coe_inj]; simp [Rat.mkRat_eq_iff, h₁, h₂]; norm_cast
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `divNat_zero` / 引理 `divNat_zero`
-
-English:
-lemma divNat_zero
-  given: (n : Nat)
-  statement: divNat n 0 = 0
-  proof: by simp [divNat]
-
-中文:
-引理 div自然数_zero
-  条件: (n : 自然数)
-  结论: div自然数 n 0 = 0
-  证明: by simp [divNat]
+/-
+**NNRat.divNat_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (n : ℕ), NNRat.divNat n 0 = 0
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Rat.divInt_zero`：∀ (n : ℤ), Rat.divInt n 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma divNat_zero (n : Nat) : divNat n 0 = 0 := by simp [divNat]
-
-/--
-lemma `num_divNat_den` / 引理 `num_divNat_den`
-
-English:
-lemma num_divNat_den
-  given: (q : Rat>=0)
-  statement: divNat q.num q.den = q
-  proof: ext by rw [← (q : Rat).mkRat_num_den']; simp [num_coe, den_coe]
-
-中文:
-引理 num_div自然数_den
-  条件: (q : 有理数>=0)
-  结论: div自然数 q.num q.den = q
-  证明: ext by rw [← (q : Rat).mkRat_num_den']; simp [num_coe, den_coe]
+@[simp] lemma divNat_zero (n : ℕ) : divNat n 0 = 0 := by simp [divNat]
+/-
+**NNRat.num_divNat_den** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), NNRat.divNat q.num q.den = q
+参数：q : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.mkRat_num_den'`：∀ (a : ℚ), mkRat a.num a.den = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Rat.divInt_ofNat`：∀ (num : ℤ) (den : ℕ), Rat.divInt num ↑den = mkRat num
+ den
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma num_divNat_den (q : Rat>=0) : divNat q.num q.den = q :=
-ext by rw [← (q : Rat).mkRat_num_den']; simp [num_coe, den_coe]
-
-/--
-lemma `natCast_eq_divNat` / 引理 `natCast_eq_divNat`
-
-English:
-lemma natCast_eq_divNat
-  given: (n : Nat)
-  statement: (n : Rat>=0) = divNat n 1
-  proof: (num_divNat_den _).symm
-
-中文:
-引理 natCast_eq_div自然数
-  条件: (n : 自然数)
-  结论: (n : 有理数>=0) = div自然数 n 1
-  证明: (num_divNat_den _).symm
-
-Depends on / 依赖: num_divNat_den
+@[simp] lemma num_divNat_den (q : ℚ≥0) : divNat q.num q.den = q :=
+  ext <| by rw [← (q : ℚ).mkRat_num_den']; simp [num_coe, den_coe]
+/-
+**NNRat.natCast_eq_divNat** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：natCast_eq_divNat (n : Nat) : (n : Rat>=0) = divNat n 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.num_divNat_den`：∀ (q : ℚ≥0), NNRat.divNat q.num q.den = q
 -/
-lemma natCast_eq_divNat (n : Nat) : (n : Rat>=0) = divNat n 1 := (num_divNat_den _).symm
-
-/--
-lemma `divNat_mul_divNat` / 引理 `divNat_mul_divNat`
-
-English:
-lemma divNat_mul_divNat
-  given: (n₁ n₂ : Nat) {d₁ d₂}
-  proof: by
-  ext; push_cast; exact Rat.divInt_mul_divInt _ _
-
-中文:
-引理 div自然数_mul_div自然数
-  条件: (n₁ n₂ : 自然数) {d₁ d₂}
-  证明: by
-  ext; push_cast; exact Rat.divInt_mul_divInt _ _
-
-Depends on / 依赖: Rat.divInt_mul_divInt, divInt_mul_divInt
+lemma natCast_eq_divNat (n : ℕ) : (n : ℚ≥0) = divNat n 1 := (num_divNat_den _).symm
+/-
+**NNRat.divNat_mul_divNat** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：divNat_mul_divNat (n₁ n₂ : Nat) {d₁ d₂} : divNat n₁ d₁ * divNat n₂ d₂ = di
+vNat (n₁ * n₂) (d₁ * d₂)
+参数：n₁ n₂ : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Rat.divInt_mul_divInt`：∀ (n₁ n₂ : ℤ) {d₁ d₂ : ℤ}, Rat.divInt n₁ d₁ * Rat
+.divInt n₂ d₂ = Rat.divInt (n₁ * n₂) (d₁ * d₂)
 -/
-lemma divNat_mul_divNat (n₁ n₂ : Nat) {d₁ d₂} :
+lemma divNat_mul_divNat (n₁ n₂ : ℕ) {d₁ d₂} :
     divNat n₁ d₁ * divNat n₂ d₂ = divNat (n₁ * n₂) (d₁ * d₂) := by
   ext; push_cast; exact Rat.divInt_mul_divInt _ _
-
-/--
-lemma `divNat_mul_left` / 引理 `divNat_mul_left`
-
-English:
-lemma divNat_mul_left
-  given: {a : Nat} (ha : a != 0) (n d : Nat)
-  statement: divNat (a * n) (a * d) = divNat n d
-  proof: by
-  ext; push_cast; exact Rat.divInt_mul_left (mod_cast ha)
-
-中文:
-引理 div自然数_mul_left
-  条件: {a : 自然数} (ha : a != 0) (n d : 自然数)
-  结论: div自然数 (a * n) (a * d) = div自然数 n d
-  证明: by
-  ext; push_cast; exact Rat.divInt_mul_left (mod_cast ha)
-
-Depends on / 依赖: L.finiteDimensional, Rat.divInt_mul_left, divInt_mul_left, finiteDimensional, mod_cast
+/-
+**NNRat.divNat_mul_left** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：divNat_mul_left {a : Nat} (ha : a != 0) (n d : Nat) : divNat (a * n) (a * 
+d) = divNat n d
+参数：ha : a != 0；n d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Rat.divInt_mul_left`：∀ {n d a : ℤ}, a ≠ 0 → Rat.divInt (a * n) (a * d) =
+ Rat.divInt n d
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
-lemma divNat_mul_left {a : Nat} (ha : a != 0) (n d : Nat) : divNat (a * n) (a * d) = divNat n d := by
+lemma divNat_mul_left {a : ℕ} (ha : a ≠ 0) (n d : ℕ) : divNat (a * n) (a * d) = divNat n d := by
   ext; push_cast; exact Rat.divInt_mul_left (mod_cast ha)
-
-/--
-lemma `divNat_mul_right` / 引理 `divNat_mul_right`
-
-English:
-lemma divNat_mul_right
-  given: {a : Nat} (ha : a != 0) (n d : Nat)
-  statement: divNat (n * a) (d * a) = divNat n d
-  proof: by
-  ext; push_cast; exact Rat.divInt_mul_right (mod_cast ha)
-
-中文:
-引理 div自然数_mul_right
-  条件: {a : 自然数} (ha : a != 0) (n d : 自然数)
-  结论: div自然数 (n * a) (d * a) = div自然数 n d
-  证明: by
-  ext; push_cast; exact Rat.divInt_mul_right (mod_cast ha)
-
-Depends on / 依赖: L.isGalois, Rat.divInt_mul_right, divInt_mul_right, isGalois, mod_cast
+/-
+**NNRat.divNat_mul_right** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：divNat_mul_right {a : Nat} (ha : a != 0) (n d : Nat) : divNat (n * a) (d *
+ a) = divNat n d
+参数：ha : a != 0；n d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Rat.divInt_mul_right`：∀ {n d a : ℤ}, a ≠ 0 → Rat.divInt (n * a) (d * a) 
+= Rat.divInt n d
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
-lemma divNat_mul_right {a : Nat} (ha : a != 0) (n d : Nat) : divNat (n * a) (d * a) = divNat n d := by
+lemma divNat_mul_right {a : ℕ} (ha : a ≠ 0) (n d : ℕ) : divNat (n * a) (d * a) = divNat n d := by
   ext; push_cast; exact Rat.divInt_mul_right (mod_cast ha)
-
-/--
-lemma `mul_den_eq_num` / 引理 `mul_den_eq_num`
-
-English:
-lemma mul_den_eq_num
-  given: (q : Rat>=0)
-  statement: q * q.den = q.num
-  proof: by
+/-
+**NNRat.mul_den_eq_num** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), q * ↑q.den = ↑q.num
+参数：q : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `NNRat.den_coe`：∀ {q : ℚ≥0}, (↑q).den = q.den
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `Rat.mul_den_eq_num`：∀ (q : ℚ), q * ↑q.den = ↑q.num
+-/
+@[simp] lemma mul_den_eq_num (q : ℚ≥0) : q * q.den = q.num := by
   ext
   push_cast
-  rw [← Int.cast_natCast]; rw [← den_coe]; rw [← Int.cast_natCast q.num]; rw [← num_coe]
+  rw [← Int.cast_natCast, ← den_coe, ← Int.cast_natCast q.num, ← num_coe]
   exact Rat.mul_den_eq_num _
-
-中文:
-引理 mul_den_eq_num
-  条件: (q : 有理数>=0)
-  结论: q * q.den = q.num
-  证明: by
-  ext
-  push_cast
-  rw [← Int.cast_natCast]; rw [← den_coe]; rw [← Int.cast_natCast q.num]; rw [← num_coe]
-  exact Rat.mul_den_eq_num _
+/-
+**NNRat.den_mul_eq_num** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), ↑q.den * q = ↑q.num
+参数：q : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `NNRat.mul_den_eq_num`：∀ (q : ℚ≥0), q * ↑q.den = ↑q.num
 -/
-@[simp] lemma mul_den_eq_num (q : Rat>=0) : q * q.den = q.num := by
-  ext
-  push_cast
-  rw [← Int.cast_natCast]; rw [← den_coe]; rw [← Int.cast_natCast q.num]; rw [← num_coe]
-  exact Rat.mul_den_eq_num _
-
-/--
-lemma `den_mul_eq_num` / 引理 `den_mul_eq_num`
-
-English:
-lemma den_mul_eq_num
-  given: (q : Rat>=0)
-  statement: q.den * q = q.num
-  proof: by rw [mul_comm, mul_den_eq_num]
-
-中文:
-引理 den_mul_eq_num
-  条件: (q : 有理数>=0)
-  结论: q.den * q = q.num
-  证明: by rw [mul_comm, mul_den_eq_num]
-
-Depends on / 依赖: IntermediateField, IntermediateField.inclusion, inclusion, inf_le_left, injective, of_injective, toLinearMap, toRingHom, toRingHom.injective
--/
-@[simp] lemma den_mul_eq_num (q : Rat>=0) : q.den * q = q.num := by rw [mul_comm, mul_den_eq_num]
+@[simp] lemma den_mul_eq_num (q : ℚ≥0) : q.den * q = q.num := by rw [mul_comm, mul_den_eq_num]
 
 /-- Define a (dependent) function or prove `∀ r : ℚ, p r` by dealing with nonnegative rational
 numbers of the form `n / d` with `d ≠ 0` and `n`, `d` coprime. -/
 @[elab_as_elim]
-/--
-Definition of `numDenCasesOn.` / `numDenCasesOn.` 的定义
+/-
+**NNRat.numDenCasesOn.** 是 Mathlib 中的一个定义，位于命名空间 `NNRat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition numDenCasesOn.{u}
-  signature: {C : Rat>=0 -> Sort u} (q) (H : forall n d, d != 0 -> n.Coprime d -> C (divNat n d))
-  body: by rw [← q.num_divNat_den]; exact H _ _ q.den_ne_zero q.coprime_num_den
-
-中文:
-定义 numDenCasesOn.{u}
-  签名: {C : 有理数>=0 -> 类型层 u} (q) (H : 对任意 n d, d != 0 -> n.Coprime d -> C (div自然数 n d))
-  定义体: by rw [← q.num_divNat_den]; exact H _ _ q.den_ne_zero q.coprime_num_den
-
-Depends on / 依赖: IntermediateField, IntermediateField.inclusion, coprime_num_den, den_ne_zero, inclusion, inf_le_right, injective, num_divNat_den, of_injective, q.coprime_num_den, q.den_ne_zero, q.num_divNat_den, toLinearMap
+--- 原说明 ---
+Define a (dependent) function or prove `∀ r : ℚ, p r` by dealing with nonnegativ
+e rational
+numbers of the form `n / d` with `d ≠ 0` and `n`, `d` coprime.
 -/
-def numDenCasesOn.{u} {C : Rat>=0 -> Sort u} (q) (H : forall n d, d != 0 -> n.Coprime d -> C (divNat n d)) :
+def numDenCasesOn.{u} {C : ℚ≥0 → Sort u} (q) (H : ∀ n d, d ≠ 0 → n.Coprime d → C (divNat n d)) :
     C q := by rw [← q.num_divNat_den]; exact H _ _ q.den_ne_zero q.coprime_num_den
-
-/--
-lemma `add_def` / 引理 `add_def`
-
-English:
-lemma add_def
-  given: (q r : Rat>=0)
-  statement: q + r = divNat (q.num * r.den + r.num * q.den) (q.den * r.den)
-  proof: by
+/-
+**NNRat.add_def** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：add_def (q r : Rat>=0) : q + r = divNat (q.num * r.den + r.num * q.den) (q
+.den * r.den)
+参数：q r : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.add_def'`：∀ (a b : ℚ), a + b = mkRat (a.num * ↑b.den + b.num * ↑a.de
+n) (a.den * b.den)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma add_def (q r : ℚ≥0) : q + r = divNat (q.num * r.den + r.num * q.den) (q.den * r.den) := by
   ext; simp [Rat.add_def', Rat.mkRat_eq_divInt, num_coe, den_coe]
-
-中文:
-引理 add_def
-  条件: (q r : 有理数>=0)
-  结论: q + r = div自然数 (q.num * r.den + r.num * q.den) (q.den * r.den)
-  证明: by
-  ext; simp [Rat.add_def', Rat.mkRat_eq_divInt, num_coe, den_coe]
-
-Depends on / 依赖: IntermediateField, IntermediateField.inclusion, Rat.add_def, Rat.mkRat_eq_divInt, add_def, den_coe, inclusion, inf_le_left, mkRat_eq_divInt, num_coe, of_algHom
+/-
+**NNRat.mul_def** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：mul_def (q r : Rat>=0) : q * r = divNat (q.num * r.num) (q.den * r.den)
+参数：q r : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.mul_eq_mkRat`：mul_eq_mkRat (q r : Rat) : q * r = mkRat (q.num * r.nu
+m) (q.den * r.den)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma add_def (q r : Rat>=0) : q + r = divNat (q.num * r.den + r.num * q.den) (q.den * r.den) := by
-  ext; simp [Rat.add_def', Rat.mkRat_eq_divInt, num_coe, den_coe]
-
-/--
-lemma `mul_def` / 引理 `mul_def`
-
-English:
-lemma mul_def
-  given: (q r : Rat>=0)
-  statement: q * r = divNat (q.num * r.num) (q.den * r.den)
-  proof: by
+lemma mul_def (q r : ℚ≥0) : q * r = divNat (q.num * r.num) (q.den * r.den) := by
   ext; simp [Rat.mul_eq_mkRat, Rat.mkRat_eq_divInt, num_coe, den_coe]
-
-中文:
-引理 mul_def
-  条件: (q r : 有理数>=0)
-  结论: q * r = div自然数 (q.num * r.num) (q.den * r.den)
-  证明: by
-  ext; simp [Rat.mul_eq_mkRat, Rat.mkRat_eq_divInt, num_coe, den_coe]
-
-Depends on / 依赖: IntermediateField, IntermediateField.inclusion, Rat.mkRat_eq_divInt, Rat.mul_eq_mkRat, den_coe, inclusion, inf_le_right, mkRat_eq_divInt, mul_eq_mkRat, num_coe, of_algHom
+/-
+**NNRat.lt_def** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：lt_def {p q : Rat>=0} : p < q ↔ p.num * q.den < q.num * p.den
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.coe_lt_coe`：coe_lt_coe : (p : Rat) < q ↔ p < q
+· 使用定理 `Rat.lt_iff`：∀ (a b : ℚ), a < b ↔ a.num * ↑b.den < b.num * ↑a.den
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mul_def (q r : Rat>=0) : q * r = divNat (q.num * r.num) (q.den * r.den) := by
-  ext; simp [Rat.mul_eq_mkRat, Rat.mkRat_eq_divInt, num_coe, den_coe]
-
-/--
-theorem `lt_def` / 定理 `lt_def`
-
-English:
-theorem lt_def
-  given: {p q : Rat>=0}
-  statement: p < q ↔ p.num * q.den < q.num * p.den
-  proof: by
-  rw [← NNRat.coe_lt_coe]; rw [Rat.lt_iff]; norm_cast
-
-中文:
-定理 lt_def
-  条件: {p q : 有理数>=0}
-  结论: p < q ↔ p.num * q.den < q.num * p.den
-  证明: by
-  rw [← NNRat.coe_lt_coe]; rw [Rat.lt_iff]; norm_cast
-
-Depends on / 依赖: NNRat.coe_lt_coe, Rat.lt_iff, coe_lt_coe, lt_iff
+theorem lt_def {p q : ℚ≥0} : p < q ↔ p.num * q.den < q.num * p.den := by
+  rw [← NNRat.coe_lt_coe, Rat.lt_iff]; norm_cast
+/-
+**NNRat.le_def** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：le_def {p q : Rat>=0} : p <= q ↔ p.num * q.den <= q.num * p.den
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NNRat.coe_le_coe`：coe_le_coe : (p : Rat) <= q ↔ p <= q
+· 使用定理 `Rat.le_iff`：∀ (a b : ℚ), a ≤ b ↔ a.num * ↑b.den ≤ b.num * ↑a.den
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lt_def {p q : Rat>=0} : p < q ↔ p.num * q.den < q.num * p.den := by
-  rw [← NNRat.coe_lt_coe]; rw [Rat.lt_iff]; norm_cast
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: {p q : Rat>=0}
-  statement: p <= q ↔ p.num * q.den <= q.num * p.den
-  proof: by
-  rw [← NNRat.coe_le_coe]; rw [Rat.le_iff]; norm_cast
-
-中文:
-定理 le_def
-  条件: {p q : 有理数>=0}
-  结论: p <= q ↔ p.num * q.den <= q.num * p.den
-  证明: by
-  rw [← NNRat.coe_le_coe]; rw [Rat.le_iff]; norm_cast
-
-Depends on / 依赖: NNRat.coe_le_coe, Rat.le_iff, coe_le_coe, le_iff
--/
-theorem le_def {p q : Rat>=0} : p <= q ↔ p.num * q.den <= q.num * p.den := by
-  rw [← NNRat.coe_le_coe]; rw [Rat.le_iff]; norm_cast
+theorem le_def {p q : ℚ≥0} : p ≤ q ↔ p.num * q.den ≤ q.num * p.den := by
+  rw [← NNRat.coe_le_coe, Rat.le_iff]; norm_cast
 
 end NNRat
 
 namespace Mathlib.Tactic.Qify
 
-/--
-lemma `nnratCast_eq` / 引理 `nnratCast_eq`
-
-English:
-lemma nnratCast_eq
-  given: (a b : Rat>=0)
-  statement: a = b ↔ (a : Rat) = (b : Rat)
-  proof: NNRat.coe_inj.symm
-
-中文:
-引理 nnratCast_eq
-  条件: (a b : 有理数>=0)
-  结论: a = b ↔ (a : 有理数) = (b : 有理数)
-  证明: NNRat.coe_inj.symm
+/-
+**Mathlib.Tactic.Qify.nnratCast_eq** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qif
+y`。
+形式化陈述：∀ (a b : ℚ≥0), a = b ↔ ↑a = ↑b
+参数：a b : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `NNRat.coe_inj`：coe_inj : (p : Rat) = q ↔ p = q
 -/
-@[qify_simps] lemma nnratCast_eq (a b : Rat>=0) : a = b ↔ (a : Rat) = (b : Rat) := NNRat.coe_inj.symm
-/--
-lemma `nnratCast_le` / 引理 `nnratCast_le`
-
-English:
-lemma nnratCast_le
-  given: (a b : Rat>=0)
-  statement: a <= b ↔ (a : Rat) <= (b : Rat)
-  proof: NNRat.coe_le_coe.symm
-
-中文:
-引理 nnratCast_le
-  条件: (a b : 有理数>=0)
-  结论: a <= b ↔ (a : 有理数) <= (b : 有理数)
-  证明: NNRat.coe_le_coe.symm
+@[qify_simps] lemma nnratCast_eq (a b : ℚ≥0) : a = b ↔ (a : ℚ) = (b : ℚ) := NNRat.coe_inj.symm
+/-
+**Mathlib.Tactic.Qify.nnratCast_le** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qif
+y`。
+形式化陈述：∀ (a b : ℚ≥0), a ≤ b ↔ ↑a ≤ ↑b
+参数：a b : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `NNRat.coe_le_coe`：coe_le_coe : (p : Rat) <= q ↔ p <= q
 -/
-@[qify_simps] lemma nnratCast_le (a b : Rat>=0) : a <= b ↔ (a : Rat) <= (b : Rat) := NNRat.coe_le_coe.symm
-/--
-lemma `nnratCast_lt` / 引理 `nnratCast_lt`
-
-English:
-lemma nnratCast_lt
-  given: (a b : Rat>=0)
-  statement: a < b ↔ (a : Rat) < (b : Rat)
-  proof: NNRat.coe_lt_coe.symm
-
-中文:
-引理 nnratCast_lt
-  条件: (a b : 有理数>=0)
-  结论: a < b ↔ (a : 有理数) < (b : 有理数)
-  证明: NNRat.coe_lt_coe.symm
+@[qify_simps] lemma nnratCast_le (a b : ℚ≥0) : a ≤ b ↔ (a : ℚ) ≤ (b : ℚ) := NNRat.coe_le_coe.symm
+/-
+**Mathlib.Tactic.Qify.nnratCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qif
+y`。
+形式化陈述：∀ (a b : ℚ≥0), a < b ↔ ↑a < ↑b
+参数：a b : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `NNRat.coe_lt_coe`：coe_lt_coe : (p : Rat) < q ↔ p < q
 -/
-@[qify_simps] lemma nnratCast_lt (a b : Rat>=0) : a < b ↔ (a : Rat) < (b : Rat) := NNRat.coe_lt_coe.symm
-/--
-lemma `nnratCast_ne` / 引理 `nnratCast_ne`
-
-English:
-lemma nnratCast_ne
-  given: (a b : Rat>=0)
-  statement: a != b ↔ (a : Rat) != (b : Rat)
-  proof: NNRat.ne_iff.symm
-
-中文:
-引理 nnratCast_ne
-  条件: (a b : 有理数>=0)
-  结论: a != b ↔ (a : 有理数) != (b : 有理数)
-  证明: NNRat.ne_iff.symm
+@[qify_simps] lemma nnratCast_lt (a b : ℚ≥0) : a < b ↔ (a : ℚ) < (b : ℚ) := NNRat.coe_lt_coe.symm
+/-
+**Mathlib.Tactic.Qify.nnratCast_ne** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.Qif
+y`。
+形式化陈述：∀ (a b : ℚ≥0), a ≠ b ↔ ↑a ≠ ↑b
+参数：a b : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `NNRat.ne_iff`：ne_iff {x y : Rat>=0} : (x : Rat) != (y : Rat) ↔ x != y
 -/
-@[qify_simps] lemma nnratCast_ne (a b : Rat>=0) : a != b ↔ (a : Rat) != (b : Rat) := NNRat.ne_iff.symm
+@[qify_simps] lemma nnratCast_ne (a b : ℚ≥0) : a ≠ b ↔ (a : ℚ) ≠ (b : ℚ) := NNRat.ne_iff.symm
 
 end Mathlib.Tactic.Qify
+

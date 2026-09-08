@@ -24,42 +24,38 @@ universe w v u
 variable {C : Type u} [Category.{v} C] [CartesianMonoidalCategory C] [BraidedCategory C] {X : C}
 
 variable (X) in
-/--
-Definition of `abbrev` / `abbrev` 的定义
+/-- Abbreviation for an unbundled commutative group object. It is a group object that is a
+commutative monoid object. -/
+/-
+**CategoryTheory.abbrev** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：abbrev CommGrpObj
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class abbrev
-  parameters: CommGrpObj
-  (no additional axioms)
-
-中文:
-类 abbrev
-  参数: CommGrpObj
-  (无附加公理)
-
-Depends on / 依赖: GrpObj, IsCommMonObj
+--- 原说明 ---
+Abbreviation for an unbundled commutative group object. It is a group object tha
+t is a
+commutative monoid object.
 -/
 class abbrev CommGrpObj := GrpObj X, IsCommMonObj X
 
 variable (X) in
 /-- If `X` represents a presheaf of commutative groups, then `X` is a commutative group object. -/
 @[instance_reducible]
-/--
-Definition of `CommGrpObj.ofRepresentableBy` / `CommGrpObj.ofRepresentableBy` 的定义
+/-
+**CategoryTheory.CommGrpObj.ofRepresentableBy** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.CommGrpObj`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory.Br
+aidedCategory C] →         (X : C) →           (F : CategoryTheory.Functor Cᵒᵖ C
+ommGrpCat) →             (F.comp (CategoryTheory.forget CommGrpCat)).Representab
+leBy X → CategoryTheory.CommGrpObj X
+参数：X : C；F : CategoryTheory.Functor Cᵒᵖ CommGrpCat；F.comp (CategoryTheory.forget
+ CommGrpCat)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CommGrpObj.ofRepresentableBy
-  signature: (F : Cᵒᵖ ⥤ CommGrpCat.{w})
-  body: GrpObj.ofRepresentableBy X (F ⋙ forget₂ CommGrpCat GrpCat) α
-  __ := IsCommMonObj.ofRepresentableBy X (F ⋙ forget₂ CommGrpCat CommMonCat) α
-
-中文:
-定义 CommGrpObj.ofRepresentableBy
-  签名: (F : Cᵒᵖ ⥤ 交换群范畴.{w})
-  定义体: GrpObj.ofRepresentableBy X (F ⋙ forget₂ CommGrpCat GrpCat) α
-  __ := IsCommMonObj.ofRepresentableBy X (F ⋙ forget₂ CommGrpCat CommMonCat) α
-
-Depends on / 依赖: CommGrpCat, GrpCat, GrpObj, GrpObj.ofRepresentableBy, ofRepresentableBy
+--- 原说明 ---
+If `X` represents a presheaf of commutative groups, then `X` is a commutative gr
+oup object.
 -/
 def CommGrpObj.ofRepresentableBy (F : Cᵒᵖ ⥤ CommGrpCat.{w})
     (α : (F ⋙ forget _).RepresentableBy X) : CommGrpObj X where
@@ -69,32 +65,18 @@ def CommGrpObj.ofRepresentableBy (F : Cᵒᵖ ⥤ CommGrpCat.{w})
 set_option backward.defeqAttrib.useBackward true in
 /-- The yoneda embedding of `CommGrp C` into presheaves of groups. -/
 @[simps]
-/--
-Definition of `yonedaCommGrpGrpObj` / `yonedaCommGrpGrpObj` 的定义
+/-
+**CategoryTheory.yonedaCommGrpGrpObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaCommGrpGrpObj (G : CommGrp C) : (Grp C)ᵒᵖ ⥤ CommGrpCat where obj H
+参数：G : CommGrp C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommGrp.comm`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2
+ : CategoryTheory…
 
-English:
-definition yonedaCommGrpGrpObj
-  signature: (G : CommGrp C)
-  body: .of (unop H ⟶ G.toGrp)
-  map {H I} f := CommGrpCat.ofHom {
-    toFun := (f.unop ≫ ·)
-    map_one' := by ext; simp [Mon.Hom.hom_one]
-    map_mul' g h := by
-      ext
-      simpa using! ((yonedaGrpObj G.X).map f.unop.hom.hom.op).hom.map_mul g.hom.hom h.hom.hom }
-
-中文:
-定义 yonedaCommGrpGrpObj
-  签名: (G : 交换群 C)
-  定义体: .of (unop H ⟶ G.toGrp)
-  map {H I} f := CommGrpCat.ofHom {
-    toFun := (f.unop ≫ ·)
-    map_one' := by ext; simp [Mon.Hom.hom_one]
-    map_mul' g h := by
-      ext
-      simpa using! ((yonedaGrpObj G.X).map f.unop.hom.hom.op).hom.map_mul g.hom.hom h.hom.hom }
-
-Depends on / 依赖: G.toGrp
+--- 原说明 ---
+The yoneda embedding of `CommGrp C` into presheaves of groups.
 -/
 def yonedaCommGrpGrpObj (G : CommGrp C) : (Grp C)ᵒᵖ ⥤ CommGrpCat where
   obj H := .of (unop H ⟶ G.toGrp)
@@ -109,34 +91,17 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- The yoneda embedding of `CommGrp C` into presheaves of groups. -/
 @[simps]
-/--
-Definition of `yonedaCommGrpGrp` / `yonedaCommGrpGrp` 的定义
+/-
+**CategoryTheory.yonedaCommGrpGrp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：yonedaCommGrpGrp : CommGrp C ⥤ (Grp C)ᵒᵖ ⥤ CommGrpCat where obj
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommGrp.comm`：∀ {C : Type u₁} [inst : CategoryTheory.Cate
+gory.{v₁, u₁} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2
+ : CategoryTheory…
 
-English:
-definition yonedaCommGrpGrp
-  signature: : CommGrp C ⥤ (Grp C)ᵒᵖ ⥤ CommGrpCat where
-  body: yonedaCommGrpGrpObj
-  map {X₁ X₂} ψ := {
-    app Y := CommGrpCat.ofHom {
-      toFun := (· ≫ ψ.hom)
-      map_one' := by ext; simp
-      map_mul' f g := by
-        ext
-        simpa using ((yonedaGrp.map ψ.hom).app (op (unop Y).X)).hom.map_mul f.hom.hom g.hom.hom } }
-
-中文:
-定义 yonedaCommGrpGrp
-  签名: : 交换群 C ⥤ (群 C)ᵒᵖ ⥤ 交换群范畴 where
-  定义体: yonedaCommGrpGrpObj
-  map {X₁ X₂} ψ := {
-    app Y := CommGrpCat.ofHom {
-      toFun := (· ≫ ψ.hom)
-      map_one' := by ext; simp
-      map_mul' f g := by
-        ext
-        simpa using ((yonedaGrp.map ψ.hom).app (op (unop Y).X)).hom.map_mul f.hom.hom g.hom.hom } }
-
-Depends on / 依赖: yonedaCommGrpGrpObj
+--- 原说明 ---
+The yoneda embedding of `CommGrp C` into presheaves of groups.
 -/
 def yonedaCommGrpGrp : CommGrp C ⥤ (Grp C)ᵒᵖ ⥤ CommGrpCat where
   obj := yonedaCommGrpGrpObj
@@ -149,3 +114,4 @@ def yonedaCommGrpGrp : CommGrp C ⥤ (Grp C)ᵒᵖ ⥤ CommGrpCat where
         simpa using ((yonedaGrp.map ψ.hom).app (op (unop Y).X)).hom.map_mul f.hom.hom g.hom.hom } }
 
 end CategoryTheory
+

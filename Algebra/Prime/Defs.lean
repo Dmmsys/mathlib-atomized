@@ -38,223 +38,140 @@ section Prime
 
 variable [CommMonoidWithZero M]
 
-/--
-Definition of `Prime` / `Prime` 的定义
+/-- An element `p` of a commutative monoid with zero (e.g., a ring) is called *prime*,
+if it's not zero, not a unit, and `p ∣ a * b → p ∣ a ∨ p ∣ b` for all `a`, `b`. -/
+/-
+**Prime** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Prime (p : M) : Prop
+参数：p : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Prime
-  signature: (p : M)
-  body: p != 0 ∧ ¬IsUnit p ∧ forall a b, p ∣ a * b -> p ∣ a ∨ p ∣ b
-
-中文:
-定义 素
-  签名: (p : M)
-  定义体: p != 0 ∧ ¬IsUnit p ∧ forall a b, p ∣ a * b -> p ∣ a ∨ p ∣ b
-
-Depends on / 依赖: IsUnit
+--- 原说明 ---
+An element `p` of a commutative monoid with zero (e.g., a ring) is called *prime
+*,
+if it's not zero, not a unit, and `p ∣ a * b → p ∣ a ∨ p ∣ b` for all `a`, `b`.
 -/
 def Prime (p : M) : Prop :=
-  p != 0 ∧ ¬IsUnit p ∧ forall a b, p ∣ a * b -> p ∣ a ∨ p ∣ b
+  p ≠ 0 ∧ ¬IsUnit p ∧ ∀ a b, p ∣ a * b → p ∣ a ∨ p ∣ b
 
 namespace Prime
 
 variable {p : M} (hp : Prime p)
 include hp
 
-/--
-theorem `ne_zero` / 定理 `ne_zero`
-
-English:
-theorem ne_zero
-  statement: p != 0
-  proof: hp.1
-
-中文:
-定理 ne_zero
-  结论: p != 0
-  证明: hp.1
+/-
+**Prime.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：ne_zero : p != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem ne_zero : p != 0 :=
+theorem ne_zero : p ≠ 0 :=
   hp.1
-
-/--
-theorem `not_isUnit` / 定理 `not_isUnit`
-
-English:
-theorem not_isUnit
-  statement: ¬IsUnit p
-  proof: hp.2.1
-
-@[deprecated (since := "2026-08-02")]
-alias not_unit := not_isUnit
-
-中文:
-定理 not_isUnit
-  结论: ¬是单位 p
-  证明: hp.2.1
-
-@[deprecated (since := "2026-08-02")]
-alias not_unit := not_isUnit
+/-
+**Prime.not_isUnit** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：not_isUnit : ¬IsUnit p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem not_isUnit : ¬IsUnit p :=
   hp.2.1
 
 @[deprecated (since := "2026-08-02")]
 alias not_unit := not_isUnit
-
-/--
-theorem `not_dvd_one` / 定理 `not_dvd_one`
-
-English:
-theorem not_dvd_one
-  statement: ¬p ∣ 1
-  proof: mt (isUnit_of_dvd_one ·) hp.not_isUnit
-
-中文:
-定理 not_dvd_one
-  结论: ¬p ∣ 1
-  证明: mt (isUnit_of_dvd_one ·) hp.not_isUnit
-
-Depends on / 依赖: hp.not_isUnit, isUnit_of_dvd_one, not_isUnit
+/-
+**Prime.not_dvd_one** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：not_dvd_one : ¬p ∣ 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `isUnit_of_dvd_one`：isUnit_of_dvd_one {a : α} (h : a ∣ 1) : IsUnit (a : α
+)
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
 -/
 theorem not_dvd_one : ¬p ∣ 1 :=
   mt (isUnit_of_dvd_one ·) hp.not_isUnit
-
-/--
-theorem `ne_one` / 定理 `ne_one`
-
-English:
-theorem ne_one
-  statement: p != 1
-  proof: fun h => hp.2.1 (h.symm ▸ isUnit_one)
-
-中文:
-定理 ne_one
-  结论: p != 1
-  证明: fun h => hp.2.1 (h.symm ▸ isUnit_one)
-
-Depends on / 依赖: h.symm, isUnit_one
+/-
+**Prime.ne_one** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：ne_one : p != 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ne_one : p != 1 := fun h => hp.2.1 (h.symm ▸ isUnit_one)
-
-/--
-theorem `dvd_or_dvd` / 定理 `dvd_or_dvd`
-
-English:
-theorem dvd_or_dvd
-  given: {a b : M} (h : p ∣ a * b)
-  statement: p ∣ a ∨ p ∣ b
-  proof: hp.2.2 a b h
-
-中文:
-定理 dvd_or_dvd
-  条件: {a b : M} (h : p ∣ a * b)
-  结论: p ∣ a ∨ p ∣ b
-  证明: hp.2.2 a b h
+theorem ne_one : p ≠ 1 := fun h => hp.2.1 (h.symm ▸ isUnit_one)
+/-
+**Prime.dvd_or_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：dvd_or_dvd {a b : M} (h : p ∣ a * b) : p ∣ a ∨ p ∣ b
+参数：h : p ∣ a * b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem dvd_or_dvd {a b : M} (h : p ∣ a * b) : p ∣ a ∨ p ∣ b :=
   hp.2.2 a b h
-
-/--
-theorem `dvd_mul` / 定理 `dvd_mul`
-
-English:
-theorem dvd_mul
-  given: {a b : M}
-  statement: p ∣ a * b ↔ p ∣ a ∨ p ∣ b
-  proof: ⟨hp.dvd_or_dvd, (Or.elim · (dvd_mul_of_dvd_left · _) (dvd_mul_of_dvd_right · _))⟩
-
-中文:
-定理 dvd_mul
-  条件: {a b : M}
-  结论: p ∣ a * b ↔ p ∣ a ∨ p ∣ b
-  证明: ⟨hp.dvd_or_dvd, (Or.elim · (dvd_mul_of_dvd_left · _) (dvd_mul_of_dvd_right · _))⟩
-
-Depends on / 依赖: Or.elim, dvd_mul_of_dvd_left, dvd_mul_of_dvd_right, dvd_or_dvd, hp.dvd_or_dvd
+/-
+**Prime.dvd_mul** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：dvd_mul {a b : M} : p ∣ a * b ↔ p ∣ a ∨ p ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prime.dvd_or_dvd`：dvd_or_dvd {a b : M} (h : p ∣ a * b) : p ∣ a ∨ p ∣ b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `dvd_mul_of_dvd_left`：dvd_mul_of_dvd_left (h : a ∣ b) (c : α) : a ∣ b * c
+· 使用定理 `dvd_mul_of_dvd_right`：dvd_mul_of_dvd_right (h : a ∣ b) (c : α) : a ∣ c *
+ b
 -/
 theorem dvd_mul {a b : M} : p ∣ a * b ↔ p ∣ a ∨ p ∣ b :=
   ⟨hp.dvd_or_dvd, (Or.elim · (dvd_mul_of_dvd_left · _) (dvd_mul_of_dvd_right · _))⟩
-
-/--
-theorem `isPrimal` / 定理 `isPrimal`
-
-English:
-theorem isPrimal
-  statement: IsPrimal p
-  proof: fun _a _b dvd => (hp.dvd_or_dvd dvd).elim
-  (fun h => ⟨p, 1, h, one_dvd _, (mul_one p).symm⟩) fun h => ⟨1, p, one_dvd _, h, (one_mul p).symm⟩
-
-中文:
-定理 isPrimal
-  结论: IsPrimal p
-  证明: fun _a _b dvd => (hp.dvd_or_dvd dvd).elim
-  (fun h => ⟨p, 1, h, one_dvd _, (mul_one p).symm⟩) fun h => ⟨1, p, one_dvd _, h, (one_mul p).symm⟩
-
-Depends on / 依赖: dvd_or_dvd, hp.dvd_or_dvd
+/-
+**Prime.isPrimal** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：isPrimal : IsPrimal p
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Prime.dvd_or_dvd`：dvd_or_dvd {a b : M} (h : p ∣ a * b) : p ∣ a ∨ p ∣ b
+· 使用定理 `one_dvd`：one_dvd (a : α) : 1 ∣ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem isPrimal : IsPrimal p := fun _a _b dvd => (hp.dvd_or_dvd dvd).elim
-  (fun h => ⟨p, 1, h, one_dvd _, (mul_one p).symm⟩) fun h => ⟨1, p, one_dvd _, h, (one_mul p).symm⟩
-
-/--
-theorem `not_dvd_mul` / 定理 `not_dvd_mul`
-
-English:
-theorem not_dvd_mul
-  given: {a b : M} (ha : ¬ p ∣ a) (hb : ¬ p ∣ b)
-  statement: ¬ p ∣ a * b
-  proof: hp.dvd_mul.not.mpr not_or.mpr ⟨ha, hb⟩
-
-中文:
-定理 not_dvd_mul
-  条件: {a b : M} (ha : ¬ p ∣ a) (hb : ¬ p ∣ b)
-  结论: ¬ p ∣ a * b
-  证明: hp.dvd_mul.not.mpr not_or.mpr ⟨ha, hb⟩
-
-Depends on / 依赖: dvd_mul, hp.dvd_mul.not.mpr, not_or, not_or.mpr
+theorem isPrimal : IsPrimal p := fun _a _b dvd ↦ (hp.dvd_or_dvd dvd).elim
+  (fun h ↦ ⟨p, 1, h, one_dvd _, (mul_one p).symm⟩) fun h ↦ ⟨1, p, one_dvd _, h, (one_mul p).symm⟩
+/-
+**Prime.not_dvd_mul** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：not_dvd_mul {a b : M} (ha : ¬ p ∣ a) (hb : ¬ p ∣ b) : ¬ p ∣ a * b
+参数：ha : ¬ p ∣ a；hb : ¬ p ∣ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Prime.dvd_mul`：dvd_mul {a b : M} : p ∣ a * b ↔ p ∣ a ∨ p ∣ b
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
 -/
 theorem not_dvd_mul {a b : M} (ha : ¬ p ∣ a) (hb : ¬ p ∣ b) : ¬ p ∣ a * b :=
-hp.dvd_mul.not.mpr not_or.mpr ⟨ha, hb⟩
-
-/--
-theorem `dvd_of_dvd_pow` / 定理 `dvd_of_dvd_pow`
-
-English:
-theorem dvd_of_dvd_pow
-  given: {a : M} {n : Nat} (h : p ∣ a ^ n)
-  statement: p ∣ a
-  proof: by
-  induction n with
-  | zero =>
-    rw [pow_zero] at h
-    have := isUnit_of_dvd_one h
-    have := not_isUnit hp
-    contradiction
-  | succ n ih =>
-    rw [pow_succ'] at h
-    rcases dvd_or_dvd hp h with dvd_a | dvd_pow
-    · assumption
-    · exact ih dvd_pow
-
-中文:
-定理 dvd_of_dvd_pow
-  条件: {a : M} {n : 自然数} (h : p ∣ a ^ n)
-  结论: p ∣ a
-  证明: by
-  induction n with
-  | zero =>
-    rw [pow_zero] at h
-    have := isUnit_of_dvd_one h
-    have := not_isUnit hp
-    contradiction
-  | succ n ih =>
-    rw [pow_succ'] at h
-    rcases dvd_or_dvd hp h with dvd_a | dvd_pow
-    · assumption
-    · exact ih dvd_pow
-
-Depends on / 依赖: dvd_a, dvd_or_dvd, dvd_pow, isUnit_of_dvd_one, not_isUnit, pow_succ, pow_zero
+  hp.dvd_mul.not.mpr <| not_or.mpr ⟨ha, hb⟩
+/-
+**Prime.dvd_of_dvd_pow** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：dvd_of_dvd_pow {a : M} {n : Nat} (h : p ∣ a ^ n) : p ∣ a
+参数：h : p ∣ a ^ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isUnit_of_dvd_one`：isUnit_of_dvd_one {a : α} (h : a ∣ 1) : IsUnit (a : α
+)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
+· 使用定理 `Prime.dvd_or_dvd`：dvd_or_dvd {a b : M} (h : p ∣ a * b) : p ∣ a ∨ p ∣ b
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
 -/
-theorem dvd_of_dvd_pow {a : M} {n : Nat} (h : p ∣ a ^ n) : p ∣ a := by
+theorem dvd_of_dvd_pow {a : M} {n : ℕ} (h : p ∣ a ^ n) : p ∣ a := by
   induction n with
   | zero =>
     rw [pow_zero] at h
@@ -266,212 +183,150 @@ theorem dvd_of_dvd_pow {a : M} {n : Nat} (h : p ∣ a ^ n) : p ∣ a := by
     rcases dvd_or_dvd hp h with dvd_a | dvd_pow
     · assumption
     · exact ih dvd_pow
-
-/--
-theorem `dvd_pow_iff_dvd` / 定理 `dvd_pow_iff_dvd`
-
-English:
-theorem dvd_pow_iff_dvd
-  given: {a : M} {n : Nat} (hn : n != 0)
-  statement: p ∣ a ^ n ↔ p ∣ a
-  proof: ⟨hp.dvd_of_dvd_pow, (dvd_pow · hn)⟩
-
-中文:
-定理 dvd_pow_iff_dvd
-  条件: {a : M} {n : 自然数} (hn : n != 0)
-  结论: p ∣ a ^ n ↔ p ∣ a
-  证明: ⟨hp.dvd_of_dvd_pow, (dvd_pow · hn)⟩
-
-Depends on / 依赖: dvd_of_dvd_pow, dvd_pow, hp.dvd_of_dvd_pow
+/-
+**Prime.dvd_pow_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：dvd_pow_iff_dvd {a : M} {n : Nat} (hn : n != 0) : p ∣ a ^ n ↔ p ∣ a
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prime.dvd_of_dvd_pow`：dvd_of_dvd_pow {a : M} {n : Nat} (h : p ∣ a ^ n) :
+ p ∣ a
+· 使用引理 `dvd_pow`：dvd_pow (hab : a ∣ b) : forall {n : Nat} (_ : n != 0), a ∣ b ^ 
+n | 0, hn => (hn rfl).elim | n + 1, _ => by rw [pow_succ']; exact hab.mul_rig…
 -/
-theorem dvd_pow_iff_dvd {a : M} {n : Nat} (hn : n != 0) : p ∣ a ^ n ↔ p ∣ a :=
+theorem dvd_pow_iff_dvd {a : M} {n : ℕ} (hn : n ≠ 0) : p ∣ a ^ n ↔ p ∣ a :=
   ⟨hp.dvd_of_dvd_pow, (dvd_pow · hn)⟩
 
 end Prime
 
 @[simp]
-/--
-theorem `not_prime_zero` / 定理 `not_prime_zero`
-
-English:
-theorem not_prime_zero
-  statement: ¬Prime (0 : M)
-  proof: fun h => h.ne_zero rfl
-
-@[simp]
-
-中文:
-定理 not_prime_zero
-  结论: ¬素 (0 : M)
-  证明: fun h => h.ne_zero rfl
-
-@[simp]
-
-Depends on / 依赖: h.ne_zero, ne_zero
+/-
+**not_prime_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_prime_zero : ¬Prime (0 : M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prime.ne_zero`：ne_zero : p != 0
 -/
 theorem not_prime_zero : ¬Prime (0 : M) := fun h => h.ne_zero rfl
 
 @[simp]
-/--
-theorem `not_prime_one` / 定理 `not_prime_one`
-
-English:
-theorem not_prime_one
-  statement: ¬Prime (1 : M)
-  proof: fun h => h.not_isUnit isUnit_one
-
-中文:
-定理 not_prime_one
-  结论: ¬素 (1 : M)
-  证明: fun h => h.not_isUnit isUnit_one
-
-Depends on / 依赖: h.not_isUnit, isUnit_one, not_isUnit
+/-
+**not_prime_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_prime_one : ¬Prime (1 : M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
 -/
 theorem not_prime_one : ¬Prime (1 : M) := fun h => h.not_isUnit isUnit_one
 
 end Prime
 
-/--
-theorem `Irreducible.not_dvd_isUnit` / 定理 `Irreducible.not_dvd_isUnit`
-
-English:
-theorem Irreducible.not_dvd_isUnit
-  given: [CommMonoid M] {p u : M} (hp : Irreducible p) (hu : IsUnit u)
-  proof: mt (isUnit_of_dvd_unit · hu) hp.not_isUnit
-
-中文:
-定理 不可约.not_dvd_isUnit
-  条件: [交换幺半群 M] {p u : M} (hp : 不可约 p) (hu : 是单位 u)
-  证明: mt (isUnit_of_dvd_unit · hu) hp.not_isUnit
-
-Depends on / 依赖: hp.not_isUnit, isUnit_of_dvd_unit, not_isUnit
+/-
+**Irreducible.not_dvd_isUnit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.not_dvd_isUnit [CommMonoid M] {p u : M} (hp : Irreducible p) (
+hu : IsUnit u) : ¬p ∣ u
+参数：hp : Irreducible p；hu : IsUnit u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `isUnit_of_dvd_unit`：isUnit_of_dvd_unit {x y : α} (xy : x ∣ y) (hu : IsUn
+it y) : IsUnit x
+· 使用定理 `Irreducible.not_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}, Irre
+ducible p → ¬IsUnit p
 -/
 theorem Irreducible.not_dvd_isUnit [CommMonoid M] {p u : M} (hp : Irreducible p) (hu : IsUnit u) :
     ¬p ∣ u :=
   mt (isUnit_of_dvd_unit · hu) hp.not_isUnit
-
-/--
-theorem `Irreducible.not_dvd_one` / 定理 `Irreducible.not_dvd_one`
-
-English:
-theorem Irreducible.not_dvd_one
-  given: [CommMonoid M] {p : M} (hp : Irreducible p)
-  statement: ¬p ∣ 1
-  proof: hp.not_dvd_isUnit isUnit_one
-
-中文:
-定理 不可约.not_dvd_one
-  条件: [交换幺半群 M] {p : M} (hp : 不可约 p)
-  结论: ¬p ∣ 1
-  证明: hp.not_dvd_isUnit isUnit_one
-
-Depends on / 依赖: hp.not_dvd_isUnit, isUnit_one, not_dvd_isUnit
+/-
+**Irreducible.not_dvd_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.not_dvd_one [CommMonoid M] {p : M} (hp : Irreducible p) : ¬p ∣
+ 1
+参数：hp : Irreducible p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.not_dvd_isUnit`：Irreducible.not_dvd_isUnit [CommMonoid M] {p
+ u : M} (hp : Irreducible p) (hu : IsUnit u) : ¬p ∣ u
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
 -/
 theorem Irreducible.not_dvd_one [CommMonoid M] {p : M} (hp : Irreducible p) : ¬p ∣ 1 :=
   hp.not_dvd_isUnit isUnit_one
-
-/--
-theorem `Irreducible.not_dvd_unit` / 定理 `Irreducible.not_dvd_unit`
-
-English:
-theorem Irreducible.not_dvd_unit
-  given: [CommMonoid M] {p : M} (u : Mˣ) (hp : Irreducible p)
-  proof: hp.not_dvd_isUnit u.isUnit
-
-@[simp]
-
-中文:
-定理 不可约.not_dvd_unit
-  条件: [交换幺半群 M] {p : M} (u : Mˣ) (hp : 不可约 p)
-  证明: hp.not_dvd_isUnit u.isUnit
-
-@[simp]
-
-Depends on / 依赖: hp.not_dvd_isUnit, isUnit, not_dvd_isUnit, u.isUnit
+/-
+**Irreducible.not_dvd_unit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.not_dvd_unit [CommMonoid M] {p : M} (u : Mˣ) (hp : Irreducible
+ p) : ¬ p ∣ u
+参数：u : Mˣ；hp : Irreducible p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.not_dvd_isUnit`：Irreducible.not_dvd_isUnit [CommMonoid M] {p
+ u : M} (hp : Irreducible p) (hu : IsUnit u) : ¬p ∣ u
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem Irreducible.not_dvd_unit [CommMonoid M] {p : M} (u : Mˣ) (hp : Irreducible p) :
     ¬ p ∣ u :=
   hp.not_dvd_isUnit u.isUnit
 
 @[simp]
-/--
-theorem `not_irreducible_zero` / 定理 `not_irreducible_zero`
-
-English:
-theorem not_irreducible_zero
-  given: [MonoidWithZero M]
-  statement: ¬Irreducible (0 : M)
-  proof: h (mul_zero 0).symm
-    this.elim hn0 hn0
-
-中文:
-定理 not_irreducible_zero
-  条件: [带零幺半群 M]
-  结论: ¬不可约 (0 : M)
-  证明: h (mul_zero 0).symm
-    this.elim hn0 hn0
-
-Depends on / 依赖: mul_zero
+/-
+**not_irreducible_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_irreducible_zero [MonoidWithZero M] : ¬Irreducible (0 : M) | ⟨hn0, h⟩ 
+=> have : IsUnit (0 : M) ∨ IsUnit (0 : M)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
 -/
 theorem not_irreducible_zero [MonoidWithZero M] : ¬Irreducible (0 : M)
   | ⟨hn0, h⟩ =>
     have : IsUnit (0 : M) ∨ IsUnit (0 : M) := h (mul_zero 0).symm
     this.elim hn0 hn0
-
-/--
-theorem `Irreducible.ne_zero` / 定理 `Irreducible.ne_zero`
-
-English:
-theorem Irreducible.ne_zero
-  given: [MonoidWithZero M]
-  statement: forall {p : M}, Irreducible p -> p != 0
-
-中文:
-定理 不可约.ne_zero
-  条件: [带零幺半群 M]
-  结论: 对任意 {p : M}, 不可约 p -> p != 0
+/-
+**Irreducible.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Irreducible`。
+形式化陈述：∀ {M : Type u_1} [inst : MonoidWithZero M] {p : M}, Irreducible p → p ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_irreducible_zero`：not_irreducible_zero [MonoidWithZero M] : ¬Irreduc
+ible (0 : M) | ⟨hn0, h⟩ => have : IsUnit (0 : M) ∨ IsUnit (0 : M)
 -/
-theorem Irreducible.ne_zero [MonoidWithZero M] : forall {p : M}, Irreducible p -> p != 0
+theorem Irreducible.ne_zero [MonoidWithZero M] : ∀ {p : M}, Irreducible p → p ≠ 0
   | _, hp, rfl => not_irreducible_zero hp
 
-/--
-theorem `Irreducible.dvd_symm` / 定理 `Irreducible.dvd_symm`
+/-- If `p` and `q` are irreducible, then `p ∣ q` implies `q ∣ p`. -/
+/-
+**Irreducible.dvd_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.dvd_symm [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irred
+ucible q) : p ∣ q -> q ∣ p
+参数：hp : Irreducible p；hq : Irreducible q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsUnit.mul_right_dvd`：mul_right_dvd (hu : IsUnit u) : a * u ∣ b ↔ a ∣ b
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `of_irreducible_mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Irredu
+cible (a * b) → IsUnit a ∨ IsUnit b
+· 使用定理 `Irreducible.not_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}, Irre
+ducible p → ¬IsUnit p
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem Irreducible.dvd_symm
-  given: [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irreducible q)
-  proof: by
-  rintro ⟨q', rfl⟩
-  rw [IsUnit.mul_right_dvd (Or.resolve_left (of_irreducible_mul hq) hp.not_isUnit)]
-
-中文:
-定理 不可约.dvd_symm
-  条件: [幺半群 M] {p q : M} (hp : 不可约 p) (hq : 不可约 q)
-  证明: by
-  rintro ⟨q', rfl⟩
-  rw [IsUnit.mul_right_dvd (Or.resolve_left (of_irreducible_mul hq) hp.not_isUnit)]
-
-Depends on / 依赖: IsUnit, IsUnit.mul_right_dvd, Or.resolve_left, hp.not_isUnit, mul_right_dvd, not_isUnit, of_irreducible_mul, resolve_left
+--- 原说明 ---
+If `p` and `q` are irreducible, then `p ∣ q` implies `q ∣ p`.
 -/
 theorem Irreducible.dvd_symm [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irreducible q) :
-    p ∣ q -> q ∣ p := by
+    p ∣ q → q ∣ p := by
   rintro ⟨q', rfl⟩
   rw [IsUnit.mul_right_dvd (Or.resolve_left (of_irreducible_mul hq) hp.not_isUnit)]
-
-/--
-theorem `Irreducible.dvd_comm` / 定理 `Irreducible.dvd_comm`
-
-English:
-theorem Irreducible.dvd_comm
-  given: [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irreducible q)
-  proof: ⟨hp.dvd_symm hq, hq.dvd_symm hp⟩
-
-中文:
-定理 不可约.dvd_comm
-  条件: [幺半群 M] {p q : M} (hp : 不可约 p) (hq : 不可约 q)
-  证明: ⟨hp.dvd_symm hq, hq.dvd_symm hp⟩
-
-Depends on / 依赖: dvd_symm, hp.dvd_symm, hq.dvd_symm
+/-
+**Irreducible.dvd_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.dvd_comm [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irred
+ucible q) : p ∣ q ↔ q ∣ p
+参数：hp : Irreducible p；hq : Irreducible q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.dvd_symm`：Irreducible.dvd_symm [Monoid M] {p q : M} (hp : Ir
+reducible p) (hq : Irreducible q) : p ∣ q -> q ∣ p
 -/
 theorem Irreducible.dvd_comm [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irreducible q) :
     p ∣ q ↔ q ∣ p :=
@@ -481,47 +336,42 @@ section CommMonoidWithZero
 
 variable [CommMonoidWithZero M]
 
-/--
-theorem `Irreducible.prime_of_isPrimal` / 定理 `Irreducible.prime_of_isPrimal`
-
-English:
-theorem Irreducible.prime_of_isPrimal
-  statement: {a : M}
-  proof: ⟨irr.ne_zero, irr.not_isUnit, fun a b dvd => by
-    obtain ⟨d₁, d₂, h₁, h₂, rfl⟩ := primal dvd
-    exact (of_irreducible_mul irr).symm.imp (·.mul_right_dvd.mpr h₁) (·.mul_left_dvd.mpr h₂)⟩
-
-中文:
-定理 不可约.prime_of_isPrimal
-  结论: {a : M}
-  证明: ⟨irr.ne_zero, irr.not_isUnit, fun a b dvd => by
-    obtain ⟨d₁, d₂, h₁, h₂, rfl⟩ := primal dvd
-    exact (of_irreducible_mul irr).symm.imp (·.mul_right_dvd.mpr h₁) (·.mul_left_dvd.mpr h₂)⟩
-
-Depends on / 依赖: irr.ne_zero, irr.not_isUnit, mul_left_dvd, mul_left_dvd.mpr, mul_right_dvd, mul_right_dvd.mpr, ne_zero, not_isUnit, of_irreducible_mul, primal, symm.imp
+/-
+**Irreducible.prime_of_isPrimal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.prime_of_isPrimal {a : M} (irr : Irreducible a) (primal : IsPr
+imal a) : Prime a
+参数：irr : Irreducible a；primal : IsPrimal a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.ne_zero`：∀ {M : Type u_1} [inst : MonoidWithZero M] {p : M},
+ Irreducible p → p ≠ 0
+· 使用定理 `Irreducible.not_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}, Irre
+ducible p → ¬IsUnit p
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsUnit.mul_right_dvd`：mul_right_dvd (hu : IsUnit u) : a * u ∣ b ↔ a ∣ b
+· 使用定理 `IsUnit.mul_left_dvd`：mul_left_dvd (hu : IsUnit u) : u * a ∣ b ↔ a ∣ b
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用定理 `of_irreducible_mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Irredu
+cible (a * b) → IsUnit a ∨ IsUnit b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Irreducible.prime_of_isPrimal {a : M}
     (irr : Irreducible a) (primal : IsPrimal a) : Prime a :=
-  ⟨irr.ne_zero, irr.not_isUnit, fun a b dvd => by
+  ⟨irr.ne_zero, irr.not_isUnit, fun a b dvd ↦ by
     obtain ⟨d₁, d₂, h₁, h₂, rfl⟩ := primal dvd
     exact (of_irreducible_mul irr).symm.imp (·.mul_right_dvd.mpr h₁) (·.mul_left_dvd.mpr h₂)⟩
-
-/--
-theorem `Irreducible.prime` / 定理 `Irreducible.prime`
-
-English:
-theorem Irreducible.prime
-  given: [DecompositionMonoid M] {a : M} (irr : Irreducible a)
-  statement: Prime a
-  proof: irr.prime_of_isPrimal (DecompositionMonoid.primal a)
-
-中文:
-定理 不可约.prime
-  条件: [分解幺半群 M] {a : M} (irr : 不可约 a)
-  结论: 素 a
-  证明: irr.prime_of_isPrimal (DecompositionMonoid.primal a)
-
-Depends on / 依赖: DecompositionMonoid, DecompositionMonoid.primal, irr.prime_of_isPrimal, primal, prime_of_isPrimal
+/-
+**Irreducible.prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Irreducible.prime [DecompositionMonoid M] {a : M} (irr : Irreducible a) : 
+Prime a
+参数：irr : Irreducible a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.prime_of_isPrimal`：Irreducible.prime_of_isPrimal {a : M} (ir
+r : Irreducible a) (primal : IsPrimal a) : Prime a
+· 使用定理 `DecompositionMonoid.primal`：∀ {α : Type u_1} {inst : Semigroup α} [self 
+: DecompositionMonoid α] (a : α), IsPrimal a
 -/
 theorem Irreducible.prime [DecompositionMonoid M] {a : M} (irr : Irreducible a) : Prime a :=
   irr.prime_of_isPrimal (DecompositionMonoid.primal a)
@@ -532,60 +382,54 @@ section CancelCommMonoidWithZero
 
 variable [CommMonoidWithZero M] [IsCancelMulZero M] {p : M}
 
-/--
-theorem `Prime.irreducible` / 定理 `Prime.irreducible`
-
-English:
-theorem Prime.irreducible
-  given: (hp : Prime p)
-  statement: Irreducible p
-  proof: ⟨hp.not_isUnit, fun a b => by
-    rintro rfl
-    exact (hp.dvd_or_dvd dvd_rfl).symm.imp
-      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_right <| right_ne_zero_of_mul hp.ne_zero).mp <|
-        dvd_mul_of_dvd_right · _)
-      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).mp <|
-        dvd_mul_of_dvd_left · _)⟩
-
-中文:
-定理 素.irreducible
-  条件: (hp : 素 p)
-  结论: 不可约 p
-  证明: ⟨hp.not_isUnit, fun a b => by
-    rintro rfl
-    exact (hp.dvd_or_dvd dvd_rfl).symm.imp
-      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_right <| right_ne_zero_of_mul hp.ne_zero).mp <|
-        dvd_mul_of_dvd_right · _)
-      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).mp <|
-        dvd_mul_of_dvd_left · _)⟩
+/-
+**Prime.irreducible** 是 Mathlib 中的一个定理，位于命名空间 `Prime`。
+形式化陈述：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCancelMulZero M] {p : M}
+, Prime p → Irreducible p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `isUnit_of_dvd_one`：isUnit_of_dvd_one {a : α} (h : a ∣ 1) : IsUnit (a : α
+)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_dvd_mul_iff_right`：mul_dvd_mul_iff_right [CommMonoidWithZero α] [IsC
+ancelMulZero α] {a b c : α} (hc : c != 0) : a * c ∣ b * c ↔ a ∣ b
+· 使用定理 `right_ne_zero_of_mul`：right_ne_zero_of_mul : a * b != 0 -> b != 0
+· 使用定理 `Prime.ne_zero`：ne_zero : p != 0
+· 使用定理 `dvd_mul_of_dvd_right`：dvd_mul_of_dvd_right (h : a ∣ b) (c : α) : a ∣ c *
+ b
+· 使用定理 `mul_dvd_mul_iff_left`：mul_dvd_mul_iff_left [MonoidWithZero α] [IsLeftCan
+celMulZero α] {a b c : α} (ha : a != 0) : a * b ∣ a * c ↔ b ∣ c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `left_ne_zero_of_mul`：left_ne_zero_of_mul : a * b != 0 -> a != 0
+· 使用定理 `dvd_mul_of_dvd_left`：dvd_mul_of_dvd_left (h : a ∣ b) (c : α) : a ∣ b * c
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用定理 `Prime.dvd_or_dvd`：dvd_or_dvd {a b : M} (h : p ∣ a * b) : p ∣ a ∨ p ∣ b
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 protected theorem Prime.irreducible (hp : Prime p) : Irreducible p :=
-  ⟨hp.not_isUnit, fun a b => by
+  ⟨hp.not_isUnit, fun a b ↦ by
     rintro rfl
     exact (hp.dvd_or_dvd dvd_rfl).symm.imp
       (isUnit_of_dvd_one <| (mul_dvd_mul_iff_right <| right_ne_zero_of_mul hp.ne_zero).mp <|
         dvd_mul_of_dvd_right · _)
       (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).mp <|
         dvd_mul_of_dvd_left · _)⟩
-
-/--
-theorem `irreducible_iff_prime` / 定理 `irreducible_iff_prime`
-
-English:
-theorem irreducible_iff_prime
-  given: [DecompositionMonoid M] {a : M}
-  statement: Irreducible a ↔ Prime a
-  proof: ⟨Irreducible.prime, Prime.irreducible⟩
-
-中文:
-定理 irreducible_iff_prime
-  条件: [分解幺半群 M] {a : M}
-  结论: 不可约 a ↔ 素 a
-  证明: ⟨Irreducible.prime, Prime.irreducible⟩
-
-Depends on / 依赖: Irreducible, Irreducible.prime, Prime.irreducible, irreducible
+/-
+**irreducible_iff_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：irreducible_iff_prime [DecompositionMonoid M] {a : M} : Irreducible a ↔ Pr
+ime a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Irreducible.prime`：Irreducible.prime [DecompositionMonoid M] {a : M} (ir
+r : Irreducible a) : Prime a
+· 使用定理 `Prime.irreducible`：∀ {M : Type u_1} [inst : CommMonoidWithZero M] [IsCan
+celMulZero M] {p : M}, Prime p → Irreducible p
 -/
 theorem irreducible_iff_prime [DecompositionMonoid M] {a : M} : Irreducible a ↔ Prime a :=
   ⟨Irreducible.prime, Prime.irreducible⟩
 
 end CancelCommMonoidWithZero
+

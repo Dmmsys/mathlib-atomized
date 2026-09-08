@@ -48,111 +48,98 @@ section Semimodule
 /-- A `LocallyConvexSpace` is a topological semimodule over an ordered semiring in which convex
 neighborhoods of a point form a neighborhood basis at that point. -/
 @[wikidata Q1572357]
-/--
-Definition of `LocallyConvexSpace` / `LocallyConvexSpace` 的定义
+/-
+**LocallyConvexSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(𝕜 : Type u_1) →   (E : Type u_2) →     [inst : Semiring 𝕜] →       [Parti
+alOrder 𝕜] → [inst_2 : AddCommMonoid E] → [_root_.Module 𝕜 E] → [TopologicalSpac
+e E] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LocallyConvexSpace
-  parameters: (𝕜 E : Type*) [Semiring 𝕜] [PartialOrder 𝕜]
-  axioms and operations (1):
-    - convex_basis : forall x : E, (𝓝 x).HasBasis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id
-
-中文:
-类 LocallyConvex空间
-  参数: (𝕜 E : 类型) [半环 𝕜] [偏序 𝕜]
-  公理与运算 (1 个):
-    - convex_basis : 对任意 x : E, (𝓝 x).有基 (fun s : 集合 E => s in 𝓝 x ∧ 凸 𝕜 s) id
+--- 原说明 ---
+A `LocallyConvexSpace` is a topological semimodule over an ordered semiring in w
+hich convex
+neighborhoods of a point form a neighborhood basis at that point.
 -/
 class LocallyConvexSpace (𝕜 E : Type*) [Semiring 𝕜] [PartialOrder 𝕜]
     [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E] : Prop where
-  convex_basis : forall x : E, (𝓝 x).HasBasis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id
+  convex_basis : ∀ x : E, (𝓝 x).HasBasis (fun s : Set E => s ∈ 𝓝 x ∧ Convex 𝕜 s) id
 
 variable (𝕜 E : Type*) [Semiring 𝕜] [PartialOrder 𝕜]
   [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E]
-
-/--
-theorem `locallyConvexSpace_iff` / 定理 `locallyConvexSpace_iff`
-
-English:
-theorem locallyConvexSpace_iff
-  proof: ⟨fun _ => LocallyConvexSpace.convex_basis, LocallyConvexSpace.mk⟩
-
-中文:
-定理 locallyConvexSpace_iff
-  证明: ⟨fun _ => LocallyConvexSpace.convex_basis, LocallyConvexSpace.mk⟩
-
-Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.convex_basis, LocallyConvexSpace.mk, convex_basis
+/-
+**locallyConvexSpace_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：locallyConvexSpace_iff : LocallyConvexSpace 𝕜 E ↔ forall x : E, (𝓝 x).HasB
+asis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.convex_basis`：∀ {𝕜 : Type u_1} {E : Type u_2} {inst :
+ Semiring 𝕜} {inst_1 : PartialOrder 𝕜} {inst_2 : AddCommMonoid E}   {inst_3 : _r
+oot_.Module 𝕜 E} {ins…
 -/
 theorem locallyConvexSpace_iff :
-    LocallyConvexSpace 𝕜 E ↔ forall x : E, (𝓝 x).HasBasis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id :=
-  ⟨fun _ => LocallyConvexSpace.convex_basis, LocallyConvexSpace.mk⟩
-
-/--
-theorem `LocallyConvexSpace.ofBases` / 定理 `LocallyConvexSpace.ofBases`
-
-English:
-theorem LocallyConvexSpace.ofBases
-  statement: {ι : Type*} (b : E -> ι -> Set E) (p : E -> ι -> Prop)
-  proof: ⟨fun x =>
-    (hbasis x).to_hasBasis
-      (fun i hi => ⟨b x i, ⟨⟨(hbasis x).mem_of_mem hi, hconvex x i hi⟩, le_refl (b x i)⟩⟩)
-      fun s hs =>
-      ⟨(hbasis x).index s hs.1, ⟨(hbasis x).property_index hs.1, (hbasis x).set_index_subset hs.1⟩⟩⟩
-
-中文:
-定理 LocallyConvex空间.ofBases
-  结论: {ι : 类型} (b : E -> ι -> 集合 E) (p : E -> ι -> 命题)
-  证明: ⟨fun x =>
-    (hbasis x).to_hasBasis
-      (fun i hi => ⟨b x i, ⟨⟨(hbasis x).mem_of_mem hi, hconvex x i hi⟩, le_refl (b x i)⟩⟩)
-      fun s hs =>
-      ⟨(hbasis x).index s hs.1, ⟨(hbasis x).property_index hs.1, (hbasis x).set_index_subset hs.1⟩⟩⟩
-
-Depends on / 依赖: hbasis, hconvex, le_refl, mem_of_mem, property_index, set_index_subset, to_hasBasis
+    LocallyConvexSpace 𝕜 E ↔ ∀ x : E, (𝓝 x).HasBasis (fun s : Set E => s ∈ 𝓝 x ∧ Convex 𝕜 s) id :=
+  ⟨fun _ ↦ LocallyConvexSpace.convex_basis, LocallyConvexSpace.mk⟩
+/-
+**LocallyConvexSpace.ofBases** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LocallyConvexSpace.ofBases {ι : Type*} (b : E -> ι -> Set E) (p : E -> ι -
+> Prop) (hbasis : forall x : E, (𝓝 x).HasBasis (p x) (b x)) (hconvex : forall x 
+i, p x i -> Convex 𝕜 (b x i)) : LocallyConvexSpace 𝕜 E
+参数：b : E -> ι -> Set E；p : E -> ι -> Prop；hbasis : forall x : E, (𝓝 x).HasBasis 
+(p x) (b x)；hconvex : forall x i, p x i -> Convex 𝕜 (b x i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `Filter.HasBasis.mem_of_mem`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter 
+α} {p : ι → Prop} {s : ι → Set α} {i : ι}, l.HasBasis p s → p i → s i ∈ l
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.HasBasis.property_index`：∀ {α : Type u_1} {ι : Sort u_4} {l : Fil
+ter α} {p : ι → Prop} {s : ι → Set α} {t : Set α} (h : l.HasBasis p s)   (ht : t
+ ∈ l), p ↑(h.index t…
+· 使用定理 `Filter.HasBasis.set_index_subset`：∀ {α : Type u_1} {ι : Sort u_4} {l : F
+ilter α} {p : ι → Prop} {s : ι → Set α} {t : Set α} (h : l.HasBasis p s)   (ht :
+ t ∈ l), s ↑(h.index t…
 -/
-theorem LocallyConvexSpace.ofBases {ι : Type*} (b : E -> ι -> Set E) (p : E -> ι -> Prop)
-    (hbasis : forall x : E, (𝓝 x).HasBasis (p x) (b x)) (hconvex : forall x i, p x i -> Convex 𝕜 (b x i)) :
+theorem LocallyConvexSpace.ofBases {ι : Type*} (b : E → ι → Set E) (p : E → ι → Prop)
+    (hbasis : ∀ x : E, (𝓝 x).HasBasis (p x) (b x)) (hconvex : ∀ x i, p x i → Convex 𝕜 (b x i)) :
     LocallyConvexSpace 𝕜 E :=
   ⟨fun x =>
     (hbasis x).to_hasBasis
       (fun i hi => ⟨b x i, ⟨⟨(hbasis x).mem_of_mem hi, hconvex x i hi⟩, le_refl (b x i)⟩⟩)
       fun s hs =>
       ⟨(hbasis x).index s hs.1, ⟨(hbasis x).property_index hs.1, (hbasis x).set_index_subset hs.1⟩⟩⟩
-
-/--
-theorem `LocallyConvexSpace.convex_basis_zero` / 定理 `LocallyConvexSpace.convex_basis_zero`
-
-English:
-theorem LocallyConvexSpace.convex_basis_zero
-  given: [LocallyConvexSpace 𝕜 E]
-  proof: LocallyConvexSpace.convex_basis 0
-
-中文:
-定理 LocallyConvex空间.convex_basis_zero
-  条件: [LocallyConvex空间 𝕜 E]
-  证明: LocallyConvexSpace.convex_basis 0
-
-Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.convex_basis, convex_basis
+/-
+**LocallyConvexSpace.convex_basis_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LocallyConvexSpace.convex_basis_zero [LocallyConvexSpace 𝕜 E] : (𝓝 0 : Fil
+ter E).HasBasis (fun s => s in (𝓝 0 : Filter E) ∧ Convex 𝕜 s) id
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.convex_basis`：∀ {𝕜 : Type u_1} {E : Type u_2} {inst :
+ Semiring 𝕜} {inst_1 : PartialOrder 𝕜} {inst_2 : AddCommMonoid E}   {inst_3 : _r
+oot_.Module 𝕜 E} {ins…
 -/
 theorem LocallyConvexSpace.convex_basis_zero [LocallyConvexSpace 𝕜 E] :
-    (𝓝 0 : Filter E).HasBasis (fun s => s in (𝓝 0 : Filter E) ∧ Convex 𝕜 s) id :=
+    (𝓝 0 : Filter E).HasBasis (fun s => s ∈ (𝓝 0 : Filter E) ∧ Convex 𝕜 s) id :=
   LocallyConvexSpace.convex_basis 0
-
-/--
-theorem `locallyConvexSpace_iff_exists_convex_subset` / 定理 `locallyConvexSpace_iff_exists_convex_subset`
-
-English:
-theorem locallyConvexSpace_iff_exists_convex_subset
-  proof: (locallyConvexSpace_iff 𝕜 E).trans (forall_congr' fun _ => hasBasis_self)
-
-中文:
-定理 locallyConvexSpace_iff_存在_convex_subset
-  证明: (locallyConvexSpace_iff 𝕜 E).trans (forall_congr' fun _ => hasBasis_self)
-
-Depends on / 依赖: forall_congr, hasBasis_self, locallyConvexSpace_iff
+/-
+**locallyConvexSpace_iff_exists_convex_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：locallyConvexSpace_iff_exists_convex_subset : LocallyConvexSpace 𝕜 E ↔ for
+all x : E, forall U in 𝓝 x, exists S in 𝓝 x, Convex 𝕜 S ∧ S subseteq U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `locallyConvexSpace_iff`：locallyConvexSpace_iff : LocallyConvexSpace 𝕜 E 
+↔ forall x : E, (𝓝 x).HasBasis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Filter.hasBasis_self`：hasBasis_self {l : Filter α} {P : Set α -> Prop} :
+ HasBasis l (fun s => s in l ∧ P s) id ↔ forall t in l, exists r in l, P r ∧ r s
+ubseteq t
 -/
 theorem locallyConvexSpace_iff_exists_convex_subset :
-    LocallyConvexSpace 𝕜 E ↔ forall x : E, forall U in 𝓝 x, exists S in 𝓝 x, Convex 𝕜 S ∧ S subseteq U :=
+    LocallyConvexSpace 𝕜 E ↔ ∀ x : E, ∀ U ∈ 𝓝 x, ∃ S ∈ 𝓝 x, Convex 𝕜 S ∧ S ⊆ U :=
   (locallyConvexSpace_iff 𝕜 E).trans (forall_congr' fun _ => hasBasis_self)
 
 end Semimodule
@@ -163,122 +150,142 @@ variable (𝕜 E : Type*) [Semiring 𝕜] [PartialOrder 𝕜]
   [AddCommGroup E] [Module 𝕜 E] [TopologicalSpace E]
   [IsTopologicalAddGroup E]
 
-/--
-theorem `LocallyConvexSpace.ofBasisZero` / 定理 `LocallyConvexSpace.ofBasisZero`
-
-English:
-theorem LocallyConvexSpace.ofBasisZero
-  statement: {ι : Type*} (b : ι -> Set E) (p : ι -> Prop)
-  proof: by
-  refine LocallyConvexSpace.ofBases 𝕜 E (fun (x : E) (i : ι) => (x + ·) '' b i) (fun _ => p)
-    (fun x => ?_) fun x i hi => (hconvex i hi).translate x
-  rw [← map_add_left_nhds_zero]
-  exact hbasis.map _
-
-中文:
-定理 LocallyConvex空间.ofBasisZero
-  结论: {ι : 类型} (b : ι -> 集合 E) (p : ι -> 命题)
-  证明: by
-  refine LocallyConvexSpace.ofBases 𝕜 E (fun (x : E) (i : ι) => (x + ·) '' b i) (fun _ => p)
-    (fun x => ?_) fun x i hi => (hconvex i hi).translate x
-  rw [← map_add_left_nhds_zero]
-  exact hbasis.map _
-
-Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.ofBases, hbasis, hbasis.map, hconvex, map_add_left_nhds_zero, ofBases, translate
+/-
+**LocallyConvexSpace.ofBasisZero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LocallyConvexSpace.ofBasisZero {ι : Type*} (b : ι -> Set E) (p : ι -> Prop
+) (hbasis : (𝓝 0).HasBasis p b) (hconvex : forall i, p i -> Convex 𝕜 (b i)) : Lo
+callyConvexSpace 𝕜 E
+参数：b : ι -> Set E；p : ι -> Prop；hbasis : (𝓝 0).HasBasis p b；hconvex : forall i, 
+p i -> Convex 𝕜 (b i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.ofBases`：LocallyConvexSpace.ofBases {ι : Type*} (b : 
+E -> ι -> Set E) (p : E -> ι -> Prop) (hbasis : forall x : E, (𝓝 x).HasBasis (p 
+x) (b x)) (hconv…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_add_left_nhds_zero`：∀ {G : Type w} [inst : TopologicalSpace G] [inst
+_1 : AddGroup G] [IsTopologicalAddGroup G] (x : G),   Filter.map (fun x_1 => x +
+ x_1) (nhds …
+· 使用定理 `Filter.HasBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α} (f : α → β),   l.HasBasis p s → (Filte
+r.map f l…
+· 使用定理 `Convex.translate`：Convex.translate (hs : Convex 𝕜 s) (z : E) : Convex 𝕜 
+((fun x => z + x) '' s)
 -/
-theorem LocallyConvexSpace.ofBasisZero {ι : Type*} (b : ι -> Set E) (p : ι -> Prop)
-    (hbasis : (𝓝 0).HasBasis p b) (hconvex : forall i, p i -> Convex 𝕜 (b i)) :
+theorem LocallyConvexSpace.ofBasisZero {ι : Type*} (b : ι → Set E) (p : ι → Prop)
+    (hbasis : (𝓝 0).HasBasis p b) (hconvex : ∀ i, p i → Convex 𝕜 (b i)) :
     LocallyConvexSpace 𝕜 E := by
   refine LocallyConvexSpace.ofBases 𝕜 E (fun (x : E) (i : ι) => (x + ·) '' b i) (fun _ => p)
     (fun x => ?_) fun x i hi => (hconvex i hi).translate x
   rw [← map_add_left_nhds_zero]
   exact hbasis.map _
-
-/--
-theorem `locallyConvexSpace_iff_zero` / 定理 `locallyConvexSpace_iff_zero`
-
-English:
-theorem locallyConvexSpace_iff_zero
-  statement: LocallyConvexSpace 𝕜 E ↔
-  proof: ⟨fun _ => LocallyConvexSpace.convex_basis 0, fun h =>
-    LocallyConvexSpace.ofBasisZero 𝕜 E _ _ h fun _ => And.right⟩
-
-中文:
-定理 locallyConvexSpace_iff_zero
-  结论: LocallyConvex空间 𝕜 E ↔
-  证明: ⟨fun _ => LocallyConvexSpace.convex_basis 0, fun h =>
-    LocallyConvexSpace.ofBasisZero 𝕜 E _ _ h fun _ => And.right⟩
-
-Depends on / 依赖: And.right, LocallyConvexSpace, LocallyConvexSpace.convex_basis, LocallyConvexSpace.ofBasisZero, convex_basis, ofBasisZero
+/-
+**locallyConvexSpace_iff_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：locallyConvexSpace_iff_zero : LocallyConvexSpace 𝕜 E ↔ (𝓝 0 : Filter E).Ha
+sBasis (fun s : Set E => s in (𝓝 0 : Filter E) ∧ Convex 𝕜 s) id
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.convex_basis`：∀ {𝕜 : Type u_1} {E : Type u_2} {inst :
+ Semiring 𝕜} {inst_1 : PartialOrder 𝕜} {inst_2 : AddCommMonoid E}   {inst_3 : _r
+oot_.Module 𝕜 E} {ins…
+· 使用定理 `LocallyConvexSpace.ofBasisZero`：LocallyConvexSpace.ofBasisZero {ι : Type
+*} (b : ι -> Set E) (p : ι -> Prop) (hbasis : (𝓝 0).HasBasis p b) (hconvex : for
+all i, p i -> Convex…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem locallyConvexSpace_iff_zero : LocallyConvexSpace 𝕜 E ↔
-    (𝓝 0 : Filter E).HasBasis (fun s : Set E => s in (𝓝 0 : Filter E) ∧ Convex 𝕜 s) id :=
+    (𝓝 0 : Filter E).HasBasis (fun s : Set E => s ∈ (𝓝 0 : Filter E) ∧ Convex 𝕜 s) id :=
   ⟨fun _ => LocallyConvexSpace.convex_basis 0, fun h =>
     LocallyConvexSpace.ofBasisZero 𝕜 E _ _ h fun _ => And.right⟩
-
-/--
-theorem `locallyConvexSpace_iff_exists_convex_subset_zero` / 定理 `locallyConvexSpace_iff_exists_convex_subset_zero`
-
-English:
-theorem locallyConvexSpace_iff_exists_convex_subset_zero
-  proof: (locallyConvexSpace_iff_zero 𝕜 E).trans hasBasis_self
-
-中文:
-定理 locallyConvexSpace_iff_存在_convex_subset_zero
-  证明: (locallyConvexSpace_iff_zero 𝕜 E).trans hasBasis_self
-
-Depends on / 依赖: hasBasis_self, locallyConvexSpace_iff_zero
+/-
+**locallyConvexSpace_iff_exists_convex_subset_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：locallyConvexSpace_iff_exists_convex_subset_zero : LocallyConvexSpace 𝕜 E 
+↔ forall U in (𝓝 0 : Filter E), exists S in (𝓝 0 : Filter E), Convex 𝕜 S ∧ S sub
+seteq U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `locallyConvexSpace_iff_zero`：locallyConvexSpace_iff_zero : LocallyConvex
+Space 𝕜 E ↔ (𝓝 0 : Filter E).HasBasis (fun s : Set E => s in (𝓝 0 : Filter E) ∧ 
+Convex 𝕜 s) id
+· 使用定理 `Filter.hasBasis_self`：hasBasis_self {l : Filter α} {P : Set α -> Prop} :
+ HasBasis l (fun s => s in l ∧ P s) id ↔ forall t in l, exists r in l, P r ∧ r s
+ubseteq t
 -/
 theorem locallyConvexSpace_iff_exists_convex_subset_zero :
-    LocallyConvexSpace 𝕜 E ↔ forall U in (𝓝 0 : Filter E), exists S in (𝓝 0 : Filter E), Convex 𝕜 S ∧ S subseteq U :=
+    LocallyConvexSpace 𝕜 E ↔ ∀ U ∈ (𝓝 0 : Filter E), ∃ S ∈ (𝓝 0 : Filter E), Convex 𝕜 S ∧ S ⊆ U :=
   (locallyConvexSpace_iff_zero 𝕜 E).trans hasBasis_self
 
 -- see Note [lower instance priority]
-instance (priority := 100) LocallyConvexSpace.toLocallyPathConnectedSpace [Module Real E]
-    [ContinuousSMul Real E] [LocallyConvexSpace Real E] : LocallyPathConnectedSpace E :=
-  .of_bases (fun x => convex_basis (𝕜 := Real) x)
-fun _ _ hs => hs.2.isPathConnected nonempty_of_mem mem_of_mem_nhds hs.1
-
-/--
-theorem `Convex.locallyPathConnectedSpace` / 定理 `Convex.locallyPathConnectedSpace`
-
-English:
-theorem Convex.locallyPathConnectedSpace
-  statement: [Module Real E] [ContinuousSMul Real E] [LocallyConvexSpace Real E]
-  proof: by
-  refine ⟨fun x => ⟨fun s => ⟨fun hs => ?_, fun ⟨t, ht⟩ => mem_of_superset ht.1.1 ht.2⟩⟩⟩
-  let ⟨t, ht⟩ := (mem_nhds_subtype S x s).mp hs
-  let ⟨t', ht'⟩ := (LocallyConvexSpace.convex_basis (𝕜 := Real) x.1).mem_iff.mp ht.1
-  refine ⟨(↑) ⁻¹' t', ⟨?_, ?_⟩, (preimage_mono ht'.2).trans ht.2⟩
-  · exact continuousAt_subtype_val.preimage_mem_nhds ht'.1.1
-  · refine Subtype.preimage_coe_self_inter _ _ ▸ IsPathConnected.preimage_coe ?_ inter_subset_left
-    exact (hS.inter ht'.1.2).isPathConnected ⟨x, x.2, mem_of_mem_nhds ht'.1.1⟩
-
-@[deprecated (since := "2026-06-21")]
-alias Convex.locPathConnectedSpace := Convex.locallyPathConnectedSpace
-
-中文:
-定理 凸.locallyPathConnectedSpace
-  结论: [模 实数 E] [连续标量乘法 实数 E] [LocallyConvex空间 实数 E]
-  证明: by
-  refine ⟨fun x => ⟨fun s => ⟨fun hs => ?_, fun ⟨t, ht⟩ => mem_of_superset ht.1.1 ht.2⟩⟩⟩
-  let ⟨t, ht⟩ := (mem_nhds_subtype S x s).mp hs
-  let ⟨t', ht'⟩ := (LocallyConvexSpace.convex_basis (𝕜 := Real) x.1).mem_iff.mp ht.1
-  refine ⟨(↑) ⁻¹' t', ⟨?_, ?_⟩, (preimage_mono ht'.2).trans ht.2⟩
-  · exact continuousAt_subtype_val.preimage_mem_nhds ht'.1.1
-  · refine Subtype.preimage_coe_self_inter _ _ ▸ IsPathConnected.preimage_coe ?_ inter_subset_left
-    exact (hS.inter ht'.1.2).isPathConnected ⟨x, x.2, mem_of_mem_nhds ht'.1.1⟩
-
-@[deprecated (since := "2026-06-21")]
-alias Convex.locPathConnectedSpace := Convex.locallyPathConnectedSpace
-
-Depends on / 依赖: IsPathConnected, IsPathConnected.preimage_coe, LocallyConvexSpace, LocallyConvexSpace.convex_basis, Subtype, Subtype.preimage_coe_self_inter, continuousAt_subtype_val, continuousAt_subtype_val.preimage_mem_nhds, convex_basis, hS.inter, inter_subset_left, isPathConnected, mem_iff, mem_iff.mp, mem_nhds_subtype, mem_of_mem, mem_of_superset, preimage_coe, preimage_coe_self_inter, preimage_mem_nhds
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Convex.locallyPathConnectedSpace [Module Real E] [ContinuousSMul Real E] [LocallyConvexSpace Real E]
-    {S : Set E} (hS : Convex Real S) : LocallyPathConnectedSpace S := by
-  refine ⟨fun x => ⟨fun s => ⟨fun hs => ?_, fun ⟨t, ht⟩ => mem_of_superset ht.1.1 ht.2⟩⟩⟩
+instance (priority := 100) LocallyConvexSpace.toLocallyPathConnectedSpace [Module ℝ E]
+    [ContinuousSMul ℝ E] [LocallyConvexSpace ℝ E] : LocallyPathConnectedSpace E :=
+  .of_bases (fun x ↦ convex_basis (𝕜 := ℝ) x)
+    fun _ _ hs ↦ hs.2.isPathConnected <| nonempty_of_mem <| mem_of_mem_nhds hs.1
+
+/-- Convex subsets of locally convex spaces are locally path-connected. -/
+/-
+**Convex.locallyPathConnectedSpace** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Convex.locallyPathConnectedSpace [Module Real E] [ContinuousSMul Real E] [
+LocallyConvexSpace Real E] {S : Set E} (hS : Convex Real S) : LocallyPathConnect
+edSpace S
+参数：hS : Convex Real S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhds_subtype`：mem_nhds_subtype (s : Set X) (x : { x // x in s }) (t 
+: Set { x // x in s }) : t in 𝓝 x ↔ exists u in 𝓝 (x : X), Subtype.val ⁻¹' u sub
+seteq …
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `LocallyConvexSpace.convex_basis`：∀ {𝕜 : Type u_1} {E : Type u_2} {inst :
+ Semiring 𝕜} {inst_1 : PartialOrder 𝕜} {inst_2 : AddCommMonoid E}   {inst_3 : _r
+oot_.Module 𝕜 E} {ins…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `ContinuousAt.preimage_mem_nhds`：ContinuousAt.preimage_mem_nhds {t : Set 
+Y} (h : ContinuousAt f x) (ht : t in 𝓝 (f x)) : f ⁻¹' t in 𝓝 x
+· 使用定理 `continuousAt_subtype_val`：continuousAt_subtype_val {p : X -> Prop} {x : 
+Subtype p} : ContinuousAt ((↑) : Subtype p -> X) x
+· 使用定理 `IsPathConnected.preimage_coe`：IsPathConnected.preimage_coe {U W : Set X}
+ (hW : IsPathConnected W) (hWU : W subseteq U) : IsPathConnected (((↑) : U -> X)
+ ⁻¹' W)
+· 使用定理 `Convex.isPathConnected`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst_1
+ : _root_.Module ℝ E] [inst_2 : TopologicalSpace E] [ContinuousAdd E]   [Continu
+ousSMul ℝ E]…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `Convex.inter`：Convex.inter {t : Set E} (hs : Convex 𝕜 s) (ht : Convex 𝕜 
+t) : Convex 𝕜 (s inter t)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `Subtype.preimage_coe_self_inter`：preimage_coe_self_inter (s t : Set α) :
+ ((↑) : s -> α) ⁻¹' (s inter t) = ((↑) : s -> α) ⁻¹' t
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+
+--- 原说明 ---
+Convex subsets of locally convex spaces are locally path-connected.
+-/
+theorem Convex.locallyPathConnectedSpace [Module ℝ E] [ContinuousSMul ℝ E] [LocallyConvexSpace ℝ E]
+    {S : Set E} (hS : Convex ℝ S) : LocallyPathConnectedSpace S := by
+  refine ⟨fun x ↦ ⟨fun s ↦ ⟨fun hs ↦ ?_, fun ⟨t, ht⟩ ↦ mem_of_superset ht.1.1 ht.2⟩⟩⟩
   let ⟨t, ht⟩ := (mem_nhds_subtype S x s).mp hs
-  let ⟨t', ht'⟩ := (LocallyConvexSpace.convex_basis (𝕜 := Real) x.1).mem_iff.mp ht.1
+  let ⟨t', ht'⟩ := (LocallyConvexSpace.convex_basis (𝕜 := ℝ) x.1).mem_iff.mp ht.1
   refine ⟨(↑) ⁻¹' t', ⟨?_, ?_⟩, (preimage_mono ht'.2).trans ht.2⟩
   · exact continuousAt_subtype_val.preimage_mem_nhds ht'.1.1
   · refine Subtype.preimage_coe_self_inter _ _ ▸ IsPathConnected.preimage_coe ?_ inter_subset_left
@@ -295,31 +302,35 @@ variable (𝕜 E : Type*) [Field 𝕜] [PartialOrder 𝕜] [ZeroLEOneClass 𝕜]
   [AddCommGroup E] [Module 𝕜 E] [TopologicalSpace E]
   [IsTopologicalAddGroup E] [ContinuousConstSMul 𝕜 E]
 
-/--
-theorem `LocallyConvexSpace.convex_open_basis_zero` / 定理 `LocallyConvexSpace.convex_open_basis_zero`
-
-English:
-theorem LocallyConvexSpace.convex_open_basis_zero
-  given: [LocallyConvexSpace 𝕜 E]
-  proof: (LocallyConvexSpace.convex_basis_zero 𝕜 E).to_hasBasis
-    (fun s hs =>
-      ⟨interior s, ⟨mem_interior_iff_mem_nhds.mpr hs.1, isOpen_interior, hs.2.interior⟩,
-        interior_subset⟩)
-    fun s hs => ⟨s, ⟨hs.2.1.mem_nhds hs.1, hs.2.2⟩, subset_rfl⟩
-
-中文:
-定理 LocallyConvex空间.convex_open_basis_zero
-  条件: [LocallyConvex空间 𝕜 E]
-  证明: (LocallyConvexSpace.convex_basis_zero 𝕜 E).to_hasBasis
-    (fun s hs =>
-      ⟨interior s, ⟨mem_interior_iff_mem_nhds.mpr hs.1, isOpen_interior, hs.2.interior⟩,
-        interior_subset⟩)
-    fun s hs => ⟨s, ⟨hs.2.1.mem_nhds hs.1, hs.2.2⟩, subset_rfl⟩
-
-Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.convex_basis_zero, convex_basis_zero, interior, interior_subset, isOpen_interior, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mpr, mem_nhds, subset_rfl, to_hasBasis
+/-
+**LocallyConvexSpace.convex_open_basis_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LocallyConvexSpace.convex_open_basis_zero [LocallyConvexSpace 𝕜 E] : (𝓝 0 
+: Filter E).HasBasis (fun s => (0 : E) in s ∧ IsOpen s ∧ Convex 𝕜 s) id
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.to_hasBasis`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort 
+u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' →
+ Set α},   l.HasB…
+· 使用定理 `LocallyConvexSpace.convex_basis_zero`：LocallyConvexSpace.convex_basis_ze
+ro [LocallyConvexSpace 𝕜 E] : (𝓝 0 : Filter E).HasBasis (fun s => s in (𝓝 0 : Fi
+lter E) ∧ Convex 𝕜 s) id
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_interior_iff_mem_nhds`：mem_interior_iff_mem_nhds : x in interior s ↔
+ s in 𝓝 x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `isOpen_interior`：isOpen_interior : IsOpen (interior s)
+· 使用定理 `Convex.interior`：∀ {𝕜 : Type u_2} {E : Type u_3} [inst : Field 𝕜] [inst_
+1 : PartialOrder 𝕜] [inst_2 : AddCommGroup E]   [inst_3 : _root_.Module 𝕜 E] [in
+st_4 …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `interior_subset`：interior_subset : interior s subseteq s
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 -/
 theorem LocallyConvexSpace.convex_open_basis_zero [LocallyConvexSpace 𝕜 E] :
-    (𝓝 0 : Filter E).HasBasis (fun s => (0 : E) in s ∧ IsOpen s ∧ Convex 𝕜 s) id :=
+    (𝓝 0 : Filter E).HasBasis (fun s => (0 : E) ∈ s ∧ IsOpen s ∧ Convex 𝕜 s) id :=
   (LocallyConvexSpace.convex_basis_zero 𝕜 E).to_hasBasis
     (fun s hs =>
       ⟨interior s, ⟨mem_interior_iff_mem_nhds.mpr hs.1, isOpen_interior, hs.2.interior⟩,
@@ -328,44 +339,74 @@ theorem LocallyConvexSpace.convex_open_basis_zero [LocallyConvexSpace 𝕜 E] :
 
 variable {𝕜 E} [LocallyConvexSpace 𝕜 E] {s t : Set E} {x : E}
 
-/--
-theorem `Disjoint.exists_open_convexes` / 定理 `Disjoint.exists_open_convexes`
+/-- In a locally convex space, every two disjoint convex sets such that one is compact and the other
+is closed admit disjoint convex open neighborhoods. -/
+/-
+**Disjoint.exists_open_convexes** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Disjoint.exists_open_convexes (disj : Disjoint s t) (hs₁ : Convex 𝕜 s) (hs
+₂ : IsCompact s) (ht₁ : Convex 𝕜 t) (ht₂ : IsClosed t) : exists u v, IsOpen u ∧ 
+IsOpen v ∧ Convex 𝕜 u ∧ Convex 𝕜 v ∧ s subseteq u ∧ t subseteq v ∧ Disjoint u v
+参数：disj : Disjoint s t；hs₁ : Convex 𝕜 s；hs₂ : IsCompact s；ht₁ : Convex 𝕜 t；ht₂ :
+ IsClosed t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isUniformAddGroup_of_addCommGroup`：∀ {G : Type u_1} [inst : AddCommGroup
+ G] [inst_1 : TopologicalSpace G] [inst_2 : IsTopologicalAddGroup G],   IsUnifor
+mAddGroup G
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `LocallyConvexSpace.convex_open_basis_zero`：LocallyConvexSpace.convex_ope
+n_basis_zero [LocallyConvexSpace 𝕜 E] : (𝓝 0 : Filter E).HasBasis (fun s => (0 :
+ E) in s ∧ IsOpen s ∧ Convex 𝕜 …
+· 使用定理 `Disjoint.exists_uniform_thickening_of_basis`：Disjoint.exists_uniform_thi
+ckening_of_basis {p : ι -> Prop} {s : ι -> Set (α × α)} (hU : (𝓤 α).HasBasis p s
+) {A B : Set α} (hA : IsCompact A…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `uniformity_eq_comap_nhds_zero`：∀ (Gᵣ : Type u_3) [inst : UniformSpace Gᵣ
+] [inst_1 : AddGroup Gᵣ] [IsRightUniformAddGroup Gᵣ],   uniformity Gᵣ = Filter.c
+omap (fun x => x.2 …
+· 使用定理 `IsUniformAddGroup.isRightUniformAddGroup`：∀ (α : Type u_1) [inst : Unifo
+rmSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α], IsRightUniformAddGroup α
+· 使用定理 `IsOpen.add_left`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Ad
+dGroup α] [ContinuousConstVAdd α α] {s t : Set α},   IsOpen t → IsOpen (s + t)
+· 使用定理 `SeparatelyContinuousAdd.to_continuousVAdd`：∀ {M : Type u_3} [inst : Topo
+logicalSpace M] [inst_1 : Add M] [SeparatelyContinuousAdd M], ContinuousConstVAd
+d M M
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `Convex.add`：Convex.add {t : Set E} (hs : Convex 𝕜 s) (ht : Convex 𝕜 t) :
+ Convex 𝕜 (s + t)
+· 使用定理 `Set.subset_add_left`：∀ {α : Type u_2} [inst : AddZeroClass α] (s : Set α
+) {t : Set α}, 0 ∈ t → s ⊆ s + t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.image_add_left`：∀ {α : Type u_2} [inst : AddGroup α] {t : Set α} {a 
+: α}, (fun x => a + x) '' t = (fun x => -a + x) ⁻¹' t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
 
-English:
-theorem Disjoint.exists_open_convexes
-  statement: (disj : Disjoint s t)
-  proof: by
-  let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
-  have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
-  have := (LocallyConvexSpace.convex_open_basis_zero 𝕜 E).comap fun x : E × E => x.2 - x.1
-  rw [← uniformity_eq_comap_nhds_zero] at this
-  rcases disj.exists_uniform_thickening_of_basis this hs₂ ht₂ with ⟨V, ⟨hV0, hVopen, hVconvex⟩, hV⟩
-  refine ⟨s + V, t + V, hVopen.add_left, hVopen.add_left, hs₁.add hVconvex, ht₁.add hVconvex,
-    subset_add_left _ hV0, subset_add_left _ hV0, ?_⟩
-  simp_rw [← iUnion_add_left_image, image_add_left]
-  simp_rw [UniformSpace.ball, ← preimage_comp, sub_eq_neg_add] at hV
-  exact hV
-
-中文:
-定理 Disjoint.存在_open_convexes
-  结论: (disj : Disjoint s t)
-  证明: by
-  let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
-  have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
-  have := (LocallyConvexSpace.convex_open_basis_zero 𝕜 E).comap fun x : E × E => x.2 - x.1
-  rw [← uniformity_eq_comap_nhds_zero] at this
-  rcases disj.exists_uniform_thickening_of_basis this hs₂ ht₂ with ⟨V, ⟨hV0, hVopen, hVconvex⟩, hV⟩
-  refine ⟨s + V, t + V, hVopen.add_left, hVopen.add_left, hs₁.add hVconvex, ht₁.add hVconvex,
-    subset_add_left _ hV0, subset_add_left _ hV0, ?_⟩
-  simp_rw [← iUnion_add_left_image, image_add_left]
-  simp_rw [UniformSpace.ball, ← preimage_comp, sub_eq_neg_add] at hV
-  exact hV
-
-Depends on / 依赖: IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, LocallyConvexSpace, LocallyConvexSpace.convex_open_basis_zero, UniformSpace, add_left, convex_open_basis_zero, disj.exists_uniform_thickening_of_basis, exists_uniform_thickening_of_basis, hVconvex, hVopen, hVopen.add_left, isUniformAddGroup_of_addCommGroup, rightUniformSpace, subset_add_left, uniformity_eq_comap_nhds_zero
+--- 原说明 ---
+In a locally convex space, every two disjoint convex sets such that one is compa
+ct and the other
+is closed admit disjoint convex open neighborhoods.
 -/
 theorem Disjoint.exists_open_convexes (disj : Disjoint s t)
     (hs₁ : Convex 𝕜 s) (hs₂ : IsCompact s) (ht₁ : Convex 𝕜 t) (ht₂ : IsClosed t) :
-    exists u v, IsOpen u ∧ IsOpen v ∧ Convex 𝕜 u ∧ Convex 𝕜 v ∧ s subseteq u ∧ t subseteq v ∧ Disjoint u v := by
+    ∃ u v, IsOpen u ∧ IsOpen v ∧ Convex 𝕜 u ∧ Convex 𝕜 v ∧ s ⊆ u ∧ t ⊆ v ∧ Disjoint u v := by
   let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   have := (LocallyConvexSpace.convex_open_basis_zero 𝕜 E).comap fun x : E × E => x.2 - x.1
@@ -377,26 +418,42 @@ theorem Disjoint.exists_open_convexes (disj : Disjoint s t)
   simp_rw [UniformSpace.ball, ← preimage_comp, sub_eq_neg_add] at hV
   exact hV
 
-/--
-lemma `exists_open_convex_of_notMem` / 引理 `exists_open_convex_of_notMem`
+/-- In a locally convex space, every point `x` and closed convex set `s ∌ x` admit disjoint convex
+open neighborhoods. -/
+/-
+**exists_open_convex_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：exists_open_convex_of_notMem (hx : x ∉ s) (hsconv : Convex 𝕜 s) (hsclosed 
+: IsClosed s) : exists U V : Set E, IsOpen U ∧ IsOpen V ∧ Convex 𝕜 U ∧ Convex 𝕜 
+V ∧ x in U ∧ s subseteq V ∧ Disjoint U V
+参数：hx : x ∉ s；hsconv : Convex 𝕜 s；hsclosed : IsClosed s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Disjoint.exists_open_convexes`：Disjoint.exists_open_convexes (disj : Dis
+joint s t) (hs₁ : Convex 𝕜 s) (hs₂ : IsCompact s) (ht₁ : Convex 𝕜 t) (ht₂ : IsCl
+osed t) : exists u …
 
-English:
-lemma exists_open_convex_of_notMem
-  given: (hx : x ∉ s) (hsconv : Convex 𝕜 s) (hsclosed : IsClosed s)
-  proof: by
-  simpa [*] using Disjoint.exists_open_convexes (s := {x}) (t := s) (𝕜 := 𝕜)
-
-中文:
-引理 存在_open_convex_of_notMem
-  条件: (hx : x ∉ s) (hsconv : 凸 𝕜 s) (hsclosed : 是闭集 s)
-  证明: by
-  simpa [*] using Disjoint.exists_open_convexes (s := {x}) (t := s) (𝕜 := 𝕜)
-
-Depends on / 依赖: Disjoint, Disjoint.exists_open_convexes, exists_open_convexes
+--- 原说明 ---
+In a locally convex space, every point `x` and closed convex set `s ∌ x` admit d
+isjoint convex
+open neighborhoods.
 -/
 lemma exists_open_convex_of_notMem (hx : x ∉ s) (hsconv : Convex 𝕜 s) (hsclosed : IsClosed s) :
-    exists U V : Set E,
-      IsOpen U ∧ IsOpen V ∧ Convex 𝕜 U ∧ Convex 𝕜 V ∧ x in U ∧ s subseteq V ∧ Disjoint U V := by
+    ∃ U V : Set E,
+      IsOpen U ∧ IsOpen V ∧ Convex 𝕜 U ∧ Convex 𝕜 V ∧ x ∈ U ∧ s ⊆ V ∧ Disjoint U V := by
   simpa [*] using Disjoint.exists_open_convexes (s := {x}) (t := s) (𝕜 := 𝕜)
 
 end LinearOrderedField
@@ -407,80 +464,80 @@ variable {ι : Sort*} {𝕜 E F : Type*} [Semiring 𝕜] [PartialOrder 𝕜]
   [AddCommMonoid E] [Module 𝕜 E]
   [AddCommMonoid F] [Module 𝕜 F]
 
-/--
-theorem `LocallyConvexSpace.sInf` / 定理 `LocallyConvexSpace.sInf`
-
-English:
-theorem LocallyConvexSpace.sInf
-  statement: {ts : Set (TopologicalSpace E)}
-  proof: by
-  let : TopologicalSpace E := sInf ts
-  refine .ofBases 𝕜 E (fun _ => fun If : Set ts × (ts -> Set E) => ⋂ i in If.1, If.2 i)
-      (fun x => fun If : Set ts × (ts -> Set E) =>
-        If.1.Finite ∧ forall i in If.1, If.2 i in @nhds _ (↑i) x ∧ Convex 𝕜 (If.2 i))
-      (fun x => ?_) fun x If hif => convex_iInter fun i => convex_iInter fun hi => (hif.2 i hi).2
-  rw [nhds_sInf]; rw [← iInf_subtype'']
-  exact .iInf' fun i : ts => (@locallyConvexSpace_iff 𝕜 E _ _ _ _ ↑i).mp (h (↑i) i.2) x
-
-中文:
-定理 LocallyConvex空间.sInf
-  结论: {ts : 集合 (拓扑空间 E)}
-  证明: by
-  let : TopologicalSpace E := sInf ts
-  refine .ofBases 𝕜 E (fun _ => fun If : Set ts × (ts -> Set E) => ⋂ i in If.1, If.2 i)
-      (fun x => fun If : Set ts × (ts -> Set E) =>
-        If.1.Finite ∧ forall i in If.1, If.2 i in @nhds _ (↑i) x ∧ Convex 𝕜 (If.2 i))
-      (fun x => ?_) fun x If hif => convex_iInter fun i => convex_iInter fun hi => (hif.2 i hi).2
-  rw [nhds_sInf]; rw [← iInf_subtype'']
-  exact .iInf' fun i : ts => (@locallyConvexSpace_iff 𝕜 E _ _ _ _ ↑i).mp (h (↑i) i.2) x
+/-
+**LocallyConvexSpace.sInf** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConvexSpace`。
+形式化陈述：∀ {𝕜 : Type u_2} {E : Type u_3} [inst : Semiring 𝕜] [inst_1 : PartialOrder
+ 𝕜] [inst_2 : AddCommMonoid E]   [inst_3 : _root_.Module 𝕜 E] {ts : Set (Topolog
+icalSpace E)},   (∀ t ∈ ts, LocallyConvexSpace 𝕜 E) → LocallyConvexSpace 𝕜 E
+参数：TopologicalSpace E；∀ t ∈ ts, LocallyConvexSpace 𝕜 E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.ofBases`：LocallyConvexSpace.ofBases {ι : Type*} (b : 
+E -> ι -> Set E) (p : E -> ι -> Prop) (hbasis : forall x : E, (𝓝 x).HasBasis (p 
+x) (b x)) (hconv…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_sInf`：nhds_sInf {s : Set (TopologicalSpace α)} {a : α} : @nhds α (s
+Inf s) a = ⨅ t in s, @nhds α t a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iInf_subtype''`：∀ {α : Type u_1} [inst : CompleteLattice α] {ι : Type u_
+8} (s : Set ι) (f : ι → α), ⨅ i, f ↑i = ⨅ t ∈ s, f t
+· 使用定理 `Filter.HasBasis.iInf'`：∀ {α : Type u_1} {ι : Type u_6} {ι' : ι → Type u_
+7} {l : ι → Filter α} {p : (i : ι) → ι' i → Prop}   {s : (i : ι) → ι' i → Set α}
+,   (∀ (i :…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `locallyConvexSpace_iff`：locallyConvexSpace_iff : LocallyConvexSpace 𝕜 E 
+↔ forall x : E, (𝓝 x).HasBasis (fun s : Set E => s in 𝓝 x ∧ Convex 𝕜 s) id
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `convex_iInter`：convex_iInter {ι : Sort*} {s : ι -> Set E} (h : forall i,
+ Convex 𝕜 (s i)) : Convex 𝕜 (⋂ i, s i)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 protected theorem LocallyConvexSpace.sInf {ts : Set (TopologicalSpace E)}
-    (h : forall t in ts, @LocallyConvexSpace 𝕜 E _ _ _ _ t) :
+    (h : ∀ t ∈ ts, @LocallyConvexSpace 𝕜 E _ _ _ _ t) :
     @LocallyConvexSpace 𝕜 E _ _ _ _ (sInf ts) := by
   let : TopologicalSpace E := sInf ts
-  refine .ofBases 𝕜 E (fun _ => fun If : Set ts × (ts -> Set E) => ⋂ i in If.1, If.2 i)
-      (fun x => fun If : Set ts × (ts -> Set E) =>
-        If.1.Finite ∧ forall i in If.1, If.2 i in @nhds _ (↑i) x ∧ Convex 𝕜 (If.2 i))
+  refine .ofBases 𝕜 E (fun _ => fun If : Set ts × (ts → Set E) => ⋂ i ∈ If.1, If.2 i)
+      (fun x => fun If : Set ts × (ts → Set E) =>
+        If.1.Finite ∧ ∀ i ∈ If.1, If.2 i ∈ @nhds _ (↑i) x ∧ Convex 𝕜 (If.2 i))
       (fun x => ?_) fun x If hif => convex_iInter fun i => convex_iInter fun hi => (hif.2 i hi).2
-  rw [nhds_sInf]; rw [← iInf_subtype'']
+  rw [nhds_sInf, ← iInf_subtype'']
   exact .iInf' fun i : ts => (@locallyConvexSpace_iff 𝕜 E _ _ _ _ ↑i).mp (h (↑i) i.2) x
-
-/--
-theorem `LocallyConvexSpace.iInf` / 定理 `LocallyConvexSpace.iInf`
-
-English:
-theorem LocallyConvexSpace.iInf
-  statement: {ts' : ι -> TopologicalSpace E}
-  proof: .sInf by rwa [forall_mem_range]
-
-中文:
-定理 LocallyConvex空间.iInf
-  结论: {ts' : ι -> 拓扑空间 E}
-  证明: .sInf by rwa [forall_mem_range]
+/-
+**LocallyConvexSpace.iInf** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConvexSpace`。
+形式化陈述：∀ {ι : Sort u_1} {𝕜 : Type u_2} {E : Type u_3} [inst : Semiring 𝕜] [inst_1
+ : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [inst_3 : _root_.Module 𝕜 E] {ts
+' : ι → TopologicalSpace E},   (∀ (i : ι), LocallyConvexSpace 𝕜 E) → LocallyConv
+exSpace 𝕜 E
+参数：∀ (i : ι), LocallyConvexSpace 𝕜 E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.sInf`：∀ {𝕜 : Type u_2} {E : Type u_3} [inst : Semirin
+g 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [inst_3 : _root_.Mod
+ule 𝕜 E] {ts …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.forall_mem_range`：forall_mem_range {p : α -> Prop} : (forall a in ra
+nge f, p a) ↔ forall i, p (f i)
 -/
-protected theorem LocallyConvexSpace.iInf {ts' : ι -> TopologicalSpace E}
-    (h' : forall i, @LocallyConvexSpace 𝕜 E _ _ _ _ (ts' i)) :
+protected theorem LocallyConvexSpace.iInf {ts' : ι → TopologicalSpace E}
+    (h' : ∀ i, @LocallyConvexSpace 𝕜 E _ _ _ _ (ts' i)) :
     @LocallyConvexSpace 𝕜 E _ _ _ _ (⨅ i, ts' i) :=
-.sInf by rwa [forall_mem_range]
-
-/--
-theorem `LocallyConvexSpace.inf` / 定理 `LocallyConvexSpace.inf`
-
-English:
-theorem LocallyConvexSpace.inf
-  statement: {t₁ t₂ : TopologicalSpace E}
-  proof: by
-  rw [inf_eq_iInf]
-  refine .iInf fun b => ?_
-  cases b <;> assumption
-
-中文:
-定理 LocallyConvex空间.下确界
-  结论: {t₁ t₂ : 拓扑空间 E}
-  证明: by
-  rw [inf_eq_iInf]
-  refine .iInf fun b => ?_
-  cases b <;> assumption
+  .sInf <| by rwa [forall_mem_range]
+/-
+**LocallyConvexSpace.inf** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConvexSpace`。
+形式化陈述：∀ {𝕜 : Type u_2} {E : Type u_3} [inst : Semiring 𝕜] [inst_1 : PartialOrder
+ 𝕜] [inst_2 : AddCommMonoid E]   [inst_3 : _root_.Module 𝕜 E] {t₁ t₂ : Topologic
+alSpace E},   LocallyConvexSpace 𝕜 E → LocallyConvexSpace 𝕜 E → LocallyConvexSpa
+ce 𝕜 E
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_eq_iInf`：∀ {α : Type u_1} [inst : CompleteLattice α] (x y : α), x ⊓ 
+y = ⨅ b, bif b then x else y
+· 使用定理 `LocallyConvexSpace.iInf`：∀ {ι : Sort u_1} {𝕜 : Type u_2} {E : Type u_3} 
+[inst : Semiring 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [inst
+_3 : _root_.M…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 protected theorem LocallyConvexSpace.inf {t₁ t₂ : TopologicalSpace E}
     (h₁ : @LocallyConvexSpace 𝕜 E _ _ _ _ t₁)
@@ -488,119 +545,98 @@ protected theorem LocallyConvexSpace.inf {t₁ t₂ : TopologicalSpace E}
   rw [inf_eq_iInf]
   refine .iInf fun b => ?_
   cases b <;> assumption
-
-/--
-theorem `LocallyConvexSpace.induced` / 定理 `LocallyConvexSpace.induced`
-
-English:
-theorem LocallyConvexSpace.induced
-  statement: {t : TopologicalSpace F} [LocallyConvexSpace 𝕜 F]
-  proof: by
-  let : TopologicalSpace E := t.induced f
-  refine LocallyConvexSpace.ofBases 𝕜 E (fun _ => preimage f)
-    (fun x => fun s : Set F => s in 𝓝 (f x) ∧ Convex 𝕜 s) (fun x => ?_) fun x s ⟨_, hs⟩ =>
-    hs.linear_preimage f
-  rw [nhds_induced]
-  exact (LocallyConvexSpace.convex_basis <| f x).comap f
-
-中文:
-定理 LocallyConvex空间.induced
-  结论: {t : 拓扑空间 F} [LocallyConvex空间 𝕜 F]
-  证明: by
-  let : TopologicalSpace E := t.induced f
-  refine LocallyConvexSpace.ofBases 𝕜 E (fun _ => preimage f)
-    (fun x => fun s : Set F => s in 𝓝 (f x) ∧ Convex 𝕜 s) (fun x => ?_) fun x s ⟨_, hs⟩ =>
-    hs.linear_preimage f
-  rw [nhds_induced]
-  exact (LocallyConvexSpace.convex_basis <| f x).comap f
+/-
+**LocallyConvexSpace.induced** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConvexSpace`。
+形式化陈述：∀ {𝕜 : Type u_2} {E : Type u_3} {F : Type u_4} [inst : Semiring 𝕜] [inst_1
+ : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [inst_3 : _root_.Module 𝕜 E] [in
+st_4 : AddCommMonoid F] [inst_5 : _root_.Module 𝕜 F] {t : TopologicalSpace F}   
+[LocallyConvexSpace 𝕜 F] (f : E →ₗ[𝕜] F), LocallyConvexSpace 𝕜 E
+参数：f : E →ₗ[𝕜] F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.ofBases`：LocallyConvexSpace.ofBases {ι : Type*} (b : 
+E -> ι -> Set E) (p : E -> ι -> Prop) (hbasis : forall x : E, (𝓝 x).HasBasis (p 
+x) (b x)) (hconv…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_induced`：nhds_induced [T : TopologicalSpace α] (f : β -> α) (a : β)
+ : @nhds β (TopologicalSpace.induced f T) a = comap f (𝓝 (f a))
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `LocallyConvexSpace.convex_basis`：∀ {𝕜 : Type u_1} {E : Type u_2} {inst :
+ Semiring 𝕜} {inst_1 : PartialOrder 𝕜} {inst_2 : AddCommMonoid E}   {inst_3 : _r
+oot_.Module 𝕜 E} {ins…
+· 使用定理 `Convex.linear_preimage`：Convex.linear_preimage {s : Set F} (hs : Convex 
+𝕜 s) (f : E ->ₗ[𝕜] F) : Convex 𝕜 (f ⁻¹' s)
 -/
 protected theorem LocallyConvexSpace.induced {t : TopologicalSpace F} [LocallyConvexSpace 𝕜 F]
-    (f : E ->ₗ[𝕜] F) : @LocallyConvexSpace 𝕜 E _ _ _ _ (t.induced f) := by
+    (f : E →ₗ[𝕜] F) : @LocallyConvexSpace 𝕜 E _ _ _ _ (t.induced f) := by
   let : TopologicalSpace E := t.induced f
   refine LocallyConvexSpace.ofBases 𝕜 E (fun _ => preimage f)
-    (fun x => fun s : Set F => s in 𝓝 (f x) ∧ Convex 𝕜 s) (fun x => ?_) fun x s ⟨_, hs⟩ =>
+    (fun x => fun s : Set F => s ∈ 𝓝 (f x) ∧ Convex 𝕜 s) (fun x => ?_) fun x s ⟨_, hs⟩ =>
     hs.linear_preimage f
   rw [nhds_induced]
   exact (LocallyConvexSpace.convex_basis <| f x).comap f
-
-/--
-theorem `Topology.IsInducing.locallyConvexSpace` / 定理 `Topology.IsInducing.locallyConvexSpace`
-
-English:
-theorem Topology.IsInducing.locallyConvexSpace
-  statement: [TopologicalSpace F] [LocallyConvexSpace 𝕜 F]
-  proof: by
-  rw [hf.eq_induced]
-  exact .induced f
-
-中文:
-定理 拓扑.是Inducing.locallyConvexSpace
-  结论: [拓扑空间 F] [LocallyConvex空间 𝕜 F]
-  证明: by
-  rw [hf.eq_induced]
-  exact .induced f
-
-Depends on / 依赖: eq_induced, hf.eq_induced, induced
+/-
+**Topology.IsInducing.locallyConvexSpace** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Topology.IsInducing.locallyConvexSpace [TopologicalSpace F] [LocallyConvex
+Space 𝕜 F] [TopologicalSpace E] {f : E ->ₗ[𝕜] F} (hf : IsInducing f) : LocallyCo
+nvexSpace 𝕜 E
+参数：hf : IsInducing f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Topology.IsInducing.eq_induced`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsInducing f
+ → tX = TopologicalS…
+· 使用定理 `LocallyConvexSpace.induced`：∀ {𝕜 : Type u_2} {E : Type u_3} {F : Type u_
+4} [inst : Semiring 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [i
+nst_3 : _root_.M…
 -/
 theorem Topology.IsInducing.locallyConvexSpace [TopologicalSpace F] [LocallyConvexSpace 𝕜 F]
-    [TopologicalSpace E] {f : E ->ₗ[𝕜] F} (hf : IsInducing f) :
+    [TopologicalSpace E] {f : E →ₗ[𝕜] F} (hf : IsInducing f) :
     LocallyConvexSpace 𝕜 E := by
   rw [hf.eq_induced]
   exact .induced f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TopologicalSpace
-  signature: E] [LocallyConvexSpace 𝕜 E] {S
-  body: IsInducing.locallyConvexSpace (f := S.subtype) .subtypeVal
-
-中文:
-实例 [拓扑空间
-  签名: E] [LocallyConvex空间 𝕜 E] {S
-  定义体: IsInducing.locallyConvexSpace (f := S.subtype) .subtypeVal
-
-Depends on / 依赖: IsInducing, IsInducing.locallyConvexSpace, S.subtype, locallyConvexSpace, subtype, subtypeVal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TopologicalSpace E] [LocallyConvexSpace 𝕜 E] {S : Submodule 𝕜 E} :
     LocallyConvexSpace 𝕜 S :=
   IsInducing.locallyConvexSpace (f := S.subtype) .subtypeVal
-
-/--
-Instance `Pi.locallyConvexSpace` / 实例 `Pi.locallyConvexSpace`
-
-English:
-instance Pi.locallyConvexSpace
-  signature: {ι : Type*} {X : ι -> Type*} [forall i, AddCommMonoid (X i)]
-  body: .iInf fun i => .induced (LinearMap.proj i)
-
-中文:
-实例 依赖函数类型.locallyConvexSpace
-  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, 加法交换幺半群 (X i)]
-  定义体: .iInf fun i => .induced (LinearMap.proj i)
-
-Depends on / 依赖: LinearMap, LinearMap.proj, induced
+/-
+**Pi.locallyConvexSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Pi.locallyConvexSpace {ι : Type*} {X : ι -> Type*} [forall i, AddCommMonoi
+d (X i)] [forall i, TopologicalSpace (X i)] [forall i, Module 𝕜 (X i)] [forall i
+, LocallyConvexSpace 𝕜 (X i)] : LocallyConvexSpace 𝕜 (forall i, X i)
+参数：X i；X i；X i；X i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.iInf`：∀ {ι : Sort u_1} {𝕜 : Type u_2} {E : Type u_3} 
+[inst : Semiring 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [inst
+_3 : _root_.M…
+· 使用定理 `LocallyConvexSpace.induced`：∀ {𝕜 : Type u_2} {E : Type u_3} {F : Type u_
+4} [inst : Semiring 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [i
+nst_3 : _root_.M…
 -/
-instance Pi.locallyConvexSpace {ι : Type*} {X : ι -> Type*} [forall i, AddCommMonoid (X i)]
-    [forall i, TopologicalSpace (X i)] [forall i, Module 𝕜 (X i)] [forall i, LocallyConvexSpace 𝕜 (X i)] :
-    LocallyConvexSpace 𝕜 (forall i, X i) :=
+instance Pi.locallyConvexSpace {ι : Type*} {X : ι → Type*} [∀ i, AddCommMonoid (X i)]
+    [∀ i, TopologicalSpace (X i)] [∀ i, Module 𝕜 (X i)] [∀ i, LocallyConvexSpace 𝕜 (X i)] :
+    LocallyConvexSpace 𝕜 (∀ i, X i) :=
   .iInf fun i => .induced (LinearMap.proj i)
-
-/--
-Instance `Prod.locallyConvexSpace` / 实例 `Prod.locallyConvexSpace`
-
-English:
-instance Prod.locallyConvexSpace
-  signature: [TopologicalSpace E] [TopologicalSpace F] [LocallyConvexSpace 𝕜 E]
-  body: .inf (.induced (LinearMap.fst _ _ _)) (.induced (LinearMap.snd _ _ _))
-
-中文:
-实例 积类型.locallyConvexSpace
-  签名: [拓扑空间 E] [拓扑空间 F] [LocallyConvex空间 𝕜 E]
-  定义体: .inf (.induced (LinearMap.fst _ _ _)) (.induced (LinearMap.snd _ _ _))
-
-Depends on / 依赖: LinearMap, LinearMap.fst, LinearMap.snd, induced
+/-
+**Prod.locallyConvexSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.locallyConvexSpace [TopologicalSpace E] [TopologicalSpace F] [Locally
+ConvexSpace 𝕜 E] [LocallyConvexSpace 𝕜 F] : LocallyConvexSpace 𝕜 (E × F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LocallyConvexSpace.inf`：∀ {𝕜 : Type u_2} {E : Type u_3} [inst : Semiring
+ 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [inst_3 : _root_.Modu
+le 𝕜 E] {t₁ …
+· 使用定理 `LocallyConvexSpace.induced`：∀ {𝕜 : Type u_2} {E : Type u_3} {F : Type u_
+4} [inst : Semiring 𝕜] [inst_1 : PartialOrder 𝕜] [inst_2 : AddCommMonoid E]   [i
+nst_3 : _root_.M…
 -/
 instance Prod.locallyConvexSpace [TopologicalSpace E] [TopologicalSpace F] [LocallyConvexSpace 𝕜 E]
     [LocallyConvexSpace 𝕜 F] : LocallyConvexSpace 𝕜 (E × F) :=
@@ -610,60 +646,74 @@ end LatticeOps
 
 section LinearOrderedSemiring
 
-/--
-Instance `LinearOrderedSemiring.toLocallyConvexSpace` / 实例 `LinearOrderedSemiring.toLocallyConvexSpace`
+/-- A linear ordered semiring is a locally convex space over itself. -/
+/-
+**LinearOrderedSemiring.toLocallyConvexSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：LinearOrderedSemiring.toLocallyConvexSpace {R : Type*} [TopologicalSpace R
+] [Semiring R] [LinearOrder R] [IsStrictOrderedRing R] [OrderTopology R] : Local
+lyConvexSpace R R where convex_basis x
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `isBot_or_exists_lt`：∀ {α : Type u_1} [inst : Preorder α] [IsCodirectedOr
+der α] (a : α), IsBot a ∨ ∃ b, b < a
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `Filter.HasBasis.to_hasBasis'`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort
+ u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : ι' 
+→ Set α},   l.HasB…
+· 使用定理 `nhds_bot_basis`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Lin
+earOrder α] [inst_2 : OrderBot α] [OrderTopology α]   [Nontrivial α], (nhds ⊥).H
+asBa…
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `IsStrictOrderedModule.toPosSMulStrictMono`：∀ {α : Type u_1} {β : Type u_
+2} {inst : SMul α β} {inst_1 : Preorder α} {inst_2 : Preorder β} {inst_3 : Zero 
+α}   {inst_4 : Zero β} [self : …
+· 使用定理 `IsStrictOrderedRing.toIsStrictOrderedModule`：∀ {α : Type u_1} [inst : Se
+miring α] [inst_1 : PartialOrder α] [IsStrictOrderedRing α], IsStrictOrderedModu
+le α α
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `isTop_or_exists_gt`：isTop_or_exists_gt [IsDirectedOrder α] (a : α) : IsT
+op a ∨ exists b, a < b
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `nhds_top_basis`：nhds_top_basis [TopologicalSpace α] [LinearOrder α] [Ord
+erTop α] [OrderTopology α] [Nontrivial α] : (𝓝 ⊤).HasBasis (fun a : α => a < ⊤) 
+fun …
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `IsStrictOrderedRing.toNoMaxOrder`：∀ {R : Type u} [inst : Semiring R] [in
+st_1 : PartialOrder R] [IsStrictOrderedRing R], NoMaxOrder R
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
+· 使用定理 `nhds_basis_Ioo'`：nhds_basis_Ioo' {a : α} (hl : exists l, l < a) (hu : ex
+ists u, a < u) : (𝓝 a).HasBasis (fun b : α × α => b.1 < a ∧ a < b.2) fun b => Io
+o b.1…
 
-English:
-instance LinearOrderedSemiring.toLocallyConvexSpace
-  signature: {R : Type*} [TopologicalSpace R]
-  body: by
-    obtain hl | hl := isBot_or_exists_lt x
-    · refine hl.rec ?_ _
-      intro
-      refine nhds_bot_basis.to_hasBasis' ?_ ?_
-      · intros
-        refine ⟨Set.Iio _, ?_, .rfl⟩
-        simp_all [Iio_mem_nhds, convex_Iio]
-      · simp +contextual
-    obtain hu | hu := isTop_or_exists_gt x
-    · refine hu.rec ?_ _
-      intro
-      refine nhds_top_basis.to_hasBasis' ?_ ?_
-      · intros
-        refine ⟨Set.Ioi _, ?_, subset_rfl⟩
-        simp_all
-      · simp +contextual
-    refine (nhds_basis_Ioo' hl hu).to_hasBasis' ?_ ?_
-    · simp only [id_eq, and_imp, Prod.forall]
-      exact fun _ _ h₁ h₂ => ⟨_, by simp [h₁, h₂, Ioo_mem_nhds, convex_Ioo], subset_rfl⟩
-    · simp +contextual
-
-中文:
-实例 LinearOrderedSemiring.toLocallyConvexSpace
-  签名: {R : 类型} [拓扑空间 R]
-  定义体: by
-    obtain hl | hl := isBot_or_exists_lt x
-    · refine hl.rec ?_ _
-      intro
-      refine nhds_bot_basis.to_hasBasis' ?_ ?_
-      · intros
-        refine ⟨Set.Iio _, ?_, .rfl⟩
-        simp_all [Iio_mem_nhds, convex_Iio]
-      · simp +contextual
-    obtain hu | hu := isTop_or_exists_gt x
-    · refine hu.rec ?_ _
-      intro
-      refine nhds_top_basis.to_hasBasis' ?_ ?_
-      · intros
-        refine ⟨Set.Ioi _, ?_, subset_rfl⟩
-        simp_all
-      · simp +contextual
-    refine (nhds_basis_Ioo' hl hu).to_hasBasis' ?_ ?_
-    · simp only [id_eq, and_imp, Prod.forall]
-      exact fun _ _ h₁ h₂ => ⟨_, by simp [h₁, h₂, Ioo_mem_nhds, convex_Ioo], subset_rfl⟩
-    · simp +contextual
-
-Depends on / 依赖: Iio_mem_nhds, Prod.forall, Set.Iio, Set.Ioi, and_imp, contextual, convex_Iio, hl.rec, hu.rec, id_eq, intros, isBot_or_exists_lt, isTop_or_exists_gt, nhds_basis_Ioo, nhds_bot_basis, nhds_bot_basis.to_hasBasis, nhds_top_basis, nhds_top_basis.to_hasBasis, subset_rfl, to_hasBasis
+--- 原说明 ---
+A linear ordered semiring is a locally convex space over itself.
 -/
 instance LinearOrderedSemiring.toLocallyConvexSpace {R : Type*} [TopologicalSpace R]
     [Semiring R] [LinearOrder R] [IsStrictOrderedRing R] [OrderTopology R] :
@@ -687,47 +737,44 @@ instance LinearOrderedSemiring.toLocallyConvexSpace {R : Type*} [TopologicalSpac
       · simp +contextual
     refine (nhds_basis_Ioo' hl hu).to_hasBasis' ?_ ?_
     · simp only [id_eq, and_imp, Prod.forall]
-      exact fun _ _ h₁ h₂ => ⟨_, by simp [h₁, h₂, Ioo_mem_nhds, convex_Ioo], subset_rfl⟩
+      exact fun _ _ h₁ h₂ ↦ ⟨_, by simp [h₁, h₂, Ioo_mem_nhds, convex_Ioo], subset_rfl⟩
     · simp +contextual
 
 end LinearOrderedSemiring
 
-/--
-lemma `Convex.eventually_nhdsWithin_segment` / 引理 `Convex.eventually_nhdsWithin_segment`
-
-English:
-lemma Convex.eventually_nhdsWithin_segment
-  statement: {E 𝕜 : Type*}
-  proof: by
-  rw [eventually_nhdsWithin_iff]; rw [(LocallyConvexSpace.convex_basis (𝕜 := 𝕜) x₀).eventually_iff]
-    at h ⊢
-  obtain ⟨u, ⟨hu_nhds, hu_convex⟩, h⟩ := h
-  refine ⟨u, ⟨hu_nhds, hu_convex⟩, fun x hxu hxs y hy => h ?_ (hs.segment_subset hx₀s hxs hy)⟩
-  suffices segment 𝕜 x₀ x subseteq u from this hy
-  exact hu_convex.segment_subset (mem_of_mem_nhds hu_nhds) hxu
-
-中文:
-引理 凸.eventually_nhdsWithin_segment
-  结论: {E 𝕜 : 类型}
-  证明: by
-  rw [eventually_nhdsWithin_iff]; rw [(LocallyConvexSpace.convex_basis (𝕜 := 𝕜) x₀).eventually_iff]
-    at h ⊢
-  obtain ⟨u, ⟨hu_nhds, hu_convex⟩, h⟩ := h
-  refine ⟨u, ⟨hu_nhds, hu_convex⟩, fun x hxu hxs y hy => h ?_ (hs.segment_subset hx₀s hxs hy)⟩
-  suffices segment 𝕜 x₀ x subseteq u from this hy
-  exact hu_convex.segment_subset (mem_of_mem_nhds hu_nhds) hxu
-
-Depends on / 依赖: LocallyConvexSpace, LocallyConvexSpace.convex_basis, convex_basis, eventually_iff, eventually_nhdsWithin_iff, hs.segment_subset, hu_convex, hu_convex.segment_subset, hu_nhds, mem_of_mem_nhds, segment, segment_subset, subseteq
+/-
+**Convex.eventually_nhdsWithin_segment** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Convex.eventually_nhdsWithin_segment {E 𝕜 : Type*} [Semiring 𝕜] [PartialOr
+der 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E] [LocallyConvexSpace 𝕜
+ E] {s : Set E} (hs : Convex 𝕜 s) {x₀ : E} (hx₀s : x₀ in s) {p : E -> Prop} (h :
+ forallᶠ x in 𝓝[s] x₀, p x) : forallᶠ x in 𝓝[s] x₀, forall y in segment 𝕜 x₀ x, 
+p y
+参数：hs : Convex 𝕜 s；hx₀s : x₀ in s；h : forallᶠ x in 𝓝[s] x₀, p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eventually_nhdsWithin_iff`：eventually_nhdsWithin_iff {a : α} {s : Set α}
+ {p : α -> Prop} : (forallᶠ x in 𝓝[s] a, p x) ↔ forallᶠ x in 𝓝 a, x in s -> p x
+· 使用定理 `Filter.HasBasis.eventually_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Fil
+ter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {q : α → Prop}, (∀ᶠ 
+(x : α) in l, q x) ↔…
+· 使用定理 `LocallyConvexSpace.convex_basis`：∀ {𝕜 : Type u_1} {E : Type u_2} {inst :
+ Semiring 𝕜} {inst_1 : PartialOrder 𝕜} {inst_2 : AddCommMonoid E}   {inst_3 : _r
+oot_.Module 𝕜 E} {ins…
+· 使用定理 `Convex.segment_subset`：Convex.segment_subset (h : Convex 𝕜 s) {x y : E} 
+(hx : x in s) (hy : y in s) : [x -[𝕜] y] subseteq s
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
 -/
 lemma Convex.eventually_nhdsWithin_segment {E 𝕜 : Type*}
     [Semiring 𝕜] [PartialOrder 𝕜]
     [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E] [LocallyConvexSpace 𝕜 E]
-    {s : Set E} (hs : Convex 𝕜 s) {x₀ : E} (hx₀s : x₀ in s)
-    {p : E -> Prop} (h : forallᶠ x in 𝓝[s] x₀, p x) :
-    forallᶠ x in 𝓝[s] x₀, forall y in segment 𝕜 x₀ x, p y := by
-  rw [eventually_nhdsWithin_iff]; rw [(LocallyConvexSpace.convex_basis (𝕜 := 𝕜) x₀).eventually_iff]
+    {s : Set E} (hs : Convex 𝕜 s) {x₀ : E} (hx₀s : x₀ ∈ s)
+    {p : E → Prop} (h : ∀ᶠ x in 𝓝[s] x₀, p x) :
+    ∀ᶠ x in 𝓝[s] x₀, ∀ y ∈ segment 𝕜 x₀ x, p y := by
+  rw [eventually_nhdsWithin_iff, (LocallyConvexSpace.convex_basis (𝕜 := 𝕜) x₀).eventually_iff]
     at h ⊢
   obtain ⟨u, ⟨hu_nhds, hu_convex⟩, h⟩ := h
-  refine ⟨u, ⟨hu_nhds, hu_convex⟩, fun x hxu hxs y hy => h ?_ (hs.segment_subset hx₀s hxs hy)⟩
-  suffices segment 𝕜 x₀ x subseteq u from this hy
+  refine ⟨u, ⟨hu_nhds, hu_convex⟩, fun x hxu hxs y hy ↦ h ?_ (hs.segment_subset hx₀s hxs hy)⟩
+  suffices segment 𝕜 x₀ x ⊆ u from this hy
   exact hu_convex.segment_subset (mem_of_mem_nhds hu_nhds) hxu

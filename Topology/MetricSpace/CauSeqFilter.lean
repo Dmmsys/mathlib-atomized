@@ -24,56 +24,53 @@ open Set Filter Topology
 
 variable {β : Type v}
 
-/--
-theorem `CauSeq.tendsto_limit` / 定理 `CauSeq.tendsto_limit`
-
-English:
-theorem CauSeq.tendsto_limit
-  statement: [NormedRing β] [hn : IsAbsoluteValue (norm : β -> Real)]
-  proof: tendsto_nhds.mpr
-    (by
-      intro s os lfs
-      suffices exists a : Nat, forall b : Nat, b >= a -> f b in s by simpa using this
-      rcases Metric.isOpen_iff.1 os _ lfs with ⟨ε, ⟨hε, hεs⟩⟩
-      obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ hε
-      exists N
-      intro b hb
-      apply hεs
-      dsimp [Metric.ball]
-      rw [dist_comm]; rw [dist_eq_norm]
-      solve_by_elim)
-
-中文:
-定理 CauSeq.tendsto_limit
-  结论: [赋范环 β] [hn : 是绝对值 (norm : β -> 实数)]
-  证明: tendsto_nhds.mpr
-    (by
-      intro s os lfs
-      suffices exists a : Nat, forall b : Nat, b >= a -> f b in s by simpa using this
-      rcases Metric.isOpen_iff.1 os _ lfs with ⟨ε, ⟨hε, hεs⟩⟩
-      obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ hε
-      exists N
-      intro b hb
-      apply hεs
-      dsimp [Metric.ball]
-      rw [dist_comm]; rw [dist_eq_norm]
-      solve_by_elim)
-
-Depends on / 依赖: CauSeq, CauSeq.equiv_lim, Metric, Metric.ball, Metric.isOpen_iff, Setoid, Setoid.symm, dist_comm, dist_eq_norm, equiv_lim, isOpen_iff, solve_by_elim, tendsto_nhds, tendsto_nhds.mpr
+/-
+**CauSeq.tendsto_limit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CauSeq.tendsto_limit [NormedRing β] [hn : IsAbsoluteValue (norm : β -> Rea
+l)] (f : CauSeq β norm) [CauSeq.IsComplete β norm] : Tendsto f atTop (𝓝 f.lim)
+参数：norm : β -> Real；f : CauSeq β norm。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tendsto_nhds`：tendsto_nhds {f : α -> X} {l : Filter α} : Tendsto f l (𝓝 
+x) ↔ forall s, IsOpen s -> x in s -> f ⁻¹' s in l
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.isOpen_iff`：isOpen_iff : IsOpen s ↔ forall x in s, exists ε > 0, 
+ball x ε subseteq s
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用定理 `CauSeq.equiv_lim`：equiv_lim (s : CauSeq β abv) : s ≈ const abv (lim s)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem CauSeq.tendsto_limit [NormedRing β] [hn : IsAbsoluteValue (norm : β -> Real)]
+theorem CauSeq.tendsto_limit [NormedRing β] [hn : IsAbsoluteValue (norm : β → ℝ)]
     (f : CauSeq β norm) [CauSeq.IsComplete β norm] : Tendsto f atTop (𝓝 f.lim) :=
   tendsto_nhds.mpr
     (by
       intro s os lfs
-      suffices exists a : Nat, forall b : Nat, b >= a -> f b in s by simpa using this
+      suffices ∃ a : ℕ, ∀ b : ℕ, b ≥ a → f b ∈ s by simpa using this
       rcases Metric.isOpen_iff.1 os _ lfs with ⟨ε, ⟨hε, hεs⟩⟩
       obtain ⟨N, hN⟩ := Setoid.symm (CauSeq.equiv_lim f) _ hε
       exists N
       intro b hb
       apply hεs
       dsimp [Metric.ball]
-      rw [dist_comm]; rw [dist_eq_norm]
+      rw [dist_comm, dist_eq_norm]
       solve_by_elim)
 
 variable [NormedField β]
@@ -87,42 +84,40 @@ This needs to be fixed, since it prevents showing that ℤ_[hp] is complete.
 -/
 open Metric
 
-/--
-theorem `CauchySeq.isCauSeq` / 定理 `CauchySeq.isCauSeq`
-
-English:
-theorem CauchySeq.isCauSeq
-  given: {f : Nat -> β} (hf : CauchySeq f)
-  statement: IsCauSeq norm f
-  proof: by
-  obtain ⟨hf1, hf2⟩ := cauchy_iff.1 hf
-  intro ε hε
-  rcases hf2 { x | dist x.1 x.2 < ε } (dist_mem_uniformity hε) with ⟨t, ⟨ht, htsub⟩⟩
-  simp only [mem_map, mem_atTop_sets, mem_preimage] at ht; obtain ⟨N, hN⟩ := ht
-  exists N
-  intro j hj
-  rw [← dist_eq_norm]
-  apply @htsub (f j, f N)
-  apply Set.mk_mem_prod <;> solve_by_elim [le_refl]
-
-中文:
-定理 CauchySeq.isCauSeq
-  条件: {f : 自然数 -> β} (hf : CauchySeq f)
-  结论: IsCauSeq norm f
-  证明: by
-  obtain ⟨hf1, hf2⟩ := cauchy_iff.1 hf
-  intro ε hε
-  rcases hf2 { x | dist x.1 x.2 < ε } (dist_mem_uniformity hε) with ⟨t, ⟨ht, htsub⟩⟩
-  simp only [mem_map, mem_atTop_sets, mem_preimage] at ht; obtain ⟨N, hN⟩ := ht
-  exists N
-  intro j hj
-  rw [← dist_eq_norm]
-  apply @htsub (f j, f N)
-  apply Set.mk_mem_prod <;> solve_by_elim [le_refl]
-
-Depends on / 依赖: Set.mk_mem_prod, cauchy_iff, dist_eq_norm, dist_mem_uniformity, le_refl, mem_atTop_sets, mem_map, mem_preimage, mk_mem_prod, solve_by_elim
+/-
+**CauchySeq.isCauSeq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CauchySeq.isCauSeq {f : Nat -> β} (hf : CauchySeq f) : IsCauSeq norm f
+参数：hf : CauchySeq f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `cauchy_iff`：cauchy_iff {f : Filter α} : Cauchy f ↔ NeBot f ∧ forall s in
+ 𝓤 α, exists t in f, t ×ˢ t subseteq s
+· 使用定理 `Metric.dist_mem_uniformity`：dist_mem_uniformity {ε : Real} (ε0 : 0 < ε) 
+: { p : α × α | dist p.1 p.2 < ε } in 𝓤 α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
+· 使用定理 `Set.mk_mem_prod`：mk_mem_prod (ha : a in s) (hb : b in t) : (a, b) in s ×
+ˢ t
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem CauchySeq.isCauSeq {f : Nat -> β} (hf : CauchySeq f) : IsCauSeq norm f := by
+theorem CauchySeq.isCauSeq {f : ℕ → β} (hf : CauchySeq f) : IsCauSeq norm f := by
   obtain ⟨hf1, hf2⟩ := cauchy_iff.1 hf
   intro ε hε
   rcases hf2 { x | dist x.1 x.2 < ε } (dist_mem_uniformity hε) with ⟨t, ⟨ht, htsub⟩⟩
@@ -132,59 +127,42 @@ theorem CauchySeq.isCauSeq {f : Nat -> β} (hf : CauchySeq f) : IsCauSeq norm f 
   rw [← dist_eq_norm]
   apply @htsub (f j, f N)
   apply Set.mk_mem_prod <;> solve_by_elim [le_refl]
-
-/--
-theorem `CauSeq.cauchySeq` / 定理 `CauSeq.cauchySeq`
-
-English:
-theorem CauSeq.cauchySeq
-  given: (f : CauSeq β norm)
-  statement: CauchySeq f
-  proof: by
-  refine cauchy_iff.2 ⟨by infer_instance, fun s hs => ?_⟩
-  rcases mem_uniformity_dist.1 hs with ⟨ε, ⟨hε, hεs⟩⟩
-  obtain ⟨N, hN⟩ := CauSeq.cauchy₂ f hε
-  exists { n | n >= N }.image f
-  simp only [mem_atTop_sets, mem_map]
-  constructor
-  · exists N
-    intro b hb
-    exists b
-  · rintro ⟨a, b⟩ ⟨⟨a', ⟨ha'1, ha'2⟩⟩, ⟨b', ⟨hb'1, hb'2⟩⟩⟩
-    dsimp at ha'1 ha'2 hb'1 hb'2
-    rw [← ha'2]; rw [← hb'2]
-    apply hεs
-    rw [dist_eq_norm]
-    apply hN <;> assumption
-
-中文:
-定理 CauSeq.cauchySeq
-  条件: (f : CauSeq β norm)
-  结论: CauchySeq f
-  证明: by
-  refine cauchy_iff.2 ⟨by infer_instance, fun s hs => ?_⟩
-  rcases mem_uniformity_dist.1 hs with ⟨ε, ⟨hε, hεs⟩⟩
-  obtain ⟨N, hN⟩ := CauSeq.cauchy₂ f hε
-  exists { n | n >= N }.image f
-  simp only [mem_atTop_sets, mem_map]
-  constructor
-  · exists N
-    intro b hb
-    exists b
-  · rintro ⟨a, b⟩ ⟨⟨a', ⟨ha'1, ha'2⟩⟩, ⟨b', ⟨hb'1, hb'2⟩⟩⟩
-    dsimp at ha'1 ha'2 hb'1 hb'2
-    rw [← ha'2]; rw [← hb'2]
-    apply hεs
-    rw [dist_eq_norm]
-    apply hN <;> assumption
-
-Depends on / 依赖: CauSeq, CauSeq.cauchy, cauchy_iff, dist_eq_norm, infer_instance, mem_atTop_sets, mem_map, mem_uniformity_dist
+/-
+**CauSeq.cauchySeq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CauSeq.cauchySeq (f : CauSeq β norm) : CauchySeq f
+参数：f : CauSeq β norm。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `cauchy_iff`：cauchy_iff {f : Filter α} : Cauchy f ↔ NeBot f ∧ forall s in
+ 𝓤 α, exists t in f, t ×ˢ t subseteq s
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.mem_uniformity_dist`：mem_uniformity_dist {s : Set (α × α)} : s in
+ 𝓤 α ↔ exists ε > 0, forall ⦃a b : α⦄, dist a b < ε -> (a, b) in s
+· 使用定理 `CauSeq.cauchy₂`：cauchy₂ (f : CauSeq β abv) {ε} : 0 < ε -> exists i, fora
+ll j >= i, forall k >= i, abv (f j - f k) < ε
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dist_eq_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (a b : 
+E), dist a b = ‖a - b‖
 -/
 theorem CauSeq.cauchySeq (f : CauSeq β norm) : CauchySeq f := by
   refine cauchy_iff.2 ⟨by infer_instance, fun s hs => ?_⟩
   rcases mem_uniformity_dist.1 hs with ⟨ε, ⟨hε, hεs⟩⟩
   obtain ⟨N, hN⟩ := CauSeq.cauchy₂ f hε
-  exists { n | n >= N }.image f
+  exists { n | n ≥ N }.image f
   simp only [mem_atTop_sets, mem_map]
   constructor
   · exists N
@@ -192,27 +170,26 @@ theorem CauSeq.cauchySeq (f : CauSeq β norm) : CauchySeq f := by
     exists b
   · rintro ⟨a, b⟩ ⟨⟨a', ⟨ha'1, ha'2⟩⟩, ⟨b', ⟨hb'1, hb'2⟩⟩⟩
     dsimp at ha'1 ha'2 hb'1 hb'2
-    rw [← ha'2]; rw [← hb'2]
+    rw [← ha'2, ← hb'2]
     apply hεs
     rw [dist_eq_norm]
     apply hN <;> assumption
 
-/--
-theorem `isCauSeq_iff_cauchySeq` / 定理 `isCauSeq_iff_cauchySeq`
+/-- In a normed field, `CauSeq` coincides with the usual notion of Cauchy sequences. -/
+/-
+**isCauSeq_iff_cauchySeq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCauSeq_iff_cauchySeq {α : Type u} [NormedField α] {u : Nat -> α} : IsCau
+Seq norm u ↔ CauchySeq u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CauSeq.cauchySeq`：CauSeq.cauchySeq (f : CauSeq β norm) : CauchySeq f
+· 使用定理 `CauchySeq.isCauSeq`：CauchySeq.isCauSeq {f : Nat -> β} (hf : CauchySeq f)
+ : IsCauSeq norm f
 
-English:
-theorem isCauSeq_iff_cauchySeq
-  given: {α : Type u} [NormedField α] {u : Nat -> α}
-  proof: ⟨fun h => CauSeq.cauchySeq ⟨u, h⟩, fun h => h.isCauSeq⟩
-
-中文:
-定理 isCauSeq_iff_cauchySeq
-  条件: {α : 类型u} [赋范域 α] {u : 自然数 -> α}
-  证明: ⟨fun h => CauSeq.cauchySeq ⟨u, h⟩, fun h => h.isCauSeq⟩
-
-Depends on / 依赖: CauSeq, CauSeq.cauchySeq, cauchySeq, h.isCauSeq, isCauSeq
+--- 原说明 ---
+In a normed field, `CauSeq` coincides with the usual notion of Cauchy sequences.
 -/
-theorem isCauSeq_iff_cauchySeq {α : Type u} [NormedField α] {u : Nat -> α} :
+theorem isCauSeq_iff_cauchySeq {α : Type u} [NormedField α] {u : ℕ → α} :
     IsCauSeq norm u ↔ CauchySeq u :=
   ⟨fun h => CauSeq.cauchySeq ⟨u, h⟩, fun h => h.isCauSeq⟩
 
@@ -220,6 +197,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 -- see Note [lower instance priority]
 /-- A complete normed field is complete as a metric space, as Cauchy sequences converge by
 assumption and this suffices to characterize completeness. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A complete normed field is complete as a metric space, as Cauchy sequences conve
+rge by
+assumption and this suffices to characterize completeness.
+-/
 instance (priority := 100) completeSpace_of_cauSeq_isComplete [CauSeq.IsComplete β norm] :
     CompleteSpace β := by
   apply complete_of_cauchySeq_tendsto

@@ -37,92 +37,78 @@ open scoped Polynomial
 
 section Cyclotomic
 
-variable (p : Nat)
+variable (p : ℕ)
 
-local notation "𝓟" => Submodule.span Int {(p : Int)}
+local notation "𝓟" => Submodule.span ℤ {(p : ℤ)}
 
 open Polynomial
 
-/--
-theorem `cyclotomic_comp_X_add_one_isEisensteinAt` / 定理 `cyclotomic_comp_X_add_one_isEisensteinAt`
-
-English:
-theorem cyclotomic_comp_X_add_one_isEisensteinAt
-  given: [hp : Fact p.Prime]
-  proof: by
-  refine Monic.isEisensteinAt_of_mem_of_notMem ?_
-      (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
-        Nat.prime_iff_prime_int.1 hp.out) (fun {i hi} => ?_) ?_
-  · rw [show (X + 1 : Int[X]) = X + C 1 by simp]
-    refine (cyclotomic.monic p Int).comp (monic_X_add_C 1) fun h => ?_
-    rw [natDegree_X_add_C] at h
-    exact zero_ne_one h.symm
-  · rw [cyclotomic_prime, geom_sum_X_comp_X_add_one_eq_sum, ← lcoeff_apply, map_sum]
-    conv =>
-      congr
-      congr
-      next => skip
-      congr
-      next => skip
-      ext
-      rw [lcoeff_apply]; rw [← C_eq_natCast]; rw [C_mul_X_pow_eq_monomial]; rw [coeff_monomial]
-    rw [natDegree_comp]; rw [show (X + 1 : Int[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
-      natDegree_cyclotomic, Nat.totient_prime hp.out] at hi
-    simp only [hi.trans_le (Nat.sub_le _ _), sum_ite_eq', mem_range, if_true,
-      Ideal.submodule_span_eq, Ideal.mem_span_singleton, Int.natCast_dvd_natCast]
-    exact hp.out.dvd_choose_self i.succ_ne_zero (lt_tsub_iff_right.1 hi)
-  · rw [coeff_zero_eq_eval_zero, eval_comp, cyclotomic_prime, eval_add, eval_X, eval_one, zero_add,
-      eval_geom_sum, one_geom_sum, Ideal.submodule_span_eq, Ideal.span_singleton_pow,
-      Ideal.mem_span_singleton]
-    intro h
-    obtain ⟨k, hk⟩ := Int.natCast_dvd_natCast.1 h
-    have : 2 <= p := Nat.Prime.two_le hp.out
-    have : p < p ^ 2 := by nlinarith
-    cases k <;> grind
-
-中文:
-定理 cyclotomic_comp_X_add_one_isEisensteinAt
-  条件: [hp : Fact p.素]
-  证明: by
-  refine Monic.isEisensteinAt_of_mem_of_notMem ?_
-      (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
-        Nat.prime_iff_prime_int.1 hp.out) (fun {i hi} => ?_) ?_
-  · rw [show (X + 1 : Int[X]) = X + C 1 by simp]
-    refine (cyclotomic.monic p Int).comp (monic_X_add_C 1) fun h => ?_
-    rw [natDegree_X_add_C] at h
-    exact zero_ne_one h.symm
-  · rw [cyclotomic_prime, geom_sum_X_comp_X_add_one_eq_sum, ← lcoeff_apply, map_sum]
-    conv =>
-      congr
-      congr
-      next => skip
-      congr
-      next => skip
-      ext
-      rw [lcoeff_apply]; rw [← C_eq_natCast]; rw [C_mul_X_pow_eq_monomial]; rw [coeff_monomial]
-    rw [natDegree_comp]; rw [show (X + 1 : Int[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
-      natDegree_cyclotomic, Nat.totient_prime hp.out] at hi
-    simp only [hi.trans_le (Nat.sub_le _ _), sum_ite_eq', mem_range, if_true,
-      Ideal.submodule_span_eq, Ideal.mem_span_singleton, Int.natCast_dvd_natCast]
-    exact hp.out.dvd_choose_self i.succ_ne_zero (lt_tsub_iff_right.1 hi)
-  · rw [coeff_zero_eq_eval_zero, eval_comp, cyclotomic_prime, eval_add, eval_X, eval_one, zero_add,
-      eval_geom_sum, one_geom_sum, Ideal.submodule_span_eq, Ideal.span_singleton_pow,
-      Ideal.mem_span_singleton]
-    intro h
-    obtain ⟨k, hk⟩ := Int.natCast_dvd_natCast.1 h
-    have : 2 <= p := Nat.Prime.two_le hp.out
-    have : p < p ^ 2 := by nlinarith
-    cases k <;> grind
-
-Depends on / 依赖: Ideal.IsPrime.ne_top, Ideal.span_singleton_prime, IsPrime, Monic.isEisensteinAt_of_mem_of_notMem, Nat.prime_iff_prime_int, cyclotomic, cyclotomic.monic, cyclotomic_prime, geom_sum_X_comp_X_add_one_eq_sum, h.symm, hp.out, hp.out.ne_zero, isEisensteinAt_of_mem_of_notMem, lcoeff_apply, map_sum, mod_cast, monic_X_add_C, natDegree_X_add_C, ne_top, ne_zero
+/-
+**cyclotomic_comp_X_add_one_isEisensteinAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：cyclotomic_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] : ((cyclotomi
+c p Int).comp (X + 1)).IsEisensteinAt 𝓟
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.Monic.isEisensteinAt_of_mem_of_notMem`：∀ {R : Type u} [inst :
+ CommSemiring R] {𝓟 : Ideal R} {f : Polynomial R},   f.Monic → 𝓟 ≠ ⊤ → (∀ {n : ℕ
+}, n < f.natDegree → f.coeff n ∈ 𝓟) → …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Polynomial.Monic.comp`：comp (hp : p.Monic) (hq : q.Monic) (h : q.natDegr
+ee != 0) : (p.comp q).Monic
+· 使用定理 `Polynomial.cyclotomic.monic`：∀ (n : ℕ) (R : Type u_1) [inst : Ring R], (
+Polynomial.cyclotomic n R).Monic
+· 使用定理 `Polynomial.monic_X_add_C`：monic_X_add_C (x : R) : Monic (X + C x)
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.natDegree_X_add_C`：natDegree_X_add_C (x : R) : (X + C x).natD
+egree = 1
+· 使用定理 `Ideal.IsPrime.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}, 
+I.IsPrime → I ≠ ⊤
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_singleton_prime`：span_singleton_prime {p : α} (hp : p != 0) :
+ IsPrime (span ({p} : Set α)) ↔ Prime p
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.prime_iff_prime_int`：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root
+_.Prime (p : Int)
+· 使用定理 `Polynomial.cyclotomic_prime`：cyclotomic_prime (R : Type*) [Ring R] (p : 
+Nat) [hp : Fact p.Prime] : cyclotomic p R = ∑ i in Finset.range p, X ^ i
+· 使用定理 `Polynomial.geom_sum_X_comp_X_add_one_eq_sum`：geom_sum_X_comp_X_add_one_e
+q_sum (n : Nat) : (∑ i in range n, (X : R[X]) ^ i).comp (X + 1) = (Finset.range 
+n).sum fun i : Nat => (n.choose (…
+· 使用定理 `Polynomial.lcoeff_apply`：lcoeff_apply (n : Nat) (f : R[X]) : lcoeff R n 
+f = coeff f n
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Polynomial.C_eq_natCast`：C_eq_natCast (n : Nat) : C (n : R) = (n : R[X])
+（共 125 条，此处仅展示前 30 条）
 -/
 theorem cyclotomic_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] :
-    ((cyclotomic p Int).comp (X + 1)).IsEisensteinAt 𝓟 := by
+    ((cyclotomic p ℤ).comp (X + 1)).IsEisensteinAt 𝓟 := by
   refine Monic.isEisensteinAt_of_mem_of_notMem ?_
       (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
         Nat.prime_iff_prime_int.1 hp.out) (fun {i hi} => ?_) ?_
-  · rw [show (X + 1 : Int[X]) = X + C 1 by simp]
-    refine (cyclotomic.monic p Int).comp (monic_X_add_C 1) fun h => ?_
+  · rw [show (X + 1 : ℤ[X]) = X + C 1 by simp]
+    refine (cyclotomic.monic p ℤ).comp (monic_X_add_C 1) fun h => ?_
     rw [natDegree_X_add_C] at h
     exact zero_ne_one h.symm
   · rw [cyclotomic_prime, geom_sum_X_comp_X_add_one_eq_sum, ← lcoeff_apply, map_sum]
@@ -133,8 +119,8 @@ theorem cyclotomic_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] :
       congr
       next => skip
       ext
-      rw [lcoeff_apply]; rw [← C_eq_natCast]; rw [C_mul_X_pow_eq_monomial]; rw [coeff_monomial]
-    rw [natDegree_comp]; rw [show (X + 1 : Int[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
+      rw [lcoeff_apply, ← C_eq_natCast, C_mul_X_pow_eq_monomial, coeff_monomial]
+    rw [natDegree_comp, show (X + 1 : ℤ[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
       natDegree_cyclotomic, Nat.totient_prime hp.out] at hi
     simp only [hi.trans_le (Nat.sub_le _ _), sum_ite_eq', mem_range, if_true,
       Ideal.submodule_span_eq, Ideal.mem_span_singleton, Int.natCast_dvd_natCast]
@@ -144,123 +130,98 @@ theorem cyclotomic_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] :
       Ideal.mem_span_singleton]
     intro h
     obtain ⟨k, hk⟩ := Int.natCast_dvd_natCast.1 h
-    have : 2 <= p := Nat.Prime.two_le hp.out
+    have : 2 ≤ p := Nat.Prime.two_le hp.out
     have : p < p ^ 2 := by nlinarith
     cases k <;> grind
-
-/--
-theorem `cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt` / 定理 `cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt`
-
-English:
-theorem cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt
-  given: [hp : Fact p.Prime] (n : Nat)
-  proof: by
-  refine Monic.isEisensteinAt_of_mem_of_notMem ?_
-      (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
-        Nat.prime_iff_prime_int.1 hp.out) ?_ ?_
-  · rw [show (X + 1 : Int[X]) = X + C 1 by simp]
-    refine (cyclotomic.monic _ Int).comp (monic_X_add_C 1) fun h => ?_
-    rw [natDegree_X_add_C] at h
-    exact zero_ne_one h.symm
-  · induction n with
-    | zero =>
-      intro i hi
-      rw [Nat.zero_add]; rw [pow_one] at hi ⊢
-      exact (cyclotomic_comp_X_add_one_isEisensteinAt p).mem hi
-    | succ n hn =>
-      intro i hi
-      rw [Ideal.submodule_span_eq]; rw [Ideal.mem_span_singleton]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [show ↑(_ : Int) = Int.castRingHom (ZMod p) _ by rfl]; rw [← coeff_map]; rw [map_comp]; rw [map_cyclotomic]; rw [Polynomial.map_add]; rw [map_X]; rw [Polynomial.map_one]; rw [pow_add]; rw [pow_one]; rw [cyclotomic_mul_prime_dvd_eq_pow]; rw [pow_comp]; rw [← ZMod.expand_card]; rw [coeff_expand hp.out.pos]
-      · simp only [ite_eq_right_iff]
-        rintro ⟨k, hk⟩
-        rw [natDegree_comp]; rw [show (X + 1 : Int[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
-          natDegree_cyclotomic, Nat.totient_prime_pow hp.out (Nat.succ_pos _), Nat.add_one_sub_one]
-          at hn hi
-        rw [hk]; rw [pow_succ']; rw [mul_assoc] at hi
-        rw [hk]; rw [mul_comm]; rw [Nat.mul_div_cancel _ hp.out.pos]
-        replace hn := hn (lt_of_mul_lt_mul_left' hi)
-        rw [Ideal.submodule_span_eq]; rw [Ideal.mem_span_singleton]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [show ↑(_ : Int) = Int.castRingHom (ZMod p) _ by rfl]; rw [← coeff_map] at hn
-        simpa [map_comp] using hn
-      · exact ⟨p ^ n, by rw [pow_succ']⟩
-  · rw [coeff_zero_eq_eval_zero, eval_comp, cyclotomic_prime_pow_eq_geom_sum hp.out, eval_add,
-      eval_X, eval_one, zero_add, eval_finsetSum]
-    simp only [eval_pow, eval_X, one_pow, sum_const, card_range, Nat.smul_one_eq_cast,
-      submodule_span_eq, Ideal.submodule_span_eq, Ideal.span_singleton_pow,
-      Ideal.mem_span_singleton]
-    intro h
-    obtain ⟨k, hk⟩ := Int.natCast_dvd_natCast.1 h
-    have : 2 <= p := Nat.Prime.two_le hp.out
-    have : p < p ^ 2 := by nlinarith
-    cases k <;> grind
-
-中文:
-定理 cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt
-  条件: [hp : Fact p.素] (n : 自然数)
-  证明: by
-  refine Monic.isEisensteinAt_of_mem_of_notMem ?_
-      (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
-        Nat.prime_iff_prime_int.1 hp.out) ?_ ?_
-  · rw [show (X + 1 : Int[X]) = X + C 1 by simp]
-    refine (cyclotomic.monic _ Int).comp (monic_X_add_C 1) fun h => ?_
-    rw [natDegree_X_add_C] at h
-    exact zero_ne_one h.symm
-  · induction n with
-    | zero =>
-      intro i hi
-      rw [Nat.zero_add]; rw [pow_one] at hi ⊢
-      exact (cyclotomic_comp_X_add_one_isEisensteinAt p).mem hi
-    | succ n hn =>
-      intro i hi
-      rw [Ideal.submodule_span_eq]; rw [Ideal.mem_span_singleton]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [show ↑(_ : Int) = Int.castRingHom (ZMod p) _ by rfl]; rw [← coeff_map]; rw [map_comp]; rw [map_cyclotomic]; rw [Polynomial.map_add]; rw [map_X]; rw [Polynomial.map_one]; rw [pow_add]; rw [pow_one]; rw [cyclotomic_mul_prime_dvd_eq_pow]; rw [pow_comp]; rw [← ZMod.expand_card]; rw [coeff_expand hp.out.pos]
-      · simp only [ite_eq_right_iff]
-        rintro ⟨k, hk⟩
-        rw [natDegree_comp]; rw [show (X + 1 : Int[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
-          natDegree_cyclotomic, Nat.totient_prime_pow hp.out (Nat.succ_pos _), Nat.add_one_sub_one]
-          at hn hi
-        rw [hk]; rw [pow_succ']; rw [mul_assoc] at hi
-        rw [hk]; rw [mul_comm]; rw [Nat.mul_div_cancel _ hp.out.pos]
-        replace hn := hn (lt_of_mul_lt_mul_left' hi)
-        rw [Ideal.submodule_span_eq]; rw [Ideal.mem_span_singleton]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [show ↑(_ : Int) = Int.castRingHom (ZMod p) _ by rfl]; rw [← coeff_map] at hn
-        simpa [map_comp] using hn
-      · exact ⟨p ^ n, by rw [pow_succ']⟩
-  · rw [coeff_zero_eq_eval_zero, eval_comp, cyclotomic_prime_pow_eq_geom_sum hp.out, eval_add,
-      eval_X, eval_one, zero_add, eval_finsetSum]
-    simp only [eval_pow, eval_X, one_pow, sum_const, card_range, Nat.smul_one_eq_cast,
-      submodule_span_eq, Ideal.submodule_span_eq, Ideal.span_singleton_pow,
-      Ideal.mem_span_singleton]
-    intro h
-    obtain ⟨k, hk⟩ := Int.natCast_dvd_natCast.1 h
-    have : 2 <= p := Nat.Prime.two_le hp.out
-    have : p < p ^ 2 := by nlinarith
-    cases k <;> grind
-
-Depends on / 依赖: Ideal.IsPrime.ne_top, Ideal.span_singleton_prime, IsPrime, Monic.isEisensteinAt_of_mem_of_notMem, Nat.prime_iff_prime_int, Nat.zero_add, cyclotomic, cyclotomic.monic, cyclotomic_comp_X_add_one_isEisensteinAt, h.symm, hp.out, hp.out.ne_zero, isEisensteinAt_of_mem_of_notMem, mod_cast, monic_X_add_C, natDegree_X_add_C, ne_top, ne_zero, pow_one, prime_iff_prime_int
+/-
+**cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] (n 
+: Nat) : ((cyclotomic (p ^ (n + 1)) Int).comp (X + 1)).IsEisensteinAt 𝓟
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.Monic.isEisensteinAt_of_mem_of_notMem`：∀ {R : Type u} [inst :
+ CommSemiring R] {𝓟 : Ideal R} {f : Polynomial R},   f.Monic → 𝓟 ≠ ⊤ → (∀ {n : ℕ
+}, n < f.natDegree → f.coeff n ∈ 𝓟) → …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Polynomial.Monic.comp`：comp (hp : p.Monic) (hq : q.Monic) (h : q.natDegr
+ee != 0) : (p.comp q).Monic
+· 使用定理 `Polynomial.cyclotomic.monic`：∀ (n : ℕ) (R : Type u_1) [inst : Ring R], (
+Polynomial.cyclotomic n R).Monic
+· 使用定理 `Polynomial.monic_X_add_C`：monic_X_add_C (x : R) : Monic (X + C x)
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.natDegree_X_add_C`：natDegree_X_add_C (x : R) : (X + C x).natD
+egree = 1
+· 使用定理 `Ideal.IsPrime.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}, 
+I.IsPrime → I ≠ ⊤
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_singleton_prime`：span_singleton_prime {p : α} (hp : p != 0) :
+ IsPrime (span ({p} : Set α)) ↔ Prime p
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.prime_iff_prime_int`：prime_iff_prime_int {p : Nat} : p.Prime ↔ _root
+_.Prime (p : Int)
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `Polynomial.IsEisensteinAt.mem`：∀ {R : Type u} [inst : CommSemiring R] {f
+ : Polynomial R} {𝓟 : Ideal R},   f.IsEisensteinAt 𝓟 → ∀ {n : ℕ}, n < f.natDegre
+e → f.coeff n ∈ 𝓟
+· 使用定理 `cyclotomic_comp_X_add_one_isEisensteinAt`：cyclotomic_comp_X_add_one_isEi
+sensteinAt [hp : Fact p.Prime] : ((cyclotomic p Int).comp (X + 1)).IsEisensteinA
+t 𝓟
+· 使用定理 `Ideal.submodule_span_eq`：submodule_span_eq {s : Set α} : Submodule.span 
+α s = Ideal.span s
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `ZMod.intCast_zmod_eq_zero_iff_dvd`：intCast_zmod_eq_zero_iff_dvd (a : Int
+) (b : Nat) : (a : ZMod b) = 0 ↔ (b : Int) ∣ a
+· 使用定理 `Polynomial.coeff_map`：coeff_map (n : Nat) : coeff (p.map f) n = f (coeff
+ p n)
+（共 136 条，此处仅展示前 30 条）
 -/
-theorem cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] (n : Nat) :
-    ((cyclotomic (p ^ (n + 1)) Int).comp (X + 1)).IsEisensteinAt 𝓟 := by
+theorem cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] (n : ℕ) :
+    ((cyclotomic (p ^ (n + 1)) ℤ).comp (X + 1)).IsEisensteinAt 𝓟 := by
   refine Monic.isEisensteinAt_of_mem_of_notMem ?_
       (Ideal.IsPrime.ne_top <| (Ideal.span_singleton_prime (mod_cast hp.out.ne_zero)).2 <|
         Nat.prime_iff_prime_int.1 hp.out) ?_ ?_
-  · rw [show (X + 1 : Int[X]) = X + C 1 by simp]
-    refine (cyclotomic.monic _ Int).comp (monic_X_add_C 1) fun h => ?_
+  · rw [show (X + 1 : ℤ[X]) = X + C 1 by simp]
+    refine (cyclotomic.monic _ ℤ).comp (monic_X_add_C 1) fun h => ?_
     rw [natDegree_X_add_C] at h
     exact zero_ne_one h.symm
   · induction n with
     | zero =>
       intro i hi
-      rw [Nat.zero_add]; rw [pow_one] at hi ⊢
+      rw [Nat.zero_add, pow_one] at hi ⊢
       exact (cyclotomic_comp_X_add_one_isEisensteinAt p).mem hi
     | succ n hn =>
       intro i hi
-      rw [Ideal.submodule_span_eq]; rw [Ideal.mem_span_singleton]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [show ↑(_ : Int) = Int.castRingHom (ZMod p) _ by rfl]; rw [← coeff_map]; rw [map_comp]; rw [map_cyclotomic]; rw [Polynomial.map_add]; rw [map_X]; rw [Polynomial.map_one]; rw [pow_add]; rw [pow_one]; rw [cyclotomic_mul_prime_dvd_eq_pow]; rw [pow_comp]; rw [← ZMod.expand_card]; rw [coeff_expand hp.out.pos]
+      rw [Ideal.submodule_span_eq, Ideal.mem_span_singleton, ← ZMod.intCast_zmod_eq_zero_iff_dvd,
+        show ↑(_ : ℤ) = Int.castRingHom (ZMod p) _ by rfl, ← coeff_map, map_comp, map_cyclotomic,
+        Polynomial.map_add, map_X, Polynomial.map_one, pow_add, pow_one,
+        cyclotomic_mul_prime_dvd_eq_pow, pow_comp, ← ZMod.expand_card, coeff_expand hp.out.pos]
       · simp only [ite_eq_right_iff]
         rintro ⟨k, hk⟩
-        rw [natDegree_comp]; rw [show (X + 1 : Int[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
+        rw [natDegree_comp, show (X + 1 : ℤ[X]) = X + C 1 by simp, natDegree_X_add_C, mul_one,
           natDegree_cyclotomic, Nat.totient_prime_pow hp.out (Nat.succ_pos _), Nat.add_one_sub_one]
           at hn hi
-        rw [hk]; rw [pow_succ']; rw [mul_assoc] at hi
-        rw [hk]; rw [mul_comm]; rw [Nat.mul_div_cancel _ hp.out.pos]
+        rw [hk, pow_succ', mul_assoc] at hi
+        rw [hk, mul_comm, Nat.mul_div_cancel _ hp.out.pos]
         replace hn := hn (lt_of_mul_lt_mul_left' hi)
-        rw [Ideal.submodule_span_eq]; rw [Ideal.mem_span_singleton]; rw [← ZMod.intCast_zmod_eq_zero_iff_dvd]; rw [show ↑(_ : Int) = Int.castRingHom (ZMod p) _ by rfl]; rw [← coeff_map] at hn
+        rw [Ideal.submodule_span_eq, Ideal.mem_span_singleton, ← ZMod.intCast_zmod_eq_zero_iff_dvd,
+           show ↑(_ : ℤ) = Int.castRingHom (ZMod p) _ by rfl, ← coeff_map] at hn
         simpa [map_comp] using hn
       · exact ⟨p ^ n, by rw [pow_succ']⟩
   · rw [coeff_zero_eq_eval_zero, eval_comp, cyclotomic_prime_pow_eq_geom_sum hp.out, eval_add,
@@ -270,7 +231,7 @@ theorem cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt [hp : Fact p.Prime] (
       Ideal.mem_span_singleton]
     intro h
     obtain ⟨k, hk⟩ := Int.natCast_dvd_natCast.1 h
-    have : 2 <= p := Nat.Prime.two_le hp.out
+    have : 2 ≤ p := Nat.Prime.two_le hp.out
     have : p < p ^ 2 := by nlinarith
     cases k <;> grind
 
@@ -286,148 +247,86 @@ local notation "𝓟" => Submodule.span R {(p : R)}
 
 open IsIntegrallyClosed PowerBasis Nat Polynomial IsScalarTower
 
-/--
-theorem `dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt` / 定理 `dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt`
+/-- Let `K` be the field of fraction of an integrally closed domain `R` and let `L` be an extension
+of `K`, generated by an integral power basis `B` such that the minimal polynomial of `B.gen` is
+Eisenstein at `p`. Given `z : L` integral over `R`, if `Q : R[X]` is such that
+`aeval B.gen Q = p • z`, then `p ∣ Q.coeff 0`. -/
+/-
+**dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt** 是 Mathlib 中的
+一个定理，位于命名空间 ``。
+形式化陈述：dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt {B : Power
+Basis K L} (hp : Prime p) (hBint : IsIntegral R B.gen) {z : L} {Q : R[X]} (hQ : 
+aeval B.gen Q = p • z) (hzint : IsIntegral R z) (hei : (minpoly R B.gen).IsEisen
+steinAt 𝓟) : p ∣ Q.coeff 0
+参数：hp : Prime p；hBint : IsIntegral R B.gen；hQ : aeval B.gen Q = p • z；hzint : Is
+Integral R z；hei : (minpoly R B.gen).IsEisensteinAt 𝓟。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.finite`：finite (pb : PowerBasis R S) : Module.Finite R S
+· 使用定理 `Nat.exists_eq_succ_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k.succ
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `PowerBasis.dim_pos`：dim_pos [Nontrivial S] (pb : PowerBasis R S) : 0 < p
+b.dim
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `PowerBasis.finrank`：finrank [StrongRankCondition R] (pb : PowerBasis R S
+) : Module.finrank R S = pb.dim
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `PowerBasis.natDegree_minpoly`：natDegree_minpoly [Nontrivial A] (pb : Pow
+erBasis A S) : (minpoly A pb.gen).natDegree = pb.dim
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `minpoly.isIntegrallyClosed_eq_field_fractions'`：isIntegrallyClosed_eq_fi
+eld_fractions' [IsDomain S] [Algebra K S] [IsScalarTower R K S] {s : S} (hs : Is
+Integral R s) : minpoly K s = (minpo…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.Monic.natDegree_map`：∀ {R : Type u} {S : Type v} [inst : Semi
+ring R] [inst_1 : Semiring S] [Nontrivial S] {P : Polynomial R},   P.Monic → ∀ (
+f : R →+* S), (Polyn…
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `IsIntegral.sub`：∀ {R : Type u_1} {A : Type u_2} [inst : CommRing R] [ins
+t_1 : CommRing A] [inst_2 : Algebra R A] {x y : A},   IsIntegral R x → IsIntegra
+l R …
+· 使用定理 `IsIntegral.mul`：∀ {R : Type u_1} {A : Type u_2} [inst : CommRing R] [ins
+t_1 : CommRing A] [inst_2 : Algebra R A] {x y : A},   IsIntegral R x → IsIntegra
+l R …
+· 使用定理 `IsIntegral.pow`：IsIntegral.pow {x : B} (h : IsIntegral R x) (n : Nat) : 
+IsIntegral R (x ^ n)
+· 使用定理 `IsIntegral.sum`：IsIntegral.sum {α : Type*} {s : Finset α} (f : α -> A) (
+h : forall x in s, IsIntegral R (f x)) : IsIntegral R (∑ x in s, f x)
+· 使用定理 `IsIntegral.smul`：IsIntegral.smul {R} [CommSemiring R] [Algebra R B] [Alg
+ebra S B] [Algebra R S] [IsScalarTower R S B] {x : B} (r : R) (hx : IsIntegral S
+ x) :…
+· 使用定理 `adjoin_le_integralClosure`：adjoin_le_integralClosure {x : A} (hx : IsInt
+egral R x) : Algebra.adjoin R {x} <= integralClosure R A
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsIntegrallyClosed.isIntegral_iff`：isIntegral_iff [IsIntegrallyClosed R]
+ {x : K} : IsIntegral R x ↔ exists y : R, algebraMap R K y = x
+· 使用定理 `Algebra.isIntegral_norm`：isIntegral_norm [Algebra R L] [Algebra R K] [Is
+ScalarTower R K L] {x : L} (hx : IsIntegral R x) : IsIntegral R (norm K x)
+· 使用定理 `IsFractionRing.injective`：∀ (R : Type u_1) [inst : CommRing R] (K : Type
+ u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K],   Funct
+ion.Injective …
+（共 138 条，此处仅展示前 30 条）
 
-English:
-theorem dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt
-  statement: {B : PowerBasis K L}
-  proof: by
-  -- First define some abbreviations.
-  let := B.finite
-  let P := minpoly R B.gen
-  obtain ⟨n, hn⟩ := Nat.exists_eq_succ_of_ne_zero B.dim_pos.ne'
-  have finrank_K_L : Module.finrank K L = B.dim := B.finrank
-  have deg_K_P : (minpoly K B.gen).natDegree = B.dim := B.natDegree_minpoly
-  have deg_R_P : P.natDegree = B.dim := by
-    rw [← deg_K_P]; rw [minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [(minpoly.monic hBint).natDegree_map (algebraMap R K)]
-  choose! f hf using
-    hei.isWeaklyEisensteinAt.exists_mem_adjoin_mul_eq_pow_natDegree_le (minpoly.aeval R B.gen)
-      (minpoly.monic hBint)
-  simp only [P, (minpoly.monic hBint).natDegree_map, deg_R_P] at hf
-  -- The Eisenstein condition shows that `p` divides `Q.coeff 0`
-  -- if `p^n.succ` divides the following multiple of `Q.coeff 0^n.succ`:
-  suffices
-      p ^ n.succ ∣ Q.coeff 0 ^ n.succ * ((-1) ^ (n.succ * n) * (minpoly R B.gen).coeff 0 ^ n) by
-    have hndiv : ¬p ^ 2 ∣ (minpoly R B.gen).coeff 0 := fun h =>
-      hei.notMem ((span_singleton_pow p 2).symm ▸ Ideal.mem_span_singleton.2 h)
-    refine hp.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd (n := n) (?_ : _ ∣ _) hndiv
-    convert! (IsUnit.dvd_mul_right ⟨(-1) ^ (n.succ * n), rfl⟩).mpr this using 1
-    push_cast
-    ring_nf
-    simp
-  -- We claim the quotient of `Q^n * _` by `p^n` is the following `r`:
-  have aux : forall i in (range (Q.natDegree + 1)).erase 0, B.dim <= i + n := by grind
-  have hintsum :
-    IsIntegral R
-      (z * B.gen ^ n - ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • f (x + n)) := by
-    refine (hzint.mul (hBint.pow _)).sub (.sum _ fun i hi => .smul _ ?_)
-    exact adjoin_le_integralClosure hBint (hf _ (aux i hi)).1
-  obtain ⟨r, hr⟩ := isIntegral_iff.1 (isIntegral_norm K hintsum)
-  use r
-  -- Do the computation in `K` so we can work in terms of `z` instead of `r`.
-  apply IsFractionRing.injective R K
-  simp only [map_mul, map_pow, map_neg, map_one]
-  -- Both sides are actually norms:
-  calc
-    _ = norm K (Q.coeff 0 • B.gen ^ n) := ?_
-    _ = norm K (p • (z * B.gen ^ n) -
-          ∑ x in (range (Q.natDegree + 1)).erase 0, p • Q.coeff x • f (x + n)) :=
-        (congr_arg (norm K) (eq_sub_of_add_eq ?_))
-    _ = _ := ?_
-  · simp only [Algebra.smul_def, algebraMap_apply R K L, Algebra.norm_algebraMap, map_mul,
-      map_pow, finrank_K_L, PowerBasis.norm_gen_eq_coeff_zero_minpoly,
-      minpoly.isIntegrallyClosed_eq_field_fractions' K hBint, coeff_map, ← hn]
-    ring
-  swap
-  · simp_rw [← smul_sum, ← smul_sub, Algebra.smul_def p, algebraMap_apply R K L, map_mul,
-      Algebra.norm_algebraMap, finrank_K_L, hr, ← hn]
-  calc
-    _ = (Q.coeff 0 • ↑1 + ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) *
-          B.gen ^ n := ?_
-    _ = (Q.coeff 0 • B.gen ^ 0 +
-        ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) * B.gen ^ n := by
-      rw [pow_zero]
-    _ = aeval B.gen Q * B.gen ^ n := ?_
-    _ = _ := by rw [hQ, Algebra.smul_mul_assoc]
-  · have : forall i in (range (Q.natDegree + 1)).erase 0,
-        Q.coeff i • (B.gen ^ i * B.gen ^ n) = p • Q.coeff i • f (i + n) := by
-      intro i hi
-      rw [← pow_add]; rw [← (hf _ (aux i hi)).2]; rw [← Algebra.smul_def]; rw [smul_smul]; rw [mul_comm _ p]; rw [smul_smul]
-    simp only [add_mul, smul_mul_assoc, one_mul, sum_mul, sum_congr rfl this]
-  · rw [aeval_eq_sum_range,
-      Finset.add_sum_erase (range (Q.natDegree + 1)) fun i => Q.coeff i • B.gen ^ i]
-    simp
-
-中文:
-定理 dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt
-  结论: {B : PowerBasis K L}
-  证明: by
-  -- First define some abbreviations.
-  let := B.finite
-  let P := minpoly R B.gen
-  obtain ⟨n, hn⟩ := Nat.exists_eq_succ_of_ne_zero B.dim_pos.ne'
-  have finrank_K_L : Module.finrank K L = B.dim := B.finrank
-  have deg_K_P : (minpoly K B.gen).natDegree = B.dim := B.natDegree_minpoly
-  have deg_R_P : P.natDegree = B.dim := by
-    rw [← deg_K_P]; rw [minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [(minpoly.monic hBint).natDegree_map (algebraMap R K)]
-  choose! f hf using
-    hei.isWeaklyEisensteinAt.exists_mem_adjoin_mul_eq_pow_natDegree_le (minpoly.aeval R B.gen)
-      (minpoly.monic hBint)
-  simp only [P, (minpoly.monic hBint).natDegree_map, deg_R_P] at hf
-  -- The Eisenstein condition shows that `p` divides `Q.coeff 0`
-  -- if `p^n.succ` divides the following multiple of `Q.coeff 0^n.succ`:
-  suffices
-      p ^ n.succ ∣ Q.coeff 0 ^ n.succ * ((-1) ^ (n.succ * n) * (minpoly R B.gen).coeff 0 ^ n) by
-    have hndiv : ¬p ^ 2 ∣ (minpoly R B.gen).coeff 0 := fun h =>
-      hei.notMem ((span_singleton_pow p 2).symm ▸ Ideal.mem_span_singleton.2 h)
-    refine hp.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd (n := n) (?_ : _ ∣ _) hndiv
-    convert! (IsUnit.dvd_mul_right ⟨(-1) ^ (n.succ * n), rfl⟩).mpr this using 1
-    push_cast
-    ring_nf
-    simp
-  -- We claim the quotient of `Q^n * _` by `p^n` is the following `r`:
-  have aux : forall i in (range (Q.natDegree + 1)).erase 0, B.dim <= i + n := by grind
-  have hintsum :
-    IsIntegral R
-      (z * B.gen ^ n - ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • f (x + n)) := by
-    refine (hzint.mul (hBint.pow _)).sub (.sum _ fun i hi => .smul _ ?_)
-    exact adjoin_le_integralClosure hBint (hf _ (aux i hi)).1
-  obtain ⟨r, hr⟩ := isIntegral_iff.1 (isIntegral_norm K hintsum)
-  use r
-  -- Do the computation in `K` so we can work in terms of `z` instead of `r`.
-  apply IsFractionRing.injective R K
-  simp only [map_mul, map_pow, map_neg, map_one]
-  -- Both sides are actually norms:
-  calc
-    _ = norm K (Q.coeff 0 • B.gen ^ n) := ?_
-    _ = norm K (p • (z * B.gen ^ n) -
-          ∑ x in (range (Q.natDegree + 1)).erase 0, p • Q.coeff x • f (x + n)) :=
-        (congr_arg (norm K) (eq_sub_of_add_eq ?_))
-    _ = _ := ?_
-  · simp only [Algebra.smul_def, algebraMap_apply R K L, Algebra.norm_algebraMap, map_mul,
-      map_pow, finrank_K_L, PowerBasis.norm_gen_eq_coeff_zero_minpoly,
-      minpoly.isIntegrallyClosed_eq_field_fractions' K hBint, coeff_map, ← hn]
-    ring
-  swap
-  · simp_rw [← smul_sum, ← smul_sub, Algebra.smul_def p, algebraMap_apply R K L, map_mul,
-      Algebra.norm_algebraMap, finrank_K_L, hr, ← hn]
-  calc
-    _ = (Q.coeff 0 • ↑1 + ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) *
-          B.gen ^ n := ?_
-    _ = (Q.coeff 0 • B.gen ^ 0 +
-        ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) * B.gen ^ n := by
-      rw [pow_zero]
-    _ = aeval B.gen Q * B.gen ^ n := ?_
-    _ = _ := by rw [hQ, Algebra.smul_mul_assoc]
-  · have : forall i in (range (Q.natDegree + 1)).erase 0,
-        Q.coeff i • (B.gen ^ i * B.gen ^ n) = p • Q.coeff i • f (i + n) := by
-      intro i hi
-      rw [← pow_add]; rw [← (hf _ (aux i hi)).2]; rw [← Algebra.smul_def]; rw [smul_smul]; rw [mul_comm _ p]; rw [smul_smul]
-    simp only [add_mul, smul_mul_assoc, one_mul, sum_mul, sum_congr rfl this]
-  · rw [aeval_eq_sum_range,
-      Finset.add_sum_erase (range (Q.natDegree + 1)) fun i => Q.coeff i • B.gen ^ i]
-    simp
+--- 原说明 ---
+Let `K` be the field of fraction of an integrally closed domain `R` and let `L` 
+be an extension
+of `K`, generated by an integral power basis `B` such that the minimal polynomia
+l of `B.gen` is
+Eisenstein at `p`. Given `z : L` integral over `R`, if `Q : R[X]` is such that
+`aeval B.gen Q = p • z`, then `p ∣ Q.coeff 0`.
 -/
 theorem dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt {B : PowerBasis K L}
     (hp : Prime p) (hBint : IsIntegral R B.gen) {z : L} {Q : R[X]} (hQ : aeval B.gen Q = p • z)
@@ -439,7 +338,8 @@ theorem dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt {B : Pow
   have finrank_K_L : Module.finrank K L = B.dim := B.finrank
   have deg_K_P : (minpoly K B.gen).natDegree = B.dim := B.natDegree_minpoly
   have deg_R_P : P.natDegree = B.dim := by
-    rw [← deg_K_P]; rw [minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [(minpoly.monic hBint).natDegree_map (algebraMap R K)]
+    rw [← deg_K_P, minpoly.isIntegrallyClosed_eq_field_fractions' K hBint,
+      (minpoly.monic hBint).natDegree_map (algebraMap R K)]
   choose! f hf using
     hei.isWeaklyEisensteinAt.exists_mem_adjoin_mul_eq_pow_natDegree_le (minpoly.aeval R B.gen)
       (minpoly.monic hBint)
@@ -456,10 +356,10 @@ theorem dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt {B : Pow
     ring_nf
     simp
   -- We claim the quotient of `Q^n * _` by `p^n` is the following `r`:
-  have aux : forall i in (range (Q.natDegree + 1)).erase 0, B.dim <= i + n := by grind
+  have aux : ∀ i ∈ (range (Q.natDegree + 1)).erase 0, B.dim ≤ i + n := by grind
   have hintsum :
     IsIntegral R
-      (z * B.gen ^ n - ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • f (x + n)) := by
+      (z * B.gen ^ n - ∑ x ∈ (range (Q.natDegree + 1)).erase 0, Q.coeff x • f (x + n)) := by
     refine (hzint.mul (hBint.pow _)).sub (.sum _ fun i hi => .smul _ ?_)
     exact adjoin_le_integralClosure hBint (hf _ (aux i hi)).1
   obtain ⟨r, hr⟩ := isIntegral_iff.1 (isIntegral_norm K hintsum)
@@ -471,7 +371,7 @@ theorem dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt {B : Pow
   calc
     _ = norm K (Q.coeff 0 • B.gen ^ n) := ?_
     _ = norm K (p • (z * B.gen ^ n) -
-          ∑ x in (range (Q.natDegree + 1)).erase 0, p • Q.coeff x • f (x + n)) :=
+          ∑ x ∈ (range (Q.natDegree + 1)).erase 0, p • Q.coeff x • f (x + n)) :=
         (congr_arg (norm K) (eq_sub_of_add_eq ?_))
     _ = _ := ?_
   · simp only [Algebra.smul_def, algebraMap_apply R K L, Algebra.norm_algebraMap, map_mul,
@@ -482,319 +382,171 @@ theorem dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt {B : Pow
   · simp_rw [← smul_sum, ← smul_sub, Algebra.smul_def p, algebraMap_apply R K L, map_mul,
       Algebra.norm_algebraMap, finrank_K_L, hr, ← hn]
   calc
-    _ = (Q.coeff 0 • ↑1 + ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) *
+    _ = (Q.coeff 0 • ↑1 + ∑ x ∈ (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) *
           B.gen ^ n := ?_
     _ = (Q.coeff 0 • B.gen ^ 0 +
-        ∑ x in (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) * B.gen ^ n := by
+        ∑ x ∈ (range (Q.natDegree + 1)).erase 0, Q.coeff x • B.gen ^ x) * B.gen ^ n := by
       rw [pow_zero]
     _ = aeval B.gen Q * B.gen ^ n := ?_
     _ = _ := by rw [hQ, Algebra.smul_mul_assoc]
-  · have : forall i in (range (Q.natDegree + 1)).erase 0,
+  · have : ∀ i ∈ (range (Q.natDegree + 1)).erase 0,
         Q.coeff i • (B.gen ^ i * B.gen ^ n) = p • Q.coeff i • f (i + n) := by
       intro i hi
-      rw [← pow_add]; rw [← (hf _ (aux i hi)).2]; rw [← Algebra.smul_def]; rw [smul_smul]; rw [mul_comm _ p]; rw [smul_smul]
+      rw [← pow_add, ← (hf _ (aux i hi)).2, ← Algebra.smul_def, smul_smul, mul_comm _ p, smul_smul]
     simp only [add_mul, smul_mul_assoc, one_mul, sum_mul, sum_congr rfl this]
   · rw [aeval_eq_sum_range,
       Finset.add_sum_erase (range (Q.natDegree + 1)) fun i => Q.coeff i • B.gen ^ i]
     simp
-
-/--
-theorem `mem_adjoin_of_dvd_coeff_of_dvd_aeval` / 定理 `mem_adjoin_of_dvd_coeff_of_dvd_aeval`
-
-English:
-theorem mem_adjoin_of_dvd_coeff_of_dvd_aeval
-  statement: {A B : Type*} [CommSemiring A] [Ring B]
-  proof: by
-  choose! f hf using hQ
-  rw [aeval_eq_sum_range]; rw [sum_range] at hz
-  conv_lhs at hz =>
-    congr
-    next => skip
-    ext i
-    rw [hf i (mem_range.2 (Fin.is_lt i))]; rw [← smul_smul]
-  rw [← smul_sum] at hz
-  rw [← smul_right_injective _ hp hz]
-  exact
-    Subalgebra.sum_mem _ fun _ _ =>
-      Subalgebra.smul_mem _ (Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton _)) _) _
-
-中文:
-定理 mem_adjoin_of_dvd_coeff_of_dvd_aeval
-  结论: {A B : 类型} [交换半环 A] [环 B]
-  证明: by
-  choose! f hf using hQ
-  rw [aeval_eq_sum_range]; rw [sum_range] at hz
-  conv_lhs at hz =>
-    congr
-    next => skip
-    ext i
-    rw [hf i (mem_range.2 (Fin.is_lt i))]; rw [← smul_smul]
-  rw [← smul_sum] at hz
-  rw [← smul_right_injective _ hp hz]
-  exact
-    Subalgebra.sum_mem _ fun _ _ =>
-      Subalgebra.smul_mem _ (Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton _)) _) _
-
-Depends on / 依赖: Fin.is_lt, Set.mem_singleton, Subalgebra, Subalgebra.pow_mem, Subalgebra.smul_mem, Subalgebra.sum_mem, aeval_eq_sum_range, conv_lhs, is_lt, mem_range, mem_singleton, pow_mem, smul_mem, smul_right_injective, smul_smul, smul_sum, subset_adjoin, sum_mem, sum_range
+/-
+**mem_adjoin_of_dvd_coeff_of_dvd_aeval** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_adjoin_of_dvd_coeff_of_dvd_aeval {A B : Type*} [CommSemiring A] [Ring 
+B] [Algebra A B] [IsDomain A] [Module.IsTorsionFree A B] {Q : A[X]} {p : A} {x z
+ : B} (hp : p != 0) (hQ : forall i in range (Q.natDegree + 1), p ∣ Q.coeff i) (h
+z : aeval x Q = p • z) : z in adjoin A ({x} : Set B)
+参数：hp : p != 0；hQ : forall i in range (Q.natDegree + 1), p ∣ Q.coeff i；hz : aeva
+l x Q = p • z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_right_injective`：smul_right_injective (hr : r != 0) : ((r • ·) : M 
+-> M).Injective
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `Fin.is_lt`：∀ {n : ℕ} (a : Fin n), ↑a < n
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Finset.sum_range`：∀ {M : Type u_2} [inst : AddCommMonoid M] {n : ℕ} (f :
+ ℕ → M), ∑ i ∈ Finset.range n, f i = ∑ i, f ↑i
+· 使用定理 `Polynomial.aeval_eq_sum_range`：aeval_eq_sum_range [Algebra R S] {p : R[X
+]} (x : S) : aeval x p = ∑ i in Finset.range (p.natDegree + 1), p.coeff i • x ^ 
+i
+· 使用定理 `Subalgebra.sum_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {ι : Type w}
+ {t : Fi…
+· 使用定理 `Subalgebra.smul_mem`：smul_mem {x : A} (hx : x in S) (r : R) : r • x in S
+· 使用定理 `Subalgebra.pow_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : A}, x ∈
+ S → ∀ (…
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `Function.sometimes_spec`：sometimes_spec {p : Prop} {α} [Nonempty α] (P :
+ α -> Prop) (f : p -> α) (a : p) (h : P (f a)) : P (sometimes f)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 theorem mem_adjoin_of_dvd_coeff_of_dvd_aeval {A B : Type*} [CommSemiring A] [Ring B]
-    [Algebra A B] [IsDomain A] [Module.IsTorsionFree A B] {Q : A[X]} {p : A} {x z : B} (hp : p != 0)
-    (hQ : forall i in range (Q.natDegree + 1), p ∣ Q.coeff i) (hz : aeval x Q = p • z) :
-    z in adjoin A ({x} : Set B) := by
+    [Algebra A B] [IsDomain A] [Module.IsTorsionFree A B] {Q : A[X]} {p : A} {x z : B} (hp : p ≠ 0)
+    (hQ : ∀ i ∈ range (Q.natDegree + 1), p ∣ Q.coeff i) (hz : aeval x Q = p • z) :
+    z ∈ adjoin A ({x} : Set B) := by
   choose! f hf using hQ
-  rw [aeval_eq_sum_range]; rw [sum_range] at hz
+  rw [aeval_eq_sum_range, sum_range] at hz
   conv_lhs at hz =>
     congr
     next => skip
     ext i
-    rw [hf i (mem_range.2 (Fin.is_lt i))]; rw [← smul_smul]
+    rw [hf i (mem_range.2 (Fin.is_lt i)), ← smul_smul]
   rw [← smul_sum] at hz
   rw [← smul_right_injective _ hp hz]
   exact
     Subalgebra.sum_mem _ fun _ _ =>
       Subalgebra.smul_mem _ (Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton _)) _) _
 
-/--
-theorem `mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt` / 定理 `mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt`
+/-- Let `K` be the field of fraction of an integrally closed domain `R` and let `L` be an extension
+of `K`, generated by an integral power basis `B` such that the minimal polynomial of `B.gen` is
+Eisenstein at `p`. Given `z : L` integral over `R`, if `p • z ∈ R[B.gen]`, then
+`z ∈ R[B.gen]`. -/
+/-
+**mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt** 是 Mathlib 中的一个定理，位于命
+名空间 ``。
+形式化陈述：mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt {B : PowerBasis K 
+L} (hp : Prime p) (hBint : IsIntegral R B.gen) {z : L} (hzint : IsIntegral R z) 
+(hz : p • z in adjoin R ({B.gen} : Set L)) (hei : (minpoly R B.gen).IsEisenstein
+At 𝓟) : z in adjoin R ({B.gen} : Set L)
+参数：hp : Prime p；hBint : IsIntegral R B.gen；hzint : IsIntegral R z；hz : p • z in 
+adjoin R ({B.gen} : Set L)；hei : (minpoly R B.gen).IsEisensteinAt 𝓟。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.IsEisensteinAt.notMem`：∀ {R : Type u} [inst : CommSemiring R]
+ {f : Polynomial R} {𝓟 : Ideal R}, f.IsEisensteinAt 𝓟 → f.coeff 0 ∉ 𝓟 ^ 2
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_singleton_pow`：span_singleton_pow (s : R) [(span {s}).IsTwoSi
+ded] (n : Nat) : span {s} ^ n = (span {s ^ n} : Ideal R)
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `PowerBasis.finite`：finite (pb : PowerBasis R S) : Module.Finite R S
+· 使用定理 `Nat.exists_eq_succ_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k.succ
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `PowerBasis.dim_pos`：dim_pos [Nontrivial S] (pb : PowerBasis R S) : 0 < p
+b.dim
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用引理 `Module.IsTorsionFree.trans_faithfulSMul`：Module.IsTorsionFree.trans_fait
+hfulSMul [Nontrivial R] [IsCancelMulZero A] [AddCommMonoid M] [Module A M] [Modu
+le R M] [IsTorsionFree A M] […
+· 使用定理 `IsFractionRing.instFaithfulSMul`：∀ (R : Type u_1) [inst : CommRing R] (K
+ : Type u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K], 
+  FaithfulSMul R K
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.adjoin_singleton_eq_range_aeval`：adjoin_singleton_eq_range_aeval
+ (x : A) : adjoin R {x} = (aeval x).range
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `minpoly.aeval_modByMonic_minpoly`：aeval_modByMonic_minpoly (p : A[X]) (x
+ : B) : (p %ₘ minpoly A x).aeval x = p.aeval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.aeval_zero`：aeval_zero : aeval x (0 : R[X]) = 0
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `IsScalarTower.algebraMap_eq`：algebraMap_eq : algebraMap R A = (algebraMa
+p S A).comp (algebraMap R S)
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+（共 153 条，此处仅展示前 30 条）
 
-English:
-theorem mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt
-  statement: {B : PowerBasis K L}
-  proof: by
-  -- First define some abbreviations.
-  have hndiv : ¬p ^ 2 ∣ (minpoly R B.gen).coeff 0 := fun h =>
-    hei.notMem ((span_singleton_pow p 2).symm ▸ Ideal.mem_span_singleton.2 h)
-  have := B.finite
-  set P := minpoly R B.gen with hP
-  obtain ⟨n, hn⟩ := Nat.exists_eq_succ_of_ne_zero B.dim_pos.ne'
-  have : Module.IsTorsionFree R L := .trans_faithfulSMul R K L
-  -- There is a polynomial `Q` such that `p • z = aeval B.gen Q`. We can assume that
-  -- `Q.degree < P.degree` and `Q ≠ 0`.
-  rw [adjoin_singleton_eq_range_aeval] at hz
-  obtain ⟨Q₁, hQ⟩ := hz
-  set Q := Q₁ %ₘ P with hQ₁
-  replace hQ : aeval B.gen Q = p • z := by simpa [hQ₁, hP] using hQ
-  by_cases hQzero : Q = 0
-  · simp only [hQzero, Algebra.smul_def, zero_eq_mul, aeval_zero] at hQ
-    rcases hQ with H | H₁
-    · have : Function.Injective (algebraMap R L) := by
-        rw [algebraMap_eq R K L]
-        exact (algebraMap K L).injective.comp (IsFractionRing.injective R K)
-      exfalso
-      exact hp.ne_zero ((injective_iff_map_eq_zero _).1 this _ H)
-    · rw [H₁]
-      exact Subalgebra.zero_mem _
-  -- It is enough to prove that all coefficients of `Q` are divisible by `p`, by induction.
-  -- The base case is `dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt`.
-  refine mem_adjoin_of_dvd_coeff_of_dvd_aeval hp.ne_zero (fun i => ?_) hQ
-  induction i using Nat.case_strong_induction_on with
-  | hz =>
-    intro
-    exact dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt hp hBint hQ hzint hei
-  | hi j hind =>
-    intro hj
-    convert! hp.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd (n := n) _ hndiv
-    -- Two technical results we will need about `P.natDegree` and `Q.natDegree`.
-    have H := degree_modByMonic_lt Q₁ (minpoly.monic hBint)
-    rw [← hQ₁]; rw [← hP] at H
-    replace H := Nat.lt_iff_add_one_le.1
-      (lt_of_lt_of_le
-        (lt_of_le_of_lt (Nat.lt_iff_add_one_le.1 (Nat.lt_of_succ_lt_succ (mem_range.1 hj)))
-          (lt_succ_self _)) (Nat.lt_iff_add_one_le.1 ((natDegree_lt_natDegree_iff hQzero).2 H)))
-    have Hj : Q.natDegree + 1 = j + 1 + (Q.natDegree - j) := by
-      rw [← add_comm 1]; rw [← add_comm 1]; rw [add_assoc]; rw [add_right_inj]; rw [← Nat.add_sub_assoc (Nat.lt_of_succ_lt_succ (mem_range.1 hj)).le]; rw [add_comm]; rw [Nat.add_sub_cancel]
-    -- By induction hypothesis we can find `g : ℕ → R` such that
-    -- `k ∈ range (j + 1) → Q.coeff k • B.gen ^ k = (algebraMap R L) p * g k • B.gen ^ k`-
-    choose! g hg using hind
-    replace hg : forall k in range (j + 1), Q.coeff k • B.gen ^ k =
-        algebraMap R L p * g k • B.gen ^ k := by
-      intro k hk
-      rw [hg k (mem_range_succ_iff.1 hk)
-        (mem_range_succ_iff.2
-          (le_trans (mem_range_succ_iff.1 hk) (succ_le_iff.1 (mem_range_succ_iff.1 hj)).le))]; rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [map_mul]; rw [mul_assoc]
-    -- Since `minpoly R B.gen` is Eisenstein, we can find `f : ℕ → L` such that
-    -- `(map (algebraMap R L) (minpoly R B.gen)).nat_degree ≤ i` implies `f i ∈ R[B.gen]`
-    -- and `(algebraMap R L) p * f i = B.gen ^ i`. We will also need `hf₁`, a reformulation of this
-    -- property.
-    choose! f hf using
-      IsWeaklyEisensteinAt.exists_mem_adjoin_mul_eq_pow_natDegree_le (minpoly.aeval R B.gen)
-        (minpoly.monic hBint) hei.isWeaklyEisensteinAt
-    have hf₁ : forall k in (range (Q.natDegree - j)).erase 0,
-        Q.coeff (j + 1 + k) • B.gen ^ (j + 1 + k) * B.gen ^ (P.natDegree - (j + 2)) =
-        (algebraMap R L) p * Q.coeff (j + 1 + k) • f (k + P.natDegree - 1) := by
-      intro k hk
-      rw [smul_mul_assoc]; rw [← pow_add]; rw [← Nat.add_sub_assoc H]; rw [add_comm (j + 1) 1]; rw [add_assoc (j + 1)]; rw [add_comm _ (k + P.natDegree)]; rw [Nat.add_sub_add_right]; rw [← (hf (k + P.natDegree - 1) _).2]; rw [mul_smul_comm]
-      rw [(minpoly.monic hBint).natDegree_map]; rw [add_comm]; rw [Nat.add_sub_assoc]; rw [le_add_iff_nonneg_right]
-      · exact Nat.zero_le _
-      · refine one_le_iff_ne_zero.2 fun h => ?_
-        rw [h] at hk
-        simp at hk
-    -- The Eisenstein condition shows that `p` divides `Q.coeff j`
-    -- if `p^n.succ` divides the following multiple of `Q.coeff (succ j)^n.succ`:
-    suffices
-        p ^ n.succ ∣ Q.coeff (succ j) ^ n.succ *
-          (minpoly R B.gen).coeff 0 ^ (succ j + (P.natDegree - (j + 2))) by
-      convert! this
-      rw [Nat.succ_eq_add_one]; rw [add_assoc]; rw [← Nat.add_sub_assoc H]; rw [add_comm (j + 1)]; rw [Nat.add_sub_add_left]; rw [← Nat.add_sub_assoc]; rw [Nat.add_sub_add_left]; rw [hP]; rw [←
-        (minpoly.monic hBint).natDegree_map (algebraMap R K)]; rw [←
-        minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [natDegree_minpoly]; rw [hn]; rw [Nat.sub_one]; rw [Nat.pred_succ]
-      lia
-    -- Using `hQ : aeval B.gen Q = p • z`, we write `p • z` as a sum of terms of degree less than
-    -- `j+1`, that are multiples of `p` by induction, and terms of degree at least `j+1`.
-    rw [aeval_eq_sum_range]; rw [Hj]; rw [range_add]; rw [sum_union (disjoint_range_addLeftEmbedding _ _)]; rw [sum_congr rfl hg]; rw [add_comm] at hQ
-    -- We multiply this equality by `B.gen ^ (P.natDegree-(j+2))`, so we can use `hf₁` on the terms
-    -- we didn't know were multiples of `p`, and we take the norm on both sides.
-    replace hQ := congr_arg (fun x => x * B.gen ^ (P.natDegree - (j + 2))) hQ
-    simp_rw [sum_map, addLeftEmbedding_apply, add_mul, sum_mul, mul_assoc] at hQ
-    rw [← insert_erase
-      (mem_range.2 (tsub_pos_iff_lt.2 <| Nat.lt_of_succ_lt_succ <| mem_range.1 hj))]; rw [sum_insert (notMem_erase 0 _)]; rw [add_zero]; rw [sum_congr rfl hf₁]; rw [← mul_sum]; rw [← mul_sum]; rw [add_assoc]; rw [← mul_add]; rw [smul_mul_assoc]; rw [← pow_add]; rw [Algebra.smul_def] at hQ
-    replace hQ := congr_arg (norm K) (eq_sub_of_add_eq hQ)
-    -- We obtain an equality of elements of `K`, but everything is integral, so we can move to `R`
-    -- and simplify `hQ`.
-    have hintsum : IsIntegral R (z * B.gen ^ (P.natDegree - (j + 2)) -
-        (∑ x in (range (Q.natDegree - j)).erase 0,
-          Q.coeff (j + 1 + x) • f (x + P.natDegree - 1) +
-            ∑ x in range (j + 1), g x • B.gen ^ x * B.gen ^ (P.natDegree - (j + 2)))) := by
-      refine (hzint.mul (hBint.pow _)).sub
-        (.add (.sum _ fun k hk => .smul _ ?_)
-          (.sum _ fun k _ => .mul (.smul _ (.pow hBint _)) (hBint.pow _)))
-      refine adjoin_le_integralClosure hBint (hf _ ?_).1
-      rw [(minpoly.monic hBint).natDegree_map (algebraMap R L)]
-      rw [add_comm]; rw [Nat.add_sub_assoc]; rw [le_add_iff_nonneg_right]
-      · exact zero_le
-      · refine one_le_iff_ne_zero.2 fun h => ?_
-        rw [h] at hk
-        simp at hk
-    obtain ⟨r, hr⟩ := isIntegral_iff.1 (isIntegral_norm K hintsum)
-    rw [Algebra.smul_def]; rw [mul_assoc]; rw [← mul_sub]; rw [map_mul]; rw [algebraMap_apply R K L]; rw [map_pow]; rw [Algebra.norm_algebraMap]; rw [map_mul]; rw [algebraMap_apply R K L]; rw [Algebra.norm_algebraMap]; rw [finrank B]; rw [← hr]; rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [coeff_map]; rw [show (-1 : K) = algebraMap R K (-1) by simp]; rw [← map_pow]; rw [← map_pow]; rw [← map_mul]; rw [←
-      map_pow]; rw [← map_mul]; rw [← map_pow]; rw [← map_mul] at hQ
-    -- We can now finish the proof.
-    have hppdiv : p ^ B.dim ∣ p ^ B.dim * r := dvd_mul_of_dvd_left dvd_rfl _
-    rwa [← IsFractionRing.injective R K hQ, mul_comm, ← Units.coe_neg_one, mul_pow, ←
-      Units.val_pow_eq_pow_val, ← Units.val_pow_eq_pow_val, mul_assoc,
-      Units.dvd_mul_left, mul_comm, ← Nat.succ_eq_add_one, hn] at hppdiv
-
-中文:
-定理 mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt
-  结论: {B : PowerBasis K L}
-  证明: by
-  -- First define some abbreviations.
-  have hndiv : ¬p ^ 2 ∣ (minpoly R B.gen).coeff 0 := fun h =>
-    hei.notMem ((span_singleton_pow p 2).symm ▸ Ideal.mem_span_singleton.2 h)
-  have := B.finite
-  set P := minpoly R B.gen with hP
-  obtain ⟨n, hn⟩ := Nat.exists_eq_succ_of_ne_zero B.dim_pos.ne'
-  have : Module.IsTorsionFree R L := .trans_faithfulSMul R K L
-  -- There is a polynomial `Q` such that `p • z = aeval B.gen Q`. We can assume that
-  -- `Q.degree < P.degree` and `Q ≠ 0`.
-  rw [adjoin_singleton_eq_range_aeval] at hz
-  obtain ⟨Q₁, hQ⟩ := hz
-  set Q := Q₁ %ₘ P with hQ₁
-  replace hQ : aeval B.gen Q = p • z := by simpa [hQ₁, hP] using hQ
-  by_cases hQzero : Q = 0
-  · simp only [hQzero, Algebra.smul_def, zero_eq_mul, aeval_zero] at hQ
-    rcases hQ with H | H₁
-    · have : Function.Injective (algebraMap R L) := by
-        rw [algebraMap_eq R K L]
-        exact (algebraMap K L).injective.comp (IsFractionRing.injective R K)
-      exfalso
-      exact hp.ne_zero ((injective_iff_map_eq_zero _).1 this _ H)
-    · rw [H₁]
-      exact Subalgebra.zero_mem _
-  -- It is enough to prove that all coefficients of `Q` are divisible by `p`, by induction.
-  -- The base case is `dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt`.
-  refine mem_adjoin_of_dvd_coeff_of_dvd_aeval hp.ne_zero (fun i => ?_) hQ
-  induction i using Nat.case_strong_induction_on with
-  | hz =>
-    intro
-    exact dvd_coeff_zero_of_aeval_eq_prime_smul_of_minpoly_isEisensteinAt hp hBint hQ hzint hei
-  | hi j hind =>
-    intro hj
-    convert! hp.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd (n := n) _ hndiv
-    -- Two technical results we will need about `P.natDegree` and `Q.natDegree`.
-    have H := degree_modByMonic_lt Q₁ (minpoly.monic hBint)
-    rw [← hQ₁]; rw [← hP] at H
-    replace H := Nat.lt_iff_add_one_le.1
-      (lt_of_lt_of_le
-        (lt_of_le_of_lt (Nat.lt_iff_add_one_le.1 (Nat.lt_of_succ_lt_succ (mem_range.1 hj)))
-          (lt_succ_self _)) (Nat.lt_iff_add_one_le.1 ((natDegree_lt_natDegree_iff hQzero).2 H)))
-    have Hj : Q.natDegree + 1 = j + 1 + (Q.natDegree - j) := by
-      rw [← add_comm 1]; rw [← add_comm 1]; rw [add_assoc]; rw [add_right_inj]; rw [← Nat.add_sub_assoc (Nat.lt_of_succ_lt_succ (mem_range.1 hj)).le]; rw [add_comm]; rw [Nat.add_sub_cancel]
-    -- By induction hypothesis we can find `g : ℕ → R` such that
-    -- `k ∈ range (j + 1) → Q.coeff k • B.gen ^ k = (algebraMap R L) p * g k • B.gen ^ k`-
-    choose! g hg using hind
-    replace hg : forall k in range (j + 1), Q.coeff k • B.gen ^ k =
-        algebraMap R L p * g k • B.gen ^ k := by
-      intro k hk
-      rw [hg k (mem_range_succ_iff.1 hk)
-        (mem_range_succ_iff.2
-          (le_trans (mem_range_succ_iff.1 hk) (succ_le_iff.1 (mem_range_succ_iff.1 hj)).le))]; rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [map_mul]; rw [mul_assoc]
-    -- Since `minpoly R B.gen` is Eisenstein, we can find `f : ℕ → L` such that
-    -- `(map (algebraMap R L) (minpoly R B.gen)).nat_degree ≤ i` implies `f i ∈ R[B.gen]`
-    -- and `(algebraMap R L) p * f i = B.gen ^ i`. We will also need `hf₁`, a reformulation of this
-    -- property.
-    choose! f hf using
-      IsWeaklyEisensteinAt.exists_mem_adjoin_mul_eq_pow_natDegree_le (minpoly.aeval R B.gen)
-        (minpoly.monic hBint) hei.isWeaklyEisensteinAt
-    have hf₁ : forall k in (range (Q.natDegree - j)).erase 0,
-        Q.coeff (j + 1 + k) • B.gen ^ (j + 1 + k) * B.gen ^ (P.natDegree - (j + 2)) =
-        (algebraMap R L) p * Q.coeff (j + 1 + k) • f (k + P.natDegree - 1) := by
-      intro k hk
-      rw [smul_mul_assoc]; rw [← pow_add]; rw [← Nat.add_sub_assoc H]; rw [add_comm (j + 1) 1]; rw [add_assoc (j + 1)]; rw [add_comm _ (k + P.natDegree)]; rw [Nat.add_sub_add_right]; rw [← (hf (k + P.natDegree - 1) _).2]; rw [mul_smul_comm]
-      rw [(minpoly.monic hBint).natDegree_map]; rw [add_comm]; rw [Nat.add_sub_assoc]; rw [le_add_iff_nonneg_right]
-      · exact Nat.zero_le _
-      · refine one_le_iff_ne_zero.2 fun h => ?_
-        rw [h] at hk
-        simp at hk
-    -- The Eisenstein condition shows that `p` divides `Q.coeff j`
-    -- if `p^n.succ` divides the following multiple of `Q.coeff (succ j)^n.succ`:
-    suffices
-        p ^ n.succ ∣ Q.coeff (succ j) ^ n.succ *
-          (minpoly R B.gen).coeff 0 ^ (succ j + (P.natDegree - (j + 2))) by
-      convert! this
-      rw [Nat.succ_eq_add_one]; rw [add_assoc]; rw [← Nat.add_sub_assoc H]; rw [add_comm (j + 1)]; rw [Nat.add_sub_add_left]; rw [← Nat.add_sub_assoc]; rw [Nat.add_sub_add_left]; rw [hP]; rw [←
-        (minpoly.monic hBint).natDegree_map (algebraMap R K)]; rw [←
-        minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [natDegree_minpoly]; rw [hn]; rw [Nat.sub_one]; rw [Nat.pred_succ]
-      lia
-    -- Using `hQ : aeval B.gen Q = p • z`, we write `p • z` as a sum of terms of degree less than
-    -- `j+1`, that are multiples of `p` by induction, and terms of degree at least `j+1`.
-    rw [aeval_eq_sum_range]; rw [Hj]; rw [range_add]; rw [sum_union (disjoint_range_addLeftEmbedding _ _)]; rw [sum_congr rfl hg]; rw [add_comm] at hQ
-    -- We multiply this equality by `B.gen ^ (P.natDegree-(j+2))`, so we can use `hf₁` on the terms
-    -- we didn't know were multiples of `p`, and we take the norm on both sides.
-    replace hQ := congr_arg (fun x => x * B.gen ^ (P.natDegree - (j + 2))) hQ
-    simp_rw [sum_map, addLeftEmbedding_apply, add_mul, sum_mul, mul_assoc] at hQ
-    rw [← insert_erase
-      (mem_range.2 (tsub_pos_iff_lt.2 <| Nat.lt_of_succ_lt_succ <| mem_range.1 hj))]; rw [sum_insert (notMem_erase 0 _)]; rw [add_zero]; rw [sum_congr rfl hf₁]; rw [← mul_sum]; rw [← mul_sum]; rw [add_assoc]; rw [← mul_add]; rw [smul_mul_assoc]; rw [← pow_add]; rw [Algebra.smul_def] at hQ
-    replace hQ := congr_arg (norm K) (eq_sub_of_add_eq hQ)
-    -- We obtain an equality of elements of `K`, but everything is integral, so we can move to `R`
-    -- and simplify `hQ`.
-    have hintsum : IsIntegral R (z * B.gen ^ (P.natDegree - (j + 2)) -
-        (∑ x in (range (Q.natDegree - j)).erase 0,
-          Q.coeff (j + 1 + x) • f (x + P.natDegree - 1) +
-            ∑ x in range (j + 1), g x • B.gen ^ x * B.gen ^ (P.natDegree - (j + 2)))) := by
-      refine (hzint.mul (hBint.pow _)).sub
-        (.add (.sum _ fun k hk => .smul _ ?_)
-          (.sum _ fun k _ => .mul (.smul _ (.pow hBint _)) (hBint.pow _)))
-      refine adjoin_le_integralClosure hBint (hf _ ?_).1
-      rw [(minpoly.monic hBint).natDegree_map (algebraMap R L)]
-      rw [add_comm]; rw [Nat.add_sub_assoc]; rw [le_add_iff_nonneg_right]
-      · exact zero_le
-      · refine one_le_iff_ne_zero.2 fun h => ?_
-        rw [h] at hk
-        simp at hk
-    obtain ⟨r, hr⟩ := isIntegral_iff.1 (isIntegral_norm K hintsum)
-    rw [Algebra.smul_def]; rw [mul_assoc]; rw [← mul_sub]; rw [map_mul]; rw [algebraMap_apply R K L]; rw [map_pow]; rw [Algebra.norm_algebraMap]; rw [map_mul]; rw [algebraMap_apply R K L]; rw [Algebra.norm_algebraMap]; rw [finrank B]; rw [← hr]; rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [coeff_map]; rw [show (-1 : K) = algebraMap R K (-1) by simp]; rw [← map_pow]; rw [← map_pow]; rw [← map_mul]; rw [←
-      map_pow]; rw [← map_mul]; rw [← map_pow]; rw [← map_mul] at hQ
-    -- We can now finish the proof.
-    have hppdiv : p ^ B.dim ∣ p ^ B.dim * r := dvd_mul_of_dvd_left dvd_rfl _
-    rwa [← IsFractionRing.injective R K hQ, mul_comm, ← Units.coe_neg_one, mul_pow, ←
-      Units.val_pow_eq_pow_val, ← Units.val_pow_eq_pow_val, mul_assoc,
-      Units.dvd_mul_left, mul_comm, ← Nat.succ_eq_add_one, hn] at hppdiv
+--- 原说明 ---
+Let `K` be the field of fraction of an integrally closed domain `R` and let `L` 
+be an extension
+of `K`, generated by an integral power basis `B` such that the minimal polynomia
+l of `B.gen` is
+Eisenstein at `p`. Given `z : L` integral over `R`, if `p • z ∈ R[B.gen]`, then
+`z ∈ R[B.gen]`.
 -/
 theorem mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt {B : PowerBasis K L}
     (hp : Prime p) (hBint : IsIntegral R B.gen) {z : L} (hzint : IsIntegral R z)
-    (hz : p • z in adjoin R ({B.gen} : Set L)) (hei : (minpoly R B.gen).IsEisensteinAt 𝓟) :
-    z in adjoin R ({B.gen} : Set L) := by
+    (hz : p • z ∈ adjoin R ({B.gen} : Set L)) (hei : (minpoly R B.gen).IsEisensteinAt 𝓟) :
+    z ∈ adjoin R ({B.gen} : Set L) := by
   -- First define some abbreviations.
   have hndiv : ¬p ^ 2 ∣ (minpoly R B.gen).coeff 0 := fun h =>
     hei.notMem ((span_singleton_pow p 2).symm ▸ Ideal.mem_span_singleton.2 h)
@@ -830,22 +582,25 @@ theorem mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt {B : PowerBasis 
     convert! hp.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd (n := n) _ hndiv
     -- Two technical results we will need about `P.natDegree` and `Q.natDegree`.
     have H := degree_modByMonic_lt Q₁ (minpoly.monic hBint)
-    rw [← hQ₁]; rw [← hP] at H
+    rw [← hQ₁, ← hP] at H
     replace H := Nat.lt_iff_add_one_le.1
       (lt_of_lt_of_le
         (lt_of_le_of_lt (Nat.lt_iff_add_one_le.1 (Nat.lt_of_succ_lt_succ (mem_range.1 hj)))
           (lt_succ_self _)) (Nat.lt_iff_add_one_le.1 ((natDegree_lt_natDegree_iff hQzero).2 H)))
     have Hj : Q.natDegree + 1 = j + 1 + (Q.natDegree - j) := by
-      rw [← add_comm 1]; rw [← add_comm 1]; rw [add_assoc]; rw [add_right_inj]; rw [← Nat.add_sub_assoc (Nat.lt_of_succ_lt_succ (mem_range.1 hj)).le]; rw [add_comm]; rw [Nat.add_sub_cancel]
+      rw [← add_comm 1, ← add_comm 1, add_assoc, add_right_inj,
+        ← Nat.add_sub_assoc (Nat.lt_of_succ_lt_succ (mem_range.1 hj)).le, add_comm,
+        Nat.add_sub_cancel]
     -- By induction hypothesis we can find `g : ℕ → R` such that
     -- `k ∈ range (j + 1) → Q.coeff k • B.gen ^ k = (algebraMap R L) p * g k • B.gen ^ k`-
     choose! g hg using hind
-    replace hg : forall k in range (j + 1), Q.coeff k • B.gen ^ k =
+    replace hg : ∀ k ∈ range (j + 1), Q.coeff k • B.gen ^ k =
         algebraMap R L p * g k • B.gen ^ k := by
       intro k hk
       rw [hg k (mem_range_succ_iff.1 hk)
         (mem_range_succ_iff.2
-          (le_trans (mem_range_succ_iff.1 hk) (succ_le_iff.1 (mem_range_succ_iff.1 hj)).le))]; rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [map_mul]; rw [mul_assoc]
+          (le_trans (mem_range_succ_iff.1 hk) (succ_le_iff.1 (mem_range_succ_iff.1 hj)).le)),
+        Algebra.smul_def, Algebra.smul_def, map_mul, mul_assoc]
     -- Since `minpoly R B.gen` is Eisenstein, we can find `f : ℕ → L` such that
     -- `(map (algebraMap R L) (minpoly R B.gen)).nat_degree ≤ i` implies `f i ∈ R[B.gen]`
     -- and `(algebraMap R L) p * f i = B.gen ^ i`. We will also need `hf₁`, a reformulation of this
@@ -853,12 +608,14 @@ theorem mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt {B : PowerBasis 
     choose! f hf using
       IsWeaklyEisensteinAt.exists_mem_adjoin_mul_eq_pow_natDegree_le (minpoly.aeval R B.gen)
         (minpoly.monic hBint) hei.isWeaklyEisensteinAt
-    have hf₁ : forall k in (range (Q.natDegree - j)).erase 0,
+    have hf₁ : ∀ k ∈ (range (Q.natDegree - j)).erase 0,
         Q.coeff (j + 1 + k) • B.gen ^ (j + 1 + k) * B.gen ^ (P.natDegree - (j + 2)) =
         (algebraMap R L) p * Q.coeff (j + 1 + k) • f (k + P.natDegree - 1) := by
       intro k hk
-      rw [smul_mul_assoc]; rw [← pow_add]; rw [← Nat.add_sub_assoc H]; rw [add_comm (j + 1) 1]; rw [add_assoc (j + 1)]; rw [add_comm _ (k + P.natDegree)]; rw [Nat.add_sub_add_right]; rw [← (hf (k + P.natDegree - 1) _).2]; rw [mul_smul_comm]
-      rw [(minpoly.monic hBint).natDegree_map]; rw [add_comm]; rw [Nat.add_sub_assoc]; rw [le_add_iff_nonneg_right]
+      rw [smul_mul_assoc, ← pow_add, ← Nat.add_sub_assoc H, add_comm (j + 1) 1,
+        add_assoc (j + 1), add_comm _ (k + P.natDegree), Nat.add_sub_add_right,
+        ← (hf (k + P.natDegree - 1) _).2, mul_smul_comm]
+      rw [(minpoly.monic hBint).natDegree_map, add_comm, Nat.add_sub_assoc, le_add_iff_nonneg_right]
       · exact Nat.zero_le _
       · refine one_le_iff_ne_zero.2 fun h => ?_
         rw [h] at hk
@@ -869,81 +626,110 @@ theorem mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt {B : PowerBasis 
         p ^ n.succ ∣ Q.coeff (succ j) ^ n.succ *
           (minpoly R B.gen).coeff 0 ^ (succ j + (P.natDegree - (j + 2))) by
       convert! this
-      rw [Nat.succ_eq_add_one]; rw [add_assoc]; rw [← Nat.add_sub_assoc H]; rw [add_comm (j + 1)]; rw [Nat.add_sub_add_left]; rw [← Nat.add_sub_assoc]; rw [Nat.add_sub_add_left]; rw [hP]; rw [←
-        (minpoly.monic hBint).natDegree_map (algebraMap R K)]; rw [←
-        minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [natDegree_minpoly]; rw [hn]; rw [Nat.sub_one]; rw [Nat.pred_succ]
+      rw [Nat.succ_eq_add_one, add_assoc, ← Nat.add_sub_assoc H, add_comm (j + 1),
+        Nat.add_sub_add_left, ← Nat.add_sub_assoc, Nat.add_sub_add_left, hP, ←
+        (minpoly.monic hBint).natDegree_map (algebraMap R K), ←
+        minpoly.isIntegrallyClosed_eq_field_fractions' K hBint, natDegree_minpoly, hn, Nat.sub_one,
+        Nat.pred_succ]
       lia
     -- Using `hQ : aeval B.gen Q = p • z`, we write `p • z` as a sum of terms of degree less than
     -- `j+1`, that are multiples of `p` by induction, and terms of degree at least `j+1`.
-    rw [aeval_eq_sum_range]; rw [Hj]; rw [range_add]; rw [sum_union (disjoint_range_addLeftEmbedding _ _)]; rw [sum_congr rfl hg]; rw [add_comm] at hQ
+    rw [aeval_eq_sum_range, Hj, range_add, sum_union (disjoint_range_addLeftEmbedding _ _),
+      sum_congr rfl hg, add_comm] at hQ
     -- We multiply this equality by `B.gen ^ (P.natDegree-(j+2))`, so we can use `hf₁` on the terms
     -- we didn't know were multiples of `p`, and we take the norm on both sides.
     replace hQ := congr_arg (fun x => x * B.gen ^ (P.natDegree - (j + 2))) hQ
     simp_rw [sum_map, addLeftEmbedding_apply, add_mul, sum_mul, mul_assoc] at hQ
     rw [← insert_erase
-      (mem_range.2 (tsub_pos_iff_lt.2 <| Nat.lt_of_succ_lt_succ <| mem_range.1 hj))]; rw [sum_insert (notMem_erase 0 _)]; rw [add_zero]; rw [sum_congr rfl hf₁]; rw [← mul_sum]; rw [← mul_sum]; rw [add_assoc]; rw [← mul_add]; rw [smul_mul_assoc]; rw [← pow_add]; rw [Algebra.smul_def] at hQ
+      (mem_range.2 (tsub_pos_iff_lt.2 <| Nat.lt_of_succ_lt_succ <| mem_range.1 hj)),
+      sum_insert (notMem_erase 0 _), add_zero, sum_congr rfl hf₁, ← mul_sum, ← mul_sum, add_assoc,
+      ← mul_add, smul_mul_assoc, ← pow_add, Algebra.smul_def] at hQ
     replace hQ := congr_arg (norm K) (eq_sub_of_add_eq hQ)
     -- We obtain an equality of elements of `K`, but everything is integral, so we can move to `R`
     -- and simplify `hQ`.
     have hintsum : IsIntegral R (z * B.gen ^ (P.natDegree - (j + 2)) -
-        (∑ x in (range (Q.natDegree - j)).erase 0,
+        (∑ x ∈ (range (Q.natDegree - j)).erase 0,
           Q.coeff (j + 1 + x) • f (x + P.natDegree - 1) +
-            ∑ x in range (j + 1), g x • B.gen ^ x * B.gen ^ (P.natDegree - (j + 2)))) := by
+            ∑ x ∈ range (j + 1), g x • B.gen ^ x * B.gen ^ (P.natDegree - (j + 2)))) := by
       refine (hzint.mul (hBint.pow _)).sub
         (.add (.sum _ fun k hk => .smul _ ?_)
           (.sum _ fun k _ => .mul (.smul _ (.pow hBint _)) (hBint.pow _)))
       refine adjoin_le_integralClosure hBint (hf _ ?_).1
       rw [(minpoly.monic hBint).natDegree_map (algebraMap R L)]
-      rw [add_comm]; rw [Nat.add_sub_assoc]; rw [le_add_iff_nonneg_right]
+      rw [add_comm, Nat.add_sub_assoc, le_add_iff_nonneg_right]
       · exact zero_le
       · refine one_le_iff_ne_zero.2 fun h => ?_
         rw [h] at hk
         simp at hk
     obtain ⟨r, hr⟩ := isIntegral_iff.1 (isIntegral_norm K hintsum)
-    rw [Algebra.smul_def]; rw [mul_assoc]; rw [← mul_sub]; rw [map_mul]; rw [algebraMap_apply R K L]; rw [map_pow]; rw [Algebra.norm_algebraMap]; rw [map_mul]; rw [algebraMap_apply R K L]; rw [Algebra.norm_algebraMap]; rw [finrank B]; rw [← hr]; rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [minpoly.isIntegrallyClosed_eq_field_fractions' K hBint]; rw [coeff_map]; rw [show (-1 : K) = algebraMap R K (-1) by simp]; rw [← map_pow]; rw [← map_pow]; rw [← map_mul]; rw [←
-      map_pow]; rw [← map_mul]; rw [← map_pow]; rw [← map_mul] at hQ
+    rw [Algebra.smul_def, mul_assoc, ← mul_sub, map_mul, algebraMap_apply R K L, map_pow,
+      Algebra.norm_algebraMap, map_mul, algebraMap_apply R K L, Algebra.norm_algebraMap,
+      finrank B, ← hr, PowerBasis.norm_gen_eq_coeff_zero_minpoly,
+      minpoly.isIntegrallyClosed_eq_field_fractions' K hBint, coeff_map,
+      show (-1 : K) = algebraMap R K (-1) by simp, ← map_pow, ← map_pow, ← map_mul, ←
+      map_pow, ← map_mul, ← map_pow, ← map_mul] at hQ
     -- We can now finish the proof.
     have hppdiv : p ^ B.dim ∣ p ^ B.dim * r := dvd_mul_of_dvd_left dvd_rfl _
     rwa [← IsFractionRing.injective R K hQ, mul_comm, ← Units.coe_neg_one, mul_pow, ←
       Units.val_pow_eq_pow_val, ← Units.val_pow_eq_pow_val, mul_assoc,
       Units.dvd_mul_left, mul_comm, ← Nat.succ_eq_add_one, hn] at hppdiv
 
-/--
-theorem `mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt` / 定理 `mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt`
+/-- Let `K` be the field of fraction of an integrally closed domain `R` and let `L` be an extension
+of `K`, generated by an integral power basis `B` such that the minimal polynomial of `B.gen` is
+Eisenstein at `p`. Given `z : L` integral over `R`, if `p ^ n • z ∈ R[B.gen]`, then
+`z ∈ R[B.gen]`. Together with `Algebra.discr_mul_isIntegral_mem_adjoin` this result often
+allows to compute the ring of integers of `L`. -/
+/-
+**mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt** 是 Mathlib 中的一个定理
+，位于命名空间 ``。
+形式化陈述：mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt {B : PowerBasi
+s K L} (hp : Prime p) (hBint : IsIntegral R B.gen) {n : Nat} {z : L} (hzint : Is
+Integral R z) (hz : p ^ n • z in adjoin R ({B.gen} : Set L)) (hei : (minpoly R B
+.gen).IsEisensteinAt 𝓟) : z in adjoin R ({B.gen} : Set L)
+参数：hp : Prime p；hBint : IsIntegral R B.gen；hzint : IsIntegral R z；hz : p ^ n • z
+ in adjoin R ({B.gen} : Set L)；hei : (minpoly R B.gen).IsEisensteinAt 𝓟。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt`：mem_adjoin_of_s
+mul_prime_smul_of_minpoly_isEisensteinAt {B : PowerBasis K L} (hp : Prime p) (hB
+int : IsIntegral R B.gen) {z : L} (hzint : Is…
+· 使用定理 `IsIntegral.smul`：IsIntegral.smul {R} [CommSemiring R] [Algebra R B] [Alg
+ebra S B] [Algebra R S] [IsScalarTower R S B] {x : B} (r : R) (hx : IsIntegral S
+ x) :…
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
 
-English:
-theorem mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt
-  statement: {B : PowerBasis K L}
-  proof: by
-  induction n with
-  | zero => simpa using hz
-  | succ n hn =>
-    rw [_root_.pow_succ']; rw [mul_smul] at hz
-    exact
-      hn (mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt hp hBint (hzint.smul _) hz hei)
-
-中文:
-定理 mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt
-  结论: {B : PowerBasis K L}
-  证明: by
-  induction n with
-  | zero => simpa using hz
-  | succ n hn =>
-    rw [_root_.pow_succ']; rw [mul_smul] at hz
-    exact
-      hn (mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt hp hBint (hzint.smul _) hz hei)
-
-Depends on / 依赖: _root_, _root_.pow_succ, hzint.smul, mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt, mul_smul, pow_succ
+--- 原说明 ---
+Let `K` be the field of fraction of an integrally closed domain `R` and let `L` 
+be an extension
+of `K`, generated by an integral power basis `B` such that the minimal polynomia
+l of `B.gen` is
+Eisenstein at `p`. Given `z : L` integral over `R`, if `p ^ n • z ∈ R[B.gen]`, t
+hen
+`z ∈ R[B.gen]`. Together with `Algebra.discr_mul_isIntegral_mem_adjoin` this res
+ult often
+allows to compute the ring of integers of `L`.
 -/
 theorem mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt {B : PowerBasis K L}
-    (hp : Prime p) (hBint : IsIntegral R B.gen) {n : Nat} {z : L} (hzint : IsIntegral R z)
-    (hz : p ^ n • z in adjoin R ({B.gen} : Set L)) (hei : (minpoly R B.gen).IsEisensteinAt 𝓟) :
-    z in adjoin R ({B.gen} : Set L) := by
+    (hp : Prime p) (hBint : IsIntegral R B.gen) {n : ℕ} {z : L} (hzint : IsIntegral R z)
+    (hz : p ^ n • z ∈ adjoin R ({B.gen} : Set L)) (hei : (minpoly R B.gen).IsEisensteinAt 𝓟) :
+    z ∈ adjoin R ({B.gen} : Set L) := by
   induction n with
   | zero => simpa using hz
   | succ n hn =>
-    rw [_root_.pow_succ']; rw [mul_smul] at hz
+    rw [_root_.pow_succ', mul_smul] at hz
     exact
       hn (mem_adjoin_of_smul_prime_smul_of_minpoly_isEisensteinAt hp hBint (hzint.smul _) hz hei)
 
 end IsIntegral
+

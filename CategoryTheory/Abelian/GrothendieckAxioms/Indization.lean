@@ -29,22 +29,16 @@ section
 
 variable {C : Type u} [Category.{v} C]
 
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J : Type v} [SmallCategory J] [IsFiltered J] [HasFiniteLimits C] :
     HasExactColimitsOfShape J (Ind C) :=
   HasExactColimitsOfShape.domain_of_functor J (Ind.inclusion C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteLimits
-  signature: C] : AB5 (Ind C) where
-  body: inferInstance
-
-中文:
-实例 [有有限极限
-  签名: C] : AB5 (Ind C) where
-  定义体: inferInstance
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteLimits C] : AB5 (Ind C) where
   ofShape _ _ _ := inferInstance
@@ -55,20 +49,39 @@ section
 
 variable {C : Type u} [SmallCategory C] [Abelian C]
 
-/--
-Instance `isGrothendieckAbelian_ind` / 实例 `isGrothendieckAbelian_ind`
-
-English:
-instance isGrothendieckAbelian_ind
-  signature: : IsGrothendieckAbelian.{u} (Ind C) where
-  body: ⟨⟨_, Ind.isSeparator_range_yoneda⟩⟩
-
-中文:
-实例 isGrothendieckAbelian_ind
-  签名: : 是GrothendieckAbelian.{u} (Ind C) where
-  定义体: ⟨⟨_, Ind.isSeparator_range_yoneda⟩⟩
-
-Depends on / 依赖: Ind.isSeparator_range_yoneda, isSeparator_range_yoneda
+/-
+**CategoryTheory.Limits.isGrothendieckAbelian_ind** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：isGrothendieckAbelian_ind : IsGrothendieckAbelian.{u} (Ind C) where hasSep
+arator
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.instHasFilteredColimitsInd`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C],   CategoryTheory.Limits.HasFilteredColimits (Catego
+ryTheory.Ind C)
+· 使用定理 `CategoryTheory.Limits.instAB5IndOfHasFiniteLimits`：∀ {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimits C],  
+ CategoryTheory.AB5 (CategoryTheory.Ind…
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.instHasCoproductsIndOfHasFiniteCoproducts`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteCopro
+ducts C],   CategoryTheory.Limits.HasCoproduct…
+· 使用定理 `CategoryTheory.Limits.hasFiniteCoproducts_of_hasFiniteColimits`：∀ (C : T
+ype u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFinit
+eColimits C],   CategoryTheory.Limits.HasFiniteCopro…
+· 使用定理 `CategoryTheory.Abelian.hasFiniteColimits`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.H
+asFiniteColimits C
+· 使用定理 `CategoryTheory.Ind.isSeparator_range_yoneda`：∀ {C : Type u} [inst : Cate
+goryTheory.SmallCategory C] [CategoryTheory.Preadditive C]   [inst_2 : CategoryT
+heory.Limits.HasFiniteColimits C]…
 -/
 instance isGrothendieckAbelian_ind : IsGrothendieckAbelian.{u} (Ind C) where
   hasSeparator := ⟨⟨_, Ind.isSeparator_range_yoneda⟩⟩
@@ -76,3 +89,4 @@ instance isGrothendieckAbelian_ind : IsGrothendieckAbelian.{u} (Ind C) where
 end
 
 end CategoryTheory.Limits
+

@@ -41,34 +41,27 @@ variable {C : Type u₁} [Category.{v₁} C] [MonoidalCategory.{v₁} C] [Braide
 open scoped MonObj ComonObj
 
 /--
-Definition of `BimonObj` / `BimonObj` 的定义
+A bimonoid object in a braided category `C` is an object that is simultaneously monoid and comonoid
+objects, and structure morphisms of them satisfy appropriate consistency conditions.
+-/
+/-
+**CategoryTheory.BimonObj** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：BimonObj (M : C) extends MonObj M, ComonObj M where mul_comul (M) : μ[M] ≫
+ Δ[M] = (Δ[M] otimesₘ Δ[M]) ≫ tensorμ M M M M ≫ (μ[M] otimesₘ μ[M])
+参数：M : C；M。
+继承自：MonObj M, ComonObj M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class BimonObj
-  parameters: (M : C)
-  extends: MonObj M, ComonObj M
-  axioms and operations (4):
-    - mul_comul((M)) : μ[M] ≫ Δ[M] = (Δ[M] otimesₘ Δ[M]) ≫ tensorμ M M M M ≫ (μ[M] otimesₘ μ[M])  [default: by cat_disch]
-    - one_comul((M)) : η[M] ≫ Δ[M] = η[M otimes M]  [default: by cat_disch]
-    - mul_counit((M)) : μ[M] ≫ ε[M] = ε[M otimes M]  [default: by cat_disch]
-    - one_counit((M)) : η[M] ≫ ε[M] = 𝟙 (𝟙_ C)  [default: by cat_disch]
-
-中文:
-类 BimonObj
-  参数: (M : C)
-  继承: MonObj M, 余monObj M
-  公理与运算 (4 个):
-    - mul_comul((M)) : μ[M] ≫ Δ[M] = (Δ[M] otimesₘ Δ[M]) ≫ tensorμ M M M M ≫ (μ[M] otimesₘ μ[M])  [默认: by cat_disch]
-    - one_comul((M)) : η[M] ≫ Δ[M] = η[M otimes M]  [默认: by cat_disch]
-    - mul_counit((M)) : μ[M] ≫ ε[M] = ε[M otimes M]  [默认: by cat_disch]
-    - one_counit((M)) : η[M] ≫ ε[M] = 𝟙 (𝟙_ C)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, mul_counit, one_comul, one_counit, otimes
+--- 原说明 ---
+A bimonoid object in a braided category `C` is an object that is simultaneously 
+monoid and comonoid
+objects, and structure morphisms of them satisfy appropriate consistency conditi
+ons.
 -/
 class BimonObj (M : C) extends MonObj M, ComonObj M where
-  mul_comul (M) : μ[M] ≫ Δ[M] = (Δ[M] otimesₘ Δ[M]) ≫ tensorμ M M M M ≫ (μ[M] otimesₘ μ[M]) := by cat_disch
-  one_comul (M) : η[M] ≫ Δ[M] = η[M otimes M] := by cat_disch
-  mul_counit (M) : μ[M] ≫ ε[M] = ε[M otimes M] := by cat_disch
+  mul_comul (M) : μ[M] ≫ Δ[M] = (Δ[M] ⊗ₘ Δ[M]) ≫ tensorμ M M M M ≫ (μ[M] ⊗ₘ μ[M]) := by cat_disch
+  one_comul (M) : η[M] ≫ Δ[M] = η[M ⊗ M] := by cat_disch
+  mul_counit (M) : μ[M] ≫ ε[M] = ε[M ⊗ M] := by cat_disch
   one_counit (M) : η[M] ≫ ε[M] = 𝟙 (𝟙_ C) := by cat_disch
 
 namespace BimonObj
@@ -77,205 +70,141 @@ attribute [reassoc (attr := simp)] mul_comul one_comul mul_counit one_counit
 
 end BimonObj
 
-/--
-Definition of `IsBimonHom` / `IsBimonHom` 的定义
+/-- The property that a morphism between bimonoid objects is a bimonoid morphism. -/
+/-
+**CategoryTheory.IsBimonHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.MonoidalCategory C] →       [inst_2 : CategoryTheory.BraidedC
+ategory C] →         {M N : C} → [CategoryTheory.BimonObj M] → [CategoryTheory.B
+imonObj N] → (M ⟶ N) → Prop
+参数：M ⟶ N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsBimonHom
-  parameters: {M N : C} [BimonObj M] [BimonObj N] (f : M ⟶ N)
-  (no additional axioms)
-
-中文:
-类 是Bimon态射
-  参数: {M N : C} [BimonObj M] [BimonObj N] (f : M ⟶ N)
-  (无附加公理)
+--- 原说明 ---
+The property that a morphism between bimonoid objects is a bimonoid morphism.
 -/
 class IsBimonHom {M N : C} [BimonObj M] [BimonObj N] (f : M ⟶ N) : Prop extends
     IsMonHom f, IsComonHom f
 
 variable (C) in
 /--
-Definition of `Bimon` / `Bimon` 的定义
+A bimonoid object in a braided category `C` is a comonoid object in the (monoidal)
+category of monoid objects in `C`.
+-/
+/-
+**CategoryTheory.Bimon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Bimon
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Bimon
-  body: Comon (Mon C)
-
-中文:
-定义 Bimon
-  定义体: Comon (Mon C)
+--- 原说明 ---
+A bimonoid object in a braided category `C` is a comonoid object in the (monoida
+l)
+category of monoid objects in `C`.
 -/
 def Bimon := Comon (Mon C)
 
 namespace Bimon
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (Bimon C)
-  body: inferInstanceAs (Category (Comon (Mon C)))
-
-中文:
-实例 :
-  签名: 范畴 (Bimon C)
-  定义体: inferInstanceAs (Category (Comon (Mon C)))
-
-Depends on / 依赖: Category
+/-
+**CategoryTheory.Bimon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bimon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (Bimon C) := inferInstanceAs (Category (Comon (Mon C)))
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : Bimon C} {f g : X ⟶ Y} (w : f.hom.hom = g.hom.hom)
-  statement: f = g
-  proof: Comon.Hom.ext (Mon.Hom.ext w)
-
-中文:
-引理 ext
-  条件: {X Y : Bimon C} {f g : X ⟶ Y} (w : f.hom.hom = g.hom.hom)
-  结论: f = g
-  证明: Comon.Hom.ext (Mon.Hom.ext w)
+/-
+**CategoryTheory.Bimon.ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCategory C] {X 
+Y : CategoryTheory.Bimon C} {f g : X ⟶ Y},   f.hom.hom = g.hom.hom → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Comon.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Cat
+egory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {M N : Category
+Theory.Comon C} {x…
+· 使用定理 `CategoryTheory.Mon.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTheory.Categ
+ory.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {M N : CategoryTh
+eory.Mon C} {x y…
 -/
 @[ext] lemma ext {X Y : Bimon C} {f g : X ⟶ Y} (w : f.hom.hom = g.hom.hom) : f = g :=
   Comon.Hom.ext (Mon.Hom.ext w)
-
-/--
-theorem `id_hom'` / 定理 `id_hom'`
-
-English:
-theorem id_hom'
-  given: (M : Bimon C)
-  statement: Comon.Hom.hom (𝟙 M) = 𝟙 M.X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_hom'
-  条件: (M : Bimon C)
-  结论: 余mon.态射.hom (𝟙 M) = 𝟙 M.X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Bimon.id_hom'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCategory C] (M 
+: CategoryTheory.Bimon C),   (CategoryTheory.CategoryStruct.id M).hom = Category
+Theory.CategoryStruct.id M.X
+参数：M : CategoryTheory.Bimon C；CategoryTheory.CategoryStruct.id M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem id_hom' (M : Bimon C) : Comon.Hom.hom (𝟙 M) = 𝟙 M.X := rfl
 
 @[simp]
-/--
-theorem `comp_hom'` / 定理 `comp_hom'`
-
-English:
-theorem comp_hom'
-  given: {M N K : Bimon C} (f : M ⟶ N) (g : N ⟶ K)
-  statement: (f ≫ g).hom = f.hom ≫ g.hom
-  proof: rfl
-
-中文:
-定理 comp_hom'
-  条件: {M N K : Bimon C} (f : M ⟶ N) (g : N ⟶ K)
-  结论: (f ≫ g).hom = f.hom ≫ g.hom
-  证明: rfl
+/-
+**CategoryTheory.Bimon.comp_hom'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bimon
+`。
+形式化陈述：comp_hom' {M N K : Bimon C} (f : M ⟶ N) (g : N ⟶ K) : (f ≫ g).hom = f.hom 
+≫ g.hom
+参数：f : M ⟶ N；g : N ⟶ K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom' {M N K : Bimon C} (f : M ⟶ N) (g : N ⟶ K) : (f ≫ g).hom = f.hom ≫ g.hom :=
   rfl
 
 variable (C)
 
-/--
-Definition of `toMon` / `toMon` 的定义
+/-- The forgetful functor from bimonoid objects to monoid objects. -/
+/-
+**CategoryTheory.Bimon.toMon** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：toMon : Bimon C ⥤ Mon C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toMon
-  signature: : Bimon C ⥤ Mon C
-  body: Comon.forget (Mon C)
-
-中文:
-缩写 toMon
-  签名: : Bimon C ⥤ 幺半群 C
-  定义体: Comon.forget (Mon C)
-
-Depends on / 依赖: Comon.forget, forget
+--- 原说明 ---
+The forgetful functor from bimonoid objects to monoid objects.
 -/
 abbrev toMon : Bimon C ⥤ Mon C := Comon.forget (Mon C)
 
-/--
-Definition of `forget` / `forget` 的定义
+/-- The forgetful functor from bimonoid objects to the underlying category. -/
+/-
+**CategoryTheory.Bimon.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：forget : Bimon C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : Bimon C ⥤ C
-  body: toMon C ⋙ Mon.forget C
-
-@[simp]
-
-中文:
-定义 forget
-  签名: : Bimon C ⥤ C
-  定义体: toMon C ⋙ Mon.forget C
-
-@[simp]
-
-Depends on / 依赖: Mon.forget, forget
+--- 原说明 ---
+The forgetful functor from bimonoid objects to the underlying category.
 -/
 def forget : Bimon C ⥤ C := toMon C ⋙ Mon.forget C
 
 @[simp]
-/--
-theorem `toMon_forget` / 定理 `toMon_forget`
-
-English:
-theorem toMon_forget
-  statement: toMon C ⋙ Mon.forget C = forget C
-  proof: rfl
-
-中文:
-定理 toMon_forget
-  结论: toMon C ⋙ 幺半群.forget C = forget C
-  证明: rfl
+/-
+**CategoryTheory.Bimon.toMon_forget** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bi
+mon`。
+形式化陈述：toMon_forget : toMon C ⋙ Mon.forget C = forget C
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMon_forget : toMon C ⋙ Mon.forget C = forget C := rfl
 
 /-- The forgetful functor from bimonoid objects to comonoid objects. -/
 @[simps!]
-/--
-Definition of `toComon` / `toComon` 的定义
+/-
+**CategoryTheory.Bimon.toComon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：toComon : Bimon C ⥤ Comon C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toComon
-  signature: : Bimon C ⥤ Comon C
-  body: (Mon.forget C).mapComon
-
-@[simp]
-
-中文:
-定义 toComon
-  签名: : Bimon C ⥤ 余mon C
-  定义体: (Mon.forget C).mapComon
-
-@[simp]
-
-Depends on / 依赖: Mon.forget, WEqualsLocallyBijective, WEqualsLocallyBijective.mk, forget, mapComon
+--- 原说明 ---
+The forgetful functor from bimonoid objects to comonoid objects.
 -/
 def toComon : Bimon C ⥤ Comon C := (Mon.forget C).mapComon
 
 @[simp]
-/--
-theorem `toComon_forget` / 定理 `toComon_forget`
-
-English:
-theorem toComon_forget
-  statement: toComon C ⋙ Comon.forget C = forget C
-  proof: rfl
-
-中文:
-定理 toComon_forget
-  结论: toComon C ⋙ 余mon.forget C = forget C
-  证明: rfl
+/-
+**CategoryTheory.Bimon.toComon_forget** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Bimon`。
+形式化陈述：toComon_forget : toComon C ⋙ Comon.forget C = forget C
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toComon_forget : toComon C ⋙ Comon.forget C = forget C := rfl
 
@@ -284,26 +213,17 @@ set_option backward.isDefEq.respectTransparency false in
 variable {C} in
 /-- The object level part of the forward direction of `Comon (Mon C) ≌ Mon (Comon C)` -/
 @[simps]
-/--
-Definition of `toMonComonObj` / `toMonComonObj` 的定义
+/-
+**CategoryTheory.Bimon.toMonComonObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.B
+imon`。
+形式化陈述：toMonComonObj (M : Bimon C) : Mon (Comon C) where X
+参数：M : Bimon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMonComonObj
-  signature: (M : Bimon C)
-  body: (toComon C).obj M
-  mon.one := .mk' η[M.X.X]
-  mon.mul.hom := μ[M.X.X]
-  mon.mul.isComonHom_hom.hom_comul := by simp
-
-中文:
-定义 toMonComonObj
-  签名: (M : Bimon C)
-  定义体: (toComon C).obj M
-  mon.one := .mk' η[M.X.X]
-  mon.mul.hom := μ[M.X.X]
-  mon.mul.isComonHom_hom.hom_comul := by simp
-
-Depends on / 依赖: toComon
+--- 原说明 ---
+The object level part of the forward direction of `Comon (Mon C) ≌ Mon (Comon C)
+`
 -/
 def toMonComonObj (M : Bimon C) : Mon (Comon C) where
   X := (toComon C).obj M
@@ -314,22 +234,15 @@ def toMonComonObj (M : Bimon C) : Mon (Comon C) where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The forward direction of `Comon (Mon C) ≌ Mon (Comon C)` -/
 @[simps]
-/--
-Definition of `toMonComon` / `toMonComon` 的定义
+/-
+**CategoryTheory.Bimon.toMonComon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimo
+n`。
+形式化陈述：toMonComon : Bimon C ⥤ Mon (Comon C) where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMonComon
-  signature: : Bimon C ⥤ Mon (Comon C) where
-  body: toMonComonObj
-  map f := .mk' ((toComon C).map f)
-
-中文:
-定义 toMonComon
-  签名: : Bimon C ⥤ 幺半群 (余mon C) where
-  定义体: toMonComonObj
-  map f := .mk' ((toComon C).map f)
-
-Depends on / 依赖: toMonComonObj
+--- 原说明 ---
+The forward direction of `Comon (Mon C) ≌ Mon (Comon C)`
 -/
 def toMonComon : Bimon C ⥤ Mon (Comon C) where
   obj := toMonComonObj
@@ -339,65 +252,45 @@ variable {C}
 
 /-- Auxiliary definition for `ofMonComonObj`. -/
 @[simps! X]
-/--
-Definition of `ofMonComonObjX` / `ofMonComonObjX` 的定义
+/-
+**CategoryTheory.Bimon.ofMonComonObjX** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Bimon`。
+形式化陈述：ofMonComonObjX (M : Mon (Comon C)) : Mon C
+参数：M : Mon (Comon C)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMonComonObjX
-  signature: (M : Mon (Comon C))
-  body: (Comon.forget C).mapMon.obj M
-
-@[simp]
-
-中文:
-定义 ofMonComonObjX
-  签名: (M : 幺半群 (余mon C))
-  定义体: (Comon.forget C).mapMon.obj M
-
-@[simp]
-
-Depends on / 依赖: Comon.forget, forget, mapMon, mapMon.obj
+--- 原说明 ---
+Auxiliary definition for `ofMonComonObj`.
 -/
 def ofMonComonObjX (M : Mon (Comon C)) : Mon C := (Comon.forget C).mapMon.obj M
 
 @[simp]
-/--
-theorem `ofMonComonObjX_one` / 定理 `ofMonComonObjX_one`
-
-English:
-theorem ofMonComonObjX_one
-  given: (M : Mon (Comon C))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMonComonObjX_one
-  条件: (M : 幺半群 (余mon C))
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Bimon.ofMonComonObjX_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Bimon`。
+形式化陈述：ofMonComonObjX_one (M : Mon (Comon C)) : η[(ofMonComonObjX M).X] = 𝟙 (𝟙_ C
+) ≫ η[M.X].hom
+参数：M : Mon (Comon C)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMonComonObjX_one (M : Mon (Comon C)) :
     η[(ofMonComonObjX M).X] = 𝟙 (𝟙_ C) ≫ η[M.X].hom :=
   rfl
 
 @[simp]
-/--
-theorem `ofMonComonObjX_mul` / 定理 `ofMonComonObjX_mul`
-
-English:
-theorem ofMonComonObjX_mul
-  given: (M : Mon (Comon C))
-  proof: rfl
-
-中文:
-定理 ofMonComonObjX_mul
-  条件: (M : 幺半群 (余mon C))
-  证明: rfl
+/-
+**CategoryTheory.Bimon.ofMonComonObjX_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Bimon`。
+形式化陈述：ofMonComonObjX_mul (M : Mon (Comon C)) : μ[(ofMonComonObjX M).X] = 𝟙 (M.X.
+X otimes M.X.X) ≫ μ[M.X].hom
+参数：M : Mon (Comon C)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMonComonObjX_mul (M : Mon (Comon C)) :
-    μ[(ofMonComonObjX M).X] = 𝟙 (M.X.X otimes M.X.X) ≫ μ[M.X].hom :=
+    μ[(ofMonComonObjX M).X] = 𝟙 (M.X.X ⊗ M.X.X) ≫ μ[M.X].hom :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
@@ -405,24 +298,17 @@ attribute [local instance] ComonObj.instTensorUnit in
 attribute [local simp] MonObj.tensorObj.one_def MonObj.tensorObj.mul_def tensorμ in
 /-- The object level part of the backward direction of `Comon (Mon C) ≌ Mon (Comon C)` -/
 @[simps]
-/--
-Definition of `ofMonComonObj` / `ofMonComonObj` 的定义
+/-
+**CategoryTheory.Bimon.ofMonComonObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.B
+imon`。
+形式化陈述：ofMonComonObj (M : Mon (Comon C)) : Bimon C where X
+参数：M : Mon (Comon C)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMonComonObj
-  signature: (M : Mon (Comon C))
-  body: ofMonComonObjX M
-  comon.counit := .mk' ε[M.X.X]
-  comon.comul := .mk' Δ[M.X.X]
-
-中文:
-定义 ofMonComonObj
-  签名: (M : 幺半群 (余mon C))
-  定义体: ofMonComonObjX M
-  comon.counit := .mk' ε[M.X.X]
-  comon.comul := .mk' Δ[M.X.X]
-
-Depends on / 依赖: ofMonComonObjX
+--- 原说明 ---
+The object level part of the backward direction of `Comon (Mon C) ≌ Mon (Comon C
+)`
 -/
 def ofMonComonObj (M : Mon (Comon C)) : Bimon C where
   X := ofMonComonObjX M
@@ -433,22 +319,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 variable (C) in
 /-- The backward direction of `Comon (Mon C) ≌ Mon (Comon C)` -/
 @[simps]
-/--
-Definition of `ofMonComon` / `ofMonComon` 的定义
+/-
+**CategoryTheory.Bimon.ofMonComon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimo
+n`。
+形式化陈述：ofMonComon : Mon (Comon C) ⥤ Bimon C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMonComon
-  signature: : Mon (Comon C) ⥤ Bimon C where
-  body: ofMonComonObj
-  map f := .mk' ((Comon.forget C).mapMon.map f)
-
-中文:
-定义 ofMonComon
-  签名: : 幺半群 (余mon C) ⥤ Bimon C where
-  定义体: ofMonComonObj
-  map f := .mk' ((Comon.forget C).mapMon.map f)
-
-Depends on / 依赖: ofMonComonObj
+--- 原说明 ---
+The backward direction of `Comon (Mon C) ≌ Mon (Comon C)`
 -/
 def ofMonComon : Mon (Comon C) ⥤ Bimon C where
   obj := ofMonComonObj
@@ -456,18 +335,14 @@ def ofMonComon : Mon (Comon C) ⥤ Bimon C where
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `toMonComon_ofMonComon_obj_one` / 定理 `toMonComon_ofMonComon_obj_one`
-
-English:
-theorem toMonComon_ofMonComon_obj_one
-  given: (M : Bimon C)
-  proof: rfl
-
-中文:
-定理 toMonComon_ofMonComon_obj_one
-  条件: (M : Bimon C)
-  证明: rfl
+/-
+**CategoryTheory.Bimon.toMonComon_ofMonComon_obj_one** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Bimon`。
+形式化陈述：toMonComon_ofMonComon_obj_one (M : Bimon C) : η[((toMonComon C ⋙ ofMonComo
+n C).obj M).X.X] = 𝟙 _ ≫ η[M.X.X]
+参数：M : Bimon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMonComon_ofMonComon_obj_one (M : Bimon C) :
     η[((toMonComon C ⋙ ofMonComon C).obj M).X.X] = 𝟙 _ ≫ η[M.X.X] :=
@@ -475,18 +350,14 @@ theorem toMonComon_ofMonComon_obj_one (M : Bimon C) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `toMonComon_ofMonComon_obj_mul` / 定理 `toMonComon_ofMonComon_obj_mul`
-
-English:
-theorem toMonComon_ofMonComon_obj_mul
-  given: (M : Bimon C)
-  proof: rfl
-
-中文:
-定理 toMonComon_ofMonComon_obj_mul
-  条件: (M : Bimon C)
-  证明: rfl
+/-
+**CategoryTheory.Bimon.toMonComon_ofMonComon_obj_mul** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Bimon`。
+形式化陈述：toMonComon_ofMonComon_obj_mul (M : Bimon C) : μ[((toMonComon C ⋙ ofMonComo
+n C).obj M).X.X] = 𝟙 _ ≫ μ[M.X.X]
+参数：M : Bimon C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toMonComon_ofMonComon_obj_mul (M : Bimon C) :
     μ[((toMonComon C ⋙ ofMonComon C).obj M).X.X] = 𝟙 _ ≫ μ[M.X.X] :=
@@ -495,121 +366,99 @@ theorem toMonComon_ofMonComon_obj_mul (M : Bimon C) :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Auxiliary definition for `equivMonComonUnitIsoApp`. -/
 @[simps!]
-/--
-Definition of `equivMonComonUnitIsoAppXAux` / `equivMonComonUnitIsoAppXAux` 的定义
+/-
+**CategoryTheory.Bimon.equivMonComonUnitIsoAppXAux** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Bimon`。
+形式化陈述：equivMonComonUnitIsoAppXAux (M : Bimon C) : M.X.X ≅ ((toMonComon C ⋙ ofMon
+Comon C).obj M).X.X
+参数：M : Bimon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMonComonUnitIsoAppXAux
-  signature: (M : Bimon C)
-  body: Iso.refl _
-
-中文:
-定义 equivMonComonUnitIsoAppXAux
-  签名: (M : Bimon C)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Auxiliary definition for `equivMonComonUnitIsoApp`.
 -/
 def equivMonComonUnitIsoAppXAux (M : Bimon C) :
     M.X.X ≅ ((toMonComon C ⋙ ofMonComon C).obj M).X.X :=
   Iso.refl _
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Bimon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bimon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Bimon C) : IsMonHom (equivMonComonUnitIsoAppXAux M).hom where
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Auxiliary definition for `equivMonComonUnitIsoApp`. -/
 @[simps!]
-/--
-Definition of `equivMonComonUnitIsoAppX` / `equivMonComonUnitIsoAppX` 的定义
+/-
+**CategoryTheory.Bimon.equivMonComonUnitIsoAppX** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Bimon`。
+形式化陈述：equivMonComonUnitIsoAppX (M : Bimon C) : M.X ≅ ((toMonComon C ⋙ ofMonComon
+ C).obj M).X
+参数：M : Bimon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMonComonUnitIsoAppX
-  signature: (M : Bimon C)
-  body: Mon.mkIso (equivMonComonUnitIsoAppXAux M)
-
-中文:
-定义 equivMonComonUnitIsoAppX
-  签名: (M : Bimon C)
-  定义体: Mon.mkIso (equivMonComonUnitIsoAppXAux M)
-
-Depends on / 依赖: Mon.mkIso, equivMonComonUnitIsoAppXAux
+--- 原说明 ---
+Auxiliary definition for `equivMonComonUnitIsoApp`.
 -/
 def equivMonComonUnitIsoAppX (M : Bimon C) :
     M.X ≅ ((toMonComon C ⋙ ofMonComon C).obj M).X :=
   Mon.mkIso (equivMonComonUnitIsoAppXAux M)
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Bimon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bimon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Bimon C) : IsComonHom (equivMonComonUnitIsoAppX M).hom where
 
 /-- The unit for the equivalence `Comon (Mon C) ≌ Mon (Comon C)`. -/
 @[simps!]
-/--
-Definition of `equivMonComonUnitIsoApp` / `equivMonComonUnitIsoApp` 的定义
+/-
+**CategoryTheory.Bimon.equivMonComonUnitIsoApp** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Bimon`。
+形式化陈述：equivMonComonUnitIsoApp (M : Bimon C) : M ≅ (toMonComon C ⋙ ofMonComon C).
+obj M
+参数：M : Bimon C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bimon.instIsComonHomMonHomEquivMonComonUnitIsoAppX`：∀ {C 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.
+MonoidalCategory C]   [inst_2 : CategoryTheory.BraidedC…
 
-English:
-definition equivMonComonUnitIsoApp
-  signature: (M : Bimon C)
-  body: Comon.mkIso' (equivMonComonUnitIsoAppX M)
-
-@[simp]
-
-中文:
-定义 equivMonComonUnitIsoApp
-  签名: (M : Bimon C)
-  定义体: Comon.mkIso' (equivMonComonUnitIsoAppX M)
-
-@[simp]
-
-Depends on / 依赖: Comon.mkIso, equivMonComonUnitIsoAppX
+--- 原说明 ---
+The unit for the equivalence `Comon (Mon C) ≌ Mon (Comon C)`.
 -/
 def equivMonComonUnitIsoApp (M : Bimon C) :
     M ≅ (toMonComon C ⋙ ofMonComon C).obj M :=
   Comon.mkIso' (equivMonComonUnitIsoAppX M)
 
 @[simp]
-/--
-theorem `ofMonComon_toMonComon_obj_counit` / 定理 `ofMonComon_toMonComon_obj_counit`
-
-English:
-theorem ofMonComon_toMonComon_obj_counit
-  given: (M : Mon (Comon C))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofMonComon_toMonComon_obj_counit
-  条件: (M : 幺半群 (余mon C))
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: G.Full, G.IsLocallyFull, IsLocallyFull, IsLocallyFull.of_full, of_full
+/-
+**CategoryTheory.Bimon.ofMonComon_toMonComon_obj_counit** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Bimon`。
+形式化陈述：ofMonComon_toMonComon_obj_counit (M : Mon (Comon C)) : ε[((ofMonComon C ⋙ 
+toMonComon C).obj M).X.X] = ε[M.X.X] ≫ 𝟙 _
+参数：M : Mon (Comon C)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMonComon_toMonComon_obj_counit (M : Mon (Comon C)) :
     ε[((ofMonComon C ⋙ toMonComon C).obj M).X.X] = ε[M.X.X] ≫ 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `ofMonComon_toMonComon_obj_comul` / 定理 `ofMonComon_toMonComon_obj_comul`
-
-English:
-theorem ofMonComon_toMonComon_obj_comul
-  given: (M : Mon (Comon C))
-  proof: rfl
-
-#adaptation_note
-
-中文:
-定理 ofMonComon_toMonComon_obj_comul
-  条件: (M : 幺半群 (余mon C))
-  证明: rfl
-
-#adaptation_note
-
-Depends on / 依赖: Faithful, G.Faithful, G.IsLocallyFaithful, IsLocallyFaithful, IsLocallyFaithful.of_faithful, of_faithful
+/-
+**CategoryTheory.Bimon.ofMonComon_toMonComon_obj_comul** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Bimon`。
+形式化陈述：ofMonComon_toMonComon_obj_comul (M : Mon (Comon C)) : Δ[((ofMonComon C ⋙ t
+oMonComon C).obj M).X.X] = Δ[M.X.X] ≫ 𝟙 _
+参数：M : Mon (Comon C)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofMonComon_toMonComon_obj_comul (M : Mon (Comon C)) :
     Δ[((ofMonComon C ⋙ toMonComon C).obj M).X.X] = Δ[M.X.X] ≫ 𝟙 _ :=
@@ -620,26 +469,27 @@ theorem ofMonComon_toMonComon_obj_comul (M : Mon (Comon C)) :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Auxiliary definition for `equivMonComonCounitIsoApp`. -/
 @[simps!]
-/--
-Definition of `equivMonComonCounitIsoAppXAux` / `equivMonComonCounitIsoAppXAux` 的定义
+/-
+**CategoryTheory.Bimon.equivMonComonCounitIsoAppXAux** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Bimon`。
+形式化陈述：equivMonComonCounitIsoAppXAux (M : Mon (Comon C)) : ((ofMonComon C ⋙ toMon
+Comon C).obj M).X.X ≅ M.X.X
+参数：M : Mon (Comon C)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMonComonCounitIsoAppXAux
-  signature: (M : Mon (Comon C))
-  body: Iso.refl _
-
-中文:
-定义 equivMonComonCounitIsoAppXAux
-  签名: (M : 幺半群 (余mon C))
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+Auxiliary definition for `equivMonComonCounitIsoApp`.
 -/
 def equivMonComonCounitIsoAppXAux (M : Mon (Comon C)) :
     ((ofMonComon C ⋙ toMonComon C).obj M).X.X ≅ M.X.X :=
   Iso.refl _
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Bimon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bimon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Mon (Comon C)) : IsComonHom (equivMonComonCounitIsoAppXAux M).hom where
 
 #adaptation_note
@@ -647,71 +497,62 @@ instance (M : Mon (Comon C)) : IsComonHom (equivMonComonCounitIsoAppXAux M).hom 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Auxiliary definition for `equivMonComonCounitIsoApp`. -/
 @[simps!]
-/--
-Definition of `equivMonComonCounitIsoAppX` / `equivMonComonCounitIsoAppX` 的定义
+/-
+**CategoryTheory.Bimon.equivMonComonCounitIsoAppX** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Bimon`。
+形式化陈述：equivMonComonCounitIsoAppX (M : Mon (Comon C)) : ((ofMonComon C ⋙ toMonCom
+on C).obj M).X ≅ M.X
+参数：M : Mon (Comon C)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bimon.instIsComonHomHomEquivMonComonCounitIsoAppXAux`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheor
+y.MonoidalCategory C]   [inst_2 : CategoryTheory.BraidedC…
 
-English:
-definition equivMonComonCounitIsoAppX
-  signature: (M : Mon (Comon C))
-  body: Comon.mkIso' (equivMonComonCounitIsoAppXAux M)
-
-中文:
-定义 equivMonComonCounitIsoAppX
-  签名: (M : 幺半群 (余mon C))
-  定义体: Comon.mkIso' (equivMonComonCounitIsoAppXAux M)
-
-Depends on / 依赖: Comon.mkIso, equivMonComonCounitIsoAppXAux
+--- 原说明 ---
+Auxiliary definition for `equivMonComonCounitIsoApp`.
 -/
 def equivMonComonCounitIsoAppX (M : Mon (Comon C)) :
     ((ofMonComon C ⋙ toMonComon C).obj M).X ≅ M.X :=
   Comon.mkIso' (equivMonComonCounitIsoAppXAux M)
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Bimon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bimon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Mon (Comon C)) : IsMonHom (equivMonComonCounitIsoAppX M).hom where
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The counit for the equivalence `Comon (Mon C) ≌ Mon (Comon C)`. -/
 @[simps!]
-/--
-Definition of `equivMonComonCounitIsoApp` / `equivMonComonCounitIsoApp` 的定义
+/-
+**CategoryTheory.Bimon.equivMonComonCounitIsoApp** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Bimon`。
+形式化陈述：equivMonComonCounitIsoApp (M : Mon (Comon C)) : (ofMonComon C ⋙ toMonComon
+ C).obj M ≅ M
+参数：M : Mon (Comon C)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMonComonCounitIsoApp
-  signature: (M : Mon (Comon C))
-  body: Mon.mkIso (equivMonComonCounitIsoAppX M)
-
-中文:
-定义 equivMonComonCounitIsoApp
-  签名: (M : 幺半群 (余mon C))
-  定义体: Mon.mkIso (equivMonComonCounitIsoAppX M)
-
-Depends on / 依赖: Mon.mkIso, equivMonComonCounitIsoAppX
+--- 原说明 ---
+The counit for the equivalence `Comon (Mon C) ≌ Mon (Comon C)`.
 -/
 def equivMonComonCounitIsoApp (M : Mon (Comon C)) :
     (ofMonComon C ⋙ toMonComon C).obj M ≅ M :=
-Mon.mkIso (equivMonComonCounitIsoAppX M)
+  Mon.mkIso <| (equivMonComonCounitIsoAppX M)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `equivMonComon` / `equivMonComon` 的定义
+/-- The equivalence `Comon (Mon C) ≌ Mon (Comon C)` -/
+/-
+**CategoryTheory.Bimon.equivMonComon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.B
+imon`。
+形式化陈述：equivMonComon : Bimon C ≌ Mon (Comon C) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMonComon
-  signature: : Bimon C ≌ Mon (Comon C) where
-  body: toMonComon C
-  inverse := ofMonComon C
-  unitIso := NatIso.ofComponents equivMonComonUnitIsoApp
-  counitIso := NatIso.ofComponents equivMonComonCounitIsoApp
-
-中文:
-定义 equivMonComon
-  签名: : Bimon C ≌ 幺半群 (余mon C) where
-  定义体: toMonComon C
-  inverse := ofMonComon C
-  unitIso := NatIso.ofComponents equivMonComonUnitIsoApp
-  counitIso := NatIso.ofComponents equivMonComonCounitIsoApp
-
-Depends on / 依赖: toMonComon
+--- 原说明 ---
+The equivalence `Comon (Mon C) ≌ Mon (Comon C)`
 -/
 def equivMonComon : Bimon C ≌ Mon (Comon C) where
   functor := toMonComon C
@@ -724,40 +565,30 @@ def equivMonComon : Bimon C ≌ Mon (Comon C) where
 variable (C) in
 /-- The trivial bimonoid object. -/
 @[simps!]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**CategoryTheory.Bimon.trivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：trivial : Bimon C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: : Bimon C
-  body: Comon.trivial (Mon C)
-
-中文:
-定义 trivial
-  签名: : Bimon C
-  定义体: Comon.trivial (Mon C)
-
-Depends on / 依赖: Comon.trivial
+--- 原说明 ---
+The trivial bimonoid object.
 -/
 def trivial : Bimon C := Comon.trivial (Mon C)
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The bimonoid morphism from the trivial bimonoid to any bimonoid. -/
 @[simps]
-/--
-Definition of `trivialTo` / `trivialTo` 的定义
+/-
+**CategoryTheory.Bimon.trivialTo** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimon
+`。
+形式化陈述：trivialTo (A : Bimon C) : trivial C ⟶ A
+参数：A : Bimon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivialTo
-  signature: (A : Bimon C)
-  body: .mk' (default : Mon.trivial C ⟶ A.X)
-
-中文:
-定义 trivialTo
-  签名: (A : Bimon C)
-  定义体: .mk' (default : Mon.trivial C ⟶ A.X)
-
-Depends on / 依赖: Mon.trivial
+--- 原说明 ---
+The bimonoid morphism from the trivial bimonoid to any bimonoid.
 -/
 def trivialTo (A : Bimon C) : trivial C ⟶ A :=
   .mk' (default : Mon.trivial C ⟶ A.X)
@@ -765,20 +596,16 @@ def trivialTo (A : Bimon C) : trivial C ⟶ A :=
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The bimonoid morphism from any bimonoid to the trivial bimonoid. -/
 @[simps!]
-/--
-Definition of `toTrivial` / `toTrivial` 的定义
+/-
+**CategoryTheory.Bimon.toTrivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimon
+`。
+形式化陈述：toTrivial (A : Bimon C) : A ⟶ trivial C
+参数：A : Bimon C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toTrivial
-  signature: (A : Bimon C)
-  body: (default : @Quiver.Hom (Comon (Mon C)) _ A (Comon.trivial (Mon C)))
-
-中文:
-定义 toTrivial
-  签名: (A : Bimon C)
-  定义体: (default : @Quiver.Hom (Comon (Mon C)) _ A (Comon.trivial (Mon C)))
-
-Depends on / 依赖: Comon.trivial, Quiver, Quiver.Hom
+--- 原说明 ---
+The bimonoid morphism from any bimonoid to the trivial bimonoid.
 -/
 def toTrivial (A : Bimon C) : A ⟶ trivial C :=
   (default : @Quiver.Hom (Comon (Mon C)) _ A (Comon.trivial (Mon C)))
@@ -786,169 +613,204 @@ def toTrivial (A : Bimon C) : A ⟶ trivial C :=
 /-! ### Additional lemmas -/
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `BimonObjAux_counit` / 定理 `BimonObjAux_counit`
+/-
+**CategoryTheory.Bimon.BimonObjAux_counit** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Bimon`。
+形式化陈述：BimonObjAux_counit (M : Bimon C) : ε[((toComon C).obj M).X] = ε[M.X].hom
+参数：M : Bimon C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 
-English:
-theorem BimonObjAux_counit
-  given: (M : Bimon C)
-  proof: Category.comp_id _
-
-中文:
-定理 BimonObjAux_counit
-  条件: (M : Bimon C)
-  证明: Category.comp_id _
-
-Depends on / 依赖: Category, Category.comp_id, comp_id
+--- 原说明 ---
+### Additional lemmas
 -/
 theorem BimonObjAux_counit (M : Bimon C) :
     ε[((toComon C).obj M).X] = ε[M.X].hom :=
   Category.comp_id _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `BimonObjAux_comul` / 定理 `BimonObjAux_comul`
-
-English:
-theorem BimonObjAux_comul
-  given: (M : Bimon C)
-  proof: Category.comp_id _
-
-中文:
-定理 BimonObjAux_comul
-  条件: (M : Bimon C)
-  证明: Category.comp_id _
-
-Depends on / 依赖: Category, Category.comp_id, comp_id
+/-
+**CategoryTheory.Bimon.BimonObjAux_comul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Bimon`。
+形式化陈述：BimonObjAux_comul (M : Bimon C) : Δ[((toComon C).obj M).X] = Δ[M.X].hom
+参数：M : Bimon C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem BimonObjAux_comul (M : Bimon C) :
     Δ[((toComon C).obj M).X] = Δ[M.X].hom :=
   Category.comp_id _
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.Bimon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Bimon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Bimon C) : BimonObj M.X.X where
   counit := ε[M.X].hom
   comul := Δ[M.X].hom
   counit_comul := by
-    rw [← BimonObjAux_counit]; rw [← BimonObjAux_comul]; rw [ComonObj.counit_comul]
+    rw [← BimonObjAux_counit, ← BimonObjAux_comul, ComonObj.counit_comul]
   comul_counit := by
-    rw [← BimonObjAux_counit]; rw [← BimonObjAux_comul]; rw [ComonObj.comul_counit]
+    rw [← BimonObjAux_counit, ← BimonObjAux_comul, ComonObj.comul_counit]
   comul_assoc := by
     simp_rw [← BimonObjAux_comul, ComonObj.comul_assoc]
 
 attribute [local simp] MonObj.tensorObj.one_def in
 @[reassoc]
-/--
-theorem `one_comul` / 定理 `one_comul`
-
-English:
-theorem one_comul
-  given: (M : C) [BimonObj M]
-  proof: by
-  simp
-
-@[reassoc]
-
-中文:
-定理 one_comul
-  条件: (M : C) [BimonObj M]
-  证明: by
-  simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bimon.one_comul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bimon
+`。
+形式化陈述：one_comul (M : C) [BimonObj M] : η[M] ≫ Δ[M] = (fun_ _).inv ≫ (η[M] otimes
+ₘ η[M])
+参数：M : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.BimonObj.one_comul`：∀ {C : Type u₁} {inst : CategoryTheor
+y.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {inst_2 : 
+CategoryTheory.BraidedC…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem one_comul (M : C) [BimonObj M] :
-    η[M] ≫ Δ[M] = (fun_ _).inv ≫ (η[M] otimesₘ η[M]) := by
+    η[M] ≫ Δ[M] = (λ_ _).inv ≫ (η[M] ⊗ₘ η[M]) := by
   simp
 
 @[reassoc]
-/--
-theorem `mul_counit` / 定理 `mul_counit`
-
-English:
-theorem mul_counit
-  given: (M : C) [BimonObj M]
-  proof: by
-  simp
-
-中文:
-定理 mul_counit
-  条件: (M : C) [BimonObj M]
-  证明: by
-  simp
+/-
+**CategoryTheory.Bimon.mul_counit** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Bimo
+n`。
+形式化陈述：mul_counit (M : C) [BimonObj M] : μ[M] ≫ ε[M] = (ε[M] otimesₘ ε[M]) ≫ (fun
+_ _).hom
+参数：M : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.BimonObj.mul_counit`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {inst_2 :
+ CategoryTheory.BraidedC…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_counit (M : C) [BimonObj M] :
-    μ[M] ≫ ε[M] = (ε[M] otimesₘ ε[M]) ≫ (fun_ _).hom := by
+    μ[M] ≫ ε[M] = (ε[M] ⊗ₘ ε[M]) ≫ (λ_ _).hom := by
   simp
 
-/--
-theorem `compatibility` / 定理 `compatibility`
+/-- Compatibility of the monoid and comonoid structures, in terms of morphisms in `C`. -/
+/-
+**CategoryTheory.Bimon.compatibility** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.B
+imon`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cate
+goryTheory.MonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCategory C] (M 
+: C) [inst_3 : CategoryTheory.BimonObj M],   CategoryTheory.CategoryStruct.comp 
+      (CategoryTheory.MonoidalCategoryStruct.tensorHom CategoryTheory.ComonObj.c
+omul CategoryTheory.ComonObj.comul)       (CategoryTheory.CategoryStruct.comp   
+      (CategoryTheory.MonoidalCategoryStruct.associator M M (CategoryTheory.Mono
+idalCategoryStruct.tensorObj M M)).hom         (CategoryTheory.CategoryStruct.co
+mp           (CategoryTheory.MonoidalCategoryStruct.whiskerLeft M             (C
+ategoryTheory.MonoidalCategoryStruct.associator M M M).inv)           (CategoryT
+heory.CategoryStruct.comp             (CategoryTheory.MonoidalCategoryStruct.whi
+skerLeft M               (CategoryTheory.MonoidalCategoryStruct.whiskerRight (β_
+ M M).hom M))             (CategoryTheory.CategoryStruct.comp               (Cat
+egoryTheory.MonoidalCategoryStruct.whiskerLeft M                 (CategoryTheory
+.MonoidalCategoryStruct.associator M M M).hom)               (CategoryTheory.Cat
+egoryStruct.comp                 (CategoryTheory.MonoidalCategoryStruct.associat
+or M M                     (CategoryTheory.MonoidalCategoryStruct.tensorObj M M)
+).inv                 (CategoryTheory.MonoidalCategoryStruct.tensorHom CategoryT
+heory.MonObj.mul                   CategoryTheory.MonObj.mul)))))) =     Categor
+yTheory.CategoryStruct.comp CategoryTheory.MonObj.mul CategoryTheory.ComonObj.co
+mul
+参数：M : C；CategoryTheory.MonoidalCategoryStruct.tensorHom CategoryTheory.ComonObj
+.comul CategoryTheory.ComonObj.comul；CategoryTheory.CategoryStruct.comp         
+(CategoryTheory.MonoidalCategoryStruct.associator M M (CategoryTheory.MonoidalCa
+tegoryStruct.tensorObj M M)).hom         (CategoryTheory.CategoryStruct.comp    
+       (CategoryTheory.MonoidalCategoryStruct.whiskerLeft M             (Categor
+yTheory.MonoidalCategoryStruct.associator M M M).inv)           (CategoryTheory.
+CategoryStruct.comp             (CategoryTheory.MonoidalCategoryStruct.whiskerLe
+ft M               (CategoryTheory.MonoidalCategoryStruct.whiskerRight (β_ M M).
+hom M))             (CategoryTheory.CategoryStruct.comp               (CategoryT
+heory.MonoidalCategoryStruct.whiskerLeft M                 (CategoryTheory.Monoi
+dalCategoryStruct.associator M M M).hom)               (CategoryTheory.CategoryS
+truct.comp                 (CategoryTheory.MonoidalCategoryStruct.associator M M
+                     (CategoryTheory.MonoidalCategoryStruct.tensorObj M M)).inv 
+                (CategoryTheory.MonoidalCategoryStruct.tensorHom CategoryTheory.
+MonObj.mul                   CategoryTheory.MonObj.mul)))))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.BimonObj.mul_comul`：∀ {C : Type u₁} {inst : CategoryTheor
+y.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C}   {inst_2 : 
+CategoryTheory.BraidedC…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem compatibility
-  given: (M : C) [BimonObj M]
-  proof: by
-  simp only [BimonObj.mul_comul, tensorμ, Category.assoc]
-
-中文:
-定理 compatibility
-  条件: (M : C) [BimonObj M]
-  证明: by
-  simp only [BimonObj.mul_comul, tensorμ, Category.assoc]
+--- 原说明 ---
+Compatibility of the monoid and comonoid structures, in terms of morphisms in `C
+`.
 -/
 @[reassoc (attr := simp)] theorem compatibility (M : C) [BimonObj M] :
-    (Δ[M] otimesₘ Δ[M]) ≫
-      (α_ _ _ (M otimes M)).hom ≫ M ◁ (α_ _ _ _).inv ≫
+    (Δ[M] ⊗ₘ Δ[M]) ≫
+      (α_ _ _ (M ⊗ M)).hom ≫ M ◁ (α_ _ _ _).inv ≫
       M ◁ (β_ M M).hom ▷ M ≫
       M ◁ (α_ _ _ _).hom ≫ (α_ _ _ _).inv ≫
-      (μ[M] otimesₘ μ[M]) =
+      (μ[M] ⊗ₘ μ[M]) =
     μ[M] ≫ Δ[M] := by
   simp only [BimonObj.mul_comul, tensorμ, Category.assoc]
 
 /-- Auxiliary definition for `Bimon.mk'`. -/
 @[simps X]
-/--
-Definition of `mk'X` / `mk'X` 的定义
+/-
+**CategoryTheory.Bimon.mk'X** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     [inst_
+1 : CategoryTheory.MonoidalCategory C] →       [inst_2 : CategoryTheory.BraidedC
+ategory C] → (X : C) → [CategoryTheory.BimonObj X] → CategoryTheory.Mon C
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'X
-  signature: (X : C) [BimonObj X]
-  body: { X := X }
-
-中文:
-定义 mk'X
-  签名: (X : C) [BimonObj X]
-  定义体: { X := X }
+--- 原说明 ---
+Auxiliary definition for `Bimon.mk'`.
 -/
 def mk'X (X : C) [BimonObj X] : Mon C := { X := X }
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Construct an object of `Bimon C` from an object `X : C` and `BimonObj X` instance. -/
 @[simps X]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**CategoryTheory.Bimon.mk'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bimon`。
+形式化陈述：mk'X (X : C) [BimonObj X] : Mon C
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: (X : C) [BimonObj X]
-  body: mk'X X
-  comon :=
-    { counit := .mk' (ε : X ⟶ 𝟙_ C)
-      comul := .mk' (Δ : X ⟶ X otimes X) }
-
-中文:
-定义 mk'
-  签名: (X : C) [BimonObj X]
-  定义体: mk'X X
-  comon :=
-    { counit := .mk' (ε : X ⟶ 𝟙_ C)
-      comul := .mk' (Δ : X ⟶ X otimes X) }
+--- 原说明 ---
+Construct an object of `Bimon C` from an object `X : C` and `BimonObj X` instanc
+e.
 -/
 def mk' (X : C) [BimonObj X] : Bimon C where
   X := mk'X X
   comon :=
     { counit := .mk' (ε : X ⟶ 𝟙_ C)
-      comul := .mk' (Δ : X ⟶ X otimes X) }
+      comul := .mk' (Δ : X ⟶ X ⊗ X) }
 
 end Bimon
 end CategoryTheory
+

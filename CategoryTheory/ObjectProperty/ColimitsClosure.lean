@@ -30,122 +30,82 @@ namespace CategoryTheory.ObjectProperty
 open Limits
 
 variable {C : Type u} [Category.{v} C] (P : ObjectProperty C)
-  {α : Type t} (J : α -> Type u') [forall a, Category.{v'} (J a)]
+  {α : Type t} (J : α → Type u') [∀ a, Category.{v'} (J a)]
 
-/--
-Inductive type `colimitsClosure` / 归纳类型 `colimitsClosure`
+/-- The closure of a property of objects of a category under colimits of
+shape `J a` for a family of categories `J`. -/
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cat
+egoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     CategoryT
+heory.ObjectProperty C →       {α : Type t} →         (J : α → Type u') → [(a : 
+α) → CategoryTheory.Category.{v', u'} (J a)] → CategoryTheory.ObjectProperty C
+参数：J : α → Type u'；a : α；J a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive colimitsClosure
-  parameters: : ObjectProperty C
-  constructors (3):
-    - of_mem: (X : C) (hX : P X) : colimitsClosure X
-    - of_isoClosure: {X Y : C} (e : X ≅ Y) (hX : colimitsClosure X) : colimitsClosure Y
-    - of_colimitPresentation: {X : C} {a : α} (pres : ColimitPresentation (J a) X) (h : forall j, colimitsClosure (pres.diag.obj j)) : colimitsClosure X
-
-中文:
-归纳类型 colimitsClosure
-  参数: : ObjectProperty C
-  构造子 (3 个):
-    - of_mem: (X : C) (hX : P X) : colimitsClosure X
-    - of_isoClosure: {X Y : C} (e : X ≅ Y) (hX : colimitsClosure X) : colimitsClosure Y
-    - of_colimitPresentation: {X : C} {a : α} (pres : 余limitPresentation (J a) X) (h : 对任意 j, colimitsClosure (pres.diag.obj j)) : colimitsClosure X
+--- 原说明 ---
+The closure of a property of objects of a category under colimits of
+shape `J a` for a family of categories `J`.
 -/
 inductive colimitsClosure : ObjectProperty C
   | of_mem (X : C) (hX : P X) : colimitsClosure X
   | of_isoClosure {X Y : C} (e : X ≅ Y) (hX : colimitsClosure X) : colimitsClosure Y
   | of_colimitPresentation {X : C} {a : α} (pres : ColimitPresentation (J a) X)
-      (h : forall j, colimitsClosure (pres.diag.obj j)) : colimitsClosure X
+      (h : ∀ j, colimitsClosure (pres.diag.obj j)) : colimitsClosure X
 
 @[simp]
-/--
-lemma `le_colimitsClosure` / 引理 `le_colimitsClosure`
-
-English:
-lemma le_colimitsClosure
-  statement: P <= P.colimitsClosure J
-  proof: fun X hX => .of_mem X hX
-
-中文:
-引理 le_colimitsClosure
-  结论: P <= P.colimitsClosure J
-  证明: fun X hX => .of_mem X hX
-
-Depends on / 依赖: of_mem
+/-
+**CategoryTheory.ObjectProperty.le_colimitsClosure** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：le_colimitsClosure : P <= P.colimitsClosure J
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le_colimitsClosure : P <= P.colimitsClosure J :=
-  fun X hX => .of_mem X hX
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.Nonempty]
-  signature: : (P.colimitsClosure J).Nonempty
-  body: .mono (P.le_colimitsClosure J)
-
-中文:
-实例 [P.非空]
-  签名: : (P.colimitsClosure J).非空
-  定义体: .mono (P.le_colimitsClosure J)
-
-Depends on / 依赖: P.le_colimitsClosure, le_colimitsClosure
+lemma le_colimitsClosure : P ≤ P.colimitsClosure J :=
+  fun X hX ↦ .of_mem X hX
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.Nonempty] : (P.colimitsClosure J).Nonempty :=
   .mono (P.le_colimitsClosure J)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (P.colimitsClosure J).IsClosedUnderIsomorphisms
-  body: .of_isoClosure e hX
-
-中文:
-实例 :
-  签名: (P.colimitsClosure J).在同构下封闭
-  定义体: .of_isoClosure e hX
-
-Depends on / 依赖: of_isoClosure
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (P.colimitsClosure J).IsClosedUnderIsomorphisms where
   of_iso e hX := .of_isoClosure e hX
-
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (a : α) : (P.colimitsClosure J).IsClosedUnderColimitsOfShape (J a) where
   colimitsOfShape_le := by
     rintro X ⟨hX⟩
     exact .of_colimitPresentation hX.toColimitPresentation hX.prop_diag_obj
 
 variable {P J} in
-/--
-lemma `colimitsClosure_le` / 引理 `colimitsClosure_le`
-
-English:
-lemma colimitsClosure_le
-  statement: {Q : ObjectProperty C} [Q.IsClosedUnderIsomorphisms]
-  proof: by
-  intro X hX
-  induction hX with
-  | of_mem X hX => exact h _ hX
-  | of_isoClosure e hX hX' => exact Q.prop_of_iso e hX'
-  | of_colimitPresentation pres h h' => exact Q.prop_of_isColimit pres.isColimit h'
-
-中文:
-引理 colimitsClosure_le
-  结论: {Q : ObjectProperty C} [Q.在同构下封闭]
-  证明: by
-  intro X hX
-  induction hX with
-  | of_mem X hX => exact h _ hX
-  | of_isoClosure e hX hX' => exact Q.prop_of_iso e hX'
-  | of_colimitPresentation pres h h' => exact Q.prop_of_isColimit pres.isColimit h'
-
-Depends on / 依赖: Q.prop_of_isColimit, Q.prop_of_iso, isColimit, of_colimitPresentation, of_isoClosure, of_mem, pres.isColimit, prop_of_isColimit, prop_of_iso
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure_le** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：colimitsClosure_le {Q : ObjectProperty C} [Q.IsClosedUnderIsomorphisms] [f
+orall (a : α), Q.IsClosedUnderColimitsOfShape (J a)] (h : P <= Q) : P.colimitsCl
+osure J <= Q
+参数：a : α；J a；h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_iso`：prop_of_iso [IsClosedUnderIso
+morphisms P] {X Y : C} (e : X ≅ Y) (hX : P X) : P Y
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit`：prop_of_isColimit {F : 
+J ⥤ C} {c : Cocone F} (hc : IsColimit c) (hF : forall (j : J), P (F.obj j)) : P 
+c.pt
 -/
 lemma colimitsClosure_le {Q : ObjectProperty C} [Q.IsClosedUnderIsomorphisms]
-    [forall (a : α), Q.IsClosedUnderColimitsOfShape (J a)] (h : P <= Q) :
-    P.colimitsClosure J <= Q := by
+    [∀ (a : α), Q.IsClosedUnderColimitsOfShape (J a)] (h : P ≤ Q) :
+    P.colimitsClosure J ≤ Q := by
   intro X hX
   induction hX with
   | of_mem X hX => exact h _ hX
@@ -153,111 +113,119 @@ lemma colimitsClosure_le {Q : ObjectProperty C} [Q.IsClosedUnderIsomorphisms]
   | of_colimitPresentation pres h h' => exact Q.prop_of_isColimit pres.isColimit h'
 
 variable {P} in
-/--
-lemma `colimitsClosure_monotone` / 引理 `colimitsClosure_monotone`
-
-English:
-lemma colimitsClosure_monotone
-  given: {Q : ObjectProperty C} (h : P <= Q)
-  proof: colimitsClosure_le (h.trans (Q.le_colimitsClosure J))
-
-中文:
-引理 colimitsClosure_monotone
-  条件: {Q : ObjectProperty C} (h : P <= Q)
-  证明: colimitsClosure_le (h.trans (Q.le_colimitsClosure J))
-
-Depends on / 依赖: Q.le_colimitsClosure, colimitsClosure_le, h.trans, le_colimitsClosure
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure_monotone** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsClosure_monotone {Q : ObjectProperty C} (h : P <= Q) : P.colimitsC
+losure J <= Q.colimitsClosure J
+参数：h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_le`：colimitsClosure_le {Q 
+: ObjectProperty C} [Q.IsClosedUnderIsomorphisms] [forall (a : α), Q.IsClosedUnd
+erColimitsOfShape (J a)] (h : P <= Q) …
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsColimitsClosu
+re`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory
+.ObjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderColimitsOfShapeColimitsCl
+osure`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryThe
+ory.ObjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.ObjectProperty.le_colimitsClosure`：le_colimitsClosure : P
+ <= P.colimitsClosure J
 -/
-lemma colimitsClosure_monotone {Q : ObjectProperty C} (h : P <= Q) :
-    P.colimitsClosure J <= Q.colimitsClosure J :=
+lemma colimitsClosure_monotone {Q : ObjectProperty C} (h : P ≤ Q) :
+    P.colimitsClosure J ≤ Q.colimitsClosure J :=
   colimitsClosure_le (h.trans (Q.le_colimitsClosure J))
-
-/--
-lemma `colimitsClosure_eq_self` / 引理 `colimitsClosure_eq_self`
-
-English:
-lemma colimitsClosure_eq_self
-  statement: [P.IsClosedUnderIsomorphisms]
-  proof: le_antisymm (colimitsClosure_le (le_refl P)) (P.le_colimitsClosure J)
-
-@[simp]
-
-中文:
-引理 colimitsClosure_eq_self
-  结论: [P.在同构下封闭]
-  证明: le_antisymm (colimitsClosure_le (le_refl P)) (P.le_colimitsClosure J)
-
-@[simp]
-
-Depends on / 依赖: P.le_colimitsClosure, colimitsClosure_le, le_antisymm, le_colimitsClosure, le_refl
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure_eq_self** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsClosure_eq_self [P.IsClosedUnderIsomorphisms] [forall (a : α), P.I
+sClosedUnderColimitsOfShape (J a)] : P.colimitsClosure J = P
+参数：a : α；J a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_le`：colimitsClosure_le {Q 
+: ObjectProperty C} [Q.IsClosedUnderIsomorphisms] [forall (a : α), Q.IsClosedUnd
+erColimitsOfShape (J a)] (h : P <= Q) …
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用引理 `CategoryTheory.ObjectProperty.le_colimitsClosure`：le_colimitsClosure : P
+ <= P.colimitsClosure J
 -/
 lemma colimitsClosure_eq_self [P.IsClosedUnderIsomorphisms]
-    [forall (a : α), P.IsClosedUnderColimitsOfShape (J a)] : P.colimitsClosure J = P :=
+    [∀ (a : α), P.IsClosedUnderColimitsOfShape (J a)] : P.colimitsClosure J = P :=
   le_antisymm (colimitsClosure_le (le_refl P)) (P.le_colimitsClosure J)
 
 @[simp]
-/--
-lemma `colimitsClosure_bot` / 引理 `colimitsClosure_bot`
-
-English:
-lemma colimitsClosure_bot
-  given: [forall (a : α), Nonempty (J a)]
-  proof: colimitsClosure_eq_self _ _
-
-@[simp]
-
-中文:
-引理 colimitsClosure_bot
-  条件: [对任意 (a : α), 非空 (J a)]
-  证明: colimitsClosure_eq_self _ _
-
-@[simp]
-
-Depends on / 依赖: colimitsClosure_eq_self
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure_bot** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ObjectProperty`。
+形式化陈述：colimitsClosure_bot [forall (a : α), Nonempty (J a)] : colimitsClosure (⊥ 
+: ObjectProperty C) J = ⊥
+参数：a : α；J a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_eq_self`：colimitsClosure_e
+q_self [P.IsClosedUnderIsomorphisms] [forall (a : α), P.IsClosedUnderColimitsOfS
+hape (J a)] : P.colimitsClosure J = P
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsBot`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C], ⊥.IsClosedUnderIsomorphisms
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderColimitsOfShapeBotOfNonem
+pty`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (J : Type u'
+)   [inst_1 : CategoryTheory.Category.{v', u'} J] [Nonempty J], ⊥…
 -/
-lemma colimitsClosure_bot [forall (a : α), Nonempty (J a)] :
+lemma colimitsClosure_bot [∀ (a : α), Nonempty (J a)] :
     colimitsClosure (⊥ : ObjectProperty C) J = ⊥ :=
   colimitsClosure_eq_self _ _
 
 @[simp]
-/--
-lemma `colimitsClosure_top` / 引理 `colimitsClosure_top`
-
-English:
-lemma colimitsClosure_top
-  statement: colimitsClosure (⊤ : ObjectProperty C) J = ⊤
-  proof: colimitsClosure_eq_self _ _
-
-中文:
-引理 colimitsClosure_top
-  结论: colimitsClosure (⊤ : ObjectProperty C) J = ⊤
-  证明: colimitsClosure_eq_self _ _
-
-Depends on / 依赖: colimitsClosure_eq_self, infer_instance, truncLE
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure_top** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ObjectProperty`。
+形式化陈述：colimitsClosure_top : colimitsClosure (⊤ : ObjectProperty C) J = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_eq_self`：colimitsClosure_e
+q_self [P.IsClosedUnderIsomorphisms] [forall (a : α), P.IsClosedUnderColimitsOfS
+hape (J a)] : P.colimitsClosure J = P
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsTop`：∀ {C : T
+ype u} [inst : CategoryTheory.Category.{v, u} C], ⊤.IsClosedUnderIsomorphisms
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderColimitsOfShapeTop`：∀ {C 
+: Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (J : Type u')   [inst_
+1 : CategoryTheory.Category.{v', u'} J], ⊤.IsClosedUnde…
 -/
 lemma colimitsClosure_top : colimitsClosure (⊤ : ObjectProperty C) J = ⊤ :=
   colimitsClosure_eq_self _ _
-
-/--
-lemma `colimitsClosure_isoClosure` / 引理 `colimitsClosure_isoClosure`
-
-English:
-lemma colimitsClosure_isoClosure
-  proof: by
-  refine le_antisymm (colimitsClosure_le ?_)
-    (colimitsClosure_monotone _ P.le_isoClosure)
-  rw [isoClosure_le_iff]
-  exact le_colimitsClosure P J
-
-中文:
-引理 colimitsClosure_isoClosure
-  证明: by
-  refine le_antisymm (colimitsClosure_le ?_)
-    (colimitsClosure_monotone _ P.le_isoClosure)
-  rw [isoClosure_le_iff]
-  exact le_colimitsClosure P J
-
-Depends on / 依赖: P.le_isoClosure, colimitsClosure_le, colimitsClosure_monotone, infer_instance, isoClosure_le_iff, le_antisymm, le_colimitsClosure, le_isoClosure, truncGT
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure_isoClosure** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsClosure_isoClosure : P.isoClosure.colimitsClosure J = P.colimitsCl
+osure J
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_le`：colimitsClosure_le {Q 
+: ObjectProperty C} [Q.IsClosedUnderIsomorphisms] [forall (a : α), Q.IsClosedUnd
+erColimitsOfShape (J a)] (h : P <= Q) …
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsColimitsClosu
+re`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory
+.ObjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderColimitsOfShapeColimitsCl
+osure`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryThe
+ory.ObjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.isoClosure_le_iff`：isoClosure_le_iff [IsCl
+osedUnderIsomorphisms Q] : isoClosure P <= Q ↔ P <= Q
+· 使用引理 `CategoryTheory.ObjectProperty.le_colimitsClosure`：le_colimitsClosure : P
+ <= P.colimitsClosure J
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_monotone`：colimitsClosure_
+monotone {Q : ObjectProperty C} (h : P <= Q) : P.colimitsClosure J <= Q.colimits
+Closure J
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
 -/
 lemma colimitsClosure_isoClosure :
     P.isoClosure.colimitsClosure J = P.colimitsClosure J := by
@@ -266,93 +234,102 @@ lemma colimitsClosure_isoClosure :
   rw [isoClosure_le_iff]
   exact le_colimitsClosure P J
 
-/--
-Definition of `colimitClosure` / `colimitClosure` 的定义
+/-- The closure of a property of objects of a category under colimits of
+shape `J` for a category `J`. -/
+/-
+**CategoryTheory.ObjectProperty.colimitClosure** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.ObjectProperty`。
+形式化陈述：colimitClosure (J : Type*) [Category* J] : ObjectProperty C
+参数：J : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation colimitClosure
-  signature: (J : Type*) [Category* J]
-  body: P.colimitsClosure (fun (_ : Unit) => J)
-
-中文:
-缩写 colimitClosure
-  签名: (J : 类型) [范畴* J]
-  定义体: P.colimitsClosure (fun (_ : Unit) => J)
-
-Depends on / 依赖: P.colimitsClosure, colimitsClosure
+--- 原说明 ---
+The closure of a property of objects of a category under colimits of
+shape `J` for a category `J`.
 -/
 abbrev colimitClosure (J : Type*) [Category* J] : ObjectProperty C :=
-  P.colimitsClosure (fun (_ : Unit) => J)
-
+  P.colimitsClosure (fun (_ : Unit) ↦ J)
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (J : Type*) [Category* J] : (P.colimitClosure J).IsClosedUnderColimitsOfShape J :=
   P.instIsClosedUnderColimitsOfShapeColimitsClosure _ ()
-
-/--
-lemma `colimitsClosure_eq_unop_limitsClosure` / 引理 `colimitsClosure_eq_unop_limitsClosure`
-
-English:
-lemma colimitsClosure_eq_unop_limitsClosure
-  proof: by
-  refine le_antisymm ?_ ?_
-  · apply colimitsClosure_le
-    rw [← op_monotone_iff]; rw [op_unop]
-    apply le_limitsClosure
-  · rw [← op_monotone_iff, op_unop]
-    apply limitsClosure_le
-    rw [op_monotone_iff]
-    apply le_colimitsClosure
-
-中文:
-引理 colimitsClosure_eq_unop_limitsClosure
-  证明: by
-  refine le_antisymm ?_ ?_
-  · apply colimitsClosure_le
-    rw [← op_monotone_iff]; rw [op_unop]
-    apply le_limitsClosure
-  · rw [← op_monotone_iff, op_unop]
-    apply limitsClosure_le
-    rw [op_monotone_iff]
-    apply le_colimitsClosure
-
-Depends on / 依赖: colimitsClosure_le, le_antisymm, le_colimitsClosure, le_limitsClosure, limitsClosure_le, op_monotone_iff, op_unop
+/-
+**CategoryTheory.ObjectProperty.colimitsClosure_eq_unop_limitsClosure** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsClosure_eq_unop_limitsClosure : P.colimitsClosure J = (P.op.limits
+Closure (fun a => (J a)ᵒᵖ)).unop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_le`：colimitsClosure_le {Q 
+: ObjectProperty C} [Q.IsClosedUnderIsomorphisms] [forall (a : α), Q.IsClosedUnd
+erColimitsOfShape (J a)] (h : P <= Q) …
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsUnopOfOpposit
+e`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.
+ObjectProperty Cᵒᵖ)   [P.IsClosedUnderIsomorphisms], P.unop.IsC…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsLimitsClosure
+`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.O
+bjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderColimitsOfShapeUnopOfIsCl
+osedUnderLimitsOfShapeOpposite`：∀ {C : Type u_1} [inst : CategoryTheory.Category
+.{v_1, u_1} C] (J : Type u')   [inst_1 : CategoryTheory.Category.{v', u'} J] (Q 
+: CategoryTh…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderLimitsOfShapeLimitsClosur
+e`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.
+ObjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.op_monotone_iff`：op_monotone_iff {P Q : Ob
+jectProperty C} : P.op <= Q.op ↔ P <= Q
+· 使用引理 `CategoryTheory.ObjectProperty.op_unop`：op_unop (P : ObjectProperty Cᵒᵖ) 
+: P.unop.op = P
+· 使用引理 `CategoryTheory.ObjectProperty.le_limitsClosure`：le_limitsClosure : P <= 
+P.limitsClosure J
+· 使用引理 `CategoryTheory.ObjectProperty.limitsClosure_le`：limitsClosure_le {Q : Ob
+jectProperty C} [Q.IsClosedUnderIsomorphisms] [forall (a : α), Q.IsClosedUnderLi
+mitsOfShape (J a)] (h : P <= Q) : P.…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsOppositeOp`：∀
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory.Obje
+ctProperty C)   [P.IsClosedUnderIsomorphisms], P.op.IsClose…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsColimitsClosu
+re`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheory
+.ObjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderLimitsOfShapeOppositeOpOf
+IsClosedUnderColimitsOfShape`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{
+v_1, u_1} C] (P : CategoryTheory.ObjectProperty C) (J : Type u')   [inst_1 : Cat
+egoryTheor…
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderColimitsOfShapeColimitsCl
+osure`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryThe
+ory.ObjectProperty C) {α : Type t}   (J : α → Type u') [inst_1 : (a…
+· 使用引理 `CategoryTheory.ObjectProperty.le_colimitsClosure`：le_colimitsClosure : P
+ <= P.colimitsClosure J
 -/
 lemma colimitsClosure_eq_unop_limitsClosure :
-    P.colimitsClosure J = (P.op.limitsClosure (fun a => (J a)ᵒᵖ)).unop := by
+    P.colimitsClosure J = (P.op.limitsClosure (fun a ↦ (J a)ᵒᵖ)).unop := by
   refine le_antisymm ?_ ?_
   · apply colimitsClosure_le
-    rw [← op_monotone_iff]; rw [op_unop]
+    rw [← op_monotone_iff, op_unop]
     apply le_limitsClosure
   · rw [← op_monotone_iff, op_unop]
     apply limitsClosure_le
     rw [op_monotone_iff]
     apply le_colimitsClosure
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ObjectProperty.EssentiallySmall.{w}
-  signature: P] [LocallySmall.{w} C] [Small.{w} α]
-  body: by
-  rw [colimitsClosure_eq_unop_limitsClosure]
-  have (a : α) : Small.{w} (J a)ᵒᵖ := Opposite.small
-  infer_instance
-
-中文:
-实例 [ObjectProperty.EssentiallySmall.{w}
-  签名: P] [LocallySmall.{w} C] [Small.{w} α]
-  定义体: by
-  rw [colimitsClosure_eq_unop_limitsClosure]
-  have (a : α) : Small.{w} (J a)ᵒᵖ := Opposite.small
-  infer_instance
-
-Depends on / 依赖: Opposite, Opposite.small, colimitsClosure_eq_unop_limitsClosure, infer_instance
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ObjectProperty.EssentiallySmall.{w} P] [LocallySmall.{w} C] [Small.{w} α]
-    [forall a, Small.{w} (J a)] [forall a, LocallySmall.{w} (J a)] :
+    [∀ a, Small.{w} (J a)] [∀ a, LocallySmall.{w} (J a)] :
     ObjectProperty.EssentiallySmall.{w} (P.colimitsClosure J) := by
   rw [colimitsClosure_eq_unop_limitsClosure]
   have (a : α) : Small.{w} (J a)ᵒᵖ := Opposite.small
   infer_instance
 
 end CategoryTheory.ObjectProperty
+

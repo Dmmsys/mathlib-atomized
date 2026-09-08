@@ -64,183 +64,175 @@ variable {P : Cᵒᵖ ⥤ Type w}
 variable {X : C}
 variable (J J₂ : GrothendieckTopology C)
 
-/--
-Definition of `IsSeparated` / `IsSeparated` 的定义
+/-- A presheaf is separated for a topology if it is separated for every sieve in the topology. -/
+/-
+**CategoryTheory.Presieve.IsSeparated** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Presieve`。
+形式化陈述：IsSeparated (P : Cᵒᵖ ⥤ Type w) : Prop
+参数：P : Cᵒᵖ ⥤ Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSeparated
-  signature: (P : Cᵒᵖ ⥤ Type w)
-  body: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSeparatedFor P (S : Presieve X)
-
-中文:
-定义 是分离
-  签名: (P : Cᵒᵖ ⥤ 类型 w)
-  定义体: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSeparatedFor P (S : Presieve X)
-
-Depends on / 依赖: IsSeparatedFor, Presieve
+--- 原说明 ---
+A presheaf is separated for a topology if it is separated for every sieve in the
+ topology.
 -/
 def IsSeparated (P : Cᵒᵖ ⥤ Type w) : Prop :=
-  forall ⦃X⦄ (S : Sieve X), S in J X -> IsSeparatedFor P (S : Presieve X)
+  ∀ ⦃X⦄ (S : Sieve X), S ∈ J X → IsSeparatedFor P (S : Presieve X)
 
-/--
-Definition of `IsSheaf` / `IsSheaf` 的定义
+/-- A presheaf is a sheaf for a topology if it is a sheaf for every sieve in the topology.
 
-English:
-definition IsSheaf
-  signature: (P : Cᵒᵖ ⥤ Type w)
-  body: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSheafFor P (S : Presieve X)
+If the given topology is given by a pretopology, `isSheaf_pretopology` shows it suffices to
+check the sheaf condition at presieves in the pretopology.
+-/
+/-
+**CategoryTheory.Presieve.IsSheaf** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Pres
+ieve`。
+形式化陈述：IsSheaf (P : Cᵒᵖ ⥤ Type w) : Prop
+参数：P : Cᵒᵖ ⥤ Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 是层
-  签名: (P : Cᵒᵖ ⥤ 类型 w)
-  定义体: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSheafFor P (S : Presieve X)
+--- 原说明 ---
+A presheaf is a sheaf for a topology if it is a sheaf for every sieve in the top
+ology.
 
-Depends on / 依赖: IsSheafFor, Presieve
+If the given topology is given by a pretopology, `isSheaf_pretopology` shows it 
+suffices to
+check the sheaf condition at presieves in the pretopology.
 -/
 def IsSheaf (P : Cᵒᵖ ⥤ Type w) : Prop :=
-  forall ⦃X⦄ (S : Sieve X), S in J X -> IsSheafFor P (S : Presieve X)
+  ∀ ⦃X⦄ (S : Sieve X), S ∈ J X → IsSheafFor P (S : Presieve X)
 
 variable {J} in
-/--
-theorem `IsSheaf.isSheafFor` / 定理 `IsSheaf.isSheafFor`
-
-English:
-theorem IsSheaf.isSheafFor
-  statement: {P : Cᵒᵖ ⥤ Type w} (hp : IsSheaf J P) (R : Presieve X)
-  proof: (isSheafFor_iff_generate R).2 hp _ hr
-
-中文:
-定理 是层.isSheafFor
-  结论: {P : Cᵒᵖ ⥤ 类型 w} (hp : 是层 J P) (R : Presieve X)
-  证明: (isSheafFor_iff_generate R).2 hp _ hr
-
-Depends on / 依赖: isSheafFor_iff_generate
+/-
+**CategoryTheory.Presieve.IsSheaf.isSheafFor** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Presieve.IsSheaf`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X : C} {J : Cate
+goryTheory.GrothendieckTopology C}   {P : CategoryTheory.Functor Cᵒᵖ (Type w)}, 
+  CategoryTheory.Presieve.IsSheaf J P →     ∀ (R : CategoryTheory.Presieve X), C
+ategoryTheory.Sieve.generate R ∈ J X → CategoryTheory.Presieve.IsSheafFor P R
+参数：Type w；R : CategoryTheory.Presieve X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_iff_generate`：isSheafFor_iff_generate
+ (R : Presieve X) : IsSheafFor P R ↔ IsSheafFor P (generate R : Presieve X)
 -/
 theorem IsSheaf.isSheafFor {P : Cᵒᵖ ⥤ Type w} (hp : IsSheaf J P) (R : Presieve X)
-    (hr : generate R in J X) : IsSheafFor P R :=
-(isSheafFor_iff_generate R).2 hp _ hr
-
-/--
-theorem `isSheaf_of_le` / 定理 `isSheaf_of_le`
-
-English:
-theorem isSheaf_of_le
-  given: (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C}
-  proof: fun h t _ S hS => t S (h _ hS)
-
-中文:
-定理 isSheaf_of_le
-  条件: (P : Cᵒᵖ ⥤ 类型 w) {J₁ J₂ : Grothendieck拓扑 C}
-  证明: fun h t _ S hS => t S (h _ hS)
+    (hr : generate R ∈ J X) : IsSheafFor P R :=
+  (isSheafFor_iff_generate R).2 <| hp _ hr
+/-
+**CategoryTheory.Presieve.isSheaf_of_le** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Presieve`。
+形式化陈述：isSheaf_of_le (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C} : J₁ <= 
+J₂ -> IsSheaf J₂ P -> IsSheaf J₁ P
+参数：P : Cᵒᵖ ⥤ Type w。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isSheaf_of_le (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C} :
-    J₁ <= J₂ -> IsSheaf J₂ P -> IsSheaf J₁ P := fun h t _ S hS => t S (h _ hS)
-
-/--
-theorem `isSeparated_of_le` / 定理 `isSeparated_of_le`
-
-English:
-theorem isSeparated_of_le
-  given: (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C}
-  proof: fun h hP _ S hS => hP S h _ hS
-
-中文:
-定理 isSeparated_of_le
-  条件: (P : Cᵒᵖ ⥤ 类型 w) {J₁ J₂ : Grothendieck拓扑 C}
-  证明: fun h hP _ S hS => hP S h _ hS
+    J₁ ≤ J₂ → IsSheaf J₂ P → IsSheaf J₁ P := fun h t _ S hS => t S (h _ hS)
+/-
+**CategoryTheory.Presieve.isSeparated_of_le** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Presieve`。
+形式化陈述：isSeparated_of_le (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C} : J₁
+ <= J₂ -> IsSeparated J₂ P -> IsSeparated J₁ P
+参数：P : Cᵒᵖ ⥤ Type w。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isSeparated_of_le (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C} :
-    J₁ <= J₂ -> IsSeparated J₂ P -> IsSeparated J₁ P :=
-fun h hP _ S hS => hP S h _ hS
+    J₁ ≤ J₂ → IsSeparated J₂ P → IsSeparated J₁ P :=
+  fun h hP _ S hS ↦ hP S <| h _ hS
 
 variable {J} in
-/--
-theorem `IsSheaf.isSeparated` / 定理 `IsSheaf.isSeparated`
-
-English:
-theorem IsSheaf.isSeparated
-  given: {P : Cᵒᵖ ⥤ Type w} (h : IsSheaf J P)
-  statement: IsSeparated J P
-  proof: fun _ S hS => (h S hS).isSeparatedFor
-
-中文:
-定理 是层.isSeparated
-  条件: {P : Cᵒᵖ ⥤ 类型 w} (h : 是层 J P)
-  结论: 是分离 J P
-  证明: fun _ S hS => (h S hS).isSeparatedFor
-
-Depends on / 依赖: isSeparatedFor
+/-
+**CategoryTheory.Presieve.IsSheaf.isSeparated** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Presieve.IsSheaf`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheo
+ry.GrothendieckTopology C}   {P : CategoryTheory.Functor Cᵒᵖ (Type w)},   Catego
+ryTheory.Presieve.IsSheaf J P → CategoryTheory.Presieve.IsSeparated J P
+参数：Type w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.IsSheafFor.isSeparatedFor`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.Functor Cᵒᵖ (Type w)}
+ {X : C}   {R : CategoryTheory.Presieve…
 -/
 theorem IsSheaf.isSeparated {P : Cᵒᵖ ⥤ Type w} (h : IsSheaf J P) : IsSeparated J P :=
   fun _ S hS => (h S hS).isSeparatedFor
 
 variable {J} in
-/--
-theorem `IsSeparated.isSheaf` / 定理 `IsSeparated.isSheaf`
+/-- If `P` is separated and every compatible family of elements of `P` for a covering
+sieve has an amalgamation, `P` is a sheaf. -/
+/-
+**CategoryTheory.Presieve.IsSeparated.isSheaf** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Presieve.IsSeparated`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheo
+ry.GrothendieckTopology C}   {P : CategoryTheory.Functor Cᵒᵖ (Type w)},   Catego
+ryTheory.Presieve.IsSeparated J P →     (∀ (X : C),         ∀ S ∈ J X,          
+ ∀ (x : CategoryTheory.Presieve.FamilyOfElements P S.arrows), x.Compatible → ∃ t
+, x.IsAmalgamation t) →       CategoryTheory.Presieve.IsSheaf J P
+参数：Type w；∀ (X : C),         ∀ S ∈ J X,           ∀ (x : CategoryTheory.Presieve
+.FamilyOfElements P S.arrows), x.Compatible → ∃ t, x.IsAmalgamation t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.IsSeparatedFor.isSheafFor`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.Functor Cᵒᵖ (Type w)}
+ {X : C}   {R : CategoryTheory.Presieve…
 
-English:
-theorem IsSeparated.isSheaf
-  statement: {P : Cᵒᵖ ⥤ Type w} (h : IsSeparated J P) (h' : forall X, forall S in J X,
-  proof: fun _ S hS => (h S hS).isSheafFor h' _ S hS
-
-中文:
-定理 是分离.isSheaf
-  结论: {P : Cᵒᵖ ⥤ 类型 w} (h : 是分离 J P) (h' : 对任意 X, 对任意 S in J X,
-  证明: fun _ S hS => (h S hS).isSheafFor h' _ S hS
-
-Depends on / 依赖: isSheafFor
+--- 原说明 ---
+If `P` is separated and every compatible family of elements of `P` for a coverin
+g
+sieve has an amalgamation, `P` is a sheaf.
 -/
-theorem IsSeparated.isSheaf {P : Cᵒᵖ ⥤ Type w} (h : IsSeparated J P) (h' : forall X, forall S in J X,
-      forall x : FamilyOfElements P S.arrows, x.Compatible -> exists t, x.IsAmalgamation t) :
+theorem IsSeparated.isSheaf {P : Cᵒᵖ ⥤ Type w} (h : IsSeparated J P) (h' : ∀ X, ∀ S ∈ J X,
+      ∀ x : FamilyOfElements P S.arrows, x.Compatible → ∃ t, x.IsAmalgamation t) :
     IsSheaf J P :=
-fun _ S hS => (h S hS).isSheafFor h' _ S hS
+  fun _ S hS ↦ (h S hS).isSheafFor <| h' _ S hS
 
 section
 
 variable {J} {P₁ : Cᵒᵖ ⥤ Type w} {P₂ : Cᵒᵖ ⥤ Type w'}
-  (e : forall ⦃X : C⦄, P₁.obj (op X) ≃ P₂.obj (op X))
-  (he : forall ⦃X Y : C⦄ (f : X ⟶ Y) (x : P₁.obj (op Y)),
+  (e : ∀ ⦃X : C⦄, P₁.obj (op X) ≃ P₂.obj (op X))
+  (he : ∀ ⦃X Y : C⦄ (f : X ⟶ Y) (x : P₁.obj (op Y)),
     e (P₁.map f.op x) = P₂.map f.op (e x))
 
 include he in
-/--
-lemma `isSheaf_of_nat_equiv` / 引理 `isSheaf_of_nat_equiv`
-
-English:
-lemma isSheaf_of_nat_equiv
-  given: (hP₁ : Presieve.IsSheaf J P₁)
-  proof: fun _ R hR =>
-  isSheafFor_of_nat_equiv e he (hP₁ R hR)
-
-include he in
-
-中文:
-引理 isSheaf_of_nat_equiv
-  条件: (hP₁ : Presieve.是层 J P₁)
-  证明: fun _ R hR =>
-  isSheafFor_of_nat_equiv e he (hP₁ R hR)
-
-include he in
+/-
+**CategoryTheory.Presieve.isSheaf_of_nat_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Presieve`。
+形式化陈述：isSheaf_of_nat_equiv (hP₁ : Presieve.IsSheaf J P₁) : Presieve.IsSheaf J P₂
+参数：hP₁ : Presieve.IsSheaf J P₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Presieve.isSheafFor_of_nat_equiv`：isSheafFor_of_nat_equiv
+ {P₁ : Cᵒᵖ ⥤ Type w} {P₂ : Cᵒᵖ ⥤ Type w'} (e : forall ⦃X : C⦄, P₁.obj (op X) ≃ P
+₂.obj (op X)) (he : forall ⦃X Y : C⦄ …
 -/
 lemma isSheaf_of_nat_equiv (hP₁ : Presieve.IsSheaf J P₁) :
-    Presieve.IsSheaf J P₂ := fun _ R hR =>
+    Presieve.IsSheaf J P₂ := fun _ R hR ↦
   isSheafFor_of_nat_equiv e he (hP₁ R hR)
 
 include he in
-/--
-lemma `isSheaf_iff_of_nat_equiv` / 引理 `isSheaf_iff_of_nat_equiv`
-
-English:
-lemma isSheaf_iff_of_nat_equiv
-  proof: by
-  simp only [Presieve.IsSheaf, Presieve.isSheafFor_iff_of_nat_equiv e he]
-
-中文:
-引理 isSheaf_iff_of_nat_equiv
-  证明: by
-  simp only [Presieve.IsSheaf, Presieve.isSheafFor_iff_of_nat_equiv e he]
-
-Depends on / 依赖: IsSheaf, Presieve, Presieve.IsSheaf, Presieve.isSheafFor_iff_of_nat_equiv, isSheafFor_iff_of_nat_equiv
+/-
+**CategoryTheory.Presieve.isSheaf_iff_of_nat_equiv** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Presieve`。
+形式化陈述：isSheaf_iff_of_nat_equiv : Presieve.IsSheaf J P₁ ↔ Presieve.IsSheaf J P₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `CategoryTheory.Presieve.isSheafFor_iff_of_nat_equiv`：isSheafFor_iff_of_n
+at_equiv {P₁ : Cᵒᵖ ⥤ Type w} {P₂ : Cᵒᵖ ⥤ Type w'} (e : forall ⦃X : C⦄, P₁.obj (o
+p X) ≃ P₂.obj (op X)) (he : forall ⦃X Y :…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isSheaf_iff_of_nat_equiv :
     Presieve.IsSheaf J P₁ ↔ Presieve.IsSheaf J P₂ := by
@@ -248,154 +240,154 @@ lemma isSheaf_iff_of_nat_equiv :
 
 end
 
-/--
-theorem `isSheaf_iso` / 定理 `isSheaf_iso`
+/-- The property of being a sheaf is preserved by isomorphism. -/
+/-
+**CategoryTheory.Presieve.isSheaf_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Presieve`。
+形式化陈述：isSheaf_iso {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (h : IsSheaf J P) : IsSheaf J
+ P'
+参数：i : P ≅ P'；h : IsSheaf J P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_iso`：isSheafFor_iso {P' : Cᵒᵖ ⥤ Type 
+w} (i : P ≅ P') (hP : IsSheafFor P R) : IsSheafFor P' R
 
-English:
-theorem isSheaf_iso
-  given: {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (h : IsSheaf J P)
-  statement: IsSheaf J P'
-  proof: fun _ S hS => isSheafFor_iso i (h S hS)
-
-中文:
-定理 isSheaf_iso
-  条件: {P' : Cᵒᵖ ⥤ 类型 w} (i : P ≅ P') (h : 是层 J P)
-  结论: 是层 J P'
-  证明: fun _ S hS => isSheafFor_iso i (h S hS)
-
-Depends on / 依赖: isSheafFor_iso
+--- 原说明 ---
+The property of being a sheaf is preserved by isomorphism.
 -/
 theorem isSheaf_iso {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (h : IsSheaf J P) : IsSheaf J P' :=
   fun _ S hS => isSheafFor_iso i (h S hS)
 
-/--
-theorem `isSeparated_iso` / 定理 `isSeparated_iso`
+/-- The property of being separated is preserved under isomorphisms. -/
+/-
+**CategoryTheory.Presieve.isSeparated_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Presieve`。
+形式化陈述：isSeparated_iso {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (hP : IsSeparated J P) : 
+IsSeparated J P'
+参数：i : P ≅ P'；hP : IsSeparated J P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.isSeparatedFor_iso`：isSeparatedFor_iso {P' : Cᵒᵖ
+ ⥤ Type w} (i : P ≅ P') (hP : IsSeparatedFor P R) : IsSeparatedFor P' R
 
-English:
-theorem isSeparated_iso
-  given: {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (hP : IsSeparated J P)
-  proof: fun _ S hS => isSeparatedFor_iso i (hP S hS)
-
-中文:
-定理 isSeparated_iso
-  条件: {P' : Cᵒᵖ ⥤ 类型 w} (i : P ≅ P') (hP : 是分离 J P)
-  证明: fun _ S hS => isSeparatedFor_iso i (hP S hS)
-
-Depends on / 依赖: isSeparatedFor_iso
+--- 原说明 ---
+The property of being separated is preserved under isomorphisms.
 -/
 theorem isSeparated_iso {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (hP : IsSeparated J P) :
     IsSeparated J P' :=
-  fun _ S hS => isSeparatedFor_iso i (hP S hS)
-
-/--
-theorem `isSheaf_of_yoneda` / 定理 `isSheaf_of_yoneda`
-
-English:
-theorem isSheaf_of_yoneda
-  statement: {P : Cᵒᵖ ⥤ Type v}
-  proof: fun _ _ hS =>
-  isSheafFor_iff_yonedaSheafCondition.2 (h _ hS)
-
-中文:
-定理 isSheaf_of_yoneda
-  结论: {P : Cᵒᵖ ⥤ 类型v}
-  证明: fun _ _ hS =>
-  isSheafFor_iff_yonedaSheafCondition.2 (h _ hS)
+  fun _ S hS ↦ isSeparatedFor_iso i (hP S hS)
+/-
+**CategoryTheory.Presieve.isSheaf_of_yoneda** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Presieve`。
+形式化陈述：isSheaf_of_yoneda {P : Cᵒᵖ ⥤ Type v} (h : forall {X} (S : Sieve X), S in J
+ X -> YonedaSheafCondition P S) : IsSheaf J P
+参数：h : forall {X} (S : Sieve X), S in J X -> YonedaSheafCondition P S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_iff_yonedaSheafCondition`：isSheafFor_
+iff_yonedaSheafCondition {P : Cᵒᵖ ⥤ Type v₁} : IsSheafFor P (S : Presieve X) ↔ Y
+onedaSheafCondition P S
 -/
 theorem isSheaf_of_yoneda {P : Cᵒᵖ ⥤ Type v}
-    (h : forall {X} (S : Sieve X), S in J X -> YonedaSheafCondition P S) : IsSheaf J P := fun _ _ hS =>
+    (h : ∀ {X} (S : Sieve X), S ∈ J X → YonedaSheafCondition P S) : IsSheaf J P := fun _ _ hS =>
   isSheafFor_iff_yonedaSheafCondition.2 (h _ hS)
 
-/--
-theorem `isSheaf_pretopology` / 定理 `isSheaf_pretopology`
+/-- For a topology generated by a basis, it suffices to check the sheaf condition on the basis
+presieves only.
+-/
+/-
+**CategoryTheory.Presieve.isSheaf_pretopology** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Presieve`。
+形式化陈述：isSheaf_pretopology [HasPullbacks C] (K : Pretopology C) : IsSheaf K.toGro
+thendieck P ↔ forall {X : C} (R : Presieve X), R in K X -> IsSheafFor P R
+参数：K : Pretopology C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_iff_generate`：isSheafFor_iff_generate
+ (R : Presieve X) : IsSheafFor P R ↔ IsSheafFor P (generate R : Presieve X)
+· 使用定理 `CategoryTheory.Sieve.le_generate`：le_generate (R : Presieve X) : R <= ge
+nerate R
+· 使用定理 `GaloisConnection.monotone_u`：monotone_u : Monotone u
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `CategoryTheory.Sieve.generate_le_iff`：generate_le_iff (R : Presieve X) (
+S : Sieve X) : generate R <= S ↔ R <= S
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_subsieve`：isSheafFor_subsieve (P : Cᵒ
+ᵖ ⥤ Type w) {S : Sieve X} {R : Presieve X} (h : (S : Presieve X) <= R) (trans : 
+forall ⦃Y⦄ (f : Y ⟶ X), IsSheafFo…
+· 使用定理 `CategoryTheory.Presieve.instHasPullbacksOfHasPullbacks`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} [CategoryTheory.Limits.HasPu
+llbacks C]   (R : CategoryTheory.Presieve X)…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Sieve.pullbackArrows_comm`：pullbackArrows_comm {X Y : C} 
+(f : Y ⟶ X) (R : Presieve X) [R.HasPullbacks f] : Sieve.generate (R.pullbackArro
+ws f) = (Sieve.generate R).pul…
+· 使用定理 `CategoryTheory.Pretopology.pullbacks`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasPullbacks C]   (self :
+ CategoryTheory.Pretopolog…
 
-English:
-theorem isSheaf_pretopology
-  given: [HasPullbacks C] (K : Pretopology C)
-  proof: by
-  constructor
-  · intro PJ X R hR
-    rw [isSheafFor_iff_generate]
-    apply PJ (Sieve.generate R) ⟨_, hR, le_generate R⟩
-  · rintro PK X S ⟨R, hR, RS⟩
-    have gRS : ⇑(generate R) <= S := by
-      apply giGenerate.gc.monotone_u
-      rwa [generate_le_iff]
-    apply isSheafFor_subsieve P gRS _
-    intro Y f
-    rw [← pullbackArrows_comm]; rw [← isSheafFor_iff_generate]
-    exact PK (pullbackArrows f R) (K.pullbacks f R hR)
-
-中文:
-定理 isSheaf_pretopology
-  条件: [有Pullbacks C] (K : Pretopology C)
-  证明: by
-  constructor
-  · intro PJ X R hR
-    rw [isSheafFor_iff_generate]
-    apply PJ (Sieve.generate R) ⟨_, hR, le_generate R⟩
-  · rintro PK X S ⟨R, hR, RS⟩
-    have gRS : ⇑(generate R) <= S := by
-      apply giGenerate.gc.monotone_u
-      rwa [generate_le_iff]
-    apply isSheafFor_subsieve P gRS _
-    intro Y f
-    rw [← pullbackArrows_comm]; rw [← isSheafFor_iff_generate]
-    exact PK (pullbackArrows f R) (K.pullbacks f R hR)
-
-Depends on / 依赖: K.pullbacks, Sieve.generate, generate, generate_le_iff, giGenerate, giGenerate.gc.monotone_u, isSheafFor_iff_generate, isSheafFor_subsieve, le_generate, monotone_u, pullbackArrows, pullbackArrows_comm, pullbacks
+--- 原说明 ---
+For a topology generated by a basis, it suffices to check the sheaf condition on
+ the basis
+presieves only.
 -/
 theorem isSheaf_pretopology [HasPullbacks C] (K : Pretopology C) :
-    IsSheaf K.toGrothendieck P ↔ forall {X : C} (R : Presieve X), R in K X -> IsSheafFor P R := by
+    IsSheaf K.toGrothendieck P ↔ ∀ {X : C} (R : Presieve X), R ∈ K X → IsSheafFor P R := by
   constructor
   · intro PJ X R hR
     rw [isSheafFor_iff_generate]
     apply PJ (Sieve.generate R) ⟨_, hR, le_generate R⟩
   · rintro PK X S ⟨R, hR, RS⟩
-    have gRS : ⇑(generate R) <= S := by
+    have gRS : ⇑(generate R) ≤ S := by
       apply giGenerate.gc.monotone_u
       rwa [generate_le_iff]
     apply isSheafFor_subsieve P gRS _
     intro Y f
-    rw [← pullbackArrows_comm]; rw [← isSheafFor_iff_generate]
+    rw [← pullbackArrows_comm, ← isSheafFor_iff_generate]
     exact PK (pullbackArrows f R) (K.pullbacks f R hR)
 
-/--
-theorem `isSheaf_bot` / 定理 `isSheaf_bot`
+/-- Any presheaf is a sheaf for the bottom (trivial) Grothendieck topology. -/
+/-
+**CategoryTheory.Presieve.isSheaf_bot** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Presieve`。
+形式化陈述：isSheaf_bot : IsSheaf (⊥ : GrothendieckTopology C) P
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 
-English:
-theorem isSheaf_bot
-  statement: IsSheaf (⊥ : GrothendieckTopology C) P
-  proof: fun X => by
-  simp [isSheafFor_top]
-
-中文:
-定理 isSheaf_bot
-  结论: 是层 (⊥ : Grothendieck拓扑 C) P
-  证明: fun X => by
-  simp [isSheafFor_top]
-
-Depends on / 依赖: isSheafFor_top
+--- 原说明 ---
+Any presheaf is a sheaf for the bottom (trivial) Grothendieck topology.
 -/
 theorem isSheaf_bot : IsSheaf (⊥ : GrothendieckTopology C) P := fun X => by
   simp [isSheafFor_top]
 
 /-- A presheaf is a sheaf after composing with a universe lift if and only if it is a sheaf. -/
 @[simp]
-/--
-theorem `isSheafFor_comp_uliftFunctor_iff` / 定理 `isSheafFor_comp_uliftFunctor_iff`
+/-
+**CategoryTheory.Presieve.isSheafFor_comp_uliftFunctor_iff** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Presieve`。
+形式化陈述：isSheafFor_comp_uliftFunctor_iff {R : Presieve X} : R.IsSheafFor (P ⋙ ulif
+tFunctor.{w'}) ↔ R.IsSheafFor P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.Presieve.isSheafFor_iff_of_nat_equiv`：isSheafFor_iff_of_n
+at_equiv {P₁ : Cᵒᵖ ⥤ Type w} {P₂ : Cᵒᵖ ⥤ Type w'} (e : forall ⦃X : C⦄, P₁.obj (o
+p X) ≃ P₂.obj (op X)) (he : forall ⦃X Y :…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-theorem isSheafFor_comp_uliftFunctor_iff
-  given: {R : Presieve X}
-  proof: (isSheafFor_iff_of_nat_equiv (fun _ => Equiv.ulift.symm) (fun _ _ _ _ => rfl)).symm
-
-中文:
-定理 isSheafFor_comp_uliftFunctor_iff
-  条件: {R : Presieve X}
-  证明: (isSheafFor_iff_of_nat_equiv (fun _ => Equiv.ulift.symm) (fun _ _ _ _ => rfl)).symm
-
-Depends on / 依赖: Equiv.ulift.symm, isSheafFor_iff_of_nat_equiv
+--- 原说明 ---
+A presheaf is a sheaf after composing with a universe lift if and only if it is 
+a sheaf.
 -/
 theorem isSheafFor_comp_uliftFunctor_iff {R : Presieve X} :
     R.IsSheafFor (P ⋙ uliftFunctor.{w'}) ↔ R.IsSheafFor P :=
@@ -403,73 +395,74 @@ theorem isSheafFor_comp_uliftFunctor_iff {R : Presieve X} :
 
 /-- A presheaf is a sheaf after composing with a universe lift if and only if it is a sheaf. -/
 @[simp]
-/--
-theorem `isSheaf_comp_uliftFunctor_iff` / 定理 `isSheaf_comp_uliftFunctor_iff`
+/-
+**CategoryTheory.Presieve.isSheaf_comp_uliftFunctor_iff** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Presieve`。
+形式化陈述：isSheaf_comp_uliftFunctor_iff : IsSheaf J (P ⋙ uliftFunctor.{w'}) ↔ IsShea
+f J P
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.Presieve.isSheaf_iff_of_nat_equiv`：isSheaf_iff_of_nat_equ
+iv : Presieve.IsSheaf J P₁ ↔ Presieve.IsSheaf J P₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-theorem isSheaf_comp_uliftFunctor_iff
-  statement: IsSheaf J (P ⋙ uliftFunctor.{w'}) ↔ IsSheaf J P
-  proof: (isSheaf_iff_of_nat_equiv (fun _ => Equiv.ulift.symm) (fun _ _ _ _ => rfl)).symm
-
-中文:
-定理 isSheaf_comp_uliftFunctor_iff
-  结论: 是层 J (P ⋙ uliftFunctor.{w'}) ↔ 是层 J P
-  证明: (isSheaf_iff_of_nat_equiv (fun _ => Equiv.ulift.symm) (fun _ _ _ _ => rfl)).symm
-
-Depends on / 依赖: Equiv.ulift.symm, isSheaf_iff_of_nat_equiv
+--- 原说明 ---
+A presheaf is a sheaf after composing with a universe lift if and only if it is 
+a sheaf.
 -/
 theorem isSheaf_comp_uliftFunctor_iff : IsSheaf J (P ⋙ uliftFunctor.{w'}) ↔ IsSheaf J P :=
   (isSheaf_iff_of_nat_equiv (fun _ => Equiv.ulift.symm) (fun _ _ _ _ => rfl)).symm
 
-/--
-theorem `isSheaf_comp_uliftFunctor` / 定理 `isSheaf_comp_uliftFunctor`
+/-- The composition of a sheaf with a ULift functor is still a sheaf. -/
+/-
+**CategoryTheory.Presieve.isSheaf_comp_uliftFunctor** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Presieve`。
+形式化陈述：isSheaf_comp_uliftFunctor (h : IsSheaf J P) : IsSheaf J (P ⋙ uliftFunctor.
+{w'})
+参数：h : IsSheaf J P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presieve.isSheaf_comp_uliftFunctor_iff`：isSheaf_comp_ulif
+tFunctor_iff : IsSheaf J (P ⋙ uliftFunctor.{w'}) ↔ IsSheaf J P
 
-English:
-theorem isSheaf_comp_uliftFunctor
-  given: (h : IsSheaf J P)
-  statement: IsSheaf J (P ⋙ uliftFunctor.{w'})
-  proof: by
-  rwa [isSheaf_comp_uliftFunctor_iff]
-
-中文:
-定理 isSheaf_comp_uliftFunctor
-  条件: (h : 是层 J P)
-  结论: 是层 J (P ⋙ uliftFunctor.{w'})
-  证明: by
-  rwa [isSheaf_comp_uliftFunctor_iff]
-
-Depends on / 依赖: isSheaf_comp_uliftFunctor_iff
+--- 原说明 ---
+The composition of a sheaf with a ULift functor is still a sheaf.
 -/
 theorem isSheaf_comp_uliftFunctor (h : IsSheaf J P) : IsSheaf J (P ⋙ uliftFunctor.{w'}) := by
   rwa [isSheaf_comp_uliftFunctor_iff]
 
 set_option backward.defeqAttrib.useBackward true in
 /--
-Definition of `compatibleYonedaFamily_toCocone` / `compatibleYonedaFamily_toCocone` 的定义
+For a presheaf of the form `yoneda.obj W`, a compatible family of elements on a sieve
+is the same as a co-cone over the sieve. Constructing a co-cone from a compatible family works for
+any presieve, as does constructing a family of elements from a co-cone. Showing compatibility of the
+family needs the sieve condition.
+Note: This is related to `CategoryTheory.Presheaf.conesEquivSieveCompatibleFamily`
+-/
+/-
+**CategoryTheory.Presieve.compatibleYonedaFamily_toCocone** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.Presieve`。
+形式化陈述：compatibleYonedaFamily_toCocone (R : Presieve X) (W : C) (x : FamilyOfElem
+ents (yoneda.obj W) R) (hx : FamilyOfElements.Compatible x) : Cocone (R.diagram)
+ where pt
+参数：R : Presieve X；W : C；x : FamilyOfElements (yoneda.obj W) R；hx : FamilyOfEleme
+nts.Compatible x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compatibleYonedaFamily_toCocone
-  signature: (R : Presieve X) (W : C) (x : FamilyOfElements (yoneda.obj W) R)
-  body: W
-  ι :=
-    { app := fun f => x f.obj.hom f.property
-      naturality := by
-        intro g₁ g₂ F
-        dsimp
-        rw [comp_id]; rw [← id_comp (x g₁.obj.hom g₁.property)]
-        exact hx _ _ _ _ (by simp) }
-
-中文:
-定义 compatibleYonedaFamily_toCocone
-  签名: (R : Presieve X) (W : C) (x : FamilyOfElements (yoneda.obj W) R)
-  定义体: W
-  ι :=
-    { app := fun f => x f.obj.hom f.property
-      naturality := by
-        intro g₁ g₂ F
-        dsimp
-        rw [comp_id]; rw [← id_comp (x g₁.obj.hom g₁.property)]
-        exact hx _ _ _ _ (by simp) }
+--- 原说明 ---
+For a presheaf of the form `yoneda.obj W`, a compatible family of elements on a 
+sieve
+is the same as a co-cone over the sieve. Constructing a co-cone from a compatibl
+e family works for
+any presieve, as does constructing a family of elements from a co-cone. Showing 
+compatibility of the
+family needs the sieve condition.
+Note: This is related to `CategoryTheory.Presheaf.conesEquivSieveCompatibleFamil
+y`
 -/
 def compatibleYonedaFamily_toCocone (R : Presieve X) (W : C) (x : FamilyOfElements (yoneda.obj W) R)
     (hx : FamilyOfElements.Compatible x) :
@@ -480,23 +473,21 @@ def compatibleYonedaFamily_toCocone (R : Presieve X) (W : C) (x : FamilyOfElemen
       naturality := by
         intro g₁ g₂ F
         dsimp
-        rw [comp_id]; rw [← id_comp (x g₁.obj.hom g₁.property)]
+        rw [comp_id, ← id_comp (x g₁.obj.hom g₁.property)]
         exact hx _ _ _ _ (by simp) }
 
-/--
-Definition of `yonedaFamilyOfElements_fromCocone` / `yonedaFamilyOfElements_fromCocone` 的定义
+/-- Construct a family of elements from a cocone. -/
+/-
+**CategoryTheory.Presieve.yonedaFamilyOfElements_fromCocone** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Presieve`。
+形式化陈述：yonedaFamilyOfElements_fromCocone (R : Presieve X) (s : Cocone (diagram R)
+) : FamilyOfElements (yoneda.obj s.pt) R
+参数：R : Presieve X；s : Cocone (diagram R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition yonedaFamilyOfElements_fromCocone
-  signature: (R : Presieve X) (s : Cocone (diagram R))
-  body: fun _ f hf => s.ι.app ⟨Over.mk f, hf⟩
-
-中文:
-定义 yonedaFamilyOfElements_fromCocone
-  签名: (R : Presieve X) (s : 余锥 (diagram R))
-  定义体: fun _ f hf => s.ι.app ⟨Over.mk f, hf⟩
-
-Depends on / 依赖: Over.mk
+--- 原说明 ---
+Construct a family of elements from a cocone.
 -/
 def yonedaFamilyOfElements_fromCocone (R : Presieve X) (s : Cocone (diagram R)) :
     FamilyOfElements (yoneda.obj s.pt) R :=
@@ -512,49 +503,39 @@ variable {X : C}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `yonedaFamily_fromCocone_compatible` / 定理 `yonedaFamily_fromCocone_compatible`
-
-English:
-theorem yonedaFamily_fromCocone_compatible
-  given: (S : Sieve X) (s : Cocone (diagram S.arrows))
-  proof: by
-  intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ hgf
-  have Hs := s.ι.naturality
-  simp only [yoneda_obj_obj, Opposite.unop_op, yoneda_obj_map, Quiver.Hom.unop_op]
-  dsimp [yonedaFamilyOfElements_fromCocone]
-  have hgf₁ : S.arrows (g₁ ≫ f₁) := by exact Sieve.downward_closed S hf₁ g₁
-  have hgf₂ : S.arrows (g₂ ≫ f₂) := by exact Sieve.downward_closed S hf₂ g₂
-  let F : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk (g₂ ≫ f₂) : Over X) := Over.homMk (𝟙 Z)
-  let F₁ : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk f₁ : Over X) := Over.homMk g₁
-  let F₂ : (Over.mk (g₂ ≫ f₂) : Over X) ⟶ (Over.mk f₂ : Over X) := Over.homMk g₂
-  have hF := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ (ObjectProperty.homMk F)
-  have hF₁ := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk f₁, hf₁⟩ (ObjectProperty.homMk F₁)
-  have hF₂ := @Hs ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ ⟨Over.mk f₂, hf₂⟩ (ObjectProperty.homMk F₂)
-  cat_disch
-
-中文:
-定理 yonedaFamily_fromCocone_compatible
-  条件: (S : 筛 X) (s : 余锥 (diagram S.arrows))
-  证明: by
-  intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ hgf
-  have Hs := s.ι.naturality
-  simp only [yoneda_obj_obj, Opposite.unop_op, yoneda_obj_map, Quiver.Hom.unop_op]
-  dsimp [yonedaFamilyOfElements_fromCocone]
-  have hgf₁ : S.arrows (g₁ ≫ f₁) := by exact Sieve.downward_closed S hf₁ g₁
-  have hgf₂ : S.arrows (g₂ ≫ f₂) := by exact Sieve.downward_closed S hf₂ g₂
-  let F : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk (g₂ ≫ f₂) : Over X) := Over.homMk (𝟙 Z)
-  let F₁ : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk f₁ : Over X) := Over.homMk g₁
-  let F₂ : (Over.mk (g₂ ≫ f₂) : Over X) ⟶ (Over.mk f₂ : Over X) := Over.homMk g₂
-  have hF := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ (ObjectProperty.homMk F)
-  have hF₁ := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk f₁, hf₁⟩ (ObjectProperty.homMk F₁)
-  have hF₂ := @Hs ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ ⟨Over.mk f₂, hf₂⟩ (ObjectProperty.homMk F₂)
-  cat_disch
-
-Depends on / 依赖: Opposite, Opposite.unop_op, Over.homM, Over.homMk, Over.mk, Quiver, Quiver.Hom.unop_op, S.arrows, Sieve.downward_closed, arrows, downward_closed, naturality, unop_op, yonedaFamilyOfElements_fromCocone, yoneda_obj_map, yoneda_obj_obj
+/-
+**CategoryTheory.Sieve.yonedaFamily_fromCocone_compatible** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Sieve`。
+形式化陈述：yonedaFamily_fromCocone_compatible (S : Sieve X) (s : Cocone (diagram S.ar
+rows)) : FamilyOfElements.Compatible yonedaFamilyOfElements_fromCocone S.arrows 
+s
+参数：S : Sieve X；s : Cocone (diagram S.arrows)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Sieve.downward_closed`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {X : C} (self : CategoryTheory.Sieve X) {Y Z : C}   {f
+ : Y ⟶ X}, self.arrows f →…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 theorem yonedaFamily_fromCocone_compatible (S : Sieve X) (s : Cocone (diagram S.arrows)) :
-FamilyOfElements.Compatible yonedaFamilyOfElements_fromCocone S.arrows s := by
+    FamilyOfElements.Compatible <| yonedaFamilyOfElements_fromCocone S.arrows s := by
   intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ hgf
   have Hs := s.ι.naturality
   simp only [yoneda_obj_obj, Opposite.unop_op, yoneda_obj_map, Quiver.Hom.unop_op]
@@ -570,79 +551,54 @@ FamilyOfElements.Compatible yonedaFamilyOfElements_fromCocone S.arrows s := by
   cat_disch
 
 /--
-theorem `forallYonedaIsSheaf_iff_colimit` / 定理 `forallYonedaIsSheaf_iff_colimit`
+The base of a sieve `S` is a colimit of `S` iff all Yoneda-presheaves satisfy
+the sheaf condition for `S`.
+-/
+/-
+**CategoryTheory.Sieve.forallYonedaIsSheaf_iff_colimit** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Sieve`。
+形式化陈述：forallYonedaIsSheaf_iff_colimit (S : Sieve X) : (forall W : C, Presieve.Is
+SheafFor (yoneda.obj W) (S : Presieve X)) ↔ Nonempty (IsColimit S.arrows.cocone)
+参数：S : Sieve X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sieve.yonedaFamily_fromCocone_compatible`：yonedaFamily_fr
+omCocone_compatible (S : Sieve X) (s : Cocone (diagram S.arrows)) : FamilyOfElem
+ents.Compatible yonedaFamilyOfElements_fromCo…
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Over.forgetCocone_ι_app`：∀ {T : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} T] (X : T)   (self : CategoryTheory.Comma (CategoryTheo
+ry.Functor.id T) (CategoryTh…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.IsColimit.uniq`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u
+₃} C]   {F : CategoryTheor…
 
-English:
-theorem forallYonedaIsSheaf_iff_colimit
-  given: (S : Sieve X)
-  proof: by
-  constructor
-  · intro H
-    refine Nonempty.intro ?_
-    exact
-    { desc := fun s => H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
-.choose (yonedaFamily_fromCocone_compatible S s)
-      fac := by
-        intro s f
-        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
-          (yonedaFamily_fromCocone_compatible S s)
-        have ht := H.choose_spec.1 f.obj.hom f.property
-        cat_disch
-      uniq := by
-        intro s Fs HFs
-        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
-          (yonedaFamily_fromCocone_compatible S s)
-        apply H.choose_spec.2 Fs
-        exact fun _ f hf => HFs ⟨Over.mk f, hf⟩ }
-  · intro H W x hx
-    replace H := Classical.choice H
-    let s := compatibleYonedaFamily_toCocone S.arrows W x hx
-    use H.desc s
-    constructor
-    · exact fun _ f hf => (H.fac s) ⟨Over.mk f, hf⟩
-    · exact fun g hg => H.uniq s g (fun ⟨⟨f, _, hom⟩, hf⟩ => hg hom hf)
-
-中文:
-定理 对任意YonedaIsSheaf_iff_colimit
-  条件: (S : 筛 X)
-  证明: by
-  constructor
-  · intro H
-    refine Nonempty.intro ?_
-    exact
-    { desc := fun s => H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
-.choose (yonedaFamily_fromCocone_compatible S s)
-      fac := by
-        intro s f
-        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
-          (yonedaFamily_fromCocone_compatible S s)
-        have ht := H.choose_spec.1 f.obj.hom f.property
-        cat_disch
-      uniq := by
-        intro s Fs HFs
-        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
-          (yonedaFamily_fromCocone_compatible S s)
-        apply H.choose_spec.2 Fs
-        exact fun _ f hf => HFs ⟨Over.mk f, hf⟩ }
-  · intro H W x hx
-    replace H := Classical.choice H
-    let s := compatibleYonedaFamily_toCocone S.arrows W x hx
-    use H.desc s
-    constructor
-    · exact fun _ f hf => (H.fac s) ⟨Over.mk f, hf⟩
-    · exact fun g hg => H.uniq s g (fun ⟨⟨f, _, hom⟩, hf⟩ => hg hom hf)
-
-Depends on / 依赖: H.choose_spec, Nonempty, Nonempty.intro, S.arrows, arrows, cat_disch, choose_spec, f.obj.hom, f.property, property, replace, s.pt, yonedaFamilyOfElements_fromCocone, yonedaFamily_fromCocone_compatible
+--- 原说明 ---
+The base of a sieve `S` is a colimit of `S` iff all Yoneda-presheaves satisfy
+the sheaf condition for `S`.
 -/
 theorem forallYonedaIsSheaf_iff_colimit (S : Sieve X) :
-    (forall W : C, Presieve.IsSheafFor (yoneda.obj W) (S : Presieve X)) ↔
+    (∀ W : C, Presieve.IsSheafFor (yoneda.obj W) (S : Presieve X)) ↔
       Nonempty (IsColimit S.arrows.cocone) := by
   constructor
   · intro H
     refine Nonempty.intro ?_
     exact
     { desc := fun s => H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
-.choose (yonedaFamily_fromCocone_compatible S s)
+        (yonedaFamily_fromCocone_compatible S s) |>.choose
       fac := by
         intro s f
         replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
@@ -666,3 +622,4 @@ theorem forallYonedaIsSheaf_iff_colimit (S : Sieve X) :
 end Sieve
 
 end CategoryTheory
+

@@ -30,338 +30,168 @@ universe u v w
 variable {R : Type u} {M : Type v} {N : Type w}
 
 @[to_additive]
-/--
-Instance `smulLeft` / 实例 `smulLeft`
-
-English:
-instance smulLeft
-  signature: [SMul R M]
-  body: ⟨fun s x => s.down • x⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 smulLeft
-  签名: [标量乘法 R M]
-  定义体: ⟨fun s x => s.down • x⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: s.down
+/-
+**ULift.smulLeft** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：smulLeft [SMul R M] : SMul (ULift R) M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulLeft [SMul R M] : SMul (ULift R) M :=
   ⟨fun s x => s.down • x⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: [SMul R M] (s : ULift R) (x : M)
-  statement: s • x = s.down • x
-  proof: rfl
-
-中文:
-定理 smul_def
-  条件: [标量乘法 R M] (s : 类型层提升 R) (x : M)
-  结论: s • x = s.down • x
-  证明: rfl
+/-
+**ULift.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：smul_def [SMul R M] (s : ULift R) (x : M) : s • x = s.down • x
+参数：s : ULift R；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_def [SMul R M] (s : ULift R) (x : M) : s • x = s.down • x :=
   rfl
-
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
-
-English:
-instance isScalarTower
-  signature: [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N]
-  body: ⟨fun x y z => show (x.down • y) • z = x.down • y • z from smul_assoc _ _ _⟩
-
-中文:
-实例 isScalarTower
-  签名: [标量乘法 R M] [标量乘法 M N] [标量乘法 R N] [标量塔 R M N]
-  定义体: ⟨fun x y z => show (x.down • y) • z = x.down • y • z from smul_assoc _ _ _⟩
-
-Depends on / 依赖: smul_assoc, x.down
+/-
+**ULift.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：isScalarTower [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N] : IsS
+calarTower (ULift R) M N
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N] :
     IsScalarTower (ULift R) M N :=
   ⟨fun x y z => show (x.down • y) • z = x.down • y • z from smul_assoc _ _ _⟩
-
-/--
-Instance `isScalarTower'` / 实例 `isScalarTower'`
-
-English:
-instance isScalarTower'
-  signature: [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N]
-  body: ⟨fun x y z => show (x • y.down) • z = x • y.down • z from smul_assoc _ _ _⟩
-
-中文:
-实例 isScalarTower'
-  签名: [标量乘法 R M] [标量乘法 M N] [标量乘法 R N] [标量塔 R M N]
-  定义体: ⟨fun x y z => show (x • y.down) • z = x • y.down • z from smul_assoc _ _ _⟩
-
-Depends on / 依赖: smul_assoc, y.down
+/-
+**ULift.isScalarTower'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：isScalarTower' [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N] : Is
+ScalarTower R (ULift M) N
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower' [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N] :
     IsScalarTower R (ULift M) N :=
   ⟨fun x y z => show (x • y.down) • z = x • y.down • z from smul_assoc _ _ _⟩
-
-/--
-Instance `isScalarTower''` / 实例 `isScalarTower''`
-
-English:
-instance isScalarTower''
-  signature: [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N]
-  body: ⟨fun x y z => show up ((x • y) • z.down) = ⟨x • y • z.down⟩ by rw [smul_assoc]⟩
-
-中文:
-实例 isScalarTower''
-  签名: [标量乘法 R M] [标量乘法 M N] [标量乘法 R N] [标量塔 R M N]
-  定义体: ⟨fun x y z => show up ((x • y) • z.down) = ⟨x • y • z.down⟩ by rw [smul_assoc]⟩
-
-Depends on / 依赖: smul_assoc, z.down
+/-
+**ULift.isScalarTower''** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：isScalarTower'' [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N] : I
+sScalarTower R M (ULift N)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
 instance isScalarTower'' [SMul R M] [SMul M N] [SMul R N] [IsScalarTower R M N] :
     IsScalarTower R M (ULift N) :=
   ⟨fun x y z => show up ((x • y) • z.down) = ⟨x • y • z.down⟩ by rw [smul_assoc]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R M] [SMul Rᵐᵒᵖ M] [IsCentralScalar R M] : IsCentralScalar R (ULift M)
-  body: ⟨fun r m => congr_arg up op_smul_eq_smul r m.down⟩
-
-@[to_additive]
-
-中文:
-实例 [标量乘法
-  签名: R M] [标量乘法 Rᵐᵒᵖ M] [中心标量 R M] : 中心标量 R (类型层提升 M)
-  定义体: ⟨fun r m => congr_arg up op_smul_eq_smul r m.down⟩
-
-@[to_additive]
-
-Depends on / 依赖: congr_arg, m.down, op_smul_eq_smul
+/-
+**ULift.** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul R M] [SMul Rᵐᵒᵖ M] [IsCentralScalar R M] : IsCentralScalar R (ULift M) :=
-⟨fun r m => congr_arg up op_smul_eq_smul r m.down⟩
+  ⟨fun r m => congr_arg up <| op_smul_eq_smul r m.down⟩
 
 @[to_additive]
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: [Monoid R] [MulAction R M]
-  body: mul_smul _ _
-  one_smul := one_smul _
-
-@[to_additive]
-
-中文:
-实例 mulAction
-  签名: [幺半群 R] [乘法作用 R M]
-  定义体: mul_smul _ _
-  one_smul := one_smul _
-
-@[to_additive]
-
-Depends on / 依赖: mul_smul
+/-
+**ULift.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulAction [Monoid R] [MulAction R M] : MulAction (ULift R) M where mul_smu
+l _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 instance mulAction [Monoid R] [MulAction R M] : MulAction (ULift R) M where
   mul_smul _ _ := mul_smul _ _
   one_smul := one_smul _
 
 @[to_additive]
-/--
-Instance `mulAction'` / 实例 `mulAction'`
-
-English:
-instance mulAction'
-  signature: [Monoid R] [MulAction R M]
-  body: fun _ _ _ => congr_arg ULift.up mul_smul _ _ _
-one_smul := fun _ => congr_arg ULift.up one_smul _ _
-
-中文:
-实例 mulAction'
-  签名: [幺半群 R] [乘法作用 R M]
-  定义体: fun _ _ _ => congr_arg ULift.up mul_smul _ _ _
-one_smul := fun _ => congr_arg ULift.up one_smul _ _
-
-Depends on / 依赖: ULift.up, congr_arg, mul_smul
+/-
+**ULift.mulAction'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulAction' [Monoid R] [MulAction R M] : MulAction R (ULift M) where mul_sm
+ul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction' [Monoid R] [MulAction R M] : MulAction R (ULift M) where
-mul_smul := fun _ _ _ => congr_arg ULift.up mul_smul _ _ _
-one_smul := fun _ => congr_arg ULift.up one_smul _ _
-
-/--
-Instance `smulZeroClass` / 实例 `smulZeroClass`
-
-English:
-instance smulZeroClass
-  signature: [Zero M] [SMulZeroClass R M]
-  body: { ULift.smulLeft with smul_zero := fun _ => smul_zero _ }
-
-中文:
-实例 smulZeroClass
-  签名: [零 M] [SMulZero类 R M]
-  定义体: { ULift.smulLeft with smul_zero := fun _ => smul_zero _ }
-
-Depends on / 依赖: ULift.smulLeft, smulLeft, smul_zero
+  mul_smul := fun _ _ _ => congr_arg ULift.up <| mul_smul _ _ _
+  one_smul := fun _ => congr_arg ULift.up <| one_smul _ _
+/-
+**ULift.smulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：smulZeroClass [Zero M] [SMulZeroClass R M] : SMulZeroClass (ULift R) M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulZeroClass [Zero M] [SMulZeroClass R M] : SMulZeroClass (ULift R) M :=
   { ULift.smulLeft with smul_zero := fun _ => smul_zero _ }
-
-/--
-Instance `smulZeroClass'` / 实例 `smulZeroClass'`
-
-English:
-instance smulZeroClass'
-  signature: [Zero M] [SMulZeroClass R M]
-  body: by { ext; simp [smul_zero] }
-
-中文:
-实例 smulZeroClass'
-  签名: [零 M] [SMulZero类 R M]
-  定义体: by { ext; simp [smul_zero] }
-
-Depends on / 依赖: smul_zero
+/-
+**ULift.smulZeroClass'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：smulZeroClass' [Zero M] [SMulZeroClass R M] : SMulZeroClass R (ULift M) wh
+ere smul_zero c
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulZeroClass' [Zero M] [SMulZeroClass R M] : SMulZeroClass R (ULift M) where
   smul_zero c := by { ext; simp [smul_zero] }
-
-/--
-Instance `distribSMul` / 实例 `distribSMul`
-
-English:
-instance distribSMul
-  signature: [AddZeroClass M] [DistribSMul R M]
-  body: smul_add _
-
-中文:
-实例 distribSMul
-  签名: [加法零类 M] [分配标量乘法 R M]
-  定义体: smul_add _
-
-Depends on / 依赖: smul_add
+/-
+**ULift.distribSMul** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：distribSMul [AddZeroClass M] [DistribSMul R M] : DistribSMul (ULift R) M w
+here smul_add _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribSMul [AddZeroClass M] [DistribSMul R M] : DistribSMul (ULift R) M where
   smul_add _ := smul_add _
-
-/--
-Instance `distribSMul'` / 实例 `distribSMul'`
-
-English:
-instance distribSMul'
-  signature: [AddZeroClass M] [DistribSMul R M]
-  body: by
-    ext
-    simp [smul_add]
-
-中文:
-实例 distribSMul'
-  签名: [加法零类 M] [分配标量乘法 R M]
-  定义体: by
-    ext
-    simp [smul_add]
-
-Depends on / 依赖: IsOrderedCancelSMul, smul_add
+/-
+**ULift.distribSMul'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：distribSMul' [AddZeroClass M] [DistribSMul R M] : DistribSMul R (ULift M) 
+where smul_add c f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribSMul' [AddZeroClass M] [DistribSMul R M] : DistribSMul R (ULift M) where
   smul_add c f g := by
     ext
     simp [smul_add]
-
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
-
-English:
-instance distribMulAction
-  signature: [Monoid R] [AddMonoid M] [DistribMulAction R M]
-  body: { ULift.mulAction, ULift.distribSMul with }
-
-中文:
-实例 distribMulAction
-  签名: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
-  定义体: { ULift.mulAction, ULift.distribSMul with }
-
-Depends on / 依赖: ULift.distribSMul, ULift.mulAction, distribSMul, mulAction
+/-
+**ULift.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：distribMulAction [Monoid R] [AddMonoid M] [DistribMulAction R M] : Distrib
+MulAction (ULift R) M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction [Monoid R] [AddMonoid M] [DistribMulAction R M] :
     DistribMulAction (ULift R) M :=
   { ULift.mulAction, ULift.distribSMul with }
-
-/--
-Instance `distribMulAction'` / 实例 `distribMulAction'`
-
-English:
-instance distribMulAction'
-  signature: [Monoid R] [AddMonoid M] [DistribMulAction R M]
-  body: { ULift.mulAction', ULift.distribSMul' with }
-
-中文:
-实例 distribMulAction'
-  签名: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
-  定义体: { ULift.mulAction', ULift.distribSMul' with }
-
-Depends on / 依赖: ULift.distribSMul, ULift.mulAction, distribSMul, mulAction
+/-
+**ULift.distribMulAction'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：distribMulAction' [Monoid R] [AddMonoid M] [DistribMulAction R M] : Distri
+bMulAction R (ULift M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction' [Monoid R] [AddMonoid M] [DistribMulAction R M] :
     DistribMulAction R (ULift M) :=
   { ULift.mulAction', ULift.distribSMul' with }
-
-/--
-Instance `mulDistribMulAction` / 实例 `mulDistribMulAction`
-
-English:
-instance mulDistribMulAction
-  signature: [Monoid R] [Monoid M] [MulDistribMulAction R M]
-  body: smul_one _
-  smul_mul _ := smul_mul' _
-
-中文:
-实例 mulDistribMulAction
-  签名: [幺半群 R] [幺半群 M] [MulDistribMul作用 R M]
-  定义体: smul_one _
-  smul_mul _ := smul_mul' _
-
-Depends on / 依赖: smul_one
+/-
+**ULift.mulDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulDistribMulAction [Monoid R] [Monoid M] [MulDistribMulAction R M] : MulD
+istribMulAction (ULift R) M where smul_one _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulDistribMulAction [Monoid R] [Monoid M] [MulDistribMulAction R M] :
     MulDistribMulAction (ULift R) M where
   smul_one _ := smul_one _
   smul_mul _ := smul_mul' _
-
-/--
-Instance `mulDistribMulAction'` / 实例 `mulDistribMulAction'`
-
-English:
-instance mulDistribMulAction'
-  signature: [Monoid R] [Monoid M] [MulDistribMulAction R M]
-  body: { ULift.mulAction' with
-    smul_one := fun _ => by
-      ext
-      simp [smul_one]
-    smul_mul := fun _ _ _ => by
-      ext
-      simp [smul_mul'] }
-
-中文:
-实例 mulDistribMulAction'
-  签名: [幺半群 R] [幺半群 M] [MulDistribMul作用 R M]
-  定义体: { ULift.mulAction' with
-    smul_one := fun _ => by
-      ext
-      simp [smul_one]
-    smul_mul := fun _ _ _ => by
-      ext
-      simp [smul_mul'] }
-
-Depends on / 依赖: ULift.mulAction, mulAction, smul_mul, smul_one
+/-
+**ULift.mulDistribMulAction'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulDistribMulAction' [Monoid R] [Monoid M] [MulDistribMulAction R M] : Mul
+DistribMulAction R (ULift M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulDistribMulAction' [Monoid R] [Monoid M] [MulDistribMulAction R M] :
     MulDistribMulAction R (ULift M) :=
@@ -372,124 +202,57 @@ instance mulDistribMulAction' [Monoid R] [Monoid M] [MulDistribMulAction R M] :
     smul_mul := fun _ _ _ => by
       ext
       simp [smul_mul'] }
-
-/--
-Instance `smulWithZero` / 实例 `smulWithZero`
-
-English:
-instance smulWithZero
-  signature: [Zero R] [Zero M] [SMulWithZero R M]
-  body: { ULift.smulLeft with
-    smul_zero := fun _ => smul_zero _
-    zero_smul := zero_smul _ }
-
-中文:
-实例 smulWithZero
-  签名: [零 R] [零 M] [带零标量乘法 R M]
-  定义体: { ULift.smulLeft with
-    smul_zero := fun _ => smul_zero _
-    zero_smul := zero_smul _ }
-
-Depends on / 依赖: ULift.smulLeft, smulLeft, smul_zero, zero_smul
+/-
+**ULift.smulWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：smulWithZero [Zero R] [Zero M] [SMulWithZero R M] : SMulWithZero (ULift R)
+ M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 -/
 instance smulWithZero [Zero R] [Zero M] [SMulWithZero R M] : SMulWithZero (ULift R) M :=
   { ULift.smulLeft with
     smul_zero := fun _ => smul_zero _
     zero_smul := zero_smul _ }
-
-/--
-Instance `smulWithZero'` / 实例 `smulWithZero'`
-
-English:
-instance smulWithZero'
-  signature: [Zero R] [Zero M] [SMulWithZero R M]
-  body: ULift.ext _ _ smul_zero _
-zero_smul _ := ULift.ext _ _ zero_smul _ _
-
-中文:
-实例 smulWithZero'
-  签名: [零 R] [零 M] [带零标量乘法 R M]
-  定义体: ULift.ext _ _ smul_zero _
-zero_smul _ := ULift.ext _ _ zero_smul _ _
-
-Depends on / 依赖: ULift.ext, smul_zero
+/-
+**ULift.smulWithZero'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：smulWithZero' [Zero R] [Zero M] [SMulWithZero R M] : SMulWithZero R (ULift
+ M) where smul_zero _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulWithZero' [Zero R] [Zero M] [SMulWithZero R M] : SMulWithZero R (ULift M) where
-smul_zero _ := ULift.ext _ _ smul_zero _
-zero_smul _ := ULift.ext _ _ zero_smul _ _
-
-/--
-Instance `mulActionWithZero` / 实例 `mulActionWithZero`
-
-English:
-instance mulActionWithZero
-  signature: [MonoidWithZero R] [Zero M] [MulActionWithZero R M]
-  body: { ULift.smulWithZero with
-    one_smul := one_smul _
-    mul_smul := mul_smul }
-
-中文:
-实例 mulActionWithZero
-  签名: [带零幺半群 R] [零 M] [带零乘法作用 R M]
-  定义体: { ULift.smulWithZero with
-    one_smul := one_smul _
-    mul_smul := mul_smul }
-
-Depends on / 依赖: ULift.smulWithZero, mul_smul, one_smul, smulWithZero
+  smul_zero _ := ULift.ext _ _ <| smul_zero _
+  zero_smul _ := ULift.ext _ _ <| zero_smul _ _
+/-
+**ULift.mulActionWithZero** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulActionWithZero [MonoidWithZero R] [Zero M] [MulActionWithZero R M] : Mu
+lActionWithZero (ULift R) M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulActionWithZero [MonoidWithZero R] [Zero M] [MulActionWithZero R M] :
     MulActionWithZero (ULift R) M :=
   { ULift.smulWithZero with
     one_smul := one_smul _
     mul_smul := mul_smul }
-
-/--
-Instance `mulActionWithZero'` / 实例 `mulActionWithZero'`
-
-English:
-instance mulActionWithZero'
-  signature: [MonoidWithZero R] [Zero M] [MulActionWithZero R M]
-  body: { ULift.smulWithZero' with
-    one_smul := one_smul _
-    mul_smul := mul_smul }
-
-中文:
-实例 mulActionWithZero'
-  签名: [带零幺半群 R] [零 M] [带零乘法作用 R M]
-  定义体: { ULift.smulWithZero' with
-    one_smul := one_smul _
-    mul_smul := mul_smul }
-
-Depends on / 依赖: ULift.smulWithZero, mul_smul, one_smul, smulWithZero
+/-
+**ULift.mulActionWithZero'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：mulActionWithZero' [MonoidWithZero R] [Zero M] [MulActionWithZero R M] : M
+ulActionWithZero R (ULift M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulActionWithZero' [MonoidWithZero R] [Zero M] [MulActionWithZero R M] :
     MulActionWithZero R (ULift M) :=
   { ULift.smulWithZero' with
     one_smul := one_smul _
     mul_smul := mul_smul }
-
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: [Semiring R] [AddCommMonoid M] [Module R M]
-  body: { ULift.smulWithZero with
-    add_smul := fun _ _ => add_smul _ _
-    smul_add := smul_add
-    one_smul := one_smul _
-    mul_smul := mul_smul }
-
-中文:
-实例 module
-  签名: [半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: { ULift.smulWithZero with
-    add_smul := fun _ _ => add_smul _ _
-    smul_add := smul_add
-    one_smul := one_smul _
-    mul_smul := mul_smul }
-
-Depends on / 依赖: ULift.smulWithZero, add_smul, mul_smul, one_smul, smulWithZero, smul_add
+/-
+**ULift.module** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：module [Semiring R] [AddCommMonoid M] [Module R M] : Module (ULift R) M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module [Semiring R] [AddCommMonoid M] [Module R M] : Module (ULift R) M :=
   { ULift.smulWithZero with
@@ -497,33 +260,15 @@ instance module [Semiring R] [AddCommMonoid M] [Module R M] : Module (ULift R) M
     smul_add := smul_add
     one_smul := one_smul _
     mul_smul := mul_smul }
-
-/--
-Instance `module'` / 实例 `module'`
-
-English:
-instance module'
-  signature: [Semiring R] [AddCommMonoid M] [Module R M]
-  body: { ULift.smulWithZero' with
-add_smul := fun _ _ _ => ULift.ext _ _ add_smul _ _ _
-    one_smul := one_smul _
-    mul_smul := mul_smul
-    smul_add := smul_add }
-
-中文:
-实例 module'
-  签名: [半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: { ULift.smulWithZero' with
-add_smul := fun _ _ _ => ULift.ext _ _ add_smul _ _ _
-    one_smul := one_smul _
-    mul_smul := mul_smul
-    smul_add := smul_add }
-
-Depends on / 依赖: ULift.ext, ULift.smulWithZero, add_smul, mul_smul, one_smul, smulWithZero, smul_add
+/-
+**ULift.module'** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：module' [Semiring R] [AddCommMonoid M] [Module R M] : Module R (ULift M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module' [Semiring R] [AddCommMonoid M] [Module R M] : Module R (ULift M) :=
   { ULift.smulWithZero' with
-add_smul := fun _ _ _ => ULift.ext _ _ add_smul _ _ _
+    add_smul := fun _ _ _ => ULift.ext _ _ <| add_smul _ _ _
     one_smul := one_smul _
     mul_smul := mul_smul
     smul_add := smul_add }
@@ -532,26 +277,17 @@ add_smul := fun _ _ _ => ULift.ext _ _ add_smul _ _ _
 
 This is a linear version of `AddEquiv.ulift`. -/
 @[simps apply symm_apply]
-/--
-Definition of `moduleEquiv` / `moduleEquiv` 的定义
+/-
+**ULift.moduleEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ULift`。
+形式化陈述：moduleEquiv [Semiring R] [AddCommMonoid M] [Module R M] : ULift.{w} M ≃ₗ[R
+] M where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition moduleEquiv
-  signature: [Semiring R] [AddCommMonoid M] [Module R M]
-  body: ULift.down
-  invFun := ULift.up
-  map_smul' _ _ := rfl
-  __ := AddEquiv.ulift
+--- 原说明 ---
+The `R`-linear equivalence between `ULift M` and `M`.
 
-中文:
-定义 moduleEquiv
-  签名: [半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: ULift.down
-  invFun := ULift.up
-  map_smul' _ _ := rfl
-  __ := AddEquiv.ulift
-
-Depends on / 依赖: ULift.down
+This is a linear version of `AddEquiv.ulift`.
 -/
 def moduleEquiv [Semiring R] [AddCommMonoid M] [Module R M] : ULift.{w} M ≃ₗ[R] M where
   toFun := ULift.down
@@ -560,3 +296,4 @@ def moduleEquiv [Semiring R] [AddCommMonoid M] [Module R M] : ULift.{w} M ≃ₗ
   __ := AddEquiv.ulift
 
 end ULift
+

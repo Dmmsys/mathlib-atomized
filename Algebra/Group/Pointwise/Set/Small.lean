@@ -20,123 +20,61 @@ variable {α β : Type*} (s t : Set α)
 
 open scoped Pointwise
 
-/--
-Instance `small_set_zero` / 实例 `small_set_zero`
-
-English:
-instance small_set_zero
-  signature: [Zero α]
-  body: small_single _
-
-中文:
-实例 small_set_zero
-  签名: [零 α]
-  定义体: small_single _
-
-Depends on / 依赖: small_single
+/-
+**small_set_zero** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_set_zero [Zero α] : Small.{u} (0 : Set α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_single`：small_single (x : α) : Small.{u} ({x} : Set α)
 -/
 instance small_set_zero [Zero α] : Small.{u} (0 : Set α) := small_single _
-/--
-Instance `small_set_one` / 实例 `small_set_one`
-
-English:
-instance small_set_one
-  signature: [One α]
-  body: small_single _
-
-中文:
-实例 small_set_one
-  签名: [幺 α]
-  定义体: small_single _
-
-Depends on / 依赖: small_single
+/-
+**small_set_one** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_set_one [One α] : Small.{u} (1 : Set α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_single`：small_single (x : α) : Small.{u} ({x} : Set α)
 -/
 instance small_set_one [One α] : Small.{u} (1 : Set α) := small_single _
-
-/--
-Instance `small_neg` / 实例 `small_neg`
-
-English:
-instance small_neg
-  signature: [InvolutiveNeg α] [Small.{u} s]
-  body: by
-  rw [← Set.image_neg_eq_neg]
-  infer_instance
-
-中文:
-实例 small_neg
-  签名: [InvolutiveNeg α] [Small.{u} s]
-  定义体: by
-  rw [← Set.image_neg_eq_neg]
-  infer_instance
-
-Depends on / 依赖: Set.image_neg_eq_neg, image_neg_eq_neg, infer_instance
+/-
+**small_neg** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_neg [InvolutiveNeg α] [Small.{u} s] : Small.{u} (-s :)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_neg_eq_neg`：∀ {α : Type u_2} [inst : InvolutiveNeg α] {s : Set
+ α}, (fun x => -x) '' s = -s
 -/
 instance small_neg [InvolutiveNeg α] [Small.{u} s] : Small.{u} (-s :) := by
   rw [← Set.image_neg_eq_neg]
   infer_instance
-
-/--
-Instance `small_add` / 实例 `small_add`
-
-English:
-instance small_add
-  signature: [Add α] [Small.{u} s] [Small.{u} t]
-  body: small_image2 ..
-
-中文:
-实例 small_add
-  签名: [加法 α] [Small.{u} s] [Small.{u} t]
-  定义体: small_image2 ..
-
-Depends on / 依赖: small_image2
+/-
+**small_add** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_add [Add α] [Small.{u} s] [Small.{u} t] : Small.{u} (s + t)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance small_add [Add α] [Small.{u} s] [Small.{u} t] : Small.{u} (s + t) := small_image2 ..
-/--
-Instance `small_sub` / 实例 `small_sub`
-
-English:
-instance small_sub
-  signature: [Sub α] [Small.{u} s] [Small.{u} t]
-  body: small_image2 ..
-
-中文:
-实例 small_sub
-  签名: [减法 α] [Small.{u} s] [Small.{u} t]
-  定义体: small_image2 ..
-
-Depends on / 依赖: small_image2
+/-
+**small_sub** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_sub [Sub α] [Small.{u} s] [Small.{u} t] : Small.{u} (s - t)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance small_sub [Sub α] [Small.{u} s] [Small.{u} t] : Small.{u} (s - t) := small_image2 ..
-/--
-Instance `small_mul` / 实例 `small_mul`
-
-English:
-instance small_mul
-  signature: [Mul α] [Small.{u} s] [Small.{u} t]
-  body: small_image2 ..
-
-中文:
-实例 small_mul
-  签名: [乘法 α] [Small.{u} s] [Small.{u} t]
-  定义体: small_image2 ..
-
-Depends on / 依赖: small_image2
+/-
+**small_mul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_mul [Mul α] [Small.{u} s] [Small.{u} t] : Small.{u} (s * t)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance small_mul [Mul α] [Small.{u} s] [Small.{u} t] : Small.{u} (s * t) := small_image2 ..
-/--
-Instance `small_div` / 实例 `small_div`
-
-English:
-instance small_div
-  signature: [Div α] [Small.{u} s] [Small.{u} t]
-  body: small_image2 ..
-
-中文:
-实例 small_div
-  签名: [除法 α] [Small.{u} s] [Small.{u} t]
-  定义体: small_image2 ..
-
-Depends on / 依赖: small_image2
+/-
+**small_div** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_div [Div α] [Small.{u} s] [Small.{u} t] : Small.{u} (s / t)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance small_div [Div α] [Small.{u} s] [Small.{u} t] : Small.{u} (s / t) := small_image2 ..

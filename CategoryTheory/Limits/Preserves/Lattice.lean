@@ -35,57 +35,62 @@ section
 
 variable [SemilatticeInf α] [OrderTop α] [SemilatticeInf β] [OrderTop β] [InfTopHomClass F α β]
 
-/--
-Instance `preservesLimit_finite_toFunctor` / 实例 `preservesLimit_finite_toFunctor`
-
-English:
-instance preservesLimit_finite_toFunctor
-  signature: {J : Type w} [SmallCategory J]
-  body: preservesLimit_of_preserves_limit_cone (finiteLimitCone K).isLimit
-    (finiteLimitCone _).isLimit.ofIsoLimit
-      (Cone.ext (eqToIso (show Finset.univ.inf _ = f _ by aesop)) (by subsingleton))
-
-中文:
-实例 preservesLimit_finite_toFunctor
-  签名: {J : 类型 w} [小范畴 J]
-  定义体: preservesLimit_of_preserves_limit_cone (finiteLimitCone K).isLimit
-    (finiteLimitCone _).isLimit.ofIsoLimit
-      (Cone.ext (eqToIso (show Finset.univ.inf _ = f _ by aesop)) (by subsingleton))
-
-Depends on / 依赖: Cone.ext, Finset, Finset.univ.inf, eqToIso, finiteLimitCone, isLimit, isLimit.ofIsoLimit, ofIsoLimit, preservesLimit_of_preserves_limit_cone, subsingleton
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesLimit_finite_toFunctor** 是 Math
+lib 中的一个实例，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：preservesLimit_finite_toFunctor {J : Type w} [SmallCategory J] [FinCategor
+y J] (K : J ⥤ α) : PreservesLimit K (toOrderHom f).toFunctor
+参数：K : J ⥤ α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `InfHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : SemilatticeIn
+f β] [InfHomClass…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.finiteLimitCone_cone_pt`：∀ {α : Ty
+pe u} {J : Type w} [inst : CategoryTheory.SmallCategory J] [inst_1 : CategoryThe
+ory.FinCategory J]   [inst_2 : SemilatticeInf α] [i…
+· 使用定理 `map_finset_inf`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeInf α] [inst_1 : OrderTop α]   [inst_2 : SemilatticeInf
+ β] …
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 instance preservesLimit_finite_toFunctor {J : Type w} [SmallCategory J]
     [FinCategory J] (K : J ⥤ α) : PreservesLimit K (toOrderHom f).toFunctor :=
-preservesLimit_of_preserves_limit_cone (finiteLimitCone K).isLimit
+  preservesLimit_of_preserves_limit_cone (finiteLimitCone K).isLimit <|
     (finiteLimitCone _).isLimit.ofIsoLimit
       (Cone.ext (eqToIso (show Finset.univ.inf _ = f _ by aesop)) (by subsingleton))
-
-/--
-Instance `preservesLimitsOfShape_finite_toFunctor` / 实例 `preservesLimitsOfShape_finite_toFunctor`
-
-English:
-instance preservesLimitsOfShape_finite_toFunctor
-  signature: {J : Type w} [SmallCategory J] [FinCategory J]
-
-中文:
-实例 preservesLimitsOfShape_finite_toFunctor
-  签名: {J : 类型 w} [小范畴 J] [有限范畴 J]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesLimitsOfShape_finite_toFunctor*
+* 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : SemilatticeInf α]   [inst_2 : OrderTop α] [inst_3 : SemilatticeInf β] 
+[inst_4 : OrderTop β] [inst_5 : InfTopHomClass F α β] {J : Type w}   [inst_6 : C
+ategoryTheory.SmallCategory J] [CategoryTheory.FinCategory J],   CategoryTheory.
+Limits.PreservesLimitsOfShape J (↑f).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : SemilatticeIn
+f β] [InfHomClass…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
 -/
 instance preservesLimitsOfShape_finite_toFunctor {J : Type w} [SmallCategory J] [FinCategory J] :
     PreservesLimitsOfShape J (toOrderHom f).toFunctor where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteLimits (toOrderHom f).toFunctor
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 保持FiniteLimits (toOrderHom f).toFunctor
-  定义体: inferInstance
+/-
+**CategoryTheory.Limits.CompleteLattice.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Limits.CompleteLattice`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteLimits (toOrderHom f).toFunctor where
   preservesFiniteLimits _ _ _ := inferInstance
@@ -96,57 +101,62 @@ section
 
 variable [SemilatticeSup α] [OrderBot α] [SemilatticeSup β] [OrderBot β] [SupBotHomClass F α β]
 
-/--
-Instance `preservesColimit_finite_toFunctor` / 实例 `preservesColimit_finite_toFunctor`
-
-English:
-instance preservesColimit_finite_toFunctor
-  signature: {J : Type w} [SmallCategory J]
-  body: preservesColimit_of_preserves_colimit_cocone (finiteColimitCocone K).isColimit
-    (finiteColimitCocone _).isColimit.ofIsoColimit
-      (Cocone.ext (eqToIso (show Finset.univ.sup _ = f _ by aesop)) (by subsingleton))
-
-中文:
-实例 preservesColimit_finite_toFunctor
-  签名: {J : 类型 w} [小范畴 J]
-  定义体: preservesColimit_of_preserves_colimit_cocone (finiteColimitCocone K).isColimit
-    (finiteColimitCocone _).isColimit.ofIsoColimit
-      (Cocone.ext (eqToIso (show Finset.univ.sup _ = f _ by aesop)) (by subsingleton))
-
-Depends on / 依赖: Cocone, Cocone.ext, Finset, Finset.univ.sup, eqToIso, finiteColimitCocone, isColimit, isColimit.ofIsoColimit, ofIsoColimit, preservesColimit_of_preserves_colimit_cocone, subsingleton
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesColimit_finite_toFunctor** 是 Ma
+thlib 中的一个实例，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：preservesColimit_finite_toFunctor {J : Type w} [SmallCategory J] [FinCateg
+ory J] (K : J ⥤ α) : PreservesColimit K (toOrderHom f).toFunctor
+参数：K : J ⥤ α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone`：pres
+ervesColimit_of_preserves_colimit_cocone {F : C ⥤ D} {t : Cocone K} (h : IsColim
+it t) (hF : IsColimit (F.mapCocone t)) : PreservesColimi…
+· 使用定理 `SupHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeSup α]   [inst_2 : SemilatticeSu
+p β] [SupHomClass…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.finiteColimitCocone_cocone_pt`：∀ {
+α : Type u} {J : Type w} [inst : CategoryTheory.SmallCategory J] [inst_1 : Categ
+oryTheory.FinCategory J]   [inst_2 : SemilatticeSup α] [i…
+· 使用定理 `map_finset_sup`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeSup α] [inst_1 : OrderBot α]   [inst_2 : SemilatticeSup
+ β] …
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 instance preservesColimit_finite_toFunctor {J : Type w} [SmallCategory J]
     [FinCategory J] (K : J ⥤ α) : PreservesColimit K (toOrderHom f).toFunctor :=
-preservesColimit_of_preserves_colimit_cocone (finiteColimitCocone K).isColimit
+  preservesColimit_of_preserves_colimit_cocone (finiteColimitCocone K).isColimit <|
     (finiteColimitCocone _).isColimit.ofIsoColimit
       (Cocone.ext (eqToIso (show Finset.univ.sup _ = f _ by aesop)) (by subsingleton))
-
-/--
-Instance `preservesColimitsOfShape_finite_toFunctor` / 实例 `preservesColimitsOfShape_finite_toFunctor`
-
-English:
-instance preservesColimitsOfShape_finite_toFunctor
-  signature: {J : Type w} [SmallCategory J]
-
-中文:
-实例 preservesColimitsOfShape_finite_toFunctor
-  签名: {J : 类型 w} [小范畴 J]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesColimitsOfShape_finite_toFuncto
+r** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : SemilatticeSup α]   [inst_2 : OrderBot α] [inst_3 : SemilatticeSup β] 
+[inst_4 : OrderBot β] [inst_5 : SupBotHomClass F α β] {J : Type w}   [inst_6 : C
+ategoryTheory.SmallCategory J] [CategoryTheory.FinCategory J],   CategoryTheory.
+Limits.PreservesColimitsOfShape J (↑f).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeSup α]   [inst_2 : SemilatticeSu
+p β] [SupHomClass…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
 -/
 instance preservesColimitsOfShape_finite_toFunctor {J : Type w} [SmallCategory J]
     [FinCategory J] : PreservesColimitsOfShape J (toOrderHom f).toFunctor where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteColimits (toOrderHom f).toFunctor
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 保持FiniteColimits (toOrderHom f).toFunctor
-  定义体: inferInstance
+/-
+**CategoryTheory.Limits.CompleteLattice.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Limits.CompleteLattice`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteColimits (toOrderHom f).toFunctor where
   preservesFiniteColimits _ _ _ := inferInstance
@@ -157,130 +167,211 @@ section
 
 variable [CompleteLattice α] [CompleteLattice β]
 
-/--
-Instance `preservesLimit_toFunctor` / 实例 `preservesLimit_toFunctor`
-
-English:
-instance preservesLimit_toFunctor
-  signature: [sInfHomClass F α β] {J : Type w} [Category.{w'} J]
-  body: preservesLimit_of_preserves_limit_cone (limitCone K).isLimit
-    (limitCone _).isLimit.ofIsoLimit (Cone.ext (eqToIso (by aesop)) (by subsingleton))
-
-中文:
-实例 preservesLimit_toFunctor
-  签名: [sInf态射类 F α β] {J : 类型 w} [范畴.{w'} J]
-  定义体: preservesLimit_of_preserves_limit_cone (limitCone K).isLimit
-    (limitCone _).isLimit.ofIsoLimit (Cone.ext (eqToIso (by aesop)) (by subsingleton))
-
-Depends on / 依赖: Cone.ext, eqToIso, isLimit, isLimit.ofIsoLimit, limitCone, ofIsoLimit, preservesLimit_of_preserves_limit_cone, subsingleton
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesLimit_toFunctor** 是 Mathlib 中的一
+个实例，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：preservesLimit_toFunctor [sInfHomClass F α β] {J : Type w} [Category.{w'} 
+J] (K : J ⥤ α) : PreservesLimit K (toOrderHom f).toFunctor
+参数：K : J ⥤ α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `InfHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : SemilatticeIn
+f β] [InfHomClass…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sInfHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sInfHomCl…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.limitCone_cone_pt`：∀ {α : Type u} 
+[inst : CompleteLattice α] {J : Type w} [inst_1 : CategoryTheory.Category.{w', w
+} J]   (F : CategoryTheory.Functor J α), (Cat…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_iInf`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Sort u_6} 
+[inst : FunLike F α β] [inst_1 : InfSet α]   [inst_2 : InfSet β] [sInfHomClass…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 instance preservesLimit_toFunctor [sInfHomClass F α β] {J : Type w} [Category.{w'} J]
     (K : J ⥤ α) : PreservesLimit K (toOrderHom f).toFunctor :=
-preservesLimit_of_preserves_limit_cone (limitCone K).isLimit
+  preservesLimit_of_preserves_limit_cone (limitCone K).isLimit <|
     (limitCone _).isLimit.ofIsoLimit (Cone.ext (eqToIso (by aesop)) (by subsingleton))
-
-/--
-Instance `preservesLimitsOfShape_toFunctor` / 实例 `preservesLimitsOfShape_toFunctor`
-
-English:
-instance preservesLimitsOfShape_toFunctor
-  signature: [sInfHomClass F α β] {J : Type w} [Category.{w'} J]
-
-中文:
-实例 preservesLimitsOfShape_toFunctor
-  签名: [sInf态射类 F α β] {J : 类型 w} [范畴.{w'} J]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesLimitsOfShape_toFunctor** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_3 : sInfHomCla
+ss F α β] {J : Type w} [inst_4 : CategoryTheory.Category.{w', w} J],   CategoryT
+heory.Limits.PreservesLimitsOfShape J (↑f).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : SemilatticeIn
+f β] [InfHomClass…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sInfHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sInfHomCl…
 -/
 instance preservesLimitsOfShape_toFunctor [sInfHomClass F α β] {J : Type w} [Category.{w'} J] :
     PreservesLimitsOfShape J (toOrderHom f).toFunctor where
-
-/--
-Instance `preservesLimitsOfSize_toFunctor` / 实例 `preservesLimitsOfSize_toFunctor`
-
-English:
-instance preservesLimitsOfSize_toFunctor
-  signature: [sInfHomClass F α β]
-
-中文:
-实例 preservesLimitsOfSize_toFunctor
-  签名: [sInf态射类 F α β]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesLimitsOfSize_toFunctor** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_3 : sInfHomCla
+ss F α β],   CategoryTheory.Limits.PreservesLimitsOfSize.{w', w, u, v, u, v} (↑f
+).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : SemilatticeIn
+f β] [InfHomClass…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sInfHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sInfHomCl…
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.preservesLimitsOfShape_toFunctor`：
+∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) [inst_
+1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_…
 -/
 instance preservesLimitsOfSize_toFunctor [sInfHomClass F α β] :
     PreservesLimitsOfSize.{w', w} (toOrderHom f).toFunctor where
-
-/--
-Instance `preservesLimits_toFunctor` / 实例 `preservesLimits_toFunctor`
-
-English:
-instance preservesLimits_toFunctor
-  signature: [sInfHomClass F α β]
-
-中文:
-实例 preservesLimits_toFunctor
-  签名: [sInf态射类 F α β]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesLimits_toFunctor** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_3 : sInfHomCla
+ss F α β], CategoryTheory.Limits.PreservesLimits (↑f).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InfHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeInf α]   [inst_2 : SemilatticeIn
+f β] [InfHomClass…
+· 使用定理 `InfTopHomClass.toInfHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Min α} {inst_1 : Min β} {inst_2 : Top α} {inst_3 : Top β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sInfHomClass.toInfTopHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sInfHomCl…
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.preservesLimitsOfShape_toFunctor`：
+∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) [inst_
+1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_…
 -/
 instance preservesLimits_toFunctor [sInfHomClass F α β] :
     PreservesLimits (toOrderHom f).toFunctor where
-
-/--
-Instance `preservesColimit_toFunctor` / 实例 `preservesColimit_toFunctor`
-
-English:
-instance preservesColimit_toFunctor
-  signature: [sSupHomClass F α β] {J : Type w} [Category.{w'} J]
-  body: preservesColimit_of_preserves_colimit_cocone (colimitCocone K).isColimit
-    (colimitCocone _).isColimit.ofIsoColimit (Cocone.ext (eqToIso (by aesop)) (by subsingleton))
-
-中文:
-实例 preservesColimit_toFunctor
-  签名: [sSup态射类 F α β] {J : 类型 w} [范畴.{w'} J]
-  定义体: preservesColimit_of_preserves_colimit_cocone (colimitCocone K).isColimit
-    (colimitCocone _).isColimit.ofIsoColimit (Cocone.ext (eqToIso (by aesop)) (by subsingleton))
-
-Depends on / 依赖: Cocone, Cocone.ext, colimitCocone, eqToIso, isColimit, isColimit.ofIsoColimit, ofIsoColimit, preservesColimit_of_preserves_colimit_cocone, subsingleton
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesColimit_toFunctor** 是 Mathlib 中
+的一个实例，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：preservesColimit_toFunctor [sSupHomClass F α β] {J : Type w} [Category.{w'
+} J] (K : J ⥤ α) : PreservesColimit K (toOrderHom f).toFunctor
+参数：K : J ⥤ α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimit_of_preserves_colimit_cocone`：pres
+ervesColimit_of_preserves_colimit_cocone {F : C ⥤ D} {t : Cocone K} (h : IsColim
+it t) (hF : IsColimit (F.mapCocone t)) : PreservesColimi…
+· 使用定理 `SupHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeSup α]   [inst_2 : SemilatticeSu
+p β] [SupHomClass…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sSupHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sSupHomCl…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.colimitCocone_cocone_pt`：∀ {α : Ty
+pe u} [inst : CompleteLattice α] {J : Type w} [inst_1 : CategoryTheory.Category.
+{w', w} J]   (F : CategoryTheory.Functor J α), (Cat…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_iSup`：map_iSup [SupSet α] [SupSet β] [sSupHomClass F α β] (f : F) (g
+ : ι -> α) : f (⨆ i, g i) = ⨆ i, f (g i)
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 instance preservesColimit_toFunctor [sSupHomClass F α β] {J : Type w} [Category.{w'} J]
     (K : J ⥤ α) : PreservesColimit K (toOrderHom f).toFunctor :=
-preservesColimit_of_preserves_colimit_cocone (colimitCocone K).isColimit
+  preservesColimit_of_preserves_colimit_cocone (colimitCocone K).isColimit <|
     (colimitCocone _).isColimit.ofIsoColimit (Cocone.ext (eqToIso (by aesop)) (by subsingleton))
-
-/--
-Instance `preservesColimitsOfShape_toFunctor` / 实例 `preservesColimitsOfShape_toFunctor`
-
-English:
-instance preservesColimitsOfShape_toFunctor
-  signature: [sSupHomClass F α β] {J : Type w} [Category.{w'} J]
-
-中文:
-实例 preservesColimitsOfShape_toFunctor
-  签名: [sSup态射类 F α β] {J : 类型 w} [范畴.{w'} J]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesColimitsOfShape_toFunctor** 是 M
+athlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_3 : sSupHomCla
+ss F α β] {J : Type w} [inst_4 : CategoryTheory.Category.{w', w} J],   CategoryT
+heory.Limits.PreservesColimitsOfShape J (↑f).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeSup α]   [inst_2 : SemilatticeSu
+p β] [SupHomClass…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sSupHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sSupHomCl…
 -/
 instance preservesColimitsOfShape_toFunctor [sSupHomClass F α β] {J : Type w} [Category.{w'} J] :
     PreservesColimitsOfShape J (toOrderHom f).toFunctor where
-
-/--
-Instance `preservesColimitsOfSize_toFunctor` / 实例 `preservesColimitsOfSize_toFunctor`
-
-English:
-instance preservesColimitsOfSize_toFunctor
-  signature: [sSupHomClass F α β]
-
-中文:
-实例 preservesColimitsOfSize_toFunctor
-  签名: [sSup态射类 F α β]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesColimitsOfSize_toFunctor** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_3 : sSupHomCla
+ss F α β],   CategoryTheory.Limits.PreservesColimitsOfSize.{w', w, u, v, u, v} (
+↑f).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeSup α]   [inst_2 : SemilatticeSu
+p β] [SupHomClass…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sSupHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sSupHomCl…
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.preservesColimitsOfShape_toFunctor
+`：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) [ins
+t_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_…
 -/
 instance preservesColimitsOfSize_toFunctor [sSupHomClass F α β] :
     PreservesColimitsOfSize.{w', w} (toOrderHom f).toFunctor where
-
-/--
-Instance `preservesColimits_toFunctor` / 实例 `preservesColimits_toFunctor`
-
-English:
-instance preservesColimits_toFunctor
-  signature: [sSupHomClass F α β]
-
-中文:
-实例 preservesColimits_toFunctor
-  签名: [sSup态射类 F α β]
+/-
+**CategoryTheory.Limits.CompleteLattice.preservesColimits_toFunctor** 是 Mathlib 
+中的一个定理，位于命名空间 `CategoryTheory.Limits.CompleteLattice`。
+形式化陈述：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) 
+[inst_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_3 : sSupHomCla
+ss F α β], CategoryTheory.Limits.PreservesColimits (↑f).toFunctor
+参数：f : F；↑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SupHomClass.toOrderHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type u
+_3} [inst : FunLike F α β] [inst_1 : SemilatticeSup α]   [inst_2 : SemilatticeSu
+p β] [SupHomClass…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sSupHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sSupHomCl…
+· 使用定理 `CategoryTheory.Limits.CompleteLattice.preservesColimitsOfShape_toFunctor
+`：∀ {α : Type u} {β : Type v} {F : Type u_1} [inst : FunLike F α β] (f : F) [ins
+t_1 : CompleteLattice α]   [inst_2 : CompleteLattice β] [inst_…
 -/
 instance preservesColimits_toFunctor [sSupHomClass F α β] :
     PreservesColimits (toOrderHom f).toFunctor where
@@ -288,3 +379,4 @@ instance preservesColimits_toFunctor [sSupHomClass F α β] :
 end
 
 end CategoryTheory.Limits.CompleteLattice
+

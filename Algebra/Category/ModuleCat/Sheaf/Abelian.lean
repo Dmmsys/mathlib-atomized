@@ -37,27 +37,13 @@ namespace SheafOfModules
 variable (R : Sheaf J RingCat.{u}) [HasSheafify J AddCommGrpCat.{v}]
   [J.WEqualsLocallyBijective AddCommGrpCat.{v}]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Abelian (SheafOfModules.{v} R)
-  body: by
-  let adj := PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)
-  exact abelianOfAdjunction _ _ (asIso (adj.counit)) adj
-
-中文:
-实例 :
-  签名: 交换 (模层.{v} R)
-  定义体: by
-  let adj := PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)
-  exact abelianOfAdjunction _ _ (asIso (adj.counit)) adj
-
-Depends on / 依赖: PresheafOfModules, PresheafOfModules.sheafificationAdjunction, R.obj, abelianOfAdjunction, adj.counit, counit, sheafificationAdjunction
+/-
+**SheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `SheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Abelian (SheafOfModules.{v} R) := by
   let adj := PresheafOfModules.sheafificationAdjunction (𝟙 R.obj)
   exact abelianOfAdjunction _ _ (asIso (adj.counit)) adj
 
 end SheafOfModules
+

@@ -25,48 +25,41 @@ namespace CategoryTheory.Codiscrete
 
 open Simplicial
 
-variable {X : Type u} {n : Nat}
+variable {X : Type u} {n : ℕ}
 
 /-- Since the morphisms in a codiscrete category do not carry information, an n-simplex of
 coherentIso is equivalent to an X-vector of length (n + 1). -/
 @[simps! +dsimpLhs]
-/--
-Definition of `equivFun` / `equivFun` 的定义
+/-
+**CategoryTheory.Codiscrete.equivFun** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.C
+odiscrete`。
+形式化陈述：equivFun : nerve (Codiscrete X) _⦋n⦌ ≃ (Fin (n + 1) -> X) where toFun f k
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivFun
-  signature: : nerve (Codiscrete X) _⦋n⦌ ≃ (Fin (n + 1) -> X) where
-  body: (f.obj k).as
-  invFun f := .mk (fun k => .mk (f k)) (fun _ => iso _ _|>.hom) (fun _ => rfl) (fun _ _ => rfl)
-
-中文:
-定义 equivFun
-  签名: : nerve (余discrete X) _⦋n⦌ ≃ (有限集 (n + 1) -> X) where
-  定义体: (f.obj k).as
-  invFun f := .mk (fun k => .mk (f k)) (fun _ => iso _ _|>.hom) (fun _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: f.obj
+--- 原说明 ---
+Since the morphisms in a codiscrete category do not carry information, an n-simp
+lex of
+coherentIso is equivalent to an X-vector of length (n + 1).
 -/
-def equivFun : nerve (Codiscrete X) _⦋n⦌ ≃ (Fin (n + 1) -> X) where
+def equivFun : nerve (Codiscrete X) _⦋n⦌ ≃ (Fin (n + 1) → X) where
   toFun f k := (f.obj k).as
-  invFun f := .mk (fun k => .mk (f k)) (fun _ => iso _ _|>.hom) (fun _ => rfl) (fun _ _ => rfl)
+  invFun f := .mk (fun k ↦ .mk (f k)) (fun _ ↦ iso _ _|>.hom) (fun _ ↦ rfl) (fun _ _ ↦ rfl)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If a type `X` has decidable equality, the nerve of the codiscrete category on `X`
+has decidable equality as well. -/
+/-
+**CategoryTheory.Codiscrete.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Codiscret
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [DecidableEq
-  signature: X] : DecidableEq (nerve (Codiscrete X) _⦋n⦌)
-  body: fun _ _ => decidable_of_iff _ (Equiv.apply_eq_iff_eq equivFun)
-
-中文:
-实例 [DecidableEq
-  签名: X] : DecidableEq (nerve (余discrete X) _⦋n⦌)
-  定义体: fun _ _ => decidable_of_iff _ (Equiv.apply_eq_iff_eq equivFun)
-
-Depends on / 依赖: Equiv.apply_eq_iff_eq, apply_eq_iff_eq, decidable_of_iff, equivFun
+--- 原说明 ---
+If a type `X` has decidable equality, the nerve of the codiscrete category on `X
+`
+has decidable equality as well.
 -/
 instance [DecidableEq X] : DecidableEq (nerve (Codiscrete X) _⦋n⦌) :=
-  fun _ _ => decidable_of_iff _ (Equiv.apply_eq_iff_eq equivFun)
+  fun _ _ ↦ decidable_of_iff _ (Equiv.apply_eq_iff_eq equivFun)
 
 end CategoryTheory.Codiscrete
+

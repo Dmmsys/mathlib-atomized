@@ -36,37 +36,24 @@ open Lean Parser PrettyPrinter Delaborator Std
 
 namespace Superscript
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Hashable Char
-  body: ⟨fun c => hash c.1⟩
-
-中文:
-实例 :
-  签名: Hashable Char
-  定义体: ⟨fun c => hash c.1⟩
+/-
+**Mathlib.Tactic.Superscript.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.Superscr
+ipt`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Hashable Char := ⟨fun c => hash c.1⟩
 
-/--
-Definition of `Mapping` / `Mapping` 的定义
+/-- A bidirectional character mapping. -/
+/-
+**Mathlib.Tactic.Superscript.Mapping** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.S
+uperscript`。
+形式化陈述：Mapping where /-- Map from "special" (e.g. superscript) characters to "nor
+mal" characters. -/ toNormal : Std.HashMap Char Char
+参数：e.g. superscript。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Mapping
-  parameters: where
-  axioms and operations (2):
-    - toNormal : Std.HashMap Char Char  [default: {}]
-    - toSpecial : Std.HashMap Char Char  [default: {}]
-
-中文:
-结构 Mapping
-  参数: where
-  公理与运算 (2 个):
-    - toNormal : Std.HashMap Char Char  [默认: {}]
-    - toSpecial : Std.HashMap Char Char  [默认: {}]
+--- 原说明 ---
+A bidirectional character mapping.
 -/
 structure Mapping where
   /-- Map from "special" (e.g. superscript) characters to "normal" characters. -/
@@ -75,38 +62,18 @@ structure Mapping where
   toSpecial : Std.HashMap Char Char := {}
   deriving Inhabited
 
-/--
-Definition of `mkMapping` / `mkMapping` 的定义
+/-- Constructs a mapping (intended for compile time use). Panics on violated invariants. -/
+/-
+**Mathlib.Tactic.Superscript.mkMapping** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Superscript`。
+形式化陈述：mkMapping (s₁ s₂ : String) : Mapping
+参数：s₁ s₂ : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkMapping
-  signature: (s₁ s₂ : String)
-  body: Id.run do
-  let mut toNormal := {}
-  let mut toSpecial := {}
-  assert! s₁.length == s₂.length
-  for sp in s₁.toRawSubstring, nm in s₂ do
-    assert! !toNormal.contains sp
-    assert! !toSpecial.contains nm
-    toNormal := toNormal.insert sp nm
-    toSpecial := toSpecial.insert nm sp
-  pure { toNormal, toSpecial }
-
-中文:
-定义 mkMapping
-  签名: (s₁ s₂ : String)
-  定义体: Id.run do
-  let mut toNormal := {}
-  let mut toSpecial := {}
-  assert! s₁.length == s₂.length
-  for sp in s₁.toRawSubstring, nm in s₂ do
-    assert! !toNormal.contains sp
-    assert! !toSpecial.contains nm
-    toNormal := toNormal.insert sp nm
-    toSpecial := toSpecial.insert nm sp
-  pure { toNormal, toSpecial }
-
-Depends on / 依赖: Id.run
+--- 原说明 ---
+Constructs a mapping (intended for compile time use). Panics on violated invaria
+nts.
 -/
 def mkMapping (s₁ s₂ : String) : Mapping := Id.run do
   let mut toNormal := {}
@@ -119,99 +86,59 @@ def mkMapping (s₁ s₂ : String) : Mapping := Id.run do
     toSpecial := toSpecial.insert nm sp
   pure { toNormal, toSpecial }
 
-/--
-Definition of `Mapping.superscript` / `Mapping.superscript` 的定义
+/-- A mapping from superscripts to and from regular text. -/
+/-
+**Mathlib.Tactic.Superscript.Mapping.superscript** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.Superscript.Mapping`。
+形式化陈述：Mathlib.Tactic.Superscript.Mapping
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mapping.superscript
-  body: mkMapping
-  "⁰¹²³⁴⁵⁶⁷⁸⁹ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖ𐞥ʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾꟴᴿᵀᵁⱽᵂᵝᵞᵟᵋᶿᶥᶹᵠᵡ⁺⁻⁼⁽⁾"
-  "0123456789abcdefghijklmnopqrstuvwxyzABDEGHIJKLMNOPQRTUVWβγδεθιυφχ+-=()"
-
-中文:
-定义 Mapping.superscript
-  定义体: mkMapping
-  "⁰¹²³⁴⁵⁶⁷⁸⁹ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖ𐞥ʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾꟴᴿᵀᵁⱽᵂᵝᵞᵟᵋᶿᶥᶹᵠᵡ⁺⁻⁼⁽⁾"
-  "0123456789abcdefghijklmnopqrstuvwxyzABDEGHIJKLMNOPQRTUVWβγδεθιυφχ+-=()"
-
-Depends on / 依赖: mkMapping
+--- 原说明 ---
+A mapping from superscripts to and from regular text.
 -/
 def Mapping.superscript := mkMapping
   "⁰¹²³⁴⁵⁶⁷⁸⁹ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖ𐞥ʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾꟴᴿᵀᵁⱽᵂᵝᵞᵟᵋᶿᶥᶹᵠᵡ⁺⁻⁼⁽⁾"
   "0123456789abcdefghijklmnopqrstuvwxyzABDEGHIJKLMNOPQRTUVWβγδεθιυφχ+-=()"
 
-/--
-Definition of `Mapping.subscript` / `Mapping.subscript` 的定义
+/-- A mapping from subscripts to and from regular text. -/
+/-
+**Mathlib.Tactic.Superscript.Mapping.subscript** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Superscript.Mapping`。
+形式化陈述：Mathlib.Tactic.Superscript.Mapping
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mapping.subscript
-  body: mkMapping
-  "₀₁₂₃₄₅₆₇₈₉ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡʏᴢᵦᵧᵨᵩᵪ₊₋₌₍₎"
-  "0123456789aehijklmnoprstuvxABCDEFGHIJKLMNOPQRSTUVWYZβγρφχ+-=()"
-
-中文:
-定义 Mapping.subscript
-  定义体: mkMapping
-  "₀₁₂₃₄₅₆₇₈₉ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡʏᴢᵦᵧᵨᵩᵪ₊₋₌₍₎"
-  "0123456789aehijklmnoprstuvxABCDEFGHIJKLMNOPQRSTUVWYZβγρφχ+-=()"
-
-Depends on / 依赖: mkMapping
+--- 原说明 ---
+A mapping from subscripts to and from regular text.
 -/
 def Mapping.subscript := mkMapping
   "₀₁₂₃₄₅₆₇₈₉ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡʏᴢᵦᵧᵨᵩᵪ₊₋₌₍₎"
   "0123456789aehijklmnoprstuvxABCDEFGHIJKLMNOPQRSTUVWYZβγρφχ+-=()"
 
-/--
-Definition of `satisfyTokensFn` / `satisfyTokensFn` 的定义
-
-English:
-definition satisfyTokensFn
-  signature: (p : Char -> Bool) (errorMsg : String) (many := true)
-  body: fun c s =>
-  let start := s.pos
-  let s := takeWhile1Fn p errorMsg c s
-  if s.hasError then s else
-  let stop := s.pos
-  let s := whitespace c s
-  let toks := #[(start, stop, s.pos)]
-  if many then
-    let rec /-- Loop body of `satisfyTokensFn` -/
-    loop (toks) (s : ParserState) : ParserState :=
-      let start := s.pos
-      let s := takeWhileFn p c s
-      if s.pos == start then k toks s else
-        let stop := s.pos
-        let s := whitespace c s
-        let toks := toks.push (start, stop, s.pos)
-        loop toks s
-    loop toks s
-  else k toks s
-
-中文:
-定义 satisfyTokensFn
-  签名: (p : Char -> 布尔值) (errorMsg : String) (many := true)
-  定义体: fun c s =>
-  let start := s.pos
-  let s := takeWhile1Fn p errorMsg c s
-  if s.hasError then s else
-  let stop := s.pos
-  let s := whitespace c s
-  let toks := #[(start, stop, s.pos)]
-  if many then
-    let rec /-- Loop body of `satisfyTokensFn` -/
-    loop (toks) (s : ParserState) : ParserState :=
-      let start := s.pos
-      let s := takeWhileFn p c s
-      if s.pos == start then k toks s else
-        let stop := s.pos
-        let s := whitespace c s
-        let toks := toks.push (start, stop, s.pos)
-        loop toks s
-    loop toks s
-  else k toks s
+/-- Collects runs of text satisfying `p` followed by whitespace. Fails if the first character does
+not satisfy `p`. If `many` is true, it will parse 1 or more many whitespace-separated runs,
+otherwise it will parse only 1. If successful, it passes the result to `k` as an array `(a, b, c)`
+where `a..b` is a token and `b..c` is whitespace.
 -/
-partial def satisfyTokensFn (p : Char -> Bool) (errorMsg : String) (many := true)
-    (k : Array (String.Pos.Raw × String.Pos.Raw × String.Pos.Raw) -> ParserState -> ParserState) :
+/-
+**Mathlib.Tactic.Superscript.satisfyTokensFn** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Superscript`。
+形式化陈述：(Char → Bool) →   String →     optParam Bool true →       (Array (String.P
+os.Raw × String.Pos.Raw × String.Pos.Raw) → Parser.ParserState → Parser.ParserSt
+ate) →         Parser.ParserFn
+参数：String.Pos.Raw × String.Pos.Raw × String.Pos.Raw。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Collects runs of text satisfying `p` followed by whitespace. Fails if the first 
+character does
+not satisfy `p`. If `many` is true, it will parse 1 or more many whitespace-sepa
+rated runs,
+otherwise it will parse only 1. If successful, it passes the result to `k` as an
+ array `(a, b, c)`
+where `a..b` is a token and `b..c` is whitespace.
+-/
+partial def satisfyTokensFn (p : Char → Bool) (errorMsg : String) (many := true)
+    (k : Array (String.Pos.Raw × String.Pos.Raw × String.Pos.Raw) → ParserState → ParserState) :
     ParserFn := fun c s =>
   let start := s.pos
   let s := takeWhile1Fn p errorMsg c s
@@ -232,38 +159,20 @@ partial def satisfyTokensFn (p : Char -> Bool) (errorMsg : String) (many := true
     loop toks s
   else k toks s
 
-variable {α : Type u} [Inhabited α] (as : Array α) (leftOfPartition : α -> Bool) in
+variable {α : Type u} [Inhabited α] (as : Array α) (leftOfPartition : α → Bool) in
 /-- Given a predicate `leftOfPartition` which is true for indexes `< i` and false for `≥ i`,
 returns `i`, by binary search. -/
 @[specialize]
-/--
-Definition of `partitionPoint` / `partitionPoint` 的定义
+/-
+**Mathlib.Tactic.Superscript.partitionPoint** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Superscript`。
+形式化陈述：partitionPoint (lo
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partitionPoint
-  signature: (lo := 0) (hi := as.size)
-  body: if lo < hi then
-    let m := (lo + hi)/2
-    let a := as[m]!
-    if leftOfPartition a then
-      partitionPoint (m+1) hi
-    else
-      partitionPoint lo m
-  else lo
-
-中文:
-定义 partitionPoint
-  签名: (lo := 0) (hi := as.size)
-  定义体: if lo < hi then
-    let m := (lo + hi)/2
-    let a := as[m]!
-    if leftOfPartition a then
-      partitionPoint (m+1) hi
-    else
-      partitionPoint lo m
-  else lo
-
-Depends on / 依赖: as.size
+--- 原说明 ---
+Given a predicate `leftOfPartition` which is true for indexes `< i` and false fo
+r `≥ i`,
+returns `i`, by binary search.
 -/
 def partitionPoint (lo := 0) (hi := as.size) : Nat :=
   if lo < hi then
@@ -275,122 +184,38 @@ def partitionPoint (lo := 0) (hi := as.size) : Nat :=
       partitionPoint lo m
   else lo
 
-/--
-Definition of `scriptFnNoAntiquot` / `scriptFnNoAntiquot` 的定义
+/-- The core function for super/subscript parsing. It consists of three stages:
 
-English:
-definition scriptFnNoAntiquot
-  signature: (m : Mapping) (errorMsg : String) (p : ParserFn)
-  body: fun c s =>
-  let start := s.pos
-  satisfyTokensFn m.toNormal.contains errorMsg many c s (k := fun toks s => Id.run do
-    let mut newStr := ""
-    -- This consists of a sorted array of `(from, to)` pairs, where indexes `from+i` in `newStr`
-    -- such that `from+i < from'` for the next element of the array, are mapped to `to+i`.
-    let mut aligns := #[((0 : String.Pos.Raw), start)]
-    for (start, stopTk, stopWs) in toks do
-      let mut pos := start
-      while pos < stopTk do
-        let ch := c.get pos
-        let ch' := m.toNormal[ch]!
-        newStr := newStr.push ch'
-        pos := pos + ch
-        if ch.utf8Size != ch'.utf8Size then
-          aligns := aligns.push (newStr.rawEndPos, pos)
-      newStr := newStr.push ' '
-      if stopWs.1 - stopTk.1 != 1 then
-        aligns := aligns.push (newStr.rawEndPos, stopWs)
-    let ictx := mkInputContext newStr "<superscript>"
-    let s' := p.run ictx c.toParserModuleContext c.tokens (mkParserState newStr)
-    let rec /-- Applies the alignment mapping to a position. -/
-    align (pos : String.Pos.Raw) :=
-      let i := partitionPoint aligns (·.1 <= pos)
-      let (a, b) := aligns[i - 1]!
-.offsetBy b pos.unoffsetBy a
-    let s := { s with pos := align s'.pos, errorMsg := s'.errorMsg }
-    if s.hasError then return s
-    let rec
-    /-- Applies the alignment mapping to a `Substring`. -/
-    alignSubstr : Substring.Raw -> Substring.Raw
-      | ⟨_newStr, start, stop⟩ => c.substring (align start) (align stop),
-    /-- Applies the alignment mapping to a `SourceInfo`. -/
-    alignInfo : SourceInfo -> SourceInfo
-      | .original leading pos trailing endPos =>
-        -- Marking these as original breaks semantic highlighting,
-        -- marking them as canonical breaks the unused variables linter. :(
-        .original (alignSubstr leading) (align pos) (alignSubstr trailing) (align endPos)
-      | .synthetic pos endPos canonical =>
-        .synthetic (align pos) (align endPos) canonical
-      | .none => .none,
-     /-- Applies the alignment mapping to a `Syntax`. -/
-     alignSyntax : Syntax -> Syntax
-      | .missing => .missing
-      | .node info kind args => .node (alignInfo info) kind (args.map alignSyntax)
-      | .atom info val =>
-        -- We have to preserve the unsubscripted `val` even though it breaks `Syntax.reprint`
-        -- because basic parsers like `num` read the `val` directly
-        .atom (alignInfo info) val
-      | .ident info rawVal val preresolved =>
-        .ident (alignInfo info) (alignSubstr rawVal) val preresolved
-    s.pushSyntax (alignSyntax s'.stxStack.back)
-  )
+1. Parse a run of superscripted characters, skipping whitespace and stopping when we hit a
+   non-superscript character.
+2. Un-superscript the text and pass the body to the inner parser (usually `term`).
+3. Take the resulting `Syntax` object and align all the positions to fit back into the original
+   text (which as a side effect also rewrites all the substrings to be in subscript text).
 
-中文:
-定义 scriptFnNoAntiquot
-  签名: (m : Mapping) (errorMsg : String) (p : ParserFn)
-  定义体: fun c s =>
-  let start := s.pos
-  satisfyTokensFn m.toNormal.contains errorMsg many c s (k := fun toks s => Id.run do
-    let mut newStr := ""
-    -- This consists of a sorted array of `(from, to)` pairs, where indexes `from+i` in `newStr`
-    -- such that `from+i < from'` for the next element of the array, are mapped to `to+i`.
-    let mut aligns := #[((0 : String.Pos.Raw), start)]
-    for (start, stopTk, stopWs) in toks do
-      let mut pos := start
-      while pos < stopTk do
-        let ch := c.get pos
-        let ch' := m.toNormal[ch]!
-        newStr := newStr.push ch'
-        pos := pos + ch
-        if ch.utf8Size != ch'.utf8Size then
-          aligns := aligns.push (newStr.rawEndPos, pos)
-      newStr := newStr.push ' '
-      if stopWs.1 - stopTk.1 != 1 then
-        aligns := aligns.push (newStr.rawEndPos, stopWs)
-    let ictx := mkInputContext newStr "<superscript>"
-    let s' := p.run ictx c.toParserModuleContext c.tokens (mkParserState newStr)
-    let rec /-- Applies the alignment mapping to a position. -/
-    align (pos : String.Pos.Raw) :=
-      let i := partitionPoint aligns (·.1 <= pos)
-      let (a, b) := aligns[i - 1]!
-.offsetBy b pos.unoffsetBy a
-    let s := { s with pos := align s'.pos, errorMsg := s'.errorMsg }
-    if s.hasError then return s
-    let rec
-    /-- Applies the alignment mapping to a `Substring`. -/
-    alignSubstr : Substring.Raw -> Substring.Raw
-      | ⟨_newStr, start, stop⟩ => c.substring (align start) (align stop),
-    /-- Applies the alignment mapping to a `SourceInfo`. -/
-    alignInfo : SourceInfo -> SourceInfo
-      | .original leading pos trailing endPos =>
-        -- Marking these as original breaks semantic highlighting,
-        -- marking them as canonical breaks the unused variables linter. :(
-        .original (alignSubstr leading) (align pos) (alignSubstr trailing) (align endPos)
-      | .synthetic pos endPos canonical =>
-        .synthetic (align pos) (align endPos) canonical
-      | .none => .none,
-     /-- Applies the alignment mapping to a `Syntax`. -/
-     alignSyntax : Syntax -> Syntax
-      | .missing => .missing
-      | .node info kind args => .node (alignInfo info) kind (args.map alignSyntax)
-      | .atom info val =>
-        -- We have to preserve the unsubscripted `val` even though it breaks `Syntax.reprint`
-        -- because basic parsers like `num` read the `val` directly
-        .atom (alignInfo info) val
-      | .ident info rawVal val preresolved =>
-        .ident (alignInfo info) (alignSubstr rawVal) val preresolved
-    s.pushSyntax (alignSyntax s'.stxStack.back)
-  )
+If `many` is false, then whitespace (and comments) are not allowed inside the superscript.
+-/
+/-
+**Mathlib.Tactic.Superscript.scriptFnNoAntiquot** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.Superscript`。
+形式化陈述：Mathlib.Tactic.Superscript.Mapping → String → Parser.ParserFn → optParam B
+ool true → Parser.ParserFn
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The core function for super/subscript parsing. It consists of three stages:
+
+1. Parse a run of superscripted characters, skipping whitespace and stopping whe
+n we hit a
+   non-superscript character.
+2. Un-superscript the text and pass the body to the inner parser (usually `term`
+).
+3. Take the resulting `Syntax` object and align all the positions to fit back in
+to the original
+   text (which as a side effect also rewrites all the substrings to be in subscr
+ipt text).
+
+If `many` is false, then whitespace (and comments) are not allowed inside the su
+perscript.
 -/
 partial def scriptFnNoAntiquot (m : Mapping) (errorMsg : String) (p : ParserFn)
     (many := true) : ParserFn := fun c s =>
@@ -416,17 +241,17 @@ partial def scriptFnNoAntiquot (m : Mapping) (errorMsg : String) (p : ParserFn)
     let s' := p.run ictx c.toParserModuleContext c.tokens (mkParserState newStr)
     let rec /-- Applies the alignment mapping to a position. -/
     align (pos : String.Pos.Raw) :=
-      let i := partitionPoint aligns (·.1 <= pos)
+      let i := partitionPoint aligns (·.1 ≤ pos)
       let (a, b) := aligns[i - 1]!
-.offsetBy b pos.unoffsetBy a
+      pos.unoffsetBy a |>.offsetBy b
     let s := { s with pos := align s'.pos, errorMsg := s'.errorMsg }
     if s.hasError then return s
     let rec
     /-- Applies the alignment mapping to a `Substring`. -/
-    alignSubstr : Substring.Raw -> Substring.Raw
+    alignSubstr : Substring.Raw → Substring.Raw
       | ⟨_newStr, start, stop⟩ => c.substring (align start) (align stop),
     /-- Applies the alignment mapping to a `SourceInfo`. -/
-    alignInfo : SourceInfo -> SourceInfo
+    alignInfo : SourceInfo → SourceInfo
       | .original leading pos trailing endPos =>
         -- Marking these as original breaks semantic highlighting,
         -- marking them as canonical breaks the unused variables linter. :(
@@ -435,7 +260,7 @@ partial def scriptFnNoAntiquot (m : Mapping) (errorMsg : String) (p : ParserFn)
         .synthetic (align pos) (align endPos) canonical
       | .none => .none,
      /-- Applies the alignment mapping to a `Syntax`. -/
-     alignSyntax : Syntax -> Syntax
+     alignSyntax : Syntax → Syntax
       | .missing => .missing
       | .node info kind args => .node (alignInfo info) kind (args.map alignSyntax)
       | .atom info val =>
@@ -447,38 +272,42 @@ partial def scriptFnNoAntiquot (m : Mapping) (errorMsg : String) (p : ParserFn)
     s.pushSyntax (alignSyntax s'.stxStack.back)
   )
 
-/--
-Definition of `scriptParser` / `scriptParser` 的定义
+/-- The super/subscript parser.
 
-English:
-definition scriptParser
-  signature: (m : Mapping) (antiquotName errorMsg : String) (p : Parser)
-  body: let tokens := " " :: (m.toNormal.toArray.map (·.1.toString) |>.qsort (·<·)).toList
-  let antiquotP := mkAntiquot antiquotName `term (isPseudoKind := true)
-  let p := Superscript.scriptFnNoAntiquot m errorMsg p.fn many
-  node kind {
-    info.firstTokens := .tokens tokens
-    info.collectTokens := (tokens ++ ·)
-    fn := withAntiquotFn antiquotP.fn p (isCatAntiquot := true)
-  }
+* `m`: the character mapping
+* `antiquotName`: the name to use for antiquotation bindings `$a:antiquotName`.
+  Note that the actual syntax kind bound will be the body kind (parsed by `p`), not `kind`.
+* `errorMsg`: shown when the parser does not match
+* `p`: the inner parser (usually `term`), to be called on the body of the superscript
+* `many`: if false, whitespace is not allowed inside the superscript
+* `kind`: the term will be wrapped in a node with this kind;
+  generally this is a name of the parser declaration itself.
+-/
+/-
+**Mathlib.Tactic.Superscript.scriptParser** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Superscript`。
+形式化陈述：scriptParser (m : Mapping) (antiquotName errorMsg : String) (p : Parser) (
+many
+参数：m : Mapping；antiquotName errorMsg : String；p : Parser。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 scriptParser
-  签名: (m : Mapping) (antiquotName errorMsg : String) (p : Parser)
-  定义体: let tokens := " " :: (m.toNormal.toArray.map (·.1.toString) |>.qsort (·<·)).toList
-  let antiquotP := mkAntiquot antiquotName `term (isPseudoKind := true)
-  let p := Superscript.scriptFnNoAntiquot m errorMsg p.fn many
-  node kind {
-    info.firstTokens := .tokens tokens
-    info.collectTokens := (tokens ++ ·)
-    fn := withAntiquotFn antiquotP.fn p (isCatAntiquot := true)
-  }
+--- 原说明 ---
+The super/subscript parser.
 
-Depends on / 依赖: Parser, SyntaxNodeKind, decl_name
+* `m`: the character mapping
+* `antiquotName`: the name to use for antiquotation bindings `$a:antiquotName`.
+  Note that the actual syntax kind bound will be the body kind (parsed by `p`), 
+not `kind`.
+* `errorMsg`: shown when the parser does not match
+* `p`: the inner parser (usually `term`), to be called on the body of the supers
+cript
+* `many`: if false, whitespace is not allowed inside the superscript
+* `kind`: the term will be wrapped in a node with this kind;
+  generally this is a name of the parser declaration itself.
 -/
 def scriptParser (m : Mapping) (antiquotName errorMsg : String) (p : Parser)
     (many := true) (kind : SyntaxNodeKind := by exact decl_name%) : Parser :=
-let tokens := " " :: (m.toNormal.toArray.map (·.1.toString) |>.qsort (·<·)).toList
+  let tokens := "$" :: (m.toNormal.toArray.map (·.1.toString) |>.qsort (·<·)).toList
   let antiquotP := mkAntiquot antiquotName `term (isPseudoKind := true)
   let p := Superscript.scriptFnNoAntiquot m errorMsg p.fn many
   node kind {
@@ -487,98 +316,47 @@ let tokens := " " :: (m.toNormal.toArray.map (·.1.toString) |>.qsort (·<·)).t
     fn := withAntiquotFn antiquotP.fn p (isCatAntiquot := true)
   }
 
-/--
-Definition of `scriptParser.parenthesizer` / `scriptParser.parenthesizer` 的定义
+/-- Parenthesizer for the script parser. -/
+/-
+**Mathlib.Tactic.Superscript.scriptParser.parenthesizer** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.Superscript.scriptParser`。
+形式化陈述：SyntaxNodeKind → PrettyPrinter.Parenthesizer → PrettyPrinter.Parenthesizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition scriptParser.parenthesizer
-  signature: (k : SyntaxNodeKind) (p : Parenthesizer)
-  body: Parenthesizer.node.parenthesizer k p
-
-中文:
-定义 scriptParser.parenthesizer
-  签名: (k : SyntaxNodeKind) (p : Parenthesizer)
-  定义体: Parenthesizer.node.parenthesizer k p
-
-Depends on / 依赖: Parenthesizer, Parenthesizer.node.parenthesizer, parenthesizer
+--- 原说明 ---
+Parenthesizer for the script parser.
 -/
 def scriptParser.parenthesizer (k : SyntaxNodeKind) (p : Parenthesizer) : Parenthesizer :=
   Parenthesizer.node.parenthesizer k p
 
-/--
-Definition of `_root_.Std.Format.mapStringsM` / `_root_.Std.Format.mapStringsM` 的定义
+/-- Map over the strings in a `Format`. -/
+/-
+**Mathlib.Tactic.Superscript._root_.Std.Format.mapStringsM** 是 Mathlib 中的一个定义，位于
+命名空间 `Mathlib.Tactic.Superscript`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Std.Format.mapStringsM
-  signature: {m} [Monad m] (f : Format) (f' : String -> m String)
-  body: match f with
-| .group f b => (.group · b) < > Std.Format.mapStringsM f f'
-| .tag t g => .tag t < > Std.Format.mapStringsM g f'
-| .append f g => .append < > Std.Format.mapStringsM f f' <*> Std.Format.mapStringsM g f'
-| .nest n f => .nest n < > Std.Format.mapStringsM f f'
-| .text s => .text < > f' s
-  | .align _ | .line | .nil => pure f
-
-中文:
-定义 _root_.Std.Format.mapStringsM
-  签名: {m} [单子 m] (f : Format) (f' : String -> m String)
-  定义体: match f with
-| .group f b => (.group · b) < > Std.Format.mapStringsM f f'
-| .tag t g => .tag t < > Std.Format.mapStringsM g f'
-| .append f g => .append < > Std.Format.mapStringsM f f' <*> Std.Format.mapStringsM g f'
-| .nest n f => .nest n < > Std.Format.mapStringsM f f'
-| .text s => .text < > f' s
-  | .align _ | .line | .nil => pure f
-
-Depends on / 依赖: Format, Std.Format.mapStringsM, append, mapStringsM
+--- 原说明 ---
+Map over the strings in a `Format`.
 -/
-def _root_.Std.Format.mapStringsM {m} [Monad m] (f : Format) (f' : String -> m String) : m Format :=
+def _root_.Std.Format.mapStringsM {m} [Monad m] (f : Format) (f' : String → m String) : m Format :=
   match f with
-| .group f b => (.group · b) < > Std.Format.mapStringsM f f'
-| .tag t g => .tag t < > Std.Format.mapStringsM g f'
-| .append f g => .append < > Std.Format.mapStringsM f f' <*> Std.Format.mapStringsM g f'
-| .nest n f => .nest n < > Std.Format.mapStringsM f f'
-| .text s => .text < > f' s
+  | .group f b => (.group · b) <$> Std.Format.mapStringsM f f'
+  | .tag t g => .tag t <$> Std.Format.mapStringsM g f'
+  | .append f g => .append <$> Std.Format.mapStringsM f f' <*> Std.Format.mapStringsM g f'
+  | .nest n f => .nest n <$> Std.Format.mapStringsM f f'
+  | .text s => .text <$> f' s
   | .align _ | .line | .nil => pure f
 
-/--
-Definition of `scriptParser.formatter` / `scriptParser.formatter` 的定义
+/-- Formatter for the script parser. -/
+/-
+**Mathlib.Tactic.Superscript.scriptParser.formatter** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.Superscript.scriptParser`。
+形式化陈述：String → Mathlib.Tactic.Superscript.Mapping → SyntaxNodeKind → PrettyPrint
+er.Formatter → PrettyPrinter.Formatter
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition scriptParser.formatter
-  signature: (name : String) (m : Mapping) (k : SyntaxNodeKind) (p : Formatter)
-  body: do
-  let stack ← modifyGet fun s => (s.stack, {s with stack := #[]})
-  Formatter.node.formatter k p
-  let st ← get
-  let transformed : Except String _ := st.stack.mapM (·.mapStringsM fun s => do
-    let some s := s.toList.mapM (m.toSpecial.insert ' ' ' ').get? | .error s
-    .ok (String.ofList s))
-  match transformed with
-  | .error err =>
-    -- TODO: this only appears if the caller explicitly calls the pretty-printer
-    Lean.logErrorAt (← get).stxTrav.cur s!"Not a {name}: '{err}'"
-    set { st with stack := stack ++ st.stack }
-  | .ok newStack =>
-    set { st with stack := stack ++ newStack }
-
-中文:
-定义 scriptParser.formatter
-  签名: (name : String) (m : Mapping) (k : SyntaxNodeKind) (p : Formatter)
-  定义体: do
-  let stack ← modifyGet fun s => (s.stack, {s with stack := #[]})
-  Formatter.node.formatter k p
-  let st ← get
-  let transformed : Except String _ := st.stack.mapM (·.mapStringsM fun s => do
-    let some s := s.toList.mapM (m.toSpecial.insert ' ' ' ').get? | .error s
-    .ok (String.ofList s))
-  match transformed with
-  | .error err =>
-    -- TODO: this only appears if the caller explicitly calls the pretty-printer
-    Lean.logErrorAt (← get).stxTrav.cur s!"Not a {name}: '{err}'"
-    set { st with stack := stack ++ st.stack }
-  | .ok newStack =>
-    set { st with stack := stack ++ newStack }
+--- 原说明 ---
+Formatter for the script parser.
 -/
 def scriptParser.formatter (name : String) (m : Mapping) (k : SyntaxNodeKind) (p : Formatter) :
     Formatter := do
@@ -599,52 +377,66 @@ def scriptParser.formatter (name : String) (m : Mapping) (k : SyntaxNodeKind) (p
 end Superscript
 
 /--
-Definition of `superscript` / `superscript` 的定义
+The parser `superscript(term)` parses a superscript. Basic usage is:
+```
+local syntax:arg term:max superscript(term) : term
+local macro_rules | `($a:term $b:superscript) => `($a ^ $b)
+```
+Given a notation like this, the expression `2⁶⁴` parses and expands to `2 ^ 64`.
 
-English:
-definition superscript
-  signature: (p : Parser)
-  body: Superscript.scriptParser .superscript "superscript" "expected superscript character" p
+Note that because of Unicode limitations, not many characters can actually be typed inside the
+superscript, so this should not be used for complex expressions. Legal superscript characters:
+```
+⁰¹²³⁴⁵⁶⁷⁸⁹ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖ𐞥ʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾꟴᴿᵀᵁⱽᵂᵝᵞᵟᵋᶿᶥᶹᵠᵡ⁺⁻⁼⁽⁾
+```
+-/
+/-
+**Mathlib.Tactic.superscript** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：superscript (p : Parser) : Parser
+参数：p : Parser。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 superscript
-  签名: (p : Parser)
-  定义体: Superscript.scriptParser .superscript "superscript" "expected superscript character" p
+--- 原说明 ---
+The parser `superscript(term)` parses a superscript. Basic usage is:
+```
+local syntax:arg term:max superscript(term) : term
+local macro_rules | `($a:term $b:superscript) => `($a ^ $b)
+```
+Given a notation like this, the expression `2⁶⁴` parses and expands to `2 ^ 64`.
 
-Depends on / 依赖: Superscript, Superscript.scriptParser, character, expected, scriptParser, superscript
+Note that because of Unicode limitations, not many characters can actually be ty
+ped inside the
+superscript, so this should not be used for complex expressions. Legal superscri
+pt characters:
+```
+⁰¹²³⁴⁵⁶⁷⁸⁹ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖ𐞥ʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾꟴᴿᵀᵁⱽᵂᵝᵞᵟᵋᶿᶥᶹᵠᵡ⁺⁻⁼⁽⁾
+```
 -/
 def superscript (p : Parser) : Parser :=
   Superscript.scriptParser .superscript "superscript" "expected superscript character" p
 /-- Formatter for the superscript parser. -/
 @[combinator_parenthesizer superscript]
-/--
-Definition of `superscript.parenthesizer` / `superscript.parenthesizer` 的定义
+/-
+**Mathlib.Tactic.superscript.parenthesizer** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.superscript`。
+形式化陈述：PrettyPrinter.Parenthesizer → PrettyPrinter.Parenthesizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition superscript.parenthesizer
-  body: Superscript.scriptParser.parenthesizer ``superscript
-
-中文:
-定义 superscript.parenthesizer
-  定义体: Superscript.scriptParser.parenthesizer ``superscript
-
-Depends on / 依赖: Superscript, Superscript.scriptParser.parenthesizer, parenthesizer, scriptParser, superscript
+--- 原说明 ---
+Formatter for the superscript parser.
 -/
 def superscript.parenthesizer := Superscript.scriptParser.parenthesizer ``superscript
 /-- Formatter for the superscript parser. -/
 @[combinator_formatter superscript]
-/--
-Definition of `superscript.formatter` / `superscript.formatter` 的定义
+/-
+**Mathlib.Tactic.superscript.formatter** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.superscript`。
+形式化陈述：PrettyPrinter.Formatter → PrettyPrinter.Formatter
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition superscript.formatter
-  body: Superscript.scriptParser.formatter "superscript" .superscript ``superscript
-
-中文:
-定义 superscript.formatter
-  定义体: Superscript.scriptParser.formatter "superscript" .superscript ``superscript
-
-Depends on / 依赖: Superscript, Superscript.scriptParser.formatter, formatter, scriptParser, superscript
+--- 原说明 ---
+Formatter for the superscript parser.
 -/
 def superscript.formatter :=
   Superscript.scriptParser.formatter "superscript" .superscript ``superscript
@@ -657,70 +449,91 @@ downstream parsers using the combinators will crash.
 See https://leanprover.zulipchat.com/#narrow/channel/270676-lean4/topic/Non-builtin.20parser.20aliases/near/365125476
 for some context. -/
 @[term_parser]
-/--
-Definition of `superscriptTerm` / `superscriptTerm` 的定义
+/-
+**Mathlib.Tactic.superscriptTerm** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：superscriptTerm
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition superscriptTerm
-  body: leading_parser (withAnonymousAntiquot := false) superscript termParser
+--- 原说明 ---
+Shorthand for `superscript(term)`.
 
-中文:
-定义 superscriptTerm
-  定义体: leading_parser (withAnonymousAntiquot := false) superscript termParser
+This is needed because the initializer below does not always run, and if it has 
+not run then
+downstream parsers using the combinators will crash.
 
-Depends on / 依赖: leading_parser, superscript, termParser, withAnonymousAntiquot
+See https://leanprover.zulipchat.com/#narrow/channel/270676-lean4/topic/Non-buil
+tin.20parser.20aliases/near/365125476
+for some context.
 -/
 def superscriptTerm := leading_parser (withAnonymousAntiquot := false) superscript termParser
 
 initialize register_parser_alias superscript
 
 /--
-Definition of `subscript` / `subscript` 的定义
+The parser `subscript(term)` parses a subscript. Basic usage is:
+```
+local syntax:arg term:max subscript(term) : term
+local macro_rules | `($a:term $i:subscript) => `($a $i)
+```
+Given a notation like this, the expression `(a)ᵢ` parses and expands to `a i`. (Either parentheses
+or a whitespace as in `a ᵢ` is required, because `aᵢ` is considered as an identifier.)
 
-English:
-definition subscript
-  signature: (p : Parser)
-  body: Superscript.scriptParser .subscript "subscript" "expected subscript character" p
+Note that because of Unicode limitations, not many characters can actually be typed inside the
+subscript, so this should not be used for complex expressions. Legal subscript characters:
+```
+₀₁₂₃₄₅₆₇₈₉ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡʏᴢᵦᵧᵨᵩᵪ₊₋₌₍₎
+```
+-/
+/-
+**Mathlib.Tactic.subscript** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：subscript (p : Parser) : Parser
+参数：p : Parser。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 subscript
-  签名: (p : Parser)
-  定义体: Superscript.scriptParser .subscript "subscript" "expected subscript character" p
+--- 原说明 ---
+The parser `subscript(term)` parses a subscript. Basic usage is:
+```
+local syntax:arg term:max subscript(term) : term
+local macro_rules | `($a:term $i:subscript) => `($a $i)
+```
+Given a notation like this, the expression `(a)ᵢ` parses and expands to `a i`. (
+Either parentheses
+or a whitespace as in `a ᵢ` is required, because `aᵢ` is considered as an identi
+fier.)
 
-Depends on / 依赖: Superscript, Superscript.scriptParser, character, expected, scriptParser, subscript
+Note that because of Unicode limitations, not many characters can actually be ty
+ped inside the
+subscript, so this should not be used for complex expressions. Legal subscript c
+haracters:
+```
+₀₁₂₃₄₅₆₇₈₉ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘꞯʀꜱᴛᴜᴠᴡʏᴢᵦᵧᵨᵩᵪ₊₋₌₍₎
+```
 -/
 def subscript (p : Parser) : Parser :=
   Superscript.scriptParser .subscript "subscript" "expected subscript character" p
 /-- Formatter for the subscript parser. -/
 @[combinator_parenthesizer subscript]
-/--
-Definition of `subscript.parenthesizer` / `subscript.parenthesizer` 的定义
+/-
+**Mathlib.Tactic.subscript.parenthesizer** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.subscript`。
+形式化陈述：PrettyPrinter.Parenthesizer → PrettyPrinter.Parenthesizer
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subscript.parenthesizer
-  body: Superscript.scriptParser.parenthesizer ``subscript
-
-中文:
-定义 subscript.parenthesizer
-  定义体: Superscript.scriptParser.parenthesizer ``subscript
-
-Depends on / 依赖: Superscript, Superscript.scriptParser.parenthesizer, parenthesizer, scriptParser, subscript
+--- 原说明 ---
+Formatter for the subscript parser.
 -/
 def subscript.parenthesizer := Superscript.scriptParser.parenthesizer ``subscript
 /-- Formatter for the subscript parser. -/
 @[combinator_formatter subscript]
-/--
-Definition of `subscript.formatter` / `subscript.formatter` 的定义
+/-
+**Mathlib.Tactic.subscript.formatter** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.s
+ubscript`。
+形式化陈述：PrettyPrinter.Formatter → PrettyPrinter.Formatter
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subscript.formatter
-  body: Superscript.scriptParser.formatter "subscript" .subscript ``subscript
-
-中文:
-定义 subscript.formatter
-  定义体: Superscript.scriptParser.formatter "subscript" .subscript ``subscript
-
-Depends on / 依赖: Superscript, Superscript.scriptParser.formatter, formatter, scriptParser, subscript
+--- 原说明 ---
+Formatter for the subscript parser.
 -/
 def subscript.formatter := Superscript.scriptParser.formatter "subscript" .subscript ``subscript
 
@@ -732,35 +545,37 @@ downstream parsers using the combinators will crash.
 See https://leanprover.zulipchat.com/#narrow/channel/270676-lean4/topic/Non-builtin.20parser.20aliases/near/365125476
 for some context. -/
 @[term_parser]
-/--
-Definition of `subscriptTerm` / `subscriptTerm` 的定义
+/-
+**Mathlib.Tactic.subscriptTerm** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：subscriptTerm
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subscriptTerm
-  body: leading_parser (withAnonymousAntiquot := false) subscript termParser
+--- 原说明 ---
+Shorthand for `subscript(term)`.
 
-中文:
-定义 subscriptTerm
-  定义体: leading_parser (withAnonymousAntiquot := false) subscript termParser
+This is needed because the initializer below does not always run, and if it has 
+not run then
+downstream parsers using the combinators will crash.
 
-Depends on / 依赖: leading_parser, subscript, termParser, withAnonymousAntiquot
+See https://leanprover.zulipchat.com/#narrow/channel/270676-lean4/topic/Non-buil
+tin.20parser.20aliases/near/365125476
+for some context.
 -/
 def subscriptTerm := leading_parser (withAnonymousAntiquot := false) subscript termParser
 
 initialize register_parser_alias subscript
 
-/--
-Definition of `Superscript.isValid` / `Superscript.isValid` 的定义
+/-- Returns true if every character in `stx : Syntax` can be superscripted
+(or subscripted). -/
+/-
+**Mathlib.Tactic.Superscript.isValid** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Superscript.isValid
-  signature: (m : Mapping)
-
-中文:
-定义 Superscript.isValid
-  签名: (m : Mapping)
+--- 原说明 ---
+Returns true if every character in `stx : Syntax` can be superscripted
+(or subscripted).
 -/
-private partial def Superscript.isValid (m : Mapping) : Syntax -> Bool
+private partial def Superscript.isValid (m : Mapping) : Syntax → Bool
   | .node _ kind args => kind == hygieneInfoKind || (!(scripted kind) && args.all (isValid m))
   | .atom _ s => valid s
   | .ident _ _ s _ => valid s.toString
@@ -768,49 +583,44 @@ private partial def Superscript.isValid (m : Mapping) : Syntax -> Bool
 where
   valid (s : String) : Bool :=
     s.all ((m.toSpecial.insert ' ' ' ').contains ·)
-  scripted : SyntaxNodeKind -> Bool :=
+  scripted : SyntaxNodeKind → Bool :=
     #[``subscript, ``superscript].contains
 
-/--
-Definition of `delabSuperscript` / `delabSuperscript` 的定义
+/-- Successfully delaborates only if the resulting expression can be superscripted.
 
-English:
-definition delabSuperscript
-  signature: : Delab
-  body: do
-  let stx ← delab
-  if Superscript.isValid .superscript stx.raw then pure stx else failure
+See `Mapping.superscript` in this file for legal superscript characters. -/
+/-
+**Mathlib.Tactic.delabSuperscript** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：delabSuperscript : Delab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 delabSuperscript
-  签名: : Delab
-  定义体: do
-  let stx ← delab
-  if Superscript.isValid .superscript stx.raw then pure stx else failure
+--- 原说明 ---
+Successfully delaborates only if the resulting expression can be superscripted.
+
+See `Mapping.superscript` in this file for legal superscript characters.
 -/
 def delabSuperscript : Delab := do
   let stx ← delab
   if Superscript.isValid .superscript stx.raw then pure stx else failure
 
-/--
-Definition of `delabSubscript` / `delabSubscript` 的定义
+/-- Successfully delaborates only if the resulting expression can be subscripted.
 
-English:
-definition delabSubscript
-  signature: : Delab
-  body: do
-  let stx ← delab
-  if Superscript.isValid .subscript stx.raw then pure stx else failure
+See `Mapping.subscript` in this file for legal subscript characters. -/
+/-
+**Mathlib.Tactic.delabSubscript** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：delabSubscript : Delab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 delabSubscript
-  签名: : Delab
-  定义体: do
-  let stx ← delab
-  if Superscript.isValid .subscript stx.raw then pure stx else failure
+--- 原说明 ---
+Successfully delaborates only if the resulting expression can be subscripted.
+
+See `Mapping.subscript` in this file for legal subscript characters.
 -/
 def delabSubscript : Delab := do
   let stx ← delab
   if Superscript.isValid .subscript stx.raw then pure stx else failure
 
 end Mathlib.Tactic
+

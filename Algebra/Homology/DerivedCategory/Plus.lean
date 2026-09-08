@@ -32,50 +32,101 @@ namespace HomotopyCategory.Plus
 
 variable (C)
 
-/--
-Definition of `subcategoryAcyclic` / `subcategoryAcyclic` 的定义
+/-- The property of objects in `HomotopyCategory.Plus C` that is satisfied
+by acyclic complexes. -/
+/-
+**HomotopyCategory.Plus.subcategoryAcyclic** 是 Mathlib 中的一个缩写定义，位于命名空间 `Homotopy
+Category.Plus`。
+形式化陈述：subcategoryAcyclic : ObjectProperty (HomotopyCategory.Plus C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subcategoryAcyclic
-  signature: :
-  body: (HomotopyCategory.subcategoryAcyclic C).inverseImage (HomotopyCategory.Plus.ι C)
-
-中文:
-缩写 subcategoryAcyclic
-  签名: :
-  定义体: (HomotopyCategory.subcategoryAcyclic C).inverseImage (HomotopyCategory.Plus.ι C)
-
-Depends on / 依赖: HomotopyCategory, HomotopyCategory.Plus, HomotopyCategory.subcategoryAcyclic, inverseImage, subcategoryAcyclic
+--- 原说明 ---
+The property of objects in `HomotopyCategory.Plus C` that is satisfied
+by acyclic complexes.
 -/
 abbrev subcategoryAcyclic :
     ObjectProperty (HomotopyCategory.Plus C) :=
   (HomotopyCategory.subcategoryAcyclic C).inverseImage (HomotopyCategory.Plus.ι C)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `quasiIso_eq_subcategoryAcyclic_trW` / 引理 `quasiIso_eq_subcategoryAcyclic_trW`
-
-English:
-lemma quasiIso_eq_subcategoryAcyclic_trW
-  proof: by
-  ext K L f
-  obtain ⟨M, g, h, mem⟩ := CategoryTheory.Pretriangulated.distinguished_cocone_triangle f
-  have := (HomotopyCategory.subcategoryAcyclic C).trW_iff_of_distinguished _
-    ((HomotopyCategory.Plus.ι C).map_distinguished _ mem)
-  rw [← HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic] at this
-  rwa [dsimp% (subcategoryAcyclic C).trW_iff_of_distinguished _ mem]
-
-中文:
-引理 quasiIso_eq_subcategoryAcyclic_trW
-  证明: by
-  ext K L f
-  obtain ⟨M, g, h, mem⟩ := CategoryTheory.Pretriangulated.distinguished_cocone_triangle f
-  have := (HomotopyCategory.subcategoryAcyclic C).trW_iff_of_distinguished _
-    ((HomotopyCategory.Plus.ι C).map_distinguished _ mem)
-  rw [← HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic] at this
-  rwa [dsimp% (subcategoryAcyclic C).trW_iff_of_distinguished _ mem]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Pretriangulated.distinguished_cocone_triangle, HomotopyCategory, HomotopyCategory.Plus, HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic, HomotopyCategory.subcategoryAcyclic, Pretriangulated, distinguished_cocone_triangle, map_distinguished, quasiIso_eq_trW_subcategoryAcyclic, subcategoryAcyclic, trW_iff_of_distinguished
+/-
+**HomotopyCategory.Plus.quasiIso_eq_subcategoryAcyclic_trW** 是 Mathlib 中的一个引理，位于
+命名空间 `HomotopyCategory.Plus`。
+形式化陈述：quasiIso_eq_subcategoryAcyclic_trW : HomotopyCategory.Plus.quasiIso C = (s
+ubcategoryAcyclic C).trW
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.ext`：ext (W W' : MorphismProperty C) (h 
+: forall ⦃X Y : C⦄ (f : X ⟶ Y), W f ↔ W' f) : W = W'
+· 使用定理 `CategoryTheory.ObjectProperty.instHasZeroObjectFullSubcategoryOfContains
+Zero`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (P : CategoryTheo
+ry.ObjectProperty C) [P.ContainsZero],   CategoryTheory.Limits.Has…
+· 使用定理 `HomotopyCategory.instContainsZeroIntUpPlusOfHasZeroObject`：∀ (C : Type u
+_1) [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Pread
+ditive C]   [CategoryTheory.Limits.HasZeroObjec…
+· 使用定理 `CategoryTheory.Abelian.hasZeroObject`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.HasZe
+roObject C
+· 使用定理 `HomotopyCategory.instIsStableUnderShiftIntUpPlus`：∀ (C : Type u_1) [inst
+ : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]
+,   (HomotopyCategory.plus C).IsStable…
+· 使用定理 `CategoryTheory.ObjectProperty.instAdditiveFullSubcategoryShiftFunctor`：∀
+ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheor
+y.ObjectProperty C) {A : Type u_2}   [inst_1 : AddMonoid A]…
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `HomotopyCategory.instAdditiveIntUpShiftFunctor`：∀ (C : Type u) [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Preadditive C] (n : ℤ)
+,   (CategoryTheory.shiftFunctor (Ho…
+· 使用定理 `HomotopyCategory.instHasZeroObject`：∀ {ι : Type u_2} (V : Type u) [inst 
+: CategoryTheory.Category.{v, u} V] [inst_1 : CategoryTheory.Preadditive V]   (c
+ : ComplexShape ι) [Cate…
+· 使用定理 `CategoryTheory.Abelian.hasBinaryBiproducts`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   CategoryTheo
+ry.Limits.HasBinaryBiproducts C
+· 使用定理 `HomotopyCategory.instIsTriangulatedIntUpPlus`：∀ (C : Type u_1) [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]   [
+inst_2 : CategoryTheory.Limits.Has…
+· 使用定理 `CategoryTheory.ObjectProperty.IsTriangulated.toIsStableUnderShift`：∀ {C 
+: Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {inst_1 : CategoryTheo
+ry.Limits.HasZeroObject C}   {inst_2 : CategoryTheory.H…
+· 使用定理 `CategoryTheory.ObjectProperty.IsTriangulated.toContainsZero`：∀ {C : Type
+ u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {inst_1 : CategoryTheory.Lim
+its.HasZeroObject C}   {inst_2 : CategoryTheory.H…
+· 使用定理 `CategoryTheory.Pretriangulated.distinguished_cocone_triangle`：∀ {C : Typ
+e u} {inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.H
+asZeroObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用引理 `CategoryTheory.ObjectProperty.trW_iff_of_distinguished`：trW_iff_of_disti
+nguished [P.IsClosedUnderIsomorphisms] (T : Triangle C) (hT : T in distTriang C)
+ : P.trW T.mor₁ ↔ P T.obj₃
+· 使用定理 `HomotopyCategory.instIsClosedUnderIsomorphismsIntUpSubcategoryAcyclic`：∀
+ (C : Type u) [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory
+.Abelian C],   (HomotopyCategory.subcategoryAcyclic C).IsCl…
+· 使用引理 `CategoryTheory.Functor.map_distinguished`：map_distinguished [F.IsTriangu
+lated] (T : Triangle C) (hT : T in distTriang C) : F.mapTriangle.obj T in distTr
+iang D
+· 使用定理 `CategoryTheory.ObjectProperty.instIsTriangulatedFullSubcategoryι`：∀ {C :
+ Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheor
+y.Limits.HasZeroObject C]   [inst_2 : CategoryTheory.H…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsInverseImage`
+：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u'} [inst_1 
+: CategoryTheory.Category.{v', u'} D]   (P : CategoryTheory.O…
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic`：quasiIso_eq_trW_sub
+categoryAcyclic : quasiIso C (ComplexShape.up Int) = (subcategoryAcyclic C).trW
 -/
 lemma quasiIso_eq_subcategoryAcyclic_trW :
     HomotopyCategory.Plus.quasiIso C = (subcategoryAcyclic C).trW := by
@@ -96,28 +147,21 @@ variable [HasDerivedCategory C]
 
 namespace Plus
 
-/--
-Definition of `Qh` / `Qh` 的定义
+/-- The localization functor `HomotopyCategory.Plus C ⥤ DerivedCategory.Plus C`. -/
+/-
+**DerivedCategory.Plus.Qh** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory.Plus`。
+形式化陈述：Qh : HomotopyCategory.Plus C ⥤ Plus C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-definition Qh
-  signature: : HomotopyCategory.Plus C ⥤ Plus C
-  body: t.plus.lift (HomotopyCategory.Plus.ι _ ⋙ DerivedCategory.Qh) (by
-    rintro ⟨K, hK⟩
-    obtain ⟨K, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
-    obtain ⟨n, _⟩ := (HomotopyCategory.plus_quotient_obj_iff _).mp hK
-    exact ⟨n, t.isGE_of_iso ((quotientCompQhIso C).symm.app K) n⟩)
-
-中文:
-定义 Qh
-  签名: : HomotopyCategory.Plus C ⥤ Plus C
-  定义体: t.plus.lift (HomotopyCategory.Plus.ι _ ⋙ DerivedCategory.Qh) (by
-    rintro ⟨K, hK⟩
-    obtain ⟨K, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
-    obtain ⟨n, _⟩ := (HomotopyCategory.plus_quotient_obj_iff _).mp hK
-    exact ⟨n, t.isGE_of_iso ((quotientCompQhIso C).symm.app K) n⟩)
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.Qh, HomotopyCategory, HomotopyCategory.Plus, HomotopyCategory.plus_quotient_obj_iff, HomotopyCategory.quotient_obj_surjective, isGE_of_iso, plus_quotient_obj_iff, quotientCompQhIso, quotient_obj_surjective, symm.app, t.isGE_of_iso, t.plus.lift
+--- 原说明 ---
+The localization functor `HomotopyCategory.Plus C ⥤ DerivedCategory.Plus C`.
 -/
 noncomputable def Qh : HomotopyCategory.Plus C ⥤ Plus C :=
   t.plus.lift (HomotopyCategory.Plus.ι _ ⋙ DerivedCategory.Qh) (by
@@ -125,127 +169,71 @@ noncomputable def Qh : HomotopyCategory.Plus C ⥤ Plus C :=
     obtain ⟨K, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
     obtain ⟨n, _⟩ := (HomotopyCategory.plus_quotient_obj_iff _).mp hK
     exact ⟨n, t.isGE_of_iso ((quotientCompQhIso C).symm.app K) n⟩)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Qh : _ ⥤ Plus C).CommShift Int
-  body: by
-  dsimp only [Qh]
-  infer_instance
-
-中文:
-实例 :
-  签名: (Qh : _ ⥤ Plus C).交换Shift 整数
-  定义体: by
-  dsimp only [Qh]
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : (Qh : _ ⥤ Plus C).CommShift Int := by
+noncomputable instance : (Qh : _ ⥤ Plus C).CommShift ℤ := by
   dsimp only [Qh]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Qh : _ ⥤ Plus C).IsTriangulated
-  body: by
-  dsimp only [Qh]
-  infer_instance
-
-中文:
-实例 :
-  签名: (Qh : _ ⥤ Plus C).是三角
-  定义体: by
-  dsimp only [Qh]
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (Qh : _ ⥤ Plus C).IsTriangulated := by
   dsimp only [Qh]
   infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `Qh_map_bijective_of_isKInjective` / 引理 `Qh_map_bijective_of_isKInjective`
-
-English:
-lemma Qh_map_bijective_of_isKInjective
-  statement: (K L : HomotopyCategory.Plus C)
-  proof: by
-  have := CochainComplex.IsKInjective.Qh_map_bijective K.1 L.1.as
-  rw [← Function.Bijective.of_comp_iff _
-    ((HomotopyCategory.Plus.fullyFaithfulι C).map_bijective _ _)] at this
-  rwa [← Function.Bijective.of_comp_iff' (t.plus.fullyFaithfulι.map_bijective _ _)]
-
-中文:
-引理 Qh_map_bijective_of_isKInjective
-  结论: (K L : HomotopyCategory.Plus C)
-  证明: by
-  have := CochainComplex.IsKInjective.Qh_map_bijective K.1 L.1.as
-  rw [← Function.Bijective.of_comp_iff _
-    ((HomotopyCategory.Plus.fullyFaithfulι C).map_bijective _ _)] at this
-  rwa [← Function.Bijective.of_comp_iff' (t.plus.fullyFaithfulι.map_bijective _ _)]
-
-Depends on / 依赖: Bijective, CochainComplex, CochainComplex.IsKInjective.Qh_map_bijective, Function, Function.Bijective.of_comp_iff, HomotopyCategory, HomotopyCategory.Plus.fullyFaithful, IsKInjective, Qh_map_bijective, map_bijective, of_comp_iff, t.plus.fullyFaithful
+/-
+**DerivedCategory.Plus.Qh_map_bijective_of_isKInjective** 是 Mathlib 中的一个引理，位于命名空
+间 `DerivedCategory.Plus`。
+形式化陈述：Qh_map_bijective_of_isKInjective (K L : HomotopyCategory.Plus C) (_ : Coch
+ainComplex.IsKInjective L.1.as) : Function.Bijective (Qh.map : (K ⟶ L) -> _)
+参数：K L : HomotopyCategory.Plus C；_ : CochainComplex.IsKInjective L.1.as。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用引理 `CochainComplex.IsKInjective.Qh_map_bijective`：Qh_map_bijective [HasDeriv
+edCategory C] (K : HomotopyCategory C (ComplexShape.up Int)) (L : CochainComplex
+ C Int) [L.IsKInjective] : Functio…
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Bijective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Bijective 
+(f ∘ g) ↔ Function.Bi…
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_bijective`：map_bijective (X Y :
+ C) : Function.Bijective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `Function.Bijective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Bijective (f 
+∘ g) ↔ Function.Bije…
 -/
 lemma Qh_map_bijective_of_isKInjective (K L : HomotopyCategory.Plus C)
-    (_ : CochainComplex.IsKInjective L.1.as) : Function.Bijective (Qh.map : (K ⟶ L) -> _) := by
+    (_ : CochainComplex.IsKInjective L.1.as) : Function.Bijective (Qh.map : (K ⟶ L) → _) := by
   have := CochainComplex.IsKInjective.Qh_map_bijective K.1 L.1.as
   rw [← Function.Bijective.of_comp_iff _
     ((HomotopyCategory.Plus.fullyFaithfulι C).map_bijective _ _)] at this
   rwa [← Function.Bijective.of_comp_iff' (t.plus.fullyFaithfulι.map_bijective _ _)]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (HomotopyCategory.plus C).IsVerdierRightLocalizing
-  body: by
-    obtain ⟨K : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
-    obtain ⟨L : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
-    simp only [HomotopyCategory.plus_quotient_obj_iff] at hL
-    obtain ⟨n, hn⟩ := hL
-    obtain ⟨φ, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective φ
-    rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hK
-    refine ⟨(HomotopyCategory.quotient _ _).obj (K.truncGE n),
-      (HomotopyCategory.quotient _ _).map (K.πTruncGE n),
-      (HomotopyCategory.quotient _ _).map (CochainComplex.truncGEMap φ n ≫ inv (L.πTruncGE n)),
-      ?_, ?_, by simp [← Functor.map_comp]⟩
-    · simp only [HomotopyCategory.plus_quotient_obj_iff]
-      exact ⟨n, inferInstance⟩
-    · rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic]
-      exact hK.truncGE _
-
-中文:
-实例 :
-  签名: (HomotopyCategory.plus C).是VerdierRightLocalizing
-  定义体: by
-    obtain ⟨K : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
-    obtain ⟨L : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
-    simp only [HomotopyCategory.plus_quotient_obj_iff] at hL
-    obtain ⟨n, hn⟩ := hL
-    obtain ⟨φ, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective φ
-    rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hK
-    refine ⟨(HomotopyCategory.quotient _ _).obj (K.truncGE n),
-      (HomotopyCategory.quotient _ _).map (K.πTruncGE n),
-      (HomotopyCategory.quotient _ _).map (CochainComplex.truncGEMap φ n ≫ inv (L.πTruncGE n)),
-      ?_, ?_, by simp [← Functor.map_comp]⟩
-    · simp only [HomotopyCategory.plus_quotient_obj_iff]
-      exact ⟨n, inferInstance⟩
-    · rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic]
-      exact hK.truncGE _
-
-Depends on / 依赖: CochainComplex, HomotopyCategory, HomotopyCategory.plus_quotient_obj_iff, HomotopyCategory.quotient, HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic, HomotopyCategory.quotient_obj_surjective, K.truncGE, map_surjective, plus_quotient_obj_iff, quotient, quotient_obj_mem_subcategoryAcyclic_iff_acyclic, quotient_obj_surjective, truncGE
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (HomotopyCategory.plus C).IsVerdierRightLocalizing
     (HomotopyCategory.subcategoryAcyclic C) where
@@ -267,208 +255,149 @@ instance : (HomotopyCategory.plus C).IsVerdierRightLocalizing
 
 variable (C)
 
-/--
-Definition of `QhCompιIsoιCompQh` / `QhCompιIsoιCompQh` 的定义
+/-- The functor `DerivedCategory.Plus.Qh : HomotopyCategory.Plus C ⥤ DerivedCategory.Plus C`
+is induced by `DerivedCategory.Qh : HomotopyCategory C (.up ℤ) ⥤ DerivedCategory C`. -/
+/-
+**DerivedCategory.Plus.QhComp** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition QhCompιIsoιCompQh
-  signature: :
-  body: Iso.refl _
-
-中文:
-定义 QhCompιIsoιCompQh
-  签名: :
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The functor `DerivedCategory.Plus.Qh : HomotopyCategory.Plus C ⥤ DerivedCategory
+.Plus C`
+is induced by `DerivedCategory.Qh : HomotopyCategory C (.up ℤ) ⥤ DerivedCategory
+ C`.
 -/
 noncomputable def QhCompιIsoιCompQh :
     Qh ⋙ Plus.ι ≅ HomotopyCategory.Plus.ι C ⋙ DerivedCategory.Qh := Iso.refl _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Qh (C := C)).EssSurj
-  body: by
-    intro ⟨X, n, K, e, h⟩
-    refine ⟨⟨(HomotopyCategory.quotient C (ComplexShape.up Int)).obj K, ?_⟩,
-      ⟨Plus.ι.preimageIso ((quotientCompQhIso C).app _ ≪≫ e.symm)⟩⟩
-    simp only [HomotopyCategory.plus_quotient_obj_iff]
-    exact ⟨n, h⟩
-
-中文:
-实例 :
-  签名: (Qh (C := C)).本质满射
-  定义体: by
-    intro ⟨X, n, K, e, h⟩
-    refine ⟨⟨(HomotopyCategory.quotient C (ComplexShape.up Int)).obj K, ?_⟩,
-      ⟨Plus.ι.preimageIso ((quotientCompQhIso C).app _ ≪≫ e.symm)⟩⟩
-    simp only [HomotopyCategory.plus_quotient_obj_iff]
-    exact ⟨n, h⟩
-
-Depends on / 依赖: EssSurj
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (Qh (C := C)).EssSurj where
   mem_essImage := by
     intro ⟨X, n, K, e, h⟩
-    refine ⟨⟨(HomotopyCategory.quotient C (ComplexShape.up Int)).obj K, ?_⟩,
+    refine ⟨⟨(HomotopyCategory.quotient C (ComplexShape.up ℤ)).obj K, ?_⟩,
       ⟨Plus.ι.preimageIso ((quotientCompQhIso C).app _ ≪≫ e.symm)⟩⟩
     simp only [HomotopyCategory.plus_quotient_obj_iff]
     exact ⟨n, h⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Qh.IsLocalization (HomotopyCategory.Plus.subcategoryAcyclic C).trW
-  body: ((HomotopyCategory.plus C).triangulatedLocalizerMorphism
-    (HomotopyCategory.subcategoryAcyclic C)).isLocalization_of_isLocalizedFullyFaithful
-      (QhCompιIsoιCompQh C).symm
-
-中文:
-实例 :
-  签名: Qh.是Localization (HomotopyCategory.Plus.subcategoryAcyclic C).trW
-  定义体: ((HomotopyCategory.plus C).triangulatedLocalizerMorphism
-    (HomotopyCategory.subcategoryAcyclic C)).isLocalization_of_isLocalizedFullyFaithful
-      (QhCompιIsoιCompQh C).symm
-
-Depends on / 依赖: HomotopyCategory, HomotopyCategory.plus, HomotopyCategory.subcategoryAcyclic, isLocalization_of_isLocalizedFullyFaithful, subcategoryAcyclic, triangulatedLocalizerMorphism
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Qh.IsLocalization (HomotopyCategory.Plus.subcategoryAcyclic C).trW :=
   ((HomotopyCategory.plus C).triangulatedLocalizerMorphism
     (HomotopyCategory.subcategoryAcyclic C)).isLocalization_of_isLocalizedFullyFaithful
       (QhCompιIsoιCompQh C).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Qh.IsLocalization (HomotopyCategory.Plus.quasiIso C)
-  body: by
-  rw [HomotopyCategory.Plus.quasiIso_eq_subcategoryAcyclic_trW]
-  infer_instance
-
-中文:
-实例 :
-  签名: Qh.是Localization (HomotopyCategory.Plus.quasiIso C)
-  定义体: by
-  rw [HomotopyCategory.Plus.quasiIso_eq_subcategoryAcyclic_trW]
-  infer_instance
-
-Depends on / 依赖: HomotopyCategory, HomotopyCategory.Plus.quasiIso_eq_subcategoryAcyclic_trW, infer_instance, quasiIso_eq_subcategoryAcyclic_trW
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Qh.IsLocalization (HomotopyCategory.Plus.quasiIso C) := by
   rw [HomotopyCategory.Plus.quasiIso_eq_subcategoryAcyclic_trW]
   infer_instance
 
-/--
-Definition of `singleFunctors` / `singleFunctors` 的定义
+/-- The single functors `C ⥤ DerivedCategory.Plus C` for all `n : ℤ` along with
+their compatibilities with shifts. -/
+/-
+**DerivedCategory.Plus.singleFunctors** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory
+.Plus`。
+形式化陈述：singleFunctors : SingleFunctors C (Plus C) Int
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-definition singleFunctors
-  signature: : SingleFunctors C (Plus C) Int
-  body: SingleFunctors.lift (DerivedCategory.singleFunctors C) Plus.ι
-      (fun n => t.plus.lift (DerivedCategory.singleFunctor C n)
-      (fun _ => ⟨n, inferInstance⟩))
-      (fun _ => Iso.refl _)
-
-中文:
-定义 singleFunctors
-  签名: : SingleFunctors C (Plus C) 整数
-  定义体: SingleFunctors.lift (DerivedCategory.singleFunctors C) Plus.ι
-      (fun n => t.plus.lift (DerivedCategory.singleFunctor C n)
-      (fun _ => ⟨n, inferInstance⟩))
-      (fun _ => Iso.refl _)
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.singleFunctor, DerivedCategory.singleFunctors, Iso.refl, SingleFunctors, SingleFunctors.lift, singleFunctor, singleFunctors, t.plus.lift
+--- 原说明 ---
+The single functors `C ⥤ DerivedCategory.Plus C` for all `n : ℤ` along with
+their compatibilities with shifts.
 -/
-noncomputable def singleFunctors : SingleFunctors C (Plus C) Int :=
+noncomputable def singleFunctors : SingleFunctors C (Plus C) ℤ :=
   SingleFunctors.lift (DerivedCategory.singleFunctors C) Plus.ι
       (fun n => t.plus.lift (DerivedCategory.singleFunctor C n)
       (fun _ => ⟨n, inferInstance⟩))
       (fun _ => Iso.refl _)
 
-/--
-Definition of `singleFunctor` / `singleFunctor` 的定义
+/-- The single functor `C ⥤ DerivedCategory.Plus C` which sends `X : C` to the
+single cochain complex with `X` sitting in degree `n : ℤ`. -/
+/-
+**DerivedCategory.Plus.singleFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `DerivedCategor
+y.Plus`。
+形式化陈述：singleFunctor (n : Int) : C ⥤ Plus C
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-abbreviation singleFunctor
-  signature: (n : Int)
-  body: (singleFunctors C).functor n
-
-中文:
-缩写 singleFunctor
-  签名: (n : 整数)
-  定义体: (singleFunctors C).functor n
-
-Depends on / 依赖: functor, singleFunctors
+--- 原说明 ---
+The single functor `C ⥤ DerivedCategory.Plus C` which sends `X : C` to the
+single cochain complex with `X` sitting in degree `n : ℤ`.
 -/
-noncomputable abbrev singleFunctor (n : Int) : C ⥤ Plus C := (singleFunctors C).functor n
+noncomputable abbrev singleFunctor (n : ℤ) : C ⥤ Plus C := (singleFunctors C).functor n
 
-/--
-Definition of `singleFunctorιIso` / `singleFunctorιIso` 的定义
+/-- The single functors on `DerivedCategory.Plus C` are induced by the
+single functors on `DerivedCategory C`. -/
+/-
+**DerivedCategory.Plus.singleFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `DerivedCategor
+y.Plus`。
+形式化陈述：singleFunctor (n : Int) : C ⥤ Plus C
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-definition singleFunctorιIso
-  signature: (n : Int)
-  body: Iso.refl _
-
-中文:
-定义 singleFunctorιIso
-  签名: (n : 整数)
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The single functors on `DerivedCategory.Plus C` are induced by the
+single functors on `DerivedCategory C`.
 -/
-noncomputable def singleFunctorιIso (n : Int) :
+noncomputable def singleFunctorιIso (n : ℤ) :
     singleFunctor C n ⋙ Plus.ι ≅ DerivedCategory.singleFunctor C n :=
   Iso.refl _
-
-instance (n : Int) : (singleFunctor C n).Additive := by
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℤ) : (singleFunctor C n).Additive := by
   dsimp [singleFunctor, singleFunctors]
   infer_instance
 
-/--
-Definition of `homologyFunctor` / `homologyFunctor` 的定义
+/-- The homology functor `DerivedCategory.Plus C ⥤ C` in degree `n : ℤ`. -/
+/-
+**DerivedCategory.Plus.homologyFunctor** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategor
+y.Plus`。
+形式化陈述：homologyFunctor (n : Int) : Plus C ⥤ C
+参数：n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-definition homologyFunctor
-  signature: (n : Int)
-  body: Plus.ι ⋙ DerivedCategory.homologyFunctor C n
-deriving Functor.IsHomological
-
-中文:
-定义 homologyFunctor
-  签名: (n : 整数)
-  定义体: Plus.ι ⋙ DerivedCategory.homologyFunctor C n
-deriving Functor.IsHomological
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.homologyFunctor, homologyFunctor
+--- 原说明 ---
+The homology functor `DerivedCategory.Plus C ⥤ C` in degree `n : ℤ`.
 -/
-noncomputable def homologyFunctor (n : Int) : Plus C ⥤ C :=
+noncomputable def homologyFunctor (n : ℤ) : Plus C ⥤ C :=
   Plus.ι ⋙ DerivedCategory.homologyFunctor C n
 deriving Functor.IsHomological
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Qh (C := C)).mapArrow.EssSurj
-  body: Localization.essSurj_mapArrow _
-    (HomotopyCategory.Plus.subcategoryAcyclic C).trW
-
-中文:
-实例 :
-  签名: (Qh (C := C)).mapArrow.本质满射
-  定义体: Localization.essSurj_mapArrow _
-    (HomotopyCategory.Plus.subcategoryAcyclic C).trW
-
-Depends on / 依赖: EssSurj, mapArrow, mapArrow.EssSurj
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (Qh (C := C)).mapArrow.EssSurj :=
   Localization.essSurj_mapArrow _
@@ -476,219 +405,211 @@ instance : (Qh (C := C)).mapArrow.EssSurj :=
 
 variable {C}
 
-/--
-Definition of `TStructure.t` / `TStructure.t` 的定义
+/-- The canonical t-structure on `DerivedCategory.Plus C`. -/
+/-
+**DerivedCategory.Plus.TStructure.t** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory.P
+lus.TStructure`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.Abelian C] →       [inst_2 : HasDerivedCategory C] → Categ
+oryTheory.Triangulated.TStructure (DerivedCategory.Plus C)
+参数：DerivedCategory.Plus C。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-abbreviation TStructure.t
-  signature: : TStructure (DerivedCategory.Plus C)
-  body: (DerivedCategory.TStructure.t (C := C)).plus.tStructure DerivedCategory.TStructure.t
-
-中文:
-缩写 TStructure.t
-  签名: : TStructure (导出范畴.Plus C)
-  定义体: (DerivedCategory.TStructure.t (C := C)).plus.tStructure DerivedCategory.TStructure.t
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.TStructure.t, TStructure, plus.tStructure, tStructure
+--- 原说明 ---
+The canonical t-structure on `DerivedCategory.Plus C`.
 -/
 noncomputable abbrev TStructure.t : TStructure (DerivedCategory.Plus C) :=
   (DerivedCategory.TStructure.t (C := C)).plus.tStructure DerivedCategory.TStructure.t
 
-/--
-Definition of `IsGE` / `IsGE` 的定义
+/-- Given `X : DerivedCategory.Plus C` and `n : ℤ`, this property means
+that `X` is `≥ n` for the canonical t-structure. -/
+/-
+**DerivedCategory.Plus.IsGE** 是 Mathlib 中的一个缩写定义，位于命名空间 `DerivedCategory.Plus`。
+形式化陈述：IsGE (X : Plus C) (n : Int) : Prop
+参数：X : Plus C；n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-abbreviation IsGE
-  signature: (X : Plus C) (n : Int)
-  body: Plus.TStructure.t.IsGE X n
-
-中文:
-缩写 是GE
-  签名: (X : Plus C) (n : 整数)
-  定义体: Plus.TStructure.t.IsGE X n
-
-Depends on / 依赖: Plus.TStructure.t.IsGE, TStructure
+--- 原说明 ---
+Given `X : DerivedCategory.Plus C` and `n : ℤ`, this property means
+that `X` is `≥ n` for the canonical t-structure.
 -/
-abbrev IsGE (X : Plus C) (n : Int) : Prop := Plus.TStructure.t.IsGE X n
+abbrev IsGE (X : Plus C) (n : ℤ) : Prop := Plus.TStructure.t.IsGE X n
 
-/--
-Definition of `IsLE` / `IsLE` 的定义
+/-- Given `X : DerivedCategory.Plus C` and `n : ℤ`, this property means
+that `X` is `≤ n` for the canonical t-structure. -/
+/-
+**DerivedCategory.Plus.IsLE** 是 Mathlib 中的一个缩写定义，位于命名空间 `DerivedCategory.Plus`。
+形式化陈述：IsLE (X : Plus C) (n : Int) : Prop
+参数：X : Plus C；n : Int。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-abbreviation IsLE
-  signature: (X : Plus C) (n : Int)
-  body: Plus.TStructure.t.IsLE X n
-
-中文:
-缩写 是LE
-  签名: (X : Plus C) (n : 整数)
-  定义体: Plus.TStructure.t.IsLE X n
-
-Depends on / 依赖: Plus.TStructure.t.IsLE, TStructure
+--- 原说明 ---
+Given `X : DerivedCategory.Plus C` and `n : ℤ`, this property means
+that `X` is `≤ n` for the canonical t-structure.
 -/
-abbrev IsLE (X : Plus C) (n : Int) : Prop := Plus.TStructure.t.IsLE X n
-
-/--
-lemma `isGE_ι_obj_iff` / 引理 `isGE_ι_obj_iff`
-
-English:
-lemma isGE_ι_obj_iff
-  given: (X : Plus C) (n : Int)
-  proof: by
-  constructor
-  all_goals exact fun h => ⟨h.1⟩
-
-中文:
-引理 isGE_ι_obj_iff
-  条件: (X : Plus C) (n : 整数)
-  证明: by
-  constructor
-  all_goals exact fun h => ⟨h.1⟩
-
-Depends on / 依赖: all_goals
+abbrev IsLE (X : Plus C) (n : ℤ) : Prop := Plus.TStructure.t.IsLE X n
+/-
+**DerivedCategory.Plus.isGE_** 是 Mathlib 中的一个引理，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isGE_ι_obj_iff (X : Plus C) (n : Int) :
+lemma isGE_ι_obj_iff (X : Plus C) (n : ℤ) :
     (ι.obj X).IsGE n ↔ X.IsGE n := by
   constructor
-  all_goals exact fun h => ⟨h.1⟩
-
-/--
-lemma `isLE_ι_obj_iff` / 引理 `isLE_ι_obj_iff`
-
-English:
-lemma isLE_ι_obj_iff
-  given: (X : Plus C) (n : Int)
-  proof: by
-  constructor
-  all_goals exact fun h => ⟨h.1⟩
-
-中文:
-引理 isLE_ι_obj_iff
-  条件: (X : Plus C) (n : 整数)
-  证明: by
-  constructor
-  all_goals exact fun h => ⟨h.1⟩
-
-Depends on / 依赖: all_goals
+  all_goals exact fun h ↦ ⟨h.1⟩
+/-
+**DerivedCategory.Plus.isLE_** 是 Mathlib 中的一个引理，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isLE_ι_obj_iff (X : Plus C) (n : Int) :
+lemma isLE_ι_obj_iff (X : Plus C) (n : ℤ) :
     (ι.obj X).IsLE n ↔ X.IsLE n := by
   constructor
-  all_goals exact fun h => ⟨h.1⟩
-
-instance (X : Plus C) (n : Int) [X.IsGE n] : (ι.obj X).IsGE n := by
+  all_goals exact fun h ↦ ⟨h.1⟩
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : Plus C) (n : ℤ) [X.IsGE n] : (ι.obj X).IsGE n := by
   rw [isGE_ι_obj_iff]
   infer_instance
-
-instance (X : Plus C) (n : Int) [X.IsLE n] : (ι.obj X).IsLE n := by
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : Plus C) (n : ℤ) [X.IsLE n] : (ι.obj X).IsLE n := by
   rw [isLE_ι_obj_iff]
   infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (DerivedCategory.Plus.homologyFunctor C 0).ShiftSequence Int
-  body: inferInstanceAs ((ι ⋙ DerivedCategory.homologyFunctor C 0).ShiftSequence Int)
-
-中文:
-实例 :
-  签名: (导出范畴.Plus.homologyFunctor C 0).ShiftSequence 整数
-  定义体: inferInstanceAs ((ι ⋙ DerivedCategory.homologyFunctor C 0).ShiftSequence Int)
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.homologyFunctor, ShiftSequence, homologyFunctor
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance : (DerivedCategory.Plus.homologyFunctor C 0).ShiftSequence Int :=
-  inferInstanceAs ((ι ⋙ DerivedCategory.homologyFunctor C 0).ShiftSequence Int)
-
-instance (X : C) (n : Int) : ((singleFunctor C n).obj X).IsGE n := by
+noncomputable instance : (DerivedCategory.Plus.homologyFunctor C 0).ShiftSequence ℤ :=
+  inferInstanceAs ((ι ⋙ DerivedCategory.homologyFunctor C 0).ShiftSequence ℤ)
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (n : ℤ) : ((singleFunctor C n).obj X).IsGE n := by
   rw [← isGE_ι_obj_iff]
   change DerivedCategory.TStructure.t.IsGE ((DerivedCategory.singleFunctor C n).obj X) n
   infer_instance
-
-instance (X : C) (n : Int) : ((singleFunctor C n).obj X).IsLE n := by
+/-
+**DerivedCategory.Plus.** 是 Mathlib 中的一个实例，位于命名空间 `DerivedCategory.Plus`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (X : C) (n : ℤ) : ((singleFunctor C n).obj X).IsLE n := by
   rw [← isLE_ι_obj_iff]
   change DerivedCategory.TStructure.t.IsLE ((DerivedCategory.singleFunctor C n).obj X) n
   infer_instance
-
-/--
-lemma `isZero_homology_of_isGE` / 引理 `isZero_homology_of_isGE`
-
-English:
-lemma isZero_homology_of_isGE
-  proof: (ι.obj X).isZero_of_isGE n i hi
-
-中文:
-引理 isZero_homology_of_isGE
-  证明: (ι.obj X).isZero_of_isGE n i hi
-
-Depends on / 依赖: isZero_of_isGE
+/-
+**DerivedCategory.Plus.isZero_homology_of_isGE** 是 Mathlib 中的一个引理，位于命名空间 `Derive
+dCategory.Plus`。
+形式化陈述：isZero_homology_of_isGE (X : Plus C) (n : Int) [X.IsGE n] (i : Int) (hi : 
+i < n) : IsZero ((homologyFunctor C i).obj X)
+参数：X : Plus C；n : Int；i : Int；hi : i < n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `DerivedCategory.isZero_of_isGE`：isZero_of_isGE (X : DerivedCategory C) (
+n i : Int) (hi : i < n) [hX : X.IsGE n] : IsZero ((homologyFunctor _ i).obj X)
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `DerivedCategory.Plus.instIsGEObjιOfIsGE`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : 
+HasDerivedCategory C] (X : De…
 -/
 lemma isZero_homology_of_isGE
-    (X : Plus C) (n : Int) [X.IsGE n] (i : Int) (hi : i < n) :
+    (X : Plus C) (n : ℤ) [X.IsGE n] (i : ℤ) (hi : i < n) :
     IsZero ((homologyFunctor C i).obj X) :=
   (ι.obj X).isZero_of_isGE n i hi
-
-/--
-lemma `isZero_homology_of_isLE` / 引理 `isZero_homology_of_isLE`
-
-English:
-lemma isZero_homology_of_isLE
-  proof: (ι.obj X).isZero_of_isLE n i hi
-
-中文:
-引理 isZero_homology_of_isLE
-  证明: (ι.obj X).isZero_of_isLE n i hi
-
-Depends on / 依赖: isZero_of_isLE
+/-
+**DerivedCategory.Plus.isZero_homology_of_isLE** 是 Mathlib 中的一个引理，位于命名空间 `Derive
+dCategory.Plus`。
+形式化陈述：isZero_homology_of_isLE (X : Plus C) (n : Int) [X.IsLE n] (i : Int) (hi : 
+n < i) : IsZero ((homologyFunctor C i).obj X)
+参数：X : Plus C；n : Int；i : Int；hi : n < i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `DerivedCategory.isZero_of_isLE`：isZero_of_isLE (X : DerivedCategory C) (
+n i : Int) (hi : n < i) [hX : X.IsLE n] : IsZero ((homologyFunctor _ i).obj X)
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `DerivedCategory.Plus.instIsLEObjιOfIsLE`：∀ {C : Type u_1} [inst : Catego
+ryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : 
+HasDerivedCategory C] (X : De…
 -/
 lemma isZero_homology_of_isLE
-    (X : Plus C) (n : Int) [X.IsLE n] (i : Int) (hi : n < i) :
+    (X : Plus C) (n : ℤ) [X.IsLE n] (i : ℤ) (hi : n < i) :
     IsZero ((homologyFunctor C i).obj X) :=
   (ι.obj X).isZero_of_isLE n i hi
-
-/--
-lemma `isIso_iff` / 引理 `isIso_iff`
-
-English:
-lemma isIso_iff
-  given: {X Y : Plus C} (f : X ⟶ Y)
-  proof: by
-  refine ⟨fun _ _ => inferInstance, fun _ => ?_⟩
-  have : IsIso (ι.map f) := by rwa [DerivedCategory.isIso_iff]
-  exact isIso_of_fully_faithful ι _
-
-中文:
-引理 isIso_iff
-  条件: {X Y : Plus C} (f : X ⟶ Y)
-  证明: by
-  refine ⟨fun _ _ => inferInstance, fun _ => ?_⟩
-  have : IsIso (ι.map f) := by rwa [DerivedCategory.isIso_iff]
-  exact isIso_of_fully_faithful ι _
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.isIso_iff, isIso_iff, isIso_of_fully_faithful
+/-
+**DerivedCategory.Plus.isIso_iff** 是 Mathlib 中的一个引理，位于命名空间 `DerivedCategory.Plus
+`。
+形式化陈述：isIso_iff {X Y : Plus C} (f : X ⟶ Y) : IsIso f ↔ forall (n : Int), IsIso (
+(homologyFunctor C n).map f)
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `DerivedCategory.isIso_iff`：isIso_iff {K L : DerivedCategory C} (f : K ⟶ 
+L) : IsIso f ↔ forall (n : Int), IsIso ((homologyFunctor C n).map f)
+· 使用定理 `CategoryTheory.isIso_of_fully_faithful`：isIso_of_fully_faithful (f : X ⟶
+ Y) [IsIso (F.map f)] : IsIso f
 -/
 lemma isIso_iff {X Y : Plus C} (f : X ⟶ Y) :
-    IsIso f ↔ forall (n : Int), IsIso ((homologyFunctor C n).map f) := by
-  refine ⟨fun _ _ => inferInstance, fun _ => ?_⟩
+    IsIso f ↔ ∀ (n : ℤ), IsIso ((homologyFunctor C n).map f) := by
+  refine ⟨fun _ _ ↦ inferInstance, fun _ ↦ ?_⟩
   have : IsIso (ι.map f) := by rwa [DerivedCategory.isIso_iff]
   exact isIso_of_fully_faithful ι _
 
-/--
-Definition of `Q` / `Q` 的定义
+/-- The localization functor `CochainComplex.Plus C ⥤ DerivedCategory.Plus C`. -/
+/-
+**DerivedCategory.Plus.Q** 是 Mathlib 中的一个定义，位于命名空间 `DerivedCategory.Plus`。
+形式化陈述：Q : CochainComplex.Plus C ⥤ DerivedCategory.Plus C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
 
-English:
-definition Q
-  signature: : CochainComplex.Plus C ⥤ DerivedCategory.Plus C
-  body: HomotopyCategory.Plus.quotient C ⋙ Qh
-
-中文:
-定义 Q
-  签名: : 上链复形.Plus C ⥤ 导出范畴.Plus C
-  定义体: HomotopyCategory.Plus.quotient C ⋙ Qh
-
-Depends on / 依赖: HomotopyCategory, HomotopyCategory.Plus.quotient, quotient
+--- 原说明 ---
+The localization functor `CochainComplex.Plus C ⥤ DerivedCategory.Plus C`.
 -/
 noncomputable def Q : CochainComplex.Plus C ⥤ DerivedCategory.Plus C :=
   HomotopyCategory.Plus.quotient C ⋙ Qh
@@ -698,3 +619,4 @@ noncomputable def Q : CochainComplex.Plus C ⥤ DerivedCategory.Plus C :=
 end Plus
 
 end DerivedCategory
+

@@ -42,93 +42,43 @@ namespace exteriorPower
 
 open RealInnerProductSpace Matrix
 
-variable {n : Nat} {E : Type*} [NormedAddCommGroup E] [InnerProductSpace Real E]
+variable {n : ℕ} {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-/--
-Definition of `innerProductForm` / `innerProductForm` 的定义
+/-- The inner product on `⋀[ℝ]^n E` as a bilinear map. This is an implementation detail
+for constructing the `InnerProductSpace` instance and should not be used directly.
+Use `⟪·, ·⟫` instead. -/
+/-
+**exteriorPower.innerProductForm** 是 Mathlib 中的一个定义，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition innerProductForm
-  signature: : ⋀[Real]^n E ->ₗ[Real] ⋀[Real]^n E ->ₗ[Real] Real
-  body: pairingDual Real E n ∘ₗ map n (innerₗ E)
-
-中文:
-定义 innerProductForm
-  签名: : ⋀[实数]^n E ->ₗ[实数] ⋀[实数]^n E ->ₗ[实数] 实数
-  定义体: pairingDual Real E n ∘ₗ map n (innerₗ E)
+--- 原说明 ---
+The inner product on `⋀[ℝ]^n E` as a bilinear map. This is an implementation det
+ail
+for constructing the `InnerProductSpace` instance and should not be used directl
+y.
+Use `⟪·, ·⟫` instead.
 -/
-private def innerProductForm : ⋀[Real]^n E ->ₗ[Real] ⋀[Real]^n E ->ₗ[Real] Real :=
-  pairingDual Real E n ∘ₗ map n (innerₗ E)
-
-/--
-lemma `innerProductForm_ιMulti_ιMulti` / 引理 `innerProductForm_ιMulti_ιMulti`
-
-English:
-lemma innerProductForm_ιMulti_ιMulti
-  given: (x y : Fin n -> E)
-  proof: by
+private def innerProductForm : ⋀[ℝ]^n E →ₗ[ℝ] ⋀[ℝ]^n E →ₗ[ℝ] ℝ :=
+  pairingDual ℝ E n ∘ₗ map n (innerₗ E)
+/-
+**exteriorPower.innerProductForm_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+private lemma innerProductForm_ιMulti_ιMulti (x y : Fin n → E) :
+    innerProductForm (ιMulti ℝ n x) (ιMulti ℝ n y) = det (of fun i j ↦ ⟪x j, y i⟫) := by
   simp [innerProductForm]
 
 @[simp]
-
-中文:
-引理 innerProductForm_ιMulti_ιMulti
-  条件: (x y : 有限集 n -> E)
-  证明: by
-  simp [innerProductForm]
-
-@[simp]
+/-
+**exteriorPower.innerProductForm_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma innerProductForm_ιMulti_ιMulti (x y : Fin n -> E) :
-    innerProductForm (ιMulti Real n x) (ιMulti Real n y) = det (of fun i j => ⟪x j, y i⟫) := by
-  simp [innerProductForm]
-
-@[simp]
-/--
-lemma `innerProductForm_ιMulti_self` / 引理 `innerProductForm_ιMulti_self`
-
-English:
-lemma innerProductForm_ιMulti_self
-  given: (x : Fin n -> E)
-  proof: by
+private lemma innerProductForm_ιMulti_self (x : Fin n → E) :
+    innerProductForm (ιMulti ℝ n x) (ιMulti ℝ n x) = det (gram ℝ x) := by
   simp [gram, innerProductForm_ιMulti_ιMulti, real_inner_comm]
-
-中文:
-引理 innerProductForm_ιMulti_self
-  条件: (x : 有限集 n -> E)
-  证明: by
-  simp [gram, innerProductForm_ιMulti_ιMulti, real_inner_comm]
--/
-private lemma innerProductForm_ιMulti_self (x : Fin n -> E) :
-    innerProductForm (ιMulti Real n x) (ιMulti Real n x) = det (gram Real x) := by
-  simp [gram, innerProductForm_ιMulti_ιMulti, real_inner_comm]
-
-/--
-lemma `flip_innerProductForm` / 引理 `flip_innerProductForm`
-
-English:
-lemma flip_innerProductForm
-  proof: by
-  apply linearMap_ext
-  ext
-  simp only [LinearMap.compAlternatingMap_apply, LinearMap.flip_apply,
-    innerProductForm_ιMulti_ιMulti]
-  rw [← Matrix.det_transpose]
-  congr 1
-  ext
-  exact real_inner_comm _ _
-
-中文:
-引理 flip_innerProductForm
-  证明: by
-  apply linearMap_ext
-  ext
-  simp only [LinearMap.compAlternatingMap_apply, LinearMap.flip_apply,
-    innerProductForm_ιMulti_ιMulti]
-  rw [← Matrix.det_transpose]
-  congr 1
-  ext
-  exact real_inner_comm _ _
+/-
+**exteriorPower.flip_innerProductForm** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma flip_innerProductForm :
     (innerProductForm (E := E) (n := n)).flip = innerProductForm := by
@@ -140,65 +90,22 @@ private lemma flip_innerProductForm :
   congr 1
   ext
   exact real_inner_comm _ _
-
-/--
-lemma `innerProductForm_symm` / 引理 `innerProductForm_symm`
-
-English:
-lemma innerProductForm_symm
-  given: (x y : ⋀[Real]^n E)
-  proof: congr($flip_innerProductForm x y)
-
-@[simp]
-
-中文:
-引理 innerProductForm_symm
-  条件: (x y : ⋀[实数]^n E)
-  证明: congr($flip_innerProductForm x y)
-
-@[simp]
+/-
+**exteriorPower.innerProductForm_symm** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma innerProductForm_symm (x y : ⋀[Real]^n E) :
+private lemma innerProductForm_symm (x y : ⋀[ℝ]^n E) :
     innerProductForm y x = innerProductForm x y :=
   congr($flip_innerProductForm x y)
 
 @[simp]
-/--
-lemma `innerProductForm_ιMulti_family_of_orthonormal` / 引理 `innerProductForm_ιMulti_family_of_orthonormal`
-
-English:
-lemma innerProductForm_ιMulti_family_of_orthonormal
-  statement: {ι : Type*} [LinearOrder ι] {v : ι -> E}
-  proof: by
-  simp only [ιMulti_family]
-  split_ifs with h
-  · subst h
-    simp [gram_eq_one_iff_orthonormal.mpr (hv.comp _ (RelEmbedding.injective _))]
-  · rw [innerProductForm_ιMulti_ιMulti]
-    obtain ⟨x, hxt, hxs⟩ := (Set.powersetCard.exists_mem_notMem_iff_ne t s).mp (.symm h)
-    simp only [Set.mem_range, not_exists,
-      ← Set.powersetCard.mem_range_ofFinEmbEquiv_symm_iff_mem] at hxs hxt
-    obtain ⟨i, rfl⟩ := hxt
-    exact det_eq_zero_of_row_eq_zero i (fun j => hv.inner_eq_zero (hxs j))
-
-中文:
-引理 innerProductForm_ιMulti_family_of_orthonormal
-  结论: {ι : 类型} [线性序 ι] {v : ι -> E}
-  证明: by
-  simp only [ιMulti_family]
-  split_ifs with h
-  · subst h
-    simp [gram_eq_one_iff_orthonormal.mpr (hv.comp _ (RelEmbedding.injective _))]
-  · rw [innerProductForm_ιMulti_ιMulti]
-    obtain ⟨x, hxt, hxs⟩ := (Set.powersetCard.exists_mem_notMem_iff_ne t s).mp (.symm h)
-    simp only [Set.mem_range, not_exists,
-      ← Set.powersetCard.mem_range_ofFinEmbEquiv_symm_iff_mem] at hxs hxt
-    obtain ⟨i, rfl⟩ := hxt
-    exact det_eq_zero_of_row_eq_zero i (fun j => hv.inner_eq_zero (hxs j))
+/-
+**exteriorPower.innerProductForm_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma innerProductForm_ιMulti_family_of_orthonormal {ι : Type*} [LinearOrder ι] {v : ι -> E}
-    (hv : Orthonormal Real v) (s t : Set.powersetCard ι n) :
-    innerProductForm (ιMulti_family Real n v s) (ιMulti_family Real n v t) = if s = t then 1 else 0 := by
+private lemma innerProductForm_ιMulti_family_of_orthonormal {ι : Type*} [LinearOrder ι] {v : ι → E}
+    (hv : Orthonormal ℝ v) (s t : Set.powersetCard ι n) :
+    innerProductForm (ιMulti_family ℝ n v s) (ιMulti_family ℝ n v t) = if s = t then 1 else 0 := by
   simp only [ιMulti_family]
   split_ifs with h
   · subst h
@@ -208,237 +115,117 @@ private lemma innerProductForm_ιMulti_family_of_orthonormal {ι : Type*} [Linea
     simp only [Set.mem_range, not_exists,
       ← Set.powersetCard.mem_range_ofFinEmbEquiv_symm_iff_mem] at hxs hxt
     obtain ⟨i, rfl⟩ := hxt
-    exact det_eq_zero_of_row_eq_zero i (fun j => hv.inner_eq_zero (hxs j))
-
-/--
-lemma `innerProductForm_eq_sum` / 引理 `innerProductForm_eq_sum`
-
-English:
-lemma innerProductForm_eq_sum
-  statement: {ι : Type*} [Fintype ι] [LinearOrder ι]
-  proof: by
-  conv_lhs =>
-    rw [← (b.toBasis.exteriorPower n).sum_repr x]; rw [← (b.toBasis.exteriorPower n).sum_repr y]
-  simp
-
-中文:
-引理 innerProductForm_eq_sum
-  结论: {ι : 类型} [有限类型 ι] [线性序 ι]
-  证明: by
-  conv_lhs =>
-    rw [← (b.toBasis.exteriorPower n).sum_repr x]; rw [← (b.toBasis.exteriorPower n).sum_repr y]
-  simp
-
-Depends on / 依赖: NormedSpace, SubmoduleClass, SubmoduleClass.toNormedSpace, toNormedSpace
+    exact det_eq_zero_of_row_eq_zero i (fun j ↦ hv.inner_eq_zero (hxs j))
+/-
+**exteriorPower.innerProductForm_eq_sum** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma innerProductForm_eq_sum {ι : Type*} [Fintype ι] [LinearOrder ι]
-    (b : OrthonormalBasis ι Real E) (x y : ⋀[Real]^n E) :
+    (b : OrthonormalBasis ι ℝ E) (x y : ⋀[ℝ]^n E) :
     innerProductForm x y =
       ∑ s, (b.toBasis.exteriorPower n).repr y s * (b.toBasis.exteriorPower n).repr x s := by
   conv_lhs =>
-    rw [← (b.toBasis.exteriorPower n).sum_repr x]; rw [← (b.toBasis.exteriorPower n).sum_repr y]
+    rw [← (b.toBasis.exteriorPower n).sum_repr x, ← (b.toBasis.exteriorPower n).sum_repr y]
   simp
-
-/--
-lemma `innerProductForm_self` / 引理 `innerProductForm_self`
-
-English:
-lemma innerProductForm_self
-  statement: (x : ⋀[Real]^n E) {ι : Type*} [Fintype ι] [LinearOrder ι]
-  proof: by
-  simp_rw [innerProductForm_eq_sum b, pow_two]
-
-中文:
-引理 innerProductForm_self
-  结论: (x : ⋀[实数]^n E) {ι : 类型} [有限类型 ι] [线性序 ι]
-  证明: by
-  simp_rw [innerProductForm_eq_sum b, pow_two]
+/-
+**exteriorPower.innerProductForm_self** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma innerProductForm_self (x : ⋀[Real]^n E) {ι : Type*} [Fintype ι] [LinearOrder ι]
-    (b : OrthonormalBasis ι Real E) :
+private lemma innerProductForm_self (x : ⋀[ℝ]^n E) {ι : Type*} [Fintype ι] [LinearOrder ι]
+    (b : OrthonormalBasis ι ℝ E) :
     innerProductForm x x = ∑ s, (b.toBasis.exteriorPower n).repr x s ^ 2 := by
   simp_rw [innerProductForm_eq_sum b, pow_two]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FiniteDimensional
-  signature: Real E] : InnerProductSpace.Core Real (⋀[Real]^n E) where
-  body: innerProductForm x y
-  conj_inner_symm := innerProductForm_symm
-  add_left := by simp
-  smul_left := by simp
-  re_inner_nonneg x := by
-    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]
-    exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)
-  definite x h := by
-    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]; rw [Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => sq_nonneg _)] at h
-    apply Module.Basis.ext_elem ((stdOrthonormalBasis Real E).toBasis.exteriorPower n)
-    simpa using h
-
-中文:
-实例 [有限维
-  签名: 实数 E] : 内积空间.核 实数 (⋀[实数]^n E) where
-  定义体: innerProductForm x y
-  conj_inner_symm := innerProductForm_symm
-  add_left := by simp
-  smul_left := by simp
-  re_inner_nonneg x := by
-    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]
-    exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)
-  definite x h := by
-    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]; rw [Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => sq_nonneg _)] at h
-    apply Module.Basis.ext_elem ((stdOrthonormalBasis Real E).toBasis.exteriorPower n)
-    simpa using h
+/-
+**exteriorPower.** 是 Mathlib 中的一个实例，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[no_expose] instance [FiniteDimensional Real E] : InnerProductSpace.Core Real (⋀[Real]^n E) where
+@[no_expose] instance [FiniteDimensional ℝ E] : InnerProductSpace.Core ℝ (⋀[ℝ]^n E) where
   inner x y := innerProductForm x y
   conj_inner_symm := innerProductForm_symm
   add_left := by simp
   smul_left := by simp
   re_inner_nonneg x := by
-    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]
-    exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)
+    rw [innerProductForm_self x (stdOrthonormalBasis ℝ E)]
+    exact Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)
   definite x h := by
-    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]; rw [Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => sq_nonneg _)] at h
-    apply Module.Basis.ext_elem ((stdOrthonormalBasis Real E).toBasis.exteriorPower n)
+    rw [innerProductForm_self x (stdOrthonormalBasis ℝ E),
+      Finset.sum_eq_zero_iff_of_nonneg (fun _ _ ↦ sq_nonneg _)] at h
+    apply Module.Basis.ext_elem ((stdOrthonormalBasis ℝ E).toBasis.exteriorPower n)
     simpa using h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FiniteDimensional
-  signature: Real E] : NormedAddCommGroup (⋀[Real]^n E)
-  body: InnerProductSpace.Core.toNormedAddCommGroup (𝕜 := Real)
-
-中文:
-实例 [有限维
-  签名: 实数 E] : 赋范交换加群 (⋀[实数]^n E)
-  定义体: InnerProductSpace.Core.toNormedAddCommGroup (𝕜 := Real)
-
-Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core.toNormedAddCommGroup, NontriviallyNormedField, NontriviallyNormedField.cobounded_neBot, cobounded, cobounded_neBot, toNormedAddCommGroup
+/-
+**exteriorPower.** 是 Mathlib 中的一个实例，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [FiniteDimensional Real E] : NormedAddCommGroup (⋀[Real]^n E) :=
-  InnerProductSpace.Core.toNormedAddCommGroup (𝕜 := Real)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FiniteDimensional
-  signature: Real E] : InnerProductSpace Real (⋀[Real]^n E)
-  body: InnerProductSpace.ofCore _
-
-中文:
-实例 [有限维
-  签名: 实数 E] : 内积空间 实数 (⋀[实数]^n E)
-  定义体: InnerProductSpace.ofCore _
-
-Depends on / 依赖: InnerProductSpace, InnerProductSpace.ofCore, NormedSpace, RealNormedSpace, RealNormedSpace.cobounded_neBot, cobounded_neBot, ofCore
+instance [FiniteDimensional ℝ E] : NormedAddCommGroup (⋀[ℝ]^n E) :=
+  InnerProductSpace.Core.toNormedAddCommGroup (𝕜 := ℝ)
+/-
+**exteriorPower.** 是 Mathlib 中的一个实例，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [FiniteDimensional Real E] : InnerProductSpace Real (⋀[Real]^n E) :=
+instance [FiniteDimensional ℝ E] : InnerProductSpace ℝ (⋀[ℝ]^n E) :=
   InnerProductSpace.ofCore _
-
-/--
-lemma `inner_ιMulti_ιMulti` / 引理 `inner_ιMulti_ιMulti`
-
-English:
-lemma inner_ιMulti_ιMulti
-  given: [FiniteDimensional Real E] (x y : Fin n -> E)
-  proof: innerProductForm_ιMulti_ιMulti x y
-
-中文:
-引理 inner_ιMulti_ιMulti
-  条件: [有限维 实数 E] (x y : 有限集 n -> E)
-  证明: innerProductForm_ιMulti_ιMulti x y
-
-Depends on / 依赖: Infinite, NontriviallyNormedField, NontriviallyNormedField.infinite, infinite
+/-
+**exteriorPower.inner_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma inner_ιMulti_ιMulti [FiniteDimensional Real E] (x y : Fin n -> E) :
-    ⟪ιMulti Real n x, ιMulti Real n y⟫ = det (of fun i j => ⟪x j, y i⟫) :=
+lemma inner_ιMulti_ιMulti [FiniteDimensional ℝ E] (x y : Fin n → E) :
+    ⟪ιMulti ℝ n x, ιMulti ℝ n y⟫ = det (of fun i j ↦ ⟪x j, y i⟫) :=
   innerProductForm_ιMulti_ιMulti x y
-
-/--
-lemma `inner_ιMulti_self` / 引理 `inner_ιMulti_self`
-
-English:
-lemma inner_ιMulti_self
-  given: [FiniteDimensional Real E] (x : Fin n -> E)
-  proof: innerProductForm_ιMulti_self x
-
-中文:
-引理 inner_ιMulti_self
-  条件: [有限维 实数 E] (x : 有限集 n -> E)
-  证明: innerProductForm_ιMulti_self x
-
-Depends on / 依赖: NoncompactSpace, NormedField, NormedField.noncompactSpace, noncompactSpace
+/-
+**exteriorPower.inner_** 是 Mathlib 中的一个引理，位于命名空间 `exteriorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma inner_ιMulti_self [FiniteDimensional Real E] (x : Fin n -> E) :
-    ⟪ιMulti Real n x, ιMulti Real n x⟫ = det (gram Real x) :=
+lemma inner_ιMulti_self [FiniteDimensional ℝ E] (x : Fin n → E) :
+    ⟪ιMulti ℝ n x, ιMulti ℝ n x⟫ = det (gram ℝ x) :=
   innerProductForm_ιMulti_self x
 
 end exteriorPower
 
 section OrthonormalBasis
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace Real E] [FiniteDimensional Real E]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
 variable {I : Type*} [Fintype I] [LinearOrder I]
 
-/--
-Definition of `OrthonormalBasis.exteriorPower` / `OrthonormalBasis.exteriorPower` 的定义
+/-- An orthonormal basis of a finite-dimensional real inner product space `E` induces an
+orthonormal basis of `⋀[ℝ]^n E`, indexed by `n`-element subsets of the index type. -/
+/-
+**OrthonormalBasis.exteriorPower** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrthonormalBasis.exteriorPower (b : OrthonormalBasis I Real E) (n : Nat) :
+ OrthonormalBasis (Set.powersetCard I n) Real (⋀[Real]^n E)
+参数：b : OrthonormalBasis I Real E；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrthonormalBasis.exteriorPower
-  signature: (b : OrthonormalBasis I Real E) (n : Nat)
-  body: (b.toBasis.exteriorPower n).toOrthonormalBasis by
-    rw [orthonormal_iff_ite]
-    intro i j
-    rw [exteriorPower.coe_basis]; rw [OrthonormalBasis.coe_toBasis]
-    exact exteriorPower.innerProductForm_ιMulti_family_of_orthonormal b.orthonormal i j
-
-@[simp]
-
-中文:
-定义 正交标准基.exteriorPower
-  签名: (b : 正交标准基 I 实数 E) (n : 自然数)
-  定义体: (b.toBasis.exteriorPower n).toOrthonormalBasis by
-    rw [orthonormal_iff_ite]
-    intro i j
-    rw [exteriorPower.coe_basis]; rw [OrthonormalBasis.coe_toBasis]
-    exact exteriorPower.innerProductForm_ιMulti_family_of_orthonormal b.orthonormal i j
-
-@[simp]
-
-Depends on / 依赖: NoncompactSpace, NormedSpace, OrthonormalBasis, OrthonormalBasis.coe_toBasis, RealNormedSpace, RealNormedSpace.noncompactSpace, b.orthonormal, b.toBasis.exteriorPower, coe_basis, coe_toBasis, exteriorPower, exteriorPower.coe_basis, exteriorPower.innerProductForm_, noncompactSpace, orthonormal, orthonormal_iff_ite, toBasis, toOrthonormalBasis
+--- 原说明 ---
+An orthonormal basis of a finite-dimensional real inner product space `E` induce
+s an
+orthonormal basis of `⋀[ℝ]^n E`, indexed by `n`-element subsets of the index typ
+e.
 -/
-def OrthonormalBasis.exteriorPower (b : OrthonormalBasis I Real E) (n : Nat) :
-    OrthonormalBasis (Set.powersetCard I n) Real (⋀[Real]^n E) :=
-(b.toBasis.exteriorPower n).toOrthonormalBasis by
+def OrthonormalBasis.exteriorPower (b : OrthonormalBasis I ℝ E) (n : ℕ) :
+    OrthonormalBasis (Set.powersetCard I n) ℝ (⋀[ℝ]^n E) :=
+  (b.toBasis.exteriorPower n).toOrthonormalBasis <| by
     rw [orthonormal_iff_ite]
     intro i j
-    rw [exteriorPower.coe_basis]; rw [OrthonormalBasis.coe_toBasis]
+    rw [exteriorPower.coe_basis, OrthonormalBasis.coe_toBasis]
     exact exteriorPower.innerProductForm_ιMulti_family_of_orthonormal b.orthonormal i j
 
 @[simp]
-/--
-lemma `OrthonormalBasis.toBasis_exteriorPower` / 引理 `OrthonormalBasis.toBasis_exteriorPower`
-
-English:
-lemma OrthonormalBasis.toBasis_exteriorPower
-  given: (b : OrthonormalBasis I Real E) (n : Nat)
-  proof: (b.toBasis.exteriorPower n).toBasis_toOrthonormalBasis _
-
-中文:
-引理 正交标准基.toBasis_exteriorPower
-  条件: (b : 正交标准基 I 实数 E) (n : 自然数)
-  证明: (b.toBasis.exteriorPower n).toBasis_toOrthonormalBasis _
-
-Depends on / 依赖: NormedAlgebra, NormedAlgebra.toNormedSpace, NormedSpace, b.toBasis.exteriorPower, exteriorPower, toBasis, toBasis_toOrthonormalBasis, toNormedSpace
+/-
+**OrthonormalBasis.toBasis_exteriorPower** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：OrthonormalBasis.toBasis_exteriorPower (b : OrthonormalBasis I Real E) (n 
+: Nat) : (b.exteriorPower n).toBasis = b.toBasis.exteriorPower n
+参数：b : OrthonormalBasis I Real E；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.toBasis_toOrthonormalBasis`：∀ {ι : Type u_1} {𝕜 : Type u_3}
+ [inst : RCLike 𝕜] {E : Type u_4} [inst_1 : NormedAddCommGroup E]   [inst_2 : In
+nerProductSpace 𝕜 E] [inst_3 …
 -/
-lemma OrthonormalBasis.toBasis_exteriorPower (b : OrthonormalBasis I Real E) (n : Nat) :
+lemma OrthonormalBasis.toBasis_exteriorPower (b : OrthonormalBasis I ℝ E) (n : ℕ) :
     (b.exteriorPower n).toBasis = b.toBasis.exteriorPower n :=
   (b.toBasis.exteriorPower n).toBasis_toOrthonormalBasis _
 
 end OrthonormalBasis
+

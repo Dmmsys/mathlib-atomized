@@ -35,81 +35,54 @@ open CategoryTheory Limits
 variable (V : Type*) [Category* V]
 
 -- Note: this is _not_ a categorical action of `G` on `V`.
-/--
-Definition of `Action` / `Action` 的定义
+/-- An `Action V G` represents a bundled action of
+the monoid `G` on an object of some category `V`.
 
-English:
-structure Action
-  parameters: (G : Type*) [Monoid G]
-  axioms and operations (2):
-    - V : V
-    - ρ : G ->* End V
+As an example, when `V = ModuleCat R`, this is an `R`-linear representation of `G`,
+while when `V = Type` this is a `G`-action.
+-/
+/-
+**Action** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(V : Type u_1) → [CategoryTheory.Category.{v_1, u_1} V] → (G : Type u_2) →
+ [Monoid G] → Type (max (max u_1 u_2) v_1)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 作用
-  参数: (G : 类型) [幺半群 G]
-  公理与运算 (2 个):
-    - V : V
-    - ρ : G ->* End V
+--- 原说明 ---
+An `Action V G` represents a bundled action of
+the monoid `G` on an object of some category `V`.
+
+As an example, when `V = ModuleCat R`, this is an `R`-linear representation of `
+G`,
+while when `V = Type` this is a `G`-action.
 -/
 structure Action (G : Type*) [Monoid G] where
   /-- The object this action acts on -/
   V : V
   /-- The underlying monoid homomorphism of this action -/
-  ρ : G ->* End V
+  ρ : G →* End V
 
 namespace Action
 
 variable {V}
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `ρ_one` / 定理 `ρ_one`
-
-English:
-theorem ρ_one
-  given: {G : Type*} [Monoid G] (A : Action V G)
-  statement: A.ρ 1 = 𝟙 A.V
-  proof: by simp
-
-中文:
-定理 ρ_one
-  条件: {G : 类型} [幺半群 G] (A : 作用 V G)
-  结论: A.ρ 1 = 𝟙 A.V
-  证明: by simp
-
-Depends on / 依赖: Finite, Finite.exists_type_univ_nonempty_mulEquiv, Limits, Limits.preservesColimitsOfShape_of_equiv, exists_type_univ_nonempty_mulEquiv, he.some.toSingleObjEquiv.symm, preservesColimitsOfShape_of_equiv, toSingleObjEquiv
+/-
+**Action.** 是 Mathlib 中的一个定理，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ρ_one {G : Type*} [Monoid G] (A : Action V G) : A.ρ 1 = 𝟙 A.V := by simp
 
 /-- When a group acts, we can lift the action to the group of automorphisms. -/
 @[simps]
-/--
-Definition of `ρAut` / `ρAut` 的定义
+/-
+**Action.** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ρAut
-  signature: {G : Type*} [Group G] (A : Action V G)
-  body: { hom := A.ρ g
-      inv := A.ρ (g⁻¹ : G)
-      hom_inv_id := (A.ρ.map_mul (g⁻¹ : G) g).symm.trans (by rw [inv_mul_cancel, ρ_one])
-      inv_hom_id := (A.ρ.map_mul g (g⁻¹ : G)).symm.trans (by rw [mul_inv_cancel, ρ_one]) }
-  map_one' := Aut.ext A.ρ.map_one
-  map_mul' x y := Aut.ext (A.ρ.map_mul x y)
-
-中文:
-定义 ρAut
-  签名: {G : 类型} [群 G] (A : 作用 V G)
-  定义体: { hom := A.ρ g
-      inv := A.ρ (g⁻¹ : G)
-      hom_inv_id := (A.ρ.map_mul (g⁻¹ : G) g).symm.trans (by rw [inv_mul_cancel, ρ_one])
-      inv_hom_id := (A.ρ.map_mul g (g⁻¹ : G)).symm.trans (by rw [mul_inv_cancel, ρ_one]) }
-  map_one' := Aut.ext A.ρ.map_one
-  map_mul' x y := Aut.ext (A.ρ.map_mul x y)
-
-Depends on / 依赖: Aut.ext, hom_inv_id, inv_hom_id, inv_mul_cancel, map_mul, map_one, mul_inv_cancel, symm.trans
+--- 原说明 ---
+When a group acts, we can lift the action to the group of automorphisms.
 -/
-def ρAut {G : Type*} [Group G] (A : Action V G) : G ->* Aut A.V where
+def ρAut {G : Type*} [Group G] (A : Action V G) : G →* Aut A.V where
   toFun g :=
     { hom := A.ρ g
       inv := A.ρ (g⁻¹ : G)
@@ -124,54 +97,31 @@ section
 
 /-- The action defined by sending every monoid element to the identity. -/
 @[simps]
-/--
-Definition of `trivial` / `trivial` 的定义
+/-
+**Action.trivial** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：trivial (X : V) : Action V G
+参数：X : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivial
-  signature: (X : V)
-  body: { V := X, ρ := 1 }
-
-中文:
-定义 trivial
-  签名: (X : V)
-  定义体: { V := X, ρ := 1 }
+--- 原说明 ---
+The action defined by sending every monoid element to the identity.
 -/
 def trivial (X : V) : Action V G := { V := X, ρ := 1 }
-
-/--
-Instance `inhabited'` / 实例 `inhabited'`
-
-English:
-instance inhabited'
-  signature: : Inhabited (Action Type* G)
-  body: ⟨⟨PUnit, 1⟩⟩
-
-中文:
-实例 inhabited'
-  签名: : 可居 (作用 类型 G)
-  定义体: ⟨⟨PUnit, 1⟩⟩
+/-
+**Action.inhabited'** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+形式化陈述：inhabited' : Inhabited (Action Type* G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabited' : Inhabited (Action Type* G) :=
   ⟨⟨PUnit, 1⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Action AddCommGrpCat G)
-  body: ⟨trivial G AddCommGrpCat.of PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 (作用 加法交换群范畴 G)
-  定义体: ⟨trivial G AddCommGrpCat.of PUnit⟩
-
-Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.of, hom.app
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Action AddCommGrpCat G) :=
-⟨trivial G AddCommGrpCat.of PUnit⟩
+  ⟨trivial G <| AddCommGrpCat.of PUnit⟩
 
 end
 
@@ -181,29 +131,22 @@ variable {G}
 commuting with the action of `G`.
 -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**Action.Hom** 是 Mathlib 中的一个结构，位于命名空间 `Action`。
+形式化陈述：Hom (M N : Action V G) where /-- The morphism between the underlying objec
+ts of this action -/ hom : M.V ⟶ N.V comm : forall g : G, M.ρ g ≫ hom = hom ≫ N.
+ρ g
+参数：M N : Action V G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (M N : Action V G)
-  axioms and operations (2):
-    - hom : M.V ⟶ N.V
-    - comm : forall g : G, M.ρ g ≫ hom = hom ≫ N.ρ g  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (M N : 作用 V G)
-  公理与运算 (2 个):
-    - hom : M.V ⟶ N.V
-    - comm : 对任意 g : G, M.ρ g ≫ hom = hom ≫ N.ρ g  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A homomorphism of `Action V G`s is a morphism between the underlying objects,
+commuting with the action of `G`.
 -/
 structure Hom (M N : Action V G) where
   /-- The morphism between the underlying objects of this action -/
   hom : M.V ⟶ N.V
-  comm : forall g : G, M.ρ g ≫ hom = hom ≫ N.ρ g := by cat_disch
+  comm : ∀ g : G, M.ρ g ≫ hom = hom ≫ N.ρ g := by cat_disch
 
 namespace Hom
 
@@ -213,21 +156,21 @@ attribute [local simp] comm comm_assoc
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The identity morphism on an `Action V G`. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**Action.Hom.id** 是 Mathlib 中的一个定义，位于命名空间 `Action.Hom`。
+形式化陈述：id (M : Action V G) : Action.Hom M M where hom
+参数：M : Action V G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (M : Action V G)
-  body: 𝟙 M.V
-
-中文:
-定义 id
-  签名: (M : 作用 V G)
-  定义体: 𝟙 M.V
+--- 原说明 ---
+The identity morphism on an `Action V G`.
 -/
 def id (M : Action V G) : Action.Hom M M where hom := 𝟙 M.V
-
+/-
+**Action.Hom.** 是 Mathlib 中的一个实例，位于命名空间 `Action.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (M : Action V G) : Inhabited (Action.Hom M M) :=
   ⟨id M⟩
 
@@ -235,26 +178,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The composition of two `Action V G` homomorphisms is the composition of the underlying maps.
 -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**Action.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `Action.Hom`。
+形式化陈述：comp {M N K : Action V G} (p : Action.Hom M N) (q : Action.Hom N K) : Acti
+on.Hom M K where hom
+参数：p : Action.Hom M N；q : Action.Hom N K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {M N K : Action V G} (p : Action.Hom M N) (q : Action.Hom N K)
-  body: p.hom ≫ q.hom
-  comm := by
-    intro g
-    simp_all only [comm_assoc, comm, Category.assoc]
-
-中文:
-定义 comp
-  签名: {M N K : 作用 V G} (p : 作用.态射 M N) (q : 作用.态射 N K)
-  定义体: p.hom ≫ q.hom
-  comm := by
-    intro g
-    simp_all only [comm_assoc, comm, Category.assoc]
-
-Depends on / 依赖: p.hom, q.hom
+--- 原说明 ---
+The composition of two `Action V G` homomorphisms is the composition of the unde
+rlying maps.
 -/
 def comp {M N K : Action V G} (p : Action.Hom M N) (q : Action.Hom N K) : Action.Hom M K where
   hom := p.hom ≫ q.hom
@@ -264,194 +198,128 @@ def comp {M N K : Action V G} (p : Action.Hom M N) (q : Action.Hom N K) : Action
 
 end Hom
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (Action V G)
-  body: Hom M N
-  id M := Hom.id M
-  comp f g := Hom.comp f g
-
-中文:
-实例 :
-  签名: 范畴 (作用 V G)
-  定义体: Hom M N
-  id M := Hom.id M
-  comp f g := Hom.comp f g
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (Action V G) where
   Hom M N := Hom M N
   id M := Hom.id M
   comp f g := Hom.comp f g
-
-/--
-lemma `hom_injective` / 引理 `hom_injective`
-
-English:
-lemma hom_injective
-  given: {M N : Action V G}
-  statement: Function.Injective (Hom.hom : (M ⟶ N) -> (M.V ⟶ N.V))
-  proof: fun _ _ => Hom.ext
-
-@[ext]
-
-中文:
-引理 hom_injective
-  条件: {M N : 作用 V G}
-  结论: 函数.单射 (态射.hom : (M ⟶ N) -> (M.V ⟶ N.V))
-  证明: fun _ _ => Hom.ext
-
-@[ext]
-
-Depends on / 依赖: Hom.ext
+/-
+**Action.hom_injective** 是 Mathlib 中的一个引理，位于命名空间 `Action`。
+形式化陈述：hom_injective {M N : Action V G} : Function.Injective (Hom.hom : (M ⟶ N) -
+> (M.V ⟶ N.V))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Action.Hom.ext`：∀ {V : Type u_1} {inst : CategoryTheory.Category.{v_1, u
+_1} V} {G : Type u_2} {inst_1 : Monoid G} {M N : Action V G}   {x y : M.Hom N}, 
+x.ho…
 -/
-lemma hom_injective {M N : Action V G} : Function.Injective (Hom.hom : (M ⟶ N) -> (M.V ⟶ N.V)) :=
-  fun _ _ => Hom.ext
+lemma hom_injective {M N : Action V G} : Function.Injective (Hom.hom : (M ⟶ N) → (M.V ⟶ N.V)) :=
+  fun _ _ ↦ Hom.ext
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {M N : Action V G} (φ₁ φ₂ : M ⟶ N) (h : φ₁.hom = φ₂.hom)
-  statement: φ₁ = φ₂
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {M N : 作用 V G} (φ₁ φ₂ : M ⟶ N) (h : φ₁.hom = φ₂.hom)
-  结论: φ₁ = φ₂
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**Action.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `Action`。
+形式化陈述：hom_ext {M N : Action V G} (φ₁ φ₂ : M ⟶ N) (h : φ₁.hom = φ₂.hom) : φ₁ = φ₂
+参数：φ₁ φ₂ : M ⟶ N；h : φ₁.hom = φ₂.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Action.Hom.ext`：∀ {V : Type u_1} {inst : CategoryTheory.Category.{v_1, u
+_1} V} {G : Type u_2} {inst_1 : Monoid G} {M N : Action V G}   {x y : M.Hom N}, 
+x.ho…
 -/
 lemma hom_ext {M N : Action V G} (φ₁ φ₂ : M ⟶ N) (h : φ₁.hom = φ₂.hom) : φ₁ = φ₂ :=
   Hom.ext h
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `id_hom` / 定理 `id_hom`
-
-English:
-theorem id_hom
-  given: (M : Action V G)
-  statement: (𝟙 M : Hom M M).hom = 𝟙 M.V
-  proof: rfl
-
-中文:
-定理 id_hom
-  条件: (M : 作用 V G)
-  结论: (𝟙 M : 态射 M M).hom = 𝟙 M.V
-  证明: rfl
+/-
+**Action.id_hom** 是 Mathlib 中的一个定理，位于命名空间 `Action`。
+形式化陈述：id_hom (M : Action V G) : (𝟙 M : Hom M M).hom = 𝟙 M.V
+参数：M : Action V G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_hom (M : Action V G) : (𝟙 M : Hom M M).hom = 𝟙 M.V :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp, reassoc]
-/--
-theorem `comp_hom` / 定理 `comp_hom`
-
-English:
-theorem comp_hom
-  given: {M N K : Action V G} (f : M ⟶ N) (g : N ⟶ K)
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 comp_hom
-  条件: {M N K : 作用 V G} (f : M ⟶ N) (g : N ⟶ K)
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**Action.comp_hom** 是 Mathlib 中的一个定理，位于命名空间 `Action`。
+形式化陈述：comp_hom {M N K : Action V G} (f : M ⟶ N) (g : N ⟶ K) : (f ≫ g : Hom M K).
+hom = f.hom ≫ g.hom
+参数：f : M ⟶ N；g : N ⟶ K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_hom {M N K : Action V G} (f : M ⟶ N) (g : N ⟶ K) :
     (f ≫ g : Hom M K).hom = f.hom ≫ g.hom :=
   rfl
 
 @[reassoc (attr := simp)]
-/--
-theorem `hom_inv_hom` / 定理 `hom_inv_hom`
-
-English:
-theorem hom_inv_hom
-  given: {M N : Action V G} (f : M ≅ N)
-  proof: by
-  rw [← comp_hom]; rw [Iso.hom_inv_id]; rw [id_hom]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 hom_inv_hom
-  条件: {M N : 作用 V G} (f : M ≅ N)
-  证明: by
-  rw [← comp_hom]; rw [Iso.hom_inv_id]; rw [id_hom]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Iso.hom_inv_id, comp_hom, hom_inv_id, id_hom
+/-
+**Action.hom_inv_hom** 是 Mathlib 中的一个定理，位于命名空间 `Action`。
+形式化陈述：hom_inv_hom {M N : Action V G} (f : M ≅ N) : f.hom.hom ≫ f.inv.hom = 𝟙 M.V
+参数：f : M ≅ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Action.comp_hom`：comp_hom {M N K : Action V G} (f : M ⟶ N) (g : N ⟶ K) :
+ (f ≫ g : Hom M K).hom = f.hom ≫ g.hom
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `Action.id_hom`：id_hom (M : Action V G) : (𝟙 M : Hom M M).hom = 𝟙 M.V
 -/
 theorem hom_inv_hom {M N : Action V G} (f : M ≅ N) :
     f.hom.hom ≫ f.inv.hom = 𝟙 M.V := by
-  rw [← comp_hom]; rw [Iso.hom_inv_id]; rw [id_hom]
+  rw [← comp_hom, Iso.hom_inv_id, id_hom]
 
 @[reassoc (attr := simp)]
-/--
-theorem `inv_hom_hom` / 定理 `inv_hom_hom`
-
-English:
-theorem inv_hom_hom
-  given: {M N : Action V G} (f : M ≅ N)
-  proof: by
-  rw [← comp_hom]; rw [Iso.inv_hom_id]; rw [id_hom]
-
-中文:
-定理 inv_hom_hom
-  条件: {M N : 作用 V G} (f : M ≅ N)
-  证明: by
-  rw [← comp_hom]; rw [Iso.inv_hom_id]; rw [id_hom]
-
-Depends on / 依赖: Iso.inv_hom_id, comp_hom, id_hom, inv_hom_id
+/-
+**Action.inv_hom_hom** 是 Mathlib 中的一个定理，位于命名空间 `Action`。
+形式化陈述：inv_hom_hom {M N : Action V G} (f : M ≅ N) : f.inv.hom ≫ f.hom.hom = 𝟙 N.V
+参数：f : M ≅ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Action.comp_hom`：comp_hom {M N K : Action V G} (f : M ⟶ N) (g : N ⟶ K) :
+ (f ≫ g : Hom M K).hom = f.hom ≫ g.hom
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `Action.id_hom`：id_hom (M : Action V G) : (𝟙 M : Hom M M).hom = 𝟙 M.V
 -/
 theorem inv_hom_hom {M N : Action V G} (f : M ≅ N) :
     f.inv.hom ≫ f.hom.hom = 𝟙 N.V := by
-  rw [← comp_hom]; rw [Iso.inv_hom_id]; rw [id_hom]
+  rw [← comp_hom, Iso.inv_hom_id, id_hom]
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Construct an isomorphism of `G` actions/representations
 from an isomorphism of the underlying objects,
 where the forward direction commutes with the group action. -/
 @[simps]
-/--
-Definition of `mkIso` / `mkIso` 的定义
+/-
+**Action.mkIso** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：mkIso {M N : Action V G} (f : M.V ≅ N.V) (comm : forall g : G, M.ρ g ≫ f.h
+om = f.hom ≫ N.ρ g
+参数：f : M.V ≅ N.V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIso
-  signature: {M N : Action V G} (f : M.V ≅ N.V)
-  body: { hom := f.hom
-      comm := comm }
-  inv :=
-    { hom := f.inv
-      comm := fun g => by have w := comm g =≫ f.inv; simp at w; simp [w] }
-
-中文:
-定义 mkIso
-  签名: {M N : 作用 V G} (f : M.V ≅ N.V)
-  定义体: { hom := f.hom
-      comm := comm }
-  inv :=
-    { hom := f.inv
-      comm := fun g => by have w := comm g =≫ f.inv; simp at w; simp [w] }
-
-Depends on / 依赖: cat_disch, f.hom, f.inv
+--- 原说明 ---
+Construct an isomorphism of `G` actions/representations
+from an isomorphism of the underlying objects,
+where the forward direction commutes with the group action.
 -/
 def mkIso {M N : Action V G} (f : M.V ≅ N.V)
-    (comm : forall g : G, M.ρ g ≫ f.hom = f.hom ≫ N.ρ g := by cat_disch) : M ≅ N where
+    (comm : ∀ g : G, M.ρ g ≫ f.hom = f.hom ≫ N.ρ g := by cat_disch) : M ≅ N where
   hom :=
     { hom := f.hom
       comm := comm }
@@ -460,32 +328,37 @@ def mkIso {M N : Action V G} (f : M.V ≅ N.V)
       comm := fun g => by have w := comm g =≫ f.inv; simp at w; simp [w] }
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) isIso_of_hom_isIso {M N : Action V G} (f : M ⟶ N) [IsIso f.hom] :
     IsIso f := (mkIso (asIso f.hom) f.comm).isIso_hom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `isIso_hom_mk` / 实例 `isIso_hom_mk`
-
-English:
-instance isIso_hom_mk
-  signature: {M N : Action V G} (f : M.V ⟶ N.V) [IsIso f] (w)
-  body: (mkIso (asIso f) w).isIso_hom
-
-中文:
-实例 isIso_hom_mk
-  签名: {M N : 作用 V G} (f : M.V ⟶ N.V) [是同构 f] (w)
-  定义体: (mkIso (asIso f) w).isIso_hom
-
-Depends on / 依赖: isIso_hom
+/-
+**Action.isIso_hom_mk** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+形式化陈述：isIso_hom_mk {M N : Action V G} (f : M.V ⟶ N.V) [IsIso f] (w) : @IsIso _ _
+ M N (Hom.mk f w)
+参数：f : M.V ⟶ N.V；w。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance isIso_hom_mk {M N : Action V G} (f : M.V ⟶ N.V) [IsIso f] (w) :
     @IsIso _ _ M N (Hom.mk f w) :=
   (mkIso (asIso f) w).isIso_hom
-
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {M N : Action V G} (f : M ≅ N) : IsIso f.hom.hom where
   out := ⟨f.inv.hom, by simp⟩
-
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {M N : Action V G} (f : M ≅ N) : IsIso f.inv.hom where
   out := ⟨f.hom.hom, by simp⟩
 
@@ -494,32 +367,18 @@ namespace FunctorCategoryEquivalence
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Auxiliary definition for `functorCategoryEquivalence`. -/
 @[simps]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**Action.FunctorCategoryEquivalence.functor** 是 Mathlib 中的一个定义，位于命名空间 `Action.Fu
+nctorCategoryEquivalence`。
+形式化陈述：functor : Action V G ⥤ SingleObj G ⥤ V where obj M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Action.Hom.comm`：∀ {V : Type u_1} [inst : CategoryTheory.Category.{v_1, 
+u_1} V] {G : Type u_2} [inst_1 : Monoid G] {M N : Action V G}   (self : M.Hom N)
+ (g :…
 
-English:
-definition functor
-  signature: : Action V G ⥤ SingleObj G ⥤ V where
-  body: { obj := fun _ => M.V
-      map := fun g => M.ρ g
-      map_id := fun _ => M.ρ.map_one
-      map_comp := fun g h => M.ρ.map_mul h g }
-  map f :=
-    { app := fun _ => f.hom
-      naturality := fun _ _ g => f.comm g }
-
-中文:
-定义 functor
-  签名: : 作用 V G ⥤ SingleObj G ⥤ V where
-  定义体: { obj := fun _ => M.V
-      map := fun g => M.ρ g
-      map_id := fun _ => M.ρ.map_one
-      map_comp := fun g h => M.ρ.map_mul h g }
-  map f :=
-    { app := fun _ => f.hom
-      naturality := fun _ _ g => f.comm g }
-
-Depends on / 依赖: f.comm, f.hom, map_comp, map_id, map_mul, map_one, naturality
+--- 原说明 ---
+Auxiliary definition for `functorCategoryEquivalence`.
 -/
 def functor : Action V G ⥤ SingleObj G ⥤ V where
   obj M :=
@@ -534,34 +393,15 @@ def functor : Action V G ⥤ SingleObj G ⥤ V where
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Auxiliary definition for `functorCategoryEquivalence`. -/
 @[simps]
-/--
-Definition of `inverse` / `inverse` 的定义
+/-
+**Action.FunctorCategoryEquivalence.inverse** 是 Mathlib 中的一个定义，位于命名空间 `Action.Fu
+nctorCategoryEquivalence`。
+形式化陈述：inverse : (SingleObj G ⥤ V) ⥤ Action V G where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inverse
-  signature: : (SingleObj G ⥤ V) ⥤ Action V G where
-  body: { V := F.obj PUnit.unit
-      ρ :=
-        { toFun := fun g => F.map g
-          map_one' := F.map_id PUnit.unit
-          map_mul' := fun g h => F.map_comp h g } }
-  map f :=
-    { hom := f.app PUnit.unit
-      comm := fun g => f.naturality g }
-
-中文:
-定义 inverse
-  签名: : (SingleObj G ⥤ V) ⥤ 作用 V G where
-  定义体: { V := F.obj PUnit.unit
-      ρ :=
-        { toFun := fun g => F.map g
-          map_one' := F.map_id PUnit.unit
-          map_mul' := fun g h => F.map_comp h g } }
-  map f :=
-    { hom := f.app PUnit.unit
-      comm := fun g => f.naturality g }
-
-Depends on / 依赖: F.map, F.map_comp, F.map_id, F.obj, PUnit.unit, f.app, f.naturality, map_comp, map_id, map_mul, map_one, naturality
+--- 原说明 ---
+Auxiliary definition for `functorCategoryEquivalence`.
 -/
 def inverse : (SingleObj G ⥤ V) ⥤ Action V G where
   obj F :=
@@ -578,20 +418,15 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Auxiliary definition for `functorCategoryEquivalence`. -/
 @[simps!]
-/--
-Definition of `unitIso` / `unitIso` 的定义
+/-
+**Action.FunctorCategoryEquivalence.unitIso** 是 Mathlib 中的一个定义，位于命名空间 `Action.Fu
+nctorCategoryEquivalence`。
+形式化陈述：unitIso : 𝟭 (Action V G) ≅ functor ⋙ inverse
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unitIso
-  signature: : 𝟭 (Action V G) ≅ functor ⋙ inverse
-  body: NatIso.ofComponents fun M => mkIso (Iso.refl _)
-
-中文:
-定义 unitIso
-  签名: : 𝟭 (作用 V G) ≅ functor ⋙ inverse
-  定义体: NatIso.ofComponents fun M => mkIso (Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Auxiliary definition for `functorCategoryEquivalence`.
 -/
 def unitIso : 𝟭 (Action V G) ≅ functor ⋙ inverse :=
   NatIso.ofComponents fun M => mkIso (Iso.refl _)
@@ -599,20 +434,15 @@ def unitIso : 𝟭 (Action V G) ≅ functor ⋙ inverse :=
 set_option backward.isDefEq.respectTransparency false in
 /-- Auxiliary definition for `functorCategoryEquivalence`. -/
 @[simps!]
-/--
-Definition of `counitIso` / `counitIso` 的定义
+/-
+**Action.FunctorCategoryEquivalence.counitIso** 是 Mathlib 中的一个定义，位于命名空间 `Action.
+FunctorCategoryEquivalence`。
+形式化陈述：counitIso : inverse ⋙ functor ≅ 𝟭 (SingleObj G ⥤ V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitIso
-  signature: : inverse ⋙ functor ≅ 𝟭 (SingleObj G ⥤ V)
-  body: NatIso.ofComponents fun M => NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 counitIso
-  签名: : inverse ⋙ functor ≅ 𝟭 (SingleObj G ⥤ V)
-  定义体: NatIso.ofComponents fun M => NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Auxiliary definition for `functorCategoryEquivalence`.
 -/
 def counitIso : inverse ⋙ functor ≅ 𝟭 (SingleObj G ⥤ V) :=
   NatIso.ofComponents fun M => NatIso.ofComponents fun _ => Iso.refl _
@@ -631,26 +461,15 @@ set_option backward.defeqAttrib.useBackward true in
 is equivalent to the functor category `SingleObj G ⥤ V`.
 -/
 @[simps]
-/--
-Definition of `functorCategoryEquivalence` / `functorCategoryEquivalence` 的定义
+/-
+**Action.functorCategoryEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：functorCategoryEquivalence : Action V G ≌ SingleObj G ⥤ V where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorCategoryEquivalence
-  signature: : Action V G ≌ SingleObj G ⥤ V where
-  body: functor
-  inverse := inverse
-  unitIso := unitIso
-  counitIso := counitIso
-
-中文:
-定义 functorCategoryEquivalence
-  签名: : 作用 V G ≌ SingleObj G ⥤ V where
-  定义体: functor
-  inverse := inverse
-  unitIso := unitIso
-  counitIso := counitIso
-
-Depends on / 依赖: functor
+--- 原说明 ---
+The category of actions of `G` in the category `V`
+is equivalent to the functor category `SingleObj G ⥤ V`.
 -/
 def functorCategoryEquivalence : Action V G ≌ SingleObj G ⥤ V where
   functor := functor
@@ -659,39 +478,17 @@ def functorCategoryEquivalence : Action V G ≌ SingleObj G ⥤ V where
   counitIso := counitIso
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (FunctorCategoryEquivalence.functor (V := V) (G := G)).IsEquivalence
-  body: (functorCategoryEquivalence V G).isEquivalence_functor
-
-中文:
-实例 :
-  签名: (FunctorCategoryEquivalence.functor (V := V) (G := G)).是等价
-  定义体: (functorCategoryEquivalence V G).isEquivalence_functor
-
-Depends on / 依赖: IsEquivalence
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (FunctorCategoryEquivalence.functor (V := V) (G := G)).IsEquivalence :=
   (functorCategoryEquivalence V G).isEquivalence_functor
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (FunctorCategoryEquivalence.inverse (V := V) (G := G)).IsEquivalence
-  body: (functorCategoryEquivalence V G).isEquivalence_inverse
-
-中文:
-实例 :
-  签名: (FunctorCategoryEquivalence.inverse (V := V) (G := G)).是等价
-  定义体: (functorCategoryEquivalence V G).isEquivalence_inverse
-
-Depends on / 依赖: IsEquivalence
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (FunctorCategoryEquivalence.inverse (V := V) (G := G)).IsEquivalence :=
   (functorCategoryEquivalence V G).isEquivalence_inverse
@@ -709,72 +506,61 @@ Use the `CategoryTheory.forget` API provided by the `ConcreteCategory` instance 
 rather than using this directly.
 -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**Action.forget** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：forget : Action V G ⥤ V where obj M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : Action V G ⥤ V where
-  body: M.V
-  map f := f.hom
+--- 原说明 ---
+(implementation) The forgetful functor from bundled actions to the underlying ob
+jects.
 
-中文:
-定义 forget
-  签名: : 作用 V G ⥤ V where
-  定义体: M.V
-  map f := f.hom
+Use the `CategoryTheory.forget` API provided by the `ConcreteCategory` instance 
+below,
+rather than using this directly.
 -/
 def forget : Action V G ⥤ V where
   obj M := M.V
   map f := f.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget V G).Faithful
-  body: Hom.ext w
-
-中文:
-实例 :
-  签名: (forget V G).忠实
-  定义体: Hom.ext w
-
-Depends on / 依赖: Hom.ext
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget V G).Faithful where map_injective w := Hom.ext w
 
-/--
-Definition of `HomSubtype` / `HomSubtype` 的定义
+/-- The type of `V`-morphisms that can be lifted back to morphisms in the category `Action`. -/
+/-
+**Action.HomSubtype** 是 Mathlib 中的一个缩写定义，位于命名空间 `Action`。
+形式化陈述：HomSubtype {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (
+FV X Y) (CV X) (CV Y)] [ConcreteCategory V FV] (M N : Action V G)
+参数：FV X Y；CV X；CV Y；M N : Action V G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HomSubtype
-  signature: {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (FV X Y) (CV X) (CV Y)]
-  body: { f : FV M.V N.V // forall g : G,
-      f ∘ ConcreteCategory.hom (M.ρ g) = ConcreteCategory.hom (N.ρ g) ∘ f }
-
-中文:
-缩写 HomSubtype
-  签名: {FV : V -> V -> 类型} {CV : V -> 类型} [对任意 X Y, 函数状 (FV X Y) (CV X) (CV Y)]
-  定义体: { f : FV M.V N.V // forall g : G,
-      f ∘ ConcreteCategory.hom (M.ρ g) = ConcreteCategory.hom (N.ρ g) ∘ f }
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom
+--- 原说明 ---
+The type of `V`-morphisms that can be lifted back to morphisms in the category `
+Action`.
 -/
-abbrev HomSubtype {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (FV X Y) (CV X) (CV Y)]
+abbrev HomSubtype {FV : V → V → Type*} {CV : V → Type*} [∀ X Y, FunLike (FV X Y) (CV X) (CV Y)]
     [ConcreteCategory V FV] (M N : Action V G) :=
-  { f : FV M.V N.V // forall g : G,
+  { f : FV M.V N.V // ∀ g : G,
       f ∘ ConcreteCategory.hom (M.ρ g) = ConcreteCategory.hom (N.ρ g) ∘ f }
-
-instance {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (FV X Y) (CV X) (CV Y)]
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {FV : V → V → Type*} {CV : V → Type*} [∀ X Y, FunLike (FV X Y) (CV X) (CV Y)]
     [ConcreteCategory V FV] (M N : Action V G) :
     FunLike (HomSubtype V G M N) (CV M.V) (CV N.V) where
   coe f := f.1
   coe_injective _ _ h := Subtype.ext (DFunLike.coe_injective h)
 
 set_option backward.isDefEq.respectTransparency.types false in
-instance {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (FV X Y) (CV X) (CV Y)]
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {FV : V → V → Type*} {CV : V → Type*} [∀ X Y, FunLike (FV X Y) (CV X) (CV Y)]
     [ConcreteCategory V FV] : ConcreteCategory (Action V G) (HomSubtype V G) where
   hom f := ⟨ConcreteCategory.hom (C := V) f.1, fun g => by
     ext
@@ -787,79 +573,84 @@ instance {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (FV X Y) 
   comp_apply _ _ := ConcreteCategory.comp_apply (C := V) _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `hasForgetToV` / 实例 `hasForgetToV`
-
-English:
-instance hasForgetToV
-  signature: {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (FV X Y) (CV X) (CV Y)]
-  body: forget V G
-
-中文:
-实例 hasForgetToV
-  签名: {FV : V -> V -> 类型} {CV : V -> 类型} [对任意 X Y, 函数状 (FV X Y) (CV X) (CV Y)]
-  定义体: forget V G
-
-Depends on / 依赖: forget
+/-
+**Action.hasForgetToV** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+形式化陈述：hasForgetToV {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike
+ (FV X Y) (CV X) (CV Y)] [ConcreteCategory V FV] : HasForget₂ (Action V G) V whe
+re forget₂
+参数：FV X Y；CV X；CV Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance hasForgetToV {FV : V -> V -> Type*} {CV : V -> Type*} [forall X Y, FunLike (FV X Y) (CV X) (CV Y)]
+instance hasForgetToV {FV : V → V → Type*} {CV : V → Type*} [∀ X Y, FunLike (FV X Y) (CV X) (CV Y)]
     [ConcreteCategory V FV] : HasForget₂ (Action V G) V where forget₂ := forget V G
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `functorCategoryEquivalenceCompEvaluation` / `functorCategoryEquivalenceCompEvaluation` 的定义
+/-- The forgetful functor is intertwined by `functorCategoryEquivalence` with
+evaluation at `PUnit.star`. -/
+/-
+**Action.functorCategoryEquivalenceCompEvaluation** 是 Mathlib 中的一个定义，位于命名空间 `Act
+ion`。
+形式化陈述：functorCategoryEquivalenceCompEvaluation : (functorCategoryEquivalence V G
+).functor ⋙ (evaluation _ _).obj PUnit.unit ≅ forget V G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorCategoryEquivalenceCompEvaluation
-  signature: :
-  body: Iso.refl _
-
-中文:
-定义 functorCategoryEquivalenceCompEvaluation
-  签名: :
-  定义体: Iso.refl _
-
-Depends on / 依赖: Iso.refl
+--- 原说明 ---
+The forgetful functor is intertwined by `functorCategoryEquivalence` with
+evaluation at `PUnit.star`.
 -/
 def functorCategoryEquivalenceCompEvaluation :
     (functorCategoryEquivalence V G).functor ⋙ (evaluation _ _).obj PUnit.unit ≅ forget V G :=
   Iso.refl _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `preservesLimits_forget` / 实例 `preservesLimits_forget`
-
-English:
-instance preservesLimits_forget
-  signature: [HasLimits V]
-  body: Limits.preservesLimits_of_natIso (Action.functorCategoryEquivalenceCompEvaluation V G)
-
-中文:
-实例 preservesLimits_forget
-  签名: [有极限 V]
-  定义体: Limits.preservesLimits_of_natIso (Action.functorCategoryEquivalenceCompEvaluation V G)
-
-Depends on / 依赖: Action, Action.functorCategoryEquivalenceCompEvaluation, Limits, Limits.preservesLimits_of_natIso, functorCategoryEquivalenceCompEvaluation, preservesLimits_of_natIso
+/-
+**Action.preservesLimits_forget** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+形式化陈述：preservesLimits_forget [HasLimits V] : PreservesLimits (forget V G)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimits_of_natIso`：preservesLimits_of_natI
+so {F G : C ⥤ D} (h : F ≅ G) [PreservesLimitsOfSize.{w, w'} F] : PreservesLimits
+OfSize.{w, w'} G where preservesLimit…
+· 使用定理 `CategoryTheory.Limits.comp_preservesLimits`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.
+{v₂, u₂} D]   {E : Type u₃} [ℰ :…
+· 使用定理 `CategoryTheory.Functor.instPreservesLimitsOfSizeOfIsRightAdjoint`：∀ {C :
+ Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst_
+1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 noncomputable instance preservesLimits_forget [HasLimits V] :
     PreservesLimits (forget V G) :=
   Limits.preservesLimits_of_natIso (Action.functorCategoryEquivalenceCompEvaluation V G)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `preservesColimits_forget` / 实例 `preservesColimits_forget`
-
-English:
-instance preservesColimits_forget
-  signature: [HasColimits V]
-  body: preservesColimits_of_natIso (Action.functorCategoryEquivalenceCompEvaluation V G)
-
-中文:
-实例 preservesColimits_forget
-  签名: [有余极限 V]
-  定义体: preservesColimits_of_natIso (Action.functorCategoryEquivalenceCompEvaluation V G)
-
-Depends on / 依赖: Action, Action.functorCategoryEquivalenceCompEvaluation, functorCategoryEquivalenceCompEvaluation, preservesColimits_of_natIso
+/-
+**Action.preservesColimits_forget** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+形式化陈述：preservesColimits_forget [HasColimits V] : PreservesColimits (forget V G)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesColimits_of_natIso`：preservesColimits_of_
+natIso {F G : C ⥤ D} (h : F ≅ G) [PreservesColimitsOfSize.{w, w'} F] : Preserves
+ColimitsOfSize.{w, w'} G where preserve…
+· 使用定理 `CategoryTheory.Limits.comp_preservesColimits`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   {E : Type u₃} [ℰ :…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfSizeOfIsLeftAdjoint`：∀ {C 
+: Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_2, u_2} C]   [inst
+_1 : CategoryTheory.Category.{v_3, u_3} D] (F : Categor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 noncomputable instance preservesColimits_forget [HasColimits V] :
     PreservesColimits (forget V G) :=
@@ -869,65 +660,26 @@ noncomputable instance preservesColimits_forget [HasColimits V] :
 end Forget
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Iso.conj_ρ` / 定理 `Iso.conj_ρ`
-
-English:
-theorem Iso.conj_ρ
-  given: {M N : Action V G} (f : M ≅ N) (g : G)
-  proof: by
-      rw [Iso.conj_apply]; rw [Iso.eq_inv_comp]; simp [f.hom.comm]
-
-中文:
-定理 同构.conj_ρ
-  条件: {M N : 作用 V G} (f : M ≅ N) (g : G)
-  证明: by
-      rw [Iso.conj_apply]; rw [Iso.eq_inv_comp]; simp [f.hom.comm]
-
-Depends on / 依赖: Iso.conj_apply, Iso.eq_inv_comp, conj_apply, eq_inv_comp, f.hom.comm
+/-
+**Action.Iso.conj_** 是 Mathlib 中的一个定理，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Iso.conj_ρ {M N : Action V G} (f : M ≅ N) (g : G) :
     N.ρ g = ((forget V G).mapIso f).conj (M.ρ g) := by
-      rw [Iso.conj_apply]; rw [Iso.eq_inv_comp]; simp [f.hom.comm]
+      rw [Iso.conj_apply, Iso.eq_inv_comp]; simp [f.hom.comm]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `actionPUnitEquivalence` / `actionPUnitEquivalence` 的定义
+/-- Actions/representations of the trivial monoid are just objects in the ambient category. -/
+/-
+**Action.actionPUnitEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：actionPUnitEquivalence : Action V PUnit ≌ V where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition actionPUnitEquivalence
-  signature: : Action V PUnit ≌ V where
-  body: forget V _
-  inverse :=
-    { obj := fun X => ⟨X, 1⟩
-      map := fun f => ⟨f, fun ⟨⟩ => by simp⟩ }
-  unitIso :=
-    NatIso.ofComponents fun X => mkIso (Iso.refl _) fun ⟨⟩ => by
-      simp only [Functor.id_obj, MonoidHom.one_apply, End.one_def, Functor.comp_obj,
-        forget_obj, Iso.refl_hom, Category.comp_id]
-      exact ρ_one X
-  counitIso := NatIso.ofComponents fun _ => Iso.refl _
-
-@[deprecated (since := "2026-02-08")] alias actionPunitEquivalence := actionPUnitEquivalence
-
-中文:
-定义 actionPUnitEquivalence
-  签名: : 作用 V 命题单元 ≌ V where
-  定义体: forget V _
-  inverse :=
-    { obj := fun X => ⟨X, 1⟩
-      map := fun f => ⟨f, fun ⟨⟩ => by simp⟩ }
-  unitIso :=
-    NatIso.ofComponents fun X => mkIso (Iso.refl _) fun ⟨⟩ => by
-      simp only [Functor.id_obj, MonoidHom.one_apply, End.one_def, Functor.comp_obj,
-        forget_obj, Iso.refl_hom, Category.comp_id]
-      exact ρ_one X
-  counitIso := NatIso.ofComponents fun _ => Iso.refl _
-
-@[deprecated (since := "2026-02-08")] alias actionPunitEquivalence := actionPUnitEquivalence
-
-Depends on / 依赖: forget
+--- 原说明 ---
+Actions/representations of the trivial monoid are just objects in the ambient ca
+tegory.
 -/
 def actionPUnitEquivalence : Action V PUnit ≌ V where
   functor := forget V _
@@ -952,30 +704,22 @@ taking actions of `H` to actions of `G`.
 (This makes sense for any homomorphism, but the name is natural when `f` is a monomorphism.)
 -/
 @[simps]
-/--
-Definition of `res` / `res` 的定义
+/-
+**Action.res** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：res {G H : Type*} [Monoid G] [Monoid H] (f : G ->* H) : Action V H ⥤ Actio
+n V G where obj M
+参数：f : G ->* H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition res
-  signature: {G H : Type*} [Monoid G] [Monoid H] (f : G ->* H)
-  body: { V := M.V
-      ρ := M.ρ.comp f }
-  map p :=
-    { hom := p.hom
-      comm := fun g => p.comm (f g) }
+--- 原说明 ---
+The "restriction" functor along a monoid homomorphism `f : G →* H`,
+taking actions of `H` to actions of `G`.
 
-中文:
-定义 res
-  签名: {G H : 类型} [幺半群 G] [幺半群 H] (f : G ->* H)
-  定义体: { V := M.V
-      ρ := M.ρ.comp f }
-  map p :=
-    { hom := p.hom
-      comm := fun g => p.comm (f g) }
-
-Depends on / 依赖: p.comm, p.hom
+(This makes sense for any homomorphism, but the name is natural when `f` is a mo
+nomorphism.)
 -/
-def res {G H : Type*} [Monoid G] [Monoid H] (f : G ->* H) : Action V H ⥤ Action V G where
+def res {G H : Type*} [Monoid G] [Monoid H] (f : G →* H) : Action V H ⥤ Action V G where
   obj M :=
     { V := M.V
       ρ := M.ρ.comp f }
@@ -989,20 +733,15 @@ set_option backward.defeqAttrib.useBackward true in
 the identity functor on `Action V G`.
 -/
 @[simps!]
-/--
-Definition of `resId` / `resId` 的定义
+/-
+**Action.resId** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：resId {G : Type*} [Monoid G] : res V (MonoidHom.id G) ≅ 𝟭 (Action V G)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resId
-  signature: {G : Type*} [Monoid G]
-  body: NatIso.ofComponents fun M => mkIso (Iso.refl _)
-
-中文:
-定义 resId
-  签名: {G : 类型} [幺半群 G]
-  定义体: NatIso.ofComponents fun M => mkIso (Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The natural isomorphism from restriction along the identity homomorphism to
+the identity functor on `Action V G`.
 -/
 def resId {G : Type*} [Monoid G] : res V (MonoidHom.id G) ≅ 𝟭 (Action V G) :=
   NatIso.ofComponents fun M => mkIso (Iso.refl _)
@@ -1013,73 +752,55 @@ set_option backward.defeqAttrib.useBackward true in
 to the restriction along the composition of homomorphism.
 -/
 @[simps!]
-/--
-Definition of `resComp` / `resComp` 的定义
+/-
+**Action.resComp** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：resComp {G H K : Type*} [Monoid G] [Monoid H] [Monoid K] (f : G ->* H) (g 
+: H ->* K) : res V g ⋙ res V f ≅ res V (g.comp f)
+参数：f : G ->* H；g : H ->* K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resComp
-  signature: {G H K : Type*} [Monoid G] [Monoid H] [Monoid K]
-  body: NatIso.ofComponents fun M => mkIso (Iso.refl _)
-
-中文:
-定义 resComp
-  签名: {G H K : 类型} [幺半群 G] [幺半群 H] [幺半群 K]
-  定义体: NatIso.ofComponents fun M => mkIso (Iso.refl _)
-
-Depends on / 依赖: F.map, Finite, Finite.of_injective, GaloisCategory, GaloisCategory.getFiberFunctor, Iso.refl, NatIso, NatIso.ofComponents, evaluation_injective_of_isConnected, getFiberFunctor, nonempty_fiber_of_isConnected, ofComponents, of_injective
+--- 原说明 ---
+The natural isomorphism from the composition of restrictions along homomorphisms
+to the restriction along the composition of homomorphism.
 -/
 def resComp {G H K : Type*} [Monoid G] [Monoid H] [Monoid K]
-    (f : G ->* H) (g : H ->* K) : res V g ⋙ res V f ≅ res V (g.comp f) :=
+    (f : G →* H) (g : H →* K) : res V g ⋙ res V f ≅ res V (g.comp f) :=
   NatIso.ofComponents fun M => mkIso (Iso.refl _)
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Restricting scalars along equal maps is naturally isomorphic. -/
 @[simps! hom inv]
-/--
-Definition of `resCongr` / `resCongr` 的定义
+/-
+**Action.resCongr** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：resCongr {G H : Type*} [Monoid G] [Monoid H] {f f' : G ->* H} (h : f = f')
+ : Action.res V f ≅ Action.res V f'
+参数：h : f = f'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resCongr
-  signature: {G H : Type*} [Monoid G] [Monoid H] {f f' : G ->* H} (h : f = f')
-  body: NatIso.ofComponents (fun _ => Action.mkIso (Iso.refl _))
-
-中文:
-定义 resCongr
-  签名: {G H : 类型} [幺半群 G] [幺半群 H] {f f' : G ->* H} (h : f = f')
-  定义体: NatIso.ofComponents (fun _ => Action.mkIso (Iso.refl _))
-
-Depends on / 依赖: Action, Action.mkIso, F.map, Finite, Finite.of_injective, GaloisCategory, GaloisCategory.getFiberFunctor, Iso.refl, NatIso, NatIso.ofComponents, evaluation_aut_injective_of_isConnected, f.hom, getFiberFunctor, nonempty_fiber_of_isConnected, ofComponents, of_injective
+--- 原说明 ---
+Restricting scalars along equal maps is naturally isomorphic.
 -/
-def resCongr {G H : Type*} [Monoid G] [Monoid H] {f f' : G ->* H} (h : f = f') :
+def resCongr {G H : Type*} [Monoid G] [Monoid H] {f f' : G →* H} (h : f = f') :
     Action.res V f ≅ Action.res V f' :=
-  NatIso.ofComponents (fun _ => Action.mkIso (Iso.refl _))
+  NatIso.ofComponents (fun _ ↦ Action.mkIso (Iso.refl _))
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Restricting scalars along a monoid isomorphism induces an equivalence of categories. -/
 @[simps! functor inverse]
-/--
-Definition of `resEquiv` / `resEquiv` 的定义
+/-
+**Action.resEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Action`。
+形式化陈述：resEquiv {G H : Type*} [Monoid G] [Monoid H] (f : G ≃* H) : Action V H ≌ A
+ction V G where functor
+参数：f : G ≃* H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition resEquiv
-  signature: {G H : Type*} [Monoid G] [Monoid H] (f : G ≃* H)
-  body: Action.res _ f
-  inverse := Action.res _ f.symm
-  unitIso := Action.resCongr (f := MonoidHom.id H) V (by ext; simp) ≪≫ (Action.resComp _ _ _).symm
-  counitIso := Action.resComp _ _ _ ≪≫
-    Action.resCongr (f' := MonoidHom.id G) V (by ext; simp)
-
-中文:
-定义 resEquiv
-  签名: {G H : 类型} [幺半群 G] [幺半群 H] (f : G ≃* H)
-  定义体: Action.res _ f
-  inverse := Action.res _ f.symm
-  unitIso := Action.resCongr (f := MonoidHom.id H) V (by ext; simp) ≪≫ (Action.resComp _ _ _).symm
-  counitIso := Action.resComp _ _ _ ≪≫
-    Action.resCongr (f' := MonoidHom.id G) V (by ext; simp)
-
-Depends on / 依赖: Action, Action.res
+--- 原说明 ---
+Restricting scalars along a monoid isomorphism induces an equivalence of categor
+ies.
 -/
 def resEquiv {G H : Type*} [Monoid G] [Monoid H] (f : G ≃* H) :
     Action V H ≌ Action V G where
@@ -1092,73 +813,56 @@ def resEquiv {G H : Type*} [Monoid G] [Monoid H] (f : G ≃* H) :
 -- TODO promote `res` to a pseudofunctor from
 -- the locally discrete bicategory constructed from `Monᵒᵖ` to `Cat`, sending `G` to `Action V G`.
 
-variable {G H : Type*} [Monoid G] [Monoid H] (f : G ->* H)
+variable {G H : Type*} [Monoid G] [Monoid H] (f : G →* H)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The functor from `Action V H` to `Action V G` induced by a monoid homomorphism
+`f : G →* H` is faithful. -/
+/-
+**Action.** 是 Mathlib 中的一个实例，位于命名空间 `Action`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: (res V f).Faithful
-  body: by
-    ext
-    rw [← res_map_hom _ f g₁]; rw [← res_map_hom _ f g₂]; rw [h]
-
-中文:
-实例 :
-  签名: (res V f).忠实
-  定义体: by
-    ext
-    rw [← res_map_hom _ f g₁]; rw [← res_map_hom _ f g₂]; rw [h]
-
-Depends on / 依赖: res_map_hom
+--- 原说明 ---
+The functor from `Action V H` to `Action V G` induced by a monoid homomorphism
+`f : G →* H` is faithful.
 -/
 instance : (res V f).Faithful where
   map_injective {X} {Y} g₁ g₂ h := by
     ext
-    rw [← res_map_hom _ f g₁]; rw [← res_map_hom _ f g₂]; rw [h]
+    rw [← res_map_hom _ f g₁, ← res_map_hom _ f g₂, h]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `full_res` / 引理 `full_res`
+/-- The functor from `Action V H` to `Action V G` induced by a monoid homomorphism
+`f : G →* H` is full if `f` is surjective. -/
+/-
+**Action.full_res** 是 Mathlib 中的一个引理，位于命名空间 `Action`。
+形式化陈述：full_res (f_surj : Function.Surjective f) : (res V f).Full where map_surje
+ctive {X} {Y} g
+参数：f_surj : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Action.Hom.comm`：∀ {V : Type u_1} [inst : CategoryTheory.Category.{v_1, 
+u_1} V] {G : Type u_2} [inst_1 : Monoid G] {M N : Action V G}   (self : M.Hom N)
+ (g :…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Action.hom_ext`：hom_ext {M N : Action V G} (φ₁ φ₂ : M ⟶ N) (h : φ₁.hom =
+ φ₂.hom) : φ₁ = φ₂
 
-English:
-lemma full_res
-  given: (f_surj : Function.Surjective f)
-  statement: (res V f).Full where
-  proof: by
-    use ⟨g.hom, fun h => ?_⟩
-    · ext
-      simp
-    · obtain ⟨a, rfl⟩ := f_surj h
-      have : X.ρ (f a) = ((res V f).obj X).ρ a := rfl
-      rw [this]; rw [g.comm a]
-      simp
-
-中文:
-引理 full_res
-  条件: (f_surj : 函数.满射 f)
-  结论: (res V f).满 where
-  证明: by
-    use ⟨g.hom, fun h => ?_⟩
-    · ext
-      simp
-    · obtain ⟨a, rfl⟩ := f_surj h
-      have : X.ρ (f a) = ((res V f).obj X).ρ a := rfl
-      rw [this]; rw [g.comm a]
-      simp
-
-Depends on / 依赖: f_surj, g.comm, g.hom
+--- 原说明 ---
+The functor from `Action V H` to `Action V G` induced by a monoid homomorphism
+`f : G →* H` is full if `f` is surjective.
 -/
 lemma full_res (f_surj : Function.Surjective f) : (res V f).Full where
   map_surjective {X} {Y} g := by
-    use ⟨g.hom, fun h => ?_⟩
+    use ⟨g.hom, fun h ↦ ?_⟩
     · ext
       simp
     · obtain ⟨a, rfl⟩ := f_surj h
       have : X.ρ (f a) = ((res V f).obj X).ρ a := rfl
-      rw [this]; rw [g.comm a]
+      rw [this, g.comm a]
       simp
 
 end Action
@@ -1171,42 +875,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- A functor between categories induces a functor between
 the categories of `G`-actions within those categories. -/
 @[simps]
-/--
-Definition of `mapAction` / `mapAction` 的定义
+/-
+**CategoryTheory.Functor.mapAction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：mapAction (F : V ⥤ W) (G : Type*) [Monoid G] : Action V G ⥤ Action W G whe
+re obj M
+参数：F : V ⥤ W；G : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapAction
-  signature: (F : V ⥤ W) (G : Type*) [Monoid G]
-  body: { V := F.obj M.V
-      ρ :=
-        { toFun := fun g => F.map (M.ρ g)
-          map_one' := by simp
-          map_mul' := fun g h => by
-            dsimp
-            rw [map_mul]; rw [End.mul_def]; rw [F.map_comp] } }
-  map f :=
-    { hom := F.map f.hom
-      comm := fun g => by dsimp; rw [← F.map_comp, f.comm, F.map_comp] }
-  map_id M := by ext; simp only [Action.id_hom, F.map_id]
-  map_comp f g := by ext; simp only [Action.comp_hom, F.map_comp]
-
-中文:
-定义 mapAction
-  签名: (F : V ⥤ W) (G : 类型) [幺半群 G]
-  定义体: { V := F.obj M.V
-      ρ :=
-        { toFun := fun g => F.map (M.ρ g)
-          map_one' := by simp
-          map_mul' := fun g h => by
-            dsimp
-            rw [map_mul]; rw [End.mul_def]; rw [F.map_comp] } }
-  map f :=
-    { hom := F.map f.hom
-      comm := fun g => by dsimp; rw [← F.map_comp, f.comm, F.map_comp] }
-  map_id M := by ext; simp only [Action.id_hom, F.map_id]
-  map_comp f g := by ext; simp only [Action.comp_hom, F.map_comp]
-
-Depends on / 依赖: Action, Action.comp_hom, Action.id_hom, End.mul_def, F.map, F.map_comp, F.map_id, F.obj, comp_hom, f.comm, f.hom, id_hom, map_comp, map_id, map_mul, map_one, mul_def
+--- 原说明 ---
+A functor between categories induces a functor between
+the categories of `G`-actions within those categories.
 -/
 def mapAction (F : V ⥤ W) (G : Type*) [Monoid G] : Action V G ⥤ Action W G where
   obj M :=
@@ -1216,7 +896,7 @@ def mapAction (F : V ⥤ W) (G : Type*) [Monoid G] : Action V G ⥤ Action W G w
           map_one' := by simp
           map_mul' := fun g h => by
             dsimp
-            rw [map_mul]; rw [End.mul_def]; rw [F.map_comp] } }
+            rw [map_mul, End.mul_def, F.map_comp] } }
   map f :=
     { hom := F.map f.hom
       comm := fun g => by dsimp; rw [← F.map_comp, f.comm, F.map_comp] }
@@ -1224,41 +904,45 @@ def mapAction (F : V ⥤ W) (G : Type*) [Monoid G] : Action V G ⥤ Action W G w
   map_comp f g := by ext; simp only [Action.comp_hom, F.map_comp]
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : V ⥤ W) (G : Type*) [Monoid G] [F.Faithful] : (F.mapAction G).Faithful where
   map_injective eq := by
     ext
-    apply_fun (fun f => f.hom) at eq
+    apply_fun (fun f ↦ f.hom) at eq
     exact F.map_injective eq
 
 set_option backward.isDefEq.respectTransparency.types false in
 /--
-Definition of `FullyFaithful.mapAction` / `FullyFaithful.mapAction` 的定义
+A fully faithful functor between categories induces a fully faithful functor between
+the categories of `G`-actions within those categories. -/
+/-
+**CategoryTheory.Functor.FullyFaithful.mapAction** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.FullyFaithful`。
+形式化陈述：{V : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} V] →     {W 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} W] →         {F
+ : CategoryTheory.Functor V W} →           F.FullyFaithful → (G : Type u_3) → [i
+nst_2 : Monoid G] → (F.mapAction G).FullyFaithful
+参数：G : Type u_3；F.mapAction G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FullyFaithful.mapAction
-  signature: {F : V ⥤ W} (h : F.FullyFaithful) (G : Type*) [Monoid G]
-  body: by
-    refine ⟨h.preimage f.hom, fun _ => h.map_injective ?_⟩
-    simp only [map_comp, map_preimage]
-    exact f.comm _
-
-中文:
-定义 满忠实.mapAction
-  签名: {F : V ⥤ W} (h : F.满忠实) (G : 类型) [幺半群 G]
-  定义体: by
-    refine ⟨h.preimage f.hom, fun _ => h.map_injective ?_⟩
-    simp only [map_comp, map_preimage]
-    exact f.comm _
-
-Depends on / 依赖: f.comm, f.hom, h.map_injective, h.preimage, map_comp, map_injective, map_preimage, preimage
+--- 原说明 ---
+A fully faithful functor between categories induces a fully faithful functor bet
+ween
+the categories of `G`-actions within those categories.
 -/
 def FullyFaithful.mapAction {F : V ⥤ W} (h : F.FullyFaithful) (G : Type*) [Monoid G] :
     (F.mapAction G).FullyFaithful where
   preimage f := by
-    refine ⟨h.preimage f.hom, fun _ => h.map_injective ?_⟩
+    refine ⟨h.preimage f.hom, fun _ ↦ h.map_injective ?_⟩
     simp only [map_comp, map_preimage]
     exact f.comm _
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : V ⥤ W) (G : Type*) [Monoid G] [F.Faithful] [F.Full] : (F.mapAction G).Full :=
   ((Functor.FullyFaithful.ofFullyFaithful F).mapAction G).full
 
@@ -1268,47 +952,41 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- `Functor.mapAction` is functorial in the functor. -/
 @[simps! hom inv]
-/--
-Definition of `mapActionComp` / `mapActionComp` 的定义
+/-
+**CategoryTheory.Functor.mapActionComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：mapActionComp {T : Type*} [Category* T] (F : V ⥤ W) (F' : W ⥤ T) : (F ⋙ F'
+).mapAction G ≅ F.mapAction G ⋙ F'.mapAction G
+参数：F : V ⥤ W；F' : W ⥤ T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapActionComp
-  signature: {T : Type*} [Category* T] (F : V ⥤ W) (F' : W ⥤ T)
-  body: NatIso.ofComponents (fun X => Iso.refl _)
-
-中文:
-定义 mapActionComp
-  签名: {T : 类型} [范畴* T] (F : V ⥤ W) (F' : W ⥤ T)
-  定义体: NatIso.ofComponents (fun X => Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+`Functor.mapAction` is functorial in the functor.
 -/
 def mapActionComp {T : Type*} [Category* T] (F : V ⥤ W) (F' : W ⥤ T) :
     (F ⋙ F').mapAction G ≅ F.mapAction G ⋙ F'.mapAction G :=
-  NatIso.ofComponents (fun X => Iso.refl _)
+  NatIso.ofComponents (fun X ↦ Iso.refl _)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- `Functor.mapAction` preserves isomorphisms of functors. -/
 @[simps! hom inv]
-/--
-Definition of `mapActionCongr` / `mapActionCongr` 的定义
+/-
+**CategoryTheory.Functor.mapActionCongr** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：mapActionCongr {F F' : V ⥤ W} (e : F ≅ F') : F.mapAction G ≅ F'.mapAction 
+G
+参数：e : F ≅ F'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapActionCongr
-  signature: {F F' : V ⥤ W} (e : F ≅ F')
-  body: NatIso.ofComponents (fun X => Action.mkIso (e.app X.V))
-
-中文:
-定义 mapActionCongr
-  签名: {F F' : V ⥤ W} (e : F ≅ F')
-  定义体: NatIso.ofComponents (fun X => Action.mkIso (e.app X.V))
-
-Depends on / 依赖: Action, Action.mkIso, NatIso, NatIso.ofComponents, e.app, ofComponents
+--- 原说明 ---
+`Functor.mapAction` preserves isomorphisms of functors.
 -/
 def mapActionCongr {F F' : V ⥤ W} (e : F ≅ F') :
     F.mapAction G ≅ F'.mapAction G :=
-  NatIso.ofComponents (fun X => Action.mkIso (e.app X.V))
+  NatIso.ofComponents (fun X ↦ Action.mkIso (e.app X.V))
 
 end Functor
 
@@ -1317,28 +995,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- An equivalence of categories induces an equivalence of
 the categories of `G`-actions within those categories. -/
 @[simps functor inverse]
-/--
-Definition of `Equivalence.mapAction` / `Equivalence.mapAction` 的定义
+/-
+**CategoryTheory.Equivalence.mapAction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Equivalence`。
+形式化陈述：{V : Type u_2} →   {W : Type u_3} →     [inst : CategoryTheory.Category.{v
+_2, u_2} V] →       [inst_1 : CategoryTheory.Category.{v_3, u_3} W] →         (G
+ : Type u_4) → [inst_2 : Monoid G] → (V ≌ W) → (Action V G ≌ Action W G)
+参数：G : Type u_4；V ≌ W；Action V G ≌ Action W G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equivalence.mapAction
-  signature: {V W : Type*} [Category* V] [Category* W] (G : Type*) [Monoid G]
-  body: E.functor.mapAction G
-  inverse := E.inverse.mapAction G
-  unitIso := Functor.mapActionCongr G E.unitIso ≪≫ Functor.mapActionComp G _ _
-  counitIso := (Functor.mapActionComp G _ _).symm ≪≫ Functor.mapActionCongr G E.counitIso
-  functor_unitIso_comp X := by ext; simp
-
-中文:
-定义 等价.mapAction
-  签名: {V W : 类型} [范畴* V] [范畴* W] (G : 类型) [幺半群 G]
-  定义体: E.functor.mapAction G
-  inverse := E.inverse.mapAction G
-  unitIso := Functor.mapActionCongr G E.unitIso ≪≫ Functor.mapActionComp G _ _
-  counitIso := (Functor.mapActionComp G _ _).symm ≪≫ Functor.mapActionCongr G E.counitIso
-  functor_unitIso_comp X := by ext; simp
-
-Depends on / 依赖: E.functor.mapAction, functor, mapAction
+--- 原说明 ---
+An equivalence of categories induces an equivalence of
+the categories of `G`-actions within those categories.
 -/
 def Equivalence.mapAction {V W : Type*} [Category* V] [Category* W] (G : Type*) [Monoid G]
     (E : V ≌ W) : Action V G ≌ Action W G where
@@ -1349,3 +1017,4 @@ def Equivalence.mapAction {V W : Type*} [Category* V] [Category* W] (G : Type*) 
   functor_unitIso_comp X := by ext; simp
 
 end CategoryTheory
+

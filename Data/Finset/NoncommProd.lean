@@ -36,67 +36,63 @@ version.
 
 @[expose] public section
 
-variable {F ι α β γ : Type*} (f : α -> β -> β) (op : α -> α -> α)
+variable {F ι α β γ : Type*} (f : α → β → β) (op : α → α → α)
 
 namespace Multiset
 
-/--
-Definition of `noncommFoldr` / `noncommFoldr` 的定义
+/-- Fold of a `s : Multiset α` with `f : α → β → β`, given a proof that `LeftCommutative f`
+on all elements `x ∈ s`. -/
+/-
+**Multiset.noncommFoldr** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：noncommFoldr (s : Multiset α) (comm : { x | x in s }.Pairwise fun x y => f
+orall b, f x (f y b) = f y (f x b)) (b : β) : β
+参数：s : Multiset α；comm : { x | x in s }.Pairwise fun x y => forall b, f x (f y b
+) = f y (f x b)；b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncommFoldr
-  signature: (s : Multiset α)
-  body: letI : LeftCommutative (α := { x // x in s }) (f ∘ Subtype.val) :=
-    ⟨fun ⟨_, hx⟩ ⟨_, hy⟩ =>
-      haveI : Std.Refl fun x y => forall b, f x (f y b) = f y (f x b) := ⟨fun _ _ => rfl⟩
-      comm.of_refl hx hy⟩
-  s.attach.foldr (f ∘ Subtype.val) b
-
-中文:
-定义 noncommFoldr
-  签名: (s : Multiset α)
-  定义体: letI : LeftCommutative (α := { x // x in s }) (f ∘ Subtype.val) :=
-    ⟨fun ⟨_, hx⟩ ⟨_, hy⟩ =>
-      haveI : Std.Refl fun x y => forall b, f x (f y b) = f y (f x b) := ⟨fun _ _ => rfl⟩
-      comm.of_refl hx hy⟩
-  s.attach.foldr (f ∘ Subtype.val) b
-
-Depends on / 依赖: LeftCommutative, Std.Refl, Subtype, Subtype.val, attach, comm.of_refl, of_refl, s.attach.foldr
+--- 原说明 ---
+Fold of a `s : Multiset α` with `f : α → β → β`, given a proof that `LeftCommuta
+tive f`
+on all elements `x ∈ s`.
 -/
 def noncommFoldr (s : Multiset α)
-    (comm : { x | x in s }.Pairwise fun x y => forall b, f x (f y b) = f y (f x b)) (b : β) : β :=
-  letI : LeftCommutative (α := { x // x in s }) (f ∘ Subtype.val) :=
+    (comm : { x | x ∈ s }.Pairwise fun x y => ∀ b, f x (f y b) = f y (f x b)) (b : β) : β :=
+  letI : LeftCommutative (α := { x // x ∈ s }) (f ∘ Subtype.val) :=
     ⟨fun ⟨_, hx⟩ ⟨_, hy⟩ =>
-      haveI : Std.Refl fun x y => forall b, f x (f y b) = f y (f x b) := ⟨fun _ _ => rfl⟩
+      haveI : Std.Refl fun x y => ∀ b, f x (f y b) = f y (f x b) := ⟨fun _ _ => rfl⟩
       comm.of_refl hx hy⟩
   s.attach.foldr (f ∘ Subtype.val) b
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `noncommFoldr_coe` / 定理 `noncommFoldr_coe`
-
-English:
-theorem noncommFoldr_coe
-  given: (l : List α) (comm) (b : β)
-  proof: by
-  simp only [noncommFoldr, coe_foldr, coe_attach, List.attach, List.attachWith, Function.comp_def]
-  rw [← List.foldr_map]
-  simp [List.map_pmap]
-
-@[simp]
-
-中文:
-定理 noncommFoldr_coe
-  条件: (l : 列表 α) (comm) (b : β)
-  证明: by
-  simp only [noncommFoldr, coe_foldr, coe_attach, List.attach, List.attachWith, Function.comp_def]
-  rw [← List.foldr_map]
-  simp [List.map_pmap]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_def, List.attach, List.attachWith, List.foldr_map, List.map_pmap, attach, attachWith, coe_attach, coe_foldr, comp_def, foldr_map, map_pmap, noncommFoldr
+/-
+**Multiset.noncommFoldr_coe** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFoldr_coe (l : List α) (comm) (b : β) : noncommFoldr f (l : Multise
+t α) comm b = l.foldr f b
+参数：l : List α；comm；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.foldr_map`：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β : Type u_3} {f : α₁
+ → α₂} {g : α₂ → β → β} {l : List α₁} {init : β},   List.foldr g init (List.map 
+f l)…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.map_pmap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {p : α → P
+rop} {g : β → γ} {f : (a : α) → p a → β} {l : List α}   (H : ∀ a ∈ l, p a), List
+.ma…
+· 使用定理 `List.pmap_eq_map`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} {f : α 
+→ β} {l : List α} (H : ∀ a ∈ l, p a),   List.pmap (fun a x => f a) l H = List.ma
+p f l
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun'`：∀ {α : Type u_1}, (List.map fun a => a) = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommFoldr_coe (l : List α) (comm) (b : β) :
     noncommFoldr f (l : Multiset α) comm b = l.foldr f b := by
@@ -105,66 +101,59 @@ theorem noncommFoldr_coe (l : List α) (comm) (b : β) :
   simp [List.map_pmap]
 
 @[simp]
-/--
-theorem `noncommFoldr_empty` / 定理 `noncommFoldr_empty`
-
-English:
-theorem noncommFoldr_empty
-  given: (h) (b : β)
-  statement: noncommFoldr f (0 : Multiset α) h b = b
-  proof: rfl
-
-中文:
-定理 noncommFoldr_empty
-  条件: (h) (b : β)
-  结论: noncommFoldr f (0 : Multiset α) h b = b
-  证明: rfl
+/-
+**Multiset.noncommFoldr_empty** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFoldr_empty (h) (b : β) : noncommFoldr f (0 : Multiset α) h b = b
+参数：h；b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem noncommFoldr_empty (h) (b : β) : noncommFoldr f (0 : Multiset α) h b = b :=
   rfl
-
-/--
-theorem `noncommFoldr_cons` / 定理 `noncommFoldr_cons`
-
-English:
-theorem noncommFoldr_cons
-  given: (s : Multiset α) (a : α) (h h') (b : β)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp
-
-中文:
-定理 noncommFoldr_cons
-  条件: (s : Multiset α) (a : α) (h h') (b : β)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Multiset.noncommFoldr_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFoldr_cons (s : Multiset α) (a : α) (h h') (b : β) : noncommFoldr f
+ (a ::ₘ s) h b = f a (noncommFoldr f s h' b)
+参数：s : Multiset α；a : α；h h'；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommFoldr_coe`：noncommFoldr_coe (l : List α) (comm) (b : β) 
+: noncommFoldr f (l : Multiset α) comm b = l.foldr f b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommFoldr_cons (s : Multiset α) (a : α) (h h') (b : β) :
     noncommFoldr f (a ::ₘ s) h b = f a (noncommFoldr f s h' b) := by
   induction s using Quotient.inductionOn
   simp
-
-/--
-theorem `noncommFoldr_eq_foldr` / 定理 `noncommFoldr_eq_foldr`
-
-English:
-theorem noncommFoldr_eq_foldr
-  given: (s : Multiset α) [h : LeftCommutative f] (b : β)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp
-
-中文:
-定理 noncommFoldr_eq_foldr
-  条件: (s : Multiset α) [h : 左交换 f] (b : β)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Multiset.noncommFoldr_eq_foldr** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFoldr_eq_foldr (s : Multiset α) [h : LeftCommutative f] (b : β) : n
+oncommFoldr f s (fun x _ y _ _ => h.left_comm x y) b = foldr f b s
+参数：s : Multiset α；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `LeftCommutative.left_comm`：∀ {α : Sort u} {β : Sort v} {op : α → β → β} 
+[self : LeftCommutative op] (a₁ a₂ : α) (b : β),   op a₁ (op a₂ b) = op a₂ (op a
+₁ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommFoldr_coe`：noncommFoldr_coe (l : List α) (comm) (b : β) 
+: noncommFoldr f (l : Multiset α) comm b = l.foldr f b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommFoldr_eq_foldr (s : Multiset α) [h : LeftCommutative f] (b : β) :
     noncommFoldr f s (fun x _ y _ _ => h.left_comm x y) b = foldr f b s := by
@@ -175,110 +164,100 @@ section assoc
 
 variable [assoc : Std.Associative op]
 
-/--
-Definition of `noncommFold` / `noncommFold` 的定义
+/-- Fold of a `s : Multiset α` with an associative `op : α → α → α`, given a proofs that `op`
+is commutative on all elements `x ∈ s`. -/
+/-
+**Multiset.noncommFold** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：noncommFold (s : Multiset α) (comm : { x | x in s }.Pairwise fun x y => op
+ x y = op y x) : α -> α
+参数：s : Multiset α；comm : { x | x in s }.Pairwise fun x y => op x y = op y x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncommFold
-  signature: (s : Multiset α) (comm : { x | x in s }.Pairwise fun x y => op x y = op y x)
-  body: noncommFoldr op s fun x hx y hy h b => by rw [← assoc.assoc, comm hx hy h, assoc.assoc]
-
-中文:
-定义 noncommFold
-  签名: (s : Multiset α) (comm : { x | x in s }.两两 fun x y => op x y = op y x)
-  定义体: noncommFoldr op s fun x hx y hy h b => by rw [← assoc.assoc, comm hx hy h, assoc.assoc]
-
-Depends on / 依赖: assoc.assoc, noncommFoldr
+--- 原说明 ---
+Fold of a `s : Multiset α` with an associative `op : α → α → α`, given a proofs 
+that `op`
+is commutative on all elements `x ∈ s`.
 -/
-def noncommFold (s : Multiset α) (comm : { x | x in s }.Pairwise fun x y => op x y = op y x) :
-    α -> α :=
+def noncommFold (s : Multiset α) (comm : { x | x ∈ s }.Pairwise fun x y => op x y = op y x) :
+    α → α :=
   noncommFoldr op s fun x hx y hy h b => by rw [← assoc.assoc, comm hx hy h, assoc.assoc]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `noncommFold_coe` / 定理 `noncommFold_coe`
-
-English:
-theorem noncommFold_coe
-  given: (l : List α) (comm) (a : α)
-  proof: by simp [noncommFold]
-
-@[simp]
-
-中文:
-定理 noncommFold_coe
-  条件: (l : 列表 α) (comm) (a : α)
-  证明: by simp [noncommFold]
-
-@[simp]
-
-Depends on / 依赖: noncommFold
+/-
+**Multiset.noncommFold_coe** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFold_coe (l : List α) (comm) (a : α) : noncommFold op (l : Multiset
+ α) comm a = l.foldr op a
+参数：l : List α；comm；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommFoldr_coe`：noncommFoldr_coe (l : List α) (comm) (b : β) 
+: noncommFoldr f (l : Multiset α) comm b = l.foldr f b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommFold_coe (l : List α) (comm) (a : α) :
     noncommFold op (l : Multiset α) comm a = l.foldr op a := by simp [noncommFold]
 
 @[simp]
-/--
-theorem `noncommFold_empty` / 定理 `noncommFold_empty`
-
-English:
-theorem noncommFold_empty
-  given: (h) (a : α)
-  statement: noncommFold op (0 : Multiset α) h a = a
-  proof: rfl
-
-中文:
-定理 noncommFold_empty
-  条件: (h) (a : α)
-  结论: noncommFold op (0 : Multiset α) h a = a
-  证明: rfl
+/-
+**Multiset.noncommFold_empty** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFold_empty (h) (a : α) : noncommFold op (0 : Multiset α) h a = a
+参数：h；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem noncommFold_empty (h) (a : α) : noncommFold op (0 : Multiset α) h a = a :=
   rfl
-
-/--
-theorem `noncommFold_cons` / 定理 `noncommFold_cons`
-
-English:
-theorem noncommFold_cons
-  given: (s : Multiset α) (a : α) (h h') (x : α)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp
-
-中文:
-定理 noncommFold_cons
-  条件: (s : Multiset α) (a : α) (h h') (x : α)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Multiset.noncommFold_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFold_cons (s : Multiset α) (a : α) (h h') (x : α) : noncommFold op 
+(a ::ₘ s) h x = op a (noncommFold op s h' x)
+参数：s : Multiset α；a : α；h h'；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommFold_coe`：noncommFold_coe (l : List α) (comm) (a : α) : 
+noncommFold op (l : Multiset α) comm a = l.foldr op a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommFold_cons (s : Multiset α) (a : α) (h h') (x : α) :
     noncommFold op (a ::ₘ s) h x = op a (noncommFold op s h' x) := by
   induction s using Quotient.inductionOn
   simp
-
-/--
-theorem `noncommFold_eq_fold` / 定理 `noncommFold_eq_fold`
-
-English:
-theorem noncommFold_eq_fold
-  given: (s : Multiset α) [Std.Commutative op] (a : α)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp
-
-中文:
-定理 noncommFold_eq_fold
-  条件: (s : Multiset α) [Std.交换 op] (a : α)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Multiset.noncommFold_eq_fold** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommFold_eq_fold (s : Multiset α) [Std.Commutative op] (a : α) : noncom
+mFold op s (fun x _ y _ _ => Std.Commutative.comm x y) a = fold op a s
+参数：s : Multiset α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Std.Commutative.comm`：∀ {α : Sort u} {op : α → α → α} [self : Std.Commut
+ative op] (a b : α), op a b = op b a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommFold_coe`：noncommFold_coe (l : List α) (comm) (a : α) : 
+noncommFold op (l : Multiset α) comm a = l.foldr op a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommFold_eq_fold (s : Multiset α) [Std.Commutative op] (a : α) :
     noncommFold op s (fun x _ y _ _ => Std.Commutative.comm x y) a = fold op a s := by
@@ -294,62 +273,43 @@ on all elements `x ∈ s`. -/
 @[to_additive
       /-- Sum of a `s : Multiset α` with `[AddMonoid α]`, given a proof that `+` commutes
       on all elements `x ∈ s`. -/]
-/--
-Definition of `noncommProd` / `noncommProd` 的定义
-
-English:
-definition noncommProd
-  signature: (s : Multiset α) (comm : { x | x in s }.Pairwise Commute)
-  body: s.noncommFold (· * ·) comm 1
-
-中文:
-定义 noncommProd
-  签名: (s : Multiset α) (comm : { x | x in s }.两两 Commute)
-  定义体: s.noncommFold (· * ·) comm 1
-
-Depends on / 依赖: noncommFold, s.noncommFold
+/-
+**Multiset.noncommProd** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：noncommProd (s : Multiset α) (comm : { x | x in s }.Pairwise Commute) : α
+参数：s : Multiset α；comm : { x | x in s }.Pairwise Commute。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def noncommProd (s : Multiset α) (comm : { x | x in s }.Pairwise Commute) : α :=
+def noncommProd (s : Multiset α) (comm : { x | x ∈ s }.Pairwise Commute) : α :=
   s.noncommFold (· * ·) comm 1
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_coe` / 定理 `noncommProd_coe`
-
-English:
-theorem noncommProd_coe
-  given: (l : List α) (comm)
-  statement: noncommProd (l : Multiset α) comm = l.prod
-  proof: by
-  rw [noncommProd]
-  simp only [noncommFold_coe]
-  induction l with
-  | nil => simp
-  | cons hd tl hl =>
-    rw [List.prod_cons]; rw [List.foldr]; rw [hl]
-    intro x hx y hy
-    exact comm (List.mem_cons_of_mem _ hx) (List.mem_cons_of_mem _ hy)
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 noncommProd_coe
-  条件: (l : 列表 α) (comm)
-  结论: noncommProd (l : Multiset α) comm = l.乘积
-  证明: by
-  rw [noncommProd]
-  simp only [noncommFold_coe]
-  induction l with
-  | nil => simp
-  | cons hd tl hl =>
-    rw [List.prod_cons]; rw [List.foldr]; rw [hl]
-    intro x hx y hy
-    exact comm (List.mem_cons_of_mem _ hx) (List.mem_cons_of_mem _ hy)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.foldr, List.mem_cons_of_mem, List.prod_cons, mem_cons_of_mem, noncommFold_coe, noncommProd, prod_cons
+/-
+**Multiset.noncommProd_coe** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_coe (l : List α) (comm) : noncommProd (l : Multiset α) comm = 
+l.prod
+参数：l : List α；comm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd.eq_1`：∀ {α : Type u_3} [inst : Monoid α] (s : Multi
+set α) (comm : {x | x ∈ s}.Pairwise Commute),   s.noncommProd comm = Multiset.no
+ncommFold (fun …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.noncommFold_coe`：noncommFold_coe (l : List α) (comm) (a : α) : 
+noncommFold op (l : Multiset α) comm a = l.foldr op a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.prod_cons`：∀ {α : Type u} [inst : Mul α] [inst_1 : One α] {a : α} {
+l : List α}, (a :: l).prod = a * l.prod
+· 使用定理 `List.foldr.eq_2`：∀ {α : Type u} {β : Type v} (f : α → β → β) (init : β) 
+(a : α) (as : List α),   List.foldr f init (a :: as) = f a (List.foldr f init as
+)
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
 -/
 theorem noncommProd_coe (l : List α) (comm) : noncommProd (l : Multiset α) comm = l.prod := by
   rw [noncommProd]
@@ -357,56 +317,44 @@ theorem noncommProd_coe (l : List α) (comm) : noncommProd (l : Multiset α) com
   induction l with
   | nil => simp
   | cons hd tl hl =>
-    rw [List.prod_cons]; rw [List.foldr]; rw [hl]
+    rw [List.prod_cons, List.foldr, hl]
     intro x hx y hy
     exact comm (List.mem_cons_of_mem _ hx) (List.mem_cons_of_mem _ hy)
 
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_empty` / 定理 `noncommProd_empty`
-
-English:
-theorem noncommProd_empty
-  given: (h)
-  statement: noncommProd (0 : Multiset α) h = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 noncommProd_empty
-  条件: (h)
-  结论: noncommProd (0 : Multiset α) h = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Multiset.noncommProd_empty** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_empty (h) : noncommProd (0 : Multiset α) h = 1
+参数：h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem noncommProd_empty (h) : noncommProd (0 : Multiset α) h = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_cons` / 定理 `noncommProd_cons`
-
-English:
-theorem noncommProd_cons
-  given: (s : Multiset α) (a : α) (comm)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp
-
-@[to_additive]
-
-中文:
-定理 noncommProd_cons
-  条件: (s : Multiset α) (a : α) (comm)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Multiset.noncommProd_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_cons (s : Multiset α) (a : α) (comm) : noncommProd (a ::ₘ s) c
+omm = a * noncommProd s (comm.mono fun _ => mem_cons_of_mem)
+参数：s : Multiset α；a : α；comm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Multiset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Multiset α} (h 
+: a in s) : a in b ::ₘ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommProd_cons (s : Multiset α) (a : α) (comm) :
     noncommProd (a ::ₘ s) comm = a * noncommProd s (comm.mono fun _ => mem_cons_of_mem) := by
@@ -414,50 +362,44 @@ theorem noncommProd_cons (s : Multiset α) (a : α) (comm) :
   simp
 
 @[to_additive]
-/--
-theorem `noncommProd_cons'` / 定理 `noncommProd_cons'`
-
-English:
-theorem noncommProd_cons'
-  given: (s : Multiset α) (a : α) (comm)
-  proof: by
-  induction s using Quotient.inductionOn with | _ s
-  simp only [quot_mk_to_coe, cons_coe, noncommProd_coe, List.prod_cons]
-  induction s with
-  | nil => simp
-  | cons hd tl IH =>
-    rw [List.prod_cons]; rw [mul_assoc]; rw [← IH]; rw [← mul_assoc]; rw [← mul_assoc]
-    · congr 1
-      apply comm.of_refl <;> simp
-    · intro x hx y hy
-      simp only [quot_mk_to_coe, List.mem_cons, mem_coe, cons_coe] at hx hy
-      apply comm
-      · cases hx <;> simp [*]
-      · cases hy <;> simp [*]
-
-@[to_additive]
-
-中文:
-定理 noncommProd_cons'
-  条件: (s : Multiset α) (a : α) (comm)
-  证明: by
-  induction s using Quotient.inductionOn with | _ s
-  simp only [quot_mk_to_coe, cons_coe, noncommProd_coe, List.prod_cons]
-  induction s with
-  | nil => simp
-  | cons hd tl IH =>
-    rw [List.prod_cons]; rw [mul_assoc]; rw [← IH]; rw [← mul_assoc]; rw [← mul_assoc]
-    · congr 1
-      apply comm.of_refl <;> simp
-    · intro x hx y hy
-      simp only [quot_mk_to_coe, List.mem_cons, mem_coe, cons_coe] at hx hy
-      apply comm
-      · cases hx <;> simp [*]
-      · cases hy <;> simp [*]
-
-@[to_additive]
-
-Depends on / 依赖: List.mem_cons, List.prod_cons, Quotient, Quotient.inductionOn, comm.of_refl, cons_coe, inductionOn, mem_coe, mem_cons, mul_assoc, noncommProd_coe, of_refl, prod_cons, quot_mk_to_coe
+/-
+**Multiset.noncommProd_cons'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_cons' (s : Multiset α) (a : α) (comm) : noncommProd (a ::ₘ s) 
+comm = noncommProd s (comm.mono fun _ => mem_cons_of_mem) * a
+参数：s : Multiset α；a : α；comm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Multiset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Multiset α} (h 
+: a in s) : a in b ::ₘ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.prod_cons`：∀ {α : Type u} [inst : Mul α] [inst_1 : One α] {a : α} {
+l : List α}, (a :: l).prod = a * l.prod
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `Set.Pairwise.of_refl`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} [S
+td.Refl r], s.Pairwise r → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → r a b
+· 使用定理 `Commute.instRefl`：∀ {S : Type u_3} [inst : Mul S], Std.Refl Commute
 -/
 theorem noncommProd_cons' (s : Multiset α) (a : α) (comm) :
     noncommProd (a ::ₘ s) comm = noncommProd s (comm.mono fun _ => mem_cons_of_mem) * a := by
@@ -466,7 +408,7 @@ theorem noncommProd_cons' (s : Multiset α) (a : α) (comm) :
   induction s with
   | nil => simp
   | cons hd tl IH =>
-    rw [List.prod_cons]; rw [mul_assoc]; rw [← IH]; rw [← mul_assoc]; rw [← mul_assoc]
+    rw [List.prod_cons, mul_assoc, ← IH, ← mul_assoc, ← mul_assoc]
     · congr 1
       apply comm.of_refl <;> simp
     · intro x hx y hy
@@ -476,28 +418,33 @@ theorem noncommProd_cons' (s : Multiset α) (a : α) (comm) :
       · cases hy <;> simp [*]
 
 @[to_additive]
-/--
-theorem `noncommProd_add` / 定理 `noncommProd_add`
-
-English:
-theorem noncommProd_add
-  given: (s t : Multiset α) (comm)
-  proof: by
-  rcases s with ⟨⟩
-  rcases t with ⟨⟩
-  simp
-
-@[to_additive]
-
-中文:
-定理 noncommProd_add
-  条件: (s t : Multiset α) (comm)
-  证明: by
-  rcases s with ⟨⟩
-  rcases t with ⟨⟩
-  simp
-
-@[to_additive]
+/-
+**Multiset.noncommProd_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_add (s t : Multiset α) (comm) : noncommProd (s + t) comm = non
+commProd s (comm.mono <| subset_of_le <| s.le_add_right t) * noncommProd t (comm
+.mono <| subset_of_le <| t.le_add_left s)
+参数：s t : Multiset α；comm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Multiset.subset_of_le`：subset_of_le : s <= t -> s subseteq t
+· 使用引理 `Multiset.le_add_right`：le_add_right (s t : Multiset α) : s <= s + t
+· 使用引理 `Multiset.le_add_left`：le_add_left (s t : Multiset α) : s <= t + s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `List.prod_append`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : One α] [Std.
+LawfulLeftIdentity (fun x1 x2 => x1 * x2) 1]   [Std.Associative fun x1 x2 => x1 
+* x2] …
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommProd_add (s t : Multiset α) (comm) :
     noncommProd (s + t) comm =
@@ -508,29 +455,30 @@ theorem noncommProd_add (s t : Multiset α) (comm) :
   simp
 
 @[to_additive]
-/--
-lemma `noncommProd_induction` / 引理 `noncommProd_induction`
-
-English:
-lemma noncommProd_induction
-  statement: (s : Multiset α) (comm)
-  proof: by
-  induction s using Quotient.inductionOn with | _ l
-  simp only [quot_mk_to_coe, noncommProd_coe, mem_coe] at base ⊢
-  exact l.prod_induction p hom unit base
-
-中文:
-引理 noncommProd_induction
-  结论: (s : Multiset α) (comm)
-  证明: by
-  induction s using Quotient.inductionOn with | _ l
-  simp only [quot_mk_to_coe, noncommProd_coe, mem_coe] at base ⊢
-  exact l.prod_induction p hom unit base
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, l.prod_induction, mem_coe, noncommProd_coe, prod_induction, quot_mk_to_coe
+/-
+**Multiset.noncommProd_induction** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_induction (s : Multiset α) (comm) (p : α -> Prop) (hom : foral
+l a b, p a -> p b -> p (a * b)) (unit : p 1) (base : forall x in s, p x) : p (s.
+noncommProd comm)
+参数：s : Multiset α；comm；p : α -> Prop；hom : forall a b, p a -> p b -> p (a * b)；u
+nit : p 1；base : forall x in s, p x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用引理 `List.prod_induction`：prod_induction (p : M -> Prop) (hom : forall a b, p
+ a -> p b -> p (a * b)) (unit : p 1) (base : forall x in l, p x) : p l.prod
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 lemma noncommProd_induction (s : Multiset α) (comm)
-    (p : α -> Prop) (hom : forall a b, p a -> p b -> p (a * b)) (unit : p 1) (base : forall x in s, p x) :
+    (p : α → Prop) (hom : ∀ a b, p a → p b → p (a * b)) (unit : p 1) (base : ∀ x ∈ s, p x) :
     p (s.noncommProd comm) := by
   induction s using Quotient.inductionOn with | _ l
   simp only [quot_mk_to_coe, noncommProd_coe, mem_coe] at base ⊢
@@ -539,58 +487,58 @@ lemma noncommProd_induction (s : Multiset α) (comm)
 variable [FunLike F α β]
 
 @[to_additive]
-/--
-theorem `map_noncommProd_aux` / 定理 `map_noncommProd_aux`
-
-English:
-theorem map_noncommProd_aux
-  statement: [MulHomClass F α β] (s : Multiset α)
-  proof: by
-  simp only [Multiset.mem_map]
-  rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ _
-  exact (comm.of_refl hx hy).map f
-
-@[to_additive]
-
-中文:
-定理 map_noncommProd_aux
-  结论: [乘法态射类 F α β] (s : Multiset α)
-  证明: by
-  simp only [Multiset.mem_map]
-  rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ _
-  exact (comm.of_refl hx hy).map f
-
-@[to_additive]
+/-
+**Multiset.map_noncommProd_aux** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Monoid α] [inst_1 :
+ Monoid β] [inst_2 : FunLike F α β]   [MulHomClass F α β] (s : Multiset α),   {x
+ | x ∈ s}.Pairwise Commute → ∀ (f : F), {x | x ∈ Multiset.map (⇑f) s}.Pairwise C
+ommute
+参数：s : Multiset α；f : F；⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Commute.map`：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : Mul 
+M] [inst_1 : Mul N] {x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N], Co
+m…
+· 使用定理 `Set.Pairwise.of_refl`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} [S
+td.Refl r], s.Pairwise r → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → r a b
+· 使用定理 `Commute.instRefl`：∀ {S : Type u_3} [inst : Mul S], Std.Refl Commute
 -/
 protected theorem map_noncommProd_aux [MulHomClass F α β] (s : Multiset α)
-    (comm : { x | x in s }.Pairwise Commute) (f : F) : { x | x in s.map f }.Pairwise Commute := by
+    (comm : { x | x ∈ s }.Pairwise Commute) (f : F) : { x | x ∈ s.map f }.Pairwise Commute := by
   simp only [Multiset.mem_map]
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ _
   exact (comm.of_refl hx hy).map f
 
 @[to_additive]
-/--
-theorem `map_noncommProd` / 定理 `map_noncommProd`
-
-English:
-theorem map_noncommProd
-  given: [MonoidHomClass F α β] (s : Multiset α) (comm) (f : F)
-  proof: by
-  induction s using Quotient.inductionOn
-  simpa using map_list_prod f _
-
-@[to_additive noncommSum_eq_card_nsmul]
-
-中文:
-定理 map_noncommProd
-  条件: [幺半群态射类 F α β] (s : Multiset α) (comm) (f : F)
-  证明: by
-  induction s using Quotient.inductionOn
-  simpa using map_list_prod f _
-
-@[to_additive noncommSum_eq_card_nsmul]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, map_list_prod
+/-
+**Multiset.map_noncommProd** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_noncommProd [MonoidHomClass F α β] (s : Multiset α) (comm) (f : F) : f
+ (s.noncommProd comm) = (s.map f).noncommProd (Multiset.map_noncommProd_aux s co
+mm f)
+参数：s : Multiset α；comm；f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Multiset.map_noncommProd_aux`：∀ {F : Type u_1} {α : Type u_3} {β : Type 
+u_4} [inst : Monoid α] [inst_1 : Monoid β] [inst_2 : FunLike F α β]   [MulHomCla
+ss F α β] (s : Mul…
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `map_list_prod`：map_list_prod {F : Type*} [FunLike F M N] [MonoidHomClass
+ F M N] (f : F) (l : List M) : f l.prod = (l.map f).prod
 -/
 theorem map_noncommProd [MonoidHomClass F α β] (s : Multiset α) (comm) (f : F) :
     f (s.noncommProd comm) = (s.map f).noncommProd (Multiset.map_noncommProd_aux s comm f) := by
@@ -598,60 +546,55 @@ theorem map_noncommProd [MonoidHomClass F α β] (s : Multiset α) (comm) (f : F
   simpa using map_list_prod f _
 
 @[to_additive noncommSum_eq_card_nsmul]
-/--
-theorem `noncommProd_eq_pow_card` / 定理 `noncommProd_eq_pow_card`
-
-English:
-theorem noncommProd_eq_pow_card
-  given: (s : Multiset α) (comm) (m : α) (h : forall x in s, x = m)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp only [quot_mk_to_coe, noncommProd_coe, coe_card, mem_coe] at *
-  exact List.prod_eq_pow_card _ m h
-
-@[to_additive]
-
-中文:
-定理 noncommProd_eq_pow_card
-  条件: (s : Multiset α) (comm) (m : α) (h : 对任意 x in s, x = m)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp only [quot_mk_to_coe, noncommProd_coe, coe_card, mem_coe] at *
-  exact List.prod_eq_pow_card _ m h
-
-@[to_additive]
-
-Depends on / 依赖: List.prod_eq_pow_card, Quotient, Quotient.inductionOn, coe_card, inductionOn, mem_coe, noncommProd_coe, prod_eq_pow_card, quot_mk_to_coe
+/-
+**Multiset.noncommProd_eq_pow_card** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_eq_pow_card (s : Multiset α) (comm) (m : α) (h : forall x in s
+, x = m) : s.noncommProd comm = m ^ Multiset.card s
+参数：s : Multiset α；comm；m : α；h : forall x in s, x = m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `List.prod_eq_pow_card`：prod_eq_pow_card (l : List M) (m : M) (h : forall
+ x in l, x = m) : l.prod = m ^ l.length
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem noncommProd_eq_pow_card (s : Multiset α) (comm) (m : α) (h : forall x in s, x = m) :
+theorem noncommProd_eq_pow_card (s : Multiset α) (comm) (m : α) (h : ∀ x ∈ s, x = m) :
     s.noncommProd comm = m ^ Multiset.card s := by
   induction s using Quotient.inductionOn
   simp only [quot_mk_to_coe, noncommProd_coe, coe_card, mem_coe] at *
   exact List.prod_eq_pow_card _ m h
 
 @[to_additive]
-/--
-theorem `noncommProd_eq_prod` / 定理 `noncommProd_eq_prod`
-
-English:
-theorem noncommProd_eq_prod
-  given: {α : Type*} [CommMonoid α] (s : Multiset α)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp
-
-@[to_additive]
-
-中文:
-定理 noncommProd_eq_prod
-  条件: {α : 类型} [交换幺半群 α] (s : Multiset α)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
+/-
+**Multiset.noncommProd_eq_prod** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_eq_prod {α : Type*} [CommMonoid α] (s : Multiset α) : (noncomm
+Prod s fun _ _ _ _ _ => Commute.all _ _) = prod s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Commute.all`：∀ {S : Type u_3} [inst : CommMagma S] (a b : S), Commute a 
+b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem noncommProd_eq_prod {α : Type*} [CommMonoid α] (s : Multiset α) :
     (noncommProd s fun _ _ _ _ _ => Commute.all _ _) = prod s := by
@@ -659,105 +602,84 @@ theorem noncommProd_eq_prod {α : Type*} [CommMonoid α] (s : Multiset α) :
   simp
 
 @[to_additive]
-/--
-theorem `noncommProd_commute` / 定理 `noncommProd_commute`
-
-English:
-theorem noncommProd_commute
-  given: (s : Multiset α) (comm) (y : α) (h : forall x in s, Commute y x)
-  proof: by
-  induction s using Quotient.inductionOn
-  simp only [quot_mk_to_coe, noncommProd_coe]
-  exact Commute.list_prod_right _ _ h
-
-中文:
-定理 noncommProd_commute
-  条件: (s : Multiset α) (comm) (y : α) (h : 对任意 x in s, Commute y x)
-  证明: by
-  induction s using Quotient.inductionOn
-  simp only [quot_mk_to_coe, noncommProd_coe]
-  exact Commute.list_prod_right _ _ h
-
-Depends on / 依赖: Commute, Commute.list_prod_right, Quotient, Quotient.inductionOn, inductionOn, list_prod_right, noncommProd_coe, quot_mk_to_coe
+/-
+**Multiset.noncommProd_commute** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_commute (s : Multiset α) (comm) (y : α) (h : forall x in s, Co
+mmute y x) : Commute y (s.noncommProd comm)
+参数：s : Multiset α；comm；y : α；h : forall x in s, Commute y x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `Commute.list_prod_right`：∀ {M : Type u_4} [inst : Monoid M] (l : List M)
+ (y : M), (∀ x ∈ l, Commute y x) → Commute y l.prod
 -/
-theorem noncommProd_commute (s : Multiset α) (comm) (y : α) (h : forall x in s, Commute y x) :
+theorem noncommProd_commute (s : Multiset α) (comm) (y : α) (h : ∀ x ∈ s, Commute y x) :
     Commute y (s.noncommProd comm) := by
   induction s using Quotient.inductionOn
   simp only [quot_mk_to_coe, noncommProd_coe]
   exact Commute.list_prod_right _ _ h
-
-/--
-theorem `mul_noncommProd_erase` / 定理 `mul_noncommProd_erase`
-
-English:
-theorem mul_noncommProd_erase
-  statement: [DecidableEq α] (s : Multiset α) {a : α} (h : a in s) (comm)
-  proof: by
-  induction s using Quotient.inductionOn with | _ l
-  simp only [quot_mk_to_coe, mem_coe, coe_erase, noncommProd_coe] at comm h ⊢
-  suffices forall x in l, forall y in l, x * y = y * x by rw [List.prod_erase_of_comm h this]
-  intro x hx y hy
-  rcases eq_or_ne x y with rfl | hxy
-  · rfl
-  exact comm hx hy hxy
-
-中文:
-定理 mul_noncommProd_erase
-  结论: [DecidableEq α] (s : Multiset α) {a : α} (h : a in s) (comm)
-  证明: by
-  induction s using Quotient.inductionOn with | _ l
-  simp only [quot_mk_to_coe, mem_coe, coe_erase, noncommProd_coe] at comm h ⊢
-  suffices forall x in l, forall y in l, x * y = y * x by rw [List.prod_erase_of_comm h this]
-  intro x hx y hy
-  rcases eq_or_ne x y with rfl | hxy
-  · rfl
-  exact comm hx hy hxy
-
-Depends on / 依赖: mem_of_mem_erase, s.mem_of_mem_erase
+/-
+**Multiset.mul_noncommProd_erase** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mul_noncommProd_erase [DecidableEq α] (s : Multiset α) {a : α} (h : a in s
+) (comm) (comm'
+参数：s : Multiset α；h : a in s；comm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `List.prod_erase_of_comm`：prod_erase_of_comm [DecidableEq M] (ha : a in l
+) (comm : forall x in l, forall y in l, x * y = y * x) : a * (l.erase a).prod = 
+l.prod
 -/
-theorem mul_noncommProd_erase [DecidableEq α] (s : Multiset α) {a : α} (h : a in s) (comm)
-    (comm' := fun _ hx _ hy hxy => comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
+theorem mul_noncommProd_erase [DecidableEq α] (s : Multiset α) {a : α} (h : a ∈ s) (comm)
+    (comm' := fun _ hx _ hy hxy ↦ comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
     a * (s.erase a).noncommProd comm' = s.noncommProd comm := by
   induction s using Quotient.inductionOn with | _ l
   simp only [quot_mk_to_coe, mem_coe, coe_erase, noncommProd_coe] at comm h ⊢
-  suffices forall x in l, forall y in l, x * y = y * x by rw [List.prod_erase_of_comm h this]
+  suffices ∀ x ∈ l, ∀ y ∈ l, x * y = y * x by rw [List.prod_erase_of_comm h this]
   intro x hx y hy
   rcases eq_or_ne x y with rfl | hxy
   · rfl
   exact comm hx hy hxy
-
-/--
-theorem `noncommProd_erase_mul` / 定理 `noncommProd_erase_mul`
-
-English:
-theorem noncommProd_erase_mul
-  statement: [DecidableEq α] (s : Multiset α) {a : α} (h : a in s) (comm)
-  proof: by
-  suffices forall b in erase s a, Commute a b by
-    rw [← (noncommProd_commute (s.erase a) comm' a this).eq]; rw [mul_noncommProd_erase s h comm comm']
-  intro b hb
-  rcases eq_or_ne a b with rfl | hab
-  · rfl
-  exact comm h (mem_of_mem_erase hb) hab
-
-中文:
-定理 noncommProd_erase_mul
-  结论: [DecidableEq α] (s : Multiset α) {a : α} (h : a in s) (comm)
-  证明: by
-  suffices forall b in erase s a, Commute a b by
-    rw [← (noncommProd_commute (s.erase a) comm' a this).eq]; rw [mul_noncommProd_erase s h comm comm']
-  intro b hb
-  rcases eq_or_ne a b with rfl | hab
-  · rfl
-  exact comm h (mem_of_mem_erase hb) hab
-
-Depends on / 依赖: mem_of_mem_erase, s.mem_of_mem_erase
+/-
+**Multiset.noncommProd_erase_mul** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：noncommProd_erase_mul [DecidableEq α] (s : Multiset α) {a : α} (h : a in s
+) (comm) (comm'
+参数：s : Multiset α；h : a in s；comm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Multiset.mem_of_mem_erase`：mem_of_mem_erase {a b : α} {s : Multiset α} :
+ a in s.erase b -> a in s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `Multiset.noncommProd_commute`：noncommProd_commute (s : Multiset α) (comm
+) (y : α) (h : forall x in s, Commute y x) : Commute y (s.noncommProd comm)
+· 使用定理 `Multiset.mul_noncommProd_erase`：mul_noncommProd_erase [DecidableEq α] (s
+ : Multiset α) {a : α} (h : a in s) (comm) (comm'
 -/
-theorem noncommProd_erase_mul [DecidableEq α] (s : Multiset α) {a : α} (h : a in s) (comm)
-    (comm' := fun _ hx _ hy hxy => comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
+theorem noncommProd_erase_mul [DecidableEq α] (s : Multiset α) {a : α} (h : a ∈ s) (comm)
+    (comm' := fun _ hx _ hy hxy ↦ comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
     (s.erase a).noncommProd comm' * a = s.noncommProd comm := by
-  suffices forall b in erase s a, Commute a b by
-    rw [← (noncommProd_commute (s.erase a) comm' a this).eq]; rw [mul_noncommProd_erase s h comm comm']
+  suffices ∀ b ∈ erase s a, Commute a b by
+    rw [← (noncommProd_commute (s.erase a) comm' a this).eq, mul_noncommProd_erase s h comm comm']
   intro b hb
   rcases eq_or_ne a b with rfl | hab
   · rfl
@@ -773,217 +695,223 @@ open scoped Function -- required for scoped `on` notation
 
 /-- Proof used in definition of `Finset.noncommProd` -/
 @[to_additive /-- Proof used in definition of `Finset.noncommSum` -/]
-/--
-theorem `noncommProd_lemma` / 定理 `noncommProd_lemma`
+/-
+**Finset.noncommProd_lemma** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_lemma (s : Finset α) (f : α -> β) (comm : (s : Set α).Pairwise
+ (Commute on f)) : Set.Pairwise { x | x in Multiset.map f s.val } Commute
+参数：s : Finset α；f : α -> β；comm : (s : Set α).Pairwise (Commute on f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.map_set_pairwise`：map_set_pairwise {f : α -> β} {r : β -> β -> 
+Prop} {m : Multiset α} (h : { a | a in m }.Pairwise fun a₁ a₂ => r (f a₁) (f a₂)
+) : { b | b in …
 
-English:
-theorem noncommProd_lemma
-  statement: (s : Finset α) (f : α -> β)
-  proof: Multiset.map_set_pairwise comm
-
-中文:
-定理 noncommProd_lemma
-  结论: (s : 有限集 α) (f : α -> β)
-  证明: Multiset.map_set_pairwise comm
-
-Depends on / 依赖: Multiset, Multiset.map_set_pairwise, map_set_pairwise
+--- 原说明 ---
+Proof used in definition of `Finset.noncommProd`
 -/
-theorem noncommProd_lemma (s : Finset α) (f : α -> β)
+theorem noncommProd_lemma (s : Finset α) (f : α → β)
     (comm : (s : Set α).Pairwise (Commute on f)) :
-    Set.Pairwise { x | x in Multiset.map f s.val } Commute := Multiset.map_set_pairwise comm
+    Set.Pairwise { x | x ∈ Multiset.map f s.val } Commute := Multiset.map_set_pairwise comm
 
 /-- Product of a `s : Finset α` mapped with `f : α → β` with `[Monoid β]`,
 given a proof that `*` commutes on all elements `f x` for `x ∈ s`. -/
 @[to_additive
       /-- Sum of a `s : Finset α` mapped with `f : α → β` with `[AddMonoid β]`,
 given a proof that `+` commutes on all elements `f x` for `x ∈ s`. -/]
-/--
-Definition of `noncommProd` / `noncommProd` 的定义
-
-English:
-definition noncommProd
-  signature: (s : Finset α) (f : α -> β)
-  body: (s.1.map f).noncommProd noncommProd_lemma s f comm
-
-@[to_additive]
-
-中文:
-定义 noncommProd
-  签名: (s : 有限集 α) (f : α -> β)
-  定义体: (s.1.map f).noncommProd noncommProd_lemma s f comm
-
-@[to_additive]
-
-Depends on / 依赖: noncommProd, noncommProd_lemma
+/-
+**Finset.noncommProd** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：noncommProd (s : Finset α) (f : α -> β) (comm : (s : Set α).Pairwise (Comm
+ute on f)) : β
+参数：s : Finset α；f : α -> β；comm : (s : Set α).Pairwise (Commute on f)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
 -/
-def noncommProd (s : Finset α) (f : α -> β)
+def noncommProd (s : Finset α) (f : α → β)
     (comm : (s : Set α).Pairwise (Commute on f)) : β :=
-(s.1.map f).noncommProd noncommProd_lemma s f comm
+  (s.1.map f).noncommProd <| noncommProd_lemma s f comm
 
 @[to_additive]
-/--
-lemma `noncommProd_induction` / 引理 `noncommProd_induction`
-
-English:
-lemma noncommProd_induction
-  statement: (s : Finset α) (f : α -> β) (comm)
-  proof: by
-  refine Multiset.noncommProd_induction _ _ _ hom unit fun b hb => ?_
-  obtain (⟨a, ha : a in s, rfl : f a = b⟩) := by simpa using hb
-  exact base a ha
-
-@[to_additive (attr := congr)]
-
-中文:
-引理 noncommProd_induction
-  结论: (s : 有限集 α) (f : α -> β) (comm)
-  证明: by
-  refine Multiset.noncommProd_induction _ _ _ hom unit fun b hb => ?_
-  obtain (⟨a, ha : a in s, rfl : f a = b⟩) := by simpa using hb
-  exact base a ha
-
-@[to_additive (attr := congr)]
-
-Depends on / 依赖: Multiset, Multiset.noncommProd_induction, noncommProd_induction
+/-
+**Finset.noncommProd_induction** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_induction (s : Finset α) (f : α -> β) (comm) (p : β -> Prop) (
+hom : forall a b, p a -> p b -> p (a * b)) (unit : p 1) (base : forall x in s, p
+ (f x)) : p (s.noncommProd f comm)
+参数：s : Finset α；f : α -> β；comm；p : β -> Prop；hom : forall a b, p a -> p b -> p 
+(a * b)；unit : p 1；base : forall x in s, p (f x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Multiset.noncommProd_induction`：noncommProd_induction (s : Multiset α) (
+comm) (p : α -> Prop) (hom : forall a b, p a -> p b -> p (a * b)) (unit : p 1) (
+base : forall x in s…
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
 -/
-lemma noncommProd_induction (s : Finset α) (f : α -> β) (comm)
-    (p : β -> Prop) (hom : forall a b, p a -> p b -> p (a * b)) (unit : p 1) (base : forall x in s, p (f x)) :
+lemma noncommProd_induction (s : Finset α) (f : α → β) (comm)
+    (p : β → Prop) (hom : ∀ a b, p a → p b → p (a * b)) (unit : p 1) (base : ∀ x ∈ s, p (f x)) :
     p (s.noncommProd f comm) := by
-  refine Multiset.noncommProd_induction _ _ _ hom unit fun b hb => ?_
-  obtain (⟨a, ha : a in s, rfl : f a = b⟩) := by simpa using hb
+  refine Multiset.noncommProd_induction _ _ _ hom unit fun b hb ↦ ?_
+  obtain (⟨a, ha : a ∈ s, rfl : f a = b⟩) := by simpa using hb
   exact base a ha
 
 @[to_additive (attr := congr)]
-/--
-theorem `noncommProd_congr` / 定理 `noncommProd_congr`
-
-English:
-theorem noncommProd_congr
-  statement: {s₁ s₂ : Finset α} {f g : α -> β} (h₁ : s₁ = s₂)
-  proof: by
-  simp_rw [noncommProd, Multiset.map_congr (congr_arg _ h₁) h₂]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 noncommProd_congr
-  结论: {s₁ s₂ : 有限集 α} {f g : α -> β} (h₁ : s₁ = s₂)
-  证明: by
-  simp_rw [noncommProd, Multiset.map_congr (congr_arg _ h₁) h₂]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Multiset, Multiset.map_congr, congr_arg, map_congr, noncommProd, simp_rw
+/-
+**Finset.noncommProd_congr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_congr {s₁ s₂ : Finset α} {f g : α -> β} (h₁ : s₁ = s₂) (h₂ : f
+orall x in s₂, f x = g x) (comm) : noncommProd s₁ f comm = noncommProd s₂ g fun 
+x hx y hy h => by dsimp only [Function.onFun] rw [← h₂ _ hx]; rw [← h₂ _ hy] sub
+st h₁ exact comm hx hy h
+参数：h₁ : s₁ = s₂；h₂ : forall x in s₂, f x = g x；comm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_congr {s₁ s₂ : Finset α} {f g : α -> β} (h₁ : s₁ = s₂)
-    (h₂ : forall x in s₂, f x = g x) (comm) :
+theorem noncommProd_congr {s₁ s₂ : Finset α} {f g : α → β} (h₁ : s₁ = s₂)
+    (h₂ : ∀ x ∈ s₂, f x = g x) (comm) :
     noncommProd s₁ f comm =
       noncommProd s₂ g fun x hx y hy h => by
         dsimp only [Function.onFun]
-        rw [← h₂ _ hx]; rw [← h₂ _ hy]
+        rw [← h₂ _ hx, ← h₂ _ hy]
         subst h₁
         exact comm hx hy h := by
   simp_rw [noncommProd, Multiset.map_congr (congr_arg _ h₁) h₂]
 
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_toFinset` / 定理 `noncommProd_toFinset`
-
-English:
-theorem noncommProd_toFinset
-  given: [DecidableEq α] (l : List α) (f : α -> β) (comm) (hl : l.Nodup)
-  proof: by
-  rw [← List.dedup_eq_self] at hl
-  simp [noncommProd, hl]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 noncommProd_toFinset
-  条件: [DecidableEq α] (l : 列表 α) (f : α -> β) (comm) (hl : l.Nodup)
-  证明: by
-  rw [← List.dedup_eq_self] at hl
-  simp [noncommProd, hl]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: List.dedup_eq_self, dedup_eq_self, noncommProd
+/-
+**Finset.noncommProd_toFinset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_toFinset [DecidableEq α] (l : List α) (f : α -> β) (comm) (hl 
+: l.Nodup) : noncommProd l.toFinset f comm = (l.map f).prod
+参数：l : List α；f : α -> β；comm；hl : l.Nodup。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.dedup_eq_self`：dedup_eq_self {l : List α} : dedup l = l ↔ Nodup l
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_toFinset [DecidableEq α] (l : List α) (f : α -> β) (comm) (hl : l.Nodup) :
+theorem noncommProd_toFinset [DecidableEq α] (l : List α) (f : α → β) (comm) (hl : l.Nodup) :
     noncommProd l.toFinset f comm = (l.map f).prod := by
   rw [← List.dedup_eq_self] at hl
   simp [noncommProd, hl]
 
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_empty` / 定理 `noncommProd_empty`
-
-English:
-theorem noncommProd_empty
-  given: (f : α -> β) (h)
-  statement: noncommProd (∅ : Finset α) f h = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 noncommProd_empty
-  条件: (f : α -> β) (h)
-  结论: noncommProd (∅ : 有限集 α) f h = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Finset.noncommProd_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_empty (f : α -> β) (h) : noncommProd (∅ : Finset α) f h = 1
+参数：f : α -> β；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem noncommProd_empty (f : α -> β) (h) : noncommProd (∅ : Finset α) f h = 1 :=
+theorem noncommProd_empty (f : α → β) (h) : noncommProd (∅ : Finset α) f h = 1 :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_cons` / 定理 `noncommProd_cons`
-
-English:
-theorem noncommProd_cons
-  statement: (s : Finset α) (a : α) (f : α -> β)
-  proof: by
-  simp_rw [noncommProd, Finset.cons_val, Multiset.map_cons, Multiset.noncommProd_cons]
-
-@[to_additive]
-
-中文:
-定理 noncommProd_cons
-  结论: (s : 有限集 α) (a : α) (f : α -> β)
-  证明: by
-  simp_rw [noncommProd, Finset.cons_val, Multiset.map_cons, Multiset.noncommProd_cons]
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.cons_val, Multiset, Multiset.map_cons, Multiset.noncommProd_cons, cons_val, map_cons, noncommProd, noncommProd_cons, simp_rw
+/-
+**Finset.noncommProd_cons** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_cons (s : Finset α) (a : α) (f : α -> β) (ha : a ∉ s) (comm) :
+ noncommProd (cons a s ha) f comm = f a * noncommProd s f (comm.mono fun _ => Fi
+nset.mem_cons.2 ∘ .inr)
+参数：s : Finset α；a : α；f : α -> β；ha : a ∉ s；comm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_cons`：mem_cons {h} : b in s.cons a h ↔ b = a ∨ b in s
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Multiset α} (h 
+: a in s) : a in b ::ₘ s
+· 使用定理 `Multiset.noncommProd_cons`：noncommProd_cons (s : Multiset α) (a : α) (co
+mm) : noncommProd (a ::ₘ s) comm = a * noncommProd s (comm.mono fun _ => mem_con
+s_of_mem)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_cons (s : Finset α) (a : α) (f : α -> β)
+theorem noncommProd_cons (s : Finset α) (a : α) (f : α → β)
     (ha : a ∉ s) (comm) :
     noncommProd (cons a s ha) f comm =
       f a * noncommProd s f (comm.mono fun _ => Finset.mem_cons.2 ∘ .inr) := by
   simp_rw [noncommProd, Finset.cons_val, Multiset.map_cons, Multiset.noncommProd_cons]
 
 @[to_additive]
-/--
-theorem `noncommProd_cons'` / 定理 `noncommProd_cons'`
-
-English:
-theorem noncommProd_cons'
-  statement: (s : Finset α) (a : α) (f : α -> β)
-  proof: by
-  simp_rw [noncommProd, Finset.cons_val, Multiset.map_cons, Multiset.noncommProd_cons']
-
-中文:
-定理 noncommProd_cons'
-  结论: (s : 有限集 α) (a : α) (f : α -> β)
-  证明: by
-  simp_rw [noncommProd, Finset.cons_val, Multiset.map_cons, Multiset.noncommProd_cons']
-
-Depends on / 依赖: Finset, Finset.cons_val, Multiset, Multiset.map_cons, Multiset.noncommProd_cons, cons_val, map_cons, noncommProd, noncommProd_cons, simp_rw
+/-
+**Finset.noncommProd_cons'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_cons' (s : Finset α) (a : α) (f : α -> β) (ha : a ∉ s) (comm) 
+: noncommProd (cons a s ha) f comm = noncommProd s f (comm.mono fun _ => Finset.
+mem_cons.2 ∘ .inr) * f a
+参数：s : Finset α；a : α；f : α -> β；ha : a ∉ s；comm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_cons`：mem_cons {h} : b in s.cons a h ↔ b = a ∨ b in s
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Multiset α} (h 
+: a in s) : a in b ::ₘ s
+· 使用定理 `Multiset.noncommProd_cons'`：noncommProd_cons' (s : Multiset α) (a : α) (
+comm) : noncommProd (a ::ₘ s) comm = noncommProd s (comm.mono fun _ => mem_cons_
+of_mem) * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_cons' (s : Finset α) (a : α) (f : α -> β)
+theorem noncommProd_cons' (s : Finset α) (a : α) (f : α → β)
     (ha : a ∉ s) (comm) :
     noncommProd (cons a s ha) f comm =
       noncommProd s f (comm.mono fun _ => Finset.mem_cons.2 ∘ .inr) * f a := by
@@ -991,24 +919,38 @@ theorem noncommProd_cons' (s : Finset α) (a : α) (f : α -> β)
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_insert_of_notMem` / 定理 `noncommProd_insert_of_notMem`
-
-English:
-theorem noncommProd_insert_of_notMem
-  statement: [DecidableEq α] (s : Finset α) (a : α) (f : α -> β) (comm)
-  proof: by
-  simp only [← cons_eq_insert _ _ ha, noncommProd_cons]
-
-中文:
-定理 noncommProd_insert_of_notMem
-  结论: [DecidableEq α] (s : 有限集 α) (a : α) (f : α -> β) (comm)
-  证明: by
-  simp only [← cons_eq_insert _ _ ha, noncommProd_cons]
-
-Depends on / 依赖: cons_eq_insert, noncommProd_cons
+/-
+**Finset.noncommProd_insert_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_insert_of_notMem [DecidableEq α] (s : Finset α) (a : α) (f : α
+ -> β) (comm) (ha : a ∉ s) : noncommProd (insert a s) f comm = f a * noncommProd
+ s f (comm.mono fun _ => mem_insert_of_mem)
+参数：s : Finset α；a : α；f : α -> β；comm；ha : a ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_cons`：mem_cons {h} : b in s.cons a h ↔ b = a ∨ b in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.noncommProd_congr`：noncommProd_congr {s₁ s₂ : Finset α} {f g : α 
+-> β} (h₁ : s₁ = s₂) (h₂ : forall x in s₂, f x = g x) (comm) : noncommProd s₁ f 
+comm = noncomm…
+· 使用定理 `Finset.noncommProd_cons`：noncommProd_cons (s : Finset α) (a : α) (f : α 
+-> β) (ha : a ∉ s) (comm) : noncommProd (cons a s ha) f comm = f a * noncommProd
+ s f (comm.mo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_insert_of_notMem [DecidableEq α] (s : Finset α) (a : α) (f : α -> β) (comm)
+theorem noncommProd_insert_of_notMem [DecidableEq α] (s : Finset α) (a : α) (f : α → β) (comm)
     (ha : a ∉ s) :
     noncommProd (insert a s) f comm =
       f a * noncommProd s f (comm.mono fun _ => mem_insert_of_mem) := by
@@ -1016,50 +958,54 @@ theorem noncommProd_insert_of_notMem [DecidableEq α] (s : Finset α) (a : α) (
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive]
-/--
-theorem `noncommProd_insert_of_notMem'` / 定理 `noncommProd_insert_of_notMem'`
-
-English:
-theorem noncommProd_insert_of_notMem'
-  statement: [DecidableEq α] (s : Finset α) (a : α) (f : α -> β) (comm)
-  proof: by
-  simp only [← cons_eq_insert _ _ ha, noncommProd_cons']
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 noncommProd_insert_of_notMem'
-  结论: [DecidableEq α] (s : 有限集 α) (a : α) (f : α -> β) (comm)
-  证明: by
-  simp only [← cons_eq_insert _ _ ha, noncommProd_cons']
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: cons_eq_insert, noncommProd_cons
+/-
+**Finset.noncommProd_insert_of_notMem'** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_insert_of_notMem' [DecidableEq α] (s : Finset α) (a : α) (f : 
+α -> β) (comm) (ha : a ∉ s) : noncommProd (insert a s) f comm = noncommProd s f 
+(comm.mono fun _ => mem_insert_of_mem) * f a
+参数：s : Finset α；a : α；f : α -> β；comm；ha : a ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_cons`：mem_cons {h} : b in s.cons a h ↔ b = a ∨ b in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.cons_eq_insert`：cons_eq_insert (a s h) : @cons α a s h = insert a
+ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.noncommProd_congr`：noncommProd_congr {s₁ s₂ : Finset α} {f g : α 
+-> β} (h₁ : s₁ = s₂) (h₂ : forall x in s₂, f x = g x) (comm) : noncommProd s₁ f 
+comm = noncomm…
+· 使用定理 `Finset.noncommProd_cons'`：noncommProd_cons' (s : Finset α) (a : α) (f : 
+α -> β) (ha : a ∉ s) (comm) : noncommProd (cons a s ha) f comm = noncommProd s f
+ (comm.mono fu…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_insert_of_notMem' [DecidableEq α] (s : Finset α) (a : α) (f : α -> β) (comm)
+theorem noncommProd_insert_of_notMem' [DecidableEq α] (s : Finset α) (a : α) (f : α → β) (comm)
     (ha : a ∉ s) :
     noncommProd (insert a s) f comm =
       noncommProd s f (comm.mono fun _ => mem_insert_of_mem) * f a := by
   simp only [← cons_eq_insert _ _ ha, noncommProd_cons']
 
 @[to_additive (attr := simp)]
-/--
-theorem `noncommProd_singleton` / 定理 `noncommProd_singleton`
-
-English:
-theorem noncommProd_singleton
-  given: (a : α) (f : α -> β)
-  proof: mul_one _
-
-中文:
-定理 noncommProd_singleton
-  条件: (a : α) (f : α -> β)
-  证明: mul_one _
-
-Depends on / 依赖: mul_one
+/-
+**Finset.noncommProd_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_singleton (a : α) (f : α -> β) : noncommProd ({a} : Finset α) 
+f (by norm_cast exact Set.pairwise_singleton _ _) = f a
+参数：a : α；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem noncommProd_singleton (a : α) (f : α -> β) :
+theorem noncommProd_singleton (a : α) (f : α → β) :
     noncommProd ({a} : Finset α) f
         (by
           norm_cast
@@ -1069,149 +1015,174 @@ theorem noncommProd_singleton (a : α) (f : α -> β) :
 variable [FunLike F β γ]
 
 @[to_additive]
-/--
-theorem `map_noncommProd` / 定理 `map_noncommProd`
-
-English:
-theorem map_noncommProd
-  given: [MonoidHomClass F β γ] (s : Finset α) (f : α -> β) (comm) (g : F)
-  proof: by
-  simp [noncommProd, Multiset.map_noncommProd]
-
-@[to_additive noncommSum_eq_card_nsmul]
-
-中文:
-定理 map_noncommProd
-  条件: [幺半群态射类 F β γ] (s : 有限集 α) (f : α -> β) (comm) (g : F)
-  证明: by
-  simp [noncommProd, Multiset.map_noncommProd]
-
-@[to_additive noncommSum_eq_card_nsmul]
-
-Depends on / 依赖: Multiset, Multiset.map_noncommProd, map_noncommProd, noncommProd
+/-
+**Finset.map_noncommProd** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：map_noncommProd [MonoidHomClass F β γ] (s : Finset α) (f : α -> β) (comm) 
+(g : F) : g (s.noncommProd f comm) = s.noncommProd (fun i => g (f i)) fun _ hx _
+ hy _ => (comm.of_refl hx hy).map g
+参数：s : Finset α；f : α -> β；comm；g : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Commute.map`：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : Mul 
+M] [inst_1 : Mul N] {x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N], Co
+m…
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Set.Pairwise.of_refl`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} [S
+td.Refl r], s.Pairwise r → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → r a b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.map_noncommProd_aux`：∀ {F : Type u_1} {α : Type u_3} {β : Type 
+u_4} [inst : Monoid α] [inst_1 : Monoid β] [inst_2 : FunLike F α β]   [MulHomCla
+ss F α β] (s : Mul…
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_noncommProd`：map_noncommProd [MonoidHomClass F α β] (s : Mu
+ltiset α) (comm) (f : F) : f (s.noncommProd comm) = (s.map f).noncommProd (Multi
+set.map_noncom…
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_noncommProd [MonoidHomClass F β γ] (s : Finset α) (f : α -> β) (comm) (g : F) :
+theorem map_noncommProd [MonoidHomClass F β γ] (s : Finset α) (f : α → β) (comm) (g : F) :
     g (s.noncommProd f comm) =
       s.noncommProd (fun i => g (f i)) fun _ hx _ hy _ => (comm.of_refl hx hy).map g := by
   simp [noncommProd, Multiset.map_noncommProd]
 
 @[to_additive noncommSum_eq_card_nsmul]
-/--
-theorem `noncommProd_eq_pow_card` / 定理 `noncommProd_eq_pow_card`
-
-English:
-theorem noncommProd_eq_pow_card
-  given: (s : Finset α) (f : α -> β) (comm) (m : β) (h : forall x in s, f x = m)
-  proof: by
-  rw [noncommProd]; rw [Multiset.noncommProd_eq_pow_card _ _ m]
-  · simp only [Finset.card_def, Multiset.card_map]
-  · simpa using h
-
-@[to_additive]
-
-中文:
-定理 noncommProd_eq_pow_card
-  条件: (s : 有限集 α) (f : α -> β) (comm) (m : β) (h : 对任意 x in s, f x = m)
-  证明: by
-  rw [noncommProd]; rw [Multiset.noncommProd_eq_pow_card _ _ m]
-  · simp only [Finset.card_def, Multiset.card_map]
-  · simpa using h
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.card_def, Multiset, Multiset.card_map, Multiset.noncommProd_eq_pow_card, card_def, card_map, noncommProd, noncommProd_eq_pow_card
+/-
+**Finset.noncommProd_eq_pow_card** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_eq_pow_card (s : Finset α) (f : α -> β) (comm) (m : β) (h : fo
+rall x in s, f x = m) : s.noncommProd f comm = m ^ s.card
+参数：s : Finset α；f : α -> β；comm；m : β；h : forall x in s, f x = m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.noncommProd.eq_1`：∀ {α : Type u_3} {β : Type u_4} [inst : Monoid 
+β] (s : Finset α) (f : α → β)   (comm : (↑s).Pairwise (Function.onFun Commute f)
+), s.noncommP…
+· 使用定理 `Multiset.noncommProd_eq_pow_card`：noncommProd_eq_pow_card (s : Multiset 
+α) (comm) (m : α) (h : forall x in s, x = m) : s.noncommProd comm = m ^ Multiset
+.card s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_eq_pow_card (s : Finset α) (f : α -> β) (comm) (m : β) (h : forall x in s, f x = m) :
+theorem noncommProd_eq_pow_card (s : Finset α) (f : α → β) (comm) (m : β) (h : ∀ x ∈ s, f x = m) :
     s.noncommProd f comm = m ^ s.card := by
-  rw [noncommProd]; rw [Multiset.noncommProd_eq_pow_card _ _ m]
+  rw [noncommProd, Multiset.noncommProd_eq_pow_card _ _ m]
   · simp only [Finset.card_def, Multiset.card_map]
   · simpa using h
 
 @[to_additive]
-/--
-theorem `noncommProd_commute` / 定理 `noncommProd_commute`
-
-English:
-theorem noncommProd_commute
-  statement: (s : Finset α) (f : α -> β) (comm) (y : β)
-  proof: by
-  apply Multiset.noncommProd_commute
-  intro y
-  rw [Multiset.mem_map]
-  rintro ⟨x, ⟨hx, rfl⟩⟩
-  exact h x hx
-
-中文:
-定理 noncommProd_commute
-  结论: (s : 有限集 α) (f : α -> β) (comm) (y : β)
-  证明: by
-  apply Multiset.noncommProd_commute
-  intro y
-  rw [Multiset.mem_map]
-  rintro ⟨x, ⟨hx, rfl⟩⟩
-  exact h x hx
-
-Depends on / 依赖: Multiset, Multiset.mem_map, Multiset.noncommProd_commute, mem_map, noncommProd_commute
+/-
+**Finset.noncommProd_commute** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_commute (s : Finset α) (f : α -> β) (comm) (y : β) (h : forall
+ x in s, Commute y (f x)) : Commute y (s.noncommProd f comm)
+参数：s : Finset α；f : α -> β；comm；y : β；h : forall x in s, Commute y (f x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.noncommProd_commute`：noncommProd_commute (s : Multiset α) (comm
+) (y : α) (h : forall x in s, Commute y x) : Commute y (s.noncommProd comm)
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
 -/
-theorem noncommProd_commute (s : Finset α) (f : α -> β) (comm) (y : β)
-    (h : forall x in s, Commute y (f x)) : Commute y (s.noncommProd f comm) := by
+theorem noncommProd_commute (s : Finset α) (f : α → β) (comm) (y : β)
+    (h : ∀ x ∈ s, Commute y (f x)) : Commute y (s.noncommProd f comm) := by
   apply Multiset.noncommProd_commute
   intro y
   rw [Multiset.mem_map]
   rintro ⟨x, ⟨hx, rfl⟩⟩
   exact h x hx
-
-/--
-theorem `mul_noncommProd_erase` / 定理 `mul_noncommProd_erase`
-
-English:
-theorem mul_noncommProd_erase
-  statement: [DecidableEq α] (s : Finset α) {a : α} (h : a in s) (f : α -> β) (comm)
-  proof: by
-  classical
-  simpa only [← Multiset.map_erase_of_mem _ _ h] using!
-    Multiset.mul_noncommProd_erase (s.1.map f) (Multiset.mem_map_of_mem f h) _
-
-中文:
-定理 mul_noncommProd_erase
-  结论: [DecidableEq α] (s : 有限集 α) {a : α} (h : a in s) (f : α -> β) (comm)
-  证明: by
-  classical
-  simpa only [← Multiset.map_erase_of_mem _ _ h] using!
-    Multiset.mul_noncommProd_erase (s.1.map f) (Multiset.mem_map_of_mem f h) _
-
-Depends on / 依赖: mem_of_mem_erase, s.mem_of_mem_erase
+/-
+**Finset.mul_noncommProd_erase** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mul_noncommProd_erase [DecidableEq α] (s : Finset α) {a : α} (h : a in s) 
+(f : α -> β) (comm) (comm'
+参数：s : Finset α；h : a in s；f : α -> β；comm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Multiset.mem_of_mem_erase`：mem_of_mem_erase {a b : α} {s : Multiset α} :
+ a in s.erase b -> a in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.map_erase_of_mem`：map_erase_of_mem [DecidableEq α] [DecidableEq
+ β] (f : α -> β) (s : Multiset α) {x : α} (h : x in s) : (s.erase x).map f = (s.
+map f).erase (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `Multiset.mul_noncommProd_erase`：mul_noncommProd_erase [DecidableEq α] (s
+ : Multiset α) {a : α} (h : a in s) (comm) (comm'
+· 使用定理 `Multiset.mem_map_of_mem`：mem_map_of_mem (f : α -> β) {a : α} {s : Multis
+et α} (h : a in s) : f a in map f s
 -/
-theorem mul_noncommProd_erase [DecidableEq α] (s : Finset α) {a : α} (h : a in s) (f : α -> β) (comm)
-    (comm' := fun _ hx _ hy hxy => comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
+theorem mul_noncommProd_erase [DecidableEq α] (s : Finset α) {a : α} (h : a ∈ s) (f : α → β) (comm)
+    (comm' := fun _ hx _ hy hxy ↦ comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
     f a * (s.erase a).noncommProd f comm' = s.noncommProd f comm := by
   classical
   simpa only [← Multiset.map_erase_of_mem _ _ h] using!
     Multiset.mul_noncommProd_erase (s.1.map f) (Multiset.mem_map_of_mem f h) _
-
-/--
-theorem `noncommProd_erase_mul` / 定理 `noncommProd_erase_mul`
-
-English:
-theorem noncommProd_erase_mul
-  statement: [DecidableEq α] (s : Finset α) {a : α} (h : a in s) (f : α -> β) (comm)
-  proof: by
-  classical
-  simpa only [← Multiset.map_erase_of_mem _ _ h] using!
-    Multiset.noncommProd_erase_mul (s.1.map f) (Multiset.mem_map_of_mem f h) _
-
-中文:
-定理 noncommProd_erase_mul
-  结论: [DecidableEq α] (s : 有限集 α) {a : α} (h : a in s) (f : α -> β) (comm)
-  证明: by
-  classical
-  simpa only [← Multiset.map_erase_of_mem _ _ h] using!
-    Multiset.noncommProd_erase_mul (s.1.map f) (Multiset.mem_map_of_mem f h) _
-
-Depends on / 依赖: mem_of_mem_erase, s.mem_of_mem_erase
+/-
+**Finset.noncommProd_erase_mul** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_erase_mul [DecidableEq α] (s : Finset α) {a : α} (h : a in s) 
+(f : α -> β) (comm) (comm'
+参数：s : Finset α；h : a in s；f : α -> β；comm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Multiset.mem_of_mem_erase`：mem_of_mem_erase {a b : α} {s : Multiset α} :
+ a in s.erase b -> a in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.map_erase_of_mem`：map_erase_of_mem [DecidableEq α] [DecidableEq
+ β] (f : α -> β) (s : Multiset α) {x : α} (h : x in s) : (s.erase x).map f = (s.
+map f).erase (f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `Multiset.noncommProd_erase_mul`：noncommProd_erase_mul [DecidableEq α] (s
+ : Multiset α) {a : α} (h : a in s) (comm) (comm'
+· 使用定理 `Multiset.mem_map_of_mem`：mem_map_of_mem (f : α -> β) {a : α} {s : Multis
+et α} (h : a in s) : f a in map f s
 -/
-theorem noncommProd_erase_mul [DecidableEq α] (s : Finset α) {a : α} (h : a in s) (f : α -> β) (comm)
-    (comm' := fun _ hx _ hy hxy => comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
+theorem noncommProd_erase_mul [DecidableEq α] (s : Finset α) {a : α} (h : a ∈ s) (f : α → β) (comm)
+    (comm' := fun _ hx _ hy hxy ↦ comm (s.mem_of_mem_erase hx) (s.mem_of_mem_erase hy) hxy) :
     (s.erase a).noncommProd f comm' * f a = s.noncommProd f comm := by
   classical
   simpa only [← Multiset.map_erase_of_mem _ _ h] using!
@@ -1219,28 +1190,36 @@ theorem noncommProd_erase_mul [DecidableEq α] (s : Finset α) {a : α} (h : a i
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive]
-/--
-theorem `noncommProd_eq_prod` / 定理 `noncommProd_eq_prod`
-
-English:
-theorem noncommProd_eq_prod
-  given: {β : Type*} [CommMonoid β] (s : Finset α) (f : α -> β)
-  proof: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons a s ha IH => simp [IH]
-
-中文:
-定理 noncommProd_eq_prod
-  条件: {β : 类型} [交换幺半群 β] (s : 有限集 α) (f : α -> β)
-  证明: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons a s ha IH => simp [IH]
-
-Depends on / 依赖: Finset, Finset.cons_induction_on, cons_induction_on
+/-
+**Finset.noncommProd_eq_prod** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_eq_prod {β : Type*} [CommMonoid β] (s : Finset α) (f : α -> β)
+ : (noncommProd s f fun _ _ _ _ _ => Commute.all _ _) = s.prod f
+参数：s : Finset α；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction_on`：cons_induction_on {α : Type*} {motive : Finset
+ α -> Prop} (s : Finset α) (empty : motive ∅) (cons : forall (a : α) (s : Finset
+ α) (h : a ∉ s…
+· 使用定理 `Commute.all`：∀ {S : Type u_3} [inst : CommMagma S] (a b : S), Commute a 
+b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_cons`：mem_cons {h} : b in s.cons a h ↔ b = a ∨ b in s
+· 使用定理 `Finset.noncommProd_cons`：noncommProd_cons (s : Finset α) (a : α) (f : α 
+-> β) (ha : a ∉ s) (comm) : noncommProd (cons a s ha) f comm = f a * noncommProd
+ s f (comm.mo…
+· 使用定理 `Finset.prod_cons`：prod_cons (h : a ∉ s) : ∏ x in cons a s h, f x = f a *
+ ∏ x in s, f x
 -/
-theorem noncommProd_eq_prod {β : Type*} [CommMonoid β] (s : Finset α) (f : α -> β) :
+theorem noncommProd_eq_prod {β : Type*} [CommMonoid β] (s : Finset α) (f : α → β) :
     (noncommProd s f fun _ _ _ _ _ => Commute.all _ _) = s.prod f := by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -1248,36 +1227,58 @@ theorem noncommProd_eq_prod {β : Type*} [CommMonoid β] (s : Finset α) (f : α
 
 /-- The non-commutative version of `Finset.prod_union` -/
 @[to_additive /-- The non-commutative version of `Finset.sum_union` -/]
-/--
-theorem `noncommProd_union_of_disjoint` / 定理 `noncommProd_union_of_disjoint`
+/-
+**Finset.noncommProd_union_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_union_of_disjoint [DecidableEq α] {s t : Finset α} (h : Disjoi
+nt s t) (f : α -> β) (comm : Set.Pairwise ↑(s union t) (Commute on f)) : noncomm
+Prod (s union t) f comm = noncommProd s f (comm.mono <| coe_subset.2 subset_unio
+n_left) * noncommProd t f (comm.mono <| coe_subset.2 subset_union_right)
+参数：h : Disjoint s t；f : α -> β；comm : Set.Pairwise ↑(s union t) (Commute on f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `Finset.subset_union_left`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s₂
+ : Finset α}, s₁ ⊆ s₁ ∪ s₂
+· 使用定理 `Finset.subset_union_right`：∀ {α : Type u_1} [inst : DecidableEq α] {s₁ s
+₂ : Finset α}, s₂ ⊆ s₁ ∪ s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.noncommProd_lemma`：noncommProd_lemma (s : Finset α) (f : α -> β) 
+(comm : (s : Set α).Pairwise (Commute on f)) : Set.Pairwise { x | x in Multiset.
+map f s.val } …
+· 使用定理 `Finset.union_val`：union_val (s t : Finset α) : (s union t).1 = s.1 union
+ t.1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.add_eq_union_iff_disjoint`：add_eq_union_iff_disjoint [Decidable
+Eq α] {s t : Multiset α} : s + t = s union t ↔ Disjoint s t
+· 使用定理 `List.map_append`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l₁ l₂ : Li
+st α}, List.map f (l₁ ++ l₂) = List.map f l₁ ++ List.map f l₂
+· 使用定理 `Multiset.noncommProd.congr_simp`：∀ {α : Type u_3} [inst : Monoid α] (s s
+_1 : Multiset α) (e_s : s = s_1) (comm : {x | x ∈ s}.Pairwise Commute),   s.nonc
+ommProd comm = s_1.no…
+· 使用定理 `Multiset.noncommProd_coe`：noncommProd_coe (l : List α) (comm) : noncommP
+rod (l : Multiset α) comm = l.prod
+· 使用定理 `List.prod_append`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : One α] [Std.
+LawfulLeftIdentity (fun x1 x2 => x1 * x2) 1]   [Std.Associative fun x1 x2 => x1 
+* x2] …
+· 使用定理 `Std.LawfulIdentity.toLawfulLeftIdentity`：∀ {α : Sort u} {op : α → α → α}
+ {o : outParam α} [self : Std.LawfulIdentity op o], Std.LawfulLeftIdentity op o
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem noncommProd_union_of_disjoint
-  statement: [DecidableEq α] {s t : Finset α} (h : Disjoint s t)
-  proof: by
-  rcases s with ⟨⟨sl⟩, hsl⟩
-  rcases t with ⟨⟨tl⟩, htl⟩
-  simp only [← Finset.disjoint_val, Multiset.quot_mk_to_coe'] at h
-  simp [noncommProd, ← Multiset.add_eq_union_iff_disjoint.mpr h]
-
-@[to_additive]
-
-中文:
-定理 noncommProd_union_of_disjoint
-  结论: [DecidableEq α] {s t : 有限集 α} (h : Disjoint s t)
-  证明: by
-  rcases s with ⟨⟨sl⟩, hsl⟩
-  rcases t with ⟨⟨tl⟩, htl⟩
-  simp only [← Finset.disjoint_val, Multiset.quot_mk_to_coe'] at h
-  simp [noncommProd, ← Multiset.add_eq_union_iff_disjoint.mpr h]
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.disjoint_val, Multiset, Multiset.add_eq_union_iff_disjoint.mpr, Multiset.quot_mk_to_coe, add_eq_union_iff_disjoint, disjoint_val, noncommProd, quot_mk_to_coe
+--- 原说明 ---
+The non-commutative version of `Finset.prod_union`
 -/
 theorem noncommProd_union_of_disjoint [DecidableEq α] {s t : Finset α} (h : Disjoint s t)
-    (f : α -> β) (comm : Set.Pairwise ↑(s union t) (Commute on f)) :
-    noncommProd (s union t) f comm =
+    (f : α → β) (comm : Set.Pairwise ↑(s ∪ t) (Commute on f)) :
+    noncommProd (s ∪ t) f comm =
       noncommProd s f (comm.mono <| coe_subset.2 subset_union_left) *
         noncommProd t f (comm.mono <| coe_subset.2 subset_union_right) := by
   rcases s with ⟨⟨sl⟩, hsl⟩
@@ -1286,34 +1287,27 @@ theorem noncommProd_union_of_disjoint [DecidableEq α] {s t : Finset α} (h : Di
   simp [noncommProd, ← Multiset.add_eq_union_iff_disjoint.mpr h]
 
 @[to_additive]
-/--
-theorem `noncommProd_mul_distrib_aux` / 定理 `noncommProd_mul_distrib_aux`
-
-English:
-theorem noncommProd_mul_distrib_aux
-  statement: {s : Finset α} {f : α -> β} {g : α -> β}
-  proof: by
-  intro x hx y hy h
-  apply Commute.mul_left <;> apply Commute.mul_right
-  · exact comm_ff.of_refl hx hy
-  · exact (comm_gf hy hx h.symm).symm
-  · exact comm_gf hx hy h
-  · exact comm_gg.of_refl hx hy
-
-中文:
-定理 noncommProd_mul_distrib_aux
-  结论: {s : 有限集 α} {f : α -> β} {g : α -> β}
-  证明: by
-  intro x hx y hy h
-  apply Commute.mul_left <;> apply Commute.mul_right
-  · exact comm_ff.of_refl hx hy
-  · exact (comm_gf hy hx h.symm).symm
-  · exact comm_gf hx hy h
-  · exact comm_gg.of_refl hx hy
-
-Depends on / 依赖: Commute, Commute.mul_left, Commute.mul_right, comm_ff, comm_ff.of_refl, comm_gf, comm_gg, comm_gg.of_refl, h.symm, mul_left, mul_right, of_refl
+/-
+**Finset.noncommProd_mul_distrib_aux** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_mul_distrib_aux {s : Finset α} {f : α -> β} {g : α -> β} (comm
+_ff : (s : Set α).Pairwise (Commute on f)) (comm_gg : (s : Set α).Pairwise (Comm
+ute on g)) (comm_gf : (s : Set α).Pairwise fun x y => Commute (g x) (f y)) : (s 
+: Set α).Pairwise fun x y => Commute ((f * g) x) ((f * g) y)
+参数：comm_ff : (s : Set α).Pairwise (Commute on f)；comm_gg : (s : Set α).Pairwise 
+(Commute on g)；comm_gf : (s : Set α).Pairwise fun x y => Commute (g x) (f y)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.mul_left`：mul_left (hac : Commute a c) (hbc : Commute b c) : Com
+mute (a * b) c
+· 使用定理 `Commute.mul_right`：mul_right (hab : Commute a b) (hac : Commute a c) : C
+ommute a (b * c)
+· 使用定理 `Set.Pairwise.of_refl`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} [S
+td.Refl r], s.Pairwise r → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → r a b
+· 使用定理 `Commute.symm`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → C
+ommute b a
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem noncommProd_mul_distrib_aux {s : Finset α} {f : α -> β} {g : α -> β}
+theorem noncommProd_mul_distrib_aux {s : Finset α} {f : α → β} {g : α → β}
     (comm_ff : (s : Set α).Pairwise (Commute on f))
     (comm_gg : (s : Set α).Pairwise (Commute on g))
     (comm_gf : (s : Set α).Pairwise fun x y => Commute (g x) (f y)) :
@@ -1328,97 +1322,140 @@ theorem noncommProd_mul_distrib_aux {s : Finset α} {f : α -> β} {g : α -> β
 set_option backward.isDefEq.respectTransparency false in
 /-- The non-commutative version of `Finset.prod_mul_distrib` -/
 @[to_additive /-- The non-commutative version of `Finset.sum_add_distrib` -/]
-/--
-theorem `noncommProd_mul_distrib` / 定理 `noncommProd_mul_distrib`
+/-
+**Finset.noncommProd_mul_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_mul_distrib {s : Finset α} (f : α -> β) (g : α -> β) (comm_ff 
+comm_gg comm_gf) : noncommProd s (f * g) (noncommProd_mul_distrib_aux comm_ff co
+mm_gg comm_gf) = noncommProd s f comm_ff * noncommProd s g comm_gg
+参数：f : α -> β；g : α -> β；comm_ff comm_gg comm_gf。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction_on`：cons_induction_on {α : Type*} {motive : Finset
+ α -> Prop} (s : Finset α) (empty : motive ∅) (cons : forall (a : α) (s : Finset
+ α) (h : a ∉ s…
+· 使用定理 `Finset.noncommProd_mul_distrib_aux`：noncommProd_mul_distrib_aux {s : Fin
+set α} {f : α -> β} {g : α -> β} (comm_ff : (s : Set α).Pairwise (Commute on f))
+ (comm_gg : (s : Set α).…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.noncommProd_congr`：noncommProd_congr {s₁ s₂ : Finset α} {f g : α 
+-> β} (h₁ : s₁ = s₂) (h₂ : forall x in s₂, f x = g x) (comm) : noncommProd s₁ f 
+comm = noncomm…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_cons`：mem_cons {h} : b in s.cons a h ↔ b = a ∨ b in s
+· 使用定理 `Finset.noncommProd_cons`：noncommProd_cons (s : Finset α) (a : α) (f : α 
+-> β) (ha : a ∉ s) (comm) : noncommProd (cons a s ha) f comm = f a * noncommProd
+ s f (comm.mo…
+· 使用引理 `Pi.mul_apply`：mul_apply (f g : forall i, M i) (i : ι) : (f * g) i = f i 
+* g i
+· 使用定理 `Finset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Finset α} {hb : b
+ ∉ s} (ha : a in s) : a in cons b s hb
+· 使用定理 `Commute.mul_mul_mul_comm`：∀ {S : Type u_3} [inst : Semigroup S] {b c : S
+}, Commute b c → ∀ (a d : S), a * b * (c * d) = a * c * (b * d)
+· 使用定理 `Finset.noncommProd_commute`：noncommProd_commute (s : Finset α) (f : α ->
+ β) (comm) (y : β) (h : forall x in s, Commute y (f x)) : Commute y (s.noncommPr
+od f comm)
+· 使用定理 `Finset.mem_cons_self`：mem_cons_self (a : α) (s : Finset α) {h} : a in co
+ns a s h
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
 
-English:
-theorem noncommProd_mul_distrib
-  given: {s : Finset α} (f : α -> β) (g : α -> β) (comm_ff comm_gg comm_gf)
-  proof: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons x s hnotMem ih =>
-    rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Pi.mul_apply]; rw [ih (comm_ff.mono fun _ => mem_cons_of_mem) (comm_gg.mono fun _ => mem_cons_of_mem)
-        (comm_gf.mono fun _ => mem_cons_of_mem)]; rw [(noncommProd_commute _ _ _ _ fun y hy => ?_).mul_mul_mul_comm]
-    exact comm_gf (mem_cons_self x s) (mem_cons_of_mem hy) (ne_of_mem_of_not_mem hy hnotMem).symm
-
-中文:
-定理 noncommProd_mul_distrib
-  条件: {s : 有限集 α} (f : α -> β) (g : α -> β) (comm_ff comm_gg comm_gf)
-  证明: by
-  induction s using Finset.cons_induction_on with
-  | empty => simp
-  | cons x s hnotMem ih =>
-    rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Pi.mul_apply]; rw [ih (comm_ff.mono fun _ => mem_cons_of_mem) (comm_gg.mono fun _ => mem_cons_of_mem)
-        (comm_gf.mono fun _ => mem_cons_of_mem)]; rw [(noncommProd_commute _ _ _ _ fun y hy => ?_).mul_mul_mul_comm]
-    exact comm_gf (mem_cons_self x s) (mem_cons_of_mem hy) (ne_of_mem_of_not_mem hy hnotMem).symm
-
-Depends on / 依赖: Finset, Finset.cons_induction_on, Finset.noncommProd_cons, Pi.mul_apply, comm_ff, comm_ff.mono, comm_gf, comm_gf.mono, comm_gg, comm_gg.mono, cons_induction_on, hnotMem, mem_cons_of_mem, mem_cons_self, mul_apply, mul_mul_mul_comm, ne_of_mem_of_not_mem, noncommProd_commute, noncommProd_cons
+--- 原说明 ---
+The non-commutative version of `Finset.prod_mul_distrib`
 -/
-theorem noncommProd_mul_distrib {s : Finset α} (f : α -> β) (g : α -> β) (comm_ff comm_gg comm_gf) :
+theorem noncommProd_mul_distrib {s : Finset α} (f : α → β) (g : α → β) (comm_ff comm_gg comm_gf) :
     noncommProd s (f * g) (noncommProd_mul_distrib_aux comm_ff comm_gg comm_gf) =
       noncommProd s f comm_ff * noncommProd s g comm_gg := by
   induction s using Finset.cons_induction_on with
   | empty => simp
   | cons x s hnotMem ih =>
-    rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Pi.mul_apply]; rw [ih (comm_ff.mono fun _ => mem_cons_of_mem) (comm_gg.mono fun _ => mem_cons_of_mem)
-        (comm_gf.mono fun _ => mem_cons_of_mem)]; rw [(noncommProd_commute _ _ _ _ fun y hy => ?_).mul_mul_mul_comm]
+    rw [Finset.noncommProd_cons, Finset.noncommProd_cons, Finset.noncommProd_cons, Pi.mul_apply,
+      ih (comm_ff.mono fun _ => mem_cons_of_mem) (comm_gg.mono fun _ => mem_cons_of_mem)
+        (comm_gf.mono fun _ => mem_cons_of_mem),
+      (noncommProd_commute _ _ _ _ fun y hy => ?_).mul_mul_mul_comm]
     exact comm_gf (mem_cons_self x s) (mem_cons_of_mem hy) (ne_of_mem_of_not_mem hy hnotMem).symm
 
 section FinitePi
 
-variable {M : ι -> Type*} [forall i, Monoid (M i)]
+variable {M : ι → Type*} [∀ i, Monoid (M i)]
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive]
-/--
-theorem `noncommProd_mulSingle` / 定理 `noncommProd_mulSingle`
-
-English:
-theorem noncommProd_mulSingle
-  given: [Fintype ι] [DecidableEq ι] (x : forall i, M i)
-  proof: by
-  ext i
-  apply (univ.map_noncommProd (fun i => MonoidHom.mulSingle M i (x i)) ?a
-    (Pi.evalMonoidHom M i)).trans
-  case a =>
-    intro i _ j _ _
-    exact Pi.mulSingle_apply_commute x i j
-  convert! (noncommProd_congr (insert_erase (mem_univ i)).symm _ _).trans _
-  · intro j
-    exact Pi.mulSingle j (x j) i
-  · intro j _; dsimp
-  · rw [noncommProd_insert_of_notMem _ _ _ _ (notMem_erase _ _),
-      noncommProd_eq_pow_card (univ.erase i), one_pow, mul_one]
-    · simp only [Pi.mulSingle_eq_same]
-    · simpa using fun _ a => Pi.mulSingle_eq_of_ne (a ·.symm) _
-
-中文:
-定理 noncommProd_mulSingle
-  条件: [有限类型 ι] [DecidableEq ι] (x : 对任意 i, M i)
-  证明: by
-  ext i
-  apply (univ.map_noncommProd (fun i => MonoidHom.mulSingle M i (x i)) ?a
-    (Pi.evalMonoidHom M i)).trans
-  case a =>
-    intro i _ j _ _
-    exact Pi.mulSingle_apply_commute x i j
-  convert! (noncommProd_congr (insert_erase (mem_univ i)).symm _ _).trans _
-  · intro j
-    exact Pi.mulSingle j (x j) i
-  · intro j _; dsimp
-  · rw [noncommProd_insert_of_notMem _ _ _ _ (notMem_erase _ _),
-      noncommProd_eq_pow_card (univ.erase i), one_pow, mul_one]
-    · simp only [Pi.mulSingle_eq_same]
-    · simpa using fun _ a => Pi.mulSingle_eq_of_ne (a ·.symm) _
-
-Depends on / 依赖: MonoidHom, MonoidHom.mulSingle, Pi.evalMonoidHom, Pi.mulSingl, Pi.mulSingle, Pi.mulSingle_apply_commute, Pi.mulSingle_eq_same, convert, evalMonoidHom, insert_erase, map_noncommProd, mem_univ, mulSingl, mulSingle, mulSingle_apply_commute, mulSingle_eq_same, mul_one, noncommProd_congr, noncommProd_eq_pow_card, noncommProd_insert_of_notMem
+/-
+**Finset.noncommProd_mulSingle** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：noncommProd_mulSingle [Fintype ι] [DecidableEq ι] (x : forall i, M i) : (u
+niv.noncommProd (fun i => Pi.mulSingle i (x i)) fun i _ j _ _ => Pi.mulSingle_ap
+ply_commute x i j) = x
+参数：x : forall i, M i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Pi.mulSingle_apply_commute`：Pi.mulSingle_apply_commute [forall i, MulOne
+Class <| f i] (x : forall i, f i) (i j : I) : Commute (mulSingle i (x i)) (mulSi
+ngle j (x j))
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Commute.map`：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : Mul 
+M] [inst_1 : Mul N] {x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N], Co
+m…
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `Set.Pairwise.of_refl`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} [S
+td.Refl r], s.Pairwise r → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → r a b
+· 使用定理 `Finset.map_noncommProd`：map_noncommProd [MonoidHomClass F β γ] (s : Fins
+et α) (f : α -> β) (comm) (g : F) : g (s.noncommProd f comm) = s.noncommProd (fu
+n i => g (f …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.insert_erase`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset
+ α} {a : α}, a ∈ s → insert a (s.erase a) = s
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Finset.noncommProd_congr`：noncommProd_congr {s₁ s₂ : Finset α} {f g : α 
+-> β} (h₁ : s₁ = s₂) (h₂ : forall x in s₂, f x = g x) (comm) : noncommProd s₁ f 
+comm = noncomm…
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.noncommProd_insert_of_notMem`：noncommProd_insert_of_notMem [Decid
+ableEq α] (s : Finset α) (a : α) (f : α -> β) (comm) (ha : a ∉ s) : noncommProd 
+(insert a s) f comm = f a…
+· 使用定理 `Finset.notMem_erase`：notMem_erase (a : α) (s : Finset α) : a ∉ erase s a
+· 使用定理 `Finset.noncommProd_eq_pow_card`：noncommProd_eq_pow_card (s : Finset α) (
+f : α -> β) (comm) (m : β) (h : forall x in s, f x = m) : s.noncommProd f comm =
+ m ^ s.card
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用引理 `Pi.mulSingle_eq_of_ne`：mulSingle_eq_of_ne {i i' : ι} (h : i' != i) (x : 
+M i) : mulSingle i x i' = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Pi.mulSingle_eq_same`：mulSingle_eq_same (i : ι) (x : M i) : mulSingle i 
+x i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem noncommProd_mulSingle [Fintype ι] [DecidableEq ι] (x : forall i, M i) :
+theorem noncommProd_mulSingle [Fintype ι] [DecidableEq ι] (x : ∀ i, M i) :
     (univ.noncommProd (fun i => Pi.mulSingle i (x i)) fun i _ j _ _ =>
         Pi.mulSingle_apply_commute x i j) = x := by
   ext i
-  apply (univ.map_noncommProd (fun i => MonoidHom.mulSingle M i (x i)) ?a
+  apply (univ.map_noncommProd (fun i ↦ MonoidHom.mulSingle M i (x i)) ?a
     (Pi.evalMonoidHom M i)).trans
   case a =>
     intro i _ j _ _
@@ -1430,40 +1467,22 @@ theorem noncommProd_mulSingle [Fintype ι] [DecidableEq ι] (x : forall i, M i) 
   · rw [noncommProd_insert_of_notMem _ _ _ _ (notMem_erase _ _),
       noncommProd_eq_pow_card (univ.erase i), one_pow, mul_one]
     · simp only [Pi.mulSingle_eq_same]
-    · simpa using fun _ a => Pi.mulSingle_eq_of_ne (a ·.symm) _
+    · simpa using fun _ a ↦ Pi.mulSingle_eq_of_ne (a ·.symm) _
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive]
-/--
-theorem `_root_.MonoidHom.pi_ext` / 定理 `_root_.MonoidHom.pi_ext`
-
-English:
-theorem _root_.MonoidHom.pi_ext
-  statement: [Finite ι] [DecidableEq ι] {f g : (forall i, M i) ->* γ}
-  proof: by
-  cases nonempty_fintype ι
-  ext x
-  rw [← noncommProd_mulSingle x]; rw [univ.map_noncommProd]; rw [univ.map_noncommProd]
-  congr 1 with i; exact h i (x i)
-
-中文:
-定理 _root_.幺半群态射.pi_ext
-  结论: [有限 ι] [DecidableEq ι] {f g : (对任意 i, M i) ->* γ}
-  证明: by
-  cases nonempty_fintype ι
-  ext x
-  rw [← noncommProd_mulSingle x]; rw [univ.map_noncommProd]; rw [univ.map_noncommProd]
-  congr 1 with i; exact h i (x i)
-
-Depends on / 依赖: map_noncommProd, noncommProd_mulSingle, nonempty_fintype, univ.map_noncommProd
+/-
+**Finset._root_.MonoidHom.pi_ext** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.MonoidHom.pi_ext [Finite ι] [DecidableEq ι] {f g : (forall i, M i) ->* γ}
-    (h : forall i x, f (Pi.mulSingle i x) = g (Pi.mulSingle i x)) : f = g := by
+theorem _root_.MonoidHom.pi_ext [Finite ι] [DecidableEq ι] {f g : (∀ i, M i) →* γ}
+    (h : ∀ i x, f (Pi.mulSingle i x) = g (Pi.mulSingle i x)) : f = g := by
   cases nonempty_fintype ι
   ext x
-  rw [← noncommProd_mulSingle x]; rw [univ.map_noncommProd]; rw [univ.map_noncommProd]
+  rw [← noncommProd_mulSingle x, univ.map_noncommProd, univ.map_noncommProd]
   congr 1 with i; exact h i (x i)
 
 end FinitePi
 
 end Finset
+

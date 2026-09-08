@@ -28,393 +28,330 @@ namespace Function
 
 variable {α β : Type*} [Neg α]
 
-/--
-Definition of `Even` / `Even` 的定义
+/-- A function `f` is _even_ if it satisfies `f (-x) = f x` for all `x`. -/
+/-
+**Function.Even** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → [Neg α] → (α → β) → Prop
+参数：α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Even
-  signature: (f : α -> β)
-  body: forall a, f (-a) = f a
-
-中文:
-定义 Even
-  签名: (f : α -> β)
-  定义体: forall a, f (-a) = f a
+--- 原说明 ---
+A function `f` is _even_ if it satisfies `f (-x) = f x` for all `x`.
 -/
-protected def Even (f : α -> β) : Prop := forall a, f (-a) = f a
+protected def Even (f : α → β) : Prop := ∀ a, f (-a) = f a
 
-/--
-Definition of `Odd` / `Odd` 的定义
+/-- A function `f` is _odd_ if it satisfies `f (-x) = -f x` for all `x`. -/
+/-
+**Function.Odd** 是 Mathlib 中的一个定义，位于命名空间 `Function`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → [Neg α] → [Neg β] → (α → β) → Prop
+参数：α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Odd
-  signature: [Neg β] (f : α -> β)
-  body: forall a, f (-a) = -(f a)
-
-中文:
-定义 Odd
-  签名: [取负 β] (f : α -> β)
-  定义体: forall a, f (-a) = -(f a)
+--- 原说明 ---
+A function `f` is _odd_ if it satisfies `f (-x) = -f x` for all `x`.
 -/
-protected def Odd [Neg β] (f : α -> β) : Prop := forall a, f (-a) = -(f a)
+protected def Odd [Neg β] (f : α → β) : Prop := ∀ a, f (-a) = -(f a)
 
-/--
-lemma `Even.eq` / 引理 `Even.eq`
+/-- An even function `f` satisfies `f (-x) = f x`. -/
+/-
+**Function.Even.eq** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {f : α → β}, Function.Even 
+f → ∀ (x : α), f (-x) = f x
+参数：x : α；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Even.eq
-  given: {f : α -> β} (hf : f.Even) (x : α)
-  statement: f (-x) = f x
-  proof: hf x
-
-中文:
-引理 Even.eq
-  条件: {f : α -> β} (hf : f.Even) (x : α)
-  结论: f (-x) = f x
-  证明: hf x
+--- 原说明 ---
+An even function `f` satisfies `f (-x) = f x`.
 -/
-lemma Even.eq {f : α -> β} (hf : f.Even) (x : α) : f (-x) = f x := hf x
+lemma Even.eq {f : α → β} (hf : f.Even) (x : α) : f (-x) = f x := hf x
 
-/--
-lemma `Even.const` / 引理 `Even.const`
+/-- Any constant function is even. -/
+/-
+**Function.Even.const** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] (b : β), Function.Even fun 
+x => b
+参数：b : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Even.const
-  given: (b : β)
-  statement: Function.Even (fun _ : α => b)
-  proof: fun _ => rfl
-
-中文:
-引理 Even.const
-  条件: (b : β)
-  结论: 函数.Even (fun _ : α => b)
-  证明: fun _ => rfl
+--- 原说明 ---
+Any constant function is even.
 -/
-lemma Even.const (b : β) : Function.Even (fun _ : α => b) := fun _ => rfl
+lemma Even.const (b : β) : Function.Even (fun _ : α ↦ b) := fun _ ↦ rfl
 
-/--
-lemma `Even.zero` / 引理 `Even.zero`
+/-- The zero function is even. -/
+/-
+**Function.Even.zero** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] [inst_1 : Zero β], Function
+.Even fun x => 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Even.const`：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] (b :
+ β), Function.Even fun x => b
 
-English:
-lemma Even.zero
-  given: [Zero β]
-  statement: Function.Even (fun (_ : α) => (0 : β))
-  proof: Even.const 0
-
-中文:
-引理 Even.zero
-  条件: [零 β]
-  结论: 函数.Even (fun (_ : α) => (0 : β))
-  证明: Even.const 0
-
-Depends on / 依赖: Even.const
+--- 原说明 ---
+The zero function is even.
 -/
-lemma Even.zero [Zero β] : Function.Even (fun (_ : α) => (0 : β)) := Even.const 0
+lemma Even.zero [Zero β] : Function.Even (fun (_ : α) ↦ (0 : β)) := Even.const 0
 
-/--
-lemma `Odd.eq` / 引理 `Odd.eq`
+/-- An odd function `f` satisfies `f (-x) = -f x`. -/
+/-
+**Function.Odd.eq** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] [inst_1 : Neg β] {f : α → β
+}, Function.Odd f → ∀ (x : α), f (-x) = -f x
+参数：x : α；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Odd.eq
-  given: [Neg β] {f : α -> β} (hf : f.Odd) (x : α)
-  statement: f (-x) = -f x
-  proof: hf x
-
-中文:
-引理 Odd.eq
-  条件: [取负 β] {f : α -> β} (hf : f.Odd) (x : α)
-  结论: f (-x) = -f x
-  证明: hf x
+--- 原说明 ---
+An odd function `f` satisfies `f (-x) = -f x`.
 -/
-lemma Odd.eq [Neg β] {f : α -> β} (hf : f.Odd) (x : α) : f (-x) = -f x := hf x
+lemma Odd.eq [Neg β] {f : α → β} (hf : f.Odd) (x : α) : f (-x) = -f x := hf x
 
-/--
-lemma `Odd.zero` / 引理 `Odd.zero`
+/-- The zero function is odd. -/
+/-
+**Function.Odd.zero** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] [inst_1 : NegZeroClass β], 
+Function.Odd fun x => 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 
-English:
-lemma Odd.zero
-  given: [NegZeroClass β]
-  statement: Function.Odd (fun (_ : α) => (0 : β))
-  proof: fun _ => neg_zero.symm
-
-中文:
-引理 Odd.zero
-  条件: [NegZero类 β]
-  结论: 函数.Odd (fun (_ : α) => (0 : β))
-  证明: fun _ => neg_zero.symm
-
-Depends on / 依赖: neg_zero, neg_zero.symm
+--- 原说明 ---
+The zero function is odd.
 -/
-lemma Odd.zero [NegZeroClass β] : Function.Odd (fun (_ : α) => (0 : β)) := fun _ => neg_zero.symm
+lemma Odd.zero [NegZeroClass β] : Function.Odd (fun (_ : α) ↦ (0 : β)) := fun _ ↦ neg_zero.symm
 
 section composition
 
 variable {γ : Type*}
 
-/--
-lemma `Even.left_comp` / 引理 `Even.left_comp`
+/-- If `f` is arbitrary and `g` is even, then `f ∘ g` is even. -/
+/-
+**Function.Even.left_comp** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} {g : α → β},
+   Function.Even g → ∀ (f : β → γ), Function.Even (f ∘ g)
+参数：f : β → γ；f ∘ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-lemma Even.left_comp
-  given: {g : α -> β} (hg : g.Even) (f : β -> γ)
-  statement: (f ∘ g).Even
-  proof: (congr_arg f <| hg ·)
-
-中文:
-引理 Even.left_comp
-  条件: {g : α -> β} (hg : g.Even) (f : β -> γ)
-  结论: (f ∘ g).Even
-  证明: (congr_arg f <| hg ·)
-
-Depends on / 依赖: congr_arg
+--- 原说明 ---
+If `f` is arbitrary and `g` is even, then `f ∘ g` is even.
 -/
-lemma Even.left_comp {g : α -> β} (hg : g.Even) (f : β -> γ) : (f ∘ g).Even :=
+lemma Even.left_comp {g : α → β} (hg : g.Even) (f : β → γ) : (f ∘ g).Even :=
   (congr_arg f <| hg ·)
 
-/--
-lemma `Even.comp_odd` / 引理 `Even.comp_odd`
+/-- If `f` is even and `g` is odd, then `f ∘ g` is even. -/
+/-
+**Function.Even.comp_odd** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} [inst_1 : Ne
+g β] {f : β → γ},   Function.Even f → ∀ {g : α → β}, Function.Odd g → Function.E
+ven (f ∘ g)
+参数：f ∘ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Even.comp_odd
-  given: [Neg β] {f : β -> γ} (hf : f.Even) {g : α -> β} (hg : g.Odd)
-  proof: by
-  intro a
-  simp only [comp_apply, hg a, hf _]
-
-中文:
-引理 Even.comp_odd
-  条件: [取负 β] {f : β -> γ} (hf : f.Even) {g : α -> β} (hg : g.Odd)
-  证明: by
-  intro a
-  simp only [comp_apply, hg a, hf _]
-
-Depends on / 依赖: comp_apply
+--- 原说明 ---
+If `f` is even and `g` is odd, then `f ∘ g` is even.
 -/
-lemma Even.comp_odd [Neg β] {f : β -> γ} (hf : f.Even) {g : α -> β} (hg : g.Odd) :
+lemma Even.comp_odd [Neg β] {f : β → γ} (hf : f.Even) {g : α → β} (hg : g.Odd) :
     (f ∘ g).Even := by
   intro a
   simp only [comp_apply, hg a, hf _]
 
-/--
-lemma `Odd.comp_odd` / 引理 `Odd.comp_odd`
+/-- If `f` and `g` are odd, then `f ∘ g` is odd. -/
+/-
+**Function.Odd.comp_odd** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} [inst_1 : Ne
+g β] [inst_2 : Neg γ] {f : β → γ},   Function.Odd f → ∀ {g : α → β}, Function.Od
+d g → Function.Odd (f ∘ g)
+参数：f ∘ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Odd.comp_odd
-  given: [Neg β] [Neg γ] {f : β -> γ} (hf : f.Odd) {g : α -> β} (hg : g.Odd)
-  proof: by
-  intro a
-  simp only [comp_apply, hg a, hf _]
-
-中文:
-引理 Odd.comp_odd
-  条件: [取负 β] [取负 γ] {f : β -> γ} (hf : f.Odd) {g : α -> β} (hg : g.Odd)
-  证明: by
-  intro a
-  simp only [comp_apply, hg a, hf _]
-
-Depends on / 依赖: comp_apply
+--- 原说明 ---
+If `f` and `g` are odd, then `f ∘ g` is odd.
 -/
-lemma Odd.comp_odd [Neg β] [Neg γ] {f : β -> γ} (hf : f.Odd) {g : α -> β} (hg : g.Odd) :
+lemma Odd.comp_odd [Neg β] [Neg γ] {f : β → γ} (hf : f.Odd) {g : α → β} (hg : g.Odd) :
     (f ∘ g).Odd := by
   intro a
   simp only [comp_apply, hg a, hf _]
 
 end composition
 
-/--
-lemma `Even.add` / 引理 `Even.add`
-
-English:
-lemma Even.add
-  given: [Add β] {f g : α -> β} (hf : f.Even) (hg : g.Even)
-  statement: (f + g).Even
-  proof: by
-  intro a
-  simp only [hf a, hg a, Pi.add_apply]
-
-中文:
-引理 Even.add
-  条件: [加法 β] {f g : α -> β} (hf : f.Even) (hg : g.Even)
-  结论: (f + g).Even
-  证明: by
-  intro a
-  simp only [hf a, hg a, Pi.add_apply]
-
-Depends on / 依赖: Pi.add_apply, add_apply
+/-
+**Function.Even.add** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] [inst_1 : Add β] {f g : α →
+ β},   Function.Even f → Function.Even g → Function.Even (f + g)
+参数：f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Even.add [Add β] {f g : α -> β} (hf : f.Even) (hg : g.Even) : (f + g).Even := by
+lemma Even.add [Add β] {f g : α → β} (hf : f.Even) (hg : g.Even) : (f + g).Even := by
   intro a
   simp only [hf a, hg a, Pi.add_apply]
-
-/--
-lemma `Odd.add` / 引理 `Odd.add`
-
-English:
-lemma Odd.add
-  given: [SubtractionCommMonoid β] {f g : α -> β} (hf : f.Odd) (hg : g.Odd)
-  statement: (f + g).Odd
-  proof: by
-  intro a
-  simp only [hf a, hg a, Pi.add_apply, neg_add]
-
-中文:
-引理 Odd.add
-  条件: [SubtractionComm幺半群 β] {f g : α -> β} (hf : f.Odd) (hg : g.Odd)
-  结论: (f + g).Odd
-  证明: by
-  intro a
-  simp only [hf a, hg a, Pi.add_apply, neg_add]
-
-Depends on / 依赖: Pi.add_apply, add_apply, neg_add
+/-
+**Function.Odd.add** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] [inst_1 : SubtractionCommMo
+noid β] {f g : α → β},   Function.Odd f → Function.Odd g → Function.Odd (f + g)
+参数：f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Odd.add [SubtractionCommMonoid β] {f g : α -> β} (hf : f.Odd) (hg : g.Odd) : (f + g).Odd := by
+lemma Odd.add [SubtractionCommMonoid β] {f g : α → β} (hf : f.Odd) (hg : g.Odd) : (f + g).Odd := by
   intro a
   simp only [hf a, hg a, Pi.add_apply, neg_add]
 
 section smul
 
-variable {γ : Type*} {f : α -> β} {g : α -> γ}
+variable {γ : Type*} {f : α → β} {g : α → γ}
 
-/--
-lemma `Even.smul_even` / 引理 `Even.smul_even`
-
-English:
-lemma Even.smul_even
-  given: [SMul β γ] (hf : f.Even) (hg : g.Even)
-  statement: (f • g).Even
-  proof: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a]
-
-中文:
-引理 Even.smul_even
-  条件: [标量乘法 β γ] (hf : f.Even) (hg : g.Even)
-  结论: (f • g).Even
-  证明: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a]
-
-Depends on / 依赖: Pi.smul_apply, smul_apply
+/-
+**Function.Even.smul_even** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} {f : α → β} 
+{g : α → γ} [inst_1 : SMul β γ],   Function.Even f → Function.Even g → Function.
+Even (f • g)
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Even.smul_even [SMul β γ] (hf : f.Even) (hg : g.Even) : (f • g).Even := by
   intro a
   simp only [Pi.smul_apply', hf a, hg a]
-
-/--
-lemma `Even.smul_odd` / 引理 `Even.smul_odd`
-
-English:
-lemma Even.smul_odd
-  given: [Monoid β] [AddGroup γ] [DistribMulAction β γ] (hf : f.Even) (hg : g.Odd)
-  proof: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a, smul_neg]
-
-中文:
-引理 Even.smul_odd
-  条件: [幺半群 β] [加法群 γ] [分配乘法作用 β γ] (hf : f.Even) (hg : g.Odd)
-  证明: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a, smul_neg]
-
-Depends on / 依赖: Pi.smul_apply, smul_apply, smul_neg
+/-
+**Function.Even.smul_odd** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} {f : α → β} 
+{g : α → γ} [inst_1 : Monoid β]   [inst_2 : AddGroup γ] [inst_3 : DistribMulActi
+on β γ], Function.Even f → Function.Odd g → Function.Odd (f • g)
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Even.smul_odd [Monoid β] [AddGroup γ] [DistribMulAction β γ] (hf : f.Even) (hg : g.Odd) :
     (f • g).Odd := by
   intro a
   simp only [Pi.smul_apply', hf a, hg a, smul_neg]
-
-/--
-lemma `Odd.smul_even` / 引理 `Odd.smul_even`
-
-English:
-lemma Odd.smul_even
-  given: [Ring β] [AddCommGroup γ] [Module β γ] (hf : f.Odd) (hg : g.Even)
-  proof: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a, neg_smul]
-
-中文:
-引理 Odd.smul_even
-  条件: [环 β] [加法交换群 γ] [模 β γ] (hf : f.Odd) (hg : g.Even)
-  证明: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a, neg_smul]
-
-Depends on / 依赖: Pi.smul_apply, neg_smul, smul_apply
+/-
+**Function.Odd.smul_even** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} {f : α → β} 
+{g : α → γ} [inst_1 : Ring β]   [inst_2 : AddCommGroup γ] [inst_3 : _root_.Modul
+e β γ], Function.Odd f → Function.Even g → Function.Odd (f • g)
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Odd.smul_even [Ring β] [AddCommGroup γ] [Module β γ] (hf : f.Odd) (hg : g.Even) :
     (f • g).Odd := by
   intro a
   simp only [Pi.smul_apply', hf a, hg a, neg_smul]
-
-/--
-lemma `Odd.smul_odd` / 引理 `Odd.smul_odd`
-
-English:
-lemma Odd.smul_odd
-  given: [Ring β] [AddCommGroup γ] [Module β γ] (hf : f.Odd) (hg : g.Odd)
-  proof: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a, smul_neg, neg_smul, neg_neg]
-
-中文:
-引理 Odd.smul_odd
-  条件: [环 β] [加法交换群 γ] [模 β γ] (hf : f.Odd) (hg : g.Odd)
-  证明: by
-  intro a
-  simp only [Pi.smul_apply', hf a, hg a, smul_neg, neg_smul, neg_neg]
-
-Depends on / 依赖: Pi.smul_apply, neg_neg, neg_smul, smul_apply, smul_neg
+/-
+**Function.Odd.smul_odd** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} {f : α → β} 
+{g : α → γ} [inst_1 : Ring β]   [inst_2 : AddCommGroup γ] [inst_3 : _root_.Modul
+e β γ], Function.Odd f → Function.Odd g → Function.Even (f • g)
+参数：f • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Odd.smul_odd [Ring β] [AddCommGroup γ] [Module β γ] (hf : f.Odd) (hg : g.Odd) :
     (f • g).Even := by
   intro a
   simp only [Pi.smul_apply', hf a, hg a, smul_neg, neg_smul, neg_neg]
-
-/--
-lemma `Even.const_smul` / 引理 `Even.const_smul`
-
-English:
-lemma Even.const_smul
-  given: [SMul β γ] (hg : g.Even) (r : β)
-  statement: (r • g).Even
-  proof: by
-  intro a
-  simp only [Pi.smul_apply, hg a]
-
-中文:
-引理 Even.const_smul
-  条件: [标量乘法 β γ] (hg : g.Even) (r : β)
-  结论: (r • g).Even
-  证明: by
-  intro a
-  simp only [Pi.smul_apply, hg a]
-
-Depends on / 依赖: Pi.smul_apply, smul_apply
+/-
+**Function.Even.const_smul** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} {g : α → γ} 
+[inst_1 : SMul β γ],   Function.Even g → ∀ (r : β), Function.Even (r • g)
+参数：r : β；r • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Even.const_smul [SMul β γ] (hg : g.Even) (r : β) : (r • g).Even := by
   intro a
   simp only [Pi.smul_apply, hg a]
-
-/--
-lemma `Odd.const_smul` / 引理 `Odd.const_smul`
-
-English:
-lemma Odd.const_smul
-  given: [Monoid β] [AddGroup γ] [DistribMulAction β γ] (hg : g.Odd) (r : β)
-  proof: by
-  intro a
-  simp only [Pi.smul_apply, hg a, smul_neg]
-
-中文:
-引理 Odd.const_smul
-  条件: [幺半群 β] [加法群 γ] [分配乘法作用 β γ] (hg : g.Odd) (r : β)
-  证明: by
-  intro a
-  simp only [Pi.smul_apply, hg a, smul_neg]
-
-Depends on / 依赖: Pi.smul_apply, smul_apply, smul_neg
+/-
+**Function.Odd.const_smul** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Neg α] {γ : Type u_3} {g : α → γ} 
+[inst_1 : Monoid β] [inst_2 : AddGroup γ]   [inst_3 : DistribMulAction β γ], Fun
+ction.Odd g → ∀ (r : β), Function.Odd (r • g)
+参数：r : β；r • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Odd.const_smul [Monoid β] [AddGroup γ] [DistribMulAction β γ] (hg : g.Odd) (r : β) :
     (r • g).Odd := by
@@ -425,103 +362,88 @@ end smul
 
 section mul
 
-variable {R : Type*} [Mul R] {f g : α -> R}
+variable {R : Type*} [Mul R] {f g : α → R}
 
-/--
-lemma `Even.mul_even` / 引理 `Even.mul_even`
-
-English:
-lemma Even.mul_even
-  given: (hf : f.Even) (hg : g.Even)
-  statement: (f * g).Even
-  proof: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a]
-
-中文:
-引理 Even.mul_even
-  条件: (hf : f.Even) (hg : g.Even)
-  结论: (f * g).Even
-  证明: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a]
-
-Depends on / 依赖: Pi.mul_apply, mul_apply
+/-
+**Function.Even.mul_even** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} [inst : Neg α] {R : Type u_3} [inst_1 : Mul R] {f g : α →
+ R},   Function.Even f → Function.Even g → Function.Even (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Even.mul_even (hf : f.Even) (hg : g.Even) : (f * g).Even := by
   intro a
   simp only [Pi.mul_apply, hf a, hg a]
-
-/--
-lemma `Even.mul_odd` / 引理 `Even.mul_odd`
-
-English:
-lemma Even.mul_odd
-  given: [HasDistribNeg R] (hf : f.Even) (hg : g.Odd)
-  statement: (f * g).Odd
-  proof: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a, mul_neg]
-
-中文:
-引理 Even.mul_odd
-  条件: [有DistribNeg R] (hf : f.Even) (hg : g.Odd)
-  结论: (f * g).Odd
-  证明: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a, mul_neg]
-
-Depends on / 依赖: Pi.mul_apply, mul_apply, mul_neg
+/-
+**Function.Even.mul_odd** 是 Mathlib 中的一个定理，位于命名空间 `Function.Even`。
+形式化陈述：∀ {α : Type u_1} [inst : Neg α] {R : Type u_3} [inst_1 : Mul R] {f g : α →
+ R} [inst_2 : HasDistribNeg R],   Function.Even f → Function.Odd g → Function.Od
+d (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Even.mul_odd [HasDistribNeg R] (hf : f.Even) (hg : g.Odd) : (f * g).Odd := by
   intro a
   simp only [Pi.mul_apply, hf a, hg a, mul_neg]
-
-/--
-lemma `Odd.mul_even` / 引理 `Odd.mul_even`
-
-English:
-lemma Odd.mul_even
-  given: [HasDistribNeg R] (hf : f.Odd) (hg : g.Even)
-  statement: (f * g).Odd
-  proof: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a, neg_mul]
-
-中文:
-引理 Odd.mul_even
-  条件: [有DistribNeg R] (hf : f.Odd) (hg : g.Even)
-  结论: (f * g).Odd
-  证明: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a, neg_mul]
-
-Depends on / 依赖: Pi.mul_apply, mul_apply, neg_mul
+/-
+**Function.Odd.mul_even** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} [inst : Neg α] {R : Type u_3} [inst_1 : Mul R] {f g : α →
+ R} [inst_2 : HasDistribNeg R],   Function.Odd f → Function.Even g → Function.Od
+d (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Odd.mul_even [HasDistribNeg R] (hf : f.Odd) (hg : g.Even) : (f * g).Odd := by
   intro a
   simp only [Pi.mul_apply, hf a, hg a, neg_mul]
-
-/--
-lemma `Odd.mul_odd` / 引理 `Odd.mul_odd`
-
-English:
-lemma Odd.mul_odd
-  given: [HasDistribNeg R] (hf : f.Odd) (hg : g.Odd)
-  statement: (f * g).Even
-  proof: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a, mul_neg, neg_mul, neg_neg]
-
-中文:
-引理 Odd.mul_odd
-  条件: [有DistribNeg R] (hf : f.Odd) (hg : g.Odd)
-  结论: (f * g).Even
-  证明: by
-  intro a
-  simp only [Pi.mul_apply, hf a, hg a, mul_neg, neg_mul, neg_neg]
-
-Depends on / 依赖: Pi.mul_apply, mul_apply, mul_neg, neg_mul, neg_neg
+/-
+**Function.Odd.mul_odd** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_1} [inst : Neg α] {R : Type u_3} [inst_1 : Mul R] {f g : α →
+ R} [inst_2 : HasDistribNeg R],   Function.Odd f → Function.Odd g → Function.Eve
+n (f * g)
+参数：f * g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Odd.mul_odd [HasDistribNeg R] (hf : f.Odd) (hg : g.Odd) : (f * g).Even := by
   intro a
@@ -532,100 +454,117 @@ end mul
 section torsionfree
 
 -- need to redeclare variables since `InvolutiveNeg α` conflicts with `Neg α`
-variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α -> β}
+variable {α β : Type*} [AddCommGroup β] [IsAddTorsionFree β] {f : α → β}
 
 /--
-lemma `zero_of_even_and_odd` / 引理 `zero_of_even_and_odd`
+If `f` is both even and odd, and its target is a torsion-free commutative additive group,
+then `f = 0`.
+-/
+/-
+**Function.zero_of_even_and_odd** 是 Mathlib 中的一个引理，位于命名空间 `Function`。
+形式化陈述：zero_of_even_and_odd [Neg α] (he : f.Even) (ho : f.Odd) : f = 0
+参数：he : f.Even；ho : f.Odd。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.zero_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Zer
+o (M i)] (i : ι), 0 i = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_eq_self`：∀ {G : Type u_2} [inst : AddGroup G] [IsAddTorsionFree G] {
+a : G}, -a = a ↔ a = 0
 
-English:
-lemma zero_of_even_and_odd
-  given: [Neg α] (he : f.Even) (ho : f.Odd)
-  statement: f = 0
-  proof: by
-  ext r
-  rw [Pi.zero_apply]; rw [← neg_eq_self]; rw [← ho]; rw [he]
-
-中文:
-引理 zero_of_even_and_odd
-  条件: [取负 α] (he : f.Even) (ho : f.Odd)
-  结论: f = 0
-  证明: by
-  ext r
-  rw [Pi.zero_apply]; rw [← neg_eq_self]; rw [← ho]; rw [he]
-
-Depends on / 依赖: Pi.zero_apply, neg_eq_self, zero_apply
+--- 原说明 ---
+If `f` is both even and odd, and its target is a torsion-free commutative additi
+ve group,
+then `f = 0`.
 -/
 lemma zero_of_even_and_odd [Neg α] (he : f.Even) (ho : f.Odd) : f = 0 := by
   ext r
-  rw [Pi.zero_apply]; rw [← neg_eq_self]; rw [← ho]; rw [he]
+  rw [Pi.zero_apply, ← neg_eq_self, ← ho, he]
 
-/--
-lemma `Odd.finsetSum_eq_zero` / 引理 `Odd.finsetSum_eq_zero`
+/-- The sum of values of an odd function over a symmetric finite set is zero. -/
+/-
+**Function.Odd.finsetSum_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommGroup β] [IsAddTorsionFree 
+β] [inst_2 : InvolutiveNeg α] {f : α → β},   Function.Odd f → ∀ {s : Finset α}, 
+Finset.map (Equiv.toEmbedding (Equiv.neg α)) s = s → s.sum f = 0
+参数：Equiv.toEmbedding (Equiv.neg α)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.neg_apply`：∀ (G : Type u_14) [inst : InvolutiveNeg G], ⇑(Equiv.neg
+ G) = Neg.neg
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_neg_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f : ι → G),   ∑ x ∈ s, -f x = -∑ x ∈ s, f x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
 
-English:
-lemma Odd.finsetSum_eq_zero
-  statement: [InvolutiveNeg α] {f : α -> β} (hf : f.Odd) {s : Finset α}
-  proof: by
-  simpa [neg_eq_self, funext hf, hs] using (Finset.sum_map s (Equiv.neg α).toEmbedding f).symm
-
-@[deprecated (since := "2026-04-08")] alias Odd.finset_sum_eq_zero := Odd.finsetSum_eq_zero
-
-中文:
-引理 Odd.finsetSum_eq_zero
-  结论: [InvolutiveNeg α] {f : α -> β} (hf : f.Odd) {s : 有限集 α}
-  证明: by
-  simpa [neg_eq_self, funext hf, hs] using (Finset.sum_map s (Equiv.neg α).toEmbedding f).symm
-
-@[deprecated (since := "2026-04-08")] alias Odd.finset_sum_eq_zero := Odd.finsetSum_eq_zero
-
-Depends on / 依赖: Equiv.neg, Finset, Finset.sum_map, neg_eq_self, sum_map, toEmbedding
+--- 原说明 ---
+The sum of values of an odd function over a symmetric finite set is zero.
 -/
-lemma Odd.finsetSum_eq_zero [InvolutiveNeg α] {f : α -> β} (hf : f.Odd) {s : Finset α}
+lemma Odd.finsetSum_eq_zero [InvolutiveNeg α] {f : α → β} (hf : f.Odd) {s : Finset α}
     (hs : Finset.map (Equiv.neg α).toEmbedding s = s) :
     s.sum f = 0 := by
   simpa [neg_eq_self, funext hf, hs] using (Finset.sum_map s (Equiv.neg α).toEmbedding f).symm
 
 @[deprecated (since := "2026-04-08")] alias Odd.finset_sum_eq_zero := Odd.finsetSum_eq_zero
 
-/--
-lemma `Odd.sum_eq_zero` / 引理 `Odd.sum_eq_zero`
+/-- The sum of the values of an odd function is 0. -/
+/-
+**Function.Odd.sum_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommGroup β] [IsAddTorsionFree 
+β] [inst_2 : Fintype α]   [inst_3 : InvolutiveNeg α] {f : α → β}, Function.Odd f
+ → ∑ a, f a = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Odd.finsetSum_eq_zero`：∀ {α : Type u_3} {β : Type u_4} [inst : 
+AddCommGroup β] [IsAddTorsionFree β] [inst_2 : InvolutiveNeg α] {f : α → β},   F
+unction.Odd f → ∀ {s…
+· 使用定理 `Finset.map_univ_equiv`：map_univ_equiv [Fintype β] (f : β ≃ α) : univ.map
+ f.toEmbedding = univ
 
-English:
-lemma Odd.sum_eq_zero
-  given: [Fintype α] [InvolutiveNeg α] {f : α -> β} (hf : f.Odd)
-  statement: ∑ a, f a = 0
-  proof: hf.finsetSum_eq_zero Finset.map_univ_equiv (Equiv.neg α)
-
-中文:
-引理 Odd.sum_eq_zero
-  条件: [有限类型 α] [InvolutiveNeg α] {f : α -> β} (hf : f.Odd)
-  结论: ∑ a, f a = 0
-  证明: hf.finsetSum_eq_zero Finset.map_univ_equiv (Equiv.neg α)
-
-Depends on / 依赖: Equiv.neg, Finset, Finset.map_univ_equiv, finsetSum_eq_zero, hf.finsetSum_eq_zero, map_univ_equiv
+--- 原说明 ---
+The sum of the values of an odd function is 0.
 -/
-lemma Odd.sum_eq_zero [Fintype α] [InvolutiveNeg α] {f : α -> β} (hf : f.Odd) : ∑ a, f a = 0 :=
-hf.finsetSum_eq_zero Finset.map_univ_equiv (Equiv.neg α)
+lemma Odd.sum_eq_zero [Fintype α] [InvolutiveNeg α] {f : α → β} (hf : f.Odd) : ∑ a, f a = 0 :=
+  hf.finsetSum_eq_zero <| Finset.map_univ_equiv (Equiv.neg α)
 
-/--
-lemma `Odd.map_zero` / 引理 `Odd.map_zero`
+/-- An odd function vanishes at zero. -/
+/-
+**Function.Odd.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `Function.Odd`。
+形式化陈述：∀ {α : Type u_3} {β : Type u_4} [inst : AddCommGroup β] [IsAddTorsionFree 
+β] {f : α → β} [inst_2 : NegZeroClass α],   Function.Odd f → f 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma Odd.map_zero
-  given: [NegZeroClass α] (hf : f.Odd)
-  statement: f 0 = 0
-  proof: by simp [← neg_eq_self, ← hf 0]
-
-中文:
-引理 Odd.map_zero
-  条件: [NegZero类 α] (hf : f.Odd)
-  结论: f 0 = 0
-  证明: by simp [← neg_eq_self, ← hf 0]
-
-Depends on / 依赖: neg_eq_self
+--- 原说明 ---
+An odd function vanishes at zero.
 -/
 lemma Odd.map_zero [NegZeroClass α] (hf : f.Odd) : f 0 = 0 := by simp [← neg_eq_self, ← hf 0]
 
 end torsionfree
 
 end Function
+

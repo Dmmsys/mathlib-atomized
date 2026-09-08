@@ -28,149 +28,119 @@ namespace Encodable
 
 variable {α : Type*}
 
-/--
-Instance `List.Vector.encodable` / 实例 `List.Vector.encodable`
+/-- If `α` is encodable, then so is `Vector α n`. -/
+/-
+**Encodable.List.Vector.encodable** 是 Mathlib 中的一个定义，位于命名空间 `Encodable.List.Vect
+or`。
+形式化陈述：{α : Type u_1} → [Encodable α] → {n : ℕ} → Encodable (List.Vector α n)
+参数：List.Vector α n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance List.Vector.encodable
-  signature: [Encodable α] {n}
-  body: inferInstanceAs Encodable (Subtype _)
-
-中文:
-实例 列表.Vector.encodable
-  签名: [可编码 α] {n}
-  定义体: inferInstanceAs Encodable (Subtype _)
-
-Depends on / 依赖: Encodable, Subtype
+--- 原说明 ---
+If `α` is encodable, then so is `Vector α n`.
 -/
 instance List.Vector.encodable [Encodable α] {n} : Encodable (List.Vector α n) :=
-inferInstanceAs Encodable (Subtype _)
+  inferInstanceAs <| Encodable (Subtype _)
 
-/--
-Instance `List.Vector.countable` / 实例 `List.Vector.countable`
+/-- If `α` is countable, then so is `Vector α n`. -/
+/-
+**Encodable.List.Vector.countable** 是 Mathlib 中的一个定理，位于命名空间 `Encodable.List.Vect
+or`。
+形式化陈述：∀ {α : Type u_1} [Countable α] {n : ℕ}, Countable (List.Vector α n)
+参数：List.Vector α n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance List.Vector.countable
-  signature: [Countable α] {n}
-  body: inferInstanceAs Countable (Subtype _)
-
-中文:
-实例 列表.Vector.countable
-  签名: [可数 α] {n}
-  定义体: inferInstanceAs Countable (Subtype _)
-
-Depends on / 依赖: Countable, Subtype
+--- 原说明 ---
+If `α` is countable, then so is `Vector α n`.
 -/
 instance List.Vector.countable [Countable α] {n} : Countable (List.Vector α n) :=
-inferInstanceAs Countable (Subtype _)
+  inferInstanceAs <| Countable (Subtype _)
 
-/--
-Instance `finArrow` / 实例 `finArrow`
+/-- If `α` is encodable, then so is `Fin n → α`. -/
+/-
+**Encodable.finArrow** 是 Mathlib 中的一个实例，位于命名空间 `Encodable`。
+形式化陈述：finArrow [Encodable α] {n} : Encodable (Fin n -> α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance finArrow
-  signature: [Encodable α] {n}
-  body: ofEquiv _ (Equiv.vectorEquivFin _ _).symm
-
-中文:
-实例 finArrow
-  签名: [可编码 α] {n}
-  定义体: ofEquiv _ (Equiv.vectorEquivFin _ _).symm
-
-Depends on / 依赖: Equiv.vectorEquivFin, ofEquiv, vectorEquivFin
+--- 原说明 ---
+If `α` is encodable, then so is `Fin n → α`.
 -/
-instance finArrow [Encodable α] {n} : Encodable (Fin n -> α) :=
+instance finArrow [Encodable α] {n} : Encodable (Fin n → α) :=
   ofEquiv _ (Equiv.vectorEquivFin _ _).symm
-
-/--
-Instance `finPi` / 实例 `finPi`
-
-English:
-instance finPi
-  signature: (n) (π : Fin n -> Type*) [forall i, Encodable (π i)]
-  body: ofEquiv _ (Equiv.piEquivSubtypeSigma (Fin n) π)
-
-中文:
-实例 finPi
-  签名: (n) (π : 有限集 n -> 类型) [对任意 i, 可编码 (π i)]
-  定义体: ofEquiv _ (Equiv.piEquivSubtypeSigma (Fin n) π)
-
-Depends on / 依赖: Equiv.piEquivSubtypeSigma, ofEquiv, piEquivSubtypeSigma
+/-
+**Encodable.finPi** 是 Mathlib 中的一个实例，位于命名空间 `Encodable`。
+形式化陈述：finPi (n) (π : Fin n -> Type*) [forall i, Encodable (π i)] : Encodable (fo
+rall i, π i)
+参数：n；π : Fin n -> Type*；π i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance finPi (n) (π : Fin n -> Type*) [forall i, Encodable (π i)] : Encodable (forall i, π i) :=
+instance finPi (n) (π : Fin n → Type*) [∀ i, Encodable (π i)] : Encodable (∀ i, π i) :=
   ofEquiv _ (Equiv.piEquivSubtypeSigma (Fin n) π)
 
 -- TODO: Unify with `fintypePi` and find a better name
-/--
-Definition of `fintypeArrow` / `fintypeArrow` 的定义
+/-- When `α` is finite and `β` is encodable, `α → β` is encodable too. Because the encoding is not
+unique, we wrap it in `Trunc` to preserve computability. -/
+/-
+**Encodable.fintypeArrow** 是 Mathlib 中的一个定义，位于命名空间 `Encodable`。
+形式化陈述：fintypeArrow (α : Type*) (β : Type*) [DecidableEq α] [Fintype α] [Encodabl
+e β] : Trunc (Encodable (α -> β))
+参数：α : Type*；β : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition fintypeArrow
-  signature: (α : Type*) (β : Type*) [DecidableEq α] [Fintype α] [Encodable β]
-  body: (Fintype.truncEquivFin α).map fun f =>
-Encodable.ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr f (Equiv.refl _)
-
-中文:
-定义 fintypeArrow
-  签名: (α : 类型) (β : 类型) [DecidableEq α] [有限类型 α] [可编码 β]
-  定义体: (Fintype.truncEquivFin α).map fun f =>
-Encodable.ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr f (Equiv.refl _)
-
-Depends on / 依赖: Encodable, Encodable.ofEquiv, Equiv.arrowCongr, Equiv.refl, Fintype, Fintype.card, Fintype.truncEquivFin, arrowCongr, ofEquiv, truncEquivFin
+--- 原说明 ---
+When `α` is finite and `β` is encodable, `α → β` is encodable too. Because the e
+ncoding is not
+unique, we wrap it in `Trunc` to preserve computability.
 -/
 def fintypeArrow (α : Type*) (β : Type*) [DecidableEq α] [Fintype α] [Encodable β] :
-    Trunc (Encodable (α -> β)) :=
+    Trunc (Encodable (α → β)) :=
   (Fintype.truncEquivFin α).map fun f =>
-Encodable.ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr f (Equiv.refl _)
+    Encodable.ofEquiv (Fin (Fintype.card α) → β) <| Equiv.arrowCongr f (Equiv.refl _)
 
-/--
-Definition of `fintypePi` / `fintypePi` 的定义
+/-- When `α` is finite and all `π a` are encodable, `Π a, π a` is encodable too. Because the
+encoding is not unique, we wrap it in `Trunc` to preserve computability. -/
+/-
+**Encodable.fintypePi** 是 Mathlib 中的一个定义，位于命名空间 `Encodable`。
+形式化陈述：fintypePi (α : Type*) (π : α -> Type*) [DecidableEq α] [Fintype α] [forall
+ a, Encodable (π a)] : Trunc (Encodable (forall a, π a))
+参数：α : Type*；π : α -> Type*；π a。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fintypePi
-  signature: (α : Type*) (π : α -> Type*) [DecidableEq α] [Fintype α] [forall a, Encodable (π a)]
-  body: (Fintype.truncEncodable α).bind fun a =>
-    (@fintypeArrow α (Σ a, π a) _ _ (@Sigma.encodable _ _ a _)).bind fun f =>
-Trunc.mk
-        @Encodable.ofEquiv _ _ (@Subtype.encodable _ _ f _)
-          (Equiv.piEquivSubtypeSigma α π)
-
-中文:
-定义 fintypePi
-  签名: (α : 类型) (π : α -> 类型) [DecidableEq α] [有限类型 α] [对任意 a, 可编码 (π a)]
-  定义体: (Fintype.truncEncodable α).bind fun a =>
-    (@fintypeArrow α (Σ a, π a) _ _ (@Sigma.encodable _ _ a _)).bind fun f =>
-Trunc.mk
-        @Encodable.ofEquiv _ _ (@Subtype.encodable _ _ f _)
-          (Equiv.piEquivSubtypeSigma α π)
-
-Depends on / 依赖: Encodable, Encodable.ofEquiv, Equiv.piEquivSubtypeSigma, Fintype, Fintype.truncEncodable, Sigma.encodable, Subtype, Subtype.encodable, Trunc.mk, encodable, fintypeArrow, ofEquiv, piEquivSubtypeSigma, truncEncodable
+--- 原说明 ---
+When `α` is finite and all `π a` are encodable, `Π a, π a` is encodable too. Bec
+ause the
+encoding is not unique, we wrap it in `Trunc` to preserve computability.
 -/
-def fintypePi (α : Type*) (π : α -> Type*) [DecidableEq α] [Fintype α] [forall a, Encodable (π a)] :
-    Trunc (Encodable (forall a, π a)) :=
+def fintypePi (α : Type*) (π : α → Type*) [DecidableEq α] [Fintype α] [∀ a, Encodable (π a)] :
+    Trunc (Encodable (∀ a, π a)) :=
   (Fintype.truncEncodable α).bind fun a =>
     (@fintypeArrow α (Σ a, π a) _ _ (@Sigma.encodable _ _ a _)).bind fun f =>
-Trunc.mk
+      Trunc.mk <|
         @Encodable.ofEquiv _ _ (@Subtype.encodable _ _ f _)
           (Equiv.piEquivSubtypeSigma α π)
 
-/--
-Instance `fintypeArrowOfEncodable` / 实例 `fintypeArrowOfEncodable`
+/-- If `α` and `β` are encodable and `α` is a fintype, then `α → β` is encodable as well. -/
+/-
+**Encodable.fintypeArrowOfEncodable** 是 Mathlib 中的一个实例，位于命名空间 `Encodable`。
+形式化陈述：fintypeArrowOfEncodable {α β : Type*} [Encodable α] [Fintype α] [Encodable
+ β] : Encodable (α -> β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-instance fintypeArrowOfEncodable
-  signature: {α β : Type*} [Encodable α] [Fintype α] [Encodable β]
-  body: ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr fintypeEquivFin (Equiv.refl _)
-
-中文:
-实例 fintypeArrowOfEncodable
-  签名: {α β : 类型} [可编码 α] [有限类型 α] [可编码 β]
-  定义体: ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr fintypeEquivFin (Equiv.refl _)
-
-Depends on / 依赖: Equiv.arrowCongr, Equiv.refl, Fintype, Fintype.card, arrowCongr, fintypeEquivFin, ofEquiv
+--- 原说明 ---
+If `α` and `β` are encodable and `α` is a fintype, then `α → β` is encodable as 
+well.
 -/
 instance fintypeArrowOfEncodable {α β : Type*} [Encodable α] [Fintype α] [Encodable β] :
-    Encodable (α -> β) :=
-ofEquiv (Fin (Fintype.card α) -> β) Equiv.arrowCongr fintypeEquivFin (Equiv.refl _)
+    Encodable (α → β) :=
+  ofEquiv (Fin (Fintype.card α) → β) <| Equiv.arrowCongr fintypeEquivFin (Equiv.refl _)
 
 end Encodable
+

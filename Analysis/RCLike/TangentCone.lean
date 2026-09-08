@@ -18,105 +18,124 @@ A set of unique differentiability for `ℝ` is also a set of unique differentiab
 public section
 
 variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] [h𝕜 : IsRCLikeNormedField 𝕜]
-  {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedSpace Real E]
+  {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedSpace ℝ E]
   {s : Set E} {x : E}
 
-/--
-theorem `tangentConeAt_real_subset_isRCLikeNormedField` / 定理 `tangentConeAt_real_subset_isRCLikeNormedField`
-
-English:
-theorem tangentConeAt_real_subset_isRCLikeNormedField
-  proof: by
-  let := h𝕜.rclike
-  exact tangentConeAt_mono_field
-
-中文:
-定理 tangentConeAt_real_subset_isRCLikeNormedField
-  证明: by
-  let := h𝕜.rclike
-  exact tangentConeAt_mono_field
-
-Depends on / 依赖: rclike, tangentConeAt_mono_field
+/-
+**tangentConeAt_real_subset_isRCLikeNormedField** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tangentConeAt_real_subset_isRCLikeNormedField : tangentConeAt Real s x sub
+seteq tangentConeAt 𝕜 s x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tangentConeAt_mono_field`：tangentConeAt_mono_field {𝕜' : Type*} [Monoid 
+𝕜'] [SMul 𝕜 𝕜'] [MulAction 𝕜' E] [IsScalarTower 𝕜 𝕜' E] : tangentConeAt 𝕜 s x su
+bseteq tangent…
+· 使用定理 `Real.isScalarTower`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst_1 : _
+root_.Module ℝ E] [inst_2 : TopologicalSpace E] [ContinuousSMul ℝ E]   [T2Space 
+E] {A : …
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
 theorem tangentConeAt_real_subset_isRCLikeNormedField :
-    tangentConeAt Real s x subseteq tangentConeAt 𝕜 s x := by
+    tangentConeAt ℝ s x ⊆ tangentConeAt 𝕜 s x := by
   let := h𝕜.rclike
   exact tangentConeAt_mono_field
-
-/--
-theorem `UniqueDiffWithinAt.of_real` / 定理 `UniqueDiffWithinAt.of_real`
-
-English:
-theorem UniqueDiffWithinAt.of_real
-  given: (hs : UniqueDiffWithinAt Real s x)
-  proof: by
-  let := h𝕜.rclike
-  exact hs.mono_field
-
-中文:
-定理 UniqueDiffWithinAt.of_real
-  条件: (hs : UniqueDiffWithinAt 实数 s x)
-  证明: by
-  let := h𝕜.rclike
-  exact hs.mono_field
-
-Depends on / 依赖: hs.mono_field, mono_field, rclike
+/-
+**UniqueDiffWithinAt.of_real** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniqueDiffWithinAt.of_real (hs : UniqueDiffWithinAt Real s x) : UniqueDiff
+WithinAt 𝕜 s x
+参数：hs : UniqueDiffWithinAt Real s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniqueDiffWithinAt.mono_field`：UniqueDiffWithinAt.mono_field (hs : Uniqu
+eDiffWithinAt 𝕜 s x) : UniqueDiffWithinAt 𝕜' s x
+· 使用定理 `Real.isScalarTower`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst_1 : _
+root_.Module ℝ E] [inst_2 : TopologicalSpace E] [ContinuousSMul ℝ E]   [T2Space 
+E] {A : …
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
-theorem UniqueDiffWithinAt.of_real (hs : UniqueDiffWithinAt Real s x) :
+theorem UniqueDiffWithinAt.of_real (hs : UniqueDiffWithinAt ℝ s x) :
     UniqueDiffWithinAt 𝕜 s x := by
   let := h𝕜.rclike
   exact hs.mono_field
-
-/--
-theorem `UniqueDiffOn.of_real` / 定理 `UniqueDiffOn.of_real`
-
-English:
-theorem UniqueDiffOn.of_real
-  given: (hs : UniqueDiffOn Real s)
-  proof: fun x hx => (hs x hx).of_real
-
-中文:
-定理 UniqueDiffOn.of_real
-  条件: (hs : UniqueDiffOn 实数 s)
-  证明: fun x hx => (hs x hx).of_real
-
-Depends on / 依赖: of_real
+/-
+**UniqueDiffOn.of_real** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniqueDiffOn.of_real (hs : UniqueDiffOn Real s) : UniqueDiffOn 𝕜 s
+参数：hs : UniqueDiffOn Real s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniqueDiffWithinAt.of_real`：UniqueDiffWithinAt.of_real (hs : UniqueDiffW
+ithinAt Real s x) : UniqueDiffWithinAt 𝕜 s x
 -/
-theorem UniqueDiffOn.of_real (hs : UniqueDiffOn Real s) :
+theorem UniqueDiffOn.of_real (hs : UniqueDiffOn ℝ s) :
     UniqueDiffOn 𝕜 s :=
-  fun x hx => (hs x hx).of_real
+  fun x hx ↦ (hs x hx).of_real
 
-/--
-theorem `uniqueDiffWithinAt_convex_of_isRCLikeNormedField` / 定理 `uniqueDiffWithinAt_convex_of_isRCLikeNormedField`
+/-- In a real or complex vector space, a convex set with nonempty interior is a set of unique
+differentiability. -/
+/-
+**uniqueDiffWithinAt_convex_of_isRCLikeNormedField** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueDiffWithinAt_convex_of_isRCLikeNormedField (conv : Convex Real s) (h
+s : (interior s).Nonempty) (hx : x in closure s) : UniqueDiffWithinAt 𝕜 s x
+参数：conv : Convex Real s；hs : (interior s).Nonempty；hx : x in closure s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniqueDiffWithinAt.of_real`：UniqueDiffWithinAt.of_real (hs : UniqueDiffW
+ithinAt Real s x) : UniqueDiffWithinAt 𝕜 s x
+· 使用定理 `uniqueDiffWithinAt_convex`：uniqueDiffWithinAt_convex (conv : Convex Real
+ s) (hs : (interior s).Nonempty) {x : E} (hx : x in closure s) : UniqueDiffWithi
+nAt Real s x
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 
-English:
-theorem uniqueDiffWithinAt_convex_of_isRCLikeNormedField
-  proof: UniqueDiffWithinAt.of_real (uniqueDiffWithinAt_convex conv hs hx)
-
-中文:
-定理 uniqueDiffWithinAt_convex_of_isRCLikeNormedField
-  证明: UniqueDiffWithinAt.of_real (uniqueDiffWithinAt_convex conv hs hx)
-
-Depends on / 依赖: UniqueDiffWithinAt, UniqueDiffWithinAt.of_real, of_real, uniqueDiffWithinAt_convex
+--- 原说明 ---
+In a real or complex vector space, a convex set with nonempty interior is a set 
+of unique
+differentiability.
 -/
 theorem uniqueDiffWithinAt_convex_of_isRCLikeNormedField
-    (conv : Convex Real s) (hs : (interior s).Nonempty) (hx : x in closure s) :
+    (conv : Convex ℝ s) (hs : (interior s).Nonempty) (hx : x ∈ closure s) :
     UniqueDiffWithinAt 𝕜 s x :=
   UniqueDiffWithinAt.of_real (uniqueDiffWithinAt_convex conv hs hx)
 
-/--
-theorem `uniqueDiffOn_convex_of_isRCLikeNormedField` / 定理 `uniqueDiffOn_convex_of_isRCLikeNormedField`
+/-- In a real or complex vector space, a convex set with nonempty interior is a set of unique
+differentiability. -/
+/-
+**uniqueDiffOn_convex_of_isRCLikeNormedField** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueDiffOn_convex_of_isRCLikeNormedField (conv : Convex Real s) (hs : (i
+nterior s).Nonempty) : UniqueDiffOn 𝕜 s
+参数：conv : Convex Real s；hs : (interior s).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniqueDiffOn.of_real`：UniqueDiffOn.of_real (hs : UniqueDiffOn Real s) : 
+UniqueDiffOn 𝕜 s
+· 使用定理 `uniqueDiffOn_convex`：uniqueDiffOn_convex (conv : Convex Real s) (hs : (i
+nterior s).Nonempty) : UniqueDiffOn Real s
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
 
-English:
-theorem uniqueDiffOn_convex_of_isRCLikeNormedField
-  proof: UniqueDiffOn.of_real (uniqueDiffOn_convex conv hs)
-
-中文:
-定理 uniqueDiffOn_convex_of_isRCLikeNormedField
-  证明: UniqueDiffOn.of_real (uniqueDiffOn_convex conv hs)
-
-Depends on / 依赖: UniqueDiffOn, UniqueDiffOn.of_real, of_real, uniqueDiffOn_convex
+--- 原说明 ---
+In a real or complex vector space, a convex set with nonempty interior is a set 
+of unique
+differentiability.
 -/
 theorem uniqueDiffOn_convex_of_isRCLikeNormedField
-    (conv : Convex Real s) (hs : (interior s).Nonempty) : UniqueDiffOn 𝕜 s :=
+    (conv : Convex ℝ s) (hs : (interior s).Nonempty) : UniqueDiffOn 𝕜 s :=
   UniqueDiffOn.of_real (uniqueDiffOn_convex conv hs)

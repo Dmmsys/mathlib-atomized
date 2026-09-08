@@ -39,36 +39,25 @@ variable {J : Type u₂} [Category.{v₂} J]
   [HasLimitsOfShape Iᵒᵖ (Type (max u v))]
 variable (F : I ⥤ C) (G : Cᵒᵖ ⥤ Type v)
 
-/--
-Definition of `colimitYonedaHomEquiv` / `colimitYonedaHomEquiv` 的定义
+/-- Variant of `colimitYonedaHomIsoLimitOp`: natural transformations with domain
+`colimit (F ⋙ yoneda)` are equivalent to a limit in a lower universe. -/
+/-
+**CategoryTheory.colimitYonedaHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：colimitYonedaHomEquiv : (colimit (F ⋙ yoneda) ⟶ G) ≃ (limit (F.op ⋙ G))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition colimitYonedaHomEquiv
-  signature: :
-  body: Equiv.symm Equiv.ulift.symm.trans Equiv.symm Iso.toEquiv calc
-  (colimit (F ⋙ yoneda) ⟶ G) ≅ limit (F.op ⋙ G ⋙ uliftFunctor.{u}) :=
-        colimitYonedaHomIsoLimitOp _ _
-  _ ≅ limit ((F.op ⋙ G) ⋙ uliftFunctor.{u}) :=
-        HasLimit.isoOfNatIso (Functor.associator _ _ _).symm
-  _ ≅ uliftFunctor.{u}.obj (limit (F.op ⋙ G)) :=
-        (preservesLimitIso _ _).symm
-
-中文:
-定义 colimitYonedaHomEquiv
-  签名: :
-  定义体: Equiv.symm Equiv.ulift.symm.trans Equiv.symm Iso.toEquiv calc
-  (colimit (F ⋙ yoneda) ⟶ G) ≅ limit (F.op ⋙ G ⋙ uliftFunctor.{u}) :=
-        colimitYonedaHomIsoLimitOp _ _
-  _ ≅ limit ((F.op ⋙ G) ⋙ uliftFunctor.{u}) :=
-        HasLimit.isoOfNatIso (Functor.associator _ _ _).symm
-  _ ≅ uliftFunctor.{u}.obj (limit (F.op ⋙ G)) :=
-        (preservesLimitIso _ _).symm
-
-Depends on / 依赖: Equiv.symm, Equiv.ulift.symm.trans, F.op, Functor, Functor.associator, HasLimit, HasLimit.isoOfNatIso, Iso.toEquiv, associator, colimit, colimitYonedaHomIsoLimitOp, isoOfNatIso, preservesLimitIso, toEquiv, uliftFunctor, yoneda
+--- 原说明 ---
+Variant of `colimitYonedaHomIsoLimitOp`: natural transformations with domain
+`colimit (F ⋙ yoneda)` are equivalent to a limit in a lower universe.
 -/
 noncomputable def colimitYonedaHomEquiv :
     (colimit (F ⋙ yoneda) ⟶ G) ≃ (limit (F.op ⋙ G)) :=
-Equiv.symm Equiv.ulift.symm.trans Equiv.symm Iso.toEquiv calc
+  Equiv.symm <| Equiv.ulift.symm.trans <| Equiv.symm <| Iso.toEquiv <| calc
   (colimit (F ⋙ yoneda) ⟶ G) ≅ limit (F.op ⋙ G ⋙ uliftFunctor.{u}) :=
         colimitYonedaHomIsoLimitOp _ _
   _ ≅ limit ((F.op ⋙ G) ⋙ uliftFunctor.{u}) :=
@@ -82,40 +71,10 @@ set_option backward.defeqAttrib.useBackward true in
 unif_hint {C D : Type*} [Category* C] [Category* D] (F : C ⥤ D) (G : D ⥤ Type*) (X X' : C)
   where X ≟ X'⊢ (F ⋙ G).obj X ≟ (G.obj (F.obj X)) in
 @[simp]
-/--
-theorem `colimitYonedaHomEquiv_π_apply` / 定理 `colimitYonedaHomEquiv_π_apply`
-
-English:
-theorem colimitYonedaHomEquiv_π_apply
-  given: (η : colimit (F ⋙ yoneda) ⟶ G) (i : Iᵒᵖ)
-  proof: by
-  simp only [colimitYonedaHomEquiv, Iso.toEquiv, uliftFunctor_obj,
-    Iso.trans_def, Iso.trans_assoc, Iso.trans_hom, Iso.trans_inv,
-    Category.assoc, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.coe_fn_mk, comp_apply,
-    Equiv.ulift_apply]
-  have (a : limit ((F.op ⋙ G) ⋙ uliftFunctor.{u, v})) := congrArg ULift.down
-    (ConcreteCategory.congr_hom (preservesLimitIso_inv_π uliftFunctor.{u, v} (F.op ⋙ G) i) a)
-  refine Eq.trans (dsimp% this _) ?_
-  rw [HasLimit.isoOfNatIso_hom_π_apply]
-  dsimp
-  erw [colimitYonedaHomIsoLimitOp_π_apply]
-
-中文:
-定理 colimitYonedaHomEquiv_π_apply
-  条件: (η : colimit (F ⋙ yoneda) ⟶ G) (i : Iᵒᵖ)
-  证明: by
-  simp only [colimitYonedaHomEquiv, Iso.toEquiv, uliftFunctor_obj,
-    Iso.trans_def, Iso.trans_assoc, Iso.trans_hom, Iso.trans_inv,
-    Category.assoc, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.coe_fn_mk, comp_apply,
-    Equiv.ulift_apply]
-  have (a : limit ((F.op ⋙ G) ⋙ uliftFunctor.{u, v})) := congrArg ULift.down
-    (ConcreteCategory.congr_hom (preservesLimitIso_inv_π uliftFunctor.{u, v} (F.op ⋙ G) i) a)
-  refine Eq.trans (dsimp% this _) ?_
-  rw [HasLimit.isoOfNatIso_hom_π_apply]
-  dsimp
-  erw [colimitYonedaHomIsoLimitOp_π_apply]
-
-Depends on / 依赖: Category, Category.assoc, ConcreteCategory, ConcreteCategory.congr_hom, Eq.trans, Equiv.coe_fn_mk, Equiv.symm_symm, Equiv.symm_trans_apply, Equiv.ulift_apply, F.op, HasLimit, HasLimit.isoOfNatIso_hom_, Iso.toEquiv, Iso.trans_assoc, Iso.trans_def, Iso.trans_hom, Iso.trans_inv, SmallHom, SmallHom.mk_comp_mk, ULift.down
+/-
+**CategoryTheory.colimitYonedaHomEquiv_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem colimitYonedaHomEquiv_π_apply (η : colimit (F ⋙ yoneda) ⟶ G) (i : Iᵒᵖ) :
     dsimp% limit.π (F.op ⋙ G) i (colimitYonedaHomEquiv F G η) =
@@ -130,53 +89,18 @@ theorem colimitYonedaHomEquiv_π_apply (η : colimit (F ⋙ yoneda) ⟶ G) (i : 
   rw [HasLimit.isoOfNatIso_hom_π_apply]
   dsimp
   erw [colimitYonedaHomIsoLimitOp_π_apply]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Small.{v} (colimit (F ⋙ yoneda) ⟶ G)
-  body: ⟨_, ⟨colimitYonedaHomEquiv F G⟩⟩
-
-中文:
-实例 :
-  签名: Small.{v} (colimit (F ⋙ yoneda) ⟶ G)
-  定义体: ⟨_, ⟨colimitYonedaHomEquiv F G⟩⟩
-
-Depends on / 依赖: Iso.refl, colimitYonedaHomEquiv, eX.symm, eY.symm, eZ.symm, hasSmallLocalizedHom_of_isos, smallHomMap, smallHomMap_comp
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Small.{v} (colimit (F ⋙ yoneda) ⟶ G) where
   equiv_small := ⟨_, ⟨colimitYonedaHomEquiv F G⟩⟩
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LocallySmall.{v} (ObjectProperty.FullSubcategory (IsIndObject (C := C)))
-  body: by
-    obtain ⟨⟨P⟩⟩ := X.2
-    obtain ⟨⟨Q⟩⟩ := Y.2
-    let e₁ := IsColimit.coconePointUniqueUpToIso (P.isColimit) (colimit.isColimit _)
-    let e₂ := IsColimit.coconePointUniqueUpToIso (Q.isColimit) (colimit.isColimit _)
-    let e₃ := Iso.homCongr e₁ e₂
-    dsimp only [colimit.cocone_x] at e₃
-    exact small_map (InducedCategory.homEquiv.trans e₃)
-
-中文:
-实例 :
-  签名: LocallySmall.{v} (ObjectProperty.满子范畴 (是IndObject (C := C)))
-  定义体: by
-    obtain ⟨⟨P⟩⟩ := X.2
-    obtain ⟨⟨Q⟩⟩ := Y.2
-    let e₁ := IsColimit.coconePointUniqueUpToIso (P.isColimit) (colimit.isColimit _)
-    let e₂ := IsColimit.coconePointUniqueUpToIso (Q.isColimit) (colimit.isColimit _)
-    let e₃ := Iso.homCongr e₁ e₂
-    dsimp only [colimit.cocone_x] at e₃
-    exact small_map (InducedCategory.homEquiv.trans e₃)
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LocallySmall.{v} (ObjectProperty.FullSubcategory (IsIndObject (C := C))) where
   hom_small X Y := by
@@ -189,3 +113,4 @@ instance : LocallySmall.{v} (ObjectProperty.FullSubcategory (IsIndObject (C := C
     exact small_map (InducedCategory.homEquiv.trans e₃)
 
 end CategoryTheory
+

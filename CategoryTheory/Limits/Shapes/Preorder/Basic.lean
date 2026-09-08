@@ -31,22 +31,11 @@ section OrderBot
 
 variable [OrderBot J]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimitsOfShape J C
-  body: ⟨fun _ => by infer_instance⟩
-
-中文:
-实例 :
-  签名: 有形状极限 J C
-  定义体: ⟨fun _ => by infer_instance⟩
-
-Depends on / 依赖: infer_instance
+/-
+**Preorder.** 是 Mathlib 中的一个实例，位于命名空间 `Preorder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : HasLimitsOfShape J C := ⟨fun _ => by infer_instance⟩
+instance : HasLimitsOfShape J C := ⟨fun _ ↦ by infer_instance⟩
 
 end OrderBot
 
@@ -54,23 +43,13 @@ section OrderTop
 
 variable [OrderTop J]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimitsOfShape J C
-  body: ⟨fun _ => by infer_instance⟩
-
-中文:
-实例 :
-  签名: 有形状余极限 J C
-  定义体: ⟨fun _ => by infer_instance⟩
-
-Depends on / 依赖: infer_instance
+/-
+**Preorder.** 是 Mathlib 中的一个实例，位于命名空间 `Preorder`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : HasColimitsOfShape J C := ⟨fun _ => by infer_instance⟩
+instance : HasColimitsOfShape J C := ⟨fun _ ↦ by infer_instance⟩
 
 end OrderTop
 
 end Preorder
+

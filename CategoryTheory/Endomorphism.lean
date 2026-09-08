@@ -30,18 +30,16 @@ namespace CategoryTheory
 /-- Endomorphisms of an object in a category. Arguments order in multiplication agrees with
 `Function.comp`, not with `CategoryTheory.CategoryStruct.comp`. -/
 @[implicit_reducible]
-/--
-Definition of `End` / `End` 的定义
+/-
+**CategoryTheory.End** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：End {C : Type u} [CategoryStruct.{v} C] (X : C)
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition End
-  signature: {C : Type u} [CategoryStruct.{v} C] (X : C)
-  body: X ⟶ X
-
-中文:
-定义 End
-  签名: {C : 类型u} [CategoryStruct.{v} C] (X : C)
-  定义体: X ⟶ X
+--- 原说明 ---
+Endomorphisms of an object in a category. Arguments order in multiplication agre
+es with
+`Function.comp`, not with `CategoryTheory.CategoryStruct.comp`.
 -/
 def End {C : Type u} [CategoryStruct.{v} C] (X : C) := X ⟶ X
 
@@ -51,158 +49,119 @@ section Struct
 
 variable {C : Type u} [CategoryStruct.{v} C] (X : C)
 
-/--
-Instance `one` / 实例 `one`
-
-English:
-instance one
-  signature: : One (End X)
-  body: ⟨𝟙 X⟩
-
-中文:
-实例 one
-  签名: : 幺 (End X)
-  定义体: ⟨𝟙 X⟩
+/-
+**CategoryTheory.End.one** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.End`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.CategoryStruct.{v, u} C] → (X : C) →
+ One (CategoryTheory.End X)
+参数：X : C；CategoryTheory.End X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance one : One (End X) := ⟨𝟙 X⟩
-
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: : Inhabited (End X)
-  body: ⟨𝟙 X⟩
-
-中文:
-实例 inhabited
-  签名: : 可居 (End X)
-  定义体: ⟨𝟙 X⟩
+/-
+**CategoryTheory.End.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.End`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.CategoryStruct.{v, u} C] → (X : C) →
+ Inhabited (CategoryTheory.End X)
+参数：X : C；CategoryTheory.End X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance inhabited : Inhabited (End X) := ⟨𝟙 X⟩
 
-/--
-Instance `mul` / 实例 `mul`
+/-- Multiplication of endomorphisms agrees with `Function.comp`, not with
+`CategoryTheory.CategoryStruct.comp`. -/
+/-
+**CategoryTheory.End.mul** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.End`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.CategoryStruct.{v, u} C] → (X : C) →
+ Mul (CategoryTheory.End X)
+参数：X : C；CategoryTheory.End X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mul
-  signature: : Mul (End X)
-  body: ⟨fun x y => y ≫ x⟩
-
-中文:
-实例 mul
-  签名: : 乘法 (End X)
-  定义体: ⟨fun x y => y ≫ x⟩
+--- 原说明 ---
+Multiplication of endomorphisms agrees with `Function.comp`, not with
+`CategoryTheory.CategoryStruct.comp`.
 -/
 protected instance mul : Mul (End X) := ⟨fun x y => y ≫ x⟩
 
 variable {X}
 
-/--
-Definition of `of` / `of` 的定义
+/-- Assist the typechecker by expressing a morphism `X ⟶ X` as a term of `CategoryTheory.End X`. -/
+/-
+**CategoryTheory.End.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.End`。
+形式化陈述：of (f : X ⟶ X) : End X
+参数：f : X ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (f : X ⟶ X)
-  body: f
-
-中文:
-缩写 of
-  签名: (f : X ⟶ X)
-  定义体: f
+--- 原说明 ---
+Assist the typechecker by expressing a morphism `X ⟶ X` as a term of `CategoryTh
+eory.End X`.
 -/
 abbrev of (f : X ⟶ X) : End X := f
 
-/--
-Definition of `asHom` / `asHom` 的定义
+/-- Assist the typechecker by expressing an endomorphism `f : CategoryTheory.End X` as a term of
+`X ⟶ X`. -/
+/-
+**CategoryTheory.End.asHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.End`。
+形式化陈述：asHom (f : End X) : X ⟶ X
+参数：f : End X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation asHom
-  signature: (f : End X)
-  body: f
-
-中文:
-缩写 asHom
-  签名: (f : End X)
-  定义体: f
+--- 原说明 ---
+Assist the typechecker by expressing an endomorphism `f : CategoryTheory.End X` 
+as a term of
+`X ⟶ X`.
 -/
 abbrev asHom (f : End X) : X ⟶ X := f
 
 -- TODO: to fix defeq abuse, this should be `(1 : End x) = of (𝟙 X)`.
 -- But that would require many more extra simp lemmas to get rid of the `of`.
 @[simp]
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : End X) = 𝟙 X
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : End X) = 𝟙 X
-  证明: rfl
+/-
+**CategoryTheory.End.one_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.End`。
+形式化陈述：one_def : (1 : End X) = 𝟙 X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_def : (1 : End X) = 𝟙 X := rfl
 
 -- TODO: to fix defeq abuse, this should be `xs * ys = of (ys ≫ xs)`.
 -- But that would require many more extra simp lemmas to get rid of the `of`.
 @[simp]
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (xs ys : End X)
-  statement: xs * ys = ys ≫ xs
-  proof: rfl
-
-中文:
-定理 mul_def
-  条件: (xs ys : End X)
-  结论: xs * ys = ys ≫ xs
-  证明: rfl
+/-
+**CategoryTheory.End.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.End`。
+形式化陈述：mul_def (xs ys : End X) : xs * ys = ys ≫ xs
+参数：xs ys : End X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def (xs ys : End X) : xs * ys = ys ≫ xs := rfl
-
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {x y : End X} (h : asHom x = asHom y)
-  statement: x = y
-  proof: h
-
-中文:
-引理 ext
-  条件: {x y : End X} (h : asHom x = asHom y)
-  结论: x = y
-  证明: h
+/-
+**CategoryTheory.End.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.End`。
+形式化陈述：ext {x y : End X} (h : asHom x = asHom y) : x = y
+参数：h : asHom x = asHom y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ext {x y : End X} (h : asHom x = asHom y) : x = y := h
 
 end Struct
 
-/--
-Instance `monoid` / 实例 `monoid`
+/-- Endomorphisms of an object form a monoid -/
+/-
+**CategoryTheory.End.monoid** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.End`。
+形式化陈述：monoid {C : Type u} [Category.{v} C] {X : C} : Monoid (End X) where mul_on
+e
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 
-English:
-instance monoid
-  signature: {C : Type u} [Category.{v} C] {X : C}
-  body: Category.id_comp
-  one_mul := Category.comp_id
-  mul_assoc := fun x y z => (Category.assoc z y x).symm
-
-中文:
-实例 monoid
-  签名: {C : 类型u} [范畴.{v} C] {X : C}
-  定义体: Category.id_comp
-  one_mul := Category.comp_id
-  mul_assoc := fun x y z => (Category.assoc z y x).symm
-
-Depends on / 依赖: Category, Category.id_comp, Functor, Functor.map_comp, id_comp, map_comp
+--- 原说明 ---
+Endomorphisms of an object form a monoid
 -/
 instance monoid {C : Type u} [Category.{v} C] {X : C} : Monoid (End X) where
   mul_one := Category.id_comp
@@ -215,106 +174,68 @@ variable {C : Type u} [Category.{v} C]
 
 open Opposite
 
-/--
-Instance `mulActionRight` / 实例 `mulActionRight`
-
-English:
-instance mulActionRight
-  signature: {X Y : C}
-  body: f ≫ r
-  one_smul := Category.comp_id
-mul_smul _ _ _ := Eq.symm Category.assoc _ _ _
-
-中文:
-实例 mulActionRight
-  签名: {X Y : C}
-  定义体: f ≫ r
-  one_smul := Category.comp_id
-mul_smul _ _ _ := Eq.symm Category.assoc _ _ _
+/-
+**CategoryTheory.End.mulActionRight** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.En
+d`。
+形式化陈述：mulActionRight {X Y : C} : MulAction (End Y) (X ⟶ Y) where smul r f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 instance mulActionRight {X Y : C} : MulAction (End Y) (X ⟶ Y) where
   smul r f := f ≫ r
   one_smul := Category.comp_id
-mul_smul _ _ _ := Eq.symm Category.assoc _ _ _
-
-/--
-Instance `mulActionLeft` / 实例 `mulActionLeft`
-
-English:
-instance mulActionLeft
-  signature: {X Y : C}
-  body: r.unop ≫ f
-  one_smul := Category.id_comp
-  mul_smul _ _ _ := Category.assoc _ _ _
-
-中文:
-实例 mulActionLeft
-  签名: {X Y : C}
-  定义体: r.unop ≫ f
-  one_smul := Category.id_comp
-  mul_smul _ _ _ := Category.assoc _ _ _
-
-Depends on / 依赖: r.unop
+  mul_smul _ _ _ := Eq.symm <| Category.assoc _ _ _
+/-
+**CategoryTheory.End.mulActionLeft** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.End
+`。
+形式化陈述：mulActionLeft {X Y : C} : MulAction (End X)ᵐᵒᵖ (X ⟶ Y) where smul r f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 instance mulActionLeft {X Y : C} : MulAction (End X)ᵐᵒᵖ (X ⟶ Y) where
   smul r f := r.unop ≫ f
   one_smul := Category.id_comp
   mul_smul _ _ _ := Category.assoc _ _ _
-
-/--
-theorem `smul_right` / 定理 `smul_right`
-
-English:
-theorem smul_right
-  given: {X Y : C} {r : End Y} {f : X ⟶ Y}
-  statement: r • f = f ≫ r
-  proof: rfl
-
-中文:
-定理 smul_right
-  条件: {X Y : C} {r : End Y} {f : X ⟶ Y}
-  结论: r • f = f ≫ r
-  证明: rfl
+/-
+**CategoryTheory.End.smul_right** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.End`。
+形式化陈述：smul_right {X Y : C} {r : End Y} {f : X ⟶ Y} : r • f = f ≫ r
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_right {X Y : C} {r : End Y} {f : X ⟶ Y} : r • f = f ≫ r :=
   rfl
-
-/--
-theorem `smul_left` / 定理 `smul_left`
-
-English:
-theorem smul_left
-  given: {X Y : C} {r : (End X)ᵐᵒᵖ} {f : X ⟶ Y}
-  statement: r • f = r.unop ≫ f
-  proof: rfl
-
-中文:
-定理 smul_left
-  条件: {X Y : C} {r : (End X)ᵐᵒᵖ} {f : X ⟶ Y}
-  结论: r • f = r.unop ≫ f
-  证明: rfl
+/-
+**CategoryTheory.End.smul_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.End`。
+形式化陈述：smul_left {X Y : C} {r : (End X)ᵐᵒᵖ} {f : X ⟶ Y} : r • f = r.unop ≫ f
+参数：End X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_left {X Y : C} {r : (End X)ᵐᵒᵖ} {f : X ⟶ Y} : r • f = r.unop ≫ f :=
   rfl
 
 end MulAction
 
-/--
-Instance `group` / 实例 `group`
+/-- In a groupoid, endomorphisms form a group -/
+/-
+**CategoryTheory.End.group** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.End`。
+形式化陈述：group {C : Type u} [Groupoid.{v} C] (X : C) : Group (End X) where inv_mul_
+cancel
+参数：X : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Groupoid.comp_inv`：∀ {obj : Type u} [self : CategoryTheor
+y.Groupoid obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.comp f 
+(CategoryTheory.Groupo…
 
-English:
-instance group
-  signature: {C : Type u} [Groupoid.{v} C] (X : C)
-  body: Groupoid.comp_inv
-  inv := Groupoid.inv
-
-中文:
-实例 group
-  签名: {C : 类型u} [群胚.{v} C] (X : C)
-  定义体: Groupoid.comp_inv
-  inv := Groupoid.inv
-
-Depends on / 依赖: Groupoid, Groupoid.comp_inv, comp_inv
+--- 原说明 ---
+In a groupoid, endomorphisms form a group
 -/
 instance group {C : Type u} [Groupoid.{v} C] (X : C) : Group (End X) where
   inv_mul_cancel := Groupoid.comp_inv
@@ -323,22 +244,28 @@ instance group {C : Type u} [Groupoid.{v} C] (X : C) : Group (End X) where
 end End
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `isUnit_iff_isIso` / 定理 `isUnit_iff_isIso`
-
-English:
-theorem isUnit_iff_isIso
-  given: {C : Type u} [Category.{v} C] {X : C} (f : End X)
-  proof: ⟨fun h => { out := ⟨h.unit.inv, ⟨h.unit.inv_val, h.unit.val_inv⟩⟩ }, fun h =>
-    ⟨⟨f, inv f, by simp, by simp⟩, rfl⟩⟩
-
-中文:
-定理 isUnit_iff_isIso
-  条件: {C : 类型u} [范畴.{v} C] {X : C} (f : End X)
-  证明: ⟨fun h => { out := ⟨h.unit.inv, ⟨h.unit.inv_val, h.unit.val_inv⟩⟩ }, fun h =>
-    ⟨⟨f, inv f, by simp, by simp⟩, rfl⟩⟩
-
-Depends on / 依赖: h.unit.inv, h.unit.inv_val, h.unit.val_inv, inv_val, val_inv
+/-
+**CategoryTheory.isUnit_iff_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：isUnit_iff_isIso {C : Type u} [Category.{v} C] {X : C} (f : End X) : IsUni
+t (f : End X) ↔ IsIso f
+参数：f : End X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.inv_val`：∀ {α : Type u} [inst : Monoid α] (self : αˣ), self.inv * 
+↑self = 1
+· 使用定理 `Units.val_inv`：∀ {α : Type u} [inst : Monoid α] (self : αˣ), ↑self * sel
+f.inv = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
 -/
 theorem isUnit_iff_isIso {C : Type u} [Category.{v} C] {X : C} (f : End X) :
     IsUnit (f : End X) ↔ IsIso f :=
@@ -347,85 +274,49 @@ theorem isUnit_iff_isIso {C : Type u} [Category.{v} C] {X : C} (f : End X) :
 
 variable {C : Type u} [Category.{v} C] (X : C)
 
-/--
-Definition of `Aut` / `Aut` 的定义
+/-- Automorphisms of an object in a category.
 
-English:
-definition Aut
-  signature: (X : C)
-  body: X ≅ X
+The order of arguments in multiplication agrees with
+`Function.comp`, not with `CategoryTheory.CategoryStruct.comp`.
+-/
+/-
+**CategoryTheory.Aut** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Aut (X : C)
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Aut
-  签名: (X : C)
-  定义体: X ≅ X
+--- 原说明 ---
+Automorphisms of an object in a category.
+
+The order of arguments in multiplication agrees with
+`Function.comp`, not with `CategoryTheory.CategoryStruct.comp`.
 -/
 def Aut (X : C) := X ≅ X
 
 namespace Aut
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X : C} {φ₁ φ₂ : Aut X} (h : φ₁.hom = φ₂.hom)
-  statement: φ₁ = φ₂
-  proof: Iso.ext h
-
-中文:
-引理 ext
-  条件: {X : C} {φ₁ φ₂ : Aut X} (h : φ₁.hom = φ₂.hom)
-  结论: φ₁ = φ₂
-  证明: Iso.ext h
-
-Depends on / 依赖: Iso.ext
+/-
+**CategoryTheory.Aut.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Aut`。
+形式化陈述：ext {X : C} {φ₁ φ₂ : Aut X} (h : φ₁.hom = φ₂.hom) : φ₁ = φ₂
+参数：h : φ₁.hom = φ₂.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
 -/
 lemma ext {X : C} {φ₁ φ₂ : Aut X} (h : φ₁.hom = φ₂.hom) : φ₁ = φ₂ :=
   Iso.ext h
-
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: : Inhabited (Aut X)
-  body: ⟨Iso.refl X⟩
-
-中文:
-实例 inhabited
-  签名: : 可居 (Aut X)
-  定义体: ⟨Iso.refl X⟩
+/-
+**CategoryTheory.Aut.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Aut`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → (X : C) → Inhab
+ited (CategoryTheory.Aut X)
+参数：X : C；CategoryTheory.Aut X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance inhabited : Inhabited (Aut X) := ⟨Iso.refl X⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Group (Aut X)
-  body: Iso.refl X
-  inv := Iso.symm
-  mul x y := Iso.trans y x
-  mul_assoc _ _ _ := (Iso.trans_assoc _ _ _).symm
-  one_mul := Iso.trans_refl
-  mul_one := Iso.refl_trans
-  inv_mul_cancel := Iso.self_symm_id
-
-中文:
-实例 :
-  签名: 群 (Aut X)
-  定义体: Iso.refl X
-  inv := Iso.symm
-  mul x y := Iso.trans y x
-  mul_assoc _ _ _ := (Iso.trans_assoc _ _ _).symm
-  one_mul := Iso.trans_refl
-  mul_one := Iso.refl_trans
-  inv_mul_cancel := Iso.self_symm_id
-
-Depends on / 依赖: Iso.refl
+/-
+**CategoryTheory.Aut.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Aut`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Group (Aut X) where
   one := Iso.refl X
@@ -435,57 +326,42 @@ instance : Group (Aut X) where
   one_mul := Iso.trans_refl
   mul_one := Iso.refl_trans
   inv_mul_cancel := Iso.self_symm_id
-
-/--
-theorem `Aut_mul_def` / 定理 `Aut_mul_def`
-
-English:
-theorem Aut_mul_def
-  given: (f g : Aut X)
-  statement: f * g = g.trans f
-  proof: rfl
-
-中文:
-定理 Aut_mul_def
-  条件: (f g : Aut X)
-  结论: f * g = g.trans f
-  证明: rfl
+/-
+**CategoryTheory.Aut.Aut_mul_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Aut`。
+形式化陈述：Aut_mul_def (f g : Aut X) : f * g = g.trans f
+参数：f g : Aut X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Aut_mul_def (f g : Aut X) : f * g = g.trans f := rfl
-
-/--
-theorem `Aut_inv_def` / 定理 `Aut_inv_def`
-
-English:
-theorem Aut_inv_def
-  given: (f : Aut X)
-  statement: f⁻¹ = f.symm
-  proof: rfl
-
-中文:
-定理 Aut_inv_def
-  条件: (f : Aut X)
-  结论: f⁻¹ = f.symm
-  证明: rfl
+/-
+**CategoryTheory.Aut.Aut_inv_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Aut`。
+形式化陈述：Aut_inv_def (f : Aut X) : f⁻¹ = f.symm
+参数：f : Aut X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Aut_inv_def (f : Aut X) : f⁻¹ = f.symm := rfl
 
-/--
-Definition of `unitsEndEquivAut` / `unitsEndEquivAut` 的定义
+/-- Units in the monoid of endomorphisms of an object
+are (multiplicatively) equivalent to automorphisms of that object.
+-/
+/-
+**CategoryTheory.Aut.unitsEndEquivAut** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Aut`。
+形式化陈述：unitsEndEquivAut : (End X)ˣ ≃* Aut X where toFun f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
 
-English:
-definition unitsEndEquivAut
-  signature: : (End X)ˣ ≃* Aut X where
-  body: ⟨f.1, f.2, f.4, f.3⟩
-  invFun f := ⟨f.1, f.2, f.4, f.3⟩
-  map_mul' f g := by cases f; cases g; rfl
-
-中文:
-定义 unitsEndEquivAut
-  签名: : (End X)ˣ ≃* Aut X where
-  定义体: ⟨f.1, f.2, f.4, f.3⟩
-  invFun f := ⟨f.1, f.2, f.4, f.3⟩
-  map_mul' f g := by cases f; cases g; rfl
+--- 原说明 ---
+Units in the monoid of endomorphisms of an object
+are (multiplicatively) equivalent to automorphisms of that object.
 -/
 def unitsEndEquivAut : (End X)ˣ ≃* Aut X where
   toFun f := ⟨f.1, f.2, f.4, f.3⟩
@@ -494,46 +370,30 @@ def unitsEndEquivAut : (End X)ˣ ≃* Aut X where
 
 /-- The inclusion of `Aut X` to `End X` as a monoid homomorphism. -/
 @[simps!]
-/--
-Definition of `toEnd` / `toEnd` 的定义
+/-
+**CategoryTheory.Aut.toEnd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Aut`。
+形式化陈述：toEnd (X : C) : Aut X ->* End X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toEnd
-  signature: (X : C)
-  body: (Units.coeHom (End X)).comp (Aut.unitsEndEquivAut X).symm
-
-中文:
-定义 toEnd
-  签名: (X : C)
-  定义体: (Units.coeHom (End X)).comp (Aut.unitsEndEquivAut X).symm
-
-Depends on / 依赖: Aut.unitsEndEquivAut, Units.coeHom, coeHom, unitsEndEquivAut
+--- 原说明 ---
+The inclusion of `Aut X` to `End X` as a monoid homomorphism.
 -/
-def toEnd (X : C) : Aut X ->* End X := (Units.coeHom (End X)).comp (Aut.unitsEndEquivAut X).symm
+def toEnd (X : C) : Aut X →* End X := (Units.coeHom (End X)).comp (Aut.unitsEndEquivAut X).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `autMulEquivOfIso` / `autMulEquivOfIso` 的定义
+/-- Isomorphisms induce isomorphisms of the automorphism group -/
+/-
+**CategoryTheory.Aut.autMulEquivOfIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Aut`。
+形式化陈述：autMulEquivOfIso {X Y : C} (h : X ≅ Y) : Aut X ≃* Aut Y where toFun x
+参数：h : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition autMulEquivOfIso
-  signature: {X Y : C} (h : X ≅ Y)
-  body: { hom := h.inv ≫ x.hom ≫ h.hom, inv := h.inv ≫ x.inv ≫ h.hom }
-  invFun y := { hom := h.hom ≫ y.hom ≫ h.inv, inv := h.hom ≫ y.inv ≫ h.inv }
-  left_inv _ := by cat_disch
-  right_inv _ := by cat_disch
-  map_mul' := by simp [Aut_mul_def]
-
-中文:
-定义 autMulEquivOfIso
-  签名: {X Y : C} (h : X ≅ Y)
-  定义体: { hom := h.inv ≫ x.hom ≫ h.hom, inv := h.inv ≫ x.inv ≫ h.hom }
-  invFun y := { hom := h.hom ≫ y.hom ≫ h.inv, inv := h.hom ≫ y.inv ≫ h.inv }
-  left_inv _ := by cat_disch
-  right_inv _ := by cat_disch
-  map_mul' := by simp [Aut_mul_def]
-
-Depends on / 依赖: h.hom, h.inv, x.hom, x.inv
+--- 原说明 ---
+Isomorphisms induce isomorphisms of the automorphism group
 -/
 def autMulEquivOfIso {X Y : C} (h : X ≅ Y) : Aut X ≃* Aut Y where
   toFun x := { hom := h.inv ≫ x.hom ≫ h.hom, inv := h.inv ≫ x.inv ≫ h.hom }
@@ -550,50 +410,43 @@ variable {D : Type u'} [Category.{v'} D] (f : C ⥤ D)
 
 /-- `f.map` as a monoid hom between endomorphism monoids. -/
 @[simps]
-/--
-Definition of `mapEnd` / `mapEnd` 的定义
+/-
+**CategoryTheory.Functor.mapEnd** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functo
+r`。
+形式化陈述：mapEnd : End X ->* End (f.obj X) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 
-English:
-definition mapEnd
-  signature: : End X ->* End (f.obj X) where
-  body: f.map
-  map_mul' x y := f.map_comp y x
-  map_one' := f.map_id X
-
-中文:
-定义 mapEnd
-  签名: : End X ->* End (f.obj X) where
-  定义体: f.map
-  map_mul' x y := f.map_comp y x
-  map_one' := f.map_id X
-
-Depends on / 依赖: f.map
+--- 原说明 ---
+`f.map` as a monoid hom between endomorphism monoids.
 -/
-def mapEnd : End X ->* End (f.obj X) where
+def mapEnd : End X →* End (f.obj X) where
   toFun := f.map
   map_mul' x y := f.map_comp y x
   map_one' := f.map_id X
 
-/--
-Definition of `mapAut` / `mapAut` 的定义
+/-- `f.mapIso` as a group hom between automorphism groups. -/
+/-
+**CategoryTheory.Functor.mapAut** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functo
+r`。
+形式化陈述：mapAut : Aut X ->* Aut (f.obj X) where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mapIso_refl`：mapIso_refl (F : C ⥤ D) (X : C) : F.
+mapIso (Iso.refl X) = Iso.refl (F.obj X)
+· 使用定理 `CategoryTheory.Functor.mapIso_trans`：mapIso_trans (F : C ⥤ D) {X Y Z : C
+} (i : X ≅ Y) (j : Y ≅ Z) : F.mapIso (i ≪≫ j) = F.mapIso i ≪≫ F.mapIso j
 
-English:
-definition mapAut
-  signature: : Aut X ->* Aut (f.obj X) where
-  body: f.mapIso
-  map_mul' x y := f.mapIso_trans y x
-  map_one' := f.mapIso_refl X
-
-中文:
-定义 mapAut
-  签名: : Aut X ->* Aut (f.obj X) where
-  定义体: f.mapIso
-  map_mul' x y := f.mapIso_trans y x
-  map_one' := f.mapIso_refl X
-
-Depends on / 依赖: f.mapIso, mapIso
+--- 原说明 ---
+`f.mapIso` as a group hom between automorphism groups.
 -/
-def mapAut : Aut X ->* Aut (f.obj X) where
+def mapAut : Aut X →* Aut (f.obj X) where
   toFun := f.mapIso
   map_mul' x y := f.mapIso_trans y x
   map_one' := f.mapIso_refl X
@@ -605,22 +458,16 @@ variable (hf : FullyFaithful f)
 
 /-- `mulEquivEnd` as an isomorphism between endomorphism monoids. -/
 @[simps!]
-/--
-Definition of `mulEquivEnd` / `mulEquivEnd` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.mulEquivEnd** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor.FullyFaithful`。
+形式化陈述：mulEquivEnd (X : C) : End X ≃* End (f.obj X) where toEquiv
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulEquivEnd
-  signature: (X : C)
-  body: hf.homEquiv
-  __ := mapEnd X f
-
-中文:
-定义 mulEquivEnd
-  签名: (X : C)
-  定义体: hf.homEquiv
-  __ := mapEnd X f
-
-Depends on / 依赖: hf.homEquiv, homEquiv
+--- 原说明 ---
+`mulEquivEnd` as an isomorphism between endomorphism monoids.
 -/
 noncomputable def mulEquivEnd (X : C) :
     End X ≃* End (f.obj X) where
@@ -629,22 +476,16 @@ noncomputable def mulEquivEnd (X : C) :
 
 /-- `mulEquivAut` as an isomorphism between automorphism groups. -/
 @[simps!]
-/--
-Definition of `autMulEquivOfFullyFaithful` / `autMulEquivOfFullyFaithful` 的定义
+/-
+**CategoryTheory.Functor.FullyFaithful.autMulEquivOfFullyFaithful** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Functor.FullyFaithful`。
+形式化陈述：autMulEquivOfFullyFaithful (X : C) : Aut X ≃* Aut (f.obj X) where toEquiv
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition autMulEquivOfFullyFaithful
-  signature: (X : C)
-  body: hf.isoEquiv
-  __ := mapAut X f
-
-中文:
-定义 autMulEquivOfFullyFaithful
-  签名: (X : C)
-  定义体: hf.isoEquiv
-  __ := mapAut X f
-
-Depends on / 依赖: hf.isoEquiv, isoEquiv
+--- 原说明 ---
+`mulEquivAut` as an isomorphism between automorphism groups.
 -/
 noncomputable def autMulEquivOfFullyFaithful (X : C) :
     Aut X ≃* Aut (f.obj X) where
@@ -657,26 +498,23 @@ end Functor
 
 /-- The multiplicative bijection `End X ≃* End (F X)` when `X : InducedCategory C F`. -/
 @[simps!]
-/--
-Definition of `InducedCategory.endEquiv` / `InducedCategory.endEquiv` 的定义
+/-
+**CategoryTheory.InducedCategory.endEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.InducedCategory`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u_1} →       {F : D → C} → {X : CategoryTheory.InducedCategory C F} → CategoryT
+heory.End X ≃* CategoryTheory.End (F X)
+参数：F X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition InducedCategory.endEquiv
-  signature: {D : Type*} {F : D -> C}
-  body: InducedCategory.homEquiv
-  map_mul' _ _ := rfl
-
-中文:
-定义 InducedCategory.endEquiv
-  签名: {D : 类型} {F : D -> C}
-  定义体: InducedCategory.homEquiv
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: InducedCategory, InducedCategory.homEquiv, homEquiv
+--- 原说明 ---
+The multiplicative bijection `End X ≃* End (F X)` when `X : InducedCategory C F`
+.
 -/
-def InducedCategory.endEquiv {D : Type*} {F : D -> C}
+def InducedCategory.endEquiv {D : Type*} {F : D → C}
     {X : InducedCategory C F} : End X ≃* End (F X) where
   toEquiv := InducedCategory.homEquiv
   map_mul' _ _ := rfl
 
 end CategoryTheory
+

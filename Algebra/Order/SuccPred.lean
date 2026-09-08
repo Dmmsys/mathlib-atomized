@@ -22,42 +22,26 @@ predecessors into these common arithmetical forms.
 
 public section
 
-/--
-Definition of `SuccAddOrder` / `SuccAddOrder` 的定义
+/-- A typeclass for `succ x = x + 1`. -/
+/-
+**SuccAddOrder** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Preorder α] → [Add α] → [One α] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SuccAddOrder
-  parameters: (α : Type*) [Preorder α] [Add α] [One α]
-  extends: SuccOrder α
-  axioms and operations (1):
-    - succ_eq_add_one((x : α)) : succ x = x + 1
-
-中文:
-类 SuccAdd序
-  参数: (α : 类型) [预序 α] [加法 α] [幺 α]
-  继承: Succ序 α
-  公理与运算 (1 个):
-    - succ_eq_add_one((x : α)) : succ x = x + 1
+--- 原说明 ---
+A typeclass for `succ x = x + 1`.
 -/
 class SuccAddOrder (α : Type*) [Preorder α] [Add α] [One α] extends SuccOrder α where
   succ_eq_add_one (x : α) : succ x = x + 1
 
-/--
-Definition of `PredSubOrder` / `PredSubOrder` 的定义
+/-- A typeclass for `pred x = x - 1`. -/
+/-
+**PredSubOrder** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Preorder α] → [Sub α] → [One α] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class PredSubOrder
-  parameters: (α : Type*) [Preorder α] [Sub α] [One α]
-  extends: PredOrder α
-  axioms and operations (1):
-    - pred_eq_sub_one((x : α)) : pred x = x - 1
-
-中文:
-类 PredSub序
-  参数: (α : 类型) [预序 α] [减法 α] [幺 α]
-  继承: Pred序 α
-  公理与运算 (1 个):
-    - pred_eq_sub_one((x : α)) : pred x = x - 1
+--- 原说明 ---
+A typeclass for `pred x = x - 1`.
 -/
 class PredSubOrder (α : Type*) [Preorder α] [Sub α] [One α] extends PredOrder α where
   pred_eq_sub_one (x : α) : pred x = x - 1
@@ -75,175 +59,109 @@ section Add
 variable [Add α] [One α] [SuccAddOrder α]
 
 @[simp]
-/--
-theorem `succ_eq_add_one` / 定理 `succ_eq_add_one`
-
-English:
-theorem succ_eq_add_one
-  given: (x : α)
-  statement: succ x = x + 1
-  proof: SuccAddOrder.succ_eq_add_one x
-
-中文:
-定理 succ_eq_add_one
-  条件: (x : α)
-  结论: succ x = x + 1
-  证明: SuccAddOrder.succ_eq_add_one x
-
-Depends on / 依赖: SuccAddOrder, SuccAddOrder.succ_eq_add_one, succ_eq_add_one
+/-
+**Order.succ_eq_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：succ_eq_add_one (x : α) : succ x = x + 1
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SuccAddOrder.succ_eq_add_one`：∀ {α : Type u_1} {inst : Preorder α} {inst
+_1 : Add α} {inst_2 : One α} [self : SuccAddOrder α] (x : α),   SuccOrder.succ x
+ = x + 1
 -/
 theorem succ_eq_add_one (x : α) : succ x = x + 1 :=
   SuccAddOrder.succ_eq_add_one x
-
-/--
-theorem `add_one_le_of_lt` / 定理 `add_one_le_of_lt`
-
-English:
-theorem add_one_le_of_lt
-  given: (h : x < y)
-  statement: x + 1 <= y
-  proof: by
+/-
+**Order.add_one_le_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：add_one_le_of_lt (h : x < y) : x + 1 <= y
+参数：h : x < y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.succ_le_of_lt`：succ_le_of_lt {a b : α} : a < b -> succ a <= b
+-/
+theorem add_one_le_of_lt (h : x < y) : x + 1 ≤ y := by
   rw [← succ_eq_add_one]
   exact succ_le_of_lt h
-
-中文:
-定理 add_one_le_of_lt
-  条件: (h : x < y)
-  结论: x + 1 <= y
-  证明: by
-  rw [← succ_eq_add_one]
-  exact succ_le_of_lt h
-
-Depends on / 依赖: succ_eq_add_one, succ_le_of_lt
+/-
+**Order.add_one_le_iff_of_not_isMax** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：add_one_le_iff_of_not_isMax (hx : ¬ IsMax x) : x + 1 <= y ↔ x < y
+参数：hx : ¬ IsMax x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.succ_le_iff_of_not_isMax`：succ_le_iff_of_not_isMax (ha : ¬IsMax a)
+ : succ a <= b ↔ a < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem add_one_le_of_lt (h : x < y) : x + 1 <= y := by
-  rw [← succ_eq_add_one]
-  exact succ_le_of_lt h
-
-/--
-theorem `add_one_le_iff_of_not_isMax` / 定理 `add_one_le_iff_of_not_isMax`
-
-English:
-theorem add_one_le_iff_of_not_isMax
-  given: (hx : ¬ IsMax x)
-  statement: x + 1 <= y ↔ x < y
-  proof: by
-  rw [← succ_eq_add_one]; rw [succ_le_iff_of_not_isMax hx]
-
-中文:
-定理 add_one_le_iff_of_not_isMax
-  条件: (hx : ¬ IsMax x)
-  结论: x + 1 <= y ↔ x < y
-  证明: by
-  rw [← succ_eq_add_one]; rw [succ_le_iff_of_not_isMax hx]
-
-Depends on / 依赖: succ_eq_add_one, succ_le_iff_of_not_isMax
+theorem add_one_le_iff_of_not_isMax (hx : ¬ IsMax x) : x + 1 ≤ y ↔ x < y := by
+  rw [← succ_eq_add_one, succ_le_iff_of_not_isMax hx]
+/-
+**Order.add_one_le_iff_of_not_isMax'** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：add_one_le_iff_of_not_isMax' (hy : ¬ IsMax y) : x + 1 <= y ↔ x < y
+参数：hy : ¬ IsMax y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.succ_le_iff_of_not_isMax'`：succ_le_iff_of_not_isMax' (hb : ¬IsMax 
+b) : succ a <= b ↔ a < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem add_one_le_iff_of_not_isMax (hx : ¬ IsMax x) : x + 1 <= y ↔ x < y := by
-  rw [← succ_eq_add_one]; rw [succ_le_iff_of_not_isMax hx]
-
-/--
-theorem `add_one_le_iff_of_not_isMax'` / 定理 `add_one_le_iff_of_not_isMax'`
-
-English:
-theorem add_one_le_iff_of_not_isMax'
-  given: (hy : ¬ IsMax y)
-  statement: x + 1 <= y ↔ x < y
-  proof: by
-  rw [← succ_eq_add_one]; rw [succ_le_iff_of_not_isMax' hy]
+theorem add_one_le_iff_of_not_isMax' (hy : ¬ IsMax y) : x + 1 ≤ y ↔ x < y := by
+  rw [← succ_eq_add_one, succ_le_iff_of_not_isMax' hy]
 
 @[simp]
-
-中文:
-定理 add_one_le_iff_of_not_isMax'
-  条件: (hy : ¬ IsMax y)
-  结论: x + 1 <= y ↔ x < y
-  证明: by
-  rw [← succ_eq_add_one]; rw [succ_le_iff_of_not_isMax' hy]
-
-@[simp]
-
-Depends on / 依赖: succ_eq_add_one, succ_le_iff_of_not_isMax
+/-
+**Order.add_one_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：add_one_le_iff [NoMaxOrder α] : x + 1 <= y ↔ x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.add_one_le_iff_of_not_isMax`：add_one_le_iff_of_not_isMax (hx : ¬ I
+sMax x) : x + 1 <= y ↔ x < y
+· 使用定理 `not_isMax`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxOrder α] (a : α), 
+¬IsMax a
 -/
-theorem add_one_le_iff_of_not_isMax' (hy : ¬ IsMax y) : x + 1 <= y ↔ x < y := by
-  rw [← succ_eq_add_one]; rw [succ_le_iff_of_not_isMax' hy]
-
-@[simp]
-/--
-theorem `add_one_le_iff` / 定理 `add_one_le_iff`
-
-English:
-theorem add_one_le_iff
-  given: [NoMaxOrder α]
-  statement: x + 1 <= y ↔ x < y
-  proof: add_one_le_iff_of_not_isMax (not_isMax x)
-
-@[simp]
-
-中文:
-定理 add_one_le_iff
-  条件: [NoMax序 α]
-  结论: x + 1 <= y ↔ x < y
-  证明: add_one_le_iff_of_not_isMax (not_isMax x)
-
-@[simp]
-
-Depends on / 依赖: add_one_le_iff_of_not_isMax, not_isMax
--/
-theorem add_one_le_iff [NoMaxOrder α] : x + 1 <= y ↔ x < y :=
+theorem add_one_le_iff [NoMaxOrder α] : x + 1 ≤ y ↔ x < y :=
   add_one_le_iff_of_not_isMax (not_isMax x)
 
 @[simp]
-/--
-theorem `wcovBy_add_one` / 定理 `wcovBy_add_one`
-
-English:
-theorem wcovBy_add_one
-  given: (x : α)
-  statement: x ⩿ x + 1
-  proof: by
-  rw [← succ_eq_add_one]
-  exact wcovBy_succ x
-
-@[simp]
-
-中文:
-定理 wcovBy_add_one
-  条件: (x : α)
-  结论: x ⩿ x + 1
-  证明: by
-  rw [← succ_eq_add_one]
-  exact wcovBy_succ x
-
-@[simp]
-
-Depends on / 依赖: succ_eq_add_one, wcovBy_succ
+/-
+**Order.wcovBy_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：wcovBy_add_one (x : α) : x ⩿ x + 1
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.wcovBy_succ`：wcovBy_succ (a : α) : a ⩿ succ a
 -/
 theorem wcovBy_add_one (x : α) : x ⩿ x + 1 := by
   rw [← succ_eq_add_one]
   exact wcovBy_succ x
 
 @[simp]
-/--
-theorem `covBy_add_one` / 定理 `covBy_add_one`
-
-English:
-theorem covBy_add_one
-  given: [NoMaxOrder α] (x : α)
-  statement: x ⋖ x + 1
-  proof: by
-  rw [← succ_eq_add_one]
-  exact covBy_succ x
-
-中文:
-定理 covBy_add_one
-  条件: [NoMax序 α] (x : α)
-  结论: x ⋖ x + 1
-  证明: by
-  rw [← succ_eq_add_one]
-  exact covBy_succ x
-
-Depends on / 依赖: covBy_succ, succ_eq_add_one
+/-
+**Order.covBy_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：covBy_add_one [NoMaxOrder α] (x : α) : x ⋖ x + 1
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.covBy_succ`：covBy_succ (a : α) : a ⋖ succ a
 -/
 theorem covBy_add_one [NoMaxOrder α] (x : α) : x ⋖ x + 1 := by
   rw [← succ_eq_add_one]
@@ -256,153 +174,95 @@ section Sub
 variable [Sub α] [One α] [PredSubOrder α]
 
 @[simp]
-/--
-theorem `pred_eq_sub_one` / 定理 `pred_eq_sub_one`
-
-English:
-theorem pred_eq_sub_one
-  given: (x : α)
-  statement: pred x = x - 1
-  proof: PredSubOrder.pred_eq_sub_one x
-
-中文:
-定理 pred_eq_sub_one
-  条件: (x : α)
-  结论: pred x = x - 1
-  证明: PredSubOrder.pred_eq_sub_one x
-
-Depends on / 依赖: PredSubOrder, PredSubOrder.pred_eq_sub_one, pred_eq_sub_one
+/-
+**Order.pred_eq_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：pred_eq_sub_one (x : α) : pred x = x - 1
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PredSubOrder.pred_eq_sub_one`：∀ {α : Type u_1} {inst : Preorder α} {inst
+_1 : Sub α} {inst_2 : One α} [self : PredSubOrder α] (x : α),   PredOrder.pred x
+ = x - 1
 -/
 theorem pred_eq_sub_one (x : α) : pred x = x - 1 :=
   PredSubOrder.pred_eq_sub_one x
-
-/--
-theorem `le_sub_one_of_lt` / 定理 `le_sub_one_of_lt`
-
-English:
-theorem le_sub_one_of_lt
-  given: (h : x < y)
-  statement: x <= y - 1
-  proof: by
+/-
+**Order.le_sub_one_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：le_sub_one_of_lt (h : x < y) : x <= y - 1
+参数：h : x < y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Order.le_pred_of_lt`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Pred
+Order α] {a b : α}, b < a → b ≤ Order.pred a
+-/
+theorem le_sub_one_of_lt (h : x < y) : x ≤ y - 1 := by
   rw [← pred_eq_sub_one]
   exact le_pred_of_lt h
-
-中文:
-定理 le_sub_one_of_lt
-  条件: (h : x < y)
-  结论: x <= y - 1
-  证明: by
-  rw [← pred_eq_sub_one]
-  exact le_pred_of_lt h
-
-Depends on / 依赖: le_pred_of_lt, pred_eq_sub_one
+/-
+**Order.le_sub_one_iff_of_not_isMin** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：le_sub_one_iff_of_not_isMin (hy : ¬ IsMin y) : x <= y - 1 ↔ x < y
+参数：hy : ¬ IsMin y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Order.le_pred_iff_of_not_isMin`：∀ {α : Type u_1} [inst : Preorder α] [in
+st_1 : PredOrder α] {a b : α}, ¬IsMin a → (b ≤ Order.pred a ↔ b < a)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_sub_one_of_lt (h : x < y) : x <= y - 1 := by
-  rw [← pred_eq_sub_one]
-  exact le_pred_of_lt h
-
-/--
-theorem `le_sub_one_iff_of_not_isMin` / 定理 `le_sub_one_iff_of_not_isMin`
-
-English:
-theorem le_sub_one_iff_of_not_isMin
-  given: (hy : ¬ IsMin y)
-  statement: x <= y - 1 ↔ x < y
-  proof: by
-  rw [← pred_eq_sub_one]; rw [le_pred_iff_of_not_isMin hy]
+theorem le_sub_one_iff_of_not_isMin (hy : ¬ IsMin y) : x ≤ y - 1 ↔ x < y := by
+  rw [← pred_eq_sub_one, le_pred_iff_of_not_isMin hy]
 
 @[simp]
-
-中文:
-定理 le_sub_one_iff_of_not_isMin
-  条件: (hy : ¬ IsMin y)
-  结论: x <= y - 1 ↔ x < y
-  证明: by
-  rw [← pred_eq_sub_one]; rw [le_pred_iff_of_not_isMin hy]
-
-@[simp]
-
-Depends on / 依赖: le_pred_iff_of_not_isMin, pred_eq_sub_one
+/-
+**Order.le_sub_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：le_sub_one_iff [NoMinOrder α] : x <= y - 1 ↔ x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.le_sub_one_iff_of_not_isMin`：le_sub_one_iff_of_not_isMin (hy : ¬ I
+sMin y) : x <= y - 1 ↔ x < y
+· 使用定理 `not_isMin`：not_isMin [NoMinOrder α] (a : α) : ¬IsMin a
 -/
-theorem le_sub_one_iff_of_not_isMin (hy : ¬ IsMin y) : x <= y - 1 ↔ x < y := by
-  rw [← pred_eq_sub_one]; rw [le_pred_iff_of_not_isMin hy]
-
-@[simp]
-/--
-theorem `le_sub_one_iff` / 定理 `le_sub_one_iff`
-
-English:
-theorem le_sub_one_iff
-  given: [NoMinOrder α]
-  statement: x <= y - 1 ↔ x < y
-  proof: le_sub_one_iff_of_not_isMin (not_isMin y)
-
-@[simp]
-
-中文:
-定理 le_sub_one_iff
-  条件: [NoMin序 α]
-  结论: x <= y - 1 ↔ x < y
-  证明: le_sub_one_iff_of_not_isMin (not_isMin y)
-
-@[simp]
-
-Depends on / 依赖: le_sub_one_iff_of_not_isMin, not_isMin
--/
-theorem le_sub_one_iff [NoMinOrder α] : x <= y - 1 ↔ x < y :=
+theorem le_sub_one_iff [NoMinOrder α] : x ≤ y - 1 ↔ x < y :=
   le_sub_one_iff_of_not_isMin (not_isMin y)
 
 @[simp]
-/--
-theorem `sub_one_wcovBy` / 定理 `sub_one_wcovBy`
-
-English:
-theorem sub_one_wcovBy
-  given: (x : α)
-  statement: x - 1 ⩿ x
-  proof: by
-  rw [← pred_eq_sub_one]
-  exact pred_wcovBy x
-
-@[simp]
-
-中文:
-定理 sub_one_wcovBy
-  条件: (x : α)
-  结论: x - 1 ⩿ x
-  证明: by
-  rw [← pred_eq_sub_one]
-  exact pred_wcovBy x
-
-@[simp]
-
-Depends on / 依赖: pred_eq_sub_one, pred_wcovBy
+/-
+**Order.sub_one_wcovBy** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：sub_one_wcovBy (x : α) : x - 1 ⩿ x
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Order.pred_wcovBy`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : PredOr
+der α] (a : α), Order.pred a ⩿ a
 -/
 theorem sub_one_wcovBy (x : α) : x - 1 ⩿ x := by
   rw [← pred_eq_sub_one]
   exact pred_wcovBy x
 
 @[simp]
-/--
-theorem `sub_one_covBy` / 定理 `sub_one_covBy`
-
-English:
-theorem sub_one_covBy
-  given: [NoMinOrder α] (x : α)
-  statement: x - 1 ⋖ x
-  proof: by
-  rw [← pred_eq_sub_one]
-  exact pred_covBy x
-
-中文:
-定理 sub_one_covBy
-  条件: [NoMin序 α] (x : α)
-  结论: x - 1 ⋖ x
-  证明: by
-  rw [← pred_eq_sub_one]
-  exact pred_covBy x
-
-Depends on / 依赖: pred_covBy, pred_eq_sub_one
+/-
+**Order.sub_one_covBy** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：sub_one_covBy [NoMinOrder α] (x : α) : x - 1 ⋖ x
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Order.pred_covBy`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : PredOrd
+er α] [NoMinOrder α] (a : α), Order.pred a ⋖ a
 -/
 theorem sub_one_covBy [NoMinOrder α] (x : α) : x - 1 ⋖ x := by
   rw [← pred_eq_sub_one]
@@ -411,76 +271,63 @@ theorem sub_one_covBy [NoMinOrder α] (x : α) : x - 1 ⋖ x := by
 end Sub
 
 @[simp]
-/--
-theorem `succ_iterate` / 定理 `succ_iterate`
-
-English:
-theorem succ_iterate
-  given: [AddMonoidWithOne α] [SuccAddOrder α] (x : α) (n : Nat)
-  proof: by
-  induction n with
-  | zero =>
-    rw [Function.iterate_zero_apply]; rw [Nat.cast_zero]; rw [add_zero]
-  | succ n IH =>
-    rw [Function.iterate_succ_apply']; rw [IH]; rw [Nat.cast_add]; rw [succ_eq_add_one]; rw [Nat.cast_one]; rw [add_assoc]
-
-@[simp]
-
-中文:
-定理 succ_iterate
-  条件: [加法带幺幺半群 α] [SuccAdd序 α] (x : α) (n : 自然数)
-  证明: by
-  induction n with
-  | zero =>
-    rw [Function.iterate_zero_apply]; rw [Nat.cast_zero]; rw [add_zero]
-  | succ n IH =>
-    rw [Function.iterate_succ_apply']; rw [IH]; rw [Nat.cast_add]; rw [succ_eq_add_one]; rw [Nat.cast_one]; rw [add_assoc]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.iterate_succ_apply, Function.iterate_zero_apply, Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc, add_zero, cast_add, cast_one, cast_zero, iterate_succ_apply, iterate_zero_apply, succ_eq_add_one
+/-
+**Order.succ_iterate** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：succ_iterate [AddMonoidWithOne α] [SuccAddOrder α] (x : α) (n : Nat) : suc
+c^[n] x = x + n
+参数：x : α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.iterate_zero_apply`：iterate_zero_apply (x : α) : f^[0] x = x
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
 -/
-theorem succ_iterate [AddMonoidWithOne α] [SuccAddOrder α] (x : α) (n : Nat) :
+theorem succ_iterate [AddMonoidWithOne α] [SuccAddOrder α] (x : α) (n : ℕ) :
     succ^[n] x = x + n := by
   induction n with
   | zero =>
-    rw [Function.iterate_zero_apply]; rw [Nat.cast_zero]; rw [add_zero]
+    rw [Function.iterate_zero_apply, Nat.cast_zero, add_zero]
   | succ n IH =>
-    rw [Function.iterate_succ_apply']; rw [IH]; rw [Nat.cast_add]; rw [succ_eq_add_one]; rw [Nat.cast_one]; rw [add_assoc]
+    rw [Function.iterate_succ_apply', IH, Nat.cast_add, succ_eq_add_one, Nat.cast_one, add_assoc]
 
 @[simp]
-/--
-theorem `pred_iterate` / 定理 `pred_iterate`
-
-English:
-theorem pred_iterate
-  given: [AddCommGroupWithOne α] [PredSubOrder α] (x : α) (n : Nat)
-  proof: by
-  induction n with
-  | zero =>
-    rw [Function.iterate_zero_apply]; rw [Nat.cast_zero]; rw [sub_zero]
-  | succ n IH =>
-    rw [Function.iterate_succ_apply']; rw [IH]; rw [Nat.cast_add]; rw [pred_eq_sub_one]; rw [Nat.cast_one]; rw [sub_sub]
-
-中文:
-定理 pred_iterate
-  条件: [加法交换带幺群 α] [PredSub序 α] (x : α) (n : 自然数)
-  证明: by
-  induction n with
-  | zero =>
-    rw [Function.iterate_zero_apply]; rw [Nat.cast_zero]; rw [sub_zero]
-  | succ n IH =>
-    rw [Function.iterate_succ_apply']; rw [IH]; rw [Nat.cast_add]; rw [pred_eq_sub_one]; rw [Nat.cast_one]; rw [sub_sub]
-
-Depends on / 依赖: Function, Function.iterate_succ_apply, Function.iterate_zero_apply, Nat.cast_add, Nat.cast_one, Nat.cast_zero, cast_add, cast_one, cast_zero, iterate_succ_apply, iterate_zero_apply, pred_eq_sub_one, sub_sub, sub_zero
+/-
+**Order.pred_iterate** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：pred_iterate [AddCommGroupWithOne α] [PredSubOrder α] (x : α) (n : Nat) : 
+pred^[n] x = x - n
+参数：x : α；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.iterate_zero_apply`：iterate_zero_apply (x : α) : f^[0] x = x
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
 -/
-theorem pred_iterate [AddCommGroupWithOne α] [PredSubOrder α] (x : α) (n : Nat) :
+theorem pred_iterate [AddCommGroupWithOne α] [PredSubOrder α] (x : α) (n : ℕ) :
     pred^[n] x = x - n := by
   induction n with
   | zero =>
-    rw [Function.iterate_zero_apply]; rw [Nat.cast_zero]; rw [sub_zero]
+    rw [Function.iterate_zero_apply, Nat.cast_zero, sub_zero]
   | succ n IH =>
-    rw [Function.iterate_succ_apply']; rw [IH]; rw [Nat.cast_add]; rw [pred_eq_sub_one]; rw [Nat.cast_one]; rw [sub_sub]
+    rw [Function.iterate_succ_apply', IH, Nat.cast_add, pred_eq_sub_one, Nat.cast_one, sub_sub]
 
 end Preorder
 
@@ -488,400 +335,323 @@ section PartialOrder
 
 variable [PartialOrder α]
 
-/--
-theorem `not_isMax_zero` / 定理 `not_isMax_zero`
-
-English:
-theorem not_isMax_zero
-  given: [Zero α] [One α] [ZeroLEOneClass α] [NeZero (1 : α)]
-  statement: ¬ IsMax (0 : α)
-  proof: by
-  rw [not_isMax_iff]
-  exact ⟨1, one_pos⟩
-
-中文:
-定理 not_isMax_zero
-  条件: [零 α] [幺 α] [ZeroLEOne类 α] [NeZero (1 : α)]
-  结论: ¬ IsMax (0 : α)
-  证明: by
-  rw [not_isMax_iff]
-  exact ⟨1, one_pos⟩
-
-Depends on / 依赖: not_isMax_iff, one_pos
+/-
+**Order.not_isMax_zero** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：not_isMax_zero [Zero α] [One α] [ZeroLEOneClass α] [NeZero (1 : α)] : ¬ Is
+Max (0 : α)
+参数：1 : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_isMax_iff`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, ¬IsMax a ↔ 
+∃ b, a < b
+· 使用定理 `one_pos`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 : Par
+tialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
 -/
 theorem not_isMax_zero [Zero α] [One α] [ZeroLEOneClass α] [NeZero (1 : α)] : ¬ IsMax (0 : α) := by
   rw [not_isMax_iff]
   exact ⟨1, one_pos⟩
-
-/--
-theorem `one_le_iff_pos` / 定理 `one_le_iff_pos`
-
-English:
-theorem one_le_iff_pos
-  statement: [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)]
-  proof: by
-  rw [← succ_le_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
-
-中文:
-定理 one_le_iff_pos
-  结论: [加法带幺幺半群 α] [ZeroLEOne类 α] [NeZero (1 : α)]
-  证明: by
-  rw [← succ_le_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
-
-Depends on / 依赖: not_isMax_zero, succ_eq_add_one, succ_le_iff_of_not_isMax, zero_add
+/-
+**Order.one_le_iff_pos** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)] [S
+uccAddOrder α] : 1 <= x ↔ 0 < x
+参数：1 : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_le_iff_of_not_isMax`：succ_le_iff_of_not_isMax (ha : ¬IsMax a)
+ : succ a <= b ↔ a < b
+· 使用定理 `Order.not_isMax_zero`：not_isMax_zero [Zero α] [One α] [ZeroLEOneClass α]
+ [NeZero (1 : α)] : ¬ IsMax (0 : α)
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)]
-    [SuccAddOrder α] : 1 <= x ↔ 0 < x := by
-  rw [← succ_le_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
-
-/--
-theorem `one_le_iff_ne_zero` / 定理 `one_le_iff_ne_zero`
-
-English:
-theorem one_le_iff_ne_zero
-  statement: [AddMonoidWithOne α] [NeZero (1 : α)]
-  proof: by
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]
-
-中文:
-定理 one_le_iff_ne_zero
-  结论: [加法带幺幺半群 α] [NeZero (1 : α)]
-  证明: by
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]
-
-Depends on / 依赖: Order.one_le_iff_pos, one_le_iff_pos, pos_iff_ne_zero
+    [SuccAddOrder α] : 1 ≤ x ↔ 0 < x := by
+  rw [← succ_le_iff_of_not_isMax not_isMax_zero, succ_eq_add_one, zero_add]
+/-
+**Order.one_le_iff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：one_le_iff_ne_zero [AddMonoidWithOne α] [NeZero (1 : α)] [SuccAddOrder α] 
+[IsBotZeroClass α] : 1 <= x ↔ x != 0
+参数：1 : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.one_le_iff_pos`：one_le_iff_pos [AddMonoidWithOne α] [ZeroLEOneClas
+s α] [NeZero (1 : α)] [SuccAddOrder α] : 1 <= x ↔ 0 < x
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem one_le_iff_ne_zero [AddMonoidWithOne α] [NeZero (1 : α)]
-    [SuccAddOrder α] [IsBotZeroClass α] : 1 <= x ↔ x != 0 := by
-  rw [Order.one_le_iff_pos]; rw [pos_iff_ne_zero]
-
-/--
-theorem `covBy_iff_add_one_eq` / 定理 `covBy_iff_add_one_eq`
-
-English:
-theorem covBy_iff_add_one_eq
-  given: [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
-  proof: by
-  rw [← succ_eq_add_one]
-  exact succ_eq_iff_covBy.symm
-
-中文:
-定理 covBy_iff_add_one_eq
-  条件: [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
-  证明: by
-  rw [← succ_eq_add_one]
-  exact succ_eq_iff_covBy.symm
-
-Depends on / 依赖: succ_eq_add_one, succ_eq_iff_covBy, succ_eq_iff_covBy.symm
+    [SuccAddOrder α] [IsBotZeroClass α] : 1 ≤ x ↔ x ≠ 0 := by
+  rw [Order.one_le_iff_pos, pos_iff_ne_zero]
+/-
+**Order.covBy_iff_add_one_eq** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：covBy_iff_add_one_eq [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α] : x ⋖
+ y ↔ x + 1 = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Order.succ_eq_iff_covBy`：succ_eq_iff_covBy : succ a = b ↔ a ⋖ b
 -/
 theorem covBy_iff_add_one_eq [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α] :
     x ⋖ y ↔ x + 1 = y := by
   rw [← succ_eq_add_one]
   exact succ_eq_iff_covBy.symm
-
-/--
-theorem `covBy_iff_sub_one_eq` / 定理 `covBy_iff_sub_one_eq`
-
-English:
-theorem covBy_iff_sub_one_eq
-  given: [Sub α] [One α] [PredSubOrder α] [NoMinOrder α]
-  proof: by
-  rw [← pred_eq_sub_one]
-  exact pred_eq_iff_covBy.symm
-
-中文:
-定理 covBy_iff_sub_one_eq
-  条件: [减法 α] [幺 α] [PredSub序 α] [NoMin序 α]
-  证明: by
-  rw [← pred_eq_sub_one]
-  exact pred_eq_iff_covBy.symm
-
-Depends on / 依赖: pred_eq_iff_covBy, pred_eq_iff_covBy.symm, pred_eq_sub_one
+/-
+**Order.covBy_iff_sub_one_eq** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：covBy_iff_sub_one_eq [Sub α] [One α] [PredSubOrder α] [NoMinOrder α] : x ⋖
+ y ↔ y - 1 = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Order.pred_eq_iff_covBy`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_
+1 : PredOrder α] {a b : α} [NoMinOrder α], Order.pred a = b ↔ b ⋖ a
 -/
 theorem covBy_iff_sub_one_eq [Sub α] [One α] [PredSubOrder α] [NoMinOrder α] :
     x ⋖ y ↔ y - 1 = x := by
   rw [← pred_eq_sub_one]
   exact pred_eq_iff_covBy.symm
-
-/--
-theorem `IsSuccPrelimit.add_one_lt` / 定理 `IsSuccPrelimit.add_one_lt`
-
-English:
-theorem IsSuccPrelimit.add_one_lt
-  statement: [Add α] [One α] [SuccAddOrder α]
-  proof: by
-  rw [← succ_eq_add_one]
-  exact hx.succ_lt hy
-
-中文:
-定理 IsSuccPrelimit.add_one_lt
-  结论: [加法 α] [幺 α] [SuccAdd序 α]
-  证明: by
-  rw [← succ_eq_add_one]
-  exact hx.succ_lt hy
-
-Depends on / 依赖: hx.succ_lt, succ_eq_add_one, succ_lt
+/-
+**Order.IsSuccPrelimit.add_one_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsSuccPrelimi
+t`。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : Add α] [inst_
+2 : One α] [SuccAddOrder α],   Order.IsSuccPrelimit x → y < x → y + 1 < x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.IsSuccPrelimit.succ_lt`：∀ {α : Type u_1} {a b : α} [inst : Partial
+Order α] [inst_1 : SuccOrder α],   Order.IsSuccPrelimit b → a < b → Order.succ a
+ < b
 -/
 theorem IsSuccPrelimit.add_one_lt [Add α] [One α] [SuccAddOrder α]
     (hx : IsSuccPrelimit x) (hy : y < x) : y + 1 < x := by
   rw [← succ_eq_add_one]
   exact hx.succ_lt hy
-
-/--
-theorem `IsPredPrelimit.lt_sub_one` / 定理 `IsPredPrelimit.lt_sub_one`
-
-English:
-theorem IsPredPrelimit.lt_sub_one
-  statement: [Sub α] [One α] [PredSubOrder α]
-  proof: by
-  rw [← pred_eq_sub_one]
-  exact hx.lt_pred hy
-
-中文:
-定理 IsPredPrelimit.lt_sub_one
-  结论: [减法 α] [幺 α] [PredSub序 α]
-  证明: by
-  rw [← pred_eq_sub_one]
-  exact hx.lt_pred hy
-
-Depends on / 依赖: hx.lt_pred, lt_pred, pred_eq_sub_one
+/-
+**Order.IsPredPrelimit.lt_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsPredPrelimi
+t`。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : Sub α] [inst_
+2 : One α] [PredSubOrder α],   Order.IsPredPrelimit x → x < y → x < y - 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Order.IsPredPrelimit.lt_pred`：∀ {α : Type u_1} {a b : α} [inst : Partial
+Order α] [inst_1 : PredOrder α],   Order.IsPredPrelimit b → b < a → b < Order.pr
+ed a
 -/
 theorem IsPredPrelimit.lt_sub_one [Sub α] [One α] [PredSubOrder α]
     (hx : IsPredPrelimit x) (hy : x < y) : x < y - 1 := by
   rw [← pred_eq_sub_one]
   exact hx.lt_pred hy
-
-/--
-theorem `IsSuccLimit.add_one_lt` / 定理 `IsSuccLimit.add_one_lt`
-
-English:
-theorem IsSuccLimit.add_one_lt
-  statement: [Add α] [One α] [SuccAddOrder α]
-  proof: hx.isSuccPrelimit.add_one_lt hy
-
-中文:
-定理 是SuccLimit.add_one_lt
-  结论: [加法 α] [幺 α] [SuccAdd序 α]
-  证明: hx.isSuccPrelimit.add_one_lt hy
-
-Depends on / 依赖: add_one_lt, hx.isSuccPrelimit.add_one_lt, isSuccPrelimit
+/-
+**Order.IsSuccLimit.add_one_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsSuccLimit`。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : Add α] [inst_
+2 : One α] [SuccAddOrder α],   Order.IsSuccLimit x → y < x → y + 1 < x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsSuccPrelimit.add_one_lt`：∀ {α : Type u_1} {x y : α} [inst : Part
+ialOrder α] [inst_1 : Add α] [inst_2 : One α] [SuccAddOrder α],   Order.IsSuccPr
+elimit x → y < x → y …
+· 使用定理 `Order.IsSuccLimit.isSuccPrelimit`：∀ {α : Type u_1} [inst : Preorder α] {
+a : α}, Order.IsSuccLimit a → Order.IsSuccPrelimit a
 -/
 theorem IsSuccLimit.add_one_lt [Add α] [One α] [SuccAddOrder α]
     (hx : IsSuccLimit x) (hy : y < x) : y + 1 < x :=
   hx.isSuccPrelimit.add_one_lt hy
-
-/--
-theorem `IsPredLimit.lt_sub_one` / 定理 `IsPredLimit.lt_sub_one`
-
-English:
-theorem IsPredLimit.lt_sub_one
-  statement: [Sub α] [One α] [PredSubOrder α]
-  proof: hx.isPredPrelimit.lt_sub_one hy
-
-中文:
-定理 是PredLimit.lt_sub_one
-  结论: [减法 α] [幺 α] [PredSub序 α]
-  证明: hx.isPredPrelimit.lt_sub_one hy
-
-Depends on / 依赖: hx.isPredPrelimit.lt_sub_one, isPredPrelimit, lt_sub_one
+/-
+**Order.IsPredLimit.lt_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsPredLimit`。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : Sub α] [inst_
+2 : One α] [PredSubOrder α],   Order.IsPredLimit x → x < y → x < y - 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsPredPrelimit.lt_sub_one`：∀ {α : Type u_1} {x y : α} [inst : Part
+ialOrder α] [inst_1 : Sub α] [inst_2 : One α] [PredSubOrder α],   Order.IsPredPr
+elimit x → x < y → x …
+· 使用定理 `Order.IsPredLimit.isPredPrelimit`：∀ {α : Type u_1} [inst : Preorder α] {
+a : α}, Order.IsPredLimit a → Order.IsPredPrelimit a
 -/
 theorem IsPredLimit.lt_sub_one [Sub α] [One α] [PredSubOrder α]
     (hx : IsPredLimit x) (hy : x < y) : x < y - 1 :=
   hx.isPredPrelimit.lt_sub_one hy
-
-/--
-theorem `IsSuccPrelimit.add_natCast_lt` / 定理 `IsSuccPrelimit.add_natCast_lt`
-
-English:
-theorem IsSuccPrelimit.add_natCast_lt
-  statement: [AddMonoidWithOne α] [SuccAddOrder α]
-
-中文:
-定理 IsSuccPrelimit.add_natCast_lt
-  结论: [加法带幺幺半群 α] [SuccAdd序 α]
+/-
+**Order.IsSuccPrelimit.add_natCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsSuccPre
+limit`。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : AddMonoidWith
+One α] [SuccAddOrder α],   Order.IsSuccPrelimit x → y < x → ∀ (n : ℕ), y + ↑n < 
+x
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsSuccPrelimit.add_natCast_lt [AddMonoidWithOne α] [SuccAddOrder α]
-    (hx : IsSuccPrelimit x) (hy : y < x) : forall n : Nat, y + n < x
+    (hx : IsSuccPrelimit x) (hy : y < x) : ∀ n : ℕ, y + n < x
   | 0 => by simpa
   | n + 1 => by
-    rw [Nat.cast_add_one]; rw [← add_assoc]
+    rw [Nat.cast_add_one, ← add_assoc]
     exact hx.add_one_lt (hx.add_natCast_lt hy n)
-
-/--
-theorem `IsPredPrelimit.lt_sub_natCast` / 定理 `IsPredPrelimit.lt_sub_natCast`
-
-English:
-theorem IsPredPrelimit.lt_sub_natCast
-  statement: [AddCommGroupWithOne α] [PredSubOrder α]
-
-中文:
-定理 IsPredPrelimit.lt_sub_natCast
-  结论: [加法交换带幺群 α] [PredSub序 α]
+/-
+**Order.IsPredPrelimit.lt_sub_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsPredPre
+limit`。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : AddCommGroupW
+ithOne α] [PredSubOrder α],   Order.IsPredPrelimit x → x < y → ∀ (n : ℕ), x < y 
+- ↑n
+参数：n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsPredPrelimit.lt_sub_natCast [AddCommGroupWithOne α] [PredSubOrder α]
-    (hx : IsPredPrelimit x) (hy : x < y) : forall n : Nat, x < y - n
+    (hx : IsPredPrelimit x) (hy : x < y) : ∀ n : ℕ, x < y - n
   | 0 => by simpa
   | n + 1 => by
-    rw [Nat.cast_add_one]; rw [← sub_sub]
+    rw [Nat.cast_add_one, ← sub_sub]
     exact hx.lt_sub_one (hx.lt_sub_natCast hy n)
-
-/--
-theorem `IsSuccLimit.add_natCast_lt` / 定理 `IsSuccLimit.add_natCast_lt`
-
-English:
-theorem IsSuccLimit.add_natCast_lt
-  statement: [AddMonoidWithOne α] [SuccAddOrder α]
-  proof: hx.isSuccPrelimit.add_natCast_lt hy
-
-中文:
-定理 是SuccLimit.add_natCast_lt
-  结论: [加法带幺幺半群 α] [SuccAdd序 α]
-  证明: hx.isSuccPrelimit.add_natCast_lt hy
-
-Depends on / 依赖: add_natCast_lt, hx.isSuccPrelimit.add_natCast_lt, isSuccPrelimit
+/-
+**Order.IsSuccLimit.add_natCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsSuccLimit`
+。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : AddMonoidWith
+One α] [SuccAddOrder α],   Order.IsSuccLimit x → y < x → ∀ (n : ℕ), y + ↑n < x
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsSuccPrelimit.add_natCast_lt`：∀ {α : Type u_1} {x y : α} [inst : 
+PartialOrder α] [inst_1 : AddMonoidWithOne α] [SuccAddOrder α],   Order.IsSuccPr
+elimit x → y < x → ∀ (n :…
+· 使用定理 `Order.IsSuccLimit.isSuccPrelimit`：∀ {α : Type u_1} [inst : Preorder α] {
+a : α}, Order.IsSuccLimit a → Order.IsSuccPrelimit a
 -/
 theorem IsSuccLimit.add_natCast_lt [AddMonoidWithOne α] [SuccAddOrder α]
-    (hx : IsSuccLimit x) (hy : y < x) : forall n : Nat, y + n < x :=
+    (hx : IsSuccLimit x) (hy : y < x) : ∀ n : ℕ, y + n < x :=
   hx.isSuccPrelimit.add_natCast_lt hy
-
-/--
-theorem `IsPredLimit.lt_sub_natCast` / 定理 `IsPredLimit.lt_sub_natCast`
-
-English:
-theorem IsPredLimit.lt_sub_natCast
-  statement: [AddCommGroupWithOne α] [PredSubOrder α]
-  proof: hx.isPredPrelimit.lt_sub_natCast hy
-
-中文:
-定理 是PredLimit.lt_sub_natCast
-  结论: [加法交换带幺群 α] [PredSub序 α]
-  证明: hx.isPredPrelimit.lt_sub_natCast hy
-
-Depends on / 依赖: hx.isPredPrelimit.lt_sub_natCast, isPredPrelimit, lt_sub_natCast
+/-
+**Order.IsPredLimit.lt_sub_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsPredLimit`
+。
+形式化陈述：∀ {α : Type u_1} {x y : α} [inst : PartialOrder α] [inst_1 : AddCommGroupW
+ithOne α] [PredSubOrder α],   Order.IsPredLimit x → x < y → ∀ (n : ℕ), x < y - ↑
+n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsPredPrelimit.lt_sub_natCast`：∀ {α : Type u_1} {x y : α} [inst : 
+PartialOrder α] [inst_1 : AddCommGroupWithOne α] [PredSubOrder α],   Order.IsPre
+dPrelimit x → x < y → ∀ (…
+· 使用定理 `Order.IsPredLimit.isPredPrelimit`：∀ {α : Type u_1} [inst : Preorder α] {
+a : α}, Order.IsPredLimit a → Order.IsPredPrelimit a
 -/
 theorem IsPredLimit.lt_sub_natCast [AddCommGroupWithOne α] [PredSubOrder α]
-    (hx : IsPredLimit x) (hy : x < y) : forall n : Nat, x < y - n :=
+    (hx : IsPredLimit x) (hy : x < y) : ∀ n : ℕ, x < y - n :=
   hx.isPredPrelimit.lt_sub_natCast hy
-
-/--
-theorem `IsSuccLimit.natCast_lt` / 定理 `IsSuccLimit.natCast_lt`
-
-English:
-theorem IsSuccLimit.natCast_lt
-  statement: [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α]
-  proof: by
-  simpa using hx.add_natCast_lt hx.pos
-
-中文:
-定理 是SuccLimit.natCast_lt
-  结论: [加法带幺幺半群 α] [SuccAdd序 α] [是BotZero类 α]
-  证明: by
-  simpa using hx.add_natCast_lt hx.pos
-
-Depends on / 依赖: add_natCast_lt, hx.add_natCast_lt, hx.pos
+/-
+**Order.IsSuccLimit.natCast_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order.IsSuccLimit`。
+形式化陈述：∀ {α : Type u_1} {x : α} [inst : PartialOrder α] [inst_1 : AddMonoidWithOn
+e α] [SuccAddOrder α] [IsBotZeroClass α],   Order.IsSuccLimit x → ∀ (n : ℕ), ↑n 
+< x
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Order.IsSuccLimit.add_natCast_lt`：∀ {α : Type u_1} {x y : α} [inst : Par
+tialOrder α] [inst_1 : AddMonoidWithOne α] [SuccAddOrder α],   Order.IsSuccLimit
+ x → y < x → ∀ (n : ℕ)…
+· 使用定理 `Order.IsSuccLimit.pos`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [ins
+t_1 : Zero α] [IsBotZeroClass α], Order.IsSuccLimit a → 0 < a
 -/
 theorem IsSuccLimit.natCast_lt [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α]
-    (hx : IsSuccLimit x) : forall n : Nat, n < x := by
+    (hx : IsSuccLimit x) : ∀ n : ℕ, n < x := by
   simpa using hx.add_natCast_lt hx.pos
-
-/--
-theorem `not_isSuccLimit_natCast` / 定理 `not_isSuccLimit_natCast`
-
-English:
-theorem not_isSuccLimit_natCast
-  given: [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α] (n : Nat)
-  proof: fun h => (h.natCast_lt n).false
-
-@[simp]
-
-中文:
-定理 not_isSuccLimit_natCast
-  条件: [加法带幺幺半群 α] [SuccAdd序 α] [是BotZero类 α] (n : 自然数)
-  证明: fun h => (h.natCast_lt n).false
-
-@[simp]
-
-Depends on / 依赖: h.natCast_lt, natCast_lt
+/-
+**Order.not_isSuccLimit_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：not_isSuccLimit_natCast [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroCl
+ass α] (n : Nat) : ¬ IsSuccLimit (n : α)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
+· 使用定理 `Order.IsSuccLimit.natCast_lt`：∀ {α : Type u_1} {x : α} [inst : PartialOr
+der α] [inst_1 : AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α],   Orde
+r.IsSuccLimit x → …
 -/
-theorem not_isSuccLimit_natCast [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α] (n : Nat) :
+theorem not_isSuccLimit_natCast [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α] (n : ℕ) :
     ¬ IsSuccLimit (n : α) :=
-  fun h => (h.natCast_lt n).false
+  fun h ↦ (h.natCast_lt n).false
 
 @[simp]
-/--
-theorem `not_isSuccPrelimit_add_one` / 定理 `not_isSuccPrelimit_add_one`
-
-English:
-theorem not_isSuccPrelimit_add_one
-  given: (a : α) [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
-  proof: succ_eq_add_one a ▸ not_isSuccPrelimit_succ a
-
-@[simp]
-
-中文:
-定理 not_isSuccPrelimit_add_one
-  条件: (a : α) [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
-  证明: succ_eq_add_one a ▸ not_isSuccPrelimit_succ a
-
-@[simp]
-
-Depends on / 依赖: not_isSuccPrelimit_succ, succ_eq_add_one
+/-
+**Order.not_isSuccPrelimit_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：not_isSuccPrelimit_add_one (a : α) [Add α] [One α] [SuccAddOrder α] [NoMax
+Order α] : ¬ IsSuccPrelimit (a + 1)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.not_isSuccPrelimit_succ`：not_isSuccPrelimit_succ (a : α) : ¬IsSucc
+Prelimit (succ a)
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
 -/
 theorem not_isSuccPrelimit_add_one (a : α) [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α] :
     ¬ IsSuccPrelimit (a + 1) :=
   succ_eq_add_one a ▸ not_isSuccPrelimit_succ a
 
 @[simp]
-/--
-theorem `not_isSuccLimit_add_one` / 定理 `not_isSuccLimit_add_one`
-
-English:
-theorem not_isSuccLimit_add_one
-  given: (a : α) [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α]
-  proof: succ_eq_add_one a ▸ not_isSuccLimit_succ a
-
-@[simp]
-
-中文:
-定理 not_isSuccLimit_add_one
-  条件: (a : α) [加法 α] [幺 α] [SuccAdd序 α] [NoMax序 α]
-  证明: succ_eq_add_one a ▸ not_isSuccLimit_succ a
-
-@[simp]
-
-Depends on / 依赖: not_isSuccLimit_succ, succ_eq_add_one
+/-
+**Order.not_isSuccLimit_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：not_isSuccLimit_add_one (a : α) [Add α] [One α] [SuccAddOrder α] [NoMaxOrd
+er α] : ¬ IsSuccLimit (a + 1)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.not_isSuccLimit_succ`：not_isSuccLimit_succ (a : α) : ¬IsSuccLimit 
+(succ a)
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
 -/
 theorem not_isSuccLimit_add_one (a : α) [Add α] [One α] [SuccAddOrder α] [NoMaxOrder α] :
     ¬ IsSuccLimit (a + 1) :=
   succ_eq_add_one a ▸ not_isSuccLimit_succ a
 
 @[simp]
-/--
-theorem `succ_eq_zero` / 定理 `succ_eq_zero`
-
-English:
-theorem succ_eq_zero
-  statement: [AddZeroClass α] [OrderBot α] [IsBotZeroClass α] [One α] [NoMaxOrder α]
-  proof: by
-  cases a
-  · simp [bot_eq_zero]
-  · rename_i a
-    simp only [WithBot.succ_coe, WithBot.coe_ne_bot, iff_false, succ_eq_add_one]
-    by_contra h
-    simpa [h] using max_of_succ_le (a := a)
-
-中文:
-定理 succ_eq_zero
-  结论: [加法零类 α] [有底序 α] [是BotZero类 α] [幺 α] [NoMax序 α]
-  证明: by
-  cases a
-  · simp [bot_eq_zero]
-  · rename_i a
-    simp only [WithBot.succ_coe, WithBot.coe_ne_bot, iff_false, succ_eq_add_one]
-    by_contra h
-    simpa [h] using max_of_succ_le (a := a)
-
-Depends on / 依赖: WithBot, WithBot.coe_ne_bot, WithBot.succ_coe, bot_eq_zero, coe_ne_bot, iff_false, max_of_succ_le, rename_i, succ_coe, succ_eq_add_one
+/-
+**Order.succ_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：succ_eq_zero [AddZeroClass α] [OrderBot α] [IsBotZeroClass α] [One α] [NoM
+axOrder α] [SuccAddOrder α] {a : WithBot α} : WithBot.succ a = 0 ↔ a = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `bot_eq_zero`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero α] 
+[IsBotZeroClass α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Order.max_of_succ_le`：max_of_succ_le {a : α} : succ a <= a -> IsMax a
 -/
 theorem succ_eq_zero [AddZeroClass α] [OrderBot α] [IsBotZeroClass α] [One α] [NoMaxOrder α]
     [SuccAddOrder α] {a : WithBot α} : WithBot.succ a = 0 ↔ a = ⊥ := by
@@ -902,123 +672,83 @@ section Add
 
 variable [Add α] [One α] [SuccAddOrder α]
 
-/--
-theorem `le_of_lt_add_one` / 定理 `le_of_lt_add_one`
-
-English:
-theorem le_of_lt_add_one
-  given: (h : x < y + 1)
-  statement: x <= y
-  proof: by
+/-
+**Order.le_of_lt_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：le_of_lt_add_one (h : x < y + 1) : x <= y
+参数：h : x < y + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.le_of_lt_succ`：le_of_lt_succ {a b : α} : a < succ b -> a <= b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+-/
+theorem le_of_lt_add_one (h : x < y + 1) : x ≤ y := by
   rw [← succ_eq_add_one] at h
   exact le_of_lt_succ h
-
-中文:
-定理 le_of_lt_add_one
-  条件: (h : x < y + 1)
-  结论: x <= y
-  证明: by
-  rw [← succ_eq_add_one] at h
-  exact le_of_lt_succ h
-
-Depends on / 依赖: le_of_lt_succ, succ_eq_add_one
+/-
+**Order.lt_add_one_iff_of_not_isMax** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：lt_add_one_iff_of_not_isMax (hy : ¬ IsMax y) : x < y + 1 ↔ x <= y
+参数：hy : ¬ IsMax y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.lt_succ_iff_of_not_isMax`：lt_succ_iff_of_not_isMax (ha : ¬IsMax a)
+ : b < succ a ↔ b <= a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_of_lt_add_one (h : x < y + 1) : x <= y := by
-  rw [← succ_eq_add_one] at h
-  exact le_of_lt_succ h
-
-/--
-theorem `lt_add_one_iff_of_not_isMax` / 定理 `lt_add_one_iff_of_not_isMax`
-
-English:
-theorem lt_add_one_iff_of_not_isMax
-  given: (hy : ¬ IsMax y)
-  statement: x < y + 1 ↔ x <= y
-  proof: by
-  rw [← succ_eq_add_one]; rw [lt_succ_iff_of_not_isMax hy]
-
-中文:
-定理 lt_add_one_iff_of_not_isMax
-  条件: (hy : ¬ IsMax y)
-  结论: x < y + 1 ↔ x <= y
-  证明: by
-  rw [← succ_eq_add_one]; rw [lt_succ_iff_of_not_isMax hy]
-
-Depends on / 依赖: lt_succ_iff_of_not_isMax, succ_eq_add_one
+theorem lt_add_one_iff_of_not_isMax (hy : ¬ IsMax y) : x < y + 1 ↔ x ≤ y := by
+  rw [← succ_eq_add_one, lt_succ_iff_of_not_isMax hy]
+/-
+**Order.lt_add_one_iff_of_not_isMax'** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：lt_add_one_iff_of_not_isMax' (hx : ¬ IsMax x) : x < y + 1 ↔ x <= y
+参数：hx : ¬ IsMax x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `Order.lt_succ_iff_of_not_isMax'`：lt_succ_iff_of_not_isMax' (hb : ¬IsMax 
+b) : b < succ a ↔ b <= a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lt_add_one_iff_of_not_isMax (hy : ¬ IsMax y) : x < y + 1 ↔ x <= y := by
-  rw [← succ_eq_add_one]; rw [lt_succ_iff_of_not_isMax hy]
-
-/--
-theorem `lt_add_one_iff_of_not_isMax'` / 定理 `lt_add_one_iff_of_not_isMax'`
-
-English:
-theorem lt_add_one_iff_of_not_isMax'
-  given: (hx : ¬ IsMax x)
-  statement: x < y + 1 ↔ x <= y
-  proof: by
-  rw [← succ_eq_add_one]; rw [lt_succ_iff_of_not_isMax' hx]
+theorem lt_add_one_iff_of_not_isMax' (hx : ¬ IsMax x) : x < y + 1 ↔ x ≤ y := by
+  rw [← succ_eq_add_one, lt_succ_iff_of_not_isMax' hx]
 
 @[simp]
-
-中文:
-定理 lt_add_one_iff_of_not_isMax'
-  条件: (hx : ¬ IsMax x)
-  结论: x < y + 1 ↔ x <= y
-  证明: by
-  rw [← succ_eq_add_one]; rw [lt_succ_iff_of_not_isMax' hx]
-
-@[simp]
-
-Depends on / 依赖: lt_succ_iff_of_not_isMax, succ_eq_add_one
+/-
+**Order.lt_add_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：lt_add_one_iff [NoMaxOrder α] : x < y + 1 ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.lt_add_one_iff_of_not_isMax`：lt_add_one_iff_of_not_isMax (hy : ¬ I
+sMax y) : x < y + 1 ↔ x <= y
+· 使用定理 `not_isMax`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxOrder α] (a : α), 
+¬IsMax a
 -/
-theorem lt_add_one_iff_of_not_isMax' (hx : ¬ IsMax x) : x < y + 1 ↔ x <= y := by
-  rw [← succ_eq_add_one]; rw [lt_succ_iff_of_not_isMax' hx]
-
-@[simp]
-/--
-theorem `lt_add_one_iff` / 定理 `lt_add_one_iff`
-
-English:
-theorem lt_add_one_iff
-  given: [NoMaxOrder α]
-  statement: x < y + 1 ↔ x <= y
-  proof: lt_add_one_iff_of_not_isMax (not_isMax y)
-
-@[simp]
-
-中文:
-定理 lt_add_one_iff
-  条件: [NoMax序 α]
-  结论: x < y + 1 ↔ x <= y
-  证明: lt_add_one_iff_of_not_isMax (not_isMax y)
-
-@[simp]
-
-Depends on / 依赖: lt_add_one_iff_of_not_isMax, not_isMax
--/
-theorem lt_add_one_iff [NoMaxOrder α] : x < y + 1 ↔ x <= y :=
+theorem lt_add_one_iff [NoMaxOrder α] : x < y + 1 ↔ x ≤ y :=
   lt_add_one_iff_of_not_isMax (not_isMax y)
 
 @[simp]
-/--
-theorem `add_one_inj` / 定理 `add_one_inj`
-
-English:
-theorem add_one_inj
-  given: [NoMaxOrder α]
-  statement: x + 1 = y + 1 ↔ x = y
-  proof: by
-  simp [← succ_eq_add_one]
-
-中文:
-定理 add_one_inj
-  条件: [NoMax序 α]
-  结论: x + 1 = y + 1 ↔ x = y
-  证明: by
-  simp [← succ_eq_add_one]
-
-Depends on / 依赖: succ_eq_add_one
+/-
+**Order.add_one_inj** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：add_one_inj [NoMaxOrder α] : x + 1 = y + 1 ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem add_one_inj [NoMaxOrder α] : x + 1 = y + 1 ↔ x = y := by
   simp [← succ_eq_add_one]
@@ -1026,173 +756,144 @@ theorem add_one_inj [NoMaxOrder α] : x + 1 = y + 1 ↔ x = y := by
 end Add
 
 @[simp]
-/--
-theorem `lt_two_iff` / 定理 `lt_two_iff`
-
-English:
-theorem lt_two_iff
-  given: [AddMonoidWithOne α] [SuccAddOrder α] [NoMaxOrder α]
-  statement: x < 2 ↔ x <= 1
-  proof: by
-  rw [← one_add_one_eq_two]; rw [lt_add_one_iff]
-
-中文:
-定理 lt_two_iff
-  条件: [加法带幺幺半群 α] [SuccAdd序 α] [NoMax序 α]
-  结论: x < 2 ↔ x <= 1
-  证明: by
-  rw [← one_add_one_eq_two]; rw [lt_add_one_iff]
-
-Depends on / 依赖: lt_add_one_iff, one_add_one_eq_two
+/-
+**Order.lt_two_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：lt_two_iff [AddMonoidWithOne α] [SuccAddOrder α] [NoMaxOrder α] : x < 2 ↔ 
+x <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用定理 `Order.lt_add_one_iff`：lt_add_one_iff [NoMaxOrder α] : x < y + 1 ↔ x <= y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lt_two_iff [AddMonoidWithOne α] [SuccAddOrder α] [NoMaxOrder α] : x < 2 ↔ x <= 1 := by
-  rw [← one_add_one_eq_two]; rw [lt_add_one_iff]
+theorem lt_two_iff [AddMonoidWithOne α] [SuccAddOrder α] [NoMaxOrder α] : x < 2 ↔ x ≤ 1 := by
+  rw [← one_add_one_eq_two, lt_add_one_iff]
 
 section AddMonoidWithOne
 variable [AddMonoidWithOne α] [SuccAddOrder α] [IsBotZeroClass α] [NeZero (1 : α)]
 
 @[simp]
-/--
-theorem `lt_one_iff` / 定理 `lt_one_iff`
-
-English:
-theorem lt_one_iff
-  statement: x < 1 ↔ x = 0
-  proof: by
-  simpa using (one_le_iff_ne_zero (x := x)).not
-
-中文:
-定理 lt_one_iff
-  结论: x < 1 ↔ x = 0
-  证明: by
-  simpa using (one_le_iff_ne_zero (x := x)).not
-
-Depends on / 依赖: one_le_iff_ne_zero
+/-
+**Order.lt_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：lt_one_iff : x < 1 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Order.one_le_iff_ne_zero`：one_le_iff_ne_zero [AddMonoidWithOne α] [NeZer
+o (1 : α)] [SuccAddOrder α] [IsBotZeroClass α] : 1 <= x ↔ x != 0
 -/
 theorem lt_one_iff : x < 1 ↔ x = 0 := by
   simpa using (one_le_iff_ne_zero (x := x)).not
-
-/--
-theorem `le_one_iff` / 定理 `le_one_iff`
-
-English:
-theorem le_one_iff
-  statement: x <= 1 ↔ x = 0 ∨ x = 1
-  proof: by
-  rw [le_iff_lt_or_eq]; rw [lt_one_iff]
-
-@[simp]
-
-中文:
-定理 le_one_iff
-  结论: x <= 1 ↔ x = 0 ∨ x = 1
-  证明: by
-  rw [le_iff_lt_or_eq]; rw [lt_one_iff]
-
-@[simp]
-
-Depends on / 依赖: le_iff_lt_or_eq, lt_one_iff
+/-
+**Order.le_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：le_one_iff : x <= 1 ↔ x = 0 ∨ x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_iff_lt_or_eq`：le_iff_lt_or_eq : a <= b ↔ a < b ∨ a = b
+· 使用定理 `Order.lt_one_iff`：lt_one_iff : x < 1 ↔ x = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_one_iff : x <= 1 ↔ x = 0 ∨ x = 1 := by
-  rw [le_iff_lt_or_eq]; rw [lt_one_iff]
+theorem le_one_iff : x ≤ 1 ↔ x = 0 ∨ x = 1 := by
+  rw [le_iff_lt_or_eq, lt_one_iff]
 
 @[simp]
-/--
-theorem `Iio_one` / 定理 `Iio_one`
-
-English:
-theorem Iio_one
-  statement: Set.Iio (1 : α) = {0}
-  proof: by
-  ext; simp
-
-中文:
-定理 Iio_one
-  结论: 集合.左无界右开区间 (1 : α) = {0}
-  证明: by
-  ext; simp
+/-
+**Order.Iio_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：Iio_one : Set.Iio (1 : α) = {0}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Iio_one : Set.Iio (1 : α) = {0} := by
   ext; simp
-
-/--
-theorem `Iic_one` / 定理 `Iic_one`
-
-English:
-theorem Iic_one
-  statement: Set.Iic (1 : α) = {0, 1}
-  proof: by
-  ext; simp [le_one_iff]
-
-中文:
-定理 Iic_one
-  结论: 集合.左无界右闭区间 (1 : α) = {0, 1}
-  证明: by
-  ext; simp [le_one_iff]
-
-Depends on / 依赖: le_one_iff
+/-
+**Order.Iic_one** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：Iic_one : Set.Iic (1 : α) = {0, 1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Iic_one : Set.Iic (1 : α) = {0, 1} := by
   ext; simp [le_one_iff]
 
 variable [NoMaxOrder α]
-
-/--
-theorem `le_two_iff` / 定理 `le_two_iff`
-
-English:
-theorem le_two_iff
-  statement: x <= 2 ↔ x = 0 ∨ x = 1 ∨ x = 2
-  proof: by
-  rw [le_iff_lt_or_eq]; rw [lt_two_iff]; rw [le_one_iff]; rw [or_assoc]
-
-中文:
-定理 le_two_iff
-  结论: x <= 2 ↔ x = 0 ∨ x = 1 ∨ x = 2
-  证明: by
-  rw [le_iff_lt_or_eq]; rw [lt_two_iff]; rw [le_one_iff]; rw [or_assoc]
-
-Depends on / 依赖: le_iff_lt_or_eq, le_one_iff, lt_two_iff, or_assoc
+/-
+**Order.le_two_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：le_two_iff : x <= 2 ↔ x = 0 ∨ x = 1 ∨ x = 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_iff_lt_or_eq`：le_iff_lt_or_eq : a <= b ↔ a < b ∨ a = b
+· 使用定理 `Order.lt_two_iff`：lt_two_iff [AddMonoidWithOne α] [SuccAddOrder α] [NoMa
+xOrder α] : x < 2 ↔ x <= 1
+· 使用定理 `Order.le_one_iff`：le_one_iff : x <= 1 ↔ x = 0 ∨ x = 1
+· 使用定理 `or_assoc`：∀ {a b c : Prop}, (a ∨ b) ∨ c ↔ a ∨ b ∨ c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_two_iff : x <= 2 ↔ x = 0 ∨ x = 1 ∨ x = 2 := by
-  rw [le_iff_lt_or_eq]; rw [lt_two_iff]; rw [le_one_iff]; rw [or_assoc]
-
-/--
-theorem `Iio_two` / 定理 `Iio_two`
-
-English:
-theorem Iio_two
-  statement: Set.Iio (2 : α) = {0, 1}
-  proof: by
-  ext; simp [le_one_iff]
-
-中文:
-定理 Iio_two
-  结论: 集合.左无界右开区间 (2 : α) = {0, 1}
-  证明: by
-  ext; simp [le_one_iff]
-
-Depends on / 依赖: le_one_iff
+theorem le_two_iff : x ≤ 2 ↔ x = 0 ∨ x = 1 ∨ x = 2 := by
+  rw [le_iff_lt_or_eq, lt_two_iff, le_one_iff, or_assoc]
+/-
+**Order.Iio_two** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：Iio_two : Set.Iio (2 : α) = {0, 1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Iio_two : Set.Iio (2 : α) = {0, 1} := by
   ext; simp [le_one_iff]
-
-/--
-theorem `Iic_two` / 定理 `Iic_two`
-
-English:
-theorem Iic_two
-  statement: Set.Iic (2 : α) = {0, 1, 2}
-  proof: by
-  ext; simp [le_two_iff]
-
-中文:
-定理 Iic_two
-  结论: 集合.左无界右闭区间 (2 : α) = {0, 1, 2}
-  证明: by
-  ext; simp [le_two_iff]
-
-Depends on / 依赖: le_two_iff
+/-
+**Order.Iic_two** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：Iic_two : Set.Iic (2 : α) = {0, 1, 2}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Iic_two : Set.Iic (2 : α) = {0, 1, 2} := by
   ext; simp [le_two_iff]
@@ -1203,100 +904,75 @@ section Sub
 
 variable [Sub α] [One α] [PredSubOrder α]
 
-/--
-theorem `le_of_sub_one_lt` / 定理 `le_of_sub_one_lt`
-
-English:
-theorem le_of_sub_one_lt
-  given: (h : x - 1 < y)
-  statement: x <= y
-  proof: by
+/-
+**Order.le_of_sub_one_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：le_of_sub_one_lt (h : x - 1 < y) : x <= y
+参数：h : x - 1 < y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.le_of_pred_lt`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : P
+redOrder α] {a b : α}, Order.pred b < a → b ≤ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+-/
+theorem le_of_sub_one_lt (h : x - 1 < y) : x ≤ y := by
   rw [← pred_eq_sub_one] at h
   exact le_of_pred_lt h
-
-中文:
-定理 le_of_sub_one_lt
-  条件: (h : x - 1 < y)
-  结论: x <= y
-  证明: by
-  rw [← pred_eq_sub_one] at h
-  exact le_of_pred_lt h
-
-Depends on / 依赖: le_of_pred_lt, pred_eq_sub_one
+/-
+**Order.sub_one_lt_iff_of_not_isMin** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：sub_one_lt_iff_of_not_isMin (hx : ¬ IsMin x) : x - 1 < y ↔ x <= y
+参数：hx : ¬ IsMin x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `Order.pred_lt_iff_of_not_isMin`：∀ {α : Type u_1} [inst : LinearOrder α] 
+[inst_1 : PredOrder α] {a b : α}, ¬IsMin a → (Order.pred a < b ↔ a ≤ b)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_of_sub_one_lt (h : x - 1 < y) : x <= y := by
-  rw [← pred_eq_sub_one] at h
-  exact le_of_pred_lt h
-
-/--
-theorem `sub_one_lt_iff_of_not_isMin` / 定理 `sub_one_lt_iff_of_not_isMin`
-
-English:
-theorem sub_one_lt_iff_of_not_isMin
-  given: (hx : ¬ IsMin x)
-  statement: x - 1 < y ↔ x <= y
-  proof: by
-  rw [← pred_eq_sub_one]; rw [pred_lt_iff_of_not_isMin hx]
+theorem sub_one_lt_iff_of_not_isMin (hx : ¬ IsMin x) : x - 1 < y ↔ x ≤ y := by
+  rw [← pred_eq_sub_one, pred_lt_iff_of_not_isMin hx]
 
 @[simp]
-
-中文:
-定理 sub_one_lt_iff_of_not_isMin
-  条件: (hx : ¬ IsMin x)
-  结论: x - 1 < y ↔ x <= y
-  证明: by
-  rw [← pred_eq_sub_one]; rw [pred_lt_iff_of_not_isMin hx]
-
-@[simp]
-
-Depends on / 依赖: pred_eq_sub_one, pred_lt_iff_of_not_isMin
+/-
+**Order.sub_one_lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：sub_one_lt_iff [NoMinOrder α] : x - 1 < y ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.sub_one_lt_iff_of_not_isMin`：sub_one_lt_iff_of_not_isMin (hx : ¬ I
+sMin x) : x - 1 < y ↔ x <= y
+· 使用定理 `not_isMin`：not_isMin [NoMinOrder α] (a : α) : ¬IsMin a
 -/
-theorem sub_one_lt_iff_of_not_isMin (hx : ¬ IsMin x) : x - 1 < y ↔ x <= y := by
-  rw [← pred_eq_sub_one]; rw [pred_lt_iff_of_not_isMin hx]
-
-@[simp]
-/--
-theorem `sub_one_lt_iff` / 定理 `sub_one_lt_iff`
-
-English:
-theorem sub_one_lt_iff
-  given: [NoMinOrder α]
-  statement: x - 1 < y ↔ x <= y
-  proof: sub_one_lt_iff_of_not_isMin (not_isMin x)
-
-中文:
-定理 sub_one_lt_iff
-  条件: [NoMin序 α]
-  结论: x - 1 < y ↔ x <= y
-  证明: sub_one_lt_iff_of_not_isMin (not_isMin x)
-
-Depends on / 依赖: not_isMin, sub_one_lt_iff_of_not_isMin
--/
-theorem sub_one_lt_iff [NoMinOrder α] : x - 1 < y ↔ x <= y :=
+theorem sub_one_lt_iff [NoMinOrder α] : x - 1 < y ↔ x ≤ y :=
   sub_one_lt_iff_of_not_isMin (not_isMin x)
 
 end Sub
 
-/--
-theorem `lt_one_iff_nonpos` / 定理 `lt_one_iff_nonpos`
-
-English:
-theorem lt_one_iff_nonpos
-  statement: [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)]
-  proof: by
-  rw [← lt_succ_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
-
-中文:
-定理 lt_one_iff_nonpos
-  结论: [加法带幺幺半群 α] [ZeroLEOne类 α] [NeZero (1 : α)]
-  证明: by
-  rw [← lt_succ_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
-
-Depends on / 依赖: lt_succ_iff_of_not_isMax, not_isMax_zero, succ_eq_add_one, zero_add
+/-
+**Order.lt_one_iff_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：lt_one_iff_nonpos [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)]
+ [SuccAddOrder α] : x < 1 ↔ x <= 0
+参数：1 : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.lt_succ_iff_of_not_isMax`：lt_succ_iff_of_not_isMax (ha : ¬IsMax a)
+ : b < succ a ↔ b <= a
+· 使用定理 `Order.not_isMax_zero`：not_isMax_zero [Zero α] [One α] [ZeroLEOneClass α]
+ [NeZero (1 : α)] : ¬ IsMax (0 : α)
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_one_iff_nonpos [AddMonoidWithOne α] [ZeroLEOneClass α] [NeZero (1 : α)]
-    [SuccAddOrder α] : x < 1 ↔ x <= 0 := by
-  rw [← lt_succ_iff_of_not_isMax not_isMax_zero]; rw [succ_eq_add_one]; rw [zero_add]
+    [SuccAddOrder α] : x < 1 ↔ x ≤ 0 := by
+  rw [← lt_succ_iff_of_not_isMax not_isMax_zero, succ_eq_add_one, zero_add]
 
 end LinearOrder
 
@@ -1306,340 +982,359 @@ section Monotone
 variable {α β : Type*} [PartialOrder α] [Preorder β]
 
 section SuccAddOrder
-variable [Add α] [One α] [SuccAddOrder α] [IsSuccArchimedean α] {s : Set α} {f : α -> β}
+variable [Add α] [One α] [SuccAddOrder α] [IsSuccArchimedean α] {s : Set α} {f : α → β}
 
-/--
-lemma `monotoneOn_of_le_add_one` / 引理 `monotoneOn_of_le_add_one`
-
-English:
-lemma monotoneOn_of_le_add_one
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.succ_eq_add_one] using monotoneOn_of_le_succ hs (f := f)
-
-中文:
-引理 monotoneOn_of_le_add_one
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.succ_eq_add_one] using monotoneOn_of_le_succ hs (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, monotoneOn_of_le_succ, succ_eq_add_one
+/-
+**monotoneOn_of_le_add_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：monotoneOn_of_le_add_one (hs : s.OrdConnected) : (forall a, ¬ IsMax a -> a
+ in s -> a + 1 in s -> f a <= f (a + 1)) -> MonotoneOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用引理 `monotoneOn_of_le_succ`：monotoneOn_of_le_succ (hs : s.OrdConnected) (hf :
+ forall a, ¬ IsMax a -> a in s -> succ a in s -> f a <= f (succ a)) : MonotoneOn
+ f s
 -/
 lemma monotoneOn_of_le_add_one (hs : s.OrdConnected) :
-    (forall a, ¬ IsMax a -> a in s -> a + 1 in s -> f a <= f (a + 1)) -> MonotoneOn f s := by
+    (∀ a, ¬ IsMax a → a ∈ s → a + 1 ∈ s → f a ≤ f (a + 1)) → MonotoneOn f s := by
   simpa [Order.succ_eq_add_one] using monotoneOn_of_le_succ hs (f := f)
-
-/--
-lemma `antitoneOn_of_add_one_le` / 引理 `antitoneOn_of_add_one_le`
-
-English:
-lemma antitoneOn_of_add_one_le
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.succ_eq_add_one] using antitoneOn_of_succ_le hs (f := f)
-
-中文:
-引理 antitoneOn_of_add_one_le
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.succ_eq_add_one] using antitoneOn_of_succ_le hs (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, antitoneOn_of_succ_le, succ_eq_add_one
+/-
+**antitoneOn_of_add_one_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：antitoneOn_of_add_one_le (hs : s.OrdConnected) : (forall a, ¬ IsMax a -> a
+ in s -> a + 1 in s -> f (a + 1) <= f a) -> AntitoneOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `antitoneOn_of_succ_le`：antitoneOn_of_succ_le (hs : s.OrdConnected) (hf :
+ forall a, ¬ IsMax a -> a in s -> succ a in s -> f (succ a) <= f a) : AntitoneOn
+ f s
 -/
 lemma antitoneOn_of_add_one_le (hs : s.OrdConnected) :
-    (forall a, ¬ IsMax a -> a in s -> a + 1 in s -> f (a + 1) <= f a) -> AntitoneOn f s := by
+    (∀ a, ¬ IsMax a → a ∈ s → a + 1 ∈ s → f (a + 1) ≤ f a) → AntitoneOn f s := by
   simpa [Order.succ_eq_add_one] using antitoneOn_of_succ_le hs (f := f)
-
-/--
-lemma `strictMonoOn_of_lt_add_one` / 引理 `strictMonoOn_of_lt_add_one`
-
-English:
-lemma strictMonoOn_of_lt_add_one
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.succ_eq_add_one] using strictMonoOn_of_lt_succ hs (f := f)
-
-中文:
-引理 strictMonoOn_of_lt_add_one
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.succ_eq_add_one] using strictMonoOn_of_lt_succ hs (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, strictMonoOn_of_lt_succ, succ_eq_add_one
+/-
+**strictMonoOn_of_lt_add_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictMonoOn_of_lt_add_one (hs : s.OrdConnected) : (forall a, ¬ IsMax a ->
+ a in s -> a + 1 in s -> f a < f (a + 1)) -> StrictMonoOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用引理 `strictMonoOn_of_lt_succ`：strictMonoOn_of_lt_succ (hs : s.OrdConnected) (
+hf : forall a, ¬ IsMax a -> a in s -> succ a in s -> f a < f (succ a)) : StrictM
+onoOn f s
 -/
 lemma strictMonoOn_of_lt_add_one (hs : s.OrdConnected) :
-    (forall a, ¬ IsMax a -> a in s -> a + 1 in s -> f a < f (a + 1)) -> StrictMonoOn f s := by
+    (∀ a, ¬ IsMax a → a ∈ s → a + 1 ∈ s → f a < f (a + 1)) → StrictMonoOn f s := by
   simpa [Order.succ_eq_add_one] using strictMonoOn_of_lt_succ hs (f := f)
-
-/--
-lemma `strictAntiOn_of_add_one_lt` / 引理 `strictAntiOn_of_add_one_lt`
-
-English:
-lemma strictAntiOn_of_add_one_lt
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.succ_eq_add_one] using strictAntiOn_of_succ_lt hs (f := f)
-
-中文:
-引理 strictAntiOn_of_add_one_lt
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.succ_eq_add_one] using strictAntiOn_of_succ_lt hs (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, strictAntiOn_of_succ_lt, succ_eq_add_one
+/-
+**strictAntiOn_of_add_one_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictAntiOn_of_add_one_lt (hs : s.OrdConnected) : (forall a, ¬ IsMax a ->
+ a in s -> a + 1 in s -> f (a + 1) < f a) -> StrictAntiOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `strictAntiOn_of_succ_lt`：strictAntiOn_of_succ_lt (hs : s.OrdConnected) (
+hf : forall a, ¬ IsMax a -> a in s -> succ a in s -> f (succ a) < f a) : StrictA
+ntiOn f s
 -/
 lemma strictAntiOn_of_add_one_lt (hs : s.OrdConnected) :
-    (forall a, ¬ IsMax a -> a in s -> a + 1 in s -> f (a + 1) < f a) -> StrictAntiOn f s := by
+    (∀ a, ¬ IsMax a → a ∈ s → a + 1 ∈ s → f (a + 1) < f a) → StrictAntiOn f s := by
   simpa [Order.succ_eq_add_one] using strictAntiOn_of_succ_lt hs (f := f)
-
-/--
-lemma `monotone_of_le_add_one` / 引理 `monotone_of_le_add_one`
-
-English:
-lemma monotone_of_le_add_one
-  statement: (forall a, ¬ IsMax a -> f a <= f (a + 1)) -> Monotone f
-  proof: by
+/-
+**monotone_of_le_add_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：monotone_of_le_add_one : (forall a, ¬ IsMax a -> f a <= f (a + 1)) -> Mono
+tone f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用引理 `monotone_of_le_succ`：monotone_of_le_succ (hf : forall a, ¬ IsMax a -> f 
+a <= f (succ a)) : Monotone f
+-/
+lemma monotone_of_le_add_one : (∀ a, ¬ IsMax a → f a ≤ f (a + 1)) → Monotone f := by
   simpa [Order.succ_eq_add_one] using monotone_of_le_succ (f := f)
-
-中文:
-引理 monotone_of_le_add_one
-  结论: (对任意 a, ¬ IsMax a -> f a <= f (a + 1)) -> 递增 f
-  证明: by
-  simpa [Order.succ_eq_add_one] using monotone_of_le_succ (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, monotone_of_le_succ, succ_eq_add_one
+/-
+**antitone_of_add_one_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：antitone_of_add_one_le : (forall a, ¬ IsMax a -> f (a + 1) <= f a) -> Anti
+tone f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用引理 `antitone_of_succ_le`：antitone_of_succ_le (hf : forall a, ¬ IsMax a -> f 
+(succ a) <= f a) : Antitone f
 -/
-lemma monotone_of_le_add_one : (forall a, ¬ IsMax a -> f a <= f (a + 1)) -> Monotone f := by
-  simpa [Order.succ_eq_add_one] using monotone_of_le_succ (f := f)
-
-/--
-lemma `antitone_of_add_one_le` / 引理 `antitone_of_add_one_le`
-
-English:
-lemma antitone_of_add_one_le
-  statement: (forall a, ¬ IsMax a -> f (a + 1) <= f a) -> Antitone f
-  proof: by
+lemma antitone_of_add_one_le : (∀ a, ¬ IsMax a → f (a + 1) ≤ f a) → Antitone f := by
   simpa [Order.succ_eq_add_one] using antitone_of_succ_le (f := f)
-
-中文:
-引理 antitone_of_add_one_le
-  结论: (对任意 a, ¬ IsMax a -> f (a + 1) <= f a) -> 递减 f
-  证明: by
-  simpa [Order.succ_eq_add_one] using antitone_of_succ_le (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, antitone_of_succ_le, succ_eq_add_one
+/-
+**strictMono_of_lt_add_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictMono_of_lt_add_one : (forall a, ¬ IsMax a -> f a < f (a + 1)) -> Str
+ictMono f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用引理 `strictMono_of_lt_succ`：strictMono_of_lt_succ (hf : forall a, ¬ IsMax a -
+> f a < f (succ a)) : StrictMono f
 -/
-lemma antitone_of_add_one_le : (forall a, ¬ IsMax a -> f (a + 1) <= f a) -> Antitone f := by
-  simpa [Order.succ_eq_add_one] using antitone_of_succ_le (f := f)
-
-/--
-lemma `strictMono_of_lt_add_one` / 引理 `strictMono_of_lt_add_one`
-
-English:
-lemma strictMono_of_lt_add_one
-  statement: (forall a, ¬ IsMax a -> f a < f (a + 1)) -> StrictMono f
-  proof: by
+lemma strictMono_of_lt_add_one : (∀ a, ¬ IsMax a → f a < f (a + 1)) → StrictMono f := by
   simpa [Order.succ_eq_add_one] using strictMono_of_lt_succ (f := f)
-
-中文:
-引理 strictMono_of_lt_add_one
-  结论: (对任意 a, ¬ IsMax a -> f a < f (a + 1)) -> 严格递增 f
-  证明: by
-  simpa [Order.succ_eq_add_one] using strictMono_of_lt_succ (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, strictMono_of_lt_succ, succ_eq_add_one
+/-
+**strictAnti_of_add_one_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictAnti_of_add_one_lt : (forall a, ¬ IsMax a -> f (a + 1) < f a) -> Str
+ictAnti f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.succ_eq_add_one`：succ_eq_add_one (x : α) : succ x = x + 1
+· 使用引理 `strictAnti_of_succ_lt`：strictAnti_of_succ_lt (hf : forall a, ¬ IsMax a -
+> f (succ a) < f a) : StrictAnti f
 -/
-lemma strictMono_of_lt_add_one : (forall a, ¬ IsMax a -> f a < f (a + 1)) -> StrictMono f := by
-  simpa [Order.succ_eq_add_one] using strictMono_of_lt_succ (f := f)
-
-/--
-lemma `strictAnti_of_add_one_lt` / 引理 `strictAnti_of_add_one_lt`
-
-English:
-lemma strictAnti_of_add_one_lt
-  statement: (forall a, ¬ IsMax a -> f (a + 1) < f a) -> StrictAnti f
-  proof: by
-  simpa [Order.succ_eq_add_one] using strictAnti_of_succ_lt (f := f)
-
-中文:
-引理 strictAnti_of_add_one_lt
-  结论: (对任意 a, ¬ IsMax a -> f (a + 1) < f a) -> 严格递减 f
-  证明: by
-  simpa [Order.succ_eq_add_one] using strictAnti_of_succ_lt (f := f)
-
-Depends on / 依赖: Order.succ_eq_add_one, strictAnti_of_succ_lt, succ_eq_add_one
--/
-lemma strictAnti_of_add_one_lt : (forall a, ¬ IsMax a -> f (a + 1) < f a) -> StrictAnti f := by
+lemma strictAnti_of_add_one_lt : (∀ a, ¬ IsMax a → f (a + 1) < f a) → StrictAnti f := by
   simpa [Order.succ_eq_add_one] using strictAnti_of_succ_lt (f := f)
 
 end SuccAddOrder
 
 section PredSubOrder
-variable [Sub α] [One α] [PredSubOrder α] [IsPredArchimedean α] {s : Set α} {f : α -> β}
+variable [Sub α] [One α] [PredSubOrder α] [IsPredArchimedean α] {s : Set α} {f : α → β}
 
-/--
-lemma `monotoneOn_of_sub_one_le` / 引理 `monotoneOn_of_sub_one_le`
-
-English:
-lemma monotoneOn_of_sub_one_le
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.pred_eq_sub_one] using monotoneOn_of_pred_le hs (f := f)
-
-中文:
-引理 monotoneOn_of_sub_one_le
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.pred_eq_sub_one] using monotoneOn_of_pred_le hs (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, monotoneOn_of_pred_le, pred_eq_sub_one
+/-
+**monotoneOn_of_sub_one_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：monotoneOn_of_sub_one_le (hs : s.OrdConnected) : (forall a, ¬ IsMin a -> a
+ in s -> a - 1 in s -> f (a - 1) <= f a) -> MonotoneOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `monotoneOn_of_pred_le`：monotoneOn_of_pred_le (hs : s.OrdConnected) (hf :
+ forall a, ¬ IsMin a -> a in s -> pred a in s -> f (pred a) <= f a) : MonotoneOn
+ f s
 -/
 lemma monotoneOn_of_sub_one_le (hs : s.OrdConnected) :
-    (forall a, ¬ IsMin a -> a in s -> a - 1 in s -> f (a - 1) <= f a) -> MonotoneOn f s := by
+    (∀ a, ¬ IsMin a → a ∈ s → a - 1 ∈ s → f (a - 1) ≤ f a) → MonotoneOn f s := by
   simpa [Order.pred_eq_sub_one] using monotoneOn_of_pred_le hs (f := f)
-
-/--
-lemma `antitoneOn_of_le_sub_one` / 引理 `antitoneOn_of_le_sub_one`
-
-English:
-lemma antitoneOn_of_le_sub_one
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.pred_eq_sub_one] using antitoneOn_of_le_pred hs (f := f)
-
-中文:
-引理 antitoneOn_of_le_sub_one
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.pred_eq_sub_one] using antitoneOn_of_le_pred hs (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, antitoneOn_of_le_pred, pred_eq_sub_one
+/-
+**antitoneOn_of_le_sub_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：antitoneOn_of_le_sub_one (hs : s.OrdConnected) : (forall a, ¬ IsMin a -> a
+ in s -> a - 1 in s -> f a <= f (a - 1)) -> AntitoneOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用引理 `antitoneOn_of_le_pred`：antitoneOn_of_le_pred (hs : s.OrdConnected) (hf :
+ forall a, ¬ IsMin a -> a in s -> pred a in s -> f a <= f (pred a)) : AntitoneOn
+ f s
 -/
 lemma antitoneOn_of_le_sub_one (hs : s.OrdConnected) :
-    (forall a, ¬ IsMin a -> a in s -> a - 1 in s -> f a <= f (a - 1)) -> AntitoneOn f s := by
+    (∀ a, ¬ IsMin a → a ∈ s → a - 1 ∈ s → f a ≤ f (a - 1)) → AntitoneOn f s := by
   simpa [Order.pred_eq_sub_one] using antitoneOn_of_le_pred hs (f := f)
-
-/--
-lemma `strictMonoOn_of_sub_one_lt` / 引理 `strictMonoOn_of_sub_one_lt`
-
-English:
-lemma strictMonoOn_of_sub_one_lt
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.pred_eq_sub_one] using strictMonoOn_of_pred_lt hs (f := f)
-
-中文:
-引理 strictMonoOn_of_sub_one_lt
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.pred_eq_sub_one] using strictMonoOn_of_pred_lt hs (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, pred_eq_sub_one, strictMonoOn_of_pred_lt
+/-
+**strictMonoOn_of_sub_one_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictMonoOn_of_sub_one_lt (hs : s.OrdConnected) : (forall a, ¬ IsMin a ->
+ a in s -> a - 1 in s -> f (a - 1) < f a) -> StrictMonoOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `strictMonoOn_of_pred_lt`：strictMonoOn_of_pred_lt (hs : s.OrdConnected) (
+hf : forall a, ¬ IsMin a -> a in s -> pred a in s -> f (pred a) < f a) : StrictM
+onoOn f s
 -/
 lemma strictMonoOn_of_sub_one_lt (hs : s.OrdConnected) :
-    (forall a, ¬ IsMin a -> a in s -> a - 1 in s -> f (a - 1) < f a) -> StrictMonoOn f s := by
+    (∀ a, ¬ IsMin a → a ∈ s → a - 1 ∈ s → f (a - 1) < f a) → StrictMonoOn f s := by
   simpa [Order.pred_eq_sub_one] using strictMonoOn_of_pred_lt hs (f := f)
-
-/--
-lemma `strictAntiOn_of_lt_sub_one` / 引理 `strictAntiOn_of_lt_sub_one`
-
-English:
-lemma strictAntiOn_of_lt_sub_one
-  given: (hs : s.OrdConnected)
-  proof: by
-  simpa [Order.pred_eq_sub_one] using strictAntiOn_of_lt_pred hs (f := f)
-
-中文:
-引理 strictAntiOn_of_lt_sub_one
-  条件: (hs : s.序连通)
-  证明: by
-  simpa [Order.pred_eq_sub_one] using strictAntiOn_of_lt_pred hs (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, pred_eq_sub_one, strictAntiOn_of_lt_pred
+/-
+**strictAntiOn_of_lt_sub_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictAntiOn_of_lt_sub_one (hs : s.OrdConnected) : (forall a, ¬ IsMin a ->
+ a in s -> a - 1 in s -> f a < f (a - 1)) -> StrictAntiOn f s
+参数：hs : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用引理 `strictAntiOn_of_lt_pred`：strictAntiOn_of_lt_pred (hs : s.OrdConnected) (
+hf : forall a, ¬ IsMin a -> a in s -> pred a in s -> f a < f (pred a)) : StrictA
+ntiOn f s
 -/
 lemma strictAntiOn_of_lt_sub_one (hs : s.OrdConnected) :
-    (forall a, ¬ IsMin a -> a in s -> a - 1 in s -> f a < f (a - 1)) -> StrictAntiOn f s := by
+    (∀ a, ¬ IsMin a → a ∈ s → a - 1 ∈ s → f a < f (a - 1)) → StrictAntiOn f s := by
   simpa [Order.pred_eq_sub_one] using strictAntiOn_of_lt_pred hs (f := f)
-
-/--
-lemma `monotone_of_sub_one_le` / 引理 `monotone_of_sub_one_le`
-
-English:
-lemma monotone_of_sub_one_le
-  statement: (forall a, ¬ IsMin a -> f (a - 1) <= f a) -> Monotone f
-  proof: by
+/-
+**monotone_of_sub_one_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：monotone_of_sub_one_le : (forall a, ¬ IsMin a -> f (a - 1) <= f a) -> Mono
+tone f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用引理 `monotone_of_pred_le`：monotone_of_pred_le (hf : forall a, ¬ IsMin a -> f 
+(pred a) <= f a) : Monotone f
+-/
+lemma monotone_of_sub_one_le : (∀ a, ¬ IsMin a → f (a - 1) ≤ f a) → Monotone f := by
   simpa [Order.pred_eq_sub_one] using monotone_of_pred_le (f := f)
-
-中文:
-引理 monotone_of_sub_one_le
-  结论: (对任意 a, ¬ IsMin a -> f (a - 1) <= f a) -> 递增 f
-  证明: by
-  simpa [Order.pred_eq_sub_one] using monotone_of_pred_le (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, monotone_of_pred_le, pred_eq_sub_one
+/-
+**antitone_of_le_sub_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：antitone_of_le_sub_one : (forall a, ¬ IsMin a -> f a <= f (a - 1)) -> Anti
+tone f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用引理 `antitone_of_le_pred`：antitone_of_le_pred (hf : forall a, ¬ IsMin a -> f 
+a <= f (pred a)) : Antitone f
 -/
-lemma monotone_of_sub_one_le : (forall a, ¬ IsMin a -> f (a - 1) <= f a) -> Monotone f := by
-  simpa [Order.pred_eq_sub_one] using monotone_of_pred_le (f := f)
-
-/--
-lemma `antitone_of_le_sub_one` / 引理 `antitone_of_le_sub_one`
-
-English:
-lemma antitone_of_le_sub_one
-  statement: (forall a, ¬ IsMin a -> f a <= f (a - 1)) -> Antitone f
-  proof: by
+lemma antitone_of_le_sub_one : (∀ a, ¬ IsMin a → f a ≤ f (a - 1)) → Antitone f := by
   simpa [Order.pred_eq_sub_one] using antitone_of_le_pred (f := f)
-
-中文:
-引理 antitone_of_le_sub_one
-  结论: (对任意 a, ¬ IsMin a -> f a <= f (a - 1)) -> 递减 f
-  证明: by
-  simpa [Order.pred_eq_sub_one] using antitone_of_le_pred (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, antitone_of_le_pred, pred_eq_sub_one
+/-
+**strictMono_of_sub_one_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictMono_of_sub_one_lt : (forall a, ¬ IsMin a -> f (a - 1) < f a) -> Str
+ictMono f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用引理 `strictMono_of_pred_lt`：strictMono_of_pred_lt (hf : forall a, ¬ IsMin a -
+> f (pred a) < f a) : StrictMono f
 -/
-lemma antitone_of_le_sub_one : (forall a, ¬ IsMin a -> f a <= f (a - 1)) -> Antitone f := by
-  simpa [Order.pred_eq_sub_one] using antitone_of_le_pred (f := f)
-
-/--
-lemma `strictMono_of_sub_one_lt` / 引理 `strictMono_of_sub_one_lt`
-
-English:
-lemma strictMono_of_sub_one_lt
-  statement: (forall a, ¬ IsMin a -> f (a - 1) < f a) -> StrictMono f
-  proof: by
+lemma strictMono_of_sub_one_lt : (∀ a, ¬ IsMin a → f (a - 1) < f a) → StrictMono f := by
   simpa [Order.pred_eq_sub_one] using strictMono_of_pred_lt (f := f)
-
-中文:
-引理 strictMono_of_sub_one_lt
-  结论: (对任意 a, ¬ IsMin a -> f (a - 1) < f a) -> 严格递增 f
-  证明: by
-  simpa [Order.pred_eq_sub_one] using strictMono_of_pred_lt (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, pred_eq_sub_one, strictMono_of_pred_lt
+/-
+**strictAnti_of_lt_sub_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：strictAnti_of_lt_sub_one : (forall a, ¬ IsMin a -> f a < f (a - 1)) -> Str
+ictAnti f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.pred_eq_sub_one`：pred_eq_sub_one (x : α) : pred x = x - 1
+· 使用引理 `strictAnti_of_lt_pred`：strictAnti_of_lt_pred (hf : forall a, ¬ IsMin a -
+> f a < f (pred a)) : StrictAnti f
 -/
-lemma strictMono_of_sub_one_lt : (forall a, ¬ IsMin a -> f (a - 1) < f a) -> StrictMono f := by
-  simpa [Order.pred_eq_sub_one] using strictMono_of_pred_lt (f := f)
-
-/--
-lemma `strictAnti_of_lt_sub_one` / 引理 `strictAnti_of_lt_sub_one`
-
-English:
-lemma strictAnti_of_lt_sub_one
-  statement: (forall a, ¬ IsMin a -> f a < f (a - 1)) -> StrictAnti f
-  proof: by
-  simpa [Order.pred_eq_sub_one] using strictAnti_of_lt_pred (f := f)
-
-中文:
-引理 strictAnti_of_lt_sub_one
-  结论: (对任意 a, ¬ IsMin a -> f a < f (a - 1)) -> 严格递减 f
-  证明: by
-  simpa [Order.pred_eq_sub_one] using strictAnti_of_lt_pred (f := f)
-
-Depends on / 依赖: Order.pred_eq_sub_one, pred_eq_sub_one, strictAnti_of_lt_pred
--/
-lemma strictAnti_of_lt_sub_one : (forall a, ¬ IsMin a -> f a < f (a - 1)) -> StrictAnti f := by
+lemma strictAnti_of_lt_sub_one : (∀ a, ¬ IsMin a → f a < f (a - 1)) → StrictAnti f := by
   simpa [Order.pred_eq_sub_one] using strictAnti_of_lt_pred (f := f)
 
 end PredSubOrder
 end Monotone
+

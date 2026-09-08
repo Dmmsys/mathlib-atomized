@@ -38,18 +38,19 @@ namespace HasProductsOfShapeAux
 
 variable (J : Type) [HasProductsOfShape J C] [W.IsStableUnderProductsOfShape J]
 
-/--
-lemma `inverts` / 引理 `inverts`
-
-English:
-lemma inverts
-  proof: fun _ _ f hf => Localization.inverts L W _ (MorphismProperty.limMap f hf)
-
-中文:
-引理 inverts
-  证明: fun _ _ f hf => Localization.inverts L W _ (MorphismProperty.limMap f hf)
-
-Depends on / 依赖: Localization, Localization.inverts, MorphismProperty, MorphismProperty.limMap, inverts, limMap
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.inverts** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Localization.HasProductsOfShapeAux`。
+形式化陈述：inverts : (W.functorCategory (Discrete J)).IsInvertedBy (lim ⋙ L)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `CategoryTheory.MorphismProperty.limMap`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {W : CategoryTheory.MorphismProperty C} {J : Type u_1} 
+  [inst_1 : CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 lemma inverts :
     (W.functorCategory (Discrete J)).IsInvertedBy (lim ⋙ L) :=
@@ -57,123 +58,108 @@ lemma inverts :
 
 variable [W.ContainsIdentities] [Finite J]
 
-/--
-Definition of `limitFunctor` / `limitFunctor` 的定义
+/-- The (candidate) limit functor for the localized category.
+It is induced by `lim ⋙ L : (Discrete J ⥤ C) ⥤ D`. -/
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.limitFunctor** 是 Mathlib 中的一
+个缩写定义，位于命名空间 `CategoryTheory.Localization.HasProductsOfShapeAux`。
+形式化陈述：limitFunctor : (Discrete J ⥤ D) ⥤ D
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.HasProductsOfShapeAux.inverts`：inverts : (W.
+functorCategory (Discrete J)).IsInvertedBy (lim ⋙ L)
+· 使用定理 `CategoryTheory.Functor.IsLocalization.instDiscreteObjWhiskeringRightFunc
+torCategoryOfFiniteOfContainsIdentities`：∀ {J : Type} [Finite J] {C : Type u₁} {
+D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C]   [inst_1 : CategoryThe
+ory.Category.{v₂, u₂}…
 
-English:
-abbreviation limitFunctor
-  signature: :
-  body: Localization.lift _ (inverts L W J)
-    ((whiskeringRight (Discrete J) C D).obj L)
-
-中文:
-缩写 limitFunctor
-  签名: :
-  定义体: Localization.lift _ (inverts L W J)
-    ((whiskeringRight (Discrete J) C D).obj L)
-
-Depends on / 依赖: Discrete, Localization, Localization.lift, inverts, whiskeringRight
+--- 原说明 ---
+The (candidate) limit functor for the localized category.
+It is induced by `lim ⋙ L : (Discrete J ⥤ C) ⥤ D`.
 -/
 noncomputable abbrev limitFunctor :
     (Discrete J ⥤ D) ⥤ D :=
   Localization.lift _ (inverts L W J)
     ((whiskeringRight (Discrete J) C D).obj L)
 
-/--
-Definition of `compLimitFunctorIso` / `compLimitFunctorIso` 的定义
+/-- The functor `limitFunctor L W J` is induced by `lim ⋙ L`. -/
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.compLimitFunctorIso** 是 Math
+lib 中的一个定义，位于命名空间 `CategoryTheory.Localization.HasProductsOfShapeAux`。
+形式化陈述：compLimitFunctorIso : ((whiskeringRight (Discrete J) C D).obj L) ⋙ limitFu
+nctor L W J ≅ lim ⋙ L
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.HasProductsOfShapeAux.inverts`：inverts : (W.
+functorCategory (Discrete J)).IsInvertedBy (lim ⋙ L)
+· 使用定理 `CategoryTheory.Functor.IsLocalization.instDiscreteObjWhiskeringRightFunc
+torCategoryOfFiniteOfContainsIdentities`：∀ {J : Type} [Finite J] {C : Type u₁} {
+D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C]   [inst_1 : CategoryThe
+ory.Category.{v₂, u₂}…
 
-English:
-definition compLimitFunctorIso
-  signature: :
-  body: by
-  apply Localization.fac
-
-中文:
-定义 compLimitFunctorIso
-  签名: :
-  定义体: by
-  apply Localization.fac
-
-Depends on / 依赖: Localization, Localization.fac
+--- 原说明 ---
+The functor `limitFunctor L W J` is induced by `lim ⋙ L`.
 -/
 noncomputable def compLimitFunctorIso :
     ((whiskeringRight (Discrete J) C D).obj L) ⋙ limitFunctor L W J ≅
       lim ⋙ L := by
   apply Localization.fac
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: (Functor.compConstIso _ _).symm
-
-中文:
-实例 :
-  定义体: (Functor.compConstIso _ _).symm
-
-Depends on / 依赖: Functor, Functor.compConstIso, compConstIso
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.Localization.HasProductsOfShapeAux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance :
     CatCommSq (Functor.const (Discrete J)) L
       ((whiskeringRight (Discrete J) C D).obj L) (Functor.const (Discrete J)) where
   iso := (Functor.compConstIso _ _).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: (compLimitFunctorIso L W J).symm
-
-中文:
-实例 :
-  定义体: (compLimitFunctorIso L W J).symm
-
-Depends on / 依赖: compLimitFunctorIso
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.Localization.HasProductsOfShapeAux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance :
     CatCommSq lim ((whiskeringRight (Discrete J) C D).obj L) L (limitFunctor L W J) where
   iso := (compLimitFunctorIso L W J).symm
 
-/--
-Definition of `adj` / `adj` 的定义
+/-- The adjunction between the constant functor `D ⥤ (Discrete J ⥤ D)`
+and `limitFunctor L W J`. -/
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.adj** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Localization.HasProductsOfShapeAux`。
+形式化陈述：adj : Functor.const _ ⊣ limitFunctor L W J
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsLocalization.instDiscreteObjWhiskeringRightFunc
+torCategoryOfFiniteOfContainsIdentities`：∀ {J : Type} [Finite J] {C : Type u₁} {
+D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C]   [inst_1 : CategoryThe
+ory.Category.{v₂, u₂}…
 
-English:
-definition adj
-  signature: :
-  body: constLimAdj.localization L W ((whiskeringRight (Discrete J) C D).obj L)
-    (W.functorCategory (Discrete J)) (Functor.const _) (limitFunctor L W J)
-
-中文:
-定义 adj
-  签名: :
-  定义体: constLimAdj.localization L W ((whiskeringRight (Discrete J) C D).obj L)
-    (W.functorCategory (Discrete J)) (Functor.const _) (limitFunctor L W J)
-
-Depends on / 依赖: Category, Category.id_comp, Discrete, Functor, Functor.const, W.functorCategory, constLimAdj, constLimAdj.localization, functorCategory, id_comp, limitFunctor, localization, whiskeringRight
+--- 原说明 ---
+The adjunction between the constant functor `D ⥤ (Discrete J ⥤ D)`
+and `limitFunctor L W J`.
 -/
 noncomputable def adj :
     Functor.const _ ⊣ limitFunctor L W J :=
   constLimAdj.localization L W ((whiskeringRight (Discrete J) C D).obj L)
     (W.functorCategory (Discrete J)) (Functor.const _) (limitFunctor L W J)
-
-/--
-lemma `adj_counit_app` / 引理 `adj_counit_app`
-
-English:
-lemma adj_counit_app
-  given: (F : Discrete J ⥤ C)
-  proof: by
-  apply constLimAdj.localization_counit_app
-
-中文:
-引理 adj_counit_app
-  条件: (F : 离散 J ⥤ C)
-  证明: by
-  apply constLimAdj.localization_counit_app
-
-Depends on / 依赖: constLimAdj, constLimAdj.localization_counit_app, localization_counit_app
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.adj_counit_app** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.Localization.HasProductsOfShapeAux`。
+形式化陈述：adj_counit_app (F : Discrete J ⥤ C) : (adj L W J).counit.app (F ⋙ L) = (Fu
+nctor.const (Discrete J)).map ((compLimitFunctorIso L W J).hom.app F) ≫ (Functor
+.compConstIso (Discrete J) L).hom.app (lim.obj F) ≫ whiskerRight (constLimAdj.co
+unit.app F) L
+参数：F : Discrete J ⥤ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.localization_counit_app`：localization_counit_a
+pp (X₂ : C₂) : (adj.localization L₁ W₁ L₂ W₂ G' F').counit.app (L₂.obj X₂) = G'.
+map ((CatCommSq.iso F L₂ L₁ F').inv.app…
+· 使用定理 `CategoryTheory.Functor.IsLocalization.instDiscreteObjWhiskeringRightFunc
+torCategoryOfFiniteOfContainsIdentities`：∀ {J : Type} [Finite J] {C : Type u₁} {
+D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C]   [inst_1 : CategoryThe
+ory.Category.{v₂, u₂}…
 -/
 lemma adj_counit_app (F : Discrete J ⥤ C) :
     (adj L W J).counit.app (F ⋙ L) =
@@ -184,22 +170,17 @@ lemma adj_counit_app (F : Discrete J ⥤ C) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `isLimitMapCone` / `isLimitMapCone` 的定义
+/-- Auxiliary definition for `Localization.preservesProductsOfShape`. -/
+/-
+**CategoryTheory.Localization.HasProductsOfShapeAux.isLimitMapCone** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.Localization.HasProductsOfShapeAux`。
+形式化陈述：isLimitMapCone (F : Discrete J ⥤ C) : IsLimit (L.mapCone (limit.cone F))
+参数：F : Discrete J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitMapCone
-  signature: (F : Discrete J ⥤ C)
-  body: IsLimit.ofIsoLimit (isLimitConeOfAdj (adj L W J) (F ⋙ L))
-    (Cone.ext ((compLimitFunctorIso L W J).app F) (by simp [adj_counit_app, constLimAdj]))
-
-中文:
-定义 isLimitMapCone
-  签名: (F : 离散 J ⥤ C)
-  定义体: IsLimit.ofIsoLimit (isLimitConeOfAdj (adj L W J) (F ⋙ L))
-    (Cone.ext ((compLimitFunctorIso L W J).app F) (by simp [adj_counit_app, constLimAdj]))
-
-Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, adj_counit_app, compLimitFunctorIso, constLimAdj, isLimitConeOfAdj, ofIsoLimit
+--- 原说明 ---
+Auxiliary definition for `Localization.preservesProductsOfShape`.
 -/
 noncomputable def isLimitMapCone (F : Discrete J ⥤ C) :
     IsLimit (L.mapCone (limit.cone F)) :=
@@ -211,22 +192,20 @@ end HasProductsOfShapeAux
 variable [W.ContainsIdentities]
 
 include L
-/--
-lemma `hasProductsOfShape` / 引理 `hasProductsOfShape`
-
-English:
-lemma hasProductsOfShape
-  statement: (J : Type) [Finite J] [HasProductsOfShape J C]
-  proof: hasLimitsOfShape_iff_isLeftAdjoint_const.2
-    (HasProductsOfShapeAux.adj L W J).isLeftAdjoint
-
-中文:
-引理 hasProductsOfShape
-  结论: (J : 类型) [有限 J] [HasProductsOfShape J C]
-  证明: hasLimitsOfShape_iff_isLeftAdjoint_const.2
-    (HasProductsOfShapeAux.adj L W J).isLeftAdjoint
-
-Depends on / 依赖: HasProductsOfShapeAux, HasProductsOfShapeAux.adj, hasLimitsOfShape_iff_isLeftAdjoint_const, isLeftAdjoint
+/-
+**CategoryTheory.Localization.hasProductsOfShape** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Localization`。
+形式化陈述：hasProductsOfShape (J : Type) [Finite J] [HasProductsOfShape J C] [W.IsSta
+bleUnderProductsOfShape J] : HasProductsOfShape J D
+参数：J : Type。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_iff_isLeftAdjoint_const`：hasLimit
+sOfShape_iff_isLeftAdjoint_const : HasLimitsOfShape J C ↔ IsLeftAdjoint (const J
+ : C ⥤ _)
+· 使用引理 `CategoryTheory.Adjunction.isLeftAdjoint`：isLeftAdjoint (adj : F ⊣ G) : F
+.IsLeftAdjoint
 -/
 lemma hasProductsOfShape (J : Type) [Finite J] [HasProductsOfShape J C]
     [W.IsStableUnderProductsOfShape J] :
@@ -234,22 +213,29 @@ lemma hasProductsOfShape (J : Type) [Finite J] [HasProductsOfShape J C]
   hasLimitsOfShape_iff_isLeftAdjoint_const.2
     (HasProductsOfShapeAux.adj L W J).isLeftAdjoint
 
-/--
-lemma `preservesProductsOfShape` / 引理 `preservesProductsOfShape`
+/-- When `C` has finite products indexed by `J`, `W : MorphismProperty C` contains
+identities and is stable under products indexed by `J`,
+then any localization functor for `W` preserves finite products indexed by `J`. -/
+/-
+**CategoryTheory.Localization.preservesProductsOfShape** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Localization`。
+形式化陈述：preservesProductsOfShape (J : Type) [Finite J] [HasProductsOfShape J C] [W
+.IsStableUnderProductsOfShape J] : PreservesLimitsOfShape (Discrete J) L where p
+reservesLimit {F}
+参数：J : Type。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_preserves_limit_cone`：preservesL
+imit_of_preserves_limit_cone {F : C ⥤ D} {t : Cone K} (h : IsLimit t) (hF : IsLi
+mit (F.mapCone t)) : PreservesLimit K F where pres…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 
-English:
-lemma preservesProductsOfShape
-  statement: (J : Type) [Finite J]
-  proof: preservesLimit_of_preserves_limit_cone (limit.isLimit F)
-    (HasProductsOfShapeAux.isLimitMapCone L W J F)
-
-中文:
-引理 preservesProductsOfShape
-  结论: (J : 类型) [有限 J]
-  证明: preservesLimit_of_preserves_limit_cone (limit.isLimit F)
-    (HasProductsOfShapeAux.isLimitMapCone L W J F)
-
-Depends on / 依赖: isLimit, limit.isLimit, preservesLimit_of_preserves_limit_cone
+--- 原说明 ---
+When `C` has finite products indexed by `J`, `W : MorphismProperty C` contains
+identities and is stable under products indexed by `J`,
+then any localization functor for `W` preserves finite products indexed by `J`.
 -/
 lemma preservesProductsOfShape (J : Type) [Finite J]
     [HasProductsOfShape J C] [W.IsStableUnderProductsOfShape J] :
@@ -260,113 +246,73 @@ lemma preservesProductsOfShape (J : Type) [Finite J]
 variable [HasFiniteProducts C] [W.IsStableUnderFiniteProducts]
 
 include W in
-/--
-lemma `hasFiniteProducts` / 引理 `hasFiniteProducts`
-
-English:
-lemma hasFiniteProducts
-  statement: HasFiniteProducts D
-  proof: ⟨fun _ => hasProductsOfShape L W _⟩
-
-include W in
-
-中文:
-引理 hasFiniteProducts
-  结论: 有FiniteProducts D
-  证明: ⟨fun _ => hasProductsOfShape L W _⟩
-
-include W in
-
-Depends on / 依赖: hasProductsOfShape
+/-
+**CategoryTheory.Localization.hasFiniteProducts** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Localization`。
+形式化陈述：hasFiniteProducts : HasFiniteProducts D
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.hasProductsOfShape`：hasProductsOfShape (J : 
+Type) [Finite J] [HasProductsOfShape J C] [W.IsStableUnderProductsOfShape J] : H
+asProductsOfShape J D
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderFiniteProducts.isStableUnde
+rProductsOfShape`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : 
+CategoryTheory.MorphismProperty C}   [self : W.IsStableUnderFiniteProducts] (J…
 -/
 lemma hasFiniteProducts : HasFiniteProducts D :=
   ⟨fun _ => hasProductsOfShape L W _⟩
 
 include W in
-/--
-lemma `preservesFiniteProducts` / 引理 `preservesFiniteProducts`
+/-- When `C` has finite products and `W : MorphismProperty C` contains
+identities and is stable under finite products,
+then any localization functor for `W` preserves finite products. -/
+/-
+**CategoryTheory.Localization.preservesFiniteProducts** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Localization`。
+形式化陈述：preservesFiniteProducts : PreservesFiniteProducts L where preserves _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.preservesProductsOfShape`：preservesProductsO
+fShape (J : Type) [Finite J] [HasProductsOfShape J C] [W.IsStableUnderProductsOf
+Shape J] : PreservesLimitsOfShape (Discret…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.MorphismProperty.IsStableUnderFiniteProducts.isStableUnde
+rProductsOfShape`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : 
+CategoryTheory.MorphismProperty C}   [self : W.IsStableUnderFiniteProducts] (J…
 
-English:
-lemma preservesFiniteProducts
-  proof: preservesProductsOfShape L W _
-
-中文:
-引理 preservesFiniteProducts
-  证明: preservesProductsOfShape L W _
-
-Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.addMonoidal_leftUnitor, addMonoidal_leftUnitor, eqToHom_app, eqToHom_map, eqToIso, eqToIso.inv, id_comp, preservesProductsOfShape, shiftFunctor, shiftFunctorAdd, shiftFunctorZero
+--- 原说明 ---
+When `C` has finite products and `W : MorphismProperty C` contains
+identities and is stable under finite products,
+then any localization functor for `W` preserves finite products.
 -/
 lemma preservesFiniteProducts :
     PreservesFiniteProducts L where
   preserves _ := preservesProductsOfShape L W _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteProducts (W.Localization)
-  body: hasFiniteProducts W.Q W
-
-中文:
-实例 :
-  签名: 有FiniteProducts (W.Localization)
-  定义体: hasFiniteProducts W.Q W
-
-Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.addMonoidal_rightUnitor, addMonoidal_rightUnitor, eqToHom_app, eqToHom_map, eqToIso, eqToIso.inv, hasFiniteProducts, id_comp, shiftFunctor, shiftFunctorAdd, shiftFunctorZero
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteProducts (W.Localization) := hasFiniteProducts W.Q W
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteProducts W.Q
-  body: preservesFiniteProducts W.Q W
-
-中文:
-实例 :
-  签名: 保持FiniteProducts W.Q
-  定义体: preservesFiniteProducts W.Q W
-
-Depends on / 依赖: Category, Category.assoc, Category.comp_id, Discrete, Discrete.addMonoidal_associator, _eq_shiftFunctorAdd, addMonoidal_associator, comp_id, eqToHom_app, eqToHom_map, eqToIso, eqToIso.hom, preservesFiniteProducts, shiftFunctor, shiftFunctorAdd
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PreservesFiniteProducts W.Q := preservesFiniteProducts W.Q W
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [W.HasLocalization]
-  signature: :
-  body: hasFiniteProducts W.Q' W
-
-中文:
-实例 [W.有Localization]
-  签名: :
-  定义体: hasFiniteProducts W.Q' W
-
-Depends on / 依赖: hasFiniteProducts
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [W.HasLocalization] :
     HasFiniteProducts (W.Localization') :=
   hasFiniteProducts W.Q' W
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [W.HasLocalization]
-  signature: :
-  body: preservesFiniteProducts W.Q' W
-
-中文:
-实例 [W.有Localization]
-  签名: :
-  定义体: preservesFiniteProducts W.Q' W
-
-Depends on / 依赖: Iso.hom, NatTrans, NatTrans.congr_app, _zero_add, congr_app, congr_arg, preservesFiniteProducts, shiftFunctorAdd
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [W.HasLocalization] :
     PreservesFiniteProducts W.Q' :=
@@ -375,3 +321,4 @@ noncomputable instance [W.HasLocalization] :
 end Localization
 
 end CategoryTheory
+

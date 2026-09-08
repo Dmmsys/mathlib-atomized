@@ -30,123 +30,76 @@ namespace PartialOrder
 /-- Given a partially ordered type `X`, this is the type of nonempty finite
 subsets `A` of `X` such that all the elements of `A` are comparable. -/
 @[ext]
-/--
-Definition of `NonemptyFiniteChains` / `NonemptyFiniteChains` 的定义
+/-
+**PartialOrder.NonemptyFiniteChains** 是 Mathlib 中的一个结构，位于命名空间 `PartialOrder`。
+形式化陈述：NonemptyFiniteChains (X : Type u) [PartialOrder X] where /-- a finite subs
+et -/ finset : Finset X nonempty : finset.Nonempty
+参数：X : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NonemptyFiniteChains
-  parameters: (X : Type u) [PartialOrder X]
-  axioms and operations (3):
-    - finset : Finset X
-    - nonempty : finset.Nonempty  [default: by simp]
-    - comparable((a b : finset)) : a <= b ∨ b <= a
-
-中文:
-结构 NonemptyFiniteChains
-  参数: (X : 类型u) [偏序 X]
-  公理与运算 (3 个):
-    - finset : 有限集 X
-    - nonempty : finset.非空  [默认: by simp]
-    - comparable((a b : finset)) : a <= b ∨ b <= a
-
-Depends on / 依赖: comparable, finset
+--- 原说明 ---
+Given a partially ordered type `X`, this is the type of nonempty finite
+subsets `A` of `X` such that all the elements of `A` are comparable.
 -/
 structure NonemptyFiniteChains (X : Type u) [PartialOrder X] where
   /-- a finite subset -/
   finset : Finset X
   nonempty : finset.Nonempty := by simp
-  comparable (a b : finset) : a <= b ∨ b <= a
+  comparable (a b : finset) : a ≤ b ∨ b ≤ a
 
 namespace NonemptyFiniteChains
 
 attribute [simp] nonempty
 
+/-
+**PartialOrder.NonemptyFiniteChains.** 是 Mathlib 中的一个实例，位于命名空间 `PartialOrder.Non
+emptyFiniteChains`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Type u) [PartialOrder X] : PartialOrder (NonemptyFiniteChains X) :=
-  PartialOrder.lift finset (fun _ _ _ => by aesop)
+  PartialOrder.lift finset (fun _ _ _ ↦ by aesop)
 
 variable {X Y : Type*} [PartialOrder X] [PartialOrder Y]
 
 @[simp]
-/--
-lemma `le_iff` / 引理 `le_iff`
-
-English:
-lemma le_iff
-  given: (A B : NonemptyFiniteChains X)
-  statement: A <= B ↔ A.finset <= B.finset
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-引理 le_iff
-  条件: (A B : NonemptyFiniteChains X)
-  结论: A <= B ↔ A.finset <= B.finset
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**PartialOrder.NonemptyFiniteChains.le_iff** 是 Mathlib 中的一个引理，位于命名空间 `PartialOrd
+er.NonemptyFiniteChains`。
+形式化陈述：le_iff (A B : NonemptyFiniteChains X) : A <= B ↔ A.finset <= B.finset
+参数：A B : NonemptyFiniteChains X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma le_iff (A B : NonemptyFiniteChains X) : A <= B ↔ A.finset <= B.finset := Iff.rfl
+lemma le_iff (A B : NonemptyFiniteChains X) : A ≤ B ↔ A.finset ≤ B.finset := Iff.rfl
 
 @[simp]
-/--
-lemma `lt_iff` / 引理 `lt_iff`
-
-English:
-lemma lt_iff
-  given: (A B : NonemptyFiniteChains X)
-  statement: A < B ↔ A.finset < B.finset
-  proof: Iff.rfl
-
-中文:
-引理 lt_iff
-  条件: (A B : NonemptyFiniteChains X)
-  结论: A < B ↔ A.finset < B.finset
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**PartialOrder.NonemptyFiniteChains.lt_iff** 是 Mathlib 中的一个引理，位于命名空间 `PartialOrd
+er.NonemptyFiniteChains`。
+形式化陈述：lt_iff (A B : NonemptyFiniteChains X) : A < B ↔ A.finset < B.finset
+参数：A B : NonemptyFiniteChains X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma lt_iff (A B : NonemptyFiniteChains X) : A < B ↔ A.finset < B.finset := Iff.rfl
 
 open scoped Classical in
-/--
-Definition of `map` / `map` 的定义
+/-- The image of a nonempty finite chain by a monotone map. -/
+/-
+**PartialOrder.NonemptyFiniteChains.map** 是 Mathlib 中的一个定义，位于命名空间 `PartialOrder.
+NonemptyFiniteChains`。
+形式化陈述：map (s : NonemptyFiniteChains X) (f : X ->o Y) : NonemptyFiniteChains Y wh
+ere finset
+参数：s : NonemptyFiniteChains X；f : X ->o Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (s : NonemptyFiniteChains X) (f : X ->o Y)
-  body: Finset.image f s.finset
-  comparable := by
-    rintro ⟨a, ha⟩ ⟨b, hb⟩
-    simp only [Finset.mem_image] at ha hb
-    obtain ⟨a, ha', rfl⟩ := ha
-    obtain ⟨b, hb', rfl⟩ := hb
-    obtain h | h := s.comparable ⟨_, ha'⟩ ⟨_, hb'⟩
-    · exact Or.inl (f.monotone h)
-    · exact Or.inr (f.monotone h)
-
-@[simp]
-
-中文:
-定义 map
-  签名: (s : NonemptyFiniteChains X) (f : X ->o Y)
-  定义体: Finset.image f s.finset
-  comparable := by
-    rintro ⟨a, ha⟩ ⟨b, hb⟩
-    simp only [Finset.mem_image] at ha hb
-    obtain ⟨a, ha', rfl⟩ := ha
-    obtain ⟨b, hb', rfl⟩ := hb
-    obtain h | h := s.comparable ⟨_, ha'⟩ ⟨_, hb'⟩
-    · exact Or.inl (f.monotone h)
-    · exact Or.inr (f.monotone h)
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.image, finset, s.finset
+--- 原说明 ---
+The image of a nonempty finite chain by a monotone map.
 -/
-noncomputable def map (s : NonemptyFiniteChains X) (f : X ->o Y) :
+noncomputable def map (s : NonemptyFiniteChains X) (f : X →o Y) :
     NonemptyFiniteChains Y where
   finset := Finset.image f s.finset
   comparable := by
@@ -159,51 +112,44 @@ noncomputable def map (s : NonemptyFiniteChains X) (f : X ->o Y) :
     · exact Or.inr (f.monotone h)
 
 @[simp]
-/--
-lemma `mem_map_iff` / 引理 `mem_map_iff`
-
-English:
-lemma mem_map_iff
-  given: (s : NonemptyFiniteChains X) (f : X ->o Y) (y : Y)
-  proof: by
-  simp [map]
-
-中文:
-引理 mem_map_iff
-  条件: (s : NonemptyFiniteChains X) (f : X ->o Y) (y : Y)
-  证明: by
-  simp [map]
+/-
+**PartialOrder.NonemptyFiniteChains.mem_map_iff** 是 Mathlib 中的一个引理，位于命名空间 `Parti
+alOrder.NonemptyFiniteChains`。
+形式化陈述：mem_map_iff (s : NonemptyFiniteChains X) (f : X ->o Y) (y : Y) : y in (s.m
+ap f).finset ↔ exists x, x in s.finset ∧ f x = y
+参数：s : NonemptyFiniteChains X；f : X ->o Y；y : Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_map_iff (s : NonemptyFiniteChains X) (f : X ->o Y) (y : Y) :
-    y in (s.map f).finset ↔ exists x, x in s.finset ∧ f x = y := by
+lemma mem_map_iff (s : NonemptyFiniteChains X) (f : X →o Y) (y : Y) :
+    y ∈ (s.map f).finset ↔ ∃ x, x ∈ s.finset ∧ f x = y := by
   simp [map]
 
 /-- The monotone map `NonemptyFiniteChains X →o NonemptyFiniteChains Y`
 that is induced by `f : X →o Y`. -/
 @[simps]
-/--
-Definition of `orderHomMap` / `orderHomMap` 的定义
+/-
+**PartialOrder.NonemptyFiniteChains.orderHomMap** 是 Mathlib 中的一个定义，位于命名空间 `Parti
+alOrder.NonemptyFiniteChains`。
+形式化陈述：orderHomMap (f : X ->o Y) : NonemptyFiniteChains X ->o NonemptyFiniteChain
+s Y where toFun s
+参数：f : X ->o Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderHomMap
-  signature: (f : X ->o Y)
-  body: map s f
-  monotone' a b h x hx := by
-    simp only [mem_map_iff] at hx ⊢
-    obtain ⟨x, hx, rfl⟩ := hx
-    exact ⟨x, h hx, rfl⟩
-
-中文:
-定义 orderHomMap
-  签名: (f : X ->o Y)
-  定义体: map s f
-  monotone' a b h x hx := by
-    simp only [mem_map_iff] at hx ⊢
-    obtain ⟨x, hx, rfl⟩ := hx
-    exact ⟨x, h hx, rfl⟩
+--- 原说明 ---
+The monotone map `NonemptyFiniteChains X →o NonemptyFiniteChains Y`
+that is induced by `f : X →o Y`.
 -/
-noncomputable def orderHomMap (f : X ->o Y) :
-    NonemptyFiniteChains X ->o NonemptyFiniteChains Y where
+noncomputable def orderHomMap (f : X →o Y) :
+    NonemptyFiniteChains X →o NonemptyFiniteChains Y where
   toFun s := map s f
   monotone' a b h x hx := by
     simp only [mem_map_iff] at hx ⊢
@@ -218,22 +164,16 @@ open PartialOrder in
 /-- The functor `PartOrd ⥤ PartOrd` which sends a partially ordered type `X`
 to `NonemptyFiniteChains X`. -/
 @[simps]
-/--
-Definition of `PartOrd.nonemptyFiniteChainsFunctor` / `PartOrd.nonemptyFiniteChainsFunctor` 的定义
+/-
+**PartOrd.nonemptyFiniteChainsFunctor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PartOrd.nonemptyFiniteChainsFunctor : PartOrd.{u} ⥤ PartOrd.{u} where obj 
+X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PartOrd.nonemptyFiniteChainsFunctor
-  signature: : PartOrd.{u} ⥤ PartOrd.{u} where
-  body: .of (NonemptyFiniteChains X)
-  map f := PartOrd.ofHom (NonemptyFiniteChains.orderHomMap f.hom)
-
-中文:
-定义 偏序.nonemptyFiniteChainsFunctor
-  签名: : 偏序.{u} ⥤ 偏序.{u} where
-  定义体: .of (NonemptyFiniteChains X)
-  map f := PartOrd.ofHom (NonemptyFiniteChains.orderHomMap f.hom)
-
-Depends on / 依赖: NonemptyFiniteChains
+--- 原说明 ---
+The functor `PartOrd ⥤ PartOrd` which sends a partially ordered type `X`
+to `NonemptyFiniteChains X`.
 -/
 noncomputable def PartOrd.nonemptyFiniteChainsFunctor : PartOrd.{u} ⥤ PartOrd.{u} where
   obj X := .of (NonemptyFiniteChains X)

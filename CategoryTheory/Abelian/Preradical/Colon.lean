@@ -14,7 +14,7 @@ public import Mathlib.CategoryTheory.Limits.Preserves.Shapes.Square
 # The colon construction on preradicals
 
 Given preradicals `Φ` and `Ψ` on an abelian category `C`, this file defines their **colon** `Φ : Ψ`
-in the sense of Stenström. Following Stenström, one can realize the colon object `r : s` evaluated
+in the sense of Stenström.  Following Stenström, one can realize the colon object `r : s` evaluated
 at `X : C` as the pullback of `X ⟶ X / r X` along `s (X / r X) ⟶ X / r X`. We encode this
 categorically by constructing `Φ : Ψ` as a pullback in the category of endofunctors of the canonical
 projection `Φ.π : 𝟭 C ⟶ Φ.quotient` along
@@ -54,79 +54,55 @@ namespace Preradical
 
 variable (Φ Ψ : Preradical C)
 
-/--
-Definition of `quotient` / `quotient` 的定义
+/-- The cokernel of `Φ.ι : Φ.r ⟶ 𝟭 C`. -/
+/-
+**CategoryTheory.Abelian.Preradical.quotient** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.Abelian.Preradical`。
+形式化陈述：quotient : C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation quotient
-  signature: : C ⥤ C
-  body: cokernel Φ.ι
-
-中文:
-缩写 quotient
-  签名: : C ⥤ C
-  定义体: cokernel Φ.ι
-
-Depends on / 依赖: cokernel
+--- 原说明 ---
+The cokernel of `Φ.ι : Φ.r ⟶ 𝟭 C`.
 -/
 noncomputable abbrev quotient : C ⥤ C := cokernel Φ.ι
 
-/--
-Definition of `π` / `π` 的定义
+/-- The canonical projection `𝟭 C ⥤ Φ.quotient` where `Φ.quotient` is the cokernel of
+`Φ.ι : Φ.r ⟶ 𝟭 C`. -/
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π
-  signature: : 𝟭 C ⟶ Φ.quotient
-  body: cokernel.π Φ.ι
-  deriving Epi
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 π
-  签名: : 𝟭 C ⟶ Φ.quotient
-  定义体: cokernel.π Φ.ι
-  deriving Epi
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cokernel
+--- 原说明 ---
+The canonical projection `𝟭 C ⥤ Φ.quotient` where `Φ.quotient` is the cokernel o
+f
+`Φ.ι : Φ.r ⟶ 𝟭 C`.
 -/
 noncomputable def π : 𝟭 C ⟶ Φ.quotient := cokernel.π Φ.ι
   deriving Epi
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι_π` / 引理 `ι_π`
-
-English:
-lemma ι_π
-  statement: Φ.ι ≫ Φ.π = 0
-  proof: cokernel.condition _
-
-中文:
-引理 ι_π
-  结论: Φ.ι ≫ Φ.π = 0
-  证明: cokernel.condition _
-
-Depends on / 依赖: cokernel, cokernel.condition, condition
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_π : Φ.ι ≫ Φ.π = 0 := cokernel.condition _
 
-/--
-Definition of `isColimitCokernelCofork` / `isColimitCokernelCofork` 的定义
+/-- The canonical cofork `CokernelCofork.ofπ Φ.π Φ.ι_π` exhibits `Φ.π : 𝟭 C ⟶ Φ.quotient` as the
+cokernel of `Φ.ι : Φ.r ⟶ 𝟭 C`. -/
+/-
+**CategoryTheory.Abelian.Preradical.isColimitCokernelCofork** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Abelian.Preradical`。
+形式化陈述：isColimitCokernelCofork : IsColimit (CokernelCofork.ofπ _ Φ.ι_π)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitCokernelCofork
-  signature: : IsColimit (CokernelCofork.ofπ _ Φ.ι_π)
-  body: cokernelIsCokernel _
-
-中文:
-定义 isColimitCokernelCofork
-  签名: : 是余极限 (余核余叉.ofπ _ Φ.ι_π)
-  定义体: cokernelIsCokernel _
-
-Depends on / 依赖: cokernelIsCokernel
+--- 原说明 ---
+The canonical cofork `CokernelCofork.ofπ Φ.π Φ.ι_π` exhibits `Φ.π : 𝟭 C ⟶ Φ.quot
+ient` as the
+cokernel of `Φ.ι : Φ.r ⟶ 𝟭 C`.
 -/
 noncomputable def isColimitCokernelCofork : IsColimit (CokernelCofork.ofπ _ Φ.ι_π) :=
   cokernelIsCokernel _
@@ -134,118 +110,83 @@ noncomputable def isColimitCokernelCofork : IsColimit (CokernelCofork.ofπ _ Φ.
 /-- The short complex `Φ.r ⟶ 𝟭 C ⟶ Φ.quotient` in the functor category associated to a preradical
 `Φ`. -/
 @[simps]
-/--
-Definition of `shortComplex` / `shortComplex` 的定义
+/-
+**CategoryTheory.Abelian.Preradical.shortComplex** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Abelian.Preradical`。
+形式化陈述：shortComplex : ShortComplex (C ⥤ C) where f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shortComplex
-  signature: : ShortComplex (C ⥤ C) where
-  body: Φ.ι
-  g := Φ.π
-
-中文:
-定义 shortComplex
-  签名: : 短复形 (C ⥤ C) where
-  定义体: Φ.ι
-  g := Φ.π
+--- 原说明 ---
+The short complex `Φ.r ⟶ 𝟭 C ⟶ Φ.quotient` in the functor category associated to
+ a preradical
+`Φ`.
 -/
 noncomputable def shortComplex : ShortComplex (C ⥤ C) where
   f := Φ.ι
   g := Φ.π
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono Φ.shortComplex.f
-  body: by dsimp; infer_instance
-
-中文:
-实例 :
-  签名: 单态射 Φ.shortComplex.f
-  定义体: by dsimp; infer_instance
-
-Depends on / 依赖: L.obj, infer_instance, isIso_hom_app, isPointwiseRightKanExtensionRanCounit
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono Φ.shortComplex.f := by dsimp; infer_instance
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Epi Φ.shortComplex.g
-  body: by dsimp; infer_instance
-
-中文:
-实例 :
-  签名: 满态射 Φ.shortComplex.g
-  定义体: by dsimp; infer_instance
-
-Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, infer_instance, isIso_of_isIso_app
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Epi Φ.shortComplex.g := by dsimp; infer_instance
-
-/--
-lemma `shortExact_shortComplex` / 引理 `shortExact_shortComplex`
-
-English:
-lemma shortExact_shortComplex
-  statement: Φ.shortComplex.ShortExact where
-  proof: ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel _)
-
-中文:
-引理 shortExact_shortComplex
-  结论: Φ.shortComplex.短正合 where
-  证明: ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel _)
-
-Depends on / 依赖: ShortComplex, ShortComplex.exact_of_g_is_cokernel, cokernelIsCokernel, exact_of_g_is_cokernel
+/-
+**CategoryTheory.Abelian.Preradical.shortExact_shortComplex** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Abelian.Preradical`。
+形式化陈述：shortExact_shortComplex : Φ.shortComplex.ShortExact where exact
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ShortComplex.exact_of_g_is_cokernel`：exact_of_g_is_cokern
+el (hS : IsColimit (CokernelCofork.ofπ S.g S.zero)) [S.HasHomology] : S.Exact
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.categoryWithHomology_of_abelian`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C],   Category
+Theory.CategoryWithHomology C
+· 使用定理 `CategoryTheory.Abelian.Preradical.instMonoFunctorFShortComplex`：∀ {C : T
+ype u_1} [inst : CategoryTheory.Category.{u_2, u_1} C] [inst_1 : CategoryTheory.
+Abelian C]   (Φ : CategoryTheory.Abelian.Preradical …
+· 使用定理 `CategoryTheory.Abelian.Preradical.instEpiFunctorGShortComplex`：∀ {C : Ty
+pe u_1} [inst : CategoryTheory.Category.{u_2, u_1} C] [inst_1 : CategoryTheory.A
+belian C]   (Φ : CategoryTheory.Abelian.Preradical …
 -/
 lemma shortExact_shortComplex : Φ.shortComplex.ShortExact where
   exact := ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel _)
 
-/--
-Definition of `isLimitKernelFork` / `isLimitKernelFork` 的定义
+/-- The kernel fork `KernelFork.ofι Φ.ι Φ.ι_π` exhibits `Φ.ι : Φ.r ⟶ 𝟭 C` as the kernel
+of the canonical projection `Φ.π : 𝟭 C ⟶ Φ.quotient`. -/
+/-
+**CategoryTheory.Abelian.Preradical.isLimitKernelFork** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Abelian.Preradical`。
+形式化陈述：isLimitKernelFork : IsLimit (KernelFork.ofι _ Φ.ι_π)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Abelian.Preradical.shortExact_shortComplex`：shortExact_sh
+ortComplex : Φ.shortComplex.ShortExact where exact
 
-English:
-definition isLimitKernelFork
-  signature: : IsLimit (KernelFork.ofι _ Φ.ι_π)
-  body: Φ.shortExact_shortComplex.fIsKernel
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 isLimitKernelFork
-  签名: : 是极限 (核叉.ofι _ Φ.ι_π)
-  定义体: Φ.shortExact_shortComplex.fIsKernel
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: fIsKernel, infer_instance, ranAdjunction_counit, shortExact_shortComplex, shortExact_shortComplex.fIsKernel
+--- 原说明 ---
+The kernel fork `KernelFork.ofι Φ.ι Φ.ι_π` exhibits `Φ.ι : Φ.r ⟶ 𝟭 C` as the ker
+nel
+of the canonical projection `Φ.π : 𝟭 C ⟶ Φ.quotient`.
 -/
 noncomputable def isLimitKernelFork : IsLimit (KernelFork.ofι _ Φ.ι_π) :=
   Φ.shortExact_shortComplex.fIsKernel
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι_π_app` / 引理 `ι_π_app`
-
-English:
-lemma ι_π_app
-  given: (X : C)
-  statement: Φ.ι.app X ≫ Φ.π.app X = 0
-  proof: by
-  simp [← NatTrans.comp_app]
-
-中文:
-引理 ι_π_app
-  条件: (X : C)
-  结论: Φ.ι.app X ≫ Φ.π.app X = 0
-  证明: by
-  simp [← NatTrans.comp_app]
-
-Depends on / 依赖: NatTrans, NatTrans.comp_app, comp_app
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_π_app (X : C) : Φ.ι.app X ≫ Φ.π.app X = 0 := by
   simp [← NatTrans.comp_app]
@@ -253,82 +194,114 @@ lemma ι_π_app (X : C) : Φ.ι.app X ≫ Φ.π.app X = 0 := by
 /-- For `X : C`, the short complex `Φ.r.obj X ⟶ X ⟶ Φ.quotient.obj X` obtained by evaluating
 `Φ.shortComplex` at `X`. -/
 @[simps]
-/--
-Definition of `shortComplexObj` / `shortComplexObj` 的定义
+/-
+**CategoryTheory.Abelian.Preradical.shortComplexObj** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Abelian.Preradical`。
+形式化陈述：shortComplexObj (X : C) : ShortComplex C where f
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shortComplexObj
-  signature: (X : C)
-  body: Φ.ι.app X
-  g := Φ.π.app X
-
-中文:
-定义 shortComplexObj
-  签名: (X : C)
-  定义体: Φ.ι.app X
-  g := Φ.π.app X
+--- 原说明 ---
+For `X : C`, the short complex `Φ.r.obj X ⟶ X ⟶ Φ.quotient.obj X` obtained by ev
+aluating
+`Φ.shortComplex` at `X`.
 -/
 noncomputable def shortComplexObj (X : C) : ShortComplex C where
   f := Φ.ι.app X
   g := Φ.π.app X
-
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : Mono (Φ.shortComplexObj X).f := by dsimp; infer_instance
-
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : Epi (Φ.shortComplexObj X).g := by dsimp; infer_instance
-
-/--
-lemma `shortExact_shortComplexObj` / 引理 `shortExact_shortComplexObj`
-
-English:
-lemma shortExact_shortComplexObj
-  given: (X : C)
-  statement: (Φ.shortComplexObj X).ShortExact where
-  proof: (ShortComplex.ShortExact.map_of_exact Φ.shortExact_shortComplex ((evaluation C C).obj X)).exact
-
-中文:
-引理 shortExact_shortComplexObj
-  条件: (X : C)
-  结论: (Φ.shortComplexObj X).短正合 where
-  证明: (ShortComplex.ShortExact.map_of_exact Φ.shortExact_shortComplex ((evaluation C C).obj X)).exact
-
-Depends on / 依赖: ShortComplex, ShortComplex.ShortExact.map_of_exact, ShortExact, evaluation, map_of_exact, shortExact_shortComplex
+/-
+**CategoryTheory.Abelian.Preradical.shortExact_shortComplexObj** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Abelian.Preradical`。
+形式化陈述：shortExact_shortComplexObj (X : C) : (Φ.shortComplexObj X).ShortExact wher
+e exact
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.exact`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms C]   {S : CategoryTheory.Sho…
+· 使用定理 `CategoryTheory.Functor.preservesZeroMorphisms_evaluation_obj`：∀ {C : Typ
+e u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Catego
+ryTheory.Category.{v₂, u₂} D]   [inst_2 : Category…
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.map_of_exact`：∀ {C : Type u_1} {D
+ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryT
+heory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用引理 `CategoryTheory.Abelian.Preradical.shortExact_shortComplex`：shortExact_sh
+ortComplex : Φ.shortComplex.ShortExact where exact
+· 使用定理 `CategoryTheory.Limits.instPreservesFiniteLimitsFunctorObjEvaluationOfHas
+FiniteLimits`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {K 
+: Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} K] [CategoryThe…
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `CategoryTheory.Limits.instPreservesFiniteColimitsFunctorObjEvaluationOfH
+asFiniteColimits`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C]
+ {K : Type u_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} K] [CategoryThe…
+· 使用定理 `CategoryTheory.Abelian.hasFiniteColimits`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.H
+asFiniteColimits C
+· 使用定理 `CategoryTheory.Abelian.Preradical.instMonoFShortComplexObj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{u_2, u_1} C] [inst_1 : CategoryTheory.Abel
+ian C]   (Φ : CategoryTheory.Abelian.Preradical …
+· 使用定理 `CategoryTheory.Abelian.Preradical.instEpiGShortComplexObj`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{u_2, u_1} C] [inst_1 : CategoryTheory.Abeli
+an C]   (Φ : CategoryTheory.Abelian.Preradical …
 -/
 lemma shortExact_shortComplexObj (X : C) : (Φ.shortComplexObj X).ShortExact where
   exact :=
     (ShortComplex.ShortExact.map_of_exact Φ.shortExact_shortComplex ((evaluation C C).obj X)).exact
 
-/--
-Definition of `isLimitKernelForkObj` / `isLimitKernelForkObj` 的定义
+/-- For `X : C`, the kernel fork `KernelFork.ofι (Φ.ι.app X) (Φ.ι_π_app X)` exhibits
+`Φ.ι.app X : Φ.r.obj X ⟶ X` as the kernel of the projection `Φ.π.app X : X ⟶ Φ.quotient.obj X`. -/
+/-
+**CategoryTheory.Abelian.Preradical.isLimitKernelForkObj** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Abelian.Preradical`。
+形式化陈述：isLimitKernelForkObj (X : C) : IsLimit (KernelFork.ofι _ (Φ.ι_π_app X))
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Abelian.Preradical.shortExact_shortComplexObj`：shortExact
+_shortComplexObj (X : C) : (Φ.shortComplexObj X).ShortExact where exact
 
-English:
-definition isLimitKernelForkObj
-  signature: (X : C)
-  body: (Φ.shortExact_shortComplexObj X).fIsKernel
-
-中文:
-定义 isLimitKernelForkObj
-  签名: (X : C)
-  定义体: (Φ.shortExact_shortComplexObj X).fIsKernel
-
-Depends on / 依赖: fIsKernel, shortExact_shortComplexObj
+--- 原说明 ---
+For `X : C`, the kernel fork `KernelFork.ofι (Φ.ι.app X) (Φ.ι_π_app X)` exhibits
+`Φ.ι.app X : Φ.r.obj X ⟶ X` as the kernel of the projection `Φ.π.app X : X ⟶ Φ.q
+uotient.obj X`.
 -/
 noncomputable def isLimitKernelForkObj (X : C) : IsLimit (KernelFork.ofι _ (Φ.ι_π_app X)) :=
   (Φ.shortExact_shortComplexObj X).fIsKernel
 
-/--
-Definition of `isColimitCokernelCoforkObj` / `isColimitCokernelCoforkObj` 的定义
+/-- For `X : C`, the cokernel cofork `CokernelCofork.ofπ (Φ.π.app X) (Φ.ι_π_app X)` exhibits
+`Φ.π.app X : X ⟶ Φ.quotient.obj X` as the cokernel of `Φ.ι.app X : Φ.r.obj X ⟶ X`. -/
+/-
+**CategoryTheory.Abelian.Preradical.isColimitCokernelCoforkObj** 是 Mathlib 中的一个定
+义，位于命名空间 `CategoryTheory.Abelian.Preradical`。
+形式化陈述：isColimitCokernelCoforkObj (X : C) : IsColimit (CokernelCofork.ofπ _ (Φ.ι_
+π_app X))
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Abelian.Preradical.shortExact_shortComplexObj`：shortExact
+_shortComplexObj (X : C) : (Φ.shortComplexObj X).ShortExact where exact
 
-English:
-definition isColimitCokernelCoforkObj
-  signature: (X : C)
-  body: (Φ.shortExact_shortComplexObj X).gIsCokernel
-
-中文:
-定义 isColimitCokernelCoforkObj
-  签名: (X : C)
-  定义体: (Φ.shortExact_shortComplexObj X).gIsCokernel
-
-Depends on / 依赖: gIsCokernel, shortExact_shortComplexObj
+--- 原说明 ---
+For `X : C`, the cokernel cofork `CokernelCofork.ofπ (Φ.π.app X) (Φ.ι_π_app X)` 
+exhibits
+`Φ.π.app X : X ⟶ Φ.quotient.obj X` as the cokernel of `Φ.ι.app X : Φ.r.obj X ⟶ X
+`.
 -/
 noncomputable def isColimitCokernelCoforkObj (X : C) :
     IsColimit (CokernelCofork.ofπ _ (Φ.ι_π_app X)) :=
@@ -336,102 +309,95 @@ noncomputable def isColimitCokernelCoforkObj (X : C) :
 
 open CategoryTheory.Functor
 
-/--
-Definition of `colon` / `colon` 的定义
+/-- The colon preradical from Stenström, defined as the pullback of `Φ.π : 𝟭 C ⟶ Φ.quotient` along
+`Φ.quotient.whiskerLeft Ψ.ι ≫ Φ.quotient.rightUnitor.hom : Φ.quotient ⋙ Ψ.r ⟶ Φ.quotient` -/
+/-
+**CategoryTheory.Abelian.Preradical.colon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Abelian.Preradical`。
+形式化陈述：colon : Preradical C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colon
-  signature: : Preradical C
-  body: MonoOver.mk
-    (pullback.fst Φ.π (whiskerLeft Φ.quotient Ψ.ι ≫ (rightUnitor _).hom))
-
-中文:
-定义 colon
-  签名: : Preradical C
-  定义体: MonoOver.mk
-    (pullback.fst Φ.π (whiskerLeft Φ.quotient Ψ.ι ≫ (rightUnitor _).hom))
-
-Depends on / 依赖: MonoOver, MonoOver.mk, pullback, pullback.fst, quotient, rightUnitor, whiskerLeft
+--- 原说明 ---
+The colon preradical from Stenström, defined as the pullback of `Φ.π : 𝟭 C ⟶ Φ.q
+uotient` along
+`Φ.quotient.whiskerLeft Ψ.ι ≫ Φ.quotient.rightUnitor.hom : Φ.quotient ⋙ Ψ.r ⟶ Φ.
+quotient`
 -/
 noncomputable def colon : Preradical C :=
   MonoOver.mk
     (pullback.fst Φ.π (whiskerLeft Φ.quotient Ψ.ι ≫ (rightUnitor _).hom))
 
-/--
-Definition of `colonπ` / `colonπ` 的定义
+/-- The second projection of the pullback defining the colon preradical. -/
+/-
+**CategoryTheory.Abelian.Preradical.colon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Abelian.Preradical`。
+形式化陈述：colon : Preradical C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colonπ
-  signature: : (colon Φ Ψ).r ⟶ Φ.quotient ⋙ Ψ.r
-  body: pullback.snd _ _
-
-中文:
-定义 colonπ
-  签名: : (colon Φ Ψ).r ⟶ Φ.quotient ⋙ Ψ.r
-  定义体: pullback.snd _ _
-
-Depends on / 依赖: pullback, pullback.snd
+--- 原说明 ---
+The second projection of the pullback defining the colon preradical.
 -/
 noncomputable def colonπ : (colon Φ Ψ).r ⟶ Φ.quotient ⋙ Ψ.r := pullback.snd _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Epi (colonπ Φ Ψ)
-  body: by dsimp [colonπ]; infer_instance
-
-中文:
-实例 :
-  签名: 满态射 (colonπ Φ Ψ)
-  定义体: by dsimp [colonπ]; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Epi (colonπ Φ Ψ) := by dsimp [colonπ]; infer_instance
-
+/-
+**CategoryTheory.Abelian.Preradical.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.A
+belian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : Epi ((colonπ Φ Ψ).app X) := instEpiAppOfFunctor (Φ.colonπ Ψ) X
-
-/--
-lemma `isPullback_colon` / 引理 `isPullback_colon`
-
-English:
-lemma isPullback_colon
-  proof: .of_hasPullback _ _
-
-中文:
-引理 isPullback_colon
-  证明: .of_hasPullback _ _
-
-Depends on / 依赖: of_hasPullback
+/-
+**CategoryTheory.Abelian.Preradical.isPullback_colon** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Abelian.Preradical`。
+形式化陈述：isPullback_colon : IsPullback (colon Φ Ψ).ι (colonπ Φ Ψ) Φ.π (whiskerLeft 
+Φ.quotient Ψ.ι ≫ (rightUnitor _).hom)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsPullback.of_hasPullback`：of_hasPullback (f : X ⟶ Z) (g 
+: Y ⟶ Z) [HasPullback f g] : IsPullback (pullback.fst f g) (pullback.snd f g) f 
+g
 -/
 lemma isPullback_colon :
     IsPullback (colon Φ Ψ).ι (colonπ Φ Ψ) Φ.π
       (whiskerLeft Φ.quotient Ψ.ι ≫ (rightUnitor _).hom) :=
   .of_hasPullback _ _
-
-/--
-lemma `isPullback_colon_obj` / 引理 `isPullback_colon_obj`
-
-English:
-lemma isPullback_colon_obj
-  given: (Φ Ψ : Preradical C) (X : C)
-  proof: by
-  simpa using (isPullback_colon Φ Ψ).map ((evaluation _ _).obj X)
-
-@[reassoc]
-
-中文:
-引理 isPullback_colon_obj
-  条件: (Φ Ψ : Preradical C) (X : C)
-  证明: by
-  simpa using (isPullback_colon Φ Ψ).map ((evaluation _ _).obj X)
-
-@[reassoc]
-
-Depends on / 依赖: evaluation, isPullback_colon
+/-
+**CategoryTheory.Abelian.Preradical.isPullback_colon_obj** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Abelian.Preradical`。
+形式化陈述：isPullback_colon_obj (Φ Ψ : Preradical C) (X : C) : IsPullback ((Φ.colon Ψ
+).ι.app X) ((Φ.colonπ Ψ).app X) (Φ.π.app X) (Ψ.ι.app (Φ.quotient.obj X))
+参数：Φ Ψ : Preradical C；X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.IsPullback.map`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用引理 `CategoryTheory.Abelian.Preradical.isPullback_colon`：isPullback_colon : I
+sPullback (colon Φ Ψ).ι (colonπ Φ Ψ) Φ.π (whiskerLeft Φ.quotient Ψ.ι ≫ (rightUni
+tor _).hom)
 -/
 lemma isPullback_colon_obj (Φ Ψ : Preradical C) (X : C) :
     IsPullback ((Φ.colon Ψ).ι.app X) ((Φ.colonπ Ψ).app X)
@@ -439,149 +405,134 @@ lemma isPullback_colon_obj (Φ Ψ : Preradical C) (X : C) :
   simpa using (isPullback_colon Φ Ψ).map ((evaluation _ _).obj X)
 
 @[reassoc]
-/--
-lemma `colon_ι_app_π_app` / 引理 `colon_ι_app_π_app`
-
-English:
-lemma colon_ι_app_π_app
-  given: (Φ Ψ : Preradical C) (X : C)
-  proof: (isPullback_colon_obj Φ Ψ X).w
-
-中文:
-引理 colon_ι_app_π_app
-  条件: (Φ Ψ : Preradical C) (X : C)
-  证明: (isPullback_colon_obj Φ Ψ X).w
-
-Depends on / 依赖: isPullback_colon_obj
+/-
+**CategoryTheory.Abelian.Preradical.colon_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Abelian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma colon_ι_app_π_app (Φ Ψ : Preradical C) (X : C) :
     (Φ.colon Ψ).ι.app X ≫ Φ.π.app X = (Φ.colonπ Ψ).app X ≫ Ψ.ι.app (Φ.quotient.obj X) :=
   (isPullback_colon_obj Φ Ψ X).w
 
-/--
-Definition of `toColon` / `toColon` 的定义
+/-- There is a morphism `Φ ⟶ (Φ.colon Ψ)` induced by the universal property for the pullback
+via `Φ.ι : Φ.r X ⟶ 𝟭 C` and the zero morphism `Φ.r ⟶  Φ.quotient ⋙ Ψ.r`. -/
+/-
+**CategoryTheory.Abelian.Preradical.toColon** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Abelian.Preradical`。
+形式化陈述：toColon : Φ ⟶ Φ.colon Ψ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Abelian.Preradical.isPullback_colon`：isPullback_colon : I
+sPullback (colon Φ Ψ).ι (colonπ Φ Ψ) Φ.π (whiskerLeft Φ.quotient Ψ.ι ≫ (rightUni
+tor _).hom)
 
-English:
-definition toColon
-  signature: : Φ ⟶ Φ.colon Ψ
-  body: MonoOver.homMk ((isPullback_colon Φ Ψ).lift Φ.ι 0 (by simp))
-
-中文:
-定义 toColon
-  签名: : Φ ⟶ Φ.colon Ψ
-  定义体: MonoOver.homMk ((isPullback_colon Φ Ψ).lift Φ.ι 0 (by simp))
-
-Depends on / 依赖: MonoOver, MonoOver.homMk, isPullback_colon
+--- 原说明 ---
+There is a morphism `Φ ⟶ (Φ.colon Ψ)` induced by the universal property for the 
+pullback
+via `Φ.ι : Φ.r X ⟶ 𝟭 C` and the zero morphism `Φ.r ⟶  Φ.quotient ⋙ Ψ.r`.
 -/
 noncomputable def toColon : Φ ⟶ Φ.colon Ψ :=
   MonoOver.homMk ((isPullback_colon Φ Ψ).lift Φ.ι 0 (by simp))
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `toColon_hom_left_colonπ` / 引理 `toColon_hom_left_colonπ`
-
-English:
-lemma toColon_hom_left_colonπ
-  proof: by
-  simp [toColon]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 toColon_hom_left_colonπ
-  证明: by
-  simp [toColon]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: toColon
+/-
+**CategoryTheory.Abelian.Preradical.toColon_hom_left_colon** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Abelian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toColon_hom_left_colonπ :
     (toColon Φ Ψ).hom.left ≫ colonπ Φ Ψ = 0 := by
   simp [toColon]
 
 @[reassoc (attr := simp)]
-/--
-lemma `toColon_hom_left_app_colonπ_app` / 引理 `toColon_hom_left_app_colonπ_app`
-
-English:
-lemma toColon_hom_left_app_colonπ_app
-  given: (X : C)
-  proof: NatTrans.congr_app (toColon_hom_left_colonπ Φ Ψ) X
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 toColon_hom_left_app_colonπ_app
-  条件: (X : C)
-  证明: NatTrans.congr_app (toColon_hom_left_colonπ Φ Ψ) X
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: NatTrans, NatTrans.congr_app, congr_app
+/-
+**CategoryTheory.Abelian.Preradical.toColon_hom_left_app_colon** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.Abelian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toColon_hom_left_app_colonπ_app (X : C) :
     (toColon Φ Ψ).hom.left.app X ≫ (colonπ Φ Ψ).app X = 0 :=
   NatTrans.congr_app (toColon_hom_left_colonπ Φ Ψ) X
 
 @[reassoc (attr := simp)]
-/--
-lemma `toColon_hom_left_app_colon_ι_app` / 引理 `toColon_hom_left_app_colon_ι_app`
-
-English:
-lemma toColon_hom_left_app_colon_ι_app
-  given: (X : C)
-  proof: by
-  rw [← NatTrans.comp_app]; rw [Over.w]
-
-中文:
-引理 toColon_hom_left_app_colon_ι_app
-  条件: (X : C)
-  证明: by
-  rw [← NatTrans.comp_app]; rw [Over.w]
-
-Depends on / 依赖: NatTrans, NatTrans.comp_app, Over.w, comp_app
+/-
+**CategoryTheory.Abelian.Preradical.toColon_hom_left_app_colon_** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.Abelian.Preradical`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toColon_hom_left_app_colon_ι_app (X : C) :
     (Φ.toColon Ψ).hom.left.app X ≫ (Φ.colon Ψ).ι.app X = Φ.ι.app X := by
-  rw [← NatTrans.comp_app]; rw [Over.w]
+  rw [← NatTrans.comp_app, Over.w]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isIso_toColon_hom_left_app_iff` / 定理 `isIso_toColon_hom_left_app_iff`
+/-- For `X : C`, the morphism `(toColon Φ Ψ)` is an isomorphism if and only if
+`(Ψ.r.obj (Φ.quotient.obj X))` is the zero object. -/
+/-
+**CategoryTheory.Abelian.Preradical.isIso_toColon_hom_left_app_iff** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Abelian.Preradical`。
+形式化陈述：isIso_toColon_hom_left_app_iff {Φ Ψ : Preradical C} {X : C} : IsIso ((toCo
+lon Φ Ψ).hom.left.app X) ↔ IsZero (Ψ.r.obj (Φ.quotient.obj X))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsZero.of_epi_eq_zero`：of_epi_eq_zero {X Y : C} (f
+ : X ⟶ Y) [Epi f] (h : f = 0) : IsZero Y
+· 使用定理 `CategoryTheory.Abelian.Preradical.instEpiAppColonπ`：∀ {C : Type u_1} [in
+st : CategoryTheory.Category.{u_2, u_1} C] [inst_1 : CategoryTheory.Abelian C]  
+ (Φ Ψ : CategoryTheory.Abelian.Preradica…
+· 使用定理 `CategoryTheory.Limits.zero_of_epi_comp`：zero_of_epi_comp {X Y Z : C} (f 
+: X ⟶ Y) {g : Y ⟶ Z} [Epi f] (h : f ≫ g = 0) : g = 0
+· 使用定理 `CategoryTheory.instEffectiveEpiOfIsIso`：∀ {C : Type u_1} [inst : Categor
+yTheory.Category.{v_1, u_1} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],  
+ CategoryTheory.EffectiveEpi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Abelian.Preradical.toColon_hom_left_app_colonπ_app`：toCol
+on_hom_left_app_colonπ_app (X : C) : (toColon Φ Ψ).hom.left.app X ≫ (colonπ Φ Ψ)
+.app X = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Abelian.Preradical.ι_π_app`：ι_π_app (X : C) : Φ.ι.app X ≫
+ Φ.π.app X = 0
+· 使用引理 `CategoryTheory.Abelian.Preradical.colon_ι_app_π_app`：colon_ι_app_π_app (
+Φ Ψ : Preradical C) (X : C) : (Φ.colon Ψ).ι.app X ≫ Φ.π.app X = (Φ.colonπ Ψ).app
+ X ≫ Ψ.ι.app (Φ.quotient.obj X)
+· 使用定理 `CategoryTheory.Limits.IsZero.eq_zero_of_tgt`：eq_zero_of_tgt {X Y : C} (o
+ : IsZero Y) (f : X ⟶ Y) : f = 0
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.instMonoAppOfFunctor`：∀ {K : Type u} [inst : CategoryTheo
+ry.Category.{v, u} K] {C : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} C
+]   {F G : CategoryTheory…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.Limits.hasFiniteWidePullbacks_of_hasFiniteLimits`：∀ (C : 
+Type u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFini
+teLimits C],   CategoryTheory.Limits.HasFiniteWidePul…
+· 使用定理 `CategoryTheory.Abelian.hasFiniteLimits`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.Has
+FiniteLimits C
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Abelian.Preradical.toColon_hom_left_app_colon_ι_app`：toCo
+lon_hom_left_app_colon_ι_app (X : C) : (Φ.toColon Ψ).hom.left.app X ≫ (Φ.colon Ψ
+).ι.app X = Φ.ι.app X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 
-English:
-theorem isIso_toColon_hom_left_app_iff
-  given: {Φ Ψ : Preradical C} {X : C}
-  proof: by
-  constructor <;> intro h
-  · exact IsZero.of_epi_eq_zero ((colonπ Φ Ψ).app X)
-      (zero_of_epi_comp ((toColon Φ Ψ).hom.left.app X) (by simp))
-  · obtain ⟨inv, hinv⟩ :=
-      KernelFork.IsLimit.lift' (Φ.isLimitKernelForkObj X) ((colon Φ Ψ).ι.app X) (by
-        rw [colon_ι_app_π_app]; rw [h.eq_zero_of_tgt ((colonπ Φ Ψ).app X)]; rw [zero_comp])
-    dsimp at hinv
-    refine ⟨inv, ?_, ?_⟩
-    · simp [← cancel_mono (Φ.ι.app X), hinv]
-    · simp [← cancel_mono ((Φ.colon Ψ).ι.app X), hinv]
-
-中文:
-定理 isIso_toColon_hom_left_app_iff
-  条件: {Φ Ψ : Preradical C} {X : C}
-  证明: by
-  constructor <;> intro h
-  · exact IsZero.of_epi_eq_zero ((colonπ Φ Ψ).app X)
-      (zero_of_epi_comp ((toColon Φ Ψ).hom.left.app X) (by simp))
-  · obtain ⟨inv, hinv⟩ :=
-      KernelFork.IsLimit.lift' (Φ.isLimitKernelForkObj X) ((colon Φ Ψ).ι.app X) (by
-        rw [colon_ι_app_π_app]; rw [h.eq_zero_of_tgt ((colonπ Φ Ψ).app X)]; rw [zero_comp])
-    dsimp at hinv
-    refine ⟨inv, ?_, ?_⟩
-    · simp [← cancel_mono (Φ.ι.app X), hinv]
-    · simp [← cancel_mono ((Φ.colon Ψ).ι.app X), hinv]
-
-Depends on / 依赖: IsLimit, IsZero, IsZero.of_epi_eq_zero, KernelFork, KernelFork.IsLimit.lift, cancel_mono, eq_zero_of_tgt, h.eq_zero_of_tgt, hom.left.app, isLimitKernelForkObj, of_epi_eq_zero, toColon, zero_comp, zero_of_epi_comp
+--- 原说明 ---
+For `X : C`, the morphism `(toColon Φ Ψ)` is an isomorphism if and only if
+`(Ψ.r.obj (Φ.quotient.obj X))` is the zero object.
 -/
 theorem isIso_toColon_hom_left_app_iff {Φ Ψ : Preradical C} {X : C} :
     IsIso ((toColon Φ Ψ).hom.left.app X) ↔ IsZero (Ψ.r.obj (Φ.quotient.obj X)) := by
@@ -590,36 +541,49 @@ theorem isIso_toColon_hom_left_app_iff {Φ Ψ : Preradical C} {X : C} :
       (zero_of_epi_comp ((toColon Φ Ψ).hom.left.app X) (by simp))
   · obtain ⟨inv, hinv⟩ :=
       KernelFork.IsLimit.lift' (Φ.isLimitKernelForkObj X) ((colon Φ Ψ).ι.app X) (by
-        rw [colon_ι_app_π_app]; rw [h.eq_zero_of_tgt ((colonπ Φ Ψ).app X)]; rw [zero_comp])
+        rw [colon_ι_app_π_app, h.eq_zero_of_tgt ((colonπ Φ Ψ).app X), zero_comp])
     dsimp at hinv
     refine ⟨inv, ?_, ?_⟩
     · simp [← cancel_mono (Φ.ι.app X), hinv]
     · simp [← cancel_mono ((Φ.colon Ψ).ι.app X), hinv]
 
-/--
-theorem `isIso_toColon_iff` / 定理 `isIso_toColon_iff`
+/-- The morphism `(toColon Φ Ψ)` is an isomorphism if and only if `Φ.quotient ⋙ Ψ.r` is the zero
+object. -/
+/-
+**CategoryTheory.Abelian.Preradical.isIso_toColon_iff** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Abelian.Preradical`。
+形式化陈述：isIso_toColon_iff {Φ Ψ : Preradical C} : IsIso (toColon Φ Ψ) ↔ IsZero (Φ.q
+uotient ⋙ Ψ.r)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.isZero_iff`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {D : Type u'} [inst_1 : CategoryTheory.Category.{v', u'} D] 
+  [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Abelian.hasZeroObject`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.HasZe
+roObject C
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `CategoryTheory.Abelian.Preradical.isIso_toColon_hom_left_app_iff`：isIso_
+toColon_hom_left_app_iff {Φ Ψ : Preradical C} {X : C} : IsIso ((toColon Φ Ψ).hom
+.left.app X) ↔ IsZero (Ψ.r.obj (Φ.quotient.obj X))
 
-English:
-theorem isIso_toColon_iff
-  given: {Φ Ψ : Preradical C}
-  proof: by
-  simpa [MonoOver.isIso_iff_isIso_hom_left, isZero_iff (Φ.quotient ⋙ Ψ.r),
-    NatTrans.isIso_iff_isIso_app] using forall_congr' fun x => isIso_toColon_hom_left_app_iff
-
-中文:
-定理 isIso_toColon_iff
-  条件: {Φ Ψ : Preradical C}
-  证明: by
-  simpa [MonoOver.isIso_iff_isIso_hom_left, isZero_iff (Φ.quotient ⋙ Ψ.r),
-    NatTrans.isIso_iff_isIso_app] using forall_congr' fun x => isIso_toColon_hom_left_app_iff
-
-Depends on / 依赖: MonoOver, MonoOver.isIso_iff_isIso_hom_left, NatTrans, NatTrans.isIso_iff_isIso_app, forall_congr, isIso_iff_isIso_app, isIso_iff_isIso_hom_left, isIso_toColon_hom_left_app_iff, isZero_iff, quotient
+--- 原说明 ---
+The morphism `(toColon Φ Ψ)` is an isomorphism if and only if `Φ.quotient ⋙ Ψ.r`
+ is the zero
+object.
 -/
 theorem isIso_toColon_iff {Φ Ψ : Preradical C} :
     IsIso (toColon Φ Ψ) ↔ IsZero (Φ.quotient ⋙ Ψ.r) := by
   simpa [MonoOver.isIso_iff_isIso_hom_left, isZero_iff (Φ.quotient ⋙ Ψ.r),
-    NatTrans.isIso_iff_isIso_app] using forall_congr' fun x => isIso_toColon_hom_left_app_iff
+    NatTrans.isIso_iff_isIso_app] using forall_congr' fun x ↦ isIso_toColon_hom_left_app_iff
 
 end Preradical
 
 end CategoryTheory.Abelian
+

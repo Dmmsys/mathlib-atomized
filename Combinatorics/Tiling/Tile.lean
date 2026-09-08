@@ -73,22 +73,21 @@ open scoped Pointwise
 variable {G X ιₚ : Type*} [Group G] [MulAction G X]
 
 variable (G X) in
-/--
-Definition of `Prototile` / `Prototile` 的定义
+/-- A `Prototile G X` describes a tile in `X`, copies of which under elements of `G` may be used in
+tilings. Two copies related by an element of `symmetries` are considered the same; two copies not so
+related, even if they have the same points, are considered distinct. -/
+/-
+**DiscreteTiling.Prototile** 是 Mathlib 中的一个归纳类型，位于命名空间 `DiscreteTiling`。
+形式化陈述：(G : Type u_1) → (X : Type u_2) → [inst : Group G] → [MulAction G X] → Typ
+e (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Prototile
-  parameters: where
-  axioms and operations (2):
-    - carrier : Set X
-    - symmetries : Subgroup (MulAction.stabilizer G carrier)
-
-中文:
-结构 Prototile
-  参数: where
-  公理与运算 (2 个):
-    - carrier : 集合 X
-    - symmetries : 子群 (乘法作用.stabilizer G carrier)
+--- 原说明 ---
+A `Prototile G X` describes a tile in `X`, copies of which under elements of `G`
+ may be used in
+tilings. Two copies related by an element of `symmetries` are considered the sam
+e; two copies not so
+related, even if they have the same points, are considered distinct.
 -/
 @[ext] structure Prototile where
   /-- The points in the prototile. Use the coercion to `Set X`, or `∈` on the `Prototile`, rather
@@ -100,224 +99,150 @@ structure Prototile
 
 namespace Prototile
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Prototile G X)
-  body: ⟨∅, ⊥⟩
-
-中文:
-实例 :
-  签名: 可居 (Prototile G X)
-  定义体: ⟨∅, ⊥⟩
+/-
+**DiscreteTiling.Prototile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.Prototile`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Prototile G X) where
   default := ⟨∅, ⊥⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (Prototile G X) (Set X)
-  body: Prototile.carrier
-
-中文:
-实例 :
-  签名: CoeOut (Prototile G X) (集合 X)
-  定义体: Prototile.carrier
-
-Depends on / 依赖: Prototile, Prototile.carrier, carrier
+/-
+**DiscreteTiling.Prototile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.Prototile`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (Prototile G X) (Set X) where
   coe := Prototile.carrier
 
 attribute [coe] carrier
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership X (Prototile G X)
-  body: x in (p : Set X)
-
-中文:
-实例 :
-  签名: Membership X (Prototile G X)
-  定义体: x in (p : Set X)
+/-
+**DiscreteTiling.Prototile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.Prototile`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership X (Prototile G X) where
-  mem p x := x in (p : Set X)
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (c s)
-  statement: (⟨c, s⟩ : Prototile G X) = c
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (c s)
-  结论: (⟨c, s⟩ : Prototile G X) = c
-  证明: rfl
+  mem p x := x ∈ (p : Set X)
+/-
+**DiscreteTiling.Prototile.coe_mk** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteTiling.Prot
+otile`。
+形式化陈述：coe_mk (c s) : (⟨c, s⟩ : Prototile G X) = c
+参数：c s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mk (c s) : (⟨c, s⟩ : Prototile G X) = c := rfl
-
-/--
-lemma `mem_coe` / 引理 `mem_coe`
-
-English:
-lemma mem_coe
-  given: {x : X} {p : Prototile G X}
-  statement: x in (p : Set X) ↔ x in p
-  proof: Iff.rfl
-
-中文:
-引理 mem_coe
-  条件: {x : X} {p : Prototile G X}
-  结论: x in (p : 集合 X) ↔ x in p
-  证明: Iff.rfl
+/-
+**DiscreteTiling.Prototile.mem_coe** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTiling.Pro
+totile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} [inst : Group G] [inst_1 : MulAction G X] 
+{x : X} {p : DiscreteTiling.Prototile G X},   x ∈ ↑p ↔ x ∈ p
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_coe {x : X} {p : Prototile G X} : x in (p : Set X) ↔ x in p := Iff.rfl
+@[simp] lemma mem_coe {x : X} {p : Prototile G X} : x ∈ (p : Set X) ↔ x ∈ p := Iff.rfl
 
 end Prototile
 
 variable (G X ιₚ) in
-/--
-Definition of `Protoset` / `Protoset` 的定义
+/-- A `Protoset G X ιₚ` is an indexed family of `Prototile G X`. This is a separate definition
+rather than just using plain functions to facilitate defining associated API that can be used with
+dot notation. -/
+/-
+**DiscreteTiling.Protoset** 是 Mathlib 中的一个归纳类型，位于命名空间 `DiscreteTiling`。
+形式化陈述：(G : Type u_1) → (X : Type u_2) → Type u_3 → [inst : Group G] → [MulAction
+ G X] → Type (max (max u_1 u_2) u_3)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Protoset
-  parameters: where
-  axioms and operations (1):
-    - tiles : ιₚ -> Prototile G X
-
-中文:
-结构 Protoset
-  参数: where
-  公理与运算 (1 个):
-    - tiles : ιₚ -> Prototile G X
+--- 原说明 ---
+A `Protoset G X ιₚ` is an indexed family of `Prototile G X`. This is a separate 
+definition
+rather than just using plain functions to facilitate defining associated API tha
+t can be used with
+dot notation.
 -/
 @[ext] structure Protoset where
   /-- The tiles in the protoset. Use the coercion to a function rather than using `tiles`
       directly. -/
-  tiles : ιₚ -> Prototile G X
+  tiles : ιₚ → Prototile G X
 
 namespace Protoset
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Protoset G X ιₚ)
-  body: ⟨fun _ => default⟩
-
-中文:
-实例 :
-  签名: 可居 (Protoset G X ιₚ)
-  定义体: ⟨fun _ => default⟩
+/-
+**DiscreteTiling.Protoset.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.Protoset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Protoset G X ιₚ) where
-  default := ⟨fun _ => default⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeFun (Protoset G X ιₚ) (fun _ => ιₚ -> Prototile G X)
-  body: tiles
-
-中文:
-实例 :
-  签名: CoeFun (Protoset G X ιₚ) (fun _ => ιₚ -> Prototile G X)
-  定义体: tiles
+  default := ⟨fun _ ↦ default⟩
+/-
+**DiscreteTiling.Protoset.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.Protoset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeFun (Protoset G X ιₚ) (fun _ => ιₚ -> Prototile G X) where
+instance : CoeFun (Protoset G X ιₚ) (fun _ ↦ ιₚ → Prototile G X) where
   coe := tiles
 
 attribute [coe] tiles
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (t)
-  statement: (⟨t⟩ : Protoset G X ιₚ) = t
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (t)
-  结论: (⟨t⟩ : Protoset G X ιₚ) = t
-  证明: rfl
+/-
+**DiscreteTiling.Protoset.coe_mk** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteTiling.Proto
+set`。
+形式化陈述：coe_mk (t) : (⟨t⟩ : Protoset G X ιₚ) = t
+参数：t。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mk (t) : (⟨t⟩ : Protoset G X ιₚ) = t := rfl
-
-/--
-lemma `coe_inj` / 引理 `coe_inj`
-
-English:
-lemma coe_inj
-  given: {ps₁ ps₂ : Protoset G X ιₚ}
-  proof: Protoset.ext_iff.symm
-
-中文:
-引理 coe_inj
-  条件: {ps₁ ps₂ : Protoset G X ιₚ}
-  证明: Protoset.ext_iff.symm
+/-
+**DiscreteTiling.Protoset.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTiling.Prot
+oset`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps₁ ps₂ : DiscreteTiling.Protoset G X ιₚ}, ↑ps₁ = ↑ps₂ ↔ ps₁ 
+= ps₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `DiscreteTiling.Protoset.ext_iff`：∀ {G : Type u_1} {X : Type u_2} {ιₚ : T
+ype u_3} {inst : Group G} {inst_1 : MulAction G X}   {x y : DiscreteTiling.Proto
+set G X ιₚ}, x = y ↔ …
 -/
 @[simp, norm_cast] lemma coe_inj {ps₁ ps₂ : Protoset G X ιₚ} :
-    (ps₁ : ιₚ -> Prototile G X) = ps₂ ↔ ps₁ = ps₂ :=
+    (ps₁ : ιₚ → Prototile G X) = ps₂ ↔ ps₁ = ps₂ :=
   Protoset.ext_iff.symm
-
-/--
-lemma `coe_injective` / 引理 `coe_injective`
-
-English:
-lemma coe_injective
-  statement: Injective (Protoset.tiles : Protoset G X ιₚ -> ιₚ -> Prototile G X)
-  proof: fun _ _ => coe_inj.1
-
-中文:
-引理 coe_injective
-  结论: 单射 (Protoset.tiles : Protoset G X ιₚ -> ιₚ -> Prototile G X)
-  证明: fun _ _ => coe_inj.1
-
-Depends on / 依赖: coe_inj
+/-
+**DiscreteTiling.Protoset.coe_injective** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteTilin
+g.Protoset`。
+形式化陈述：coe_injective : Injective (Protoset.tiles : Protoset G X ιₚ -> ιₚ -> Proto
+tile G X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DiscreteTiling.Protoset.coe_inj`：∀ {G : Type u_1} {X : Type u_2} {ιₚ : T
+ype u_3} [inst : Group G] [inst_1 : MulAction G X]   {ps₁ ps₂ : DiscreteTiling.P
+rotoset G X ιₚ}, ↑ps₁…
 -/
-lemma coe_injective : Injective (Protoset.tiles : Protoset G X ιₚ -> ιₚ -> Prototile G X) :=
-  fun _ _ => coe_inj.1
+lemma coe_injective : Injective (Protoset.tiles : Protoset G X ιₚ → ιₚ → Prototile G X) :=
+  fun _ _ ↦ coe_inj.1
 
 end Protoset
 
 variable {ps : Protoset G X ιₚ}
 
 variable (ps) in
-/--
-Definition of `PlacedTile` / `PlacedTile` 的定义
+/-- A `PlacedTile ps` is an image of a tile in the protoset `p` under an element of the group `G`.
+This is represented using a quotient so that images under group elements differing only by a
+symmetry of the tile are equal. -/
+/-
+**DiscreteTiling.PlacedTile** 是 Mathlib 中的一个归纳类型，位于命名空间 `DiscreteTiling`。
+形式化陈述：{G : Type u_1} →   {X : Type u_2} →     {ιₚ : Type u_3} → [inst : Group G]
+ → [inst_1 : MulAction G X] → DiscreteTiling.Protoset G X ιₚ → Type (max u_1 u_3
+)
+参数：max u_1 u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PlacedTile
-  parameters: where
-  axioms and operations (2):
-    - index : ιₚ
-    - groupElts : G ⧸ ((ps index).symmetries.map <| Subgroup.subtype _)
-
-中文:
-结构 PlacedTile
-  参数: where
-  公理与运算 (2 个):
-    - index : ιₚ
-    - groupElts : G ⧸ ((ps index).symmetries.map <| 子群.subtype _)
+--- 原说明 ---
+A `PlacedTile ps` is an image of a tile in the protoset `p` under an element of 
+the group `G`.
+This is represented using a quotient so that images under group elements differi
+ng only by a
+symmetry of the tile are equal.
 -/
 @[ext] structure PlacedTile where
   /-- The index of the tile in the protoset. -/
@@ -327,90 +252,74 @@ structure PlacedTile
 
 namespace PlacedTile
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: ιₚ] : Nonempty (PlacedTile ps)
-  body: ⟨⟨Classical.arbitrary _, (1 : G)⟩⟩
-
-中文:
-实例 [非空
-  签名: ιₚ] : 非空 (PlacedTile ps)
-  定义体: ⟨⟨Classical.arbitrary _, (1 : G)⟩⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary
+/-
+**DiscreteTiling.PlacedTile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.PlacedTil
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty ιₚ] : Nonempty (PlacedTile ps) := ⟨⟨Classical.arbitrary _, (1 : G)⟩⟩
 
-/--
-lemma `induction_on` / 引理 `induction_on`
+/-- An induction principle to deduce results for `PlacedTile` from those given an index and an
+element of `G`, used with `induction pt using PlacedTile.induction_on`. -/
+/-
+**DiscreteTiling.PlacedTile.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTili
+ng.PlacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} {ppt : DiscreteTiling.Pl
+acedTile ps → Prop} (pt : DiscreteTiling.PlacedTile ps),   (∀ (i : ιₚ) (gx : G),
+ ppt { index := i, groupElts := ↑gx }) → ppt pt
+参数：pt : DiscreteTiling.PlacedTile ps；∀ (i : ιₚ) (gx : G), ppt { index := i, grou
+pElts := ↑gx }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
 
-English:
-lemma induction_on
-  statement: {ppt : PlacedTile ps -> Prop} (pt : PlacedTile ps)
-  proof: by
-  rcases pt with ⟨i, gx⟩
-  induction gx using Quotient.inductionOn
-  apply h
-
-中文:
-引理 induction_on
-  结论: {ppt : PlacedTile ps -> 命题} (pt : PlacedTile ps)
-  证明: by
-  rcases pt with ⟨i, gx⟩
-  induction gx using Quotient.inductionOn
-  apply h
+--- 原说明 ---
+An induction principle to deduce results for `PlacedTile` from those given an in
+dex and an
+element of `G`, used with `induction pt using PlacedTile.induction_on`.
 -/
-@[elab_as_elim] protected lemma induction_on {ppt : PlacedTile ps -> Prop} (pt : PlacedTile ps)
-    (h : forall i : ιₚ, forall gx : G, ppt ⟨i, gx⟩) : ppt pt := by
+@[elab_as_elim] protected lemma induction_on {ppt : PlacedTile ps → Prop} (pt : PlacedTile ps)
+    (h : ∀ i : ιₚ, ∀ gx : G, ppt ⟨i, gx⟩) : ppt pt := by
   rcases pt with ⟨i, gx⟩
   induction gx using Quotient.inductionOn
   apply h
 
-/--
-lemma `ext_iff_of_exists` / 引理 `ext_iff_of_exists`
+/-- An alternative extensionality principle for `PlacedTile` that avoids `HEq`, using existence of a
+common group element. -/
+/-
+**DiscreteTiling.PlacedTile.ext_iff_of_exists** 是 Mathlib 中的一个引理，位于命名空间 `Discret
+eTiling.PlacedTile`。
+形式化陈述：ext_iff_of_exists {pt₁ pt₂ : PlacedTile ps} : pt₁ = pt₂ ↔ pt₁.index = pt₂.
+index ∧ exists g, ⟦g⟧ = pt₁.groupElts ∧ ⟦g⟧ = pt₂.groupElts
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
+· 使用定理 `DiscreteTiling.PlacedTile.ext`：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Typ
+e u_3} {inst : Group G} {inst_1 : MulAction G X}   {ps : DiscreteTiling.Protoset
+ G X ιₚ} {x y : Dis…
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma ext_iff_of_exists
-  given: {pt₁ pt₂ : PlacedTile ps}
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨h, g, hg₁, hg₂⟩ => ?_⟩
-  · subst h
-    simp only [and_self, true_and]
-    refine ⟨pt₁.groupElts.out, ?_⟩
-    rw [Quotient.out_eq]
-  · rcases pt₁ with ⟨i₁, g₁⟩
-    rcases pt₂ with ⟨i₂, g₂⟩
-    dsimp only at h
-    subst h
-    ext
-    · rfl
-    · exact heq_of_eq (hg₁.symm.trans hg₂)
-
-中文:
-引理 ext_iff_of_存在
-  条件: {pt₁ pt₂ : PlacedTile ps}
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨h, g, hg₁, hg₂⟩ => ?_⟩
-  · subst h
-    simp only [and_self, true_and]
-    refine ⟨pt₁.groupElts.out, ?_⟩
-    rw [Quotient.out_eq]
-  · rcases pt₁ with ⟨i₁, g₁⟩
-    rcases pt₂ with ⟨i₂, g₂⟩
-    dsimp only at h
-    subst h
-    ext
-    · rfl
-    · exact heq_of_eq (hg₁.symm.trans hg₂)
-
-Depends on / 依赖: Quotient, Quotient.out_eq, and_self, groupElts, groupElts.out, heq_of_eq, out_eq, symm.trans, true_and
+--- 原说明 ---
+An alternative extensionality principle for `PlacedTile` that avoids `HEq`, usin
+g existence of a
+common group element.
 -/
 lemma ext_iff_of_exists {pt₁ pt₂ : PlacedTile ps} :
-    pt₁ = pt₂ ↔ pt₁.index = pt₂.index ∧ exists g, ⟦g⟧ = pt₁.groupElts ∧ ⟦g⟧ = pt₂.groupElts := by
-  refine ⟨fun h => ?_, fun ⟨h, g, hg₁, hg₂⟩ => ?_⟩
+    pt₁ = pt₂ ↔ pt₁.index = pt₂.index ∧ ∃ g, ⟦g⟧ = pt₁.groupElts ∧ ⟦g⟧ = pt₂.groupElts := by
+  refine ⟨fun h ↦ ?_, fun ⟨h, g, hg₁, hg₂⟩ ↦ ?_⟩
   · subst h
     simp only [and_self, true_and]
     refine ⟨pt₁.groupElts.out, ?_⟩
@@ -423,47 +332,47 @@ lemma ext_iff_of_exists {pt₁ pt₂ : PlacedTile ps} :
     · rfl
     · exact heq_of_eq (hg₁.symm.trans hg₂)
 
-/--
-lemma `ext_iff_of_preimage` / 引理 `ext_iff_of_preimage`
+/-- An alternative extensionality principle for `PlacedTile` that avoids `HEq`, using equality of
+quotient preimages. -/
+/-
+**DiscreteTiling.PlacedTile.ext_iff_of_preimage** 是 Mathlib 中的一个引理，位于命名空间 `Discr
+eteTiling.PlacedTile`。
+形式化陈述：ext_iff_of_preimage {pt₁ pt₂ : PlacedTile ps} : pt₁ = pt₂ ↔ pt₁.index = pt
+₂.index ∧ (Quotient.mk _) ⁻¹' {pt₁.groupElts} = (Quotient.mk _) ⁻¹' {pt₂.groupEl
+ts}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `DiscreteTiling.PlacedTile.ext`：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Typ
+e u_3} {inst : Group G} {inst_1 : MulAction G X}   {ps : DiscreteTiling.Protoset
+ G X ιₚ} {x y : Dis…
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.singleton_eq_singleton_iff`：singleton_eq_singleton_iff {x y : α} : {
+x} = ({y} : Set α) ↔ x = y
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Set.preimage_eq_preimage`：preimage_eq_preimage {f : β -> α} (hf : Surjec
+tive f) : f ⁻¹' s = f ⁻¹' t ↔ s = t
+· 使用定理 `Quotient.mk''_surjective`：∀ {α : Sort u_1} {s₁ : Setoid α}, Function.Sur
+jective Quotient.mk''
 
-English:
-lemma ext_iff_of_preimage
-  given: {pt₁ pt₂ : PlacedTile ps}
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨hi, hq⟩ => ?_⟩
-  · subst h
-    simp only [and_self]
-  · rcases pt₁ with ⟨i₁, g₁⟩
-    rcases pt₂ with ⟨i₂, g₂⟩
-    dsimp only at hi
-    subst hi
-    ext
-    · rfl
-    · exact heq_of_eq (Set.singleton_eq_singleton_iff.1
-        ((Set.preimage_eq_preimage Quotient.mk''_surjective).1 hq))
-
-中文:
-引理 ext_iff_of_preimage
-  条件: {pt₁ pt₂ : PlacedTile ps}
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨hi, hq⟩ => ?_⟩
-  · subst h
-    simp only [and_self]
-  · rcases pt₁ with ⟨i₁, g₁⟩
-    rcases pt₂ with ⟨i₂, g₂⟩
-    dsimp only at hi
-    subst hi
-    ext
-    · rfl
-    · exact heq_of_eq (Set.singleton_eq_singleton_iff.1
-        ((Set.preimage_eq_preimage Quotient.mk''_surjective).1 hq))
-
-Depends on / 依赖: Quotient, Quotient.mk, Set.preimage_eq_preimage, Set.singleton_eq_singleton_iff, _surjective, and_self, heq_of_eq, preimage_eq_preimage, singleton_eq_singleton_iff
+--- 原说明 ---
+An alternative extensionality principle for `PlacedTile` that avoids `HEq`, usin
+g equality of
+quotient preimages.
 -/
 lemma ext_iff_of_preimage {pt₁ pt₂ : PlacedTile ps} :
     pt₁ = pt₂ ↔ pt₁.index = pt₂.index ∧
       (Quotient.mk _) ⁻¹' {pt₁.groupElts} = (Quotient.mk _) ⁻¹' {pt₂.groupElts} := by
-  refine ⟨fun h => ?_, fun ⟨hi, hq⟩ => ?_⟩
+  refine ⟨fun h ↦ ?_, fun ⟨hi, hq⟩ ↦ ?_⟩
   · subst h
     simp only [and_self]
   · rcases pt₁ with ⟨i₁, g₁⟩
@@ -475,347 +384,237 @@ lemma ext_iff_of_preimage {pt₁ pt₂ : PlacedTile ps} :
     · exact heq_of_eq (Set.singleton_eq_singleton_iff.1
         ((Set.preimage_eq_preimage Quotient.mk''_surjective).1 hq))
 
-/--
-Definition of `coeSet` / `coeSet` 的定义
+/-- Coercion from a `PlacedTile` to a set of points. Use the coercion rather than using `coeSet`
+directly. -/
+/-
+**DiscreteTiling.PlacedTile.coeSet** 是 Mathlib 中的一个定义，位于命名空间 `DiscreteTiling.Pla
+cedTile`。
+形式化陈述：{G : Type u_1} →   {X : Type u_2} →     {ιₚ : Type u_3} →       [inst : Gr
+oup G] →         [inst_1 : MulAction G X] → {ps : DiscreteTiling.Protoset G X ιₚ
+} → DiscreteTiling.PlacedTile ps → Set X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeSet
-  signature: (pt : PlacedTile ps)
-  body: Quotient.liftOn' pt.groupElts (fun g => g • (ps pt.index : Set X))
-    fun a b r => by
-      rw [QuotientGroup.leftRel_eq] at r
-      rw [eq_comm]; rw [← inv_smul_eq_iff]; rw [smul_smul]; rw [← MulAction.mem_stabilizer_iff]
-      exact SetLike.le_def.1 (Subgroup.map_subtype_le _) r
-
-中文:
-定义 coeSet
-  签名: (pt : PlacedTile ps)
-  定义体: Quotient.liftOn' pt.groupElts (fun g => g • (ps pt.index : Set X))
-    fun a b r => by
-      rw [QuotientGroup.leftRel_eq] at r
-      rw [eq_comm]; rw [← inv_smul_eq_iff]; rw [smul_smul]; rw [← MulAction.mem_stabilizer_iff]
-      exact SetLike.le_def.1 (Subgroup.map_subtype_le _) r
+--- 原说明 ---
+Coercion from a `PlacedTile` to a set of points. Use the coercion rather than us
+ing `coeSet`
+directly.
 -/
 @[coe] def coeSet (pt : PlacedTile ps) : Set X :=
-  Quotient.liftOn' pt.groupElts (fun g => g • (ps pt.index : Set X))
-    fun a b r => by
+  Quotient.liftOn' pt.groupElts (fun g ↦ g • (ps pt.index : Set X))
+    fun a b r ↦ by
       rw [QuotientGroup.leftRel_eq] at r
-      rw [eq_comm]; rw [← inv_smul_eq_iff]; rw [smul_smul]; rw [← MulAction.mem_stabilizer_iff]
+      rw [eq_comm, ← inv_smul_eq_iff, smul_smul, ← MulAction.mem_stabilizer_iff]
       exact SetLike.le_def.1 (Subgroup.map_subtype_le _) r
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (PlacedTile ps) (Set X)
-  body: coeSet
-
-中文:
-实例 :
-  签名: CoeOut (PlacedTile ps) (集合 X)
-  定义体: coeSet
-
-Depends on / 依赖: coeSet
+/-
+**DiscreteTiling.PlacedTile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.PlacedTil
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (PlacedTile ps) (Set X) where
   coe := coeSet
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership X (PlacedTile ps)
-  body: x in (p : Set X)
-
-中文:
-实例 :
-  签名: Membership X (PlacedTile ps)
-  定义体: x in (p : Set X)
+/-
+**DiscreteTiling.PlacedTile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.PlacedTil
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership X (PlacedTile ps) where
-  mem p x := x in (p : Set X)
-
-/--
-lemma `mem_coe` / 引理 `mem_coe`
-
-English:
-lemma mem_coe
-  given: {x : X} {pt : PlacedTile ps}
-  statement: x in (pt : Set X) ↔ x in pt
-  proof: Iff.rfl
-
-中文:
-引理 mem_coe
-  条件: {x : X} {pt : PlacedTile ps}
-  结论: x in (pt : 集合 X) ↔ x in pt
-  证明: Iff.rfl
+  mem p x := x ∈ (p : Set X)
+/-
+**DiscreteTiling.PlacedTile.mem_coe** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTiling.Pl
+acedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} {x : X} {pt : DiscreteTi
+ling.PlacedTile ps}, x ∈ ↑pt ↔ x ∈ pt
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_coe {x : X} {pt : PlacedTile ps} : x in (pt : Set X) ↔ x in pt := Iff.rfl
-
-/--
-lemma `coe_mk_mk` / 引理 `coe_mk_mk`
-
-English:
-lemma coe_mk_mk
-  given: (i : ιₚ) (g : G)
-  statement: (⟨i, ⟦g⟧⟩ : PlacedTile ps) = g • (ps i : Set X)
-  proof: rfl
-
-中文:
-引理 coe_mk_mk
-  条件: (i : ιₚ) (g : G)
-  结论: (⟨i, ⟦g⟧⟩ : PlacedTile ps) = g • (ps i : 集合 X)
-  证明: rfl
+@[simp] lemma mem_coe {x : X} {pt : PlacedTile ps} : x ∈ (pt : Set X) ↔ x ∈ pt := Iff.rfl
+/-
+**DiscreteTiling.PlacedTile.coe_mk_mk** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteTiling.
+PlacedTile`。
+形式化陈述：coe_mk_mk (i : ιₚ) (g : G) : (⟨i, ⟦g⟧⟩ : PlacedTile ps) = g • (ps i : Set 
+X)
+参数：i : ιₚ；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mk_mk (i : ιₚ) (g : G) : (⟨i, ⟦g⟧⟩ : PlacedTile ps) = g • (ps i : Set X) := rfl
-
-/--
-lemma `coe_mk_coe` / 引理 `coe_mk_coe`
-
-English:
-lemma coe_mk_coe
-  given: (i : ιₚ) (g : G)
-  statement: (⟨i, g⟩ : PlacedTile ps) = g • (ps i : Set X)
-  proof: rfl
-
-中文:
-引理 coe_mk_coe
-  条件: (i : ιₚ) (g : G)
-  结论: (⟨i, g⟩ : PlacedTile ps) = g • (ps i : 集合 X)
-  证明: rfl
+/-
+**DiscreteTiling.PlacedTile.coe_mk_coe** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteTiling
+.PlacedTile`。
+形式化陈述：coe_mk_coe (i : ιₚ) (g : G) : (⟨i, g⟩ : PlacedTile ps) = g • (ps i : Set X
+)
+参数：i : ιₚ；g : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mk_coe (i : ιₚ) (g : G) : (⟨i, g⟩ : PlacedTile ps) = g • (ps i : Set X) := rfl
-
-/--
-lemma `coe_nonempty_iff` / 引理 `coe_nonempty_iff`
-
-English:
-lemma coe_nonempty_iff
-  given: {pt : PlacedTile ps}
-  proof: by
-  rcases pt with ⟨index, groupElts⟩
-  simp only [coeSet]
-  rw [← groupElts.out_eq']; rw [Quotient.liftOn'_mk'']
-  simp
-
-中文:
-引理 coe_nonempty_iff
-  条件: {pt : PlacedTile ps}
-  证明: by
-  rcases pt with ⟨index, groupElts⟩
-  simp only [coeSet]
-  rw [← groupElts.out_eq']; rw [Quotient.liftOn'_mk'']
-  simp
-
-Depends on / 依赖: Quotient, Quotient.liftOn, coeSet, groupElts, groupElts.out_eq, liftOn, out_eq
+/-
+**DiscreteTiling.PlacedTile.coe_nonempty_iff** 是 Mathlib 中的一个引理，位于命名空间 `Discrete
+Tiling.PlacedTile`。
+形式化陈述：coe_nonempty_iff {pt : PlacedTile ps} : (pt : Set X).Nonempty ↔ (ps pt.ind
+ex : Set X).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Quotient.out_eq'`：out_eq' (q : Quotient s₁) : Quotient.mk'' q.out = q
+· 使用定理 `Quotient.liftOn'_mk''`：∀ {α : Sort u_1} {φ : Sort u_4} {s₁ : Setoid α} (
+f : α → φ) (h : ∀ (a b : α), s₁ a b → f a = f b) (x : α),   (Quotient.mk'' x).li
+ftOn' f h =…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma coe_nonempty_iff {pt : PlacedTile ps} :
     (pt : Set X).Nonempty ↔ (ps pt.index : Set X).Nonempty := by
   rcases pt with ⟨index, groupElts⟩
   simp only [coeSet]
-  rw [← groupElts.out_eq']; rw [Quotient.liftOn'_mk'']
+  rw [← groupElts.out_eq', Quotient.liftOn'_mk'']
   simp
-
-/--
-lemma `coe_mk_nonempty_iff` / 引理 `coe_mk_nonempty_iff`
-
-English:
-lemma coe_mk_nonempty_iff
-  given: {i : ιₚ} (g)
-  proof: coe_nonempty_iff
-
-中文:
-引理 coe_mk_nonempty_iff
-  条件: {i : ιₚ} (g)
-  证明: coe_nonempty_iff
+/-
+**DiscreteTiling.PlacedTile.coe_mk_nonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Discr
+eteTiling.PlacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} {i : ιₚ}   (g : G ⧸ Subg
+roup.map (MulAction.stabilizer G ↑(↑ps i)).subtype (↑ps i).symmetries),   (↑{ in
+dex := i, groupElts := g }).Nonempty ↔ (↑(↑ps i)).Nonempty
+参数：g : G ⧸ Subgroup.map (MulAction.stabilizer G ↑(↑ps i)).subtype (↑ps i).symmet
+ries；↑{ index := i, groupElts := g }；↑(↑ps i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `DiscreteTiling.PlacedTile.coe_nonempty_iff`：coe_nonempty_iff {pt : Place
+dTile ps} : (pt : Set X).Nonempty ↔ (ps pt.index : Set X).Nonempty
 -/
 @[simp] lemma coe_mk_nonempty_iff {i : ιₚ} (g) :
     ((⟨i, g⟩ : PlacedTile ps) : Set X).Nonempty ↔ (ps i : Set X).Nonempty :=
   coe_nonempty_iff
-
-/--
-lemma `coe_finite_iff` / 引理 `coe_finite_iff`
-
-English:
-lemma coe_finite_iff
-  given: {pt : PlacedTile ps}
-  proof: by
-  rcases pt with ⟨index, groupElts⟩
-  simp only [coeSet]
-  rw [← groupElts.out_eq']; rw [Quotient.liftOn'_mk'']
-  simp
-
-中文:
-引理 coe_finite_iff
-  条件: {pt : PlacedTile ps}
-  证明: by
-  rcases pt with ⟨index, groupElts⟩
-  simp only [coeSet]
-  rw [← groupElts.out_eq']; rw [Quotient.liftOn'_mk'']
-  simp
-
-Depends on / 依赖: Quotient, Quotient.liftOn, coeSet, groupElts, groupElts.out_eq, liftOn, out_eq
+/-
+**DiscreteTiling.PlacedTile.coe_finite_iff** 是 Mathlib 中的一个引理，位于命名空间 `DiscreteTi
+ling.PlacedTile`。
+形式化陈述：coe_finite_iff {pt : PlacedTile ps} : (pt : Set X).Finite ↔ (ps pt.index :
+ Set X).Finite
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Quotient.out_eq'`：out_eq' (q : Quotient s₁) : Quotient.mk'' q.out = q
+· 使用定理 `Quotient.liftOn'_mk''`：∀ {α : Sort u_1} {φ : Sort u_4} {s₁ : Setoid α} (
+f : α → φ) (h : ∀ (a b : α), s₁ a b → f a = f b) (x : α),   (Quotient.mk'' x).li
+ftOn' f h =…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma coe_finite_iff {pt : PlacedTile ps} :
     (pt : Set X).Finite ↔ (ps pt.index : Set X).Finite := by
   rcases pt with ⟨index, groupElts⟩
   simp only [coeSet]
-  rw [← groupElts.out_eq']; rw [Quotient.liftOn'_mk'']
+  rw [← groupElts.out_eq', Quotient.liftOn'_mk'']
   simp
-
-/--
-lemma `coe_mk_finite_iff` / 引理 `coe_mk_finite_iff`
-
-English:
-lemma coe_mk_finite_iff
-  given: {i : ιₚ} (g)
-  proof: coe_finite_iff
-
-中文:
-引理 coe_mk_finite_iff
-  条件: {i : ιₚ} (g)
-  证明: coe_finite_iff
+/-
+**DiscreteTiling.PlacedTile.coe_mk_finite_iff** 是 Mathlib 中的一个定理，位于命名空间 `Discret
+eTiling.PlacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} {i : ιₚ}   (g : G ⧸ Subg
+roup.map (MulAction.stabilizer G ↑(↑ps i)).subtype (↑ps i).symmetries),   (↑{ in
+dex := i, groupElts := g }).Finite ↔ (↑(↑ps i)).Finite
+参数：g : G ⧸ Subgroup.map (MulAction.stabilizer G ↑(↑ps i)).subtype (↑ps i).symmet
+ries；↑{ index := i, groupElts := g }；↑(↑ps i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `DiscreteTiling.PlacedTile.coe_finite_iff`：coe_finite_iff {pt : PlacedTil
+e ps} : (pt : Set X).Finite ↔ (ps pt.index : Set X).Finite
 -/
 @[simp] lemma coe_mk_finite_iff {i : ιₚ} (g) :
     ((⟨i, g⟩ : PlacedTile ps) : Set X).Finite ↔ (ps i : Set X).Finite :=
   coe_finite_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul G (PlacedTile ps)
-  body: Quotient.liftOn' pt.groupElts (fun h => ⟨pt.index, g * h⟩)
-    fun a b r => by
-      rw [QuotientGroup.leftRel_eq] at r
-      refine PlacedTile.ext rfl ?_
-      simpa [QuotientGroup.eq, ← mul_assoc] using r
-
-中文:
-实例 :
-  签名: 标量乘法 G (PlacedTile ps)
-  定义体: Quotient.liftOn' pt.groupElts (fun h => ⟨pt.index, g * h⟩)
-    fun a b r => by
-      rw [QuotientGroup.leftRel_eq] at r
-      refine PlacedTile.ext rfl ?_
-      simpa [QuotientGroup.eq, ← mul_assoc] using r
-
-Depends on / 依赖: Quotient, Quotient.liftOn, groupElts, liftOn, pt.groupElts, pt.index
+/-
+**DiscreteTiling.PlacedTile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.PlacedTil
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul G (PlacedTile ps) where
-  smul g pt := Quotient.liftOn' pt.groupElts (fun h => ⟨pt.index, g * h⟩)
-    fun a b r => by
+  smul g pt := Quotient.liftOn' pt.groupElts (fun h ↦ ⟨pt.index, g * h⟩)
+    fun a b r ↦ by
       rw [QuotientGroup.leftRel_eq] at r
       refine PlacedTile.ext rfl ?_
       simpa [QuotientGroup.eq, ← mul_assoc] using r
-
-/--
-lemma `smul_mk_mk` / 引理 `smul_mk_mk`
-
-English:
-lemma smul_mk_mk
-  given: (g h : G) (i : ιₚ)
-  statement: g • (⟨i, ⟦h⟧⟩ : PlacedTile ps) = ⟨i, g * h⟩
-  proof: rfl
-
-中文:
-引理 smul_mk_mk
-  条件: (g h : G) (i : ιₚ)
-  结论: g • (⟨i, ⟦h⟧⟩ : PlacedTile ps) = ⟨i, g * h⟩
-  证明: rfl
+/-
+**DiscreteTiling.PlacedTile.smul_mk_mk** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTiling
+.PlacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} (g h : G) (i : ιₚ),   g 
+• { index := i, groupElts := ⟦h⟧ } = { index := i, groupElts := ↑(g * h) }
+参数：g h : G；i : ιₚ；g * h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma smul_mk_mk (g h : G) (i : ιₚ) : g • (⟨i, ⟦h⟧⟩ : PlacedTile ps) = ⟨i, g * h⟩ := rfl
-
-/--
-lemma `smul_mk_coe` / 引理 `smul_mk_coe`
-
-English:
-lemma smul_mk_coe
-  given: (g h : G) (i : ιₚ)
-  statement: g • (⟨i, h⟩ : PlacedTile ps) = ⟨i, g * h⟩
-  proof: rfl
-
-中文:
-引理 smul_mk_coe
-  条件: (g h : G) (i : ιₚ)
-  结论: g • (⟨i, h⟩ : PlacedTile ps) = ⟨i, g * h⟩
-  证明: rfl
+/-
+**DiscreteTiling.PlacedTile.smul_mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTilin
+g.PlacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} (g h : G) (i : ιₚ),   g 
+• { index := i, groupElts := ↑h } = { index := i, groupElts := ↑(g * h) }
+参数：g h : G；i : ιₚ；g * h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma smul_mk_coe (g h : G) (i : ιₚ) : g • (⟨i, h⟩ : PlacedTile ps) = ⟨i, g * h⟩ := rfl
-
-/--
-lemma `smul_index` / 引理 `smul_index`
-
-English:
-lemma smul_index
-  given: (g : G) (pt : PlacedTile ps)
-  statement: (g • pt).index = pt.index
-  proof: by
-  induction pt using PlacedTile.induction_on
-  rfl
-
-中文:
-引理 smul_index
-  条件: (g : G) (pt : PlacedTile ps)
-  结论: (g • pt).index = pt.index
-  证明: by
-  induction pt using PlacedTile.induction_on
-  rfl
+/-
+**DiscreteTiling.PlacedTile.smul_index** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTiling
+.PlacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} (g : G) (pt : DiscreteTi
+ling.PlacedTile ps), (g • pt).index = pt.index
+参数：g : G；pt : DiscreteTiling.PlacedTile ps；g • pt。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DiscreteTiling.PlacedTile.induction_on`：∀ {G : Type u_1} {X : Type u_2} 
+{ιₚ : Type u_3} [inst : Group G] [inst_1 : MulAction G X]   {ps : DiscreteTiling
+.Protoset G X ιₚ} {ppt : Dis…
 -/
 @[simp] lemma smul_index (g : G) (pt : PlacedTile ps) : (g • pt).index = pt.index := by
   induction pt using PlacedTile.induction_on
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  given: (g : G) (pt : PlacedTile ps)
-  proof: by
-  induction pt using PlacedTile.induction_on
-  simp [coeSet, mul_smul]
-
-中文:
-引理 coe_smul
-  条件: (g : G) (pt : PlacedTile ps)
-  证明: by
-  induction pt using PlacedTile.induction_on
-  simp [coeSet, mul_smul]
+/-
+**DiscreteTiling.PlacedTile.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `DiscreteTiling.P
+lacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} (g : G) (pt : DiscreteTi
+ling.PlacedTile ps), ↑(g • pt) = g • ↑pt
+参数：g : G；pt : DiscreteTiling.PlacedTile ps；g • pt。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DiscreteTiling.PlacedTile.induction_on`：∀ {G : Type u_1} {X : Type u_2} 
+{ιₚ : Type u_3} [inst : Group G] [inst_1 : MulAction G X]   {ps : DiscreteTiling
+.Protoset G X ιₚ} {ppt : Dis…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma coe_smul (g : G) (pt : PlacedTile ps) :
     (g • pt : PlacedTile ps) = g • (pt : Set X) := by
   induction pt using PlacedTile.induction_on
   simp [coeSet, mul_smul]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulAction G (PlacedTile ps)
-  body: inferInstance
-  one_smul pt := by
-    induction pt using PlacedTile.induction_on
-    simp
-  mul_smul x y pt := by
-    induction pt using PlacedTile.induction_on
-    simp [mul_assoc]
-
-中文:
-实例 :
-  签名: 乘法作用 G (PlacedTile ps)
-  定义体: inferInstance
-  one_smul pt := by
-    induction pt using PlacedTile.induction_on
-    simp
-  mul_smul x y pt := by
-    induction pt using PlacedTile.induction_on
-    simp [mul_assoc]
+/-
+**DiscreteTiling.PlacedTile.** 是 Mathlib 中的一个实例，位于命名空间 `DiscreteTiling.PlacedTil
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulAction G (PlacedTile ps) where
   __ : SMul G (PlacedTile ps) := inferInstance
@@ -825,69 +624,77 @@ instance : MulAction G (PlacedTile ps) where
   mul_smul x y pt := by
     induction pt using PlacedTile.induction_on
     simp [mul_assoc]
-
-/--
-lemma `smul_mem_smul_iff` / 引理 `smul_mem_smul_iff`
-
-English:
-lemma smul_mem_smul_iff
-  given: (g : G) {x : X} {pt : PlacedTile ps}
-  statement: g • x in g • pt ↔ x in pt
-  proof: by
-  rw [← mem_coe]; rw [coe_smul]; rw [Set.smul_mem_smul_set_iff]; rw [mem_coe]
-
-中文:
-引理 smul_mem_smul_iff
-  条件: (g : G) {x : X} {pt : PlacedTile ps}
-  结论: g • x in g • pt ↔ x in pt
-  证明: by
-  rw [← mem_coe]; rw [coe_smul]; rw [Set.smul_mem_smul_set_iff]; rw [mem_coe]
+/-
+**DiscreteTiling.PlacedTile.smul_mem_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Discret
+eTiling.PlacedTile`。
+形式化陈述：∀ {G : Type u_1} {X : Type u_2} {ιₚ : Type u_3} [inst : Group G] [inst_1 :
+ MulAction G X]   {ps : DiscreteTiling.Protoset G X ιₚ} (g : G) {x : X} {pt : Di
+screteTiling.PlacedTile ps}, g • x ∈ g • pt ↔ x ∈ pt
+参数：g : G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DiscreteTiling.PlacedTile.mem_coe`：∀ {G : Type u_1} {X : Type u_2} {ιₚ :
+ Type u_3} [inst : Group G] [inst_1 : MulAction G X]   {ps : DiscreteTiling.Prot
+oset G X ιₚ} {x : X} {p…
+· 使用定理 `DiscreteTiling.PlacedTile.coe_smul`：∀ {G : Type u_1} {X : Type u_2} {ιₚ 
+: Type u_3} [inst : Group G] [inst_1 : MulAction G X]   {ps : DiscreteTiling.Pro
+toset G X ιₚ} (g : G) (p…
+· 使用定理 `Set.smul_mem_smul_set_iff`：smul_mem_smul_set_iff : a • x in a • s ↔ x in
+ s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma smul_mem_smul_iff (g : G) {x : X} {pt : PlacedTile ps} : g • x in g • pt ↔ x in pt := by
-  rw [← mem_coe]; rw [coe_smul]; rw [Set.smul_mem_smul_set_iff]; rw [mem_coe]
-
-/--
-lemma `mem_smul_iff_smul_inv_mem` / 引理 `mem_smul_iff_smul_inv_mem`
-
-English:
-lemma mem_smul_iff_smul_inv_mem
-  given: {g : G} {x : X} {pt : PlacedTile ps}
-  proof: by
-  simp_rw [← mem_coe, coe_smul, Set.mem_smul_set_iff_inv_smul_mem]
-
-中文:
-引理 mem_smul_iff_smul_inv_mem
-  条件: {g : G} {x : X} {pt : PlacedTile ps}
-  证明: by
-  simp_rw [← mem_coe, coe_smul, Set.mem_smul_set_iff_inv_smul_mem]
-
-Depends on / 依赖: Set.mem_smul_set_iff_inv_smul_mem, coe_smul, mem_coe, mem_smul_set_iff_inv_smul_mem, simp_rw
+@[simp] lemma smul_mem_smul_iff (g : G) {x : X} {pt : PlacedTile ps} : g • x ∈ g • pt ↔ x ∈ pt := by
+  rw [← mem_coe, coe_smul, Set.smul_mem_smul_set_iff, mem_coe]
+/-
+**DiscreteTiling.PlacedTile.mem_smul_iff_smul_inv_mem** 是 Mathlib 中的一个引理，位于命名空间 
+`DiscreteTiling.PlacedTile`。
+形式化陈述：mem_smul_iff_smul_inv_mem {g : G} {x : X} {pt : PlacedTile ps} : x in g • 
+pt ↔ g⁻¹ • x in pt
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DiscreteTiling.PlacedTile.coe_smul`：∀ {G : Type u_1} {X : Type u_2} {ιₚ 
+: Type u_3} [inst : Group G] [inst_1 : MulAction G X]   {ps : DiscreteTiling.Pro
+toset G X ιₚ} (g : G) (p…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mem_smul_iff_smul_inv_mem {g : G} {x : X} {pt : PlacedTile ps} :
-    x in g • pt ↔ g⁻¹ • x in pt := by
+    x ∈ g • pt ↔ g⁻¹ • x ∈ pt := by
   simp_rw [← mem_coe, coe_smul, Set.mem_smul_set_iff_inv_smul_mem]
-
-/--
-lemma `mem_inv_smul_iff_smul_mem` / 引理 `mem_inv_smul_iff_smul_mem`
-
-English:
-lemma mem_inv_smul_iff_smul_mem
-  given: {g : G} {x : X} {pt : PlacedTile ps}
-  proof: by
-  simp_rw [← mem_coe, coe_smul, Set.mem_inv_smul_set_iff]
-
-中文:
-引理 mem_inv_smul_iff_smul_mem
-  条件: {g : G} {x : X} {pt : PlacedTile ps}
-  证明: by
-  simp_rw [← mem_coe, coe_smul, Set.mem_inv_smul_set_iff]
-
-Depends on / 依赖: Set.mem_inv_smul_set_iff, coe_smul, mem_coe, mem_inv_smul_set_iff, simp_rw
+/-
+**DiscreteTiling.PlacedTile.mem_inv_smul_iff_smul_mem** 是 Mathlib 中的一个引理，位于命名空间 
+`DiscreteTiling.PlacedTile`。
+形式化陈述：mem_inv_smul_iff_smul_mem {g : G} {x : X} {pt : PlacedTile ps} : x in g⁻¹ 
+• pt ↔ g • x in pt
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `DiscreteTiling.PlacedTile.coe_smul`：∀ {G : Type u_1} {X : Type u_2} {ιₚ 
+: Type u_3} [inst : Group G] [inst_1 : MulAction G X]   {ps : DiscreteTiling.Pro
+toset G X ιₚ} (g : G) (p…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mem_inv_smul_iff_smul_mem {g : G} {x : X} {pt : PlacedTile ps} :
-    x in g⁻¹ • pt ↔ g • x in pt := by
+    x ∈ g⁻¹ • pt ↔ g • x ∈ pt := by
   simp_rw [← mem_coe, coe_smul, Set.mem_inv_smul_set_iff]
 
 end PlacedTile
 
 end DiscreteTiling
+

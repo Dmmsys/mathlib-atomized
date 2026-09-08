@@ -67,91 +67,77 @@ See also `Monoid.toOppositeMulAction` and `MonoidWithZero.toOppositeMulActionWit
 @[to_additive /-- Like `Add.toVAdd`, but adds on the right.
 
   See also `AddMonoid.toOppositeAddAction`. -/]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 910) Mul.toSMulMulOpposite (α : Type*) [Mul α] : SMul αᵐᵒᵖ α where
   smul a b := b * a.unop
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_eq_mul` / 引理 `smul_eq_mul`
-
-English:
-lemma smul_eq_mul
-  given: {α : Type*} [Mul α] (a b : α)
-  statement: a • b = a * b
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 smul_eq_mul
-  条件: {α : 类型} [乘法 α] (a b : α)
-  结论: a • b = a * b
-  证明: rfl
-
-@[to_additive]
+/-
+**smul_eq_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b := rfl
 
 @[to_additive]
-/--
-lemma `op_smul_eq_mul` / 引理 `op_smul_eq_mul`
-
-English:
-lemma op_smul_eq_mul
-  given: {α : Type*} [Mul α] (a b : α)
-  statement: MulOpposite.op a • b = b * a
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 op_smul_eq_mul
-  条件: {α : 类型} [乘法 α] (a b : α)
-  结论: MulOpposite.op a • b = b * a
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**op_smul_eq_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：op_smul_eq_mul {α : Type*} [Mul α] (a b : α) : MulOpposite.op a • b = b * 
+a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma op_smul_eq_mul {α : Type*} [Mul α] (a b : α) : MulOpposite.op a • b = b * a := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `MulOpposite.smul_eq_mul_unop` / 引理 `MulOpposite.smul_eq_mul_unop`
-
-English:
-lemma MulOpposite.smul_eq_mul_unop
-  given: [Mul α] (a : αᵐᵒᵖ) (b : α)
-  statement: a • b = b * a.unop
-  proof: rfl
-
-中文:
-引理 MulOpposite.smul_eq_mul_unop
-  条件: [乘法 α] (a : αᵐᵒᵖ) (b : α)
-  结论: a • b = b * a.unop
-  证明: rfl
+/-
+**MulOpposite.smul_eq_mul_unop** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MulOpposite.smul_eq_mul_unop [Mul α] (a : αᵐᵒᵖ) (b : α) : a • b = b * a.un
+op
+参数：a : αᵐᵒᵖ；b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma MulOpposite.smul_eq_mul_unop [Mul α] (a : αᵐᵒᵖ) (b : α) : a • b = b * a.unop := rfl
 
-/--
-Definition of `AddSemigroupAction` / `AddSemigroupAction` 的定义
+/-- Type class for actions by additive semigroups, with notation `g +ᵥ p`.
 
-English:
-class AddSemigroupAction
-  parameters: (G P : Type*) [AddSemigroup G]
-  extends: VAdd G P
-  axioms and operations (1):
-    - add_vadd : forall (g₁ g₂ : G) (p : P), (g₁ + g₂) +ᵥ p = g₁ +ᵥ g₂ +ᵥ p
+The `AddSemigroupAction G P` typeclass says that the additive semigroup `G` acts additively on a
+type `P`.  More precisely this means that the action satisfies the axiom
+`(g₁ + g₂) +ᵥ p = g₁ +ᵥ (g₂ +ᵥ p)`.  A mathematician might simply say that the additive semigroup
+`G` acts on `P`.
 
-中文:
-类 加法半群作用
-  参数: (G P : 类型) [加法半群 G]
-  继承: 向量加法 G P
-  公理与运算 (1 个):
-    - add_vadd : 对任意 (g₁ g₂ : G) (p : P), (g₁ + g₂) +ᵥ p = g₁ +ᵥ g₂ +ᵥ p
+For example, if `A` is an additive semigroup and `X` is a type, if a mathematician says
+say "let `A` act on the set `X`" they will usually mean `[AddSemigroupAction A X]`. -/
+/-
+**AddSemigroupAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_9) → Type u_10 → [AddSemigroup G] → Type (max u_10 u_9)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Type class for actions by additive semigroups, with notation `g +ᵥ p`.
+
+The `AddSemigroupAction G P` typeclass says that the additive semigroup `G` acts
+ additively on a
+type `P`.  More precisely this means that the action satisfies the axiom
+`(g₁ + g₂) +ᵥ p = g₁ +ᵥ (g₂ +ᵥ p)`.  A mathematician might simply say that the a
+dditive semigroup
+`G` acts on `P`.
+
+For example, if `A` is an additive semigroup and `X` is a type, if a mathematici
+an says
+say "let `A` act on the set `X`" they will usually mean `[AddSemigroupAction A X
+]`.
 -/
 class AddSemigroupAction (G P : Type*) [AddSemigroup G] extends VAdd G P where
   /-- Associativity of `+ᵥ` and `+` -/
-  add_vadd : forall (g₁ g₂ : G) (p : P), (g₁ + g₂) +ᵥ p = g₁ +ᵥ g₂ +ᵥ p
+  add_vadd : ∀ (g₁ g₂ : G) (p : P), (g₁ + g₂) +ᵥ p = g₁ +ᵥ g₂ +ᵥ p
 
 /-- Type class for actions by semigroups, with notation `g • p`.
 
@@ -160,49 +146,64 @@ More precisely this means that the action satisfies the axiom `(g₁ * g₂) •
 A mathematician might simply say that the semigroup `G` acts on `P`.
 
 For example, if `G` is a semigroup and `X` is a type, if a mathematician says
-say "let `G` act on the set `X`" they will probably mean `[SemigroupAction G X]`. -/
+say "let `G` act on the set `X`" they will probably mean  `[SemigroupAction G X]`. -/
 @[to_additive (attr := ext)]
-/--
-Definition of `SemigroupAction` / `SemigroupAction` 的定义
+/-
+**SemigroupAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_9) → Type u_10 → [Semigroup α] → Type (max u_10 u_9)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SemigroupAction
-  parameters: (α β : Type*) [Semigroup α]
-  extends: SMul α β
-  axioms and operations (1):
-    - mul_smul((x y : α) (b : β)) : (x * y) • b = x • y • b
+--- 原说明 ---
+Type class for actions by semigroups, with notation `g • p`.
 
-中文:
-类 半群作用
-  参数: (α β : 类型) [半群 α]
-  继承: 标量乘法 α β
-  公理与运算 (1 个):
-    - mul_smul((x y : α) (b : β)) : (x * y) • b = x • y • b
+The `SemigroupAction G P` typeclass says that the semigroup `G` acts multiplicat
+ively on a type `P`.
+More precisely this means that the action satisfies the axiom `(g₁ * g₂) • p = g
+₁ • (g₂ • p)`.
+A mathematician might simply say that the semigroup `G` acts on `P`.
+
+For example, if `G` is a semigroup and `X` is a type, if a mathematician says
+say "let `G` act on the set `X`" they will probably mean  `[SemigroupAction G X]
+`.
 -/
 class SemigroupAction (α β : Type*) [Semigroup α] extends SMul α β where
   /-- Associativity of `•` and `*` -/
   mul_smul (x y : α) (b : β) : (x * y) • b = x • y • b
 
 /--
-Definition of `AddAction` / `AddAction` 的定义
+Type class for additive monoid actions on types, with notation `g +ᵥ p`.
 
-English:
-class AddAction
-  parameters: (G : Type*) (P : Type*) [AddMonoid G]
-  extends: AddSemigroupAction G P
-  axioms and operations (1):
-    - zero_vadd : forall p : P, (0 : G) +ᵥ p = p
+The `AddAction G P` typeclass says that the additive monoid `G` acts additively on a type `P`.
+More precisely this means that the action satisfies the two axioms `0 +ᵥ p = p` and
+`(g₁ + g₂) +ᵥ p = g₁ +ᵥ (g₂ +ᵥ p)`. A mathematician might simply say that the additive monoid `G`
+acts on `P`.
 
-中文:
-类 加法作用
-  参数: (G : 类型) (P : 类型) [加法幺半群 G]
-  继承: 加法半群作用 G P
-  公理与运算 (1 个):
-    - zero_vadd : 对任意 p : P, (0 : G) +ᵥ p = p
+For example, if `A` is an additive group and `X` is a type, if a mathematician says
+say "let `A` act on the set `X`" they will usually mean `[AddAction A X]`.
+-/
+/-
+**AddAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_9) → Type u_10 → [AddMonoid G] → Type (max u_10 u_9)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Type class for additive monoid actions on types, with notation `g +ᵥ p`.
+
+The `AddAction G P` typeclass says that the additive monoid `G` acts additively 
+on a type `P`.
+More precisely this means that the action satisfies the two axioms `0 +ᵥ p = p` 
+and
+`(g₁ + g₂) +ᵥ p = g₁ +ᵥ (g₂ +ᵥ p)`. A mathematician might simply say that the ad
+ditive monoid `G`
+acts on `P`.
+
+For example, if `A` is an additive group and `X` is a type, if a mathematician s
+ays
+say "let `A` act on the set `X`" they will usually mean `[AddAction A X]`.
 -/
 class AddAction (G : Type*) (P : Type*) [AddMonoid G] extends AddSemigroupAction G P where
   /-- Zero is a neutral element for `+ᵥ` -/
-  protected zero_vadd : forall p : P, (0 : G) +ᵥ p = p
+  protected zero_vadd : ∀ p : P, (0 : G) +ᵥ p = p
 
 /--
 Type class for monoid actions on types, with notation `g • p`.
@@ -216,68 +217,60 @@ For example, if `G` is a group and `X` is a type, if a mathematician says
 say "let `G` act on the set `X`" they will probably mean `[MulAction G X]`.
 -/
 @[to_additive (attr := ext, wikidata Q288465)]
-/--
-Definition of `MulAction` / `MulAction` 的定义
+/-
+**MulAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_9) → Type u_10 → [Monoid α] → Type (max u_10 u_9)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MulAction
-  parameters: (α : Type*) (β : Type*) [Monoid α]
-  extends: SemigroupAction α β
-  axioms and operations (1):
-    - one_smul : forall b : β, (1 : α) • b = b
+--- 原说明 ---
+Type class for monoid actions on types, with notation `g • p`.
 
-中文:
-类 乘法作用
-  参数: (α : 类型) (β : 类型) [幺半群 α]
-  继承: 半群作用 α β
-  公理与运算 (1 个):
-    - one_smul : 对任意 b : β, (1 : α) • b = b
+The `MulAction G P` typeclass says that the monoid `G` acts multiplicatively on 
+a type `P`.
+More precisely this means that the action satisfies the two axioms `1 • p = p` a
+nd
+`(g₁ * g₂) • p = g₁ • (g₂ • p)`. A mathematician might simply say that the monoi
+d `G`
+acts on `P`.
+
+For example, if `G` is a group and `X` is a type, if a mathematician says
+say "let `G` act on the set `X`" they will probably mean `[MulAction G X]`.
 -/
 class MulAction (α : Type*) (β : Type*) [Monoid α] extends SemigroupAction α β where
   /-- One is the neutral element for `•` -/
-  protected one_smul : forall b : β, (1 : α) • b = b
+  protected one_smul : ∀ b : β, (1 : α) • b = b
 
 /-! ### Scalar tower and commuting actions -/
 
-/--
-Definition of `VAddCommClass` / `VAddCommClass` 的定义
+/-- A typeclass mixin saying that two additive actions on the same space commute. -/
+/-
+**VAddCommClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (N : Type u_10) → (α : Type u_11) → [VAdd M α] → [VAdd N 
+α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class VAddCommClass
-  parameters: (M N α : Type*) [VAdd M α] [VAdd N α]
-  axioms and operations (1):
-    - vadd_comm : forall (m : M) (n : N) (a : α), m +ᵥ (n +ᵥ a) = n +ᵥ (m +ᵥ a)
-
-中文:
-类 VAddComm类
-  参数: (M N α : 类型) [向量加法 M α] [向量加法 N α]
-  公理与运算 (1 个):
-    - vadd_comm : 对任意 (m : M) (n : N) (a : α), m +ᵥ (n +ᵥ a) = n +ᵥ (m +ᵥ a)
+--- 原说明 ---
+A typeclass mixin saying that two additive actions on the same space commute.
 -/
 class VAddCommClass (M N α : Type*) [VAdd M α] [VAdd N α] : Prop where
   /-- `+ᵥ` is left commutative -/
-  vadd_comm : forall (m : M) (n : N) (a : α), m +ᵥ (n +ᵥ a) = n +ᵥ (m +ᵥ a)
+  vadd_comm : ∀ (m : M) (n : N) (a : α), m +ᵥ (n +ᵥ a) = n +ᵥ (m +ᵥ a)
 
 /-- A typeclass mixin saying that two multiplicative actions on the same space commute. -/
 @[to_additive]
-/--
-Definition of `SMulCommClass` / `SMulCommClass` 的定义
+/-
+**SMulCommClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (N : Type u_10) → (α : Type u_11) → [SMul M α] → [SMul N 
+α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SMulCommClass
-  parameters: (M N α : Type*) [SMul M α] [SMul N α]
-  axioms and operations (1):
-    - smul_comm : forall (m : M) (n : N) (a : α), m • n • a = n • m • a
-
-中文:
-类 标量交换类
-  参数: (M N α : 类型) [标量乘法 M α] [标量乘法 N α]
-  公理与运算 (1 个):
-    - smul_comm : 对任意 (m : M) (n : N) (a : α), m • n • a = n • m • a
+--- 原说明 ---
+A typeclass mixin saying that two multiplicative actions on the same space commu
+te.
 -/
 class SMulCommClass (M N α : Type*) [SMul M α] [SMul N α] : Prop where
   /-- `•` is left commutative -/
-  smul_comm : forall (m : M) (n : N) (a : α), m • n • a = n • m • a
+  smul_comm : ∀ (m : M) (n : N) (a : α), m • n • a = n • m • a
 
 export SemigroupAction (mul_smul)
 export AddSemigroupAction (add_vadd)
@@ -304,20 +297,22 @@ An example of where this is used is `LinearMap.prod_equiv`.
 /-- Commutativity of actions is a symmetric relation. This lemma can't be an instance because this
 would cause a loop in the instance search graph. -/
 @[to_additive]
-/--
-lemma `SMulCommClass.symm` / 引理 `SMulCommClass.symm`
+/-
+**SMulCommClass.symm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul N α] [SMulCommClass M 
+N α] : SMulCommClass N M α where smul_comm a' a b
+参数：M N α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 
-English:
-lemma SMulCommClass.symm
-  given: (M N α : Type*) [SMul M α] [SMul N α] [SMulCommClass M N α]
-  proof: (smul_comm a a' b).symm
-
-中文:
-引理 标量交换类.symm
-  条件: (M N α : 类型) [标量乘法 M α] [标量乘法 N α] [标量交换类 M N α]
-  证明: (smul_comm a a' b).symm
-
-Depends on / 依赖: smul_comm
+--- 原说明 ---
+Commutativity of actions is a symmetric relation. This lemma can't be an instanc
+e because this
+would cause a loop in the instance search graph.
 -/
 lemma SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul N α] [SMulCommClass M N α] :
     SMulCommClass N M α where smul_comm a' a b := (smul_comm a a' b).symm
@@ -327,236 +322,225 @@ because this would cause a loop in the instance search graph. -/
 add_decl_doc VAddCommClass.symm
 
 @[to_additive]
-/--
-lemma `Function.Injective.smulCommClass` / 引理 `Function.Injective.smulCommClass`
-
-English:
-lemma Function.Injective.smulCommClass
-  statement: [SMul M α] [SMul N α] [SMul M β] [SMul N β]
-  proof: hf by simp only [h₁, h₂, smul_comm c₁ c₂ (f x)]
-
-@[to_additive]
-
-中文:
-引理 函数.单射.smulCommClass
-  结论: [标量乘法 M α] [标量乘法 N α] [标量乘法 M β] [标量乘法 N β]
-  证明: hf by simp only [h₁, h₂, smul_comm c₁ c₂ (f x)]
-
-@[to_additive]
-
-Depends on / 依赖: smul_comm
+/-
+**Function.Injective.smulCommClass** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Injective.smulCommClass [SMul M α] [SMul N α] [SMul M β] [SMul N 
+β] [SMulCommClass M N β] {f : α -> β} (hf : Injective f) (h₁ : forall (c : M) x,
+ f (c • x) = c • f x) (h₂ : forall (c : N) x, f (c • x) = c • f x) : SMulCommCla
+ss M N α where smul_comm c₁ c₂ x
+参数：hf : Injective f；h₁ : forall (c : M) x, f (c • x) = c • f x；h₂ : forall (c : 
+N) x, f (c • x) = c • f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Function.Injective.smulCommClass [SMul M α] [SMul N α] [SMul M β] [SMul N β]
-    [SMulCommClass M N β] {f : α -> β} (hf : Injective f) (h₁ : forall (c : M) x, f (c • x) = c • f x)
-    (h₂ : forall (c : N) x, f (c • x) = c • f x) : SMulCommClass M N α where
-smul_comm c₁ c₂ x := hf by simp only [h₁, h₂, smul_comm c₁ c₂ (f x)]
+    [SMulCommClass M N β] {f : α → β} (hf : Injective f) (h₁ : ∀ (c : M) x, f (c • x) = c • f x)
+    (h₂ : ∀ (c : N) x, f (c • x) = c • f x) : SMulCommClass M N α where
+  smul_comm c₁ c₂ x := hf <| by simp only [h₁, h₂, smul_comm c₁ c₂ (f x)]
 
 @[to_additive]
-/--
-lemma `Function.Surjective.smulCommClass` / 引理 `Function.Surjective.smulCommClass`
-
-English:
-lemma Function.Surjective.smulCommClass
-  statement: [SMul M α] [SMul N α] [SMul M β] [SMul N β]
-  proof: hf.forall.2 fun x => by simp only [← h₁, ← h₂, smul_comm c₁ c₂ x]
-
-@[to_additive]
-
-中文:
-引理 函数.满射.smulCommClass
-  结论: [标量乘法 M α] [标量乘法 N α] [标量乘法 M β] [标量乘法 N β]
-  证明: hf.forall.2 fun x => by simp only [← h₁, ← h₂, smul_comm c₁ c₂ x]
-
-@[to_additive]
-
-Depends on / 依赖: hf.forall, smul_comm
+/-
+**Function.Surjective.smulCommClass** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.Surjective.smulCommClass [SMul M α] [SMul N α] [SMul M β] [SMul N
+ β] [SMulCommClass M N α] {f : α -> β} (hf : Surjective f) (h₁ : forall (c : M) 
+x, f (c • x) = c • f x) (h₂ : forall (c : N) x, f (c • x) = c • f x) : SMulCommC
+lass M N β where smul_comm c₁ c₂
+参数：hf : Surjective f；h₁ : forall (c : M) x, f (c • x) = c • f x；h₂ : forall (c :
+ N) x, f (c • x) = c • f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Function.Surjective.smulCommClass [SMul M α] [SMul N α] [SMul M β] [SMul N β]
-    [SMulCommClass M N α] {f : α -> β} (hf : Surjective f) (h₁ : forall (c : M) x, f (c • x) = c • f x)
-    (h₂ : forall (c : N) x, f (c • x) = c • f x) : SMulCommClass M N β where
-  smul_comm c₁ c₂ := hf.forall.2 fun x => by simp only [← h₁, ← h₂, smul_comm c₁ c₂ x]
+    [SMulCommClass M N α] {f : α → β} (hf : Surjective f) (h₁ : ∀ (c : M) x, f (c • x) = c • f x)
+    (h₂ : ∀ (c : N) x, f (c • x) = c • f x) : SMulCommClass M N β where
+  smul_comm c₁ c₂ := hf.forall.2 fun x ↦ by simp only [← h₁, ← h₂, smul_comm c₁ c₂ x]
 
 @[to_additive]
-/--
-Instance `smulCommClass_self` / 实例 `smulCommClass_self`
-
-English:
-instance smulCommClass_self
-  signature: (M α : Type*) [CommMonoid M] [MulAction M α]
-  body: by rw [← mul_smul, mul_comm, mul_smul]
-
-中文:
-实例 smulCommClass_self
-  签名: (M α : 类型) [交换幺半群 M] [乘法作用 M α]
-  定义体: by rw [← mul_smul, mul_comm, mul_smul]
-
-Depends on / 依赖: mul_comm, mul_smul
+/-
+**smulCommClass_self** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：smulCommClass_self (M α : Type*) [CommMonoid M] [MulAction M α] : SMulComm
+Class M M α where smul_comm a a' b
+参数：M α : Type*。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 instance smulCommClass_self (M α : Type*) [CommMonoid M] [MulAction M α] : SMulCommClass M M α where
   smul_comm a a' b := by rw [← mul_smul, mul_comm, mul_smul]
 
-/--
-Definition of `VAddAssocClass` / `VAddAssocClass` 的定义
+/-- An instance of `VAddAssocClass M N α` states that the additive action of `M` on `α` is
+determined by the additive actions of `M` on `N` and `N` on `α`. -/
+/-
+**VAddAssocClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (N : Type u_10) → (α : Type u_11) → [VAdd M N] → [VAdd N 
+α] → [VAdd M α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class VAddAssocClass
-  parameters: (M N α : Type*) [VAdd M N] [VAdd N α] [VAdd M α]
-  axioms and operations (1):
-    - vadd_assoc : forall (x : M) (y : N) (z : α), (x +ᵥ y) +ᵥ z = x +ᵥ y +ᵥ z
-
-中文:
-类 VAddAssoc类
-  参数: (M N α : 类型) [向量加法 M N] [向量加法 N α] [向量加法 M α]
-  公理与运算 (1 个):
-    - vadd_assoc : 对任意 (x : M) (y : N) (z : α), (x +ᵥ y) +ᵥ z = x +ᵥ y +ᵥ z
+--- 原说明 ---
+An instance of `VAddAssocClass M N α` states that the additive action of `M` on 
+`α` is
+determined by the additive actions of `M` on `N` and `N` on `α`.
 -/
 class VAddAssocClass (M N α : Type*) [VAdd M N] [VAdd N α] [VAdd M α] : Prop where
   /-- Associativity of `+ᵥ` -/
-  vadd_assoc : forall (x : M) (y : N) (z : α), (x +ᵥ y) +ᵥ z = x +ᵥ y +ᵥ z
+  vadd_assoc : ∀ (x : M) (y : N) (z : α), (x +ᵥ y) +ᵥ z = x +ᵥ y +ᵥ z
 
 /-- An instance of `IsScalarTower M N α` states that the multiplicative
 action of `M` on `α` is determined by the multiplicative actions of `M` on `N`
 and `N` on `α`. -/
 @[to_additive]
-/--
-Definition of `IsScalarTower` / `IsScalarTower` 的定义
+/-
+**IsScalarTower** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (N : Type u_10) → (α : Type u_11) → [SMul M N] → [SMul N 
+α] → [SMul M α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsScalarTower
-  parameters: (M N α : Type*) [SMul M N] [SMul N α] [SMul M α]
-  axioms and operations (1):
-    - smul_assoc : forall (x : M) (y : N) (z : α), (x • y) • z = x • y • z
-
-中文:
-类 标量塔
-  参数: (M N α : 类型) [标量乘法 M N] [标量乘法 N α] [标量乘法 M α]
-  公理与运算 (1 个):
-    - smul_assoc : 对任意 (x : M) (y : N) (z : α), (x • y) • z = x • y • z
+--- 原说明 ---
+An instance of `IsScalarTower M N α` states that the multiplicative
+action of `M` on `α` is determined by the multiplicative actions of `M` on `N`
+and `N` on `α`.
 -/
 class IsScalarTower (M N α : Type*) [SMul M N] [SMul N α] [SMul M α] : Prop where
   /-- Associativity of `•` -/
-  smul_assoc : forall (x : M) (y : N) (z : α), (x • y) • z = x • y • z
+  smul_assoc : ∀ (x : M) (y : N) (z : α), (x • y) • z = x • y • z
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_assoc` / 引理 `smul_assoc`
-
-English:
-lemma smul_assoc
-  statement: {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarTower M N α] (x : M) (y : N)
-  proof: IsScalarTower.smul_assoc x y z
-
-@[to_additive]
-
-中文:
-引理 smul_assoc
-  结论: {M N} [标量乘法 M N] [标量乘法 N α] [标量乘法 M α] [标量塔 M N α] (x : M) (y : N)
-  证明: IsScalarTower.smul_assoc x y z
-
-@[to_additive]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.smul_assoc, smul_assoc
+/-
+**smul_assoc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarTower M N α] (x
+ : M) (y : N) (z : α) : (x • y) • z = x • y • z
+参数：x : M；y : N；z : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.smul_assoc`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_1
+1} {inst : SMul M N} {inst_1 : SMul N α} {inst_2 : SMul M α}   [self : IsScalarT
+ower M N α] (x…
 -/
 lemma smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarTower M N α] (x : M) (y : N)
     (z : α) : (x • y) • z = x • y • z := IsScalarTower.smul_assoc x y z
 
 @[to_additive]
-/--
-Instance `Semigroup.isScalarTower` / 实例 `Semigroup.isScalarTower`
-
-English:
-instance Semigroup.isScalarTower
-  signature: [Semigroup α]
-  body: ⟨mul_assoc⟩
-
-中文:
-实例 半群.isScalarTower
-  签名: [半群 α]
-  定义体: ⟨mul_assoc⟩
-
-Depends on / 依赖: mul_assoc
+/-
+**Semigroup.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Semigroup.isScalarTower [Semigroup α] : IsScalarTower α α α
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 instance Semigroup.isScalarTower [Semigroup α] : IsScalarTower α α α := ⟨mul_assoc⟩
 
-/--
-Definition of `SMulDistribClass` / `SMulDistribClass` 的定义
+/-- An instance of `SMulDistribClass G R S` states that the multiplicative
+action of `G` on `S` is determined by the multiplicative actions of `G` on `R`
+and `R` on `S`.
 
-English:
-class SMulDistribClass
-  parameters: (G R S : Type*) [SMul G R] [SMul G S] [SMul R S]
-  axioms and operations (1):
-    - smul_distrib_smul((g : G) (r : R) (s : S)) : g • r • s = (g • r) • (g • s)
+This is similar to `IsScalarTower` except that the action of `G` distributes
+over the action of `R` on `S`.
 
-中文:
-类 SMulDistrib类
-  参数: (G R S : 类型) [标量乘法 G R] [标量乘法 G S] [标量乘法 R S]
-  公理与运算 (1 个):
-    - smul_distrib_smul((g : G) (r : R) (s : S)) : g • r • s = (g • r) • (g • s)
+E.g. if `M/L/K` is a tower of galois extensions then `SMulDistribClass Gal(M/K) L M`. -/
+/-
+**SMulDistribClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_9) → (R : Type u_10) → (S : Type u_11) → [SMul G R] → [SMul G 
+S] → [SMul R S] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An instance of `SMulDistribClass G R S` states that the multiplicative
+action of `G` on `S` is determined by the multiplicative actions of `G` on `R`
+and `R` on `S`.
+
+This is similar to `IsScalarTower` except that the action of `G` distributes
+over the action of `R` on `S`.
+
+E.g. if `M/L/K` is a tower of galois extensions then `SMulDistribClass Gal(M/K) 
+L M`.
 -/
 class SMulDistribClass (G R S : Type*) [SMul G R] [SMul G S] [SMul R S] : Prop where
   smul_distrib_smul (g : G) (r : R) (s : S) : g • r • s = (g • r) • (g • s)
 
 export SMulDistribClass (smul_distrib_smul)
 
-/--
-Definition of `IsCentralVAdd` / `IsCentralVAdd` 的定义
+/-- A typeclass indicating that the right (aka `AddOpposite`) and left actions by `M` on `α` are
+equal, that is that `M` acts centrally on `α`. This can be thought of as a version of commutativity
+for `+ᵥ`. -/
+/-
+**IsCentralVAdd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (α : Type u_10) → [VAdd M α] → [VAdd Mᵃᵒᵖ α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCentralVAdd
-  parameters: (M α : Type*) [VAdd M α] [VAdd Mᵃᵒᵖ α]
-  axioms and operations (1):
-    - op_vadd_eq_vadd : forall (m : M) (a : α), AddOpposite.op m +ᵥ a = m +ᵥ a
-
-中文:
-类 是CentralVAdd
-  参数: (M α : 类型) [向量加法 M α] [向量加法 Mᵃᵒᵖ α]
-  公理与运算 (1 个):
-    - op_vadd_eq_vadd : 对任意 (m : M) (a : α), AddOpposite.op m +ᵥ a = m +ᵥ a
+--- 原说明 ---
+A typeclass indicating that the right (aka `AddOpposite`) and left actions by `M
+` on `α` are
+equal, that is that `M` acts centrally on `α`. This can be thought of as a versi
+on of commutativity
+for `+ᵥ`.
 -/
 class IsCentralVAdd (M α : Type*) [VAdd M α] [VAdd Mᵃᵒᵖ α] : Prop where
   /-- The right and left actions of `M` on `α` are equal. -/
-  op_vadd_eq_vadd : forall (m : M) (a : α), AddOpposite.op m +ᵥ a = m +ᵥ a
+  op_vadd_eq_vadd : ∀ (m : M) (a : α), AddOpposite.op m +ᵥ a = m +ᵥ a
 
 /-- A typeclass indicating that the right (aka `MulOpposite`) and left actions by `M` on `α` are
 equal, that is that `M` acts centrally on `α`. This can be thought of as a version of commutativity
 for `•`. -/
 @[to_additive]
-/--
-Definition of `IsCentralScalar` / `IsCentralScalar` 的定义
+/-
+**IsCentralScalar** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (α : Type u_10) → [SMul M α] → [SMul Mᵐᵒᵖ α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCentralScalar
-  parameters: (M α : Type*) [SMul M α] [SMul Mᵐᵒᵖ α]
-  axioms and operations (1):
-    - op_smul_eq_smul : forall (m : M) (a : α), MulOpposite.op m • a = m • a
-
-中文:
-类 中心标量
-  参数: (M α : 类型) [标量乘法 M α] [标量乘法 Mᵐᵒᵖ α]
-  公理与运算 (1 个):
-    - op_smul_eq_smul : 对任意 (m : M) (a : α), MulOpposite.op m • a = m • a
+--- 原说明 ---
+A typeclass indicating that the right (aka `MulOpposite`) and left actions by `M
+` on `α` are
+equal, that is that `M` acts centrally on `α`. This can be thought of as a versi
+on of commutativity
+for `•`.
 -/
 class IsCentralScalar (M α : Type*) [SMul M α] [SMul Mᵐᵒᵖ α] : Prop where
   /-- The right and left actions of `M` on `α` are equal. -/
-  op_smul_eq_smul : forall (m : M) (a : α), MulOpposite.op m • a = m • a
+  op_smul_eq_smul : ∀ (m : M) (a : α), MulOpposite.op m • a = m • a
 
 @[to_additive]
-/--
-lemma `IsCentralScalar.unop_smul_eq_smul` / 引理 `IsCentralScalar.unop_smul_eq_smul`
-
-English:
-lemma IsCentralScalar.unop_smul_eq_smul
-  statement: {M α : Type*} [SMul M α] [SMul Mᵐᵒᵖ α]
-  proof: by
-  induction m; exact (IsCentralScalar.op_smul_eq_smul _ a).symm
-
-中文:
-引理 中心标量.unop_smul_eq_smul
-  结论: {M α : 类型} [标量乘法 M α] [标量乘法 Mᵐᵒᵖ α]
-  证明: by
-  induction m; exact (IsCentralScalar.op_smul_eq_smul _ a).symm
-
-Depends on / 依赖: IsCentralScalar, IsCentralScalar.op_smul_eq_smul, op_smul_eq_smul
+/-
+**IsCentralScalar.unop_smul_eq_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsCentralScalar.unop_smul_eq_smul {M α : Type*} [SMul M α] [SMul Mᵐᵒᵖ α] [
+IsCentralScalar M α] (m : Mᵐᵒᵖ) (a : α) : MulOpposite.unop m • a = m • a
+参数：m : Mᵐᵒᵖ；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 lemma IsCentralScalar.unop_smul_eq_smul {M α : Type*} [SMul M α] [SMul Mᵐᵒᵖ α]
     [IsCentralScalar M α] (m : Mᵐᵒᵖ) (a : α) : MulOpposite.unop m • a = m • a := by
@@ -569,26 +553,42 @@ attribute [simp] IsCentralScalar.op_smul_eq_smul
 
 -- these instances are very low priority, as there is usually a faster way to find these instances
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 50) SMulCommClass.op_left [SMul M α] [SMul Mᵐᵒᵖ α] [IsCentralScalar M α]
     [SMul N α] [SMulCommClass M N α] : SMulCommClass Mᵐᵒᵖ N α :=
-  ⟨fun m n a => by rw [← unop_smul_eq_smul m (n • a), ← unop_smul_eq_smul m a, smul_comm]⟩
+  ⟨fun m n a ↦ by rw [← unop_smul_eq_smul m (n • a), ← unop_smul_eq_smul m a, smul_comm]⟩
 
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 50) SMulCommClass.op_right [SMul M α] [SMul N α] [SMul Nᵐᵒᵖ α]
     [IsCentralScalar N α] [SMulCommClass M N α] : SMulCommClass M Nᵐᵒᵖ α :=
-  ⟨fun m n a => by rw [← unop_smul_eq_smul n (m • a), ← unop_smul_eq_smul n a, smul_comm]⟩
+  ⟨fun m n a ↦ by rw [← unop_smul_eq_smul n (m • a), ← unop_smul_eq_smul n a, smul_comm]⟩
 
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 50) IsScalarTower.op_left [SMul M α] [SMul Mᵐᵒᵖ α] [IsCentralScalar M α]
     [SMul M N] [SMul Mᵐᵒᵖ N] [IsCentralScalar M N] [SMul N α] [IsScalarTower M N α] :
     IsScalarTower Mᵐᵒᵖ N α where
   smul_assoc m n a := by rw [← unop_smul_eq_smul m (n • a), ← unop_smul_eq_smul m n, smul_assoc]
 
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 50) IsScalarTower.op_right [SMul M α] [SMul M N] [SMul N α]
     [SMul Nᵐᵒᵖ α] [IsCentralScalar N α] [IsScalarTower M N α] : IsScalarTower M Nᵐᵒᵖ α where
   smul_assoc m n a := by
-    rw [← unop_smul_eq_smul n a]; rw [← unop_smul_eq_smul (m • n) a]; rw [MulOpposite.unop_smul]; rw [smul_assoc]
+    rw [← unop_smul_eq_smul n a, ← unop_smul_eq_smul (m • n) a, MulOpposite.unop_smul, smul_assoc]
 
 namespace SMul
 variable [SMul M α]
@@ -597,20 +597,14 @@ variable [SMul M α]
 `DistribMulAction.compHom`, `Module.compHom`, etc. -/
 @[to_additive (attr := simp, implicit_reducible)
 /-- Auxiliary definition for `VAdd.comp`, `AddAction.compHom`, etc. -/]
-/--
-Definition of `comp.smul` / `comp.smul` 的定义
-
-English:
-definition comp.smul
-  signature: (g : N -> M) (n : N) (a : α)
-  body: g n • a
-
-中文:
-定义 comp.smul
-  签名: (g : N -> M) (n : N) (a : α)
-  定义体: g n • a
+/-
+**SMul.comp.smul** 是 Mathlib 中的一个定义，位于命名空间 `SMul.comp`。
+形式化陈述：{M : Type u_1} → {N : Type u_2} → {α : Type u_5} → [SMul M α] → (N → M) → 
+N → α → α
+参数：N → M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def comp.smul (g : N -> M) (n : N) (a : α) : α := g n • a
+def comp.smul (g : N → M) (n : N) (a : α) : α := g n • a
 
 variable (α)
 
@@ -620,22 +614,14 @@ variable (α)
 -- `SMul.comp.smul` to prevent typeclass inference unfolding too far
 @[to_additive /-- An additive action of `M` on `α` and a function `N → M` induces an additive
 action of `N` on `α`. -/]
-/--
-Definition of `comp` / `comp` 的定义
-
-English:
-abbreviation comp
-  signature: (g : N -> M)
-  body: SMul.comp.smul g
-
-中文:
-缩写 comp
-  签名: (g : N -> M)
-  定义体: SMul.comp.smul g
-
-Depends on / 依赖: SMul.comp.smul
+/-
+**SMul.comp** 是 Mathlib 中的一个缩写定义，位于命名空间 `SMul`。
+形式化陈述：comp (g : N -> M) : SMul N α where smul
+参数：g : N -> M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev comp (g : N -> M) : SMul N α where smul := SMul.comp.smul g
+abbrev comp (g : N → M) : SMul N α where smul := SMul.comp.smul g
 
 variable {α}
 
@@ -651,30 +637,17 @@ are still metavariables. -/
 
 This cannot be an instance because it can cause infinite loops whenever the `SMul` arguments
 are still metavariables. -/]
-/--
-lemma `comp.isScalarTower` / 引理 `comp.isScalarTower`
-
-English:
-lemma comp.isScalarTower
-  given: [SMul M β] [SMul α β] [IsScalarTower M α β] (g : N -> M)
-  statement: by
-  proof: comp α g; haveI := comp β g; exact IsScalarTower N α β where
-  __ := comp α g
-  __ := comp β g
-  smul_assoc n := smul_assoc (g n)
-
-中文:
-引理 comp.isScalarTower
-  条件: [标量乘法 M β] [标量乘法 α β] [标量塔 M α β] (g : N -> M)
-  结论: by
-  证明: comp α g; haveI := comp β g; exact IsScalarTower N α β where
-  __ := comp α g
-  __ := comp β g
-  smul_assoc n := smul_assoc (g n)
-
-Depends on / 依赖: IsScalarTower
+/-
+**SMul.comp.isScalarTower** 是 Mathlib 中的一个定理，位于命名空间 `SMul.comp`。
+形式化陈述：∀ {M : Type u_1} {N : Type u_2} {α : Type u_5} {β : Type u_6} [inst : SMul
+ M α] [inst_1 : SMul M β] [inst_2 : SMul α β]   [IsScalarTower M α β] (g : N → M
+), IsScalarTower N α β
+参数：g : N → M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 -/
-lemma comp.isScalarTower [SMul M β] [SMul α β] [IsScalarTower M α β] (g : N -> M) : by
+lemma comp.isScalarTower [SMul M β] [SMul α β] [IsScalarTower M α β] (g : N → M) : by
     haveI := comp α g; haveI := comp β g; exact IsScalarTower N α β where
   __ := comp α g
   __ := comp β g
@@ -685,26 +658,18 @@ are still metavariables. -/
 @[to_additive
 /-- This cannot be an instance because it can cause infinite loops whenever the `VAdd` arguments
 are still metavariables. -/]
-/--
-lemma `comp.smulCommClass` / 引理 `comp.smulCommClass`
-
-English:
-lemma comp.smulCommClass
-  given: [SMul β α] [SMulCommClass M β α] (g : N -> M)
-  proof: comp α g
-    SMulCommClass N β α where
-  __ := comp α g
-  smul_comm n := smul_comm (g n)
-
-中文:
-引理 comp.smulCommClass
-  条件: [标量乘法 β α] [标量交换类 M β α] (g : N -> M)
-  证明: comp α g
-    SMulCommClass N β α where
-  __ := comp α g
-  smul_comm n := smul_comm (g n)
+/-
+**SMul.comp.smulCommClass** 是 Mathlib 中的一个定理，位于命名空间 `SMul.comp`。
+形式化陈述：∀ {M : Type u_1} {N : Type u_2} {α : Type u_5} {β : Type u_6} [inst : SMul
+ M α] [inst_1 : SMul β α]   [SMulCommClass M β α] (g : N → M), SMulCommClass N β
+ α
+参数：g : N → M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
-lemma comp.smulCommClass [SMul β α] [SMulCommClass M β α] (g : N -> M) :
+lemma comp.smulCommClass [SMul β α] [SMulCommClass M β α] (g : N → M) :
     haveI := comp α g
     SMulCommClass N β α where
   __ := comp α g
@@ -715,26 +680,18 @@ are still metavariables. -/
 @[to_additive
 /-- This cannot be an instance because it can cause infinite loops whenever the `VAdd` arguments
 are still metavariables. -/]
-/--
-lemma `comp.smulCommClass'` / 引理 `comp.smulCommClass'`
-
-English:
-lemma comp.smulCommClass'
-  given: [SMul β α] [SMulCommClass β M α] (g : N -> M)
-  proof: comp α g
-    SMulCommClass β N α where
-  __ := comp α g
-  smul_comm _ n := smul_comm _ (g n)
-
-中文:
-引理 comp.smulCommClass'
-  条件: [标量乘法 β α] [标量交换类 β M α] (g : N -> M)
-  证明: comp α g
-    SMulCommClass β N α where
-  __ := comp α g
-  smul_comm _ n := smul_comm _ (g n)
+/-
+**SMul.comp.smulCommClass'** 是 Mathlib 中的一个定理，位于命名空间 `SMul.comp`。
+形式化陈述：∀ {M : Type u_1} {N : Type u_2} {α : Type u_5} {β : Type u_6} [inst : SMul
+ M α] [inst_1 : SMul β α]   [SMulCommClass β M α] (g : N → M), SMulCommClass β N
+ α
+参数：g : N → M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
-lemma comp.smulCommClass' [SMul β α] [SMulCommClass β M α] (g : N -> M) :
+lemma comp.smulCommClass' [SMul β α] [SMulCommClass β M α] (g : N → M) :
     haveI := comp α g
     SMulCommClass β N α where
   __ := comp α g
@@ -746,83 +703,87 @@ section
 
 /-- Note that the `SMulCommClass α β β` typeclass argument is usually satisfied by `Algebra α β`. -/
 @[to_additive]
-/--
-lemma `mul_smul_comm` / 引理 `mul_smul_comm`
+/-
+**mul_smul_comm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s : α) (x y : β) :
+ x * s • y = s • (x * y)
+参数：s : α；x y : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 
-English:
-lemma mul_smul_comm
-  given: [Mul β] [SMul α β] [SMulCommClass α β β] (s : α) (x y : β)
-  proof: (smul_comm s x y).symm
-
-中文:
-引理 mul_smul_comm
-  条件: [乘法 β] [标量乘法 α β] [标量交换类 α β β] (s : α) (x y : β)
-  证明: (smul_comm s x y).symm
-
-Depends on / 依赖: smul_comm
+--- 原说明 ---
+Note that the `SMulCommClass α β β` typeclass argument is usually satisfied by `
+Algebra α β`.
 -/
 lemma mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s : α) (x y : β) :
     x * s • y = s • (x * y) := (smul_comm s x y).symm
 
 /-- Note that the `IsScalarTower α β β` typeclass argument is usually satisfied by `Algebra α β`. -/
 @[to_additive]
-/--
-lemma `smul_mul_assoc` / 引理 `smul_mul_assoc`
+/-
+**smul_mul_assoc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] (r : α) (x y : β) 
+: r • x * y = r • (x * y)
+参数：r : α；x y : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
 
-English:
-lemma smul_mul_assoc
-  given: [Mul β] [SMul α β] [IsScalarTower α β β] (r : α) (x y : β)
-  proof: smul_assoc r x y
-
-中文:
-引理 smul_mul_assoc
-  条件: [乘法 β] [标量乘法 α β] [标量塔 α β β] (r : α) (x y : β)
-  证明: smul_assoc r x y
-
-Depends on / 依赖: smul_assoc
+--- 原说明 ---
+Note that the `IsScalarTower α β β` typeclass argument is usually satisfied by `
+Algebra α β`.
 -/
 lemma smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] (r : α) (x y : β) :
     r • x * y = r • (x * y) := smul_assoc r x y
 
 /-- Note that the `IsScalarTower α β β` typeclass argument is usually satisfied by `Algebra α β`. -/
 @[to_additive]
-/--
-lemma `smul_div_assoc` / 引理 `smul_div_assoc`
+/-
+**smul_div_assoc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_div_assoc [DivInvMonoid β] [SMul α β] [IsScalarTower α β β] (r : α) (
+x y : β) : r • x / y = r • (x / y)
+参数：r : α；x y : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma smul_div_assoc
-  given: [DivInvMonoid β] [SMul α β] [IsScalarTower α β β] (r : α) (x y : β)
-  proof: by simp [div_eq_mul_inv, smul_mul_assoc]
-
-@[to_additive]
-
-中文:
-引理 smul_div_assoc
-  条件: [除逆幺半群 β] [标量乘法 α β] [标量塔 α β β] (r : α) (x y : β)
-  证明: by simp [div_eq_mul_inv, smul_mul_assoc]
-
-@[to_additive]
-
-Depends on / 依赖: div_eq_mul_inv, smul_mul_assoc
+--- 原说明 ---
+Note that the `IsScalarTower α β β` typeclass argument is usually satisfied by `
+Algebra α β`.
 -/
 lemma smul_div_assoc [DivInvMonoid β] [SMul α β] [IsScalarTower α β β] (r : α) (x y : β) :
     r • x / y = r • (x / y) := by simp [div_eq_mul_inv, smul_mul_assoc]
 
 @[to_additive]
-/--
-lemma `smul_smul_smul_comm` / 引理 `smul_smul_smul_comm`
-
-English:
-lemma smul_smul_smul_comm
-  statement: [SMul α β] [SMul α γ] [SMul β δ] [SMul α δ] [SMul γ δ]
-  proof: by rw [smul_assoc, smul_assoc, smul_comm b]
-
-中文:
-引理 smul_smul_smul_comm
-  结论: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β δ] [标量乘法 α δ] [标量乘法 γ δ]
-  证明: by rw [smul_assoc, smul_assoc, smul_comm b]
-
-Depends on / 依赖: smul_assoc, smul_comm
+/-
+**smul_smul_smul_comm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_smul_smul_comm [SMul α β] [SMul α γ] [SMul β δ] [SMul α δ] [SMul γ δ]
+ [IsScalarTower α β δ] [IsScalarTower α γ δ] [SMulCommClass β γ δ] (a : α) (b : 
+β) (c : γ) (d : δ) : (a • b) • c • d = (a • c) • b • d
+参数：a : α；b : β；c : γ；d : δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 lemma smul_smul_smul_comm [SMul α β] [SMul α γ] [SMul β δ] [SMul α δ] [SMul γ δ]
     [IsScalarTower α β δ] [IsScalarTower α γ δ] [SMulCommClass β γ δ] (a : α) (b : β) (c : γ)
@@ -831,28 +792,24 @@ lemma smul_smul_smul_comm [SMul α β] [SMul α γ] [SMul β δ] [SMul α δ] [S
 /-- Note that the `IsScalarTower α β β` and `SMulCommClass α β β` typeclass arguments are usually
 satisfied by `Algebra α β`. -/
 @[to_additive]
-/--
-lemma `smul_mul_smul_comm` / 引理 `smul_mul_smul_comm`
+/-
+**smul_mul_smul_comm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_mul_smul_comm [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β] [IsSca
+larTower α α β] [SMulCommClass α β β] (a : α) (b : β) (c : α) (d : β) : (a • b) 
+* (c • d) = (a * c) • (b * d)
+参数：a : α；b : β；c : α；d : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用引理 `smul_smul_smul_comm`：smul_smul_smul_comm [SMul α β] [SMul α γ] [SMul β δ
+] [SMul α δ] [SMul γ δ] [IsScalarTower α β δ] [IsScalarTower α γ δ] [SMulCommCla
+ss β γ δ]…
 
-English:
-lemma smul_mul_smul_comm
-  statement: [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β]
-  proof: by
-  have : SMulCommClass β α β := .symm ..; exact smul_smul_smul_comm a b c d
-
-@[to_additive]
-alias smul_mul_smul := smul_mul_smul_comm
-
-中文:
-引理 smul_mul_smul_comm
-  结论: [乘法 α] [乘法 β] [标量乘法 α β] [标量塔 α β β]
-  证明: by
-  have : SMulCommClass β α β := .symm ..; exact smul_smul_smul_comm a b c d
-
-@[to_additive]
-alias smul_mul_smul := smul_mul_smul_comm
-
-Depends on / 依赖: SMulCommClass, smul_smul_smul_comm
+--- 原说明 ---
+Note that the `IsScalarTower α β β` and `SMulCommClass α β β` typeclass argument
+s are usually
+satisfied by `Algebra α β`.
 -/
 lemma smul_mul_smul_comm [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β]
     [IsScalarTower α α β] [SMulCommClass α β β] (a : α) (b : β) (c : α) (d : β) :
@@ -865,20 +822,22 @@ alias smul_mul_smul := smul_mul_smul_comm
 /-- Note that the `IsScalarTower α β β` and `SMulCommClass α β β` typeclass arguments are usually
 satisfied by `Algebra α β`. -/
 @[to_additive]
-/--
-lemma `mul_smul_mul_comm` / 引理 `mul_smul_mul_comm`
+/-
+**mul_smul_mul_comm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_smul_mul_comm [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β] [IsScal
+arTower α α β] [SMulCommClass α β β] (a b : α) (c d : β) : (a * b) • (c * d) = (
+a • c) * (b • d)
+参数：a b : α；c d : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_smul_smul_comm`：smul_smul_smul_comm [SMul α β] [SMul α γ] [SMul β δ
+] [SMul α δ] [SMul γ δ] [IsScalarTower α β δ] [IsScalarTower α γ δ] [SMulCommCla
+ss β γ δ]…
 
-English:
-lemma mul_smul_mul_comm
-  statement: [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β]
-  proof: smul_smul_smul_comm a b c d
-
-中文:
-引理 mul_smul_mul_comm
-  结论: [乘法 α] [乘法 β] [标量乘法 α β] [标量塔 α β β]
-  证明: smul_smul_smul_comm a b c d
-
-Depends on / 依赖: smul_smul_smul_comm
+--- 原说明 ---
+Note that the `IsScalarTower α β β` and `SMulCommClass α β β` typeclass argument
+s are usually
+satisfied by `Algebra α β`.
 -/
 lemma mul_smul_mul_comm [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β]
     [IsScalarTower α α β] [SMulCommClass α β β] (a b : α) (c d : β) :
@@ -887,96 +846,78 @@ lemma mul_smul_mul_comm [Mul α] [Mul β] [SMul α β] [IsScalarTower α β β]
 variable [SMul M α]
 
 @[to_additive]
-/--
-lemma `SemiconjBy.smul_right` / 引理 `SemiconjBy.smul_right`
-
-English:
-lemma SemiconjBy.smul_right
-  statement: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {x a b : α}
-  proof: by
-  rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
-
-@[to_additive]
-
-中文:
-引理 SemiconjBy.smul_right
-  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {x a b : α}
-  证明: by
-  rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
-
-@[to_additive]
-
-Depends on / 依赖: SemiconjBy, h.eq, mul_smul_comm, smul_mul_assoc
+/-
+**SemiconjBy.smul_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SemiconjBy.smul_right [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] 
+{x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy x (r • a) (r • b)
+参数：h : SemiconjBy x a b；r : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SemiconjBy.eq_1`：∀ {M : Type u_2} [inst : Mul M] (a x y : M), SemiconjBy
+ a x y = (a * x = y * a)
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用定理 `SemiconjBy.eq`：∀ {S : Type u_1} [inst : Mul S] {a x y : S}, SemiconjBy a
+ x y → a * x = y * a
 -/
 lemma SemiconjBy.smul_right [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {x a b : α}
     (h : SemiconjBy x a b) (r : M) : SemiconjBy x (r • a) (r • b) := by
-  rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
+  rw [SemiconjBy, mul_smul_comm, smul_mul_assoc, h.eq]
 
 @[to_additive]
-/--
-lemma `SemiconjBy.smul_left` / 引理 `SemiconjBy.smul_left`
-
-English:
-lemma SemiconjBy.smul_left
-  statement: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {x a b : α}
-  proof: by
-  rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
-
-@[to_additive]
-
-中文:
-引理 SemiconjBy.smul_left
-  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {x a b : α}
-  证明: by
-  rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
-
-@[to_additive]
-
-Depends on / 依赖: SemiconjBy, h.eq, mul_smul_comm, smul_mul_assoc
+/-
+**SemiconjBy.smul_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SemiconjBy.smul_left [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {
+x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy (r • x) a b
+参数：h : SemiconjBy x a b；r : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SemiconjBy.eq_1`：∀ {M : Type u_2} [inst : Mul M] (a x y : M), SemiconjBy
+ a x y = (a * x = y * a)
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用定理 `SemiconjBy.eq`：∀ {S : Type u_1} [inst : Mul S] {a x y : S}, SemiconjBy a
+ x y → a * x = y * a
 -/
 lemma SemiconjBy.smul_left [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {x a b : α}
     (h : SemiconjBy x a b) (r : M) : SemiconjBy (r • x) a b := by
-  rw [SemiconjBy]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [h.eq]
+  rw [SemiconjBy, mul_smul_comm, smul_mul_assoc, h.eq]
 
 @[to_additive]
-/--
-lemma `Commute.smul_right` / 引理 `Commute.smul_right`
-
-English:
-lemma Commute.smul_right
-  statement: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a b : α}
-  proof: SemiconjBy.smul_right h r
-
-@[to_additive]
-
-中文:
-引理 Commute.smul_right
-  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {a b : α}
-  证明: SemiconjBy.smul_right h r
-
-@[to_additive]
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.smul_right, smul_right
+/-
+**Commute.smul_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Commute.smul_right [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a 
+b : α} (h : Commute a b) (r : M) : Commute a (r • b)
+参数：h : Commute a b；r : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SemiconjBy.smul_right`：SemiconjBy.smul_right [Mul α] [SMulCommClass M α 
+α] [IsScalarTower M α α] {x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy
+ x (r • a) …
 -/
 lemma Commute.smul_right [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a b : α}
     (h : Commute a b) (r : M) : Commute a (r • b) :=
   SemiconjBy.smul_right h r
 
 @[to_additive]
-/--
-lemma `Commute.smul_left` / 引理 `Commute.smul_left`
-
-English:
-lemma Commute.smul_left
-  statement: [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a b : α}
-  proof: SemiconjBy.smul_left h r
-
-中文:
-引理 Commute.smul_left
-  结论: [乘法 α] [标量交换类 M α α] [标量塔 M α α] {a b : α}
-  证明: SemiconjBy.smul_left h r
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.smul_left, smul_left
+/-
+**Commute.smul_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Commute.smul_left [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a b
+ : α} (h : Commute a b) (r : M) : Commute (r • a) b
+参数：h : Commute a b；r : M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SemiconjBy.smul_left`：SemiconjBy.smul_left [Mul α] [SMulCommClass M α α]
+ [IsScalarTower M α α] {x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy (
+r • x) a b
 -/
 lemma Commute.smul_left [Mul α] [SMulCommClass M α α] [IsScalarTower M α α] {a b : α}
     (h : Commute a b) (r : M) : Commute (r • a) b :=
@@ -988,176 +929,133 @@ section
 variable [Monoid M] [MulAction M α] {a : M}
 
 @[to_additive]
-/--
-lemma `smul_smul` / 引理 `smul_smul`
-
-English:
-lemma smul_smul
-  given: (a₁ a₂ : M) (b : α)
-  statement: a₁ • a₂ • b = (a₁ * a₂) • b
-  proof: (mul_smul _ _ _).symm
-
-中文:
-引理 smul_smul
-  条件: (a₁ a₂ : M) (b : α)
-  结论: a₁ • a₂ • b = (a₁ * a₂) • b
-  证明: (mul_smul _ _ _).symm
-
-Depends on / 依赖: mul_smul
+/-
+**smul_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+参数：a₁ a₂ : M；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
 -/
 lemma smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b := (mul_smul _ _ _).symm
 
 variable (M)
 
 @[to_additive (attr := simp)]
-/--
-lemma `one_smul` / 引理 `one_smul`
-
-English:
-lemma one_smul
-  given: (b : α)
-  statement: (1 : M) • b = b
-  proof: MulAction.one_smul _
-
-中文:
-引理 one_smul
-  条件: (b : α)
-  结论: (1 : M) • b = b
-  证明: MulAction.one_smul _
-
-Depends on / 依赖: MulAction, MulAction.one_smul, one_smul
+/-
+**one_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_smul (b : α) : (1 : M) • b = b
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.one_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Monoid α} [
+self : MulAction α β] (b : β), 1 • b = b
 -/
 lemma one_smul (b : α) : (1 : M) • b = b := MulAction.one_smul _
 
 /-- `SMul` version of `one_mul_eq_id` -/
 @[to_additive /-- `VAdd` version of `zero_add_eq_id` -/]
-/--
-lemma `one_smul_eq_id` / 引理 `one_smul_eq_id`
+/-
+**one_smul_eq_id** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_smul_eq_id : (((1 : M) • ·) : α -> α) = id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 
-English:
-lemma one_smul_eq_id
-  statement: (((1 : M) • ·) : α -> α) = id
-  proof: funext one_smul _
-
-中文:
-引理 one_smul_eq_id
-  结论: (((1 : M) • ·) : α -> α) = id
-  证明: funext one_smul _
-
-Depends on / 依赖: one_smul
+--- 原说明 ---
+`SMul` version of `one_mul_eq_id`
 -/
-lemma one_smul_eq_id : (((1 : M) • ·) : α -> α) = id := funext one_smul _
+lemma one_smul_eq_id : (((1 : M) • ·) : α → α) = id := funext <| one_smul _
 
 /-- `SMul` version of `comp_mul_left` -/
 @[to_additive /-- `VAdd` version of `comp_add_left` -/]
-/--
-lemma `comp_smul_left` / 引理 `comp_smul_left`
+/-
+**comp_smul_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：comp_smul_left (a₁ a₂ : M) : (a₁ • ·) ∘ (a₂ • ·) = (((a₁ * a₂) • ·) : α ->
+ α)
+参数：a₁ a₂ : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
 
-English:
-lemma comp_smul_left
-  given: (a₁ a₂ : M)
-  statement: (a₁ • ·) ∘ (a₂ • ·) = (((a₁ * a₂) • ·) : α -> α)
-  proof: funext fun _ => (mul_smul _ _ _).symm
-
-中文:
-引理 comp_smul_left
-  条件: (a₁ a₂ : M)
-  结论: (a₁ • ·) ∘ (a₂ • ·) = (((a₁ * a₂) • ·) : α -> α)
-  证明: funext fun _ => (mul_smul _ _ _).symm
-
-Depends on / 依赖: mul_smul
+--- 原说明 ---
+`SMul` version of `comp_mul_left`
 -/
-lemma comp_smul_left (a₁ a₂ : M) : (a₁ • ·) ∘ (a₂ • ·) = (((a₁ * a₂) • ·) : α -> α) :=
-  funext fun _ => (mul_smul _ _ _).symm
+lemma comp_smul_left (a₁ a₂ : M) : (a₁ • ·) ∘ (a₂ • ·) = (((a₁ * a₂) • ·) : α → α) :=
+  funext fun _ ↦ (mul_smul _ _ _).symm
 
 variable {M}
 
 @[to_additive (attr := simp)]
-/--
-theorem `smul_iterate` / 定理 `smul_iterate`
-
-English:
-theorem smul_iterate
-  given: (a : M)
-  statement: forall n : Nat, (a • · : α -> α)^[n] = (a ^ n • ·)
-
-中文:
-定理 smul_iterate
-  条件: (a : M)
-  结论: 对任意 n : 自然数, (a • · : α -> α)^[n] = (a ^ n • ·)
+/-
+**smul_iterate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {α : Type u_5} [inst : Monoid M] [inst_1 : MulAction M α]
+ (a : M) (n : ℕ),   (fun x => a • x)^[n] = fun x => a ^ n • x
+参数：a : M；n : ℕ；fun x => a • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_iterate (a : M) : forall n : Nat, (a • · : α -> α)^[n] = (a ^ n • ·)
+theorem smul_iterate (a : M) : ∀ n : ℕ, (a • · : α → α)^[n] = (a ^ n • ·)
   | 0 => by simp [funext_iff]
   | n + 1 => by ext; simp [smul_iterate, pow_succ, smul_smul]
 
 @[to_additive]
-/--
-lemma `smul_iterate_apply` / 引理 `smul_iterate_apply`
-
-English:
-lemma smul_iterate_apply
-  given: (a : M) (n : Nat) (x : α)
-  statement: (a • ·)^[n] x = a ^ n • x
-  proof: by
-  rw [smul_iterate]
-
-中文:
-引理 smul_iterate_apply
-  条件: (a : M) (n : 自然数) (x : α)
-  结论: (a • ·)^[n] x = a ^ n • x
-  证明: by
-  rw [smul_iterate]
-
-Depends on / 依赖: smul_iterate
+/-
+**smul_iterate_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_iterate_apply (a : M) (n : Nat) (x : α) : (a • ·)^[n] x = a ^ n • x
+参数：a : M；n : Nat；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_iterate`：∀ {M : Type u_1} {α : Type u_5} [inst : Monoid M] [inst_1 
+: MulAction M α] (a : M) (n : ℕ),   (fun x => a • x)^[n] = fun x => a ^ n • x
 -/
-lemma smul_iterate_apply (a : M) (n : Nat) (x : α) : (a • ·)^[n] x = a ^ n • x := by
+lemma smul_iterate_apply (a : M) (n : ℕ) (x : α) : (a • ·)^[n] x = a ^ n • x := by
   rw [smul_iterate]
 
 /-- Pullback a multiplicative action along an injective map respecting `•`.
 See note [reducible non-instances]. -/
 @[to_additive
     /-- Pullback an additive action along an injective map respecting `+ᵥ`. -/]
-/--
-Definition of `Function.Injective.mulAction` / `Function.Injective.mulAction` 的定义
-
-English:
-abbreviation Function.Injective.mulAction
-  signature: [SMul M β] (f : β -> α) (hf : Injective f)
-  body: hf (smul _ _).trans one_smul _ (f x)
-mul_smul c₁ c₂ x := hf by simp only [smul, mul_smul]
-
-中文:
-缩写 函数.单射.mulAction
-  签名: [标量乘法 M β] (f : β -> α) (hf : 单射 f)
-  定义体: hf (smul _ _).trans one_smul _ (f x)
-mul_smul c₁ c₂ x := hf by simp only [smul, mul_smul]
+/-
+**Function.Injective.mulAction** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{M : Type u_1} →   {α : Type u_5} →     {β : Type u_6} →       [inst : Mon
+oid M] →         [inst_1 : MulAction M α] →           [inst_2 : SMul M β] →     
+        (f : β → α) → Function.Injective f → (∀ (c : M) (x : β), f (c • x) = c •
+ f x) → MulAction M β
+参数：f : β → α；∀ (c : M) (x : β), f (c • x) = c • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected abbrev Function.Injective.mulAction [SMul M β] (f : β -> α) (hf : Injective f)
-    (smul : forall (c : M) (x), f (c • x) = c • f x) : MulAction M β where
-one_smul x := hf (smul _ _).trans one_smul _ (f x)
-mul_smul c₁ c₂ x := hf by simp only [smul, mul_smul]
+protected abbrev Function.Injective.mulAction [SMul M β] (f : β → α) (hf : Injective f)
+    (smul : ∀ (c : M) (x), f (c • x) = c • f x) : MulAction M β where
+  one_smul x := hf <| (smul _ _).trans <| one_smul _ (f x)
+  mul_smul c₁ c₂ x := hf <| by simp only [smul, mul_smul]
 
 /-- Pushforward a multiplicative action along a surjective map respecting `•`.
 See note [reducible non-instances]. -/
 @[to_additive
     /-- Pushforward an additive action along a surjective map respecting `+ᵥ`. -/]
-/--
-Definition of `Function.Surjective.mulAction` / `Function.Surjective.mulAction` 的定义
-
-English:
-abbreviation Function.Surjective.mulAction
-  signature: [SMul M β] (f : α -> β) (hf : Surjective f)
-  body: by simp [hf.forall, ← smul]
-  mul_smul := by simp [hf.forall, ← smul, mul_smul]
-
-中文:
-缩写 函数.满射.mulAction
-  签名: [标量乘法 M β] (f : α -> β) (hf : 满射 f)
-  定义体: by simp [hf.forall, ← smul]
-  mul_smul := by simp [hf.forall, ← smul, mul_smul]
+/-
+**Function.Surjective.mulAction** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjective`。
+形式化陈述：{M : Type u_1} →   {α : Type u_5} →     {β : Type u_6} →       [inst : Mon
+oid M] →         [inst_1 : MulAction M α] →           [inst_2 : SMul M β] →     
+        (f : α → β) → Function.Surjective f → (∀ (c : M) (x : α), f (c • x) = c 
+• f x) → MulAction M β
+参数：f : α → β；∀ (c : M) (x : α), f (c • x) = c • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected abbrev Function.Surjective.mulAction [SMul M β] (f : α -> β) (hf : Surjective f)
-    (smul : forall (c : M) (x), f (c • x) = c • f x) : MulAction M β where
+protected abbrev Function.Surjective.mulAction [SMul M β] (f : α → β) (hf : Surjective f)
+    (smul : ∀ (c : M) (x), f (c • x) = c • f x) : MulAction M β where
   one_smul := by simp [hf.forall, ← smul]
   mul_smul := by simp [hf.forall, ← smul, mul_smul]
 
@@ -1172,58 +1070,51 @@ This is promoted to a module by `Semiring.toModule`. -/
 /-- The regular action of a monoid on itself by left addition.
 
 This is promoted to an `AddTorsor` by `addGroup_is_addTorsor`. -/]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 1100) Monoid.toMulAction : MulAction M M where
   smul := (· * ·)
   one_smul := one_mul
   mul_smul := mul_assoc
 
 @[to_additive]
-/--
-Instance `IsScalarTower.left` / 实例 `IsScalarTower.left`
-
-English:
-instance IsScalarTower.left
-  signature: : IsScalarTower M M α where
-  body: mul_smul x y z
-
-@[to_additive]
-
-中文:
-实例 标量塔.left
-  签名: : 标量塔 M M α where
-  定义体: mul_smul x y z
-
-@[to_additive]
-
-Depends on / 依赖: mul_smul
+/-
+**IsScalarTower.left** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsScalarTower.left : IsScalarTower M M α where smul_assoc x y z
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
 -/
 instance IsScalarTower.left : IsScalarTower M M α where
   smul_assoc x y z := mul_smul x y z
 
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R M : Type*} [CommMonoid M] [SMul R M] [IsScalarTower R M M] : SMulCommClass R M M where
   smul_comm r s x := by
-    rw [← one_smul M (s • x)]; rw [← smul_assoc]; rw [smul_comm]; rw [smul_assoc]; rw [one_smul]
+    rw [← one_smul M (s • x), ← smul_assoc, smul_comm, smul_assoc, one_smul]
 
 variable {M}
 
 section Monoid
 variable [Monoid N] [MulAction M N] [IsScalarTower M N N] [SMulCommClass M N N]
 
-/--
-lemma `smul_pow` / 引理 `smul_pow`
-
-English:
-lemma smul_pow
-  given: (r : M) (x : N)
-  statement: forall n, (r • x) ^ n = r ^ n • x ^ n
-
-中文:
-引理 smul_pow
-  条件: (r : M) (x : N)
-  结论: 对任意 n, (r • x) ^ n = r ^ n • x ^ n
+/-
+**smul_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {N : Type u_2} [inst : Monoid M] [inst_1 : Monoid N] [ins
+t_2 : MulAction M N] [IsScalarTower M N N]   [SMulCommClass M N N] (r : M) (x : 
+N) (n : ℕ), (r • x) ^ n = r ^ n • x ^ n
+参数：r : M；x : N；n : ℕ；r • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma smul_pow (r : M) (x : N) : forall n, (r • x) ^ n = r ^ n • x ^ n
+lemma smul_pow (r : M) (x : N) : ∀ n, (r • x) ^ n = r ^ n • x ^ n
   | 0 => by simp
   | n + 1 => by rw [pow_succ', smul_pow _ _ n, smul_mul_smul_comm, ← pow_succ', ← pow_succ']
 
@@ -1233,170 +1124,124 @@ section Group
 variable [Group G] [MulAction G α] {g : G} {a b : α}
 
 @[to_additive (attr := simp)]
-/--
-lemma `inv_smul_smul` / 引理 `inv_smul_smul`
-
-English:
-lemma inv_smul_smul
-  given: (g : G) (a : α)
-  statement: g⁻¹ • g • a = a
-  proof: by rw [smul_smul, inv_mul_cancel, one_smul]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 inv_smul_smul
-  条件: (g : G) (a : α)
-  结论: g⁻¹ • g • a = a
-  证明: by rw [smul_smul, inv_mul_cancel, one_smul]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: inv_mul_cancel, one_smul, smul_smul
+/-
+**inv_smul_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+参数：g : G；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 lemma inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a := by rw [smul_smul, inv_mul_cancel, one_smul]
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_inv_smul` / 引理 `smul_inv_smul`
-
-English:
-lemma smul_inv_smul
-  given: (g : G) (a : α)
-  statement: g • g⁻¹ • a = a
-  proof: by rw [smul_smul, mul_inv_cancel, one_smul]
-
-中文:
-引理 smul_inv_smul
-  条件: (g : G) (a : α)
-  结论: g • g⁻¹ • a = a
-  证明: by rw [smul_smul, mul_inv_cancel, one_smul]
-
-Depends on / 依赖: mul_inv_cancel, one_smul, smul_smul
+/-
+**smul_inv_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+参数：g : G；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 lemma smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a := by rw [smul_smul, mul_inv_cancel, one_smul]
-
-/--
-lemma `inv_smul_eq_iff` / 引理 `inv_smul_eq_iff`
-
-English:
-lemma inv_smul_eq_iff
-  statement: g⁻¹ • a = b ↔ a = g • b
-  proof: ⟨fun h => by rw [← h, smul_inv_smul], fun h => by rw [h, inv_smul_smul]⟩
-
-中文:
-引理 inv_smul_eq_iff
-  结论: g⁻¹ • a = b ↔ a = g • b
-  证明: ⟨fun h => by rw [← h, smul_inv_smul], fun h => by rw [h, inv_smul_smul]⟩
+/-
+**inv_smul_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_1 : MulAction G α] 
+{g : G} {a b : α}, g⁻¹ • a = b ↔ a = g • b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
 -/
 @[to_additive] lemma inv_smul_eq_iff : g⁻¹ • a = b ↔ a = g • b :=
-  ⟨fun h => by rw [← h, smul_inv_smul], fun h => by rw [h, inv_smul_smul]⟩
-
-/--
-lemma `eq_inv_smul_iff` / 引理 `eq_inv_smul_iff`
-
-English:
-lemma eq_inv_smul_iff
-  statement: a = g⁻¹ • b ↔ g • a = b
-  proof: ⟨fun h => by rw [h, smul_inv_smul], fun h => by rw [← h, inv_smul_smul]⟩
-
-中文:
-引理 eq_inv_smul_iff
-  结论: a = g⁻¹ • b ↔ g • a = b
-  证明: ⟨fun h => by rw [h, smul_inv_smul], fun h => by rw [← h, inv_smul_smul]⟩
+  ⟨fun h ↦ by rw [← h, smul_inv_smul], fun h ↦ by rw [h, inv_smul_smul]⟩
+/-
+**eq_inv_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {G : Type u_3} {α : Type u_5} [inst : Group G] [inst_1 : MulAction G α] 
+{g : G} {a b : α}, a = g⁻¹ • b ↔ g • a = b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
 -/
 @[to_additive] lemma eq_inv_smul_iff : a = g⁻¹ • b ↔ g • a = b :=
-  ⟨fun h => by rw [h, smul_inv_smul], fun h => by rw [← h, inv_smul_smul]⟩
+  ⟨fun h ↦ by rw [h, smul_inv_smul], fun h ↦ by rw [← h, inv_smul_smul]⟩
 
 section Mul
 variable [Mul H] [MulAction G H] [SMulCommClass G H H] [IsScalarTower G H H] {a b : H}
 
 @[to_additive (attr := simp)]
-/--
-lemma `SemiconjBy.smul_right_iff` / 引理 `SemiconjBy.smul_right_iff`
-
-English:
-lemma SemiconjBy.smul_right_iff
-  given: {a b x : H} {r : G}
-  proof: ⟨fun h => by simpa using h.smul_right r⁻¹, (smul_right · r)⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 SemiconjBy.smul_right_iff
-  条件: {a b x : H} {r : G}
-  证明: ⟨fun h => by simpa using h.smul_right r⁻¹, (smul_right · r)⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: h.smul_right, smul_right
+/-
+**SemiconjBy.smul_right_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SemiconjBy.smul_right_iff {a b x : H} {r : G} : SemiconjBy x (r • a) (r • 
+b) ↔ SemiconjBy x a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用引理 `SemiconjBy.smul_right`：SemiconjBy.smul_right [Mul α] [SMulCommClass M α 
+α] [IsScalarTower M α α] {x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy
+ x (r • a) …
 -/
 lemma SemiconjBy.smul_right_iff {a b x : H} {r : G} :
     SemiconjBy x (r • a) (r • b) ↔ SemiconjBy x a b :=
-  ⟨fun h => by simpa using h.smul_right r⁻¹, (smul_right · r)⟩
+  ⟨fun h ↦ by simpa using h.smul_right r⁻¹, (smul_right · r)⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `SemiconjBy.smul_left_iff` / 引理 `SemiconjBy.smul_left_iff`
-
-English:
-lemma SemiconjBy.smul_left_iff
-  given: {a b x : H} {r : G}
-  proof: ⟨fun h => by simpa using h.smul_left r⁻¹, (smul_left · r)⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 SemiconjBy.smul_left_iff
-  条件: {a b x : H} {r : G}
-  证明: ⟨fun h => by simpa using h.smul_left r⁻¹, (smul_left · r)⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: h.smul_left, smul_left
+/-
+**SemiconjBy.smul_left_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SemiconjBy.smul_left_iff {a b x : H} {r : G} : SemiconjBy (r • x) a b ↔ Se
+miconjBy x a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用引理 `SemiconjBy.smul_left`：SemiconjBy.smul_left [Mul α] [SMulCommClass M α α]
+ [IsScalarTower M α α] {x a b : α} (h : SemiconjBy x a b) (r : M) : SemiconjBy (
+r • x) a b
 -/
 lemma SemiconjBy.smul_left_iff {a b x : H} {r : G} :
     SemiconjBy (r • x) a b ↔ SemiconjBy x a b :=
-  ⟨fun h => by simpa using h.smul_left r⁻¹, (smul_left · r)⟩
+  ⟨fun h ↦ by simpa using h.smul_left r⁻¹, (smul_left · r)⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `Commute.smul_right_iff` / 引理 `Commute.smul_right_iff`
-
-English:
-lemma Commute.smul_right_iff
-  statement: Commute a (g • b) ↔ Commute a b
-  proof: SemiconjBy.smul_right_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 Commute.smul_right_iff
-  结论: Commute a (g • b) ↔ Commute a b
-  证明: SemiconjBy.smul_right_iff
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.smul_right_iff, smul_right_iff
+/-
+**Commute.smul_right_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Commute.smul_right_iff : Commute a (g • b) ↔ Commute a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SemiconjBy.smul_right_iff`：SemiconjBy.smul_right_iff {a b x : H} {r : G}
+ : SemiconjBy x (r • a) (r • b) ↔ SemiconjBy x a b
 -/
 lemma Commute.smul_right_iff : Commute a (g • b) ↔ Commute a b :=
   SemiconjBy.smul_right_iff
 
 @[to_additive (attr := simp)]
-/--
-lemma `Commute.smul_left_iff` / 引理 `Commute.smul_left_iff`
-
-English:
-lemma Commute.smul_left_iff
-  statement: Commute (g • a) b ↔ Commute a b
-  proof: SemiconjBy.smul_left_iff
-
-中文:
-引理 Commute.smul_left_iff
-  结论: Commute (g • a) b ↔ Commute a b
-  证明: SemiconjBy.smul_left_iff
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.smul_left_iff, smul_left_iff
+/-
+**Commute.smul_left_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Commute.smul_left_iff : Commute (g • a) b ↔ Commute a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SemiconjBy.smul_left_iff`：SemiconjBy.smul_left_iff {a b x : H} {r : G} :
+ SemiconjBy (r • x) a b ↔ SemiconjBy x a b
 -/
 lemma Commute.smul_left_iff : Commute (g • a) b ↔ Commute a b :=
   SemiconjBy.smul_left_iff
@@ -1405,247 +1250,226 @@ end Mul
 
 variable [Group H] [MulAction G H] [SMulCommClass G H H] [IsScalarTower G H H]
 
-/--
-lemma `smul_inv` / 引理 `smul_inv`
-
-English:
-lemma smul_inv
-  given: (g : G) (a : H)
-  statement: (g • a)⁻¹ = g⁻¹ • a⁻¹
-  proof: inv_eq_of_mul_eq_one_right by rw [smul_mul_smul_comm, mul_inv_cancel, mul_inv_cancel, one_smul]
-
-中文:
-引理 smul_inv
-  条件: (g : G) (a : H)
-  结论: (g • a)⁻¹ = g⁻¹ • a⁻¹
-  证明: inv_eq_of_mul_eq_one_right by rw [smul_mul_smul_comm, mul_inv_cancel, mul_inv_cancel, one_smul]
-
-Depends on / 依赖: inv_eq_of_mul_eq_one_right, mul_inv_cancel, one_smul, smul_mul_smul_comm
+/-
+**smul_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_inv (g : G) (a : H) : (g • a)⁻¹ = g⁻¹ • a⁻¹
+参数：g : G；a : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_eq_of_mul_eq_one_right`：inv_eq_of_mul_eq_one_right : a * b = 1 -> a⁻
+¹ = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_mul_smul_comm`：smul_mul_smul_comm [Mul α] [Mul β] [SMul α β] [IsSca
+larTower α β β] [IsScalarTower α α β] [SMulCommClass α β β] (a : α) (b : β) (c :
+ α) (d :…
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 lemma smul_inv (g : G) (a : H) : (g • a)⁻¹ = g⁻¹ • a⁻¹ :=
-inv_eq_of_mul_eq_one_right by rw [smul_mul_smul_comm, mul_inv_cancel, mul_inv_cancel, one_smul]
-
-/--
-lemma `smul_zpow` / 引理 `smul_zpow`
-
-English:
-lemma smul_zpow
-  given: (g : G) (a : H) (n : Int)
-  statement: (g • a) ^ n = g ^ n • a ^ n
-  proof: by
-  cases n <;> simp [smul_pow, smul_inv]
-
-中文:
-引理 smul_zpow
-  条件: (g : G) (a : H) (n : 整数)
-  结论: (g • a) ^ n = g ^ n • a ^ n
-  证明: by
-  cases n <;> simp [smul_pow, smul_inv]
-
-Depends on / 依赖: smul_inv, smul_pow
+  inv_eq_of_mul_eq_one_right <| by rw [smul_mul_smul_comm, mul_inv_cancel, mul_inv_cancel, one_smul]
+/-
+**smul_zpow** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_zpow (g : G) (a : H) (n : Int) : (g • a) ^ n = g ^ n • a ^ n
+参数：g : G；a : H；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `smul_pow`：∀ {M : Type u_1} {N : Type u_2} [inst : Monoid M] [inst_1 : Mo
+noid N] [inst_2 : MulAction M N] [IsScalarTower M N N]   [SMulCommClass M N N]…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_negSucc`：zpow_negSucc (a : G) (n : Nat) : a ^ (Int.negSucc n) = (a 
+^ (n + 1))⁻¹
+· 使用引理 `smul_inv`：smul_inv (g : G) (a : H) : (g • a)⁻¹ = g⁻¹ • a⁻¹
 -/
-lemma smul_zpow (g : G) (a : H) (n : Int) : (g • a) ^ n = g ^ n • a ^ n := by
+lemma smul_zpow (g : G) (a : H) (n : ℤ) : (g • a) ^ n = g ^ n • a ^ n := by
   cases n <;> simp [smul_pow, smul_inv]
 
 end Group
 end
 
-/--
-lemma `SMulCommClass.of_commMonoid` / 引理 `SMulCommClass.of_commMonoid`
-
-English:
-lemma SMulCommClass.of_commMonoid
-  proof: by
-    rw [← one_smul G (s • x)]; rw [← smul_assoc]; rw [← one_smul G x]; rw [← smul_assoc s 1 x]; rw [smul_comm]; rw [smul_assoc]; rw [one_smul]; rw [smul_assoc]; rw [one_smul]
-
-中文:
-引理 标量交换类.of_commMonoid
-  证明: by
-    rw [← one_smul G (s • x)]; rw [← smul_assoc]; rw [← one_smul G x]; rw [← smul_assoc s 1 x]; rw [smul_comm]; rw [smul_assoc]; rw [one_smul]; rw [smul_assoc]; rw [one_smul]
-
-Depends on / 依赖: one_smul, smul_assoc, smul_comm
+/-
+**SMulCommClass.of_commMonoid** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SMulCommClass.of_commMonoid (A B G : Type*) [CommMonoid G] [SMul A G] [SMu
+l B G] [IsScalarTower A G G] [IsScalarTower B G G] : SMulCommClass A B G where s
+mul_comm r s x
+参数：A B G : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
 -/
 lemma SMulCommClass.of_commMonoid
     (A B G : Type*) [CommMonoid G] [SMul A G] [SMul B G]
     [IsScalarTower A G G] [IsScalarTower B G G] :
     SMulCommClass A B G where
   smul_comm r s x := by
-    rw [← one_smul G (s • x)]; rw [← smul_assoc]; rw [← one_smul G x]; rw [← smul_assoc s 1 x]; rw [smul_comm]; rw [smul_assoc]; rw [one_smul]; rw [smul_assoc]; rw [one_smul]
-
-/--
-lemma `IsScalarTower.of_commMonoid` / 引理 `IsScalarTower.of_commMonoid`
-
-English:
-lemma IsScalarTower.of_commMonoid
-  statement: (R₁ R : Type*)
-  proof: by rw [smul_eq_mul, mul_comm, ← smul_eq_mul, ← smul_comm, smul_eq_mul,
-    mul_comm, ← smul_eq_mul]
-
-中文:
-引理 标量塔.of_commMonoid
-  结论: (R₁ R : 类型)
-  证明: by rw [smul_eq_mul, mul_comm, ← smul_eq_mul, ← smul_comm, smul_eq_mul,
-    mul_comm, ← smul_eq_mul]
-
-Depends on / 依赖: mul_comm, smul_comm, smul_eq_mul
+    rw [← one_smul G (s • x), ← smul_assoc, ← one_smul G x, ← smul_assoc s 1 x,
+      smul_comm, smul_assoc, one_smul, smul_assoc, one_smul]
+/-
+**IsScalarTower.of_commMonoid** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsScalarTower.of_commMonoid (R₁ R : Type*) [Monoid R₁] [CommMonoid R] [Mul
+Action R₁ R] [SMulCommClass R₁ R R] : IsScalarTower R₁ R R where smul_assoc x₁ y
+ z
+参数：R₁ R : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
 -/
 lemma IsScalarTower.of_commMonoid (R₁ R : Type*)
     [Monoid R₁] [CommMonoid R] [MulAction R₁ R] [SMulCommClass R₁ R R] : IsScalarTower R₁ R R where
   smul_assoc x₁ y z := by rw [smul_eq_mul, mul_comm, ← smul_eq_mul, ← smul_comm, smul_eq_mul,
     mul_comm, ← smul_eq_mul]
-
-/--
-lemma `isScalarTower_iff_smulCommClass_of_commMonoid` / 引理 `isScalarTower_iff_smulCommClass_of_commMonoid`
-
-English:
-lemma isScalarTower_iff_smulCommClass_of_commMonoid
-  statement: (R₁ R : Type*)
-  proof: ⟨fun _ => IsScalarTower.of_commMonoid R₁ R, fun _ => SMulCommClass.of_commMonoid R₁ R R⟩
-
-中文:
-引理 isScalarTower_iff_smulCommClass_of_commMonoid
-  结论: (R₁ R : 类型)
-  证明: ⟨fun _ => IsScalarTower.of_commMonoid R₁ R, fun _ => SMulCommClass.of_commMonoid R₁ R R⟩
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.of_commMonoid, SMulCommClass, SMulCommClass.of_commMonoid, of_commMonoid
+/-
+**isScalarTower_iff_smulCommClass_of_commMonoid** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isScalarTower_iff_smulCommClass_of_commMonoid (R₁ R : Type*) [Monoid R₁] [
+CommMonoid R] [MulAction R₁ R] : SMulCommClass R₁ R R ↔ IsScalarTower R₁ R R
+参数：R₁ R : Type*。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsScalarTower.of_commMonoid`：IsScalarTower.of_commMonoid (R₁ R : Type*) 
+[Monoid R₁] [CommMonoid R] [MulAction R₁ R] [SMulCommClass R₁ R R] : IsScalarTow
+er R₁ R R where s…
+· 使用引理 `SMulCommClass.of_commMonoid`：SMulCommClass.of_commMonoid (A B G : Type*)
+ [CommMonoid G] [SMul A G] [SMul B G] [IsScalarTower A G G] [IsScalarTower B G G
+] : SMulCommClass…
 -/
 lemma isScalarTower_iff_smulCommClass_of_commMonoid (R₁ R : Type*)
     [Monoid R₁] [CommMonoid R] [MulAction R₁ R] :
     SMulCommClass R₁ R R ↔ IsScalarTower R₁ R R :=
-  ⟨fun _ => IsScalarTower.of_commMonoid R₁ R, fun _ => SMulCommClass.of_commMonoid R₁ R R⟩
+  ⟨fun _ ↦ IsScalarTower.of_commMonoid R₁ R, fun _ ↦ SMulCommClass.of_commMonoid R₁ R R⟩
 
 end
 
 section CompatibleScalar
 
 @[to_additive]
-/--
-lemma `smul_one_smul` / 引理 `smul_one_smul`
-
-English:
-lemma smul_one_smul
-  statement: {M} (N) [Monoid N] [SMul M N] [MulAction N α] [SMul M α]
-  proof: by
-  rw [smul_assoc]; rw [one_smul]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_one_smul
-  结论: {M} (N) [幺半群 N] [标量乘法 M N] [乘法作用 N α] [标量乘法 M α]
-  证明: by
-  rw [smul_assoc]; rw [one_smul]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: one_smul, smul_assoc
+/-
+**smul_one_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N α] [SMul M α] [Is
+ScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
+参数：N；x : M；y : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_assoc`：smul_assoc {M N} [SMul M N] [SMul N α] [SMul M α] [IsScalarT
+ower M N α] (x : M) (y : N) (z : α) : (x • y) • z = x • y • z
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 lemma smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N α] [SMul M α]
     [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y := by
-  rw [smul_assoc]; rw [one_smul]
+  rw [smul_assoc, one_smul]
 
 @[to_additive (attr := simp)]
-/--
-lemma `smul_one_mul` / 引理 `smul_one_mul`
-
-English:
-lemma smul_one_mul
-  given: {M N} [MulOneClass N] [SMul M N] [IsScalarTower M N N] (x : M) (y : N)
-  proof: by rw [smul_mul_assoc, one_mul]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 smul_one_mul
-  条件: {M N} [MulOne类 N] [标量乘法 M N] [标量塔 M N N] (x : M) (y : N)
-  证明: by rw [smul_mul_assoc, one_mul]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: one_mul, smul_mul_assoc
+/-
+**smul_one_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_one_mul {M N} [MulOneClass N] [SMul M N] [IsScalarTower M N N] (x : M
+) (y : N) : x • (1 : N) * y = x • y
+参数：x : M；y : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 lemma smul_one_mul {M N} [MulOneClass N] [SMul M N] [IsScalarTower M N N] (x : M) (y : N) :
     x • (1 : N) * y = x • y := by rw [smul_mul_assoc, one_mul]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mul_smul_one` / 引理 `mul_smul_one`
-
-English:
-lemma mul_smul_one
-  given: {M N} [MulOneClass N] [SMul M N] [SMulCommClass M N N] (x : M) (y : N)
-  proof: by rw [← smul_eq_mul, ← smul_comm, smul_eq_mul, mul_one]
-
-@[to_additive]
-
-中文:
-引理 mul_smul_one
-  条件: {M N} [MulOne类 N] [标量乘法 M N] [标量交换类 M N N] (x : M) (y : N)
-  证明: by rw [← smul_eq_mul, ← smul_comm, smul_eq_mul, mul_one]
-
-@[to_additive]
-
-Depends on / 依赖: mul_one, smul_comm, smul_eq_mul
+/-
+**mul_smul_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_smul_one {M N} [MulOneClass N] [SMul M N] [SMulCommClass M N N] (x : M
+) (y : N) : y * x • (1 : N) = x • y
+参数：x : M；y : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 lemma mul_smul_one {M N} [MulOneClass N] [SMul M N] [SMulCommClass M N N] (x : M) (y : N) :
     y * x • (1 : N) = x • y := by rw [← smul_eq_mul, ← smul_comm, smul_eq_mul, mul_one]
 
 @[to_additive]
-/--
-lemma `IsScalarTower.of_smul_one_mul` / 引理 `IsScalarTower.of_smul_one_mul`
-
-English:
-lemma IsScalarTower.of_smul_one_mul
-  statement: {M N} [Monoid N] [SMul M N]
-  proof: ⟨fun x y z => by rw [← h, smul_eq_mul, mul_assoc, h, smul_eq_mul]⟩
-
-@[to_additive]
-
-中文:
-引理 标量塔.of_smul_one_mul
-  结论: {M N} [幺半群 N] [标量乘法 M N]
-  证明: ⟨fun x y z => by rw [← h, smul_eq_mul, mul_assoc, h, smul_eq_mul]⟩
-
-@[to_additive]
-
-Depends on / 依赖: mul_assoc, smul_eq_mul
+/-
+**IsScalarTower.of_smul_one_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsScalarTower.of_smul_one_mul {M N} [Monoid N] [SMul M N] (h : forall (x :
+ M) (y : N), x • (1 : N) * y = x • y) : IsScalarTower M N N
+参数：h : forall (x : M) (y : N), x • (1 : N) * y = x • y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 lemma IsScalarTower.of_smul_one_mul {M N} [Monoid N] [SMul M N]
-    (h : forall (x : M) (y : N), x • (1 : N) * y = x • y) : IsScalarTower M N N :=
-  ⟨fun x y z => by rw [← h, smul_eq_mul, mul_assoc, h, smul_eq_mul]⟩
+    (h : ∀ (x : M) (y : N), x • (1 : N) * y = x • y) : IsScalarTower M N N :=
+  ⟨fun x y z ↦ by rw [← h, smul_eq_mul, mul_assoc, h, smul_eq_mul]⟩
 
 @[to_additive]
-/--
-lemma `SMulCommClass.of_mul_smul_one` / 引理 `SMulCommClass.of_mul_smul_one`
-
-English:
-lemma SMulCommClass.of_mul_smul_one
-  statement: {M N} [Monoid N] [SMul M N]
-  proof: ⟨fun x y z => by rw [← H x z, smul_eq_mul, ← H, smul_eq_mul, mul_assoc]⟩
-
-中文:
-引理 标量交换类.of_mul_smul_one
-  结论: {M N} [幺半群 N] [标量乘法 M N]
-  证明: ⟨fun x y z => by rw [← H x z, smul_eq_mul, ← H, smul_eq_mul, mul_assoc]⟩
-
-Depends on / 依赖: mul_assoc, smul_eq_mul
+/-
+**SMulCommClass.of_mul_smul_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SMulCommClass.of_mul_smul_one {M N} [Monoid N] [SMul M N] (H : forall (x :
+ M) (y : N), y * x • (1 : N) = x • y) : SMulCommClass M N N
+参数：H : forall (x : M) (y : N), y * x • (1 : N) = x • y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 lemma SMulCommClass.of_mul_smul_one {M N} [Monoid N] [SMul M N]
-    (H : forall (x : M) (y : N), y * x • (1 : N) = x • y) : SMulCommClass M N N :=
-  ⟨fun x y z => by rw [← H x z, smul_eq_mul, ← H, smul_eq_mul, mul_assoc]⟩
+    (H : ∀ (x : M) (y : N), y * x • (1 : N) = x • y) : SMulCommClass M N N :=
+  ⟨fun x y z ↦ by rw [← H x z, smul_eq_mul, ← H, smul_eq_mul, mul_assoc]⟩
 
 /--
-lemma `IsScalarTower.to₁₂₄` / 引理 `IsScalarTower.to₁₂₄`
+Let `Q / P / N / M` be a tower. If `P / N / M`, `Q / P / M` and `Q / P / N` are
+scalar towers, then `Q / N / M` is also a scalar tower.
+-/
+/-
+**IsScalarTower.to** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma IsScalarTower.to₁₂₄
-  statement: (M N P Q)
-  proof: by rw [← smul_one_smul P, smul_assoc m, smul_assoc, smul_one_smul]
-
-中文:
-引理 标量塔.to₁₂₄
-  结论: (M N P Q)
-  证明: by rw [← smul_one_smul P, smul_assoc m, smul_assoc, smul_one_smul]
+--- 原说明 ---
+Let `Q / P / N / M` be a tower. If `P / N / M`, `Q / P / M` and `Q / P / N` are
+scalar towers, then `Q / N / M` is also a scalar tower.
 -/
 @[to_additive] lemma IsScalarTower.to₁₂₄ (M N P Q)
     [SMul M N] [SMul M P] [SMul M Q] [SMul N P] [SMul N Q] [Monoid P] [MulAction P Q]
@@ -1653,17 +1477,16 @@ lemma IsScalarTower.to₁₂₄
   smul_assoc m n q := by rw [← smul_one_smul P, smul_assoc m, smul_assoc, smul_one_smul]
 
 /--
-lemma `IsScalarTower.to₁₃₄` / 引理 `IsScalarTower.to₁₃₄`
+Let `Q / P / N / M` be a tower. If `P / N / M`, `Q / N / M` and `Q / P / N` are
+scalar towers, then `Q / P / M` is also a scalar tower.
+-/
+/-
+**IsScalarTower.to** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma IsScalarTower.to₁₃₄
-  statement: (M N P Q)
-  proof: by rw [← smul_one_smul N m, smul_assoc, smul_one_smul]
-
-中文:
-引理 标量塔.to₁₃₄
-  结论: (M N P Q)
-  证明: by rw [← smul_one_smul N m, smul_assoc, smul_one_smul]
+--- 原说明 ---
+Let `Q / P / N / M` be a tower. If `P / N / M`, `Q / N / M` and `Q / P / N` are
+scalar towers, then `Q / P / M` is also a scalar tower.
 -/
 @[to_additive] lemma IsScalarTower.to₁₃₄ (M N P Q)
     [SMul M N] [SMul M P] [SMul M Q] [SMul P Q] [Monoid N] [MulAction N P] [MulAction N Q]
@@ -1671,22 +1494,21 @@ lemma IsScalarTower.to₁₃₄
   smul_assoc m p q := by rw [← smul_one_smul N m, smul_assoc, smul_one_smul]
 
 /--
-lemma `IsScalarTower.to₂₃₄` / 引理 `IsScalarTower.to₂₃₄`
+Let `Q / P / N / M` be a tower. If `P / N / M`, `Q / N / M` and `Q / P / M` are
+scalar towers, then `Q / P / N` is also a scalar tower.
+-/
+/-
+**IsScalarTower.to** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma IsScalarTower.to₂₃₄
-  statement: (M N P Q)
-  proof: by obtain ⟨m, rfl⟩ := h n; simp_rw [smul_one_smul, smul_assoc]
-
-中文:
-引理 标量塔.to₂₃₄
-  结论: (M N P Q)
-  证明: by obtain ⟨m, rfl⟩ := h n; simp_rw [smul_one_smul, smul_assoc]
+--- 原说明 ---
+Let `Q / P / N / M` be a tower. If `P / N / M`, `Q / N / M` and `Q / P / M` are
+scalar towers, then `Q / P / N` is also a scalar tower.
 -/
 @[to_additive] lemma IsScalarTower.to₂₃₄ (M N P Q)
     [SMul M N] [SMul M P] [SMul M Q] [SMul P Q] [Monoid N] [MulAction N P] [MulAction N Q]
     [IsScalarTower M N P] [IsScalarTower M N Q] [IsScalarTower M P Q]
-    (h : Function.Surjective fun m : M => m • (1 : N)) : IsScalarTower N P Q where
+    (h : Function.Surjective fun m : M ↦ m • (1 : N)) : IsScalarTower N P Q where
   smul_assoc n p q := by obtain ⟨m, rfl⟩ := h n; simp_rw [smul_one_smul, smul_assoc]
 
 end CompatibleScalar
@@ -1701,30 +1523,30 @@ The axiom is also satisfied by a Galois group $Gal(L/K)$ acting on the field `L`
 but here you can use the even stronger class `MulSemiringAction`, which captures
 how the action plays with both multiplication and addition. -/
 @[ext]
-/--
-Definition of `MulDistribMulAction` / `MulDistribMulAction` 的定义
+/-
+**MulDistribMulAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (N : Type u_10) → [Monoid M] → [Monoid N] → Type (max u_1
+0 u_9)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MulDistribMulAction
-  parameters: (M N : Type*) [Monoid M] [Monoid N]
-  extends: MulAction M N
-  axioms and operations (2):
-    - smul_one : forall r : M, r • (1 : N) = 1
-    - smul_mul : forall (r : M) (x y : N), r • (x * y) = r • x * r • y
+--- 原说明 ---
+Typeclass for multiplicative actions on multiplicative structures.
 
-中文:
-类 MulDistribMul作用
-  参数: (M N : 类型) [幺半群 M] [幺半群 N]
-  继承: 乘法作用 M N
-  公理与运算 (2 个):
-    - smul_one : 对任意 r : M, r • (1 : N) = 1
-    - smul_mul : 对任意 (r : M) (x y : N), r • (x * y) = r • x * r • y
+The key axiom here is `smul_mul : g • (x * y) = (g • x) * (g • y)`.
+If `G` is a multiplicative group with automorphism group `Γ`, then there is a na
+tural instance of
+`MulDistribMulAction Γ G`.
+
+The axiom is also satisfied by a Galois group $Gal(L/K)$ acting on the field `L`
+,
+but here you can use the even stronger class `MulSemiringAction`, which captures
+how the action plays with both multiplication and addition.
 -/
 class MulDistribMulAction (M N : Type*) [Monoid M] [Monoid N] extends MulAction M N where
   /-- Multiplying `1` by a scalar gives `1` -/
-  smul_one : forall r : M, r • (1 : N) = 1
+  smul_one : ∀ r : M, r • (1 : N) = 1
   /-- Distributivity of `•` across `*` -/
-  smul_mul : forall (r : M) (x y : N), r • (x * y) = r • x * r • y
+  smul_mul : ∀ (r : M) (x y : N), r • (x * y) = r • x * r • y
 
 /-- Typeclass for additive actions on additive structures.
 
@@ -1732,30 +1554,25 @@ The key axiom here is `vadd_add : g +ᵥ (x + y) = (g +ᵥ x) + (g +ᵥ y)`.
 If `G` is an additive group with additive automorphism group `Γ`, then there is a natural instance
 of `AddDistribAddAction Γ G`. -/
 @[ext]
-/--
-Definition of `AddDistribAddAction` / `AddDistribAddAction` 的定义
+/-
+**AddDistribAddAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_9) → (N : Type u_10) → [AddMonoid M] → [AddMonoid N] → Type (m
+ax u_10 u_9)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AddDistribAddAction
-  parameters: (M N : Type*) [AddMonoid M] [AddMonoid N]
-  extends: AddAction M N
-  axioms and operations (2):
-    - vadd_zero : forall r : M, r +ᵥ (0 : N) = 0
-    - vadd_add : forall (r : M) (x y : N), r +ᵥ (x + y) = (r +ᵥ x) + (r +ᵥ y)
+--- 原说明 ---
+Typeclass for additive actions on additive structures.
 
-中文:
-类 分配加法作用
-  参数: (M N : 类型) [加法幺半群 M] [加法幺半群 N]
-  继承: 加法作用 M N
-  公理与运算 (2 个):
-    - vadd_zero : 对任意 r : M, r +ᵥ (0 : N) = 0
-    - vadd_add : 对任意 (r : M) (x y : N), r +ᵥ (x + y) = (r +ᵥ x) + (r +ᵥ y)
+The key axiom here is `vadd_add : g +ᵥ (x + y) = (g +ᵥ x) + (g +ᵥ y)`.
+If `G` is an additive group with additive automorphism group `Γ`, then there is 
+a natural instance
+of `AddDistribAddAction Γ G`.
 -/
 class AddDistribAddAction (M N : Type*) [AddMonoid M] [AddMonoid N] extends AddAction M N where
   /-- Acting on `0` by a scalar gives `0` -/
-  vadd_zero : forall r : M, r +ᵥ (0 : N) = 0
+  vadd_zero : ∀ r : M, r +ᵥ (0 : N) = 0
   /-- Distributivity of `+ᵥ` across `+` -/
-  vadd_add : forall (r : M) (x y : N), r +ᵥ (x + y) = (r +ᵥ x) + (r +ᵥ y)
+  vadd_add : ∀ (r : M) (x y : N), r +ᵥ (x + y) = (r +ᵥ x) + (r +ᵥ y)
 
 export MulDistribMulAction (smul_one)
 export AddDistribAddAction (vadd_zero)
@@ -1766,22 +1583,15 @@ section MulDistribMulAction
 variable [Monoid M] [Monoid N] [MulDistribMulAction M N]
 
 @[to_additive]
-/--
-lemma `smul_mul'` / 引理 `smul_mul'`
-
-English:
-lemma smul_mul'
-  given: (a : M) (b₁ b₂ : N)
-  statement: a • (b₁ * b₂) = a • b₁ * a • b₂
-  proof: MulDistribMulAction.smul_mul ..
-
-中文:
-引理 smul_mul'
-  条件: (a : M) (b₁ b₂ : N)
-  结论: a • (b₁ * b₂) = a • b₁ * a • b₂
-  证明: MulDistribMulAction.smul_mul ..
-
-Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.smul_mul, smul_mul
+/-
+**smul_mul'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_mul' (a : M) (b₁ b₂ : N) : a • (b₁ * b₂) = a • b₁ * a • b₂
+参数：a : M；b₁ b₂ : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulDistribMulAction.smul_mul`：∀ {M : Type u_9} {N : Type u_10} {inst : M
+onoid M} {inst_1 : Monoid N} [self : MulDistribMulAction M N] (r : M)   (x y : N
+), r • (x * y) = r…
 -/
 lemma smul_mul' (a : M) (b₁ b₂ : N) : a • (b₁ * b₂) = a • b₁ * a • b₂ :=
   MulDistribMulAction.smul_mul ..
@@ -1793,244 +1603,158 @@ section IsCancelSMul
 variable (G P : Type*)
 -- TODO: IsRightCancelSmul
 
-/--
-Definition of `IsLeftCancelVAdd` / `IsLeftCancelVAdd` 的定义
+/-- A vector addition is left-cancellative if it is pointwise injective on the left. -/
+/-
+**IsLeftCancelVAdd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_9) → (P : Type u_10) → [VAdd G P] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLeftCancelVAdd
-  parameters: [VAdd G P]
-  axioms and operations (1):
-    - left_cancel' : forall (a : G) (b c : P), a +ᵥ b = a +ᵥ c -> b = c
-
-中文:
-类 是左消去向量加法
-  参数: [向量加法 G P]
-  公理与运算 (1 个):
-    - left_cancel' : 对任意 (a : G) (b c : P), a +ᵥ b = a +ᵥ c -> b = c
+--- 原说明 ---
+A vector addition is left-cancellative if it is pointwise injective on the left.
 -/
 class IsLeftCancelVAdd [VAdd G P] : Prop where
-  protected left_cancel' : forall (a : G) (b c : P), a +ᵥ b = a +ᵥ c -> b = c
+  protected left_cancel' : ∀ (a : G) (b c : P), a +ᵥ b = a +ᵥ c → b = c
 
 /-- A scalar multiplication is left-cancellative if it is pointwise injective on the left. -/
 @[to_additive]
-/--
-Definition of `IsLeftCancelSMul` / `IsLeftCancelSMul` 的定义
+/-
+**IsLeftCancelSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_9) → (P : Type u_10) → [SMul G P] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsLeftCancelSMul
-  parameters: [SMul G P]
-  axioms and operations (1):
-    - left_cancel' : forall (a : G) (b c : P), a • b = a • c -> b = c
-
-中文:
-类 是左消去标量乘法
-  参数: [标量乘法 G P]
-  公理与运算 (1 个):
-    - left_cancel' : 对任意 (a : G) (b c : P), a • b = a • c -> b = c
+--- 原说明 ---
+A scalar multiplication is left-cancellative if it is pointwise injective on the
+ left.
 -/
 class IsLeftCancelSMul [SMul G P] : Prop where
-  protected left_cancel' : forall (a : G) (b c : P), a • b = a • c -> b = c
+  protected left_cancel' : ∀ (a : G) (b c : P), a • b = a • c → b = c
 
 @[to_additive]
-/--
-lemma `IsLeftCancelSMul.left_cancel` / 引理 `IsLeftCancelSMul.left_cancel`
-
-English:
-lemma IsLeftCancelSMul.left_cancel
-  given: {G P} [SMul G P] [IsLeftCancelSMul G P] (a : G) (b c : P)
-  proof: IsLeftCancelSMul.left_cancel' a b c
-
-@[to_additive]
-
-中文:
-引理 是左消去标量乘法.left_cancel
-  条件: {G P} [标量乘法 G P] [是左消去标量乘法 G P] (a : G) (b c : P)
-  证明: IsLeftCancelSMul.left_cancel' a b c
-
-@[to_additive]
-
-Depends on / 依赖: IsLeftCancelSMul, IsLeftCancelSMul.left_cancel, left_cancel
+/-
+**IsLeftCancelSMul.left_cancel** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsLeftCancelSMul.left_cancel {G P} [SMul G P] [IsLeftCancelSMul G P] (a : 
+G) (b c : P) : a • b = a • c -> b = c
+参数：a : G；b c : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLeftCancelSMul.left_cancel'`：∀ {G : Type u_9} {P : Type u_10} {inst : 
+SMul G P} [self : IsLeftCancelSMul G P] (a : G) (b c : P),   a • b = a • c → b =
+ c
 -/
 lemma IsLeftCancelSMul.left_cancel {G P} [SMul G P] [IsLeftCancelSMul G P] (a : G) (b c : P) :
-    a • b = a • c -> b = c := IsLeftCancelSMul.left_cancel' a b c
+    a • b = a • c → b = c := IsLeftCancelSMul.left_cancel' a b c
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: G] [IsLeftCancelMul G] : IsLeftCancelSMul G G where
-  body: IsLeftCancelMul.mul_left_cancel
-
-中文:
-实例 [乘法
-  签名: G] [左乘消去 G] : 是左消去标量乘法 G G where
-  定义体: IsLeftCancelMul.mul_left_cancel
-
-Depends on / 依赖: IsLeftCancelMul, IsLeftCancelMul.mul_left_cancel, mul_left_cancel
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul G] [IsLeftCancelMul G] : IsLeftCancelSMul G G where
   left_cancel' := IsLeftCancelMul.mul_left_cancel
 
-/--
-Definition of `IsCancelVAdd` / `IsCancelVAdd` 的定义
+/-- A vector addition is cancellative if it is pointwise injective on the left and right.
 
-English:
-class IsCancelVAdd
-  parameters: [VAdd G P]
-  extends: IsLeftCancelVAdd G P
-  axioms and operations (1):
-    - right_cancel' : forall (a b : G) (c : P), a +ᵥ c = b +ᵥ c -> a = b
+A group action is cancellative in this sense if and only if it is **free**.
+See `isCancelVAdd_iff_eq_zero_of_vadd_eq` for a more familiar condition. -/
+/-
+**IsCancelVAdd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_9) → (P : Type u_10) → [VAdd G P] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 是消去向量加法
-  参数: [向量加法 G P]
-  继承: 是左消去向量加法 G P
-  公理与运算 (1 个):
-    - right_cancel' : 对任意 (a b : G) (c : P), a +ᵥ c = b +ᵥ c -> a = b
+--- 原说明 ---
+A vector addition is cancellative if it is pointwise injective on the left and r
+ight.
+
+A group action is cancellative in this sense if and only if it is **free**.
+See `isCancelVAdd_iff_eq_zero_of_vadd_eq` for a more familiar condition.
 -/
 class IsCancelVAdd [VAdd G P] : Prop extends IsLeftCancelVAdd G P where
-  protected right_cancel' : forall (a b : G) (c : P), a +ᵥ c = b +ᵥ c -> a = b
+  protected right_cancel' : ∀ (a b : G) (c : P), a +ᵥ c = b +ᵥ c → a = b
 
 /-- A scalar multiplication is cancellative if it is pointwise injective on the left and right.
 
 A group action is cancellative in this sense if and only if it is **free**.
 See `isCancelSMul_iff_eq_one_of_smul_eq` for a more familiar condition. -/
 @[to_additive]
-/--
-Definition of `IsCancelSMul` / `IsCancelSMul` 的定义
+/-
+**IsCancelSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_9) → (P : Type u_10) → [SMul G P] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCancelSMul
-  parameters: [SMul G P]
-  extends: IsLeftCancelSMul G P
-  axioms and operations (1):
-    - right_cancel' : forall (a b : G) (c : P), a • c = b • c -> a = b
+--- 原说明 ---
+A scalar multiplication is cancellative if it is pointwise injective on the left
+ and right.
 
-中文:
-类 是消去标量乘法
-  参数: [标量乘法 G P]
-  继承: 是左消去标量乘法 G P
-  公理与运算 (1 个):
-    - right_cancel' : 对任意 (a b : G) (c : P), a • c = b • c -> a = b
+A group action is cancellative in this sense if and only if it is **free**.
+See `isCancelSMul_iff_eq_one_of_smul_eq` for a more familiar condition.
 -/
 class IsCancelSMul [SMul G P] : Prop extends IsLeftCancelSMul G P where
-  protected right_cancel' : forall (a b : G) (c : P), a • c = b • c -> a = b
+  protected right_cancel' : ∀ (a b : G) (c : P), a • c = b • c → a = b
 
 @[to_additive]
-/--
-lemma `IsCancelSMul.left_cancel` / 引理 `IsCancelSMul.left_cancel`
-
-English:
-lemma IsCancelSMul.left_cancel
-  given: {G P} [SMul G P] [IsCancelSMul G P] (a : G) (b c : P)
-  proof: IsLeftCancelSMul.left_cancel' a b c
-
-@[to_additive]
-
-中文:
-引理 是消去标量乘法.left_cancel
-  条件: {G P} [标量乘法 G P] [是消去标量乘法 G P] (a : G) (b c : P)
-  证明: IsLeftCancelSMul.left_cancel' a b c
-
-@[to_additive]
-
-Depends on / 依赖: IsLeftCancelSMul, IsLeftCancelSMul.left_cancel, left_cancel
+/-
+**IsCancelSMul.left_cancel** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsCancelSMul.left_cancel {G P} [SMul G P] [IsCancelSMul G P] (a : G) (b c 
+: P) : a • b = a • c -> b = c
+参数：a : G；b c : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLeftCancelSMul.left_cancel'`：∀ {G : Type u_9} {P : Type u_10} {inst : 
+SMul G P} [self : IsLeftCancelSMul G P] (a : G) (b c : P),   a • b = a • c → b =
+ c
+· 使用定理 `IsCancelSMul.toIsLeftCancelSMul`：∀ {G : Type u_9} {P : Type u_10} {inst 
+: SMul G P} [self : IsCancelSMul G P], IsLeftCancelSMul G P
 -/
 lemma IsCancelSMul.left_cancel {G P} [SMul G P] [IsCancelSMul G P] (a : G) (b c : P) :
-    a • b = a • c -> b = c := IsLeftCancelSMul.left_cancel' a b c
+    a • b = a • c → b = c := IsLeftCancelSMul.left_cancel' a b c
 
 @[to_additive]
-/--
-lemma `IsCancelSMul.right_cancel` / 引理 `IsCancelSMul.right_cancel`
-
-English:
-lemma IsCancelSMul.right_cancel
-  given: {G P} [SMul G P] [IsCancelSMul G P] (a b : G) (c : P)
-  proof: IsCancelSMul.right_cancel' a b c
-
-@[to_additive]
-
-中文:
-引理 是消去标量乘法.right_cancel
-  条件: {G P} [标量乘法 G P] [是消去标量乘法 G P] (a b : G) (c : P)
-  证明: IsCancelSMul.right_cancel' a b c
-
-@[to_additive]
-
-Depends on / 依赖: IsCancelSMul, IsCancelSMul.right_cancel, right_cancel
+/-
+**IsCancelSMul.right_cancel** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsCancelSMul.right_cancel {G P} [SMul G P] [IsCancelSMul G P] (a b : G) (c
+ : P) : a • c = b • c -> a = b
+参数：a b : G；c : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCancelSMul.right_cancel'`：∀ {G : Type u_9} {P : Type u_10} {inst : SMu
+l G P} [self : IsCancelSMul G P] (a b : G) (c : P), a • c = b • c → a = b
 -/
 lemma IsCancelSMul.right_cancel {G P} [SMul G P] [IsCancelSMul G P] (a b : G) (c : P) :
-    a • c = b • c -> a = b := IsCancelSMul.right_cancel' a b c
+    a • c = b • c → a = b := IsCancelSMul.right_cancel' a b c
 
 @[to_additive]
-/--
-lemma `IsCancelSMul.eq_one_of_smul` / 引理 `IsCancelSMul.eq_one_of_smul`
-
-English:
-lemma IsCancelSMul.eq_one_of_smul
-  statement: {G P} [Monoid G] [MulAction G P] [IsCancelSMul G P] {g : G}
-  proof: IsCancelSMul.right_cancel g 1 x ((one_smul G x).symm ▸ h)
-
-@[to_additive]
-
-中文:
-引理 是消去标量乘法.eq_one_of_smul
-  结论: {G P} [幺半群 G] [乘法作用 G P] [是消去标量乘法 G P] {g : G}
-  证明: IsCancelSMul.right_cancel g 1 x ((one_smul G x).symm ▸ h)
-
-@[to_additive]
-
-Depends on / 依赖: IsCancelSMul, IsCancelSMul.right_cancel, one_smul, right_cancel
+/-
+**IsCancelSMul.eq_one_of_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsCancelSMul.eq_one_of_smul {G P} [Monoid G] [MulAction G P] [IsCancelSMul
+ G P] {g : G} {x : P} (h : g • x = x) : g = 1
+参数：h : g • x = x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsCancelSMul.right_cancel`：IsCancelSMul.right_cancel {G P} [SMul G P] [I
+sCancelSMul G P] (a b : G) (c : P) : a • c = b • c -> a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 lemma IsCancelSMul.eq_one_of_smul {G P} [Monoid G] [MulAction G P] [IsCancelSMul G P] {g : G}
     {x : P} (h : g • x = x) : g = 1 :=
   IsCancelSMul.right_cancel g 1 x ((one_smul G x).symm ▸ h)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CancelMonoid
-  signature: G] : IsCancelSMul G G where
-  body: IsLeftCancelMul.mul_left_cancel
-  right_cancel' _ _ _ := mul_right_cancel
-
-@[to_additive]
-
-中文:
-实例 [消去幺半群
-  签名: G] : 是消去标量乘法 G G where
-  定义体: IsLeftCancelMul.mul_left_cancel
-  right_cancel' _ _ _ := mul_right_cancel
-
-@[to_additive]
-
-Depends on / 依赖: IsLeftCancelMul, IsLeftCancelMul.mul_left_cancel, mul_left_cancel
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CancelMonoid G] : IsCancelSMul G G where
   left_cancel' := IsLeftCancelMul.mul_left_cancel
   right_cancel' _ _ _ := mul_right_cancel
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: G] [MulAction G P] : IsLeftCancelSMul G P where
-  body: by rw [← inv_smul_smul a b, h, inv_smul_smul]
-
-中文:
-实例 [群
-  签名: G] [乘法作用 G P] : 是左消去标量乘法 G P where
-  定义体: by rw [← inv_smul_smul a b, h, inv_smul_smul]
-
-Depends on / 依赖: inv_smul_smul
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group G] [MulAction G P] : IsLeftCancelSMul G P where
   left_cancel' a b c h := by rw [← inv_smul_smul a b, h, inv_smul_smul]
 
 end IsCancelSMul
+

@@ -66,20 +66,16 @@ extension to a (unital) algebra homomorphism from `Unitization R A` to `B`.
 /-- The minimal unitization of a non-unital `R`-algebra `A`. This is just a structure wrapper for
 `R × A`. -/
 @[ext]
-/--
-Definition of `Unitization` / `Unitization` 的定义
+/-
+**Unitization** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_2 → Type (max u_1 u_2)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Unitization
-  parameters: (R A : Type*)
-  extends: R × A
-  (no additional axioms)
-
-中文:
-结构 Unitization
-  参数: (R A : 类型)
-  继承: R × A
-  (无附加公理)
+--- 原说明 ---
+The minimal unitization of a non-unital `R`-algebra `A`. This is just a structur
+e wrapper for
+`R × A`.
 -/
 structure Unitization (R A : Type*) extends R × A
 
@@ -99,247 +95,150 @@ section Basic
 
 variable {R A : Type*}
 
-/--
-lemma `mk_toProd` / 引理 `mk_toProd`
-
-English:
-lemma mk_toProd
-  given: (x : Unitization R A)
-  statement: mk x.toProd = x
-  proof: rfl
-
-中文:
-引理 mk_toProd
-  条件: (x : Unitization R A)
-  结论: mk x.toProd = x
-  证明: rfl
+/-
+**Unitization.mk_toProd** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：mk_toProd (x : Unitization R A) : mk x.toProd = x
+参数：x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_toProd (x : Unitization R A) : mk x.toProd = x := rfl
-/--
-lemma `toProd_mk` / 引理 `toProd_mk`
-
-English:
-lemma toProd_mk
-  given: (x : R × A)
-  statement: toProd (mk x) = x
-  proof: rfl
-
-中文:
-引理 toProd_mk
-  条件: (x : R × A)
-  结论: toProd (mk x) = x
-  证明: rfl
+/-
+**Unitization.toProd_mk** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：toProd_mk (x : R × A) : toProd (mk x) = x
+参数：x : R × A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toProd_mk (x : R × A) : toProd (mk x) = x := rfl
 
 /-- The canonical equivalence between `Unitization R A` and `R × A`. -/
 @[simps apply symm_apply]
-/--
-Definition of `equiv` / `equiv` 的定义
+/-
+**Unitization.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：equiv : Unitization R A ≃ R × A where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Unitization.mk_toProd`：mk_toProd (x : Unitization R A) : mk x.toProd = x
+· 使用引理 `Unitization.toProd_mk`：toProd_mk (x : R × A) : toProd (mk x) = x
 
-English:
-definition equiv
-  signature: : Unitization R A ≃ R × A where
-  body: toProd
-  invFun := mk
-  left_inv := mk_toProd
-  right_inv := toProd_mk
-
-中文:
-定义 equiv
-  签名: : Unitization R A ≃ R × A where
-  定义体: toProd
-  invFun := mk
-  left_inv := mk_toProd
-  right_inv := toProd_mk
-
-Depends on / 依赖: toProd
+--- 原说明 ---
+The canonical equivalence between `Unitization R A` and `R × A`.
 -/
 def equiv : Unitization R A ≃ R × A where
   toFun := toProd
   invFun := mk
   left_inv := mk_toProd
   right_inv := toProd_mk
-
-/--
-lemma `toProd_injective` / 引理 `toProd_injective`
-
-English:
-lemma toProd_injective
-  statement: (toProd : Unitization R A -> R × A).Injective
-  proof: equiv.injective
-
-中文:
-引理 toProd_injective
-  结论: (toProd : Unitization R A -> R × A).单射
-  证明: equiv.injective
-
-Depends on / 依赖: equiv.injective, injective
+/-
+**Unitization.toProd_injective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：toProd_injective : (toProd : Unitization R A -> R × A).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-lemma toProd_injective : (toProd : Unitization R A -> R × A).Injective :=
+lemma toProd_injective : (toProd : Unitization R A → R × A).Injective :=
   equiv.injective
-
-/--
-lemma `toProd_surjective` / 引理 `toProd_surjective`
-
-English:
-lemma toProd_surjective
-  statement: (toProd : Unitization R A -> R × A).Surjective
-  proof: equiv.surjective
-
-中文:
-引理 toProd_surjective
-  结论: (toProd : Unitization R A -> R × A).满射
-  证明: equiv.surjective
-
-Depends on / 依赖: equiv.surjective, surjective
+/-
+**Unitization.toProd_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：toProd_surjective : (toProd : Unitization R A -> R × A).Surjective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
-lemma toProd_surjective : (toProd : Unitization R A -> R × A).Surjective :=
+lemma toProd_surjective : (toProd : Unitization R A → R × A).Surjective :=
   equiv.surjective
-
-/--
-lemma `toProd_bijective` / 引理 `toProd_bijective`
-
-English:
-lemma toProd_bijective
-  statement: (toProd : Unitization R A -> R × A).Bijective
-  proof: equiv.bijective
-
-中文:
-引理 toProd_bijective
-  结论: (toProd : Unitization R A -> R × A).双射
-  证明: equiv.bijective
-
-Depends on / 依赖: bijective, equiv.bijective
+/-
+**Unitization.toProd_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：toProd_bijective : (toProd : Unitization R A -> R × A).Bijective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
-lemma toProd_bijective : (toProd : Unitization R A -> R × A).Bijective :=
+lemma toProd_bijective : (toProd : Unitization R A → R × A).Bijective :=
   equiv.bijective
-
-/--
-lemma `mk_injective` / 引理 `mk_injective`
-
-English:
-lemma mk_injective
-  statement: (mk : R × A -> Unitization R A).Injective
-  proof: equiv.symm.injective
-
-中文:
-引理 mk_injective
-  结论: (mk : R × A -> Unitization R A).单射
-  证明: equiv.symm.injective
-
-Depends on / 依赖: equiv.symm.injective, injective
+/-
+**Unitization.mk_injective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：mk_injective : (mk : R × A -> Unitization R A).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-lemma mk_injective : (mk : R × A -> Unitization R A).Injective :=
+lemma mk_injective : (mk : R × A → Unitization R A).Injective :=
   equiv.symm.injective
-
-/--
-lemma `mk_surjective` / 引理 `mk_surjective`
-
-English:
-lemma mk_surjective
-  statement: (mk : R × A -> Unitization R A).Surjective
-  proof: equiv.symm.surjective
-
-中文:
-引理 mk_surjective
-  结论: (mk : R × A -> Unitization R A).满射
-  证明: equiv.symm.surjective
-
-Depends on / 依赖: equiv.symm.surjective, surjective
+/-
+**Unitization.mk_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：mk_surjective : (mk : R × A -> Unitization R A).Surjective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-lemma mk_surjective : (mk : R × A -> Unitization R A).Surjective :=
+lemma mk_surjective : (mk : R × A → Unitization R A).Surjective :=
   equiv.symm.surjective
-
-/--
-lemma `mk_bijective` / 引理 `mk_bijective`
-
-English:
-lemma mk_bijective
-  statement: (mk : R × A -> Unitization R A).Bijective
-  proof: equiv.symm.bijective
-
-@[simp]
-
-中文:
-引理 mk_bijective
-  结论: (mk : R × A -> Unitization R A).双射
-  证明: equiv.symm.bijective
-
-@[simp]
-
-Depends on / 依赖: bijective, equiv.symm.bijective
+/-
+**Unitization.mk_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：mk_bijective : (mk : R × A -> Unitization R A).Bijective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-lemma mk_bijective : (mk : R × A -> Unitization R A).Bijective :=
+lemma mk_bijective : (mk : R × A → Unitization R A).Bijective :=
   equiv.symm.bijective
 
 @[simp]
-/--
-lemma `toProd_inj_iff` / 引理 `toProd_inj_iff`
-
-English:
-lemma toProd_inj_iff
-  given: {x y : Unitization R A}
-  statement: toProd x = toProd y ↔ x = y
-  proof: toProd_injective.eq_iff
-
-中文:
-引理 toProd_inj_iff
-  条件: {x y : Unitization R A}
-  结论: toProd x = toProd y ↔ x = y
-  证明: toProd_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toProd_injective, toProd_injective.eq_iff
+/-
+**Unitization.toProd_inj_iff** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：toProd_inj_iff {x y : Unitization R A} : toProd x = toProd y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `Unitization.toProd_injective`：toProd_injective : (toProd : Unitization R
+ A -> R × A).Injective
 -/
 lemma toProd_inj_iff {x y : Unitization R A} : toProd x = toProd y ↔ x = y :=
   toProd_injective.eq_iff
 
-/--
-Definition of `inl` / `inl` 的定义
+/-- The canonical inclusion `R → Unitization R A`. -/
+/-
+**Unitization.inl** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：inl [Zero A] (r : R) : Unitization R A
+参数：r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inl
-  signature: [Zero A] (r : R)
-  body: mk (r, 0)
-
-中文:
-定义 inl
-  签名: [零 A] (r : R)
-  定义体: mk (r, 0)
+--- 原说明 ---
+The canonical inclusion `R → Unitization R A`.
 -/
 def inl [Zero A] (r : R) : Unitization R A :=
   mk (r, 0)
 
 /-- The canonical inclusion `A → Unitization R A`. -/
 @[coe]
-/--
-Definition of `inr` / `inr` 的定义
+/-
+**Unitization.inr** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：inr [Zero R] (a : A) : Unitization R A
+参数：a : A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inr
-  signature: [Zero R] (a : A)
-  body: mk (0, a)
-
-中文:
-定义 inr
-  签名: [零 R] (a : A)
-  定义体: mk (0, a)
+--- 原说明 ---
+The canonical inclusion `A → Unitization R A`.
 -/
 def inr [Zero R] (a : A) : Unitization R A :=
   mk (0, a)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: R] : Coe A (Unitization R A) where
-  body: inr
-
-中文:
-实例 [零
-  签名: R] : Coe A (Unitization R A) where
-  定义体: inr
+/-
+**Unitization.** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero R] : Coe A (Unitization R A) where
   coe := inr
@@ -349,43 +248,23 @@ section
 variable (A)
 
 @[simp]
-/--
-theorem `fst_inl` / 定理 `fst_inl`
-
-English:
-theorem fst_inl
-  given: [Zero A] (r : R)
-  statement: (inl r : Unitization R A).fst = r
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_inl
-  条件: [零 A] (r : R)
-  结论: (inl r : Unitization R A).fst = r
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_inl** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_inl [Zero A] (r : R) : (inl r : Unitization R A).fst = r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_inl [Zero A] (r : R) : (inl r : Unitization R A).fst = r :=
   rfl
 
 @[simp]
-/--
-theorem `snd_inl` / 定理 `snd_inl`
-
-English:
-theorem snd_inl
-  given: [Zero A] (r : R)
-  statement: (inl r : Unitization R A).snd = 0
-  proof: rfl
-
-中文:
-定理 snd_inl
-  条件: [零 A] (r : R)
-  结论: (inl r : Unitization R A).snd = 0
-  证明: rfl
+/-
+**Unitization.snd_inl** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_inl [Zero A] (r : R) : (inl r : Unitization R A).snd = 0
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_inl [Zero A] (r : R) : (inl r : Unitization R A).snd = 0 :=
   rfl
@@ -397,155 +276,97 @@ section
 variable (R)
 
 @[simp]
-/--
-theorem `fst_inr` / 定理 `fst_inr`
-
-English:
-theorem fst_inr
-  given: [Zero R] (a : A)
-  statement: (a : Unitization R A).fst = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_inr
-  条件: [零 R] (a : A)
-  结论: (a : Unitization R A).fst = 0
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_inr** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_inr [Zero R] (a : A) : (a : Unitization R A).fst = 0
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_inr [Zero R] (a : A) : (a : Unitization R A).fst = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `snd_inr` / 定理 `snd_inr`
-
-English:
-theorem snd_inr
-  given: [Zero R] (a : A)
-  statement: (a : Unitization R A).snd = a
-  proof: rfl
-
-中文:
-定理 snd_inr
-  条件: [零 R] (a : A)
-  结论: (a : Unitization R A).snd = a
-  证明: rfl
+/-
+**Unitization.snd_inr** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_inr [Zero R] (a : A) : (a : Unitization R A).snd = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_inr [Zero R] (a : A) : (a : Unitization R A).snd = a :=
   rfl
 
 end
 
-/--
-theorem `inl_injective` / 定理 `inl_injective`
-
-English:
-theorem inl_injective
-  given: [Zero A]
-  statement: Function.Injective (inl : R -> Unitization R A)
-  proof: Function.LeftInverse.injective (g := Prod.fst ∘ toProd) fst_inl _
-
-中文:
-定理 inl_injective
-  条件: [零 A]
-  结论: 函数.单射 (inl : R -> Unitization R A)
-  证明: Function.LeftInverse.injective (g := Prod.fst ∘ toProd) fst_inl _
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, Prod.fst, fst_inl, injective, toProd
+/-
+**Unitization.inl_injective** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_injective [Zero A] : Function.Injective (inl : R -> Unitization R A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `Unitization.fst_inl`：fst_inl [Zero A] (r : R) : (inl r : Unitization R A
+).fst = r
 -/
-theorem inl_injective [Zero A] : Function.Injective (inl : R -> Unitization R A) :=
-Function.LeftInverse.injective (g := Prod.fst ∘ toProd) fst_inl _
-
-/--
-theorem `inr_injective` / 定理 `inr_injective`
-
-English:
-theorem inr_injective
-  given: [Zero R]
-  statement: Function.Injective ((↑) : A -> Unitization R A)
-  proof: Function.LeftInverse.injective (g := Prod.snd ∘ toProd) snd_inr _
-
-中文:
-定理 inr_injective
-  条件: [零 R]
-  结论: 函数.单射 ((↑) : A -> Unitization R A)
-  证明: Function.LeftInverse.injective (g := Prod.snd ∘ toProd) snd_inr _
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, Prod.snd, injective, snd_inr, toProd
+theorem inl_injective [Zero A] : Function.Injective (inl : R → Unitization R A) :=
+  Function.LeftInverse.injective (g := Prod.fst ∘ toProd) <| fst_inl _
+/-
+**Unitization.inr_injective** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_injective [Zero R] : Function.Injective ((↑) : A -> Unitization R A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `Unitization.snd_inr`：snd_inr [Zero R] (a : A) : (a : Unitization R A).sn
+d = a
 -/
-theorem inr_injective [Zero R] : Function.Injective ((↑) : A -> Unitization R A) :=
-Function.LeftInverse.injective (g := Prod.snd ∘ toProd) snd_inr _
-
-/--
-theorem `inr_inj` / 定理 `inr_inj`
-
-English:
-theorem inr_inj
-  given: [Zero R] {x y : A}
-  proof: inr_injective.eq_iff
-
-中文:
-定理 inr_inj
-  条件: [零 R] {x y : A}
-  证明: inr_injective.eq_iff
+theorem inr_injective [Zero R] : Function.Injective ((↑) : A → Unitization R A) :=
+  Function.LeftInverse.injective (g := Prod.snd ∘ toProd) <| snd_inr _
+/-
+**Unitization.inr_inj** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : Zero R] {x y : A}, ↑x = ↑y ↔ x = y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Unitization.inr_injective`：inr_injective [Zero R] : Function.Injective (
+(↑) : A -> Unitization R A)
 -/
 @[simp, norm_cast] theorem inr_inj [Zero R] {x y : A} :
     (inr x : Unitization R A) = inr y ↔ x = y := inr_injective.eq_iff
-
-/--
-theorem `inl_inj` / 定理 `inl_inj`
-
-English:
-theorem inl_inj
-  given: [Zero A] {x y : R}
-  proof: inl_injective.eq_iff
-
-中文:
-定理 inl_inj
-  条件: [零 A] {x y : R}
-  证明: inl_injective.eq_iff
+/-
+**Unitization.inl_inj** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} [inst : Zero A] {x y : R}, Unitization.inl
+ x = Unitization.inl y ↔ x = y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Unitization.inl_injective`：inl_injective [Zero A] : Function.Injective (
+inl : R -> Unitization R A)
 -/
 @[simp] theorem inl_inj [Zero A] {x y : R} :
     (inl x : Unitization R A) = inl y ↔ x = y :=
   inl_injective.eq_iff
-
-/--
-Instance `instNontrivialLeft` / 实例 `instNontrivialLeft`
-
-English:
-instance instNontrivialLeft
-  signature: {𝕜 A} [Nontrivial 𝕜] [Nonempty A]
-  body: equiv.nontrivial
-
-中文:
-实例 instNontrivialLeft
-  签名: {𝕜 A} [非平凡 𝕜] [非空 A]
-  定义体: equiv.nontrivial
-
-Depends on / 依赖: equiv.nontrivial, nontrivial
+/-
+**Unitization.instNontrivialLeft** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instNontrivialLeft {𝕜 A} [Nontrivial 𝕜] [Nonempty A] : Nontrivial (Unitiza
+tion 𝕜 A)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nontrivial`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) [Nontrivia
+l β], Nontrivial α
 -/
 instance instNontrivialLeft {𝕜 A} [Nontrivial 𝕜] [Nonempty A] :
     Nontrivial (Unitization 𝕜 A) :=
   equiv.nontrivial
-
-/--
-Instance `instNontrivialRight` / 实例 `instNontrivialRight`
-
-English:
-instance instNontrivialRight
-  signature: {𝕜 A} [Nonempty 𝕜] [Nontrivial A]
-  body: equiv.nontrivial
-
-中文:
-实例 instNontrivialRight
-  签名: {𝕜 A} [非空 𝕜] [非平凡 A]
-  定义体: equiv.nontrivial
-
-Depends on / 依赖: equiv.nontrivial, nontrivial
+/-
+**Unitization.instNontrivialRight** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instNontrivialRight {𝕜 A} [Nonempty 𝕜] [Nontrivial A] : Nontrivial (Unitiz
+ation 𝕜 A)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.nontrivial`：∀ {α : Type u_1} {β : Type u_2} (e : α ≃ β) [Nontrivia
+l β], Nontrivial α
 -/
 instance instNontrivialRight {𝕜 A} [Nonempty 𝕜] [Nontrivial A] :
     Nontrivial (Unitization 𝕜 A) :=
@@ -562,457 +383,241 @@ section Additive
 
 variable {T : Type*} {S : Type*} {R : Type*} {A : Type*}
 
-/--
-Instance `instCanLift` / 实例 `instCanLift`
-
-English:
-instance instCanLift
-  signature: [Zero R]
-  body: ⟨x.snd, Unitization.ext (hx ▸ fst_inr R x.snd) rfl⟩
-
-中文:
-实例 instCanLift
-  签名: [零 R]
-  定义体: ⟨x.snd, Unitization.ext (hx ▸ fst_inr R x.snd) rfl⟩
-
-Depends on / 依赖: Unitization, Unitization.ext, fst_inr, x.snd
+/-
+**Unitization.instCanLift** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instCanLift [Zero R] : CanLift (Unitization R A) A inr (fun x => x.fst = 0
+) where prf x hx
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Unitization.fst_inr`：fst_inr [Zero R] (a : A) : (a : Unitization R A).fs
+t = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-instance instCanLift [Zero R] : CanLift (Unitization R A) A inr (fun x => x.fst = 0) where
+instance instCanLift [Zero R] : CanLift (Unitization R A) A inr (fun x ↦ x.fst = 0) where
   prf x hx := ⟨x.snd, Unitization.ext (hx ▸ fst_inr R x.snd) rfl⟩
-
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: [Inhabited R] [Inhabited A]
-  body: equiv.inhabited
-
-中文:
-实例 instInhabited
-  签名: [可居 R] [可居 A]
-  定义体: equiv.inhabited
-
-Depends on / 依赖: equiv.inhabited, inhabited
+/-
+**Unitization.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instInhabited [Inhabited R] [Inhabited A] : Inhabited (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited [Inhabited R] [Inhabited A] : Inhabited (Unitization R A) :=
   equiv.inhabited
-
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: [Zero R] [Zero A]
-  body: equiv.zero
-
-中文:
-实例 instZero
-  签名: [零 R] [零 A]
-  定义体: equiv.zero
-
-Depends on / 依赖: equiv.zero
+/-
+**Unitization.instZero** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instZero [Zero R] [Zero A] : Zero (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero [Zero R] [Zero A] : Zero (Unitization R A) :=
   equiv.zero
-
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: [Add R] [Add A]
-  body: equiv.add
-
-中文:
-实例 instAdd
-  签名: [加法 R] [加法 A]
-  定义体: equiv.add
-
-Depends on / 依赖: equiv.add
+/-
+**Unitization.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAdd [Add R] [Add A] : Add (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAdd [Add R] [Add A] : Add (Unitization R A) :=
   equiv.add
-
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: [Sub R] [Sub A]
-  body: equiv.sub
-
-中文:
-实例 instSub
-  签名: [减法 R] [减法 A]
-  定义体: equiv.sub
-
-Depends on / 依赖: equiv.sub
+/-
+**Unitization.instSub** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instSub [Sub R] [Sub A] : Sub (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSub [Sub R] [Sub A] : Sub (Unitization R A) :=
   equiv.sub
-
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: [Neg R] [Neg A]
-  body: equiv.Neg
-
-中文:
-实例 instNeg
-  签名: [取负 R] [取负 A]
-  定义体: equiv.Neg
-
-Depends on / 依赖: equiv.Neg
+/-
+**Unitization.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instNeg [Neg R] [Neg A] : Neg (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNeg [Neg R] [Neg A] : Neg (Unitization R A) :=
   equiv.Neg
-
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: [SMul S R] [SMul S A]
-  body: equiv.smul S
-
-中文:
-实例 instSMul
-  签名: [标量乘法 S R] [标量乘法 S A]
-  定义体: equiv.smul S
-
-Depends on / 依赖: equiv.smul
+/-
+**Unitization.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instSMul [SMul S R] [SMul S A] : SMul S (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul [SMul S R] [SMul S A] : SMul S (Unitization R A) :=
   equiv.smul S
-
-/--
-Instance `instAddSemigroup` / 实例 `instAddSemigroup`
-
-English:
-instance instAddSemigroup
-  signature: [AddSemigroup R] [AddSemigroup A]
-  body: fast_instance% equiv.addSemigroup
-
-中文:
-实例 instAddSemigroup
-  签名: [加法半群 R] [加法半群 A]
-  定义体: fast_instance% equiv.addSemigroup
-
-Depends on / 依赖: addSemigroup, equiv.addSemigroup, fast_instance
+/-
+**Unitization.instAddSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAddSemigroup [AddSemigroup R] [AddSemigroup A] : AddSemigroup (Unitiza
+tion R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddSemigroup [AddSemigroup R] [AddSemigroup A] : AddSemigroup (Unitization R A) :=
   fast_instance% equiv.addSemigroup
-
-/--
-Instance `instAddZeroClass` / 实例 `instAddZeroClass`
-
-English:
-instance instAddZeroClass
-  signature: [AddZeroClass R] [AddZeroClass A]
-  body: fast_instance% equiv.addZeroClass
-
-中文:
-实例 instAddZeroClass
-  签名: [加法零类 R] [加法零类 A]
-  定义体: fast_instance% equiv.addZeroClass
-
-Depends on / 依赖: addZeroClass, equiv.addZeroClass, fast_instance
+/-
+**Unitization.instAddZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAddZeroClass [AddZeroClass R] [AddZeroClass A] : AddZeroClass (Unitiza
+tion R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddZeroClass [AddZeroClass R] [AddZeroClass A] : AddZeroClass (Unitization R A) :=
   fast_instance% equiv.addZeroClass
-
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: [AddMonoid R] [AddMonoid A]
-  body: fast_instance% equiv.addMonoid
-
-中文:
-实例 instAddMonoid
-  签名: [加法幺半群 R] [加法幺半群 A]
-  定义体: fast_instance% equiv.addMonoid
-
-Depends on / 依赖: addMonoid, equiv.addMonoid, fast_instance
+/-
+**Unitization.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAddMonoid [AddMonoid R] [AddMonoid A] : AddMonoid (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddMonoid [AddMonoid R] [AddMonoid A] : AddMonoid (Unitization R A) :=
   fast_instance% equiv.addMonoid
-
-/--
-Instance `instAddGroup` / 实例 `instAddGroup`
-
-English:
-instance instAddGroup
-  signature: [AddGroup R] [AddGroup A]
-  body: fast_instance% equiv.addGroup
-
-中文:
-实例 instAddGroup
-  签名: [加法群 R] [加法群 A]
-  定义体: fast_instance% equiv.addGroup
-
-Depends on / 依赖: addGroup, equiv.addGroup, fast_instance
+/-
+**Unitization.instAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAddGroup [AddGroup R] [AddGroup A] : AddGroup (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddGroup [AddGroup R] [AddGroup A] : AddGroup (Unitization R A) :=
   fast_instance% equiv.addGroup
-
-/--
-Instance `instAddCommSemigroup` / 实例 `instAddCommSemigroup`
-
-English:
-instance instAddCommSemigroup
-  signature: [AddCommSemigroup R] [AddCommSemigroup A]
-  body: fast_instance% equiv.addCommSemigroup
-
-中文:
-实例 instAddCommSemigroup
-  签名: [加法交换半群 R] [加法交换半群 A]
-  定义体: fast_instance% equiv.addCommSemigroup
-
-Depends on / 依赖: addCommSemigroup, equiv.addCommSemigroup, fast_instance
+/-
+**Unitization.instAddCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAddCommSemigroup [AddCommSemigroup R] [AddCommSemigroup A] : AddCommSe
+migroup (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommSemigroup [AddCommSemigroup R] [AddCommSemigroup A] :
     AddCommSemigroup (Unitization R A) :=
   fast_instance% equiv.addCommSemigroup
-
-/--
-Instance `instAddCommMonoid` / 实例 `instAddCommMonoid`
-
-English:
-instance instAddCommMonoid
-  signature: [AddCommMonoid R] [AddCommMonoid A]
-  body: fast_instance% equiv.addCommMonoid
-
-中文:
-实例 instAddCommMonoid
-  签名: [加法交换幺半群 R] [加法交换幺半群 A]
-  定义体: fast_instance% equiv.addCommMonoid
-
-Depends on / 依赖: addCommMonoid, equiv.addCommMonoid, fast_instance
+/-
+**Unitization.instAddCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAddCommMonoid [AddCommMonoid R] [AddCommMonoid A] : AddCommMonoid (Uni
+tization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommMonoid [AddCommMonoid R] [AddCommMonoid A] : AddCommMonoid (Unitization R A) :=
   fast_instance% equiv.addCommMonoid
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup R] [AddCommGroup A]
-  body: fast_instance% equiv.addCommGroup
-
-@[simp]
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 R] [加法交换群 A]
-  定义体: fast_instance% equiv.addCommGroup
-
-@[simp]
-
-Depends on / 依赖: addCommGroup, equiv.addCommGroup, fast_instance
+/-
+**Unitization.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAddCommGroup [AddCommGroup R] [AddCommGroup A] : AddCommGroup (Unitiza
+tion R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup [AddCommGroup R] [AddCommGroup A] : AddCommGroup (Unitization R A) :=
   fast_instance% equiv.addCommGroup
 
 @[simp]
-/--
-theorem `toProd_zero` / 定理 `toProd_zero`
-
-English:
-theorem toProd_zero
-  given: [Zero R] [Zero A]
-  statement: (0 : Unitization R A).toProd = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toProd_zero
-  条件: [零 R] [零 A]
-  结论: (0 : Unitization R A).toProd = 0
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.toProd_zero** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：toProd_zero [Zero R] [Zero A] : (0 : Unitization R A).toProd = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toProd_zero [Zero R] [Zero A] : (0 : Unitization R A).toProd = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `toProd_add` / 定理 `toProd_add`
-
-English:
-theorem toProd_add
-  given: [Add R] [Add A] (x₁ x₂ : Unitization R A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toProd_add
-  条件: [加法 R] [加法 A] (x₁ x₂ : Unitization R A)
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.toProd_add** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：toProd_add [Add R] [Add A] (x₁ x₂ : Unitization R A) : (x₁ + x₂).toProd = 
+x₁.toProd + x₂.toProd
+参数：x₁ x₂ : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toProd_add [Add R] [Add A] (x₁ x₂ : Unitization R A) :
     (x₁ + x₂).toProd = x₁.toProd + x₂.toProd :=
   rfl
 
 @[simp]
-/--
-theorem `toProd_neg` / 定理 `toProd_neg`
-
-English:
-theorem toProd_neg
-  given: [Neg R] [Neg A] (x : Unitization R A)
-  statement: (-x).toProd = -x.toProd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toProd_neg
-  条件: [取负 R] [取负 A] (x : Unitization R A)
-  结论: (-x).toProd = -x.toProd
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.toProd_neg** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：toProd_neg [Neg R] [Neg A] (x : Unitization R A) : (-x).toProd = -x.toProd
+参数：x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toProd_neg [Neg R] [Neg A] (x : Unitization R A) : (-x).toProd = -x.toProd :=
   rfl
 
 @[simp]
-/--
-theorem `toProd_smul` / 定理 `toProd_smul`
-
-English:
-theorem toProd_smul
-  given: [SMul S R] [SMul S A] (s : S) (x : Unitization R A)
-  proof: rfl
-
-中文:
-定理 toProd_smul
-  条件: [标量乘法 S R] [标量乘法 S A] (s : S) (x : Unitization R A)
-  证明: rfl
+/-
+**Unitization.toProd_smul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：toProd_smul [SMul S R] [SMul S A] (s : S) (x : Unitization R A) : (s • x).
+toProd = s • x.toProd
+参数：s : S；x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toProd_smul [SMul S R] [SMul S A] (s : S) (x : Unitization R A) :
     (s • x).toProd = s • x.toProd :=
   rfl
-
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMul T S]
-  body: equiv.isScalarTower T S
-
-中文:
-实例 instIsScalarTower
-  签名: [标量乘法 T R] [标量乘法 T A] [标量乘法 S R] [标量乘法 S A] [标量乘法 T S]
-  定义体: equiv.isScalarTower T S
-
-Depends on / 依赖: equiv.isScalarTower, isScalarTower
+/-
+**Unitization.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instIsScalarTower [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMul T S] [
+IsScalarTower T S R] [IsScalarTower T S A] : IsScalarTower T S (Unitization R A)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.isScalarTower`：∀ (M : Type u_1) (N : Type u_2) {α : Type u_4} {β :
+ Type u_5} [inst : SMul M N] [inst_1 : SMul M β] [inst_2 : SMul N β]   (e : α ≃ 
+β) [IsSca…
 -/
 instance instIsScalarTower [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMul T S]
     [IsScalarTower T S R] [IsScalarTower T S A] : IsScalarTower T S (Unitization R A) :=
   equiv.isScalarTower T S
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMulCommClass T S R]
-  body: equiv.smulCommClass T S
-
-中文:
-实例 instSMulCommClass
-  签名: [标量乘法 T R] [标量乘法 T A] [标量乘法 S R] [标量乘法 S A] [标量交换类 T S R]
-  定义体: equiv.smulCommClass T S
-
-Depends on / 依赖: equiv.smulCommClass, smulCommClass
+/-
+**Unitization.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instSMulCommClass [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMulCommCla
+ss T S R] [SMulCommClass T S A] : SMulCommClass T S (Unitization R A)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.smulCommClass`：∀ (M : Type u_1) (N : Type u_2) {α : Type u_4} {β :
+ Type u_5} [inst : SMul M β] [inst_1 : SMul N β] (e : α ≃ β)   [SMulCommClass M 
+N β], SMu…
 -/
 instance instSMulCommClass [SMul T R] [SMul T A] [SMul S R] [SMul S A] [SMulCommClass T S R]
     [SMulCommClass T S A] : SMulCommClass T S (Unitization R A) :=
   equiv.smulCommClass T S
-
-/--
-Instance `instIsCentralScalar` / 实例 `instIsCentralScalar`
-
-English:
-instance instIsCentralScalar
-  signature: [SMul S R] [SMul S A] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ A] [IsCentralScalar S R]
-  body: equiv.isCentralScalar S
-
-中文:
-实例 instIsCentralScalar
-  签名: [标量乘法 S R] [标量乘法 S A] [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ A] [中心标量 S R]
-  定义体: equiv.isCentralScalar S
-
-Depends on / 依赖: equiv.isCentralScalar, isCentralScalar
+/-
+**Unitization.instIsCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instIsCentralScalar [SMul S R] [SMul S A] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ A] [IsC
+entralScalar S R] [IsCentralScalar S A] : IsCentralScalar S (Unitization R A)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.isCentralScalar`：∀ (M : Type u_1) {α : Type u_4} {β : Type u_5} [i
+nst : SMul M β] [inst_1 : SMul Mᵐᵒᵖ β] (e : α ≃ β)   [IsCentralScalar M β], IsCe
+ntralScalar…
 -/
 instance instIsCentralScalar [SMul S R] [SMul S A] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ A] [IsCentralScalar S R]
     [IsCentralScalar S A] : IsCentralScalar S (Unitization R A) :=
   equiv.isCentralScalar S
-
-/--
-Instance `instMulAction` / 实例 `instMulAction`
-
-English:
-instance instMulAction
-  signature: [Monoid S] [MulAction S R] [MulAction S A]
-  body: fast_instance% equiv.mulAction S
-
-中文:
-实例 instMulAction
-  签名: [幺半群 S] [乘法作用 S R] [乘法作用 S A]
-  定义体: fast_instance% equiv.mulAction S
-
-Depends on / 依赖: equiv.mulAction, fast_instance, mulAction
+/-
+**Unitization.instMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instMulAction [Monoid S] [MulAction S R] [MulAction S A] : MulAction S (Un
+itization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulAction [Monoid S] [MulAction S R] [MulAction S A] : MulAction S (Unitization R A) :=
   fast_instance% equiv.mulAction S
-
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [Monoid S] [AddMonoid R] [AddMonoid A] [DistribMulAction S R]
-  body: fast_instance% equiv.distribMulAction S
-
-中文:
-实例 instDistribMulAction
-  签名: [幺半群 S] [加法幺半群 R] [加法幺半群 A] [分配乘法作用 S R]
-  定义体: fast_instance% equiv.distribMulAction S
-
-Depends on / 依赖: distribMulAction, equiv.distribMulAction, fast_instance
+/-
+**Unitization.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instDistribMulAction [Monoid S] [AddMonoid R] [AddMonoid A] [DistribMulAct
+ion S R] [DistribMulAction S A] : DistribMulAction S (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction [Monoid S] [AddMonoid R] [AddMonoid A] [DistribMulAction S R]
     [DistribMulAction S A] : DistribMulAction S (Unitization R A) :=
   fast_instance% equiv.distribMulAction S
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [Module S A]
-  body: fast_instance% equiv.module S
-
-中文:
-实例 instModule
-  签名: [半环 S] [加法交换幺半群 R] [加法交换幺半群 A] [模 S R] [模 S A]
-  定义体: fast_instance% equiv.module S
-
-Depends on / 依赖: equiv.module, fast_instance, module
+/-
+**Unitization.instModule** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instModule [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [
+Module S A] : Module S (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [Module S A] :
     Module S (Unitization R A) :=
@@ -1021,40 +626,25 @@ instance instModule [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R
 variable (R A) in
 /-- The identity map between `Unitization R A` and `R × A` as an `AddEquiv`. -/
 @[simps! apply symm_apply]
-/--
-Definition of `addEquiv` / `addEquiv` 的定义
+/-
+**Unitization.addEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：addEquiv [Add R] [Add A] : Unitization R A ≃+ R × A where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addEquiv
-  signature: [Add R] [Add A]
-  body: equiv
-  map_add' _ _ := rfl
-
-中文:
-定义 addEquiv
-  签名: [加法 R] [加法 A]
-  定义体: equiv
-  map_add' _ _ := rfl
+--- 原说明 ---
+The identity map between `Unitization R A` and `R × A` as an `AddEquiv`.
 -/
 def addEquiv [Add R] [Add A] : Unitization R A ≃+ R × A where
   toEquiv := equiv
   map_add' _ _ := rfl
 
 -- not marked `simp` because the LHS would not be in simp normal form.
-/--
-lemma `toEquiv_addEquiv` / 引理 `toEquiv_addEquiv`
-
-English:
-lemma toEquiv_addEquiv
-  given: [Add R] [Add A]
-  statement: (addEquiv R A).toEquiv = equiv
-  proof: rfl
-
-中文:
-引理 toEquiv_addEquiv
-  条件: [加法 R] [加法 A]
-  结论: (addEquiv R A).toEquiv = equiv
-  证明: rfl
+/-
+**Unitization.toEquiv_addEquiv** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：toEquiv_addEquiv [Add R] [Add A] : (addEquiv R A).toEquiv = equiv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toEquiv_addEquiv [Add R] [Add A] : (addEquiv R A).toEquiv = equiv :=
   rfl
@@ -1062,26 +652,15 @@ lemma toEquiv_addEquiv [Add R] [Add A] : (addEquiv R A).toEquiv = equiv :=
 variable (R S A) in
 /-- The identity map between `Unitization R A` and `R × A` as a `LinearEquiv`. -/
 @[simps! apply symm_apply]
-/--
-Definition of `linearEquiv` / `linearEquiv` 的定义
+/-
+**Unitization.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：linearEquiv [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] 
+[Module S A] : Unitization R A ≃ₗ[S] R × A where toAddEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearEquiv
-  signature: [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [Module S A]
-  body: addEquiv R A
-  map_smul' _ _ := rfl
-
-@[simp]
-
-中文:
-定义 linearEquiv
-  签名: [半环 S] [加法交换幺半群 R] [加法交换幺半群 A] [模 S R] [模 S A]
-  定义体: addEquiv R A
-  map_smul' _ _ := rfl
-
-@[simp]
-
-Depends on / 依赖: addEquiv
+--- 原说明 ---
+The identity map between `Unitization R A` and `R × A` as a `LinearEquiv`.
 -/
 def linearEquiv [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [Module S A] :
     Unitization R A ≃ₗ[S] R × A where
@@ -1089,203 +668,103 @@ def linearEquiv [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [Module S R] [M
   map_smul' _ _ := rfl
 
 @[simp]
-/--
-lemma `toAddEquiv_linearEquiv` / 引理 `toAddEquiv_linearEquiv`
-
-English:
-lemma toAddEquiv_linearEquiv
-  statement: [Semiring S] [AddCommMonoid R] [AddCommMonoid A]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toAddEquiv_linearEquiv
-  结论: [半环 S] [加法交换幺半群 R] [加法交换幺半群 A]
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.toAddEquiv_linearEquiv** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：toAddEquiv_linearEquiv [Semiring S] [AddCommMonoid R] [AddCommMonoid A] [M
+odule S R] [Module S A] : (linearEquiv S R A).toAddEquiv = addEquiv R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toAddEquiv_linearEquiv [Semiring S] [AddCommMonoid R] [AddCommMonoid A]
     [Module S R] [Module S A] : (linearEquiv S R A).toAddEquiv = addEquiv R A :=
   rfl
 
 @[simp]
-/--
-theorem `fst_zero` / 定理 `fst_zero`
-
-English:
-theorem fst_zero
-  given: [Zero R] [Zero A]
-  statement: (0 : Unitization R A).fst = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_zero
-  条件: [零 R] [零 A]
-  结论: (0 : Unitization R A).fst = 0
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_zero** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_zero [Zero R] [Zero A] : (0 : Unitization R A).fst = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_zero [Zero R] [Zero A] : (0 : Unitization R A).fst = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `snd_zero` / 定理 `snd_zero`
-
-English:
-theorem snd_zero
-  given: [Zero R] [Zero A]
-  statement: (0 : Unitization R A).snd = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 snd_zero
-  条件: [零 R] [零 A]
-  结论: (0 : Unitization R A).snd = 0
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.snd_zero** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_zero [Zero R] [Zero A] : (0 : Unitization R A).snd = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_zero [Zero R] [Zero A] : (0 : Unitization R A).snd = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `fst_add` / 定理 `fst_add`
-
-English:
-theorem fst_add
-  given: [Add R] [Add A] (x₁ x₂ : Unitization R A)
-  statement: (x₁ + x₂).fst = x₁.fst + x₂.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_add
-  条件: [加法 R] [加法 A] (x₁ x₂ : Unitization R A)
-  结论: (x₁ + x₂).fst = x₁.fst + x₂.fst
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_add** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_add [Add R] [Add A] (x₁ x₂ : Unitization R A) : (x₁ + x₂).fst = x₁.fst
+ + x₂.fst
+参数：x₁ x₂ : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_add [Add R] [Add A] (x₁ x₂ : Unitization R A) : (x₁ + x₂).fst = x₁.fst + x₂.fst :=
   rfl
 
 @[simp]
-/--
-theorem `snd_add` / 定理 `snd_add`
-
-English:
-theorem snd_add
-  given: [Add R] [Add A] (x₁ x₂ : Unitization R A)
-  statement: (x₁ + x₂).snd = x₁.snd + x₂.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 snd_add
-  条件: [加法 R] [加法 A] (x₁ x₂ : Unitization R A)
-  结论: (x₁ + x₂).snd = x₁.snd + x₂.snd
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.snd_add** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_add [Add R] [Add A] (x₁ x₂ : Unitization R A) : (x₁ + x₂).snd = x₁.snd
+ + x₂.snd
+参数：x₁ x₂ : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_add [Add R] [Add A] (x₁ x₂ : Unitization R A) : (x₁ + x₂).snd = x₁.snd + x₂.snd :=
   rfl
 
 @[simp]
-/--
-theorem `fst_neg` / 定理 `fst_neg`
-
-English:
-theorem fst_neg
-  given: [Neg R] [Neg A] (x : Unitization R A)
-  statement: (-x).fst = -x.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_neg
-  条件: [取负 R] [取负 A] (x : Unitization R A)
-  结论: (-x).fst = -x.fst
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_neg** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_neg [Neg R] [Neg A] (x : Unitization R A) : (-x).fst = -x.fst
+参数：x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_neg [Neg R] [Neg A] (x : Unitization R A) : (-x).fst = -x.fst :=
   rfl
 
 @[simp]
-/--
-theorem `snd_neg` / 定理 `snd_neg`
-
-English:
-theorem snd_neg
-  given: [Neg R] [Neg A] (x : Unitization R A)
-  statement: (-x).snd = -x.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 snd_neg
-  条件: [取负 R] [取负 A] (x : Unitization R A)
-  结论: (-x).snd = -x.snd
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.snd_neg** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_neg [Neg R] [Neg A] (x : Unitization R A) : (-x).snd = -x.snd
+参数：x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_neg [Neg R] [Neg A] (x : Unitization R A) : (-x).snd = -x.snd :=
   rfl
 
 @[simp]
-/--
-theorem `fst_smul` / 定理 `fst_smul`
-
-English:
-theorem fst_smul
-  given: [SMul S R] [SMul S A] (s : S) (x : Unitization R A)
-  statement: (s • x).fst = s • x.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_smul
-  条件: [标量乘法 S R] [标量乘法 S A] (s : S) (x : Unitization R A)
-  结论: (s • x).fst = s • x.fst
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_smul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_smul [SMul S R] [SMul S A] (s : S) (x : Unitization R A) : (s • x).fst
+ = s • x.fst
+参数：s : S；x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_smul [SMul S R] [SMul S A] (s : S) (x : Unitization R A) : (s • x).fst = s • x.fst :=
   rfl
 
 @[simp]
-/--
-theorem `snd_smul` / 定理 `snd_smul`
-
-English:
-theorem snd_smul
-  given: [SMul S R] [SMul S A] (s : S) (x : Unitization R A)
-  statement: (s • x).snd = s • x.snd
-  proof: rfl
-
-中文:
-定理 snd_smul
-  条件: [标量乘法 S R] [标量乘法 S A] (s : S) (x : Unitization R A)
-  结论: (s • x).snd = s • x.snd
-  证明: rfl
+/-
+**Unitization.snd_smul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_smul [SMul S R] [SMul S A] (s : S) (x : Unitization R A) : (s • x).snd
+ = s • x.snd
+参数：s : S；x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_smul [SMul S R] [SMul S A] (s : S) (x : Unitization R A) : (s • x).snd = s • x.snd :=
   rfl
@@ -1295,116 +774,78 @@ section
 variable (A)
 
 @[simp]
-/--
-theorem `inl_zero` / 定理 `inl_zero`
-
-English:
-theorem inl_zero
-  given: [Zero R] [Zero A]
-  statement: (inl 0 : Unitization R A) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 inl_zero
-  条件: [零 R] [零 A]
-  结论: (inl 0 : Unitization R A) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.inl_zero** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_zero [Zero R] [Zero A] : (inl 0 : Unitization R A) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inl_zero [Zero R] [Zero A] : (inl 0 : Unitization R A) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `inl_add` / 定理 `inl_add`
-
-English:
-theorem inl_add
-  given: [Add R] [AddZeroClass A] (r₁ r₂ : R)
-  proof: Unitization.ext rfl (add_zero 0).symm
-
-@[simp]
-
-中文:
-定理 inl_add
-  条件: [加法 R] [加法零类 A] (r₁ r₂ : R)
-  证明: Unitization.ext rfl (add_zero 0).symm
-
-@[simp]
-
-Depends on / 依赖: Unitization, Unitization.ext, add_zero
+/-
+**Unitization.inl_add** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_add [Add R] [AddZeroClass A] (r₁ r₂ : R) : (inl (r₁ + r₂) : Unitizatio
+n R A) = inl r₁ + inl r₂
+参数：r₁ r₂ : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem inl_add [Add R] [AddZeroClass A] (r₁ r₂ : R) :
     (inl (r₁ + r₂) : Unitization R A) = inl r₁ + inl r₂ :=
   Unitization.ext rfl (add_zero 0).symm
 
 @[simp]
-/--
-theorem `inl_neg` / 定理 `inl_neg`
-
-English:
-theorem inl_neg
-  given: [Neg R] [AddGroup A] (r : R)
-  statement: (inl (-r) : Unitization R A) = -inl r
-  proof: Unitization.ext rfl neg_zero.symm
-
-@[simp]
-
-中文:
-定理 inl_neg
-  条件: [取负 R] [加法群 A] (r : R)
-  结论: (inl (-r) : Unitization R A) = -inl r
-  证明: Unitization.ext rfl neg_zero.symm
-
-@[simp]
-
-Depends on / 依赖: Unitization, Unitization.ext, neg_zero, neg_zero.symm
+/-
+**Unitization.inl_neg** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_neg [Neg R] [AddGroup A] (r : R) : (inl (-r) : Unitization R A) = -inl
+ r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem inl_neg [Neg R] [AddGroup A] (r : R) : (inl (-r) : Unitization R A) = -inl r :=
   Unitization.ext rfl neg_zero.symm
 
 @[simp]
-/--
-theorem `inl_sub` / 定理 `inl_sub`
-
-English:
-theorem inl_sub
-  given: [AddGroup R] [AddGroup A] (r₁ r₂ : R)
-  proof: Unitization.ext rfl (sub_zero 0).symm
-
-@[simp]
-
-中文:
-定理 inl_sub
-  条件: [加法群 R] [加法群 A] (r₁ r₂ : R)
-  证明: Unitization.ext rfl (sub_zero 0).symm
-
-@[simp]
-
-Depends on / 依赖: Unitization, Unitization.ext, sub_zero
+/-
+**Unitization.inl_sub** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_sub [AddGroup R] [AddGroup A] (r₁ r₂ : R) : (inl (r₁ - r₂) : Unitizati
+on R A) = inl r₁ - inl r₂
+参数：r₁ r₂ : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
 theorem inl_sub [AddGroup R] [AddGroup A] (r₁ r₂ : R) :
     (inl (r₁ - r₂) : Unitization R A) = inl r₁ - inl r₂ :=
   Unitization.ext rfl (sub_zero 0).symm
 
 @[simp]
-/--
-theorem `inl_smul` / 定理 `inl_smul`
-
-English:
-theorem inl_smul
-  given: [Zero A] [SMul S R] [SMulZeroClass S A] (s : S) (r : R)
-  proof: Unitization.ext rfl (smul_zero s).symm
-
-中文:
-定理 inl_smul
-  条件: [零 A] [标量乘法 S R] [SMulZero类 S A] (s : S) (r : R)
-  证明: Unitization.ext rfl (smul_zero s).symm
-
-Depends on / 依赖: Unitization, Unitization.ext, smul_zero
+/-
+**Unitization.inl_smul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_smul [Zero A] [SMul S R] [SMulZeroClass S A] (s : S) (r : R) : (inl (s
+ • r) : Unitization R A) = s • inl r
+参数：s : S；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem inl_smul [Zero A] [SMul S R] [SMulZeroClass S A] (s : S) (r : R) :
     (inl (s • r) : Unitization R A) = s • inl r :=
@@ -1417,118 +858,75 @@ section
 variable (R)
 
 @[simp, norm_cast]
-/--
-theorem `inr_zero` / 定理 `inr_zero`
-
-English:
-theorem inr_zero
-  given: [Zero R] [Zero A]
-  statement: ↑(0 : A) = (0 : Unitization R A)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 inr_zero
-  条件: [零 R] [零 A]
-  结论: ↑(0 : A) = (0 : Unitization R A)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Unitization.inr_zero** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_zero [Zero R] [Zero A] : ↑(0 : A) = (0 : Unitization R A)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inr_zero [Zero R] [Zero A] : ↑(0 : A) = (0 : Unitization R A) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `inr_add` / 定理 `inr_add`
-
-English:
-theorem inr_add
-  given: [AddZeroClass R] [Add A] (m₁ m₂ : A)
-  statement: (↑(m₁ + m₂) : Unitization R A) = m₁ + m₂
-  proof: Unitization.ext (add_zero 0).symm rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 inr_add
-  条件: [加法零类 R] [加法 A] (m₁ m₂ : A)
-  结论: (↑(m₁ + m₂) : Unitization R A) = m₁ + m₂
-  证明: Unitization.ext (add_zero 0).symm rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Unitization, Unitization.ext, add_zero
+/-
+**Unitization.inr_add** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_add [AddZeroClass R] [Add A] (m₁ m₂ : A) : (↑(m₁ + m₂) : Unitization R
+ A) = m₁ + m₂
+参数：m₁ m₂ : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem inr_add [AddZeroClass R] [Add A] (m₁ m₂ : A) : (↑(m₁ + m₂) : Unitization R A) = m₁ + m₂ :=
   Unitization.ext (add_zero 0).symm rfl
 
 @[simp, norm_cast]
-/--
-theorem `inr_neg` / 定理 `inr_neg`
-
-English:
-theorem inr_neg
-  given: [AddGroup R] [Neg A] (m : A)
-  statement: (↑(-m) : Unitization R A) = -m
-  proof: Unitization.ext neg_zero.symm rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 inr_neg
-  条件: [加法群 R] [取负 A] (m : A)
-  结论: (↑(-m) : Unitization R A) = -m
-  证明: Unitization.ext neg_zero.symm rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Unitization, Unitization.ext, neg_zero, neg_zero.symm
+/-
+**Unitization.inr_neg** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_neg [AddGroup R] [Neg A] (m : A) : (↑(-m) : Unitization R A) = -m
+参数：m : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem inr_neg [AddGroup R] [Neg A] (m : A) : (↑(-m) : Unitization R A) = -m :=
   Unitization.ext neg_zero.symm rfl
 
 @[simp, norm_cast]
-/--
-theorem `inr_sub` / 定理 `inr_sub`
-
-English:
-theorem inr_sub
-  given: [AddGroup R] [AddGroup A] (m₁ m₂ : A)
-  statement: (↑(m₁ - m₂) : Unitization R A) = m₁ - m₂
-  proof: Unitization.ext (sub_zero 0).symm rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 inr_sub
-  条件: [加法群 R] [加法群 A] (m₁ m₂ : A)
-  结论: (↑(m₁ - m₂) : Unitization R A) = m₁ - m₂
-  证明: Unitization.ext (sub_zero 0).symm rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Unitization, Unitization.ext, sub_zero
+/-
+**Unitization.inr_sub** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_sub [AddGroup R] [AddGroup A] (m₁ m₂ : A) : (↑(m₁ - m₂) : Unitization 
+R A) = m₁ - m₂
+参数：m₁ m₂ : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
 theorem inr_sub [AddGroup R] [AddGroup A] (m₁ m₂ : A) : (↑(m₁ - m₂) : Unitization R A) = m₁ - m₂ :=
   Unitization.ext (sub_zero 0).symm rfl
 
 @[simp, norm_cast]
-/--
-theorem `inr_smul` / 定理 `inr_smul`
-
-English:
-theorem inr_smul
-  given: [Zero R] [SMulZeroClass S R] [SMul S A] (r : S) (m : A)
-  proof: Unitization.ext (smul_zero _).symm rfl
-
-中文:
-定理 inr_smul
-  条件: [零 R] [SMulZero类 S R] [标量乘法 S A] (r : S) (m : A)
-  证明: Unitization.ext (smul_zero _).symm rfl
-
-Depends on / 依赖: Unitization, Unitization.ext, smul_zero
+/-
+**Unitization.inr_smul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_smul [Zero R] [SMulZeroClass S R] [SMul S A] (r : S) (m : A) : (↑(r • 
+m) : Unitization R A) = r • (m : Unitization R A)
+参数：r : S；m : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem inr_smul [Zero R] [SMulZeroClass S R] [SMul S A] (r : S) (m : A) :
     (↑(r • m) : Unitization R A) = r • (m : Unitization R A) :=
@@ -1536,20 +934,17 @@ theorem inr_smul [Zero R] [SMulZeroClass S R] [SMul S A] (r : S) (m : A) :
 
 end
 
-/--
-theorem `inl_fst_add_inr_snd_eq` / 定理 `inl_fst_add_inr_snd_eq`
-
-English:
-theorem inl_fst_add_inr_snd_eq
-  given: [AddZeroClass R] [AddZeroClass A] (x : Unitization R A)
-  proof: Unitization.ext (add_zero x.fst) (zero_add x.snd)
-
-中文:
-定理 inl_fst_add_inr_snd_eq
-  条件: [加法零类 R] [加法零类 A] (x : Unitization R A)
-  证明: Unitization.ext (add_zero x.fst) (zero_add x.snd)
-
-Depends on / 依赖: Unitization, Unitization.ext, add_zero, x.fst, x.snd, zero_add
+/-
+**Unitization.inl_fst_add_inr_snd_eq** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_fst_add_inr_snd_eq [AddZeroClass R] [AddZeroClass A] (x : Unitization 
+R A) : inl x.fst + (x.snd : Unitization R A) = x
+参数：x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem inl_fst_add_inr_snd_eq [AddZeroClass R] [AddZeroClass A] (x : Unitization R A) :
     inl x.fst + (x.snd : Unitization R A) = x :=
@@ -1560,51 +955,50 @@ on terms of the form `inl r + a`.
 
 This can be used as `induction x`. -/
 @[elab_as_elim, induction_eliminator, cases_eliminator]
-/--
-theorem `ind` / 定理 `ind`
+/-
+**Unitization.ind** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：ind {R A} [AddZeroClass R] [AddZeroClass A] {P : Unitization R A -> Prop} 
+(inl_add_inr : forall (r : R) (a : A), P (inl r + (a : Unitization R A))) (x) : 
+P x
+参数：inl_add_inr : forall (r : R) (a : A), P (inl r + (a : Unitization R A))；x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.inl_fst_add_inr_snd_eq`：inl_fst_add_inr_snd_eq [AddZeroClass
+ R] [AddZeroClass A] (x : Unitization R A) : inl x.fst + (x.snd : Unitization R 
+A) = x
 
-English:
-theorem ind
-  statement: {R A} [AddZeroClass R] [AddZeroClass A] {P : Unitization R A -> Prop}
-  proof: inl_fst_add_inr_snd_eq x ▸ inl_add_inr x.fst x.snd
+--- 原说明 ---
+To show a property hold on all `Unitization R A` it suffices to show it holds
+on terms of the form `inl r + a`.
 
-@[ext]
-
-中文:
-定理 ind
-  结论: {R A} [加法零类 R] [加法零类 A] {P : Unitization R A -> 命题}
-  证明: inl_fst_add_inr_snd_eq x ▸ inl_add_inr x.fst x.snd
-
-@[ext]
-
-Depends on / 依赖: inl_add_inr, inl_fst_add_inr_snd_eq, x.fst, x.snd
+This can be used as `induction x`.
 -/
-theorem ind {R A} [AddZeroClass R] [AddZeroClass A] {P : Unitization R A -> Prop}
-    (inl_add_inr : forall (r : R) (a : A), P (inl r + (a : Unitization R A))) (x) : P x :=
+theorem ind {R A} [AddZeroClass R] [AddZeroClass A] {P : Unitization R A → Prop}
+    (inl_add_inr : ∀ (r : R) (a : A), P (inl r + (a : Unitization R A))) (x) : P x :=
   inl_fst_add_inr_snd_eq x ▸ inl_add_inr x.fst x.snd
 
 @[ext]
-/--
-theorem `linearMap_ext` / 定理 `linearMap_ext`
-
-English:
-theorem linearMap_ext
-  statement: {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [AddCommMonoid N]
-  proof: .injective (linearEquiv S R A).arrowCongr (.refl ..)
-    LinearMap.prod_ext (LinearMap.ext hl) (LinearMap.ext hr)
-
-中文:
-定理 linearMap_ext
-  结论: {N} [交换半环 S] [加法交换幺半群 R] [加法交换幺半群 A] [加法交换幺半群 N]
-  证明: .injective (linearEquiv S R A).arrowCongr (.refl ..)
-    LinearMap.prod_ext (LinearMap.ext hl) (LinearMap.ext hr)
-
-Depends on / 依赖: LinearMap, LinearMap.ext, LinearMap.prod_ext, arrowCongr, injective, linearEquiv, prod_ext
+/-
+**Unitization.linearMap_ext** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：linearMap_ext {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [Ad
+dCommMonoid N] [Module S R] [Module S A] [Module S N] ⦃f g : Unitization R A ->ₗ
+[S] N⦄ (hl : forall r, f (inl r) = g (inl r)) (hr : forall a : A, f a = g a) : f
+ = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用定理 `LinearMap.prod_ext`：prod_ext {f g : M × M₂ ->ₗ[R] M₃} (hl : f.comp (inl 
+_ _ _) = g.comp (inl _ _ _)) (hr : f.comp (inr _ _ _) = g.comp (inr _ _ _)) : f 
+= g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
 theorem linearMap_ext {N} [CommSemiring S] [AddCommMonoid R] [AddCommMonoid A] [AddCommMonoid N]
-    [Module S R] [Module S A] [Module S N] ⦃f g : Unitization R A ->ₗ[S] N⦄
-    (hl : forall r, f (inl r) = g (inl r)) (hr : forall a : A, f a = g a) : f = g :=
-.injective (linearEquiv S R A).arrowCongr (.refl ..)
+    [Module S R] [Module S A] [Module S N] ⦃f g : Unitization R A →ₗ[S] N⦄
+    (hl : ∀ r, f (inl r) = g (inl r)) (hr : ∀ a : A, f a = g a) : f = g :=
+  (linearEquiv S R A).arrowCongr (.refl ..) |>.injective <|
     LinearMap.prod_ext (LinearMap.ext hl) (LinearMap.ext hr)
 
 variable [Semiring S] [Semiring R] [AddCommMonoid A] [SMul R A] [Module S R] [Module S A]
@@ -1612,73 +1006,44 @@ variable [Semiring S] [Semiring R] [AddCommMonoid A] [SMul R A] [Module S R] [Mo
 variable (S R A) in
 /-- The canonical `S`-linear inclusion `A → Unitization R A`. -/
 @[simps apply]
-/--
-Definition of `inrHom` / `inrHom` 的定义
+/-
+**Unitization.inrHom** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：inrHom : A ->ₗ[S] Unitization R A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inrHom
-  signature: : A ->ₗ[S] Unitization R A where
-  body: (↑)
-  map_add' := inr_add R
-  map_smul' := inr_smul R
-
-omit [SMul R A] in
-
-中文:
-定义 inrHom
-  签名: : A ->ₗ[S] Unitization R A where
-  定义体: (↑)
-  map_add' := inr_add R
-  map_smul' := inr_smul R
-
-omit [SMul R A] in
+--- 原说明 ---
+The canonical `S`-linear inclusion `A → Unitization R A`.
 -/
-def inrHom : A ->ₗ[S] Unitization R A where
+def inrHom : A →ₗ[S] Unitization R A where
   toFun := (↑)
   map_add' := inr_add R
   map_smul' := inr_smul R
 
 omit [SMul R A] in
-/--
-lemma `inrHom_injective` / 引理 `inrHom_injective`
-
-English:
-lemma inrHom_injective
-  statement: Function.Injective (inrHom S R A)
-  proof: Unitization.inr_injective
-
-中文:
-引理 inrHom_injective
-  结论: 函数.单射 (inrHom S R A)
-  证明: Unitization.inr_injective
-
-Depends on / 依赖: Unitization, Unitization.inr_injective, inr_injective
+/-
+**Unitization.inrHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：inrHom_injective : Function.Injective (inrHom S R A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.inr_injective`：inr_injective [Zero R] : Function.Injective (
+(↑) : A -> Unitization R A)
 -/
 lemma inrHom_injective : Function.Injective (inrHom S R A) := Unitization.inr_injective
 
 variable (S R A) in
 /-- The canonical `S`-linear projection `Unitization R A → A`. -/
 @[simps apply]
-/--
-Definition of `sndHom` / `sndHom` 的定义
+/-
+**Unitization.sndHom** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：sndHom : Unitization R A ->ₗ[S] A where toFun a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sndHom
-  signature: : Unitization R A ->ₗ[S] A where
-  body: a.snd
-  map_add' := snd_add
-  map_smul' := snd_smul
-
-中文:
-定义 sndHom
-  签名: : Unitization R A ->ₗ[S] A where
-  定义体: a.snd
-  map_add' := snd_add
-  map_smul' := snd_smul
-
-Depends on / 依赖: a.snd
+--- 原说明 ---
+The canonical `S`-linear projection `Unitization R A → A`.
 -/
-def sndHom : Unitization R A ->ₗ[S] A where
+def sndHom : Unitization R A →ₗ[S] A where
   toFun a := a.snd
   map_add' := snd_add
   map_smul' := snd_smul
@@ -1692,125 +1057,64 @@ section Mul
 
 variable {R A : Type*}
 
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: [One R] [Zero A]
-  body: ⟨.mk (1, 0)⟩
-
-中文:
-实例 instOne
-  签名: [幺 R] [零 A]
-  定义体: ⟨.mk (1, 0)⟩
+/-
+**Unitization.instOne** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instOne [One R] [Zero A] : One (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOne [One R] [Zero A] : One (Unitization R A) :=
   ⟨.mk (1, 0)⟩
-
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: [Mul R] [Add A] [Mul A] [SMul R A]
-  body: ⟨fun x y => .mk (x.fst * y.fst, x.fst • y.snd + y.fst • x.snd + x.snd * y.snd)⟩
-
-@[simp]
-
-中文:
-实例 instMul
-  签名: [乘法 R] [加法 A] [乘法 A] [标量乘法 R A]
-  定义体: ⟨fun x y => .mk (x.fst * y.fst, x.fst • y.snd + y.fst • x.snd + x.snd * y.snd)⟩
-
-@[simp]
-
-Depends on / 依赖: x.fst, x.snd, y.fst, y.snd
+/-
+**Unitization.instMul** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instMul [Mul R] [Add A] [Mul A] [SMul R A] : Mul (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMul [Mul R] [Add A] [Mul A] [SMul R A] : Mul (Unitization R A) :=
   ⟨fun x y => .mk (x.fst * y.fst, x.fst • y.snd + y.fst • x.snd + x.snd * y.snd)⟩
 
 @[simp]
-/--
-theorem `fst_one` / 定理 `fst_one`
-
-English:
-theorem fst_one
-  given: [One R] [Zero A]
-  statement: (1 : Unitization R A).fst = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_one
-  条件: [幺 R] [零 A]
-  结论: (1 : Unitization R A).fst = 1
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_one** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_one [One R] [Zero A] : (1 : Unitization R A).fst = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_one [One R] [Zero A] : (1 : Unitization R A).fst = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `snd_one` / 定理 `snd_one`
-
-English:
-theorem snd_one
-  given: [One R] [Zero A]
-  statement: (1 : Unitization R A).snd = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 snd_one
-  条件: [幺 R] [零 A]
-  结论: (1 : Unitization R A).snd = 0
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.snd_one** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_one [One R] [Zero A] : (1 : Unitization R A).snd = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_one [One R] [Zero A] : (1 : Unitization R A).snd = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `fst_mul` / 定理 `fst_mul`
-
-English:
-theorem fst_mul
-  given: [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_mul
-  条件: [乘法 R] [加法 A] [乘法 A] [标量乘法 R A] (x₁ x₂ : Unitization R A)
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_mul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_mul [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A) : (x₁
+ * x₂).fst = x₁.fst * x₂.fst
+参数：x₁ x₂ : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_mul [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A) :
     (x₁ * x₂).fst = x₁.fst * x₂.fst :=
   rfl
 
 @[simp]
-/--
-theorem `snd_mul` / 定理 `snd_mul`
-
-English:
-theorem snd_mul
-  given: [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A)
-  proof: rfl
-
-中文:
-定理 snd_mul
-  条件: [乘法 R] [加法 A] [乘法 A] [标量乘法 R A] (x₁ x₂ : Unitization R A)
-  证明: rfl
+/-
+**Unitization.snd_mul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_mul [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A) : (x₁
+ * x₂).snd = x₁.fst • x₂.snd + x₂.fst • x₁.snd + x₁.snd * x₂.snd
+参数：x₁ x₂ : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_mul [Mul R] [Add A] [Mul A] [SMul R A] (x₁ x₂ : Unitization R A) :
     (x₁ * x₂).snd = x₁.fst • x₂.snd + x₂.fst • x₁.snd + x₁.snd * x₂.snd :=
@@ -1821,62 +1125,50 @@ section
 variable (A)
 
 @[simp]
-/--
-theorem `inl_one` / 定理 `inl_one`
-
-English:
-theorem inl_one
-  given: [One R] [Zero A]
-  statement: (inl 1 : Unitization R A) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 inl_one
-  条件: [幺 R] [零 A]
-  结论: (inl 1 : Unitization R A) = 1
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.inl_one** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_one [One R] [Zero A] : (inl 1 : Unitization R A) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inl_one [One R] [Zero A] : (inl 1 : Unitization R A) = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `inl_mul` / 定理 `inl_mul`
-
-English:
-theorem inl_mul
-  given: [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ r₂ : R)
-  proof: Unitization.ext rfl by simp
-
-中文:
-定理 inl_mul
-  条件: [乘法 R] [非幺非结合半环 A] [SMulZero类 R A] (r₁ r₂ : R)
-  证明: Unitization.ext rfl by simp
-
-Depends on / 依赖: Unitization, Unitization.ext
+/-
+**Unitization.inl_mul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_mul [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ r₂ :
+ R) : (inl (r₁ * r₂) : Unitization R A) = inl r₁ * inl r₂
+参数：r₁ r₂ : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inl_mul [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ r₂ : R) :
     (inl (r₁ * r₂) : Unitization R A) = inl r₁ * inl r₂ :=
-Unitization.ext rfl by simp
-
-/--
-theorem `inl_mul_inl` / 定理 `inl_mul_inl`
-
-English:
-theorem inl_mul_inl
-  given: [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ r₂ : R)
-  proof: (inl_mul A r₁ r₂).symm
-
-中文:
-定理 inl_mul_inl
-  条件: [乘法 R] [非幺非结合半环 A] [SMulZero类 R A] (r₁ r₂ : R)
-  证明: (inl_mul A r₁ r₂).symm
-
-Depends on / 依赖: inl_mul
+  Unitization.ext rfl <| by simp
+/-
+**Unitization.inl_mul_inl** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_mul_inl [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ 
+r₂ : R) : (inl r₁ * inl r₂ : Unitization R A) = inl (r₁ * r₂)
+参数：r₁ r₂ : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Unitization.inl_mul`：inl_mul [Mul R] [NonUnitalNonAssocSemiring A] [SMul
+ZeroClass R A] (r₁ r₂ : R) : (inl (r₁ * r₂) : Unitization R A) = inl r₁ * inl r₂
 -/
 theorem inl_mul_inl [Mul R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r₁ r₂ : R) :
     (inl r₁ * inl r₂ : Unitization R A) = inl (r₁ * r₂) :=
@@ -1889,311 +1181,209 @@ section
 variable (R)
 
 @[simp, norm_cast]
-/--
-theorem `inr_mul` / 定理 `inr_mul`
-
-English:
-theorem inr_mul
-  given: [MulZeroClass R] [AddZeroClass A] [Mul A] [SMulWithZero R A] (a₁ a₂ : A)
-  proof: Unitization.ext (mul_zero _).symm by simp
-
-中文:
-定理 inr_mul
-  条件: [乘零类 R] [加法零类 A] [乘法 A] [带零标量乘法 R A] (a₁ a₂ : A)
-  证明: Unitization.ext (mul_zero _).symm by simp
-
-Depends on / 依赖: Unitization, Unitization.ext, mul_zero
+/-
+**Unitization.inr_mul** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_mul [MulZeroClass R] [AddZeroClass A] [Mul A] [SMulWithZero R A] (a₁ a
+₂ : A) : (↑(a₁ * a₂) : Unitization R A) = a₁ * a₂
+参数：a₁ a₂ : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inr_mul [MulZeroClass R] [AddZeroClass A] [Mul A] [SMulWithZero R A] (a₁ a₂ : A) :
     (↑(a₁ * a₂) : Unitization R A) = a₁ * a₂ :=
-Unitization.ext (mul_zero _).symm by simp
+  Unitization.ext (mul_zero _).symm <| by simp
 
 end
 
 @[norm_cast]
-/--
-theorem `inl_mul_inr` / 定理 `inl_mul_inr`
-
-English:
-theorem inl_mul_inr
-  statement: [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r : R)
-  proof: Unitization.ext (mul_zero r) by simp
-
-@[norm_cast]
-
-中文:
-定理 inl_mul_inr
-  结论: [乘零类 R] [非幺非结合半环 A] [SMulZero类 R A] (r : R)
-  证明: Unitization.ext (mul_zero r) by simp
-
-@[norm_cast]
-
-Depends on / 依赖: Unitization, Unitization.ext, mul_zero
+/-
+**Unitization.inl_mul_inr** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_mul_inr [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass 
+R A] (r : R) (a : A) : ((inl r : Unitization R A) * a) = ↑(r • a)
+参数：r : R；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Unitization.inr_smul`：inr_smul [Zero R] [SMulZeroClass S R] [SMul S A] (
+r : S) (m : A) : (↑(r • m) : Unitization R A) = r • (m : Unitization R A)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inl_mul_inr [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r : R)
     (a : A) : ((inl r : Unitization R A) * a) = ↑(r • a) :=
-Unitization.ext (mul_zero r) by simp
+  Unitization.ext (mul_zero r) <| by simp
 
 @[norm_cast]
-/--
-theorem `inr_mul_inl` / 定理 `inr_mul_inl`
-
-English:
-theorem inr_mul_inl
-  statement: [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r : R)
-  proof: Unitization.ext (zero_mul r) by simp
-
-中文:
-定理 inr_mul_inl
-  结论: [乘零类 R] [非幺非结合半环 A] [SMulZero类 R A] (r : R)
-  证明: Unitization.ext (zero_mul r) by simp
-
-Depends on / 依赖: Unitization, Unitization.ext, zero_mul
+/-
+**Unitization.inr_mul_inl** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_mul_inl [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass 
+R A] (r : R) (a : A) : a * (inl r : Unitization R A) = ↑(r • a)
+参数：r : R；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Unitization.inr_smul`：inr_smul [Zero R] [SMulZeroClass S R] [SMul S A] (
+r : S) (m : A) : (↑(r • m) : Unitization R A) = r • (m : Unitization R A)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inr_mul_inl [MulZeroClass R] [NonUnitalNonAssocSemiring A] [SMulZeroClass R A] (r : R)
     (a : A) : a * (inl r : Unitization R A) = ↑(r • a) :=
-Unitization.ext (zero_mul r) by simp
-
-/--
-Instance `instMulOneClass` / 实例 `instMulOneClass`
-
-English:
-instance instMulOneClass
-  signature: [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A]
-  body: fast_instance%
-  { Unitization.instOne, Unitization.instMul with
-one_mul x := Unitization.ext (one_mul x.fst) by simp
-mul_one x := Unitization.ext (mul_one x.fst) by simp }
-
-中文:
-实例 instMulOneClass
-  签名: [幺半群 R] [非幺非结合半环 A] [分配乘法作用 R A]
-  定义体: fast_instance%
-  { Unitization.instOne, Unitization.instMul with
-one_mul x := Unitization.ext (one_mul x.fst) by simp
-mul_one x := Unitization.ext (mul_one x.fst) by simp }
-
-Depends on / 依赖: Unitization, Unitization.ext, Unitization.instMul, Unitization.instOne, fast_instance, instMul, instOne, mul_one, one_mul, x.fst
+  Unitization.ext (zero_mul r) <| by simp
+/-
+**Unitization.instMulOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instMulOneClass [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction
+ R A] : MulOneClass (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulOneClass [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] :
     MulOneClass (Unitization R A) :=
   fast_instance%
   { Unitization.instOne, Unitization.instMul with
-one_mul x := Unitization.ext (one_mul x.fst) by simp
-mul_one x := Unitization.ext (mul_one x.fst) by simp }
-
-/--
-Instance `instNonAssocSemiring` / 实例 `instNonAssocSemiring`
-
-English:
-instance instNonAssocSemiring
-  signature: [Semiring R] [NonUnitalNonAssocSemiring A] [Module R A]
-  body: fast_instance%
-  { Unitization.instMulOneClass,
-    Unitization.instAddCommMonoid with
-zero_mul _ := Unitization.ext (zero_mul _) by simp
-mul_zero _ := Unitization.ext (mul_zero _) by simp
-left_distrib _ _ _ := Unitization.ext (mul_add ..) by
-      simp [smul_add, add_smul, mul_add]
-      abel
-right_distrib _ _ _ := Unitization.ext (add_mul ..) by
-      simp [smul_add, add_smul, add_mul]
-      abel }
-
-中文:
-实例 instNonAssocSemiring
-  签名: [半环 R] [非幺非结合半环 A] [模 R A]
-  定义体: fast_instance%
-  { Unitization.instMulOneClass,
-    Unitization.instAddCommMonoid with
-zero_mul _ := Unitization.ext (zero_mul _) by simp
-mul_zero _ := Unitization.ext (mul_zero _) by simp
-left_distrib _ _ _ := Unitization.ext (mul_add ..) by
-      simp [smul_add, add_smul, mul_add]
-      abel
-right_distrib _ _ _ := Unitization.ext (add_mul ..) by
-      simp [smul_add, add_smul, add_mul]
-      abel }
-
-Depends on / 依赖: Unitization, Unitization.ext, Unitization.instAddCommMonoid, Unitization.instMulOneClass, add_mul, add_smul, fast_instance, instAddCommMonoid, instMulOneClass, left_distrib, mul_add, mul_zero, right_distrib, smul_add, zero_mul
+    one_mul x := Unitization.ext (one_mul x.fst) <| by simp
+    mul_one x := Unitization.ext (mul_one x.fst) <| by simp }
+/-
+**Unitization.instNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instNonAssocSemiring [Semiring R] [NonUnitalNonAssocSemiring A] [Module R 
+A] : NonAssocSemiring (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocSemiring [Semiring R] [NonUnitalNonAssocSemiring A] [Module R A] :
     NonAssocSemiring (Unitization R A) :=
   fast_instance%
   { Unitization.instMulOneClass,
     Unitization.instAddCommMonoid with
-zero_mul _ := Unitization.ext (zero_mul _) by simp
-mul_zero _ := Unitization.ext (mul_zero _) by simp
-left_distrib _ _ _ := Unitization.ext (mul_add ..) by
+    zero_mul _ := Unitization.ext (zero_mul _) <| by simp
+    mul_zero _ := Unitization.ext (mul_zero _) <| by simp
+    left_distrib _ _ _ := Unitization.ext (mul_add ..) <| by
       simp [smul_add, add_smul, mul_add]
       abel
-right_distrib _ _ _ := Unitization.ext (add_mul ..) by
+    right_distrib _ _ _ := Unitization.ext (add_mul ..) <| by
       simp [smul_add, add_smul, add_mul]
       abel }
-
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: [CommMonoid R] [NonUnitalSemiring A] [DistribMulAction R A]
-  body: fast_instance%
-  { Unitization.instMulOneClass with
-mul_assoc x y z := Unitization.ext (mul_assoc ..) by
-      simp only [snd_mul, fst_mul, smul_add, smul_smul, add_mul, smul_mul_assoc, mul_assoc, mul_add,
-        mul_smul_comm, mul_comm z.fst x.fst, mul_comm z.fst y.fst]
-      abel }
-
-中文:
-实例 instMonoid
-  签名: [交换幺半群 R] [非幺半环 A] [分配乘法作用 R A]
-  定义体: fast_instance%
-  { Unitization.instMulOneClass with
-mul_assoc x y z := Unitization.ext (mul_assoc ..) by
-      simp only [snd_mul, fst_mul, smul_add, smul_smul, add_mul, smul_mul_assoc, mul_assoc, mul_add,
-        mul_smul_comm, mul_comm z.fst x.fst, mul_comm z.fst y.fst]
-      abel }
-
-Depends on / 依赖: Unitization, Unitization.ext, Unitization.instMulOneClass, add_mul, fast_instance, fst_mul, instMulOneClass, mul_add, mul_assoc, mul_comm, mul_smul_comm, smul_add, smul_mul_assoc, smul_smul, snd_mul, x.fst, y.fst, z.fst
+/-
+**Unitization.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instMonoid [CommMonoid R] [NonUnitalSemiring A] [DistribMulAction R A] [Is
+ScalarTower R A A] [SMulCommClass R A A] : Monoid (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMonoid [CommMonoid R] [NonUnitalSemiring A] [DistribMulAction R A]
     [IsScalarTower R A A] [SMulCommClass R A A] : Monoid (Unitization R A) :=
   fast_instance%
   { Unitization.instMulOneClass with
-mul_assoc x y z := Unitization.ext (mul_assoc ..) by
+    mul_assoc x y z := Unitization.ext (mul_assoc ..) <| by
       simp only [snd_mul, fst_mul, smul_add, smul_smul, add_mul, smul_mul_assoc, mul_assoc, mul_add,
         mul_smul_comm, mul_comm z.fst x.fst, mul_comm z.fst y.fst]
       abel }
-
-/--
-Instance `instCommMonoid` / 实例 `instCommMonoid`
-
-English:
-instance instCommMonoid
-  signature: [CommMonoid R] [NonUnitalCommSemiring A] [DistribMulAction R A]
-  body: fast_instance%
-  { Unitization.instMonoid with
-mul_comm _ _ := Unitization.ext (mul_comm ..) by simp [add_comm, mul_comm] }
-
-中文:
-实例 instCommMonoid
-  签名: [交换幺半群 R] [非幺交换半环 A] [分配乘法作用 R A]
-  定义体: fast_instance%
-  { Unitization.instMonoid with
-mul_comm _ _ := Unitization.ext (mul_comm ..) by simp [add_comm, mul_comm] }
-
-Depends on / 依赖: Unitization, Unitization.ext, Unitization.instMonoid, add_comm, fast_instance, instMonoid, mul_comm
+/-
+**Unitization.instCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instCommMonoid [CommMonoid R] [NonUnitalCommSemiring A] [DistribMulAction 
+R A] [IsScalarTower R A A] [SMulCommClass R A A] : CommMonoid (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommMonoid [CommMonoid R] [NonUnitalCommSemiring A] [DistribMulAction R A]
     [IsScalarTower R A A] [SMulCommClass R A A] : CommMonoid (Unitization R A) :=
   fast_instance%
   { Unitization.instMonoid with
-mul_comm _ _ := Unitization.ext (mul_comm ..) by simp [add_comm, mul_comm] }
-
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: [CommSemiring R] [NonUnitalSemiring A] [Module R A] [IsScalarTower R A A]
-  body: fast_instance%
-  { Unitization.instMonoid, Unitization.instNonAssocSemiring with }
-
-中文:
-实例 instSemiring
-  签名: [交换半环 R] [非幺半环 A] [模 R A] [标量塔 R A A]
-  定义体: fast_instance%
-  { Unitization.instMonoid, Unitization.instNonAssocSemiring with }
-
-Depends on / 依赖: Unitization, Unitization.instMonoid, Unitization.instNonAssocSemiring, fast_instance, instMonoid, instNonAssocSemiring
+    mul_comm _ _ := Unitization.ext (mul_comm ..) <| by simp [add_comm, mul_comm] }
+/-
+**Unitization.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instSemiring [CommSemiring R] [NonUnitalSemiring A] [Module R A] [IsScalar
+Tower R A A] [SMulCommClass R A A] : Semiring (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemiring [CommSemiring R] [NonUnitalSemiring A] [Module R A] [IsScalarTower R A A]
     [SMulCommClass R A A] : Semiring (Unitization R A) :=
   fast_instance%
   { Unitization.instMonoid, Unitization.instNonAssocSemiring with }
-
-/--
-Instance `instCommSemiring` / 实例 `instCommSemiring`
-
-English:
-instance instCommSemiring
-  signature: [CommSemiring R] [NonUnitalCommSemiring A] [Module R A]
-  body: fast_instance%
-  { Unitization.instCommMonoid, Unitization.instNonAssocSemiring with }
-
-中文:
-实例 instCommSemiring
-  签名: [交换半环 R] [非幺交换半环 A] [模 R A]
-  定义体: fast_instance%
-  { Unitization.instCommMonoid, Unitization.instNonAssocSemiring with }
-
-Depends on / 依赖: Unitization, Unitization.instCommMonoid, Unitization.instNonAssocSemiring, fast_instance, instCommMonoid, instNonAssocSemiring
+/-
+**Unitization.instCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instCommSemiring [CommSemiring R] [NonUnitalCommSemiring A] [Module R A] [
+IsScalarTower R A A] [SMulCommClass R A A] : CommSemiring (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemiring [CommSemiring R] [NonUnitalCommSemiring A] [Module R A]
     [IsScalarTower R A A] [SMulCommClass R A A] : CommSemiring (Unitization R A) :=
   fast_instance%
   { Unitization.instCommMonoid, Unitization.instNonAssocSemiring with }
-
-/--
-Instance `instNonAssocRing` / 实例 `instNonAssocRing`
-
-English:
-instance instNonAssocRing
-  signature: [CommRing R] [NonUnitalNonAssocRing A] [Module R A]
-  body: fast_instance%
-  { Unitization.instAddCommGroup, Unitization.instNonAssocSemiring with }
-
-中文:
-实例 instNonAssocRing
-  签名: [交换环 R] [非幺非结合环 A] [模 R A]
-  定义体: fast_instance%
-  { Unitization.instAddCommGroup, Unitization.instNonAssocSemiring with }
-
-Depends on / 依赖: Unitization, Unitization.instAddCommGroup, Unitization.instNonAssocSemiring, fast_instance, instAddCommGroup, instNonAssocSemiring
+/-
+**Unitization.instNonAssocRing** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instNonAssocRing [CommRing R] [NonUnitalNonAssocRing A] [Module R A] : Non
+AssocRing (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocRing [CommRing R] [NonUnitalNonAssocRing A] [Module R A] :
     NonAssocRing (Unitization R A) :=
   fast_instance%
   { Unitization.instAddCommGroup, Unitization.instNonAssocSemiring with }
-
-/--
-Instance `instRing` / 实例 `instRing`
-
-English:
-instance instRing
-  signature: [CommRing R] [NonUnitalRing A] [Module R A] [IsScalarTower R A A]
-  body: fast_instance%
-  { Unitization.instAddCommGroup, Unitization.instSemiring with }
-
-中文:
-实例 instRing
-  签名: [交换环 R] [非幺环 A] [模 R A] [标量塔 R A A]
-  定义体: fast_instance%
-  { Unitization.instAddCommGroup, Unitization.instSemiring with }
-
-Depends on / 依赖: Unitization, Unitization.instAddCommGroup, Unitization.instSemiring, fast_instance, instAddCommGroup, instSemiring
+/-
+**Unitization.instRing** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instRing [CommRing R] [NonUnitalRing A] [Module R A] [IsScalarTower R A A]
+ [SMulCommClass R A A] : Ring (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRing [CommRing R] [NonUnitalRing A] [Module R A] [IsScalarTower R A A]
     [SMulCommClass R A A] : Ring (Unitization R A) :=
   fast_instance%
   { Unitization.instAddCommGroup, Unitization.instSemiring with }
-
-/--
-Instance `instCommRing` / 实例 `instCommRing`
-
-English:
-instance instCommRing
-  signature: [CommRing R] [NonUnitalCommRing A] [Module R A] [IsScalarTower R A A]
-  body: fast_instance%
-  { Unitization.instAddCommGroup, Unitization.instCommSemiring with }
-
-中文:
-实例 instCommRing
-  签名: [交换环 R] [非幺交换环 A] [模 R A] [标量塔 R A A]
-  定义体: fast_instance%
-  { Unitization.instAddCommGroup, Unitization.instCommSemiring with }
-
-Depends on / 依赖: Unitization, Unitization.instAddCommGroup, Unitization.instCommSemiring, fast_instance, instAddCommGroup, instCommSemiring
+/-
+**Unitization.instCommRing** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instCommRing [CommRing R] [NonUnitalCommRing A] [Module R A] [IsScalarTowe
+r R A A] [SMulCommClass R A A] : CommRing (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommRing [CommRing R] [NonUnitalCommRing A] [Module R A] [IsScalarTower R A A]
     [SMulCommClass R A A] : CommRing (Unitization R A) :=
@@ -2204,28 +1394,17 @@ variable (R A)
 
 /-- The canonical inclusion of rings `R →+* Unitization R A`. -/
 @[simps apply]
-/--
-Definition of `inlRingHom` / `inlRingHom` 的定义
+/-
+**Unitization.inlRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：inlRingHom [Semiring R] [NonUnitalSemiring A] [Module R A] : R ->+* Unitiz
+ation R A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inlRingHom
-  signature: [Semiring R] [NonUnitalSemiring A] [Module R A]
-  body: inl
-  map_one' := inl_one A
-  map_mul' := inl_mul A
-  map_zero' := inl_zero A
-  map_add' := inl_add A
-
-中文:
-定义 inlRingHom
-  签名: [半环 R] [非幺半环 A] [模 R A]
-  定义体: inl
-  map_one' := inl_one A
-  map_mul' := inl_mul A
-  map_zero' := inl_zero A
-  map_add' := inl_add A
+--- 原说明 ---
+The canonical inclusion of rings `R →+* Unitization R A`.
 -/
-def inlRingHom [Semiring R] [NonUnitalSemiring A] [Module R A] : R ->+* Unitization R A where
+def inlRingHom [Semiring R] [NonUnitalSemiring A] [Module R A] : R →+* Unitization R A where
   toFun := inl
   map_one' := inl_one A
   map_mul' := inl_mul A
@@ -2241,179 +1420,122 @@ section Star
 
 variable {R A : Type*}
 
-/--
-Instance `instStar` / 实例 `instStar`
-
-English:
-instance instStar
-  signature: [Star R] [Star A]
-  body: ⟨fun ra => .mk (star ra.fst, star ra.snd)⟩
-
-@[simp]
-
-中文:
-实例 instStar
-  签名: [对合 R] [对合 A]
-  定义体: ⟨fun ra => .mk (star ra.fst, star ra.snd)⟩
-
-@[simp]
-
-Depends on / 依赖: ra.fst, ra.snd
+/-
+**Unitization.instStar** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instStar [Star R] [Star A] : Star (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStar [Star R] [Star A] : Star (Unitization R A) :=
   ⟨fun ra => .mk (star ra.fst, star ra.snd)⟩
 
 @[simp]
-/--
-theorem `fst_star` / 定理 `fst_star`
-
-English:
-theorem fst_star
-  given: [Star R] [Star A] (x : Unitization R A)
-  statement: (star x).fst = star x.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fst_star
-  条件: [对合 R] [对合 A] (x : Unitization R A)
-  结论: (star x).fst = star x.fst
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.fst_star** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：fst_star [Star R] [Star A] (x : Unitization R A) : (star x).fst = star x.f
+st
+参数：x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem fst_star [Star R] [Star A] (x : Unitization R A) : (star x).fst = star x.fst :=
   rfl
 
 @[simp]
-/--
-theorem `snd_star` / 定理 `snd_star`
-
-English:
-theorem snd_star
-  given: [Star R] [Star A] (x : Unitization R A)
-  statement: (star x).snd = star x.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 snd_star
-  条件: [对合 R] [对合 A] (x : Unitization R A)
-  结论: (star x).snd = star x.snd
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.snd_star** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：snd_star [Star R] [Star A] (x : Unitization R A) : (star x).snd = star x.s
+nd
+参数：x : Unitization R A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem snd_star [Star R] [Star A] (x : Unitization R A) : (star x).snd = star x.snd :=
   rfl
 
 @[simp]
-/--
-theorem `inl_star` / 定理 `inl_star`
-
-English:
-theorem inl_star
-  given: [Star R] [AddMonoid A] [StarAddMonoid A] (r : R)
-  proof: Unitization.ext rfl (by simp only [snd_star, star_zero, snd_inl])
-
-@[simp, norm_cast]
-
-中文:
-定理 inl_star
-  条件: [对合 R] [加法幺半群 A] [StarAdd幺半群 A] (r : R)
-  证明: Unitization.ext rfl (by simp only [snd_star, star_zero, snd_inl])
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Unitization, Unitization.ext, snd_inl, snd_star, star_zero
+/-
+**Unitization.inl_star** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inl_star [Star R] [AddMonoid A] [StarAddMonoid A] (r : R) : inl (star r) =
+ star (inl r : Unitization R A)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_zero`：star_zero [AddMonoid R] [StarAddMonoid R] : star (0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inl_star [Star R] [AddMonoid A] [StarAddMonoid A] (r : R) :
     inl (star r) = star (inl r : Unitization R A) :=
   Unitization.ext rfl (by simp only [snd_star, star_zero, snd_inl])
 
 @[simp, norm_cast]
-/--
-theorem `inr_star` / 定理 `inr_star`
-
-English:
-theorem inr_star
-  given: [AddMonoid R] [StarAddMonoid R] [Star A] (a : A)
-  proof: Unitization.ext (by simp only [fst_star, star_zero, fst_inr]) rfl
-
-中文:
-定理 inr_star
-  条件: [加法幺半群 R] [StarAdd幺半群 R] [对合 A] (a : A)
-  证明: Unitization.ext (by simp only [fst_star, star_zero, fst_inr]) rfl
-
-Depends on / 依赖: Unitization, Unitization.ext, fst_inr, fst_star, star_zero
+/-
+**Unitization.inr_star** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：inr_star [AddMonoid R] [StarAddMonoid R] [Star A] (a : A) : ↑(star a) = st
+ar (a : Unitization R A)
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_zero`：star_zero [AddMonoid R] [StarAddMonoid R] : star (0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inr_star [AddMonoid R] [StarAddMonoid R] [Star A] (a : A) :
     ↑(star a) = star (a : Unitization R A) :=
   Unitization.ext (by simp only [fst_star, star_zero, fst_inr]) rfl
-
-/--
-Instance `instStarAddMonoid` / 实例 `instStarAddMonoid`
-
-English:
-instance instStarAddMonoid
-  signature: [AddMonoid R] [AddMonoid A] [StarAddMonoid R] [StarAddMonoid A]
-  body: Unitization.ext (star_star x.fst) (star_star x.snd)
-  star_add x y := Unitization.ext (star_add x.fst y.fst) (star_add x.snd y.snd)
-
-中文:
-实例 instStarAddMonoid
-  签名: [加法幺半群 R] [加法幺半群 A] [StarAdd幺半群 R] [StarAdd幺半群 A]
-  定义体: Unitization.ext (star_star x.fst) (star_star x.snd)
-  star_add x y := Unitization.ext (star_add x.fst y.fst) (star_add x.snd y.snd)
-
-Depends on / 依赖: Unitization, Unitization.ext, star_star, x.fst, x.snd
+/-
+**Unitization.instStarAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instStarAddMonoid [AddMonoid R] [AddMonoid A] [StarAddMonoid R] [StarAddMo
+noid A] : StarAddMonoid (Unitization R A) where star_involutive x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStarAddMonoid [AddMonoid R] [AddMonoid A] [StarAddMonoid R] [StarAddMonoid A] :
     StarAddMonoid (Unitization R A) where
   star_involutive x := Unitization.ext (star_star x.fst) (star_star x.snd)
   star_add x y := Unitization.ext (star_add x.fst y.fst) (star_add x.snd y.snd)
-
-/--
-Instance `instStarModule` / 实例 `instStarModule`
-
-English:
-instance instStarModule
-  signature: [CommSemiring R] [StarRing R] [AddCommMonoid A] [StarAddMonoid A]
-  body: Unitization.ext (by simp) (by simp)
-
-中文:
-实例 instStarModule
-  签名: [交换半环 R] [对合环 R] [加法交换幺半群 A] [StarAdd幺半群 A]
-  定义体: Unitization.ext (by simp) (by simp)
-
-Depends on / 依赖: Unitization, Unitization.ext
+/-
+**Unitization.instStarModule** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instStarModule [CommSemiring R] [StarRing R] [AddCommMonoid A] [StarAddMon
+oid A] [Module R A] [StarModule R A] : StarModule R (Unitization R A) where star
+_smul _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_mul'`：star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) 
+= star x * star y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
 -/
 instance instStarModule [CommSemiring R] [StarRing R] [AddCommMonoid A] [StarAddMonoid A]
     [Module R A] [StarModule R A] : StarModule R (Unitization R A) where
   star_smul _ _ := Unitization.ext (by simp) (by simp)
-
-/--
-Instance `instStarRing` / 实例 `instStarRing`
-
-English:
-instance instStarRing
-  signature: [CommSemiring R] [StarRing R] [NonUnitalNonAssocSemiring A] [StarRing A]
-  body: fast_instance%
-  { Unitization.instStarAddMonoid with
-    star_mul x y := Unitization.ext
-      (by simp [-star_mul']) (by simp [-star_mul', add_comm (star x.fst • star y.snd)]) }
-
-中文:
-实例 instStarRing
-  签名: [交换半环 R] [对合环 R] [非幺非结合半环 A] [对合环 A]
-  定义体: fast_instance%
-  { Unitization.instStarAddMonoid with
-    star_mul x y := Unitization.ext
-      (by simp [-star_mul']) (by simp [-star_mul', add_comm (star x.fst • star y.snd)]) }
-
-Depends on / 依赖: Unitization, Unitization.ext, Unitization.instStarAddMonoid, add_comm, fast_instance, instStarAddMonoid, star_mul, x.fst, y.snd
+/-
+**Unitization.instStarRing** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instStarRing [CommSemiring R] [StarRing R] [NonUnitalNonAssocSemiring A] [
+StarRing A] [Module R A] [StarModule R A] : StarRing (Unitization R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStarRing [CommSemiring R] [StarRing R] [NonUnitalNonAssocSemiring A] [StarRing A]
     [Module R A] [StarModule R A] :
@@ -2434,40 +1556,11 @@ variable (S R A : Type*) [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A]
   [IsScalarTower R A A] [SMulCommClass R A A] [Algebra S R] [DistribMulAction S A]
   [IsScalarTower S R A]
 
-/--
-Instance `instAlgebra` / 实例 `instAlgebra`
-
-English:
-instance instAlgebra
-  signature: : Algebra S (Unitization R A) where
-  body: (Unitization.inlRingHom R A).comp (algebraMap S R)
-  commutes' := fun s x => by
-    induction x with
-    | inl_add_inr =>
-      change inl (algebraMap S R s) * _ = _ * inl (algebraMap S R s)
-      rw [mul_add]; rw [add_mul]; rw [inl_mul_inl]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [inr_mul_inl]; rw [mul_comm]
-  smul_def' := fun s x => by
-    induction x with
-    | inl_add_inr =>
-      change _ = inl (algebraMap S R s) * _
-      rw [mul_add]; rw [smul_add]; rw [Algebra.algebraMap_eq_smul_one]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [smul_one_mul]; rw [inl_smul]; rw [inr_smul]; rw [smul_one_smul]
-
-中文:
-实例 instAlgebra
-  签名: : 代数 S (Unitization R A) where
-  定义体: (Unitization.inlRingHom R A).comp (algebraMap S R)
-  commutes' := fun s x => by
-    induction x with
-    | inl_add_inr =>
-      change inl (algebraMap S R s) * _ = _ * inl (algebraMap S R s)
-      rw [mul_add]; rw [add_mul]; rw [inl_mul_inl]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [inr_mul_inl]; rw [mul_comm]
-  smul_def' := fun s x => by
-    induction x with
-    | inl_add_inr =>
-      change _ = inl (algebraMap S R s) * _
-      rw [mul_add]; rw [smul_add]; rw [Algebra.algebraMap_eq_smul_one]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [smul_one_mul]; rw [inl_smul]; rw [inr_smul]; rw [smul_one_smul]
-
-Depends on / 依赖: Unitization, Unitization.inlRingHom, algebraMap, inlRingHom
+/-
+**Unitization.instAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instAlgebra : Algebra S (Unitization R A) where algebraMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAlgebra : Algebra S (Unitization R A) where
   algebraMap := (Unitization.inlRingHom R A).comp (algebraMap S R)
@@ -2475,104 +1568,62 @@ instance instAlgebra : Algebra S (Unitization R A) where
     induction x with
     | inl_add_inr =>
       change inl (algebraMap S R s) * _ = _ * inl (algebraMap S R s)
-      rw [mul_add]; rw [add_mul]; rw [inl_mul_inl]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [inr_mul_inl]; rw [mul_comm]
+      rw [mul_add, add_mul, inl_mul_inl, inl_mul_inl, inl_mul_inr, inr_mul_inl, mul_comm]
   smul_def' := fun s x => by
     induction x with
     | inl_add_inr =>
       change _ = inl (algebraMap S R s) * _
-      rw [mul_add]; rw [smul_add]; rw [Algebra.algebraMap_eq_smul_one]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [smul_one_mul]; rw [inl_smul]; rw [inr_smul]; rw [smul_one_smul]
-
-/--
-theorem `algebraMap_eq_inl_comp` / 定理 `algebraMap_eq_inl_comp`
-
-English:
-theorem algebraMap_eq_inl_comp
-  statement: ⇑(algebraMap S (Unitization R A)) = inl ∘ algebraMap S R
-  proof: rfl
-
-中文:
-定理 algebraMap_eq_inl_comp
-  结论: ⇑(algebraMap S (Unitization R A)) = inl ∘ algebraMap S R
-  证明: rfl
+      rw [mul_add, smul_add, Algebra.algebraMap_eq_smul_one, inl_mul_inl, inl_mul_inr,
+        smul_one_mul, inl_smul, inr_smul, smul_one_smul]
+/-
+**Unitization.algebraMap_eq_inl_comp** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：algebraMap_eq_inl_comp : ⇑(algebraMap S (Unitization R A)) = inl ∘ algebra
+Map S R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_eq_inl_comp : ⇑(algebraMap S (Unitization R A)) = inl ∘ algebraMap S R :=
   rfl
-
-/--
-theorem `algebraMap_eq_inlRingHom_comp` / 定理 `algebraMap_eq_inlRingHom_comp`
-
-English:
-theorem algebraMap_eq_inlRingHom_comp
-  proof: rfl
-
-中文:
-定理 algebraMap_eq_inlRingHom_comp
-  证明: rfl
+/-
+**Unitization.algebraMap_eq_inlRingHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `Unitizati
+on`。
+形式化陈述：algebraMap_eq_inlRingHom_comp : algebraMap S (Unitization R A) = (inlRingH
+om R A).comp (algebraMap S R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_eq_inlRingHom_comp :
     algebraMap S (Unitization R A) = (inlRingHom R A).comp (algebraMap S R) :=
   rfl
-
-/--
-theorem `algebraMap_eq_inl` / 定理 `algebraMap_eq_inl`
-
-English:
-theorem algebraMap_eq_inl
-  statement: ⇑(algebraMap R (Unitization R A)) = inl
-  proof: rfl
-
-中文:
-定理 algebraMap_eq_inl
-  结论: ⇑(algebraMap R (Unitization R A)) = inl
-  证明: rfl
+/-
+**Unitization.algebraMap_eq_inl** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：algebraMap_eq_inl : ⇑(algebraMap R (Unitization R A)) = inl
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_eq_inl : ⇑(algebraMap R (Unitization R A)) = inl :=
   rfl
-
-/--
-theorem `algebraMap_eq_inlRingHom` / 定理 `algebraMap_eq_inlRingHom`
-
-English:
-theorem algebraMap_eq_inlRingHom
-  statement: algebraMap R (Unitization R A) = inlRingHom R A
-  proof: rfl
-
-中文:
-定理 algebraMap_eq_inlRingHom
-  结论: algebraMap R (Unitization R A) = inlRingHom R A
-  证明: rfl
+/-
+**Unitization.algebraMap_eq_inlRingHom** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：algebraMap_eq_inlRingHom : algebraMap R (Unitization R A) = inlRingHom R A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_eq_inlRingHom : algebraMap R (Unitization R A) = inlRingHom R A :=
   rfl
 
 /-- The canonical `R`-algebra projection `Unitization R A → R`. -/
 @[simps]
-/--
-Definition of `fstHom` / `fstHom` 的定义
+/-
+**Unitization.fstHom** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：fstHom : Unitization R A ->ₐ[R] R where toFun a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fstHom
-  signature: : Unitization R A ->ₐ[R] R where
-  body: a.fst
-  map_one' := fst_one
-  map_mul' := fst_mul
-  map_zero' := fst_zero (A := A)
-  map_add' := fst_add
-  commutes' := fst_inl A
-
-中文:
-定义 fstHom
-  签名: : Unitization R A ->ₐ[R] R where
-  定义体: a.fst
-  map_one' := fst_one
-  map_mul' := fst_mul
-  map_zero' := fst_zero (A := A)
-  map_add' := fst_add
-  commutes' := fst_inl A
-
-Depends on / 依赖: a.fst
+--- 原说明 ---
+The canonical `R`-algebra projection `Unitization R A → R`.
 -/
-def fstHom : Unitization R A ->ₐ[R] R where
+def fstHom : Unitization R A →ₐ[R] R where
   toFun a := a.fst
   map_one' := fst_one
   map_mul' := fst_mul
@@ -2587,29 +1638,21 @@ section coe
 /-- The coercion from a non-unital `R`-algebra `A` to its unitization `Unitization R A`
 realized as a non-unital algebra homomorphism. -/
 @[simps toFun]
-/--
-Definition of `inrNonUnitalAlgHom` / `inrNonUnitalAlgHom` 的定义
+/-
+**Unitization.inrNonUnitalAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：inrNonUnitalAlgHom (R A : Type*) [CommSemiring R] [NonUnitalSemiring A] [M
+odule R A] : A ->ₙₐ[R] Unitization R A where toFun
+参数：R A : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inrNonUnitalAlgHom
-  signature: (R A : Type*) [CommSemiring R] [NonUnitalSemiring A] [Module R A]
-  body: (↑)
-  map_smul' := inr_smul R
-  map_zero' := inr_zero R
-  map_add' := inr_add R
-  map_mul' := inr_mul R
-
-中文:
-定义 inrNonUnitalAlgHom
-  签名: (R A : 类型) [交换半环 R] [非幺半环 A] [模 R A]
-  定义体: (↑)
-  map_smul' := inr_smul R
-  map_zero' := inr_zero R
-  map_add' := inr_add R
-  map_mul' := inr_mul R
+--- 原说明 ---
+The coercion from a non-unital `R`-algebra `A` to its unitization `Unitization R
+ A`
+realized as a non-unital algebra homomorphism.
 -/
 def inrNonUnitalAlgHom (R A : Type*) [CommSemiring R] [NonUnitalSemiring A] [Module R A] :
-    A ->ₙₐ[R] Unitization R A where
+    A →ₙₐ[R] Unitization R A where
   toFun := (↑)
   map_smul' := inr_smul R
   map_zero' := inr_zero R
@@ -2619,51 +1662,47 @@ def inrNonUnitalAlgHom (R A : Type*) [CommSemiring R] [NonUnitalSemiring A] [Mod
 /-- The coercion from a non-unital `R`-algebra `A` to its unitization `Unitization R A`
 realized as a non-unital star algebra homomorphism. -/
 @[simps! apply]
-/--
-Definition of `inrNonUnitalStarAlgHom` / `inrNonUnitalStarAlgHom` 的定义
+/-
+**Unitization.inrNonUnitalStarAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：inrNonUnitalStarAlgHom (R A : Type*) [CommSemiring R] [StarAddMonoid R] [N
+onUnitalSemiring A] [Star A] [Module R A] : A ->⋆ₙₐ[R] Unitization R A where toN
+onUnitalAlgHom
+参数：R A : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inrNonUnitalStarAlgHom
-  signature: (R A : Type*) [CommSemiring R] [StarAddMonoid R]
-  body: inrNonUnitalAlgHom R A
-  map_star' := inr_star
-
-中文:
-定义 inrNonUnitalStarAlgHom
-  签名: (R A : 类型) [交换半环 R] [StarAdd幺半群 R]
-  定义体: inrNonUnitalAlgHom R A
-  map_star' := inr_star
-
-Depends on / 依赖: inrNonUnitalAlgHom
+--- 原说明 ---
+The coercion from a non-unital `R`-algebra `A` to its unitization `Unitization R
+ A`
+realized as a non-unital star algebra homomorphism.
 -/
 def inrNonUnitalStarAlgHom (R A : Type*) [CommSemiring R] [StarAddMonoid R]
     [NonUnitalSemiring A] [Star A] [Module R A] :
-    A ->⋆ₙₐ[R] Unitization R A where
+    A →⋆ₙₐ[R] Unitization R A where
   toNonUnitalAlgHom := inrNonUnitalAlgHom R A
   map_star' := inr_star
 
 /-- The star algebra equivalence obtained by restricting `Unitization.inrNonUnitalStarAlgHom`
 to its range. -/
 @[simps!]
-/--
-Definition of `inrRangeEquiv` / `inrRangeEquiv` 的定义
+/-
+**Unitization.inrRangeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：inrRangeEquiv (R A : Type*) [CommSemiring R] [StarAddMonoid R] [NonUnitalS
+emiring A] [Star A] [Module R A] [IsScalarTower R A A] [SMulCommClass R A A] : A
+ ≃⋆ₐ[R] NonUnitalStarAlgHom.range (inrNonUnitalStarAlgHom R A)
+参数：R A : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inrRangeEquiv
-  signature: (R A : Type*) [CommSemiring R] [StarAddMonoid R] [NonUnitalSemiring A]
-  body: StarAlgEquiv.ofLeftInverse' (g := fun a => a.snd) (snd_inr R ·)
-
-中文:
-定义 inrRangeEquiv
-  签名: (R A : 类型) [交换半环 R] [StarAdd幺半群 R] [非幺半环 A]
-  定义体: StarAlgEquiv.ofLeftInverse' (g := fun a => a.snd) (snd_inr R ·)
-
-Depends on / 依赖: StarAlgEquiv, StarAlgEquiv.ofLeftInverse, a.snd, ofLeftInverse, snd_inr
+--- 原说明 ---
+The star algebra equivalence obtained by restricting `Unitization.inrNonUnitalSt
+arAlgHom`
+to its range.
 -/
 def inrRangeEquiv (R A : Type*) [CommSemiring R] [StarAddMonoid R] [NonUnitalSemiring A]
     [Star A] [Module R A] [IsScalarTower R A A] [SMulCommClass R A A] :
     A ≃⋆ₐ[R] NonUnitalStarAlgHom.range (inrNonUnitalStarAlgHom R A) :=
-  StarAlgEquiv.ofLeftInverse' (g := fun a => a.snd) (snd_inr R ·)
+  StarAlgEquiv.ofLeftInverse' (g := fun a ↦ a.snd) (snd_inr R ·)
 
 end coe
 
@@ -2673,74 +1712,93 @@ variable {S R A : Type*} [CommSemiring S] [CommSemiring R] [NonUnitalSemiring A]
   [SMulCommClass R A A] [IsScalarTower R A A] {B : Type*} [Semiring B] [Algebra S B] [Algebra S R]
   [DistribMulAction S A] [IsScalarTower S R A] {C : Type*} [Semiring C] [Algebra R C]
 
-/--
-theorem `algHom_ext` / 定理 `algHom_ext`
-
-English:
-theorem algHom_ext
-  statement: {F : Type*}
-  proof: by
-  refine DFunLike.ext φ ψ (fun x => ?_)
-  induction x
-  simp only [map_add, ← algebraMap_eq_inl, h, h']
-
-中文:
-定理 algHom_ext
-  结论: {F : 类型}
-  证明: by
-  refine DFunLike.ext φ ψ (fun x => ?_)
-  induction x
-  simp only [map_add, ← algebraMap_eq_inl, h, h']
-
-Depends on / 依赖: DFunLike, DFunLike.ext, algebraMap_eq_inl, map_add
+/-
+**Unitization.algHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：algHom_ext {F : Type*} [FunLike F (Unitization R A) B] [AlgHomClass F S (U
+nitization R A) B] {φ ψ : F} (h : forall a : A, φ a = ψ a) (h' : forall r, φ (al
+gebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)) : φ = ψ
+参数：Unitization R A；Unitization R A；h : forall a : A, φ a = ψ a；h' : forall r, φ 
+(algebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `Unitization.ind`：ind {R A} [AddZeroClass R] [AddZeroClass A] {P : Unitiz
+ation R A -> Prop} (inl_add_inr : forall (r : R) (a : A), P (inl r + (a : Unitiz
+ation…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algHom_ext {F : Type*}
     [FunLike F (Unitization R A) B] [AlgHomClass F S (Unitization R A) B] {φ ψ : F}
-    (h : forall a : A, φ a = ψ a)
-    (h' : forall r, φ (algebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)) :
+    (h : ∀ a : A, φ a = ψ a)
+    (h' : ∀ r, φ (algebraMap R (Unitization R A) r) = ψ (algebraMap R (Unitization R A) r)) :
     φ = ψ := by
-  refine DFunLike.ext φ ψ (fun x => ?_)
+  refine DFunLike.ext φ ψ (fun x ↦ ?_)
   induction x
   simp only [map_add, ← algebraMap_eq_inl, h, h']
-
-/--
-lemma `algHom_ext''` / 引理 `algHom_ext''`
-
-English:
-lemma algHom_ext''
-  statement: {F : Type*}
-  proof: algHom_ext h (fun r => by simp only [AlgHomClass.commutes])
-
-中文:
-引理 algHom_ext''
-  结论: {F : 类型}
-  证明: algHom_ext h (fun r => by simp only [AlgHomClass.commutes])
-
-Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, algHom_ext, commutes
+/-
+**Unitization.algHom_ext''** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：algHom_ext'' {F : Type*} [FunLike F (Unitization R A) C] [AlgHomClass F R 
+(Unitization R A) C] {φ ψ : F} (h : forall a : A, φ a = ψ a) : φ = ψ
+参数：Unitization R A；Unitization R A；h : forall a : A, φ a = ψ a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.algHom_ext`：algHom_ext {F : Type*} [FunLike F (Unitization R
+ A) B] [AlgHomClass F S (Unitization R A) B] {φ ψ : F} (h : forall a : A, φ a = 
+ψ a) (h' : f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHomClass.commutes`：∀ {F : Type u_1} {R : outParam (Type u_2)} {A : ou
+tParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {inst_1 :
+ Semiring …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma algHom_ext'' {F : Type*}
     [FunLike F (Unitization R A) C] [AlgHomClass F R (Unitization R A) C] {φ ψ : F}
-    (h : forall a : A, φ a = ψ a) : φ = ψ :=
+    (h : ∀ a : A, φ a = ψ a) : φ = ψ :=
   algHom_ext h (fun r => by simp only [AlgHomClass.commutes])
 
 /-- See note [partially-applied ext lemmas] -/
 @[ext 1100]
-/--
-theorem `algHom_ext'` / 定理 `algHom_ext'`
+/-
+**Unitization.algHom_ext'** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：algHom_ext' {φ ψ : Unitization R A ->ₐ[R] C} (h : φ.toNonUnitalAlgHom.comp
+ (inrNonUnitalAlgHom R A) = ψ.toNonUnitalAlgHom.comp (inrNonUnitalAlgHom R A)) :
+ φ = ψ
+参数：h : φ.toNonUnitalAlgHom.comp (inrNonUnitalAlgHom R A) = ψ.toNonUnitalAlgHom.c
+omp (inrNonUnitalAlgHom R A)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Unitization.algHom_ext''`：algHom_ext'' {F : Type*} [FunLike F (Unitizati
+on R A) C] [AlgHomClass F R (Unitization R A) C] {φ ψ : F} (h : forall a : A, φ 
+a = ψ a) : φ =…
+· 使用定理 `NonUnitalAlgHom.congr_fun`：congr_fun {f g : A ->ₛₙₐ[φ] B} (h : f = g) (x
+ : A) : f x = g x
 
-English:
-theorem algHom_ext'
-  statement: {φ ψ : Unitization R A ->ₐ[R] C}
-  proof: algHom_ext'' (NonUnitalAlgHom.congr_fun h)
-
-中文:
-定理 algHom_ext'
-  结论: {φ ψ : Unitization R A ->ₐ[R] C}
-  证明: algHom_ext'' (NonUnitalAlgHom.congr_fun h)
-
-Depends on / 依赖: NonUnitalAlgHom, NonUnitalAlgHom.congr_fun, algHom_ext, congr_fun
+--- 原说明 ---
+See note [partially-applied ext lemmas]
 -/
-theorem algHom_ext' {φ ψ : Unitization R A ->ₐ[R] C}
+theorem algHom_ext' {φ ψ : Unitization R A →ₐ[R] C}
     (h :
       φ.toNonUnitalAlgHom.comp (inrNonUnitalAlgHom R A) =
         ψ.toNonUnitalAlgHom.comp (inrNonUnitalAlgHom R A)) :
@@ -2752,66 +1810,21 @@ algebra homomorphism from the unitization into `C`. This is extended to an `Equi
 `Unitization.lift` and that should be used instead. This declaration only exists for performance
 reasons. -/
 @[simps]
-/--
-Definition of `_root_.NonUnitalAlgHom.toAlgHom` / `_root_.NonUnitalAlgHom.toAlgHom` 的定义
+/-
+**Unitization._root_.NonUnitalAlgHom.toAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Unitiza
+tion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.NonUnitalAlgHom.toAlgHom
-  signature: (φ : A ->ₙₐ[R] C)
-  body: fun x => algebraMap R C x.fst + φ x.snd
-  map_one' := by simp only [fst_one, map_one, snd_one, φ.map_zero, add_zero]
-  map_mul' := fun x y => by
-    induction x with
-    | inl_add_inr x_r x_a =>
-      induction y with
-      | inl_add_inr =>
-        simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_mul, snd_add, snd_inl, snd_inr, add_zero,
-          map_mul, zero_add, map_add, map_smul φ]
-        rw [add_mul]; rw [mul_add]; rw [mul_add]
-        rw [← Algebra.commutes _ (φ x_a)]
-        simp only [Algebra.algebraMap_eq_smul_one, smul_one_mul, add_assoc]
-  map_zero' := by simp only [fst_zero, map_zero, snd_zero, φ.map_zero, add_zero]
-  map_add' := fun x y => by
-    induction x with
-    | inl_add_inr =>
-      induction y with
-      | inl_add_inr =>
-        simp only [fst_add, fst_inl, fst_inr, add_zero, map_add, snd_add, snd_inl, snd_inr,
-          zero_add, φ.map_add]
-        rw [add_add_add_comm]
-  commutes' := fun r => by
-    simp only [algebraMap_eq_inl, fst_inl, snd_inl, φ.map_zero, add_zero]
-
-中文:
-定义 _root_.非幺Alg态射.toAlgHom
-  签名: (φ : A ->ₙₐ[R] C)
-  定义体: fun x => algebraMap R C x.fst + φ x.snd
-  map_one' := by simp only [fst_one, map_one, snd_one, φ.map_zero, add_zero]
-  map_mul' := fun x y => by
-    induction x with
-    | inl_add_inr x_r x_a =>
-      induction y with
-      | inl_add_inr =>
-        simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_mul, snd_add, snd_inl, snd_inr, add_zero,
-          map_mul, zero_add, map_add, map_smul φ]
-        rw [add_mul]; rw [mul_add]; rw [mul_add]
-        rw [← Algebra.commutes _ (φ x_a)]
-        simp only [Algebra.algebraMap_eq_smul_one, smul_one_mul, add_assoc]
-  map_zero' := by simp only [fst_zero, map_zero, snd_zero, φ.map_zero, add_zero]
-  map_add' := fun x y => by
-    induction x with
-    | inl_add_inr =>
-      induction y with
-      | inl_add_inr =>
-        simp only [fst_add, fst_inl, fst_inr, add_zero, map_add, snd_add, snd_inl, snd_inr,
-          zero_add, φ.map_add]
-        rw [add_add_add_comm]
-  commutes' := fun r => by
-    simp only [algebraMap_eq_inl, fst_inl, snd_inl, φ.map_zero, add_zero]
-
-Depends on / 依赖: algebraMap, x.fst, x.snd
+--- 原说明 ---
+A non-unital algebra homomorphism from `A` into a unital `R`-algebra `C` lifts t
+o a unital
+algebra homomorphism from the unitization into `C`. This is extended to an `Equi
+v` in
+`Unitization.lift` and that should be used instead. This declaration only exists
+ for performance
+reasons.
 -/
-def _root_.NonUnitalAlgHom.toAlgHom (φ : A ->ₙₐ[R] C) : Unitization R A ->ₐ[R] C where
+def _root_.NonUnitalAlgHom.toAlgHom (φ : A →ₙₐ[R] C) : Unitization R A →ₐ[R] C where
   toFun := fun x => algebraMap R C x.fst + φ x.snd
   map_one' := by simp only [fst_one, map_one, snd_one, φ.map_zero, add_zero]
   map_mul' := fun x y => by
@@ -2821,7 +1834,7 @@ def _root_.NonUnitalAlgHom.toAlgHom (φ : A ->ₙₐ[R] C) : Unitization R A ->�
       | inl_add_inr =>
         simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_mul, snd_add, snd_inl, snd_inr, add_zero,
           map_mul, zero_add, map_add, map_smul φ]
-        rw [add_mul]; rw [mul_add]; rw [mul_add]
+        rw [add_mul, mul_add, mul_add]
         rw [← Algebra.commutes _ (φ x_a)]
         simp only [Algebra.algebraMap_eq_smul_one, smul_one_mul, add_assoc]
   map_zero' := by simp only [fst_zero, map_zero, snd_zero, φ.map_zero, add_zero]
@@ -2841,72 +1854,43 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Non-unital algebra homomorphisms from `A` into a unital `R`-algebra `C` lift uniquely to
 `Unitization R A →ₐ[R] C`. This is the universal property of the unitization. -/
 @[simps! apply symm_apply]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**Unitization.lift** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：lift : (A ->ₙₐ[R] C) ≃ (Unitization R A ->ₐ[R] C) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : (A ->ₙₐ[R] C) ≃ (Unitization R A ->ₐ[R] C) where
-  body: NonUnitalAlgHom.toAlgHom
-  invFun φ := φ.toNonUnitalAlgHom.comp (inrNonUnitalAlgHom R A)
-  left_inv φ := by ext; simp [NonUnitalAlgHomClass.toNonUnitalAlgHom]
-  right_inv φ := by ext; simp [NonUnitalAlgHomClass.toNonUnitalAlgHom]
-
-中文:
-定义 lift
-  签名: : (A ->ₙₐ[R] C) ≃ (Unitization R A ->ₐ[R] C) where
-  定义体: NonUnitalAlgHom.toAlgHom
-  invFun φ := φ.toNonUnitalAlgHom.comp (inrNonUnitalAlgHom R A)
-  left_inv φ := by ext; simp [NonUnitalAlgHomClass.toNonUnitalAlgHom]
-  right_inv φ := by ext; simp [NonUnitalAlgHomClass.toNonUnitalAlgHom]
-
-Depends on / 依赖: NonUnitalAlgHom, NonUnitalAlgHom.toAlgHom, toAlgHom
+--- 原说明 ---
+Non-unital algebra homomorphisms from `A` into a unital `R`-algebra `C` lift uni
+quely to
+`Unitization R A →ₐ[R] C`. This is the universal property of the unitization.
 -/
-def lift : (A ->ₙₐ[R] C) ≃ (Unitization R A ->ₐ[R] C) where
+def lift : (A →ₙₐ[R] C) ≃ (Unitization R A →ₐ[R] C) where
   toFun := NonUnitalAlgHom.toAlgHom
   invFun φ := φ.toNonUnitalAlgHom.comp (inrNonUnitalAlgHom R A)
   left_inv φ := by ext; simp [NonUnitalAlgHomClass.toNonUnitalAlgHom]
   right_inv φ := by ext; simp [NonUnitalAlgHomClass.toNonUnitalAlgHom]
-
-/--
-theorem `lift_symm_apply_apply` / 定理 `lift_symm_apply_apply`
-
-English:
-theorem lift_symm_apply_apply
-  given: (φ : Unitization R A ->ₐ[R] C) (a : A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lift_symm_apply_apply
-  条件: (φ : Unitization R A ->ₐ[R] C) (a : A)
-  证明: rfl
-
-@[simp]
+/-
+**Unitization.lift_symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：lift_symm_apply_apply (φ : Unitization R A ->ₐ[R] C) (a : A) : Unitization
+.lift.symm φ a = φ a
+参数：φ : Unitization R A ->ₐ[R] C；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem lift_symm_apply_apply (φ : Unitization R A ->ₐ[R] C) (a : A) :
+theorem lift_symm_apply_apply (φ : Unitization R A →ₐ[R] C) (a : A) :
     Unitization.lift.symm φ a = φ a :=
   rfl
 
 @[simp]
-/--
-lemma `_root_.NonUnitalAlgHom.toAlgHom_zero` / 引理 `_root_.NonUnitalAlgHom.toAlgHom_zero`
-
-English:
-lemma _root_.NonUnitalAlgHom.toAlgHom_zero
-  proof: by
-  ext
-  simp
-
-中文:
-引理 _root_.非幺Alg态射.toAlgHom_zero
-  证明: by
-  ext
-  simp
+/-
+**Unitization._root_.NonUnitalAlgHom.toAlgHom_zero** 是 Mathlib 中的一个引理，位于命名空间 `Un
+itization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.NonUnitalAlgHom.toAlgHom_zero :
-    ⇑(0 : A ->ₙₐ[R] R).toAlgHom = (fun x => x.fst) := by
+    ⇑(0 : A →ₙₐ[R] R).toAlgHom = (fun x ↦ x.fst) := by
   ext
   simp
 
@@ -2920,82 +1904,78 @@ variable [Semiring C] [Algebra R C] [StarRing C]
 
 /-- See note [partially-applied ext lemmas] -/
 @[ext]
-/--
-theorem `starAlgHom_ext` / 定理 `starAlgHom_ext`
+/-
+**Unitization.starAlgHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：starAlgHom_ext {φ ψ : Unitization R A ->⋆ₐ[R] C} (h : (φ : Unitization R A
+ ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A) = (ψ : Unitization R 
+A ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A)) : φ = ψ
+参数：h : (φ : Unitization R A ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom
+ R A) = (ψ : Unitization R A ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHo
+m R A)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `StarAlgHom.instAlgHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u_
+4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_
+3 : Star A] [ins…
+· 使用定理 `StarAlgHom.instStarHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u
+_4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst
+_3 : Star A] [ins…
+· 使用引理 `Unitization.algHom_ext''`：algHom_ext'' {F : Type*} [FunLike F (Unitizati
+on R A) C] [AlgHomClass F R (Unitization R A) C] {φ ψ : F} (h : forall a : A, φ 
+a = ψ a) : φ =…
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-English:
-theorem starAlgHom_ext
-  statement: {φ ψ : Unitization R A ->⋆ₐ[R] C}
-  proof: Unitization.algHom_ext'' DFunLike.congr_fun h
-
-中文:
-定理 starAlgHom_ext
-  结论: {φ ψ : Unitization R A ->⋆ₐ[R] C}
-  证明: Unitization.algHom_ext'' DFunLike.congr_fun h
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Unitization, Unitization.algHom_ext, algHom_ext, congr_fun
+--- 原说明 ---
+See note [partially-applied ext lemmas]
 -/
-theorem starAlgHom_ext {φ ψ : Unitization R A ->⋆ₐ[R] C}
-    (h : (φ : Unitization R A ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A) =
-      (ψ : Unitization R A ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A)) :
+theorem starAlgHom_ext {φ ψ : Unitization R A →⋆ₐ[R] C}
+    (h : (φ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A) =
+      (ψ : Unitization R A →⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlgHom R A)) :
     φ = ψ :=
-Unitization.algHom_ext'' DFunLike.congr_fun h
+  Unitization.algHom_ext'' <| DFunLike.congr_fun h
 
 variable [StarModule R C]
 
 /-- Non-unital star algebra homomorphisms from `A` into a unital star `R`-algebra `C` lift uniquely
 to `Unitization R A →⋆ₐ[R] C`. This is the universal property of the unitization. -/
 @[simps! apply symm_apply]
-/--
-Definition of `starLift` / `starLift` 的定义
+/-
+**Unitization.starLift** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：starLift : (A ->⋆ₙₐ[R] C) ≃ (Unitization R A ->⋆ₐ[R] C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starLift
-  signature: : (A ->⋆ₙₐ[R] C) ≃ (Unitization R A ->⋆ₐ[R] C)
-  body: { toFun := fun φ =>
-  { toAlgHom := Unitization.lift φ.toNonUnitalAlgHom
-    map_star' := fun x => by
-      simp [map_star] }
-  invFun φ := φ.toNonUnitalStarAlgHom.comp (inrNonUnitalStarAlgHom R A),
-  left_inv _ := by ext; simp,
-  right_inv _ := by ext; simp }
-
-中文:
-定义 starLift
-  签名: : (A ->⋆ₙₐ[R] C) ≃ (Unitization R A ->⋆ₐ[R] C)
-  定义体: { toFun := fun φ =>
-  { toAlgHom := Unitization.lift φ.toNonUnitalAlgHom
-    map_star' := fun x => by
-      simp [map_star] }
-  invFun φ := φ.toNonUnitalStarAlgHom.comp (inrNonUnitalStarAlgHom R A),
-  left_inv _ := by ext; simp,
-  right_inv _ := by ext; simp }
-
-Depends on / 依赖: Unitization, Unitization.lift, inrNonUnitalStarAlgHom, invFun, left_inv, map_star, right_inv, toAlgHom, toNonUnitalAlgHom, toNonUnitalStarAlgHom, toNonUnitalStarAlgHom.comp
+--- 原说明 ---
+Non-unital star algebra homomorphisms from `A` into a unital star `R`-algebra `C
+` lift uniquely
+to `Unitization R A →⋆ₐ[R] C`. This is the universal property of the unitization
+.
 -/
-def starLift : (A ->⋆ₙₐ[R] C) ≃ (Unitization R A ->⋆ₐ[R] C) :=
-{ toFun := fun φ =>
+def starLift : (A →⋆ₙₐ[R] C) ≃ (Unitization R A →⋆ₐ[R] C) :=
+{ toFun := fun φ ↦
   { toAlgHom := Unitization.lift φ.toNonUnitalAlgHom
     map_star' := fun x => by
       simp [map_star] }
   invFun φ := φ.toNonUnitalStarAlgHom.comp (inrNonUnitalStarAlgHom R A),
   left_inv _ := by ext; simp,
   right_inv _ := by ext; simp }
-
-/--
-theorem `starLift_symm_apply_apply` / 定理 `starLift_symm_apply_apply`
-
-English:
-theorem starLift_symm_apply_apply
-  given: (φ : Unitization R A ->⋆ₐ[R] C) (a : A)
-  proof: rfl
-
-中文:
-定理 starLift_symm_apply_apply
-  条件: (φ : Unitization R A ->⋆ₐ[R] C) (a : A)
-  证明: rfl
+/-
+**Unitization.starLift_symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Unitization`。
+形式化陈述：∀ {R : Type u_1} {A : Type u_2} {C : Type u_3} [inst : CommSemiring R] [in
+st_1 : StarRing R]   [inst_2 : NonUnitalSemiring A] [inst_3 : StarRing A] [inst_
+4 : _root_.Module R A] [inst_5 : SMulCommClass R A A]   [inst_6 : IsScalarTower 
+R A A] [inst_7 : Semiring C] [inst_8 : Algebra R C] [inst_9 : StarRing C]   [ins
+t_10 : StarModule R C] (φ : Unitization R A →⋆ₐ[R] C) (a : A), (Unitization.star
+Lift.symm φ) a = φ ↑a
+参数：φ : Unitization R A →⋆ₐ[R] C；a : A；Unitization.starLift.symm φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] theorem starLift_symm_apply_apply (φ : Unitization R A ->⋆ₐ[R] C) (a : A) :
+@[simp] theorem starLift_symm_apply_apply (φ : Unitization R A →⋆ₐ[R] C) (a : A) :
     Unitization.starLift.symm φ a = φ a :=
   rfl
 
@@ -3016,128 +1996,147 @@ This sends `φ : A →⋆ₙₐ[R] B` to a map `Unitization R A →⋆ₐ[R] Uni
 `(r, a) ↦ (r, φ a)` (or perhaps more precisely,
 `algebraMap R _ r + ↑a ↦ algebraMap R _ r + ↑(φ a)`). -/
 @[simps! apply]
-/--
-Definition of `starMap` / `starMap` 的定义
+/-
+**Unitization.starMap** 是 Mathlib 中的一个定义，位于命名空间 `Unitization`。
+形式化陈述：starMap (φ : A ->⋆ₙₐ[R] B) : Unitization R A ->⋆ₐ[R] Unitization R B
+参数：φ : A ->⋆ₙₐ[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starMap
-  signature: (φ : A ->⋆ₙₐ[R] B)
-  body: Unitization.starLift (Unitization.inrNonUnitalStarAlgHom R B).comp φ
+--- 原说明 ---
+The functorial map on morphisms between the category of non-unital C⋆-algebras w
+ith non-unital
+star homomorphisms and unital C⋆-algebras with unital star homomorphisms.
 
-@[simp high]
-
-中文:
-定义 starMap
-  签名: (φ : A ->⋆ₙₐ[R] B)
-  定义体: Unitization.starLift (Unitization.inrNonUnitalStarAlgHom R B).comp φ
-
-@[simp high]
-
-Depends on / 依赖: Unitization, Unitization.inrNonUnitalStarAlgHom, Unitization.starLift, inrNonUnitalStarAlgHom, starLift
+This sends `φ : A →⋆ₙₐ[R] B` to a map `Unitization R A →⋆ₐ[R] Unitization R B` g
+iven by the formula
+`(r, a) ↦ (r, φ a)` (or perhaps more precisely,
+`algebraMap R _ r + ↑a ↦ algebraMap R _ r + ↑(φ a)`).
 -/
-def starMap (φ : A ->⋆ₙₐ[R] B) : Unitization R A ->⋆ₐ[R] Unitization R B :=
-Unitization.starLift (Unitization.inrNonUnitalStarAlgHom R B).comp φ
+def starMap (φ : A →⋆ₙₐ[R] B) : Unitization R A →⋆ₐ[R] Unitization R B :=
+  Unitization.starLift <| (Unitization.inrNonUnitalStarAlgHom R B).comp φ
 
 @[simp high]
-/--
-lemma `starMap_inr` / 引理 `starMap_inr`
-
-English:
-lemma starMap_inr
-  given: (φ : A ->⋆ₙₐ[R] B) (a : A)
-  proof: by
-  simp
-
-@[simp high]
-
-中文:
-引理 starMap_inr
-  条件: (φ : A ->⋆ₙₐ[R] B) (a : A)
-  证明: by
-  simp
-
-@[simp high]
+/-
+**Unitization.starMap_inr** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：starMap_inr (φ : A ->⋆ₙₐ[R] B) (a : A) : starMap φ (inr a) = inr (φ a)
+参数：φ : A ->⋆ₙₐ[R] B；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitization.starMap_apply`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3
+} [inst : CommSemiring R] [inst_1 : StarRing R]   [inst_2 : NonUnitalSemiring A]
+ [inst_3 : Star…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma starMap_inr (φ : A ->⋆ₙₐ[R] B) (a : A) :
+lemma starMap_inr (φ : A →⋆ₙₐ[R] B) (a : A) :
     starMap φ (inr a) = inr (φ a) := by
   simp
 
 @[simp high]
-/--
-lemma `starMap_inl` / 引理 `starMap_inl`
-
-English:
-lemma starMap_inl
-  given: (φ : A ->⋆ₙₐ[R] B) (r : R)
-  proof: by
-  simp
-
-中文:
-引理 starMap_inl
-  条件: (φ : A ->⋆ₙₐ[R] B) (r : R)
-  证明: by
-  simp
+/-
+**Unitization.starMap_inl** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：starMap_inl (φ : A ->⋆ₙₐ[R] B) (r : R) : starMap φ (inl r) = algebraMap R 
+(Unitization R B) r
+参数：φ : A ->⋆ₙₐ[R] B；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitization.starMap_apply`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3
+} [inst : CommSemiring R] [inst_1 : StarRing R]   [inst_2 : NonUnitalSemiring A]
+ [inst_3 : Star…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `NonUnitalStarAlgHom.instNonUnitalAlgHomClass`：∀ {R : Type u_1} {A : Type
+ u_2} {B : Type u_3} [inst : Monoid R] [inst_1 : NonUnitalNonAssocSemiring A]   
+[inst_2 : DistribMulAction R A] [i…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma starMap_inl (φ : A ->⋆ₙₐ[R] B) (r : R) :
+lemma starMap_inl (φ : A →⋆ₙₐ[R] B) (r : R) :
     starMap φ (inl r) = algebraMap R (Unitization R B) r := by
   simp
 
-/--
-lemma `starMap_injective` / 引理 `starMap_injective`
+/-- If `φ : A →⋆ₙₐ[R] B` is injective, the lift `starMap φ : Unitization R A →⋆ₐ[R] Unitization R B`
+is also injective. -/
+/-
+**Unitization.starMap_injective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：starMap_injective {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Injective φ) : Functio
+n.Injective (starMap φ)
+参数：hφ : Function.Injective φ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Unitization.starMap_apply`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3
+} [inst : CommSemiring R] [inst_1 : StarRing R]   [inst_2 : NonUnitalSemiring A]
+ [inst_3 : Star…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 
-English:
-lemma starMap_injective
-  given: {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Injective φ)
-  proof: by
-  intro x y h
-  ext
-  · simpa using! congr($(h).fst)
-· exact hφ by simpa [algebraMap_eq_inl] using! congr($(h).snd)
-
-中文:
-引理 starMap_injective
-  条件: {φ : A ->⋆ₙₐ[R] B} (hφ : 函数.单射 φ)
-  证明: by
-  intro x y h
-  ext
-  · simpa using! congr($(h).fst)
-· exact hφ by simpa [algebraMap_eq_inl] using! congr($(h).snd)
-
-Depends on / 依赖: algebraMap_eq_inl
+--- 原说明 ---
+If `φ : A →⋆ₙₐ[R] B` is injective, the lift `starMap φ : Unitization R A →⋆ₐ[R] 
+Unitization R B`
+is also injective.
 -/
-lemma starMap_injective {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Injective φ) :
+lemma starMap_injective {φ : A →⋆ₙₐ[R] B} (hφ : Function.Injective φ) :
     Function.Injective (starMap φ) := by
   intro x y h
   ext
   · simpa using! congr($(h).fst)
-· exact hφ by simpa [algebraMap_eq_inl] using! congr($(h).snd)
+  · exact hφ <| by simpa [algebraMap_eq_inl] using! congr($(h).snd)
 
-/--
-lemma `starMap_surjective` / 引理 `starMap_surjective`
+/-- If `φ : A →⋆ₙₐ[R] B` is surjective, the lift
+`starMap φ : Unitization R A →⋆ₐ[R] Unitization R B` is also surjective. -/
+/-
+**Unitization.starMap_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：starMap_surjective {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Surjective φ) : Funct
+ion.Surjective (starMap φ)
+参数：hφ : Function.Surjective φ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.ind`：ind {R A} [AddZeroClass R] [AddZeroClass A] {P : Unitiz
+ation R A -> Prop} (inl_add_inr : forall (r : R) (a : A), P (inl r + (a : Unitiz
+ation…
 
-English:
-lemma starMap_surjective
-  given: {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Surjective φ)
-  proof: by
-  intro x
-  induction x using Unitization.ind with
-  | inl_add_inr r b =>
-    obtain ⟨a, rfl⟩ := hφ b
-    exact ⟨mk (r, a), by rfl⟩
-
-中文:
-引理 starMap_surjective
-  条件: {φ : A ->⋆ₙₐ[R] B} (hφ : 函数.满射 φ)
-  证明: by
-  intro x
-  induction x using Unitization.ind with
-  | inl_add_inr r b =>
-    obtain ⟨a, rfl⟩ := hφ b
-    exact ⟨mk (r, a), by rfl⟩
-
-Depends on / 依赖: Unitization, Unitization.ind, inl_add_inr
+--- 原说明 ---
+If `φ : A →⋆ₙₐ[R] B` is surjective, the lift
+`starMap φ : Unitization R A →⋆ₐ[R] Unitization R B` is also surjective.
 -/
-lemma starMap_surjective {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Surjective φ) :
+lemma starMap_surjective {φ : A →⋆ₙₐ[R] B} (hφ : Function.Surjective φ) :
     Function.Surjective (starMap φ) := by
   intro x
   induction x using Unitization.ind with
@@ -3145,46 +2144,90 @@ lemma starMap_surjective {φ : A ->⋆ₙₐ[R] B} (hφ : Function.Surjective φ
     obtain ⟨a, rfl⟩ := hφ b
     exact ⟨mk (r, a), by rfl⟩
 
-/--
-lemma `starMap_comp` / 引理 `starMap_comp`
+/-- `starMap` is functorial: `starMap (ψ.comp φ) = (starMap ψ).comp (starMap φ)`. -/
+/-
+**Unitization.starMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：starMap_comp {φ : A ->⋆ₙₐ[R] B} {ψ : B ->⋆ₙₐ[R] C} : starMap (ψ.comp φ) = 
+(starMap ψ).comp (starMap φ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.starAlgHom_ext`：starAlgHom_ext {φ ψ : Unitization R A ->⋆ₐ[R
+] C} (h : (φ : Unitization R A ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlg
+Hom R A) = (ψ : …
+· 使用定理 `NonUnitalStarAlgHom.ext`：ext {f g : A ->⋆ₙₐ[R] B} (h : forall x, f x = g
+ x) : f = g
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `StarAlgHom.instAlgHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u_
+4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_
+3 : Star A] [ins…
+· 使用定理 `StarAlgHom.instStarHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u
+_4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst
+_3 : Star A] [ins…
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitization.inrNonUnitalStarAlgHom_apply`：∀ (R : Type u_1) (A : Type u_2
+) [inst : CommSemiring R] [inst_1 : StarAddMonoid R] [inst_2 : NonUnitalSemiring
+ A]   [inst_3 : Star A] [inst_…
+· 使用引理 `Unitization.starMap_inr`：starMap_inr (φ : A ->⋆ₙₐ[R] B) (a : A) : starMa
+p φ (inr a) = inr (φ a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma starMap_comp
-  given: {φ : A ->⋆ₙₐ[R] B} {ψ : B ->⋆ₙₐ[R] C}
-  proof: by
-  ext; all_goals simp
-
-中文:
-引理 starMap_comp
-  条件: {φ : A ->⋆ₙₐ[R] B} {ψ : B ->⋆ₙₐ[R] C}
-  证明: by
-  ext; all_goals simp
-
-Depends on / 依赖: all_goals
+--- 原说明 ---
+`starMap` is functorial: `starMap (ψ.comp φ) = (starMap ψ).comp (starMap φ)`.
 -/
-lemma starMap_comp {φ : A ->⋆ₙₐ[R] B} {ψ : B ->⋆ₙₐ[R] C} :
+lemma starMap_comp {φ : A →⋆ₙₐ[R] B} {ψ : B →⋆ₙₐ[R] C} :
     starMap (ψ.comp φ) = (starMap ψ).comp (starMap φ) := by
   ext; all_goals simp
 
 /-- `starMap` is functorial:
 `starMap (NonUnitalStarAlgHom.id R B) = StarAlgHom.id R (Unitization R B)`. -/
 @[simp]
-/--
-lemma `starMap_id` / 引理 `starMap_id`
+/-
+**Unitization.starMap_id** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：starMap_id : starMap (NonUnitalStarAlgHom.id R B) = StarAlgHom.id R (Uniti
+zation R B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Unitization.starAlgHom_ext`：starAlgHom_ext {φ ψ : Unitization R A ->⋆ₐ[R
+] C} (h : (φ : Unitization R A ->⋆ₙₐ[R] C).comp (Unitization.inrNonUnitalStarAlg
+Hom R A) = (ψ : …
+· 使用定理 `NonUnitalStarAlgHom.ext`：ext {f g : A ->⋆ₙₐ[R] B} (h : forall x, f x = g
+ x) : f = g
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `StarAlgHom.instAlgHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u_
+4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_
+3 : Star A] [ins…
+· 使用定理 `StarAlgHom.instStarHomClass`：∀ {R : Type u_2} {A : Type u_3} {B : Type u
+_4} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst
+_3 : Star A] [ins…
+· 使用定理 `Unitization.ext`：∀ {R : Type u_1} {A : Type u_2} {x y : Unitization R A}
+, x.toProd.1 = y.toProd.1 → x.toProd.2 = y.toProd.2 → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitization.inrNonUnitalStarAlgHom_apply`：∀ (R : Type u_1) (A : Type u_2
+) [inst : CommSemiring R] [inst_1 : StarAddMonoid R] [inst_2 : NonUnitalSemiring
+ A]   [inst_3 : Star A] [inst_…
+· 使用引理 `Unitization.starMap_inr`：starMap_inr (φ : A ->⋆ₙₐ[R] B) (a : A) : starMa
+p φ (inr a) = inr (φ a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma starMap_id
-  statement: starMap (NonUnitalStarAlgHom.id R B) = StarAlgHom.id R (Unitization R B)
-  proof: by
-  ext; all_goals simp
-
-中文:
-引理 starMap_id
-  结论: starMap (非幺StarAlg态射.id R B) = StarAlg态射.id R (Unitization R B)
-  证明: by
-  ext; all_goals simp
-
-Depends on / 依赖: all_goals
+--- 原说明 ---
+`starMap` is functorial:
+`starMap (NonUnitalStarAlgHom.id R B) = StarAlgHom.id R (Unitization R B)`.
 -/
 lemma starMap_id : starMap (NonUnitalStarAlgHom.id R B) = StarAlgHom.id R (Unitization R B) := by
   ext; all_goals simp
@@ -3198,26 +2241,24 @@ variable [StarAddMonoid R] [Star A] {a : A}
 
 
 @[simp]
-/--
-lemma `isSelfAdjoint_inr` / 引理 `isSelfAdjoint_inr`
-
-English:
-lemma isSelfAdjoint_inr
-  statement: IsSelfAdjoint (a : Unitization R A) ↔ IsSelfAdjoint a
-  proof: by
-  simp only [isSelfAdjoint_iff, ← inr_star, inr_injective.eq_iff]
-
-alias ⟨_root_.IsSelfAdjoint.of_inr, _⟩ := isSelfAdjoint_inr
-
-中文:
-引理 isSelfAdjoint_inr
-  结论: IsSelfAdjoint (a : Unitization R A) ↔ IsSelfAdjoint a
-  证明: by
-  simp only [isSelfAdjoint_iff, ← inr_star, inr_injective.eq_iff]
-
-alias ⟨_root_.IsSelfAdjoint.of_inr, _⟩ := isSelfAdjoint_inr
-
-Depends on / 依赖: eq_iff, inr_injective, inr_injective.eq_iff, inr_star, isSelfAdjoint_iff
+/-
+**Unitization.isSelfAdjoint_inr** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：isSelfAdjoint_inr : IsSelfAdjoint (a : Unitization R A) ↔ IsSelfAdjoint a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Unitization.inr_injective`：inr_injective [Zero R] : Function.Injective (
+(↑) : A -> Unitization R A)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isSelfAdjoint_inr : IsSelfAdjoint (a : Unitization R A) ↔ IsSelfAdjoint a := by
   simp only [isSelfAdjoint_iff, ← inr_star, inr_injective.eq_iff]
@@ -3225,22 +2266,9 @@ lemma isSelfAdjoint_inr : IsSelfAdjoint (a : Unitization R A) ↔ IsSelfAdjoint 
 alias ⟨_root_.IsSelfAdjoint.of_inr, _⟩ := isSelfAdjoint_inr
 
 variable (R) in
-/--
-lemma `_root_.IsSelfAdjoint.inr` / 引理 `_root_.IsSelfAdjoint.inr`
-
-English:
-lemma _root_.IsSelfAdjoint.inr
-  given: (ha : IsSelfAdjoint a)
-  statement: IsSelfAdjoint (a : Unitization R A)
-  proof: isSelfAdjoint_inr.mpr ha
-
-中文:
-引理 _root_.IsSelfAdjoint.inr
-  条件: (ha : IsSelfAdjoint a)
-  结论: IsSelfAdjoint (a : Unitization R A)
-  证明: isSelfAdjoint_inr.mpr ha
-
-Depends on / 依赖: isSelfAdjoint_inr, isSelfAdjoint_inr.mpr
+/-
+**Unitization._root_.IsSelfAdjoint.inr** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsSelfAdjoint.inr (ha : IsSelfAdjoint a) : IsSelfAdjoint (a : Unitization R A) :=
   isSelfAdjoint_inr.mpr ha
@@ -3248,26 +2276,24 @@ lemma _root_.IsSelfAdjoint.inr (ha : IsSelfAdjoint a) : IsSelfAdjoint (a : Uniti
 variable [AddCommMonoid A] [Mul A] [SMulWithZero R A]
 
 @[simp]
-/--
-lemma `isStarNormal_inr` / 引理 `isStarNormal_inr`
-
-English:
-lemma isStarNormal_inr
-  statement: IsStarNormal (a : Unitization R A) ↔ IsStarNormal a
-  proof: by
-  simp only [isStarNormal_iff, commute_iff_eq, ← inr_star, ← inr_mul, inr_injective.eq_iff]
-
-alias ⟨_root_.IsStarNormal.of_inr, _⟩ := isStarNormal_inr
-
-中文:
-引理 isStarNormal_inr
-  结论: 是StarNormal (a : Unitization R A) ↔ 是StarNormal a
-  证明: by
-  simp only [isStarNormal_iff, commute_iff_eq, ← inr_star, ← inr_mul, inr_injective.eq_iff]
-
-alias ⟨_root_.IsStarNormal.of_inr, _⟩ := isStarNormal_inr
-
-Depends on / 依赖: commute_iff_eq, eq_iff, inr_injective, inr_injective.eq_iff, inr_mul, inr_star, isStarNormal_iff
+/-
+**Unitization.isStarNormal_inr** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：isStarNormal_inr : IsStarNormal (a : Unitization R A) ↔ IsStarNormal a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Unitization.inr_injective`：inr_injective [Zero R] : Function.Injective (
+(↑) : A -> Unitization R A)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isStarNormal_inr : IsStarNormal (a : Unitization R A) ↔ IsStarNormal a := by
   simp only [isStarNormal_iff, commute_iff_eq, ← inr_star, ← inr_mul, inr_injective.eq_iff]
@@ -3275,20 +2301,16 @@ lemma isStarNormal_inr : IsStarNormal (a : Unitization R A) ↔ IsStarNormal a :
 alias ⟨_root_.IsStarNormal.of_inr, _⟩ := isStarNormal_inr
 
 variable (R a) in
-/--
-Instance `instIsStarNormal` / 实例 `instIsStarNormal`
-
-English:
-instance instIsStarNormal
-  signature: (a : A) [IsStarNormal a]
-  body: isStarNormal_inr.mpr ‹_›
-
-中文:
-实例 instIsStarNormal
-  签名: (a : A) [是StarNormal a]
-  定义体: isStarNormal_inr.mpr ‹_›
-
-Depends on / 依赖: isStarNormal_inr, isStarNormal_inr.mpr
+/-
+**Unitization.instIsStarNormal** 是 Mathlib 中的一个实例，位于命名空间 `Unitization`。
+形式化陈述：instIsStarNormal (a : A) [IsStarNormal a] : IsStarNormal (a : Unitization 
+R A)
+参数：a : A。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Unitization.isStarNormal_inr`：isStarNormal_inr : IsStarNormal (a : Uniti
+zation R A) ↔ IsStarNormal a
 -/
 instance instIsStarNormal (a : A) [IsStarNormal a] :
     IsStarNormal (a : Unitization R A) :=
@@ -3297,30 +2319,25 @@ instance instIsStarNormal (a : A) [IsStarNormal a] :
 end StarNormal
 
 @[simp]
-/--
-lemma `isIdempotentElem_inr_iff` / 引理 `isIdempotentElem_inr_iff`
-
-English:
-lemma isIdempotentElem_inr_iff
-  statement: (R : Type*) {A : Type*} [MulZeroClass R]
-  proof: by
-  simp only [IsIdempotentElem, ← inr_mul, inr_injective.eq_iff]
-
-alias ⟨_, IsIdempotentElem.inr⟩ := isIdempotentElem_inr_iff
-
-@[grind =]
-
-中文:
-引理 isIdempotentElem_inr_iff
-  结论: (R : 类型) {A : 类型} [乘零类 R]
-  证明: by
-  simp only [IsIdempotentElem, ← inr_mul, inr_injective.eq_iff]
-
-alias ⟨_, IsIdempotentElem.inr⟩ := isIdempotentElem_inr_iff
-
-@[grind =]
-
-Depends on / 依赖: IsIdempotentElem, eq_iff, inr_injective, inr_injective.eq_iff, inr_mul
+/-
+**Unitization.isIdempotentElem_inr_iff** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：isIdempotentElem_inr_iff (R : Type*) {A : Type*} [MulZeroClass R] [AddZero
+Class A] [Mul A] [SMulWithZero R A] {a : A} : IsIdempotentElem (a : Unitization 
+R A) ↔ IsIdempotentElem a
+参数：R : Type*。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Unitization.inr_injective`：inr_injective [Zero R] : Function.Injective (
+(↑) : A -> Unitization R A)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isIdempotentElem_inr_iff (R : Type*) {A : Type*} [MulZeroClass R]
     [AddZeroClass A] [Mul A] [SMulWithZero R A] {a : A} :
@@ -3330,28 +2347,20 @@ lemma isIdempotentElem_inr_iff (R : Type*) {A : Type*} [MulZeroClass R]
 alias ⟨_, IsIdempotentElem.inr⟩ := isIdempotentElem_inr_iff
 
 @[grind =]
-/--
-lemma `isStarProjection_inr_iff` / 引理 `isStarProjection_inr_iff`
-
-English:
-lemma isStarProjection_inr_iff
-  statement: {R A : Type*} [Semiring R] [StarRing R] [NonUnitalSemiring A]
-  proof: by
-  simp [isStarProjection_iff]
-
-protected alias ⟨_root_.IsStarProjection.of_inr, _root_.IsStarProjection.inr⟩ :=
-  isStarProjection_inr_iff
-
-中文:
-引理 isStarProjection_inr_iff
-  结论: {R A : 类型} [半环 R] [对合环 R] [非幺半环 A]
-  证明: by
-  simp [isStarProjection_iff]
-
-protected alias ⟨_root_.IsStarProjection.of_inr, _root_.IsStarProjection.inr⟩ :=
-  isStarProjection_inr_iff
-
-Depends on / 依赖: isStarProjection_iff
+/-
+**Unitization.isStarProjection_inr_iff** 是 Mathlib 中的一个引理，位于命名空间 `Unitization`。
+形式化陈述：isStarProjection_inr_iff {R A : Type*} [Semiring R] [StarRing R] [NonUnita
+lSemiring A] [StarRing A] [Module R A] {p : A} : IsStarProjection (p : Unitizati
+on R A) ↔ IsStarProjection p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isStarProjection_inr_iff {R A : Type*} [Semiring R] [StarRing R] [NonUnitalSemiring A]
     [StarRing A] [Module R A] {p : A} :
@@ -3362,3 +2371,4 @@ protected alias ⟨_root_.IsStarProjection.of_inr, _root_.IsStarProjection.inr�
   isStarProjection_inr_iff
 
 end Unitization
+

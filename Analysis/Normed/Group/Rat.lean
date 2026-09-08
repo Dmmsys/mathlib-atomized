@@ -14,82 +14,37 @@ public section
 
 namespace Rat
 
-/--
-Instance `instNormedAddCommGroup` / 实例 `instNormedAddCommGroup`
-
-English:
-instance instNormedAddCommGroup
-  signature: : NormedAddCommGroup Rat where
-  body: ‖(r : Real)‖
-  dist_eq r₁ r₂ := by
-    simp only [dist_eq, norm, cast_add, cast_neg]
-    rw [← abs_neg]; rw [neg_sub]
-    abel_nf
-
-@[norm_cast, simp high] -- increase priority to prevent the left-hand side from simplifying
-
-中文:
-实例 instNormedAddCommGroup
-  签名: : 赋范交换加群 有理数 where
-  定义体: ‖(r : Real)‖
-  dist_eq r₁ r₂ := by
-    simp only [dist_eq, norm, cast_add, cast_neg]
-    rw [← abs_neg]; rw [neg_sub]
-    abel_nf
-
-@[norm_cast, simp high] -- increase priority to prevent the left-hand side from simplifying
+/-
+**Rat.instNormedAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instNormedAddCommGroup : NormedAddCommGroup Rat where norm r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instNormedAddCommGroup : NormedAddCommGroup Rat where
-  norm r := ‖(r : Real)‖
+instance instNormedAddCommGroup : NormedAddCommGroup ℚ where
+  norm r := ‖(r : ℝ)‖
   dist_eq r₁ r₂ := by
     simp only [dist_eq, norm, cast_add, cast_neg]
-    rw [← abs_neg]; rw [neg_sub]
+    rw [← abs_neg, neg_sub]
     abel_nf
 
 @[norm_cast, simp high] -- increase priority to prevent the left-hand side from simplifying
-/--
-theorem `norm_cast_real` / 定理 `norm_cast_real`
-
-English:
-theorem norm_cast_real
-  given: (r : Rat)
-  statement: ‖(r : Real)‖ = ‖r‖
-  proof: rfl
-
-@[norm_cast, simp]
-
-中文:
-定理 norm_cast_real
-  条件: (r : 有理数)
-  结论: ‖(r : 实数)‖ = ‖r‖
-  证明: rfl
-
-@[norm_cast, simp]
+/-
+**Rat.norm_cast_real** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：norm_cast_real (r : Rat) : ‖(r : Real)‖ = ‖r‖
+参数：r : Rat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem norm_cast_real (r : Rat) : ‖(r : Real)‖ = ‖r‖ :=
+theorem norm_cast_real (r : ℚ) : ‖(r : ℝ)‖ = ‖r‖ :=
   rfl
 
 @[norm_cast, simp]
-/--
-theorem `_root_.Int.norm_cast_rat` / 定理 `_root_.Int.norm_cast_rat`
-
-English:
-theorem _root_.Int.norm_cast_rat
-  given: (m : Int)
-  statement: ‖(m : Rat)‖ = ‖m‖
-  proof: by
-  rw [← Rat.norm_cast_real]; rw [← Int.norm_cast_real]; congr 1
-
-中文:
-定理 _root_.整数.norm_cast_rat
-  条件: (m : 整数)
-  结论: ‖(m : 有理数)‖ = ‖m‖
-  证明: by
-  rw [← Rat.norm_cast_real]; rw [← Int.norm_cast_real]; congr 1
-
-Depends on / 依赖: Int.norm_cast_real, Rat.norm_cast_real, norm_cast_real
+/-
+**Rat._root_.Int.norm_cast_rat** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Int.norm_cast_rat (m : Int) : ‖(m : Rat)‖ = ‖m‖ := by
-  rw [← Rat.norm_cast_real]; rw [← Int.norm_cast_real]; congr 1
+theorem _root_.Int.norm_cast_rat (m : ℤ) : ‖(m : ℚ)‖ = ‖m‖ := by
+  rw [← Rat.norm_cast_real, ← Int.norm_cast_real]; congr 1
 
 end Rat
+

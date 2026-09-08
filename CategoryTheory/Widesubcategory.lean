@@ -37,43 +37,41 @@ open MorphismProperty
 section Induced
 
 variable {C : Type u₁} (D : Type u₂) [Category.{v₁} D]
-variable (F : C -> D) (P : MorphismProperty D) [P.IsMultiplicative]
+variable (F : C → D) (P : MorphismProperty D) [P.IsMultiplicative]
 
 /-- `InducedWideCategory D F P`, where `F : C → D`, is a typeclass synonym for `C`,
 which provides a category structure so that the morphisms `X ⟶ Y` are the morphisms
 in `D` from `F X` to `F Y` which satisfy a property `P : MorphismProperty D` that is multiplicative.
 -/
 @[nolint unusedArguments]
-/--
-Definition of `InducedWideCategory` / `InducedWideCategory` 的定义
+/-
+**CategoryTheory.InducedWideCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：InducedWideCategory (_F : C -> D) (_P : MorphismProperty D) [IsMultiplicat
+ive _P]
+参数：_F : C -> D；_P : MorphismProperty D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition InducedWideCategory
-  signature: (_F : C -> D) (_P : MorphismProperty D) [IsMultiplicative _P]
-  body: C
-
-中文:
-定义 InducedWideCategory
-  签名: (_F : C -> D) (_P : MorphismProperty D) [是Multiplicative _P]
-  定义体: C
+--- 原说明 ---
+`InducedWideCategory D F P`, where `F : C → D`, is a typeclass synonym for `C`,
+which provides a category structure so that the morphisms `X ⟶ Y` are the morphi
+sms
+in `D` from `F X` to `F Y` which satisfy a property `P : MorphismProperty D` tha
+t is multiplicative.
 -/
-def InducedWideCategory (_F : C -> D) (_P : MorphismProperty D) [IsMultiplicative _P] :=
+def InducedWideCategory (_F : C → D) (_P : MorphismProperty D) [IsMultiplicative _P] :=
   C
 
 variable {D}
-
-/--
-Instance `InducedWideCategory.hasCoeToSort` / 实例 `InducedWideCategory.hasCoeToSort`
-
-English:
-instance InducedWideCategory.hasCoeToSort
-  signature: {α : Sort*} [CoeSort D α]
-  body: ⟨fun c => F c⟩
-
-中文:
-实例 InducedWideCategory.hasCoeToSort
-  签名: {α : 类型层*} [CoeSort D α]
-  定义体: ⟨fun c => F c⟩
+/-
+**CategoryTheory.InducedWideCategory.hasCoeToSort** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.InducedWideCategory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₂} D] →       (F : C → D) →         (P : CategoryTheory.MorphismProperty D) → 
+          [inst_1 : P.IsMultiplicative] →             {α : Sort u_1} → [CoeSort 
+D α] → CoeSort (CategoryTheory.InducedWideCategory D F P) α
+参数：F : C → D；P : CategoryTheory.MorphismProperty D；CategoryTheory.InducedWideCat
+egory D F P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance InducedWideCategory.hasCoeToSort {α : Sort*} [CoeSort D α] :
     CoeSort (InducedWideCategory D F P) α :=
@@ -84,22 +82,20 @@ variable {F P} in
 is a 2-field structure consisting of a morphism `F X ⟶ F Y` in `D` that satisfies
 the property `P`. -/
 @[ext]
-/--
-Definition of `InducedWideCategory.Hom` / `InducedWideCategory.Hom` 的定义
+/-
+**CategoryTheory.InducedWideCategory.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTh
+eory.InducedWideCategory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₂} D] →       {F : C → D} →         {P : CategoryTheory.MorphismProperty D} → 
+          [inst_1 : P.IsMultiplicative] →             CategoryTheory.InducedWide
+Category D F P → CategoryTheory.InducedWideCategory D F P → Type v₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure InducedWideCategory.Hom
-  parameters: (X Y : InducedWideCategory D F P)
-  axioms and operations (2):
-    - hom : F X ⟶ F Y
-    - property : P hom
-
-中文:
-结构 InducedWideCategory.态射
-  参数: (X Y : InducedWideCategory D F P)
-  公理与运算 (2 个):
-    - hom : F X ⟶ F Y
-    - property : P hom
+--- 原说明 ---
+The type of morphisms in `InducedWideCategory D F P` between `X` and `Y`
+is a 2-field structure consisting of a morphism `F X ⟶ F Y` in `D` that satisfie
+s
+the property `P`.
 -/
 structure InducedWideCategory.Hom (X Y : InducedWideCategory D F P) where
   /-- The underlying morphism. -/
@@ -108,22 +104,16 @@ structure InducedWideCategory.Hom (X Y : InducedWideCategory D F P) where
   property : P hom
 
 @[simps!]
-/--
-Instance `InducedWideCategory.category` / 实例 `InducedWideCategory.category`
-
-English:
-instance InducedWideCategory.category
-  signature: :
-  body: Hom X Y
-  id X := ⟨𝟙 (F X), P.id_mem (F X)⟩
-  comp {_ _ _} f g := ⟨f.1 ≫ g.1, P.comp_mem _ _ f.2 g.2⟩
-
-中文:
-实例 InducedWideCategory.category
-  签名: :
-  定义体: Hom X Y
-  id X := ⟨𝟙 (F X), P.id_mem (F X)⟩
-  comp {_ _ _} f g := ⟨f.1 ≫ g.1, P.comp_mem _ _ f.2 g.2⟩
+/-
+**CategoryTheory.InducedWideCategory.category** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.InducedWideCategory`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₂} D] →       (F : C → D) →         (P : CategoryTheory.MorphismProperty D) → 
+          [inst_1 : P.IsMultiplicative] → CategoryTheory.Category.{v₁, u₁} (Cate
+goryTheory.InducedWideCategory D F P)
+参数：F : C → D；P : CategoryTheory.MorphismProperty D；CategoryTheory.InducedWideCat
+egory D F P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance InducedWideCategory.category :
     Category (InducedWideCategory D F P) where
@@ -133,43 +123,46 @@ instance InducedWideCategory.category :
 
 /-- The forgetful functor from an induced wide category to the original category. -/
 @[simps]
-/--
-Definition of `wideInducedFunctor` / `wideInducedFunctor` 的定义
+/-
+**CategoryTheory.wideInducedFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：wideInducedFunctor : InducedWideCategory D F P ⥤ D where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wideInducedFunctor
-  signature: : InducedWideCategory D F P ⥤ D where
-  body: F
-  map {_ _} f := f.1
-
-中文:
-定义 wideInducedFunctor
-  签名: : InducedWideCategory D F P ⥤ D where
-  定义体: F
-  map {_ _} f := f.1
+--- 原说明 ---
+The forgetful functor from an induced wide category to the original category.
 -/
 def wideInducedFunctor : InducedWideCategory D F P ⥤ D where
   obj := F
   map {_ _} f := f.1
 
-/--
-Instance `InducedWideCategory.faithful` / 实例 `InducedWideCategory.faithful`
+/-- The induced functor `wideInducedFunctor F P : InducedWideCategory D F P ⥤ D`
+is faithful. -/
+/-
+**CategoryTheory.InducedWideCategory.faithful** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.InducedWideCategory`。
+形式化陈述：∀ {C : Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₂} D] 
+(F : C → D)   (P : CategoryTheory.MorphismProperty D) [inst_1 : P.IsMultiplicati
+ve],   (CategoryTheory.wideInducedFunctor F P).Faithful
+参数：F : C → D；P : CategoryTheory.MorphismProperty D；CategoryTheory.wideInducedFun
+ctor F P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.wideInducedFunctor_map`：∀ {C : Type u₁} {D : Type u₂} [in
+st : CategoryTheory.Category.{v₁, u₂} D] (F : C → D)   (P : CategoryTheory.Morph
+ismProperty D) [inst_1 : P.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.InducedWideCategory.Hom.mk.congr_simp`：∀ {C : Type u₁} {D
+ : Type u₂} [inst : CategoryTheory.Category.{v₁, u₂} D] {F : C → D}   {P : Categ
+oryTheory.MorphismProperty D} [inst_1 : P.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-instance InducedWideCategory.faithful
-  signature: : (wideInducedFunctor F P).Faithful where
-  body: by
-    cases f
-    cases g
-    aesop
-
-中文:
-实例 InducedWideCategory.faithful
-  签名: : (wideInducedFunctor F P).忠实 where
-  定义体: by
-    cases f
-    cases g
-    aesop
+--- 原说明 ---
+The induced functor `wideInducedFunctor F P : InducedWideCategory D F P ⥤ D`
+is faithful.
 -/
 instance InducedWideCategory.faithful : (wideInducedFunctor F P).Faithful where
   map_injective {X Y} f g eq := by
@@ -188,187 +181,137 @@ variable (P : MorphismProperty C) [IsMultiplicative P]
 Structure for wide subcategories. Objects ignore the morphism property.
 -/
 @[ext, nolint unusedArguments]
-/--
-Definition of `WideSubcategory` / `WideSubcategory` 的定义
+/-
+**CategoryTheory.WideSubcategory** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (_P : 
+CategoryTheory.MorphismProperty C) → [_P.IsMultiplicative] → Type u₁
+参数：_P : CategoryTheory.MorphismProperty C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure WideSubcategory
-  parameters: (_P : MorphismProperty C) [IsMultiplicative _P]
-  axioms and operations (1):
-    - obj : C
-
-中文:
-结构 宽子范畴
-  参数: (_P : MorphismProperty C) [是Multiplicative _P]
-  公理与运算 (1 个):
-    - obj : C
+--- 原说明 ---
+Structure for wide subcategories. Objects ignore the morphism property.
 -/
 structure WideSubcategory (_P : MorphismProperty C) [IsMultiplicative _P] where
   /-- The category of which this is a wide subcategory -/
   obj : C
-
-/--
-Instance `WideSubcategory.category` / 实例 `WideSubcategory.category`
-
-English:
-instance WideSubcategory.category
-  signature: : Category.{v₁} (WideSubcategory P)
-  body: InducedWideCategory.category WideSubcategory.obj P
-
-@[ext]
-
-中文:
-实例 宽子范畴.category
-  签名: : 范畴.{v₁} (宽子范畴 P)
-  定义体: InducedWideCategory.category WideSubcategory.obj P
-
-@[ext]
-
-Depends on / 依赖: InducedWideCategory, InducedWideCategory.category, WideSubcategory, WideSubcategory.obj, category
+/-
+**CategoryTheory.WideSubcategory.category** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.WideSubcategory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (P : C
+ategoryTheory.MorphismProperty C) →       [inst_1 : P.IsMultiplicative] → Catego
+ryTheory.Category.{v₁, u₁} (CategoryTheory.WideSubcategory P)
+参数：P : CategoryTheory.MorphismProperty C；CategoryTheory.WideSubcategory P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance WideSubcategory.category : Category.{v₁} (WideSubcategory P) :=
   InducedWideCategory.category WideSubcategory.obj P
 
 @[ext]
-/--
-lemma `WideSubcategory.hom_ext` / 引理 `WideSubcategory.hom_ext`
-
-English:
-lemma WideSubcategory.hom_ext
-  given: {X Y : WideSubcategory P} {f g : X ⟶ Y} (h : f.hom = g.hom)
-  proof: InducedWideCategory.Hom.ext h
-
-@[simp]
-
-中文:
-引理 宽子范畴.hom_ext
-  条件: {X Y : 宽子范畴 P} {f g : X ⟶ Y} (h : f.hom = g.hom)
-  证明: InducedWideCategory.Hom.ext h
-
-@[simp]
-
-Depends on / 依赖: InducedWideCategory, InducedWideCategory.Hom.ext
+/-
+**CategoryTheory.WideSubcategory.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.WideSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (P : CategoryT
+heory.MorphismProperty C)   [inst_1 : P.IsMultiplicative] {X Y : CategoryTheory.
+WideSubcategory P} {f g : X ⟶ Y}, f.hom = g.hom → f = g
+参数：P : CategoryTheory.MorphismProperty C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.InducedWideCategory.Hom.ext`：∀ {C : Type u₁} {D : Type u₂
+} {inst : CategoryTheory.Category.{v₁, u₂} D} {F : C → D}   {P : CategoryTheory.
+MorphismProperty D} {inst_1 : P.…
 -/
 lemma WideSubcategory.hom_ext {X Y : WideSubcategory P} {f g : X ⟶ Y} (h : f.hom = g.hom) :
     f = g :=
   InducedWideCategory.Hom.ext h
 
 @[simp]
-/--
-lemma `WideSubcategory.id_def` / 引理 `WideSubcategory.id_def`
-
-English:
-lemma WideSubcategory.id_def
-  given: (X : WideSubcategory P)
-  statement: (CategoryStruct.id X).1 = 𝟙 X.obj
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 宽子范畴.id_def
-  条件: (X : 宽子范畴 P)
-  结论: (CategoryStruct.id X).1 = 𝟙 X.obj
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.WideSubcategory.id_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.WideSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (P : CategoryT
+heory.MorphismProperty C)   [inst_1 : P.IsMultiplicative] (X : CategoryTheory.Wi
+deSubcategory P),   (CategoryTheory.CategoryStruct.id X).hom = CategoryTheory.Ca
+tegoryStruct.id X.obj
+参数：P : CategoryTheory.MorphismProperty C；X : CategoryTheory.WideSubcategory P；Ca
+tegoryTheory.CategoryStruct.id X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma WideSubcategory.id_def (X : WideSubcategory P) : (CategoryStruct.id X).1 = 𝟙 X.obj := rfl
 
 @[simp]
-/--
-lemma `WideSubcategory.comp_def` / 引理 `WideSubcategory.comp_def`
-
-English:
-lemma WideSubcategory.comp_def
-  given: {X Y Z : WideSubcategory P} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 宽子范畴.comp_def
-  条件: {X Y Z : 宽子范畴 P} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**CategoryTheory.WideSubcategory.comp_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.WideSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (P : CategoryT
+heory.MorphismProperty C)   [inst_1 : P.IsMultiplicative] {X Y Z : CategoryTheor
+y.WideSubcategory P} (f : X ⟶ Y) (g : Y ⟶ Z),   (CategoryTheory.CategoryStruct.c
+omp f g).hom = CategoryTheory.CategoryStruct.comp f.hom g.hom
+参数：P : CategoryTheory.MorphismProperty C；f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.Cate
+goryStruct.comp f g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma WideSubcategory.comp_def {X Y Z : WideSubcategory P} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).1 = (f.1 ≫ g.1 : X.obj ⟶ Z.obj) := rfl
 
-/--
-Definition of `wideSubcategoryInclusion` / `wideSubcategoryInclusion` 的定义
+/-- The forgetful functor from a wide subcategory into the original category
+("forgetting" the condition).
+-/
+/-
+**CategoryTheory.wideSubcategoryInclusion** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：wideSubcategoryInclusion : WideSubcategory P ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wideSubcategoryInclusion
-  signature: : WideSubcategory P ⥤ C
-  body: wideInducedFunctor WideSubcategory.obj P
-
-@[simp]
-
-中文:
-定义 wideSubcategoryInclusion
-  签名: : 宽子范畴 P ⥤ C
-  定义体: wideInducedFunctor WideSubcategory.obj P
-
-@[simp]
-
-Depends on / 依赖: WideSubcategory, WideSubcategory.obj, wideInducedFunctor
+--- 原说明 ---
+The forgetful functor from a wide subcategory into the original category
+("forgetting" the condition).
 -/
 def wideSubcategoryInclusion : WideSubcategory P ⥤ C :=
   wideInducedFunctor WideSubcategory.obj P
 
 @[simp]
-/--
-theorem `wideSubcategoryInclusion.obj` / 定理 `wideSubcategoryInclusion.obj`
-
-English:
-theorem wideSubcategoryInclusion.obj
-  given: (X)
-  statement: (wideSubcategoryInclusion P).obj X = X.obj
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 wideSubcategoryInclusion.obj
-  条件: (X)
-  结论: (wideSubcategoryInclusion P).obj X = X.obj
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.wideSubcategoryInclusion.obj** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.wideSubcategoryInclusion`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (P : CategoryT
+heory.MorphismProperty C)   [inst_1 : P.IsMultiplicative] (X : CategoryTheory.Wi
+deSubcategory P),   (CategoryTheory.wideSubcategoryInclusion P).obj X = X.obj
+参数：P : CategoryTheory.MorphismProperty C；X : CategoryTheory.WideSubcategory P；Ca
+tegoryTheory.wideSubcategoryInclusion P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideSubcategoryInclusion.obj (X) : (wideSubcategoryInclusion P).obj X = X.obj :=
   rfl
 
 @[simp]
-/--
-theorem `wideSubcategoryInclusion.map` / 定理 `wideSubcategoryInclusion.map`
-
-English:
-theorem wideSubcategoryInclusion.map
-  given: {X Y} {f : X ⟶ Y}
-  proof: rfl
-
-中文:
-定理 wideSubcategoryInclusion.map
-  条件: {X Y} {f : X ⟶ Y}
-  证明: rfl
+/-
+**CategoryTheory.wideSubcategoryInclusion.map** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.wideSubcategoryInclusion`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (P : CategoryT
+heory.MorphismProperty C)   [inst_1 : P.IsMultiplicative] {X Y : CategoryTheory.
+WideSubcategory P} {f : X ⟶ Y},   (CategoryTheory.wideSubcategoryInclusion P).ma
+p f = f.hom
+参数：P : CategoryTheory.MorphismProperty C；CategoryTheory.wideSubcategoryInclusion
+ P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem wideSubcategoryInclusion.map {X Y} {f : X ⟶ Y} :
     (wideSubcategoryInclusion P).map f = f.1 :=
   rfl
 
-/--
-Instance `wideSubcategory.faithful` / 实例 `wideSubcategory.faithful`
+/-- The inclusion of a wide subcategory is faithful. -/
+/-
+**CategoryTheory.wideSubcategory.faithful** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.wideSubcategory`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (P : CategoryT
+heory.MorphismProperty C)   [inst_1 : P.IsMultiplicative], (CategoryTheory.wideS
+ubcategoryInclusion P).Faithful
+参数：P : CategoryTheory.MorphismProperty C；CategoryTheory.wideSubcategoryInclusion
+ P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance wideSubcategory.faithful
-  signature: : (wideSubcategoryInclusion P).Faithful
-  body: inferInstanceAs (wideInducedFunctor WideSubcategory.obj P).Faithful
-
-中文:
-实例 wideSubcategory.faithful
-  签名: : (wideSubcategoryInclusion P).忠实
-  定义体: inferInstanceAs (wideInducedFunctor WideSubcategory.obj P).Faithful
-
-Depends on / 依赖: Faithful, WideSubcategory, WideSubcategory.obj, wideInducedFunctor
+--- 原说明 ---
+The inclusion of a wide subcategory is faithful.
 -/
 instance wideSubcategory.faithful : (wideSubcategoryInclusion P).Faithful :=
   inferInstanceAs (wideInducedFunctor WideSubcategory.obj P).Faithful
@@ -376,26 +319,18 @@ instance wideSubcategory.faithful : (wideSubcategoryInclusion P).Faithful :=
 variable {P} in
 /-- Build an isomorphism in `WideSubcategory P` from an isomorphism in `C`. -/
 @[simps!]
-/--
-Definition of `WideSubcategory.isoMk` / `WideSubcategory.isoMk` 的定义
+/-
+**CategoryTheory.WideSubcategory.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.WideSubcategory`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {P : C
+ategoryTheory.MorphismProperty C} →       [inst_1 : P.IsMultiplicative] →       
+  {X Y : CategoryTheory.WideSubcategory P} → (e : X.obj ≅ Y.obj) → P e.hom → P e
+.inv → (X ≅ Y)
+参数：e : X.obj ≅ Y.obj；X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WideSubcategory.isoMk
-  signature: {X Y : WideSubcategory P} (e : X.obj ≅ Y.obj)
-  body: ⟨e.hom, h₁⟩
-  inv := ⟨e.inv, h₂⟩
-
-@[deprecated (since := "2026-08-07")] alias isoMk := WideSubcategory.isoMk
-
-中文:
-定义 宽子范畴.isoMk
-  签名: {X Y : 宽子范畴 P} (e : X.obj ≅ Y.obj)
-  定义体: ⟨e.hom, h₁⟩
-  inv := ⟨e.inv, h₂⟩
-
-@[deprecated (since := "2026-08-07")] alias isoMk := WideSubcategory.isoMk
-
-Depends on / 依赖: e.hom
+--- 原说明 ---
+Build an isomorphism in `WideSubcategory P` from an isomorphism in `C`.
 -/
 def WideSubcategory.isoMk {X Y : WideSubcategory P} (e : X.obj ≅ Y.obj)
     (h₁ : P e.hom) (h₂ : P e.inv) : X ≅ Y where
@@ -407,3 +342,4 @@ def WideSubcategory.isoMk {X Y : WideSubcategory P} (e : X.obj ≅ Y.obj)
 end WideSubcategory
 
 end CategoryTheory
+

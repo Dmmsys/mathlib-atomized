@@ -33,23 +33,24 @@ open Category Bicategory
 
 open Bicategory
 
-/--
-Definition of `FreeBicategory` / `FreeBicategory` 的定义
+/-- Free bicategory over a quiver. Its objects are the same as those in the underlying quiver. -/
+/-
+**CategoryTheory.FreeBicategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：FreeBicategory (B : Type u)
+参数：B : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FreeBicategory
-  signature: (B : Type u)
-  body: B
-
-中文:
-定义 FreeBicategory
-  签名: (B : 类型u)
-  定义体: B
+--- 原说明 ---
+Free bicategory over a quiver. Its objects are the same as those in the underlyi
+ng quiver.
 -/
 def FreeBicategory (B : Type u) :=
   B
-
-instance (B : Type u) : forall [Inhabited B], Inhabited (FreeBicategory B) := by
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (B : Type u) : ∀ [Inhabited B], Inhabited (FreeBicategory B) := by
   intro h
   exact id h
 
@@ -59,105 +60,62 @@ section
 
 variable {B : Type u} [Quiver.{v} B]
 
-/--
-Inductive type `Hom` / 归纳类型 `Hom`
+/-- 1-morphisms in the free bicategory. -/
+/-
+**CategoryTheory.FreeBicategory.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+FreeBicategory`。
+形式化陈述：{B : Type u} → [Quiver B] → B → B → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Hom
-  parameters: : B -> B -> Type max u v
-  constructors (3):
-    - of: {a b : B} (f : a ⟶ b) : Hom a b
-    - id: (a : B) : Hom a a
-    - comp: {a b c : B} (f : Hom a b) (g : Hom b c) : Hom a c
-
-中文:
-归纳类型 态射
-  参数: : B -> B -> 类型 最大值 u v
-  构造子 (3 个):
-    - of: {a b : B} (f : a ⟶ b) : 态射 a b
-    - id: (a : B) : 态射 a a
-    - comp: {a b c : B} (f : 态射 a b) (g : 态射 b c) : 态射 a c
+--- 原说明 ---
+1-morphisms in the free bicategory.
 -/
-inductive Hom : B -> B -> Type max u v
+inductive Hom : B → B → Type max u v
   | of {a b : B} (f : a ⟶ b) : Hom a b
   | id (a : B) : Hom a a
   | comp {a b c : B} (f : Hom a b) (g : Hom b c) : Hom a c
-
+/-
+**CategoryTheory.FreeBicategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.FreeB
+icategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (a b : B) [Inhabited (a ⟶ b)] : Inhabited (Hom a b) :=
   ⟨Hom.of default⟩
-
-/--
-Instance `quiver` / 实例 `quiver`
-
-English:
-instance quiver
-  signature: : Quiver.{max u v} (FreeBicategory B) where
-  body: fun a b : B => Hom a b
-
-中文:
-实例 quiver
-  签名: : 箭图.{最大值 u v} (FreeBicategory B) where
-  定义体: fun a b : B => Hom a b
+/-
+**CategoryTheory.FreeBicategory.quiver** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+.FreeBicategory`。
+形式化陈述：quiver : Quiver.{max u v} (FreeBicategory B) where Hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance quiver : Quiver.{max u v} (FreeBicategory B) where
   Hom := fun a b : B => Hom a b
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Instance `categoryStruct` / 实例 `categoryStruct`
-
-English:
-instance categoryStruct
-  signature: : CategoryStruct.{max u v} (FreeBicategory B) where
-  body: fun a : B => Hom.id a
-  comp := @fun _ _ _ => Hom.comp
-
-中文:
-实例 categoryStruct
-  签名: : CategoryStruct.{最大值 u v} (FreeBicategory B) where
-  定义体: fun a : B => Hom.id a
-  comp := @fun _ _ _ => Hom.comp
-
-Depends on / 依赖: Hom.id
+/-
+**CategoryTheory.FreeBicategory.categoryStruct** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.FreeBicategory`。
+形式化陈述：categoryStruct : CategoryStruct.{max u v} (FreeBicategory B) where id
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance categoryStruct : CategoryStruct.{max u v} (FreeBicategory B) where
-  id := fun a : B => Hom.id a
+  id   := fun a : B => Hom.id a
   comp := @fun _ _ _ => Hom.comp
 
-/--
-Inductive type `Hom₂` / 归纳类型 `Hom₂`
+/-- Representatives of 2-morphisms in the free bicategory. -/
+/-
+**CategoryTheory.FreeBicategory.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+FreeBicategory`。
+形式化陈述：{B : Type u} → [Quiver B] → B → B → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Hom₂
-  parameters: : forall {a b : FreeBicategory B}, (a ⟶ b) -> (a ⟶ b) -> Type max u v
-  constructors (10):
-    - id: {a b} (f : a ⟶ b) : Hom₂ f f
-    - vcomp: {a b} {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h) : Hom₂ f h
-    - whisker_left: {a b c} (f : a ⟶ b) {g h : b ⟶ c} (η : Hom₂ g h) : Hom₂ (f ≫ g) (f ≫ h) -- `η` cannot be earlier than `h` since it is a recursive argument.
-    - whisker_right: {a b c} {f g : a ⟶ b} (h : b ⟶ c) (η : Hom₂ f g) : Hom₂ (f.comp h) (g.comp h)
-    - associator: {a b c d} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : Hom₂ ((f ≫ g) ≫ h) (f ≫ (g ≫ h))
-    - associator_inv: {a b c d} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : Hom₂ (f ≫ (g ≫ h)) ((f ≫ g) ≫ h)
-    - right_unitor: {a b} (f : a ⟶ b) : Hom₂ (f ≫ (𝟙 b)) f
-    - right_unitor_inv: {a b} (f : a ⟶ b) : Hom₂ f (f ≫ (𝟙 b))
-    - left_unitor: {a b} (f : a ⟶ b) : Hom₂ ((𝟙 a) ≫ f) f
-    - left_unitor_inv: {a b} (f : a ⟶ b) : Hom₂ f ((𝟙 a) ≫ f)
-
-中文:
-归纳类型 Hom₂
-  参数: : 对任意 {a b : FreeBicategory B}, (a ⟶ b) -> (a ⟶ b) -> 类型 最大值 u v
-  构造子 (10 个):
-    - id: {a b} (f : a ⟶ b) : Hom₂ f f
-    - vcomp: {a b} {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h) : Hom₂ f h
-    - whisker_left: {a b c} (f : a ⟶ b) {g h : b ⟶ c} (η : Hom₂ g h) : Hom₂ (f ≫ g) (f ≫ h) -- `η` cannot be earlier than `h` since it is a recursive argument.
-    - whisker_right: {a b c} {f g : a ⟶ b} (h : b ⟶ c) (η : Hom₂ f g) : Hom₂ (f.comp h) (g.comp h)
-    - associator: {a b c d} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : Hom₂ ((f ≫ g) ≫ h) (f ≫ (g ≫ h))
-    - associator_inv: {a b c d} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) : Hom₂ (f ≫ (g ≫ h)) ((f ≫ g) ≫ h)
-    - right_unitor: {a b} (f : a ⟶ b) : Hom₂ (f ≫ (𝟙 b)) f
-    - right_unitor_inv: {a b} (f : a ⟶ b) : Hom₂ f (f ≫ (𝟙 b))
-    - left_unitor: {a b} (f : a ⟶ b) : Hom₂ ((𝟙 a) ≫ f) f
-    - left_unitor_inv: {a b} (f : a ⟶ b) : Hom₂ f ((𝟙 a) ≫ f)
+--- 原说明 ---
+Representatives of 2-morphisms in the free bicategory.
 -/
-inductive Hom₂ : forall {a b : FreeBicategory B}, (a ⟶ b) -> (a ⟶ b) -> Type max u v
+inductive Hom₂ : ∀ {a b : FreeBicategory B}, (a ⟶ b) → (a ⟶ b) → Type max u v
   | id {a b} (f : a ⟶ b) : Hom₂ f f
   | vcomp {a b} {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h) : Hom₂ f h
   | whisker_left {a b c} (f : a ⟶ b) {g h : b ⟶ c} (η : Hom₂ g h) :
@@ -185,98 +143,47 @@ local notation η " ▷ " h => Hom₂.whisker_right h η
 
 local notation "α_" => Hom₂.associator
 
-local notation "fun_" => Hom₂.left_unitor
+local notation "λ_" => Hom₂.left_unitor
 
 local notation "ρ_" => Hom₂.right_unitor
 
 local notation "α⁻¹_" => Hom₂.associator_inv
 
-local notation "fun⁻¹_" => Hom₂.left_unitor_inv
+local notation "λ⁻¹_" => Hom₂.left_unitor_inv
 
 local notation "ρ⁻¹_" => Hom₂.right_unitor_inv
 
-/--
-Inductive type `Rel` / 归纳类型 `Rel`
+/-- Relations between 2-morphisms in the free bicategory. -/
+/-
+**CategoryTheory.FreeBicategory.Rel** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+FreeBicategory`。
+形式化陈述：{B : Type u} →   [inst : Quiver B] →     {a b : CategoryTheory.FreeBicateg
+ory B} →       {f g : a ⟶ b} → CategoryTheory.FreeBicategory.Hom₂ f g → Category
+Theory.FreeBicategory.Hom₂ f g → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Rel
-  parameters: : forall {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> Hom₂ f g -> Prop
-  constructors (25):
-    - vcomp_right: {a b} {f g h : Hom a b} (η : Hom₂ f g) (θ₁ θ₂ : Hom₂ g h) : Rel θ₁ θ₂ -> Rel (η ≫ θ₁) (η ≫ θ₂)
-    - vcomp_left: {a b} {f g h : Hom a b} (η₁ η₂ : Hom₂ f g) (θ : Hom₂ g h) : Rel η₁ η₂ -> Rel (η₁ ≫ θ) (η₂ ≫ θ)
-    - id_comp: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (𝟙 f ≫ η) η
-    - comp_id: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (η ≫ 𝟙 g) η
-    - assoc: {a b} {f g h i : Hom a b} (η : Hom₂ f g) (θ : Hom₂ g h) (ι : Hom₂ h i) : Rel ((η ≫ θ) ≫ ι) (η ≫ θ ≫ ι)
-    - whisker_left: {a b c} (f : Hom a b) (g h : Hom b c) (η η' : Hom₂ g h) : Rel η η' -> Rel (f ◁ η) (f ◁ η')
-    - whisker_left_id: {a b c} (f : Hom a b) (g : Hom b c) : Rel (f ◁ 𝟙 g) (𝟙 (f.comp g))
-    - whisker_left_comp: {a b c} (f : Hom a b) {g h i : Hom b c} (η : Hom₂ g h) (θ : Hom₂ h i) : Rel (f ◁ η ≫ θ) ((f ◁ η) ≫ f ◁ θ)
-    - id_whisker_left: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (Hom.id a ◁ η) (fun_ f ≫ η ≫ fun⁻¹_ g)
-    - comp_whisker_left: {a b c d} (f : Hom a b) (g : Hom b c) {h h' : Hom c d} (η : Hom₂ h h') : Rel (f.comp g ◁ η) (α_ f g h ≫ (f ◁ g ◁ η) ≫ α⁻¹_ f g h')
-    - whisker_right: {a b c} (f g : Hom a b) (h : Hom b c) (η η' : Hom₂ f g) : Rel η η' -> Rel (η ▷ h) (η' ▷ h)
-    - id_whisker_right: {a b c} (f : Hom a b) (g : Hom b c) : Rel (𝟙 f ▷ g) (𝟙 (f.comp g))
-    - comp_whisker_right: {a b c} {f g h : Hom a b} (i : Hom b c) (η : Hom₂ f g) (θ : Hom₂ g h) : Rel ((η ≫ θ) ▷ i) ((η ▷ i) ≫ θ ▷ i)
-    - whisker_right_id: {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (η ▷ Hom.id b) (ρ_ f ≫ η ≫ ρ⁻¹_ g)
-    - whisker_right_comp: {a b c d} {f f' : Hom a b} (g : Hom b c) (h : Hom c d) (η : Hom₂ f f') : Rel (η ▷ g.comp h) (α⁻¹_ f g h ≫ ((η ▷ g) ▷ h) ≫ α_ f' g h)
-    - whisker_assoc: {a b c d} (f : Hom a b) {g g' : Hom b c} (η : Hom₂ g g') (h : Hom c d) : Rel ((f ◁ η) ▷ h) (α_ f g h ≫ (f ◁ η ▷ h) ≫ α⁻¹_ f g' h)
-    - whisker_exchange: {a b c} {f g : Hom a b} {h i : Hom b c} (η : Hom₂ f g) (θ : Hom₂ h i) : Rel ((f ◁ θ) ≫ η ▷ i) ((η ▷ h) ≫ g ◁ θ)
-    - associator_hom_inv: {a b c d} (f : Hom a b) (g : Hom b c) (h : Hom c d) : Rel (α_ f g h ≫ α⁻¹_ f g h) (𝟙 ((f.comp g).comp h))
-    - associator_inv_hom: {a b c d} (f : Hom a b) (g : Hom b c) (h : Hom c d) : Rel (α⁻¹_ f g h ≫ α_ f g h) (𝟙 (f.comp (g.comp h)))
-    - left_unitor_hom_inv: {a b} (f : Hom a b) : Rel (fun_ f ≫ fun⁻¹_ f) (𝟙 ((Hom.id a).comp f))
-    - left_unitor_inv_hom: {a b} (f : Hom a b) : Rel (fun⁻¹_ f ≫ fun_ f) (𝟙 f)
-    - right_unitor_hom_inv: {a b} (f : Hom a b) : Rel (ρ_ f ≫ ρ⁻¹_ f) (𝟙 (f.comp (Hom.id b)))
-    - right_unitor_inv_hom: {a b} (f : Hom a b) : Rel (ρ⁻¹_ f ≫ ρ_ f) (𝟙 f)
-    - pentagon: {a b c d e} (f : Hom a b) (g : Hom b c) (h : Hom c d) (i : Hom d e) : Rel ((α_ f g h ▷ i) ≫ α_ f (g.comp h) i ≫ f ◁ α_ g h i) (α_ (f.comp g) h i ≫ α_ f g (h.comp i))
-    - triangle: {a b c} (f : Hom a b) (g : Hom b c) : Rel (α_ f (Hom.id b) g ≫ f ◁ fun_ g) (ρ_ f ▷ g)
-
-中文:
-归纳类型 关系
-  参数: : 对任意 {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> Hom₂ f g -> 命题
-  构造子 (25 个):
-    - vcomp_right: {a b} {f g h : 态射 a b} (η : Hom₂ f g) (θ₁ θ₂ : Hom₂ g h) : 关系 θ₁ θ₂ -> 关系 (η ≫ θ₁) (η ≫ θ₂)
-    - vcomp_left: {a b} {f g h : 态射 a b} (η₁ η₂ : Hom₂ f g) (θ : Hom₂ g h) : 关系 η₁ η₂ -> 关系 (η₁ ≫ θ) (η₂ ≫ θ)
-    - id_comp: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (𝟙 f ≫ η) η
-    - comp_id: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (η ≫ 𝟙 g) η
-    - assoc: {a b} {f g h i : 态射 a b} (η : Hom₂ f g) (θ : Hom₂ g h) (ι : Hom₂ h i) : 关系 ((η ≫ θ) ≫ ι) (η ≫ θ ≫ ι)
-    - whisker_left: {a b c} (f : 态射 a b) (g h : 态射 b c) (η η' : Hom₂ g h) : 关系 η η' -> 关系 (f ◁ η) (f ◁ η')
-    - whisker_left_id: {a b c} (f : 态射 a b) (g : 态射 b c) : 关系 (f ◁ 𝟙 g) (𝟙 (f.comp g))
-    - whisker_left_comp: {a b c} (f : 态射 a b) {g h i : 态射 b c} (η : Hom₂ g h) (θ : Hom₂ h i) : 关系 (f ◁ η ≫ θ) ((f ◁ η) ≫ f ◁ θ)
-    - id_whisker_left: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (态射.id a ◁ η) (fun_ f ≫ η ≫ fun⁻¹_ g)
-    - comp_whisker_left: {a b c d} (f : 态射 a b) (g : 态射 b c) {h h' : 态射 c d} (η : Hom₂ h h') : 关系 (f.comp g ◁ η) (α_ f g h ≫ (f ◁ g ◁ η) ≫ α⁻¹_ f g h')
-    - whisker_right: {a b c} (f g : 态射 a b) (h : 态射 b c) (η η' : Hom₂ f g) : 关系 η η' -> 关系 (η ▷ h) (η' ▷ h)
-    - id_whisker_right: {a b c} (f : 态射 a b) (g : 态射 b c) : 关系 (𝟙 f ▷ g) (𝟙 (f.comp g))
-    - comp_whisker_right: {a b c} {f g h : 态射 a b} (i : 态射 b c) (η : Hom₂ f g) (θ : Hom₂ g h) : 关系 ((η ≫ θ) ▷ i) ((η ▷ i) ≫ θ ▷ i)
-    - whisker_right_id: {a b} {f g : 态射 a b} (η : Hom₂ f g) : 关系 (η ▷ 态射.id b) (ρ_ f ≫ η ≫ ρ⁻¹_ g)
-    - whisker_right_comp: {a b c d} {f f' : 态射 a b} (g : 态射 b c) (h : 态射 c d) (η : Hom₂ f f') : 关系 (η ▷ g.comp h) (α⁻¹_ f g h ≫ ((η ▷ g) ▷ h) ≫ α_ f' g h)
-    - whisker_assoc: {a b c d} (f : 态射 a b) {g g' : 态射 b c} (η : Hom₂ g g') (h : 态射 c d) : 关系 ((f ◁ η) ▷ h) (α_ f g h ≫ (f ◁ η ▷ h) ≫ α⁻¹_ f g' h)
-    - whisker_exchange: {a b c} {f g : 态射 a b} {h i : 态射 b c} (η : Hom₂ f g) (θ : Hom₂ h i) : 关系 ((f ◁ θ) ≫ η ▷ i) ((η ▷ h) ≫ g ◁ θ)
-    - associator_hom_inv: {a b c d} (f : 态射 a b) (g : 态射 b c) (h : 态射 c d) : 关系 (α_ f g h ≫ α⁻¹_ f g h) (𝟙 ((f.comp g).comp h))
-    - associator_inv_hom: {a b c d} (f : 态射 a b) (g : 态射 b c) (h : 态射 c d) : 关系 (α⁻¹_ f g h ≫ α_ f g h) (𝟙 (f.comp (g.comp h)))
-    - left_unitor_hom_inv: {a b} (f : 态射 a b) : 关系 (fun_ f ≫ fun⁻¹_ f) (𝟙 ((态射.id a).comp f))
-    - left_unitor_inv_hom: {a b} (f : 态射 a b) : 关系 (fun⁻¹_ f ≫ fun_ f) (𝟙 f)
-    - right_unitor_hom_inv: {a b} (f : 态射 a b) : 关系 (ρ_ f ≫ ρ⁻¹_ f) (𝟙 (f.comp (态射.id b)))
-    - right_unitor_inv_hom: {a b} (f : 态射 a b) : 关系 (ρ⁻¹_ f ≫ ρ_ f) (𝟙 f)
-    - pentagon: {a b c d e} (f : 态射 a b) (g : 态射 b c) (h : 态射 c d) (i : 态射 d e) : 关系 ((α_ f g h ▷ i) ≫ α_ f (g.comp h) i ≫ f ◁ α_ g h i) (α_ (f.comp g) h i ≫ α_ f g (h.comp i))
-    - triangle: {a b c} (f : 态射 a b) (g : 态射 b c) : 关系 (α_ f (态射.id b) g ≫ f ◁ fun_ g) (ρ_ f ▷ g)
+--- 原说明 ---
+Relations between 2-morphisms in the free bicategory.
 -/
-inductive Rel : forall {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> Hom₂ f g -> Prop
+inductive Rel : ∀ {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g → Hom₂ f g → Prop
   | vcomp_right {a b} {f g h : Hom a b} (η : Hom₂ f g) (θ₁ θ₂ : Hom₂ g h) :
-      Rel θ₁ θ₂ -> Rel (η ≫ θ₁) (η ≫ θ₂)
+      Rel θ₁ θ₂ → Rel (η ≫ θ₁) (η ≫ θ₂)
   | vcomp_left {a b} {f g h : Hom a b} (η₁ η₂ : Hom₂ f g) (θ : Hom₂ g h) :
-      Rel η₁ η₂ -> Rel (η₁ ≫ θ) (η₂ ≫ θ)
+      Rel η₁ η₂ → Rel (η₁ ≫ θ) (η₂ ≫ θ)
   | id_comp {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (𝟙 f ≫ η) η
   | comp_id {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (η ≫ 𝟙 g) η
   | assoc {a b} {f g h i : Hom a b} (η : Hom₂ f g) (θ : Hom₂ g h) (ι : Hom₂ h i) :
       Rel ((η ≫ θ) ≫ ι) (η ≫ θ ≫ ι)
   | whisker_left {a b c} (f : Hom a b) (g h : Hom b c) (η η' : Hom₂ g h) :
-      Rel η η' -> Rel (f ◁ η) (f ◁ η')
+      Rel η η' → Rel (f ◁ η) (f ◁ η')
   | whisker_left_id {a b c} (f : Hom a b) (g : Hom b c) : Rel (f ◁ 𝟙 g) (𝟙 (f.comp g))
   | whisker_left_comp {a b c} (f : Hom a b) {g h i : Hom b c} (η : Hom₂ g h) (θ : Hom₂ h i) :
       Rel (f ◁ η ≫ θ) ((f ◁ η) ≫ f ◁ θ)
-  | id_whisker_left {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (Hom.id a ◁ η) (fun_ f ≫ η ≫ fun⁻¹_ g)
+  | id_whisker_left {a b} {f g : Hom a b} (η : Hom₂ f g) : Rel (Hom.id a ◁ η) (λ_ f ≫ η ≫ λ⁻¹_ g)
   | comp_whisker_left {a b c d} (f : Hom a b) (g : Hom b c) {h h' : Hom c d} (η : Hom₂ h h') :
      Rel (f.comp g ◁ η) (α_ f g h ≫ (f ◁ g ◁ η) ≫ α⁻¹_ f g h')
   | whisker_right {a b c} (f g : Hom a b) (h : Hom b c) (η η' : Hom₂ f g) :
-      Rel η η' -> Rel (η ▷ h) (η' ▷ h)
+      Rel η η' → Rel (η ▷ h) (η' ▷ h)
   | id_whisker_right {a b c} (f : Hom a b) (g : Hom b c) : Rel (𝟙 f ▷ g) (𝟙 (f.comp g))
   | comp_whisker_right {a b c} {f g h : Hom a b} (i : Hom b c) (η : Hom₂ f g) (θ : Hom₂ g h) :
       Rel ((η ≫ θ) ▷ i) ((η ▷ i) ≫ θ ▷ i)
@@ -291,51 +198,24 @@ inductive Rel : forall {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> H
       Rel (α_ f g h ≫ α⁻¹_ f g h) (𝟙 ((f.comp g).comp h))
   | associator_inv_hom {a b c d} (f : Hom a b) (g : Hom b c) (h : Hom c d) :
       Rel (α⁻¹_ f g h ≫ α_ f g h) (𝟙 (f.comp (g.comp h)))
-  | left_unitor_hom_inv {a b} (f : Hom a b) : Rel (fun_ f ≫ fun⁻¹_ f) (𝟙 ((Hom.id a).comp f))
-  | left_unitor_inv_hom {a b} (f : Hom a b) : Rel (fun⁻¹_ f ≫ fun_ f) (𝟙 f)
+  | left_unitor_hom_inv {a b} (f : Hom a b) : Rel (λ_ f ≫ λ⁻¹_ f) (𝟙 ((Hom.id a).comp f))
+  | left_unitor_inv_hom {a b} (f : Hom a b) : Rel (λ⁻¹_ f ≫ λ_ f) (𝟙 f)
   | right_unitor_hom_inv {a b} (f : Hom a b) : Rel (ρ_ f ≫ ρ⁻¹_ f) (𝟙 (f.comp (Hom.id b)))
   | right_unitor_inv_hom {a b} (f : Hom a b) : Rel (ρ⁻¹_ f ≫ ρ_ f) (𝟙 f)
   | pentagon {a b c d e} (f : Hom a b) (g : Hom b c) (h : Hom c d) (i : Hom d e) :
       Rel ((α_ f g h ▷ i) ≫ α_ f (g.comp h) i ≫ f ◁ α_ g h i)
         (α_ (f.comp g) h i ≫ α_ f g (h.comp i))
-  | triangle {a b c} (f : Hom a b) (g : Hom b c) : Rel (α_ f (Hom.id b) g ≫ f ◁ fun_ g) (ρ_ f ▷ g)
+  | triangle {a b c} (f : Hom a b) (g : Hom b c) : Rel (α_ f (Hom.id b) g ≫ f ◁ λ_ g) (ρ_ f ▷ g)
 
 end
 
-/--
-Instance `homCategory` / 实例 `homCategory`
-
-English:
-instance homCategory
-  signature: (a b : FreeBicategory B)
-  body: Quot (@Rel _ _ a b f g)
-  id f := Quot.mk Rel (Hom₂.id f)
-  comp := @fun _ _ _ => Quot.map₂ Hom₂.vcomp Rel.vcomp_right Rel.vcomp_left
-  id_comp := by
-    rintro f g ⟨η⟩
-    exact Quot.sound (Rel.id_comp η)
-  comp_id := by
-    rintro f g ⟨η⟩
-    exact Quot.sound (Rel.comp_id η)
-  assoc := by
-    rintro f g h i ⟨η⟩ ⟨θ⟩ ⟨ι⟩
-    exact Quot.sound (Rel.assoc η θ ι)
-
-中文:
-实例 homCategory
-  签名: (a b : FreeBicategory B)
-  定义体: Quot (@Rel _ _ a b f g)
-  id f := Quot.mk Rel (Hom₂.id f)
-  comp := @fun _ _ _ => Quot.map₂ Hom₂.vcomp Rel.vcomp_right Rel.vcomp_left
-  id_comp := by
-    rintro f g ⟨η⟩
-    exact Quot.sound (Rel.id_comp η)
-  comp_id := by
-    rintro f g ⟨η⟩
-    exact Quot.sound (Rel.comp_id η)
-  assoc := by
-    rintro f g h i ⟨η⟩ ⟨θ⟩ ⟨ι⟩
-    exact Quot.sound (Rel.assoc η θ ι)
+/-
+**CategoryTheory.FreeBicategory.homCategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.FreeBicategory`。
+形式化陈述：homCategory (a b : FreeBicategory B) : Category (a ⟶ b) where Hom f g
+参数：a b : FreeBicategory B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance homCategory (a b : FreeBicategory B) : Category (a ⟶ b) where
   Hom f g := Quot (@Rel _ _ a b f g)
@@ -351,110 +231,16 @@ instance homCategory (a b : FreeBicategory B) : Category (a ⟶ b) where
     rintro f g h i ⟨η⟩ ⟨θ⟩ ⟨ι⟩
     exact Quot.sound (Rel.assoc η θ ι)
 
-/--
-Instance `bicategory` / 实例 `bicategory`
+/-- Bicategory structure on the free bicategory. -/
+/-
+**CategoryTheory.FreeBicategory.bicategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.FreeBicategory`。
+形式化陈述：bicategory : Bicategory (FreeBicategory B) where homCategory
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance bicategory
-  signature: : Bicategory (FreeBicategory B) where
-  body: @fun (a b : B) => FreeBicategory.homCategory a b
-  whiskerLeft := @fun _ _ _ f g h η => Quot.map (Hom₂.whisker_left f) (Rel.whisker_left f g h) η
-  whiskerLeft_id := @fun _ _ _ f g => Quot.sound (Rel.whisker_left_id f g)
-  associator := @fun _ _ _ _ f g h =>
-    { hom := Quot.mk Rel (Hom₂.associator f g h)
-      inv := Quot.mk Rel (Hom₂.associator_inv f g h)
-      hom_inv_id := Quot.sound (Rel.associator_hom_inv f g h)
-      inv_hom_id := Quot.sound (Rel.associator_inv_hom f g h) }
-  leftUnitor := @fun _ _ f =>
-    { hom := Quot.mk Rel (Hom₂.left_unitor f)
-      inv := Quot.mk Rel (Hom₂.left_unitor_inv f)
-      hom_inv_id := Quot.sound (Rel.left_unitor_hom_inv f)
-      inv_hom_id := Quot.sound (Rel.left_unitor_inv_hom f) }
-  rightUnitor := @fun _ _ f =>
-    { hom := Quot.mk Rel (Hom₂.right_unitor f)
-      inv := Quot.mk Rel (Hom₂.right_unitor_inv f)
-      hom_inv_id := Quot.sound (Rel.right_unitor_hom_inv f)
-      inv_hom_id := Quot.sound (Rel.right_unitor_inv_hom f) }
-  whiskerLeft_comp := by
-    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
-    exact Quot.sound (Rel.whisker_left_comp f η θ)
-  id_whiskerLeft := by
-    rintro a b f g ⟨η⟩
-    exact Quot.sound (Rel.id_whisker_left η)
-  comp_whiskerLeft := by
-    rintro a b c d f g h h' ⟨η⟩
-    exact Quot.sound (Rel.comp_whisker_left f g η)
-  whiskerRight := @fun _ _ _ f g η h => Quot.map (Hom₂.whisker_right h) (Rel.whisker_right f g h) η
-  id_whiskerRight := @fun _ _ _ f g => Quot.sound (Rel.id_whisker_right f g)
-  comp_whiskerRight := by
-    rintro a b c f g h ⟨η⟩ ⟨θ⟩ i
-    exact Quot.sound (Rel.comp_whisker_right i η θ)
-  whiskerRight_id := by
-    rintro a b f g ⟨η⟩
-    exact Quot.sound (Rel.whisker_right_id η)
-  whiskerRight_comp := by
-    rintro a b c d f f' ⟨η⟩ g h
-    exact Quot.sound (Rel.whisker_right_comp g h η)
-  whisker_assoc := by
-    rintro a b c d f g g' ⟨η⟩ h
-    exact Quot.sound (Rel.whisker_assoc f η h)
-  whisker_exchange := by
-    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
-    exact Quot.sound (Rel.whisker_exchange η θ)
-  pentagon := @fun _ _ _ _ _ f g h i => Quot.sound (Rel.pentagon f g h i)
-  triangle := @fun _ _ _ f g => Quot.sound (Rel.triangle f g)
-
-中文:
-实例 bicategory
-  签名: : 双范畴 (FreeBicategory B) where
-  定义体: @fun (a b : B) => FreeBicategory.homCategory a b
-  whiskerLeft := @fun _ _ _ f g h η => Quot.map (Hom₂.whisker_left f) (Rel.whisker_left f g h) η
-  whiskerLeft_id := @fun _ _ _ f g => Quot.sound (Rel.whisker_left_id f g)
-  associator := @fun _ _ _ _ f g h =>
-    { hom := Quot.mk Rel (Hom₂.associator f g h)
-      inv := Quot.mk Rel (Hom₂.associator_inv f g h)
-      hom_inv_id := Quot.sound (Rel.associator_hom_inv f g h)
-      inv_hom_id := Quot.sound (Rel.associator_inv_hom f g h) }
-  leftUnitor := @fun _ _ f =>
-    { hom := Quot.mk Rel (Hom₂.left_unitor f)
-      inv := Quot.mk Rel (Hom₂.left_unitor_inv f)
-      hom_inv_id := Quot.sound (Rel.left_unitor_hom_inv f)
-      inv_hom_id := Quot.sound (Rel.left_unitor_inv_hom f) }
-  rightUnitor := @fun _ _ f =>
-    { hom := Quot.mk Rel (Hom₂.right_unitor f)
-      inv := Quot.mk Rel (Hom₂.right_unitor_inv f)
-      hom_inv_id := Quot.sound (Rel.right_unitor_hom_inv f)
-      inv_hom_id := Quot.sound (Rel.right_unitor_inv_hom f) }
-  whiskerLeft_comp := by
-    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
-    exact Quot.sound (Rel.whisker_left_comp f η θ)
-  id_whiskerLeft := by
-    rintro a b f g ⟨η⟩
-    exact Quot.sound (Rel.id_whisker_left η)
-  comp_whiskerLeft := by
-    rintro a b c d f g h h' ⟨η⟩
-    exact Quot.sound (Rel.comp_whisker_left f g η)
-  whiskerRight := @fun _ _ _ f g η h => Quot.map (Hom₂.whisker_right h) (Rel.whisker_right f g h) η
-  id_whiskerRight := @fun _ _ _ f g => Quot.sound (Rel.id_whisker_right f g)
-  comp_whiskerRight := by
-    rintro a b c f g h ⟨η⟩ ⟨θ⟩ i
-    exact Quot.sound (Rel.comp_whisker_right i η θ)
-  whiskerRight_id := by
-    rintro a b f g ⟨η⟩
-    exact Quot.sound (Rel.whisker_right_id η)
-  whiskerRight_comp := by
-    rintro a b c d f f' ⟨η⟩ g h
-    exact Quot.sound (Rel.whisker_right_comp g h η)
-  whisker_assoc := by
-    rintro a b c d f g g' ⟨η⟩ h
-    exact Quot.sound (Rel.whisker_assoc f η h)
-  whisker_exchange := by
-    rintro a b c f g h i ⟨η⟩ ⟨θ⟩
-    exact Quot.sound (Rel.whisker_exchange η θ)
-  pentagon := @fun _ _ _ _ _ f g h i => Quot.sound (Rel.pentagon f g h i)
-  triangle := @fun _ _ _ f g => Quot.sound (Rel.triangle f g)
-
-Depends on / 依赖: FreeBicategory, FreeBicategory.homCategory, homCategory
+--- 原说明 ---
+Bicategory structure on the free bicategory.
 -/
 instance bicategory : Bicategory (FreeBicategory B) where
   homCategory := @fun (a b : B) => FreeBicategory.homCategory a b
@@ -506,291 +292,170 @@ instance bicategory : Bicategory (FreeBicategory B) where
 
 variable {a b c d : FreeBicategory B}
 
-/--
-Definition of `Hom₂.mk` / `Hom₂.mk` 的定义
+/-- `Hom₂.mk η` is an abbreviation for `Quot.mk Rel η`. -/
+/-
+**CategoryTheory.FreeBicategory.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+FreeBicategory`。
+形式化陈述：{B : Type u} → [Quiver B] → B → B → Type (max u v)
+参数：max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom₂.mk
-  signature: {f g : a ⟶ b} (η : Hom₂ f g)
-  body: Quot.mk Rel η
-
-@[simp]
-
-中文:
-缩写 Hom₂.mk
-  签名: {f g : a ⟶ b} (η : Hom₂ f g)
-  定义体: Quot.mk Rel η
-
-@[simp]
-
-Depends on / 依赖: Quot.mk
+--- 原说明 ---
+`Hom₂.mk η` is an abbreviation for `Quot.mk Rel η`.
 -/
 abbrev Hom₂.mk {f g : a ⟶ b} (η : Hom₂ f g) : f ⟶ g :=
   Quot.mk Rel η
 
 @[simp]
-/--
-theorem `mk_vcomp` / 定理 `mk_vcomp`
-
-English:
-theorem mk_vcomp
-  given: {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_vcomp
-  条件: {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.mk_vcomp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.FreeBicategory`。
+形式化陈述：mk_vcomp {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h) : (η.vcomp θ).mk = 
+(η.mk ≫ θ.mk : f ⟶ h)
+参数：η : Hom₂ f g；θ : Hom₂ g h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_vcomp {f g h : a ⟶ b} (η : Hom₂ f g) (θ : Hom₂ g h) :
     (η.vcomp θ).mk = (η.mk ≫ θ.mk : f ⟶ h) :=
   rfl
 
 @[simp]
-/--
-theorem `mk_whisker_left` / 定理 `mk_whisker_left`
-
-English:
-theorem mk_whisker_left
-  given: (f : a ⟶ b) {g h : b ⟶ c} (η : Hom₂ g h)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_whisker_left
-  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : Hom₂ g h)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Category, Category.assoc, CommSq, Pi.lift, sq.w
+/-
+**CategoryTheory.FreeBicategory.mk_whisker_left** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.FreeBicategory`。
+形式化陈述：mk_whisker_left (f : a ⟶ b) {g h : b ⟶ c} (η : Hom₂ g h) : (Hom₂.whisker_l
+eft f η).mk = (f ◁ η.mk : f ≫ g ⟶ f ≫ h)
+参数：f : a ⟶ b；η : Hom₂ g h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_whisker_left (f : a ⟶ b) {g h : b ⟶ c} (η : Hom₂ g h) :
     (Hom₂.whisker_left f η).mk = (f ◁ η.mk : f ≫ g ⟶ f ≫ h) :=
   rfl
 
 @[simp]
-/--
-theorem `mk_whisker_right` / 定理 `mk_whisker_right`
-
-English:
-theorem mk_whisker_right
-  given: {f g : a ⟶ b} (η : Hom₂ f g) (h : b ⟶ c)
-  proof: rfl
-
-中文:
-定理 mk_whisker_right
-  条件: {f g : a ⟶ b} (η : Hom₂ f g) (h : b ⟶ c)
-  证明: rfl
-
-Depends on / 依赖: CommSq, Sigma.desc, sq.w
+/-
+**CategoryTheory.FreeBicategory.mk_whisker_right** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.FreeBicategory`。
+形式化陈述：mk_whisker_right {f g : a ⟶ b} (η : Hom₂ f g) (h : b ⟶ c) : (Hom₂.whisker_
+right h η).mk = (η.mk ▷ h : f ≫ h ⟶ g ≫ h)
+参数：η : Hom₂ f g；h : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_whisker_right {f g : a ⟶ b} (η : Hom₂ f g) (h : b ⟶ c) :
     (Hom₂.whisker_right h η).mk = (η.mk ▷ h : f ≫ h ⟶ g ≫ h) :=
   rfl
 
 variable (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)
-
-/--
-theorem `id_def` / 定理 `id_def`
-
-English:
-theorem id_def
-  statement: Hom.id (B := B) a = 𝟙 a
-  proof: rfl
-
-中文:
-定理 id_def
-  结论: 态射.id (B := B) a = 𝟙 a
-  证明: rfl
+/-
+**CategoryTheory.FreeBicategory.id_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.FreeBicategory`。
+形式化陈述：id_def : Hom.id (B
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_def : Hom.id (B := B) a = 𝟙 a :=
   rfl
-
-/--
-theorem `comp_def` / 定理 `comp_def`
-
-English:
-theorem comp_def
-  statement: Hom.comp f g = f ≫ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_def
-  结论: 态射.comp f g = f ≫ g
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.comp_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.FreeBicategory`。
+形式化陈述：comp_def : Hom.comp f g = f ≫ g
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_def : Hom.comp f g = f ≫ g :=
   rfl
 
 @[simp]
-/--
-theorem `mk_id` / 定理 `mk_id`
-
-English:
-theorem mk_id
-  statement: Quot.mk _ (Hom₂.id f) = 𝟙 f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_id
-  结论: 商.mk _ (Hom₂.id f) = 𝟙 f
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.mk_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+FreeBicategory`。
+形式化陈述：mk_id : Quot.mk _ (Hom₂.id f) = 𝟙 f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_id : Quot.mk _ (Hom₂.id f) = 𝟙 f :=
   rfl
 
 @[simp]
-/--
-theorem `mk_associator_hom` / 定理 `mk_associator_hom`
-
-English:
-theorem mk_associator_hom
-  statement: Quot.mk _ (Hom₂.associator f g h) = (α_ f g h).hom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_associator_hom
-  结论: 商.mk _ (Hom₂.associator f g h) = (α_ f g h).hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.mk_associator_hom** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.FreeBicategory`。
+形式化陈述：mk_associator_hom : Quot.mk _ (Hom₂.associator f g h) = (α_ f g h).hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_associator_hom : Quot.mk _ (Hom₂.associator f g h) = (α_ f g h).hom :=
   rfl
 
 @[simp]
-/--
-theorem `mk_associator_inv` / 定理 `mk_associator_inv`
-
-English:
-theorem mk_associator_inv
-  statement: Quot.mk _ (Hom₂.associator_inv f g h) = (α_ f g h).inv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_associator_inv
-  结论: 商.mk _ (Hom₂.associator_inv f g h) = (α_ f g h).inv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.mk_associator_inv** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.FreeBicategory`。
+形式化陈述：mk_associator_inv : Quot.mk _ (Hom₂.associator_inv f g h) = (α_ f g h).inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_associator_inv : Quot.mk _ (Hom₂.associator_inv f g h) = (α_ f g h).inv :=
   rfl
 
 @[simp]
-/--
-theorem `mk_left_unitor_hom` / 定理 `mk_left_unitor_hom`
-
-English:
-theorem mk_left_unitor_hom
-  statement: Quot.mk _ (Hom₂.left_unitor f) = (fun_ f).hom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_left_unitor_hom
-  结论: 商.mk _ (Hom₂.left_unitor f) = (fun_ f).hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.mk_left_unitor_hom** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.FreeBicategory`。
+形式化陈述：mk_left_unitor_hom : Quot.mk _ (Hom₂.left_unitor f) = (fun_ f).hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_left_unitor_hom : Quot.mk _ (Hom₂.left_unitor f) = (fun_ f).hom :=
+theorem mk_left_unitor_hom : Quot.mk _ (Hom₂.left_unitor f) = (λ_ f).hom :=
   rfl
 
 @[simp]
-/--
-theorem `mk_left_unitor_inv` / 定理 `mk_left_unitor_inv`
-
-English:
-theorem mk_left_unitor_inv
-  statement: Quot.mk _ (Hom₂.left_unitor_inv f) = (fun_ f).inv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_left_unitor_inv
-  结论: 商.mk _ (Hom₂.left_unitor_inv f) = (fun_ f).inv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.mk_left_unitor_inv** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.FreeBicategory`。
+形式化陈述：mk_left_unitor_inv : Quot.mk _ (Hom₂.left_unitor_inv f) = (fun_ f).inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_left_unitor_inv : Quot.mk _ (Hom₂.left_unitor_inv f) = (fun_ f).inv :=
+theorem mk_left_unitor_inv : Quot.mk _ (Hom₂.left_unitor_inv f) = (λ_ f).inv :=
   rfl
 
 @[simp]
-/--
-theorem `mk_right_unitor_hom` / 定理 `mk_right_unitor_hom`
-
-English:
-theorem mk_right_unitor_hom
-  statement: Quot.mk _ (Hom₂.right_unitor f) = (ρ_ f).hom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_right_unitor_hom
-  结论: 商.mk _ (Hom₂.right_unitor f) = (ρ_ f).hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.mk_right_unitor_hom** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.FreeBicategory`。
+形式化陈述：mk_right_unitor_hom : Quot.mk _ (Hom₂.right_unitor f) = (ρ_ f).hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_right_unitor_hom : Quot.mk _ (Hom₂.right_unitor f) = (ρ_ f).hom :=
   rfl
 
 @[simp]
-/--
-theorem `mk_right_unitor_inv` / 定理 `mk_right_unitor_inv`
-
-English:
-theorem mk_right_unitor_inv
-  statement: Quot.mk _ (Hom₂.right_unitor_inv f) = (ρ_ f).inv
-  proof: rfl
-
-中文:
-定理 mk_right_unitor_inv
-  结论: 商.mk _ (Hom₂.right_unitor_inv f) = (ρ_ f).inv
-  证明: rfl
+/-
+**CategoryTheory.FreeBicategory.mk_right_unitor_inv** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.FreeBicategory`。
+形式化陈述：mk_right_unitor_inv : Quot.mk _ (Hom₂.right_unitor_inv f) = (ρ_ f).inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_right_unitor_inv : Quot.mk _ (Hom₂.right_unitor_inv f) = (ρ_ f).inv :=
   rfl
 
 /-- Canonical prefunctor from `B` to `free_bicategory B`. -/
 @[simps]
-/--
-Definition of `of` / `of` 的定义
+/-
+**CategoryTheory.FreeBicategory.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fre
+eBicategory`。
+形式化陈述：of : Prefunctor B (FreeBicategory B) where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: : Prefunctor B (FreeBicategory B) where
-  body: id
-  map := @fun _ _ => Hom.of
-
-中文:
-定义 of
-  签名: : 预函子 B (FreeBicategory B) where
-  定义体: id
-  map := @fun _ _ => Hom.of
+--- 原说明 ---
+Canonical prefunctor from `B` to `free_bicategory B`.
 -/
 def of : Prefunctor B (FreeBicategory B) where
   obj := id
@@ -805,58 +470,44 @@ variable (F : Prefunctor B C)
 
 /-- Auxiliary definition for `lift`. -/
 @[simp]
-/--
-Definition of `liftHom` / `liftHom` 的定义
+/-
+**CategoryTheory.FreeBicategory.liftHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.FreeBicategory`。
+形式化陈述：{B : Type u₁} →   [inst : Quiver B] →     {C : Type u₂} →       [inst_1 : 
+CategoryTheory.CategoryStruct.{v₂, u₂} C] →         (F : B ⥤q C) → {a b : Catego
+ryTheory.FreeBicategory B} → (a ⟶ b) → (F.obj a ⟶ F.obj b)
+参数：F : B ⥤q C；a ⟶ b；F.obj a ⟶ F.obj b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftHom
-  signature: : forall {a b : FreeBicategory B}, (a ⟶ b) -> (F.obj a ⟶ F.obj b)
-
-中文:
-定义 liftHom
-  签名: : 对任意 {a b : FreeBicategory B}, (a ⟶ b) -> (F.obj a ⟶ F.obj b)
+--- 原说明 ---
+Auxiliary definition for `lift`.
 -/
-def liftHom : forall {a b : FreeBicategory B}, (a ⟶ b) -> (F.obj a ⟶ F.obj b)
+def liftHom : ∀ {a b : FreeBicategory B}, (a ⟶ b) → (F.obj a ⟶ F.obj b)
   | _, _, Hom.of f => F.map f
   | _, _, Hom.id a => 𝟙 (F.obj a)
   | _, _, Hom.comp f g => liftHom f ≫ liftHom g
 
 @[simp]
-/--
-theorem `liftHom_id` / 定理 `liftHom_id`
-
-English:
-theorem liftHom_id
-  given: (a : FreeBicategory B)
-  statement: liftHom F (𝟙 a) = 𝟙 (F.obj a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 liftHom_id
-  条件: (a : FreeBicategory B)
-  结论: liftHom F (𝟙 a) = 𝟙 (F.obj a)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.FreeBicategory.liftHom_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.FreeBicategory`。
+形式化陈述：liftHom_id (a : FreeBicategory B) : liftHom F (𝟙 a) = 𝟙 (F.obj a)
+参数：a : FreeBicategory B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem liftHom_id (a : FreeBicategory B) : liftHom F (𝟙 a) = 𝟙 (F.obj a) :=
   rfl
 
 @[simp]
-/--
-theorem `liftHom_comp` / 定理 `liftHom_comp`
-
-English:
-theorem liftHom_comp
-  given: {a b c : FreeBicategory B} (f : a ⟶ b) (g : b ⟶ c)
-  proof: rfl
-
-中文:
-定理 liftHom_comp
-  条件: {a b c : FreeBicategory B} (f : a ⟶ b) (g : b ⟶ c)
-  证明: rfl
+/-
+**CategoryTheory.FreeBicategory.liftHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.FreeBicategory`。
+形式化陈述：liftHom_comp {a b c : FreeBicategory B} (f : a ⟶ b) (g : b ⟶ c) : liftHom 
+F (f ≫ g) = liftHom F f ≫ liftHom F g
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem liftHom_comp {a b c : FreeBicategory B} (f : a ⟶ b) (g : b ⟶ c) :
     liftHom F (f ≫ g) = liftHom F f ≫ liftHom F g :=
@@ -869,23 +520,25 @@ section
 variable {B : Type u₁} [Quiver.{v₁} B] {C : Type u₂} [Bicategory.{w₂, v₂} C]
 variable (F : Prefunctor B C)
 
-/--
-Definition of `liftHom₂` / `liftHom₂` 的定义
+/-- Auxiliary definition for `lift`. -/
+/-
+**CategoryTheory.FreeBicategory.liftHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.FreeBicategory`。
+形式化陈述：{B : Type u₁} →   [inst : Quiver B] →     {C : Type u₂} →       [inst_1 : 
+CategoryTheory.CategoryStruct.{v₂, u₂} C] →         (F : B ⥤q C) → {a b : Catego
+ryTheory.FreeBicategory B} → (a ⟶ b) → (F.obj a ⟶ F.obj b)
+参数：F : B ⥤q C；a ⟶ b；F.obj a ⟶ F.obj b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftHom₂
-  signature: : forall {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> (liftHom F f ⟶ liftHom F g)
-
-中文:
-定义 liftHom₂
-  签名: : 对任意 {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> (liftHom F f ⟶ liftHom F g)
+--- 原说明 ---
+Auxiliary definition for `lift`.
 -/
-def liftHom₂ : forall {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> (liftHom F f ⟶ liftHom F g)
+def liftHom₂ : ∀ {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g → (liftHom F f ⟶ liftHom F g)
   | _, _, _, _, Hom₂.id _ => 𝟙 _
   | _, _, _, _, Hom₂.associator _ _ _ => (α_ _ _ _).hom
   | _, _, _, _, Hom₂.associator_inv _ _ _ => (α_ _ _ _).inv
-  | _, _, _, _, Hom₂.left_unitor _ => (fun_ _).hom
-  | _, _, _, _, Hom₂.left_unitor_inv _ => (fun_ _).inv
+  | _, _, _, _, Hom₂.left_unitor _ => (λ_ _).hom
+  | _, _, _, _, Hom₂.left_unitor_inv _ => (λ_ _).inv
   | _, _, _, _, Hom₂.right_unitor _ => (ρ_ _).hom
   | _, _, _, _, Hom₂.right_unitor_inv _ => (ρ_ _).inv
   | _, _, _, _, Hom₂.vcomp η θ => liftHom₂ η ≫ liftHom₂ θ
@@ -894,20 +547,14 @@ def liftHom₂ : forall {a b : FreeBicategory B} {f g : a ⟶ b}, Hom₂ f g -> 
 
 set_option backward.isDefEq.respectTransparency.types false in
 attribute [local simp] whisker_exchange in
-/--
-theorem `liftHom₂_congr` / 定理 `liftHom₂_congr`
-
-English:
-theorem liftHom₂_congr
-  given: {a b : FreeBicategory B} {f g : a ⟶ b} {η θ : Hom₂ f g} (H : Rel η θ)
-  proof: by induction H <;> (dsimp [liftHom₂]; cat_disch)
-
-中文:
-定理 liftHom₂_congr
-  条件: {a b : FreeBicategory B} {f g : a ⟶ b} {η θ : Hom₂ f g} (H : 关系 η θ)
-  证明: by induction H <;> (dsimp [liftHom₂]; cat_disch)
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.FreeBicategory.liftHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.FreeBicategory`。
+形式化陈述：{B : Type u₁} →   [inst : Quiver B] →     {C : Type u₂} →       [inst_1 : 
+CategoryTheory.CategoryStruct.{v₂, u₂} C] →         (F : B ⥤q C) → {a b : Catego
+ryTheory.FreeBicategory B} → (a ⟶ b) → (F.obj a ⟶ F.obj b)
+参数：F : B ⥤q C；a ⟶ b；F.obj a ⟶ F.obj b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem liftHom₂_congr {a b : FreeBicategory B} {f g : a ⟶ b} {η θ : Hom₂ f g} (H : Rel η θ) :
     liftHom₂ F η = liftHom₂ F θ := by induction H <;> (dsimp [liftHom₂]; cat_disch)
@@ -916,54 +563,20 @@ theorem liftHom₂_congr {a b : FreeBicategory B} {f g : a ⟶ b} {η θ : Hom�
 `free_bicategory B` to `C`.
 -/
 @[simps]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.FreeBicategory.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+reeBicategory`。
+形式化陈述：lift : FreeBicategory B ⥤ᵖ C where obj
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FreeBicategory.liftHom₂_congr`：liftHom₂_congr {a b : Free
+Bicategory B} {f g : a ⟶ b} {η θ : Hom₂ f g} (H : Rel η θ) : liftHom₂ F η = lift
+Hom₂ F θ
 
-English:
-definition lift
-  signature: : FreeBicategory B ⥤ᵖ C where
-  body: F.obj
-  map := liftHom F
-  mapId _ := Iso.refl _
-  mapComp _ _ := Iso.refl _
-  map₂ := Quot.lift (liftHom₂ F) fun _ _ H => liftHom₂_congr F H
-  -- Porting note: We'd really prefer not to be doing this by hand.
-  -- in mathlib3 `tidy` did these inductions for us.
-  map₂_comp := by
-    intro a b f g h η θ
-    induction η using Quot.rec
-    · induction θ using Quot.rec <;> rfl
-    · rfl
-  map₂_whisker_left := by
-    intro a b c f g h η
-    induction η using Quot.rec
-    · cat_disch
-    · rfl
-  map₂_whisker_right := by intro _ _ _ _ _ η h; dsimp; induction η using Quot.rec <;> cat_disch
-
-中文:
-定义 lift
-  签名: : FreeBicategory B ⥤ᵖ C where
-  定义体: F.obj
-  map := liftHom F
-  mapId _ := Iso.refl _
-  mapComp _ _ := Iso.refl _
-  map₂ := Quot.lift (liftHom₂ F) fun _ _ H => liftHom₂_congr F H
-  -- Porting note: We'd really prefer not to be doing this by hand.
-  -- in mathlib3 `tidy` did these inductions for us.
-  map₂_comp := by
-    intro a b f g h η θ
-    induction η using Quot.rec
-    · induction θ using Quot.rec <;> rfl
-    · rfl
-  map₂_whisker_left := by
-    intro a b c f g h η
-    induction η using Quot.rec
-    · cat_disch
-    · rfl
-  map₂_whisker_right := by intro _ _ _ _ _ η h; dsimp; induction η using Quot.rec <;> cat_disch
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A prefunctor from a quiver `B` to a bicategory `C` can be lifted to a pseudofunc
+tor from
+`free_bicategory B` to `C`.
 -/
 def lift : FreeBicategory B ⥤ᵖ C where
   obj := F.obj
@@ -990,3 +603,4 @@ end
 end FreeBicategory
 
 end CategoryTheory
+

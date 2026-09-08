@@ -93,274 +93,248 @@ variable [CommRing R] [AddCommGroup M] [AddCommGroup N]
 
 namespace QuadraticMap
 
-/--
-Definition of `polar` / `polar` 的定义
+/-- Up to a factor 2, `Q.polar` is the associated bilinear map for a quadratic map `Q`.
 
-English:
-definition polar
-  signature: (f : M -> N) (x y : M)
-  body: f (x + y) - f x - f y
-
-中文:
-定义 polar
-  签名: (f : M -> N) (x y : M)
-  定义体: f (x + y) - f x - f y
+Source of this name: https://en.wikipedia.org/wiki/Quadratic_form#Generalization
 -/
-def polar (f : M -> N) (x y : M) :=
+/-
+**QuadraticMap.polar** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：polar (f : M -> N) (x y : M)
+参数：f : M -> N；x y : M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Up to a factor 2, `Q.polar` is the associated bilinear map for a quadratic map `
+Q`.
+
+Source of this name: https://en.wikipedia.org/wiki/Quadratic_form#Generalization
+-/
+def polar (f : M → N) (x y : M) :=
   f (x + y) - f x - f y
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (f : M -> N) (x y : M)
-  proof: by
-  rw [polar]
-  abel
-
-中文:
-定理 map_add
-  条件: (f : M -> N) (x y : M)
-  证明: by
-  rw [polar]
-  abel
+/-
+**QuadraticMap.map_add** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ {M : Type u_4} {N : Type u_5} [inst : AddCommGroup M] [inst_1 : AddCommG
+roup N] (f : M → N) (x y : M),   f (x + y) = f x + f y + QuadraticMap.polar f x 
+y
+参数：f : M → N；x y : M；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.polar.eq_1`：∀ {M : Type u_4} {N : Type u_5} [inst : AddComm
+Group M] [inst_1 : AddCommGroup N] (f : M → N) (x y : M),   QuadraticMap.polar f
+ x y = f (x +…
+· 使用定理 `_private.Mathlib.LinearAlgebra.QuadraticForm.Basic.0.QuadraticMap.map_ad
+d._abel_1_2`：∀ {M : Type u_2} {N : Type u_1} [inst : AddCommGroup M] [inst_1 : A
+ddCommGroup N] (f : M → N) (x y : M),   f (x + y) = f x + f y + (f (x + y…
 -/
-protected theorem map_add (f : M -> N) (x y : M) :
+protected theorem map_add (f : M → N) (x y : M) :
     f (x + y) = f x + f y + polar f x y := by
   rw [polar]
   abel
-
-/--
-theorem `polar_add` / 定理 `polar_add`
-
-English:
-theorem polar_add
-  given: (f g : M -> N) (x y : M)
-  statement: polar (f + g) x y = polar f x y + polar g x y
-  proof: by
+/-
+**QuadraticMap.polar_add** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_add (f g : M -> N) (x y : M) : polar (f + g) x y = polar f x y + pol
+ar g x y
+参数：f g : M -> N；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.LinearAlgebra.QuadraticForm.Basic.0.QuadraticMap.polar_
+add._abel_1_2`：∀ {M : Type u_2} {N : Type u_1} [inst : AddCommGroup M] [inst_1 :
+ AddCommGroup N] (f g : M → N) (x y : M),   f (x + y) + g (x + y) - (f x + …
+-/
+theorem polar_add (f g : M → N) (x y : M) : polar (f + g) x y = polar f x y + polar g x y := by
   simp only [polar, Pi.add_apply]
   abel
-
-中文:
-定理 polar_add
-  条件: (f g : M -> N) (x y : M)
-  结论: polar (f + g) x y = polar f x y + polar g x y
-  证明: by
-  simp only [polar, Pi.add_apply]
-  abel
-
-Depends on / 依赖: Pi.add_apply, add_apply
+/-
+**QuadraticMap.polar_neg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_neg (f : M -> N) (x y : M) : polar (-f) x y = -polar f x y
+参数：f : M -> N；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem polar_add (f g : M -> N) (x y : M) : polar (f + g) x y = polar f x y + polar g x y := by
-  simp only [polar, Pi.add_apply]
-  abel
-
-/--
-theorem `polar_neg` / 定理 `polar_neg`
-
-English:
-theorem polar_neg
-  given: (f : M -> N) (x y : M)
-  statement: polar (-f) x y = -polar f x y
-  proof: by
+theorem polar_neg (f : M → N) (x y : M) : polar (-f) x y = -polar f x y := by
   simp only [polar, Pi.neg_apply, sub_eq_add_neg, neg_add]
-
-中文:
-定理 polar_neg
-  条件: (f : M -> N) (x y : M)
-  结论: polar (-f) x y = -polar f x y
-  证明: by
-  simp only [polar, Pi.neg_apply, sub_eq_add_neg, neg_add]
-
-Depends on / 依赖: Pi.neg_apply, neg_add, neg_apply, sub_eq_add_neg
+/-
+**QuadraticMap.polar_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_smul [Monoid S] [DistribMulAction S N] (f : M -> N) (s : S) (x y : M
+) : polar (s • f) x y = s • polar f x y
+参数：f : M -> N；s : S；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem polar_neg (f : M -> N) (x y : M) : polar (-f) x y = -polar f x y := by
-  simp only [polar, Pi.neg_apply, sub_eq_add_neg, neg_add]
-
-/--
-theorem `polar_smul` / 定理 `polar_smul`
-
-English:
-theorem polar_smul
-  given: [Monoid S] [DistribMulAction S N] (f : M -> N) (s : S) (x y : M)
-  proof: by simp only [polar, Pi.smul_apply, smul_sub]
-
-中文:
-定理 polar_smul
-  条件: [幺半群 S] [分配乘法作用 S N] (f : M -> N) (s : S) (x y : M)
-  证明: by simp only [polar, Pi.smul_apply, smul_sub]
-
-Depends on / 依赖: Pi.smul_apply, smul_apply, smul_sub
--/
-theorem polar_smul [Monoid S] [DistribMulAction S N] (f : M -> N) (s : S) (x y : M) :
+theorem polar_smul [Monoid S] [DistribMulAction S N] (f : M → N) (s : S) (x y : M) :
     polar (s • f) x y = s • polar f x y := by simp only [polar, Pi.smul_apply, smul_sub]
-
-/--
-theorem `polar_comm` / 定理 `polar_comm`
-
-English:
-theorem polar_comm
-  given: (f : M -> N) (x y : M)
-  statement: polar f x y = polar f y x
-  proof: by
-  rw [polar]; rw [polar]; rw [add_comm]; rw [sub_sub]; rw [sub_sub]; rw [add_comm (f x) (f y)]
-
-中文:
-定理 polar_comm
-  条件: (f : M -> N) (x y : M)
-  结论: polar f x y = polar f y x
-  证明: by
-  rw [polar]; rw [polar]; rw [add_comm]; rw [sub_sub]; rw [sub_sub]; rw [add_comm (f x) (f y)]
-
-Depends on / 依赖: add_comm, sub_sub
+/-
+**QuadraticMap.polar_comm** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_comm (f : M -> N) (x y : M) : polar f x y = polar f y x
+参数：f : M -> N；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.polar.eq_1`：∀ {M : Type u_4} {N : Type u_5} [inst : AddComm
+Group M] [inst_1 : AddCommGroup N] (f : M → N) (x y : M),   QuadraticMap.polar f
+ x y = f (x +…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
 -/
-theorem polar_comm (f : M -> N) (x y : M) : polar f x y = polar f y x := by
-  rw [polar]; rw [polar]; rw [add_comm]; rw [sub_sub]; rw [sub_sub]; rw [add_comm (f x) (f y)]
+theorem polar_comm (f : M → N) (x y : M) : polar f x y = polar f y x := by
+  rw [polar, polar, add_comm, sub_sub, sub_sub, add_comm (f x) (f y)]
 
-/--
-theorem `polar_add_left_iff` / 定理 `polar_add_left_iff`
+/-- Auxiliary lemma to express bilinearity of `QuadraticMap.polar` without subtraction. -/
+/-
+**QuadraticMap.polar_add_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_add_left_iff {f : M -> N} {x x' y : M} : polar f (x + x') y = polar 
+f x y + polar f x' y ↔ f (x + x' + y) + (f x + f x' + f y) = f (x + x') + f (x' 
++ y) + f (y + x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_sub`：∀ {G : Type u_3} [inst : SubNegMonoid G] (a b c : G), a + (b - 
+c) = a + b - c
+· 使用定理 `sub_add_eq_add_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a - b + c = a + c - b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem polar_add_left_iff
-  given: {f : M -> N} {x x' y : M}
-  proof: by
-  simp only [← add_assoc]
-  simp only [polar, sub_eq_iff_eq_add, eq_sub_iff_add_eq, sub_add_eq_add_sub, add_sub]
-  simp only [add_right_comm _ (f y) _, add_right_comm _ (f x') (f x)]
-  rw [add_comm y x]; rw [add_right_comm _ _ (f (x + y))]; rw [add_comm _ (f (x + y))]; rw [add_right_comm (f (x + y))]; rw [add_left_inj]
-
-中文:
-定理 polar_add_left_iff
-  条件: {f : M -> N} {x x' y : M}
-  证明: by
-  simp only [← add_assoc]
-  simp only [polar, sub_eq_iff_eq_add, eq_sub_iff_add_eq, sub_add_eq_add_sub, add_sub]
-  simp only [add_right_comm _ (f y) _, add_right_comm _ (f x') (f x)]
-  rw [add_comm y x]; rw [add_right_comm _ _ (f (x + y))]; rw [add_comm _ (f (x + y))]; rw [add_right_comm (f (x + y))]; rw [add_left_inj]
-
-Depends on / 依赖: add_assoc, add_comm, add_left_inj, add_right_comm, add_sub, eq_sub_iff_add_eq, sub_add_eq_add_sub, sub_eq_iff_eq_add
+--- 原说明 ---
+Auxiliary lemma to express bilinearity of `QuadraticMap.polar` without subtracti
+on.
 -/
-theorem polar_add_left_iff {f : M -> N} {x x' y : M} :
+theorem polar_add_left_iff {f : M → N} {x x' y : M} :
     polar f (x + x') y = polar f x y + polar f x' y ↔
       f (x + x' + y) + (f x + f x' + f y) = f (x + x') + f (x' + y) + f (y + x) := by
   simp only [← add_assoc]
   simp only [polar, sub_eq_iff_eq_add, eq_sub_iff_add_eq, sub_add_eq_add_sub, add_sub]
   simp only [add_right_comm _ (f y) _, add_right_comm _ (f x') (f x)]
-  rw [add_comm y x]; rw [add_right_comm _ _ (f (x + y))]; rw [add_comm _ (f (x + y))]; rw [add_right_comm (f (x + y))]; rw [add_left_inj]
-
-/--
-theorem `polar_comp` / 定理 `polar_comp`
-
-English:
-theorem polar_comp
-  statement: {F : Type*} [AddCommGroup S] [FunLike F N S] [AddMonoidHomClass F N S]
-  proof: by
-  simp only [polar, Function.comp_apply, map_sub]
-
-中文:
-定理 polar_comp
-  结论: {F : 类型} [加法交换群 S] [函数状 F N S] [加法幺半群态射类 F N S]
-  证明: by
-  simp only [polar, Function.comp_apply, map_sub]
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, map_sub
+  rw [add_comm y x, add_right_comm _ _ (f (x + y)), add_comm _ (f (x + y)),
+    add_right_comm (f (x + y)), add_left_inj]
+/-
+**QuadraticMap.polar_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_comp {F : Type*} [AddCommGroup S] [FunLike F N S] [AddMonoidHomClass
+ F N S] (f : M -> N) (g : F) (x y : M) : polar (g ∘ f) x y = g (polar f x y)
+参数：f : M -> N；g : F；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem polar_comp {F : Type*} [AddCommGroup S] [FunLike F N S] [AddMonoidHomClass F N S]
-    (f : M -> N) (g : F) (x y : M) :
+    (f : M → N) (g : F) (x y : M) :
     polar (g ∘ f) x y = g (polar f x y) := by
   simp only [polar, Function.comp_apply, map_sub]
 
-/--
-Definition of `polarSym2` / `polarSym2` 的定义
+/-- `QuadraticMap.polar` as a function from `Sym2`. -/
+/-
+**QuadraticMap.polarSym2** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：polarSym2 (f : M -> N) : Sym2 M -> N
+参数：f : M -> N。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.polar_comm`：polar_comm (f : M -> N) (x y : M) : polar f x y
+ = polar f y x
 
-English:
-definition polarSym2
-  signature: (f : M -> N)
-  body: Sym2.lift ⟨polar f, polar_comm _⟩
-
-@[simp]
-
-中文:
-定义 polarSym2
-  签名: (f : M -> N)
-  定义体: Sym2.lift ⟨polar f, polar_comm _⟩
-
-@[simp]
-
-Depends on / 依赖: Sym2.lift, polar_comm
+--- 原说明 ---
+`QuadraticMap.polar` as a function from `Sym2`.
 -/
-def polarSym2 (f : M -> N) : Sym2 M -> N :=
+def polarSym2 (f : M → N) : Sym2 M → N :=
   Sym2.lift ⟨polar f, polar_comm _⟩
 
 @[simp]
-/--
-lemma `polarSym2_sym2Mk` / 引理 `polarSym2_sym2Mk`
-
-English:
-lemma polarSym2_sym2Mk
-  given: (f : M -> N) (x y : M)
-  statement: polarSym2 f s(x, y) = polar f x y
-  proof: rfl
-
-中文:
-引理 polarSym2_sym2Mk
-  条件: (f : M -> N) (x y : M)
-  结论: polarSym2 f s(x, y) = polar f x y
-  证明: rfl
+/-
+**QuadraticMap.polarSym2_sym2Mk** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticMap`。
+形式化陈述：polarSym2_sym2Mk (f : M -> N) (x y : M) : polarSym2 f s(x, y) = polar f x 
+y
+参数：f : M -> N；x y : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma polarSym2_sym2Mk (f : M -> N) (x y : M) : polarSym2 f s(x, y) = polar f x y := rfl
+lemma polarSym2_sym2Mk (f : M → N) (x y : M) : polarSym2 f s(x, y) = polar f x y := rfl
 
 end QuadraticMap
 
 end Polar
 
-/--
-Definition of `QuadraticMap` / `QuadraticMap` 的定义
+/-- A quadratic map on a module.
 
-English:
-structure QuadraticMap
-  parameters: (R : Type u) (M : Type v) (N : Type w) [CommSemiring R] [AddCommMonoid M]
-  axioms and operations (3):
-    - toFun : M -> N
-    - toFun_smul : forall (a : R) (x : M), toFun (a • x) = (a * a) • toFun x
-    - exists_companion' : exists B : BilinMap R M N, forall x y, toFun (x + y) = toFun x + toFun y + B x y
+For a more familiar constructor when `R` is a ring, see `QuadraticMap.ofPolar`. -/
+/-
+**QuadraticMap** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) →   (M : Type v) →     (N : Type w) →       [inst : CommSemir
+ing R] →         [inst_1 : AddCommMonoid M] →           [_root_.Module R M] → [i
+nst_3 : AddCommMonoid N] → [_root_.Module R N] → Type (max v w)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 二次映射
-  参数: (R : 类型u) (M : 类型v) (N : 类型 w) [交换半环 R] [加法交换幺半群 M]
-  公理与运算 (3 个):
-    - toFun : M -> N
-    - toFun_smul : 对任意 (a : R) (x : M), toFun (a • x) = (a * a) • toFun x
-    - exists_companion' : 存在 B : BilinMap R M N, 对任意 x y, toFun (x + y) = toFun x + toFun y + B x y
+--- 原说明 ---
+A quadratic map on a module.
+
+For a more familiar constructor when `R` is a ring, see `QuadraticMap.ofPolar`.
 -/
 structure QuadraticMap (R : Type u) (M : Type v) (N : Type w) [CommSemiring R] [AddCommMonoid M]
     [Module R M] [AddCommMonoid N] [Module R N] where
   /-- The underlying function.
 
   Do NOT use directly. Use the coercion instead. -/
-  toFun : M -> N
-  toFun_smul : forall (a : R) (x : M), toFun (a • x) = (a * a) • toFun x
-  exists_companion' : exists B : BilinMap R M N, forall x y, toFun (x + y) = toFun x + toFun y + B x y
+  toFun : M → N
+  toFun_smul : ∀ (a : R) (x : M), toFun (a • x) = (a * a) • toFun x
+  exists_companion' : ∃ B : BilinMap R M N, ∀ x y, toFun (x + y) = toFun x + toFun y + B x y
 
 section QuadraticForm
 
 variable (R : Type u) (M : Type v) [CommSemiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Definition of `QuadraticForm` / `QuadraticForm` 的定义
+/-- A quadratic form on a module. -/
+/-
+**QuadraticForm** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：QuadraticForm : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation QuadraticForm
-  signature: : Type _
-  body: QuadraticMap R M R
-
-中文:
-缩写 QuadraticForm
-  签名: : 类型 _
-  定义体: QuadraticMap R M R
-
-Depends on / 依赖: QuadraticMap
+--- 原说明 ---
+A quadratic form on a module.
 -/
 abbrev QuadraticForm : Type _ := QuadraticMap R M R
 
@@ -373,20 +347,11 @@ section DFunLike
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]
 variable {Q Q' : QuadraticMap R M N}
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (QuadraticMap R M N) M N where
-  body: toFun
-  coe_injective x y h := by cases x; cases y; congr
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (二次映射 R M N) M N where
-  定义体: toFun
-  coe_injective x y h := by cases x; cases y; congr
+/-
+**QuadraticMap.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+形式化陈述：instFunLike : FunLike (QuadraticMap R M N) M N where coe
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike (QuadraticMap R M N) M N where
   coe := toFun
@@ -396,152 +361,102 @@ variable (Q)
 
 /-- The `simp` normal form for a quadratic map is `DFunLike.coe`, not `toFun`. -/
 @[simp]
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
+/-
+**QuadraticMap.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：toFun_eq_coe : Q.toFun = ⇑Q
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem toFun_eq_coe
-  statement: Q.toFun = ⇑Q
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toFun_eq_coe
-  结论: Q.toFun = ⇑Q
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+The `simp` normal form for a quadratic map is `DFunLike.coe`, not `toFun`.
 -/
 theorem toFun_eq_coe : Q.toFun = ⇑Q :=
   rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (toFun : M -> N) (toFun_smul exists_companion')
-  proof: rfl
-
-中文:
-定理 coe_mk
-  条件: (toFun : M -> N) (toFun_smul 存在_companion')
-  证明: rfl
+/-
+**QuadraticMap.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：coe_mk (toFun : M -> N) (toFun_smul exists_companion') : ⇑({toFun, toFun_s
+mul, exists_companion'} : QuadraticMap R M N) = toFun
+参数：toFun : M -> N；toFun_smul exists_companion'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (toFun : M -> N) (toFun_smul exists_companion') :
+theorem coe_mk (toFun : M → N) (toFun_smul exists_companion') :
     ⇑({toFun, toFun_smul, exists_companion'} : QuadraticMap R M N) = toFun := rfl
 
 -- this must come after the instFunLike definition
-initialize_simps_projections QuadraticMap (toFun -> apply)
+initialize_simps_projections QuadraticMap (toFun → apply)
 
 variable {Q}
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (H : forall x : M, Q x = Q' x)
-  statement: Q = Q'
-  proof: DFunLike.ext _ _ H
-
-中文:
-定理 ext
-  条件: (H : 对任意 x : M, Q x = Q' x)
-  结论: Q = Q'
-  证明: DFunLike.ext _ _ H
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**QuadraticMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：ext (H : forall x : M, Q x = Q' x) : Q = Q'
+参数：H : forall x : M, Q x = Q' x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (H : forall x : M, Q x = Q' x) : Q = Q' :=
+theorem ext (H : ∀ x : M, Q x = Q' x) : Q = Q' :=
   DFunLike.ext _ _ H
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: (h : Q = Q') (x : M)
-  statement: Q x = Q' x
-  proof: DFunLike.congr_fun h _
-
-中文:
-定理 congr_fun
-  条件: (h : Q = Q') (x : M)
-  结论: Q x = Q' x
-  证明: DFunLike.congr_fun h _
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
+/-
+**QuadraticMap.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：congr_fun (h : Q = Q') (x : M) : Q x = Q' x
+参数：h : Q = Q'；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 theorem congr_fun (h : Q = Q') (x : M) : Q x = Q' x :=
   DFunLike.congr_fun h _
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `QuadraticMap` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+/-
+**QuadraticMap.copy** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：{R : Type u_3} →   {M : Type u_4} →     {N : Type u_5} →       [inst : Com
+mSemiring R] →         [inst_1 : AddCommMonoid M] →           [inst_2 : _root_.M
+odule R M] →             [inst_3 : AddCommMonoid N] →               [inst_4 : _r
+oot_.Module R N] → (Q : QuadraticMap R M N) → (Q' : M → N) → Q' = ⇑Q → Quadratic
+Map R M N
+参数：Q : QuadraticMap R M N；Q' : M → N。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q)
-  body: Q'
-  toFun_smul := h.symm ▸ Q.toFun_smul
-  exists_companion' := h.symm ▸ Q.exists_companion'
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (Q : 二次映射 R M N) (Q' : M -> N) (h : Q' = ⇑Q)
-  定义体: Q'
-  toFun_smul := h.symm ▸ Q.toFun_smul
-  exists_companion' := h.symm ▸ Q.exists_companion'
-
-@[simp]
+--- 原说明 ---
+Copy of a `QuadraticMap` with a new `toFun` equal to the old one. Useful to fix 
+definitional
+equalities.
 -/
-protected def copy (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q) : QuadraticMap R M N where
+protected def copy (Q : QuadraticMap R M N) (Q' : M → N) (h : Q' = ⇑Q) : QuadraticMap R M N where
   toFun := Q'
   toFun_smul := h.symm ▸ Q.toFun_smul
   exists_companion' := h.symm ▸ Q.exists_companion'
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q)
-  statement: ⇑(Q.copy Q' h) = Q'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (Q : 二次映射 R M N) (Q' : M -> N) (h : Q' = ⇑Q)
-  结论: ⇑(Q.copy Q' h) = Q'
-  证明: rfl
+/-
+**QuadraticMap.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：coe_copy (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q) : ⇑(Q.copy Q
+' h) = Q'
+参数：Q : QuadraticMap R M N；Q' : M -> N；h : Q' = ⇑Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q) : ⇑(Q.copy Q' h) = Q' :=
+theorem coe_copy (Q : QuadraticMap R M N) (Q' : M → N) (h : Q' = ⇑Q) : ⇑(Q.copy Q' h) = Q' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q)
-  statement: Q.copy Q' h = Q
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (Q : 二次映射 R M N) (Q' : M -> N) (h : Q' = ⇑Q)
-  结论: Q.copy Q' h = Q
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**QuadraticMap.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：copy_eq (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q) : Q.copy Q' h
+ = Q
+参数：Q : QuadraticMap R M N；Q' : M -> N；h : Q' = ⇑Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (Q : QuadraticMap R M N) (Q' : M -> N) (h : Q' = ⇑Q) : Q.copy Q' h = Q :=
+theorem copy_eq (Q : QuadraticMap R M N) (Q' : M → N) (h : Q' = ⇑Q) : Q.copy Q' h = Q :=
   DFunLike.ext' h
 
 end DFunLike
@@ -551,64 +466,56 @@ section CommSemiring
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]
 variable (Q : QuadraticMap R M N)
 
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  given: (a : R) (x : M)
-  statement: Q (a • x) = (a * a) • Q x
-  proof: Q.toFun_smul a x
-
-中文:
-定理 map_smul
-  条件: (a : R) (x : M)
-  结论: Q (a • x) = (a * a) • Q x
-  证明: Q.toFun_smul a x
+/-
+**QuadraticMap.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommSemiring R] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [inst_3 : AddCommMonoid N
+] [inst_4 : _root_.Module R N] (Q : QuadraticMap R M N) (a : R)   (x : M), Q (a 
+• x) = (a * a) • Q x
+参数：Q : QuadraticMap R M N；a : R；x : M；a • x；a * a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.toFun_smul`：∀ {R : Type u} {M : Type v} {N : Type w} [inst 
+: CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [ins
+t_3 : AddComm…
 -/
 protected theorem map_smul (a : R) (x : M) : Q (a • x) = (a * a) • Q x :=
   Q.toFun_smul a x
-
-/--
-theorem `exists_companion` / 定理 `exists_companion`
-
-English:
-theorem exists_companion
-  statement: exists B : BilinMap R M N, forall x y, Q (x + y) = Q x + Q y + B x y
-  proof: Q.exists_companion'
-
-中文:
-定理 存在_companion
-  结论: 存在 B : BilinMap R M N, 对任意 x y, Q (x + y) = Q x + Q y + B x y
-  证明: Q.exists_companion'
-
-Depends on / 依赖: Q.exists_companion, ae_restrict_iff, exists_companion, hs.nullMeasurableSet, nullMeasurableSet
+/-
+**QuadraticMap.exists_companion** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：exists_companion : exists B : BilinMap R M N, forall x y, Q (x + y) = Q x 
++ Q y + B x y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.exists_companion'`：∀ {R : Type u} {M : Type v} {N : Type w}
+ [inst : CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]
+   [inst_3 : AddComm…
 -/
-theorem exists_companion : exists B : BilinMap R M N, forall x y, Q (x + y) = Q x + Q y + B x y :=
+theorem exists_companion : ∃ B : BilinMap R M N, ∀ x y, Q (x + y) = Q x + Q y + B x y :=
   Q.exists_companion'
-
-/--
-theorem `map_add_add_add_map` / 定理 `map_add_add_add_map`
-
-English:
-theorem map_add_add_add_map
-  given: (x y z : M)
-  proof: by
-  obtain ⟨B, h⟩ := Q.exists_companion
-  rw [add_comm z x]
-  simp only [h, LinearMap.map_add₂]
-  abel
-
-中文:
-定理 map_add_add_add_map
-  条件: (x y z : M)
-  证明: by
-  obtain ⟨B, h⟩ := Q.exists_companion
-  rw [add_comm z x]
-  simp only [h, LinearMap.map_add₂]
-  abel
-
-Depends on / 依赖: LinearMap, LinearMap.map_add, Q.exists_companion, add_comm, exists_companion
+/-
+**QuadraticMap.map_add_add_add_map** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：map_add_add_add_map (x y z : M) : Q (x + y + z) + (Q x + Q y + Q z) = Q (x
+ + y) + Q (y + z) + Q (z + x)
+参数：x y z : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.exists_companion`：exists_companion : exists B : BilinMap R 
+M N, forall x y, Q (x + y) = Q x + Q y + B x y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearMap.map_add₂`：map_add₂ (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (x₁ x₂ y) :
+ f (x₁ + x₂) y = f x₁ y + f x₂ y
+· 使用定理 `_private.Mathlib.LinearAlgebra.QuadraticForm.Basic.0.QuadraticMap.map_ad
+d_add_add_map._abel_1_1`：∀ {R : Type u_3} {M : Type u_2} {N : Type u_1} [inst : 
+CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [inst_
+3 : A…
 -/
 theorem map_add_add_add_map (x y z : M) :
     Q (x + y + z) + (Q x + Q y + Q z) = Q (x + y) + Q (y + z) + Q (z + x) := by
@@ -616,115 +523,129 @@ theorem map_add_add_add_map (x y z : M) :
   rw [add_comm z x]
   simp only [h, LinearMap.map_add₂]
   abel
-
-/--
-theorem `map_add_self` / 定理 `map_add_self`
-
-English:
-theorem map_add_self
-  given: (x : M)
-  statement: Q (x + x) = 4 • Q x
-  proof: by
-  rw [← two_smul R x]; rw [Q.map_smul]; rw [← Nat.cast_smul_eq_nsmul R]
-  norm_num
-
-中文:
-定理 map_add_self
-  条件: (x : M)
-  结论: Q (x + x) = 4 • Q x
-  证明: by
-  rw [← two_smul R x]; rw [Q.map_smul]; rw [← Nat.cast_smul_eq_nsmul R]
-  norm_num
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, Q.map_smul, cast_smul_eq_nsmul, map_smul, two_smul
+/-
+**QuadraticMap.map_add_self** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：map_add_self (x : M) : Q (x + x) = 4 • Q x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用定理 `QuadraticMap.map_smul`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isNat_natCast`：isNat_natCast {R} [AddMonoidWithOne 
+R] (n m : Nat) : IsNat n m -> IsNat (n : R) m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem map_add_self (x : M) : Q (x + x) = 4 • Q x := by
-  rw [← two_smul R x]; rw [Q.map_smul]; rw [← Nat.cast_smul_eq_nsmul R]
+  rw [← two_smul R x, Q.map_smul, ← Nat.cast_smul_eq_nsmul R]
   norm_num
 
 -- not @[simp] because it is superseded by `ZeroHomClass.map_zero`
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  statement: Q 0 = 0
-  proof: by
-  rw [← @zero_smul R _ _ _ _ (0 : M)]; rw [Q.map_smul]; rw [zero_mul]; rw [zero_smul]
-
-中文:
-定理 map_zero
-  结论: Q 0 = 0
-  证明: by
-  rw [← @zero_smul R _ _ _ _ (0 : M)]; rw [Q.map_smul]; rw [zero_mul]; rw [zero_smul]
+/-
+**QuadraticMap.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommSemiring R] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [inst_3 : AddCommMonoid N
+] [inst_4 : _root_.Module R N] (Q : QuadraticMap R M N), Q 0 = 0
+参数：Q : QuadraticMap R M N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `QuadraticMap.map_smul`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 protected theorem map_zero : Q 0 = 0 := by
-  rw [← @zero_smul R _ _ _ _ (0 : M)]; rw [Q.map_smul]; rw [zero_mul]; rw [zero_smul]
-
-/--
-Instance `zeroHomClass` / 实例 `zeroHomClass`
-
-English:
-instance zeroHomClass
-  signature: : ZeroHomClass (QuadraticMap R M N) M N
-  body: { QuadraticMap.instFunLike (R := R) (M := M) (N := N) with map_zero := QuadraticMap.map_zero }
-
-中文:
-实例 zeroHomClass
-  签名: : 保零态射类 (二次映射 R M N) M N
-  定义体: { QuadraticMap.instFunLike (R := R) (M := M) (N := N) with map_zero := QuadraticMap.map_zero }
-
-Depends on / 依赖: QuadraticMap, QuadraticMap.instFunLike, QuadraticMap.map_zero, instFunLike, map_zero
+  rw [← @zero_smul R _ _ _ _ (0 : M), Q.map_smul, zero_mul, zero_smul]
+/-
+**QuadraticMap.zeroHomClass** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+形式化陈述：zeroHomClass : ZeroHomClass (QuadraticMap R M N) M N
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.map_zero`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
 -/
 instance zeroHomClass : ZeroHomClass (QuadraticMap R M N) M N :=
   { QuadraticMap.instFunLike (R := R) (M := M) (N := N) with map_zero := QuadraticMap.map_zero }
-
-/--
-theorem `map_smul_of_tower` / 定理 `map_smul_of_tower`
-
-English:
-theorem map_smul_of_tower
-  statement: [CommSemiring S] [Algebra S R] [SMul S M] [IsScalarTower S R M]
-  proof: by
-  rw [← IsScalarTower.algebraMap_smul R a x]; rw [Q.map_smul]; rw [← map_mul]; rw [algebraMap_smul]
-
-中文:
-定理 map_smul_of_tower
-  结论: [交换半环 S] [代数 S R] [标量乘法 S M] [标量塔 S R M]
-  证明: by
-  rw [← IsScalarTower.algebraMap_smul R a x]; rw [Q.map_smul]; rw [← map_mul]; rw [algebraMap_smul]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_smul, Q.map_smul, algebraMap_smul, map_mul, map_smul
+/-
+**QuadraticMap.map_smul_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：map_smul_of_tower [CommSemiring S] [Algebra S R] [SMul S M] [IsScalarTower
+ S R M] [Module S N] [IsScalarTower S R N] (a : S) (x : M) : Q (a • x) = (a * a)
+ • Q x
+参数：a : S；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_smul`：algebraMap_smul [SMul R M] [IsScalarTower
+ R A M] (r : R) (x : M) : algebraMap R A r • x = r • x
+· 使用定理 `QuadraticMap.map_smul`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `algebraMap_smul`：algebraMap_smul (r : R) (m : M) : (algebraMap R A) r • 
+m = r • m
 -/
 theorem map_smul_of_tower [CommSemiring S] [Algebra S R] [SMul S M] [IsScalarTower S R M]
     [Module S N] [IsScalarTower S R N] (a : S)
     (x : M) : Q (a • x) = (a * a) • Q x := by
-  rw [← IsScalarTower.algebraMap_smul R a x]; rw [Q.map_smul]; rw [← map_mul]; rw [algebraMap_smul]
+  rw [← IsScalarTower.algebraMap_smul R a x, Q.map_smul, ← map_mul, algebraMap_smul]
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- Restrict the domain of a quadratic map -/
+/-
+**QuadraticMap.restrict** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：{R : Type u_3} →   {M : Type u_4} →     {N : Type u_5} →       [inst : Com
+mSemiring R] →         [inst_1 : AddCommMonoid M] →           [inst_2 : _root_.M
+odule R M] →             [inst_3 : AddCommMonoid N] →               [inst_4 : _r
+oot_.Module R N] → QuadraticMap R M N → (V : Submodule R M) → QuadraticMap R (↥V
+) N
+参数：V : Submodule R M；↥V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (Q : QuadraticMap R M N) (V : Submodule R M)
-  body: Q v
-  toFun_smul a v := Q.toFun_smul a v.val
-  exists_companion' := match Q.exists_companion with
-    | ⟨b, hb⟩ => ⟨b.domRestrict₁₂ V V, fun x y => hb x.val y.val⟩
-
-中文:
-定义 restrict
-  签名: (Q : 二次映射 R M N) (V : 子模 R M)
-  定义体: Q v
-  toFun_smul a v := Q.toFun_smul a v.val
-  exists_companion' := match Q.exists_companion with
-    | ⟨b, hb⟩ => ⟨b.domRestrict₁₂ V V, fun x y => hb x.val y.val⟩
+--- 原说明 ---
+Restrict the domain of a quadratic map
 -/
 @[simps] def restrict (Q : QuadraticMap R M N) (V : Submodule R M) : QuadraticMap R V N where
   toFun v := Q v
   toFun_smul a v := Q.toFun_smul a v.val
   exists_companion' := match Q.exists_companion with
-    | ⟨b, hb⟩ => ⟨b.domRestrict₁₂ V V, fun x y => hb x.val y.val⟩
+    | ⟨b, hb⟩ => ⟨b.domRestrict₁₂ V V, fun x y ↦ hb x.val y.val⟩
 
 end CommSemiring
 
@@ -734,385 +655,333 @@ variable [CommRing R] [AddCommGroup M] [AddCommGroup N]
 variable [Module R M] [Module R N] (Q : QuadraticMap R M N)
 
 @[simp]
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  given: (x : M)
-  statement: Q (-x) = Q x
-  proof: by
-  rw [← @neg_one_smul R _ _ _ _ x]; rw [Q.map_smul]; rw [neg_one_mul]; rw [neg_neg]; rw [one_smul]
-
-中文:
-定理 map_neg
-  条件: (x : M)
-  结论: Q (-x) = Q x
-  证明: by
-  rw [← @neg_one_smul R _ _ _ _ x]; rw [Q.map_smul]; rw [neg_one_mul]; rw [neg_neg]; rw [one_smul]
+/-
+**QuadraticMap.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommRing R] [inst_1
+ : AddCommGroup M] [inst_2 : AddCommGroup N]   [inst_3 : _root_.Module R M] [ins
+t_4 : _root_.Module R N] (Q : QuadraticMap R M N) (x : M), Q (-x) = Q x
+参数：Q : QuadraticMap R M N；x : M；-x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_one_smul`：neg_one_smul (x : M) : (-1 : R) • x = -x
+· 使用定理 `QuadraticMap.map_smul`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
+· 使用定理 `neg_one_mul`：neg_one_mul (a : α) : -1 * a = -a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 protected theorem map_neg (x : M) : Q (-x) = Q x := by
-  rw [← @neg_one_smul R _ _ _ _ x]; rw [Q.map_smul]; rw [neg_one_mul]; rw [neg_neg]; rw [one_smul]
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  given: (x y : M)
-  statement: Q (x - y) = Q (y - x)
-  proof: by rw [← neg_sub, Q.map_neg]
-
-@[simp]
-
-中文:
-定理 map_sub
-  条件: (x y : M)
-  结论: Q (x - y) = Q (y - x)
-  证明: by rw [← neg_sub, Q.map_neg]
-
-@[simp]
+  rw [← @neg_one_smul R _ _ _ _ x, Q.map_smul, neg_one_mul, neg_neg, one_smul]
+/-
+**QuadraticMap.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommRing R] [inst_1
+ : AddCommGroup M] [inst_2 : AddCommGroup N]   [inst_3 : _root_.Module R M] [ins
+t_4 : _root_.Module R N] (Q : QuadraticMap R M N) (x y : M), Q (x - y) = Q (y - 
+x)
+参数：Q : QuadraticMap R M N；x y : M；x - y；y - x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `QuadraticMap.map_neg`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [in
+st : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : AddCommGroup N]   [inst_3 :
+ _root_.Mo…
 -/
 protected theorem map_sub (x y : M) : Q (x - y) = Q (y - x) := by rw [← neg_sub, Q.map_neg]
 
 @[simp]
-/--
-theorem `polar_zero_left` / 定理 `polar_zero_left`
-
-English:
-theorem polar_zero_left
-  given: (y : M)
-  statement: polar Q 0 y = 0
-  proof: by
-  simp only [polar, zero_add, QuadraticMap.map_zero, sub_zero, sub_self]
-
-@[simp]
-
-中文:
-定理 polar_zero_left
-  条件: (y : M)
-  结论: polar Q 0 y = 0
-  证明: by
-  simp only [polar, zero_add, QuadraticMap.map_zero, sub_zero, sub_self]
-
-@[simp]
-
-Depends on / 依赖: QuadraticMap, QuadraticMap.map_zero, map_zero, sub_self, sub_zero, zero_add
+/-
+**QuadraticMap.polar_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_zero_left (y : M) : polar Q 0 y = 0
+参数：y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `QuadraticMap.map_zero`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem polar_zero_left (y : M) : polar Q 0 y = 0 := by
   simp only [polar, zero_add, QuadraticMap.map_zero, sub_zero, sub_self]
 
 @[simp]
-/--
-theorem `polar_add_left` / 定理 `polar_add_left`
-
-English:
-theorem polar_add_left
-  given: (x x' y : M)
-  statement: polar Q (x + x') y = polar Q x y + polar Q x' y
-  proof: polar_add_left_iff.mpr Q.map_add_add_add_map x x' y
-
-@[simp]
-
-中文:
-定理 polar_add_left
-  条件: (x x' y : M)
-  结论: polar Q (x + x') y = polar Q x y + polar Q x' y
-  证明: polar_add_left_iff.mpr Q.map_add_add_add_map x x' y
-
-@[simp]
-
-Depends on / 依赖: Q.map_add_add_add_map, map_add_add_add_map, polar_add_left_iff, polar_add_left_iff.mpr
+/-
+**QuadraticMap.polar_add_left** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_add_left (x x' y : M) : polar Q (x + x') y = polar Q x y + polar Q x
+' y
+参数：x x' y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `QuadraticMap.polar_add_left_iff`：polar_add_left_iff {f : M -> N} {x x' y
+ : M} : polar f (x + x') y = polar f x y + polar f x' y ↔ f (x + x' + y) + (f x 
++ f x' + f y) = f (x …
+· 使用定理 `QuadraticMap.map_add_add_add_map`：map_add_add_add_map (x y z : M) : Q (x
+ + y + z) + (Q x + Q y + Q z) = Q (x + y) + Q (y + z) + Q (z + x)
 -/
 theorem polar_add_left (x x' y : M) : polar Q (x + x') y = polar Q x y + polar Q x' y :=
-polar_add_left_iff.mpr Q.map_add_add_add_map x x' y
+  polar_add_left_iff.mpr <| Q.map_add_add_add_map x x' y
 
 @[simp]
-/--
-theorem `polar_smul_left` / 定理 `polar_smul_left`
-
-English:
-theorem polar_smul_left
-  given: (a : R) (x y : M)
-  statement: polar Q (a • x) y = a • polar Q x y
-  proof: by
-  obtain ⟨B, h⟩ := Q.exists_companion
-  simp_rw [polar, h, Q.map_smul, LinearMap.map_smul₂, sub_sub, add_sub_cancel_left]
-
-@[simp]
-
-中文:
-定理 polar_smul_left
-  条件: (a : R) (x y : M)
-  结论: polar Q (a • x) y = a • polar Q x y
-  证明: by
-  obtain ⟨B, h⟩ := Q.exists_companion
-  simp_rw [polar, h, Q.map_smul, LinearMap.map_smul₂, sub_sub, add_sub_cancel_left]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.map_smul, Q.exists_companion, Q.map_smul, add_sub_cancel_left, exists_companion, map_smul, simp_rw, sub_sub
+/-
+**QuadraticMap.polar_smul_left** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_smul_left (a : R) (x y : M) : polar Q (a • x) y = a • polar Q x y
+参数：a : R；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.exists_companion`：exists_companion : exists B : BilinMap R 
+M N, forall x y, Q (x + y) = Q x + Q y + B x y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `QuadraticMap.map_smul`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
+· 使用定理 `LinearMap.map_smul₂`：map_smul₂ (f : M₂ ->ₗ[R] N₂ ->ₛₗ[σ₁₂] P₂) (r : R) (
+x y) : f (r • x) y = r • f x y
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem polar_smul_left (a : R) (x y : M) : polar Q (a • x) y = a • polar Q x y := by
   obtain ⟨B, h⟩ := Q.exists_companion
   simp_rw [polar, h, Q.map_smul, LinearMap.map_smul₂, sub_sub, add_sub_cancel_left]
 
 @[simp]
-/--
-theorem `polar_neg_left` / 定理 `polar_neg_left`
-
-English:
-theorem polar_neg_left
-  given: (x y : M)
-  statement: polar Q (-x) y = -polar Q x y
-  proof: by
-  rw [← neg_one_smul R x]; rw [polar_smul_left]; rw [neg_one_smul]
-
-@[simp]
-
-中文:
-定理 polar_neg_left
-  条件: (x y : M)
-  结论: polar Q (-x) y = -polar Q x y
-  证明: by
-  rw [← neg_one_smul R x]; rw [polar_smul_left]; rw [neg_one_smul]
-
-@[simp]
-
-Depends on / 依赖: neg_one_smul, polar_smul_left
+/-
+**QuadraticMap.polar_neg_left** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_neg_left (x y : M) : polar Q (-x) y = -polar Q x y
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_one_smul`：neg_one_smul (x : M) : (-1 : R) • x = -x
+· 使用定理 `QuadraticMap.polar_smul_left`：polar_smul_left (a : R) (x y : M) : polar 
+Q (a • x) y = a • polar Q x y
 -/
 theorem polar_neg_left (x y : M) : polar Q (-x) y = -polar Q x y := by
-  rw [← neg_one_smul R x]; rw [polar_smul_left]; rw [neg_one_smul]
+  rw [← neg_one_smul R x, polar_smul_left, neg_one_smul]
 
 @[simp]
-/--
-theorem `polar_sub_left` / 定理 `polar_sub_left`
-
-English:
-theorem polar_sub_left
-  given: (x x' y : M)
-  statement: polar Q (x - x') y = polar Q x y - polar Q x' y
-  proof: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [polar_add_left]; rw [polar_neg_left]
-
-@[simp]
-
-中文:
-定理 polar_sub_left
-  条件: (x x' y : M)
-  结论: polar Q (x - x') y = polar Q x y - polar Q x' y
-  证明: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [polar_add_left]; rw [polar_neg_left]
-
-@[simp]
-
-Depends on / 依赖: polar_add_left, polar_neg_left, sub_eq_add_neg
+/-
+**QuadraticMap.polar_sub_left** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_sub_left (x x' y : M) : polar Q (x - x') y = polar Q x y - polar Q x
+' y
+参数：x x' y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `QuadraticMap.polar_add_left`：polar_add_left (x x' y : M) : polar Q (x + 
+x') y = polar Q x y + polar Q x' y
+· 使用定理 `QuadraticMap.polar_neg_left`：polar_neg_left (x y : M) : polar Q (-x) y =
+ -polar Q x y
 -/
 theorem polar_sub_left (x x' y : M) : polar Q (x - x') y = polar Q x y - polar Q x' y := by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [polar_add_left]; rw [polar_neg_left]
+  rw [sub_eq_add_neg, sub_eq_add_neg, polar_add_left, polar_neg_left]
 
 @[simp]
-/--
-theorem `polar_zero_right` / 定理 `polar_zero_right`
-
-English:
-theorem polar_zero_right
-  given: (y : M)
-  statement: polar Q y 0 = 0
-  proof: by
-  simp only [add_zero, polar, QuadraticMap.map_zero, sub_self]
-
-@[simp]
-
-中文:
-定理 polar_zero_right
-  条件: (y : M)
-  结论: polar Q y 0 = 0
-  证明: by
-  simp only [add_zero, polar, QuadraticMap.map_zero, sub_self]
-
-@[simp]
-
-Depends on / 依赖: QuadraticMap, QuadraticMap.map_zero, add_zero, map_zero, sub_self
+/-
+**QuadraticMap.polar_zero_right** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_zero_right (y : M) : polar Q y 0 = 0
+参数：y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `QuadraticMap.map_zero`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : A…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem polar_zero_right (y : M) : polar Q y 0 = 0 := by
   simp only [add_zero, polar, QuadraticMap.map_zero, sub_self]
 
 @[simp]
-/--
-theorem `polar_add_right` / 定理 `polar_add_right`
-
-English:
-theorem polar_add_right
-  given: (x y y' : M)
-  statement: polar Q x (y + y') = polar Q x y + polar Q x y'
-  proof: by
-  rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_add_left]
-
-@[simp]
-
-中文:
-定理 polar_add_right
-  条件: (x y y' : M)
-  结论: polar Q x (y + y') = polar Q x y + polar Q x y'
-  证明: by
-  rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_add_left]
-
-@[simp]
-
-Depends on / 依赖: polar_add_left, polar_comm
+/-
+**QuadraticMap.polar_add_right** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_add_right (x y y' : M) : polar Q x (y + y') = polar Q x y + polar Q 
+x y'
+参数：x y y' : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.polar_comm`：polar_comm (f : M -> N) (x y : M) : polar f x y
+ = polar f y x
+· 使用定理 `QuadraticMap.polar_add_left`：polar_add_left (x x' y : M) : polar Q (x + 
+x') y = polar Q x y + polar Q x' y
 -/
 theorem polar_add_right (x y y' : M) : polar Q x (y + y') = polar Q x y + polar Q x y' := by
-  rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_add_left]
+  rw [polar_comm Q x, polar_comm Q x, polar_comm Q x, polar_add_left]
 
 @[simp]
-/--
-theorem `polar_smul_right` / 定理 `polar_smul_right`
-
-English:
-theorem polar_smul_right
-  given: (a : R) (x y : M)
-  statement: polar Q x (a • y) = a • polar Q x y
-  proof: by
-  rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_smul_left]
-
-@[simp]
-
-中文:
-定理 polar_smul_right
-  条件: (a : R) (x y : M)
-  结论: polar Q x (a • y) = a • polar Q x y
-  证明: by
-  rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_smul_left]
-
-@[simp]
-
-Depends on / 依赖: polar_comm, polar_smul_left
+/-
+**QuadraticMap.polar_smul_right** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_smul_right (a : R) (x y : M) : polar Q x (a • y) = a • polar Q x y
+参数：a : R；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.polar_comm`：polar_comm (f : M -> N) (x y : M) : polar f x y
+ = polar f y x
+· 使用定理 `QuadraticMap.polar_smul_left`：polar_smul_left (a : R) (x y : M) : polar 
+Q (a • x) y = a • polar Q x y
 -/
 theorem polar_smul_right (a : R) (x y : M) : polar Q x (a • y) = a • polar Q x y := by
-  rw [polar_comm Q x]; rw [polar_comm Q x]; rw [polar_smul_left]
+  rw [polar_comm Q x, polar_comm Q x, polar_smul_left]
 
 @[simp]
-/--
-theorem `polar_neg_right` / 定理 `polar_neg_right`
-
-English:
-theorem polar_neg_right
-  given: (x y : M)
-  statement: polar Q x (-y) = -polar Q x y
-  proof: by
-  rw [← neg_one_smul R y]; rw [polar_smul_right]; rw [neg_one_smul]
-
-@[simp]
-
-中文:
-定理 polar_neg_right
-  条件: (x y : M)
-  结论: polar Q x (-y) = -polar Q x y
-  证明: by
-  rw [← neg_one_smul R y]; rw [polar_smul_right]; rw [neg_one_smul]
-
-@[simp]
-
-Depends on / 依赖: neg_one_smul, polar_smul_right
+/-
+**QuadraticMap.polar_neg_right** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_neg_right (x y : M) : polar Q x (-y) = -polar Q x y
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_one_smul`：neg_one_smul (x : M) : (-1 : R) • x = -x
+· 使用定理 `QuadraticMap.polar_smul_right`：polar_smul_right (a : R) (x y : M) : pola
+r Q x (a • y) = a • polar Q x y
 -/
 theorem polar_neg_right (x y : M) : polar Q x (-y) = -polar Q x y := by
-  rw [← neg_one_smul R y]; rw [polar_smul_right]; rw [neg_one_smul]
+  rw [← neg_one_smul R y, polar_smul_right, neg_one_smul]
 
 @[simp]
-/--
-theorem `polar_sub_right` / 定理 `polar_sub_right`
-
-English:
-theorem polar_sub_right
-  given: (x y y' : M)
-  statement: polar Q x (y - y') = polar Q x y - polar Q x y'
-  proof: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [polar_add_right]; rw [polar_neg_right]
-
-@[simp]
-
-中文:
-定理 polar_sub_right
-  条件: (x y y' : M)
-  结论: polar Q x (y - y') = polar Q x y - polar Q x y'
-  证明: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [polar_add_right]; rw [polar_neg_right]
-
-@[simp]
-
-Depends on / 依赖: polar_add_right, polar_neg_right, sub_eq_add_neg
+/-
+**QuadraticMap.polar_sub_right** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_sub_right (x y y' : M) : polar Q x (y - y') = polar Q x y - polar Q 
+x y'
+参数：x y y' : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `QuadraticMap.polar_add_right`：polar_add_right (x y y' : M) : polar Q x (
+y + y') = polar Q x y + polar Q x y'
+· 使用定理 `QuadraticMap.polar_neg_right`：polar_neg_right (x y : M) : polar Q x (-y)
+ = -polar Q x y
 -/
 theorem polar_sub_right (x y y' : M) : polar Q x (y - y') = polar Q x y - polar Q x y' := by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [polar_add_right]; rw [polar_neg_right]
+  rw [sub_eq_add_neg, sub_eq_add_neg, polar_add_right, polar_neg_right]
 
 @[simp]
-/--
-theorem `polar_self` / 定理 `polar_self`
-
-English:
-theorem polar_self
-  given: (x : M)
-  statement: polar Q x x = 2 • Q x
-  proof: by
-  rw [polar]; rw [map_add_self]; rw [sub_sub]; rw [sub_eq_iff_eq_add]; rw [← two_smul Nat]; rw [← two_smul Nat]; rw [← mul_smul]
-  simp
-
-中文:
-定理 polar_self
-  条件: (x : M)
-  结论: polar Q x x = 2 • Q x
-  证明: by
-  rw [polar]; rw [map_add_self]; rw [sub_sub]; rw [sub_eq_iff_eq_add]; rw [← two_smul Nat]; rw [← two_smul Nat]; rw [← mul_smul]
-  simp
-
-Depends on / 依赖: map_add_self, mul_smul, sub_eq_iff_eq_add, sub_sub, two_smul
+/-
+**QuadraticMap.polar_self** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：polar_self (x : M) : polar Q x x = 2 • Q x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.polar.eq_1`：∀ {M : Type u_4} {N : Type u_5} [inst : AddComm
+Group M] [inst_1 : AddCommGroup N] (f : M → N) (x y : M),   QuadraticMap.polar f
+ x y = f (x +…
+· 使用定理 `QuadraticMap.map_add_self`：map_add_self (x : M) : Q (x + x) = 4 • Q x
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem polar_self (x : M) : polar Q x x = 2 • Q x := by
-  rw [polar]; rw [map_add_self]; rw [sub_sub]; rw [sub_eq_iff_eq_add]; rw [← two_smul Nat]; rw [← two_smul Nat]; rw [← mul_smul]
+  rw [polar, map_add_self, sub_sub, sub_eq_iff_eq_add, ← two_smul ℕ, ← two_smul ℕ, ← mul_smul]
   simp
 
 /-- `QuadraticMap.polar` as a bilinear map -/
 @[simps!]
-/--
-Definition of `polarBilin` / `polarBilin` 的定义
+/-
+**QuadraticMap.polarBilin** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：polarBilin : BilinMap R M N
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.polar_add_left`：polar_add_left (x x' y : M) : polar Q (x + 
+x') y = polar Q x y + polar Q x' y
+· 使用定理 `QuadraticMap.polar_smul_left`：polar_smul_left (a : R) (x y : M) : polar 
+Q (a • x) y = a • polar Q x y
+· 使用定理 `QuadraticMap.polar_add_right`：polar_add_right (x y y' : M) : polar Q x (
+y + y') = polar Q x y + polar Q x y'
+· 使用定理 `QuadraticMap.polar_smul_right`：polar_smul_right (a : R) (x y : M) : pola
+r Q x (a • y) = a • polar Q x y
 
-English:
-definition polarBilin
-  signature: : BilinMap R M N
-  body: LinearMap.mk₂ R (polar Q) (polar_add_left Q) (polar_smul_left Q) (polar_add_right Q)
-  (polar_smul_right Q)
-
-中文:
-定义 polarBilin
-  签名: : BilinMap R M N
-  定义体: LinearMap.mk₂ R (polar Q) (polar_add_left Q) (polar_smul_left Q) (polar_add_right Q)
-  (polar_smul_right Q)
-
-Depends on / 依赖: LinearMap, LinearMap.mk, polar_add_left, polar_add_right, polar_smul_left, polar_smul_right
+--- 原说明 ---
+`QuadraticMap.polar` as a bilinear map
 -/
 def polarBilin : BilinMap R M N :=
   LinearMap.mk₂ R (polar Q) (polar_add_left Q) (polar_smul_left Q) (polar_add_right Q)
   (polar_smul_right Q)
-
-/--
-lemma `polarSym2_map_smul` / 引理 `polarSym2_map_smul`
-
-English:
-lemma polarSym2_map_smul
-  given: {ι} (Q : QuadraticMap R M N) (g : ι -> M) (l : ι -> R) (p : Sym2 ι)
-  proof: by
-  obtain ⟨_, _⟩ := p; simp [← smul_assoc, mul_comm]
-
-中文:
-引理 polarSym2_map_smul
-  条件: {ι} (Q : 二次映射 R M N) (g : ι -> M) (l : ι -> R) (p : Sym2 ι)
-  证明: by
-  obtain ⟨_, _⟩ := p; simp [← smul_assoc, mul_comm]
-
-Depends on / 依赖: mul_comm, smul_assoc
+/-
+**QuadraticMap.polarSym2_map_smul** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticMap`。
+形式化陈述：polarSym2_map_smul {ι} (Q : QuadraticMap R M N) (g : ι -> M) (l : ι -> R) 
+(p : Sym2 ι) : polarSym2 Q (p.map (l • g)) = (p.map l).mul • polarSym2 Q (p.map 
+g)
+参数：Q : QuadraticMap R M N；g : ι -> M；l : ι -> R；p : Sym2 ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Sym2.map_congr`：map_congr {f g : α -> β} {s : Sym2 α} (h : forall x in s
+, f x = g x) : map f s = map g s
+· 使用定理 `QuadraticMap.polar_smul_right`：polar_smul_right (a : R) (x y : M) : pola
+r Q x (a • y) = a • polar Q x y
+· 使用定理 `QuadraticMap.polar_smul_left`：polar_smul_left (a : R) (x y : M) : polar 
+Q (a • x) y = a • polar Q x y
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma polarSym2_map_smul {ι} (Q : QuadraticMap R M N) (g : ι -> M) (l : ι -> R) (p : Sym2 ι) :
+lemma polarSym2_map_smul {ι} (Q : QuadraticMap R M N) (g : ι → M) (l : ι → R) (p : Sym2 ι) :
     polarSym2 Q (p.map (l • g)) = (p.map l).mul • polarSym2 Q (p.map g) := by
   obtain ⟨_, _⟩ := p; simp [← smul_assoc, mul_comm]
 
@@ -1120,160 +989,194 @@ variable [CommSemiring S] [Algebra S R] [Module S M] [IsScalarTower S R M] [Modu
     [IsScalarTower S R N]
 
 @[simp]
-/--
-theorem `polar_smul_left_of_tower` / 定理 `polar_smul_left_of_tower`
-
-English:
-theorem polar_smul_left_of_tower
-  given: (a : S) (x y : M)
-  statement: polar Q (a • x) y = a • polar Q x y
-  proof: by
-  rw [← IsScalarTower.algebraMap_smul R a x]; rw [polar_smul_left]; rw [algebraMap_smul]
-
-@[simp]
-
-中文:
-定理 polar_smul_left_of_tower
-  条件: (a : S) (x y : M)
-  结论: polar Q (a • x) y = a • polar Q x y
-  证明: by
-  rw [← IsScalarTower.algebraMap_smul R a x]; rw [polar_smul_left]; rw [algebraMap_smul]
-
-@[simp]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_smul, algebraMap_smul, polar_smul_left
+/-
+**QuadraticMap.polar_smul_left_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`
+。
+形式化陈述：polar_smul_left_of_tower (a : S) (x y : M) : polar Q (a • x) y = a • polar
+ Q x y
+参数：a : S；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_smul`：algebraMap_smul [SMul R M] [IsScalarTower
+ R A M] (r : R) (x : M) : algebraMap R A r • x = r • x
+· 使用定理 `QuadraticMap.polar_smul_left`：polar_smul_left (a : R) (x y : M) : polar 
+Q (a • x) y = a • polar Q x y
+· 使用定理 `algebraMap_smul`：algebraMap_smul (r : R) (m : M) : (algebraMap R A) r • 
+m = r • m
 -/
 theorem polar_smul_left_of_tower (a : S) (x y : M) : polar Q (a • x) y = a • polar Q x y := by
-  rw [← IsScalarTower.algebraMap_smul R a x]; rw [polar_smul_left]; rw [algebraMap_smul]
+  rw [← IsScalarTower.algebraMap_smul R a x, polar_smul_left, algebraMap_smul]
 
 @[simp]
-/--
-theorem `polar_smul_right_of_tower` / 定理 `polar_smul_right_of_tower`
-
-English:
-theorem polar_smul_right_of_tower
-  given: (a : S) (x y : M)
-  statement: polar Q x (a • y) = a • polar Q x y
-  proof: by
-  rw [← IsScalarTower.algebraMap_smul R a y]; rw [polar_smul_right]; rw [algebraMap_smul]
-
-中文:
-定理 polar_smul_right_of_tower
-  条件: (a : S) (x y : M)
-  结论: polar Q x (a • y) = a • polar Q x y
-  证明: by
-  rw [← IsScalarTower.algebraMap_smul R a y]; rw [polar_smul_right]; rw [algebraMap_smul]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_smul, algebraMap_smul, polar_smul_right
+/-
+**QuadraticMap.polar_smul_right_of_tower** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap
+`。
+形式化陈述：polar_smul_right_of_tower (a : S) (x y : M) : polar Q x (a • y) = a • pola
+r Q x y
+参数：a : S；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.algebraMap_smul`：algebraMap_smul [SMul R M] [IsScalarTower
+ R A M] (r : R) (x : M) : algebraMap R A r • x = r • x
+· 使用定理 `QuadraticMap.polar_smul_right`：polar_smul_right (a : R) (x y : M) : pola
+r Q x (a • y) = a • polar Q x y
+· 使用定理 `algebraMap_smul`：algebraMap_smul (r : R) (m : M) : (algebraMap R A) r • 
+m = r • m
 -/
 theorem polar_smul_right_of_tower (a : S) (x y : M) : polar Q x (a • y) = a • polar Q x y := by
-  rw [← IsScalarTower.algebraMap_smul R a y]; rw [polar_smul_right]; rw [algebraMap_smul]
+  rw [← IsScalarTower.algebraMap_smul R a y, polar_smul_right, algebraMap_smul]
 
 /-- An alternative constructor to `QuadraticMap.mk`, for rings where `polar` can be used. -/
 @[simps]
-/--
-Definition of `ofPolar` / `ofPolar` 的定义
+/-
+**QuadraticMap.ofPolar** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：ofPolar (toFun : M -> N) (toFun_smul : forall (a : R) (x : M), toFun (a • 
+x) = (a * a) • toFun x) (polar_add_left : forall x x' y : M, polar toFun (x + x'
+) y = polar toFun x y + polar toFun x' y) (polar_smul_left : forall (a : R) (x y
+ : M), polar toFun (a • x) y = a • polar toFun x y) : QuadraticMap R M N
+参数：toFun : M -> N；toFun_smul : forall (a : R) (x : M), toFun (a • x) = (a * a) •
+ toFun x；polar_add_left : forall x x' y : M, polar toFun (x + x') y = polar toFu
+n x y + polar toFun x' y；polar_smul_left : forall (a : R) (x y : M), polar toFun
+ (a • x) y = a • polar toFun x y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofPolar
-  signature: (toFun : M -> N) (toFun_smul : forall (a : R) (x : M), toFun (a • x) = (a * a) • toFun x)
-  body: { toFun
-    toFun_smul
-    exists_companion' := ⟨LinearMap.mk₂ R (polar toFun) (polar_add_left) (polar_smul_left)
-      (fun x _ _ => by simp_rw [polar_comm _ x, polar_add_left])
-      (fun _ _ _ => by rw [polar_comm, polar_smul_left, polar_comm]),
-      fun _ _ => by
-        simp only [LinearMap.mk₂_apply]
-        rw [polar]; rw [sub_sub]; rw [add_sub_cancel]⟩ }
-
-中文:
-定义 ofPolar
-  签名: (toFun : M -> N) (toFun_smul : 对任意 (a : R) (x : M), toFun (a • x) = (a * a) • toFun x)
-  定义体: { toFun
-    toFun_smul
-    exists_companion' := ⟨LinearMap.mk₂ R (polar toFun) (polar_add_left) (polar_smul_left)
-      (fun x _ _ => by simp_rw [polar_comm _ x, polar_add_left])
-      (fun _ _ _ => by rw [polar_comm, polar_smul_left, polar_comm]),
-      fun _ _ => by
-        simp only [LinearMap.mk₂_apply]
-        rw [polar]; rw [sub_sub]; rw [add_sub_cancel]⟩ }
-
-Depends on / 依赖: LinearMap, LinearMap.mk, add_sub_cancel, exists_companion, polar_add_left, polar_comm, polar_smul_left, simp_rw, sub_sub, toFun_smul
+--- 原说明 ---
+An alternative constructor to `QuadraticMap.mk`, for rings where `polar` can be 
+used.
 -/
-def ofPolar (toFun : M -> N) (toFun_smul : forall (a : R) (x : M), toFun (a • x) = (a * a) • toFun x)
-    (polar_add_left : forall x x' y : M, polar toFun (x + x') y = polar toFun x y + polar toFun x' y)
-    (polar_smul_left : forall (a : R) (x y : M), polar toFun (a • x) y = a • polar toFun x y) :
+def ofPolar (toFun : M → N) (toFun_smul : ∀ (a : R) (x : M), toFun (a • x) = (a * a) • toFun x)
+    (polar_add_left : ∀ x x' y : M, polar toFun (x + x') y = polar toFun x y + polar toFun x' y)
+    (polar_smul_left : ∀ (a : R) (x y : M), polar toFun (a • x) y = a • polar toFun x y) :
     QuadraticMap R M N :=
   { toFun
     toFun_smul
     exists_companion' := ⟨LinearMap.mk₂ R (polar toFun) (polar_add_left) (polar_smul_left)
-      (fun x _ _ => by simp_rw [polar_comm _ x, polar_add_left])
-      (fun _ _ _ => by rw [polar_comm, polar_smul_left, polar_comm]),
-      fun _ _ => by
+      (fun x _ _ ↦ by simp_rw [polar_comm _ x, polar_add_left])
+      (fun _ _ _ ↦ by rw [polar_comm, polar_smul_left, polar_comm]),
+      fun _ _ ↦ by
         simp only [LinearMap.mk₂_apply]
-        rw [polar]; rw [sub_sub]; rw [add_sub_cancel]⟩ }
+        rw [polar, sub_sub, add_sub_cancel]⟩ }
 
-/--
-theorem `choose_exists_companion` / 定理 `choose_exists_companion`
+/-- In a ring the companion bilinear form is unique and equal to `QuadraticMap.polar`. -/
+/-
+**QuadraticMap.choose_exists_companion** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：choose_exists_companion : Q.exists_companion.choose = polarBilin Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext₂`：ext₂ {f g : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P} (H : forall m n, 
+f m n = g m n) : f = g
+· 使用定理 `QuadraticMap.exists_companion`：exists_companion : exists B : BilinMap R 
+M N, forall x y, Q (x + y) = Q x + Q y + B x y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.polarBilin_apply_apply`：∀ {R : Type u_3} {M : Type u_4} {N 
+: Type u_5} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : AddCommGroup
+ N]   [inst_3 : _root_.Mo…
+· 使用定理 `QuadraticMap.polar.eq_1`：∀ {M : Type u_4} {N : Type u_5} [inst : AddComm
+Group M] [inst_1 : AddCommGroup N] (f : M → N) (x y : M),   QuadraticMap.polar f
+ x y = f (x +…
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
 
-English:
-theorem choose_exists_companion
-  statement: Q.exists_companion.choose = polarBilin Q
-  proof: LinearMap.ext₂ fun x y => by
-    rw [polarBilin_apply_apply]; rw [polar]; rw [Q.exists_companion.choose_spec]; rw [sub_sub]; rw [add_sub_cancel_left]
-
-中文:
-定理 choose_存在_companion
-  结论: Q.存在_companion.choose = polarBilin Q
-  证明: LinearMap.ext₂ fun x y => by
-    rw [polarBilin_apply_apply]; rw [polar]; rw [Q.exists_companion.choose_spec]; rw [sub_sub]; rw [add_sub_cancel_left]
-
-Depends on / 依赖: LinearMap, LinearMap.ext, Q.exists_companion.choose_spec, add_sub_cancel_left, choose_spec, exists_companion, polarBilin_apply_apply, sub_sub
+--- 原说明 ---
+In a ring the companion bilinear form is unique and equal to `QuadraticMap.polar
+`.
 -/
 theorem choose_exists_companion : Q.exists_companion.choose = polarBilin Q :=
   LinearMap.ext₂ fun x y => by
-    rw [polarBilin_apply_apply]; rw [polar]; rw [Q.exists_companion.choose_spec]; rw [sub_sub]; rw [add_sub_cancel_left]
-
-/--
-theorem `map_sum` / 定理 `map_sum`
-
-English:
-theorem map_sum
-  given: {ι} [DecidableEq ι] (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M)
-  proof: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons a s ha ih =>
-    simp_rw [Finset.sum_cons, QuadraticMap.map_add, ih, add_assoc, Finset.sym2_cons,
-      Finset.sum_filter, Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons,
-      Sym2.mkEmbedding_apply, Sym2.mk_isDiag_iff, not_true, if_false, zero_add,
-      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
-      polarBilin_apply_apply]
-    congr 2
-    rw [add_comm]
-    congr! with i hi
-    rw [if_pos (ne_of_mem_of_not_mem hi ha).symm]
-
-中文:
-定理 map_sum
-  条件: {ι} [DecidableEq ι] (Q : 二次映射 R M N) (s : 有限集 ι) (f : ι -> M)
-  证明: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons a s ha ih =>
-    simp_rw [Finset.sum_cons, QuadraticMap.map_add, ih, add_assoc, Finset.sym2_cons,
-      Finset.sum_filter, Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons,
-      Sym2.mkEmbedding_apply, Sym2.mk_isDiag_iff, not_true, if_false, zero_add,
-      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
-      polarBilin_apply_apply]
-    congr 2
-    rw [add_comm]
-    congr! with i hi
-    rw [if_pos (ne_of_mem_of_not_mem hi ha).symm]
+    rw [polarBilin_apply_apply, polar, Q.exists_companion.choose_spec, sub_sub,
+      add_sub_cancel_left]
+/-
+**QuadraticMap.map_sum** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommRing R] [inst_1
+ : AddCommGroup M] [inst_2 : AddCommGroup N]   [inst_3 : _root_.Module R M] [ins
+t_4 : _root_.Module R N] {ι : Type u_8} [inst_5 : DecidableEq ι]   (Q : Quadrati
+cMap R M N) (s : Finset ι) (f : ι → M),   Q (∑ i ∈ s, f i) = ∑ i ∈ s, Q (f i) + 
+∑ ij ∈ s.sym2 with ¬ij.IsDiag, QuadraticMap.polarSym2 (⇑Q) (Sym2.map f ij)
+参数：Q : QuadraticMap R M N；s : Finset ι；f : ι → M；∑ i ∈ s, f i；f i；⇑Q；Sym2.map f 
+ij。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.filter_empty`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePr
+ed p], Finset.filter p ∅ = ∅
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `QuadraticMap.map_add`：∀ {M : Type u_4} {N : Type u_5} [inst : AddCommGro
+up M] [inst_1 : AddCommGroup N] (f : M → N) (x y : M),   f (x + y) = f x + f y +
+ Quadratic…
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.filter.congr_simp`：∀ {α : Type u_1} (p p_1 : α → Prop),   p = p_1
+ →     ∀ {inst : DecidablePred p} [inst_1 : DecidablePred p_1] (s s_1 : Finset α
+),       s = s…
+· 使用定理 `Finset.sym2_cons`：sym2_cons (a : α) (s : Finset α) (ha : a ∉ s) : (s.con
+s a ha).sym2 = ((s.cons a ha).map <| Sym2.mkEmbedding a).disjUnion s.sym2 (by si
+mp [Fi…
+· 使用定理 `Finset.sum_filter`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst 
+: AddCommMonoid M] (p : ι → Prop) [inst_1 : DecidablePred p]   (f : ι → M), ∑ a 
+∈ s wit…
+· 使用定理 `Finset.sum_disjUnion`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι}
+ [inst : AddCommMonoid M] {f : ι → M} (h : Disjoint s₁ s₂),   ∑ x ∈ s₁.disjUnion
+ s₂ h, f x…
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Sym2.mkEmbedding_apply`：∀ {α : Type u_1} (a b : α), (Sym2.mkEmbedding a)
+ b = s(a, b)
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `QuadraticMap.polarBilin_apply_apply`：∀ {R : Type u_3} {M : Type u_4} {N 
+: Type u_5} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : AddCommGroup
+ N]   [inst_3 : _root_.Mo…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 33 条，此处仅展示前 30 条）
 -/
-protected theorem map_sum {ι} [DecidableEq ι] (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M) :
-    Q (∑ i in s, f i) = ∑ i in s, Q (f i)
-      + ∑ ij in s.sym2 with ¬ ij.IsDiag, polarSym2 Q (ij.map f) := by
+protected theorem map_sum {ι} [DecidableEq ι] (Q : QuadraticMap R M N) (s : Finset ι) (f : ι → M) :
+    Q (∑ i ∈ s, f i) = ∑ i ∈ s, Q (f i)
+      + ∑ ij ∈ s.sym2 with ¬ ij.IsDiag, polarSym2 Q (ij.map f) := by
   induction s using Finset.cons_induction with
   | empty => simp
   | cons a s ha ih =>
@@ -1286,38 +1189,84 @@ protected theorem map_sum {ι} [DecidableEq ι] (Q : QuadraticMap R M N) (s : Fi
     rw [add_comm]
     congr! with i hi
     rw [if_pos (ne_of_mem_of_not_mem hi ha).symm]
-
-/--
-theorem `map_sum'` / 定理 `map_sum'`
-
-English:
-theorem map_sum'
-  given: {ι} (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M)
-  proof: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons a s ha ih =>
-    simp_rw [Finset.sum_cons, QuadraticMap.map_add Q, ih, add_assoc, Finset.sym2_cons,
-      Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons, Sym2.mkEmbedding_apply,
-      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
-      polarBilin_apply_apply, polar_self]
-    abel_nf
-
-中文:
-定理 map_sum'
-  条件: {ι} (Q : 二次映射 R M N) (s : 有限集 ι) (f : ι -> M)
-  证明: by
-  induction s using Finset.cons_induction with
-  | empty => simp
-  | cons a s ha ih =>
-    simp_rw [Finset.sum_cons, QuadraticMap.map_add Q, ih, add_assoc, Finset.sym2_cons,
-      Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons, Sym2.mkEmbedding_apply,
-      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
-      polarBilin_apply_apply, polar_self]
-    abel_nf
+/-
+**QuadraticMap.map_sum'** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommRing R] [inst_1
+ : AddCommGroup M] [inst_2 : AddCommGroup N]   [inst_3 : _root_.Module R M] [ins
+t_4 : _root_.Module R N] {ι : Type u_8} (Q : QuadraticMap R M N) (s : Finset ι) 
+  (f : ι → M), Q (∑ i ∈ s, f i) = ∑ ij ∈ s.sym2, QuadraticMap.polarSym2 (⇑Q) (Sy
+m2.map f ij) - ∑ i ∈ s, Q (f i)
+参数：Q : QuadraticMap R M N；s : Finset ι；f : ι → M；∑ i ∈ s, f i；⇑Q；Sym2.map f ij；f
+ i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `QuadraticMap.map_add`：∀ {M : Type u_4} {N : Type u_5} [inst : AddCommGro
+up M] [inst_1 : AddCommGroup N] (f : M → N) (x y : M),   f (x + y) = f x + f y +
+ Quadratic…
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sym2_cons`：sym2_cons (a : α) (s : Finset α) (ha : a ∉ s) : (s.con
+s a ha).sym2 = ((s.cons a ha).map <| Sym2.mkEmbedding a).disjUnion s.sym2 (by si
+mp [Fi…
+· 使用定理 `Finset.sum_disjUnion`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι}
+ [inst : AddCommMonoid M] {f : ι → M} (h : Disjoint s₁ s₂),   ∑ x ∈ s₁.disjUnion
+ s₂ h, f x…
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
+· 使用定理 `Sym2.mkEmbedding_apply`：∀ {α : Type u_1} (a b : α), (Sym2.mkEmbedding a)
+ b = s(a, b)
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `QuadraticMap.polarBilin_apply_apply`：∀ {R : Type u_3} {M : Type u_4} {N 
+: Type u_5} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : AddCommGroup
+ N]   [inst_3 : _root_.Mo…
+· 使用定理 `QuadraticMap.polar_self`：polar_self (x : M) : polar Q x x = 2 • Q x
+· 使用引理 `Mathlib.Tactic.Abel.subst_into_addg`：subst_into_addg {α} [AddCommGroup α
+] (l r tl tr t) (prl : (l : α) = tl) (prr : r = tr) (prt : tl + tr = t) : l + r 
+= t
+· 使用定理 `Mathlib.Tactic.Abel.term_atomg`：term_atomg {α} [AddCommGroup α] (x : α) 
+: x = termg 1 x 0
+· 使用定理 `Mathlib.Tactic.Abel.unfold_sub`：unfold_sub {α} [SubtractionMonoid α] (a 
+b c : α) (h : a + -b = c) : a - b = c
+· 使用引理 `Mathlib.Tactic.Abel.subst_into_negg`：subst_into_negg {α} [AddCommGroup α
+] (a ta t : α) (pra : a = ta) (prt : -ta = t) : -a = t
+· 使用定理 `Mathlib.Tactic.Abel.term_neg`：term_neg {α} [AddCommGroup α] (n x a n' a'
+) (h₁ : -n = n') (h₂ : -a = a') : -@termg α _ n x a = termg n' x a'
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `Mathlib.Tactic.Abel.term_add_constg`：term_add_constg {α} [AddCommGroup α
+] (n x a k a') (h : a + k = a') : @termg α _ n x a + k = termg n x a'
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+（共 45 条，此处仅展示前 30 条）
 -/
-protected theorem map_sum' {ι} (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M) :
-    Q (∑ i in s, f i) = ∑ ij in s.sym2, polarSym2 Q (ij.map f) - ∑ i in s, Q (f i) := by
+protected theorem map_sum' {ι} (Q : QuadraticMap R M N) (s : Finset ι) (f : ι → M) :
+    Q (∑ i ∈ s, f i) = ∑ ij ∈ s.sym2, polarSym2 Q (ij.map f) - ∑ i ∈ s, Q (f i) := by
   induction s using Finset.cons_induction with
   | empty => simp
   | cons a s ha ih =>
@@ -1338,65 +1287,30 @@ section SMul
 variable [Monoid S] [Monoid T] [DistribMulAction S N] [DistribMulAction T N]
 variable [SMulCommClass S R N] [SMulCommClass T R N]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `QuadraticMap R M N` inherits the scalar action from any algebra over `R`.
 
-English:
-instance :
-  signature: SMul S (QuadraticMap R M N)
-  body: ⟨fun a Q =>
-    { toFun := a • ⇑Q
-      toFun_smul := fun b x => by
-        rw [Pi.smul_apply]; rw [Q.map_smul]; rw [Pi.smul_apply]; rw [smul_comm]
-      exists_companion' :=
-        let ⟨B, h⟩ := Q.exists_companion
-        letI := SMulCommClass.symm S R N
-        ⟨a • B, by simp [h]⟩ }⟩
+This provides an `R`-action via `Algebra.id`. -/
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 :
-  签名: 标量乘法 S (二次映射 R M N)
-  定义体: ⟨fun a Q =>
-    { toFun := a • ⇑Q
-      toFun_smul := fun b x => by
-        rw [Pi.smul_apply]; rw [Q.map_smul]; rw [Pi.smul_apply]; rw [smul_comm]
-      exists_companion' :=
-        let ⟨B, h⟩ := Q.exists_companion
-        letI := SMulCommClass.symm S R N
-        ⟨a • B, by simp [h]⟩ }⟩
+--- 原说明 ---
+`QuadraticMap R M N` inherits the scalar action from any algebra over `R`.
 
-Depends on / 依赖: Pi.smul_apply, Q.exists_companion, Q.map_smul, SMulCommClass, SMulCommClass.symm, exists_companion, map_smul, smul_apply, smul_comm, toFun_smul
+This provides an `R`-action via `Algebra.id`.
 -/
 instance : SMul S (QuadraticMap R M N) :=
   ⟨fun a Q =>
     { toFun := a • ⇑Q
       toFun_smul := fun b x => by
-        rw [Pi.smul_apply]; rw [Q.map_smul]; rw [Pi.smul_apply]; rw [smul_comm]
+        rw [Pi.smul_apply, Q.map_smul, Pi.smul_apply, smul_comm]
       exists_companion' :=
         let ⟨B, h⟩ := Q.exists_companion
         letI := SMulCommClass.symm S R N
         ⟨a • B, by simp [h]⟩ }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSMulApply S (QuadraticMap R M N) M N
-  body: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_smul := FunLike.coe_smul
-
-@[deprecated (since := "2026-07-27")] protected alias smul_apply := smul_apply
-
-中文:
-实例 :
-  签名: 是SMulApply S (二次映射 R M N) M N
-  定义体: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_smul := FunLike.coe_smul
-
-@[deprecated (since := "2026-07-27")] protected alias smul_apply := smul_apply
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsSMulApply S (QuadraticMap R M N) M N where
   smul_apply _ _ _ := rfl
@@ -1404,89 +1318,32 @@ instance : IsSMulApply S (QuadraticMap R M N) M N where
 @[deprecated (since := "2026-07-27")] alias coeFn_smul := FunLike.coe_smul
 
 @[deprecated (since := "2026-07-27")] protected alias smul_apply := smul_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: S T N] : SMulCommClass S T (QuadraticMap R M N)
-  body: FunLike.smulCommClass
-
-中文:
-实例 [标量交换类
-  签名: S T N] : 标量交换类 S T (二次映射 R M N)
-  定义体: FunLike.smulCommClass
-
-Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass S T N] : SMulCommClass S T (QuadraticMap R M N) :=
   FunLike.smulCommClass
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S T] [IsScalarTower S T N] : IsScalarTower S T (QuadraticMap R M N)
-  body: FunLike.isScalarTower
-
-中文:
-实例 [标量乘法
-  签名: S T] [标量塔 S T N] : 标量塔 S T (二次映射 R M N)
-  定义体: FunLike.isScalarTower
-
-Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S T] [IsScalarTower S T N] : IsScalarTower S T (QuadraticMap R M N) :=
   FunLike.isScalarTower
 
 end SMul
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (QuadraticMap R M N)
-  body: ⟨{ toFun := fun _ => 0
-      toFun_smul := fun a _ => by simp only [smul_zero]
-      exists_companion' := ⟨0, fun _ _ => by simp only [add_zero, LinearMap.zero_apply]⟩ }⟩
-
-中文:
-实例 :
-  签名: 零 (二次映射 R M N)
-  定义体: ⟨{ toFun := fun _ => 0
-      toFun_smul := fun a _ => by simp only [smul_zero]
-      exists_companion' := ⟨0, fun _ _ => by simp only [add_zero, LinearMap.zero_apply]⟩ }⟩
-
-Depends on / 依赖: LinearMap, LinearMap.zero_apply, add_zero, exists_companion, smul_zero, toFun_smul, zero_apply
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (QuadraticMap R M N) :=
-  ⟨{ toFun := fun _ => 0
+  ⟨{  toFun := fun _ => 0
       toFun_smul := fun a _ => by simp only [smul_zero]
       exists_companion' := ⟨0, fun _ _ => by simp only [add_zero, LinearMap.zero_apply]⟩ }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroApply (QuadraticMap R M N) M N
-  body: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_zero := FunLike.coe_zero
-
-@[deprecated (since := "2026-07-27")] protected alias zero_apply := zero_apply
-
-中文:
-实例 :
-  签名: 是ZeroApply (二次映射 R M N) M N
-  定义体: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_zero := FunLike.coe_zero
-
-@[deprecated (since := "2026-07-27")] protected alias zero_apply := zero_apply
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZeroApply (QuadraticMap R M N) M N where
   zero_apply _ := rfl
@@ -1494,51 +1351,15 @@ instance : IsZeroApply (QuadraticMap R M N) M N where
 @[deprecated (since := "2026-07-27")] alias coeFn_zero := FunLike.coe_zero
 
 @[deprecated (since := "2026-07-27")] protected alias zero_apply := zero_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (QuadraticMap R M N)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (二次映射 R M N)
-  定义体: ⟨0⟩
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (QuadraticMap R M N) :=
   ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (QuadraticMap R M N)
-  body: ⟨fun Q Q' =>
-    { toFun := Q + Q'
-      toFun_smul := fun a x => by simp only [Pi.add_apply, smul_add, QuadraticMap.map_smul]
-      exists_companion' :=
-        let ⟨B, h⟩ := Q.exists_companion
-        let ⟨B', h'⟩ := Q'.exists_companion
-        ⟨B + B', fun x y => by
-          simp_rw [Pi.add_apply, h, h', LinearMap.add_apply, add_add_add_comm]⟩ }⟩
-
-中文:
-实例 :
-  签名: 加法 (二次映射 R M N)
-  定义体: ⟨fun Q Q' =>
-    { toFun := Q + Q'
-      toFun_smul := fun a x => by simp only [Pi.add_apply, smul_add, QuadraticMap.map_smul]
-      exists_companion' :=
-        let ⟨B, h⟩ := Q.exists_companion
-        let ⟨B', h'⟩ := Q'.exists_companion
-        ⟨B + B', fun x y => by
-          simp_rw [Pi.add_apply, h, h', LinearMap.add_apply, add_add_add_comm]⟩ }⟩
-
-Depends on / 依赖: LinearMap, LinearMap.add_apply, Pi.add_apply, Q.exists_companion, QuadraticMap, QuadraticMap.map_smul, add_add_add_comm, add_apply, exists_companion, map_smul, simp_rw, smul_add, toFun_smul
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (QuadraticMap R M N) :=
   ⟨fun Q Q' =>
@@ -1549,27 +1370,9 @@ instance : Add (QuadraticMap R M N) :=
         let ⟨B', h'⟩ := Q'.exists_companion
         ⟨B + B', fun x y => by
           simp_rw [Pi.add_apply, h, h', LinearMap.add_apply, add_add_add_comm]⟩ }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsAddApply (QuadraticMap R M N) M N
-  body: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_add := FunLike.coe_add
-
-@[deprecated (since := "2026-07-27")] protected alias add_apply := add_apply
-
-中文:
-实例 :
-  签名: 是加法Apply (二次映射 R M N) M N
-  定义体: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_add := FunLike.coe_add
-
-@[deprecated (since := "2026-07-27")] protected alias add_apply := add_apply
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsAddApply (QuadraticMap R M N) M N where
   add_apply _ _ _ := rfl
@@ -1577,29 +1380,9 @@ instance : IsAddApply (QuadraticMap R M N) M N where
 @[deprecated (since := "2026-07-27")] alias coeFn_add := FunLike.coe_add
 
 @[deprecated (since := "2026-07-27")] protected alias add_apply := add_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommMonoid (QuadraticMap R M N)
-  body: fast_instance% FunLike.addCommMonoid
-
-@[deprecated (since := "2026-07-27")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
-
-@[deprecated (since := "2026-07-27")] alias coeFnAddMonoidHom_apply := FunLike.coeAddMonoidHom_apply
-
-中文:
-实例 :
-  签名: 加法交换幺半群 (二次映射 R M N)
-  定义体: fast_instance% FunLike.addCommMonoid
-
-@[deprecated (since := "2026-07-27")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
-
-@[deprecated (since := "2026-07-27")] alias coeFnAddMonoidHom_apply := FunLike.coeAddMonoidHom_apply
-
-Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommMonoid (QuadraticMap R M N) := fast_instance% FunLike.addCommMonoid
 
@@ -1609,68 +1392,38 @@ instance : AddCommMonoid (QuadraticMap R M N) := fast_instance% FunLike.addCommM
 
 /-- Evaluation on a particular element of the module `M` is an additive map on quadratic maps. -/
 @[simps! apply]
-/--
-Definition of `evalAddMonoidHom` / `evalAddMonoidHom` 的定义
+/-
+**QuadraticMap.evalAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：evalAddMonoidHom (m : M) : QuadraticMap R M N ->+ N
+参数：m : M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.instIsZeroApply`：∀ {R : Type u_3} {M : Type u_4} {N : Type 
+u_5} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Modul
+e R M] [inst_3 : A…
+· 使用定理 `QuadraticMap.instIsAddApply`：∀ {R : Type u_3} {M : Type u_4} {N : Type u
+_5} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module
+ R M] [inst_3 : A…
 
-English:
-definition evalAddMonoidHom
-  signature: (m : M)
-  body: (Pi.evalAddMonoidHom _ m).comp (FunLike.coeAddMonoidHom _ _ _)
-
-@[deprecated (since := "2026-07-27")] alias coeFn_sum := FunLike.coe_sum
-
-@[deprecated (since := "2026-07-27")] protected alias sum_apply := sum_apply
-
-中文:
-定义 evalAddMonoidHom
-  签名: (m : M)
-  定义体: (Pi.evalAddMonoidHom _ m).comp (FunLike.coeAddMonoidHom _ _ _)
-
-@[deprecated (since := "2026-07-27")] alias coeFn_sum := FunLike.coe_sum
-
-@[deprecated (since := "2026-07-27")] protected alias sum_apply := sum_apply
-
-Depends on / 依赖: FunLike, FunLike.coeAddMonoidHom, Pi.evalAddMonoidHom, coeAddMonoidHom, evalAddMonoidHom
+--- 原说明 ---
+Evaluation on a particular element of the module `M` is an additive map on quadr
+atic maps.
 -/
-def evalAddMonoidHom (m : M) : QuadraticMap R M N ->+ N :=
+def evalAddMonoidHom (m : M) : QuadraticMap R M N →+ N :=
   (Pi.evalAddMonoidHom _ m).comp (FunLike.coeAddMonoidHom _ _ _)
 
 @[deprecated (since := "2026-07-27")] alias coeFn_sum := FunLike.coe_sum
 
 @[deprecated (since := "2026-07-27")] protected alias sum_apply := sum_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: S] [DistribMulAction S N] [SMulCommClass S R N] :
-  body: fast_instance% FunLike.distribMulAction
-
-中文:
-实例 [幺半群
-  签名: S] [分配乘法作用 S N] [标量交换类 S R N] :
-  定义体: fast_instance% FunLike.distribMulAction
-
-Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid S] [DistribMulAction S N] [SMulCommClass S R N] :
     DistribMulAction S (QuadraticMap R M N) := fast_instance% FunLike.distribMulAction
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: S] [Module S N] [SMulCommClass S R N] :
-  body: fast_instance% FunLike.module
-
-中文:
-实例 [半环
-  签名: S] [模 S N] [标量交换类 S R N] :
-  定义体: fast_instance% FunLike.module
-
-Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring S] [Module S N] [SMulCommClass S R N] :
     Module S (QuadraticMap R M N) := fast_instance% FunLike.module
@@ -1681,30 +1434,9 @@ section RingOperators
 
 variable [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (QuadraticMap R M N)
-  body: ⟨fun Q =>
-    { toFun := -Q
-      toFun_smul := fun a x => by simp only [Pi.neg_apply, Q.map_smul, smul_neg]
-      exists_companion' :=
-        let ⟨B, h⟩ := Q.exists_companion
-        ⟨-B, fun x y => by simp_rw [Pi.neg_apply, h, LinearMap.neg_apply, neg_add]⟩ }⟩
-
-中文:
-实例 :
-  签名: 取负 (二次映射 R M N)
-  定义体: ⟨fun Q =>
-    { toFun := -Q
-      toFun_smul := fun a x => by simp only [Pi.neg_apply, Q.map_smul, smul_neg]
-      exists_companion' :=
-        let ⟨B, h⟩ := Q.exists_companion
-        ⟨-B, fun x y => by simp_rw [Pi.neg_apply, h, LinearMap.neg_apply, neg_add]⟩ }⟩
-
-Depends on / 依赖: LinearMap, LinearMap.neg_apply, Pi.neg_apply, Q.exists_companion, Q.map_smul, exists_companion, map_smul, neg_add, neg_apply, simp_rw, smul_neg, toFun_smul
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (QuadraticMap R M N) :=
   ⟨fun Q =>
@@ -1713,27 +1445,9 @@ instance : Neg (QuadraticMap R M N) :=
       exists_companion' :=
         let ⟨B, h⟩ := Q.exists_companion
         ⟨-B, fun x y => by simp_rw [Pi.neg_apply, h, LinearMap.neg_apply, neg_add]⟩ }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNegApply (QuadraticMap R M N) M N
-  body: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_neg := FunLike.coe_neg
-
-@[deprecated (since := "2026-07-27")] protected alias neg_apply := neg_apply
-
-中文:
-实例 :
-  签名: 是NegApply (二次映射 R M N) M N
-  定义体: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_neg := FunLike.coe_neg
-
-@[deprecated (since := "2026-07-27")] protected alias neg_apply := neg_apply
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsNegApply (QuadraticMap R M N) M N where
   neg_apply _ _ := rfl
@@ -1741,45 +1455,15 @@ instance : IsNegApply (QuadraticMap R M N) M N where
 @[deprecated (since := "2026-07-27")] alias coeFn_neg := FunLike.coe_neg
 
 @[deprecated (since := "2026-07-27")] protected alias neg_apply := neg_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (QuadraticMap R M N)
-  body: ⟨fun Q Q' => (Q + -Q').copy (Q - Q') (sub_eq_add_neg _ _)⟩
-
-中文:
-实例 :
-  签名: 减法 (二次映射 R M N)
-  定义体: ⟨fun Q Q' => (Q + -Q').copy (Q - Q') (sub_eq_add_neg _ _)⟩
-
-Depends on / 依赖: sub_eq_add_neg
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (QuadraticMap R M N) :=
   ⟨fun Q Q' => (Q + -Q').copy (Q - Q') (sub_eq_add_neg _ _)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSubApply (QuadraticMap R M N) M N
-  body: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_sub := FunLike.coe_sub
-
-@[deprecated (since := "2026-07-27")] protected alias sub_apply := sub_apply
-
-中文:
-实例 :
-  签名: 是SubApply (二次映射 R M N) M N
-  定义体: rfl
-
-@[deprecated (since := "2026-07-27")] alias coeFn_sub := FunLike.coe_sub
-
-@[deprecated (since := "2026-07-27")] protected alias sub_apply := sub_apply
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsSubApply (QuadraticMap R M N) M N where
   sub_apply _ _ _ := rfl
@@ -1787,21 +1471,9 @@ instance : IsSubApply (QuadraticMap R M N) M N where
 @[deprecated (since := "2026-07-27")] alias coeFn_sub := FunLike.coe_sub
 
 @[deprecated (since := "2026-07-27")] protected alias sub_apply := sub_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (QuadraticMap R M N)
-  body: fast_instance% FunLike.addCommGroup
-
-中文:
-实例 :
-  签名: 加法交换群 (二次映射 R M N)
-  定义体: fast_instance% FunLike.addCommGroup
-
-Depends on / 依赖: FunLike, FunLike.addCommGroup, addCommGroup, fast_instance
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (QuadraticMap R M N) := fast_instance% FunLike.addCommGroup
 
@@ -1816,30 +1488,17 @@ variable [IsScalarTower S R M] [IsScalarTower S R N]
 /-- If `Q : M → N` is a quadratic map of `R`-modules and `R` is an `S`-algebra,
 then the restriction of scalars is a quadratic map of `S`-modules. -/
 @[simps!]
-/--
-Definition of `restrictScalars` / `restrictScalars` 的定义
+/-
+**QuadraticMap.restrictScalars** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：restrictScalars (Q : QuadraticMap R M N) : QuadraticMap S M N where toFun 
+x
+参数：Q : QuadraticMap R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictScalars
-  signature: (Q : QuadraticMap R M N)
-  body: Q x
-  toFun_smul a x := by
-    simp [map_smul_of_tower]
-  exists_companion' :=
-    let ⟨B, h⟩ := Q.exists_companion
-    ⟨B.restrictScalars₁₂ (S := R) (R' := S) (S' := S), fun x y => by
-      simp only [LinearMap.restrictScalars₁₂_apply_apply, h]⟩
-
-中文:
-定义 restrictScalars
-  签名: (Q : 二次映射 R M N)
-  定义体: Q x
-  toFun_smul a x := by
-    simp [map_smul_of_tower]
-  exists_companion' :=
-    let ⟨B, h⟩ := Q.exists_companion
-    ⟨B.restrictScalars₁₂ (S := R) (R' := S) (S' := S), fun x y => by
-      simp only [LinearMap.restrictScalars₁₂_apply_apply, h]⟩
+--- 原说明 ---
+If `Q : M → N` is a quadratic map of `R`-modules and `R` is an `S`-algebra,
+then the restriction of scalars is a quadratic map of `S`-modules.
 -/
 def restrictScalars (Q : QuadraticMap R M N) : QuadraticMap S M N where
   toFun x := Q x
@@ -1857,32 +1516,19 @@ section Comp
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]
 variable [AddCommMonoid P] [Module R P]
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Compose the quadratic map with a linear function on the right. -/
+/-
+**QuadraticMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：comp (Q : QuadraticMap R N P) (f : M ->ₗ[R] N) : QuadraticMap R M P where 
+toFun x
+参数：Q : QuadraticMap R N P；f : M ->ₗ[R] N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (Q : QuadraticMap R N P) (f : M ->ₗ[R] N)
-  body: Q (f x)
-  toFun_smul a x := by simp only [Q.map_smul, map_smul]
-  exists_companion' :=
-    let ⟨B, h⟩ := Q.exists_companion
-    ⟨B.compl₁₂ f f, fun x y => by simp_rw [f.map_add]; exact h (f x) (f y)⟩
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (Q : 二次映射 R N P) (f : M ->ₗ[R] N)
-  定义体: Q (f x)
-  toFun_smul a x := by simp only [Q.map_smul, map_smul]
-  exists_companion' :=
-    let ⟨B, h⟩ := Q.exists_companion
-    ⟨B.compl₁₂ f f, fun x y => by simp_rw [f.map_add]; exact h (f x) (f y)⟩
-
-@[simp]
+--- 原说明 ---
+Compose the quadratic map with a linear function on the right.
 -/
-def comp (Q : QuadraticMap R N P) (f : M ->ₗ[R] N) : QuadraticMap R M P where
+def comp (Q : QuadraticMap R N P) (f : M →ₗ[R] N) : QuadraticMap R M P where
   toFun x := Q (f x)
   toFun_smul a x := by simp only [Q.map_smul, map_smul]
   exists_companion' :=
@@ -1890,48 +1536,28 @@ def comp (Q : QuadraticMap R N P) (f : M ->ₗ[R] N) : QuadraticMap R M P where
     ⟨B.compl₁₂ f f, fun x y => by simp_rw [f.map_add]; exact h (f x) (f y)⟩
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (Q : QuadraticMap R N P) (f : M ->ₗ[R] N) (x : M)
-  statement: (Q.comp f) x = Q (f x)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  条件: (Q : 二次映射 R N P) (f : M ->ₗ[R] N) (x : M)
-  结论: (Q.comp f) x = Q (f x)
-  证明: rfl
+/-
+**QuadraticMap.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：comp_apply (Q : QuadraticMap R N P) (f : M ->ₗ[R] N) (x : M) : (Q.comp f) 
+x = Q (f x)
+参数：Q : QuadraticMap R N P；f : M ->ₗ[R] N；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (Q : QuadraticMap R N P) (f : M ->ₗ[R] N) (x : M) : (Q.comp f) x = Q (f x) :=
+theorem comp_apply (Q : QuadraticMap R N P) (f : M →ₗ[R] N) (x : M) : (Q.comp f) x = Q (f x) :=
   rfl
 
 /-- Compose a quadratic map with a linear function on the left. -/
 @[simps +simpRhs]
-/--
-Definition of `_root_.LinearMap.compQuadraticMap` / `_root_.LinearMap.compQuadraticMap` 的定义
+/-
+**QuadraticMap._root_.LinearMap.compQuadraticMap** 是 Mathlib 中的一个定义，位于命名空间 `Quad
+raticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearMap.compQuadraticMap
-  signature: (f : N ->ₗ[R] P) (Q : QuadraticMap R M N)
-  body: f (Q x)
-  toFun_smul b x := by simp only [Q.map_smul, map_smul]
-  exists_companion' :=
-    let ⟨B, h⟩ := Q.exists_companion
-    ⟨B.compr₂ f, fun x y => by simp only [h, map_add, LinearMap.compr₂_apply]⟩
-
-中文:
-定义 _root_.线性映射.compQuadraticMap
-  签名: (f : N ->ₗ[R] P) (Q : 二次映射 R M N)
-  定义体: f (Q x)
-  toFun_smul b x := by simp only [Q.map_smul, map_smul]
-  exists_companion' :=
-    let ⟨B, h⟩ := Q.exists_companion
-    ⟨B.compr₂ f, fun x y => by simp only [h, map_add, LinearMap.compr₂_apply]⟩
+--- 原说明 ---
+Compose a quadratic map with a linear function on the left.
 -/
-def _root_.LinearMap.compQuadraticMap (f : N ->ₗ[R] P) (Q : QuadraticMap R M N) :
+def _root_.LinearMap.compQuadraticMap (f : N →ₗ[R] P) (Q : QuadraticMap R M N) :
     QuadraticMap R M P where
   toFun x := f (Q x)
   toFun_smul b x := by simp only [Q.map_smul, map_smul]
@@ -1941,24 +1567,17 @@ def _root_.LinearMap.compQuadraticMap (f : N ->ₗ[R] P) (Q : QuadraticMap R M N
 
 /-- Compose a quadratic map with a linear function on the left. -/
 @[simps! +simpRhs]
-/--
-Definition of `_root_.LinearMap.compQuadraticMap'` / `_root_.LinearMap.compQuadraticMap'` 的定义
+/-
+**QuadraticMap._root_.LinearMap.compQuadraticMap'** 是 Mathlib 中的一个定义，位于命名空间 `Qua
+draticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearMap.compQuadraticMap'
-  signature: [CommSemiring S] [Algebra S R] [Module S N] [Module S M]
-  body: _root_.LinearMap.compQuadraticMap f Q.restrictScalars
-
-中文:
-定义 _root_.线性映射.compQuadraticMap'
-  签名: [交换半环 S] [代数 S R] [模 S N] [模 S M]
-  定义体: _root_.LinearMap.compQuadraticMap f Q.restrictScalars
-
-Depends on / 依赖: LinearMap, Q.restrictScalars, _root_, _root_.LinearMap.compQuadraticMap, compQuadraticMap, restrictScalars
+--- 原说明 ---
+Compose a quadratic map with a linear function on the left.
 -/
 def _root_.LinearMap.compQuadraticMap' [CommSemiring S] [Algebra S R] [Module S N] [Module S M]
     [IsScalarTower S R N] [IsScalarTower S R M] [Module S P]
-    (f : N ->ₗ[S] P) (Q : QuadraticMap R M N) : QuadraticMap S M P :=
+    (f : N →ₗ[S] P) (Q : QuadraticMap R M N) : QuadraticMap S M P :=
   _root_.LinearMap.compQuadraticMap f Q.restrictScalars
 
 /-- When `N` and `P` are equivalent, quadratic maps on `M` into `N` are equivalent to quadratic
@@ -1966,34 +1585,17 @@ maps on `M` into `P`.
 
 See `LinearMap.BilinMap.congr₂` for the bilinear map version. -/
 @[simps apply]
-/--
-Definition of `_root_.LinearEquiv.congrQuadraticMap` / `_root_.LinearEquiv.congrQuadraticMap` 的定义
+/-
+**QuadraticMap._root_.LinearEquiv.congrQuadraticMap** 是 Mathlib 中的一个定义，位于命名空间 `Q
+uadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.LinearEquiv.congrQuadraticMap
-  signature: (e : N ≃ₗ[R] P)
-  body: e.compQuadraticMap Q
-  invFun Q := e.symm.compQuadraticMap Q
-  left_inv _ := ext fun _ => e.symm_apply_apply _
-  right_inv _ := ext fun _ => e.apply_symm_apply _
-  map_add' _ _ := ext fun _ => map_add e _ _
-  map_smul' _ _ := ext fun _ => e.map_smul _ _
+--- 原说明 ---
+When `N` and `P` are equivalent, quadratic maps on `M` into `N` are equivalent t
+o quadratic
+maps on `M` into `P`.
 
-@[simp]
-
-中文:
-定义 _root_.线性等价.congrQuadraticMap
-  签名: (e : N ≃ₗ[R] P)
-  定义体: e.compQuadraticMap Q
-  invFun Q := e.symm.compQuadraticMap Q
-  left_inv _ := ext fun _ => e.symm_apply_apply _
-  right_inv _ := ext fun _ => e.apply_symm_apply _
-  map_add' _ _ := ext fun _ => map_add e _ _
-  map_smul' _ _ := ext fun _ => e.map_smul _ _
-
-@[simp]
-
-Depends on / 依赖: compQuadraticMap, e.compQuadraticMap
+See `LinearMap.BilinMap.congr₂` for the bilinear map version.
 -/
 def _root_.LinearEquiv.congrQuadraticMap (e : N ≃ₗ[R] P) :
     QuadraticMap R M N ≃ₗ[R] QuadraticMap R M P where
@@ -2005,39 +1607,19 @@ def _root_.LinearEquiv.congrQuadraticMap (e : N ≃ₗ[R] P) :
   map_smul' _ _ := ext fun _ => e.map_smul _ _
 
 @[simp]
-/--
-theorem `_root_.LinearEquiv.congrQuadraticMap_refl` / 定理 `_root_.LinearEquiv.congrQuadraticMap_refl`
-
-English:
-theorem _root_.LinearEquiv.congrQuadraticMap_refl
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 _root_.线性等价.congrQuadraticMap_refl
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticMap._root_.LinearEquiv.congrQuadraticMap_refl** 是 Mathlib 中的一个定理，位于命名
+空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.congrQuadraticMap_refl :
     LinearEquiv.congrQuadraticMap (.refl R N) = .refl R (QuadraticMap R M N) := rfl
 
 @[simp]
-/--
-theorem `_root_.LinearEquiv.congrQuadraticMap_symm` / 定理 `_root_.LinearEquiv.congrQuadraticMap_symm`
-
-English:
-theorem _root_.LinearEquiv.congrQuadraticMap_symm
-  given: (e : N ≃ₗ[R] P)
-  proof: rfl
-
-中文:
-定理 _root_.线性等价.congrQuadraticMap_symm
-  条件: (e : N ≃ₗ[R] P)
-  证明: rfl
-
-Depends on / 依赖: congrQuadraticMap, e.symm.congrQuadraticMap
+/-
+**QuadraticMap._root_.LinearEquiv.congrQuadraticMap_symm** 是 Mathlib 中的一个定理，位于命名
+空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearEquiv.congrQuadraticMap_symm (e : N ≃ₗ[R] P) :
     (LinearEquiv.congrQuadraticMap e (M := M)).symm = e.symm.congrQuadraticMap := rfl
@@ -2049,41 +1631,22 @@ section NonUnitalNonAssocSemiring
 variable [CommSemiring R] [NonUnitalNonAssocSemiring A] [AddCommMonoid M] [Module R M]
 variable [Module R A] [SMulCommClass R A A] [IsScalarTower R A A]
 
-/--
-Definition of `linMulLin` / `linMulLin` 的定义
+/-- The product of linear maps into an `R`-algebra is a quadratic map. -/
+/-
+**QuadraticMap.linMulLin** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：linMulLin (f g : M ->ₗ[R] A) : QuadraticMap R M A where toFun
+参数：f g : M ->ₗ[R] A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linMulLin
-  signature: (f g : M ->ₗ[R] A)
-  body: f * g
-  toFun_smul a x := by
-    rw [Pi.mul_apply]; rw [Pi.mul_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [← smul_assoc]; rw [smul_eq_mul]
-  exists_companion' :=
-    ⟨(LinearMap.mul R A).compl₁₂ f g + (LinearMap.mul R A).flip.compl₁₂ g f, fun x y => by
-      simp only [Pi.mul_apply, map_add, left_distrib, right_distrib, LinearMap.add_apply,
-        LinearMap.compl₁₂_apply, LinearMap.mul_apply', LinearMap.flip_apply]
-      abel_nf⟩
-
-@[simp]
-
-中文:
-定义 linMulLin
-  签名: (f g : M ->ₗ[R] A)
-  定义体: f * g
-  toFun_smul a x := by
-    rw [Pi.mul_apply]; rw [Pi.mul_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [← smul_assoc]; rw [smul_eq_mul]
-  exists_companion' :=
-    ⟨(LinearMap.mul R A).compl₁₂ f g + (LinearMap.mul R A).flip.compl₁₂ g f, fun x y => by
-      simp only [Pi.mul_apply, map_add, left_distrib, right_distrib, LinearMap.add_apply,
-        LinearMap.compl₁₂_apply, LinearMap.mul_apply', LinearMap.flip_apply]
-      abel_nf⟩
-
-@[simp]
+--- 原说明 ---
+The product of linear maps into an `R`-algebra is a quadratic map.
 -/
-def linMulLin (f g : M ->ₗ[R] A) : QuadraticMap R M A where
+def linMulLin (f g : M →ₗ[R] A) : QuadraticMap R M A where
   toFun := f * g
   toFun_smul a x := by
-    rw [Pi.mul_apply]; rw [Pi.mul_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [← smul_assoc]; rw [smul_eq_mul]
+    rw [Pi.mul_apply, Pi.mul_apply, map_smulₛₗ, RingHom.id_apply, map_smulₛₗ, RingHom.id_apply,
+      smul_mul_assoc, mul_smul_comm, ← smul_assoc, smul_eq_mul]
   exists_companion' :=
     ⟨(LinearMap.mul R A).compl₁₂ f g + (LinearMap.mul R A).flip.compl₁₂ g f, fun x y => by
       simp only [Pi.mul_apply, map_add, left_distrib, right_distrib, LinearMap.add_apply,
@@ -2091,91 +1654,62 @@ def linMulLin (f g : M ->ₗ[R] A) : QuadraticMap R M A where
       abel_nf⟩
 
 @[simp]
-/--
-theorem `linMulLin_apply` / 定理 `linMulLin_apply`
-
-English:
-theorem linMulLin_apply
-  given: (f g : M ->ₗ[R] A) (x)
-  statement: linMulLin f g x = f x * g x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 linMulLin_apply
-  条件: (f g : M ->ₗ[R] A) (x)
-  结论: linMulLin f g x = f x * g x
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticMap.linMulLin_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：linMulLin_apply (f g : M ->ₗ[R] A) (x) : linMulLin f g x = f x * g x
+参数：f g : M ->ₗ[R] A；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem linMulLin_apply (f g : M ->ₗ[R] A) (x) : linMulLin f g x = f x * g x :=
+theorem linMulLin_apply (f g : M →ₗ[R] A) (x) : linMulLin f g x = f x * g x :=
   rfl
 
 @[simp]
-/--
-theorem `add_linMulLin` / 定理 `add_linMulLin`
-
-English:
-theorem add_linMulLin
-  given: (f g h : M ->ₗ[R] A)
-  statement: linMulLin (f + g) h = linMulLin f h + linMulLin g h
-  proof: ext fun _ => add_mul _ _ _
-
-@[simp]
-
-中文:
-定理 add_linMulLin
-  条件: (f g h : M ->ₗ[R] A)
-  结论: linMulLin (f + g) h = linMulLin f h + linMulLin g h
-  证明: ext fun _ => add_mul _ _ _
-
-@[simp]
-
-Depends on / 依赖: add_mul
+/-
+**QuadraticMap.add_linMulLin** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：add_linMulLin (f g h : M ->ₗ[R] A) : linMulLin (f + g) h = linMulLin f h +
+ linMulLin g h
+参数：f g h : M ->ₗ[R] A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.ext`：ext (H : forall x : M, Q x = Q' x) : Q = Q'
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
 -/
-theorem add_linMulLin (f g h : M ->ₗ[R] A) : linMulLin (f + g) h = linMulLin f h + linMulLin g h :=
+theorem add_linMulLin (f g h : M →ₗ[R] A) : linMulLin (f + g) h = linMulLin f h + linMulLin g h :=
   ext fun _ => add_mul _ _ _
 
 @[simp]
-/--
-theorem `linMulLin_add` / 定理 `linMulLin_add`
-
-English:
-theorem linMulLin_add
-  given: (f g h : M ->ₗ[R] A)
-  statement: linMulLin f (g + h) = linMulLin f g + linMulLin f h
-  proof: ext fun _ => mul_add _ _ _
-
-中文:
-定理 linMulLin_add
-  条件: (f g h : M ->ₗ[R] A)
-  结论: linMulLin f (g + h) = linMulLin f g + linMulLin f h
-  证明: ext fun _ => mul_add _ _ _
-
-Depends on / 依赖: mul_add
+/-
+**QuadraticMap.linMulLin_add** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：linMulLin_add (f g h : M ->ₗ[R] A) : linMulLin f (g + h) = linMulLin f g +
+ linMulLin f h
+参数：f g h : M ->ₗ[R] A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.ext`：ext (H : forall x : M, Q x = Q' x) : Q = Q'
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 -/
-theorem linMulLin_add (f g h : M ->ₗ[R] A) : linMulLin f (g + h) = linMulLin f g + linMulLin f h :=
+theorem linMulLin_add (f g h : M →ₗ[R] A) : linMulLin f (g + h) = linMulLin f g + linMulLin f h :=
   ext fun _ => mul_add _ _ _
 
 variable {N' : Type*} [AddCommMonoid N'] [Module R N']
 
 @[simp]
-/--
-theorem `linMulLin_comp` / 定理 `linMulLin_comp`
-
-English:
-theorem linMulLin_comp
-  given: (f g : M ->ₗ[R] A) (h : N' ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 linMulLin_comp
-  条件: (f g : M ->ₗ[R] A) (h : N' ->ₗ[R] M)
-  证明: rfl
+/-
+**QuadraticMap.linMulLin_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：linMulLin_comp (f g : M ->ₗ[R] A) (h : N' ->ₗ[R] M) : (linMulLin f g).comp
+ h = linMulLin (f.comp h) (g.comp h)
+参数：f g : M ->ₗ[R] A；h : N' ->ₗ[R] M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem linMulLin_comp (f g : M ->ₗ[R] A) (h : N' ->ₗ[R] M) :
+theorem linMulLin_comp (f g : M →ₗ[R] A) (h : N' →ₗ[R] M) :
     (linMulLin f g).comp h = linMulLin (f.comp h) (g.comp h) :=
   rfl
 
@@ -2183,63 +1717,41 @@ variable {n : Type*}
 
 /-- `sq` is the quadratic map sending the vector `x : A` to `x * x` -/
 @[simps!]
-/--
-Definition of `sq` / `sq` 的定义
+/-
+**QuadraticMap.sq** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：sq : QuadraticMap R A A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sq
-  signature: : QuadraticMap R A A
-  body: linMulLin LinearMap.id LinearMap.id
-
-中文:
-定义 sq
-  签名: : 二次映射 R A A
-  定义体: linMulLin LinearMap.id LinearMap.id
-
-Depends on / 依赖: LinearMap, LinearMap.id, linMulLin
+--- 原说明 ---
+`sq` is the quadratic map sending the vector `x : A` to `x * x`
 -/
 def sq : QuadraticMap R A A :=
   linMulLin LinearMap.id LinearMap.id
 
-/--
-Definition of `proj` / `proj` 的定义
+/-- `proj i j` is the quadratic map sending the vector `x : n → R` to `x i * x j` -/
+/-
+**QuadraticMap.proj** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：proj (i j : n) : QuadraticMap R (n -> A) A
+参数：i j : n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proj
-  signature: (i j : n)
-  body: linMulLin (@LinearMap.proj _ _ _ (fun _ => A) _ _ i) (@LinearMap.proj _ _ _ (fun _ => A) _ _ j)
-
-@[simp]
-
-中文:
-定义 proj
-  签名: (i j : n)
-  定义体: linMulLin (@LinearMap.proj _ _ _ (fun _ => A) _ _ i) (@LinearMap.proj _ _ _ (fun _ => A) _ _ j)
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.proj, linMulLin
+--- 原说明 ---
+`proj i j` is the quadratic map sending the vector `x : n → R` to `x i * x j`
 -/
-def proj (i j : n) : QuadraticMap R (n -> A) A :=
+def proj (i j : n) : QuadraticMap R (n → A) A :=
   linMulLin (@LinearMap.proj _ _ _ (fun _ => A) _ _ i) (@LinearMap.proj _ _ _ (fun _ => A) _ _ j)
 
 @[simp]
-/--
-theorem `proj_apply` / 定理 `proj_apply`
-
-English:
-theorem proj_apply
-  given: (i j : n) (x : n -> A)
-  statement: proj (R := R) i j x = x i * x j
-  proof: rfl
-
-中文:
-定理 proj_apply
-  条件: (i j : n) (x : n -> A)
-  结论: proj (R := R) i j x = x i * x j
-  证明: rfl
+/-
+**QuadraticMap.proj_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：proj_apply (i j : n) (x : n -> A) : proj (R
+参数：i j : n；x : n -> A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem proj_apply (i j : n) (x : n -> A) : proj (R := R) i j x = x i * x j :=
+theorem proj_apply (i j : n) (x : n → A) : proj (R := R) i j x = x i * x j :=
   rfl
 
 end NonUnitalNonAssocSemiring
@@ -2274,26 +1786,17 @@ variable [CommSemiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Modu
 variable {N' : Type*} [AddCommMonoid N'] [Module R N']
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `toQuadraticMap` / `toQuadraticMap` 的定义
+/-- A bilinear map gives a quadratic map by applying the argument twice. -/
+/-
+**LinearMap.BilinMap.toQuadraticMap** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap.BilinMa
+p`。
+形式化陈述：toQuadraticMap (B : BilinMap R M N) : QuadraticMap R M N where toFun x
+参数：B : BilinMap R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toQuadraticMap
-  signature: (B : BilinMap R M N)
-  body: B x x
-  toFun_smul a x := by simp only [map_smul, LinearMap.smul_apply, smul_smul]
-  exists_companion' := ⟨B + LinearMap.flip B, fun x y => by simp [add_add_add_comm, add_comm]⟩
-
-@[simp]
-
-中文:
-定义 toQuadraticMap
-  签名: (B : BilinMap R M N)
-  定义体: B x x
-  toFun_smul a x := by simp only [map_smul, LinearMap.smul_apply, smul_smul]
-  exists_companion' := ⟨B + LinearMap.flip B, fun x y => by simp [add_add_add_comm, add_comm]⟩
-
-@[simp]
+--- 原说明 ---
+A bilinear map gives a quadratic map by applying the argument twice.
 -/
 def toQuadraticMap (B : BilinMap R M N) : QuadraticMap R M N where
   toFun x := B x x
@@ -2301,38 +1804,27 @@ def toQuadraticMap (B : BilinMap R M N) : QuadraticMap R M N where
   exists_companion' := ⟨B + LinearMap.flip B, fun x y => by simp [add_add_add_comm, add_comm]⟩
 
 @[simp]
-/--
-theorem `toQuadraticMap_apply` / 定理 `toQuadraticMap_apply`
-
-English:
-theorem toQuadraticMap_apply
-  given: (B : BilinMap R M N) (x : M)
-  statement: B.toQuadraticMap x = B x x
-  proof: rfl
-
-中文:
-定理 toQuadraticMap_apply
-  条件: (B : BilinMap R M N) (x : M)
-  结论: B.toQuadraticMap x = B x x
-  证明: rfl
+/-
+**LinearMap.BilinMap.toQuadraticMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.B
+ilinMap`。
+形式化陈述：toQuadraticMap_apply (B : BilinMap R M N) (x : M) : B.toQuadraticMap x = B
+ x x
+参数：B : BilinMap R M N；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toQuadraticMap_apply (B : BilinMap R M N) (x : M) : B.toQuadraticMap x = B x x :=
   rfl
-
-/--
-theorem `toQuadraticMap_comp_same` / 定理 `toQuadraticMap_comp_same`
-
-English:
-theorem toQuadraticMap_comp_same
-  given: (B : BilinMap R M N) (f : N' ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 toQuadraticMap_comp_same
-  条件: (B : BilinMap R M N) (f : N' ->ₗ[R] M)
-  证明: rfl
+/-
+**LinearMap.BilinMap.toQuadraticMap_comp_same** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap.BilinMap`。
+形式化陈述：toQuadraticMap_comp_same (B : BilinMap R M N) (f : N' ->ₗ[R] M) : BilinMap
+.toQuadraticMap (B.compl₁₂ f f) = B.toQuadraticMap.comp f
+参数：B : BilinMap R M N；f : N' ->ₗ[R] M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toQuadraticMap_comp_same (B : BilinMap R M N) (f : N' ->ₗ[R] M) :
+theorem toQuadraticMap_comp_same (B : BilinMap R M N) (f : N' →ₗ[R] M) :
     BilinMap.toQuadraticMap (B.compl₁₂ f f) = B.toQuadraticMap.comp f := rfl
 
 section
@@ -2340,18 +1832,12 @@ section
 variable (R M)
 
 @[simp]
-/--
-theorem `toQuadraticMap_zero` / 定理 `toQuadraticMap_zero`
-
-English:
-theorem toQuadraticMap_zero
-  statement: (0 : BilinMap R M N).toQuadraticMap = 0
-  proof: rfl
-
-中文:
-定理 toQuadraticMap_zero
-  结论: (0 : BilinMap R M N).toQuadraticMap = 0
-  证明: rfl
+/-
+**LinearMap.BilinMap.toQuadraticMap_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Bi
+linMap`。
+形式化陈述：toQuadraticMap_zero : (0 : BilinMap R M N).toQuadraticMap = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toQuadraticMap_zero : (0 : BilinMap R M N).toQuadraticMap = 0 :=
   rfl
@@ -2359,40 +1845,32 @@ theorem toQuadraticMap_zero : (0 : BilinMap R M N).toQuadraticMap = 0 :=
 end
 
 @[simp]
-/--
-theorem `toQuadraticMap_add` / 定理 `toQuadraticMap_add`
-
-English:
-theorem toQuadraticMap_add
-  given: (B₁ B₂ : BilinMap R M N)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toQuadraticMap_add
-  条件: (B₁ B₂ : BilinMap R M N)
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.BilinMap.toQuadraticMap_add** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Bil
+inMap`。
+形式化陈述：toQuadraticMap_add (B₁ B₂ : BilinMap R M N) : (B₁ + B₂).toQuadraticMap = B
+₁.toQuadraticMap + B₂.toQuadraticMap
+参数：B₁ B₂ : BilinMap R M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toQuadraticMap_add (B₁ B₂ : BilinMap R M N) :
     (B₁ + B₂).toQuadraticMap = B₁.toQuadraticMap + B₂.toQuadraticMap :=
   rfl
 
 @[simp]
-/--
-theorem `toQuadraticMap_smul` / 定理 `toQuadraticMap_smul`
-
-English:
-theorem toQuadraticMap_smul
-  statement: [Monoid S] [DistribMulAction S N] [SMulCommClass S R N]
-  proof: rfl
-
-中文:
-定理 toQuadraticMap_smul
-  结论: [幺半群 S] [分配乘法作用 S N] [标量交换类 S R N]
-  证明: rfl
+/-
+**LinearMap.BilinMap.toQuadraticMap_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Bi
+linMap`。
+形式化陈述：toQuadraticMap_smul [Monoid S] [DistribMulAction S N] [SMulCommClass S R N
+] [SMulCommClass R S N] (a : S) (B : BilinMap R M N) : (a • B).toQuadraticMap = 
+a • B.toQuadraticMap
+参数：a : S；B : BilinMap R M N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
 theorem toQuadraticMap_smul [Monoid S] [DistribMulAction S N] [SMulCommClass S R N]
     [SMulCommClass R S N] (a : S)
@@ -2405,53 +1883,43 @@ variable (S R M)
 
 /-- `LinearMap.BilinMap.toQuadraticMap` as an additive homomorphism -/
 @[simps]
-/--
-Definition of `toQuadraticMapAddMonoidHom` / `toQuadraticMapAddMonoidHom` 的定义
+/-
+**LinearMap.BilinMap.toQuadraticMapAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Linea
+rMap.BilinMap`。
+形式化陈述：toQuadraticMapAddMonoidHom : (BilinMap R M N) ->+ QuadraticMap R M N where
+ toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.BilinMap.toQuadraticMap_zero`：toQuadraticMap_zero : (0 : Bilin
+Map R M N).toQuadraticMap = 0
+· 使用定理 `LinearMap.BilinMap.toQuadraticMap_add`：toQuadraticMap_add (B₁ B₂ : Bilin
+Map R M N) : (B₁ + B₂).toQuadraticMap = B₁.toQuadraticMap + B₂.toQuadraticMap
 
-English:
-definition toQuadraticMapAddMonoidHom
-  signature: : (BilinMap R M N) ->+ QuadraticMap R M N where
-  body: toQuadraticMap
-  map_zero' := toQuadraticMap_zero _ _
-  map_add' := toQuadraticMap_add
-
-中文:
-定义 toQuadraticMapAddMonoidHom
-  签名: : (BilinMap R M N) ->+ 二次映射 R M N where
-  定义体: toQuadraticMap
-  map_zero' := toQuadraticMap_zero _ _
-  map_add' := toQuadraticMap_add
-
-Depends on / 依赖: toQuadraticMap
+--- 原说明 ---
+`LinearMap.BilinMap.toQuadraticMap` as an additive homomorphism
 -/
-def toQuadraticMapAddMonoidHom : (BilinMap R M N) ->+ QuadraticMap R M N where
+def toQuadraticMapAddMonoidHom : (BilinMap R M N) →+ QuadraticMap R M N where
   toFun := toQuadraticMap
   map_zero' := toQuadraticMap_zero _ _
   map_add' := toQuadraticMap_add
 
 /-- `LinearMap.BilinMap.toQuadraticMap` as a linear map -/
 @[simps]
-/--
-Definition of `toQuadraticMapLinearMap` / `toQuadraticMapLinearMap` 的定义
+/-
+**LinearMap.BilinMap.toQuadraticMapLinearMap** 是 Mathlib 中的一个定义，位于命名空间 `LinearMa
+p.BilinMap`。
+形式化陈述：toQuadraticMapLinearMap [Semiring S] [Module S N] [SMulCommClass S R N] [S
+MulCommClass R S N] : (BilinMap R M N) ->ₗ[S] QuadraticMap R M N where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.BilinMap.toQuadraticMap_add`：toQuadraticMap_add (B₁ B₂ : Bilin
+Map R M N) : (B₁ + B₂).toQuadraticMap = B₁.toQuadraticMap + B₂.toQuadraticMap
 
-English:
-definition toQuadraticMapLinearMap
-  signature: [Semiring S] [Module S N] [SMulCommClass S R N] [SMulCommClass R S N]
-  body: toQuadraticMap
-  map_smul' := toQuadraticMap_smul
-  map_add' := toQuadraticMap_add
-
-中文:
-定义 toQuadraticMapLinearMap
-  签名: [半环 S] [模 S N] [标量交换类 S R N] [标量交换类 R S N]
-  定义体: toQuadraticMap
-  map_smul' := toQuadraticMap_smul
-  map_add' := toQuadraticMap_add
-
-Depends on / 依赖: toQuadraticMap
+--- 原说明 ---
+`LinearMap.BilinMap.toQuadraticMap` as a linear map
 -/
 def toQuadraticMapLinearMap [Semiring S] [Module S N] [SMulCommClass S R N] [SMulCommClass R S N] :
-    (BilinMap R M N) ->ₗ[S] QuadraticMap R M N where
+    (BilinMap R M N) →ₗ[S] QuadraticMap R M N where
   toFun := toQuadraticMap
   map_smul' := toQuadraticMap_smul
   map_add' := toQuadraticMap_add
@@ -2459,92 +1927,72 @@ def toQuadraticMapLinearMap [Semiring S] [Module S N] [SMulCommClass S R N] [SMu
 end
 
 @[simp]
-/--
-theorem `toQuadraticMap_list_sum` / 定理 `toQuadraticMap_list_sum`
-
-English:
-theorem toQuadraticMap_list_sum
-  given: (B : List (BilinMap R M N))
-  proof: map_list_sum (toQuadraticMapAddMonoidHom R M) B
-
-@[simp]
-
-中文:
-定理 toQuadraticMap_list_sum
-  条件: (B : 列表 (BilinMap R M N))
-  证明: map_list_sum (toQuadraticMapAddMonoidHom R M) B
-
-@[simp]
-
-Depends on / 依赖: map_list_sum, toQuadraticMapAddMonoidHom
+/-
+**LinearMap.BilinMap.toQuadraticMap_list_sum** 是 Mathlib 中的一个定理，位于命名空间 `LinearMa
+p.BilinMap`。
+形式化陈述：toQuadraticMap_list_sum (B : List (BilinMap R M N)) : B.sum.toQuadraticMap
+ = (B.map toQuadraticMap).sum
+参数：B : List (BilinMap R M N)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_list_sum`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoid M] [inst
+_1 : AddMonoid N] {F : Type u_8} [inst_2 : FunLike F M N]   [AddMonoidHomClass F
+ M…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem toQuadraticMap_list_sum (B : List (BilinMap R M N)) :
     B.sum.toQuadraticMap = (B.map toQuadraticMap).sum :=
   map_list_sum (toQuadraticMapAddMonoidHom R M) B
 
 @[simp]
-/--
-theorem `toQuadraticMap_multiset_sum` / 定理 `toQuadraticMap_multiset_sum`
-
-English:
-theorem toQuadraticMap_multiset_sum
-  given: (B : Multiset (BilinMap R M N))
-  proof: map_multiset_sum (toQuadraticMapAddMonoidHom R M) B
-
-@[simp]
-
-中文:
-定理 toQuadraticMap_multiset_sum
-  条件: (B : Multiset (BilinMap R M N))
-  证明: map_multiset_sum (toQuadraticMapAddMonoidHom R M) B
-
-@[simp]
-
-Depends on / 依赖: map_multiset_sum, toQuadraticMapAddMonoidHom
+/-
+**LinearMap.BilinMap.toQuadraticMap_multiset_sum** 是 Mathlib 中的一个定理，位于命名空间 `Line
+arMap.BilinMap`。
+形式化陈述：toQuadraticMap_multiset_sum (B : Multiset (BilinMap R M N)) : B.sum.toQuad
+raticMap = (B.map toQuadraticMap).sum
+参数：B : Multiset (BilinMap R M N)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_multiset_sum`：∀ {F : Type u_1} {M : Type u_5} {N : Type u_6} [inst :
+ AddCommMonoid M] [inst_1 : AddCommMonoid N]   [inst_2 : FunLike F M N] [AddMono
+idHomC…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
 theorem toQuadraticMap_multiset_sum (B : Multiset (BilinMap R M N)) :
     B.sum.toQuadraticMap = (B.map toQuadraticMap).sum :=
   map_multiset_sum (toQuadraticMapAddMonoidHom R M) B
 
 @[simp]
-/--
-theorem `toQuadraticMap_sum` / 定理 `toQuadraticMap_sum`
-
-English:
-theorem toQuadraticMap_sum
-  given: {ι : Type*} (s : Finset ι) (B : ι -> (BilinMap R M N))
-  proof: map_sum (toQuadraticMapAddMonoidHom R M) B s
-
-@[simp]
-
-中文:
-定理 toQuadraticMap_sum
-  条件: {ι : 类型} (s : 有限集 ι) (B : ι -> (BilinMap R M N))
-  证明: map_sum (toQuadraticMapAddMonoidHom R M) B s
-
-@[simp]
-
-Depends on / 依赖: map_sum, toQuadraticMapAddMonoidHom
+/-
+**LinearMap.BilinMap.toQuadraticMap_sum** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Bil
+inMap`。
+形式化陈述：toQuadraticMap_sum {ι : Type*} (s : Finset ι) (B : ι -> (BilinMap R M N)) 
+: (∑ i in s, B i).toQuadraticMap = ∑ i in s, (B i).toQuadraticMap
+参数：s : Finset ι；B : ι -> (BilinMap R M N)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem toQuadraticMap_sum {ι : Type*} (s : Finset ι) (B : ι -> (BilinMap R M N)) :
-    (∑ i in s, B i).toQuadraticMap = ∑ i in s, (B i).toQuadraticMap :=
+theorem toQuadraticMap_sum {ι : Type*} (s : Finset ι) (B : ι → (BilinMap R M N)) :
+    (∑ i ∈ s, B i).toQuadraticMap = ∑ i ∈ s, (B i).toQuadraticMap :=
   map_sum (toQuadraticMapAddMonoidHom R M) B s
 
 @[simp]
-/--
-theorem `toQuadraticMap_eq_zero` / 定理 `toQuadraticMap_eq_zero`
-
-English:
-theorem toQuadraticMap_eq_zero
-  given: {B : BilinMap R M N}
-  proof: QuadraticMap.ext_iff
-
-中文:
-定理 toQuadraticMap_eq_zero
-  条件: {B : BilinMap R M N}
-  证明: QuadraticMap.ext_iff
-
-Depends on / 依赖: QuadraticMap, QuadraticMap.ext_iff, ext_iff
+/-
+**LinearMap.BilinMap.toQuadraticMap_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap
+.BilinMap`。
+形式化陈述：toQuadraticMap_eq_zero {B : BilinMap R M N} : B.toQuadraticMap = 0 ↔ B.IsA
+lt
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.ext_iff`：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [in
+st : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [
+inst_3 : A…
 -/
 theorem toQuadraticMap_eq_zero {B : BilinMap R M N} :
     B.toQuadraticMap = 0 ↔ B.IsAlt :=
@@ -2558,136 +2006,98 @@ variable [CommRing R] [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N
 variable {B : BilinMap R M N}
 
 @[simp]
-/--
-theorem `toQuadraticMap_neg` / 定理 `toQuadraticMap_neg`
-
-English:
-theorem toQuadraticMap_neg
-  given: (B : BilinMap R M N)
-  statement: (-B).toQuadraticMap = -B.toQuadraticMap
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toQuadraticMap_neg
-  条件: (B : BilinMap R M N)
-  结论: (-B).toQuadraticMap = -B.toQuadraticMap
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.BilinMap.toQuadraticMap_neg** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Bil
+inMap`。
+形式化陈述：toQuadraticMap_neg (B : BilinMap R M N) : (-B).toQuadraticMap = -B.toQuadr
+aticMap
+参数：B : BilinMap R M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toQuadraticMap_neg (B : BilinMap R M N) : (-B).toQuadraticMap = -B.toQuadraticMap :=
   rfl
 
 @[simp]
-/--
-theorem `toQuadraticMap_sub` / 定理 `toQuadraticMap_sub`
-
-English:
-theorem toQuadraticMap_sub
-  given: (B₁ B₂ : BilinMap R M N)
-  proof: rfl
-
-中文:
-定理 toQuadraticMap_sub
-  条件: (B₁ B₂ : BilinMap R M N)
-  证明: rfl
+/-
+**LinearMap.BilinMap.toQuadraticMap_sub** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Bil
+inMap`。
+形式化陈述：toQuadraticMap_sub (B₁ B₂ : BilinMap R M N) : (B₁ - B₂).toQuadraticMap = B
+₁.toQuadraticMap - B₂.toQuadraticMap
+参数：B₁ B₂ : BilinMap R M N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toQuadraticMap_sub (B₁ B₂ : BilinMap R M N) :
     (B₁ - B₂).toQuadraticMap = B₁.toQuadraticMap - B₂.toQuadraticMap :=
   rfl
-
-/--
-theorem `polar_toQuadraticMap` / 定理 `polar_toQuadraticMap`
-
-English:
-theorem polar_toQuadraticMap
-  given: (x y : M)
-  statement: polar (toQuadraticMap B) x y = B x y + B y x
-  proof: by
-  simp only [polar, toQuadraticMap_apply, map_add, add_apply, add_assoc, add_comm (B y x) _,
-    add_sub_cancel_left, sub_eq_add_neg _ (B y y), add_neg_cancel_left]
-
-中文:
-定理 polar_toQuadraticMap
-  条件: (x y : M)
-  结论: polar (toQuadraticMap B) x y = B x y + B y x
-  证明: by
-  simp only [polar, toQuadraticMap_apply, map_add, add_apply, add_assoc, add_comm (B y x) _,
-    add_sub_cancel_left, sub_eq_add_neg _ (B y y), add_neg_cancel_left]
-
-Depends on / 依赖: add_apply, add_assoc, add_comm, add_neg_cancel_left, add_sub_cancel_left, map_add, sub_eq_add_neg, toQuadraticMap_apply
+/-
+**LinearMap.BilinMap.polar_toQuadraticMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.B
+ilinMap`。
+形式化陈述：polar_toQuadraticMap (x y : M) : polar (toQuadraticMap B) x y = B x y + B 
+y x
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `add_neg_cancel_left`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a +
+ (-a + b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem polar_toQuadraticMap (x y : M) : polar (toQuadraticMap B) x y = B x y + B y x := by
   simp only [polar, toQuadraticMap_apply, map_add, add_apply, add_assoc, add_comm (B y x) _,
     add_sub_cancel_left, sub_eq_add_neg _ (B y y), add_neg_cancel_left]
-
-/--
-theorem `polarBilin_toQuadraticMap` / 定理 `polarBilin_toQuadraticMap`
-
-English:
-theorem polarBilin_toQuadraticMap
-  statement: polarBilin (toQuadraticMap B) = B + flip B
-  proof: LinearMap.ext₂ polar_toQuadraticMap
-
-中文:
-定理 polarBilin_toQuadraticMap
-  结论: polarBilin (toQuadraticMap B) = B + flip B
-  证明: LinearMap.ext₂ polar_toQuadraticMap
-
-Depends on / 依赖: LinearMap, LinearMap.ext, polar_toQuadraticMap
+/-
+**LinearMap.BilinMap.polarBilin_toQuadraticMap** 是 Mathlib 中的一个定理，位于命名空间 `Linear
+Map.BilinMap`。
+形式化陈述：polarBilin_toQuadraticMap : polarBilin (toQuadraticMap B) = B + flip B
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext₂`：ext₂ {f g : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P} (H : forall m n, 
+f m n = g m n) : f = g
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `LinearMap.BilinMap.polar_toQuadraticMap`：polar_toQuadraticMap (x y : M) 
+: polar (toQuadraticMap B) x y = B x y + B y x
 -/
 theorem polarBilin_toQuadraticMap : polarBilin (toQuadraticMap B) = B + flip B :=
   LinearMap.ext₂ polar_toQuadraticMap
-
-/--
-theorem `_root_.QuadraticMap.toQuadraticMap_polarBilin` / 定理 `_root_.QuadraticMap.toQuadraticMap_polarBilin`
-
-English:
-theorem _root_.QuadraticMap.toQuadraticMap_polarBilin
-  given: (Q : QuadraticMap R M N)
-  proof: QuadraticMap.ext fun x => (polar_self _ x).trans by simp
-
-中文:
-定理 _root_.二次映射.toQuadraticMap_polarBilin
-  条件: (Q : 二次映射 R M N)
-  证明: QuadraticMap.ext fun x => (polar_self _ x).trans by simp
+/-
+**LinearMap.BilinMap._root_.QuadraticMap.toQuadraticMap_polarBilin** 是 Mathlib 中
+的一个定理，位于命名空间 `LinearMap.BilinMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem _root_.QuadraticMap.toQuadraticMap_polarBilin (Q : QuadraticMap R M N) :
     toQuadraticMap (polarBilin Q) = 2 • Q :=
-QuadraticMap.ext fun x => (polar_self _ x).trans by simp
-
-/--
-theorem `_root_.QuadraticMap.polarBilin_injective` / 定理 `_root_.QuadraticMap.polarBilin_injective`
-
-English:
-theorem _root_.QuadraticMap.polarBilin_injective
-  given: (h : IsUnit (2 : R))
-  proof: by
-  intro Q₁ Q₂ h₁₂
-  apply h.smul_left_cancel.mp
-  rw [show (2 : R) = (2 : Nat) by rfl]
-  simp_rw [Nat.cast_smul_eq_nsmul R, ← QuadraticMap.toQuadraticMap_polarBilin]
-  exact congrArg toQuadraticMap h₁₂
-
-中文:
-定理 _root_.二次映射.polarBilin_injective
-  条件: (h : 是单位 (2 : R))
-  证明: by
-  intro Q₁ Q₂ h₁₂
-  apply h.smul_left_cancel.mp
-  rw [show (2 : R) = (2 : Nat) by rfl]
-  simp_rw [Nat.cast_smul_eq_nsmul R, ← QuadraticMap.toQuadraticMap_polarBilin]
-  exact congrArg toQuadraticMap h₁₂
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, QuadraticMap, QuadraticMap.toQuadraticMap_polarBilin, cast_smul_eq_nsmul, h.smul_left_cancel.mp, simp_rw, smul_left_cancel, toQuadraticMap, toQuadraticMap_polarBilin
+  QuadraticMap.ext fun x => (polar_self _ x).trans <| by simp
+/-
+**LinearMap.BilinMap._root_.QuadraticMap.polarBilin_injective** 是 Mathlib 中的一个定理
+，位于命名空间 `LinearMap.BilinMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.QuadraticMap.polarBilin_injective (h : IsUnit (2 : R)) :
-    Function.Injective (polarBilin : QuadraticMap R M N -> _) := by
+    Function.Injective (polarBilin : QuadraticMap R M N → _) := by
   intro Q₁ Q₂ h₁₂
   apply h.smul_left_cancel.mp
-  rw [show (2 : R) = (2 : Nat) by rfl]
+  rw [show (2 : R) = (2 : ℕ) by rfl]
   simp_rw [Nat.cast_smul_eq_nsmul R, ← QuadraticMap.toQuadraticMap_polarBilin]
   exact congrArg toQuadraticMap h₁₂
 
@@ -2695,74 +2105,40 @@ section
 
 variable {N' : Type*} [AddCommGroup N'] [Module R N']
 
-/--
-theorem `_root_.QuadraticMap.polarBilin_comp` / 定理 `_root_.QuadraticMap.polarBilin_comp`
-
-English:
-theorem _root_.QuadraticMap.polarBilin_comp
-  given: (Q : QuadraticMap R N' N) (f : M ->ₗ[R] N')
-  proof: LinearMap.ext₂ fun x y => by simp [polar]
-
-中文:
-定理 _root_.二次映射.polarBilin_comp
-  条件: (Q : 二次映射 R N' N) (f : M ->ₗ[R] N')
-  证明: LinearMap.ext₂ fun x y => by simp [polar]
-
-Depends on / 依赖: LinearMap, LinearMap.ext
+/-
+**LinearMap.BilinMap._root_.QuadraticMap.polarBilin_comp** 是 Mathlib 中的一个定理，位于命名
+空间 `LinearMap.BilinMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.QuadraticMap.polarBilin_comp (Q : QuadraticMap R N' N) (f : M ->ₗ[R] N') :
+theorem _root_.QuadraticMap.polarBilin_comp (Q : QuadraticMap R N' N) (f : M →ₗ[R] N') :
     polarBilin (Q.comp f) = LinearMap.compl₁₂ (polarBilin Q) f f :=
-LinearMap.ext₂ fun x y => by simp [polar]
+  LinearMap.ext₂ <| fun x y => by simp [polar]
 
 end
 
 variable {N' : Type*} [AddCommGroup N']
 
-/--
-theorem `_root_.LinearMap.compQuadraticMap_polar` / 定理 `_root_.LinearMap.compQuadraticMap_polar`
-
-English:
-theorem _root_.LinearMap.compQuadraticMap_polar
-  statement: [CommSemiring S] [Algebra S R] [Module S N]
-  proof: by
-  simp [polar]
-
-中文:
-定理 _root_.线性映射.compQuadraticMap_polar
-  结论: [交换半环 S] [代数 S R] [模 S N]
-  证明: by
-  simp [polar]
+/-
+**LinearMap.BilinMap._root_.LinearMap.compQuadraticMap_polar** 是 Mathlib 中的一个定理，
+位于命名空间 `LinearMap.BilinMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearMap.compQuadraticMap_polar [CommSemiring S] [Algebra S R] [Module S N]
-    [Module S N'] [IsScalarTower S R N] [Module S M] [IsScalarTower S R M] (f : N ->ₗ[S] N')
+    [Module S N'] [IsScalarTower S R N] [Module S M] [IsScalarTower S R M] (f : N →ₗ[S] N')
     (Q : QuadraticMap R M N) (x y : M) : polar (f.compQuadraticMap' Q) x y = f (polar Q x y) := by
   simp [polar]
 
 variable [Module R N']
-
-/--
-theorem `_root_.LinearMap.compQuadraticMap_polarBilin` / 定理 `_root_.LinearMap.compQuadraticMap_polarBilin`
-
-English:
-theorem _root_.LinearMap.compQuadraticMap_polarBilin
-  given: (f : N ->ₗ[R] N') (Q : QuadraticMap R M N)
-  proof: by
-  ext
-  rw [polarBilin_apply_apply]; rw [compr₂_apply]; rw [polarBilin_apply_apply]; rw [LinearMap.compQuadraticMap_polar]
-
-中文:
-定理 _root_.线性映射.compQuadraticMap_polarBilin
-  条件: (f : N ->ₗ[R] N') (Q : 二次映射 R M N)
-  证明: by
-  ext
-  rw [polarBilin_apply_apply]; rw [compr₂_apply]; rw [polarBilin_apply_apply]; rw [LinearMap.compQuadraticMap_polar]
-
-Depends on / 依赖: LinearMap, LinearMap.compQuadraticMap_polar, compQuadraticMap_polar, polarBilin_apply_apply
+/-
+**LinearMap.BilinMap._root_.LinearMap.compQuadraticMap_polarBilin** 是 Mathlib 中的
+一个定理，位于命名空间 `LinearMap.BilinMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.LinearMap.compQuadraticMap_polarBilin (f : N ->ₗ[R] N') (Q : QuadraticMap R M N) :
+theorem _root_.LinearMap.compQuadraticMap_polarBilin (f : N →ₗ[R] N') (Q : QuadraticMap R M N) :
     (f.compQuadraticMap' Q).polarBilin = Q.polarBilin.compr₂ f := by
   ext
-  rw [polarBilin_apply_apply]; rw [compr₂_apply]; rw [polarBilin_apply_apply]; rw [LinearMap.compQuadraticMap_polar]
+  rw [polarBilin_apply_apply, compr₂_apply, polarBilin_apply_apply,
+    LinearMap.compQuadraticMap_polar]
 
 end Ring
 
@@ -2778,38 +2154,13 @@ section
 
 variable [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `2` is invertible in `R`, then it is also invertible in `End R M`. -/
+/-
+**QuadraticMap.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Invertible
-  signature: (2 : R)] : Invertible (2
-  body: (⟨⅟2, Set.invOf_mem_center (Set.ofNat_mem_center _ _)⟩ : Submonoid.center R) •
-    (1 : Module.End R M)
-  invOf_mul_self := by
-    ext m
-    dsimp [Submonoid.smul_def]
-    rw [← ofNat_smul_eq_nsmul R]; rw [invOf_smul_smul (2 : R) m]
-  mul_invOf_self := by
-    ext m
-    dsimp [Submonoid.smul_def]
-    rw [← ofNat_smul_eq_nsmul R]; rw [smul_invOf_smul (2 : R) m]
-
-中文:
-实例 [可逆
-  签名: (2 : R)] : 可逆 (2
-  定义体: (⟨⅟2, Set.invOf_mem_center (Set.ofNat_mem_center _ _)⟩ : Submonoid.center R) •
-    (1 : Module.End R M)
-  invOf_mul_self := by
-    ext m
-    dsimp [Submonoid.smul_def]
-    rw [← ofNat_smul_eq_nsmul R]; rw [invOf_smul_smul (2 : R) m]
-  mul_invOf_self := by
-    ext m
-    dsimp [Submonoid.smul_def]
-    rw [← ofNat_smul_eq_nsmul R]; rw [smul_invOf_smul (2 : R) m]
-
-Depends on / 依赖: Set.invOf_mem_center, Set.ofNat_mem_center, Submonoid, Submonoid.center, center, invOf_mem_center, ofNat_mem_center
+--- 原说明 ---
+If `2` is invertible in `R`, then it is also invertible in `End R M`.
 -/
 instance [Invertible (2 : R)] : Invertible (2 : Module.End R M) where
   invOf := (⟨⅟2, Set.invOf_mem_center (Set.ofNat_mem_center _ _)⟩ : Submonoid.center R) •
@@ -2817,27 +2168,30 @@ instance [Invertible (2 : R)] : Invertible (2 : Module.End R M) where
   invOf_mul_self := by
     ext m
     dsimp [Submonoid.smul_def]
-    rw [← ofNat_smul_eq_nsmul R]; rw [invOf_smul_smul (2 : R) m]
+    rw [← ofNat_smul_eq_nsmul R, invOf_smul_smul (2 : R) m]
   mul_invOf_self := by
     ext m
     dsimp [Submonoid.smul_def]
-    rw [← ofNat_smul_eq_nsmul R]; rw [smul_invOf_smul (2 : R) m]
+    rw [← ofNat_smul_eq_nsmul R, smul_invOf_smul (2 : R) m]
 
 /-- If `2` is invertible in `R`, then applying the inverse of `2` in `End R M` to an element
 of `M` is the same as multiplying by the inverse of `2` in `R`. -/
 @[simp]
-/--
-lemma `half_moduleEnd_apply_eq_half_smul` / 引理 `half_moduleEnd_apply_eq_half_smul`
+/-
+**QuadraticMap.half_moduleEnd_apply_eq_half_smul** 是 Mathlib 中的一个引理，位于命名空间 `Quad
+raticMap`。
+形式化陈述：half_moduleEnd_apply_eq_half_smul [Invertible (2 : R)] (x : M) : ⅟(2 : Mod
+ule.End R M) x = ⅟(2 : R) • x
+参数：2 : R；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-lemma half_moduleEnd_apply_eq_half_smul
-  given: [Invertible (2 : R)] (x : M)
-  proof: rfl
-
-中文:
-引理 half_moduleEnd_apply_eq_half_smul
-  条件: [可逆 (2 : R)] (x : M)
-  证明: rfl
+--- 原说明 ---
+If `2` is invertible in `R`, then applying the inverse of `2` in `End R M` to an
+ element
+of `M` is the same as multiplying by the inverse of `2` in `R`.
 -/
 lemma half_moduleEnd_apply_eq_half_smul [Invertible (2 : R)] (x : M) :
     ⅟(2 : Module.End R M) x = ⅟(2 : R) • x :=
@@ -2854,137 +2208,200 @@ variable (S) [CommSemiring S] [Algebra S R] [Module S N] [IsScalarTower S R N]
 -- the requirement that multiplication by `2` is invertible on the target module `N`
 variable [Invertible (2 : Module.End R N)]
 
-/--
-Definition of `associatedHom` / `associatedHom` 的定义
+/-- `associatedHom` is the map that sends a quadratic map on a module `M` over `R` to its
+associated symmetric bilinear map.  As provided here, this has the structure of an `S`-linear map
+where `S` is a commutative ring and `R` is an `S`-algebra.
 
-English:
-definition associatedHom
-  signature: : QuadraticMap R M N ->ₗ[S] (BilinMap R M N) where
-  body: ⅟(2 : Module.End R N) • polarBilin Q
-  map_add' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_add]
-  map_smul' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_smul]
+Over a commutative ring, use `QuadraticMap.associated`, which gives an `R`-linear map.  Over a
+general ring with no nontrivial distinguished commutative subring, use `QuadraticMap.associated'`,
+which gives an additive homomorphism (or more precisely a `ℤ`-linear map.) -/
+/-
+**QuadraticMap.associatedHom** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：associatedHom : QuadraticMap R M N ->ₗ[S] (BilinMap R M N) where toFun Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 associatedHom
-  签名: : 二次映射 R M N ->ₗ[S] (BilinMap R M N) where
-  定义体: ⅟(2 : Module.End R N) • polarBilin Q
-  map_add' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_add]
-  map_smul' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_smul]
+--- 原说明 ---
+`associatedHom` is the map that sends a quadratic map on a module `M` over `R` t
+o its
+associated symmetric bilinear map.  As provided here, this has the structure of 
+an `S`-linear map
+where `S` is a commutative ring and `R` is an `S`-algebra.
 
-Depends on / 依赖: Module, Module.End, polarBilin
+Over a commutative ring, use `QuadraticMap.associated`, which gives an `R`-linea
+r map.  Over a
+general ring with no nontrivial distinguished commutative subring, use `Quadrati
+cMap.associated'`,
+which gives an additive homomorphism (or more precisely a `ℤ`-linear map.)
 -/
-def associatedHom : QuadraticMap R M N ->ₗ[S] (BilinMap R M N) where
+def associatedHom : QuadraticMap R M N →ₗ[S] (BilinMap R M N) where
   toFun Q := ⅟(2 : Module.End R N) • polarBilin Q
-  map_add' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_add]
-  map_smul' _ _ := LinearMap.ext₂ fun _ _ => by simp [polar_smul]
+  map_add' _ _ := LinearMap.ext₂ fun _ _ ↦ by simp [polar_add]
+  map_smul' _ _ := LinearMap.ext₂ fun _ _ ↦ by simp [polar_smul]
 
 variable (Q : QuadraticMap R M N)
-
-/--
-theorem `associated_apply` / 定理 `associated_apply`
-
-English:
-theorem associated_apply
-  given: (x y : M)
-  proof: rfl
-
-中文:
-定理 associated_apply
-  条件: (x y : M)
-  证明: rfl
+/-
+**QuadraticMap.associated_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_apply (x y : M) : associatedHom S Q x y = ⅟(2 : Module.End R N)
+ • (Q (x + y) - Q x - Q y)
+参数：x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
 theorem associated_apply (x y : M) :
     associatedHom S Q x y = ⅟(2 : Module.End R N) • (Q (x + y) - Q x - Q y) := rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-theorem `two_nsmul_associated` / 定理 `two_nsmul_associated`
+/-- Twice the associated bilinear map of `Q` is the same as the polar of `Q`. -/
+/-
+**QuadraticMap.two_nsmul_associated** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：∀ (S : Type u_1) {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : Comm
+Ring R] [inst_1 : AddCommGroup M]   [inst_2 : _root_.Module R M] [inst_3 : AddCo
+mmGroup N] [inst_4 : _root_.Module R N] [inst_5 : CommSemiring S]   [inst_6 : Al
+gebra S R] [inst_7 : _root_.Module S N] [inst_8 : IsScalarTower S R N] [inst_9 :
+ Invertible 2]   (Q : QuadraticMap R M N), 2 • (QuadraticMap.associatedHom S) Q 
+= Q.polarBilin
+参数：S : Type u_1；Q : QuadraticMap R M N；QuadraticMap.associatedHom S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.smul_apply`：smul_apply (a : S) (f : M ->ₛₗ[σ₁₂] M₂) (x : M) : 
+(a • f) x = a • f x
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `Nat.cast_ofNat`：∀ {R : Type u_1} {n : ℕ} [inst : NatCast R] [inst_1 : n.
+AtLeastTwo], ↑(OfNat.ofNat n) = OfNat.ofNat n
+· 使用定理 `mul_invOf_self'`：mul_invOf_self' [Mul α] [One α] (a : α) {_ : Invertible
+ a} : a * ⅟a = 1
+· 使用定理 `Module.End.one_apply`：one_apply (x : M) : (1 : Module.End R M) x = x
+· 使用定理 `QuadraticMap.polar.eq_1`：∀ {M : Type u_4} {N : Type u_5} [inst : AddComm
+Group M] [inst_1 : AddCommGroup N] (f : M → N) (x y : M),   QuadraticMap.polar f
+ x y = f (x +…
 
-English:
-theorem two_nsmul_associated
-  statement: 2 • associatedHom S Q = Q.polarBilin
-  proof: by
-  ext
-  dsimp [associated_apply]
-  rw [← LinearMap.smul_apply]; rw [nsmul_eq_mul]; rw [Nat.cast_ofNat]; rw [mul_invOf_self']; rw [Module.End.one_apply]; rw [polar]
-
-中文:
-定理 two_nsmul_associated
-  结论: 2 • associatedHom S Q = Q.polarBilin
-  证明: by
-  ext
-  dsimp [associated_apply]
-  rw [← LinearMap.smul_apply]; rw [nsmul_eq_mul]; rw [Nat.cast_ofNat]; rw [mul_invOf_self']; rw [Module.End.one_apply]; rw [polar]
+--- 原说明 ---
+Twice the associated bilinear map of `Q` is the same as the polar of `Q`.
 -/
 @[simp] theorem two_nsmul_associated : 2 • associatedHom S Q = Q.polarBilin := by
   ext
   dsimp [associated_apply]
-  rw [← LinearMap.smul_apply]; rw [nsmul_eq_mul]; rw [Nat.cast_ofNat]; rw [mul_invOf_self']; rw [Module.End.one_apply]; rw [polar]
-
-/--
-theorem `associated_isSymm` / 定理 `associated_isSymm`
-
-English:
-theorem associated_isSymm
-  given: (Q : QuadraticMap R M N) (x y : M)
-  proof: by
-  simp only [associated_apply, sub_eq_add_neg, add_assoc, add_comm, add_left_comm]
-
-中文:
-定理 associated_isSymm
-  条件: (Q : 二次映射 R M N) (x y : M)
-  证明: by
-  simp only [associated_apply, sub_eq_add_neg, add_assoc, add_comm, add_left_comm]
-
-Depends on / 依赖: add_assoc, add_comm, add_left_comm, associated_apply, sub_eq_add_neg
+  rw [← LinearMap.smul_apply, nsmul_eq_mul, Nat.cast_ofNat, mul_invOf_self', Module.End.one_apply,
+    polar]
+/-
+**QuadraticMap.associated_isSymm** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_isSymm (Q : QuadraticMap R M N) (x y : M) : associatedHom S Q x
+ y = associatedHom S Q y x
+参数：Q : QuadraticMap R M N；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associated_isSymm (Q : QuadraticMap R M N) (x y : M) :
     associatedHom S Q x y = associatedHom S Q y x := by
   simp only [associated_apply, sub_eq_add_neg, add_assoc, add_comm, add_left_comm]
-
-/--
-theorem `_root_.QuadraticForm.associated_isSymm` / 定理 `_root_.QuadraticForm.associated_isSymm`
-
-English:
-theorem _root_.QuadraticForm.associated_isSymm
-  given: (Q : QuadraticForm R M) [Invertible (2 : R)]
-  proof: ⟨QuadraticMap.associated_isSymm S Q⟩
-
-中文:
-定理 _root_.QuadraticForm.associated_isSymm
-  条件: (Q : QuadraticForm R M) [可逆 (2 : R)]
-  证明: ⟨QuadraticMap.associated_isSymm S Q⟩
-
-Depends on / 依赖: QuadraticMap, QuadraticMap.associated_isSymm, associated_isSymm
+/-
+**QuadraticMap._root_.QuadraticForm.associated_isSymm** 是 Mathlib 中的一个定理，位于命名空间 
+`QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.QuadraticForm.associated_isSymm (Q : QuadraticForm R M) [Invertible (2 : R)] :
     (associatedHom S Q).IsSymm :=
   ⟨QuadraticMap.associated_isSymm S Q⟩
 
-/--
-lemma `associated_flip` / 引理 `associated_flip`
+/-- A version of `QuadraticMap.associated_isSymm` for general targets
+(using `flip` because `IsSymm` does not apply here). -/
+/-
+**QuadraticMap.associated_flip** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_flip : (associatedHom S Q).flip = associatedHom S Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma associated_flip
-  statement: (associatedHom S Q).flip = associatedHom S Q
-  proof: by
-  ext
-  simp only [LinearMap.flip_apply, associated_apply, add_comm, sub_eq_add_neg, add_left_comm,
-    add_assoc]
-
-@[simp]
-
-中文:
-引理 associated_flip
-  结论: (associatedHom S Q).flip = associatedHom S Q
-  证明: by
-  ext
-  simp only [LinearMap.flip_apply, associated_apply, add_comm, sub_eq_add_neg, add_left_comm,
-    add_assoc]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.flip_apply, add_assoc, add_comm, add_left_comm, associated_apply, flip_apply, sub_eq_add_neg
+--- 原说明 ---
+A version of `QuadraticMap.associated_isSymm` for general targets
+(using `flip` because `IsSymm` does not apply here).
 -/
 lemma associated_flip : (associatedHom S Q).flip = associatedHom S Q := by
   ext
@@ -2992,247 +2409,402 @@ lemma associated_flip : (associatedHom S Q).flip = associatedHom S Q := by
     add_assoc]
 
 @[simp]
-/--
-theorem `associated_comp` / 定理 `associated_comp`
-
-English:
-theorem associated_comp
-  given: {N' : Type*} [AddCommGroup N'] [Module R N'] (f : N' ->ₗ[R] M)
-  proof: by
-  ext
-  simp only [associated_apply, comp_apply, map_add, LinearMap.compl₁₂_apply]
-
-中文:
-定理 associated_comp
-  条件: {N' : 类型} [加法交换群 N'] [模 R N'] (f : N' ->ₗ[R] M)
-  证明: by
-  ext
-  simp only [associated_apply, comp_apply, map_add, LinearMap.compl₁₂_apply]
-
-Depends on / 依赖: LinearMap, LinearMap.compl, associated_apply, comp_apply, map_add
+/-
+**QuadraticMap.associated_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_comp {N' : Type*} [AddCommGroup N'] [Module R N'] (f : N' ->ₗ[R
+] M) : associatedHom S (Q.comp f) = (associatedHom S Q).compl₁₂ f f
+参数：f : N' ->ₗ[R] M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem associated_comp {N' : Type*} [AddCommGroup N'] [Module R N'] (f : N' ->ₗ[R] M) :
+theorem associated_comp {N' : Type*} [AddCommGroup N'] [Module R N'] (f : N' →ₗ[R] M) :
     associatedHom S (Q.comp f) = (associatedHom S Q).compl₁₂ f f := by
   ext
   simp only [associated_apply, comp_apply, map_add, LinearMap.compl₁₂_apply]
-
-/--
-theorem `associated_toQuadraticMap` / 定理 `associated_toQuadraticMap`
-
-English:
-theorem associated_toQuadraticMap
-  given: (B : BilinMap R M N) (x y : M)
-  proof: by
-  simp only [associated_apply, BilinMap.toQuadraticMap_apply, map_add, LinearMap.add_apply,
-    Module.End.smul_def, map_sub]
-  abel_nf
-
-中文:
-定理 associated_toQuadraticMap
-  条件: (B : BilinMap R M N) (x y : M)
-  证明: by
-  simp only [associated_apply, BilinMap.toQuadraticMap_apply, map_add, LinearMap.add_apply,
-    Module.End.smul_def, map_sub]
-  abel_nf
-
-Depends on / 依赖: BilinMap, BilinMap.toQuadraticMap_apply, LinearMap, LinearMap.add_apply, Module, Module.End.smul_def, abel_nf, add_apply, associated_apply, map_add, map_sub, smul_def, toQuadraticMap_apply
+/-
+**QuadraticMap.associated_toQuadraticMap** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap
+`。
+形式化陈述：associated_toQuadraticMap (B : BilinMap R M N) (x y : M) : associatedHom S
+ B.toQuadraticMap x y = ⅟(2 : Module.End R N) • (B x y + B y x)
+参数：B : BilinMap R M N；x y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Mathlib.Tactic.Abel.unfold_sub`：unfold_sub {α} [SubtractionMonoid α] (a 
+b c : α) (h : a + -b = c) : a - b = c
+· 使用引理 `Mathlib.Tactic.Abel.subst_into_addg`：subst_into_addg {α} [AddCommGroup α
+] (l r tl tr t) (prl : (l : α) = tl) (prr : r = tr) (prt : tl + tr = t) : l + r 
+= t
+· 使用定理 `Mathlib.Tactic.Abel.term_atomg`：term_atomg {α} [AddCommGroup α] (x : α) 
+: x = termg 1 x 0
+· 使用定理 `Mathlib.Tactic.Abel.term_add_constg`：term_add_constg {α} [AddCommGroup α
+] (n x a k a') (h : a + k = a') : @termg α _ n x a + k = termg n x a'
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `Mathlib.Tactic.Abel.subst_into_negg`：subst_into_negg {α} [AddCommGroup α
+] (a ta t : α) (pra : a = ta) (prt : -ta = t) : -a = t
+· 使用定理 `Mathlib.Tactic.Abel.term_neg`：term_neg {α} [AddCommGroup α] (n x a n' a'
+) (h₁ : -n = n') (h₂ : -a = a') : -@termg α _ n x a = termg n' x a'
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `Mathlib.Tactic.Abel.term_add_termg`：term_add_termg {α} [AddCommGroup α] 
+(n₁ x a₁ n₂ a₂ n' a') (h₁ : n₁ + n₂ = n') (h₂ : a₁ + a₂ = a') : @termg α _ n₁ x 
+a₁ + @termg α _ n₂ x a₂ …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_add`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HAdd.hAdd →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+（共 36 条，此处仅展示前 30 条）
 -/
 theorem associated_toQuadraticMap (B : BilinMap R M N) (x y : M) :
     associatedHom S B.toQuadraticMap x y = ⅟(2 : Module.End R N) • (B x y + B y x) := by
   simp only [associated_apply, BilinMap.toQuadraticMap_apply, map_add, LinearMap.add_apply,
     Module.End.smul_def, map_sub]
   abel_nf
-
-/--
-theorem `associated_left_inverse` / 定理 `associated_left_inverse`
-
-English:
-theorem associated_left_inverse
-  given: {B₁ : BilinMap R M N} (h : forall x y, B₁ x y = B₁ y x)
-  proof: LinearMap.ext₂ fun x y => by
-    rw [associated_toQuadraticMap]; rw [← h x y]; rw [← two_smul R]; rw [invOf_smul_eq_iff]; rw [two_smul]; rw [two_smul]
-
-中文:
-定理 associated_left_inverse
-  条件: {B₁ : BilinMap R M N} (h : 对任意 x y, B₁ x y = B₁ y x)
-  证明: LinearMap.ext₂ fun x y => by
-    rw [associated_toQuadraticMap]; rw [← h x y]; rw [← two_smul R]; rw [invOf_smul_eq_iff]; rw [two_smul]; rw [two_smul]
-
-Depends on / 依赖: LinearMap, LinearMap.ext, associated_toQuadraticMap, invOf_smul_eq_iff, two_smul
+/-
+**QuadraticMap.associated_left_inverse** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_left_inverse {B₁ : BilinMap R M N} (h : forall x y, B₁ x y = B₁
+ y x) : associatedHom S B₁.toQuadraticMap = B₁
+参数：h : forall x y, B₁ x y = B₁ y x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.ext₂`：ext₂ {f g : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P} (H : forall m n, 
+f m n = g m n) : f = g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.associated_toQuadraticMap`：associated_toQuadraticMap (B : B
+ilinMap R M N) (x y : M) : associatedHom S B.toQuadraticMap x y = ⅟(2 : Module.E
+nd R N) • (B x y + B y x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用引理 `invOf_smul_eq_iff`：invOf_smul_eq_iff : ⅟c • x = y ↔ x = c • y
 -/
-theorem associated_left_inverse {B₁ : BilinMap R M N} (h : forall x y, B₁ x y = B₁ y x) :
+theorem associated_left_inverse {B₁ : BilinMap R M N} (h : ∀ x y, B₁ x y = B₁ y x) :
     associatedHom S B₁.toQuadraticMap = B₁ :=
-  LinearMap.ext₂ fun x y => by
-    rw [associated_toQuadraticMap]; rw [← h x y]; rw [← two_smul R]; rw [invOf_smul_eq_iff]; rw [two_smul]; rw [two_smul]
+  LinearMap.ext₂ fun x y ↦ by
+    rw [associated_toQuadraticMap, ← h x y, ← two_smul R, invOf_smul_eq_iff, two_smul, two_smul]
 
-/--
-lemma `associated_left_inverse'` / 引理 `associated_left_inverse'`
+/-- A version of `QuadraticMap.associated_left_inverse` for general targets. -/
+/-
+**QuadraticMap.associated_left_inverse'** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticMap`
+。
+形式化陈述：associated_left_inverse' {B₁ : BilinMap R M N} (hB₁ : B₁.flip = B₁) : asso
+ciatedHom S B₁.toQuadraticMap = B₁
+参数：hB₁ : B₁.flip = B₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.associated_toQuadraticMap`：associated_toQuadraticMap (B : B
+ilinMap R M N) (x y : M) : associatedHom S B.toQuadraticMap x y = ⅟(2 : Module.E
+nd R N) • (B x y + B y x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.flip_apply`：flip_apply (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P) (m : M)
+ (n : N) : flip f n m = f m n
+· 使用引理 `invOf_smul_eq_iff`：invOf_smul_eq_iff : ⅟c • x = y ↔ x = c • y
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
 
-English:
-lemma associated_left_inverse'
-  given: {B₁ : BilinMap R M N} (hB₁ : B₁.flip = B₁)
-  proof: by
-  ext _ y
-  rw [associated_toQuadraticMap]; rw [← LinearMap.flip_apply _ y]; rw [hB₁]; rw [invOf_smul_eq_iff]; rw [two_smul]
-
-中文:
-引理 associated_left_inverse'
-  条件: {B₁ : BilinMap R M N} (hB₁ : B₁.flip = B₁)
-  证明: by
-  ext _ y
-  rw [associated_toQuadraticMap]; rw [← LinearMap.flip_apply _ y]; rw [hB₁]; rw [invOf_smul_eq_iff]; rw [two_smul]
-
-Depends on / 依赖: LinearMap, LinearMap.flip_apply, associated_toQuadraticMap, flip_apply, invOf_smul_eq_iff, two_smul
+--- 原说明 ---
+A version of `QuadraticMap.associated_left_inverse` for general targets.
 -/
 lemma associated_left_inverse' {B₁ : BilinMap R M N} (hB₁ : B₁.flip = B₁) :
     associatedHom S B₁.toQuadraticMap = B₁ := by
   ext _ y
-  rw [associated_toQuadraticMap]; rw [← LinearMap.flip_apply _ y]; rw [hB₁]; rw [invOf_smul_eq_iff]; rw [two_smul]
-
-/--
-theorem `associated_eq_self_apply` / 定理 `associated_eq_self_apply`
-
-English:
-theorem associated_eq_self_apply
-  given: (x : M)
-  statement: associatedHom S Q x x = Q x
-  proof: by
-  rw [associated_apply]; rw [map_add_self]; rw [← three_add_one_eq_four]; rw [← two_add_one_eq_three]; rw [add_smul]; rw [add_smul]; rw [one_smul]; rw [add_sub_cancel_right]; rw [add_sub_cancel_right]; rw [two_smul]; rw [← two_smul R]; rw [invOf_smul_eq_iff]; rw [two_smul]; rw [two_smul]
-
-中文:
-定理 associated_eq_self_apply
-  条件: (x : M)
-  结论: associatedHom S Q x x = Q x
-  证明: by
-  rw [associated_apply]; rw [map_add_self]; rw [← three_add_one_eq_four]; rw [← two_add_one_eq_three]; rw [add_smul]; rw [add_smul]; rw [one_smul]; rw [add_sub_cancel_right]; rw [add_sub_cancel_right]; rw [two_smul]; rw [← two_smul R]; rw [invOf_smul_eq_iff]; rw [two_smul]; rw [two_smul]
-
-Depends on / 依赖: add_smul, add_sub_cancel_right, associated_apply, invOf_smul_eq_iff, map_add_self, one_smul, three_add_one_eq_four, two_add_one_eq_three, two_smul
+  rw [associated_toQuadraticMap, ← LinearMap.flip_apply _ y, hB₁, invOf_smul_eq_iff, two_smul]
+/-
+**QuadraticMap.associated_eq_self_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`
+。
+形式化陈述：associated_eq_self_apply (x : M) : associatedHom S Q x x = Q x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.associated_apply`：associated_apply (x y : M) : associatedHo
+m S Q x y = ⅟(2 : Module.End R N) • (Q (x + y) - Q x - Q y)
+· 使用定理 `QuadraticMap.map_add_self`：map_add_self (x : M) : Q (x + x) = 4 • Q x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `three_add_one_eq_four`：three_add_one_eq_four [AddMonoidWithOne R] : 3 + 
+1 = (4 : R)
+· 使用定理 `two_add_one_eq_three`：two_add_one_eq_three [AddMonoidWithOne R] : 2 + 1 
+= (3 : R)
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用引理 `invOf_smul_eq_iff`：invOf_smul_eq_iff : ⅟c • x = y ↔ x = c • y
 -/
 theorem associated_eq_self_apply (x : M) : associatedHom S Q x x = Q x := by
-  rw [associated_apply]; rw [map_add_self]; rw [← three_add_one_eq_four]; rw [← two_add_one_eq_three]; rw [add_smul]; rw [add_smul]; rw [one_smul]; rw [add_sub_cancel_right]; rw [add_sub_cancel_right]; rw [two_smul]; rw [← two_smul R]; rw [invOf_smul_eq_iff]; rw [two_smul]; rw [two_smul]
-
-/--
-theorem `toQuadraticMap_associated` / 定理 `toQuadraticMap_associated`
-
-English:
-theorem toQuadraticMap_associated
-  statement: (associatedHom S Q).toQuadraticMap = Q
-  proof: QuadraticMap.ext associated_eq_self_apply S Q
-
-中文:
-定理 toQuadraticMap_associated
-  结论: (associatedHom S Q).toQuadraticMap = Q
-  证明: QuadraticMap.ext associated_eq_self_apply S Q
-
-Depends on / 依赖: QuadraticMap, QuadraticMap.ext, associated_eq_self_apply
+  rw [associated_apply, map_add_self, ← three_add_one_eq_four, ← two_add_one_eq_three, add_smul,
+    add_smul, one_smul, add_sub_cancel_right, add_sub_cancel_right, two_smul, ← two_smul R,
+    invOf_smul_eq_iff, two_smul, two_smul]
+/-
+**QuadraticMap.toQuadraticMap_associated** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap
+`。
+形式化陈述：toQuadraticMap_associated : (associatedHom S Q).toQuadraticMap = Q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `QuadraticMap.ext`：ext (H : forall x : M, Q x = Q' x) : Q = Q'
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `QuadraticMap.associated_eq_self_apply`：associated_eq_self_apply (x : M) 
+: associatedHom S Q x x = Q x
 -/
 theorem toQuadraticMap_associated : (associatedHom S Q).toQuadraticMap = Q :=
-QuadraticMap.ext associated_eq_self_apply S Q
+  QuadraticMap.ext <| associated_eq_self_apply S Q
 
 -- note: usually `rightInverse` lemmas are named the other way around, but this is consistent
 -- with historical naming in this file.
-/--
-theorem `associated_rightInverse` / 定理 `associated_rightInverse`
-
-English:
-theorem associated_rightInverse
-  proof: toQuadraticMap_associated S
-
-中文:
-定理 associated_rightInverse
-  证明: toQuadraticMap_associated S
-
-Depends on / 依赖: toQuadraticMap_associated
+/-
+**QuadraticMap.associated_rightInverse** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_rightInverse : Function.RightInverse (associatedHom S) (BilinMa
+p.toQuadraticMap : _ -> QuadraticMap R M N)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `QuadraticMap.toQuadraticMap_associated`：toQuadraticMap_associated : (ass
+ociatedHom S Q).toQuadraticMap = Q
 -/
 theorem associated_rightInverse :
-    Function.RightInverse (associatedHom S) (BilinMap.toQuadraticMap : _ -> QuadraticMap R M N) :=
+    Function.RightInverse (associatedHom S) (BilinMap.toQuadraticMap : _ → QuadraticMap R M N) :=
   toQuadraticMap_associated S
 
-/--
-Definition of `associated'` / `associated'` 的定义
+/-- `associated'` is the `ℤ`-linear map that sends a quadratic form on a module `M` over `R` to its
+associated symmetric bilinear form. -/
+/-
+**QuadraticMap.associated'** 是 Mathlib 中的一个缩写定义，位于命名空间 `QuadraticMap`。
+形式化陈述：associated' : QuadraticMap R M N ->ₗ[Int] BilinMap R M N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation associated'
-  signature: : QuadraticMap R M N ->ₗ[Int] BilinMap R M N
-  body: associatedHom Int
-
-中文:
-缩写 associated'
-  签名: : 二次映射 R M N ->ₗ[整数] BilinMap R M N
-  定义体: associatedHom Int
-
-Depends on / 依赖: associatedHom
+--- 原说明 ---
+`associated'` is the `ℤ`-linear map that sends a quadratic form on a module `M` 
+over `R` to its
+associated symmetric bilinear form.
 -/
-abbrev associated' : QuadraticMap R M N ->ₗ[Int] BilinMap R M N :=
-  associatedHom Int
+abbrev associated' : QuadraticMap R M N →ₗ[ℤ] BilinMap R M N :=
+  associatedHom ℤ
 
-/--
-Instance `canLift` / 实例 `canLift`
+/-- Symmetric bilinear forms can be lifted to quadratic forms -/
+/-
+**QuadraticMap.canLift** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+形式化陈述：canLift [Invertible (2 : R)] : CanLift (BilinMap R M R) (QuadraticForm R M
+) (associatedHom Nat) LinearMap.IsSymm where prf B
+参数：2 : R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `QuadraticMap.associated_left_inverse`：associated_left_inverse {B₁ : Bili
+nMap R M N} (h : forall x y, B₁ x y = B₁ y x) : associatedHom S B₁.toQuadraticMa
+p = B₁
 
-English:
-instance canLift
-  signature: [Invertible (2 : R)]
-  body: fun ⟨hB⟩ => ⟨B.toQuadraticMap, associated_left_inverse _ hB⟩
-
-中文:
-实例 canLift
-  签名: [可逆 (2 : R)]
-  定义体: fun ⟨hB⟩ => ⟨B.toQuadraticMap, associated_left_inverse _ hB⟩
-
-Depends on / 依赖: B.toQuadraticMap, associated_left_inverse, toQuadraticMap
+--- 原说明 ---
+Symmetric bilinear forms can be lifted to quadratic forms
 -/
 instance canLift [Invertible (2 : R)] :
-    CanLift (BilinMap R M R) (QuadraticForm R M) (associatedHom Nat) LinearMap.IsSymm where
-  prf B := fun ⟨hB⟩ => ⟨B.toQuadraticMap, associated_left_inverse _ hB⟩
+    CanLift (BilinMap R M R) (QuadraticForm R M) (associatedHom ℕ) LinearMap.IsSymm where
+  prf B := fun ⟨hB⟩ ↦ ⟨B.toQuadraticMap, associated_left_inverse _ hB⟩
 
-/--
-Instance `canLift'` / 实例 `canLift'`
+/-- Symmetric bilinear maps can be lifted to quadratic maps -/
+/-
+**QuadraticMap.canLift'** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticMap`。
+形式化陈述：canLift' : CanLift (BilinMap R M N) (QuadraticMap R M N) (associatedHom Na
+t) fun B => B.flip = B where prf B hB
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用引理 `QuadraticMap.associated_left_inverse'`：associated_left_inverse' {B₁ : Bi
+linMap R M N} (hB₁ : B₁.flip = B₁) : associatedHom S B₁.toQuadraticMap = B₁
 
-English:
-instance canLift'
-  signature: :
-  body: ⟨B.toQuadraticMap, associated_left_inverse' _ hB⟩
-
-中文:
-实例 canLift'
-  签名: :
-  定义体: ⟨B.toQuadraticMap, associated_left_inverse' _ hB⟩
-
-Depends on / 依赖: B.toQuadraticMap, associated_left_inverse, toQuadraticMap
+--- 原说明 ---
+Symmetric bilinear maps can be lifted to quadratic maps
 -/
 instance canLift' :
-    CanLift (BilinMap R M N) (QuadraticMap R M N) (associatedHom Nat) fun B => B.flip = B where
+    CanLift (BilinMap R M N) (QuadraticMap R M N) (associatedHom ℕ) fun B ↦ B.flip = B where
   prf B hB := ⟨B.toQuadraticMap, associated_left_inverse' _ hB⟩
 
-/--
-theorem `exists_quadraticMap_ne_zero` / 定理 `exists_quadraticMap_ne_zero`
+/-- There exists a non-null vector with respect to any quadratic form `Q` whose associated
+bilinear form is non-zero, i.e. there exists `x` such that `Q x ≠ 0`. -/
+/-
+**QuadraticMap.exists_quadraticMap_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticM
+ap`。
+形式化陈述：exists_quadraticMap_ne_zero {Q : QuadraticMap R M N} -- Porting note: adde
+d implicit argument (hB₁ : associated' (N
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `QuadraticMap.ext`：ext (H : forall x : M, Q x = Q' x) : Q = Q'
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 
-English:
-theorem exists_quadraticMap_ne_zero
-  statement: {Q : QuadraticMap R M N}
-  proof: by
-  rw [← not_forall]
-  intro h
-  apply hB₁
-  rw [(QuadraticMap.ext h : Q = 0)]; rw [map_zero]
-
-中文:
-定理 存在_quadraticMap_ne_zero
-  结论: {Q : 二次映射 R M N}
-  证明: by
-  rw [← not_forall]
-  intro h
-  apply hB₁
-  rw [(QuadraticMap.ext h : Q = 0)]; rw [map_zero]
+--- 原说明 ---
+There exists a non-null vector with respect to any quadratic form `Q` whose asso
+ciated
+bilinear form is non-zero, i.e. there exists `x` such that `Q x ≠ 0`.
 -/
 theorem exists_quadraticMap_ne_zero {Q : QuadraticMap R M N}
     -- Porting note: added implicit argument
-    (hB₁ : associated' (N := N) Q != 0) :
-    exists x, Q x != 0 := by
+    (hB₁ : associated' (N := N) Q ≠ 0) :
+    ∃ x, Q x ≠ 0 := by
   rw [← not_forall]
   intro h
   apply hB₁
-  rw [(QuadraticMap.ext h : Q = 0)]; rw [map_zero]
+  rw [(QuadraticMap.ext h : Q = 0), map_zero]
 
 end AssociatedHom
 
@@ -3242,73 +2814,122 @@ variable [CommSemiring S] [CommRing R] [AddCommGroup M] [Algebra S R] [Module R 
 variable [AddCommGroup N] [Module R N] [Module S N] [IsScalarTower S R N]
 variable [Invertible (2 : Module.End R N)]
 
--- Note: When possible, rather than writing lemmas about `associated`, write a lemma applying to
+-- Note:  When possible, rather than writing lemmas about `associated`, write a lemma applying to
 -- the more general `associatedHom` and place it in the previous section.
 
-/--
-Definition of `associated` / `associated` 的定义
+/-- `associated` is the linear map that sends a quadratic map over a commutative ring to its
+associated symmetric bilinear map. -/
+/-
+**QuadraticMap.associated** 是 Mathlib 中的一个缩写定义，位于命名空间 `QuadraticMap`。
+形式化陈述：associated : QuadraticMap R M N ->ₗ[R] BilinMap R M N
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation associated
-  signature: : QuadraticMap R M N ->ₗ[R] BilinMap R M N
-  body: associatedHom R
-
-中文:
-缩写 associated
-  签名: : 二次映射 R M N ->ₗ[R] BilinMap R M N
-  定义体: associatedHom R
-
-Depends on / 依赖: associatedHom
+--- 原说明 ---
+`associated` is the linear map that sends a quadratic map over a commutative rin
+g to its
+associated symmetric bilinear map.
 -/
-abbrev associated : QuadraticMap R M N ->ₗ[R] BilinMap R M N :=
+abbrev associated : QuadraticMap R M N →ₗ[R] BilinMap R M N :=
   associatedHom R
 
 variable (S) in
-/--
-theorem `coe_associatedHom` / 定理 `coe_associatedHom`
-
-English:
-theorem coe_associatedHom
-  proof: rfl
-
-中文:
-定理 coe_associatedHom
-  证明: rfl
+/-
+**QuadraticMap.coe_associatedHom** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：coe_associatedHom : ⇑(associatedHom S : QuadraticMap R M N ->ₗ[S] BilinMap
+ R M N) = associated
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
 theorem coe_associatedHom :
-    ⇑(associatedHom S : QuadraticMap R M N ->ₗ[S] BilinMap R M N) = associated :=
+    ⇑(associatedHom S : QuadraticMap R M N →ₗ[S] BilinMap R M N) = associated :=
   rfl
 
 open LinearMap in
 @[simp]
-/--
-theorem `associated_linMulLin` / 定理 `associated_linMulLin`
-
-English:
-theorem associated_linMulLin
-  given: [Invertible (2 : R)] (f g : M ->ₗ[R] R)
-  proof: by
-  ext
-  simp only [associated_apply, linMulLin_apply, map_add, smul_add, LinearMap.add_apply,
-    LinearMap.smul_apply, compl₁₂_apply, mul_apply', smul_eq_mul, invOf_smul_eq_iff]
-  simp only [Module.End.smul_def, Module.End.ofNat_apply, nsmul_eq_mul, Nat.cast_ofNat,
-    mul_invOf_cancel_left']
-  ring_nf
-
-中文:
-定理 associated_linMulLin
-  条件: [可逆 (2 : R)] (f g : M ->ₗ[R] R)
-  证明: by
-  ext
-  simp only [associated_apply, linMulLin_apply, map_add, smul_add, LinearMap.add_apply,
-    LinearMap.smul_apply, compl₁₂_apply, mul_apply', smul_eq_mul, invOf_smul_eq_iff]
-  simp only [Module.End.smul_def, Module.End.ofNat_apply, nsmul_eq_mul, Nat.cast_ofNat,
-    mul_invOf_cancel_left']
-  ring_nf
-
-Depends on / 依赖: linMulLin
+/-
+**QuadraticMap.associated_linMulLin** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_linMulLin [Invertible (2 : R)] (f g : M ->ₗ[R] R) : associated 
+(R
+参数：2 : R；f g : M ->ₗ[R] R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `mul_invOf_cancel_left'`：mul_invOf_cancel_left' {_ : Invertible a} : a * 
+(⅟a * b) = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+（共 52 条，此处仅展示前 30 条）
 -/
-theorem associated_linMulLin [Invertible (2 : R)] (f g : M ->ₗ[R] R) :
+theorem associated_linMulLin [Invertible (2 : R)] (f g : M →ₗ[R] R) :
     associated (R := R) (N := R) (linMulLin f g) =
       ⅟(2 : R) • ((mul R R).compl₁₂ f g + (mul R R).compl₁₂ g f) := by
   ext
@@ -3320,31 +2941,38 @@ theorem associated_linMulLin [Invertible (2 : R)] (f g : M ->ₗ[R] R) :
 
 open LinearMap in
 @[simp]
-/--
-lemma `associated_sq` / 引理 `associated_sq`
-
-English:
-lemma associated_sq
-  given: [Invertible (2 : R)]
-  statement: associated (R := R) sq = mul R R
-  proof: by
-  rw [sq]; rw [associated_linMulLin]
-  simp only [smul_add, invOf_two_smul_add_invOf_two_smul]
-  rfl
-
-中文:
-引理 associated_sq
-  条件: [可逆 (2 : R)]
-  结论: associated (R := R) sq = mul R R
-  证明: by
-  rw [sq]; rw [associated_linMulLin]
-  simp only [smul_add, invOf_two_smul_add_invOf_two_smul]
-  rfl
-
-Depends on / 依赖: associated_linMulLin, invOf_two_smul_add_invOf_two_smul, smul_add
+/-
+**QuadraticMap.associated_sq** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_sq [Invertible (2 : R)] : associated (R
+参数：2 : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.sq.eq_1`：∀ {R : Type u_3} {A : Type u_7} [inst : CommSemiri
+ng R] [inst_1 : NonUnitalNonAssocSemiring A]   [inst_2 : _root_.Module R A] [ins
+t_3 : SMul…
+· 使用定理 `QuadraticMap.associated_linMulLin`：associated_linMulLin [Invertible (2 :
+ R)] (f g : M ->ₗ[R] R) : associated (R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `invOf_two_smul_add_invOf_two_smul`：invOf_two_smul_add_invOf_two_smul (R)
+ [Semiring R] [AddCommMonoid M] [Module R M] [Invertible (2 : R)] (x : M) : (⅟2 
+: R) • x + (⅟2 : R) • x…
 -/
 lemma associated_sq [Invertible (2 : R)] : associated (R := R) sq = mul R R := by
-  rw [sq]; rw [associated_linMulLin]
+  rw [sq, associated_linMulLin]
   simp only [smul_add, invOf_two_smul_add_invOf_two_smul]
   rfl
 
@@ -3358,165 +2986,120 @@ section CommSemiring
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]
   {Q : QuadraticMap R M N}
 
-/--
-Definition of `IsOrtho` / `IsOrtho` 的定义
+/-- The proposition that two elements of a quadratic map space are orthogonal. -/
+/-
+**QuadraticMap.IsOrtho** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：IsOrtho (Q : QuadraticMap R M N) (x y : M) : Prop
+参数：Q : QuadraticMap R M N；x y : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsOrtho
-  signature: (Q : QuadraticMap R M N) (x y : M)
-  body: Q (x + y) = Q x + Q y
-
-中文:
-定义 IsOrtho
-  签名: (Q : 二次映射 R M N) (x y : M)
-  定义体: Q (x + y) = Q x + Q y
+--- 原说明 ---
+The proposition that two elements of a quadratic map space are orthogonal.
 -/
 def IsOrtho (Q : QuadraticMap R M N) (x y : M) : Prop :=
   Q (x + y) = Q x + Q y
-
-/--
-theorem `isOrtho_def` / 定理 `isOrtho_def`
-
-English:
-theorem isOrtho_def
-  given: {Q : QuadraticMap R M N} {x y : M}
-  statement: Q.IsOrtho x y ↔ Q (x + y) = Q x + Q y
-  proof: Iff.rfl
-
-中文:
-定理 isOrtho_def
-  条件: {Q : 二次映射 R M N} {x y : M}
-  结论: Q.IsOrtho x y ↔ Q (x + y) = Q x + Q y
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**QuadraticMap.isOrtho_def** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：isOrtho_def {Q : QuadraticMap R M N} {x y : M} : Q.IsOrtho x y ↔ Q (x + y)
+ = Q x + Q y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isOrtho_def {Q : QuadraticMap R M N} {x y : M} : Q.IsOrtho x y ↔ Q (x + y) = Q x + Q y :=
   Iff.rfl
-
-/--
-theorem `IsOrtho.all` / 定理 `IsOrtho.all`
-
-English:
-theorem IsOrtho.all
-  given: (x y : M)
-  statement: IsOrtho (0 : QuadraticMap R M N) x y
-  proof: (zero_add _).symm
-
-中文:
-定理 IsOrtho.all
-  条件: (x y : M)
-  结论: IsOrtho (0 : 二次映射 R M N) x y
-  证明: (zero_add _).symm
-
-Depends on / 依赖: zero_add
+/-
+**QuadraticMap.IsOrtho.all** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.IsOrtho`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommSemiring R] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [inst_3 : AddCommMonoid N
+] [inst_4 : _root_.Module R N] (x y : M),   QuadraticMap.IsOrtho 0 x y
+参数：x y : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem IsOrtho.all (x y : M) : IsOrtho (0 : QuadraticMap R M N) x y := (zero_add _).symm
-
-/--
-theorem `IsOrtho.zero_left` / 定理 `IsOrtho.zero_left`
-
-English:
-theorem IsOrtho.zero_left
-  given: (x : M)
-  statement: IsOrtho Q (0 : M) x
-  proof: by simp [isOrtho_def]
-
-中文:
-定理 IsOrtho.zero_left
-  条件: (x : M)
-  结论: IsOrtho Q (0 : M) x
-  证明: by simp [isOrtho_def]
-
-Depends on / 依赖: isOrtho_def
+/-
+**QuadraticMap.IsOrtho.zero_left** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.IsOrtho
+`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommSemiring R] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [inst_3 : AddCommMonoid N
+] [inst_4 : _root_.Module R N] {Q : QuadraticMap R M N} (x : M),   Q.IsOrtho 0 x
+参数：x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsOrtho.zero_left (x : M) : IsOrtho Q (0 : M) x := by simp [isOrtho_def]
-
-/--
-theorem `IsOrtho.zero_right` / 定理 `IsOrtho.zero_right`
-
-English:
-theorem IsOrtho.zero_right
-  given: (x : M)
-  statement: IsOrtho Q x (0 : M)
-  proof: by simp [isOrtho_def]
-
-中文:
-定理 IsOrtho.zero_right
-  条件: (x : M)
-  结论: IsOrtho Q x (0 : M)
-  证明: by simp [isOrtho_def]
-
-Depends on / 依赖: isOrtho_def
+/-
+**QuadraticMap.IsOrtho.zero_right** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.IsOrth
+o`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommSemiring R] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [inst_3 : AddCommMonoid N
+] [inst_4 : _root_.Module R N] {Q : QuadraticMap R M N} (x : M),   Q.IsOrtho x 0
+参数：x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsOrtho.zero_right (x : M) : IsOrtho Q x (0 : M) := by simp [isOrtho_def]
-
-/--
-theorem `ne_zero_of_not_isOrtho_self` / 定理 `ne_zero_of_not_isOrtho_self`
-
-English:
-theorem ne_zero_of_not_isOrtho_self
-  given: {Q : QuadraticMap R M N} (x : M) (hx₁ : ¬Q.IsOrtho x x)
-  proof: fun hx₂ => hx₁ (hx₂.symm ▸ .zero_left _)
-
-中文:
-定理 ne_zero_of_not_isOrtho_self
-  条件: {Q : 二次映射 R M N} (x : M) (hx₁ : ¬Q.IsOrtho x x)
-  证明: fun hx₂ => hx₁ (hx₂.symm ▸ .zero_left _)
-
-Depends on / 依赖: zero_left
+/-
+**QuadraticMap.ne_zero_of_not_isOrtho_self** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticM
+ap`。
+形式化陈述：ne_zero_of_not_isOrtho_self {Q : QuadraticMap R M N} (x : M) (hx₁ : ¬Q.IsO
+rtho x x) : x != 0
+参数：x : M；hx₁ : ¬Q.IsOrtho x x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.IsOrtho.zero_left`：∀ {R : Type u_3} {M : Type u_4} {N : Typ
+e u_5} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Mod
+ule R M] [inst_3 : A…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem ne_zero_of_not_isOrtho_self {Q : QuadraticMap R M N} (x : M) (hx₁ : ¬Q.IsOrtho x x) :
-    x != 0 :=
+    x ≠ 0 :=
   fun hx₂ => hx₁ (hx₂.symm ▸ .zero_left _)
-
-/--
-theorem `isOrtho_comm` / 定理 `isOrtho_comm`
-
-English:
-theorem isOrtho_comm
-  given: {x y : M}
-  statement: IsOrtho Q x y ↔ IsOrtho Q y x
-  proof: by simp_rw [isOrtho_def, add_comm]
-
-alias ⟨IsOrtho.symm, _⟩ := isOrtho_comm
-
-中文:
-定理 isOrtho_comm
-  条件: {x y : M}
-  结论: IsOrtho Q x y ↔ IsOrtho Q y x
-  证明: by simp_rw [isOrtho_def, add_comm]
-
-alias ⟨IsOrtho.symm, _⟩ := isOrtho_comm
-
-Depends on / 依赖: add_comm, isOrtho_def, simp_rw
+/-
+**QuadraticMap.isOrtho_comm** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：isOrtho_comm {x y : M} : IsOrtho Q x y ↔ IsOrtho Q y x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isOrtho_comm {x y : M} : IsOrtho Q x y ↔ IsOrtho Q y x := by simp_rw [isOrtho_def, add_comm]
 
 alias ⟨IsOrtho.symm, _⟩ := isOrtho_comm
-
-/--
-theorem `_root_.LinearMap.BilinForm.toQuadraticMap_isOrtho` / 定理 `_root_.LinearMap.BilinForm.toQuadraticMap_isOrtho`
-
-English:
-theorem _root_.LinearMap.BilinForm.toQuadraticMap_isOrtho
-  statement: [IsCancelAdd R]
-  proof: by
-  let : AddCancelMonoid R := { ‹IsCancelAdd R›, (inferInstance : AddCommMonoid R) with }
-  simp_rw [isOrtho_def, B.toQuadraticMap_apply, map_add,
-    LinearMap.add_apply, add_comm _ (B y y), add_add_add_comm _ _ (B y y), add_comm (B y y)]
-  rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [RingHom.id_apply]; rw [add_self_eq_zero]
-
-中文:
-定理 _root_.线性映射.BilinForm.toQuadraticMap_isOrtho
-  结论: [是消去加法 R]
-  证明: by
-  let : AddCancelMonoid R := { ‹IsCancelAdd R›, (inferInstance : AddCommMonoid R) with }
-  simp_rw [isOrtho_def, B.toQuadraticMap_apply, map_add,
-    LinearMap.add_apply, add_comm _ (B y y), add_add_add_comm _ _ (B y y), add_comm (B y y)]
-  rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [RingHom.id_apply]; rw [add_self_eq_zero]
-
-Depends on / 依赖: AddCancelMonoid, AddCommMonoid, B.toQuadraticMap_apply, IsCancelAdd, LinearMap, LinearMap.add_apply, RingHom, RingHom.id_apply, add_add_add_comm, add_apply, add_comm, add_eq_left, add_self_eq_zero, h.eq, id_apply, isOrtho_def, map_add, simp_rw, toQuadraticMap_apply
+/-
+**QuadraticMap._root_.LinearMap.BilinForm.toQuadraticMap_isOrtho** 是 Mathlib 中的一
+个定理，位于命名空间 `QuadraticMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.LinearMap.BilinForm.toQuadraticMap_isOrtho [IsCancelAdd R]
     [NoZeroDivisors R] [CharZero R] {B : BilinMap R M R} {x y : M} (h : B.IsSymm) :
@@ -3524,7 +3107,7 @@ theorem _root_.LinearMap.BilinForm.toQuadraticMap_isOrtho [IsCancelAdd R]
   let : AddCancelMonoid R := { ‹IsCancelAdd R›, (inferInstance : AddCommMonoid R) with }
   simp_rw [isOrtho_def, B.toQuadraticMap_apply, map_add,
     LinearMap.add_apply, add_comm _ (B y y), add_add_add_comm _ _ (B y y), add_comm (B y y)]
-  rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [RingHom.id_apply]; rw [add_self_eq_zero]
+  rw [add_eq_left (a := B x x + B y y), ← h.eq, RingHom.id_apply, add_self_eq_zero]
 
 end CommSemiring
 
@@ -3532,69 +3115,65 @@ section CommRing
 variable [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N]
   {Q : QuadraticMap R M N}
 
-/--
-theorem `isOrtho_polarBilin` / 定理 `isOrtho_polarBilin`
-
-English:
-theorem isOrtho_polarBilin
-  given: {x y : M}
-  statement: Q.polarBilin x y = 0 ↔ IsOrtho Q x y
-  proof: by
-  simp_rw [isOrtho_def, polarBilin_apply_apply, polar, sub_sub, sub_eq_zero]
-
-中文:
-定理 isOrtho_polarBilin
-  条件: {x y : M}
-  结论: Q.polarBilin x y = 0 ↔ IsOrtho Q x y
-  证明: by
-  simp_rw [isOrtho_def, polarBilin_apply_apply, polar, sub_sub, sub_eq_zero]
-
-Depends on / 依赖: isOrtho_def, polarBilin_apply_apply, simp_rw, sub_eq_zero, sub_sub
+/-
+**QuadraticMap.isOrtho_polarBilin** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：isOrtho_polarBilin {x y : M} : Q.polarBilin x y = 0 ↔ IsOrtho Q x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `QuadraticMap.polarBilin_apply_apply`：∀ {R : Type u_3} {M : Type u_4} {N 
+: Type u_5} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : AddCommGroup
+ N]   [inst_3 : _root_.Mo…
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isOrtho_polarBilin {x y : M} : Q.polarBilin x y = 0 ↔ IsOrtho Q x y := by
   simp_rw [isOrtho_def, polarBilin_apply_apply, polar, sub_sub, sub_eq_zero]
-
-/--
-theorem `IsOrtho.polar_eq_zero` / 定理 `IsOrtho.polar_eq_zero`
-
-English:
-theorem IsOrtho.polar_eq_zero
-  given: {x y : M} (h : IsOrtho Q x y)
-  statement: polar Q x y = 0
-  proof: isOrtho_polarBilin.mpr h
-
-@[simp]
-
-中文:
-定理 IsOrtho.polar_eq_zero
-  条件: {x y : M} (h : IsOrtho Q x y)
-  结论: polar Q x y = 0
-  证明: isOrtho_polarBilin.mpr h
-
-@[simp]
-
-Depends on / 依赖: isOrtho_polarBilin, isOrtho_polarBilin.mpr
+/-
+**QuadraticMap.IsOrtho.polar_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.IsO
+rtho`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommRing R] [inst_1
+ : AddCommGroup M]   [inst_2 : _root_.Module R M] [inst_3 : AddCommGroup N] [ins
+t_4 : _root_.Module R N] {Q : QuadraticMap R M N}   {x y : M}, Q.IsOrtho x y → Q
+uadraticMap.polar (⇑Q) x y = 0
+参数：⇑Q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `QuadraticMap.isOrtho_polarBilin`：isOrtho_polarBilin {x y : M} : Q.polarB
+ilin x y = 0 ↔ IsOrtho Q x y
 -/
 theorem IsOrtho.polar_eq_zero {x y : M} (h : IsOrtho Q x y) : polar Q x y = 0 :=
   isOrtho_polarBilin.mpr h
 
 @[simp]
-/--
-theorem `associated_isOrtho` / 定理 `associated_isOrtho`
-
-English:
-theorem associated_isOrtho
-  given: [Invertible (2 : R)] {x y : M}
-  proof: by
-  simp_rw [isOrtho_def, associated_apply, invOf_smul_eq_iff, smul_zero, sub_sub, sub_eq_zero]
-
-中文:
-定理 associated_isOrtho
-  条件: [可逆 (2 : R)] {x y : M}
-  证明: by
-  simp_rw [isOrtho_def, associated_apply, invOf_smul_eq_iff, smul_zero, sub_sub, sub_eq_zero]
-
-Depends on / 依赖: associated_apply, invOf_smul_eq_iff, isOrtho_def, simp_rw, smul_zero, sub_eq_zero, sub_sub
+/-
+**QuadraticMap.associated_isOrtho** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：associated_isOrtho [Invertible (2 : R)] {x y : M} : Q.associated x y = 0 ↔
+ Q.IsOrtho x y
+参数：2 : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem associated_isOrtho [Invertible (2 : R)] {x y : M} :
     Q.associated x y = 0 ↔ Q.IsOrtho x y := by
@@ -3610,57 +3189,51 @@ section Semiring
 
 variable [CommSemiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N]
 
-/--
-Definition of `Anisotropic` / `Anisotropic` 的定义
+/-- An anisotropic quadratic map is zero only on zero vectors. -/
+/-
+**QuadraticMap.Anisotropic** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：Anisotropic (Q : QuadraticMap R M N) : Prop
+参数：Q : QuadraticMap R M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Anisotropic
-  signature: (Q : QuadraticMap R M N)
-  body: forall x, Q x = 0 -> x = 0
-
-中文:
-定义 Anisotropic
-  签名: (Q : 二次映射 R M N)
-  定义体: forall x, Q x = 0 -> x = 0
+--- 原说明 ---
+An anisotropic quadratic map is zero only on zero vectors.
 -/
 def Anisotropic (Q : QuadraticMap R M N) : Prop :=
-  forall x, Q x = 0 -> x = 0
-
-/--
-theorem `not_anisotropic_iff_exists` / 定理 `not_anisotropic_iff_exists`
-
-English:
-theorem not_anisotropic_iff_exists
-  given: (Q : QuadraticMap R M N)
-  proof: by
-  simp only [Anisotropic, not_forall, exists_prop, and_comm]
-
-中文:
-定理 not_anisotropic_iff_存在
-  条件: (Q : 二次映射 R M N)
-  证明: by
-  simp only [Anisotropic, not_forall, exists_prop, and_comm]
-
-Depends on / 依赖: Anisotropic, and_comm, exists_prop, not_forall
+  ∀ x, Q x = 0 → x = 0
+/-
+**QuadraticMap.not_anisotropic_iff_exists** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMa
+p`。
+形式化陈述：not_anisotropic_iff_exists (Q : QuadraticMap R M N) : ¬Anisotropic Q ↔ exi
+sts x, x != 0 ∧ Q x = 0
+参数：Q : QuadraticMap R M N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem not_anisotropic_iff_exists (Q : QuadraticMap R M N) :
-    ¬Anisotropic Q ↔ exists x, x != 0 ∧ Q x = 0 := by
+    ¬Anisotropic Q ↔ ∃ x, x ≠ 0 ∧ Q x = 0 := by
   simp only [Anisotropic, not_forall, exists_prop, and_comm]
-
-/--
-theorem `Anisotropic.eq_zero_iff` / 定理 `Anisotropic.eq_zero_iff`
-
-English:
-theorem Anisotropic.eq_zero_iff
-  given: {Q : QuadraticMap R M N} (h : Anisotropic Q) {x : M}
-  proof: ⟨h x, fun h => h.symm ▸ map_zero Q⟩
-
-中文:
-定理 Anisotropic.eq_zero_iff
-  条件: {Q : 二次映射 R M N} (h : Anisotropic Q) {x : M}
-  证明: ⟨h x, fun h => h.symm ▸ map_zero Q⟩
-
-Depends on / 依赖: h.symm, map_zero
+/-
+**QuadraticMap.Anisotropic.eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.A
+nisotropic`。
+形式化陈述：∀ {R : Type u_3} {M : Type u_4} {N : Type u_5} [inst : CommSemiring R] [in
+st_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid N] [inst_3 : _root_.Module R M
+] [inst_4 : _root_.Module R N] {Q : QuadraticMap R M N},   Q.Anisotropic → ∀ {x 
+: M}, Q x = 0 ↔ x = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Anisotropic.eq_zero_iff {Q : QuadraticMap R M N} (h : Anisotropic Q) {x : M} :
     Q x = 0 ↔ x = 0 :=
@@ -3672,29 +3245,40 @@ section Ring
 
 variable [CommRing R] [AddCommGroup M] [Module R M]
 
-/--
-theorem `separatingLeft_of_anisotropic` / 定理 `separatingLeft_of_anisotropic`
+/-- The associated bilinear form of an anisotropic quadratic form is nondegenerate. -/
+/-
+**QuadraticMap.separatingLeft_of_anisotropic** 是 Mathlib 中的一个定理，位于命名空间 `Quadrati
+cMap`。
+形式化陈述：separatingLeft_of_anisotropic [Invertible (2 : R)] (Q : QuadraticMap R M R
+) (hB : Q.Anisotropic) : -- Porting note: added implicit argument (QuadraticMap.
+associated' (N
+参数：2 : R；Q : QuadraticMap R M R；hB : Q.Anisotropic。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `QuadraticMap.associated_eq_self_apply`：associated_eq_self_apply (x : M) 
+: associatedHom S Q x x = Q x
 
-English:
-theorem separatingLeft_of_anisotropic
-  statement: [Invertible (2 : R)] (Q : QuadraticMap R M R)
-  proof: fun x hx => hB _ by
-  rw [← hx x]
-  exact (associated_eq_self_apply _ _ x).symm
-
-中文:
-定理 separatingLeft_of_anisotropic
-  结论: [可逆 (2 : R)] (Q : 二次映射 R M R)
-  证明: fun x hx => hB _ by
-  rw [← hx x]
-  exact (associated_eq_self_apply _ _ x).symm
-
-Depends on / 依赖: SeparatingLeft, associated_eq_self_apply
+--- 原说明 ---
+The associated bilinear form of an anisotropic quadratic form is nondegenerate.
 -/
 theorem separatingLeft_of_anisotropic [Invertible (2 : R)] (Q : QuadraticMap R M R)
     (hB : Q.Anisotropic) :
     -- Porting note: added implicit argument
-(QuadraticMap.associated' (N := R) Q).SeparatingLeft := fun x hx => hB _ by
+    (QuadraticMap.associated' (N := R) Q).SeparatingLeft := fun x hx ↦ hB _ <| by
   rw [← hx x]
   exact (associated_eq_self_apply _ _ x).symm
 
@@ -3708,37 +3292,30 @@ variable {R₂ : Type u} [CommSemiring R₂] [AddCommMonoid M] [Module R₂ M]
 variable [PartialOrder N] [AddCommMonoid N] [Module R₂ N]
 variable {Q₂ : QuadraticMap R₂ M N}
 
-/--
-Definition of `PosDef` / `PosDef` 的定义
+/-- A positive definite quadratic form is positive on nonzero vectors. -/
+/-
+**QuadraticMap.PosDef** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：PosDef (Q₂ : QuadraticMap R₂ M N) : Prop
+参数：Q₂ : QuadraticMap R₂ M N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PosDef
-  signature: (Q₂ : QuadraticMap R₂ M N)
-  body: forall x, x != 0 -> 0 < Q₂ x
-
-中文:
-定义 PosDef
-  签名: (Q₂ : 二次映射 R₂ M N)
-  定义体: forall x, x != 0 -> 0 < Q₂ x
+--- 原说明 ---
+A positive definite quadratic form is positive on nonzero vectors.
 -/
 def PosDef (Q₂ : QuadraticMap R₂ M N) : Prop :=
-  forall x, x != 0 -> 0 < Q₂ x
-
-
-/--
-theorem `PosDef.smul` / 定理 `PosDef.smul`
-
-English:
-theorem PosDef.smul
-  statement: {R} [CommSemiring R] [PartialOrder R]
-  proof: fun x hx => smul_pos a_pos (h x hx)
-
-中文:
-定理 PosDef.smul
-  结论: {R} [交换半环 R] [偏序 R]
-  证明: fun x hx => smul_pos a_pos (h x hx)
-
-Depends on / 依赖: a_pos, smul_pos
+  ∀ x, x ≠ 0 → 0 < Q₂ x
+/-
+**QuadraticMap.PosDef.smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.PosDef`。
+形式化陈述：∀ {M : Type u_4} {N : Type u_5} [inst : AddCommMonoid M] [inst_1 : Partial
+Order N] [inst_2 : AddCommMonoid N]   {R : Type u_8} [inst_3 : CommSemiring R] [
+inst_4 : PartialOrder R] [inst_5 : _root_.Module R M]   [inst_6 : _root_.Module 
+R N] [PosSMulStrictMono R N] {Q : QuadraticMap R M N},   Q.PosDef → ∀ {a : R}, 0
+ < a → (a • Q).PosDef
+参数：a • Q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `smul_pos`：smul_pos [PosSMulStrictMono α β] (ha : 0 < a) (hb : 0 < b) : 0
+ < a • b
 -/
 theorem PosDef.smul {R} [CommSemiring R] [PartialOrder R]
     [Module R M] [Module R N] [PosSMulStrictMono R N]
@@ -3746,163 +3323,163 @@ theorem PosDef.smul {R} [CommSemiring R] [PartialOrder R]
   fun x hx => smul_pos a_pos (h x hx)
 
 variable {n : Type*}
-
-/--
-theorem `PosDef.nonneg` / 定理 `PosDef.nonneg`
-
-English:
-theorem PosDef.nonneg
-  given: {Q : QuadraticMap R₂ M N} (hQ : PosDef Q) (x : M)
-  statement: 0 <= Q x
-  proof: (eq_or_ne x 0).elim (fun h => h.symm ▸ (map_zero Q).symm.le) fun h => (hQ _ h).le
-
-中文:
-定理 PosDef.nonneg
-  条件: {Q : 二次映射 R₂ M N} (hQ : PosDef Q) (x : M)
-  结论: 0 <= Q x
-  证明: (eq_or_ne x 0).elim (fun h => h.symm ▸ (map_zero Q).symm.le) fun h => (hQ _ h).le
-
-Depends on / 依赖: eq_or_ne, h.symm, map_zero, symm.le
+/-
+**QuadraticMap.PosDef.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.PosDef`。
+形式化陈述：∀ {M : Type u_4} {N : Type u_5} {R₂ : Type u} [inst : CommSemiring R₂] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R₂ M] [inst_3 : PartialOrder N
+] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N]   {Q : QuadraticMap R
+₂ M N}, Q.PosDef → ∀ (x : M), 0 ≤ Q x
+参数：x : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-theorem PosDef.nonneg {Q : QuadraticMap R₂ M N} (hQ : PosDef Q) (x : M) : 0 <= Q x :=
+theorem PosDef.nonneg {Q : QuadraticMap R₂ M N} (hQ : PosDef Q) (x : M) : 0 ≤ Q x :=
   (eq_or_ne x 0).elim (fun h => h.symm ▸ (map_zero Q).symm.le) fun h => (hQ _ h).le
-
-/--
-theorem `PosDef.anisotropic` / 定理 `PosDef.anisotropic`
-
-English:
-theorem PosDef.anisotropic
-  given: {Q : QuadraticMap R₂ M N} (hQ : Q.PosDef)
-  statement: Q.Anisotropic
-  proof: fun x hQx => by_contradiction fun hx =>
-lt_irrefl (0 : N) by
-      have := hQ _ hx
-      rw [hQx] at this
-      exact this
-
-中文:
-定理 PosDef.anisotropic
-  条件: {Q : 二次映射 R₂ M N} (hQ : Q.PosDef)
-  结论: Q.Anisotropic
-  证明: fun x hQx => by_contradiction fun hx =>
-lt_irrefl (0 : N) by
-      have := hQ _ hx
-      rw [hQx] at this
-      exact this
-
-Depends on / 依赖: by_contradiction, lt_irrefl
+/-
+**QuadraticMap.PosDef.anisotropic** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.PosDef
+`。
+形式化陈述：∀ {M : Type u_4} {N : Type u_5} {R₂ : Type u} [inst : CommSemiring R₂] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R₂ M] [inst_3 : PartialOrder N
+] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N]   {Q : QuadraticMap R
+₂ M N}, Q.PosDef → Q.Anisotropic
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_contradiction`：by_contradiction {p : Prop} : (¬p -> False) -> p
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem PosDef.anisotropic {Q : QuadraticMap R₂ M N} (hQ : Q.PosDef) : Q.Anisotropic :=
   fun x hQx => by_contradiction fun hx =>
-lt_irrefl (0 : N) by
+    lt_irrefl (0 : N) <| by
       have := hQ _ hx
       rw [hQx] at this
       exact this
-
-/--
-theorem `PosDef.le_zero_iff` / 定理 `PosDef.le_zero_iff`
-
-English:
-theorem PosDef.le_zero_iff
-  given: {Q : QuadraticMap R₂ M N} (hQ : PosDef Q) {x : M}
-  proof: by
-  refine ⟨fun h => ?_, fun h => by simp [h]⟩
-  have : Q x = 0 := le_antisymm h (hQ.nonneg x)
-  rwa [← hQ.anisotropic]
-
-中文:
-定理 PosDef.le_zero_iff
-  条件: {Q : 二次映射 R₂ M N} (hQ : PosDef Q) {x : M}
-  证明: by
-  refine ⟨fun h => ?_, fun h => by simp [h]⟩
-  have : Q x = 0 := le_antisymm h (hQ.nonneg x)
-  rwa [← hQ.anisotropic]
-
-Depends on / 依赖: anisotropic, hQ.anisotropic, hQ.nonneg, le_antisymm, nonneg
+/-
+**QuadraticMap.PosDef.le_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.PosDef
+`。
+形式化陈述：∀ {M : Type u_4} {N : Type u_5} {R₂ : Type u} [inst : CommSemiring R₂] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R₂ M] [inst_3 : PartialOrder N
+] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N]   {Q : QuadraticMap R
+₂ M N}, Q.PosDef → ∀ {x : M}, Q x ≤ 0 ↔ x = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `QuadraticMap.PosDef.nonneg`：∀ {M : Type u_4} {N : Type u_5} {R₂ : Type u
+} [inst : CommSemiring R₂] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R₂ M] [inst_3 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuadraticMap.PosDef.anisotropic`：∀ {M : Type u_4} {N : Type u_5} {R₂ : T
+ype u} [inst : CommSemiring R₂] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Mo
+dule R₂ M] [inst_3 : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
 -/
 theorem PosDef.le_zero_iff {Q : QuadraticMap R₂ M N} (hQ : PosDef Q) {x : M} :
-    Q x <= 0 ↔ x = 0 := by
-  refine ⟨fun h => ?_, fun h => by simp [h]⟩
+    Q x ≤ 0 ↔ x = 0 := by
+  refine ⟨fun h ↦ ?_, fun h ↦ by simp [h]⟩
   have : Q x = 0 := le_antisymm h (hQ.nonneg x)
   rwa [← hQ.anisotropic]
-
-/--
-theorem `posDef_of_nonneg` / 定理 `posDef_of_nonneg`
-
-English:
-theorem posDef_of_nonneg
-  given: {Q : QuadraticMap R₂ M N} (h : forall x, 0 <= Q x) (h0 : Q.Anisotropic)
-  proof: fun x hx => lt_of_le_of_ne (h x) (Ne.symm fun hQx => hx <| h0 _ hQx)
-
-中文:
-定理 posDef_of_nonneg
-  条件: {Q : 二次映射 R₂ M N} (h : 对任意 x, 0 <= Q x) (h0 : Q.Anisotropic)
-  证明: fun x hx => lt_of_le_of_ne (h x) (Ne.symm fun hQx => hx <| h0 _ hQx)
-
-Depends on / 依赖: Ne.symm, lt_of_le_of_ne
+/-
+**QuadraticMap.posDef_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：posDef_of_nonneg {Q : QuadraticMap R₂ M N} (h : forall x, 0 <= Q x) (h0 : 
+Q.Anisotropic) : PosDef Q
+参数：h : forall x, 0 <= Q x；h0 : Q.Anisotropic。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem posDef_of_nonneg {Q : QuadraticMap R₂ M N} (h : forall x, 0 <= Q x) (h0 : Q.Anisotropic) :
+theorem posDef_of_nonneg {Q : QuadraticMap R₂ M N} (h : ∀ x, 0 ≤ Q x) (h0 : Q.Anisotropic) :
     PosDef Q :=
   fun x hx => lt_of_le_of_ne (h x) (Ne.symm fun hQx => hx <| h0 _ hQx)
-
-/--
-theorem `posDef_iff_nonneg` / 定理 `posDef_iff_nonneg`
-
-English:
-theorem posDef_iff_nonneg
-  given: {Q : QuadraticMap R₂ M N}
-  statement: PosDef Q ↔ (forall x, 0 <= Q x) ∧ Q.Anisotropic
-  proof: ⟨fun h => ⟨h.nonneg, h.anisotropic⟩, fun ⟨n, a⟩ => posDef_of_nonneg n a⟩
-
-中文:
-定理 posDef_iff_nonneg
-  条件: {Q : 二次映射 R₂ M N}
-  结论: PosDef Q ↔ (对任意 x, 0 <= Q x) ∧ Q.Anisotropic
-  证明: ⟨fun h => ⟨h.nonneg, h.anisotropic⟩, fun ⟨n, a⟩ => posDef_of_nonneg n a⟩
-
-Depends on / 依赖: anisotropic, h.anisotropic, h.nonneg, nonneg, posDef_of_nonneg
+/-
+**QuadraticMap.posDef_iff_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：posDef_iff_nonneg {Q : QuadraticMap R₂ M N} : PosDef Q ↔ (forall x, 0 <= Q
+ x) ∧ Q.Anisotropic
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticMap.PosDef.nonneg`：∀ {M : Type u_4} {N : Type u_5} {R₂ : Type u
+} [inst : CommSemiring R₂] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R₂ M] [inst_3 : …
+· 使用定理 `QuadraticMap.PosDef.anisotropic`：∀ {M : Type u_4} {N : Type u_5} {R₂ : T
+ype u} [inst : CommSemiring R₂] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Mo
+dule R₂ M] [inst_3 : …
+· 使用定理 `QuadraticMap.posDef_of_nonneg`：posDef_of_nonneg {Q : QuadraticMap R₂ M N
+} (h : forall x, 0 <= Q x) (h0 : Q.Anisotropic) : PosDef Q
 -/
-theorem posDef_iff_nonneg {Q : QuadraticMap R₂ M N} : PosDef Q ↔ (forall x, 0 <= Q x) ∧ Q.Anisotropic :=
+theorem posDef_iff_nonneg {Q : QuadraticMap R₂ M N} : PosDef Q ↔ (∀ x, 0 ≤ Q x) ∧ Q.Anisotropic :=
   ⟨fun h => ⟨h.nonneg, h.anisotropic⟩, fun ⟨n, a⟩ => posDef_of_nonneg n a⟩
-
-/--
-theorem `PosDef.add` / 定理 `PosDef.add`
-
-English:
-theorem PosDef.add
-  statement: [AddLeftStrictMono N]
-  proof: fun x hx => add_pos (hQ x hx) (hQ' x hx)
-
-中文:
-定理 PosDef.add
-  结论: [AddLeftStrictMono N]
-  证明: fun x hx => add_pos (hQ x hx) (hQ' x hx)
-
-Depends on / 依赖: add_pos
+/-
+**QuadraticMap.PosDef.add** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap.PosDef`。
+形式化陈述：∀ {M : Type u_4} {N : Type u_5} {R₂ : Type u} [inst : CommSemiring R₂] [in
+st_1 : AddCommMonoid M]   [inst_2 : _root_.Module R₂ M] [inst_3 : PartialOrder N
+] [inst_4 : AddCommMonoid N] [inst_5 : _root_.Module R₂ N]   [AddLeftStrictMono 
+N] (Q Q' : QuadraticMap R₂ M N), Q.PosDef → Q'.PosDef → (Q + Q').PosDef
+参数：Q Q' : QuadraticMap R₂ M N；Q + Q'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_pos`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder α] 
+[AddLeftStrictMono α] {a b : α},   0 < a → 0 < b → 0 < a + b
 -/
 theorem PosDef.add [AddLeftStrictMono N]
     (Q Q' : QuadraticMap R₂ M N) (hQ : PosDef Q) (hQ' : PosDef Q') :
     PosDef (Q + Q') :=
   fun x hx => add_pos (hQ x hx) (hQ' x hx)
-
-/--
-theorem `linMulLinSelfPosDef` / 定理 `linMulLinSelfPosDef`
-
-English:
-theorem linMulLinSelfPosDef
-  statement: {R} [CommSemiring R] [Module R M]
-  proof: fun _x hx => mul_self_pos.2 fun h => hx LinearMap.ker_eq_bot'.mp hf _ h
-
-中文:
-定理 linMulLinSelfPosDef
-  结论: {R} [交换半环 R] [模 R M]
-  证明: fun _x hx => mul_self_pos.2 fun h => hx LinearMap.ker_eq_bot'.mp hf _ h
+/-
+**QuadraticMap.linMulLinSelfPosDef** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：linMulLinSelfPosDef {R} [CommSemiring R] [Module R M] [Semiring A] [Linear
+Order A] [IsStrictOrderedRing A] [ExistsAddOfLE A] [Module R A] [SMulCommClass R
+ A A] [IsScalarTower R A A] (f : M ->ₗ[R] A) (hf : LinearMap.ker f = ⊥) : PosDef
+ (linMulLin (A
+参数：f : M ->ₗ[R] A；hf : LinearMap.ker f = ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mul_self_pos`：mul_self_pos [ExistsAddOfLE R] [PosMulStrictMono R] [MulPo
+sStrictMono R] [AddLeftStrictMono R] [AddLeftReflectLT R] {a : R} : 0 < a * a ↔ 
+a …
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.ker_eq_bot'`：ker_eq_bot' {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ fo
+rall m, f m = 0 -> m = 0
 -/
 theorem linMulLinSelfPosDef {R} [CommSemiring R] [Module R M]
     [Semiring A] [LinearOrder A] [IsStrictOrderedRing A]
-    [ExistsAddOfLE A] [Module R A] [SMulCommClass R A A] [IsScalarTower R A A] (f : M ->ₗ[R] A)
+    [ExistsAddOfLE A] [Module R A] [SMulCommClass R A A] [IsScalarTower R A A] (f : M →ₗ[R] A)
     (hf : LinearMap.ker f = ⊥) : PosDef (linMulLin (A := A) f f) :=
-fun _x hx => mul_self_pos.2 fun h => hx LinearMap.ker_eq_bot'.mp hf _ h
+  fun _x hx => mul_self_pos.2 fun h => hx <| LinearMap.ker_eq_bot'.mp hf _ h
 
 end PosDef
 
@@ -3922,26 +3499,19 @@ The determinant of the matrix is the discriminant of the quadratic form.
 variable {n : Type w} [Fintype n] [DecidableEq n]
 variable [CommRing R] [AddCommMonoid M] [Module R M]
 
-/--
-Definition of `Matrix.toQuadraticForm'` / `Matrix.toQuadraticForm'` 的定义
+/-- `M.toQuadraticForm'` is the map `fun x ↦ row x * M * col x` as a quadratic form on `n → R`. -/
+/-
+**Matrix.toQuadraticForm'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Matrix.toQuadraticForm' (M : Matrix n n R) : QuadraticForm R (n -> R)
+参数：M : Matrix n n R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Matrix.toQuadraticForm'
-  signature: (M : Matrix n n R)
-  body: LinearMap.BilinMap.toQuadraticMap (Matrix.toLinearMap₂' R M)
-
-@[deprecated (since := "2026-05-15")] alias Matrix.toQuadraticMap' := Matrix.toQuadraticForm'
-
-中文:
-定义 矩阵.toQuadraticForm'
-  签名: (M : 矩阵 n n R)
-  定义体: LinearMap.BilinMap.toQuadraticMap (Matrix.toLinearMap₂' R M)
-
-@[deprecated (since := "2026-05-15")] alias Matrix.toQuadraticMap' := Matrix.toQuadraticForm'
-
-Depends on / 依赖: BilinMap, LinearMap, LinearMap.BilinMap.toQuadraticMap, Matrix, Matrix.toLinearMap, toQuadraticMap
+--- 原说明 ---
+`M.toQuadraticForm'` is the map `fun x ↦ row x * M * col x` as a quadratic form 
+on `n → R`.
 -/
-def Matrix.toQuadraticForm' (M : Matrix n n R) : QuadraticForm R (n -> R) :=
+def Matrix.toQuadraticForm' (M : Matrix n n R) : QuadraticForm R (n → R) :=
   LinearMap.BilinMap.toQuadraticMap (Matrix.toLinearMap₂' R M)
 
 @[deprecated (since := "2026-05-15")] alias Matrix.toQuadraticMap' := Matrix.toQuadraticForm'
@@ -3952,105 +3522,142 @@ namespace QuadraticForm
 
 section Rn
 
-/--
-Definition of `toMatrix'` / `toMatrix'` 的定义
+/-- A matrix representation of a quadratic form `Q : QuadraticForm R (n → R)`.
+  See also `QuadraticForm.toMatrix` which gives the matrix in a given basis of a quadratic form on
+  an abstract vector space. -/
+/-
+**QuadraticForm.toMatrix'** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticForm`。
+形式化陈述：toMatrix' (Q : QuadraticForm R (n -> R)) : Matrix n n R
+参数：Q : QuadraticForm R (n -> R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMatrix'
-  signature: (Q : QuadraticForm R (n -> R))
-  body: LinearMap.toMatrix₂' R Q.associated
-
-中文:
-定义 toMatrix'
-  签名: (Q : QuadraticForm R (n -> R))
-  定义体: LinearMap.toMatrix₂' R Q.associated
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, Q.associated, associated
+--- 原说明 ---
+A matrix representation of a quadratic form `Q : QuadraticForm R (n → R)`.
+  See also `QuadraticForm.toMatrix` which gives the matrix in a given basis of a
+ quadratic form on
+  an abstract vector space.
 -/
-def toMatrix' (Q : QuadraticForm R (n -> R)) : Matrix n n R :=
+def toMatrix' (Q : QuadraticForm R (n → R)) : Matrix n n R :=
   LinearMap.toMatrix₂' R Q.associated
-
-/--
-theorem `toMatrix'_smul` / 定理 `toMatrix'_smul`
-
-English:
-theorem toMatrix'_smul
-  given: (a : R) (Q : QuadraticForm R (n -> R))
-  proof: by
-  simp [toMatrix']
-
-中文:
-定理 toMatrix'_smul
-  条件: (a : R) (Q : QuadraticForm R (n -> R))
-  证明: by
-  simp [toMatrix']
+/-
+**QuadraticForm.toMatrix'_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：∀ {R : Type u_3} {n : Type w} [inst : Fintype n] [inst_1 : DecidableEq n] 
+[inst_2 : CommRing R] [inst_3 : Invertible 2]   (a : R) (Q : QuadraticForm R (n 
+→ R)), (a • Q).toMatrix' = a • Q.toMatrix'
+参数：a : R；Q : QuadraticForm R (n → R)；a • Q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMatrix'_smul (a : R) (Q : QuadraticForm R (n -> R)) :
+theorem toMatrix'_smul (a : R) (Q : QuadraticForm R (n → R)) :
     (a • Q).toMatrix' = a • Q.toMatrix' := by
   simp [toMatrix']
-
-/--
-theorem `isSymm_toMatrix'` / 定理 `isSymm_toMatrix'`
-
-English:
-theorem isSymm_toMatrix'
-  given: (Q : QuadraticForm R (n -> R))
-  statement: Q.toMatrix'.IsSymm
-  proof: by
-  ext i j
-  rw [toMatrix']; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [← QuadraticMap.associated_isSymm]
-
-中文:
-定理 isSymm_toMatrix'
-  条件: (Q : QuadraticForm R (n -> R))
-  结论: Q.toMatrix'.是Symm
-  证明: by
-  ext i j
-  rw [toMatrix']; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [← QuadraticMap.associated_isSymm]
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, Matrix, Matrix.transpose_apply, QuadraticMap, QuadraticMap.associated_isSymm, _apply, associated_isSymm, toMatrix, transpose_apply
+/-
+**QuadraticForm.isSymm_toMatrix'** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：isSymm_toMatrix' (Q : QuadraticForm R (n -> R)) : Q.toMatrix'.IsSymm
+参数：Q : QuadraticForm R (n -> R)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticForm.toMatrix'.eq_1`：∀ {R : Type u_3} {n : Type w} [inst : Fint
+ype n] [inst_1 : DecidableEq n] [inst_2 : CommRing R] [inst_3 : Invertible 2]   
+(Q : QuadraticForm…
+· 使用定理 `Matrix.transpose_apply`：transpose_apply (M : Matrix m n α) (i j) : trans
+pose M i j = M j i
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `LinearMap.toMatrix₂'_apply`：∀ {R : Type u_1} {S₁ : Type u_3} {S₂ : Type 
+u_5} {N₂ : Type u_10} {n : Type u_11} {m : Type u_12}   [inst : CommSemiring R] 
+[inst_1 : AddCom…
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuadraticMap.associated_isSymm`：associated_isSymm (Q : QuadraticMap R M 
+N) (x y : M) : associatedHom S Q x y = associatedHom S Q y x
 -/
-theorem isSymm_toMatrix' (Q : QuadraticForm R (n -> R)) : Q.toMatrix'.IsSymm := by
+theorem isSymm_toMatrix' (Q : QuadraticForm R (n → R)) : Q.toMatrix'.IsSymm := by
   ext i j
-  rw [toMatrix']; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [LinearMap.toMatrix₂'_apply]; rw [← QuadraticMap.associated_isSymm]
+  rw [toMatrix', Matrix.transpose_apply, LinearMap.toMatrix₂'_apply, LinearMap.toMatrix₂'_apply,
+    ← QuadraticMap.associated_isSymm]
 
 variable {m : Type w} [DecidableEq m] [Fintype m]
 
 open Matrix
 
 @[simp]
-/--
-theorem `toMatrix'_comp` / 定理 `toMatrix'_comp`
-
-English:
-theorem toMatrix'_comp
-  given: (Q : QuadraticForm R (m -> R)) (f : (n -> R) ->ₗ[R] m -> R)
-  proof: by
-  simp only [QuadraticMap.associated_comp, LinearMap.toMatrix₂'_compl₁₂, toMatrix']
-
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix' := QuadraticForm.toMatrix'
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_smul :=
-  QuadraticForm.toMatrix'_smul
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.isSymm_toMatrix' :=
-  QuadraticForm.isSymm_toMatrix'
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_comp :=
-  QuadraticForm.toMatrix'_comp
-
-中文:
-定理 toMatrix'_comp
-  条件: (Q : QuadraticForm R (m -> R)) (f : (n -> R) ->ₗ[R] m -> R)
-  证明: by
-  simp only [QuadraticMap.associated_comp, LinearMap.toMatrix₂'_compl₁₂, toMatrix']
-
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix' := QuadraticForm.toMatrix'
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_smul :=
-  QuadraticForm.toMatrix'_smul
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.isSymm_toMatrix' :=
-  QuadraticForm.isSymm_toMatrix'
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_comp :=
-  QuadraticForm.toMatrix'_comp
+/-
+**QuadraticForm.toMatrix'_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：∀ {R : Type u_3} {n : Type w} [inst : Fintype n] [inst_1 : DecidableEq n] 
+[inst_2 : CommRing R] [inst_3 : Invertible 2]   {m : Type w} [inst_4 : Decidable
+Eq m] [inst_5 : Fintype m] (Q : QuadraticForm R (m → R)) (f : (n → R) →ₗ[R] m → 
+R),   QuadraticForm.toMatrix' (QuadraticMap.comp Q f) =     (LinearMap.toMatrix'
+ f).transpose * Q.toMatrix' * LinearMap.toMatrix' f
+参数：Q : QuadraticForm R (m → R)；f : (n → R) →ₗ[R] m → R；QuadraticMap.comp Q f；Lin
+earMap.toMatrix' f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.toMatrix'`：toMatrix'_intrinsicStar (f : WithConv ((m -> R) ->ₗ
+[R] (n -> R))) : (star f).ofConv.toMatrix' = f.ofConv.toMatrix'.map star
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.associated_comp`：associated_comp {N' : Type*} [AddCommGroup
+ N'] [Module R N'] (f : N' ->ₗ[R] M) : associatedHom S (Q.comp f) = (associatedH
+om S Q).compl₁₂ f …
+· 使用定理 `LinearMap.toMatrix₂'_compl₁₂`：∀ {n : Type u_11} {m : Type u_12} {n' : Ty
+pe u_13} {m' : Type u_14} {R : Type u_16} [inst : CommSemiring R]   [inst_1 : Fi
+ntype n] [inst_2 :…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMatrix'_comp (Q : QuadraticForm R (m -> R)) (f : (n -> R) ->ₗ[R] m -> R) :
+theorem toMatrix'_comp (Q : QuadraticForm R (m → R)) (f : (n → R) →ₗ[R] m → R) :
     QuadraticForm.toMatrix' (Q.comp f) =
       (LinearMap.toMatrix' f)ᵀ * Q.toMatrix' * (LinearMap.toMatrix' f) := by
   simp only [QuadraticMap.associated_comp, LinearMap.toMatrix₂'_compl₁₂, toMatrix']
@@ -4070,116 +3677,158 @@ open Module
 
 variable [AddCommGroup N] [Module R N] (b : Basis n R N) (Q : QuadraticForm R N)
 
-/--
-Definition of `toMatrix` / `toMatrix` 的定义
+/-- A matrix representation of the quadratic form `Q : QuadraticForm R N` with respect to a
+  given basis. See also `QuadraticForm.toMatrix'` for the special case of `N = n → R` with
+  the standard basis. -/
+/-
+**QuadraticForm.toMatrix** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticForm`。
+形式化陈述：toMatrix : Matrix n n R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toMatrix
-  signature: : Matrix n n R
-  body: LinearMap.toMatrix₂ b b (Q.associated)
-
-中文:
-定义 toMatrix
-  签名: : 矩阵 n n R
-  定义体: LinearMap.toMatrix₂ b b (Q.associated)
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, Q.associated, associated
+--- 原说明 ---
+A matrix representation of the quadratic form `Q : QuadraticForm R N` with respe
+ct to a
+  given basis. See also `QuadraticForm.toMatrix'` for the special case of `N = n
+ → R` with
+  the standard basis.
 -/
 noncomputable def toMatrix : Matrix n n R :=
   LinearMap.toMatrix₂ b b (Q.associated)
-
-/--
-lemma `toMatrix_eq_toMatrix'` / 引理 `toMatrix_eq_toMatrix'`
-
-English:
-lemma toMatrix_eq_toMatrix'
-  given: (Q : QuadraticForm R (n -> R))
-  proof: by
-  simp only [toMatrix, toMatrix']
-  exact LinearEquiv.congr_arg rfl
-
-中文:
-引理 toMatrix_eq_toMatrix'
-  条件: (Q : QuadraticForm R (n -> R))
-  证明: by
-  simp only [toMatrix, toMatrix']
-  exact LinearEquiv.congr_arg rfl
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.congr_arg, congr_arg, toMatrix
+/-
+**QuadraticForm.toMatrix_eq_toMatrix'** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticForm`。
+形式化陈述：toMatrix_eq_toMatrix' (Q : QuadraticForm R (n -> R)) : Q.toMatrix (Pi.basi
+sFun R n) = Q.toMatrix'
+参数：Q : QuadraticForm R (n -> R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `LinearEquiv.congr_arg`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
-lemma toMatrix_eq_toMatrix' (Q : QuadraticForm R (n -> R)) :
+lemma toMatrix_eq_toMatrix' (Q : QuadraticForm R (n → R)) :
     Q.toMatrix (Pi.basisFun R n) = Q.toMatrix' := by
   simp only [toMatrix, toMatrix']
   exact LinearEquiv.congr_arg rfl
-
-/--
-theorem `toMatrix_smul` / 定理 `toMatrix_smul`
-
-English:
-theorem toMatrix_smul
-  given: (a : R) (Q : QuadraticForm R N)
-  proof: by
-  simp [toMatrix]
-
-中文:
-定理 toMatrix_smul
-  条件: (a : R) (Q : QuadraticForm R N)
-  证明: by
-  simp [toMatrix]
-
-Depends on / 依赖: toMatrix
+/-
+**QuadraticForm.toMatrix_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：toMatrix_smul (a : R) (Q : QuadraticForm R N) : (a • Q).toMatrix b = a • (
+Q.toMatrix b)
+参数：a : R；Q : QuadraticForm R N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toMatrix_smul (a : R) (Q : QuadraticForm R N) :
     (a • Q).toMatrix b = a • (Q.toMatrix b) := by
   simp [toMatrix]
-
-/--
-theorem `isSymm_toMatrix` / 定理 `isSymm_toMatrix`
-
-English:
-theorem isSymm_toMatrix
-  given: (Q : QuadraticForm R N)
-  statement: (Q.toMatrix b).IsSymm
-  proof: by
-  ext i j
-  rw [toMatrix]; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂_apply]; rw [LinearMap.toMatrix₂_apply]; rw [← QuadraticMap.associated_isSymm]
-
-中文:
-定理 isSymm_toMatrix
-  条件: (Q : QuadraticForm R N)
-  结论: (Q.toMatrix b).是Symm
-  证明: by
-  ext i j
-  rw [toMatrix]; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂_apply]; rw [LinearMap.toMatrix₂_apply]; rw [← QuadraticMap.associated_isSymm]
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, Matrix, Matrix.transpose_apply, QuadraticMap, QuadraticMap.associated_isSymm, associated_isSymm, toMatrix, transpose_apply
+/-
+**QuadraticForm.isSymm_toMatrix** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：isSymm_toMatrix (Q : QuadraticForm R N) : (Q.toMatrix b).IsSymm
+参数：Q : QuadraticForm R N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticForm.toMatrix.eq_1`：∀ {R : Type u_3} {N : Type u_5} {n : Type w
+} [inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : CommRing R]   [inst_3 : 
+Invertible 2] [in…
+· 使用定理 `Matrix.transpose_apply`：transpose_apply (M : Matrix m n α) (i j) : trans
+pose M i j = M j i
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `LinearMap.toMatrix₂_apply`：LinearMap.toMatrix₂_apply (B : M₁ ->ₛₗ[σ₁] M₂
+ ->ₛₗ[σ₂] N₂) (i : n) (j : m) : LinearMap.toMatrix₂ b₁ b₂ B i j = B (b₁ i) (b₂ j
+)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuadraticMap.associated_isSymm`：associated_isSymm (Q : QuadraticMap R M 
+N) (x y : M) : associatedHom S Q x y = associatedHom S Q y x
 -/
 theorem isSymm_toMatrix (Q : QuadraticForm R N) : (Q.toMatrix b).IsSymm := by
   ext i j
-  rw [toMatrix]; rw [Matrix.transpose_apply]; rw [LinearMap.toMatrix₂_apply]; rw [LinearMap.toMatrix₂_apply]; rw [← QuadraticMap.associated_isSymm]
+  rw [toMatrix, Matrix.transpose_apply, LinearMap.toMatrix₂_apply, LinearMap.toMatrix₂_apply,
+    ← QuadraticMap.associated_isSymm]
 
 variable {m : Type w} [DecidableEq m] [Fintype m] [AddCommGroup P] [Module R P]
 
 open Matrix
-
-/--
-theorem `toMatrix_comp` / 定理 `toMatrix_comp`
-
-English:
-theorem toMatrix_comp
-  given: (b' : Basis m R P) (Q : QuadraticForm R P) (f : N ->ₗ[R] P)
-  proof: by
-  simp only [QuadraticMap.associated_comp, LinearMap.toMatrix₂_compl₁₂ b' b', toMatrix]
-
-中文:
-定理 toMatrix_comp
-  条件: (b' : 基 m R P) (Q : QuadraticForm R P) (f : N ->ₗ[R] P)
-  证明: by
-  simp only [QuadraticMap.associated_comp, LinearMap.toMatrix₂_compl₁₂ b' b', toMatrix]
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, QuadraticMap, QuadraticMap.associated_comp, associated_comp, toMatrix
+/-
+**QuadraticForm.toMatrix_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：toMatrix_comp (b' : Basis m R P) (Q : QuadraticForm R P) (f : N ->ₗ[R] P) 
+: QuadraticForm.toMatrix b (Q.comp f) = (f.toMatrix b b')ᵀ * (Q.toMatrix b') * (
+f.toMatrix b b')
+参数：b' : Basis m R P；Q : QuadraticForm R P；f : N ->ₗ[R] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.associated_comp`：associated_comp {N' : Type*} [AddCommGroup
+ N'] [Module R N'] (f : N' ->ₗ[R] M) : associatedHom S (Q.comp f) = (associatedH
+om S Q).compl₁₂ f …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.toMatrix₂_compl₁₂`：LinearMap.toMatrix₂_compl₁₂ (B : M₁ ->ₗ[R] 
+M₂ ->ₗ[R] R) (l : M₁' ->ₗ[R] M₁) (r : M₂' ->ₗ[R] M₂) : LinearMap.toMatrix₂ b₁' b
+₂' (B.compl₁₂ l r…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toMatrix_comp (b' : Basis m R P) (Q : QuadraticForm R P) (f : N ->ₗ[R] P) :
+theorem toMatrix_comp (b' : Basis m R P) (Q : QuadraticForm R P) (f : N →ₗ[R] P) :
     QuadraticForm.toMatrix b (Q.comp f) =
       (f.toMatrix b b')ᵀ * (Q.toMatrix b') * (f.toMatrix b b') := by
   simp only [QuadraticMap.associated_comp, LinearMap.toMatrix₂_compl₁₂ b' b', toMatrix]
@@ -4190,74 +3839,93 @@ section Discriminant
 
 section Rn
 
-/--
-Definition of `discr'` / `discr'` 的定义
+/-- The discriminant of a quadratic form `Q : QuadraticForm R (n → R)` generalizes the discriminant
+  of a quadratic polynomial. -/
+/-
+**QuadraticForm.discr'** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticForm`。
+形式化陈述：discr' (Q : QuadraticForm R (n -> R)) : R
+参数：Q : QuadraticForm R (n -> R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition discr'
-  signature: (Q : QuadraticForm R (n -> R))
-  body: Q.toMatrix'.det
-
-中文:
-定义 discr'
-  签名: (Q : QuadraticForm R (n -> R))
-  定义体: Q.toMatrix'.det
-
-Depends on / 依赖: Q.toMatrix, toMatrix
+--- 原说明 ---
+The discriminant of a quadratic form `Q : QuadraticForm R (n → R)` generalizes t
+he discriminant
+  of a quadratic polynomial.
 -/
-def discr' (Q : QuadraticForm R (n -> R)) : R :=
+def discr' (Q : QuadraticForm R (n → R)) : R :=
   Q.toMatrix'.det
 
-variable {Q : QuadraticForm R (n -> R)}
-
-/--
-theorem `discr'_smul` / 定理 `discr'_smul`
-
-English:
-theorem discr'_smul
-  given: (a : R)
-  statement: (a • Q).discr' = a ^ Fintype.card n * Q.discr'
-  proof: by
-  simp [discr', toMatrix'_smul]
-
-中文:
-定理 discr'_smul
-  条件: (a : R)
-  结论: (a • Q).discr' = a ^ 有限类型.card n * Q.discr'
-  证明: by
-  simp [discr', toMatrix'_smul]
+variable {Q : QuadraticForm R (n → R)}
+/-
+**QuadraticForm.discr'_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：∀ {R : Type u_3} {n : Type w} [inst : Fintype n] [inst_1 : DecidableEq n] 
+[inst_2 : CommRing R] [inst_3 : Invertible 2]   {Q : QuadraticForm R (n → R)} (a
+ : R), (a • Q).discr' = a ^ Fintype.card n * Q.discr'
+参数：n → R；a : R；a • Q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.det.congr_simp`：∀ {n : Type u_2} {inst : DecidableEq n} [inst_1 :
+ DecidableEq n] [inst_2 : Fintype n] {R : Type v} [inst_3 : CommRing R]   (M M_1
+ : Matrix n…
+· 使用定理 `QuadraticForm.toMatrix'_smul`：∀ {R : Type u_3} {n : Type w} [inst : Fint
+ype n] [inst_1 : DecidableEq n] [inst_2 : CommRing R] [inst_3 : Invertible 2]   
+(a : R) (Q : Quadr…
+· 使用定理 `Matrix.det_smul_of_tower`：det_smul_of_tower {α} [Monoid α] [MulAction α 
+R] [IsScalarTower α R R] [SMulCommClass α R R] (c : α) (A : Matrix n n R) : det 
+(c • A) = c ^ …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem discr'_smul (a : R) : (a • Q).discr' = a ^ Fintype.card n * Q.discr' := by
   simp [discr', toMatrix'_smul]
-
-/--
-theorem `discr'_comp` / 定理 `discr'_comp`
-
-English:
-theorem discr'_comp
-  given: (f : (n -> R) ->ₗ[R] n -> R)
-  proof: by
-  simp [mul_left_comm, toMatrix'_comp, mul_comm, discr']
-
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr := QuadraticForm.discr'
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_smul :=
-  QuadraticForm.discr'_smul
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_comp :=
-  QuadraticForm.discr'_comp
-
-中文:
-定理 discr'_comp
-  条件: (f : (n -> R) ->ₗ[R] n -> R)
-  证明: by
-  simp [mul_left_comm, toMatrix'_comp, mul_comm, discr']
-
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr := QuadraticForm.discr'
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_smul :=
-  QuadraticForm.discr'_smul
-@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_comp :=
-  QuadraticForm.discr'_comp
+/-
+**QuadraticForm.discr'_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：∀ {R : Type u_3} {n : Type w} [inst : Fintype n] [inst_1 : DecidableEq n] 
+[inst_2 : CommRing R] [inst_3 : Invertible 2]   {Q : QuadraticForm R (n → R)} (f
+ : (n → R) →ₗ[R] n → R),   QuadraticForm.discr' (QuadraticMap.comp Q f) = (Linea
+rMap.toMatrix' f).det * (LinearMap.toMatrix' f).det * Q.discr'
+参数：n → R；f : (n → R) →ₗ[R] n → R；QuadraticMap.comp Q f；LinearMap.toMatrix' f；Lin
+earMap.toMatrix' f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.toMatrix'`：toMatrix'_intrinsicStar (f : WithConv ((m -> R) ->ₗ
+[R] (n -> R))) : (star f).ofConv.toMatrix' = f.ofConv.toMatrix'.map star
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.det.congr_simp`：∀ {n : Type u_2} {inst : DecidableEq n} [inst_1 :
+ DecidableEq n] [inst_2 : Fintype n] {R : Type v} [inst_3 : CommRing R]   (M M_1
+ : Matrix n…
+· 使用定理 `QuadraticForm.toMatrix'_comp`：∀ {R : Type u_3} {n : Type w} [inst : Fint
+ype n] [inst_1 : DecidableEq n] [inst_2 : CommRing R] [inst_3 : Invertible 2]   
+{m : Type w} [inst…
+· 使用定理 `Matrix.det_mul`：det_mul (M N : Matrix n n R) : det (M * N) = det M * det
+ N
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.det_transpose`：det_transpose (M : Matrix n n R) : Mᵀ.det = M.det
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem discr'_comp (f : (n -> R) ->ₗ[R] n -> R) :
+theorem discr'_comp (f : (n → R) →ₗ[R] n → R) :
     QuadraticForm.discr' (Q.comp f) = f.toMatrix'.det * f.toMatrix'.det * Q.discr' := by
   simp [mul_left_comm, toMatrix'_comp, mul_comm, discr']
 
@@ -4275,90 +3943,113 @@ open Module
 
 variable [AddCommGroup N] [Module R N] (b : Basis n R N) (Q : QuadraticForm R N)
 
-/--
-Definition of `discr` / `discr` 的定义
+/-- The discriminant of a quadratic form `Q : QuadraticForm R N` generalizes the discriminant
+  of a quadratic polynomial. -/
+/-
+**QuadraticForm.discr** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticForm`。
+形式化陈述：discr : R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition discr
-  signature: : R
-  body: (Q.toMatrix b).det
-
-中文:
-定义 discr
-  签名: : R
-  定义体: (Q.toMatrix b).det
-
-Depends on / 依赖: Q.toMatrix, toMatrix
+--- 原说明 ---
+The discriminant of a quadratic form `Q : QuadraticForm R N` generalizes the dis
+criminant
+  of a quadratic polynomial.
 -/
 noncomputable def discr : R := (Q.toMatrix b).det
 
 variable {b Q}
-
-/--
-theorem `discr_smul` / 定理 `discr_smul`
-
-English:
-theorem discr_smul
-  given: (a : R)
-  statement: (a • Q).discr b = a ^ Fintype.card n * (Q.discr b)
-  proof: by
-  simp [discr, toMatrix_smul]
-
-中文:
-定理 discr_smul
-  条件: (a : R)
-  结论: (a • Q).discr b = a ^ 有限类型.card n * (Q.discr b)
-  证明: by
-  simp [discr, toMatrix_smul]
-
-Depends on / 依赖: toMatrix_smul
+/-
+**QuadraticForm.discr_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：discr_smul (a : R) : (a • Q).discr b = a ^ Fintype.card n * (Q.discr b)
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.det.congr_simp`：∀ {n : Type u_2} {inst : DecidableEq n} [inst_1 :
+ DecidableEq n] [inst_2 : Fintype n] {R : Type v} [inst_3 : CommRing R]   (M M_1
+ : Matrix n…
+· 使用定理 `QuadraticForm.toMatrix_smul`：toMatrix_smul (a : R) (Q : QuadraticForm R 
+N) : (a • Q).toMatrix b = a • (Q.toMatrix b)
+· 使用定理 `Matrix.det_smul_of_tower`：det_smul_of_tower {α} [Monoid α] [MulAction α 
+R] [IsScalarTower α R R] [SMulCommClass α R R] (c : α) (A : Matrix n n R) : det 
+(c • A) = c ^ …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem discr_smul (a : R) : (a • Q).discr b = a ^ Fintype.card n * (Q.discr b) := by
   simp [discr, toMatrix_smul]
-
-/--
-theorem `discr_comp` / 定理 `discr_comp`
-
-English:
-theorem discr_comp
-  statement: [AddCommGroup P] [Module R P] (b' : Basis n R P) (Q : QuadraticForm R P)
-  proof: by
-  simp [mul_left_comm, toMatrix_comp b b', mul_comm, discr]
-
-中文:
-定理 discr_comp
-  结论: [加法交换群 P] [模 R P] (b' : 基 n R P) (Q : QuadraticForm R P)
-  证明: by
-  simp [mul_left_comm, toMatrix_comp b b', mul_comm, discr]
-
-Depends on / 依赖: mul_comm, mul_left_comm, toMatrix_comp
+/-
+**QuadraticForm.discr_comp** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticForm`。
+形式化陈述：discr_comp [AddCommGroup P] [Module R P] (b' : Basis n R P) (Q : Quadratic
+Form R P) (f : N ->ₗ[R] P) : QuadraticForm.discr b (Q.comp f) = (f.toMatrix b b'
+).det * (f.toMatrix b b').det * (Q.discr b')
+参数：b' : Basis n R P；Q : QuadraticForm R P；f : N ->ₗ[R] P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.det.congr_simp`：∀ {n : Type u_2} {inst : DecidableEq n} [inst_1 :
+ DecidableEq n] [inst_2 : Fintype n] {R : Type v} [inst_3 : CommRing R]   (M M_1
+ : Matrix n…
+· 使用定理 `QuadraticForm.toMatrix_comp`：toMatrix_comp (b' : Basis m R P) (Q : Quadr
+aticForm R P) (f : N ->ₗ[R] P) : QuadraticForm.toMatrix b (Q.comp f) = (f.toMatr
+ix b b')ᵀ * (Q.to…
+· 使用定理 `Matrix.det_mul`：det_mul (M N : Matrix n n R) : det (M * N) = det M * det
+ N
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.det_transpose`：det_transpose (M : Matrix n n R) : Mᵀ.det = M.det
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem discr_comp [AddCommGroup P] [Module R P] (b' : Basis n R P) (Q : QuadraticForm R P)
-    (f : N ->ₗ[R] P) :
+    (f : N →ₗ[R] P) :
     QuadraticForm.discr b (Q.comp f) =
       (f.toMatrix b b').det * (f.toMatrix b b').det * (Q.discr b') := by
   simp [mul_left_comm, toMatrix_comp b b', mul_comm, discr]
-
-/--
-lemma `discr_eq_discr'` / 引理 `discr_eq_discr'`
-
-English:
-lemma discr_eq_discr'
-  given: (Q : QuadraticForm R (n -> R))
-  proof: by
-  rw [discr]; rw [discr']; rw [toMatrix_eq_toMatrix']
-
-中文:
-引理 discr_eq_discr'
-  条件: (Q : QuadraticForm R (n -> R))
-  证明: by
-  rw [discr]; rw [discr']; rw [toMatrix_eq_toMatrix']
-
-Depends on / 依赖: toMatrix_eq_toMatrix
+/-
+**QuadraticForm.discr_eq_discr'** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticForm`。
+形式化陈述：discr_eq_discr' (Q : QuadraticForm R (n -> R)) : Q.discr (Pi.basisFun R n)
+ = Q.discr'
+参数：Q : QuadraticForm R (n -> R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticForm.discr.eq_1`：∀ {R : Type u_3} {N : Type u_5} {n : Type w} [
+inst : Fintype n] [inst_1 : DecidableEq n] [inst_2 : CommRing R]   [inst_3 : Inv
+ertible 2] [in…
+· 使用定理 `QuadraticForm.discr'.eq_1`：∀ {R : Type u_3} {n : Type w} [inst : Fintype
+ n] [inst_1 : DecidableEq n] [inst_2 : CommRing R] [inst_3 : Invertible 2]   (Q 
+: QuadraticForm…
+· 使用引理 `QuadraticForm.toMatrix_eq_toMatrix'`：toMatrix_eq_toMatrix' (Q : Quadrati
+cForm R (n -> R)) : Q.toMatrix (Pi.basisFun R n) = Q.toMatrix'
 -/
-lemma discr_eq_discr' (Q : QuadraticForm R (n -> R)) :
-    Q.discr (Pi.basisFun R n) = Q.discr' := by
-  rw [discr]; rw [discr']; rw [toMatrix_eq_toMatrix']
+lemma discr_eq_discr' (Q : QuadraticForm R (n → R)) :
+    Q.discr (Pi.basisFun R n)  = Q.discr' := by
+  rw [discr, discr', toMatrix_eq_toMatrix']
 
 end Basis
 
@@ -4379,17 +4070,20 @@ section Semiring
 variable [CommSemiring R] [AddCommMonoid M] [Module R M]
 
 /--
-theorem `separatingLeft_of_anisotropic` / 定理 `separatingLeft_of_anisotropic`
+A bilinear form is separating left if the quadratic form it is associated with is anisotropic.
+-/
+/-
+**LinearMap.BilinForm.separatingLeft_of_anisotropic** 是 Mathlib 中的一个定理，位于命名空间 `L
+inearMap.BilinForm`。
+形式化陈述：separatingLeft_of_anisotropic {B : BilinForm R M} (hB : B.toQuadraticMap.A
+nisotropic) : B.SeparatingLeft
+参数：hB : B.toQuadraticMap.Anisotropic。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem separatingLeft_of_anisotropic
-  given: {B : BilinForm R M} (hB : B.toQuadraticMap.Anisotropic)
-  proof: fun x hx => hB _ (hx x)
-
-中文:
-定理 separatingLeft_of_anisotropic
-  条件: {B : BilinForm R M} (hB : B.toQuadraticMap.Anisotropic)
-  证明: fun x hx => hB _ (hx x)
+--- 原说明 ---
+A bilinear form is separating left if the quadratic form it is associated with i
+s anisotropic.
 -/
 theorem separatingLeft_of_anisotropic {B : BilinForm R M} (hB : B.toQuadraticMap.Anisotropic) :
     B.SeparatingLeft := fun x hx => hB _ (hx x)
@@ -4398,136 +4092,145 @@ end Semiring
 
 variable [CommRing R] [AddCommGroup M] [Module R M]
 
-/--
-theorem `exists_bilinForm_self_ne_zero` / 定理 `exists_bilinForm_self_ne_zero`
+/-- There exists a non-null vector with respect to any symmetric, nonzero bilinear form `B`
+on a module `M` over a ring `R` with invertible `2`, i.e. there exists some
+`x : M` such that `B x x ≠ 0`. -/
+/-
+**LinearMap.BilinForm.exists_bilinForm_self_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `L
+inearMap.BilinForm`。
+形式化陈述：exists_bilinForm_self_ne_zero [htwo : Invertible (2 : R)] {B : BilinForm R
+ M} (hB₁ : B != 0) (hB₂ : B.IsSymm) : exists x, B x x != 0
+参数：2 : R；hB₁ : B != 0；hB₂ : B.IsSymm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuadraticMap.exists_quadraticMap_ne_zero`：exists_quadraticMap_ne_zero {Q
+ : QuadraticMap R M N} -- Porting note: added implicit argument (hB₁ : associate
+d' (N
+· 使用定理 `QuadraticMap.associated_eq_self_apply`：associated_eq_self_apply (x : M) 
+: associatedHom S Q x x = Q x
 
-English:
-theorem exists_bilinForm_self_ne_zero
-  statement: [htwo : Invertible (2 : R)] {B : BilinForm R M}
-  proof: by
-  lift B to QuadraticForm R M using hB₂ with Q
-  obtain ⟨x, hx⟩ := QuadraticMap.exists_quadraticMap_ne_zero hB₁
-  exact ⟨x, fun h => hx (Q.associated_eq_self_apply Nat x ▸ h)⟩
-
-中文:
-定理 存在_bilinForm_self_ne_zero
-  结论: [htwo : 可逆 (2 : R)] {B : BilinForm R M}
-  证明: by
-  lift B to QuadraticForm R M using hB₂ with Q
-  obtain ⟨x, hx⟩ := QuadraticMap.exists_quadraticMap_ne_zero hB₁
-  exact ⟨x, fun h => hx (Q.associated_eq_self_apply Nat x ▸ h)⟩
-
-Depends on / 依赖: Q.associated_eq_self_apply, QuadraticForm, QuadraticMap, QuadraticMap.exists_quadraticMap_ne_zero, associated_eq_self_apply, exists_quadraticMap_ne_zero
+--- 原说明 ---
+There exists a non-null vector with respect to any symmetric, nonzero bilinear f
+orm `B`
+on a module `M` over a ring `R` with invertible `2`, i.e. there exists some
+`x : M` such that `B x x ≠ 0`.
 -/
 theorem exists_bilinForm_self_ne_zero [htwo : Invertible (2 : R)] {B : BilinForm R M}
-    (hB₁ : B != 0) (hB₂ : B.IsSymm) : exists x, B x x != 0 := by
+    (hB₁ : B ≠ 0) (hB₂ : B.IsSymm) : ∃ x, B x x ≠ 0 := by
   lift B to QuadraticForm R M using hB₂ with Q
   obtain ⟨x, hx⟩ := QuadraticMap.exists_quadraticMap_ne_zero hB₁
-  exact ⟨x, fun h => hx (Q.associated_eq_self_apply Nat x ▸ h)⟩
+  exact ⟨x, fun h => hx (Q.associated_eq_self_apply ℕ x ▸ h)⟩
 
 open Module
 
 variable {V : Type u} {K : Type v} [Field K] [AddCommGroup V] [Module K V]
 variable [FiniteDimensional K V]
 
-/--
-theorem `exists_orthogonal_basis` / 定理 `exists_orthogonal_basis`
+/-- Given a symmetric bilinear form `B` on some vector space `V` over a field `K`
+in which `2` is invertible, there exists an orthogonal basis with respect to `B`. -/
+/-
+**LinearMap.BilinForm.exists_orthogonal_basis** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap.BilinForm`。
+形式化陈述：exists_orthogonal_basis [hK : Invertible (2 : K)] {B : LinearMap.BilinForm
+ K V} (hB₂ : B.IsSymm) : exists v : Basis (Fin (finrank K V)) K V, B.IsOrthoᵢ v
+参数：2 : K；hB₂ : B.IsSymm。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.BilinForm.exists_bilinForm_self_ne_zero`：exists_bilinForm_self
+_ne_zero [htwo : Invertible (2 : R)] {B : BilinForm R M} (hB₁ : B != 0) (hB₂ : B
+.IsSymm) : exists x, B x x != 0
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.IsSymm.domRestrict`：domRestrict (H : B.IsSymm) (p : Submodule 
+R M) : (B.domRestrict₁₂ p p).IsSymm where eq _ _
+· 使用定理 `Nat.succ.inj`：∀ {m n : ℕ}, m.succ = n.succ → m = n
+· 使用定理 `finrank_span_singleton`：finrank_span_singleton {v : V} (hv : v != 0) : f
+inrank K (K ∙ v) = 1
+· 使用定理 `ne_zero_of_map`：∀ {R : Type u_10} {S : Type u_11} {F : Type u_12} [inst 
+: Zero R] [inst_1 : Zero S] [inst_2 : FunLike F R S]   [ZeroHomClass F R S] {f :
+ F} …
+· 使用定理 `Submodule.finrank_add_eq_of_isCompl`：finrank_add_eq_of_isCompl [FiniteDi
+mensional K V] {U W : Submodule K V} (h : IsCompl U W) : finrank K U + finrank K
+ W = finrank K V
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `LinearMap.isCompl_span_singleton_orthogonal`：isCompl_span_singleton_orth
+ogonal {B : V ->ₗ[K] V ->ₗ[K] K} {x : V} (hx : B x x != 0) : IsCompl (K ∙ x) ((K
+ ∙ x).orthogonalBilin B)
+· 使用定理 `IsCompl.disjoint`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bou
+ndedOrder α] {x y : α}, IsCompl x y → Disjoint x y
+· 使用定理 `Submodule.disjoint_def`：disjoint_def {p p' : Submodule R M} : Disjoint p
+ p' ↔ forall x in p, x in p' -> x = (0 : M)
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `Submodule.mem_span_singleton_self`：mem_span_singleton_self (x : M) : x i
+n R ∙ x
+· 使用定理 `Submodule.neg_mem_iff`：∀ {R : Type u} {M : Type v} [inst : Ring R] [inst
+_1 : AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {x : M
+}, -x ∈ p ↔…
+· 使用定理 `add_eq_zero_iff_neg_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a + b = 0 ↔ -a = b
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+（共 55 条，此处仅展示前 30 条）
 
-English:
-theorem exists_orthogonal_basis
-  statement: [hK : Invertible (2 : K)] {B : LinearMap.BilinForm K V}
-  proof: by
-  suffices forall d, finrank K V = d -> exists v : Basis (Fin d) K V, B.IsOrthoᵢ v by exact this _ rfl
-  intro d hd
-  induction d generalizing V with
-  | zero => exact ⟨basisOfFinrankZero hd, fun _ _ _ => map_zero _⟩
-  | succ d ih =>
-  -- either the bilinear form is trivial or we can pick a non-null `x`
-  obtain rfl | hB₁ := eq_or_ne B 0
-  · let b := Module.finBasis K V
-    rw [hd] at b
-    exact ⟨b, fun i j _ => rfl⟩
-  obtain ⟨x, hx⟩ := exists_bilinForm_self_ne_zero hB₁ hB₂
-  rw [← Submodule.finrank_add_eq_of_isCompl (isCompl_span_singleton_orthogonal hx).symm]; rw [finrank_span_singleton (ne_zero_of_map hx)] at hd
-  let B' := B.domRestrict₁₂ ((K ∙ x).orthogonalBilin B) ((K ∙ x).orthogonalBilin B)
-  obtain ⟨v', hv₁⟩ := ih (hB₂.domRestrict _ : B'.IsSymm) (Nat.succ.inj hd)
-  -- concatenate `x` with the basis obtained by induction
-  let b :=
-    Basis.mkFinCons x v'
-      (by
-        rintro c y hy hc
-        rw [add_eq_zero_iff_neg_eq] at hc
-        rw [← hc]; rw [Submodule.neg_mem_iff] at hy
-        have := (isCompl_span_singleton_orthogonal hx).disjoint
-        rw [Submodule.disjoint_def] at this
-        have := this (c • x) (Submodule.smul_mem _ _ <| Submodule.mem_span_singleton_self _) hy
-exact (smul_eq_zero.1 this).resolve_right fun h => hx h.symm ▸ map_zero _)
-      (by
-        intro y
-        refine ⟨-B x y / B x x, fun z hz => ?_⟩
-        obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hz
-        rw [map_smul]; rw [smul_apply]; rw [map_add]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [div_mul_cancel₀ _ hx]; rw [add_neg_cancel]; rw [mul_zero])
-  refine ⟨b, ?_⟩
-  rw [Basis.coe_mkFinCons]
-  intro j i
-  refine Fin.cases ?_ (fun i => ?_) i <;> refine Fin.cases ?_ (fun j => ?_) j <;> intro hij <;>
-    simp only [Function.onFun, Fin.cons_zero, Fin.cons_succ, Function.comp_apply]
-  · exact (hij rfl).elim
-  · rw [← hB₂.eq]
-    exact (v' j).prop _ (Submodule.mem_span_singleton_self x)
-  · exact (v' i).prop _ (Submodule.mem_span_singleton_self x)
-  · exact hv₁ (ne_of_apply_ne _ hij)
-
-中文:
-定理 存在_orthogonal_basis
-  结论: [hK : 可逆 (2 : K)] {B : 线性映射.BilinForm K V}
-  证明: by
-  suffices forall d, finrank K V = d -> exists v : Basis (Fin d) K V, B.IsOrthoᵢ v by exact this _ rfl
-  intro d hd
-  induction d generalizing V with
-  | zero => exact ⟨basisOfFinrankZero hd, fun _ _ _ => map_zero _⟩
-  | succ d ih =>
-  -- either the bilinear form is trivial or we can pick a non-null `x`
-  obtain rfl | hB₁ := eq_or_ne B 0
-  · let b := Module.finBasis K V
-    rw [hd] at b
-    exact ⟨b, fun i j _ => rfl⟩
-  obtain ⟨x, hx⟩ := exists_bilinForm_self_ne_zero hB₁ hB₂
-  rw [← Submodule.finrank_add_eq_of_isCompl (isCompl_span_singleton_orthogonal hx).symm]; rw [finrank_span_singleton (ne_zero_of_map hx)] at hd
-  let B' := B.domRestrict₁₂ ((K ∙ x).orthogonalBilin B) ((K ∙ x).orthogonalBilin B)
-  obtain ⟨v', hv₁⟩ := ih (hB₂.domRestrict _ : B'.IsSymm) (Nat.succ.inj hd)
-  -- concatenate `x` with the basis obtained by induction
-  let b :=
-    Basis.mkFinCons x v'
-      (by
-        rintro c y hy hc
-        rw [add_eq_zero_iff_neg_eq] at hc
-        rw [← hc]; rw [Submodule.neg_mem_iff] at hy
-        have := (isCompl_span_singleton_orthogonal hx).disjoint
-        rw [Submodule.disjoint_def] at this
-        have := this (c • x) (Submodule.smul_mem _ _ <| Submodule.mem_span_singleton_self _) hy
-exact (smul_eq_zero.1 this).resolve_right fun h => hx h.symm ▸ map_zero _)
-      (by
-        intro y
-        refine ⟨-B x y / B x x, fun z hz => ?_⟩
-        obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hz
-        rw [map_smul]; rw [smul_apply]; rw [map_add]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [div_mul_cancel₀ _ hx]; rw [add_neg_cancel]; rw [mul_zero])
-  refine ⟨b, ?_⟩
-  rw [Basis.coe_mkFinCons]
-  intro j i
-  refine Fin.cases ?_ (fun i => ?_) i <;> refine Fin.cases ?_ (fun j => ?_) j <;> intro hij <;>
-    simp only [Function.onFun, Fin.cons_zero, Fin.cons_succ, Function.comp_apply]
-  · exact (hij rfl).elim
-  · rw [← hB₂.eq]
-    exact (v' j).prop _ (Submodule.mem_span_singleton_self x)
-  · exact (v' i).prop _ (Submodule.mem_span_singleton_self x)
-  · exact hv₁ (ne_of_apply_ne _ hij)
-
-Depends on / 依赖: B.IsOrtho, basisOfFinrankZero, finrank, generalizing, map_zero
+--- 原说明 ---
+Given a symmetric bilinear form `B` on some vector space `V` over a field `K`
+in which `2` is invertible, there exists an orthogonal basis with respect to `B`
+.
 -/
 theorem exists_orthogonal_basis [hK : Invertible (2 : K)] {B : LinearMap.BilinForm K V}
-    (hB₂ : B.IsSymm) : exists v : Basis (Fin (finrank K V)) K V, B.IsOrthoᵢ v := by
-  suffices forall d, finrank K V = d -> exists v : Basis (Fin d) K V, B.IsOrthoᵢ v by exact this _ rfl
+    (hB₂ : B.IsSymm) : ∃ v : Basis (Fin (finrank K V)) K V, B.IsOrthoᵢ v := by
+  suffices ∀ d, finrank K V = d → ∃ v : Basis (Fin d) K V, B.IsOrthoᵢ v by exact this _ rfl
   intro d hd
   induction d generalizing V with
   | zero => exact ⟨basisOfFinrankZero hd, fun _ _ _ => map_zero _⟩
@@ -4538,7 +4241,8 @@ theorem exists_orthogonal_basis [hK : Invertible (2 : K)] {B : LinearMap.BilinFo
     rw [hd] at b
     exact ⟨b, fun i j _ => rfl⟩
   obtain ⟨x, hx⟩ := exists_bilinForm_self_ne_zero hB₁ hB₂
-  rw [← Submodule.finrank_add_eq_of_isCompl (isCompl_span_singleton_orthogonal hx).symm]; rw [finrank_span_singleton (ne_zero_of_map hx)] at hd
+  rw [← Submodule.finrank_add_eq_of_isCompl (isCompl_span_singleton_orthogonal hx).symm,
+    finrank_span_singleton (ne_zero_of_map hx)] at hd
   let B' := B.domRestrict₁₂ ((K ∙ x).orthogonalBilin B) ((K ∙ x).orthogonalBilin B)
   obtain ⟨v', hv₁⟩ := ih (hB₂.domRestrict _ : B'.IsSymm) (Nat.succ.inj hd)
   -- concatenate `x` with the basis obtained by induction
@@ -4547,16 +4251,17 @@ theorem exists_orthogonal_basis [hK : Invertible (2 : K)] {B : LinearMap.BilinFo
       (by
         rintro c y hy hc
         rw [add_eq_zero_iff_neg_eq] at hc
-        rw [← hc]; rw [Submodule.neg_mem_iff] at hy
+        rw [← hc, Submodule.neg_mem_iff] at hy
         have := (isCompl_span_singleton_orthogonal hx).disjoint
         rw [Submodule.disjoint_def] at this
         have := this (c • x) (Submodule.smul_mem _ _ <| Submodule.mem_span_singleton_self _) hy
-exact (smul_eq_zero.1 this).resolve_right fun h => hx h.symm ▸ map_zero _)
+        exact (smul_eq_zero.1 this).resolve_right fun h => hx <| h.symm ▸ map_zero _)
       (by
         intro y
         refine ⟨-B x y / B x x, fun z hz => ?_⟩
         obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hz
-        rw [map_smul]; rw [smul_apply]; rw [map_add]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [div_mul_cancel₀ _ hx]; rw [add_neg_cancel]; rw [mul_zero])
+        rw [map_smul, smul_apply, map_add, map_smul, smul_eq_mul, smul_eq_mul,
+          div_mul_cancel₀ _ hx, add_neg_cancel, mul_zero])
   refine ⟨b, ?_⟩
   rw [Basis.coe_mkFinCons]
   intro j i
@@ -4579,50 +4284,40 @@ open Finset Module
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]
 variable {ι : Type*}
 
-/--
-Definition of `basisRepr` / `basisRepr` 的定义
+/-- Given a quadratic map `Q` and a basis, `basisRepr` is the basis representation of `Q`. -/
+/-
+**QuadraticMap.basisRepr** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：basisRepr [Finite ι] (Q : QuadraticMap R M N) (v : Basis ι R M) : Quadrati
+cMap R (ι -> R) N
+参数：Q : QuadraticMap R M N；v : Basis ι R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basisRepr
-  signature: [Finite ι] (Q : QuadraticMap R M N) (v : Basis ι R M)
-  body: Q.comp v.equivFun.symm
-
-@[simp]
-
-中文:
-定义 basisRepr
-  签名: [有限 ι] (Q : 二次映射 R M N) (v : 基 ι R M)
-  定义体: Q.comp v.equivFun.symm
-
-@[simp]
-
-Depends on / 依赖: Q.comp, equivFun, v.equivFun.symm
+--- 原说明 ---
+Given a quadratic map `Q` and a basis, `basisRepr` is the basis representation o
+f `Q`.
 -/
 noncomputable def basisRepr [Finite ι] (Q : QuadraticMap R M N) (v : Basis ι R M) :
-    QuadraticMap R (ι -> R) N :=
+    QuadraticMap R (ι → R) N :=
   Q.comp v.equivFun.symm
 
 @[simp]
-/--
-theorem `basisRepr_apply` / 定理 `basisRepr_apply`
-
-English:
-theorem basisRepr_apply
-  given: [Fintype ι] {v : Basis ι R M} (Q : QuadraticMap R M N) (w : ι -> R)
-  proof: by
-  rw [← v.equivFun_symm_apply]
-  rfl
-
-中文:
-定理 basisRepr_apply
-  条件: [有限类型 ι] {v : 基 ι R M} (Q : 二次映射 R M N) (w : ι -> R)
-  证明: by
-  rw [← v.equivFun_symm_apply]
-  rfl
-
-Depends on / 依赖: equivFun_symm_apply, v.equivFun_symm_apply
+/-
+**QuadraticMap.basisRepr_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`。
+形式化陈述：basisRepr_apply [Fintype ι] {v : Basis ι R M} (Q : QuadraticMap R M N) (w 
+: ι -> R) : Q.basisRepr v w = Q (∑ i : ι, w i • v i)
+参数：Q : QuadraticMap R M N；w : ι -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.equivFun_symm_apply`：∀ {ι : Type u_1} {R : Type u_3} {M : T
+ype u_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Modul
+e R M] [inst_3 : Finty…
 -/
-theorem basisRepr_apply [Fintype ι] {v : Basis ι R M} (Q : QuadraticMap R M N) (w : ι -> R) :
+theorem basisRepr_apply [Fintype ι] {v : Basis ι R M} (Q : QuadraticMap R M N) (w : ι → R) :
     Q.basisRepr v w = Q (∑ i : ι, w i • v i) := by
   rw [← v.equivFun_symm_apply]
   rfl
@@ -4633,92 +4328,152 @@ section
 
 variable (R)
 
-/--
-Definition of `weightedSumSquares` / `weightedSumSquares` 的定义
+/-- The weighted sum of squares with respect to some weight as a quadratic form.
 
-English:
-definition weightedSumSquares
-  signature: [Monoid S] [DistribMulAction S R] [SMulCommClass S R R] (w : ι -> S)
-  body: ∑ i : ι, w i • (proj (R := R) (n := ι) i i)
+The weights are applied using `•`; typically this definition is used either with `S = R` or
+`[Algebra S R]`, although this is stated more generally. -/
+/-
+**QuadraticMap.weightedSumSquares** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticMap`。
+形式化陈述：weightedSumSquares [Monoid S] [DistribMulAction S R] [SMulCommClass S R R]
+ (w : ι -> S) : QuadraticMap R (ι -> R) R
+参数：w : ι -> S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 weightedSumSquares
-  签名: [幺半群 S] [分配乘法作用 S R] [标量交换类 S R R] (w : ι -> S)
-  定义体: ∑ i : ι, w i • (proj (R := R) (n := ι) i i)
+--- 原说明 ---
+The weighted sum of squares with respect to some weight as a quadratic form.
+
+The weights are applied using `•`; typically this definition is used either with
+ `S = R` or
+`[Algebra S R]`, although this is stated more generally.
 -/
-def weightedSumSquares [Monoid S] [DistribMulAction S R] [SMulCommClass S R R] (w : ι -> S) :
-    QuadraticMap R (ι -> R) R :=
+def weightedSumSquares [Monoid S] [DistribMulAction S R] [SMulCommClass S R R] (w : ι → S) :
+    QuadraticMap R (ι → R) R :=
   ∑ i : ι, w i • (proj (R := R) (n := ι) i i)
 
 end
 
 @[simp]
-/--
-theorem `weightedSumSquares_apply` / 定理 `weightedSumSquares_apply`
-
-English:
-theorem weightedSumSquares_apply
-  statement: [Monoid S] [DistribMulAction S R] [SMulCommClass S R R]
-  proof: sum_apply _ _ _
-
-中文:
-定理 weightedSumSquares_apply
-  结论: [幺半群 S] [分配乘法作用 S R] [标量交换类 S R R]
-  证明: sum_apply _ _ _
-
-Depends on / 依赖: sum_apply
+/-
+**QuadraticMap.weightedSumSquares_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`
+。
+形式化陈述：weightedSumSquares_apply [Monoid S] [DistribMulAction S R] [SMulCommClass 
+S R R] (w : ι -> S) (v : ι -> R) : weightedSumSquares R w v = ∑ i : ι, w i • (v 
+i * v i)
+参数：w : ι -> S；v : ι -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sum_apply`：∀ {F : Type u_8} {α : Type u_9} {β : Type u_10} {ι : Type u_1
+1} [inst : FunLike F α β] [inst_1 : AddCommMonoid β]   [inst_2 : AddCommMonoid …
+· 使用定理 `QuadraticMap.instIsZeroApply`：∀ {R : Type u_3} {M : Type u_4} {N : Type 
+u_5} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Modul
+e R M] [inst_3 : A…
+· 使用定理 `QuadraticMap.instIsAddApply`：∀ {R : Type u_3} {M : Type u_4} {N : Type u
+_5} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module
+ R M] [inst_3 : A…
 -/
 theorem weightedSumSquares_apply [Monoid S] [DistribMulAction S R] [SMulCommClass S R R]
-    (w : ι -> S) (v : ι -> R) :
+    (w : ι → S) (v : ι → R) :
     weightedSumSquares R w v = ∑ i : ι, w i • (v i * v i) :=
   sum_apply _ _ _
 
-/--
-theorem `basisRepr_eq_of_iIsOrtho` / 定理 `basisRepr_eq_of_iIsOrtho`
+/-- On an orthogonal basis, the basis representation of `Q` is just a sum of squares. -/
+/-
+**QuadraticMap.basisRepr_eq_of_iIsOrtho** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticMap`
+。
+形式化陈述：basisRepr_eq_of_iIsOrtho {R M} [CommRing R] [AddCommGroup M] [Module R M] 
+[Invertible (2 : R)] (Q : QuadraticForm R M) (v : Basis ι R M) (hv₂ : (associate
+d (R
+参数：2 : R；Q : QuadraticForm R M；v : Basis ι R M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用定理 `QuadraticMap.ext`：ext (H : forall x : M, Q x = Q' x) : Q = Q'
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticMap.basisRepr_apply`：basisRepr_apply [Fintype ι] {v : Basis ι R
+ M} (Q : QuadraticMap R M N) (w : ι -> R) : Q.basisRepr v w = Q (∑ i : ι, w i • 
+v i)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuadraticMap.associated_eq_self_apply`：associated_eq_self_apply (x : M) 
+: associatedHom S Q x x = Q x
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `QuadraticMap.weightedSumSquares_apply`：weightedSumSquares_apply [Monoid 
+S] [DistribMulAction S R] [SMulCommClass S R R] (w : ι -> S) (v : ι -> R) : weig
+htedSumSquares R w v = ∑ i …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `LinearMap.map_sum₂`：map_sum₂ {ι : Type*} (f : M ->ₛₗ[ρ₁₂] N ->ₛₗ[σ₁₂] P)
+ (t : Finset ι) (x : ι -> M) (y) : f (∑ i in t, x i) y = ∑ i in t, f (x i) y
+· 使用定理 `Finset.sum_eq_single_of_mem`：∀ {ι : Type u_1} {M : Type u_4} [inst : Add
+CommMonoid M] {s : Finset ι} {f : ι → M},   ∀ a ∈ s, (∀ b ∈ s, b ≠ a → f b = 0) 
+→ ∑ x ∈ s, f x = …
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `LinearMap.map_smul₂`：map_smul₂ (f : M₂ ->ₗ[R] N₂ ->ₛₗ[σ₁₂] P₂) (r : R) (
+x y) : f (r • x) y = r • f x y
+· 使用定理 `Mathlib.Tactic.Module.NF.eq_of_eval_eq_eval`：eq_of_eval_eq_eval {R₁ R₂ :
+ Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁] [Module R₁ M] 
+[Semiring R₂] [Module R₂ M] {l₁ l…
+· 使用定理 `Mathlib.Tactic.Module.NF.smul_eq_eval`：smul_eq_eval {R₀ : Type*} [AddCom
+mMonoid M] [Semiring R] [Module R M] [Semiring R₀] [Module R₀ M] [Semiring S] [M
+odule S M] {l : NF R M} {l₀…
+· 使用定理 `Mathlib.Tactic.Module.NF.zero_eq_eval`：zero_eq_eval [AddMonoid M] : (0:M
+) = NF.eval (R
+· 使用定理 `Mathlib.Tactic.Module.NF.eval_algebraMap`：eval_algebraMap [CommSemiring 
+S] [Semiring R] [Algebra S R] [AddMonoid M] [SMul S M] [MulAction R M] [IsScalar
+Tower S R M] (l : NF S M) : (l…
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `QuadraticMap.associated_apply`：associated_apply (x y : M) : associatedHo
+m S Q x y = ⅟(2 : Module.End R N) • (Q (x + y) - Q x - Q y)
+· 使用定理 `Module.End.smul_def`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (f : Module.End R M) 
+(a : M), …
+（共 76 条，此处仅展示前 30 条）
 
-English:
-theorem basisRepr_eq_of_iIsOrtho
-  statement: {R M} [CommRing R] [AddCommGroup M] [Module R M]
-  proof: by
-  ext w
-  rw [basisRepr_apply]; rw [← @associated_eq_self_apply R]; rw [map_sum]; rw [weightedSumSquares_apply]
-  refine sum_congr rfl fun j hj => ?_
-  rw [← @associated_eq_self_apply R]; rw [LinearMap.map_sum₂]; rw [sum_eq_single_of_mem j hj]
-  · rw [map_smul, LinearMap.map_smul₂, smul_eq_mul, associated_apply, smul_eq_mul,
-      smul_eq_mul, Module.End.smul_def, half_moduleEnd_apply_eq_half_smul]
-    ring_nf
-  · intro i _ hij
-    rw [map_smul]; rw [LinearMap.map_smul₂]; rw [hv₂ hij]
-    module
-
-中文:
-定理 basisRepr_eq_of_iIsOrtho
-  结论: {R M} [交换环 R] [加法交换群 M] [模 R M]
-  证明: by
-  ext w
-  rw [basisRepr_apply]; rw [← @associated_eq_self_apply R]; rw [map_sum]; rw [weightedSumSquares_apply]
-  refine sum_congr rfl fun j hj => ?_
-  rw [← @associated_eq_self_apply R]; rw [LinearMap.map_sum₂]; rw [sum_eq_single_of_mem j hj]
-  · rw [map_smul, LinearMap.map_smul₂, smul_eq_mul, associated_apply, smul_eq_mul,
-      smul_eq_mul, Module.End.smul_def, half_moduleEnd_apply_eq_half_smul]
-    ring_nf
-  · intro i _ hij
-    rw [map_smul]; rw [LinearMap.map_smul₂]; rw [hv₂ hij]
-    module
+--- 原说明 ---
+On an orthogonal basis, the basis representation of `Q` is just a sum of squares
+.
 -/
 theorem basisRepr_eq_of_iIsOrtho {R M} [CommRing R] [AddCommGroup M] [Module R M]
     [Invertible (2 : R)] (Q : QuadraticForm R M) (v : Basis ι R M)
     (hv₂ : (associated (R := R) Q).IsOrthoᵢ v) :
     Q.basisRepr v = weightedSumSquares _ fun i => Q (v i) := by
   ext w
-  rw [basisRepr_apply]; rw [← @associated_eq_self_apply R]; rw [map_sum]; rw [weightedSumSquares_apply]
+  rw [basisRepr_apply, ← @associated_eq_self_apply R, map_sum, weightedSumSquares_apply]
   refine sum_congr rfl fun j hj => ?_
-  rw [← @associated_eq_self_apply R]; rw [LinearMap.map_sum₂]; rw [sum_eq_single_of_mem j hj]
+  rw [← @associated_eq_self_apply R, LinearMap.map_sum₂, sum_eq_single_of_mem j hj]
   · rw [map_smul, LinearMap.map_smul₂, smul_eq_mul, associated_apply, smul_eq_mul,
       smul_eq_mul, Module.End.smul_def, half_moduleEnd_apply_eq_half_smul]
     ring_nf
   · intro i _ hij
-    rw [map_smul]; rw [LinearMap.map_smul₂]; rw [hv₂ hij]
+    rw [map_smul, LinearMap.map_smul₂, hv₂ hij]
     module
 
 end QuadraticMap
+

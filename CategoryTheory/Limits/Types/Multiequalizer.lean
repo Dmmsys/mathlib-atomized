@@ -31,22 +31,17 @@ variable {J : MulticospanShape} (I : MulticospanIndex J (Type u))
 /-- Given `I : MulticospanIndex J (Type u)`, this is a type which identifies
 to the sections of the functor `I.multicospan`. -/
 @[ext]
-/--
-Definition of `MulticospanIndex.sections` / `MulticospanIndex.sections` 的定义
+/-
+**CategoryTheory.Limits.MulticospanIndex.sections** 是 Mathlib 中的一个归纳类型，位于命名空间 `C
+ategoryTheory.Limits.MulticospanIndex`。
+形式化陈述：{J : CategoryTheory.Limits.MulticospanShape} → CategoryTheory.Limits.Multi
+cospanIndex J (Type u) → Type (max u u_1)
+参数：Type u；max u u_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MulticospanIndex.sections
-  parameters: where
-  axioms and operations (2):
-    - val((i : J.L)) : I.left i
-    - property((r : J.R)) : I.fst r (val _) = I.snd r (val _)
-
-中文:
-结构 MulticospanIndex.sections
-  参数: where
-  公理与运算 (2 个):
-    - val((i : J.L)) : I.left i
-    - property((r : J.R)) : I.fst r (val _) = I.snd r (val _)
+--- 原说明 ---
+Given `I : MulticospanIndex J (Type u)`, this is a type which identifies
+to the sections of the functor `I.multicospan`.
 -/
 structure MulticospanIndex.sections where
   /-- The data of an element in `I.left i` for each `i : J.L`. -/
@@ -56,53 +51,23 @@ structure MulticospanIndex.sections where
 /-- The bijection `I.sections ≃ I.multicospan.sections` when `I : MulticospanIndex (Type u)`
 is a multiequalizer diagram in the category of types. -/
 @[simps]
-/--
-Definition of `MulticospanIndex.sectionsEquiv` / `MulticospanIndex.sectionsEquiv` 的定义
+/-
+**CategoryTheory.Limits.MulticospanIndex.sectionsEquiv** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Limits.MulticospanIndex`。
+形式化陈述：{J : CategoryTheory.Limits.MulticospanShape} →   (I : CategoryTheory.Limit
+s.MulticospanIndex J (Type u)) → I.sections ≃ ↑I.multicospan.sections
+参数：I : CategoryTheory.Limits.MulticospanIndex J (Type u)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulticospanIndex.sectionsEquiv
-  signature: :
-  body: { val := fun i => match i with
-        | .left i => s.val i
-        | .right j => I.fst j (s.val _)
-      property := by
-        rintro _ _ (_ | _ | r)
-        · rfl
-        · rfl
-        · exact (s.property r).symm }
-  invFun s :=
-    { val := fun i => s.val (.left i)
-      property := fun r => (s.property (.fst r)).trans (s.property (.snd r)).symm }
-  right_inv s := by
-    ext (_ | r)
-    · rfl
-    · exact s.property (.fst r)
-
-中文:
-定义 MulticospanIndex.sectionsEquiv
-  签名: :
-  定义体: { val := fun i => match i with
-        | .left i => s.val i
-        | .right j => I.fst j (s.val _)
-      property := by
-        rintro _ _ (_ | _ | r)
-        · rfl
-        · rfl
-        · exact (s.property r).symm }
-  invFun s :=
-    { val := fun i => s.val (.left i)
-      property := fun r => (s.property (.fst r)).trans (s.property (.snd r)).symm }
-  right_inv s := by
-    ext (_ | r)
-    · rfl
-    · exact s.property (.fst r)
-
-Depends on / 依赖: I.fst, invFun, property, right_inv, s.property, s.val
+--- 原说明 ---
+The bijection `I.sections ≃ I.multicospan.sections` when `I : MulticospanIndex (
+Type u)`
+is a multiequalizer diagram in the category of types.
 -/
 def MulticospanIndex.sectionsEquiv :
     I.sections ≃ I.multicospan.sections where
   toFun s :=
-    { val := fun i => match i with
+    { val := fun i ↦ match i with
         | .left i => s.val i
         | .right j => I.fst j (s.val _)
       property := by
@@ -111,8 +76,8 @@ def MulticospanIndex.sectionsEquiv :
         · rfl
         · exact (s.property r).symm }
   invFun s :=
-    { val := fun i => s.val (.left i)
-      property := fun r => (s.property (.fst r)).trans (s.property (.snd r)).symm }
+    { val := fun i ↦ s.val (.left i)
+      property := fun r ↦ (s.property (.fst r)).trans (s.property (.snd r)).symm }
   right_inv s := by
     ext (_ | r)
     · rfl
@@ -126,126 +91,118 @@ variable (c : Multifork I)
 /-- Given a multiequalizer diagram `I : MulticospanIndex (Type u)` in the category of
 types and `c` a multifork for `I`, this is the canonical map `c.pt → I.sections`. -/
 @[simps]
-/--
-Definition of `toSections` / `toSections` 的定义
+/-
+**CategoryTheory.Limits.Multifork.toSections** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.Multifork`。
+形式化陈述：toSections (x : c.pt) : I.sections where val i
+参数：x : c.pt。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSections
-  signature: (x : c.pt)
-  body: c.ι i x
-  property r := ConcreteCategory.congr_hom (c.condition r) x
-
-中文:
-定义 toSections
-  签名: (x : c.pt)
-  定义体: c.ι i x
-  property r := ConcreteCategory.congr_hom (c.condition r) x
+--- 原说明 ---
+Given a multiequalizer diagram `I : MulticospanIndex (Type u)` in the category o
+f
+types and `c` a multifork for `I`, this is the canonical map `c.pt → I.sections`
+.
 -/
 def toSections (x : c.pt) : I.sections where
   val i := c.ι i x
   property r := ConcreteCategory.congr_hom (c.condition r) x
-
-/--
-lemma `toSections_fac` / 引理 `toSections_fac`
-
-English:
-lemma toSections_fac
-  statement: I.sectionsEquiv.symm ∘ Types.sectionOfCone c = c.toSections
-  proof: rfl
-
-中文:
-引理 toSections_fac
-  结论: I.sectionsEquiv.symm ∘ Types.sectionOfCone c = c.toSections
-  证明: rfl
+/-
+**CategoryTheory.Limits.Multifork.toSections_fac** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Limits.Multifork`。
+形式化陈述：toSections_fac : I.sectionsEquiv.symm ∘ Types.sectionOfCone c = c.toSectio
+ns
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma toSections_fac : I.sectionsEquiv.symm ∘ Types.sectionOfCone c = c.toSections := rfl
 
-/--
-lemma `isLimit_types_iff` / 引理 `isLimit_types_iff`
+/-- A multifork `c : Multifork I` in the category of types is limit iff the
+map `c.toSections : c.pt → I.sections` is a bijection. -/
+/-
+**CategoryTheory.Limits.Multifork.isLimit_types_iff** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Limits.Multifork`。
+形式化陈述：isLimit_types_iff : Nonempty (IsLimit c) ↔ Function.Bijective c.toSections
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Types.isLimit_iff_bijective_sectionOfCone`：isLimit
+_iff_bijective_sectionOfCone (c : Cone F) : Nonempty (IsLimit c) ↔ (Types.sectio
+nOfCone c).Bijective
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Limits.Multifork.toSections_fac`：toSections_fac : I.secti
+onsEquiv.symm ∘ Types.sectionOfCone c = c.toSections
+· 使用定理 `EquivLike.comp_bijective`：comp_bijective (f : α -> β) (e : F) : Function
+.Bijective (e ∘ f) ↔ Function.Bijective f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma isLimit_types_iff
-  statement: Nonempty (IsLimit c) ↔ Function.Bijective c.toSections
-  proof: by
-  rw [Types.isLimit_iff_bijective_sectionOfCone]; rw [← toSections_fac]; rw [EquivLike.comp_bijective]
-
-中文:
-引理 isLimit_types_iff
-  结论: 非空 (是极限 c) ↔ 函数.双射 c.toSections
-  证明: by
-  rw [Types.isLimit_iff_bijective_sectionOfCone]; rw [← toSections_fac]; rw [EquivLike.comp_bijective]
-
-Depends on / 依赖: EquivLike, EquivLike.comp_bijective, Types.isLimit_iff_bijective_sectionOfCone, comp_bijective, isLimit_iff_bijective_sectionOfCone, toSections_fac
+--- 原说明 ---
+A multifork `c : Multifork I` in the category of types is limit iff the
+map `c.toSections : c.pt → I.sections` is a bijection.
 -/
 lemma isLimit_types_iff : Nonempty (IsLimit c) ↔ Function.Bijective c.toSections := by
-  rw [Types.isLimit_iff_bijective_sectionOfCone]; rw [← toSections_fac]; rw [EquivLike.comp_bijective]
+  rw [Types.isLimit_iff_bijective_sectionOfCone, ← toSections_fac, EquivLike.comp_bijective]
 
 namespace IsLimit
 
 variable {c} (hc : IsLimit c)
 
-/--
-Definition of `sectionsEquiv` / `sectionsEquiv` 的定义
+/-- The bijection `I.sections ≃ c.pt` when `c : Multifork I` is a limit multifork
+in the category of types. -/
+/-
+**CategoryTheory.Limits.Multifork.IsLimit.sectionsEquiv** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Limits.Multifork.IsLimit`。
+形式化陈述：sectionsEquiv : I.sections ≃ c.pt
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sectionsEquiv
-  signature: : I.sections ≃ c.pt
-  body: (Equiv.ofBijective _ (c.isLimit_types_iff.1 ⟨hc⟩)).symm
-
-@[simp]
-
-中文:
-定义 sectionsEquiv
-  签名: : I.sections ≃ c.pt
-  定义体: (Equiv.ofBijective _ (c.isLimit_types_iff.1 ⟨hc⟩)).symm
-
-@[simp]
-
-Depends on / 依赖: Equiv.ofBijective, c.isLimit_types_iff, isLimit_types_iff, ofBijective
+--- 原说明 ---
+The bijection `I.sections ≃ c.pt` when `c : Multifork I` is a limit multifork
+in the category of types.
 -/
 noncomputable def sectionsEquiv : I.sections ≃ c.pt :=
   (Equiv.ofBijective _ (c.isLimit_types_iff.1 ⟨hc⟩)).symm
 
 @[simp]
-/--
-lemma `sectionsEquiv_symm_apply_val` / 引理 `sectionsEquiv_symm_apply_val`
-
-English:
-lemma sectionsEquiv_symm_apply_val
-  given: (x : c.pt) (i : J.L)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 sectionsEquiv_symm_apply_val
-  条件: (x : c.pt) (i : J.L)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.Multifork.IsLimit.sectionsEquiv_symm_apply_val** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.Limits.Multifork.IsLimit`。
+形式化陈述：sectionsEquiv_symm_apply_val (x : c.pt) (i : J.L) : ((sectionsEquiv hc).sy
+mm x).val i = c.ι i x
+参数：x : c.pt；i : J.L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma sectionsEquiv_symm_apply_val (x : c.pt) (i : J.L) :
     ((sectionsEquiv hc).symm x).val i = c.ι i x := rfl
 
 @[simp]
-/--
-lemma `sectionsEquiv_apply_val` / 引理 `sectionsEquiv_apply_val`
-
-English:
-lemma sectionsEquiv_apply_val
-  given: (s : I.sections) (i : J.L)
-  proof: by
-  obtain ⟨x, rfl⟩ := (sectionsEquiv hc).symm.surjective s
-  simp
-
-中文:
-引理 sectionsEquiv_apply_val
-  条件: (s : I.sections) (i : J.L)
-  证明: by
-  obtain ⟨x, rfl⟩ := (sectionsEquiv hc).symm.surjective s
-  simp
-
-Depends on / 依赖: sectionsEquiv, surjective, symm.surjective
+/-
+**CategoryTheory.Limits.Multifork.IsLimit.sectionsEquiv_apply_val** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Limits.Multifork.IsLimit`。
+形式化陈述：sectionsEquiv_apply_val (s : I.sections) (i : J.L) : c.ι i (sectionsEquiv 
+hc s) = s.val i
+参数：s : I.sections；i : J.L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sectionsEquiv_apply_val (s : I.sections) (i : J.L) :
     c.ι i (sectionsEquiv hc s) = s.val i := by
@@ -257,3 +214,4 @@ end IsLimit
 end Multifork
 
 end CategoryTheory.Limits
+

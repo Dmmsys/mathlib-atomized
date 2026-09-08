@@ -48,177 +48,117 @@ namespace Monoid
 
 open CoprodI Subgroup Coprod Function List
 
-variable {ι : Type*} {G : ι -> Type*} {H : Type*} {K : Type*} [Monoid K]
+variable {ι : Type*} {G : ι → Type*} {H : Type*} {K : Type*} [Monoid K]
 
-/--
-Definition of `PushoutI.con` / `PushoutI.con` 的定义
+/-- The relation we quotient by to form the pushout -/
+/-
+**Monoid.PushoutI.con** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：{ι : Type u_1} →   {G : ι → Type u_2} →     {H : Type u_3} →       [inst :
+ (i : ι) → Monoid (G i)] →         [inst_1 : Monoid H] → ((i : ι) → H →* G i) → 
+Con (Monoid.Coprod (Monoid.CoprodI G) H)
+参数：i : ι；G i；(i : ι) → H →* G i；Monoid.Coprod (Monoid.CoprodI G) H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PushoutI.con
-  signature: [forall i, Monoid (G i)] [Monoid H] (φ : forall i, H ->* G i)
-  body: conGen (fun x y : Coprod (CoprodI G) H =>
-    exists i x', x = inl (of (φ i x')) ∧ y = inr x')
-
-中文:
-定义 PushoutI.con
-  签名: [对任意 i, 幺半群 (G i)] [幺半群 H] (φ : 对任意 i, H ->* G i)
-  定义体: conGen (fun x y : Coprod (CoprodI G) H =>
-    exists i x', x = inl (of (φ i x')) ∧ y = inr x')
-
-Depends on / 依赖: Coprod, CoprodI, conGen
+--- 原说明 ---
+The relation we quotient by to form the pushout
 -/
-def PushoutI.con [forall i, Monoid (G i)] [Monoid H] (φ : forall i, H ->* G i) :
+def PushoutI.con [∀ i, Monoid (G i)] [Monoid H] (φ : ∀ i, H →* G i) :
     Con (Coprod (CoprodI G) H) :=
   conGen (fun x y : Coprod (CoprodI G) H =>
-    exists i x', x = inl (of (φ i x')) ∧ y = inr x')
+    ∃ i x', x = inl (of (φ i x')) ∧ y = inr x')
 
-/--
-Definition of `PushoutI` / `PushoutI` 的定义
+/-- The indexed pushout of monoids, which is the pushout in the category of monoids,
+or the category of groups. -/
+/-
+**Monoid.PushoutI** 是 Mathlib 中的一个定义，位于命名空间 `Monoid`。
+形式化陈述：PushoutI [forall i, Monoid (G i)] [Monoid H] (φ : forall i, H ->* G i) : T
+ype _
+参数：G i；φ : forall i, H ->* G i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PushoutI
-  signature: [forall i, Monoid (G i)] [Monoid H] (φ : forall i, H ->* G i)
-  body: (PushoutI.con φ).Quotient
-
-中文:
-定义 PushoutI
-  签名: [对任意 i, 幺半群 (G i)] [幺半群 H] (φ : 对任意 i, H ->* G i)
-  定义体: (PushoutI.con φ).Quotient
-
-Depends on / 依赖: PushoutI, PushoutI.con, Quotient
+--- 原说明 ---
+The indexed pushout of monoids, which is the pushout in the category of monoids,
+or the category of groups.
 -/
-def PushoutI [forall i, Monoid (G i)] [Monoid H] (φ : forall i, H ->* G i) : Type _ :=
+def PushoutI [∀ i, Monoid (G i)] [Monoid H] (φ : ∀ i, H →* G i) : Type _ :=
   (PushoutI.con φ).Quotient
 
 namespace PushoutI
 
 section Monoid
 
-variable [forall i, Monoid (G i)] [Monoid H] {φ : forall i, H ->* G i}
+variable [∀ i, Monoid (G i)] [Monoid H] {φ : ∀ i, H →* G i}
 
-/--
-Instance `mul` / 实例 `mul`
-
-English:
-instance mul
-  signature: : Mul (PushoutI φ)
-  body: by
-  delta PushoutI; infer_instance
-
-中文:
-实例 mul
-  签名: : 乘法 (PushoutI φ)
-  定义体: by
-  delta PushoutI; infer_instance
+/-
+**Monoid.PushoutI.mul** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：{ι : Type u_1} →   {G : ι → Type u_2} →     {H : Type u_3} →       [inst :
+ (i : ι) → Monoid (G i)] → [inst_1 : Monoid H] → {φ : (i : ι) → H →* G i} → Mul 
+(Monoid.PushoutI φ)
+参数：i : ι；G i；i : ι；Monoid.PushoutI φ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance mul : Mul (PushoutI φ) := by
   delta PushoutI; infer_instance
-
-/--
-Instance `one` / 实例 `one`
-
-English:
-instance one
-  signature: : One (PushoutI φ)
-  body: by
-  delta PushoutI; infer_instance
-
-中文:
-实例 one
-  签名: : 幺 (PushoutI φ)
-  定义体: by
-  delta PushoutI; infer_instance
+/-
+**Monoid.PushoutI.one** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：{ι : Type u_1} →   {G : ι → Type u_2} →     {H : Type u_3} →       [inst :
+ (i : ι) → Monoid (G i)] → [inst_1 : Monoid H] → {φ : (i : ι) → H →* G i} → One 
+(Monoid.PushoutI φ)
+参数：i : ι；G i；i : ι；Monoid.PushoutI φ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance one : One (PushoutI φ) := by
   delta PushoutI; infer_instance
-
-/--
-Instance `monoid` / 实例 `monoid`
-
-English:
-instance monoid
-  signature: : Monoid (PushoutI φ)
-  body: { Con.monoid _ with
-    toMul := PushoutI.mul
-    toOne := PushoutI.one }
-
-中文:
-实例 monoid
-  签名: : 幺半群 (PushoutI φ)
-  定义体: { Con.monoid _ with
-    toMul := PushoutI.mul
-    toOne := PushoutI.one }
-
-Depends on / 依赖: Con.monoid, PushoutI, PushoutI.mul, PushoutI.one, monoid
+/-
+**Monoid.PushoutI.monoid** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：monoid : Monoid (PushoutI φ)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance monoid : Monoid (PushoutI φ) :=
   { Con.monoid _ with
     toMul := PushoutI.mul
     toOne := PushoutI.one }
 
-/--
-Definition of `of` / `of` 的定义
+/-- The map from each indexing group into the pushout -/
+/-
+**Monoid.PushoutI.of** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：of (i : ι) : G i ->* PushoutI φ
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: (i : ι)
-  body: (Con.mk' _).comp inl.comp CoprodI.of
-
-中文:
-定义 of
-  签名: (i : ι)
-  定义体: (Con.mk' _).comp inl.comp CoprodI.of
-
-Depends on / 依赖: Con.mk, CoprodI, CoprodI.of, inl.comp
+--- 原说明 ---
+The map from each indexing group into the pushout
 -/
-def of (i : ι) : G i ->* PushoutI φ :=
-(Con.mk' _).comp inl.comp CoprodI.of
+def of (i : ι) : G i →* PushoutI φ :=
+  (Con.mk' _).comp <| inl.comp CoprodI.of
 
 variable (φ) in
-/--
-Definition of `base` / `base` 的定义
+/-- The map from the base monoid into the pushout -/
+/-
+**Monoid.PushoutI.base** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：base : H ->* PushoutI φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition base
-  signature: : H ->* PushoutI φ
-  body: (Con.mk' _).comp inr
-
-中文:
-定义 base
-  签名: : H ->* PushoutI φ
-  定义体: (Con.mk' _).comp inr
-
-Depends on / 依赖: Con.mk
+--- 原说明 ---
+The map from the base monoid into the pushout
 -/
-def base : H ->* PushoutI φ :=
+def base : H →* PushoutI φ :=
   (Con.mk' _).comp inr
-
-/--
-theorem `of_comp_eq_base` / 定理 `of_comp_eq_base`
-
-English:
-theorem of_comp_eq_base
-  given: (i : ι)
-  statement: (of i).comp (φ i) = (base φ)
-  proof: by
-  ext x
-  apply (Con.eq _).2
-  refine ConGen.Rel.of _ _ ?_
-  simp only [MonoidHom.comp_apply]
-  exact ⟨_, _, rfl, rfl⟩
-
-中文:
-定理 of_comp_eq_base
-  条件: (i : ι)
-  结论: (of i).comp (φ i) = (base φ)
-  证明: by
-  ext x
-  apply (Con.eq _).2
-  refine ConGen.Rel.of _ _ ?_
-  simp only [MonoidHom.comp_apply]
-  exact ⟨_, _, rfl, rfl⟩
-
-Depends on / 依赖: Con.eq, ConGen, ConGen.Rel.of, MonoidHom, MonoidHom.comp_apply, comp_apply
+/-
+**Monoid.PushoutI.of_comp_eq_base** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：of_comp_eq_base (i : ι) : (of i).comp (φ i) = (base φ)
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Con.eq`：∀ {M : Type u_1} [inst : Mul M] (c : Con M) {a b : M}, ↑a = ↑b ↔
+ c a b
 -/
 theorem of_comp_eq_base (i : ι) : (of i).comp (φ i) = (base φ) := by
   ext x
@@ -228,55 +168,42 @@ theorem of_comp_eq_base (i : ι) : (of i).comp (φ i) = (base φ) := by
   exact ⟨_, _, rfl, rfl⟩
 
 variable (φ) in
-/--
-theorem `of_apply_eq_base` / 定理 `of_apply_eq_base`
-
-English:
-theorem of_apply_eq_base
-  given: (i : ι) (x : H)
-  statement: of i (φ i x) = base φ x
-  proof: by
-  rw [← MonoidHom.comp_apply]; rw [of_comp_eq_base]
-
-中文:
-定理 of_apply_eq_base
-  条件: (i : ι) (x : H)
-  结论: of i (φ i x) = base φ x
-  证明: by
-  rw [← MonoidHom.comp_apply]; rw [of_comp_eq_base]
-
-Depends on / 依赖: MonoidHom, MonoidHom.comp_apply, comp_apply, of_comp_eq_base
+/-
+**Monoid.PushoutI.of_apply_eq_base** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：of_apply_eq_base (i : ι) (x : H) : of i (φ i x) = base φ x
+参数：i : ι；x : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.comp_apply`：MonoidHom.comp_apply [MulOne M] [MulOne N] [MulOne
+ P] (g : N ->* P) (f : M ->* N) (x : M) : g.comp f x = g (f x)
+· 使用定理 `Monoid.PushoutI.of_comp_eq_base`：of_comp_eq_base (i : ι) : (of i).comp (
+φ i) = (base φ)
 -/
 theorem of_apply_eq_base (i : ι) (x : H) : of i (φ i x) = base φ x := by
-  rw [← MonoidHom.comp_apply]; rw [of_comp_eq_base]
+  rw [← MonoidHom.comp_apply, of_comp_eq_base]
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- Define a homomorphism out of the pushout of monoids by defining it on each object in the
+diagram -/
+/-
+**Monoid.PushoutI.lift** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：lift (f : forall i, G i ->* K) (k : H ->* K) (hf : forall i, (f i).comp (φ
+ i) = k) : PushoutI φ ->* K
+参数：f : forall i, G i ->* K；k : H ->* K；hf : forall i, (f i).comp (φ i) = k。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (f : forall i, G i ->* K) (k : H ->* K)
-  body: Con.lift _ (Coprod.lift (CoprodI.lift f) k) by
-    apply Con.conGen_le.2 fun x y => ?_
-    rintro ⟨i, x', rfl, rfl⟩
-    simp only [DFunLike.ext_iff, MonoidHom.coe_comp, comp_apply] at hf
-    simp [hf]
-
-中文:
-定义 lift
-  签名: (f : 对任意 i, G i ->* K) (k : H ->* K)
-  定义体: Con.lift _ (Coprod.lift (CoprodI.lift f) k) by
-    apply Con.conGen_le.2 fun x y => ?_
-    rintro ⟨i, x', rfl, rfl⟩
-    simp only [DFunLike.ext_iff, MonoidHom.coe_comp, comp_apply] at hf
-    simp [hf]
-
-Depends on / 依赖: Con.conGen_le, Con.lift, Coprod, Coprod.lift, CoprodI, CoprodI.lift, DFunLike, DFunLike.ext_iff, MonoidHom, MonoidHom.coe_comp, coe_comp, comp_apply, conGen_le, ext_iff
+--- 原说明 ---
+Define a homomorphism out of the pushout of monoids by defining it on each objec
+t in the
+diagram
 -/
-def lift (f : forall i, G i ->* K) (k : H ->* K)
-    (hf : forall i, (f i).comp (φ i) = k) :
-    PushoutI φ ->* K :=
-Con.lift _ (Coprod.lift (CoprodI.lift f) k) by
+def lift (f : ∀ i, G i →* K) (k : H →* K)
+    (hf : ∀ i, (f i).comp (φ i) = k) :
+    PushoutI φ →* K :=
+  Con.lift _ (Coprod.lift (CoprodI.lift f) k) <| by
     apply Con.conGen_le.2 fun x y => ?_
     rintro ⟨i, x', rfl, rfl⟩
     simp only [DFunLike.ext_iff, MonoidHom.coe_comp, comp_apply] at hf
@@ -284,29 +211,26 @@ Con.lift _ (Coprod.lift (CoprodI.lift f) k) by
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lift_of` / 定理 `lift_of`
-
-English:
-theorem lift_of
-  statement: (f : forall i, G i ->* K) (k : H ->* K)
-  proof: by
-  delta PushoutI lift of
-  simp only [MonoidHom.coe_comp, Con.coe_mk', comp_apply, Con.lift_coe,
-    lift_apply_inl, CoprodI.lift_of]
-
-中文:
-定理 lift_of
-  结论: (f : 对任意 i, G i ->* K) (k : H ->* K)
-  证明: by
-  delta PushoutI lift of
-  simp only [MonoidHom.coe_comp, Con.coe_mk', comp_apply, Con.lift_coe,
-    lift_apply_inl, CoprodI.lift_of]
-
-Depends on / 依赖: Con.coe_mk, Con.lift_coe, CoprodI, CoprodI.lift_of, MonoidHom, MonoidHom.coe_comp, PushoutI, coe_comp, coe_mk, comp_apply, lift_apply_inl, lift_coe, lift_of
+/-
+**Monoid.PushoutI.lift_of** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：lift_of (f : forall i, G i ->* K) (k : H ->* K) (hf : forall i, (f i).comp
+ (φ i) = k) {i : ι} (g : G i) : (lift f k hf) (of i g : PushoutI φ) = f i g
+参数：f : forall i, G i ->* K；k : H ->* K；hf : forall i, (f i).comp (φ i) = k；g : G
+ i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.CoprodI.lift_of`：lift_of {N} [Monoid N] (fi : forall i, M i ->* N
+) {i} (m : M i) : lift fi (of m) = fi i m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_of (f : forall i, G i ->* K) (k : H ->* K)
-    (hf : forall i, (f i).comp (φ i) = k)
+theorem lift_of (f : ∀ i, G i →* K) (k : H →* K)
+    (hf : ∀ i, (f i).comp (φ i) = k)
     {i : ι} (g : G i) : (lift f k hf) (of i g : PushoutI φ) = f i g := by
   delta PushoutI lift of
   simp only [MonoidHom.coe_comp, Con.coe_mk', comp_apply, Con.lift_coe,
@@ -314,130 +238,103 @@ theorem lift_of (f : forall i, G i ->* K) (k : H ->* K)
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lift_base` / 定理 `lift_base`
-
-English:
-theorem lift_base
-  statement: (f : forall i, G i ->* K) (k : H ->* K)
-  proof: by
-  delta PushoutI lift base
-  simp only [MonoidHom.coe_comp, Con.coe_mk', comp_apply, Con.lift_coe, lift_apply_inr]
-
-中文:
-定理 lift_base
-  结论: (f : 对任意 i, G i ->* K) (k : H ->* K)
-  证明: by
-  delta PushoutI lift base
-  simp only [MonoidHom.coe_comp, Con.coe_mk', comp_apply, Con.lift_coe, lift_apply_inr]
-
-Depends on / 依赖: Con.coe_mk, Con.lift_coe, MonoidHom, MonoidHom.coe_comp, PushoutI, coe_comp, coe_mk, comp_apply, lift_apply_inr, lift_coe
+/-
+**Monoid.PushoutI.lift_base** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：lift_base (f : forall i, G i ->* K) (k : H ->* K) (hf : forall i, (f i).co
+mp (φ i) = k) (g : H) : (lift f k hf) (base φ g : PushoutI φ) = k g
+参数：f : forall i, G i ->* K；k : H ->* K；hf : forall i, (f i).comp (φ i) = k；g : H
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_base (f : forall i, G i ->* K) (k : H ->* K)
-    (hf : forall i, (f i).comp (φ i) = k)
+theorem lift_base (f : ∀ i, G i →* K) (k : H →* K)
+    (hf : ∀ i, (f i).comp (φ i) = k)
     (g : H) : (lift f k hf) (base φ g : PushoutI φ) = k g := by
   delta PushoutI lift base
   simp only [MonoidHom.coe_comp, Con.coe_mk', comp_apply, Con.lift_coe, lift_apply_inr]
 
 -- `ext` attribute should be lower priority than `hom_ext_nonempty`
 @[ext 1199]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  statement: {f g : PushoutI φ ->* K}
-  proof: (MonoidHom.cancel_right Con.mk'_surjective).mp
-    Coprod.hom_ext
-      (CoprodI.ext_hom _ _ h)
-      hbase
-
-@[ext high]
-
-中文:
-定理 hom_ext
-  结论: {f g : PushoutI φ ->* K}
-  证明: (MonoidHom.cancel_right Con.mk'_surjective).mp
-    Coprod.hom_ext
-      (CoprodI.ext_hom _ _ h)
-      hbase
-
-@[ext high]
-
-Depends on / 依赖: Con.mk, Coprod, Coprod.hom_ext, CoprodI, CoprodI.ext_hom, MonoidHom, MonoidHom.cancel_right, _surjective, cancel_right, ext_hom, hom_ext
+/-
+**Monoid.PushoutI.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：hom_ext {f g : PushoutI φ ->* K} (h : forall i, f.comp (of i : G i ->* _) 
+= g.comp (of i : G i ->* _)) (hbase : f.comp (base φ) = g.comp (base φ)) : f = g
+参数：h : forall i, f.comp (of i : G i ->* _) = g.comp (of i : G i ->* _)；hbase : f
+.comp (base φ) = g.comp (base φ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MonoidHom.cancel_right`：MonoidHom.cancel_right [MulOne M] [MulOne N] [Mu
+lOne P] {g₁ g₂ : N ->* P} {f : M ->* N} (hf : Function.Surjective f) : g₁.comp f
+ = g₂.comp f…
+· 使用定理 `Con.mk'_surjective`：∀ {M : Type u_1} [inst : MulOneClass M] {c : Con M},
+ Function.Surjective ⇑c.mk'
+· 使用定理 `Monoid.Coprod.hom_ext`：hom_ext {f g : M ∗ N ->* P} (h₁ : f.comp inl = g.
+comp inl) (h₂ : f.comp inr = g.comp inr) : f = g
+· 使用定理 `Monoid.CoprodI.ext_hom`：ext_hom (f g : CoprodI M ->* N) (h : forall i, f
+.comp (of : M i ->* _) = g.comp of) : f = g
 -/
-theorem hom_ext {f g : PushoutI φ ->* K}
-    (h : forall i, f.comp (of i : G i ->* _) = g.comp (of i : G i ->* _))
+theorem hom_ext {f g : PushoutI φ →* K}
+    (h : ∀ i, f.comp (of i : G i →* _) = g.comp (of i : G i →* _))
     (hbase : f.comp (base φ) = g.comp (base φ)) : f = g :=
-(MonoidHom.cancel_right Con.mk'_surjective).mp
+  (MonoidHom.cancel_right Con.mk'_surjective).mp <|
     Coprod.hom_ext
       (CoprodI.ext_hom _ _ h)
       hbase
 
 @[ext high]
-/--
-theorem `hom_ext_nonempty` / 定理 `hom_ext_nonempty`
-
-English:
-theorem hom_ext_nonempty
-  statement: [hn : Nonempty ι]
-  proof: hom_ext h by
-    cases hn with
-    | intro i =>
-      ext
-      rw [← of_comp_eq_base i]; rw [← MonoidHom.comp_assoc]; rw [h]; rw [MonoidHom.comp_assoc]
-
-中文:
-定理 hom_ext_nonempty
-  结论: [hn : 非空 ι]
-  证明: hom_ext h by
-    cases hn with
-    | intro i =>
-      ext
-      rw [← of_comp_eq_base i]; rw [← MonoidHom.comp_assoc]; rw [h]; rw [MonoidHom.comp_assoc]
-
-Depends on / 依赖: MonoidHom, MonoidHom.comp_assoc, comp_assoc, hom_ext, of_comp_eq_base
+/-
+**Monoid.PushoutI.hom_ext_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：hom_ext_nonempty [hn : Nonempty ι] {f g : PushoutI φ ->* K} (h : forall i,
+ f.comp (of i : G i ->* _) = g.comp (of i : G i ->* _)) : f = g
+参数：h : forall i, f.comp (of i : G i ->* _) = g.comp (of i : G i ->* _)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.hom_ext`：hom_ext {f g : PushoutI φ ->* K} (h : forall i,
+ f.comp (of i : G i ->* _) = g.comp (of i : G i ->* _)) (hbase : f.comp (base φ)
+ = g.comp (ba…
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monoid.PushoutI.of_comp_eq_base`：of_comp_eq_base (i : ι) : (of i).comp (
+φ i) = (base φ)
+· 使用定理 `MonoidHom.comp_assoc`：MonoidHom.comp_assoc {Q : Type*} [MulOne M] [MulOn
+e N] [MulOne P] [MulOne Q] (f : M ->* N) (g : N ->* P) (h : P ->* Q) : (h.comp g
+).comp f =…
 -/
 theorem hom_ext_nonempty [hn : Nonempty ι]
-    {f g : PushoutI φ ->* K}
-    (h : forall i, f.comp (of i : G i ->* _) = g.comp (of i : G i ->* _)) : f = g :=
-hom_ext h by
+    {f g : PushoutI φ →* K}
+    (h : ∀ i, f.comp (of i : G i →* _) = g.comp (of i : G i →* _)) : f = g :=
+  hom_ext h <| by
     cases hn with
     | intro i =>
       ext
-      rw [← of_comp_eq_base i]; rw [← MonoidHom.comp_assoc]; rw [h]; rw [MonoidHom.comp_assoc]
+      rw [← of_comp_eq_base i, ← MonoidHom.comp_assoc, h, MonoidHom.comp_assoc]
 
 /-- The equivalence that is part of the universal property of the pushout. A hom out of
 the pushout is just a morphism out of all groups in the pushout that satisfies a commutativity
 condition. -/
 @[simps]
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
+/-
+**Monoid.PushoutI.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：homEquiv : (PushoutI φ ->* K) ≃ { f : (Π i, G i ->* K) × (H ->* K) // fora
+ll i, (f.1 i).comp (φ i) = f.2 }
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homEquiv
-  signature: :
-  body: { toFun := fun f => ⟨(fun i => f.comp (of i), f.comp (base φ)),
-      fun i => by rw [MonoidHom.comp_assoc, of_comp_eq_base]⟩
-    invFun := fun f => lift f.1.1 f.1.2 f.2,
-    left_inv := fun _ => hom_ext (by simp [DFunLike.ext_iff])
-      (by simp [DFunLike.ext_iff])
-    right_inv := fun ⟨⟨_, _⟩, _⟩ => by simp [DFunLike.ext_iff, funext_iff] }
-
-中文:
-定义 homEquiv
-  签名: :
-  定义体: { toFun := fun f => ⟨(fun i => f.comp (of i), f.comp (base φ)),
-      fun i => by rw [MonoidHom.comp_assoc, of_comp_eq_base]⟩
-    invFun := fun f => lift f.1.1 f.1.2 f.2,
-    left_inv := fun _ => hom_ext (by simp [DFunLike.ext_iff])
-      (by simp [DFunLike.ext_iff])
-    right_inv := fun ⟨⟨_, _⟩, _⟩ => by simp [DFunLike.ext_iff, funext_iff] }
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, MonoidHom, MonoidHom.comp_assoc, comp_assoc, ext_iff, f.comp, funext_iff, hom_ext, invFun, left_inv, of_comp_eq_base, right_inv
+--- 原说明 ---
+The equivalence that is part of the universal property of the pushout. A hom out
+ of
+the pushout is just a morphism out of all groups in the pushout that satisfies a
+ commutativity
+condition.
 -/
 def homEquiv :
-    (PushoutI φ ->* K) ≃ { f : (Π i, G i ->* K) × (H ->* K) // forall i, (f.1 i).comp (φ i) = f.2 } :=
+    (PushoutI φ →* K) ≃ { f : (Π i, G i →* K) × (H →* K) // ∀ i, (f.1 i).comp (φ i) = f.2 } :=
   { toFun := fun f => ⟨(fun i => f.comp (of i), f.comp (base φ)),
       fun i => by rw [MonoidHom.comp_assoc, of_comp_eq_base]⟩
     invFun := fun f => lift f.1.1 f.1.2 f.2,
@@ -445,96 +342,74 @@ def homEquiv :
       (by simp [DFunLike.ext_iff])
     right_inv := fun ⟨⟨_, _⟩, _⟩ => by simp [DFunLike.ext_iff, funext_iff] }
 
-/--
-Definition of `ofCoprodI` / `ofCoprodI` 的定义
+/-- The map from the coproduct into the pushout -/
+/-
+**Monoid.PushoutI.ofCoprodI** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：ofCoprodI : CoprodI G ->* PushoutI φ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCoprodI
-  signature: : CoprodI G ->* PushoutI φ
-  body: CoprodI.lift of
-
-@[simp]
-
-中文:
-定义 ofCoprodI
-  签名: : 余prodI G ->* PushoutI φ
-  定义体: CoprodI.lift of
-
-@[simp]
-
-Depends on / 依赖: CoprodI, CoprodI.lift
+--- 原说明 ---
+The map from the coproduct into the pushout
 -/
-def ofCoprodI : CoprodI G ->* PushoutI φ :=
+def ofCoprodI : CoprodI G →* PushoutI φ :=
   CoprodI.lift of
 
 @[simp]
-/--
-theorem `ofCoprodI_of` / 定理 `ofCoprodI_of`
-
-English:
-theorem ofCoprodI_of
-  given: (i : ι) (g : G i)
-  proof: by
-  simp [ofCoprodI]
-
-中文:
-定理 ofCoprodI_of
-  条件: (i : ι) (g : G i)
-  证明: by
-  simp [ofCoprodI]
-
-Depends on / 依赖: ofCoprodI
+/-
+**Monoid.PushoutI.ofCoprodI_of** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：ofCoprodI_of (i : ι) (g : G i) : (ofCoprodI (CoprodI.of g) : PushoutI φ) =
+ of i g
+参数：i : ι；g : G i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.CoprodI.lift_of`：lift_of {N} [Monoid N] (fi : forall i, M i ->* N
+) {i} (m : M i) : lift fi (of m) = fi i m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofCoprodI_of (i : ι) (g : G i) :
     (ofCoprodI (CoprodI.of g) : PushoutI φ) = of i g := by
   simp [ofCoprodI]
-
-/--
-theorem `induction_on` / 定理 `induction_on`
-
-English:
-theorem induction_on
-  statement: {motive : PushoutI φ -> Prop}
-  proof: by
-  delta PushoutI PushoutI.of PushoutI.base at *
-  induction x using Con.induction_on with
-  | H x =>
-    induction x using Coprod.induction_on with
-    | inl g =>
-      induction g using CoprodI.induction_on with
-      | of i g => exact of i g
-      | mul x y ihx ihy =>
-        rw [map_mul]
-        exact mul _ _ ihx ihy
-      | one => simpa using base 1
-    | inr h => exact base h
-    | mul x y ihx ihy => exact mul _ _ ihx ihy
-
-中文:
-定理 induction_on
-  结论: {motive : PushoutI φ -> 命题}
-  证明: by
-  delta PushoutI PushoutI.of PushoutI.base at *
-  induction x using Con.induction_on with
-  | H x =>
-    induction x using Coprod.induction_on with
-    | inl g =>
-      induction g using CoprodI.induction_on with
-      | of i g => exact of i g
-      | mul x y ihx ihy =>
-        rw [map_mul]
-        exact mul _ _ ihx ihy
-      | one => simpa using base 1
-    | inr h => exact base h
-    | mul x y ihx ihy => exact mul _ _ ihx ihy
-
-Depends on / 依赖: Con.induction_on, Coprod, Coprod.induction_on, CoprodI, CoprodI.induction_on, PushoutI, PushoutI.base, PushoutI.of, induction_on, map_mul
+/-
+**Monoid.PushoutI.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：induction_on {motive : PushoutI φ -> Prop} (x : PushoutI φ) (of : forall (
+i : ι) (g : G i), motive (of i g)) (base : forall h, motive (base φ h)) (mul : f
+orall x y, motive x -> motive y -> motive (x * y)) : motive x
+参数：x : PushoutI φ；of : forall (i : ι) (g : G i), motive (of i g)；base : forall h
+, motive (base φ h)；mul : forall x y, motive x -> motive y -> motive (x * y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Con.induction_on`：∀ {M : Type u_1} [inst : Mul M] {c : Con M} {C : c.Quo
+tient → Prop} (q : c.Quotient), (∀ (x : M), C ↑x) → C q
+· 使用定理 `Monoid.Coprod.induction_on`：induction_on {motive : M ∗ N -> Prop} (m : M
+ ∗ N) (inl : forall m, motive (inl m)) (inr : forall n, motive (inr n)) (mul : f
+orall x y, motiv…
+· 使用定理 `Monoid.CoprodI.induction_on`：induction_on {motive : CoprodI M -> Prop} (
+m : CoprodI M) (one : motive 1) (of : forall (i) (m : M i), motive (of m)) (mul 
+: forall x y, mot…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
-theorem induction_on {motive : PushoutI φ -> Prop}
+theorem induction_on {motive : PushoutI φ → Prop}
     (x : PushoutI φ)
-    (of : forall (i : ι) (g : G i), motive (of i g))
-    (base : forall h, motive (base φ h))
-    (mul : forall x y, motive x -> motive y -> motive (x * y)) : motive x := by
+    (of : ∀ (i : ι) (g : G i), motive (of i g))
+    (base : ∀ h, motive (base φ h))
+    (mul : ∀ x y, motive x → motive y → motive (x * y)) : motive x := by
   delta PushoutI PushoutI.of PushoutI.base at *
   induction x using Con.induction_on with
   | H x =>
@@ -551,24 +426,11 @@ theorem induction_on {motive : PushoutI φ -> Prop}
 
 end Monoid
 
-variable [forall i, Group (G i)] [Group H] {φ : forall i, H ->* G i}
+variable [∀ i, Group (G i)] [Group H] {φ : ∀ i, H →* G i}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Group (PushoutI φ)
-  body: { Con.group (PushoutI.con φ) with
-    toMonoid := PushoutI.monoid }
-
-中文:
-实例 :
-  签名: 群 (PushoutI φ)
-  定义体: { Con.group (PushoutI.con φ) with
-    toMonoid := PushoutI.monoid }
-
-Depends on / 依赖: Con.group, PushoutI, PushoutI.con, PushoutI.monoid, monoid, toMonoid
+/-
+**Monoid.PushoutI.** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.PushoutI`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Group (PushoutI φ) :=
   { Con.group (PushoutI.con φ) with
@@ -599,71 +461,48 @@ by induction on the word using `consRecOn`.
 
 variable (φ)
 
-/--
-Definition of `Transversal` / `Transversal` 的定义
+/-- The data we need to pick a normal form for words in the pushout. We need to pick a
+canonical element of each coset. We also need all the maps in the diagram to be injective -/
+/-
+**Monoid.PushoutI.NormalWord.Transversal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Monoid.Pus
+houtI.NormalWord`。
+形式化陈述：{ι : Type u_1} →   {G : ι → Type u_2} →     {H : Type u_3} → [inst : (i : 
+ι) → Group (G i)] → [inst_1 : Group H] → ((i : ι) → H →* G i) → Type (max u_1 u_
+2)
+参数：i : ι；G i；(i : ι) → H →* G i；max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Transversal
-  parameters: : Type _ where
-  axioms and operations (4):
-    - injective : forall i, Injective (φ i)
-    - set : forall i, Set (G i)
-    - one_mem : forall i, 1 in set i
-    - compl : forall i, IsComplement (φ i).range (set i)
-
-中文:
-结构 横截
-  参数: : 类型 _ where
-  公理与运算 (4 个):
-    - injective : 对任意 i, 单射 (φ i)
-    - set : 对任意 i, 集合 (G i)
-    - one_mem : 对任意 i, 1 in set i
-    - compl : 对任意 i, IsComplement (φ i).range (set i)
-
-Depends on / 依赖: DecidableEq, Subsingleton, decidableEq_of_subsingleton
+--- 原说明 ---
+The data we need to pick a normal form for words in the pushout. We need to pick
+ a
+canonical element of each coset. We also need all the maps in the diagram to be 
+injective
 -/
 structure Transversal : Type _ where
   /-- All maps in the diagram are injective -/
-  injective : forall i, Injective (φ i)
+  injective : ∀ i, Injective (φ i)
   /-- The underlying set, containing exactly one element of each coset of the base group -/
-  set : forall i, Set (G i)
+  set : ∀ i, Set (G i)
   /-- The chosen element of the base group itself is the identity -/
-  one_mem : forall i, 1 in set i
+  one_mem : ∀ i, 1 ∈ set i
   /-- We have exactly one element of each coset of the base group -/
-  compl : forall i, IsComplement (φ i).range (set i)
-
-/--
-theorem `transversal_nonempty` / 定理 `transversal_nonempty`
-
-English:
-theorem transversal_nonempty
-  given: (hφ : forall i, Injective (φ i))
-  statement: Nonempty (Transversal φ)
-  proof: by
-  choose t ht using fun i => (φ i).range.exists_isComplement_right 1
-  apply Nonempty.intro
-  exact
-    { injective := hφ
-      set := t
-      one_mem := fun i => (ht i).2
-      compl := fun i => (ht i).1 }
-
-中文:
-定理 transversal_nonempty
-  条件: (hφ : 对任意 i, 单射 (φ i))
-  结论: 非空 (横截 φ)
-  证明: by
-  choose t ht using fun i => (φ i).range.exists_isComplement_right 1
-  apply Nonempty.intro
-  exact
-    { injective := hφ
-      set := t
-      one_mem := fun i => (ht i).2
-      compl := fun i => (ht i).1 }
-
-Depends on / 依赖: Nonempty, Nonempty.intro, Subsingleton, Subsingleton.elim, exists_isComplement_right, injective, one_mem, range.exists_isComplement_right
+  compl : ∀ i, IsComplement (φ i).range (set i)
+/-
+**Monoid.PushoutI.NormalWord.transversal_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Mon
+oid.PushoutI.NormalWord`。
+形式化陈述：transversal_nonempty (hφ : forall i, Injective (φ i)) : Nonempty (Transver
+sal φ)
+参数：hφ : forall i, Injective (φ i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `Subgroup.exists_isComplement_right`：exists_isComplement_right (H : Subgr
+oup G) (g : G) : exists T, IsComplement H T ∧ g in T
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem transversal_nonempty (hφ : forall i, Injective (φ i)) : Nonempty (Transversal φ) := by
+theorem transversal_nonempty (hφ : ∀ i, Injective (φ i)) : Nonempty (Transversal φ) := by
   choose t ht using fun i => (φ i).range.exists_isComplement_right 1
   apply Nonempty.intro
   exact
@@ -674,115 +513,107 @@ theorem transversal_nonempty (hφ : forall i, Injective (φ i)) : Nonempty (Tran
 
 variable {φ}
 
-/--
-Definition of `_root_.Monoid.PushoutI.NormalWord` / `_root_.Monoid.PushoutI.NormalWord` 的定义
+/-- The normal form for words in the pushout. Every element of the pushout is the product of an
+element of the base group and a word made up of letters each of which is in the transversal. -/
+/-
+**Monoid.PushoutI.NormalWord._root_.Monoid.PushoutI.NormalWord** 是 Mathlib 中的一个结
+构，位于命名空间 `Monoid.PushoutI.NormalWord`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure _root_.Monoid.PushoutI.NormalWord
-  parameters: (d : Transversal φ)
-  extends: CoprodI.Word G
-  axioms and operations (2):
-    - head : H
-    - normalized : forall i g, ⟨i, g⟩ in toList -> g in d.set i
-
-中文:
-结构 _root_.幺半群.PushoutI.NormalWord
-  参数: (d : 横截 φ)
-  继承: 余prodI.Word G
-  公理与运算 (2 个):
-    - head : H
-    - normalized : 对任意 i g, ⟨i, g⟩ in toList -> g in d.set i
+--- 原说明 ---
+The normal form for words in the pushout. Every element of the pushout is the pr
+oduct of an
+element of the base group and a word made up of letters each of which is in the 
+transversal.
 -/
 structure _root_.Monoid.PushoutI.NormalWord (d : Transversal φ) extends CoprodI.Word G where
   /-- Every `NormalWord` is the product of an element of the base group and a word made up
   of letters each of which is in the transversal. `head` is that element of the base group. -/
   head : H
   /-- All letters in the word are in the transversal. -/
-  normalized : forall i g, ⟨i, g⟩ in toList -> g in d.set i
+  normalized : ∀ i g, ⟨i, g⟩ ∈ toList → g ∈ d.set i
 
 /--
-Definition of `Pair` / `Pair` 的定义
+A `Pair d i` is a word in the coproduct, `Coprod G`, the `tail`, and an element of the group `G i`,
+the `head`. The first letter of the `tail` must not be an element of `G i`.
+Note that the `head` may be `1`. Every letter in the `tail` must be in the transversal given by `d`.
+Similar to `Monoid.CoprodI.Pair` except every letter must be in the transversal
+(not including the head letter). -/
+/-
+**Monoid.PushoutI.NormalWord.Pair** 是 Mathlib 中的一个归纳类型，位于命名空间 `Monoid.PushoutI.N
+ormalWord`。
+形式化陈述：{ι : Type u_1} →   {G : ι → Type u_2} →     {H : Type u_3} →       [inst :
+ (i : ι) → Group (G i)] →         [inst_1 : Group H] →           {φ : (i : ι) → 
+H →* G i} → Monoid.PushoutI.NormalWord.Transversal φ → ι → Type (max u_1 u_2)
+参数：i : ι；G i；i : ι；max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Pair
-  parameters: (d : Transversal φ) (i : ι)
-  extends: CoprodI.Word.Pair G i
-  axioms and operations (1):
-    - normalized : forall i g, ⟨i, g⟩ in tail.toList -> g in d.set i
-
-中文:
-结构 对
-  参数: (d : 横截 φ) (i : ι)
-  继承: 余prodI.Word.对 G i
-  公理与运算 (1 个):
-    - normalized : 对任意 i g, ⟨i, g⟩ in tail.toList -> g in d.set i
+--- 原说明 ---
+A `Pair d i` is a word in the coproduct, `Coprod G`, the `tail`, and an element 
+of the group `G i`,
+the `head`. The first letter of the `tail` must not be an element of `G i`.
+Note that the `head` may be `1`. Every letter in the `tail` must be in the trans
+versal given by `d`.
+Similar to `Monoid.CoprodI.Pair` except every letter must be in the transversal
+(not including the head letter).
 -/
 structure Pair (d : Transversal φ) (i : ι) extends CoprodI.Word.Pair G i where
   /-- All letters in the word are in the transversal. -/
-  normalized : forall i g, ⟨i, g⟩ in tail.toList -> g in d.set i
+  normalized : ∀ i g, ⟨i, g⟩ ∈ tail.toList → g ∈ d.set i
 
 variable {d : Transversal φ}
 
 /-- The empty normalized word, representing the identity element of the group. -/
 @[simps!]
-/--
-Definition of `empty` / `empty` 的定义
+/-
+**Monoid.PushoutI.NormalWord.empty** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI.No
+rmalWord`。
+形式化陈述：empty : NormalWord d
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition empty
-  signature: : NormalWord d
-  body: ⟨CoprodI.Word.empty, 1, fun i g => by simp [CoprodI.Word.empty]⟩
-
-中文:
-定义 empty
-  签名: : NormalWord d
-  定义体: ⟨CoprodI.Word.empty, 1, fun i g => by simp [CoprodI.Word.empty]⟩
-
-Depends on / 依赖: CoprodI, CoprodI.Word.empty
+--- 原说明 ---
+The empty normalized word, representing the identity element of the group.
 -/
 def empty : NormalWord d := ⟨CoprodI.Word.empty, 1, fun i g => by simp [CoprodI.Word.empty]⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (NormalWord d)
-  body: ⟨NormalWord.empty⟩
-
-中文:
-实例 :
-  签名: 可居 (NormalWord d)
-  定义体: ⟨NormalWord.empty⟩
-
-Depends on / 依赖: NormalWord, NormalWord.empty
+/-
+**Monoid.PushoutI.NormalWord.** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.PushoutI.NormalW
+ord`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (NormalWord d) := ⟨NormalWord.empty⟩
-
+/-
+**Monoid.PushoutI.NormalWord.** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.PushoutI.NormalW
+ord`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : ι) : Inhabited (Pair d i) :=
   ⟨{ (empty : NormalWord d) with
       head := 1, tail := _,
       fstIdx_ne := fun h => by cases h }⟩
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: {w₁ w₂ : NormalWord d} (hhead : w₁.head = w₂.head)
-  proof: by
-  rcases w₁ with ⟨⟨_, _, _⟩, _, _⟩
-  rcases w₂ with ⟨⟨_, _, _⟩, _, _⟩
-  simp_all
-
-中文:
-定理 ext
-  结论: {w₁ w₂ : NormalWord d} (hhead : w₁.head = w₂.head)
-  证明: by
-  rcases w₁ with ⟨⟨_, _, _⟩, _, _⟩
-  rcases w₂ with ⟨⟨_, _, _⟩, _, _⟩
-  simp_all
+/-
+**Monoid.PushoutI.NormalWord.ext** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI.Norm
+alWord`。
+形式化陈述：ext {w₁ w₂ : NormalWord d} (hhead : w₁.head = w₂.head) (hlist : w₁.toList 
+= w₂.toList) : w₁ = w₂
+参数：hhead : w₁.head = w₂.head；hlist : w₁.toList = w₂.toList。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Monoid.CoprodI.Word.mk.congr_simp`：∀ {ι : Type u_1} {M : ι → Type u_2} [
+inst : (i : ι) → Monoid (M i)] (toList toList_1 : List ((i : ι) × M i))   (e_toL
+ist : toList = toList_1…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.mk.congr_simp`：∀ {ι : Type u_1} {G : ι → Type
+ u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i
+ : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ext {w₁ w₂ : NormalWord d} (hhead : w₁.head = w₂.head)
     (hlist : w₁.toList = w₂.toList) : w₁ = w₂ := by
@@ -791,111 +622,96 @@ theorem ext {w₁ w₂ : NormalWord d} (hhead : w₁.head = w₂.head)
   simp_all
 
 open Subgroup.IsComplement
-
-/--
-Instance `baseAction` / 实例 `baseAction`
-
-English:
-instance baseAction
-  signature: : MulAction H (NormalWord d)
-  body: { smul := fun h w => { w with head := h * w.head },
-    one_smul := by simp +instances [instHSMul]
-    mul_smul := by simp +instances [instHSMul, mul_assoc] }
-
-中文:
-实例 baseAction
-  签名: : 乘法作用 H (NormalWord d)
-  定义体: { smul := fun h w => { w with head := h * w.head },
-    one_smul := by simp +instances [instHSMul]
-    mul_smul := by simp +instances [instHSMul, mul_assoc] }
-
-Depends on / 依赖: decidable_of_iff, fact_iff, fact_iff.symm, instHSMul, instances, mul_assoc, mul_smul, one_smul, w.head
+/-
+**Monoid.PushoutI.NormalWord.baseAction** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.Pushou
+tI.NormalWord`。
+形式化陈述：baseAction : MulAction H (NormalWord d)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.normalized`：∀ {ι : Type u_1} {G : ι → Type u_
+2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i : 
+ι) → H →* G i} {d : Monoid.…
 -/
 instance baseAction : MulAction H (NormalWord d) :=
   { smul := fun h w => { w with head := h * w.head },
     one_smul := by simp +instances [instHSMul]
     mul_smul := by simp +instances [instHSMul, mul_assoc] }
-
-/--
-theorem `base_smul_def'` / 定理 `base_smul_def'`
-
-English:
-theorem base_smul_def'
-  given: (h : H) (w : NormalWord d)
-  proof: rfl
-
-中文:
-定理 base_smul_def'
-  条件: (h : H) (w : NormalWord d)
-  证明: rfl
-
-Depends on / 依赖: w.head
+/-
+**Monoid.PushoutI.NormalWord.base_smul_def'** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Pu
+shoutI.NormalWord`。
+形式化陈述：base_smul_def' (h : H) (w : NormalWord d) : h • w = { w with head
+参数：h : H；w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem base_smul_def' (h : H) (w : NormalWord d) :
     h • w = { w with head := h * w.head } := rfl
-/--
-Definition of `prod` / `prod` 的定义
+/-- Take the product of a normal word as an element of the `PushoutI`. We show that this is
+bijective, in `NormalWord.equiv`. -/
+/-
+**Monoid.PushoutI.NormalWord.prod** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI.Nor
+malWord`。
+形式化陈述：prod (w : NormalWord d) : PushoutI φ
+参数：w : NormalWord d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (w : NormalWord d)
-  body: base φ w.head * ofCoprodI (w.toWord).prod
-
-@[simp]
-
-中文:
-定义 乘积
-  签名: (w : NormalWord d)
-  定义体: base φ w.head * ofCoprodI (w.toWord).prod
-
-@[simp]
-
-Depends on / 依赖: ofCoprodI, toWord, w.head, w.toWord
+--- 原说明 ---
+Take the product of a normal word as an element of the `PushoutI`. We show that 
+this is
+bijective, in `NormalWord.equiv`.
 -/
 def prod (w : NormalWord d) : PushoutI φ :=
   base φ w.head * ofCoprodI (w.toWord).prod
 
 @[simp]
-/--
-theorem `prod_base_smul` / 定理 `prod_base_smul`
-
-English:
-theorem prod_base_smul
-  given: (h : H) (w : NormalWord d)
-  proof: by
-  simp only [base_smul_def', prod, map_mul, mul_assoc]
-
-@[simp]
-
-中文:
-定理 prod_base_smul
-  条件: (h : H) (w : NormalWord d)
-  证明: by
-  simp only [base_smul_def', prod, map_mul, mul_assoc]
-
-@[simp]
-
-Depends on / 依赖: base_smul_def, map_mul, mul_assoc
+/-
+**Monoid.PushoutI.NormalWord.prod_base_smul** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Pu
+shoutI.NormalWord`。
+形式化陈述：prod_base_smul (h : H) (w : NormalWord d) : (h • w).prod = base φ h * w.pr
+od
+参数：h : H；w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prod_base_smul (h : H) (w : NormalWord d) :
     (h • w).prod = base φ h * w.prod := by
   simp only [base_smul_def', prod, map_mul, mul_assoc]
 
 @[simp]
-/--
-theorem `prod_empty` / 定理 `prod_empty`
-
-English:
-theorem prod_empty
-  statement: (empty : NormalWord d).prod = 1
-  proof: by
-  simp [prod, empty]
-
-中文:
-定理 prod_empty
-  结论: (empty : NormalWord d).乘积 = 1
-  证明: by
-  simp [prod, empty]
+/-
+**Monoid.PushoutI.NormalWord.prod_empty** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Pushou
+tI.NormalWord`。
+形式化陈述：prod_empty : (empty : NormalWord d).prod = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prod_empty : (empty : NormalWord d).prod = 1 := by
   simp [prod, empty]
@@ -903,42 +719,27 @@ theorem prod_empty : (empty : NormalWord d).prod = 1 := by
 /-- A constructor that multiplies a `NormalWord` by an element, with condition to make
 sure the underlying list does get longer. -/
 @[simps!]
-/--
-Definition of `cons` / `cons` 的定义
+/-
+**Monoid.PushoutI.NormalWord.cons** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI.Nor
+malWord`。
+形式化陈述：cons {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i) (hgr : g 
+∉ (φ i).range) : NormalWord d
+参数：g : G i；w : NormalWord d；hmw : w.fstIdx != some i；hgr : g ∉ (φ i).range。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.injective`：∀ {ι : Type u_1} {G : 
+ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]  
+ {φ : (i : ι) → H →* G i} (self : Mono…
 
-English:
-definition cons
-  signature: {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i)
-  body: letI n := (d.compl i).equiv (g * (φ i w.head))
-  letI w' := Word.cons (n.2 : G i) w.toWord hmw
-    (mt (coe_equiv_snd_eq_one_iff_mem _ (d.one_mem _)).1
-      (mt (mul_mem_cancel_right (by simp)).1 hgr))
-  { toWord := w'
-    head := (MonoidHom.ofInjective (d.injective i)).symm n.1
-    normalized := fun i g hg => by
-      simp only [w', Word.cons, mem_cons, Sigma.mk.inj_iff] at hg
-      rcases hg with ⟨rfl, hg | hg⟩
-      · simp
-      · exact w.normalized _ _ (by assumption) }
-
-中文:
-定义 cons
-  签名: {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i)
-  定义体: letI n := (d.compl i).equiv (g * (φ i w.head))
-  letI w' := Word.cons (n.2 : G i) w.toWord hmw
-    (mt (coe_equiv_snd_eq_one_iff_mem _ (d.one_mem _)).1
-      (mt (mul_mem_cancel_right (by simp)).1 hgr))
-  { toWord := w'
-    head := (MonoidHom.ofInjective (d.injective i)).symm n.1
-    normalized := fun i g hg => by
-      simp only [w', Word.cons, mem_cons, Sigma.mk.inj_iff] at hg
-      rcases hg with ⟨rfl, hg | hg⟩
-      · simp
-      · exact w.normalized _ _ (by assumption) }
-
-Depends on / 依赖: MonoidHom, MonoidHom.ofInjective, Sigma.mk.inj_iff, Word.cons, coe_equiv_snd_eq_one_iff_mem, d.compl, d.injective, d.one_mem, inj_iff, injective, mem_cons, mul_mem_cancel_right, normalized, ofInjective, one_mem, toWord, w.head, w.normalized, w.toWord
+--- 原说明 ---
+A constructor that multiplies a `NormalWord` by an element, with condition to ma
+ke
+sure the underlying list does get longer.
 -/
-noncomputable def cons {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i)
+noncomputable def cons {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx ≠ some i)
     (hgr : g ∉ (φ i).range) : NormalWord d :=
   letI n := (d.compl i).equiv (g * (φ i w.head))
   letI w' := Word.cons (n.2 : G i) w.toWord hmw
@@ -954,116 +755,135 @@ noncomputable def cons {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some 
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `prod_cons` / 定理 `prod_cons`
-
-English:
-theorem prod_cons
-  statement: {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i)
-  proof: by
-  simp [prod, cons, ← of_apply_eq_base φ i, equiv_fst_eq_mul_inv, mul_assoc]
-
-中文:
-定理 prod_cons
-  结论: {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i)
-  证明: by
-  simp [prod, cons, ← of_apply_eq_base φ i, equiv_fst_eq_mul_inv, mul_assoc]
-
-Depends on / 依赖: equiv_fst_eq_mul_inv, mul_assoc, of_apply_eq_base
+/-
+**Monoid.PushoutI.NormalWord.prod_cons** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Pushout
+I.NormalWord`。
+形式化陈述：prod_cons {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i) (hgr
+ : g ∉ (φ i).range) : (cons g w hmw hgr).prod = of i g * w.prod
+参数：g : G i；w : NormalWord d；hmw : w.fstIdx != some i；hgr : g ∉ (φ i).range。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.injective`：∀ {ι : Type u_1} {G : 
+ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]  
+ {φ : (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monoid.PushoutI.of_apply_eq_base`：of_apply_eq_base (i : ι) (x : H) : of 
+i (φ i x) = base φ x
+· 使用定理 `MonoidHom.apply_ofInjective_symm`：apply_ofInjective_symm {f : G ->* N} (
+hf : Function.Injective f) (x : f.range) : f ((ofInjective hf).symm x) = x
+· 使用定理 `Subgroup.IsComplement.equiv_fst_eq_mul_inv`：equiv_fst_eq_mul_inv (g : G)
+ : ↑(hST.equiv g).fst = g * ((hST.equiv g).snd : G)⁻¹
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `Monoid.CoprodI.Word.prod_cons`：prod_cons (i) (m : M i) (w : Word M) (h1 
+: m != 1) (h2 : w.fstIdx != some i) : prod (cons m w h2 h1) = of m * prod w
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Monoid.PushoutI.ofCoprodI_of`：ofCoprodI_of (i : ι) (g : G i) : (ofCoprod
+I (CoprodI.of g) : PushoutI φ) = of i g
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem prod_cons {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i)
+theorem prod_cons {i} (g : G i) (w : NormalWord d) (hmw : w.fstIdx ≠ some i)
     (hgr : g ∉ (φ i).range) : (cons g w hmw hgr).prod = of i g * w.prod := by
   simp [prod, cons, ← of_apply_eq_base φ i, equiv_fst_eq_mul_inv, mul_assoc]
 
-variable [DecidableEq ι] [forall i, DecidableEq (G i)]
+variable [DecidableEq ι] [∀ i, DecidableEq (G i)]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `eq_one_of_smul_normalized` / 定理 `eq_one_of_smul_normalized`
+/-- Given a word in `CoprodI`, if every letter is in the transversal and when
+we multiply by an element of the base group it still has this property,
+then the element of the base group we multiplied by was one. -/
+/-
+**Monoid.PushoutI.NormalWord.eq_one_of_smul_normalized** 是 Mathlib 中的一个定理，位于命名空间
+ `Monoid.PushoutI.NormalWord`。
+形式化陈述：eq_one_of_smul_normalized (w : CoprodI.Word G) {i : ι} (h : H) (hw : foral
+l i g, ⟨i, g⟩ in w.toList -> g in d.set i) (hφw : forall j g, ⟨j, g⟩ in (CoprodI
+.of (φ i h) • w).toList -> g in d.set j) : h = 1
+参数：w : CoprodI.Word G；h : H；hw : forall i g, ⟨i, g⟩ in w.toList -> g in d.set i；
+hφw : forall j g, ⟨j, g⟩ in (CoprodI.of (φ i h) • w).toList -> g in d.set j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Exists.fst`：∀ {b : Prop} {p : b → Prop}, Exists p → b
+· 使用定理 `Exists.snd`：∀ {b : Prop} {p : b → Prop} (h : Exists p), p ⋯
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.CoprodI.Word.equivPair_head`：equivPair_head {i : ι} {w : Word M} 
+: (equivPair i w).head = if h : exists (h : w.toList != []), (w.toList.head h).1
+ = i then h.snd ▸ (w.toL…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.IsComplement.equiv_snd_eq_self_iff_mem`：equiv_snd_eq_self_iff_m
+em {g : G} (h1 : 1 in S) : ((hST.equiv g).snd : G) = g ↔ g in T
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `List.head_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head h ∈ l
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.one_mem`：∀ {ι : Type u_1} {G : ι 
+→ Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {
+φ : (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Subgroup.IsComplement.equiv_one`：equiv_one (hs1 : 1 in S) (ht1 : 1 in T)
+ : hST.equiv 1 = (⟨1, hs1⟩, ⟨1, ht1⟩)
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+（共 55 条，此处仅展示前 30 条）
 
-English:
-theorem eq_one_of_smul_normalized
-  statement: (w : CoprodI.Word G) {i : ι} (h : H)
-  proof: by
-  simp only [← (d.compl _).equiv_snd_eq_self_iff_mem (one_mem _)] at hw hφw
-  have hhead : ((d.compl i).equiv (Word.equivPair i w).head).2 =
-      (Word.equivPair i w).head := by
-    rw [Word.equivPair_head]
-    split_ifs with h
-    · rcases h with ⟨_, rfl⟩
-      exact hw _ _ (List.head_mem _)
-    · rw [equiv_one (d.compl i) (one_mem _) (d.one_mem _)]
-  by_contra hh1
-  have := hφw i (φ i h * (Word.equivPair i w).head) ?_
-  · apply hh1
-    rw [equiv_mul_left_of_mem (d.compl i) ⟨_]; rw [rfl⟩]; rw [hhead] at this
-    simpa [((injective_iff_map_eq_one' _).1 (d.injective i))] using this
-  · simp only [Word.mem_smul_iff, not_true, false_and, ne_eq, Option.mem_def, mul_right_inj,
-      exists_eq_right', mul_eq_left, exists_prop, true_and, false_or]
-    constructor
-    · intro h
-      apply_fun (d.compl i).equiv at h
-      simp only [Prod.ext_iff, equiv_one (d.compl i) (one_mem _) (d.one_mem _),
-        equiv_mul_left_of_mem (d.compl i) ⟨_, rfl⟩, hhead, Subtype.ext_iff,
-        Prod.ext_iff] at h
-      rcases h with ⟨h₁, h₂⟩
-      rw [h₂]; rw [coe_mul]; rw [((d.compl i).coe_equiv_fst_eq_one_iff_mem (one_mem _)).mpr (d.one_mem _)]; rw [mul_one]; rw [Subtype.coe_mk]; rw [map_eq_one_iff (φ i) (d.injective i)] at h₁
-      contradiction
-    · rw [Word.equivPair_head]
-      dsimp
-      split_ifs with hep
-      · rcases hep with ⟨hnil, rfl⟩
-        rw [head?_eq_some_head hnil]
-        simp_all
-      · push Not at hep
-        by_cases hw : w.toList = []
-        · simp [hw, Word.fstIdx]
-        · simp [head?_eq_some_head hw, Word.fstIdx, hep hw]
-
-中文:
-定理 eq_one_of_smul_normalized
-  结论: (w : 余prodI.Word G) {i : ι} (h : H)
-  证明: by
-  simp only [← (d.compl _).equiv_snd_eq_self_iff_mem (one_mem _)] at hw hφw
-  have hhead : ((d.compl i).equiv (Word.equivPair i w).head).2 =
-      (Word.equivPair i w).head := by
-    rw [Word.equivPair_head]
-    split_ifs with h
-    · rcases h with ⟨_, rfl⟩
-      exact hw _ _ (List.head_mem _)
-    · rw [equiv_one (d.compl i) (one_mem _) (d.one_mem _)]
-  by_contra hh1
-  have := hφw i (φ i h * (Word.equivPair i w).head) ?_
-  · apply hh1
-    rw [equiv_mul_left_of_mem (d.compl i) ⟨_]; rw [rfl⟩]; rw [hhead] at this
-    simpa [((injective_iff_map_eq_one' _).1 (d.injective i))] using this
-  · simp only [Word.mem_smul_iff, not_true, false_and, ne_eq, Option.mem_def, mul_right_inj,
-      exists_eq_right', mul_eq_left, exists_prop, true_and, false_or]
-    constructor
-    · intro h
-      apply_fun (d.compl i).equiv at h
-      simp only [Prod.ext_iff, equiv_one (d.compl i) (one_mem _) (d.one_mem _),
-        equiv_mul_left_of_mem (d.compl i) ⟨_, rfl⟩, hhead, Subtype.ext_iff,
-        Prod.ext_iff] at h
-      rcases h with ⟨h₁, h₂⟩
-      rw [h₂]; rw [coe_mul]; rw [((d.compl i).coe_equiv_fst_eq_one_iff_mem (one_mem _)).mpr (d.one_mem _)]; rw [mul_one]; rw [Subtype.coe_mk]; rw [map_eq_one_iff (φ i) (d.injective i)] at h₁
-      contradiction
-    · rw [Word.equivPair_head]
-      dsimp
-      split_ifs with hep
-      · rcases hep with ⟨hnil, rfl⟩
-        rw [head?_eq_some_head hnil]
-        simp_all
-      · push Not at hep
-        by_cases hw : w.toList = []
-        · simp [hw, Word.fstIdx]
-        · simp [head?_eq_some_head hw, Word.fstIdx, hep hw]
-
-Depends on / 依赖: List.head_mem, Word.equivPair, Word.equivPair_head, d.compl, d.one_mem, equivPair, equivPair_head, equiv_mul_left_of_mem, equiv_one, equiv_snd_eq_self_iff_mem, head_mem, injective_iff_, one_mem, split_ifs
+--- 原说明 ---
+Given a word in `CoprodI`, if every letter is in the transversal and when
+we multiply by an element of the base group it still has this property,
+then the element of the base group we multiplied by was one.
 -/
 theorem eq_one_of_smul_normalized (w : CoprodI.Word G) {i : ι} (h : H)
-    (hw : forall i g, ⟨i, g⟩ in w.toList -> g in d.set i)
-    (hφw : forall j g, ⟨j, g⟩ in (CoprodI.of (φ i h) • w).toList -> g in d.set j) :
+    (hw : ∀ i g, ⟨i, g⟩ ∈ w.toList → g ∈ d.set i)
+    (hφw : ∀ j g, ⟨j, g⟩ ∈ (CoprodI.of (φ i h) • w).toList → g ∈ d.set j) :
     h = 1 := by
   simp only [← (d.compl _).equiv_snd_eq_self_iff_mem (one_mem _)] at hw hφw
   have hhead : ((d.compl i).equiv (Word.equivPair i w).head).2 =
@@ -1076,7 +896,7 @@ theorem eq_one_of_smul_normalized (w : CoprodI.Word G) {i : ι} (h : H)
   by_contra hh1
   have := hφw i (φ i h * (Word.equivPair i w).head) ?_
   · apply hh1
-    rw [equiv_mul_left_of_mem (d.compl i) ⟨_]; rw [rfl⟩]; rw [hhead] at this
+    rw [equiv_mul_left_of_mem (d.compl i) ⟨_, rfl⟩, hhead] at this
     simpa [((injective_iff_map_eq_one' _).1 (d.injective i))] using this
   · simp only [Word.mem_smul_iff, not_true, false_and, ne_eq, Option.mem_def, mul_right_inj,
       exists_eq_right', mul_eq_left, exists_prop, true_and, false_or]
@@ -1087,7 +907,8 @@ theorem eq_one_of_smul_normalized (w : CoprodI.Word G) {i : ι} (h : H)
         equiv_mul_left_of_mem (d.compl i) ⟨_, rfl⟩, hhead, Subtype.ext_iff,
         Prod.ext_iff] at h
       rcases h with ⟨h₁, h₂⟩
-      rw [h₂]; rw [coe_mul]; rw [((d.compl i).coe_equiv_fst_eq_one_iff_mem (one_mem _)).mpr (d.one_mem _)]; rw [mul_one]; rw [Subtype.coe_mk]; rw [map_eq_one_iff (φ i) (d.injective i)] at h₁
+      rw [h₂, coe_mul, ((d.compl i).coe_equiv_fst_eq_one_iff_mem (one_mem _)).mpr (d.one_mem _),
+        mul_one, Subtype.coe_mk, map_eq_one_iff (φ i) (d.injective i)] at h₁
       contradiction
     · rw [Word.equivPair_head]
       dsimp
@@ -1099,39 +920,44 @@ theorem eq_one_of_smul_normalized (w : CoprodI.Word G) {i : ι} (h : H)
         by_cases hw : w.toList = []
         · simp [hw, Word.fstIdx]
         · simp [head?_eq_some_head hw, Word.fstIdx, hep hw]
-
-/--
-theorem `ext_smul` / 定理 `ext_smul`
-
-English:
-theorem ext_smul
-  statement: {w₁ w₂ : NormalWord d} (i : ι)
-  proof: by
-  rcases w₁ with ⟨w₁, h₁, hw₁⟩
-  rcases w₂ with ⟨w₂, h₂, hw₂⟩
-  dsimp at *
-  rw [smul_eq_iff_eq_inv_smul]; rw [← mul_smul] at h
-  subst h
-  simp only [← map_inv, ← map_mul] at hw₁
-  have : h₁⁻¹ * h₂ = 1 := eq_one_of_smul_normalized w₂ (h₁⁻¹ * h₂) hw₂ hw₁
-  rw [inv_mul_eq_one] at this; subst this
-  simp
-
-中文:
-定理 ext_smul
-  结论: {w₁ w₂ : NormalWord d} (i : ι)
-  证明: by
-  rcases w₁ with ⟨w₁, h₁, hw₁⟩
-  rcases w₂ with ⟨w₂, h₂, hw₂⟩
-  dsimp at *
-  rw [smul_eq_iff_eq_inv_smul]; rw [← mul_smul] at h
-  subst h
-  simp only [← map_inv, ← map_mul] at hw₁
-  have : h₁⁻¹ * h₂ = 1 := eq_one_of_smul_normalized w₂ (h₁⁻¹ * h₂) hw₂ hw₁
-  rw [inv_mul_eq_one] at this; subst this
-  simp
-
-Depends on / 依赖: eq_one_of_smul_normalized, inv_mul_eq_one, map_inv, map_mul, mul_smul, smul_eq_iff_eq_inv_smul
+/-
+**Monoid.PushoutI.NormalWord.ext_smul** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI
+.NormalWord`。
+形式化陈述：ext_smul {w₁ w₂ : NormalWord d} (i : ι) (h : CoprodI.of (φ i w₁.head) • w₁
+.toWord = CoprodI.of (φ i w₂.head) • w₂.toWord) : w₁ = w₂
+参数：i : ι；h : CoprodI.of (φ i w₁.head) • w₁.toWord = CoprodI.of (φ i w₂.head) • w
+₂.toWord。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.eq_one_of_smul_normalized`：eq_one_of_smul_nor
+malized (w : CoprodI.Word G) {i : ι} (h : H) (hw : forall i g, ⟨i, g⟩ in w.toLis
+t -> g in d.set i) (hφw : forall j g, ⟨j, …
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Monoid.PushoutI.NormalWord.mk.congr_simp`：∀ {ι : Type u_1} {G : ι → Type
+ u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i
+ : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `inv_mul_eq_one`：inv_mul_eq_one : a⁻¹ * b = 1 ↔ a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用引理 `smul_eq_iff_eq_inv_smul`：smul_eq_iff_eq_inv_smul (g : α) {x y : β} : g •
+ x = y ↔ x = g⁻¹ • y
 -/
 theorem ext_smul {w₁ w₂ : NormalWord d} (i : ι)
     (h : CoprodI.of (φ i w₁.head) • w₁.toWord =
@@ -1140,45 +966,37 @@ theorem ext_smul {w₁ w₂ : NormalWord d} (i : ι)
   rcases w₁ with ⟨w₁, h₁, hw₁⟩
   rcases w₂ with ⟨w₂, h₂, hw₂⟩
   dsimp at *
-  rw [smul_eq_iff_eq_inv_smul]; rw [← mul_smul] at h
+  rw [smul_eq_iff_eq_inv_smul, ← mul_smul] at h
   subst h
   simp only [← map_inv, ← map_mul] at hw₁
   have : h₁⁻¹ * h₂ = 1 := eq_one_of_smul_normalized w₂ (h₁⁻¹ * h₂) hw₂ hw₁
   rw [inv_mul_eq_one] at this; subst this
   simp
 
-/--
-Definition of `rcons` / `rcons` 的定义
+/-- Given a pair `(head, tail)`, we can form a word by prepending `head` to `tail`, but
+putting head into normal form first, by making sure it is expressed as an element
+of the base group multiplied by an element of the transversal. -/
+/-
+**Monoid.PushoutI.NormalWord.rcons** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI.No
+rmalWord`。
+形式化陈述：rcons (i : ι) (p : Pair d i) : NormalWord d
+参数：i : ι；p : Pair d i。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.injective`：∀ {ι : Type u_1} {G : 
+ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]  
+ {φ : (i : ι) → H →* G i} (self : Mono…
 
-English:
-definition rcons
-  signature: (i : ι) (p : Pair d i)
-  body: letI n := (d.compl i).equiv p.head
-  let w := (Word.equivPair i).symm { p.toPair with head := n.2 }
-  { toWord := w
-    head := (MonoidHom.ofInjective (d.injective i)).symm n.1
-    normalized := fun i g hg => by
-        dsimp [w] at hg
-        rw [Word.equivPair_symm]; rw [Word.mem_rcons_iff] at hg
-        rcases hg with hg | ⟨_, rfl, rfl⟩
-        · exact p.normalized _ _ hg
-        · simp }
-
-中文:
-定义 rcons
-  签名: (i : ι) (p : 对 d i)
-  定义体: letI n := (d.compl i).equiv p.head
-  let w := (Word.equivPair i).symm { p.toPair with head := n.2 }
-  { toWord := w
-    head := (MonoidHom.ofInjective (d.injective i)).symm n.1
-    normalized := fun i g hg => by
-        dsimp [w] at hg
-        rw [Word.equivPair_symm]; rw [Word.mem_rcons_iff] at hg
-        rcases hg with hg | ⟨_, rfl, rfl⟩
-        · exact p.normalized _ _ hg
-        · simp }
-
-Depends on / 依赖: MonoidHom, MonoidHom.ofInjective, Word.equivPair, Word.equivPair_symm, Word.mem_rcons_iff, d.compl, d.injective, equivPair, equivPair_symm, injective, mem_rcons_iff, normalized, ofInjective, p.head, p.normalized, p.toPair, toPair, toWord
+--- 原说明 ---
+Given a pair `(head, tail)`, we can form a word by prepending `head` to `tail`, 
+but
+putting head into normal form first, by making sure it is expressed as an elemen
+t
+of the base group multiplied by an element of the transversal.
 -/
 noncomputable def rcons (i : ι) (p : Pair d i) : NormalWord d :=
   letI n := (d.compl i).equiv p.head
@@ -1187,111 +1005,88 @@ noncomputable def rcons (i : ι) (p : Pair d i) : NormalWord d :=
     head := (MonoidHom.ofInjective (d.injective i)).symm n.1
     normalized := fun i g hg => by
         dsimp [w] at hg
-        rw [Word.equivPair_symm]; rw [Word.mem_rcons_iff] at hg
+        rw [Word.equivPair_symm, Word.mem_rcons_iff] at hg
         rcases hg with hg | ⟨_, rfl, rfl⟩
         · exact p.normalized _ _ hg
         · simp }
-
-/--
-theorem `rcons_injective` / 定理 `rcons_injective`
-
-English:
-theorem rcons_injective
-  given: {i : ι}
-  statement: Function.Injective (rcons (d := d) i)
-  proof: by
-  rintro ⟨⟨head₁, tail₁⟩, _⟩ ⟨⟨head₂, tail₂⟩, _⟩
-  simp only [rcons, NormalWord.mk.injEq, EmbeddingLike.apply_eq_iff_eq,
-    Word.Pair.mk.injEq, Pair.mk.injEq, and_imp]
-  rintro h₁ rfl h₃
-  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁]; rw [← equiv_fst_mul_equiv_snd (d.compl i) head₂]; rw [h₁]; rw [h₃]
-  simp
-
-中文:
-定理 rcons_injective
-  条件: {i : ι}
-  结论: 函数.单射 (rcons (d := d) i)
-  证明: by
-  rintro ⟨⟨head₁, tail₁⟩, _⟩ ⟨⟨head₂, tail₂⟩, _⟩
-  simp only [rcons, NormalWord.mk.injEq, EmbeddingLike.apply_eq_iff_eq,
-    Word.Pair.mk.injEq, Pair.mk.injEq, and_imp]
-  rintro h₁ rfl h₃
-  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁]; rw [← equiv_fst_mul_equiv_snd (d.compl i) head₂]; rw [h₁]; rw [h₃]
-  simp
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, NormalWord, NormalWord.mk.injEq, Pair.mk.injEq, Word.Pair.mk.injEq, and_imp, apply_eq_iff_eq, d.compl, equiv_fst_mul_equiv_snd
+/-
+**Monoid.PushoutI.NormalWord.rcons_injective** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.P
+ushoutI.NormalWord`。
+形式化陈述：rcons_injective {i : ι} : Function.Injective (rcons (d
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.injective`：∀ {ι : Type u_1} {G : 
+ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]  
+ {φ : (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Monoid.PushoutI.NormalWord.mk.injEq`：∀ {ι : Type u_1} {G : ι → Type u_2}
+ {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i : ι)
+ → H →* G i} {d : Monoid.…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `Monoid.CoprodI.Word.Pair.mk.injEq`：∀ {ι : Type u_1} {M : ι → Type u_2} [
+inst : (i : ι) → Monoid (M i)] {i : ι} (head : M i) (tail : Monoid.CoprodI.Word 
+M)   (fstIdx_ne : tail.…
+· 使用定理 `Monoid.PushoutI.NormalWord.Pair.mk.injEq`：∀ {ι : Type u_1} {G : ι → Type
+ u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i
+ : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.IsComplement.equiv_fst_mul_equiv_snd`：equiv_fst_mul_equiv_snd (
+g : G) : ↑(hST.equiv g).fst * (hST.equiv g).snd = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem rcons_injective {i : ι} : Function.Injective (rcons (d := d) i) := by
   rintro ⟨⟨head₁, tail₁⟩, _⟩ ⟨⟨head₂, tail₂⟩, _⟩
   simp only [rcons, NormalWord.mk.injEq, EmbeddingLike.apply_eq_iff_eq,
     Word.Pair.mk.injEq, Pair.mk.injEq, and_imp]
   rintro h₁ rfl h₃
-  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁]; rw [← equiv_fst_mul_equiv_snd (d.compl i) head₂]; rw [h₁]; rw [h₃]
+  rw [← equiv_fst_mul_equiv_snd (d.compl i) head₁,
+      ← equiv_fst_mul_equiv_snd (d.compl i) head₂,
+    h₁, h₃]
   simp
 
-/--
-Definition of `equivPair` / `equivPair` 的定义
+/-- The equivalence between `NormalWord`s and pairs. We can turn a `NormalWord` into a
+pair by taking the head of the `List` if it is in `G i` and multiplying it by the element of the
+base group. -/
+/-
+**Monoid.PushoutI.NormalWord.equivPair** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Pushout
+I.NormalWord`。
+形式化陈述：equivPair (i) : NormalWord d ≃ Pair d i
+参数：i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivPair
-  signature: (i)
-  body: letI toFun : NormalWord d -> Pair d i :=
-    fun w =>
-      letI p := Word.equivPair i (CoprodI.of (φ i w.head) • w.toWord)
-      { toPair := p
-        normalized := fun j g hg => by
-          dsimp only [p] at hg
-          rw [Word.of_smul_def]; rw [← Word.equivPair_symm]; rw [Equiv.apply_symm_apply] at hg
-          dsimp at hg
-          exact w.normalized _ _ (Word.mem_of_mem_equivPair_tail _ hg) }
-  haveI leftInv : Function.LeftInverse (rcons i) toFun :=
-fun w => ext_smul i by
-      simp only [toFun, rcons, Word.equivPair_symm,
-        Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul,
-        MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
-        mul_smul, inv_smul_smul, smul_inv_smul]
-  { toFun := toFun
-    invFun := rcons i
-    left_inv := leftInv
-    right_inv := fun _ => rcons_injective (leftInv _) }
-
-中文:
-定义 equivPair
-  签名: (i)
-  定义体: letI toFun : NormalWord d -> Pair d i :=
-    fun w =>
-      letI p := Word.equivPair i (CoprodI.of (φ i w.head) • w.toWord)
-      { toPair := p
-        normalized := fun j g hg => by
-          dsimp only [p] at hg
-          rw [Word.of_smul_def]; rw [← Word.equivPair_symm]; rw [Equiv.apply_symm_apply] at hg
-          dsimp at hg
-          exact w.normalized _ _ (Word.mem_of_mem_equivPair_tail _ hg) }
-  haveI leftInv : Function.LeftInverse (rcons i) toFun :=
-fun w => ext_smul i by
-      simp only [toFun, rcons, Word.equivPair_symm,
-        Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul,
-        MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
-        mul_smul, inv_smul_smul, smul_inv_smul]
-  { toFun := toFun
-    invFun := rcons i
-    left_inv := leftInv
-    right_inv := fun _ => rcons_injective (leftInv _) }
-
-Depends on / 依赖: CoprodI, CoprodI.of, Equiv.apply_symm_apply, Function, Function.LeftInverse, LeftInverse, NormalWord, Word.equi, Word.equivPair, Word.equivPair_smul_same, Word.equivPair_symm, Word.mem_of_mem_equivPair_tail, Word.of_smul_def, apply_symm_apply, equivPair, equivPair_smul_same, equivPair_symm, ext_smul, leftInv, mem_of_mem_equivPair_tail
+--- 原说明 ---
+The equivalence between `NormalWord`s and pairs. We can turn a `NormalWord` into
+ a
+pair by taking the head of the `List` if it is in `G i` and multiplying it by th
+e element of the
+base group.
 -/
 noncomputable def equivPair (i) : NormalWord d ≃ Pair d i :=
-  letI toFun : NormalWord d -> Pair d i :=
+  letI toFun : NormalWord d → Pair d i :=
     fun w =>
       letI p := Word.equivPair i (CoprodI.of (φ i w.head) • w.toWord)
       { toPair := p
         normalized := fun j g hg => by
           dsimp only [p] at hg
-          rw [Word.of_smul_def]; rw [← Word.equivPair_symm]; rw [Equiv.apply_symm_apply] at hg
+          rw [Word.of_smul_def, ← Word.equivPair_symm, Equiv.apply_symm_apply] at hg
           dsimp at hg
           exact w.normalized _ _ (Word.mem_of_mem_equivPair_tail _ hg) }
   haveI leftInv : Function.LeftInverse (rcons i) toFun :=
-fun w => ext_smul i by
+    fun w => ext_smul i <| by
       simp only [toFun, rcons, Word.equivPair_symm,
         Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul,
         MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
@@ -1300,39 +1095,17 @@ fun w => ext_smul i by
     invFun := rcons i
     left_inv := leftInv
     right_inv := fun _ => rcons_injective (leftInv _) }
-
-/--
-Instance `summandAction` / 实例 `summandAction`
-
-English:
-instance summandAction
-  signature: (i : ι)
-  body: { smul := fun g w => (equivPair i).symm
-      { equivPair i w with
-        head := g * (equivPair i w).head }
-    one_smul := fun _ => by
-      dsimp +instances [instHSMul]
-      rw [one_mul]
-      exact (equivPair i).symm_apply_apply _
-    mul_smul := fun _ _ _ => by
-      dsimp +instances [instHSMul]
-      simp [mul_assoc, Equiv.apply_symm_apply] }
-
-中文:
-实例 summandAction
-  签名: (i : ι)
-  定义体: { smul := fun g w => (equivPair i).symm
-      { equivPair i w with
-        head := g * (equivPair i w).head }
-    one_smul := fun _ => by
-      dsimp +instances [instHSMul]
-      rw [one_mul]
-      exact (equivPair i).symm_apply_apply _
-    mul_smul := fun _ _ _ => by
-      dsimp +instances [instHSMul]
-      simp [mul_assoc, Equiv.apply_symm_apply] }
-
-Depends on / 依赖: Equiv.apply_symm_apply, apply_symm_apply, equivPair, instHSMul, instances, mul_assoc, mul_smul, one_mul, one_smul, symm_apply_apply
+/-
+**Monoid.PushoutI.NormalWord.summandAction** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.Pus
+houtI.NormalWord`。
+形式化陈述：summandAction (i : ι) : MulAction (G i) (NormalWord d)
+参数：i : ι。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Monoid.PushoutI.NormalWord.Pair.normalized`：∀ {ι : Type u_1} {G : ι → Ty
+pe u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : 
+(i : ι) → H →* G i} {d : Monoid.…
 -/
 noncomputable instance summandAction (i : ι) : MulAction (G i) (NormalWord d) :=
   { smul := fun g w => (equivPair i).symm
@@ -1345,21 +1118,14 @@ noncomputable instance summandAction (i : ι) : MulAction (G i) (NormalWord d) :
     mul_smul := fun _ _ _ => by
       dsimp +instances [instHSMul]
       simp [mul_assoc, Equiv.apply_symm_apply] }
-
-/--
-theorem `summand_smul_def'` / 定理 `summand_smul_def'`
-
-English:
-theorem summand_smul_def'
-  given: {i : ι} (g : G i) (w : NormalWord d)
-  proof: rfl
-
-中文:
-定理 summand_smul_def'
-  条件: {i : ι} (g : G i) (w : NormalWord d)
-  证明: rfl
-
-Depends on / 依赖: equivPair
+/-
+**Monoid.PushoutI.NormalWord.summand_smul_def'** 是 Mathlib 中的一个定理，位于命名空间 `Monoid
+.PushoutI.NormalWord`。
+形式化陈述：summand_smul_def' {i : ι} (g : G i) (w : NormalWord d) : g • w = (equivPai
+r i).symm { equivPair i w with head
+参数：g : G i；w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem summand_smul_def' {i : ι} (g : G i) (w : NormalWord d) :
     g • w = (equivPair i).symm
@@ -1367,52 +1133,18 @@ theorem summand_smul_def' {i : ι} (g : G i) (w : NormalWord d) :
         head := g * (equivPair i w).head } := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: : MulAction (PushoutI φ) (NormalWord d)
-  body: MulAction.ofEndHom
-    lift
-      (fun _ => MulAction.toEndHom)
-MulAction.toEndHom by
-    intro i
-    simp only [MulAction.toEndHom, DFunLike.ext_iff, MonoidHom.coe_comp, MonoidHom.coe_mk,
-      OneHom.coe_mk, comp_apply]
-    intro h
-    funext w
-    apply NormalWord.ext_smul i
-    simp only [summand_smul_def', equivPair, rcons, Word.equivPair_symm, Equiv.coe_fn_mk,
-      Equiv.coe_fn_symm_mk, Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul,
-      Word.rcons_eq_smul, equiv_fst_eq_mul_inv, map_mul, map_inv, mul_smul, inv_smul_smul,
-      smul_inv_smul, base_smul_def', MonoidHom.apply_ofInjective_symm]
-
-中文:
-实例 mulAction
-  签名: : 乘法作用 (PushoutI φ) (NormalWord d)
-  定义体: MulAction.ofEndHom
-    lift
-      (fun _ => MulAction.toEndHom)
-MulAction.toEndHom by
-    intro i
-    simp only [MulAction.toEndHom, DFunLike.ext_iff, MonoidHom.coe_comp, MonoidHom.coe_mk,
-      OneHom.coe_mk, comp_apply]
-    intro h
-    funext w
-    apply NormalWord.ext_smul i
-    simp only [summand_smul_def', equivPair, rcons, Word.equivPair_symm, Equiv.coe_fn_mk,
-      Equiv.coe_fn_symm_mk, Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul,
-      Word.rcons_eq_smul, equiv_fst_eq_mul_inv, map_mul, map_inv, mul_smul, inv_smul_smul,
-      smul_inv_smul, base_smul_def', MonoidHom.apply_ofInjective_symm]
-
-Depends on / 依赖: DFunLike, DFunLike.ext_iff, Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, MonoidHom, MonoidHom.coe_comp, MonoidHom.coe_mk, MulAction, MulAction.ofEndHom, MulAction.toEndHom, NormalWord, NormalWord.ext_smul, OneHom, OneHom.coe_mk, Word.equivPair_smul_same, Word.equivPair_symm, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, coe_comp, coe_fn_mk
+/-
+**Monoid.PushoutI.NormalWord.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.Pushout
+I.NormalWord`。
+形式化陈述：mulAction : MulAction (PushoutI φ) (NormalWord d)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance mulAction : MulAction (PushoutI φ) (NormalWord d) :=
-MulAction.ofEndHom
+  MulAction.ofEndHom <|
     lift
       (fun _ => MulAction.toEndHom)
-MulAction.toEndHom by
+      MulAction.toEndHom <| by
     intro i
     simp only [MulAction.toEndHom, DFunLike.ext_iff, MonoidHom.coe_comp, MonoidHom.coe_mk,
       OneHom.coe_mk, comp_apply]
@@ -1423,151 +1155,102 @@ MulAction.toEndHom by
       Equiv.coe_fn_symm_mk, Word.equivPair_smul_same, Word.equivPair_tail_eq_inv_smul,
       Word.rcons_eq_smul, equiv_fst_eq_mul_inv, map_mul, map_inv, mul_smul, inv_smul_smul,
       smul_inv_smul, base_smul_def', MonoidHom.apply_ofInjective_symm]
-
-/--
-theorem `base_smul_def` / 定理 `base_smul_def`
-
-English:
-theorem base_smul_def
-  given: (h : H) (w : NormalWord d)
-  proof: rfl
-
-中文:
-定理 base_smul_def
-  条件: (h : H) (w : NormalWord d)
-  证明: rfl
-
-Depends on / 依赖: w.head
+/-
+**Monoid.PushoutI.NormalWord.base_smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Pus
+houtI.NormalWord`。
+形式化陈述：base_smul_def (h : H) (w : NormalWord d) : base φ h • w = { w with head
+参数：h : H；w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem base_smul_def (h : H) (w : NormalWord d) :
     base φ h • w = { w with head := h * w.head } := rfl
-
-/--
-theorem `summand_smul_def` / 定理 `summand_smul_def`
-
-English:
-theorem summand_smul_def
-  given: {i : ι} (g : G i) (w : NormalWord d)
-  proof: rfl
-
-中文:
-定理 summand_smul_def
-  条件: {i : ι} (g : G i) (w : NormalWord d)
-  证明: rfl
-
-Depends on / 依赖: equivPair
+/-
+**Monoid.PushoutI.NormalWord.summand_smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.
+PushoutI.NormalWord`。
+形式化陈述：summand_smul_def {i : ι} (g : G i) (w : NormalWord d) : of (φ
+参数：g : G i；w : NormalWord d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem summand_smul_def {i : ι} (g : G i) (w : NormalWord d) :
     of (φ := φ) i g • w = (equivPair i).symm
       { equivPair i w with
         head := g * (equivPair i w).head } := rfl
-
-/--
-theorem `of_smul_eq_smul` / 定理 `of_smul_eq_smul`
-
-English:
-theorem of_smul_eq_smul
-  given: {i : ι} (g : G i) (w : NormalWord d)
-  proof: by
-  rw [summand_smul_def]; rw [summand_smul_def']
-
-中文:
-定理 of_smul_eq_smul
-  条件: {i : ι} (g : G i) (w : NormalWord d)
-  证明: by
-  rw [summand_smul_def]; rw [summand_smul_def']
-
-Depends on / 依赖: summand_smul_def
+/-
+**Monoid.PushoutI.NormalWord.of_smul_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.P
+ushoutI.NormalWord`。
+形式化陈述：of_smul_eq_smul {i : ι} (g : G i) (w : NormalWord d) : of (φ
+参数：g : G i；w : NormalWord d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Monoid.CoprodI.Word.Pair.fstIdx_ne`：∀ {ι : Type u_1} {M : ι → Type u_2} 
+[inst : (i : ι) → Monoid (M i)] {i : ι} (self : Monoid.CoprodI.Word.Pair M i),  
+ self.tail.fstIdx ≠ some…
+· 使用定理 `Monoid.PushoutI.NormalWord.Pair.normalized`：∀ {ι : Type u_1} {G : ι → Ty
+pe u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : 
+(i : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.summand_smul_def`：summand_smul_def {i : ι} (g
+ : G i) (w : NormalWord d) : of (φ
+· 使用定理 `Monoid.PushoutI.NormalWord.summand_smul_def'`：summand_smul_def' {i : ι} 
+(g : G i) (w : NormalWord d) : g • w = (equivPair i).symm { equivPair i w with h
+ead
 -/
 theorem of_smul_eq_smul {i : ι} (g : G i) (w : NormalWord d) :
     of (φ := φ) i g • w = g • w := by
-  rw [summand_smul_def]; rw [summand_smul_def']
-
-/--
-theorem `base_smul_eq_smul` / 定理 `base_smul_eq_smul`
-
-English:
-theorem base_smul_eq_smul
-  given: (h : H) (w : NormalWord d)
-  proof: by
-  rw [base_smul_def]; rw [base_smul_def']
-
-中文:
-定理 base_smul_eq_smul
-  条件: (h : H) (w : NormalWord d)
-  证明: by
-  rw [base_smul_def]; rw [base_smul_def']
-
-Depends on / 依赖: base_smul_def
+  rw [summand_smul_def, summand_smul_def']
+/-
+**Monoid.PushoutI.NormalWord.base_smul_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `Monoid
+.PushoutI.NormalWord`。
+形式化陈述：base_smul_eq_smul (h : H) (w : NormalWord d) : base φ h • w = h • w
+参数：h : H；w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.normalized`：∀ {ι : Type u_1} {G : ι → Type u_
+2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i : 
+ι) → H →* G i} {d : Monoid.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.base_smul_def`：base_smul_def (h : H) (w : Nor
+malWord d) : base φ h • w = { w with head
+· 使用定理 `Monoid.PushoutI.NormalWord.base_smul_def'`：base_smul_def' (h : H) (w : N
+ormalWord d) : h • w = { w with head
 -/
 theorem base_smul_eq_smul (h : H) (w : NormalWord d) :
     base φ h • w = h • w := by
-  rw [base_smul_def]; rw [base_smul_def']
+  rw [base_smul_def, base_smul_def']
 
 /-- Induction principle for `NormalWord`, that corresponds closely to inducting on
 the underlying list. -/
 @[elab_as_elim]
-/--
-Definition of `consRecOn` / `consRecOn` 的定义
+/-
+**Monoid.PushoutI.NormalWord.consRecOn** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Pushout
+I.NormalWord`。
+形式化陈述：consRecOn {motive : NormalWord d -> Sort _} (w : NormalWord d) (empty : mo
+tive empty) (cons : forall (i : ι) (g : G i) (w : NormalWord d) (hmw : w.fstIdx 
+!= some i) (_hgn : g in d.set i) (hgr : g ∉ (φ i).range) (_hw1 : w.head = 1), mo
+tive w -> motive (cons g w hmw hgr)) (base : forall (h : H) (w : NormalWord d), 
+w.head = 1 -> motive w -> motive (base φ h • w)) : motive w
+参数：w : NormalWord d；empty : motive empty；cons : forall (i : ι) (g : G i) (w : No
+rmalWord d) (hmw : w.fstIdx != some i) (_hgn : g in d.set i) (hgr : g ∉ (φ i).ra
+nge) (_hw1 : w.head = 1), motive w -> motive (cons g w hmw hgr)；base : forall (h
+ : H) (w : NormalWord d), w.head = 1 -> motive w -> motive (base φ h • w)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition consRecOn
-  signature: {motive : NormalWord d -> Sort _} (w : NormalWord d)
-  body: by
-  rcases w with ⟨w, head, h3⟩
-  convert! base head ⟨w, 1, h3⟩ rfl ?_
-  · simp [base_smul_def]
-  · induction w using Word.consRecOn with
-    | empty => exact empty
-    | cons i g w h1 hg1 ih =>
-      convert!
-        cons i g ⟨w, 1, fun _ _ h => h3 _ _ (List.mem_cons_of_mem _ h)⟩ h1
-          (h3 _ _ List.mem_cons_self) ?_ rfl (ih ?_)
-      · simp only [Word.cons, NormalWord.cons, map_one, mul_one,
-          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
-          (h3 _ _ List.mem_cons_self)]
-      · apply d.injective i
-        simp only [NormalWord.cons, equiv_fst_eq_mul_inv, MonoidHom.apply_ofInjective_symm,
-          map_one, mul_one, mul_inv_cancel, (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
-          (h3 _ _ List.mem_cons_self)]
-      · rwa [← SetLike.mem_coe,
-          ← coe_equiv_snd_eq_one_iff_mem (d.compl i) (d.one_mem _),
-          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
-          (h3 _ _ List.mem_cons_self)]
-
-中文:
-定义 consRecOn
-  签名: {motive : NormalWord d -> 类型层 _} (w : NormalWord d)
-  定义体: by
-  rcases w with ⟨w, head, h3⟩
-  convert! base head ⟨w, 1, h3⟩ rfl ?_
-  · simp [base_smul_def]
-  · induction w using Word.consRecOn with
-    | empty => exact empty
-    | cons i g w h1 hg1 ih =>
-      convert!
-        cons i g ⟨w, 1, fun _ _ h => h3 _ _ (List.mem_cons_of_mem _ h)⟩ h1
-          (h3 _ _ List.mem_cons_self) ?_ rfl (ih ?_)
-      · simp only [Word.cons, NormalWord.cons, map_one, mul_one,
-          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
-          (h3 _ _ List.mem_cons_self)]
-      · apply d.injective i
-        simp only [NormalWord.cons, equiv_fst_eq_mul_inv, MonoidHom.apply_ofInjective_symm,
-          map_one, mul_one, mul_inv_cancel, (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
-          (h3 _ _ List.mem_cons_self)]
-      · rwa [← SetLike.mem_coe,
-          ← coe_equiv_snd_eq_one_iff_mem (d.compl i) (d.one_mem _),
-          (equiv_snd_eq_self_iff_mem (d.compl i) (one_mem _)).2
-          (h3 _ _ List.mem_cons_self)]
-
-Depends on / 依赖: List.mem_cons_of_mem, List.mem_cons_self, NormalWord, NormalWord.cons, Word.cons, Word.consRecOn, base_smul_def, consRecOn, convert, d.compl, d.injective, equiv_fst, equiv_snd_eq_self_iff_mem, injective, map_one, mem_cons_of_mem, mem_cons_self, mul_one, one_mem
+--- 原说明 ---
+Induction principle for `NormalWord`, that corresponds closely to inducting on
+the underlying list.
 -/
-noncomputable def consRecOn {motive : NormalWord d -> Sort _} (w : NormalWord d)
+noncomputable def consRecOn {motive : NormalWord d → Sort _} (w : NormalWord d)
     (empty : motive empty)
-    (cons : forall (i : ι) (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some i)
-      (_hgn : g in d.set i) (hgr : g ∉ (φ i).range) (_hw1 : w.head = 1),
-      motive w -> motive (cons g w hmw hgr))
-    (base : forall (h : H) (w : NormalWord d), w.head = 1 -> motive w -> motive
+    (cons : ∀ (i : ι) (g : G i) (w : NormalWord d) (hmw : w.fstIdx ≠ some i)
+      (_hgn : g ∈ d.set i) (hgr : g ∉ (φ i).range) (_hw1 : w.head = 1),
+      motive w → motive (cons g w hmw hgr))
+    (base : ∀ (h : H) (w : NormalWord d), w.head = 1 → motive w → motive
       (base φ h • w)) : motive w := by
   rcases w with ⟨w, head, h3⟩
   convert! base head ⟨w, 1, h3⟩ rfl ?_
@@ -1592,37 +1275,73 @@ noncomputable def consRecOn {motive : NormalWord d -> Sort _} (w : NormalWord d)
 
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `cons_eq_smul` / 定理 `cons_eq_smul`
-
-English:
-theorem cons_eq_smul
-  statement: {i : ι} (g : G i)
-  proof: by
-  apply ext_smul i
-  simp only [cons, Word.cons_eq_smul, MonoidHom.apply_ofInjective_symm,
-    equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv, mul_smul, inv_smul_smul, summand_smul_def,
-    equivPair, rcons, Word.equivPair_symm, Word.rcons_eq_smul, Equiv.coe_fn_mk,
-    Word.equivPair_tail_eq_inv_smul, Equiv.coe_fn_symm_mk, smul_inv_smul]
-
-@[simp]
-
-中文:
-定理 cons_eq_smul
-  结论: {i : ι} (g : G i)
-  证明: by
-  apply ext_smul i
-  simp only [cons, Word.cons_eq_smul, MonoidHom.apply_ofInjective_symm,
-    equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv, mul_smul, inv_smul_smul, summand_smul_def,
-    equivPair, rcons, Word.equivPair_symm, Word.rcons_eq_smul, Equiv.coe_fn_mk,
-    Word.equivPair_tail_eq_inv_smul, Equiv.coe_fn_symm_mk, smul_inv_smul]
-
-@[simp]
-
-Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, MonoidHom, MonoidHom.apply_ofInjective_symm, Word.cons_eq_smul, Word.equivPair_symm, Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, apply_ofInjective_symm, coe_fn_mk, coe_fn_symm_mk, cons_eq_smul, equivPair, equivPair_symm, equivPair_tail_eq_inv_smul, equiv_fst_eq_mul_inv, ext_smul, inv_smul_smul, map_inv, map_mul
+/-
+**Monoid.PushoutI.NormalWord.cons_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Push
+outI.NormalWord`。
+形式化陈述：cons_eq_smul {i : ι} (g : G i) (w : NormalWord d) (hmw : w.fstIdx != some 
+i) (hgr : g ∉ (φ i).range) : cons g w hmw hgr = of (φ
+参数：g : G i；w : NormalWord d；hmw : w.fstIdx != some i；hgr : g ∉ (φ i).range。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.ext_smul`：ext_smul {w₁ w₂ : NormalWord d} (i 
+: ι) (h : CoprodI.of (φ i w₁.head) • w₁.toWord = CoprodI.of (φ i w₂.head) • w₂.t
+oWord) : w₁ = w₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.injective`：∀ {ι : Type u_1} {G : 
+ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]  
+ {φ : (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Monoid.CoprodI.Word.cons_eq_smul`：cons_eq_smul {i} {m : M i} {ls h1 h2} 
+: cons m ls h1 h2 = of m • ls
+· 使用定理 `Monoid.PushoutI.NormalWord.mk.congr_simp`：∀ {ι : Type u_1} {G : ι → Type
+ u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i
+ : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `MonoidHom.apply_ofInjective_symm`：apply_ofInjective_symm {f : G ->* N} (
+hf : Function.Injective f) (x : f.range) : f ((ofInjective hf).symm x) = x
+· 使用定理 `Subgroup.IsComplement.equiv_fst_eq_mul_inv`：equiv_fst_eq_mul_inv (g : G)
+ : ↑(hST.equiv g).fst = g * ((hST.equiv g).snd : G)⁻¹
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Monoid.CoprodI.Word.Pair.fstIdx_ne`：∀ {ι : Type u_1} {M : ι → Type u_2} 
+[inst : (i : ι) → Monoid (M i)] {i : ι} (self : Monoid.CoprodI.Word.Pair M i),  
+ self.tail.fstIdx ≠ some…
+· 使用定理 `Monoid.CoprodI.Word.equivPair_tail_eq_inv_smul`：equivPair_tail_eq_inv_sm
+ul {G : ι -> Type*} [forall i, Group (G i)] [forall i, DecidableEq (G i)] {i} (w
+ : Word G) : (equivPair i w).tail = …
+· 使用定理 `Monoid.PushoutI.NormalWord.Pair.normalized`：∀ {ι : Type u_1} {G : ι → Ty
+pe u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : 
+(i : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `Monoid.CoprodI.Word.Pair.mk.congr_simp`：∀ {ι : Type u_1} {M : ι → Type u
+_2} [inst : (i : ι) → Monoid (M i)] {i : ι} (head head_1 : M i),   head = head_1
+ →     ∀ (tail tail_1 : Mono…
+· 使用定理 `Monoid.CoprodI.Word.rcons_eq_smul`：rcons_eq_smul {i} (p : Pair M i) : rc
+ons p = of p.head • p.tail
+· 使用定理 `Monoid.PushoutI.NormalWord.Pair.mk.congr_simp`：∀ {ι : Type u_1} {G : ι →
+ Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ
+ : (i : ι) → H →* G i} {d : Monoid.…
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem cons_eq_smul {i : ι} (g : G i)
-    (w : NormalWord d) (hmw : w.fstIdx != some i)
+    (w : NormalWord d) (hmw : w.fstIdx ≠ some i)
     (hgr : g ∉ (φ i).range) : cons g w hmw hgr = of (φ := φ) i g • w := by
   apply ext_smul i
   simp only [cons, Word.cons_eq_smul, MonoidHom.apply_ofInjective_symm,
@@ -1631,34 +1350,79 @@ theorem cons_eq_smul {i : ι} (g : G i)
     Word.equivPair_tail_eq_inv_smul, Equiv.coe_fn_symm_mk, smul_inv_smul]
 
 @[simp]
-/--
-theorem `prod_summand_smul` / 定理 `prod_summand_smul`
-
-English:
-theorem prod_summand_smul
-  given: {i : ι} (g : G i) (w : NormalWord d)
-  proof: by
-  simp only [prod, summand_smul_def', equivPair, rcons, Word.equivPair_symm,
-    Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Word.equivPair_smul_same,
-    Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, ← of_apply_eq_base φ i,
-    MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
-    Word.prod_smul, ofCoprodI_of, inv_mul_cancel_left, mul_inv_cancel_left]
-
-@[simp]
-
-中文:
-定理 prod_summand_smul
-  条件: {i : ι} (g : G i) (w : NormalWord d)
-  证明: by
-  simp only [prod, summand_smul_def', equivPair, rcons, Word.equivPair_symm,
-    Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Word.equivPair_smul_same,
-    Word.equivPair_tail_eq_inv_smul, Word.rcons_eq_smul, ← of_apply_eq_base φ i,
-    MonoidHom.apply_ofInjective_symm, equiv_fst_eq_mul_inv, mul_assoc, map_mul, map_inv,
-    Word.prod_smul, ofCoprodI_of, inv_mul_cancel_left, mul_inv_cancel_left]
-
-@[simp]
-
-Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, MonoidHom, MonoidHom.apply_ofInjective_symm, Word.equivPair_smul_same, Word.equivPair_symm, Word.equivPair_tail_eq_inv_smul, Word.prod_smul, Word.rcons_eq_smul, apply_ofInjective_symm, coe_fn_mk, coe_fn_symm_mk, equivPair, equivPair_smul_same, equivPair_symm, equivPair_tail_eq_inv_smul, equiv_fst_eq_mul_inv, inv_mul_cancel_left, map_inv, map_mul
+/-
+**Monoid.PushoutI.NormalWord.prod_summand_smul** 是 Mathlib 中的一个定理，位于命名空间 `Monoid
+.PushoutI.NormalWord`。
+形式化陈述：prod_summand_smul {i : ι} (g : G i) (w : NormalWord d) : (g • w).prod = of
+ i g * w.prod
+参数：g : G i；w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.injective`：∀ {ι : Type u_1} {G : 
+ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]  
+ {φ : (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Monoid.CoprodI.Word.Pair.fstIdx_ne`：∀ {ι : Type u_1} {M : ι → Type u_2} 
+[inst : (i : ι) → Monoid (M i)] {i : ι} (self : Monoid.CoprodI.Word.Pair M i),  
+ self.tail.fstIdx ≠ some…
+· 使用定理 `Monoid.CoprodI.Word.equivPair_tail_eq_inv_smul`：equivPair_tail_eq_inv_sm
+ul {G : ι -> Type*} [forall i, Group (G i)] [forall i, DecidableEq (G i)] {i} (w
+ : Word G) : (equivPair i w).tail = …
+· 使用定理 `Monoid.CoprodI.Word.equivPair_smul_same`：equivPair_smul_same {i} (m : M 
+i) (w : Word M) : equivPair i (of m • w) = ⟨m * (equivPair i w).head, (equivPair
+ i w).tail, (equivPair i w).f…
+· 使用定理 `Monoid.CoprodI.Word.Pair.mk.congr_simp`：∀ {ι : Type u_1} {M : ι → Type u
+_2} [inst : (i : ι) → Monoid (M i)] {i : ι} (head head_1 : M i),   head = head_1
+ →     ∀ (tail tail_1 : Mono…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Monoid.PushoutI.NormalWord.Pair.mk.congr_simp`：∀ {ι : Type u_1} {G : ι →
+ Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ
+ : (i : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `Equiv.mk.congr_simp`：∀ {α : Sort u_1} {β : Sort u_2} (toFun toFun_1 : α 
+→ β) (e_toFun : toFun = toFun_1) (invFun invFun_1 : β → α)   (e_invFun : invFun 
+= invFun_…
+· 使用定理 `Monoid.PushoutI.NormalWord.Pair.normalized`：∀ {ι : Type u_1} {G : ι → Ty
+pe u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : 
+(i : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `Monoid.CoprodI.Word.rcons_eq_smul`：rcons_eq_smul {i} (p : Pair M i) : rc
+ons p = of p.head • p.tail
+· 使用定理 `Monoid.PushoutI.NormalWord.mk.congr_simp`：∀ {ι : Type u_1} {G : ι → Type
+ u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i
+ : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monoid.PushoutI.of_apply_eq_base`：of_apply_eq_base (i : ι) (x : H) : of 
+i (φ i x) = base φ x
+· 使用定理 `MonoidHom.apply_ofInjective_symm`：apply_ofInjective_symm {f : G ->* N} (
+hf : Function.Injective f) (x : f.range) : f ((ofInjective hf).symm x) = x
+· 使用定理 `Subgroup.IsComplement.equiv_fst_eq_mul_inv`：equiv_fst_eq_mul_inv (g : G)
+ : ↑(hST.equiv g).fst = g * ((hST.equiv g).snd : G)⁻¹
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `Monoid.CoprodI.Word.prod_smul`：prod_smul (m) : forall w : Word M, prod (
+m • w) = m * prod w
+· 使用定理 `Monoid.PushoutI.ofCoprodI_of`：ofCoprodI_of (i : ι) (g : G i) : (ofCoprod
+I (CoprodI.of g) : PushoutI φ) = of i g
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+（共 31 条，此处仅展示前 30 条）
 -/
 theorem prod_summand_smul {i : ι} (g : G i) (w : NormalWord d) :
     (g • w).prod = of i g * w.prod := by
@@ -1669,28 +1433,30 @@ theorem prod_summand_smul {i : ι} (g : G i) (w : NormalWord d) :
     Word.prod_smul, ofCoprodI_of, inv_mul_cancel_left, mul_inv_cancel_left]
 
 @[simp]
-/--
-theorem `prod_smul` / 定理 `prod_smul`
-
-English:
-theorem prod_smul
-  given: (g : PushoutI φ) (w : NormalWord d)
-  proof: by
-  induction g using PushoutI.induction_on generalizing w with
-  | of i g => rw [of_smul_eq_smul, prod_summand_smul]
-  | base h => rw [base_smul_eq_smul, prod_base_smul]
-  | mul x y ihx ihy => rw [mul_smul, ihx, ihy, mul_assoc]
-
-中文:
-定理 prod_smul
-  条件: (g : PushoutI φ) (w : NormalWord d)
-  证明: by
-  induction g using PushoutI.induction_on generalizing w with
-  | of i g => rw [of_smul_eq_smul, prod_summand_smul]
-  | base h => rw [base_smul_eq_smul, prod_base_smul]
-  | mul x y ihx ihy => rw [mul_smul, ihx, ihy, mul_assoc]
-
-Depends on / 依赖: PushoutI, PushoutI.induction_on, base_smul_eq_smul, generalizing, induction_on, mul_assoc, mul_smul, of_smul_eq_smul, prod_base_smul, prod_summand_smul
+/-
+**Monoid.PushoutI.NormalWord.prod_smul** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Pushout
+I.NormalWord`。
+形式化陈述：prod_smul (g : PushoutI φ) (w : NormalWord d) : (g • w).prod = g * w.prod
+参数：g : PushoutI φ；w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.induction_on`：induction_on {motive : PushoutI φ -> Prop}
+ (x : PushoutI φ) (of : forall (i : ι) (g : G i), motive (of i g)) (base : foral
+l h, motive (base …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.of_smul_eq_smul`：of_smul_eq_smul {i : ι} (g :
+ G i) (w : NormalWord d) : of (φ
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_summand_smul`：prod_summand_smul {i : ι} 
+(g : G i) (w : NormalWord d) : (g • w).prod = of i g * w.prod
+· 使用定理 `Monoid.PushoutI.NormalWord.base_smul_eq_smul`：base_smul_eq_smul (h : H) 
+(w : NormalWord d) : base φ h • w = h • w
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_base_smul`：prod_base_smul (h : H) (w : N
+ormalWord d) : (h • w).prod = base φ h * w.prod
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem prod_smul (g : PushoutI φ) (w : NormalWord d) :
     (g • w).prod = g * w.prod := by
@@ -1698,66 +1464,55 @@ theorem prod_smul (g : PushoutI φ) (w : NormalWord d) :
   | of i g => rw [of_smul_eq_smul, prod_summand_smul]
   | base h => rw [base_smul_eq_smul, prod_base_smul]
   | mul x y ihx ihy => rw [mul_smul, ihx, ihy, mul_assoc]
-
-/--
-theorem `prod_smul_empty` / 定理 `prod_smul_empty`
-
-English:
-theorem prod_smul_empty
-  given: (w : NormalWord d)
-  statement: w.prod • empty = w
-  proof: by
-  induction w using consRecOn with
-  | empty => simp
-  | cons i g w _ _ _ _ ih =>
-    rw [prod_cons]; rw [mul_smul]; rw [ih]; rw [cons_eq_smul]
-  | base h w _ ih =>
-    rw [prod_smul]; rw [mul_smul]; rw [ih]
-
-中文:
-定理 prod_smul_empty
-  条件: (w : NormalWord d)
-  结论: w.乘积 • empty = w
-  证明: by
-  induction w using consRecOn with
-  | empty => simp
-  | cons i g w _ _ _ _ ih =>
-    rw [prod_cons]; rw [mul_smul]; rw [ih]; rw [cons_eq_smul]
-  | base h w _ ih =>
-    rw [prod_smul]; rw [mul_smul]; rw [ih]
-
-Depends on / 依赖: consRecOn, cons_eq_smul, mul_smul, prod_cons, prod_smul
+/-
+**Monoid.PushoutI.NormalWord.prod_smul_empty** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.P
+ushoutI.NormalWord`。
+形式化陈述：prod_smul_empty (w : NormalWord d) : w.prod • empty = w
+参数：w : NormalWord d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_empty`：prod_empty : (empty : NormalWord 
+d).prod = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_cons`：prod_cons {i} (g : G i) (w : Norma
+lWord d) (hmw : w.fstIdx != some i) (hgr : g ∉ (φ i).range) : (cons g w hmw hgr)
+.prod = of i g * w.prod
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `Monoid.PushoutI.NormalWord.cons_eq_smul`：cons_eq_smul {i : ι} (g : G i) 
+(w : NormalWord d) (hmw : w.fstIdx != some i) (hgr : g ∉ (φ i).range) : cons g w
+ hmw hgr = of (φ
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_smul`：prod_smul (g : PushoutI φ) (w : No
+rmalWord d) : (g • w).prod = g * w.prod
 -/
 theorem prod_smul_empty (w : NormalWord d) : w.prod • empty = w := by
   induction w using consRecOn with
   | empty => simp
   | cons i g w _ _ _ _ ih =>
-    rw [prod_cons]; rw [mul_smul]; rw [ih]; rw [cons_eq_smul]
+    rw [prod_cons, mul_smul, ih, cons_eq_smul]
   | base h w _ ih =>
-    rw [prod_smul]; rw [mul_smul]; rw [ih]
+    rw [prod_smul, mul_smul, ih]
 
-/--
-Definition of `equiv` / `equiv` 的定义
+/-- The equivalence between normal forms and elements of the pushout -/
+/-
+**Monoid.PushoutI.NormalWord.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI.No
+rmalWord`。
+形式化陈述：equiv : PushoutI φ ≃ NormalWord d
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_smul_empty`：prod_smul_empty (w : NormalW
+ord d) : w.prod • empty = w
 
-English:
-definition equiv
-  signature: : PushoutI φ ≃ NormalWord d
-  body: { toFun := fun g => g • .empty
-    invFun := fun w => w.prod
-    left_inv := fun g => by
-      simp only [prod_smul, prod_empty, mul_one]
-    right_inv := fun w => prod_smul_empty w }
-
-中文:
-定义 equiv
-  签名: : PushoutI φ ≃ NormalWord d
-  定义体: { toFun := fun g => g • .empty
-    invFun := fun w => w.prod
-    left_inv := fun g => by
-      simp only [prod_smul, prod_empty, mul_one]
-    right_inv := fun w => prod_smul_empty w }
-
-Depends on / 依赖: invFun, left_inv, mul_one, prod_empty, prod_smul, prod_smul_empty, right_inv, w.prod
+--- 原说明 ---
+The equivalence between normal forms and elements of the pushout
 -/
 noncomputable def equiv : PushoutI φ ≃ NormalWord d :=
   { toFun := fun g => g • .empty
@@ -1765,69 +1520,42 @@ noncomputable def equiv : PushoutI φ ≃ NormalWord d :=
     left_inv := fun g => by
       simp only [prod_smul, prod_empty, mul_one]
     right_inv := fun w => prod_smul_empty w }
-
-/--
-theorem `prod_injective` / 定理 `prod_injective`
-
-English:
-theorem prod_injective
-  statement: {ι : Type*} {G : ι -> Type*} [(i : ι) -> Group (G i)] {φ : (i : ι) -> H ->* G i}
-  proof: by
-  let := Classical.decEq ι
-  let := fun i => Classical.decEq (G i)
-  exact equiv.symm.injective
-
-中文:
-定理 prod_injective
-  结论: {ι : 类型} {G : ι -> 类型} [(i : ι) -> 群 (G i)] {φ : (i : ι) -> H ->* G i}
-  证明: by
-  let := Classical.decEq ι
-  let := fun i => Classical.decEq (G i)
-  exact equiv.symm.injective
-
-Depends on / 依赖: Classical, Classical.decEq, equiv.symm.injective, injective
+/-
+**Monoid.PushoutI.NormalWord.prod_injective** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.Pu
+shoutI.NormalWord`。
+形式化陈述：prod_injective {ι : Type*} {G : ι -> Type*} [(i : ι) -> Group (G i)] {φ : 
+(i : ι) -> H ->* G i} {d : Transversal φ} : Function.Injective (prod : NormalWor
+d d -> PushoutI φ)
+参数：i : ι；G i；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem prod_injective {ι : Type*} {G : ι -> Type*} [(i : ι) -> Group (G i)] {φ : (i : ι) -> H ->* G i}
-    {d : Transversal φ} : Function.Injective (prod : NormalWord d -> PushoutI φ) := by
+theorem prod_injective {ι : Type*} {G : ι → Type*} [(i : ι) → Group (G i)] {φ : (i : ι) → H →* G i}
+    {d : Transversal φ} : Function.Injective (prod : NormalWord d → PushoutI φ) := by
   let := Classical.decEq ι
   let := fun i => Classical.decEq (G i)
   exact equiv.symm.injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FaithfulSMul (PushoutI φ) (NormalWord d)
-  body: ⟨fun h => by simpa using congr_arg prod (h empty)⟩
-
-中文:
-实例 :
-  签名: 忠实标量乘法 (PushoutI φ) (NormalWord d)
-  定义体: ⟨fun h => by simpa using congr_arg prod (h empty)⟩
-
-Depends on / 依赖: congr_arg
+/-
+**Monoid.PushoutI.NormalWord.** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.PushoutI.NormalW
+ord`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FaithfulSMul (PushoutI φ) (NormalWord d) :=
   ⟨fun h => by simpa using congr_arg prod (h empty)⟩
-
+/-
+**Monoid.PushoutI.NormalWord.** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.PushoutI.NormalW
+ord`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : ι) : FaithfulSMul (G i) (NormalWord d) :=
   ⟨by simp [summand_smul_def']⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FaithfulSMul H (NormalWord d)
-  body: ⟨by simp [base_smul_def']⟩
-
-中文:
-实例 :
-  签名: 忠实标量乘法 H (NormalWord d)
-  定义体: ⟨by simp [base_smul_def']⟩
-
-Depends on / 依赖: base_smul_def
+/-
+**Monoid.PushoutI.NormalWord.** 是 Mathlib 中的一个实例，位于命名空间 `Monoid.PushoutI.NormalW
+ord`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FaithfulSMul H (NormalWord d) :=
   ⟨by simp [base_smul_def']⟩
@@ -1836,86 +1564,95 @@ end NormalWord
 
 open NormalWord
 
-/--
-theorem `of_injective` / 定理 `of_injective`
+/-- All maps into the `PushoutI`, or amalgamated product of groups are injective,
+provided all maps in the diagram are injective.
 
-English:
-theorem of_injective
-  given: (hφ : forall i, Function.Injective (φ i)) (i : ι)
-  proof: by
-  rcases transversal_nonempty φ hφ with ⟨d⟩
-  let _ := Classical.decEq ι
-  let _ := fun i => Classical.decEq (G i)
-  refine Function.Injective.of_comp
-    (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
-  intro _ _ h
-  exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp_all [funext_iff, of_smul_eq_smul])
+See also `base_injective` -/
+/-
+**Monoid.PushoutI.of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：of_injective (hφ : forall i, Function.Injective (φ i)) (i : ι) : Function.
+Injective (of (φ
+参数：hφ : forall i, Function.Injective (φ i)；i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.transversal_nonempty`：transversal_nonempty (h
+φ : forall i, Injective (φ i)) : Nonempty (Transversal φ)
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `FaithfulSMul.eq_of_smul_eq_smul`：∀ {M : Type u_4} {α : Type u_5} {inst :
+ SMul M α} [self : FaithfulSMul M α] {m₁ m₂ : M},   (∀ (a : α), m₁ • a = m₂ • a)
+ → m₁ = m₂
+· 使用定理 `Monoid.PushoutI.NormalWord.instFaithfulSMul_1`：∀ {ι : Type u_1} {G : ι →
+ Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ
+ : (i : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Monoid.PushoutI.NormalWord.of_smul_eq_smul`：of_smul_eq_smul {i : ι} (g :
+ G i) (w : NormalWord d) : of (φ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 of_injective
-  条件: (hφ : 对任意 i, 函数.单射 (φ i)) (i : ι)
-  证明: by
-  rcases transversal_nonempty φ hφ with ⟨d⟩
-  let _ := Classical.decEq ι
-  let _ := fun i => Classical.decEq (G i)
-  refine Function.Injective.of_comp
-    (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
-  intro _ _ h
-  exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp_all [funext_iff, of_smul_eq_smul])
+--- 原说明 ---
+All maps into the `PushoutI`, or amalgamated product of groups are injective,
+provided all maps in the diagram are injective.
 
-Depends on / 依赖: Classical, Classical.decEq, Function, Function.Injective.of_comp, Injective, NormalWord, PushoutI, eq_of_smul_eq_smul, funext_iff, of_comp, of_smul_eq_smul, transversal_nonempty
+See also `base_injective`
 -/
-theorem of_injective (hφ : forall i, Function.Injective (φ i)) (i : ι) :
+theorem of_injective (hφ : ∀ i, Function.Injective (φ i)) (i : ι) :
     Function.Injective (of (φ := φ) i) := by
   rcases transversal_nonempty φ hφ with ⟨d⟩
   let _ := Classical.decEq ι
   let _ := fun i => Classical.decEq (G i)
   refine Function.Injective.of_comp
-    (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
+    (f := ((· • ·) : PushoutI φ → NormalWord d → NormalWord d)) ?_
   intro _ _ h
   exact eq_of_smul_eq_smul (fun w : NormalWord d =>
     by simp_all [funext_iff, of_smul_eq_smul])
-
-/--
-theorem `base_injective` / 定理 `base_injective`
-
-English:
-theorem base_injective
-  given: (hφ : forall i, Function.Injective (φ i))
-  proof: by
-  rcases transversal_nonempty φ hφ with ⟨d⟩
-  let _ := Classical.decEq ι
-  let _ := fun i => Classical.decEq (G i)
-  refine Function.Injective.of_comp
-    (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
-  intro _ _ h
-  exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp_all [funext_iff, base_smul_eq_smul])
-
-中文:
-定理 base_injective
-  条件: (hφ : 对任意 i, 函数.单射 (φ i))
-  证明: by
-  rcases transversal_nonempty φ hφ with ⟨d⟩
-  let _ := Classical.decEq ι
-  let _ := fun i => Classical.decEq (G i)
-  refine Function.Injective.of_comp
-    (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
-  intro _ _ h
-  exact eq_of_smul_eq_smul (fun w : NormalWord d =>
-    by simp_all [funext_iff, base_smul_eq_smul])
-
-Depends on / 依赖: Classical, Classical.decEq, Function, Function.Injective.of_comp, Injective, NormalWord, PushoutI, base_smul_eq_smul, eq_of_smul_eq_smul, funext_iff, of_comp, transversal_nonempty
+/-
+**Monoid.PushoutI.base_injective** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：base_injective (hφ : forall i, Function.Injective (φ i)) : Function.Inject
+ive (base φ)
+参数：hφ : forall i, Function.Injective (φ i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.transversal_nonempty`：transversal_nonempty (h
+φ : forall i, Injective (φ i)) : Nonempty (Transversal φ)
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `FaithfulSMul.eq_of_smul_eq_smul`：∀ {M : Type u_4} {α : Type u_5} {inst :
+ SMul M α} [self : FaithfulSMul M α] {m₁ m₂ : M},   (∀ (a : α), m₁ • a = m₂ • a)
+ → m₁ = m₂
+· 使用定理 `Monoid.PushoutI.NormalWord.instFaithfulSMul_2`：∀ {ι : Type u_1} {G : ι →
+ Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ
+ : (i : ι) → H →* G i} {d : Monoid.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Monoid.PushoutI.NormalWord.base_smul_eq_smul`：base_smul_eq_smul (h : H) 
+(w : NormalWord d) : base φ h • w = h • w
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem base_injective (hφ : forall i, Function.Injective (φ i)) :
+theorem base_injective (hφ : ∀ i, Function.Injective (φ i)) :
     Function.Injective (base φ) := by
   rcases transversal_nonempty φ hφ with ⟨d⟩
   let _ := Classical.decEq ι
   let _ := fun i => Classical.decEq (G i)
   refine Function.Injective.of_comp
-    (f := ((· • ·) : PushoutI φ -> NormalWord d -> NormalWord d)) ?_
+    (f := ((· • ·) : PushoutI φ → NormalWord d → NormalWord d)) ?_
   intro _ _ h
   exact eq_of_smul_eq_smul (fun w : NormalWord d =>
     by simp_all [funext_iff, base_smul_eq_smul])
@@ -1923,59 +1660,80 @@ theorem base_injective (hφ : forall i, Function.Injective (φ i)) :
 section Reduced
 
 variable (φ) in
-/--
-Definition of `Reduced` / `Reduced` 的定义
+/-- A word in `CoprodI` is reduced if none of its letters are in the base group. -/
+/-
+**Monoid.PushoutI.Reduced** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.PushoutI`。
+形式化陈述：Reduced (w : Word G) : Prop
+参数：w : Word G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Reduced
-  signature: (w : Word G)
-  body: forall g, g in w.toList -> g.2 ∉ (φ g.1).range
-
-中文:
-定义 既约
-  签名: (w : Word G)
-  定义体: forall g, g in w.toList -> g.2 ∉ (φ g.1).range
-
-Depends on / 依赖: toList, w.toList
+--- 原说明 ---
+A word in `CoprodI` is reduced if none of its letters are in the base group.
 -/
 def Reduced (w : Word G) : Prop :=
-  forall g, g in w.toList -> g.2 ∉ (φ g.1).range
-
-/--
-theorem `Reduced.exists_normalWord_prod_eq` / 定理 `Reduced.exists_normalWord_prod_eq`
-
-English:
-theorem Reduced.exists_normalWord_prod_eq
-  given: (d : Transversal φ) {w : Word G} (hw : Reduced φ w)
-  proof: by
-  induction w using Word.consRecOn with
-  | empty => exact ⟨empty, by simp, rfl⟩
-  | cons i g w hIdx hg1 ih =>
-    rcases ih (fun _ hg => hw _ (List.mem_cons_of_mem _ hg)) with
-      ⟨w', hw'prod, hw'map⟩
-    refine ⟨cons g w' ?_ ?_, ?_⟩
-    · rwa [Word.fstIdx, ← List.head?_map, hw'map, List.head?_map]
-    · exact hw _ List.mem_cons_self
-    · simp [hw'prod, hw'map]
-
-中文:
-定理 既约.存在_normalWord_prod_eq
-  条件: (d : 横截 φ) {w : Word G} (hw : 既约 φ w)
-  证明: by
-  induction w using Word.consRecOn with
-  | empty => exact ⟨empty, by simp, rfl⟩
-  | cons i g w hIdx hg1 ih =>
-    rcases ih (fun _ hg => hw _ (List.mem_cons_of_mem _ hg)) with
-      ⟨w', hw'prod, hw'map⟩
-    refine ⟨cons g w' ?_ ?_, ?_⟩
-    · rwa [Word.fstIdx, ← List.head?_map, hw'map, List.head?_map]
-    · exact hw _ List.mem_cons_self
-    · simp [hw'prod, hw'map]
-
-Depends on / 依赖: List.head, List.mem_cons_of_mem, List.mem_cons_self, Word.consRecOn, Word.fstIdx, _map, consRecOn, fstIdx, mem_cons_of_mem, mem_cons_self
+  ∀ g, g ∈ w.toList → g.2 ∉ (φ g.1).range
+/-
+**Monoid.PushoutI.Reduced.exists_normalWord_prod_eq** 是 Mathlib 中的一个定理，位于命名空间 `M
+onoid.PushoutI.Reduced`。
+形式化陈述：∀ {ι : Type u_1} {G : ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group
+ (G i)] [inst_1 : Group H]   {φ : (i : ι) → H →* G i} (d : Monoid.PushoutI.Norma
+lWord.Transversal φ) {w : Monoid.CoprodI.Word G},   Monoid.PushoutI.Reduced φ w 
+→     ∃ w', w'.prod = Monoid.PushoutI.ofCoprodI w.prod ∧ List.map Sigma.fst w'.t
+oList = List.map Sigma.fst w.toList
+参数：i : ι；G i；i : ι；d : Monoid.PushoutI.NormalWord.Transversal φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_empty`：prod_empty : (empty : NormalWord 
+d).prod = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+· 使用定理 `Monoid.CoprodI.Word.fstIdx.eq_1`：∀ {ι : Type u_1} {M : ι → Type u_2} [in
+st : (i : ι) → Monoid (M i)] (w : Monoid.CoprodI.Word M),   w.fstIdx = Option.ma
+p Sigma.fst w.toList.…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.head?_map`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l : List α}
+, (List.map f l).head? = Option.map f l.head?
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_cons`：prod_cons {i} (g : G i) (w : Norma
+lWord d) (hmw : w.fstIdx != some i) (hgr : g ∉ (φ i).range) : (cons g w hmw hgr)
+.prod = of i g * w.prod
+· 使用定理 `Monoid.CoprodI.Word.prod_cons`：prod_cons (i) (m : M i) (w : Word M) (h1 
+: m != 1) (h2 : w.fstIdx != some i) : prod (cons m w h2 h1) = of m * prod w
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Monoid.PushoutI.ofCoprodI_of`：ofCoprodI_of (i : ι) (g : G i) : (ofCoprod
+I (CoprodI.of g) : PushoutI φ) = of i g
+· 使用定理 `Monoid.PushoutI.NormalWord.Transversal.compl`：∀ {ι : Type u_1} {G : ι → 
+Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ 
+: (i : ι) → H →* G i} (self : Mono…
+· 使用定理 `Monoid.PushoutI.NormalWord.cons_toList`：∀ {ι : Type u_1} {G : ι → Type u
+_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ : (i :
+ ι) → H →* G i} {d : Monoid.…
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `Monoid.CoprodI.Word.cons_toList`：∀ {ι : Type u_1} {M : ι → Type u_2} [in
+st : (i : ι) → Monoid (M i)] {i : ι} (m : M i) (w : Monoid.CoprodI.Word M)   (hm
+w : w.fstIdx ≠ some i…
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem Reduced.exists_normalWord_prod_eq (d : Transversal φ) {w : Word G} (hw : Reduced φ w) :
-    exists w' : NormalWord d, w'.prod = ofCoprodI w.prod ∧
+    ∃ w' : NormalWord d, w'.prod = ofCoprodI w.prod ∧
       w'.toList.map Sigma.fst = w.toList.map Sigma.fst := by
   induction w using Word.consRecOn with
   | empty => exact ⟨empty, by simp, rfl⟩
@@ -1987,50 +1745,88 @@ theorem Reduced.exists_normalWord_prod_eq (d : Transversal φ) {w : Word G} (hw 
     · exact hw _ List.mem_cons_self
     · simp [hw'prod, hw'map]
 
-/--
-theorem `Reduced.eq_empty_of_mem_range` / 定理 `Reduced.eq_empty_of_mem_range`
+/-- For any word `w` in the coproduct,
+if `w` is reduced (i.e none its letters are in the image of the base monoid), and nonempty, then
+`w` itself is not in the image of the base group. -/
+/-
+**Monoid.PushoutI.Reduced.eq_empty_of_mem_range** 是 Mathlib 中的一个定理，位于命名空间 `Monoi
+d.PushoutI.Reduced`。
+形式化陈述：∀ {ι : Type u_1} {G : ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group
+ (G i)] [inst_1 : Group H]   {φ : (i : ι) → H →* G i},   (∀ (i : ι), Function.In
+jective ⇑(φ i)) →     ∀ {w : Monoid.CoprodI.Word G},       Monoid.PushoutI.Reduc
+ed φ w →         Monoid.PushoutI.ofCoprodI w.prod ∈ (Monoid.PushoutI.base φ).ran
+ge → w = Monoid.CoprodI.Word.empty
+参数：i : ι；G i；i : ι；∀ (i : ι), Function.Injective ⇑(φ i)；Monoid.PushoutI.base φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monoid.PushoutI.NormalWord.transversal_nonempty`：transversal_nonempty (h
+φ : forall i, Injective (φ i)) : Nonempty (Transversal φ)
+· 使用定理 `Monoid.PushoutI.Reduced.exists_normalWord_prod_eq`：∀ {ι : Type u_1} {G :
+ ι → Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H] 
+  {φ : (i : ι) → H →* G i} (d : Monoid.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Monoid.CoprodI.Word.empty_toList`：∀ {ι : Type u_1} {M : ι → Type u_2} [i
+nst : (i : ι) → Monoid (M i)], Monoid.CoprodI.Word.empty.toList = []
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monoid.PushoutI.NormalWord.prod_injective`：prod_injective {ι : Type*} {G
+ : ι -> Type*} [(i : ι) -> Group (G i)] {φ : (i : ι) -> H ->* G i} {d : Transver
+sal φ} : Function.Injective (pr…
+· 使用定理 `Monoid.CoprodI.Word.ext`：∀ {ι : Type u_1} {M : ι → Type u_2} {inst : (i 
+: ι) → Monoid (M i)} {x y : Monoid.CoprodI.Word M},   x.toList = y.toList → x = 
+y
+· 使用定理 `List.ext_getElem?`：∀ {α : Type u_1} {l₁ l₂ : List α}, (∀ (i : ℕ), l₁[i]?
+ = l₂[i]?) → l₁ = l₂
+· 使用定理 `Option.ext`：∀ {α : Type u_1} {o₁ o₂ : Option α}, (∀ (a : α), o₁ = some a
+ ↔ o₂ = some a) → o₁ = o₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `getElem?_neg`：∀ {cont : Type u_1} {idx : Type u_2} {elem : Type u_3} {do
+m : cont → idx → Prop} [inst : GetElem? cont idx elem dom]   [LawfulGetElem cont
+ i…
+· 使用定理 `List.instLawfulGetElemNatLtLength`：∀ {α : Type u_1}, LawfulGetElem (List
+ α) ℕ α fun as i => i < as.length
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem Reduced.eq_empty_of_mem_range
-  proof: by
-  rcases transversal_nonempty φ hφ with ⟨d⟩
-  rcases hw.exists_normalWord_prod_eq d with ⟨w', hw'prod, hw'map⟩
-  rcases h with ⟨h, heq⟩
-  have : (NormalWord.prod (d := d) ⟨.empty, h, by simp⟩) = base φ h := by
-    simp [NormalWord.prod]
-  rw [← hw'prod]; rw [← this] at heq
-  suffices w'.toWord = .empty by
-    simp [this, @eq_comm _ []] at hw'map
-    ext
-    simp [hw'map]
-  rw [← prod_injective heq]
-
-中文:
-定理 既约.eq_empty_of_mem_range
-  证明: by
-  rcases transversal_nonempty φ hφ with ⟨d⟩
-  rcases hw.exists_normalWord_prod_eq d with ⟨w', hw'prod, hw'map⟩
-  rcases h with ⟨h, heq⟩
-  have : (NormalWord.prod (d := d) ⟨.empty, h, by simp⟩) = base φ h := by
-    simp [NormalWord.prod]
-  rw [← hw'prod]; rw [← this] at heq
-  suffices w'.toWord = .empty by
-    simp [this, @eq_comm _ []] at hw'map
-    ext
-    simp [hw'map]
-  rw [← prod_injective heq]
-
-Depends on / 依赖: NormalWord, NormalWord.prod, eq_comm, exists_normalWord_prod_eq, hw.exists_normalWord_prod_eq, prod_injective, toWord, transversal_nonempty
+--- 原说明 ---
+For any word `w` in the coproduct,
+if `w` is reduced (i.e none its letters are in the image of the base monoid), an
+d nonempty, then
+`w` itself is not in the image of the base group.
 -/
 theorem Reduced.eq_empty_of_mem_range
-    (hφ : forall i, Injective (φ i)) {w : Word G} (hw : Reduced φ w)
-    (h : ofCoprodI w.prod in (base φ).range) : w = .empty := by
+    (hφ : ∀ i, Injective (φ i)) {w : Word G} (hw : Reduced φ w)
+    (h : ofCoprodI w.prod ∈ (base φ).range) : w = .empty := by
   rcases transversal_nonempty φ hφ with ⟨d⟩
   rcases hw.exists_normalWord_prod_eq d with ⟨w', hw'prod, hw'map⟩
   rcases h with ⟨h, heq⟩
   have : (NormalWord.prod (d := d) ⟨.empty, h, by simp⟩) = base φ h := by
     simp [NormalWord.prod]
-  rw [← hw'prod]; rw [← this] at heq
+  rw [← hw'prod, ← this] at heq
   suffices w'.toWord = .empty by
     simp [this, @eq_comm _ []] at hw'map
     ext
@@ -2039,98 +1835,86 @@ theorem Reduced.eq_empty_of_mem_range
 
 end Reduced
 
-/--
-theorem `inf_of_range_eq_base_range` / 定理 `inf_of_range_eq_base_range`
+/-- The intersection of the images of the maps from any two distinct groups in the diagram
+into the amalgamated product is the image of the map from the base group in the diagram. -/
+/-
+**Monoid.PushoutI.inf_of_range_eq_base_range** 是 Mathlib 中的一个定理，位于命名空间 `Monoid.P
+ushoutI`。
+形式化陈述：inf_of_range_eq_base_range (hφ : forall i, Injective (φ i)) {i j : ι} (hij
+ : i != j) : (of i).range ⊓ (of j).range = (base φ).range
+参数：hφ : forall i, Injective (φ i)；hij : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MonoidHom.mem_range`：mem_range {f : G ->* N} {y : N} : y in f.range ↔ ex
+ists x, f x = y
+· 使用定理 `Monoid.PushoutI.of_apply_eq_base`：of_apply_eq_base (i : ι) (x : H) : of 
+i (φ i x) = base φ x
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Monoid.PushoutI.Reduced.eq_empty_of_mem_range`：∀ {ι : Type u_1} {G : ι →
+ Type u_2} {H : Type u_3} [inst : (i : ι) → Group (G i)] [inst_1 : Group H]   {φ
+ : (i : ι) → H →* G i},   (∀ (i : ι…
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `map_inv`：map_inv [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) (a : G) : f a⁻¹ = (f a)⁻¹
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+（共 39 条，此处仅展示前 30 条）
 
-English:
-theorem inf_of_range_eq_base_range
-  proof: le_antisymm
-    (by
-      intro x ⟨⟨g₁, hg₁⟩, ⟨g₂, hg₂⟩⟩
-      by_contra hx
-      have hx1 : x != 1 := by rintro rfl; simp_all only [ne_eq, one_mem, not_true_eq_false]
-      have hg₁1 : g₁ != 1 :=
-        ne_of_apply_ne (of (φ := φ) i) (by simp_all)
-      have hg₂1 : g₂ != 1 :=
-        ne_of_apply_ne (of (φ := φ) j) (by simp_all)
-      have hg₁r : g₁ ∉ (φ i).range := by
-        rintro ⟨y, rfl⟩
-        subst hg₁
-        exact hx (of_apply_eq_base φ i y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
-      have hg₂r : g₂ ∉ (φ j).range := by
-        rintro ⟨y, rfl⟩
-        subst hg₂
-        exact hx (of_apply_eq_base φ j y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
-      let w : Word G := ⟨[⟨_, g₁⟩, ⟨_, g₂⁻¹⟩], by simp_all, by simp_all⟩
-      have hw : Reduced φ w := by
-        simp only [w, Reduced, List.mem_cons,
-          forall_eq_or_imp, not_false_eq_true,
-          hg₁r, hg₂r, List.mem_nil_iff, false_imp_iff, imp_true_iff, and_true,
-          inv_mem_iff]
-      have := hw.eq_empty_of_mem_range hφ (by
-        simp only [w, Word.prod, List.map_cons, List.prod_cons, List.prod_nil,
-          List.map_nil, map_mul, ofCoprodI_of, hg₁, hg₂, map_inv, mul_one,
-          mul_inv_cancel, one_mem])
-      simp [w, Word.empty] at this)
-    (le_inf
-      (by rw [← of_comp_eq_base i]
-          rintro _ ⟨h, rfl⟩
-          exact MonoidHom.mem_range.2 ⟨φ i h, rfl⟩)
-      (by rw [← of_comp_eq_base j]
-          rintro _ ⟨h, rfl⟩
-          exact MonoidHom.mem_range.2 ⟨φ j h, rfl⟩))
-
-中文:
-定理 inf_of_range_eq_base_range
-  证明: le_antisymm
-    (by
-      intro x ⟨⟨g₁, hg₁⟩, ⟨g₂, hg₂⟩⟩
-      by_contra hx
-      have hx1 : x != 1 := by rintro rfl; simp_all only [ne_eq, one_mem, not_true_eq_false]
-      have hg₁1 : g₁ != 1 :=
-        ne_of_apply_ne (of (φ := φ) i) (by simp_all)
-      have hg₂1 : g₂ != 1 :=
-        ne_of_apply_ne (of (φ := φ) j) (by simp_all)
-      have hg₁r : g₁ ∉ (φ i).range := by
-        rintro ⟨y, rfl⟩
-        subst hg₁
-        exact hx (of_apply_eq_base φ i y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
-      have hg₂r : g₂ ∉ (φ j).range := by
-        rintro ⟨y, rfl⟩
-        subst hg₂
-        exact hx (of_apply_eq_base φ j y ▸ MonoidHom.mem_range.2 ⟨y, rfl⟩)
-      let w : Word G := ⟨[⟨_, g₁⟩, ⟨_, g₂⁻¹⟩], by simp_all, by simp_all⟩
-      have hw : Reduced φ w := by
-        simp only [w, Reduced, List.mem_cons,
-          forall_eq_or_imp, not_false_eq_true,
-          hg₁r, hg₂r, List.mem_nil_iff, false_imp_iff, imp_true_iff, and_true,
-          inv_mem_iff]
-      have := hw.eq_empty_of_mem_range hφ (by
-        simp only [w, Word.prod, List.map_cons, List.prod_cons, List.prod_nil,
-          List.map_nil, map_mul, ofCoprodI_of, hg₁, hg₂, map_inv, mul_one,
-          mul_inv_cancel, one_mem])
-      simp [w, Word.empty] at this)
-    (le_inf
-      (by rw [← of_comp_eq_base i]
-          rintro _ ⟨h, rfl⟩
-          exact MonoidHom.mem_range.2 ⟨φ i h, rfl⟩)
-      (by rw [← of_comp_eq_base j]
-          rintro _ ⟨h, rfl⟩
-          exact MonoidHom.mem_range.2 ⟨φ j h, rfl⟩))
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_range, le_antisymm, mem_range, ne_eq, ne_of_apply_ne, not_true_eq_false, of_apply_eq_base, one_mem
+--- 原说明 ---
+The intersection of the images of the maps from any two distinct groups in the d
+iagram
+into the amalgamated product is the image of the map from the base group in the 
+diagram.
 -/
 theorem inf_of_range_eq_base_range
-    (hφ : forall i, Injective (φ i)) {i j : ι} (hij : i != j) :
+    (hφ : ∀ i, Injective (φ i)) {i j : ι} (hij : i ≠ j) :
     (of i).range ⊓ (of j).range = (base φ).range :=
   le_antisymm
     (by
       intro x ⟨⟨g₁, hg₁⟩, ⟨g₂, hg₂⟩⟩
       by_contra hx
-      have hx1 : x != 1 := by rintro rfl; simp_all only [ne_eq, one_mem, not_true_eq_false]
-      have hg₁1 : g₁ != 1 :=
+      have hx1 : x ≠ 1 := by rintro rfl; simp_all only [ne_eq, one_mem, not_true_eq_false]
+      have hg₁1 : g₁ ≠ 1 :=
         ne_of_apply_ne (of (φ := φ) i) (by simp_all)
-      have hg₂1 : g₂ != 1 :=
+      have hg₂1 : g₂ ≠ 1 :=
         ne_of_apply_ne (of (φ := φ) j) (by simp_all)
       have hg₁r : g₁ ∉ (φ i).range := by
         rintro ⟨y, rfl⟩
@@ -2162,3 +1946,4 @@ theorem inf_of_range_eq_base_range
 end PushoutI
 
 end Monoid
+

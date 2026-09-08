@@ -52,40 +52,23 @@ open TensorProduct
 
 namespace AdicCompletion
 
-/--
-Definition of `ofTensorProduct` / `ofTensorProduct` 的定义
+/-- The natural `AdicCompletion I R`-linear map from `AdicCompletion I R ⊗[R] M` to
+the adic completion of `M`. -/
+/-
+**AdicCompletion.ofTensorProduct** 是 Mathlib 中的一个定义，位于命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProduct : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] A
+dicCompletion I M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AdicCompletion.instIsScalarTower_1`：∀ {R : Type u_1} [inst : CommRing R]
+ (I : Ideal R) {M : Type u_3} [inst_1 : AddCommGroup M]   [inst_2 : _root_.Modul
+e R M], IsScalarTower R …
 
-English:
-definition ofTensorProduct
-  signature: : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] AdicCompletion I M
-  body: TensorProduct.AlgebraTensorModule.lift
-    { toFun r := LinearMap.lsmul (AdicCompletion I R) (AdicCompletion I M) r ∘ₗ of I M
-      map_add' x y := by
-        apply LinearMap.ext
-        simp
-      map_smul' r x := by
-        apply LinearMap.ext
-        simp [mul_smul] }
-
-@[simp]
-
-中文:
-定义 ofTensorProduct
-  签名: : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] AdicCompletion I M
-  定义体: TensorProduct.AlgebraTensorModule.lift
-    { toFun r := LinearMap.lsmul (AdicCompletion I R) (AdicCompletion I M) r ∘ₗ of I M
-      map_add' x y := by
-        apply LinearMap.ext
-        simp
-      map_smul' r x := by
-        apply LinearMap.ext
-        simp [mul_smul] }
-
-@[simp]
-
-Depends on / 依赖: AdicCompletion, AlgebraTensorModule, LinearMap, LinearMap.ext, LinearMap.lsmul, TensorProduct, TensorProduct.AlgebraTensorModule.lift, map_add, map_smul, mul_smul
+--- 原说明 ---
+The natural `AdicCompletion I R`-linear map from `AdicCompletion I R ⊗[R] M` to
+the adic completion of `M`.
 -/
-def ofTensorProduct : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] AdicCompletion I M :=
+def ofTensorProduct : AdicCompletion I R ⊗[R] M →ₗ[AdicCompletion I R] AdicCompletion I M :=
   TensorProduct.AlgebraTensorModule.lift
     { toFun r := LinearMap.lsmul (AdicCompletion I R) (AdicCompletion I M) r ∘ₗ of I M
       map_add' x y := by
@@ -96,44 +79,77 @@ def ofTensorProduct : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] A
         simp [mul_smul] }
 
 @[simp]
-/--
-lemma `ofTensorProduct_tmul` / 引理 `ofTensorProduct_tmul`
-
-English:
-lemma ofTensorProduct_tmul
-  given: (r : AdicCompletion I R) (x : M)
-  proof: by
-  rfl
-
-中文:
-引理 ofTensorProduct_tmul
-  条件: (r : AdicCompletion I R) (x : M)
-  证明: by
-  rfl
+/-
+**AdicCompletion.ofTensorProduct_tmul** 是 Mathlib 中的一个引理，位于命名空间 `AdicCompletion`
+。
+形式化陈述：ofTensorProduct_tmul (r : AdicCompletion I R) (x : M) : ofTensorProduct I 
+M (r otimesₜ x) = r • of I M x
+参数：r : AdicCompletion I R；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 lemma ofTensorProduct_tmul (r : AdicCompletion I R) (x : M) :
-    ofTensorProduct I M (r otimesₜ x) = r • of I M x := by
+    ofTensorProduct I M (r ⊗ₜ x) = r • of I M x := by
   rfl
 
 variable {M} in
-/--
-lemma `ofTensorProduct_naturality` / 引理 `ofTensorProduct_naturality`
+/-- `ofTensorProduct` is functorial in `M`. -/
+/-
+**AdicCompletion.ofTensorProduct_naturality** 是 Mathlib 中的一个引理，位于命名空间 `AdicCompl
+etion`。
+形式化陈述：ofTensorProduct_naturality (f : M ->ₗ[R] N) : map I f ∘ₗ ofTensorProduct I
+ M = ofTensorProduct I N ∘ₗ AlgebraTensorModule.map LinearMap.id f
+参数：f : M ->ₗ[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `AdicCompletion.instIsScalarTower_1`：∀ {R : Type u_1} [inst : CommRing R]
+ (I : Ideal R) {M : Type u_3} [inst_1 : AddCommGroup M]   [inst_2 : _root_.Modul
+e R M], IsScalarTower R …
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用引理 `AdicCompletion.ext`：ext {x y : AdicCompletion I M} (h : forall n, x.val 
+n = y.val n) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用引理 `AdicCompletion.ofTensorProduct_tmul`：ofTensorProduct_tmul (r : AdicCompl
+etion I R) (x : M) : ofTensorProduct I M (r otimesₜ x) = r • of I M x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma ofTensorProduct_naturality
-  given: (f : M ->ₗ[R] N)
-  proof: by
-  ext
-  simp
-
-中文:
-引理 ofTensorProduct_naturality
-  条件: (f : M ->ₗ[R] N)
-  证明: by
-  ext
-  simp
+--- 原说明 ---
+`ofTensorProduct` is functorial in `M`.
 -/
-lemma ofTensorProduct_naturality (f : M ->ₗ[R] N) :
+lemma ofTensorProduct_naturality (f : M →ₗ[R] N) :
     map I f ∘ₗ ofTensorProduct I M =
       ofTensorProduct I N ∘ₗ AlgebraTensorModule.map LinearMap.id f := by
   ext
@@ -152,27 +168,13 @@ section DecidableEq
 variable [Fintype ι] [DecidableEq ι]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `piEquivOfFintype_comp_ofTensorProduct_eq` / 引理 `piEquivOfFintype_comp_ofTensorProduct_eq`
-
-English:
-lemma piEquivOfFintype_comp_ofTensorProduct_eq
-  proof: by
-  ext i j k
-  suffices h : (if j = i then 1 else 0) = (if j = i then 1 else 0 : AdicCompletion I R).val k by
-    simpa [Pi.single_apply, -smul_eq_mul]
-  split <;> simp
-
-中文:
-引理 piEquivOfFintype_comp_ofTensorProduct_eq
-  证明: by
-  ext i j k
-  suffices h : (if j = i then 1 else 0) = (if j = i then 1 else 0 : AdicCompletion I R).val k by
-    simpa [Pi.single_apply, -smul_eq_mul]
-  split <;> simp
+/-
+**AdicCompletion.piEquivOfFintype_comp_ofTensorProduct_eq** 是 Mathlib 中的一个引理，位于命
+名空间 `AdicCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma piEquivOfFintype_comp_ofTensorProduct_eq :
-    piEquivOfFintype I (fun _ : ι => R) ∘ₗ ofTensorProduct I (ι -> R) =
+    piEquivOfFintype I (fun _ : ι ↦ R) ∘ₗ ofTensorProduct I (ι → R) =
       (TensorProduct.piScalarRight R (AdicCompletion I R) (AdicCompletion I R) ι).toLinearMap := by
   ext i j k
   suffices h : (if j = i then 1 else 0) = (if j = i then 1 else 0 : AdicCompletion I R).val k by
@@ -196,49 +198,52 @@ example : ((AdicCompletion.module I).toSMul : SMul (AdicCompletion I R) (AdicCom
   rfl
 -/
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ofTensorProduct_eq` / 引理 `ofTensorProduct_eq`
+/-
+**AdicCompletion.ofTensorProduct_eq** 是 Mathlib 中的一个引理，位于命名空间 `AdicCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ofTensorProduct_eq
-  proof: by
-  rw [← piEquivOfFintype_comp_ofTensorProduct_eq I ι]; rw [← LinearMap.comp_assoc]
-  simp
+--- 原说明 ---
+import Mathlib.RingTheory.AdicCompletion.Algebra
 
-中文:
-引理 ofTensorProduct_eq
-  证明: by
-  rw [← piEquivOfFintype_comp_ofTensorProduct_eq I ι]; rw [← LinearMap.comp_assoc]
-  simp
+variable {R : Type*} [CommRing R] (I : Ideal R) (ι : Type*) [Fintype ι] [Decidab
+leEq ι]
+
+-- `AdicCompletion.module` has type `Module X Y → Module (F X) (F Y)` so introdu
+ces
+-- diamonds if `X = Y`.
+example : AdicCompletion.module I = Semiring.toModule := by
+  fail_if_success with_reducible_and_instances rfl
+  rfl
+
+example : ((AdicCompletion.module I).toSMul : SMul (AdicCompletion I R) (AdicCom
+pletion I R)) =
+    Semiring.toModule.toSMul := by
+  fail_if_success with_reducible_and_instances rfl
+  rfl
 -/
 private lemma ofTensorProduct_eq :
-    ofTensorProduct I (ι -> R) = (piEquivOfFintype I (ι := ι) (fun _ : ι => R)).symm.toLinearMap ∘ₗ
+    ofTensorProduct I (ι → R) = (piEquivOfFintype I (ι := ι) (fun _ : ι ↦ R)).symm.toLinearMap ∘ₗ
       (TensorProduct.piScalarRight R (AdicCompletion I R) (AdicCompletion I R) ι).toLinearMap := by
-  rw [← piEquivOfFintype_comp_ofTensorProduct_eq I ι]; rw [← LinearMap.comp_assoc]
+  rw [← piEquivOfFintype_comp_ofTensorProduct_eq I ι, ← LinearMap.comp_assoc]
   simp
 
-/--
-Definition of `ofTensorProductInvOfPiFintype` / `ofTensorProductInvOfPiFintype` 的定义
+/-- (Implementation): If `M = R^ι` and `ι` is finite, we may construct an inverse to
+`ofTensorProduct I (ι → R)`. -/
+/-
+**AdicCompletion.ofTensorProductInvOfPiFintype** 是 Mathlib 中的一个定义，位于命名空间 `AdicCo
+mpletion`。
+形式化陈述：ofTensorProductInvOfPiFintype : AdicCompletion I (ι -> R) ≃ₗ[AdicCompletio
+n I R] AdicCompletion I R otimes[R] (ι -> R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofTensorProductInvOfPiFintype
-  signature: :
-  body: letI f := piEquivOfFintype I (fun _ : ι => R)
-  letI g := (TensorProduct.piScalarRight R (AdicCompletion I R) (AdicCompletion I R) ι).symm
-  f.trans g
-
-中文:
-定义 ofTensorProductInvOfPiFintype
-  签名: :
-  定义体: letI f := piEquivOfFintype I (fun _ : ι => R)
-  letI g := (TensorProduct.piScalarRight R (AdicCompletion I R) (AdicCompletion I R) ι).symm
-  f.trans g
-
-Depends on / 依赖: AdicCompletion, TensorProduct, TensorProduct.piScalarRight, f.trans, piEquivOfFintype, piScalarRight
+--- 原说明 ---
+(Implementation): If `M = R^ι` and `ι` is finite, we may construct an inverse to
+`ofTensorProduct I (ι → R)`.
 -/
 def ofTensorProductInvOfPiFintype :
-    AdicCompletion I (ι -> R) ≃ₗ[AdicCompletion I R] AdicCompletion I R otimes[R] (ι -> R) :=
-  letI f := piEquivOfFintype I (fun _ : ι => R)
+    AdicCompletion I (ι → R) ≃ₗ[AdicCompletion I R] AdicCompletion I R ⊗[R] (ι → R) :=
+  letI f := piEquivOfFintype I (fun _ : ι ↦ R)
   letI g := (TensorProduct.piScalarRight R (AdicCompletion I R) (AdicCompletion I R) ι).symm
   f.trans g
 
@@ -259,29 +264,62 @@ example : ((AdicCompletion.module I).toSMul : SMul (AdicCompletion I R) (AdicCom
   rfl
 -/
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ofTensorProductInvOfPiFintype_comp_ofTensorProduct` / 引理 `ofTensorProductInvOfPiFintype_comp_ofTensorProduct`
+/-
+**AdicCompletion.ofTensorProductInvOfPiFintype_comp_ofTensorProduct** 是 Mathlib 
+中的一个引理，位于命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProductInvOfPiFintype_comp_ofTensorProduct : ofTensorProductInvOfP
+iFintype I ι ∘ₗ ofTensorProduct I (ι -> R) = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.coe_trans`：coe_trans : (e₁₂.trans e₂₃ : M₁ ->ₛₗ[σ₁₃] M₃) = (
+e₂₃ : M₂ ->ₛₗ[σ₂₃] M₃).comp (e₁₂ : M₁ ->ₛₗ[σ₁₂] M₂)
+· 使用定理 `LinearMap.comp_assoc`：comp_assoc {R₄ M₄ : Type*} [Semiring R₄] [AddCommM
+onoid M₄] [Module R₄ M₄] {σ₃₄ : R₃ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₁₄ : R₁ ->+* R₄
+} [RingHom…
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `_private.Mathlib.RingTheory.AdicCompletion.AsTensorProduct.0.AdicComplet
+ion.piEquivOfFintype_comp_ofTensorProduct_eq`：∀ {R : Type u_1} [inst : CommRing 
+R] (I : Ideal R) (ι : Type u_4) [inst_1 : Fintype ι] [inst_2 : DecidableEq ι],  
+ ↑(AdicCompletion.piEquivO…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearEquiv.self_trans_symm`：self_trans_symm (f : M₁ ≃ₛₗ[σ₁₂] M₂) : f.tr
+ans f.symm = LinearEquiv.refl R₁ M₁
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma ofTensorProductInvOfPiFintype_comp_ofTensorProduct
-  proof: by
-  dsimp only [ofTensorProductInvOfPiFintype]
-  rw [LinearEquiv.coe_trans]; rw [LinearMap.comp_assoc]; rw [piEquivOfFintype_comp_ofTensorProduct_eq]
-  simp
+--- 原说明 ---
+import Mathlib.RingTheory.AdicCompletion.Algebra
 
-中文:
-引理 ofTensorProductInvOfPiFintype_comp_ofTensorProduct
-  证明: by
-  dsimp only [ofTensorProductInvOfPiFintype]
-  rw [LinearEquiv.coe_trans]; rw [LinearMap.comp_assoc]; rw [piEquivOfFintype_comp_ofTensorProduct_eq]
-  simp
+variable {R : Type*} [CommRing R] (I : Ideal R) (ι : Type*) [Fintype ι] [Decidab
+leEq ι]
 
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_trans, LinearMap, LinearMap.comp_assoc, coe_trans, comp_assoc, ofTensorProductInvOfPiFintype, piEquivOfFintype_comp_ofTensorProduct_eq
+-- `AdicCompletion.module` has type `Module X Y → Module (F X) (F Y)` so introdu
+ces
+-- diamonds if `X = Y`.
+example : AdicCompletion.module I = Semiring.toModule := by
+  fail_if_success with_reducible_and_instances rfl
+  rfl
+
+example : ((AdicCompletion.module I).toSMul : SMul (AdicCompletion I R) (AdicCom
+pletion I R)) =
+    Semiring.toModule.toSMul := by
+  fail_if_success with_reducible_and_instances rfl
+  rfl
 -/
 lemma ofTensorProductInvOfPiFintype_comp_ofTensorProduct :
-    ofTensorProductInvOfPiFintype I ι ∘ₗ ofTensorProduct I (ι -> R) = LinearMap.id := by
+    ofTensorProductInvOfPiFintype I ι ∘ₗ ofTensorProduct I (ι → R) = LinearMap.id := by
   dsimp only [ofTensorProductInvOfPiFintype]
-  rw [LinearEquiv.coe_trans]; rw [LinearMap.comp_assoc]; rw [piEquivOfFintype_comp_ofTensorProduct_eq]
+  rw [LinearEquiv.coe_trans, LinearMap.comp_assoc, piEquivOfFintype_comp_ofTensorProduct_eq]
   simp
 
 /-
@@ -301,140 +339,204 @@ example : ((AdicCompletion.module I).toSMul : SMul (AdicCompletion I R) (AdicCom
   rfl
 -/
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ofTensorProduct_comp_ofTensorProductInvOfPiFintype` / 引理 `ofTensorProduct_comp_ofTensorProductInvOfPiFintype`
+/-
+**AdicCompletion.ofTensorProduct_comp_ofTensorProductInvOfPiFintype** 是 Mathlib 
+中的一个引理，位于命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProduct_comp_ofTensorProductInvOfPiFintype : ofTensorProduct I (ι 
+-> R) ∘ₗ ofTensorProductInvOfPiFintype I ι = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.coe_trans`：coe_trans : (e₁₂.trans e₂₃ : M₁ ->ₛₗ[σ₁₃] M₃) = (
+e₂₃ : M₂ ->ₛₗ[σ₂₃] M₃).comp (e₁₂ : M₁ ->ₛₗ[σ₁₂] M₂)
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `_private.Mathlib.RingTheory.AdicCompletion.AsTensorProduct.0.AdicComplet
+ion.ofTensorProduct_eq`：∀ {R : Type u_1} [inst : CommRing R] (I : Ideal R) (ι : 
+Type u_4) [inst_1 : Fintype ι] [inst_2 : DecidableEq ι],   AdicCompletion.ofTens
+orPr…
+· 使用定理 `LinearMap.comp_assoc`：comp_assoc {R₄ M₄ : Type*} [Semiring R₄] [AddCommM
+onoid M₄] [Module R₄ M₄] {σ₃₄ : R₃ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₁₄ : R₁ ->+* R₄
+} [RingHom…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `LinearEquiv.symm_trans_self`：symm_trans_self (f : M₁ ≃ₛₗ[σ₁₂] M₂) : f.sy
+mm.trans f = LinearEquiv.refl R₂ M₂
+· 使用定理 `LinearEquiv.self_trans_symm`：self_trans_symm (f : M₁ ≃ₛₗ[σ₁₂] M₂) : f.tr
+ans f.symm = LinearEquiv.refl R₁ M₁
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma ofTensorProduct_comp_ofTensorProductInvOfPiFintype
-  proof: by
-  dsimp only [ofTensorProductInvOfPiFintype]
-  rw [LinearEquiv.coe_trans]; rw [ofTensorProduct_eq]; rw [LinearMap.comp_assoc]
-  nth_rw 2 [← LinearMap.comp_assoc]
-  simp
+--- 原说明 ---
+import Mathlib.RingTheory.AdicCompletion.Algebra
 
-中文:
-引理 ofTensorProduct_comp_ofTensorProductInvOfPiFintype
-  证明: by
-  dsimp only [ofTensorProductInvOfPiFintype]
-  rw [LinearEquiv.coe_trans]; rw [ofTensorProduct_eq]; rw [LinearMap.comp_assoc]
-  nth_rw 2 [← LinearMap.comp_assoc]
-  simp
+variable {R : Type*} [CommRing R] (I : Ideal R) (ι : Type*) [Fintype ι] [Decidab
+leEq ι]
 
-Depends on / 依赖: LinearEquiv, LinearEquiv.coe_trans, LinearMap, LinearMap.comp_assoc, coe_trans, comp_assoc, nth_rw, ofTensorProductInvOfPiFintype, ofTensorProduct_eq
+-- `AdicCompletion.module` has type `Module X Y → Module (F X) (F Y)` so introdu
+ces
+-- diamonds if `X = Y`.
+example : AdicCompletion.module I = Semiring.toModule := by
+  fail_if_success with_reducible_and_instances rfl
+  rfl
+
+example : ((AdicCompletion.module I).toSMul : SMul (AdicCompletion I R) (AdicCom
+pletion I R)) =
+    Semiring.toModule.toSMul := by
+  fail_if_success with_reducible_and_instances rfl
+  rfl
 -/
 lemma ofTensorProduct_comp_ofTensorProductInvOfPiFintype :
-    ofTensorProduct I (ι -> R) ∘ₗ ofTensorProductInvOfPiFintype I ι = LinearMap.id := by
+    ofTensorProduct I (ι → R) ∘ₗ ofTensorProductInvOfPiFintype I ι = LinearMap.id := by
   dsimp only [ofTensorProductInvOfPiFintype]
-  rw [LinearEquiv.coe_trans]; rw [ofTensorProduct_eq]; rw [LinearMap.comp_assoc]
+  rw [LinearEquiv.coe_trans, ofTensorProduct_eq, LinearMap.comp_assoc]
   nth_rw 2 [← LinearMap.comp_assoc]
   simp
 
-/--
-Definition of `ofTensorProductEquivOfPiFintype` / `ofTensorProductEquivOfPiFintype` 的定义
+/-- `ofTensorProduct` as an equiv in the case of `M = R^ι` where `ι` is finite. -/
+/-
+**AdicCompletion.ofTensorProductEquivOfPiFintype** 是 Mathlib 中的一个定义，位于命名空间 `Adic
+Completion`。
+形式化陈述：ofTensorProductEquivOfPiFintype : AdicCompletion I R otimes[R] (ι -> R) ≃ₗ
+[AdicCompletion I R] AdicCompletion I (ι -> R)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `AdicCompletion.ofTensorProduct_comp_ofTensorProductInvOfPiFintype`：ofTen
+sorProduct_comp_ofTensorProductInvOfPiFintype : ofTensorProduct I (ι -> R) ∘ₗ of
+TensorProductInvOfPiFintype I ι = LinearMap.id
+· 使用引理 `AdicCompletion.ofTensorProductInvOfPiFintype_comp_ofTensorProduct`：ofTen
+sorProductInvOfPiFintype_comp_ofTensorProduct : ofTensorProductInvOfPiFintype I 
+ι ∘ₗ ofTensorProduct I (ι -> R) = LinearMap.id
 
-English:
-definition ofTensorProductEquivOfPiFintype
-  signature: :
-  body: LinearEquiv.ofLinearMap
-    (ofTensorProduct I (ι -> R))
-    (ofTensorProductInvOfPiFintype I ι)
-    (ofTensorProduct_comp_ofTensorProductInvOfPiFintype I ι)
-    (ofTensorProductInvOfPiFintype_comp_ofTensorProduct I ι)
-
-中文:
-定义 ofTensorProductEquivOfPiFintype
-  签名: :
-  定义体: LinearEquiv.ofLinearMap
-    (ofTensorProduct I (ι -> R))
-    (ofTensorProductInvOfPiFintype I ι)
-    (ofTensorProduct_comp_ofTensorProductInvOfPiFintype I ι)
-    (ofTensorProductInvOfPiFintype_comp_ofTensorProduct I ι)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, ofLinearMap, ofTensorProduct, ofTensorProductInvOfPiFintype, ofTensorProductInvOfPiFintype_comp_ofTensorProduct, ofTensorProduct_comp_ofTensorProductInvOfPiFintype
+--- 原说明 ---
+`ofTensorProduct` as an equiv in the case of `M = R^ι` where `ι` is finite.
 -/
 def ofTensorProductEquivOfPiFintype :
-    AdicCompletion I R otimes[R] (ι -> R) ≃ₗ[AdicCompletion I R] AdicCompletion I (ι -> R) :=
+    AdicCompletion I R ⊗[R] (ι → R) ≃ₗ[AdicCompletion I R] AdicCompletion I (ι → R) :=
   LinearEquiv.ofLinearMap
-    (ofTensorProduct I (ι -> R))
+    (ofTensorProduct I (ι → R))
     (ofTensorProductInvOfPiFintype I ι)
     (ofTensorProduct_comp_ofTensorProductInvOfPiFintype I ι)
     (ofTensorProductInvOfPiFintype_comp_ofTensorProduct I ι)
 
 end DecidableEq
 
-/--
-lemma `ofTensorProduct_bijective_of_pi_of_fintype` / 引理 `ofTensorProduct_bijective_of_pi_of_fintype`
+/-- If `M = R^ι`, `ofTensorProduct` is bijective. -/
+/-
+**AdicCompletion.ofTensorProduct_bijective_of_pi_of_fintype** 是 Mathlib 中的一个引理，位
+于命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProduct_bijective_of_pi_of_fintype [Finite ι] : Function.Bijective
+ (ofTensorProduct I (ι -> R))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `EquivLike.bijective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Bijective ⇑e
 
-English:
-lemma ofTensorProduct_bijective_of_pi_of_fintype
-  given: [Finite ι]
-  proof: by
-  classical
-  cases nonempty_fintype ι
-  exact EquivLike.bijective (ofTensorProductEquivOfPiFintype I ι)
-
-中文:
-引理 ofTensorProduct_bijective_of_pi_of_fintype
-  条件: [有限 ι]
-  证明: by
-  classical
-  cases nonempty_fintype ι
-  exact EquivLike.bijective (ofTensorProductEquivOfPiFintype I ι)
-
-Depends on / 依赖: EquivLike, EquivLike.bijective, bijective, classical, nonempty_fintype, ofTensorProductEquivOfPiFintype
+--- 原说明 ---
+If `M = R^ι`, `ofTensorProduct` is bijective.
 -/
 lemma ofTensorProduct_bijective_of_pi_of_fintype [Finite ι] :
-    Function.Bijective (ofTensorProduct I (ι -> R)) := by
+    Function.Bijective (ofTensorProduct I (ι → R)) := by
   classical
   cases nonempty_fintype ι
   exact EquivLike.bijective (ofTensorProductEquivOfPiFintype I ι)
 
 end PiFintype
 
-/--
-lemma `ofTensorProduct_surjective_of_finite` / 引理 `ofTensorProduct_surjective_of_finite`
+/-- If `M` is a finite `R`-module, then the canonical map
+`AdicCompletion I R ⊗[R] M →ₗ AdicCompletion I M` is surjective. -/
+/-
+**AdicCompletion.ofTensorProduct_surjective_of_finite** 是 Mathlib 中的一个引理，位于命名空间 
+`AdicCompletion`。
+形式化陈述：ofTensorProduct_surjective_of_finite [Module.Finite R M] : Function.Surjec
+tive (ofTensorProduct I M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用引理 `Module.Finite.exists_fin'`：exists_fin' [Module.Finite R M] : exists (n :
+ Nat) (f : (Fin n -> R) ->ₗ[R] M), Surjective f
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `AdicCompletion.instIsScalarTower_1`：∀ {R : Type u_1} [inst : CommRing R]
+ (I : Ideal R) {M : Type u_3} [inst_1 : AddCommGroup M]   [inst_2 : _root_.Modul
+e R M], IsScalarTower R …
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `LinearMap.pi_ext'`：pi_ext' (h : forall i, f.comp (single R φ i) = g.comp
+ (single R φ i)) : f = g
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `AdicCompletion.ext`：ext {x y : AdicCompletion I M} (h : forall n, x.val 
+n = y.val n) : x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用引理 `AdicCompletion.ofTensorProduct_tmul`：ofTensorProduct_tmul (r : AdicCompl
+etion I R) (x : M) : ofTensorProduct I M (r otimesₜ x) = r • of I M x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `AdicCompletion.map_surjective`：map_surjective (hf : Function.Surjective 
+f) : Function.Surjective (map I f)
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用引理 `AdicCompletion.ofTensorProduct_bijective_of_pi_of_fintype`：ofTensorProdu
+ct_bijective_of_pi_of_fintype [Finite ι] : Function.Bijective (ofTensorProduct I
+ (ι -> R))
+· 使用定理 `Function.Surjective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u
+_3} {f : α → β} {g : γ → α},   Function.Surjective (f ∘ g) → Function.Surjective
+ f
 
-English:
-lemma ofTensorProduct_surjective_of_finite
-  given: [Module.Finite R M]
-  proof: by
-  obtain ⟨n, p, hp⟩ := Module.Finite.exists_fin' R M
-  let f := ofTensorProduct I M ∘ₗ p.baseChange (AdicCompletion I R)
-  let g := map I p ∘ₗ ofTensorProduct I (Fin n -> R)
-  have hfg : f = g := by
-    ext
-    simp [f, g]
-  have hf : Function.Surjective f := by
-    simp only [hfg, LinearMap.coe_comp, g]
-    apply Function.Surjective.comp
-    · exact AdicCompletion.map_surjective I hp
-    · exact (ofTensorProduct_bijective_of_pi_of_fintype I (Fin n)).surjective
-  exact Function.Surjective.of_comp hf
-
-中文:
-引理 ofTensorProduct_surjective_of_finite
-  条件: [模.有限 R M]
-  证明: by
-  obtain ⟨n, p, hp⟩ := Module.Finite.exists_fin' R M
-  let f := ofTensorProduct I M ∘ₗ p.baseChange (AdicCompletion I R)
-  let g := map I p ∘ₗ ofTensorProduct I (Fin n -> R)
-  have hfg : f = g := by
-    ext
-    simp [f, g]
-  have hf : Function.Surjective f := by
-    simp only [hfg, LinearMap.coe_comp, g]
-    apply Function.Surjective.comp
-    · exact AdicCompletion.map_surjective I hp
-    · exact (ofTensorProduct_bijective_of_pi_of_fintype I (Fin n)).surjective
-  exact Function.Surjective.of_comp hf
-
-Depends on / 依赖: AdicCompletion, AdicCompletion.map_surjective, Finite, Function, Function.Surjective, Function.Surjective.comp, Function.Surjective.of_comp, LinearMap, LinearMap.coe_comp, Module, Module.Finite.exists_fin, Surjective, baseChange, coe_comp, exists_fin, map_surjective, ofTensorProduct, ofTensorProduct_bijective_of_pi_of_fintype, of_comp, p.baseChange
+--- 原说明 ---
+If `M` is a finite `R`-module, then the canonical map
+`AdicCompletion I R ⊗[R] M →ₗ AdicCompletion I M` is surjective.
 -/
 lemma ofTensorProduct_surjective_of_finite [Module.Finite R M] :
     Function.Surjective (ofTensorProduct I M) := by
   obtain ⟨n, p, hp⟩ := Module.Finite.exists_fin' R M
   let f := ofTensorProduct I M ∘ₗ p.baseChange (AdicCompletion I R)
-  let g := map I p ∘ₗ ofTensorProduct I (Fin n -> R)
+  let g := map I p ∘ₗ ofTensorProduct I (Fin n → R)
   have hfg : f = g := by
     ext
     simp [f, g]
@@ -463,8 +565,8 @@ commutative diagram:
 
 ```
  AdicCompletion I R ⊗[R] ker f -→ AdicCompletion I R ⊗[R] (ι → R) -→ AdicCompletion I R ⊗[R] M -→ 0
-               | | | |
-               ↓ ↓ ↓ ↓
+               |                             |                                 |                  |
+               ↓                             ↓                                 ↓                  ↓
     AdicCompletion I (ker f) ------→ AdicCompletion I (ι → R) -------→ AdicCompletion I M ------→ 0
 ```
 
@@ -481,202 +583,84 @@ open CategoryTheory
 
 section
 
-variable {ι : Type} (f : (ι -> R) ->ₗ[R] M)
+variable {ι : Type} (f : (ι → R) →ₗ[R] M)
 
 /-- The first horizontal arrow in the top row. -/
 private
-/--
-Definition of `lTensorKerIncl` / `lTensorKerIncl` 的定义
-
-English:
-definition lTensorKerIncl
-  signature: : AdicCompletion I R otimes[R] LinearMap.ker f ->ₗ[AdicCompletion I R]
-  body: AlgebraTensorModule.map LinearMap.id (LinearMap.ker f).subtype
-
-中文:
-定义 lTensorKerIncl
-  签名: : AdicCompletion I R otimes[R] 线性映射.ker f ->ₗ[AdicCompletion I R]
-  定义体: AlgebraTensorModule.map LinearMap.id (LinearMap.ker f).subtype
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, LinearMap, LinearMap.id, LinearMap.ker, subtype
+/-
+**AdicCompletion.lTensorKerIncl** 是 Mathlib 中的一个定义，位于命名空间 `AdicCompletion`。
+形式化陈述：lTensorKerIncl : AdicCompletion I R otimes[R] LinearMap.ker f ->ₗ[AdicComp
+letion I R] AdicCompletion I R otimes[R] (ι -> R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def lTensorKerIncl : AdicCompletion I R otimes[R] LinearMap.ker f ->ₗ[AdicCompletion I R]
-    AdicCompletion I R otimes[R] (ι -> R) :=
+def lTensorKerIncl : AdicCompletion I R ⊗[R] LinearMap.ker f →ₗ[AdicCompletion I R]
+    AdicCompletion I R ⊗[R] (ι → R) :=
   AlgebraTensorModule.map LinearMap.id (LinearMap.ker f).subtype
 
-/--
-Definition of `lTensorf` / `lTensorf` 的定义
+/-- The second horizontal arrow in the top row. -/
+/-
+**AdicCompletion.lTensorf** 是 Mathlib 中的一个定义，位于命名空间 `AdicCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lTensorf
-  signature: :
-  body: AlgebraTensorModule.map LinearMap.id f
-
-中文:
-定义 lTensorf
-  签名: :
-  定义体: AlgebraTensorModule.map LinearMap.id f
+--- 原说明 ---
+The second horizontal arrow in the top row.
 -/
 private def lTensorf :
-    AdicCompletion I R otimes[R] (ι -> R) ->ₗ[AdicCompletion I R] AdicCompletion I R otimes[R] M :=
+    AdicCompletion I R ⊗[R] (ι → R) →ₗ[AdicCompletion I R] AdicCompletion I R ⊗[R] M :=
   AlgebraTensorModule.map LinearMap.id f
 
 variable (hf : Function.Surjective f)
 
 include hf
-
-/--
-lemma `tens_exact` / 引理 `tens_exact`
-
-English:
-lemma tens_exact
-  statement: Function.Exact (lTensorKerIncl I M f) (lTensorf I M f)
-  proof: lTensor_exact (AdicCompletion I R) (f.exact_subtype_ker_map) hf
-
-中文:
-引理 tens_exact
-  结论: 函数.正合 (lTensorKerIncl I M f) (lTensorf I M f)
-  证明: lTensor_exact (AdicCompletion I R) (f.exact_subtype_ker_map) hf
+/-
+**AdicCompletion.tens_exact** 是 Mathlib 中的一个引理，位于命名空间 `AdicCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma tens_exact : Function.Exact (lTensorKerIncl I M f) (lTensorf I M f) :=
   lTensor_exact (AdicCompletion I R) (f.exact_subtype_ker_map) hf
-
-/--
-lemma `tens_surj` / 引理 `tens_surj`
-
-English:
-lemma tens_surj
-  statement: Function.Surjective (lTensorf I M f)
-  proof: LinearMap.lTensor_surjective (AdicCompletion I R) hf
-
-中文:
-引理 tens_surj
-  结论: 函数.满射 (lTensorf I M f)
-  证明: LinearMap.lTensor_surjective (AdicCompletion I R) hf
+/-
+**AdicCompletion.tens_surj** 是 Mathlib 中的一个引理，位于命名空间 `AdicCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma tens_surj : Function.Surjective (lTensorf I M f) :=
   LinearMap.lTensor_surjective (AdicCompletion I R) hf
-
-/--
-lemma `adic_exact` / 引理 `adic_exact`
-
-English:
-lemma adic_exact
-  given: [IsNoetherianRing R] [Finite ι]
-  proof: map_exact (Submodule.injective_subtype _) (f.exact_subtype_ker_map) hf
-
-中文:
-引理 adic_exact
-  条件: [是Noether环 R] [有限 ι]
-  证明: map_exact (Submodule.injective_subtype _) (f.exact_subtype_ker_map) hf
+/-
+**AdicCompletion.adic_exact** 是 Mathlib 中的一个引理，位于命名空间 `AdicCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma adic_exact [IsNoetherianRing R] [Finite ι] :
     Function.Exact (map I (LinearMap.ker f).subtype) (map I f) :=
   map_exact (Submodule.injective_subtype _) (f.exact_subtype_ker_map) hf
-
-/--
-lemma `adic_surj` / 引理 `adic_surj`
-
-English:
-lemma adic_surj
-  statement: Function.Surjective (map I f)
-  proof: map_surjective I hf
-
-private
-
-中文:
-引理 adic_surj
-  结论: 函数.满射 (map I f)
-  证明: map_surjective I hf
-
-private
+/-
+**AdicCompletion.adic_surj** 是 Mathlib 中的一个引理，位于命名空间 `AdicCompletion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma adic_surj : Function.Surjective (map I f) :=
   map_surjective I hf
 
 private
-/--
-lemma `ofTensorProduct_bijective_of_map_from_fin` / 引理 `ofTensorProduct_bijective_of_map_from_fin`
-
-English:
-lemma ofTensorProduct_bijective_of_map_from_fin
-  given: [Finite ι] [IsNoetherianRing R]
-  proof: LinearMap.bijective_of_surjective_of_bijective_of_bijective_of_injective
-    (lTensorKerIncl I M f)
-    (lTensorf I M f)
-    (0 : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] Unit)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
-    (map I <| (LinearMap.ker f).subtype)
-    (map I f)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
-    (ofTensorProduct I (LinearMap.ker f))
-    (ofTensorProduct I (ι -> R))
-    (ofTensorProduct I M)
-    0
-    0
-    (ofTensorProduct_naturality I <| (LinearMap.ker f).subtype)
-    (ofTensorProduct_naturality I f)
-    rfl
-    rfl
-    (tens_exact I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| tens_surj I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
-    (adic_exact I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| adic_surj I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
-    (ofTensorProduct_surjective_of_finite I (LinearMap.ker f))
-    (ofTensorProduct_bijective_of_pi_of_fintype I ι)
-    (Function.bijective_of_subsingleton _)
-    (Function.injective_of_subsingleton _)
-
-中文:
-引理 ofTensorProduct_bijective_of_map_from_fin
-  条件: [有限 ι] [是Noether环 R]
-  证明: LinearMap.bijective_of_surjective_of_bijective_of_bijective_of_injective
-    (lTensorKerIncl I M f)
-    (lTensorf I M f)
-    (0 : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] Unit)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
-    (map I <| (LinearMap.ker f).subtype)
-    (map I f)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
-    (ofTensorProduct I (LinearMap.ker f))
-    (ofTensorProduct I (ι -> R))
-    (ofTensorProduct I M)
-    0
-    0
-    (ofTensorProduct_naturality I <| (LinearMap.ker f).subtype)
-    (ofTensorProduct_naturality I f)
-    rfl
-    rfl
-    (tens_exact I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| tens_surj I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
-    (adic_exact I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| adic_surj I M f hf)
-    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
-    (ofTensorProduct_surjective_of_finite I (LinearMap.ker f))
-    (ofTensorProduct_bijective_of_pi_of_fintype I ι)
-    (Function.bijective_of_subsingleton _)
-    (Function.injective_of_subsingleton _)
-
-Depends on / 依赖: AdicCompletion, LinearMap, LinearMap.bijective_of_surjective_of_bijective_of_bijective_of_injective, LinearMap.ker, bijective_of_surjective_of_bijective_of_bijective_of_injective, lTensorKerIncl, lTensorf, ofTensorP, ofTensorProduct, ofTensorProduct_naturality, otimes, subtype
+/-
+**AdicCompletion.ofTensorProduct_bijective_of_map_from_fin** 是 Mathlib 中的一个引理，位于
+命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProduct_bijective_of_map_from_fin [Finite ι] [IsNoetherianRing R] 
+: Function.Bijective (ofTensorProduct I M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofTensorProduct_bijective_of_map_from_fin [Finite ι] [IsNoetherianRing R] :
     Function.Bijective (ofTensorProduct I M) :=
   LinearMap.bijective_of_surjective_of_bijective_of_bijective_of_injective
     (lTensorKerIncl I M f)
     (lTensorf I M f)
-    (0 : AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] Unit)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
+    (0 : AdicCompletion I R ⊗[R] M →ₗ[AdicCompletion I R] Unit)
+    (0 : _ →ₗ[AdicCompletion I R] Unit)
     (map I <| (LinearMap.ker f).subtype)
     (map I f)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
-    (0 : _ ->ₗ[AdicCompletion I R] Unit)
+    (0 : _ →ₗ[AdicCompletion I R] Unit)
+    (0 : _ →ₗ[AdicCompletion I R] Unit)
     (ofTensorProduct I (LinearMap.ker f))
-    (ofTensorProduct I (ι -> R))
+    (ofTensorProduct I (ι → R))
     (ofTensorProduct I M)
     0
     0
@@ -699,22 +683,30 @@ end
 
 variable [IsNoetherianRing R]
 
-/--
-theorem `ofTensorProduct_bijective_of_finite_of_isNoetherian` / 定理 `ofTensorProduct_bijective_of_finite_of_isNoetherian`
+/-- If `R` is a Noetherian ring and `M` is a finite `R`-module, then the natural map
+given by `AdicCompletion.ofTensorProduct` is an isomorphism. -/
+/-
+**AdicCompletion.ofTensorProduct_bijective_of_finite_of_isNoetherian** 是 Mathlib
+ 中的一个定理，位于命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProduct_bijective_of_finite_of_isNoetherian [Module.Finite R M] : 
+Function.Bijective (ofTensorProduct I M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用引理 `Module.Finite.exists_fin'`：exists_fin' [Module.Finite R M] : exists (n :
+ Nat) (f : (Fin n -> R) ->ₗ[R] M), Surjective f
+· 使用定理 `_private.Mathlib.RingTheory.AdicCompletion.AsTensorProduct.0.AdicComplet
+ion.ofTensorProduct_bijective_of_map_from_fin`：∀ {R : Type u} [inst : CommRing R
+] (I : Ideal R) (M : Type u) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R
+ M]   {ι : Type} (f : (ι → …
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-theorem ofTensorProduct_bijective_of_finite_of_isNoetherian
-  proof: by
-  obtain ⟨n, f, hf⟩ := Module.Finite.exists_fin' R M
-  exact ofTensorProduct_bijective_of_map_from_fin I M f hf
-
-中文:
-定理 ofTensorProduct_bijective_of_finite_of_isNoetherian
-  证明: by
-  obtain ⟨n, f, hf⟩ := Module.Finite.exists_fin' R M
-  exact ofTensorProduct_bijective_of_map_from_fin I M f hf
-
-Depends on / 依赖: Finite, Module, Module.Finite.exists_fin, exists_fin, ofTensorProduct_bijective_of_map_from_fin
+--- 原说明 ---
+If `R` is a Noetherian ring and `M` is a finite `R`-module, then the natural map
+given by `AdicCompletion.ofTensorProduct` is an isomorphism.
 -/
 theorem ofTensorProduct_bijective_of_finite_of_isNoetherian
     [Module.Finite R M] :
@@ -722,161 +714,194 @@ theorem ofTensorProduct_bijective_of_finite_of_isNoetherian
   obtain ⟨n, f, hf⟩ := Module.Finite.exists_fin' R M
   exact ofTensorProduct_bijective_of_map_from_fin I M f hf
 
-/--
-Definition of `ofTensorProductEquivOfFiniteNoetherian` / `ofTensorProductEquivOfFiniteNoetherian` 的定义
+/-- `ofTensorProduct` packaged as linear equiv if `M` is a finite `R`-module and `R` is
+Noetherian. -/
+/-
+**AdicCompletion.ofTensorProductEquivOfFiniteNoetherian** 是 Mathlib 中的一个定义，位于命名空
+间 `AdicCompletion`。
+形式化陈述：ofTensorProductEquivOfFiniteNoetherian [Module.Finite R M] : AdicCompletio
+n I R otimes[R] M ≃ₗ[AdicCompletion I R] AdicCompletion I M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AdicCompletion.ofTensorProduct_bijective_of_finite_of_isNoetherian`：ofTe
+nsorProduct_bijective_of_finite_of_isNoetherian [Module.Finite R M] : Function.B
+ijective (ofTensorProduct I M)
 
-English:
-definition ofTensorProductEquivOfFiniteNoetherian
-  signature: [Module.Finite R M]
-  body: LinearEquiv.ofBijective (ofTensorProduct I M)
-    (ofTensorProduct_bijective_of_finite_of_isNoetherian I M)
-
-中文:
-定义 ofTensorProductEquivOfFiniteNoetherian
-  签名: [模.有限 R M]
-  定义体: LinearEquiv.ofBijective (ofTensorProduct I M)
-    (ofTensorProduct_bijective_of_finite_of_isNoetherian I M)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, ofBijective, ofTensorProduct, ofTensorProduct_bijective_of_finite_of_isNoetherian
+--- 原说明 ---
+`ofTensorProduct` packaged as linear equiv if `M` is a finite `R`-module and `R`
+ is
+Noetherian.
 -/
 def ofTensorProductEquivOfFiniteNoetherian [Module.Finite R M] :
-    AdicCompletion I R otimes[R] M ≃ₗ[AdicCompletion I R] AdicCompletion I M :=
+    AdicCompletion I R ⊗[R] M ≃ₗ[AdicCompletion I R] AdicCompletion I M :=
   LinearEquiv.ofBijective (ofTensorProduct I M)
     (ofTensorProduct_bijective_of_finite_of_isNoetherian I M)
-
-/--
-lemma `coe_ofTensorProductEquivOfFiniteNoetherian` / 引理 `coe_ofTensorProductEquivOfFiniteNoetherian`
-
-English:
-lemma coe_ofTensorProductEquivOfFiniteNoetherian
-  given: [Module.Finite R M]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_ofTensorProductEquivOfFiniteNoetherian
-  条件: [模.有限 R M]
-  证明: rfl
-
-@[simp]
+/-
+**AdicCompletion.coe_ofTensorProductEquivOfFiniteNoetherian** 是 Mathlib 中的一个引理，位
+于命名空间 `AdicCompletion`。
+形式化陈述：coe_ofTensorProductEquivOfFiniteNoetherian [Module.Finite R M] : ofTensorP
+roductEquivOfFiniteNoetherian I M = ofTensorProduct I M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 lemma coe_ofTensorProductEquivOfFiniteNoetherian [Module.Finite R M] :
     ofTensorProductEquivOfFiniteNoetherian I M = ofTensorProduct I M :=
   rfl
 
 @[simp]
-/--
-lemma `ofTensorProductEquivOfFiniteNoetherian_apply` / 引理 `ofTensorProductEquivOfFiniteNoetherian_apply`
-
-English:
-lemma ofTensorProductEquivOfFiniteNoetherian_apply
-  statement: [Module.Finite R M]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofTensorProductEquivOfFiniteNoetherian_apply
-  结论: [模.有限 R M]
-  证明: rfl
-
-@[simp]
+/-
+**AdicCompletion.ofTensorProductEquivOfFiniteNoetherian_apply** 是 Mathlib 中的一个引理
+，位于命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProductEquivOfFiniteNoetherian_apply [Module.Finite R M] (x : Adic
+Completion I R otimes[R] M) : ofTensorProductEquivOfFiniteNoetherian I M x = ofT
+ensorProduct I M x
+参数：x : AdicCompletion I R otimes[R] M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 lemma ofTensorProductEquivOfFiniteNoetherian_apply [Module.Finite R M]
-    (x : AdicCompletion I R otimes[R] M) :
+    (x : AdicCompletion I R ⊗[R] M) :
     ofTensorProductEquivOfFiniteNoetherian I M x = ofTensorProduct I M x :=
   rfl
 
 @[simp]
-/--
-lemma `ofTensorProductEquivOfFiniteNoetherian_symm_of` / 引理 `ofTensorProductEquivOfFiniteNoetherian_symm_of`
-
-English:
-lemma ofTensorProductEquivOfFiniteNoetherian_symm_of
-  proof: by
-  have h : (of I M) x = ofTensorProductEquivOfFiniteNoetherian I M (1 otimesₜ x) := by
-    simp
-  rw [h]; rw [LinearEquiv.symm_apply_apply]
-
-中文:
-引理 ofTensorProductEquivOfFiniteNoetherian_symm_of
-  证明: by
-  have h : (of I M) x = ofTensorProductEquivOfFiniteNoetherian I M (1 otimesₜ x) := by
-    simp
-  rw [h]; rw [LinearEquiv.symm_apply_apply]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_apply, ofTensorProductEquivOfFiniteNoetherian, symm_apply_apply
+/-
+**AdicCompletion.ofTensorProductEquivOfFiniteNoetherian_symm_of** 是 Mathlib 中的一个
+引理，位于命名空间 `AdicCompletion`。
+形式化陈述：ofTensorProductEquivOfFiniteNoetherian_symm_of [Module.Finite R M] (x : M)
+ : (ofTensorProductEquivOfFiniteNoetherian I M).symm ((of I M) x) = 1 otimesₜ x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AdicCompletion.ofTensorProduct_tmul`：ofTensorProduct_tmul (r : AdicCompl
+etion I R) (x : M) : ofTensorProduct I M (r otimesₜ x) = r • of I M x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
 -/
 lemma ofTensorProductEquivOfFiniteNoetherian_symm_of
     [Module.Finite R M] (x : M) :
-    (ofTensorProductEquivOfFiniteNoetherian I M).symm ((of I M) x) = 1 otimesₜ x := by
-  have h : (of I M) x = ofTensorProductEquivOfFiniteNoetherian I M (1 otimesₜ x) := by
+    (ofTensorProductEquivOfFiniteNoetherian I M).symm ((of I M) x) = 1 ⊗ₜ x := by
+  have h : (of I M) x = ofTensorProductEquivOfFiniteNoetherian I M (1 ⊗ₜ x) := by
     simp
-  rw [h]; rw [LinearEquiv.symm_apply_apply]
+  rw [h, LinearEquiv.symm_apply_apply]
 
 section
 
 variable {M : Type u} [AddCommGroup M] [Module R M]
-variable {N : Type u} [AddCommGroup N] [Module R N] (f : M ->ₗ[R] N)
+variable {N : Type u} [AddCommGroup N] [Module R N] (f : M →ₗ[R] N)
 variable [Module.Finite R M] [Module.Finite R N]
 
-/--
-lemma `tensor_map_id_left_eq_map` / 引理 `tensor_map_id_left_eq_map`
-
-English:
-lemma tensor_map_id_left_eq_map
-  proof: by
-  rw [coe_ofTensorProductEquivOfFiniteNoetherian]; rw [ofTensorProduct_naturality I f]
-  ext x
-  simp
-
-中文:
-引理 tensor_map_id_left_eq_map
-  证明: by
-  rw [coe_ofTensorProductEquivOfFiniteNoetherian]; rw [ofTensorProduct_naturality I f]
-  ext x
-  simp
-
-Depends on / 依赖: coe_ofTensorProductEquivOfFiniteNoetherian, ofTensorProduct_naturality
+/-
+**AdicCompletion.tensor_map_id_left_eq_map** 是 Mathlib 中的一个引理，位于命名空间 `AdicComple
+tion`。
+形式化陈述：tensor_map_id_left_eq_map : (AlgebraTensorModule.map LinearMap.id f) = (of
+TensorProductEquivOfFiniteNoetherian I N).symm.toLinearMap ∘ₗ map I f ∘ₗ (ofTens
+orProductEquivOfFiniteNoetherian I M).toLinearMap
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AdicCompletion.coe_ofTensorProductEquivOfFiniteNoetherian`：coe_ofTensorP
+roductEquivOfFiniteNoetherian [Module.Finite R M] : ofTensorProductEquivOfFinite
+Noetherian I M = ofTensorProduct I M
+· 使用引理 `AdicCompletion.ofTensorProduct_naturality`：ofTensorProduct_naturality (f
+ : M ->ₗ[R] N) : map I f ∘ₗ ofTensorProduct I M = ofTensorProduct I N ∘ₗ Algebra
+TensorModule.map LinearMap.id f
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_injective`：∀ {R : Type uR} {A : 
+Type uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst
+_1 : Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorProduct.AlgebraTensorModule.curry_apply`：∀ {R : Type uR} {A : Type
+ uA} {M : Type uM} {N : Type uN} {P : Type uP} [inst : CommSemiring R] [inst_1 :
+ Semiring A]   [inst_2 : Algebra R …
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `AdicCompletion.instIsScalarTower_1`：∀ {R : Type u_1} [inst : CommRing R]
+ (I : Ideal R) {M : Type u_3} [inst_1 : AddCommGroup M]   [inst_2 : _root_.Modul
+e R M], IsScalarTower R …
+· 使用引理 `AdicCompletion.ofTensorProduct_tmul`：ofTensorProduct_tmul (r : AdicCompl
+etion I R) (x : M) : ofTensorProduct I M (r otimesₜ x) = r • of I M x
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用引理 `AdicCompletion.ofTensorProductEquivOfFiniteNoetherian_symm_of`：ofTensorP
+roductEquivOfFiniteNoetherian_symm_of [Module.Finite R M] (x : M) : (ofTensorPro
+ductEquivOfFiniteNoetherian I M).symm ((of I M) x) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma tensor_map_id_left_eq_map :
     (AlgebraTensorModule.map LinearMap.id f) =
       (ofTensorProductEquivOfFiniteNoetherian I N).symm.toLinearMap ∘ₗ
       map I f ∘ₗ
       (ofTensorProductEquivOfFiniteNoetherian I M).toLinearMap := by
-  rw [coe_ofTensorProductEquivOfFiniteNoetherian]; rw [ofTensorProduct_naturality I f]
+  rw [coe_ofTensorProductEquivOfFiniteNoetherian, ofTensorProduct_naturality I f]
   ext x
   simp
 
 variable {f}
-
-/--
-lemma `tensor_map_id_left_injective_of_injective` / 引理 `tensor_map_id_left_injective_of_injective`
-
-English:
-lemma tensor_map_id_left_injective_of_injective
-  given: (hf : Function.Injective f)
-  proof: by
-  rw [tensor_map_id_left_eq_map I f]
-  simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, EmbeddingLike.comp_injective,
-    EquivLike.injective_comp]
-  exact map_injective I hf
-
-中文:
-引理 tensor_map_id_left_injective_of_injective
-  条件: (hf : 函数.单射 f)
-  证明: by
-  rw [tensor_map_id_left_eq_map I f]
-  simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, EmbeddingLike.comp_injective,
-    EquivLike.injective_comp]
-  exact map_injective I hf
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.comp_injective, EquivLike, EquivLike.injective_comp, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, coe_coe, coe_comp, comp_injective, injective_comp, map_injective, tensor_map_id_left_eq_map
+/-
+**AdicCompletion.tensor_map_id_left_injective_of_injective** 是 Mathlib 中的一个引理，位于
+命名空间 `AdicCompletion`。
+形式化陈述：tensor_map_id_left_injective_of_injective (hf : Function.Injective f) : Fu
+nction.Injective (AlgebraTensorModule.map LinearMap.id f : AdicCompletion I R ot
+imes[R] M ->ₗ[AdicCompletion I R] AdicCompletion I R otimes[R] N)
+参数：hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AdicCompletion.tensor_map_id_left_eq_map`：tensor_map_id_left_eq_map : (A
+lgebraTensorModule.map LinearMap.id f) = (ofTensorProductEquivOfFiniteNoetherian
+ I N).symm.toLinearMap ∘ₗ map …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `AdicCompletion.map_injective`：map_injective {f : M ->ₗ[R] N} (hf : Funct
+ion.Injective f) : Function.Injective (map I f)
 -/
 lemma tensor_map_id_left_injective_of_injective (hf : Function.Injective f) :
     Function.Injective (AlgebraTensorModule.map LinearMap.id f :
-        AdicCompletion I R otimes[R] M ->ₗ[AdicCompletion I R] AdicCompletion I R otimes[R] N) := by
+        AdicCompletion I R ⊗[R] M →ₗ[AdicCompletion I R] AdicCompletion I R ⊗[R] N) := by
   rw [tensor_map_id_left_eq_map I f]
   simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, EmbeddingLike.comp_injective,
     EquivLike.injective_comp]
@@ -884,27 +909,34 @@ lemma tensor_map_id_left_injective_of_injective (hf : Function.Injective f) :
 
 end
 
-/--
-Instance `flat_of_isNoetherian` / 实例 `flat_of_isNoetherian`
+/-- Adic completion of a Noetherian ring `R` is flat over `R`. -/
+/-
+**AdicCompletion.flat_of_isNoetherian** 是 Mathlib 中的一个实例，位于命名空间 `AdicCompletion`
+。
+形式化陈述：flat_of_isNoetherian : Module.Flat R (AdicCompletion I R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Module.Flat.iff_lTensor_injective'`：iff_lTensor_injective' : Flat R M ↔ 
+forall (I : Ideal R), Function.Injective (lTensor M I.subtype)
+· 使用引理 `AdicCompletion.tensor_map_id_left_injective_of_injective`：tensor_map_id_
+left_injective_of_injective (hf : Function.Injective f) : Function.Injective (Al
+gebraTensorModule.map LinearMap.id f : AdicCom…
+· 使用定理 `Module.instFiniteSubtypeMemIdealOfIsNoetherian`：∀ {R₁ : Type u_5} {S : T
+ype u_6} [inst : CommSemiring R₁] [inst_1 : Semiring S] [inst_2 : Algebra R₁ S] 
+  [IsNoetherian R₁ S] (I : Ideal S),…
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
 
-English:
-instance flat_of_isNoetherian
-  signature: : Module.Flat R (AdicCompletion I R)
-  body: Module.Flat.iff_lTensor_injective'.mpr fun J =>
-    tensor_map_id_left_injective_of_injective I (Submodule.injective_subtype J)
-
-中文:
-实例 flat_of_isNoetherian
-  签名: : 模.平坦 R (AdicCompletion I R)
-  定义体: Module.Flat.iff_lTensor_injective'.mpr fun J =>
-    tensor_map_id_left_injective_of_injective I (Submodule.injective_subtype J)
-
-Depends on / 依赖: Module, Module.Flat.iff_lTensor_injective, Submodule, Submodule.injective_subtype, iff_lTensor_injective, injective_subtype, tensor_map_id_left_injective_of_injective
+--- 原说明 ---
+Adic completion of a Noetherian ring `R` is flat over `R`.
 -/
 instance flat_of_isNoetherian : Module.Flat R (AdicCompletion I R) :=
-  Module.Flat.iff_lTensor_injective'.mpr fun J =>
+  Module.Flat.iff_lTensor_injective'.mpr fun J ↦
     tensor_map_id_left_injective_of_injective I (Submodule.injective_subtype J)
 
 end Noetherian
 
 end AdicCompletion
+

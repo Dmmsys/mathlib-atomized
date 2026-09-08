@@ -25,22 +25,25 @@ namespace Algebra
 variable (A B G : Type*) [CommSemiring A] [Semiring B] [Algebra A B]
   [Group G] [MulSemiringAction G B]
 
-/--
-Definition of `IsInvariant` / `IsInvariant` 的定义
+/-- An action of a group `G` on an extension of rings `B/A` is invariant if every fixed point of
+`B` lies in the image of `A`. The converse statement that every point in the image of `A` is fixed
+by `G` is `smul_algebraMap` (assuming `SMulCommClass A B G`). -/
+/-
+**Algebra.IsInvariant** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra`。
+形式化陈述：(A : Type u_1) →   (B : Type u_2) →     (G : Type u_3) →       [inst : Com
+mSemiring A] →         [inst_1 : Semiring B] → [Algebra A B] → [inst : Group G] 
+→ [MulSemiringAction G B] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsInvariant
-  parameters: : Prop where
-  axioms and operations (1):
-    - isInvariant : forall b : B, (forall g : G, g • b = b) -> exists a : A, algebraMap A B a = b
-
-中文:
-类 是不变
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isInvariant : 对任意 b : B, (对任意 g : G, g • b = b) -> 存在 a : A, algebraMap A B a = b
+--- 原说明 ---
+An action of a group `G` on an extension of rings `B/A` is invariant if every fi
+xed point of
+`B` lies in the image of `A`. The converse statement that every point in the ima
+ge of `A` is fixed
+by `G` is `smul_algebraMap` (assuming `SMulCommClass A B G`).
 -/
 @[mk_iff] class IsInvariant : Prop where
-  isInvariant : forall b : B, (forall g : G, g • b = b) -> exists a : A, algebraMap A B a = b
+  isInvariant : ∀ b : B, (∀ g : G, g • b = b) → ∃ a : A, algebraMap A B a = b
 
 end Algebra
+

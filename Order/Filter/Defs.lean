@@ -59,7 +59,7 @@ at the cost of including the assumption `[NeBot f]` in a number of lemmas and de
 
 ## References
 
-* [N. Bourbaki, *General Topology*][bourbaki1966]
+*  [N. Bourbaki, *General Topology*][bourbaki1966]
 -/
 
 @[expose] public section
@@ -72,1375 +72,954 @@ open Set
 is upwards-closed, and is stable under intersection. We do not forbid this collection to be
 all sets of `α`. -/
 @[to_dual_dont_translate]
-/--
-Definition of `Filter` / `Filter` 的定义
+/-
+**Filter** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Filter
-  parameters: (α : Type*)
-  axioms and operations (4):
-    - sets : Set (Set α)
-    - univ_sets : Set.univ in sets
-    - sets_of_superset({x y}) : x in sets -> x subseteq y -> y in sets
-    - inter_sets({x y}) : x in sets -> y in sets -> x inter y in sets
-
-中文:
-结构 滤子
-  参数: (α : 类型)
-  公理与运算 (4 个):
-    - sets : 集合 (集合 α)
-    - univ_sets : 集合.univ in sets
-    - sets_of_superset({x y}) : x in sets -> x subseteq y -> y in sets
-    - inter_sets({x y}) : x in sets -> y in sets -> x inter y in sets
+--- 原说明 ---
+A filter `F` on a type `α` is a collection of sets of `α` which contains the who
+le `α`,
+is upwards-closed, and is stable under intersection. We do not forbid this colle
+ction to be
+all sets of `α`.
 -/
 structure Filter (α : Type*) where
   /-- The set of sets that belong to the filter. -/
   sets : Set (Set α)
   /-- The set `Set.univ` belongs to any filter. -/
-  univ_sets : Set.univ in sets
+  univ_sets : Set.univ ∈ sets
   /-- If a set belongs to a filter, then its superset belongs to the filter as well. -/
-  sets_of_superset {x y} : x in sets -> x subseteq y -> y in sets
+  sets_of_superset {x y} : x ∈ sets → x ⊆ y → y ∈ sets
   /-- If two sets belong to a filter, then their intersection belongs to the filter as well. -/
-  inter_sets {x y} : x in sets -> y in sets -> x inter y in sets
+  inter_sets {x y} : x ∈ sets → y ∈ sets → x ∩ y ∈ sets
 
 namespace Filter
 
 variable {α β : Type*} {f g : Filter α} {s t : Set α}
 
-/--
-theorem `filter_eq` / 定理 `filter_eq`
-
-English:
-theorem filter_eq
-  statement: forall {f g : Filter α}, f.sets = g.sets -> f = g
-
-中文:
-定理 filter_eq
-  结论: 对任意 {f g : 滤子 α}, f.sets = g.sets -> f = g
+/-
+**Filter.filter_eq** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {f g : Filter α}, f.sets = g.sets → f = g
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem filter_eq : forall {f g : Filter α}, f.sets = g.sets -> f = g
+theorem filter_eq : ∀ {f g : Filter α}, f.sets = g.sets → f = g
   | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
 
-/--
-Instance `instMembership` / 实例 `instMembership`
+/-- If `F` is a filter on `α`, and `U` a subset of `α` then we can write `U ∈ F` as on paper. -/
+/-
+**Filter.instMembership** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instMembership : Membership (Set α) (Filter α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instMembership
-  signature: : Membership (Set α) (Filter α)
-  body: ⟨fun F U => U in F.sets⟩
+--- 原说明 ---
+If `F` is a filter on `α`, and `U` a subset of `α` then we can write `U ∈ F` as 
+on paper.
+-/
+instance instMembership : Membership (Set α) (Filter α) := ⟨fun F U => U ∈ F.sets⟩
 
 @[ext]
-
-中文:
-实例 instMembership
-  签名: : Membership (集合 α) (滤子 α)
-  定义体: ⟨fun F U => U in F.sets⟩
-
-@[ext]
-
-Depends on / 依赖: F.sets
+/-
+**Filter.ext** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {f g : Filter α}, (∀ (s : Set α), s ∈ f ↔ s ∈ g) → f = g
+参数：∀ (s : Set α), s ∈ f ↔ s ∈ g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.filter_eq`：∀ {α : Type u_1} {f g : Filter α}, f.sets = g.sets → f
+ = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
-instance instMembership : Membership (Set α) (Filter α) := ⟨fun F U => U in F.sets⟩
-
-@[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (h : forall s, s in f ↔ s in g)
-  statement: f = g
-  proof: filter_eq Set.ext h
+protected theorem ext (h : ∀ s, s ∈ f ↔ s ∈ g) : f = g := filter_eq <| Set.ext h
 
 @[simp]
-
-中文:
-定理 ext
-  条件: (h : 对任意 s, s in f ↔ s in g)
-  结论: f = g
-  证明: filter_eq Set.ext h
-
-@[simp]
+/-
+**Filter.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {s : Set α} {t : Set (Set α)} {h₁ : Set.univ ∈ t} {h₂ : ∀
+ {x y : Set α}, x ∈ t → x ⊆ y → y ∈ t}   {h₃ : ∀ {x y : Set α}, x ∈ t → y ∈ t → 
+x ∩ y ∈ t},   s ∈ { sets := t, univ_sets := h₁, sets_of_superset := h₂, inter_se
+ts := h₃ } ↔ s ∈ t
+参数：Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected theorem ext (h : forall s, s in f ↔ s in g) : f = g := filter_eq Set.ext h
-
-@[simp]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: {t : Set (Set α)} {h₁ h₂ h₃}
-  statement: s in mk t h₁ h₂ h₃ ↔ s in t
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_mk
-  条件: {t : 集合 (集合 α)} {h₁ h₂ h₃}
-  结论: s in mk t h₁ h₂ h₃ ↔ s in t
-  证明: Iff.rfl
-
-@[simp]
--/
-protected theorem mem_mk {t : Set (Set α)} {h₁ h₂ h₃} : s in mk t h₁ h₂ h₃ ↔ s in t :=
+protected theorem mem_mk {t : Set (Set α)} {h₁ h₂ h₃} : s ∈ mk t h₁ h₂ h₃ ↔ s ∈ t :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_sets` / 定理 `mem_sets`
-
-English:
-theorem mem_sets
-  statement: s in f.sets ↔ s in f
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_sets
-  结论: s in f.sets ↔ s in f
-  证明: Iff.rfl
-
-@[simp]
+/-
+**Filter.mem_sets** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {f : Filter α} {s : Set α}, s ∈ f.sets ↔ s ∈ f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected theorem mem_sets : s in f.sets ↔ s in f :=
+protected theorem mem_sets : s ∈ f.sets ↔ s ∈ f :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `univ_mem` / 定理 `univ_mem`
-
-English:
-theorem univ_mem
-  statement: univ in f
-  proof: f.univ_sets
-
-@[gcongr]
-
-中文:
-定理 univ_mem
-  结论: univ in f
-  证明: f.univ_sets
-
-@[gcongr]
-
-Depends on / 依赖: f.univ_sets, univ_sets
+/-
+**Filter.univ_mem** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：univ_mem : univ in f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_sets`：∀ {α : Type u_1} (self : Filter α), Set.univ ∈ self.se
+ts
 -/
-theorem univ_mem : univ in f :=
+theorem univ_mem : univ ∈ f :=
   f.univ_sets
 
 @[gcongr]
-/--
-theorem `mem_of_superset` / 定理 `mem_of_superset`
-
-English:
-theorem mem_of_superset
-  given: {x y : Set α} (hx : x in f) (hxy : x subseteq y)
-  statement: y in f
-  proof: f.sets_of_superset hx hxy
-
-中文:
-定理 mem_of_superset
-  条件: {x y : 集合 α} (hx : x in f) (hxy : x subseteq y)
-  结论: y in f
-  证明: f.sets_of_superset hx hxy
-
-Depends on / 依赖: f.sets_of_superset, sets_of_superset
+/-
+**Filter.mem_of_superset** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_of_superset {x y : Set α} (hx : x in f) (hxy : x subseteq y) : y in f
+参数：hx : x in f；hxy : x subseteq y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.sets_of_superset`：∀ {α : Type u_1} (self : Filter α) {x y : Set α
+}, x ∈ self.sets → x ⊆ y → y ∈ self.sets
 -/
-theorem mem_of_superset {x y : Set α} (hx : x in f) (hxy : x subseteq y) : y in f :=
+theorem mem_of_superset {x y : Set α} (hx : x ∈ f) (hxy : x ⊆ y) : y ∈ f :=
   f.sets_of_superset hx hxy
-
-/--
-theorem `univ_mem'` / 定理 `univ_mem'`
-
-English:
-theorem univ_mem'
-  given: (h : forall a, a in s)
-  statement: s in f
-  proof: mem_of_superset univ_mem fun x _ => h x
-
-中文:
-定理 univ_mem'
-  条件: (h : 对任意 a, a in s)
-  结论: s in f
-  证明: mem_of_superset univ_mem fun x _ => h x
-
-Depends on / 依赖: mem_of_superset, univ_mem
+/-
+**Filter.univ_mem'** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：univ_mem' (h : forall a, a in s) : s in f
+参数：h : forall a, a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 -/
-theorem univ_mem' (h : forall a, a in s) : s in f :=
+theorem univ_mem' (h : ∀ a, a ∈ s) : s ∈ f :=
   mem_of_superset univ_mem fun x _ => h x
-
-/--
-theorem `inter_mem` / 定理 `inter_mem`
-
-English:
-theorem inter_mem
-  given: (hs : s in f) (ht : t in f)
-  statement: s inter t in f
-  proof: f.inter_sets hs ht
-
-中文:
-定理 inter_mem
-  条件: (hs : s in f) (ht : t in f)
-  结论: s inter t in f
-  证明: f.inter_sets hs ht
-
-Depends on / 依赖: f.inter_sets, inter_sets
+/-
+**Filter.inter_mem** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+参数：hs : s in f；ht : t in f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.inter_sets`：∀ {α : Type u_1} (self : Filter α) {x y : Set α}, x ∈
+ self.sets → y ∈ self.sets → x ∩ y ∈ self.sets
 -/
-theorem inter_mem (hs : s in f) (ht : t in f) : s inter t in f :=
+theorem inter_mem (hs : s ∈ f) (ht : t ∈ f) : s ∩ t ∈ f :=
   f.inter_sets hs ht
-
-/--
-theorem `mp_mem` / 定理 `mp_mem`
-
-English:
-theorem mp_mem
-  given: (hs : s in f) (h : { x | x in s -> x in t } in f)
-  statement: t in f
-  proof: mem_of_superset (inter_mem hs h) fun _ ⟨h₁, h₂⟩ => h₂ h₁
-
-中文:
-定理 mp_mem
-  条件: (hs : s in f) (h : { x | x in s -> x in t } in f)
-  结论: t in f
-  证明: mem_of_superset (inter_mem hs h) fun _ ⟨h₁, h₂⟩ => h₂ h₁
-
-Depends on / 依赖: inter_mem, mem_of_superset
+/-
+**Filter.mp_mem** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) : t in f
+参数：hs : s in f；h : { x | x in s -> x in t } in f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
 -/
-theorem mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) : t in f :=
+theorem mp_mem (hs : s ∈ f) (h : { x | x ∈ s → x ∈ t } ∈ f) : t ∈ f :=
   mem_of_superset (inter_mem hs h) fun _ ⟨h₁, h₂⟩ => h₂ h₁
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Override `sets` field of a filter to provide better definitional equality. -/
+/-
+**Filter.copy** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → (f : Filter α) → (S : Set (Set α)) → (∀ (s : Set α), s ∈ 
+S ↔ s ∈ f) → Filter α
+参数：f : Filter α；S : Set (Set α)；∀ (s : Set α), s ∈ S ↔ s ∈ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : Filter α) (S : Set (Set α)) (hmem : forall s, s in S ↔ s in f)
-  body: S
-  univ_sets := (hmem _).2 univ_mem
-sets_of_superset h hsub := (hmem _).2 mem_of_superset ((hmem _).1 h) hsub
-inter_sets h₁ h₂ := (hmem _).2 inter_mem ((hmem _).1 h₁) ((hmem _).1 h₂)
-
-中文:
-定义 copy
-  签名: (f : 滤子 α) (S : 集合 (集合 α)) (hmem : 对任意 s, s in S ↔ s in f)
-  定义体: S
-  univ_sets := (hmem _).2 univ_mem
-sets_of_superset h hsub := (hmem _).2 mem_of_superset ((hmem _).1 h) hsub
-inter_sets h₁ h₂ := (hmem _).2 inter_mem ((hmem _).1 h₁) ((hmem _).1 h₂)
+--- 原说明 ---
+Override `sets` field of a filter to provide better definitional equality.
 -/
-protected def copy (f : Filter α) (S : Set (Set α)) (hmem : forall s, s in S ↔ s in f) : Filter α where
+protected def copy (f : Filter α) (S : Set (Set α)) (hmem : ∀ s, s ∈ S ↔ s ∈ f) : Filter α where
   sets := S
   univ_sets := (hmem _).2 univ_mem
-sets_of_superset h hsub := (hmem _).2 mem_of_superset ((hmem _).1 h) hsub
-inter_sets h₁ h₂ := (hmem _).2 inter_mem ((hmem _).1 h₁) ((hmem _).1 h₂)
-
-/--
-theorem `mem_copy` / 定理 `mem_copy`
-
-English:
-theorem mem_copy
-  given: {S hmem}
-  statement: s in f.copy S hmem ↔ s in S
-  proof: Iff.rfl
-
-中文:
-定理 mem_copy
-  条件: {S hmem}
-  结论: s in f.copy S hmem ↔ s in S
-  证明: Iff.rfl
+  sets_of_superset h hsub := (hmem _).2 <| mem_of_superset ((hmem _).1 h) hsub
+  inter_sets h₁ h₂ := (hmem _).2 <| inter_mem ((hmem _).1 h₁) ((hmem _).1 h₂)
+/-
+**Filter.mem_copy** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {f : Filter α} {s : Set α} {S : Set (Set α)} {hmem : ∀ (s
+ : Set α), s ∈ S ↔ s ∈ f},   s ∈ f.copy S hmem ↔ s ∈ S
+参数：Set α；s : Set α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] theorem mem_copy {S hmem} : s in f.copy S hmem ↔ s in S := Iff.rfl
+@[simp] theorem mem_copy {S hmem} : s ∈ f.copy S hmem ↔ s ∈ S := Iff.rfl
 
-/--
-Definition of `comk` / `comk` 的定义
+/-- Construct a filter from a property that is stable under finite unions.
+A set `s` belongs to `Filter.comk p _ _ _` iff its complement satisfies the predicate `p`.
+This constructor is useful to define filters like `Filter.cofinite`. -/
+/-
+**Filter.comk** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：comk (p : Set α -> Prop) (he : p ∅) (hmono : forall t, p t -> forall s sub
+seteq t, p s) (hunion : forall s, p s -> forall t, p t -> p (s union t)) : Filte
+r α where sets
+参数：p : Set α -> Prop；he : p ∅；hmono : forall t, p t -> forall s subseteq t, p s；
+hunion : forall s, p s -> forall t, p t -> p (s union t)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comk
-  signature: (p : Set α -> Prop) (he : p ∅) (hmono : forall t, p t -> forall s subseteq t, p s)
-  body: {t | p tᶜ}
-  univ_sets := by simpa
-  sets_of_superset := fun ht₁ ht => hmono _ ht₁ _ (compl_subset_compl.2 ht)
-  inter_sets := fun ht₁ ht₂ => by simp [compl_inter, hunion _ ht₁ _ ht₂]
-
-@[simp]
-
-中文:
-定义 comk
-  签名: (p : 集合 α -> 命题) (he : p ∅) (hmono : 对任意 t, p t -> 对任意 s subseteq t, p s)
-  定义体: {t | p tᶜ}
-  univ_sets := by simpa
-  sets_of_superset := fun ht₁ ht => hmono _ ht₁ _ (compl_subset_compl.2 ht)
-  inter_sets := fun ht₁ ht₂ => by simp [compl_inter, hunion _ ht₁ _ ht₂]
-
-@[simp]
+--- 原说明 ---
+Construct a filter from a property that is stable under finite unions.
+A set `s` belongs to `Filter.comk p _ _ _` iff its complement satisfies the pred
+icate `p`.
+This constructor is useful to define filters like `Filter.cofinite`.
 -/
-def comk (p : Set α -> Prop) (he : p ∅) (hmono : forall t, p t -> forall s subseteq t, p s)
-    (hunion : forall s, p s -> forall t, p t -> p (s union t)) : Filter α where
+def comk (p : Set α → Prop) (he : p ∅) (hmono : ∀ t, p t → ∀ s ⊆ t, p s)
+    (hunion : ∀ s, p s → ∀ t, p t → p (s ∪ t)) : Filter α where
   sets := {t | p tᶜ}
   univ_sets := by simpa
   sets_of_superset := fun ht₁ ht => hmono _ ht₁ _ (compl_subset_compl.2 ht)
   inter_sets := fun ht₁ ht₂ => by simp [compl_inter, hunion _ ht₁ _ ht₂]
 
 @[simp]
-/--
-lemma `mem_comk` / 引理 `mem_comk`
-
-English:
-lemma mem_comk
-  given: {p : Set α -> Prop} {he hmono hunion s}
-  proof: .rfl
-
-中文:
-引理 mem_comk
-  条件: {p : 集合 α -> 命题} {he hmono hunion s}
-  证明: .rfl
+/-
+**Filter.mem_comk** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：mem_comk {p : Set α -> Prop} {he hmono hunion s} : s in comk p he hmono hu
+nion ↔ p sᶜ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_comk {p : Set α -> Prop} {he hmono hunion s} :
-    s in comk p he hmono hunion ↔ p sᶜ :=
+lemma mem_comk {p : Set α → Prop} {he hmono hunion s} :
+    s ∈ comk p he hmono hunion ↔ p sᶜ :=
   .rfl
 
-/--
-Definition of `principal` / `principal` 的定义
+/-- The principal filter of `s` is the collection of all supersets of `s`. -/
+/-
+**Filter.principal** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：principal (s : Set α) : Filter α where sets
+参数：s : Set α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.subset_inter`：subset_inter {s t r : Set α} (rs : r subseteq s) (rt :
+ r subseteq t) : r subseteq s inter t
 
-English:
-definition principal
-  signature: (s : Set α)
-  body: { t | s subseteq t }
-  univ_sets := subset_univ s
-  sets_of_superset hx := Subset.trans hx
-  inter_sets := subset_inter
-
-@[inherit_doc]
-scoped notation "𝓟" => Filter.principal
-
-中文:
-定义 principal
-  签名: (s : 集合 α)
-  定义体: { t | s subseteq t }
-  univ_sets := subset_univ s
-  sets_of_superset hx := Subset.trans hx
-  inter_sets := subset_inter
-
-@[inherit_doc]
-scoped notation "𝓟" => Filter.principal
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+The principal filter of `s` is the collection of all supersets of `s`.
 -/
 def principal (s : Set α) : Filter α where
-  sets := { t | s subseteq t }
+  sets := { t | s ⊆ t }
   univ_sets := subset_univ s
   sets_of_superset hx := Subset.trans hx
   inter_sets := subset_inter
 
 @[inherit_doc]
 scoped notation "𝓟" => Filter.principal
-
-/--
-theorem `mem_principal` / 定理 `mem_principal`
-
-English:
-theorem mem_principal
-  statement: s in 𝓟 t ↔ t subseteq s
-  proof: Iff.rfl
-
-中文:
-定理 mem_principal
-  结论: s in 𝓟 t ↔ t subseteq s
-  证明: Iff.rfl
+/-
+**Filter.mem_principal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {s t : Set α}, s ∈ Filter.principal t ↔ t ⊆ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] theorem mem_principal : s in 𝓟 t ↔ t subseteq s := Iff.rfl
+@[simp] theorem mem_principal : s ∈ 𝓟 t ↔ t ⊆ s := Iff.rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `pure x` is the set of sets that contain `x`. It is equal to `𝓟 {x}` but
+with this definition we have `s ∈ pure a` defeq `a ∈ s`. -/
+/-
+**Filter.** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Pure Filter
-  body: .copy (𝓟 {x}) {s | x in s} fun _ => by simp
-
-@[simp]
-
-中文:
-实例 :
-  签名: Pure 滤子
-  定义体: .copy (𝓟 {x}) {s | x in s} fun _ => by simp
-
-@[simp]
+--- 原说明 ---
+`pure x` is the set of sets that contain `x`. It is equal to `𝓟 {x}` but
+with this definition we have `s ∈ pure a` defeq `a ∈ s`.
 -/
 instance : Pure Filter where
-  pure x := .copy (𝓟 {x}) {s | x in s} fun _ => by simp
+  pure x := .copy (𝓟 {x}) {s | x ∈ s} fun _ ↦ by simp
 
 @[simp]
-/--
-theorem `mem_pure` / 定理 `mem_pure`
-
-English:
-theorem mem_pure
-  given: {a : α} {s : Set α}
-  statement: s in (pure a : Filter α) ↔ a in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_pure
-  条件: {a : α} {s : 集合 α}
-  结论: s in (pure a : 滤子 α) ↔ a in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_pure** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_pure {a : α} {s : Set α} : s in (pure a : Filter α) ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_pure {a : α} {s : Set α} : s in (pure a : Filter α) ↔ a in s :=
+theorem mem_pure {a : α} {s : Set α} : s ∈ (pure a : Filter α) ↔ a ∈ s :=
   Iff.rfl
 
-/--
-Definition of `ker` / `ker` 的定义
+/-- The *kernel* of a filter is the intersection of all its sets. -/
+/-
+**Filter.ker** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：ker (f : Filter α) : Set α
+参数：f : Filter α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ker
-  signature: (f : Filter α)
-  body: ⋂₀ f.sets
-
-中文:
-定义 ker
-  签名: (f : 滤子 α)
-  定义体: ⋂₀ f.sets
-
-Depends on / 依赖: f.sets
+--- 原说明 ---
+The *kernel* of a filter is the intersection of all its sets.
 -/
 def ker (f : Filter α) : Set α := ⋂₀ f.sets
 
-/--
-Definition of `join` / `join` 的定义
+/-- The join of a filter of filters is defined by the relation `s ∈ join f ↔ {t | s ∈ t} ∈ f`. -/
+/-
+**Filter.join** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：join (f : Filter (Filter α)) : Filter α where sets
+参数：f : Filter (Filter α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition join
-  signature: (f : Filter (Filter α))
-  body: { s | { t : Filter α | s in t } in f }
-  univ_sets := by simp only [mem_ofPred_eq, univ_mem, ofPred_true]
-  sets_of_superset hx xy := mem_of_superset hx fun f h => mem_of_superset h xy
-  inter_sets hx hy := mem_of_superset (inter_mem hx hy) fun f ⟨h₁, h₂⟩ => inter_mem h₁ h₂
-
-@[simp]
-
-中文:
-定义 join
-  签名: (f : 滤子 (滤子 α))
-  定义体: { s | { t : Filter α | s in t } in f }
-  univ_sets := by simp only [mem_ofPred_eq, univ_mem, ofPred_true]
-  sets_of_superset hx xy := mem_of_superset hx fun f h => mem_of_superset h xy
-  inter_sets hx hy := mem_of_superset (inter_mem hx hy) fun f ⟨h₁, h₂⟩ => inter_mem h₁ h₂
-
-@[simp]
-
-Depends on / 依赖: Filter
+--- 原说明 ---
+The join of a filter of filters is defined by the relation `s ∈ join f ↔ {t | s 
+∈ t} ∈ f`.
 -/
 def join (f : Filter (Filter α)) : Filter α where
-  sets := { s | { t : Filter α | s in t } in f }
+  sets := { s | { t : Filter α | s ∈ t } ∈ f }
   univ_sets := by simp only [mem_ofPred_eq, univ_mem, ofPred_true]
   sets_of_superset hx xy := mem_of_superset hx fun f h => mem_of_superset h xy
   inter_sets hx hy := mem_of_superset (inter_mem hx hy) fun f ⟨h₁, h₂⟩ => inter_mem h₁ h₂
 
 @[simp]
-/--
-theorem `mem_join` / 定理 `mem_join`
-
-English:
-theorem mem_join
-  given: {s : Set α} {f : Filter (Filter α)}
-  statement: s in join f ↔ { t | s in t } in f
-  proof: Iff.rfl
-
-中文:
-定理 mem_join
-  条件: {s : 集合 α} {f : 滤子 (滤子 α)}
-  结论: s in join f ↔ { t | s in t } in f
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.mem_join** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_join {s : Set α} {f : Filter (Filter α)} : s in join f ↔ { t | s in t 
+} in f
+参数：Filter α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_join {s : Set α} {f : Filter (Filter α)} : s in join f ↔ { t | s in t } in f :=
+theorem mem_join {s : Set α} {f : Filter (Filter α)} : s ∈ join f ↔ { t | s ∈ t } ∈ f :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Filter α)
-  body: forall ⦃U : Set α⦄, U in g -> U in f
-le_antisymm a b h₁ h₂ := filter_eq Subset.antisymm h₂ h₁
-  le_refl a := Subset.rfl
-  le_trans a b c h₁ h₂ := Subset.trans h₂ h₁
-
-中文:
-实例 :
-  签名: 偏序 (滤子 α)
-  定义体: forall ⦃U : Set α⦄, U in g -> U in f
-le_antisymm a b h₁ h₂ := filter_eq Subset.antisymm h₂ h₁
-  le_refl a := Subset.rfl
-  le_trans a b c h₁ h₂ := Subset.trans h₂ h₁
+/-
+**Filter.** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Filter α) where
-  le f g := forall ⦃U : Set α⦄, U in g -> U in f
-le_antisymm a b h₁ h₂ := filter_eq Subset.antisymm h₂ h₁
+  le f g := ∀ ⦃U : Set α⦄, U ∈ g → U ∈ f
+  le_antisymm a b h₁ h₂ := filter_eq <| Subset.antisymm h₂ h₁
   le_refl a := Subset.rfl
   le_trans a b c h₁ h₂ := Subset.trans h₂ h₁
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  statement: f <= g ↔ forall x in g, x in f
-  proof: Iff.rfl
-
-中文:
-定理 le_def
-  结论: f <= g ↔ 对任意 x in g, x in f
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Filter.le_def** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：le_def : f <= g ↔ forall x in g, x in f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def : f <= g ↔ forall x in g, x in f :=
+theorem le_def : f ≤ g ↔ ∀ x ∈ g, x ∈ f :=
   Iff.rfl
-
-/--
-Instance `instSupSet` / 实例 `instSupSet`
-
-English:
-instance instSupSet
-  signature: : SupSet (Filter α) where
-  body: join (𝓟 S)
-
-中文:
-实例 instSupSet
-  签名: : 上确界集 (滤子 α) where
-  定义体: join (𝓟 S)
+/-
+**Filter.instSupSet** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instSupSet : SupSet (Filter α) where sSup S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSupSet : SupSet (Filter α) where
   sSup S := join (𝓟 S)
-
-/--
-theorem `mem_sSup` / 定理 `mem_sSup`
-
-English:
-theorem mem_sSup
-  given: {S : Set (Filter α)}
-  statement: s in sSup S ↔ forall f in S, s in f
-  proof: .rfl
-
-中文:
-定理 mem_sSup
-  条件: {S : 集合 (滤子 α)}
-  结论: s in sSup S ↔ 对任意 f in S, s in f
-  证明: .rfl
+/-
+**Filter.mem_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {s : Set α} {S : Set (Filter α)}, s ∈ sSup S ↔ ∀ f ∈ S, s
+ ∈ f
+参数：Filter α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] theorem mem_sSup {S : Set (Filter α)} : s in sSup S ↔ forall f in S, s in f := .rfl
+@[simp] theorem mem_sSup {S : Set (Filter α)} : s ∈ sSup S ↔ ∀ f ∈ S, s ∈ f := .rfl
 
 /-- Infimum of a set of filters.
 This definition is marked as irreducible
 so that Lean doesn't try to unfold it when unifying expressions. -/
 @[irreducible]
-/--
-Definition of `sInf` / `sInf` 的定义
+/-
+**Filter.sInf** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → Set (Filter α) → Filter α
+参数：Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sInf
-  signature: (s : Set (Filter α))
-  body: sSup (lowerBounds s)
-
-中文:
-定义 sInf
-  签名: (s : 集合 (滤子 α))
-  定义体: sSup (lowerBounds s)
+--- 原说明 ---
+Infimum of a set of filters.
+This definition is marked as irreducible
+so that Lean doesn't try to unfold it when unifying expressions.
 -/
 protected def sInf (s : Set (Filter α)) : Filter α := sSup (lowerBounds s)
-
-/--
-Instance `instInfSet` / 实例 `instInfSet`
-
-English:
-instance instInfSet
-  signature: : InfSet (Filter α) where
-  body: Filter.sInf
-
-中文:
-实例 instInfSet
-  签名: : 下确界集 (滤子 α) where
-  定义体: Filter.sInf
-
-Depends on / 依赖: Filter, Filter.sInf
+/-
+**Filter.instInfSet** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instInfSet : InfSet (Filter α) where sInf
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInfSet : InfSet (Filter α) where
   sInf := Filter.sInf
-
-/--
-theorem `sSup_lowerBounds` / 定理 `sSup_lowerBounds`
-
-English:
-theorem sSup_lowerBounds
-  given: (s : Set (Filter α))
-  statement: sSup (lowerBounds s) = sInf s
-  proof: by
-  simp [sInf, Filter.sInf]
-
-中文:
-定理 sSup_lowerBounds
-  条件: (s : 集合 (滤子 α))
-  结论: sSup (lowerBounds s) = sInf s
-  证明: by
-  simp [sInf, Filter.sInf]
+/-
+**Filter.sSup_lowerBounds** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} (s : Set (Filter α)), sSup (lowerBounds s) = sInf s
+参数：s : Set (Filter α)；lowerBounds s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.sInf.eq_1`：∀ {α : Type u_1} (s : Set (Filter α)), Filter.sInf s =
+ sSup (lowerBounds s)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem sSup_lowerBounds (s : Set (Filter α)) : sSup (lowerBounds s) = sInf s := by
   simp [sInf, Filter.sInf]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (Filter α)
-  body: .copy (sSup (Set.range pure)) {s | forall x, x in s} by simp
-
-中文:
-实例 :
-  签名: 顶元素 (滤子 α)
-  定义体: .copy (sSup (Set.range pure)) {s | forall x, x in s} by simp
-
-Depends on / 依赖: Set.range
+/-
+**Filter.** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (Filter α) where
-top := .copy (sSup (Set.range pure)) {s | forall x, x in s} by simp
-
-/--
-theorem `mem_top_iff_forall` / 定理 `mem_top_iff_forall`
-
-English:
-theorem mem_top_iff_forall
-  given: {s : Set α}
-  statement: s in (⊤ : Filter α) ↔ forall x, x in s
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_top_iff_对任意
-  条件: {s : 集合 α}
-  结论: s in (⊤ : 滤子 α) ↔ 对任意 x, x in s
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+  top := .copy (sSup (Set.range pure)) {s | ∀ x, x ∈ s} <| by simp
+/-
+**Filter.mem_top_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_top_iff_forall {s : Set α} : s in (⊤ : Filter α) ↔ forall x, x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_top_iff_forall {s : Set α} : s in (⊤ : Filter α) ↔ forall x, x in s :=
+theorem mem_top_iff_forall {s : Set α} : s ∈ (⊤ : Filter α) ↔ ∀ x, x ∈ s :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_top` / 定理 `mem_top`
-
-English:
-theorem mem_top
-  given: {s : Set α}
-  statement: s in (⊤ : Filter α) ↔ s = univ
-  proof: by
-  rw [mem_top_iff_forall]; rw [eq_univ_iff_forall]
-
-中文:
-定理 mem_top
-  条件: {s : 集合 α}
-  结论: s in (⊤ : 滤子 α) ↔ s = univ
-  证明: by
-  rw [mem_top_iff_forall]; rw [eq_univ_iff_forall]
-
-Depends on / 依赖: eq_univ_iff_forall, mem_top_iff_forall
+/-
+**Filter.mem_top** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_top {s : Set α} : s in (⊤ : Filter α) ↔ s = univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_top_iff_forall`：mem_top_iff_forall {s : Set α} : s in (⊤ : Fi
+lter α) ↔ forall x, x in s
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_top {s : Set α} : s in (⊤ : Filter α) ↔ s = univ := by
-  rw [mem_top_iff_forall]; rw [eq_univ_iff_forall]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (Filter α)
-  body: .copy (sSup ∅) univ by simp
-
-@[simp]
-
-中文:
-实例 :
-  签名: 底元素 (滤子 α)
-  定义体: .copy (sSup ∅) univ by simp
-
-@[simp]
+theorem mem_top {s : Set α} : s ∈ (⊤ : Filter α) ↔ s = univ := by
+  rw [mem_top_iff_forall, eq_univ_iff_forall]
+/-
+**Filter.** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (Filter α) where
-bot := .copy (sSup ∅) univ by simp
+  bot := .copy (sSup ∅) univ <| by simp
 
 @[simp]
-/--
-theorem `mem_bot` / 定理 `mem_bot`
-
-English:
-theorem mem_bot
-  given: {s : Set α}
-  statement: s in (⊥ : Filter α)
-  proof: trivial
-
-中文:
-定理 mem_bot
-  条件: {s : 集合 α}
-  结论: s in (⊥ : 滤子 α)
-  证明: trivial
+/-
+**Filter.mem_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_bot {s : Set α} : s in (⊥ : Filter α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-theorem mem_bot {s : Set α} : s in (⊥ : Filter α) :=
+theorem mem_bot {s : Set α} : s ∈ (⊥ : Filter α) :=
   trivial
 
-/--
-Instance `instInf` / 实例 `instInf`
+/-- The infimum of filters is the filter generated by intersections
+  of elements of the two filters. -/
+/-
+**Filter.instInf** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instInf : Min (Filter α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instInf
-  signature: : Min (Filter α)
-  body: ⟨fun f g : Filter α =>
-    { sets := { s | exists a in f, exists b in g, s = a inter b }
-      univ_sets := ⟨_, univ_mem, _, univ_mem, by simp⟩
-      sets_of_superset := by
-        rintro x y ⟨a, ha, b, hb, rfl⟩ xy
-        refine ⟨a union y, mem_of_superset ha subset_union_left, b union y,
-          mem_of_superset hb subset_union_left, ?_⟩
-        rw [← inter_union_distrib_right]; rw [union_eq_self_of_subset_left xy]
-      inter_sets := by
-        rintro x y ⟨a, ha, b, hb, rfl⟩ ⟨c, hc, d, hd, rfl⟩
-        refine ⟨a inter c, inter_mem ha hc, b inter d, inter_mem hb hd, ?_⟩
-        ac_rfl }⟩
-
-中文:
-实例 instInf
-  签名: : 最小值 (滤子 α)
-  定义体: ⟨fun f g : Filter α =>
-    { sets := { s | exists a in f, exists b in g, s = a inter b }
-      univ_sets := ⟨_, univ_mem, _, univ_mem, by simp⟩
-      sets_of_superset := by
-        rintro x y ⟨a, ha, b, hb, rfl⟩ xy
-        refine ⟨a union y, mem_of_superset ha subset_union_left, b union y,
-          mem_of_superset hb subset_union_left, ?_⟩
-        rw [← inter_union_distrib_right]; rw [union_eq_self_of_subset_left xy]
-      inter_sets := by
-        rintro x y ⟨a, ha, b, hb, rfl⟩ ⟨c, hc, d, hd, rfl⟩
-        refine ⟨a inter c, inter_mem ha hc, b inter d, inter_mem hb hd, ?_⟩
-        ac_rfl }⟩
-
-Depends on / 依赖: Filter, inter_mem, inter_sets, inter_union_distrib_right, mem_of_superset, sets_of_superset, subset_union_left, union_eq_self_of_subset_left, univ_mem, univ_sets
+--- 原说明 ---
+The infimum of filters is the filter generated by intersections
+  of elements of the two filters.
 -/
 instance instInf : Min (Filter α) :=
   ⟨fun f g : Filter α =>
-    { sets := { s | exists a in f, exists b in g, s = a inter b }
+    { sets := { s | ∃ a ∈ f, ∃ b ∈ g, s = a ∩ b }
       univ_sets := ⟨_, univ_mem, _, univ_mem, by simp⟩
       sets_of_superset := by
         rintro x y ⟨a, ha, b, hb, rfl⟩ xy
-        refine ⟨a union y, mem_of_superset ha subset_union_left, b union y,
+        refine ⟨a ∪ y, mem_of_superset ha subset_union_left, b ∪ y,
           mem_of_superset hb subset_union_left, ?_⟩
-        rw [← inter_union_distrib_right]; rw [union_eq_self_of_subset_left xy]
+        rw [← inter_union_distrib_right, union_eq_self_of_subset_left xy]
       inter_sets := by
         rintro x y ⟨a, ha, b, hb, rfl⟩ ⟨c, hc, d, hd, rfl⟩
-        refine ⟨a inter c, inter_mem ha hc, b inter d, inter_mem hb hd, ?_⟩
+        refine ⟨a ∩ c, inter_mem ha hc, b ∩ d, inter_mem hb hd, ?_⟩
         ac_rfl }⟩
 
-/--
-Instance `instSup` / 实例 `instSup`
+/-- The supremum of two filters is the filter that contains sets that belong to both filters. -/
+/-
+**Filter.instSup** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instSup : Max (Filter α) where max f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSup
-  signature: : Max (Filter α) where
-  body: .copy (sSup {f, g}) {s | s in f ∧ s in g} by simp
-
-中文:
-实例 instSup
-  签名: : 最大值 (滤子 α) where
-  定义体: .copy (sSup {f, g}) {s | s in f ∧ s in g} by simp
+--- 原说明 ---
+The supremum of two filters is the filter that contains sets that belong to both
+ filters.
 -/
 instance instSup : Max (Filter α) where
-max f g := .copy (sSup {f, g}) {s | s in f ∧ s in g} by simp
+  max f g := .copy (sSup {f, g}) {s | s ∈ f ∧ s ∈ g} <| by simp
 
-/--
-Instance `instSDiff` / 实例 `instSDiff`
+/-- The relative complement of two filters `f \ g` contains sets
+whose union with any set in `g` lies in `f`. -/
+/-
+**Filter.instSDiff** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instSDiff : SDiff (Filter α) where sdiff f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSDiff
-  signature: : SDiff (Filter α) where
-  body: {
-    sets := {s | forall ⦃t⦄, t in g -> s subseteq t -> t in f}
-    univ_sets := by simp +contextual
-    sets_of_superset hx hxy t ht hyt := hx ht (hxy.trans hyt)
-    inter_sets hx hy t htg ht := by
-      rw [← union_eq_right.2 ht]; rw [inter_union_distrib_right]
-      apply inter_mem
-      · exact hx (mem_of_superset htg subset_union_right) subset_union_left
-      · exact hy (mem_of_superset htg subset_union_right) subset_union_left
-  }
-
-中文:
-实例 instSDiff
-  签名: : 对称差 (滤子 α) where
-  定义体: {
-    sets := {s | forall ⦃t⦄, t in g -> s subseteq t -> t in f}
-    univ_sets := by simp +contextual
-    sets_of_superset hx hxy t ht hyt := hx ht (hxy.trans hyt)
-    inter_sets hx hy t htg ht := by
-      rw [← union_eq_right.2 ht]; rw [inter_union_distrib_right]
-      apply inter_mem
-      · exact hx (mem_of_superset htg subset_union_right) subset_union_left
-      · exact hy (mem_of_superset htg subset_union_right) subset_union_left
-  }
+--- 原说明 ---
+The relative complement of two filters `f \ g` contains sets
+whose union with any set in `g` lies in `f`.
 -/
 instance instSDiff : SDiff (Filter α) where
   sdiff f g := {
-    sets := {s | forall ⦃t⦄, t in g -> s subseteq t -> t in f}
+    sets := {s | ∀ ⦃t⦄, t ∈ g → s ⊆ t → t ∈ f}
     univ_sets := by simp +contextual
     sets_of_superset hx hxy t ht hyt := hx ht (hxy.trans hyt)
     inter_sets hx hy t htg ht := by
-      rw [← union_eq_right.2 ht]; rw [inter_union_distrib_right]
+      rw [← union_eq_right.2 ht, inter_union_distrib_right]
       apply inter_mem
       · exact hx (mem_of_superset htg subset_union_right) subset_union_left
       · exact hy (mem_of_superset htg subset_union_right) subset_union_left
   }
 
-/--
-Instance `instHNot` / 实例 `instHNot`
+/-- The coheyting negation of a filter is the complement of its kernel. -/
+/-
+**Filter.instHNot** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instHNot : HNot (Filter α) where hnot f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instHNot
-  signature: : HNot (Filter α) where
-  body: 𝓟 f.kerᶜ
-
-中文:
-实例 instHNot
-  签名: : HNot (滤子 α) where
-  定义体: 𝓟 f.kerᶜ
-
-Depends on / 依赖: f.ker
+--- 原说明 ---
+The coheyting negation of a filter is the complement of its kernel.
 -/
 instance instHNot : HNot (Filter α) where
   hnot f := 𝓟 f.kerᶜ
-
-/--
-theorem `mem_sdiff` / 定理 `mem_sdiff`
-
-English:
-theorem mem_sdiff
-  statement: s in f \ g ↔ forall t in g, s subseteq t -> t in f
-  proof: .rfl
-
-中文:
-定理 mem_sdiff
-  结论: s in f \ g ↔ 对任意 t in g, s subseteq t -> t in f
-  证明: .rfl
+/-
+**Filter.mem_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：mem_sdiff : s in f \ g ↔ forall t in g, s subseteq t -> t in f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sdiff : s in f \ g ↔ forall t in g, s subseteq t -> t in f := .rfl
-
-/--
-theorem `hnot_def` / 定理 `hnot_def`
-
-English:
-theorem hnot_def
-  statement: ￢f = 𝓟 f.kerᶜ
-  proof: rfl
-
-中文:
-定理 hnot_def
-  结论: ￢f = 𝓟 f.kerᶜ
-  证明: rfl
+theorem mem_sdiff : s ∈ f \ g ↔ ∀ t ∈ g, s ⊆ t → t ∈ f := .rfl
+/-
+**Filter.hnot_def** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {f : Filter α}, ￢f = Filter.principal f.kerᶜ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem hnot_def : ￢f = 𝓟 f.kerᶜ := rfl
 
 
-/--
-Definition of `NeBot` / `NeBot` 的定义
+/-- A filter is `NeBot` if it is not equal to `⊥`, or equivalently the empty set does not belong to
+the filter. Bourbaki include this assumption in the definition of a filter but we prefer to have a
+`CompleteLattice` structure on `Filter _`, so we use a typeclass argument in lemmas instead. -/
+/-
+**Filter.NeBot** 是 Mathlib 中的一个归纳类型，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → Filter α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NeBot
-  parameters: (f : Filter α)
-  axioms and operations (1):
-    - ne' : f != ⊥
-
-中文:
-类 NeBot
-  参数: (f : 滤子 α)
-  公理与运算 (1 个):
-    - ne' : f != ⊥
+--- 原说明 ---
+A filter is `NeBot` if it is not equal to `⊥`, or equivalently the empty set doe
+s not belong to
+the filter. Bourbaki include this assumption in the definition of a filter but w
+e prefer to have a
+`CompleteLattice` structure on `Filter _`, so we use a typeclass argument in lem
+mas instead.
 -/
 class NeBot (f : Filter α) : Prop where
   /-- The filter is nontrivial: `f ≠ ⊥` or equivalently, `∅ ∉ f`. -/
-  ne' : f != ⊥
+  ne' : f ≠ ⊥
 
 @[push ←]
-/--
-theorem `neBot_iff` / 定理 `neBot_iff`
-
-English:
-theorem neBot_iff
-  given: {f : Filter α}
-  statement: NeBot f ↔ f != ⊥
-  proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
-
-中文:
-定理 neBot_iff
-  条件: {f : 滤子 α}
-  结论: NeBot f ↔ f != ⊥
-  证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
+/-
+**Filter.neBot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：neBot_iff {f : Filter α} : NeBot f ↔ f != ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.ne'`：∀ {α : Type u_1} {f : Filter α} [self : f.NeBot], f ≠ 
+⊥
 -/
-theorem neBot_iff {f : Filter α} : NeBot f ↔ f != ⊥ :=
+theorem neBot_iff {f : Filter α} : NeBot f ↔ f ≠ ⊥ :=
   ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
-/--
-Definition of `Eventually` / `Eventually` 的定义
+/-- `f.Eventually p` or `∀ᶠ x in f, p x` mean that `{x | p x} ∈ f`. E.g., `∀ᶠ x in atTop, p x`
+means that `p` holds true for sufficiently large `x`. -/
+/-
+**Filter.Eventually** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → (α → Prop) → Filter α → Prop
+参数：α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Eventually
-  signature: (p : α -> Prop) (f : Filter α)
-  body: { x | p x } in f
+--- 原说明 ---
+`f.Eventually p` or `∀ᶠ x in f, p x` mean that `{x | p x} ∈ f`. E.g., `∀ᶠ x in a
+tTop, p x`
+means that `p` holds true for sufficiently large `x`.
+-/
+protected def Eventually (p : α → Prop) (f : Filter α) : Prop :=
+  { x | p x } ∈ f
 
 @[inherit_doc Filter.Eventually]
-notation3 "forallᶠ "(...)" in "f", "r:(scoped p => Filter.Eventually p f) => r
+notation3 "∀ᶠ "(...)" in "f", "r:(scoped p => Filter.Eventually p f) => r
 
-中文:
-定义 Eventually
-  签名: (p : α -> 命题) (f : 滤子 α)
-  定义体: { x | p x } in f
+/-- `f.Frequently p` or `∃ᶠ x in f, p x` mean that `{x | ¬p x} ∉ f`. E.g., `∃ᶠ x in atTop, p x`
+means that there exist arbitrarily large `x` for which `p` holds true. -/
+/-
+**Filter.Frequently** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → (α → Prop) → Filter α → Prop
+参数：α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[inherit_doc Filter.Eventually]
-notation3 "forallᶠ "(...)" in "f", "r:(scoped p => Filter.Eventually p f) => r
+--- 原说明 ---
+`f.Frequently p` or `∃ᶠ x in f, p x` mean that `{x | ¬p x} ∉ f`. E.g., `∃ᶠ x in 
+atTop, p x`
+means that there exist arbitrarily large `x` for which `p` holds true.
 -/
-protected def Eventually (p : α -> Prop) (f : Filter α) : Prop :=
-  { x | p x } in f
-
-@[inherit_doc Filter.Eventually]
-notation3 "forallᶠ "(...)" in "f", "r:(scoped p => Filter.Eventually p f) => r
-
-/--
-Definition of `Frequently` / `Frequently` 的定义
-
-English:
-definition Frequently
-  signature: (p : α -> Prop) (f : Filter α)
-  body: ¬forallᶠ x in f, ¬p x
+protected def Frequently (p : α → Prop) (f : Filter α) : Prop :=
+  ¬∀ᶠ x in f, ¬p x
 
 @[inherit_doc Filter.Frequently]
-notation3 "existsᶠ "(...)" in "f", "r:(scoped p => Filter.Frequently p f) => r
+notation3 "∃ᶠ "(...)" in "f", "r:(scoped p => Filter.Frequently p f) => r
 
-中文:
-定义 Frequently
-  签名: (p : α -> 命题) (f : 滤子 α)
-  定义体: ¬forallᶠ x in f, ¬p x
+/-- Two functions `f` and `g` are *eventually equal* along a filter `l` if the set of `x` such that
+`f x = g x` belongs to `l`. -/
+/-
+**Filter.EventuallyEq** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：EventuallyEq (l : Filter α) (f g : α -> β) : Prop
+参数：l : Filter α；f g : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[inherit_doc Filter.Frequently]
-notation3 "existsᶠ "(...)" in "f", "r:(scoped p => Filter.Frequently p f) => r
+--- 原说明 ---
+Two functions `f` and `g` are *eventually equal* along a filter `l` if the set o
+f `x` such that
+`f x = g x` belongs to `l`.
 -/
-protected def Frequently (p : α -> Prop) (f : Filter α) : Prop :=
-  ¬forallᶠ x in f, ¬p x
-
-@[inherit_doc Filter.Frequently]
-notation3 "existsᶠ "(...)" in "f", "r:(scoped p => Filter.Frequently p f) => r
-
-/--
-Definition of `EventuallyEq` / `EventuallyEq` 的定义
-
-English:
-definition EventuallyEq
-  signature: (l : Filter α) (f g : α -> β)
-  body: forallᶠ x in l, f x = g x
-
-@[inherit_doc]
-notation:50 f " =ᶠ[" l:50 "] " g:50 => EventuallyEq l f g
-
-中文:
-定义 EventuallyEq
-  签名: (l : 滤子 α) (f g : α -> β)
-  定义体: forallᶠ x in l, f x = g x
-
-@[inherit_doc]
-notation:50 f " =ᶠ[" l:50 "] " g:50 => EventuallyEq l f g
--/
-def EventuallyEq (l : Filter α) (f g : α -> β) : Prop :=
-  forallᶠ x in l, f x = g x
+def EventuallyEq (l : Filter α) (f g : α → β) : Prop :=
+  ∀ᶠ x in l, f x = g x
 
 @[inherit_doc]
 notation:50 f " =ᶠ[" l:50 "] " g:50 => EventuallyEq l f g
 
 /-- A function `f` is eventually less than or equal to a function `g` at a filter `l`. -/
 @[to_dual self (reorder := f g)]
-/--
-Definition of `EventuallyLE` / `EventuallyLE` 的定义
+/-
+**Filter.EventuallyLE** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：EventuallyLE [LE β] (l : Filter α) (f g : α -> β) : Prop
+参数：l : Filter α；f g : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EventuallyLE
-  signature: [LE β] (l : Filter α) (f g : α -> β)
-  body: forallᶠ x in l, f x <= g x
-
-@[inherit_doc]
-notation:50 f " <=ᶠ[" l:50 "] " g:50 => EventuallyLE l f g
-
-中文:
-定义 EventuallyLE
-  签名: [LE β] (l : 滤子 α) (f g : α -> β)
-  定义体: forallᶠ x in l, f x <= g x
-
-@[inherit_doc]
-notation:50 f " <=ᶠ[" l:50 "] " g:50 => EventuallyLE l f g
+--- 原说明 ---
+A function `f` is eventually less than or equal to a function `g` at a filter `l
+`.
 -/
-def EventuallyLE [LE β] (l : Filter α) (f g : α -> β) : Prop :=
-  forallᶠ x in l, f x <= g x
+def EventuallyLE [LE β] (l : Filter α) (f g : α → β) : Prop :=
+  ∀ᶠ x in l, f x ≤ g x
 
 @[inherit_doc]
-notation:50 f " <=ᶠ[" l:50 "] " g:50 => EventuallyLE l f g
+notation:50 f " ≤ᶠ[" l:50 "] " g:50 => EventuallyLE l f g
 
-/--
-Definition of `map` / `map` 的定义
+/-- The forward map of a filter -/
+/-
+**Filter.map** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：map (m : α -> β) (f : Filter α) : Filter β where sets
+参数：m : α -> β；f : Filter α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.univ_mem`：univ_mem : univ in f
 
-English:
-definition map
-  signature: (m : α -> β) (f : Filter α)
-  body: preimage m ⁻¹' f.sets
-  univ_sets := univ_mem
-  sets_of_superset hs st := mem_of_superset hs fun _x hx => st hx
-  inter_sets hs ht := inter_mem hs ht
-
-中文:
-定义 map
-  签名: (m : α -> β) (f : 滤子 α)
-  定义体: preimage m ⁻¹' f.sets
-  univ_sets := univ_mem
-  sets_of_superset hs st := mem_of_superset hs fun _x hx => st hx
-  inter_sets hs ht := inter_mem hs ht
-
-Depends on / 依赖: f.sets, preimage
+--- 原说明 ---
+The forward map of a filter
 -/
-def map (m : α -> β) (f : Filter α) : Filter β where
+def map (m : α → β) (f : Filter α) : Filter β where
   sets := preimage m ⁻¹' f.sets
   univ_sets := univ_mem
-  sets_of_superset hs st := mem_of_superset hs fun _x hx => st hx
+  sets_of_superset hs st := mem_of_superset hs fun _x hx ↦ st hx
   inter_sets hs ht := inter_mem hs ht
 
-/--
-Definition of `Tendsto` / `Tendsto` 的定义
+/-- `Filter.Tendsto` is the generic "limit of a function" predicate.
+  `Tendsto f l₁ l₂` asserts that for every `l₂` neighborhood `a`,
+  the `f`-preimage of `a` is an `l₁` neighborhood. -/
+/-
+**Filter.Tendsto** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：Tendsto (f : α -> β) (l₁ : Filter α) (l₂ : Filter β)
+参数：f : α -> β；l₁ : Filter α；l₂ : Filter β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Tendsto
-  signature: (f : α -> β) (l₁ : Filter α) (l₂ : Filter β)
-  body: l₁.map f <= l₂
-
-中文:
-定义 收敛
-  签名: (f : α -> β) (l₁ : 滤子 α) (l₂ : 滤子 β)
-  定义体: l₁.map f <= l₂
+--- 原说明 ---
+`Filter.Tendsto` is the generic "limit of a function" predicate.
+  `Tendsto f l₁ l₂` asserts that for every `l₂` neighborhood `a`,
+  the `f`-preimage of `a` is an `l₁` neighborhood.
 -/
-def Tendsto (f : α -> β) (l₁ : Filter α) (l₂ : Filter β) :=
-  l₁.map f <= l₂
+def Tendsto (f : α → β) (l₁ : Filter α) (l₂ : Filter β) :=
+  l₁.map f ≤ l₂
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- The inverse map of a filter. A set `s` belongs to `Filter.comap m f` if either of the following
+equivalent conditions hold.
 
-English:
-definition comap
-  signature: (m : α -> β) (f : Filter β)
-  body: { s | exists t in f, m ⁻¹' t subseteq s }
-  univ_sets := ⟨univ, univ_mem, subset_univ _⟩
-  sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
-  inter_sets := fun ⟨a', ha₁, ha₂⟩ ⟨b', hb₁, hb₂⟩ =>
-    ⟨a' inter b', inter_mem ha₁ hb₁, inter_subset_inter ha₂ hb₂⟩
-
-中文:
-定义 comap
-  签名: (m : α -> β) (f : 滤子 β)
-  定义体: { s | exists t in f, m ⁻¹' t subseteq s }
-  univ_sets := ⟨univ, univ_mem, subset_univ _⟩
-  sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
-  inter_sets := fun ⟨a', ha₁, ha₂⟩ ⟨b', hb₁, hb₂⟩ =>
-    ⟨a' inter b', inter_mem ha₁ hb₁, inter_subset_inter ha₂ hb₂⟩
-
-Depends on / 依赖: subseteq
+1. There exists a set `t ∈ f` such that `m ⁻¹' t ⊆ s`. This is used as a definition.
+2. The set `kernImage m s = {y | ∀ x, m x = y → x ∈ s}` belongs to `f`, see `Filter.mem_comap'`.
+3. The set `(m '' sᶜ)ᶜ` belongs to `f`, see `Filter.mem_comap_iff_compl` and
+   `Filter.compl_mem_comap`.
 -/
-def comap (m : α -> β) (f : Filter β) : Filter α where
-  sets := { s | exists t in f, m ⁻¹' t subseteq s }
+/-
+**Filter.comap** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：comap (m : α -> β) (f : Filter β) : Filter α where sets
+参数：m : α -> β；f : Filter β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The inverse map of a filter. A set `s` belongs to `Filter.comap m f` if either o
+f the following
+equivalent conditions hold.
+
+1. There exists a set `t ∈ f` such that `m ⁻¹' t ⊆ s`. This is used as a definit
+ion.
+2. The set `kernImage m s = {y | ∀ x, m x = y → x ∈ s}` belongs to `f`, see `Fil
+ter.mem_comap'`.
+3. The set `(m '' sᶜ)ᶜ` belongs to `f`, see `Filter.mem_comap_iff_compl` and
+   `Filter.compl_mem_comap`.
+-/
+def comap (m : α → β) (f : Filter β) : Filter α where
+  sets := { s | ∃ t ∈ f, m ⁻¹' t ⊆ s }
   univ_sets := ⟨univ, univ_mem, subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
   inter_sets := fun ⟨a', ha₁, ha₂⟩ ⟨b', hb₁, hb₂⟩ =>
-    ⟨a' inter b', inter_mem ha₁ hb₁, inter_subset_inter ha₂ hb₂⟩
+    ⟨a' ∩ b', inter_mem ha₁ hb₁, inter_subset_inter ha₂ hb₂⟩
 
-/--
-Definition of `coprod` / `coprod` 的定义
+/-- Coproduct of filters. -/
+/-
+**Filter.coprod** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Filter α → Filter β → Filter (α × β)
+参数：α × β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coprod
-  signature: (f : Filter α) (g : Filter β)
-  body: f.comap Prod.fst ⊔ g.comap Prod.snd
-
-中文:
-定义 coprod
-  签名: (f : 滤子 α) (g : 滤子 β)
-  定义体: f.comap Prod.fst ⊔ g.comap Prod.snd
+--- 原说明 ---
+Coproduct of filters.
 -/
 protected def coprod (f : Filter α) (g : Filter β) : Filter (α × β) :=
   f.comap Prod.fst ⊔ g.comap Prod.snd
 
-/--
-Instance `instSProd` / 实例 `instSProd`
+/-- Product of filters. This is the filter generated by Cartesian products
+of elements of the component filters. -/
+/-
+**Filter.instSProd** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+形式化陈述：instSProd : SProd (Filter α) (Filter β) (Filter (α × β)) where sprod f g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSProd
-  signature: : SProd (Filter α) (Filter β) (Filter (α × β)) where
-  body: f.comap Prod.fst ⊓ g.comap Prod.snd
-
-中文:
-实例 instSProd
-  签名: : SProd (滤子 α) (滤子 β) (滤子 (α × β)) where
-  定义体: f.comap Prod.fst ⊓ g.comap Prod.snd
-
-Depends on / 依赖: Prod.fst, Prod.snd, f.comap, g.comap
+--- 原说明 ---
+Product of filters. This is the filter generated by Cartesian products
+of elements of the component filters.
 -/
 instance instSProd : SProd (Filter α) (Filter β) (Filter (α × β)) where
   sprod f g := f.comap Prod.fst ⊓ g.comap Prod.snd
-
-/--
-theorem `prod_eq_inf` / 定理 `prod_eq_inf`
-
-English:
-theorem prod_eq_inf
-  given: (f : Filter α) (g : Filter β)
-  statement: f ×ˢ g = f.comap Prod.fst ⊓ g.comap Prod.snd
-  proof: rfl
-
-中文:
-定理 prod_eq_inf
-  条件: (f : 滤子 α) (g : 滤子 β)
-  结论: f ×ˢ g = f.comap 积类型.fst ⊓ g.comap 积类型.snd
-  证明: rfl
+/-
+**Filter.prod_eq_inf** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：prod_eq_inf (f : Filter α) (g : Filter β) : f ×ˢ g = f.comap Prod.fst ⊓ g.
+comap Prod.snd
+参数：f : Filter α；g : Filter β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_eq_inf (f : Filter α) (g : Filter β) : f ×ˢ g = f.comap Prod.fst ⊓ g.comap Prod.snd :=
   rfl
 
-/--
-Definition of `pi` / `pi` 的定义
+/-- The product of an indexed family of filters. -/
+/-
+**Filter.pi** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：pi {ι : Type*} {α : ι -> Type*} (f : forall i, Filter (α i)) : Filter (for
+all i, α i)
+参数：f : forall i, Filter (α i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: {ι : Type*} {α : ι -> Type*} (f : forall i, Filter (α i))
-  body: ⨅ i, comap (Function.eval i) (f i)
-
-中文:
-定义 pi
-  签名: {ι : 类型} {α : ι -> 类型} (f : 对任意 i, 滤子 (α i))
-  定义体: ⨅ i, comap (Function.eval i) (f i)
-
-Depends on / 依赖: Function, Function.eval
+--- 原说明 ---
+The product of an indexed family of filters.
 -/
-def pi {ι : Type*} {α : ι -> Type*} (f : forall i, Filter (α i)) : Filter (forall i, α i) :=
+def pi {ι : Type*} {α : ι → Type*} (f : ∀ i, Filter (α i)) : Filter (∀ i, α i) :=
   ⨅ i, comap (Function.eval i) (f i)
 
-/--
-Definition of `bind` / `bind` 的定义
+/-- The monadic bind operation on filter is defined the usual way in terms of `map` and `join`.
 
-English:
-definition bind
-  signature: (f : Filter α) (m : α -> Filter β)
-  body: join (map m f)
+Unfortunately, this `bind` does not result in the expected applicative. See `Filter.seq` for the
+applicative instance. -/
+/-
+**Filter.bind** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：bind (f : Filter α) (m : α -> Filter β) : Filter β
+参数：f : Filter α；m : α -> Filter β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 bind
-  签名: (f : 滤子 α) (m : α -> 滤子 β)
-  定义体: join (map m f)
+--- 原说明 ---
+The monadic bind operation on filter is defined the usual way in terms of `map` 
+and `join`.
+
+Unfortunately, this `bind` does not result in the expected applicative. See `Fil
+ter.seq` for the
+applicative instance.
 -/
-def bind (f : Filter α) (m : α -> Filter β) : Filter β :=
+def bind (f : Filter α) (m : α → Filter β) : Filter β :=
   join (map m f)
 
-/--
-Definition of `seq` / `seq` 的定义
+/-- The applicative sequentiation operation. This is not induced by the bind operation. -/
+/-
+**Filter.seq** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：seq (f : Filter (α -> β)) (g : Filter α) : Filter β where sets
+参数：f : Filter (α -> β)；g : Filter α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition seq
-  signature: (f : Filter (α -> β)) (g : Filter α)
-  body: { s | exists u in f, exists t in g, forall m in u, forall x in t, (m : α -> β) x in s }
-  univ_sets := ⟨univ, univ_mem, univ, univ_mem, fun _ _ _ _ => trivial⟩
-  sets_of_superset := fun ⟨t₀, t₁, h₀, h₁, h⟩ hst =>
-⟨t₀, t₁, h₀, h₁, fun _ hx _ hy => hst h _ hx _ hy⟩
-  inter_sets := fun ⟨t₀, ht₀, t₁, ht₁, ht⟩ ⟨u₀, hu₀, u₁, hu₁, hu⟩ =>
-    ⟨t₀ inter u₀, inter_mem ht₀ hu₀, t₁ inter u₁, inter_mem ht₁ hu₁, fun _ ⟨hx₀, hx₁⟩ _ ⟨hy₀, hy₁⟩ =>
-      ⟨ht _ hx₀ _ hy₀, hu _ hx₁ _ hy₁⟩⟩
-
-中文:
-定义 seq
-  签名: (f : 滤子 (α -> β)) (g : 滤子 α)
-  定义体: { s | exists u in f, exists t in g, forall m in u, forall x in t, (m : α -> β) x in s }
-  univ_sets := ⟨univ, univ_mem, univ, univ_mem, fun _ _ _ _ => trivial⟩
-  sets_of_superset := fun ⟨t₀, t₁, h₀, h₁, h⟩ hst =>
-⟨t₀, t₁, h₀, h₁, fun _ hx _ hy => hst h _ hx _ hy⟩
-  inter_sets := fun ⟨t₀, ht₀, t₁, ht₁, ht⟩ ⟨u₀, hu₀, u₁, hu₁, hu⟩ =>
-    ⟨t₀ inter u₀, inter_mem ht₀ hu₀, t₁ inter u₁, inter_mem ht₁ hu₁, fun _ ⟨hx₀, hx₁⟩ _ ⟨hy₀, hy₁⟩ =>
-      ⟨ht _ hx₀ _ hy₀, hu _ hx₁ _ hy₁⟩⟩
+--- 原说明 ---
+The applicative sequentiation operation. This is not induced by the bind operati
+on.
 -/
-def seq (f : Filter (α -> β)) (g : Filter α) : Filter β where
-  sets := { s | exists u in f, exists t in g, forall m in u, forall x in t, (m : α -> β) x in s }
+def seq (f : Filter (α → β)) (g : Filter α) : Filter β where
+  sets := { s | ∃ u ∈ f, ∃ t ∈ g, ∀ m ∈ u, ∀ x ∈ t, (m : α → β) x ∈ s }
   univ_sets := ⟨univ, univ_mem, univ, univ_mem, fun _ _ _ _ => trivial⟩
   sets_of_superset := fun ⟨t₀, t₁, h₀, h₁, h⟩ hst =>
-⟨t₀, t₁, h₀, h₁, fun _ hx _ hy => hst h _ hx _ hy⟩
+    ⟨t₀, t₁, h₀, h₁, fun _ hx _ hy => hst <| h _ hx _ hy⟩
   inter_sets := fun ⟨t₀, ht₀, t₁, ht₁, ht⟩ ⟨u₀, hu₀, u₁, hu₁, hu⟩ =>
-    ⟨t₀ inter u₀, inter_mem ht₀ hu₀, t₁ inter u₁, inter_mem ht₁ hu₁, fun _ ⟨hx₀, hx₁⟩ _ ⟨hy₀, hy₁⟩ =>
+    ⟨t₀ ∩ u₀, inter_mem ht₀ hu₀, t₁ ∩ u₁, inter_mem ht₁ hu₁, fun _ ⟨hx₀, hx₁⟩ _ ⟨hy₀, hy₁⟩ =>
       ⟨ht _ hx₀ _ hy₀, hu _ hx₁ _ hy₁⟩⟩
 
-/--
-Definition of `curry` / `curry` 的定义
+/-- This filter is characterized by `Filter.eventually_curry_iff`:
+`(∀ᶠ (x : α × β) in f.curry g, p x) ↔ ∀ᶠ (x : α) in f, ∀ᶠ (y : β) in g, p (x, y)`. Useful
+in adding quantifiers to the middle of `Tendsto`s. See
+`hasFDerivAt_of_tendstoUniformlyOnFilter`. -/
+/-
+**Filter.curry** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：curry (f : Filter α) (g : Filter β) : Filter (α × β)
+参数：f : Filter α；g : Filter β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition curry
-  signature: (f : Filter α) (g : Filter β)
-  body: bind f fun a => map (a, ·) g
-
-中文:
-定义 curry
-  签名: (f : 滤子 α) (g : 滤子 β)
-  定义体: bind f fun a => map (a, ·) g
+--- 原说明 ---
+This filter is characterized by `Filter.eventually_curry_iff`:
+`(∀ᶠ (x : α × β) in f.curry g, p x) ↔ ∀ᶠ (x : α) in f, ∀ᶠ (y : β) in g, p (x, y)
+`. Useful
+in adding quantifiers to the middle of `Tendsto`s. See
+`hasFDerivAt_of_tendstoUniformlyOnFilter`.
 -/
 def curry (f : Filter α) (g : Filter β) : Filter (α × β) :=
-  bind f fun a => map (a, ·) g
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bind Filter
-  body: ⟨@Filter.bind⟩
-
-中文:
-实例 :
-  签名: Bind 滤子
-  定义体: ⟨@Filter.bind⟩
-
-Depends on / 依赖: Filter, Filter.bind
+  bind f fun a ↦ map (a, ·) g
+/-
+**Filter.** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bind Filter :=
   ⟨@Filter.bind⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Functor Filter
-  body: @Filter.map
-
-中文:
-实例 :
-  签名: 函子 滤子
-  定义体: @Filter.map
-
-Depends on / 依赖: Filter, Filter.map
+/-
+**Filter.** 是 Mathlib 中的一个实例，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Functor Filter where map := @Filter.map
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- A variant on `bind` using a function `g` taking a set instead of a member of `α`.
+This is essentially a push-forward along a function mapping each set to a filter. -/
+/-
+**Filter.lift** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Filter α → (Set α → Filter β) → Filter β
+参数：Set α → Filter β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (f : Filter α) (g : Set α -> Filter β)
-  body: ⨅ s in f, g s
-
-中文:
-定义 lift
-  签名: (f : 滤子 α) (g : 集合 α -> 滤子 β)
-  定义体: ⨅ s in f, g s
+--- 原说明 ---
+A variant on `bind` using a function `g` taking a set instead of a member of `α`
+.
+This is essentially a push-forward along a function mapping each set to a filter
+.
 -/
-protected def lift (f : Filter α) (g : Set α -> Filter β) :=
-  ⨅ s in f, g s
+protected def lift (f : Filter α) (g : Set α → Filter β) :=
+  ⨅ s ∈ f, g s
 
-/--
-Definition of `lift'` / `lift'` 的定义
+/-- Specialize `lift` to functions `Set α → Set β`. This can be viewed as a generalization of `map`.
+This is essentially a push-forward along a function mapping each set to a set. -/
+/-
+**Filter.lift'** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 𝓟 (h univ)
+参数：h : Set α -> Set β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift'
-  signature: (f : Filter α) (h : Set α -> Set β)
-  body: f.lift (𝓟 ∘ h)
-
-中文:
-定义 lift'
-  签名: (f : 滤子 α) (h : 集合 α -> 集合 β)
-  定义体: f.lift (𝓟 ∘ h)
+--- 原说明 ---
+Specialize `lift` to functions `Set α → Set β`. This can be viewed as a generali
+zation of `map`.
+This is essentially a push-forward along a function mapping each set to a set.
 -/
-protected def lift' (f : Filter α) (h : Set α -> Set β) :=
+protected def lift' (f : Filter α) (h : Set α → Set β) :=
   f.lift (𝓟 ∘ h)
 
-/--
-Definition of `IsBounded` / `IsBounded` 的定义
+/-- `f.IsBounded r`: the filter `f` is eventually bounded w.r.t. the relation `r`,
+i.e. eventually, it is bounded by some uniform bound.
+`r` will be usually instantiated with `(· ≤ ·)` or `(· ≥ ·)`. -/
+/-
+**Filter.IsBounded** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：IsBounded (r : α -> α -> Prop) (f : Filter α)
+参数：r : α -> α -> Prop；f : Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsBounded
-  signature: (r : α -> α -> Prop) (f : Filter α)
-  body: exists b, forallᶠ x in f, r x b
-
-中文:
-定义 IsBounded
-  签名: (r : α -> α -> 命题) (f : 滤子 α)
-  定义体: exists b, forallᶠ x in f, r x b
+--- 原说明 ---
+`f.IsBounded r`: the filter `f` is eventually bounded w.r.t. the relation `r`,
+i.e. eventually, it is bounded by some uniform bound.
+`r` will be usually instantiated with `(· ≤ ·)` or `(· ≥ ·)`.
 -/
-def IsBounded (r : α -> α -> Prop) (f : Filter α) :=
-  exists b, forallᶠ x in f, r x b
+def IsBounded (r : α → α → Prop) (f : Filter α) :=
+  ∃ b, ∀ᶠ x in f, r x b
 
-/--
-Definition of `IsBoundedUnder` / `IsBoundedUnder` 的定义
+/-- `f.IsBoundedUnder (≺) u`: the image of the filter `f` under `u` is eventually bounded w.r.t.
+the relation `≺`, i.e. eventually, it is bounded by some uniform bound. -/
+/-
+**Filter.IsBoundedUnder** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：IsBoundedUnder (r : α -> α -> Prop) (f : Filter β) (u : β -> α)
+参数：r : α -> α -> Prop；f : Filter β；u : β -> α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsBoundedUnder
-  signature: (r : α -> α -> Prop) (f : Filter β) (u : β -> α)
-  body: (map u f).IsBounded r
-
-中文:
-定义 IsBoundedUnder
-  签名: (r : α -> α -> 命题) (f : 滤子 β) (u : β -> α)
-  定义体: (map u f).IsBounded r
-
-Depends on / 依赖: IsBounded
+--- 原说明 ---
+`f.IsBoundedUnder (≺) u`: the image of the filter `f` under `u` is eventually bo
+unded w.r.t.
+the relation `≺`, i.e. eventually, it is bounded by some uniform bound.
 -/
-def IsBoundedUnder (r : α -> α -> Prop) (f : Filter β) (u : β -> α) :=
+def IsBoundedUnder (r : α → α → Prop) (f : Filter β) (u : β → α) :=
   (map u f).IsBounded r
 
-/--
-Definition of `IsCobounded` / `IsCobounded` 的定义
+/-- `IsCobounded (≺) f` states that the filter `f` does not tend to infinity w.r.t. `≺`. This is
+also called frequently bounded. Will be usually instantiated with `≤` or `≥`.
 
-English:
-definition IsCobounded
-  signature: (r : α -> α -> Prop) (f : Filter α)
-  body: exists b, forall a, (forallᶠ x in f, r x a) -> r b a
-
-中文:
-定义 IsCobounded
-  签名: (r : α -> α -> 命题) (f : 滤子 α)
-  定义体: exists b, forall a, (forallᶠ x in f, r x a) -> r b a
+There is a subtlety in this definition: we want `f.IsCobounded` to hold for any `f` in the case of
+complete lattices. This will be relevant to deduce theorems on complete lattices from their
+versions on conditionally complete lattices with additional assumptions. We have to be careful in
+the edge case of the trivial filter containing the empty set: the other natural definition
+  `¬ ∀ a, ∀ᶠ n in f, a ≤ n`
+would not work as well in this case.
 -/
-def IsCobounded (r : α -> α -> Prop) (f : Filter α) :=
-  exists b, forall a, (forallᶠ x in f, r x a) -> r b a
+/-
+**Filter.IsCobounded** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：IsCobounded (r : α -> α -> Prop) (f : Filter α)
+参数：r : α -> α -> Prop；f : Filter α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `IsCoboundedUnder` / `IsCoboundedUnder` 的定义
+--- 原说明 ---
+`IsCobounded (≺) f` states that the filter `f` does not tend to infinity w.r.t. 
+`≺`. This is
+also called frequently bounded. Will be usually instantiated with `≤` or `≥`.
 
-English:
-definition IsCoboundedUnder
-  signature: (r : α -> α -> Prop) (f : Filter β) (u : β -> α)
-  body: (map u f).IsCobounded r
-
-中文:
-定义 IsCoboundedUnder
-  签名: (r : α -> α -> 命题) (f : 滤子 β) (u : β -> α)
-  定义体: (map u f).IsCobounded r
-
-Depends on / 依赖: IsCobounded
+There is a subtlety in this definition: we want `f.IsCobounded` to hold for any 
+`f` in the case of
+complete lattices. This will be relevant to deduce theorems on complete lattices
+ from their
+versions on conditionally complete lattices with additional assumptions. We have
+ to be careful in
+the edge case of the trivial filter containing the empty set: the other natural 
+definition
+  `¬ ∀ a, ∀ᶠ n in f, a ≤ n`
+would not work as well in this case.
 -/
-def IsCoboundedUnder (r : α -> α -> Prop) (f : Filter β) (u : β -> α) :=
+def IsCobounded (r : α → α → Prop) (f : Filter α) :=
+  ∃ b, ∀ a, (∀ᶠ x in f, r x a) → r b a
+
+/-- `IsCoboundedUnder (≺) f u` states that the image of the filter `f` under the map `u` does not
+tend to infinity w.r.t. `≺`. This is also called frequently bounded. Will be usually instantiated
+with `≤` or `≥`. -/
+/-
+**Filter.IsCoboundedUnder** 是 Mathlib 中的一个定义，位于命名空间 `Filter`。
+形式化陈述：IsCoboundedUnder (r : α -> α -> Prop) (f : Filter β) (u : β -> α)
+参数：r : α -> α -> Prop；f : Filter β；u : β -> α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`IsCoboundedUnder (≺) f u` states that the image of the filter `f` under the map
+ `u` does not
+tend to infinity w.r.t. `≺`. This is also called frequently bounded. Will be usu
+ally instantiated
+with `≤` or `≥`.
+-/
+def IsCoboundedUnder (r : α → α → Prop) (f : Filter β) (u : β → α) :=
   (map u f).IsCobounded r
 
 end Filter
@@ -1470,9 +1049,9 @@ elab_rules : tactic
 | `(tactic| filter_upwards $[[$[$args],*]]? $[with $wth*]? $[using $usingArg]?) => do
   focus do
     let config : ApplyConfig := {newGoals := ApplyNewGoals.nonDependentOnly}
-.reverse do for e in args.getD #[]
+    for e in args.getD #[] |>.reverse do
       let goal ← getMainGoal
-replaceMainGoal ← goal.withContext runTermElab do
+      replaceMainGoal <| ← goal.withContext <| runTermElab do
         let m ← mkFreshExprMVar none
         let lem ← Term.elabTermEnsuringType
           (← ``(Filter.mp_mem $e $(← Term.exprToSyntax m))) (← goal.getType)
@@ -1480,10 +1059,11 @@ replaceMainGoal ← goal.withContext runTermElab do
         return [m.mvarId!]
     liftMetaTactic fun goal => do
       goal.apply (← mkConstWithFreshMVarLevels ``Filter.univ_mem') config
-evalTactic ← `(tactic| try dsimp -zeta only [Set.mem_ofPred_eq])
+    evalTactic <|← `(tactic| try dsimp -zeta only [Set.mem_ofPred_eq])
     if let some l := wth then
-evalTactic ← `(tactic| intro $[$l]*)
+      evalTactic <|← `(tactic| intro $[$l]*)
     if let some e := usingArg then
-evalTactic ← `(tactic| exact $e)
+      evalTactic <|← `(tactic| exact $e)
 
 end Mathlib.Tactic
+

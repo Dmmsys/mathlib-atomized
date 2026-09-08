@@ -151,36 +151,17 @@ be in context to choose a default.
 
 section
 
-/--
-Definition of `LinarithConfig` / `LinarithConfig` 的定义
+/-- A configuration object for `linarith`. -/
+/-
+**Mathlib.Tactic.Linarith.LinarithConfig** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tact
+ic.Linarith`。
+形式化陈述：LinarithConfig : Type where /-- Discharger to prove that a candidate linea
+r combination of hypothesis is zero. In a tactic configuration, set using `(disc
+harger
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LinarithConfig
-  parameters: : Type where
-  axioms and operations (8):
-    - discharger : TacticM Unit  [default: do evalTactic (← `(tactic| ring1))]
-    - exfalso : Bool  [default: true]
-    - transparency : TransparencyMode  [default: .reducible]
-    - splitHypotheses : Bool  [default: true]
-    - splitNe : Bool  [default: false]
-    - minimize : Bool  [default: true]
-    - preprocessors : List GlobalBranchingPreprocessor  [default: defaultPreprocessors]
-    - oracle : CertificateOracle  [default: .simplexAlgorithmSparse]
-
-中文:
-结构 LinarithConfig
-  参数: : 类型 where
-  公理与运算 (8 个):
-    - discharger : TacticM 单元  [默认: do evalTactic (← `(tactic| ring1))]
-    - exfalso : 布尔值  [默认: true]
-    - transparency : TransparencyMode  [默认: .reducible]
-    - splitHypotheses : 布尔值  [默认: true]
-    - splitNe : 布尔值  [默认: false]
-    - minimize : 布尔值  [默认: true]
-    - preprocessors : 列表 GlobalBranchingPreprocessor  [默认: defaultPreprocessors]
-    - oracle : CertificateOracle  [默认: .simplexAlgorithmSparse]
-
-Depends on / 依赖: notation
+--- 原说明 ---
+A configuration object for `linarith`. -/
 -/
 structure LinarithConfig : Type where
   /-- Discharger to prove that a candidate linear combination of hypothesis is zero.
@@ -210,23 +191,23 @@ structure LinarithConfig : Type where
   oracle : CertificateOracle := .simplexAlgorithmSparse
 
 /--
-Definition of `LinarithConfig.updateReducibility` / `LinarithConfig.updateReducibility` 的定义
+`cfg.updateReducibility reduce_default` will change the transparency setting of `cfg` to
+`default` if `reduce_default` is true. In this case, it also sets the discharger to `ring!`,
+since this is typically needed when using stronger unification.
+-/
+/-
+**Mathlib.Tactic.Linarith.LinarithConfig.updateReducibility** 是 Mathlib 中的一个定义，位
+于命名空间 `Mathlib.Tactic.Linarith.LinarithConfig`。
+形式化陈述：Mathlib.Tactic.Linarith.LinarithConfig → Bool → Mathlib.Tactic.Linarith.Li
+narithConfig
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LinarithConfig.updateReducibility
-  signature: (cfg : LinarithConfig) (reduce_default : Bool)
-  body: if reduce_default then
-    { cfg with transparency := .default, discharger := do evalTactic (← `(tactic| ring1!)) }
-  else cfg
-
-中文:
-定义 LinarithConfig.updateReducibility
-  签名: (cfg : LinarithConfig) (reduce_default : 布尔值)
-  定义体: if reduce_default then
-    { cfg with transparency := .default, discharger := do evalTactic (← `(tactic| ring1!)) }
-  else cfg
-
-Depends on / 依赖: discharger, evalTactic, reduce_default, tactic, transparency
+--- 原说明 ---
+`cfg.updateReducibility reduce_default` will change the transparency setting of 
+`cfg` to
+`default` if `reduce_default` is true. In this case, it also sets the discharger
+ to `ring!`,
+since this is typically needed when using stronger unification.
 -/
 def LinarithConfig.updateReducibility (cfg : LinarithConfig) (reduce_default : Bool) :
     LinarithConfig :=
@@ -239,27 +220,27 @@ end
 /-! ### Control -/
 
 /--
-Definition of `getContrLemma` / `getContrLemma` 的定义
+If `e` is a comparison `a R b` or the negation of a comparison `¬ a R b`, found in the target,
+`getContrLemma e` returns the name of a lemma that will change the goal to an
+implication, along with the type of `a` and `b`.
 
-English:
-definition getContrLemma
-  signature: (e : Expr)
-  body: do
-  match ← e.ineqOrNotIneq? with
-  | (true, Ineq.lt, t, _) => pure (``lt_of_not_ge, t)
-  | (true, Ineq.le, t, _) => pure (``le_of_not_gt, t)
-  | (true, Ineq.eq, t, _) => pure (``eq_of_not_lt_of_not_gt, t)
-  | (false, _, t, _) => pure (``Not.intro, t)
+For example, if `e` is `(a : ℕ) < b`, returns ``(`lt_of_not_ge, ℕ)``.
+-/
+/-
+**Mathlib.Tactic.Linarith.getContrLemma** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Linarith`。
+形式化陈述：getContrLemma (e : Expr) : MetaM (Name × Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getContrLemma
-  签名: (e : Expr)
-  定义体: do
-  match ← e.ineqOrNotIneq? with
-  | (true, Ineq.lt, t, _) => pure (``lt_of_not_ge, t)
-  | (true, Ineq.le, t, _) => pure (``le_of_not_gt, t)
-  | (true, Ineq.eq, t, _) => pure (``eq_of_not_lt_of_not_gt, t)
-  | (false, _, t, _) => pure (``Not.intro, t)
+--- 原说明 ---
+If `e` is a comparison `a R b` or the negation of a comparison `¬ a R b`, found 
+in the target,
+`getContrLemma e` returns the name of a lemma that will change the goal to an
+implication, along with the type of `a` and `b`.
+
+For example, if `e` is `(a : ℕ) < b`, returns ``(`lt_of_not_ge, ℕ)``.
 -/
 def getContrLemma (e : Expr) : MetaM (Name × Expr) := do
   match ← e.ineqOrNotIneq? with
@@ -269,29 +250,31 @@ def getContrLemma (e : Expr) : MetaM (Name × Expr) := do
   | (false, _, t, _) => pure (``Not.intro, t)
 
 /--
-Definition of `applyContrLemma` / `applyContrLemma` 的定义
+`applyContrLemma` inspects the target to see if it can be moved to a hypothesis by negation.
+For example, a goal `⊢ a ≤ b` can become `b < a ⊢ false`.
+If this is the case, it applies the appropriate lemma and introduces the new hypothesis.
+It returns the type of the terms in the comparison (e.g. the type of `a` and `b` above) and the
+newly introduced local constant.
+Otherwise returns `none`.
+-/
+/-
+**Mathlib.Tactic.Linarith.applyContrLemma** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Linarith`。
+形式化陈述：applyContrLemma (g : MVarId) : MetaM (Option (Expr × Expr) × MVarId)
+参数：g : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyContrLemma
-  signature: (g : MVarId)
-  body: do
-  try
-    let (nm, tp) ← getContrLemma (← withReducible g.getType')
-    let [g] ← g.apply (← mkConst' nm) | failure
-    let (f, g) ← g.intro1P
-    return (some (tp, .fvar f), g)
-  catch _ => return (none, g)
-
-中文:
-定义 applyContrLemma
-  签名: (g : MVarId)
-  定义体: do
-  try
-    let (nm, tp) ← getContrLemma (← withReducible g.getType')
-    let [g] ← g.apply (← mkConst' nm) | failure
-    let (f, g) ← g.intro1P
-    return (some (tp, .fvar f), g)
-  catch _ => return (none, g)
+--- 原说明 ---
+`applyContrLemma` inspects the target to see if it can be moved to a hypothesis 
+by negation.
+For example, a goal `⊢ a ≤ b` can become `b < a ⊢ false`.
+If this is the case, it applies the appropriate lemma and introduces the new hyp
+othesis.
+It returns the type of the terms in the comparison (e.g. the type of `a` and `b`
+ above) and the
+newly introduced local constant.
+Otherwise returns `none`.
 -/
 def applyContrLemma (g : MVarId) : MetaM (Option (Expr × Expr) × MVarId) := do
   try
@@ -301,43 +284,36 @@ def applyContrLemma (g : MVarId) : MetaM (Option (Expr × Expr) × MVarId) := do
     return (some (tp, .fvar f), g)
   catch _ => return (none, g)
 
-/--
-Definition of `ExprMultiMap` / `ExprMultiMap` 的定义
+/-- A map of keys to values, where the keys are `Expr` up to defeq and one key can be
+associated to multiple values. -/
+/-
+**Mathlib.Tactic.Linarith.ExprMultiMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tact
+ic.Linarith`。
+形式化陈述：ExprMultiMap α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ExprMultiMap
-  signature: α
-  body: Array (Expr × List α)
-
-中文:
-缩写 ExprMultiMap
-  签名: α
-  定义体: Array (Expr × List α)
+--- 原说明 ---
+A map of keys to values, where the keys are `Expr` up to defeq and one key can b
+e
+associated to multiple values.
 -/
 abbrev ExprMultiMap α := Array (Expr × List α)
 
-/--
-Definition of `ExprMultiMap.find` / `ExprMultiMap.find` 的定义
+/-- Retrieves the list of values at a key, as well as the index of the key for later modification.
+(If the key is not in the map it returns `self.size` as the index.) -/
+/-
+**Mathlib.Tactic.Linarith.ExprMultiMap.find** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Linarith.ExprMultiMap`。
+形式化陈述：{α : Type} → Mathlib.Tactic.Linarith.ExprMultiMap α → Expr → MetaM (ℕ × Li
+st α)
+参数：ℕ × List α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition ExprMultiMap.find
-  signature: {α : Type} (self : ExprMultiMap α) (k : Expr)
-  body: do
-  for h : i in [:self.size] do
-    let (k', vs) := self[i]
-    if ← isDefEq k' k then
-      return (i, vs)
-  return (self.size, [])
-
-中文:
-定义 ExprMultiMap.find
-  签名: {α : 类型} (self : ExprMultiMap α) (k : Expr)
-  定义体: do
-  for h : i in [:self.size] do
-    let (k', vs) := self[i]
-    if ← isDefEq k' k then
-      return (i, vs)
-  return (self.size, [])
+--- 原说明 ---
+Retrieves the list of values at a key, as well as the index of the key for later
+ modification.
+(If the key is not in the map it returns `self.size` as the index.)
 -/
 def ExprMultiMap.find {α : Type} (self : ExprMultiMap α) (k : Expr) : MetaM (Nat × List α) := do
   for h : i in [:self.size] do
@@ -346,26 +322,21 @@ def ExprMultiMap.find {α : Type} (self : ExprMultiMap α) (k : Expr) : MetaM (N
       return (i, vs)
   return (self.size, [])
 
-/--
-Definition of `ExprMultiMap.insert` / `ExprMultiMap.insert` 的定义
+/-- Insert a new value into the map at key `k`. This does a defeq check with all other keys
+in the map. -/
+/-
+**Mathlib.Tactic.Linarith.ExprMultiMap.insert** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Linarith.ExprMultiMap`。
+形式化陈述：{α : Type} → Mathlib.Tactic.Linarith.ExprMultiMap α → Expr → α → MetaM (Ma
+thlib.Tactic.Linarith.ExprMultiMap α)
+参数：Mathlib.Tactic.Linarith.ExprMultiMap α。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition ExprMultiMap.insert
-  signature: {α : Type} (self : ExprMultiMap α) (k : Expr) (v : α)
-  body: do
-  for h : i in [:self.size] do
-    if ← isDefEq self[i].1 k then
-      return self.modify i fun (k, vs) => (k, v::vs)
-  return self.push (k, [v])
-
-中文:
-定义 ExprMultiMap.insert
-  签名: {α : 类型} (self : ExprMultiMap α) (k : Expr) (v : α)
-  定义体: do
-  for h : i in [:self.size] do
-    if ← isDefEq self[i].1 k then
-      return self.modify i fun (k, vs) => (k, v::vs)
-  return self.push (k, [v])
+--- 原说明 ---
+Insert a new value into the map at key `k`. This does a defeq check with all oth
+er keys
+in the map.
 -/
 def ExprMultiMap.insert {α : Type} (self : ExprMultiMap α) (k : Expr) (v : α) :
     MetaM (ExprMultiMap α) := do
@@ -375,51 +346,58 @@ def ExprMultiMap.insert {α : Type} (self : ExprMultiMap α) (k : Expr) (v : α)
   return self.push (k, [v])
 
 /--
-Definition of `partitionByTypeIdx` / `partitionByTypeIdx` 的定义
+`partitionByTypeIdx l` takes a list `l` of pairs `(h, i)` where `h` is a proof of a
+comparison and `i` records the original position of `h`. The proofs are grouped by the
+type of the variables appearing in the comparison, e.g. `(a : ℚ) < 1` and
+`(b : ℤ) > c` will be separated. The resulting map associates each type with the
+list of `(h, i)` pairs over that type.
+-/
+/-
+**Mathlib.Tactic.Linarith.partitionByTypeIdx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Linarith`。
+形式化陈述：partitionByTypeIdx (l : List (Expr × Nat)) : MetaM (ExprMultiMap (Expr × N
+at))
+参数：l : List (Expr × Nat)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition partitionByTypeIdx
-  signature: (l : List (Expr × Nat))
-  body: l.foldlM (fun m ⟨h, i⟩ => do m.insert (← typeOfIneqProof h) (h, i)) #[]
-
-中文:
-定义 partitionByTypeIdx
-  签名: (l : 列表 (Expr × 自然数))
-  定义体: l.foldlM (fun m ⟨h, i⟩ => do m.insert (← typeOfIneqProof h) (h, i)) #[]
-
-Depends on / 依赖: foldlM, insert, l.foldlM, m.insert, typeOfIneqProof
+--- 原说明 ---
+`partitionByTypeIdx l` takes a list `l` of pairs `(h, i)` where `h` is a proof o
+f a
+comparison and `i` records the original position of `h`. The proofs are grouped 
+by the
+type of the variables appearing in the comparison, e.g. `(a : ℚ) < 1` and
+`(b : ℤ) > c` will be separated. The resulting map associates each type with the
+list of `(h, i)` pairs over that type.
 -/
 def partitionByTypeIdx (l : List (Expr × Nat)) : MetaM (ExprMultiMap (Expr × Nat)) :=
   l.foldlM (fun m ⟨h, i⟩ => do m.insert (← typeOfIneqProof h) (h, i)) #[]
 
 /--
-Definition of `findLinarithContradiction` / `findLinarithContradiction` 的定义
+Given a list `ls` of pairs `(α, L)` where each `L` is a list of indexed proofs of
+comparisons over the type `α`, `findLinarithContradiction cfg g ls` tries each list in
+succession, invoking `linarith` until one produces a contradiction. It returns the
+resulting proof of `False` together with the indices of the hypotheses that had
+nonzero coefficients in the final certificate.
+-/
+/-
+**Mathlib.Tactic.Linarith.findLinarithContradiction** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.Linarith`。
+形式化陈述：findLinarithContradiction (cfg : LinarithConfig) (g : MVarId) (ls : List (
+Expr × List (Expr × Nat))) : MetaM (Expr × List Nat)
+参数：cfg : LinarithConfig；g : MVarId；ls : List (Expr × List (Expr × Nat))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findLinarithContradiction
-  signature: (cfg : LinarithConfig) (g : MVarId)
-  body: try
-    ls.firstM (fun ⟨α, L⟩ =>
-      withTraceNode `linarith (fun _ => return m!" running on type {α}") do
-        let (pf, idxs) ←
-          proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (L.map Prod.fst)
-        let idxs := idxs.map fun i => L[i]!.2
-        return (pf, idxs))
-  catch e => throwError "linarith failed to find a contradiction\n{g}\n{e.toMessageData}"
-
-中文:
-定义 findLinarithContradiction
-  签名: (cfg : LinarithConfig) (g : MVarId)
-  定义体: try
-    ls.firstM (fun ⟨α, L⟩ =>
-      withTraceNode `linarith (fun _ => return m!" running on type {α}") do
-        let (pf, idxs) ←
-          proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (L.map Prod.fst)
-        let idxs := idxs.map fun i => L[i]!.2
-        return (pf, idxs))
-  catch e => throwError "linarith failed to find a contradiction\n{g}\n{e.toMessageData}"
-
-Depends on / 依赖: L.map, Prod.fst, cfg.discharger, cfg.oracle, cfg.transparency, discharger, e.toMessageData, failed, firstM, idxs.map, ls.firstM, oracle, proveFalseByLinarith, return, running, throwError, toMessageData, transparency, withTraceNode
+--- 原说明 ---
+Given a list `ls` of pairs `(α, L)` where each `L` is a list of indexed proofs o
+f
+comparisons over the type `α`, `findLinarithContradiction cfg g ls` tries each l
+ist in
+succession, invoking `linarith` until one produces a contradiction. It returns t
+he
+resulting proof of `False` together with the indices of the hypotheses that had
+nonzero coefficients in the final certificate.
 -/
 def findLinarithContradiction (cfg : LinarithConfig) (g : MVarId)
     (ls : List (Expr × List (Expr × Nat))) : MetaM (Expr × List Nat) :=
@@ -432,91 +410,27 @@ def findLinarithContradiction (cfg : LinarithConfig) (g : MVarId)
         return (pf, idxs))
   catch e => throwError "linarith failed to find a contradiction\n{g}\n{e.toMessageData}"
 
--- If it succeeds, the passed metavariable should have been assigned.
 /--
-Definition of `runLinarith` / `runLinarith` 的定义
+Given a list `hyps` of proofs of comparisons, `runLinarith cfg prefType g hyps` preprocesses
+`hyps` according to the list of preprocessors in `cfg`. This results in a list of branches
+(typically only one), each of which must succeed in order to close the goal.
 
-English:
-definition runLinarith
-  signature: (cfg : LinarithConfig) (prefType : Option Expr) (g : MVarId)
-  body: do
-  let singleProcess (g : MVarId) (hyps : List (Expr × Nat)) : MetaM (Expr × List Nat) :=
-    g.withContext do
-      linarithTraceProofs
-        s!"after preprocessing, linarith has {hyps.length} facts:" (hyps.map Prod.fst)
-      let mut hyp_set ← partitionByTypeIdx hyps
-      trace[linarith] "hypotheses appear in {hyp_set.size} different types"
-      -- If we have a preferred type, strip it from `hyp_set` and prepare a handler with a custom
-      -- trace message
-      let pref : MetaM _ ← do
-        if let some t := prefType then
-          let (i, vs) ← hyp_set.find t
-          hyp_set := hyp_set.eraseIdxIfInBounds i
-pure
-            withTraceNode `linarith (fun _ => return m!" running on preferred type {t}") do
-              let (pf, idxs) ←
-                proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (vs.map Prod.fst)
-              let idxs := idxs.map fun j => vs[j]!.2
-              return (pf, idxs)
-        else
-          pure failure
-pref > findLinarithContradiction cfg g hyp_set.toList
-  let mut preprocessors := cfg.preprocessors
-  if cfg.splitNe then
-    preprocessors := Linarith.removeNe :: preprocessors
-  if cfg.splitHypotheses then
-    preprocessors := Linarith.splitConjunctions.globalize.branching :: preprocessors
-  let branches ← preprocess preprocessors g hyps
-  let mut used : List Nat := []
-  for (g, es) in branches do
-    let esIdx := es.zipIdx
-    let (r, idxs) ← singleProcess g esIdx
-    g.assign r
-    used := idxs ++ used
-  -- Verify that we closed the goal. Failure here should only result from a bad `Preprocessor`.
-  (Expr.mvar g).ensureHasNoMVars
-  return used.eraseDups
+In each branch, the hypotheses are partitioned by type and `linarith` is run on each class in
+turn; one of these must succeed in order for `linarith` to succeed on the branch. If `prefType`
+is provided, the corresponding class is tried first.
 
-中文:
-定义 runLinarith
-  签名: (cfg : LinarithConfig) (prefType : 选项类型 Expr) (g : MVarId)
-  定义体: do
-  let singleProcess (g : MVarId) (hyps : List (Expr × Nat)) : MetaM (Expr × List Nat) :=
-    g.withContext do
-      linarithTraceProofs
-        s!"after preprocessing, linarith has {hyps.length} facts:" (hyps.map Prod.fst)
-      let mut hyp_set ← partitionByTypeIdx hyps
-      trace[linarith] "hypotheses appear in {hyp_set.size} different types"
-      -- If we have a preferred type, strip it from `hyp_set` and prepare a handler with a custom
-      -- trace message
-      let pref : MetaM _ ← do
-        if let some t := prefType then
-          let (i, vs) ← hyp_set.find t
-          hyp_set := hyp_set.eraseIdxIfInBounds i
-pure
-            withTraceNode `linarith (fun _ => return m!" running on preferred type {t}") do
-              let (pf, idxs) ←
-                proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (vs.map Prod.fst)
-              let idxs := idxs.map fun j => vs[j]!.2
-              return (pf, idxs)
-        else
-          pure failure
-pref > findLinarithContradiction cfg g hyp_set.toList
-  let mut preprocessors := cfg.preprocessors
-  if cfg.splitNe then
-    preprocessors := Linarith.removeNe :: preprocessors
-  if cfg.splitHypotheses then
-    preprocessors := Linarith.splitConjunctions.globalize.branching :: preprocessors
-  let branches ← preprocess preprocessors g hyps
-  let mut used : List Nat := []
-  for (g, es) in branches do
-    let esIdx := es.zipIdx
-    let (r, idxs) ← singleProcess g esIdx
-    g.assign r
-    used := idxs ++ used
-  -- Verify that we closed the goal. Failure here should only result from a bad `Preprocessor`.
-  (Expr.mvar g).ensureHasNoMVars
-  return used.eraseDups
+On success, the metavariable `g` is assigned and the function returns the indices of the
+original hypotheses that were used with nonzero coefficient in the final proof.
+-/
+-- If it succeeds, the passed metavariable should have been assigned.
+/-
+**Mathlib.Tactic.Linarith.runLinarith** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Linarith`。
+形式化陈述：runLinarith (cfg : LinarithConfig) (prefType : Option Expr) (g : MVarId) (
+hyps : List Expr) : MetaM (List Nat)
+参数：cfg : LinarithConfig；prefType : Option Expr；g : MVarId；hyps : List Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def runLinarith (cfg : LinarithConfig) (prefType : Option Expr) (g : MVarId)
     (hyps : List Expr) : MetaM (List Nat) := do
@@ -532,7 +446,7 @@ def runLinarith (cfg : LinarithConfig) (prefType : Option Expr) (g : MVarId)
         if let some t := prefType then
           let (i, vs) ← hyp_set.find t
           hyp_set := hyp_set.eraseIdxIfInBounds i
-pure
+          pure <|
             withTraceNode `linarith (fun _ => return m!" running on preferred type {t}") do
               let (pf, idxs) ←
                 proveFalseByLinarith cfg.transparency cfg.oracle cfg.discharger g (vs.map Prod.fst)
@@ -540,7 +454,7 @@ pure
               return (pf, idxs)
         else
           pure failure
-pref > findLinarithContradiction cfg g hyp_set.toList
+      pref <|> findLinarithContradiction cfg g hyp_set.toList
   let mut preprocessors := cfg.preprocessors
   if cfg.splitNe then
     preprocessors := Linarith.removeNe :: preprocessors
@@ -562,112 +476,45 @@ pref > findLinarithContradiction cfg g hyp_set.toList
 -- to only those that are comparisons over the type `restr_type`.
 -- -/
 -- def filterHyps (restr_type : Expr) (hyps : List Expr) : MetaM (List Expr) :=
--- hyps.filterM (fun h => do
--- let ht ← inferType h
--- match getContrLemma ht with
--- | some (_, htype) => isDefEq htype restr_type
--- | none => return false)
+--   hyps.filterM (fun h => do
+--     let ht ← inferType h
+--     match getContrLemma ht with
+--     | some (_, htype) => isDefEq htype restr_type
+--     | none => return false)
 
 /--
-Definition of `linarithUsedHyps` / `linarithUsedHyps` 的定义
+`linarithUsedHyps only_on hyps cfg g` runs `linarith` with the supplied hypotheses. It
+fails if the goal cannot be closed. When successful, it returns the subset of `hyps` that
+were actually used (i.e. had a nonzero coefficient) in the final certificate.
 
-English:
-definition linarithUsedHyps
-  signature: (only_on : Bool) (hyps : List Expr)
-  body: g.withContext do
-  -- if the target is an equality, we run `linarith` twice, to prove ≤ and ≥.
-  if (← whnfR (← instantiateMVars (← g.getType))).isEq then
-    trace[linarith] "target is an equality: splitting"
-    if let some [g₁, g₂] ← try? (g.apply (← mkConst' ``eq_of_not_lt_of_not_gt)) then
-let h₁ ← withTraceNode `linarith (fun _ => return m!" proving >=")
-        linarithUsedHyps only_on hyps cfg g₁
-let h₂ ← withTraceNode `linarith (fun _ => return m!" proving <=")
-        linarithUsedHyps only_on hyps cfg g₂
-      return h₁ ++ h₂
+* `hyps` is a list of proofs of comparisons to include in the search.
+* If `only_on` is true, the search will be restricted to `hyps`. Otherwise it will use all
+  comparisons in the local context.
+* If `cfg.transparency := semireducible`,
+  it will unfold semireducible definitions when trying to match atomic expressions.
+-/
+/-
+**Mathlib.Tactic.Linarith.linarithUsedHyps** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib
+.Tactic.Linarith`。
+形式化陈述：Bool → List Expr → optParam Mathlib.Tactic.Linarith.LinarithConfig { } → M
+VarId → MetaM (List Expr)
+参数：List Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  /- If we are proving a comparison goal (and not just `False`), we consider the type of the
-    elements in the comparison to be the "preferred" type. That is, if we find comparison
-    hypotheses in multiple types, we will run `linarith` on the goal type first.
-    In this case we also receive a new variable from moving the goal to a hypothesis.
-    Otherwise, there is no preferred type and no new variable; we simply change the goal to `False`.
-  -/
+--- 原说明 ---
+`linarithUsedHyps only_on hyps cfg g` runs `linarith` with the supplied hypothes
+es. It
+fails if the goal cannot be closed. When successful, it returns the subset of `h
+yps` that
+were actually used (i.e. had a nonzero coefficient) in the final certificate.
 
-  let (g, target_type, new_var) ← match ← applyContrLemma g with
-  | (none, g) =>
-    if cfg.exfalso then
-      trace[linarith] "using exfalso"
-      pure (← g.exfalso, none, none)
-    else
-      pure (g, none, none)
-  | (some (t, v), g) => pure (g, some t, some v)
-
-  g.withContext do
-    -- set up the list of hypotheses, considering the `only_on` and `restrict_type` options
-    let hyps ←
-      (if only_on then return new_var.toList ++ hyps
-        else return (← getLocalHyps).toList ++ hyps)
-
-    -- TODO in mathlib3 we could specify a restriction to a single type.
-    -- I haven't done that here because I don't know how to store a `Type` in `LinarithConfig`.
-    -- There's only one use of the `restrict_type` configuration option in mathlib3,
-    -- and it can be avoided just by using `linarith only`.
-
-    linarithTraceProofs "linarith is running on the following hypotheses:" hyps
-    let usedIdxs ← runLinarith cfg target_type g hyps
-    let used := usedIdxs.filterMap (hyps[·]?)
-    let used := match new_var with
-      | some nv => used.filter (fun h => !(h == nv))
-      | none => used
-    return used
-
-中文:
-定义 linarithUsedHyps
-  签名: (only_on : 布尔值) (hyps : 列表 Expr)
-  定义体: g.withContext do
-  -- if the target is an equality, we run `linarith` twice, to prove ≤ and ≥.
-  if (← whnfR (← instantiateMVars (← g.getType))).isEq then
-    trace[linarith] "target is an equality: splitting"
-    if let some [g₁, g₂] ← try? (g.apply (← mkConst' ``eq_of_not_lt_of_not_gt)) then
-let h₁ ← withTraceNode `linarith (fun _ => return m!" proving >=")
-        linarithUsedHyps only_on hyps cfg g₁
-let h₂ ← withTraceNode `linarith (fun _ => return m!" proving <=")
-        linarithUsedHyps only_on hyps cfg g₂
-      return h₁ ++ h₂
-
-  /- If we are proving a comparison goal (and not just `False`), we consider the type of the
-    elements in the comparison to be the "preferred" type. That is, if we find comparison
-    hypotheses in multiple types, we will run `linarith` on the goal type first.
-    In this case we also receive a new variable from moving the goal to a hypothesis.
-    Otherwise, there is no preferred type and no new variable; we simply change the goal to `False`.
-  -/
-
-  let (g, target_type, new_var) ← match ← applyContrLemma g with
-  | (none, g) =>
-    if cfg.exfalso then
-      trace[linarith] "using exfalso"
-      pure (← g.exfalso, none, none)
-    else
-      pure (g, none, none)
-  | (some (t, v), g) => pure (g, some t, some v)
-
-  g.withContext do
-    -- set up the list of hypotheses, considering the `only_on` and `restrict_type` options
-    let hyps ←
-      (if only_on then return new_var.toList ++ hyps
-        else return (← getLocalHyps).toList ++ hyps)
-
-    -- TODO in mathlib3 we could specify a restriction to a single type.
-    -- I haven't done that here because I don't know how to store a `Type` in `LinarithConfig`.
-    -- There's only one use of the `restrict_type` configuration option in mathlib3,
-    -- and it can be avoided just by using `linarith only`.
-
-    linarithTraceProofs "linarith is running on the following hypotheses:" hyps
-    let usedIdxs ← runLinarith cfg target_type g hyps
-    let used := usedIdxs.filterMap (hyps[·]?)
-    let used := match new_var with
-      | some nv => used.filter (fun h => !(h == nv))
-      | none => used
-    return used
+* `hyps` is a list of proofs of comparisons to include in the search.
+* If `only_on` is true, the search will be restricted to `hyps`. Otherwise it wi
+ll use all
+  comparisons in the local context.
+* If `cfg.transparency := semireducible`,
+  it will unfold semireducible definitions when trying to match atomic expressio
+ns.
 -/
 partial def linarithUsedHyps (only_on : Bool) (hyps : List Expr)
     (cfg : LinarithConfig := {}) (g : MVarId) : MetaM (List Expr) := g.withContext do
@@ -675,9 +522,9 @@ partial def linarithUsedHyps (only_on : Bool) (hyps : List Expr)
   if (← whnfR (← instantiateMVars (← g.getType))).isEq then
     trace[linarith] "target is an equality: splitting"
     if let some [g₁, g₂] ← try? (g.apply (← mkConst' ``eq_of_not_lt_of_not_gt)) then
-let h₁ ← withTraceNode `linarith (fun _ => return m!" proving >=")
+      let h₁ ← withTraceNode `linarith (fun _ => return m!" proving ≥") <|
         linarithUsedHyps only_on hyps cfg g₁
-let h₂ ← withTraceNode `linarith (fun _ => return m!" proving <=")
+      let h₂ ← withTraceNode `linarith (fun _ => return m!" proving ≤") <|
         linarithUsedHyps only_on hyps cfg g₂
       return h₁ ++ h₂
 
@@ -717,23 +564,27 @@ let h₂ ← withTraceNode `linarith (fun _ => return m!" proving <=")
     return used
 
 /--
-Definition of `linarith` / `linarith` 的定义
+Run the core `linarith` procedure on the goal `g` using the hypotheses `hyps`.
+If `only_on` is true, the search is restricted to `hyps`; otherwise all suitable
+local hypotheses are considered. This is the workhorse behind the user-facing
+`linarith` tactic.
+-/
+/-
+**Mathlib.Tactic.Linarith.linarith** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lin
+arith`。
+形式化陈述：Bool → List Expr → optParam Mathlib.Tactic.Linarith.LinarithConfig { } → M
+VarId → MetaM Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linarith
-  signature: (only_on : Bool) (hyps : List Expr) (cfg : LinarithConfig := {})
-  body: do
-discard linarithUsedHyps only_on hyps cfg g
-
-中文:
-定义 linarith
-  签名: (only_on : 布尔值) (hyps : 列表 Expr) (cfg : LinarithConfig := {})
-  定义体: do
-discard linarithUsedHyps only_on hyps cfg g
+--- 原说明 ---
+Run the core `linarith` procedure on the goal `g` using the hypotheses `hyps`.
+If `only_on` is true, the search is restricted to `hyps`; otherwise all suitable
+local hypotheses are considered. This is the workhorse behind the user-facing
+`linarith` tactic.
 -/
 partial def linarith (only_on : Bool) (hyps : List Expr) (cfg : LinarithConfig := {})
     (g : MVarId) : MetaM Unit := do
-discard linarithUsedHyps only_on hyps cfg g
+  discard <| linarithUsedHyps only_on hyps cfg g
 
 end Linarith
 
@@ -809,7 +660,7 @@ syntax (name := linarith) "linarith" "!"? linarithArgsRest : tactic
 /--
 `linarith?` behaves like `linarith` but, on success, it prints a suggestion of
 the form `linarith only [...]` listing a minimized set of hypotheses used in the
-final proof. Use `linarith?!` for the higher-reducibility variant and set the
+final proof.  Use `linarith?!` for the higher-reducibility variant and set the
 `minimize` flag in the configuration to control whether greedy minimization is
 performed.
 -/
@@ -860,7 +711,7 @@ elab_rules : tactic
   | `(tactic| linarith $[!%$bang]? $cfg:optConfig $[only%$o]? $[[$args,*]]?) => withMainContext do
     let args ← ((args.map (TSepArray.getElems)).getD {}).mapM (elabTermWithoutNewMVars `linarith)
     let cfg := (← elabLinarithConfig cfg).updateReducibility bang.isSome
-commitIfNoEx do liftMetaFinishingTactic Linarith.linarith o.isSome args.toList cfg
+    commitIfNoEx do liftMetaFinishingTactic <| Linarith.linarith o.isSome args.toList cfg
 
 private meta partial def minimize (cfg : Linarith.LinarithConfig) (st : Tactic.SavedState)
     (g : MVarId) (hs : List Expr) (i : Nat) : TacticM (List Expr) := do
@@ -893,7 +744,7 @@ elab_rules : tactic
             else
               pure used₀
           st.restore
-discard Linarith.linarith true used cfg g
+          discard <| Linarith.linarith true used cfg g
           replaceMainGoal []
           -- TODO: we should check for, and deal with, shadowed names here.
           let idsList ← used.mapM fun e => do
@@ -901,15 +752,15 @@ discard Linarith.linarith true used cfg g
           let sugg ← `(tactic| linarith only [$(idsList.toArray),*])
           Lean.Meta.Tactic.TryThis.addSuggestion tk sugg
         catch e =>
-discard st.restore
+          discard <| st.restore
           throw e
 
 -- TODO restore this when `add_tactic_doc` is ported
 -- add_tactic_doc
--- { name := "linarith",
--- category := doc_category.tactic,
--- decl_names := [`tactic.interactive.linarith],
--- tags := ["arithmetic", "decision procedure", "finishing"] }
+-- { name       := "linarith",
+--   category   := doc_category.tactic,
+--   decl_names := [`tactic.interactive.linarith],
+--   tags       := ["arithmetic", "decision procedure", "finishing"] }
 
 open Linarith
 
@@ -919,13 +770,14 @@ elab_rules : tactic
     let cfg := (← elabLinarithConfig cfg).updateReducibility bang.isSome
     let cfg := { cfg with
       preprocessors := cfg.preprocessors.concat nlinarithExtras }
-commitIfNoEx do liftMetaFinishingTactic Linarith.linarith o.isSome args.toList cfg
+    commitIfNoEx do liftMetaFinishingTactic <| Linarith.linarith o.isSome args.toList cfg
 
 -- TODO restore this when `add_tactic_doc` is ported
 -- add_tactic_doc
--- { name := "nlinarith",
--- category := doc_category.tactic,
--- decl_names := [`tactic.interactive.nlinarith],
--- tags := ["arithmetic", "decision procedure", "finishing"] }
+-- { name       := "nlinarith",
+--   category   := doc_category.tactic,
+--   decl_names := [`tactic.interactive.nlinarith],
+--   tags       := ["arithmetic", "decision procedure", "finishing"] }
 
 end Mathlib.Tactic
+

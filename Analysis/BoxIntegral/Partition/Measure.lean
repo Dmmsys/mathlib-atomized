@@ -43,105 +43,108 @@ namespace Box
 
 variable (I : Box ι)
 
-/--
-theorem `measure_Icc_lt_top` / 定理 `measure_Icc_lt_top`
-
-English:
-theorem measure_Icc_lt_top
-  given: (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ]
-  statement: μ (Box.Icc I) < ∞
-  proof: show μ (Icc I.lower I.upper) < ∞ from I.isCompact_Icc.measure_lt_top
-
-中文:
-定理 measure_Icc_lt_top
-  条件: (μ : 测度 (ι -> 实数)) [是局部有限测度 μ]
-  结论: μ (Box.闭区间 I) < ∞
-  证明: show μ (Icc I.lower I.upper) < ∞ from I.isCompact_Icc.measure_lt_top
-
-Depends on / 依赖: I.isCompact_Icc.measure_lt_top, I.lower, I.upper, isCompact_Icc, measure_lt_top
+/-
+**BoxIntegral.Box.measure_Icc_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`
+。
+形式化陈述：measure_Icc_lt_top (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ] : 
+μ (Box.Icc I) < ∞
+参数：μ : Measure (ι -> Real)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.measure_lt_top`：∀ {α : Type u_1} {m0 : MeasurableSpace α} [ins
+t : TopologicalSpace α] {μ : MeasureTheory.Measure α}   [MeasureTheory.IsFiniteM
+easureOnCompac…
+· 使用定理 `isFiniteMeasureOnCompacts_of_isLocallyFiniteMeasure`：∀ {α : Type u_1} [i
+nst : TopologicalSpace α] {x : MeasurableSpace α} {μ : MeasureTheory.Measure α} 
+  [MeasureTheory.IsLocallyFiniteMeasure μ…
+· 使用定理 `BoxIntegral.Box.isCompact_Icc`：∀ {ι : Type u_1} (I : BoxIntegral.Box ι),
+ IsCompact (BoxIntegral.Box.Icc I)
 -/
-theorem measure_Icc_lt_top (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ] : μ (Box.Icc I) < ∞ :=
+theorem measure_Icc_lt_top (μ : Measure (ι → ℝ)) [IsLocallyFiniteMeasure μ] : μ (Box.Icc I) < ∞ :=
   show μ (Icc I.lower I.upper) < ∞ from I.isCompact_Icc.measure_lt_top
-
-/--
-theorem `measure_coe_lt_top` / 定理 `measure_coe_lt_top`
-
-English:
-theorem measure_coe_lt_top
-  given: (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ]
-  statement: μ I < ∞
-  proof: (measure_mono <| coe_subset_Icc).trans_lt (I.measure_Icc_lt_top μ)
-
-中文:
-定理 measure_coe_lt_top
-  条件: (μ : 测度 (ι -> 实数)) [是局部有限测度 μ]
-  结论: μ I < ∞
-  证明: (measure_mono <| coe_subset_Icc).trans_lt (I.measure_Icc_lt_top μ)
-
-Depends on / 依赖: I.measure_Icc_lt_top, coe_subset_Icc, measure_Icc_lt_top, measure_mono, trans_lt
+/-
+**BoxIntegral.Box.measure_coe_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`
+。
+形式化陈述：measure_coe_lt_top (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ] : 
+μ I < ∞
+参数：μ : Measure (ι -> Real)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `BoxIntegral.Box.coe_subset_Icc`：coe_subset_Icc : ↑I subseteq Box.Icc I
+· 使用定理 `BoxIntegral.Box.measure_Icc_lt_top`：measure_Icc_lt_top (μ : Measure (ι -
+> Real)) [IsLocallyFiniteMeasure μ] : μ (Box.Icc I) < ∞
 -/
-theorem measure_coe_lt_top (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ] : μ I < ∞ :=
+theorem measure_coe_lt_top (μ : Measure (ι → ℝ)) [IsLocallyFiniteMeasure μ] : μ I < ∞ :=
   (measure_mono <| coe_subset_Icc).trans_lt (I.measure_Icc_lt_top μ)
 
 section Countable
 
 variable [Countable ι]
 
-/--
-theorem `measurableSet_coe` / 定理 `measurableSet_coe`
-
-English:
-theorem measurableSet_coe
-  statement: MeasurableSet (I : Set (ι -> Real))
-  proof: by
-  rw [coe_eq_pi]
-  exact MeasurableSet.univ_pi fun i => measurableSet_Ioc
-
-中文:
-定理 measurableSet_coe
-  结论: 可测集 (I : 集合 (ι -> 实数))
-  证明: by
-  rw [coe_eq_pi]
-  exact MeasurableSet.univ_pi fun i => measurableSet_Ioc
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ_pi, coe_eq_pi, measurableSet_Ioc, univ_pi
+/-
+**BoxIntegral.Box.measurableSet_coe** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：measurableSet_coe : MeasurableSet (I : Set (ι -> Real))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.coe_eq_pi`：coe_eq_pi : (I : Set (ι -> Real)) = pi univ f
+un i => Ioc (I.lower i) (I.upper i)
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `measurableSet_Ioc`：measurableSet_Ioc [ClosedIicTopology α] : MeasurableS
+et (Ioc a b)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
 -/
-theorem measurableSet_coe : MeasurableSet (I : Set (ι -> Real)) := by
+theorem measurableSet_coe : MeasurableSet (I : Set (ι → ℝ)) := by
   rw [coe_eq_pi]
   exact MeasurableSet.univ_pi fun i => measurableSet_Ioc
-
-/--
-theorem `measurableSet_Icc` / 定理 `measurableSet_Icc`
-
-English:
-theorem measurableSet_Icc
-  statement: MeasurableSet (Box.Icc I)
-  proof: _root_.measurableSet_Icc
-
-中文:
-定理 measurableSet_Icc
-  结论: 可测集 (Box.闭区间 I)
-  证明: _root_.measurableSet_Icc
-
-Depends on / 依赖: _root_, _root_.measurableSet_Icc, measurableSet_Icc
+/-
+**BoxIntegral.Box.measurableSet_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：measurableSet_Icc : MeasurableSet (Box.Icc I)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurableSet_Icc`：measurableSet_Icc [OrderClosedTopology α] : Measurabl
+eSet (Icc a b)
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
 -/
 theorem measurableSet_Icc : MeasurableSet (Box.Icc I) :=
   _root_.measurableSet_Icc
-
-/--
-theorem `measurableSet_Ioo` / 定理 `measurableSet_Ioo`
-
-English:
-theorem measurableSet_Ioo
-  statement: MeasurableSet (Box.Ioo I)
-  proof: MeasurableSet.univ_pi fun _ => _root_.measurableSet_Ioo
-
-中文:
-定理 measurableSet_Ioo
-  结论: 可测集 (Box.开区间 I)
-  证明: MeasurableSet.univ_pi fun _ => _root_.measurableSet_Ioo
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ_pi, _root_, _root_.measurableSet_Ioo, measurableSet_Ioo, univ_pi
+/-
+**BoxIntegral.Box.measurableSet_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：measurableSet_Ioo : MeasurableSet (Box.Ioo I)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.univ_pi`：∀ {δ : Type u_4} {X : δ → Type u_6} [inst : (a : 
+δ) → MeasurableSpace (X a)] [Countable δ] {t : (i : δ) → Set (X i)},   (∀ (i : δ
+), Measurab…
+· 使用定理 `measurableSet_Ioo`：measurableSet_Ioo [OrderClosedTopology α] : Measurabl
+eSet (Ioo a b)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `HasSolidNorm.orderClosedTopology`：∀ {E : Type u_2} [inst : NormedAddComm
+Group E] [inst_1 : Lattice E] [HasSolidNorm E] [IsOrderedAddMonoid E],   OrderCl
+osedTopology E
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
 -/
 theorem measurableSet_Ioo : MeasurableSet (Box.Ioo I) :=
   MeasurableSet.univ_pi fun _ => _root_.measurableSet_Ioo
@@ -150,79 +153,116 @@ end Countable
 
 variable [Fintype ι]
 
-/--
-theorem `coe_ae_eq_Icc` / 定理 `coe_ae_eq_Icc`
-
-English:
-theorem coe_ae_eq_Icc
-  statement: (I : Set (ι -> Real)) =ᵐ[volume] Box.Icc I
-  proof: by
-  rw [coe_eq_pi]
-  exact Measure.univ_pi_Ioc_ae_eq_Icc
-
-中文:
-定理 coe_ae_eq_Icc
-  结论: (I : 集合 (ι -> 实数)) =ᵐ[volume] Box.闭区间 I
-  证明: by
-  rw [coe_eq_pi]
-  exact Measure.univ_pi_Ioc_ae_eq_Icc
-
-Depends on / 依赖: Measure, Measure.univ_pi_Ioc_ae_eq_Icc, coe_eq_pi, univ_pi_Ioc_ae_eq_Icc
+/-
+**BoxIntegral.Box.coe_ae_eq_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：coe_ae_eq_Icc : (I : Set (ι -> Real)) =ᵐ[volume] Box.Icc I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.coe_eq_pi`：coe_eq_pi : (I : Set (ι -> Real)) = pi univ f
+un i => Ioc (I.lower i) (I.upper i)
+· 使用定理 `MeasureTheory.Measure.univ_pi_Ioc_ae_eq_Icc`：univ_pi_Ioc_ae_eq_Icc {f g 
+: forall i, α i} : (pi univ fun i => Ioc (f i) (g i)) =ᵐ[Measure.pi μ] Icc f g
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.sigmaFinite`：∀ {G : Type u_1} [in
+st : MeasurableSpace G] [inst_1 : AddGroup G] [inst_2 : TopologicalSpace G]   (μ
+ : MeasureTheory.Measure G) [μ.IsAddHaar…
+· 使用定理 `instIsAddHaarMeasureVolume`：∀ {E : Type u_3} [inst : NormedAddCommGroup 
+E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : FiniteDimensional ℝ E]   [inst_3 :
+ MeasurableSpace…
+· 使用定理 `SeparableWeaklyLocallyCompactAddGroup.sigmaCompactSpace`：∀ {G : Type w} 
+[inst : TopologicalSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G]   [T
+opologicalSpace.SeparableSpace G] [WeaklyLoca…
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `instWeaklyLocallyCompactSpaceOfLocallyCompactSpace`：∀ {X : Type u_1} [in
+st : TopologicalSpace X] [LocallyCompactSpace X], WeaklyLocallyCompactSpace X
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
 -/
-theorem coe_ae_eq_Icc : (I : Set (ι -> Real)) =ᵐ[volume] Box.Icc I := by
+theorem coe_ae_eq_Icc : (I : Set (ι → ℝ)) =ᵐ[volume] Box.Icc I := by
   rw [coe_eq_pi]
   exact Measure.univ_pi_Ioc_ae_eq_Icc
-
-/--
-theorem `Ioo_ae_eq_Icc` / 定理 `Ioo_ae_eq_Icc`
-
-English:
-theorem Ioo_ae_eq_Icc
-  statement: Box.Ioo I =ᵐ[volume] Box.Icc I
-  proof: Measure.univ_pi_Ioo_ae_eq_Icc
-
-中文:
-定理 Ioo_ae_eq_Icc
-  结论: Box.开区间 I =ᵐ[volume] Box.闭区间 I
-  证明: Measure.univ_pi_Ioo_ae_eq_Icc
-
-Depends on / 依赖: Measure, Measure.univ_pi_Ioo_ae_eq_Icc, univ_pi_Ioo_ae_eq_Icc
+/-
+**BoxIntegral.Box.Ioo_ae_eq_Icc** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：Ioo_ae_eq_Icc : Box.Ioo I =ᵐ[volume] Box.Icc I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.univ_pi_Ioo_ae_eq_Icc`：univ_pi_Ioo_ae_eq_Icc {f g 
+: forall i, α i} : (pi univ fun i => Ioo (f i) (g i)) =ᵐ[Measure.pi μ] Icc f g
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.sigmaFinite`：∀ {G : Type u_1} [in
+st : MeasurableSpace G] [inst_1 : AddGroup G] [inst_2 : TopologicalSpace G]   (μ
+ : MeasureTheory.Measure G) [μ.IsAddHaar…
+· 使用定理 `instIsAddHaarMeasureVolume`：∀ {E : Type u_3} [inst : NormedAddCommGroup 
+E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : FiniteDimensional ℝ E]   [inst_3 :
+ MeasurableSpace…
+· 使用定理 `SeparableWeaklyLocallyCompactAddGroup.sigmaCompactSpace`：∀ {G : Type w} 
+[inst : TopologicalSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G]   [T
+opologicalSpace.SeparableSpace G] [WeaklyLoca…
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `instWeaklyLocallyCompactSpaceOfLocallyCompactSpace`：∀ {X : Type u_1} [in
+st : TopologicalSpace X] [LocallyCompactSpace X], WeaklyLocallyCompactSpace X
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
 -/
 theorem Ioo_ae_eq_Icc : Box.Ioo I =ᵐ[volume] Box.Icc I :=
   Measure.univ_pi_Ioo_ae_eq_Icc
 
 end Box
 
-/--
-theorem `Prepartition.measure_iUnion_toReal` / 定理 `Prepartition.measure_iUnion_toReal`
-
-English:
-theorem Prepartition.measure_iUnion_toReal
-  statement: [Finite ι] {I : Box ι} (π : Prepartition I)
-  proof: by
-  simp only [measureReal_def]
-  rw [← ENNReal.toReal_sum (fun J _ => (J.measure_coe_lt_top μ).ne)]; rw [π.iUnion_def]
-  simp only [← mem_boxes]
-  rw [measure_biUnion_finset π.pairwiseDisjoint]
-  exact fun J _ => J.measurableSet_coe
-
-中文:
-定理 预分拆.measure_iUnion_to实数
-  结论: [有限 ι] {I : Box ι} (π : 预分拆 I)
-  证明: by
-  simp only [measureReal_def]
-  rw [← ENNReal.toReal_sum (fun J _ => (J.measure_coe_lt_top μ).ne)]; rw [π.iUnion_def]
-  simp only [← mem_boxes]
-  rw [measure_biUnion_finset π.pairwiseDisjoint]
-  exact fun J _ => J.measurableSet_coe
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_sum, J.measurableSet_coe, J.measure_coe_lt_top, iUnion_def, measurableSet_coe, measureReal_def, measure_biUnion_finset, measure_coe_lt_top, mem_boxes, pairwiseDisjoint, toReal_sum
+/-
+**BoxIntegral.Prepartition.measure_iUnion_toReal** 是 Mathlib 中的一个定理，位于命名空间 `BoxI
+ntegral.Prepartition`。
+形式化陈述：∀ {ι : Type u_1} [Finite ι] {I : BoxIntegral.Box ι} (π : BoxIntegral.Prepa
+rtition I) (μ : MeasureTheory.Measure (ι → ℝ))   [MeasureTheory.IsLocallyFiniteM
+easure μ], μ.real π.iUnion = ∑ J ∈ π.boxes, μ.real ↑J
+参数：π : BoxIntegral.Prepartition I；μ : MeasureTheory.Measure (ι → ℝ)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.toReal_sum`：toReal_sum {s : Finset α} {f : α -> Real>=0∞} (hf : 
+forall a in s, f a != ∞) : ENNReal.toReal (∑ a in s, f a) = ∑ a in s, ENNReal.to
+Real (f …
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `BoxIntegral.Box.measure_coe_lt_top`：measure_coe_lt_top (μ : Measure (ι -
+> Real)) [IsLocallyFiniteMeasure μ] : μ I < ∞
+· 使用定理 `BoxIntegral.Prepartition.iUnion_def`：iUnion_def : π.iUnion = ⋃ J in π, ↑
+J
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `MeasureTheory.measure_biUnion_finset`：measure_biUnion_finset {s : Finset
+ ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f) (hm : forall b in s, Measura
+bleSet (f b)) : μ (⋃ b in …
+· 使用定理 `BoxIntegral.Prepartition.pairwiseDisjoint`：∀ {ι : Type u_1} {I : BoxInte
+gral.Box ι} (self : BoxIntegral.Prepartition I),   (↑self.boxes).Pairwise (Funct
+ion.onFun Disjoint BoxIntegral.…
+· 使用定理 `BoxIntegral.Box.measurableSet_coe`：measurableSet_coe : MeasurableSet (I 
+: Set (ι -> Real))
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
 -/
 theorem Prepartition.measure_iUnion_toReal [Finite ι] {I : Box ι} (π : Prepartition I)
-    (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ] :
-    μ.real π.iUnion = ∑ J in π.boxes, μ.real J := by
+    (μ : Measure (ι → ℝ)) [IsLocallyFiniteMeasure μ] :
+    μ.real π.iUnion = ∑ J ∈ π.boxes, μ.real J := by
   simp only [measureReal_def]
-  rw [← ENNReal.toReal_sum (fun J _ => (J.measure_coe_lt_top μ).ne)]; rw [π.iUnion_def]
+  rw [← ENNReal.toReal_sum (fun J _ => (J.measure_coe_lt_top μ).ne), π.iUnion_def]
   simp only [← mem_boxes]
   rw [measure_biUnion_finset π.pairwiseDisjoint]
   exact fun J _ => J.measurableSet_coe
@@ -238,22 +278,21 @@ namespace Measure
 /-- If `μ` is a locally finite measure on `ℝⁿ`, then `fun J ↦ μ.real J` is a box-additive
 function. -/
 @[simps]
-/--
-Definition of `toBoxAdditive` / `toBoxAdditive` 的定义
+/-
+**MeasureTheory.Measure.toBoxAdditive** 是 Mathlib 中的一个定义，位于命名空间 `MeasureTheory.M
+easure`。
+形式化陈述：toBoxAdditive [Finite ι] (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure
+ μ] : ι ->ᵇᵃ[⊤] Real where toFun J
+参数：μ : Measure (ι -> Real)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toBoxAdditive
-  signature: [Finite ι] (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ]
-  body: μ.real J
-  sum_partition_boxes' J _ π hπ := by rw [← π.measure_iUnion_toReal, hπ.iUnion_eq]
-
-中文:
-定义 toBoxAdditive
-  签名: [有限 ι] (μ : 测度 (ι -> 实数)) [是局部有限测度 μ]
-  定义体: μ.real J
-  sum_partition_boxes' J _ π hπ := by rw [← π.measure_iUnion_toReal, hπ.iUnion_eq]
+--- 原说明 ---
+If `μ` is a locally finite measure on `ℝⁿ`, then `fun J ↦ μ.real J` is a box-add
+itive
+function.
 -/
-def toBoxAdditive [Finite ι] (μ : Measure (ι -> Real)) [IsLocallyFiniteMeasure μ] : ι ->ᵇᵃ[⊤] Real where
+def toBoxAdditive [Finite ι] (μ : Measure (ι → ℝ)) [IsLocallyFiniteMeasure μ] : ι →ᵇᵃ[⊤] ℝ where
   toFun J := μ.real J
   sum_partition_boxes' J _ π hπ := by rw [← π.measure_iUnion_toReal, hπ.iUnion_eq]
 
@@ -271,69 +310,99 @@ variable [Fintype ι]
 
 -- This is not a `simp` lemma because the left-hand side simplifies already.
 -- See `volume_apply'` for the relevant `simp` lemma.
-/--
-theorem `volume_apply` / 定理 `volume_apply`
-
-English:
-theorem volume_apply
-  given: (I : Box ι)
-  proof: by
-  rw [Measure.toBoxAdditive_apply]; rw [coe_eq_pi]; rw [measureReal_def]; rw [Real.volume_pi_Ioc_toReal I.lower_le_upper]
-
-@[simp]
-
-中文:
-定理 volume_apply
-  条件: (I : Box ι)
-  证明: by
-  rw [Measure.toBoxAdditive_apply]; rw [coe_eq_pi]; rw [measureReal_def]; rw [Real.volume_pi_Ioc_toReal I.lower_le_upper]
-
-@[simp]
-
-Depends on / 依赖: I.lower_le_upper, Measure, Measure.toBoxAdditive_apply, Real.volume_pi_Ioc_toReal, coe_eq_pi, lower_le_upper, measureReal_def, toBoxAdditive_apply, volume_pi_Ioc_toReal
+/-
+**BoxIntegral.Box.volume_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：volume_apply (I : Box ι) : (volume : Measure (ι -> Real)).toBoxAdditive I 
+= ∏ i, (I.upper i - I.lower i)
+参数：I : Box ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `MeasureTheory.Measure.instIsLocallyFiniteMeasureForallVolumeOfSigmaFinit
+e`：∀ {ι : Type u_1} [inst : Fintype ι] {X : ι → Type u_4} [inst_1 : (i : ι) → To
+pologicalSpace (X i)]   [inst_2 : (i : ι) → MeasureTheory.Measu…
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.sigmaFinite`：∀ {G : Type u_1} [in
+st : MeasurableSpace G] [inst_1 : AddGroup G] [inst_2 : TopologicalSpace G]   (μ
+ : MeasureTheory.Measure G) [μ.IsAddHaar…
+· 使用定理 `instIsAddHaarMeasureVolume`：∀ {E : Type u_3} [inst : NormedAddCommGroup 
+E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : FiniteDimensional ℝ E]   [inst_3 :
+ MeasurableSpace…
+· 使用定理 `SeparableWeaklyLocallyCompactAddGroup.sigmaCompactSpace`：∀ {G : Type w} 
+[inst : TopologicalSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G]   [T
+opologicalSpace.SeparableSpace G] [WeaklyLoca…
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `instWeaklyLocallyCompactSpaceOfLocallyCompactSpace`：∀ {X : Type u_1} [in
+st : TopologicalSpace X] [LocallyCompactSpace X], WeaklyLocallyCompactSpace X
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.toBoxAdditive_apply`：∀ {ι : Type u_1} [inst : Fini
+te ι] (μ : MeasureTheory.Measure (ι → ℝ)) [inst_1 : MeasureTheory.IsLocallyFinit
+eMeasure μ]   (J : BoxIntegral.…
+· 使用定理 `BoxIntegral.Box.coe_eq_pi`：coe_eq_pi : (I : Set (ι -> Real)) = pi univ f
+un i => Ioc (I.lower i) (I.upper i)
+· 使用定理 `MeasureTheory.measureReal_def`：measureReal_def {α : Type*} {m : Measurab
+leSpace α} (μ : Measure α) (s : Set α) : μ.real s = (μ s).toReal
+· 使用定理 `Real.volume_pi_Ioc_toReal`：volume_pi_Ioc_toReal {a b : ι -> Real} (h : a
+ <= b) : (volume (pi univ fun i => Ioc (a i) (b i))).toReal = ∏ i, (b i - a i)
+· 使用定理 `BoxIntegral.Box.lower_le_upper`：lower_le_upper : I.lower <= I.upper
 -/
 theorem volume_apply (I : Box ι) :
-    (volume : Measure (ι -> Real)).toBoxAdditive I = ∏ i, (I.upper i - I.lower i) := by
-  rw [Measure.toBoxAdditive_apply]; rw [coe_eq_pi]; rw [measureReal_def]; rw [Real.volume_pi_Ioc_toReal I.lower_le_upper]
+    (volume : Measure (ι → ℝ)).toBoxAdditive I = ∏ i, (I.upper i - I.lower i) := by
+  rw [Measure.toBoxAdditive_apply, coe_eq_pi, measureReal_def,
+    Real.volume_pi_Ioc_toReal I.lower_le_upper]
 
 @[simp]
-/--
-theorem `volume_apply'` / 定理 `volume_apply'`
-
-English:
-theorem volume_apply'
-  given: (I : Box ι)
-  proof: by
-  rw [coe_eq_pi]; rw [Real.volume_pi_Ioc_toReal I.lower_le_upper]
-
-中文:
-定理 volume_apply'
-  条件: (I : Box ι)
-  证明: by
-  rw [coe_eq_pi]; rw [Real.volume_pi_Ioc_toReal I.lower_le_upper]
-
-Depends on / 依赖: I.lower_le_upper, Real.volume_pi_Ioc_toReal, coe_eq_pi, lower_le_upper, volume_pi_Ioc_toReal
+/-
+**BoxIntegral.Box.volume_apply'** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：volume_apply' (I : Box ι) : ((volume : Measure (ι -> Real)) I).toReal = ∏ 
+i, (I.upper i - I.lower i)
+参数：I : Box ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.Box.coe_eq_pi`：coe_eq_pi : (I : Set (ι -> Real)) = pi univ f
+un i => Ioc (I.lower i) (I.upper i)
+· 使用定理 `Real.volume_pi_Ioc_toReal`：volume_pi_Ioc_toReal {a b : ι -> Real} (h : a
+ <= b) : (volume (pi univ fun i => Ioc (a i) (b i))).toReal = ∏ i, (b i - a i)
+· 使用定理 `BoxIntegral.Box.lower_le_upper`：lower_le_upper : I.lower <= I.upper
 -/
 theorem volume_apply' (I : Box ι) :
-    ((volume : Measure (ι -> Real)) I).toReal = ∏ i, (I.upper i - I.lower i) := by
-  rw [coe_eq_pi]; rw [Real.volume_pi_Ioc_toReal I.lower_le_upper]
-
-/--
-theorem `volume_face_mul` / 定理 `volume_face_mul`
-
-English:
-theorem volume_face_mul
-  given: {n} (i : Fin (n + 1)) (I : Box (Fin (n + 1)))
-  proof: by
-  simp only [face_lower, face_upper, Fin.prod_univ_succAbove _ i, mul_comm]
-
-中文:
-定理 volume_face_mul
-  条件: {n} (i : 有限集 (n + 1)) (I : Box (有限集 (n + 1)))
-  证明: by
-  simp only [face_lower, face_upper, Fin.prod_univ_succAbove _ i, mul_comm]
-
-Depends on / 依赖: Fin.prod_univ_succAbove, face_lower, face_upper, mul_comm, prod_univ_succAbove
+    ((volume : Measure (ι → ℝ)) I).toReal = ∏ i, (I.upper i - I.lower i) := by
+  rw [coe_eq_pi, Real.volume_pi_Ioc_toReal I.lower_le_upper]
+/-
+**BoxIntegral.Box.volume_face_mul** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral.Box`。
+形式化陈述：volume_face_mul {n} (i : Fin (n + 1)) (I : Box (Fin (n + 1))) : (∏ j, ((I.
+face i).upper j - (I.face i).lower j)) * (I.upper i - I.lower i) = ∏ j, (I.upper
+ j - I.lower j)
+参数：i : Fin (n + 1)；I : Box (Fin (n + 1))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `BoxIntegral.Box.face_upper`：∀ {n : ℕ} (I : BoxIntegral.Box (Fin (n + 1))
+) (i : Fin (n + 1)) (a : Fin n),   (I.face i).upper a = I.upper (i.succAbove a)
+· 使用定理 `BoxIntegral.Box.face_lower`：∀ {n : ℕ} (I : BoxIntegral.Box (Fin (n + 1))
+) (i : Fin (n + 1)) (a : Fin n),   (I.face i).lower a = I.lower (i.succAbove a)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Fin.prod_univ_succAbove`：prod_univ_succAbove (f : Fin (n + 1) -> M) (x :
+ Fin (n + 1)) : ∏ i, f i = f x * ∏ i : Fin n, f (x.succAbove i)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem volume_face_mul {n} (i : Fin (n + 1)) (I : Box (Fin (n + 1))) :
     (∏ j, ((I.face i).upper j - (I.face i).lower j)) * (I.upper i - I.lower i) =
@@ -346,46 +415,56 @@ namespace BoxAdditiveMap
 
 variable [Fintype ι]
 
-/--
-Definition of `volume` / `volume` 的定义
+/-- Box-additive map sending each box `I` to the continuous linear endomorphism
+`x ↦ (volume I).toReal • x`. -/
+/-
+**BoxIntegral.BoxAdditiveMap.volume** 是 Mathlib 中的一个定义，位于命名空间 `BoxIntegral.BoxAd
+ditiveMap`。
+形式化陈述：{ι : Type u_1} →   [Fintype ι] →     {E : Type u_2} →       [inst : Normed
+AddCommGroup E] → [inst_1 : NormedSpace ℝ E] → BoxIntegral.BoxAdditiveMap ι (E →
+L[ℝ] E) ⊤
+参数：E →L[ℝ] E。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-definition volume
-  signature: {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
-  body: (volume : Measure (ι -> Real)).toBoxAdditive.toSMul
-
-中文:
-定义 volume
-  签名: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
-  定义体: (volume : Measure (ι -> Real)).toBoxAdditive.toSMul
+--- 原说明 ---
+Box-additive map sending each box `I` to the continuous linear endomorphism
+`x ↦ (volume I).toReal • x`.
 -/
-protected def volume {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] : ι ->ᵇᵃ E ->L[Real] E :=
-  (volume : Measure (ι -> Real)).toBoxAdditive.toSMul
-
-/--
-theorem `volume_apply` / 定理 `volume_apply`
-
-English:
-theorem volume_apply
-  given: {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] (I : Box ι) (x : E)
-  proof: by
-  rw [BoxAdditiveMap.volume]; rw [toSMul_apply]
-  exact congr_arg₂ (· • ·) I.volume_apply rfl
-
-中文:
-定理 volume_apply
-  条件: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E] (I : Box ι) (x : E)
-  证明: by
-  rw [BoxAdditiveMap.volume]; rw [toSMul_apply]
-  exact congr_arg₂ (· • ·) I.volume_apply rfl
-
-Depends on / 依赖: BoxAdditiveMap, BoxAdditiveMap.volume, I.volume_apply, toSMul_apply, volume, volume_apply
+protected def volume {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] : ι →ᵇᵃ E →L[ℝ] E :=
+  (volume : Measure (ι → ℝ)).toBoxAdditive.toSMul
+/-
+**BoxIntegral.BoxAdditiveMap.volume_apply** 是 Mathlib 中的一个定理，位于命名空间 `BoxIntegral
+.BoxAdditiveMap`。
+形式化陈述：volume_apply {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] (I : 
+Box ι) (x : E) : BoxAdditiveMap.volume I x = (∏ j, (I.upper j - I.lower j)) • x
+参数：I : Box ι；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `BoxIntegral.BoxAdditiveMap.volume.eq_1`：∀ {ι : Type u_1} [inst : Fintype
+ ι] {E : Type u_2} [inst_1 : NormedAddCommGroup E] [inst_2 : NormedSpace ℝ E],  
+ BoxIntegral.BoxAdditiveMap.…
+· 使用定理 `BoxIntegral.BoxAdditiveMap.toSMul_apply`：toSMul_apply (f : ι ->ᵇᵃ[I₀] Re
+al) (I : Box ι) (x : E) : f.toSMul I x = f I • x
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `BoxIntegral.Box.volume_apply`：volume_apply (I : Box ι) : (volume : Measu
+re (ι -> Real)).toBoxAdditive I = ∏ i, (I.upper i - I.lower i)
 -/
-theorem volume_apply {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] (I : Box ι) (x : E) :
+theorem volume_apply {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] (I : Box ι) (x : E) :
     BoxAdditiveMap.volume I x = (∏ j, (I.upper j - I.lower j)) • x := by
-  rw [BoxAdditiveMap.volume]; rw [toSMul_apply]
+  rw [BoxAdditiveMap.volume, toSMul_apply]
   exact congr_arg₂ (· • ·) I.volume_apply rfl
 
 end BoxAdditiveMap
 
 end BoxIntegral
+

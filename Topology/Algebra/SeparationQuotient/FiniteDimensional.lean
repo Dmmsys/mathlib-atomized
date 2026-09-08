@@ -16,18 +16,21 @@ In this file we show that the separation quotient of a finite module is a finite
 
 public section
 
-/--
-Instance `SeparationQuotient.instModuleFinite` / 实例 `SeparationQuotient.instModuleFinite`
+/-- The separation quotient of a finite module is a finite module. -/
+/-
+**SeparationQuotient.instModuleFinite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：SeparationQuotient.instModuleFinite {R M : Type*} [Semiring R] [AddCommMon
+oid M] [Module R M] [Module.Finite R M] [TopologicalSpace M] [ContinuousAdd M] [
+ContinuousConstSMul R M] : Module.Finite R (SeparationQuotient M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.of_surjective`：of_surjective [hM : Module.Finite R M] (f :
+ M ->ₛₗ[σ] P) (hf : Surjective f) : Module.Finite S P
+· 使用定理 `Quotient.mk_surjective`：Quotient.mk_surjective {s : Setoid α} : Function
+.Surjective (Quotient.mk s)
 
-English:
-instance SeparationQuotient.instModuleFinite
-  body: Module.Finite.of_surjective (mkCLM R M).toLinearMap Quotient.mk_surjective
-
-中文:
-实例 SeparationQuotient.instModuleFinite
-  定义体: Module.Finite.of_surjective (mkCLM R M).toLinearMap Quotient.mk_surjective
-
-Depends on / 依赖: Finite, Module, Module.Finite.of_surjective, Quotient, Quotient.mk_surjective, mk_surjective, of_surjective, toLinearMap
+--- 原说明 ---
+The separation quotient of a finite module is a finite module.
 -/
 instance SeparationQuotient.instModuleFinite
     {R M : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [Module.Finite R M]

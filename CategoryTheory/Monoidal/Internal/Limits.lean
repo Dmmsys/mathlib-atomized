@@ -44,46 +44,18 @@ We construct the limit object of a functor `F : J ⥤ Mon C` given a limit cone 
 `F ⋙ forget C`.
 -/
 @[simps!]
-/--
-Definition of `limit` / `limit` 的定义
+/-
+**CategoryTheory.Mon.limit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mon`。
+形式化陈述：limit (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) : Mon
+ C where X
+参数：F : J ⥤ Mon C；c : Cone (F ⋙ Mon.forget C)；hc : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limit
-  signature: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
-  body: c.pt
-  mon.one := hc.lift
-    { pt := _
-      π.app X := η[(F.obj X).X] }
-  mon.mul := hc.lift
-    { pt := _
-      π.app X := (c.π.app X otimesₘ c.π.app X) ≫ μ[(F.obj X).X]
-      π.naturality i j f := by have := c.π.naturality f; simp_all }
-mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensorHom_assoc]
-mon.mul_one := hc.hom_ext by simp [whiskerLeft_comp_tensorHom_assoc]
-  mon.mul_assoc := by
-    apply hc.hom_ext
-    simp only [Functor.comp_obj, forget_obj, Functor.const_obj_obj, IsLimit.fac,
-      mon_tauto, implies_true]
-
-中文:
-定义 limit
-  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
-  定义体: c.pt
-  mon.one := hc.lift
-    { pt := _
-      π.app X := η[(F.obj X).X] }
-  mon.mul := hc.lift
-    { pt := _
-      π.app X := (c.π.app X otimesₘ c.π.app X) ≫ μ[(F.obj X).X]
-      π.naturality i j f := by have := c.π.naturality f; simp_all }
-mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensorHom_assoc]
-mon.mul_one := hc.hom_ext by simp [whiskerLeft_comp_tensorHom_assoc]
-  mon.mul_assoc := by
-    apply hc.hom_ext
-    simp only [Functor.comp_obj, forget_obj, Functor.const_obj_obj, IsLimit.fac,
-      mon_tauto, implies_true]
-
-Depends on / 依赖: c.pt
+--- 原说明 ---
+We construct the limit object of a functor `F : J ⥤ Mon C` given a limit cone `c
+` of
+`F ⋙ forget C`.
 -/
 def limit (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) :
     Mon C where
@@ -93,10 +65,10 @@ def limit (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) :
       π.app X := η[(F.obj X).X] }
   mon.mul := hc.lift
     { pt := _
-      π.app X := (c.π.app X otimesₘ c.π.app X) ≫ μ[(F.obj X).X]
+      π.app X := (c.π.app X ⊗ₘ c.π.app X) ≫ μ[(F.obj X).X]
       π.naturality i j f := by have := c.π.naturality f; simp_all }
-mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensorHom_assoc]
-mon.mul_one := hc.hom_ext by simp [whiskerLeft_comp_tensorHom_assoc]
+  mon.one_mul := hc.hom_ext <| by simp [whiskerRight_comp_tensorHom_assoc]
+  mon.mul_one := hc.hom_ext <| by simp [whiskerLeft_comp_tensorHom_assoc]
   mon.mul_assoc := by
     apply hc.hom_ext
     simp only [Functor.comp_obj, forget_obj, Functor.const_obj_obj, IsLimit.fac,
@@ -106,22 +78,17 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Implementation of `Mon.hasLimits`: a limiting cone over a functor `F : J ⥤ Mon C`.
 -/
 @[simps]
-/--
-Definition of `limitCone` / `limitCone` 的定义
+/-
+**CategoryTheory.Mon.limitCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Mon`。
+形式化陈述：limitCone (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) :
+ Cone F where pt
+参数：F : J ⥤ Mon C；c : Cone (F ⋙ Mon.forget C)；hc : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitCone
-  signature: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
-  body: limit F c hc
-  π.app j := .mk' (c.π.app j)
-  π.naturality j j' f := Hom.ext' (c.π.naturality f)
-
-中文:
-定义 limitCone
-  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
-  定义体: limit F c hc
-  π.app j := .mk' (c.π.app j)
-  π.naturality j j' f := Hom.ext' (c.π.naturality f)
+--- 原说明 ---
+Implementation of `Mon.hasLimits`: a limiting cone over a functor `F : J ⥤ Mon C
+`.
 -/
 def limitCone (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) : Cone F where
   pt := limit F c hc
@@ -134,20 +101,19 @@ set_option backward.defeqAttrib.useBackward true in
 `forget C : Mon C ⥤ C` is isomorphic to the limit cone of `F ⋙ forget C`.
 -/
 @[simps!]
-/--
-Definition of `forgetMapConeLimitConeIso` / `forgetMapConeLimitConeIso` 的定义
+/-
+**CategoryTheory.Mon.forgetMapConeLimitConeIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Mon`。
+形式化陈述：forgetMapConeLimitConeIso (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (h
+c : IsLimit c) : (forget C).mapCone (limitCone F c hc) ≅ c
+参数：F : J ⥤ Mon C；c : Cone (F ⋙ Mon.forget C)；hc : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetMapConeLimitConeIso
-  signature: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
-  body: Cone.ext (Iso.refl _) (by simp)
-
-中文:
-定义 forgetMapConeLimitConeIso
-  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
-  定义体: Cone.ext (Iso.refl _) (by simp)
-
-Depends on / 依赖: Cone.ext, Iso.refl
+--- 原说明 ---
+The image of the proposed limit cone for `F : J ⥤ Mon C` under the forgetful fun
+ctor
+`forget C : Mon C ⥤ C` is isomorphic to the limit cone of `F ⋙ forget C`.
 -/
 def forgetMapConeLimitConeIso (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) :
     (forget C).mapCone (limitCone F c hc) ≅ c :=
@@ -159,143 +125,81 @@ set_option backward.isDefEq.respectTransparency false in
 the proposed cone over a functor `F : J ⥤ Mon C` is a limit cone.
 -/
 @[simps]
-/--
-Definition of `limitConeIsLimit` / `limitConeIsLimit` 的定义
+/-
+**CategoryTheory.Mon.limitConeIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Mon`。
+形式化陈述：limitConeIsLimit (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLim
+it c) : IsLimit (limitCone F c hc) where lift s
+参数：F : J ⥤ Mon C；c : Cone (F ⋙ Mon.forget C)；hc : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeIsLimit
-  signature: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
-  body: { hom := hc.lift ((Mon.forget C).mapCone s)
-isMonHom_hom.mul_hom := hc.hom_ext by simp
-isMonHom_hom.one_hom := hc.hom_ext by simp }
-  fac s h := by ext; simp
-uniq s m w := Hom.ext' hc.hom_ext fun j => by simpa using congr($(w j).hom)
-
-中文:
-定义 limitConeIsLimit
-  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
-  定义体: { hom := hc.lift ((Mon.forget C).mapCone s)
-isMonHom_hom.mul_hom := hc.hom_ext by simp
-isMonHom_hom.one_hom := hc.hom_ext by simp }
-  fac s h := by ext; simp
-uniq s m w := Hom.ext' hc.hom_ext fun j => by simpa using congr($(w j).hom)
-
-Depends on / 依赖: Hom.ext, Mon.forget, forget, hc.hom_ext, hc.lift, hom_ext, isMonHom_hom, isMonHom_hom.mul_hom, isMonHom_hom.one_hom, mapCone, mul_hom, one_hom
+--- 原说明 ---
+Implementation of `Mon.hasLimitsOfShape`:
+the proposed cone over a functor `F : J ⥤ Mon C` is a limit cone.
 -/
 def limitConeIsLimit (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) :
     IsLimit (limitCone F c hc) where
   lift s :=
     { hom := hc.lift ((Mon.forget C).mapCone s)
-isMonHom_hom.mul_hom := hc.hom_ext by simp
-isMonHom_hom.one_hom := hc.hom_ext by simp }
+      isMonHom_hom.mul_hom := hc.hom_ext <| by simp
+      isMonHom_hom.one_hom := hc.hom_ext <| by simp }
   fac s h := by ext; simp
-uniq s m w := Hom.ext' hc.hom_ext fun j => by simpa using congr($(w j).hom)
+  uniq s m w := Hom.ext' <| hc.hom_ext fun j ↦ by simpa using congr($(w j).hom)
 
 /--
-Definition of `limitConeLiftsToLimit` / `limitConeLiftsToLimit` 的定义
+A helper definition to show that the forgetful functor `forget C : Mon C ⥤ C` creates limits:
+given a limit cone `c` of `F ⋙ forget C`, we can lift it to a limit cone of `F`.
+-/
+/-
+**CategoryTheory.Mon.limitConeLiftsToLimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Mon`。
+形式化陈述：limitConeLiftsToLimit (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : 
+IsLimit c) : LiftsToLimit F (forget C) c hc where liftedCone
+参数：F : J ⥤ Mon C；c : Cone (F ⋙ Mon.forget C)；hc : IsLimit c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeLiftsToLimit
-  signature: (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c)
-  body: limitCone F c hc
-  validLift := forgetMapConeLimitConeIso _ _ _
-  makesLimit := limitConeIsLimit _ _ _
-
-中文:
-定义 limitConeLiftsToLimit
-  签名: (F : J ⥤ 幺半群 C) (c : 锥 (F ⋙ 幺半群.forget C)) (hc : 是极限 c)
-  定义体: limitCone F c hc
-  validLift := forgetMapConeLimitConeIso _ _ _
-  makesLimit := limitConeIsLimit _ _ _
-
-Depends on / 依赖: limitCone
+--- 原说明 ---
+A helper definition to show that the forgetful functor `forget C : Mon C ⥤ C` cr
+eates limits:
+given a limit cone `c` of `F ⋙ forget C`, we can lift it to a limit cone of `F`.
 -/
 def limitConeLiftsToLimit (F : J ⥤ Mon C) (c : Cone (F ⋙ Mon.forget C)) (hc : IsLimit c) :
     LiftsToLimit F (forget C) c hc where
   liftedCone := limitCone F c hc
   validLift := forgetMapConeLimitConeIso _ _ _
   makesLimit := limitConeIsLimit _ _ _
-
+/-
+**CategoryTheory.Mon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : J ⥤ Mon C) : CreatesLimit F (forget C) :=
   createsLimitOfReflectsIso (limitConeLiftsToLimit _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimitsOfShape J (forget C)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 :
-  签名: 创造形状极限 J (forget C)
-  定义体: ⟨inferInstance⟩
+/-
+**CategoryTheory.Mon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CreatesLimitsOfShape J (forget C) := ⟨inferInstance⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimitsOfSize.{w} (forget C)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 :
-  签名: CreatesLimitsOfSize.{w} (forget C)
-  定义体: ⟨inferInstance⟩
+/-
+**CategoryTheory.Mon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CreatesLimitsOfSize.{w} (forget C) := ⟨inferInstance⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimits (forget C)
-  body: ⟨inferInstance⟩
-
-中文:
-实例 :
-  签名: CreatesLimits (forget C)
-  定义体: ⟨inferInstance⟩
-
-Depends on / 依赖: isConservative_pointsBot
+/-
+**CategoryTheory.Mon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CreatesLimits (forget C) := ⟨inferInstance⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimitsOfShape
-  signature: J C] : HasLimitsOfShape J (Mon C)
-  body: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (forget C)
-
-中文:
-实例 [有形状极限
-  签名: J C] : 有形状极限 J (幺半群 C)
-  定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (forget C)
-
-Depends on / 依赖: forget, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
+/-
+**CategoryTheory.Mon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasLimitsOfShape J C] : HasLimitsOfShape J (Mon C) :=
   hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (forget C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimitsOfShape
-  signature: J C] :
-  body: CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape _
-
-中文:
-实例 [有形状极限
-  签名: J C] :
-  定义体: CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape _
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape, preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape
+/-
+**CategoryTheory.Mon.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasLimitsOfShape J C] :
     PreservesLimitsOfShape J (Mon.forget C) :=
@@ -303,3 +207,4 @@ instance [HasLimitsOfShape J C] :
 
 end Mon
 end CategoryTheory
+

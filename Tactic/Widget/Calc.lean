@@ -31,58 +31,14 @@ open Lean Server RequestM
 
 /-- Code action to create a `calc` tactic from the current goal. -/
 @[tactic_code_action calcTactic]
-/--
-Definition of `createCalc` / `createCalc` 的定义
+/-
+**createCalc** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：createCalc : TacticCodeAction
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition createCalc
-  signature: : TacticCodeAction
-  body: fun _params _snap ctx _stack node => do
-  let .node (.ofTacticInfo info) _ := node | return #[]
-  if info.goalsBefore.isEmpty then return #[]
-  let eager := {
-    title := s!"Generate a calc block."
-    kind? := "quickfix"
-  }
-  let doc ← readDoc
-  return #[{
-    eager
-    lazy? := some do
-      let tacPos := doc.meta.text.utf8PosToLspPos info.stx.getPos?.get!
-      let endPos := doc.meta.text.utf8PosToLspPos info.stx.getTailPos?.get!
-      let goal := info.goalsBefore[0]!
-let goalFmt ← ctx.runMetaM {} goal.withContext do Meta.ppExpr (← goal.getType)
-      return { eager with
-edit? := some .ofTextEdit doc.versionedIdentifier
-          { range := ⟨tacPos, endPos⟩, newText := s!"calc {goalFmt} := by sorry" }
-      }
-  }]
-
-中文:
-定义 createCalc
-  签名: : TacticCodeAction
-  定义体: fun _params _snap ctx _stack node => do
-  let .node (.ofTacticInfo info) _ := node | return #[]
-  if info.goalsBefore.isEmpty then return #[]
-  let eager := {
-    title := s!"Generate a calc block."
-    kind? := "quickfix"
-  }
-  let doc ← readDoc
-  return #[{
-    eager
-    lazy? := some do
-      let tacPos := doc.meta.text.utf8PosToLspPos info.stx.getPos?.get!
-      let endPos := doc.meta.text.utf8PosToLspPos info.stx.getTailPos?.get!
-      let goal := info.goalsBefore[0]!
-let goalFmt ← ctx.runMetaM {} goal.withContext do Meta.ppExpr (← goal.getType)
-      return { eager with
-edit? := some .ofTextEdit doc.versionedIdentifier
-          { range := ⟨tacPos, endPos⟩, newText := s!"calc {goalFmt} := by sorry" }
-      }
-  }]
-
-Depends on / 依赖: _params, _snap, _stack
+--- 原说明 ---
+Code action to create a `calc` tactic from the current goal.
 -/
 def createCalc : TacticCodeAction := fun _params _snap ctx _stack node => do
   let .node (.ofTacticInfo info) _ := node | return #[]
@@ -98,9 +54,9 @@ def createCalc : TacticCodeAction := fun _params _snap ctx _stack node => do
       let tacPos := doc.meta.text.utf8PosToLspPos info.stx.getPos?.get!
       let endPos := doc.meta.text.utf8PosToLspPos info.stx.getTailPos?.get!
       let goal := info.goalsBefore[0]!
-let goalFmt ← ctx.runMetaM {} goal.withContext do Meta.ppExpr (← goal.getType)
+      let goalFmt ← ctx.runMetaM {} <| goal.withContext do Meta.ppExpr (← goal.getType)
       return { eager with
-edit? := some .ofTextEdit doc.versionedIdentifier
+        edit? := some <|.ofTextEdit doc.versionedIdentifier
           { range := ⟨tacPos, endPos⟩, newText := s!"calc {goalFmt} := by sorry" }
       }
   }]
@@ -111,24 +67,14 @@ open Lean Meta
 
 open Lean Server in
 
-/--
-Definition of `CalcParams` / `CalcParams` 的定义
+/-- Parameters for the calc widget. -/
+/-
+**CalcParams** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CalcParams
-  parameters: extends SelectInsertParams
-  extends: SelectInsertParams
-  axioms and operations (2):
-    - isFirst : Bool
-    - indent : Nat
-
-中文:
-结构 CalcParams
-  参数: extends SelectInsertParams
-  继承: SelectInsertParams
-  公理与运算 (2 个):
-    - isFirst : 布尔值
-    - indent : 自然数
+--- 原说明 ---
+Parameters for the calc widget.
 -/
 structure CalcParams extends SelectInsertParams where
   /-- Is this the first calc step? -/
@@ -137,118 +83,18 @@ structure CalcParams extends SelectInsertParams where
   indent : Nat
   deriving SelectInsertParamsClass, RpcEncodable
 
-/--
-Definition of `suggestSteps` / `suggestSteps` 的定义
+/-- Return the link text and inserted text above and below of the calc widget. -/
+/-
+**suggestSteps** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：suggestSteps (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr) (p
+arams : CalcParams) : MetaM (String × String × Option (String.Pos.Raw × String.P
+os.Raw))
+参数：pos : Array Lean.SubExpr.GoalsLocation；goalType : Expr；params : CalcParams。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition suggestSteps
-  signature: (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr) (params : CalcParams)
-  body: do
-  let subexprPos := getGoalLocations pos
-  let some (rel, lhs, rhs) ← Lean.Elab.Term.getCalcRelation? goalType |
-      throwError "invalid 'calc' step, relation expected{indentExpr goalType}"
-  let relApp := mkApp2 rel
-    (← mkFreshExprMVar none)
-    (← mkFreshExprMVar none)
-  let some relStr := ((← Meta.ppExpr relApp) |> toString |>.splitOn)[1]?
-    | throwError "could not find relation symbol in {relApp}"
-  let isSelectedLeft := subexprPos.any (fun L => #[0, 1].isPrefixOf L.toArray)
-  let isSelectedRight := subexprPos.any (fun L => #[1].isPrefixOf L.toArray)
-
-  let mut goalType := goalType
-  for pos in subexprPos do
-    goalType ← insertMetaVar goalType pos
-  let some (_, newLhs, newRhs) ← Lean.Elab.Term.getCalcRelation? goalType |
-      throwError "invalid 'calc' step, relation expected{indentExpr goalType}"
-
-  let lhsStr := (toString <| ← Meta.ppExpr lhs).renameMetaVar
-  let newLhsStr := (toString <| ← Meta.ppExpr newLhs).renameMetaVar
-  let rhsStr := (toString <| ← Meta.ppExpr rhs).renameMetaVar
-  let newRhsStr := (toString <| ← Meta.ppExpr newRhs).renameMetaVar
-
-  let spc := String.replicate params.indent ' '
-  let insertedCode := match isSelectedLeft, isSelectedRight with
-  | true, true =>
-    if params.isFirst then
-      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {newRhsStr} := by sorry\n\
-         {spc}_ {relStr} {rhsStr} := by sorry"
-    else
-      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}\
-         _ {relStr} {newRhsStr} := by sorry\n{spc}\
-         _ {relStr} {rhsStr} := by sorry"
-  | false, true =>
-    if params.isFirst then
-      s!"{lhsStr} {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-    else
-      s!"_ {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-  | true, false =>
-    if params.isFirst then
-      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-    else
-      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-  | false, false => "This should not happen"
-
-  let stepInfo := match isSelectedLeft, isSelectedRight with
-  | true, true => "Create two new steps"
-  | true, false | false, true => "Create a new step"
-  | false, false => "This should not happen"
-.offset let pos : String.Pos.Raw := insertedCode.find (fun c => c == '?')
-  return (stepInfo, insertedCode, some (pos, ⟨pos.byteIdx + 2⟩) )
-
-中文:
-定义 suggestSteps
-  签名: (pos : 数组 Lean.SubExpr.GoalsLocation) (goalType : Expr) (params : CalcParams)
-  定义体: do
-  let subexprPos := getGoalLocations pos
-  let some (rel, lhs, rhs) ← Lean.Elab.Term.getCalcRelation? goalType |
-      throwError "invalid 'calc' step, relation expected{indentExpr goalType}"
-  let relApp := mkApp2 rel
-    (← mkFreshExprMVar none)
-    (← mkFreshExprMVar none)
-  let some relStr := ((← Meta.ppExpr relApp) |> toString |>.splitOn)[1]?
-    | throwError "could not find relation symbol in {relApp}"
-  let isSelectedLeft := subexprPos.any (fun L => #[0, 1].isPrefixOf L.toArray)
-  let isSelectedRight := subexprPos.any (fun L => #[1].isPrefixOf L.toArray)
-
-  let mut goalType := goalType
-  for pos in subexprPos do
-    goalType ← insertMetaVar goalType pos
-  let some (_, newLhs, newRhs) ← Lean.Elab.Term.getCalcRelation? goalType |
-      throwError "invalid 'calc' step, relation expected{indentExpr goalType}"
-
-  let lhsStr := (toString <| ← Meta.ppExpr lhs).renameMetaVar
-  let newLhsStr := (toString <| ← Meta.ppExpr newLhs).renameMetaVar
-  let rhsStr := (toString <| ← Meta.ppExpr rhs).renameMetaVar
-  let newRhsStr := (toString <| ← Meta.ppExpr newRhs).renameMetaVar
-
-  let spc := String.replicate params.indent ' '
-  let insertedCode := match isSelectedLeft, isSelectedRight with
-  | true, true =>
-    if params.isFirst then
-      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {newRhsStr} := by sorry\n\
-         {spc}_ {relStr} {rhsStr} := by sorry"
-    else
-      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}\
-         _ {relStr} {newRhsStr} := by sorry\n{spc}\
-         _ {relStr} {rhsStr} := by sorry"
-  | false, true =>
-    if params.isFirst then
-      s!"{lhsStr} {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-    else
-      s!"_ {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-  | true, false =>
-    if params.isFirst then
-      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-    else
-      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
-  | false, false => "This should not happen"
-
-  let stepInfo := match isSelectedLeft, isSelectedRight with
-  | true, true => "Create two new steps"
-  | true, false | false, true => "Create a new step"
-  | false, false => "This should not happen"
-.offset let pos : String.Pos.Raw := insertedCode.find (fun c => c == '?')
-  return (stepInfo, insertedCode, some (pos, ⟨pos.byteIdx + 2⟩) )
+--- 原说明 ---
+Return the link text and inserted text above and below of the calc widget.
 -/
 def suggestSteps (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr) (params : CalcParams) :
     MetaM (String × String × Option (String.Pos.Raw × String.Pos.Raw)) := do
@@ -260,8 +106,8 @@ def suggestSteps (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr) (par
     (← mkFreshExprMVar none)
   let some relStr := ((← Meta.ppExpr relApp) |> toString |>.splitOn)[1]?
     | throwError "could not find relation symbol in {relApp}"
-  let isSelectedLeft := subexprPos.any (fun L => #[0, 1].isPrefixOf L.toArray)
-  let isSelectedRight := subexprPos.any (fun L => #[1].isPrefixOf L.toArray)
+  let isSelectedLeft := subexprPos.any (fun L ↦ #[0, 1].isPrefixOf L.toArray)
+  let isSelectedRight := subexprPos.any (fun L ↦ #[1].isPrefixOf L.toArray)
 
   let mut goalType := goalType
   for pos in subexprPos do
@@ -300,27 +146,18 @@ def suggestSteps (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr) (par
   | true, true => "Create two new steps"
   | true, false | false, true => "Create a new step"
   | false, false => "This should not happen"
-.offset let pos : String.Pos.Raw := insertedCode.find (fun c => c == '?')
+  let pos : String.Pos.Raw := insertedCode.find (fun c => c == '?') |>.offset
   return (stepInfo, insertedCode, some (pos, ⟨pos.byteIdx + 2⟩) )
 
 /-- Rpc function for the calc widget. -/
 @[server_rpc_method]
-/--
-Definition of `CalcPanel.rpc` / `CalcPanel.rpc` 的定义
+/-
+**CalcPanel.rpc** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CalcPanel.rpc
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CalcPanel.rpc
-  body: mkSelectionPanelRPC suggestSteps
-  "Please select subterms using Shift-click."
-  "Calc 🔍️"
-
-中文:
-定义 CalcPanel.rpc
-  定义体: mkSelectionPanelRPC suggestSteps
-  "Please select subterms using Shift-click."
-  "Calc 🔍️"
-
-Depends on / 依赖: mkSelectionPanelRPC, suggestSteps
+--- 原说明 ---
+Rpc function for the calc widget.
 -/
 def CalcPanel.rpc := mkSelectionPanelRPC suggestSteps
   "Please select subterms using Shift-click."
@@ -328,20 +165,14 @@ def CalcPanel.rpc := mkSelectionPanelRPC suggestSteps
 
 /-- The calc widget. -/
 @[widget_module]
-/--
-Definition of `CalcPanel` / `CalcPanel` 的定义
+/-
+**CalcPanel** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：CalcPanel : Component CalcParams
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CalcPanel
-  signature: : Component CalcParams
-  body: mk_rpc_widget% CalcPanel.rpc
-
-中文:
-定义 CalcPanel
-  签名: : Component CalcParams
-  定义体: mk_rpc_widget% CalcPanel.rpc
-
-Depends on / 依赖: CalcPanel, CalcPanel.rpc, mk_rpc_widget
+--- 原说明 ---
+The calc widget.
 -/
 def CalcPanel : Component CalcParams :=
   mk_rpc_widget% CalcPanel.rpc
@@ -365,10 +196,11 @@ elab_rules : tactic
   for step in ← Lean.Elab.Term.mkCalcStepViews steps do
     let some replaceRange := (← getFileMap).lspRangeOfStx? step.ref | continue
     let json := json% {"replaceRange": $(replaceRange),
-"isFirst": (isFirst),
-"indent": (replaceRange.start.character)}
+                        "isFirst": $(isFirst),
+                        "indent": $(replaceRange.start.character)}
     Widget.savePanelWidgetInfo CalcPanel.javascriptHash (pure json) step.proof
     isFirst := false
   evalCalc (← `(tactic|calc%$calcstx $steps))
 
 end Lean.Elab.Tactic
+

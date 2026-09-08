@@ -28,38 +28,25 @@ namespace ModularForm
 
 open EisensteinSeries CongruenceSubgroup MatrixGroups
 
-/--
-Definition of `eisensteinSeriesMF` / `eisensteinSeriesMF` 的定义
+/-- This defines Eisenstein series as modular forms of weight `k`, level `Γ(N)` and congruence
+condition given by `a : Fin 2 → ZMod N`. -/
+/-
+**ModularForm.eisensteinSeriesMF** 是 Mathlib 中的一个定义，位于命名空间 `ModularForm`。
+形式化陈述：eisensteinSeriesMF {k : Int} {N : Nat} [NeZero N] (hk : 3 <= k) (a : Fin 2
+ -> ZMod N) : ModularForm Γ(N) k where toFun
+参数：hk : 3 <= k；a : Fin 2 -> ZMod N。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `EisensteinSeries.eisensteinSeriesSIF_mdifferentiable`：eisensteinSeriesSI
+F_mdifferentiable {k : Int} {N : Nat} (hk : 3 <= k) (a : Fin 2 -> ZMod N) : MDif
+f (eisensteinSeriesSIF a k)
 
-English:
-definition eisensteinSeriesMF
-  signature: {k : Int} {N : Nat} [NeZero N] (hk : 3 <= k) (a : Fin 2 -> ZMod N)
-  body: eisensteinSeriesSIF a k
-  slash_action_eq' := (eisensteinSeriesSIF a k).slash_action_eq'
-  holo' := eisensteinSeriesSIF_mdifferentiable hk a
-  bdd_at_cusps' {c} hc := by
-    rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
-    rw [OnePoint.isBoundedAt_iff_forall_SL2Z hc]
-    exact fun γ hγ => isBoundedAtImInfty_eisensteinSeriesSIF a hk γ
-
-@[deprecated (since := "2026-02-10")] noncomputable alias eisensteinSeries_MF := eisensteinSeriesMF
-
-中文:
-定义 eisensteinSeriesMF
-  签名: {k : 整数} {N : 自然数} [NeZero N] (hk : 3 <= k) (a : 有限集 2 -> ZMod N)
-  定义体: eisensteinSeriesSIF a k
-  slash_action_eq' := (eisensteinSeriesSIF a k).slash_action_eq'
-  holo' := eisensteinSeriesSIF_mdifferentiable hk a
-  bdd_at_cusps' {c} hc := by
-    rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
-    rw [OnePoint.isBoundedAt_iff_forall_SL2Z hc]
-    exact fun γ hγ => isBoundedAtImInfty_eisensteinSeriesSIF a hk γ
-
-@[deprecated (since := "2026-02-10")] noncomputable alias eisensteinSeries_MF := eisensteinSeriesMF
-
-Depends on / 依赖: eisensteinSeriesSIF
+--- 原说明 ---
+This defines Eisenstein series as modular forms of weight `k`, level `Γ(N)` and 
+congruence
+condition given by `a : Fin 2 → ZMod N`.
 -/
-def eisensteinSeriesMF {k : Int} {N : Nat} [NeZero N] (hk : 3 <= k) (a : Fin 2 -> ZMod N) :
+def eisensteinSeriesMF {k : ℤ} {N : ℕ} [NeZero N] (hk : 3 ≤ k) (a : Fin 2 → ZMod N) :
     ModularForm Γ(N) k where
   toFun := eisensteinSeriesSIF a k
   slash_action_eq' := (eisensteinSeriesSIF a k).slash_action_eq'
@@ -67,56 +54,51 @@ def eisensteinSeriesMF {k : Int} {N : Nat} [NeZero N] (hk : 3 <= k) (a : Fin 2 -
   bdd_at_cusps' {c} hc := by
     rw [Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z] at hc
     rw [OnePoint.isBoundedAt_iff_forall_SL2Z hc]
-    exact fun γ hγ => isBoundedAtImInfty_eisensteinSeriesSIF a hk γ
+    exact fun γ hγ ↦ isBoundedAtImInfty_eisensteinSeriesSIF a hk γ
 
 @[deprecated (since := "2026-02-10")] noncomputable alias eisensteinSeries_MF := eisensteinSeriesMF
 
-/--
-Definition of `E` / `E` 的定义
+/-- Normalised Eisenstein series of level 1 and weight `k`,
+here they have been scaled by `1/2` since we sum over coprime pairs. -/
+/-
+**ModularForm.E** 是 Mathlib 中的一个定义，位于命名空间 `ModularForm`。
+形式化陈述：E {k : Nat} (hk : 3 <= k) : ModularForm 𝒮ℒ k
+参数：hk : 3 <= k。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition E
-  signature: {k : Nat} (hk : 3 <= k)
-  body: ((1 / 2 : Complex) • eisensteinSeriesMF (mod_cast hk) 0).copy _ rfl Gamma_one_coe_eq_SL.symm
-
-中文:
-定义 E
-  签名: {k : 自然数} (hk : 3 <= k)
-  定义体: ((1 / 2 : Complex) • eisensteinSeriesMF (mod_cast hk) 0).copy _ rfl Gamma_one_coe_eq_SL.symm
-
-Depends on / 依赖: Gamma_one_coe_eq_SL, Gamma_one_coe_eq_SL.symm, eisensteinSeriesMF, mod_cast
+--- 原说明 ---
+Normalised Eisenstein series of level 1 and weight `k`,
+here they have been scaled by `1/2` since we sum over coprime pairs.
 -/
-def E {k : Nat} (hk : 3 <= k) : ModularForm 𝒮ℒ k :=
-  ((1 / 2 : Complex) • eisensteinSeriesMF (mod_cast hk) 0).copy _ rfl Gamma_one_coe_eq_SL.symm
+def E {k : ℕ} (hk : 3 ≤ k) : ModularForm 𝒮ℒ k :=
+  ((1 / 2 : ℂ) • eisensteinSeriesMF (mod_cast hk) 0).copy _ rfl Gamma_one_coe_eq_SL.symm
 
-/--
-Definition of `E₄` / `E₄` 的定义
+/-- The normalised level 1 Eisenstein series of weight 4. -/
+/-
+**ModularForm.E** 是 Mathlib 中的一个定义，位于命名空间 `ModularForm`。
+形式化陈述：E {k : Nat} (hk : 3 <= k) : ModularForm 𝒮ℒ k
+参数：hk : 3 <= k。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation E₄
-  signature: : ModularForm 𝒮ℒ 4
-  body: E (by norm_num : 3 <= 4)
-
-中文:
-缩写 E₄
-  签名: : 模形式 𝒮ℒ 4
-  定义体: E (by norm_num : 3 <= 4)
+--- 原说明 ---
+The normalised level 1 Eisenstein series of weight 4.
 -/
-abbrev E₄ : ModularForm 𝒮ℒ 4 := E (by norm_num : 3 <= 4)
+abbrev E₄ : ModularForm 𝒮ℒ 4 := E (by norm_num : 3 ≤ 4)
 
-/--
-Definition of `E₆` / `E₆` 的定义
+/-- The normalised level 1 Eisenstein series of weight 6. -/
+/-
+**ModularForm.E** 是 Mathlib 中的一个定义，位于命名空间 `ModularForm`。
+形式化陈述：E {k : Nat} (hk : 3 <= k) : ModularForm 𝒮ℒ k
+参数：hk : 3 <= k。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation E₆
-  signature: : ModularForm 𝒮ℒ 6
-  body: E (by norm_num : 3 <= 6)
-
-中文:
-缩写 E₆
-  签名: : 模形式 𝒮ℒ 6
-  定义体: E (by norm_num : 3 <= 6)
+--- 原说明 ---
+The normalised level 1 Eisenstein series of weight 6.
 -/
-abbrev E₆ : ModularForm 𝒮ℒ 6 := E (by norm_num : 3 <= 6)
+abbrev E₆ : ModularForm 𝒮ℒ 6 := E (by norm_num : 3 ≤ 6)
 
 end ModularForm
+

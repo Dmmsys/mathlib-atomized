@@ -32,28 +32,9 @@ instance instEquivLike : EquivLike (MyIso A B) A B where
 
 @[ext] theorem ext {f g : MyIso A B} (h : ∀ x, f x = g x) : f = g := DFunLike.ext f g h
 
-/--
-Definition of `copy` / `copy` 的定义
-
-English:
-definition copy
-  signature: (f : MyIso A B) (f' : A -> B) (f_inv : B -> A)
-  body: f'
-  invFun := f_inv
-  left_inv := h₁.symm ▸ h₂.symm ▸ f.left_inv
-  right_inv := h₁.symm ▸ h₂.symm ▸ f.right_inv
-  map_op' := h₁.symm ▸ f.map_op'
-
-中文:
-定义 copy
-  签名: (f : MyIso A B) (f' : A -> B) (f_inv : B -> A)
-  定义体: f'
-  invFun := f_inv
-  left_inv := h₁.symm ▸ h₂.symm ▸ f.left_inv
-  right_inv := h₁.symm ▸ h₂.symm ▸ f.right_inv
-  map_op' := h₁.symm ▸ f.map_op'
--/
-protected def copy (f : MyIso A B) (f' : A -> B) (f_inv : B -> A)
+/-- Copy of a `MyIso` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+protected def copy (f : MyIso A B) (f' : A → B) (f_inv : B → A)
     (h₁ : f' = f) (h₂ : f_inv = f.invFun) : MyIso A B where
   toFun := f'
   invFun := f_inv
@@ -75,21 +56,8 @@ the axioms of your new type of isomorphisms.
 Continuing the example above:
 
 ```
-/--
-Definition of `MyIsoClass` / `MyIsoClass` 的定义
-
-English:
-class MyIsoClass
-  parameters: (F : Type*) (A B : outParam Type*) [MyClass A] [MyClass B]
-  extends: MyHomClass F A B
-  (no additional axioms)
-
-中文:
-类 MyIso类
-  参数: (F : 类型) (A B : outParam 类型) [MyClass A] [MyClass B]
-  继承: My态射类 F A B
-  (无附加公理)
--/
+/-- `MyIsoClass F A B` states that `F` is a type of `MyClass.op`-preserving morphisms.
+You should extend this class when you extend `MyIso`. -/
 class MyIsoClass (F : Type*) (A B : outParam Type*) [MyClass A] [MyClass B]
     [EquivLike F A B]
     extends MyHomClass F A B
@@ -99,21 +67,6 @@ namespace MyIso
 variable {A B : Type*} [MyClass A] [MyClass B]
 
 -- This goes after `MyIsoClass.instEquivLike`:
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MyIsoClass (MyIso A B) A B
-  body: MyIso.map_op'
-
-中文:
-实例 :
-  签名: MyIso类 (MyIso A B) A B
-  定义体: MyIso.map_op'
-
-Depends on / 依赖: MyIso.map_op, map_op
--/
 instance : MyIsoClass (MyIso A B) A B where
   map_op := MyIso.map_op'
 
@@ -126,61 +79,14 @@ The second step is to add instances of your new `MyIsoClass` for all types exten
 Typically, you can just declare a new class analogous to `MyIsoClass`:
 
 ```
-/--
-Definition of `CoolerIso` / `CoolerIso` 的定义
-
-English:
-structure CoolerIso
-  parameters: (A B : Type*) [CoolClass A] [CoolClass B]
-  extends: MyIso A B
-  axioms and operations (1):
-    - (map_cool' : toFun CoolClass.cool = CoolClass.cool)
-
-中文:
-结构 余olerIso
-  参数: (A B : 类型) [CoolClass A] [CoolClass B]
-  继承: MyIso A B
-  公理与运算 (1 个):
-    - (map_cool' : toFun CoolClass.cool = CoolClass.cool)
--/
 structure CoolerIso (A B : Type*) [CoolClass A] [CoolClass B] extends MyIso A B where
   (map_cool' : toFun CoolClass.cool = CoolClass.cool)
 
-/--
-Definition of `CoolerIsoClass` / `CoolerIsoClass` 的定义
-
-English:
-class CoolerIsoClass
-  parameters: (F : Type*) (A B : outParam Type*) [CoolClass A] [CoolClass B]
-  extends: MyIsoClass F A B
-  axioms and operations (1):
-    - (map_cool : forall (f : F), f CoolClass.cool = CoolClass.cool)
-
-中文:
-类 余olerIso类
-  参数: (F : 类型) (A B : outParam 类型) [CoolClass A] [CoolClass B]
-  继承: MyIso类 F A B
-  公理与运算 (1 个):
-    - (map_cool : 对任意 (f : F), f CoolClass.cool = CoolClass.cool)
--/
 class CoolerIsoClass (F : Type*) (A B : outParam Type*) [CoolClass A] [CoolClass B]
     [EquivLike F A B]
     extends MyIsoClass F A B where
-  (map_cool : forall (f : F), f CoolClass.cool = CoolClass.cool)
+  (map_cool : ∀ (f : F), f CoolClass.cool = CoolClass.cool)
 
-/--
-lemma `map_cool` / 引理 `map_cool`
-
-English:
-lemma map_cool
-  statement: {F A B : Type*} [CoolClass A] [CoolClass B]
-  proof: CoolerIsoClass.map_cool _
-
-中文:
-引理 map_cool
-  结论: {F A B : 类型} [CoolClass A] [CoolClass B]
-  证明: CoolerIsoClass.map_cool _
--/
 @[simp] lemma map_cool {F A B : Type*} [CoolClass A] [CoolClass B]
     [EquivLike F A B] [CoolerIsoClass F A B] (f : F) :
     f CoolClass.cool = CoolClass.cool :=
@@ -190,29 +96,6 @@ namespace CoolerIso
 
 variable {A B : Type*} [CoolClass A] [CoolClass B]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (CoolerIso A B) A B
-  body: f.toFun
-  inv f := f.invFun
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-  coe_injective' f g h₁ h₂ := by cases f; cases g; congr; exact EquivLike.coe_injective' _ _ h₁ h₂
-
-中文:
-实例 :
-  签名: 等价状 (余olerIso A B) A B
-  定义体: f.toFun
-  inv f := f.invFun
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-  coe_injective' f g h₁ h₂ := by cases f; cases g; congr; exact EquivLike.coe_injective' _ _ h₁ h₂
-
-Depends on / 依赖: f.toFun
--/
 instance : EquivLike (CoolerIso A B) A B where
   coe f := f.toFun
   inv f := f.invFun
@@ -220,23 +103,6 @@ instance : EquivLike (CoolerIso A B) A B where
   right_inv f := f.right_inv
   coe_injective' f g h₁ h₂ := by cases f; cases g; congr; exact EquivLike.coe_injective' _ _ h₁ h₂
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoolerIsoClass (CoolerIso A B) A B
-  body: f.map_op'
-  map_cool f := f.map_cool'
-
-中文:
-实例 :
-  签名: 余olerIso类 (余olerIso A B) A B
-  定义体: f.map_op'
-  map_cool f := f.map_cool'
-
-Depends on / 依赖: f.map_op, map_op
--/
 instance : CoolerIsoClass (CoolerIso A B) A B where
   map_op f := f.map_op'
   map_cool f := f.map_cool'
@@ -247,55 +113,9 @@ end CoolerIso
 ```
 
 Then any declaration taking a specific type of morphisms as parameter can instead take the
-/--
-Definition of `you` / `you` 的定义
-
-English:
-class you
-  parameters: just defined
-  (no additional axioms)
-
-中文:
-类 you
-  参数: just defined
-  (无附加公理)
--/
 class you just defined:
 ```
 -- Compare with: lemma do_something (f : MyIso A B) : sorry := sorry
-/--
-lemma `do_something` / 引理 `do_something`
-
-English:
-lemma do_something
-  given: {F : Type*} [EquivLike F A B] [MyIsoClass F A B] (f : F)
-  statement: sorry
-  proof: sorry
-```
-
-This means anything set up for `MyIso`s will automatically work for `CoolerIsoClass`es,
-and defining `CoolerIsoClass` only takes a constant amount of effort,
-instead of linearly increasing the work per `MyIso`-related declaration.
-
--/
-
-@[expose] public section
-
-中文:
-引理 do_something
-  条件: {F : 类型} [等价状 F A B] [MyIso类 F A B] (f : F)
-  结论: sorry
-  证明: sorry
-```
-
-This means anything set up for `MyIso`s will automatically work for `CoolerIsoClass`es,
-and defining `CoolerIsoClass` only takes a constant amount of effort,
-instead of linearly increasing the work per `MyIso`-related declaration.
-
--/
-
-@[expose] public section
--/
 lemma do_something {F : Type*} [EquivLike F A B] [MyIsoClass F A B] (f : F) : sorry := sorry
 ```
 
@@ -308,40 +128,45 @@ instead of linearly increasing the work per `MyIso`-related declaration.
 @[expose] public section
 
 
-/--
-Definition of `EquivLike` / `EquivLike` 的定义
+/-- The class `EquivLike E α β` expresses that terms of type `E` have an
+injective coercion to bijections between `α` and `β`.
 
-English:
-class EquivLike
-  parameters: (E : Sort*) (α β : outParam (Sort*))
-  axioms and operations (5):
-    - coe : E -> α -> β
-    - inv : E -> β -> α
-    - left_inv : forall e, Function.LeftInverse (inv e) (coe e)
-    - right_inv : forall e, Function.RightInverse (inv e) (coe e)
-    - coe_injective' : forall e g, coe e = coe g -> inv e = inv g -> e = g
+Note that this does not directly extend `FunLike`, nor take `FunLike` as a parameter,
+so we can state `coe_injective'` in a nicer way.
 
-中文:
-类 等价状
-  参数: (E : 类型层*) (α β : outParam (类型层*))
-  公理与运算 (5 个):
-    - coe : E -> α -> β
-    - inv : E -> β -> α
-    - left_inv : 对任意 e, 函数.左逆 (inv e) (coe e)
-    - right_inv : 对任意 e, 函数.右逆 (inv e) (coe e)
-    - coe_injective' : 对任意 e g, coe e = coe g -> inv e = inv g -> e = g
+This typeclass is used in the definition of the isomorphism (or equivalence) typeclasses,
+such as `ZeroEquivClass`, `MulEquivClass`, `MonoidEquivClass`, ....
+-/
+/-
+**EquivLike** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Sort u_1 → outParam (Sort u_2) → outParam (Sort u_3) → Sort (max (max (max
+ 1 u_1) u_2) u_3)
+参数：Sort u_2；Sort u_3；max (max (max 1 u_1) u_2) u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The class `EquivLike E α β` expresses that terms of type `E` have an
+injective coercion to bijections between `α` and `β`.
+
+Note that this does not directly extend `FunLike`, nor take `FunLike` as a param
+eter,
+so we can state `coe_injective'` in a nicer way.
+
+This typeclass is used in the definition of the isomorphism (or equivalence) typ
+eclasses,
+such as `ZeroEquivClass`, `MulEquivClass`, `MonoidEquivClass`, ....
 -/
 class EquivLike (E : Sort*) (α β : outParam (Sort*)) where
   /-- The coercion to a function in the forward direction. -/
-  coe : E -> α -> β
+  coe : E → α → β
   /-- The coercion to a function in the backwards direction. -/
-  inv : E -> β -> α
+  inv : E → β → α
   /-- The coercions are left inverses. -/
-  left_inv : forall e, Function.LeftInverse (inv e) (coe e)
+  left_inv : ∀ e, Function.LeftInverse (inv e) (coe e)
   /-- The coercions are right inverses. -/
-  right_inv : forall e, Function.RightInverse (inv e) (coe e)
+  right_inv : ∀ e, Function.RightInverse (inv e) (coe e)
   /-- The two coercions to functions are jointly injective. -/
-  coe_injective' : forall e g, coe e = coe g -> inv e = inv g -> e = g
+  coe_injective' : ∀ e g, coe e = coe g → inv e = inv g → e = g
   -- This is mathematically equivalent to either of the coercions to functions being injective, but
   -- the `inv` hypothesis makes this easier to prove with `congr'`
 
@@ -349,221 +174,168 @@ namespace EquivLike
 
 variable {E F α β γ : Sort*} [EquivLike E α β] [EquivLike F β γ]
 
-/--
-theorem `inv_injective` / 定理 `inv_injective`
-
-English:
-theorem inv_injective
-  statement: Function.Injective (EquivLike.inv : E -> β -> α)
-  proof: fun e g h =>
-  coe_injective' e g ((right_inv e).eq_rightInverse (h.symm ▸ left_inv g)) h
-
-中文:
-定理 inv_injective
-  结论: 函数.单射 (等价状.inv : E -> β -> α)
-  证明: fun e g h =>
-  coe_injective' e g ((right_inv e).eq_rightInverse (h.symm ▸ left_inv g)) h
+/-
+**EquivLike.inv_injective** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：inv_injective : Function.Injective (EquivLike.inv : E -> β -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.coe_injective'`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β 
+: outParam (Sort u_3)} [self : EquivLike E α β] (e g : E),   EquivLike.coe e = E
+quivLike.coe g…
+· 使用定理 `Function.LeftInverse.eq_rightInverse`：∀ {α : Sort u_1} {β : Sort u_2} {f
+ : α → β} {g₁ g₂ : β → α},   Function.LeftInverse g₁ f → Function.RightInverse g
+₂ f → g₁ = g₂
+· 使用定理 `EquivLike.right_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : out
+Param (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.RightInverse (Equ
+ivLike.in…
+· 使用定理 `EquivLike.left_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : outP
+aram (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.LeftInverse (Equiv
+Like.inv…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem inv_injective : Function.Injective (EquivLike.inv : E -> β -> α) := fun e g h =>
+theorem inv_injective : Function.Injective (EquivLike.inv : E → β → α) := fun e g h ↦
   coe_injective' e g ((right_inv e).eq_rightInverse (h.symm ▸ left_inv g)) h
-
+/-
+**EquivLike.** 是 Mathlib 中的一个实例，位于命名空间 `EquivLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toFunLike : FunLike E α β where
-  coe := (coe : E -> α -> β)
+  coe := (coe : E → α → β)
   coe_injective e g h :=
     coe_injective' e g h ((left_inv e).eq_rightInverse (h.symm ▸ right_inv g))
-
-/--
-theorem `coe_apply` / 定理 `coe_apply`
-
-English:
-theorem coe_apply
-  given: {e : E} {a : α}
-  statement: coe e a = e a
-  proof: rfl
-
-中文:
-定理 coe_apply
-  条件: {e : E} {a : α}
-  结论: coe e a = e a
-  证明: rfl
+/-
+**EquivLike.coe_apply** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [inst : EquivLike E α β] {e
+ : E} {a : α}, EquivLike.coe e a = e a
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_apply {e : E} {a : α} : coe e a = e a := rfl
-
-/--
-theorem `inv_apply_eq` / 定理 `inv_apply_eq`
-
-English:
-theorem inv_apply_eq
-  given: {e : E} {b : β} {a : α}
-  statement: inv e b = a ↔ b = e a
-  proof: by
-  constructor <;> rintro ⟨_, rfl⟩
-  exacts [(right_inv e b).symm, left_inv e a]
-
-中文:
-定理 inv_apply_eq
-  条件: {e : E} {b : β} {a : α}
-  结论: inv e b = a ↔ b = e a
-  证明: by
-  constructor <;> rintro ⟨_, rfl⟩
-  exacts [(right_inv e b).symm, left_inv e a]
-
-Depends on / 依赖: exacts, left_inv, right_inv
+/-
+**EquivLike.inv_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：inv_apply_eq {e : E} {b : β} {a : α} : inv e b = a ↔ b = e a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `EquivLike.right_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : out
+Param (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.RightInverse (Equ
+ivLike.in…
+· 使用定理 `EquivLike.left_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : outP
+aram (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.LeftInverse (Equiv
+Like.inv…
 -/
 theorem inv_apply_eq {e : E} {b : β} {a : α} : inv e b = a ↔ b = e a := by
   constructor <;> rintro ⟨_, rfl⟩
   exacts [(right_inv e b).symm, left_inv e a]
-
+/-
+**EquivLike.** 是 Mathlib 中的一个实例，位于命名空间 `EquivLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toEmbeddingLike : EmbeddingLike E α β where
   injective' e := (left_inv e).injective
-
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  given: (e : E)
-  statement: Function.Injective e
-  proof: EmbeddingLike.injective e
-
-中文:
-定理 injective
-  条件: (e : E)
-  结论: 函数.单射 e
-  证明: EmbeddingLike.injective e
+/-
+**EquivLike.injective** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [inst : EquivLike E α β] (e
+ : E), Function.Injective ⇑e
+参数：e : E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EmbeddingLike.injective`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} 
+[inst : FunLike F α β] [i : EmbeddingLike F α β] (f : F),   Function.Injective ⇑
+f
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
 -/
 protected theorem injective (e : E) : Function.Injective e :=
   EmbeddingLike.injective e
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  given: (e : E)
-  statement: Function.Surjective e
-  proof: (right_inv e).surjective
-
-中文:
-定理 surjective
-  条件: (e : E)
-  结论: 函数.满射 e
-  证明: (right_inv e).surjective
+/-
+**EquivLike.surjective** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [inst : EquivLike E α β] (e
+ : E), Function.Surjective ⇑e
+参数：e : E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `EquivLike.right_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : out
+Param (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.RightInverse (Equ
+ivLike.in…
 -/
 protected theorem surjective (e : E) : Function.Surjective e :=
   (right_inv e).surjective
-
-/--
-theorem `bijective` / 定理 `bijective`
-
-English:
-theorem bijective
-  given: (e : E)
-  statement: Function.Bijective (e : α -> β)
-  proof: ⟨EquivLike.injective e, EquivLike.surjective e⟩
-
-中文:
-定理 bijective
-  条件: (e : E)
-  结论: 函数.双射 (e : α -> β)
-  证明: ⟨EquivLike.injective e, EquivLike.surjective e⟩
+/-
+**EquivLike.bijective** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [inst : EquivLike E α β] (e
+ : E), Function.Bijective ⇑e
+参数：e : E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.injective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Injective ⇑e
+· 使用定理 `EquivLike.surjective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [in
+st : EquivLike E α β] (e : E), Function.Surjective ⇑e
 -/
-protected theorem bijective (e : E) : Function.Bijective (e : α -> β) :=
+protected theorem bijective (e : E) : Function.Bijective (e : α → β) :=
   ⟨EquivLike.injective e, EquivLike.surjective e⟩
-
-/--
-theorem `apply_eq_iff_eq` / 定理 `apply_eq_iff_eq`
-
-English:
-theorem apply_eq_iff_eq
-  given: (f : E) {x y : α}
-  statement: f x = f y ↔ x = y
-  proof: EmbeddingLike.apply_eq_iff_eq f
-
-@[simp]
-
-中文:
-定理 apply_eq_iff_eq
-  条件: (f : E) {x y : α}
-  结论: f x = f y ↔ x = y
-  证明: EmbeddingLike.apply_eq_iff_eq f
-
-@[simp]
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, apply_eq_iff_eq
+/-
+**EquivLike.apply_eq_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：apply_eq_iff_eq (f : E) {x y : α} : f x = f y ↔ x = y
+参数：f : E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EmbeddingLike.apply_eq_iff_eq`：apply_eq_iff_eq (f : F) {x y : α} : f x =
+ f y ↔ x = y
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
 -/
 theorem apply_eq_iff_eq (f : E) {x y : α} : f x = f y ↔ x = y :=
   EmbeddingLike.apply_eq_iff_eq f
 
 @[simp]
-/--
-theorem `injective_comp` / 定理 `injective_comp`
-
-English:
-theorem injective_comp
-  given: (e : E) (f : β -> γ)
-  statement: Function.Injective (f ∘ e) ↔ Function.Injective f
-  proof: Function.Injective.of_comp_iff' f (EquivLike.bijective e)
-
-@[simp]
-
-中文:
-定理 injective_comp
-  条件: (e : E) (f : β -> γ)
-  结论: 函数.单射 (f ∘ e) ↔ 函数.单射 f
-  证明: Function.Injective.of_comp_iff' f (EquivLike.bijective e)
-
-@[simp]
-
-Depends on / 依赖: EquivLike, EquivLike.bijective, Function, Function.Injective.of_comp_iff, Injective, bijective, of_comp_iff
+/-
+**EquivLike.injective_comp** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：injective_comp (e : E) (f : β -> γ) : Function.Injective (f ∘ e) ↔ Functio
+n.Injective f
+参数：e : E；f : β -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Injective (f
+ ∘ g) ↔ Function.Inje…
+· 使用定理 `EquivLike.bijective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Bijective ⇑e
 -/
-theorem injective_comp (e : E) (f : β -> γ) : Function.Injective (f ∘ e) ↔ Function.Injective f :=
+theorem injective_comp (e : E) (f : β → γ) : Function.Injective (f ∘ e) ↔ Function.Injective f :=
   Function.Injective.of_comp_iff' f (EquivLike.bijective e)
 
 @[simp]
-/--
-theorem `surjective_comp` / 定理 `surjective_comp`
-
-English:
-theorem surjective_comp
-  given: (e : E) (f : β -> γ)
-  statement: Function.Surjective (f ∘ e) ↔ Function.Surjective f
-  proof: (EquivLike.surjective e).of_comp_iff f
-
-@[simp]
-
-中文:
-定理 surjective_comp
-  条件: (e : E) (f : β -> γ)
-  结论: 函数.满射 (f ∘ e) ↔ 函数.满射 f
-  证明: (EquivLike.surjective e).of_comp_iff f
-
-@[simp]
-
-Depends on / 依赖: EquivLike, EquivLike.surjective, Terminates, length, of_comp_iff, s.Terminates, s.length, surjective
+/-
+**EquivLike.surjective_comp** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：surjective_comp (e : E) (f : β -> γ) : Function.Surjective (f ∘ e) ↔ Funct
+ion.Surjective f
+参数：e : E；f : β -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} (f : α → β) {g : γ → α},   Function.Surjective g → (Function.Surjective 
+(f ∘ g) ↔ Function.Su…
+· 使用定理 `EquivLike.surjective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [in
+st : EquivLike E α β] (e : E), Function.Surjective ⇑e
 -/
-theorem surjective_comp (e : E) (f : β -> γ) : Function.Surjective (f ∘ e) ↔ Function.Surjective f :=
+theorem surjective_comp (e : E) (f : β → γ) : Function.Surjective (f ∘ e) ↔ Function.Surjective f :=
   (EquivLike.surjective e).of_comp_iff f
 
 @[simp]
-/--
-theorem `bijective_comp` / 定理 `bijective_comp`
-
-English:
-theorem bijective_comp
-  given: (e : E) (f : β -> γ)
-  statement: Function.Bijective (f ∘ e) ↔ Function.Bijective f
-  proof: (EquivLike.bijective e).of_comp_iff f
-
-中文:
-定理 bijective_comp
-  条件: (e : E) (f : β -> γ)
-  结论: 函数.双射 (f ∘ e) ↔ 函数.双射 f
-  证明: (EquivLike.bijective e).of_comp_iff f
-
-Depends on / 依赖: EquivLike, EquivLike.bijective, bijective, of_comp_iff
+/-
+**EquivLike.bijective_comp** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：bijective_comp (e : E) (f : β -> γ) : Function.Bijective (f ∘ e) ↔ Functio
+n.Bijective f
+参数：e : E；f : β -> γ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.of_comp_iff`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α → β) {g : γ → α},   Function.Bijective g → (Function.Bijective (f 
+∘ g) ↔ Function.Bije…
+· 使用定理 `EquivLike.bijective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Bijective ⇑e
 -/
-theorem bijective_comp (e : E) (f : β -> γ) : Function.Bijective (f ∘ e) ↔ Function.Bijective f :=
+theorem bijective_comp (e : E) (f : β → γ) : Function.Bijective (f ∘ e) ↔ Function.Bijective f :=
   (EquivLike.bijective e).of_comp_iff f
 
 /-- This lemma is only supposed to be used in the generic context, when working with instances
@@ -573,22 +345,25 @@ or its equivalent.
 
 TODO: define a generic form of `Equiv.symm`. -/
 @[simp]
-/--
-theorem `inv_apply_apply` / 定理 `inv_apply_apply`
+/-
+**EquivLike.inv_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：inv_apply_apply (e : E) (a : α) : inv e (e a) = a
+参数：e : E；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.left_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : outP
+aram (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.LeftInverse (Equiv
+Like.inv…
 
-English:
-theorem inv_apply_apply
-  given: (e : E) (a : α)
-  statement: inv e (e a) = a
-  proof: left_inv _ _
+--- 原说明 ---
+This lemma is only supposed to be used in the generic context, when working with
+ instances
+of classes extending `EquivLike`.
+For concrete isomorphism types such as `Equiv`, you should use `Equiv.symm_apply
+_apply`
+or its equivalent.
 
-中文:
-定理 inv_apply_apply
-  条件: (e : E) (a : α)
-  结论: inv e (e a) = a
-  证明: left_inv _ _
-
-Depends on / 依赖: left_inv
+TODO: define a generic form of `Equiv.symm`.
 -/
 theorem inv_apply_apply (e : E) (a : α) : inv e (e a) = a := left_inv _ _
 
@@ -599,118 +374,98 @@ or its equivalent.
 
 TODO: define a generic form of `Equiv.symm`. -/
 @[simp]
-/--
-theorem `apply_inv_apply` / 定理 `apply_inv_apply`
+/-
+**EquivLike.apply_inv_apply** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：apply_inv_apply (e : E) (b : β) : e (inv e b) = b
+参数：e : E；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.right_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : out
+Param (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.RightInverse (Equ
+ivLike.in…
 
-English:
-theorem apply_inv_apply
-  given: (e : E) (b : β)
-  statement: e (inv e b) = b
-  proof: right_inv _ _
+--- 原说明 ---
+This lemma is only supposed to be used in the generic context, when working with
+ instances
+of classes extending `EquivLike`.
+For concrete isomorphism types such as `Equiv`, you should use `Equiv.apply_symm
+_apply`
+or its equivalent.
 
-中文:
-定理 apply_inv_apply
-  条件: (e : E) (b : β)
-  结论: e (inv e b) = b
-  证明: right_inv _ _
-
-Depends on / 依赖: right_inv
+TODO: define a generic form of `Equiv.symm`.
 -/
 theorem apply_inv_apply (e : E) (b : β) : e (inv e b) = b := right_inv _ _
-
-/--
-theorem `comp_injective` / 定理 `comp_injective`
-
-English:
-theorem comp_injective
-  given: (f : α -> β) (e : F)
-  statement: Function.Injective (e ∘ f) ↔ Function.Injective f
-  proof: EmbeddingLike.comp_injective f e
-
-@[simp]
-
-中文:
-定理 comp_injective
-  条件: (f : α -> β) (e : F)
-  结论: 函数.单射 (e ∘ f) ↔ 函数.单射 f
-  证明: EmbeddingLike.comp_injective f e
-
-@[simp]
-
-Depends on / 依赖: EmbeddingLike, EmbeddingLike.comp_injective, comp_injective
+/-
+**EquivLike.comp_injective** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：comp_injective (f : α -> β) (e : F) : Function.Injective (e ∘ f) ↔ Functio
+n.Injective f
+参数：f : α -> β；e : F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EmbeddingLike.comp_injective`：comp_injective {F : Sort*} [FunLike F β γ]
+ [EmbeddingLike F β γ] (f : α -> β) (e : F) : Function.Injective (e ∘ f) ↔ Funct
+ion.Injective f
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
 -/
-theorem comp_injective (f : α -> β) (e : F) : Function.Injective (e ∘ f) ↔ Function.Injective f :=
+theorem comp_injective (f : α → β) (e : F) : Function.Injective (e ∘ f) ↔ Function.Injective f :=
   EmbeddingLike.comp_injective f e
 
 @[simp]
-/--
-theorem `comp_surjective` / 定理 `comp_surjective`
-
-English:
-theorem comp_surjective
-  given: (f : α -> β) (e : F)
-  statement: Function.Surjective (e ∘ f) ↔ Function.Surjective f
-  proof: Function.Surjective.of_comp_iff' (EquivLike.bijective e) f
-
-@[simp]
-
-中文:
-定理 comp_surjective
-  条件: (f : α -> β) (e : F)
-  结论: 函数.满射 (e ∘ f) ↔ 函数.满射 f
-  证明: Function.Surjective.of_comp_iff' (EquivLike.bijective e) f
-
-@[simp]
-
-Depends on / 依赖: EquivLike, EquivLike.bijective, Function, Function.Surjective.of_comp_iff, Surjective, bijective, of_comp_iff
+/-
+**EquivLike.comp_surjective** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：comp_surjective (f : α -> β) (e : F) : Function.Surjective (e ∘ f) ↔ Funct
+ion.Surjective f
+参数：f : α -> β；e : F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : S
+ort u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Surjectiv
+e (f ∘ g) ↔ Function.S…
+· 使用定理 `EquivLike.bijective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Bijective ⇑e
 -/
-theorem comp_surjective (f : α -> β) (e : F) : Function.Surjective (e ∘ f) ↔ Function.Surjective f :=
+theorem comp_surjective (f : α → β) (e : F) : Function.Surjective (e ∘ f) ↔ Function.Surjective f :=
   Function.Surjective.of_comp_iff' (EquivLike.bijective e) f
 
 @[simp]
-/--
-theorem `comp_bijective` / 定理 `comp_bijective`
-
-English:
-theorem comp_bijective
-  given: (f : α -> β) (e : F)
-  statement: Function.Bijective (e ∘ f) ↔ Function.Bijective f
-  proof: (EquivLike.bijective e).of_comp_iff' f
-
-include β in
-
-中文:
-定理 comp_bijective
-  条件: (f : α -> β) (e : F)
-  结论: 函数.双射 (e ∘ f) ↔ 函数.双射 f
-  证明: (EquivLike.bijective e).of_comp_iff' f
-
-include β in
-
-Depends on / 依赖: EquivLike, EquivLike.bijective, bijective, of_comp_iff
+/-
+**EquivLike.comp_bijective** 是 Mathlib 中的一个定理，位于命名空间 `EquivLike`。
+形式化陈述：comp_bijective (f : α -> β) (e : F) : Function.Bijective (e ∘ f) ↔ Functio
+n.Bijective f
+参数：f : α -> β；e : F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Bijective 
+(f ∘ g) ↔ Function.Bi…
+· 使用定理 `EquivLike.bijective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Bijective ⇑e
 -/
-theorem comp_bijective (f : α -> β) (e : F) : Function.Bijective (e ∘ f) ↔ Function.Bijective f :=
+theorem comp_bijective (f : α → β) (e : F) : Function.Bijective (e ∘ f) ↔ Function.Bijective f :=
   (EquivLike.bijective e).of_comp_iff' f
 
 include β in
-/--
-lemma `subsingleton_dom` / 引理 `subsingleton_dom`
+/-- This is not an instance to avoid slowing down every single `Subsingleton` typeclass search. -/
+/-
+**EquivLike.subsingleton_dom** 是 Mathlib 中的一个引理，位于命名空间 `EquivLike`。
+形式化陈述：subsingleton_dom [Subsingleton α] : Subsingleton E
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `Function.RightInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.RightInverse f g → Function.Injective f
+· 使用定理 `EquivLike.right_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : out
+Param (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.RightInverse (Equ
+ivLike.in…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 
-English:
-lemma subsingleton_dom
-  given: [Subsingleton α]
-  statement: Subsingleton E
-  proof: ⟨fun f g => DFunLike.ext f g fun _ => (right_inv f).injective Subsingleton.elim _ _⟩
-
-中文:
-引理 subsingleton_dom
-  条件: [子单例 α]
-  结论: 子单例 E
-  证明: ⟨fun f g => DFunLike.ext f g fun _ => (right_inv f).injective Subsingleton.elim _ _⟩
-
-Depends on / 依赖: DFunLike, DFunLike.ext, Subsingleton, Subsingleton.elim, injective, right_inv
+--- 原说明 ---
+This is not an instance to avoid slowing down every single `Subsingleton` typecl
+ass search.
 -/
 lemma subsingleton_dom [Subsingleton α] : Subsingleton E :=
-⟨fun f g => DFunLike.ext f g fun _ => (right_inv f).injective Subsingleton.elim _ _⟩
+  ⟨fun f g ↦ DFunLike.ext f g fun _ ↦ (right_inv f).injective <| Subsingleton.elim _ _⟩
 
 end EquivLike
+

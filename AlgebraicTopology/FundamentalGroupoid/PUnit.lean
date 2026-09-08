@@ -25,18 +25,9 @@ universe u v
 
 namespace Path
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton (Path PUnit.unit PUnit.unit)
-  body: ⟨fun x y => by ext⟩
-
-中文:
-实例 :
-  签名: 子单例 (道路 命题单元.unit 命题单元.unit)
-  定义体: ⟨fun x y => by ext⟩
+/-
+**Path.** 是 Mathlib 中的一个实例，位于命名空间 `Path`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton (Path PUnit.unit PUnit.unit) :=
   ⟨fun x y => by ext⟩
@@ -45,32 +36,26 @@ end Path
 
 namespace FundamentalGroupoid
 
+/-
+**FundamentalGroupoid.** 是 Mathlib 中的一个实例，位于命名空间 `FundamentalGroupoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {x y : FundamentalGroupoid PUnit} : Subsingleton (x ⟶ y) := by
   convert_to! Subsingleton (Path.Homotopic.Quotient PUnit.unit PUnit.unit)
   apply Quotient.instSubsingletonQuotient
 
 /-- Equivalence of groupoids between fundamental groupoid of punit and punit -/
 @[simps]
-/--
-Definition of `punitEquivDiscretePUnit` / `punitEquivDiscretePUnit` 的定义
+/-
+**FundamentalGroupoid.punitEquivDiscretePUnit** 是 Mathlib 中的一个定义，位于命名空间 `Fundame
+ntalGroupoid`。
+形式化陈述：punitEquivDiscretePUnit : FundamentalGroupoid PUnit.{u + 1} ≌ Discrete PUn
+it.{v + 1} where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition punitEquivDiscretePUnit
-  signature: : FundamentalGroupoid PUnit.{u + 1} ≌ Discrete PUnit.{v + 1} where
-  body: Functor.star _
-  inverse := (CategoryTheory.Functor.const _).obj ⟨PUnit.unit⟩
-  unitIso := NatIso.ofComponents (fun _ => Iso.refl _)
-  counitIso := Iso.refl _
-
-中文:
-定义 punitEquivDiscretePUnit
-  签名: : FundamentalGroupoid 命题单元.{u + 1} ≌ 离散 命题单元.{v + 1} where
-  定义体: Functor.star _
-  inverse := (CategoryTheory.Functor.const _).obj ⟨PUnit.unit⟩
-  unitIso := NatIso.ofComponents (fun _ => Iso.refl _)
-  counitIso := Iso.refl _
-
-Depends on / 依赖: Functor, Functor.star
+--- 原说明 ---
+Equivalence of groupoids between fundamental groupoid of punit and punit
 -/
 def punitEquivDiscretePUnit : FundamentalGroupoid PUnit.{u + 1} ≌ Discrete PUnit.{v + 1} where
   functor := Functor.star _
@@ -79,3 +64,4 @@ def punitEquivDiscretePUnit : FundamentalGroupoid PUnit.{u + 1} ≌ Discrete PUn
   counitIso := Iso.refl _
 
 end FundamentalGroupoid
+

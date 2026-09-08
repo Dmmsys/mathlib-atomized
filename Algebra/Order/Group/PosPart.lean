@@ -52,18 +52,11 @@ variable [DivInvMonoid α] {a b : α}
 /-- The *positive part* of an element `a` in a lattice ordered group is `a ⊔ 1`, denoted `a⁺ᵐ`. -/
 @[to_additive
 /-- The *positive part* of an element `a` in a lattice ordered group is `a ⊔ 0`, denoted `a⁺`. -/]
-/--
-Instance `instOneLePart` / 实例 `instOneLePart`
-
-English:
-instance instOneLePart
-  signature: : OneLePart α where
-  body: a ⊔ 1
-
-中文:
-实例 instOneLePart
-  签名: : OneLePart α where
-  定义体: a ⊔ 1
+/-
+**instOneLePart** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instOneLePart : OneLePart α where oneLePart a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instOneLePart : OneLePart α where
   oneLePart a := a ⊔ 1
@@ -73,333 +66,212 @@ instance instOneLePart : OneLePart α where
 @[to_additive
 /-- The *negative part* of an element `a` in a lattice ordered group is `(-a) ⊔ 0`, denoted `a⁻`.
 -/]
-/--
-Instance `instLeOnePart` / 实例 `instLeOnePart`
-
-English:
-instance instLeOnePart
-  signature: : LeOnePart α where
-  body: a⁻¹ ⊔ 1
-
-中文:
-实例 instLeOnePart
-  签名: : LeOnePart α where
-  定义体: a⁻¹ ⊔ 1
+/-
+**instLeOnePart** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instLeOnePart : LeOnePart α where leOnePart a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instLeOnePart : LeOnePart α where
   leOnePart a := a⁻¹ ⊔ 1
-
-/--
-lemma `leOnePart_def` / 引理 `leOnePart_def`
-
-English:
-lemma leOnePart_def
-  given: (a : α)
-  statement: a⁻ᵐ = a⁻¹ ⊔ 1
-  proof: rfl
-
-中文:
-引理 leOnePart_def
-  条件: (a : α)
-  结论: a⁻ᵐ = a⁻¹ ⊔ 1
-  证明: rfl
+/-
+**leOnePart_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] (a : α), a⁻ᵐ
+ = a⁻¹ ⊔ 1
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] lemma leOnePart_def (a : α) : a⁻ᵐ = a⁻¹ ⊔ 1 := rfl
-
-/--
-lemma `oneLePart_def` / 引理 `oneLePart_def`
-
-English:
-lemma oneLePart_def
-  given: (a : α)
-  statement: a⁺ᵐ = a ⊔ 1
-  proof: rfl
-
-中文:
-引理 oneLePart_def
-  条件: (a : α)
-  结论: a⁺ᵐ = a ⊔ 1
-  证明: rfl
+/-
+**oneLePart_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] (a : α), a⁺ᵐ
+ = a ⊔ 1
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] lemma oneLePart_def (a : α) : a⁺ᵐ = a ⊔ 1 := rfl
-
-/--
-lemma `oneLePart_mono` / 引理 `oneLePart_mono`
-
-English:
-lemma oneLePart_mono
-  statement: Monotone (·⁺ᵐ : α -> α)
-  proof: fun _a _b hab => sup_le_sup_right hab _
-
-中文:
-引理 oneLePart_mono
-  结论: 递增 (·⁺ᵐ : α -> α)
-  证明: fun _a _b hab => sup_le_sup_right hab _
+/-
+**oneLePart_mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α], Monotone fu
+n x => x⁺ᵐ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_sup_right`：sup_le_sup_right (h₁ : a <= b) (c) : a ⊔ c <= b ⊔ c
 -/
-@[to_additive] lemma oneLePart_mono : Monotone (·⁺ᵐ : α -> α) :=
-  fun _a _b hab => sup_le_sup_right hab _
-
-/--
-lemma `oneLePart_one` / 引理 `oneLePart_one`
-
-English:
-lemma oneLePart_one
-  statement: (1 : α)⁺ᵐ = 1
-  proof: sup_idem _
-
-@[to_additive (attr := simp) posPart_nonneg]
-
-中文:
-引理 oneLePart_one
-  结论: (1 : α)⁺ᵐ = 1
-  证明: sup_idem _
-
-@[to_additive (attr := simp) posPart_nonneg]
+@[to_additive] lemma oneLePart_mono : Monotone (·⁺ᵐ : α → α) :=
+  fun _a _b hab ↦ sup_le_sup_right hab _
+/-
+**oneLePart_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α], 1⁺ᵐ = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_idem`：sup_idem (a : α) : a ⊔ a = a
 -/
 @[to_additive (attr := simp high)] lemma oneLePart_one : (1 : α)⁺ᵐ = 1 := sup_idem _
 
 @[to_additive (attr := simp) posPart_nonneg]
-/--
-lemma `one_le_oneLePart` / 引理 `one_le_oneLePart`
-
-English:
-lemma one_le_oneLePart
-  given: (a : α)
-  statement: 1 <= a⁺ᵐ
-  proof: le_sup_right
-
-@[to_additive (attr := simp) negPart_nonneg]
-
-中文:
-引理 one_le_oneLePart
-  条件: (a : α)
-  结论: 1 <= a⁺ᵐ
-  证明: le_sup_right
-
-@[to_additive (attr := simp) negPart_nonneg]
-
-Depends on / 依赖: le_sup_right
+/-
+**one_le_oneLePart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_le_oneLePart (a : α) : 1 <= a⁺ᵐ
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
 -/
-lemma one_le_oneLePart (a : α) : 1 <= a⁺ᵐ := le_sup_right
+lemma one_le_oneLePart (a : α) : 1 ≤ a⁺ᵐ := le_sup_right
 
 @[to_additive (attr := simp) negPart_nonneg]
-/--
-lemma `one_le_leOnePart` / 引理 `one_le_leOnePart`
-
-English:
-lemma one_le_leOnePart
-  given: (a : α)
-  statement: 1 <= a⁻ᵐ
-  proof: le_sup_right
-
-中文:
-引理 one_le_leOnePart
-  条件: (a : α)
-  结论: 1 <= a⁻ᵐ
-  证明: le_sup_right
-
-Depends on / 依赖: le_sup_right
+/-
+**one_le_leOnePart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：one_le_leOnePart (a : α) : 1 <= a⁻ᵐ
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
 -/
-lemma one_le_leOnePart (a : α) : 1 <= a⁻ᵐ := le_sup_right
+lemma one_le_leOnePart (a : α) : 1 ≤ a⁻ᵐ := le_sup_right
 
 -- TODO: `to_additive` guesses `nonposPart`
-/--
-lemma `le_oneLePart` / 引理 `le_oneLePart`
-
-English:
-lemma le_oneLePart
-  given: (a : α)
-  statement: a <= a⁺ᵐ
-  proof: le_sup_left
-
-中文:
-引理 le_oneLePart
-  条件: (a : α)
-  结论: a <= a⁺ᵐ
-  证明: le_sup_left
+/-
+**le_oneLePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] (a : α), a ≤
+ a⁺ᵐ
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
 -/
-@[to_additive le_posPart] lemma le_oneLePart (a : α) : a <= a⁺ᵐ := le_sup_left
-
-/--
-lemma `inv_le_leOnePart` / 引理 `inv_le_leOnePart`
-
-English:
-lemma inv_le_leOnePart
-  given: (a : α)
-  statement: a⁻¹ <= a⁻ᵐ
-  proof: le_sup_left
-
-中文:
-引理 inv_le_leOnePart
-  条件: (a : α)
-  结论: a⁻¹ <= a⁻ᵐ
-  证明: le_sup_left
+@[to_additive le_posPart] lemma le_oneLePart (a : α) : a ≤ a⁺ᵐ := le_sup_left
+/-
+**inv_le_leOnePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] (a : α), a⁻¹
+ ≤ a⁻ᵐ
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
 -/
-@[to_additive] lemma inv_le_leOnePart (a : α) : a⁻¹ <= a⁻ᵐ := le_sup_left
-
-/--
-lemma `oneLePart_eq_self` / 引理 `oneLePart_eq_self`
-
-English:
-lemma oneLePart_eq_self
-  statement: a⁺ᵐ = a ↔ 1 <= a
-  proof: sup_eq_left
-
-中文:
-引理 oneLePart_eq_self
-  结论: a⁺ᵐ = a ↔ 1 <= a
-  证明: sup_eq_left
+@[to_additive] lemma inv_le_leOnePart (a : α) : a⁻¹ ≤ a⁻ᵐ := le_sup_left
+/-
+**oneLePart_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] {a : α}, a⁺ᵐ
+ = a ↔ 1 ≤ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
 -/
-@[to_additive (attr := simp)] lemma oneLePart_eq_self : a⁺ᵐ = a ↔ 1 <= a := sup_eq_left
-/--
-lemma `oneLePart_eq_one` / 引理 `oneLePart_eq_one`
-
-English:
-lemma oneLePart_eq_one
-  statement: a⁺ᵐ = 1 ↔ a <= 1
-  proof: sup_eq_right
-
-@[to_additive (attr := simp)] alias ⟨_, oneLePart_of_one_le⟩ := oneLePart_eq_self
-@[to_additive (attr := simp)] alias ⟨_, oneLePart_of_le_one⟩ := oneLePart_eq_one
-
-中文:
-引理 oneLePart_eq_one
-  结论: a⁺ᵐ = 1 ↔ a <= 1
-  证明: sup_eq_right
-
-@[to_additive (attr := simp)] alias ⟨_, oneLePart_of_one_le⟩ := oneLePart_eq_self
-@[to_additive (attr := simp)] alias ⟨_, oneLePart_of_le_one⟩ := oneLePart_eq_one
+@[to_additive (attr := simp)] lemma oneLePart_eq_self : a⁺ᵐ = a ↔ 1 ≤ a := sup_eq_left
+/-
+**oneLePart_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] {a : α}, a⁺ᵐ
+ = 1 ↔ a ≤ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
 -/
-@[to_additive (attr := simp)] lemma oneLePart_eq_one : a⁺ᵐ = 1 ↔ a <= 1 := sup_eq_right
+@[to_additive (attr := simp)] lemma oneLePart_eq_one : a⁺ᵐ = 1 ↔ a ≤ 1 := sup_eq_right
 
 @[to_additive (attr := simp)] alias ⟨_, oneLePart_of_one_le⟩ := oneLePart_eq_self
 @[to_additive (attr := simp)] alias ⟨_, oneLePart_of_le_one⟩ := oneLePart_eq_one
 
 /-- See also `leOnePart_eq_inv`. -/
 @[to_additive /-- See also `negPart_eq_neg`. -/]
-/--
-lemma `leOnePart_eq_inv'` / 引理 `leOnePart_eq_inv'`
+/-
+**leOnePart_eq_inv'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：leOnePart_eq_inv' : a⁻ᵐ = a⁻¹ ↔ 1 <= a⁻¹
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
 
-English:
-lemma leOnePart_eq_inv'
-  statement: a⁻ᵐ = a⁻¹ ↔ 1 <= a⁻¹
-  proof: sup_eq_left
-
-中文:
-引理 leOnePart_eq_inv'
-  结论: a⁻ᵐ = a⁻¹ ↔ 1 <= a⁻¹
-  证明: sup_eq_left
-
-Depends on / 依赖: sup_eq_left
+--- 原说明 ---
+See also `leOnePart_eq_inv`.
 -/
-lemma leOnePart_eq_inv' : a⁻ᵐ = a⁻¹ ↔ 1 <= a⁻¹ := sup_eq_left
+lemma leOnePart_eq_inv' : a⁻ᵐ = a⁻¹ ↔ 1 ≤ a⁻¹ := sup_eq_left
 
 /-- See also `leOnePart_eq_one`. -/
 @[to_additive /-- See also `negPart_eq_zero`. -/]
-/--
-lemma `leOnePart_eq_one'` / 引理 `leOnePart_eq_one'`
+/-
+**leOnePart_eq_one'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：leOnePart_eq_one' : a⁻ᵐ = 1 ↔ a⁻¹ <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
 
-English:
-lemma leOnePart_eq_one'
-  statement: a⁻ᵐ = 1 ↔ a⁻¹ <= 1
-  proof: sup_eq_right
-
-中文:
-引理 leOnePart_eq_one'
-  结论: a⁻ᵐ = 1 ↔ a⁻¹ <= 1
-  证明: sup_eq_right
-
-Depends on / 依赖: sup_eq_right
+--- 原说明 ---
+See also `leOnePart_eq_one`.
 -/
-lemma leOnePart_eq_one' : a⁻ᵐ = 1 ↔ a⁻¹ <= 1 := sup_eq_right
-
-/--
-lemma `oneLePart_le_one` / 引理 `oneLePart_le_one`
-
-English:
-lemma oneLePart_le_one
-  statement: a⁺ᵐ <= 1 ↔ a <= 1
-  proof: by simp [oneLePart]
-
-中文:
-引理 oneLePart_le_one
-  结论: a⁺ᵐ <= 1 ↔ a <= 1
-  证明: by simp [oneLePart]
+lemma leOnePart_eq_one' : a⁻ᵐ = 1 ↔ a⁻¹ ≤ 1 := sup_eq_right
+/-
+**oneLePart_le_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] {a : α}, a⁺ᵐ
+ ≤ 1 ↔ a ≤ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[to_additive] lemma oneLePart_le_one : a⁺ᵐ <= 1 ↔ a <= 1 := by simp [oneLePart]
+@[to_additive] lemma oneLePart_le_one : a⁺ᵐ ≤ 1 ↔ a ≤ 1 := by simp [oneLePart]
 
 /-- See also `leOnePart_le_one`. -/
 @[to_additive /-- See also `negPart_nonpos`. -/]
-/--
-lemma `leOnePart_le_one'` / 引理 `leOnePart_le_one'`
+/-
+**leOnePart_le_one'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：leOnePart_le_one' : a⁻ᵐ <= 1 ↔ a⁻¹ <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma leOnePart_le_one'
-  statement: a⁻ᵐ <= 1 ↔ a⁻¹ <= 1
-  proof: by simp [leOnePart]
-
-中文:
-引理 leOnePart_le_one'
-  结论: a⁻ᵐ <= 1 ↔ a⁻¹ <= 1
-  证明: by simp [leOnePart]
-
-Depends on / 依赖: leOnePart
+--- 原说明 ---
+See also `leOnePart_le_one`.
 -/
-lemma leOnePart_le_one' : a⁻ᵐ <= 1 ↔ a⁻¹ <= 1 := by simp [leOnePart]
-
-/--
-lemma `one_lt_oneLePart` / 引理 `one_lt_oneLePart`
-
-English:
-lemma one_lt_oneLePart
-  given: (ha : 1 < a)
-  statement: 1 < a⁺ᵐ
-  proof: by
-  rwa [oneLePart_eq_self.2 ha.le]
-
-中文:
-引理 one_lt_oneLePart
-  条件: (ha : 1 < a)
-  结论: 1 < a⁺ᵐ
-  证明: by
-  rwa [oneLePart_eq_self.2 ha.le]
+lemma leOnePart_le_one' : a⁻ᵐ ≤ 1 ↔ a⁻¹ ≤ 1 := by simp [leOnePart]
+/-
+**one_lt_oneLePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] {a : α}, 1 <
+ a → 1 < a⁺ᵐ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `oneLePart_eq_self`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvM
+onoid α] {a : α}, a⁺ᵐ = a ↔ 1 ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 @[to_additive (attr := simp) posPart_pos] lemma one_lt_oneLePart (ha : 1 < a) : 1 < a⁺ᵐ := by
   rwa [oneLePart_eq_self.2 ha.le]
-
-/--
-lemma `oneLePart_inv` / 引理 `oneLePart_inv`
-
-English:
-lemma oneLePart_inv
-  given: (a : α)
-  statement: a⁻¹⁺ᵐ = a⁻ᵐ
-  proof: rfl
-
-中文:
-引理 oneLePart_inv
-  条件: (a : α)
-  结论: a⁻¹⁺ᵐ = a⁻ᵐ
-  证明: rfl
+/-
+**oneLePart_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] (a : α), a⁻¹
+⁺ᵐ = a⁻ᵐ
+参数：a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive (attr := simp)] lemma oneLePart_inv (a : α) : a⁻¹⁺ᵐ = a⁻ᵐ := rfl
-
-/--
-lemma `oneLePart_max` / 引理 `oneLePart_max`
-
-English:
-lemma oneLePart_max
-  given: (a b : α)
-  statement: (max a b)⁺ᵐ = max a⁺ᵐ b⁺ᵐ
-  proof: by
-  simp [oneLePart, sup_sup_distrib_right]
-
-中文:
-引理 oneLePart_max
-  条件: (a b : α)
-  结论: (最大值 a b)⁺ᵐ = 最大值 a⁺ᵐ b⁺ᵐ
-  证明: by
-  simp [oneLePart, sup_sup_distrib_right]
+/-
+**oneLePart_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoid α] (a b : α), (
+a ⊔ b)⁺ᵐ = a⁺ᵐ ⊔ b⁺ᵐ
+参数：a b : α；a ⊔ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_sup_distrib_right`：sup_sup_distrib_right (a b c : α) : a ⊔ b ⊔ c = a
+ ⊔ c ⊔ (b ⊔ c)
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive] lemma oneLePart_max (a b : α) : (max a b)⁺ᵐ = max a⁺ᵐ b⁺ᵐ := by
   simp [oneLePart, sup_sup_distrib_right]
@@ -409,37 +281,36 @@ end DivInvMonoid
 section Group
 variable [Group α] {a b : α}
 
-/--
-lemma `leOnePart_one` / 引理 `leOnePart_one`
-
-English:
-lemma leOnePart_one
-  statement: (1 : α)⁻ᵐ = 1
-  proof: by simp [leOnePart]
-
-中文:
-引理 leOnePart_one
-  结论: (1 : α)⁻ᵐ = 1
-  证明: by simp [leOnePart]
+/-
+**leOnePart_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α], 1⁻ᵐ = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive (attr := simp)] lemma leOnePart_one : (1 : α)⁻ᵐ = 1 := by simp [leOnePart]
-
-/--
-lemma `leOnePart_inv` / 引理 `leOnePart_inv`
-
-English:
-lemma leOnePart_inv
-  given: (a : α)
-  statement: a⁻¹⁻ᵐ = a⁺ᵐ
-  proof: by
-  simp [oneLePart, leOnePart]
-
-中文:
-引理 leOnePart_inv
-  条件: (a : α)
-  结论: a⁻¹⁻ᵐ = a⁺ᵐ
-  证明: by
-  simp [oneLePart, leOnePart]
+/-
+**leOnePart_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] (a : α), a⁻¹⁻ᵐ = a⁺
+ᵐ
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive (attr := simp)] lemma leOnePart_inv (a : α) : a⁻¹⁻ᵐ = a⁺ᵐ := by
   simp [oneLePart, leOnePart]
@@ -447,178 +318,153 @@ lemma leOnePart_inv
 section MulLeftMono
 variable [MulLeftMono α]
 
-/--
-lemma `leOnePart_eq_inv` / 引理 `leOnePart_eq_inv`
-
-English:
-lemma leOnePart_eq_inv
-  statement: a⁻ᵐ = a⁻¹ ↔ a <= 1
-  proof: by simp [leOnePart]
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 leOnePart_eq_inv
-  结论: a⁻ᵐ = a⁻¹ ↔ a <= 1
-  证明: by simp [leOnePart]
-
-@[to_additive (attr := simp)]
+/-
+**leOnePart_eq_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] {a : α} [MulLeftMon
+o α], a⁻ᵐ = a⁻¹ ↔ a ≤ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[to_additive (attr := simp)] lemma leOnePart_eq_inv : a⁻ᵐ = a⁻¹ ↔ a <= 1 := by simp [leOnePart]
+@[to_additive (attr := simp)] lemma leOnePart_eq_inv : a⁻ᵐ = a⁻¹ ↔ a ≤ 1 := by simp [leOnePart]
 
 @[to_additive (attr := simp)]
-/--
-lemma `leOnePart_eq_one` / 引理 `leOnePart_eq_one`
-
-English:
-lemma leOnePart_eq_one
-  statement: a⁻ᵐ = 1 ↔ 1 <= a
-  proof: by simp [leOnePart_eq_one']
+/-
+**leOnePart_eq_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：leOnePart_eq_one : a⁻ᵐ = 1 ↔ 1 <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma leOnePart_eq_one : a⁻ᵐ = 1 ↔ 1 ≤ a := by simp [leOnePart_eq_one']
 
 @[to_additive (attr := simp)] alias ⟨_, leOnePart_of_le_one⟩ := leOnePart_eq_inv
 @[to_additive (attr := simp)] alias ⟨_, leOnePart_of_one_le⟩ := leOnePart_eq_one
-
-中文:
-引理 leOnePart_eq_one
-  结论: a⁻ᵐ = 1 ↔ 1 <= a
-  证明: by simp [leOnePart_eq_one']
-
-@[to_additive (attr := simp)] alias ⟨_, leOnePart_of_le_one⟩ := leOnePart_eq_inv
-@[to_additive (attr := simp)] alias ⟨_, leOnePart_of_one_le⟩ := leOnePart_eq_one
-
-Depends on / 依赖: leOnePart_eq_one
+/-
+**leOnePart_le_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] {a : α} [MulLeftMon
+o α], a⁻ᵐ ≤ 1 ↔ 1 ≤ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma leOnePart_eq_one : a⁻ᵐ = 1 ↔ 1 <= a := by simp [leOnePart_eq_one']
-
-@[to_additive (attr := simp)] alias ⟨_, leOnePart_of_le_one⟩ := leOnePart_eq_inv
-@[to_additive (attr := simp)] alias ⟨_, leOnePart_of_one_le⟩ := leOnePart_eq_one
-
-/--
-lemma `leOnePart_le_one` / 引理 `leOnePart_le_one`
-
-English:
-lemma leOnePart_le_one
-  statement: a⁻ᵐ <= 1 ↔ 1 <= a
-  proof: by simp [leOnePart]
-
-中文:
-引理 leOnePart_le_one
-  结论: a⁻ᵐ <= 1 ↔ 1 <= a
-  证明: by simp [leOnePart]
--/
-@[to_additive] lemma leOnePart_le_one : a⁻ᵐ <= 1 ↔ 1 <= a := by simp [leOnePart]
-
-/--
-lemma `one_lt_leOnePart` / 引理 `one_lt_leOnePart`
-
-English:
-lemma one_lt_leOnePart
-  given: (ha : a < 1)
-  statement: 1 < a⁻ᵐ
-  proof: by
-  rwa [leOnePart_eq_inv.2 ha.le, one_lt_inv']
-
-中文:
-引理 one_lt_leOnePart
-  条件: (ha : a < 1)
-  结论: 1 < a⁻ᵐ
-  证明: by
-  rwa [leOnePart_eq_inv.2 ha.le, one_lt_inv']
+@[to_additive] lemma leOnePart_le_one : a⁻ᵐ ≤ 1 ↔ 1 ≤ a := by simp [leOnePart]
+/-
+**one_lt_leOnePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] {a : α} [MulLeftMon
+o α], a < 1 → 1 < a⁻ᵐ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `leOnePart_eq_inv`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α]
+ {a : α} [MulLeftMono α], a⁻ᵐ = a⁻¹ ↔ a ≤ 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `one_lt_inv'`：∀ {α : Type u} [inst : Group α] [inst_1 : LT α] [MulLeftStr
+ictMono α] {a : α}, 1 < a⁻¹ ↔ a < 1
+· 使用定理 `instIsLeftCancelMulOfMulLeftReflectLE`：∀ {α : Type u_1} [inst : Mul α] [
+inst_1 : PartialOrder α] [MulLeftReflectLE α], IsLeftCancelMul α
 -/
 @[to_additive (attr := simp) negPart_pos] lemma one_lt_leOnePart (ha : a < 1) : 1 < a⁻ᵐ := by
   rwa [leOnePart_eq_inv.2 ha.le, one_lt_inv']
 
 -- Bourbaki A.VI.12 Prop 9 a)
-/--
-lemma `oneLePart_div_leOnePart` / 引理 `oneLePart_div_leOnePart`
-
-English:
-lemma oneLePart_div_leOnePart
-  given: (a : α)
-  statement: a⁺ᵐ / a⁻ᵐ = a
-  proof: by
-  rw [div_eq_mul_inv]; rw [mul_inv_eq_iff_eq_mul]; rw [leOnePart_def]; rw [mul_sup]; rw [mul_one]; rw [mul_inv_cancel]; rw [sup_comm]; rw [oneLePart_def]
-
-中文:
-引理 oneLePart_div_leOnePart
-  条件: (a : α)
-  结论: a⁺ᵐ / a⁻ᵐ = a
-  证明: by
-  rw [div_eq_mul_inv]; rw [mul_inv_eq_iff_eq_mul]; rw [leOnePart_def]; rw [mul_sup]; rw [mul_one]; rw [mul_inv_cancel]; rw [sup_comm]; rw [oneLePart_def]
+/-
+**oneLePart_div_leOnePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeftMono α] (a 
+: α), a⁺ᵐ / a⁻ᵐ = a
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_inv_eq_iff_eq_mul`：mul_inv_eq_iff_eq_mul : a * b⁻¹ = c ↔ a = c * b
+· 使用定理 `leOnePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁻ᵐ = a⁻¹ ⊔ 1
+· 使用引理 `mul_sup`：mul_sup [MulLeftMono α] (a b c : α) : c * (a ⊔ b) = c * a ⊔ c *
+ b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `oneLePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁺ᵐ = a ⊔ 1
 -/
 @[to_additive (attr := simp)] lemma oneLePart_div_leOnePart (a : α) : a⁺ᵐ / a⁻ᵐ = a := by
-  rw [div_eq_mul_inv]; rw [mul_inv_eq_iff_eq_mul]; rw [leOnePart_def]; rw [mul_sup]; rw [mul_one]; rw [mul_inv_cancel]; rw [sup_comm]; rw [oneLePart_def]
-
-/--
-lemma `leOnePart_div_oneLePart` / 引理 `leOnePart_div_oneLePart`
-
-English:
-lemma leOnePart_div_oneLePart
-  given: (a : α)
-  statement: a⁻ᵐ / a⁺ᵐ = a⁻¹
-  proof: by
-  rw [← inv_div]; rw [oneLePart_div_leOnePart]
-
-@[to_additive]
-
-中文:
-引理 leOnePart_div_oneLePart
-  条件: (a : α)
-  结论: a⁻ᵐ / a⁺ᵐ = a⁻¹
-  证明: by
-  rw [← inv_div]; rw [oneLePart_div_leOnePart]
-
-@[to_additive]
+  rw [div_eq_mul_inv, mul_inv_eq_iff_eq_mul, leOnePart_def, mul_sup, mul_one, mul_inv_cancel,
+    sup_comm, oneLePart_def]
+/-
+**leOnePart_div_oneLePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeftMono α] (a 
+: α), a⁻ᵐ / a⁺ᵐ = a⁻¹
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `oneLePart_div_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] (a : α), a⁺ᵐ / a⁻ᵐ = a
 -/
 @[to_additive (attr := simp)] lemma leOnePart_div_oneLePart (a : α) : a⁻ᵐ / a⁺ᵐ = a⁻¹ := by
-  rw [← inv_div]; rw [oneLePart_div_leOnePart]
+  rw [← inv_div, oneLePart_div_leOnePart]
 
 @[to_additive]
-/--
-lemma `oneLePart_leOnePart_injective` / 引理 `oneLePart_leOnePart_injective`
-
-English:
-lemma oneLePart_leOnePart_injective
-  statement: Injective fun a : α => (a⁺ᵐ, a⁻ᵐ)
-  proof: by
-  simp only [Injective, Prod.mk.injEq, and_imp]
-  rintro a b hpos hneg
-  rw [← oneLePart_div_leOnePart a]; rw [← oneLePart_div_leOnePart b]; rw [hpos]; rw [hneg]
-
-@[to_additive]
-
-中文:
-引理 oneLePart_leOnePart_injective
-  结论: 单射 fun a : α => (a⁺ᵐ, a⁻ᵐ)
-  证明: by
-  simp only [Injective, Prod.mk.injEq, and_imp]
-  rintro a b hpos hneg
-  rw [← oneLePart_div_leOnePart a]; rw [← oneLePart_div_leOnePart b]; rw [hpos]; rw [hneg]
-
-@[to_additive]
-
-Depends on / 依赖: Injective, Prod.mk.injEq, and_imp, oneLePart_div_leOnePart
+/-
+**oneLePart_leOnePart_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：oneLePart_leOnePart_injective : Injective fun a : α => (a⁺ᵐ, a⁻ᵐ)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `oneLePart_div_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] (a : α), a⁺ᵐ / a⁻ᵐ = a
 -/
-lemma oneLePart_leOnePart_injective : Injective fun a : α => (a⁺ᵐ, a⁻ᵐ) := by
+lemma oneLePart_leOnePart_injective : Injective fun a : α ↦ (a⁺ᵐ, a⁻ᵐ) := by
   simp only [Injective, Prod.mk.injEq, and_imp]
   rintro a b hpos hneg
-  rw [← oneLePart_div_leOnePart a]; rw [← oneLePart_div_leOnePart b]; rw [hpos]; rw [hneg]
+  rw [← oneLePart_div_leOnePart a, ← oneLePart_div_leOnePart b, hpos, hneg]
 
 @[to_additive]
-/--
-lemma `oneLePart_leOnePart_inj` / 引理 `oneLePart_leOnePart_inj`
-
-English:
-lemma oneLePart_leOnePart_inj
-  statement: a⁺ᵐ = b⁺ᵐ ∧ a⁻ᵐ = b⁻ᵐ ↔ a = b
-  proof: Prod.mk_inj.symm.trans oneLePart_leOnePart_injective.eq_iff
-
-中文:
-引理 oneLePart_leOnePart_inj
-  结论: a⁺ᵐ = b⁺ᵐ ∧ a⁻ᵐ = b⁻ᵐ ↔ a = b
-  证明: Prod.mk_inj.symm.trans oneLePart_leOnePart_injective.eq_iff
-
-Depends on / 依赖: Prod.mk_inj.symm.trans, eq_iff, mk_inj, oneLePart_leOnePart_injective, oneLePart_leOnePart_injective.eq_iff
+/-
+**oneLePart_leOnePart_inj** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：oneLePart_leOnePart_inj : a⁺ᵐ = b⁺ᵐ ∧ a⁻ᵐ = b⁻ᵐ ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Prod.mk_inj`：mk_inj {a₁ a₂ : α} {b₁ b₂ : β} : (a₁, b₁) = (a₂, b₂) ↔ a₁ =
+ a₂ ∧ b₁ = b₂
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `oneLePart_leOnePart_injective`：oneLePart_leOnePart_injective : Injective
+ fun a : α => (a⁺ᵐ, a⁻ᵐ)
 -/
 lemma oneLePart_leOnePart_inj : a⁺ᵐ = b⁺ᵐ ∧ a⁻ᵐ = b⁻ᵐ ↔ a = b :=
   Prod.mk_inj.symm.trans oneLePart_leOnePart_injective.eq_iff
@@ -626,134 +472,156 @@ lemma oneLePart_leOnePart_inj : a⁺ᵐ = b⁺ᵐ ∧ a⁻ᵐ = b⁻ᵐ ↔ a = 
 section MulRightMono
 variable [MulRightMono α]
 
-/--
-lemma `leOnePart_anti` / 引理 `leOnePart_anti`
-
-English:
-lemma leOnePart_anti
-  statement: Antitone (leOnePart : α -> α)
-  proof: fun _a _b hab => sup_le_sup_right (inv_le_inv_iff.2 hab) _
-
-@[to_additive]
-
-中文:
-引理 leOnePart_anti
-  结论: 递减 (leOnePart : α -> α)
-  证明: fun _a _b hab => sup_le_sup_right (inv_le_inv_iff.2 hab) _
-
-@[to_additive]
+/-
+**leOnePart_anti** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeftMono α] [Mu
+lRightMono α], Antitone leOnePart
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_sup_right`：sup_le_sup_right (h₁ : a <= b) (c) : a ⊔ c <= b ⊔ c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_le_inv_iff`：inv_le_inv_iff : a⁻¹ <= b⁻¹ ↔ b <= a
 -/
-@[to_additive] lemma leOnePart_anti : Antitone (leOnePart : α -> α) :=
-  fun _a _b hab => sup_le_sup_right (inv_le_inv_iff.2 hab) _
+@[to_additive] lemma leOnePart_anti : Antitone (leOnePart : α → α) :=
+  fun _a _b hab ↦ sup_le_sup_right (inv_le_inv_iff.2 hab) _
 
 @[to_additive]
-/--
-lemma `leOnePart_eq_inv_inf_one` / 引理 `leOnePart_eq_inv_inf_one`
-
-English:
-lemma leOnePart_eq_inv_inf_one
-  given: (a : α)
-  statement: a⁻ᵐ = (a ⊓ 1)⁻¹
-  proof: by
-  rw [leOnePart_def]; rw [← inv_inj]; rw [inv_sup]; rw [inv_inv]; rw [inv_inv]; rw [inv_one]
-
-中文:
-引理 leOnePart_eq_inv_inf_one
-  条件: (a : α)
-  结论: a⁻ᵐ = (a ⊓ 1)⁻¹
-  证明: by
-  rw [leOnePart_def]; rw [← inv_inj]; rw [inv_sup]; rw [inv_inv]; rw [inv_inv]; rw [inv_one]
-
-Depends on / 依赖: inv_inj, inv_inv, inv_one, inv_sup, leOnePart_def
+/-
+**leOnePart_eq_inv_inf_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：leOnePart_eq_inv_inf_one (a : α) : a⁻ᵐ = (a ⊓ 1)⁻¹
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `leOnePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁻ᵐ = a⁻¹ ⊔ 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_inj`：inv_inj : a⁻¹ = b⁻¹ ↔ a = b
+· 使用定理 `inv_sup`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeft
+Mono α] [MulRightMono α] (a b : α), (a ⊔ b)⁻¹ = a⁻¹ ⊓ b⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
 -/
 lemma leOnePart_eq_inv_inf_one (a : α) : a⁻ᵐ = (a ⊓ 1)⁻¹ := by
-  rw [leOnePart_def]; rw [← inv_inj]; rw [inv_sup]; rw [inv_inv]; rw [inv_inv]; rw [inv_one]
+  rw [leOnePart_def, ← inv_inj, inv_sup, inv_inv, inv_inv, inv_one]
 
 -- Bourbaki A.VI.12 Prop 9 d)
-/--
-lemma `oneLePart_mul_leOnePart` / 引理 `oneLePart_mul_leOnePart`
-
-English:
-lemma oneLePart_mul_leOnePart
-  given: (a : α)
-  statement: a⁺ᵐ * a⁻ᵐ = |a|ₘ
-  proof: by
-  rw [oneLePart_def]; rw [sup_mul]; rw [one_mul]; rw [leOnePart_def]; rw [mul_sup]; rw [mul_one]; rw [mul_inv_cancel]; rw [sup_assoc]; rw [← sup_assoc a]; rw [sup_eq_right.2 le_sup_right]
-exact sup_eq_left.2 one_le_mabs a
-
-中文:
-引理 oneLePart_mul_leOnePart
-  条件: (a : α)
-  结论: a⁺ᵐ * a⁻ᵐ = |a|ₘ
-  证明: by
-  rw [oneLePart_def]; rw [sup_mul]; rw [one_mul]; rw [leOnePart_def]; rw [mul_sup]; rw [mul_one]; rw [mul_inv_cancel]; rw [sup_assoc]; rw [← sup_assoc a]; rw [sup_eq_right.2 le_sup_right]
-exact sup_eq_left.2 one_le_mabs a
+/-
+**oneLePart_mul_leOnePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeftMono α] [Mu
+lRightMono α] (a : α), a⁺ᵐ * a⁻ᵐ = |a|ₘ
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `oneLePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁺ᵐ = a ⊔ 1
+· 使用引理 `sup_mul`：sup_mul [MulRightMono α] (a b c : α) : (a ⊔ b) * c = a * c ⊔ b 
+* c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `leOnePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁻ᵐ = a⁻¹ ⊔ 1
+· 使用引理 `mul_sup`：mul_sup [MulLeftMono α] (a b c : α) : c * (a ⊔ b) = c * a ⊔ c *
+ b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `sup_assoc`：sup_assoc (a b c : α) : a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
+· 使用定理 `one_le_mabs`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [Mul
+LeftMono α] [MulRightMono α] (a : α), 1 ≤ |a|ₘ
 -/
 @[to_additive] lemma oneLePart_mul_leOnePart (a : α) : a⁺ᵐ * a⁻ᵐ = |a|ₘ := by
-  rw [oneLePart_def]; rw [sup_mul]; rw [one_mul]; rw [leOnePart_def]; rw [mul_sup]; rw [mul_one]; rw [mul_inv_cancel]; rw [sup_assoc]; rw [← sup_assoc a]; rw [sup_eq_right.2 le_sup_right]
-exact sup_eq_left.2 one_le_mabs a
-
-/--
-lemma `leOnePart_mul_oneLePart` / 引理 `leOnePart_mul_oneLePart`
-
-English:
-lemma leOnePart_mul_oneLePart
-  given: (a : α)
-  statement: a⁻ᵐ * a⁺ᵐ = |a|ₘ
-  proof: by
-  rw [oneLePart_def]; rw [mul_sup]; rw [mul_one]; rw [leOnePart_def]; rw [sup_mul]; rw [one_mul]; rw [inv_mul_cancel]; rw [sup_assoc]; rw [← @sup_assoc _ _ a]; rw [sup_eq_right.2 le_sup_right]
-exact sup_eq_left.2 one_le_mabs a
-
-中文:
-引理 leOnePart_mul_oneLePart
-  条件: (a : α)
-  结论: a⁻ᵐ * a⁺ᵐ = |a|ₘ
-  证明: by
-  rw [oneLePart_def]; rw [mul_sup]; rw [mul_one]; rw [leOnePart_def]; rw [sup_mul]; rw [one_mul]; rw [inv_mul_cancel]; rw [sup_assoc]; rw [← @sup_assoc _ _ a]; rw [sup_eq_right.2 le_sup_right]
-exact sup_eq_left.2 one_le_mabs a
+  rw [oneLePart_def, sup_mul, one_mul, leOnePart_def, mul_sup, mul_one, mul_inv_cancel, sup_assoc,
+    ← sup_assoc a, sup_eq_right.2 le_sup_right]
+  exact sup_eq_left.2 <| one_le_mabs a
+/-
+**leOnePart_mul_oneLePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeftMono α] [Mu
+lRightMono α] (a : α), a⁻ᵐ * a⁺ᵐ = |a|ₘ
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `oneLePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁺ᵐ = a ⊔ 1
+· 使用引理 `mul_sup`：mul_sup [MulLeftMono α] (a b c : α) : c * (a ⊔ b) = c * a ⊔ c *
+ b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `leOnePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁻ᵐ = a⁻¹ ⊔ 1
+· 使用引理 `sup_mul`：sup_mul [MulRightMono α] (a b c : α) : (a ⊔ b) * c = a * c ⊔ b 
+* c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `inv_mul_cancel`：inv_mul_cancel (a : G) : a⁻¹ * a = 1
+· 使用定理 `sup_assoc`：sup_assoc (a b c : α) : a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
+· 使用定理 `one_le_mabs`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [Mul
+LeftMono α] [MulRightMono α] (a : α), 1 ≤ |a|ₘ
 -/
 @[to_additive] lemma leOnePart_mul_oneLePart (a : α) : a⁻ᵐ * a⁺ᵐ = |a|ₘ := by
-  rw [oneLePart_def]; rw [mul_sup]; rw [mul_one]; rw [leOnePart_def]; rw [sup_mul]; rw [one_mul]; rw [inv_mul_cancel]; rw [sup_assoc]; rw [← @sup_assoc _ _ a]; rw [sup_eq_right.2 le_sup_right]
-exact sup_eq_left.2 one_le_mabs a
+  rw [oneLePart_def, mul_sup, mul_one, leOnePart_def, sup_mul, one_mul, inv_mul_cancel, sup_assoc,
+    ← @sup_assoc _ _ a, sup_eq_right.2 le_sup_right]
+  exact sup_eq_left.2 <| one_le_mabs a
 
 -- Bourbaki A.VI.12 Prop 9 a)
 -- a⁺ᵐ ⊓ a⁻ᵐ = 0 (`a⁺` and `a⁻` are co-prime, and, since they are positive, disjoint)
-/--
-lemma `oneLePart_inf_leOnePart_eq_one` / 引理 `oneLePart_inf_leOnePart_eq_one`
-
-English:
-lemma oneLePart_inf_leOnePart_eq_one
-  given: (a : α)
-  statement: a⁺ᵐ ⊓ a⁻ᵐ = 1
-  proof: by
-  rw [← mul_left_inj a⁻ᵐ⁻¹]; rw [inf_mul]; rw [one_mul]; rw [mul_inv_cancel]; rw [← div_eq_mul_inv]; rw [oneLePart_div_leOnePart]; rw [leOnePart_eq_inv_inf_one]; rw [inv_inv]
-
-中文:
-引理 oneLePart_inf_leOnePart_eq_one
-  条件: (a : α)
-  结论: a⁺ᵐ ⊓ a⁻ᵐ = 1
-  证明: by
-  rw [← mul_left_inj a⁻ᵐ⁻¹]; rw [inf_mul]; rw [one_mul]; rw [mul_inv_cancel]; rw [← div_eq_mul_inv]; rw [oneLePart_div_leOnePart]; rw [leOnePart_eq_inv_inf_one]; rw [inv_inv]
+/-
+**oneLePart_inf_leOnePart_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeftMono α] [Mu
+lRightMono α] (a : α), a⁺ᵐ ⊓ a⁻ᵐ = 1
+参数：a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_left_inj`：mul_left_inj (a : G) {b c : G} : b * a = c * a ↔ b = c
+· 使用定理 `instIsRightCancelMulOfMulRightReflectLE`：∀ {α : Type u_1} [inst : Mul α]
+ [inst_1 : PartialOrder α] [MulRightReflectLE α], IsRightCancelMul α
+· 使用引理 `inf_mul`：inf_mul [MulRightMono α] (a b c : α) : (a ⊓ b) * c = a * c ⊓ b 
+* c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `oneLePart_div_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] (a : α), a⁺ᵐ / a⁻ᵐ = a
+· 使用引理 `leOnePart_eq_inv_inf_one`：leOnePart_eq_inv_inf_one (a : α) : a⁻ᵐ = (a ⊓ 
+1)⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 @[to_additive] lemma oneLePart_inf_leOnePart_eq_one (a : α) : a⁺ᵐ ⊓ a⁻ᵐ = 1 := by
-  rw [← mul_left_inj a⁻ᵐ⁻¹]; rw [inf_mul]; rw [one_mul]; rw [mul_inv_cancel]; rw [← div_eq_mul_inv]; rw [oneLePart_div_leOnePart]; rw [leOnePart_eq_inv_inf_one]; rw [inv_inv]
-
-/--
-lemma `leOnePart_min` / 引理 `leOnePart_min`
-
-English:
-lemma leOnePart_min
-  given: (a b : α)
-  statement: (min a b)⁻ᵐ = max a⁻ᵐ b⁻ᵐ
-  proof: by
-  simp [leOnePart, inv_inf, sup_sup_distrib_right]
-
-中文:
-引理 leOnePart_min
-  条件: (a b : α)
-  结论: (最小值 a b)⁻ᵐ = 最大值 a⁻ᵐ b⁻ᵐ
-  证明: by
-  simp [leOnePart, inv_inf, sup_sup_distrib_right]
+  rw [← mul_left_inj a⁻ᵐ⁻¹, inf_mul, one_mul, mul_inv_cancel, ← div_eq_mul_inv,
+    oneLePart_div_leOnePart, leOnePart_eq_inv_inf_one, inv_inv]
+/-
+**leOnePart_min** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeftMono α] [Mu
+lRightMono α] (a b : α), (a ⊓ b)⁻ᵐ = a⁻ᵐ ⊔ b⁻ᵐ
+参数：a b : α；a ⊓ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_inf`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeft
+Mono α] [MulRightMono α] (a b : α), (a ⊓ b)⁻¹ = a⁻¹ ⊔ b⁻¹
+· 使用定理 `sup_sup_distrib_right`：sup_sup_distrib_right (a b c : α) : a ⊔ b ⊔ c = a
+ ⊔ c ⊔ (b ⊔ c)
+· 使用定理 `sup_of_le_right`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, a ≤
+ b → a ⊔ b = b
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive] lemma leOnePart_min (a b : α) : (min a b)⁻ᵐ = max a⁻ᵐ b⁻ᵐ := by
   simp [leOnePart, inv_inf, sup_sup_distrib_right]
@@ -768,181 +636,150 @@ section CommGroup
 variable [CommGroup α] [MulLeftMono α]
 
 -- Bourbaki A.VI.12 (with a and b swapped)
-/--
-lemma `sup_eq_mul_oneLePart_div` / 引理 `sup_eq_mul_oneLePart_div`
-
-English:
-lemma sup_eq_mul_oneLePart_div
-  given: (a b : α)
-  statement: a ⊔ b = b * (a / b)⁺ᵐ
-  proof: by
-  simp [oneLePart, mul_sup]
-
-中文:
-引理 sup_eq_mul_oneLePart_div
-  条件: (a b : α)
-  结论: a ⊔ b = b * (a / b)⁺ᵐ
-  证明: by
-  simp [oneLePart, mul_sup]
+/-
+**sup_eq_mul_oneLePart_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : CommGroup α] [MulLeftMono α]
+ (a b : α), a ⊔ b = b * (a / b)⁺ᵐ
+参数：a b : α；a / b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `mul_sup`：mul_sup [MulLeftMono α] (a b c : α) : c * (a ⊔ b) = c * a ⊔ c *
+ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_div_cancel`：mul_div_cancel (a b : G) : a * (b / a) = b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive] lemma sup_eq_mul_oneLePart_div (a b : α) : a ⊔ b = b * (a / b)⁺ᵐ := by
   simp [oneLePart, mul_sup]
 
 -- Bourbaki A.VI.12 (with a and b swapped)
-/--
-lemma `inf_eq_div_oneLePart_div` / 引理 `inf_eq_div_oneLePart_div`
-
-English:
-lemma inf_eq_div_oneLePart_div
-  given: (a b : α)
-  statement: a ⊓ b = a / (a / b)⁺ᵐ
-  proof: by
-  simp [oneLePart, div_sup, inf_comm]
-
-中文:
-引理 inf_eq_div_oneLePart_div
-  条件: (a b : α)
-  结论: a ⊓ b = a / (a / b)⁺ᵐ
-  证明: by
-  simp [oneLePart, div_sup, inf_comm]
+/-
+**inf_eq_div_oneLePart_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : CommGroup α] [MulLeftMono α]
+ (a b : α), a ⊓ b = a / (a / b)⁺ᵐ
+参数：a b : α；a / b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `div_sup`：div_sup (a b c : α) : c / (a ⊔ b) = c / a ⊓ c / b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `div_div_cancel`：div_div_cancel (a b : G) : a / (a / b) = b
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b : α), a ⊓ b = b 
+⊓ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive] lemma inf_eq_div_oneLePart_div (a b : α) : a ⊓ b = a / (a / b)⁺ᵐ := by
   simp [oneLePart, div_sup, inf_comm]
 
 -- Bourbaki A.VI.12 Prop 9 c)
-/--
-lemma `le_iff_oneLePart_leOnePart` / 引理 `le_iff_oneLePart_leOnePart`
-
-English:
-lemma le_iff_oneLePart_leOnePart
-  given: (a b : α)
-  statement: a <= b ↔ a⁺ᵐ <= b⁺ᵐ ∧ b⁻ᵐ <= a⁻ᵐ
-  proof: by
-  refine ⟨fun h => ⟨oneLePart_mono h, leOnePart_anti h⟩, fun h => ?_⟩
-  rw [← oneLePart_div_leOnePart a]; rw [← oneLePart_div_leOnePart b]
-  exact div_le_div'' h.1 h.2
-
-@[to_additive abs_add_eq_two_nsmul_posPart]
-
-中文:
-引理 le_iff_oneLePart_leOnePart
-  条件: (a b : α)
-  结论: a <= b ↔ a⁺ᵐ <= b⁺ᵐ ∧ b⁻ᵐ <= a⁻ᵐ
-  证明: by
-  refine ⟨fun h => ⟨oneLePart_mono h, leOnePart_anti h⟩, fun h => ?_⟩
-  rw [← oneLePart_div_leOnePart a]; rw [← oneLePart_div_leOnePart b]
-  exact div_le_div'' h.1 h.2
-
-@[to_additive abs_add_eq_two_nsmul_posPart]
+/-
+**le_iff_oneLePart_leOnePart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : CommGroup α] [MulLeftMono α]
+ (a b : α), a ≤ b ↔ a⁺ᵐ ≤ b⁺ᵐ ∧ b⁻ᵐ ≤ a⁻ᵐ
+参数：a b : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `oneLePart_mono`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMono
+id α], Monotone fun x => x⁺ᵐ
+· 使用定理 `leOnePart_anti`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [
+MulLeftMono α] [MulRightMono α], Antitone leOnePart
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `oneLePart_div_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] (a : α), a⁺ᵐ / a⁻ᵐ = a
+· 使用定理 `div_le_div''`：div_le_div'' (hab : a <= b) (hcd : c <= d) : a / d <= b / 
+c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-@[to_additive] lemma le_iff_oneLePart_leOnePart (a b : α) : a <= b ↔ a⁺ᵐ <= b⁺ᵐ ∧ b⁻ᵐ <= a⁻ᵐ := by
-  refine ⟨fun h => ⟨oneLePart_mono h, leOnePart_anti h⟩, fun h => ?_⟩
-  rw [← oneLePart_div_leOnePart a]; rw [← oneLePart_div_leOnePart b]
+@[to_additive] lemma le_iff_oneLePart_leOnePart (a b : α) : a ≤ b ↔ a⁺ᵐ ≤ b⁺ᵐ ∧ b⁻ᵐ ≤ a⁻ᵐ := by
+  refine ⟨fun h ↦ ⟨oneLePart_mono h, leOnePart_anti h⟩, fun h ↦ ?_⟩
+  rw [← oneLePart_div_leOnePart a, ← oneLePart_div_leOnePart b]
   exact div_le_div'' h.1 h.2
 
 @[to_additive abs_add_eq_two_nsmul_posPart]
-/--
-lemma `mabs_mul_eq_oneLePart_sq` / 引理 `mabs_mul_eq_oneLePart_sq`
-
-English:
-lemma mabs_mul_eq_oneLePart_sq
-  given: (a : α)
-  statement: |a|ₘ * a = a⁺ᵐ ^ 2
-  proof: by
-  rw [sq]; rw [← mul_mul_div_cancel a⁺ᵐ]; rw [oneLePart_mul_leOnePart]; rw [oneLePart_div_leOnePart]
-
-@[to_additive add_abs_eq_two_nsmul_posPart]
-
-中文:
-引理 mabs_mul_eq_oneLePart_sq
-  条件: (a : α)
-  结论: |a|ₘ * a = a⁺ᵐ ^ 2
-  证明: by
-  rw [sq]; rw [← mul_mul_div_cancel a⁺ᵐ]; rw [oneLePart_mul_leOnePart]; rw [oneLePart_div_leOnePart]
-
-@[to_additive add_abs_eq_two_nsmul_posPart]
-
-Depends on / 依赖: mul_mul_div_cancel, oneLePart_div_leOnePart, oneLePart_mul_leOnePart
+/-
+**mabs_mul_eq_oneLePart_sq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mabs_mul_eq_oneLePart_sq (a : α) : |a|ₘ * a = a⁺ᵐ ^ 2
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_mul_div_cancel`：mul_mul_div_cancel (a b c : G) : a * c * (b / c) = a
+ * b
+· 使用定理 `oneLePart_mul_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] [MulRightMono α] (a : α), a⁺ᵐ * a⁻ᵐ = |a|ₘ
+· 使用定理 `oneLePart_div_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] (a : α), a⁺ᵐ / a⁻ᵐ = a
 -/
 lemma mabs_mul_eq_oneLePart_sq (a : α) : |a|ₘ * a = a⁺ᵐ ^ 2 := by
-  rw [sq]; rw [← mul_mul_div_cancel a⁺ᵐ]; rw [oneLePart_mul_leOnePart]; rw [oneLePart_div_leOnePart]
+  rw [sq, ← mul_mul_div_cancel a⁺ᵐ, oneLePart_mul_leOnePart, oneLePart_div_leOnePart]
 
 @[to_additive add_abs_eq_two_nsmul_posPart]
-/--
-lemma `mul_mabs_eq_oneLePart_sq` / 引理 `mul_mabs_eq_oneLePart_sq`
-
-English:
-lemma mul_mabs_eq_oneLePart_sq
-  given: (a : α)
-  statement: a * |a|ₘ = a⁺ᵐ ^ 2
-  proof: by
-  rw [mul_comm]; rw [mabs_mul_eq_oneLePart_sq]
-
-@[to_additive abs_sub_eq_two_nsmul_negPart]
-
-中文:
-引理 mul_mabs_eq_oneLePart_sq
-  条件: (a : α)
-  结论: a * |a|ₘ = a⁺ᵐ ^ 2
-  证明: by
-  rw [mul_comm]; rw [mabs_mul_eq_oneLePart_sq]
-
-@[to_additive abs_sub_eq_two_nsmul_negPart]
-
-Depends on / 依赖: mabs_mul_eq_oneLePart_sq, mul_comm
+/-
+**mul_mabs_eq_oneLePart_sq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_mabs_eq_oneLePart_sq (a : α) : a * |a|ₘ = a⁺ᵐ ^ 2
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用引理 `mabs_mul_eq_oneLePart_sq`：mabs_mul_eq_oneLePart_sq (a : α) : |a|ₘ * a = 
+a⁺ᵐ ^ 2
 -/
 lemma mul_mabs_eq_oneLePart_sq (a : α) : a * |a|ₘ = a⁺ᵐ ^ 2 := by
-  rw [mul_comm]; rw [mabs_mul_eq_oneLePart_sq]
+  rw [mul_comm, mabs_mul_eq_oneLePart_sq]
 
 @[to_additive abs_sub_eq_two_nsmul_negPart]
-/--
-lemma `mabs_div_eq_leOnePart_sq` / 引理 `mabs_div_eq_leOnePart_sq`
-
-English:
-lemma mabs_div_eq_leOnePart_sq
-  given: (a : α)
-  statement: |a|ₘ / a = a⁻ᵐ ^ 2
-  proof: by
-  rw [sq]; rw [← mul_div_div_cancel]; rw [oneLePart_mul_leOnePart]; rw [oneLePart_div_leOnePart]
-
-@[to_additive sub_abs_eq_neg_two_nsmul_negPart]
-
-中文:
-引理 mabs_div_eq_leOnePart_sq
-  条件: (a : α)
-  结论: |a|ₘ / a = a⁻ᵐ ^ 2
-  证明: by
-  rw [sq]; rw [← mul_div_div_cancel]; rw [oneLePart_mul_leOnePart]; rw [oneLePart_div_leOnePart]
-
-@[to_additive sub_abs_eq_neg_two_nsmul_negPart]
-
-Depends on / 依赖: mul_div_div_cancel, oneLePart_div_leOnePart, oneLePart_mul_leOnePart
+/-
+**mabs_div_eq_leOnePart_sq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mabs_div_eq_leOnePart_sq (a : α) : |a|ₘ / a = a⁻ᵐ ^ 2
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_div_div_cancel`：mul_div_div_cancel (a b c : G) : a * b / (a / c) = b
+ * c
+· 使用定理 `oneLePart_mul_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] [MulRightMono α] (a : α), a⁺ᵐ * a⁻ᵐ = |a|ₘ
+· 使用定理 `oneLePart_div_leOnePart`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : G
+roup α] [MulLeftMono α] (a : α), a⁺ᵐ / a⁻ᵐ = a
 -/
 lemma mabs_div_eq_leOnePart_sq (a : α) : |a|ₘ / a = a⁻ᵐ ^ 2 := by
-  rw [sq]; rw [← mul_div_div_cancel]; rw [oneLePart_mul_leOnePart]; rw [oneLePart_div_leOnePart]
+  rw [sq, ← mul_div_div_cancel, oneLePart_mul_leOnePart, oneLePart_div_leOnePart]
 
 @[to_additive sub_abs_eq_neg_two_nsmul_negPart]
-/--
-lemma `div_mabs_eq_inv_leOnePart_sq` / 引理 `div_mabs_eq_inv_leOnePart_sq`
-
-English:
-lemma div_mabs_eq_inv_leOnePart_sq
-  given: (a : α)
-  statement: a / |a|ₘ = (a⁻ᵐ ^ 2)⁻¹
-  proof: by
-  rw [← mabs_div_eq_leOnePart_sq]; rw [inv_div]
-
-中文:
-引理 div_mabs_eq_inv_leOnePart_sq
-  条件: (a : α)
-  结论: a / |a|ₘ = (a⁻ᵐ ^ 2)⁻¹
-  证明: by
-  rw [← mabs_div_eq_leOnePart_sq]; rw [inv_div]
-
-Depends on / 依赖: inv_div, mabs_div_eq_leOnePart_sq
+/-
+**div_mabs_eq_inv_leOnePart_sq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：div_mabs_eq_inv_leOnePart_sq (a : α) : a / |a|ₘ = (a⁻ᵐ ^ 2)⁻¹
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `mabs_div_eq_leOnePart_sq`：mabs_div_eq_leOnePart_sq (a : α) : |a|ₘ / a = 
+a⁻ᵐ ^ 2
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
 -/
 lemma div_mabs_eq_inv_leOnePart_sq (a : α) : a / |a|ₘ = (a⁻ᵐ ^ 2)⁻¹ := by
-  rw [← mabs_div_eq_leOnePart_sq]; rw [inv_div]
+  rw [← mabs_div_eq_leOnePart_sq, inv_div]
 
 end CommGroup
 end Lattice
@@ -950,44 +787,41 @@ end Lattice
 section DistribLattice
 variable [DistribLattice α] [Group α]
 
-/--
-lemma `oneLePart_min` / 引理 `oneLePart_min`
-
-English:
-lemma oneLePart_min
-  given: (a b : α)
-  statement: (min a b)⁺ᵐ = min a⁺ᵐ b⁺ᵐ
-  proof: by
-  simp [oneLePart, sup_inf_right]
-
-中文:
-引理 oneLePart_min
-  条件: (a b : α)
-  结论: (最小值 a b)⁺ᵐ = 最小值 a⁺ᵐ b⁺ᵐ
-  证明: by
-  simp [oneLePart, sup_inf_right]
+/-
+**oneLePart_min** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : DistribLattice α] [inst_1 : Group α] (a b : α), (
+a ⊓ b)⁺ᵐ = a⁺ᵐ ⊓ b⁺ᵐ
+参数：a b : α；a ⊓ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_inf_right`：sup_inf_right (a b c : α) : a ⊓ b ⊔ c = (a ⊔ c) ⊓ (b ⊔ c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive] lemma oneLePart_min (a b : α) : (min a b)⁺ᵐ = min a⁺ᵐ b⁺ᵐ := by
   simp [oneLePart, sup_inf_right]
 
 variable [MulLeftMono α] [MulRightMono α]
-
-/--
-lemma `leOnePart_max` / 引理 `leOnePart_max`
-
-English:
-lemma leOnePart_max
-  given: (a b : α)
-  statement: (max a b)⁻ᵐ = min a⁻ᵐ b⁻ᵐ
-  proof: by
-  simp [leOnePart, inv_sup, sup_inf_right]
-
-中文:
-引理 leOnePart_max
-  条件: (a b : α)
-  结论: (最大值 a b)⁻ᵐ = 最小值 a⁻ᵐ b⁻ᵐ
-  证明: by
-  simp [leOnePart, inv_sup, sup_inf_right]
+/-
+**leOnePart_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : DistribLattice α] [inst_1 : Group α] [MulLeftMono
+ α] [MulRightMono α] (a b : α),   (a ⊔ b)⁻ᵐ = a⁻ᵐ ⊓ b⁻ᵐ
+参数：a b : α；a ⊔ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_sup`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Group α] [MulLeft
+Mono α] [MulRightMono α] (a b : α), (a ⊔ b)⁻¹ = a⁻¹ ⊓ b⁻¹
+· 使用定理 `sup_inf_right`：sup_inf_right (a b c : α) : a ⊓ b ⊔ c = (a ⊔ c) ⊓ (b ⊔ c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[to_additive] lemma leOnePart_max (a b : α) : (max a b)⁻ᵐ = min a⁻ᵐ b⁻ᵐ := by
   simp [leOnePart, inv_sup, sup_inf_right]
@@ -997,243 +831,190 @@ end DistribLattice
 section LinearOrder
 variable [LinearOrder α] [Group α] {a b : α}
 
-/--
-lemma `oneLePart_eq_ite` / 引理 `oneLePart_eq_ite`
-
-English:
-lemma oneLePart_eq_ite
-  statement: a⁺ᵐ = if 1 <= a then a else 1
-  proof: by
-  rw [oneLePart_def]; rw [← maxDefault]; rw [← sup_eq_maxDefault]; simp_rw [sup_comm]
-
-中文:
-引理 oneLePart_eq_ite
-  结论: a⁺ᵐ = if 1 <= a then a else 1
-  证明: by
-  rw [oneLePart_def]; rw [← maxDefault]; rw [← sup_eq_maxDefault]; simp_rw [sup_comm]
+/-
+**oneLePart_eq_ite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a : α}, a⁺ᵐ = 
+if 1 ≤ a then a else 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `oneLePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁺ᵐ = a ⊔ 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `maxDefault.eq_1`：∀ {α : Type u_1} [inst : LE α] [inst_1 : DecidableLE α]
+ (a b : α), maxDefault a b = if a ≤ b then b else a
+· 使用定理 `sup_eq_maxDefault`：sup_eq_maxDefault [SemilatticeSup α] [DecidableLE α] 
+[@Std.Total α (· <= ·)] : (· ⊔ ·) = (maxDefault : α -> α -> α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[to_additive] lemma oneLePart_eq_ite : a⁺ᵐ = if 1 <= a then a else 1 := by
-  rw [oneLePart_def]; rw [← maxDefault]; rw [← sup_eq_maxDefault]; simp_rw [sup_comm]
-
-/--
-lemma `oneLePart_eq_ite_lt` / 引理 `oneLePart_eq_ite_lt`
-
-English:
-lemma oneLePart_eq_ite_lt
-  statement: a⁺ᵐ = if 1 < a then a else 1
-  proof: by
-  grind [oneLePart_eq_ite]
-
-中文:
-引理 oneLePart_eq_ite_lt
-  结论: a⁺ᵐ = if 1 < a then a else 1
-  证明: by
-  grind [oneLePart_eq_ite]
+@[to_additive] lemma oneLePart_eq_ite : a⁺ᵐ = if 1 ≤ a then a else 1 := by
+  rw [oneLePart_def, ← maxDefault, ← sup_eq_maxDefault]; simp_rw [sup_comm]
+/-
+**oneLePart_eq_ite_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a : α}, a⁺ᵐ = 
+if 1 < a then a else 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] lemma oneLePart_eq_ite_lt : a⁺ᵐ = if 1 < a then a else 1 := by
   grind [oneLePart_eq_ite]
-
-/--
-lemma `one_lt_oneLePart_iff` / 引理 `one_lt_oneLePart_iff`
-
-English:
-lemma one_lt_oneLePart_iff
-  statement: 1 < a⁺ᵐ ↔ 1 < a
-  proof: lt_iff_lt_of_le_iff_le (one_le_oneLePart _).ge_iff_eq'.trans oneLePart_eq_one
-
-@[to_additive posPart_eq_of_posPart_pos]
-
-中文:
-引理 one_lt_oneLePart_iff
-  结论: 1 < a⁺ᵐ ↔ 1 < a
-  证明: lt_iff_lt_of_le_iff_le (one_le_oneLePart _).ge_iff_eq'.trans oneLePart_eq_one
-
-@[to_additive posPart_eq_of_posPart_pos]
+/-
+**one_lt_oneLePart_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a : α}, 1 < a⁺
+ᵐ ↔ 1 < a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `LE.le.ge_iff_eq'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (a ≤ b ↔ a = b)
+· 使用引理 `one_le_oneLePart`：one_le_oneLePart (a : α) : 1 <= a⁺ᵐ
+· 使用定理 `oneLePart_eq_one`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMo
+noid α] {a : α}, a⁺ᵐ = 1 ↔ a ≤ 1
 -/
 @[to_additive (attr := simp) posPart_pos_iff] lemma one_lt_oneLePart_iff : 1 < a⁺ᵐ ↔ 1 < a :=
-lt_iff_lt_of_le_iff_le (one_le_oneLePart _).ge_iff_eq'.trans oneLePart_eq_one
+  lt_iff_lt_of_le_iff_le <| (one_le_oneLePart _).ge_iff_eq'.trans oneLePart_eq_one
 
 @[to_additive posPart_eq_of_posPart_pos]
-/--
-lemma `oneLePart_of_one_lt_oneLePart` / 引理 `oneLePart_of_one_lt_oneLePart`
-
-English:
-lemma oneLePart_of_one_lt_oneLePart
-  given: (ha : 1 < a⁺ᵐ)
-  statement: a⁺ᵐ = a
-  proof: by
-  rw [oneLePart_def]; rw [right_lt_sup]; rw [not_le] at ha; exact oneLePart_eq_self.2 ha.le
-
-中文:
-引理 oneLePart_of_one_lt_oneLePart
-  条件: (ha : 1 < a⁺ᵐ)
-  结论: a⁺ᵐ = a
-  证明: by
-  rw [oneLePart_def]; rw [right_lt_sup]; rw [not_le] at ha; exact oneLePart_eq_self.2 ha.le
-
-Depends on / 依赖: ha.le, not_le, oneLePart_def, oneLePart_eq_self, right_lt_sup
+/-
+**oneLePart_of_one_lt_oneLePart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：oneLePart_of_one_lt_oneLePart (ha : 1 < a⁺ᵐ) : a⁺ᵐ = a
+参数：ha : 1 < a⁺ᵐ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `oneLePart_eq_self`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvM
+onoid α] {a : α}, a⁺ᵐ = a ↔ 1 ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `right_lt_sup`：right_lt_sup : b < a ⊔ b ↔ ¬a <= b
+· 使用定理 `oneLePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁺ᵐ = a ⊔ 1
 -/
 lemma oneLePart_of_one_lt_oneLePart (ha : 1 < a⁺ᵐ) : a⁺ᵐ = a := by
-  rw [oneLePart_def]; rw [right_lt_sup]; rw [not_le] at ha; exact oneLePart_eq_self.2 ha.le
-
-/--
-lemma `oneLePart_lt` / 引理 `oneLePart_lt`
-
-English:
-lemma oneLePart_lt
-  statement: a⁺ᵐ < b ↔ a < b ∧ 1 < b
-  proof: sup_lt_iff
-
-中文:
-引理 oneLePart_lt
-  结论: a⁺ᵐ < b ↔ a < b ∧ 1 < b
-  证明: sup_lt_iff
+  rw [oneLePart_def, right_lt_sup, not_le] at ha; exact oneLePart_eq_self.2 ha.le
+/-
+**oneLePart_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a b : α}, a⁺ᵐ 
+< b ↔ a < b ∧ 1 < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_lt_iff`：sup_lt_iff : b ⊔ c < a ↔ b < a ∧ c < a
 -/
 @[to_additive (attr := simp)] lemma oneLePart_lt : a⁺ᵐ < b ↔ a < b ∧ 1 < b := sup_lt_iff
 
 section covariantmul
 variable [MulLeftMono α]
 
-/--
-lemma `leOnePart_eq_ite` / 引理 `leOnePart_eq_ite`
-
-English:
-lemma leOnePart_eq_ite
-  statement: a⁻ᵐ = if a <= 1 then a⁻¹ else 1
-  proof: by
-  simp_rw [← one_le_inv']; rw [leOnePart_def, ← maxDefault, ← sup_eq_maxDefault]; simp_rw [sup_comm]
-
-中文:
-引理 leOnePart_eq_ite
-  结论: a⁻ᵐ = if a <= 1 then a⁻¹ else 1
-  证明: by
-  simp_rw [← one_le_inv']; rw [leOnePart_def, ← maxDefault, ← sup_eq_maxDefault]; simp_rw [sup_comm]
+/-
+**leOnePart_eq_ite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a : α} [MulLef
+tMono α], a⁻ᵐ = if a ≤ 1 then a⁻¹ else 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `leOnePart_def`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : DivInvMonoi
+d α] (a : α), a⁻ᵐ = a⁻¹ ⊔ 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `maxDefault.eq_1`：∀ {α : Type u_1} [inst : LE α] [inst_1 : DecidableLE α]
+ (a b : α), maxDefault a b = if a ≤ b then b else a
+· 使用定理 `sup_eq_maxDefault`：sup_eq_maxDefault [SemilatticeSup α] [DecidableLE α] 
+[@Std.Total α (· <= ·)] : (· ⊔ ·) = (maxDefault : α -> α -> α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[to_additive] lemma leOnePart_eq_ite : a⁻ᵐ = if a <= 1 then a⁻¹ else 1 := by
+@[to_additive] lemma leOnePart_eq_ite : a⁻ᵐ = if a ≤ 1 then a⁻¹ else 1 := by
   simp_rw [← one_le_inv']; rw [leOnePart_def, ← maxDefault, ← sup_eq_maxDefault]; simp_rw [sup_comm]
-
-/--
-lemma `leOnePart_eq_ite_lt` / 引理 `leOnePart_eq_ite_lt`
-
-English:
-lemma leOnePart_eq_ite_lt
-  statement: a⁻ᵐ = if a < 1 then a⁻¹ else 1
-  proof: by
-  grind [leOnePart_eq_ite, inv_one]
-
-中文:
-引理 leOnePart_eq_ite_lt
-  结论: a⁻ᵐ = if a < 1 then a⁻¹ else 1
-  证明: by
-  grind [leOnePart_eq_ite, inv_one]
+/-
+**leOnePart_eq_ite_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a : α} [MulLef
+tMono α], a⁻ᵐ = if a < 1 then a⁻¹ else 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive] lemma leOnePart_eq_ite_lt : a⁻ᵐ = if a < 1 then a⁻¹ else 1 := by
   grind [leOnePart_eq_ite, inv_one]
-
-/--
-lemma `one_lt_leOnePart_iff` / 引理 `one_lt_leOnePart_iff`
-
-English:
-lemma one_lt_leOnePart_iff
-  statement: 1 < a⁻ᵐ ↔ a < 1
-  proof: lt_iff_lt_of_le_iff_le (one_le_leOnePart _).ge_iff_eq'.trans leOnePart_eq_one
-
-中文:
-引理 one_lt_leOnePart_iff
-  结论: 1 < a⁻ᵐ ↔ a < 1
-  证明: lt_iff_lt_of_le_iff_le (one_le_leOnePart _).ge_iff_eq'.trans leOnePart_eq_one
+/-
+**one_lt_leOnePart_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a : α} [MulLef
+tMono α], 1 < a⁻ᵐ ↔ a < 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `LE.le.ge_iff_eq'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (a ≤ b ↔ a = b)
+· 使用引理 `one_le_leOnePart`：one_le_leOnePart (a : α) : 1 <= a⁻ᵐ
+· 使用引理 `leOnePart_eq_one`：leOnePart_eq_one : a⁻ᵐ = 1 ↔ 1 <= a
 -/
 @[to_additive (attr := simp) negPart_pos_iff] lemma one_lt_leOnePart_iff : 1 < a⁻ᵐ ↔ a < 1 :=
-lt_iff_lt_of_le_iff_le (one_le_leOnePart _).ge_iff_eq'.trans leOnePart_eq_one
+  lt_iff_lt_of_le_iff_le <| (one_le_leOnePart _).ge_iff_eq'.trans leOnePart_eq_one
 
 variable [MulRightMono α]
-
-/--
-lemma `leOnePart_lt` / 引理 `leOnePart_lt`
-
-English:
-lemma leOnePart_lt
-  statement: a⁻ᵐ < b ↔ b⁻¹ < a ∧ 1 < b
-  proof: sup_lt_iff.trans by rw [inv_lt']
-
-中文:
-引理 leOnePart_lt
-  结论: a⁻ᵐ < b ↔ b⁻¹ < a ∧ 1 < b
-  证明: sup_lt_iff.trans by rw [inv_lt']
+/-
+**leOnePart_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1 : Group α] {a b : α} [MulL
+eftMono α] [MulRightMono α],   a⁻ᵐ < b ↔ b⁻¹ < a ∧ 1 < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `sup_lt_iff`：sup_lt_iff : b ⊔ c < a ↔ b < a ∧ c < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_lt'`：inv_lt' : a⁻¹ < b ↔ b⁻¹ < a
+· 使用定理 `instIsLeftCancelMulOfMulLeftReflectLE`：∀ {α : Type u_1} [inst : Mul α] [
+inst_1 : PartialOrder α] [MulLeftReflectLE α], IsLeftCancelMul α
+· 使用定理 `instIsRightCancelMulOfMulRightReflectLE`：∀ {α : Type u_1} [inst : Mul α]
+ [inst_1 : PartialOrder α] [MulRightReflectLE α], IsRightCancelMul α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[to_additive (attr := simp)] lemma leOnePart_lt : a⁻ᵐ < b ↔ b⁻¹ < a ∧ 1 < b :=
-sup_lt_iff.trans by rw [inv_lt']
+  sup_lt_iff.trans <| by rw [inv_lt']
 
 end covariantmul
 end LinearOrder
 
 namespace Pi
-variable {ι : Type*} {α : ι -> Type*} [forall i, Lattice (α i)] [forall i, Group (α i)]
+variable {ι : Type*} {α : ι → Type*} [∀ i, Lattice (α i)] [∀ i, Group (α i)]
 
-/--
-lemma `oneLePart_apply` / 引理 `oneLePart_apply`
-
-English:
-lemma oneLePart_apply
-  given: (f : forall i, α i) (i : ι)
-  statement: f⁺ᵐ i = (f i)⁺ᵐ
-  proof: rfl
-
-中文:
-引理 oneLePart_apply
-  条件: (f : 对任意 i, α i) (i : ι)
-  结论: f⁺ᵐ i = (f i)⁺ᵐ
-  证明: rfl
+/-
+**Pi.oneLePart_apply** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：∀ {ι : Type u_2} {α : ι → Type u_3} [inst : (i : ι) → Lattice (α i)] [inst
+_1 : (i : ι) → Group (α i)]   (f : (i : ι) → α i) (i : ι), f⁺ᵐ i = (f i)⁺ᵐ
+参数：i : ι；α i；i : ι；α i；f : (i : ι) → α i；i : ι；f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma oneLePart_apply (f : forall i, α i) (i : ι) : f⁺ᵐ i = (f i)⁺ᵐ := rfl
-/--
-lemma `leOnePart_apply` / 引理 `leOnePart_apply`
-
-English:
-lemma leOnePart_apply
-  given: (f : forall i, α i) (i : ι)
-  statement: f⁻ᵐ i = (f i)⁻ᵐ
-  proof: rfl
-
-中文:
-引理 leOnePart_apply
-  条件: (f : 对任意 i, α i) (i : ι)
-  结论: f⁻ᵐ i = (f i)⁻ᵐ
-  证明: rfl
+@[to_additive (attr := simp)] lemma oneLePart_apply (f : ∀ i, α i) (i : ι) : f⁺ᵐ i = (f i)⁺ᵐ := rfl
+/-
+**Pi.leOnePart_apply** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：∀ {ι : Type u_2} {α : ι → Type u_3} [inst : (i : ι) → Lattice (α i)] [inst
+_1 : (i : ι) → Group (α i)]   (f : (i : ι) → α i) (i : ι), f⁻ᵐ i = (f i)⁻ᵐ
+参数：i : ι；α i；i : ι；α i；f : (i : ι) → α i；i : ι；f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := simp)] lemma leOnePart_apply (f : forall i, α i) (i : ι) : f⁻ᵐ i = (f i)⁻ᵐ := rfl
-
-/--
-lemma `oneLePart_def` / 引理 `oneLePart_def`
-
-English:
-lemma oneLePart_def
-  given: (f : forall i, α i)
-  statement: f⁺ᵐ = fun i => (f i)⁺ᵐ
-  proof: rfl
-
-中文:
-引理 oneLePart_def
-  条件: (f : 对任意 i, α i)
-  结论: f⁺ᵐ = fun i => (f i)⁺ᵐ
-  证明: rfl
+@[to_additive (attr := simp)] lemma leOnePart_apply (f : ∀ i, α i) (i : ι) : f⁻ᵐ i = (f i)⁻ᵐ := rfl
+/-
+**Pi.oneLePart_def** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：∀ {ι : Type u_2} {α : ι → Type u_3} [inst : (i : ι) → Lattice (α i)] [inst
+_1 : (i : ι) → Group (α i)]   (f : (i : ι) → α i), f⁺ᵐ = fun i => (f i)⁺ᵐ
+参数：i : ι；α i；i : ι；α i；f : (i : ι) → α i；f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := push ←)] lemma oneLePart_def (f : forall i, α i) : f⁺ᵐ = fun i => (f i)⁺ᵐ := rfl
-/--
-lemma `leOnePart_def` / 引理 `leOnePart_def`
-
-English:
-lemma leOnePart_def
-  given: (f : forall i, α i)
-  statement: f⁻ᵐ = fun i => (f i)⁻ᵐ
-  proof: rfl
-
-中文:
-引理 leOnePart_def
-  条件: (f : 对任意 i, α i)
-  结论: f⁻ᵐ = fun i => (f i)⁻ᵐ
-  证明: rfl
+@[to_additive (attr := push ←)] lemma oneLePart_def (f : ∀ i, α i) : f⁺ᵐ = fun i ↦ (f i)⁺ᵐ := rfl
+/-
+**Pi.leOnePart_def** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：∀ {ι : Type u_2} {α : ι → Type u_3} [inst : (i : ι) → Lattice (α i)] [inst
+_1 : (i : ι) → Group (α i)]   (f : (i : ι) → α i), f⁻ᵐ = fun i => (f i)⁻ᵐ
+参数：i : ι；α i；i : ι；α i；f : (i : ι) → α i；f i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[to_additive (attr := push ←)] lemma leOnePart_def (f : forall i, α i) : f⁻ᵐ = fun i => (f i)⁻ᵐ := rfl
+@[to_additive (attr := push ←)] lemma leOnePart_def (f : ∀ i, α i) : f⁻ᵐ = fun i ↦ (f i)⁻ᵐ := rfl
 
 end Pi
+

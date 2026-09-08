@@ -37,41 +37,33 @@ variable (V : Type*) [Quiver.{u} V]
 /-- Two vertices are related in the zigzag setoid if there is a
 zigzag of arrows from one to the other. -/
 @[instance_reducible]
-/--
-Definition of `zigzagSetoid` / `zigzagSetoid` 的定义
+/-
+**Quiver.zigzagSetoid** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：zigzagSetoid : Setoid V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zigzagSetoid
-  signature: : Setoid V
-  body: ⟨fun a b => Nonempty (@Path (Symmetrify V) _ a b), fun _ => ⟨Path.nil⟩, fun ⟨p⟩ =>
-    ⟨p.reverse⟩, fun ⟨p⟩ ⟨q⟩ => ⟨p.comp q⟩⟩
-
-中文:
-定义 zigzagSetoid
-  签名: : 集合等价关系 V
-  定义体: ⟨fun a b => Nonempty (@Path (Symmetrify V) _ a b), fun _ => ⟨Path.nil⟩, fun ⟨p⟩ =>
-    ⟨p.reverse⟩, fun ⟨p⟩ ⟨q⟩ => ⟨p.comp q⟩⟩
-
-Depends on / 依赖: Nonempty, Path.nil, Symmetrify, p.comp, p.reverse, reverse
+--- 原说明 ---
+Two vertices are related in the zigzag setoid if there is a
+zigzag of arrows from one to the other.
 -/
 def zigzagSetoid : Setoid V :=
-  ⟨fun a b => Nonempty (@Path (Symmetrify V) _ a b), fun _ => ⟨Path.nil⟩, fun ⟨p⟩ =>
-    ⟨p.reverse⟩, fun ⟨p⟩ ⟨q⟩ => ⟨p.comp q⟩⟩
+  ⟨fun a b ↦ Nonempty (@Path (Symmetrify V) _ a b), fun _ ↦ ⟨Path.nil⟩, fun ⟨p⟩ ↦
+    ⟨p.reverse⟩, fun ⟨p⟩ ⟨q⟩ ↦ ⟨p.comp q⟩⟩
 
-/--
-Definition of `WeaklyConnectedComponent` / `WeaklyConnectedComponent` 的定义
+/-- The type of weakly connected components of a directed graph. Two vertices are
+in the same weakly connected component if there is a zigzag of arrows from one
+to the other. -/
+/-
+**Quiver.WeaklyConnectedComponent** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：WeaklyConnectedComponent : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WeaklyConnectedComponent
-  signature: : Type _
-  body: Quotient (zigzagSetoid V)
-
-中文:
-定义 WeaklyConnectedComponent
-  签名: : 类型 _
-  定义体: Quotient (zigzagSetoid V)
-
-Depends on / 依赖: Quotient, zigzagSetoid
+--- 原说明 ---
+The type of weakly connected components of a directed graph. Two vertices are
+in the same weakly connected component if there is a zigzag of arrows from one
+to the other.
 -/
 def WeaklyConnectedComponent : Type _ :=
   Quotient (zigzagSetoid V)
@@ -80,68 +72,43 @@ namespace WeaklyConnectedComponent
 
 variable {V}
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The weakly connected component corresponding to a vertex. -/
+/-
+**Quiver.WeaklyConnectedComponent.mk** 是 Mathlib 中的一个定义，位于命名空间 `Quiver.WeaklyCon
+nectedComponent`。
+形式化陈述：{V : Type u_1} → [inst : Quiver V] → V → Quiver.WeaklyConnectedComponent V
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 
-English:
-definition mk
-  signature: : V -> WeaklyConnectedComponent V
-  body: @Quotient.mk' _ (zigzagSetoid V)
-
-中文:
-定义 mk
-  签名: : V -> WeaklyConnectedComponent V
-  定义体: @Quotient.mk' _ (zigzagSetoid V)
+--- 原说明 ---
+The weakly connected component corresponding to a vertex.
 -/
-protected def mk : V -> WeaklyConnectedComponent V :=
+protected def mk : V → WeaklyConnectedComponent V :=
   @Quotient.mk' _ (zigzagSetoid V)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeTC V (WeaklyConnectedComponent V)
-  body: ⟨WeaklyConnectedComponent.mk⟩
-
-中文:
-实例 :
-  签名: CoeTC V (WeaklyConnectedComponent V)
-  定义体: ⟨WeaklyConnectedComponent.mk⟩
-
-Depends on / 依赖: WeaklyConnectedComponent, WeaklyConnectedComponent.mk
+/-
+**Quiver.WeaklyConnectedComponent.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver.WeaklyConne
+ctedComponent`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeTC V (WeaklyConnectedComponent V) :=
   ⟨WeaklyConnectedComponent.mk⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: V] : Inhabited (WeaklyConnectedComponent V)
-  body: ⟨show V from default⟩
-
-中文:
-实例 [可居
-  签名: V] : 可居 (WeaklyConnectedComponent V)
-  定义体: ⟨show V from default⟩
+/-
+**Quiver.WeaklyConnectedComponent.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver.WeaklyConne
+ctedComponent`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited V] : Inhabited (WeaklyConnectedComponent V) :=
   ⟨show V from default⟩
-
-/--
-theorem `eq` / 定理 `eq`
-
-English:
-theorem eq
-  given: (a b : V)
-  proof: Quotient.eq''
-
-中文:
-定理 eq
-  条件: (a b : V)
-  证明: Quotient.eq''
+/-
+**Quiver.WeaklyConnectedComponent.eq** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.WeaklyCon
+nectedComponent`。
+形式化陈述：∀ {V : Type u_1} [inst : Quiver V] (a b : V),   Quiver.WeaklyConnectedComp
+onent.mk a = Quiver.WeaklyConnectedComponent.mk b ↔ Nonempty (Quiver.Path a b)
+参数：a b : V；Quiver.Path a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq''`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk''
+ a = Quotient.mk'' b ↔ s₁ a b
 -/
 protected theorem eq (a b : V) :
     (a : WeaklyConnectedComponent V) = b ↔ Nonempty (@Path (Symmetrify V) _ a b) :=
@@ -151,21 +118,23 @@ end WeaklyConnectedComponent
 
 variable {V}
 
-/--
-Definition of `wideSubquiverSymmetrify` / `wideSubquiverSymmetrify` 的定义
+/-- A wide subquiver `H` of `Symmetrify V` determines a wide subquiver of `V`, containing an
+arrow `e` if either `e` or its reversal is in `H`. -/
+/-
+**Quiver.wideSubquiverSymmetrify** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：wideSubquiverSymmetrify (H : WideSubquiver (Symmetrify V)) : WideSubquiver
+ V
+参数：H : WideSubquiver (Symmetrify V)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition wideSubquiverSymmetrify
-  signature: (H : WideSubquiver (Symmetrify V))
-  body: fun a b => {e | .inl e in H a b ∨ .inr e in H b a}
-
-中文:
-定义 wideSubquiverSymmetrify
-  签名: (H : WideSubquiver (Symmetrify V))
-  定义体: fun a b => {e | .inl e in H a b ∨ .inr e in H b a}
+--- 原说明 ---
+A wide subquiver `H` of `Symmetrify V` determines a wide subquiver of `V`, conta
+ining an
+arrow `e` if either `e` or its reversal is in `H`.
 -/
 def wideSubquiverSymmetrify (H : WideSubquiver (Symmetrify V)) : WideSubquiver V :=
-  fun a b => {e | .inl e in H a b ∨ .inr e in H b a}
+  fun a b ↦ {e | .inl e ∈ H a b ∨ .inr e ∈ H b a}
 
 /-!
 ## Strongly connected components (directed connectivity)
@@ -178,124 +147,94 @@ section StronglyConnected
 
 variable (V : Type*) [Quiver V]
 
-/--
-Definition of `IsStronglyConnected` / `IsStronglyConnected` 的定义
+/-- Strong connectivity: every ordered pair of vertices is joined by a (possibly empty)
+directed path. -/
+/-
+**Quiver.IsStronglyConnected** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：IsStronglyConnected : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsStronglyConnected
-  signature: : Prop
-  body: forall i j : V, Nonempty (Path i j)
-
-中文:
-定义 IsStronglyConnected
-  签名: : 命题
-  定义体: forall i j : V, Nonempty (Path i j)
-
-Depends on / 依赖: Nonempty
+--- 原说明 ---
+Strong connectivity: every ordered pair of vertices is joined by a (possibly emp
+ty)
+directed path.
 -/
 def IsStronglyConnected : Prop :=
-  forall i j : V, Nonempty (Path i j)
+  ∀ i j : V, Nonempty (Path i j)
 
-/--
-Definition of `IsSStronglyConnected` / `IsSStronglyConnected` 的定义
+/-- Positive strong connectivity: every ordered pair of vertices is joined by a directed path
+of positive length. -/
+/-
+**Quiver.IsSStronglyConnected** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：IsSStronglyConnected : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSStronglyConnected
-  signature: : Prop
-  body: forall i j : V, exists p : Path i j, 0 < p.length
-
-中文:
-定义 IsSStronglyConnected
-  签名: : 命题
-  定义体: forall i j : V, exists p : Path i j, 0 < p.length
-
-Depends on / 依赖: length, p.length
+--- 原说明 ---
+Positive strong connectivity: every ordered pair of vertices is joined by a dire
+cted path
+of positive length.
 -/
 def IsSStronglyConnected : Prop :=
-  forall i j : V, exists p : Path i j, 0 < p.length
-
-/--
-lemma `isStronglyConnected_iff` / 引理 `isStronglyConnected_iff`
-
-English:
-lemma isStronglyConnected_iff
-  proof: Iff.rfl
-
-中文:
-引理 isStronglyConnected_iff
-  证明: Iff.rfl
+  ∀ i j : V, ∃ p : Path i j, 0 < p.length
+/-
+**Quiver.isStronglyConnected_iff** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+形式化陈述：∀ (V : Type u_2) [inst : Quiver V], Quiver.IsStronglyConnected V ↔ ∀ (i j 
+: V), Nonempty (Quiver.Path i j)
+参数：V : Type u_2；i j : V；Quiver.Path i j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isStronglyConnected_iff :
-    IsStronglyConnected V ↔ forall i j : V, Nonempty (Path i j) := Iff.rfl
-
-/--
-lemma `isSStronglyConnected_iff` / 引理 `isSStronglyConnected_iff`
-
-English:
-lemma isSStronglyConnected_iff
-  proof: Iff.rfl
-
-中文:
-引理 isSStronglyConnected_iff
-  证明: Iff.rfl
+    IsStronglyConnected V ↔ ∀ i j : V, Nonempty (Path i j) := Iff.rfl
+/-
+**Quiver.isSStronglyConnected_iff** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+形式化陈述：∀ (V : Type u_2) [inst : Quiver V], Quiver.IsSStronglyConnected V ↔ ∀ (i j
+ : V), ∃ p, 0 < p.length
+参数：V : Type u_2；i j : V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isSStronglyConnected_iff :
-    IsSStronglyConnected V ↔ forall i j : V, exists p : Path i j, 0 < p.length := Iff.rfl
-
-/--
-lemma `IsStronglyConnected.nonempty_path` / 引理 `IsStronglyConnected.nonempty_path`
-
-English:
-lemma IsStronglyConnected.nonempty_path
-  proof: h i j
-
-中文:
-引理 IsStronglyConnected.nonempty_path
-  证明: h i j
+    IsSStronglyConnected V ↔ ∀ i j : V, ∃ p : Path i j, 0 < p.length := Iff.rfl
+/-
+**Quiver.IsStronglyConnected.nonempty_path** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.IsS
+tronglyConnected`。
+形式化陈述：∀ (V : Type u_2) [inst : Quiver V], Quiver.IsStronglyConnected V → ∀ (i j 
+: V), Nonempty (Quiver.Path i j)
+参数：V : Type u_2；i j : V；Quiver.Path i j。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsStronglyConnected.nonempty_path
     (h : IsStronglyConnected V) (i j : V) : Nonempty (Path i j) := h i j
-
-/--
-lemma `IsSStronglyConnected.exists_pos_path` / 引理 `IsSStronglyConnected.exists_pos_path`
-
-English:
-lemma IsSStronglyConnected.exists_pos_path
-  proof: h i j
-
-中文:
-引理 IsSStronglyConnected.存在_pos_path
-  证明: h i j
+/-
+**Quiver.IsSStronglyConnected.exists_pos_path** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.
+IsSStronglyConnected`。
+形式化陈述：∀ (V : Type u_2) [inst : Quiver V], Quiver.IsSStronglyConnected V → ∀ (i j
+ : V), ∃ p, 0 < p.length
+参数：V : Type u_2；i j : V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsSStronglyConnected.exists_pos_path
-    (h : IsSStronglyConnected V) (i j : V) : exists p : Path i j, 0 < p.length := h i j
-
-/--
-lemma `IsSStronglyConnected.exists_pos_cycle` / 引理 `IsSStronglyConnected.exists_pos_cycle`
-
-English:
-lemma IsSStronglyConnected.exists_pos_cycle
-  proof: h i i
-
-中文:
-引理 IsSStronglyConnected.存在_pos_cycle
-  证明: h i i
+    (h : IsSStronglyConnected V) (i j : V) : ∃ p : Path i j, 0 < p.length := h i j
+/-
+**Quiver.IsSStronglyConnected.exists_pos_cycle** 是 Mathlib 中的一个定理，位于命名空间 `Quiver
+.IsSStronglyConnected`。
+形式化陈述：∀ (V : Type u_2) [inst : Quiver V], Quiver.IsSStronglyConnected V → ∀ (i :
+ V), ∃ p, 0 < p.length
+参数：V : Type u_2；i : V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsSStronglyConnected.exists_pos_cycle
-    (h : IsSStronglyConnected V) (i : V) : exists p : Path i i, 0 < p.length := h i i
-
-/--
-lemma `IsSStronglyConnected.isStronglyConnected` / 引理 `IsSStronglyConnected.isStronglyConnected`
-
-English:
-lemma IsSStronglyConnected.isStronglyConnected
-  proof: by
-  intro i j; obtain ⟨p, _⟩ := h i j; exact ⟨p⟩
-
-中文:
-引理 IsSStronglyConnected.isStronglyConnected
-  证明: by
-  intro i j; obtain ⟨p, _⟩ := h i j; exact ⟨p⟩
+    (h : IsSStronglyConnected V) (i : V) : ∃ p : Path i i, 0 < p.length := h i i
+/-
+**Quiver.IsSStronglyConnected.isStronglyConnected** 是 Mathlib 中的一个定理，位于命名空间 `Qui
+ver.IsSStronglyConnected`。
+形式化陈述：∀ (V : Type u_2) [inst : Quiver V], Quiver.IsSStronglyConnected V → Quiver
+.IsStronglyConnected V
+参数：V : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsSStronglyConnected.isStronglyConnected
     (h : IsSStronglyConnected V) : IsStronglyConnected V := by
@@ -303,44 +242,30 @@ lemma IsSStronglyConnected.isStronglyConnected
 
 /-- Equivalence relation identifying vertices connected by directed paths in both directions. -/
 @[instance_reducible]
-/--
-Definition of `stronglyConnectedSetoid` / `stronglyConnectedSetoid` 的定义
+/-
+**Quiver.stronglyConnectedSetoid** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：stronglyConnectedSetoid : Setoid V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stronglyConnectedSetoid
-  signature: : Setoid V
-  body: ⟨fun a b => (Nonempty (Path a b)) ∧ (Nonempty (Path b a)),
-   fun _ => ⟨⟨Path.nil⟩, ⟨Path.nil⟩⟩, fun ⟨hab, hba⟩ => ⟨hba, hab⟩, fun ⟨hab, hba⟩ ⟨hbc, hcb⟩ =>
-     ⟨⟨hab.some.comp hbc.some⟩, ⟨hcb.some.comp hba.some⟩⟩⟩
-
-中文:
-定义 stronglyConnectedSetoid
-  签名: : 集合等价关系 V
-  定义体: ⟨fun a b => (Nonempty (Path a b)) ∧ (Nonempty (Path b a)),
-   fun _ => ⟨⟨Path.nil⟩, ⟨Path.nil⟩⟩, fun ⟨hab, hba⟩ => ⟨hba, hab⟩, fun ⟨hab, hba⟩ ⟨hbc, hcb⟩ =>
-     ⟨⟨hab.some.comp hbc.some⟩, ⟨hcb.some.comp hba.some⟩⟩⟩
-
-Depends on / 依赖: Nonempty, Path.nil, hab.some.comp, hba.some, hbc.some, hcb.some.comp
+--- 原说明 ---
+Equivalence relation identifying vertices connected by directed paths in both di
+rections.
 -/
 def stronglyConnectedSetoid : Setoid V :=
   ⟨fun a b => (Nonempty (Path a b)) ∧ (Nonempty (Path b a)),
    fun _ => ⟨⟨Path.nil⟩, ⟨Path.nil⟩⟩, fun ⟨hab, hba⟩ => ⟨hba, hab⟩, fun ⟨hab, hba⟩ ⟨hbc, hcb⟩ =>
      ⟨⟨hab.some.comp hbc.some⟩, ⟨hcb.some.comp hba.some⟩⟩⟩
 
-/--
-Definition of `StronglyConnectedComponent` / `StronglyConnectedComponent` 的定义
+/-- The type of strongly connected components (bidirectional reachability classes). -/
+/-
+**Quiver.StronglyConnectedComponent** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：StronglyConnectedComponent : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StronglyConnectedComponent
-  signature: : Type _
-  body: Quotient (stronglyConnectedSetoid V)
-
-中文:
-定义 StronglyConnectedComponent
-  签名: : 类型 _
-  定义体: Quotient (stronglyConnectedSetoid V)
-
-Depends on / 依赖: Quotient, stronglyConnectedSetoid
+--- 原说明 ---
+The type of strongly connected components (bidirectional reachability classes).
 -/
 def StronglyConnectedComponent : Type _ :=
   Quotient (stronglyConnectedSetoid V)
@@ -349,193 +274,134 @@ namespace StronglyConnectedComponent
 
 variable {V}
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- The canonical map from a vertex to its strongly connected component. -/
+/-
+**Quiver.StronglyConnectedComponent.mk** 是 Mathlib 中的一个定义，位于命名空间 `Quiver.Strongl
+yConnectedComponent`。
+形式化陈述：{V : Type u_2} → [inst : Quiver V] → V → Quiver.StronglyConnectedComponent
+ V
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 
-English:
-definition mk
-  signature: : V -> StronglyConnectedComponent V
-  body: @Quotient.mk' _ (stronglyConnectedSetoid V)
-
-中文:
-定义 mk
-  签名: : V -> StronglyConnectedComponent V
-  定义体: @Quotient.mk' _ (stronglyConnectedSetoid V)
+--- 原说明 ---
+The canonical map from a vertex to its strongly connected component.
 -/
-protected def mk : V -> StronglyConnectedComponent V :=
+protected def mk : V → StronglyConnectedComponent V :=
   @Quotient.mk' _ (stronglyConnectedSetoid V)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe V (StronglyConnectedComponent V)
-  body: ⟨StronglyConnectedComponent.mk⟩
-
-中文:
-实例 :
-  签名: Coe V (StronglyConnectedComponent V)
-  定义体: ⟨StronglyConnectedComponent.mk⟩
-
-Depends on / 依赖: StronglyConnectedComponent, StronglyConnectedComponent.mk
+/-
+**Quiver.StronglyConnectedComponent.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver.StronglyC
+onnectedComponent`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe V (StronglyConnectedComponent V) :=
   ⟨StronglyConnectedComponent.mk⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: V] : Inhabited (StronglyConnectedComponent V)
-  body: ⟨(default : V)⟩
-
-中文:
-实例 [可居
-  签名: V] : 可居 (StronglyConnectedComponent V)
-  定义体: ⟨(default : V)⟩
+/-
+**Quiver.StronglyConnectedComponent.** 是 Mathlib 中的一个实例，位于命名空间 `Quiver.StronglyC
+onnectedComponent`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited V] : Inhabited (StronglyConnectedComponent V) :=
   ⟨(default : V)⟩
-
-/--
-lemma `eq` / 引理 `eq`
-
-English:
-lemma eq
-  given: (a b : V)
-  proof: Quotient.eq''
-
-中文:
-引理 eq
-  条件: (a b : V)
-  证明: Quotient.eq''
+/-
+**Quiver.StronglyConnectedComponent.eq** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.Strongl
+yConnectedComponent`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V] (a b : V),   Quiver.StronglyConnectedCo
+mponent.mk a = Quiver.StronglyConnectedComponent.mk b ↔     Nonempty (Quiver.Pat
+h a b) ∧ Nonempty (Quiver.Path b a)
+参数：a b : V；Quiver.Path a b；Quiver.Path b a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq''`：∀ {α : Sort u_1} {s₁ : Setoid α} {a b : α}, Quotient.mk''
+ a = Quotient.mk'' b ↔ s₁ a b
 -/
 protected lemma eq (a b : V) :
   (a : StronglyConnectedComponent V) = b
     ↔ (Nonempty (Path a b) ∧ Nonempty (Path b a)) := Quotient.eq''
-
-/--
-lemma `mk_eq_mk` / 引理 `mk_eq_mk`
-
-English:
-lemma mk_eq_mk
-  given: {a b : V}
-  proof: StronglyConnectedComponent.eq a b
-
-中文:
-引理 mk_eq_mk
-  条件: {a b : V}
-  证明: StronglyConnectedComponent.eq a b
+/-
+**Quiver.StronglyConnectedComponent.mk_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quiver.S
+tronglyConnectedComponent`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V] {a b : V},   Quiver.StronglyConnectedCo
+mponent.mk a = Quiver.StronglyConnectedComponent.mk b ↔     Nonempty (Quiver.Pat
+h a b) ∧ Nonempty (Quiver.Path b a)
+参数：Quiver.Path a b；Quiver.Path b a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quiver.StronglyConnectedComponent.eq`：∀ {V : Type u_2} [inst : Quiver V]
+ (a b : V),   Quiver.StronglyConnectedComponent.mk a = Quiver.StronglyConnectedC
+omponent.mk b ↔     Nonemp…
 -/
 @[simp] lemma mk_eq_mk {a b : V} :
     (StronglyConnectedComponent.mk a : StronglyConnectedComponent V) =
     StronglyConnectedComponent.mk b ↔ (Nonempty (Path a b) ∧ Nonempty (Path b a)) :=
   StronglyConnectedComponent.eq a b
-
-/--
-lemma `IsSStronglyConnected.pos_cycle` / 引理 `IsSStronglyConnected.pos_cycle`
-
-English:
-lemma IsSStronglyConnected.pos_cycle
-  given: (h : IsSStronglyConnected V) (v : V)
-  proof: h v v
-
-中文:
-引理 IsSStronglyConnected.pos_cycle
-  条件: (h : IsSStronglyConnected V) (v : V)
-  证明: h v v
+/-
+**Quiver.StronglyConnectedComponent.IsSStronglyConnected.pos_cycle** 是 Mathlib 中
+的一个定理，位于命名空间 `Quiver.StronglyConnectedComponent.IsSStronglyConnected`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V], Quiver.IsSStronglyConnected V → ∀ (v :
+ V), ∃ p, 0 < p.length
+参数：v : V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsSStronglyConnected.pos_cycle (h : IsSStronglyConnected V) (v : V) :
-    exists p : Path v v, 0 < p.length := h v v
+    ∃ p : Path v v, 0 < p.length := h v v
 
 end StronglyConnectedComponent
 
 variable {V}
 
-/--
-lemma `stronglyConnectedComponent_eq_of_path` / 引理 `stronglyConnectedComponent_eq_of_path`
-
-English:
-lemma stronglyConnectedComponent_eq_of_path
-  statement: {a b : V}
-  proof: (StronglyConnectedComponent.eq (a := a) (b := b)).2 ⟨hab, hba⟩
-
-中文:
-引理 stronglyConnectedComponent_eq_of_path
-  结论: {a b : V}
-  证明: (StronglyConnectedComponent.eq (a := a) (b := b)).2 ⟨hab, hba⟩
-
-Depends on / 依赖: StronglyConnectedComponent, StronglyConnectedComponent.eq
+/-
+**Quiver.stronglyConnectedComponent_eq_of_path** 是 Mathlib 中的一个引理，位于命名空间 `Quiver
+`。
+形式化陈述：stronglyConnectedComponent_eq_of_path {a b : V} (hab : Nonempty (Path a b)
+) (hba : Nonempty (Path b a)) : (a : StronglyConnectedComponent V) = b
+参数：hab : Nonempty (Path a b)；hba : Nonempty (Path b a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Quiver.StronglyConnectedComponent.eq`：∀ {V : Type u_2} [inst : Quiver V]
+ (a b : V),   Quiver.StronglyConnectedComponent.mk a = Quiver.StronglyConnectedC
+omponent.mk b ↔     Nonemp…
 -/
 lemma stronglyConnectedComponent_eq_of_path {a b : V}
     (hab : Nonempty (Path a b)) (hba : Nonempty (Path b a)) :
     (a : StronglyConnectedComponent V) = b :=
   (StronglyConnectedComponent.eq (a := a) (b := b)).2 ⟨hab, hba⟩
-
-/--
-lemma `exists_path_of_stronglyConnectedComponent_eq` / 引理 `exists_path_of_stronglyConnectedComponent_eq`
-
-English:
-lemma exists_path_of_stronglyConnectedComponent_eq
-  statement: {a b : V}
-  proof: (StronglyConnectedComponent.eq (a := a) (b := b)).1 h
-
-中文:
-引理 存在_path_of_stronglyConnectedComponent_eq
-  结论: {a b : V}
-  证明: (StronglyConnectedComponent.eq (a := a) (b := b)).1 h
-
-Depends on / 依赖: StronglyConnectedComponent, StronglyConnectedComponent.eq
+/-
+**Quiver.exists_path_of_stronglyConnectedComponent_eq** 是 Mathlib 中的一个引理，位于命名空间 
+`Quiver`。
+形式化陈述：exists_path_of_stronglyConnectedComponent_eq {a b : V} (h : (a : StronglyC
+onnectedComponent V) = b) : (Nonempty (Path a b)) ∧ (Nonempty (Path b a))
+参数：h : (a : StronglyConnectedComponent V) = b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Quiver.StronglyConnectedComponent.eq`：∀ {V : Type u_2} [inst : Quiver V]
+ (a b : V),   Quiver.StronglyConnectedComponent.mk a = Quiver.StronglyConnectedC
+omponent.mk b ↔     Nonemp…
 -/
 lemma exists_path_of_stronglyConnectedComponent_eq {a b : V}
     (h : (a : StronglyConnectedComponent V) = b) :
     (Nonempty (Path a b)) ∧ (Nonempty (Path b a)) :=
   (StronglyConnectedComponent.eq (a := a) (b := b)).1 h
-
-/--
-lemma `stronglyConnectedComponent_singleton_iff` / 引理 `stronglyConnectedComponent_singleton_iff`
-
-English:
-lemma stronglyConnectedComponent_singleton_iff
-  given: (v : V)
-  proof: by
-  constructor
-  · intro h_singleton w hw_ne h_bidir
-    obtain ⟨hab, hba⟩ := h_bidir
-    have h_same_scc : (w : StronglyConnectedComponent V) = v :=
-      stronglyConnectedComponent_eq_of_path (a := w) (b := v) hba hab
-    obtain ⟨rfl⟩ := h_singleton w h_same_scc
-    contradiction
-  · intro h_no_bidir w h_same_scc
-    by_contra hw_ne
-    obtain ⟨hab, hba⟩ :=
-      exists_path_of_stronglyConnectedComponent_eq (a := w) (b := v) h_same_scc
-    exact (h_no_bidir w hw_ne) ⟨hba, hab⟩
-
-中文:
-引理 stronglyConnectedComponent_singleton_iff
-  条件: (v : V)
-  证明: by
-  constructor
-  · intro h_singleton w hw_ne h_bidir
-    obtain ⟨hab, hba⟩ := h_bidir
-    have h_same_scc : (w : StronglyConnectedComponent V) = v :=
-      stronglyConnectedComponent_eq_of_path (a := w) (b := v) hba hab
-    obtain ⟨rfl⟩ := h_singleton w h_same_scc
-    contradiction
-  · intro h_no_bidir w h_same_scc
-    by_contra hw_ne
-    obtain ⟨hab, hba⟩ :=
-      exists_path_of_stronglyConnectedComponent_eq (a := w) (b := v) h_same_scc
-    exact (h_no_bidir w hw_ne) ⟨hba, hab⟩
-
-Depends on / 依赖: StronglyConnectedComponent, exists_path_of_stronglyConnectedComponent_eq, h_bidir, h_no_bidir, h_same_scc, h_singleton, hw_ne, stronglyConnectedComponent_eq_of_path
+/-
+**Quiver.stronglyConnectedComponent_singleton_iff** 是 Mathlib 中的一个引理，位于命名空间 `Qui
+ver`。
+形式化陈述：stronglyConnectedComponent_singleton_iff (v : V) : (forall w : V, (w : Str
+onglyConnectedComponent V) = v -> w = v) ↔ (forall w : V, w != v -> ¬(Nonempty (
+Path v w) ∧ Nonempty (Path w v)))
+参数：v : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Quiver.stronglyConnectedComponent_eq_of_path`：stronglyConnectedComponent
+_eq_of_path {a b : V} (hab : Nonempty (Path a b)) (hba : Nonempty (Path b a)) : 
+(a : StronglyConnectedComponent V)…
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用引理 `Quiver.exists_path_of_stronglyConnectedComponent_eq`：exists_path_of_stro
+nglyConnectedComponent_eq {a b : V} (h : (a : StronglyConnectedComponent V) = b)
+ : (Nonempty (Path a b)) ∧ (Nonempty (Pat…
 -/
 lemma stronglyConnectedComponent_singleton_iff (v : V) :
-    (forall w : V, (w : StronglyConnectedComponent V) = v -> w = v) ↔
-    (forall w : V, w != v -> ¬(Nonempty (Path v w) ∧ Nonempty (Path w v))) := by
+    (∀ w : V, (w : StronglyConnectedComponent V) = v → w = v) ↔
+    (∀ w : V, w ≠ v → ¬(Nonempty (Path v w) ∧ Nonempty (Path w v))) := by
   constructor
   · intro h_singleton w hw_ne h_bidir
     obtain ⟨hab, hba⟩ := h_bidir
@@ -548,31 +414,13 @@ lemma stronglyConnectedComponent_singleton_iff (v : V) :
     obtain ⟨hab, hba⟩ :=
       exists_path_of_stronglyConnectedComponent_eq (a := w) (b := v) h_same_scc
     exact (h_no_bidir w hw_ne) ⟨hba, hab⟩
-
-/--
-lemma `IsStronglyConnected.isStronglyConnected_symmetrify` / 引理 `IsStronglyConnected.isStronglyConnected_symmetrify`
-
-English:
-lemma IsStronglyConnected.isStronglyConnected_symmetrify
-  given: (h : IsStronglyConnected V)
-  proof: by
-  intro a b
-  obtain ⟨p⟩ := h a b
-  induction p with
-  | nil => exact ⟨Path.nil⟩
-  | cons q e ih => exact ⟨ih.some.cons (Sum.inl e)⟩
-
-中文:
-引理 IsStronglyConnected.isStronglyConnected_symmetrify
-  条件: (h : IsStronglyConnected V)
-  证明: by
-  intro a b
-  obtain ⟨p⟩ := h a b
-  induction p with
-  | nil => exact ⟨Path.nil⟩
-  | cons q e ih => exact ⟨ih.some.cons (Sum.inl e)⟩
-
-Depends on / 依赖: Path.nil, Sum.inl, ih.some.cons
+/-
+**Quiver.IsStronglyConnected.isStronglyConnected_symmetrify** 是 Mathlib 中的一个定理，位
+于命名空间 `Quiver.IsStronglyConnected`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V], Quiver.IsStronglyConnected V → Quiver.
+IsStronglyConnected (Quiver.Symmetrify V)
+参数：Quiver.Symmetrify V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma IsStronglyConnected.isStronglyConnected_symmetrify (h : IsStronglyConnected V) :
     IsStronglyConnected (Symmetrify V) := by
@@ -581,37 +429,22 @@ lemma IsStronglyConnected.isStronglyConnected_symmetrify (h : IsStronglyConnecte
   induction p with
   | nil => exact ⟨Path.nil⟩
   | cons q e ih => exact ⟨ih.some.cons (Sum.inl e)⟩
-
-/--
-lemma `IsStronglyConnected.isSStronglyConnected_of_hom` / 引理 `IsStronglyConnected.isSStronglyConnected_of_hom`
-
-English:
-lemma IsStronglyConnected.isSStronglyConnected_of_hom
-  statement: (h_sc : IsStronglyConnected V)
-  proof: by
-  intro i j
-  obtain ⟨p₁⟩ := h_sc i i₀
-  obtain ⟨p₂⟩ := h_sc j₀ j
-  let p : Path i j := p₁.comp (e₀.toPath.comp p₂)
-  have hp_pos : 0 < p.length := by
-    simpa [p, Path.length_comp, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
-      Nat.succ_pos (p₁.length + p₂.length)
-  exact ⟨p, hp_pos⟩
-
-中文:
-引理 IsStronglyConnected.isSStronglyConnected_of_hom
-  结论: (h_sc : IsStronglyConnected V)
-  证明: by
-  intro i j
-  obtain ⟨p₁⟩ := h_sc i i₀
-  obtain ⟨p₂⟩ := h_sc j₀ j
-  let p : Path i j := p₁.comp (e₀.toPath.comp p₂)
-  have hp_pos : 0 < p.length := by
-    simpa [p, Path.length_comp, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
-      Nat.succ_pos (p₁.length + p₂.length)
-  exact ⟨p, hp_pos⟩
-
-Depends on / 依赖: Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, Nat.succ_pos, Path.length_comp, add_assoc, add_comm, add_left_comm, h_sc, hp_pos, length, length_comp, p.length, succ_pos, toPath, toPath.comp
+/-
+**Quiver.IsStronglyConnected.isSStronglyConnected_of_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `Quiver.IsStronglyConnected`。
+形式化陈述：∀ {V : Type u_2} [inst : Quiver V],   Quiver.IsStronglyConnected V → ∀ {i₀
+ j₀ : V} (e₀ : i₀ ⟶ j₀), Quiver.IsSStronglyConnected V
+参数：e₀ : i₀ ⟶ j₀。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Quiver.Path.length_comp`：∀ {V : Type u} [inst : Quiver V] {a b : V} (p :
+ Quiver.Path a b) {c : V} (q : Quiver.Path b c),   (p.comp q).length = p.length 
++ q.length
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `Nat.add_assoc`：∀ (n m k : ℕ), n + m + k = n + (m + k)
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
 -/
 lemma IsStronglyConnected.isSStronglyConnected_of_hom (h_sc : IsStronglyConnected V)
     {i₀ j₀ : V} (e₀ : i₀ ⟶ j₀) :
@@ -628,3 +461,4 @@ lemma IsStronglyConnected.isSStronglyConnected_of_hom (h_sc : IsStronglyConnecte
 end StronglyConnected
 
 end Quiver
+

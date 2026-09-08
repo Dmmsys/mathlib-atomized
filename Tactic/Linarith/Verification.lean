@@ -29,43 +29,25 @@ namespace Qq
 
 variable {u : Level}
 
-/--
-Definition of `ofNatQ` / `ofNatQ` 的定义
+/-- Typesafe conversion of `n : ℕ` to `Q($α)`. -/
+/-
+**Qq.ofNatQ** 是 Mathlib 中的一个定义，位于命名空间 `Qq`。
+形式化陈述：ofNatQ (α : Q(Type $u)) (_ : Q(Semiring $α)) (n : Nat) : Q($α)
+参数：α : Q(Type $u)；_ : Q(Semiring $α)；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNatQ
-  signature: (α : Q(Type $u)) (_ : Q(Semiring $α)) (n : Nat)
-  body: match n with
-  | 0 => q(0 : $α)
-  | 1 => q(1 : $α)
-  | k+2 =>
-    have lit : Q(Nat) := mkRawNatLit n
-    have k : Q(Nat) := mkRawNatLit k
-haveI : lit =Q k + 2 := ⟨⟩
-    q(OfNat.ofNat $lit)
-
-中文:
-定义 of自然数Q
-  签名: (α : Q(类型 $u)) (_ : Q(半环 $α)) (n : 自然数)
-  定义体: match n with
-  | 0 => q(0 : $α)
-  | 1 => q(1 : $α)
-  | k+2 =>
-    have lit : Q(Nat) := mkRawNatLit n
-    have k : Q(Nat) := mkRawNatLit k
-haveI : lit =Q k + 2 := ⟨⟩
-    q(OfNat.ofNat $lit)
-
-Depends on / 依赖: OfNat.ofNat, mkRawNatLit
+--- 原说明 ---
+Typesafe conversion of `n : ℕ` to `Q($α)`.
 -/
-def ofNatQ (α : Q(Type $u)) (_ : Q(Semiring $α)) (n : Nat) : Q($α) :=
+def ofNatQ (α : Q(Type $u)) (_ : Q(Semiring $α)) (n : ℕ) : Q($α) :=
   match n with
   | 0 => q(0 : $α)
   | 1 => q(1 : $α)
   | k+2 =>
-    have lit : Q(Nat) := mkRawNatLit n
-    have k : Q(Nat) := mkRawNatLit k
-haveI : lit =Q k + 2 := ⟨⟩
+    have lit : Q(ℕ) := mkRawNatLit n
+    have k : Q(ℕ) := mkRawNatLit k
+    haveI : $lit =Q $k + 2 := ⟨⟩
     q(OfNat.ofNat $lit)
 
 end Qq
@@ -77,87 +59,80 @@ open Qq
 
 /-! ### Auxiliary functions for assembling proofs -/
 
-/--
-Definition of `mulExpr'` / `mulExpr'` 的定义
+/-- A typesafe version of `mulExpr`. -/
+/-
+**Mathlib.Tactic.Linarith.mulExpr'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lin
+arith`。
+形式化陈述：mulExpr' {u : Level} (n : Nat) {α : Q(Type $u)} (inst : Q(Semiring $α)) (e
+ : Q($α)) : Q($α)
+参数：n : Nat；Type $u；inst : Q(Semiring $α)；e : Q($α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulExpr'
-  signature: {u : Level} (n : Nat) {α : Q(Type $u)} (inst : Q(Semiring $α)) (e : Q($α))
-  body: if n = 1 then e else
-    let n := ofNatQ α inst n
-    q($n * $e)
-
-中文:
-定义 mulExpr'
-  签名: {u : Level} (n : 自然数) {α : Q(类型 $u)} (inst : Q(半环 $α)) (e : Q($α))
-  定义体: if n = 1 then e else
-    let n := ofNatQ α inst n
-    q($n * $e)
-
-Depends on / 依赖: ofNatQ
+--- 原说明 ---
+A typesafe version of `mulExpr`.
 -/
-def mulExpr' {u : Level} (n : Nat) {α : Q(Type $u)} (inst : Q(Semiring $α)) (e : Q($α)) : Q($α) :=
+def mulExpr' {u : Level} (n : ℕ) {α : Q(Type $u)} (inst : Q(Semiring $α)) (e : Q($α)) : Q($α) :=
   if n = 1 then e else
     let n := ofNatQ α inst n
     q($n * $e)
 
 /--
-Definition of `mulExpr` / `mulExpr` 的定义
-
-English:
-definition mulExpr
-  signature: (n : Nat) (e : Expr)
-  body: do
-  let ⟨_, α, e⟩ ← inferTypeQ' e
-  let inst : Q(Semiring $α) ← synthInstanceQ q(Semiring $α)
-  return mulExpr' n inst e
-
-中文:
-定义 mulExpr
-  签名: (n : 自然数) (e : Expr)
-  定义体: do
-  let ⟨_, α, e⟩ ← inferTypeQ' e
-  let inst : Q(Semiring $α) ← synthInstanceQ q(Semiring $α)
-  return mulExpr' n inst e
+`mulExpr n e` creates an `Expr` representing `n*e`.
+When elaborated, the coefficient will be a native numeral of the same type as `e`.
 -/
-def mulExpr (n : Nat) (e : Expr) : MetaM Expr := do
+/-
+**Mathlib.Tactic.Linarith.mulExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lina
+rith`。
+形式化陈述：mulExpr (n : Nat) (e : Expr) : MetaM Expr
+参数：n : Nat；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`mulExpr n e` creates an `Expr` representing `n*e`.
+When elaborated, the coefficient will be a native numeral of the same type as `e
+`.
+-/
+def mulExpr (n : ℕ) (e : Expr) : MetaM Expr := do
   let ⟨_, α, e⟩ ← inferTypeQ' e
   let inst : Q(Semiring $α) ← synthInstanceQ q(Semiring $α)
   return mulExpr' n inst e
 
-/--
-Definition of `addExprs'` / `addExprs'` 的定义
+/-- A type-safe analogue of `addExprs`. -/
+/-
+**Mathlib.Tactic.Linarith.addExprs'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Li
+narith`。
+形式化陈述：{u : Level} →   {α :       have u := u;       Q(Type u)} →     Q(AddMonoid
+ «$α») → List Q(«$α») → Q(«$α»)
+参数：Type u；AddMonoid «$α»；«$α»；«$α»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addExprs'
-  signature: {u : Level} {α : Q(Type $u)} (_inst : Q(AddMonoid $α))
-
-中文:
-定义 addExprs'
-  签名: {u : Level} {α : Q(类型 $u)} (_inst : Q(加法幺半群 $α))
+--- 原说明 ---
+A type-safe analogue of `addExprs`.
 -/
-def addExprs' {u : Level} {α : Q(Type $u)} (_inst : Q(AddMonoid $α)) : List Q($α) -> Q($α)
-  | [] => q(0)
+def addExprs' {u : Level} {α : Q(Type $u)} (_inst : Q(AddMonoid $α)) : List Q($α) → Q($α)
+  | []   => q(0)
   | h::t => go h t
 where
   /-- Inner loop for `addExprs'`. -/
-  go (p : Q($α)) : List Q($α) -> Q($α)
+  go (p : Q($α)) : List Q($α) → Q($α)
   | [] => p
   | [q] => q($p + $q)
   | q::t => go q($p + $q) t
 
-/--
-Definition of `addExprs` / `addExprs` 的定义
+/-- `addExprs L` creates an `Expr` representing the sum of the elements of `L`, associated left. -/
+/-
+**Mathlib.Tactic.Linarith.addExprs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lin
+arith`。
+形式化陈述：List Expr → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addExprs
-  signature: : List Expr -> MetaM Expr
-
-中文:
-定义 addExprs
-  签名: : 列表 Expr -> MetaM Expr
+--- 原说明 ---
+`addExprs L` creates an `Expr` representing the sum of the elements of `L`, asso
+ciated left.
 -/
-def addExprs : List Expr -> MetaM Expr
+def addExprs : List Expr → MetaM Expr
   | [] => return q(0) -- This may not be of the intended type; use with caution.
   | L@(h::_) => do
     let ⟨_, α, _⟩ ← inferTypeQ' h
@@ -166,17 +141,22 @@ def addExprs : List Expr -> MetaM Expr
     return addExprs' inst L
 
 /--
-Definition of `addIneq` / `addIneq` 的定义
-
-English:
-definition addIneq
-  signature: : Ineq -> Ineq -> (Name × Ineq)
-
-中文:
-定义 addIneq
-  签名: : Ineq -> Ineq -> (Name × Ineq)
+If our goal is to add together two inequalities `t1 R1 0` and `t2 R2 0`,
+`addIneq R1 R2` produces the strength of the inequality in the sum `R`,
+along with the name of a lemma to apply in order to conclude `t1 + t2 R 0`.
 -/
-def addIneq : Ineq -> Ineq -> (Name × Ineq)
+/-
+**Mathlib.Tactic.Linarith.addIneq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Lina
+rith`。
+形式化陈述：Mathlib.Ineq → Mathlib.Ineq → Name × Mathlib.Ineq
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If our goal is to add together two inequalities `t1 R1 0` and `t2 R2 0`,
+`addIneq R1 R2` produces the strength of the inequality in the sum `R`,
+along with the name of a lemma to apply in order to conclude `t1 + t2 R 0`.
+-/
+def addIneq : Ineq → Ineq → (Name × Ineq)
   | eq, eq => (``Linarith.eq_of_eq_of_eq, eq)
   | eq, le => (``Linarith.le_of_eq_of_le, le)
   | eq, lt => (``Linarith.lt_of_eq_of_lt, lt)
@@ -188,24 +168,36 @@ def addIneq : Ineq -> Ineq -> (Name × Ineq)
   | lt, lt => (``Linarith.add_neg, lt)
 
 /--
-Definition of `mkLTZeroProof` / `mkLTZeroProof` 的定义
-
-English:
-definition mkLTZeroProof
-  signature: : List (Expr × Nat) -> MetaM Expr
-
-中文:
-定义 mkLTZeroProof
-  签名: : 列表 (Expr × 自然数) -> MetaM Expr
+`mkLTZeroProof coeffs pfs` takes a list of proofs of the form `tᵢ Rᵢ 0`,
+paired with coefficients `cᵢ`.
+It produces a proof that `∑cᵢ * tᵢ R 0`, where `R` is as strong as possible.
 -/
-def mkLTZeroProof : List (Expr × Nat) -> MetaM Expr
+/-
+**Mathlib.Tactic.Linarith.mkLTZeroProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Linarith`。
+形式化陈述：mkLTZeroProof : List (Expr × Nat) -> MetaM Expr | [] => throwError "no lin
+ear hypotheses found" | [(h, c)] => do let (_, t) ← mkSingleCompZeroOf c h retur
+n t | ((h, c)::t) => do let (iq, h') ← mkSingleCompZeroOf c h let (_, t) ← t.fol
+dlM (fun pr ce => step pr.1 pr.2 ce.1 ce.2) (iq, h') return t where /-- `step c 
+pf npf coeff` assumes that `pf` is a proof of `t1 R1 0` and `npf` is a proof of 
+`t2 R2 0`. It uses `mkSingleCompZeroOf` to prove `t1 + coeff*t2 R 0`, and return
+s `R` along with this proo
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`mkLTZeroProof coeffs pfs` takes a list of proofs of the form `tᵢ Rᵢ 0`,
+paired with coefficients `cᵢ`.
+It produces a proof that `∑cᵢ * tᵢ R 0`, where `R` is as strong as possible. -/
+-/
+def mkLTZeroProof : List (Expr × ℕ) → MetaM Expr
   | [] => throwError "no linear hypotheses found"
   | [(h, c)] => do
       let (_, t) ← mkSingleCompZeroOf c h
       return t
   | ((h, c)::t) => do
       let (iq, h') ← mkSingleCompZeroOf c h
-      let (_, t) ← t.foldlM (fun pr ce => step pr.1 pr.2 ce.1 ce.2) (iq, h')
+      let (_, t) ← t.foldlM (fun pr ce ↦ step pr.1 pr.2 ce.1 ce.2) (iq, h')
       return t
 where
   /--
@@ -213,96 +205,85 @@ where
   of `t2 R2 0`. It uses `mkSingleCompZeroOf` to prove `t1 + coeff*t2 R 0`, and returns `R`
   along with this proof.
   -/
-  step (c : Ineq) (pf npf : Expr) (coeff : Nat) : MetaM (Ineq × Expr) := do
+  step (c : Ineq) (pf npf : Expr) (coeff : ℕ) : MetaM (Ineq × Expr) := do
     let (iq, h') ← mkSingleCompZeroOf coeff npf
     let (nm, niq) := addIneq c iq
     return (niq, ← mkAppM nm #[pf, h'])
 
-/--
-Definition of `leftOfIneqProof` / `leftOfIneqProof` 的定义
+/-- If `prf` is a proof of `t R s`, `leftOfIneqProof prf` returns `t`. -/
+/-
+**Mathlib.Tactic.Linarith.leftOfIneqProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Linarith`。
+形式化陈述：leftOfIneqProof (prf : Expr) : MetaM Expr
+参数：prf : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftOfIneqProof
-  signature: (prf : Expr)
-  body: do
-  let (_, _, t, _) ← (← inferType prf).ineq?
-  return t
-
-中文:
-定义 leftOfIneqProof
-  签名: (prf : Expr)
-  定义体: do
-  let (_, _, t, _) ← (← inferType prf).ineq?
-  return t
+--- 原说明 ---
+If `prf` is a proof of `t R s`, `leftOfIneqProof prf` returns `t`.
 -/
 def leftOfIneqProof (prf : Expr) : MetaM Expr := do
   let (_, _, t, _) ← (← inferType prf).ineq?
   return t
 
-/--
-Definition of `typeOfIneqProof` / `typeOfIneqProof` 的定义
+/-- If `prf` is a proof of `t R s`, `typeOfIneqProof prf` returns the type of `t`. -/
+/-
+**Mathlib.Tactic.Linarith.typeOfIneqProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tac
+tic.Linarith`。
+形式化陈述：typeOfIneqProof (prf : Expr) : MetaM Expr
+参数：prf : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition typeOfIneqProof
-  signature: (prf : Expr)
-  body: do
-  let (_, ty, _) ← (← inferType prf).ineq?
-  return ty
-
-中文:
-定义 typeOfIneqProof
-  签名: (prf : Expr)
-  定义体: do
-  let (_, ty, _) ← (← inferType prf).ineq?
-  return ty
+--- 原说明 ---
+If `prf` is a proof of `t R s`, `typeOfIneqProof prf` returns the type of `t`.
 -/
 def typeOfIneqProof (prf : Expr) : MetaM Expr := do
   let (_, ty, _) ← (← inferType prf).ineq?
   return ty
 
 /--
-Definition of `mkNegOneLtZeroProof` / `mkNegOneLtZeroProof` 的定义
+`mkNegOneLtZeroProof tp` returns a proof of `-1 < 0`,
+where the numerals are natively of type `tp`.
+-/
+/-
+**Mathlib.Tactic.Linarith.mkNegOneLtZeroProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Linarith`。
+形式化陈述：mkNegOneLtZeroProof (tp : Expr) : MetaM Expr
+参数：tp : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkNegOneLtZeroProof
-  signature: (tp : Expr)
-  body: do
-  let zero_lt_one ← mkAppOptM ``Linarith.zero_lt_one #[tp, none, none, none]
-  mkAppM `neg_neg_of_pos #[zero_lt_one]
-
-中文:
-定义 mkNegOneLtZeroProof
-  签名: (tp : Expr)
-  定义体: do
-  let zero_lt_one ← mkAppOptM ``Linarith.zero_lt_one #[tp, none, none, none]
-  mkAppM `neg_neg_of_pos #[zero_lt_one]
+--- 原说明 ---
+`mkNegOneLtZeroProof tp` returns a proof of `-1 < 0`,
+where the numerals are natively of type `tp`.
 -/
 def mkNegOneLtZeroProof (tp : Expr) : MetaM Expr := do
   let zero_lt_one ← mkAppOptM ``Linarith.zero_lt_one #[tp, none, none, none]
   mkAppM `neg_neg_of_pos #[zero_lt_one]
 
 /--
-Definition of `addNegEqProofsIdx` / `addNegEqProofsIdx` 的定义
-
-English:
-definition addNegEqProofsIdx
-  signature: : List (Expr × Nat) -> MetaM (List (Expr × Nat))
-  body: mkAppN (← mkAppM `Iff.mpr #[← mkAppOptM ``neg_eq_zero #[none, none, t]]) #[h]
-      let tl ← addNegEqProofsIdx tl
-      return (h, i)::(nep, i)::tl
-    | _ => return (h, i) :: (← addNegEqProofsIdx tl)
-
-中文:
-定义 addNegEqProofsIdx
-  签名: : 列表 (Expr × 自然数) -> MetaM (列表 (Expr × 自然数))
-  定义体: mkAppN (← mkAppM `Iff.mpr #[← mkAppOptM ``neg_eq_zero #[none, none, t]]) #[h]
-      let tl ← addNegEqProofsIdx tl
-      return (h, i)::(nep, i)::tl
-    | _ => return (h, i) :: (← addNegEqProofsIdx tl)
-
-Depends on / 依赖: Iff.mpr, addNegEqProofsIdx, mkAppM, mkAppN, mkAppOptM, neg_eq_zero, return
+`addNegEqProofsIdx l` inspects a list `l` of pairs `(h, i)` where `h` proves
+`tᵢ Rᵢ 0` and `i` records the original index of the hypothesis. For each
+equality proof `t = 0` in the list, it appends a proof of `-t = 0` with the
+same index `i`. All other entries are preserved.
 -/
-def addNegEqProofsIdx : List (Expr × Nat) -> MetaM (List (Expr × Nat))
+/-
+**Mathlib.Tactic.Linarith.addNegEqProofsIdx** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Linarith`。
+形式化陈述：addNegEqProofsIdx : List (Expr × Nat) -> MetaM (List (Expr × Nat)) | [] =>
+ return [] | (⟨h, i⟩::tl) => do let (iq, t) ← parseCompAndExpr (← inferType h) m
+atch iq with | Ineq.eq => do let nep
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`addNegEqProofsIdx l` inspects a list `l` of pairs `(h, i)` where `h` proves
+`tᵢ Rᵢ 0` and `i` records the original index of the hypothesis. For each
+equality proof `t = 0` in the list, it appends a proof of `-t = 0` with the
+same index `i`. All other entries are preserved.
+-/
+def addNegEqProofsIdx : List (Expr × Nat) → MetaM (List (Expr × Nat))
   | [] => return []
   | (⟨h, i⟩::tl) => do
     let (iq, t) ← parseCompAndExpr (← inferType h)
@@ -315,23 +296,18 @@ def addNegEqProofsIdx : List (Expr × Nat) -> MetaM (List (Expr × Nat))
     | _ => return (h, i) :: (← addNegEqProofsIdx tl)
 
 /--
-Definition of `proveEqZeroUsing` / `proveEqZeroUsing` 的定义
+`proveEqZeroUsing tac e` tries to use `tac` to construct a proof of `e = 0`.
+-/
+/-
+**Mathlib.Tactic.Linarith.proveEqZeroUsing** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Linarith`。
+形式化陈述：proveEqZeroUsing (tac : TacticM Unit) (e : Expr) : MetaM Expr
+参数：tac : TacticM Unit；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proveEqZeroUsing
-  signature: (tac : TacticM Unit) (e : Expr)
-  body: do
-  let ⟨u, α, e⟩ ← inferTypeQ' e
-  let _h : Q(Zero $α) ← synthInstanceQ q(Zero $α)
-  synthesizeUsing' q($e = 0) tac
-
-中文:
-定义 proveEqZeroUsing
-  签名: (tac : TacticM 单元) (e : Expr)
-  定义体: do
-  let ⟨u, α, e⟩ ← inferTypeQ' e
-  let _h : Q(Zero $α) ← synthInstanceQ q(Zero $α)
-  synthesizeUsing' q($e = 0) tac
+--- 原说明 ---
+`proveEqZeroUsing tac e` tries to use `tac` to construct a proof of `e = 0`.
 -/
 def proveEqZeroUsing (tac : TacticM Unit) (e : Expr) : MetaM Expr := do
   let ⟨u, α, e⟩ ← inferTypeQ' e
@@ -341,138 +317,87 @@ def proveEqZeroUsing (tac : TacticM Unit) (e : Expr) : MetaM Expr := do
 /-! #### The main method -/
 
 /--
-Definition of `proveFalseByLinarith` / `proveFalseByLinarith` 的定义
+`proveFalseByLinarith` is the main workhorse of `linarith`.
+Given a list `l` of proofs of `tᵢ Rᵢ 0`,
+it tries to derive a contradiction from `l` and use this to produce a proof of `False`.
 
-English:
-definition proveFalseByLinarith
-  signature: (transparency : TransparencyMode) (oracle : CertificateOracle)
-  body: l.zipIdx
-let l' ← detailTrace "addNegEqProofs" addNegEqProofsIdx lidx
-      let inputsTagged : List (Expr × Option Nat) ←
-detailTrace "mkNegOneLtZeroProof"
-          return ((← mkNegOneLtZeroProof (← typeOfIneqProof h)), none) ::
-            (l'.reverse.map fun ⟨e, i⟩ => (e, some i))
-      let inputs := inputsTagged.map Prod.fst
-      trace[linarith.detail] "inputs:{indentD <| toMessageData (← inputs.mapM inferType)}"
-let (comps, max_var) ← detailTrace "linearFormsAndMaxVar"
-        linearFormsAndMaxVar transparency inputs
-      trace[linarith.detail] "comps:{indentD <| toMessageData comps}"
-      -- perform the elimination and fail if no contradiction is found.
-      let certificate : Std.HashMap Nat Nat ←
-        withTraceNode `linarith (fun _ => return m!" Invoking oracle") do
-          let certificate ←
-            try
-              oracle.produceCertificate comps max_var
-            catch e =>
-              trace[linarith] e.toMessageData
-              throwError "linarith failed to find a contradiction"
-          trace[linarith] "found a contradiction: {certificate.toList}"
-          return certificate
-      let (sm, zip, idxs) ←
-        withTraceNode `linarith (fun _ => return m!" Building final expression") do
-          let enum_inputs := inputsTagged.zipIdx
-          -- construct a list pairing nonzero coeffs with the proof of their corresponding
-          -- comparison and track the original index
-          let used := enum_inputs.filterMap fun ⟨⟨e, orig?⟩, n⟩ =>
-            (certificate[n]?).map fun c => (e, c, orig?)
-          let zip := used.map fun ⟨e, c, _⟩ => (e, c)
-          let mls ← used.mapM fun ⟨e, c, _⟩ => do mulExpr c (← leftOfIneqProof e)
-          -- `sm` is the sum of input terms, scaled to cancel out all variables.
-          let sm ← addExprs mls
-          -- let sm ← instantiateMVars sm
-          trace[linarith] "{indentD sm}\nshould be both 0 and negative"
-          let idxs :=
-            (used.foldl (fun acc (_, _, orig?) =>
-                match orig? with
-                | some i => i :: acc
-                | none => acc) []).eraseDups
-          return (sm, zip, idxs)
-      -- we prove that `sm = 0`, typically with `ring`.
-let sm_eq_zero ← detailTrace "proveEqZeroUsing" proveEqZeroUsing discharger sm
-      -- we also prove that `sm < 0`
-let sm_lt_zero ← detailTrace "mkLTZeroProof" mkLTZeroProof zip
-      let pf ← detailTrace "Linarith.lt_irrefl" do
-        -- this is a contradiction.
-        let pftp ← inferType sm_lt_zero
-        let ⟨_, nep, _⟩ ← g.rewrite pftp sm_eq_zero
-        let pf' ← mkAppM ``Eq.mp #[nep, sm_lt_zero]
-        mkAppM ``Linarith.lt_irrefl #[pf']
-      return (pf, idxs)
+`oracle : CertificateOracle` is used to search for a certificate of unsatisfiability.
 
-中文:
-定义 proveFalseByLinarith
-  签名: (transparency : TransparencyMode) (oracle : CertificateOracle)
-  定义体: l.zipIdx
-let l' ← detailTrace "addNegEqProofs" addNegEqProofsIdx lidx
-      let inputsTagged : List (Expr × Option Nat) ←
-detailTrace "mkNegOneLtZeroProof"
-          return ((← mkNegOneLtZeroProof (← typeOfIneqProof h)), none) ::
-            (l'.reverse.map fun ⟨e, i⟩ => (e, some i))
-      let inputs := inputsTagged.map Prod.fst
-      trace[linarith.detail] "inputs:{indentD <| toMessageData (← inputs.mapM inferType)}"
-let (comps, max_var) ← detailTrace "linearFormsAndMaxVar"
-        linearFormsAndMaxVar transparency inputs
-      trace[linarith.detail] "comps:{indentD <| toMessageData comps}"
-      -- perform the elimination and fail if no contradiction is found.
-      let certificate : Std.HashMap Nat Nat ←
-        withTraceNode `linarith (fun _ => return m!" Invoking oracle") do
-          let certificate ←
-            try
-              oracle.produceCertificate comps max_var
-            catch e =>
-              trace[linarith] e.toMessageData
-              throwError "linarith failed to find a contradiction"
-          trace[linarith] "found a contradiction: {certificate.toList}"
-          return certificate
-      let (sm, zip, idxs) ←
-        withTraceNode `linarith (fun _ => return m!" Building final expression") do
-          let enum_inputs := inputsTagged.zipIdx
-          -- construct a list pairing nonzero coeffs with the proof of their corresponding
-          -- comparison and track the original index
-          let used := enum_inputs.filterMap fun ⟨⟨e, orig?⟩, n⟩ =>
-            (certificate[n]?).map fun c => (e, c, orig?)
-          let zip := used.map fun ⟨e, c, _⟩ => (e, c)
-          let mls ← used.mapM fun ⟨e, c, _⟩ => do mulExpr c (← leftOfIneqProof e)
-          -- `sm` is the sum of input terms, scaled to cancel out all variables.
-          let sm ← addExprs mls
-          -- let sm ← instantiateMVars sm
-          trace[linarith] "{indentD sm}\nshould be both 0 and negative"
-          let idxs :=
-            (used.foldl (fun acc (_, _, orig?) =>
-                match orig? with
-                | some i => i :: acc
-                | none => acc) []).eraseDups
-          return (sm, zip, idxs)
-      -- we prove that `sm = 0`, typically with `ring`.
-let sm_eq_zero ← detailTrace "proveEqZeroUsing" proveEqZeroUsing discharger sm
-      -- we also prove that `sm < 0`
-let sm_lt_zero ← detailTrace "mkLTZeroProof" mkLTZeroProof zip
-      let pf ← detailTrace "Linarith.lt_irrefl" do
-        -- this is a contradiction.
-        let pftp ← inferType sm_lt_zero
-        let ⟨_, nep, _⟩ ← g.rewrite pftp sm_eq_zero
-        let pf' ← mkAppM ``Eq.mp #[nep, sm_lt_zero]
-        mkAppM ``Linarith.lt_irrefl #[pf']
-      return (pf, idxs)
+The returned certificate is a map `m` from hypothesis indices to natural number coefficients.
+If our set of hypotheses has the form `{tᵢ Rᵢ 0}`,
+then the elimination process should have guaranteed that
+1.\ `∑ (m i)*tᵢ = 0`,
+with at least one `i` such that `m i > 0` and `Rᵢ` is `<`.
 
-Depends on / 依赖: l.zipIdx, zipIdx
+We have also that
+2.\ `∑ (m i)*tᵢ < 0`,
+since for each `i`, `(m i)*tᵢ ≤ 0` and at least one is strictly negative.
+So we conclude a contradiction `0 < 0`.
+
+It remains to produce proofs of (1) and (2). (1) is verified by calling the provided `discharger`
+tactic, which is typically `ring`. We prove (2) by folding over the set of hypotheses.
+
+`transparency : TransparencyMode` controls the transparency level with which atoms are identified.
+-/
+/-
+**Mathlib.Tactic.Linarith.proveFalseByLinarith** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Linarith`。
+形式化陈述：proveFalseByLinarith (transparency : TransparencyMode) (oracle : Certifica
+teOracle) (discharger : TacticM Unit) : MVarId -> List Expr -> MetaM (Expr × Lis
+t Nat) | _, [] => throwError "no args to linarith" | g, l@(h::_) => do Lean.Core
+.checkSystem decl_name%.toString -- for the elimination to work properly, we mus
+t add a proof of `-1 < 0` to the list, -- along with negated equality proofs. le
+t lidx
+参数：transparency : TransparencyMode；oracle : CertificateOracle；discharger : Tacti
+cM Unit。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`proveFalseByLinarith` is the main workhorse of `linarith`.
+Given a list `l` of proofs of `tᵢ Rᵢ 0`,
+it tries to derive a contradiction from `l` and use this to produce a proof of `
+False`.
+
+`oracle : CertificateOracle` is used to search for a certificate of unsatisfiabi
+lity.
+
+The returned certificate is a map `m` from hypothesis indices to natural number 
+coefficients.
+If our set of hypotheses has the form `{tᵢ Rᵢ 0}`,
+then the elimination process should have guaranteed that
+1.\ `∑ (m i)*tᵢ = 0`,
+with at least one `i` such that `m i > 0` and `Rᵢ` is `<`.
+
+We have also that
+2.\ `∑ (m i)*tᵢ < 0`,
+since for each `i`, `(m i)*tᵢ ≤ 0` and at least one is strictly negative.
+So we conclude a contradiction `0 < 0`.
+
+It remains to produce proofs of (1) and (2). (1) is verified by calling the prov
+ided `discharger`
+tactic, which is typically `ring`. We prove (2) by folding over the set of hypot
+heses.
+
+`transparency : TransparencyMode` controls the transparency level with which ato
+ms are identified.
 -/
 def proveFalseByLinarith (transparency : TransparencyMode) (oracle : CertificateOracle)
-    (discharger : TacticM Unit) : MVarId -> List Expr -> MetaM (Expr × List Nat)
+    (discharger : TacticM Unit) : MVarId → List Expr → MetaM (Expr × List Nat)
   | _, [] => throwError "no args to linarith"
   | g, l@(h::_) => do
       Lean.Core.checkSystem decl_name%.toString
       -- for the elimination to work properly, we must add a proof of `-1 < 0` to the list,
       -- along with negated equality proofs.
       let lidx := l.zipIdx
-let l' ← detailTrace "addNegEqProofs" addNegEqProofsIdx lidx
+      let l' ← detailTrace "addNegEqProofs" <| addNegEqProofsIdx lidx
       let inputsTagged : List (Expr × Option Nat) ←
-detailTrace "mkNegOneLtZeroProof"
+        detailTrace "mkNegOneLtZeroProof" <|
           return ((← mkNegOneLtZeroProof (← typeOfIneqProof h)), none) ::
             (l'.reverse.map fun ⟨e, i⟩ => (e, some i))
       let inputs := inputsTagged.map Prod.fst
       trace[linarith.detail] "inputs:{indentD <| toMessageData (← inputs.mapM inferType)}"
-let (comps, max_var) ← detailTrace "linearFormsAndMaxVar"
+      let (comps, max_var) ← detailTrace "linearFormsAndMaxVar" <|
         linearFormsAndMaxVar transparency inputs
       trace[linarith.detail] "comps:{indentD <| toMessageData comps}"
       -- perform the elimination and fail if no contradiction is found.
@@ -506,9 +431,9 @@ let (comps, max_var) ← detailTrace "linearFormsAndMaxVar"
                 | none => acc) []).eraseDups
           return (sm, zip, idxs)
       -- we prove that `sm = 0`, typically with `ring`.
-let sm_eq_zero ← detailTrace "proveEqZeroUsing" proveEqZeroUsing discharger sm
+      let sm_eq_zero ← detailTrace "proveEqZeroUsing" <| proveEqZeroUsing discharger sm
       -- we also prove that `sm < 0`
-let sm_lt_zero ← detailTrace "mkLTZeroProof" mkLTZeroProof zip
+      let sm_lt_zero ← detailTrace "mkLTZeroProof" <| mkLTZeroProof zip
       let pf ← detailTrace "Linarith.lt_irrefl" do
         -- this is a contradiction.
         let pftp ← inferType sm_lt_zero
@@ -522,3 +447,4 @@ where
     withTraceNode `linarith.detail (fun _ => return m!"{s}") f
 
 end Mathlib.Tactic.Linarith
+

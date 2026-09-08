@@ -18,22 +18,19 @@ namespace IsSimpleRing
 
 variable (ι A : Type*) [Ring A] [Fintype ι] [Nonempty ι]
 
-/--
-Instance `matrix` / 实例 `matrix`
-
-English:
-instance matrix
-  signature: [IsSimpleRing A]
-  body: letI := Classical.decEq ι; TwoSidedIdeal.orderIsoMatrix
-
-中文:
-实例 matrix
-  签名: [是单环 A]
-  定义体: letI := Classical.decEq ι; TwoSidedIdeal.orderIsoMatrix
-
-Depends on / 依赖: Classical, Classical.decEq, TwoSidedIdeal, TwoSidedIdeal.orderIsoMatrix, orderIsoMatrix
+/-
+**IsSimpleRing.matrix** 是 Mathlib 中的一个实例，位于命名空间 `IsSimpleRing`。
+形式化陈述：matrix [IsSimpleRing A] : IsSimpleRing (Matrix ι ι A) where .symm.isSimple
+Order simple
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isSimpleOrder`：isSimpleOrder [BoundedOrder α] [BoundedOrder β] 
+[h : IsSimpleOrder β] (f : α ≃o β) : IsSimpleOrder α
+· 使用定理 `IsSimpleRing.simple`：∀ {R : Type u_1} {inst : NonUnitalNonAssocRing R} [
+self : IsSimpleRing R], IsSimpleOrder (TwoSidedIdeal R)
 -/
 instance matrix [IsSimpleRing A] : IsSimpleRing (Matrix ι ι A) where
-.symm.isSimpleOrder simple := letI := Classical.decEq ι; TwoSidedIdeal.orderIsoMatrix
+  simple := letI := Classical.decEq ι; TwoSidedIdeal.orderIsoMatrix |>.symm.isSimpleOrder
 
 end IsSimpleRing
+

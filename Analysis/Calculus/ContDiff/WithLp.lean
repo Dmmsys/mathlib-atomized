@@ -20,326 +20,235 @@ section PiLp
 
 open ContinuousLinearMap WithLp
 
-variable {𝕜 ι : Type*} {E : ι -> Type*} {H : Type*}
-variable [NontriviallyNormedField 𝕜] [NormedAddCommGroup H] [forall i, NormedAddCommGroup (E i)]
-  [forall i, NormedSpace 𝕜 (E i)] [NormedSpace 𝕜 H] [Fintype ι] (p) [Fact (1 <= p)]
-  {n : WithTop Nat∞} {f : H -> PiLp p E} {f' : H ->L[𝕜] PiLp p E} {t : Set H} {y : H}
+variable {𝕜 ι : Type*} {E : ι → Type*} {H : Type*}
+variable [NontriviallyNormedField 𝕜] [NormedAddCommGroup H] [∀ i, NormedAddCommGroup (E i)]
+  [∀ i, NormedSpace 𝕜 (E i)] [NormedSpace 𝕜 H] [Fintype ι] (p) [Fact (1 ≤ p)]
+  {n : WithTop ℕ∞} {f : H → PiLp p E} {f' : H →L[𝕜] PiLp p E} {t : Set H} {y : H}
 
-/--
-theorem `contDiffWithinAt_piLp` / 定理 `contDiffWithinAt_piLp`
-
-English:
-theorem contDiffWithinAt_piLp
-  proof: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffWithinAt_iff]; rw [contDiffWithinAt_pi]
-  rfl
-
-@[fun_prop]
-
-中文:
-定理 contDiffWithinAt_piLp
-  证明: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffWithinAt_iff]; rw [contDiffWithinAt_pi]
-  rfl
-
-@[fun_prop]
-
-Depends on / 依赖: PiLp.continuousLinearEquiv, comp_contDiffWithinAt_iff, contDiffWithinAt_pi, continuousLinearEquiv
+/-
+**contDiffWithinAt_piLp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffWithinAt_piLp : ContDiffWithinAt 𝕜 n f t y ↔ forall i, ContDiffWit
+hinAt 𝕜 n (fun x => f x i) t y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearEquiv.comp_contDiffWithinAt_iff`：ContinuousLinearEquiv.c
+omp_contDiffWithinAt_iff (e : F ≃L[𝕜] G) : ContDiffWithinAt 𝕜 n (e ∘ f) s x ↔ Co
+ntDiffWithinAt 𝕜 n f s x
+· 使用定理 `contDiffWithinAt_pi`：contDiffWithinAt_pi : ContDiffWithinAt 𝕜 n Φ s x ↔ 
+forall i, ContDiffWithinAt 𝕜 n (fun x => Φ x i) s x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem contDiffWithinAt_piLp :
-    ContDiffWithinAt 𝕜 n f t y ↔ forall i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y := by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffWithinAt_iff]; rw [contDiffWithinAt_pi]
+    ContDiffWithinAt 𝕜 n f t y ↔ ∀ i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y := by
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffWithinAt_iff, contDiffWithinAt_pi]
   rfl
 
 @[fun_prop]
-/--
-theorem `contDiffWithinAt_piLp'` / 定理 `contDiffWithinAt_piLp'`
-
-English:
-theorem contDiffWithinAt_piLp'
-  given: (hf : forall i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y)
-  proof: (contDiffWithinAt_piLp p).2 hf
-
-@[fun_prop]
-
-中文:
-定理 contDiffWithinAt_piLp'
-  条件: (hf : 对任意 i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y)
-  证明: (contDiffWithinAt_piLp p).2 hf
-
-@[fun_prop]
-
-Depends on / 依赖: contDiffWithinAt_piLp
+/-
+**contDiffWithinAt_piLp'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffWithinAt_piLp' (hf : forall i, ContDiffWithinAt 𝕜 n (fun x => f x 
+i) t y) : ContDiffWithinAt 𝕜 n f t y
+参数：hf : forall i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `contDiffWithinAt_piLp`：contDiffWithinAt_piLp : ContDiffWithinAt 𝕜 n f t 
+y ↔ forall i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y
 -/
-theorem contDiffWithinAt_piLp' (hf : forall i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y) :
+theorem contDiffWithinAt_piLp' (hf : ∀ i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y) :
     ContDiffWithinAt 𝕜 n f t y :=
   (contDiffWithinAt_piLp p).2 hf
 
 @[fun_prop]
-/--
-theorem `contDiffWithinAt_piLp_apply` / 定理 `contDiffWithinAt_piLp_apply`
-
-English:
-theorem contDiffWithinAt_piLp_apply
-  given: {i : ι} {t : Set (PiLp p E)} {y : PiLp p E}
-  proof: (contDiffWithinAt_piLp p).1 contDiffWithinAt_id i
-
-中文:
-定理 contDiffWithinAt_piLp_apply
-  条件: {i : ι} {t : 集合 (PiLp p E)} {y : PiLp p E}
-  证明: (contDiffWithinAt_piLp p).1 contDiffWithinAt_id i
-
-Depends on / 依赖: contDiffWithinAt_id, contDiffWithinAt_piLp
+/-
+**contDiffWithinAt_piLp_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffWithinAt_piLp_apply {i : ι} {t : Set (PiLp p E)} {y : PiLp p E} : 
+ContDiffWithinAt 𝕜 n (fun f : PiLp p E => f i) t y
+参数：PiLp p E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `contDiffWithinAt_piLp`：contDiffWithinAt_piLp : ContDiffWithinAt 𝕜 n f t 
+y ↔ forall i, ContDiffWithinAt 𝕜 n (fun x => f x i) t y
+· 使用定理 `contDiffWithinAt_id`：contDiffWithinAt_id {s x} : ContDiffWithinAt 𝕜 n (i
+d : E -> E) s x
 -/
 theorem contDiffWithinAt_piLp_apply {i : ι} {t : Set (PiLp p E)} {y : PiLp p E} :
     ContDiffWithinAt 𝕜 n (fun f : PiLp p E => f i) t y :=
   (contDiffWithinAt_piLp p).1 contDiffWithinAt_id i
-
-/--
-theorem `contDiffAt_piLp` / 定理 `contDiffAt_piLp`
-
-English:
-theorem contDiffAt_piLp
-  proof: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffAt_iff]; rw [contDiffAt_pi]
-  rfl
-
-@[fun_prop]
-
-中文:
-定理 contDiffAt_piLp
-  证明: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffAt_iff]; rw [contDiffAt_pi]
-  rfl
-
-@[fun_prop]
-
-Depends on / 依赖: PiLp.continuousLinearEquiv, comp_contDiffAt_iff, contDiffAt_pi, continuousLinearEquiv
+/-
+**contDiffAt_piLp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffAt_piLp : ContDiffAt 𝕜 n f y ↔ forall i, ContDiffAt 𝕜 n (fun x => 
+f x i) y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearEquiv.comp_contDiffAt_iff`：ContinuousLinearEquiv.comp_co
+ntDiffAt_iff (e : F ≃L[𝕜] G) : ContDiffAt 𝕜 n (e ∘ f) x ↔ ContDiffAt 𝕜 n f x
+· 使用定理 `contDiffAt_pi`：contDiffAt_pi : ContDiffAt 𝕜 n Φ x ↔ forall i, ContDiffAt
+ 𝕜 n (fun x => Φ x i) x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem contDiffAt_piLp :
-    ContDiffAt 𝕜 n f y ↔ forall i, ContDiffAt 𝕜 n (fun x => f x i) y := by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffAt_iff]; rw [contDiffAt_pi]
+    ContDiffAt 𝕜 n f y ↔ ∀ i, ContDiffAt 𝕜 n (fun x => f x i) y := by
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffAt_iff, contDiffAt_pi]
   rfl
 
 @[fun_prop]
-/--
-theorem `contDiffAt_piLp'` / 定理 `contDiffAt_piLp'`
-
-English:
-theorem contDiffAt_piLp'
-  given: (hf : forall i, ContDiffAt 𝕜 n (fun x => f x i) y)
-  proof: (contDiffAt_piLp p).2 hf
-
-@[fun_prop]
-
-中文:
-定理 contDiffAt_piLp'
-  条件: (hf : 对任意 i, ContDiffAt 𝕜 n (fun x => f x i) y)
-  证明: (contDiffAt_piLp p).2 hf
-
-@[fun_prop]
-
-Depends on / 依赖: contDiffAt_piLp
+/-
+**contDiffAt_piLp'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffAt_piLp' (hf : forall i, ContDiffAt 𝕜 n (fun x => f x i) y) : Cont
+DiffAt 𝕜 n f y
+参数：hf : forall i, ContDiffAt 𝕜 n (fun x => f x i) y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `contDiffAt_piLp`：contDiffAt_piLp : ContDiffAt 𝕜 n f y ↔ forall i, ContDi
+ffAt 𝕜 n (fun x => f x i) y
 -/
-theorem contDiffAt_piLp' (hf : forall i, ContDiffAt 𝕜 n (fun x => f x i) y) :
+theorem contDiffAt_piLp' (hf : ∀ i, ContDiffAt 𝕜 n (fun x => f x i) y) :
     ContDiffAt 𝕜 n f y :=
   (contDiffAt_piLp p).2 hf
 
 @[fun_prop]
-/--
-theorem `contDiffAt_piLp_apply` / 定理 `contDiffAt_piLp_apply`
-
-English:
-theorem contDiffAt_piLp_apply
-  given: {i : ι} {y : PiLp p E}
-  proof: (contDiffAt_piLp p).1 contDiffAt_id i
-
-中文:
-定理 contDiffAt_piLp_apply
-  条件: {i : ι} {y : PiLp p E}
-  证明: (contDiffAt_piLp p).1 contDiffAt_id i
-
-Depends on / 依赖: contDiffAt_id, contDiffAt_piLp
+/-
+**contDiffAt_piLp_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffAt_piLp_apply {i : ι} {y : PiLp p E} : ContDiffAt 𝕜 n (fun f : PiL
+p p E => f i) y
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `contDiffAt_piLp`：contDiffAt_piLp : ContDiffAt 𝕜 n f y ↔ forall i, ContDi
+ffAt 𝕜 n (fun x => f x i) y
+· 使用定理 `contDiffAt_id`：contDiffAt_id {x} : ContDiffAt 𝕜 n (id : E -> E) x
 -/
 theorem contDiffAt_piLp_apply {i : ι} {y : PiLp p E} :
     ContDiffAt 𝕜 n (fun f : PiLp p E => f i) y :=
   (contDiffAt_piLp p).1 contDiffAt_id i
-
-/--
-theorem `contDiffOn_piLp` / 定理 `contDiffOn_piLp`
-
-English:
-theorem contDiffOn_piLp
-  proof: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffOn_iff]; rw [contDiffOn_pi]
-  rfl
-
-@[fun_prop]
-
-中文:
-定理 contDiffOn_piLp
-  证明: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffOn_iff]; rw [contDiffOn_pi]
-  rfl
-
-@[fun_prop]
-
-Depends on / 依赖: PiLp.continuousLinearEquiv, comp_contDiffOn_iff, contDiffOn_pi, continuousLinearEquiv
+/-
+**contDiffOn_piLp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffOn_piLp : ContDiffOn 𝕜 n f t ↔ forall i, ContDiffOn 𝕜 n (fun x => 
+f x i) t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearEquiv.comp_contDiffOn_iff`：ContinuousLinearEquiv.comp_co
+ntDiffOn_iff (e : F ≃L[𝕜] G) : ContDiffOn 𝕜 n (e ∘ f) s ↔ ContDiffOn 𝕜 n f s
+· 使用定理 `contDiffOn_pi`：contDiffOn_pi : ContDiffOn 𝕜 n Φ s ↔ forall i, ContDiffOn
+ 𝕜 n (fun x => Φ x i) s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem contDiffOn_piLp :
-    ContDiffOn 𝕜 n f t ↔ forall i, ContDiffOn 𝕜 n (fun x => f x i) t := by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffOn_iff]; rw [contDiffOn_pi]
+    ContDiffOn 𝕜 n f t ↔ ∀ i, ContDiffOn 𝕜 n (fun x => f x i) t := by
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiffOn_iff, contDiffOn_pi]
   rfl
 
 @[fun_prop]
-/--
-theorem `contDiffOn_piLp'` / 定理 `contDiffOn_piLp'`
-
-English:
-theorem contDiffOn_piLp'
-  given: (hf : forall i, ContDiffOn 𝕜 n (fun x => f x i) t)
-  proof: (contDiffOn_piLp p).2 hf
-
-@[fun_prop]
-
-中文:
-定理 contDiffOn_piLp'
-  条件: (hf : 对任意 i, ContDiffOn 𝕜 n (fun x => f x i) t)
-  证明: (contDiffOn_piLp p).2 hf
-
-@[fun_prop]
-
-Depends on / 依赖: contDiffOn_piLp
+/-
+**contDiffOn_piLp'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffOn_piLp' (hf : forall i, ContDiffOn 𝕜 n (fun x => f x i) t) : Cont
+DiffOn 𝕜 n f t
+参数：hf : forall i, ContDiffOn 𝕜 n (fun x => f x i) t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `contDiffOn_piLp`：contDiffOn_piLp : ContDiffOn 𝕜 n f t ↔ forall i, ContDi
+ffOn 𝕜 n (fun x => f x i) t
 -/
-theorem contDiffOn_piLp' (hf : forall i, ContDiffOn 𝕜 n (fun x => f x i) t) :
+theorem contDiffOn_piLp' (hf : ∀ i, ContDiffOn 𝕜 n (fun x => f x i) t) :
     ContDiffOn 𝕜 n f t :=
   (contDiffOn_piLp p).2 hf
 
 @[fun_prop]
-/--
-theorem `contDiffOn_piLp_apply` / 定理 `contDiffOn_piLp_apply`
-
-English:
-theorem contDiffOn_piLp_apply
-  given: {i : ι} {t : Set (PiLp p E)}
-  proof: (contDiffOn_piLp p).1 contDiffOn_id i
-
-中文:
-定理 contDiffOn_piLp_apply
-  条件: {i : ι} {t : 集合 (PiLp p E)}
-  证明: (contDiffOn_piLp p).1 contDiffOn_id i
-
-Depends on / 依赖: contDiffOn_id, contDiffOn_piLp
+/-
+**contDiffOn_piLp_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiffOn_piLp_apply {i : ι} {t : Set (PiLp p E)} : ContDiffOn 𝕜 n (fun f
+ : PiLp p E => f i) t
+参数：PiLp p E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `contDiffOn_piLp`：contDiffOn_piLp : ContDiffOn 𝕜 n f t ↔ forall i, ContDi
+ffOn 𝕜 n (fun x => f x i) t
+· 使用定理 `contDiffOn_id`：contDiffOn_id {s} : ContDiffOn 𝕜 n (id : E -> E) s
 -/
 theorem contDiffOn_piLp_apply {i : ι} {t : Set (PiLp p E)} :
     ContDiffOn 𝕜 n (fun f : PiLp p E => f i) t :=
   (contDiffOn_piLp p).1 contDiffOn_id i
-
-/--
-theorem `contDiff_piLp` / 定理 `contDiff_piLp`
-
-English:
-theorem contDiff_piLp
-  statement: ContDiff 𝕜 n f ↔ forall i, ContDiff 𝕜 n fun x => f x i
-  proof: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiff_iff]; rw [contDiff_pi]
-  rfl
-
-@[fun_prop]
-
-中文:
-定理 contDiff_piLp
-  结论: 连续可微 𝕜 n f ↔ 对任意 i, 连续可微 𝕜 n fun x => f x i
-  证明: by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiff_iff]; rw [contDiff_pi]
-  rfl
-
-@[fun_prop]
-
-Depends on / 依赖: PiLp.continuousLinearEquiv, comp_contDiff_iff, contDiff_pi, continuousLinearEquiv
+/-
+**contDiff_piLp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiff_piLp : ContDiff 𝕜 n f ↔ forall i, ContDiff 𝕜 n fun x => f x i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousLinearEquiv.comp_contDiff_iff`：ContinuousLinearEquiv.comp_cont
+Diff_iff (e : F ≃L[𝕜] G) : ContDiff 𝕜 n (e ∘ f) ↔ ContDiff 𝕜 n f
+· 使用定理 `contDiff_pi`：contDiff_pi : ContDiff 𝕜 n Φ ↔ forall i, ContDiff 𝕜 n fun x
+ => Φ x i
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem contDiff_piLp : ContDiff 𝕜 n f ↔ forall i, ContDiff 𝕜 n fun x => f x i := by
-  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiff_iff]; rw [contDiff_pi]
+theorem contDiff_piLp : ContDiff 𝕜 n f ↔ ∀ i, ContDiff 𝕜 n fun x => f x i := by
+  rw [← (PiLp.continuousLinearEquiv p 𝕜 E).comp_contDiff_iff, contDiff_pi]
   rfl
 
 @[fun_prop]
-/--
-theorem `contDiff_piLp'` / 定理 `contDiff_piLp'`
-
-English:
-theorem contDiff_piLp'
-  given: (hf : forall i, ContDiff 𝕜 n (fun x => f x i))
-  proof: (contDiff_piLp p).2 hf
-
-@[fun_prop]
-
-中文:
-定理 contDiff_piLp'
-  条件: (hf : 对任意 i, 连续可微 𝕜 n (fun x => f x i))
-  证明: (contDiff_piLp p).2 hf
-
-@[fun_prop]
-
-Depends on / 依赖: contDiff_piLp
+/-
+**contDiff_piLp'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiff_piLp' (hf : forall i, ContDiff 𝕜 n (fun x => f x i)) : ContDiff 𝕜
+ n f
+参数：hf : forall i, ContDiff 𝕜 n (fun x => f x i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `contDiff_piLp`：contDiff_piLp : ContDiff 𝕜 n f ↔ forall i, ContDiff 𝕜 n f
+un x => f x i
 -/
-theorem contDiff_piLp' (hf : forall i, ContDiff 𝕜 n (fun x => f x i)) :
+theorem contDiff_piLp' (hf : ∀ i, ContDiff 𝕜 n (fun x => f x i)) :
     ContDiff 𝕜 n f :=
   (contDiff_piLp p).2 hf
 
 @[fun_prop]
-/--
-theorem `contDiff_piLp_apply` / 定理 `contDiff_piLp_apply`
-
-English:
-theorem contDiff_piLp_apply
-  given: {i : ι}
-  proof: (contDiff_piLp p).1 contDiff_id i
-
-中文:
-定理 contDiff_piLp_apply
-  条件: {i : ι}
-  证明: (contDiff_piLp p).1 contDiff_id i
-
-Depends on / 依赖: contDiff_id, contDiff_piLp
+/-
+**contDiff_piLp_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：contDiff_piLp_apply {i : ι} : ContDiff 𝕜 n (fun f : PiLp p E => f i)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `contDiff_piLp`：contDiff_piLp : ContDiff 𝕜 n f ↔ forall i, ContDiff 𝕜 n f
+un x => f x i
+· 使用定理 `contDiff_id`：contDiff_id : ContDiff 𝕜 n (id : E -> E)
 -/
 theorem contDiff_piLp_apply {i : ι} :
     ContDiff 𝕜 n (fun f : PiLp p E => f i) :=
   (contDiff_piLp p).1 contDiff_id i
 
 variable {p}
-
-/--
-lemma `PiLp.contDiff_ofLp` / 引理 `PiLp.contDiff_ofLp`
-
-English:
-lemma PiLp.contDiff_ofLp
-  statement: ContDiff 𝕜 n (@ofLp p (Π i, E i))
-  proof: (continuousLinearEquiv p 𝕜 E).contDiff
-
-中文:
-引理 PiLp.contDiff_ofLp
-  结论: 连续可微 𝕜 n (@ofLp p (Π i, E i))
-  证明: (continuousLinearEquiv p 𝕜 E).contDiff
-
-Depends on / 依赖: contDiff, continuousLinearEquiv
+/-
+**PiLp.contDiff_ofLp** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：PiLp.contDiff_ofLp : ContDiff 𝕜 n (@ofLp p (Π i, E i))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearEquiv.contDiff`：ContinuousLinearEquiv.contDiff (f : E ≃L
+[𝕜] F) : ContDiff 𝕜 n f
 -/
 lemma PiLp.contDiff_ofLp : ContDiff 𝕜 n (@ofLp p (Π i, E i)) :=
   (continuousLinearEquiv p 𝕜 E).contDiff
-
-/--
-lemma `PiLp.contDiff_toLp` / 引理 `PiLp.contDiff_toLp`
-
-English:
-lemma PiLp.contDiff_toLp
-  statement: ContDiff 𝕜 n (@toLp p (Π i, E i))
-  proof: (continuousLinearEquiv p 𝕜 E).symm.contDiff
-
-中文:
-引理 PiLp.contDiff_toLp
-  结论: 连续可微 𝕜 n (@toLp p (Π i, E i))
-  证明: (continuousLinearEquiv p 𝕜 E).symm.contDiff
-
-Depends on / 依赖: contDiff, continuousLinearEquiv, symm.contDiff
+/-
+**PiLp.contDiff_toLp** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：PiLp.contDiff_toLp : ContDiff 𝕜 n (@toLp p (Π i, E i))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearEquiv.contDiff`：ContinuousLinearEquiv.contDiff (f : E ≃L
+[𝕜] F) : ContDiff 𝕜 n f
 -/
 lemma PiLp.contDiff_toLp : ContDiff 𝕜 n (@toLp p (Π i, E i)) :=
   (continuousLinearEquiv p 𝕜 E).symm.contDiff
@@ -349,42 +258,28 @@ end PiLp
 namespace WithLp
 
 variable {𝕜 E F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedAddCommGroup F]
-  [NormedSpace 𝕜 E] [NormedSpace 𝕜 F] {p : Real>=0∞} [Fact (1 <= p)] {n : WithTop Nat∞}
+  [NormedSpace 𝕜 E] [NormedSpace 𝕜 F] {p : ℝ≥0∞} [Fact (1 ≤ p)] {n : WithTop ℕ∞}
 
-/--
-lemma `contDiff_ofLp` / 引理 `contDiff_ofLp`
-
-English:
-lemma contDiff_ofLp
-  statement: ContDiff 𝕜 n (@ofLp p (E × F))
-  proof: (prodContinuousLinearEquiv p 𝕜 E F).contDiff
-
-中文:
-引理 contDiff_ofLp
-  结论: 连续可微 𝕜 n (@ofLp p (E × F))
-  证明: (prodContinuousLinearEquiv p 𝕜 E F).contDiff
-
-Depends on / 依赖: contDiff, prodContinuousLinearEquiv
+/-
+**WithLp.contDiff_ofLp** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：contDiff_ofLp : ContDiff 𝕜 n (@ofLp p (E × F))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearEquiv.contDiff`：ContinuousLinearEquiv.contDiff (f : E ≃L
+[𝕜] F) : ContDiff 𝕜 n f
 -/
 lemma contDiff_ofLp : ContDiff 𝕜 n (@ofLp p (E × F)) :=
   (prodContinuousLinearEquiv p 𝕜 E F).contDiff
-
-/--
-lemma `contDiff_toLp` / 引理 `contDiff_toLp`
-
-English:
-lemma contDiff_toLp
-  statement: ContDiff 𝕜 n (@toLp p (E × F))
-  proof: (prodContinuousLinearEquiv p 𝕜 E F).symm.contDiff
-
-中文:
-引理 contDiff_toLp
-  结论: 连续可微 𝕜 n (@toLp p (E × F))
-  证明: (prodContinuousLinearEquiv p 𝕜 E F).symm.contDiff
-
-Depends on / 依赖: contDiff, prodContinuousLinearEquiv, symm.contDiff
+/-
+**WithLp.contDiff_toLp** 是 Mathlib 中的一个引理，位于命名空间 `WithLp`。
+形式化陈述：contDiff_toLp : ContDiff 𝕜 n (@toLp p (E × F))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearEquiv.contDiff`：ContinuousLinearEquiv.contDiff (f : E ≃L
+[𝕜] F) : ContDiff 𝕜 n f
 -/
 lemma contDiff_toLp : ContDiff 𝕜 n (@toLp p (E × F)) :=
   (prodContinuousLinearEquiv p 𝕜 E F).symm.contDiff
 
 end WithLp
+

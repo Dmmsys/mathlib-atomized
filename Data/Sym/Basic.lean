@@ -13,7 +13,7 @@ public import Mathlib.Tactic.ApplyFun
 /-!
 # Symmetric powers
 
-This file defines symmetric powers of a type. The nth symmetric power
+This file defines symmetric powers of a type.  The nth symmetric power
 consists of homogeneous n-tuples modulo permutations by the symmetric
 group.
 
@@ -35,171 +35,124 @@ assert_not_exists MonoidWithZero
 open List (Vector)
 open Function
 
-/--
-Definition of `Sym` / `Sym` 的定义
-
-English:
-definition Sym
-  signature: (α : Type*) (n : Nat)
-  body: { s : Multiset α // Multiset.card s = n }
-deriving [DecidableEq α] -> DecidableEq _
-
-中文:
-定义 Sym
-  签名: (α : 类型) (n : 自然数)
-  定义体: { s : Multiset α // Multiset.card s = n }
-deriving [DecidableEq α] -> DecidableEq _
-
-Depends on / 依赖: Multiset, Multiset.card
+/-- The nth symmetric power is n-tuples up to permutation.  We define it
+as a subtype of `Multiset` since these are well developed in the
+library.  We also give a definition `Sym.sym'` in terms of vectors, and we
+show these are equivalent in `Sym.symEquivSym'`.
 -/
-def Sym (α : Type*) (n : Nat) :=
+/-
+**Sym** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Sym (α : Type*) (n : Nat)
+参数：α : Type*；n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The nth symmetric power is n-tuples up to permutation.  We define it
+as a subtype of `Multiset` since these are well developed in the
+library.  We also give a definition `Sym.sym'` in terms of vectors, and we
+show these are equivalent in `Sym.symEquivSym'`.
+-/
+def Sym (α : Type*) (n : ℕ) :=
   { s : Multiset α // Multiset.card s = n }
-deriving [DecidableEq α] -> DecidableEq _
+deriving [DecidableEq α] → DecidableEq _
 
-/--
-Definition of `Sym.toMultiset` / `Sym.toMultiset` 的定义
+/-- The canonical map to `Multiset α` that forgets that `s` has length `n` -/
+/-
+**Sym.toMultiset** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：{α : Type u_1} → {n : ℕ} → Sym α n → Multiset α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sym.toMultiset
-  signature: {α : Type*} {n : Nat} (s : Sym α n)
-  body: s.1
-
-中文:
-定义 Sym.toMultiset
-  签名: {α : 类型} {n : 自然数} (s : Sym α n)
-  定义体: s.1
+--- 原说明 ---
+The canonical map to `Multiset α` that forgets that `s` has length `n`
 -/
-@[coe] def Sym.toMultiset {α : Type*} {n : Nat} (s : Sym α n) : Multiset α :=
+@[coe] def Sym.toMultiset {α : Type*} {n : ℕ} (s : Sym α n) : Multiset α :=
   s.1
-
-/--
-Instance `Sym.hasCoe` / 实例 `Sym.hasCoe`
-
-English:
-instance Sym.hasCoe
-  signature: (α : Type*) (n : Nat)
-  body: ⟨Sym.toMultiset⟩
-
-中文:
-实例 Sym.hasCoe
-  签名: (α : 类型) (n : 自然数)
-  定义体: ⟨Sym.toMultiset⟩
-
-Depends on / 依赖: Sym.toMultiset, toMultiset
+/-
+**Sym.hasCoe** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Sym.hasCoe (α : Type*) (n : Nat) : CoeOut (Sym α n) (Multiset α)
+参数：α : Type*；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Sym.hasCoe (α : Type*) (n : Nat) : CoeOut (Sym α n) (Multiset α) :=
+instance Sym.hasCoe (α : Type*) (n : ℕ) : CoeOut (Sym α n) (Multiset α) :=
   ⟨Sym.toMultiset⟩
 
-/--
-Definition of `List.Vector.Perm.isSetoid` / `List.Vector.Perm.isSetoid` 的定义
+/-- This is the `List.Perm` setoid lifted to `Vector`.
 
-English:
-abbreviation List.Vector.Perm.isSetoid
-  signature: (α : Type*) (n : Nat)
-  body: (List.isSetoid α).comap Subtype.val
-
-中文:
-缩写 列表.Vector.置换.isSetoid
-  签名: (α : 类型) (n : 自然数)
-  定义体: (List.isSetoid α).comap Subtype.val
-
-Depends on / 依赖: List.isSetoid, Subtype, Subtype.val, isSetoid
+See note [reducible non-instances].
 -/
-abbrev List.Vector.Perm.isSetoid (α : Type*) (n : Nat) : Setoid (Vector α n) :=
+/-
+**List.Vector.Perm.isSetoid** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：List.Vector.Perm.isSetoid (α : Type*) (n : Nat) : Setoid (Vector α n)
+参数：α : Type*；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This is the `List.Perm` setoid lifted to `Vector`.
+
+See note [reducible non-instances].
+-/
+abbrev List.Vector.Perm.isSetoid (α : Type*) (n : ℕ) : Setoid (Vector α n) :=
   (List.isSetoid α).comap Subtype.val
 
 attribute [local instance] Vector.Perm.isSetoid
 
 -- Copy over the `DecidableRel` instance across the definition.
 -- (Although `List.Vector.Perm.isSetoid` is an `abbrev`, `List.isSetoid` is not.)
-instance {α : Type*} {n : Nat} [DecidableEq α] :
-    DecidableRel (· ≈ · : List.Vector α n -> List.Vector α n -> Prop) :=
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {α : Type*} {n : ℕ} [DecidableEq α] :
+    DecidableRel (· ≈ · : List.Vector α n → List.Vector α n → Prop) :=
   fun _ _ => List.decidablePerm _ _
 
 namespace Sym
 
-variable {α β : Type*} {n n' m : Nat} {s : Sym α n} {a b : α}
+variable {α β : Type*} {n n' m : ℕ} {s : Sym α n} {a b : α}
 
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Injective ((↑) : Sym α n -> Multiset α)
-  proof: Subtype.coe_injective
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_injective
-  结论: 单射 ((↑) : Sym α n -> Multiset α)
-  证明: Subtype.coe_injective
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
+/-
+**Sym.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_injective : Injective ((↑) : Sym α n -> Multiset α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-theorem coe_injective : Injective ((↑) : Sym α n -> Multiset α) :=
+theorem coe_injective : Injective ((↑) : Sym α n → Multiset α) :=
   Subtype.coe_injective
 
 @[simp, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: {s₁ s₂ : Sym α n}
-  statement: (s₁ : Multiset α) = s₂ ↔ s₁ = s₂
-  proof: coe_injective.eq_iff
-
-中文:
-定理 coe_inj
-  条件: {s₁ s₂ : Sym α n}
-  结论: (s₁ : Multiset α) = s₂ ↔ s₁ = s₂
-  证明: coe_injective.eq_iff
-
-Depends on / 依赖: coe_injective, coe_injective.eq_iff, eq_iff
+/-
+**Sym.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_inj {s₁ s₂ : Sym α n} : (s₁ : Multiset α) = s₂ ↔ s₁ = s₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Sym.coe_injective`：coe_injective : Injective ((↑) : Sym α n -> Multiset 
+α)
 -/
 theorem coe_inj {s₁ s₂ : Sym α n} : (s₁ : Multiset α) = s₂ ↔ s₁ = s₂ :=
   coe_injective.eq_iff
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {s₁ s₂ : Sym α n} (h : (s₁ : Multiset α) = ↑s₂)
-  statement: s₁ = s₂
-  proof: coe_injective h
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {s₁ s₂ : Sym α n} (h : (s₁ : Multiset α) = ↑s₂)
-  结论: s₁ = s₂
-  证明: coe_injective h
-
-@[simp]
+/-
+**Sym.ext** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：∀ {α : Type u_1} {n : ℕ} {s₁ s₂ : Sym α n}, ↑s₁ = ↑s₂ → s₁ = s₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.coe_injective`：coe_injective : Injective ((↑) : Sym α n -> Multiset 
+α)
 -/
 @[ext] theorem ext {s₁ s₂ : Sym α n} (h : (s₁ : Multiset α) = ↑s₂) : s₁ = s₂ :=
   coe_injective h
 
 @[simp]
-/--
-theorem `val_eq_coe` / 定理 `val_eq_coe`
-
-English:
-theorem val_eq_coe
-  given: (s : Sym α n)
-  statement: s.1 = ↑s
-  proof: rfl
-
-中文:
-定理 val_eq_coe
-  条件: (s : Sym α n)
-  结论: s.1 = ↑s
-  证明: rfl
+/-
+**Sym.val_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：val_eq_coe (s : Sym α n) : s.1 = ↑s
+参数：s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_eq_coe (s : Sym α n) : s.1 = ↑s :=
   rfl
@@ -207,59 +160,41 @@ theorem val_eq_coe (s : Sym α n) : s.1 = ↑s :=
 /-- Construct an element of the `n`th symmetric power from a multiset of cardinality `n`.
 -/
 @[match_pattern]
-/--
-Definition of `mk` / `mk` 的定义
+/-
+**Sym.mk** 是 Mathlib 中的一个缩写定义，位于命名空间 `Sym`。
+形式化陈述：mk (m : Multiset α) (h : Multiset.card m = n) : Sym α n
+参数：m : Multiset α；h : Multiset.card m = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mk
-  signature: (m : Multiset α) (h : Multiset.card m = n)
-  body: ⟨m, h⟩
-
-中文:
-缩写 mk
-  签名: (m : Multiset α) (h : Multiset.card m = n)
-  定义体: ⟨m, h⟩
+--- 原说明 ---
+Construct an element of the `n`th symmetric power from a multiset of cardinality
+ `n`.
 -/
 abbrev mk (m : Multiset α) (h : Multiset.card m = n) : Sym α n :=
   ⟨m, h⟩
 
 /-- The unique element in `Sym α 0`. -/
 @[match_pattern]
-/--
-Definition of `nil` / `nil` 的定义
+/-
+**Sym.nil** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：nil : Sym α 0
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.card_zero`：card_zero : @card α 0 = 0
 
-English:
-definition nil
-  signature: : Sym α 0
-  body: ⟨0, Multiset.card_zero⟩
-
-@[simp]
-
-中文:
-定义 nil
-  签名: : Sym α 0
-  定义体: ⟨0, Multiset.card_zero⟩
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.card_zero, card_zero
+--- 原说明 ---
+The unique element in `Sym α 0`.
 -/
 def nil : Sym α 0 :=
   ⟨0, Multiset.card_zero⟩
 
 @[simp]
-/--
-theorem `coe_nil` / 定理 `coe_nil`
-
-English:
-theorem coe_nil
-  statement: ↑(@Sym.nil α) = (0 : Multiset α)
-  proof: rfl
-
-中文:
-定理 coe_nil
-  结论: ↑(@Sym.nil α) = (0 : Multiset α)
-  证明: rfl
+/-
+**Sym.coe_nil** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_nil : ↑(@Sym.nil α) = (0 : Multiset α)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_nil : ↑(@Sym.nil α) = (0 : Multiset α) :=
   rfl
@@ -267,30 +202,15 @@ theorem coe_nil : ↑(@Sym.nil α) = (0 : Multiset α) :=
 /-- Inserts an element into the term of `Sym α n`, increasing the length by one.
 -/
 @[match_pattern]
-/--
-Definition of `cons` / `cons` 的定义
+/-
+**Sym.cons** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：cons (a : α) (s : Sym α n) : Sym α n.succ
+参数：a : α；s : Sym α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cons
-  signature: (a : α) (s : Sym α n)
-  body: ⟨a ::ₘ s.1, by rw [Multiset.card_cons, s.2]⟩
-
-@[inherit_doc]
-infixr:67 " ::ₛ " => cons
-
-@[simp]
-
-中文:
-定义 cons
-  签名: (a : α) (s : Sym α n)
-  定义体: ⟨a ::ₘ s.1, by rw [Multiset.card_cons, s.2]⟩
-
-@[inherit_doc]
-infixr:67 " ::ₛ " => cons
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.card_cons, card_cons
+--- 原说明 ---
+Inserts an element into the term of `Sym α n`, increasing the length by one.
 -/
 def cons (a : α) (s : Sym α n) : Sym α n.succ :=
   ⟨a ::ₘ s.1, by rw [Multiset.card_cons, s.2]⟩
@@ -299,170 +219,110 @@ def cons (a : α) (s : Sym α n) : Sym α n.succ :=
 infixr:67 " ::ₛ " => cons
 
 @[simp]
-/--
-theorem `cons_inj_right` / 定理 `cons_inj_right`
-
-English:
-theorem cons_inj_right
-  given: (a : α) (s s' : Sym α n)
-  statement: a ::ₛ s = a ::ₛ s' ↔ s = s'
-  proof: Subtype.ext_iff.trans (Multiset.cons_inj_right _).trans Subtype.ext_iff.symm
-
-@[simp]
-
-中文:
-定理 cons_inj_right
-  条件: (a : α) (s s' : Sym α n)
-  结论: a ::ₛ s = a ::ₛ s' ↔ s = s'
-  证明: Subtype.ext_iff.trans (Multiset.cons_inj_right _).trans Subtype.ext_iff.symm
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.cons_inj_right, Subtype, Subtype.ext_iff.symm, Subtype.ext_iff.trans, cons_inj_right, ext_iff
+/-
+**Sym.cons_inj_right** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cons_inj_right (a : α) (s s' : Sym α n) : a ::ₛ s = a ::ₛ s' ↔ s = s'
+参数：a : α；s s' : Sym α n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Multiset.cons_inj_right`：cons_inj_right (a : α) : forall {s t : Multiset
+ α}, a ::ₘ s = a ::ₘ t ↔ s = t
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
 -/
 theorem cons_inj_right (a : α) (s s' : Sym α n) : a ::ₛ s = a ::ₛ s' ↔ s = s' :=
-Subtype.ext_iff.trans (Multiset.cons_inj_right _).trans Subtype.ext_iff.symm
+  Subtype.ext_iff.trans <| (Multiset.cons_inj_right _).trans Subtype.ext_iff.symm
 
 @[simp]
-/--
-theorem `cons_inj_left` / 定理 `cons_inj_left`
-
-English:
-theorem cons_inj_left
-  given: (a a' : α) (s : Sym α n)
-  statement: a ::ₛ s = a' ::ₛ s ↔ a = a'
-  proof: Subtype.ext_iff.trans Multiset.cons_inj_left _
-
-中文:
-定理 cons_inj_left
-  条件: (a a' : α) (s : Sym α n)
-  结论: a ::ₛ s = a' ::ₛ s ↔ a = a'
-  证明: Subtype.ext_iff.trans Multiset.cons_inj_left _
-
-Depends on / 依赖: Multiset, Multiset.cons_inj_left, Subtype, Subtype.ext_iff.trans, cons_inj_left, ext_iff
+/-
+**Sym.cons_inj_left** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cons_inj_left (a a' : α) (s : Sym α n) : a ::ₛ s = a' ::ₛ s ↔ a = a'
+参数：a a' : α；s : Sym α n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Multiset.cons_inj_left`：cons_inj_left {a b : α} (s : Multiset α) : a ::ₘ
+ s = b ::ₘ s ↔ a = b
 -/
 theorem cons_inj_left (a a' : α) (s : Sym α n) : a ::ₛ s = a' ::ₛ s ↔ a = a' :=
-Subtype.ext_iff.trans Multiset.cons_inj_left _
-
-/--
-theorem `cons_swap` / 定理 `cons_swap`
-
-English:
-theorem cons_swap
-  given: (a b : α) (s : Sym α n)
-  statement: a ::ₛ b ::ₛ s = b ::ₛ a ::ₛ s
-  proof: Subtype.ext Multiset.cons_swap a b s.1
-
-中文:
-定理 cons_swap
-  条件: (a b : α) (s : Sym α n)
-  结论: a ::ₛ b ::ₛ s = b ::ₛ a ::ₛ s
-  证明: Subtype.ext Multiset.cons_swap a b s.1
-
-Depends on / 依赖: Multiset, Multiset.cons_swap, Subtype, Subtype.ext, cons_swap
+  Subtype.ext_iff.trans <| Multiset.cons_inj_left _
+/-
+**Sym.cons_swap** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cons_swap (a b : α) (s : Sym α n) : a ::ₛ b ::ₛ s = b ::ₛ a ::ₛ s
+参数：a b : α；s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Multiset.cons_swap`：cons_swap (a b : α) (s : Multiset α) : a ::ₘ b ::ₘ s
+ = b ::ₘ a ::ₘ s
 -/
 theorem cons_swap (a b : α) (s : Sym α n) : a ::ₛ b ::ₛ s = b ::ₛ a ::ₛ s :=
-Subtype.ext Multiset.cons_swap a b s.1
-
-/--
-theorem `coe_cons` / 定理 `coe_cons`
-
-English:
-theorem coe_cons
-  given: (s : Sym α n) (a : α)
-  statement: (a ::ₛ s : Multiset α) = a ::ₘ s
-  proof: rfl
-
-中文:
-定理 coe_cons
-  条件: (s : Sym α n) (a : α)
-  结论: (a ::ₛ s : Multiset α) = a ::ₘ s
-  证明: rfl
+  Subtype.ext <| Multiset.cons_swap a b s.1
+/-
+**Sym.coe_cons** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_cons (s : Sym α n) (a : α) : (a ::ₛ s : Multiset α) = a ::ₘ s
+参数：s : Sym α n；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_cons (s : Sym α n) (a : α) : (a ::ₛ s : Multiset α) = a ::ₘ s :=
   rfl
 
-/--
-Definition of `ofVector` / `ofVector` 的定义
-
-English:
-definition ofVector
-  signature: : List.Vector α n -> Sym α n
-  body: fun x => ⟨↑x.val, (Multiset.coe_card _).trans x.2⟩
-
-中文:
-定义 ofVector
-  签名: : 列表.Vector α n -> Sym α n
-  定义体: fun x => ⟨↑x.val, (Multiset.coe_card _).trans x.2⟩
-
-Depends on / 依赖: Multiset, Multiset.coe_card, coe_card, x.val
+/-- This is the quotient map that takes a list of n elements as an n-tuple and produces an nth
+symmetric power.
 -/
-def ofVector : List.Vector α n -> Sym α n :=
+/-
+**Sym.ofVector** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：ofVector : List.Vector α n -> Sym α n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This is the quotient map that takes a list of n elements as an n-tuple and produ
+ces an nth
+symmetric power.
+-/
+def ofVector : List.Vector α n → Sym α n :=
   fun x => ⟨↑x.val, (Multiset.coe_card _).trans x.2⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- This is the quotient map that takes a list of n elements as an n-tuple and produces an nth
+symmetric power.
+-/
+/-
+**Sym.** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Coe (List.Vector α n) (Sym α n)
-  body: ofVector x
-
-@[simp]
-
-中文:
-实例 :
-  签名: Coe (列表.Vector α n) (Sym α n)
-  定义体: ofVector x
-
-@[simp]
-
-Depends on / 依赖: ofVector
+--- 原说明 ---
+This is the quotient map that takes a list of n elements as an n-tuple and produ
+ces an nth
+symmetric power.
 -/
 instance : Coe (List.Vector α n) (Sym α n) where coe x := ofVector x
 
 @[simp]
-/--
-theorem `ofVector_nil` / 定理 `ofVector_nil`
-
-English:
-theorem ofVector_nil
-  statement: ↑(Vector.nil : List.Vector α 0) = (Sym.nil : Sym α 0)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofVector_nil
-  结论: ↑(Vector.nil : 列表.Vector α 0) = (Sym.nil : Sym α 0)
-  证明: rfl
-
-@[simp]
+/-
+**Sym.ofVector_nil** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：ofVector_nil : ↑(Vector.nil : List.Vector α 0) = (Sym.nil : Sym α 0)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofVector_nil : ↑(Vector.nil : List.Vector α 0) = (Sym.nil : Sym α 0) :=
   rfl
 
 @[simp]
-/--
-theorem `ofVector_cons` / 定理 `ofVector_cons`
-
-English:
-theorem ofVector_cons
-  given: (a : α) (v : List.Vector α n)
-  proof: by
-  cases v
-  rfl
-
-@[simp]
-
-中文:
-定理 ofVector_cons
-  条件: (a : α) (v : 列表.Vector α n)
-  证明: by
-  cases v
-  rfl
-
-@[simp]
+/-
+**Sym.ofVector_cons** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：ofVector_cons (a : α) (v : List.Vector α n) : ↑(Vector.cons a v) = a ::ₛ (
+↑v : Sym α n)
+参数：a : α；v : List.Vector α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem ofVector_cons (a : α) (v : List.Vector α n) :
     ↑(Vector.cons a v) = a ::ₛ (↑v : Sym α n) := by
@@ -470,1220 +330,804 @@ theorem ofVector_cons (a : α) (v : List.Vector α n) :
   rfl
 
 @[simp]
-/--
-theorem `card_coe` / 定理 `card_coe`
-
-English:
-theorem card_coe
-  statement: Multiset.card (s : Multiset α) = n
-  proof: s.prop
-
-中文:
-定理 card_coe
-  结论: Multiset.card (s : Multiset α) = n
-  证明: s.prop
-
-Depends on / 依赖: s.prop
+/-
+**Sym.card_coe** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：card_coe : Multiset.card (s : Multiset α) = n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 theorem card_coe : Multiset.card (s : Multiset α) = n := s.prop
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `α ∈ s` means that `a` appears as one of the factors in `s`.
+-/
+/-
+**Sym.** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Membership α (Sym α n)
-  body: ⟨fun s a => a in s.1⟩
-
-中文:
-实例 :
-  签名: Membership α (Sym α n)
-  定义体: ⟨fun s a => a in s.1⟩
+--- 原说明 ---
+`α ∈ s` means that `a` appears as one of the factors in `s`.
 -/
 instance : Membership α (Sym α n) :=
-  ⟨fun s a => a in s.1⟩
-
-/--
-Instance `decidableMem` / 实例 `decidableMem`
-
-English:
-instance decidableMem
-  signature: [DecidableEq α] (a : α) (s : Sym α n)
-  body: s.1.decidableMem _
-
-中文:
-实例 decidableMem
-  签名: [DecidableEq α] (a : α) (s : Sym α n)
-  定义体: s.1.decidableMem _
-
-Depends on / 依赖: decidableMem
+  ⟨fun s a => a ∈ s.1⟩
+/-
+**Sym.decidableMem** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+形式化陈述：decidableMem [DecidableEq α] (a : α) (s : Sym α n) : Decidable (a in s)
+参数：a : α；s : Sym α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableMem [DecidableEq α] (a : α) (s : Sym α n) : Decidable (a in s) :=
+instance decidableMem [DecidableEq α] (a : α) (s : Sym α n) : Decidable (a ∈ s) :=
   s.1.decidableMem _
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (s : Multiset α) (h : Multiset.card s = n)
-  statement: mk s h = s
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_mk
-  条件: (s : Multiset α) (h : Multiset.card s = n)
-  结论: mk s h = s
-  证明: rfl
-
-@[simp]
+/-
+**Sym.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：∀ {α : Type u_1} {n : ℕ} (s : Multiset α) (h : s.card = n), ↑(Sym.mk s h) 
+= s
+参数：s : Multiset α；h : s.card = n；Sym.mk s h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_mk (s : Multiset α) (h : Multiset.card s = n) : mk s h = s := rfl
 
 @[simp]
-/--
-theorem `mem_mk` / 定理 `mem_mk`
-
-English:
-theorem mem_mk
-  given: (a : α) (s : Multiset α) (h : Multiset.card s = n)
-  statement: a in mk s h ↔ a in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_mk
-  条件: (a : α) (s : Multiset α) (h : Multiset.card s = n)
-  结论: a in mk s h ↔ a in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Sym.mem_mk** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_mk (a : α) (s : Multiset α) (h : Multiset.card s = n) : a in mk s h ↔ 
+a in s
+参数：a : α；s : Multiset α；h : Multiset.card s = n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_mk (a : α) (s : Multiset α) (h : Multiset.card s = n) : a in mk s h ↔ a in s :=
+theorem mem_mk (a : α) (s : Multiset α) (h : Multiset.card s = n) : a ∈ mk s h ↔ a ∈ s :=
   Iff.rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `«forall»` / 引理 `«forall»`
-
-English:
-lemma «forall»
-  given: {p : Sym α n -> Prop}
-  proof: by
-  simp [Sym]
-
-中文:
-引理 «对任意»
-  条件: {p : Sym α n -> 命题}
-  证明: by
-  simp [Sym]
+/-
+**Sym.** 是 Mathlib 中的一个引理，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma «forall» {p : Sym α n -> Prop} :
-    (forall s : Sym α n, p s) ↔ forall (s : Multiset α) (hs : Multiset.card s = n), p (Sym.mk s hs) := by
+lemma «forall» {p : Sym α n → Prop} :
+    (∀ s : Sym α n, p s) ↔ ∀ (s : Multiset α) (hs : Multiset.card s = n), p (Sym.mk s hs) := by
   simp [Sym]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `«exists»` / 引理 `«exists»`
-
-English:
-lemma «exists»
-  given: {p : Sym α n -> Prop}
-  proof: by
-  simp [Sym]
-
-@[simp]
-
-中文:
-引理 «存在»
-  条件: {p : Sym α n -> 命题}
-  证明: by
-  simp [Sym]
-
-@[simp]
+/-
+**Sym.** 是 Mathlib 中的一个引理，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma «exists» {p : Sym α n -> Prop} :
-    (exists s : Sym α n, p s) ↔ exists (s : Multiset α) (hs : Multiset.card s = n), p (Sym.mk s hs) := by
+lemma «exists» {p : Sym α n → Prop} :
+    (∃ s : Sym α n, p s) ↔ ∃ (s : Multiset α) (hs : Multiset.card s = n), p (Sym.mk s hs) := by
   simp [Sym]
 
 @[simp]
-/--
-theorem `notMem_nil` / 定理 `notMem_nil`
-
-English:
-theorem notMem_nil
-  given: (a : α)
-  statement: a ∉ (nil : Sym α 0)
-  proof: Multiset.notMem_zero a
-
-@[simp]
-
-中文:
-定理 notMem_nil
-  条件: (a : α)
-  结论: a ∉ (nil : Sym α 0)
-  证明: Multiset.notMem_zero a
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.notMem_zero, notMem_zero
+/-
+**Sym.notMem_nil** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：notMem_nil (a : α) : a ∉ (nil : Sym α 0)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.notMem_zero`：notMem_zero (a : α) : a ∉ (0 : Multiset α)
 -/
 theorem notMem_nil (a : α) : a ∉ (nil : Sym α 0) :=
   Multiset.notMem_zero a
 
 @[simp]
-/--
-theorem `mem_cons` / 定理 `mem_cons`
-
-English:
-theorem mem_cons
-  statement: a in b ::ₛ s ↔ a = b ∨ a in s
-  proof: Multiset.mem_cons
-
-@[simp]
-
-中文:
-定理 mem_cons
-  结论: a in b ::ₛ s ↔ a = b ∨ a in s
-  证明: Multiset.mem_cons
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.mem_cons, mem_cons
+/-
+**Sym.mem_cons** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_cons : a in b ::ₛ s ↔ a = b ∨ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_cons`：mem_cons {a b : α} {s : Multiset α} : a in b ::ₘ s ↔ 
+a = b ∨ a in s
 -/
-theorem mem_cons : a in b ::ₛ s ↔ a = b ∨ a in s :=
+theorem mem_cons : a ∈ b ::ₛ s ↔ a = b ∨ a ∈ s :=
   Multiset.mem_cons
 
 @[simp]
-/--
-theorem `mem_coe` / 定理 `mem_coe`
-
-English:
-theorem mem_coe
-  statement: a in (s : Multiset α) ↔ a in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_coe
-  结论: a in (s : Multiset α) ↔ a in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Sym.mem_coe** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_coe : a in (s : Multiset α) ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_coe : a in (s : Multiset α) ↔ a in s :=
+theorem mem_coe : a ∈ (s : Multiset α) ↔ a ∈ s :=
   Iff.rfl
-
-/--
-theorem `mem_cons_of_mem` / 定理 `mem_cons_of_mem`
-
-English:
-theorem mem_cons_of_mem
-  given: (h : a in s)
-  statement: a in b ::ₛ s
-  proof: Multiset.mem_cons_of_mem h
-
-中文:
-定理 mem_cons_of_mem
-  条件: (h : a in s)
-  结论: a in b ::ₛ s
-  证明: Multiset.mem_cons_of_mem h
-
-Depends on / 依赖: Multiset, Multiset.mem_cons_of_mem, mem_cons_of_mem
+/-
+**Sym.mem_cons_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_cons_of_mem (h : a in s) : a in b ::ₛ s
+参数：h : a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Multiset α} (h 
+: a in s) : a in b ::ₘ s
 -/
-theorem mem_cons_of_mem (h : a in s) : a in b ::ₛ s :=
+theorem mem_cons_of_mem (h : a ∈ s) : a ∈ b ::ₛ s :=
   Multiset.mem_cons_of_mem h
-
-/--
-theorem `mem_cons_self` / 定理 `mem_cons_self`
-
-English:
-theorem mem_cons_self
-  given: (a : α) (s : Sym α n)
-  statement: a in a ::ₛ s
-  proof: Multiset.mem_cons_self a s.1
-
-中文:
-定理 mem_cons_self
-  条件: (a : α) (s : Sym α n)
-  结论: a in a ::ₛ s
-  证明: Multiset.mem_cons_self a s.1
-
-Depends on / 依赖: Multiset, Multiset.mem_cons_self, mem_cons_self
+/-
+**Sym.mem_cons_self** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_cons_self (a : α) (s : Sym α n) : a in a ::ₛ s
+参数：a : α；s : Sym α n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_cons_self`：mem_cons_self (a : α) (s : Multiset α) : a in a 
+::ₘ s
 -/
-theorem mem_cons_self (a : α) (s : Sym α n) : a in a ::ₛ s :=
+theorem mem_cons_self (a : α) (s : Sym α n) : a ∈ a ::ₛ s :=
   Multiset.mem_cons_self a s.1
-
-/--
-theorem `cons_of_coe_eq` / 定理 `cons_of_coe_eq`
-
-English:
-theorem cons_of_coe_eq
-  given: (a : α) (v : List.Vector α n)
-  statement: a ::ₛ (↑v : Sym α n) = ↑(a ::ᵥ v)
-  proof: Subtype.ext by
-    cases v
-    rfl
-
-中文:
-定理 cons_of_coe_eq
-  条件: (a : α) (v : 列表.Vector α n)
-  结论: a ::ₛ (↑v : Sym α n) = ↑(a ::ᵥ v)
-  证明: Subtype.ext by
-    cases v
-    rfl
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**Sym.cons_of_coe_eq** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cons_of_coe_eq (a : α) (v : List.Vector α n) : a ::ₛ (↑v : Sym α n) = ↑(a 
+::ᵥ v)
+参数：a : α；v : List.Vector α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem cons_of_coe_eq (a : α) (v : List.Vector α n) : a ::ₛ (↑v : Sym α n) = ↑(a ::ᵥ v) :=
-Subtype.ext by
+  Subtype.ext <| by
     cases v
     rfl
 
 open scoped List in
-/--
-theorem `sound` / 定理 `sound`
-
-English:
-theorem sound
-  given: {a b : List.Vector α n} (h : a.val ~ b.val)
-  statement: (↑a : Sym α n) = ↑b
-  proof: Subtype.ext Quotient.sound h
-
-中文:
-定理 sound
-  条件: {a b : 列表.Vector α n} (h : a.val ~ b.val)
-  结论: (↑a : Sym α n) = ↑b
-  证明: Subtype.ext Quotient.sound h
-
-Depends on / 依赖: Quotient, Quotient.sound, Subtype, Subtype.ext
+/-
+**Sym.sound** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：sound {a b : List.Vector α n} (h : a.val ~ b.val) : (↑a : Sym α n) = ↑b
+参数：h : a.val ~ b.val。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem sound {a b : List.Vector α n} (h : a.val ~ b.val) : (↑a : Sym α n) = ↑b :=
-Subtype.ext Quotient.sound h
+  Subtype.ext <| Quotient.sound h
 
-/--
-Definition of `erase` / `erase` 的定义
+/-- `erase s a h` is the sym that subtracts 1 from the
+  multiplicity of `a` if `a` is present in the sym. -/
+/-
+**Sym.erase** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：erase [DecidableEq α] (s : Sym α (n + 1)) (a : α) (h : a in s) : Sym α n
+参数：s : Sym α (n + 1)；a : α；h : a in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition erase
-  signature: [DecidableEq α] (s : Sym α (n + 1)) (a : α) (h : a in s)
-  body: ⟨s.val.erase a, (Multiset.card_erase_of_mem h).trans s.property.symm ▸ n.pred_succ⟩
-
-@[simp]
-
-中文:
-定义 erase
-  签名: [DecidableEq α] (s : Sym α (n + 1)) (a : α) (h : a in s)
-  定义体: ⟨s.val.erase a, (Multiset.card_erase_of_mem h).trans s.property.symm ▸ n.pred_succ⟩
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.card_erase_of_mem, card_erase_of_mem, n.pred_succ, pred_succ, property, s.property.symm, s.val.erase
+--- 原说明 ---
+`erase s a h` is the sym that subtracts 1 from the
+  multiplicity of `a` if `a` is present in the sym.
 -/
-def erase [DecidableEq α] (s : Sym α (n + 1)) (a : α) (h : a in s) : Sym α n :=
-⟨s.val.erase a, (Multiset.card_erase_of_mem h).trans s.property.symm ▸ n.pred_succ⟩
+def erase [DecidableEq α] (s : Sym α (n + 1)) (a : α) (h : a ∈ s) : Sym α n :=
+  ⟨s.val.erase a, (Multiset.card_erase_of_mem h).trans <| s.property.symm ▸ n.pred_succ⟩
 
 @[simp]
-/--
-theorem `erase_mk` / 定理 `erase_mk`
-
-English:
-theorem erase_mk
-  statement: [DecidableEq α] (m : Multiset α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 erase_mk
-  结论: [DecidableEq α] (m : Multiset α)
-  证明: rfl
-
-@[simp]
+/-
+**Sym.erase_mk** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：erase_mk [DecidableEq α] (m : Multiset α) (hc : Multiset.card m = n + 1) (
+a : α) (h : a in m) : (mk m hc).erase a h = mk (m.erase a) (by rw [Multiset.card
+_erase_of_mem h, hc, Nat.add_one, Nat.pred_succ])
+参数：m : Multiset α；hc : Multiset.card m = n + 1；a : α；h : a in m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem erase_mk [DecidableEq α] (m : Multiset α)
-    (hc : Multiset.card m = n + 1) (a : α) (h : a in m) :
+    (hc : Multiset.card m = n + 1) (a : α) (h : a ∈ m) :
     (mk m hc).erase a h = mk (m.erase a)
         (by rw [Multiset.card_erase_of_mem h, hc, Nat.add_one, Nat.pred_succ]) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_erase` / 定理 `coe_erase`
-
-English:
-theorem coe_erase
-  given: [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_erase
-  条件: [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s)
-  证明: rfl
-
-@[simp]
+/-
+**Sym.coe_erase** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s) : (s.era
+se a h : Multiset α) = Multiset.erase s a
+参数：h : a in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s) :
+theorem coe_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a ∈ s) :
     (s.erase a h : Multiset α) = Multiset.erase s a :=
   rfl
 
 @[simp]
-/--
-theorem `cons_erase` / 定理 `cons_erase`
-
-English:
-theorem cons_erase
-  given: [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s)
-  statement: a ::ₛ s.erase a h = s
-  proof: coe_injective Multiset.cons_erase h
-
-@[simp]
-
-中文:
-定理 cons_erase
-  条件: [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s)
-  结论: a ::ₛ s.erase a h = s
-  证明: coe_injective Multiset.cons_erase h
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.cons_erase, coe_injective, cons_erase
+/-
+**Sym.cons_erase** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cons_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s) : a ::ₛ
+ s.erase a h = s
+参数：h : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.coe_injective`：coe_injective : Injective ((↑) : Sym α n -> Multiset 
+α)
+· 使用定理 `Multiset.cons_erase`：cons_erase {s : Multiset α} {a : α} : a in s -> a :
+:ₘ s.erase a = s
 -/
-theorem cons_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a in s) : a ::ₛ s.erase a h = s :=
-coe_injective Multiset.cons_erase h
+theorem cons_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h : a ∈ s) : a ::ₛ s.erase a h = s :=
+  coe_injective <| Multiset.cons_erase h
 
 @[simp]
-/--
-theorem `erase_cons_head` / 定理 `erase_cons_head`
-
-English:
-theorem erase_cons_head
-  statement: [DecidableEq α] (s : Sym α n) (a : α)
-  proof: coe_injective Multiset.erase_cons_head a s.1
-
-中文:
-定理 erase_cons_head
-  结论: [DecidableEq α] (s : Sym α n) (a : α)
-  证明: coe_injective Multiset.erase_cons_head a s.1
-
-Depends on / 依赖: mem_cons_self
+/-
+**Sym.erase_cons_head** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：erase_cons_head [DecidableEq α] (s : Sym α n) (a : α) (h : a in a ::ₛ s
+参数：s : Sym α n；a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.coe_injective`：coe_injective : Injective ((↑) : Sym α n -> Multiset 
+α)
+· 使用定理 `Multiset.erase_cons_head`：erase_cons_head (a : α) (s : Multiset α) : (a 
+::ₘ s).erase a = s
 -/
 theorem erase_cons_head [DecidableEq α] (s : Sym α n) (a : α)
-    (h : a in a ::ₛ s := mem_cons_self a s) : (a ::ₛ s).erase a h = s :=
-coe_injective Multiset.erase_cons_head a s.1
+    (h : a ∈ a ::ₛ s := mem_cons_self a s) : (a ::ₛ s).erase a h = s :=
+  coe_injective <| Multiset.erase_cons_head a s.1
 
-/--
-Definition of `Sym'` / `Sym'` 的定义
-
-English:
-definition Sym'
-  signature: (α : Type*) (n : Nat)
-  body: Quotient (Vector.Perm.isSetoid α n)
-
-中文:
-定义 Sym'
-  签名: (α : 类型) (n : 自然数)
-  定义体: Quotient (Vector.Perm.isSetoid α n)
-
-Depends on / 依赖: Quotient, Vector, Vector.Perm.isSetoid, isSetoid
+/-- Another definition of the nth symmetric power, using vectors modulo permutations. (See `Sym`.)
 -/
-def Sym' (α : Type*) (n : Nat) :=
+/-
+**Sym.Sym'** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：Sym' (α : Type*) (n : Nat)
+参数：α : Type*；n : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Another definition of the nth symmetric power, using vectors modulo permutations
+. (See `Sym`.)
+-/
+def Sym' (α : Type*) (n : ℕ) :=
   Quotient (Vector.Perm.isSetoid α n)
 
-/--
-Definition of `cons'` / `cons'` 的定义
-
-English:
-definition cons'
-  signature: {α : Type*} {n : Nat}
-  body: fun a =>
-  Quotient.map (Vector.cons a) fun ⟨_, _⟩ ⟨_, _⟩ h => List.Perm.cons _ h
-
-@[inherit_doc]
-scoped notation a " :: " b => cons' a b
-
-中文:
-定义 cons'
-  签名: {α : 类型} {n : 自然数}
-  定义体: fun a =>
-  Quotient.map (Vector.cons a) fun ⟨_, _⟩ ⟨_, _⟩ h => List.Perm.cons _ h
-
-@[inherit_doc]
-scoped notation a " :: " b => cons' a b
+/-- This is `cons` but for the alternative `Sym'` definition.
 -/
-def cons' {α : Type*} {n : Nat} : α -> Sym' α n -> Sym' α (Nat.succ n) := fun a =>
+/-
+**Sym.cons'** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：cons' {α : Type*} {n : Nat} : α -> Sym' α n -> Sym' α (Nat.succ n)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+This is `cons` but for the alternative `Sym'` definition.
+-/
+def cons' {α : Type*} {n : ℕ} : α → Sym' α n → Sym' α (Nat.succ n) := fun a =>
   Quotient.map (Vector.cons a) fun ⟨_, _⟩ ⟨_, _⟩ h => List.Perm.cons _ h
 
 @[inherit_doc]
 scoped notation a " :: " b => cons' a b
 
-/--
-Definition of `symEquivSym'` / `symEquivSym'` 的定义
-
-English:
-definition symEquivSym'
-  signature: {α : Type*} {n : Nat}
-  body: Equiv.subtypeQuotientEquivQuotientSubtype _ _ (fun _ => by rfl) fun _ _ => by rfl
-
-中文:
-定义 symEquivSym'
-  签名: {α : 类型} {n : 自然数}
-  定义体: Equiv.subtypeQuotientEquivQuotientSubtype _ _ (fun _ => by rfl) fun _ _ => by rfl
-
-Depends on / 依赖: Equiv.subtypeQuotientEquivQuotientSubtype, subtypeQuotientEquivQuotientSubtype
+/-- Multisets of cardinality n are equivalent to length-n vectors up to permutations.
 -/
-def symEquivSym' {α : Type*} {n : Nat} : Sym α n ≃ Sym' α n :=
+/-
+**Sym.symEquivSym'** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：symEquivSym' {α : Type*} {n : Nat} : Sym α n ≃ Sym' α n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Multisets of cardinality n are equivalent to length-n vectors up to permutations
+.
+-/
+def symEquivSym' {α : Type*} {n : ℕ} : Sym α n ≃ Sym' α n :=
   Equiv.subtypeQuotientEquivQuotientSubtype _ _ (fun _ => by rfl) fun _ _ => by rfl
-
-/--
-theorem `cons_equiv_eq_equiv_cons` / 定理 `cons_equiv_eq_equiv_cons`
-
-English:
-theorem cons_equiv_eq_equiv_cons
-  given: (α : Type*) (n : Nat) (a : α) (s : Sym α n)
-  proof: by
-  rcases s with ⟨⟨l⟩, _⟩
-  rfl
-
-中文:
-定理 cons_equiv_eq_equiv_cons
-  条件: (α : 类型) (n : 自然数) (a : α) (s : Sym α n)
-  证明: by
-  rcases s with ⟨⟨l⟩, _⟩
-  rfl
+/-
+**Sym.cons_equiv_eq_equiv_cons** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cons_equiv_eq_equiv_cons (α : Type*) (n : Nat) (a : α) (s : Sym α n) : (a 
+:: symEquivSym' s) = symEquivSym' (a ::ₛ s)
+参数：α : Type*；n : Nat；a : α；s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cons_equiv_eq_equiv_cons (α : Type*) (n : Nat) (a : α) (s : Sym α n) :
+theorem cons_equiv_eq_equiv_cons (α : Type*) (n : ℕ) (a : α) (s : Sym α n) :
     (a :: symEquivSym' s) = symEquivSym' (a ::ₛ s) := by
   rcases s with ⟨⟨l⟩, _⟩
   rfl
-
-/--
-Instance `instZeroSym` / 实例 `instZeroSym`
-
-English:
-instance instZeroSym
-  signature: : Zero (Sym α 0)
-  body: ⟨⟨0, rfl⟩⟩
-
-中文:
-实例 instZeroSym
-  签名: : 零 (Sym α 0)
-  定义体: ⟨⟨0, rfl⟩⟩
-
-Depends on / 依赖: CommGroup, IsSolvable
+/-
+**Sym.instZeroSym** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+形式化陈述：instZeroSym : Zero (Sym α 0)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZeroSym : Zero (Sym α 0) :=
   ⟨⟨0, rfl⟩⟩
-
-/--
-theorem `toMultiset_zero` / 定理 `toMultiset_zero`
-
-English:
-theorem toMultiset_zero
-  statement: toMultiset (0 : Sym α 0) = 0
-  proof: rfl
-
-中文:
-定理 toMultiset_zero
-  结论: toMultiset (0 : Sym α 0) = 0
-  证明: rfl
+/-
+**Sym.toMultiset_zero** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：∀ {α : Type u_1}, ↑0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toMultiset_zero : toMultiset (0 : Sym α 0) = 0 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EmptyCollection (Sym α 0)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: EmptyCollection (Sym α 0)
-  定义体: ⟨0⟩
+/-
+**Sym.** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EmptyCollection (Sym α 0) :=
   ⟨0⟩
-
-/--
-theorem `eq_nil_of_card_zero` / 定理 `eq_nil_of_card_zero`
-
-English:
-theorem eq_nil_of_card_zero
-  given: (s : Sym α 0)
-  statement: s = nil
-  proof: Subtype.ext Multiset.card_eq_zero.1 s.2
-
-中文:
-定理 eq_nil_of_card_zero
-  条件: (s : Sym α 0)
-  结论: s = nil
-  证明: Subtype.ext Multiset.card_eq_zero.1 s.2
-
-Depends on / 依赖: IsSolvable, Multiset, Multiset.card_eq_zero, Subsingleton, Subtype, Subtype.ext, card_eq_zero
+/-
+**Sym.eq_nil_of_card_zero** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：eq_nil_of_card_zero (s : Sym α 0) : s = nil
+参数：s : Sym α 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.card_eq_zero`：card_eq_zero {s : Multiset α} : card s = 0 ↔ s = 
+0
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem eq_nil_of_card_zero (s : Sym α 0) : s = nil :=
-Subtype.ext Multiset.card_eq_zero.1 s.2
-
-/--
-Instance `uniqueZero` / 实例 `uniqueZero`
-
-English:
-instance uniqueZero
-  signature: : Unique (Sym α 0)
-  body: ⟨⟨nil⟩, eq_nil_of_card_zero⟩
-
-中文:
-实例 uniqueZero
-  签名: : 唯一 (Sym α 0)
-  定义体: ⟨⟨nil⟩, eq_nil_of_card_zero⟩
-
-Depends on / 依赖: eq_nil_of_card_zero
+  Subtype.ext <| Multiset.card_eq_zero.1 s.2
+/-
+**Sym.uniqueZero** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+形式化陈述：uniqueZero : Unique (Sym α 0)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.eq_nil_of_card_zero`：eq_nil_of_card_zero (s : Sym α 0) : s = nil
 -/
 instance uniqueZero : Unique (Sym α 0) :=
   ⟨⟨nil⟩, eq_nil_of_card_zero⟩
 
-/--
-Definition of `replicate` / `replicate` 的定义
+/-- `replicate n a` is the sym containing only `a` with multiplicity `n`. -/
+/-
+**Sym.replicate** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：replicate (n : Nat) (a : α) : Sym α n
+参数：n : Nat；a : α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.card_replicate`：∀ {α : Type u_1} (n : ℕ) (a : α), (Multiset.rep
+licate n a).card = n
 
-English:
-definition replicate
-  signature: (n : Nat) (a : α)
-  body: ⟨Multiset.replicate n a, Multiset.card_replicate _ _⟩
-
-中文:
-定义 replicate
-  签名: (n : 自然数) (a : α)
-  定义体: ⟨Multiset.replicate n a, Multiset.card_replicate _ _⟩
-
-Depends on / 依赖: Multiset, Multiset.card_replicate, Multiset.replicate, card_replicate, replicate
+--- 原说明 ---
+`replicate n a` is the sym containing only `a` with multiplicity `n`.
 -/
-def replicate (n : Nat) (a : α) : Sym α n :=
+def replicate (n : ℕ) (a : α) : Sym α n :=
   ⟨Multiset.replicate n a, Multiset.card_replicate _ _⟩
-
-/--
-theorem `replicate_succ` / 定理 `replicate_succ`
-
-English:
-theorem replicate_succ
-  given: {a : α} {n : Nat}
-  statement: replicate n.succ a = a ::ₛ replicate n a
-  proof: rfl
-
-中文:
-定理 replicate_succ
-  条件: {a : α} {n : 自然数}
-  结论: replicate n.succ a = a ::ₛ replicate n a
-  证明: rfl
-
-Depends on / 依赖: H.subtype_injective, isSolvable_of_isSolvable_injective, subtype_injective
+/-
+**Sym.replicate_succ** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：replicate_succ {a : α} {n : Nat} : replicate n.succ a = a ::ₛ replicate n 
+a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem replicate_succ {a : α} {n : Nat} : replicate n.succ a = a ::ₛ replicate n a :=
+theorem replicate_succ {a : α} {n : ℕ} : replicate n.succ a = a ::ₛ replicate n a :=
   rfl
-
-/--
-theorem `coe_replicate` / 定理 `coe_replicate`
-
-English:
-theorem coe_replicate
-  statement: (replicate n a : Multiset α) = Multiset.replicate n a
-  proof: rfl
-
-中文:
-定理 coe_replicate
-  结论: (replicate n a : Multiset α) = Multiset.replicate n a
-  证明: rfl
+/-
+**Sym.coe_replicate** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_replicate : (replicate n a : Multiset α) = Multiset.replicate n a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_replicate : (replicate n a : Multiset α) = Multiset.replicate n a :=
   rfl
-
-/--
-theorem `val_replicate` / 定理 `val_replicate`
-
-English:
-theorem val_replicate
-  statement: (replicate n a).val = Multiset.replicate n a
-  proof: by
-  rw [val_eq_coe]; rw [coe_replicate]
-
-@[simp]
-
-中文:
-定理 val_replicate
-  结论: (replicate n a).val = Multiset.replicate n a
-  证明: by
-  rw [val_eq_coe]; rw [coe_replicate]
-
-@[simp]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.mk, _surjective, coe_replicate, isSolvable_of_surjective, val_eq_coe
+/-
+**Sym.val_replicate** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：val_replicate : (replicate n a).val = Multiset.replicate n a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Sym.val_eq_coe`：val_eq_coe (s : Sym α n) : s.1 = ↑s
+· 使用定理 `Sym.coe_replicate`：coe_replicate : (replicate n a : Multiset α) = Multis
+et.replicate n a
 -/
 theorem val_replicate : (replicate n a).val = Multiset.replicate n a := by
-  rw [val_eq_coe]; rw [coe_replicate]
+  rw [val_eq_coe, coe_replicate]
 
 @[simp]
-/--
-theorem `mem_replicate` / 定理 `mem_replicate`
-
-English:
-theorem mem_replicate
-  statement: b in replicate n a ↔ n != 0 ∧ b = a
-  proof: Multiset.mem_replicate
-
-中文:
-定理 mem_replicate
-  结论: b in replicate n a ↔ n != 0 ∧ b = a
-  证明: Multiset.mem_replicate
-
-Depends on / 依赖: Multiset, Multiset.mem_replicate, mem_replicate
+/-
+**Sym.mem_replicate** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_replicate : b in replicate n a ↔ n != 0 ∧ b = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_replicate`：mem_replicate {a b : α} {n : Nat} : b in replica
+te n a ↔ n != 0 ∧ b = a
 -/
-theorem mem_replicate : b in replicate n a ↔ n != 0 ∧ b = a :=
+theorem mem_replicate : b ∈ replicate n a ↔ n ≠ 0 ∧ b = a :=
   Multiset.mem_replicate
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `eq_replicate_iff` / 定理 `eq_replicate_iff`
-
-English:
-theorem eq_replicate_iff
-  statement: s = replicate n a ↔ forall b in s, b = a
-  proof: by
-  rw [Subtype.ext_iff]; rw [val_replicate]; rw [Multiset.eq_replicate]
-  exact and_iff_right s.2
-
-中文:
-定理 eq_replicate_iff
-  结论: s = replicate n a ↔ 对任意 b in s, b = a
-  证明: by
-  rw [Subtype.ext_iff]; rw [val_replicate]; rw [Multiset.eq_replicate]
-  exact and_iff_right s.2
-
-Depends on / 依赖: MonoidHom, MonoidHom.inl, MonoidHom.snd, Multiset, Multiset.eq_replicate, Prod.ext, Subtype, Subtype.ext_iff, and_iff_right, eq_replicate, ext_iff, hx.symm, isSolvable_of_ker_le_range, val_replicate
+/-
+**Sym.eq_replicate_iff** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：eq_replicate_iff : s = replicate n a ↔ forall b in s, b = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Sym.val_replicate`：val_replicate : (replicate n a).val = Multiset.replic
+ate n a
+· 使用定理 `Multiset.eq_replicate`：eq_replicate {a : α} {n} {s : Multiset α} : s = r
+eplicate n a ↔ card s = n ∧ forall b in s, b = a
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem eq_replicate_iff : s = replicate n a ↔ forall b in s, b = a := by
-  rw [Subtype.ext_iff]; rw [val_replicate]; rw [Multiset.eq_replicate]
+theorem eq_replicate_iff : s = replicate n a ↔ ∀ b ∈ s, b = a := by
+  rw [Subtype.ext_iff, val_replicate, Multiset.eq_replicate]
   exact and_iff_right s.2
-
-/--
-theorem `exists_mem` / 定理 `exists_mem`
-
-English:
-theorem exists_mem
-  given: (s : Sym α n.succ)
-  statement: exists a, a in s
-  proof: Multiset.card_pos_iff_exists_mem.1 s.2.symm ▸ n.succ_pos
-
-中文:
-定理 存在_mem
-  条件: (s : Sym α n.succ)
-  结论: 存在 a, a in s
-  证明: Multiset.card_pos_iff_exists_mem.1 s.2.symm ▸ n.succ_pos
-
-Depends on / 依赖: Multiset, Multiset.card_pos_iff_exists_mem, card_pos_iff_exists_mem, n.succ_pos, succ_pos
+/-
+**Sym.exists_mem** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：exists_mem (s : Sym α n.succ) : exists a, a in s
+参数：s : Sym α n.succ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.card_pos_iff_exists_mem`：card_pos_iff_exists_mem {s : Multiset 
+α} : 0 < card s ↔ exists a, a in s
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem exists_mem (s : Sym α n.succ) : exists a, a in s :=
-Multiset.card_pos_iff_exists_mem.1 s.2.symm ▸ n.succ_pos
-
-/--
-theorem `exists_cons_of_mem` / 定理 `exists_cons_of_mem`
-
-English:
-theorem exists_cons_of_mem
-  given: {s : Sym α (n + 1)} {a : α} (h : a in s)
-  statement: exists t, s = a ::ₛ t
-  proof: by
+theorem exists_mem (s : Sym α n.succ) : ∃ a, a ∈ s :=
+  Multiset.card_pos_iff_exists_mem.1 <| s.2.symm ▸ n.succ_pos
+/-
+**Sym.exists_cons_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：exists_cons_of_mem {s : Sym α (n + 1)} {a : α} (h : a in s) : exists t, s 
+= a ::ₛ t
+参数：n + 1；h : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.exists_cons_of_mem`：exists_cons_of_mem {s : Multiset α} {a : α}
+ : a in s -> exists t, s = a ::ₘ t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Multiset.card_cons`：card_cons (a : α) (s : Multiset α) : card (a ::ₘ s) 
+= card s + 1
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+-/
+theorem exists_cons_of_mem {s : Sym α (n + 1)} {a : α} (h : a ∈ s) : ∃ t, s = a ::ₛ t := by
   obtain ⟨m, h⟩ := Multiset.exists_cons_of_mem h
   have : Multiset.card m = n := by
     apply_fun Multiset.card at h
-    rw [s.2]; rw [Multiset.card_cons]; rw [add_left_inj] at h
+    rw [s.2, Multiset.card_cons, add_left_inj] at h
     exact h.symm
   use ⟨m, this⟩
   apply Subtype.ext
   exact h
-
-中文:
-定理 存在_cons_of_mem
-  条件: {s : Sym α (n + 1)} {a : α} (h : a in s)
-  结论: 存在 t, s = a ::ₛ t
-  证明: by
-  obtain ⟨m, h⟩ := Multiset.exists_cons_of_mem h
-  have : Multiset.card m = n := by
-    apply_fun Multiset.card at h
-    rw [s.2]; rw [Multiset.card_cons]; rw [add_left_inj] at h
-    exact h.symm
-  use ⟨m, this⟩
-  apply Subtype.ext
-  exact h
-
-Depends on / 依赖: Multiset, Multiset.card, Multiset.card_cons, Multiset.exists_cons_of_mem, Subtype, Subtype.ext, add_left_inj, apply_fun, card_cons, exists_cons_of_mem, h.symm
+/-
+**Sym.exists_eq_cons_of_succ** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：exists_eq_cons_of_succ (s : Sym α n.succ) : exists (a : α) (s' : Sym α n),
+ s = a ::ₛ s'
+参数：s : Sym α n.succ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.exists_mem`：exists_mem (s : Sym α n.succ) : exists a, a in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Sym.cons_erase`：cons_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h
+ : a in s) : a ::ₛ s.erase a h = s
 -/
-theorem exists_cons_of_mem {s : Sym α (n + 1)} {a : α} (h : a in s) : exists t, s = a ::ₛ t := by
-  obtain ⟨m, h⟩ := Multiset.exists_cons_of_mem h
-  have : Multiset.card m = n := by
-    apply_fun Multiset.card at h
-    rw [s.2]; rw [Multiset.card_cons]; rw [add_left_inj] at h
-    exact h.symm
-  use ⟨m, this⟩
-  apply Subtype.ext
-  exact h
-
-/--
-theorem `exists_eq_cons_of_succ` / 定理 `exists_eq_cons_of_succ`
-
-English:
-theorem exists_eq_cons_of_succ
-  given: (s : Sym α n.succ)
-  statement: exists (a : α) (s' : Sym α n), s = a ::ₛ s'
-  proof: by
+theorem exists_eq_cons_of_succ (s : Sym α n.succ) : ∃ (a : α) (s' : Sym α n), s = a ::ₛ s' := by
   obtain ⟨a, ha⟩ := exists_mem s
   classical exact ⟨a, s.erase a ha, (cons_erase ha).symm⟩
-
-中文:
-定理 存在_eq_cons_of_succ
-  条件: (s : Sym α n.succ)
-  结论: 存在 (a : α) (s' : Sym α n), s = a ::ₛ s'
-  证明: by
-  obtain ⟨a, ha⟩ := exists_mem s
-  classical exact ⟨a, s.erase a ha, (cons_erase ha).symm⟩
-
-Depends on / 依赖: classical, cons_erase, exists_mem, s.erase
+/-
+**Sym.eq_replicate** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：eq_replicate {a : α} {n : Nat} {s : Sym α n} : s = replicate n a ↔ forall 
+b in s, b = a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Multiset.eq_replicate`：eq_replicate {a : α} {n} {s : Multiset α} : s = r
+eplicate n a ↔ card s = n ∧ forall b in s, b = a
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
-theorem exists_eq_cons_of_succ (s : Sym α n.succ) : exists (a : α) (s' : Sym α n), s = a ::ₛ s' := by
-  obtain ⟨a, ha⟩ := exists_mem s
-  classical exact ⟨a, s.erase a ha, (cons_erase ha).symm⟩
-
-/--
-theorem `eq_replicate` / 定理 `eq_replicate`
-
-English:
-theorem eq_replicate
-  given: {a : α} {n : Nat} {s : Sym α n}
-  statement: s = replicate n a ↔ forall b in s, b = a
-  proof: Subtype.ext_iff.trans Multiset.eq_replicate.trans and_iff_right s.prop
-
-中文:
-定理 eq_replicate
-  条件: {a : α} {n : 自然数} {s : Sym α n}
-  结论: s = replicate n a ↔ 对任意 b in s, b = a
-  证明: Subtype.ext_iff.trans Multiset.eq_replicate.trans and_iff_right s.prop
-
-Depends on / 依赖: Multiset, Multiset.eq_replicate.trans, Subtype, Subtype.ext_iff.trans, and_iff_right, eq_replicate, ext_iff, s.prop
+theorem eq_replicate {a : α} {n : ℕ} {s : Sym α n} : s = replicate n a ↔ ∀ b ∈ s, b = a :=
+  Subtype.ext_iff.trans <| Multiset.eq_replicate.trans <| and_iff_right s.prop
+/-
+**Sym.eq_replicate_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：eq_replicate_of_subsingleton [Subsingleton α] (a : α) {n : Nat} (s : Sym α
+ n) : s = replicate n a
+参数：a : α；s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Sym.eq_replicate`：eq_replicate {a : α} {n : Nat} {s : Sym α n} : s = rep
+licate n a ↔ forall b in s, b = a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-theorem eq_replicate {a : α} {n : Nat} {s : Sym α n} : s = replicate n a ↔ forall b in s, b = a :=
-Subtype.ext_iff.trans Multiset.eq_replicate.trans and_iff_right s.prop
-
-/--
-theorem `eq_replicate_of_subsingleton` / 定理 `eq_replicate_of_subsingleton`
-
-English:
-theorem eq_replicate_of_subsingleton
-  given: [Subsingleton α] (a : α) {n : Nat} (s : Sym α n)
-  proof: eq_replicate.2 fun _ _ => Subsingleton.elim _ _
-
-中文:
-定理 eq_replicate_of_subsingleton
-  条件: [子单例 α] (a : α) {n : 自然数} (s : Sym α n)
-  证明: eq_replicate.2 fun _ _ => Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, eq_replicate
--/
-theorem eq_replicate_of_subsingleton [Subsingleton α] (a : α) {n : Nat} (s : Sym α n) :
+theorem eq_replicate_of_subsingleton [Subsingleton α] (a : α) {n : ℕ} (s : Sym α n) :
     s = replicate n a :=
   eq_replicate.2 fun _ _ => Subsingleton.elim _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: α] (n
-  body: ⟨by
-    cases n
-    · simp [eq_iff_true_of_subsingleton]
-    · intro s s'
-      obtain ⟨b, -⟩ := exists_mem s
-      rw [eq_replicate_of_subsingleton b s']; rw [eq_replicate_of_subsingleton b s]⟩
-
-中文:
-实例 [子单例
-  签名: α] (n
-  定义体: ⟨by
-    cases n
-    · simp [eq_iff_true_of_subsingleton]
-    · intro s s'
-      obtain ⟨b, -⟩ := exists_mem s
-      rw [eq_replicate_of_subsingleton b s']; rw [eq_replicate_of_subsingleton b s]⟩
-
-Depends on / 依赖: eq_iff_true_of_subsingleton, eq_replicate_of_subsingleton, exists_mem
+/-
+**Sym.** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Subsingleton α] (n : Nat) : Subsingleton (Sym α n) :=
+instance [Subsingleton α] (n : ℕ) : Subsingleton (Sym α n) :=
   ⟨by
     cases n
     · simp [eq_iff_true_of_subsingleton]
     · intro s s'
       obtain ⟨b, -⟩ := exists_mem s
-      rw [eq_replicate_of_subsingleton b s']; rw [eq_replicate_of_subsingleton b s]⟩
-
-/--
-Instance `inhabitedSym` / 实例 `inhabitedSym`
-
-English:
-instance inhabitedSym
-  signature: [Inhabited α] (n : Nat)
-  body: ⟨replicate n default⟩
-
-中文:
-实例 inhabitedSym
-  签名: [可居 α] (n : 自然数)
-  定义体: ⟨replicate n default⟩
-
-Depends on / 依赖: replicate
+      rw [eq_replicate_of_subsingleton b s', eq_replicate_of_subsingleton b s]⟩
+/-
+**Sym.inhabitedSym** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+形式化陈述：inhabitedSym [Inhabited α] (n : Nat) : Inhabited (Sym α n)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance inhabitedSym [Inhabited α] (n : Nat) : Inhabited (Sym α n) :=
+instance inhabitedSym [Inhabited α] (n : ℕ) : Inhabited (Sym α n) :=
   ⟨replicate n default⟩
-
-/--
-Instance `inhabitedSym'` / 实例 `inhabitedSym'`
-
-English:
-instance inhabitedSym'
-  signature: [Inhabited α] (n : Nat)
-  body: ⟨Quotient.mk' (List.Vector.replicate n default)⟩
-
-中文:
-实例 inhabitedSym'
-  签名: [可居 α] (n : 自然数)
-  定义体: ⟨Quotient.mk' (List.Vector.replicate n default)⟩
-
-Depends on / 依赖: List.Vector.replicate, Quotient, Quotient.mk, Vector, replicate
+/-
+**Sym.inhabitedSym'** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+形式化陈述：inhabitedSym' [Inhabited α] (n : Nat) : Inhabited (Sym' α n)
+参数：n : Nat。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 -/
-instance inhabitedSym' [Inhabited α] (n : Nat) : Inhabited (Sym' α n) :=
+instance inhabitedSym' [Inhabited α] (n : ℕ) : Inhabited (Sym' α n) :=
   ⟨Quotient.mk' (List.Vector.replicate n default)⟩
-
-instance (n : Nat) [IsEmpty α] : IsEmpty (Sym α n.succ) :=
+/-
+**Sym.** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℕ) [IsEmpty α] : IsEmpty (Sym α n.succ) :=
   ⟨fun s => by
     obtain ⟨a, -⟩ := exists_mem s
     exact isEmptyElim a⟩
-
-instance (n : Nat) [Unique α] : Unique (Sym α n) :=
+/-
+**Sym.** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℕ) [Unique α] : Unique (Sym α n) :=
   Unique.mk' _
-
-/--
-theorem `replicate_right_inj` / 定理 `replicate_right_inj`
-
-English:
-theorem replicate_right_inj
-  given: {a b : α} {n : Nat} (h : n != 0)
-  statement: replicate n a = replicate n b ↔ a = b
-  proof: Subtype.ext_iff.trans (Multiset.replicate_right_inj h)
-
-中文:
-定理 replicate_right_inj
-  条件: {a b : α} {n : 自然数} (h : n != 0)
-  结论: replicate n a = replicate n b ↔ a = b
-  证明: Subtype.ext_iff.trans (Multiset.replicate_right_inj h)
-
-Depends on / 依赖: Multiset, Multiset.replicate_right_inj, Subtype, Subtype.ext_iff.trans, ext_iff, replicate_right_inj
+/-
+**Sym.replicate_right_inj** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：replicate_right_inj {a b : α} {n : Nat} (h : n != 0) : replicate n a = rep
+licate n b ↔ a = b
+参数：h : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Multiset.replicate_right_inj`：∀ {α : Type u_1} {a b : α} {n : ℕ}, n ≠ 0 
+→ (Multiset.replicate n a = Multiset.replicate n b ↔ a = b)
 -/
-theorem replicate_right_inj {a b : α} {n : Nat} (h : n != 0) : replicate n a = replicate n b ↔ a = b :=
+theorem replicate_right_inj {a b : α} {n : ℕ} (h : n ≠ 0) : replicate n a = replicate n b ↔ a = b :=
   Subtype.ext_iff.trans (Multiset.replicate_right_inj h)
-
-/--
-theorem `replicate_right_injective` / 定理 `replicate_right_injective`
-
-English:
-theorem replicate_right_injective
-  given: {n : Nat} (h : n != 0)
-  proof: fun _ _ => (replicate_right_inj h).1
-
-中文:
-定理 replicate_right_injective
-  条件: {n : 自然数} (h : n != 0)
-  证明: fun _ _ => (replicate_right_inj h).1
-
-Depends on / 依赖: replicate_right_inj
+/-
+**Sym.replicate_right_injective** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：replicate_right_injective {n : Nat} (h : n != 0) : Function.Injective (rep
+licate n : α -> Sym α n)
+参数：h : n != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Sym.replicate_right_inj`：replicate_right_inj {a b : α} {n : Nat} (h : n 
+!= 0) : replicate n a = replicate n b ↔ a = b
 -/
-theorem replicate_right_injective {n : Nat} (h : n != 0) :
-    Function.Injective (replicate n : α -> Sym α n) := fun _ _ => (replicate_right_inj h).1
-
-instance (n : Nat) [Nontrivial α] : Nontrivial (Sym α (n + 1)) :=
+theorem replicate_right_injective {n : ℕ} (h : n ≠ 0) :
+    Function.Injective (replicate n : α → Sym α n) := fun _ _ => (replicate_right_inj h).1
+/-
+**Sym.** 是 Mathlib 中的一个实例，位于命名空间 `Sym`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℕ) [Nontrivial α] : Nontrivial (Sym α (n + 1)) :=
   (replicate_right_injective n.succ_ne_zero).nontrivial
 
-/--
-Definition of `map` / `map` 的定义
+/-- A function `α → β` induces a function `Sym α n → Sym β n` by applying it to every element of
+the underlying `n`-tuple. -/
+/-
+**Sym.map** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：map {n : Nat} (f : α -> β) (x : Sym α n) : Sym β n
+参数：f : α -> β；x : Sym α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {n : Nat} (f : α -> β) (x : Sym α n)
-  body: ⟨x.val.map f, by simp⟩
-
-@[simp]
-
-中文:
-定义 map
-  签名: {n : 自然数} (f : α -> β) (x : Sym α n)
-  定义体: ⟨x.val.map f, by simp⟩
-
-@[simp]
-
-Depends on / 依赖: x.val.map
+--- 原说明 ---
+A function `α → β` induces a function `Sym α n → Sym β n` by applying it to ever
+y element of
+the underlying `n`-tuple.
 -/
-def map {n : Nat} (f : α -> β) (x : Sym α n) : Sym β n :=
+def map {n : ℕ} (f : α → β) (x : Sym α n) : Sym β n :=
   ⟨x.val.map f, by simp⟩
 
 @[simp]
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: {n : Nat} {f : α -> β} {b : β} {l : Sym α n}
-  proof: Multiset.mem_map
-
-中文:
-定理 mem_map
-  条件: {n : 自然数} {f : α -> β} {b : β} {l : Sym α n}
-  证明: Multiset.mem_map
-
-Depends on / 依赖: Multiset, Multiset.mem_map, mem_map
+/-
+**Sym.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_map {n : Nat} {f : α -> β} {b : β} {l : Sym α n} : b in Sym.map f l ↔ 
+exists a, a in l ∧ f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
 -/
-theorem mem_map {n : Nat} {f : α -> β} {b : β} {l : Sym α n} :
-    b in Sym.map f l ↔ exists a, a in l ∧ f a = b :=
+theorem mem_map {n : ℕ} {f : α → β} {b : β} {l : Sym α n} :
+    b ∈ Sym.map f l ↔ ∃ a, a ∈ l ∧ f a = b :=
   Multiset.mem_map
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Note: `Sym.map_id` is not simp-normal, as simp ends up unfolding `id` with `Sym.map_congr` -/
 @[simp]
-/--
-theorem `map_id'` / 定理 `map_id'`
+/-
+**Sym.map_id'** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_id' {α : Type*} {n : Nat} (s : Sym α n) : Sym.map (fun x : α => x) s =
+ s
+参数：s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.ext`：∀ {α : Type u_1} {n : ℕ} {s₁ s₂ : Sym α n}, ↑s₁ = ↑s₂ → s₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_id'`：map_id' (s : Multiset α) : map (fun x => x) s = s
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem map_id'
-  given: {α : Type*} {n : Nat} (s : Sym α n)
-  statement: Sym.map (fun x : α => x) s = s
-  proof: by
-  ext; simp only [map, Multiset.map_id', ← val_eq_coe]
-
-中文:
-定理 map_id'
-  条件: {α : 类型} {n : 自然数} (s : Sym α n)
-  结论: Sym.map (fun x : α => x) s = s
-  证明: by
-  ext; simp only [map, Multiset.map_id', ← val_eq_coe]
-
-Depends on / 依赖: Multiset, Multiset.map_id, map_id, val_eq_coe
+--- 原说明 ---
+Note: `Sym.map_id` is not simp-normal, as simp ends up unfolding `id` with `Sym.
+map_congr`
 -/
-theorem map_id' {α : Type*} {n : Nat} (s : Sym α n) : Sym.map (fun x : α => x) s = s := by
+theorem map_id' {α : Type*} {n : ℕ} (s : Sym α n) : Sym.map (fun x : α => x) s = s := by
   ext; simp only [map, Multiset.map_id', ← val_eq_coe]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: {α : Type*} {n : Nat} (s : Sym α n)
-  statement: Sym.map id s = s
-  proof: by
-  ext; simp only [map, id_eq, Multiset.map_id', ← val_eq_coe]
-
-@[simp]
-
-中文:
-定理 map_id
-  条件: {α : 类型} {n : 自然数} (s : Sym α n)
-  结论: Sym.map id s = s
-  证明: by
-  ext; simp only [map, id_eq, Multiset.map_id', ← val_eq_coe]
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.map_id, id_eq, map_id, val_eq_coe
+/-
+**Sym.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_id {α : Type*} {n : Nat} (s : Sym α n) : Sym.map id s = s
+参数：s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.ext`：∀ {α : Type u_1} {n : ℕ} {s₁ s₂ : Sym α n}, ↑s₁ = ↑s₂ → s₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_id'`：map_id' (s : Multiset α) : map (fun x => x) s = s
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_id {α : Type*} {n : Nat} (s : Sym α n) : Sym.map id s = s := by
+theorem map_id {α : Type*} {n : ℕ} (s : Sym α n) : Sym.map id s = s := by
   ext; simp only [map, id_eq, Multiset.map_id', ← val_eq_coe]
 
 @[simp]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  given: {α β γ : Type*} {n : Nat} (g : β -> γ) (f : α -> β) (s : Sym α n)
-  proof: Subtype.ext by dsimp only [Sym.map]; simp
-
-@[simp]
-
-中文:
-定理 map_map
-  条件: {α β γ : 类型} {n : 自然数} (g : β -> γ) (f : α -> β) (s : Sym α n)
-  证明: Subtype.ext by dsimp only [Sym.map]; simp
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, Sym.map
+/-
+**Sym.map_map** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_map {α β γ : Type*} {n : Nat} (g : β -> γ) (f : α -> β) (s : Sym α n) 
+: Sym.map g (Sym.map f s) = Sym.map (g ∘ f) s
+参数：g : β -> γ；f : α -> β；s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_map {α β γ : Type*} {n : Nat} (g : β -> γ) (f : α -> β) (s : Sym α n) :
+theorem map_map {α β γ : Type*} {n : ℕ} (g : β → γ) (f : α → β) (s : Sym α n) :
     Sym.map g (Sym.map f s) = Sym.map (g ∘ f) s :=
-Subtype.ext by dsimp only [Sym.map]; simp
+  Subtype.ext <| by dsimp only [Sym.map]; simp
 
 @[simp]
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : α -> β)
-  statement: Sym.map f (0 : Sym α 0) = (0 : Sym β 0)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_zero
-  条件: (f : α -> β)
-  结论: Sym.map f (0 : Sym α 0) = (0 : Sym β 0)
-  证明: rfl
-
-@[simp]
+/-
+**Sym.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_zero (f : α -> β) : Sym.map f (0 : Sym α 0) = (0 : Sym β 0)
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_zero (f : α -> β) : Sym.map f (0 : Sym α 0) = (0 : Sym β 0) :=
+theorem map_zero (f : α → β) : Sym.map f (0 : Sym α 0) = (0 : Sym β 0) :=
   rfl
 
 @[simp]
-/--
-theorem `map_cons` / 定理 `map_cons`
-
-English:
-theorem map_cons
-  given: {n : Nat} (f : α -> β) (a : α) (s : Sym α n)
-  statement: (a ::ₛ s).map f = f a ::ₛ s.map f
-  proof: ext Multiset.map_cons _ _ _
+/-
+**Sym.map_cons** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_cons {n : Nat} (f : α -> β) (a : α) (s : Sym α n) : (a ::ₛ s).map f = 
+f a ::ₛ s.map f
+参数：f : α -> β；a : α；s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.ext`：∀ {α : Type u_1} {n : ℕ} {s₁ s₂ : Sym α n}, ↑s₁ = ↑s₂ → s₁ = s₂
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+-/
+theorem map_cons {n : ℕ} (f : α → β) (a : α) (s : Sym α n) : (a ::ₛ s).map f = f a ::ₛ s.map f :=
+  ext <| Multiset.map_cons _ _ _
 
 @[congr]
-
-中文:
-定理 map_cons
-  条件: {n : 自然数} (f : α -> β) (a : α) (s : Sym α n)
-  结论: (a ::ₛ s).map f = f a ::ₛ s.map f
-  证明: ext Multiset.map_cons _ _ _
-
-@[congr]
-
-Depends on / 依赖: Multiset, Multiset.map_cons, map_cons
+/-
+**Sym.map_congr** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_congr {f g : α -> β} {s : Sym α n} (h : forall x in s, f x = g x) : ma
+p f s = map g s
+参数：h : forall x in s, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
 -/
-theorem map_cons {n : Nat} (f : α -> β) (a : α) (s : Sym α n) : (a ::ₛ s).map f = f a ::ₛ s.map f :=
-ext Multiset.map_cons _ _ _
-
-@[congr]
-/--
-theorem `map_congr` / 定理 `map_congr`
-
-English:
-theorem map_congr
-  given: {f g : α -> β} {s : Sym α n} (h : forall x in s, f x = g x)
-  statement: map f s = map g s
-  proof: Subtype.ext Multiset.map_congr rfl h
+theorem map_congr {f g : α → β} {s : Sym α n} (h : ∀ x ∈ s, f x = g x) : map f s = map g s :=
+  Subtype.ext <| Multiset.map_congr rfl h
 
 @[simp]
-
-中文:
-定理 map_congr
-  条件: {f g : α -> β} {s : Sym α n} (h : 对任意 x in s, f x = g x)
-  结论: map f s = map g s
-  证明: Subtype.ext Multiset.map_congr rfl h
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.map_congr, Subtype, Subtype.ext, map_congr
+/-
+**Sym.map_mk** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_mk {f : α -> β} {m : Multiset α} {hc : Multiset.card m = n} : map f (m
+k m hc) = mk (m.map f) (by simp [hc])
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_congr {f g : α -> β} {s : Sym α n} (h : forall x in s, f x = g x) : map f s = map g s :=
-Subtype.ext Multiset.map_congr rfl h
-
-@[simp]
-/--
-theorem `map_mk` / 定理 `map_mk`
-
-English:
-theorem map_mk
-  given: {f : α -> β} {m : Multiset α} {hc : Multiset.card m = n}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_mk
-  条件: {f : α -> β} {m : Multiset α} {hc : Multiset.card m = n}
-  证明: rfl
-
-@[simp]
--/
-theorem map_mk {f : α -> β} {m : Multiset α} {hc : Multiset.card m = n} :
+theorem map_mk {f : α → β} {m : Multiset α} {hc : Multiset.card m = n} :
     map f (mk m hc) = mk (m.map f) (by simp [hc]) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_map` / 定理 `coe_map`
-
-English:
-theorem coe_map
-  given: (s : Sym α n) (f : α -> β)
-  statement: ↑(s.map f) = Multiset.map f s
-  proof: rfl
-
-中文:
-定理 coe_map
-  条件: (s : Sym α n) (f : α -> β)
-  结论: ↑(s.map f) = Multiset.map f s
-  证明: rfl
+/-
+**Sym.coe_map** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_map (s : Sym α n) (f : α -> β) : ↑(s.map f) = Multiset.map f s
+参数：s : Sym α n；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_map (s : Sym α n) (f : α -> β) : ↑(s.map f) = Multiset.map f s :=
+theorem coe_map (s : Sym α n) (f : α → β) : ↑(s.map f) = Multiset.map f s :=
   rfl
-
-/--
-theorem `map_injective` / 定理 `map_injective`
-
-English:
-theorem map_injective
-  given: {f : α -> β} (hf : Injective f) (n : Nat)
-  proof: fun _ _ h =>
-coe_injective Multiset.map_injective hf coe_inj.2 h
-
-中文:
-定理 map_injective
-  条件: {f : α -> β} (hf : 单射 f) (n : 自然数)
-  证明: fun _ _ h =>
-coe_injective Multiset.map_injective hf coe_inj.2 h
+/-
+**Sym.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：map_injective {f : α -> β} (hf : Injective f) (n : Nat) : Injective (map f
+ : Sym α n -> Sym β n)
+参数：hf : Injective f；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.coe_injective`：coe_injective : Injective ((↑) : Sym α n -> Multiset 
+α)
+· 使用定理 `Multiset.map_injective`：map_injective {f : α -> β} (hf : Function.Inject
+ive f) : Function.Injective (Multiset.map f)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Sym.coe_inj`：coe_inj {s₁ s₂ : Sym α n} : (s₁ : Multiset α) = s₂ ↔ s₁ = s
+₂
 -/
-theorem map_injective {f : α -> β} (hf : Injective f) (n : Nat) :
-    Injective (map f : Sym α n -> Sym β n) := fun _ _ h =>
-coe_injective Multiset.map_injective hf coe_inj.2 h
+theorem map_injective {f : α → β} (hf : Injective f) (n : ℕ) :
+    Injective (map f : Sym α n → Sym β n) := fun _ _ h =>
+  coe_injective <| Multiset.map_injective hf <| coe_inj.2 h
 
 /-- Mapping an equivalence `α ≃ β` using `Sym.map` gives an equivalence between `Sym α n` and
 `Sym β n`. -/
 @[simps]
-/--
-Definition of `equivCongr` / `equivCongr` 的定义
+/-
+**Sym.equivCongr** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：equivCongr (e : α ≃ β) : Sym α n ≃ Sym β n where toFun
+参数：e : α ≃ β。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition equivCongr
-  signature: (e : α ≃ β)
-  body: map e
-  invFun := map e.symm
-  left_inv x := by rw [map_map, Equiv.symm_comp_self, map_id]
-  right_inv x := by rw [map_map, Equiv.self_comp_symm, map_id]
-
-中文:
-定义 equivCongr
-  签名: (e : α ≃ β)
-  定义体: map e
-  invFun := map e.symm
-  left_inv x := by rw [map_map, Equiv.symm_comp_self, map_id]
-  right_inv x := by rw [map_map, Equiv.self_comp_symm, map_id]
+--- 原说明 ---
+Mapping an equivalence `α ≃ β` using `Sym.map` gives an equivalence between `Sym
+ α n` and
+`Sym β n`.
 -/
 def equivCongr (e : α ≃ β) : Sym α n ≃ Sym β n where
   toFun := map e
@@ -1691,696 +1135,555 @@ def equivCongr (e : α ≃ β) : Sym α n ≃ Sym β n where
   left_inv x := by rw [map_map, Equiv.symm_comp_self, map_id]
   right_inv x := by rw [map_map, Equiv.self_comp_symm, map_id]
 
-/--
-Definition of `attach` / `attach` 的定义
+/-- "Attach" a proof that `a ∈ s` to each element `a` in `s` to produce
+an element of the symmetric power on `{x // x ∈ s}`. -/
+/-
+**Sym.attach** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：attach (s : Sym α n) : Sym { x // x in s } n
+参数：s : Sym α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition attach
-  signature: (s : Sym α n)
-  body: ⟨s.val.attach, by (conv_rhs => rw [← s.2, ← Multiset.card_attach])⟩
-
-@[simp]
-
-中文:
-定义 attach
-  签名: (s : Sym α n)
-  定义体: ⟨s.val.attach, by (conv_rhs => rw [← s.2, ← Multiset.card_attach])⟩
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.card_attach, attach, card_attach, conv_rhs, s.val.attach
+--- 原说明 ---
+"Attach" a proof that `a ∈ s` to each element `a` in `s` to produce
+an element of the symmetric power on `{x // x ∈ s}`.
 -/
-def attach (s : Sym α n) : Sym { x // x in s } n :=
+def attach (s : Sym α n) : Sym { x // x ∈ s } n :=
   ⟨s.val.attach, by (conv_rhs => rw [← s.2, ← Multiset.card_attach])⟩
 
 @[simp]
-/--
-theorem `attach_mk` / 定理 `attach_mk`
-
-English:
-theorem attach_mk
-  given: {m : Multiset α} {hc : Multiset.card m = n}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 attach_mk
-  条件: {m : Multiset α} {hc : Multiset.card m = n}
-  证明: rfl
-
-@[simp]
+/-
+**Sym.attach_mk** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：attach_mk {m : Multiset α} {hc : Multiset.card m = n} : attach (mk m hc) =
+ mk m.attach (Multiset.card_attach.trans hc)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem attach_mk {m : Multiset α} {hc : Multiset.card m = n} :
     attach (mk m hc) = mk m.attach (Multiset.card_attach.trans hc) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_attach` / 定理 `coe_attach`
-
-English:
-theorem coe_attach
-  given: (s : Sym α n)
-  statement: (s.attach : Multiset { a // a in s }) =
-  proof: rfl
-
-中文:
-定理 coe_attach
-  条件: (s : Sym α n)
-  结论: (s.attach : Multiset { a // a in s }) =
-  证明: rfl
+/-
+**Sym.coe_attach** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_attach (s : Sym α n) : (s.attach : Multiset { a // a in s }) = Multise
+t.attach (s : Multiset α)
+参数：s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_attach (s : Sym α n) : (s.attach : Multiset { a // a in s }) =
+theorem coe_attach (s : Sym α n) : (s.attach : Multiset { a // a ∈ s }) =
     Multiset.attach (s : Multiset α) :=
   rfl
-
-/--
-theorem `attach_map_coe` / 定理 `attach_map_coe`
-
-English:
-theorem attach_map_coe
-  given: (s : Sym α n)
-  statement: s.attach.map (↑) = s
-  proof: coe_injective Multiset.attach_map_val _
-
-@[simp]
-
-中文:
-定理 attach_map_coe
-  条件: (s : Sym α n)
-  结论: s.attach.map (↑) = s
-  证明: coe_injective Multiset.attach_map_val _
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.attach_map_val, attach_map_val, coe_injective
+/-
+**Sym.attach_map_coe** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：attach_map_coe (s : Sym α n) : s.attach.map (↑) = s
+参数：s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.coe_injective`：coe_injective : Injective ((↑) : Sym α n -> Multiset 
+α)
+· 使用定理 `Multiset.attach_map_val`：attach_map_val (s : Multiset α) : s.attach.map 
+Subtype.val = s
 -/
 theorem attach_map_coe (s : Sym α n) : s.attach.map (↑) = s :=
-coe_injective Multiset.attach_map_val _
+  coe_injective <| Multiset.attach_map_val _
 
 @[simp]
-/--
-theorem `mem_attach` / 定理 `mem_attach`
-
-English:
-theorem mem_attach
-  given: (s : Sym α n) (x : { x // x in s })
-  statement: x in s.attach
-  proof: Multiset.mem_attach _ _
-
-@[simp]
-
-中文:
-定理 mem_attach
-  条件: (s : Sym α n) (x : { x // x in s })
-  结论: x in s.attach
-  证明: Multiset.mem_attach _ _
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.mem_attach, mem_attach
+/-
+**Sym.mem_attach** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_attach (s : Sym α n) (x : { x // x in s }) : x in s.attach
+参数：s : Sym α n；x : { x // x in s }。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_attach`：mem_attach (s : Multiset α) : forall x, x in s.atta
+ch
 -/
-theorem mem_attach (s : Sym α n) (x : { x // x in s }) : x in s.attach :=
+theorem mem_attach (s : Sym α n) (x : { x // x ∈ s }) : x ∈ s.attach :=
   Multiset.mem_attach _ _
 
 @[simp]
-/--
-theorem `attach_nil` / 定理 `attach_nil`
-
-English:
-theorem attach_nil
-  statement: (nil : Sym α 0).attach = nil
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 attach_nil
-  结论: (nil : Sym α 0).attach = nil
-  证明: rfl
-
-@[simp]
+/-
+**Sym.attach_nil** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：attach_nil : (nil : Sym α 0).attach = nil
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem attach_nil : (nil : Sym α 0).attach = nil :=
   rfl
 
 @[simp]
-/--
-theorem `attach_cons` / 定理 `attach_cons`
-
-English:
-theorem attach_cons
-  given: (x : α) (s : Sym α n)
-  proof: coe_injective Multiset.attach_cons _ _
-
-中文:
-定理 attach_cons
-  条件: (x : α) (s : Sym α n)
-  证明: coe_injective Multiset.attach_cons _ _
-
-Depends on / 依赖: Multiset, Multiset.attach_cons, attach_cons, coe_injective
+/-
+**Sym.attach_cons** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：attach_cons (x : α) (s : Sym α n) : (cons x s).attach = cons ⟨x, mem_cons_
+self _ _⟩ (s.attach.map fun x => ⟨x, mem_cons_of_mem x.prop⟩)
+参数：x : α；s : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.coe_injective`：coe_injective : Injective ((↑) : Sym α n -> Multiset 
+α)
+· 使用定理 `Sym.mem_cons_self`：mem_cons_self (a : α) (s : Sym α n) : a in a ::ₛ s
+· 使用定理 `Sym.mem_cons_of_mem`：mem_cons_of_mem (h : a in s) : a in b ::ₛ s
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Multiset.attach_cons`：attach_cons (a : α) (m : Multiset α) : (a ::ₘ m).a
+ttach = ⟨a, mem_cons_self a m⟩ ::ₘ m.attach.map fun p => ⟨p.1, mem_cons_of_mem p
+.2⟩
 -/
 theorem attach_cons (x : α) (s : Sym α n) :
     (cons x s).attach =
       cons ⟨x, mem_cons_self _ _⟩ (s.attach.map fun x => ⟨x, mem_cons_of_mem x.prop⟩) :=
-coe_injective Multiset.attach_cons _ _
+  coe_injective <| Multiset.attach_cons _ _
 
-/--
-Definition of `cast` / `cast` 的定义
+/-- Change the length of a `Sym` using an equality.
+The simp-normal form is for the `cast` to be pushed outward. -/
+/-
+**Sym.cast** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：{α : Type u_1} → {n m : ℕ} → n = m → Sym α n ≃ Sym α m
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cast
-  signature: {n m : Nat} (h : n = m)
-  body: ⟨s.val, s.2.trans h⟩
-  invFun s := ⟨s.val, s.2.trans h.symm⟩
-
-@[simp]
-
-中文:
-定义 cast
-  签名: {n m : 自然数} (h : n = m)
-  定义体: ⟨s.val, s.2.trans h⟩
-  invFun s := ⟨s.val, s.2.trans h.symm⟩
-
-@[simp]
+--- 原说明 ---
+Change the length of a `Sym` using an equality.
+The simp-normal form is for the `cast` to be pushed outward.
 -/
-protected def cast {n m : Nat} (h : n = m) : Sym α n ≃ Sym α m where
+protected def cast {n m : ℕ} (h : n = m) : Sym α n ≃ Sym α m where
   toFun s := ⟨s.val, s.2.trans h⟩
   invFun s := ⟨s.val, s.2.trans h.symm⟩
 
 @[simp]
-/--
-theorem `cast_rfl` / 定理 `cast_rfl`
-
-English:
-theorem cast_rfl
-  statement: Sym.cast rfl s = s
-  proof: Subtype.ext rfl
-
-@[simp]
-
-中文:
-定理 cast_rfl
-  结论: Sym.cast rfl s = s
-  证明: Subtype.ext rfl
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**Sym.cast_rfl** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cast_rfl : Sym.cast rfl s = s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
 theorem cast_rfl : Sym.cast rfl s = s :=
   Subtype.ext rfl
 
 @[simp]
-/--
-theorem `cast_cast` / 定理 `cast_cast`
-
-English:
-theorem cast_cast
-  given: {n'' : Nat} (h : n = n') (h' : n' = n'')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_cast
-  条件: {n'' : 自然数} (h : n = n') (h' : n' = n'')
-  证明: rfl
-
-@[simp]
+/-
+**Sym.cast_cast** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：cast_cast {n'' : Nat} (h : n = n') (h' : n' = n'') : Sym.cast h' (Sym.cast
+ h s) = Sym.cast (h.trans h') s
+参数：h : n = n'；h' : n' = n''。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cast_cast {n'' : Nat} (h : n = n') (h' : n' = n'') :
+theorem cast_cast {n'' : ℕ} (h : n = n') (h' : n' = n'') :
     Sym.cast h' (Sym.cast h s) = Sym.cast (h.trans h') s :=
   rfl
 
 @[simp]
-/--
-theorem `coe_cast` / 定理 `coe_cast`
-
-English:
-theorem coe_cast
-  given: (h : n = m)
-  statement: (Sym.cast h s : Multiset α) = s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_cast
-  条件: (h : n = m)
-  结论: (Sym.cast h s : Multiset α) = s
-  证明: rfl
-
-@[simp]
+/-
+**Sym.coe_cast** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_cast (h : n = m) : (Sym.cast h s : Multiset α) = s
+参数：h : n = m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_cast (h : n = m) : (Sym.cast h s : Multiset α) = s :=
   rfl
 
 @[simp]
-/--
-theorem `mem_cast` / 定理 `mem_cast`
-
-English:
-theorem mem_cast
-  given: (h : n = m)
-  statement: a in Sym.cast h s ↔ a in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_cast
-  条件: (h : n = m)
-  结论: a in Sym.cast h s ↔ a in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Sym.mem_cast** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_cast (h : n = m) : a in Sym.cast h s ↔ a in s
+参数：h : n = m。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_cast (h : n = m) : a in Sym.cast h s ↔ a in s :=
+theorem mem_cast (h : n = m) : a ∈ Sym.cast h s ↔ a ∈ s :=
   Iff.rfl
 
-/--
-Definition of `append` / `append` 的定义
+/-- Append a pair of `Sym` terms. -/
+/-
+**Sym.append** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：append (s : Sym α n) (s' : Sym α n') : Sym α (n + n')
+参数：s : Sym α n；s' : Sym α n'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition append
-  signature: (s : Sym α n) (s' : Sym α n')
-  body: ⟨s.1 + s'.1, by rw [Multiset.card_add, s.2, s'.2]⟩
-
-@[simp]
-
-中文:
-定义 append
-  签名: (s : Sym α n) (s' : Sym α n')
-  定义体: ⟨s.1 + s'.1, by rw [Multiset.card_add, s.2, s'.2]⟩
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.card_add, card_add
+--- 原说明 ---
+Append a pair of `Sym` terms.
 -/
 def append (s : Sym α n) (s' : Sym α n') : Sym α (n + n') :=
   ⟨s.1 + s'.1, by rw [Multiset.card_add, s.2, s'.2]⟩
 
 @[simp]
-/--
-theorem `append_inj_right` / 定理 `append_inj_right`
-
-English:
-theorem append_inj_right
-  given: (s : Sym α n) {t t' : Sym α n'}
-  statement: s.append t = s.append t' ↔ t = t'
-  proof: Subtype.ext_iff.trans (add_right_inj _).trans Subtype.ext_iff.symm
-
-@[simp]
-
-中文:
-定理 append_inj_right
-  条件: (s : Sym α n) {t t' : Sym α n'}
-  结论: s.append t = s.append t' ↔ t = t'
-  证明: Subtype.ext_iff.trans (add_right_inj _).trans Subtype.ext_iff.symm
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext_iff.symm, Subtype.ext_iff.trans, add_right_inj, ext_iff
+/-
+**Sym.append_inj_right** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：append_inj_right (s : Sym α n) {t t' : Sym α n'} : s.append t = s.append t
+' ↔ t = t'
+参数：s : Sym α n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `add_right_inj`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G] (a : 
+G) {b c : G}, a + b = a + c ↔ b = c
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
 -/
 theorem append_inj_right (s : Sym α n) {t t' : Sym α n'} : s.append t = s.append t' ↔ t = t' :=
-Subtype.ext_iff.trans (add_right_inj _).trans Subtype.ext_iff.symm
+  Subtype.ext_iff.trans <| (add_right_inj _).trans Subtype.ext_iff.symm
 
 @[simp]
-/--
-theorem `append_inj_left` / 定理 `append_inj_left`
-
-English:
-theorem append_inj_left
-  given: {s s' : Sym α n} (t : Sym α n')
-  statement: s.append t = s'.append t ↔ s = s'
-  proof: Subtype.ext_iff.trans (add_left_inj _).trans Subtype.ext_iff.symm
-
-中文:
-定理 append_inj_left
-  条件: {s s' : Sym α n} (t : Sym α n')
-  结论: s.append t = s'.append t ↔ s = s'
-  证明: Subtype.ext_iff.trans (add_left_inj _).trans Subtype.ext_iff.symm
-
-Depends on / 依赖: Subtype, Subtype.ext_iff.symm, Subtype.ext_iff.trans, add_left_inj, ext_iff
+/-
+**Sym.append_inj_left** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：append_inj_left {s s' : Sym α n} (t : Sym α n') : s.append t = s'.append t
+ ↔ s = s'
+参数：t : Sym α n'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
 -/
 theorem append_inj_left {s s' : Sym α n} (t : Sym α n') : s.append t = s'.append t ↔ s = s' :=
-Subtype.ext_iff.trans (add_left_inj _).trans Subtype.ext_iff.symm
+  Subtype.ext_iff.trans <| (add_left_inj _).trans Subtype.ext_iff.symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `append_comm` / 定理 `append_comm`
-
-English:
-theorem append_comm
-  given: (s : Sym α n') (s' : Sym α n')
-  proof: by
-  simp [append, add_comm]
-
-@[simp, norm_cast]
-
-中文:
-定理 append_comm
-  条件: (s : Sym α n') (s' : Sym α n')
-  证明: by
-  simp [append, add_comm]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: add_comm, append
+/-
+**Sym.append_comm** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：append_comm (s : Sym α n') (s' : Sym α n') : s.append s' = Sym.cast (add_c
+omm _ _) (s'.append s)
+参数：s : Sym α n'；s' : Sym α n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Sym.cast_rfl`：cast_rfl : Sym.cast rfl s = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem append_comm (s : Sym α n') (s' : Sym α n') :
     s.append s' = Sym.cast (add_comm _ _) (s'.append s) := by
   simp [append, add_comm]
 
 @[simp, norm_cast]
-/--
-theorem `coe_append` / 定理 `coe_append`
-
-English:
-theorem coe_append
-  given: (s : Sym α n) (s' : Sym α n')
-  statement: (s.append s' : Multiset α) = s + s'
-  proof: rfl
-
-中文:
-定理 coe_append
-  条件: (s : Sym α n) (s' : Sym α n')
-  结论: (s.append s' : Multiset α) = s + s'
-  证明: rfl
+/-
+**Sym.coe_append** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_append (s : Sym α n) (s' : Sym α n') : (s.append s' : Multiset α) = s 
++ s'
+参数：s : Sym α n；s' : Sym α n'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_append (s : Sym α n) (s' : Sym α n') : (s.append s' : Multiset α) = s + s' :=
   rfl
-
-/--
-theorem `mem_append_iff` / 定理 `mem_append_iff`
-
-English:
-theorem mem_append_iff
-  given: {s' : Sym α m}
-  statement: a in s.append s' ↔ a in s ∨ a in s'
-  proof: Multiset.mem_add
-
-中文:
-定理 mem_append_iff
-  条件: {s' : Sym α m}
-  结论: a in s.append s' ↔ a in s ∨ a in s'
-  证明: Multiset.mem_add
-
-Depends on / 依赖: H.subtype_injective, Multiset, Multiset.mem_add, finite_of_injective, mem_add, subtype_injective
+/-
+**Sym.mem_append_iff** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_append_iff {s' : Sym α m} : a in s.append s' ↔ a in s ∨ a in s'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_add`：mem_add {a : α} {s t : Multiset α} : a in s + t ↔ a in
+ s ∨ a in t
 -/
-theorem mem_append_iff {s' : Sym α m} : a in s.append s' ↔ a in s ∨ a in s' :=
+theorem mem_append_iff {s' : Sym α m} : a ∈ s.append s' ↔ a ∈ s ∨ a ∈ s' :=
   Multiset.mem_add
 
 set_option backward.isDefEq.respectTransparency false in
 /-- `a ↦ {a}` as an equivalence between `α` and `Sym α 1`. -/
 @[simps apply]
-/--
-Definition of `oneEquiv` / `oneEquiv` 的定义
+/-
+**Sym.oneEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：oneEquiv : α ≃ Sym α 1 where toFun a
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
 
-English:
-definition oneEquiv
-  signature: : α ≃ Sym α 1 where
-  body: ⟨{a}, by simp⟩
-  invFun s := (Equiv.subtypeQuotientEquivQuotientSubtype
-      (·.length = 1) _ (fun _ => Iff.rfl) (fun l l' => by rfl) s).liftOn
-    (fun l => l.1.head <| List.length_pos_iff.mp <| by simp)
-    fun ⟨_, _⟩ ⟨_, h⟩ => fun perm => by
-      obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h
-      exact List.eq_of_mem_singleton (List.Perm.mem_iff perm |>.mp <| List.head_mem _)
-  right_inv := by rintro ⟨⟨l⟩, h⟩; obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h; rfl
-
-中文:
-定义 oneEquiv
-  签名: : α ≃ Sym α 1 where
-  定义体: ⟨{a}, by simp⟩
-  invFun s := (Equiv.subtypeQuotientEquivQuotientSubtype
-      (·.length = 1) _ (fun _ => Iff.rfl) (fun l l' => by rfl) s).liftOn
-    (fun l => l.1.head <| List.length_pos_iff.mp <| by simp)
-    fun ⟨_, _⟩ ⟨_, h⟩ => fun perm => by
-      obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h
-      exact List.eq_of_mem_singleton (List.Perm.mem_iff perm |>.mp <| List.head_mem _)
-  right_inv := by rintro ⟨⟨l⟩, h⟩; obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h; rfl
+--- 原说明 ---
+`a ↦ {a}` as an equivalence between `α` and `Sym α 1`.
 -/
 def oneEquiv : α ≃ Sym α 1 where
   toFun a := ⟨{a}, by simp⟩
   invFun s := (Equiv.subtypeQuotientEquivQuotientSubtype
-      (·.length = 1) _ (fun _ => Iff.rfl) (fun l l' => by rfl) s).liftOn
-    (fun l => l.1.head <| List.length_pos_iff.mp <| by simp)
-    fun ⟨_, _⟩ ⟨_, h⟩ => fun perm => by
+      (·.length = 1) _ (fun _ ↦ Iff.rfl) (fun l l' ↦ by rfl) s).liftOn
+    (fun l ↦ l.1.head <| List.length_pos_iff.mp <| by simp)
+    fun ⟨_, _⟩ ⟨_, h⟩ ↦ fun perm ↦ by
       obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h
       exact List.eq_of_mem_singleton (List.Perm.mem_iff perm |>.mp <| List.head_mem _)
   right_inv := by rintro ⟨⟨l⟩, h⟩; obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h; rfl
 
-/--
-Definition of `fill` / `fill` 的定义
+/-- Fill a term `m : Sym α (n - i)` with `i` copies of `a` to obtain a term of `Sym α n`.
+This is a convenience wrapper for `m.append (replicate i a)` that adjusts the term using
+`Sym.cast`. -/
+/-
+**Sym.fill** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：fill (a : α) (i : Fin (n + 1)) (m : Sym α (n - i)) : Sym α n
+参数：a : α；i : Fin (n + 1)；m : Sym α (n - i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fill
-  signature: (a : α) (i : Fin (n + 1)) (m : Sym α (n - i))
-  body: Sym.cast (Nat.sub_add_cancel i.is_le) (m.append (replicate i a))
-
-中文:
-定义 fill
-  签名: (a : α) (i : 有限集 (n + 1)) (m : Sym α (n - i))
-  定义体: Sym.cast (Nat.sub_add_cancel i.is_le) (m.append (replicate i a))
-
-Depends on / 依赖: Nat.sub_add_cancel, Sym.cast, append, i.is_le, is_le, m.append, replicate, sub_add_cancel
+--- 原说明 ---
+Fill a term `m : Sym α (n - i)` with `i` copies of `a` to obtain a term of `Sym 
+α n`.
+This is a convenience wrapper for `m.append (replicate i a)` that adjusts the te
+rm using
+`Sym.cast`.
 -/
 def fill (a : α) (i : Fin (n + 1)) (m : Sym α (n - i)) : Sym α n :=
   Sym.cast (Nat.sub_add_cancel i.is_le) (m.append (replicate i a))
-
-/--
-theorem `coe_fill` / 定理 `coe_fill`
-
-English:
-theorem coe_fill
-  given: {a : α} {i : Fin (n + 1)} {m : Sym α (n - i)}
-  proof: rfl
-
-中文:
-定理 coe_fill
-  条件: {a : α} {i : 有限集 (n + 1)} {m : Sym α (n - i)}
-  证明: rfl
+/-
+**Sym.coe_fill** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：coe_fill {a : α} {i : Fin (n + 1)} {m : Sym α (n - i)} : (fill a i m : Mul
+tiset α) = m + replicate i a
+参数：n + 1；n - i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_fill {a : α} {i : Fin (n + 1)} {m : Sym α (n - i)} :
     (fill a i m : Multiset α) = m + replicate i a :=
   rfl
-
-/--
-theorem `mem_fill_iff` / 定理 `mem_fill_iff`
-
-English:
-theorem mem_fill_iff
-  given: {a b : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
-  proof: by
-  rw [fill]; rw [mem_cast]; rw [mem_append_iff]; rw [or_comm]; rw [mem_replicate]
-
-中文:
-定理 mem_fill_iff
-  条件: {a b : α} {i : 有限集 (n + 1)} {s : Sym α (n - i)}
-  证明: by
-  rw [fill]; rw [mem_cast]; rw [mem_append_iff]; rw [or_comm]; rw [mem_replicate]
-
-Depends on / 依赖: mem_append_iff, mem_cast, mem_replicate, or_comm
+/-
+**Sym.mem_fill_iff** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：mem_fill_iff {a b : α} {i : Fin (n + 1)} {s : Sym α (n - i)} : a in Sym.fi
+ll b i s ↔ (i : Nat) != 0 ∧ a = b ∨ a in s
+参数：n + 1；n - i。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Sym.fill.eq_1`：∀ {α : Type u_1} {n : ℕ} (a : α) (i : Fin (n + 1)) (m : S
+ym α (n - ↑i)),   Sym.fill a i m = (Sym.cast ⋯) (m.append (Sym.replicate (↑i) a)
+)
+· 使用定理 `Sym.mem_cast`：mem_cast (h : n = m) : a in Sym.cast h s ↔ a in s
+· 使用定理 `Sym.mem_append_iff`：mem_append_iff {s' : Sym α m} : a in s.append s' ↔ a
+ in s ∨ a in s'
+· 使用定理 `or_comm`：∀ {a b : Prop}, a ∨ b ↔ b ∨ a
+· 使用定理 `Sym.mem_replicate`：mem_replicate : b in replicate n a ↔ n != 0 ∧ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_fill_iff {a b : α} {i : Fin (n + 1)} {s : Sym α (n - i)} :
-    a in Sym.fill b i s ↔ (i : Nat) != 0 ∧ a = b ∨ a in s := by
-  rw [fill]; rw [mem_cast]; rw [mem_append_iff]; rw [or_comm]; rw [mem_replicate]
+    a ∈ Sym.fill b i s ↔ (i : ℕ) ≠ 0 ∧ a = b ∨ a ∈ s := by
+  rw [fill, mem_cast, mem_append_iff, or_comm, mem_replicate]
 
 open Multiset
 
-/--
-Definition of `filterNe` / `filterNe` 的定义
+/-- Remove every `a` from a given `Sym α n`.
+Yields the number of copies `i` and a term of `Sym α (n - i)`. -/
+/-
+**Sym.filterNe** 是 Mathlib 中的一个定义，位于命名空间 `Sym`。
+形式化陈述：filterNe [DecidableEq α] (a : α) (m : Sym α n) : Σ i : Fin (n + 1), Sym α 
+(n - i)
+参数：a : α；m : Sym α n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition filterNe
-  signature: [DecidableEq α] (a : α) (m : Sym α n)
-  body: ⟨⟨m.1.count a, (count_le_card _ _).trans_lt by rw [m.2, Nat.lt_succ_iff]⟩,
-    m.1.filter (a != ·),
-Nat.eq_sub_of_add_eq
-      Eq.trans
-        (by
-          rw [← countP_eq_card_filter]; rw [add_comm]
-          simp only [eq_comm, Ne, count]
-          rw [← card_eq_countP_add_countP _ _])
-        m.2⟩
-
-中文:
-定义 filterNe
-  签名: [DecidableEq α] (a : α) (m : Sym α n)
-  定义体: ⟨⟨m.1.count a, (count_le_card _ _).trans_lt by rw [m.2, Nat.lt_succ_iff]⟩,
-    m.1.filter (a != ·),
-Nat.eq_sub_of_add_eq
-      Eq.trans
-        (by
-          rw [← countP_eq_card_filter]; rw [add_comm]
-          simp only [eq_comm, Ne, count]
-          rw [← card_eq_countP_add_countP _ _])
-        m.2⟩
-
-Depends on / 依赖: Eq.trans, Nat.eq_sub_of_add_eq, Nat.lt_succ_iff, add_comm, card_eq_countP_add_countP, countP_eq_card_filter, count_le_card, eq_comm, eq_sub_of_add_eq, filter, lt_succ_iff, trans_lt
+--- 原说明 ---
+Remove every `a` from a given `Sym α n`.
+Yields the number of copies `i` and a term of `Sym α (n - i)`.
 -/
 def filterNe [DecidableEq α] (a : α) (m : Sym α n) : Σ i : Fin (n + 1), Sym α (n - i) :=
-⟨⟨m.1.count a, (count_le_card _ _).trans_lt by rw [m.2, Nat.lt_succ_iff]⟩,
-    m.1.filter (a != ·),
-Nat.eq_sub_of_add_eq
+  ⟨⟨m.1.count a, (count_le_card _ _).trans_lt <| by rw [m.2, Nat.lt_succ_iff]⟩,
+    m.1.filter (a ≠ ·),
+    Nat.eq_sub_of_add_eq <|
       Eq.trans
         (by
-          rw [← countP_eq_card_filter]; rw [add_comm]
+          rw [← countP_eq_card_filter, add_comm]
           simp only [eq_comm, Ne, count]
           rw [← card_eq_countP_add_countP _ _])
         m.2⟩
-
-/--
-theorem `sigma_sub_ext` / 定理 `sigma_sub_ext`
-
-English:
-theorem sigma_sub_ext
-  given: {m₁ m₂ : Σ i : Fin (n + 1), Sym α (n - i)} (h : (m₁.2 : Multiset α) = m₂.2)
-  proof: Sigma.subtype_ext
-    (Fin.ext <| by
-      rw [← Nat.sub_sub_self (Nat.le_of_lt_succ m₁.1.is_lt)]; rw [← m₁.2.2]; rw [val_eq_coe]; rw [h]; rw [← val_eq_coe]; rw [m₂.2.2]; rw [Nat.sub_sub_self (Nat.le_of_lt_succ m₂.1.is_lt)])
-    h
-
-中文:
-定理 sigma_sub_ext
-  条件: {m₁ m₂ : Σ i : 有限集 (n + 1), Sym α (n - i)} (h : (m₁.2 : Multiset α) = m₂.2)
-  证明: Sigma.subtype_ext
-    (Fin.ext <| by
-      rw [← Nat.sub_sub_self (Nat.le_of_lt_succ m₁.1.is_lt)]; rw [← m₁.2.2]; rw [val_eq_coe]; rw [h]; rw [← val_eq_coe]; rw [m₂.2.2]; rw [Nat.sub_sub_self (Nat.le_of_lt_succ m₂.1.is_lt)])
-    h
-
-Depends on / 依赖: Fin.ext, Nat.le_of_lt_succ, Nat.sub_sub_self, Sigma.subtype_ext, is_lt, le_of_lt_succ, sub_sub_self, subtype_ext, val_eq_coe
+/-
+**Sym.sigma_sub_ext** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：sigma_sub_ext {m₁ m₂ : Σ i : Fin (n + 1), Sym α (n - i)} (h : (m₁.2 : Mult
+iset α) = m₂.2) : m₁ = m₂
+参数：n + 1；n - i；h : (m₁.2 : Multiset α) = m₂.2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sigma.subtype_ext`：∀ {α : Type u_1} {β : Type u_7} {p : α → β → Prop} {x
+₀ x₁ : (a : α) × Subtype (p a)},   x₀.fst = x₁.fst → ↑x₀.snd = ↑x₁.snd → x₀ = x₁
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.sub_sub_self`：∀ {n m : ℕ}, m ≤ n → n - (n - m) = m
+· 使用定理 `Nat.le_of_lt_succ`：∀ {m n : ℕ}, m < n.succ → m ≤ n
+· 使用定理 `Fin.is_lt`：∀ {n : ℕ} (a : Fin n), ↑a < n
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Sym.val_eq_coe`：val_eq_coe (s : Sym α n) : s.1 = ↑s
 -/
 theorem sigma_sub_ext {m₁ m₂ : Σ i : Fin (n + 1), Sym α (n - i)} (h : (m₁.2 : Multiset α) = m₂.2) :
     m₁ = m₂ :=
   Sigma.subtype_ext
     (Fin.ext <| by
-      rw [← Nat.sub_sub_self (Nat.le_of_lt_succ m₁.1.is_lt)]; rw [← m₁.2.2]; rw [val_eq_coe]; rw [h]; rw [← val_eq_coe]; rw [m₂.2.2]; rw [Nat.sub_sub_self (Nat.le_of_lt_succ m₂.1.is_lt)])
+      rw [← Nat.sub_sub_self (Nat.le_of_lt_succ m₁.1.is_lt), ← m₁.2.2, val_eq_coe, h,
+        ← val_eq_coe, m₂.2.2, Nat.sub_sub_self (Nat.le_of_lt_succ m₂.1.is_lt)])
     h
-
-/--
-theorem `fill_filterNe` / 定理 `fill_filterNe`
-
-English:
-theorem fill_filterNe
-  given: [DecidableEq α] (a : α) (m : Sym α n)
-  proof: Sym.ext
-    (by
-      rw [coe_fill]; rw [filterNe]; rw [← val_eq_coe]; rw [Subtype.coe_mk]; rw [Fin.val_mk]
-      ext b; dsimp
-      rw [count_add]; rw [count_filter]; rw [Sym.coe_replicate]; rw [count_replicate]
-      obtain rfl | h := eq_or_ne a b
-      · rw [if_pos rfl, if_neg (not_not.2 rfl), zero_add]
-      · rw [if_pos h, if_neg h, add_zero])
-
-中文:
-定理 fill_filterNe
-  条件: [DecidableEq α] (a : α) (m : Sym α n)
-  证明: Sym.ext
-    (by
-      rw [coe_fill]; rw [filterNe]; rw [← val_eq_coe]; rw [Subtype.coe_mk]; rw [Fin.val_mk]
-      ext b; dsimp
-      rw [count_add]; rw [count_filter]; rw [Sym.coe_replicate]; rw [count_replicate]
-      obtain rfl | h := eq_or_ne a b
-      · rw [if_pos rfl, if_neg (not_not.2 rfl), zero_add]
-      · rw [if_pos h, if_neg h, add_zero])
-
-Depends on / 依赖: Fin.val_mk, Subtype, Subtype.coe_mk, Sym.coe_replicate, Sym.ext, add_zero, coe_fill, coe_mk, coe_replicate, count_add, count_filter, count_replicate, eq_or_ne, filterNe, if_neg, if_pos, not_not, val_eq_coe, val_mk, zero_add
+/-
+**Sym.fill_filterNe** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：fill_filterNe [DecidableEq α] (a : α) (m : Sym α n) : (m.filterNe a).2.fil
+l a (m.filterNe a).1 = m
+参数：a : α；m : Sym α n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.ext`：∀ {α : Type u_1} {n : ℕ} {s₁ s₂ : Sym α n}, ↑s₁ = ↑s₂ → s₁ = s₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Sym.coe_fill`：coe_fill {a : α} {i : Fin (n + 1)} {m : Sym α (n - i)} : (
+fill a i m : Multiset α) = m + replicate i a
+· 使用定理 `Sym.filterNe.eq_1`：∀ {α : Type u_1} {n : ℕ} [inst : DecidableEq α] (a : 
+α) (m : Sym α n),   Sym.filterNe a m = ⟨⟨Multiset.count a ↑m, ⋯⟩, ⟨Multiset.filt
+er (fun…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Sym.val_eq_coe`：val_eq_coe (s : Sym α n) : s.1 = ↑s
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `Fin.val_mk`：∀ {m n : ℕ} (h : m < n), ↑⟨m, h⟩ = m
+· 使用定理 `Multiset.ext'`：ext' {s t : Multiset α} : (forall a, count a s = count a 
+t) -> s = t
+· 使用定理 `Multiset.count_add`：count_add (a : α) : forall s t, count a (s + t) = co
+unt a s + count a t
+· 使用定理 `Multiset.count_filter`：count_filter {p} [DecidablePred p] {a} {s : Multi
+set α} : count a (filter p s) = if p a then count a s else 0
+· 使用定理 `Sym.coe_replicate`：coe_replicate : (replicate n a : Multiset α) = Multis
+et.replicate n a
+· 使用定理 `Multiset.count_replicate`：count_replicate (a b : α) (n : Nat) : count a 
+(replicate n b) = if b = a then n else 0
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem fill_filterNe [DecidableEq α] (a : α) (m : Sym α n) :
     (m.filterNe a).2.fill a (m.filterNe a).1 = m :=
   Sym.ext
     (by
-      rw [coe_fill]; rw [filterNe]; rw [← val_eq_coe]; rw [Subtype.coe_mk]; rw [Fin.val_mk]
+      rw [coe_fill, filterNe, ← val_eq_coe, Subtype.coe_mk, Fin.val_mk]
       ext b; dsimp
-      rw [count_add]; rw [count_filter]; rw [Sym.coe_replicate]; rw [count_replicate]
+      rw [count_add, count_filter, Sym.coe_replicate, count_replicate]
       obtain rfl | h := eq_or_ne a b
       · rw [if_pos rfl, if_neg (not_not.2 rfl), zero_add]
       · rw [if_pos h, if_neg h, add_zero])
-
-/--
-theorem `filter_ne_fill` / 定理 `filter_ne_fill`
-
-English:
-theorem filter_ne_fill
-  proof: sigma_sub_ext
-    (by
-      rw [filterNe]; rw [← val_eq_coe]; rw [Subtype.coe_mk]; rw [val_eq_coe]; rw [coe_fill]
-      rw [filter_add]; rw [filter_eq_self.2]; rw [add_eq_left]; rw [eq_zero_iff_forall_notMem]
-      · intro b hb
-        rw [mem_filter]; rw [Sym.mem_coe]; rw [mem_replicate] at hb
-        exact hb.2 hb.1.2.symm
-· exact fun a ha ha' => h ha'.symm ▸ ha)
-
-中文:
-定理 filter_ne_fill
-  证明: sigma_sub_ext
-    (by
-      rw [filterNe]; rw [← val_eq_coe]; rw [Subtype.coe_mk]; rw [val_eq_coe]; rw [coe_fill]
-      rw [filter_add]; rw [filter_eq_self.2]; rw [add_eq_left]; rw [eq_zero_iff_forall_notMem]
-      · intro b hb
-        rw [mem_filter]; rw [Sym.mem_coe]; rw [mem_replicate] at hb
-        exact hb.2 hb.1.2.symm
-· exact fun a ha ha' => h ha'.symm ▸ ha)
-
-Depends on / 依赖: Subtype, Subtype.coe_mk, Sym.mem_coe, add_eq_left, coe_fill, coe_mk, eq_zero_iff_forall_notMem, filterNe, filter_add, filter_eq_self, mem_coe, mem_filter, mem_replicate, sigma_sub_ext, val_eq_coe
+/-
+**Sym.filter_ne_fill** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：filter_ne_fill [DecidableEq α] (a : α) (m : Σ i : Fin (n + 1), Sym α (n - 
+i)) (h : a ∉ m.2) : (m.2.fill a m.1).filterNe a = m
+参数：a : α；m : Σ i : Fin (n + 1), Sym α (n - i)；h : a ∉ m.2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym.sigma_sub_ext`：sigma_sub_ext {m₁ m₂ : Σ i : Fin (n + 1), Sym α (n - 
+i)} (h : (m₁.2 : Multiset α) = m₂.2) : m₁ = m₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Sym.filterNe.eq_1`：∀ {α : Type u_1} {n : ℕ} [inst : DecidableEq α] (a : 
+α) (m : Sym α n),   Sym.filterNe a m = ⟨⟨Multiset.count a ↑m, ⋯⟩, ⟨Multiset.filt
+er (fun…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Sym.val_eq_coe`：val_eq_coe (s : Sym α n) : s.1 = ↑s
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `Sym.coe_fill`：coe_fill {a : α} {i : Fin (n + 1)} {m : Sym α (n - i)} : (
+fill a i m : Multiset α) = m + replicate i a
+· 使用定理 `Multiset.filter_add`：filter_add (s t : Multiset α) : filter p (s + t) = 
+filter p s + filter p t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.filter_eq_self`：filter_eq_self {s} : filter p s = s ↔ forall a 
+in s, p a
+· 使用定理 `add_eq_left`：∀ {M : Type u_4} [inst : AddMonoid M] [IsLeftCancelAdd M] {
+a b : M}, a + b = a ↔ b = 0
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `Multiset.eq_zero_iff_forall_notMem`：eq_zero_iff_forall_notMem {s : Multi
+set α} : s = 0 ↔ forall a, a ∉ s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Sym.mem_replicate`：mem_replicate : b in replicate n a ↔ n != 0 ∧ b = a
+· 使用定理 `Sym.mem_coe`：mem_coe : a in (s : Multiset α) ↔ a in s
+· 使用定理 `Multiset.mem_filter`：mem_filter {a : α} {s} : a in filter p s ↔ a in s ∧
+ p a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem filter_ne_fill
     [DecidableEq α] (a : α) (m : Σ i : Fin (n + 1), Sym α (n - i)) (h : a ∉ m.2) :
     (m.2.fill a m.1).filterNe a = m :=
   sigma_sub_ext
     (by
-      rw [filterNe]; rw [← val_eq_coe]; rw [Subtype.coe_mk]; rw [val_eq_coe]; rw [coe_fill]
-      rw [filter_add]; rw [filter_eq_self.2]; rw [add_eq_left]; rw [eq_zero_iff_forall_notMem]
+      rw [filterNe, ← val_eq_coe, Subtype.coe_mk, val_eq_coe, coe_fill]
+      rw [filter_add, filter_eq_self.2, add_eq_left, eq_zero_iff_forall_notMem]
       · intro b hb
-        rw [mem_filter]; rw [Sym.mem_coe]; rw [mem_replicate] at hb
+        rw [mem_filter, Sym.mem_coe, mem_replicate] at hb
         exact hb.2 hb.1.2.symm
-· exact fun a ha ha' => h ha'.symm ▸ ha)
-
-/--
-theorem `count_coe_fill_self_of_notMem` / 定理 `count_coe_fill_self_of_notMem`
-
-English:
-theorem count_coe_fill_self_of_notMem
-  statement: [DecidableEq α] {a : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
-  proof: by
-  simp [coe_fill, coe_replicate, hx]
-
-中文:
-定理 count_coe_fill_self_of_notMem
-  结论: [DecidableEq α] {a : α} {i : 有限集 (n + 1)} {s : Sym α (n - i)}
-  证明: by
-  simp [coe_fill, coe_replicate, hx]
-
-Depends on / 依赖: coe_fill, coe_replicate
+      · exact fun a ha ha' => h <| ha'.symm ▸ ha)
+/-
+**Sym.count_coe_fill_self_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：count_coe_fill_self_of_notMem [DecidableEq α] {a : α} {i : Fin (n + 1)} {s
+ : Sym α (n - i)} (hx : a ∉ s) : count a (fill a i s : Multiset α) = i
+参数：n + 1；n - i；hx : a ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.count_add`：count_add (a : α) : forall s t, count a (s + t) = co
+unt a s + count a t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.count_eq_zero_of_notMem`：count_eq_zero_of_notMem {a : α} {s : M
+ultiset α} (h : a ∉ s) : count a s = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Multiset.count_replicate_self`：count_replicate_self (a : α) (n : Nat) : 
+count a (replicate n a) = n
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem count_coe_fill_self_of_notMem [DecidableEq α] {a : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
     (hx : a ∉ s) :
     count a (fill a i s : Multiset α) = i := by
   simp [coe_fill, coe_replicate, hx]
-
-/--
-theorem `count_coe_fill_of_ne` / 定理 `count_coe_fill_of_ne`
-
-English:
-theorem count_coe_fill_of_ne
-  statement: [DecidableEq α] {a x : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
-  proof: by
-  suffices x ∉ Multiset.replicate i a by simp [coe_fill, coe_replicate, this]
-  simp [Multiset.mem_replicate, hx]
-
-中文:
-定理 count_coe_fill_of_ne
-  结论: [DecidableEq α] {a x : α} {i : 有限集 (n + 1)} {s : Sym α (n - i)}
-  证明: by
-  suffices x ∉ Multiset.replicate i a by simp [coe_fill, coe_replicate, this]
-  simp [Multiset.mem_replicate, hx]
-
-Depends on / 依赖: Multiset, Multiset.mem_replicate, Multiset.replicate, coe_fill, coe_replicate, mem_replicate, replicate
+/-
+**Sym.count_coe_fill_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Sym`。
+形式化陈述：count_coe_fill_of_ne [DecidableEq α] {a x : α} {i : Fin (n + 1)} {s : Sym 
+α (n - i)} (hx : x != a) : count x (fill a i s : Multiset α) = count x s
+参数：n + 1；n - i；hx : x != a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.count_add`：count_add (a : α) : forall s t, count a (s + t) = co
+unt a s + count a t
+· 使用定理 `Multiset.count_eq_zero_of_notMem`：count_eq_zero_of_notMem {a : α} {s : M
+ultiset α} (h : a ∉ s) : count a s = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem count_coe_fill_of_ne [DecidableEq α] {a x : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
-    (hx : x != a) :
+    (hx : x ≠ a) :
     count x (fill a i s : Multiset α) = count x s := by
   suffices x ∉ Multiset.replicate i a by simp [coe_fill, coe_replicate, this]
   simp [Multiset.mem_replicate, hx]
@@ -2392,228 +1695,211 @@ section Equiv
 /-! ### Combinatorial equivalences -/
 
 
-variable {α : Type*} {n : Nat}
+variable {α : Type*} {n : ℕ}
 
 open Sym
 
 namespace SymOptionSuccEquiv
 
-/--
-Definition of `encode` / `encode` 的定义
+/-- Function from the symmetric product over `Option` splitting on whether or not
+it contains a `none`. -/
+/-
+**SymOptionSuccEquiv.encode** 是 Mathlib 中的一个定义，位于命名空间 `SymOptionSuccEquiv`。
+形式化陈述：encode [DecidableEq α] (s : Sym (Option α) n.succ) : Sym (Option α) n oplu
+s Sym α n.succ
+参数：s : Sym (Option α) n.succ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition encode
-  signature: [DecidableEq α] (s : Sym (Option α) n.succ)
-  body: if h : none in s then Sum.inl (s.erase none h)
-  else
-    Sum.inr
-      (s.attach.map fun o =>
-o.1.get Option.ne_none_iff_isSome.1 ne_of_mem_of_not_mem o.2 h)
-
-@[simp]
-
-中文:
-定义 encode
-  签名: [DecidableEq α] (s : Sym (选项类型 α) n.succ)
-  定义体: if h : none in s then Sum.inl (s.erase none h)
-  else
-    Sum.inr
-      (s.attach.map fun o =>
-o.1.get Option.ne_none_iff_isSome.1 ne_of_mem_of_not_mem o.2 h)
-
-@[simp]
-
-Depends on / 依赖: Option.ne_none_iff_isSome, Sum.inl, Sum.inr, attach, ne_none_iff_isSome, ne_of_mem_of_not_mem, s.attach.map, s.erase
+--- 原说明 ---
+Function from the symmetric product over `Option` splitting on whether or not
+it contains a `none`.
 -/
-def encode [DecidableEq α] (s : Sym (Option α) n.succ) : Sym (Option α) n oplus Sym α n.succ :=
-  if h : none in s then Sum.inl (s.erase none h)
+def encode [DecidableEq α] (s : Sym (Option α) n.succ) : Sym (Option α) n ⊕ Sym α n.succ :=
+  if h : none ∈ s then Sum.inl (s.erase none h)
   else
     Sum.inr
       (s.attach.map fun o =>
-o.1.get Option.ne_none_iff_isSome.1 ne_of_mem_of_not_mem o.2 h)
+        o.1.get <| Option.ne_none_iff_isSome.1 <| ne_of_mem_of_not_mem o.2 h)
 
 @[simp]
-/--
-theorem `encode_of_none_mem` / 定理 `encode_of_none_mem`
-
-English:
-theorem encode_of_none_mem
-  given: [DecidableEq α] (s : Sym (Option α) n.succ) (h : none in s)
-  proof: dif_pos h
-
-@[simp]
-
-中文:
-定理 encode_of_none_mem
-  条件: [DecidableEq α] (s : Sym (选项类型 α) n.succ) (h : none in s)
-  证明: dif_pos h
-
-@[simp]
-
-Depends on / 依赖: dif_pos
+/-
+**SymOptionSuccEquiv.encode_of_none_mem** 是 Mathlib 中的一个定理，位于命名空间 `SymOptionSucc
+Equiv`。
+形式化陈述：encode_of_none_mem [DecidableEq α] (s : Sym (Option α) n.succ) (h : none i
+n s) : encode s = Sum.inl (s.erase none h)
+参数：s : Sym (Option α) n.succ；h : none in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-theorem encode_of_none_mem [DecidableEq α] (s : Sym (Option α) n.succ) (h : none in s) :
+theorem encode_of_none_mem [DecidableEq α] (s : Sym (Option α) n.succ) (h : none ∈ s) :
     encode s = Sum.inl (s.erase none h) :=
   dif_pos h
 
 @[simp]
-/--
-theorem `encode_of_none_notMem` / 定理 `encode_of_none_notMem`
-
-English:
-theorem encode_of_none_notMem
-  given: [DecidableEq α] (s : Sym (Option α) n.succ) (h : none ∉ s)
-  proof: dif_neg h
-
-中文:
-定理 encode_of_none_notMem
-  条件: [DecidableEq α] (s : Sym (选项类型 α) n.succ) (h : none ∉ s)
-  证明: dif_neg h
-
-Depends on / 依赖: dif_neg
+/-
+**SymOptionSuccEquiv.encode_of_none_notMem** 是 Mathlib 中的一个定理，位于命名空间 `SymOptionS
+uccEquiv`。
+形式化陈述：encode_of_none_notMem [DecidableEq α] (s : Sym (Option α) n.succ) (h : non
+e ∉ s) : encode s = Sum.inr (s.attach.map fun o => o.1.get Option.ne_none_iff_is
+Some.1 ne_of_mem_of_not_mem o.2 h)
+参数：s : Sym (Option α) n.succ；h : none ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem encode_of_none_notMem [DecidableEq α] (s : Sym (Option α) n.succ) (h : none ∉ s) :
     encode s =
       Sum.inr
         (s.attach.map fun o =>
-o.1.get Option.ne_none_iff_isSome.1 ne_of_mem_of_not_mem o.2 h) :=
+          o.1.get <| Option.ne_none_iff_isSome.1 <| ne_of_mem_of_not_mem o.2 h) :=
   dif_neg h
 
-/--
-Definition of `decode` / `decode` 的定义
+/-- Inverse of `Sym_option_succ_equiv.decode`. -/
+/-
+**SymOptionSuccEquiv.decode** 是 Mathlib 中的一个定义，位于命名空间 `SymOptionSuccEquiv`。
+形式化陈述：{α : Type u_1} → {n : ℕ} → Sym (Option α) n ⊕ Sym α n.succ → Sym (Option α
+) n.succ
+参数：Option α；Option α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition decode
-  signature: : Sym (Option α) n oplus Sym α n.succ -> Sym (Option α) n.succ
-
-中文:
-定义 decode
-  签名: : Sym (选项类型 α) n oplus Sym α n.succ -> Sym (选项类型 α) n.succ
+--- 原说明 ---
+Inverse of `Sym_option_succ_equiv.decode`.
 -/
-def decode : Sym (Option α) n oplus Sym α n.succ -> Sym (Option α) n.succ
+def decode : Sym (Option α) n ⊕ Sym α n.succ → Sym (Option α) n.succ
   | Sum.inl s => none ::ₛ s
   | Sum.inr s => s.map Embedding.some
 
 @[simp]
-/--
-theorem `decode_inl` / 定理 `decode_inl`
-
-English:
-theorem decode_inl
-  given: (s : Sym (Option α) n)
-  statement: decode (Sum.inl s) = none ::ₛ s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 decode_inl
-  条件: (s : Sym (选项类型 α) n)
-  结论: decode (和.inl s) = none ::ₛ s
-  证明: rfl
-
-@[simp]
+/-
+**SymOptionSuccEquiv.decode_inl** 是 Mathlib 中的一个定理，位于命名空间 `SymOptionSuccEquiv`。
+形式化陈述：decode_inl (s : Sym (Option α) n) : decode (Sum.inl s) = none ::ₛ s
+参数：s : Sym (Option α) n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem decode_inl (s : Sym (Option α) n) : decode (Sum.inl s) = none ::ₛ s :=
   rfl
 
 @[simp]
-/--
-theorem `decode_inr` / 定理 `decode_inr`
-
-English:
-theorem decode_inr
-  given: (s : Sym α n.succ)
-  statement: decode (Sum.inr s) = s.map Embedding.some
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 decode_inr
-  条件: (s : Sym α n.succ)
-  结论: decode (和.inr s) = s.map 嵌入.some
-  证明: rfl
-
-@[simp]
+/-
+**SymOptionSuccEquiv.decode_inr** 是 Mathlib 中的一个定理，位于命名空间 `SymOptionSuccEquiv`。
+形式化陈述：decode_inr (s : Sym α n.succ) : decode (Sum.inr s) = s.map Embedding.some
+参数：s : Sym α n.succ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem decode_inr (s : Sym α n.succ) : decode (Sum.inr s) = s.map Embedding.some :=
   rfl
 
 @[simp]
-/--
-theorem `decode_encode` / 定理 `decode_encode`
-
-English:
-theorem decode_encode
-  given: [DecidableEq α] (s : Sym (Option α) n.succ)
-  statement: decode (encode s) = s
-  proof: by
-  by_cases h : none in s
-  · simp [h]
-  · simp only [decode, h, not_false_iff, encode_of_none_notMem, Embedding.some_apply, map_map,
-      comp_apply, Option.some_get]
-    convert! s.attach_map_coe
-
-@[simp]
-
-中文:
-定理 decode_encode
-  条件: [DecidableEq α] (s : Sym (选项类型 α) n.succ)
-  结论: decode (encode s) = s
-  证明: by
-  by_cases h : none in s
-  · simp [h]
-  · simp only [decode, h, not_false_iff, encode_of_none_notMem, Embedding.some_apply, map_map,
-      comp_apply, Option.some_get]
-    convert! s.attach_map_coe
-
-@[simp]
-
-Depends on / 依赖: Embedding, Embedding.some_apply, Option.some_get, attach_map_coe, comp_apply, convert, decode, encode_of_none_notMem, map_map, not_false_iff, s.attach_map_coe, some_apply, some_get
+/-
+**SymOptionSuccEquiv.decode_encode** 是 Mathlib 中的一个定理，位于命名空间 `SymOptionSuccEquiv
+`。
+形式化陈述：decode_encode [DecidableEq α] (s : Sym (Option α) n.succ) : decode (encode
+ s) = s
+参数：s : Sym (Option α) n.succ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SymOptionSuccEquiv.encode_of_none_mem`：encode_of_none_mem [DecidableEq α
+] (s : Sym (Option α) n.succ) (h : none in s) : encode s = Sum.inl (s.erase none
+ h)
+· 使用定理 `Sym.cons_erase`：cons_erase [DecidableEq α] {s : Sym α n.succ} {a : α} (h
+ : a in s) : a ::ₛ s.erase a h = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Option.ne_none_iff_isSome`：∀ {α : Type u_1} {o : Option α}, o ≠ none ↔ o
+.isSome = true
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `SymOptionSuccEquiv.encode_of_none_notMem`：encode_of_none_notMem [Decidab
+leEq α] (s : Sym (Option α) n.succ) (h : none ∉ s) : encode s = Sum.inr (s.attac
+h.map fun o => o.1.get Option.…
+· 使用定理 `Sym.map_congr`：map_congr {f g : α -> β} {s : Sym α n} (h : forall x in s
+, f x = g x) : map f s = map g s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Function.Embedding.some_apply`：∀ {α : Type u_1}, ⇑Function.Embedding.som
+e = some
+· 使用定理 `Sym.map_map`：map_map {α β γ : Type*} {n : Nat} (g : β -> γ) (f : α -> β)
+ (s : Sym α n) : Sym.map g (Sym.map f s) = Sym.map (g ∘ f) s
+· 使用定理 `Option.some_get`：∀ {α : Type u_1} {x : Option α} (h : x.isSome = true), 
+some (x.get h) = x
+· 使用定理 `Sym.attach_map_coe`：attach_map_coe (s : Sym α n) : s.attach.map (↑) = s
 -/
 theorem decode_encode [DecidableEq α] (s : Sym (Option α) n.succ) : decode (encode s) = s := by
-  by_cases h : none in s
+  by_cases h : none ∈ s
   · simp [h]
   · simp only [decode, h, not_false_iff, encode_of_none_notMem, Embedding.some_apply, map_map,
       comp_apply, Option.some_get]
     convert! s.attach_map_coe
 
 @[simp]
-/--
-theorem `encode_decode` / 定理 `encode_decode`
-
-English:
-theorem encode_decode
-  given: [DecidableEq α] (s : Sym (Option α) n oplus Sym α n.succ)
-  proof: by
-  obtain s | s := s
-  · simp
-  · unfold SymOptionSuccEquiv.encode
-    split_ifs with h
-    · obtain ⟨a, _, ha⟩ := Multiset.mem_map.mp h
-      exact Option.some_ne_none _ ha
-    · refine congr_arg Sum.inr ?_
-      refine map_injective (Option.some_injective _) _ ?_
-      refine Eq.trans ?_ (.trans (SymOptionSuccEquiv.decode (Sum.inr s)).attach_map_coe ?_) <;> simp
-
-中文:
-定理 encode_decode
-  条件: [DecidableEq α] (s : Sym (选项类型 α) n oplus Sym α n.succ)
-  证明: by
-  obtain s | s := s
-  · simp
-  · unfold SymOptionSuccEquiv.encode
-    split_ifs with h
-    · obtain ⟨a, _, ha⟩ := Multiset.mem_map.mp h
-      exact Option.some_ne_none _ ha
-    · refine congr_arg Sum.inr ?_
-      refine map_injective (Option.some_injective _) _ ?_
-      refine Eq.trans ?_ (.trans (SymOptionSuccEquiv.decode (Sum.inr s)).attach_map_coe ?_) <;> simp
-
-Depends on / 依赖: Eq.trans, Multiset, Multiset.mem_map.mp, Option.some_injective, Option.some_ne_none, Sum.inr, SymOptionSuccEquiv, SymOptionSuccEquiv.decode, SymOptionSuccEquiv.encode, attach_map_coe, congr_arg, decode, encode, map_injective, mem_map, some_injective, some_ne_none, split_ifs
+/-
+**SymOptionSuccEquiv.encode_decode** 是 Mathlib 中的一个定理，位于命名空间 `SymOptionSuccEquiv
+`。
+形式化陈述：encode_decode [DecidableEq α] (s : Sym (Option α) n oplus Sym α n.succ) : 
+encode (decode s) = s
+参数：s : Sym (Option α) n oplus Sym α n.succ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `SymOptionSuccEquiv.encode_of_none_mem`：encode_of_none_mem [DecidableEq α
+] (s : Sym (Option α) n.succ) (h : none in s) : encode s = Sum.inl (s.erase none
+ h)
+· 使用定理 `Sym.erase_cons_head`：erase_cons_head [DecidableEq α] (s : Sym α n) (a : 
+α) (h : a in a ::ₛ s
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
+· 使用定理 `Option.some_ne_none`：∀ {α : Type u_1} (x : α), some x ≠ none
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Sym.map_injective`：map_injective {f : α -> β} (hf : Injective f) (n : Na
+t) : Injective (map f : Sym α n -> Sym β n)
+· 使用定理 `Option.some_injective`：some_injective (α : Type*) : Function.Injective (
+@some α)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Sym.map_congr`：map_congr {f g : α -> β} {s : Sym α n} (h : forall x in s
+, f x = g x) : map f s = map g s
+· 使用定理 `Sym.map_map`：map_map {α β γ : Type*} {n : Nat} (g : β -> γ) (f : α -> β)
+ (s : Sym α n) : Sym.map g (Sym.map f s) = Sym.map (g ∘ f) s
+· 使用定理 `Option.some_get`：∀ {α : Type u_1} {x : Option α} (h : x.isSome = true), 
+some (x.get h) = x
+· 使用定理 `Sym.attach_map_coe`：attach_map_coe (s : Sym α n) : s.attach.map (↑) = s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Function.Embedding.some_apply`：∀ {α : Type u_1}, ⇑Function.Embedding.som
+e = some
 -/
-theorem encode_decode [DecidableEq α] (s : Sym (Option α) n oplus Sym α n.succ) :
+theorem encode_decode [DecidableEq α] (s : Sym (Option α) n ⊕ Sym α n.succ) :
     encode (decode s) = s := by
   obtain s | s := s
   · simp
@@ -2627,33 +1913,25 @@ theorem encode_decode [DecidableEq α] (s : Sym (Option α) n oplus Sym α n.suc
 
 end SymOptionSuccEquiv
 
+/-- The symmetric product over `Option` is a disjoint union over simpler symmetric products. -/
 --@[simps]
-/--
-Definition of `symOptionSuccEquiv` / `symOptionSuccEquiv` 的定义
-
-English:
-definition symOptionSuccEquiv
-  signature: [DecidableEq α]
-  body: SymOptionSuccEquiv.encode
-  invFun := SymOptionSuccEquiv.decode
-  left_inv := SymOptionSuccEquiv.decode_encode
-  right_inv := SymOptionSuccEquiv.encode_decode
-
-中文:
-定义 symOptionSuccEquiv
-  签名: [DecidableEq α]
-  定义体: SymOptionSuccEquiv.encode
-  invFun := SymOptionSuccEquiv.decode
-  left_inv := SymOptionSuccEquiv.decode_encode
-  right_inv := SymOptionSuccEquiv.encode_decode
-
-Depends on / 依赖: SymOptionSuccEquiv, SymOptionSuccEquiv.encode, encode
+/-
+**symOptionSuccEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：symOptionSuccEquiv [DecidableEq α] : Sym (Option α) n.succ ≃ Sym (Option α
+) n oplus Sym α n.succ where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SymOptionSuccEquiv.decode_encode`：decode_encode [DecidableEq α] (s : Sym
+ (Option α) n.succ) : decode (encode s) = s
+· 使用定理 `SymOptionSuccEquiv.encode_decode`：encode_decode [DecidableEq α] (s : Sym
+ (Option α) n oplus Sym α n.succ) : encode (decode s) = s
 -/
 def symOptionSuccEquiv [DecidableEq α] :
-    Sym (Option α) n.succ ≃ Sym (Option α) n oplus Sym α n.succ where
+    Sym (Option α) n.succ ≃ Sym (Option α) n ⊕ Sym α n.succ where
   toFun := SymOptionSuccEquiv.encode
   invFun := SymOptionSuccEquiv.decode
   left_inv := SymOptionSuccEquiv.decode_encode
   right_inv := SymOptionSuccEquiv.encode_decode
 
 end Equiv
+

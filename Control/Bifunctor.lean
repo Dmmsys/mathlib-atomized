@@ -32,47 +32,34 @@ universe u₀ u₁ u₂ v₀ v₁ v₂
 
 open Function
 
-/--
-Definition of `Bifunctor` / `Bifunctor` 的定义
+/-- Lawless bifunctor. This typeclass only holds the data for the bimap. -/
+/-
+**Bifunctor** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(Type u₀ → Type u₁ → Type u₂) → Type (max (max (u₀ + 1) (u₁ + 1)) u₂)
+参数：max (u₀ + 1) (u₁ + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Bifunctor
-  parameters: (F : Type u₀ -> Type u₁ -> Type u₂)
-  axioms and operations (1):
-    - bimap : forall {α α' β β'}, (α -> α') -> (β -> β') -> F α β -> F α' β'
-
-中文:
-类 双函子
-  参数: (F : 类型u₀ -> 类型u₁ -> 类型u₂)
-  公理与运算 (1 个):
-    - bimap : 对任意 {α α' β β'}, (α -> α') -> (β -> β') -> F α β -> F α' β'
+--- 原说明 ---
+Lawless bifunctor. This typeclass only holds the data for the bimap.
 -/
-class Bifunctor (F : Type u₀ -> Type u₁ -> Type u₂) where
-  bimap : forall {α α' β β'}, (α -> α') -> (β -> β') -> F α β -> F α' β'
+class Bifunctor (F : Type u₀ → Type u₁ → Type u₂) where
+  bimap : ∀ {α α' β β'}, (α → α') → (β → β') → F α β → F α' β'
 
 export Bifunctor (bimap)
 
-/--
-Definition of `LawfulBifunctor` / `LawfulBifunctor` 的定义
+/-- Bifunctor. This typeclass asserts that a lawless `Bifunctor` is lawful. -/
+/-
+**LawfulBifunctor** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u₀ → Type u₁ → Type u₂) → [Bifunctor F] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LawfulBifunctor
-  parameters: (F : Type u₀ -> Type u₁ -> Type u₂) [Bifunctor F]
-  axioms and operations (2):
-    - id_bimap : forall {α β} (x : F α β), bimap id id x = x
-    - bimap_bimap : forall {α₀ α₁ α₂ β₀ β₁ β₂} (f : α₀ -> α₁) (f' : α₁ -> α₂) (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α₀ β₀), bimap f' g' (bimap f g x) = bimap (f' ∘ f) (g' ∘ g) x
-
-中文:
-类 LawfulBifunctor
-  参数: (F : 类型u₀ -> 类型u₁ -> 类型u₂) [双函子 F]
-  公理与运算 (2 个):
-    - id_bimap : 对任意 {α β} (x : F α β), bimap id id x = x
-    - bimap_bimap : 对任意 {α₀ α₁ α₂ β₀ β₁ β₂} (f : α₀ -> α₁) (f' : α₁ -> α₂) (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α₀ β₀), bimap f' g' (bimap f g x) = bimap (f' ∘ f) (g' ∘ g) x
+--- 原说明 ---
+Bifunctor. This typeclass asserts that a lawless `Bifunctor` is lawful.
 -/
-class LawfulBifunctor (F : Type u₀ -> Type u₁ -> Type u₂) [Bifunctor F] : Prop where
-  id_bimap : forall {α β} (x : F α β), bimap id id x = x
+class LawfulBifunctor (F : Type u₀ → Type u₁ → Type u₂) [Bifunctor F] : Prop where
+  id_bimap : ∀ {α β} (x : F α β), bimap id id x = x
   bimap_bimap :
-    forall {α₀ α₁ α₂ β₀ β₁ β₂} (f : α₀ -> α₁) (f' : α₁ -> α₂) (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α₀ β₀),
+    ∀ {α₀ α₁ α₂ β₀ β₁ β₂} (f : α₀ → α₁) (f' : α₁ → α₂) (g : β₀ → β₁) (g' : β₁ → β₂) (x : F α₀ β₀),
       bimap f' g' (bimap f g x) = bimap (f' ∘ f) (g' ∘ g) x
 
 export LawfulBifunctor (id_bimap bimap_bimap)
@@ -83,176 +70,152 @@ attribute [higher_order bimap_comp_bimap] bimap_bimap
 
 export LawfulBifunctor (bimap_id_id bimap_comp_bimap)
 
-variable {F : Type u₀ -> Type u₁ -> Type u₂} [Bifunctor F]
+variable {F : Type u₀ → Type u₁ → Type u₂} [Bifunctor F]
 
 namespace Bifunctor
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- Left map of a bifunctor. -/
+/-
+**Bifunctor.fst** 是 Mathlib 中的一个缩写定义，位于命名空间 `Bifunctor`。
+形式化陈述：fst {α α' β} (f : α -> α') : F α β -> F α' β
+参数：f : α -> α'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fst
-  signature: {α α' β} (f : α -> α')
-  body: bimap f id
-
-中文:
-缩写 fst
-  签名: {α α' β} (f : α -> α')
-  定义体: bimap f id
+--- 原说明 ---
+Left map of a bifunctor.
 -/
-abbrev fst {α α' β} (f : α -> α') : F α β -> F α' β :=
+abbrev fst {α α' β} (f : α → α') : F α β → F α' β :=
   bimap f id
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- Right map of a bifunctor. -/
+/-
+**Bifunctor.snd** 是 Mathlib 中的一个缩写定义，位于命名空间 `Bifunctor`。
+形式化陈述：snd {α β β'} (f : β -> β') : F α β -> F α β'
+参数：f : β -> β'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation snd
-  signature: {α β β'} (f : β -> β')
-  body: bimap id f
-
-中文:
-缩写 snd
-  签名: {α β β'} (f : β -> β')
-  定义体: bimap id f
+--- 原说明 ---
+Right map of a bifunctor.
 -/
-abbrev snd {α β β'} (f : β -> β') : F α β -> F α β' :=
+abbrev snd {α β β'} (f : β → β') : F α β → F α β' :=
   bimap id f
 
 variable [LawfulBifunctor F]
 
 @[higher_order fst_id]
-/--
-theorem `id_fst` / 定理 `id_fst`
-
-English:
-theorem id_fst
-  statement: forall {α β} (x : F α β), fst id x = x
-  proof: @id_bimap _ _ _
-
-@[higher_order snd_id]
-
-中文:
-定理 id_fst
-  结论: 对任意 {α β} (x : F α β), fst id x = x
-  证明: @id_bimap _ _ _
-
-@[higher_order snd_id]
-
-Depends on / 依赖: id_bimap
+/-
+**Bifunctor.id_fst** 是 Mathlib 中的一个定理，位于命名空间 `Bifunctor`。
+形式化陈述：id_fst : forall {α β} (x : F α β), fst id x = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LawfulBifunctor.id_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst : Bi
+functor F} [self : LawfulBifunctor F] {α : Type u₀} {β : Type u₁}   (x : F α β),
+ bimap id id x…
 -/
-theorem id_fst : forall {α β} (x : F α β), fst id x = x :=
+theorem id_fst : ∀ {α β} (x : F α β), fst id x = x :=
   @id_bimap _ _ _
 
 @[higher_order snd_id]
-/--
-theorem `id_snd` / 定理 `id_snd`
-
-English:
-theorem id_snd
-  statement: forall {α β} (x : F α β), snd id x = x
-  proof: @id_bimap _ _ _
-
-@[higher_order fst_comp_fst]
-
-中文:
-定理 id_snd
-  结论: 对任意 {α β} (x : F α β), snd id x = x
-  证明: @id_bimap _ _ _
-
-@[higher_order fst_comp_fst]
-
-Depends on / 依赖: id_bimap
+/-
+**Bifunctor.id_snd** 是 Mathlib 中的一个定理，位于命名空间 `Bifunctor`。
+形式化陈述：id_snd : forall {α β} (x : F α β), snd id x = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LawfulBifunctor.id_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst : Bi
+functor F} [self : LawfulBifunctor F] {α : Type u₀} {β : Type u₁}   (x : F α β),
+ bimap id id x…
 -/
-theorem id_snd : forall {α β} (x : F α β), snd id x = x :=
+theorem id_snd : ∀ {α β} (x : F α β), snd id x = x :=
   @id_bimap _ _ _
 
 @[higher_order fst_comp_fst]
-/--
-theorem `comp_fst` / 定理 `comp_fst`
-
-English:
-theorem comp_fst
-  given: {α₀ α₁ α₂ β} (f : α₀ -> α₁) (f' : α₁ -> α₂) (x : F α₀ β)
-  proof: by simp [fst, bimap_bimap]
-
-@[higher_order fst_comp_snd]
-
-中文:
-定理 comp_fst
-  条件: {α₀ α₁ α₂ β} (f : α₀ -> α₁) (f' : α₁ -> α₂) (x : F α₀ β)
-  证明: by simp [fst, bimap_bimap]
-
-@[higher_order fst_comp_snd]
-
-Depends on / 依赖: bimap_bimap
+/-
+**Bifunctor.comp_fst** 是 Mathlib 中的一个定理，位于命名空间 `Bifunctor`。
+形式化陈述：comp_fst {α₀ α₁ α₂ β} (f : α₀ -> α₁) (f' : α₁ -> α₂) (x : F α₀ β) : fst f'
+ (fst f x) = fst (f' ∘ f) x
+参数：f : α₀ -> α₁；f' : α₁ -> α₂；x : F α₀ β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulBifunctor.bimap_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α₀ α₁ α₂ : Type u₀}   {β₀ β₁ β₂ : Type
+ u₁} (f : α₀ → α₁…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_fst {α₀ α₁ α₂ β} (f : α₀ -> α₁) (f' : α₁ -> α₂) (x : F α₀ β) :
+theorem comp_fst {α₀ α₁ α₂ β} (f : α₀ → α₁) (f' : α₁ → α₂) (x : F α₀ β) :
     fst f' (fst f x) = fst (f' ∘ f) x := by simp [fst, bimap_bimap]
 
 @[higher_order fst_comp_snd]
-/--
-theorem `fst_snd` / 定理 `fst_snd`
-
-English:
-theorem fst_snd
-  given: {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀)
-  proof: by simp [fst, bimap_bimap]
-
-@[higher_order snd_comp_fst]
-
-中文:
-定理 fst_snd
-  条件: {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀)
-  证明: by simp [fst, bimap_bimap]
-
-@[higher_order snd_comp_fst]
-
-Depends on / 依赖: bimap_bimap
+/-
+**Bifunctor.fst_snd** 是 Mathlib 中的一个定理，位于命名空间 `Bifunctor`。
+形式化陈述：fst_snd {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀) : fst f
+ (snd f' x) = bimap f f' x
+参数：f : α₀ -> α₁；f' : β₀ -> β₁；x : F α₀ β₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulBifunctor.bimap_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α₀ α₁ α₂ : Type u₀}   {β₀ β₁ β₂ : Type
+ u₁} (f : α₀ → α₁…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem fst_snd {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀) :
+theorem fst_snd {α₀ α₁ β₀ β₁} (f : α₀ → α₁) (f' : β₀ → β₁) (x : F α₀ β₀) :
     fst f (snd f' x) = bimap f f' x := by simp [fst, bimap_bimap]
 
 @[higher_order snd_comp_fst]
-/--
-theorem `snd_fst` / 定理 `snd_fst`
-
-English:
-theorem snd_fst
-  given: {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀)
-  proof: by simp [snd, bimap_bimap]
-
-@[higher_order snd_comp_snd]
-
-中文:
-定理 snd_fst
-  条件: {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀)
-  证明: by simp [snd, bimap_bimap]
-
-@[higher_order snd_comp_snd]
-
-Depends on / 依赖: bimap_bimap
+/-
+**Bifunctor.snd_fst** 是 Mathlib 中的一个定理，位于命名空间 `Bifunctor`。
+形式化陈述：snd_fst {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀) : snd f
+' (fst f x) = bimap f f' x
+参数：f : α₀ -> α₁；f' : β₀ -> β₁；x : F α₀ β₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulBifunctor.bimap_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α₀ α₁ α₂ : Type u₀}   {β₀ β₁ β₂ : Type
+ u₁} (f : α₀ → α₁…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem snd_fst {α₀ α₁ β₀ β₁} (f : α₀ -> α₁) (f' : β₀ -> β₁) (x : F α₀ β₀) :
+theorem snd_fst {α₀ α₁ β₀ β₁} (f : α₀ → α₁) (f' : β₀ → β₁) (x : F α₀ β₀) :
     snd f' (fst f x) = bimap f f' x := by simp [snd, bimap_bimap]
 
 @[higher_order snd_comp_snd]
-/--
-theorem `comp_snd` / 定理 `comp_snd`
-
-English:
-theorem comp_snd
-  given: {α β₀ β₁ β₂} (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α β₀)
-  proof: by simp [snd, bimap_bimap]
-
-中文:
-定理 comp_snd
-  条件: {α β₀ β₁ β₂} (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α β₀)
-  证明: by simp [snd, bimap_bimap]
-
-Depends on / 依赖: bimap_bimap
+/-
+**Bifunctor.comp_snd** 是 Mathlib 中的一个定理，位于命名空间 `Bifunctor`。
+形式化陈述：comp_snd {α β₀ β₁ β₂} (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α β₀) : snd g'
+ (snd g x) = snd (g' ∘ g) x
+参数：g : β₀ -> β₁；g' : β₁ -> β₂；x : F α β₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulBifunctor.bimap_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α₀ α₁ α₂ : Type u₀}   {β₀ β₁ β₂ : Type
+ u₁} (f : α₀ → α₁…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_snd {α β₀ β₁ β₂} (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α β₀) :
+theorem comp_snd {α β₀ β₁ β₂} (g : β₀ → β₁) (g' : β₁ → β₂) (x : F α β₀) :
     snd g' (snd g x) = snd (g' ∘ g) x := by simp [snd, bimap_bimap]
 
 attribute [functor_norm]
@@ -263,156 +226,103 @@ end Bifunctor
 
 open Functor
 
-/--
-Instance `Prod.bifunctor` / 实例 `Prod.bifunctor`
-
-English:
-instance Prod.bifunctor
-  signature: : Bifunctor Prod where bimap
-  body: @Prod.map
-
-中文:
-实例 积类型.bifunctor
-  签名: : 双函子 积类型 where bimap
-  定义体: @Prod.map
-
-Depends on / 依赖: Prod.map
+/-
+**Prod.bifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.bifunctor : Bifunctor Prod where bimap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prod.bifunctor : Bifunctor Prod where bimap := @Prod.map
-
-/--
-Instance `Prod.lawfulBifunctor` / 实例 `Prod.lawfulBifunctor`
-
-English:
-instance Prod.lawfulBifunctor
-  signature: : LawfulBifunctor Prod where
-  body: rfl
-  bimap_bimap _ _ _ _ _ := rfl
-
-中文:
-实例 积类型.lawfulBifunctor
-  签名: : LawfulBifunctor 积类型 where
-  定义体: rfl
-  bimap_bimap _ _ _ _ _ := rfl
+/-
+**Prod.lawfulBifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.lawfulBifunctor : LawfulBifunctor Prod where id_bimap _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prod.lawfulBifunctor : LawfulBifunctor Prod where
   id_bimap _ := rfl
   bimap_bimap _ _ _ _ _ := rfl
-
-/--
-Instance `Bifunctor.const` / 实例 `Bifunctor.const`
-
-English:
-instance Bifunctor.const
-  signature: : Bifunctor Const where bimap f _
-  body: f
-
-中文:
-实例 双函子.const
-  签名: : 双函子 Const where bimap f _
-  定义体: f
+/-
+**Bifunctor.const** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Bifunctor.const : Bifunctor Const where bimap f _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Bifunctor.const : Bifunctor Const where bimap f _ := f
-
-/--
-Instance `LawfulBifunctor.const` / 实例 `LawfulBifunctor.const`
-
-English:
-instance LawfulBifunctor.const
-  signature: : LawfulBifunctor Const where
-  body: rfl
-  bimap_bimap _ _ _ _ _ := rfl
-
-中文:
-实例 LawfulBifunctor.const
-  签名: : LawfulBifunctor Const where
-  定义体: rfl
-  bimap_bimap _ _ _ _ _ := rfl
+/-
+**LawfulBifunctor.const** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：LawfulBifunctor.const : LawfulBifunctor Const where id_bimap _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance LawfulBifunctor.const : LawfulBifunctor Const where
   id_bimap _ := rfl
   bimap_bimap _ _ _ _ _ := rfl
-
-/--
-Instance `Bifunctor.flip` / 实例 `Bifunctor.flip`
-
-English:
-instance Bifunctor.flip
-  signature: : Bifunctor (flip F) where
-  body: (bimap f' f x : F β' α')
-
-中文:
-实例 双函子.flip
-  签名: : 双函子 (flip F) where
-  定义体: (bimap f' f x : F β' α')
+/-
+**Bifunctor.flip** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Bifunctor.flip : Bifunctor (flip F) where bimap {_α α' _β β'} f f' x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Bifunctor.flip : Bifunctor (flip F) where
   bimap {_α α' _β β'} f f' x := (bimap f' f x : F β' α')
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `LawfulBifunctor.flip` / 实例 `LawfulBifunctor.flip`
-
-English:
-instance LawfulBifunctor.flip
-  signature: [LawfulBifunctor F]
-  body: by simp [bimap, functor_norm]
-  bimap_bimap := by simp [bimap, functor_norm]
-
-中文:
-实例 LawfulBifunctor.flip
-  签名: [LawfulBifunctor F]
-  定义体: by simp [bimap, functor_norm]
-  bimap_bimap := by simp [bimap, functor_norm]
-
-Depends on / 依赖: bimap_bimap, functor_norm
+/-
+**LawfulBifunctor.flip** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：LawfulBifunctor.flip [LawfulBifunctor F] : LawfulBifunctor (flip F) where 
+id_bimap
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `LawfulBifunctor.bimap_id_id`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α : Type u₀} {β : Type u₁},   bimap id
+ id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `LawfulBifunctor.bimap_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α₀ α₁ α₂ : Type u₀}   {β₀ β₁ β₂ : Type
+ u₁} (f : α₀ → α₁…
 -/
 instance LawfulBifunctor.flip [LawfulBifunctor F] : LawfulBifunctor (flip F) where
   id_bimap := by simp [bimap, functor_norm]
   bimap_bimap := by simp [bimap, functor_norm]
-
-/--
-Instance `Sum.bifunctor` / 实例 `Sum.bifunctor`
-
-English:
-instance Sum.bifunctor
-  signature: : Bifunctor Sum where bimap
-  body: @Sum.map
-
-中文:
-实例 和.bifunctor
-  签名: : 双函子 和 where bimap
-  定义体: @Sum.map
-
-Depends on / 依赖: Sum.map
+/-
+**Sum.bifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Sum.bifunctor : Bifunctor Sum where bimap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Sum.bifunctor : Bifunctor Sum where bimap := @Sum.map
-
-/--
-Instance `Sum.lawfulBifunctor` / 实例 `Sum.lawfulBifunctor`
-
-English:
-instance Sum.lawfulBifunctor
-  signature: : LawfulBifunctor Sum where
-  body: by aesop
-  bimap_bimap := by aesop
-
-中文:
-实例 和.lawfulBifunctor
-  签名: : LawfulBifunctor 和 where
-  定义体: by aesop
-  bimap_bimap := by aesop
-
-Depends on / 依赖: bimap_bimap
+/-
+**Sum.lawfulBifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Sum.lawfulBifunctor : LawfulBifunctor Sum where id_bimap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Sum.lawfulBifunctor : LawfulBifunctor Sum where
   id_bimap := by aesop
   bimap_bimap := by aesop
 
 open Bifunctor
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 10) Bifunctor.functor {α} : Functor (F α) where map f x := snd f x
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 10) Bifunctor.lawfulFunctor [LawfulBifunctor F] {α} :
     LawfulFunctor (F α) where
   id_map := by simp [Functor.map, functor_norm]
@@ -421,41 +331,45 @@ instance (priority := 10) Bifunctor.lawfulFunctor [LawfulBifunctor F] {α} :
 
 section Bicompl
 
-variable (G : Type* -> Type u₀) (H : Type* -> Type u₁) [Functor G] [Functor H]
+variable (G : Type* → Type u₀) (H : Type* → Type u₁) [Functor G] [Functor H]
 
-/--
-Instance `Function.bicompl.bifunctor` / 实例 `Function.bicompl.bifunctor`
-
-English:
-instance Function.bicompl.bifunctor
-  signature: : Bifunctor (bicompl F G H) where
-  body: (bimap (map f) (map f') x : F (G α') (H β'))
-
-中文:
-实例 函数.bicompl.bifunctor
-  签名: : 双函子 (bicompl F G H) where
-  定义体: (bimap (map f) (map f') x : F (G α') (H β'))
+/-
+**Function.bicompl.bifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Function.bicompl.bifunctor : Bifunctor (bicompl F G H) where bimap {_α α' 
+_β β'} f f' x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Function.bicompl.bifunctor : Bifunctor (bicompl F G H) where
   bimap {_α α' _β β'} f f' x := (bimap (map f) (map f') x : F (G α') (H β'))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Function.bicompl.lawfulBifunctor` / 实例 `Function.bicompl.lawfulBifunctor`
-
-English:
-instance Function.bicompl.lawfulBifunctor
-  signature: [LawfulFunctor G] [LawfulFunctor H] [LawfulBifunctor F]
-  body: by
-  constructor <;> intros <;> simp [bimap, map_id, map_comp_map, functor_norm]
-
-中文:
-实例 函数.bicompl.lawfulBifunctor
-  签名: [Lawful函子 G] [Lawful函子 H] [LawfulBifunctor F]
-  定义体: by
-  constructor <;> intros <;> simp [bimap, map_id, map_comp_map, functor_norm]
-
-Depends on / 依赖: functor_norm, intros, map_comp_map, map_id
+/-
+**Function.bicompl.lawfulBifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Function.bicompl.lawfulBifunctor [LawfulFunctor G] [LawfulFunctor H] [Lawf
+ulBifunctor F] : LawfulBifunctor (bicompl F G H)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Functor.map_id`：Functor.map_id : (id <$> ·) = (id : F α -> F α)
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `LawfulBifunctor.bimap_id_id`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α : Type u₀} {β : Type u₁},   bimap id
+ id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LawfulBifunctor.bimap_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α₀ α₁ α₂ : Type u₀}   {β₀ β₁ β₂ : Type
+ u₁} (f : α₀ → α₁…
+· 使用定理 `Functor.map_comp_map`：Functor.map_comp_map (f : α -> β) (g : β -> γ) : (
+(g <$> ·) ∘ (f <$> ·) : F α -> F γ) = ((g ∘ f) <$> ·)
 -/
 instance Function.bicompl.lawfulBifunctor [LawfulFunctor G] [LawfulFunctor H] [LawfulBifunctor F] :
     LawfulBifunctor (bicompl F G H) := by
@@ -465,44 +379,49 @@ end Bicompl
 
 section Bicompr
 
-variable (G : Type u₂ -> Type*) [Functor G]
+variable (G : Type u₂ → Type*) [Functor G]
 
-/--
-Instance `Function.bicompr.bifunctor` / 实例 `Function.bicompr.bifunctor`
-
-English:
-instance Function.bicompr.bifunctor
-  signature: : Bifunctor (bicompr G F) where
-  body: (map (bimap f f') x : G (F α' β'))
-
-中文:
-实例 函数.bicompr.bifunctor
-  签名: : 双函子 (bicompr G F) where
-  定义体: (map (bimap f f') x : G (F α' β'))
+/-
+**Function.bicompr.bifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Function.bicompr.bifunctor : Bifunctor (bicompr G F) where bimap {_α α' _β
+ β'} f f' x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Function.bicompr.bifunctor : Bifunctor (bicompr G F) where
   bimap {_α α' _β β'} f f' x := (map (bimap f f') x : G (F α' β'))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `Function.bicompr.lawfulBifunctor` / 实例 `Function.bicompr.lawfulBifunctor`
-
-English:
-instance Function.bicompr.lawfulBifunctor
-  signature: [LawfulFunctor G] [LawfulBifunctor F]
-  body: by
-  constructor <;> intros <;> simp [bimap, functor_norm]
-
-中文:
-实例 函数.bicompr.lawfulBifunctor
-  签名: [Lawful函子 G] [LawfulBifunctor F]
-  定义体: by
-  constructor <;> intros <;> simp [bimap, functor_norm]
-
-Depends on / 依赖: functor_norm, intros
+/-
+**Function.bicompr.lawfulBifunctor** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Function.bicompr.lawfulBifunctor [LawfulFunctor G] [LawfulBifunctor F] : L
+awfulBifunctor (bicompr G F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulBifunctor.bimap_id_id`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α : Type u₀} {β : Type u₁},   bimap id
+ id = id
+· 使用定理 `LawfulFunctor.id_map`：∀ {f : Type u → Type v} {inst : Functor f} [self :
+ LawfulFunctor f] {α : Type u} (x : f α), id <$> x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Functor.map_map`：∀ {f : Type u_1 → Type u_2} {α β γ : Type u_1} [inst : 
+Functor f] [LawfulFunctor f] (m : α → β) (g : β → γ) (x : f α),   g <$> m <$> x 
+= (fu…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulBifunctor.bimap_bimap`：∀ {F : Type u₀ → Type u₁ → Type u₂} {inst :
+ Bifunctor F} [self : LawfulBifunctor F] {α₀ α₁ α₂ : Type u₀}   {β₀ β₁ β₂ : Type
+ u₁} (f : α₀ → α₁…
 -/
 instance Function.bicompr.lawfulBifunctor [LawfulFunctor G] [LawfulBifunctor F] :
     LawfulBifunctor (bicompr G F) := by
   constructor <;> intros <;> simp [bimap, functor_norm]
 
 end Bicompr
+

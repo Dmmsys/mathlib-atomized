@@ -26,24 +26,12 @@ as an open normal subgroup. It is, in fact, clopen. -/
 @[to_additive (attr := simps!)
 /-- The path component of the identity in a locally path connected additive topological group,
 as an open normal additive subgroup. It is, in fact, clopen. -/]
-/--
-Definition of `OpenNormalSubgroup.pathComponentOne` / `OpenNormalSubgroup.pathComponentOne` 的定义
-
-English:
-definition OpenNormalSubgroup.pathComponentOne
-  signature: [Group G]
-  body: .pathComponentOne G
-  isOpen' := .pathComponent 1
-  isNormal' := .pathComponentOne G
-
-中文:
-定义 OpenNormal子群.pathComponentOne
-  签名: [群 G]
-  定义体: .pathComponentOne G
-  isOpen' := .pathComponent 1
-  isNormal' := .pathComponentOne G
-
-Depends on / 依赖: pathComponentOne
+/-
+**OpenNormalSubgroup.pathComponentOne** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OpenNormalSubgroup.pathComponentOne [Group G] [IsTopologicalGroup G] [Loca
+llyPathConnectedSpace G] : OpenNormalSubgroup G where toSubgroup
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def OpenNormalSubgroup.pathComponentOne [Group G]
     [IsTopologicalGroup G] [LocallyPathConnectedSpace G] :
@@ -55,20 +43,9 @@ def OpenNormalSubgroup.pathComponentOne [Group G]
 namespace OpenNormalSubgroup
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: G] [IsTopologicalGroup G] [LocallyPathConnectedSpace G] :
-  body: .pathComponent 1
-
-中文:
-实例 [群
-  签名: G] [是拓扑群 G] [LocallyPathConnected空间 G] :
-  定义体: .pathComponent 1
-
-Depends on / 依赖: pathComponent
+/-
+**OpenNormalSubgroup.** 是 Mathlib 中的一个实例，位于命名空间 `OpenNormalSubgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group G] [IsTopologicalGroup G] [LocallyPathConnectedSpace G] :
     IsClosed (OpenNormalSubgroup.pathComponentOne G : Set G) :=
@@ -77,3 +54,4 @@ instance [Group G] [IsTopologicalGroup G] [LocallyPathConnectedSpace G] :
 end OpenNormalSubgroup
 
 end PathComponentOne
+

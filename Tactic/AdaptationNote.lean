@@ -8,7 +8,7 @@ module
 public meta import Lean.Meta.Tactic.TryThis
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public meta import Mathlib.Tactic.Linter.Header -- shake: keep
+public meta import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # Adaptation notes
@@ -25,50 +25,19 @@ open Lean
 
 initialize registerTraceClass `adaptationNote
 
-/--
-Definition of `reportAdaptationNote` / `reportAdaptationNote` 的定义
+/-- General function implementing adaptation notes. -/
+/-
+**reportAdaptationNote** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：reportAdaptationNote (f : Syntax -> Meta.Tactic.TryThis.Suggestion) : Meta
+M Unit
+参数：f : Syntax -> Meta.Tactic.TryThis.Suggestion。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reportAdaptationNote
-  signature: (f : Syntax -> Meta.Tactic.TryThis.Suggestion)
-  body: do
-  let stx ← getRef
-  if let some doc := stx[1].getOptional? then
-    trace[adaptationNote] (Lean.TSyntax.getDocString ⟨doc⟩)
-  else
-    logError "Adaptation notes must be followed by a /-- comment -/"
-    let trailing := if let .original (trailing := s) .. := stx[0].getTailInfo then s else default
-    let doc : Syntax :=
-      Syntax.node2 .none ``Parser.Command.docComment (mkAtom "/--") (mkAtom "comment -/")
-    -- Optional: copy the original whitespace after the `#adaptation_note` token
-    -- to after the docstring comment
-    let doc := doc.updateTrailing trailing
-    let stx' := (← getRef)
-    let stx' := stx'.setArg 0 stx'[0].unsetTrailing
-    let stx' := stx'.setArg 1 (mkNullNode #[doc])
-    Meta.Tactic.TryThis.addSuggestion (← getRef) (f stx') (origSpan? := ← getRef)
-
-中文:
-定义 reportAdaptationNote
-  签名: (f : Syntax -> Meta.Tactic.TryThis.Suggestion)
-  定义体: do
-  let stx ← getRef
-  if let some doc := stx[1].getOptional? then
-    trace[adaptationNote] (Lean.TSyntax.getDocString ⟨doc⟩)
-  else
-    logError "Adaptation notes must be followed by a /-- comment -/"
-    let trailing := if let .original (trailing := s) .. := stx[0].getTailInfo then s else default
-    let doc : Syntax :=
-      Syntax.node2 .none ``Parser.Command.docComment (mkAtom "/--") (mkAtom "comment -/")
-    -- Optional: copy the original whitespace after the `#adaptation_note` token
-    -- to after the docstring comment
-    let doc := doc.updateTrailing trailing
-    let stx' := (← getRef)
-    let stx' := stx'.setArg 0 stx'[0].unsetTrailing
-    let stx' := stx'.setArg 1 (mkNullNode #[doc])
-    Meta.Tactic.TryThis.addSuggestion (← getRef) (f stx') (origSpan? := ← getRef)
+--- 原说明 ---
+General function implementing adaptation notes.
 -/
-def reportAdaptationNote (f : Syntax -> Meta.Tactic.TryThis.Suggestion) : MetaM Unit := do
+def reportAdaptationNote (f : Syntax → Meta.Tactic.TryThis.Suggestion) : MetaM Unit := do
   let stx ← getRef
   if let some doc := stx[1].getOptional? then
     trace[adaptationNote] (Lean.TSyntax.getDocString ⟨doc⟩)
@@ -93,7 +62,7 @@ They typically require further action/maintenance to be taken in the future.
 This syntax works as a command, or inline in tactic or term mode.
 -/
 elab (name := adaptationNoteCmd) "#adaptation_note " (docComment)? : command => do
-Elab.Command.liftTermElabM reportAdaptationNote (fun s => (⟨s⟩ : TSyntax `tactic))
+  Elab.Command.liftTermElabM <| reportAdaptationNote (fun s => (⟨s⟩ : TSyntax `tactic))
 
 @[inherit_doc adaptationNoteCmd]
 elab "#adaptation_note " (docComment)? : tactic =>
@@ -104,32 +73,17 @@ syntax (name := adaptationNoteTermStx) "#adaptation_note " (docComment)? term : 
 
 /-- Elaborator for adaptation notes. -/
 @[term_elab adaptationNoteTermStx]
-/--
-Definition of `adaptationNoteTermElab` / `adaptationNoteTermElab` 的定义
+/-
+**adaptationNoteTermElab** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：adaptationNoteTermElab : Elab.Term.TermElab | `(#adaptation_note $[$_]? $t
+) => fun expectedType? => do reportAdaptationNote (fun s => (⟨s⟩ : Term)) Elab.T
+erm.elabTerm t expectedType? | _ => fun _ => Elab.throwUnsupportedSyntax   #adap
+tation_note /-- This is a test -/  example : True
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adaptationNoteTermElab
-  signature: : Elab.Term.TermElab
-  body: by
-  #adaptation_note /-- This is a test -/
-  trivial
-
-example : True :=
-  #adaptation_note /-- This is a test -/
-  trivial
-
-中文:
-定义 adaptationNoteTermElab
-  签名: : Elab.项.TermElab
-  定义体: by
-  #adaptation_note /-- This is a test -/
-  trivial
-
-example : True :=
-  #adaptation_note /-- This is a test -/
-  trivial
-
-Depends on / 依赖: adaptation_note
+--- 原说明 ---
+Elaborator for adaptation notes.
 -/
 def adaptationNoteTermElab : Elab.Term.TermElab
   | `(#adaptation_note $[$_]? $t) => fun expectedType? => do
@@ -139,11 +93,20 @@ def adaptationNoteTermElab : Elab.Term.TermElab
 
 
 #adaptation_note /-- This is a test -/
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
+--- 原说明 ---
+This is a test
+-/
 example : True := by
   #adaptation_note /-- This is a test -/
   trivial
-
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : True :=
   #adaptation_note /-- This is a test -/
   trivial

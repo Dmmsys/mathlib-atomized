@@ -68,111 +68,21 @@ when applicable:
 * Instances transferred elementwise to products, like `Prod.Monoid`.
   See `Mathlib/Algebra/Group/Prod.lean` for more examples.
   ```
-/--
-Instance `Prod.Z` / 实例 `Prod.Z`
-
-English:
-instance Prod.Z
-  signature: [Z M] [Z N]
-  body: ...
-  ```
-* Instances transferred elementwise to pi types, like `Pi.Monoid`.
-  See `Mathlib/Algebra/Group/Pi/Basic.lean` for more examples.
-  ```
-
-中文:
-实例 积类型.Z
-  签名: [Z M] [Z N]
-  定义体: ...
-  ```
-* Instances transferred elementwise to pi types, like `Pi.Monoid`.
-  See `Mathlib/Algebra/Group/Pi/Basic.lean` for more examples.
-  ```
--/
   instance Prod.Z [Z M] [Z N] : Z (M × N) := ...
   ```
 * Instances transferred elementwise to pi types, like `Pi.Monoid`.
   See `Mathlib/Algebra/Group/Pi/Basic.lean` for more examples.
   ```
-/--
-Instance `Pi.Z` / 实例 `Pi.Z`
-
-English:
-instance Pi.Z
-  signature: [∀ i, Z <| f i]
-  body: ...
-  ```
-* Instances transferred to `MulOpposite M`, like `MulOpposite.Monoid`.
-  See `Mathlib/Algebra/Opposites.lean` for more examples.
-  ```
-
-中文:
-实例 依赖函数类型.Z
-  签名: [∀ i, Z <| f i]
-  定义体: ...
-  ```
-* Instances transferred to `MulOpposite M`, like `MulOpposite.Monoid`.
-  See `Mathlib/Algebra/Opposites.lean` for more examples.
-  ```
--/
   instance Pi.Z [∀ i, Z <| f i] : Z (Π i : I, f i) := ...
   ```
 * Instances transferred to `MulOpposite M`, like `MulOpposite.Monoid`.
   See `Mathlib/Algebra/Opposites.lean` for more examples.
   ```
-/--
-Instance `MulOpposite.Z` / 实例 `MulOpposite.Z`
-
-English:
-instance MulOpposite.Z
-  signature: [Z M]
-  body: ...
-  ```
-* Instances transferred to `ULift M`, like `ULift.Monoid`.
-  See `Mathlib/Algebra/Group/ULift.lean` for more examples.
-  ```
-
-中文:
-实例 MulOpposite.Z
-  签名: [Z M]
-  定义体: ...
-  ```
-* Instances transferred to `ULift M`, like `ULift.Monoid`.
-  See `Mathlib/Algebra/Group/ULift.lean` for more examples.
-  ```
--/
   instance MulOpposite.Z [Z M] : Z (MulOpposite M) := ...
   ```
 * Instances transferred to `ULift M`, like `ULift.Monoid`.
   See `Mathlib/Algebra/Group/ULift.lean` for more examples.
   ```
-/--
-Instance `ULift.Z` / 实例 `ULift.Z`
-
-English:
-instance ULift.Z
-  signature: [Z M]
-  body: ...
-  ```
-* Definitions for transferring the proof fields of instances along
-  injective or surjective functions that agree on the data fields,
-  like `Function.Injective.monoid` and `Function.Surjective.monoid`.
-  We make these definitions `abbrev`, see note [reducible non-instances].
-  See `Mathlib/Algebra/Group/InjSurj.lean` for more examples.
-  ```
-
-中文:
-实例 类型层提升.Z
-  签名: [Z M]
-  定义体: ...
-  ```
-* Definitions for transferring the proof fields of instances along
-  injective or surjective functions that agree on the data fields,
-  like `Function.Injective.monoid` and `Function.Surjective.monoid`.
-  We make these definitions `abbrev`, see note [reducible non-instances].
-  See `Mathlib/Algebra/Group/InjSurj.lean` for more examples.
-  ```
--/
   instance ULift.Z [Z M] : Z (ULift M) := ...
   ```
 * Definitions for transferring the proof fields of instances along
@@ -181,171 +91,28 @@ instance ULift.Z
   We make these definitions `abbrev`, see note [reducible non-instances].
   See `Mathlib/Algebra/Group/InjSurj.lean` for more examples.
   ```
-/--
-Definition of `Function.Injective.Z` / `Function.Injective.Z` 的定义
-
-English:
-abbreviation Function.Injective.Z
-  signature: [Z M₂] (f : M₁ → M₂) (hf : f.Injective)
-  body: ...
-
-中文:
-缩写 函数.单射.Z
-  签名: [Z M₂] (f : M₁ → M₂) (hf : f.单射)
-  定义体: ...
--/
   abbrev Function.Injective.Z [Z M₂] (f : M₁ → M₂) (hf : f.Injective)
     (one : f 1 = 1) (mul : ∀ x y, f (x * y) = f x * f y) : Z M₁ := ...
 
-/--
-Definition of `Function.Surjective.Z` / `Function.Surjective.Z` 的定义
-
-English:
-abbreviation Function.Surjective.Z
-  signature: [Z M₁] (f : M₁ → M₂) (hf : f.Surjective)
-  body: ...
-  ```
-* Instances transferred elementwise to `Finsupp`s, like `Finsupp.semigroup`.
-  See `Mathlib/Data/Finsupp/Pointwise.lean` for more examples.
-  ```
-
-中文:
-缩写 函数.满射.Z
-  签名: [Z M₁] (f : M₁ → M₂) (hf : f.满射)
-  定义体: ...
-  ```
-* Instances transferred elementwise to `Finsupp`s, like `Finsupp.semigroup`.
-  See `Mathlib/Data/Finsupp/Pointwise.lean` for more examples.
-  ```
--/
   abbrev Function.Surjective.Z [Z M₁] (f : M₁ → M₂) (hf : f.Surjective)
     (one : f 1 = 1) (mul : ∀ x y, f (x * y) = f x * f y) : Z M₂ := ...
   ```
 * Instances transferred elementwise to `Finsupp`s, like `Finsupp.semigroup`.
   See `Mathlib/Data/Finsupp/Pointwise.lean` for more examples.
   ```
-/--
-Instance `Finsupp.Z` / 实例 `Finsupp.Z`
-
-English:
-instance Finsupp.Z
-  signature: [Z β]
-  body: ...
-  ```
-* Instances transferred elementwise to `Set`s, like `Set.monoid`.
-  See `Mathlib/Algebra/Group/Pointwise/Set/Basic.lean` for more examples.
-  ```
-
-中文:
-实例 有限支撑.Z
-  签名: [Z β]
-  定义体: ...
-  ```
-* Instances transferred elementwise to `Set`s, like `Set.monoid`.
-  See `Mathlib/Algebra/Group/Pointwise/Set/Basic.lean` for more examples.
-  ```
--/
   instance Finsupp.Z [Z β] : Z (α →₀ β) := ...
   ```
 * Instances transferred elementwise to `Set`s, like `Set.monoid`.
   See `Mathlib/Algebra/Group/Pointwise/Set/Basic.lean` for more examples.
   ```
-/--
-Instance `Set.Z` / 实例 `Set.Z`
-
-English:
-instance Set.Z
-  signature: [Z α]
-  body: ...
-  ```
-* Definitions for transferring the entire structure across an equivalence, like `Equiv.monoid`.
-  See `Mathlib/Algebra/Group/TransferInstance.lean` for more examples. See also the `transport`
-  tactic.
-  ```
-
-中文:
-实例 集合.Z
-  签名: [Z α]
-  定义体: ...
-  ```
-* Definitions for transferring the entire structure across an equivalence, like `Equiv.monoid`.
-  See `Mathlib/Algebra/Group/TransferInstance.lean` for more examples. See also the `transport`
-  tactic.
-  ```
--/
   instance Set.Z [Z α] : Z (Set α) := ...
   ```
 * Definitions for transferring the entire structure across an equivalence, like `Equiv.monoid`.
   See `Mathlib/Algebra/Group/TransferInstance.lean` for more examples. See also the `transport`
   tactic.
   ```
-/--
-Definition of `Equiv.Z` / `Equiv.Z` 的定义
-
-English:
-definition Equiv.Z
-  signature: (e : α ≃ β) [Z β]
-  body: ...
-
-中文:
-定义 等价.Z
-  签名: (e : α ≃ β) [Z β]
-  定义体: ...
--/
   def Equiv.Z (e : α ≃ β) [Z β] : Z α := ...
-/--
-Definition of `Equiv.ZEquiv` / `Equiv.ZEquiv` 的定义
-
-English:
-definition Equiv.ZEquiv
-  signature: (e : α ≃ β) [Z β]
-  body: ...
-  ```
-
-## Subobjects
-
-When a new typeclass `Z` adds new data fields,
-you should also create a new `SubZ` `structure` with a `carrier` field.
-
-This can be a lot of work; for now try to closely follow the existing examples
-(e.g. `Submonoid`, `Subring`, `Subalgebra`).
-We would very much like to provide some automation here, but a prerequisite will be making
-all the existing APIs more uniform.
-
-If `Z` extends `Y`, then `SubZ` should usually extend `SubY`.
-
-When `Z` adds only new proof fields to an existing structure `Y`,
-you should provide instances transferring
-`Z α` to `Z (SubY α)`, like `Submonoid.toCommMonoid`.
-Typically this is done using the `Function.Injective.Z` definition mentioned above.
-```
-
-中文:
-定义 等价.ZEquiv
-  签名: (e : α ≃ β) [Z β]
-  定义体: ...
-  ```
-
-## Subobjects
-
-When a new typeclass `Z` adds new data fields,
-you should also create a new `SubZ` `structure` with a `carrier` field.
-
-This can be a lot of work; for now try to closely follow the existing examples
-(e.g. `Submonoid`, `Subring`, `Subalgebra`).
-We would very much like to provide some automation here, but a prerequisite will be making
-all the existing APIs more uniform.
-
-If `Z` extends `Y`, then `SubZ` should usually extend `SubY`.
-
-When `Z` adds only new proof fields to an existing structure `Y`,
-you should provide instances transferring
-`Z α` to `Z (SubY α)`, like `Submonoid.toCommMonoid`.
-Typically this is done using the `Function.Injective.Z` definition mentioned above.
-```
-
-Depends on / 依赖: Equiv.Z
--/
+  /-- When there is a new notion of `Z`-equiv: -/
   def Equiv.ZEquiv (e : α ≃ β) [Z β] : by { letI := Equiv.Z e, exact α ≃Z β } := ...
   ```
 
@@ -366,191 +133,6 @@ you should provide instances transferring
 `Z α` to `Z (SubY α)`, like `Submonoid.toCommMonoid`.
 Typically this is done using the `Function.Injective.Z` definition mentioned above.
 ```
-/--
-Instance `SubY.toZ` / 实例 `SubY.toZ`
-
-English:
-instance SubY.toZ
-  signature: [Z α]
-  body: coe_injective.Z coe ...
-```
-
-## Morphisms and equivalences
-
-## Category theory
-
-For many algebraic structures, particularly ones used in representation theory, algebraic geometry,
-etc., we also define "bundled" versions, which carry `category` instances.
-
-These bundled versions are usually named by appending `Cat`,
-so for example we have `AddCommGrpCat` as a bundled `AddCommGroup`, and `TopCommRingCat`
-(which bundles together `CommRing`, `TopologicalSpace`, and `IsTopologicalRing`).
-
-These bundled versions have many appealing features:
-* a uniform notation for morphisms `X ⟶ Y`
-* a uniform notation (and definition) for isomorphisms `X ≅ Y`
-* a uniform API for subobjects, via the partial order `Subobject X`
-* interoperability with unbundled structures, via coercions to `Type`
-  (so if `G : AddCommGrpCat`, you can treat `G` as a type,
-  and it automatically has an `AddCommGroup` instance)
-  and lifting maps `AddCommGrpCat.of G`, when `G` is a type with an `AddCommGroup` instance.
-
-If, for example you do the work of proving that a typeclass `Z` has a good notion of tensor product,
-you are strongly encouraged to provide the corresponding `MonoidalCategory` instance
-on a bundled version.
-This ensures that the API for tensor products is complete, and enables use of general machinery.
-Similarly if you prove universal properties, or adjunctions, you are encouraged to state these
-using categorical language!
-
-One disadvantage of the bundled approach is that we can only speak of morphisms between
-objects living in the same type-theoretic universe.
-In practice this is rarely a problem.
-
-# Making a pull request
-
-With so many moving parts, how do you actually go about changing the algebraic hierarchy?
-
-We're still evolving how to handle this, but the current suggestion is:
-
-* If you're adding a new "leaf" class, the requirements are lower,
-  and an initial PR can just add whatever is immediately needed.
-* A new "intermediate" class, especially low down in the hierarchy,
-  needs to be careful about leaving gaps.
-
-In a perfect world, there would be a group of simultaneous PRs that basically cover everything!
-(Or at least an expectation that PRs may not be merged immediately while waiting on other
-PRs that fill out the API.)
-
-However "perfect is the enemy of good", and it would also be completely reasonable
-to add a TODO list in the main module doc-string for the new class,
-briefly listing the parts of the API which still need to be provided.
-Hopefully this document makes it easy to assemble this list.
-
-Another alternative to a TODO list in the doc-strings is adding Github issues.
--/
-
-library_note «reducible non-instances» /--
-Some definitions that define objects of a class cannot be instances, because they have an
-explicit argument that does not occur in the conclusion. An example is `Preorder.lift` that has a
-function `f : α → β` as an explicit argument to lift a preorder on `β` to a preorder on `α`.
-
-If these definitions are used to define instances of this class *and* this class is an argument to
-some other type-class so that type-class inference will have to unfold these instances to check
-for definitional equality, then these definitions should be marked `@[reducible]`.
-
-For example, `Preorder.lift` is used to define `Units.Preorder` and `PartialOrder.lift` is used
-to define `Units.PartialOrder`. In some cases it is important that type-class inference can
-recognize that `Units.Preorder` and `Units.PartialOrder` give rise to the same `LE` instance.
-For example, you might have another class that takes `[LE α]` as an argument, and this argument
-sometimes comes from `Units.Preorder` and sometimes from `Units.PartialOrder`.
-Therefore, `Preorder.lift` and `PartialOrder.lift` are marked `@[reducible]`.
--/
-
-library_note «implicit instance arguments» /--
-There are places where typeclass arguments are specified with implicit `{}` brackets instead of
-the usual `[]` brackets. This is done when the instances can be inferred because they are implicit
-arguments to the type of one of the other arguments. There are several reasons for doing so.
-
-When they can be inferred from these other arguments,
-it is faster to use this method than to use type class inference.
-For example, when writing lemmas about `(f : α →+* β)`, it is faster to specify the fact that `α`
-and `β` are `Semiring`s as `{rα : Semiring α} {rβ : Semiring β}` rather than the usual
-`[Semiring α] [Semiring β]`.
-
-When handling non-canonical instances, it is necessary that the relevant declarations take these
-
-中文:
-实例 SubY.toZ
-  签名: [Z α]
-  定义体: coe_injective.Z coe ...
-```
-
-## Morphisms and equivalences
-
-## Category theory
-
-For many algebraic structures, particularly ones used in representation theory, algebraic geometry,
-etc., we also define "bundled" versions, which carry `category` instances.
-
-These bundled versions are usually named by appending `Cat`,
-so for example we have `AddCommGrpCat` as a bundled `AddCommGroup`, and `TopCommRingCat`
-(which bundles together `CommRing`, `TopologicalSpace`, and `IsTopologicalRing`).
-
-These bundled versions have many appealing features:
-* a uniform notation for morphisms `X ⟶ Y`
-* a uniform notation (and definition) for isomorphisms `X ≅ Y`
-* a uniform API for subobjects, via the partial order `Subobject X`
-* interoperability with unbundled structures, via coercions to `Type`
-  (so if `G : AddCommGrpCat`, you can treat `G` as a type,
-  and it automatically has an `AddCommGroup` instance)
-  and lifting maps `AddCommGrpCat.of G`, when `G` is a type with an `AddCommGroup` instance.
-
-If, for example you do the work of proving that a typeclass `Z` has a good notion of tensor product,
-you are strongly encouraged to provide the corresponding `MonoidalCategory` instance
-on a bundled version.
-This ensures that the API for tensor products is complete, and enables use of general machinery.
-Similarly if you prove universal properties, or adjunctions, you are encouraged to state these
-using categorical language!
-
-One disadvantage of the bundled approach is that we can only speak of morphisms between
-objects living in the same type-theoretic universe.
-In practice this is rarely a problem.
-
-# Making a pull request
-
-With so many moving parts, how do you actually go about changing the algebraic hierarchy?
-
-We're still evolving how to handle this, but the current suggestion is:
-
-* If you're adding a new "leaf" class, the requirements are lower,
-  and an initial PR can just add whatever is immediately needed.
-* A new "intermediate" class, especially low down in the hierarchy,
-  needs to be careful about leaving gaps.
-
-In a perfect world, there would be a group of simultaneous PRs that basically cover everything!
-(Or at least an expectation that PRs may not be merged immediately while waiting on other
-PRs that fill out the API.)
-
-However "perfect is the enemy of good", and it would also be completely reasonable
-to add a TODO list in the main module doc-string for the new class,
-briefly listing the parts of the API which still need to be provided.
-Hopefully this document makes it easy to assemble this list.
-
-Another alternative to a TODO list in the doc-strings is adding Github issues.
--/
-
-library_note «reducible non-instances» /--
-Some definitions that define objects of a class cannot be instances, because they have an
-explicit argument that does not occur in the conclusion. An example is `Preorder.lift` that has a
-function `f : α → β` as an explicit argument to lift a preorder on `β` to a preorder on `α`.
-
-If these definitions are used to define instances of this class *and* this class is an argument to
-some other type-class so that type-class inference will have to unfold these instances to check
-for definitional equality, then these definitions should be marked `@[reducible]`.
-
-For example, `Preorder.lift` is used to define `Units.Preorder` and `PartialOrder.lift` is used
-to define `Units.PartialOrder`. In some cases it is important that type-class inference can
-recognize that `Units.Preorder` and `Units.PartialOrder` give rise to the same `LE` instance.
-For example, you might have another class that takes `[LE α]` as an argument, and this argument
-sometimes comes from `Units.Preorder` and sometimes from `Units.PartialOrder`.
-Therefore, `Preorder.lift` and `PartialOrder.lift` are marked `@[reducible]`.
--/
-
-library_note «implicit instance arguments» /--
-There are places where typeclass arguments are specified with implicit `{}` brackets instead of
-the usual `[]` brackets. This is done when the instances can be inferred because they are implicit
-arguments to the type of one of the other arguments. There are several reasons for doing so.
-
-When they can be inferred from these other arguments,
-it is faster to use this method than to use type class inference.
-For example, when writing lemmas about `(f : α →+* β)`, it is faster to specify the fact that `α`
-and `β` are `Semiring`s as `{rα : Semiring α} {rβ : Semiring β}` rather than the usual
-`[Semiring α] [Semiring β]`.
-
-When handling non-canonical instances, it is necessary that the relevant declarations take these
-
-Depends on / 依赖: coe_injective, coe_injective.Z
--/
 instance SubY.toZ [Z α] : Z (SubY α) :=
   coe_injective.Z coe ...
 ```
@@ -638,17 +220,6 @@ and `β` are `Semiring`s as `{rα : Semiring α} {rβ : Semiring β}` rather tha
 `[Semiring α] [Semiring β]`.
 
 When handling non-canonical instances, it is necessary that the relevant declarations take these
-/--
-Instance `arguments` / 实例 `arguments`
-
-English:
-instance arguments
-  signature: implicitly, otherwise Lean will refuse to apply them.
-
-中文:
-实例 arguments
-  签名: implicitly, otherwise Lean will refuse to apply them.
--/
 instance arguments implicitly, otherwise Lean will refuse to apply them.
 For example, in measure theory a space `X` will often come equipped with a canonical base
 sigma-algebra `MeasurableSpace X` along with many sub-sigma algebras, also of type
@@ -724,53 +295,18 @@ commutative.
 For such scenarios, users should prefer to use the unbundled `IsMulCommutative` typeclass, and to
 provide theorems such as:
 ```
-/--
-theorem `isMulCommutative_closure` / 定理 `isMulCommutative_closure`
-
-English:
-theorem isMulCommutative_closure
-  statement: {G : Type*} [Group G] {k : Set G}
-
-中文:
-定理 isMulCommutative_closure
-  结论: {G : 类型} [群 G] {k : 集合 G}
-
-Depends on / 依赖: h.isColimit, h.isColimitEquivIsColimitCokernelCofork, isColimit, isColimitEquivIsColimitCokernelCofork
--/
 theorem isMulCommutative_closure {G : Type*} [Group G] {k : Set G}
     (hcomm : ∀ x ∈ k, ∀ y ∈ k, x * y = y * x) :
     IsMulCommutative (closure k)
 ```
 or even *instances* such as
 ```
-/--
-Instance `Subgroup.instIsMulCommutative_closure` / 实例 `Subgroup.instIsMulCommutative_closure`
-
-English:
-instance Subgroup.instIsMulCommutative_closure
-  signature: {S G : Type*} [Group G] [SetLike S G]
-
-中文:
-实例 子群.instIsMulCommutative_closure
-  签名: {S G : 类型} [群 G] [集合状 S G]
--/
 instance Subgroup.instIsMulCommutative_closure {S G : Type*} [Group G] [SetLike S G]
     [MulMemClass S G] (s : S) [IsMulCommutative s] :
     IsMulCommutative (closure (s : Set G))
 ```
 and
 ```
-/--
-Instance `Subgroup.isMulCommutative_topologicalClosure` / 实例 `Subgroup.isMulCommutative_topologicalClosure`
-
-English:
-instance Subgroup.isMulCommutative_topologicalClosure
-  signature: [T2Space G] (s : Subgroup G)
-
-中文:
-实例 子群.isMulCommutative_topologicalClosure
-  签名: [T2空间 G] (s : 子群 G)
--/
 instance Subgroup.isMulCommutative_topologicalClosure [T2Space G] (s : Subgroup G)
     [IsMulCommutative s] : IsMulCommutative s.topologicalClosure
 ```
@@ -786,3 +322,4 @@ the entirery of both the bundled and unbundled hierarchies), these instances are
 available inside the `IsMulCommutative` scope and are simultaneously given the very low priority
 `50`.
 -/
+

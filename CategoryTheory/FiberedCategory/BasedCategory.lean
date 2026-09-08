@@ -37,26 +37,17 @@ open CategoryTheory.Functor Category NatTrans IsHomLift
 variable {𝒮 : Type u₁} [Category.{v₁} 𝒮]
 
 set_option linter.checkUnivs false in
-/--
-Definition of `BasedCategory` / `BasedCategory` 的定义
+/-- A based category over `𝒮` is a category `𝒳` together with a functor `p : 𝒳 ⥤ 𝒮`. -/
+/-
+**CategoryTheory.BasedCategory** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：BasedCategory (𝒮 : Type u₁) [Category.{v₁} 𝒮] where /-- The type of object
+s in a `BasedCategory` -/ obj : Type u₂ /-- The underlying category of a `BasedC
+ategory`. -/ category : Category.{v₂} obj
+参数：𝒮 : Type u₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BasedCategory
-  parameters: (𝒮 : Type u₁) [Category.{v₁} 𝒮]
-  axioms and operations (3):
-    - obj : Type u₂
-    - category : Category.{v₂} obj  [default: by infer_instance]
-    - p : obj ⥤ 𝒮
-
-中文:
-结构 Based范畴
-  参数: (𝒮 : 类型u₁) [范畴.{v₁} 𝒮]
-  公理与运算 (3 个):
-    - obj : 类型u₂
-    - category : 范畴.{v₂} obj  [默认: by infer_instance]
-    - p : obj ⥤ 𝒮
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+A based category over `𝒮` is a category `𝒳` together with a functor `p : 𝒳 ⥤ 𝒮`.
 -/
 structure BasedCategory (𝒮 : Type u₁) [Category.{v₁} 𝒮] where
   /-- The type of objects in a `BasedCategory` -/
@@ -65,44 +56,42 @@ structure BasedCategory (𝒮 : Type u₁) [Category.{v₁} 𝒮] where
   category : Category.{v₂} obj := by infer_instance
   /-- The functor to the base. -/
   p : obj ⥤ 𝒮
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (𝒳 : BasedCategory.{v₂, u₂} 𝒮) : Category 𝒳.obj := 𝒳.category
 
-/--
-Definition of `BasedCategory.ofFunctor` / `BasedCategory.ofFunctor` 的定义
+/-- The based category associated to a functor `p : 𝒳 ⥤ 𝒮`. -/
+/-
+**CategoryTheory.BasedCategory.ofFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.BasedCategory`。
+形式化陈述：{𝒮 : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] →     {𝒳 : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} 𝒳] → CategoryTheory.F
+unctor 𝒳 𝒮 → CategoryTheory.BasedCategory 𝒮
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BasedCategory.ofFunctor
-  signature: {𝒳 : Type u₂} [Category.{v₂} 𝒳] (p : 𝒳 ⥤ 𝒮)
-  body: 𝒳
-  p := p
-
-中文:
-定义 Based范畴.ofFunctor
-  签名: {𝒳 : 类型u₂} [范畴.{v₂} 𝒳] (p : 𝒳 ⥤ 𝒮)
-  定义体: 𝒳
-  p := p
+--- 原说明 ---
+The based category associated to a functor `p : 𝒳 ⥤ 𝒮`.
 -/
 def BasedCategory.ofFunctor {𝒳 : Type u₂} [Category.{v₂} 𝒳] (p : 𝒳 ⥤ 𝒮) : BasedCategory 𝒮 where
   obj := 𝒳
   p := p
 
-/--
-Definition of `BasedFunctor` / `BasedFunctor` 的定义
+/-- A functor between based categories is a functor between the underlying categories that commutes
+with the projections. -/
+/-
+**CategoryTheory.BasedFunctor** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：BasedFunctor (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮)
+ extends 𝒳.obj ⥤ 𝒴.obj where w : toFunctor ⋙ 𝒴.p = 𝒳.p
+参数：𝒳 : BasedCategory.{v₂, u₂} 𝒮；𝒴 : BasedCategory.{v₃, u₃} 𝒮。
+继承自：𝒳.obj ⥤ 𝒴.obj。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BasedFunctor
-  parameters: (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮)
-  axioms and operations (1):
-    - w : toFunctor ⋙ 𝒴.p = 𝒳.p  [default: by cat_disch]
-
-中文:
-结构 Based函子
-  参数: (𝒳 : Based范畴.{v₂, u₂} 𝒮) (𝒴 : Based范畴.{v₃, u₃} 𝒮)
-  公理与运算 (1 个):
-    - w : toFunctor ⋙ 𝒴.p = 𝒳.p  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A functor between based categories is a functor between the underlying categorie
+s that commutes
+with the projections.
 -/
 structure BasedFunctor (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮) extends
     𝒳.obj ⥤ 𝒴.obj where
@@ -117,18 +106,16 @@ initialize_simps_projections BasedFunctor (+toFunctor, -obj, -map)
 
 /-- The identity based functor. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.BasedFunctor.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Based
+Functor`。
+形式化陈述：id (𝒳 : BasedCategory.{v₂, u₂} 𝒮) : 𝒳 ⥤ᵇ 𝒳 where toFunctor
+参数：𝒳 : BasedCategory.{v₂, u₂} 𝒮。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (𝒳 : BasedCategory.{v₂, u₂} 𝒮)
-  body: 𝟭 𝒳.obj
-
-中文:
-定义 id
-  签名: (𝒳 : Based范畴.{v₂, u₂} 𝒮)
-  定义体: 𝟭 𝒳.obj
+--- 原说明 ---
+The identity based functor.
 -/
 def id (𝒳 : BasedCategory.{v₂, u₂} 𝒮) : 𝒳 ⥤ᵇ 𝒳 where
   toFunctor := 𝟭 𝒳.obj
@@ -140,22 +127,17 @@ scoped notation "𝟭" => BasedFunctor.id
 
 /-- The composition of two based functors. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.BasedFunctor.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bas
+edFunctor`。
+形式化陈述：comp {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) (G : 𝒴 ⥤ᵇ 𝒵) : 𝒳 ⥤ᵇ 𝒵 whe
+re toFunctor
+参数：F : 𝒳 ⥤ᵇ 𝒴；G : 𝒴 ⥤ᵇ 𝒵。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) (G : 𝒴 ⥤ᵇ 𝒵)
-  body: F.toFunctor ⋙ G.toFunctor
-  w := by rw [Functor.assoc, G.w, F.w]
-
-中文:
-定义 comp
-  签名: {𝒵 : Based范畴.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) (G : 𝒴 ⥤ᵇ 𝒵)
-  定义体: F.toFunctor ⋙ G.toFunctor
-  w := by rw [Functor.assoc, G.w, F.w]
-
-Depends on / 依赖: F.toFunctor, G.toFunctor, toFunctor
+--- 原说明 ---
+The composition of two based functors.
 -/
 def comp {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) (G : 𝒴 ⥤ᵇ 𝒵) : 𝒳 ⥤ᵇ 𝒵 where
   toFunctor := F.toFunctor ⋙ G.toFunctor
@@ -165,96 +147,68 @@ def comp {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) (G : �
 scoped infixr:80 " ⋙ " => BasedFunctor.comp
 
 @[simp]
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  given: (F : 𝒳 ⥤ᵇ 𝒴)
-  statement: F ⋙ 𝟭 𝒴 = F
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 comp_id
-  条件: (F : 𝒳 ⥤ᵇ 𝒴)
-  结论: F ⋙ 𝟭 𝒴 = F
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.BasedFunctor.comp_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+BasedFunctor`。
+形式化陈述：comp_id (F : 𝒳 ⥤ᵇ 𝒴) : F ⋙ 𝟭 𝒴 = F
+参数：F : 𝒳 ⥤ᵇ 𝒴。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_id (F : 𝒳 ⥤ᵇ 𝒴) : F ⋙ 𝟭 𝒴 = F :=
   rfl
 
 @[simp]
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  given: (F : 𝒳 ⥤ᵇ 𝒴)
-  statement: 𝟭 𝒳 ⋙ F = F
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 id_comp
-  条件: (F : 𝒳 ⥤ᵇ 𝒴)
-  结论: 𝟭 𝒳 ⋙ F = F
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.BasedFunctor.id_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+BasedFunctor`。
+形式化陈述：id_comp (F : 𝒳 ⥤ᵇ 𝒴) : 𝟭 𝒳 ⋙ F = F
+参数：F : 𝒳 ⥤ᵇ 𝒴。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_comp (F : 𝒳 ⥤ᵇ 𝒴) : 𝟭 𝒳 ⋙ F = F :=
   rfl
 
 @[simp]
-/--
-lemma `comp_assoc` / 引理 `comp_assoc`
-
-English:
-lemma comp_assoc
-  statement: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {𝒜 : BasedCategory.{v₅, u₅} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 comp_assoc
-  结论: {𝒵 : Based范畴.{v₄, u₄} 𝒮} {𝒜 : Based范畴.{v₅, u₅} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.BasedFunctor.comp_assoc** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.BasedFunctor`。
+形式化陈述：comp_assoc {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {𝒜 : BasedCategory.{v₅, u₅} 𝒮} (
+F : 𝒳 ⥤ᵇ 𝒴) (G : 𝒴 ⥤ᵇ 𝒵) (H : 𝒵 ⥤ᵇ 𝒜) : (F ⋙ G) ⋙ H = F ⋙ (G ⋙ H)
+参数：F : 𝒳 ⥤ᵇ 𝒴；G : 𝒴 ⥤ᵇ 𝒵；H : 𝒵 ⥤ᵇ 𝒜。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_assoc {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {𝒜 : BasedCategory.{v₅, u₅} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴)
     (G : 𝒴 ⥤ᵇ 𝒵) (H : 𝒵 ⥤ᵇ 𝒜) : (F ⋙ G) ⋙ H = F ⋙ (G ⋙ H) :=
   rfl
 
 @[simp]
-/--
-lemma `w_obj` / 引理 `w_obj`
-
-English:
-lemma w_obj
-  given: (F : 𝒳 ⥤ᵇ 𝒴) (a : 𝒳.obj)
-  statement: 𝒴.p.obj (F.obj a) = 𝒳.p.obj a
-  proof: by
-  rw [← Functor.comp_obj]; rw [F.w]
-
-中文:
-引理 w_obj
-  条件: (F : 𝒳 ⥤ᵇ 𝒴) (a : 𝒳.obj)
-  结论: 𝒴.p.obj (F.obj a) = 𝒳.p.obj a
-  证明: by
-  rw [← Functor.comp_obj]; rw [F.w]
-
-Depends on / 依赖: Functor, Functor.comp_obj, comp_obj
+/-
+**CategoryTheory.BasedFunctor.w_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Ba
+sedFunctor`。
+形式化陈述：w_obj (F : 𝒳 ⥤ᵇ 𝒴) (a : 𝒳.obj) : 𝒴.p.obj (F.obj a) = 𝒳.p.obj a
+参数：F : 𝒳 ⥤ᵇ 𝒴；a : 𝒳.obj。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.comp_obj`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   {E : Type u₃} [ins…
+· 使用定理 `CategoryTheory.BasedFunctor.w`：∀ {𝒮 : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} 𝒮] {𝒳 : CategoryTheory.BasedCategory 𝒮}   {𝒴 : CategoryTheory.Ba
+sedCategory 𝒮} (sel…
 -/
 lemma w_obj (F : 𝒳 ⥤ᵇ 𝒴) (a : 𝒳.obj) : 𝒴.p.obj (F.obj a) = 𝒳.p.obj a := by
-  rw [← Functor.comp_obj]; rw [F.w]
-
+  rw [← Functor.comp_obj, F.w]
+/-
+**CategoryTheory.BasedFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.BasedFu
+nctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : 𝒳 ⥤ᵇ 𝒴) (a : 𝒳.obj) : IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (𝟙 (F.obj a)) :=
   IsHomLift.id (w_obj F a)
 
@@ -263,109 +217,153 @@ section
 variable (F : 𝒳 ⥤ᵇ 𝒴) {R S : 𝒮} {a b : 𝒳.obj} (f : R ⟶ S) (φ : a ⟶ b)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `preserves_isHomLift` / 实例 `preserves_isHomLift`
+/-- For a based functor `F : 𝒳 ⟶ 𝒴`, then whenever an arrow `φ` in `𝒳` lifts some `f` in `𝒮`,
+then `F(φ)` also lifts `f`. -/
+/-
+**CategoryTheory.BasedFunctor.preserves_isHomLift** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.BasedFunctor`。
+形式化陈述：preserves_isHomLift [IsHomLift 𝒳.p f φ] : IsHomLift 𝒴.p f (F.map φ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsHomLift.of_fac`：of_fac {R S : 𝒮} {a b : 𝒳} (f : R ⟶ S) 
+(φ : a ⟶ b) (ha : p.obj a = R) (hb : p.obj b = S) (h : f = eqToHom ha.symm ≫ p.m
+ap φ ≫ eqToHom hb) : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.BasedFunctor.w_obj`：w_obj (F : 𝒳 ⥤ᵇ 𝒴) (a : 𝒳.obj) : 𝒴.p.
+obj (F.obj a) = 𝒳.p.obj a
+· 使用引理 `CategoryTheory.IsHomLift.domain_eq`：domain_eq (f : R ⟶ S) (φ : a ⟶ b) [p
+.IsHomLift f φ] : p.obj a = R
+· 使用引理 `CategoryTheory.IsHomLift.codomain_eq`：codomain_eq (f : R ⟶ S) (φ : a ⟶ b
+) [p.IsHomLift f φ] : p.obj b = S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.comp_map`：comp_map (F : C ⥤ D) (G : D ⥤ E) {X Y :
+ C} (f : X ⟶ Y) : (F ⋙ G).map f = G.map (F.map f)
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `CategoryTheory.BasedFunctor.w`：∀ {𝒮 : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} 𝒮] {𝒳 : CategoryTheory.BasedCategory 𝒮}   {𝒴 : CategoryTheory.Ba
+sedCategory 𝒮} (sel…
+· 使用定理 `CategoryTheory.Functor.congr_hom`：congr_hom {F G : C ⥤ D} (h : F = G) {X
+ Y} (f : X ⟶ Y) : F.map f = eqToHom (congr_obj h X) ≫ G.map f ≫ eqToHom (congr_o
+bj h Y).symm
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.eqToHom_trans_assoc`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {X Y Z : C} (p : X = Y) (q : Y = Z) {Z_1 : C} (h : Z ⟶ Z
+_1),   CategoryTheory.Ca…
+· 使用引理 `CategoryTheory.IsHomLift.fac`：fac : f = eqToHom (domain_eq p f φ).symm ≫
+ p.map φ ≫ eqToHom (codomain_eq p f φ)
 
-English:
-instance preserves_isHomLift
-  signature: [IsHomLift 𝒳.p f φ]
-  body: by
-  apply of_fac 𝒴.p f (F.map φ) (Eq.trans (F.w_obj a) (domain_eq 𝒳.p f φ))
-    (Eq.trans (F.w_obj b) (codomain_eq 𝒳.p f φ))
-  rw [← Functor.comp_map]; rw [congr_hom F.w]
-  simpa using (fac 𝒳.p f φ)
-
-中文:
-实例 preserves_isHomLift
-  签名: [IsHomLift 𝒳.p f φ]
-  定义体: by
-  apply of_fac 𝒴.p f (F.map φ) (Eq.trans (F.w_obj a) (domain_eq 𝒳.p f φ))
-    (Eq.trans (F.w_obj b) (codomain_eq 𝒳.p f φ))
-  rw [← Functor.comp_map]; rw [congr_hom F.w]
-  simpa using (fac 𝒳.p f φ)
-
-Depends on / 依赖: Eq.trans, F.map, F.w_obj, Functor, Functor.comp_map, codomain_eq, comp_map, congr_hom, domain_eq, of_fac, w_obj
+--- 原说明 ---
+For a based functor `F : 𝒳 ⟶ 𝒴`, then whenever an arrow `φ` in `𝒳` lifts some `f
+` in `𝒮`,
+then `F(φ)` also lifts `f`.
 -/
 instance preserves_isHomLift [IsHomLift 𝒳.p f φ] : IsHomLift 𝒴.p f (F.map φ) := by
   apply of_fac 𝒴.p f (F.map φ) (Eq.trans (F.w_obj a) (domain_eq 𝒳.p f φ))
     (Eq.trans (F.w_obj b) (codomain_eq 𝒳.p f φ))
-  rw [← Functor.comp_map]; rw [congr_hom F.w]
+  rw [← Functor.comp_map, congr_hom F.w]
   simpa using (fac 𝒳.p f φ)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isHomLift_map` / 引理 `isHomLift_map`
+/-- For a based functor `F : 𝒳 ⟶ 𝒴`, and an arrow `φ` in `𝒳`, then `φ` lifts an arrow `f` in `𝒮`
+if `F(φ)` does. -/
+/-
+**CategoryTheory.BasedFunctor.isHomLift_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.BasedFunctor`。
+形式化陈述：isHomLift_map [IsHomLift 𝒴.p f (F.map φ)] : IsHomLift 𝒳.p f φ
+参数：F.map φ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsHomLift.of_fac`：of_fac {R S : 𝒮} {a b : 𝒳} (f : R ⟶ S) 
+(φ : a ⟶ b) (ha : p.obj a = R) (hb : p.obj b = S) (h : f = eqToHom ha.symm ≫ p.m
+ap φ ≫ eqToHom hb) : …
+· 使用引理 `CategoryTheory.IsHomLift.domain_eq`：domain_eq (f : R ⟶ S) (φ : a ⟶ b) [p
+.IsHomLift f φ] : p.obj a = R
+· 使用引理 `CategoryTheory.BasedFunctor.w_obj`：w_obj (F : 𝒳 ⥤ᵇ 𝒴) (a : 𝒳.obj) : 𝒴.p.
+obj (F.obj a) = 𝒳.p.obj a
+· 使用引理 `CategoryTheory.IsHomLift.codomain_eq`：codomain_eq (f : R ⟶ S) (φ : a ⟶ b
+) [p.IsHomLift f φ] : p.obj b = S
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Functor.congr_obj`：congr_obj {F G : C ⥤ D} (h : F = G) (X
+) : F.obj X = G.obj X
+· 使用定理 `CategoryTheory.BasedFunctor.w`：∀ {𝒮 : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} 𝒮] {𝒳 : CategoryTheory.BasedCategory 𝒮}   {𝒴 : CategoryTheory.Ba
+sedCategory 𝒮} (sel…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.IsHomLift.fac`：fac : f = eqToHom (domain_eq p f φ).symm ≫
+ p.map φ ≫ eqToHom (codomain_eq p f φ)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.congr_hom`：congr_hom {F G : C ⥤ D} (h : F = G) {X
+ Y} (f : X ⟶ Y) : F.map f = eqToHom (congr_obj h X) ≫ G.map f ≫ eqToHom (congr_o
+bj h Y).symm
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `CategoryTheory.eqToHom_trans_assoc`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {X Y Z : C} (p : X = Y) (q : Y = Z) {Z_1 : C} (h : Z ⟶ Z
+_1),   CategoryTheory.Ca…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma isHomLift_map
-  given: [IsHomLift 𝒴.p f (F.map φ)]
-  statement: IsHomLift 𝒳.p f φ
-  proof: by
-  apply of_fac 𝒳.p f φ (F.w_obj a ▸ domain_eq 𝒴.p f (F.map φ))
-    (F.w_obj b ▸ codomain_eq 𝒴.p f (F.map φ))
-  simp [congr_hom F.w.symm, fac 𝒴.p f (F.map φ)]
-
-中文:
-引理 isHomLift_map
-  条件: [IsHomLift 𝒴.p f (F.map φ)]
-  结论: IsHomLift 𝒳.p f φ
-  证明: by
-  apply of_fac 𝒳.p f φ (F.w_obj a ▸ domain_eq 𝒴.p f (F.map φ))
-    (F.w_obj b ▸ codomain_eq 𝒴.p f (F.map φ))
-  simp [congr_hom F.w.symm, fac 𝒴.p f (F.map φ)]
-
-Depends on / 依赖: F.map, F.w.symm, F.w_obj, codomain_eq, congr_hom, domain_eq, of_fac, w_obj
+--- 原说明 ---
+For a based functor `F : 𝒳 ⟶ 𝒴`, and an arrow `φ` in `𝒳`, then `φ` lifts an arro
+w `f` in `𝒮`
+if `F(φ)` does.
 -/
 lemma isHomLift_map [IsHomLift 𝒴.p f (F.map φ)] : IsHomLift 𝒳.p f φ := by
   apply of_fac 𝒳.p f φ (F.w_obj a ▸ domain_eq 𝒴.p f (F.map φ))
     (F.w_obj b ▸ codomain_eq 𝒴.p f (F.map φ))
   simp [congr_hom F.w.symm, fac 𝒴.p f (F.map φ)]
-
-/--
-lemma `isHomLift_iff` / 引理 `isHomLift_iff`
-
-English:
-lemma isHomLift_iff
-  statement: IsHomLift 𝒴.p f (F.map φ) ↔ IsHomLift 𝒳.p f φ
-  proof: ⟨fun _ => isHomLift_map F f φ, fun _ => preserves_isHomLift F f φ⟩
-
-中文:
-引理 isHomLift_iff
-  结论: IsHomLift 𝒴.p f (F.map φ) ↔ IsHomLift 𝒳.p f φ
-  证明: ⟨fun _ => isHomLift_map F f φ, fun _ => preserves_isHomLift F f φ⟩
-
-Depends on / 依赖: isHomLift_map, preserves_isHomLift
+/-
+**CategoryTheory.BasedFunctor.isHomLift_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.BasedFunctor`。
+形式化陈述：isHomLift_iff : IsHomLift 𝒴.p f (F.map φ) ↔ IsHomLift 𝒳.p f φ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.BasedFunctor.isHomLift_map`：isHomLift_map [IsHomLift 𝒴.p 
+f (F.map φ)] : IsHomLift 𝒳.p f φ
 -/
 lemma isHomLift_iff : IsHomLift 𝒴.p f (F.map φ) ↔ IsHomLift 𝒳.p f φ :=
-  ⟨fun _ => isHomLift_map F f φ, fun _ => preserves_isHomLift F f φ⟩
+  ⟨fun _ ↦ isHomLift_map F f φ, fun _ ↦ preserves_isHomLift F f φ⟩
 
 end
 
 end BasedFunctor
 
 
-/--
-Definition of `BasedNatTrans` / `BasedNatTrans` 的定义
+/-- A `BasedNatTrans` between two `BasedFunctor`s is a natural transformation `α` between the
+underlying functors, such that for all `a : 𝒳`, `α.app a` lifts `𝟙 S` whenever `𝒳.p.obj a = S`. -/
+/-
+**CategoryTheory.BasedNatTrans** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：BasedNatTrans {𝒳 : BasedCategory.{v₂, u₂} 𝒮} {𝒴 : BasedCategory.{v₃, u₃} 𝒮
+} (F G : 𝒳 ⥤ᵇ 𝒴) extends CategoryTheory.NatTrans F.toFunctor G.toFunctor where i
+sHomLift' : forall (a : 𝒳.obj), IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (toNatTrans.app a)
+参数：F G : 𝒳 ⥤ᵇ 𝒴。
+继承自：CategoryTheory.NatTrans F.toFunctor G.toFunctor。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BasedNatTrans
-  parameters: {𝒳 : BasedCategory.{v₂, u₂} 𝒮} {𝒴 : BasedCategory.{v₃, u₃} 𝒮}
-  extends: CategoryTheory.NatTrans F.toFunctor G.toFunctor
-  axioms and operations (1):
-    - isHomLift' : forall (a : 𝒳.obj), IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (toNatTrans.app a)  [default: by cat_disch]
-
-中文:
-结构 Based自然数Trans
-  参数: {𝒳 : Based范畴.{v₂, u₂} 𝒮} {𝒴 : Based范畴.{v₃, u₃} 𝒮}
-  继承: 范畴论.自然变换 F.toFunctor G.toFunctor
-  公理与运算 (1 个):
-    - isHomLift' : 对任意 (a : 𝒳.obj), IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (to自然数Trans.app a)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A `BasedNatTrans` between two `BasedFunctor`s is a natural transformation `α` be
+tween the
+underlying functors, such that for all `a : 𝒳`, `α.app a` lifts `𝟙 S` whenever `
+𝒳.p.obj a = S`.
 -/
 structure BasedNatTrans {𝒳 : BasedCategory.{v₂, u₂} 𝒮} {𝒴 : BasedCategory.{v₃, u₃} 𝒮}
     (F G : 𝒳 ⥤ᵇ 𝒴) extends CategoryTheory.NatTrans F.toFunctor G.toFunctor where
-  isHomLift' : forall (a : 𝒳.obj), IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (toNatTrans.app a) := by cat_disch
+  isHomLift' : ∀ (a : 𝒳.obj), IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (toNatTrans.app a) := by cat_disch
 
 namespace BasedNatTrans
 
@@ -380,60 +378,39 @@ section
 variable {F G : 𝒳 ⥤ᵇ 𝒴} (α : BasedNatTrans F G)
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: (β : BasedNatTrans F G) (h : α.toNatTrans = β.toNatTrans)
-  statement: α = β
-  proof: by
-  cases α; subst h; rfl
-
-中文:
-引理 ext
-  条件: (β : Based自然数Trans F G) (h : α.to自然数Trans = β.to自然数Trans)
-  结论: α = β
-  证明: by
-  cases α; subst h; rfl
+/-
+**CategoryTheory.BasedNatTrans.ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Bas
+edNatTrans`。
+形式化陈述：ext (β : BasedNatTrans F G) (h : α.toNatTrans = β.toNatTrans) : α = β
+参数：β : BasedNatTrans F G；h : α.toNatTrans = β.toNatTrans。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma ext (β : BasedNatTrans F G) (h : α.toNatTrans = β.toNatTrans) : α = β := by
   cases α; subst h; rfl
-
-/--
-Instance `app_isHomLift` / 实例 `app_isHomLift`
-
-English:
-instance app_isHomLift
-  signature: (a : 𝒳.obj)
-  body: α.isHomLift' a
-
-中文:
-实例 app_isHomLift
-  签名: (a : 𝒳.obj)
-  定义体: α.isHomLift' a
-
-Depends on / 依赖: isHomLift
+/-
+**CategoryTheory.BasedNatTrans.app_isHomLift** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.BasedNatTrans`。
+形式化陈述：app_isHomLift (a : 𝒳.obj) : IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (α.toNatTrans.ap
+p a)
+参数：a : 𝒳.obj。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.BasedNatTrans.isHomLift'`：∀ {𝒮 : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} 𝒮] {𝒳 : CategoryTheory.BasedCategory 𝒮}   {𝒴 : Categor
+yTheory.BasedCategory 𝒮} {F G…
 -/
 instance app_isHomLift (a : 𝒳.obj) : IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (α.toNatTrans.app a) :=
   α.isHomLift' a
-
-/--
-lemma `isHomLift` / 引理 `isHomLift`
-
-English:
-lemma isHomLift
-  given: {a : 𝒳.obj} {S : 𝒮} (ha : 𝒳.p.obj a = S)
-  proof: by
-  subst ha; infer_instance
-
-中文:
-引理 isHomLift
-  条件: {a : 𝒳.obj} {S : 𝒮} (ha : 𝒳.p.obj a = S)
-  证明: by
-  subst ha; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.BasedNatTrans.isHomLift** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.BasedNatTrans`。
+形式化陈述：isHomLift {a : 𝒳.obj} {S : 𝒮} (ha : 𝒳.p.obj a = S) : IsHomLift 𝒴.p (𝟙 S) (
+α.toNatTrans.app a)
+参数：ha : 𝒳.p.obj a = S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isHomLift {a : 𝒳.obj} {S : 𝒮} (ha : 𝒳.p.obj a = S) :
     IsHomLift 𝒴.p (𝟙 S) (α.toNatTrans.app a) := by
@@ -443,56 +420,36 @@ end
 
 /-- The identity natural transformation is a `BasedNatTrans`. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.BasedNatTrans.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Base
+dNatTrans`。
+形式化陈述：id (F : 𝒳 ⥤ᵇ 𝒴) : BasedNatTrans F F where toNatTrans
+参数：F : 𝒳 ⥤ᵇ 𝒴。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (F : 𝒳 ⥤ᵇ 𝒴)
-  body: CategoryTheory.NatTrans.id F.toFunctor
-  isHomLift' := fun a => of_fac 𝒴.p _ _ (w_obj F a) (w_obj F a) (by simp)
-
-中文:
-定义 id
-  签名: (F : 𝒳 ⥤ᵇ 𝒴)
-  定义体: CategoryTheory.NatTrans.id F.toFunctor
-  isHomLift' := fun a => of_fac 𝒴.p _ _ (w_obj F a) (w_obj F a) (by simp)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.NatTrans.id, F.toFunctor, NatTrans, toFunctor
+--- 原说明 ---
+The identity natural transformation is a `BasedNatTrans`.
 -/
 def id (F : 𝒳 ⥤ᵇ 𝒴) : BasedNatTrans F F where
   toNatTrans := CategoryTheory.NatTrans.id F.toFunctor
-  isHomLift' := fun a => of_fac 𝒴.p _ _ (w_obj F a) (w_obj F a) (by simp)
+  isHomLift' := fun a ↦ of_fac 𝒴.p _ _ (w_obj F a) (w_obj F a) (by simp)
 
 /-- Composition of `BasedNatTrans`, given by composition of the underlying natural
 transformations. -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.BasedNatTrans.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Ba
+sedNatTrans`。
+形式化陈述：comp {F G H : 𝒳 ⥤ᵇ 𝒴} (α : BasedNatTrans F G) (β : BasedNatTrans G H) : Ba
+sedNatTrans F H where toNatTrans
+参数：α : BasedNatTrans F G；β : BasedNatTrans G H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: {F G H : 𝒳 ⥤ᵇ 𝒴} (α : BasedNatTrans F G) (β : BasedNatTrans G H)
-  body: CategoryTheory.NatTrans.vcomp α.toNatTrans β.toNatTrans
-  isHomLift' := by
-    intro a
-    rw [CategoryTheory.NatTrans.vcomp_app]
-    infer_instance
-
-@[simps]
-
-中文:
-定义 comp
-  签名: {F G H : 𝒳 ⥤ᵇ 𝒴} (α : Based自然数Trans F G) (β : Based自然数Trans G H)
-  定义体: CategoryTheory.NatTrans.vcomp α.toNatTrans β.toNatTrans
-  isHomLift' := by
-    intro a
-    rw [CategoryTheory.NatTrans.vcomp_app]
-    infer_instance
-
-@[simps]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.NatTrans.vcomp, NatTrans, toNatTrans
+--- 原说明 ---
+Composition of `BasedNatTrans`, given by composition of the underlying natural
+transformations.
 -/
 def comp {F G H : 𝒳 ⥤ᵇ 𝒴} (α : BasedNatTrans F G) (β : BasedNatTrans G H) : BasedNatTrans F H where
   toNatTrans := CategoryTheory.NatTrans.vcomp α.toNatTrans β.toNatTrans
@@ -502,28 +459,14 @@ def comp {F G H : 𝒳 ⥤ᵇ 𝒴} (α : BasedNatTrans F G) (β : BasedNatTrans
     infer_instance
 
 @[simps]
-/--
-Instance `homCategory` / 实例 `homCategory`
-
-English:
-instance homCategory
-  signature: (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮)
-  body: BasedNatTrans
-  id := BasedNatTrans.id
-  comp := BasedNatTrans.comp
-
-@[ext]
-
-中文:
-实例 homCategory
-  签名: (𝒳 : Based范畴.{v₂, u₂} 𝒮) (𝒴 : Based范畴.{v₃, u₃} 𝒮)
-  定义体: BasedNatTrans
-  id := BasedNatTrans.id
-  comp := BasedNatTrans.comp
-
-@[ext]
-
-Depends on / 依赖: BasedNatTrans
+/-
+**CategoryTheory.BasedNatTrans.homCategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.BasedNatTrans`。
+形式化陈述：homCategory (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮) 
+: Category (𝒳 ⥤ᵇ 𝒴) where Hom
+参数：𝒳 : BasedCategory.{v₂, u₂} 𝒮；𝒴 : BasedCategory.{v₃, u₃} 𝒮。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance homCategory (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮) :
     Category (𝒳 ⥤ᵇ 𝒴) where
@@ -532,20 +475,16 @@ instance homCategory (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCateg
   comp := BasedNatTrans.comp
 
 @[ext]
-/--
-lemma `homCategory.ext` / 引理 `homCategory.ext`
-
-English:
-lemma homCategory.ext
-  given: {F G : 𝒳 ⥤ᵇ 𝒴} (α β : F ⟶ G) (h : α.toNatTrans = β.toNatTrans)
-  statement: α = β
-  proof: BasedNatTrans.ext α β h
-
-中文:
-引理 homCategory.ext
-  条件: {F G : 𝒳 ⥤ᵇ 𝒴} (α β : F ⟶ G) (h : α.to自然数Trans = β.to自然数Trans)
-  结论: α = β
-  证明: BasedNatTrans.ext α β h
+/-
+**CategoryTheory.BasedNatTrans.homCategory.ext** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.BasedNatTrans.homCategory`。
+形式化陈述：∀ {𝒮 : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] {𝒳 : CategoryT
+heory.BasedCategory 𝒮}   {𝒴 : CategoryTheory.BasedCategory 𝒮} {F G : CategoryThe
+ory.BasedFunctor 𝒳 𝒴} (α β : F ⟶ G),   α.toNatTrans = β.toNatTrans → α = β
+参数：α β : F ⟶ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.BasedNatTrans.ext`：ext (β : BasedNatTrans F G) (h : α.toN
+atTrans = β.toNatTrans) : α = β
 -/
 lemma homCategory.ext {F G : 𝒳 ⥤ᵇ 𝒴} (α β : F ⟶ G) (h : α.toNatTrans = β.toNatTrans) : α = β :=
   BasedNatTrans.ext α β h
@@ -553,63 +492,45 @@ lemma homCategory.ext {F G : 𝒳 ⥤ᵇ 𝒴} (α β : F ⟶ G) (h : α.toNatTr
 /-- The forgetful functor from the category of based functors `𝒳 ⥤ᵇ 𝒴` to the category of
 functors of underlying categories, `𝒳.obj ⥤ 𝒴.obj`. -/
 @[simps]
-/--
-Definition of `forgetful` / `forgetful` 的定义
+/-
+**CategoryTheory.BasedNatTrans.forgetful** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.BasedNatTrans`。
+形式化陈述：forgetful (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮) : 
+(𝒳 ⥤ᵇ 𝒴) ⥤ (𝒳.obj ⥤ 𝒴.obj) where obj
+参数：𝒳 : BasedCategory.{v₂, u₂} 𝒮；𝒴 : BasedCategory.{v₃, u₃} 𝒮。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetful
-  signature: (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮)
-  body: fun F => F.toFunctor
-  map := fun α => α.toNatTrans
-
-中文:
-定义 forgetful
-  签名: (𝒳 : Based范畴.{v₂, u₂} 𝒮) (𝒴 : Based范畴.{v₃, u₃} 𝒮)
-  定义体: fun F => F.toFunctor
-  map := fun α => α.toNatTrans
-
-Depends on / 依赖: F.toFunctor, toFunctor
+--- 原说明 ---
+The forgetful functor from the category of based functors `𝒳 ⥤ᵇ 𝒴` to the catego
+ry of
+functors of underlying categories, `𝒳.obj ⥤ 𝒴.obj`.
 -/
 def forgetful (𝒳 : BasedCategory.{v₂, u₂} 𝒮) (𝒴 : BasedCategory.{v₃, u₃} 𝒮) :
     (𝒳 ⥤ᵇ 𝒴) ⥤ (𝒳.obj ⥤ 𝒴.obj) where
-  obj := fun F => F.toFunctor
-  map := fun α => α.toNatTrans
+  obj := fun F ↦ F.toFunctor
+  map := fun α ↦ α.toNatTrans
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forgetful 𝒳 𝒴).ReflectsIsomorphisms
-  body: by
-    constructor
-    use {
-      toNatTrans := inv ((forgetful 𝒳 𝒴).map α)
-      isHomLift' := fun a => by simp [lift_id_inv_isIso] }
-    aesop
-
-中文:
-实例 :
-  签名: (forgetful 𝒳 𝒴).反映同构
-  定义体: by
-    constructor
-    use {
-      toNatTrans := inv ((forgetful 𝒳 𝒴).map α)
-      isHomLift' := fun a => by simp [lift_id_inv_isIso] }
-    aesop
-
-Depends on / 依赖: forgetful, isHomLift, lift_id_inv_isIso, toNatTrans
+/-
+**CategoryTheory.BasedNatTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.BasedN
+atTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forgetful 𝒳 𝒴).ReflectsIsomorphisms where
   reflects {F G} α _ := by
     constructor
     use {
       toNatTrans := inv ((forgetful 𝒳 𝒴).map α)
-      isHomLift' := fun a => by simp [lift_id_inv_isIso] }
+      isHomLift' := fun a ↦ by simp [lift_id_inv_isIso] }
     aesop
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.BasedNatTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.BasedN
+atTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F G : 𝒳 ⥤ᵇ 𝒴} (α : F ⟶ G) [IsIso α] : IsIso (X := F.toFunctor) α.toNatTrans := by
   rw [← forgetful_map]; infer_instance
 
@@ -623,20 +544,16 @@ variable {𝒳 : BasedCategory.{v₂, u₂} 𝒮} {𝒴 : BasedCategory.{v₃, u
 
 /-- The identity natural transformation is a based natural isomorphism. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.BasedNatIso.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.BasedN
+atIso`。
+形式化陈述：id (F : 𝒳 ⥤ᵇ 𝒴) : F ≅ F where hom
+参数：F : 𝒳 ⥤ᵇ 𝒴。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (F : 𝒳 ⥤ᵇ 𝒴)
-  body: 𝟙 F
-  inv := 𝟙 F
-
-中文:
-定义 id
-  签名: (F : 𝒳 ⥤ᵇ 𝒴)
-  定义体: 𝟙 F
-  inv := 𝟙 F
+--- 原说明 ---
+The identity natural transformation is a based natural isomorphism.
 -/
 def id (F : 𝒳 ⥤ᵇ 𝒴) : F ≅ F where
   hom := 𝟙 F
@@ -644,62 +561,46 @@ def id (F : 𝒳 ⥤ᵇ 𝒴) : F ≅ F where
 
 variable {F G : 𝒳 ⥤ᵇ 𝒴}
 
-/--
-Definition of `mkNatIso` / `mkNatIso` 的定义
+/-- The inverse of a based natural transformation whose underlying natural transformation is an
+isomorphism. -/
+/-
+**CategoryTheory.BasedNatIso.mkNatIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+BasedNatIso`。
+形式化陈述：mkNatIso (α : F.toFunctor ≅ G.toFunctor) (isHomLift' : forall a : 𝒳.obj, I
+sHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (α.hom.app a)) : F ≅ G where hom
+参数：α : F.toFunctor ≅ G.toFunctor；isHomLift' : forall a : 𝒳.obj, IsHomLift 𝒴.p (𝟙
+ (𝒳.p.obj a)) (α.hom.app a)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkNatIso
-  signature: (α : F.toFunctor ≅ G.toFunctor)
-  body: { toNatTrans := α.hom }
-  inv := {
-    toNatTrans := α.inv
-    isHomLift' := fun a => by
-      have : 𝒴.p.IsHomLift (𝟙 (𝒳.p.obj a)) (α.app a).hom := (Iso.app_hom α a) ▸ isHomLift' a
-      rw [← Iso.app_inv]
-      apply IsHomLift.lift_id_inv }
-
-中文:
-定义 mk自然数Iso
-  签名: (α : F.toFunctor ≅ G.toFunctor)
-  定义体: { toNatTrans := α.hom }
-  inv := {
-    toNatTrans := α.inv
-    isHomLift' := fun a => by
-      have : 𝒴.p.IsHomLift (𝟙 (𝒳.p.obj a)) (α.app a).hom := (Iso.app_hom α a) ▸ isHomLift' a
-      rw [← Iso.app_inv]
-      apply IsHomLift.lift_id_inv }
-
-Depends on / 依赖: toNatTrans
+--- 原说明 ---
+The inverse of a based natural transformation whose underlying natural transform
+ation is an
+isomorphism.
 -/
 def mkNatIso (α : F.toFunctor ≅ G.toFunctor)
-    (isHomLift' : forall a : 𝒳.obj, IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (α.hom.app a)) : F ≅ G where
+    (isHomLift' : ∀ a : 𝒳.obj, IsHomLift 𝒴.p (𝟙 (𝒳.p.obj a)) (α.hom.app a)) : F ≅ G where
   hom := { toNatTrans := α.hom }
   inv := {
     toNatTrans := α.inv
-    isHomLift' := fun a => by
+    isHomLift' := fun a ↦ by
       have : 𝒴.p.IsHomLift (𝟙 (𝒳.p.obj a)) (α.app a).hom := (Iso.app_hom α a) ▸ isHomLift' a
       rw [← Iso.app_inv]
       apply IsHomLift.lift_id_inv }
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isIso_of_toNatTrans_isIso` / 引理 `isIso_of_toNatTrans_isIso`
-
-English:
-lemma isIso_of_toNatTrans_isIso
-  given: (α : F ⟶ G) [IsIso (X := F.toFunctor) α.toNatTrans]
-  statement: IsIso α
-  proof: have : IsIso ((forgetful 𝒳 𝒴).map α) := by simp_all
-  Functor.ReflectsIsomorphisms.reflects (forgetful 𝒳 𝒴) α
-
-中文:
-引理 isIso_of_to自然数Trans_isIso
-  条件: (α : F ⟶ G) [是同构 (X := F.toFunctor) α.to自然数Trans]
-  结论: 是同构 α
-  证明: have : IsIso ((forgetful 𝒳 𝒴).map α) := by simp_all
-  Functor.ReflectsIsomorphisms.reflects (forgetful 𝒳 𝒴) α
-
-Depends on / 依赖: F.toFunctor, toFunctor, toNatTrans
+/-
+**CategoryTheory.BasedNatIso.isIso_of_toNatTrans_isIso** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.BasedNatIso`。
+形式化陈述：isIso_of_toNatTrans_isIso (α : F ⟶ G) [IsIso (X
+参数：α : F ⟶ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ReflectsIsomorphisms.reflects`：∀ {C : Type u_1} {
+inst : CategoryTheory.Category.{v_1, u_1} C} {D : Type u_2}   {inst_1 : Category
+Theory.Category.{v_2, u_2} D} (F : Categor…
+· 使用定理 `CategoryTheory.BasedNatTrans.instReflectsIsomorphismsBasedFunctorFunctor
+ObjForgetful`：∀ {𝒮 : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} 𝒮] {𝒳 : C
+ategoryTheory.BasedCategory 𝒮}   {𝒴 : CategoryTheory.BasedCategory 𝒮}, (Ca…
 -/
 lemma isIso_of_toNatTrans_isIso (α : F ⟶ G) [IsIso (X := F.toFunctor) α.toNatTrans] : IsIso α :=
   have : IsIso ((forgetful 𝒳 𝒴).map α) := by simp_all
@@ -718,75 +619,58 @@ variable {𝒳 : BasedCategory.{v₂, u₂} 𝒮} {𝒴 : BasedCategory.{v₃, u
 /-- Left-whiskering in the bicategory `BasedCategory` is given by whiskering the underlying functors
 and natural transformations. -/
 @[simps]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.BasedCategory.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.BasedCategory`。
+形式化陈述：whiskerLeft {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) {G H : 𝒴 ⥤ᵇ 𝒵} (α 
+: G ⟶ H) : F ⋙ G ⟶ F ⋙ H where toNatTrans
+参数：F : 𝒳 ⥤ᵇ 𝒴；α : G ⟶ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) {G H : 𝒴 ⥤ᵇ 𝒵} (α : G ⟶ H)
-  body: Functor.whiskerLeft F.toFunctor α.toNatTrans
-  isHomLift' := fun a => α.isHomLift (F.w_obj a)
-
-中文:
-定义 whiskerLeft
-  签名: {𝒵 : Based范畴.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) {G H : 𝒴 ⥤ᵇ 𝒵} (α : G ⟶ H)
-  定义体: Functor.whiskerLeft F.toFunctor α.toNatTrans
-  isHomLift' := fun a => α.isHomLift (F.w_obj a)
-
-Depends on / 依赖: F.toFunctor, Functor, Functor.whiskerLeft, toFunctor, toNatTrans, whiskerLeft
+--- 原说明 ---
+Left-whiskering in the bicategory `BasedCategory` is given by whiskering the und
+erlying functors
+and natural transformations.
 -/
 def whiskerLeft {𝒵 : BasedCategory.{v₄, u₄} 𝒮} (F : 𝒳 ⥤ᵇ 𝒴) {G H : 𝒴 ⥤ᵇ 𝒵} (α : G ⟶ H) :
     F ⋙ G ⟶ F ⋙ H where
   toNatTrans := Functor.whiskerLeft F.toFunctor α.toNatTrans
-  isHomLift' := fun a => α.isHomLift (F.w_obj a)
+  isHomLift' := fun a ↦ α.isHomLift (F.w_obj a)
 
 /-- Right-whiskering in the bicategory `BasedCategory` is given by whiskering the underlying
 functors and natural transformations. -/
 @[simps]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.BasedCategory.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.BasedCategory`。
+形式化陈述：whiskerRight {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {F G : 𝒳 ⥤ᵇ 𝒴} (α : F ⟶ G) (H 
+: 𝒴 ⥤ᵇ 𝒵) : F ⋙ H ⟶ G ⋙ H where toNatTrans
+参数：α : F ⟶ G；H : 𝒴 ⥤ᵇ 𝒵。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {F G : 𝒳 ⥤ᵇ 𝒴} (α : F ⟶ G) (H : 𝒴 ⥤ᵇ 𝒵)
-  body: Functor.whiskerRight α.toNatTrans H.toFunctor
-  isHomLift' := fun _ => BasedFunctor.preserves_isHomLift _ _ _
-
-中文:
-定义 whiskerRight
-  签名: {𝒵 : Based范畴.{v₄, u₄} 𝒮} {F G : 𝒳 ⥤ᵇ 𝒴} (α : F ⟶ G) (H : 𝒴 ⥤ᵇ 𝒵)
-  定义体: Functor.whiskerRight α.toNatTrans H.toFunctor
-  isHomLift' := fun _ => BasedFunctor.preserves_isHomLift _ _ _
-
-Depends on / 依赖: Functor, Functor.whiskerRight, H.toFunctor, toFunctor, toNatTrans, whiskerRight
+--- 原说明 ---
+Right-whiskering in the bicategory `BasedCategory` is given by whiskering the un
+derlying
+functors and natural transformations.
 -/
 def whiskerRight {𝒵 : BasedCategory.{v₄, u₄} 𝒮} {F G : 𝒳 ⥤ᵇ 𝒴} (α : F ⟶ G) (H : 𝒴 ⥤ᵇ 𝒵) :
     F ⋙ H ⟶ G ⋙ H where
   toNatTrans := Functor.whiskerRight α.toNatTrans H.toFunctor
-  isHomLift' := fun _ => BasedFunctor.preserves_isHomLift _ _ _
+  isHomLift' := fun _ ↦ BasedFunctor.preserves_isHomLift _ _ _
 
 end
 
 /-- The category of based categories. -/
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**CategoryTheory.BasedCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.BasedC
+ategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Category (BasedCategory.{v₂, u₂} 𝒮)
-  body: BasedFunctor
-  id := id
-  comp := comp
-
-中文:
-实例 :
-  签名: 范畴 (Based范畴.{v₂, u₂} 𝒮)
-  定义体: BasedFunctor
-  id := id
-  comp := comp
-
-Depends on / 依赖: BasedFunctor
+--- 原说明 ---
+The category of based categories.
 -/
 instance : Category (BasedCategory.{v₂, u₂} 𝒮) where
   Hom := BasedFunctor
@@ -795,34 +679,16 @@ instance : Category (BasedCategory.{v₂, u₂} 𝒮) where
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `bicategory` / 实例 `bicategory`
+/-- The bicategory of based categories. -/
+/-
+**CategoryTheory.BasedCategory.bicategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.BasedCategory`。
+形式化陈述：bicategory : Bicategory (BasedCategory.{v₂, u₂} 𝒮) where Hom 𝒳 𝒴
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance bicategory
-  signature: : Bicategory (BasedCategory.{v₂, u₂} 𝒮) where
-  body: 𝒳 ⥤ᵇ 𝒴
-  id 𝒳 := 𝟭 𝒳
-  comp F G := F ⋙ G
-  homCategory 𝒳 𝒴 := homCategory 𝒳 𝒴
-  whiskerLeft {_ _ _} F {_ _} α := whiskerLeft F α
-  whiskerRight {_ _ _} _ _ α H := whiskerRight α H
-  associator _ _ _ := BasedNatIso.id _
-  leftUnitor {_ _} F := BasedNatIso.id F
-  rightUnitor {_ _} F := BasedNatIso.id F
-
-中文:
-实例 bicategory
-  签名: : 双范畴 (Based范畴.{v₂, u₂} 𝒮) where
-  定义体: 𝒳 ⥤ᵇ 𝒴
-  id 𝒳 := 𝟭 𝒳
-  comp F G := F ⋙ G
-  homCategory 𝒳 𝒴 := homCategory 𝒳 𝒴
-  whiskerLeft {_ _ _} F {_ _} α := whiskerLeft F α
-  whiskerRight {_ _ _} _ _ α H := whiskerRight α H
-  associator _ _ _ := BasedNatIso.id _
-  leftUnitor {_ _} F := BasedNatIso.id F
-  rightUnitor {_ _} F := BasedNatIso.id F
+--- 原说明 ---
+The bicategory of based categories.
 -/
 instance bicategory : Bicategory (BasedCategory.{v₂, u₂} 𝒮) where
   Hom 𝒳 𝒴 := 𝒳 ⥤ᵇ 𝒴
@@ -836,19 +702,18 @@ instance bicategory : Bicategory (BasedCategory.{v₂, u₂} 𝒮) where
   rightUnitor {_ _} F := BasedNatIso.id F
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The bicategory structure on `BasedCategory.{v₂, u₂} 𝒮` is strict. -/
+/-
+**CategoryTheory.BasedCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.BasedC
+ategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Bicategory.Strict (BasedCategory.{v₂, u₂} 𝒮)
-
-中文:
-实例 :
-  签名: 双范畴.Strict (Based范畴.{v₂, u₂} 𝒮)
+--- 原说明 ---
+The bicategory structure on `BasedCategory.{v₂, u₂} 𝒮` is strict.
 -/
 instance : Bicategory.Strict (BasedCategory.{v₂, u₂} 𝒮) where
 
 end BasedCategory
 
 end CategoryTheory
+

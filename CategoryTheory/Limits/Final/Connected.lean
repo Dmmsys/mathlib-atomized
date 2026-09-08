@@ -27,160 +27,108 @@ namespace CategoryTheory
 variable {C : Type u} [Category.{v} C] {D : Type u'} [Category.{v'} D]
   {T : Type w} [Unique T]
 
-/--
-lemma `isConnected_iff_final_of_unique` / 引理 `isConnected_iff_final_of_unique`
-
-English:
-lemma isConnected_iff_final_of_unique
-  given: (F : C ⥤ Discrete T)
-  proof: by
-  rw [← isConnected_iff_of_equivalence
-    (Discrete.structuredArrowEquivalenceOfUnique F default)]
-  refine ⟨fun _ => ⟨?_⟩, fun _ => inferInstance⟩
-  rintro ⟨d⟩
-  obtain rfl := Subsingleton.elim d default
-  infer_instance
-
-中文:
-引理 isConnected_iff_final_of_unique
-  条件: (F : C ⥤ 离散 T)
-  证明: by
-  rw [← isConnected_iff_of_equivalence
-    (Discrete.structuredArrowEquivalenceOfUnique F default)]
-  refine ⟨fun _ => ⟨?_⟩, fun _ => inferInstance⟩
-  rintro ⟨d⟩
-  obtain rfl := Subsingleton.elim d default
-  infer_instance
-
-Depends on / 依赖: Discrete, Discrete.structuredArrowEquivalenceOfUnique, Subsingleton, Subsingleton.elim, infer_instance, isConnected_iff_of_equivalence, structuredArrowEquivalenceOfUnique
+/-
+**CategoryTheory.isConnected_iff_final_of_unique** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：isConnected_iff_final_of_unique (F : C ⥤ Discrete T) : IsConnected C ↔ F.F
+inal
+参数：F : C ⥤ Discrete T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isConnected_iff_of_equivalence`：isConnected_iff_of_equiva
+lence {K : Type u₂} [Category.{v₂} K] (e : J ≌ K) : IsConnected J ↔ IsConnected 
+K
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.Functor.Final.out`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂} D
+}   {F : CategoryTheor…
 -/
 lemma isConnected_iff_final_of_unique (F : C ⥤ Discrete T) :
     IsConnected C ↔ F.Final := by
   rw [← isConnected_iff_of_equivalence
     (Discrete.structuredArrowEquivalenceOfUnique F default)]
-  refine ⟨fun _ => ⟨?_⟩, fun _ => inferInstance⟩
+  refine ⟨fun _ ↦ ⟨?_⟩, fun _ ↦ inferInstance⟩
   rintro ⟨d⟩
   obtain rfl := Subsingleton.elim d default
   infer_instance
-
-/--
-lemma `isConnected_iff_initial_of_unique` / 引理 `isConnected_iff_initial_of_unique`
-
-English:
-lemma isConnected_iff_initial_of_unique
-  given: (F : C ⥤ Discrete T)
-  proof: by
-  rw [← isConnected_iff_of_equivalence
-    (Discrete.costructuredArrowEquivalenceOfUnique F default)]
-  refine ⟨fun _ => ⟨?_⟩, fun _ => inferInstance⟩
-  rintro ⟨d⟩
-  obtain rfl := Subsingleton.elim d default
-  infer_instance
-
-中文:
-引理 isConnected_iff_initial_of_unique
-  条件: (F : C ⥤ 离散 T)
-  证明: by
-  rw [← isConnected_iff_of_equivalence
-    (Discrete.costructuredArrowEquivalenceOfUnique F default)]
-  refine ⟨fun _ => ⟨?_⟩, fun _ => inferInstance⟩
-  rintro ⟨d⟩
-  obtain rfl := Subsingleton.elim d default
-  infer_instance
-
-Depends on / 依赖: Discrete, Discrete.costructuredArrowEquivalenceOfUnique, Subsingleton, Subsingleton.elim, costructuredArrowEquivalenceOfUnique, infer_instance, isConnected_iff_of_equivalence
+/-
+**CategoryTheory.isConnected_iff_initial_of_unique** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：isConnected_iff_initial_of_unique (F : C ⥤ Discrete T) : IsConnected C ↔ F
+.Initial
+参数：F : C ⥤ Discrete T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.isConnected_iff_of_equivalence`：isConnected_iff_of_equiva
+lence {K : Type u₂} [Category.{v₂} K] (e : J ≌ K) : IsConnected J ↔ IsConnected 
+K
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CategoryTheory.Functor.Initial.out`：∀ {C : Type u₁} {inst : CategoryTheo
+ry.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D}   {F : CategoryTheor…
 -/
 lemma isConnected_iff_initial_of_unique (F : C ⥤ Discrete T) :
     IsConnected C ↔ F.Initial := by
   rw [← isConnected_iff_of_equivalence
     (Discrete.costructuredArrowEquivalenceOfUnique F default)]
-  refine ⟨fun _ => ⟨?_⟩, fun _ => inferInstance⟩
+  refine ⟨fun _ ↦ ⟨?_⟩, fun _ ↦ inferInstance⟩
   rintro ⟨d⟩
   obtain rfl := Subsingleton.elim d default
   infer_instance
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ Discrete T) [IsConnected C] : F.Final := by
   rwa [← isConnected_iff_final_of_unique F]
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (F : C ⥤ Discrete T) [IsConnected C] : F.Initial := by
   rwa [← isConnected_iff_initial_of_unique F]
-
-/--
-Instance `final_fst` / 实例 `final_fst`
-
-English:
-instance final_fst
-  signature: [IsConnected D]
-  body: inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
-    (prod.rightUnitorEquivalence.{0} C).functor).Final
-
-中文:
-实例 final_fst
-  签名: [是连通 D]
-  定义体: inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
-    (prod.rightUnitorEquivalence.{0} C).functor).Final
-
-Depends on / 依赖: Discrete, Discrete.mk, Functor, Functor.const, Functor.prod, functor, prod.rightUnitorEquivalence, rightUnitorEquivalence
+/-
+**CategoryTheory.final_fst** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：final_fst [IsConnected D] : (Prod.fst C D).Final
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance final_fst [IsConnected D] : (Prod.fst C D).Final :=
   inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
     (prod.rightUnitorEquivalence.{0} C).functor).Final
-
-/--
-Instance `final_snd` / 实例 `final_snd`
-
-English:
-instance final_snd
-  signature: [IsConnected C]
-  body: inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Final
-
-中文:
-实例 final_snd
-  签名: [是连通 C]
-  定义体: inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Final
-
-Depends on / 依赖: Prod.braiding, Prod.fst, braiding, functor
+/-
+**CategoryTheory.final_snd** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：final_snd [IsConnected C] : (Prod.snd C D).Final
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance final_snd [IsConnected C] : (Prod.snd C D).Final :=
   inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Final
-
-/--
-Instance `initial_fst` / 实例 `initial_fst`
-
-English:
-instance initial_fst
-  signature: [IsConnected D]
-  body: inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
-    (prod.rightUnitorEquivalence.{0} C).functor).Initial
-
-中文:
-实例 initial_fst
-  签名: [是连通 D]
-  定义体: inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
-    (prod.rightUnitorEquivalence.{0} C).functor).Initial
-
-Depends on / 依赖: Discrete, Discrete.mk, Functor, Functor.const, Functor.prod, Initial, functor, prod.rightUnitorEquivalence, rightUnitorEquivalence
+/-
+**CategoryTheory.initial_fst** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：initial_fst [IsConnected D] : (Prod.fst C D).Initial
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance initial_fst [IsConnected D] : (Prod.fst C D).Initial :=
   inferInstanceAs (Functor.prod (𝟭 C) ((Functor.const _).obj (Discrete.mk .unit)) ⋙
     (prod.rightUnitorEquivalence.{0} C).functor).Initial
-
-/--
-Instance `initial_snd` / 实例 `initial_snd`
-
-English:
-instance initial_snd
-  signature: [IsConnected C]
-  body: inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Initial
-
-中文:
-实例 initial_snd
-  签名: [是连通 C]
-  定义体: inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Initial
-
-Depends on / 依赖: Initial, Prod.braiding, Prod.fst, braiding, functor
+/-
+**CategoryTheory.initial_snd** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：initial_snd [IsConnected C] : (Prod.snd C D).Initial
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance initial_snd [IsConnected C] : (Prod.snd C D).Initial :=
   inferInstanceAs ((Prod.braiding C D).functor ⋙ Prod.fst D C).Initial
 
 end CategoryTheory
+

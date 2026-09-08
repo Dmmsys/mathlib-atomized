@@ -69,55 +69,53 @@ open Finsupp (single)
 
 --attribute [-simp] coe_eval₂_hom
 
-variable (p : Nat)
+variable (p : ℕ)
 variable (R : Type*) [CommRing R]
 
-/--
-Definition of `wittPolynomial` / `wittPolynomial` 的定义
+/-- `wittPolynomial p R n` is the `n`-th Witt polynomial
+with respect to a prime `p` with coefficients in a commutative ring `R`.
+It is defined as:
 
-English:
-definition wittPolynomial
-  signature: (n : Nat)
-  body: ∑ i in range (n + 1), monomial (single i (p ^ (n - i))) ((p : R) ^ i)
+`∑_{i ≤ n} p^i X_i^{p^{n-i}} ∈ R[X_0, X_1, X_2, …]`. -/
+/-
+**wittPolynomial** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：wittPolynomial (n : Nat) : MvPolynomial Nat R
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 wittPolynomial
-  签名: (n : 自然数)
-  定义体: ∑ i in range (n + 1), monomial (single i (p ^ (n - i))) ((p : R) ^ i)
+--- 原说明 ---
+`wittPolynomial p R n` is the `n`-th Witt polynomial
+with respect to a prime `p` with coefficients in a commutative ring `R`.
+It is defined as:
 
-Depends on / 依赖: monomial, single
+`∑_{i ≤ n} p^i X_i^{p^{n-i}} ∈ R[X_0, X_1, X_2, …]`.
 -/
-noncomputable def wittPolynomial (n : Nat) : MvPolynomial Nat R :=
-  ∑ i in range (n + 1), monomial (single i (p ^ (n - i))) ((p : R) ^ i)
-
-/--
-theorem `wittPolynomial_eq_sum_C_mul_X_pow` / 定理 `wittPolynomial_eq_sum_C_mul_X_pow`
-
-English:
-theorem wittPolynomial_eq_sum_C_mul_X_pow
-  given: (n : Nat)
-  proof: by
-  apply sum_congr rfl
-  rintro i -
-  rw [monomial_eq]; rw [Finsupp.prod_single_index]
-  rw [pow_zero]
-
-中文:
-定理 wittPolynomial_eq_sum_C_mul_X_pow
-  条件: (n : 自然数)
-  证明: by
-  apply sum_congr rfl
-  rintro i -
-  rw [monomial_eq]; rw [Finsupp.prod_single_index]
-  rw [pow_zero]
-
-Depends on / 依赖: Finsupp, Finsupp.prod_single_index, monomial_eq, pow_zero, prod_single_index, sum_congr
+noncomputable def wittPolynomial (n : ℕ) : MvPolynomial ℕ R :=
+  ∑ i ∈ range (n + 1), monomial (single i (p ^ (n - i))) ((p : R) ^ i)
+/-
+**wittPolynomial_eq_sum_C_mul_X_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wittPolynomial_eq_sum_C_mul_X_pow (n : Nat) : wittPolynomial p R n = ∑ i i
+n range (n + 1), C ((p : R) ^ i) * X i ^ p ^ (n - i)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.monomial_eq`：monomial_eq : monomial s a = C a * (s.prod fun
+ n e => X n ^ e : MvPolynomial σ R)
+· 使用定理 `Finsupp.prod_single_index`：prod_single_index {a : α} {b : M} {h : α -> M
+ -> N} (h_zero : h a 0 = 1) : (single a b).prod h = h a b
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
 -/
-theorem wittPolynomial_eq_sum_C_mul_X_pow (n : Nat) :
-    wittPolynomial p R n = ∑ i in range (n + 1), C ((p : R) ^ i) * X i ^ p ^ (n - i) := by
+theorem wittPolynomial_eq_sum_C_mul_X_pow (n : ℕ) :
+    wittPolynomial p R n = ∑ i ∈ range (n + 1), C ((p : R) ^ i) * X i ^ p ^ (n - i) := by
   apply sum_congr rfl
   rintro i -
-  rw [monomial_eq]; rw [Finsupp.prod_single_index]
+  rw [monomial_eq, Finsupp.prod_single_index]
   rw [pow_zero]
 
 /-! We set up notation locally to this file, to keep statements short and comprehensible.
@@ -144,69 +142,83 @@ section
 variable {R} {S : Type*} [CommRing S]
 
 @[simp]
-/--
-theorem `map_wittPolynomial` / 定理 `map_wittPolynomial`
-
-English:
-theorem map_wittPolynomial
-  given: (f : R ->+* S) (n : Nat)
-  statement: map f (W n) = W n
-  proof: by
-  rw [wittPolynomial]; rw [map_sum]; rw [wittPolynomial]
-  refine sum_congr rfl fun i _ => ?_
-  rw [map_monomial]; rw [map_pow]; rw [map_natCast]
-
-中文:
-定理 map_wittPolynomial
-  条件: (f : R ->+* S) (n : 自然数)
-  结论: map f (W n) = W n
-  证明: by
-  rw [wittPolynomial]; rw [map_sum]; rw [wittPolynomial]
-  refine sum_congr rfl fun i _ => ?_
-  rw [map_monomial]; rw [map_pow]; rw [map_natCast]
-
-Depends on / 依赖: map_monomial, map_natCast, map_pow, map_sum, sum_congr, wittPolynomial
+/-
+**map_wittPolynomial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_wittPolynomial (f : R ->+* S) (n : Nat) : map f (W n) = W n
+参数：f : R ->+* S；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `wittPolynomial.eq_1`：∀ (p : ℕ) (R : Type u_1) [inst : CommRing R] (n : ℕ
+),   wittPolynomial p R n = ∑ i ∈ Finset.range (n + 1), (MvPolynomial.monomial f
+un₀ | i =…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MvPolynomial.map_monomial`：map_monomial (s : σ ->₀ Nat) (a : R) : map f 
+(monomial s a) = monomial s (f a)
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
 -/
-theorem map_wittPolynomial (f : R ->+* S) (n : Nat) : map f (W n) = W n := by
-  rw [wittPolynomial]; rw [map_sum]; rw [wittPolynomial]
+theorem map_wittPolynomial (f : R →+* S) (n : ℕ) : map f (W n) = W n := by
+  rw [wittPolynomial, map_sum, wittPolynomial]
   refine sum_congr rfl fun i _ => ?_
-  rw [map_monomial]; rw [map_pow]; rw [map_natCast]
+  rw [map_monomial, map_pow, map_natCast]
 
 variable (R)
 
 @[simp]
-/--
-theorem `constantCoeff_wittPolynomial` / 定理 `constantCoeff_wittPolynomial`
-
-English:
-theorem constantCoeff_wittPolynomial
-  given: [hp : Fact p.Prime] (n : Nat)
-  proof: by
-  simp only [wittPolynomial, map_sum, constantCoeff_monomial]
-  rw [sum_eq_zero]
-  rintro i _
-  rw [if_neg]
-  rw [Finsupp.single_eq_zero]
-  exact ne_of_gt (pow_pos hp.1.pos _)
-
-@[simp]
-
-中文:
-定理 constantCoeff_wittPolynomial
-  条件: [hp : Fact p.素] (n : 自然数)
-  证明: by
-  simp only [wittPolynomial, map_sum, constantCoeff_monomial]
-  rw [sum_eq_zero]
-  rintro i _
-  rw [if_neg]
-  rw [Finsupp.single_eq_zero]
-  exact ne_of_gt (pow_pos hp.1.pos _)
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.single_eq_zero, constantCoeff_monomial, if_neg, map_sum, ne_of_gt, pow_pos, single_eq_zero, sum_eq_zero, wittPolynomial
+/-
+**constantCoeff_wittPolynomial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：constantCoeff_wittPolynomial [hp : Fact p.Prime] (n : Nat) : constantCoeff
+ (wittPolynomial p R n) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MvPolynomial.constantCoeff_monomial`：constantCoeff_monomial [DecidableEq
+ σ] (d : σ ->₀ Nat) (r : R) : constantCoeff (monomial d r) = if d = 0 then r els
+e 0
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Finsupp.single_eq_zero`：single_eq_zero : single a b = 0 ↔ b = 0
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `pow_pos`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : PartialO
+rder M₀] {a : M₀} [PosMulStrictMono M₀]   [ZeroLEOneClass M₀], 0 < a → ∀ (n :…
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `Nat.Prime.pos`：∀ {p : ℕ}, Nat.Prime p → 0 < p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
 -/
-theorem constantCoeff_wittPolynomial [hp : Fact p.Prime] (n : Nat) :
+theorem constantCoeff_wittPolynomial [hp : Fact p.Prime] (n : ℕ) :
     constantCoeff (wittPolynomial p R n) = 0 := by
   simp only [wittPolynomial, map_sum, constantCoeff_monomial]
   rw [sum_eq_zero]
@@ -216,193 +228,286 @@ theorem constantCoeff_wittPolynomial [hp : Fact p.Prime] (n : Nat) :
   exact ne_of_gt (pow_pos hp.1.pos _)
 
 @[simp]
-/--
-theorem `wittPolynomial_zero` / 定理 `wittPolynomial_zero`
-
-English:
-theorem wittPolynomial_zero
-  statement: wittPolynomial p R 0 = X 0
-  proof: by
-  simp only [wittPolynomial, X, sum_singleton, range_one, pow_zero, zero_add, tsub_self]
-
-@[simp]
-
-中文:
-定理 wittPolynomial_zero
-  结论: wittPolynomial p R 0 = X 0
-  证明: by
-  simp only [wittPolynomial, X, sum_singleton, range_one, pow_zero, zero_add, tsub_self]
-
-@[simp]
-
-Depends on / 依赖: pow_zero, range_one, sum_singleton, tsub_self, wittPolynomial, zero_add
+/-
+**wittPolynomial_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wittPolynomial_zero : wittPolynomial p R 0 = X 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wittPolynomial_zero : wittPolynomial p R 0 = X 0 := by
   simp only [wittPolynomial, X, sum_singleton, range_one, pow_zero, zero_add, tsub_self]
 
 @[simp]
-/--
-theorem `wittPolynomial_one` / 定理 `wittPolynomial_one`
-
-English:
-theorem wittPolynomial_one
-  statement: wittPolynomial p R 1 = C (p : R) * X 1 + X 0 ^ p
-  proof: by
-  simp only [wittPolynomial_eq_sum_C_mul_X_pow, sum_range_succ_comm, range_one, sum_singleton,
-    one_mul, pow_one, C_1, pow_zero, tsub_self, tsub_zero]
-
-中文:
-定理 wittPolynomial_one
-  结论: wittPolynomial p R 1 = C (p : R) * X 1 + X 0 ^ p
-  证明: by
-  simp only [wittPolynomial_eq_sum_C_mul_X_pow, sum_range_succ_comm, range_one, sum_singleton,
-    one_mul, pow_one, C_1, pow_zero, tsub_self, tsub_zero]
-
-Depends on / 依赖: one_mul, pow_one, pow_zero, range_one, sum_range_succ_comm, sum_singleton, tsub_self, tsub_zero, wittPolynomial_eq_sum_C_mul_X_pow
+/-
+**wittPolynomial_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wittPolynomial_one : wittPolynomial p R 1 = C (p : R) * X 1 + X 0 ^ p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `wittPolynomial_eq_sum_C_mul_X_pow`：wittPolynomial_eq_sum_C_mul_X_pow (n 
+: Nat) : wittPolynomial p R n = ∑ i in range (n + 1), C ((p : R) ^ i) * X i ^ p 
+^ (n - i)
+· 使用定理 `Finset.sum_range_succ_comm`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f
+ : ℕ → M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = f n + ∑ x ∈ Finset.range 
+n, f x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `tsub_zero`：tsub_zero (a : α) : a - 0 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem wittPolynomial_one : wittPolynomial p R 1 = C (p : R) * X 1 + X 0 ^ p := by
   simp only [wittPolynomial_eq_sum_C_mul_X_pow, sum_range_succ_comm, range_one, sum_singleton,
     one_mul, pow_one, C_1, pow_zero, tsub_self, tsub_zero]
-
-/--
-theorem `aeval_wittPolynomial` / 定理 `aeval_wittPolynomial`
-
-English:
-theorem aeval_wittPolynomial
-  given: {A : Type*} [CommRing A] [Algebra R A] (f : Nat -> A) (n : Nat)
-  proof: by
-  simp [wittPolynomial, map_sum, aeval_monomial, Finsupp.prod_single_index]
-
-中文:
-定理 aeval_wittPolynomial
-  条件: {A : 类型} [交换环 A] [代数 R A] (f : 自然数 -> A) (n : 自然数)
-  证明: by
-  simp [wittPolynomial, map_sum, aeval_monomial, Finsupp.prod_single_index]
-
-Depends on / 依赖: Finsupp, Finsupp.prod_single_index, aeval_monomial, map_sum, prod_single_index, wittPolynomial
+/-
+**aeval_wittPolynomial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：aeval_wittPolynomial {A : Type*} [CommRing A] [Algebra R A] (f : Nat -> A)
+ (n : Nat) : aeval f (W_ R n) = ∑ i in range (n + 1), (p : A) ^ i * f i ^ p ^ (n
+ - i)
+参数：f : Nat -> A；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MvPolynomial.aeval_monomial`：aeval_monomial (g : σ -> S₁) (d : σ ->₀ Nat
+) (r : R) : aeval g (monomial d r) = algebraMap _ _ r * d.prod fun i k => g i ^ 
+k
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `Finsupp.prod_single_index`：prod_single_index {a : α} {b : M} {h : α -> M
+ -> N} (h_zero : h a 0 = 1) : (single a b).prod h = h a b
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem aeval_wittPolynomial {A : Type*} [CommRing A] [Algebra R A] (f : Nat -> A) (n : Nat) :
-    aeval f (W_ R n) = ∑ i in range (n + 1), (p : A) ^ i * f i ^ p ^ (n - i) := by
+theorem aeval_wittPolynomial {A : Type*} [CommRing A] [Algebra R A] (f : ℕ → A) (n : ℕ) :
+    aeval f (W_ R n) = ∑ i ∈ range (n + 1), (p : A) ^ i * f i ^ p ^ (n - i) := by
   simp [wittPolynomial, map_sum, aeval_monomial, Finsupp.prod_single_index]
 
 /-- Over the ring `ZMod (p^(n+1))`, we produce the `n+1`st Witt polynomial
 by expanding the `n`th Witt polynomial by `p`. -/
 @[simp]
-/--
-theorem `wittPolynomial_zmod_self` / 定理 `wittPolynomial_zmod_self`
+/-
+**wittPolynomial_zmod_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wittPolynomial_zmod_self (n : Nat) : W_ (ZMod (p ^ (n + 1))) (n + 1) = exp
+and p (W_ (ZMod (p ^ (n + 1))) n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `wittPolynomial_eq_sum_C_mul_X_pow`：wittPolynomial_eq_sum_C_mul_X_pow (n 
+: Nat) : wittPolynomial p R n = ∑ i in range (n + 1), C ((p : R) ^ i) * X i ^ p 
+^ (n - i)
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_pow`：∀ {α : Type u_1} [inst : Semiring α] (m n : ℕ), ↑(m ^ n) =
+ ↑m ^ n
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `MvPolynomial.C_0`：C_0 : C 0 = (0 : MvPolynomial σ R)
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `MvPolynomial.expand_X`：expand_X (i : σ) : expand p (X i : MvPolynomial σ
+ R) = X i ^ p
+· 使用定理 `MvPolynomial.algHom_C`：algHom_C {A : Type*} [Semiring A] [Algebra R A] (
+f : MvPolynomial σ R ->ₐ[R] A) (r : R) : f (C r) = algebraMap R A r
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_tsub_assoc_of_le`：add_tsub_assoc_of_le (h : c <= b) (a : α) : a + b 
+- c = a + (b - c)
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem wittPolynomial_zmod_self
-  given: (n : Nat)
-  proof: by
-  simp only [wittPolynomial_eq_sum_C_mul_X_pow]
-  rw [sum_range_succ]; rw [← Nat.cast_pow]; rw [CharP.cast_eq_zero (ZMod (p ^ (n + 1))) (p ^ (n + 1))]; rw [C_0]; rw [zero_mul]; rw [add_zero]; rw [map_sum]; rw [sum_congr rfl]
-  intro k hk
-  rw [map_mul (expand p)]; rw [map_pow (expand p)]; rw [expand_X]; rw [algHom_C]; rw [← pow_mul]; rw [← pow_succ']
-  congr
-  rw [mem_range] at hk
-  rw [add_comm]; rw [add_tsub_assoc_of_le (Nat.lt_succ_iff.mp hk)]; rw [← add_comm]
-
-中文:
-定理 wittPolynomial_zmod_self
-  条件: (n : 自然数)
-  证明: by
-  simp only [wittPolynomial_eq_sum_C_mul_X_pow]
-  rw [sum_range_succ]; rw [← Nat.cast_pow]; rw [CharP.cast_eq_zero (ZMod (p ^ (n + 1))) (p ^ (n + 1))]; rw [C_0]; rw [zero_mul]; rw [add_zero]; rw [map_sum]; rw [sum_congr rfl]
-  intro k hk
-  rw [map_mul (expand p)]; rw [map_pow (expand p)]; rw [expand_X]; rw [algHom_C]; rw [← pow_mul]; rw [← pow_succ']
-  congr
-  rw [mem_range] at hk
-  rw [add_comm]; rw [add_tsub_assoc_of_le (Nat.lt_succ_iff.mp hk)]; rw [← add_comm]
-
-Depends on / 依赖: CharP.cast_eq_zero, Nat.cast_pow, Nat.lt_succ_iff.mp, add_comm, add_tsub_assoc_of_le, add_zero, algHom_C, cast_eq_zero, cast_pow, expand, expand_X, lt_succ_iff, map_mul, map_pow, map_sum, mem_range, pow_mul, pow_succ, sum_congr, sum_range_succ
+--- 原说明 ---
+Over the ring `ZMod (p^(n+1))`, we produce the `n+1`st Witt polynomial
+by expanding the `n`th Witt polynomial by `p`.
 -/
-theorem wittPolynomial_zmod_self (n : Nat) :
+theorem wittPolynomial_zmod_self (n : ℕ) :
     W_ (ZMod (p ^ (n + 1))) (n + 1) = expand p (W_ (ZMod (p ^ (n + 1))) n) := by
   simp only [wittPolynomial_eq_sum_C_mul_X_pow]
-  rw [sum_range_succ]; rw [← Nat.cast_pow]; rw [CharP.cast_eq_zero (ZMod (p ^ (n + 1))) (p ^ (n + 1))]; rw [C_0]; rw [zero_mul]; rw [add_zero]; rw [map_sum]; rw [sum_congr rfl]
+  rw [sum_range_succ, ← Nat.cast_pow, CharP.cast_eq_zero (ZMod (p ^ (n + 1))) (p ^ (n + 1)), C_0,
+    zero_mul, add_zero, map_sum, sum_congr rfl]
   intro k hk
-  rw [map_mul (expand p)]; rw [map_pow (expand p)]; rw [expand_X]; rw [algHom_C]; rw [← pow_mul]; rw [← pow_succ']
+  rw [map_mul (expand p), map_pow (expand p), expand_X, algHom_C, ← pow_mul, ← pow_succ']
   congr
   rw [mem_range] at hk
-  rw [add_comm]; rw [add_tsub_assoc_of_le (Nat.lt_succ_iff.mp hk)]; rw [← add_comm]
+  rw [add_comm, add_tsub_assoc_of_le (Nat.lt_succ_iff.mp hk), ← add_comm]
 
 section PPrime
 
 variable [hp : NeZero p]
 
-/--
-theorem `wittPolynomial_vars` / 定理 `wittPolynomial_vars`
-
-English:
-theorem wittPolynomial_vars
-  given: [CharZero R] (n : Nat)
-  statement: (wittPolynomial p R n).vars = range (n + 1)
-  proof: by
-  have : forall i, (monomial (Finsupp.single i (p ^ (n - i))) ((p : R) ^ i)).vars = {i} := by
-    intro i
-    refine vars_monomial_single i (pow_ne_zero _ hp.1) ?_
-    exact_mod_cast pow_ne_zero i hp.1
-  rw [wittPolynomial]; rw [vars_sum_of_disjoint]
-  · simp only [this, biUnion_singleton_eq_self]
-  · simp only [this]
-    intro a b h
-    apply disjoint_singleton_left.mpr
-    rwa [mem_singleton]
-
-中文:
-定理 wittPolynomial_vars
-  条件: [特征零 R] (n : 自然数)
-  结论: (wittPolynomial p R n).vars = range (n + 1)
-  证明: by
-  have : forall i, (monomial (Finsupp.single i (p ^ (n - i))) ((p : R) ^ i)).vars = {i} := by
-    intro i
-    refine vars_monomial_single i (pow_ne_zero _ hp.1) ?_
-    exact_mod_cast pow_ne_zero i hp.1
-  rw [wittPolynomial]; rw [vars_sum_of_disjoint]
-  · simp only [this, biUnion_singleton_eq_self]
-  · simp only [this]
-    intro a b h
-    apply disjoint_singleton_left.mpr
-    rwa [mem_singleton]
-
-Depends on / 依赖: Finsupp, Finsupp.single, biUnion_singleton_eq_self, disjoint_singleton_left, disjoint_singleton_left.mpr, mem_singleton, monomial, pow_ne_zero, single, vars_monomial_single, vars_sum_of_disjoint, wittPolynomial
+/-
+**wittPolynomial_vars** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wittPolynomial_vars [CharZero R] (n : Nat) : (wittPolynomial p R n).vars =
+ range (n + 1)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.vars_monomial_single`：vars_monomial_single (i : σ) {e : Nat
+} {r : R} (he : e != 0) (hr : r != 0) : (monomial (Finsupp.single i e) r).vars =
+ {i}
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `NeZero.out`：∀ {R : Type u_1} {inst : Zero R} {n : R} [self : NeZero n], 
+n ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `wittPolynomial.eq_1`：∀ (p : ℕ) (R : Type u_1) [inst : CommRing R] (n : ℕ
+),   wittPolynomial p R n = ∑ i ∈ Finset.range (n + 1), (MvPolynomial.monomial f
+un₀ | i =…
+· 使用定理 `MvPolynomial.vars_sum_of_disjoint`：vars_sum_of_disjoint [DecidableEq σ] 
+(h : Pairwise <| (Disjoint on fun i => (φ i).vars)) : (∑ i in t, φ i).vars = Fin
+set.biUnion t fun i => …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_singleton_left`：disjoint_singleton_left : Disjoint (sing
+leton a) s ↔ a ∉ s
+· 使用定理 `Finset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Finset α) ↔ 
+b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `Finset.biUnion_singleton_eq_self`：biUnion_singleton_eq_self [DecidableEq
+ α] : s.biUnion (singleton : α -> Finset α) = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem wittPolynomial_vars [CharZero R] (n : Nat) : (wittPolynomial p R n).vars = range (n + 1) := by
-  have : forall i, (monomial (Finsupp.single i (p ^ (n - i))) ((p : R) ^ i)).vars = {i} := by
+theorem wittPolynomial_vars [CharZero R] (n : ℕ) : (wittPolynomial p R n).vars = range (n + 1) := by
+  have : ∀ i, (monomial (Finsupp.single i (p ^ (n - i))) ((p : R) ^ i)).vars = {i} := by
     intro i
     refine vars_monomial_single i (pow_ne_zero _ hp.1) ?_
     exact_mod_cast pow_ne_zero i hp.1
-  rw [wittPolynomial]; rw [vars_sum_of_disjoint]
+  rw [wittPolynomial, vars_sum_of_disjoint]
   · simp only [this, biUnion_singleton_eq_self]
   · simp only [this]
     intro a b h
     apply disjoint_singleton_left.mpr
     rwa [mem_singleton]
-
-/--
-theorem `wittPolynomial_vars_subset` / 定理 `wittPolynomial_vars_subset`
-
-English:
-theorem wittPolynomial_vars_subset
-  given: (n : Nat)
-  statement: (wittPolynomial p R n).vars subseteq range (n + 1)
-  proof: by
-  rw [← map_wittPolynomial p (Int.castRingHom R)]; rw [← wittPolynomial_vars p Int]
-  apply vars_map
-
-中文:
-定理 wittPolynomial_vars_subset
-  条件: (n : 自然数)
-  结论: (wittPolynomial p R n).vars subseteq range (n + 1)
-  证明: by
-  rw [← map_wittPolynomial p (Int.castRingHom R)]; rw [← wittPolynomial_vars p Int]
-  apply vars_map
-
-Depends on / 依赖: Int.castRingHom, castRingHom, map_wittPolynomial, vars_map, wittPolynomial_vars
+/-
+**wittPolynomial_vars_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：wittPolynomial_vars_subset (n : Nat) : (wittPolynomial p R n).vars subsete
+q range (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_wittPolynomial`：map_wittPolynomial (f : R ->+* S) (n : Nat) : map f 
+(W n) = W n
+· 使用定理 `wittPolynomial_vars`：wittPolynomial_vars [CharZero R] (n : Nat) : (wittP
+olynomial p R n).vars = range (n + 1)
+· 使用定理 `MvPolynomial.vars_map`：vars_map : (map f p).vars subseteq p.vars
 -/
-theorem wittPolynomial_vars_subset (n : Nat) : (wittPolynomial p R n).vars subseteq range (n + 1) := by
-  rw [← map_wittPolynomial p (Int.castRingHom R)]; rw [← wittPolynomial_vars p Int]
+theorem wittPolynomial_vars_subset (n : ℕ) : (wittPolynomial p R n).vars ⊆ range (n + 1) := by
+  rw [← map_wittPolynomial p (Int.castRingHom R), ← wittPolynomial_vars p ℤ]
   apply vars_map
 
 end PPrime
@@ -419,189 +524,218 @@ The polynomials `xInTermsOfW` give the coordinate transformation in the backward
 -/
 
 
-/--
-Definition of `xInTermsOfW` / `xInTermsOfW` 的定义
+/-- The `xInTermsOfW p R n` is the polynomial on the basis of Witt polynomials
+that corresponds to the ordinary `X n`. -/
+/-
+**xInTermsOfW** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：(p : ℕ) → (R : Type u_1) → [inst : CommRing R] → [Invertible ↑p] → ℕ → MvP
+olynomial ℕ R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition xInTermsOfW
-  signature: [Invertible (p : R)]
-
-中文:
-定义 xInTermsOfW
-  签名: [可逆 (p : R)]
+--- 原说明 ---
+The `xInTermsOfW p R n` is the polynomial on the basis of Witt polynomials
+that corresponds to the ordinary `X n`.
 -/
-noncomputable def xInTermsOfW [Invertible (p : R)] : Nat -> MvPolynomial Nat R
+noncomputable def xInTermsOfW [Invertible (p : R)] : ℕ → MvPolynomial ℕ R
   | n => (X n - ∑ i : Fin n,
-          C ((p : R) ^ (i : Nat)) * xInTermsOfW i ^ p ^ (n - (i : Nat))) * C ((⅟p : R) ^ n)
-
-/--
-theorem `xInTermsOfW_eq` / 定理 `xInTermsOfW_eq`
-
-English:
-theorem xInTermsOfW_eq
-  given: [Invertible (p : R)] {n : Nat}
-  statement: xInTermsOfW p R n =
-  proof: by
-  rw [xInTermsOfW]; rw [← Fin.sum_univ_eq_sum_range]
-
-@[simp]
-
-中文:
-定理 xInTermsOfW_eq
-  条件: [可逆 (p : R)] {n : 自然数}
-  结论: xInTermsOfW p R n =
-  证明: by
-  rw [xInTermsOfW]; rw [← Fin.sum_univ_eq_sum_range]
-
-@[simp]
-
-Depends on / 依赖: Fin.sum_univ_eq_sum_range, sum_univ_eq_sum_range, xInTermsOfW
+          C ((p : R) ^ (i : ℕ)) * xInTermsOfW i ^ p ^ (n - (i : ℕ))) * C ((⅟p : R) ^ n)
+/-
+**xInTermsOfW_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：xInTermsOfW_eq [Invertible (p : R)] {n : Nat} : xInTermsOfW p R n = (X n -
+ ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n - i)) * C ((⅟p : R
+) ^ n)
+参数：p : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `xInTermsOfW.eq_1`：∀ (p : ℕ) (R : Type u_1) [inst : CommRing R] [inst_1 :
+ Invertible ↑p] (x : ℕ),   xInTermsOfW p R x =     (MvPolynomial.X x - ∑ i, MvPo
+lynomi…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.sum_univ_eq_sum_range`：∀ {α : Type u_1} [inst : AddCommMonoid α] (f 
+: ℕ → α) (n : ℕ), ∑ i, f ↑i = ∑ i ∈ Finset.range n, f i
 -/
-theorem xInTermsOfW_eq [Invertible (p : R)] {n : Nat} : xInTermsOfW p R n =
-    (X n - ∑ i in range n, C ((p : R) ^ i) *
+theorem xInTermsOfW_eq [Invertible (p : R)] {n : ℕ} : xInTermsOfW p R n =
+    (X n - ∑ i ∈ range n, C ((p : R) ^ i) *
       xInTermsOfW p R i ^ p ^ (n - i)) * C ((⅟p : R) ^ n) := by
-  rw [xInTermsOfW]; rw [← Fin.sum_univ_eq_sum_range]
+  rw [xInTermsOfW, ← Fin.sum_univ_eq_sum_range]
 
 @[simp]
-/--
-theorem `constantCoeff_xInTermsOfW` / 定理 `constantCoeff_xInTermsOfW`
-
-English:
-theorem constantCoeff_xInTermsOfW
-  given: [hp : Fact p.Prime] [Invertible (p : R)] (n : Nat)
-  proof: by
-  induction n using Nat.strongRecOn with | ind n IH => ?_
-  rw [xInTermsOfW_eq]; rw [mul_comm]; rw [map_mul]; rw [map_sub]; rw [map_sum]; rw [constantCoeff_C]; rw [constantCoeff_X]; rw [zero_sub]; rw [mul_neg]; rw [neg_eq_zero]; rw [sum_eq_zero]; rw [mul_zero]
-  intro m H
-  rw [mem_range] at H
-  simp only [map_mul, map_pow, map_natCast, IH m H]
-  rw [zero_pow]; rw [mul_zero]
-  exact pow_ne_zero _ hp.1.ne_zero
-
-@[simp]
-
-中文:
-定理 constantCoeff_xInTermsOfW
-  条件: [hp : Fact p.素] [可逆 (p : R)] (n : 自然数)
-  证明: by
-  induction n using Nat.strongRecOn with | ind n IH => ?_
-  rw [xInTermsOfW_eq]; rw [mul_comm]; rw [map_mul]; rw [map_sub]; rw [map_sum]; rw [constantCoeff_C]; rw [constantCoeff_X]; rw [zero_sub]; rw [mul_neg]; rw [neg_eq_zero]; rw [sum_eq_zero]; rw [mul_zero]
-  intro m H
-  rw [mem_range] at H
-  simp only [map_mul, map_pow, map_natCast, IH m H]
-  rw [zero_pow]; rw [mul_zero]
-  exact pow_ne_zero _ hp.1.ne_zero
-
-@[simp]
-
-Depends on / 依赖: Nat.strongRecOn, constantCoeff_C, constantCoeff_X, map_mul, map_natCast, map_pow, map_sub, map_sum, mem_range, mul_comm, mul_neg, mul_zero, ne_zero, neg_eq_zero, pow_ne_zero, strongRecOn, sum_eq_zero, xInTermsOfW_eq, zero_pow, zero_sub
+/-
+**constantCoeff_xInTermsOfW** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：constantCoeff_xInTermsOfW [hp : Fact p.Prime] [Invertible (p : R)] (n : Na
+t) : constantCoeff (xInTermsOfW p R n) = 0
+参数：p : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `xInTermsOfW_eq`：xInTermsOfW_eq [Invertible (p : R)] {n : Nat} : xInTerms
+OfW p R n = (X n - ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n 
+- i)…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `MvPolynomial.constantCoeff_C`：constantCoeff_C (r : R) : constantCoeff (C
+ r : MvPolynomial σ R) = r
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a =
+ 0 ↔ a = 0
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem constantCoeff_xInTermsOfW [hp : Fact p.Prime] [Invertible (p : R)] (n : Nat) :
+theorem constantCoeff_xInTermsOfW [hp : Fact p.Prime] [Invertible (p : R)] (n : ℕ) :
     constantCoeff (xInTermsOfW p R n) = 0 := by
   induction n using Nat.strongRecOn with | ind n IH => ?_
-  rw [xInTermsOfW_eq]; rw [mul_comm]; rw [map_mul]; rw [map_sub]; rw [map_sum]; rw [constantCoeff_C]; rw [constantCoeff_X]; rw [zero_sub]; rw [mul_neg]; rw [neg_eq_zero]; rw [sum_eq_zero]; rw [mul_zero]
+  rw [xInTermsOfW_eq, mul_comm, map_mul, map_sub, map_sum, constantCoeff_C,
+    constantCoeff_X, zero_sub, mul_neg, neg_eq_zero, sum_eq_zero, mul_zero]
   intro m H
   rw [mem_range] at H
   simp only [map_mul, map_pow, map_natCast, IH m H]
-  rw [zero_pow]; rw [mul_zero]
+  rw [zero_pow, mul_zero]
   exact pow_ne_zero _ hp.1.ne_zero
 
 @[simp]
-/--
-theorem `xInTermsOfW_zero` / 定理 `xInTermsOfW_zero`
-
-English:
-theorem xInTermsOfW_zero
-  given: [Invertible (p : R)]
-  statement: xInTermsOfW p R 0 = X 0
-  proof: by
-  rw [xInTermsOfW_eq]; rw [range_zero]; rw [sum_empty]; rw [pow_zero]; rw [C_1]; rw [mul_one]; rw [sub_zero]
-
-中文:
-定理 xInTermsOfW_zero
-  条件: [可逆 (p : R)]
-  结论: xInTermsOfW p R 0 = X 0
-  证明: by
-  rw [xInTermsOfW_eq]; rw [range_zero]; rw [sum_empty]; rw [pow_zero]; rw [C_1]; rw [mul_one]; rw [sub_zero]
-
-Depends on / 依赖: mul_one, pow_zero, range_zero, sub_zero, sum_empty, xInTermsOfW_eq
+/-
+**xInTermsOfW_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：xInTermsOfW_zero [Invertible (p : R)] : xInTermsOfW p R 0 = X 0
+参数：p : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `xInTermsOfW_eq`：xInTermsOfW_eq [Invertible (p : R)] {n : Nat} : xInTerms
+OfW p R n = (X n - ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n 
+- i)…
+· 使用定理 `Finset.range_zero`：range_zero : range 0 = ∅
+· 使用定理 `Finset.sum_empty`：∀ {ι : Type u_1} {M : Type u_3} {f : ι → M} [inst : Ad
+dCommMonoid M], ∑ x ∈ ∅, f x = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `MvPolynomial.C_1`：C_1 : C 1 = (1 : MvPolynomial σ R)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
 -/
 theorem xInTermsOfW_zero [Invertible (p : R)] : xInTermsOfW p R 0 = X 0 := by
-  rw [xInTermsOfW_eq]; rw [range_zero]; rw [sum_empty]; rw [pow_zero]; rw [C_1]; rw [mul_one]; rw [sub_zero]
+  rw [xInTermsOfW_eq, range_zero, sum_empty, pow_zero, C_1, mul_one, sub_zero]
 
 section PPrime
 
 variable [hp : Fact p.Prime]
 
-/--
-theorem `xInTermsOfW_vars_aux` / 定理 `xInTermsOfW_vars_aux`
-
-English:
-theorem xInTermsOfW_vars_aux
-  given: (n : Nat)
-  proof: by
-  induction n using Nat.strongRecOn with | ind n ih => ?_
-  rw [xInTermsOfW_eq]; rw [mul_comm]; rw [vars_C_mul _ (Invertible.ne_zero _)]; rw [vars_sub_of_disjoint]; rw [vars_X]; rw [range_add_one]; rw [insert_eq]
-  on_goal 1 =>
-    simp only [true_and, true_or, mem_union, mem_singleton]
-    intro i
-    rw [mem_union]; rw [mem_union]
-    apply Or.imp id
-  on_goal 2 => rw [vars_X, disjoint_singleton_left]
-  all_goals
-    intro H
-    replace H := vars_sum_subset _ _ H
-    rw [mem_biUnion] at H
-    rcases H with ⟨j, hj, H⟩
-    rw [vars_C_mul] at H
-    swap
-    · apply pow_ne_zero
-      exact mod_cast hp.1.ne_zero
-    rw [mem_range] at hj
-    replace H := (ih j hj).2 (vars_pow _ _ H)
-    rw [mem_range] at H
-  · rw [mem_range]
-    lia
-  · lia
-
-中文:
-定理 xInTermsOfW_vars_aux
-  条件: (n : 自然数)
-  证明: by
-  induction n using Nat.strongRecOn with | ind n ih => ?_
-  rw [xInTermsOfW_eq]; rw [mul_comm]; rw [vars_C_mul _ (Invertible.ne_zero _)]; rw [vars_sub_of_disjoint]; rw [vars_X]; rw [range_add_one]; rw [insert_eq]
-  on_goal 1 =>
-    simp only [true_and, true_or, mem_union, mem_singleton]
-    intro i
-    rw [mem_union]; rw [mem_union]
-    apply Or.imp id
-  on_goal 2 => rw [vars_X, disjoint_singleton_left]
-  all_goals
-    intro H
-    replace H := vars_sum_subset _ _ H
-    rw [mem_biUnion] at H
-    rcases H with ⟨j, hj, H⟩
-    rw [vars_C_mul] at H
-    swap
-    · apply pow_ne_zero
-      exact mod_cast hp.1.ne_zero
-    rw [mem_range] at hj
-    replace H := (ih j hj).2 (vars_pow _ _ H)
-    rw [mem_range] at H
-  · rw [mem_range]
-    lia
-  · lia
-
-Depends on / 依赖: Invertible, Invertible.ne_zero, Nat.strongRecOn, Or.imp, all_goals, disjoint_singleton_left, insert_eq, mem_biUnion, mem_singleton, mem_union, mul_comm, ne_zero, on_goal, range_add_one, replace, strongRecOn, true_and, true_or, vars_C_mul, vars_X
+/-
+**xInTermsOfW_vars_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：xInTermsOfW_vars_aux (n : Nat) : n in (xInTermsOfW p Rat n).vars ∧ (xInTer
+msOfW p Rat n).vars subseteq range (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `xInTermsOfW_eq`：xInTermsOfW_eq [Invertible (p : R)] {n : Nat} : xInTerms
+OfW p R n = (X n - ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n 
+- i)…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MvPolynomial.vars_C_mul`：vars_C_mul (a : A) (ha : a != 0) (φ : MvPolynom
+ial σ A) : (C a * φ : MvPolynomial σ A).vars = φ.vars
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `Invertible.ne_zero`：Invertible.ne_zero [MulZeroOneClass α] (a : α) [Nont
+rivial α] [Invertible a] : a != 0
+· 使用定理 `MvPolynomial.vars_sub_of_disjoint`：vars_sub_of_disjoint [DecidableEq σ] 
+(hpq : Disjoint p.vars q.vars) : (p - q).vars = p.vars union q.vars
+· 使用定理 `MvPolynomial.vars_X`：vars_X [Nontrivial R] : (X n : MvPolynomial σ R).va
+rs = {n}
+· 使用定理 `Finset.disjoint_singleton_left`：disjoint_singleton_left : Disjoint (sing
+leton a) s ↔ a ∉ s
+· 使用定理 `MvPolynomial.vars_sum_subset`：vars_sum_subset [DecidableEq σ] : (∑ i in 
+t, φ i).vars subseteq Finset.biUnion t fun i => (φ i).vars
+· 使用定理 `Finset.mem_biUnion`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : 
+α → Finset β} [inst : DecidableEq β] {b : β},   b ∈ s.biUnion t ↔ ∃ a ∈ s, b ∈ t
+ a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `MvPolynomial.vars_pow`：vars_pow (φ : MvPolynomial σ R) (n : Nat) : (φ ^ 
+n).vars subseteq φ.vars
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.Prime.ne_zero`：∀ {n : ℕ}, Nat.Prime n → n ≠ 0
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `Finset.range_add_one`：range_add_one : range (n + 1) = insert n (range n)
+· 使用定理 `Finset.insert_eq`：insert_eq (a : α) (s : Finset α) : insert a s = {a} un
+ion s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+（共 33 条，此处仅展示前 30 条）
 -/
-theorem xInTermsOfW_vars_aux (n : Nat) :
-    n in (xInTermsOfW p Rat n).vars ∧ (xInTermsOfW p Rat n).vars subseteq range (n + 1) := by
+theorem xInTermsOfW_vars_aux (n : ℕ) :
+    n ∈ (xInTermsOfW p ℚ n).vars ∧ (xInTermsOfW p ℚ n).vars ⊆ range (n + 1) := by
   induction n using Nat.strongRecOn with | ind n ih => ?_
-  rw [xInTermsOfW_eq]; rw [mul_comm]; rw [vars_C_mul _ (Invertible.ne_zero _)]; rw [vars_sub_of_disjoint]; rw [vars_X]; rw [range_add_one]; rw [insert_eq]
+  rw [xInTermsOfW_eq, mul_comm, vars_C_mul _ (Invertible.ne_zero _),
+    vars_sub_of_disjoint, vars_X, range_add_one, insert_eq]
   on_goal 1 =>
     simp only [true_and, true_or, mem_union, mem_singleton]
     intro i
-    rw [mem_union]; rw [mem_union]
+    rw [mem_union, mem_union]
     apply Or.imp id
   on_goal 2 => rw [vars_X, disjoint_singleton_left]
   all_goals
@@ -619,132 +753,85 @@ theorem xInTermsOfW_vars_aux (n : Nat) :
   · rw [mem_range]
     lia
   · lia
-
-/--
-theorem `xInTermsOfW_vars_subset` / 定理 `xInTermsOfW_vars_subset`
-
-English:
-theorem xInTermsOfW_vars_subset
-  given: (n : Nat)
-  statement: (xInTermsOfW p Rat n).vars subseteq range (n + 1)
-  proof: (xInTermsOfW_vars_aux p n).2
-
-中文:
-定理 xInTermsOfW_vars_subset
-  条件: (n : 自然数)
-  结论: (xInTermsOfW p 有理数 n).vars subseteq range (n + 1)
-  证明: (xInTermsOfW_vars_aux p n).2
-
-Depends on / 依赖: xInTermsOfW_vars_aux
+/-
+**xInTermsOfW_vars_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：xInTermsOfW_vars_subset (n : Nat) : (xInTermsOfW p Rat n).vars subseteq ra
+nge (n + 1)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `xInTermsOfW_vars_aux`：xInTermsOfW_vars_aux (n : Nat) : n in (xInTermsOfW
+ p Rat n).vars ∧ (xInTermsOfW p Rat n).vars subseteq range (n + 1)
 -/
-theorem xInTermsOfW_vars_subset (n : Nat) : (xInTermsOfW p Rat n).vars subseteq range (n + 1) :=
+theorem xInTermsOfW_vars_subset (n : ℕ) : (xInTermsOfW p ℚ n).vars ⊆ range (n + 1) :=
   (xInTermsOfW_vars_aux p n).2
 
 end PPrime
 
-/--
-theorem `xInTermsOfW_aux` / 定理 `xInTermsOfW_aux`
-
-English:
-theorem xInTermsOfW_aux
-  given: [Invertible (p : R)] (n : Nat)
-  proof: by
-  rw [xInTermsOfW_eq]; rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [invOf_mul_self]; rw [one_pow]; rw [C_1]; rw [mul_one]
-
-@[simp]
-
-中文:
-定理 xInTermsOfW_aux
-  条件: [可逆 (p : R)] (n : 自然数)
-  证明: by
-  rw [xInTermsOfW_eq]; rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [invOf_mul_self]; rw [one_pow]; rw [C_1]; rw [mul_one]
-
-@[simp]
-
-Depends on / 依赖: C_mul, invOf_mul_self, mul_assoc, mul_one, mul_pow, one_pow, xInTermsOfW_eq
+/-
+**xInTermsOfW_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：xInTermsOfW_aux [Invertible (p : R)] (n : Nat) : xInTermsOfW p R n * C ((p
+ : R) ^ n) = X n - ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n 
+- i)
+参数：p : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `xInTermsOfW_eq`：xInTermsOfW_eq [Invertible (p : R)] {n : Nat} : xInTerms
+OfW p R n = (X n - ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n 
+- i)…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPolynomial.C_mul`：C_mul : (C (a * a') : MvPolynomial σ R) = C a * C a'
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
+· 使用定理 `invOf_mul_self`：invOf_mul_self [Mul α] [One α] (a : α) [Invertible a] : 
+⅟a * a = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `MvPolynomial.C_1`：C_1 : C 1 = (1 : MvPolynomial σ R)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem xInTermsOfW_aux [Invertible (p : R)] (n : Nat) :
+theorem xInTermsOfW_aux [Invertible (p : R)] (n : ℕ) :
     xInTermsOfW p R n * C ((p : R) ^ n) =
-      X n - ∑ i in range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n - i) := by
-  rw [xInTermsOfW_eq]; rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [invOf_mul_self]; rw [one_pow]; rw [C_1]; rw [mul_one]
+      X n - ∑ i ∈ range n, C ((p : R) ^ i) * xInTermsOfW p R i ^ p ^ (n - i) := by
+  rw [xInTermsOfW_eq, mul_assoc, ← C_mul, ← mul_pow, invOf_mul_self,
+    one_pow, C_1, mul_one]
 
 @[simp]
-/--
-theorem `bind₁_xInTermsOfW_wittPolynomial` / 定理 `bind₁_xInTermsOfW_wittPolynomial`
-
-English:
-theorem bind₁_xInTermsOfW_wittPolynomial
-  given: [Invertible (p : R)] (k : Nat)
-  proof: by
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]
-  simp only [map_pow, map_mul, algHom_C, algebraMap_eq]
-  rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [bind₁_X_right]; rw [mul_comm]; rw [← C_pow]; rw [xInTermsOfW_aux]
-  simp only [C_pow, bind₁_X_right, sub_add_cancel]
-
-@[simp]
-
-中文:
-定理 bind₁_xInTermsOfW_wittPolynomial
-  条件: [可逆 (p : R)] (k : 自然数)
-  证明: by
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]
-  simp only [map_pow, map_mul, algHom_C, algebraMap_eq]
-  rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [bind₁_X_right]; rw [mul_comm]; rw [← C_pow]; rw [xInTermsOfW_aux]
-  simp only [C_pow, bind₁_X_right, sub_add_cancel]
-
-@[simp]
-
-Depends on / 依赖: C_pow, algHom_C, algebraMap_eq, map_mul, map_pow, map_sum, mul_comm, pow_one, pow_zero, sub_add_cancel, sum_range_succ_comm, tsub_self, wittPolynomial_eq_sum_C_mul_X_pow, xInTermsOfW_aux
+/-
+**bind** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bind₁_xInTermsOfW_wittPolynomial [Invertible (p : R)] (k : Nat) :
+theorem bind₁_xInTermsOfW_wittPolynomial [Invertible (p : R)] (k : ℕ) :
     bind₁ (xInTermsOfW p R) (W_ R k) = X k := by
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]
+  rw [wittPolynomial_eq_sum_C_mul_X_pow, map_sum]
   simp only [map_pow, map_mul, algHom_C, algebraMap_eq]
-  rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [bind₁_X_right]; rw [mul_comm]; rw [← C_pow]; rw [xInTermsOfW_aux]
+  rw [sum_range_succ_comm, tsub_self, pow_zero, pow_one, bind₁_X_right, mul_comm, ← C_pow,
+    xInTermsOfW_aux]
   simp only [C_pow, bind₁_X_right, sub_add_cancel]
 
 @[simp]
-/--
-theorem `bind₁_wittPolynomial_xInTermsOfW` / 定理 `bind₁_wittPolynomial_xInTermsOfW`
-
-English:
-theorem bind₁_wittPolynomial_xInTermsOfW
-  given: [Invertible (p : R)] (n : Nat)
-  proof: by
-  induction n using Nat.strongRecOn with | ind n H => ?_
-  rw [xInTermsOfW_eq]; rw [map_mul]; rw [map_sub]; rw [bind₁_X_right]; rw [algHom_C]; rw [map_sum]; rw [show X n = (X n * C ((p : R) ^ n)) * C ((⅟p : R) ^ n) by
-      rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [mul_invOf_self]; rw [one_pow]; rw [map_one]; rw [mul_one]]
-  congr 1
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [mul_comm (X n)]; rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
-  apply sum_congr rfl
-  intro i h
-  rw [mem_range] at h
-  rw [map_mul]; rw [map_pow (bind₁ _)]; rw [algHom_C]; rw [H i h]; rw [algebraMap_eq]
-
-中文:
-定理 bind₁_wittPolynomial_xInTermsOfW
-  条件: [可逆 (p : R)] (n : 自然数)
-  证明: by
-  induction n using Nat.strongRecOn with | ind n H => ?_
-  rw [xInTermsOfW_eq]; rw [map_mul]; rw [map_sub]; rw [bind₁_X_right]; rw [algHom_C]; rw [map_sum]; rw [show X n = (X n * C ((p : R) ^ n)) * C ((⅟p : R) ^ n) by
-      rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [mul_invOf_self]; rw [one_pow]; rw [map_one]; rw [mul_one]]
-  congr 1
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [mul_comm (X n)]; rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
-  apply sum_congr rfl
-  intro i h
-  rw [mem_range] at h
-  rw [map_mul]; rw [map_pow (bind₁ _)]; rw [algHom_C]; rw [H i h]; rw [algebraMap_eq]
-
-Depends on / 依赖: C_mul, Nat.strongRecOn, add_eq_lef, add_sub_assoc, algHom_C, map_mul, map_one, map_sub, map_sum, mul_assoc, mul_comm, mul_invOf_self, mul_one, mul_pow, one_pow, pow_one, pow_zero, strongRecOn, sum_range_succ_comm, tsub_self
+/-
+**bind** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bind₁_wittPolynomial_xInTermsOfW [Invertible (p : R)] (n : Nat) :
+theorem bind₁_wittPolynomial_xInTermsOfW [Invertible (p : R)] (n : ℕ) :
     bind₁ (W_ R) (xInTermsOfW p R n) = X n := by
   induction n using Nat.strongRecOn with | ind n H => ?_
-  rw [xInTermsOfW_eq]; rw [map_mul]; rw [map_sub]; rw [bind₁_X_right]; rw [algHom_C]; rw [map_sum]; rw [show X n = (X n * C ((p : R) ^ n)) * C ((⅟p : R) ^ n) by
-      rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [mul_invOf_self]; rw [one_pow]; rw [map_one]; rw [mul_one]]
+  rw [xInTermsOfW_eq, map_mul, map_sub, bind₁_X_right, algHom_C, map_sum,
+    show X n = (X n * C ((p : R) ^ n)) * C ((⅟p : R) ^ n) by
+      rw [mul_assoc, ← C_mul, ← mul_pow, mul_invOf_self, one_pow, map_one, mul_one]]
   congr 1
-  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [mul_comm (X n)]; rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
+  rw [wittPolynomial_eq_sum_C_mul_X_pow, sum_range_succ_comm,
+    tsub_self, pow_zero, pow_one, mul_comm (X n), add_sub_assoc, add_eq_left, sub_eq_zero]
   apply sum_congr rfl
   intro i h
   rw [mem_range] at h
-  rw [map_mul]; rw [map_pow (bind₁ _)]; rw [algHom_C]; rw [H i h]; rw [algebraMap_eq]
+  rw [map_mul, map_pow (bind₁ _), algHom_C, H i h, algebraMap_eq]

@@ -37,203 +37,245 @@ open MeasureTheory
 
 namespace ProbabilityTheory
 
-variable {T Ω : Type*} {𝓧 : T -> Type*} {mΩ : MeasurableSpace Ω} {mα : forall t, MeasurableSpace (𝓧 t)}
-  {X Y : (t : T) -> Ω -> 𝓧 t} {P : Measure Ω}
+variable {T Ω : Type*} {𝓧 : T → Type*} {mΩ : MeasurableSpace Ω} {mα : ∀ t, MeasurableSpace (𝓧 t)}
+  {X Y : (t : T) → Ω → 𝓧 t} {P : Measure Ω}
 
-/--
-lemma `isProjectiveMeasureFamily_map_restrict` / 引理 `isProjectiveMeasureFamily_map_restrict`
+/-- The finite-dimensional distributions of a stochastic process are a projective measure family. -/
+/-
+**ProbabilityTheory.isProjectiveMeasureFamily_map_restrict** 是 Mathlib 中的一个引理，位于
+命名空间 `ProbabilityTheory`。
+形式化陈述：isProjectiveMeasureFamily_map_restrict (hX : forall t, AEMeasurable (X t) 
+P) : IsProjectiveMeasureFamily (fun I => P.map (fun ω => I.restrict (X · ω)))
+参数：hX : forall t, AEMeasurable (X t) P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Finset.measurable_restrict₂`：Finset.measurable_restrict₂ {s t : Finset δ
+} (hst : s subseteq t) : Measurable (Finset.restrict₂ (π
+· 使用定理 `aemeasurable_pi_lambda`：aemeasurable_pi_lambda (f : α -> Π a, X a) (hf :
+ forall a, AEMeasurable (fun c => f c a) μ) : AEMeasurable f μ
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma isProjectiveMeasureFamily_map_restrict
-  given: (hX : forall t, AEMeasurable (X t) P)
-  proof: by
-  intro I J hJI
-  rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict₂ _).aemeasurable]
-  · simp [Finset.restrict_def, Finset.restrict₂_def, Function.comp_def]
-  · exact aemeasurable_pi_lambda _ fun _ => hX _
-
-中文:
-引理 isProjectiveMeasureFamily_map_restrict
-  条件: (hX : 对任意 t, 几乎处处可测 (X t) P)
-  证明: by
-  intro I J hJI
-  rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict₂ _).aemeasurable]
-  · simp [Finset.restrict_def, Finset.restrict₂_def, Function.comp_def]
-  · exact aemeasurable_pi_lambda _ fun _ => hX _
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, Finset, Finset.measurable_restrict, Finset.restrict, Finset.restrict_def, Function, Function.comp_def, aemeasurable, aemeasurable_pi_lambda, comp_def, map_map_of_aemeasurable, restrict_def
+--- 原说明 ---
+The finite-dimensional distributions of a stochastic process are a projective me
+asure family.
 -/
-lemma isProjectiveMeasureFamily_map_restrict (hX : forall t, AEMeasurable (X t) P) :
-    IsProjectiveMeasureFamily (fun I => P.map (fun ω => I.restrict (X · ω))) := by
+lemma isProjectiveMeasureFamily_map_restrict (hX : ∀ t, AEMeasurable (X t) P) :
+    IsProjectiveMeasureFamily (fun I ↦ P.map (fun ω ↦ I.restrict (X · ω))) := by
   intro I J hJI
   rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict₂ _).aemeasurable]
   · simp [Finset.restrict_def, Finset.restrict₂_def, Function.comp_def]
-  · exact aemeasurable_pi_lambda _ fun _ => hX _
+  · exact aemeasurable_pi_lambda _ fun _ ↦ hX _
 
-/--
-lemma `isProjectiveLimit_map` / 引理 `isProjectiveLimit_map`
+/-- The projective limit of the finite-dimensional distributions of a stochastic process is the law
+of the process. -/
+/-
+**ProbabilityTheory.isProjectiveLimit_map** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory`。
+形式化陈述：isProjectiveLimit_map (hX : AEMeasurable (fun ω => (X · ω)) P) : IsProject
+iveLimit (P.map (fun ω => (X · ω))) (fun I => P.map (fun ω => I.restrict (X · ω)
+))
+参数：hX : AEMeasurable (fun ω => (X · ω)) P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
 
-English:
-lemma isProjectiveLimit_map
-  given: (hX : AEMeasurable (fun ω => (X · ω)) P)
-  proof: by
-  intro I
-  rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict _).aemeasurable hX]; rw [Function.comp_def]
-
-中文:
-引理 isProjectiveLimit_map
-  条件: (hX : 几乎处处可测 (fun ω => (X · ω)) P)
-  证明: by
-  intro I
-  rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict _).aemeasurable hX]; rw [Function.comp_def]
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, DistribMulAction, Finset, Finset.measurable_restrict, Function, Function.comp_def, Monoid, aemeasurable, comp_def, isScalarTower_right, map_map_of_aemeasurable, measurable_restrict
+--- 原说明 ---
+The projective limit of the finite-dimensional distributions of a stochastic pro
+cess is the law
+of the process.
 -/
-lemma isProjectiveLimit_map (hX : AEMeasurable (fun ω => (X · ω)) P) :
-    IsProjectiveLimit (P.map (fun ω => (X · ω))) (fun I => P.map (fun ω => I.restrict (X · ω))) := by
+lemma isProjectiveLimit_map (hX : AEMeasurable (fun ω ↦ (X · ω)) P) :
+    IsProjectiveLimit (P.map (fun ω ↦ (X · ω))) (fun I ↦ P.map (fun ω ↦ I.restrict (X · ω))) := by
   intro I
-  rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict _).aemeasurable hX]; rw [Function.comp_def]
+  rw [AEMeasurable.map_map_of_aemeasurable (Finset.measurable_restrict _).aemeasurable hX,
+    Function.comp_def]
 
-/--
-lemma `map_eq_iff_forall_finset_map_restrict_eq` / 引理 `map_eq_iff_forall_finset_map_restrict_eq`
+/-- Two stochastic processes have same law iff they have the same
+finite-dimensional distributions. -/
+/-
+**ProbabilityTheory.map_eq_iff_forall_finset_map_restrict_eq** 是 Mathlib 中的一个引理，
+位于命名空间 `ProbabilityTheory`。
+形式化陈述：map_eq_iff_forall_finset_map_restrict_eq [IsFiniteMeasure P] (hX : AEMeasu
+rable (fun ω => (X · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) P) : P.map (fu
+n ω => (X · ω)) = P.map (fun ω => (Y · ω)) ↔ forall I : Finset T, P.map (fun ω =
+> I.restrict (X · ω)) = P.map (fun ω => I.restrict (Y · ω))
+参数：hX : AEMeasurable (fun ω => (X · ω)) P；hY : AEMeasurable (fun ω => (Y · ω)) P
+。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AEMeasurable.map_map_of_aemeasurable`：map_map_of_aemeasurable {g : β -> 
+γ} {f : α -> β} (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ) 
+: (μ.map f).map g = μ.map …
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用引理 `ProbabilityTheory.isProjectiveLimit_map`：isProjectiveLimit_map (hX : AEM
+easurable (fun ω => (X · ω)) P) : IsProjectiveLimit (P.map (fun ω => (X · ω))) (
+fun I => P.map (fun ω => I.re…
+· 使用定理 `MeasureTheory.IsProjectiveLimit.unique`：unique [forall i, IsFiniteMeasur
+e (P i)] (hμ : IsProjectiveLimit μ P) (hν : IsProjectiveLimit ν P) : μ = ν
+· 使用定理 `MeasureTheory.Measure.isFiniteMeasure_map`：∀ {α : Type u_1} {β : Type u_
+2} [mβ : MeasurableSpace β] {m : MeasurableSpace α} (μ : MeasureTheory.Measure α
+)   [MeasureTheory.IsFiniteMeas…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-lemma map_eq_iff_forall_finset_map_restrict_eq
-  statement: [IsFiniteMeasure P]
-  proof: by
-  refine ⟨fun h I => ?_, fun h => ?_⟩
-  · have hX' : P.map (fun ω => I.restrict (X · ω)) = (P.map (fun ω => (X · ω))).map I.restrict := by
-      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]; rw [Function.comp_def]
-    have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω => (Y · ω))).map I.restrict := by
-      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hY]; rw [Function.comp_def]
-    rw [hX']; rw [hY']; rw [h]
-  · have hX' := isProjectiveLimit_map hX
-    simp_rw [h] at hX'
-    exact hX'.unique (isProjectiveLimit_map hY)
-
-中文:
-引理 map_eq_iff_对任意_finset_map_restrict_eq
-  结论: [是有限测度 P]
-  证明: by
-  refine ⟨fun h I => ?_, fun h => ?_⟩
-  · have hX' : P.map (fun ω => I.restrict (X · ω)) = (P.map (fun ω => (X · ω))).map I.restrict := by
-      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]; rw [Function.comp_def]
-    have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω => (Y · ω))).map I.restrict := by
-      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hY]; rw [Function.comp_def]
-    rw [hX']; rw [hY']; rw [h]
-  · have hX' := isProjectiveLimit_map hX
-    simp_rw [h] at hX'
-    exact hX'.unique (isProjectiveLimit_map hY)
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, DistribMulAction, Function, Function.comp_def, I.restrict, Monoid, P.map, comp_def, fun_prop, isProjectiveLimit_map, map_map_of_aemeasurable, restrict, sMulCommClass_right, simp_rw
+--- 原说明 ---
+Two stochastic processes have same law iff they have the same
+finite-dimensional distributions.
 -/
 lemma map_eq_iff_forall_finset_map_restrict_eq [IsFiniteMeasure P]
-    (hX : AEMeasurable (fun ω => (X · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) P) :
-    P.map (fun ω => (X · ω)) = P.map (fun ω => (Y · ω))
-    ↔ forall I : Finset T, P.map (fun ω => I.restrict (X · ω)) = P.map (fun ω => I.restrict (Y · ω)) := by
-  refine ⟨fun h I => ?_, fun h => ?_⟩
-  · have hX' : P.map (fun ω => I.restrict (X · ω)) = (P.map (fun ω => (X · ω))).map I.restrict := by
-      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]; rw [Function.comp_def]
-    have hY' : P.map (fun ω => I.restrict (Y · ω)) = (P.map (fun ω => (Y · ω))).map I.restrict := by
-      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hY]; rw [Function.comp_def]
-    rw [hX']; rw [hY']; rw [h]
+    (hX : AEMeasurable (fun ω ↦ (X · ω)) P) (hY : AEMeasurable (fun ω ↦ (Y · ω)) P) :
+    P.map (fun ω ↦ (X · ω)) = P.map (fun ω ↦ (Y · ω))
+    ↔ ∀ I : Finset T, P.map (fun ω ↦ I.restrict (X · ω)) = P.map (fun ω ↦ I.restrict (Y · ω)) := by
+  refine ⟨fun h I ↦ ?_, fun h ↦ ?_⟩
+  · have hX' : P.map (fun ω ↦ I.restrict (X · ω)) = (P.map (fun ω ↦ (X · ω))).map I.restrict := by
+      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX, Function.comp_def]
+    have hY' : P.map (fun ω ↦ I.restrict (Y · ω)) = (P.map (fun ω ↦ (Y · ω))).map I.restrict := by
+      rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hY, Function.comp_def]
+    rw [hX', hY', h]
   · have hX' := isProjectiveLimit_map hX
     simp_rw [h] at hX'
     exact hX'.unique (isProjectiveLimit_map hY)
 
-/--
-lemma `identDistrib_iff_forall_finset_identDistrib` / 引理 `identDistrib_iff_forall_finset_identDistrib`
+/-- Two stochastic processes are identically distributed iff they have the same
+finite-dimensional distributions. -/
+/-
+**ProbabilityTheory.identDistrib_iff_forall_finset_identDistrib** 是 Mathlib 中的一个
+引理，位于命名空间 `ProbabilityTheory`。
+形式化陈述：identDistrib_iff_forall_finset_identDistrib [IsFiniteMeasure P] (hX : AEMe
+asurable (fun ω => (X · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) P) : IdentD
+istrib (fun ω => (X · ω)) (fun ω => (Y · ω)) P P ↔ forall I : Finset T, IdentDis
+trib (fun ω => I.restrict (X · ω)) (fun ω => I.restrict (Y · ω)) P P
+参数：hX : AEMeasurable (fun ω => (X · ω)) P；hY : AEMeasurable (fun ω => (Y · ω)) P
+。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `Finset.measurable_restrict`：Finset.measurable_restrict (s : Finset δ) : 
+Measurable (s.restrict (π
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ProbabilityTheory.map_eq_iff_forall_finset_map_restrict_eq`：map_eq_iff_f
+orall_finset_map_restrict_eq [IsFiniteMeasure P] (hX : AEMeasurable (fun ω => (X
+ · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) …
+· 使用定理 `ProbabilityTheory.IdentDistrib.map_eq`：∀ {α : Type u_1} {β : Type u_2} {
+γ : Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 
+: MeasurableSpace γ] {f : α…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-lemma identDistrib_iff_forall_finset_identDistrib
-  statement: [IsFiniteMeasure P]
-  proof: by
-  refine ⟨fun h I => ⟨?_, ?_, ?_⟩, fun h => ⟨hX, hY, ?_⟩⟩
-  · exact (Finset.measurable_restrict _).comp_aemeasurable hX
-  · exact (Finset.measurable_restrict _).comp_aemeasurable hY
-  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mp h.map_eq I
-  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mpr (fun I => (h I).map_eq)
-
-中文:
-引理 identDistrib_iff_对任意_finset_identDistrib
-  结论: [是有限测度 P]
-  证明: by
-  refine ⟨fun h I => ⟨?_, ?_, ?_⟩, fun h => ⟨hX, hY, ?_⟩⟩
-  · exact (Finset.measurable_restrict _).comp_aemeasurable hX
-  · exact (Finset.measurable_restrict _).comp_aemeasurable hY
-  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mp h.map_eq I
-  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mpr (fun I => (h I).map_eq)
-
-Depends on / 依赖: Finset, Finset.measurable_restrict, comp_aemeasurable, h.map_eq, map_eq, map_eq_iff_forall_finset_map_restrict_eq, measurable_restrict
+--- 原说明 ---
+Two stochastic processes are identically distributed iff they have the same
+finite-dimensional distributions.
 -/
 lemma identDistrib_iff_forall_finset_identDistrib [IsFiniteMeasure P]
-    (hX : AEMeasurable (fun ω => (X · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) P) :
-    IdentDistrib (fun ω => (X · ω)) (fun ω => (Y · ω)) P P
-      ↔ forall I : Finset T,
-        IdentDistrib (fun ω => I.restrict (X · ω)) (fun ω => I.restrict (Y · ω)) P P := by
-  refine ⟨fun h I => ⟨?_, ?_, ?_⟩, fun h => ⟨hX, hY, ?_⟩⟩
+    (hX : AEMeasurable (fun ω ↦ (X · ω)) P) (hY : AEMeasurable (fun ω ↦ (Y · ω)) P) :
+    IdentDistrib (fun ω ↦ (X · ω)) (fun ω ↦ (Y · ω)) P P
+      ↔ ∀ I : Finset T,
+        IdentDistrib (fun ω ↦ I.restrict (X · ω)) (fun ω ↦ I.restrict (Y · ω)) P P := by
+  refine ⟨fun h I ↦ ⟨?_, ?_, ?_⟩, fun h ↦ ⟨hX, hY, ?_⟩⟩
   · exact (Finset.measurable_restrict _).comp_aemeasurable hX
   · exact (Finset.measurable_restrict _).comp_aemeasurable hY
   · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mp h.map_eq I
-  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mpr (fun I => (h I).map_eq)
+  · exact (map_eq_iff_forall_finset_map_restrict_eq hX hY).mpr (fun I ↦ (h I).map_eq)
 
-/--
-lemma `map_restrict_eq_of_forall_ae_eq` / 引理 `map_restrict_eq_of_forall_ae_eq`
+/-- If two processes are modifications of each other, then they have the same finite-dimensional
+distributions. -/
+/-
+**ProbabilityTheory.map_restrict_eq_of_forall_ae_eq** 是 Mathlib 中的一个引理，位于命名空间 `P
+robabilityTheory`。
+形式化陈述：map_restrict_eq_of_forall_ae_eq (h : forall t, X t =ᵐ[P] Y t) (I : Finset 
+T) : P.map (fun ω => I.restrict (X · ω)) = P.map (fun ω => I.restrict (Y · ω))
+参数：h : forall t, X t =ᵐ[P] Y t；I : Finset T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.ae_all_iff`：ae_all_iff {ι : Sort*} [Countable ι] {p : α ->
+ ι -> Prop} : (forallᵐ a ∂μ, forall i, p a i) ↔ forall i, forallᵐ a ∂μ, p a i
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `MeasureTheory.Measure.map_congr`：map_congr {f g : α -> β} (h : f =ᵐ[μ] g
+) : Measure.map f μ = Measure.map g μ
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-lemma map_restrict_eq_of_forall_ae_eq
-  given: (h : forall t, X t =ᵐ[P] Y t) (I : Finset T)
-  proof: by
-  have h' : forallᵐ ω ∂P, forall (i : I), X i ω = Y i ω := by
-    rw [MeasureTheory.ae_all_iff]
-    exact fun i => h i
-  refine Measure.map_congr ?_
-  filter_upwards [h'] with ω h using funext h
-
-中文:
-引理 map_restrict_eq_of_对任意_ae_eq
-  条件: (h : 对任意 t, X t =ᵐ[P] Y t) (I : 有限集 T)
-  证明: by
-  have h' : forallᵐ ω ∂P, forall (i : I), X i ω = Y i ω := by
-    rw [MeasureTheory.ae_all_iff]
-    exact fun i => h i
-  refine Measure.map_congr ?_
-  filter_upwards [h'] with ω h using funext h
-
-Depends on / 依赖: Measure, Measure.map_congr, MeasureTheory, MeasureTheory.ae_all_iff, ae_all_iff, filter_upwards, map_congr
+--- 原说明 ---
+If two processes are modifications of each other, then they have the same finite
+-dimensional
+distributions.
 -/
-lemma map_restrict_eq_of_forall_ae_eq (h : forall t, X t =ᵐ[P] Y t) (I : Finset T) :
-    P.map (fun ω => I.restrict (X · ω)) = P.map (fun ω => I.restrict (Y · ω)) := by
-  have h' : forallᵐ ω ∂P, forall (i : I), X i ω = Y i ω := by
+lemma map_restrict_eq_of_forall_ae_eq (h : ∀ t, X t =ᵐ[P] Y t) (I : Finset T) :
+    P.map (fun ω ↦ I.restrict (X · ω)) = P.map (fun ω ↦ I.restrict (Y · ω)) := by
+  have h' : ∀ᵐ ω ∂P, ∀ (i : I), X i ω = Y i ω := by
     rw [MeasureTheory.ae_all_iff]
-    exact fun i => h i
+    exact fun i ↦ h i
   refine Measure.map_congr ?_
   filter_upwards [h'] with ω h using funext h
 
-/--
-lemma `map_eq_of_forall_ae_eq` / 引理 `map_eq_of_forall_ae_eq`
+/-- If two processes are modifications of each other, then they have the same distribution. -/
+/-
+**ProbabilityTheory.map_eq_of_forall_ae_eq** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：map_eq_of_forall_ae_eq [IsFiniteMeasure P] (hX : AEMeasurable (fun ω => (X
+ · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) P) (h : forall t, X t =ᵐ[P] Y t)
+ : P.map (fun ω => (X · ω)) = P.map (fun ω => (Y · ω))
+参数：hX : AEMeasurable (fun ω => (X · ω)) P；hY : AEMeasurable (fun ω => (Y · ω)) P
+；h : forall t, X t =ᵐ[P] Y t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ProbabilityTheory.map_eq_iff_forall_finset_map_restrict_eq`：map_eq_iff_f
+orall_finset_map_restrict_eq [IsFiniteMeasure P] (hX : AEMeasurable (fun ω => (X
+ · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) …
+· 使用引理 `ProbabilityTheory.map_restrict_eq_of_forall_ae_eq`：map_restrict_eq_of_fo
+rall_ae_eq (h : forall t, X t =ᵐ[P] Y t) (I : Finset T) : P.map (fun ω => I.rest
+rict (X · ω)) = P.map (fun ω => I.restr…
 
-English:
-lemma map_eq_of_forall_ae_eq
-  statement: [IsFiniteMeasure P]
-  proof: by
-  rw [map_eq_iff_forall_finset_map_restrict_eq hX hY]
-  exact fun I => map_restrict_eq_of_forall_ae_eq h I
-
-中文:
-引理 map_eq_of_对任意_ae_eq
-  结论: [是有限测度 P]
-  证明: by
-  rw [map_eq_iff_forall_finset_map_restrict_eq hX hY]
-  exact fun I => map_restrict_eq_of_forall_ae_eq h I
-
-Depends on / 依赖: map_eq_iff_forall_finset_map_restrict_eq, map_restrict_eq_of_forall_ae_eq
+--- 原说明 ---
+If two processes are modifications of each other, then they have the same distri
+bution.
 -/
 lemma map_eq_of_forall_ae_eq [IsFiniteMeasure P]
-    (hX : AEMeasurable (fun ω => (X · ω)) P) (hY : AEMeasurable (fun ω => (Y · ω)) P)
-    (h : forall t, X t =ᵐ[P] Y t) :
-    P.map (fun ω => (X · ω)) = P.map (fun ω => (Y · ω)) := by
+    (hX : AEMeasurable (fun ω ↦ (X · ω)) P) (hY : AEMeasurable (fun ω ↦ (Y · ω)) P)
+    (h : ∀ t, X t =ᵐ[P] Y t) :
+    P.map (fun ω ↦ (X · ω)) = P.map (fun ω ↦ (Y · ω)) := by
   rw [map_eq_iff_forall_finset_map_restrict_eq hX hY]
-  exact fun I => map_restrict_eq_of_forall_ae_eq h I
+  exact fun I ↦ map_restrict_eq_of_forall_ae_eq h I
 
 end ProbabilityTheory
+

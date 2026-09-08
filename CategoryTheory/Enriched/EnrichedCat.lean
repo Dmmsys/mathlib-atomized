@@ -33,73 +33,48 @@ open MonoidalCategory
 
 variable (V : Type v) [Category.{w} V] [MonoidalCategory V]
 
-/--
-Definition of `EnrichedCat` / `EnrichedCat` 的定义
+/-- Category of `V`-enriched categories for a monoidal category `V`. -/
+/-
+**CategoryTheory.EnrichedCat** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：EnrichedCat
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EnrichedCat
-  body: Bundled (EnrichedCategory.{w, v, u} V)
-
-中文:
-定义 EnrichedCat
-  定义体: Bundled (EnrichedCategory.{w, v, u} V)
-
-Depends on / 依赖: Bundled, EnrichedCategory
+--- 原说明 ---
+Category of `V`-enriched categories for a monoidal category `V`.
 -/
 def EnrichedCat := Bundled (EnrichedCategory.{w, v, u} V)
 
 namespace EnrichedCat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (EnrichedCat V) (Type u)
-  body: ⟨Bundled.α⟩
-
-中文:
-实例 :
-  签名: CoeSort (EnrichedCat V) (类型u)
-  定义体: ⟨Bundled.α⟩
-
-Depends on / 依赖: Bundled
+/-
+**CategoryTheory.EnrichedCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Enriched
+Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (EnrichedCat V) (Type u) :=
   ⟨Bundled.α⟩
-
-/--
-Instance `str` / 实例 `str`
-
-English:
-instance str
-  signature: (C : EnrichedCat.{w, v, u} V)
-  body: Bundled.str C
-
-中文:
-实例 str
-  签名: (C : EnrichedCat.{w, v, u} V)
-  定义体: Bundled.str C
-
-Depends on / 依赖: Bundled, Bundled.str
+/-
+**CategoryTheory.EnrichedCat.str** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Enric
+hedCat`。
+形式化陈述：str (C : EnrichedCat.{w, v, u} V) : EnrichedCategory.{w, v, u} V C
+参数：C : EnrichedCat.{w, v, u} V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance str (C : EnrichedCat.{w, v, u} V) : EnrichedCategory.{w, v, u} V C :=
   Bundled.str C
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a bundled `EnrichedCat` from the underlying type and the typeclass. -/
+/-
+**CategoryTheory.EnrichedCat.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Enrich
+edCat`。
+形式化陈述：of (C : Type u) [EnrichedCategory.{w} V C] : EnrichedCat.{w, v, u} V
+参数：C : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of
-  signature: (C : Type u) [EnrichedCategory.{w} V C]
-  body: Bundled.of C
-
-中文:
-定义 of
-  签名: (C : 类型u) [Enriched范畴.{w} V C]
-  定义体: Bundled.of C
-
-Depends on / 依赖: Bundled, Bundled.of
+--- 原说明 ---
+Construct a bundled `EnrichedCat` from the underlying type and the typeclass.
 -/
 def of (C : Type u) [EnrichedCategory.{w} V C] : EnrichedCat.{w, v, u} V :=
   Bundled.of C
@@ -111,18 +86,17 @@ variable {V} {C : Type u} [EnrichedCategory V C] {D : Type u₁} [EnrichedCatego
 
 /-- Whisker a `V`-enriched natural transformation on the left. -/
 @[simps!]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.EnrichedCat.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.EnrichedCat`。
+形式化陈述：whiskerLeft (F : EnrichedFunctor V C D) {G H : EnrichedFunctor V D E} (α :
+ G ⟶ H) : F.comp V G ⟶ F.comp V H
+参数：F : EnrichedFunctor V C D；α : G ⟶ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  body: ⟨(F.forgetComp G).hom ≫ F.forget.whiskerLeft α.out ≫ (F.forgetComp H).inv⟩
-
-中文:
-定义 whiskerLeft
-  定义体: ⟨(F.forgetComp G).hom ≫ F.forget.whiskerLeft α.out ≫ (F.forgetComp H).inv⟩
-
-Depends on / 依赖: F.forget.whiskerLeft, F.forgetComp, forget, forgetComp, whiskerLeft
+--- 原说明 ---
+Whisker a `V`-enriched natural transformation on the left.
 -/
 def whiskerLeft
     (F : EnrichedFunctor V C D) {G H : EnrichedFunctor V D E} (α : G ⟶ H) :
@@ -131,18 +105,17 @@ def whiskerLeft
 
 /-- Whisker a `V`-enriched natural transformation on the right. -/
 @[simps!]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.EnrichedCat.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.EnrichedCat`。
+形式化陈述：whiskerRight {F G : EnrichedFunctor V C D} (α : F ⟶ G) (H : EnrichedFuncto
+r V D E) : F.comp V H ⟶ G.comp V H
+参数：α : F ⟶ G；H : EnrichedFunctor V D E。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  body: ⟨(F.forgetComp H).hom ≫ Functor.whiskerRight α.out H.forget ≫ (G.forgetComp H).inv⟩
-
-中文:
-定义 whiskerRight
-  定义体: ⟨(F.forgetComp H).hom ≫ Functor.whiskerRight α.out H.forget ≫ (G.forgetComp H).inv⟩
-
-Depends on / 依赖: F.forgetComp, Functor, Functor.whiskerRight, G.forgetComp, H.forget, forget, forgetComp, whiskerRight
+--- 原说明 ---
+Whisker a `V`-enriched natural transformation on the right.
 -/
 def whiskerRight
     {F G : EnrichedFunctor V C D} (α : F ⟶ G) (H : EnrichedFunctor V D E) :
@@ -151,82 +124,66 @@ def whiskerRight
 
 /-- Composing the `V`-enriched identity functor with any functor is isomorphic to that functor. -/
 @[simps!]
-/--
-Definition of `leftUnitor` / `leftUnitor` 的定义
+/-
+**CategoryTheory.EnrichedCat.leftUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.EnrichedCat`。
+形式化陈述：leftUnitor (F : EnrichedFunctor V C D) : (EnrichedFunctor.id V _).comp V F
+ ≅ F
+参数：F : EnrichedFunctor V C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitor
-  signature: (F : EnrichedFunctor V C D)
-  body: EnrichedFunctor.isoMk (EnrichedFunctor.id V C).forgetComp F ≪≫
-    Functor.isoWhiskerRight (EnrichedFunctor.forgetId V C) _ ≪≫ Functor.leftUnitor F.forget
-
-中文:
-定义 leftUnitor
-  签名: (F : Enriched函子 V C D)
-  定义体: EnrichedFunctor.isoMk (EnrichedFunctor.id V C).forgetComp F ≪≫
-    Functor.isoWhiskerRight (EnrichedFunctor.forgetId V C) _ ≪≫ Functor.leftUnitor F.forget
-
-Depends on / 依赖: EnrichedFunctor, EnrichedFunctor.forgetId, EnrichedFunctor.id, EnrichedFunctor.isoMk, F.forget, Functor, Functor.isoWhiskerRight, Functor.leftUnitor, forget, forgetComp, forgetId, isoWhiskerRight, leftUnitor
+--- 原说明 ---
+Composing the `V`-enriched identity functor with any functor is isomorphic to th
+at functor.
 -/
 def leftUnitor (F : EnrichedFunctor V C D) : (EnrichedFunctor.id V _).comp V F ≅ F :=
-EnrichedFunctor.isoMk (EnrichedFunctor.id V C).forgetComp F ≪≫
+  EnrichedFunctor.isoMk <| (EnrichedFunctor.id V C).forgetComp F ≪≫
     Functor.isoWhiskerRight (EnrichedFunctor.forgetId V C) _ ≪≫ Functor.leftUnitor F.forget
 
 /-- Composing any `V`-enriched functor with the identity functor is isomorphic to the former
 functor. -/
 @[simps!]
-/--
-Definition of `rightUnitor` / `rightUnitor` 的定义
+/-
+**CategoryTheory.EnrichedCat.rightUnitor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.EnrichedCat`。
+形式化陈述：rightUnitor (F : EnrichedFunctor V C D) : EnrichedFunctor.comp V F (Enrich
+edFunctor.id V _) ≅ F
+参数：F : EnrichedFunctor V C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitor
-  signature: (F : EnrichedFunctor V C D)
-  body: EnrichedFunctor.isoMk F.forgetComp _ ≪≫
-    Functor.isoWhiskerLeft _ (EnrichedFunctor.forgetId V D) ≪≫ Functor.rightUnitor F.forget
-
-中文:
-定义 rightUnitor
-  签名: (F : Enriched函子 V C D)
-  定义体: EnrichedFunctor.isoMk F.forgetComp _ ≪≫
-    Functor.isoWhiskerLeft _ (EnrichedFunctor.forgetId V D) ≪≫ Functor.rightUnitor F.forget
-
-Depends on / 依赖: EnrichedFunctor, EnrichedFunctor.forgetId, EnrichedFunctor.isoMk, F.forget, F.forgetComp, Functor, Functor.isoWhiskerLeft, Functor.rightUnitor, forget, forgetComp, forgetId, isoWhiskerLeft, rightUnitor
+--- 原说明 ---
+Composing any `V`-enriched functor with the identity functor is isomorphic to th
+e former
+functor.
 -/
 def rightUnitor (F : EnrichedFunctor V C D) :
     EnrichedFunctor.comp V F (EnrichedFunctor.id V _) ≅ F :=
-EnrichedFunctor.isoMk F.forgetComp _ ≪≫
+  EnrichedFunctor.isoMk <| F.forgetComp _ ≪≫
     Functor.isoWhiskerLeft _ (EnrichedFunctor.forgetId V D) ≪≫ Functor.rightUnitor F.forget
 
 /-- Composition of `V`-enriched functors is associative up to isomorphism. -/
 @[simps!]
-/--
-Definition of `associator` / `associator` 的定义
+/-
+**CategoryTheory.EnrichedCat.associator** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.EnrichedCat`。
+形式化陈述：associator (F : EnrichedFunctor V C D) (G : EnrichedFunctor V D E) (H : En
+richedFunctor V E E') : EnrichedFunctor.comp V (EnrichedFunctor.comp V F G) H ≅ 
+EnrichedFunctor.comp V F (EnrichedFunctor.comp V G H)
+参数：F : EnrichedFunctor V C D；G : EnrichedFunctor V D E；H : EnrichedFunctor V E E
+'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associator
-  signature: (F : EnrichedFunctor V C D) (G : EnrichedFunctor V D E)
-  body: EnrichedFunctor.isoMk (F.comp V G).forgetComp H ≪≫
-    Functor.isoWhiskerRight (F.forgetComp G) _ ≪≫
-    Functor.associator _ _ _ ≪≫
-    Functor.isoWhiskerLeft _ (G.forgetComp H).symm ≪≫
-    (F.forgetComp _).symm
-
-中文:
-定义 associator
-  签名: (F : Enriched函子 V C D) (G : Enriched函子 V D E)
-  定义体: EnrichedFunctor.isoMk (F.comp V G).forgetComp H ≪≫
-    Functor.isoWhiskerRight (F.forgetComp G) _ ≪≫
-    Functor.associator _ _ _ ≪≫
-    Functor.isoWhiskerLeft _ (G.forgetComp H).symm ≪≫
-    (F.forgetComp _).symm
-
-Depends on / 依赖: EnrichedFunctor, EnrichedFunctor.isoMk, F.comp, F.forgetComp, Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, G.forgetComp, associator, forgetComp, isoWhiskerLeft, isoWhiskerRight
+--- 原说明 ---
+Composition of `V`-enriched functors is associative up to isomorphism.
 -/
 def associator (F : EnrichedFunctor V C D) (G : EnrichedFunctor V D E)
     (H : EnrichedFunctor V E E') :
     EnrichedFunctor.comp V (EnrichedFunctor.comp V F G) H ≅
     EnrichedFunctor.comp V F (EnrichedFunctor.comp V G H) :=
-EnrichedFunctor.isoMk (F.comp V G).forgetComp H ≪≫
+  EnrichedFunctor.isoMk <| (F.comp V G).forgetComp H ≪≫
     Functor.isoWhiskerRight (F.forgetComp G) _ ≪≫
     Functor.associator _ _ _ ≪≫
     Functor.isoWhiskerLeft _ (G.forgetComp H).symm ≪≫
@@ -234,28 +191,38 @@ EnrichedFunctor.isoMk (F.comp V G).forgetComp H ≪≫
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `comp_whiskerRight` / 引理 `comp_whiskerRight`
-
-English:
-lemma comp_whiskerRight
-  statement: {F G H : EnrichedFunctor V C D} (α : F ⟶ G)
-  proof: by
-  ext X
-  simp only [whiskerRight_out_app, NatTrans.comp_app, EnrichedFunctor.category_comp_out,
-    EnrichedFunctor.forget, EnrichedFunctor.comp_obj, EnrichedFunctor.comp_map]
-  simp [← ForgetEnrichment.homOf_comp]
-
-中文:
-引理 comp_whiskerRight
-  结论: {F G H : Enriched函子 V C D} (α : F ⟶ G)
-  证明: by
-  ext X
-  simp only [whiskerRight_out_app, NatTrans.comp_app, EnrichedFunctor.category_comp_out,
-    EnrichedFunctor.forget, EnrichedFunctor.comp_obj, EnrichedFunctor.comp_map]
-  simp [← ForgetEnrichment.homOf_comp]
-
-Depends on / 依赖: EnrichedFunctor, EnrichedFunctor.category_comp_out, EnrichedFunctor.comp_map, EnrichedFunctor.comp_obj, EnrichedFunctor.forget, ForgetEnrichment, ForgetEnrichment.homOf_comp, NatTrans, NatTrans.comp_app, category_comp_out, comp_app, comp_map, comp_obj, forget, homOf_comp, whiskerRight_out_app
+/-
+**CategoryTheory.EnrichedCat.comp_whiskerRight** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.EnrichedCat`。
+形式化陈述：comp_whiskerRight {F G H : EnrichedFunctor V C D} (α : F ⟶ G) (β : G ⟶ H) 
+(I : EnrichedFunctor V D E) : whiskerRight ⟨α.out ≫ β.out⟩ I = whiskerRight α I 
+≫ whiskerRight β I
+参数：α : F ⟶ G；β : G ⟶ H；I : EnrichedFunctor V D E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.EnrichedFunctor.hom_ext`：hom_ext {F G : EnrichedFunctor V
+ C D} {α β : F ⟶ G} (h : forall X : C, α.out.app X = β.out.app X) : α = β
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.EnrichedCat.whiskerRight_out_app`：∀ {V : Type v} [inst : 
+CategoryTheory.Category.{w, v} V] [inst_1 : CategoryTheory.MonoidalCategory V] {
+C : Type u}   [inst_2 : CategoryTheor…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.EnrichedFunctor.map_comp`：∀ {V : Type v} [inst : Category
+Theory.Category.{w, v} V] [inst_1 : CategoryTheory.MonoidalCategory V] {C : Type
+ u₁}   [inst_2 : CategoryTheo…
+· 使用定理 `CategoryTheory.MonoidalCategory.tensorHom_comp_tensorHom_assoc`：∀ {C : T
+ype u} {𝒞 : CategoryTheory.Category.{v, u} C} [self : CategoryTheory.MonoidalCat
+egory C] {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : C}   (f₁ : X₁ ⟶ Y₁) (f…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_whiskerRight {F G H : EnrichedFunctor V C D} (α : F ⟶ G)
     (β : G ⟶ H) (I : EnrichedFunctor V D E) :
@@ -266,30 +233,31 @@ lemma comp_whiskerRight {F G H : EnrichedFunctor V C D} (α : F ⟶ G)
   simp [← ForgetEnrichment.homOf_comp]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `whisker_exchange` / 引理 `whisker_exchange`
-
-English:
-lemma whisker_exchange
-  statement: {F G : EnrichedFunctor V C D} {H I : EnrichedFunctor V D E}
-  proof: by
-  ext X
-  simp only [EnrichedFunctor.forget_obj, EnrichedFunctor.comp_obj,
-    EnrichedFunctor.category_comp_out, NatTrans.comp_app, whiskerLeft_out_app,
-    whiskerRight_out_app]
-  exact (β.out.naturality (α.out.app (ForgetEnrichment.of V X))).symm
-
-中文:
-引理 whisker_exchange
-  结论: {F G : Enriched函子 V C D} {H I : Enriched函子 V D E}
-  证明: by
-  ext X
-  simp only [EnrichedFunctor.forget_obj, EnrichedFunctor.comp_obj,
-    EnrichedFunctor.category_comp_out, NatTrans.comp_app, whiskerLeft_out_app,
-    whiskerRight_out_app]
-  exact (β.out.naturality (α.out.app (ForgetEnrichment.of V X))).symm
-
-Depends on / 依赖: EnrichedFunctor, EnrichedFunctor.category_comp_out, EnrichedFunctor.comp_obj, EnrichedFunctor.forget_obj, ForgetEnrichment, ForgetEnrichment.of, NatTrans, NatTrans.comp_app, category_comp_out, comp_app, comp_obj, forget_obj, naturality, out.app, out.naturality, whiskerLeft_out_app, whiskerRight_out_app
+/-
+**CategoryTheory.EnrichedCat.whisker_exchange** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.EnrichedCat`。
+形式化陈述：whisker_exchange {F G : EnrichedFunctor V C D} {H I : EnrichedFunctor V D 
+E} (α : F ⟶ G) (β : H ⟶ I) : whiskerLeft F β ≫ whiskerRight α I = whiskerRight α
+ H ≫ whiskerLeft G β
+参数：α : F ⟶ G；β : H ⟶ I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.EnrichedFunctor.hom_ext`：hom_ext {F G : EnrichedFunctor V
+ C D} {α β : F ⟶ G} (h : forall X : C, α.out.app X = β.out.app X) : α = β
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.EnrichedCat.whiskerLeft_out_app`：∀ {V : Type v} [inst : C
+ategoryTheory.Category.{w, v} V] [inst_1 : CategoryTheory.MonoidalCategory V] {C
+ : Type u}   [inst_2 : CategoryTheor…
+· 使用定理 `CategoryTheory.EnrichedCat.whiskerRight_out_app`：∀ {V : Type v} [inst : 
+CategoryTheory.Category.{w, v} V] [inst_1 : CategoryTheory.MonoidalCategory V] {
+C : Type u}   [inst_2 : CategoryTheor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 lemma whisker_exchange {F G : EnrichedFunctor V C D} {H I : EnrichedFunctor V D E}
     (α : F ⟶ G) (β : H ⟶ I) :
@@ -301,38 +269,16 @@ lemma whisker_exchange {F G : EnrichedFunctor V C D} {H I : EnrichedFunctor V D 
   exact (β.out.naturality (α.out.app (ForgetEnrichment.of V X))).symm
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `bicategory` / 实例 `bicategory`
+/-- The bicategory structure on `EnrichedCat V` for a monoidal category `V`. -/
+/-
+**CategoryTheory.EnrichedCat.bicategory** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.EnrichedCat`。
+形式化陈述：bicategory : Bicategory (EnrichedCat.{w, v, u} V) where Hom C D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance bicategory
-  signature: : Bicategory (EnrichedCat.{w, v, u} V) where
-  body: EnrichedFunctor V C D
-  id C := EnrichedFunctor.id V C
-  comp F G := EnrichedFunctor.comp V F G
-  whiskerLeft F G H := whiskerLeft F
-  whiskerRight := whiskerRight
-  associator := associator
-  leftUnitor := leftUnitor
-  rightUnitor := rightUnitor
-  comp_whiskerRight := comp_whiskerRight
-  whisker_exchange := whisker_exchange
-
-中文:
-实例 bicategory
-  签名: : 双范畴 (EnrichedCat.{w, v, u} V) where
-  定义体: EnrichedFunctor V C D
-  id C := EnrichedFunctor.id V C
-  comp F G := EnrichedFunctor.comp V F G
-  whiskerLeft F G H := whiskerLeft F
-  whiskerRight := whiskerRight
-  associator := associator
-  leftUnitor := leftUnitor
-  rightUnitor := rightUnitor
-  comp_whiskerRight := comp_whiskerRight
-  whisker_exchange := whisker_exchange
-
-Depends on / 依赖: EnrichedFunctor
+--- 原说明 ---
+The bicategory structure on `EnrichedCat V` for a monoidal category `V`.
 -/
 instance bicategory : Bicategory (EnrichedCat.{w, v, u} V) where
   Hom C D := EnrichedFunctor V C D
@@ -349,3 +295,4 @@ instance bicategory : Bicategory (EnrichedCat.{w, v, u} V) where
 end EnrichedCat
 
 end CategoryTheory
+

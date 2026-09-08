@@ -32,155 +32,98 @@ section
 
 variable [SMul M α] [SMul M β]
 
-/--
-theorem `smul_zero_mk` / 定理 `smul_zero_mk`
-
-English:
-theorem smul_zero_mk
-  given: {α : Type*} [Monoid M] [AddMonoid α] [DistribMulAction M α] (a : M) (c : β)
-  proof: by rw [Prod.smul_mk, smul_zero]
-
-中文:
-定理 smul_zero_mk
-  条件: {α : 类型} [幺半群 M] [加法幺半群 α] [分配乘法作用 M α] (a : M) (c : β)
-  证明: by rw [Prod.smul_mk, smul_zero]
-
-Depends on / 依赖: Prod.smul_mk, smul_mk, smul_zero
+/-
+**Prod.smul_zero_mk** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：smul_zero_mk {α : Type*} [Monoid M] [AddMonoid α] [DistribMulAction M α] (
+a : M) (c : β) : a • ((0 : α), c) = (0, a • c)
+参数：a : M；c : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.smul_mk`：∀ {E : Type u_8} {α : Type u_9} {β : Type u_10} [inst : SM
+ul E α] [inst_1 : SMul E β] (c : E) (a : α) (b : β),   c • (a, b) = (c • a, c • 
+b)
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem smul_zero_mk {α : Type*} [Monoid M] [AddMonoid α] [DistribMulAction M α] (a : M) (c : β) :
     a • ((0 : α), c) = (0, a • c) := by rw [Prod.smul_mk, smul_zero]
-
-/--
-theorem `smul_mk_zero` / 定理 `smul_mk_zero`
-
-English:
-theorem smul_mk_zero
-  given: {β : Type*} [Monoid M] [AddMonoid β] [DistribMulAction M β] (a : M) (b : α)
-  proof: by rw [Prod.smul_mk, smul_zero]
-
-中文:
-定理 smul_mk_zero
-  条件: {β : 类型} [幺半群 M] [加法幺半群 β] [分配乘法作用 M β] (a : M) (b : α)
-  证明: by rw [Prod.smul_mk, smul_zero]
-
-Depends on / 依赖: Prod.smul_mk, smul_mk, smul_zero
+/-
+**Prod.smul_mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Prod`。
+形式化陈述：smul_mk_zero {β : Type*} [Monoid M] [AddMonoid β] [DistribMulAction M β] (
+a : M) (b : α) : a • (b, (0 : β)) = (a • b, 0)
+参数：a : M；b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Prod.smul_mk`：∀ {E : Type u_8} {α : Type u_9} {β : Type u_10} [inst : SM
+ul E α] [inst_1 : SMul E β] (c : E) (a : α) (b : β),   c • (a, b) = (c • a, c • 
+b)
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem smul_mk_zero {β : Type*} [Monoid M] [AddMonoid β] [DistribMulAction M β] (a : M) (b : α) :
     a • (b, (0 : β)) = (a • b, 0) := by rw [Prod.smul_mk, smul_zero]
 
 end
 
-/--
-Instance `smulZeroClass` / 实例 `smulZeroClass`
-
-English:
-instance smulZeroClass
-  signature: {R M N : Type*} [Zero M] [Zero N] [SMulZeroClass R M] [SMulZeroClass R N]
-  body: by ext <;> exact smul_zero _
-
-中文:
-实例 smulZeroClass
-  签名: {R M N : 类型} [零 M] [零 N] [SMulZero类 R M] [SMulZero类 R N]
-  定义体: by ext <;> exact smul_zero _
-
-Depends on / 依赖: smul_zero
+/-
+**Prod.smulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：smulZeroClass {R M N : Type*} [Zero M] [Zero N] [SMulZeroClass R M] [SMulZ
+eroClass R N] : SMulZeroClass R (M × N) where smul_zero _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulZeroClass {R M N : Type*} [Zero M] [Zero N] [SMulZeroClass R M] [SMulZeroClass R N] :
     SMulZeroClass R (M × N) where smul_zero _ := by ext <;> exact smul_zero _
-
-/--
-Instance `distribSMul` / 实例 `distribSMul`
-
-English:
-instance distribSMul
-  signature: {R M N : Type*} [AddZeroClass M] [AddZeroClass N] [DistribSMul R M]
-  body: by ext <;> exact smul_add ..
-
-中文:
-实例 distribSMul
-  签名: {R M N : 类型} [加法零类 M] [加法零类 N] [分配标量乘法 R M]
-  定义体: by ext <;> exact smul_add ..
-
-Depends on / 依赖: smul_add
+/-
+**Prod.distribSMul** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：distribSMul {R M N : Type*} [AddZeroClass M] [AddZeroClass N] [DistribSMul
+ R M] [DistribSMul R N] : DistribSMul R (M × N) where smul_add _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribSMul {R M N : Type*} [AddZeroClass M] [AddZeroClass N] [DistribSMul R M]
     [DistribSMul R N] : DistribSMul R (M × N) where
   smul_add _ _ _ := by ext <;> exact smul_add ..
-
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
-
-English:
-instance distribMulAction
-  signature: {R : Type*} [Monoid R] [AddMonoid M] [AddMonoid N]
-  body: { Prod.mulAction, Prod.distribSMul with }
-
-中文:
-实例 distribMulAction
-  签名: {R : 类型} [幺半群 R] [加法幺半群 M] [加法幺半群 N]
-  定义体: { Prod.mulAction, Prod.distribSMul with }
-
-Depends on / 依赖: Prod.distribSMul, Prod.mulAction, distribSMul, mulAction
+/-
+**Prod.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：distribMulAction {R : Type*} [Monoid R] [AddMonoid M] [AddMonoid N] [Distr
+ibMulAction R M] [DistribMulAction R N] : DistribMulAction R (M × N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction {R : Type*} [Monoid R] [AddMonoid M] [AddMonoid N]
     [DistribMulAction R M] [DistribMulAction R N] : DistribMulAction R (M × N) :=
   { Prod.mulAction, Prod.distribSMul with }
-
-/--
-Instance `mulDistribMulAction` / 实例 `mulDistribMulAction`
-
-English:
-instance mulDistribMulAction
-  signature: {R : Type*} [Monoid R] [Monoid M] [Monoid N]
-  body: by ext <;> exact smul_mul' ..
-  smul_one _ := by ext <;> exact smul_one _
-
-中文:
-实例 mulDistribMulAction
-  签名: {R : 类型} [幺半群 R] [幺半群 M] [幺半群 N]
-  定义体: by ext <;> exact smul_mul' ..
-  smul_one _ := by ext <;> exact smul_one _
-
-Depends on / 依赖: smul_mul, smul_one
+/-
+**Prod.mulDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：mulDistribMulAction {R : Type*} [Monoid R] [Monoid M] [Monoid N] [MulDistr
+ibMulAction R M] [MulDistribMulAction R N] : MulDistribMulAction R (M × N) where
+ smul_mul _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulDistribMulAction {R : Type*} [Monoid R] [Monoid M] [Monoid N]
     [MulDistribMulAction R M] [MulDistribMulAction R N] : MulDistribMulAction R (M × N) where
   smul_mul _ _ _ := by ext <;> exact smul_mul' ..
   smul_one _ := by ext <;> exact smul_one _
-
-/--
-Instance `smulWithZero` / 实例 `smulWithZero`
-
-English:
-instance smulWithZero
-  signature: {R : Type*} [Zero R] [Zero M] [Zero N] [SMulWithZero R M] [SMulWithZero R N]
-  body: by ext <;> exact zero_smul ..
-
-中文:
-实例 smulWithZero
-  签名: {R : 类型} [零 R] [零 M] [零 N] [带零标量乘法 R M] [带零标量乘法 R N]
-  定义体: by ext <;> exact zero_smul ..
-
-Depends on / 依赖: zero_smul
+/-
+**Prod.smulWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：smulWithZero {R : Type*} [Zero R] [Zero M] [Zero N] [SMulWithZero R M] [SM
+ulWithZero R N] : SMulWithZero R (M × N) where zero_smul _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulWithZero {R : Type*} [Zero R] [Zero M] [Zero N] [SMulWithZero R M] [SMulWithZero R N] :
     SMulWithZero R (M × N) where
   zero_smul _ := by ext <;> exact zero_smul ..
-
-/--
-Instance `mulActionWithZero` / 实例 `mulActionWithZero`
-
-English:
-instance mulActionWithZero
-  signature: {R : Type*} [MonoidWithZero R] [Zero M] [Zero N] [MulActionWithZero R M]
-  body: { Prod.mulAction, Prod.smulWithZero with }
-
-中文:
-实例 mulActionWithZero
-  签名: {R : 类型} [带零幺半群 R] [零 M] [零 N] [带零乘法作用 R M]
-  定义体: { Prod.mulAction, Prod.smulWithZero with }
-
-Depends on / 依赖: Prod.mulAction, Prod.smulWithZero, mulAction, smulWithZero
+/-
+**Prod.mulActionWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Prod`。
+形式化陈述：mulActionWithZero {R : Type*} [MonoidWithZero R] [Zero M] [Zero N] [MulAct
+ionWithZero R M] [MulActionWithZero R N] : MulActionWithZero R (M × N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulActionWithZero {R : Type*} [MonoidWithZero R] [Zero M] [Zero N] [MulActionWithZero R M]
     [MulActionWithZero R N] : MulActionWithZero R (M × N) :=
@@ -194,24 +137,17 @@ section Action_by_Prod
 
 variable (M N α) [Monoid M] [Monoid N] [AddMonoid α]
 
-/--
-Definition of `DistribMulAction.prodOfSMulCommClass` / `DistribMulAction.prodOfSMulCommClass` 的定义
+/-- Construct a `DistribMulAction` by a product monoid from `DistribMulAction`s by the factors. -/
+/-
+**DistribMulAction.prodOfSMulCommClass** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：DistribMulAction.prodOfSMulCommClass [DistribMulAction M α] [DistribMulAct
+ion N α] [SMulCommClass M N α] : DistribMulAction (M × N) α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation DistribMulAction.prodOfSMulCommClass
-  signature: [DistribMulAction M α] [DistribMulAction N α]
-  body: MulAction.prodOfSMulCommClass M N α
-  smul_zero mn := by change mn.1 • mn.2 • 0 = (0 : α); rw [smul_zero, smul_zero]
-  smul_add mn a a' := by change mn.1 • mn.2 • _ = (_ : α); rw [smul_add, smul_add]; rfl
-
-中文:
-缩写 分配乘法作用.prodOfSMulCommClass
-  签名: [分配乘法作用 M α] [分配乘法作用 N α]
-  定义体: MulAction.prodOfSMulCommClass M N α
-  smul_zero mn := by change mn.1 • mn.2 • 0 = (0 : α); rw [smul_zero, smul_zero]
-  smul_add mn a a' := by change mn.1 • mn.2 • _ = (_ : α); rw [smul_add, smul_add]; rfl
-
-Depends on / 依赖: MulAction, MulAction.prodOfSMulCommClass, prodOfSMulCommClass
+--- 原说明 ---
+Construct a `DistribMulAction` by a product monoid from `DistribMulAction`s by t
+he factors.
 -/
 abbrev DistribMulAction.prodOfSMulCommClass [DistribMulAction M α] [DistribMulAction N α]
     [SMulCommClass M N α] : DistribMulAction (M × N) α where
@@ -219,54 +155,18 @@ abbrev DistribMulAction.prodOfSMulCommClass [DistribMulAction M α] [DistribMulA
   smul_zero mn := by change mn.1 • mn.2 • 0 = (0 : α); rw [smul_zero, smul_zero]
   smul_add mn a a' := by change mn.1 • mn.2 • _ = (_ : α); rw [smul_add, smul_add]; rfl
 
-/--
-Definition of `DistribMulAction.prodEquiv` / `DistribMulAction.prodEquiv` 的定义
+/-- A `DistribMulAction` by a product monoid is equivalent to
+  commuting `DistribMulAction`s by the factors. -/
+/-
+**DistribMulAction.prodEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DistribMulAction.prodEquiv : DistribMulAction (M × N) α ≃ Σ' (_ : DistribM
+ulAction M α) (_ : DistribMulAction N α), SMulCommClass M N α where toFun _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DistribMulAction.prodEquiv
-  signature: : DistribMulAction (M × N) α ≃
-  body: letI instM := DistribMulAction.compHom α (.inl M N)
-    letI instN := DistribMulAction.compHom α (.inr M N)
-    ⟨instM, instN, (MulAction.prodEquiv M N α inferInstance).2.2⟩
-  invFun _insts :=
-    letI := _insts.1; letI := _insts.2.1; have := _insts.2.2
-    DistribMulAction.prodOfSMulCommClass M N α
-  left_inv _ := by
-    dsimp only; ext ⟨m, n⟩ a
-    change (m, (1 : N)) • ((1 : M), n) • a = _
-    rw [smul_smul]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rfl
-  right_inv := by
-    rintro ⟨_, x, _⟩
-    dsimp only; congr 1
-    · ext m a; (conv_rhs => rw [← one_smul N a]); rfl
-    congr 1
-    · funext i; congr; ext m a; clear i; (conv_rhs => rw [← one_smul N a]); rfl
-    · ext n a; (conv_rhs => rw [← one_smul M (SMul.smul n a)]); rfl
-    · exact proof_irrel_heq ..
-
-中文:
-定义 分配乘法作用.prodEquiv
-  签名: : 分配乘法作用 (M × N) α ≃
-  定义体: letI instM := DistribMulAction.compHom α (.inl M N)
-    letI instN := DistribMulAction.compHom α (.inr M N)
-    ⟨instM, instN, (MulAction.prodEquiv M N α inferInstance).2.2⟩
-  invFun _insts :=
-    letI := _insts.1; letI := _insts.2.1; have := _insts.2.2
-    DistribMulAction.prodOfSMulCommClass M N α
-  left_inv _ := by
-    dsimp only; ext ⟨m, n⟩ a
-    change (m, (1 : N)) • ((1 : M), n) • a = _
-    rw [smul_smul]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rfl
-  right_inv := by
-    rintro ⟨_, x, _⟩
-    dsimp only; congr 1
-    · ext m a; (conv_rhs => rw [← one_smul N a]); rfl
-    congr 1
-    · funext i; congr; ext m a; clear i; (conv_rhs => rw [← one_smul N a]); rfl
-    · ext n a; (conv_rhs => rw [← one_smul M (SMul.smul n a)]); rfl
-    · exact proof_irrel_heq ..
-
-Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, DistribMulAction.prodOfSMulCommClass, MulAction, MulAction.prodEquiv, Prod.mk_mul_mk, _insts, compHom, invFun, left_inv, mk_mul_mk, mul_one, one_mul, prodEquiv, prodOfSMulCommClass, right_inv, smul_smul
+--- 原说明 ---
+A `DistribMulAction` by a product monoid is equivalent to
+  commuting `DistribMulAction`s by the factors.
 -/
 def DistribMulAction.prodEquiv : DistribMulAction (M × N) α ≃
     Σ' (_ : DistribMulAction M α) (_ : DistribMulAction N α), SMulCommClass M N α where
@@ -280,7 +180,7 @@ def DistribMulAction.prodEquiv : DistribMulAction (M × N) α ≃
   left_inv _ := by
     dsimp only; ext ⟨m, n⟩ a
     change (m, (1 : N)) • ((1 : M), n) • a = _
-    rw [smul_smul]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rfl
+    rw [smul_smul, Prod.mk_mul_mk, mul_one, one_mul]; rfl
   right_inv := by
     rintro ⟨_, x, _⟩
     dsimp only; congr 1
@@ -291,3 +191,4 @@ def DistribMulAction.prodEquiv : DistribMulAction (M × N) α ≃
     · exact proof_irrel_heq ..
 
 end Action_by_Prod
+

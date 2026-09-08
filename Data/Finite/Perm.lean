@@ -34,115 +34,97 @@ variable {α : Type*} [Finite α]
 
 namespace Nat
 
-/--
-theorem `card_perm` / 定理 `card_perm`
-
-English:
-theorem card_perm
-  statement: Nat.card (Perm α) = (Nat.card α)!
-  proof: by
-  classical
-  have := Fintype.ofFinite α
-  rw [card_eq_fintype_card]; rw [card_eq_fintype_card]; rw [Fintype.card_perm]
-
-中文:
-定理 card_perm
-  结论: 自然数.card (置换 α) = (自然数.card α)!
-  证明: by
-  classical
-  have := Fintype.ofFinite α
-  rw [card_eq_fintype_card]; rw [card_eq_fintype_card]; rw [Fintype.card_perm]
-
-Depends on / 依赖: Fintype, Fintype.card_perm, Fintype.ofFinite, card_eq_fintype_card, card_perm, classical, ofFinite
+/-
+**Nat.card_perm** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：card_perm : Nat.card (Perm α) = (Nat.card α)!
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Fintype.card_perm`：Fintype.card_perm [Fintype α] : Fintype.card (Perm α)
+ = (Fintype.card α)!
 -/
 theorem card_perm : Nat.card (Perm α) = (Nat.card α)! := by
   classical
   have := Fintype.ofFinite α
-  rw [card_eq_fintype_card]; rw [card_eq_fintype_card]; rw [Fintype.card_perm]
+  rw [card_eq_fintype_card, card_eq_fintype_card, Fintype.card_perm]
 
 end Nat
 
 namespace Equiv.Perm
 
-/--
-theorem `isCyclic_of_card_le_two` / 定理 `isCyclic_of_card_le_two`
-
-English:
-theorem isCyclic_of_card_le_two
-  given: (hα : Nat.card α <= 2)
-  proof: by
-  apply isCyclic_of_card_dvd_prime (p := 2)
-  simpa [card_perm] using factorial_dvd_factorial hα
-
-中文:
-定理 isCyclic_of_card_le_two
-  条件: (hα : 自然数.card α <= 2)
-  证明: by
-  apply isCyclic_of_card_dvd_prime (p := 2)
-  simpa [card_perm] using factorial_dvd_factorial hα
-
-Depends on / 依赖: card_perm, factorial_dvd_factorial, isCyclic_of_card_dvd_prime
+/-
+**Equiv.Perm.isCyclic_of_card_le_two** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCyclic_of_card_le_two (hα : Nat.card α <= 2) : IsCyclic (Perm α)
+参数：hα : Nat.card α <= 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isCyclic_of_card_dvd_prime`：isCyclic_of_card_dvd_prime {p : Nat} [hp : F
+act p.Prime] (h : Nat.card α ∣ p) : IsCyclic α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_perm`：card_perm : Nat.card (Perm α) = (Nat.card α)!
+· 使用定理 `Nat.factorial_dvd_factorial`：factorial_dvd_factorial {m n} (h : m <= n) 
+: m ! ∣ n !
 -/
-theorem isCyclic_of_card_le_two (hα : Nat.card α <= 2) :
+theorem isCyclic_of_card_le_two (hα : Nat.card α ≤ 2) :
     IsCyclic (Perm α) := by
   apply isCyclic_of_card_dvd_prime (p := 2)
   simpa [card_perm] using factorial_dvd_factorial hα
-
-/--
-theorem `isMulCommutative_iff_card_le_two` / 定理 `isMulCommutative_iff_card_le_two`
-
-English:
-theorem isMulCommutative_iff_card_le_two
-  proof: by
-  refine ⟨?_, fun h => (isCyclic_of_card_le_two h).isMulCommutative⟩
-  classical
-  rintro ⟨⟨h⟩⟩
-  rw [← not_lt]; rw [← Set.ncard_univ]; rw [Set.two_lt_ncard_iff]
-  rintro ⟨a, b, c, _, _, _, hab, hac, hbc⟩
-  apply hbc
-  simp_rw [Perm.ext_iff] at h
-  simpa [swap_apply_of_ne_of_ne hab hac] using h (swap a b) (swap b c) a
-
-中文:
-定理 isMulCommutative_iff_card_le_two
-  证明: by
-  refine ⟨?_, fun h => (isCyclic_of_card_le_two h).isMulCommutative⟩
-  classical
-  rintro ⟨⟨h⟩⟩
-  rw [← not_lt]; rw [← Set.ncard_univ]; rw [Set.two_lt_ncard_iff]
-  rintro ⟨a, b, c, _, _, _, hab, hac, hbc⟩
-  apply hbc
-  simp_rw [Perm.ext_iff] at h
-  simpa [swap_apply_of_ne_of_ne hab hac] using h (swap a b) (swap b c) a
-
-Depends on / 依赖: Perm.ext_iff, Set.ncard_univ, Set.two_lt_ncard_iff, classical, ext_iff, isCyclic_of_card_le_two, isMulCommutative, ncard_univ, not_lt, simp_rw, swap_apply_of_ne_of_ne, two_lt_ncard_iff
+/-
+**Equiv.Perm.isMulCommutative_iff_card_le_two** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.P
+erm`。
+形式化陈述：isMulCommutative_iff_card_le_two : IsMulCommutative (Perm α) ↔ Nat.card α 
+<= 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Set.ncard_univ`：∀ (α : Type u_3), Set.univ.ncard = Nat.card α
+· 使用定理 `Set.two_lt_ncard_iff`：two_lt_ncard_iff (hs : s.Finite
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `Equiv.swap_apply_left`：swap_apply_left (a b : α) : swap a b a = b
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Equiv.Perm.isCyclic_of_card_le_two`：isCyclic_of_card_le_two (hα : Nat.ca
+rd α <= 2) : IsCyclic (Perm α)
 -/
 theorem isMulCommutative_iff_card_le_two :
-    IsMulCommutative (Perm α) ↔ Nat.card α <= 2 := by
-  refine ⟨?_, fun h => (isCyclic_of_card_le_two h).isMulCommutative⟩
+    IsMulCommutative (Perm α) ↔ Nat.card α ≤ 2 := by
+  refine ⟨?_, fun h ↦ (isCyclic_of_card_le_two h).isMulCommutative⟩
   classical
   rintro ⟨⟨h⟩⟩
-  rw [← not_lt]; rw [← Set.ncard_univ]; rw [Set.two_lt_ncard_iff]
+  rw [← not_lt, ← Set.ncard_univ, Set.two_lt_ncard_iff]
   rintro ⟨a, b, c, _, _, _, hab, hac, hbc⟩
   apply hbc
   simp_rw [Perm.ext_iff] at h
   simpa [swap_apply_of_ne_of_ne hab hac] using h (swap a b) (swap b c) a
-
-/--
-theorem `isCyclic_iff_card_le_two` / 定理 `isCyclic_iff_card_le_two`
-
-English:
-theorem isCyclic_iff_card_le_two
-  proof: ⟨fun h => isMulCommutative_iff_card_le_two.mp h.isMulCommutative, isCyclic_of_card_le_two⟩
-
-中文:
-定理 isCyclic_iff_card_le_two
-  证明: ⟨fun h => isMulCommutative_iff_card_le_two.mp h.isMulCommutative, isCyclic_of_card_le_two⟩
-
-Depends on / 依赖: h.isMulCommutative, isCyclic_of_card_le_two, isMulCommutative, isMulCommutative_iff_card_le_two, isMulCommutative_iff_card_le_two.mp
+/-
+**Equiv.Perm.isCyclic_iff_card_le_two** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：isCyclic_iff_card_le_two : IsCyclic (Perm α) ↔ Nat.card α <= 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.isMulCommutative_iff_card_le_two`：isMulCommutative_iff_card_l
+e_two : IsMulCommutative (Perm α) ↔ Nat.card α <= 2
+· 使用定理 `Equiv.Perm.isCyclic_of_card_le_two`：isCyclic_of_card_le_two (hα : Nat.ca
+rd α <= 2) : IsCyclic (Perm α)
 -/
 theorem isCyclic_iff_card_le_two :
-    IsCyclic (Perm α) ↔ Nat.card α <= 2 :=
-  ⟨fun h => isMulCommutative_iff_card_le_two.mp h.isMulCommutative, isCyclic_of_card_le_two⟩
+    IsCyclic (Perm α) ↔ Nat.card α ≤ 2 :=
+  ⟨fun h ↦ isMulCommutative_iff_card_le_two.mp h.isMulCommutative, isCyclic_of_card_le_two⟩
 
 end Equiv.Perm
+

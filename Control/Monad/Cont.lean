@@ -24,121 +24,60 @@ Haskell's `Cont`, `ContT` and `MonadCont`:
 
 universe u v w u₀ u₁ v₀ v₁
 
-/--
-Definition of `MonadCont.Label` / `MonadCont.Label` 的定义
-
-English:
-structure MonadCont.Label
-  parameters: (α : Type w) (m : Type u -> Type v) (β : Type u)
-  axioms and operations (1):
-    - apply : α -> m β
-
-中文:
-结构 MonadCont.Label
-  参数: (α : 类型 w) (m : 类型u -> 类型v) (β : 类型u)
-  公理与运算 (1 个):
-    - apply : α -> m β
+/-
+**MonadCont.Label** 是 Mathlib 中的一个归纳类型，位于命名空间 `MonadCont`。
+形式化陈述：Type w → (Type u → Type v) → Type u → Type (max v w)
+参数：Type u → Type v；max v w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-structure MonadCont.Label (α : Type w) (m : Type u -> Type v) (β : Type u) where
-  apply : α -> m β
-
-/--
-Definition of `MonadCont.goto` / `MonadCont.goto` 的定义
-
-English:
-abbreviation MonadCont.goto
-  signature: {α β} {m : Type u -> Type v} (f : MonadCont.Label α m β) (x : α)
-  body: f.apply x
-
-中文:
-缩写 MonadCont.goto
-  签名: {α β} {m : 类型u -> 类型v} (f : MonadCont.Label α m β) (x : α)
-  定义体: f.apply x
-
-Depends on / 依赖: f.apply
+structure MonadCont.Label (α : Type w) (m : Type u → Type v) (β : Type u) where
+  apply : α → m β
+/-
+**MonadCont.goto** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：MonadCont.goto {α β} {m : Type u -> Type v} (f : MonadCont.Label α m β) (x
+ : α)
+参数：f : MonadCont.Label α m β；x : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev MonadCont.goto {α β} {m : Type u -> Type v} (f : MonadCont.Label α m β) (x : α) :=
+abbrev MonadCont.goto {α β} {m : Type u → Type v} (f : MonadCont.Label α m β) (x : α) :=
   f.apply x
-
-/--
-Definition of `MonadCont` / `MonadCont` 的定义
-
-English:
-class MonadCont
-  parameters: (m : Type u -> Type v)
-  axioms and operations (1):
-    - callCC : forall {α β}, (MonadCont.Label α m β -> m α) -> m α
-
-中文:
-类 MonadCont
-  参数: (m : 类型u -> 类型v)
-  公理与运算 (1 个):
-    - callCC : 对任意 {α β}, (MonadCont.Label α m β -> m α) -> m α
+/-
+**MonadCont** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(Type u → Type v) → Type (max (u + 1) v)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-class MonadCont (m : Type u -> Type v) where
-  callCC : forall {α β}, (MonadCont.Label α m β -> m α) -> m α
+class MonadCont (m : Type u → Type v) where
+  callCC : ∀ {α β}, (MonadCont.Label α m β → m α) → m α
 
 open MonadCont
-
-/--
-Definition of `LawfulMonadCont` / `LawfulMonadCont` 的定义
-
-English:
-class LawfulMonadCont
-  parameters: (m : Type u -> Type v) [Monad m] [MonadCont m]
-  extends: LawfulMonad m
-  axioms and operations (3):
-    - callCC_bind_right({α ω γ} (cmd : m α) (next : Label ω m γ -> α -> m ω)) : (callCC fun f => cmd >>= next f) = cmd >>= fun x => callCC fun f => next f x
-    - callCC_bind_left({α} (β) (x : α) (dead : Label α m β -> β -> m α)) : (callCC fun f : Label α m β => goto f x >>= dead f) = pure x
-    - callCC_dummy({α β} (dummy : m α)) : (callCC fun _ : Label α m β => dummy) = dummy
-
-中文:
-类 LawfulMonadCont
-  参数: (m : 类型u -> 类型v) [单子 m] [MonadCont m]
-  继承: 合法单子 m
-  公理与运算 (3 个):
-    - callCC_bind_right({α ω γ} (cmd : m α) (next : Label ω m γ -> α -> m ω)) : (callCC fun f => cmd >>= next f) = cmd >>= fun x => callCC fun f => next f x
-    - callCC_bind_left({α} (β) (x : α) (dead : Label α m β -> β -> m α)) : (callCC fun f : Label α m β => goto f x >>= dead f) = pure x
-    - callCC_dummy({α β} (dummy : m α)) : (callCC fun _ : Label α m β => dummy) = dummy
+/-
+**LawfulMonadCont** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(m : Type u → Type v) → [Monad m] → [MonadCont m] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-class LawfulMonadCont (m : Type u -> Type v) [Monad m] [MonadCont m] : Prop
+class LawfulMonadCont (m : Type u → Type v) [Monad m] [MonadCont m] : Prop
     extends LawfulMonad m where
-  callCC_bind_right {α ω γ} (cmd : m α) (next : Label ω m γ -> α -> m ω) :
+  callCC_bind_right {α ω γ} (cmd : m α) (next : Label ω m γ → α → m ω) :
     (callCC fun f => cmd >>= next f) = cmd >>= fun x => callCC fun f => next f x
-  callCC_bind_left {α} (β) (x : α) (dead : Label α m β -> β -> m α) :
+  callCC_bind_left {α} (β) (x : α) (dead : Label α m β → β → m α) :
     (callCC fun f : Label α m β => goto f x >>= dead f) = pure x
   callCC_dummy {α β} (dummy : m α) : (callCC fun _ : Label α m β => dummy) = dummy
 
 export LawfulMonadCont (callCC_bind_right callCC_bind_left callCC_dummy)
-
-/--
-Definition of `ContT` / `ContT` 的定义
-
-English:
-definition ContT
-  signature: (r : Type u) (m : Type u -> Type v) (α : Type w)
-  body: (α -> m r) -> m r
-
-中文:
-定义 ContT
-  签名: (r : 类型u) (m : 类型u -> 类型v) (α : 类型 w)
-  定义体: (α -> m r) -> m r
+/-
+**ContT** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContT (r : Type u) (m : Type u -> Type v) (α : Type w)
+参数：r : Type u；m : Type u -> Type v；α : Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ContT (r : Type u) (m : Type u -> Type v) (α : Type w) :=
-  (α -> m r) -> m r
-
-/--
-Definition of `Cont` / `Cont` 的定义
-
-English:
-abbreviation Cont
-  signature: (r : Type u) (α : Type w)
-  body: ContT r Id α
-
-中文:
-缩写 余nt
-  签名: (r : 类型u) (α : 类型 w)
-  定义体: ContT r Id α
+def ContT (r : Type u) (m : Type u → Type v) (α : Type w) :=
+  (α → m r) → m r
+/-
+**Cont** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Cont (r : Type u) (α : Type w)
+参数：r : Type u；α : Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev Cont (r : Type u) (α : Type w) :=
   ContT r Id α
@@ -147,439 +86,243 @@ namespace ContT
 
 export MonadCont (Label goto)
 
-variable {r : Type u} {m : Type u -> Type v} {α β : Type w}
+variable {r : Type u} {m : Type u → Type v} {α β : Type w}
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Build a `ContT` from a function taking a continuation callback. -/
+/-
+**ContT.mk** 是 Mathlib 中的一个定义，位于命名空间 `ContT`。
+形式化陈述：mk (f : (α -> m r) -> m r) : ContT r m α
+参数：f : (α -> m r) -> m r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: (f : (α -> m r) -> m r)
-  body: f
-
-中文:
-定义 mk
-  签名: (f : (α -> m r) -> m r)
-  定义体: f
+--- 原说明 ---
+Build a `ContT` from a function taking a continuation callback.
 -/
-def mk (f : (α -> m r) -> m r) : ContT r m α := f
+def mk (f : (α → m r) → m r) : ContT r m α := f
 
-/--
-Definition of `run` / `run` 的定义
+/-- Run a `ContT` with a provided callback. -/
+/-
+**ContT.run** 是 Mathlib 中的一个定义，位于命名空间 `ContT`。
+形式化陈述：run (x : ContT r m α) : (α -> m r) -> m r
+参数：x : ContT r m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition run
-  signature: (x : ContT r m α)
-  body: x
-
-中文:
-定义 run
-  签名: (x : ContT r m α)
-  定义体: x
+--- 原说明 ---
+Run a `ContT` with a provided callback.
 -/
-def run (x : ContT r m α) : (α -> m r) -> m r := x
-
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (f : m r -> m r) (x : ContT r m α)
-  body: f ∘ x
-
-中文:
-定义 map
-  签名: (f : m r -> m r) (x : ContT r m α)
-  定义体: f ∘ x
+def run (x : ContT r m α) : (α → m r) → m r := x
+/-
+**ContT.map** 是 Mathlib 中的一个定义，位于命名空间 `ContT`。
+形式化陈述：map (f : m r -> m r) (x : ContT r m α) : ContT r m α
+参数：f : m r -> m r；x : ContT r m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def map (f : m r -> m r) (x : ContT r m α) : ContT r m α :=
+def map (f : m r → m r) (x : ContT r m α) : ContT r m α :=
   f ∘ x
-
-/--
-theorem `run_contT_map_contT` / 定理 `run_contT_map_contT`
-
-English:
-theorem run_contT_map_contT
-  given: (f : m r -> m r) (x : ContT r m α)
-  statement: run (map f x) = f ∘ run x
-  proof: rfl
-
-中文:
-定理 run_contT_map_contT
-  条件: (f : m r -> m r) (x : ContT r m α)
-  结论: run (map f x) = f ∘ run x
-  证明: rfl
+/-
+**ContT.run_contT_map_contT** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_contT_map_contT (f : m r -> m r) (x : ContT r m α) : run (map f x) = f
+ ∘ run x
+参数：f : m r -> m r；x : ContT r m α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_contT_map_contT (f : m r -> m r) (x : ContT r m α) : run (map f x) = f ∘ run x :=
+theorem run_contT_map_contT (f : m r → m r) (x : ContT r m α) : run (map f x) = f ∘ run x :=
   rfl
-
-/--
-Definition of `withContT` / `withContT` 的定义
-
-English:
-definition withContT
-  signature: (f : (β -> m r) -> α -> m r) (x : ContT r m α)
-  body: fun g => x f g
-
-中文:
-定义 withContT
-  签名: (f : (β -> m r) -> α -> m r) (x : ContT r m α)
-  定义体: fun g => x f g
+/-
+**ContT.withContT** 是 Mathlib 中的一个定义，位于命名空间 `ContT`。
+形式化陈述：withContT (f : (β -> m r) -> α -> m r) (x : ContT r m α) : ContT r m β
+参数：f : (β -> m r) -> α -> m r；x : ContT r m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def withContT (f : (β -> m r) -> α -> m r) (x : ContT r m α) : ContT r m β := fun g => x f g
-
-/--
-theorem `run_withContT` / 定理 `run_withContT`
-
-English:
-theorem run_withContT
-  given: (f : (β -> m r) -> α -> m r) (x : ContT r m α)
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 run_withContT
-  条件: (f : (β -> m r) -> α -> m r) (x : ContT r m α)
-  证明: rfl
-
-@[ext]
+def withContT (f : (β → m r) → α → m r) (x : ContT r m α) : ContT r m β := fun g => x <| f g
+/-
+**ContT.run_withContT** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_withContT (f : (β -> m r) -> α -> m r) (x : ContT r m α) : run (withCo
+ntT f x) = run x ∘ f
+参数：f : (β -> m r) -> α -> m r；x : ContT r m α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_withContT (f : (β -> m r) -> α -> m r) (x : ContT r m α) :
+theorem run_withContT (f : (β → m r) → α → m r) (x : ContT r m α) :
     run (withContT f x) = run x ∘ f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {x y : ContT r m α} (h : forall f, x.run f = y.run f)
-  statement: x = y
-  proof: by
-  unfold ContT; ext; apply h
-
-中文:
-定理 ext
-  条件: {x y : ContT r m α} (h : 对任意 f, x.run f = y.run f)
-  结论: x = y
-  证明: by
-  unfold ContT; ext; apply h
+/-
+**ContT.ext** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：∀ {r : Type u} {m : Type u → Type v} {α : Type w} {x y : ContT r m α}, (∀ 
+(f : α → m r), x.run f = y.run f) → x = y
+参数：∀ (f : α → m r), x.run f = y.run f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-protected theorem ext {x y : ContT r m α} (h : forall f, x.run f = y.run f) : x = y := by
+protected theorem ext {x y : ContT r m α} (h : ∀ f, x.run f = y.run f) : x = y := by
   unfold ContT; ext; apply h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monad (ContT r m)
-  body: f x
-  bind x f g := x fun i => f i g
-
-@[simp]
-
-中文:
-实例 :
-  签名: 单子 (ContT r m)
-  定义体: f x
-  bind x f g := x fun i => f i g
-
-@[simp]
+/-
+**ContT.** 是 Mathlib 中的一个实例，位于命名空间 `ContT`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Monad (ContT r m) where
   pure x f := f x
   bind x f g := x fun i => f i g
 
 @[simp]
-/--
-theorem `run_mk` / 定理 `run_mk`
-
-English:
-theorem run_mk
-  given: (f : (α -> m r) -> m r) (k : α -> m r)
-  statement: (.mk f : ContT r m α).run k = f k
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 run_mk
-  条件: (f : (α -> m r) -> m r) (k : α -> m r)
-  结论: (.mk f : ContT r m α).run k = f k
-  证明: rfl
-
-@[simp]
+/-
+**ContT.run_mk** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_mk (f : (α -> m r) -> m r) (k : α -> m r) : (.mk f : ContT r m α).run 
+k = f k
+参数：f : (α -> m r) -> m r；k : α -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_mk (f : (α -> m r) -> m r) (k : α -> m r) : (.mk f : ContT r m α).run k = f k := rfl
+theorem run_mk (f : (α → m r) → m r) (k : α → m r) : (.mk f : ContT r m α).run k = f k := rfl
 
 @[simp]
-/--
-theorem `run_pure` / 定理 `run_pure`
-
-English:
-theorem run_pure
-  given: (a : α) (k : α -> m r)
-  statement: (pure a : ContT r m α).run k = k a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 run_pure
-  条件: (a : α) (k : α -> m r)
-  结论: (pure a : ContT r m α).run k = k a
-  证明: rfl
-
-@[simp]
+/-
+**ContT.run_pure** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_pure (a : α) (k : α -> m r) : (pure a : ContT r m α).run k = k a
+参数：a : α；k : α -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_pure (a : α) (k : α -> m r) : (pure a : ContT r m α).run k = k a := rfl
+theorem run_pure (a : α) (k : α → m r) : (pure a : ContT r m α).run k = k a := rfl
 
 @[simp]
-/--
-theorem `run_bind` / 定理 `run_bind`
-
-English:
-theorem run_bind
-  given: (x : ContT r m α) (f : α -> ContT r m β) (k : β -> m r)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 run_bind
-  条件: (x : ContT r m α) (f : α -> ContT r m β) (k : β -> m r)
-  证明: rfl
-
-@[simp]
+/-
+**ContT.run_bind** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_bind (x : ContT r m α) (f : α -> ContT r m β) (k : β -> m r) : (x >>= 
+f).run k = x.run fun x => (f x).run k
+参数：x : ContT r m α；f : α -> ContT r m β；k : β -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_bind (x : ContT r m α) (f : α -> ContT r m β) (k : β -> m r) :
+theorem run_bind (x : ContT r m α) (f : α → ContT r m β) (k : β → m r) :
     (x >>= f).run k = x.run fun x => (f x).run k := rfl
 
 @[simp]
-/--
-theorem `run_map` / 定理 `run_map`
-
-English:
-theorem run_map
-  given: (f : α -> β) (x : ContT r m α) (k : β -> m r)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 run_map
-  条件: (f : α -> β) (x : ContT r m α) (k : β -> m r)
-  证明: rfl
-
-@[simp]
+/-
+**ContT.run_map** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_map (f : α -> β) (x : ContT r m α) (k : β -> m r) : (f <$> x).run k = 
+x.run (k ∘ f)
+参数：f : α -> β；x : ContT r m α；k : β -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_map (f : α -> β) (x : ContT r m α) (k : β -> m r) :
+theorem run_map (f : α → β) (x : ContT r m α) (k : β → m r) :
     (f <$> x).run k = x.run (k ∘ f) := rfl
 
 @[simp]
-/--
-theorem `run_seq` / 定理 `run_seq`
-
-English:
-theorem run_seq
-  given: (f : ContT r m (α -> β)) (x : ContT r m α) (k : β -> m r)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 run_seq
-  条件: (f : ContT r m (α -> β)) (x : ContT r m α) (k : β -> m r)
-  证明: rfl
-
-@[simp]
+/-
+**ContT.run_seq** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_seq (f : ContT r m (α -> β)) (x : ContT r m α) (k : β -> m r) : (f <*>
+ x).run k = f.run fun f => x.run (k ∘ f)
+参数：f : ContT r m (α -> β)；x : ContT r m α；k : β -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_seq (f : ContT r m (α -> β)) (x : ContT r m α) (k : β -> m r) :
+theorem run_seq (f : ContT r m (α → β)) (x : ContT r m α) (k : β → m r) :
     (f <*> x).run k = f.run fun f => x.run (k ∘ f) := rfl
 
 @[simp]
-/--
-theorem `run_seqLeft` / 定理 `run_seqLeft`
-
-English:
-theorem run_seqLeft
-  given: (x : ContT r m α) (y : ContT r m β) (k : α -> m r)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 run_seqLeft
-  条件: (x : ContT r m α) (y : ContT r m β) (k : α -> m r)
-  证明: rfl
-
-@[simp]
+/-
+**ContT.run_seqLeft** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_seqLeft (x : ContT r m α) (y : ContT r m β) (k : α -> m r) : (x <* y).
+run k = x.run fun x => y.run fun _ => k x
+参数：x : ContT r m α；y : ContT r m β；k : α -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_seqLeft (x : ContT r m α) (y : ContT r m β) (k : α -> m r) :
+theorem run_seqLeft (x : ContT r m α) (y : ContT r m β) (k : α → m r) :
     (x <* y).run k = x.run fun x => y.run fun _ => k x := rfl
 
 @[simp]
-/--
-theorem `run_seqRight` / 定理 `run_seqRight`
-
-English:
-theorem run_seqRight
-  given: (x : ContT r m α) (y : ContT r m β) (k : β -> m r)
-  proof: rfl
-
-中文:
-定理 run_seqRight
-  条件: (x : ContT r m α) (y : ContT r m β) (k : β -> m r)
-  证明: rfl
+/-
+**ContT.run_seqRight** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_seqRight (x : ContT r m α) (y : ContT r m β) (k : β -> m r) : (x *> y)
+.run k = x.run fun _ => y.run k
+参数：x : ContT r m α；y : ContT r m β；k : β -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_seqRight (x : ContT r m α) (y : ContT r m β) (k : β -> m r) :
+theorem run_seqRight (x : ContT r m α) (y : ContT r m β) (k : β → m r) :
     (x *> y).run k = x.run fun _ => y.run k := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulMonad (ContT r m)
-  body: LawfulMonad.mk'
-  (id_map := by intros; rfl)
-  (pure_bind := by intros; ext; rfl)
-  (bind_assoc := by intros; ext; rfl)
-
-中文:
-实例 :
-  签名: 合法单子 (ContT r m)
-  定义体: LawfulMonad.mk'
-  (id_map := by intros; rfl)
-  (pure_bind := by intros; ext; rfl)
-  (bind_assoc := by intros; ext; rfl)
-
-Depends on / 依赖: LawfulMonad, LawfulMonad.mk
+/-
+**ContT.** 是 Mathlib 中的一个实例，位于命名空间 `ContT`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulMonad (ContT r m) := LawfulMonad.mk'
   (id_map := by intros; rfl)
   (pure_bind := by intros; ext; rfl)
   (bind_assoc := by intros; ext; rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monad
-  signature: m] : MonadLift m (ContT r m) where
-  body: .mk fun k => x >>= k
-
-@[simp]
-
-中文:
-实例 [单子
-  签名: m] : MonadLift m (ContT r m) where
-  定义体: .mk fun k => x >>= k
-
-@[simp]
+/-
+**ContT.** 是 Mathlib 中的一个实例，位于命名空间 `ContT`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monad m] : MonadLift m (ContT r m) where
   monadLift x := .mk fun k => x >>= k
 
 @[simp]
-/--
-theorem `run_monadLift` / 定理 `run_monadLift`
-
-English:
-theorem run_monadLift
-  given: [Monad m] {α} (x : m α) (k : α -> m r)
-  proof: rfl
-
-中文:
-定理 run_monadLift
-  条件: [单子 m] {α} (x : m α) (k : α -> m r)
-  证明: rfl
+/-
+**ContT.run_monadLift** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_monadLift [Monad m] {α} (x : m α) (k : α -> m r) : (monadLift x : Cont
+T r m α).run k = x >>= k
+参数：x : m α；k : α -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_monadLift [Monad m] {α} (x : m α) (k : α -> m r) :
+theorem run_monadLift [Monad m] {α} (x : m α) (k : α → m r) :
     (monadLift x : ContT r m α).run k = x >>= k := rfl
-
-/--
-theorem `monadLift_bind` / 定理 `monadLift_bind`
-
-English:
-theorem monadLift_bind
-  given: [Monad m] [LawfulMonad m] {α β} (x : m α) (f : α -> m β)
-  proof: by
-  ext
-  simp only [bind_assoc, run_bind, run_monadLift, Function.comp_apply]
-
-中文:
-定理 monadLift_bind
-  条件: [单子 m] [合法单子 m] {α β} (x : m α) (f : α -> m β)
-  证明: by
-  ext
-  simp only [bind_assoc, run_bind, run_monadLift, Function.comp_apply]
-
-Depends on / 依赖: Function, Function.comp_apply, bind_assoc, comp_apply, run_bind, run_monadLift
+/-
+**ContT.monadLift_bind** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：monadLift_bind [Monad m] [LawfulMonad m] {α β} (x : m α) (f : α -> m β) : 
+(monadLift (x >>= f) : ContT r m β) = monadLift x >>= monadLift ∘ f
+参数：x : m α；f : α -> m β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContT.ext`：∀ {r : Type u} {m : Type u → Type v} {α : Type w} {x y : Cont
+T r m α}, (∀ (f : α → m r), x.run f = y.run f) → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem monadLift_bind [Monad m] [LawfulMonad m] {α β} (x : m α) (f : α -> m β) :
+theorem monadLift_bind [Monad m] [LawfulMonad m] {α β} (x : m α) (f : α → m β) :
     (monadLift (x >>= f) : ContT r m β) = monadLift x >>= monadLift ∘ f := by
   ext
   simp only [bind_assoc, run_bind, run_monadLift, Function.comp_apply]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonadCont (ContT r m)
-  body: .mk fun k => f ⟨fun x => .mk fun _ => k x⟩ k
-
-@[simp]
-
-中文:
-实例 :
-  签名: MonadCont (ContT r m)
-  定义体: .mk fun k => f ⟨fun x => .mk fun _ => k x⟩ k
-
-@[simp]
+/-
+**ContT.** 是 Mathlib 中的一个实例，位于命名空间 `ContT`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonadCont (ContT r m) where
   callCC f := .mk fun k => f ⟨fun x => .mk fun _ => k x⟩ k
 
 @[simp]
-/--
-theorem `run_callCC` / 定理 `run_callCC`
-
-English:
-theorem run_callCC
-  given: (f : Label α (ContT r m) β -> ContT r m α) (k : α -> m r)
-  proof: rfl
-
-中文:
-定理 run_callCC
-  条件: (f : Label α (ContT r m) β -> ContT r m α) (k : α -> m r)
-  证明: rfl
+/-
+**ContT.run_callCC** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_callCC (f : Label α (ContT r m) β -> ContT r m α) (k : α -> m r) : (ca
+llCC f).run k = (f ⟨fun x => .mk fun _ => k x⟩).run k
+参数：f : Label α (ContT r m) β -> ContT r m α；k : α -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem run_callCC (f : Label α (ContT r m) β -> ContT r m α) (k : α -> m r) :
+theorem run_callCC (f : Label α (ContT r m) β → ContT r m α) (k : α → m r) :
     (callCC f).run k = (f ⟨fun x => .mk fun _ => k x⟩).run k := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulMonadCont (ContT r m)
-  body: by intros; ext; rfl
-  callCC_bind_left := by intros; ext; rfl
-  callCC_dummy := by intros; ext; rfl
-
-中文:
-实例 :
-  签名: LawfulMonadCont (ContT r m)
-  定义体: by intros; ext; rfl
-  callCC_bind_left := by intros; ext; rfl
-  callCC_dummy := by intros; ext; rfl
-
-Depends on / 依赖: callCC_bind_left, callCC_dummy, intros
+/-
+**ContT.** 是 Mathlib 中的一个实例，位于命名空间 `ContT`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulMonadCont (ContT r m) where
   callCC_bind_right := by intros; ext; rfl
@@ -601,105 +344,101 @@ Here, the `throwError` is being run inside the `try`.
 See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topic/MonadExcept.20in.20the.20ContT.20monad/near/375341221)
 for further discussion.
 -/
+/-
+**ContT.** 是 Mathlib 中的一个实例，位于命名空间 `ContT`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Note that `tryCatch` does not have correct behavior in this monad:
+```
+def foo : ContT Bool (Except String) Bool := do
+  let x ← try
+    pure true
+  catch _ =>
+    return false
+  throw s!"oh no {x}"
+#eval foo.run pure
+-- `Except.ok false`, no error
+```
+Here, the `throwError` is being run inside the `try`.
+See [Zulip](https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topi
+c/MonadExcept.20in.20the.20ContT.20monad/near/375341221)
+for further discussion.
+-/
 instance (ε) [MonadExceptOf ε m] : MonadExceptOf ε (ContT r m) where
   throw e := .mk fun _ => throw e
   tryCatch act h := .mk fun k => tryCatch (act.run k) fun e => (h e).run k
 
 @[simp]
-/--
-theorem `run_throw` / 定理 `run_throw`
-
-English:
-theorem run_throw
-  statement: {ε} [MonadExceptOf ε m]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 run_throw
-  结论: {ε} [MonadExceptOf ε m]
-  证明: rfl
-
-@[simp]
+/-
+**ContT.run_throw** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_throw {ε} [MonadExceptOf ε m] (e : ε) (f : α -> m r) : (throw e : Cont
+T r m α).run f = throw e
+参数：e : ε；f : α -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem run_throw {ε} [MonadExceptOf ε m]
-    (e : ε) (f : α -> m r) :
+    (e : ε) (f : α → m r) :
     (throw e : ContT r m α).run f = throw e := rfl
 
 @[simp]
-/--
-theorem `run_tryCatch` / 定理 `run_tryCatch`
-
-English:
-theorem run_tryCatch
-  statement: {ε} [MonadExceptOf ε m]
-  proof: rfl
-
-中文:
-定理 run_tryCatch
-  结论: {ε} [MonadExceptOf ε m]
-  证明: rfl
+/-
+**ContT.run_tryCatch** 是 Mathlib 中的一个定理，位于命名空间 `ContT`。
+形式化陈述：run_tryCatch {ε} [MonadExceptOf ε m] (act : ContT r m α) (h : ε -> ContT r
+ m α) (f : α -> m r) : (tryCatch act h : ContT r m α).run f = tryCatch (act.run 
+f) fun e => (h e).run f
+参数：act : ContT r m α；h : ε -> ContT r m α；f : α -> m r。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem run_tryCatch {ε} [MonadExceptOf ε m]
-    (act : ContT r m α) (h : ε -> ContT r m α) (f : α -> m r) :
+    (act : ContT r m α) (h : ε → ContT r m α) (f : α → m r) :
     (tryCatch act h : ContT r m α).run f = tryCatch (act.run f) fun e => (h e).run f := rfl
 
 end ContT
 
-variable {m : Type u -> Type v}
+variable {m : Type u → Type v}
 
 section
 variable [Monad m]
 
-/--
-Definition of `ExceptT.mkLabel` / `ExceptT.mkLabel` 的定义
-
-English:
-definition ExceptT.mkLabel
-  signature: {α β ε}
-
-中文:
-定义 ExceptT.mkLabel
-  签名: {α β ε}
+/-
+**ExceptT.mkLabel** 是 Mathlib 中的一个定义，位于命名空间 `ExceptT`。
+形式化陈述：{m : Type u → Type v} →   [Monad m] → {α β ε : Type u} → MonadCont.Label (
+Except ε α) m β → MonadCont.Label α (ExceptT ε m) β
+参数：Except ε α；ExceptT ε m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ExceptT.mkLabel {α β ε} : Label (Except.{u, u} ε α) m β -> Label α (ExceptT ε m) β
-| ⟨f⟩ => ⟨fun a => monadLift f (Except.ok a)⟩
-
-/--
-theorem `ExceptT.goto_mkLabel` / 定理 `ExceptT.goto_mkLabel`
-
-English:
-theorem ExceptT.goto_mkLabel
-  given: {α β ε : Type _} (x : Label (Except.{u, u} ε α) m β) (i : α)
-  proof: by
-  cases x; rfl
-
-nonrec def ExceptT.callCC {ε} [MonadCont m] {α β : Type _}
-    (f : Label α (ExceptT ε m) β -> ExceptT ε m α) : ExceptT ε m α :=
-  ExceptT.mk (callCC fun x : Label _ m β => ExceptT.run <| f (ExceptT.mkLabel x))
-
-中文:
-定理 ExceptT.goto_mkLabel
-  条件: {α β ε : 类型 _} (x : Label (Except.{u, u} ε α) m β) (i : α)
-  证明: by
-  cases x; rfl
-
-nonrec def ExceptT.callCC {ε} [MonadCont m] {α β : Type _}
-    (f : Label α (ExceptT ε m) β -> ExceptT ε m α) : ExceptT ε m α :=
-  ExceptT.mk (callCC fun x : Label _ m β => ExceptT.run <| f (ExceptT.mkLabel x))
+def ExceptT.mkLabel {α β ε} : Label (Except.{u, u} ε α) m β → Label α (ExceptT ε m) β
+  | ⟨f⟩ => ⟨fun a => monadLift <| f (Except.ok a)⟩
+/-
+**ExceptT.goto_mkLabel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ExceptT.goto_mkLabel {α β ε : Type _} (x : Label (Except.{u, u} ε α) m β) 
+(i : α) : goto (ExceptT.mkLabel x) i = ExceptT.mk (Except.ok <$> goto x (Except.
+ok i))
+参数：x : Label (Except.{u, u} ε α) m β；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem ExceptT.goto_mkLabel {α β ε : Type _} (x : Label (Except.{u, u} ε α) m β) (i : α) :
     goto (ExceptT.mkLabel x) i = ExceptT.mk (Except.ok <$> goto x (Except.ok i)) := by
   cases x; rfl
 
 nonrec def ExceptT.callCC {ε} [MonadCont m] {α β : Type _}
-    (f : Label α (ExceptT ε m) β -> ExceptT ε m α) : ExceptT ε m α :=
+    (f : Label α (ExceptT ε m) β → ExceptT ε m α) : ExceptT ε m α :=
   ExceptT.mk (callCC fun x : Label _ m β => ExceptT.run <| f (ExceptT.mkLabel x))
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {ε} [MonadCont m] : MonadCont (ExceptT ε m) where
   callCC := ExceptT.callCC
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {ε} [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (ExceptT ε m) where
   callCC_bind_right := by
     intros; simp only [callCC, ExceptT.callCC, ExceptT.run_bind, callCC_bind_right]; ext
@@ -711,119 +450,53 @@ instance {ε} [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (ExceptT ε m)
       ExceptT.run_bind, ExceptT.run_mk, bind_assoc, pure_bind, @callCC_bind_left m _]
     ext; rfl
   callCC_dummy := by intros; simp only [callCC, ExceptT.callCC, @callCC_dummy m _]; ext; rfl
-
-/--
-Definition of `OptionT.mkLabel` / `OptionT.mkLabel` 的定义
-
-English:
-definition OptionT.mkLabel
-  signature: {α β}
-
-中文:
-定义 OptionT.mkLabel
-  签名: {α β}
+/-
+**OptionT.mkLabel** 是 Mathlib 中的一个定义，位于命名空间 `OptionT`。
+形式化陈述：{m : Type u → Type v} → [Monad m] → {α β : Type u} → MonadCont.Label (Opti
+on α) m β → MonadCont.Label α (OptionT m) β
+参数：Option α；OptionT m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def OptionT.mkLabel {α β} : Label (Option.{u} α) m β -> Label α (OptionT m) β
-| ⟨f⟩ => ⟨fun a => monadLift f (some a)⟩
-
-/--
-theorem `OptionT.goto_mkLabel` / 定理 `OptionT.goto_mkLabel`
-
-English:
-theorem OptionT.goto_mkLabel
-  given: {α β : Type _} (x : Label (Option.{u} α) m β) (i : α)
-  proof: (rfl)
-
-nonrec def OptionT.callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α) :
-    OptionT m α :=
-  OptionT.mk (callCC fun x : Label _ m β => OptionT.run <| f (OptionT.mkLabel x) : m (Option α))
-
-@[simp]
-
-中文:
-定理 OptionT.goto_mkLabel
-  条件: {α β : 类型 _} (x : Label (选项类型.{u} α) m β) (i : α)
-  证明: (rfl)
-
-nonrec def OptionT.callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α) :
-    OptionT m α :=
-  OptionT.mk (callCC fun x : Label _ m β => OptionT.run <| f (OptionT.mkLabel x) : m (Option α))
-
-@[simp]
+def OptionT.mkLabel {α β} : Label (Option.{u} α) m β → Label α (OptionT m) β
+  | ⟨f⟩ => ⟨fun a => monadLift <| f (some a)⟩
+/-
+**OptionT.goto_mkLabel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：OptionT.goto_mkLabel {α β : Type _} (x : Label (Option.{u} α) m β) (i : α)
+ : goto (OptionT.mkLabel x) i = OptionT.mk (goto x (some i) >>= fun a => pure (s
+ome a))
+参数：x : Label (Option.{u} α) m β；i : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem OptionT.goto_mkLabel {α β : Type _} (x : Label (Option.{u} α) m β) (i : α) :
     goto (OptionT.mkLabel x) i = OptionT.mk (goto x (some i) >>= fun a => pure (some a)) :=
   (rfl)
 
-nonrec def OptionT.callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α) :
+nonrec def OptionT.callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β → OptionT m α) :
     OptionT m α :=
   OptionT.mk (callCC fun x : Label _ m β => OptionT.run <| f (OptionT.mkLabel x) : m (Option α))
 
 @[simp]
-/--
-lemma `run_callCC` / 引理 `run_callCC`
-
-English:
-lemma run_callCC
-  given: [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α)
-  proof: (rfl)
-
-中文:
-引理 run_callCC
-  条件: [MonadCont m] {α β : 类型 _} (f : Label α (OptionT m) β -> OptionT m α)
-  证明: (rfl)
+/-
+**run_callCC** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：run_callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> Opti
+onT m α) : (OptionT.callCC f).run = (callCC fun x => OptionT.run <| f (OptionT.m
+kLabel x))
+参数：f : Label α (OptionT m) β -> OptionT m α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma run_callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α) :
+lemma run_callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β → OptionT m α) :
     (OptionT.callCC f).run = (callCC fun x => OptionT.run <| f (OptionT.mkLabel x)) := (rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonadCont
-  signature: m] : MonadCont (OptionT m) where
-  body: OptionT.callCC
-
-中文:
-实例 [MonadCont
-  签名: m] : MonadCont (OptionT m) where
-  定义体: OptionT.callCC
-
-Depends on / 依赖: OptionT, OptionT.callCC, callCC
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MonadCont m] : MonadCont (OptionT m) where
   callCC := OptionT.callCC
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MonadCont
-  signature: m] [LawfulMonadCont m] : LawfulMonadCont (OptionT m) where
-  body: by
-    refine fun _ _ => OptionT.ext ?_
-    simpa [callCC, Option.elimM, callCC_bind_right] using
-      bind_congr fun | some _ => rfl | none => by simp [@callCC_dummy m _]
-  callCC_bind_left := by
-    intros
-    ext
-    simp [callCC, OptionT.goto_mkLabel, @callCC_bind_left m _]
-  callCC_dummy := by intros; ext; simp [callCC, OptionT.callCC, @callCC_dummy m _]
-
-中文:
-实例 [MonadCont
-  签名: m] [LawfulMonadCont m] : LawfulMonadCont (OptionT m) where
-  定义体: by
-    refine fun _ _ => OptionT.ext ?_
-    simpa [callCC, Option.elimM, callCC_bind_right] using
-      bind_congr fun | some _ => rfl | none => by simp [@callCC_dummy m _]
-  callCC_bind_left := by
-    intros
-    ext
-    simp [callCC, OptionT.goto_mkLabel, @callCC_bind_left m _]
-  callCC_dummy := by intros; ext; simp [callCC, OptionT.callCC, @callCC_dummy m _]
-
-Depends on / 依赖: Option.elimM, OptionT, OptionT.callCC, OptionT.ext, OptionT.goto_mkLabel, bind_congr, callCC, callCC_bind_left, callCC_bind_right, callCC_dummy, goto_mkLabel, intros
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (OptionT m) where
   callCC_bind_right := by
@@ -835,158 +508,112 @@ instance [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (OptionT m) where
     ext
     simp [callCC, OptionT.goto_mkLabel, @callCC_bind_left m _]
   callCC_dummy := by intros; ext; simp [callCC, OptionT.callCC, @callCC_dummy m _]
-
-/--
-Definition of `WriterT.mkLabel` / `WriterT.mkLabel` 的定义
-
-English:
-definition WriterT.mkLabel
-  signature: {α β ω} [EmptyCollection ω]
-
-中文:
-定义 WriterT.mkLabel
-  签名: {α β ω} [EmptyCollection ω]
+/-
+**WriterT.mkLabel** 是 Mathlib 中的一个定义，位于命名空间 `WriterT`。
+形式化陈述：{m : Type u → Type v} →   [Monad m] →     {α : Type u_1} →       {β ω : Ty
+pe u} → [EmptyCollection ω] → MonadCont.Label (α × ω) m β → MonadCont.Label α (W
+riterT ω m) β
+参数：α × ω；WriterT ω m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def WriterT.mkLabel {α β ω} [EmptyCollection ω] : Label (α × ω) m β -> Label α (WriterT ω m) β
-| ⟨f⟩ => ⟨fun a => monadLift f (a, ∅)⟩
-
-/--
-Definition of `WriterT.mkLabel'` / `WriterT.mkLabel'` 的定义
-
-English:
-definition WriterT.mkLabel'
-  signature: {α β ω} [Monoid ω]
-
-中文:
-定义 WriterT.mkLabel'
-  签名: {α β ω} [幺半群 ω]
+def WriterT.mkLabel {α β ω} [EmptyCollection ω] : Label (α × ω) m β → Label α (WriterT ω m) β
+  | ⟨f⟩ => ⟨fun a => monadLift <| f (a, ∅)⟩
+/-
+**WriterT.mkLabel'** 是 Mathlib 中的一个定义，位于命名空间 `WriterT`。
+形式化陈述：{m : Type u → Type v} →   [Monad m] →     {α : Type u_1} → {β ω : Type u} 
+→ [Monoid ω] → MonadCont.Label (α × ω) m β → MonadCont.Label α (WriterT ω m) β
+参数：α × ω；WriterT ω m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def WriterT.mkLabel' {α β ω} [Monoid ω] : Label (α × ω) m β -> Label α (WriterT ω m) β
-| ⟨f⟩ => ⟨fun a => monadLift f (a, 1)⟩
-
-/--
-theorem `WriterT.goto_mkLabel` / 定理 `WriterT.goto_mkLabel`
-
-English:
-theorem WriterT.goto_mkLabel
-  given: {α β ω : Type _} [EmptyCollection ω] (x : Label (α × ω) m β) (i : α)
-  proof: by cases x; rfl
-
-中文:
-定理 WriterT.goto_mkLabel
-  条件: {α β ω : 类型 _} [EmptyCollection ω] (x : Label (α × ω) m β) (i : α)
-  证明: by cases x; rfl
+def WriterT.mkLabel' {α β ω} [Monoid ω] : Label (α × ω) m β → Label α (WriterT ω m) β
+  | ⟨f⟩ => ⟨fun a => monadLift <| f (a, 1)⟩
+/-
+**WriterT.goto_mkLabel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WriterT.goto_mkLabel {α β ω : Type _} [EmptyCollection ω] (x : Label (α × 
+ω) m β) (i : α) : goto (WriterT.mkLabel x) i = monadLift (goto x (i, ∅))
+参数：x : Label (α × ω) m β；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem WriterT.goto_mkLabel {α β ω : Type _} [EmptyCollection ω] (x : Label (α × ω) m β) (i : α) :
     goto (WriterT.mkLabel x) i = monadLift (goto x (i, ∅)) := by cases x; rfl
-
-/--
-theorem `WriterT.goto_mkLabel'` / 定理 `WriterT.goto_mkLabel'`
-
-English:
-theorem WriterT.goto_mkLabel'
-  given: {α β ω : Type _} [Monoid ω] (x : Label (α × ω) m β) (i : α)
-  proof: by cases x; rfl
-
-nonrec def WriterT.callCC [MonadCont m] {α β ω : Type _} [EmptyCollection ω]
-    (f : Label α (WriterT ω m) β -> WriterT ω m α) : WriterT ω m α :=
-WriterT.mk callCC (WriterT.run ∘ f ∘ WriterT.mkLabel : Label (α × ω) m β -> m (α × ω))
-
-中文:
-定理 WriterT.goto_mkLabel'
-  条件: {α β ω : 类型 _} [幺半群 ω] (x : Label (α × ω) m β) (i : α)
-  证明: by cases x; rfl
-
-nonrec def WriterT.callCC [MonadCont m] {α β ω : Type _} [EmptyCollection ω]
-    (f : Label α (WriterT ω m) β -> WriterT ω m α) : WriterT ω m α :=
-WriterT.mk callCC (WriterT.run ∘ f ∘ WriterT.mkLabel : Label (α × ω) m β -> m (α × ω))
+/-
+**WriterT.goto_mkLabel'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WriterT.goto_mkLabel' {α β ω : Type _} [Monoid ω] (x : Label (α × ω) m β) 
+(i : α) : goto (WriterT.mkLabel' x) i = monadLift (goto x (i, 1))
+参数：x : Label (α × ω) m β；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem WriterT.goto_mkLabel' {α β ω : Type _} [Monoid ω] (x : Label (α × ω) m β) (i : α) :
     goto (WriterT.mkLabel' x) i = monadLift (goto x (i, 1)) := by cases x; rfl
 
 nonrec def WriterT.callCC [MonadCont m] {α β ω : Type _} [EmptyCollection ω]
-    (f : Label α (WriterT ω m) β -> WriterT ω m α) : WriterT ω m α :=
-WriterT.mk callCC (WriterT.run ∘ f ∘ WriterT.mkLabel : Label (α × ω) m β -> m (α × ω))
-
-/--
-Definition of `WriterT.callCC'` / `WriterT.callCC'` 的定义
-
-English:
-definition WriterT.callCC'
-  signature: [MonadCont m] {α β ω : Type _} [Monoid ω]
-  body: WriterT.mk
-    MonadCont.callCC (WriterT.run ∘ f ∘ WriterT.mkLabel' : Label (α × ω) m β -> m (α × ω))
-
-中文:
-定义 WriterT.callCC'
-  签名: [MonadCont m] {α β ω : 类型 _} [幺半群 ω]
-  定义体: WriterT.mk
-    MonadCont.callCC (WriterT.run ∘ f ∘ WriterT.mkLabel' : Label (α × ω) m β -> m (α × ω))
-
-Depends on / 依赖: MonadCont, MonadCont.callCC, WriterT, WriterT.mk, WriterT.mkLabel, WriterT.run, callCC, mkLabel
+    (f : Label α (WriterT ω m) β → WriterT ω m α) : WriterT ω m α :=
+  WriterT.mk <| callCC (WriterT.run ∘ f ∘ WriterT.mkLabel : Label (α × ω) m β → m (α × ω))
+/-
+**WriterT.callCC'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WriterT.callCC' [MonadCont m] {α β ω : Type _} [Monoid ω] (f : Label α (Wr
+iterT ω m) β -> WriterT ω m α) : WriterT ω m α
+参数：f : Label α (WriterT ω m) β -> WriterT ω m α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def WriterT.callCC' [MonadCont m] {α β ω : Type _} [Monoid ω]
-    (f : Label α (WriterT ω m) β -> WriterT ω m α) : WriterT ω m α :=
-WriterT.mk
-    MonadCont.callCC (WriterT.run ∘ f ∘ WriterT.mkLabel' : Label (α × ω) m β -> m (α × ω))
+    (f : Label α (WriterT ω m) β → WriterT ω m α) : WriterT ω m α :=
+  WriterT.mk <|
+    MonadCont.callCC (WriterT.run ∘ f ∘ WriterT.mkLabel' : Label (α × ω) m β → m (α × ω))
 
 end
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (ω) [Monad m] [EmptyCollection ω] [MonadCont m] : MonadCont (WriterT ω m) where
   callCC := WriterT.callCC
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (ω) [Monad m] [Monoid ω] [MonadCont m] : MonadCont (WriterT ω m) where
   callCC := WriterT.callCC'
-
-/--
-Definition of `StateT.mkLabel` / `StateT.mkLabel` 的定义
-
-English:
-definition StateT.mkLabel
-  signature: {α β σ : Type u}
-
-中文:
-定义 StateT.mkLabel
-  签名: {α β σ : 类型u}
-
-Depends on / 依赖: Nat.xor_assoc, xor_assoc
+/-
+**StateT.mkLabel** 是 Mathlib 中的一个定义，位于命名空间 `StateT`。
+形式化陈述：{m : Type u → Type v} → {α β σ : Type u} → MonadCont.Label (α × σ) m (β × 
+σ) → MonadCont.Label α (StateT σ m) β
+参数：α × σ；β × σ；StateT σ m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def StateT.mkLabel {α β σ : Type u} : Label (α × σ) m (β × σ) -> Label α (StateT σ m) β
+def StateT.mkLabel {α β σ : Type u} : Label (α × σ) m (β × σ) → Label α (StateT σ m) β
   | ⟨f⟩ => ⟨fun a => StateT.mk (fun s => f (a, s))⟩
-
-/--
-theorem `StateT.goto_mkLabel` / 定理 `StateT.goto_mkLabel`
-
-English:
-theorem StateT.goto_mkLabel
-  given: {α β σ : Type u} (x : Label (α × σ) m (β × σ)) (i : α)
-  proof: by cases x; rfl
-
-nonrec def StateT.callCC {σ} [MonadCont m] {α β : Type _}
-    (f : Label α (StateT σ m) β -> StateT σ m α) : StateT σ m α :=
-  StateT.mk (fun r => callCC fun f' => (f <| StateT.mkLabel f').run r)
-
-中文:
-定理 StateT.goto_mkLabel
-  条件: {α β σ : 类型u} (x : Label (α × σ) m (β × σ)) (i : α)
-  证明: by cases x; rfl
-
-nonrec def StateT.callCC {σ} [MonadCont m] {α β : Type _}
-    (f : Label α (StateT σ m) β -> StateT σ m α) : StateT σ m α :=
-  StateT.mk (fun r => callCC fun f' => (f <| StateT.mkLabel f').run r)
-
-Depends on / 依赖: Fin.xor_assoc, xor_assoc
+/-
+**StateT.goto_mkLabel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：StateT.goto_mkLabel {α β σ : Type u} (x : Label (α × σ) m (β × σ)) (i : α)
+ : goto (StateT.mkLabel x) i = StateT.mk (fun s => goto x (i, s))
+参数：x : Label (α × σ) m (β × σ)；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem StateT.goto_mkLabel {α β σ : Type u} (x : Label (α × σ) m (β × σ)) (i : α) :
     goto (StateT.mkLabel x) i = StateT.mk (fun s => goto x (i, s)) := by cases x; rfl
 
 nonrec def StateT.callCC {σ} [MonadCont m] {α β : Type _}
-    (f : Label α (StateT σ m) β -> StateT σ m α) : StateT σ m α :=
+    (f : Label α (StateT σ m) β → StateT σ m α) : StateT σ m α :=
   StateT.mk (fun r => callCC fun f' => (f <| StateT.mkLabel f').run r)
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {σ} [MonadCont m] : MonadCont (StateT σ m) where
   callCC := StateT.callCC
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {σ} [Monad m] [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (StateT σ m) where
   callCC_bind_right := by
     intros
@@ -999,54 +626,40 @@ instance {σ} [Monad m] [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (Sta
     intros
     simp only [callCC, StateT.callCC, @callCC_dummy m _]
     ext; rfl
-
-/--
-Definition of `ReaderT.mkLabel` / `ReaderT.mkLabel` 的定义
-
-English:
-definition ReaderT.mkLabel
-  signature: {α β} (ρ)
-
-中文:
-定义 ReaderT.mkLabel
-  签名: {α β} (ρ)
-
-Depends on / 依赖: BitVec, BitVec.xor_assoc, xor_assoc
+/-
+**ReaderT.mkLabel** 是 Mathlib 中的一个定义，位于命名空间 `ReaderT`。
+形式化陈述：{m : Type u → Type v} →   {α : Type u_1} → {β : Type u} → (ρ : Type u) → M
+onadCont.Label α m β → MonadCont.Label α (ReaderT ρ m) β
+参数：ρ : Type u；ReaderT ρ m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ReaderT.mkLabel {α β} (ρ) : Label α m β -> Label α (ReaderT ρ m) β
+def ReaderT.mkLabel {α β} (ρ) : Label α m β → Label α (ReaderT ρ m) β
   | ⟨f⟩ => ⟨monadLift ∘ f⟩
-
-/--
-theorem `ReaderT.goto_mkLabel` / 定理 `ReaderT.goto_mkLabel`
-
-English:
-theorem ReaderT.goto_mkLabel
-  given: {α ρ β} (x : Label α m β) (i : α)
-  proof: by cases x; rfl
-
-nonrec def ReaderT.callCC {ε} [MonadCont m] {α β : Type _}
-    (f : Label α (ReaderT ε m) β -> ReaderT ε m α) : ReaderT ε m α :=
-  ReaderT.mk (fun r => callCC fun f' => (f <| ReaderT.mkLabel _ f').run r)
-
-中文:
-定理 ReaderT.goto_mkLabel
-  条件: {α ρ β} (x : Label α m β) (i : α)
-  证明: by cases x; rfl
-
-nonrec def ReaderT.callCC {ε} [MonadCont m] {α β : Type _}
-    (f : Label α (ReaderT ε m) β -> ReaderT ε m α) : ReaderT ε m α :=
-  ReaderT.mk (fun r => callCC fun f' => (f <| ReaderT.mkLabel _ f').run r)
+/-
+**ReaderT.goto_mkLabel** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ReaderT.goto_mkLabel {α ρ β} (x : Label α m β) (i : α) : goto (ReaderT.mkL
+abel ρ x) i = monadLift (goto x i)
+参数：x : Label α m β；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem ReaderT.goto_mkLabel {α ρ β} (x : Label α m β) (i : α) :
     goto (ReaderT.mkLabel ρ x) i = monadLift (goto x i) := by cases x; rfl
 
 nonrec def ReaderT.callCC {ε} [MonadCont m] {α β : Type _}
-    (f : Label α (ReaderT ε m) β -> ReaderT ε m α) : ReaderT ε m α :=
+    (f : Label α (ReaderT ε m) β → ReaderT ε m α) : ReaderT ε m α :=
   ReaderT.mk (fun r => callCC fun f' => (f <| ReaderT.mkLabel _ f').run r)
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {ρ} [MonadCont m] : MonadCont (ReaderT ρ m) where
   callCC := ReaderT.callCC
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {ρ} [Monad m] [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (ReaderT ρ m) where
   callCC_bind_right := by intros; simp only [callCC, ReaderT.callCC, ReaderT.run_bind,
                                     callCC_bind_right]; ext; rfl
@@ -1056,30 +669,26 @@ instance {ρ} [Monad m] [MonadCont m] [LawfulMonadCont m] : LawfulMonadCont (Rea
     ext; rfl
   callCC_dummy := by intros; simp only [callCC, ReaderT.callCC, @callCC_dummy m _]; ext; rfl
 
-/--
-Definition of `ContT.equiv` / `ContT.equiv` 的定义
+/-- reduce the equivalence between two continuation passing monads to the equivalence between
+their underlying monad -/
+/-
+**ContT.equiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContT.equiv {m₁ : Type u₀ -> Type v₀} {m₂ : Type u₁ -> Type v₁} {α₁ r₁ : T
+ype u₀} {α₂ r₂ : Type u₁} (F : m₁ r₁ ≃ m₂ r₂) (G : α₁ ≃ α₂) : ContT r₁ m₁ α₁ ≃ C
+ontT r₂ m₂ α₂ where toFun f r
+参数：F : m₁ r₁ ≃ m₂ r₂；G : α₁ ≃ α₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition ContT.equiv
-  signature: {m₁ : Type u₀ -> Type v₀} {m₂ : Type u₁ -> Type v₁} {α₁ r₁ : Type u₀}
-  body: F f fun x => F.symm r G x
-invFun f r := F.symm f fun x => F r G.symm x
-  left_inv f := by funext r; simp
-  right_inv f := by funext r; simp
-
-中文:
-定义 ContT.equiv
-  签名: {m₁ : 类型u₀ -> 类型v₀} {m₂ : 类型u₁ -> 类型v₁} {α₁ r₁ : 类型u₀}
-  定义体: F f fun x => F.symm r G x
-invFun f r := F.symm f fun x => F r G.symm x
-  left_inv f := by funext r; simp
-  right_inv f := by funext r; simp
-
-Depends on / 依赖: F.symm
+--- 原说明 ---
+reduce the equivalence between two continuation passing monads to the equivalenc
+e between
+their underlying monad
 -/
-def ContT.equiv {m₁ : Type u₀ -> Type v₀} {m₂ : Type u₁ -> Type v₁} {α₁ r₁ : Type u₀}
+def ContT.equiv {m₁ : Type u₀ → Type v₀} {m₂ : Type u₁ → Type v₁} {α₁ r₁ : Type u₀}
     {α₂ r₂ : Type u₁} (F : m₁ r₁ ≃ m₂ r₂) (G : α₁ ≃ α₂) : ContT r₁ m₁ α₁ ≃ ContT r₂ m₂ α₂ where
-toFun f r := F f fun x => F.symm r G x
-invFun f r := F.symm f fun x => F r G.symm x
+  toFun f r := F <| f fun x => F.symm <| r <| G x
+  invFun f r := F.symm <| f fun x => F <| r <| G.symm x
   left_inv f := by funext r; simp
   right_inv f := by funext r; simp

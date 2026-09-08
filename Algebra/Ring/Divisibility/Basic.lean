@@ -26,137 +26,126 @@ section Semigroup
 
 variable [Semigroup α] [Semigroup β] {F : Type*} [EquivLike F α β] [MulEquivClass F α β]
 
-/--
-theorem `map_dvd_iff` / 定理 `map_dvd_iff`
-
-English:
-theorem map_dvd_iff
-  given: (f : F) {a b}
-  statement: f a ∣ f b ↔ a ∣ b
-  proof: let f := MulEquivClass.toMulEquiv f
-  ⟨fun h => by rw [← f.left_inv a, ← f.left_inv b]; exact map_dvd f.symm h, map_dvd f⟩
-
-中文:
-定理 map_dvd_iff
-  条件: (f : F) {a b}
-  结论: f a ∣ f b ↔ a ∣ b
-  证明: let f := MulEquivClass.toMulEquiv f
-  ⟨fun h => by rw [← f.left_inv a, ← f.left_inv b]; exact map_dvd f.symm h, map_dvd f⟩
-
-Depends on / 依赖: MulEquivClass, MulEquivClass.toMulEquiv, f.left_inv, f.symm, left_inv, map_dvd, toMulEquiv
+/-
+**map_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_dvd_iff (f : F) {a b} : f a ∣ f b ↔ a ∣ b
+参数：f : F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `map_dvd`：∀ {M : Type u_1} {N : Type u_2} [inst : Semigroup M] [inst_1 : 
+Semigroup N] {F : Type u_3} [inst_2 : FunLike F M N]   [MulHomClass F M N] (f…
+· 使用定理 `MulEquivClass.instMulHomClass`：∀ {M : Type u_4} {N : Type u_5} (F : Type
+ u_9) [inst : Mul M] [inst_1 : Mul N] [inst_2 : EquivLike F M N]   [h : MulEquiv
+Class F M N], MulHo…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 theorem map_dvd_iff (f : F) {a b} : f a ∣ f b ↔ a ∣ b :=
   let f := MulEquivClass.toMulEquiv f
-  ⟨fun h => by rw [← f.left_inv a, ← f.left_inv b]; exact map_dvd f.symm h, map_dvd f⟩
-
-/--
-theorem `map_dvd_iff_dvd_symm` / 定理 `map_dvd_iff_dvd_symm`
-
-English:
-theorem map_dvd_iff_dvd_symm
-  given: (f : F) {a : α} {b : β}
-  proof: by
-  obtain ⟨c, rfl⟩ : exists c, f c = b := EquivLike.surjective f b
-  simp [map_dvd_iff]
-
-中文:
-定理 map_dvd_iff_dvd_symm
-  条件: (f : F) {a : α} {b : β}
-  证明: by
-  obtain ⟨c, rfl⟩ : exists c, f c = b := EquivLike.surjective f b
-  simp [map_dvd_iff]
-
-Depends on / 依赖: EquivLike, EquivLike.surjective, map_dvd_iff, surjective
+  ⟨fun h ↦ by rw [← f.left_inv a, ← f.left_inv b]; exact map_dvd f.symm h, map_dvd f⟩
+/-
+**map_dvd_iff_dvd_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_dvd_iff_dvd_symm (f : F) {a : α} {b : β} : f a ∣ b ↔ a ∣ (MulEquivClas
+s.toMulEquiv f).symm b
+参数：f : F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.surjective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [in
+st : EquivLike E α β] (e : E), Function.Surjective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulEquivClass.coe_symm_apply_apply`：∀ {α : Type u_9} {β : Type u_10} [in
+st : Mul α] [inst_1 : Mul β] {F : Type u_11} [inst_2 : EquivLike F α β]   [inst_
+3 : MulEquivClass F α β]…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem map_dvd_iff_dvd_symm (f : F) {a : α} {b : β} :
     f a ∣ b ↔ a ∣ (MulEquivClass.toMulEquiv f).symm b := by
-  obtain ⟨c, rfl⟩ : exists c, f c = b := EquivLike.surjective f b
+  obtain ⟨c, rfl⟩ : ∃ c, f c = b := EquivLike.surjective f b
   simp [map_dvd_iff]
-
-/--
-theorem `MulEquiv.decompositionMonoid` / 定理 `MulEquiv.decompositionMonoid`
-
-English:
-theorem MulEquiv.decompositionMonoid
-  given: (f : F) [DecompositionMonoid β]
-  statement: DecompositionMonoid α where
-  proof: by
-    rw [← map_dvd_iff f]; rw [map_mul] at h
-    obtain ⟨a₁, a₂, h⟩ := DecompositionMonoid.primal _ h
-    refine ⟨EquivLike.inv f a₁, EquivLike.inv f a₂, ?_⟩
-    simp_rw [← map_dvd_iff f, EquivLike.apply_inv_apply, h, true_and, ← EquivLike.apply_eq_iff_eq f,
-      h.2.2, map_mul, EquivLike.apply_inv_apply]
-
-中文:
-定理 乘法等价.decompositionMonoid
-  条件: (f : F) [分解幺半群 β]
-  结论: 分解幺半群 α where
-  证明: by
-    rw [← map_dvd_iff f]; rw [map_mul] at h
-    obtain ⟨a₁, a₂, h⟩ := DecompositionMonoid.primal _ h
-    refine ⟨EquivLike.inv f a₁, EquivLike.inv f a₂, ?_⟩
-    simp_rw [← map_dvd_iff f, EquivLike.apply_inv_apply, h, true_and, ← EquivLike.apply_eq_iff_eq f,
-      h.2.2, map_mul, EquivLike.apply_inv_apply]
-
-Depends on / 依赖: DecompositionMonoid, DecompositionMonoid.primal, EquivLike, EquivLike.apply_eq_iff_eq, EquivLike.apply_inv_apply, EquivLike.inv, apply_eq_iff_eq, apply_inv_apply, map_dvd_iff, map_mul, primal, simp_rw, true_and
+/-
+**MulEquiv.decompositionMonoid** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulEquiv.decompositionMonoid (f : F) [DecompositionMonoid β] : Decompositi
+onMonoid α where primal a b c h
+参数：f : F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DecompositionMonoid.primal`：∀ {α : Type u_1} {inst : Semigroup α} [self 
+: DecompositionMonoid α] (a : α), IsPrimal a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MulEquivClass.instMulHomClass`：∀ {M : Type u_4} {N : Type u_5} (F : Type
+ u_9) [inst : Mul M] [inst_1 : Mul N] [inst_2 : EquivLike F M N]   [h : MulEquiv
+Class F M N], MulHo…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_dvd_iff`：map_dvd_iff (f : F) {a b} : f a ∣ f b ↔ a ∣ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `EquivLike.apply_inv_apply`：apply_inv_apply (e : E) (b : β) : e (inv e b)
+ = b
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `EquivLike.apply_eq_iff_eq`：apply_eq_iff_eq (f : E) {x y : α} : f x = f y
+ ↔ x = y
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem MulEquiv.decompositionMonoid (f : F) [DecompositionMonoid β] : DecompositionMonoid α where
   primal a b c h := by
-    rw [← map_dvd_iff f]; rw [map_mul] at h
+    rw [← map_dvd_iff f, map_mul] at h
     obtain ⟨a₁, a₂, h⟩ := DecompositionMonoid.primal _ h
     refine ⟨EquivLike.inv f a₁, EquivLike.inv f a₂, ?_⟩
     simp_rw [← map_dvd_iff f, EquivLike.apply_inv_apply, h, true_and, ← EquivLike.apply_eq_iff_eq f,
       h.2.2, map_mul, EquivLike.apply_inv_apply]
 
 /--
-Definition of `noncomputable` / `noncomputable` 的定义
+If `G` is a `LeftCancelSemiGroup`, left multiplication by `g` yields an equivalence between `G`
+and the set of elements of `G` divisible by `g`.
+-/
+/-
+**Equiv.dvd** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_4} → [inst : LeftCancelSemigroup G] → (g : G) → G ≃ { a // g ∣
+ a }
+参数：g : G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def Equiv.dvd {G : Type*} [LeftCancelSemigroup G] (g : G)
-  body: fun a => ⟨g * a, ⟨a, rfl⟩⟩
-  invFun := fun ⟨_, h⟩ => h.choose
-  left_inv := fun _ => by simp
-  right_inv := by
-    rintro ⟨_, ⟨_, rfl⟩⟩
-    simp
-
-@[simp]
-
-中文:
-定义 noncomputable
-  签名: def 等价.dvd {G : 类型} [左消去半群 G] (g : G)
-  定义体: fun a => ⟨g * a, ⟨a, rfl⟩⟩
-  invFun := fun ⟨_, h⟩ => h.choose
-  left_inv := fun _ => by simp
-  right_inv := by
-    rintro ⟨_, ⟨_, rfl⟩⟩
-    simp
-
-@[simp]
+--- 原说明 ---
+If `G` is a `LeftCancelSemiGroup`, left multiplication by `g` yields an equivale
+nce between `G`
+and the set of elements of `G` divisible by `g`.
 -/
 protected noncomputable def Equiv.dvd {G : Type*} [LeftCancelSemigroup G] (g : G) :
     G ≃ {a : G // g ∣ a} where
-  toFun := fun a => ⟨g * a, ⟨a, rfl⟩⟩
-  invFun := fun ⟨_, h⟩ => h.choose
-  left_inv := fun _ => by simp
+  toFun := fun a ↦ ⟨g * a, ⟨a, rfl⟩⟩
+  invFun := fun ⟨_, h⟩ ↦ h.choose
+  left_inv := fun _ ↦ by simp
   right_inv := by
     rintro ⟨_, ⟨_, rfl⟩⟩
     simp
 
 @[simp]
-/--
-theorem `Equiv.dvd_apply` / 定理 `Equiv.dvd_apply`
-
-English:
-theorem Equiv.dvd_apply
-  given: {G : Type*} [LeftCancelSemigroup G] (g a : G)
-  proof: rfl
-
-中文:
-定理 等价.dvd_apply
-  条件: {G : 类型} [左消去半群 G] (g a : G)
-  证明: rfl
+/-
+**Equiv.dvd_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.dvd_apply {G : Type*} [LeftCancelSemigroup G] (g a : G) : Equiv.dvd 
+g a = g * a
+参数：g a : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Equiv.dvd_apply {G : Type*} [LeftCancelSemigroup G] (g a : G) :
     Equiv.dvd g a = g * a := rfl
@@ -167,26 +156,25 @@ section DistribSemigroup
 
 variable [Add α] [Semigroup α]
 
-/--
-theorem `dvd_add` / 定理 `dvd_add`
-
-English:
-theorem dvd_add
-  given: [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣ c)
-  statement: a ∣ b + c
-  proof: Dvd.elim h₁ fun d hd => Dvd.elim h₂ fun e he => Dvd.intro (d + e) (by simp [left_distrib, hd, he])
-
-alias Dvd.dvd.add := dvd_add
-
-中文:
-定理 dvd_add
-  条件: [LeftDistrib类 α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣ c)
-  结论: a ∣ b + c
-  证明: Dvd.elim h₁ fun d hd => Dvd.elim h₂ fun e he => Dvd.intro (d + e) (by simp [left_distrib, hd, he])
-
-alias Dvd.dvd.add := dvd_add
-
-Depends on / 依赖: Dvd.elim, Dvd.intro, left_distrib
+/-
+**dvd_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b
+ + c
+参数：h₁ : a ∣ b；h₂ : a ∣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.elim`：Dvd.elim {P : Prop} {a b : α} (H₁ : a ∣ b) (H₂ : forall c, b =
+ a * c -> P) : P
+· 使用定理 `Dvd.intro`：Dvd.intro (c : α) (h : a * c = b) : a ∣ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `left_distrib`：left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c :
+ R) : a * (b + c) = a * b + a * c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b + c :=
   Dvd.elim h₁ fun d hd => Dvd.elim h₂ fun e he => Dvd.intro (d + e) (by simp [left_distrib, hd, he])
@@ -196,24 +184,23 @@ alias Dvd.dvd.add := dvd_add
 end DistribSemigroup
 
 section Semiring
-variable [Semiring α] {a b c : α} {m n : Nat}
+variable [Semiring α] {a b c : α} {m n : ℕ}
 
-/--
-lemma `min_pow_dvd_add` / 引理 `min_pow_dvd_add`
-
-English:
-lemma min_pow_dvd_add
-  given: (ha : c ^ m ∣ a) (hb : c ^ n ∣ b)
-  statement: c ^ min m n ∣ a + b
-  proof: ((pow_dvd_pow c (m.min_le_left n)).trans ha).add ((pow_dvd_pow c (m.min_le_right n)).trans hb)
-
-中文:
-引理 min_pow_dvd_add
-  条件: (ha : c ^ m ∣ a) (hb : c ^ n ∣ b)
-  结论: c ^ 最小值 m n ∣ a + b
-  证明: ((pow_dvd_pow c (m.min_le_left n)).trans ha).add ((pow_dvd_pow c (m.min_le_right n)).trans hb)
-
-Depends on / 依赖: m.min_le_left, m.min_le_right, min_le_left, min_le_right, pow_dvd_pow
+/-
+**min_pow_dvd_add** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：min_pow_dvd_add (ha : c ^ m ∣ a) (hb : c ^ n ∣ b) : c ^ min m n ∣ a + b
+参数：ha : c ^ m ∣ a；hb : c ^ n ∣ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Semigroup α] [Lef
+tDistribClass α] {a b c : α}, a ∣ b → a ∣ c → a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
+· 使用定理 `Nat.min_le_left`：∀ (a b : ℕ), min a b ≤ a
+· 使用定理 `Nat.min_le_right`：∀ (a b : ℕ), min a b ≤ b
 -/
 lemma min_pow_dvd_add (ha : c ^ m ∣ a) (hb : c ^ n ∣ b) : c ^ min m n ∣ a + b :=
   ((pow_dvd_pow c (m.min_le_left n)).trans ha).add ((pow_dvd_pow c (m.min_le_right n)).trans hb)
@@ -224,22 +211,19 @@ section NonUnitalCommSemiring
 
 variable [NonUnitalCommSemiring α]
 
-/--
-theorem `Dvd.dvd.linear_comb` / 定理 `Dvd.dvd.linear_comb`
-
-English:
-theorem Dvd.dvd.linear_comb
-  given: {d x y : α} (hdx : d ∣ x) (hdy : d ∣ y) (a b : α)
-  statement: d ∣ a * x + b * y
-  proof: dvd_add (hdx.mul_left a) (hdy.mul_left b)
-
-中文:
-定理 Dvd.dvd.linear_comb
-  条件: {d x y : α} (hdx : d ∣ x) (hdy : d ∣ y) (a b : α)
-  结论: d ∣ a * x + b * y
-  证明: dvd_add (hdx.mul_left a) (hdy.mul_left b)
-
-Depends on / 依赖: dvd_add, hdx.mul_left, hdy.mul_left, mul_left
+/-
+**Dvd.dvd.linear_comb** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Dvd.dvd.linear_comb {d x y : α} (hdx : d ∣ x) (hdy : d ∣ y) (a b : α) : d 
+∣ a * x + b * y
+参数：hdx : d ∣ x；hdy : d ∣ y；a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_add`：dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣
+ c) : a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Dvd.dvd.mul_left`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b : α}, a
+ ∣ b → ∀ (c : α), a ∣ c * b
 -/
 theorem Dvd.dvd.linear_comb {d x y : α} (hdx : d ∣ x) (hdy : d ∣ y) (a b : α) : d ∣ a * x + b * y :=
   dvd_add (hdx.mul_left a) (hdy.mul_left b)
@@ -253,57 +237,75 @@ variable [Semigroup α] [HasDistribNeg α] {a b : α}
 /-- An element `a` of a semigroup with a distributive negation divides the negation of an element
 `b` iff `a` divides `b`. -/
 @[simp]
-/--
-theorem `dvd_neg` / 定理 `dvd_neg`
+/-
+**dvd_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_neg : a ∣ -b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.neg_apply`：∀ (G : Type u_14) [inst : InvolutiveNeg G], ⇑(Equiv.neg
+ G) = Neg.neg
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem dvd_neg
-  statement: a ∣ -b ↔ a ∣ b
-  proof: (Equiv.neg _).exists_congr_left.trans by
-    simp only [Equiv.neg_symm, Equiv.neg_apply, mul_neg, neg_inj, Dvd.dvd]
-
-中文:
-定理 dvd_neg
-  结论: a ∣ -b ↔ a ∣ b
-  证明: (Equiv.neg _).exists_congr_left.trans by
-    simp only [Equiv.neg_symm, Equiv.neg_apply, mul_neg, neg_inj, Dvd.dvd]
-
-Depends on / 依赖: Dvd.dvd, Equiv.neg, Equiv.neg_apply, Equiv.neg_symm, exists_congr_left, exists_congr_left.trans, mul_neg, neg_apply, neg_inj, neg_symm
+--- 原说明 ---
+An element `a` of a semigroup with a distributive negation divides the negation 
+of an element
+`b` iff `a` divides `b`.
 -/
 theorem dvd_neg : a ∣ -b ↔ a ∣ b :=
-(Equiv.neg _).exists_congr_left.trans by
+  (Equiv.neg _).exists_congr_left.trans <| by
     simp only [Equiv.neg_symm, Equiv.neg_apply, mul_neg, neg_inj, Dvd.dvd]
 
 /-- The negation of an element `a` of a semigroup with a distributive negation divides another
 element `b` iff `a` divides `b`. -/
 @[simp]
-/--
-theorem `neg_dvd` / 定理 `neg_dvd`
+/-
+**neg_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_dvd : -a ∣ b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.neg_apply`：∀ (G : Type u_14) [inst : InvolutiveNeg G], ⇑(Equiv.neg
+ G) = Neg.neg
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem neg_dvd
-  statement: -a ∣ b ↔ a ∣ b
-  proof: (Equiv.neg _).exists_congr_left.trans by
-    simp only [Equiv.neg_symm, Equiv.neg_apply, mul_neg, neg_mul, neg_neg, Dvd.dvd]
-
-alias ⟨Dvd.dvd.of_neg_left, Dvd.dvd.neg_left⟩ := neg_dvd
-
-alias ⟨Dvd.dvd.of_neg_right, Dvd.dvd.neg_right⟩ := dvd_neg
-
-中文:
-定理 neg_dvd
-  结论: -a ∣ b ↔ a ∣ b
-  证明: (Equiv.neg _).exists_congr_left.trans by
-    simp only [Equiv.neg_symm, Equiv.neg_apply, mul_neg, neg_mul, neg_neg, Dvd.dvd]
-
-alias ⟨Dvd.dvd.of_neg_left, Dvd.dvd.neg_left⟩ := neg_dvd
-
-alias ⟨Dvd.dvd.of_neg_right, Dvd.dvd.neg_right⟩ := dvd_neg
-
-Depends on / 依赖: Dvd.dvd, Equiv.neg, Equiv.neg_apply, Equiv.neg_symm, exists_congr_left, exists_congr_left.trans, mul_neg, neg_apply, neg_mul, neg_neg, neg_symm
+--- 原说明 ---
+The negation of an element `a` of a semigroup with a distributive negation divid
+es another
+element `b` iff `a` divides `b`.
 -/
 theorem neg_dvd : -a ∣ b ↔ a ∣ b :=
-(Equiv.neg _).exists_congr_left.trans by
+  (Equiv.neg _).exists_congr_left.trans <| by
     simp only [Equiv.neg_symm, Equiv.neg_apply, mul_neg, neg_mul, neg_neg, Dvd.dvd]
 
 alias ⟨Dvd.dvd.of_neg_left, Dvd.dvd.neg_left⟩ := neg_dvd
@@ -316,153 +318,148 @@ section NonUnitalRing
 
 variable [NonUnitalRing α] {a b c : α}
 
-/--
-theorem `dvd_sub` / 定理 `dvd_sub`
-
-English:
-theorem dvd_sub
-  given: (h₁ : a ∣ b) (h₂ : a ∣ c)
-  statement: a ∣ b - c
-  proof: by
-  simpa only [← sub_eq_add_neg] using h₁.add h₂.neg_right
-
-alias Dvd.dvd.sub := dvd_sub
-
-中文:
-定理 dvd_sub
-  条件: (h₁ : a ∣ b) (h₂ : a ∣ c)
-  结论: a ∣ b - c
-  证明: by
-  simpa only [← sub_eq_add_neg] using h₁.add h₂.neg_right
-
-alias Dvd.dvd.sub := dvd_sub
-
-Depends on / 依赖: neg_right, sub_eq_add_neg
+/-
+**dvd_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_sub (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b - c
+参数：h₁ : a ∣ b；h₂ : a ∣ c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Dvd.dvd.add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Semigroup α] [Lef
+tDistribClass α] {a b c : α}, a ∣ b → a ∣ c → a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Dvd.dvd.neg_right`：∀ {α : Type u_1} [inst : Semigroup α] [inst_1 : HasDi
+stribNeg α] {a b : α}, a ∣ b → a ∣ -b
 -/
 theorem dvd_sub (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b - c := by
   simpa only [← sub_eq_add_neg] using h₁.add h₂.neg_right
 
 alias Dvd.dvd.sub := dvd_sub
 
-/--
-theorem `dvd_add_left` / 定理 `dvd_add_left`
+/-- If an element `a` divides another element `c` in a ring, `a` divides the sum of another element
+`b` with `c` iff `a` divides `b`. -/
+/-
+**dvd_add_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_add_left (h : a ∣ c) : a ∣ b + c ↔ a ∣ b
+参数：h : a ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `dvd_sub`：dvd_sub (h₁ : a ∣ b) (h₂ : a ∣ c) : a ∣ b - c
+· 使用定理 `dvd_add`：dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣
+ c) : a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 
-English:
-theorem dvd_add_left
-  given: (h : a ∣ c)
-  statement: a ∣ b + c ↔ a ∣ b
-  proof: ⟨fun H => by simpa only [add_sub_cancel_right] using dvd_sub H h, fun h₂ => dvd_add h₂ h⟩
-
-中文:
-定理 dvd_add_left
-  条件: (h : a ∣ c)
-  结论: a ∣ b + c ↔ a ∣ b
-  证明: ⟨fun H => by simpa only [add_sub_cancel_right] using dvd_sub H h, fun h₂ => dvd_add h₂ h⟩
-
-Depends on / 依赖: add_sub_cancel_right, dvd_add, dvd_sub
+--- 原说明 ---
+If an element `a` divides another element `c` in a ring, `a` divides the sum of 
+another element
+`b` with `c` iff `a` divides `b`.
 -/
 theorem dvd_add_left (h : a ∣ c) : a ∣ b + c ↔ a ∣ b :=
   ⟨fun H => by simpa only [add_sub_cancel_right] using dvd_sub H h, fun h₂ => dvd_add h₂ h⟩
 
-/--
-theorem `dvd_add_right` / 定理 `dvd_add_right`
+/-- If an element `a` divides another element `b` in a ring, `a` divides the sum of `b` and another
+element `c` iff `a` divides `c`. -/
+/-
+**dvd_add_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_add_right (h : a ∣ b) : a ∣ b + c ↔ a ∣ c
+参数：h : a ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `dvd_add_left`：dvd_add_left (h : a ∣ c) : a ∣ b + c ↔ a ∣ b
 
-English:
-theorem dvd_add_right
-  given: (h : a ∣ b)
-  statement: a ∣ b + c ↔ a ∣ c
-  proof: by rw [add_comm]; exact dvd_add_left h
-
-中文:
-定理 dvd_add_right
-  条件: (h : a ∣ b)
-  结论: a ∣ b + c ↔ a ∣ c
-  证明: by rw [add_comm]; exact dvd_add_left h
-
-Depends on / 依赖: add_comm, dvd_add_left
+--- 原说明 ---
+If an element `a` divides another element `b` in a ring, `a` divides the sum of 
+`b` and another
+element `c` iff `a` divides `c`.
 -/
 theorem dvd_add_right (h : a ∣ b) : a ∣ b + c ↔ a ∣ c := by rw [add_comm]; exact dvd_add_left h
 
-/--
-theorem `dvd_sub_left` / 定理 `dvd_sub_left`
+/-- If an element `a` divides another element `c` in a ring, `a` divides the difference of another
+element `b` with `c` iff `a` divides `b`. -/
+/-
+**dvd_sub_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_sub_left (h : a ∣ c) : a ∣ b - c ↔ a ∣ b
+参数：h : a ∣ c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dvd_add_left`：dvd_add_left (h : a ∣ c) : a ∣ b + c ↔ a ∣ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `dvd_neg`：dvd_neg : a ∣ -b ↔ a ∣ b
 
-English:
-theorem dvd_sub_left
-  given: (h : a ∣ c)
-  statement: a ∣ b - c ↔ a ∣ b
-  proof: by
-  simpa only [← sub_eq_add_neg] using dvd_add_left (dvd_neg.2 h)
-
-中文:
-定理 dvd_sub_left
-  条件: (h : a ∣ c)
-  结论: a ∣ b - c ↔ a ∣ b
-  证明: by
-  simpa only [← sub_eq_add_neg] using dvd_add_left (dvd_neg.2 h)
-
-Depends on / 依赖: dvd_add_left, dvd_neg, sub_eq_add_neg
+--- 原说明 ---
+If an element `a` divides another element `c` in a ring, `a` divides the differe
+nce of another
+element `b` with `c` iff `a` divides `b`.
 -/
 theorem dvd_sub_left (h : a ∣ c) : a ∣ b - c ↔ a ∣ b := by
   simpa only [← sub_eq_add_neg] using dvd_add_left (dvd_neg.2 h)
 
-/--
-theorem `dvd_sub_right` / 定理 `dvd_sub_right`
+/-- If an element `a` divides another element `b` in a ring, `a` divides the difference of `b` and
+another element `c` iff `a` divides `c`. -/
+/-
+**dvd_sub_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_sub_right (h : a ∣ b) : a ∣ b - c ↔ a ∣ c
+参数：h : a ∣ b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `dvd_add_right`：dvd_add_right (h : a ∣ b) : a ∣ b + c ↔ a ∣ c
+· 使用定理 `dvd_neg`：dvd_neg : a ∣ -b ↔ a ∣ b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem dvd_sub_right
-  given: (h : a ∣ b)
-  statement: a ∣ b - c ↔ a ∣ c
-  proof: by
-  rw [sub_eq_add_neg]; rw [dvd_add_right h]; rw [dvd_neg]
-
-中文:
-定理 dvd_sub_right
-  条件: (h : a ∣ b)
-  结论: a ∣ b - c ↔ a ∣ c
-  证明: by
-  rw [sub_eq_add_neg]; rw [dvd_add_right h]; rw [dvd_neg]
-
-Depends on / 依赖: dvd_add_right, dvd_neg, sub_eq_add_neg
+--- 原说明 ---
+If an element `a` divides another element `b` in a ring, `a` divides the differe
+nce of `b` and
+another element `c` iff `a` divides `c`.
 -/
 theorem dvd_sub_right (h : a ∣ b) : a ∣ b - c ↔ a ∣ c := by
-  rw [sub_eq_add_neg]; rw [dvd_add_right h]; rw [dvd_neg]
-
-/--
-theorem `dvd_iff_dvd_of_dvd_sub` / 定理 `dvd_iff_dvd_of_dvd_sub`
-
-English:
-theorem dvd_iff_dvd_of_dvd_sub
-  given: (h : a ∣ b - c)
-  statement: a ∣ b ↔ a ∣ c
-  proof: by
-  rw [← sub_add_cancel b c]; rw [dvd_add_right h]
-
-中文:
-定理 dvd_iff_dvd_of_dvd_sub
-  条件: (h : a ∣ b - c)
-  结论: a ∣ b ↔ a ∣ c
-  证明: by
-  rw [← sub_add_cancel b c]; rw [dvd_add_right h]
-
-Depends on / 依赖: dvd_add_right, sub_add_cancel
+  rw [sub_eq_add_neg, dvd_add_right h, dvd_neg]
+/-
+**dvd_iff_dvd_of_dvd_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_iff_dvd_of_dvd_sub (h : a ∣ b - c) : a ∣ b ↔ a ∣ c
+参数：h : a ∣ b - c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `dvd_add_right`：dvd_add_right (h : a ∣ b) : a ∣ b + c ↔ a ∣ c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem dvd_iff_dvd_of_dvd_sub (h : a ∣ b - c) : a ∣ b ↔ a ∣ c := by
-  rw [← sub_add_cancel b c]; rw [dvd_add_right h]
-
-/--
-theorem `dvd_sub_comm` / 定理 `dvd_sub_comm`
-
-English:
-theorem dvd_sub_comm
-  statement: a ∣ b - c ↔ a ∣ c - b
-  proof: by rw [← dvd_neg, neg_sub]
-
-中文:
-定理 dvd_sub_comm
-  结论: a ∣ b - c ↔ a ∣ c - b
-  证明: by rw [← dvd_neg, neg_sub]
-
-Depends on / 依赖: dvd_neg, neg_sub
+  rw [← sub_add_cancel b c, dvd_add_right h]
+/-
+**dvd_sub_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_sub_comm : a ∣ b - c ↔ a ∣ c - b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `dvd_neg`：dvd_neg : a ∣ -b ↔ a ∣ b
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem dvd_sub_comm : a ∣ b - c ↔ a ∣ c - b := by rw [← dvd_neg, neg_sub]
 
@@ -474,84 +471,64 @@ variable [Ring α] {a b : α}
 
 /-- An element a divides the sum a + b if and only if a divides b. -/
 @[simp]
-/--
-theorem `dvd_add_self_left` / 定理 `dvd_add_self_left`
+/-
+**dvd_add_self_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_add_self_left {a b : α} : a ∣ a + b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_add_right`：dvd_add_right (h : a ∣ b) : a ∣ b + c ↔ a ∣ c
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
 
-English:
-theorem dvd_add_self_left
-  given: {a b : α}
-  statement: a ∣ a + b ↔ a ∣ b
-  proof: dvd_add_right (dvd_refl a)
-
-中文:
-定理 dvd_add_self_left
-  条件: {a b : α}
-  结论: a ∣ a + b ↔ a ∣ b
-  证明: dvd_add_right (dvd_refl a)
-
-Depends on / 依赖: dvd_add_right, dvd_refl
+--- 原说明 ---
+An element a divides the sum a + b if and only if a divides b.
 -/
 theorem dvd_add_self_left {a b : α} : a ∣ a + b ↔ a ∣ b :=
   dvd_add_right (dvd_refl a)
 
 /-- An element a divides the sum b + a if and only if a divides b. -/
 @[simp]
-/--
-theorem `dvd_add_self_right` / 定理 `dvd_add_self_right`
+/-
+**dvd_add_self_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_add_self_right {a b : α} : a ∣ b + a ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_add_left`：dvd_add_left (h : a ∣ c) : a ∣ b + c ↔ a ∣ b
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
 
-English:
-theorem dvd_add_self_right
-  given: {a b : α}
-  statement: a ∣ b + a ↔ a ∣ b
-  proof: dvd_add_left (dvd_refl a)
-
-中文:
-定理 dvd_add_self_right
-  条件: {a b : α}
-  结论: a ∣ b + a ↔ a ∣ b
-  证明: dvd_add_left (dvd_refl a)
-
-Depends on / 依赖: dvd_add_left, dvd_refl
+--- 原说明 ---
+An element a divides the sum b + a if and only if a divides b.
 -/
 theorem dvd_add_self_right {a b : α} : a ∣ b + a ↔ a ∣ b :=
   dvd_add_left (dvd_refl a)
 
 /-- An element `a` divides the difference `a - b` if and only if `a` divides `b`. -/
 @[simp]
-/--
-theorem `dvd_sub_self_left` / 定理 `dvd_sub_self_left`
+/-
+**dvd_sub_self_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_sub_self_left : a ∣ a - b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_sub_right`：dvd_sub_right (h : a ∣ b) : a ∣ b - c ↔ a ∣ c
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
 
-English:
-theorem dvd_sub_self_left
-  statement: a ∣ a - b ↔ a ∣ b
-  proof: dvd_sub_right dvd_rfl
-
-中文:
-定理 dvd_sub_self_left
-  结论: a ∣ a - b ↔ a ∣ b
-  证明: dvd_sub_right dvd_rfl
-
-Depends on / 依赖: dvd_rfl, dvd_sub_right
+--- 原说明 ---
+An element `a` divides the difference `a - b` if and only if `a` divides `b`.
 -/
 theorem dvd_sub_self_left : a ∣ a - b ↔ a ∣ b :=
   dvd_sub_right dvd_rfl
 
 /-- An element `a` divides the difference `b - a` if and only if `a` divides `b`. -/
 @[simp]
-/--
-theorem `dvd_sub_self_right` / 定理 `dvd_sub_self_right`
+/-
+**dvd_sub_self_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_sub_self_right : a ∣ b - a ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_sub_left`：dvd_sub_left (h : a ∣ c) : a ∣ b - c ↔ a ∣ b
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
 
-English:
-theorem dvd_sub_self_right
-  statement: a ∣ b - a ↔ a ∣ b
-  proof: dvd_sub_left dvd_rfl
-
-中文:
-定理 dvd_sub_self_right
-  结论: a ∣ b - a ↔ a ∣ b
-  证明: dvd_sub_left dvd_rfl
-
-Depends on / 依赖: dvd_rfl, dvd_sub_left
+--- 原说明 ---
+An element `a` divides the difference `b - a` if and only if `a` divides `b`.
 -/
 theorem dvd_sub_self_right : a ∣ b - a ↔ a ∣ b :=
   dvd_sub_left dvd_rfl
@@ -562,31 +539,46 @@ section NonUnitalCommRing
 
 variable [NonUnitalCommRing α]
 
-/--
-theorem `dvd_mul_sub_mul` / 定理 `dvd_mul_sub_mul`
-
-English:
-theorem dvd_mul_sub_mul
-  given: {k a b x y : α} (hab : k ∣ a - b) (hxy : k ∣ x - y)
-  proof: by
-  convert dvd_add (hxy.mul_left a) (hab.mul_right y)
-  rw [mul_sub_left_distrib]; rw [mul_sub_right_distrib]
-  simp only [sub_eq_add_neg, add_assoc, neg_add_cancel_left]
-
-中文:
-定理 dvd_mul_sub_mul
-  条件: {k a b x y : α} (hab : k ∣ a - b) (hxy : k ∣ x - y)
-  证明: by
-  convert dvd_add (hxy.mul_left a) (hab.mul_right y)
-  rw [mul_sub_left_distrib]; rw [mul_sub_right_distrib]
-  simp only [sub_eq_add_neg, add_assoc, neg_add_cancel_left]
-
-Depends on / 依赖: add_assoc, convert, dvd_add, hab.mul_right, hxy.mul_left, mul_left, mul_right, mul_sub_left_distrib, mul_sub_right_distrib, neg_add_cancel_left, sub_eq_add_neg
+/-
+**dvd_mul_sub_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_mul_sub_mul {k a b x y : α} (hab : k ∣ a - b) (hxy : k ∣ x - y) : k ∣ 
+a * x - b * y
+参数：hab : k ∣ a - b；hxy : k ∣ x - y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_sub_left_distrib`：mul_sub_left_distrib (a b c : α) : a * (b - c) = a
+ * b - a * c
+· 使用定理 `mul_sub_right_distrib`：mul_sub_right_distrib (a b c : α) : (a - b) * c =
+ a * c - b * c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `neg_add_cancel_left`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), -a 
++ (a + b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dvd_add`：dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣
+ c) : a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Dvd.dvd.mul_left`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b : α}, a
+ ∣ b → ∀ (c : α), a ∣ c * b
+· 使用定理 `Dvd.dvd.mul_right`：∀ {α : Type u_1} [inst : Semigroup α] {a b : α}, a ∣ 
+b → ∀ (c : α), a ∣ b * c
 -/
 theorem dvd_mul_sub_mul {k a b x y : α} (hab : k ∣ a - b) (hxy : k ∣ x - y) :
     k ∣ a * x - b * y := by
   convert dvd_add (hxy.mul_left a) (hab.mul_right y)
-  rw [mul_sub_left_distrib]; rw [mul_sub_right_distrib]
+  rw [mul_sub_left_distrib, mul_sub_right_distrib]
   simp only [sub_eq_add_neg, add_assoc, neg_add_cancel_left]
 
 end NonUnitalCommRing
+

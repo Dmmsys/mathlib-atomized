@@ -24,22 +24,12 @@ open CategoryTheory Limits CompHausLike
 
 namespace LightProfinite
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CartesianMonoidalCategory LightProfinite.{u}
-  body: cartesianMonoidalCategory
-
-中文:
-实例 :
-  签名: CartesianMonoidal范畴 LightProfinite.{u}
-  定义体: cartesianMonoidalCategory
-
-Depends on / 依赖: cartesianMonoidalCategory
+/-
+**LightProfinite.** 是 Mathlib 中的一个实例，位于命名空间 `LightProfinite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CartesianMonoidalCategory LightProfinite.{u} :=
   cartesianMonoidalCategory
 
 end LightProfinite
+

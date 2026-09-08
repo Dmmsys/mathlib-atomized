@@ -21,32 +21,15 @@ assert_not_exists Field
 
 namespace PUnit
 
-/--
-Instance `commRing` / 实例 `commRing`
-
-English:
-instance commRing
-  signature: : CommRing PUnit where
-  body: PUnit.commGroup
-  __ := PUnit.addCommGroup
-  left_distrib := by intros; rfl
-  right_distrib := by intros; rfl
-  zero_mul := by intros; rfl
-  mul_zero := by intros; rfl
-  natCast _ := unit
-
-中文:
-实例 commRing
-  签名: : 交换环 命题单元 where
-  定义体: PUnit.commGroup
-  __ := PUnit.addCommGroup
-  left_distrib := by intros; rfl
-  right_distrib := by intros; rfl
-  zero_mul := by intros; rfl
-  mul_zero := by intros; rfl
-  natCast _ := unit
-
-Depends on / 依赖: PUnit.commGroup, commGroup
+/-
+**PUnit.commRing** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：commRing : CommRing PUnit where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCommGroup.add_comm`：∀ {G : Type u} [self : AddCommGroup G] (a b : G),
+ a + b = b + a
+· 使用定理 `CommGroup.mul_comm`：∀ {G : Type u} [self : CommGroup G] (a b : G), a * b
+ = b * a
 -/
 instance commRing : CommRing PUnit where
   __ := PUnit.commGroup
@@ -56,24 +39,13 @@ instance commRing : CommRing PUnit where
   zero_mul := by intros; rfl
   mul_zero := by intros; rfl
   natCast _ := unit
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsCancelMulZero PUnit
-  body: by simp
-  mul_right_cancel_of_ne_zero := by simp
-
-中文:
-实例 :
-  签名: 是乘零消去 命题单元
-  定义体: by simp
-  mul_right_cancel_of_ne_zero := by simp
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsCancelMulZero PUnit where
   mul_left_cancel_of_ne_zero := by simp
   mul_right_cancel_of_ne_zero := by simp
 
 end PUnit
+

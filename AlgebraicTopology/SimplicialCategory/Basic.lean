@@ -43,18 +43,19 @@ namespace CategoryTheory
 
 variable (C : Type u) [Category.{v} C]
 
-/--
-Definition of `SimplicialCategory` / `SimplicialCategory` 的定义
+/-- A simplicial category is a category `C` that is enriched over the
+category of simplicial sets in such a way that morphisms in
+`C` identify to the `0`-simplices of the enriched hom. -/
+/-
+**CategoryTheory.SimplicialCategory** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`
+。
+形式化陈述：SimplicialCategory
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation SimplicialCategory
-  body: EnrichedOrdinaryCategory SSet.{v} C
-
-中文:
-缩写 SimplicialCategory
-  定义体: EnrichedOrdinaryCategory SSet.{v} C
-
-Depends on / 依赖: EnrichedOrdinaryCategory
+--- 原说明 ---
+A simplicial category is a category `C` that is enriched over the
+category of simplicial sets in such a way that morphisms in
+`C` identify to the `0`-simplices of the enriched hom.
 -/
 abbrev SimplicialCategory := EnrichedOrdinaryCategory SSet.{v} C
 
@@ -64,72 +65,69 @@ variable [SimplicialCategory C]
 
 variable {C}
 
-/--
-Definition of `sHom` / `sHom` 的定义
+/-- Abbreviation for the enriched hom of a simplicial category. -/
+/-
+**CategoryTheory.SimplicialCategory.sHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory.SimplicialCategory`。
+形式化陈述：sHom (K L : C) : SSet.{v}
+参数：K L : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sHom
-  signature: (K L : C)
-  body: K ⟶[SSet] L
-
-中文:
-缩写 sHom
-  签名: (K L : C)
-  定义体: K ⟶[SSet] L
+--- 原说明 ---
+Abbreviation for the enriched hom of a simplicial category.
 -/
 abbrev sHom (K L : C) : SSet.{v} := K ⟶[SSet] L
 
-/--
-Definition of `sHomComp` / `sHomComp` 的定义
+/-- Abbreviation for the enriched composition in a simplicial category. -/
+/-
+**CategoryTheory.SimplicialCategory.sHomComp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.SimplicialCategory`。
+形式化陈述：sHomComp (K L M : C) : sHom K L otimes sHom L M ⟶ sHom K M
+参数：K L M : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sHomComp
-  signature: (K L M : C)
-  body: eComp SSet K L M
-
-中文:
-缩写 sHomComp
-  签名: (K L M : C)
-  定义体: eComp SSet K L M
+--- 原说明 ---
+Abbreviation for the enriched composition in a simplicial category.
 -/
-abbrev sHomComp (K L M : C) : sHom K L otimes sHom L M ⟶ sHom K M := eComp SSet K L M
+abbrev sHomComp (K L M : C) : sHom K L ⊗ sHom L M ⟶ sHom K M := eComp SSet K L M
 
-/--
-Definition of `homEquiv'` / `homEquiv'` 的定义
+/-- The bijection `(K ⟶ L) ≃ sHom K L _⦋0⦌` for all objects `K` and `L`
+in a simplicial category. -/
+/-
+**CategoryTheory.SimplicialCategory.homEquiv'** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.SimplicialCategory`。
+形式化陈述：homEquiv' (K L : C) : (K ⟶ L) ≃ sHom K L _⦋0⦌
+参数：K L : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition homEquiv'
-  signature: (K L : C)
-  body: (eHomEquiv SSet).trans (sHom K L).unitHomEquiv
-
-中文:
-定义 homEquiv'
-  签名: (K L : C)
-  定义体: (eHomEquiv SSet).trans (sHom K L).unitHomEquiv
-
-Depends on / 依赖: eHomEquiv, unitHomEquiv
+--- 原说明 ---
+The bijection `(K ⟶ L) ≃ sHom K L _⦋0⦌` for all objects `K` and `L`
+in a simplicial category.
 -/
 def homEquiv' (K L : C) : (K ⟶ L) ≃ sHom K L _⦋0⦌ :=
   (eHomEquiv SSet).trans (sHom K L).unitHomEquiv
 
 variable (C) in
-/--
-Definition of `sHomFunctor` / `sHomFunctor` 的定义
+/-- The bifunctor `Cᵒᵖ ⥤ C ⥤ SSet.{v}` which sends `K : Cᵒᵖ` and `L : C` to `sHom K.unop L`. -/
+/-
+**CategoryTheory.SimplicialCategory.sHomFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cat
+egoryTheory.SimplicialCategory`。
+形式化陈述：sHomFunctor : Cᵒᵖ ⥤ C ⥤ SSet.{v}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sHomFunctor
-  signature: : Cᵒᵖ ⥤ C ⥤ SSet.{v}
-  body: eHomFunctor _ _
-
-中文:
-缩写 sHomFunctor
-  签名: : Cᵒᵖ ⥤ C ⥤ SSet.{v}
-  定义体: eHomFunctor _ _
-
-Depends on / 依赖: eHomFunctor
+--- 原说明 ---
+The bifunctor `Cᵒᵖ ⥤ C ⥤ SSet.{v}` which sends `K : Cᵒᵖ` and `L : C` to `sHom K.
+unop L`.
 -/
 noncomputable abbrev sHomFunctor : Cᵒᵖ ⥤ C ⥤ SSet.{v} := eHomFunctor _ _
 
 end SimplicialCategory
 
 end CategoryTheory
+

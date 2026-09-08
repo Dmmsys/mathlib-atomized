@@ -46,206 +46,183 @@ open Function
 
 variable {M M₀ M₀' G₀ G₀' N A A' B α β : Type*}
 
-/--
-Definition of `SMulZeroClass` / `SMulZeroClass` 的定义
+/-- Typeclass for scalar multiplication that preserves `0` on the right. -/
+/-
+**SMulZeroClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_12 → (A : Type u_13) → [Zero A] → Type (max u_12 u_13)
+参数：A : Type u_13；max u_12 u_13。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SMulZeroClass
-  parameters: (M A : Type*) [Zero A]
-  extends: SMul M A
-  axioms and operations (1):
-    - smul_zero : forall a : M, a • (0 : A) = 0
-
-中文:
-类 SMulZero类
-  参数: (M A : 类型) [零 A]
-  继承: 标量乘法 M A
-  公理与运算 (1 个):
-    - smul_zero : 对任意 a : M, a • (0 : A) = 0
-
-Depends on / 依赖: F.map_injective, HomologicalComplex, HomologicalComplex.eval, congr_map, map_injective
+--- 原说明 ---
+Typeclass for scalar multiplication that preserves `0` on the right.
 -/
 class SMulZeroClass (M A : Type*) [Zero A] extends SMul M A where
   /-- Multiplying `0` by a scalar gives `0` -/
-  smul_zero : forall a : M, a • (0 : A) = 0
+  smul_zero : ∀ a : M, a • (0 : A) = 0
 
 section smul_zero
 
 variable [Zero A] [SMulZeroClass M A]
 
 @[simp]
-/--
-theorem `smul_zero` / 定理 `smul_zero`
-
-English:
-theorem smul_zero
-  given: (a : M)
-  statement: a • (0 : A) = 0
-  proof: SMulZeroClass.smul_zero _
-
-中文:
-定理 smul_zero
-  条件: (a : M)
-  结论: a • (0 : A) = 0
-  证明: SMulZeroClass.smul_zero _
-
-Depends on / 依赖: SMulZeroClass, SMulZeroClass.smul_zero, smul_zero
+/-
+**smul_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_zero (a : M) : a • (0 : A) = 0
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulZeroClass.smul_zero`：∀ {M : Type u_12} {A : Type u_13} {inst : Zero 
+A} [self : SMulZeroClass M A] (a : M), a • 0 = 0
 -/
 theorem smul_zero (a : M) : a • (0 : A) = 0 :=
   SMulZeroClass.smul_zero _
-
-/--
-lemma `smul_ite_zero` / 引理 `smul_ite_zero`
-
-English:
-lemma smul_ite_zero
-  given: (p : Prop) [Decidable p] (a : M) (b : A)
-  proof: by split_ifs <;> simp
-
-中文:
-引理 smul_ite_zero
-  条件: (p : 命题) [可判定 p] (a : M) (b : A)
-  证明: by split_ifs <;> simp
-
-Depends on / 依赖: split_ifs
+/-
+**smul_ite_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_ite_zero (p : Prop) [Decidable p] (a : M) (b : A) : (a • if p then b 
+else 0) = if p then a • b else 0
+参数：p : Prop；a : M；b : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 lemma smul_ite_zero (p : Prop) [Decidable p] (a : M) (b : A) :
     (a • if p then b else 0) = if p then a • b else 0 := by split_ifs <;> simp
-
-/--
-lemma `smul_eq_zero_of_right` / 引理 `smul_eq_zero_of_right`
-
-English:
-lemma smul_eq_zero_of_right
-  given: (a : M) {b : A} (h : b = 0)
-  statement: a • b = 0
-  proof: h.symm ▸ smul_zero a
-
-中文:
-引理 smul_eq_zero_of_right
-  条件: (a : M) {b : A} (h : b = 0)
-  结论: a • b = 0
-  证明: h.symm ▸ smul_zero a
-
-Depends on / 依赖: h.symm, smul_zero
+/-
+**smul_eq_zero_of_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_eq_zero_of_right (a : M) {b : A} (h : b = 0) : a • b = 0
+参数：a : M；h : b = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma smul_eq_zero_of_right (a : M) {b : A} (h : b = 0) : a • b = 0 := h.symm ▸ smul_zero a
-/--
-lemma `right_ne_zero_of_smul` / 引理 `right_ne_zero_of_smul`
-
-English:
-lemma right_ne_zero_of_smul
-  given: {a : M} {b : A}
-  statement: a • b != 0 -> b != 0
-  proof: mt smul_eq_zero_of_right a
-
-中文:
-引理 right_ne_zero_of_smul
-  条件: {a : M} {b : A}
-  结论: a • b != 0 -> b != 0
-  证明: mt smul_eq_zero_of_right a
-
-Depends on / 依赖: smul_eq_zero_of_right
+/-
+**right_ne_zero_of_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：right_ne_zero_of_smul {a : M} {b : A} : a • b != 0 -> b != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用引理 `smul_eq_zero_of_right`：smul_eq_zero_of_right (a : M) {b : A} (h : b = 0)
+ : a • b = 0
 -/
-lemma right_ne_zero_of_smul {a : M} {b : A} : a • b != 0 -> b != 0 := mt smul_eq_zero_of_right a
+lemma right_ne_zero_of_smul {a : M} {b : A} : a • b ≠ 0 → b ≠ 0 := mt <| smul_eq_zero_of_right a
 
-/--
-Definition of `Function.Injective.smulZeroClass` / `Function.Injective.smulZeroClass` 的定义
+/-- Pullback a zero-preserving scalar multiplication along an injective zero-preserving map.
+See note [reducible non-instances]. -/
+/-
+**Function.Injective.smulZeroClass** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective
+`。
+形式化陈述：{M : Type u_1} →   {A : Type u_7} →     {B : Type u_9} →       [inst : Zer
+o A] →         [inst_1 : SMulZeroClass M A] →           [inst_2 : Zero B] →     
+        [inst_3 : SMul M B] →               (f : ZeroHom B A) → Function.Injecti
+ve ⇑f → (∀ (c : M) (x : B), f (c • x) = c • f x) → SMulZeroClass M B
+参数：f : ZeroHom B A；∀ (c : M) (x : B), f (c • x) = c • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Function.Injective.smulZeroClass
-  signature: [Zero B] [SMul M B] (f : ZeroHom B A)
-  body: hf by simp only [smul, map_zero, smul_zero]
-
-中文:
-缩写 函数.单射.smulZeroClass
-  签名: [零 B] [标量乘法 M B] (f : 保零态射 B A)
-  定义体: hf by simp only [smul, map_zero, smul_zero]
+--- 原说明 ---
+Pullback a zero-preserving scalar multiplication along an injective zero-preserv
+ing map.
+See note [reducible non-instances].
 -/
 protected abbrev Function.Injective.smulZeroClass [Zero B] [SMul M B] (f : ZeroHom B A)
-    (hf : Injective f) (smul : forall (c : M) (x), f (c • x) = c • f x) :
+    (hf : Injective f) (smul : ∀ (c : M) (x), f (c • x) = c • f x) :
     SMulZeroClass M B where
-smul_zero c := hf by simp only [smul, map_zero, smul_zero]
+  smul_zero c := hf <| by simp only [smul, map_zero, smul_zero]
 
-/--
-Definition of `ZeroHom.smulZeroClass` / `ZeroHom.smulZeroClass` 的定义
+/-- Pushforward a zero-preserving scalar multiplication along a zero-preserving map.
+See note [reducible non-instances]. -/
+/-
+**ZeroHom.smulZeroClass** 是 Mathlib 中的一个定义，位于命名空间 `ZeroHom`。
+形式化陈述：{M : Type u_1} →   {A : Type u_7} →     {B : Type u_9} →       [inst : Zer
+o A] →         [inst_1 : SMulZeroClass M A] →           [inst_2 : Zero B] →     
+        [inst_3 : SMul M B] → (f : ZeroHom A B) → (∀ (c : M) (x : A), f (c • x) 
+= c • f x) → SMulZeroClass M B
+参数：f : ZeroHom A B；∀ (c : M) (x : A), f (c • x) = c • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ZeroHom.smulZeroClass
-  signature: [Zero B] [SMul M B] (f : ZeroHom A B)
-  body: by rw [← map_zero f, ← smul, smul_zero]
-
-中文:
-缩写 保零态射.smulZeroClass
-  签名: [零 B] [标量乘法 M B] (f : 保零态射 A B)
-  定义体: by rw [← map_zero f, ← smul, smul_zero]
+--- 原说明 ---
+Pushforward a zero-preserving scalar multiplication along a zero-preserving map.
+See note [reducible non-instances].
 -/
 protected abbrev ZeroHom.smulZeroClass [Zero B] [SMul M B] (f : ZeroHom A B)
-    (smul : forall (c : M) (x), f (c • x) = c • f x) :
+    (smul : ∀ (c : M) (x), f (c • x) = c • f x) :
     SMulZeroClass M B where
   smul_zero c := by rw [← map_zero f, ← smul, smul_zero]
 
-/--
-Definition of `Function.Surjective.smulZeroClassLeft` / `Function.Surjective.smulZeroClassLeft` 的定义
+/-- Push forward the multiplication of `R` on `M` along a compatible surjective map `f : R → S`.
 
-English:
-abbreviation Function.Surjective.smulZeroClassLeft
-  signature: {R S M : Type*} [Zero M] [SMulZeroClass R M]
-  body: hf.forall.mpr fun c => by rw [hsmul, smul_zero]
+See also `Function.Surjective.distribMulActionLeft`.
+-/
+/-
+**Function.Surjective.smulZeroClassLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Function.Surjective.smulZeroClassLeft {R S M : Type*} [Zero M] [SMulZeroCl
+ass R M] [SMul S M] (f : R -> S) (hf : Function.Surjective f) (hsmul : forall (c
+) (x : M), f c • x = c • x) : SMulZeroClass S M where smul_zero
+参数：f : R -> S；hf : Function.Surjective f；hsmul : forall (c) (x : M), f c • x = c
+ • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 函数.满射.smulZeroClassLeft
-  签名: {R S M : 类型} [零 M] [SMulZero类 R M]
-  定义体: hf.forall.mpr fun c => by rw [hsmul, smul_zero]
+--- 原说明 ---
+Push forward the multiplication of `R` on `M` along a compatible surjective map 
+`f : R → S`.
 
-Depends on / 依赖: hf.forall.mpr, smul_zero
+See also `Function.Surjective.distribMulActionLeft`.
 -/
 abbrev Function.Surjective.smulZeroClassLeft {R S M : Type*} [Zero M] [SMulZeroClass R M]
-    [SMul S M] (f : R -> S) (hf : Function.Surjective f)
-    (hsmul : forall (c) (x : M), f c • x = c • x) :
+    [SMul S M] (f : R → S) (hf : Function.Surjective f)
+    (hsmul : ∀ (c) (x : M), f c • x = c • x) :
     SMulZeroClass S M where
   smul_zero := hf.forall.mpr fun c => by rw [hsmul, smul_zero]
 
 variable (A)
 
-/--
-Definition of `SMulZeroClass.compFun` / `SMulZeroClass.compFun` 的定义
+/-- Compose a `SMulZeroClass` with a function, with scalar multiplication `f r' • m`.
+See note [reducible non-instances]. -/
+/-
+**SMulZeroClass.compFun** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：SMulZeroClass.compFun (f : N -> M) : SMulZeroClass N A where smul
+参数：f : N -> M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation SMulZeroClass.compFun
-  signature: (f : N -> M)
-  body: SMul.comp.smul f
-  smul_zero x := smul_zero (f x)
-
-中文:
-缩写 SMulZero类.compFun
-  签名: (f : N -> M)
-  定义体: SMul.comp.smul f
-  smul_zero x := smul_zero (f x)
-
-Depends on / 依赖: SMul.comp.smul
+--- 原说明 ---
+Compose a `SMulZeroClass` with a function, with scalar multiplication `f r' • m`
+.
+See note [reducible non-instances].
 -/
-abbrev SMulZeroClass.compFun (f : N -> M) :
+abbrev SMulZeroClass.compFun (f : N → M) :
     SMulZeroClass N A where
   smul := SMul.comp.smul f
   smul_zero x := smul_zero (f x)
 
 /-- Each element of the scalars defines a zero-preserving map. -/
 @[simps]
-/--
-Definition of `SMulZeroClass.toZeroHom` / `SMulZeroClass.toZeroHom` 的定义
+/-
+**SMulZeroClass.toZeroHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SMulZeroClass.toZeroHom (x : M) : ZeroHom A A where toFun
+参数：x : M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulZeroClass.smul_zero`：∀ {M : Type u_12} {A : Type u_13} {inst : Zero 
+A} [self : SMulZeroClass M A] (a : M), a • 0 = 0
 
-English:
-definition SMulZeroClass.toZeroHom
-  signature: (x : M)
-  body: (x • ·)
-  map_zero' := smul_zero x
-
-中文:
-定义 SMulZero类.toZeroHom
-  签名: (x : M)
-  定义体: (x • ·)
-  map_zero' := smul_zero x
+--- 原说明 ---
+Each element of the scalars defines a zero-preserving map.
 -/
 def SMulZeroClass.toZeroHom (x : M) :
     ZeroHom A A where
@@ -257,51 +234,48 @@ end smul_zero
 section Zero
 variable (M₀ A)
 
-/--
-Definition of `SMulWithZero` / `SMulWithZero` 的定义
+/-- `SMulWithZero` is a class consisting of a Type `M₀` with `0 ∈ M₀` and a scalar multiplication
+of `M₀` on a Type `A` with `0`, such that the equality `r • m = 0` holds if at least one among `r`
+or `m` equals `0`. -/
+/-
+**SMulWithZero** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M₀ : Type u_2) → (A : Type u_7) → [Zero M₀] → [Zero A] → Type (max u_2 u_
+7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SMulWithZero
-  parameters: [Zero M₀] [Zero A]
-  extends: SMulZeroClass M₀ A
-  axioms and operations (1):
-    - zero_smul : forall m : A, (0 : M₀) • m = 0
-
-中文:
-类 带零标量乘法
-  参数: [零 M₀] [零 A]
-  继承: SMulZero类 M₀ A
-  公理与运算 (1 个):
-    - zero_smul : 对任意 m : A, (0 : M₀) • m = 0
-
-Depends on / 依赖: single
+--- 原说明 ---
+`SMulWithZero` is a class consisting of a Type `M₀` with `0 ∈ M₀` and a scalar m
+ultiplication
+of `M₀` on a Type `A` with `0`, such that the equality `r • m = 0` holds if at l
+east one among `r`
+or `m` equals `0`.
 -/
 class SMulWithZero [Zero M₀] [Zero A] extends SMulZeroClass M₀ A where
   /-- Scalar multiplication by the scalar `0` is `0`. -/
-  zero_smul : forall m : A, (0 : M₀) • m = 0
+  zero_smul : ∀ m : A, (0 : M₀) • m = 0
 
 -- see Note [higher instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 1100) MulZeroClass.toSMulWithZero [MulZeroClass M₀] : SMulWithZero M₀ M₀ where
   smul := (· * ·)
   smul_zero := mul_zero
   zero_smul := zero_mul
 
-/--
-Instance `MulZeroClass.toOppositeSMulWithZero` / 实例 `MulZeroClass.toOppositeSMulWithZero`
+/-- Like `MulZeroClass.toSMulWithZero`, but multiplies on the right. -/
+/-
+**MulZeroClass.toOppositeSMulWithZero** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MulZeroClass.toOppositeSMulWithZero [MulZeroClass M₀] : SMulWithZero M₀ᵐᵒᵖ
+ M₀ where smul_zero _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 
-English:
-instance MulZeroClass.toOppositeSMulWithZero
-  signature: [MulZeroClass M₀]
-  body: zero_mul _
-  zero_smul := mul_zero
-
-中文:
-实例 乘零类.toOppositeSMulWithZero
-  签名: [乘零类 M₀]
-  定义体: zero_mul _
-  zero_smul := mul_zero
-
-Depends on / 依赖: zero_mul
+--- 原说明 ---
+Like `MulZeroClass.toSMulWithZero`, but multiplies on the right.
 -/
 instance MulZeroClass.toOppositeSMulWithZero [MulZeroClass M₀] : SMulWithZero M₀ᵐᵒᵖ M₀ where
   smul_zero _ := zero_mul _
@@ -310,108 +284,75 @@ instance MulZeroClass.toOppositeSMulWithZero [MulZeroClass M₀] : SMulWithZero 
 variable {A} [Zero M₀] [Zero A] [SMulWithZero M₀ A]
 
 @[simp]
-/--
-theorem `zero_smul` / 定理 `zero_smul`
-
-English:
-theorem zero_smul
-  given: (m : A)
-  statement: (0 : M₀) • m = 0
-  proof: SMulWithZero.zero_smul m
-
-中文:
-定理 zero_smul
-  条件: (m : A)
-  结论: (0 : M₀) • m = 0
-  证明: SMulWithZero.zero_smul m
-
-Depends on / 依赖: SMulWithZero, SMulWithZero.zero_smul, zero_smul
+/-
+**zero_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：zero_smul (m : A) : (0 : M₀) • m = 0
+参数：m : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulWithZero.zero_smul`：∀ {M₀ : Type u_2} {A : Type u_7} {inst : Zero M₀
+} {inst_1 : Zero A} [self : SMulWithZero M₀ A] (m : A), 0 • m = 0
 -/
 theorem zero_smul (m : A) : (0 : M₀) • m = 0 :=
   SMulWithZero.zero_smul m
 
 variable {M₀} {a : M₀} {b : A}
-
-/--
-lemma `smul_eq_zero_of_left` / 引理 `smul_eq_zero_of_left`
-
-English:
-lemma smul_eq_zero_of_left
-  given: (h : a = 0) (b : A)
-  statement: a • b = 0
-  proof: h.symm ▸ zero_smul _ b
-
-中文:
-引理 smul_eq_zero_of_left
-  条件: (h : a = 0) (b : A)
-  结论: a • b = 0
-  证明: h.symm ▸ zero_smul _ b
-
-Depends on / 依赖: h.symm, zero_smul
+/-
+**smul_eq_zero_of_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_eq_zero_of_left (h : a = 0) (b : A) : a • b = 0
+参数：h : a = 0；b : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma smul_eq_zero_of_left (h : a = 0) (b : A) : a • b = 0 := h.symm ▸ zero_smul _ b
-/--
-lemma `left_ne_zero_of_smul` / 引理 `left_ne_zero_of_smul`
-
-English:
-lemma left_ne_zero_of_smul
-  statement: a • b != 0 -> a != 0
-  proof: mt fun h => smul_eq_zero_of_left h b
-
-中文:
-引理 left_ne_zero_of_smul
-  结论: a • b != 0 -> a != 0
-  证明: mt fun h => smul_eq_zero_of_left h b
-
-Depends on / 依赖: smul_eq_zero_of_left
+/-
+**left_ne_zero_of_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：left_ne_zero_of_smul : a • b != 0 -> a != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用引理 `smul_eq_zero_of_left`：smul_eq_zero_of_left (h : a = 0) (b : A) : a • b =
+ 0
 -/
-lemma left_ne_zero_of_smul : a • b != 0 -> a != 0 := mt fun h => smul_eq_zero_of_left h b
+lemma left_ne_zero_of_smul : a • b ≠ 0 → a ≠ 0 := mt fun h ↦ smul_eq_zero_of_left h b
 
 variable [Zero M₀'] [Zero A'] [SMul M₀ A']
 
+/-- Pullback a `SMulWithZero` structure along an injective zero-preserving homomorphism. -/
 -- See note [reducible non-instances]
-/--
-Definition of `Function.Injective.smulWithZero` / `Function.Injective.smulWithZero` 的定义
-
-English:
-abbreviation Function.Injective.smulWithZero
-  signature: (f : ZeroHom A' A) (hf : Injective f)
-  body: hf by simp [smul]
-smul_zero a := hf by simp [smul]
-
-中文:
-缩写 函数.单射.smulWithZero
-  签名: (f : 保零态射 A' A) (hf : 单射 f)
-  定义体: hf by simp [smul]
-smul_zero a := hf by simp [smul]
+/-
+**Function.Injective.smulWithZero** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`
+。
+形式化陈述：{M₀ : Type u_2} →   {A : Type u_7} →     {A' : Type u_8} →       [inst : Z
+ero M₀] →         [inst_1 : Zero A] →           [inst_2 : SMulWithZero M₀ A] →  
+           [inst_3 : Zero A'] →               [inst_4 : SMul M₀ A'] →           
+      (f : ZeroHom A' A) →                   Function.Injective ⇑f → (∀ (a : M₀)
+ (b : A'), f (a • b) = a • f b) → SMulWithZero M₀ A'
+参数：f : ZeroHom A' A；∀ (a : M₀) (b : A'), f (a • b) = a • f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev Function.Injective.smulWithZero (f : ZeroHom A' A) (hf : Injective f)
-    (smul : forall (a : M₀) (b), f (a • b) = a • f b) : SMulWithZero M₀ A' where
-zero_smul a := hf by simp [smul]
-smul_zero a := hf by simp [smul]
+    (smul : ∀ (a : M₀) (b), f (a • b) = a • f b) : SMulWithZero M₀ A' where
+  zero_smul a := hf <| by simp [smul]
+  smul_zero a := hf <| by simp [smul]
 
+/-- Pushforward a `SMulWithZero` structure along a surjective zero-preserving homomorphism. -/
 -- See note [reducible non-instances]
-/--
-Definition of `Function.Surjective.smulWithZero` / `Function.Surjective.smulWithZero` 的定义
-
-English:
-abbreviation Function.Surjective.smulWithZero
-  signature: (f : ZeroHom A A') (hf : Surjective f)
-  body: by
-    rcases hf m with ⟨x, rfl⟩
-    simp [← smul]
-  smul_zero c := by rw [← f.map_zero, ← smul, smul_zero]
-
-中文:
-缩写 函数.满射.smulWithZero
-  签名: (f : 保零态射 A A') (hf : 满射 f)
-  定义体: by
-    rcases hf m with ⟨x, rfl⟩
-    simp [← smul]
-  smul_zero c := by rw [← f.map_zero, ← smul, smul_zero]
+/-
+**Function.Surjective.smulWithZero** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjectiv
+e`。
+形式化陈述：{M₀ : Type u_2} →   {A : Type u_7} →     {A' : Type u_8} →       [inst : Z
+ero M₀] →         [inst_1 : Zero A] →           [inst_2 : SMulWithZero M₀ A] →  
+           [inst_3 : Zero A'] →               [inst_4 : SMul M₀ A'] →           
+      (f : ZeroHom A A') →                   Function.Surjective ⇑f → (∀ (a : M₀
+) (b : A), f (a • b) = a • f b) → SMulWithZero M₀ A'
+参数：f : ZeroHom A A'；∀ (a : M₀) (b : A), f (a • b) = a • f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev Function.Surjective.smulWithZero (f : ZeroHom A A') (hf : Surjective f)
-    (smul : forall (a : M₀) (b), f (a • b) = a • f b) : SMulWithZero M₀ A' where
+    (smul : ∀ (a : M₀) (b), f (a • b) = a • f b) : SMulWithZero M₀ A' where
   zero_smul m := by
     rcases hf m with ⟨x, rfl⟩
     simp [← smul]
@@ -421,22 +362,15 @@ variable (A)
 
 /-- Compose a `SMulWithZero` with a `ZeroHom`, with action `f r' • m` -/
 @[instance_reducible]
-/--
-Definition of `SMulWithZero.compHom` / `SMulWithZero.compHom` 的定义
+/-
+**SMulWithZero.compHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SMulWithZero.compHom (f : ZeroHom M₀' M₀) : SMulWithZero M₀' A where smul
+参数：f : ZeroHom M₀' M₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SMulWithZero.compHom
-  signature: (f : ZeroHom M₀' M₀)
-  body: (f · • ·)
-  smul_zero m := smul_zero (f m)
-  zero_smul m := by change (f 0) • m = 0; rw [map_zero, zero_smul]
-
-中文:
-定义 带零标量乘法.compHom
-  签名: (f : 保零态射 M₀' M₀)
-  定义体: (f · • ·)
-  smul_zero m := smul_zero (f m)
-  zero_smul m := by change (f 0) • m = 0; rw [map_zero, zero_smul]
+--- 原说明 ---
+Compose a `SMulWithZero` with a `ZeroHom`, with action `f r' • m`
 -/
 def SMulWithZero.compHom (f : ZeroHom M₀' M₀) : SMulWithZero M₀' A where
   smul := (f · • ·)
@@ -445,265 +379,235 @@ def SMulWithZero.compHom (f : ZeroHom M₀' M₀) : SMulWithZero M₀' A where
 
 end Zero
 
-/--
-Instance `AddMonoid.natSMulWithZero` / 实例 `AddMonoid.natSMulWithZero`
-
-English:
-instance AddMonoid.natSMulWithZero
-  signature: [AddMonoid A]
-  body: _root_.nsmul_zero
-  zero_smul := zero_nsmul
-
-中文:
-实例 加法幺半群.natSMulWithZero
-  签名: [加法幺半群 A]
-  定义体: _root_.nsmul_zero
-  zero_smul := zero_nsmul
-
-Depends on / 依赖: _root_, _root_.nsmul_zero, nsmul_zero
+/-
+**AddMonoid.natSMulWithZero** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddMonoid.natSMulWithZero [AddMonoid A] : SMulWithZero Nat A where smul_ze
+ro
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `nsmul_zero`：∀ {M : Type u_2} [inst : AddMonoid M] (n : ℕ), n • 0 = 0
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
 -/
-instance AddMonoid.natSMulWithZero [AddMonoid A] : SMulWithZero Nat A where
+instance AddMonoid.natSMulWithZero [AddMonoid A] : SMulWithZero ℕ A where
   smul_zero := _root_.nsmul_zero
   zero_smul := zero_nsmul
-
-/--
-Instance `AddGroup.intSMulWithZero` / 实例 `AddGroup.intSMulWithZero`
-
-English:
-instance AddGroup.intSMulWithZero
-  signature: [AddGroup A]
-  body: zsmul_zero
-  zero_smul := zero_zsmul
-
-中文:
-实例 加法群.intSMulWithZero
-  签名: [加法群 A]
-  定义体: zsmul_zero
-  zero_smul := zero_zsmul
-
-Depends on / 依赖: zsmul_zero
+/-
+**AddGroup.intSMulWithZero** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddGroup.intSMulWithZero [AddGroup A] : SMulWithZero Int A where smul_zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance AddGroup.intSMulWithZero [AddGroup A] : SMulWithZero Int A where
+instance AddGroup.intSMulWithZero [AddGroup A] : SMulWithZero ℤ A where
   smul_zero := zsmul_zero
   zero_smul := zero_zsmul
 
 section MonoidWithZero
 variable (M₀ A) [MonoidWithZero M₀] [MonoidWithZero M₀'] [Zero A]
 
-/--
-Definition of `MulActionWithZero` / `MulActionWithZero` 的定义
+/-- An action of a monoid with zero `M₀` on a Type `A`, also with `0`, extends `MulAction` and
+is compatible with `0` (both in `M₀` and in `A`), with `1 ∈ M₀`, and with associativity of
+multiplication on the monoid `A`. -/
+/-
+**MulActionWithZero** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M₀ : Type u_2) → (A : Type u_7) → [MonoidWithZero M₀] → [Zero A] → Type (
+max u_2 u_7)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class MulActionWithZero
-  parameters: extends MulAction M₀ A
-  extends: MulAction M₀ A
-  axioms and operations (2):
-    - smul_zero : forall r : M₀, r • (0 : A) = 0
-    - zero_smul : forall m : A, (0 : M₀) • m = 0
-
-中文:
-类 带零乘法作用
-  参数: extends 乘法作用 M₀ A
-  继承: 乘法作用 M₀ A
-  公理与运算 (2 个):
-    - smul_zero : 对任意 r : M₀, r • (0 : A) = 0
-    - zero_smul : 对任意 m : A, (0 : M₀) • m = 0
+--- 原说明 ---
+An action of a monoid with zero `M₀` on a Type `A`, also with `0`, extends `MulA
+ction` and
+is compatible with `0` (both in `M₀` and in `A`), with `1 ∈ M₀`, and with associ
+ativity of
+multiplication on the monoid `A`.
 -/
 class MulActionWithZero extends MulAction M₀ A where
   -- these fields are copied from `SMulWithZero`, as `extends` behaves poorly
   /-- Scalar multiplication by any element send `0` to `0`. -/
-  smul_zero : forall r : M₀, r • (0 : A) = 0
+  smul_zero : ∀ r : M₀, r • (0 : A) = 0
   /-- Scalar multiplication by the scalar `0` is `0`. -/
-  zero_smul : forall m : A, (0 : M₀) • m = 0
+  zero_smul : ∀ m : A, (0 : M₀) • m = 0
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulActionWithZero.toSMulWithZero (M₀ A) {_ : MonoidWithZero M₀}
     {_ : Zero A} [m : MulActionWithZero M₀ A] : SMulWithZero M₀ A :=
   { m with }
 
 -- see Note [higher instance priority]
 /-- See also `Semiring.toModule` -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+See also `Semiring.toModule`
+-/
 instance (priority := 1100) MonoidWithZero.toMulActionWithZero : MulActionWithZero M₀ M₀ :=
   { MulZeroClass.toSMulWithZero M₀, Monoid.toMulAction M₀ with }
 
-/--
-Instance `MonoidWithZero.toOppositeMulActionWithZero` / 实例 `MonoidWithZero.toOppositeMulActionWithZero`
+/-- Like `MonoidWithZero.toMulActionWithZero`, but multiplies on the right. See also
+`Semiring.toOppositeModule` -/
+/-
+**MonoidWithZero.toOppositeMulActionWithZero** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MonoidWithZero.toOppositeMulActionWithZero : MulActionWithZero M₀ᵐᵒᵖ M₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance MonoidWithZero.toOppositeMulActionWithZero
-  signature: : MulActionWithZero M₀ᵐᵒᵖ M₀
-  body: { MulZeroClass.toOppositeSMulWithZero M₀, Monoid.toOppositeMulAction with }
-
-中文:
-实例 带零幺半群.toOppositeMulActionWithZero
-  签名: : 带零乘法作用 M₀ᵐᵒᵖ M₀
-  定义体: { MulZeroClass.toOppositeSMulWithZero M₀, Monoid.toOppositeMulAction with }
-
-Depends on / 依赖: Monoid, Monoid.toOppositeMulAction, MulZeroClass, MulZeroClass.toOppositeSMulWithZero, toOppositeMulAction, toOppositeSMulWithZero
+--- 原说明 ---
+Like `MonoidWithZero.toMulActionWithZero`, but multiplies on the right. See also
+`Semiring.toOppositeModule`
 -/
 instance MonoidWithZero.toOppositeMulActionWithZero : MulActionWithZero M₀ᵐᵒᵖ M₀ :=
   { MulZeroClass.toOppositeSMulWithZero M₀, Monoid.toOppositeMulAction with }
-
-/--
-lemma `MulActionWithZero.subsingleton` / 引理 `MulActionWithZero.subsingleton`
-
-English:
-lemma MulActionWithZero.subsingleton
-  given: [MulActionWithZero M₀ A] [Subsingleton M₀]
-  proof: by
-    rw [← one_smul M₀ x]; rw [← one_smul M₀ y]; rw [Subsingleton.elim (1 : M₀) 0]; rw [zero_smul]; rw [zero_smul]
-
-中文:
-引理 带零乘法作用.subsingleton
-  条件: [带零乘法作用 M₀ A] [子单例 M₀]
-  证明: by
-    rw [← one_smul M₀ x]; rw [← one_smul M₀ y]; rw [Subsingleton.elim (1 : M₀) 0]; rw [zero_smul]; rw [zero_smul]
+/-
+**MulActionWithZero.subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `MulActionWithZero`。
+形式化陈述：∀ (M₀ : Type u_2) (A : Type u_7) [inst : MonoidWithZero M₀] [inst_1 : Zero
+ A] [MulActionWithZero M₀ A]   [Subsingleton M₀], Subsingleton A
+参数：M₀ : Type u_2；A : Type u_7。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `MulActionWithZero.zero_smul`：∀ {M₀ : Type u_2} {A : Type u_7} {inst : Mo
+noidWithZero M₀} {inst_1 : Zero A} [self : MulActionWithZero M₀ A] (m : A),   0 
+• m = 0
 -/
 protected lemma MulActionWithZero.subsingleton [MulActionWithZero M₀ A] [Subsingleton M₀] :
     Subsingleton A where
   allEq x y := by
-    rw [← one_smul M₀ x]; rw [← one_smul M₀ y]; rw [Subsingleton.elim (1 : M₀) 0]; rw [zero_smul]; rw [zero_smul]
-
-/--
-lemma `MulActionWithZero.nontrivial` / 引理 `MulActionWithZero.nontrivial`
-
-English:
-lemma MulActionWithZero.nontrivial
-  proof: (subsingleton_or_nontrivial M₀).resolve_left fun _ =>
-not_subsingleton A MulActionWithZero.subsingleton M₀ A
-
-中文:
-引理 带零乘法作用.nontrivial
-  证明: (subsingleton_or_nontrivial M₀).resolve_left fun _ =>
-not_subsingleton A MulActionWithZero.subsingleton M₀ A
+    rw [← one_smul M₀ x, ← one_smul M₀ y, Subsingleton.elim (1 : M₀) 0, zero_smul, zero_smul]
+/-
+**MulActionWithZero.nontrivial** 是 Mathlib 中的一个定理，位于命名空间 `MulActionWithZero`。
+形式化陈述：∀ (M₀ : Type u_2) (A : Type u_7) [inst : MonoidWithZero M₀] [inst_1 : Zero
+ A] [MulActionWithZero M₀ A] [Nontrivial A],   Nontrivial M₀
+参数：M₀ : Type u_2；A : Type u_7。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `not_subsingleton`：not_subsingleton (α) [Nontrivial α] : ¬Subsingleton α
+· 使用定理 `MulActionWithZero.subsingleton`：∀ (M₀ : Type u_2) (A : Type u_7) [inst :
+ MonoidWithZero M₀] [inst_1 : Zero A] [MulActionWithZero M₀ A]   [Subsingleton M
+₀], Subsingleton A
 -/
 protected lemma MulActionWithZero.nontrivial
     [MulActionWithZero M₀ A] [Nontrivial A] : Nontrivial M₀ :=
   (subsingleton_or_nontrivial M₀).resolve_left fun _ =>
-not_subsingleton A MulActionWithZero.subsingleton M₀ A
+    not_subsingleton A <| MulActionWithZero.subsingleton M₀ A
 
 variable {M₀ A} [MulActionWithZero M₀ A] [Zero A'] [SMul M₀ A'] (p : Prop) [Decidable p]
-
-/--
-lemma `ite_zero_smul` / 引理 `ite_zero_smul`
-
-English:
-lemma ite_zero_smul
-  given: (a : M₀) (b : A)
-  statement: (if p then a else 0 : M₀) • b = if p then a • b else 0
-  proof: by
-  rw [ite_smul]; rw [zero_smul]
-
-中文:
-引理 ite_zero_smul
-  条件: (a : M₀) (b : A)
-  结论: (if p then a else 0 : M₀) • b = if p then a • b else 0
-  证明: by
-  rw [ite_smul]; rw [zero_smul]
-
-Depends on / 依赖: ite_smul, zero_smul
+/-
+**ite_zero_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ite_zero_smul (a : M₀) (b : A) : (if p then a else 0 : M₀) • b = if p then
+ a • b else 0
+参数：a : M₀；b : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) [
+inst_1 : Decidable p] (a : α) (b c : β),   (if p then b else c) • a = if p the…
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 -/
 lemma ite_zero_smul (a : M₀) (b : A) : (if p then a else 0 : M₀) • b = if p then a • b else 0 := by
-  rw [ite_smul]; rw [zero_smul]
-
-/--
-lemma `boole_smul` / 引理 `boole_smul`
-
-English:
-lemma boole_smul
-  given: (a : A)
-  statement: (if p then 1 else 0 : M₀) • a = if p then a else 0
-  proof: by simp
-
-中文:
-引理 boole_smul
-  条件: (a : A)
-  结论: (if p then 1 else 0 : M₀) • a = if p then a else 0
-  证明: by simp
+  rw [ite_smul, zero_smul]
+/-
+**boole_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：boole_smul (a : A) : (if p then 1 else 0 : M₀) • a = if p then a else 0
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) [
+inst_1 : Decidable p] (a : α) (b c : β),   (if p then b else c) • a = if p the…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma boole_smul (a : A) : (if p then 1 else 0 : M₀) • a = if p then a else 0 := by simp
-
-/--
-lemma `Pi.single_apply_smul` / 引理 `Pi.single_apply_smul`
-
-English:
-lemma Pi.single_apply_smul
-  given: {ι : Type*} [DecidableEq ι] (x : A) (i j : ι)
-  proof: by
-  rw [single_apply]; rw [ite_smul]; rw [one_smul]; rw [zero_smul]; rw [single_apply]
-
-中文:
-引理 依赖函数类型.single_apply_smul
-  条件: {ι : 类型} [DecidableEq ι] (x : A) (i j : ι)
-  证明: by
-  rw [single_apply]; rw [ite_smul]; rw [one_smul]; rw [zero_smul]; rw [single_apply]
-
-Depends on / 依赖: ite_smul, one_smul, single_apply, zero_smul
+/-
+**Pi.single_apply_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.single_apply_smul {ι : Type*} [DecidableEq ι] (x : A) (i j : ι) : (Pi.s
+ingle i 1 : ι -> M₀) j • x = (Pi.single i x : ι -> A) j
+参数：x : A；i j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.single_apply`：∀ {ι : Type u_1} [inst : DecidableEq ι] {M : Type u_9} 
+[inst_1 : Zero M] (i : ι) (x : M) (i' : ι),   Pi.single i x i' = if i' = i then 
+x els…
+· 使用定理 `ite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) [
+inst_1 : Decidable p] (a : α) (b c : β),   (if p then b else c) • a = if p the…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
 -/
 lemma Pi.single_apply_smul {ι : Type*} [DecidableEq ι] (x : A) (i j : ι) :
-    (Pi.single i 1 : ι -> M₀) j • x = (Pi.single i x : ι -> A) j := by
-  rw [single_apply]; rw [ite_smul]; rw [one_smul]; rw [zero_smul]; rw [single_apply]
+    (Pi.single i 1 : ι → M₀) j • x = (Pi.single i x : ι → A) j := by
+  rw [single_apply, ite_smul, one_smul, zero_smul, single_apply]
 
+/-- Pullback a `MulActionWithZero` structure along an injective zero-preserving homomorphism. -/
 -- See note [reducible non-instances]
-/--
-Definition of `Function.Injective.mulActionWithZero` / `Function.Injective.mulActionWithZero` 的定义
-
-English:
-abbreviation Function.Injective.mulActionWithZero
-  signature: (f : ZeroHom A' A) (hf : Injective f)
-  body: { hf.mulAction f smul, hf.smulWithZero f smul with }
-
-中文:
-缩写 函数.单射.mulActionWithZero
-  签名: (f : 保零态射 A' A) (hf : 单射 f)
-  定义体: { hf.mulAction f smul, hf.smulWithZero f smul with }
+/-
+**Function.Injective.mulActionWithZero** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injec
+tive`。
+形式化陈述：{M₀ : Type u_2} →   {A : Type u_7} →     {A' : Type u_8} →       [inst : M
+onoidWithZero M₀] →         [inst_1 : Zero A] →           [inst_2 : MulActionWit
+hZero M₀ A] →             [inst_3 : Zero A'] →               [inst_4 : SMul M₀ A
+'] →                 (f : ZeroHom A' A) →                   Function.Injective ⇑
+f → (∀ (a : M₀) (b : A'), f (a • b) = a • f b) → MulActionWithZero M₀ A'
+参数：f : ZeroHom A' A；∀ (a : M₀) (b : A'), f (a • b) = a • f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev Function.Injective.mulActionWithZero (f : ZeroHom A' A) (hf : Injective f)
-    (smul : forall (a : M₀) (b), f (a • b) = a • f b) : MulActionWithZero M₀ A' :=
+    (smul : ∀ (a : M₀) (b), f (a • b) = a • f b) : MulActionWithZero M₀ A' :=
   { hf.mulAction f smul, hf.smulWithZero f smul with }
 
+/-- Pushforward a `MulActionWithZero` structure along a surjective zero-preserving homomorphism. -/
 -- See note [reducible non-instances]
-/--
-Definition of `Function.Surjective.mulActionWithZero` / `Function.Surjective.mulActionWithZero` 的定义
-
-English:
-abbreviation Function.Surjective.mulActionWithZero
-  signature: (f : ZeroHom A A') (hf : Surjective f)
-  body: { hf.mulAction f smul, hf.smulWithZero f smul with }
-
-中文:
-缩写 函数.满射.mulActionWithZero
-  签名: (f : 保零态射 A A') (hf : 满射 f)
-  定义体: { hf.mulAction f smul, hf.smulWithZero f smul with }
+/-
+**Function.Surjective.mulActionWithZero** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surj
+ective`。
+形式化陈述：{M₀ : Type u_2} →   {A : Type u_7} →     {A' : Type u_8} →       [inst : M
+onoidWithZero M₀] →         [inst_1 : Zero A] →           [inst_2 : MulActionWit
+hZero M₀ A] →             [inst_3 : Zero A'] →               [inst_4 : SMul M₀ A
+'] →                 (f : ZeroHom A A') →                   Function.Surjective 
+⇑f → (∀ (a : M₀) (b : A), f (a • b) = a • f b) → MulActionWithZero M₀ A'
+参数：f : ZeroHom A A'；∀ (a : M₀) (b : A), f (a • b) = a • f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected abbrev Function.Surjective.mulActionWithZero (f : ZeroHom A A') (hf : Surjective f)
-    (smul : forall (a : M₀) (b), f (a • b) = a • f b) : MulActionWithZero M₀ A' :=
+    (smul : ∀ (a : M₀) (b), f (a • b) = a • f b) : MulActionWithZero M₀ A' :=
   { hf.mulAction f smul, hf.smulWithZero f smul with }
 
 variable (A)
 
 /-- Compose a `MulActionWithZero` with a `MonoidWithZeroHom`, with action `f r' • m` -/
 @[instance_reducible]
-/--
-Definition of `MulActionWithZero.compHom` / `MulActionWithZero.compHom` 的定义
+/-
+**MulActionWithZero.compHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulActionWithZero.compHom (f : M₀' ->*₀ M₀) : MulActionWithZero M₀' A wher
+e __
+参数：f : M₀' ->*₀ M₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulActionWithZero.compHom
-  signature: (f : M₀' ->*₀ M₀)
-  body: SMulWithZero.compHom A f.toZeroHom
-  mul_smul r s m := by change f (r * s) • m = f r • f s • m; simp [mul_smul]
-  one_smul m := by change f 1 • m = m; simp
-
-中文:
-定义 带零乘法作用.compHom
-  签名: (f : M₀' ->*₀ M₀)
-  定义体: SMulWithZero.compHom A f.toZeroHom
-  mul_smul r s m := by change f (r * s) • m = f r • f s • m; simp [mul_smul]
-  one_smul m := by change f 1 • m = m; simp
-
-Depends on / 依赖: SMulWithZero, SMulWithZero.compHom, alternatingConstHomologyDataEvenNEZero, alternatingConstHomologyDataOdd, alternatingConstHomologyDataZero, compHom, even_or_odd, f.toZeroHom, n.even_or_odd, toZeroHom
+--- 原说明 ---
+Compose a `MulActionWithZero` with a `MonoidWithZeroHom`, with action `f r' • m`
 -/
-def MulActionWithZero.compHom (f : M₀' ->*₀ M₀) : MulActionWithZero M₀' A where
+def MulActionWithZero.compHom (f : M₀' →*₀ M₀) : MulActionWithZero M₀' A where
   __ := SMulWithZero.compHom A f.toZeroHom
   mul_smul r s m := by change f (r * s) • m = f r • f s • m; simp [mul_smul]
   one_smul m := by change f 1 • m = m; simp
@@ -714,34 +618,21 @@ section GroupWithZero
 variable [GroupWithZero G₀] [GroupWithZero G₀'] [MulActionWithZero G₀ G₀']
   [SMulCommClass G₀ G₀' G₀'] [IsScalarTower G₀ G₀' G₀']
 
-/--
-lemma `smul_inv₀` / 引理 `smul_inv₀`
-
-English:
-lemma smul_inv₀
-  given: (c : G₀) (x : G₀')
-  statement: (c • x)⁻¹ = c⁻¹ • x⁻¹
-  proof: by
-  obtain rfl | hc := eq_or_ne c 0
-  · simp only [inv_zero, zero_smul]
-  obtain rfl | hx := eq_or_ne x 0
-  · simp only [inv_zero, smul_zero]
-  · refine inv_eq_of_mul_eq_one_left ?_
-    rw [smul_mul_smul_comm]; rw [inv_mul_cancel₀ hc]; rw [inv_mul_cancel₀ hx]; rw [one_smul]
-
-中文:
-引理 smul_inv₀
-  条件: (c : G₀) (x : G₀')
-  结论: (c • x)⁻¹ = c⁻¹ • x⁻¹
-  证明: by
-  obtain rfl | hc := eq_or_ne c 0
-  · simp only [inv_zero, zero_smul]
-  obtain rfl | hx := eq_or_ne x 0
-  · simp only [inv_zero, smul_zero]
-  · refine inv_eq_of_mul_eq_one_left ?_
-    rw [smul_mul_smul_comm]; rw [inv_mul_cancel₀ hc]; rw [inv_mul_cancel₀ hx]; rw [one_smul]
-
-Depends on / 依赖: eq_or_ne, inv_eq_of_mul_eq_one_left, inv_zero, one_smul, smul_mul_smul_comm, smul_zero, zero_smul
+/-
+**smul_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_inv (g : G) (a : H) : (g • a)⁻¹ = g⁻¹ • a⁻¹
+参数：g : G；a : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_eq_of_mul_eq_one_right`：inv_eq_of_mul_eq_one_right : a * b = 1 -> a⁻
+¹ = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_mul_smul_comm`：smul_mul_smul_comm [Mul α] [Mul β] [SMul α β] [IsSca
+larTower α β β] [IsScalarTower α α β] [SMulCommClass α β β] (a : α) (b : β) (c :
+ α) (d :…
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 lemma smul_inv₀ (c : G₀) (x : G₀') : (c • x)⁻¹ = c⁻¹ • x⁻¹ := by
   obtain rfl | hc := eq_or_ne c 0
@@ -749,7 +640,7 @@ lemma smul_inv₀ (c : G₀) (x : G₀') : (c • x)⁻¹ = c⁻¹ • x⁻¹ :=
   obtain rfl | hx := eq_or_ne x 0
   · simp only [inv_zero, smul_zero]
   · refine inv_eq_of_mul_eq_one_left ?_
-    rw [smul_mul_smul_comm]; rw [inv_mul_cancel₀ hc]; rw [inv_mul_cancel₀ hx]; rw [one_smul]
+    rw [smul_mul_smul_comm, inv_mul_cancel₀ hc, inv_mul_cancel₀ hx, one_smul]
 
 end GroupWithZero
 
@@ -758,201 +649,175 @@ end GroupWithZero
 This is exactly `DistribMulAction` without the `MulAction` part.
 -/
 @[ext]
-/--
-Definition of `DistribSMul` / `DistribSMul` 的定义
+/-
+**DistribSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_12 → (A : Type u_13) → [AddZeroClass A] → Type (max u_12 u_13)
+参数：A : Type u_13；max u_12 u_13。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class DistribSMul
-  parameters: (M A : Type*) [AddZeroClass A]
-  extends: SMulZeroClass M A
-  axioms and operations (1):
-    - smul_add : forall (a : M) (x y : A), a • (x + y) = a • x + a • y
+--- 原说明 ---
+Typeclass for scalar multiplication that preserves `0` and `+` on the right.
 
-中文:
-类 分配标量乘法
-  参数: (M A : 类型) [加法零类 A]
-  继承: SMulZero类 M A
-  公理与运算 (1 个):
-    - smul_add : 对任意 (a : M) (x y : A), a • (x + y) = a • x + a • y
+This is exactly `DistribMulAction` without the `MulAction` part.
 -/
 class DistribSMul (M A : Type*) [AddZeroClass A] extends SMulZeroClass M A where
   /-- Scalar multiplication distributes across addition -/
-  smul_add : forall (a : M) (x y : A), a • (x + y) = a • x + a • y
+  smul_add : ∀ (a : M) (x y : A), a • (x + y) = a • x + a • y
 
 section DistribSMul
 
 variable [AddZeroClass A] [DistribSMul M A]
 
-/--
-theorem `smul_add` / 定理 `smul_add`
-
-English:
-theorem smul_add
-  given: (a : M) (b₁ b₂ : A)
-  statement: a • (b₁ + b₂) = a • b₁ + a • b₂
-  proof: DistribSMul.smul_add _ _ _
-
-中文:
-定理 smul_add
-  条件: (a : M) (b₁ b₂ : A)
-  结论: a • (b₁ + b₂) = a • b₁ + a • b₂
-  证明: DistribSMul.smul_add _ _ _
-
-Depends on / 依赖: DistribSMul, DistribSMul.smul_add, smul_add
+/-
+**smul_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+参数：a : M；b₁ b₂ : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribSMul.smul_add`：∀ {M : Type u_12} {A : Type u_13} {inst : AddZeroC
+lass A} [self : DistribSMul M A] (a : M) (x y : A),   a • (x + y) = a • x + a • 
+y
 -/
 theorem smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂ :=
   DistribSMul.smul_add _ _ _
 
-/--
-Definition of `Function.Injective.distribSMul` / `Function.Injective.distribSMul` 的定义
+/-- Pullback a distributive scalar multiplication along an injective additive monoid
+homomorphism.
+See note [reducible non-instances]. -/
+/-
+**Function.Injective.distribSMul** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{M : Type u_1} →   {A : Type u_7} →     {B : Type u_9} →       [inst : Add
+ZeroClass A] →         [inst_1 : DistribSMul M A] →           [inst_2 : AddZeroC
+lass B] →             [inst_3 : SMul M B] →               (f : B →+ A) → Functio
+n.Injective ⇑f → (∀ (c : M) (x : B), f (c • x) = c • f x) → DistribSMul M B
+参数：f : B →+ A；∀ (c : M) (x : B), f (c • x) = c • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Function.Injective.distribSMul
-  signature: [AddZeroClass B] [SMul M B] (f : B ->+ A)
-  body: { hf.smulZeroClass f.toZeroHom smul with
-smul_add := fun c x y => hf by simp only [smul, map_add, smul_add] }
-
-中文:
-缩写 函数.单射.distribSMul
-  签名: [加法零类 B] [标量乘法 M B] (f : B ->+ A)
-  定义体: { hf.smulZeroClass f.toZeroHom smul with
-smul_add := fun c x y => hf by simp only [smul, map_add, smul_add] }
+--- 原说明 ---
+Pullback a distributive scalar multiplication along an injective additive monoid
+homomorphism.
+See note [reducible non-instances].
 -/
-protected abbrev Function.Injective.distribSMul [AddZeroClass B] [SMul M B] (f : B ->+ A)
-    (hf : Injective f) (smul : forall (c : M) (x), f (c • x) = c • f x) : DistribSMul M B :=
+protected abbrev Function.Injective.distribSMul [AddZeroClass B] [SMul M B] (f : B →+ A)
+    (hf : Injective f) (smul : ∀ (c : M) (x), f (c • x) = c • f x) : DistribSMul M B :=
   { hf.smulZeroClass f.toZeroHom smul with
-smul_add := fun c x y => hf by simp only [smul, map_add, smul_add] }
+    smul_add := fun c x y => hf <| by simp only [smul, map_add, smul_add] }
 
-/--
-Definition of `Function.Surjective.distribSMul` / `Function.Surjective.distribSMul` 的定义
+/-- Pushforward a distributive scalar multiplication along a surjective additive monoid
+homomorphism.
+See note [reducible non-instances]. -/
+/-
+**Function.Surjective.distribSMul** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surjective
+`。
+形式化陈述：{M : Type u_1} →   {A : Type u_7} →     {B : Type u_9} →       [inst : Add
+ZeroClass A] →         [inst_1 : DistribSMul M A] →           [inst_2 : AddZeroC
+lass B] →             [inst_3 : SMul M B] →               (f : A →+ B) → Functio
+n.Surjective ⇑f → (∀ (c : M) (x : A), f (c • x) = c • f x) → DistribSMul M B
+参数：f : A →+ B；∀ (c : M) (x : A), f (c • x) = c • f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Function.Surjective.distribSMul
-  signature: [AddZeroClass B] [SMul M B] (f : A ->+ B)
-  body: { f.toZeroHom.smulZeroClass smul with
-    smul_add := fun c x y => by
-      rcases hf x with ⟨x, rfl⟩
-      rcases hf y with ⟨y, rfl⟩
-      simp only [smul_add, ← smul, ← map_add] }
-
-中文:
-缩写 函数.满射.distribSMul
-  签名: [加法零类 B] [标量乘法 M B] (f : A ->+ B)
-  定义体: { f.toZeroHom.smulZeroClass smul with
-    smul_add := fun c x y => by
-      rcases hf x with ⟨x, rfl⟩
-      rcases hf y with ⟨y, rfl⟩
-      simp only [smul_add, ← smul, ← map_add] }
+--- 原说明 ---
+Pushforward a distributive scalar multiplication along a surjective additive mon
+oid
+homomorphism.
+See note [reducible non-instances].
 -/
-protected abbrev Function.Surjective.distribSMul [AddZeroClass B] [SMul M B] (f : A ->+ B)
-    (hf : Surjective f) (smul : forall (c : M) (x), f (c • x) = c • f x) : DistribSMul M B :=
+protected abbrev Function.Surjective.distribSMul [AddZeroClass B] [SMul M B] (f : A →+ B)
+    (hf : Surjective f) (smul : ∀ (c : M) (x), f (c • x) = c • f x) : DistribSMul M B :=
   { f.toZeroHom.smulZeroClass smul with
     smul_add := fun c x y => by
       rcases hf x with ⟨x, rfl⟩
       rcases hf y with ⟨y, rfl⟩
       simp only [smul_add, ← smul, ← map_add] }
 
-/--
-Definition of `Function.Surjective.distribSMulLeft` / `Function.Surjective.distribSMulLeft` 的定义
+/-- Push forward the multiplication of `R` on `M` along a compatible surjective map `f : R → S`.
 
-English:
-abbreviation Function.Surjective.distribSMulLeft
-  signature: {R S M : Type*} [AddZeroClass M] [DistribSMul R M]
-  body: { hf.smulZeroClassLeft f hsmul with
-    smul_add := hf.forall.mpr fun c x y => by simp only [hsmul, smul_add] }
+See also `Function.Surjective.distribMulActionLeft`.
+-/
+/-
+**Function.Surjective.distribSMulLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Function.Surjective.distribSMulLeft {R S M : Type*} [AddZeroClass M] [Dist
+ribSMul R M] [SMul S M] (f : R -> S) (hf : Function.Surjective f) (hsmul : foral
+l (c) (x : M), f c • x = c • x) : DistribSMul S M
+参数：f : R -> S；hf : Function.Surjective f；hsmul : forall (c) (x : M), f c • x = c
+ • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 函数.满射.distribSMulLeft
-  签名: {R S M : 类型} [加法零类 M] [分配标量乘法 R M]
-  定义体: { hf.smulZeroClassLeft f hsmul with
-    smul_add := hf.forall.mpr fun c x y => by simp only [hsmul, smul_add] }
+--- 原说明 ---
+Push forward the multiplication of `R` on `M` along a compatible surjective map 
+`f : R → S`.
 
-Depends on / 依赖: hf.forall.mpr, hf.smulZeroClassLeft, smulZeroClassLeft, smul_add
+See also `Function.Surjective.distribMulActionLeft`.
 -/
 abbrev Function.Surjective.distribSMulLeft {R S M : Type*} [AddZeroClass M] [DistribSMul R M]
-    [SMul S M] (f : R -> S) (hf : Function.Surjective f)
-    (hsmul : forall (c) (x : M), f c • x = c • x) : DistribSMul S M :=
+    [SMul S M] (f : R → S) (hf : Function.Surjective f)
+    (hsmul : ∀ (c) (x : M), f c • x = c • x) : DistribSMul S M :=
   { hf.smulZeroClassLeft f hsmul with
     smul_add := hf.forall.mpr fun c x y => by simp only [hsmul, smul_add] }
 
 variable (A)
 
-/--
-Definition of `DistribSMul.compFun` / `DistribSMul.compFun` 的定义
+/-- Compose a `DistribSMul` with a function, with scalar multiplication `f r' • m`.
+See note [reducible non-instances]. -/
+/-
+**DistribSMul.compFun** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：DistribSMul.compFun (f : N -> M) : DistribSMul N A
+参数：f : N -> M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation DistribSMul.compFun
-  signature: (f : N -> M)
-  body: { SMulZeroClass.compFun A f with
-    smul_add := fun x => smul_add (f x) }
-
-中文:
-缩写 分配标量乘法.compFun
-  签名: (f : N -> M)
-  定义体: { SMulZeroClass.compFun A f with
-    smul_add := fun x => smul_add (f x) }
-
-Depends on / 依赖: SMulZeroClass, SMulZeroClass.compFun, compFun, smul_add
+--- 原说明 ---
+Compose a `DistribSMul` with a function, with scalar multiplication `f r' • m`.
+See note [reducible non-instances].
 -/
-abbrev DistribSMul.compFun (f : N -> M) : DistribSMul N A :=
+abbrev DistribSMul.compFun (f : N → M) : DistribSMul N A :=
   { SMulZeroClass.compFun A f with
     smul_add := fun x => smul_add (f x) }
 
 /-- Each element of the scalars defines an additive monoid homomorphism. -/
 @[simps]
-/--
-Definition of `DistribSMul.toAddMonoidHom` / `DistribSMul.toAddMonoidHom` 的定义
+/-
+**DistribSMul.toAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DistribSMul.toAddMonoidHom (x : M) : A ->+ A
+参数：x : M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DistribSMul.smul_add`：∀ {M : Type u_12} {A : Type u_13} {inst : AddZeroC
+lass A} [self : DistribSMul M A] (a : M) (x y : A),   a • (x + y) = a • x + a • 
+y
 
-English:
-definition DistribSMul.toAddMonoidHom
-  signature: (x : M)
-  body: { SMulZeroClass.toZeroHom A x with toFun := (x • ·), map_add' := smul_add x }
-
-中文:
-定义 分配标量乘法.toAddMonoidHom
-  签名: (x : M)
-  定义体: { SMulZeroClass.toZeroHom A x with toFun := (x • ·), map_add' := smul_add x }
-
-Depends on / 依赖: SMulZeroClass, SMulZeroClass.toZeroHom, map_add, smul_add, toZeroHom
+--- 原说明 ---
+Each element of the scalars defines an additive monoid homomorphism.
 -/
-def DistribSMul.toAddMonoidHom (x : M) : A ->+ A :=
+def DistribSMul.toAddMonoidHom (x : M) : A →+ A :=
   { SMulZeroClass.toZeroHom A x with toFun := (x • ·), map_add' := smul_add x }
-
-/--
-Instance `AddMonoid.nat_smulCommClass` / 实例 `AddMonoid.nat_smulCommClass`
-
-English:
-instance AddMonoid.nat_smulCommClass
-  signature: {M A : Type*} [AddMonoid A] [DistribSMul M A]
-  body: ((DistribSMul.toAddMonoidHom A x).map_nsmul n y).symm
-
-中文:
-实例 加法幺半群.nat_smulCommClass
-  签名: {M A : 类型} [加法幺半群 A] [分配标量乘法 M A]
-  定义体: ((DistribSMul.toAddMonoidHom A x).map_nsmul n y).symm
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_nsmul, toAddMonoidHom
+/-
+**AddMonoid.nat_smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddMonoid.nat_smulCommClass {M A : Type*} [AddMonoid A] [DistribSMul M A] 
+: SMulCommClass Nat M A where smul_comm n x y
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddMonoidHom.map_nsmul`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoi
+d M] [inst_1 : AddMonoid N] (f : M →+ N) (n : ℕ) (a : M),   f (n • a) = n • f a
 -/
 instance AddMonoid.nat_smulCommClass {M A : Type*} [AddMonoid A] [DistribSMul M A] :
-    SMulCommClass Nat M A where
+    SMulCommClass ℕ M A where
   smul_comm n x y := ((DistribSMul.toAddMonoidHom A x).map_nsmul n y).symm
 
 -- `SMulCommClass.symm` is not registered as an instance, as it would cause a loop
-/--
-Instance `AddMonoid.nat_smulCommClass'` / 实例 `AddMonoid.nat_smulCommClass'`
-
-English:
-instance AddMonoid.nat_smulCommClass'
-  signature: {M A : Type*} [AddMonoid A] [DistribSMul M A]
-  body: .symm _ _ _
-
-中文:
-实例 加法幺半群.nat_smulCommClass'
-  签名: {M A : 类型} [加法幺半群 A] [分配标量乘法 M A]
-  定义体: .symm _ _ _
+/-
+**AddMonoid.nat_smulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddMonoid.nat_smulCommClass' {M A : Type*} [AddMonoid A] [DistribSMul M A]
+ : SMulCommClass M Nat A
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance AddMonoid.nat_smulCommClass' {M A : Type*} [AddMonoid A] [DistribSMul M A] :
-    SMulCommClass M Nat A :=
+    SMulCommClass M ℕ A :=
   .symm _ _ _
 
 end DistribSMul
@@ -969,130 +834,150 @@ Mathematically, `DistribMulAction G A` is equivalent to giving `A` the structure
 a `ℤ[G]`-module.
 -/
 @[ext]
-/--
-Definition of `DistribMulAction` / `DistribMulAction` 的定义
+/-
+**DistribMulAction** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(M : Type u_12) → (A : Type u_13) → [Monoid M] → [AddMonoid A] → Type (max
+ u_12 u_13)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class DistribMulAction
-  parameters: (M A : Type*) [Monoid M] [AddMonoid A]
-  extends: MulAction M A
-  axioms and operations (2):
-    - smul_zero : forall a : M, a • (0 : A) = 0
-    - smul_add : forall (a : M) (x y : A), a • (x + y) = a • x + a • y
+--- 原说明 ---
+Typeclass for multiplicative actions on additive structures.
 
-中文:
-类 分配乘法作用
-  参数: (M A : 类型) [幺半群 M] [加法幺半群 A]
-  继承: 乘法作用 M A
-  公理与运算 (2 个):
-    - smul_zero : 对任意 a : M, a • (0 : A) = 0
-    - smul_add : 对任意 (a : M) (x y : A), a • (x + y) = a • x + a • y
+For example, if `G` is a group (with group law written as multiplication) and `A
+` is an
+abelian group (with group law written as addition), then to give `A` a `G`-modul
+e
+structure (for example, to use the theory of group cohomology) is to say `[Distr
+ibMulAction G A]`.
+Note in that we do not use the `Module` typeclass for `G`-modules, as the `Modul
+e` typeclass
+is for modules over a ring rather than a group.
+
+Mathematically, `DistribMulAction G A` is equivalent to giving `A` the structure
+ of
+a `ℤ[G]`-module.
 -/
 class DistribMulAction (M A : Type*) [Monoid M] [AddMonoid A] extends MulAction M A where
   /-- Multiplying `0` by a scalar gives `0` -/
-  smul_zero : forall a : M, a • (0 : A) = 0
+  smul_zero : ∀ a : M, a • (0 : A) = 0
   /-- Scalar multiplication distributes across addition -/
-  smul_add : forall (a : M) (x y : A), a • (x + y) = a • x + a • y
+  smul_add : ∀ (a : M) (x y : A), a • (x + y) = a • x + a • y
 
 section
 
 variable [Monoid M] [AddMonoid A] [DistribMulAction M A]
 
 -- See note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) DistribMulAction.toDistribSMul : DistribSMul M A :=
   { ‹DistribMulAction M A› with }
 
 /-! We make sure that the definition of `DistribMulAction.toDistribSMul` was done correctly,
 and the two paths from `DistribMulAction` to `SMul` are indeed definitionally equal. -/
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We make sure that the definition of `DistribMulAction.toDistribSMul` was done co
+rrectly,
+and the two paths from `DistribMulAction` to `SMul` are indeed definitionally eq
+ual.
+-/
 example :
     (DistribMulAction.toMulAction.toSMul : SMul M A) =
       DistribMulAction.toDistribSMul.toSMul :=
   rfl
 
-/--
-Definition of `Function.Injective.distribMulAction` / `Function.Injective.distribMulAction` 的定义
+/-- Pullback a distributive multiplicative action along an injective additive monoid
+homomorphism.
+See note [reducible non-instances]. -/
+/-
+**Function.Injective.distribMulAction** 是 Mathlib 中的一个定义，位于命名空间 `Function.Inject
+ive`。
+形式化陈述：{M : Type u_1} →   {A : Type u_7} →     {B : Type u_9} →       [inst : Mon
+oid M] →         [inst_1 : AddMonoid A] →           [inst_2 : DistribMulAction M
+ A] →             [inst_3 : AddMonoid B] →               [inst_4 : SMul M B] →  
+               (f : B →+ A) → Function.Injective ⇑f → (∀ (c : M) (x : B), f (c •
+ x) = c • f x) → DistribMulAction M B
+参数：f : B →+ A；∀ (c : M) (x : B), f (c • x) = c • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.one_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Monoid α} [
+self : MulAction α β] (b : β), 1 • b = b
 
-English:
-abbreviation Function.Injective.distribMulAction
-  signature: [AddMonoid B] [SMul M B] (f : B ->+ A)
-  body: { hf.distribSMul f smul, hf.mulAction f smul with }
-
-中文:
-缩写 函数.单射.distribMulAction
-  签名: [加法幺半群 B] [标量乘法 M B] (f : B ->+ A)
-  定义体: { hf.distribSMul f smul, hf.mulAction f smul with }
+--- 原说明 ---
+Pullback a distributive multiplicative action along an injective additive monoid
+homomorphism.
+See note [reducible non-instances].
 -/
-protected abbrev Function.Injective.distribMulAction [AddMonoid B] [SMul M B] (f : B ->+ A)
-    (hf : Injective f) (smul : forall (c : M) (x), f (c • x) = c • f x) : DistribMulAction M B :=
+protected abbrev Function.Injective.distribMulAction [AddMonoid B] [SMul M B] (f : B →+ A)
+    (hf : Injective f) (smul : ∀ (c : M) (x), f (c • x) = c • f x) : DistribMulAction M B :=
   { hf.distribSMul f smul, hf.mulAction f smul with }
 
-/--
-Definition of `Function.Surjective.distribMulAction` / `Function.Surjective.distribMulAction` 的定义
+/-- Pushforward a distributive multiplicative action along a surjective additive monoid
+homomorphism.
+See note [reducible non-instances]. -/
+/-
+**Function.Surjective.distribMulAction** 是 Mathlib 中的一个定义，位于命名空间 `Function.Surje
+ctive`。
+形式化陈述：{M : Type u_1} →   {A : Type u_7} →     {B : Type u_9} →       [inst : Mon
+oid M] →         [inst_1 : AddMonoid A] →           [inst_2 : DistribMulAction M
+ A] →             [inst_3 : AddMonoid B] →               [inst_4 : SMul M B] →  
+               (f : A →+ B) → Function.Surjective ⇑f → (∀ (c : M) (x : A), f (c 
+• x) = c • f x) → DistribMulAction M B
+参数：f : A →+ B；∀ (c : M) (x : A), f (c • x) = c • f x。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MulAction.one_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Monoid α} [
+self : MulAction α β] (b : β), 1 • b = b
 
-English:
-abbreviation Function.Surjective.distribMulAction
-  signature: [AddMonoid B] [SMul M B] (f : A ->+ B)
-  body: { hf.distribSMul f smul, hf.mulAction f smul with }
-
-中文:
-缩写 函数.满射.distribMulAction
-  签名: [加法幺半群 B] [标量乘法 M B] (f : A ->+ B)
-  定义体: { hf.distribSMul f smul, hf.mulAction f smul with }
+--- 原说明 ---
+Pushforward a distributive multiplicative action along a surjective additive mon
+oid
+homomorphism.
+See note [reducible non-instances].
 -/
-protected abbrev Function.Surjective.distribMulAction [AddMonoid B] [SMul M B] (f : A ->+ B)
-    (hf : Surjective f) (smul : forall (c : M) (x), f (c • x) = c • f x) : DistribMulAction M B :=
+protected abbrev Function.Surjective.distribMulAction [AddMonoid B] [SMul M B] (f : A →+ B)
+    (hf : Surjective f) (smul : ∀ (c : M) (x), f (c • x) = c • f x) : DistribMulAction M B :=
   { hf.distribSMul f smul, hf.mulAction f smul with }
 
 variable (A)
 
 /-- Each element of the monoid defines an additive monoid homomorphism. -/
 @[simps!, deprecated DistribSMul.toAddMonoidHom (since := "2026-01-07")]
-/--
-Definition of `DistribMulAction.toAddMonoidHom` / `DistribMulAction.toAddMonoidHom` 的定义
+/-
+**DistribMulAction.toAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DistribMulAction.toAddMonoidHom (x : M) : A ->+ A
+参数：x : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DistribMulAction.toAddMonoidHom
-  signature: (x : M)
-  body: DistribSMul.toAddMonoidHom A x
-
-中文:
-定义 分配乘法作用.toAddMonoidHom
-  签名: (x : M)
-  定义体: DistribSMul.toAddMonoidHom A x
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, toAddMonoidHom
+--- 原说明 ---
+Each element of the monoid defines an additive monoid homomorphism.
 -/
-def DistribMulAction.toAddMonoidHom (x : M) : A ->+ A :=
+def DistribMulAction.toAddMonoidHom (x : M) : A →+ A :=
   DistribSMul.toAddMonoidHom A x
 
 variable (M)
 
 /-- Each element of the monoid defines an additive monoid homomorphism. -/
 @[simps]
-/--
-Definition of `DistribMulAction.toAddMonoidEnd` / `DistribMulAction.toAddMonoidEnd` 的定义
+/-
+**DistribMulAction.toAddMonoidEnd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：DistribMulAction.toAddMonoidEnd : M ->* AddMonoid.End A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DistribMulAction.toAddMonoidEnd
-  signature: :
-  body: DistribSMul.toAddMonoidHom A
-map_one' := AddMonoidHom.ext one_smul M
-map_mul' x y := AddMonoidHom.ext mul_smul x y
-
-中文:
-定义 分配乘法作用.toAddMonoidEnd
-  签名: :
-  定义体: DistribSMul.toAddMonoidHom A
-map_one' := AddMonoidHom.ext one_smul M
-map_mul' x y := AddMonoidHom.ext mul_smul x y
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, toAddMonoidHom
+--- 原说明 ---
+Each element of the monoid defines an additive monoid homomorphism.
 -/
 def DistribMulAction.toAddMonoidEnd :
-    M ->* AddMonoid.End A where
+    M →* AddMonoid.End A where
   toFun := DistribSMul.toAddMonoidHom A
-map_one' := AddMonoidHom.ext one_smul M
-map_mul' x y := AddMonoidHom.ext mul_smul x y
+  map_one' := AddMonoidHom.ext <| one_smul M
+  map_mul' x y := AddMonoidHom.ext <| mul_smul x y
 
 end
 
@@ -1100,213 +985,142 @@ section
 
 variable [AddGroup A] [DistribSMul M A]
 
-/--
-Instance `AddGroup.int_smulCommClass` / 实例 `AddGroup.int_smulCommClass`
-
-English:
-instance AddGroup.int_smulCommClass
-  signature: : SMulCommClass Int M A where
-  body: ((DistribSMul.toAddMonoidHom A x).map_zsmul n y).symm
-
-中文:
-实例 加法群.int_smulCommClass
-  签名: : 标量交换类 整数 M A where
-  定义体: ((DistribSMul.toAddMonoidHom A x).map_zsmul n y).symm
-
-Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_zsmul, toAddMonoidHom
+/-
+**AddGroup.int_smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddGroup.int_smulCommClass : SMulCommClass Int M A where smul_comm n x y
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddMonoidHom.map_zsmul`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup
+ α] [inst_1 : SubtractionMonoid β] (f : α →+ β) (n : ℤ) (g : α),   f (n • g) = n
+ • f g
 -/
-instance AddGroup.int_smulCommClass : SMulCommClass Int M A where
+instance AddGroup.int_smulCommClass : SMulCommClass ℤ M A where
   smul_comm n x y := ((DistribSMul.toAddMonoidHom A x).map_zsmul n y).symm
 
 -- `SMulCommClass.symm` is not registered as an instance, as it would cause a loop
-/--
-Instance `AddGroup.int_smulCommClass'` / 实例 `AddGroup.int_smulCommClass'`
-
-English:
-instance AddGroup.int_smulCommClass'
-  signature: : SMulCommClass M Int A
-  body: SMulCommClass.symm _ _ _
-
-@[simp]
-
-中文:
-实例 加法群.int_smulCommClass'
-  签名: : 标量交换类 M 整数 A
-  定义体: SMulCommClass.symm _ _ _
-
-@[simp]
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**AddGroup.int_smulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：AddGroup.int_smulCommClass' : SMulCommClass M Int A
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
-instance AddGroup.int_smulCommClass' : SMulCommClass M Int A :=
+instance AddGroup.int_smulCommClass' : SMulCommClass M ℤ A :=
   SMulCommClass.symm _ _ _
 
 @[simp]
-/--
-theorem `smul_neg` / 定理 `smul_neg`
-
-English:
-theorem smul_neg
-  given: (r : M) (x : A)
-  statement: r • -x = -(r • x)
-  proof: eq_neg_of_add_eq_zero_left by rw [← smul_add, neg_add_cancel, smul_zero]
-
-中文:
-定理 smul_neg
-  条件: (r : M) (x : A)
-  结论: r • -x = -(r • x)
-  证明: eq_neg_of_add_eq_zero_left by rw [← smul_add, neg_add_cancel, smul_zero]
-
-Depends on / 依赖: eq_neg_of_add_eq_zero_left, neg_add_cancel, smul_add, smul_zero
+/-
+**smul_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+参数：r : M；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_neg_of_add_eq_zero_left`：∀ {G : Type u_1} [inst : SubtractionMonoid G
+] {a b : G}, a + b = 0 → a = -b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem smul_neg (r : M) (x : A) : r • -x = -(r • x) :=
-eq_neg_of_add_eq_zero_left by rw [← smul_add, neg_add_cancel, smul_zero]
-
-/--
-theorem `smul_sub` / 定理 `smul_sub`
-
-English:
-theorem smul_sub
-  given: (r : M) (x y : A)
-  statement: r • (x - y) = r • x - r • y
-  proof: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [smul_add]; rw [smul_neg]
-
-中文:
-定理 smul_sub
-  条件: (r : M) (x y : A)
-  结论: r • (x - y) = r • x - r • y
-  证明: by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [smul_add]; rw [smul_neg]
-
-Depends on / 依赖: smul_add, smul_neg, sub_eq_add_neg
+  eq_neg_of_add_eq_zero_left <| by rw [← smul_add, neg_add_cancel, smul_zero]
+/-
+**smul_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+参数：r : M；x y : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
 -/
 theorem smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y := by
-  rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [smul_add]; rw [smul_neg]
+  rw [sub_eq_add_neg, sub_eq_add_neg, smul_add, smul_neg]
 
 end
 
 section DistribMulAction
 variable [Group α] [AddMonoid β] [DistribMulAction α β]
 
-/--
-lemma `smul_eq_zero_iff_eq` / 引理 `smul_eq_zero_iff_eq`
-
-English:
-lemma smul_eq_zero_iff_eq
-  given: (a : α) {x : β}
-  statement: a • x = 0 ↔ x = 0
-  proof: ⟨fun h => by rw [← inv_smul_smul a x, h, smul_zero], fun h => h.symm ▸ smul_zero _⟩
-
-中文:
-引理 smul_eq_zero_iff_eq
-  条件: (a : α) {x : β}
-  结论: a • x = 0 ↔ x = 0
-  证明: ⟨fun h => by rw [← inv_smul_smul a x, h, smul_zero], fun h => h.symm ▸ smul_zero _⟩
-
-Depends on / 依赖: h.symm, inv_smul_smul, smul_zero
+/-
+**smul_eq_zero_iff_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_eq_zero_iff_eq (a : α) {x : β} : a • x = 0 ↔ x = 0
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 lemma smul_eq_zero_iff_eq (a : α) {x : β} : a • x = 0 ↔ x = 0 :=
   ⟨fun h => by rw [← inv_smul_smul a x, h, smul_zero], fun h => h.symm ▸ smul_zero _⟩
-
-/--
-lemma `smul_ne_zero_iff_ne` / 引理 `smul_ne_zero_iff_ne`
-
-English:
-lemma smul_ne_zero_iff_ne
-  given: (a : α) {x : β}
-  statement: a • x != 0 ↔ x != 0
-  proof: not_congr smul_eq_zero_iff_eq a
-
-中文:
-引理 smul_ne_zero_iff_ne
-  条件: (a : α) {x : β}
-  结论: a • x != 0 ↔ x != 0
-  证明: not_congr smul_eq_zero_iff_eq a
-
-Depends on / 依赖: not_congr, smul_eq_zero_iff_eq
+/-
+**smul_ne_zero_iff_ne** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_ne_zero_iff_ne (a : α) {x : β} : a • x != 0 ↔ x != 0
+参数：a : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `smul_eq_zero_iff_eq`：smul_eq_zero_iff_eq (a : α) {x : β} : a • x = 0 ↔ x
+ = 0
 -/
-lemma smul_ne_zero_iff_ne (a : α) {x : β} : a • x != 0 ↔ x != 0 :=
-not_congr smul_eq_zero_iff_eq a
+lemma smul_ne_zero_iff_ne (a : α) {x : β} : a • x ≠ 0 ↔ x ≠ 0 :=
+  not_congr <| smul_eq_zero_iff_eq a
 
 end DistribMulAction
 
 section MulDistribMulAction
 variable [Group α] [GroupWithZero β] [MulDistribMulAction α β]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMulZeroClass α β
-  body: not_imp_comm.mp mul_inv_cancel₀ by
-    rw [← smul_one g]; rw [← inv_smul_eq_iff]; rw [smul_mul']; rw [inv_smul_smul]; rw [zero_mul]
-    exact zero_ne_one
-
-中文:
-实例 :
-  签名: SMulZero类 α β
-  定义体: not_imp_comm.mp mul_inv_cancel₀ by
-    rw [← smul_one g]; rw [← inv_smul_eq_iff]; rw [smul_mul']; rw [inv_smul_smul]; rw [zero_mul]
-    exact zero_ne_one
-
-Depends on / 依赖: inv_smul_eq_iff, inv_smul_smul, not_imp_comm, not_imp_comm.mp, smul_mul, smul_one, zero_mul, zero_ne_one
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMulZeroClass α β where
-smul_zero g := not_imp_comm.mp mul_inv_cancel₀ by
-    rw [← smul_one g]; rw [← inv_smul_eq_iff]; rw [smul_mul']; rw [inv_smul_smul]; rw [zero_mul]
+  smul_zero g := not_imp_comm.mp mul_inv_cancel₀ <| by
+    rw [← smul_one g, ← inv_smul_eq_iff, smul_mul', inv_smul_smul, zero_mul]
     exact zero_ne_one
 
-/--
-theorem `smul_inv₀'` / 定理 `smul_inv₀'`
+/-- A version of `smul_inv'` for groups with zero. -/
+/-
+**smul_inv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：smul_inv (g : G) (a : H) : (g • a)⁻¹ = g⁻¹ • a⁻¹
+参数：g : G；a : H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_eq_of_mul_eq_one_right`：inv_eq_of_mul_eq_one_right : a * b = 1 -> a⁻
+¹ = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_mul_smul_comm`：smul_mul_smul_comm [Mul α] [Mul β] [SMul α β] [IsSca
+larTower α β β] [IsScalarTower α α β] [SMulCommClass α β β] (a : α) (b : β) (c :
+ α) (d :…
+· 使用定理 `mul_inv_cancel`：mul_inv_cancel (a : G) : a * a⁻¹ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 
-English:
-theorem smul_inv₀'
-  given: (g : α) (x : β)
-  statement: g • x⁻¹ = (g • x)⁻¹
-  proof: by
-  by_cases hx : x = 0
-  · rw [hx, inv_zero, smul_zero, inv_zero]
-  · apply eq_inv_of_mul_eq_one_right
-    rw [← smul_mul']; rw [mul_inv_cancel₀ hx]; rw [smul_one]
-
-中文:
-定理 smul_inv₀'
-  条件: (g : α) (x : β)
-  结论: g • x⁻¹ = (g • x)⁻¹
-  证明: by
-  by_cases hx : x = 0
-  · rw [hx, inv_zero, smul_zero, inv_zero]
-  · apply eq_inv_of_mul_eq_one_right
-    rw [← smul_mul']; rw [mul_inv_cancel₀ hx]; rw [smul_one]
+--- 原说明 ---
+A version of `smul_inv'` for groups with zero.
 -/
 @[simp] theorem smul_inv₀' (g : α) (x : β) : g • x⁻¹ = (g • x)⁻¹ := by
   by_cases hx : x = 0
   · rw [hx, inv_zero, smul_zero, inv_zero]
   · apply eq_inv_of_mul_eq_one_right
-    rw [← smul_mul']; rw [mul_inv_cancel₀ hx]; rw [smul_one]
-
-/--
-theorem `smul_div₀'` / 定理 `smul_div₀'`
-
-English:
-theorem smul_div₀'
-  given: (g : α) (x y : β)
-  statement: g • (x / y) = (g • x) / (g • y)
-  proof: by
-  rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [smul_mul']; rw [smul_inv₀']
-
-中文:
-定理 smul_div₀'
-  条件: (g : α) (x y : β)
-  结论: g • (x / y) = (g • x) / (g • y)
-  证明: by
-  rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [smul_mul']; rw [smul_inv₀']
-
-Depends on / 依赖: div_eq_mul_inv, smul_mul
+    rw [← smul_mul', mul_inv_cancel₀ hx, smul_one]
+/-
+**smul_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_div₀' (g : α) (x y : β) : g • (x / y) = (g • x) / (g • y) := by
-  rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [smul_mul']; rw [smul_inv₀']
+  rw [div_eq_mul_inv, div_eq_mul_inv, smul_mul', smul_inv₀']
 
 end MulDistribMulAction
+
